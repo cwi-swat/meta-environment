@@ -168,7 +168,7 @@ in
     ErrorList := first(args(ParseError)) .
     snd-msg(get-error-position(Focus, ErrorList)) .
     rec-msg(error-position(Pos?)) .
-    snd-msg(display-error(EditorId, Pos)) .
+    snd-note(display-error(EditorId, Pos)) .
     ErrorContent := first(next(args(ParseError))) .
     FunSym := fun(ErrorContent) .
     if equal(FunSym, "ambiguities") then

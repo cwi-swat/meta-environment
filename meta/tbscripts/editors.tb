@@ -140,7 +140,7 @@ process EditorExists(EditorId : term, ModuleName : str, Type : str,
     snd-msg(kill-editor(EditorId)).
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) 
   else 
-    snd-msg(move-editor-to-front(EditorId)) .
+    snd-note(move-editor-to-front(EditorId)) .
     snd-msg(editor-opened(ModuleName))
   fi
 
@@ -160,7 +160,7 @@ in
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-msg(kill-editor(EditorId)) .
-    snd-msg(kill-text-editor(EditorId)) .
+    snd-note(kill-text-editor(EditorId)) .
     rec-msg(text-editor-killed(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
@@ -183,7 +183,7 @@ let
 in
   snd-msg(invalidate-tree(EditorId)) .
   rec-msg(invalidation-done(EditorId,Focus?)) .
-  snd-msg(set-focus(EditorId, Focus))
+  snd-note(set-focus(EditorId, Focus))
 endlet
 
 process KillEditor(EditorId : term, Type : str, ModuleName : str) is

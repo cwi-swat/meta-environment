@@ -32,7 +32,7 @@ in
     if not-equal(DirtyFoci, []) then
       Focus := first(DirtyFoci).
       DirtyFoci := next(DirtyFoci).
-      snd-msg(get-focus-text(EditorId, Focus)).
+      snd-note(get-focus-text(EditorId, Focus)).
       rec-msg(focus-text(EditorId, Text?)).
       UpdateTextInModuleDb(Type, ModuleName, Text).
       ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .

@@ -470,7 +470,7 @@ in
   snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
     rec-msg(parse-ok(trm(ModuleName))) .
-    snd-msg(clear-focus(EditorId))
+    snd-note(clear-focus(EditorId))
   +
     rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
@@ -523,7 +523,7 @@ in
           rec-msg(extra-modules(Modules?)).
           snd-msg(open-modules(Modules)).
           rec-msg(finished-opening-modules) .
-          snd-msg(clear-focus(EditorId))
+          snd-note(clear-focus(EditorId))
         +
           rec-msg(error-opening(ModuleName, name-inconsistent)).
           snd-msg(invalidate-sdf-in-db(ModuleName)).
@@ -552,7 +552,7 @@ in
     rec-msg(postprocess-semantics-hook-result(Tree?)).
     snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
     rec-msg(eqs-updated) .
-    snd-msg(clear-focus(EditorId))
+    snd-note(clear-focus(EditorId))
   +
     rec-msg(parse-failed(eqs(ModuleName), Focus?))
   )
@@ -599,10 +599,10 @@ in
   rec-msg(editor-name(FileName?)) .
   snd-msg(save-text-file(FileName, Text)) .
   rec-msg(save-done(FileName)) .
-  snd-msg(reload-file(EditorId, FileName)) .
+  snd-note(reload-file(EditorId, FileName)) .
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(focus-moved(EditorId, Focus?)) .
-  snd-msg(set-focus(EditorId, Focus))
+  snd-note(set-focus(EditorId, Focus))
 endlet
 
 
@@ -632,8 +632,8 @@ in
   rec-msg(editor-name(FileName?)) .
   snd-msg(save-text-file(FileName, Text)) .
   rec-msg(save-done(FileName)) .
-  snd-msg(reload-file(EditorId, FileName)) .
-  snd-msg(set-focus(EditorId, Focus))
+  snd-note(reload-file(EditorId, FileName)) .
+  snd-note(set-focus(EditorId, Focus))
 endlet
 
 process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
