@@ -21,8 +21,7 @@ equations
   $ADT6 := merge-adts($ADT4, $ADT5),
   $ADT7 := merge-adts($ADT6, 
 [ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
-  constructor(OptLayout, Present,appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<chars(CHARLIST)>)),
-  list(CHARLIST, int)
+  constructor(OptLayout, Present,appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<string(chars)>))
    ])
   ===>
   sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
@@ -161,7 +160,7 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
   lexical-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
     constructor( $TypeId, $AltId, 
       appl(prod([lex(sort($AFSort))],cf(sort($AFSort)),no-attrs),
-       [appl(list(iter-star(char-class([range(0,255)]))),<chars(CHARLIST)>)]) )
+       [appl(list(iter-star(char-class([range(0,255)]))),<string(chars)>)]) )
 
 [equ-build-list-entries-empty]
   build-list-entries() =

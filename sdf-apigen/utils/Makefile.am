@@ -8,16 +8,7 @@ include $(top_srcdir)/make_rules
 
 EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-java.sh.src \
-	     sdf2-to-c.sh.src \
-	     CHARLIST_String.java.template \
-	     CHARLIST.h.template \
-	     CHARLIST.c.template \
-	     string.adt
-
-pkgdata_DATA= CHARLIST_String.java.template \
-	      CHARLIST.c.template \
-	      CHARLIST.h.template \
-	      string.adt
+	     sdf2-to-c.sh.src 
 
 
 bin_SCRIPTS = sdf2-to-adt sdf2-to-java sdf2-to-c 

@@ -19,7 +19,6 @@ Usage: $PRG -i <sdf2-specification> [options]
 
 Parameters:
  
-  -b | --bottom		    generate CHARLIST sort only      [off]
   -i | --input  <FILE>	    specify input specification      [?]
   -o | --output <STEM>	    generate <STEM>.[ch] etc.        [improvised]
   -P | --prefix <STR>	    specify API-prefix               [""]
@@ -64,7 +63,6 @@ require() {
 # {{{  default settings
 
 # settings/options
-ONLYBOTTOM=0
 INPUT=""
 OUTPUT=""
 VERBOSE=0
@@ -73,7 +71,6 @@ IMPLODEDOPT=""
 CONSOPT='-e'
 PREFIX=""
 COMPATTERMOPT=""
-GENBOTTOMSORT=1
 
 # binaries
 SDF2TOADT=${SDF2ADT}
@@ -90,9 +87,6 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
-    -b | --bottom)
-      ONLYBOTTOM=1;;
-
     -C | --term-compatibility)
       COMPATTERMOPT='--term-compatibility';;
 
@@ -112,8 +106,7 @@ do
       shift; PREFIX=$1 ;;
 
     -I | --imploded)
-      IMPLODEDOPT='-I'
-      GENBOTTOMSORT=0 ;;
+      IMPLODEDOPT='-I' ;;
 
     -v | --verbose)
       VERBOSE=1
@@ -132,13 +125,10 @@ done
 
 # {{{ sanity checks and variable setup
 
-if [ ${ONLYBOTTOM} -eq 0 ]; then
-  if [ "a${INPUT}" = "a" ]; then
-    error "no input file specified (use -i <file>)"
-  else
-    require ${INPUT}
-  fi
-
+if [ "a${INPUT}" = "a" ]; then
+  error "no input file specified (use -i <file>)"
+else
+  require ${INPUT}
 fi
 
 if [ "a${OUTPUT}" = "a" ]; then
@@ -158,29 +148,15 @@ err() {
 # }}}
 # {{{  generate C from SDF
 
-if [ ${ONLYBOTTOM} -eq 0 ]; then
-  info " generating ${OUTPUT}.adt "
-  ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
-             -i ${INPUT} -o ${OUTPUT}.adt || err
-fi
 
-if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info " generating ${OUTPUT}.pro"
-  sed "s@__NAME__@${PREFIX}@g" < ${PKGDATA}/CHARLIST.h.template > \
-    ${OUTPUT}.pro
-  info " generating ${OUTPUT}_bottom.c"
-  sed "s@__NAME__@${PREFIX}@g;\
-       s@__STEM__@${OUTPUT}@g" < ${PKGDATA}/CHARLIST.c.template > \
-    ${OUTPUT}_bottom.c
-fi
+info " generating ${OUTPUT}.adt "
+${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
+          -i ${INPUT} -o ${OUTPUT}.adt || err
 
-if [ ${ONLYBOTTOM} -eq 0 ]; then
-  info " generating C from ADT "
+info " generating C from ADT "
 
-  ${ADTTOC} ${COMPATTERMOPT} ${VERBOSEOPT} \
+${ADTTOC} ${COMPATTERMOPT} ${VERBOSEOPT} \
                --input ${OUTPUT}.adt --prefix ${PREFIX} \
-	       --prologue ${OUTPUT}.pro \
 	       -n ${OUTPUT}
-fi
 
 # }}}

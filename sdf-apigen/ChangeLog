@@ -1,5 +1,15 @@
 # $Id$
 
+2003/12/15 (jurgenv@cwi.nl)
+ * CHARLIST sort is not used anymore in generated APIs! Instead, 
+   for each lexical and the OptLayout sort, field are made of type <chars>.
+   This leads to an interface that uses directly 'char*' or String in C
+   and Java, but builds an ATermList of the ASCII characters.
+   For example: makeOptLayoutPresent(" "), will make a layout parse tree
+   containing somewhere a singleton [32].
+ * Generation of bottom-sorts removed accordingly
+ * Shell scripts simplified
+
 2003/12/08 (jurgenv@cwi.nl)
  * Removed generation of mapping from strings to CHARLIST pending a new
    solution.

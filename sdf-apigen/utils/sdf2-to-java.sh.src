@@ -19,18 +19,17 @@ Usage: $PRG -i <sdf2-specification> [options]
 
 Parameters:
 
-  -b | --bottom           only generate bottom sorts       [off]
   -i | --input  <FILE>    specify input specification      [?]
   -f | --folding          enable folding mode              [off]
   -n | --name <STR>       name of the api                  [improvised]
   -o | --output <DIR>     specify basedir for output       [.]
   -p | --package <STR>    specify package                  [""]
   -t | --visitable        visitable enabled                [off]
-  -j | --jtom             generate jtom interface          [off]
   -e | --expand-cons      propagate cons-annotations       [on]
   -r | --remove-cons      remove cons-annotations          [off]
   -I | --imploded         create API for imploded terms    [off]
   -v | --verbose          be verbose during generation     [off]
+  -V | --version <VERSION>the version number of API        [0.0.0]
   -h | --help             display this information
 
 Example: ${PRG} -r -i Booleans.sdf -p booleans
@@ -70,25 +69,6 @@ bail_out() {
 }
 
 # }}}
-# {{{  capitalize()
-
-capitalize() {
-  word=$*
-  firstLetter=${word:0:1}
-  tailWord=${word:1}
-
-  firstLetter=`echo ${firstLetter} | tr a-z A-Z`
-  echo "${firstLetter}${tailWord}"
-}
-
-# }}}
-# {{{  tolower()
-
-tolower() {
-  printf "$1" | tr A-Z a-z
-}
-
-# }}}
 
 # {{{  default settings
 
@@ -99,12 +79,7 @@ VERBOSE=0
 VERBOSEOPT=""
 IMPLODEDOPT=""
 CONSOPT='-e'
-JTOMOPT=""
-JTOM=0
 VISITABLEOPT=""
-GENBOTTOMSORT=1
-ONLYBOTTOM=0
-NAME=""
 VERSION="0.0.0"
 
 # binaries
@@ -124,9 +99,6 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
-    -b | --bottom)
-      ONLYBOTTOM=1;;
-
     -e | --expand-cons)
       CONSOPT='-e';;
 
@@ -144,18 +116,21 @@ do
 
     -p | --package)
       shift;
-      PACKAGE=`tolower $1` ;;
+      PACKAGE=$1 ;;
 
     -t | --visitable)
       VISITABLEOPT='-t' ;;
 
     -I | --imploded)
-      IMPLODEDOPT='-I'
-      GENBOTTOMSORT=0 ;;
+      IMPLODEDOPT='-I' ;;
 
     -v | --verbose)
       VERBOSE=1
       VERBOSEOPT='-v';;
+
+    -v | --verbose)
+      VERSION=$1;
+      VERSIONOPT="--version ${VERSION}";;
 
     -h | --help)
       usage; exit 0 ;;
@@ -182,21 +157,9 @@ if [ "a${NAME}" = "a" ]; then
   NAME=${BASE}
 fi
 
-LOWERNAME=`tolower ${NAME}`
-CAPNAME=`capitalize ${NAME}`
-
-if [ "a${PACKAGE}" = "a" ]; then
-  PACKAGEDECL=""
-else
-  PACKAGEDECL="package ${PACKAGE}.${LOWERNAME}.types.charlist;"
-fi
-
 # }}}
 # {{{  generate Java from SDF
-set -x
-info "Generating Java code in ${OUTPUT}/${PACKAGE} from ${INPUT}:"
 
-if [ ${ONLYBOTTOM} -eq 0 ]; then
 info "Generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || bail_out
@@ -204,17 +167,6 @@ ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
 info "Generating java from ADT "
 ${ADTTOJAVA} ${VERBOSEOPT} ${VISITABLEOPT} \
              --input ${BASE}.adt --output ${OUTPUT} \
-	     --package ${PACKAGE} -n ${NAME}
-fi
-
-#if [ ${GENBOTTOMSORT} -gt 0 ]; then
-#  info "Overwriting CHARLIST_String.java"
-#  sed "s@__PACKAGE__@${PACKAGE}.${LOWERNAME}@g;\
-#       s@__NAME__@${CAPNAME}@g;\
-#       s@__LOWERNAME__@${LOWERNAME}@g;\
-##       s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
-#       < ${PKGDATA}/CHARLIST_String.java.template \
-#       > ${OUTPUT}/${PACKAGE}/${LOWERNAME}/types/charlist/Chars.java
-#fi
+	     --package ${PACKAGE} -n ${NAME} ${VERSIONOPT}
 
 # }}}

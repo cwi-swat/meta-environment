@@ -20,5 +20,5 @@ tests
 
 [unique-labels]
 
-A  "comma":"," B  "comma":"," C  "comma":"," -> D =
+A  "comma":"," B  "comma":"," C  "comma":"," -> D ==
 A  "comma":"," B  "comma-1":"," C  "comma-2":"," -> D 

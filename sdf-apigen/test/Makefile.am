@@ -13,7 +13,7 @@ Peano_Main = PeanoTest
 
 # C programs
 INCLUDES                = -I${ATERM}/include
-booltest_SOURCES	= Booleans.c Booleans_dict.c Booleans_bottom.c booltest.c
+booltest_SOURCES	= Booleans.c Booleans_dict.c booltest.c
 booltest_LDADD		= -L$(ATERM)/lib -lATerm
 booltest_DEPENDENCIES	= booltest.pt
 
@@ -23,8 +23,8 @@ JAVAC = javac
 CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
-			booltest.pt libBooleans.a Booleans_bottom.c\
- 			Peano.adt apigen.env ${TESTS} *.class *.pro
+			booltest.pt libBooleans.a \
+ 			Peano.adt apigen.env ${TESTS} *.class *.pro *.jar
 
 clean:
 	rm -rf peano

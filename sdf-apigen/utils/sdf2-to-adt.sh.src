@@ -100,7 +100,6 @@ CONSOPT='cons-expand'
 
 # data needed
  APITABLE=${PKGDATA}/Sdf2-to-ADT.trm.tbl
-ADDLABELS=${PKGDATA}/AddLabels.eqs
 
 # binaries
  SDF2TOADT=${bindir}/Sdf2-to-ADT
@@ -108,7 +107,6 @@ SDF2TOIMPL=${bindir}/Sdf2-to-Imploded-ADT
       SGLR=${SGLRBIN}/sglr
    UNPARSE=${PTBIN}/unparsePT
  APPLYFUNC=${PTBIN}/apply-function
- EVALUATOR=${ASFBIN}/asfe
 
 # }}}
 
@@ -202,10 +200,6 @@ info "Generating ${OUTPUT} from ${INPUT}:"
 
 info " - Parsing ${INPUT} (${APITABLE})"
 ${SGLR} -p ${APITABLE} -s SDF -i ${INPUT} -o .api_1_$$ || err
-
-#info " - Labeling ${INPUT} (parsed)"
-#${APPLYFUNC} -f add-labels -s SDF -i .api_1_$$ -o .api_2_$$ || err
-#${EVALUATOR} -e ${ADDLABELS} -i .api_2_$$ -o .api_3_$$ || err
 
 info " - Generating ADT (${GENERATOR})"
 ${APPLYFUNC} -f ${FUNC} -s ATerm < .api_1_$$ > .api_4_$$ || err
