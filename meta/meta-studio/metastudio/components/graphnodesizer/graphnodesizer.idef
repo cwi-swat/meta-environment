@@ -1,0 +1,22 @@
+tool graph-node-sizer is { }
+
+process GraphNodeSizer is
+let
+  T : graph-node-sizer,
+  Graph : term,
+  GraphId : str
+in
+  rec-connect(T?)
+  .
+  (
+     rec-msg(ui-render-graph(GraphId?, Graph?))
+     . snd-eval(T, size-graph(Graph)) 
+     . rec-value(T, sized-graph(Graph?))
+     . printf("received sized graph from tool\n")
+     . snd-msg(ui-rendered-graph(GraphId, Graph))
+  ) *
+  rec-disconnect(T)
+
+endlet
+
+toolbus(GraphNodeSizer)
