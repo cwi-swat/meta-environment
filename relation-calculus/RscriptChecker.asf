@@ -708,11 +708,10 @@ $Error]>
 
 [check-valueformer3] 
       	add-generators($Gen+, $Tenv) = $Tenv',
-      	check($Exp, $Tenv') = <$Etype, $Tenv''>,
-      	container-iter-type($Etype) = $Etype',
+      	check({$Exp+}, $Tenv') = <$Etype, $Tenv''>,
       	del-generators($Gen+, $Tenv'') = $Tenv'''
       	======================================
-      	check({ $Exp | $Gen+ }, $Tenv) = <$Etype', $Tenv'''>
+      	check({ $Exp+ | $Gen+ }, $Tenv) = <$Etype, $Tenv'''>
 
 %% --- Check Exists
 

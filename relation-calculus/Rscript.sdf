@@ -57,7 +57,7 @@ exports
 
 %% Comprehensions
 
-     "{" REXP "|" {GENERATOR ","}+ "}"		-> REXP
+     "{" {REXP ","}+ "|" {GENERATOR ","}+ "}"	-> REXP
 
      RVAR 					-> DESTINATION
      "<" RVAR "," RVAR ">"			-> DESTINATION

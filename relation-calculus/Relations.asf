@@ -95,7 +95,7 @@ equations
 [car-1]	 is-empty-iter($BagIter) = false,
 	 <$Elem, $Elem'> = head($BagIter)
 	 ==============================================
-	 carrier($BagIter) = union(union1($Elem, insert($Elem', empty-bag)), carrier(tail($BagIter)))
+	 carrier($BagIter) = union1($Elem, union1($Elem', carrier(tail($BagIter))))
 
 [car-2]	is-empty-iter($BagIter) = true
 	================================================
@@ -236,13 +236,13 @@ equations
 
 [rim-1]	 is-empty-iter($BagIter) = false,
 	 <$Elem1, $Elem1'> = head($BagIter),
-	 $Elem = $Elem1
+	 $Elem = $Elem1						%% sb elem-equal
 	 ==================================================
 	 rimage($Elem, $BagIter) = union1($Elem1', rimage($Elem, tail($BagIter)))
 
 [rim-2]	 is-empty-iter($BagIter) = false,
 	 <$Elem1, $Elem1'> = head($BagIter),
-	 $Elem != $Elem1
+	 $Elem != $Elem1					%% sb not elem-equal
 	 ==================================================
 	 rimage($Elem, $BagIter) = rimage($Elem, tail($BagIter))
 
@@ -267,13 +267,13 @@ equations
 
 [lim-1]	 is-empty-iter($BagIter) = false,
 	 <$Elem1, $Elem1'> = head($BagIter),
-	 $Elem = $Elem1'
+	 $Elem = $Elem1'					%% sb elem-equal
 	 ==================================================
 	 limage($BagIter, $Elem) = union1($Elem1, limage(tail($BagIter), $Elem))
 
 [lim-2]	 is-empty-iter($BagIter) = false,
 	 <$Elem1, $Elem1'> = head($BagIter),
-	 $Elem != $Elem1'
+	 $Elem != $Elem1'					%% sb not elem-equal
 	 ==================================================
 	 limage($BagIter, $Elem) = limage(tail($BagIter), $Elem)
 
@@ -360,7 +360,7 @@ equations
 
 [cc-2]	is-empty-iter($BagIter) = false,
 	head($BagIter) = <$Elem2, $Elem2'>,
-	$Elem1' != $Elem2					%% elem-equal?
+	$Elem1' != $Elem2					%% sb not elem-equal
 	=======================================================
 	closure-comp($BagIter, $Elem1, $Elem1', $Bag) = 
 	closure-comp(tail($BagIter), $Elem1, $Elem1', $Bag)

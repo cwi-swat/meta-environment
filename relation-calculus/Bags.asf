@@ -120,7 +120,8 @@ equations
 
 %% --- in($Elem, $Bag)
 
-[in-1]  elem-equal($Elem1, $Elem2) = true
+[in-1]  %%elem-equal($Elem1, $Elem2) = true		%% Should be elem-equal, but this
+	$Elem1 = $Elem2					%% is much too expensive
 	============================================
 	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
 

@@ -25,8 +25,9 @@ equations
 	rel[int,<int,str>] IN init {}
 	rel[int,<int,str>] OUT init DEF
   satisfy
-	IN  =  {{S} x OUT[P] | S : STATEMENTS, P : PRED-OF[S]}
-	OUT =  {{S} x (DEF[S] union (IN[S] \ KILL[S])) | S : STATEMENTS }
+	IN  =  {<S, OP> | S : STATEMENTS, P : PRED-OF[S], OP : OUT[P]}
+	OUT =  {<S, OS> | S : STATEMENTS, OS : DEF[S] union (IN[S] \ KILL[S])}
+
 end equations
 
 assert "IN": IN ==  {<2, <1, "i">>, <3, <2, "j">>, <3, <1, "i">>, <4, <3, "a">>, 
@@ -50,8 +51,8 @@ equations
 	rel[int,<int,str>] LIN init {}
 	rel[int,<int,str>] LOUT init DEF
   satisfy
-	LIN  =  {{S} x (USE[S] union (LOUT[S] \ DEF[S])) | S : STATEMENTS }
-	LOUT =  {{S} x LIN[S] | S : STATEMENTS, P : PRED[S] }
+	LIN  =  { < S, I> | S : STATEMENTS,  I : USE[S] union (LOUT[S] \ DEF[S])}
+	LOUT =  { < S, O> | S : STATEMENTS,  O : LIN[S] }
 end equations
 
 assert "LIN": LIN == {<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, <4, <4, "i">>, 

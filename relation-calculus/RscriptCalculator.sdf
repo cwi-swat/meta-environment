@@ -19,7 +19,7 @@ exports
         eval-rstat(RSTAT, RSTORE)           			-> RSTORE
         eval-rstats(RSTAT*, RSTORE)          			-> RSTORE
 
-	 "{" {GENERATOR ","}+ "::" REXP  "}"			-> REXP
+	 "{" {GENERATOR ","}+ "::" {REXP ","}+  "}"		-> REXP
  
         evalp(REXP, RSTORE)            				-> Boolean
         evali(REXP, RSTORE)            				-> Integer
@@ -33,7 +33,7 @@ exports
 	eval-lt(RVALUE, RVALUE)					-> Boolean
 	eval-le(RVALUE, RVALUE)					-> Boolean
 	eval-im(RVALUE, RVALUE)					-> Elem
-	evalx-test(Boolean, REXP, RSTORE)			-> RVALUE
+	evalx-test(Boolean, REXP, RSTORE)			-> Elem
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
 
@@ -46,10 +46,11 @@ exports
 
 	equal-rval(RVALUE, RVALUE)				-> Boolean
 
-	eval-itern({RVAR ","}+,  BagIterator[[Elem]], RVALUE, REXP, RSTORE)	-> Elem
+	eval-itern({RVAR ","}+,  BagIterator[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> Bag[[Elem]]
+
 	store-rvars({RVAR ","}+, RVALUE, RSTORE)		-> RSTORE
 
-	append-rval(RVALUE, RVALUE)				-> Elem
+	append-rval(Bag[[Elem]], RVALUE)			-> Bag[[Elem]]
 	exists({RVAR ","}+, Bag[[Elem]], REXP, RSTORE)		-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
