@@ -9,8 +9,10 @@ CLEANFILES+=${include_HEADERS} ${libasf_builtins_a_SOURCES}
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
-%.c: %.c.gen
+%.c: %.c.gen 
 	chmod +x $< && ./$< ${LIBROOT} > $@
 
 %.h : %.h.gen
 	chmod +x $< && ./$< ${LIBROOT} > $@
+
+always:

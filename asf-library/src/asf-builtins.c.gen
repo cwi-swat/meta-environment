@@ -3,14 +3,14 @@
 # $Id$
 #
 
-BUILTIN_NAMES=`find $1 -name "*.c" -printf "%f" | sed "s/\.c//g"`
+BUILTIN_NAMES=`find $1 -name "*.c" -printf "%f " | sed "s/\.c//g"`
 BUILTIN_FILES=`find $1 -name "*.c"`
 
 cat  << END_OF_FILE 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <MEPT.h>
+#include <MEPT-utils.h>
 #include "asf-builtins.h"
 
 static ATbool initialized = ATfalse;
@@ -35,7 +35,7 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
 {
   AFun afun;
   char *name = NULL;
-  PT_Tree result = NULL;
+  PT_Tree result = input;
 
   assert(initialized && "builtins are not initialized");
   assert(ATgetType(builtin) == AT_APPL && "builtins should be ATermAppls");
@@ -50,6 +50,11 @@ for b in \${BUILTIN_NAMES}; do
   echo "  }"
 done
 `
+
+  if (result == NULL) {
+    ATwarning("WARNING: builtin %s failed to return a valid term\n", name);
+    return input;
+  }
 
   return result; 
 }
