@@ -10,7 +10,7 @@ EXTRA_DIST = program-check.m4 reconf \
 
 bin_SCRIPTS = ${PACKAGE}-config
 
-CLEANFILES = ${PACKAGE}-config ${PACKAGE}-${VERSION}.pkg
+CLEANFILES = ${PACKAGE}-config ${PACKAGE}-${VERSION}.pkg ${JARFILE}
 
 JARFILE = ${PACKAGE}-${VERSION}.jar
 
