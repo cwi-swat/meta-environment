@@ -1,7 +1,7 @@
 /*
 
-    MEPT -- The ``Meta Environment Parse Tree'' Library
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+    MEPT -- The ``Meta Environment Parse Tree'' Library 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -29,11 +29,10 @@
 #include <aterm2.h>
 
 #include <mept.h>
-#include <asfix2.h>
-#include <conversion.h>
+#include "a2metoa1.h"
 
-static char myname[] = "flattenPT";
-static char myversion[] = "0.1";
+static char myname[] = "a2metoa1";
+static char myversion[] = "0.0";
 
 /*
  The argument vector: list of option letters, colons denote option
@@ -41,7 +40,7 @@ static char myversion[] = "0.1";
  explanation.
  */
 
-static char myarguments[] = "bchi:o:tvV";
+static char myarguments[] = "bhi:o:tvV";
 
 /*
  Usage: displays helpful usage information
@@ -51,7 +50,6 @@ void usage(void)
   ATwarning("Usage: %s [%s]\n"
             "Options:\n"
             "\t-b              output terms in BAF format (default)\n"
-            "\t-c              interpret `cons' attributes\n"
             "\t-h              display help information (usage)\n"
             "\t-i filename     input from file (default stdin)\n"
             "\t-o filename     output to file (default stdout)\n"
@@ -78,7 +76,6 @@ int main(int argc, char **argv)
   ATbool bafmode=ATtrue;
   ATbool verbose=ATfalse;
   ATbool proceed=ATtrue;
-  ATbool interpret_cons=ATfalse;
 
   extern char *optarg;
   extern int   optind;
@@ -88,7 +85,6 @@ int main(int argc, char **argv)
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
       case 'b':  bafmode = ATtrue;                       break;
-      case 'c':  interpret_cons = ATtrue;                break;
       case 'i':  input=optarg;                           break;
       case 'o':  output=optarg;                          break;
       case 't':  bafmode = ATfalse;                      break;
@@ -96,7 +92,7 @@ int main(int argc, char **argv)
       case 'V':  version(); proceed=ATfalse;             break;
 
       case 'h':
-      default:   usage(); proceed=ATfalse;                     break;
+      default:   usage(); proceed=ATfalse;               break;
     }
   }
   argc -= optind;
@@ -104,10 +100,9 @@ int main(int argc, char **argv)
 
   ATinit(argc, argv, &bottomOfStack);       /* Initialize Aterm library */
   PT_initMEPTApi();
-  PT_initAsFix2Api();
 
   if(proceed) {
-    translatedTerm = flattenPT(ATreadFromNamedFile(input));
+    translatedTerm = a2metoa1(ATreadFromNamedFile(input));
     if(!translatedTerm)
       ATerror("%s: conversion failed.", myname);
     if(bafmode)

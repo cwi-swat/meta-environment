@@ -4,11 +4,18 @@
 # $Id$
 #
 
-bin_PROGRAMS		= flattenPT
+bin_PROGRAMS		= flattenPT a2metoa1
 
 flattenPT_SOURCES	= flattenPT-main.c
 flattenPT_LDADD		= -L../libconversion -lconversion \
-                          -L../libmept -lmept -L${ATERM}/lib -lATerm
+                          -L../libmept -lmept \
+                          -L../libasfix2 -lasfix2 \
+			  -L${ATERM}/lib -lATerm
+
+a2metoa1_SOURCES	= a2metoa1-main.c
+a2metoa1_LDADD		= -L../libconversion -lconversion \
+                          -L../libmept -lmept \
+			  -L${ATERM}/lib -lATerm
 
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include -I../libconversion
