@@ -23,6 +23,7 @@
 #include "error-display.tb"
 #include "standalone-pt-dumper.tb"
 #include "standalone-status-display.tb"
+#include "save-module.tb"
 
 process META is
 let
@@ -42,5 +43,5 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
         ModuleDB, File-creator, AsfSdfChecker, DisplayErrors,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable, 
-        Status-display, AddAPISyn) 
+        Status-display, AddAPISyn, Save-modules) 
 

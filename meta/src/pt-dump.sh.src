@@ -28,7 +28,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:dhm:o:T:V"
+myarguments="C:dhm:o:ST:V"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -40,6 +40,7 @@ Options:
     -h              display help information (usage)
     -m modulename   specifies the modulename for which a table has to generated
     -o filename     specifies the output file for the generated table 
+    -S              intermediate files are saved to disk
     -T <port>       specifies TB_PORT for toolbus
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
@@ -62,6 +63,7 @@ set -- $args
 
 configfile="meta.conf"        
 filename=""        
+saving="false"
 
 while [ $#  -gt 0 ]
 do
@@ -83,6 +85,9 @@ do
                 shift
                 filename=$1
                 ;;
+	-S)	
+		saving="true"
+		;;
         -T)
 		shift; xargs="$xargs -TB_PORT $1" ;;
 	-V)
@@ -100,7 +105,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\"" 
+toolbusdefs="-DSAVING=\\\"${saving}\\\" -DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\"" 
 
 toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share/meta \
