@@ -46,8 +46,8 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Sdf-Normalization\"),w(\
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Sdf-Normalization\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"-LEXs\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-CF\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-CF\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Normalization\"),w(\"\"),[ql(\"filter-attributes\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Attributes\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Normalization\"),w(\"\"),[ql(\"filter-attributes\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Attributes\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
@@ -57,7 +57,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Basic_Sdf_Normalization6_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 6 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_Basic_Sdf_Normalization6_1sym , ATmakeAppl ( lf_AUX_Basic_Sdf_Normalization6_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -75,7 +75,8 @@ if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) , make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , ( * ef7 ) ( ) ) ) ) ) ) ) ;
+tmp [ 6 ] = ( * ef7 ) ( tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) , make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , tmp [ 6 ] ) ) ) ) ) ) ;
 }
 }
 }

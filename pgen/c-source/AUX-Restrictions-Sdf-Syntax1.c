@@ -25,7 +25,7 @@ lf_AUX_Restrictions_Sdf_Syntax1_4sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sd
 ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax1_4sym ) ;
 lf_AUX_Restrictions_Sdf_Syntax1_5sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"reject\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax1_5sym ) ;
-lf_AUX_Restrictions_Sdf_Syntax1_6sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"eager\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_Restrictions_Sdf_Syntax1_6sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"prefer\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax1_6sym ) ;
 lf_AUX_Restrictions_Sdf_Syntax1_7sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"uneager\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax1_7sym ) ;
@@ -34,7 +34,7 @@ register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"
 register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Restrictions_Sdf_Syntax1_3 , lf_AUX_Restrictions_Sdf_Syntax1_3sym ) ;
 register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"restrictions\"),w(\"\"),sort(\"Restrictions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax1_4 , lf_AUX_Restrictions_Sdf_Syntax1_4sym ) ;
 register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"reject\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax1_5 , lf_AUX_Restrictions_Sdf_Syntax1_5sym ) ;
-register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"eager\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax1_6 , lf_AUX_Restrictions_Sdf_Syntax1_6sym ) ;
+register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"prefer\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax1_6 , lf_AUX_Restrictions_Sdf_Syntax1_6sym ) ;
 register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"uneager\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax1_7 , lf_AUX_Restrictions_Sdf_Syntax1_7sym ) ;
 }
 void resolve_AUX_Restrictions_Sdf_Syntax1 ( ) {
