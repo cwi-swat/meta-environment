@@ -13,6 +13,13 @@
 
 /*}}}  */
 
+/*{{{ globals  */
+
+static ATbool label_layout = ATfalse;
+static ATbool label_literals = ATfalse;
+static ATbool in_layout = ATfalse;
+/*}}}  */
+
 /*{{{  typedef struct PT_Position_Tag */
 
 typedef struct PT_Position_Tag {
@@ -128,12 +135,28 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   }
 
   if (PT_isTreeAppl(tree)) {
+    ATbool outermost_layout = ATfalse;
     PT_Args args = PT_getTreeArgs(tree);
     (current->curDepth)++;
+
+    if (PT_isTreeLayout(tree)) {
+      in_layout = ATtrue;
+      outermost_layout = ATtrue;
+    }
+
     args = PT_foreachTreeInArgs(args, (PT_TreeVisitor) PT_addTreePosInfo, 
 				(PT_TreeVisitorData) current);
+
     (current->curDepth)--;
     tree = PT_setTreeArgs(tree, args);
+
+    if (!label_layout && outermost_layout) {
+      in_layout = ATfalse;
+      return tree;
+    }
+    else if (!label_layout && in_layout) {
+      return tree;
+    }
   }
   else if (PT_isTreeAmb(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
@@ -161,6 +184,10 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
         current->col++;
       }
     }
+
+    if (!label_literals) {
+      return tree;
+    }
   } else {
     ATwarning("unhandled tree: %s (%t)\n", PT_yieldTree(tree), tree);
   }
@@ -177,7 +204,7 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
 {
   PT_Tree tree = PT_getParseTreeTop(parsetree);
   PT_Position current;
- 
+
   assert(maxDepth >= 0 || maxDepth == UNLIMITED_DEPTH);
 
   current.path = path;
@@ -217,4 +244,23 @@ PT_ParseTree PT_addParseTreePosInfo(char* path, PT_ParseTree parsetree)
 }
 
 /*}}}  */
+/*{{{  PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree, */
 
+PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree,
+					int depth, 
+					ATbool layout, 
+					ATbool literals)
+{
+  PT_ParseTree result = NULL;
+  label_layout = layout;
+  label_literals = literals;
+
+  result = PT_addParseTreePosInfoToDepth(path,parsetree,depth);
+  
+  label_layout = ATfalse;
+  label_literals = ATfalse;
+
+  return result;
+}
+
+/*}}}  */

@@ -91,6 +91,10 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
                                      PT_SymbolVisitor visitor,
                                      PT_SymbolVisitorData data); 
 
+PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree,
+					int depth, 
+					ATbool layout, 
+					ATbool literals);
 PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
 PT_ParseTree PT_addParseTreePosInfoToDepth(char *pathInfo, PT_ParseTree tree,
                                            int maxDepth);
