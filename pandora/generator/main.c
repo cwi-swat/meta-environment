@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include <MEPT-utils.h>
+#include <asc-support2-me.h>
 
 #include "pandora.h"
 
@@ -12,6 +13,16 @@ static char* myname = "pandora";
 static char* myversion = VERSION;
 static char* myarguments = "i:o:vVhs:";
 static ATbool run_verbose = ATfalse;
+
+#define INITIAL_TABLE_SIZE 8191
+
+/*{{{  external functions */
+
+extern void register_Box_to_Text();
+extern void resolve_Box_to_Text();
+extern void init_Box_to_Text();
+
+/*}}}  */
 
 /*{{{  void usage(void) */
 
@@ -43,6 +54,42 @@ static void version(void)
 
 /*}}}  */
 
+/*{{{  static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree) */
+
+static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
+{
+  PT_Tree newTree = NULL;
+
+  if (PT_isValidParseTree(parseTree)) {
+    PT_Tree ptBox = PT_getParseTreeTree(parseTree);
+
+    newTree = PT_applyFunctionToTree("box2text",
+                                     "BText",
+                                     1,
+                                     ptBox);
+  }
+  else {
+    ATerror("addBoxToTextFunction: not a proper parse tree: %t\n",
+              (ATerm) parseTree);
+    return (PT_Tree) NULL;
+  }
+  return newTree;
+}
+
+/*}}}  */
+
+/*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
+
+static PT_ParseTree toText(PT_ParseTree parseTree)
+{
+  PT_Tree tree = addBoxToTextFunction(parseTree);
+
+  ATerm reduct = innermost(tree);
+  return toasfix(reduct);
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[]) 
@@ -53,13 +100,20 @@ int main(int argc, char *argv[])
   int c;
 
   ATerm at_tree;
-  PT_ParseTree tree;
+  PT_ParseTree tree, ptText;
 
   BOX_Start box;
 
   ATinit(argc, argv, &bottomOfStack); 
+
+  ASC_initRunTime(INITIAL_TABLE_SIZE);
+
   PT_initMEPTApi(); 
   BOX_initBoxApi();
+
+  register_Box_to_Text();
+  resolve_Box_to_Text();
+  init_Box_to_Text();
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
@@ -84,7 +138,12 @@ int main(int argc, char *argv[])
     box = pandora(tree);
     /*printf("Box of Pandora opened!!!\n");*/
 
+    ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+
+/*
     ATwriteToNamedBinaryFile(BOX_StartToTerm(box), output);
+*/
+    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
 
     return 0;
   }

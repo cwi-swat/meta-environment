@@ -145,8 +145,8 @@ static ATbool isIndentedType(PT_Production production)
     {
 
       ATwarning("Symbol = %t\n", symbol);
-      productionLhs = PT_getSymbolsTail(productionLhs);
     }
+    productionLhs = PT_getSymbolsTail(productionLhs);
   }
 
   return ATfalse;
