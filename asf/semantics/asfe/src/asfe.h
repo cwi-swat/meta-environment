@@ -40,7 +40,6 @@ void  RWclearError();
 
 /* Variables */
 extern ATbool runVerbose;
-extern ATbool keep_layout;
 extern ATerm equations_db;
 extern ATerm fail_env;
 extern ATerm posinfo;

@@ -42,7 +42,7 @@
 #include "asfe.h"
 
 
-static char myarguments[] = "be:hi:o:w:tvVl";
+static char myarguments[] = "be:hi:o:w:tvV";
 static char myname[] = "asfe";
 static char myversion[] = "0.1";
 
@@ -61,11 +61,10 @@ usage(char *prg, ATbool is_err)
 	    "\t-e file         use the equations |file|\n"
 	    "\t-i filename     input from file (default stdin)\n"
 	    "\t-o filename     output to file (default stdout)\n"
-	    "\t-l              toggle keep layout (default %s)\n"
 	    "\t-w (on | off)   toggle traversals (default %s)\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
-	    prg, keep_layout ? "true" : "false",
+	    prg, 
 	    traversals_on ? "on" : "off", myversion);
   exit(is_err ? 1 : 0);
 }
@@ -158,7 +157,6 @@ main(int argc, char *argv[])
       case 'e': eqsfile = optarg;                break;
       case 'i': input = optarg;                  break;
       case 'o': output = optarg;                 break;
-      case 'l': keep_layout = !keep_layout;      break;
       case 'w':
 	if (!strcmp(optarg, "on")) {
 	  traversals_on = ATtrue;

@@ -34,15 +34,8 @@
 
 #include <PT-utils.h>
 
-/* This global indicates if whitespace will be saved as much as possible
- * during rewriting.
- */
-extern ATbool keep_layout;
 
-/* The definition of term equality depends on the choice to
- * keep whitespace or to throw it all away when rewriting.
- */
-#define isAsFixEqual(t1,t2) ((keep_layout) ? isEqualModuloWhitespace(t1,t2) : ATisEqual(t1,t2))
+#define isAsFixEqual(t1,t2) (isEqualModuloWhitespace(t1,t2))
 
 /* isEqualModuloWhitespace computes equality disregarding any whitespace in the 
  * asfix. Both terms must contain whitespace keywords, but they may be different.

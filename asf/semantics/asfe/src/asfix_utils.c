@@ -41,15 +41,6 @@
 #include "asfe.h"
 #include "preparation.h"
 
-/* the KEEP_LAYOUT macro is supposed to be set at the commandline
- * of the compiler.
- */
-#ifdef KEEP_LAYOUT
-ATbool keep_layout = ATtrue;
-#else
-ATbool keep_layout = ATfalse;
-#endif
-
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 {
   if (!PT_isEqualTree(asfix1, asfix2)) {

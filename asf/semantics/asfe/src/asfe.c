@@ -278,9 +278,8 @@ getSliceLast(Slice slice)
 static ATbool
 isSliceEmpty(Slice slice)
 {
-  return PT_isEqualArgs(keep_layout ?
-		      skipWhitespace(getSliceFirst(slice)) :
-		      getSliceFirst(slice), getSliceLast(slice));
+  return PT_isEqualArgs(skipWhitespace(getSliceFirst(slice)), 
+                        getSliceLast(slice));
 }
 
 /*
@@ -326,7 +325,7 @@ prepend(PT_Args first, PT_Args last, PT_Args list)
   elem = PT_getArgsHead(first);
   temp = prepend(PT_getArgsTail(first), last, list);
 
-  if (keep_layout && PT_isArgsEmpty(temp) &&
+  if (PT_isArgsEmpty(temp) &&
       (PT_isTreeSeparator(elem) || PT_isTreeLayout(elem))) {
     return PT_makeArgsEmpty();
   }
@@ -540,13 +539,7 @@ arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
 	      asource((PT_Tree) tagCurrentRule), arg1,arg2);
   }
 
-  if (!keep_layout && isAsFixEqual(arg1, arg2)) {
-    /* we don't test for equality with whitespace, because we might need some
-     * skipping in case of lists. */
-    return argsMatching(newenv, conds, orgargs1, orgargs2, lhs_posinfo,
-			 depth);
-  }
-  else if (PT_isTreeAppl(arg1) && PT_isTreeAppl(arg2)) {
+   if (PT_isTreeAppl(arg1) && PT_isTreeAppl(arg2)) {
     prod1 = PT_getTreeProd(arg1);
     prod2 = PT_getTreeProd(arg2);
     if (PT_isEqualProduction(prod1, prod2)) {
@@ -617,7 +610,6 @@ arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
     }
   }
   else { /* terms are not any of the above, and not equal */
-    if (keep_layout) {
       /* we didn't test for equality if rewriting with ws, so do it now */
       /* NOTE: is this still necessary? */
       if (isEqualModuloWhitespace(arg1, arg2)) {
@@ -630,13 +622,6 @@ arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
 	  ATwarning("*** fail_env on line %d\n", __LINE__);
 	}
       }
-    }
-    else {
-      newenv = fail_env;
-      if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
   }
 
   return newenv;
@@ -731,32 +716,23 @@ compareSubLists(Slice slice, PT_Args elems2)
   first = getSliceFirst(slice);
   last = getSliceLast(slice);
 
-  if (keep_layout) {
     first = skipWhitespace(first);
     elems2 = skipWhitespace(elems2);
 
     assert(isValidSlice(first, last));
     assert(isValidList(elems2));
-  }
 
   while (!PT_isEqualArgs(first, last) && match) {
-    if (keep_layout) {
       first = skipWhitespace(first);
       assert(isValidSlice(first, last));
-    }
 
     elem1 = PT_getArgsHead(first);
     if (PT_hasArgsHead(elems2)) {
       elem2 = PT_getArgsHead(elems2);
       match = isAsFixEqual(elem1, elem2);
 
-      if (keep_layout) {
 	elems2 = skipWhitespace(PT_getArgsTail(elems2));
 	assert(isValidList(elems2));
-      }
-      else {
-	elems2 = PT_getArgsTail(elems2);
-      }
     }
     else {
       match = ATfalse;
@@ -807,11 +783,9 @@ subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
     }
   }
 
-  if (keep_layout) {
     /* Make sure we begin at a regular element */
     elems2 = skipWhitespace(elems2);
     assert(isValidList(elems2));
-  }
 
   /* If the star variable didn't match or we have a plus variable
    * we continue matching with increasing length while possible.
@@ -821,7 +795,7 @@ subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
     for (last = PT_getArgsTail(elems2);	/* create a singleton */
 	 is_fail_env(subenv);
 	 /* add an element to the slice */
-	 last = PT_getArgsTail(keep_layout ? skipWhitespace(last) : last)) {
+	 last = PT_getArgsTail(skipWhitespace(last))) {
       assert(isValidSlice(elems2, last));
       newenv = putListVariableValue(env, elem, elems2, last);
       subenv =
@@ -851,12 +825,10 @@ listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
   assert(isValidList(skipWhitespace(elems1)));
   assert(isValidList(skipWhitespace(elems2)));
 
-  if (keep_layout) {
     elems1 = skipWhitespace(elems1);
     assert(isValidList(elems1));
     elems2 = skipWhitespace(elems2);
     assert(isValidList(elems2));
-  }
 
 
   if (PT_hasArgsHead(elems1)) {
@@ -887,10 +859,8 @@ listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
 	  else {
 	    elem1 = PT_removeTreeAnnotations(elem1);
 
-	    if (keep_layout) {
 	      elems2 = skipWhitespace(elems2);
 	      assert(isValidList(elems2));
-	    }
 
 	    if (PT_hasArgsHead(elems2)) {
 	      elem2 = PT_getArgsHead(elems2);
@@ -943,20 +913,13 @@ listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
 	}
       }
       else {			/*is_list_var(elem1) == Tfalse */
-	if (keep_layout) {
 	  elems2 = skipWhitespace(elems2);
 	  assert(isValidList(elems2));
-	}
 	if (PT_hasArgsHead(elems2)) {
 	  elem2 = PT_getArgsHead(elems2);
 
-	  if (keep_layout) {
 	    elems2 = skipWhitespace(PT_getArgsTail(elems2));
 	    assert(isValidList(elems2));
-	  }
-	  else {
-	    elems2 = PT_getArgsTail(elems2);
-	  }
 
 	  newarg1 = PT_makeTreeList(sym, elems1);
 	  newarg2 = PT_makeTreeList(sym, elems2);
@@ -1281,7 +1244,7 @@ rewriteElems(PT_Symbol sym, PT_Args elems, ATerm env, int depth)
       if (PT_isListVar(elem)) {
 	Slice tuple = getListVariableValue(env, elem);
 	assert(tuple);
-	if (keep_layout && isSliceEmpty(tuple)) {
+	if (isSliceEmpty(tuple)) {
 	  newelems = skipWhitespace(newelems);
 	  assert(isValidList(newelems));
 	}
@@ -1318,7 +1281,7 @@ rewriteElems(PT_Symbol sym, PT_Args elems, ATerm env, int depth)
     for (--i; i >= 0; i--) {
       newelem = newelem_table[i];
       if (ATgetAFun((ATermAppl) newelem) == list_var) {
-	if (keep_layout && isSliceEmpty((Slice) newelem)) {
+	if (isSliceEmpty((Slice) newelem)) {
 	  newelems = skipWhitespace(newelems);
 	  assert(isValidList(newelems));
 	}
@@ -1329,7 +1292,7 @@ rewriteElems(PT_Symbol sym, PT_Args elems, ATerm env, int depth)
 	}
       }
       else {
-	if (!(keep_layout && PT_isArgsEmpty(newelems) &&
+	if (!(PT_isArgsEmpty(newelems) &&
 	      (PT_isTreeSeparator(newelem) || PT_isTreeLayout(newelem)))) {
 	  newelems = PT_makeArgsList(newelem, newelems);
 	  assert(isValidList(skipWhitespace(newelems)));
@@ -1371,9 +1334,7 @@ rewrite(PT_Tree trm, ATerm env, int depth)
     newargs = rewriteArgs(args, env, depth);
 
     if (PT_hasProductionBracketAttr(PT_getTreeProd(trm))) {
-      newtrm = PT_getArgsHead(keep_layout ?
-			      skipWhitespace(PT_getArgsTail(newargs)) :
-			      PT_getArgsTail(newargs));
+      newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
       rewtrm = newtrm;
 
     }
@@ -1478,9 +1439,7 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
     if (PT_hasProductionBracketAttr(PT_getTreeProd(trm))) {
       args = PT_getTreeArgs(trm);
       newargs = rewriteArgsTraversal(args, env, depth, traversal);
-      newtrm = PT_getArgsHead(keep_layout ?
-                              skipWhitespace(PT_getArgsTail(newargs)) :
-                              PT_getArgsTail(newargs));
+      newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
       rewtrm = newtrm;
     }
     else {
@@ -1581,7 +1540,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
       if (PT_isListVar(elem)) {
         Slice tuple = getListVariableValue(env, elem);
         assert(tuple);
-        if (keep_layout && isSliceEmpty(tuple)) {
+        if (isSliceEmpty(tuple)) {
           newelems = skipWhitespace(newelems);
           assert(isValidList(newelems));
         }
@@ -1618,7 +1577,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
     for (--i; i >= 0; i--) {
       newelem = newelem_table[i];
       if (ATgetAFun((ATermAppl) newelem) == list_var) {
-        if (keep_layout && isSliceEmpty((Slice) newelem)) {
+        if (isSliceEmpty((Slice) newelem)) {
           newelems = skipWhitespace(newelems);
         }
         else {
@@ -1626,7 +1585,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
         }
       }
       else {
-        if (!(keep_layout && PT_isArgsEmpty(newelems) &&
+        if (!(PT_isArgsEmpty(newelems) &&
               (PT_isTreeSeparator(newelem) || PT_isTreeLayout(newelem)))) {
           newelems = PT_makeArgsList(newelem, newelems);
         }

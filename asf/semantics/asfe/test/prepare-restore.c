@@ -44,26 +44,6 @@ main(int argc, char *argv[])
   ATerm in, out;
   PT_Tree term, prepared, restored;
 
-  if (argc == 2) {
-    if (!strcmp(argv[1], "--no-whitespace") || !strcmp(argv[1], "-n")) {
-      keep_layout = ATfalse;
-    }
-    else {
-      usage = ATtrue;
-    }
-  }
-  else if (argc == 1) {
-    keep_layout = ATtrue;
-  }
-  else {
-    usage = ATtrue;
-  }
-
-  if (usage)
-    ATerror
-      ("Usage: prepare-restore [--no-whitespace] [-n]\nThis test reads an asfix term from stdin, prepares it for rewriting, restores it again and tests the input with the output for equality.\n");
-
-
   ATinit(argc, argv, &bottomOfStack);
   PT_initPTApi();
   ASF_initASFApi();
