@@ -1,6 +1,7 @@
 2002/02/12 (jurgenv@cwi.nl)
  * Fixed a serious bug in the asf compiler. It couldn't handle lists
    at the top of matching conditions.
+ * Set version of asfc to 2.4
 
 2002/02/05 (jurgenv@cwi.nl)
  * Bumped to version 1.3
