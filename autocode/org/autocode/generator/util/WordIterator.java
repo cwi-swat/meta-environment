@@ -61,6 +61,7 @@ public class WordIterator
     boolean uppercase = Character.isUpperCase(c);
 
     if (index == length) {
+      word.append(Character.toLowerCase(c));
       return word.toString();
     }
 

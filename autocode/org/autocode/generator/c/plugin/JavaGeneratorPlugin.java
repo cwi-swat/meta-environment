@@ -16,7 +16,7 @@ public class JavaGeneratorPlugin
   //{{{ public JavaMethod createMethod(operation, name, resultType, body)
 
   public JavaMethod createMethod(PropertyContext operationContext,
-				 String methodName, String resultTypeName,
+				 String methodName, String typeName,
 				 MethodBody body)
   {
     boolean isAbstract = operationContext.getBoolean("abstract");
@@ -26,15 +26,14 @@ public class JavaGeneratorPlugin
     String access = operationContext.getString("access");
     JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
 
-    JavaMethod method = new JavaMethod(methodName, resultTypeName,
-				       accessSpecifier, isAbstract,
-				       isFinal, isStatic, body);
+    JavaMethod method = new JavaMethod(methodName, typeName, accessSpecifier,
+				       isAbstract, isFinal, isStatic, body);
 
     return method;
   }
 
   //}}}
-  //{{{ public JavaMethod createConstructor(operation, name, body)
+  //{{{ public JavaMethod createMethod(operation, name, body)
 
   public JavaMethod createConstructor(PropertyContext operationContext,
 				      String name, MethodBody body)

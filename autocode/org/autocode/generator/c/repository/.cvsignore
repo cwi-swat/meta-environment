@@ -1,0 +1,9 @@
+Makefile.in
+Makefile
+classjava.stamp
+*.class
+AttributeAccess.java
+CCompilationUnit.java
+MethodAccess.java
+CAttribute.java
+CMethod.java

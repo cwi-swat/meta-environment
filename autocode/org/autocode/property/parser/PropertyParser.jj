@@ -134,7 +134,7 @@ TOKEN :
 TOKEN :
 {
   < IDENTIFIER: <WILDCARD> | ( <LETTER> ( (<LETTER>|<DIGIT>|<DASH>)* (<LETTER>|<DIGIT>)) ? )>
-| < #LETTER: ["a"-"z","A"-"Z"] >
+| < #LETTER: ["a"-"z","A"-"Z","_"] >
 | < #DIGIT: ["0"-"9"] >
 | < #DASH: "-" >
 | < #WILDCARD: "*" >

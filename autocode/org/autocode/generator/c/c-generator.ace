@@ -1,0 +1,47 @@
+application c-repository {
+  generator java {
+    @import "c-compilation-unit.ace"
+    @import "c-method.ace"
+    @import "c-attribute.ace"
+
+    enabled := true
+
+    enum * {
+      package := "org.autocode.generator.c.repository"
+    }
+
+    type * {
+      package := "org.autocode.generator.c.repository"
+      import += "org.autocode.generator.repository.*"
+      field * {
+        operation := { get, set }
+      }
+      field include? {
+        operation := init 
+      }
+    }
+
+    // Remove after bootstrapping
+    type C-Method {
+      verbatim := "CMethod.source"
+      import += "java.util.Iterator"
+      operation constructor {
+        super args {
+          name : string
+          result-type : string
+          body : method-body
+        }
+      }
+    }
+
+    // Remove after bootstrapping
+    type C-Attribute {
+      operation constructor {
+        super args {
+          name : string
+          type : string
+        }
+      }
+    }
+  }
+}

@@ -14,7 +14,37 @@ abstract public class AutocodeGenerator
 {
   private PropertyContext generatorContext;
 
-  abstract public void emit(PropertyContext generatorContext) throws IOException;
+  abstract protected void generateEnum(PropertyContext enumContext);
+  abstract protected void generateArray(PropertyContext context);
+  abstract protected void generateVerbatim(String verbatim);
+
+  abstract protected void emit(PropertyContext generatorContext) throws IOException;
+
+  //{{{ public String getFileContent(String fileName)
+
+  public String getFileContent(String fileName)
+  {
+    StringBuffer result = new StringBuffer();
+
+    try {
+      Reader reader = new FileReader(fileName);
+      char[] buffer = new char[8192];;
+      int count;
+      do {
+	count = reader.read(buffer);
+	if (count > 0) {
+	  result.append(buffer, 0, count);
+	}
+      } while (count >= 0);
+    } catch (IOException e) {
+      throw new RuntimeException("error reading verbatim source: "
+				 + fileName);
+    }
+
+    return result.toString();
+  }
+
+  //}}}
 
   //{{{ public PropertyContext getGeneratorContext()
 
@@ -39,6 +69,20 @@ abstract public class AutocodeGenerator
       String typeName = (String)iter.next();
       generateType(new PropertyContext(generatorContext, "type", typeName));
     }
+
+    Set enums = generatorContext.getValueSet("enum");
+    iter = enums.iterator();
+    while (iter.hasNext()) {
+      String enumName = (String)iter.next();
+      generateEnum(new PropertyContext(generatorContext, "enum", enumName));
+    }
+
+    Set arrays = generatorContext.getValueSet("array");
+    iter = arrays.iterator();
+    while (iter.hasNext()) {
+      String arrayName = (String)iter.next();
+      generateArray(new PropertyContext(generatorContext, "array", arrayName));
+    }
   }
 
   //}}}
@@ -46,8 +90,13 @@ abstract public class AutocodeGenerator
 
   protected void generateType(PropertyContext typeContext)
   {
+    Iterator iter = typeContext.getValueSet("verbatim").iterator();
+    while (iter.hasNext()) {
+      generateVerbatim(getFileContent((String)iter.next()));
+    }
+
     Set operations = typeContext.getValueSet("operation");
-    Iterator iter = operations.iterator();
+    iter = operations.iterator();
     while (iter.hasNext()) {
       String operationName = (String)iter.next();
       PropertyContext operationContext

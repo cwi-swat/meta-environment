@@ -1,0 +1,6 @@
+enum AttributeAccess { elements := { static, extern } }
+
+type C-Attribute :: Attribute
+{
+  access : AttributeAccess
+}

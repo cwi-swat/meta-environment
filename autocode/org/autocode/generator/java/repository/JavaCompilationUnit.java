@@ -18,6 +18,8 @@ public class JavaCompilationUnit
   private String superClass;
   private Set importedSet;
 
+  private StringBuffer verbatimContent;
+
   private JavaAccessSpecifier _access;
   private boolean _static;
   private boolean _abstract;
@@ -40,6 +42,7 @@ public class JavaCompilationUnit
     _abstract = isabstract;
     _final = isfinal;
     importedSet = new HashSet();
+    verbatimContent = new StringBuffer();
   }
 
   //}}}
@@ -73,6 +76,23 @@ public class JavaCompilationUnit
   public void setSuperClass(String superClass)
   {
     this.superClass = superClass;
+  }
+
+  //}}}
+
+  //{{{ public void addVerbatim(String verbatim)
+
+  public void addVerbatim(String verbatim)
+  {
+    verbatimContent.append(verbatim);
+  }
+
+  //}}}
+  //{{{ public String getVerbatim()
+
+  public String getVerbatim()
+  {
+    return verbatimContent.toString();
   }
 
   //}}}
@@ -132,6 +152,34 @@ public class JavaCompilationUnit
   public Iterator fetchImportedIterator()
   {
     return importedSet.iterator();
+  }
+
+  //}}}
+
+  //{{{ public String getDeclaration()
+
+  public String getDeclaration()
+  {
+    StringBuffer buf = new StringBuffer();
+
+    buf.append(getAccess().yield());
+
+    if (isAbstract()) {
+      buf.append(" abstract");
+    }
+
+    if (isStatic()) {
+      buf.append(" static");
+    }
+
+    if (isFinal()) {
+      buf.append(" final");
+    }
+
+    buf.append(" class ");
+    buf.append(getClassName());
+
+    return buf.toString();
   }
 
   //}}}

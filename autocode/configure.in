@@ -14,5 +14,7 @@ org/autocode/generator/repository/Makefile
 org/autocode/generator/java/Makefile
 org/autocode/generator/java/repository/Makefile
 org/autocode/generator/java/plugin/Makefile
+org/autocode/generator/c/Makefile
+org/autocode/generator/c/repository/Makefile
 test/Makefile
 )

@@ -1,0 +1,5 @@
+type C-CompilationUnit :: CompilationUnit
+{
+  path : string
+  include : list<string>
+}

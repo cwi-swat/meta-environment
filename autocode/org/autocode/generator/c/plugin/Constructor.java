@@ -29,37 +29,7 @@ public class Constructor
     JavaMethod constructor
       = createConstructor(operationContext, constructorName, body);
 
-    //{{{ Add arguments needed for call to super
-
-    PropertyContext superArgsContext = new PropertyContext(operationContext,
-							   "super", "args");
-    Iterator iter = superArgsContext.getValueSet("field").iterator();
-    if (iter.hasNext()) {
-      StringBuffer superArgs = new StringBuffer();
-      boolean first = true;
-      while (iter.hasNext()) {
-	String arg = (String)iter.next();
-	PropertyContext argContext
-	  = new PropertyContext(superArgsContext, "field", arg);
-	PropertyContext argTypeContext = new PropertyContext(argContext, "type");
-	String paramName = generator.parameterName(arg);
-	String paramType = generator.typeName(argTypeContext);
-	FormalParameter param = new FormalParameter(paramName, paramType);
-	constructor.addFormalParameter(param);
-	if (first) {
-	  first = false;
-	} else {
-	  superArgs.append(", ");
-	}
-	superArgs.append(paramName);
-      }
-      body.addLine("super(" + superArgs.toString() + ");");
-    }
-
-    //}}}
-    //{{{ Add field initialization arguments
-
-    iter = typeContext.getValueSet("field").iterator();
+    Iterator iter = typeContext.getValueSet("field").iterator();
     while (iter.hasNext()) {
       String fieldName = (String)iter.next();
       PropertyContext fieldContext
@@ -82,8 +52,6 @@ public class Constructor
 	body.addLine(setMethod + "(" + paramName + ");");
       }
     }
-
-    //}}}
 
     String typeName = generator.javaTypeName(typeContext.getName());
     constructor.setDescription("creates a new " + typeName + ".");

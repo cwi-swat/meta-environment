@@ -9,14 +9,24 @@ application * {
       }
     }
 
+    type := { }
     type * {
       operation += { }
+      verbatim := { }
       description := "no description"
       field * {
         operation += { }
         description := "no description"
       }
     }
+
+    enum := { }
+    enum * {
+      description := "no description"
+      element := { }
+    }
+
+    array := { }
   }
 
   generator java {

@@ -9,6 +9,10 @@ application client-app {
       package := "org.autocode.test"
     }
 
+    enum * {
+      package := "org.autocode.test"
+    }
+
     //}}}
     //{{{ type Client
 
@@ -16,7 +20,11 @@ application client-app {
     type Client {
       operation := { constructor }
   
-      //field * { access := public }
+      field name {
+        operation += { init }
+        access := public
+        static := true
+      }
 
       field order {
         operation += { init }

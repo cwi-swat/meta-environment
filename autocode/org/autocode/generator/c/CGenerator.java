@@ -1,33 +1,33 @@
-package org.autocode.generator.java;
+package org.autocode.generator.c;
 
 //{{{ imports
 
 import org.autocode.property.*;
 import org.autocode.generator.*;
 import org.autocode.generator.repository.*;
-import org.autocode.generator.java.repository.*;
+import org.autocode.generator.c.repository.*;
 
 import java.io.*;
 import java.util.*;
 
 //}}}
 
-public class JavaGenerator
+public class CGenerator
   extends AutocodeGenerator
 {
   //{{{ attributes 
 
   private Repository repository;
-  private JavaCompilationUnit compilationUnit;
+  private CCompilationUnit compilationUnit;
 
   private PrintWriter writer;
   private int indentLevel;
 
   //}}}
 
-  //{{{ public JavaCompilationUnit getCompilationUnit()
+  //{{{ public CCompilationUnit getCompilationUnit()
 
-  public JavaCompilationUnit getCompilationUnit()
+  public CCompilationUnit getCompilationUnit()
   {
     return compilationUnit;
   }
@@ -48,26 +48,10 @@ public class JavaGenerator
   protected void generateType(PropertyContext typeContext)
   {
     String typeName = typeContext.getName();
-    String pkg = typeContext.getString("package");
-    String className = javaTypeName(typeName);
-    String superClass = typeContext.getString("super");
-    String access = typeContext.getString("access");
-    JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
-    boolean isstatic = typeContext.getBoolean("static");
-    boolean isabstract = typeContext.getBoolean("abstract");
-    boolean isfinal = typeContext.getBoolean("final");
+    String path = typeContext.getString("path");
 
-    compilationUnit = new JavaCompilationUnit(pkg, className, superClass,
-					      accessSpecifier,
-					      isstatic, isabstract, isfinal);
+    compilationUnit = new CCompilationUnit(path);
     repository.addCompilationUnit(compilationUnit);
-
-    Set imports = typeContext.getValueSet("import");
-    Iterator iter = imports.iterator();
-    while (iter.hasNext()) {
-      String imported = (String)iter.next();
-      compilationUnit.addImported(imported);
-    }
 
     super.generateType(typeContext);
   }
@@ -77,67 +61,13 @@ public class JavaGenerator
 
   protected void generateEnum(PropertyContext enumContext)
   {
-    String enumName = enumContext.getName();
-    String pkg = enumContext.getString("package");
-    String className = javaTypeName(enumName);
-    String superClass = "AutocodeEnumeration";
-
-    String access = "public";
-    JavaAccessSpecifier publicAccess = JavaAccessSpecifier.parse(access);
-
-    boolean isStatic = false;
-    boolean isAbstract = false;
-    boolean isFinal = true;
-
-    compilationUnit = new JavaCompilationUnit(pkg, className, superClass,
-					      publicAccess,
-					      isStatic, isAbstract, isFinal);
-    repository.addCompilationUnit(compilationUnit);
-
-    compilationUnit.addImported("org.autocode.generator.util.AutocodeEnumeration");
-
-    isFinal = false;
-
-    //{{{ Add constructor
-
-    String constructorName = constructorName(enumName);
-    MethodBody body = new MethodBody("super(value);");
-    
-    JavaMethod constructor = new JavaMethod(constructorName, null,
-					    publicAccess, isAbstract,
-					    isFinal, isStatic, body);
-
-    FormalParameter param = new FormalParameter("value", "String");
-    constructor.addFormalParameter(param);
-    compilationUnit.addMethod(constructor);
-
-    //}}}
-    //{{{ Add static parse method
-
-    isStatic = true;
-    body = new MethodBody("return new " + className + "(value);");
-    JavaMethod parse = new JavaMethod("parse", className,
-				      publicAccess, isAbstract,
-				      isFinal, isStatic, body);
-    parse.addFormalParameter(param);
-    compilationUnit.addMethod(parse);
-
-    //}}}
   }
 
   //}}}
-  //{{{ protected void generateArray(PropertyContext context)
+  //{{{ protected void generateArray(PropertyContext arrayContext)
 
-  protected void generateArray(PropertyContext context)
+  protected void generateArray(PropertyContext arrayContext)
   {
-  }
-
-  //}}}
-  //{{{ protected void generateVerbatim(String verbatim)
-
-  protected void generateVerbatim(String verbatim)
-  {
-    getCompilationUnit().addVerbatim(verbatim);
   }
 
   //}}}
@@ -151,7 +81,7 @@ public class JavaGenerator
     Iterator iter = repository.fetchCompilationUnitIterator();
     while (iter.hasNext()) {
       indentLevel = 0;
-      JavaCompilationUnit unit = (JavaCompilationUnit)iter.next();
+      CCompilationUnit unit = (CCompilationUnit)iter.next();
       String pkgName = unit.getPackageName();
       String reldir = pkgName.replace('.', File.separatorChar);
       String absdir = root + File.separatorChar + reldir;
@@ -167,36 +97,35 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ protected void emitCompilationUnit(JavaCompilationUnit unit)
+  //{{{ protected void emitCompilationUnit(CCompilationUnit unit)
 
-  protected void emitCompilationUnit(JavaCompilationUnit unit)
+  protected void emitCompilationUnit(CCompilationUnit unit)
   {
     emitPackage(unit);
     emitImports(unit);
-    println(unit.getDeclaration());
+    println(unit.getAccess().yield() + " class " + unit.getClassName());
     emitExtends(unit);
     println("{");
     indentLevel++;
     emitAttributes(unit);
     emitMethods(unit);
-    emitVerbatim(unit);
     indentLevel--;
     println("}");
   }
 
   //}}}
-  //{{{ protected void emitPackage(JavaCompilationUnit unit)
+  //{{{ protected void emitPackage(CCompilationUnit unit)
 
-  protected void emitPackage(JavaCompilationUnit unit)
+  protected void emitPackage(CCompilationUnit unit)
   {
     println("package " + unit.getPackageName() + ";");
     println();
   }
 
   //}}}
-  //{{{ protected void emitImports(JavaCompilationUnit unit)
+  //{{{ protected void emitImports(CCompilationUnit unit)
 
-  protected void emitImports(JavaCompilationUnit unit)
+  protected void emitImports(CCompilationUnit unit)
   {
     Iterator iter = unit.fetchImportedIterator();
     if (iter.hasNext()) {
@@ -210,12 +139,12 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ protected void emitExtends(JavaCompilationUnit unit)
+  //{{{ protected void emitExtends(CCompilationUnit unit)
 
-  protected void emitExtends(JavaCompilationUnit unit)
+  protected void emitExtends(CCompilationUnit unit)
   {
     String superClass = unit.getSuperClass();
-    if (superClass != null) {
+    if (!superClass.equals("")) {
       indentLevel++;
       println("extends " + superClass);
       indentLevel--;
@@ -224,15 +153,15 @@ public class JavaGenerator
 
   //}}}
 
-  //{{{ protected void emitAttributes(JavaCompilationUnit unit)
+  //{{{ protected void emitAttributes(CCompilationUnit unit)
 
-  protected void emitAttributes(JavaCompilationUnit unit)
+  protected void emitAttributes(CCompilationUnit unit)
   {
     Iterator iter = unit.fetchAttributeIterator();
     if (iter.hasNext()) {
       foldOpen("attributes");
       while (iter.hasNext()) {
-	emitAttribute((JavaAttribute)iter.next());
+	emitAttribute((CAttribute)iter.next());
       }
       foldClose();
       println();
@@ -240,9 +169,9 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ protected void emitAttribute(JavaAttribute attribute)
+  //{{{ protected void emitAttribute(CAttribute attribute)
 
-  protected void emitAttribute(JavaAttribute attr)
+  protected void emitAttribute(CAttribute attr)
   {
     String access = attr.getAccess().yield();
     String type = attr.getType();
@@ -255,9 +184,9 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ protected void emitAttributeDocumentation(JavaAttribute attr)
+  //{{{ protected void emitAttributeDocumentation(CAttribute attr)
 
-  protected void emitAttributeDocumentation(JavaAttribute attr)
+  protected void emitAttributeDocumentation(CAttribute attr)
   {
     if (getGeneratorContext().getBoolean("javadoc")) {
       String desc = attr.getDescription();
@@ -268,35 +197,20 @@ public class JavaGenerator
   }
 
   //}}}
-  
-  //{{{ protected void emitVerbatim(JavaCompilationUnit unit)
 
-  protected void emitVerbatim(JavaCompilationUnit unit)
-  {
-    String verbatim = unit.getVerbatim();
-    String separator = System.getProperty("line.separator");
-    StringTokenizer tokenizer = new StringTokenizer(verbatim, separator);
-    while (tokenizer.hasMoreTokens()) {
-      String line = tokenizer.nextToken();
-      println(line);
-    }
-  }
+  //{{{ protected void emitMethods(CCompilationUnit unit)
 
-  //}}}
-
-  //{{{ protected void emitMethods(JavaCompilationUnit unit)
-
-  protected void emitMethods(JavaCompilationUnit unit)
+  protected void emitMethods(CCompilationUnit unit)
   {
     for (Iterator i = unit.fetchMethodIterator(); i.hasNext();) {
-      emitMethod((JavaMethod)i.next());
+      emitMethod((CMethod)i.next());
     }
   }
 
   //}}}
-  //{{{ protected void emitMethodDocumentation(JavaMethod method)
+  //{{{ protected void emitMethodDocumentation(CMethod method)
 
-  protected void emitMethodDocumentation(JavaMethod method)
+  protected void emitMethodDocumentation(CMethod method)
   {
     if (getGeneratorContext().getBoolean("javadoc")) {
       println("/**");
@@ -320,9 +234,9 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ protected void emitMethod(JavaMethod method)
+  //{{{ protected void emitMethod(CMethod method)
 
-  protected void emitMethod(JavaMethod method)
+  protected void emitMethod(CMethod method)
   {
     String decl = method.toString();
 
@@ -429,7 +343,7 @@ public class JavaGenerator
 
   public String methodName(String name)
   {
-    return javaMethodName(name);
+    return AutocodeGenerator.javaMethodName(name);
   }
 
   //}}}
@@ -437,7 +351,7 @@ public class JavaGenerator
 
   public String constructorName(String name)
   {
-    return javaTypeName(name);
+    return capitalize(methodName(name));
   }
 
   //}}}

@@ -4,3 +4,66 @@ plugin constructor {
     type := { constructor }
   }
 }
+
+type * {
+  operation constructor {
+    super args {
+      field := { }
+      field * {
+	//{{{ type *
+
+	type * {
+	  collection := false
+	  implementation := { }
+	  implementation * {
+	    import := { }
+	  }
+	  interface := { }
+	  interface * {
+	    import := { }
+	  }
+	}
+
+	//}}}
+      }
+    }
+  }
+}
+
+enum * {
+  operation constructor {
+    super args {
+      field := { }
+      field * {
+	//{{{ type *
+
+	type * {
+	  collection := false
+	  implementation := { }
+	  implementation * {
+	    import := { }
+	  }
+	  interface := { }
+	  interface * {
+	    import := { }
+	  }
+	}
+
+	//}}}
+      }
+    }
+  }
+}
+
+enum * {
+  operation constructor {
+    access := private
+    super args {
+      s : string
+    }
+  }
+
+  operation parse-enum {
+  }
+}
+

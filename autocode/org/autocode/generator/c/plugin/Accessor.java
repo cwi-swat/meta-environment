@@ -134,9 +134,6 @@ public class Accessor
     method.setDescription("initializes the "
 			  + fieldContext.getString("description") + ".");
     unit.addMethod(method);
-
-    String attrType = generator.typeName(fieldTypeContext);
-    addAttribute(unit, fieldContext, attrName, attrType);
   }
 
   //}}}

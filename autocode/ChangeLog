@@ -1,5 +1,10 @@
 $Id$
 
+Sun Feb 24 20:14:32 CET 2002 <jong,olivierp>
+ * Added support for 'verbatim' code includes
+ * Fixed enum support in Java generator
+ * Started working on C generator
+
 Fri Feb 22 14:52:29 CET 2002 <olivierp>
  * Added support for super-types, syntax: 'type Client :: Object { ... }'
    this construct is normalized to: 'type Client { super := Object ... }'
