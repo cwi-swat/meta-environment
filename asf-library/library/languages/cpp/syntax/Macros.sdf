@@ -1,7 +1,7 @@
-module languages/cpp/Macros
+module languages/cpp/syntax/Macros
 
-imports languages/cpp/Basic
-	languages/cpp/Replacement
+imports languages/cpp/syntax/Basic
+	languages/cpp/syntax/Replacement
 
 exports
 

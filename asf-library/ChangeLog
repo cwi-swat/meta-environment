@@ -1,3 +1,13 @@
+2003/09/22 (jurgenv@cwi.nl)
+  * Restructured the library:
+      - basic (still contains basic data-types)
+      - containers (still contains paramatrized data-structures)
+      - utilities (contains access to ASF builtins and other practical stuff)
+      - languages (contains specificiations of all kinds of languages)
+  * Promoted cpp grammar from sandbox to languages
+  * Changed module names of ATerm syntax to correspond better to the 
+    style guide
+
 2003/09/22 (storm@cwi.nl)
   * Added grammar for the C Preprocessor to the Sandbox.
   * Added tentative ASCII module to basic/.

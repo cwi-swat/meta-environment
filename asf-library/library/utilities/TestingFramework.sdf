@@ -20,7 +20,7 @@ hiddens
   sorts X
   imports
     containers/List[TestResult]
-    asf/syntax/Comments
+    basic/Comments
   context-free syntax
     summarize( TestResult* )	-> TestSummary
     "PASS"					-> TestSummary

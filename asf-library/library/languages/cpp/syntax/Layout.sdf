@@ -1,4 +1,4 @@
-module languages/cpp/Layout
+module languages/cpp/syntax/Layout
 
 exports
   lexical syntax

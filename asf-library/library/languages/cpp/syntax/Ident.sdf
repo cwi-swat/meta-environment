@@ -1,4 +1,4 @@
-module languages/cpp/Ident
+module languages/cpp/syntax/Ident
 
 exports
 

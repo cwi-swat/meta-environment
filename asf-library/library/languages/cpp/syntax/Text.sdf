@@ -1,4 +1,4 @@
-module languages/cpp/Text
+module languages/cpp/syntax/Text
 
 exports
 

@@ -1,0 +1,25 @@
+%%% $Id$
+                                  
+module languages/aterm/Literals
+imports languages/aterm/Layout
+
+hiddens
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+
+exports
+  sorts Literal
+  lexical syntax
+    "\\" ~[012]                    -> AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]          -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]           -> DecimalEscChar
+    "\\" "2" "5" [0-5]             -> DecimalEscChar
+
+    AlphaNumericalEscChar          -> EscChar
+    DecimalEscChar                 -> EscChar
+
+    %% fixme: replace \013 by \r when Character definition allows it.
+    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
+    EscChar                        -> L-Char
+
+    "\"" L-Char* "\""              -> Literal

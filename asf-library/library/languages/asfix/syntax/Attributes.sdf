@@ -1,5 +1,5 @@
 module languages/asfix/syntax/Attributes
-imports languages/asfix/syntax/Literals languages/aterm/ATerms
+imports languages/asfix/syntax/Literals languages/aterm/syntax/ATerms
 
 exports
   sorts Attributes Attrs Attr Associativity

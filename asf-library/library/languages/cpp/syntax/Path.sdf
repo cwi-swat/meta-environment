@@ -1,4 +1,4 @@
-module languages/cpp/Path
+module languages/cpp/syntax/Path
 
 exports
 

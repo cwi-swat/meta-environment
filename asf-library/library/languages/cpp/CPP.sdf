@@ -1,5 +1,0 @@
-module languages/cpp/CPP
-
-imports languages/cpp/Macros
-	languages/cpp/Div
-	languages/cpp/If

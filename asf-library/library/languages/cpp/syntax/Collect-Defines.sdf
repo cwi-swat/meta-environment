@@ -1,6 +1,6 @@
-module languages/cpp/Collect-Defines
+module languages/cpp/syntax/Collect-Defines
 
-imports languages/cpp/PP
+imports languages/cpp/syntax/PP
 	containers/Table[Key Value]
 
 

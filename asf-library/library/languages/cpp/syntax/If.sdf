@@ -1,7 +1,7 @@
-module languages/cpp/If
+module languages/cpp/syntax/If
 
-imports languages/cpp/Expr
-	languages/cpp/Basic
+imports languages/cpp/syntax/Expr
+	languages/cpp/syntax/Basic
 	
 
 exports

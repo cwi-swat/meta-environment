@@ -1,3 +1,0 @@
-module languages/cpp/Basic
-
-imports languages/cpp/Text languages/cpp/Layout languages/cpp/Ident
