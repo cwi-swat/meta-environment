@@ -1,7 +1,6 @@
 *.adt
 *.def
 *.dict
-*.jar
 .deps
 Makefile
 Makefile.in
