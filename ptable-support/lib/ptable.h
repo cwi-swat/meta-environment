@@ -120,7 +120,7 @@ ATerm PTA_PriorityToTerm(PTA_Priority arg);
 /*{{{  constructors */
 
 PTA_Version PTA_makeVersionDefault();
-PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities);
+PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, int initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities);
 PTA_Labels PTA_makeLabelsEmpty();
 PTA_Labels PTA_makeLabelsList(PTA_Label head, PTA_Labels tail);
 PTA_Label PTA_makeLabelDefault(PTA_Production production, int number);
@@ -136,8 +136,8 @@ PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Choices choices);
 PTA_Choices PTA_makeChoicesEmpty();
 PTA_Choices PTA_makeChoicesList(PTA_Choice head, PTA_Choices tail);
 PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAttr);
-PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAhead lookahead);
-PTA_Choice PTA_makeChoiceShift(int stateNumner);
+PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAheads lookaheads);
+PTA_Choice PTA_makeChoiceShift(int stateNumber);
 PTA_Choice PTA_makeChoiceAccept();
 PTA_SpecialAttr PTA_makeSpecialAttrNone();
 PTA_SpecialAttr PTA_makeSpecialAttrReject();
@@ -146,7 +146,7 @@ PTA_SpecialAttr PTA_makeSpecialAttrAvoid();
 PTA_LookAhead PTA_makeLookAheadDefault(PTA_CharClass charClass, PTA_LookAheads lookaheads);
 PTA_CharClass PTA_makeCharClassDefault(PTA_CharRanges ranges);
 PTA_LookAheads PTA_makeLookAheadsEmpty();
-PTA_LookAheads PTA_makeLookAheadsElement(PTA_LookAhead lookahead);
+PTA_LookAheads PTA_makeLookAheadsList(PTA_LookAhead head, PTA_LookAheads tail);
 PTA_Priorities PTA_makePrioritiesEmpty();
 PTA_Priorities PTA_makePrioritiesList(PTA_Priority head, PTA_Priorities tail);
 PTA_Priority PTA_makePriorityLeft(int label1, int label2);
@@ -191,8 +191,8 @@ ATbool PTA_hasParseTableVersion(PTA_ParseTable arg);
 PTA_Version PTA_getParseTableVersion(PTA_ParseTable arg);
 PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, PTA_Version version);
 ATbool PTA_hasParseTableInitialState(PTA_ParseTable arg);
-ATerm PTA_getParseTableInitialState(PTA_ParseTable arg);
-PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, ATerm initialState);
+int PTA_getParseTableInitialState(PTA_ParseTable arg);
+PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, int initialState);
 ATbool PTA_hasParseTableLabels(PTA_ParseTable arg);
 PTA_Labels PTA_getParseTableLabels(PTA_ParseTable arg);
 PTA_ParseTable PTA_setParseTableLabels(PTA_ParseTable arg, PTA_Labels labels);
@@ -336,12 +336,12 @@ PTA_Choice PTA_setChoiceLabel(PTA_Choice arg, int label);
 ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg);
 PTA_SpecialAttr PTA_getChoiceSpecialAttr(PTA_Choice arg);
 PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr);
-ATbool PTA_hasChoiceLookahead(PTA_Choice arg);
-PTA_LookAhead PTA_getChoiceLookahead(PTA_Choice arg);
-PTA_Choice PTA_setChoiceLookahead(PTA_Choice arg, PTA_LookAhead lookahead);
-ATbool PTA_hasChoiceStateNumner(PTA_Choice arg);
-int PTA_getChoiceStateNumner(PTA_Choice arg);
-PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner);
+ATbool PTA_hasChoiceLookaheads(PTA_Choice arg);
+PTA_LookAheads PTA_getChoiceLookaheads(PTA_Choice arg);
+PTA_Choice PTA_setChoiceLookaheads(PTA_Choice arg, PTA_LookAheads lookaheads);
+ATbool PTA_hasChoiceStateNumber(PTA_Choice arg);
+int PTA_getChoiceStateNumber(PTA_Choice arg);
+PTA_Choice PTA_setChoiceStateNumber(PTA_Choice arg, int stateNumber);
 
 /*}}}  */
 /*{{{  PTA_SpecialAttr accessors */
@@ -378,10 +378,13 @@ PTA_CharClass PTA_setCharClassRanges(PTA_CharClass arg, PTA_CharRanges ranges);
 
 ATbool PTA_isValidLookAheads(PTA_LookAheads arg);
 inline ATbool PTA_isLookAheadsEmpty(PTA_LookAheads arg);
-inline ATbool PTA_isLookAheadsElement(PTA_LookAheads arg);
-ATbool PTA_hasLookAheadsLookahead(PTA_LookAheads arg);
-PTA_LookAhead PTA_getLookAheadsLookahead(PTA_LookAheads arg);
-PTA_LookAheads PTA_setLookAheadsLookahead(PTA_LookAheads arg, PTA_LookAhead lookahead);
+inline ATbool PTA_isLookAheadsList(PTA_LookAheads arg);
+ATbool PTA_hasLookAheadsHead(PTA_LookAheads arg);
+PTA_LookAhead PTA_getLookAheadsHead(PTA_LookAheads arg);
+PTA_LookAheads PTA_setLookAheadsHead(PTA_LookAheads arg, PTA_LookAhead head);
+ATbool PTA_hasLookAheadsTail(PTA_LookAheads arg);
+PTA_LookAheads PTA_getLookAheadsTail(PTA_LookAheads arg);
+PTA_LookAheads PTA_setLookAheadsTail(PTA_LookAheads arg, PTA_LookAheads tail);
 
 /*}}}  */
 /*{{{  PTA_Priorities accessors */
@@ -415,7 +418,7 @@ PTA_Priority PTA_setPriorityLabel2(PTA_Priority arg, int label2);
 /*{{{  sort visitors */
 
 PTA_Version PTA_visitVersion(PTA_Version arg);
-PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities));
+PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), int (*acceptInitialState)(int), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities));
 PTA_Labels PTA_visitLabels(PTA_Labels arg, PTA_Label (*acceptHead)(PTA_Label));
 PTA_Label PTA_visitLabel(PTA_Label arg, PTA_Production (*acceptProduction)(PTA_Production), int (*acceptNumber)(int));
 PTA_States PTA_visitStates(PTA_States arg, PTA_State (*acceptHead)(PTA_State));
@@ -425,11 +428,11 @@ PTA_Goto PTA_visitGoto(PTA_Goto arg, PTA_CharRanges (*acceptRanges)(PTA_CharRang
 PTA_Actions PTA_visitActions(PTA_Actions arg, PTA_Action (*acceptHead)(PTA_Action));
 PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Choices (*acceptChoices)(PTA_Choices));
 PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choice));
-PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAhead (*acceptLookahead)(PTA_LookAhead), int (*acceptStateNumner)(int));
+PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads), int (*acceptStateNumber)(int));
 PTA_SpecialAttr PTA_visitSpecialAttr(PTA_SpecialAttr arg);
 PTA_LookAhead PTA_visitLookAhead(PTA_LookAhead arg, PTA_CharClass (*acceptCharClass)(PTA_CharClass), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads));
 PTA_CharClass PTA_visitCharClass(PTA_CharClass arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges));
-PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptLookahead)(PTA_LookAhead));
+PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptHead)(PTA_LookAhead));
 PTA_Priorities PTA_visitPriorities(PTA_Priorities arg, PTA_Priority (*acceptHead)(PTA_Priority));
 PTA_Priority PTA_visitPriority(PTA_Priority arg, int (*acceptLabel1)(int), int (*acceptLabel2)(int));
 

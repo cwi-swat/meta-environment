@@ -338,11 +338,11 @@ PTA_Version PTA_makeVersionDefault()
 }
 
 /*}}}  */
-/*{{{  PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities) */
+/*{{{  PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, int initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities) */
 
-PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities)
+PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, int initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities)
 {
-  return (PTA_ParseTable)(ATerm)ATmakeAppl5(PTA_afun0, (ATerm)version, (ATerm)initialState, (ATerm)labels, (ATerm)ATmakeAppl1(PTA_afun1, (ATerm)states), (ATerm)ATmakeAppl1(PTA_afun2, (ATerm)priorities));
+  return (PTA_ParseTable)(ATerm)ATmakeAppl5(PTA_afun0, (ATerm)version, (ATerm)ATmakeInt(initialState), (ATerm)labels, (ATerm)ATmakeAppl1(PTA_afun1, (ATerm)states), (ATerm)ATmakeAppl1(PTA_afun2, (ATerm)priorities));
 }
 
 /*}}}  */
@@ -466,19 +466,19 @@ PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAt
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAhead lookahead) */
+/*{{{  PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAheads lookaheads) */
 
-PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAhead lookahead)
+PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAheads lookaheads)
 {
-  return (PTA_Choice)(ATerm)ATmakeAppl4(PTA_afun8, (ATerm)ATmakeInt(length), (ATerm)ATmakeInt(label), (ATerm)specialAttr, (ATerm)lookahead);
+  return (PTA_Choice)(ATerm)ATmakeAppl4(PTA_afun8, (ATerm)ATmakeInt(length), (ATerm)ATmakeInt(label), (ATerm)specialAttr, (ATerm)lookaheads);
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_makeChoiceShift(int stateNumner) */
+/*{{{  PTA_Choice PTA_makeChoiceShift(int stateNumber) */
 
-PTA_Choice PTA_makeChoiceShift(int stateNumner)
+PTA_Choice PTA_makeChoiceShift(int stateNumber)
 {
-  return (PTA_Choice)(ATerm)ATmakeAppl1(PTA_afun9, (ATerm)ATmakeInt(stateNumner));
+  return (PTA_Choice)(ATerm)ATmakeAppl1(PTA_afun9, (ATerm)ATmakeInt(stateNumber));
 }
 
 /*}}}  */
@@ -546,11 +546,11 @@ PTA_LookAheads PTA_makeLookAheadsEmpty()
 }
 
 /*}}}  */
-/*{{{  PTA_LookAheads PTA_makeLookAheadsElement(PTA_LookAhead lookahead) */
+/*{{{  PTA_LookAheads PTA_makeLookAheadsList(PTA_LookAhead head, PTA_LookAheads tail) */
 
-PTA_LookAheads PTA_makeLookAheadsElement(PTA_LookAhead lookahead)
+PTA_LookAheads PTA_makeLookAheadsList(PTA_LookAhead head, PTA_LookAheads tail)
 {
-  return (PTA_LookAheads)(ATerm)ATmakeList1((ATerm)lookahead);
+  return (PTA_LookAheads)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
 }
 
 /*}}}  */
@@ -793,21 +793,21 @@ ATbool PTA_hasParseTableInitialState(PTA_ParseTable arg)
 }
 
 /*}}}  */
-/*{{{  ATerm PTA_getParseTableInitialState(PTA_ParseTable arg) */
+/*{{{  int PTA_getParseTableInitialState(PTA_ParseTable arg) */
 
-ATerm PTA_getParseTableInitialState(PTA_ParseTable arg)
+int PTA_getParseTableInitialState(PTA_ParseTable arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 1);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
 }
 
 /*}}}  */
-/*{{{  PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, ATerm initialState) */
+/*{{{  PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, int initialState) */
 
-PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, ATerm initialState)
+PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, int initialState)
 {
   if (PTA_isParseTableParseTable(arg)) {
-    return (PTA_ParseTable)ATsetArgument((ATermAppl)arg, (ATerm)initialState, 1);
+    return (PTA_ParseTable)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(initialState), 1);
   }
 
   ATabort("ParseTable has no InitialState: %t\n", arg);
@@ -2099,9 +2099,9 @@ PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr)
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasChoiceLookahead(PTA_Choice arg) */
+/*{{{  ATbool PTA_hasChoiceLookaheads(PTA_Choice arg) */
 
-ATbool PTA_hasChoiceLookahead(PTA_Choice arg)
+ATbool PTA_hasChoiceLookaheads(PTA_Choice arg)
 {
   if (PTA_isChoiceLookaheadReduce(arg)) {
     return ATtrue;
@@ -2110,31 +2110,31 @@ ATbool PTA_hasChoiceLookahead(PTA_Choice arg)
 }
 
 /*}}}  */
-/*{{{  PTA_LookAhead PTA_getChoiceLookahead(PTA_Choice arg) */
+/*{{{  PTA_LookAheads PTA_getChoiceLookaheads(PTA_Choice arg) */
 
-PTA_LookAhead PTA_getChoiceLookahead(PTA_Choice arg)
+PTA_LookAheads PTA_getChoiceLookaheads(PTA_Choice arg)
 {
   
-    return (PTA_LookAhead)ATgetArgument((ATermAppl)arg, 3);
+    return (PTA_LookAheads)ATgetArgument((ATermAppl)arg, 3);
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_setChoiceLookahead(PTA_Choice arg, PTA_LookAhead lookahead) */
+/*{{{  PTA_Choice PTA_setChoiceLookaheads(PTA_Choice arg, PTA_LookAheads lookaheads) */
 
-PTA_Choice PTA_setChoiceLookahead(PTA_Choice arg, PTA_LookAhead lookahead)
+PTA_Choice PTA_setChoiceLookaheads(PTA_Choice arg, PTA_LookAheads lookaheads)
 {
   if (PTA_isChoiceLookaheadReduce(arg)) {
-    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)lookahead, 3);
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)lookaheads, 3);
   }
 
-  ATabort("Choice has no Lookahead: %t\n", arg);
+  ATabort("Choice has no Lookaheads: %t\n", arg);
   return (PTA_Choice)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasChoiceStateNumner(PTA_Choice arg) */
+/*{{{  ATbool PTA_hasChoiceStateNumber(PTA_Choice arg) */
 
-ATbool PTA_hasChoiceStateNumner(PTA_Choice arg)
+ATbool PTA_hasChoiceStateNumber(PTA_Choice arg)
 {
   if (PTA_isChoiceShift(arg)) {
     return ATtrue;
@@ -2143,24 +2143,24 @@ ATbool PTA_hasChoiceStateNumner(PTA_Choice arg)
 }
 
 /*}}}  */
-/*{{{  int PTA_getChoiceStateNumner(PTA_Choice arg) */
+/*{{{  int PTA_getChoiceStateNumber(PTA_Choice arg) */
 
-int PTA_getChoiceStateNumner(PTA_Choice arg)
+int PTA_getChoiceStateNumber(PTA_Choice arg)
 {
   
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner) */
+/*{{{  PTA_Choice PTA_setChoiceStateNumber(PTA_Choice arg, int stateNumber) */
 
-PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner)
+PTA_Choice PTA_setChoiceStateNumber(PTA_Choice arg, int stateNumber)
 {
   if (PTA_isChoiceShift(arg)) {
-    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(stateNumner), 0);
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(stateNumber), 0);
   }
 
-  ATabort("Choice has no StateNumner: %t\n", arg);
+  ATabort("Choice has no StateNumber: %t\n", arg);
   return (PTA_Choice)NULL;
 }
 
@@ -2441,7 +2441,7 @@ ATbool PTA_isValidLookAheads(PTA_LookAheads arg)
   if (PTA_isLookAheadsEmpty(arg)) {
     return ATtrue;
   }
-  else if (PTA_isLookAheadsElement(arg)) {
+  else if (PTA_isLookAheadsList(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2463,50 +2463,83 @@ inline ATbool PTA_isLookAheadsEmpty(PTA_LookAheads arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool PTA_isLookAheadsElement(PTA_LookAheads arg) */
+/*{{{  inline ATbool PTA_isLookAheadsList(PTA_LookAheads arg) */
 
-inline ATbool PTA_isLookAheadsElement(PTA_LookAheads arg)
+inline ATbool PTA_isLookAheadsList(PTA_LookAheads arg)
 {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternLookAheadsElement, NULL));
+  assert(ATmatchTerm((ATerm)arg, PTA_patternLookAheadsList, NULL, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasLookAheadsLookahead(PTA_LookAheads arg) */
+/*{{{  ATbool PTA_hasLookAheadsHead(PTA_LookAheads arg) */
 
-ATbool PTA_hasLookAheadsLookahead(PTA_LookAheads arg)
+ATbool PTA_hasLookAheadsHead(PTA_LookAheads arg)
 {
-  if (PTA_isLookAheadsElement(arg)) {
+  if (PTA_isLookAheadsList(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PTA_LookAhead PTA_getLookAheadsLookahead(PTA_LookAheads arg) */
+/*{{{  PTA_LookAhead PTA_getLookAheadsHead(PTA_LookAheads arg) */
 
-PTA_LookAhead PTA_getLookAheadsLookahead(PTA_LookAheads arg)
+PTA_LookAhead PTA_getLookAheadsHead(PTA_LookAheads arg)
 {
   
     return (PTA_LookAhead)ATgetFirst((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  PTA_LookAheads PTA_setLookAheadsLookahead(PTA_LookAheads arg, PTA_LookAhead lookahead) */
+/*{{{  PTA_LookAheads PTA_setLookAheadsHead(PTA_LookAheads arg, PTA_LookAhead head) */
 
-PTA_LookAheads PTA_setLookAheadsLookahead(PTA_LookAheads arg, PTA_LookAhead lookahead)
+PTA_LookAheads PTA_setLookAheadsHead(PTA_LookAheads arg, PTA_LookAhead head)
 {
-  if (PTA_isLookAheadsElement(arg)) {
-    return (PTA_LookAheads)ATreplace((ATermList)arg, (ATerm)lookahead, 0);
+  if (PTA_isLookAheadsList(arg)) {
+    return (PTA_LookAheads)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("LookAheads has no Lookahead: %t\n", arg);
+  ATabort("LookAheads has no Head: %t\n", arg);
+  return (PTA_LookAheads)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasLookAheadsTail(PTA_LookAheads arg) */
+
+ATbool PTA_hasLookAheadsTail(PTA_LookAheads arg)
+{
+  if (PTA_isLookAheadsList(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_getLookAheadsTail(PTA_LookAheads arg) */
+
+PTA_LookAheads PTA_getLookAheadsTail(PTA_LookAheads arg)
+{
+  
+    return (PTA_LookAheads)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_setLookAheadsTail(PTA_LookAheads arg, PTA_LookAheads tail) */
+
+PTA_LookAheads PTA_setLookAheadsTail(PTA_LookAheads arg, PTA_LookAheads tail)
+{
+  if (PTA_isLookAheadsList(arg)) {
+    return (PTA_LookAheads)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
+  }
+
+  ATabort("LookAheads has no Tail: %t\n", arg);
   return (PTA_LookAheads)NULL;
 }
 
@@ -2845,9 +2878,9 @@ PTA_Version PTA_visitVersion(PTA_Version arg)
 }
 
 /*}}}  */
-/*{{{  PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities)) */
+/*{{{  PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), int (*acceptInitialState)(int), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities)) */
 
-PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities))
+PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), int (*acceptInitialState)(int), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities))
 {
   if (PTA_isParseTableParseTable(arg)) {
     return PTA_makeParseTableParseTable(
@@ -3004,9 +3037,9 @@ PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choic
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAhead (*acceptLookahead)(PTA_LookAhead), int (*acceptStateNumner)(int)) */
+/*{{{  PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads), int (*acceptStateNumber)(int)) */
 
-PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAhead (*acceptLookahead)(PTA_LookAhead), int (*acceptStateNumner)(int))
+PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads), int (*acceptStateNumber)(int))
 {
   if (PTA_isChoiceReduce(arg)) {
     return PTA_makeChoiceReduce(
@@ -3019,11 +3052,11 @@ PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*accep
         acceptLength ? acceptLength(PTA_getChoiceLength(arg)) : PTA_getChoiceLength(arg),
         acceptLabel ? acceptLabel(PTA_getChoiceLabel(arg)) : PTA_getChoiceLabel(arg),
         acceptSpecialAttr ? acceptSpecialAttr(PTA_getChoiceSpecialAttr(arg)) : PTA_getChoiceSpecialAttr(arg),
-        acceptLookahead ? acceptLookahead(PTA_getChoiceLookahead(arg)) : PTA_getChoiceLookahead(arg));
+        acceptLookaheads ? acceptLookaheads(PTA_getChoiceLookaheads(arg)) : PTA_getChoiceLookaheads(arg));
   }
   if (PTA_isChoiceShift(arg)) {
     return PTA_makeChoiceShift(
-        acceptStateNumner ? acceptStateNumner(PTA_getChoiceStateNumner(arg)) : PTA_getChoiceStateNumner(arg));
+        acceptStateNumber ? acceptStateNumber(PTA_getChoiceStateNumber(arg)) : PTA_getChoiceStateNumber(arg));
   }
   if (PTA_isChoiceAccept(arg)) {
     return PTA_makeChoiceAccept();
@@ -3081,16 +3114,17 @@ PTA_CharClass PTA_visitCharClass(PTA_CharClass arg, PTA_CharRanges (*acceptRange
 }
 
 /*}}}  */
-/*{{{  PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptLookahead)(PTA_LookAhead)) */
+/*{{{  PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptHead)(PTA_LookAhead)) */
 
-PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptLookahead)(PTA_LookAhead))
+PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptHead)(PTA_LookAhead))
 {
   if (PTA_isLookAheadsEmpty(arg)) {
     return PTA_makeLookAheadsEmpty();
   }
-  if (PTA_isLookAheadsElement(arg)) {
-    return PTA_makeLookAheadsElement(
-        acceptLookahead ? acceptLookahead(PTA_getLookAheadsLookahead(arg)) : PTA_getLookAheadsLookahead(arg));
+  if (PTA_isLookAheadsList(arg)) {
+    return PTA_makeLookAheadsList(
+        acceptHead ? acceptHead(PTA_getLookAheadsHead(arg)) : PTA_getLookAheadsHead(arg),
+        PTA_visitLookAheads(PTA_getLookAheadsTail(arg), acceptHead));
   }
   ATabort("not a LookAheads: %t\n", arg);
   return (PTA_LookAheads)NULL;

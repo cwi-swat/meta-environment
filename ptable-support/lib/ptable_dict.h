@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jun 28 09:19:21 2002
+ * Generated at Sun Jul  7 20:14:07 2002
  */
 
 #ifndef __ptable_dict_H
@@ -31,7 +31,7 @@ extern ATerm PTA_patternPriorityRight;
 extern ATerm PTA_patternPriorityLeft;
 extern ATerm PTA_patternPrioritiesList;
 extern ATerm PTA_patternPrioritiesEmpty;
-extern ATerm PTA_patternLookAheadsElement;
+extern ATerm PTA_patternLookAheadsList;
 extern ATerm PTA_patternLookAheadsEmpty;
 extern ATerm PTA_patternCharClassDefault;
 extern ATerm PTA_patternLookAheadDefault;

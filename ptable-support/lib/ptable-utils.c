@@ -21,3 +21,23 @@ PT_Production PTA_LookUpProduction(PTA_ParseTable pt, int label)
   ATwarning("PTA_LookUpProduction: production %d not found\n", label);
   return NULL;
 }
+
+int PTAgetGotosLength(PTA_Gotos gotos)
+{
+  return ATgetLength((ATermList)PTA_makeTermFromGotos(gotos));
+}
+
+int PTAgetActionsLength(PTA_Actions actions)
+{
+  return ATgetLength((ATermList)PTA_makeTermFromActions(actions));
+}
+
+int PTAgetStatesLength(PTA_States states) 
+{
+  return ATgetLength((ATermList)PTA_makeTermFromStates(states));
+}
+
+int PTAgetLabelsLength(PTA_Labels labels)
+{
+  return ATgetLength((ATermList)PTA_makeTermFromLabels(labels));
+}
