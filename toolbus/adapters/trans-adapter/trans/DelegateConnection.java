@@ -69,7 +69,8 @@ public class DelegateConnection implements DelegateTif {
 	}
 
 	public void postMaskeradeTerminate(ATerm term) {
-		maskeradeConnection.sendTerm(factory.make("snd-terminate(" + term + ")"));
+		System.exit(1);
+//		maskeradeConnection.sendTerm(factory.make("snd-terminate(" + term + ")"));
 	}
 
 	public void recAckEvent(ATerm t0) {
