@@ -1,4 +1,4 @@
-#! @SHELL@
+#! /bin/sh
 # $Id$
 
 prefix=@prefix@
@@ -15,7 +15,7 @@ in
 		;;
 	*)
 		echo "Usage: `basename $0` msm-paths-file module"
-		exit;;
+		exit 1;;
 esac
 
 modules=`$IMPORTS $msm $module`;
