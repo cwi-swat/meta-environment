@@ -63,7 +63,7 @@ Manipulation of modules in database:
 
 #include "module-db.h"
 
-static char myversion[] = "1.1";
+static char myversion[] = "1.2";
 
 ATermTable new_modules_db;
 ATermTable import_db;
@@ -475,29 +475,37 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
   }
 }
 
-ATerm add_parse_table(int cid, char *module, char *table, 
-                               ATerm tableType, int timestamp)
+ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
 {
   ATerm entry, modname;
+  char *moduleName;
+  int tableLoc, tableTimeLoc;
 
-  modname = ATmake("<str>",module);
+  if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
+    tableLoc = EQS_TABLE_LOC;
+    tableTimeLoc = EQS_TABLE_TIME_LOC;
+  } 
+  else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
+    tableLoc = TRM_TABLE_LOC;
+    tableTimeLoc = TRM_TABLE_TIME_LOC;
+  }
+  else {
+    ATerror("Illegal moduleId: %t\n", moduleId);
+    return NULL;
+  }
+
+  modname = ATmake("<str>",moduleName);
 
   entry = GetValue(new_modules_db, modname);
-  if (ATisEqual(tableType, ATmake("eqs"))) {
-    entry = (ATerm)ATreplace((ATermList)entry,
-                             ATmake("table(<str>)", table),
-                             EQS_TABLE_LOC); 
-    entry = (ATerm)ATreplace((ATermList)entry,
-                             (ATerm)ATmakeInt(timestamp),
-                             EQS_TABLE_TIME_LOC);
-  } else {
-    entry = (ATerm)ATreplace((ATermList)entry,
-                             ATmake("table(<str>)", table),
-                             TRM_TABLE_LOC); 
-    entry = (ATerm)ATreplace((ATermList)entry,
-                             (ATerm)ATmakeInt(timestamp),
-                             TRM_TABLE_TIME_LOC);
-  }
+
+  entry = (ATerm)ATreplace((ATermList)entry,
+                           /*ATmake("table(<str>)", table),*/
+                           ATmake("table(<term>)", table),
+                           tableLoc); 
+  entry = (ATerm)ATreplace((ATermList)entry,
+                           (ATerm)ATmakeInt(timestamp),
+                           tableTimeLoc);
+
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(parse-table-added)");
 }
@@ -602,23 +610,35 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
 ATbool is_valid_parse_table(ATermList visited, ATerm module, 
                             int timeOfEqsTable, int timeOfTrmTable);
 
-ATerm get_parse_table(int cid, char *modulename, ATerm tableType)
+ATerm get_parse_table(int cid, ATerm moduleId)
 {
   ATermList entry;
   ATerm     table, modname;
-  char      *place;
+  ATerm     contents;
+  /*char      *place;*/
+  char      *moduleName;
   int tableLoc;
 
-  if(ATisEqual(tableType, ATmake("eqs"))) {
+  if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     tableLoc = EQS_TABLE_LOC;
-  } else {
+  } 
+  else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
     tableLoc = TRM_TABLE_LOC;
   }
-  modname = ATmake("<str>", modulename);
-  if((entry = (ATermList) GetValue(new_modules_db, modname))) {
+  else {
+    ATwarning("Illegal moduleId: %t\n", moduleId);
+    return ATmake("snd-value(no-table)");
+  }
+    
+  modname = ATmake("<str>", moduleName);
+  if ((entry = (ATermList) GetValue(new_modules_db, modname))) {
     table = ATelementAt((ATermList)entry, tableLoc);
-    if(ATmatch(table,"table(<str>)", &place))
+    /*if (ATmatch(table,"table(<str>)", &place)) 
       return ATmake("snd-value(table(<str>))",place);
+    */
+    if (ATmatch(table,"table(<term>)", &contents)) {
+      return ATmake("snd-value(table(<term>))", ATBpack(contents));
+    }
   }
   return ATmake("snd-value(no-table)");
 }

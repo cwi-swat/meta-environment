@@ -25,9 +25,10 @@ let
   Id        : term,
   T1        : term,
   Path      : str,
-  Table     : str,
+  Table     : term,
   T2        : term,
   AsFixModule: term,
+  ModuleId  : term,
   Syntax    : term,
   NewSyntax : term,
   EqsTree   : term,
@@ -194,9 +195,9 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-updated)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(add-parse-table-to-db(Name?, Table?, TableType?, timestamp(Time?))).
-  snd-eval(Mdb,add-parse-table(Name, Table, TableType, Time)).
-  rec-value(Mdb,parse-table-added).
+  rec-msg(add-parse-table-to-db(ModuleId?, Table?, timestamp(Time?))) .
+  snd-eval(Mdb, add-parse-table(ModuleId, Table, Time)) .
+  rec-value(Mdb, parse-table-added) .
   snd-msg(parse-table-added)
 +
 /* Add parse table to the database for the given module name */
@@ -212,12 +213,12 @@ snd-do(Mdb, create-module-db).
   snd-msg(path(Path))
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-table-from-db(Name?, TableType?)).
-  snd-eval(Mdb, get-parse-table(Name, TableType)).
-  ( rec-value(Mdb, table(Table?)).
+  rec-msg(get-table-from-db(ModuleId?)) .
+  snd-eval(Mdb, get-parse-table(ModuleId)) .
+  ( rec-value(Mdb, table(Table?)) .
     snd-msg(table(Table))
   +
-    rec-value(Mdb, no-table).
+    rec-value(Mdb, no-table) .
     snd-msg(no-table)
   )
 +
@@ -248,8 +249,12 @@ snd-do(Mdb, create-module-db).
   )
 +
 /* Get the syntax for a list of modules */
-  rec-msg(get-all-sdf2-definitions(Name?)).
-  snd-eval(Mdb, get-all-sdf2-definitions(Name)).
+  (
+    rec-msg(get-all-sdf2-definitions(eqs(Name?)))
+  +
+    rec-msg(get-all-sdf2-definitions(trm(Name?)))
+  ) .
+  snd-eval(Mdb, get-all-sdf2-definitions(Name)) .
   (
     rec-value(Mdb, syntax(Syntax?)).
     snd-msg(syntax(Syntax))
