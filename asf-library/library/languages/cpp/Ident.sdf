@@ -1,4 +1,4 @@
-module Ident
+module languages/cpp/Ident
 
 exports
 

@@ -1,4 +1,4 @@
-module Tokens
+module languages/cpp/Tokens
 
 exports
 

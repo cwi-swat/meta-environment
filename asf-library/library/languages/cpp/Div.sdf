@@ -1,8 +1,8 @@
-module Div
+module languages/cpp/Div
 
-imports Tokens
-imports Basic
-	Path
+imports languages/cpp/Tokens
+imports languages/cpp/Basic
+	languages/cpp/Path
 	
 
 exports

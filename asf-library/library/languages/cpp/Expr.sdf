@@ -1,8 +1,8 @@
-module Expr
+module languages/cpp/Expr
 
 imports basic/Integers
 	basic/Strings
-	Ident
+	languages/cpp/Ident
 
 exports
 

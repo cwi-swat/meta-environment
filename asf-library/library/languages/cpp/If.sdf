@@ -1,7 +1,7 @@
-module If
+module languages/cpp/If
 
-imports Expr
-	Basic
+imports languages/cpp/Expr
+	languages/cpp/Basic
 	
 
 exports

@@ -1,6 +1,6 @@
-module Replacement
+module languages/cpp/Replacement
 
-imports Ident
+imports languages/cpp/Ident
 	basic/Strings
 	basic/Integers
 	
