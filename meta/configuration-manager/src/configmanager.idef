@@ -28,7 +28,6 @@ in
   snd-note(search-paths-processed)
 endlet
   
-
 process ConfigManager is
 let
   CMNG          : configmanager,

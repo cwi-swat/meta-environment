@@ -39,10 +39,11 @@ ATerm MB_ModuleNameToTerm(MB_ModuleName arg);
 MB_Buttons MB_makeButtonsList(MB_ButtonList list);
 MB_ButtonList MB_makeButtonListEmpty();
 MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail);
-MB_Button MB_makeButtonEditor(char* module, MB_EditorType type, ATerm name, ATerm actions);
+MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions);
 MB_EditorType MB_makeEditorTypeTerm();
 MB_EditorType MB_makeEditorTypeEquations();
 MB_EditorType MB_makeEditorTypeSyntax();
+MB_EditorType MB_makeEditorTypeMessageList();
 MB_EditorType MB_makeEditorTypeAll();
 MB_ModuleName MB_makeModuleNameAll();
 
@@ -83,8 +84,8 @@ MB_ButtonList MB_setButtonListTail(MB_ButtonList arg, MB_ButtonList tail);
 ATbool MB_isValidButton(MB_Button arg);
 inline ATbool MB_isButtonEditor(MB_Button arg);
 ATbool MB_hasButtonModule(MB_Button arg);
-char* MB_getButtonModule(MB_Button arg);
-MB_Button MB_setButtonModule(MB_Button arg, char* module);
+char * MB_getButtonModule(MB_Button arg);
+MB_Button MB_setButtonModule(MB_Button arg, char * module);
 ATbool MB_hasButtonType(MB_Button arg);
 MB_EditorType MB_getButtonType(MB_Button arg);
 MB_Button MB_setButtonType(MB_Button arg, MB_EditorType type);
@@ -102,6 +103,7 @@ ATbool MB_isValidEditorType(MB_EditorType arg);
 inline ATbool MB_isEditorTypeTerm(MB_EditorType arg);
 inline ATbool MB_isEditorTypeEquations(MB_EditorType arg);
 inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg);
+inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg);
 inline ATbool MB_isEditorTypeAll(MB_EditorType arg);
 
 /*}}}  */
@@ -115,7 +117,7 @@ inline ATbool MB_isModuleNameAll(MB_ModuleName arg);
 
 MB_Buttons MB_visitButtons(MB_Buttons arg, MB_ButtonList (*acceptList)(MB_ButtonList));
 MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_Button));
-MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm));
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm));
 MB_EditorType MB_visitEditorType(MB_EditorType arg);
 MB_ModuleName MB_visitModuleName(MB_ModuleName arg);
 

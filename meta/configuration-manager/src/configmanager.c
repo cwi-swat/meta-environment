@@ -7,6 +7,8 @@
 #include <unistd.h> 
 #include <assert.h>
 
+#define MAX_MESSAGE_LENGTH 133
+
 static char myversion[] = "1.0";     
 static MB_ButtonList buttons = NULL;
 static MB_ButtonList standard_buttons = NULL;
@@ -120,9 +122,15 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
 ATerm get_button_actions(int cid, ATerm buttonName, char *editortype, 
 			 char *modulename)
 {
+  char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
   MB_ButtonList localButtons = MB_concatButtonList(buttons,standard_buttons);
   MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
-  ATermList buttonActions = (ATermList) ATparse("[message(\"undefined button\")]");
+  ATermList buttonActions;
+  
+  strncat(message, ATwriteToString(buttonName), 
+          MAX_MESSAGE_LENGTH - strlen(message));
+
+  buttonActions = (ATermList) ATmake("[message(<str>)]", message);
 
   while (!ATisEmpty(localButtons)) {
     MB_Button buttonDesc = MB_getButtonListHead(localButtons);

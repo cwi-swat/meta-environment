@@ -133,9 +133,9 @@ MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail)
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_makeButtonEditor(char* module, MB_EditorType type, ATerm name, ATerm actions) */
+/*{{{  MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions) */
 
-MB_Button MB_makeButtonEditor(char* module, MB_EditorType type, ATerm name, ATerm actions)
+MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions)
 {
   return (MB_Button)(ATerm)ATmakeAppl4(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)type, (ATerm)name, (ATerm)actions);
 }
@@ -165,11 +165,19 @@ MB_EditorType MB_makeEditorTypeSyntax()
 }
 
 /*}}}  */
+/*{{{  MB_EditorType MB_makeEditorTypeMessageList() */
+
+MB_EditorType MB_makeEditorTypeMessageList()
+{
+  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun5);
+}
+
+/*}}}  */
 /*{{{  MB_EditorType MB_makeEditorTypeAll() */
 
 MB_EditorType MB_makeEditorTypeAll()
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun5);
+  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun6);
 }
 
 /*}}}  */
@@ -177,7 +185,7 @@ MB_EditorType MB_makeEditorTypeAll()
 
 MB_ModuleName MB_makeModuleNameAll()
 {
-  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun5);
+  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun6);
 }
 
 /*}}}  */
@@ -421,18 +429,18 @@ ATbool MB_hasButtonModule(MB_Button arg)
 }
 
 /*}}}  */
-/*{{{  char* MB_getButtonModule(MB_Button arg) */
+/*{{{  char * MB_getButtonModule(MB_Button arg) */
 
-char* MB_getButtonModule(MB_Button arg)
+char * MB_getButtonModule(MB_Button arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char* module) */
+/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char * module) */
 
-MB_Button MB_setButtonModule(MB_Button arg, char* module)
+MB_Button MB_setButtonModule(MB_Button arg, char * module)
 {
   if (MB_isButtonEditor(arg)) {
     return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), 0);
@@ -559,6 +567,9 @@ ATbool MB_isValidEditorType(MB_EditorType arg)
   else if (MB_isEditorTypeSyntax(arg)) {
     return ATtrue;
   }
+  else if (MB_isEditorTypeMessageList(arg)) {
+    return ATtrue;
+  }
   else if (MB_isEditorTypeAll(arg)) {
     return ATtrue;
   }
@@ -624,6 +635,28 @@ inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeSyntax);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg) */
+
+inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeMessageList);
       last_gc = ATgetGCCount();
     }
 
@@ -715,9 +748,9 @@ MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_B
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm)) */
+/*{{{  MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm)) */
 
-MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm))
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm))
 {
   if (MB_isButtonEditor(arg)) {
     return MB_makeButtonEditor(
@@ -743,6 +776,9 @@ MB_EditorType MB_visitEditorType(MB_EditorType arg)
   }
   if (MB_isEditorTypeSyntax(arg)) {
     return MB_makeEditorTypeSyntax();
+  }
+  if (MB_isEditorTypeMessageList(arg)) {
+    return MB_makeEditorTypeMessageList();
   }
   if (MB_isEditorTypeAll(arg)) {
     return MB_makeEditorTypeAll();

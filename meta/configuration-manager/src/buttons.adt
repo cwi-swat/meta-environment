@@ -10,6 +10,7 @@
  [EditorType, term, "term"],
  [EditorType, equations, "equations"],
  [EditorType, syntax, "syntax"],
+ [EditorType, message-list, "message-list"],
  [EditorType, all, "*"],
 
  [ModuleName, all, "*"]
