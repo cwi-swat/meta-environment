@@ -141,12 +141,8 @@ static void treeToSlices(PT_Tree tree)
 
       if (hasAlphanumericChars(chars)) {
 	storeTree(tree, "MetaKeyword"); 
+	return;
       }
-      else {
-	storeTree(tree, "MetaOperator");
-      }
-
-      return;
     }
     else if (PT_isTreeVar(tree)) {
       storeTree(tree, "MetaVariable");
