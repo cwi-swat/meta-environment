@@ -1,5 +1,10 @@
 # $Id$
 
+2003/09/25 (markvdb@cwi.nl)
+ * Added a check to the asf-checker to check that the outermost
+   function symbol of the left hand side of an equation is
+   *NOT* a constructor.
+
 2003/09/22 ({storm,jurgenv}@cwi.nl)
  * Changed implementation of ordering builtin to use a stable complete
    ordering.
