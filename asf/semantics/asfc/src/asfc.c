@@ -86,7 +86,11 @@ void rec_terminate(int cid, ATerm t)
  /* read the cpu time up till now*/
   cputime = clock();
   cpusecs = (float) ((float) cputime / (float) CLOCKS_PER_SEC);
-  ATfprintf(stderr, "Compiler used %f seconds cpu time\n", cpusecs);
+
+  if(run_verbose) {
+    ATfprintf(stderr, "Compiler used %f seconds cpu time\n", cpusecs);
+  }
+
   exit(0);
 }
 
