@@ -34,15 +34,23 @@ tools needed to get the Meta-Environment running:
 	  syntax of a module, the equations of a module, or a term over
           a specific module.
      <LI> The <EM>parser</EM>, which can parse terms given a parse table
-          an an input string.
+          and an input string.
      <LI> The <EM>parser generator</EM>, which can generate parse tables
           giving the complete syntax of a module and its submodules.
      <LI> The <EM>evaluator</EM>, which can evaluate a term given an
           input term and a list of equations.
+     <LI> The <EM>compiler</EM>, which can compile a specification and
+          generate C code for it.
      <LI> A <EM>module database</EM>, which keeps track of all modules
           and relations between modules in the system.
      <LI> A <EM>term database</EM>, which keeps track of all terms
           in the system.
+     <LI> An <EM>unparser</EM>, which can unparse terms, either to text
+          (by updating the layout in the AsFix representation of the term),
+          TeX code, or HTML code, given a list consisting of pairs of
+          syntax rules and box expressions.
+     <LI> An <EM>unparser generator</EM>, which can generate lists consisting
+          of pairs of syntax rules and box expressions.
 </UL>
 
 An important design decision is to separate the term database from the
@@ -86,7 +94,7 @@ of syntax change propagation can occur:
 <OL>
 <LI> When the user performs a <EM>text editing operation</EM> on
      the syntax of a module. An advantage could be that changes
-     changes are propagated as early as possible, giving all
+     are propagated as early as possible, giving all
      user interface components the possibility to keep the user
      informed of the exact state of information they provide.
      A disadvantage is that if the user decides to 'undo' changes
