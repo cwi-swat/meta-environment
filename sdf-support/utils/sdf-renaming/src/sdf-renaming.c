@@ -118,7 +118,6 @@ static ATermList applyImports(SDF_ImportList imports, PT_ParseTree pt)
     if (SDF_hasImportRenamings(import)) {
       SDF_Renamings renamings = SDF_getImportRenamings(import);
 
-      ATwarning("DEBUG: applyImports:  try to get this ATBpack into an interface function?\n");
       result = ATinsert(result, 
 			ATBpack(
 			  PT_ParseTreeToTerm(applyRenamings(renamings, pt))));
