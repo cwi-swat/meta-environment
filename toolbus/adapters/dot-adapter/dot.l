@@ -38,15 +38,18 @@ subgraph { return SUBGRAPH; }
 	char *ptr = strbuf;
 	int c;
 
-	while((c = input()) != '"'){
-		if(c <= 0) {
+	while ((c = input()) != '"'){
+		if (c <= 0) {
 			yyerror("String constant not terminated at eof");
 		}
-		if(ptr == &strbuf[BUFSIZ]){
+		if (ptr == &strbuf[BUFSIZ]){
 			yyerror("String constant too long");
 		}
-		if(c == '\\') {
+		if (c == '\\') {
 			c = input();
+			if (c == '\n') {
+				continue;
+			}
 		}
 		*ptr++ = c;		   
 	}
