@@ -30,6 +30,7 @@ let
   ModuleId   : term, 
   TableType  : term,
   Table      : term,
+  Path       : str,
   Id         : int
 in
 Id := process-id.
@@ -37,7 +38,7 @@ Id := process-id.
   rec-msg(set-parsetable(ModuleId?)) .
   snd-msg(get-table-from-db(ModuleId)) .
   (
-    rec-msg(table(Table?)).
+    rec-msg(table(Table?, Path?)).
     ReopenLanguage(ModuleId, Table)
   +
     rec-msg(no-table) .
@@ -54,6 +55,7 @@ process MakeTable(ModuleId : term) is
 let
   Syntax    : term,
   Table     : term,
+  Path      : str,
   TimeStamp : term
 in
   snd-msg(get-all-sdf2-definitions(ModuleId)).
@@ -66,13 +68,11 @@ in
     snd-msg(generate-parsetable(Syntax, ModuleId)).
     rec-msg(parsetable(Table?)).
 
-    snd-msg(get-table-timestamp(ModuleId)).
-    rec-msg(table-timestamp(TimeStamp?)).
-    snd-msg(add-parse-table-to-db(ModuleId, Table, TimeStamp)).
+    snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
     rec-msg(parse-table-added).
 
     snd-msg(get-table-from-db(ModuleId)) .
-    rec-msg(table(Table?)).
+    rec-msg(table(Table?, Path?)).
     ReopenLanguage(ModuleId, Table)
     +
     rec-msg(no-syntax).

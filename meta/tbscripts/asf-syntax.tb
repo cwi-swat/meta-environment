@@ -38,6 +38,7 @@ in
     rec-msg(changed-syntax(Syntax?)) .
 #endif
 
+
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(asf-syntax(Syntax))  
