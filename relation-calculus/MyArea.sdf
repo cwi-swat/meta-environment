@@ -1,6 +1,6 @@
 module MyArea
 
-imports aterm/Literals aterm/IntCon
+imports aterm/Literals aterm/IntCon basic/Strings
 
 exports
   sorts Area
@@ -8,3 +8,27 @@ exports
   context-free syntax
   
   area(Literal, IntCon, IntCon, IntCon, IntCon) -> Area
+  get-filename(Area)				-> String
+  get-beginline(Area)				-> Integer
+  get-begincol(Area)				-> Integer
+
+  get-endline(Area)				-> Integer
+  get-endcol(Area)				-> Integer
+ 
+
+
+
+  context-free syntax
+  
+  lit2str(Literal)				-> String
+  intcon2natcon(IntCon)				-> NatCon
+
+hiddens
+  variables
+
+        "$IntCon" [0-9\']*            		-> IntCon
+        "$Integer" [0-9\']*            		-> Integer
+        "$Literal" [0-9\']*             	-> Literal
+        "$String" [0-9\']*             		-> String
+  
+	"Char*" [0-9\']* 			-> CHAR*

@@ -126,6 +126,8 @@
 [EVE2]	$Tuple = evalx($Exp, $Rstore)	===> evalt($Exp, $Rstore) = $Tuple
 [EVB1]	$Bag = evalx($Exp, $Rstore)     ===> evalb($Exp, $Rstore) = $Bag
 [EVR1]	$Rel = evalx($Exp, $Rstore)     ===> evalr($Exp, $Rstore) = $Rel
+[EVA1]	$Area = evalx($Exp, $Rstore)    ===> evala($Exp, $Rstore) = $Area
+
 
 %% ---- The main evaluation function evalx
 
@@ -470,26 +472,15 @@
 
 [pw2]	power({}) = {{}}
 
-[fn]	$Area = evalx($Exp, $Rstore),
-	$Area = area(String, Integer1, Integer2, Integer3, Integer4)
-	=====================================================
-	evalx(filename($Exp), $Rstore) = String
+[fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 
-[bl]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
-	=====================================================
-	evalx(beginline($Exp), $Rstore) = Integer1
+[bl]	evalx(beginline($Exp), $Rstore) = get-beginline(evala($Exp, $Rstore))
 
-[bc]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
-	=====================================================
-	evalx(begincol($Exp), $Rstore) = Integer2
+[bc]	evalx(begincol($Exp), $Rstore) 	= get-begincol(evala($Exp, $Rstore))
 
-[el]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
-	=====================================================
-	evalx(endline($Exp), $Rstore) = Integer3
+[el]	evalx(endline($Exp), $Rstore) 	= get-endline(evala($Exp, $Rstore))
 
-[ec]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
-	=====================================================
-	evalx(endcol($Exp), $Rstore) = Integer4
+[ec]	evalx(endcol($Exp), $Rstore) 	= get-endcol(evala($Exp, $Rstore))
 
 
 
