@@ -335,7 +335,7 @@ static void AFTreshuffleLexicalConstructorFunctions(int cid,
 
 /*{{{  static void gen_makefile(ATerm name) */
 
-static static void gen_makefile(ATerm name)
+static void gen_makefile(ATerm name)
 {
   char *text, *mtext;
   char *path;
