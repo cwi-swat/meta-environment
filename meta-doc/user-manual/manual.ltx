@@ -147,15 +147,15 @@ This is work under construction.
 
 \section{Overview}\label{overview} 
 
-\subsection{When to use the ASF+SDF Meta-Environment?}
+\subsection{When to use the \ASmetaenv?}
 
-The ASF+SDF Meta-Environment is an interactive development environment
+The \ASmetaenv\ is an interactive development environment
 for the automatic generation of interactive systems for manipulating
 programs, specifications, or other texts written in a formal
 language. The generation process is controlled by a definition of the
 target language, which typically includes such features as syntax,
 pretty printing, type checking and execution of programs in the target
-language. The ASF+SDF Meta-environment can help you if:
+language. The \ASmetaenv\ can help you if:
 
 \begin{itemize}
 
@@ -169,12 +169,12 @@ language. The ASF+SDF Meta-environment can help you if:
    want to analyze or transform them.
 \end{itemize}
 
-The ASF+SDF formalism allows the definition of syntactic as well as
+The \asfsdf\ formalism allows the definition of syntactic as well as
 semantic issues. It can be used for the definition of languages (for
 programming, for writing specifications, for querying databases, for
 text processing, or for dedicated applications). In addition it can be
 used for the formal specification of a wide variety of
-problems. ASF+SDF provides you with:
+problems. \asfsdf\ provides you with:
 
 \begin{itemize}
 
@@ -191,17 +191,17 @@ problems. ASF+SDF provides you with:
 
 \end{itemize}
 
-The ASF+SDF Meta-environment offers: 
+The \ASmetaenv\ offers: 
 
 \begin{itemize}
 
-  \item Syntax-directed editing of ASF+SDF specifications.
+  \item Syntax-directed editing of \asfsdf\ specifications.
 
   \item Incremental compilation and testing of specifications.
 
-  \item Compilation of ASF+SDF specifications into dedicated
-interactive environments containing various tools such as a lexical
-analyzer, a parser, a pretty printer, a syntax-directed editor, a
+  \item Compilation of \asfsdf\ specifications into dedicated
+interactive environments containing various tools such as a parser, 
+a pretty printer, a syntax-directed editor, a
 debugger, and an interpreter or compiler.
 
 \end{itemize}
@@ -230,7 +230,7 @@ editor. All editing in the Meta-environment is done by creating
 instances of a \emph{generic syntax-directed editor}.
 
 After each editing operation on a module its \emph{implementation} is updated
-immediately. It consists of a lexical scanner, a parser, a pretty
+immediately. It consists of a parser, a pretty
 printer, and a term rewriting system which are all derived from the
 module automatically.
 
@@ -267,7 +267,7 @@ specification like a type checker or evaluator for the toy language
 PICO. It follows the user-interface to explain the capabilities of the
 system.  Topics that will be addressed include:
 \begin{itemize}
-\item How to start the system, and how to leave it.
+\item How to start the system, and how to exit it.
 \item How to create, open and save a specification.
 \item How to edit the syntax and/or equations part of a module.
 \item How to edit a term.
@@ -305,11 +305,12 @@ handy later on.
 
 \item {\tt -c \emph{dir}} instructs the \asfsdf\ compiler to generate
 C files in the directory \emph{dir}. Note that this directory is also
-controlled by the environment {\tt COMPILER\_OUTPUT}
+controlled by the environment variable {\tt COMPILER\_OUTPUT}
 
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
-an interactive viewer (``ToolBus viewer'') will be started that allows the study of
-the internal behaviour of the system.
+an interactive viewer (``ToolBus viewer'') will be started that 
+allows the study of the internal behaviour of the system.
+The viewer is shown in Figure~\ref{FIG:viewer}.
 
 \item {\tt -h } shows help information for the {\tt meta} command.
 
@@ -335,6 +336,12 @@ file in the demo directory for an example. (**)
 
   \centerline{\epsfig{file=meta-start.ps,width=12cm}}
   \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
+
+\end{figure}
+\begin{figure}[tb]
+
+  \centerline{\epsfig{file=viewer.ps,width=14cm}}
+  \caption{\label{FIG:viewer} Main window of ToolBus viewer}
 
 \end{figure}
 
@@ -418,8 +425,6 @@ Meta-Environment. If modules have been modified, you are expicitly
 asked to save them. he same effect can be achieved by leaving the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
-
-{\tt Revert} (**)
 
 {\tt Export} allows the export of the import pane in various graphical
 formats.  {\tt Print Setup} allows the customization of the command
@@ -598,13 +603,13 @@ the syntax of all the selected modules.
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
 \end{figure}
 
-To help you to get acquainted with the ASF+SDF Meta-environment the system
+To help you to get acquainted with the \ASmetaenv\ the system
 comprises two example specifications, namely the one-module specification:
 {\tt Bool-example}, and the specification of the syntax, typechecker and dynamic
 semantics of the small programming language Pico.
 
 This Guided Tour is meant to guide you through these specifications, and show
-you the main features of the ASF+SDF Meta-environment. Only global information
+you the main features of the \ASmetaenv. Only global information
 is given about these features but references are made to parts of the
 user-manual with detailed information.
 
@@ -877,7 +882,7 @@ intended.
 
 \subsubsection{Modifying {\tt Bool-example}}
 
-The ASF+SDF Meta-Environment is an \emph{incremental environment generator}. After
+The \ASmetaenv\ is an \emph{incremental environment generator}. After
 each edit operation on a module, its \emph{implementation} (i.e., scanner, parser and
 term rewriting system) is updated immediately.
 
@@ -1250,33 +1255,33 @@ statements means updating the value-environment.
 The rest of the equations deal with the evaluation of expressions. Evaluating
 expressions results in a value.
 
-\section{A quick introduction to ASF+SDF} \label{ASF+SDF}
+\section{A quick introduction to \asfsdf} \label{ASF+SDF}
 
 \paragraph{This whole section is just a conversion
   of text from the old manual; it has to be checked for SDF2 compatibility!}
 
-ASF+SDF is the result of the marriage of two formalisms ASF (Algebraic
-Specification Formalism) and SDF (Syntax Definition Formalism). ASF is based
+\asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
+Specification Formalism) and \sdf\ (Syntax Definition Formalism). \asf\ is based
 on the notion of a module consisting of a signature defining the abstract
 syntax of functions and a set of conditional equations defining their
 semantics. Modules can be imported in other modules and can be parameterized.
-SDF allows the simultaneous definition of concrete (i.e., lexical and
+\sdf\ allows the simultaneous definition of concrete (i.e., lexical and
 context-free) and abstract syntax and implicitly defines a translation from
 text strings to abstract syntax trees.
 
-The main idea of ASF+SDF is to identify the abstract syntax defined by the
-signature in ASF specifications with the abstract syntax defined implicitly by
-an SDF specification, thus yielding a standard mapping from text to abstract
+The main idea of \asfsdf\ is to identify the abstract syntax defined by the
+signature in \asf\ specifications with the abstract syntax defined implicitly by
+an \sdf\ specification, thus yielding a standard mapping from text to abstract
 syntax tree. This gives the possibility to associate semantics with (the tree
 representation of) text and to introduce user-defined notation in
 specifications.
 
-ASF+SDF is therefore a modular specification formalism for the integrated
+\asfsdf\ is therefore a modular specification formalism for the integrated
 definition of syntax and semantics.
 
 \subsection{Modules and Modular Structure}
 
-An ASF+SDF specification consists of a sequence of module declarations. Each
+An \asfsdf\ specification consists of a sequence of module declarations. Each
 module may define syntax rules as well as semantic rules and the notation used
 in the semantic rules depends on the definition of syntax rules. The entities
 declared in a module may be visible or invisible to other modules. A module
@@ -1415,7 +1420,7 @@ complemented character class accepts all characters not in the original class.
 
 \subsubsection{Escape Conventions}
 
-Characters with a special meaning in ASF+SDF may cause problems when they are
+Characters with a special meaning in \asfsdf\ may cause problems when they are
 needed as ordinary characters in the lexical syntax. The backslash character
 (`{\tt \\}') is used as escape character for the quoting of special characters. You
 should use `{\tt \\$c$}' whenever you need special character $c$ as ordinary character in
@@ -1611,7 +1616,7 @@ Written as a conventional BNF grammar (and not considering lexical syntax) this 
 \end{verbatim}
 
 When a literal in a context-free function consists only of lower case letters
-and digits and is not a keyword of ASF+SDF, it need not be surrounded with
+and digits and is not a keyword of \asfsdf, it need not be surrounded with
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
 definition given above.
 
@@ -1619,7 +1624,7 @@ definition given above.
 
 It happens quite often that a context-free syntax requires the description of
 the repetition of a syntactic notion or of list structures (with or without
-separators) containing a syntactic notion. ASF+SDF provides the following
+separators) containing a syntactic notion. \asfsdf\ provides the following
 primitives for this:
 
 \begin{itemize}
