@@ -491,9 +491,9 @@ static TBbool rec_ack_event(term* e, term** out)
    /* rec-ack-event */
    if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
       return TBfalse;
-   wprintf("if [catch {rec-ack-event ");
+   wprintf("if [catch {rec-ack-event {");
    print_term(farg);
-   wprintf("} msg] {TBerror $msg}\n" );
+   wprintf("}} msg] {TBerror $msg}\n" );
    fflush(to_wish);
    return TBtrue;
 }
@@ -507,9 +507,9 @@ static TBbool rec_terminate( term* e, term** out )
    /* rec-terminate */
    if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
       return TBfalse;
-   wprintf("if [catch {rec-terminate ");
+   wprintf("if [catch {rec-terminate {");
    print_term(farg);
-   wprintf("} msg] {TBerror $msg}; exit\n" );
+   wprintf("}} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
    shutdown(0);
