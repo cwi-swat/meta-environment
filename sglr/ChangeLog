@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/08 (markvdb@cwi.nl)
+ * Reverse the list of ambiguities, fixed bug #55.
+
 2003/10/01 (markvdb@cwi.nl)
  * Removed the '-n' flag and everything related to this.
    The detection of eagerness attributes remains as it was.
