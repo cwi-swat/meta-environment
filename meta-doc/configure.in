@@ -23,6 +23,7 @@ AM_CONDITIONAL(BUILD_MANUAL, test x$build_manual = xtrue)
 dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
+  guided-tour/Makefile
   user-manual/Makefile
 )
 
