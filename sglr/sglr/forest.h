@@ -26,7 +26,8 @@
 #define SG_REJECTLABEL  "X"
 
 enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_ADD,
-                     SG_AMBTBL_REMOVE, SG_AMBTBL_LOOKUP, SG_AMBTBL_DUMP};
+                     SG_AMBTBL_UPDATE, SG_AMBTBL_REMOVE, SG_AMBTBL_LOOKUP,
+                     SG_AMBTBL_DUMP};
 
 enum SG_ApplIDAction { SG_APPLID_ZERO, SG_APPLID_INC };
 

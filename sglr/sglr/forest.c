@@ -125,46 +125,49 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
   else
     t = (ATerm) ATmakeAppl2(SG_ApplAfun(), SG_LookupProduction(pt,l),
                             (ATerm) ts);
-
+#if 0
   if(reject)
     t = ATsetAnnotation(t, SG_RejectLabel(), (ATerm) ATmakeInt(1));
+#endif
   return ATsetAnnotation(t, SG_ApplLabel(),
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
 ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
 {
-  AFun      fun;
-  ATermList args, ambs;
+  ATermList ambs, trms;
+  ATermInt  idx;
+  AFun      fun  = ATgetAFun(t);
+  ATermList args = ATgetArguments((ATermAppl) t);
 
-  fun  = ATgetAFun(t);
-  args = ATgetArguments((ATermAppl) t);
-  if(fun == SG_ApplAfun()) {
-    ATermInt  idx = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
+  if(fun != SG_ApplAfun())
+    return (ATerm) ATmakeApplList(fun, (ATermList) SG_YieldPT((ATerm)args));
 
-    /*  Are we indeed encountering an ambiguity cluster?  */
-    if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
-      /*  No ambiguity  */
-      if(recurse)
-        return (ATerm)ATmakeAppl2(SG_ApplAfun(),
-                                  SG_YieldPT(ATgetFirst(args)),
-                                  SG_YieldPT(ATelementAt(args, 1)));
-      else
-        return t;
-    } else {
-      /*  Ambiguous node  */
-      SGnrAmb(SG_NRAMB_INC);
-      if(recurse)
-        return (ATerm)ATmake("amb(<list>)",
-                             (ATermList)SG_YieldPT(ATgetFirst((ATermList)ambs)));
-      else
-        return (ATerm)ATmake("amb(<list>)",
-                             (ATermList)ATgetFirst((ATermList)ambs));
-    }
-  } else {
-    return (ATerm) ATmakeApplList(fun,
-                                  (ATermList) SG_YieldPT((ATerm)args));
+  idx  = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
+  /*  Are we indeed encountering an ambiguity cluster?  */
+  if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+    /*  No ambiguity  */
+    if(recurse)
+      return (ATerm)ATmakeAppl2(SG_ApplAfun(),
+                                SG_YieldPT(ATgetFirst(args)),
+                                SG_YieldPT(ATelementAt(args, 1)));
+    return t;
   }
+  /*  Encountered an ambiguity cluster -- singular? */
+  trms = (ATermList) ATgetFirst(ambs);
+  if (ATgetLength(trms) == 1) {
+    t = ATgetFirst(trms);
+    if(recurse)
+      return SG_YieldPT(t);
+    else
+      return t;
+  }
+  /*  Multiple: this is truly an ambiguous node  */
+  SGnrAmb(SG_NRAMB_INC);
+  if(recurse)
+    return (ATerm)ATmake("amb(<list>)", (ATermList)SG_YieldPT((ATerm) trms));
+  else
+    return (ATerm)ATmake("amb(<list>)", trms);
 }
 
 ATerm SG_YieldPT(ATerm t)
@@ -216,6 +219,7 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
       }
       break;
     case SG_AMBTBL_ADD:
+    case SG_AMBTBL_UPDATE:
       if(!ambtbl) SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
       ATtablePut(ambtbl, (ATerm) index, (ATerm) value);
       break;
@@ -265,7 +269,10 @@ void SG_Amb(ATerm existing, ATerm new) {
     newidxs = ATmakeList2(ex_annot, nw_annot);
   } else {
     /* Expand existing ambiguity */
-    newtrms = ATinsert((ATermList) ATgetFirst(ambs), nw_cln);
+    newtrms = (ATermList) ATgetFirst(ambs);
+    if(ATgetLength(newtrms) == 1)
+      SG_MaxNrAmb(SG_NRAMB_INC);
+    newtrms = ATinsert(newtrms, nw_cln);
     newidxs = ATinsert((ATermList) ATgetLast(ambs), nw_annot);
   }
   ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);

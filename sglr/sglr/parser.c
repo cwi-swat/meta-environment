@@ -366,17 +366,25 @@ ATerm SG_Result(char *sort)
 
     if(!SG_OUTPUT)
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
-    else if (SG_MaxNrAmb(SG_NRAMB_ASK) == 0)
-      forest = ATmake("parsetree(<term>,<int>)",forest, 0);
-    else {    /*  The full yield is necessary only in this case  */
+    else {
       forest = SG_YieldPT(forest);
       forest = ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
-    }
-
 #ifdef HAVE_A2TOA1
-    if(SG_ASFIX1)
-      forest = a2toa1(forest);
+      if(SG_ASFIX1) {
+        if(SGnrAmb(SG_NRAMB_ASK) > 0) {
+          ATfprintf(stderr, "error: cannot represent parse forest "
+                            "(%d ambiguities) in AsFix1\n",
+                    SGnrAmb(SG_NRAMB_ASK));
+          return ATmake("parse-error([character(<int>), line(<int>),"
+                        "col(<int>), char(<int>)])",
+                        current_token, line, col, text_length);
+        }
+        if (SG_VERBOSE)
+          ATfprintf(stderr, "converting AsFix2 parse tree to AsFix1\n");
+        forest = a2toa1(forest);
+      }
 #endif
+    }
 
     return forest;
   } else
@@ -691,46 +699,34 @@ void SG_AddStackHist(stack *parent, stack *kid)
 
 void SG_PropagateReject(stack *st)
 {
-  ATermList l, ambs, idxs, oldambs, oldidxs,
-            newambs = ATempty, newidxs = ATempty, clearidxs = ATempty;
-  ATermInt  idx;
+  ATermList amb, trms, idxs, oldidxs, newtrms = ATempty;
   ATerm     compost, t, i;
+  ATermInt  cmpstid;
 
   while(st != NULL) {
     compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
-    idx = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel());
-    l = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL);
-    if(!ATisEmpty(l)) {
+    cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
+    amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
+    if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
       compost = ATremoveAnnotation(compost, SG_ApplLabel());
-      ambs = oldambs = (ATermList) ATgetFirst(l);
-      idxs = oldidxs = (ATermList) ATelementAt(l, 1);
-      while(ambs && !ATisEmpty(ambs)) {
-        t = ATgetFirst(ambs);
-        i = ATgetFirst(idxs);
-        ambs = ATgetNext(ambs);
-        idxs = ATgetNext(idxs);
-        if(!ATisEqual(compost, t)) {   /* Skip the term creating the ambiguity! */
-          newambs = ATinsert(newambs, t);
-          newidxs = ATinsert(newidxs, i);
-        } else {
-          clearidxs = ATinsert(clearidxs, i);
+      trms = (ATermList) ATgetFirst(amb);
+      idxs = oldidxs = (ATermList) ATelementAt(amb, 1);
+      while(trms && !ATisEmpty(trms)) {
+        t = ATgetFirst(trms); trms = ATgetNext(trms);
+        i = ATgetFirst(idxs); idxs = ATgetNext(idxs);
+        if(!ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
+          newtrms = ATinsert(newtrms, t);
         }
       }
-      if (!ATisEmpty(clearidxs)) {            /*  Amb-table must change    */
-        if(ATgetLength(newidxs) <= 1) {       /*  Ambiguity fully resolved */
-          SG_MaxNrAmb(SG_NRAMB_DEC);
-          clearidxs=oldidxs;
+      if(!ATisEmpty(newtrms)) {       /* Update the full ambiguity cluster  */
+        amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
+        for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
+          SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
         }
-        for(; !ATisEmpty(clearidxs); clearidxs=ATgetNext(clearidxs)) {
-          SG_AmbTable(SG_AMBTBL_REMOVE, (ATermInt)ATgetFirst(clearidxs), NULL);
-        }
+        return;
       }
-      return;
     }
     SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
-/*
-    SG_MarkStackRejected(st);
- */
     st = st->kid;
   }
 }
