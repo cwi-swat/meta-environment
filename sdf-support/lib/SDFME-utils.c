@@ -204,6 +204,11 @@ SDF_Layout SDF_makeLayoutSpace()
   return (SDF_Layout)PT_makeTermFromTree(PT_makeTreeLayoutFromString(" "));
 }
 
+SDF_Layout SDF_makeLayoutNewline()
+{
+  return (SDF_Layout)PT_makeTermFromTree(PT_makeTreeLayoutFromString("\n"));
+}
+
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
 {
   SDF_ModuleId   modid   = SDF_getModuleNameModuleId(moduleName);
@@ -214,12 +219,14 @@ ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
 SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
 {
   SDF_Layout s = SDF_makeLayoutSpace();
+  SDF_Layout nl = SDF_makeLayoutNewline();
+
   SDF_ImpSectionList list = SDF_getModuleList(module);
   SDF_ImportList ilist = SDF_makeImportListSingle(import);
   SDF_Imports imports = SDF_makeImportsDefault(ilist);
   SDF_ImpSection section = SDF_makeImpSectionImports(s, imports);
   
-  list = SDF_makeImpSectionListMany(section, s, list);
+  list = SDF_makeImpSectionListMany(section, nl, list);
 
   return SDF_setModuleList(module, list);
 }
