@@ -123,6 +123,7 @@ doc: $(DOCFILES)
 # clean target (remove all easily build components and temporary files)
 clean:
 	rm -f *.o *~ $(CLEANFILES)
+	cd test; make clean
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
