@@ -71,18 +71,18 @@ equations
                      add-vlp-for-variables(Symbol*1 -> Symbol Attrs Prod*, Symbol*2, Symbol*3) =
                        [Symbol*4, Prio*1, Prio*2]
 
-  [avfs-1'1] add-vlp-for-sort(Sort, ) =
+  [avfs-1'1] add-vlp-for-sort($Sort, ) =
 
-  [avfs-1'2] Sort2 != sort("L""A""Y""O""U""T"),
-             add-vlp-for-sort(Sort1, Symbol*) = Prio*
+  [avfs-1'2] $Sort2 != sort("L""A""Y""O""U""T"),
+             add-vlp-for-sort($Sort1, Symbol*) = Prio*
              ========================================
-             add-vlp-for-sort(Sort1, Sort2 Symbol*) =
-               < < Sort1 -CF> -VAR> -> < Sort1 -CF> >
-               < Sort2 -LEX> -> < Sort2 -CF>, Prio*
+             add-vlp-for-sort($Sort1, $Sort2 Symbol*) =
+               < < $Sort1 -CF> -VAR> -> < $Sort1 -CF> >
+               < $Sort2 -LEX> -> < $Sort2 -CF>, Prio*
 
-  [avfs-1'3] add-vlp-for-sort(Sort1, Symbol*) = Prio*
+  [avfs-1'3] add-vlp-for-sort($Sort1, Symbol*) = Prio*
              ========================================
-             add-vlp-for-sort(Sort1, sort("L""A""Y""O""U""T") Symbol*) =
+             add-vlp-for-sort($Sort1, sort("L""A""Y""O""U""T") Symbol*) =
                Prio*
 
   [default-avfs-1'4] add-vlp-for-sort(Symbol, Symbol*) =
@@ -124,11 +124,11 @@ equations
 
   [clsp-1'1] collect-lexical-sorts-productions(,Symbol*) = Symbol*
 
-  [clsp-1'2] collect-lexical-sorts-productions(Symbol*1 -> Sort Attrs Prod*1,
-                                               Symbol*2 Sort Symbol*3) =
-               collect-lexical-sorts-productions(Prod*1,Symbol*2 Sort Symbol*3)
+  [clsp-1'2] collect-lexical-sorts-productions(Symbol*1 -> $Sort Attrs Prod*1,
+                                               Symbol*2 $Sort Symbol*3) =
+               collect-lexical-sorts-productions(Prod*1,Symbol*2 $Sort Symbol*3)
 
-  [default-clsp-1'3] collect-lexical-sorts-productions(Prod*1,Symbol*2 Sort) = Symbol*3
+  [default-clsp-1'3] collect-lexical-sorts-productions(Prod*1,Symbol*2 $Sort) = Symbol*3
                      ==================================================================
-                     collect-lexical-sorts-productions(Symbol*1 -> Sort Attrs Prod*1,
+                     collect-lexical-sorts-productions(Symbol*1 -> $Sort Attrs Prod*1,
                                                        Symbol*2) = Symbol*3

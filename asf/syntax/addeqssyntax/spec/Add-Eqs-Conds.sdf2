@@ -46,4 +46,4 @@ hiddens
     "Section*"[0-9]*     -> Section*
     "Symbol"[0-9]*       -> Symbol
     "Symbol*"[0-9]*      -> Symbol*
-    "Sort"[0-9]*         -> Sort
+    "$Sort"[0-9]*        -> Sort

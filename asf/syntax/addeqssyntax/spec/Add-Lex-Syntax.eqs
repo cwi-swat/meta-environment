@@ -61,16 +61,16 @@ equations
              add-lcf-for-productions(Symbol*1 -> Symbol Attrs Prod*1,
                                      Symbol*2 Symbol Symbol*3) = Prod*2
 
-  [default-alfp-1'2] add-lcf-for-production(Symbol*1 -> Sort) = Prod,
-                     add-lcf-for-productions(Prod*1,Symbol*2 Sort) = Prod*2
+  [default-alfp-1'2] add-lcf-for-production(Symbol*1 -> $Sort) = Prod,
+                     add-lcf-for-productions(Prod*1,Symbol*2 $Sort) = Prod*2
                      ======================================================
-                     add-lcf-for-productions(Symbol*1 -> Sort Attrs Prod*1,
+                     add-lcf-for-productions(Symbol*1 -> $Sort Attrs Prod*1,
                                              Symbol*2) = Prod Prod*2
 
-  [alfp-2'1] upper2lower(Sort) = literal(Char*)
+  [alfp-2'1] upper2lower($Sort) = literal(Char*)
              ==================================
-             add-lcf-for-production(Symbol* -> Sort) =
-               literal(""" Char* """) "(" CHAR* ")" -> Sort
+             add-lcf-for-production(Symbol* -> $Sort) =
+               literal(""" Char* """) "(" CHAR* ")" -> $Sort
 
   [u2l-1'1]  upper2lower(sort("A")) = literal("a")
 
