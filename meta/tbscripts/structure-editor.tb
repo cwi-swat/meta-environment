@@ -40,6 +40,7 @@ let
   ErrList: list, Cycle: list, Src:str,
   Fun: str, Args: list, 
   Modules: list,
+  RewritingOK : term,
   LangOK: term
 in
   Id := process-id.
@@ -184,24 +185,36 @@ in
 
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)) .
     if equal(IsTerm, "term") then
-      if equal(Fl,[]) then
-        if equal(FF,[]) then
-          snd-note(ui-status(stat(Id,"Rewriting..."))).
-          snd-msg(get-tree(Fid)) .
-          rec-msg(tree(TrmTree?)) .
-          snd-msg(rewrite(Language, TrmTree)).
-          (
-            rec-msg(rewrite-result(NormalFormTree?)) .
-    	    snd-msg(unparse(NormalFormTree)).
-	    rec-msg(unparsed-text(Src?)).
-	    printf("\nNormal form is:\n%s\n", Src)
-          +
-            rec-msg(rewrite-errors(ErrList?)) .
-	    snd-msg(display-rewrite-errors(ErrList))
-          )
+      if equal(FF,[]) then
+        if not-equal(Fl,[]) then
+	  Foc:= first(Fl).
+	  snd-msg(get-anno("focusstatus", Foc)) .
+	  rec-msg(annotation(T?)) .
+	  if equal(clean,T) then
+	    RewritingOK := true
+          else
+	    RewritingOK := false
+          fi
         else
-          snd-note(ui-status(error("Please parse term before reducing")))
+          RewritingOK := true
         fi
+      else
+        RewritingOK := false
+      fi.
+      if equal(RewritingOK, true) then
+        snd-note(ui-status(stat(Id,"Rewriting..."))).
+        snd-msg(get-tree(Fid)) .
+        rec-msg(tree(TrmTree?)) .
+        snd-msg(rewrite(Language, TrmTree)).
+        (
+          rec-msg(rewrite-result(NormalFormTree?)) .
+          snd-msg(unparse(NormalFormTree)).
+	  rec-msg(unparsed-text(Src?)).
+	  printf("\nNormal form is:\n%s\n", Src)
+        +
+          rec-msg(rewrite-errors(ErrList?)) .
+	  snd-msg(display-rewrite-errors(ErrList))
+        )
       else
         snd-note(ui-status(error("Please parse term before reducing")))
       fi .
