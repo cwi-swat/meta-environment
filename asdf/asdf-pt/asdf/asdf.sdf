@@ -71,7 +71,7 @@ exports
 
   context-free syntax
 
-    Literal ":" Symbol			-> AS-Constant {cons("constant")}
+    Literal ":" Sort			-> AS-Constant {cons("constant")}
 
     Literal ":" Sort "->" FunResult	-> AS-FunctionSig {cons("funsig")}
     

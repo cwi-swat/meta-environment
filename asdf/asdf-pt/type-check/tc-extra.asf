@@ -2,12 +2,12 @@ equations
 
 [check-infallible-1] 
 
-  check-infallible($FD, $LT : $SO -> $SFR1* & infallible & $SFR2*, no) = yes
-
-[default-check-infallible-1] check-infallible($FD, $AFS, $ANS) = 
-      error("Type error", 
-          [localized("Semantic function can fail", 
+  check-infallible($FD, $LT : $SO -> $SFR1* & infallible & $SFR2*, yes) = 
+      error("Type error", [localized("Semantic function can fail", 
 			get-location($FD))])
+
+
+[default-check-infallible-1] check-infallible($FD, $AFS, $ANS) = yes
 
 [check-terminates-1] 
 

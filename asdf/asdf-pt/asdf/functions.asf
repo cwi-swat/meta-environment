@@ -5,7 +5,8 @@ equations
     get-type-info($ASM) = 
 	   <get-signatures($ASM), 
 	    get-subtypes($ASM, []), 
-	    get-dataop-sigs($ASM, [])>
+	    get-dataop-sigs($ASM, []),
+	    get-data-constants($ASM, [])>
 
 [get-sig-0] get-signatures($ASM) = get-sigs($ASM, sigs())
 
@@ -43,6 +44,9 @@ equations
 	get-dataop-sigs($ATY, $ARR1, get-dataop-sigs($ATY, $ARR2, $DOS))
 
 [default-get-dataop-sigs-1] get-dataop-sigs($ATY, $ARR, $DOS) = $DOS
+
+[get-data-cons-1] get-data-constants(uqliteral($CH+) : $SO, $DCS) = 
+		  <data($CH+), sort-to-type($SO)>:$DCS
 
 [get-selectors-1] 
     

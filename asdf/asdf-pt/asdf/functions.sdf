@@ -6,6 +6,7 @@ imports
   asdf/asdf-sem-sec
   asdf/lower-case
   containers/List[<DataOp, FunResult>]
+  containers/List[<Data, Type>]
 
 exports
 
@@ -17,9 +18,11 @@ context-free syntax
 
   get-type-info(AS-Module)	-> TypeInfo
 
-  <Signatures, SubTypes, DataOpSigs>	-> TypeInfo
+  <Signatures, SubTypes, DataOpSigs, DataConstants>	-> TypeInfo
 
   List[[<DataOp, FunResult>]]		-> DataOpSigs
+
+  List[[<Data, Type>]]			-> DataConstants
 
   get-signatures(AS-Module)	-> Signatures
 
@@ -48,6 +51,12 @@ context-free syntax
   get-dataop-type({(Literal ":" Sort) ","}*)	-> Type
 
   sort-to-type(Sort)	  -> AtomicType
+
+  get-data-constants(AS-Module, DataConstants)  
+			-> DataConstants {traversal(accu, break, top-down)}
+
+  get-data-constants(AS-Constant, DataConstants)  
+			-> DataConstants {traversal(accu, break, top-down)}
 
   join-type-info(TypeInfo, TypeInfo)  -> TypeInfo
 
@@ -85,6 +94,7 @@ hiddens variables
 
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$DOS"[0-9]?		-> List[[<DataOp, FunResult>]]
+  "$DCS"[0-9]?		-> List[[<Data, Type>]]
 
   "$ARR"[0-9]?		-> AS-Requires-Rhs
   "$CH"[0-9]?		-> CHAR

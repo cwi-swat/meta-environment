@@ -193,9 +193,9 @@ variables qliteral("""$CH+""")[0-9\']* 		-> Sort
 	  qliteral("""$CH+""")[0-9\']*"+"	-> Sort+
 	  qliteral("""$CH+""")[0-9\']*"*"	-> Sort*
 
-  [tc-1] $transform-constant(Literal : Symbol) = 
+  [tc-1] $transform-constant(Literal : Sort) = 
 context-free syntax
-  Literal -> Symbol
+  Literal -> Sort
 
   [ei-1] $extract-imports(sort($CH+),Import*) = 
          $add-to(moduleid($CH+), Import*)
