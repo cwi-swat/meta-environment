@@ -64,29 +64,105 @@ still working although start would be set to zero!?!
 
 - ASDFEditor: TypeCheck
 
-- ASDF term editor: Reduce - Does not work on the coreml example.
-
 - Evaluation of Action Semantic
 
 - Description of concrete syntax in the Action env.
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
-- Initial termstore, should be part of the distribution.
 
 Husk at tilføje til cvs
  evaluation
 ? evaluation.sh.src
 ? initial.termstore
-? reduct.out
-? typecheck
-? asdf/concat.asf
-? asdf/concat.sdf
-? asdf/evaluation-function.asf
-? asdf/evaluation-function.sdf
 
 
+Crash hvis reduce som første ting.
 
 --------------------- Changes: --------------------
+
+
+Tue, Sep 27
+Note:
+- Identified the place where the solution to the following bug lies:
+  If the generated asf won't parse, the corresponding asdf module need
+  to be opend. This can be done by changing the process GetEditorType
+  in editing.tb which is called from EditLocation in button-actions.tb.
+
+- Working on fixing the interface issue.
+
+- asdf-modules.tb.src: ASDF, when receiving a
+  generate-asfsdf-for-modules message some info is now being displayed
+  so as to let the user know some thing is happing.
+
+- asdf-modules.tb.src: GetEvalInfo, information about which module we
+  are currently gathering information from is now being displayed.
+
+- tbscript-mode.el: Update of the syntax highlighting.
+
+Mon, Sep 27
+Note:
+- Identified some interface problems between the Action Env. and the
+evaluator. Fixing is underway.
+
+Sat, Sep 25
+Note:
+Changes made to
+- asdf-modules.tb.src: ASDFButtons, It is now possible to call
+  the evaluator from the Action env.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, It is now possible to call
+  the evaluator from the Action env.
+
+Fri, Sep 24
+Note:
+Changes made to
+- asdf2sdf.asf: [trhs-2], Sort1 -> Type, First letter in Sort1 is made
+lower-case.
+
+Tue, Sep 21
+Note:
+Changes made to
+- asdf-modules.tb.src: SecondParse, correcting the bug from yesterday,
+handling the case when GetParseTable returns no-table.
+
+Mon, Sep 20
+Note:
+Changes made to
+- asdf-modules.tb.src: ParseASDF, correcting a bug appearing when
+reparsing after a parseerror. Added remove asdf-text to invalidate-asdf-in-db.
+
+- Found a new bug Action Env crashes when a misspel appears in
+  rhs-productions.
+  e.g. val ::= booleeean.
+
+Fri, Sep 17
+Note:
+Changes made to
+- asdf-modules.tb.src: ParseASDF, consistent use of invalidate-modules-in-db.
+
+Tue, Wed, Thu Sep 14, 15, 16
+Note:
+Changes made to
+Integrating the evaluator into the Action Env.
+- eval.sdf, eval.asf, evaluation-function.sdf,
+evaluation-function.asf: Making sure, they conform to the same interface.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, added a call to the
+  environment builder.
+
+
+Mon Sep 13
+Note:
+Changes made to
+asdf/asdf-pt/make_rules, added *.termstore, now the termstore is
+copied when installing the action package, using mkmeta.
+
+- asdf-modules.tb.src: ASDF, now using the termstore in __ASDF_PT__.
+
+Fri Sep 10
+Note:
+Changes made to
+- Done twisting the sdf and asf modules to make them parse correctly.
 
 Thu Sep 9
 Note:
