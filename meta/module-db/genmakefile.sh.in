@@ -2,10 +2,11 @@
 #
 # $Id$
 #   Date: 3/19/1998
-# Author: Merijn de jonge
+# Author: Merijn de Jonge, Jeroen Scheerder
 #
-# This script generates on standard output a Makefile suitable to compile
-# the C code corresponding to a compiled specification.
+# This script generates both a Makefile.in for use with autconf as well
+# as a Makefile suitable for compiling the C code corresponding to a 
+# compiled specification.
 #
 # usage:
 #    genmakefile.sh <target>
@@ -15,6 +16,7 @@
 # The generated Makefile understands the following targets:
 #
 # all, or <target>        This will build <target>
+# install                 Builds and installs <target>
 # debug                   This will build <target>-db (i.e., a
 #                         stand-alone program suitable for debugging)
 # profile                 This will build <target>-prof (i.e., a
@@ -43,9 +45,11 @@ PROFILE_LD_FLAGS=-pg
     STD_LD_FLAGS=
 
         FLAGS_cc=
-       FLAGS_gcc="-Wall"
+       FLAGS_gcc="-Wall -O4"
 
 ## No changes below
+
+PERL=@PERL@
 
 # display usage message
 usage()
@@ -82,14 +86,27 @@ then
    exit 1
 fi
 
-cat <<ENDCAT
-# Makefile for target "$1" generated automatically on `date`
+#
+# In the next bit, use `%!%id%!%' for configure stuff, and adapt
+# the substitution code at the end for the added key -- it's the
+# only workaround to prevent configure's substition.
+#
+# Yup, I know it's a hack... sosumi.
+tmpfile=${TMPDIR:-/tmp}/`basename $0`.$$
+trap "rm -f $tmpfile" 0 1 2 15
+
+cat <<ENDMAKE > $tmpfile
+#
+# Makefile for target "$1" generated automagically on `date`
 #
 
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
 
+srcdir          = %!%srcdir%!%
+top_srcdir      = %!%top_srcdir%!%
+
 # Default compiler to use
-CC=@CC@
+CC=%!%CC%!%
 
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
@@ -113,26 +130,31 @@ STD-CC-FLAGS  = ${STD_CC_FLAGS}
 STD-LD-FLAGS  = ${STD_LD_FLAGS}
 
 # FLAGS_\$(CC): compiler dependent flags (e.g., FLAGS-gcc=-Wall)
-FLAGS-cc      =${FLAGS_cc}
-FLAGS-gcc     =${FLAGS_gcc}
+FLAGS-cc      = ${FLAGS_cc}
+FLAGS-gcc     = ${FLAGS_gcc}
 
 # There should be no need to change anything below
 
-prefix          = @prefix@
-exec_prefix     = @exec_prefix@
-bindir          = \$(exec_prefix)/bin
-libdir          = \$(exec_prefix)/lib
-includedir      = \$(prefix)/include
+prefix          = %!%prefix%!%
+exec_prefix     = %!%exec_prefix%!%
+bindir          = %!%bindir%!%
+libdir          = %!%libdir%!%
+includedir      = %!%includedir%!%
 
-DEFS            = @DEFS@ \$(XDEFS)
-INCLUDES        = @INCLUDES@ \$(XINCLUDES)
-LIBS            = @LIBS@ \$(XLIBS)
-SOCKLIBS        = @SOCKLIBS@
+DEFS            = %!%DEFS%!% \$(XDEFS)
+INCLUDES        = %!%INCLUDES%!% \$(XINCLUDES)
+LIBS            = %!%LIBS%!% \$(XLIBS)
+SOCKLIBS        = %!%SOCKLIBS%!%
 
-ATERM           = @ATERM@
+INSTALL		= %!%INSTALL%!%
+INSTALL_DATA	= %!%INSTALL_DATA%!%
+INSTALL_PROG	= %!%INSTALL_PROG%!%
+UNINSTALL	= %!%UNINSTALL%!%
+
+ATERM           = %!%ATERM%!%
 
 XINCLUDES       = -I\$(ATERM)/include -I\$(includedir)
-XLIBS           = -L\$(prefix)/lib \$(SOCKLIBS) 
+XLIBS           = -L\$(prefix)/lib \$(SOCKLIBS)
 
 SPEC_SRCS=`cat $1.module-list |\
           grep -v '#' | awk '{printf "\\\\\n          %s", $1;}'`
@@ -142,28 +164,43 @@ STD-OBJS=\$(SRCS:.c=-\$(CC).o)
 DEBUG-OBJS=\$(SRCS:.c=-dbg.o)
 PROFILE-OBJS=\$(SRCS:.c=-prof.o)
 
+BINFILES    = $1
+LIBFILES    =
+INCLUDEFILES=
+
 # Make rules
 
-all:	$1
+all:	\${BINFILES}
 
+# install target (install binaries, include files, and libraries)
 install:	all
+	mkdir -p $(bindir) $(libdir) $(includedir)
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-%-\$(CC).o: %.c
+# uninstall target (remove all files installed by 'install' target)
+uninstall:
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
+
+%-\$(CC).o:	%.c
 	\$(CC) \$(FLAGS-\$(CC)) \$(STD-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
-%-dbg.o: %.c
+%-dbg.o:	%.c
 	\$(CC) \$(FLAGS-\$(CC)) \$(DEBUG-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
-%-prof.o: %.c
+%-prof.o:	%.c
 	\$(CC) \$(FLAGS-\$(CC)) \$(PROFILE-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
-$1 : \$(STD-OBJS)
+$1:	\$(STD-OBJS)
 	\$(CC) \$(STD-LD-FLAGS) -o \$@ \$(STD-OBJS) \$(LIBDIR) \$(STD-LIBS)
 
-$1-debug : \$(DEBUG-OBJS)
+$1-debug:	\$(DEBUG-OBJS)
 	\$(CC) \$(DEBUG-LD-FLAGS) -o \$@ \$(DEBUG-OBJS) \$(LIBDIR) \$(DEBUG-LIBS)
 
-$1-prof : \$(PROFILE-OBJS)
+$1-prof:	\$(PROFILE-OBJS)
 	\$(CC) \$(PROFILE-LD-FLAGS) -o \$@ \$(PROFILE-OBJS) \$(LIBDIR) \$(PROFILE-LIBS)
 
 debug:  $1-debug
@@ -196,4 +233,49 @@ init.c: \$(SPEC_SRCS)
 
 clean:
 	\$(RM) *.o init.c $1 $1-db $1-prof
-ENDCAT
+ENDMAKE
+
+# Create the configure-ready Makefile.in template
+#
+$PERL -pe 's|%!%([^@]+)%!%|\@$1\@|g' < $tmpfile > Makefile.in
+
+# Create the instantiated Makefile, by substituting configure's
+# variables `manually'.  Beware: to prevent perl from interfering
+# (by interpolating configure variable values) the configure items
+# must be quoted sans interpolation explicitly before substitution.
+#
+$PERL -pe '	$srcdir   = q{@srcdir@};
+		$topsrc   = q{@top_srcdir@};
+		$CC       = q{@CC@};
+		$prefix   = q{@prefix@};
+		$eprefix  = q{@exec_prefix@};
+		$bindir   = q{@bindir@};
+		$libdir   = q{@libdir@};
+		$incdir   = q{@includedir@};
+		$DEFS     = q{@DEFS@};
+		$INCLUDES = q{@INCLUDES@};
+		$LIBS     = q{@LIBS@};
+		$SOCKLIBS = q{@SOCKLIBS@};
+		$INSTALL  = q{@INSTALL@};
+		$INSTDATA = q{@INSTALL_DATA@};
+		$INSTPROG = q{@INSTALL_PROG@};
+		$UNINSTALL= q{@UNINSTALL@};
+		$ATERM    = q{@ATERM@};
+		
+		s|%!%srcdir%!%|$srcdir|g;
+		s|%!%top_srcdir%!%|$topsrc|g;
+		s|%!%CC%!%|$CC|g;
+		s|%!%prefix%!%|$prefix|g;
+		s|%!%exec_prefix%!%|$eprefix|g;
+		s|%!%bindir%!%|$bindir|g;
+		s|%!%libdir%!%|$libdir|g;
+		s|%!%includedir%!%|$incdir|g;
+		s|%!%DEFS%!%|$DEFS|g;
+		s|%!%INCLUDES%!%|$INCLUDES|g;
+		s|%!%LIBS%!%|$LIBS|g;
+		s|%!%SOCKLIBS%!%|$SOCKLIBS|g;
+		s|%!%INSTALL%!%|$INSTALL|g;
+		s|%!%INSTALL_DATA%!%|$INSTDATA|g;
+		s|%!%INSTALL_PROG%!%|$INSTPROG|g;
+		s|%!%UNINSTALL%!%|$UNINSTALL|g;
+		s|%!%ATERM%!%|$ATERM|g;' < $tmpfile > Makefile
