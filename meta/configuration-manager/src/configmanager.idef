@@ -12,6 +12,35 @@
 #define ASF_LIBRARY_PATH "."
 #endif
 
+process IfEqual(ButtonAction : term,
+                Stack : list,
+		ButtonActions : list,
+                RStack : list?,
+		RButtonActions : list?) is
+let
+  Tree1       : term,
+  Tree2       : term,
+  ThenActions : list,
+  ElseActions : list,
+  IStack      : list
+in
+  Tree1 := first(Stack) .
+  IStack := next(Stack) .
+  Tree2 := first(IStack) .
+  IStack := next(IStack) .
+  snd-msg(equal-trees(Tree1, Tree2)) .
+  (
+    rec-msg(true) .
+    ThenActions := first(args(ButtonAction)) .
+    RButtonActions := join(ThenActions, ButtonActions)
+  +
+    rec-msg(false) .
+    ElseActions := first(next(args(ButtonAction))) .
+    RButtonActions := join(ElseActions, ButtonActions)
+  ) .
+  RStack := IStack
+endlet
+
 process ConfigManager is
 let
   CMNG          : configmanager,
@@ -24,6 +53,7 @@ let
   ButtonActions : list,
   ButtonAction  : term,
   ModuleName    : str,
+  FunName       : str,
   EditorType    : str,
   Tree          : term,
   EditorId      : term,
@@ -66,13 +96,18 @@ in
       if not-equal(ButtonActions, []) then
         ButtonAction := first(ButtonActions) .
         ButtonActions := next(ButtonActions) .
-        snd-msg(ButtonAction, Stack, EditorId) .
-        (
-          rec-msg(stack(Stack?))
-        +
-          rec-msg(error-stack) .
-          ButtonActions := []
-        )
+	FunName := fun(ButtonAction) .
+	if equal(FunName, "if-equal") then
+	  IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
+	else
+          snd-msg(ButtonAction, Stack, EditorId) .
+          (
+            rec-msg(stack(Stack?))
+          +
+            rec-msg(error-stack) .
+            ButtonActions := []
+          )
+	fi
       fi
     )*
     if equal(ButtonActions, []) then
