@@ -18,7 +18,8 @@ ASFME.adt: ASFME.raw subst-eqs
 	./subst-eqs ASFME.raw > ASFME.adt
 
 ASFME.c: ASFME.adt ASFME.pro
-	adt-to-c -i ASFME.adt --prologue ASFME.pro --prefix ASF_ -o ASFME
+	adt-to-c --compat-term -i ASFME.adt --prologue ASFME.pro \
+		--prefix ASF_ -o ASFME
 
 subst-eqs: subst-eqs.c
 	${COMPILE} -o $@ $<  -I${ADT}/include -I${ATERM}/include \

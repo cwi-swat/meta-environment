@@ -34,225 +34,225 @@ void ASF_initASFMEApi(void)
 
 /*{{{  term conversion functions */
 
-/*{{{  ASF_Production ASF_makeProductionFromTerm(ATerm t) */
+/*{{{  ASF_Production ASF_ProductionFromTerm(ATerm t) */
 
-ASF_Production ASF_makeProductionFromTerm(ATerm t)
+ASF_Production ASF_ProductionFromTerm(ATerm t)
 {
   return (ASF_Production)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromProduction(ASF_Production arg) */
+/*{{{  ATerm ASF_ProductionToTerm(ASF_Production arg) */
 
-ATerm ASF_makeTermFromProduction(ASF_Production arg)
+ATerm ASF_ProductionToTerm(ASF_Production arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Implies ASF_makeImpliesFromTerm(ATerm t) */
+/*{{{  ASF_Implies ASF_ImpliesFromTerm(ATerm t) */
 
-ASF_Implies ASF_makeImpliesFromTerm(ATerm t)
+ASF_Implies ASF_ImpliesFromTerm(ATerm t)
 {
   return (ASF_Implies)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromImplies(ASF_Implies arg) */
+/*{{{  ATerm ASF_ImpliesToTerm(ASF_Implies arg) */
 
-ATerm ASF_makeTermFromImplies(ASF_Implies arg)
+ATerm ASF_ImpliesToTerm(ASF_Implies arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_TagId ASF_makeTagIdFromTerm(ATerm t) */
+/*{{{  ASF_TagId ASF_TagIdFromTerm(ATerm t) */
 
-ASF_TagId ASF_makeTagIdFromTerm(ATerm t)
+ASF_TagId ASF_TagIdFromTerm(ATerm t)
 {
   return (ASF_TagId)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromTagId(ASF_TagId arg) */
+/*{{{  ATerm ASF_TagIdToTerm(ASF_TagId arg) */
 
-ATerm ASF_makeTermFromTagId(ASF_TagId arg)
+ATerm ASF_TagIdToTerm(ASF_TagId arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Conditions ASF_makeConditionsFromTerm(ATerm t) */
+/*{{{  ASF_Conditions ASF_ConditionsFromTerm(ATerm t) */
 
-ASF_Conditions ASF_makeConditionsFromTerm(ATerm t)
+ASF_Conditions ASF_ConditionsFromTerm(ATerm t)
 {
   return (ASF_Conditions)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromConditions(ASF_Conditions arg) */
+/*{{{  ATerm ASF_ConditionsToTerm(ASF_Conditions arg) */
 
-ATerm ASF_makeTermFromConditions(ASF_Conditions arg)
+ATerm ASF_ConditionsToTerm(ASF_Conditions arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_ConditionList ASF_makeConditionListFromTerm(ATerm t) */
+/*{{{  ASF_ConditionList ASF_ConditionListFromTerm(ATerm t) */
 
-ASF_ConditionList ASF_makeConditionListFromTerm(ATerm t)
+ASF_ConditionList ASF_ConditionListFromTerm(ATerm t)
 {
   return (ASF_ConditionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromConditionList(ASF_ConditionList arg) */
+/*{{{  ATerm ASF_ConditionListToTerm(ASF_ConditionList arg) */
 
-ATerm ASF_makeTermFromConditionList(ASF_ConditionList arg)
+ATerm ASF_ConditionListToTerm(ASF_ConditionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Equations ASF_makeEquationsFromTerm(ATerm t) */
+/*{{{  ASF_Equations ASF_EquationsFromTerm(ATerm t) */
 
-ASF_Equations ASF_makeEquationsFromTerm(ATerm t)
+ASF_Equations ASF_EquationsFromTerm(ATerm t)
 {
   return (ASF_Equations)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromEquations(ASF_Equations arg) */
+/*{{{  ATerm ASF_EquationsToTerm(ASF_Equations arg) */
 
-ATerm ASF_makeTermFromEquations(ASF_Equations arg)
+ATerm ASF_EquationsToTerm(ASF_Equations arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList ASF_makeCondEquationListFromTerm(ATerm t) */
+/*{{{  ASF_CondEquationList ASF_CondEquationListFromTerm(ATerm t) */
 
-ASF_CondEquationList ASF_makeCondEquationListFromTerm(ATerm t)
+ASF_CondEquationList ASF_CondEquationListFromTerm(ATerm t)
 {
   return (ASF_CondEquationList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromCondEquationList(ASF_CondEquationList arg) */
+/*{{{  ATerm ASF_CondEquationListToTerm(ASF_CondEquationList arg) */
 
-ATerm ASF_makeTermFromCondEquationList(ASF_CondEquationList arg)
+ATerm ASF_CondEquationListToTerm(ASF_CondEquationList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquation ASF_makeCondEquationFromTerm(ATerm t) */
+/*{{{  ASF_CondEquation ASF_CondEquationFromTerm(ATerm t) */
 
-ASF_CondEquation ASF_makeCondEquationFromTerm(ATerm t)
+ASF_CondEquation ASF_CondEquationFromTerm(ATerm t)
 {
   return (ASF_CondEquation)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromCondEquation(ASF_CondEquation arg) */
+/*{{{  ATerm ASF_CondEquationToTerm(ASF_CondEquation arg) */
 
-ATerm ASF_makeTermFromCondEquation(ASF_CondEquation arg)
+ATerm ASF_CondEquationToTerm(ASF_CondEquation arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Tag ASF_makeTagFromTerm(ATerm t) */
+/*{{{  ASF_Tag ASF_TagFromTerm(ATerm t) */
 
-ASF_Tag ASF_makeTagFromTerm(ATerm t)
+ASF_Tag ASF_TagFromTerm(ATerm t)
 {
   return (ASF_Tag)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromTag(ASF_Tag arg) */
+/*{{{  ATerm ASF_TagToTerm(ASF_Tag arg) */
 
-ATerm ASF_makeTermFromTag(ASF_Tag arg)
+ATerm ASF_TagToTerm(ASF_Tag arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Tree ASF_makeTreeFromTerm(ATerm t) */
+/*{{{  ASF_Tree ASF_TreeFromTerm(ATerm t) */
 
-ASF_Tree ASF_makeTreeFromTerm(ATerm t)
+ASF_Tree ASF_TreeFromTerm(ATerm t)
 {
   return (ASF_Tree)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromTree(ASF_Tree arg) */
+/*{{{  ATerm ASF_TreeToTerm(ASF_Tree arg) */
 
-ATerm ASF_makeTermFromTree(ASF_Tree arg)
+ATerm ASF_TreeToTerm(ASF_Tree arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_CHARList ASF_makeCHARListFromTerm(ATerm t) */
+/*{{{  ASF_CHARList ASF_CHARListFromTerm(ATerm t) */
 
-ASF_CHARList ASF_makeCHARListFromTerm(ATerm t)
+ASF_CHARList ASF_CHARListFromTerm(ATerm t)
 {
   return (ASF_CHARList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromCHARList(ASF_CHARList arg) */
+/*{{{  ATerm ASF_CHARListToTerm(ASF_CHARList arg) */
 
-ATerm ASF_makeTermFromCHARList(ASF_CHARList arg)
+ATerm ASF_CHARListToTerm(ASF_CHARList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Equation ASF_makeEquationFromTerm(ATerm t) */
+/*{{{  ASF_Equation ASF_EquationFromTerm(ATerm t) */
 
-ASF_Equation ASF_makeEquationFromTerm(ATerm t)
+ASF_Equation ASF_EquationFromTerm(ATerm t)
 {
   return (ASF_Equation)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromEquation(ASF_Equation arg) */
+/*{{{  ATerm ASF_EquationToTerm(ASF_Equation arg) */
 
-ATerm ASF_makeTermFromEquation(ASF_Equation arg)
+ATerm ASF_EquationToTerm(ASF_Equation arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_Condition ASF_makeConditionFromTerm(ATerm t) */
+/*{{{  ASF_Condition ASF_ConditionFromTerm(ATerm t) */
 
-ASF_Condition ASF_makeConditionFromTerm(ATerm t)
+ASF_Condition ASF_ConditionFromTerm(ATerm t)
 {
   return (ASF_Condition)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromCondition(ASF_Condition arg) */
+/*{{{  ATerm ASF_ConditionToTerm(ASF_Condition arg) */
 
-ATerm ASF_makeTermFromCondition(ASF_Condition arg)
+ATerm ASF_ConditionToTerm(ASF_Condition arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ASF_CHAR ASF_makeCHARFromTerm(ATerm t) */
+/*{{{  ASF_CHAR ASF_CHARFromTerm(ATerm t) */
 
-ASF_CHAR ASF_makeCHARFromTerm(ATerm t)
+ASF_CHAR ASF_CHARFromTerm(ATerm t)
 {
   return (ASF_CHAR)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ASF_makeTermFromCHAR(ASF_CHAR arg) */
+/*{{{  ATerm ASF_CHARToTerm(ASF_CHAR arg) */
 
-ATerm ASF_makeTermFromCHAR(ASF_CHAR arg)
+ATerm ASF_CHARToTerm(ASF_CHAR arg)
 {
   return (ATerm)arg;
 }
