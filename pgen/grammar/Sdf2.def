@@ -111,7 +111,7 @@ exports
     "left":CharClass "/" "right":CharClass   -> CharClass       {cons("diff"),left,memo}
     "left":CharClass "/\\" "right":CharClass -> CharClass       {cons("isect"),left,memo}
     "left":CharClass "\\/" "right":CharClass -> CharClass       {cons("union"),left}
-    "(" CharClass ")"          -> CharClass {bracket}
+    "(" CharClass ")"          -> CharClass {bracket, avoid}
 
   context-free priorities
     "~" CharClass             -> CharClass >
@@ -279,10 +279,9 @@ exports
 
 exports
   lexical syntax
-    [\ \t\n\013]	-> LAYOUT
+    [\ \t\n\r]	-> LAYOUT
   context-free restrictions
-    LAYOUT? -/- [\ \t\n\013] 
-module languages/aterm/syntax/Literals
+    LAYOUT? -/- [\ \t\n\r] module languages/aterm/syntax/Literals
 imports basic/Whitespace
 
 hiddens
@@ -300,7 +299,7 @@ exports
     alpha:AlphaNumericalEscChar  -> EscChar {cons("alpha-numeric")}
     decimal:DecimalEscChar       -> EscChar {cons("decimal")}
 
-    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char {cons("normal")}
+    ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char {cons("normal")}
     EscChar                      -> L-Char {cons("escaped")}
 
     "\"" chars:L-Char* "\""              -> Literal {cons("quoted")} module languages/aterm/syntax/ATerms
