@@ -8,8 +8,6 @@ import aterm.*;
  */
 public interface ToolInstance {
 
-  // public ATerm getToolId();
-
   public void sndEvalToTool(ATerm id, ATermAppl call);
 
   public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException;

@@ -1,0 +1,104 @@
+The ToolBus/tool interface
+==========================
+
+The tool descriptor
+-------------------
+
+A tool is characterized by the class ToolDescriptor defined as follows (getters/setters omitted):
+
+public class ToolDescriptor {
+  private String toolName;
+  private String hostName;
+  private int restartFrequency;
+  private boolean internal;
+  private String kind;
+  private ATermList functionSignatures;
+  ...
+}
+
+The meaning of these fields is as follows.
+
+toolName: the name of the tool (for Java tools: the class name, for other tools: the command to execute the tool)
+
+hostName: the host computer on which the tool is to be executed.
+
+restartFrequency: 
+	(a) restartFrequncecy = 0 means execute tool only once and then execute requests until termination
+	(b) restartFrequency > 0 means execute tool and increment a counter (starting at 0) for each request, 
+	    is reached then restart the tool and reset the counter.
+    (c) restartFrequency < 0: error
+    
+internal:
+	(a) internal = true: execute tool inside ToolBus (only applicaable for Java tools)
+	(b) internal = false: execute tool outside ToolBus
+	
+kind: indication of the platform used by the tool (e.g., "java", "c", "unknown", ...)
+
+functionSignatures:
+	a list of eval/do/events
+	
+	
+The ToolBus/tool interface
+---------------------------
+
+The interface between ToolBus and tool is defined as follows:
+
+public interface ToolInstance {
+
+  public void sndEvalToTool(ATerm id, ATermAppl call);
+
+  public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException;
+
+  public void sndDoToTool(ATerm id, ATermAppl call);
+
+  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment);
+
+  public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
+
+  public void terminate(ATerm id, String msg);
+
+}
+
+Notes:
+
+- Each method has an "id" as first argument. This is the transaction id of this
+  particular invocation.
+  
+- The pairs sndEvalToTool/getValueFromTool and getEventFromTool/sndAckToTool always
+  use the same id. Internally, the tool can use these id's to maintain a list of pending
+  evals/events.
+
+- getValueFromTool and getEventFromTool update the giving environment
+  in the case they succeed.
+
+- Each tool implementation should implement this interface.
+
+- The constructor for the tool implementation gets a ToolDescriptor as argument.
+
+- The following tool implementations are envisaged:
+
+	InternalTool: executed inside the ToolBus (Java tools only)
+
+	ExternalTool: arbitrary tool executed outside the ToolBus using socket communication
+
+
+Discussion
+----------
+
+- ToolDescriptor.internal can be removed if we allow "ToolBus" as hostname.
+
+- Is ToolDescriptor.kind usefull?
+
+- Do we want InternalTool in two flavours: a version based on reflection and a version based on tif generation?
+
+- In the future, external tools could get the property  "SOAP" is they use soap as transport protocol.
+
+
+
+
+
+
+
+
+
+

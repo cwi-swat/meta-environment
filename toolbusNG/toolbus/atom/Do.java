@@ -11,8 +11,8 @@ import aterm.ATerm;
  */
 public class Do extends ToolAtom {
   
-  public  Do(ATerm trm){
-    super(trm);
+  public  Do(ATerm toolTerm){
+    super(toolTerm);
   }
   
   public ProcessExpression copy(){

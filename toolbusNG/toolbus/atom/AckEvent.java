@@ -11,8 +11,8 @@ import aterm.ATerm;
  */
 public class AckEvent extends ToolAtom {
 
-  public AckEvent(ATerm toolarg) {
-    super(toolarg);
+  public AckEvent(ATerm toolTerm) {
+    super(toolTerm);
   }
   
   public ProcessExpression copy(){
@@ -32,5 +32,4 @@ public class AckEvent extends ToolAtom {
     ti.sndAckToTool(getSubstitutedId(), getSubstitutedCall());
     return nextState();
   }
-
 }
