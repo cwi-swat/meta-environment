@@ -8,12 +8,12 @@ sorts Attributes Attrs Attr Associativity
 context-free syntax
 
 "no-attrs"                -> Attributes  {cons("no-attrs")}
-attrs(attrs:Attrs)        -> Attributes  {cons("attrs")}
+attrs(attributes:Attrs)        -> Attributes  {cons("attrs")}
 
 "[" {Attr ","}+ "]"       -> Attrs {cons("many")}
 
-"assoc"("assoc":Associativity)  -> Attr {cons("assoc")}
-term(term:ATerm)                -> Attr {cons("term")}
+"assoc"("assocativity":Associativity)  -> Attr {cons("assoc")}
+term(aterm:ATerm)                -> Attr {cons("term")}
 id(module-name:Literal)         -> Attr {cons("id")}
 
 "bracket" -> Attr {cons("bracket")}
