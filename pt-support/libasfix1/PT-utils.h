@@ -11,6 +11,7 @@ ATbool PT_isSymbolIter(PT_Symbol arg);
 
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
+int     PT_getArgsLength(PT_Args args);
 
 typedef void* PT_TreeVisitorData;
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);
@@ -36,7 +37,6 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
-int     PT_getArgsLength(PT_Args args);
 
 char      *PT_getStringChars(PT_String ptStr);
 PT_String PT_setStringChars(const char* str);
