@@ -3,6 +3,7 @@
  */
 package toolbus.atom;
 import toolbus.*;
+import toolbus.process.*;
 import toolbus.process.ProcessExpression;
 
 import aterm.*;
@@ -23,11 +24,11 @@ public class Print extends Atom {
 
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
-      Environment e = getEnv();
+      ProcessInstance p = getProcess();
       //System.out.println("Print, env is: " + e);
       ATermList args = (ATermList) arg.value;
       for (int i = 0; i < args.getLength(); i++) {
-        System.out.print(TBTerm.eval(args.elementAt(i), e));
+        System.out.print(TBTerm.eval(args.elementAt(i), p));
       }
       System.out.println("");
       return nextState();

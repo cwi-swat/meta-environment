@@ -33,7 +33,7 @@ public class Assign extends Atom {
 
     ATerm exptype = TBTerm.checkType(exp.value, this.getEnv());
 
-    if (vartype != exptype) // lhs = term!
+    if (!TBTerm.checkCompatible(vartype, exptype) )// lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
   }
 
@@ -41,8 +41,10 @@ public class Assign extends Atom {
     if (!isEnabled())
       return false;
     Environment e = this.getEnv();
+    ProcessInstance p = this.getProcess();
 
-    e.putVar(var.value, TBTerm.eval(exp.value, e));
+    ATerm newval = TBTerm.eval(exp.value, p);
+    e.putVar(var.value, newval);
     return nextState();
   }
 }
