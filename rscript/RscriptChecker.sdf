@@ -12,7 +12,8 @@ imports MyPosInfo[Bag[[Elem]]]
 
 
 exports
-    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
+    sorts ERROR ERRORS REXPTYPE # TENV TENV DCLRVARS  
+          Boolean #  Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
 
     context-free syntax
 
@@ -23,7 +24,6 @@ exports
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
 
         is-var(REXPTYPE)                        		-> Boolean
-	is-simple-type(REXPTYPE)				-> Boolean
 	is-tuple(Elem)						-> Boolean
 
 	REXPTYPE "==" REXPTYPE					-> Boolean
@@ -78,9 +78,26 @@ exports
         check-not-defined(RVAR, TENV)            		-> TENV
 
         require-type(REXP, REXPTYPE, TENV) 			-> TENV
-	require-bag-type(REXP, RVAR, REXPTYPE, TENV) 		-> TENV
-	require-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
-	require-nrel-type(REXP, {RVAR ","}+, REXPTYPE, TENV) 	-> TENV
+        require-type2(REXP, REXPTYPE, REXP, REXPTYPE, TENV) 	-> TENV
+
+	
+	require-and-store-bag-type(REXP, RVAR, REXPTYPE, TENV) 	-> TENV
+	require-and-store-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
+	require-and-store-nrel-type(REXP, {RVAR ","}+, REXPTYPE, TENV) 	-> TENV
+
+	compat-cmp(REXP, REXPTYPE, REXPTYPE, TENV)		-> TENV
+	check-cmp(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+
+	compat-un(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	check-un(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+
+	compat-comp(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	compat-prod(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	compat-im(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	compat-trans(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
+	compat-size(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
+
+
 
         container-type(REXPTYPE)				-> REXPTYPE
         container-iter-type(REXPTYPE)				-> REXPTYPE
@@ -102,34 +119,9 @@ exports
         substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
 
 
-        "and"                          				-> OP
-        "or"                           				-> OP
-	"implies"						-> OP
-        "not"                          				-> OP
-        "in"			      				-> OP
-        "notin"			      				-> OP
-
-        "=="                           				-> OP
-        "!="                           				-> OP
-        "<="                           				-> OP
-        "<"                            				-> OP
-        ">="                           				-> OP
-        ">"                            				-> OP
-        "union"                        				-> OP
-        "inter"                        				-> OP
-        "\\"                           				-> OP
-        "o"                            				-> OP
-        "x"                            				-> OP
-        "."                            				-> OP
-        "+"                            				-> OP
-        "*"                            				-> OP
-        "#"                            				-> OP
-
-        compat "(" REXP "," REXPTYPE OP REXPTYPE "," TENV ")" 	-> REXPTYPE # TENV
-        compat "(" REXP "," REXPTYPE OP "," TENV ")" 		-> REXPTYPE #TENV
-        compat "(" REXP "," OP REXPTYPE  "," TENV ")" 		-> REXPTYPE #TENV
-
-	compat1(REXP, REXPTYPE, REXPTYPE, TENV)			-> REXPTYPE # TENV
+%%        compat "(" REXP "," REXPTYPE OP REXPTYPE "," TENV ")" 	-> REXPTYPE # TENV
+%%        compat "(" REXP "," REXPTYPE OP "," TENV ")" 		-> REXPTYPE #TENV
+%%        compat "(" REXP "," OP REXPTYPE  "," TENV ")" 		-> REXPTYPE #TENV
 
 hiddens
 %%    imports asf/syntax/Comments
@@ -147,7 +139,8 @@ hiddens
      "$Exp+" [0-9\']*    	-> {REXP ","}+
      "$Exps" [0-9\']*    	-> {REXP ","}+
 
-     "$Op"               	-> OP
+%%     "$Op"               	-> OP
+
      "$Etype" [0-9\']*    	-> REXPTYPE
      "$Etype*" [0-9\']*    	-> {REXPTYPE ","}*
      "$Etype+" [0-9\']*    	-> {REXPTYPE ","}+

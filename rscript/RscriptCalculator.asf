@@ -207,7 +207,7 @@
 [LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
 
 [LT1]	eval-lt($Bag1, $Bag2) 			= strict-subset($Bag1,  $Bag2)
-[LT3]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
+[LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
 
 [LE1]	evalx($Exp1 <= $Exp2, $Rstore) 		= eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
