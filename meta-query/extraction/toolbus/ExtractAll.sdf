@@ -1,18 +1,6 @@
 module ExtractAll
 
-imports ExtractEvents
-imports ExtractInitialProcesses
-imports ExtractMessages
-imports ExtractParameters
-imports ExtractProcessCreations
-imports ExtractProcessDeclarations
-imports ExtractProcessInvocations
-imports ExtractProcessUses
-imports ExtractProcessReferences
-imports ExtractToolDeclarations
-imports ExtractVariableDeclarations
-imports ExtractVariableDefinitions
-imports ExtractVariableUses
+imports ExtractControlFlow
 
 exports
   context-free syntax

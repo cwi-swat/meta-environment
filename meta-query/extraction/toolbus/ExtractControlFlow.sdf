@@ -1,0 +1,23 @@
+module ExtractControlFlow
+
+imports ToolBusExtraction
+imports utilities/PosInfo[ProcessExpr]
+imports utilities/Parsing[ProcessExpr]
+
+exports
+  context-free syntax
+    extractControlFlow(Tscript, RSTORE) -> RSTORE {traversal(accu, top-down, continue)}
+    extractControlFlow(ProcessExpr, RSTORE) -> RSTORE {traversal(accu, top-down, continue)}
+
+  context-free syntax
+    addControlFlow({ProcessExpr ","}*, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "$ProcessExpr"[0-9]* -> ProcessExpr
+    "$ProcessExpr*"[0-9]* -> {ProcessExpr ","}*
+    "$ProcessExpr+"[0-9]* -> {ProcessExpr ","}+
+    "$ProcessExprId"[0-9]* -> Location
+    "$ProcessExprStr"[0-9]* -> StrCon
+    "$Rstore"[0-9]* -> RSTORE
+    "$Tuple"[0-9]* -> Tuple

@@ -13,8 +13,12 @@ in
     Parser().
     snd-msg(parse-file(FileName)) .
     rec-msg(parse-file-result(FileName, ParseTree?)) .
-    snd-do(UI, show-tree(ParseTree)) .
-    snd-ack-event(UI, parse-file(FileName))
+    if equal(ParseTree, no-tree) then
+      snd-do(UI, no-tree)
+    else  
+      snd-do(UI, show-tree(ParseTree))
+    fi
+    . snd-ack-event(UI, parse-file(FileName))
   +
     rec-msg(test-message) .
     rec-event(UI, quit) .
@@ -41,7 +45,8 @@ in
     snd-msg(parse-file-result(FileName, ParseTree)) .
     snd-msg(second-definition(FileName?)) .
     snd-msg(string("string"))
-  ) * delta
+  ) * 
+  printf("End")
 endlet
 
 process Unused is

@@ -25,32 +25,23 @@ equations
 %%[A7]
 %%  delta . $ProcessExpr = delta
 
-[default-star-normalization]
-  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
+[star-normalization]
+  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
 
-[star-normalization-0]
-  ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
-    ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
-
-%%[par-normalization-0]
-%%  $ProcessExpr1 || $ProcessExpr2 =
-%%    ( $ProcessExpr1 . $ProcessExpr2 ) + ( $ProcessExpr2 . $ProcessExpr1 )
+%%[star-normalization-0]
+%%  ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
+%%    ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
 
 [if-then-0]
-  if $Term then $ProcessExpr1 fi . $ProcessExpr2 =
-    if $Term then $ProcessExpr1 . $ProcessExpr2 fi
-
-[if-then-1]
-  $ProcessExpr1 . if $Term then $ProcessExpr2 fi . $ProcessExpr3 =
-    $ProcessExpr1 . if $Term then $ProcessExpr2 . $ProcessExpr3 fi
+  tau != $ProcessExpr
+  ===>
+  if $Term then $ProcessExpr fi =
+    if $Term then tau fi . $ProcessExpr
 
 [if-then-else-0]
-  if $Term then $ProcessExpr1 else $ProcessExpr2 fi . $ProcessExpr3 =
-    if $Term then $ProcessExpr1 . $ProcessExpr3 else $ProcessExpr2 . $ProcessExpr3 fi
+  if $Term then $ProcessExpr1 else $ProcessExpr2 fi =
+    if $Term then $ProcessExpr1 fi + if not($Term) then $ProcessExpr2 fi
 
-[if-then-else-1]
-  $ProcessExpr1 . if $Term then $ProcessExpr2 else $ProcessExpr3 fi . $ProcessExpr4 =
-    $ProcessExpr1 . if $Term then $ProcessExpr2 . $ProcessExpr4 else $ProcessExpr3 . $ProcessExpr4 fi
 
 [M1]
   $ProcessExpr1 || $ProcessExpr2 =

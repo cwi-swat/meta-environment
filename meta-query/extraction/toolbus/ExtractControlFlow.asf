@@ -1,0 +1,27 @@
+equations
+
+[extract-control-flow-0]
+  $Rstore2 := addControlFlow($ProcessExpr*, $Rstore1)
+  ===>
+  extractControlFlow(prod($ProcessExpr*), $Rstore1) = $Rstore2
+
+[add-flow-control-0]
+  $ProcessExprId1 := get-location($ProcessExpr1),
+  $ProcessExprId2 := get-location($ProcessExpr2),
+  $ProcessExprStr1 := unparse-to-string($ProcessExpr1),
+  $ProcessExprStr2 := unparse-to-string($ProcessExpr2),
+  $Tuple1 := <$ProcessExprStr1, $ProcessExprStr2>,
+  $Rstore2 := add-tuple(CONTROL_FLOW, $Tuple1, $Rstore1)
+  ===>
+  addControlFlow($ProcessExpr1, $ProcessExpr2, $Rstore1) = $Rstore2
+
+[add-flow-control-1]
+  $ProcessExprId3 := get-location($ProcessExpr1),
+  $ProcessExprId4 := get-location($ProcessExpr2),
+  $ProcessExprStr1 := unparse-to-string($ProcessExpr1),
+  $ProcessExprStr2 := unparse-to-string($ProcessExpr2),
+  $Tuple1 := <$ProcessExprStr1, $ProcessExprStr2>,
+  $Rstore2 := add-tuple(CONTROL_FLOW, $Tuple1, $Rstore1)
+  ===>
+  addControlFlow($ProcessExpr1, $ProcessExpr2, $ProcessExpr+, $Rstore1) =  
+    addControlFlow($ProcessExpr2, $ProcessExpr+, $Rstore2)
