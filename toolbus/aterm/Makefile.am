@@ -1,5 +1,7 @@
 # $Id$
 
+SUBDIRS			= . java
+
 DICTTOC			= $(ATERM)/bin/dicttoc
 TIFSTOC			= ${top_builddir}/aterm/tifstoc
 TOOLBUS			= ${top_builddir}/toolbus/toolbus

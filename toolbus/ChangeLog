@@ -19,6 +19,14 @@
 
 ------------------------------------------------------------------------------
 
+Date:   Thu Jul 12 10:49:22 CEST 2001
+- Moved Java-sources of ATB (ATerm ToolBus support)
+  from ATerm-distribution to ToolBus distribution. (jong@cwi.nl)
+
+Date:   Wed Jul 11
+- Moved C-sources of ATB (ATerm ToolBus support)
+  from ATerm-distribution to ToolBus distribution. (jong@cwi.nl)
+
 Date:   Thu Jul  5 11:37:43 CEST 2001
 - Version is now 0.18
 - Added toolbus-adapter

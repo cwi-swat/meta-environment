@@ -32,7 +32,7 @@ AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
    CFLAGS=${withval},
    if test "a${GCC}" = "ayes"; then
-     CFLAGS="-Wall -g -O2"
+     CFLAGS="-Wall -Werror -g -O2"
    fi;
 )
 AC_SUBST(CFLAGS)
@@ -215,31 +215,36 @@ AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
-AC_OUTPUT(Makefile
-          libtb/Makefile
-          toolbus/Makefile
-          aterm/Makefile
-          adapters/Makefile
-          adapters/wish-adapter/Makefile
-          adapters/tcltk-adapter/Makefile
-          adapters/perl-adapter/Makefile
-          adapters/gen-adapter/Makefile
-	  adapters/toolbus-adapter/Makefile
-          adapters/emacs-adapter/Makefile
-          adapters/python-adapter/Makefile
-          adapters/java-adapter/Makefile
-          adapters/java-adapter/toolbus/Makefile
-          adapters/java-adapter/toolbus/aterm/Makefile
-          adapters/java-adapter/toolbus/util/Makefile
-          adapters/java-adapter/toolbus/tool/Makefile
-          tbviz/Makefile
-          doc/Makefile
-          doc/src/Makefile
-          demos/Makefile 
-          demos/auction/Makefile 
-          demos/calc/Makefile
-          demos/game/Makefile
-          demos/hello/Makefile
-          demos/wave/Makefile
-          test/Makefile
+AC_OUTPUT(
+  Makefile
+  libtb/Makefile
+  toolbus/Makefile
+  aterm/Makefile
+  aterm/java/Makefile
+  aterm/java/toolbus/Makefile
+  aterm/java/toolbus/tifstojava
+  adapters/Makefile
+  adapters/wish-adapter/Makefile
+  adapters/tcltk-adapter/Makefile
+  adapters/perl-adapter/Makefile
+  adapters/gen-adapter/Makefile
+  adapters/toolbus-adapter/Makefile
+  adapters/emacs-adapter/Makefile
+  adapters/python-adapter/Makefile
+  adapters/java-adapter/Makefile
+  adapters/java-adapter/toolbus/Makefile
+  adapters/java-adapter/toolbus/aterm/Makefile
+  adapters/java-adapter/toolbus/util/Makefile
+  adapters/java-adapter/toolbus/tool/Makefile
+  tbviz/Makefile
+  doc/Makefile
+  doc/src/Makefile
+  demos/Makefile 
+  demos/auction/Makefile 
+  demos/calc/Makefile
+  demos/game/Makefile
+  demos/hello/Makefile
+  demos/wave/Makefile
+  test/Makefile,
+  chmod +x aterm/java/toolbus/tifstojava
 ) 

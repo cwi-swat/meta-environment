@@ -1,0 +1,290 @@
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ../../..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+ALL_ADAPTERS = @ALL_ADAPTERS@
+AR = @AR@
+ATERM = @ATERM@
+CC = @CC@
+CFLAGS = @CFLAGS@
+EMACS_ADAPTER = @EMACS_ADAPTER@
+JAVA_ADAPTER = @JAVA_ADAPTER@
+LEX = @LEX@
+MAKEINFO = @MAKEINFO@
+NOWEB = @NOWEB@
+PACKAGE = @PACKAGE@
+PERL = @PERL@
+PERL_ADAPTER = @PERL_ADAPTER@
+PYTHON_ADAPTER = @PYTHON_ADAPTER@
+RANLIB = @RANLIB@
+TCLTK_ADAPTER = @TCLTK_ADAPTER@
+TIDE = @TIDE@
+TIDEDEF = @TIDEDEF@
+TIDEINC = @TIDEINC@
+VERSION = @VERSION@
+WISH = @WISH@
+WISH_ADAPTER = @WISH_ADAPTER@
+YACC = @YACC@
+YACCLIB = @YACCLIB@
+translit = @translit@
+x_includes = @x_includes@
+x_libraries = @x_libraries@
+
+javadir = ${prefix}/classes/toolbus
+
+CLEANFILES = test.tifs example.tifs
+
+EXTRA_DIST = test.tb test.tifs example.tb example.tifs
+
+java_JAVA = Tool.java AbstractTool.java TestTool.java JavaTif.java 		Testing.java Example.java
+
+
+JAVAROOT = ${top_builddir}/aterm/java/
+
+# This is some kind of hack to make sure that generated Java files are
+# generated before compiling all other java files but that it will
+# not be included in the distribution nor that it will be generated
+# during a make dist.
+TESTCLASSES = TestingTif.java TestingTool.java TestingBridge.java 
+EXAMPLECLASSES = ExampleTif.java ExampleTool.java ExampleBridge.java 
+
+noinst_SCRIPTS = ${TESTCLASSES} ${EXAMPLECLASSES}
+
+bin_SCRIPTS = tifstojava
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_CLEAN_FILES =  tifstojava
+SCRIPTS =  $(bin_SCRIPTS) $(noinst_SCRIPTS)
+
+JAVAC = javac
+JAVACFLAGS = 
+CLASSPATH_ENV = CLASSPATH=$(JAVAROOT):$(srcdir)/$(JAVAROOT):$$CLASSPATH
+DIST_COMMON =  $(java_JAVA) Makefile.am Makefile.in tifstojava.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+all: all-redirect
+.SUFFIXES:
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu aterm/java/toolbus/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+tifstojava: $(top_builddir)/config.status tifstojava.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	done
+
+mostlyclean-javaJAVA:
+
+clean-javaJAVA:
+	-rm *.class classjava.stamp
+
+distclean-javaJAVA:
+
+maintainer-clean-javaJAVA:
+
+install-javaJAVA: classjava.stamp
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(javadir)
+	for p in *.class; do \
+	  echo " $(INSTALL_DATA) $$p $(DESTDIR)$(javadir)/$$p"; \
+	  $(INSTALL_DATA) $$p $(DESTDIR)$(javadir)/$$p; \
+	done
+
+uninstall-javaJAVA:
+	@$(NORMAL_UNINSTALL)
+	for p in *.class; do \
+	  rm -f $(DESTDIR)$(javadir)/$$p; \
+	done
+classjava.stamp: $(java_JAVA)
+	$(CLASSPATH_ENV) $(JAVAC) -d $(JAVAROOT) $(JAVACFLAGS) $?
+	echo timestamp > classjava.stamp
+tags: TAGS
+TAGS:
+
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = aterm/java/toolbus
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu aterm/java/toolbus/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-binSCRIPTS
+install-exec: install-exec-am
+
+install-data-am: install-javaJAVA
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-binSCRIPTS uninstall-javaJAVA
+uninstall: uninstall-am
+all-am: Makefile $(SCRIPTS) classjava.stamp
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(javadir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-javaJAVA mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-javaJAVA clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-javaJAVA distclean-generic clean-am
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-javaJAVA maintainer-clean-generic \
+		distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: uninstall-binSCRIPTS install-binSCRIPTS mostlyclean-javaJAVA \
+distclean-javaJAVA clean-javaJAVA maintainer-clean-javaJAVA \
+uninstall-javaJAVA install-javaJAVA tags distdir info-am info dvi-am \
+dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+${EXAMPLECLASSES}: example.tifs JavaTif.class
+	CLASSPATH=${top_srcdir}/aterm/java:${CLASSPATH} \
+	${top_srcdir}/aterm/java/toolbus/tifstojava \
+	-tifs example.tifs -tool example -package toolbus
+
+${TESTCLASSES}: test.tifs JavaTif.class
+	CLASSPATH=${top_srcdir}/aterm/java:${CLASSPATH} \
+	${top_srcdir}/aterm/java/toolbus/tifstojava \
+	-tifs test.tifs -tool testing -package toolbus
+
+test.tifs: test.tb
+	${top_builddir}/toolbus/toolbus -gentifs test.tb
+
+example.tifs: example.tb
+	${top_builddir}/toolbus/toolbus -gentifs example.tb
+
+%.class: %.java
+	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -O -d $(JAVAROOT) $<
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:
