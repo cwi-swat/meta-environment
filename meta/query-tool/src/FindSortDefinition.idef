@@ -26,4 +26,4 @@ in
   delta
 endlet
 
-tool toolFindSortDefinition is { command = "fsd" }
+tool toolFindSortDefinition is { command = "FindSortDefinition" }
