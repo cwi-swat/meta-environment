@@ -85,6 +85,32 @@ ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFCondi
 }
 
 /*}}}  */
+/*{{{  ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
+
+ASF_ASFTestEquationTestList ASF_concatASFTestEquationTestList(ASF_ASFTestEquationTestList l1, ASF_ASFTestEquationTestList l2)
+{
+  if (!ASF_isASFTestEquationTestListEmpty(l2)) {
+    if (ASF_hasASFTestEquationTestListHead(l1)) {
+      ASF_ASFTestEquation head = ASF_getASFTestEquationTestListHead(l1);
+      if (ASF_hasASFTestEquationTestListTail(l1)) {
+        ASF_ASFTestEquationTestList tail = ASF_getASFTestEquationTestListTail(l1);
+      
+        return ASF_makeASFTestEquationTestListMany(head, ASF_makeLayoutEmpty(),
+                 ASF_concatASFTestEquationTestList(tail, l2));
+      }
+      else {
+        return ASF_makeASFTestEquationTestListMany(head, ASF_makeLayoutEmpty(), l2);
+      }
+    }
+    else {
+      return l2;
+    }
+  } 
+
+  return l1;
+}
+
+/*}}}  */
 /*{{{  ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
 
 ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList cel1,

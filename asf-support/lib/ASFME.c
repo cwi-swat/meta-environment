@@ -13,6 +13,8 @@ typedef struct ATerm _ASF_ASFConditions;
 typedef struct ATerm _ASF_ASFConditionList;
 typedef struct ATerm _ASF_ASFEquations;
 typedef struct ATerm _ASF_ASFConditionalEquationList;
+typedef struct ATerm _ASF_ASFTestEquationTestList;
+typedef struct ATerm _ASF_ASFTestEquation;
 typedef struct ATerm _ASF_ASFConditionalEquation;
 typedef struct ATerm _ASF_ASFTag;
 typedef struct ATerm _ASF_Tree;
@@ -144,6 +146,38 @@ ASF_ASFConditionalEquationList ASF_ASFConditionalEquationListFromTerm(ATerm t)
 /*{{{  ATerm ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg) */
 
 ATerm ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_ASFTestEquationTestListFromTerm(ATerm t) */
+
+ASF_ASFTestEquationTestList ASF_ASFTestEquationTestListFromTerm(ATerm t)
+{
+  return (ASF_ASFTestEquationTestList)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg) */
+
+ATerm ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_ASFTestEquationFromTerm(ATerm t) */
+
+ASF_ASFTestEquation ASF_ASFTestEquationFromTerm(ATerm t)
+{
+  return (ASF_ASFTestEquation)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg) */
+
+ATerm ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg)
 {
   return (ATerm)arg;
 }
@@ -385,6 +419,14 @@ ASF_ASFEquations ASF_makeASFEquationsPresent(ASF_OptLayout wsAfterEquations, ASF
 }
 
 /*}}}  */
+/*{{{  ASF_ASFEquations ASF_makeASFEquationsPresentWithTests(ASF_OptLayout wsAfterEquations, ASF_ASFConditionalEquationList list, ASF_OptLayout wsAfterList, ASF_OptLayout wsAfterTests, ASF_ASFTestEquationTestList testList) */
+
+ASF_ASFEquations ASF_makeASFEquationsPresentWithTests(ASF_OptLayout wsAfterEquations, ASF_ASFConditionalEquationList list, ASF_OptLayout wsAfterList, ASF_OptLayout wsAfterTests, ASF_ASFTestEquationTestList testList)
+{
+  return (ASF_ASFEquations)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun6, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31))))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun32))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun6, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun29))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun26))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun33)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl1(ASF_afun18, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun6, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31))))), (ATerm)testList)), (ATerm)wsAfterTests), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun32))), (ATerm)wsAfterList), (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl1(ASF_afun18, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun6, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))))), (ATerm)list)), (ATerm)wsAfterEquations), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun29))));
+}
+
+/*}}}  */
 /*{{{  ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListEmpty() */
 
 ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListEmpty()
@@ -409,11 +451,43 @@ ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListMany(ASF_ASFCon
 }
 
 /*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListEmpty() */
+
+ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListEmpty()
+{
+  return (ASF_ASFTestEquationTestList)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListSingle(ASF_ASFTestEquation head) */
+
+ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListSingle(ASF_ASFTestEquation head)
+{
+  return (ASF_ASFTestEquationTestList)(ATerm)ATmakeList1((ATerm)head);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListMany(ASF_ASFTestEquation head, ASF_OptLayout wsAfterFirst, ASF_ASFTestEquationTestList tail) */
+
+ASF_ASFTestEquationTestList ASF_makeASFTestEquationTestListMany(ASF_ASFTestEquation head, ASF_OptLayout wsAfterFirst, ASF_ASFTestEquationTestList tail)
+{
+  return (ASF_ASFTestEquationTestList)(ATerm)ATinsert(ATinsert((ATermList)tail, (ATerm)wsAfterFirst), (ATerm)head);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_makeASFTestEquationDefault(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFCondition ASFCondition) */
+
+ASF_ASFTestEquation ASF_makeASFTestEquationDefault(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFCondition ASFCondition)
+{
+  return (ASF_ASFTestEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun35)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ASFCondition), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
+}
+
+/*}}}  */
 /*{{{  ASF_ASFConditionalEquation ASF_makeASFConditionalEquationSimple(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFEquation ASFEquation) */
 
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationSimple(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFEquation ASFEquation)
 {
-  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun32)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun33)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ASFEquation), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
+  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun36)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun37)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ASFEquation), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
 }
 
 /*}}}  */
@@ -421,7 +495,7 @@ ASF_ASFConditionalEquation ASF_makeASFConditionalEquationSimple(ASF_ASFTag ASFTa
 
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationImplies(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFConditions ASFConditions, ASF_OptLayout wsAfterASFConditions, ASF_ASFImplies ASFImplies, ASF_OptLayout wsAfterASFImplies, ASF_ASFEquation ASFEquation)
 {
-  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun16)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun25)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun32)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun34)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ASFEquation), (ATerm)wsAfterASFImplies), (ATerm)ASFImplies), (ATerm)wsAfterASFConditions), (ATerm)ASFConditions), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
+  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun36)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun16)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun25)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun38)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ASFEquation), (ATerm)wsAfterASFImplies), (ATerm)ASFImplies), (ATerm)wsAfterASFConditions), (ATerm)ASFConditions), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
 }
 
 /*}}}  */
@@ -429,7 +503,7 @@ ASF_ASFConditionalEquation ASF_makeASFConditionalEquationImplies(ASF_ASFTag ASFT
 
 ASF_ASFConditionalEquation ASF_makeASFConditionalEquationWhen(ASF_ASFTag ASFTag, ASF_OptLayout wsAfterASFTag, ASF_ASFEquation ASFEquation, ASF_OptLayout wsAfterASFEquation, ASF_OptLayout wsAfterWhen, ASF_ASFConditions ASFConditions)
 {
-  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun25)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun35))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun32)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun35)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ASFConditions), (ATerm)wsAfterWhen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun35))), (ATerm)wsAfterASFEquation), (ATerm)ASFEquation), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
+  return (ASF_ASFConditionalEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun25)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun39))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun36)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun28))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun39)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ASFConditions), (ATerm)wsAfterWhen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun39))), (ATerm)wsAfterASFEquation), (ATerm)ASFEquation), (ATerm)wsAfterASFTag), (ATerm)ASFTag));
 }
 
 /*}}}  */
@@ -437,7 +511,7 @@ ASF_ASFConditionalEquation ASF_makeASFConditionalEquationWhen(ASF_ASFTag ASFTag,
 
 ASF_ASFTag ASF_makeASFTagEmpty(ASF_OptLayout wsAfterBracketOpen)
 {
-  return (ASF_ASFTag)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun36))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun37))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun32))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun38)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun36))), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun37))));
+  return (ASF_ASFTag)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun40))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun40))), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))));
 }
 
 /*}}}  */
@@ -445,7 +519,7 @@ ASF_ASFTag ASF_makeASFTagEmpty(ASF_OptLayout wsAfterBracketOpen)
 
 ASF_ASFTag ASF_makeASFTagNotEmpty(ASF_OptLayout wsAfterBracketOpen, ASF_ASFTagId ASFTagId, ASF_OptLayout wsAfterASFTagId)
 {
-  return (ASF_ASFTag)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun36))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun21)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun37))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun32))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun39)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun36))), (ATerm)wsAfterASFTagId), (ATerm)ASFTagId), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun37))));
+  return (ASF_ASFTag)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun40))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun21)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun34))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun43)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun40))), (ATerm)wsAfterASFTagId), (ATerm)ASFTagId), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))));
 }
 
 /*}}}  */
@@ -461,7 +535,7 @@ ASF_Tree ASF_makeTreeLexicalConstructor(char * formalName, ASF_Symbol symbol, AS
 
 ASF_Tree ASF_makeTreeAmbiguityConstructor(ASF_Symbol amb, ASF_Symbol symbol, ASF_OptLayout wsAfterAmb, ASF_OptLayout wsAfterParenOpen, ASF_Symbol listSymbol, ASF_TreeAmbs ambs, ASF_OptLayout wsAfterAmbs)
 {
-  return (ASF_Tree)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun2))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl2(ASF_afun40, (ATerm)amb, (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun24))))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun9))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)symbol), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun42)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun2))), (ATerm)wsAfterAmbs), (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl1(ASF_afun18, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl2(ASF_afun40, (ATerm)listSymbol, (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun24))))), (ATerm)ambs)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun9))), (ATerm)wsAfterAmb), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun41))));
+  return (ASF_Tree)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun2))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl2(ASF_afun44, (ATerm)amb, (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun24))))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun9))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun45))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)symbol), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun46)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun2))), (ATerm)wsAfterAmbs), (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl1(ASF_afun18, (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl2(ASF_afun44, (ATerm)listSymbol, (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun24))))), (ATerm)ambs)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun9))), (ATerm)wsAfterAmb), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun45))));
 }
 
 /*}}}  */
@@ -493,7 +567,7 @@ ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_OptLayout wsAfterFirst, ASF
 
 ASF_ASFEquation ASF_makeASFEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquals, ASF_Tree rhs)
 {
-  return (ASF_ASFEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun31))), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (ASF_ASFEquation)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun47))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun36))), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun47))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -501,7 +575,7 @@ ASF_ASFEquation ASF_makeASFEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsS
 
 ASF_ASFCondition ASF_makeASFConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquals, ASF_Tree rhs)
 {
-  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun44)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun43))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun47))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun48)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun47))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -509,7 +583,7 @@ ASF_ASFCondition ASF_makeASFConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol r
 
 ASF_ASFCondition ASF_makeASFConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterUnequal, ASF_Tree rhs)
 {
-  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun45))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun46)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterUnequal), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun45))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun49))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun50)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterUnequal), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun49))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -565,7 +639,7 @@ ASF_OptLayout ASF_makeOptLayoutPresent(ASF_CHARLIST chars)
 
 ASF_Start ASF_makeStartASFEquations(ASF_OptLayout wsBefore, ASF_ASFEquations topASFEquations, ASF_OptLayout wsAfter, int ambCnt)
 {
-  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun47, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun26)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun48)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topASFEquations), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun51, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun26)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun52)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topASFEquations), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -604,6 +678,16 @@ ATbool ASF_isEqualASFEquations(ASF_ASFEquations arg0, ASF_ASFEquations arg1)
 }
 
 ATbool ASF_isEqualASFConditionalEquationList(ASF_ASFConditionalEquationList arg0, ASF_ASFConditionalEquationList arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ASF_isEqualASFTestEquationTestList(ASF_ASFTestEquationTestList arg0, ASF_ASFTestEquationTestList arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ASF_isEqualASFTestEquation(ASF_ASFTestEquation arg0, ASF_ASFTestEquation arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1230,6 +1314,9 @@ ATbool ASF_isValidASFEquations(ASF_ASFEquations arg)
   else if (ASF_isASFEquationsPresent(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1278,11 +1365,36 @@ inline ATbool ASF_isASFEquationsPresent(ASF_ASFEquations arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool ASF_isASFEquationsPresentWithTests(ASF_ASFEquations arg) */
+
+inline ATbool ASF_isASFEquationsPresentWithTests(ASF_ASFEquations arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFEquationsPresentWithTests, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool ASF_hasASFEquationsWsAfterEquations(ASF_ASFEquations arg) */
 
 ATbool ASF_hasASFEquationsWsAfterEquations(ASF_ASFEquations arg)
 {
   if (ASF_isASFEquationsPresent(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFEquationsPresentWithTests(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1293,7 +1405,10 @@ ATbool ASF_hasASFEquationsWsAfterEquations(ASF_ASFEquations arg)
 
 ASF_OptLayout ASF_getASFEquationsWsAfterEquations(ASF_ASFEquations arg)
 {
-  
+  if (ASF_isASFEquationsPresent(arg)) {
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  }
+  else 
     return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
@@ -1303,6 +1418,9 @@ ASF_OptLayout ASF_getASFEquationsWsAfterEquations(ASF_ASFEquations arg)
 ASF_ASFEquations ASF_setASFEquationsWsAfterEquations(ASF_ASFEquations arg, ASF_OptLayout wsAfterEquations)
 {
   if (ASF_isASFEquationsPresent(arg)) {
+    return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterEquations, 1), 1);
+  }
+  else if (ASF_isASFEquationsPresentWithTests(arg)) {
     return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterEquations, 1), 1);
   }
 
@@ -1318,6 +1436,9 @@ ATbool ASF_hasASFEquationsList(ASF_ASFEquations arg)
   if (ASF_isASFEquationsPresent(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1326,7 +1447,10 @@ ATbool ASF_hasASFEquationsList(ASF_ASFEquations arg)
 
 ASF_ASFConditionalEquationList ASF_getASFEquationsList(ASF_ASFEquations arg)
 {
-  
+  if (ASF_isASFEquationsPresent(arg)) {
+    return (ASF_ASFConditionalEquationList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
+  }
+  else 
     return (ASF_ASFConditionalEquationList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
 }
 
@@ -1338,8 +1462,110 @@ ASF_ASFEquations ASF_setASFEquationsList(ASF_ASFEquations arg, ASF_ASFConditiona
   if (ASF_isASFEquationsPresent(arg)) {
     return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
   }
+  else if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
+  }
 
   ATabort("ASFEquations has no List: %t\n", arg);
+  return (ASF_ASFEquations)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFEquationsWsAfterList(ASF_ASFEquations arg) */
+
+ATbool ASF_hasASFEquationsWsAfterList(ASF_ASFEquations arg)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFEquationsWsAfterList(ASF_ASFEquations arg) */
+
+ASF_OptLayout ASF_getASFEquationsWsAfterList(ASF_ASFEquations arg)
+{
+  
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFEquations ASF_setASFEquationsWsAfterList(ASF_ASFEquations arg, ASF_OptLayout wsAfterList) */
+
+ASF_ASFEquations ASF_setASFEquationsWsAfterList(ASF_ASFEquations arg, ASF_OptLayout wsAfterList)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterList, 3), 1);
+  }
+
+  ATabort("ASFEquations has no WsAfterList: %t\n", arg);
+  return (ASF_ASFEquations)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFEquationsWsAfterTests(ASF_ASFEquations arg) */
+
+ATbool ASF_hasASFEquationsWsAfterTests(ASF_ASFEquations arg)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFEquationsWsAfterTests(ASF_ASFEquations arg) */
+
+ASF_OptLayout ASF_getASFEquationsWsAfterTests(ASF_ASFEquations arg)
+{
+  
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFEquations ASF_setASFEquationsWsAfterTests(ASF_ASFEquations arg, ASF_OptLayout wsAfterTests) */
+
+ASF_ASFEquations ASF_setASFEquationsWsAfterTests(ASF_ASFEquations arg, ASF_OptLayout wsAfterTests)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterTests, 5), 1);
+  }
+
+  ATabort("ASFEquations has no WsAfterTests: %t\n", arg);
+  return (ASF_ASFEquations)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFEquationsTestList(ASF_ASFEquations arg) */
+
+ATbool ASF_hasASFEquationsTestList(ASF_ASFEquations arg)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_getASFEquationsTestList(ASF_ASFEquations arg) */
+
+ASF_ASFTestEquationTestList ASF_getASFEquationsTestList(ASF_ASFEquations arg)
+{
+  
+    return (ASF_ASFTestEquationTestList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFEquations ASF_setASFEquationsTestList(ASF_ASFEquations arg, ASF_ASFTestEquationTestList testList) */
+
+ASF_ASFEquations ASF_setASFEquationsTestList(ASF_ASFEquations arg, ASF_ASFTestEquationTestList testList)
+{
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return (ASF_ASFEquations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)testList, 1), 6), 1);
+  }
+
+  ATabort("ASFEquations has no TestList: %t\n", arg);
   return (ASF_ASFEquations)NULL;
 }
 
@@ -1535,6 +1761,326 @@ ASF_ASFConditionalEquationList ASF_setASFConditionalEquationListTail(ASF_ASFCond
 
   ATabort("ASFConditionalEquationList has no Tail: %t\n", arg);
   return (ASF_ASFConditionalEquationList)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList accessors */
+
+/*{{{  ATbool ASF_isValidASFTestEquationTestList(ASF_ASFTestEquationTestList arg) */
+
+ATbool ASF_isValidASFTestEquationTestList(ASF_ASFTestEquationTestList arg)
+{
+  if (ASF_isASFTestEquationTestListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFTestEquationTestListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFTestEquationTestListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFTestEquationTestListEmpty(ASF_ASFTestEquationTestList arg) */
+
+inline ATbool ASF_isASFTestEquationTestListEmpty(ASF_ASFTestEquationTestList arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternASFTestEquationTestListEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFTestEquationTestListSingle(ASF_ASFTestEquationTestList arg) */
+
+inline ATbool ASF_isASFTestEquationTestListSingle(ASF_ASFTestEquationTestList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFTestEquationTestListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFTestEquationTestListMany(ASF_ASFTestEquationTestList arg) */
+
+inline ATbool ASF_isASFTestEquationTestListMany(ASF_ASFTestEquationTestList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFTestEquationTestListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg) */
+
+ATbool ASF_hasASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg)
+{
+  if (ASF_isASFTestEquationTestListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFTestEquationTestListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_getASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg) */
+
+ASF_ASFTestEquation ASF_getASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg)
+{
+  if (ASF_isASFTestEquationTestListSingle(arg)) {
+    return (ASF_ASFTestEquation)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (ASF_ASFTestEquation)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquation head) */
+
+ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListHead(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquation head)
+{
+  if (ASF_isASFTestEquationTestListSingle(arg)) {
+    return (ASF_ASFTestEquationTestList)ATreplace((ATermList)arg, (ATerm)head, 0);
+  }
+  else if (ASF_isASFTestEquationTestListMany(arg)) {
+    return (ASF_ASFTestEquationTestList)ATreplace((ATermList)arg, (ATerm)head, 0);
+  }
+
+  ATabort("ASFTestEquationTestList has no Head: %t\n", arg);
+  return (ASF_ASFTestEquationTestList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg) */
+
+ATbool ASF_hasASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg)
+{
+  if (ASF_isASFTestEquationTestListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg) */
+
+ASF_OptLayout ASF_getASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg)
+{
+  
+    return (ASF_OptLayout)ATelementAt((ATermList)arg, 1);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg, ASF_OptLayout wsAfterFirst) */
+
+ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListWsAfterFirst(ASF_ASFTestEquationTestList arg, ASF_OptLayout wsAfterFirst)
+{
+  if (ASF_isASFTestEquationTestListMany(arg)) {
+    return (ASF_ASFTestEquationTestList)ATreplace((ATermList)arg, (ATerm)wsAfterFirst, 1);
+  }
+
+  ATabort("ASFTestEquationTestList has no WsAfterFirst: %t\n", arg);
+  return (ASF_ASFTestEquationTestList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg) */
+
+ATbool ASF_hasASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg)
+{
+  if (ASF_isASFTestEquationTestListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_getASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg) */
+
+ASF_ASFTestEquationTestList ASF_getASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg)
+{
+  
+    return (ASF_ASFTestEquationTestList)ATgetTail((ATermList)arg, 2);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquationTestList tail) */
+
+ASF_ASFTestEquationTestList ASF_setASFTestEquationTestListTail(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquationTestList tail)
+{
+  if (ASF_isASFTestEquationTestListMany(arg)) {
+    return (ASF_ASFTestEquationTestList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  }
+
+  ATabort("ASFTestEquationTestList has no Tail: %t\n", arg);
+  return (ASF_ASFTestEquationTestList)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation accessors */
+
+/*{{{  ATbool ASF_isValidASFTestEquation(ASF_ASFTestEquation arg) */
+
+ATbool ASF_isValidASFTestEquation(ASF_ASFTestEquation arg)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFTestEquationDefault(ASF_ASFTestEquation arg) */
+
+inline ATbool ASF_isASFTestEquationDefault(ASF_ASFTestEquation arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternASFTestEquationDefault, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationASFTag(ASF_ASFTestEquation arg) */
+
+ATbool ASF_hasASFTestEquationASFTag(ASF_ASFTestEquation arg)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTag ASF_getASFTestEquationASFTag(ASF_ASFTestEquation arg) */
+
+ASF_ASFTag ASF_getASFTestEquationASFTag(ASF_ASFTestEquation arg)
+{
+  
+    return (ASF_ASFTag)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_setASFTestEquationASFTag(ASF_ASFTestEquation arg, ASF_ASFTag ASFTag) */
+
+ASF_ASFTestEquation ASF_setASFTestEquationASFTag(ASF_ASFTestEquation arg, ASF_ASFTag ASFTag)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return (ASF_ASFTestEquation)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ASFTag, 0), 1);
+  }
+
+  ATabort("ASFTestEquation has no ASFTag: %t\n", arg);
+  return (ASF_ASFTestEquation)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg) */
+
+ATbool ASF_hasASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg) */
+
+ASF_OptLayout ASF_getASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg)
+{
+  
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_setASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg, ASF_OptLayout wsAfterASFTag) */
+
+ASF_ASFTestEquation ASF_setASFTestEquationWsAfterASFTag(ASF_ASFTestEquation arg, ASF_OptLayout wsAfterASFTag)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return (ASF_ASFTestEquation)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterASFTag, 1), 1);
+  }
+
+  ATabort("ASFTestEquation has no WsAfterASFTag: %t\n", arg);
+  return (ASF_ASFTestEquation)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFTestEquationASFCondition(ASF_ASFTestEquation arg) */
+
+ATbool ASF_hasASFTestEquationASFCondition(ASF_ASFTestEquation arg)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFCondition ASF_getASFTestEquationASFCondition(ASF_ASFTestEquation arg) */
+
+ASF_ASFCondition ASF_getASFTestEquationASFCondition(ASF_ASFTestEquation arg)
+{
+  
+    return (ASF_ASFCondition)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_setASFTestEquationASFCondition(ASF_ASFTestEquation arg, ASF_ASFCondition ASFCondition) */
+
+ASF_ASFTestEquation ASF_setASFTestEquationASFCondition(ASF_ASFTestEquation arg, ASF_ASFCondition ASFCondition)
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return (ASF_ASFTestEquation)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ASFCondition, 2), 1);
+  }
+
+  ATabort("ASFTestEquation has no ASFCondition: %t\n", arg);
+  return (ASF_ASFTestEquation)NULL;
 }
 
 /*}}}  */
@@ -4044,9 +4590,9 @@ ASF_ASFConditionList ASF_visitASFConditionList(ASF_ASFConditionList arg, ASF_ASF
 }
 
 /*}}}  */
-/*{{{  ASF_ASFEquations ASF_visitASFEquations(ASF_ASFEquations arg, ASF_OptLayout (*acceptWsAfterEquations)(ASF_OptLayout), ASF_ASFConditionalEquationList (*acceptList)(ASF_ASFConditionalEquationList)) */
+/*{{{  ASF_ASFEquations ASF_visitASFEquations(ASF_ASFEquations arg, ASF_OptLayout (*acceptWsAfterEquations)(ASF_OptLayout), ASF_ASFConditionalEquationList (*acceptList)(ASF_ASFConditionalEquationList), ASF_OptLayout (*acceptWsAfterList)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterTests)(ASF_OptLayout), ASF_ASFTestEquationTestList (*acceptTestList)(ASF_ASFTestEquationTestList)) */
 
-ASF_ASFEquations ASF_visitASFEquations(ASF_ASFEquations arg, ASF_OptLayout (*acceptWsAfterEquations)(ASF_OptLayout), ASF_ASFConditionalEquationList (*acceptList)(ASF_ASFConditionalEquationList))
+ASF_ASFEquations ASF_visitASFEquations(ASF_ASFEquations arg, ASF_OptLayout (*acceptWsAfterEquations)(ASF_OptLayout), ASF_ASFConditionalEquationList (*acceptList)(ASF_ASFConditionalEquationList), ASF_OptLayout (*acceptWsAfterList)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterTests)(ASF_OptLayout), ASF_ASFTestEquationTestList (*acceptTestList)(ASF_ASFTestEquationTestList))
 {
   if (ASF_isASFEquationsAbsent(arg)) {
     return ASF_makeASFEquationsAbsent();
@@ -4055,6 +4601,14 @@ ASF_ASFEquations ASF_visitASFEquations(ASF_ASFEquations arg, ASF_OptLayout (*acc
     return ASF_makeASFEquationsPresent(
         acceptWsAfterEquations ? acceptWsAfterEquations(ASF_getASFEquationsWsAfterEquations(arg)) : ASF_getASFEquationsWsAfterEquations(arg),
         acceptList ? acceptList(ASF_getASFEquationsList(arg)) : ASF_getASFEquationsList(arg));
+  }
+  if (ASF_isASFEquationsPresentWithTests(arg)) {
+    return ASF_makeASFEquationsPresentWithTests(
+        acceptWsAfterEquations ? acceptWsAfterEquations(ASF_getASFEquationsWsAfterEquations(arg)) : ASF_getASFEquationsWsAfterEquations(arg),
+        acceptList ? acceptList(ASF_getASFEquationsList(arg)) : ASF_getASFEquationsList(arg),
+        acceptWsAfterList ? acceptWsAfterList(ASF_getASFEquationsWsAfterList(arg)) : ASF_getASFEquationsWsAfterList(arg),
+        acceptWsAfterTests ? acceptWsAfterTests(ASF_getASFEquationsWsAfterTests(arg)) : ASF_getASFEquationsWsAfterTests(arg),
+        acceptTestList ? acceptTestList(ASF_getASFEquationsTestList(arg)) : ASF_getASFEquationsTestList(arg));
   }
   ATabort("not a ASFEquations: %t\n", arg);
   return (ASF_ASFEquations)NULL;
@@ -4080,6 +4634,43 @@ ASF_ASFConditionalEquationList ASF_visitASFConditionalEquationList(ASF_ASFCondit
   }
   ATabort("not a ASFConditionalEquationList: %t\n", arg);
   return (ASF_ASFConditionalEquationList)NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_visitASFTestEquationTestList(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquation (*acceptHead)(ASF_ASFTestEquation), ASF_OptLayout (*acceptWsAfterFirst)(ASF_OptLayout)) */
+
+ASF_ASFTestEquationTestList ASF_visitASFTestEquationTestList(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquation (*acceptHead)(ASF_ASFTestEquation), ASF_OptLayout (*acceptWsAfterFirst)(ASF_OptLayout))
+{
+  if (ASF_isASFTestEquationTestListEmpty(arg)) {
+    return ASF_makeASFTestEquationTestListEmpty();
+  }
+  if (ASF_isASFTestEquationTestListSingle(arg)) {
+    return ASF_makeASFTestEquationTestListSingle(
+        acceptHead ? acceptHead(ASF_getASFTestEquationTestListHead(arg)) : ASF_getASFTestEquationTestListHead(arg));
+  }
+  if (ASF_isASFTestEquationTestListMany(arg)) {
+    return ASF_makeASFTestEquationTestListMany(
+        acceptHead ? acceptHead(ASF_getASFTestEquationTestListHead(arg)) : ASF_getASFTestEquationTestListHead(arg),
+        acceptWsAfterFirst ? acceptWsAfterFirst(ASF_getASFTestEquationTestListWsAfterFirst(arg)) : ASF_getASFTestEquationTestListWsAfterFirst(arg),
+        ASF_visitASFTestEquationTestList(ASF_getASFTestEquationTestListTail(arg), acceptHead, acceptWsAfterFirst));
+  }
+  ATabort("not a ASFTestEquationTestList: %t\n", arg);
+  return (ASF_ASFTestEquationTestList)NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquation ASF_visitASFTestEquation(ASF_ASFTestEquation arg, ASF_ASFTag (*acceptASFTag)(ASF_ASFTag), ASF_OptLayout (*acceptWsAfterASFTag)(ASF_OptLayout), ASF_ASFCondition (*acceptASFCondition)(ASF_ASFCondition)) */
+
+ASF_ASFTestEquation ASF_visitASFTestEquation(ASF_ASFTestEquation arg, ASF_ASFTag (*acceptASFTag)(ASF_ASFTag), ASF_OptLayout (*acceptWsAfterASFTag)(ASF_OptLayout), ASF_ASFCondition (*acceptASFCondition)(ASF_ASFCondition))
+{
+  if (ASF_isASFTestEquationDefault(arg)) {
+    return ASF_makeASFTestEquationDefault(
+        acceptASFTag ? acceptASFTag(ASF_getASFTestEquationASFTag(arg)) : ASF_getASFTestEquationASFTag(arg),
+        acceptWsAfterASFTag ? acceptWsAfterASFTag(ASF_getASFTestEquationWsAfterASFTag(arg)) : ASF_getASFTestEquationWsAfterASFTag(arg),
+        acceptASFCondition ? acceptASFCondition(ASF_getASFTestEquationASFCondition(arg)) : ASF_getASFTestEquationASFCondition(arg));
+  }
+  ATabort("not a ASFTestEquation: %t\n", arg);
+  return (ASF_ASFTestEquation)NULL;
 }
 
 /*}}}  */

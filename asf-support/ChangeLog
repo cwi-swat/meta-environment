@@ -1,6 +1,7 @@
 2003/10/15 (jurgenv@cwi.nl)
  * Added syntax for tests to ASF
  * Regenerated asf-support library
+ * Added concatTestEquationTestList function
 
 2003/10/08 (markvdb@cwi.nl)
  * Bumped into version 1.2.

@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Oct  2 16:32:22 2003
+ * Generated at Wed Oct 15 16:17:13 2003
  */
 
 #ifndef __ASFME_dict_H
@@ -56,6 +56,10 @@ extern AFun ASF_afun45;
 extern AFun ASF_afun46;
 extern AFun ASF_afun47;
 extern AFun ASF_afun48;
+extern AFun ASF_afun49;
+extern AFun ASF_afun50;
+extern AFun ASF_afun51;
+extern AFun ASF_afun52;
 
 extern ATerm ASF_patternStartASFEquations;
 extern ATerm ASF_patternOptLayoutPresent;
@@ -77,9 +81,14 @@ extern ATerm ASF_patternASFTagEmpty;
 extern ATerm ASF_patternASFConditionalEquationWhen;
 extern ATerm ASF_patternASFConditionalEquationImplies;
 extern ATerm ASF_patternASFConditionalEquationSimple;
+extern ATerm ASF_patternASFTestEquationDefault;
+extern ATerm ASF_patternASFTestEquationTestListMany;
+extern ATerm ASF_patternASFTestEquationTestListSingle;
+extern ATerm ASF_patternASFTestEquationTestListEmpty;
 extern ATerm ASF_patternASFConditionalEquationListMany;
 extern ATerm ASF_patternASFConditionalEquationListSingle;
 extern ATerm ASF_patternASFConditionalEquationListEmpty;
+extern ATerm ASF_patternASFEquationsPresentWithTests;
 extern ATerm ASF_patternASFEquationsPresent;
 extern ATerm ASF_patternASFEquationsAbsent;
 extern ATerm ASF_patternASFConditionListMany;
