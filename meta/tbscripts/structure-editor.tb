@@ -208,10 +208,10 @@ in
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
     +
     rec-event(TE,get-focus(Fid,I?)).
-    snd-msg(getFocus(Fid, I)) .
+    snd-msg(get-focus(Fid, I)) .
     rec-msg(focus(Foc?)) .
     snd-msg(TE,set-focus(Fid, Foc)) .
-    snd-msg(setFocus(Fid, Foc)) .
+    snd-msg(set-focus(Fid, Foc)) .
     rec-msg(focus-list(Fl?)) .
     snd-ack-event(TE,get-focus(Fid,I))
     +
