@@ -29,19 +29,19 @@ exports
 
    context-free syntax
 
-        eval-rstat(RSTAT, RSTORE)           			-> RSTORE
-        eval-rstats(RSTAT*, RSTORE)          			-> RSTORE
+        eval-rstat(RSTAT, RSTORE)           			-> RSTORE { complete}
+        eval-rstats(RSTAT*, RSTORE)          			-> RSTORE {complete}
 
 	"{" {GENERATOR ","}+ "::" {REXP ","}+  "}"		-> REXP
  
-        evalp(REXP, RSTORE)            				-> Boolean
-        evali(REXP, RSTORE)            				-> Integer
-        evale(REXP, RSTORE)            				-> Elem
-        evalt(REXP, RSTORE)            				-> Tuple
-        evalb(REXP, RSTORE)            				-> Bag[[Elem]]
-        evalr(REXP, RSTORE)            				-> Bag[[Elem]]
-        evalx(REXP, RSTORE)            				-> Elem
-	evall(REXP, RSTORE)					-> Location
+        evalp(REXP, RSTORE)            				-> Boolean {complete}
+        evali(REXP, RSTORE)            				-> Integer {complete}
+        evale(REXP, RSTORE)            				-> Elem {complete}
+        evalt(REXP, RSTORE)            				-> Tuple {complete}
+        evalb(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
+        evalr(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
+        evalx(REXP, RSTORE)            				-> Elem {complete}
+	evall(REXP, RSTORE)					-> Location {complete}
 
 	evalc(REXP, RSTORE)					-> RVALUE
 	evalc-test(Boolean, REXP, RSTORE)			-> RVALUE

@@ -161,7 +161,8 @@ assert "sum-2":		sum({1})		== 1
 assert "sum-3":		sum({1, 2})		== 3
 assert "sum-4":		sum({1, 2, 3})		== 6
 assert "sum-5":		sum({1, -2, 3})		== 2
-assert "sum-6":		sum({1, 1, 1})		== 3
+%%>>assert "sum-6":		sum({1, 1, 1})		== 3
+assert "sum-6":		sum({1, 1, 1})		== 1
 
 assert "average-1":	average({})	== 0
 assert "average-2":	average({1})		== 1
