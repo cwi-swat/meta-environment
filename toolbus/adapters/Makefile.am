@@ -12,7 +12,6 @@ SUBDIRS = \
 DIST_SUBDIRS = \
 	emacs-adapter \
 	gen-adapter \
-	java-adapter \
 	perl-adapter \
 	python-adapter \
 	tcltk-adapter \
