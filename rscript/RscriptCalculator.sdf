@@ -1,4 +1,4 @@
->]module RscriptCalculator
+module RscriptCalculator
 
 imports Rscript
 %% imports Relations[Elem]
