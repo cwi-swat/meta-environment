@@ -12,8 +12,8 @@ PTPT_AttrList PTPT_reverseAttrList(PTPT_AttrList args);
 PTPT_CharRangeList PTPT_reverseCharRangeList(PTPT_CharRangeList args);
 PTPT_ATermElems PTPT_reverseATermElems(PTPT_ATermElems args);
 
-PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt);
-PTPT_Tree      PTPT_explodeTree(PT_Tree pt);
-PTPT_ATerm     PTPT_explodeATerm(ATerm trm);
+PTPT_ParseTree PTPT_liftParseTree(PT_ParseTree pt);
+PTPT_Tree      PTPT_liftTree(PT_Tree pt);
+PTPT_ATerm     PTPT_liftATerm(ATerm trm);
 
 #endif
