@@ -1293,6 +1293,7 @@ int main(int argc, char *argv[])
 				  AFsource(subject,subjectText);
 
 					ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
+					return 1;
 				} else {
 					ATerror("No memory available to print errors.\n");
 				}
