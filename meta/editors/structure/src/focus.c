@@ -49,9 +49,14 @@ SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status)
 				createArea(parse_tree, path), focus_status);
   }
   else {
-    PT_Tree tree = getTreeAt(PT_getParseTreeTree(parse_tree), 
-                             SE_getPathSteps(path));
-    PT_Production prod = PT_getTreeProd(tree);
+    PT_Tree tree = PT_getParseTreeTree(parse_tree); 
+    PT_Production prod;
+
+    if (SE_hasPathSteps(path)) {
+      tree = getTreeAt(tree, SE_getPathSteps(path));
+    }
+      
+    prod = PT_getTreeProd(tree);
     length = PT_getTreeLengthAnno(tree);
     SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
     if (PT_isProductionVariable(prod)) {

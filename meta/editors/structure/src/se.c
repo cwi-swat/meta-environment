@@ -531,8 +531,6 @@ main(int argc, char *argv[])
 
   ATBinit(argc, argv, &bottomOfStack);
 
-  ATsetChecking(ATtrue);
-
   PT_initMEPTApi();
   SE_initEditorDataApi();
 

@@ -268,7 +268,12 @@ SE_Path getPathInParseTreeAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo)
   tree = PT_getParseTreeTree(parse_tree);
   steps = getStepsInTreeAtPosInfo(tree, posInfo);
 
-  return SE_makePathTerm(steps);
+  if (steps != NULL) {
+    return SE_makePathTerm(steps);
+  }
+  else {
+    return SE_makePathRoot();
+  }
 }
 
 /*}}}  */

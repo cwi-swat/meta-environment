@@ -391,14 +391,22 @@ SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location)
   SE_Path path = getPathInParseTree(parse_tree, location, 0);
 
   if (SE_isPathTerm(path)) {
-    PT_Tree tree = PT_getParseTreeTree(parse_tree);
-    SE_Steps steps = SE_getPathSteps(path);
-    PT_Tree sub_tree = getTreeAt(tree, steps);
+    PT_Tree tree;
+    SE_Steps steps;
+    PT_Tree sub_tree;
 
-    if (isBasicLeafNode(sub_tree)) {
-      steps = stepUp(steps);
+    tree = PT_getParseTreeTree(parse_tree);
+
+    if (SE_hasPathSteps(path)) {
+      steps = SE_getPathSteps(path);
+      sub_tree = getTreeAt(tree, steps);
+
+      if (isBasicLeafNode(sub_tree)) {
+        steps = stepUp(steps);
+      }
+
+      path = SE_makePathTerm(steps);
     }
-    path = SE_makePathTerm(steps);
   }
 
   focus = createEditorFocus(editor, parse_tree, path);
@@ -418,13 +426,18 @@ SE_Focus getFocusAtPosInfo(SE_Editor editor,
 
   if (SE_isPathTerm(path)) {
     PT_Tree tree = PT_getParseTreeTree(parse_tree);
-    SE_Steps steps = SE_getPathSteps(path);
-    PT_Tree sub_tree = getTreeAt(tree, steps);
 
-    if (isBasicLeafNode(sub_tree)) {
-      steps = stepUp(steps);
+    if (SE_hasPathSteps(path)) {
+      SE_Steps steps = SE_getPathSteps(path);
+      PT_Tree sub_tree;
+
+      sub_tree = getTreeAt (tree, steps);
+
+      if (isBasicLeafNode(sub_tree)) {
+        steps = stepUp(steps);
+      }
+      path = SE_makePathTerm(steps);
     }
-    path = SE_makePathTerm(steps);
   }
 
   focus = createEditorFocus(editor, parse_tree, path);
