@@ -32,7 +32,7 @@
 
 \newcommand{\printindex}{%
   \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
-  \texorhtml{\input{manual.ind}}{\htmlprintindex}}
+  \texorhtml{\IfFileExists{manual.ind}{\input{manual.ind}}}{\htmlprintindex}}
 
 \htmlpanelfield{Contents}{hlxcontents}
 \htmlpanelfield{Index}{hlxindex}
@@ -1150,7 +1150,7 @@ The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 \begin{center}
 \begin{Label}{FIG:Bool-example.sdf}
 
-\T \includegraphics[width=12cm]{Bool-example_sdf2.pdf}
+\T \includegraphics[width=12cm]{Bool-example_sdf2}
 \W \htmlimage{Bool-example.sdf2.gif}
 \caption{Editor for the syntax of {\tt Bool-example}}
 

@@ -1,3 +1,6 @@
+2001/05/20 (mdejonge@cwi.nl)
+  * Fixed the dailybuild of meta-doc.
+
 2002/05/06 (vandenbr@loria.fr)
   * Tried to fix the dailybuild of meta-doc.
   * Based the generation of the manual on pdflatex instead of latex.

@@ -26,22 +26,29 @@ PSJES = Bool-example_asf.ps Bool-example_sdf2.ps Bool-example_trm.ps \
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
 
-CLEANFILES = manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,pdf,toc} $(PDFJES)
+CLEANFILES = manual.aux manual.bbl manual.blg manual.dvi \
+             manual.ilg manual.ind manual.idx manual.log \
+             manual.ps  manual.pdf manual.toc manual.out \
+             $(PDFJES)
 
 manual: asf+sdf-user-manual.pdf
 
 manual.dvi: $(MANUAL)
+	latex manual.ltx
+	makeindex manual.idx
+	bibtex manual
+	latex manual.ltx
+	latex manual.ltx
 
 spell:
 	detex manual.ltx | spell -b +words.txt
 
 asf+sdf-user-manual.ps: manual.dvi $(PSJES)
-	makeindex manual.idx ;\
-	latex manual.ltx ;\
 	dvips -o $@ $<
 
 asf+sdf-user-manual.pdf: $(MANUAL) $(PDFJES)
-	makeindex manual.idx ;\
-	pdflatex manual.ltx ;\
-	bibtex manual ;\
+	pdflatex manual.ltx
+	makeindex manual.idx
+	bibtex manual
+	pdflatex manual.ltx
 	pdflatex manual.ltx
