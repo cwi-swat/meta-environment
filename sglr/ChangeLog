@@ -1,5 +1,11 @@
 $Id$
 
+2003/08/07 ({jurgenv,markvdb}@cwi.nl)
+ * Fixed a bug wrt to filtering of rejects, somehow the position
+   information was not updated and thus in case a rejected tree
+   was in an ambiguity cluster the position information got 
+   out of sync during filtering.
+
 2003/08/01 (markvdb@cwi.nl)
  * Fine-tuned the way user-defined injections are treated.
 
