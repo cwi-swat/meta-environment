@@ -95,11 +95,11 @@ Installation instructions:
       $ cd ..
       $ cd aterm
       $ autoconf
-      $ ./configure
+      $ ./configure --prefix=..
       $ gmake install
       $ cd ..
       $ cd new-meta
-      $ ./configure --with-tcldot=/path/to/directory/Tcldot (see above)
+      $ ./configure --with-aterm=.. --with-toolbus=.. --with-tcldot=/path/to/directory/Tcldot (see above)
       $ gmake install
       $ cd ..
 
