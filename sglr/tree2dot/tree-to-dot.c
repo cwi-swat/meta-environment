@@ -285,17 +285,17 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 
 void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
 {
-  ATerm t, tree;
+  ATerm t, the_tree;
 
   ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
             (int) st, SG_ST_STATE(st));
   ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
-  tree = (ATerm) SG_LK_TREE(l);
-  t = SG_TreeType(tree);
-  if(ATgetType(tree) == AT_INT) {
+  the_tree = (ATerm) SG_LK_TREE(l);
+  t = SG_TreeType(the_tree);
+  if(ATgetType(the_tree) == AT_INT) {
     SG_PrintChar(dot, ATgetInt((ATermInt) t));
   } else {
-    ATfprintf(dot, "%s : ", SG_DotTermYield(tree));
+    ATfprintf(dot, "%s : ", SG_DotTermYield(the_tree));
     SG_PrintSymbol(dot, t);
   }
   ATfprintf(dot, "\"");
