@@ -58,6 +58,15 @@ int ASF_getConditionListLength(ASF_ASFConditionList list)
 }
 
 /*}}}  */
+/*{{{  int ASF_getTestEquationListLength(ASF_ASFTestEquationTestList list) */
+
+int ASF_getTestEquationListLength(ASF_ASFTestEquationTestList list)
+{
+  return (ATgetLength((ATermList) 
+      ASF_makeTermFromASFTestEquationTestList(list)) / 2) + 1;
+}
+
+/*}}}  */
 /*{{{  ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
 
 ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1,

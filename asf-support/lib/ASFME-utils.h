@@ -14,6 +14,7 @@ int    ASF_getASFConditionalEquationListLength(ASF_ASFConditionalEquationList eq
 ASF_ASFConditionalEquationList ASF_concatCondEquationList(ASF_ASFConditionalEquationList l1, ASF_ASFConditionalEquationList l2);
 ASF_ASFTestEquationTestList ASF_concatASFTestEquationTestList(ASF_ASFTestEquationTestList l1, ASF_ASFTestEquationTestList l2);
 
+int ASF_getTestEquationListLength(ASF_ASFTestEquationTestList list);
 ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, ASF_ASFConditionalEquationList l2);
 ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListFromParseTrees(ATermList l);
 
