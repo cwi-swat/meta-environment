@@ -74,7 +74,7 @@ extern Symbol record_sym;
 #define check_sym(t,s) (get_sym(t) == (s))
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
 #define remove_list(t) (ATgetArgument((ATermAppl) t,0))
-
+#define parse_sort(s)  (ATparse(s))
 /*}}}  */
 
   /*{{{  memo functionality */
