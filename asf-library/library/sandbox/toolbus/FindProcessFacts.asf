@@ -1,0 +1,45 @@
+equations
+
+[ff-top]
+  find-process-facts(TscriptDefs toolbus(ProcessInvocations)) = 
+    find-process-facts(TscriptDefs, {})
+
+[ff-basic]
+  get-process-name(ProcessSignature) = ProcessName,
+  find-facts-in-process(ProcessExpr, 
+                     make-process-facts(process-declaration ProcessName,{},{},{},{})) = ProcessFacts
+  ===>
+  find-process-facts(process ProcessSignature is ProcessExpr, ProcessFactsSet) =
+    ProcessFactsSet + { ProcessFacts }
+
+[ff-create-basic]
+  find-facts-in-process(create(ProcessName, GenVar), CollectedFacts) =
+    add-process-creation(CollectedFacts, process-creation ProcessName)
+
+[ff-create-param]
+  find-facts-in-process(create(ProcessName(Terms), GenVar), CollectedFacts) =
+    add-process-creation(CollectedFacts, process-creation ProcessName)
+
+[ff-invocation-basic]
+  find-facts-in-process(ProcessName, CollectedFacts) =
+    add-process-invocation(CollectedFacts, process-invocation ProcessName)
+
+[ff-invocation-param]
+  find-facts-in-process(ProcessName(Terms), CollectedFacts) =
+  add-process-invocation(CollectedFacts, process-invocation ProcessName)
+
+[ff-send-basic]
+  find-facts-in-process( snd-msg(Id), CollectedFacts) =
+  add-send-message(CollectedFacts, send-atom Id)
+
+[ff-send-complex]
+  find-facts-in-process( snd-msg(Id(TermList)), CollectedFacts) = 
+  add-send-message(CollectedFacts, send-atom Id)
+
+[ff-recv-basic]
+  find-facts-in-process( rec-msg(Id), CollectedFacts) = 
+    add-receive-message(CollectedFacts, recv-atom Id)
+
+[ff-recv-complex]
+  find-facts-in-process( rec-msg(Id(TermList)), CollectedFacts) =     
+     add-receive-message(CollectedFacts, recv-atom Id)

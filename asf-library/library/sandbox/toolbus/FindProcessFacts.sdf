@@ -1,0 +1,46 @@
+module FindProcessFacts
+
+imports 
+  TscriptOperations
+  FactsOperations
+  containers/Set[ProcessFacts]
+
+exports
+  sorts ProcessFactsSet
+  context-free syntax
+    Set[[ProcessFacts]] -> ProcessFactsSet
+
+  context-free syntax
+    find-process-facts( Tscript ) -> ProcessFactsSet
+
+hiddens
+  context-free syntax
+    find-process-facts( TscriptDef*, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,break)}
+    find-process-facts( ProcessDef, ProcessFactsSet )  -> ProcessFactsSet {traversal(accu,top-down,break)}
+
+  context-free syntax
+    find-facts-in-process(ProcessExpr, ProcessFacts)         -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process( ProcessInvocation, ProcessFacts ) -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process( Term, ProcessFacts )              -> ProcessFacts {traversal(accu,top-down,continue)}
+
+  variables
+    "TscriptDefs"                                 -> TscriptDef*
+    "ProcessInvocations"                          -> {ProcessInvocation ","}+
+    "ProcessCreations"                          -> {ProcessCreation ","}+
+    "ProcessFacts"[0-9\']*                      -> ProcessFacts
+    "StartupFacts"[0-9\']*                      -> StartupFacts
+    "CollectedFacts"[0-9\']*                      -> ProcessFacts
+    "ProcessFactsSet"[0-9\']*                   -> Set[[ProcessFacts]]
+    "ProcessSignature"                                 -> ProcessSignature
+    "ProcessName"                                 -> ProcessName
+    "ProcessNames"                                -> ProcessName*
+    "VarDecl"                                     -> VarDecl
+    "VarDecls"[0-9]*                              -> {VarDecl ","}*
+    "ProcessExpr"                                 -> ProcessExpr
+    "GenVar"                                      -> GenVar
+    "Id"                                          -> Id
+    "Term"                                        -> Term
+    "Terms"                                       -> {Term ","}*
+    "TermList"                                    -> TermList
+    "Table"[0-9\']*                               -> Table[[Var # Term]]
+    "Var"                                         -> Var

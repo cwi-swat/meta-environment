@@ -1,56 +1,20 @@
 module FindFacts
 
-imports 
-  TscriptOperations
-  FactsOperations
-  containers/Set[ProcessFacts]
-  FindStartupFacts
+imports
+  FindStartupFacts 
+  FindProcessFacts
 
 exports
-  sorts ProcessFactsSet
-  context-free syntax
-    Set[[ProcessFacts]] -> ProcessFactsSet
-
   sorts ToolBusFacts
   context-free syntax
     StartupFacts # ProcessFactsSet -> ToolBusFacts 
+
   context-free syntax
-    find-facts( Tscript )             -> ToolBusFacts
-    get-var-decls ( ProcessDef )      -> {VarDecl ","}*
-    lookup-var( Var, {VarDecl ","}*)  -> Term
+    find-facts( Tscript ) -> ToolBusFacts
 
 hiddens
-  context-free syntax
-    find-facts( TscriptDef*, ProcessFactsSet )              -> ProcessFactsSet {traversal(accu,top-down,break)}
-    find-facts( ProcessDef, ProcessFactsSet )               -> ProcessFactsSet {traversal(accu,top-down,break)}
-%%    find-facts( {ProcessInvocation ","}+, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,break)}
-
-  context-free syntax
-    find-process-facts(ProcessExpr, ProcessFacts)           -> ProcessFacts {traversal(accu,top-down,continue)}
-    find-process-facts( ProcessInvocation, ProcessFacts )   -> ProcessFacts {traversal(accu,top-down,continue)}
-%%    find-facts( {ProcessInvocation ","}+, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,continue)}
-    find-process-facts( Term, ProcessFacts )                -> ProcessFacts {traversal(accu,top-down,continue)}
-
-    get-var-decls( ProcessExpr )                  -> {VarDecl ","}*
-
   variables
-    "TscriptDefs"                                 -> TscriptDef*
-    "ProcessInvocations"                          -> {ProcessInvocation ","}+
-    "ProcessCreations"                          -> {ProcessCreation ","}+
-    "ProcessFacts"[0-9\']*                      -> ProcessFacts
-    "StartupFacts"[0-9\']*                      -> StartupFacts
-    "CollectedFacts"[0-9\']*                      -> ProcessFacts
-    "ProcessFactsSet"[0-9\']*                   -> Set[[ProcessFacts]]
-    "ProcessSignature"                                 -> ProcessSignature
-    "ProcessName"                                 -> ProcessName
-    "ProcessNames"                                -> ProcessName*
-    "VarDecl"                                     -> VarDecl
-    "VarDecls"[0-9]*                              -> {VarDecl ","}*
-    "ProcessExpr"                                 -> ProcessExpr
-    "GenVar"                                      -> GenVar
-    "Id"                                          -> Id
-    "Term"                                        -> Term
-    "Terms"                                       -> {Term ","}*
-    "TermList"                                    -> TermList
-    "Table"[0-9\']*                               -> Table[[Var # Term]]
-    "Var"                                         -> Var
+    "Tscript" -> Tscript
+    "StartupFacts" -> StartupFacts
+    "ProcessFactsSet" -> ProcessFactsSet
+    
