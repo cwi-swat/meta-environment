@@ -1,5 +1,6 @@
 2001/06/19 (jurgenv@cwi.nl)
  * added a library to create a flattened lexical from a string
+ * added a library to create a flat layout tree from a string
 
 2001/06/07 (jurgenv@cwi.nl)
  * reactivated the addPosInfo commanline tool (it used to be called add-posinfo)

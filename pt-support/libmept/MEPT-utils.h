@@ -82,6 +82,7 @@ ATbool PT_isTreeLexical(PT_Tree tree);
 PT_Tree PT_makeTreeLayoutEmpty();
 ATbool  PT_isTreeLayout(PT_Tree tree);
 PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args);
+PT_Tree PT_makeTreeLayoutFromString(const char *str);
 
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);  
 
