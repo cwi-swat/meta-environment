@@ -1,3 +1,8 @@
+2002/05/13 (jurgenv@cwi.nl)
+ * The asfc compiler renames slashes to underscores in the module name
+   to cope with compound module names.
+ * Bumped to 1.5beta
+
 2002/04/19 (jurgenv@cwi.nl)
  * Release 1.4
 
