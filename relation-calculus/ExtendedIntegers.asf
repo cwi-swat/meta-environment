@@ -31,3 +31,6 @@ equations
 
 [default-min] min($Int1, $Int2) = $Int2
 
+[eqi1]	$Int == $Int = true
+[default-eqi]
+	$Int1 == $Int2 = false

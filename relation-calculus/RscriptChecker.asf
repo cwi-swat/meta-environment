@@ -162,81 +162,83 @@ $Error]>
      	check-const(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
 [check-const-bag1]
-      check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag), $Tenv)
+      check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag),$Tenv)
+
+
+[check-const-br1]
+      is-tuple($Elem) = false,
+       check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
+       $Etype' = bag[$Etype],
+      check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
+       ==========================================
+       check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
 
 %%[check-const-br1]
+%%	is-empty-iter($BagIter) = false,
+%%	$BagIter' = tail($BagIter),
+%%	is-empty-iter($BagIter') = false,
+%%	$Elem = head($BagIter),
 %%      	is-tuple($Elem) = false,
 %%       	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
 %%       	$Etype' = bag[$Etype],
-%%       	check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
+%%       	check-const-bag-or-rel($BagIter', $Tenv') = <$Etype', $Tenv''>
 %%       	==========================================
-%%       	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
+%%       	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype', $Tenv''>
 
-[check-const-br1]
-	is-empty-iter($BagIter) = false,
-	$BagIter' = tail($BagIter),
-	is-empty-iter($BagIter') = false,
-	$Elem = head($BagIter),
-      	is-tuple($Elem) = false,
-       	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
-       	$Etype' = bag[$Etype],
-       	check-const-bag-or-rel($BagIter', $Tenv') = <$Etype', $Tenv''>
-       	==========================================
-       	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype', $Tenv''>
-%%[check-const-br2] 
+[check-const-br2] 
+	is-tuple($Elem) = false,
+       check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
+       $Etype' =  bag[$Etype]
+       ==========================================
+       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
+
+%%[check-const-br2]
+%%	is-empty-iter($BagIter) = false,
+%%	$BagIter' = tail($BagIter),
+%%%%	is-empty-iter($BagIter') = true,
 %%	is-tuple($Elem) = false,
 %%       	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
 %%       	$Etype' =  bag[$Etype]
 %%       	==========================================
-%%       	check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
+%%       	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype', $Tenv'>	
 
-[check-const-br2]
-	is-empty-iter($BagIter) = false,
-	$BagIter' = tail($BagIter),
-	is-empty-iter($BagIter') = true,
-	is-tuple($Elem) = false,
-       	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
-       	$Etype' =  bag[$Etype]
-       	==========================================
-       	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype', $Tenv'>	
-
-%%[check-const-br31]
-%%	is-tuple($Elem) = true,   
-%%	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
-%%	$Etype = rel[$Etype1,$Etype2],
-%%      	check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype, $Tenv''>
-%%      	==========================================
-%%      	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
-
-[check-const-br31]	
-	is-empty-iter($BagIter) = false,
-	$BagIter' = tail($BagIter),
-	is-empty-iter($BagIter') = false,
-	$Elem = head($BagIter),
+[check-const-br31]
 	is-tuple($Elem) = true,   
 	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	$Etype = rel[$Etype1,$Etype2],
-      	check-const-bag-or-rel($BagIter', $Tenv') = <$Etype, $Tenv''>
-      	==========================================
-      	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype, $Tenv''>
+      check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype, $Tenv''>
+      ==========================================
+      check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
 
-%%[check-const-br4]
-%%	is-tuple($Elem) = true, 
+%%[check-const-br31]	
+%%	is-empty-iter($BagIter) = false,
+%%	$BagIter' = tail($BagIter),
+%%	is-empty-iter($BagIter') = false,
+%%	$Elem = head($BagIter),
+%%	is-tuple($Elem) = true,   
 %%	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
-%%	$Etype = rel[$Etype1,$Etype2]
-%%       ==========================================
-%%       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
+%%	$Etype = rel[$Etype1,$Etype2],
+%%      	check-const-bag-or-rel($BagIter', $Tenv') = <$Etype, $Tenv''>
+%%      	==========================================
+%%      	check-const-bag-or-rel($BagIter, $Tenv) = <$Etype, $Tenv''>
 
 [check-const-br4]
-	is-empty-iter($BagIter) = false,
-	$BagIter' = tail($BagIter),
-	is-empty-iter($BagIter') = true,
-	$Elem = head($BagIter),
 	is-tuple($Elem) = true, 
 	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	$Etype = rel[$Etype1,$Etype2]
        ==========================================
-       check-const-bag-or-rel($BagIter, $Tenv) = <$Etype, $Tenv'>
+       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
+
+%%[check-const-br4]
+%%	is-empty-iter($BagIter) = false,
+%%	$BagIter' = tail($BagIter),
+%%	is-empty-iter($BagIter') = true,
+%%	$Elem = head($BagIter),
+%%	is-tuple($Elem) = true, 
+%%	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
+%%	$Etype = rel[$Etype1,$Etype2]
+%%       ==========================================
+%%       check-const-bag-or-rel($BagIter, $Tenv) = <$Etype, $Tenv'>
 
 %%-----------------------------------------------------------------------------------
 
@@ -353,8 +355,10 @@ $Error]>
 [compat-cmp5]
 	compat-cmp($Exp, int, int, $Tenv) = $Tenv
 [compat-cmp6]
-	compat-cmp($Exp, area, area, $Tenv) = $Tenv
+	compat-cmp($Exp, str, str, $Tenv) = $Tenv
 [compat-cmp7]
+	compat-cmp($Exp, area, area, $Tenv) = $Tenv
+[compat-cmp8]
 	compat-cmp($Exp, $Etype1, $Etype2, $Tenv) = 
 	$Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp
 

@@ -423,6 +423,19 @@ otherwise\\ \hline
 
 \emph{str}$_1$ {\tt !=} \emph{str}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
 otherwise\\ \hline
+
+\emph{str}$_1$ {\tt <=} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is lexicographically less than
+or equal to \emph{str}$_2$ and {\tt false} otherwise\\ \hline
+
+\emph{str}$_1$ {\tt <} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is a lexicographically less than \emph{str}$_2$
+and {\tt false} otherwise\\ \hline
+
+\emph{str}$_1$ {\tt >=} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is lexicographically greater
+than or equal to \emph{str}$_2$  and {\tt false} otherwise\\ \hline
+
+\emph{str}$_1$ {\tt >} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$  lexicographically greater than \emph{str}$_2$
+and {\tt false} otherwise\\ \hline
+
 \end{tabular}
 \subsection{Operations on Areas} \label{BO:area}
 
@@ -1612,18 +1625,22 @@ Taeke Kooiker
 {\tt !=}  & Inequality of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt <=}  & Less than or equal of integers & \ref{BO:int}\\
+{\tt <=}  & Less than or equal of strings & \ref{BO:str}\\
 {\tt <=}  & Textual inclusion of areas & \ref{BO:area}\\
 {\tt <=}  & Subset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt <}  & Less than of integers & \ref{BO:int}\\
+{\tt <}  & Less than of strings & \ref{BO:str}\\
 {\tt <}  & Strict textual inclusion of areas & \ref{BO:area}\\
 {\tt <}  & Strict subset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt >=}  & Greater than or equal of integers & \ref{BO:int}\\
+{\tt >=}  & Greater than or equal of strings & \ref{BO:str}\\
 {\tt >=}  & Textual containment of areas & \ref{BO:area}\\
 {\tt >=}  & Superset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt >}  & Greater than of integers & \ref{BO:int}\\
+{\tt >}  & Greater than of strings & \ref{BO:str}\\
 {\tt >}  & Strict textual containment of areas & \ref{BO:area}\\
 {\tt >}  & Strict superset of bags/relations & \ref{BO:bag-or-rel}\\
 

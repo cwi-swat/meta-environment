@@ -33,6 +33,6 @@ exports
 hiddens
 imports basic/Whitespace
 
-%%  variables
-%%  "$Elem"[0-9]* -> Elem
-%%  "$Bag"[0-9]* -> Bag[[Elem]]
+  variables
+  "$Elem"[0-9]* -> Elem
+  "$Bag"[0-9]* -> Bag[[Elem]]

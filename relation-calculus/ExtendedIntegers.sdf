@@ -11,6 +11,9 @@ exports
 	max(Integer, Integer)	    -> Integer
 	min(Integer, Integer)	    -> Integer
 
+	Integer "==" Integer	    -> Boolean
+
+
    context-free priorities
 	Integer "/" Integer -> Integer > Integer "*" Integer -> Integer
 hiddens

@@ -1,7 +1,7 @@
 module MyArea
 
 imports languages/aterm/syntax/Literals languages/aterm/syntax/IntCon 
-    basic/Strings basic/Integers
+    basic/Strings ExtendedIntegers
 
 exports
   sorts Area
@@ -16,6 +16,13 @@ exports
   get-endline(Area)				-> NatCon
   get-endcol(Area)				-> NatCon
 
+  equal(Area, Area)				-> Boolean
+
+  less(Area, Area)				-> Boolean
+  less-equal(Area, Area)			-> Boolean
+
+  greater(Area, Area)				-> Boolean
+  greater-equal(Area, Area)			-> Boolean			
   context-free syntax
   
   lit2str(Literal)				-> String
@@ -25,4 +32,5 @@ hiddens
   variables
         "$NatCon" [0-9\']*            		-> NatCon
         "$Literal" [0-9\']*             	-> Literal
- 	"Char*" [0-9\']* 			-> CHAR*
+ 	"$Char*" [0-9\']* 			-> CHAR*
+	"$Area" [0-9\']*			-> Area

@@ -69,11 +69,13 @@ assert "implies 4" : (false implies false) == true
 
 assert "in 1" : 2 in Bag1
 assert "in 2" : not (7 in Bag1)
+assert "in 3" : {2,3} in {{1,2}, {2,3}, {3,4}}
+assert "in 4" : {3,2} in {{1,2}, {2,3}, {3,4}}
+assert "in 5" : <2,20> in Rel1
+assert "in 6" :  not (<7,70> in Rel1)
+
 assert "notin 1" : not (2 notin Bag1)
 assert "notin 2": (7 notin Bag1)
-
-assert "in 3" : <2,20> in Rel1
-assert "in 4" :  not (<7,70> in Rel1)
 assert "notin 3" : <7,70> notin Rel1
 assert "notin 4" : not(<2,20> notin Rel1)
 
@@ -143,6 +145,8 @@ bag[int] BigBag   = {5, 4, 3, 2, 1, 2}
 
 assert "<= 1" : 1 <= 2
 assert "<= 2" : 2 <= 2
+assert "<= 2a" : "a" <= "b"
+assert "<= 2b" : "b" <= "b"
 assert "<= 3" : A1 <= A1
 assert "<= 4" : A1 <= A2
 assert "<= 5" : A3 <= A4
@@ -157,6 +161,8 @@ assert "<= 10": not(BigBag <= SmallBag)
 
 assert "< 1" : 1 < 2
 assert "< 2" : not 2 < 2
+assert "< 2a" : "a" < "b"
+assert "< 2b" : not "b" < "b"
 assert "< 3" : not(A1 < A1)
 assert "< 4" : A1 < A2
 assert "< 5" : A3 < A4
@@ -171,6 +177,8 @@ assert "< 10": not(BigBag < SmallBag)
 
 assert ">= 1" : not(1 >= 2)
 assert ">= 2" : 2 >= 2
+assert ">= 2a" : not ("a" >= "b")
+assert ">= 2b" : "b" >= "b"
 assert ">= 3" : A1 >= A1
 assert ">= 4" : not(A1 >= A2)
 assert ">= 5" : not(A3 >= A4)
@@ -185,6 +193,8 @@ assert ">= 10": not(SmallBag >= BigBag)
 
 assert "> 1" : not(1 > 2)
 assert "> 2" : not(2 > 2)
+assert "> 2a" : not ("a" > "b")
+assert "> 2b" : not("b" > "b")
 assert "> 3" : not(A1 > A1)
 assert "> 4" : not(A1 > A2)
 assert "> 5" : not(A3 > A4)
@@ -209,6 +219,7 @@ assert "union 8" :  Rel1 union {<7,70>} == {<1,10>, <2,20>, <3,30>,<7,70>}
 assert "union 9" : EMPTYREL union Rel2 == Rel2
 assert "union 10": Rel1 union EMPTYREL == Rel1
 assert "union 11": EMPTYREL union EMPTYREL == EMPTYREL
+assert "union 12": {1,2,3,2,1} union {1,2,2,3,3,3} == {1,1,2,2,3,3,3}
 
 %% --- inter
 
@@ -234,6 +245,7 @@ assert "inter 18": Rel1 inter EMPTYREL == EMPTYREL
 assert "inter 19": EMPTYREL inter Rel1 == EMPTYREL
 assert "inter 20": Rel1 inter Rel2 == {<3,30>}
 assert "inter 21": Rel2 inter Rel1 == {<3,30>}
+assert "inter 22": {1,2,3,2,1} inter {1,2,2,3,3,3} == {1,2,2,3}
 
 %% --- \
 
@@ -246,6 +258,8 @@ assert "diff 5": Rel1 \ EMPTYREL == Rel1
 assert "diff 6":  EMPTYREL \ Rel1 == EMPTYREL
 assert "diff 7": Rel1 \ Rel2 == {<1,10>, <2,20>}
 assert "diff 8": Rel2 \ Rel1 == {<4,40>, <5,50>}
+
+assert "diff 9": {1,2,3,2,1} \  {1,2,2,3,3,3} == {1}
 
 %% --- o
 

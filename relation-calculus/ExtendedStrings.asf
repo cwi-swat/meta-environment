@@ -1,0 +1,15 @@
+equations
+
+[seq]	equal($Str1, $Str2) = str-cmp($Str1, $Str2) == 0
+
+[slt]	less($Str1, $Str2) = str-cmp($Str1, $Str2) == -1
+
+[sle]	$Int = str-cmp($Str1, $Str2)
+	=====================================================
+	less-equal($Str1, $Str2) = str-cmp($Str1, $Str2) <= 0
+
+[sgt]	greater($Str1, $Str2) = str-cmp($Str1, $Str2) == 1
+
+[sge]	$Int = str-cmp($Str1, $Str2)
+	=====================================================
+	greater-equal($Str1, $Str2) = str-cmp($Str1, $Str2) >= 0
