@@ -11,20 +11,8 @@ equations
   declare IdType* ; = 
     box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
 
-[idtypelist2box-0]
-  Box := idtype2box(IdType)
-  ===>
-  idtypelist2box(IdType) = V [Box]
-
-[idtypelist2box-1]
-  Box1 := idtype2box(IdType),
-  Box2 := H hs=0 [Box1 ","],
-  V [Box*] := idtypelist2box(IdType*)
-  ===>
-  idtypelist2box(IdType, IdType*) = V [Box2 Box*]
-
 [idtype2box-0]
-  idtype2box(PicoId : Type) = H [H hs=0 [picoid2box(PicoId) ":"] type2box(Type)]
+  PicoId : Type = box2idtype(H [H hs=0 [picoid2box(PicoId) ":"] type2box(Type)])
 
 [if2box-0]
   if Exp then Statement*1 else Statement*2 fi =
@@ -39,8 +27,3 @@ equations
     box2statement(V [HV ["while" exp2box(Exp) "do"] 
                     I [statementlist2box(Statement*)] 
                   "od"])
-
-%% [list]
-%% IdType , IdType+ = 
-%% box2idtypelist(V [H hs=0 [idtype2box(IdType) ","] idtypelist2box(IdType+)])
-
