@@ -19,5 +19,6 @@ hiddens
     "#Identifiers"[0-9]* -> {Identifier "."}*
     "#Identifiersp"[0-9]* -> {Identifier "."}+
     "#Name" -> Name
+    "#PrimitiveType" -> PrimitiveType
     "#String"[0-9]* -> String
     "#VariableDeclaratorId" -> VariableDeclaratorId
