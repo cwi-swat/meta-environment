@@ -7,18 +7,27 @@ imports utilities/PosInfo[Grammar]
 
 exports
   context-free syntax
-    contains-visible-startsymbols(Definition) -> {Error ","}*
+    contains-visible-startsymbols(Definition, ModuleId) -> {Error ","}*
 
 hiddens
   context-free syntax
-    collect-visible-startsymbols(Definition, Boolean) -> Boolean {traversal(accu, break, top-down)}
-    collect-visible-startsymbols(Section, Boolean)    -> Boolean {traversal(accu, break, top-down)}
-    collect-visible-startsymbols(Grammar, Boolean)    -> Boolean {traversal(accu, break, top-down)}
+    collect-visible-startsymbols(Definition, Boolean, ModuleId) -> Boolean {traversal(accu, break, top-down)}
+    collect-visible-startsymbols(Module, Boolean, ModuleId)     -> Boolean {traversal(accu, break, top-down)}
+
+    collect-only-visible-startsymbols(Module, Boolean)     -> Boolean {traversal(accu, break, top-down)}
+    collect-only-visible-startsymbols(Section, Boolean)    -> Boolean {traversal(accu, break, top-down)}
+    collect-only-visible-startsymbols(Grammar, Boolean)    -> Boolean {traversal(accu, break, top-down)}
+
+    collect-all-visible-startsymbols(Module, Boolean)     -> Boolean {traversal(accu, break, top-down)}
+    collect-all-visible-startsymbols(Grammar, Boolean)    -> Boolean {traversal(accu, break, top-down)}
 
 hiddens
   variables
+    "$Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*   -> ModuleId
     "$Boolean"[0-9]*    -> Boolean
     "$Definition"[0-9]* -> Definition
     "$Grammar"[0-9]*    -> Grammar
     "$Symbol*"[0-9]*    -> Symbol*
+    "$String"[0-9]*     -> StrCon
     

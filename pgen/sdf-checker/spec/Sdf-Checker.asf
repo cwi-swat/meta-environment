@@ -1,24 +1,28 @@
 equations
 
-  [cs-1'1] Msg* := check-sdf(Definition),
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, $ModuleId),
+           Msg* := get-messages(InfoMsgTuple),
            moduleid($Char*) := $ModuleId
            ====>
            check-sdf(definition Definition, $ModuleId) =
              summary("SdfChecker", strcon(""" $Char* """), [Msg*])
 
-  [cs-1'1] Msg* := check-sdf(Definition)
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, Unknown),
+           Msg* := get-messages(InfoMsgTuple)
            ====>
            check-sdf(definition Definition) =
              summary("SdfChecker", "Unknown", [Msg*])
 
   [cs-1'1] Msg*1 := check-labels(Definition1),
            Definition2 := remove-labels(Definition1),
-           Msg*2 := check-sorts-and-prods(Definition2),
+           InfoMsgTuple := check-sorts-and-prods(Definition2),
+           Msg*2 := get-messages(InfoMsgTuple),
            Msg*3 := check-sdf-attributes(Definition2),
            Msg*4 := check-for-deprecated-symbols(Definition2),
-           Msg*5 := contains-visible-startsymbols(Definition2)
+           Msg*5 := contains-visible-startsymbols(Definition2, $ModuleId)
            ====>
-           check-sdf(Definition1) = Msg*1, Msg*2, Msg*3, Msg*4, Msg*5
+           check-sdf(Definition1, $ModuleId) = 
+             put-messages(Msg*1, Msg*2, Msg*3, Msg*4, Msg*5, InfoMsgTuple)
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
@@ -89,7 +93,7 @@ make-error("module not available", strcon(""" $Char* """), $Location),
             InfoMsgTuple3 := check-modules(Definition, Definition, InfoMsgTuple2),
             InfoMsgTuple4 := post-check-modules(Definition, imports(), InfoMsgTuple3)
             ====>
-            check-sorts-and-prods(Definition) = get-messages(InfoMsgTuple4)
+            check-sorts-and-prods(Definition) = InfoMsgTuple4
 	
   [pcm-1'1] $ModuleId := get-module-name(Module),
             ModuleInfoTable := get-module-info(InfoMsgTuple),
@@ -132,16 +136,15 @@ make-error("module not available", strcon(""" $Char* """), $Location),
            InfoMsgTuple4 := check-imports(ImportsSet, Definition, InfoMsgTuple2),
 
            InfoMsgTuple5 := check-module-sorts(Module, InfoMsgTuple4),
-           InfoMsgTuple6 := check-module-prods(Module, InfoMsgTuple5),
-           InfoMsgTuple7 := check-module-constructors(Module, InfoMsgTuple6)
+           InfoMsgTuple6 := check-module-prods(Module, InfoMsgTuple5)
            ====>
-           check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple7
+           check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple6
 
  [pcm-1'1] post-check-modules(,ImportsSet, InfoMsgTuple) = 
              post-check-modules(ImportsSet, InfoMsgTuple)
 
  [pcm-1'1] $ModuleId := get-module-name(Module)
-           ====================================
+           ====>
            post-check-modules(Module Module*, imports(Import*), InfoMsgTuple) = 
               post-check-modules(Module*, imports($ModuleId Import*), InfoMsgTuple)
 

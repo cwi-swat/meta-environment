@@ -1,8 +1,7 @@
 module  Sdf-Checker
 
 imports Sdf-AttributeChecker LabelChecker SortChecker 
-        ProductionChecker ConstructorChecker
-        RemoveLabels DeprecatedSymbols StartSymbolChecker
+        ProductionChecker RemoveLabels DeprecatedSymbols StartSymbolChecker
 
 imports utilities/PosInfo[Import]
 
@@ -10,13 +9,13 @@ exports
   context-free start-symbols Summary
 
   context-free syntax
-    check-sdf(SDF)           -> Summary
-    check-sdf(SDF, ModuleId) -> Summary
-    check-sdf(Definition)    -> {Error ","}*
+    check-sdf(SDF)                  -> Summary
+    check-sdf(SDF, ModuleId)        -> Summary
+    check-sdf(Definition, ModuleId) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                          -> {Error ","}*
+    check-sorts-and-prods(Definition)                          -> Info-Msg-Tuple
     pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
     pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
     pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple

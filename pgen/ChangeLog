@@ -1,5 +1,12 @@
 $Id$
 
+Wed Sep 29 15:31:05 CEST 2004 <markvdb@cwi.nl>
+ * Moved the check on cons attributes from the SdfChecker
+   to the AsfSdfChecker.
+
+Thu Sep 16 11:56:37 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 2.3
+
 Thu Sep  9 10:27:33 CEST 2004 <markvdb@cwi.nl>
  * Improved the lowel level handling of symbol sets in order
    to improve the efficiency.
