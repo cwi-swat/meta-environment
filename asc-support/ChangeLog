@@ -5,6 +5,7 @@ $Id$
  * Reading in parse trees from files uses the same API as parsing builtins
  * All file IO is now implemented in a single builtin-io.c file
  * Shell builtin takes Bytes as argument instead of Strings
+ * Parse tables can now be included in generated code
  
 2003/11/03 (jurgenvm@cwi.nl)
  * Added lower-from-tree builtin.
