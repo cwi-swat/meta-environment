@@ -16,6 +16,7 @@
 
 static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols);
 
+/*{{{  static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr) */
 
 static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr)
 {
@@ -76,6 +77,7 @@ static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr)
   return result;
 }
 
+/*}}}  */
 /*{{{  static SDF_AttributeList PTAttrsToSDFAttributeList(PT_Attrs ptAttrs) */
 
 static SDF_AttributeList PTAttrsToSDFAttributeList(PT_Attrs ptAttrs)

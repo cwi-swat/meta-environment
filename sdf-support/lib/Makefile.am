@@ -1,24 +1,38 @@
 # $Id$
 
-lib_LIBRARIES		= libSDFME.a libSDF2PT.a libPT2SDF.a
+CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
-include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h SDF2PT.h PT2SDF.h
+EXTRA_DIST = Sdf.label.def
 
-libSDFME_a_SOURCES	= SDFME.c SDFME_dict.c SDFME_bottom.c ${UTILSRCS}
+lib_LIBRARIES = libSDFME.a libSDF2PT.a libPT2SDF.a
 
-libSDF2PT_a_SOURCES     = sdf2pt.c
+include_HEADERS = \
+	PT2SDF.h \
+	SDF2PT.h \
+	SDFME-utils.h \
+	SDFME.h \
+	SDFME_dict.h
 
-libPT2SDF_a_SOURCES     = pt2sdf.c
+libSDFME_a_SOURCES = SDFME.c SDFME_dict.c SDFME_bottom.c ${UTILSRCS}
 
-UTILSRCS		= get-module-name.c get-imports.c grammar.c prod.c \
-			  sort.c prio.c restrict.c SDFME-utils.c renamings.c
+libSDF2PT_a_SOURCES = sdf2pt.c
 
-EXTRA_DIST		= Sdf.label.def
+libPT2SDF_a_SOURCES = pt2sdf.c
 
-INCLUDES		= -I${ATERM}/include \
-                          -I${PT_SUPPORT}/include
+INCLUDES = \
+	-I${ATERM}/include \
+	-I${PT_SUPPORT}/include
 
-CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
+UTILSRCS = \
+	SDFME-utils.c \
+	get-imports.c \
+	get-module-name.c \
+	grammar.c \
+	prio.c \
+	prod.c \
+	renamings.c \
+	restrict.c \
+	sort.c
 
 # Developers only:
 api: Sdf.label.def
