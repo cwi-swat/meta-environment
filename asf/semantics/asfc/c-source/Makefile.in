@@ -35,7 +35,7 @@ ATERM       = @ATERM@
 
 include Make.modules
 
-XCFLAGS = -O2 ${INCLUDE}
+XCFLAGS = ${INCLUDE}
 INCLUDE = -I../support -I$(includedir) -I$(ATERM)/include
 LIBS	= -L$(ATERM)/lib   \
 	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
