@@ -93,6 +93,8 @@ INCLUDEFILES	:=
 
 all:	${BINFILES}
 
+libs:	${LIBFILES}
+
 install:	${BINFILES}
 	$(foreach tool, $^, cp $(tool) $(bindir); chmod 755 $(bindir)/$(tool);)
 
