@@ -155,7 +155,6 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
   char *prefix = remove_extension(output);
 
   saveName = dashesToUnderscores(name);
-  ATwarning("name: %s\noutput: %s\next: %s\n", name, output, prefix);
 
   if (input_muasf) {
     PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
