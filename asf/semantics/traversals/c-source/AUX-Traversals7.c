@@ -25,8 +25,6 @@ static Symbol ef8sym ;
 static funcptr ef8 ;
 static Symbol ef9sym ;
 static funcptr ef9 ;
-static Symbol ef10sym ;
-static funcptr ef10 ;
 void register_AUX_Traversals7 ( ) {
 lf_AUX_Traversals7_1sym = ATmakeSymbol ( "prod(id(\"Traversals\"),w(\"\"),[ql(\"generate_module\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Definition\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -56,16 +54,14 @@ ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Collect\"),w(\"\"),
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Collect\"),w(\"\"),[ql(\"normal_exported_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Definition\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Imports\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Make\"),w(\"\"),[ql(\"make_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Make\"),w(\"\"),[ql(\"make_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Priorities\"),w(\"\"),[ql(\"prefer_sorts\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Priorities\"),w(\"\"),[ql(\"prefer_sorts\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Add\"),w(\"\"),[ql(\"add_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) ) ;
-ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Add\"),w(\"\"),[ql(\"add_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) ) ;
+ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Add\"),w(\"\"),[ql(\"add_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) ) ;
+ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Add\"),w(\"\"),[ql(\"add_productions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Traversals7 ( ) {
 }
 ATerm lf_AUX_Traversals7_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 15 ] ;
+ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_Traversals7_1sym , ATmakeAppl ( lf_AUX_Traversals7_1sym , arg0 , arg1 ) ) ;
 ( tmp [ 0 ] = ( * ef1 ) ( arg0 ) ) ;
 ( tmp [ 1 ] = ( * ef2 ) ( arg0 ) ) ;
@@ -86,9 +82,8 @@ if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 ( tmp [ 11 ] = ( * ef4 ) ( lf2 ( cons ( make_list ( tmp [ 4 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ;
 ( tmp [ 12 ] = ( * ef8 ) ( tmp [ 11 ] , tmp [ 0 ] ) ) ;
-( tmp [ 13 ] = ( * ef9 ) ( tmp [ 12 ] ) ) ;
-( tmp [ 14 ] = ( * ef10 ) ( tmp [ 1 ] , tmp [ 13 ] ) ) ;
-FUNC_EXIT ( tmp [ 14 ] ) ;
+( tmp [ 13 ] = ( * ef9 ) ( tmp [ 1 ] , tmp [ 12 ] ) ) ;
+FUNC_EXIT ( tmp [ 13 ] ) ;
 }
 }
 }
