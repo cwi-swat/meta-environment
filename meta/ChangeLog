@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Feb 18 12:50:28 CET 2004 <jurgenv@cwi.nl>
+ * added new action; convert-feedback to fo from an error produced
+   by an ASF+SDF specification to an error that can be handled by
+   the MetaStudio.
+
 Tue Feb 17 15:21:17 CET 2004 <kooiker@cwi.nl>
  * meta-studio/metastudio/components/graph/GraphPanel.java:
    - getZoomToFitFactor checks graph on null 
