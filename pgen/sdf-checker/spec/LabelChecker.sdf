@@ -18,16 +18,16 @@ hiddens
     Literal "++" LabelsSet       -> LabelsSet
 
   context-free syntax
-    check-labels(Definition, Messages)            -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    check-labels(Module, Messages)                -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    check-labels(Module, Messages, ModuleId)      -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    check-labels(Production, Messages, ModuleId)  -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-labels(Definition, Messages)            -> Messages {traversal(accu, break, top-down)}
+    check-labels(Module, Messages)                -> Messages {traversal(accu, break, top-down)}
+    check-labels(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
+    check-labels(Production, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
     check-labels(Symbol*, Labels-Msgs-Tuple, 
-                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
     check-labels({Symbol ","}*, Labels-Msgs-Tuple, 
-                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
     check-labels(Symbol, Labels-Msgs-Tuple, 
-                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
 
 hiddens
   variables

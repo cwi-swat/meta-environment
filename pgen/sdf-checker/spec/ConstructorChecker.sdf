@@ -14,37 +14,37 @@ hiddens
   context-free syntax
     get-constructor-symbol-pairs(Module,
                                  Constructors-Msg-Tuple,
-                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     get-constructor-symbol-pairs(Grammar,
                                  Constructors-Msg-Tuple,
-                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     get-constructor-symbol-pairs(Production,
                                  Constructors-Msg-Tuple,
-                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     get-constructor-symbol-pairs(Attributes,
                                  Constructors-Msg-Tuple,
                                  ModuleId, Symbol,
-                                 Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                 Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     get-constructor-symbol-pairs(Attribute,
                                  Constructors-Msg-Tuple,
                                  ModuleId, Symbol,
-                                 Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                 Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
     check-constructor-in-priorities({Group ">"}+,
                                     Constructors-Msg-Tuple,
-                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     check-constructor-in-priorities(Production,
                                     Constructors-Msg-Tuple,
-                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     check-constructor-in-priorities(Attributes,
                                     Constructors-Msg-Tuple,
                                     ModuleId, Symbol,
-                                    Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                    Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
     check-constructor-in-priorities(Attribute,
                                     Constructors-Msg-Tuple,
                                     ModuleId, Symbol,
-                                    Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+                                    Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
 
 hiddens
   variables

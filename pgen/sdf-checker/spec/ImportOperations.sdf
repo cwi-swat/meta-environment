@@ -13,19 +13,19 @@ exports
 
 hiddens
   context-free syntax
-    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, break, top-down)}
+    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, break, top-down)}
+    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, break, top-down)}
                 
 hiddens
   context-free syntax
-    get-hidden-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
-    get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-hidden-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, break, top-down)}
+    get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, break, top-down)}
+    get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, break, top-down)}
 
 hiddens
   context-free syntax
-    get-imports(Grammar, ImportsSet)       -> ImportsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)} 
+    get-imports(Grammar, ImportsSet)       -> ImportsSet {traversal(accu, break, top-down)} 
     get-imports(ModuleId, ImportRelations) -> ImportsSet
 
 exports
