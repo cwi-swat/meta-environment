@@ -58,7 +58,7 @@
 
   ---------------------------------------------------------------------*/
 
-static char *buffer;                /* i/o buffer       */
+char *buffer;                /* i/o buffer       */
 static char *buf_ptr;               /* read and write ptr in buffer    */
                                     /* AND in format string, see above */
 static char *start_buf_ptr;         /* start value of buf_ptr, for error messages */

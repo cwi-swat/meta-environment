@@ -1620,16 +1620,19 @@ static TBbool pending_events(void)
     ti1 = first(ev_pair);
     ev1 = first(next(ev_pair));
     next_phase = TCP_transition(ti1, ev1, TBfalse);
-/*
+
+    /*
     TBmsg("pending_events, considering %t\n", ev1);
     TBmsg("tool_instance = %t\n", ti1);
     TBmsg("next_phase = %d\n", next_phase);
-*/
+    */
 
     if((next_phase >= 0) && rec_from_tool_step1(ti1, ev1, next_phase)){
       if(TBverbose)TBmsg("DEQUEU EVENT: %t\n", ev1);
       next(prev) = next(events);
       k++;
+    } else {
+      prev = events;
     }
   }
   Pending = next(&head);

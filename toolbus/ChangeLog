@@ -18,6 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 ------------------------------------------------------------------------------
+
+Date:	Tue Apr 24 11:19:23 CEST 2001
+Version 0.15
+Author: {jong,olivierp}@cwi.nl
+interpreter.c: Fix bug in single linked list code of dequeueing of queued events
+
 Date:   Tue Jan 30 22:35:49 MET 2001
 Version 0.15
 Author:  Merijn de Jonge
