@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/08 (markvdb@cwi.nl)
+ * Bumped into version 1.0.
+
 2003/10/07 (markvdb@cwi.nl)
  * Replaced [Symbol, pair, pair(<lhs(Symbol)>,<rhs(Symbol)>)]
    by [Symbol, tuple, tuple(<head(Symbol)>,<rest(Symbols)>)]
