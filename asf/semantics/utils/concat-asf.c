@@ -47,10 +47,8 @@ main (int argc, char **argv)
   char *inputs[MAX_MODULES] = { "-" };
   int  nInputs = 0;
   char *output = "-";
-  ASF_Equations equations;
-  ASF_CondEquationList list, alleqs;
-  PT_ParseTree parseTree;
-  PT_Tree tree;
+  ATermList list;
+  ASF_CondEquationList alleqs;
   int i;
 
   if(argc == 1) { /* no arguments */
@@ -93,23 +91,22 @@ main (int argc, char **argv)
   PT_initMEPTApi();
   ASF_initASFMEApi();
 
-  alleqs = ASF_makeCondEquationListEmpty();
-
+ 
+  list = ATempty;
   for (--nInputs; nInputs >= 0; nInputs--) {
-    parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
-    if (parseTree == NULL) {
+    ATerm p = ATreadFromNamedFile(inputs[nInputs]); 
+
+    if (p == NULL) {
       ATwarning("concat-asf: Unable to read anything from %s\n", 
 		inputs[nInputs]);
     }
     else {
-      tree = PT_getParseTreeTree(parseTree);
-      equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
-
-      list = ASF_getEquationsList(equations);
-      alleqs = ASF_concatCondEquationList(list,alleqs);
+      list = ATinsert(list, p);
     }
     free(inputs[nInputs]);
   }
+
+  alleqs = ASF_makeCondEquationListFromParseTrees(list);
  
   ATwriteToNamedBinaryFile(ASF_makeTermFromCondEquationList(alleqs), output);
  
