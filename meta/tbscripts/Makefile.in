@@ -91,7 +91,7 @@ test:	all
 # example: 'mytest.c: mytest.c.nw'
 
 meta.tifs: $(DATAFILES)
-	$(TOOLBUSBIN)/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/parser -gentifs meta.tb
+	$(TOOLBUSBIN)/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/sglr -gentifs meta.tb
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
