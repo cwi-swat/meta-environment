@@ -14,6 +14,19 @@ extern char *output_path;
 /* The function {\tt AFTgeLexFuncsSort} traverse a list
    of modules and looks for all lexical functions
    with the given sorts as result sort. */
+
+ATerm AFTmakeId(ATerm id)
+{
+  char *id_str;
+ 
+  if(ATmatch(id, "<str>", &id_str))
+    return ATmakeTerm(pattern_asfix_id, id_str);
+  else {
+    ATerror("Illegal identifier %t\n", id);
+    return NULL; /* silence the compiler */
+  }
+}
+
 ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
 {
   ATerm entry, lmod, amod, lexfunc, rsort;
@@ -93,18 +106,17 @@ ATerm unique_new_name(ATerm name);
 
 ATerm AFTcreateNewModule(ATerm modname)
 { 
-  char *orig_modname_string;
-  ATerm module_name_with_id, module_name_string, extmodname;
+  ATerm module_name_with_id, extmodname;
   ATerm orig_mod_name_with_id;
 
   ATerm newmodule = AFinitModule();
   ATerm newmodname = unique_new_name(modname);
   
-  ATmatch(newmodname, "<str>", &module_name_string);
-  module_name_with_id = ATmakeTerm(pattern_asfix_id, module_name_string);
-  ATmatch(modname,"<str>",&orig_modname_string);
-  orig_mod_name_with_id = ATmakeTerm(pattern_asfix_id,orig_modname_string);
-  extmodname = ATsetAnnotation(module_name_with_id,ATparse("module-name"),orig_mod_name_with_id);
+  module_name_with_id = AFTmakeId(newmodname);
+  orig_mod_name_with_id = AFTmakeId(modname);
+
+  extmodname = ATsetAnnotation(module_name_with_id,
+                               ATparse("module-name"),orig_mod_name_with_id);
   newmodule = AFputModuleName(newmodule,extmodname);
   PutValue(compile_db,newmodname,newmodule);
   return newmodname;
@@ -239,7 +251,7 @@ void gen_makefile(ATerm name);
 
 void AFTreshuffleModules(int cid, ATermList mods)
 {
-  ATerm entry, mod, newmod, newmodname, oldamod, cffunc, flatcffunc;
+  ATerm entry, mod, id_mod, newmod, newmodname, oldamod, cffunc, flatcffunc;
   ATermList cffuncs, eqs, orgmods;
   ATerm newsubsection, newsection;
 
@@ -262,7 +274,8 @@ void AFTreshuffleModules(int cid, ATermList mods)
       newsection = AFinitExportSection();
       newsection = AFputSectionArgs(newsection,
                                     ATmakeList1(newsubsection));
-      flatcffunc = AFTflattenSdf2Prod(mod,cffunc);
+      id_mod = AFTmakeId(mod);
+      flatcffunc = AFTflattenSdf2Prod(id_mod,cffunc);
       eqs = AFTgetEquationsFunc(flatcffunc,orgmods);
       if(!ATisEmpty(eqs)) {
         newmodname = AFTcreateNewModule(mod);

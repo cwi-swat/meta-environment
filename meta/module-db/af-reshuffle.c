@@ -12,6 +12,8 @@ extern ATbool reshuffling;
 extern ATerm top_module;
 extern char *output_path;
 
+extern ATerm AFTmakeId(ATerm id);
+
 int equal_term(ATerm term1,ATerm term2)
 {
   char *text1, *text2;
@@ -192,7 +194,8 @@ ATerm ATcreateNewModule(ATerm modname)
 {
   ATerm newmodule = AFinitModule();
   ATerm newmodname = unique_new_name(modname);
-  newmodule = AFputModuleName(newmodule,newmodname);
+  ATerm newmodname_id = AFTmakeId(newmodname);
+  newmodule = AFputModuleName(newmodule,newmodname_id);
   PutValue(compile_db,newmodname,newmodule);
   return newmodname;
 }
@@ -214,7 +217,7 @@ void AFwriteAsfixFile(int cid,ATerm modname)
 
   ATerm amod = GetValue(compile_db,modname);
 
-  if(ATmatchTerm(modname,pattern_asfix_id,&text)) {
+  if(ATmatch(modname,"<str>",&text)) {
     /* Check whether the C file exists. */
     len = strlen(output_path) + 1 + strlen(text) + strlen(".c");
     fname = malloc(len + 1);
@@ -261,7 +264,7 @@ void AFwriteAsfixFile(int cid,ATerm modname)
       /* write full path name instead of only module name */
       ATfprintf(stderr,"Writing: %s\n", fname);
       element = ATmake("snd-event(generate-code(<str>,<term>))",
-                       modname,amod);
+                       text,amod);
       if(!compiling) {
         compiling = ATtrue;
         ATBwriteTerm(cid,element);

@@ -72,12 +72,10 @@ snd-do(Mdb, create-module-db).
 /* Add a module to the database */
   rec-msg(add-module-to-db(AsFixModule?,timestamp(Time?))).
   snd-eval(Mdb,add-module(AsFixModule)).
-  rec-value(Mdb,imports(Name?,need-modules(Modules?))).
-  snd-msg(need-modules(Modules)).
+  rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-  snd-eval(Mdb,calc-import-rels(Name)).
-  rec-value(Mdb,irels(Pairs?)).
-  snd-note(import-relations(irels(Pairs)))
+  snd-note(import-relations(irels(Pairs))).
+  snd-msg(need-modules(Modules))
 +
   rec-msg(add-empty-module-to-db(Name?)).
   snd-eval(Mdb,add-empty-module(Name)).
@@ -88,22 +86,18 @@ snd-do(Mdb, create-module-db).
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(add-sdf2-module-to-db(Path?,AsFixModule?,timestamp(Time?),Status?)).
   snd-eval(Mdb,add-sdf2-module(Path,AsFixModule,Time,Status)).
-  rec-value(Mdb,imports(Name?,need-modules(Modules?))).
-  snd-msg(need-modules(Modules)).
+  rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-  snd-eval(Mdb,calc-import-rels(Name)).
-  rec-value(Mdb,irels(Pairs?)).
-  snd-note(import-relations(irels(Pairs)))
+  snd-note(import-relations(irels(Pairs))).
+  snd-msg(need-modules(Modules))
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(update-module-in-db(AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
     snd-eval(Mdb,update-sdf2-module(AsFixModule)).
-    rec-value(Mdb,imports(Name?,need-modules(Modules?))).
+    rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-    snd-eval(Mdb,calc-import-rels(Name)).
-    rec-value(Mdb,irels(Pairs?)).
     snd-note(import-relations(irels(Pairs))).
     snd-msg(extra-modules(Modules))
   else
@@ -152,11 +146,13 @@ snd-do(Mdb, create-module-db).
   )
 +
 /* Return a list of all modules imported by this one*/
+/*
   rec-msg(get-all-imported-modules(Name?)).
   snd-eval(Mdb, get-all-imported-modules(Name)).
   rec-value(Mdb, all-imports(Modules?)).
   snd-msg(all-imported-modules(Modules))
 +
+*/
 /* Return a list of all modules */
   rec-msg(get-all-modules).
   snd-eval(Mdb, get-all-modules).
@@ -165,16 +161,16 @@ snd-do(Mdb, create-module-db).
 +
 
 /* Get all equations for a list of modules */
-  rec-msg(get-all-equations(Modules?)).
-  snd-eval(Mdb, get-new-equations(Modules)).
+  rec-msg(get-all-equations(Name?)).
+  snd-eval(Mdb, get-all-equations(Name)).
   rec-value(Mdb, equations(Equations?)).
   snd-msg(all-equations(Equations))
 +
 /* Get the syntax for a list of modules */
-  rec-msg(retrieve-syntax(Name?)).
-  snd-eval(Mdb, retrieve-syntax(Name)).
-  rec-value(Mdb, syntax(Syntax?)).
-  snd-msg(total-syntax(Syntax))
+  rec-msg(get-all-sdf2-definitions(Name?)).
+  snd-eval(Mdb, get-all-sdf2-definitions(Name)).
+  rec-value(Mdb, syntax-with-rewrite-function(Syntax?)).
+  snd-msg(syntax-with-rewrite-function(Syntax))
 +
   rec-msg(get-sdf2-asfix(Name?)).
   snd-eval(Mdb, get-asfix(Name, sdf2)).
