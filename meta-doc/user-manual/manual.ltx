@@ -539,8 +539,6 @@ the specification.
 
 \section{Guided Tour}
 
-(*** Under construction ***)
-
 \begin{figure}[tb]
   \centerline{\epsfig{file=meta-booleans.ps,width=6cm}}
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
@@ -1129,7 +1127,758 @@ statements means updating the value-environment.
 The rest of the equations deal with the evaluation of expressions. Evaluating
 expressions results in a value.
 
-\section{The ASF+SDF specification formalism}
+\section{The ASF+SDF Specification Formalism}
+
+\paragraph{This whole section is just a conversion
+  of text from the old manual; it has to be checked for SDF2 compatibility!}
+
+ASF+SDF is the result of the marriage of two formalisms ASF (Algebraic
+Specification Formalism) and SDF (Syntax Definition Formalism). ASF is based
+on the notion of a module consisting of a signature defining the abstract
+syntax of functions and a set of conditional equations defining their
+semantics. Modules can be imported in other modules and can be parameterized.
+SDF allows the simultaneous definition of concrete (i.e., lexical and
+context-free) and abstract syntax and implicitly defines a translation from
+text strings to abstract syntax trees.
+
+The main idea of ASF+SDF is to identify the abstract syntax defined by the
+signature in ASF specifications with the abstract syntax defined implicitly by
+an SDF specification, thus yielding a standard mapping from text to abstract
+syntax tree. This gives the possibility to associate semantics with (the tree
+representation of) text and to introduce user-defined notation in
+specifications.
+
+ASF+SDF is therefore a modular specification formalism for the integrated
+definition of syntax and semantics.
+
+\subsection{Modules and Modular Structure}
+
+An ASF+SDF specification consists of a sequence of module declarations. Each
+module may define syntax rules as well as semantic rules and the notation used
+in the semantic rules depends on the definition of syntax rules. The entities
+declared in a module may be visible or invisible to other modules. A module
+can use another module from the specification by importing it. As a result,
+all visible names of the imported module become available in the importing
+module.
+
+The overall structure of a module is:
+
+\begin{verbatim}
+
+module
+   <Name>
+imports 
+   <Name-of-imported-module>+
+ 
+<Section>*
+ 
+priorities
+   <Priority-relation-between-context-free-rules>+
+
+equations
+   <Conditional-equation>*
+\end{verbatim}
+
+A module consists of a module header, an imports clause followed by a list of zero or more
+sections (that define sorts, lexical syntax, context-free syntax and
+variables) followed by a priority declaration and conditional
+equations. All these parts are optional.
+
+Each \emph{Section} starts with one of the keywords {\tt exports} or {\tt
+  hiddens}: {\tt exports} makes all entities in the section visible to other
+  modules,{\tt  hiddens} makes all entities in the section local to the module. A Section has the form:
+
+\begin{verbatim}
+exports-or-hiddens
+
+  sorts
+    Names-of-sorts 
+  lexical syntax
+    Rules-of-the-lexical-syntax 
+  context-free-syntax
+    Rules-of-the-context-free-syntax 
+  variables
+    Names-of-variables
+
+\end{verbatim}
+  
+  where each of the subsections for sorts, lexical syntax, context-free syntax
+  and variables is optional.
+  
+  Modules can be combined by importing one module in another. As a result all
+  exported entities of the imported module (and of all modules that are
+  imported indirectly by it) become available in the importing module.
+
+\subsection{Sorts}
+
+A sort is declared by listing its name in a sorts section of a module. A sort
+name should start with a capital letter and may be followed by letters and/or
+digits. Hyphens (`{\tt -}') and underscores (`{\tt \_}') may be embedded in
+sort names. There are four predefined sorts which may not be redeclared:
+
+\begin{itemize}
+  
+\item {\tt LAYOUT} defines which parts of the text are layout symbols between
+  lexical tokens and are to be skipped during lexical analysis. It may only be
+  used as result sort of lexical functions. When a string is matched by both a
+  LAYOUT function and by other non-LAYOUT functions, then the interpretation
+  as layout symbol is ignored. Typically used for defining layout and comment
+  conventions.
+
+\item {\tt IGNORE} defines which parts of the text are layout symbols inside lexical tokens and are to be
+ignored, i.e. ignored symbols do not contribute to the text of a lexical token. Typically used for defining languages where layout or comment symbols may occur inside lexical tokens.
+
+\item {\tt REJEC}T defines sequences of consecutive lexical tokens that are to be rejected. Typically used to
+forbid certain sequences of lexical tokens, like a number immediately followed by an identifier.
+
+\item {\tt CHAR} gives access to the character representation of lexical tokens and may only be used in
+declarations of variables.
+
+\end{itemize}
+
+\subsection{Lexical Syntax}
+
+The lexical syntax describes the low level structure of text by means of
+\emph{lexical tokens}. A lexical token consists of a sort name (used to
+distinguish classes of tokens like identifiers and numbers), and actual text
+of the token. The lexical syntax also defines which substrings of the text are
+layout symbols or comments and are to be skipped.
+
+A lexical syntax contains a set of declarations for \emph{lexical functions},
+each consisting of a regular expression and a result sort. All functions with
+the same result sort together define the lexical syntax of tokens of that
+sort. Regular expressions may contain strings, sort names, character classes,
+or repetition operators. Spaces are only significant inside strings and
+character classes.
+
+\subsubsection{Lexical Functions}
+
+In their simplest form, declarations of lexical functions consist of a
+sequence of zero or more strings or sort names followed by `{\tt ->}' and the
+name of a result sort, say $L$. The regular expression associated with $L$
+consists of the \emph{or} of all left-hand sides of lexical functions with
+result sort $L$. All sort names appearing in left-hand sides of declarations
+are replaced by the regular expression associated with them. Circular
+dependencies between declarations in the lexical syntax are forbidden.
+
+For each sort that appears as result sort in the lexical syntax a lexical
+constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically added
+to the context-free syntax of the specification. Here, `{\tt l}' is the name of sort
+`{\tt L}' written in lower case letters. In this way, you can get access to the text
+of lexical tokens.
+
+5.3.2 Character Classes
+
+Enumerations of characters occur frequently in lexical definitions. They can
+be abbreviated by using character classes enclosed by `{\tt [}' and `{\tt
+  ]}'. A character class contains a list of zero or more characters (which
+stand for themselves) or character ranges such as, for instance, {\tt [0-9]}
+as an abbreviation for the characters {\tt 0}, {\tt 1}, ..., {\tt 9}. 
+In a character range of the form {\tt $c_1$-$c_2$} one of the following restrictions should apply:
+
+\begin{itemize}
+\item $c_1$ and $c_2$ are both lower case letters and $c_2$ follows $c_1$ in
+  the alphabet, or 
+\item $c_1$ and $c_2$ are both upper case letters and $c_2$ follows $c_1$ in
+  the alphabet, or 
+\item $c_1$ and $c_2$ are both digits and the numeric value of $c_2$ is
+  greater than that of $c_1$, or 
+\item $c_1$ and $c_2$ are both escaped non-printable characters and the character code of $c_1$ is larger
+than that of $c_2$.
+\end{itemize}
+
+By prefixing a character class with `{\tt ~}', it is complemented. Such a
+complemented character class accepts all characters not in the original class.
+
+\subsubsection{Escape Conventions}
+
+Characters with a special meaning in ASF+SDF may cause problems when they are
+needed as ordinary characters in the lexical syntax. The backslash character
+(`{\tt \\}') is used as escape character for the quoting of special characters. You
+should use `{\tt \\$c$}' whenever you need special character $c$ as ordinary character in
+the definition.
+
+In character classes, the following characters are special and should be
+escaped: 
+
+\begin{itemize}
+\item {\tt [}: begin of character class 
+\item {\tt ]}: end of character class 
+\item {\tt -}: character range 
+\item \verb+\+: escape character
+\end{itemize}
+
+In literal strings, the following characters are special and should be
+escaped:
+
+\begin{itemize}
+ \item {\tt "}: double quote 
+\item \verb+\+: escape character.
+\end{itemize}
+
+You may use the following abbreviations in literals and in character classes:
+
+\begin{itemize}
+
+\item \verb+\n+: newline character 
+
+\item \verb+\r+: carriage return
+
+\item \verb+\t+: horizontal tabulation 
+
+\item {\tt $ddd$}: a non-printable character with three digit (octal) code
+  $ddd$.
+
+\end{itemize}
+
+\subsubsection{Repetitions}
+
+It is common, that lexical tokens can only be described by patterns that
+exhibit a certain repetition. Two postfix operators are available for this
+purpose:
+
+\begin{itemize}
+
+\item {\tt *}: indicates zero or more repetitions of the sort, literal or
+  character class preceding the {\tt *}. 
+
+\item {\tt +}: indicates one or more repetitions of the sort, literal or
+  character class preceding the {\tt +}.
+
+\end{itemize}
+
+\subsubsection{Literals}
+
+All literal symbols such as keywords and operator symbols that appear in the
+context-free syntax are added to the lexical syntax implicitly.
+
+\subsubsection{Lexical Ambiguities}
+
+(*** dit moet helemaal op de schop)
+
+Lexical ambiguities are resolved by the following four rules:
+
+\begin{itemize}
+
+\item Prefer Longest Match per Sort: reject all interpretations of the input text that are included
+
+in a longer interpretation of the same sort. Given a standard definition of identifiers, the input `xyz' will thus lead to recognition of the identifier `xyz' and not to either `x' or `xy'. In the context of scanning Fortran, the input `3.NE.4' will lead to the recognition of two lexical tokens: the integer `3' and the floating constant `3.'. Both tokens are passed on to the parser which may decide if either (or both) tokens lead to a syntactically correct parse of the text.
+
+\item Prefer non-Layout: eliminate all interpretations of the text as layout symbol. When, after
+
+applying this rule, no interpretations remain, the next lexical token is taken from the input text.
+
+\item Prefer Literals: give preference to interpretation as a literal, i.e., as keyword or operator
+
+introduced in the context-free syntax, over interpretation as a more general symbol (such as identifier).
+
+\item Prefer variables: give preference to interpretation as a variable (as defined in a variables
+section) over interpretation as a literal.
+
+\end{itemize}
+
+Ambiguities that cannot be solved by these rules remain, and are passed on to the syntax analysis phase.
+
+\subsubsection{Examples of Lexical Syntax Definitions}
+
+\paragraph{Defining Identifiers}
+
+\begin{verbatim}
+
+sorts ID 
+
+lexical syntax
+
+   [a-zA-Z] [a-zA-Z0-9]* -> ID
+\end{verbatim}
+
+Observe that the space between the two character classes is ignored.
+
+\paragraph{Defining Numbers}
+
+\begin{verbatim}
+
+sorts UnsignedInt SignedInt UnsignedReal Number 
+
+lexical syntax
+
+   [0-9]+                                     -> UnsignedInt
+   UnsignedInt                                -> SignedInt 
+   [+\-] UnsignedInt                          -> SignedInt
+   UnsignedInt "." UnsignedInt                -> UnsignedReal
+   UnsignedInt "." UnsignedInt [eE] SignedInt -> UnsignedReal 
+   UnsignedInt [eE] SignedInt                 -> UnsignedReal
+   UnsignedInt                                -> Number 
+   UnsignedReal                               -> Number
+
+\end{verbatim}
+
+\paragraph{Defining Strings}
+
+\begin{verbatim}
+sorts String 
+
+lexical syntax
+   "\"" ~ ["\n]* "\"" -> String
+\end{verbatim}
+
+\paragraph{Defining Comments}
+
+\begin{verbatim}
+
+sorts CommentChar 
+
+lexical syntax
+
+   ~ [*]                  -> CommentChar
+   "*" ~ [)]              -> CommentChar
+   "(*" CommentChar* "*)" -> LAYOUT
+\end{verbatim}
+
+Note: In the current implementation the above definition does not work, since
+CommentChar is not properly treated as an auxiliary sort for the lexical
+syntax. As a result, every space will be recognized as a
+CommentChar. Temporary solution: omit the declaration for CommentChar (this
+produces an error message), but the parser will behave as expected.
+
+\begin{verbatim}
+
+lexical syntax
+   "%%" ~ [\n] * "\n" -> LAYOUT
+   "%" ~[\n%] * "%"   -> LAYOUT
+\end{verbatim}
+
+\subsection{Context-free Syntax}
+
+The context-free syntax describes the concrete and abstract syntactic
+structure of sentences in a language. A context-free syntax contains a set of
+declarations for \emph{context-free functions}, each consisting of zero or
+more literals, sort names, or lists followed by `{\tt ->}' and a result sort.
+They may be followed by attributes that control how parentheses and brackets
+affect the abstract syntax or by attributes that define the associativity of a
+rule. All functions with the same result sort together define the alternatives
+for that sort.
+
+\subsubsection{Context-free Functions}
+
+In their simplest form, declarations of context-free functions consist of a
+sequence of zero or more literal strings or sort names followed by `{\tt ->}'
+and the name of a result sort. All literal strings appearing in a context-free
+function declaration are implicitly added to the lexical syntax. Consider the
+following language of coordinates and drawing commands:
+
+\begin{verbatim}
+sorts NAT COORD CMND 
+
+lexical syntax
+   [0-9]+ -> NAT 
+   [\ \n] -> LAYOUT 
+
+context-free syntax
+   "(" NAT "," NAT ")" -> COORD
+   "line" "to" COORD   -> CMND 
+   "move" "to" COORD   -> CMND
+\end{verbatim}
+
+Written as a conventional BNF grammar (and not considering lexical syntax) this is equivalent to:
+
+\begin{verbatim}
+<COORD> ::= "(" <NAT> "," <NAT> ")" 
+<CMND>  ::= "line" "to" <COORD> | "move" "to" <COORD>
+\end{verbatim}
+
+When a literal in a context-free function consists only of lower case letters
+and digits and is not a keyword of ASF+SDF, it need not be surrounded with
+quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
+definition given above.
+
+\subsubsection{List Structures}
+
+It happens quite often that a context-free syntax requires the description of
+the repetition of a syntactic notion or of list structures (with or without
+separators) containing a syntactic notion. ASF+SDF provides the following
+primitives for this:
+
+\begin{itemize}
+
+\item Lists without separators:
+
+\begin{itemize}
+
+\item[{\tt $S$*}] defines zero or more repetitions of sort $S$. 
+
+\item[{\tt $S$+}] defines one or more repetitions of sort $S$.
+
+\end{itemize} 
+
+\item Lists with separators
+
+\begin{itemize}
+
+\item[{\tt \{$S$ $sep$}*\}] defines zero or more repetitions of sort $S$ separated by the literal
+$sep$.
+
+\item[{\tt \{$S$ $sep$\}+}] defines one or more repetitions of sort $S$ separated by the literal
+$sep$.
+
+\end{itemize}
+
+\end{itemize}
+
+Lists may be used in the left-hand side of a context-free function and in the
+right-hand side of a variable declaration. see Section ***[Variables]. They
+may {\bf not} be used as result sort in the right-hand side of a context-free
+function. This imposes no real restriction since a new sort can be introduced
+representing a list. This new sort may then be used in the left-hand side of
+other context-free rules.
+
+Using lists, the syntax of a list of identifiers (occurring in a declaration
+in a Pascal-like language) can be defined as follows:
+
+\begin{verbatim}
+sorts ID DECL TYPE 
+
+lexical syntax
+
+   [a-z]+ -> ID 
+   " "    -> LAYOUT 
+
+context-free syntax
+
+   decl { ID "," }+ ":" TYPE -> DECL
+   integer                   -> TYPE 
+   real                      -> TYPE
+\end{verbatim}
+
+\subsubsection{Chain Functions}
+
+A context-free syntax may contain functions that do not add syntax, but serve
+the sole purpose of including a smaller syntactic notion into a larger one. A
+typical example is the inclusion of identifiers in expressions or of natural
+numbers in reals. Such a \emph{chain function} has one of the following forms:
+
+\begin{itemize}
+
+\item {\tt $SMALL$ -> $BIG$} 
+\item {\tt {$SMALL$ $sep$}* -> $BIG$} 
+\item {\tt $SMALL$* -> $BIG$} 
+\item {\tt {$SMALL$ $sep$}+ -> $BIG$} 
+\item {\tt $SMALL$+ -> $BIG$}
+
+\end{itemize}
+
+Chain functions do not appear in the abstract syntax but correspond to a
+\emph{subsort relation} between $SMALL$ and $BIG$.
+
+\subsubsection{Bracket Functions}
+
+A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
+and $close$ are literals acting as opening and closing parenthesis for sort
+$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions and `{\tt
+  begin}' and `{\tt end}' in programs. In most cases, such brackets are only
+introduced for grouping and disambiguation, but have no further meaning. By
+adding the attribute {\tt bracket} to the function declaration, it will not be
+included in the abstract syntax.
+
+Since brackets are necessary for overruling the priority and associativity of
+functions (see ***[Priorities]), it is required that bracket functions are
+declared for the argument and result sorts of
+
+\begin{itemize}
+
+\item all functions appearing in priority declarations, and
+  
+\item all functions having one of the attributes {\tt left}, {\tt right}, {\tt
+    assoc}, or {\tt non-assoc}.
+
+\end{itemize}
+
+\subsubsection{Explicit Naming of Operators in the Abstract Syntax}
+
+(*** Outdated ****)
+
+This section is only relevant when you want to implement yourself functions that operate on the trees constructed by the Meta-environment (or the stand-alone SDF implementation). The following is never needed when you are only writing ASF+SDF specifications.
+
+For each context-free function, the system automatically generates an internal name to label nodes in the abstract syntax tree corresponding to this function. When used inside the ASF+SDF Meta-environment names are thus redundant. However, names are indispensable if you want to build external tools that work directly on the tree structures generated. To name a rule explicitly, write the operator name followed by a colon before the context-free function declaration, like in
+
+plus : EXP "+" EXP -? EXP For list constructs, names are generated of the form SortSeparator.list where Sort is the element sort and Separator is a keyword replacing the iterated separator. The rule for a list of expressions separated by a semi-colon:
+
+- EXP ";" ""+ -? EXP.S generates the name `EXPSEMIC.list' which may be used elsewhere. You may override the automatic naming mechanism by inserting a name, preceded by a colon, after the iterator:
+
+- EXP ";" ""+:exp.s -? EXP.S User defined operator names may not be used more than once.
+
+\subsection{Priorities}
+
+The context-free syntax defined in an ASF+SDF specification may be ambiguous: there are sentences which have more than one associated tree. The common example are the arithmetic expressions in which definitions of the priority or associativity of operators are missing. There are three mechanisms for defining associativity and priority:
+
+\begin{itemize}
+
+\item relative priorities of functions (defined in the `{\tt priorities}' section); 
+
+\item associativity of functions (defined as attribute following the function
+  declaration); 
+
+\item associativity of groups of functions (defined in the `{\tt priorities}'
+  section).
+
+\end{itemize}
+
+\subsubsection{ Relative Priorities}
+
+The relative priority of two functions is defined by including {\tt $F$ > $G$}
+in the `{\tt priorities}' section, where $F$ and $G$ are as written in the
+context-free grammar. Functions with a higher priority bind more strongly than
+functions with lower priorities and the nodes corresponding to them should
+thus appear at lower levels in the tree than nodes corresponding to functions
+with lower priorities. Lists of functions may be used in a priority
+declaration: {\tt $F$ > {$G$, $H$}} is an abbreviation for {\tt $F$ > $G$, $F$
+  > $H$} . 
+
+\subsubsection{Associative Functions}
+
+Associativity attributes can be attached to binary functions of the form `{\tt
+  $S$ $op$ $S$ -> $S$}', where $op$ is a literal or empty. Without
+  associativity attributes, nested occurrences of such functions immediately
+  lead to ambiguities, as is shown by the sentence `{\tt S-string op S-string
+    op S-string}' where `{\tt S-string}' is a string of sort $S$. The
+  particular associativity associated with $op$ determines the indented
+  interpretation of such sentences.
+  
+  We call two occurrences of functions $F$ and $G$ related, when the node
+  corresponding to $F$ has a node corresponding to $G$ as first or last child.
+  The associativity attributes define how to accept or reject trees containing
+  related occurrences of the same function, $F$:
+
+\begin{itemize}
+
+\item {\tt left}: related occurrences of F associate from left to right. 
+
+\item {\tt right}: related occurrences of F associate from right to left. 
+
+\item{\tt  assoc}: related occurrences of F associate from left to right.
+
+\item {\tt non-assoc}: related occurrences of F are not allowed.
+
+\end{itemize}
+
+Currently, there is no syntactic or semantic difference between `{\tt left}'
+and `{\tt assoc'}, but we may change that in the future.
+
+As an example, simple arithmetic expressions with usual priorities and
+associativities are defined below:
+
+\begin{verbatim}
+sorts E 
+
+lexical syntax
+   [0-9]+ -> E 
+   [\ \n] -> LAYOUT 
+
+context-free syntax
+   E "+" E   -> E {left}
+   E "*" E   -> E {left}
+   "(" E ")" -> E {bracket}
+
+context-free priorities
+   E "*" E   -> E > E "+" E   -> E {left}
+\end{verbatim}
+
+5.5.4 Groups of Associative Functions
+
+(*** Outdated ***)
+
+Groups of associative functions define how to accept or reject trees
+containing related occurrences of different functions with the same priority.
+They are defined by prefixing a list of context-free functions in a priority
+declaration with one of the following attributes:
+
+\begin{itemize}
+
+\item left: related occurrences of F and G associate from left to right. 
+\item right: related occurrences of F and G associate from right to left.
+\item non-assoc: related occurrences of F and G are not allowed.
+
+\end{itemize}
+
+where F and G are functions appearing in the list.
+
+\subsubsection{Removing Trees using Priorities}
+
+The priority and associativity declarations are used to eliminate trees in two
+phases: 
+
+\begin{itemize}
+
+\item First, trees containing internal conflicts (regarding priority or associativity) are eliminated.
+
+\item Next, the remaining trees are compared pair-wise and trees are eliminated that are dominated
+by another one. The ordering used is obtained by extending the priority
+ordering on contextfree functions to an ordering on trees.
+
+\end{itemize}
+
+\subsubsection{Removing Trees Containing Conflicts}
+
+The simplest application of priority and associativity declarations is the
+elimination of trees that contain conflicts:
+
+\begin{itemize}
+\item a parent node has a child with a lower priority than the parent itself; 
+\item a parent has a first or last child that is in conflict with
+  associativity of parent and child.
+\end{itemize}
+
+A larger example illustrates this:
+
+\begin{verbatim}
+sorts E 
+
+lexical syntax
+   [0-9]+ -> E
+   [\ \n] -> LAYOUT 
+
+context-free syntax
+   E "+" E   -> E {left}
+   E "-" E   -> E {non-assoc}
+   E "*" E   -> E {left}
+   E "/" E   -> E {non-assoc}
+   E "^" E   -> E {right}
+   "(" E ")" -> E {bracket}
+
+context-free  priorities
+   "^" > {non-assoc: "*", "/"} > {left: "+", "-"}
+
+\end{verbatim}
+
+The definition of associativities is here only choosen to illustrate various
+possibilities and combinations. Some examples show the effect of these
+declarations:
+
+\begin{center}
+\begin{tabular}{ll}
+  Sentence   & Interpretation \\
+\verb"1^2^3" & \verb"1^(2^3)" \\
+\verb"1^2*3" & \verb"(1^2)*3" \\
+\verb"1*2*3" & \verb"(1*2)*3" \\
+\verb"1/2/3" & error \\
+\verb"1*2/3" & error \\
+\verb"1-2-3" & error \\
+\verb"1+2+3" & \verb"(1+2)+3" \\
+\verb"1-2+3" & \verb"(1-2)+3" \\
+\verb"1+2-3" & \verb"(1+2)-3"\\
+\end{tabular}
+\end{center}
+
+After removing all trees containing conflicts, more than one tree may remain.
+To further reduce this set of remaining trees, the priority ordering `>' on
+context-free functions is extended to a priority ordering `>>' on trees. A
+tree in the set is then rejected if there is another tree in the set with
+higher priority. The relation $P_1$ >> $P_2$ holds between two trees $P_1$ and
+$P_2$ if
+
+\begin{itemize}
+
+\item $P_1$ is not equal to $P_2$, and 
+\item if, for any F, $P_1$ contains more nodes corresponding to F than $P_2$, then $P_2$ contains more
+nodes corresponding to some function G witch G ! F in $P_1$. (This also covers
+the case that there are no nodes corresponding to F in $P_2$ or no nodes
+corresponding to G in $P_1$)
+
+\end{itemize}
+
+The following example shows how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using priorities. It concerns expressions for describing subscripts
+and superscripts in the typesetting language EQN. The crucial point is that,
+for typesetting reasons, we want to treat a subscript followed by a
+superscript in a special way. Therefore, the special case `{\tt E sub E sup E
+  -> E}' is introduced, which has priority over a combination of the two
+functions `{\tt E sub E -> E}' and `{\tt E sup E -? E}'.
+
+\begin{verbatim}
+sorts E 
+
+context-free syntax
+   E sub E       -> E {left}
+   E sup E       -> E {left}
+   E sub E sup E -> E 
+   "{" E "}"     -> E {bracket}
+   a             -> E 
+
+context-free priorities
+   sub sup > { left: sub , sup}
+\end{verbatim}
+
+\subsection{Variables}
+
+Variables are declared in the `variables' section of a module. It consists of
+a list of variables together with their sort. Each declaration defines a
+naming scheme for variables together with a result sort. A naming scheme is a
+regular expression like the ones allowed in the lexical syntax (See Section
+5.3 [Lexical Syntax], page 31) except that sorts are not allowed. One variable
+declaration may thus define an unlimited number of variables. The sort of a
+variable may be a simple sort, or a list with or without separators. The
+variables `Id', `Type3', and `Id-list''' are examples of variables declared by
+the following specification:
+
+\begin{verbatim}
+sorts ID DECL TYPE 
+
+lexical syntax
+   [a-z]+ -> ID
+   " "    -> LAYOUT 
+context-free syntax
+   decl {ID ","}+ ":" TYPE -> DECL 
+   integer                 -> TYPE 
+   real                    -> TYPE 
+
+variables
+   Id           -> ID 
+   Type [0-9]*  -> TYPE 
+   Id-list [']* -> { ID "," }* 
+   Id-ne-list   -> {ID "," }+
+\end{verbatim}
+
+Note that variables (as all other entities in a module -- except equations)
+may be exported.  See Section ***[Modules]..
+
+\subsection{Equations}
+
+With equations a meaning or semantics may be added to functions declared in
+the context-free syntax. The equality of two terms $S$ and $T$ is defined by
+an unconditional equation of the form:
+
+\begin{quote}
+{\tt [$TagId$] $S$ = $T$} 
+\end{quote}
+
+where $TagId$ is a sequence of letters and/or digits starting with an
+uppercase letter or a digit, and $S$ and $T$ must be terms of the same sort. A
+conditional equation consists of a number of conditions (also called premises)
+and a conclusion. It can be written in three (syntactically different) ways:
+
+{\tt 
+\begin{tabbing}
+
+(a)  [$TagId$] \= $S$ = $T$ when $C_1$, $C_2$, ...\\
+(b)  [$TagId$] \> $C_1$, $C_2$, ... ====> $S$ = $T$\\ 
+(c)  [$TagId$] \> $C_1$, $C_2$, ...\\
+                 \> =================\\
+                 \> \ \ \ \ \ $S$ = $T$\\
+\end{tabbing}
+}
+
+\noindent where $C_1$, $C_2$, ...  are conditions which may be either positive (and have
+the form `{\tt $S$ = $T$}'), or negative (and have the form `{\tt $S$ !=
+  $T$}').
+
+Note that list sorts are not allowed as the sort of the term at the left-hand side or right-hand
+side of a condition or conclusion (but see Section ***[Lists]). This restriction can be circumvented by introducing a new sort for the list.
+
+Equations establish equalities between terms. How they are executed is
+discussed in Chapter **[Executing].
+
+
 
 \section{Miscellaneous}
 
