@@ -1,0 +1,28 @@
+module languages/pico/pretty/Pico-pretty
+
+imports languages/box/syntax/Box
+imports languages/pico/syntax/Pico-Syntax
+
+exports
+  context-free syntax
+    decls2box(DECLS)                    -> Box {to-box}
+    exp2box(EXP)                        -> Box {to-box}
+    idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
+    picoid2box(PICO-ID)                 -> Box {to-box}
+    statementlist2box({STATEMENT ";"}*) -> Box {to-box}
+    type2box(TYPE)                      -> Box {to-box}
+    box2decls(Box)                      -> DECLS {from-box}
+    box2idtype(Box)                     -> ID-TYPE {from-box}
+    box2program(Box)                    -> PROGRAM {from-box}
+    box2statement(Box)                  -> STATEMENT {from-box}
+
+hiddens
+  context-free syntax
+
+  variables
+    "Decls"[0-9]*      -> DECLS
+    "Exp"[0-9]*        -> EXP
+    "IdType*"[0-9]*    -> {ID-TYPE ","}*
+    "PicoId"[0-9]*     -> PICO-ID
+    "Statement*"[0-9]* -> {STATEMENT ";"}*
+    "Type"[0-9]*       -> TYPE
