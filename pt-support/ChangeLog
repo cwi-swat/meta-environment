@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar  4 10:05:50 CET 2003 <{markvdb,jong}@cwi.nl>
+ * rename isVarDefault to isProductionVariable
+
 2003/02/18 (markvdb@cwi.nl)
  * Activated the translation from tree2graph.
 

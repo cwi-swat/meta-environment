@@ -321,7 +321,7 @@ static ATerm implodeApplication(PT_Tree tree)
     return implodeLayout(tree);
   }
 
-  if (PT_isVarDefault(prod)) {
+  if (PT_isProductionVariable(prod)) {
     return implodeVar(tree);
   }
 

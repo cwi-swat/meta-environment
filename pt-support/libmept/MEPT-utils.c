@@ -129,9 +129,9 @@ ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isVarDefault(PT_Production prod) */
+/*{{{  ATbool PT_isProductionVariable(PT_Production prod) */
 
-ATbool PT_isVarDefault(PT_Production prod)
+ATbool PT_isProductionVariable(PT_Production prod)
 {
   /* This implements: "prod([varsym(<term>)],cf(<term>),<term>)" */
   if (PT_isProductionDefault(prod)) {
@@ -480,7 +480,7 @@ ATbool PT_isTreeVar(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_isVarDefault(prod);
+    return PT_isProductionVariable(prod);
   }
   return ATfalse;
 }
@@ -492,7 +492,7 @@ ATbool PT_isTreeVarList(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
+    if (PT_isProductionVariable(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
       if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
         PT_Symbol sym = PT_getSymbolSymbol(rhssym);
@@ -513,7 +513,7 @@ ATbool PT_isTreeVarListStar(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
+    if (PT_isProductionVariable(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
       if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
         PT_Symbol sym = PT_getSymbolSymbol(rhssym);
@@ -532,7 +532,7 @@ ATbool PT_isTreeVarListPlus(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
+    if (PT_isProductionVariable(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
       if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
         PT_Symbol sym = PT_getSymbolSymbol(rhssym);

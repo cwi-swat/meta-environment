@@ -625,7 +625,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
        !inList) {
     listSymbol = PT_getProductionRhs(prod);
   
-    if (PT_isVarDefault(prod)) {
+    if (PT_isProductionVariable(prod)) {
       newArgs = PT_makeArgsList(
                   flattenVar(tree),
                   PT_makeArgsEmpty());
@@ -652,7 +652,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
 
   } 
 
-  if (PT_isVarDefault(prod)) {
+  if (PT_isProductionVariable(prod)) {
     return flattenVar(tree);
   }
 
