@@ -10,9 +10,19 @@ VERSION=0.02
 AC_SUBST(PRODUCT)
 AC_SUBST(VERSION)
 
-dnl Default locations of other components
-TOOLBUS='${prefix}'
-ATERM='${prefix}'
+dnl Default locations of used components
+AC_PATH_PROG(TOOLBUS, toolbus, no)
+if test "${TOOLBUS}" = "no"; then
+	TOOLBUS='${prefix}'
+else
+	TOOLBUS=`dirname \`dirname ${TOOLBUS}\``
+fi
+AC_PATH_PROG(ATERM, tifstoc, no)
+if test "${ATERM}" = "no"; then
+	ATERM='${prefix}'
+else
+	ATERM=`dirname \`dirname ${ATERM}\``
+fi
 META='${top_srcdir}/..'
 
 AC_DEFUN(AC_PROG_MAKEDEPEND, [
