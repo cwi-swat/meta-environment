@@ -28,6 +28,8 @@
      still printed
    - An error message is printed in all cases where a table is added with
      the same name as an existing table, but a different type
+ * Commented out icons in MetaStudio
+ * Moved scale menu to file menubar
 
 2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
