@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Mar  7 15:35:11 2001
+ * Generated at Tue Mar 13 15:00:25 2001
  */
 
 #ifndef __SDF_dict_H
@@ -127,6 +127,7 @@ extern ATerm SDF_patternImpSectionImports;
 extern ATerm SDF_patternAttributeAvoid;
 extern ATerm SDF_patternAttributePrefer;
 extern ATerm SDF_patternAttributeReject;
+extern ATerm SDF_patternAttributeTraverse;
 extern ATerm SDF_patternAttributeMemo;
 extern ATerm SDF_patternAttributeConstructor;
 extern ATerm SDF_patternAttributeCons;

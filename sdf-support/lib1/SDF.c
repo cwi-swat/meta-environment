@@ -1852,6 +1852,14 @@ SDF_Attribute SDF_makeAttributeMemo()
 }
 
 /*}}}  */
+/*{{{  SDF_Attribute SDF_makeAttributeTraverse() */
+
+SDF_Attribute SDF_makeAttributeTraverse()
+{
+  return (SDF_Attribute)ATmakeTerm(SDF_patternAttributeTraverse);
+}
+
+/*}}}  */
 /*{{{  SDF_Attribute SDF_makeAttributeReject() */
 
 SDF_Attribute SDF_makeAttributeReject()
@@ -8986,6 +8994,9 @@ ATbool SDF_isValidAttribute(SDF_Attribute arg)
   else if (SDF_isAttributeMemo(arg)) {
     return ATtrue;
   }
+  else if (SDF_isAttributeTraverse(arg)) {
+    return ATtrue;
+  }
   else if (SDF_isAttributeReject(arg)) {
     return ATtrue;
   }
@@ -9044,6 +9055,14 @@ ATbool SDF_isAttributeConstructor(SDF_Attribute arg)
 ATbool SDF_isAttributeMemo(SDF_Attribute arg)
 {
   return ATmatchTerm((ATerm)arg, SDF_patternAttributeMemo);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isAttributeTraverse(SDF_Attribute arg) */
+
+ATbool SDF_isAttributeTraverse(SDF_Attribute arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternAttributeTraverse);
 }
 
 /*}}}  */
@@ -18626,6 +18645,9 @@ SDF_Attribute SDF_visitAttribute(SDF_Attribute arg, char * (*acceptWsAfterId)(ch
   }
   if (SDF_isAttributeMemo(arg)) {
     return SDF_makeAttributeMemo();
+  }
+  if (SDF_isAttributeTraverse(arg)) {
+    return SDF_makeAttributeTraverse();
   }
   if (SDF_isAttributeReject(arg)) {
     return SDF_makeAttributeReject();

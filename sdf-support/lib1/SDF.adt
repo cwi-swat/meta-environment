@@ -8024,7 +8024,35 @@ w (
 
 "" )
 , 
-no-attrs )
+attrs ( 
+
+l ( 
+
+
+"{" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+l ( 
+
+
+"avoid" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"}" ) ) )
 , 
 w ( 
 
@@ -8626,6 +8654,75 @@ l (
 
 
 "memo" ) ] ) ]
+, 
+
+[ 
+
+Attribute
+, 
+traverse
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Label-Sdf-Syntax" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+ql ( 
+
+
+"traverse" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Attribute" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+l ( 
+
+
+"traverse" ) ] ) ]
 , 
 
 [ 

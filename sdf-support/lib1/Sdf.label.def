@@ -231,7 +231,7 @@ exports
     UQLiteral                                            -> Literal	{cons("uqlit")}
     Literal                                              -> Symbol	{cons("lit")}
     function-symbol: Literal "(" arguments:{Symbol ","}* ")" 
-      "->" result:Symbol Attributes                      -> Production	{cons("prod-fun")}
+      "->" result:Symbol Attributes                      -> Production	{avoid, cons("prod-fun")}
 
 module Label-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals-Sdf-Syntax ATerms
