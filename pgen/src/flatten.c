@@ -194,7 +194,7 @@ ATerm SDFflattenAttr(ATerm attr)
   return newattr;
 }
 
-/*}}} */
+/*}}}  */
 /*{{{  ATerm SDFflattenAttrs(ATerm attrs) */
 
 /**
@@ -555,6 +555,10 @@ ATerm SDFflattenSymbol(ATerm symbol)
   else if(AFTisVarSymbol(symbol)) {
     symbol2 = AFTgetVarSymbol(symbol);
     newsymbol = ATmake("varsym(<term>)", SDFflattenSymbol(symbol2));
+  } 
+  else if(AFTisLabeledSymbol(symbol)) {
+    symbol2 = AFTgetLabeledSymbol(symbol);
+    newsymbol = SDFflattenSymbol(symbol2);
   }
   else {
     ATabort("Unknown symbol %t\n", symbol);
