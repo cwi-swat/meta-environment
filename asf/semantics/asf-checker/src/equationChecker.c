@@ -23,7 +23,7 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 
 static ERR_FeedbackList makeAmbiguityMessage()
 {
-  return ERR_makeFeedbackListSingle(makeMessage("Equations contain ambiguities",NULL,NULL));
+  return ERR_makeFeedbackListSingle(ERR_makeFeedbackError("equations contain ambiguities", ERR_makeSubjectListEmpty()));
 }
 
 /*}}}  */
