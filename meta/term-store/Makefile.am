@@ -15,9 +15,10 @@ term_store_SOURCES = \
 	table.c \
 	table-store.c
 
-term_store_LDADD = -L$(ATERM)/lib -lATerm \
-                   -L$(TOOLBUSLIB)/lib -lATB \
+term_store_LDADD = \
                    -L./snapshot -lsnapshot \
+                   -L$(TOOLBUSLIB)/lib -lATB \
+                   -L$(ATERM)/lib -lATerm \
 		   $(SOCKLIBS)
 
 noinst_HEADERS		= table.h table-store.h term-store.tif.h
