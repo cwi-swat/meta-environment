@@ -3,6 +3,8 @@ $Id$
 Mon Nov 29 10:33:03 CET 2004 <{jurgenv,jong,kooiker}@cwi.nl>
  * Execute 'dot -y' now, to flip coordinate system such that Swing
    can deal with it better.
+ * NOTA BENE: we no depend on the '-y' switch of graphviz's dot, which
+   does not appear in all released versions of graphviz.
  * Bugfix: half of the edge coordinates were inverted depending on dots
    ideosynchrasies. Now we build the edge coordinates in the same fashion
    for all edge types (s,e,whatever)
