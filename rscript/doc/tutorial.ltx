@@ -138,17 +138,17 @@ which is  a shorthand for  {\tt bag[<$T_1$, $T_2$, ..., $T_n$>]}.
 
 We will use the familiar notation
 \begin{quote}
-  {\tt \{ $E$ | $G_1$, ..., $G_n$ \}}
+  {\tt \{ $E_1$, ..., $E_m$ | $G_1$, ..., $G_n$ \}}
 \end{quote}
 to denote the construction of a bag consisting of the union of
-successive values of the expression $E$.  The values and the
-generated bag are determined by $E$ and the \emph{generators}
+successive values of the expressions $E_1 ,..., E_m$.  The values and the
+generated bag are determined by  $E_1 ,..., E_m$ and the \emph{generators}
 $G_1 ,..., G_n$.  $E$ is computed for all possible
 combinations of values produced by the generators.
 
 Each generator may introduce new variables
-that can be used in subsequent generators as well as in the expression
-$E$.  A generator can use the variables introduced by preceding
+that can be used in subsequent generators as well as in the expressions  $E_1 ,..., E_m$.
+A generator can use the variables introduced by preceding
 generators.  Generators may enumerate all the values in a bag or
 relation, they may perform a test, or they may assign a value to
 variables.
@@ -205,6 +205,10 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 \paragraph{Example}
 {\tt \{<Y, X> | <X, Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
 the given relation: {\tt \{<10,1>, <20,2>\}}.
+
+\paragraph{Example}
+
+{\tt \{X, X * X | X : \{1, 2, 3, 4, 5\},  X >= 3\}} yields the bag {\tt \{3,4,5,9,16,25\}}.
 
 \subsection{Declarations}
 

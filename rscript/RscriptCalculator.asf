@@ -194,19 +194,19 @@
 	====================================================
 	evalx(not $Exp, $Rstore) = $BoolCon
 
-[IN1]	$BoolCon = in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore))
+[IN1]	$BoolCon = in(evale($Exp1, $Rstore), evalb($Exp2, $Rstore))
 	====================================================
 	evalx($Exp1 in $Exp2, $Rstore) = $BoolCon
 
-[NI1]	$BoolCon = not(in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore)))
+[NI1]	$BoolCon = not(in(evale($Exp1, $Rstore), evalb($Exp2, $Rstore)))
 	====================================================
 	evalx($Exp1 notin $Exp2, $Rstore) = $BoolCon
 
-[EQ1]	$BoolCon = elem-equal(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[EQ1]	$BoolCon = elem-equal(evale($Exp1, $Rstore), evale($Exp2, $Rstore))
 	====================================================
 	evalx($Exp1 == $Exp2, $Rstore) 	= $BoolCon
 
-[NE1]	$BoolCon = not(elem-equal(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[NE1]	$BoolCon = not(elem-equal(evale($Exp1, $Rstore), evale($Exp2, $Rstore)))
 	====================================================
 	evalx($Exp1 != $Exp2, $Rstore) 	=  $BoolCon
 
@@ -276,13 +276,13 @@
 
 [RTC1]	evalx($Exp *, $Rstore)			= rtrans-closure(evalb($Exp, $Rstore))
 
-[SZ1]	evalx(# $Exp, $Rstore) 	= size(evalb($Exp, $Rstore))
+[SZ1]	evalx(# $Exp, $Rstore)			= size(evalb($Exp, $Rstore))
 
 %% ---- Eval comprehensions
 
 %% ---- Simplify multiple generators
 
-[RF2]	{$Exp | $Gen+}  =  {$Gen+ :: $Exp}
+[RF2]	{$Exp+ | $Gen+}  =  {$Gen+ :: {$Exp+}}
 
 [XX] 	{$Gen, $Gen+ :: $Exp } = { $Gen :: {$Gen+ :: $Exp}}
 
@@ -294,9 +294,9 @@
 
 %% ---- Generator: test
 
-[et-1a]	$Bool =  evalp($Test, $Rstore)
+[et-1a]	$Bool = evalp($Test, $Rstore)
 	======================================================================
-	evalx({$Test :: $Exp} , $Rstore) = evalx-test($Bool, $Exp, $Rstore)
+	evalx({$Test :: $Exp} , $Rstore) = evalx-test($Bool, $Exp,$Rstore)
 
 %% ---- Generator: assignment,  one variable V <- E
 
@@ -346,14 +346,14 @@
 [ei2-2]	is-empty-iter($BagIter) = false,
 	$Elem = head($BagIter),
 	$Rstore' = store-rvars($Var+, $Elem, $Rstore),
-	$Val' = evalx($Exp, $Rstore'),
-	eval-itern($Var+, tail($BagIter), append-rval($Val, $Val'), $Exp, $Rstore') = $Elem'	%%XXX
+	$Bag' = append-rval($Bag, evalx($Exp, $Rstore'))
 	======================================================
-	eval-itern($Var+, $BagIter, $Val, $Exp, $Rstore) = $Elem'
+	eval-itern($Var+, $BagIter, $Bag, $Exp, $Rstore) =
+	eval-itern($Var+, tail($BagIter), $Bag', $Exp, $Rstore')  
 
 [ei2-3]	is-empty-iter($BagIter) = true
 	======================================================
-	eval-itern($Var+, $BagIter, $Elem, $Exp2, $Rstore) = $Elem	  %%XXX
+	eval-itern($Var+, $BagIter, $Bag, $Exp, $Rstore) = $Bag	  %%XXX
 
 %% ---- Auxiliary functions for evaluating comprehensions
 
@@ -370,12 +370,11 @@
 
 %% --- Append-rval
 
-[AP0]	append-rval($Elem, *undefined*) = $Elem
+[AP0]	append-rval($Bag, *undefined*) = $Bag
 
-[AP1]	is-bag($Elem2) = false
-	====================================================
-	append-rval($Bag1, $Elem2) = union2($Bag1, $Elem2)
-[default-AP2]	
+[AP1]	append-rval($Bag1, {$Elem}) = union2($Bag1, $Elem)
+
+[default-AP]
 	append-rval($Bag1, $Bag2) = union($Bag1, $Bag2)
 
 %% ---- Exists
