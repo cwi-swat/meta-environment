@@ -1,4 +1,4 @@
-SUBDIRS = lift-error lower-error
+SUBDIRS = lift-error lower-error error-diff
 
 #AM_CFLAGS = -Werror
 

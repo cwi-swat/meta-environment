@@ -1,5 +1,8 @@
 $Id$
 
+2004/02/17 (markvdb@cwi.nl)
+ * Added error-diff functionality.
+
 Mon Feb 16 16:37:02 CET 2004 <{jong,jurgenv}@cwi.nl>
  * utils/error-support.{c,idef}:
    - add get-summary-first-feedback, get-feedback-first-location,

@@ -89,6 +89,7 @@ AC_CONFIG_FILES([Makefile
   utils/Makefile
   utils/lift-error/Makefile
   utils/lower-error/Makefile
+  utils/error-diff/Makefile
 ])
 AC_OUTPUT
 
