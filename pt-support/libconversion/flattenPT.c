@@ -585,7 +585,6 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
   }
 
   if (PT_isTreeAmb(tree)) {
-    ATwarning("hier komt ie niet\n");
     args = PT_getTreeArgs(tree);
     return PT_makeTreeAmb(flattenArgs(args));
   }
