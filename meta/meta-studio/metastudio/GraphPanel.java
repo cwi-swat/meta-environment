@@ -325,8 +325,18 @@ public class GraphPanel
 
     g.setColor(node_border);
 
-    System.err.println(getNodeShape(node));
-    g.drawRect(x, y, w, h);
+    Shape shape = getNodeShape(node);
+    
+    if (shape.isBox()) {
+      g.drawRect(x, y, w, h);
+    }
+    else if (shape.isEllipse()) {
+        g.drawOval(x,y,w,h);
+    }
+    else {
+        // defautl case, we draw a rectangle
+        g.drawRect(x,y,w,h);
+    }
 
     String name = node.getLabel();
     int tw = metrics.stringWidth(name);
