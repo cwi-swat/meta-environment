@@ -169,4 +169,6 @@ AC_OUTPUT(
    tbscripts/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
+   configuration-manager/action-checker/Makefile
+   configuration-manager/action-checker/src/Makefile
 )

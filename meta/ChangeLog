@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/22 <markvdb@cwi.nl>
+ * First version of action/button script checker.
+
 2003/09/18 <markvdb@cwi.nl>
  * Added an action to convert the result of prompt-for-file
    "str(<FILENAME>)" into "file(<FILENAME>)".
