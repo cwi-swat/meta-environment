@@ -949,7 +949,6 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
 tree SG_ConvertA2ToA1(tree t)
 {
   int nr_ambs = SGnrAmb(SG_NR_ASK);
-  ATermList ambs;
 
   if(nr_ambs > 0) {
     IF_DEBUG(
@@ -958,11 +957,7 @@ tree SG_ConvertA2ToA1(tree t)
                 nr_ambs, nr_ambs > 1 ? "ies":"y")
     );
 
-    ambs = SG_AmbTracker(t);
-
-    assert(ambs != NULL);
-
-    return SG_ParseError(ATempty, nr_ambs, ambs);
+    return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(t));
   }
 
   IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
