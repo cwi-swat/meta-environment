@@ -38,4 +38,10 @@ SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList list1,
                                               SDF_RestrictionList list2);
 SDF_RestrictionList SDF_getGrammarKernelRestrictions(SDF_Grammar grammar);
 
+SDF_Production SDF_removeAttributes(SDF_Production prod);
+
+ATbool SDF_hasRejectAttribute(SDF_Production prod);
+ATbool SDF_hasPreferAttribute(SDF_Production prod);
+ATbool SDF_hasAvoidAttribute(SDF_Production prod);
+
 #endif /* _SDF_UTILS_H */

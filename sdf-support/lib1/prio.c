@@ -3,7 +3,7 @@
 static void
 collect_prios(SDF_Grammar grammar, SDF_PriorityList *prios)
 {
-  if (SDF_isGrammarSyntax(grammar)) {
+  if (SDF_isGrammarPriorities(grammar)) {
     SDF_Priorities grammarPrios = SDF_getGrammarPriorities(grammar);
     SDF_PriorityList kernelPrios = SDF_getPrioritiesList(grammarPrios);
 

@@ -72,3 +72,80 @@ SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList l1,
   return l1;
 }
 
+SDF_Production SDF_removeAttributes(SDF_Production prod)
+{
+  SDF_Attributes emptyAttrs = SDF_makeAttributesNoAttrs();
+  return SDF_setProductionAttributes(prod, emptyAttrs);
+}
+
+ATbool SDF_hasRejectAttribute(SDF_Production prod)
+{
+  ATbool found = ATfalse;
+  SDF_Attributes attrs = SDF_getProductionAttributes(prod);
+
+  if (!SDF_isAttributesNoAttrs(attrs)) {
+    SDF_AttributeList attrList = SDF_getAttributesList(attrs);
+    
+    while (SDF_hasAttributeListHead(attrList) && !found) {
+      SDF_Attribute attr = SDF_getAttributeListHead(attrList);
+
+      if (SDF_isAttributeReject(attr)) {
+        found = ATtrue;
+      }
+
+      if (SDF_isAttributeListSingle(attrList)) {
+        break;
+      }
+      attrList = SDF_getAttributeListTail(attrList);
+    }
+  }
+  return found;
+}
+
+ATbool SDF_hasPreferAttribute(SDF_Production prod)
+{
+  ATbool found = ATfalse;
+  SDF_Attributes attrs = SDF_getProductionAttributes(prod);
+
+  if (!SDF_isAttributesNoAttrs(attrs)) {
+    SDF_AttributeList attrList = SDF_getAttributesList(attrs);
+    
+    while (SDF_hasAttributeListHead(attrList) && !found) {
+      SDF_Attribute attr = SDF_getAttributeListHead(attrList);
+
+      if (SDF_isAttributePrefer(attr)) {
+        found = ATtrue;
+      }
+
+      if (SDF_isAttributeListSingle(attrList)) {
+        break;
+      }
+      attrList = SDF_getAttributeListTail(attrList);
+    }
+  }
+  return found;
+}
+
+ATbool SDF_hasAvoidAttribute(SDF_Production prod)
+{
+  ATbool found = ATfalse;
+  SDF_Attributes attrs = SDF_getProductionAttributes(prod);
+
+  if (!SDF_isAttributesNoAttrs(attrs)) {
+    SDF_AttributeList attrList = SDF_getAttributesList(attrs);
+    
+    while (SDF_hasAttributeListHead(attrList) && !found) {
+      SDF_Attribute attr = SDF_getAttributeListHead(attrList);
+
+      if (SDF_isAttributeAvoid(attr)) {
+        found = ATtrue;
+      }
+
+      if (SDF_isAttributeListSingle(attrList)) {
+        break;
+      }
+      attrList = SDF_getAttributeListTail(attrList);
+    }
+  }
+  return found;
+}

@@ -3,7 +3,7 @@
 static void
 collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restricts)
 {
-  if (SDF_isGrammarSyntax(grammar)) {
+  if (SDF_isGrammarRestrictions(grammar)) {
     SDF_Restrictions grammarPrios = SDF_getGrammarRestrictions(grammar);
     SDF_RestrictionList kernelPrios = SDF_getRestrictionsList(grammarPrios);
 
