@@ -8,6 +8,7 @@
 
 typedef struct ATerm _CO_BoolCon;
 typedef struct ATerm _CO_Boolean;
+typedef struct ATerm _CO_Measure;
 typedef struct ATerm _CO_Start;
 typedef struct ATerm _CO_OptLayout;
 
@@ -51,6 +52,22 @@ CO_Boolean CO_BooleanFromTerm(ATerm t)
 /*{{{  ATerm CO_BooleanToTerm(CO_Boolean arg) */
 
 ATerm CO_BooleanToTerm(CO_Boolean arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  CO_Measure CO_MeasureFromTerm(ATerm t) */
+
+CO_Measure CO_MeasureFromTerm(ATerm t)
+{
+  return (CO_Measure)t;
+}
+
+/*}}}  */
+/*{{{  ATerm CO_MeasureToTerm(CO_Measure arg) */
+
+ATerm CO_MeasureToTerm(CO_Measure arg)
 {
   return (ATerm)arg;
 }
@@ -148,11 +165,43 @@ CO_Boolean CO_makeBooleanBracket(CO_OptLayout wsAfterParenOpen, CO_Boolean Boole
 }
 
 /*}}}  */
+/*{{{  CO_Measure CO_makeMeasureLess() */
+
+CO_Measure CO_makeMeasureLess()
+{
+  return (CO_Measure)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun27))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28))), (ATerm)ATmakeAppl1(CO_afun7, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun8, (ATerm)ATmakeAppl1(CO_afun9, (ATerm)ATmakeAppl0(CO_afun27)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun27))));
+}
+
+/*}}}  */
+/*{{{  CO_Measure CO_makeMeasureGreater() */
+
+CO_Measure CO_makeMeasureGreater()
+{
+  return (CO_Measure)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun29))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28))), (ATerm)ATmakeAppl1(CO_afun7, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun8, (ATerm)ATmakeAppl1(CO_afun9, (ATerm)ATmakeAppl0(CO_afun29)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun29))));
+}
+
+/*}}}  */
+/*{{{  CO_Measure CO_makeMeasureEqual() */
+
+CO_Measure CO_makeMeasureEqual()
+{
+  return (CO_Measure)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun30))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28))), (ATerm)ATmakeAppl1(CO_afun7, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun8, (ATerm)ATmakeAppl1(CO_afun9, (ATerm)ATmakeAppl0(CO_afun30)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun2, (ATerm)ATmakeAppl0(CO_afun30))));
+}
+
+/*}}}  */
+/*{{{  CO_Start CO_makeStartMeasure(CO_OptLayout wsBefore, CO_Measure topMeasure, CO_OptLayout wsAfter, int ambCnt) */
+
+CO_Start CO_makeStartMeasure(CO_OptLayout wsBefore, CO_Measure topMeasure, CO_OptLayout wsAfter, int ambCnt)
+{
+  return (CO_Start)(ATerm)ATmakeAppl2(CO_afun31, (ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun32)), (ATerm)ATmakeAppl0(CO_afun33)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topMeasure), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+}
+
+/*}}}  */
 /*{{{  CO_Start CO_makeStartBoolCon(CO_OptLayout wsBefore, CO_BoolCon topBoolCon, CO_OptLayout wsAfter, int ambCnt) */
 
 CO_Start CO_makeStartBoolCon(CO_OptLayout wsBefore, CO_BoolCon topBoolCon, CO_OptLayout wsAfter, int ambCnt)
 {
-  return (CO_Start)(ATerm)ATmakeAppl2(CO_afun27, (ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun6)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28)), (ATerm)ATmakeAppl0(CO_afun29)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topBoolCon), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (CO_Start)(ATerm)ATmakeAppl2(CO_afun31, (ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun6)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun32)), (ATerm)ATmakeAppl0(CO_afun33)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topBoolCon), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -160,7 +209,7 @@ CO_Start CO_makeStartBoolCon(CO_OptLayout wsBefore, CO_BoolCon topBoolCon, CO_Op
 
 CO_Start CO_makeStartBoolean(CO_OptLayout wsBefore, CO_Boolean topBoolean, CO_OptLayout wsAfter, int ambCnt)
 {
-  return (CO_Start)(ATerm)ATmakeAppl2(CO_afun27, (ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun12)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun28)), (ATerm)ATmakeAppl0(CO_afun29)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topBoolean), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (CO_Start)(ATerm)ATmakeAppl2(CO_afun31, (ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun12)))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15)))), (ATerm)ATmakeAppl1(CO_afun5, (ATerm)ATmakeAppl0(CO_afun32)), (ATerm)ATmakeAppl0(CO_afun33)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topBoolean), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -168,7 +217,7 @@ CO_Start CO_makeStartBoolean(CO_OptLayout wsBefore, CO_Boolean topBoolean, CO_Op
 
 CO_OptLayout CO_makeOptLayoutAbsent()
 {
-  return (CO_OptLayout)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl0(CO_afun29)), (ATerm)ATempty);
+  return (CO_OptLayout)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl0(CO_afun33)), (ATerm)ATempty);
 }
 
 /*}}}  */
@@ -176,7 +225,7 @@ CO_OptLayout CO_makeOptLayoutAbsent()
 
 CO_OptLayout CO_makeOptLayoutPresent(CO_CHARLIST chars)
 {
-  return (CO_OptLayout)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl0(CO_afun29)), (ATerm)chars);
+  return (CO_OptLayout)(ATerm)ATmakeAppl2(CO_afun0, (ATerm)ATmakeAppl3(CO_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl1(CO_afun4, (ATerm)ATmakeAppl1(CO_afun14, (ATerm)ATmakeAppl0(CO_afun15))), (ATerm)ATmakeAppl0(CO_afun33)), (ATerm)chars);
 }
 
 /*}}}  */
@@ -190,6 +239,11 @@ ATbool CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1)
 }
 
 ATbool CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool CO_isEqualMeasure(CO_Measure arg0, CO_Measure arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -788,19 +842,131 @@ CO_Boolean CO_setBooleanWsAfterBoolean(CO_Boolean arg, CO_OptLayout wsAfterBoole
 /*}}}  */
 
 /*}}}  */
+/*{{{  CO_Measure accessors */
+
+/*{{{  ATbool CO_isValidMeasure(CO_Measure arg) */
+
+ATbool CO_isValidMeasure(CO_Measure arg)
+{
+  if (CO_isMeasureLess(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isMeasureGreater(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isMeasureEqual(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool CO_isMeasureLess(CO_Measure arg) */
+
+inline ATbool CO_isMeasureLess(CO_Measure arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CO_patternMeasureLess);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool CO_isMeasureGreater(CO_Measure arg) */
+
+inline ATbool CO_isMeasureGreater(CO_Measure arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CO_patternMeasureGreater);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool CO_isMeasureEqual(CO_Measure arg) */
+
+inline ATbool CO_isMeasureEqual(CO_Measure arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CO_patternMeasureEqual);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  CO_Start accessors */
 
 /*{{{  ATbool CO_isValidStart(CO_Start arg) */
 
 ATbool CO_isValidStart(CO_Start arg)
 {
-  if (CO_isStartBoolCon(arg)) {
+  if (CO_isStartMeasure(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolCon(arg)) {
     return ATtrue;
   }
   else if (CO_isStartBoolean(arg)) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool CO_isStartMeasure(CO_Start arg) */
+
+inline ATbool CO_isStartMeasure(CO_Start arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CO_patternStartMeasure, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -852,7 +1018,10 @@ inline ATbool CO_isStartBoolean(CO_Start arg)
 
 ATbool CO_hasStartWsBefore(CO_Start arg)
 {
-  if (CO_isStartBoolCon(arg)) {
+  if (CO_isStartMeasure(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolCon(arg)) {
     return ATtrue;
   }
   else if (CO_isStartBoolean(arg)) {
@@ -866,7 +1035,10 @@ ATbool CO_hasStartWsBefore(CO_Start arg)
 
 CO_OptLayout CO_getStartWsBefore(CO_Start arg)
 {
-  if (CO_isStartBoolCon(arg)) {
+  if (CO_isStartMeasure(arg)) {
+    return (CO_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
+  }
+  else if (CO_isStartBoolCon(arg)) {
     return (CO_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
   }
   else 
@@ -878,7 +1050,10 @@ CO_OptLayout CO_getStartWsBefore(CO_Start arg)
 
 CO_Start CO_setStartWsBefore(CO_Start arg, CO_OptLayout wsBefore)
 {
-  if (CO_isStartBoolCon(arg)) {
+  if (CO_isStartMeasure(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsBefore, 0), 1), 0);
+  }
+  else if (CO_isStartBoolCon(arg)) {
     return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsBefore, 0), 1), 0);
   }
   else if (CO_isStartBoolean(arg)) {
@@ -886,6 +1061,141 @@ CO_Start CO_setStartWsBefore(CO_Start arg, CO_OptLayout wsBefore)
   }
 
   ATabort("Start has no WsBefore: %t\n", arg);
+  return (CO_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool CO_hasStartTopMeasure(CO_Start arg) */
+
+ATbool CO_hasStartTopMeasure(CO_Start arg)
+{
+  if (CO_isStartMeasure(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  CO_Measure CO_getStartTopMeasure(CO_Start arg) */
+
+CO_Measure CO_getStartTopMeasure(CO_Start arg)
+{
+  
+    return (CO_Measure)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  CO_Start CO_setStartTopMeasure(CO_Start arg, CO_Measure topMeasure) */
+
+CO_Start CO_setStartTopMeasure(CO_Start arg, CO_Measure topMeasure)
+{
+  if (CO_isStartMeasure(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)topMeasure, 1), 1), 0);
+  }
+
+  ATabort("Start has no TopMeasure: %t\n", arg);
+  return (CO_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool CO_hasStartWsAfter(CO_Start arg) */
+
+ATbool CO_hasStartWsAfter(CO_Start arg)
+{
+  if (CO_isStartMeasure(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolean(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  CO_OptLayout CO_getStartWsAfter(CO_Start arg) */
+
+CO_OptLayout CO_getStartWsAfter(CO_Start arg)
+{
+  if (CO_isStartMeasure(arg)) {
+    return (CO_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return (CO_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else 
+    return (CO_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+}
+
+/*}}}  */
+/*{{{  CO_Start CO_setStartWsAfter(CO_Start arg, CO_OptLayout wsAfter) */
+
+CO_Start CO_setStartWsAfter(CO_Start arg, CO_OptLayout wsAfter)
+{
+  if (CO_isStartMeasure(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
+  }
+  else if (CO_isStartBoolean(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
+  }
+
+  ATabort("Start has no WsAfter: %t\n", arg);
+  return (CO_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool CO_hasStartAmbCnt(CO_Start arg) */
+
+ATbool CO_hasStartAmbCnt(CO_Start arg)
+{
+  if (CO_isStartMeasure(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return ATtrue;
+  }
+  else if (CO_isStartBoolean(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  int CO_getStartAmbCnt(CO_Start arg) */
+
+int CO_getStartAmbCnt(CO_Start arg)
+{
+  if (CO_isStartMeasure(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else 
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  CO_Start CO_setStartAmbCnt(CO_Start arg, int ambCnt) */
+
+CO_Start CO_setStartAmbCnt(CO_Start arg, int ambCnt)
+{
+  if (CO_isStartMeasure(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
+  }
+  else if (CO_isStartBoolCon(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
+  }
+  else if (CO_isStartBoolean(arg)) {
+    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
+  }
+
+  ATabort("Start has no AmbCnt: %t\n", arg);
   return (CO_Start)NULL;
 }
 
@@ -919,90 +1229,6 @@ CO_Start CO_setStartTopBoolCon(CO_Start arg, CO_BoolCon topBoolCon)
   }
 
   ATabort("Start has no TopBoolCon: %t\n", arg);
-  return (CO_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool CO_hasStartWsAfter(CO_Start arg) */
-
-ATbool CO_hasStartWsAfter(CO_Start arg)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return ATtrue;
-  }
-  else if (CO_isStartBoolean(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  CO_OptLayout CO_getStartWsAfter(CO_Start arg) */
-
-CO_OptLayout CO_getStartWsAfter(CO_Start arg)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return (CO_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else 
-    return (CO_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-}
-
-/*}}}  */
-/*{{{  CO_Start CO_setStartWsAfter(CO_Start arg, CO_OptLayout wsAfter) */
-
-CO_Start CO_setStartWsAfter(CO_Start arg, CO_OptLayout wsAfter)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
-  }
-  else if (CO_isStartBoolean(arg)) {
-    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
-  }
-
-  ATabort("Start has no WsAfter: %t\n", arg);
-  return (CO_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool CO_hasStartAmbCnt(CO_Start arg) */
-
-ATbool CO_hasStartAmbCnt(CO_Start arg)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return ATtrue;
-  }
-  else if (CO_isStartBoolean(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int CO_getStartAmbCnt(CO_Start arg) */
-
-int CO_getStartAmbCnt(CO_Start arg)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-  }
-  else 
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-}
-
-/*}}}  */
-/*{{{  CO_Start CO_setStartAmbCnt(CO_Start arg, int ambCnt) */
-
-CO_Start CO_setStartAmbCnt(CO_Start arg, int ambCnt)
-{
-  if (CO_isStartBoolCon(arg)) {
-    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
-  }
-  else if (CO_isStartBoolean(arg)) {
-    return (CO_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
-  }
-
-  ATabort("Start has no AmbCnt: %t\n", arg);
   return (CO_Start)NULL;
 }
 
@@ -1194,10 +1420,35 @@ CO_Boolean CO_visitBoolean(CO_Boolean arg, CO_BoolCon (*acceptBoolCon)(CO_BoolCo
 }
 
 /*}}}  */
-/*{{{  CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_Boolean (*acceptTopBoolean)(CO_Boolean)) */
+/*{{{  CO_Measure CO_visitMeasure(CO_Measure arg) */
 
-CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_Boolean (*acceptTopBoolean)(CO_Boolean))
+CO_Measure CO_visitMeasure(CO_Measure arg)
 {
+  if (CO_isMeasureLess(arg)) {
+    return CO_makeMeasureLess();
+  }
+  if (CO_isMeasureGreater(arg)) {
+    return CO_makeMeasureGreater();
+  }
+  if (CO_isMeasureEqual(arg)) {
+    return CO_makeMeasureEqual();
+  }
+  ATabort("not a Measure: %t\n", arg);
+  return (CO_Measure)NULL;
+}
+
+/*}}}  */
+/*{{{  CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_Measure (*acceptTopMeasure)(CO_Measure), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Boolean (*acceptTopBoolean)(CO_Boolean)) */
+
+CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_Measure (*acceptTopMeasure)(CO_Measure), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Boolean (*acceptTopBoolean)(CO_Boolean))
+{
+  if (CO_isStartMeasure(arg)) {
+    return CO_makeStartMeasure(
+        acceptWsBefore ? acceptWsBefore(CO_getStartWsBefore(arg)) : CO_getStartWsBefore(arg),
+        acceptTopMeasure ? acceptTopMeasure(CO_getStartTopMeasure(arg)) : CO_getStartTopMeasure(arg),
+        acceptWsAfter ? acceptWsAfter(CO_getStartWsAfter(arg)) : CO_getStartWsAfter(arg),
+        acceptAmbCnt ? acceptAmbCnt(CO_getStartAmbCnt(arg)) : CO_getStartAmbCnt(arg));
+  }
   if (CO_isStartBoolCon(arg)) {
     return CO_makeStartBoolCon(
         acceptWsBefore ? acceptWsBefore(CO_getStartWsBefore(arg)) : CO_getStartWsBefore(arg),

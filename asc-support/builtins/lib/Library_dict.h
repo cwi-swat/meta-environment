@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Sep 22 18:53:02 2003
+ * Generated at Thu Sep 25 11:16:48 2003
  */
 
 #ifndef __Library_dict_H
@@ -37,11 +37,19 @@ extern AFun CO_afun26;
 extern AFun CO_afun27;
 extern AFun CO_afun28;
 extern AFun CO_afun29;
+extern AFun CO_afun30;
+extern AFun CO_afun31;
+extern AFun CO_afun32;
+extern AFun CO_afun33;
 
 extern ATerm CO_patternOptLayoutPresent;
 extern ATerm CO_patternOptLayoutAbsent;
 extern ATerm CO_patternStartBoolean;
 extern ATerm CO_patternStartBoolCon;
+extern ATerm CO_patternStartMeasure;
+extern ATerm CO_patternMeasureEqual;
+extern ATerm CO_patternMeasureGreater;
+extern ATerm CO_patternMeasureLess;
 extern ATerm CO_patternBooleanBracket;
 extern ATerm CO_patternBooleanNot;
 extern ATerm CO_patternBooleanAnd;
