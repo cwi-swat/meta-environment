@@ -1,0 +1,14 @@
+package
+identification
+  name=tide-support
+  version=1.0
+  location=http://www.cwi.nl/~mdejonge/downloads
+  info=mailto:Pieter.Olivier@cwi.nl
+  description='A package containing the library needed to connect C based tools to Tide'
+  keywords=meta-environment, tide, debugging, adapter
+
+configuration interface
+
+requires
+  aterm		2.3
+  toolbuslib	0.7

@@ -1,0 +1,12 @@
+*-*.pkg
+Makefile
+Makefile.in
+aclocal.m4
+autom4te-2.53.cache
+autom4te.cache
+config.cache
+config.h.in
+config.log
+config.status
+configure
+*-config

@@ -1,0 +1,7 @@
+
+
+Fri Nov 19 13:11:33 CET 2004 <jurgenv@cwi.nl>
+ * Split tide/lib-c off into a separate package tide-support. The reason
+   is that we don't want all tools to depend on tide (including its Java
+   dependency). Examples are pgen, sglr, etc.
+
