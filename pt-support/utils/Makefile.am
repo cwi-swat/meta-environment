@@ -55,6 +55,7 @@ addPosInfo_SOURCES = \
 addPosInfo_LDADD = \
 	-L../libmept -lmept \
 	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ERROR_SUPPORT}/lib -lLocationAPI \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}
