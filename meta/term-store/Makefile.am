@@ -7,7 +7,7 @@ pkgdata_DATA = term-store.idef
 
 bin_PROGRAMS = term-store
 
-term_store_SOURCES = term-store.c term-store.tif.c
+term_store_SOURCES = main.c term-store.tif.c
 term_store_LDADD = -L$(ATERM)/lib -lATerm \
                    -L$(TOOLBUSLIB)/lib -lATB \
                    -L. -ltables
