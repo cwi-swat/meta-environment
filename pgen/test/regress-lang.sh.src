@@ -166,5 +166,6 @@ do
 	${RM} -f $dir/*.asfix[12]
 #	cd ..
 done
+printf "\n"
 
 exit $error
