@@ -70,4 +70,8 @@ distclean:
 		cd ..; \
 	done
 
+# ObTribute to Larry Wall
+love:
+	@echo "not war"
+
 depend:
