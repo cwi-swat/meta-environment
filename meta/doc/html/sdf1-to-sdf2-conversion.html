@@ -13,6 +13,7 @@
 If you have an Asf+Sdf language definition developed with the old 
 Asf+Sdf Meta-Environment you have to perform some (simple) 
 modifications.
+For details concerning Sdf2 we refer to the PhD-thesis of Eelco Visser.
 
 <p>The main differences between Sdf1 and Sdf2 are in the range of
 lexical disambiguation.
@@ -20,6 +21,12 @@ lexical disambiguation.
     <h2>Lexical and Syntactic Modifications</h2>
 
        <ul>
+          <li>Each module M should start with:
+<pre>
+module M
+...
+</pre>
+ 
           <li>All characters not being a (uppercase) letter or a digit have
               to be escaped.
           <p>Sdf1: [!@#$%^] -> StrangeChar
@@ -30,21 +37,64 @@ lexical disambiguation.
           <p>Sdf1: [ \n\t\r] -> LAYOUT
           <p>Sdf2: [\ \n\t\r] -> LAYOUT
 
+          <li>The octal coding of characters in a character class
+              is changed into a decimal coding.
+          <p>Sdf1: [\012] -> NL
+          <p>Sdf2: [\010] -> NL
+
           <li>The syntax of priority section in Sdf1 is changed:
               <ul>
                  <li>The keyword "context-free" is added to "priorities".
                  <li>Only the ascending priority changes are supported.
                  <li>The abbreviations are no longer supported.
               </ul>
-              <p>Example in Sdf1:
-                  priorities "|" < "$"
+              <p>For example the priority definition section in Sdf1:
+<pre>
+priorities 
+  "|" < "&"
+</pre>
+              becomes
+<pre>
+context-free priorities
+  Bool "&" Bool -> Bool >
+  Bool "|" Bool -> Bool 
+</pre>
        </ul>
+
+    <h2>Lexical Disambiguation</h2>
+Sdf2 does not support automatic lexical disambiguation. If you do not take
+extra precautions this may lead to many ambiguities and performance penalties
+during parsing. There are a number of simple rules to which one has to stick
+when converting to and/or writing an Sdf2 definition.
+The lexical disambiguation rules in Sdf1 are:
+<ul>
+<li>Prefer longest match per sort.
+<li>Prefer non layout.
+<li>Prefer literals.
+<li>Prefer variables. 
+</ul>
+For more details we refer to the Sdf reference manual.
+
+<h3>Example Definition of Layout</h3>
+
+<pre>
+module Layout
+
+exports
+  lexical syntax
+    [\ \t\n]         -> LAYOUT
+    "%%" ~[\n]* "\n" -> LAYOUT
+    "%" ~[\%\n]+ "%" -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+</pre>
+
 
     <hr>
     <address><a href="mailto:Mark.van.den.Brand@cwi.nl">Mark van den Brand</a></address>
 <!-- Created: Mon Jun 21 11:28:10 MET DST 1999 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 21 12:14:06 MET DST 1999
+Last modified: Mon Jun 21 16:49:26 MET DST 1999
 <!-- hhmts end -->
   </body>
 </html>
