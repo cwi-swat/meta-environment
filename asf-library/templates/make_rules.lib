@@ -18,25 +18,29 @@ PACKAGE_BUILTINS=$(shell grep "built-in" *.sdf | \
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
 EXTRA_DIST = $(MODULES) $(PREPARED) 
-CLEANFILES+=link-test.c
 
 # Build a stub to test if every built-in has an implementation
 noinst_PROGRAMS=link-test
-link_test_SOURCES= $(PACKAGE_SRC) link-test.c
+link_test_SOURCES=$(PACKAGE_SRC) link-test.c
+link_test_DEPENDENCIES=register
 link_test_LDADD=-L${PT_SUPPORT}/lib -lmept \
                 -L${ATERM}/lib -lATerm
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 REGISTER=${top_srcdir}/utils/register.sh -r
 GENLINKTEST=${top_srcdir}/utils/gen-link-test.sh
-BUILTINS_REGISTRY=${top_builddir}/src/builtins.lst
-OBJECTS_REGISTRY=${top_builddir}/src/objects.lst
+BUILTINS_REGISTRY=${top_srcdir}/src/builtins.lst
+OBJECTS_REGISTRY=${top_srcdir}/src/objects.lst
+
+BUILT_SOURCES=link-test.c
 
 # create the stub and at the same time register the built-ins
-link-test.c: $(PACKAGE_SRC) $(MODULES)
+link-test.c: $(MODULES)
+	${GENLINKTEST} "${PACKAGE_BUILTINS}" > $@
+
+register: $(PACKAGE_SRC) $(MODULES)
 	${REGISTER} ${BUILTINS_REGISTRY} ${subdir} "${PACKAGE_BUILTINS}"
 	${REGISTER} ${OBJECTS_REGISTRY} ${subdir} "${PACKAGE_OBJECTS}"
-	${GENLINKTEST} "${PACKAGE_BUILTINS}" > $@
 
 # Installation hooks take care of modifying access bits and installing
 # the files in the right order (time stamps are important here)
