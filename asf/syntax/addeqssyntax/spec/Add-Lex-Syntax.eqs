@@ -1,0 +1,132 @@
+%%
+%%    PGEN - the SDF2 parse table generator.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+equations
+
+  [alcf-1'1] add-lexical-constructor-function() =
+
+  [alcf-1'2] add-lcf-for-mod(Module) = Prod*1,
+             add-lexical-constructor-function(Module*) = Prod*2
+             ==================================================
+             add-lexical-constructor-function(Module Module*) = Prod*1 Prod*2
+
+  [alfm-1'1] add-lcf-for-sections(Section*) = Prod*
+             ======================================
+             add-lcf-for-mod(module ModName ImpSection* Section*) = Prod*
+
+  [alfs-1'1] add-lcf-for-sections() =
+
+  [alfs-1'2] add-lcf-for-section(Section) = Prod*1,
+             add-lcf-for-sections(Section*) = Prod*2
+             =======================================
+             add-lcf-for-sections(Section Section*) = Prod*1 Prod*2
+
+  [alfs-2'1] add-lcf-for-section(exports Grammar) =
+                add-lcf-for-grammar(Grammar)
+
+  [alfs-2'2] add-lcf-for-section(hiddens Grammar) =
+               add-lcf-for-grammar(Grammar)
+
+  [alfg-1'1] add-lcf-for-grammar(Grammar1) = Prod*1,
+             add-lcf-for-grammar(Grammar2) = Prod*2
+             ======================================
+             add-lcf-for-grammar(Grammar1 Grammar2) = Prod*1 Prod*2
+
+  [alfg-1'2] %%%add-lcf-for-productions(Prod*1,sort("L""A""Y""O""U""T")) = Prod*2
+             add-lcf-for-productions(Prod*1,LAYOUT) = Prod*2
+             ===============================================
+             add-lcf-for-grammar(lexical syntax Prod*1) = Prod*2
+
+  [default-alfg-1'3] add-lcf-for-grammar(Grammar) =
+
+  [alfp-1'1] add-lcf-for-productions(,Symbol*) =
+
+  [alfp-1'2] add-lcf-for-productions(Prod*1,Symbol*2 Symbol Symbol*3) = Prod*2
+             =================================================================
+             add-lcf-for-productions(Symbol*1 -> Symbol Attrs Prod*1,
+                                     Symbol*2 Symbol Symbol*3) = Prod*2
+
+  [default-alfp-1'2] add-lcf-for-production(Symbol*1 -> Sort) = Prod,
+                     add-lcf-for-productions(Prod*1,Symbol*2 Sort) = Prod*2
+                     ======================================================
+                     add-lcf-for-productions(Symbol*1 -> Sort Attrs Prod*1,
+                                             Symbol*2) = Prod Prod*2
+
+  [alfp-2'1] upper2lower(Sort) = literal(Char*)
+             ==================================
+             add-lcf-for-production(Symbol* -> Sort) =
+               literal(""" Char* """) "(" CHAR* ")" -> Sort
+
+  [u2l-1'1]  upper2lower(sort("A")) = literal("a")
+
+  [u2l-1'2]  upper2lower(sort("B")) = literal("b")
+
+  [u2l-1'3]  upper2lower(sort("C")) = literal("c")
+
+  [u2l-1'4]  upper2lower(sort("D")) = literal("d")
+
+  [u2l-1'5]  upper2lower(sort("E")) = literal("e")
+
+  [u2l-1'6]  upper2lower(sort("F")) = literal("f")
+
+  [u2l-1'7]  upper2lower(sort("G")) = literal("g")
+
+  [u2l-1'8]  upper2lower(sort("H")) = literal("h")
+
+  [u2l-1'9]  upper2lower(sort("I")) = literal("i")
+
+  [u2l-1'10] upper2lower(sort("J")) = literal("j")
+
+  [u2l-1'11] upper2lower(sort("K")) = literal("k")
+
+  [u2l-1'12] upper2lower(sort("L")) = literal("l")
+
+  [u2l-1'13] upper2lower(sort("M")) = literal("m")
+
+  [u2l-1'14] upper2lower(sort("N")) = literal("n")
+
+  [u2l-1'15] upper2lower(sort("O")) = literal("o")
+
+  [u2l-1'16] upper2lower(sort("P")) = literal("p")
+
+  [u2l-1'17] upper2lower(sort("Q")) = literal("q")
+
+  [u2l-1'18] upper2lower(sort("R")) = literal("r")
+
+  [u2l-1'19] upper2lower(sort("S")) = literal("s")
+
+  [u2l-1'20] upper2lower(sort("T")) = literal("t")
+
+  [u2l-1'21] upper2lower(sort("U")) = literal("u")
+
+  [u2l-1'22] upper2lower(sort("V")) = literal("v")
+
+  [u2l-1'23] upper2lower(sort("W")) = literal("w")
+
+  [u2l-1'24] upper2lower(sort("X")) = literal("x")
+
+  [u2l-1'25] upper2lower(sort("Y")) = literal("y")
+
+  [u2l-1'26] upper2lower(sort("Z")) = literal("z")
+
+  [u2l-1'27] upper2lower(sort(Char1)) = literal(Char2),
+             upper2lower(sort(Char+1)) = literal(Char+2)
+             ==============================================
+             upper2lower(sort(Char1 Char+1)) = literal(Char2 Char+2)
+
+  [default-u2l-1'28] upper2lower(sort(Char)) = literal(Char)

@@ -1,0 +1,54 @@
+%%
+%%    PGEN - the SDF2 parse table generator.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+%%                        The Netherlands.
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%      
+
+module Add-Prefer-Variables
+
+imports Sdf2
+
+exports
+  context-free syntax
+    "add-prefer-vars" "(" Module* ")" -> Definition
+
+hiddens
+  context-free syntax
+    "add-pv-for-modules" "(" Module* ")"       -> Definition
+    "add-pv-for-module" "(" Module ")"         -> Module
+    "add-pv-for-sections" "(" Section* ")"     -> Sections
+    "add-pv-for-section" "(" Section ")"       -> Section
+    "add-pv-for-grammar" "(" Grammar ")"       -> Grammar
+    "add-pv-for-variables" "(" Productions ")" -> Productions
+
+hiddens
+  variables
+    "Attrs"[0-9]*        -> Attributes
+    "ImpSection*"[0-9]*  -> ImpSection*
+    "Grammar"[0-9]*      -> Grammar
+    "ModName"[0-9]*      -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "Prio"[0-9]*         -> Priority
+    "Prio*"[0-9]*        -> {Priority ","}*
+    "Prod"[0-9]*         -> Production
+    "Prod*"[0-9]*        -> Production*
+    "Section"[0-9]*      -> Section
+    "Section*"[0-9]*     -> Section*
+    "Sort"[0-9]*         -> Sort
+    "Symbol"[0-9]*       -> Symbol
+    "Symbol*"[0-9]*      -> Symbol*

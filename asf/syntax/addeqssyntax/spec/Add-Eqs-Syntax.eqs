@@ -1,0 +1,107 @@
+%%
+%%    PGEN - the SDF2 parse table generator.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+equations
+
+  [aem-1'1] add-equation-module(Sdf) = add-equation-module(Main,Sdf)
+
+  [aem-1'2] create-eqs-and-conds(Module*1) = Prod*1,
+            add-lexical-constructor-function(Module*1) = Prod*2,
+            add-tagid-rejects(Module*1) = Prod*3,
+            %%add-var-lex-priorities(Module*1) = Prio*,
+            add-prefer-vars(Module*1) = Module*2,
+            add-eqs-to-module(ModName, Module*2) = Module*3
+            ===============================================
+            add-equation-module(ModName, definition Module*1) =
+              definition
+              Module*3
+              module Characters
+              exports
+                sorts CHAR
+                lexical syntax
+                  [\"] ~[\257] [\"] -> CHAR
+
+              module Equations
+              imports Characters
+              exports
+                sorts Tag TagId CondEquation Equation Implies
+                      Condition Equations
+                lexical syntax
+                  "===" [\=]*    -> Implies
+                  [shortchar("A")-shortchar("Z")
+                   shortchar("a")-shortchar("z")
+                   shortchar("0")-shortchar("9")
+                   shortchar("\""'")]                   -> TagId {avoid}
+                  [shortchar("A")-shortchar("Z")
+                   shortchar("a")-shortchar("z")
+                   shortchar("0")-shortchar("9")
+                   shortchar("\""'")]
+                  [shortchar("A")-shortchar("Z")
+                   shortchar("a")-shortchar("z")
+                   shortchar("0")-shortchar("9")
+                   shortchar("\""'")shortchar("\""-")]*
+                  [shortchar("A")-shortchar("Z")
+                   shortchar("a")-shortchar("z")
+                   shortchar("0")-shortchar("9")
+                   shortchar("\""'")]                   -> TagId {avoid}
+                context-free syntax
+                  {Condition ","}+          -> Conditions
+                                            -> Equations
+                  "equations" CondEquation* -> Equations
+
+                  Tag Equation                    -> CondEquation
+                  Tag Conditions Implies Equation -> CondEquation
+                  Tag Equation "when" Conditions  -> CondEquation
+                  "[" "]"                         -> Tag
+                  "[" TagId "]"                   -> Tag
+                  Prod*3
+
+
+              module GEN-LexConsFuncs
+              imports Characters
+              exports
+                context-free syntax
+                  Prod*2
+
+              module GEN-Equations
+              imports GEN-LexConsFuncs Equations
+              exports
+                context-free syntax
+                  Prod*1
+
+  [aetm-1'1] add-eqs-to-module(ModName, Module*1
+                                        module ModName
+                                        imports Import*
+                                        Section*
+                                        Module*2) =
+               Module*1
+               module ModName
+               imports Import* GEN-Equations
+               Section*
+               Module*2
+
+  [aetm-1'2] add-eqs-to-module(ModName, Module*1
+                                        module ModName
+                                        Section*
+                                        Module*2) =
+               Module*1
+               module ModName
+               imports GEN-Equations
+               Section*
+               Module*2
