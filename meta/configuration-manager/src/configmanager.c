@@ -30,6 +30,9 @@ static ATermTable systemActionsByDescription = NULL;
 static ATermList userExtensions = NULL;
 static ATermList systemExtensions = NULL;
 
+static ATermList userTextCategories = NULL;
+static ATermList systemTextCategories = NULL;
+
 static ATermList modulePaths = NULL;
 
 /*}}}  */
@@ -179,6 +182,14 @@ static void addExtension(ATermList extensions, MC_Property property)
 }
 
 /*}}}  */
+/*{{{  static void addTextCategory(ATermList categories, MC_Property property) */
+
+static void addTextCategory(ATermList categories, MC_Property property)
+{
+  categories = ATinsert(categories, MC_PropertyToTerm(property));
+}
+
+/*}}}  */
 
 /*{{{  static void addSystemProperty(MC_Property property) */
 
@@ -188,7 +199,7 @@ static void addSystemProperty(MC_Property property)
     addExtension(systemExtensions, property);
   }
   else if (MC_isPropertyModulePath(property)) {
-    const char *path = MC_getPropertyName(property);
+    const char *path = MC_getPropertyPath(property);
     modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
   }
   else if (MC_isPropertyAction(property)) {
@@ -200,6 +211,9 @@ static void addSystemProperty(MC_Property property)
       setActions(systemActionsByDescription, cur, actions);
       list = MC_getActionDescriptionListTail(list);
     }
+  }
+  else if (MC_isPropertyTextCategory(property)) {
+    addTextCategory(systemTextCategories, property);
   }
   else {
     ATabort(__FILE__ ":addSystemProperty: unhandled property: %t\n", property);
@@ -248,6 +262,9 @@ static void addUserProperty(MC_Property property)
       list = MC_getActionDescriptionListTail(list);
     }
   }
+  else if (MC_isPropertyTextCategory(property)) {
+    addTextCategory(userTextCategories, property);
+  }
   else {
     ATabort(__FILE__ ":addUserProperty: unhandled property: %t\n", property);
   }
@@ -284,6 +301,7 @@ void remove_user_properties(int cid)
   char curdir[MAX_PATH_LENGTH];
   ATtableReset(userDescriptionsByType);
   ATtableReset(userActionsByDescription);
+  userTextCategories = ATempty;
 
   if (getcwd(curdir, MAX_PATH_LENGTH) == NULL) {
     ATerror("__FILE__: could not get current working directory");
@@ -428,6 +446,15 @@ ATerm get_module_paths(int cid)
 }
 
 /*}}}  */
+/*{{{  ATerm get_text_properties(int cid) */
+
+ATerm get_text_categories(int cid)
+{
+  ATermList all = ATconcat(systemTextCategories, userTextCategories);
+  return ATmake("snd-value(text-properties(<term>))", all);
+}
+
+/*}}}  */
 /*{{{  void usage(char *prg, ATbool is_err) */
 
 void usage(char *prg, ATbool is_err)
@@ -468,6 +495,12 @@ static void initConfigurationManager(void)
 
   ATprotectList(&systemExtensions);
   systemExtensions = ATempty;
+
+  ATprotectList(&userTextCategories);
+  userTextCategories = ATempty;
+
+  ATprotectList(&systemTextCategories);
+  systemTextCategories = ATempty;
 
   userDescriptionsByType = ATtableCreate(INITIAL_TABLE_SIZE,
 					 TABLE_RESIZE_PERCENTAGE);

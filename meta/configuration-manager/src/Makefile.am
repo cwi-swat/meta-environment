@@ -58,5 +58,4 @@ api:
 		--input configuration.adt \
 		--name MetaConfig \
 		--prefix MC_ \
-		--output . \
-		--version 1.1
+		--output . 

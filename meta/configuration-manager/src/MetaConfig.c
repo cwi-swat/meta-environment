@@ -53,6 +53,11 @@ typedef struct ATerm _MC_ActionType;
 typedef struct ATerm _MC_Event;
 typedef struct ATerm _MC_Items;
 typedef struct ATerm _MC_ModuleName;
+typedef struct ATerm _MC_TextCategoryName;
+typedef struct ATerm _MC_TextAttributes;
+typedef struct ATerm _MC_TextAttribute;
+typedef struct ATerm _MC_TextStyle;
+typedef struct ATerm _MC_Color;
 
 /*}}}  */
 
@@ -108,6 +113,31 @@ void MC_protectItems(MC_Items *arg)
 }
 
 void MC_protectModuleName(MC_ModuleName *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectTextCategoryName(MC_TextCategoryName *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectTextAttributes(MC_TextAttributes *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectTextAttribute(MC_TextAttribute *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectTextStyle(MC_TextStyle *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectColor(MC_Color *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -260,6 +290,86 @@ ATerm MC_ModuleNameToTerm(MC_ModuleName arg)
 }
 
 /*}}}  */
+/*{{{  MC_TextCategoryName MC_TextCategoryNameFromTerm(ATerm t) */
+
+MC_TextCategoryName MC_TextCategoryNameFromTerm(ATerm t)
+{
+  return (MC_TextCategoryName)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_TextCategoryNameToTerm(MC_TextCategoryName arg) */
+
+ATerm MC_TextCategoryNameToTerm(MC_TextCategoryName arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_TextAttributesFromTerm(ATerm t) */
+
+MC_TextAttributes MC_TextAttributesFromTerm(ATerm t)
+{
+  return (MC_TextAttributes)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_TextAttributesToTerm(MC_TextAttributes arg) */
+
+ATerm MC_TextAttributesToTerm(MC_TextAttributes arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_TextAttributeFromTerm(ATerm t) */
+
+MC_TextAttribute MC_TextAttributeFromTerm(ATerm t)
+{
+  return (MC_TextAttribute)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_TextAttributeToTerm(MC_TextAttribute arg) */
+
+ATerm MC_TextAttributeToTerm(MC_TextAttribute arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_TextStyleFromTerm(ATerm t) */
+
+MC_TextStyle MC_TextStyleFromTerm(ATerm t)
+{
+  return (MC_TextStyle)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_TextStyleToTerm(MC_TextStyle arg) */
+
+ATerm MC_TextStyleToTerm(MC_TextStyle arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_ColorFromTerm(ATerm t) */
+
+MC_Color MC_ColorFromTerm(ATerm t)
+{
+  return (MC_Color)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_ColorToTerm(MC_Color arg) */
+
+ATerm MC_ColorToTerm(MC_Color arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  list functions */
@@ -372,6 +482,42 @@ MC_Items MC_makeItems5(char* elem1, char* elem2, char* elem3, char* elem4, char*
 MC_Items MC_makeItems6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6) {
   return (MC_Items) ATmakeList6((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))));
 }
+int MC_getTextAttributesLength (MC_TextAttributes arg) {
+  return ATgetLength((ATermList) arg);
+}
+MC_TextAttributes MC_reverseTextAttributes(MC_TextAttributes arg) {
+  return (MC_TextAttributes) ATreverse((ATermList) arg);
+}
+MC_TextAttributes MC_appendTextAttributes(MC_TextAttributes arg, MC_TextAttribute elem) {
+  return (MC_TextAttributes) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+MC_TextAttributes MC_concatTextAttributes(MC_TextAttributes arg0, MC_TextAttributes arg1) {
+  return (MC_TextAttributes) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+MC_TextAttributes MC_sliceTextAttributes(MC_TextAttributes arg, int start, int end) {
+  return (MC_TextAttributes) ATgetSlice((ATermList) arg, start, end);
+}
+MC_TextAttribute MC_getTextAttributesTextAttributeAt(MC_TextAttributes arg, int index) {
+ return (MC_TextAttribute)ATelementAt((ATermList) arg,index);
+}
+MC_TextAttributes MC_replaceTextAttributesTextAttributeAt(MC_TextAttributes arg, MC_TextAttribute elem, int index) {
+ return (MC_TextAttributes) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+MC_TextAttributes MC_makeTextAttributes2(MC_TextAttribute elem1, MC_TextAttribute elem2) {
+  return (MC_TextAttributes) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+MC_TextAttributes MC_makeTextAttributes3(MC_TextAttribute elem1, MC_TextAttribute elem2, MC_TextAttribute elem3) {
+  return (MC_TextAttributes) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+MC_TextAttributes MC_makeTextAttributes4(MC_TextAttribute elem1, MC_TextAttribute elem2, MC_TextAttribute elem3, MC_TextAttribute elem4) {
+  return (MC_TextAttributes) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+MC_TextAttributes MC_makeTextAttributes5(MC_TextAttribute elem1, MC_TextAttribute elem2, MC_TextAttribute elem3, MC_TextAttribute elem4, MC_TextAttribute elem5) {
+  return (MC_TextAttributes) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+MC_TextAttributes MC_makeTextAttributes6(MC_TextAttribute elem1, MC_TextAttribute elem2, MC_TextAttribute elem3, MC_TextAttribute elem4, MC_TextAttribute elem5, MC_TextAttribute elem6) {
+  return (MC_TextAttributes) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
 
 /*}}}  */
 /*{{{  constructors */
@@ -424,11 +570,19 @@ MC_Property MC_makePropertyExtension(const char* language, const char* extension
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_makePropertyModulePath(const char* name) */
+/*{{{  MC_Property MC_makePropertyModulePath(const char* path) */
 
-MC_Property MC_makePropertyModulePath(const char* name)
+MC_Property MC_makePropertyModulePath(const char* path)
 {
-  return (MC_Property)(ATerm)ATmakeAppl1(MC_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (MC_Property)(ATerm)ATmakeAppl1(MC_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAttributes attributes) */
+
+MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAttributes attributes)
+{
+  return (MC_Property)(ATerm)ATmakeAppl2(MC_afun4, (ATerm) category, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -436,7 +590,7 @@ MC_Property MC_makePropertyModulePath(const char* name)
 
 MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType type, MC_Event event)
 {
-  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun4, (ATerm) type, (ATerm) event);
+  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun5, (ATerm) type, (ATerm) event);
 }
 
 /*}}}  */
@@ -468,7 +622,7 @@ MC_ActionDescriptionList MC_makeActionDescriptionListMany(MC_ActionDescription h
 
 MC_ActionType MC_makeActionTypeTermEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun5);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun6);
 }
 
 /*}}}  */
@@ -476,7 +630,7 @@ MC_ActionType MC_makeActionTypeTermEditor(void)
 
 MC_ActionType MC_makeActionTypeTermEditorForModule(const char* moduleId)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -484,7 +638,7 @@ MC_ActionType MC_makeActionTypeTermEditorForModule(const char* moduleId)
 
 MC_ActionType MC_makeActionTypeEquationsEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun7);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun8);
 }
 
 /*}}}  */
@@ -492,7 +646,7 @@ MC_ActionType MC_makeActionTypeEquationsEditor(void)
 
 MC_ActionType MC_makeActionTypeSyntaxEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun8);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun9);
 }
 
 /*}}}  */
@@ -500,7 +654,7 @@ MC_ActionType MC_makeActionTypeSyntaxEditor(void)
 
 MC_ActionType MC_makeActionTypeFeedbackList(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun9);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun10);
 }
 
 /*}}}  */
@@ -508,7 +662,7 @@ MC_ActionType MC_makeActionTypeFeedbackList(void)
 
 MC_ActionType MC_makeActionTypeTreePanel(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun10);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun11);
 }
 
 /*}}}  */
@@ -516,7 +670,7 @@ MC_ActionType MC_makeActionTypeTreePanel(void)
 
 MC_ActionType MC_makeActionTypeModulePopup(const char* moduleId)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun11, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun12, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -524,7 +678,7 @@ MC_ActionType MC_makeActionTypeModulePopup(const char* moduleId)
 
 MC_ActionType MC_makeActionTypeNewModulePopup(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun12);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun13);
 }
 
 /*}}}  */
@@ -532,7 +686,7 @@ MC_ActionType MC_makeActionTypeNewModulePopup(void)
 
 MC_ActionType MC_makeActionTypeStudioMenubar(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun13);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun14);
 }
 
 /*}}}  */
@@ -540,7 +694,7 @@ MC_ActionType MC_makeActionTypeStudioMenubar(void)
 
 MC_ActionType MC_makeActionTypeStudioToolbar(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun14);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun15);
 }
 
 /*}}}  */
@@ -548,7 +702,7 @@ MC_ActionType MC_makeActionTypeStudioToolbar(void)
 
 MC_ActionType MC_makeActionTypeWildcard(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun15);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun16);
 }
 
 /*}}}  */
@@ -556,7 +710,7 @@ MC_ActionType MC_makeActionTypeWildcard(void)
 
 MC_Event MC_makeEventClick(void)
 {
-  return (MC_Event)(ATerm)ATmakeAppl0(MC_afun16);
+  return (MC_Event)(ATerm)ATmakeAppl0(MC_afun17);
 }
 
 /*}}}  */
@@ -564,7 +718,7 @@ MC_Event MC_makeEventClick(void)
 
 MC_Event MC_makeEventIcon(const char* title, const char* path)
 {
-  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun17, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun18, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -572,7 +726,7 @@ MC_Event MC_makeEventIcon(const char* title, const char* path)
 
 MC_Event MC_makeEventDefault(MC_Items items)
 {
-  return (MC_Event)(ATerm)ATmakeAppl1(MC_afun18, (ATerm) items);
+  return (MC_Event)(ATerm)ATmakeAppl1(MC_afun19, (ATerm) items);
 }
 
 /*}}}  */
@@ -580,7 +734,7 @@ MC_Event MC_makeEventDefault(MC_Items items)
 
 MC_Event MC_makeEventShortcut(MC_Items items, const char* shortcut)
 {
-  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun19, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun20, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -612,7 +766,135 @@ MC_Items MC_makeItemsMany(const char* head, MC_Items tail)
 
 MC_ModuleName MC_makeModuleNameWildcard(void)
 {
-  return (MC_ModuleName)(ATerm)ATmakeAppl0(MC_afun15);
+  return (MC_ModuleName)(ATerm)ATmakeAppl0(MC_afun16);
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_makeTextCategoryNameFocus(void) */
+
+MC_TextCategoryName MC_makeTextCategoryNameFocus(void)
+{
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun21);
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_makeTextCategoryNameSelection(void) */
+
+MC_TextCategoryName MC_makeTextCategoryNameSelection(void)
+{
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun22);
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_makeTextCategoryNameNormal(void) */
+
+MC_TextCategoryName MC_makeTextCategoryNameNormal(void)
+{
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun23);
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_makeTextCategoryNameExtern(const char* name) */
+
+MC_TextCategoryName MC_makeTextCategoryNameExtern(const char* name)
+{
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl1(MC_afun24, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_makeTextAttributesEmpty(void) */
+
+MC_TextAttributes MC_makeTextAttributesEmpty(void)
+{
+  return (MC_TextAttributes)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_makeTextAttributesSingle(MC_TextAttribute head) */
+
+MC_TextAttributes MC_makeTextAttributesSingle(MC_TextAttribute head)
+{
+  return (MC_TextAttributes)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_makeTextAttributesMany(MC_TextAttribute head, MC_TextAttributes tail) */
+
+MC_TextAttributes MC_makeTextAttributesMany(MC_TextAttribute head, MC_TextAttributes tail)
+{
+  return (MC_TextAttributes)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_makeTextAttributeForegroundColor(MC_Color color) */
+
+MC_TextAttribute MC_makeTextAttributeForegroundColor(MC_Color color)
+{
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun25, (ATerm) color);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_makeTextAttributeBackgroundColor(MC_Color color) */
+
+MC_TextAttribute MC_makeTextAttributeBackgroundColor(MC_Color color)
+{
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun26, (ATerm) color);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_makeTextAttributeStyle(MC_TextStyle style) */
+
+MC_TextAttribute MC_makeTextAttributeStyle(MC_TextStyle style)
+{
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun27, (ATerm) style);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_makeTextAttributeFont(const char* name) */
+
+MC_TextAttribute MC_makeTextAttributeFont(const char* name)
+{
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun28, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_makeTextAttributeSize(int points) */
+
+MC_TextAttribute MC_makeTextAttributeSize(int points)
+{
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun29, (ATerm) (ATerm) ATmakeInt(points));
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_makeTextStyleBold(void) */
+
+MC_TextStyle MC_makeTextStyleBold(void)
+{
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun30);
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_makeTextStyleItalics(void) */
+
+MC_TextStyle MC_makeTextStyleItalics(void)
+{
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun31);
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_makeTextStyleUnderlined(void) */
+
+MC_TextStyle MC_makeTextStyleUnderlined(void)
+{
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun32);
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_makeColorRgb(int red, int green, int blue) */
+
+MC_Color MC_makeColorRgb(int red, int green, int blue)
+{
+  return (MC_Color)(ATerm)ATmakeAppl3(MC_afun33, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 
 /*}}}  */
@@ -661,6 +943,31 @@ ATbool MC_isEqualItems(MC_Items arg0, MC_Items arg1)
 }
 
 ATbool MC_isEqualModuleName(MC_ModuleName arg0, MC_ModuleName arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualTextCategoryName(MC_TextCategoryName arg0, MC_TextCategoryName arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualTextAttributes(MC_TextAttributes arg0, MC_TextAttributes arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualTextAttribute(MC_TextAttribute arg0, MC_TextAttribute arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualTextStyle(MC_TextStyle arg0, MC_TextStyle arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualColor(MC_Color arg0, MC_Color arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -824,6 +1131,17 @@ ATbool MC_hasPropertiesHead(MC_Properties arg)
 }
 
 /*}}}  */
+/*{{{  ATbool MC_hasPropertiesTail(MC_Properties arg) */
+
+ATbool MC_hasPropertiesTail(MC_Properties arg)
+{
+  if (MC_isPropertiesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  MC_Property MC_getPropertiesHead(MC_Properties arg) */
 
 MC_Property MC_getPropertiesHead(MC_Properties arg)
@@ -833,6 +1151,15 @@ MC_Property MC_getPropertiesHead(MC_Properties arg)
   }
   else 
     return (MC_Property)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_Properties MC_getPropertiesTail(MC_Properties arg) */
+
+MC_Properties MC_getPropertiesTail(MC_Properties arg)
+{
+  
+    return (MC_Properties)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -849,26 +1176,6 @@ MC_Properties MC_setPropertiesHead(MC_Properties arg, MC_Property head)
 
   ATabort("Properties has no Head: %t\n", arg);
   return (MC_Properties)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasPropertiesTail(MC_Properties arg) */
-
-ATbool MC_hasPropertiesTail(MC_Properties arg)
-{
-  if (MC_isPropertiesMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  MC_Properties MC_getPropertiesTail(MC_Properties arg) */
-
-MC_Properties MC_getPropertiesTail(MC_Properties arg)
-{
-  
-    return (MC_Properties)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -900,6 +1207,9 @@ ATbool MC_isValidProperty(MC_Property arg)
     return ATtrue;
   }
   else if (MC_isPropertyModulePath(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isPropertyTextCategory(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -972,11 +1282,99 @@ inline ATbool MC_isPropertyModulePath(MC_Property arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool MC_isPropertyTextCategory(MC_Property arg) */
+
+inline ATbool MC_isPropertyTextCategory(MC_Property arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternPropertyTextCategory, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool MC_hasPropertyDescriptions(MC_Property arg) */
 
 ATbool MC_hasPropertyDescriptions(MC_Property arg)
 {
   if (MC_isPropertyAction(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyActions(MC_Property arg) */
+
+ATbool MC_hasPropertyActions(MC_Property arg)
+{
+  if (MC_isPropertyAction(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyLanguage(MC_Property arg) */
+
+ATbool MC_hasPropertyLanguage(MC_Property arg)
+{
+  if (MC_isPropertyExtension(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyExtension(MC_Property arg) */
+
+ATbool MC_hasPropertyExtension(MC_Property arg)
+{
+  if (MC_isPropertyExtension(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyPath(MC_Property arg) */
+
+ATbool MC_hasPropertyPath(MC_Property arg)
+{
+  if (MC_isPropertyModulePath(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyCategory(MC_Property arg) */
+
+ATbool MC_hasPropertyCategory(MC_Property arg)
+{
+  if (MC_isPropertyTextCategory(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasPropertyAttributes(MC_Property arg) */
+
+ATbool MC_hasPropertyAttributes(MC_Property arg)
+{
+  if (MC_isPropertyTextCategory(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -989,6 +1387,60 @@ MC_ActionDescriptionList MC_getPropertyDescriptions(MC_Property arg)
 {
   
     return (MC_ActionDescriptionList)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  ATerm MC_getPropertyActions(MC_Property arg) */
+
+ATerm MC_getPropertyActions(MC_Property arg)
+{
+  
+    return (ATerm)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  char* MC_getPropertyLanguage(MC_Property arg) */
+
+char* MC_getPropertyLanguage(MC_Property arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  char* MC_getPropertyExtension(MC_Property arg) */
+
+char* MC_getPropertyExtension(MC_Property arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  char* MC_getPropertyPath(MC_Property arg) */
+
+char* MC_getPropertyPath(MC_Property arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_getPropertyCategory(MC_Property arg) */
+
+MC_TextCategoryName MC_getPropertyCategory(MC_Property arg)
+{
+  
+    return (MC_TextCategoryName)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_getPropertyAttributes(MC_Property arg) */
+
+MC_TextAttributes MC_getPropertyAttributes(MC_Property arg)
+{
+  
+    return (MC_TextAttributes)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1005,26 +1457,6 @@ MC_Property MC_setPropertyDescriptions(MC_Property arg, MC_ActionDescriptionList
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasPropertyActions(MC_Property arg) */
-
-ATbool MC_hasPropertyActions(MC_Property arg)
-{
-  if (MC_isPropertyAction(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATerm MC_getPropertyActions(MC_Property arg) */
-
-ATerm MC_getPropertyActions(MC_Property arg)
-{
-  
-    return (ATerm)ATgetArgument((ATermAppl)arg, 1);
-}
-
-/*}}}  */
 /*{{{  MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions) */
 
 MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions)
@@ -1035,26 +1467,6 @@ MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions)
 
   ATabort("Property has no Actions: %t\n", arg);
   return (MC_Property)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasPropertyLanguage(MC_Property arg) */
-
-ATbool MC_hasPropertyLanguage(MC_Property arg)
-{
-  if (MC_isPropertyExtension(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* MC_getPropertyLanguage(MC_Property arg) */
-
-char* MC_getPropertyLanguage(MC_Property arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
@@ -1071,26 +1483,6 @@ MC_Property MC_setPropertyLanguage(MC_Property arg, const char* language)
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasPropertyExtension(MC_Property arg) */
-
-ATbool MC_hasPropertyExtension(MC_Property arg)
-{
-  if (MC_isPropertyExtension(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* MC_getPropertyExtension(MC_Property arg) */
-
-char* MC_getPropertyExtension(MC_Property arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
 /*{{{  MC_Property MC_setPropertyExtension(MC_Property arg, const char* extension) */
 
 MC_Property MC_setPropertyExtension(MC_Property arg, const char* extension)
@@ -1104,35 +1496,41 @@ MC_Property MC_setPropertyExtension(MC_Property arg, const char* extension)
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasPropertyName(MC_Property arg) */
+/*{{{  MC_Property MC_setPropertyPath(MC_Property arg, const char* path) */
 
-ATbool MC_hasPropertyName(MC_Property arg)
+MC_Property MC_setPropertyPath(MC_Property arg, const char* path)
 {
   if (MC_isPropertyModulePath(arg)) {
-    return ATtrue;
+    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
   }
-  return ATfalse;
+
+  ATabort("Property has no Path: %t\n", arg);
+  return (MC_Property)NULL;
 }
 
 /*}}}  */
-/*{{{  char* MC_getPropertyName(MC_Property arg) */
+/*{{{  MC_Property MC_setPropertyCategory(MC_Property arg, MC_TextCategoryName category) */
 
-char* MC_getPropertyName(MC_Property arg)
+MC_Property MC_setPropertyCategory(MC_Property arg, MC_TextCategoryName category)
 {
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  if (MC_isPropertyTextCategory(arg)) {
+    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) category), 0);
+  }
+
+  ATabort("Property has no Category: %t\n", arg);
+  return (MC_Property)NULL;
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_setPropertyName(MC_Property arg, const char* name) */
+/*{{{  MC_Property MC_setPropertyAttributes(MC_Property arg, MC_TextAttributes attributes) */
 
-MC_Property MC_setPropertyName(MC_Property arg, const char* name)
+MC_Property MC_setPropertyAttributes(MC_Property arg, MC_TextAttributes attributes)
 {
-  if (MC_isPropertyModulePath(arg)) {
-    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue))), 0);
+  if (MC_isPropertyTextCategory(arg)) {
+    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 1);
   }
 
-  ATabort("Property has no Name: %t\n", arg);
+  ATabort("Property has no Attributes: %t\n", arg);
   return (MC_Property)NULL;
 }
 
@@ -1175,12 +1573,32 @@ ATbool MC_hasActionDescriptionType(MC_ActionDescription arg)
 }
 
 /*}}}  */
+/*{{{  ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg) */
+
+ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg)
+{
+  if (MC_isActionDescriptionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  MC_ActionType MC_getActionDescriptionType(MC_ActionDescription arg) */
 
 MC_ActionType MC_getActionDescriptionType(MC_ActionDescription arg)
 {
   
     return (MC_ActionType)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg) */
+
+MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg)
+{
+  
+    return (MC_Event)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1194,26 +1612,6 @@ MC_ActionDescription MC_setActionDescriptionType(MC_ActionDescription arg, MC_Ac
 
   ATabort("ActionDescription has no Type: %t\n", arg);
   return (MC_ActionDescription)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg) */
-
-ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg)
-{
-  if (MC_isActionDescriptionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg) */
-
-MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg)
-{
-  
-    return (MC_Event)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1330,6 +1728,17 @@ ATbool MC_hasActionDescriptionListHead(MC_ActionDescriptionList arg)
 }
 
 /*}}}  */
+/*{{{  ATbool MC_hasActionDescriptionListTail(MC_ActionDescriptionList arg) */
+
+ATbool MC_hasActionDescriptionListTail(MC_ActionDescriptionList arg)
+{
+  if (MC_isActionDescriptionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  MC_ActionDescription MC_getActionDescriptionListHead(MC_ActionDescriptionList arg) */
 
 MC_ActionDescription MC_getActionDescriptionListHead(MC_ActionDescriptionList arg)
@@ -1339,6 +1748,15 @@ MC_ActionDescription MC_getActionDescriptionListHead(MC_ActionDescriptionList ar
   }
   else 
     return (MC_ActionDescription)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_ActionDescriptionList MC_getActionDescriptionListTail(MC_ActionDescriptionList arg) */
+
+MC_ActionDescriptionList MC_getActionDescriptionListTail(MC_ActionDescriptionList arg)
+{
+  
+    return (MC_ActionDescriptionList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1355,26 +1773,6 @@ MC_ActionDescriptionList MC_setActionDescriptionListHead(MC_ActionDescriptionLis
 
   ATabort("ActionDescriptionList has no Head: %t\n", arg);
   return (MC_ActionDescriptionList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasActionDescriptionListTail(MC_ActionDescriptionList arg) */
-
-ATbool MC_hasActionDescriptionListTail(MC_ActionDescriptionList arg)
-{
-  if (MC_isActionDescriptionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  MC_ActionDescriptionList MC_getActionDescriptionListTail(MC_ActionDescriptionList arg) */
-
-MC_ActionDescriptionList MC_getActionDescriptionListTail(MC_ActionDescriptionList arg)
-{
-  
-    return (MC_ActionDescriptionList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1843,28 +2241,6 @@ ATbool MC_hasEventTitle(MC_Event arg)
 }
 
 /*}}}  */
-/*{{{  char* MC_getEventTitle(MC_Event arg) */
-
-char* MC_getEventTitle(MC_Event arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-}
-
-/*}}}  */
-/*{{{  MC_Event MC_setEventTitle(MC_Event arg, const char* title) */
-
-MC_Event MC_setEventTitle(MC_Event arg, const char* title)
-{
-  if (MC_isEventIcon(arg)) {
-    return (MC_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue))), 0);
-  }
-
-  ATabort("Event has no Title: %t\n", arg);
-  return (MC_Event)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool MC_hasEventPath(MC_Event arg) */
 
 ATbool MC_hasEventPath(MC_Event arg)
@@ -1873,28 +2249,6 @@ ATbool MC_hasEventPath(MC_Event arg)
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* MC_getEventPath(MC_Event arg) */
-
-char* MC_getEventPath(MC_Event arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
-/*{{{  MC_Event MC_setEventPath(MC_Event arg, const char* path) */
-
-MC_Event MC_setEventPath(MC_Event arg, const char* path)
-{
-  if (MC_isEventIcon(arg)) {
-    return (MC_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
-  }
-
-  ATabort("Event has no Path: %t\n", arg);
-  return (MC_Event)NULL;
 }
 
 /*}}}  */
@@ -1912,6 +2266,35 @@ ATbool MC_hasEventItems(MC_Event arg)
 }
 
 /*}}}  */
+/*{{{  ATbool MC_hasEventShortcut(MC_Event arg) */
+
+ATbool MC_hasEventShortcut(MC_Event arg)
+{
+  if (MC_isEventShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MC_getEventTitle(MC_Event arg) */
+
+char* MC_getEventTitle(MC_Event arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  char* MC_getEventPath(MC_Event arg) */
+
+char* MC_getEventPath(MC_Event arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
 /*{{{  MC_Items MC_getEventItems(MC_Event arg) */
 
 MC_Items MC_getEventItems(MC_Event arg)
@@ -1921,6 +2304,41 @@ MC_Items MC_getEventItems(MC_Event arg)
   }
   else 
     return (MC_Items)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  char* MC_getEventShortcut(MC_Event arg) */
+
+char* MC_getEventShortcut(MC_Event arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  MC_Event MC_setEventTitle(MC_Event arg, const char* title) */
+
+MC_Event MC_setEventTitle(MC_Event arg, const char* title)
+{
+  if (MC_isEventIcon(arg)) {
+    return (MC_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue))), 0);
+  }
+
+  ATabort("Event has no Title: %t\n", arg);
+  return (MC_Event)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_Event MC_setEventPath(MC_Event arg, const char* path) */
+
+MC_Event MC_setEventPath(MC_Event arg, const char* path)
+{
+  if (MC_isEventIcon(arg)) {
+    return (MC_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
+  }
+
+  ATabort("Event has no Path: %t\n", arg);
+  return (MC_Event)NULL;
 }
 
 /*}}}  */
@@ -1937,26 +2355,6 @@ MC_Event MC_setEventItems(MC_Event arg, MC_Items items)
 
   ATabort("Event has no Items: %t\n", arg);
   return (MC_Event)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasEventShortcut(MC_Event arg) */
-
-ATbool MC_hasEventShortcut(MC_Event arg)
-{
-  if (MC_isEventShortcut(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* MC_getEventShortcut(MC_Event arg) */
-
-char* MC_getEventShortcut(MC_Event arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -2073,6 +2471,17 @@ ATbool MC_hasItemsHead(MC_Items arg)
 }
 
 /*}}}  */
+/*{{{  ATbool MC_hasItemsTail(MC_Items arg) */
+
+ATbool MC_hasItemsTail(MC_Items arg)
+{
+  if (MC_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* MC_getItemsHead(MC_Items arg) */
 
 char* MC_getItemsHead(MC_Items arg)
@@ -2082,6 +2491,15 @@ char* MC_getItemsHead(MC_Items arg)
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)arg)));
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_getItemsTail(MC_Items arg) */
+
+MC_Items MC_getItemsTail(MC_Items arg)
+{
+  
+    return (MC_Items)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -2098,26 +2516,6 @@ MC_Items MC_setItemsHead(MC_Items arg, const char* head)
 
   ATabort("Items has no Head: %t\n", arg);
   return (MC_Items)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasItemsTail(MC_Items arg) */
-
-ATbool MC_hasItemsTail(MC_Items arg)
-{
-  if (MC_isItemsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  MC_Items MC_getItemsTail(MC_Items arg) */
-
-MC_Items MC_getItemsTail(MC_Items arg)
-{
-  
-    return (MC_Items)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -2163,6 +2561,803 @@ inline ATbool MC_isModuleNameWildcard(MC_ModuleName arg)
 /*}}}  */
 
 /*}}}  */
+/*{{{  MC_TextCategoryName accessors */
+
+/*{{{  ATbool MC_isValidTextCategoryName(MC_TextCategoryName arg) */
+
+ATbool MC_isValidTextCategoryName(MC_TextCategoryName arg)
+{
+  if (MC_isTextCategoryNameFocus(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextCategoryNameSelection(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextCategoryNameNormal(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextCategoryNameExtern(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextCategoryNameFocus(MC_TextCategoryName arg) */
+
+inline ATbool MC_isTextCategoryNameFocus(MC_TextCategoryName arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextCategoryNameFocus);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextCategoryNameSelection(MC_TextCategoryName arg) */
+
+inline ATbool MC_isTextCategoryNameSelection(MC_TextCategoryName arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextCategoryNameSelection);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextCategoryNameNormal(MC_TextCategoryName arg) */
+
+inline ATbool MC_isTextCategoryNameNormal(MC_TextCategoryName arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextCategoryNameNormal);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextCategoryNameExtern(MC_TextCategoryName arg) */
+
+inline ATbool MC_isTextCategoryNameExtern(MC_TextCategoryName arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextCategoryNameExtern, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextCategoryNameName(MC_TextCategoryName arg) */
+
+ATbool MC_hasTextCategoryNameName(MC_TextCategoryName arg)
+{
+  if (MC_isTextCategoryNameExtern(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MC_getTextCategoryNameName(MC_TextCategoryName arg) */
+
+char* MC_getTextCategoryNameName(MC_TextCategoryName arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_setTextCategoryNameName(MC_TextCategoryName arg, const char* name) */
+
+MC_TextCategoryName MC_setTextCategoryNameName(MC_TextCategoryName arg, const char* name)
+{
+  if (MC_isTextCategoryNameExtern(arg)) {
+    return (MC_TextCategoryName)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue))), 0);
+  }
+
+  ATabort("TextCategoryName has no Name: %t\n", arg);
+  return (MC_TextCategoryName)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_TextAttributes accessors */
+
+/*{{{  ATbool MC_isValidTextAttributes(MC_TextAttributes arg) */
+
+ATbool MC_isValidTextAttributes(MC_TextAttributes arg)
+{
+  if (MC_isTextAttributesEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributesEmpty(MC_TextAttributes arg) */
+
+inline ATbool MC_isTextAttributesEmpty(MC_TextAttributes arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MC_patternTextAttributesEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributesSingle(MC_TextAttributes arg) */
+
+inline ATbool MC_isTextAttributesSingle(MC_TextAttributes arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributesSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributesMany(MC_TextAttributes arg) */
+
+inline ATbool MC_isTextAttributesMany(MC_TextAttributes arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributesMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributesHead(MC_TextAttributes arg) */
+
+ATbool MC_hasTextAttributesHead(MC_TextAttributes arg)
+{
+  if (MC_isTextAttributesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributesTail(MC_TextAttributes arg) */
+
+ATbool MC_hasTextAttributesTail(MC_TextAttributes arg)
+{
+  if (MC_isTextAttributesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_getTextAttributesHead(MC_TextAttributes arg) */
+
+MC_TextAttribute MC_getTextAttributesHead(MC_TextAttributes arg)
+{
+  if (MC_isTextAttributesSingle(arg)) {
+    return (MC_TextAttribute)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (MC_TextAttribute)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_getTextAttributesTail(MC_TextAttributes arg) */
+
+MC_TextAttributes MC_getTextAttributesTail(MC_TextAttributes arg)
+{
+  
+    return (MC_TextAttributes)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_setTextAttributesHead(MC_TextAttributes arg, MC_TextAttribute head) */
+
+MC_TextAttributes MC_setTextAttributesHead(MC_TextAttributes arg, MC_TextAttribute head)
+{
+  if (MC_isTextAttributesSingle(arg)) {
+    return (MC_TextAttributes)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (MC_isTextAttributesMany(arg)) {
+    return (MC_TextAttributes)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("TextAttributes has no Head: %t\n", arg);
+  return (MC_TextAttributes)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_setTextAttributesTail(MC_TextAttributes arg, MC_TextAttributes tail) */
+
+MC_TextAttributes MC_setTextAttributesTail(MC_TextAttributes arg, MC_TextAttributes tail)
+{
+  if (MC_isTextAttributesMany(arg)) {
+    return (MC_TextAttributes)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("TextAttributes has no Tail: %t\n", arg);
+  return (MC_TextAttributes)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_TextAttribute accessors */
+
+/*{{{  ATbool MC_isValidTextAttribute(MC_TextAttribute arg) */
+
+ATbool MC_isValidTextAttribute(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeForegroundColor(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributeBackgroundColor(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributeStyle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributeFont(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributeSize(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributeForegroundColor(MC_TextAttribute arg) */
+
+inline ATbool MC_isTextAttributeForegroundColor(MC_TextAttribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributeForegroundColor, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributeBackgroundColor(MC_TextAttribute arg) */
+
+inline ATbool MC_isTextAttributeBackgroundColor(MC_TextAttribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributeBackgroundColor, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributeStyle(MC_TextAttribute arg) */
+
+inline ATbool MC_isTextAttributeStyle(MC_TextAttribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributeStyle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributeFont(MC_TextAttribute arg) */
+
+inline ATbool MC_isTextAttributeFont(MC_TextAttribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributeFont, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextAttributeSize(MC_TextAttribute arg) */
+
+inline ATbool MC_isTextAttributeSize(MC_TextAttribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextAttributeSize, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributeColor(MC_TextAttribute arg) */
+
+ATbool MC_hasTextAttributeColor(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeForegroundColor(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextAttributeBackgroundColor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributeStyle(MC_TextAttribute arg) */
+
+ATbool MC_hasTextAttributeStyle(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeStyle(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributeName(MC_TextAttribute arg) */
+
+ATbool MC_hasTextAttributeName(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeFont(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasTextAttributePoints(MC_TextAttribute arg) */
+
+ATbool MC_hasTextAttributePoints(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeSize(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_getTextAttributeColor(MC_TextAttribute arg) */
+
+MC_Color MC_getTextAttributeColor(MC_TextAttribute arg)
+{
+  if (MC_isTextAttributeForegroundColor(arg)) {
+    return (MC_Color)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
+    return (MC_Color)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_getTextAttributeStyle(MC_TextAttribute arg) */
+
+MC_TextStyle MC_getTextAttributeStyle(MC_TextAttribute arg)
+{
+  
+    return (MC_TextStyle)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  char* MC_getTextAttributeName(MC_TextAttribute arg) */
+
+char* MC_getTextAttributeName(MC_TextAttribute arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  int MC_getTextAttributePoints(MC_TextAttribute arg) */
+
+int MC_getTextAttributePoints(MC_TextAttribute arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_setTextAttributeColor(MC_TextAttribute arg, MC_Color color) */
+
+MC_TextAttribute MC_setTextAttributeColor(MC_TextAttribute arg, MC_Color color)
+{
+  if (MC_isTextAttributeForegroundColor(arg)) {
+    return (MC_TextAttribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) color), 0);
+  }
+  else if (MC_isTextAttributeBackgroundColor(arg)) {
+    return (MC_TextAttribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) color), 0);
+  }
+
+  ATabort("TextAttribute has no Color: %t\n", arg);
+  return (MC_TextAttribute)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_setTextAttributeStyle(MC_TextAttribute arg, MC_TextStyle style) */
+
+MC_TextAttribute MC_setTextAttributeStyle(MC_TextAttribute arg, MC_TextStyle style)
+{
+  if (MC_isTextAttributeStyle(arg)) {
+    return (MC_TextAttribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) style), 0);
+  }
+
+  ATabort("TextAttribute has no Style: %t\n", arg);
+  return (MC_TextAttribute)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_setTextAttributeName(MC_TextAttribute arg, const char* name) */
+
+MC_TextAttribute MC_setTextAttributeName(MC_TextAttribute arg, const char* name)
+{
+  if (MC_isTextAttributeFont(arg)) {
+    return (MC_TextAttribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue))), 0);
+  }
+
+  ATabort("TextAttribute has no Name: %t\n", arg);
+  return (MC_TextAttribute)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_setTextAttributePoints(MC_TextAttribute arg, int points) */
+
+MC_TextAttribute MC_setTextAttributePoints(MC_TextAttribute arg, int points)
+{
+  if (MC_isTextAttributeSize(arg)) {
+    return (MC_TextAttribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(points)), 0);
+  }
+
+  ATabort("TextAttribute has no Points: %t\n", arg);
+  return (MC_TextAttribute)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_TextStyle accessors */
+
+/*{{{  ATbool MC_isValidTextStyle(MC_TextStyle arg) */
+
+ATbool MC_isValidTextStyle(MC_TextStyle arg)
+{
+  if (MC_isTextStyleBold(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextStyleItalics(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isTextStyleUnderlined(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextStyleBold(MC_TextStyle arg) */
+
+inline ATbool MC_isTextStyleBold(MC_TextStyle arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextStyleBold);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextStyleItalics(MC_TextStyle arg) */
+
+inline ATbool MC_isTextStyleItalics(MC_TextStyle arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextStyleItalics);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isTextStyleUnderlined(MC_TextStyle arg) */
+
+inline ATbool MC_isTextStyleUnderlined(MC_TextStyle arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternTextStyleUnderlined);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_Color accessors */
+
+/*{{{  ATbool MC_isValidColor(MC_Color arg) */
+
+ATbool MC_isValidColor(MC_Color arg)
+{
+  if (MC_isColorRgb(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isColorRgb(MC_Color arg) */
+
+inline ATbool MC_isColorRgb(MC_Color arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MC_patternColorRgb, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasColorRed(MC_Color arg) */
+
+ATbool MC_hasColorRed(MC_Color arg)
+{
+  if (MC_isColorRgb(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasColorGreen(MC_Color arg) */
+
+ATbool MC_hasColorGreen(MC_Color arg)
+{
+  if (MC_isColorRgb(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasColorBlue(MC_Color arg) */
+
+ATbool MC_hasColorBlue(MC_Color arg)
+{
+  if (MC_isColorRgb(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  int MC_getColorRed(MC_Color arg) */
+
+int MC_getColorRed(MC_Color arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
+}
+
+/*}}}  */
+/*{{{  int MC_getColorGreen(MC_Color arg) */
+
+int MC_getColorGreen(MC_Color arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  int MC_getColorBlue(MC_Color arg) */
+
+int MC_getColorBlue(MC_Color arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 2));
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_setColorRed(MC_Color arg, int red) */
+
+MC_Color MC_setColorRed(MC_Color arg, int red)
+{
+  if (MC_isColorRgb(arg)) {
+    return (MC_Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(red)), 0);
+  }
+
+  ATabort("Color has no Red: %t\n", arg);
+  return (MC_Color)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_setColorGreen(MC_Color arg, int green) */
+
+MC_Color MC_setColorGreen(MC_Color arg, int green)
+{
+  if (MC_isColorRgb(arg)) {
+    return (MC_Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(green)), 1);
+  }
+
+  ATabort("Color has no Green: %t\n", arg);
+  return (MC_Color)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_setColorBlue(MC_Color arg, int blue) */
+
+MC_Color MC_setColorBlue(MC_Color arg, int blue)
+{
+  if (MC_isColorRgb(arg)) {
+    return (MC_Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(blue)), 2);
+  }
+
+  ATabort("Color has no Blue: %t\n", arg);
+  return (MC_Color)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  sort visitors */
 
 /*{{{  MC_Configuration MC_visitConfiguration(MC_Configuration arg, MC_Properties (*acceptList)(MC_Properties)) */
@@ -2199,9 +3394,9 @@ MC_Properties MC_visitProperties(MC_Properties arg, MC_Property (*acceptHead)(MC
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptName)(char*)) */
+/*{{{  MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes)) */
 
-MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptName)(char*))
+MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes))
 {
   if (MC_isPropertyAction(arg)) {
     return MC_makePropertyAction(
@@ -2215,7 +3410,12 @@ MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptD
   }
   if (MC_isPropertyModulePath(arg)) {
     return MC_makePropertyModulePath(
-        acceptName ? acceptName(MC_getPropertyName(arg)) : MC_getPropertyName(arg));
+        acceptPath ? acceptPath(MC_getPropertyPath(arg)) : MC_getPropertyPath(arg));
+  }
+  if (MC_isPropertyTextCategory(arg)) {
+    return MC_makePropertyTextCategory(
+        acceptCategory ? acceptCategory(MC_getPropertyCategory(arg)) : MC_getPropertyCategory(arg),
+        acceptAttributes ? acceptAttributes(MC_getPropertyAttributes(arg)) : MC_getPropertyAttributes(arg));
   }
   ATabort("not a Property: %t\n", arg);
   return (MC_Property)NULL;
@@ -2357,6 +3557,111 @@ MC_ModuleName MC_visitModuleName(MC_ModuleName arg)
   }
   ATabort("not a ModuleName: %t\n", arg);
   return (MC_ModuleName)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextCategoryName MC_visitTextCategoryName(MC_TextCategoryName arg, char* (*acceptName)(char*)) */
+
+MC_TextCategoryName MC_visitTextCategoryName(MC_TextCategoryName arg, char* (*acceptName)(char*))
+{
+  if (MC_isTextCategoryNameFocus(arg)) {
+    return MC_makeTextCategoryNameFocus();
+  }
+  if (MC_isTextCategoryNameSelection(arg)) {
+    return MC_makeTextCategoryNameSelection();
+  }
+  if (MC_isTextCategoryNameNormal(arg)) {
+    return MC_makeTextCategoryNameNormal();
+  }
+  if (MC_isTextCategoryNameExtern(arg)) {
+    return MC_makeTextCategoryNameExtern(
+        acceptName ? acceptName(MC_getTextCategoryNameName(arg)) : MC_getTextCategoryNameName(arg));
+  }
+  ATabort("not a TextCategoryName: %t\n", arg);
+  return (MC_TextCategoryName)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttributes MC_visitTextAttributes(MC_TextAttributes arg, MC_TextAttribute (*acceptHead)(MC_TextAttribute)) */
+
+MC_TextAttributes MC_visitTextAttributes(MC_TextAttributes arg, MC_TextAttribute (*acceptHead)(MC_TextAttribute))
+{
+  if (MC_isTextAttributesEmpty(arg)) {
+    return MC_makeTextAttributesEmpty();
+  }
+  if (MC_isTextAttributesSingle(arg)) {
+    return MC_makeTextAttributesSingle(
+        acceptHead ? acceptHead(MC_getTextAttributesHead(arg)) : MC_getTextAttributesHead(arg));
+  }
+  if (MC_isTextAttributesMany(arg)) {
+    return MC_makeTextAttributesMany(
+        acceptHead ? acceptHead(MC_getTextAttributesHead(arg)) : MC_getTextAttributesHead(arg),
+        MC_visitTextAttributes(MC_getTextAttributesTail(arg), acceptHead));
+  }
+  ATabort("not a TextAttributes: %t\n", arg);
+  return (MC_TextAttributes)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextAttribute MC_visitTextAttribute(MC_TextAttribute arg, MC_Color (*acceptColor)(MC_Color), MC_TextStyle (*acceptStyle)(MC_TextStyle), char* (*acceptName)(char*), int (*acceptPoints)(int)) */
+
+MC_TextAttribute MC_visitTextAttribute(MC_TextAttribute arg, MC_Color (*acceptColor)(MC_Color), MC_TextStyle (*acceptStyle)(MC_TextStyle), char* (*acceptName)(char*), int (*acceptPoints)(int))
+{
+  if (MC_isTextAttributeForegroundColor(arg)) {
+    return MC_makeTextAttributeForegroundColor(
+        acceptColor ? acceptColor(MC_getTextAttributeColor(arg)) : MC_getTextAttributeColor(arg));
+  }
+  if (MC_isTextAttributeBackgroundColor(arg)) {
+    return MC_makeTextAttributeBackgroundColor(
+        acceptColor ? acceptColor(MC_getTextAttributeColor(arg)) : MC_getTextAttributeColor(arg));
+  }
+  if (MC_isTextAttributeStyle(arg)) {
+    return MC_makeTextAttributeStyle(
+        acceptStyle ? acceptStyle(MC_getTextAttributeStyle(arg)) : MC_getTextAttributeStyle(arg));
+  }
+  if (MC_isTextAttributeFont(arg)) {
+    return MC_makeTextAttributeFont(
+        acceptName ? acceptName(MC_getTextAttributeName(arg)) : MC_getTextAttributeName(arg));
+  }
+  if (MC_isTextAttributeSize(arg)) {
+    return MC_makeTextAttributeSize(
+        acceptPoints ? acceptPoints(MC_getTextAttributePoints(arg)) : MC_getTextAttributePoints(arg));
+  }
+  ATabort("not a TextAttribute: %t\n", arg);
+  return (MC_TextAttribute)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_TextStyle MC_visitTextStyle(MC_TextStyle arg) */
+
+MC_TextStyle MC_visitTextStyle(MC_TextStyle arg)
+{
+  if (MC_isTextStyleBold(arg)) {
+    return MC_makeTextStyleBold();
+  }
+  if (MC_isTextStyleItalics(arg)) {
+    return MC_makeTextStyleItalics();
+  }
+  if (MC_isTextStyleUnderlined(arg)) {
+    return MC_makeTextStyleUnderlined();
+  }
+  ATabort("not a TextStyle: %t\n", arg);
+  return (MC_TextStyle)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_Color MC_visitColor(MC_Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int)) */
+
+MC_Color MC_visitColor(MC_Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int))
+{
+  if (MC_isColorRgb(arg)) {
+    return MC_makeColorRgb(
+        acceptRed ? acceptRed(MC_getColorRed(arg)) : MC_getColorRed(arg),
+        acceptGreen ? acceptGreen(MC_getColorGreen(arg)) : MC_getColorGreen(arg),
+        acceptBlue ? acceptBlue(MC_getColorBlue(arg)) : MC_getColorBlue(arg));
+  }
+  ATabort("not a Color: %t\n", arg);
+  return (MC_Color)NULL;
 }
 
 /*}}}  */

@@ -5,7 +5,7 @@
 
 #include "configuration-manager.tif.h"
 
-#define NR_SIG_ENTRIES	9
+#define NR_SIG_ENTRIES	10
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<configuration-manager>,add-system-properties(<str>))",
@@ -16,6 +16,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<configuration-manager>,get-extension-modulename(<str>))",
   "rec-eval(<configuration-manager>,get-modulename-extension(<str>))",
   "rec-eval(<configuration-manager>,get-module-paths)",
+  "rec-eval(<configuration-manager>,get-text-categories)",
   "rec-terminate(<configuration-manager>,<term>)",
 };
 
@@ -27,30 +28,33 @@ ATerm configuration_manager_handler(int conn, ATerm term)
   char *s0;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(get-actions(<term>,<term>))", &t0, &t1)) {
-    return get_actions(conn, t0, t1);
-  }
   if(ATmatch(term, "rec-eval(get-module-actions(<term>,<term>,<str>))", &t0, &t1, &s0)) {
     return get_module_actions(conn, t0, t1, s0);
   }
-  if(ATmatch(term, "rec-eval(get-module-events(<term>,<str>))", &t0, &s0)) {
-    return get_module_events(conn, t0, s0);
+  if(ATmatch(term, "rec-eval(get-actions(<term>,<term>))", &t0, &t1)) {
+    return get_actions(conn, t0, t1);
   }
   if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
     return get_extension_modulename(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(get-events(<term>))", &t0)) {
-    return get_events(conn, t0);
+  if(ATmatch(term, "rec-eval(get-module-events(<term>,<str>))", &t0, &s0)) {
+    return get_module_events(conn, t0, s0);
   }
   if(ATmatch(term, "rec-eval(get-modulename-extension(<str>))", &s0)) {
     return get_modulename_extension(conn, s0);
+  }
+  if(ATmatch(term, "rec-eval(get-events(<term>))", &t0)) {
+    return get_events(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-module-paths)")) {
+    return get_module_paths(conn);
   }
   if(ATmatch(term, "rec-do(add-system-properties(<str>))", &s0)) {
     add_system_properties(conn, s0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-module-paths)")) {
-    return get_module_paths(conn);
+  if(ATmatch(term, "rec-eval(get-text-categories)")) {
+    return get_text_categories(conn);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);

@@ -68,7 +68,8 @@ let
   Extension: str,
   Term: term,
   Text: str,
-  Tree: term
+  Tree: term,
+  Categories: term
 in
   execute(configuration-manager, CM?)
   .
@@ -123,6 +124,11 @@ in
     . snd-eval(CM, get-module-paths)
     . rec-value(CM, module-paths(ModulePaths?))
     . snd-msg(module-paths(ModulePaths))
+  +
+    rec-msg(get-text-categories)
+    . snd-eval(CM, get-text-categories)
+    . rec-value(CM, text-categories(Categories?))
+    . snd-msg(text-categories(Categories))
   )
   *
   delta

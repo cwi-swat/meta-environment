@@ -4,7 +4,9 @@
 
   constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <actions(term)>)),
   constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
-  constructor(Property, module-path, module-path(<name(str)>)),
+  constructor(Property, module-path, module-path(<path(str)>)),
+
+  constructor(Property, text-category, text-category(<category(TextCategoryName)>,<attributes(TextAttributes)>)),
 
   constructor(ActionDescription, default, description(<type(ActionType)>, <event(Event)>)),
   list(ActionDescriptionList, ActionDescription),
@@ -29,5 +31,21 @@
   constructor(Event, shortcut, menu(<items(Items)>, <shortcut(str)>)),
   list(Items, str),
 
-  constructor(ModuleName, wildcard, "*")
+  constructor(ModuleName, wildcard, "*"),
+
+  constructor(TextCategoryName, focus, focus),
+  constructor(TextCategoryName, selection, selection),
+  constructor(TextCategoryName, normal, normal),
+  constructor(TextCategoryName, extern, extern(<name(str)>)),
+
+  list(TextAttributes, TextAttribute),
+  constructor(TextAttribute, foreground-color, foreground-color(<color(Color)>)),
+  constructor(TextAttribute, background-color, background-color(<color(Color)>)),
+  constructor(TextAttribute, style, style(<style(TextStyle)>)),
+  constructor(TextAttribute, font, font(<name(str)>)),
+  constructor(TextAttribute, size, size(<points(int)>)),
+  constructor(TextStyle, bold, bold),
+  constructor(TextStyle, italics, italics),
+  constructor(TextStyle, underlined, underlined),
+  constructor(Color, rgb, rgb(<red(int)>,<green(int)>,<blue(int)>))
 ]
