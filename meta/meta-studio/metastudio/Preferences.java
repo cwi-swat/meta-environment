@@ -48,6 +48,15 @@ public class Preferences
   }
 
   //}}}
+  //{{{ static public void setString(String key, String value)
+
+  static public void setString(String key, String value)
+  {
+    properties.setProperty(key, value);
+  }
+
+  //}}}
+
   //{{{ static public Color getColor(String key)
 
   static public Color getColor(String key)

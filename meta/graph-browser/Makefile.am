@@ -41,11 +41,9 @@ CLEANFILES  = graph-browser graph-browser.tcl graph-browser.1
 	 fi
 	sed 's@__WISH__@$(WISH)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
-	     s@__ASF_LIBRARY__@$(ASF_LIBRARY)@g;\
 	     s@__DATADIR__@$(pkgdatadir)@g' < $< > $@ && \
 	chmod +x $@
 
 %.tcl: %.tcl.src Makefile
-	sed 's@__USE_TIDE__@$(USE_TIDE)@g;\
-             s@__ASF_LIBRARY__@$(ASF_LIBRARY)@g;' < $< > $@ 
+	sed 's@__USE_TIDE__@$(USE_TIDE)@g;' < $< > $@ 
 

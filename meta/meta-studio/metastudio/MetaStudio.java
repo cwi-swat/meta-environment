@@ -880,6 +880,17 @@ public class MetaStudio
 
   //}}}
 
+  //{{{ public void initialize_ui(String libloc, String syn_ext, String sem_ext,
+
+  public void initializeUi(String libloc, String syn_ext, String sem_ext,
+			    String trm_ext)
+  {
+    Preferences.setString("module.extension",syn_ext);
+    Preferences.setString("term.extension",trm_ext);
+  }
+
+  //}}}
+
   //{{{ private Module addModule(String name)
 
   private Module addModule(String name)
@@ -1227,8 +1238,9 @@ public class MetaStudio
   void doEditTerm(String module)
   {
     JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
-    chooser.setFileFilter(new ExtensionFilter(new String[] { ".trm" },
-					      "Term (*.trm)"));
+    chooser.setFileFilter(new ExtensionFilter(new String[] { 
+      Preferences.getString("term.extension")},
+      Preferences.getString("term.extension.description")));
     int option = chooser.showOpenDialog(this);
     if (option == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();

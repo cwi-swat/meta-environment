@@ -2,13 +2,11 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST  = meta.sh.src pt-dump.sh.src eqs-dump.sh.src meta.pod meta.1
+EXTRA_DIST  = generic-meta.sh.src 
 
-bin_SCRIPTS = meta pt-dump eqs-dump
+bin_SCRIPTS = generic-meta 
 
-man_MANS    = meta.1
-
-CLEANFILES  = meta meta.1 pt-dump eqs-dump
+CLEANFILES  = generic-meta meta.1 
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
@@ -18,8 +16,6 @@ CLEANFILES  = meta meta.1 pt-dump eqs-dump
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
-	     s@__ASF__@$(ASF)@g;\
-	     s@__ASF_LIBRARY__@$(ASF_LIBRARY)@g;\
 	     s@__WISH__@$(WISH)@g;\
 	     s@__XEMACS__@$(XEMACS)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \

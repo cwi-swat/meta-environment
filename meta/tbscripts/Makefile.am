@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS = asf
-
 TBSCRIPTS     = clear-all.tb close-module.tb editor-creator.tb \
                 edit-equations.tb edit-syntax.tb edit-term.tb \
                 file-creator.tb meta.tb notification.tb \

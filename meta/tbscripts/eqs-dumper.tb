@@ -16,31 +16,36 @@
 #include "parsetablegen.idef"
 #include "process-eqs.tb"
 #include "configmanager.idef"
-#include "error-display.tb"
 #include "standalone-eqs-dumper.tb"
 #include "standalone-status-display.tb"
 #include "save-module.tb"
-#include "semantics-interface.tb"
+#include "meta-interface.tb"
 
 process META is
 let
-  Id      : term
+  Id      : term,
+  Syntax  : str,
+  Semantics : str,
+  Term : str,
+  Sort : term
 in
   Id := process-id.
   (
     rec-msg(get-file-extensions) .
-    snd-msg(set-file-extensions(syntax(".sdf"),rules(".asf"),term(".trm")))
+    snd-msg(file-extensions-hook).
+    rec-msg(file-extensions-hook-result(Syntax?, Semantics?, Term?)).
+    snd-msg(set-file-extensions(syntax(Syntax),rules(Semantics),term(Term)))
   +
     rec-msg(get-rules-top-sort) .
-    snd-msg(set-rules-top-sort(sort("Equations")))
+    snd-msg(semantics-top-sort-hook).
+    rec-msg(semantics-top-sort-hook-result(Sort?)).
+    snd-msg(set-rules-top-sort(Sort))
   )*delta
 endlet
 
 toolbus(META, Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
         ModuleDB, File-creator, Notify-about-changed-modules,
-	AsfSdfChecker, AsfChecker, DisplayErrors, AsfOperations,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
-	Semantics-Interface, AddEqSyn, AddAPISyn, Open-modules, PGen, 
-	DumpEquations,
-        ProcessEqs, GetEquations, Status-display, Save-modules) 
+	Meta-Interface,  Open-modules, PGen, 
+	DumpEquations, ProcessEqs, GetEquations, Status-display, Save-modules) 
 

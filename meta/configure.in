@@ -51,16 +51,6 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
    [  --with-pgen=DIR         pgen is in DIR])
 AC_SUBST(PGEN)
 
-dnl Require asf package
-AC_PACKAGE_REQUIRE(asf, addeqssyntax,
-   [  --with-asf=DIR          asf is in DIR])
-AC_SUBST(ASF)
-
-dnl Require asf-library package
-AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
-   [  --with-asf-library=DIR  asf-library is in DIR])
-AC_SUBST(ASF_LIBRARY)
-
 dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
@@ -70,17 +60,6 @@ dnl Require sdf-support package
 AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
    [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
-
-dnl Require asf-support package
-AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
-   [  --with-asf-support=DIR  asf-support is in DIR])
-AC_SUBST(ASF_SUPPORT)
-
-dnl Require asc-support package
-
-AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
-   [  --with-asc-support=DIR  asc-support is in DIR])
-AC_SUBST(ASC_SUPPORT)
 
 dnl Handle --enable-metastudio argument to configure
 AC_ARG_ENABLE(metastudio,

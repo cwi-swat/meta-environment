@@ -45,7 +45,7 @@
 #include "dump-equations.tb"
 #include "configmanager.idef"
 
-#include "semantics-interface.tb"
+#include "meta-interface.tb"
 
 process META is
 let 
@@ -60,9 +60,7 @@ in
     rec-msg(get-file-extensions) .
     snd-msg(file-extensions-hook).
     rec-msg(file-extensions-hook-result(Syntax?,Semantics?,Term?)).
-    snd-msg(set-file-extensions(syntax(Syntax),
-                                rules(Semantics),
-				term(Term)))
+    snd-msg(set-file-extensions(syntax(Syntax),rules(Semantics),term(Term)))
   +
     rec-msg(get-rules-top-sort) .
     snd-msg(semantics-top-sort-hook).
@@ -97,7 +95,7 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
 	RevertModule, PrintModule, File-creator, SE,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language,
 	Notify-about-changed-modules, Compile-module,
-	Semantics-Interface,  Open-initial-module,
+	Meta-Interface,  Open-initial-module,
         Open-modules,  PGen, ApplyFunc,
 	Help, GenAdapt, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         DumpParseTable, RenameModule,

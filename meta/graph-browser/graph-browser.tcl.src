@@ -1,4 +1,4 @@
-#
+
 #
 # $Id$
 
@@ -16,7 +16,6 @@
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
 set use_tide "__USE_TIDE__" 
-set library_dir "__ASF_LIBRARY__/share/asf-library"
 
 set help_meta "$metaname
 
@@ -647,11 +646,14 @@ proc RenameModule { mod newmod newpath} {
 # generates a widget to enter the new name for the selected module.
 #--
 proc RenameModuleWidget {module} {
+  global syntax_ext
 
-  set types {
-      {{SDF}   {.sdf}        }
-      {{Any}    *              }
-  }
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
+
   set file [tk_getSaveFile -initialfile [lindex [split $module "/"] end]  \
             -filetypes $types -title "Rename Module..."]
 
@@ -668,12 +670,12 @@ proc RenameModuleWidget {module} {
 # and destroys the widget $w.
 #--
 proc NewModule { file } {
-    global opening
+    global opening syntax_ext
 
     set opening 1
 
 # Get the module name...
-    set mod [GetBasename $file ".sdf"]
+    set mod [GetBasename $file "$syntax_ext"]
 # ... and open it.
     GBevent [format "new-module(%s,%s)" [ToId $file] [ToId $mod]]
 }
@@ -797,21 +799,33 @@ proc OpenModuleWidget {} {
   OpenWidget "Open Module..." "."
 }
 
+proc initialize-ui {libloc syn_ext sem_ext t_ext} {
+global library_dir syntax_ext semantics_ext term_ext
+ 
+  set library_dir [TCLstring $libloc]
+  set syntax_ext  [TCLstring $syn_ext]
+  set semantics_ext  [TCLstring $sem_ext]
+  set term_ext  [TCLstring $t_ext]
+}
+
 proc OpenLibModuleWidget {} {
   global library_dir
 
-  OpenWidget "Open Library Module..." $library_dir
+  OpenWidget "Open Library Module ..." $library_dir
 }
 
 proc OpenWidget {title location} {
+  global syntax_ext
+  
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
 
-  set types {
-      {{SDF}   {.sdf}        }
-      {{Any}    *              }
-  }
   set file [tk_getOpenFile -initialdir $location -filetypes $types \
                                        -title $title]
-  set mod [GetBasename $file ".sdf"]
+  set mod [GetBasename $file "$syntax_ext"]
   if [ expr [ string length $mod ] > 0 ] {
     OpenModule $file $mod
   }
@@ -836,11 +850,14 @@ proc GetBasename {fnam ext} {
 }
 
 proc NewModuleWidget {} {
+  global syntax_ext
 
-  set types {
-      {{SDF}   {.sdf}        }
-      {{Any}    *              }
-  }
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
+
   set file [tk_getSaveFile -filetypes $types -title "New Module..."]
 
   if [ expr [ string length $file ] > 0 ] {
@@ -849,11 +866,13 @@ proc NewModuleWidget {} {
 }
 
 proc EditTermWidget {mod operation} {
+global term_ext
 
-set types {
-   {{Trm} {.trm} }
-   {{Any} * }
-}
+  set sdftype {{SDF}}
+  lappend sdftype $term_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
 
 if {$operation == "open"} {
   set file [tk_getOpenFile -filetypes $types -title "Edit Term over $mod"]
