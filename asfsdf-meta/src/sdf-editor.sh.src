@@ -3,4 +3,4 @@
 __META__/bin/generic-meta -I __ASF__/share/asf \
                           -I __PREFIX__/share/asfsdf-meta \
 			  -p __ASF__/bin \
-			  -S __PREFIX__/share/meta/sdf-editor.tb $* 
+			  -S __PREFIX__/share/meta/syntax-editor.tb $* 
