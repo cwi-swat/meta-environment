@@ -297,7 +297,7 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
   if (SE_isFocusNotEmpty(focus)) {
     if (strcmp(SE_getFocusSort(focus), SORT_UNPARSED) != 0) {
       PT_Tree tree = getFocussedTree(editor, focus);
-      PT_ParseTree parse_tree =  PT_makeParseTree(tree);
+      PT_ParseTree parse_tree =  PT_makeValidParseTreeFromTree(tree);
       return ATmake("snd-value(parse-tree(<term>))", 
                     PT_makeTermFromParseTree(parse_tree));
     }
