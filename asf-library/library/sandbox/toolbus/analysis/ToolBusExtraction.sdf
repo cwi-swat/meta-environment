@@ -1,7 +1,25 @@
 module ToolBusExtraction
 
-imports Tscript
 imports RelationCalculator
+imports ToolBusOperations
+imports MyPosInfo[VarDecl]
+imports MyPosInfo[Var]
 
 exports
+  context-free syntax
+    extractRelations(Tscript) -> RSTORE
 
+hiddens
+  context-free syntax
+    extractRelations(TscriptDef*, RSTORE) -> RSTORE {traversal(accu,top-down,break)}
+    extractRelations(VarDecl, RSTORE)     -> RSTORE {traversal(accu,top-down,break)}
+
+  variables
+    "$Area"[0-9]*              -> Area      
+    "$Rstore"[0-9]*            -> RSTORE
+
+    "TscriptDefs"[0-9]*        -> TscriptDef*
+    "ProcessInvocations"[0-9]* -> {ProcessInvocation ","}+
+    "VarDecl"[0-9]*            -> VarDecl
+    "Term"[0-9]*               -> Term
+    "Var"[0-9]*                -> Var

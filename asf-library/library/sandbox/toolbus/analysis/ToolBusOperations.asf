@@ -1,0 +1,4 @@
+equations
+
+  [variable2string] 
+    var2str(vname(Char*)) = strcon(""" Char* """)

@@ -1,0 +1,12 @@
+module ToolBusOperations
+
+imports Tscript
+imports basic/Strings
+
+exports
+  context-free syntax
+    var2str(Var) -> String
+
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*
