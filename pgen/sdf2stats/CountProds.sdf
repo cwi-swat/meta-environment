@@ -11,11 +11,17 @@ exports
     "context-free" "functions" Int 
     "reject" "functions"       Int  
     "follow" "restrictions"    Int 
-    "priorities"               Int -> IntPair
+    "priorities"               Int
+    "number" "of" "lhs"        Int 
+    "total" "lhs" "size"       Int 
+    "maximum" "lhs" "size"     Int -> IntPair
 
     "count-prods" "(" SDF ")" -> IntPair
 
 hiddens
+  sorts LhsInfo
+  context-free syntax
+    "(" Int "," Int "," Int ")" -> LhsInfo 
   context-free syntax
     "count-kernel-prods" (Definition, Int)      -> Int {traverse}
     "count-kernel-prods" (Grammar, Int)         -> Int {traverse}
@@ -32,10 +38,20 @@ hiddens
     "count-follow-restricts" (Restriction, Int) -> Int {traverse}
     "count-priorities" (Definition, Int)        -> Int {traverse}
     "count-priorities" (Priority, Int)          -> Int {traverse}
+    "lhs-size-info" (Definition, LhsInfo)       -> LhsInfo {traverse}
+    "lhs-size-info" (Grammar, LhsInfo)          -> LhsInfo {traverse}
+    "lhs-size-info" (Production, LhsInfo)       -> LhsInfo {traverse}
+    "calc-lhs-size" (Production)                -> Int
+    "nr-of-symbols" (Symbol*)                   -> Int
+    "nr-of-sep-symbols" ({Symbol ","}*)         -> Int
+    "maximum" (Int, Int)                        -> Int
 
   variables
+    "Attributes"[0-9]*  -> Attributes
     "Definition"[0-9]*  -> Definition
     "Int"[0-9]*         -> Int
+    "Lhsinfo"[0-9]*     -> LhsInfo
+    "Literal"[0-9]*     -> Literal
     "Lookaheads"[0-9]*  -> Lookaheads
     "Productions"[0-9]* -> Productions
     "Production"[0-9]*  -> Production
@@ -43,3 +59,6 @@ hiddens
     "Priority"[0-9]*    -> Priority
     "Symbol"[0-9]*      -> Symbol
     "Symbols"[0-9]*     -> Symbols
+    "Symbol*"[0-9]*     -> Symbol*
+    "Symbol,*"[0-9]*    -> {Symbol ","}*
+    "Symbol,+"[0-9]*    -> {Symbol ","}+
