@@ -76,12 +76,6 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb, changed-modules(ChngMods?)).
   snd-msg(changed-modules(ChngMods))
 +
-/* Revert one module from the db */
-  rec-msg(revert-module-in-db(Name?)).
-  snd-eval(Mdb, delete-module(Name)).
-  rec-value(Mdb, changed-modules(ChngMods?)).
-  snd-msg(done)
-+
 /* See if a module is in the db */
   rec-msg(is-module-in-db(Name?)).
   snd-eval(Mdb, exists(Name)).
