@@ -4,10 +4,6 @@
 
 /*tool logger is { command = "tblog -logfile meta.log" }*/
 
-#ifdef METASTUDIO
-#include <dot-adapter.idef>
-#endif
-
 #include "abort.tb"
 #include "parse-utils.tb"
 #include "sglr.idef"
@@ -48,6 +44,7 @@
 #include "query.tb"
 /* #include "query-tool.idef" */
 #include "tree2graph.idef"
+#include "layoutgraph.idef"
 
 #include "meta-interface.tb"
 
@@ -110,7 +107,7 @@ toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui,
 	RestoreTermBrackets, RestoreBrackets,
 	Query, /* QueryTool , */ Tree2Graph
 #ifdef METASTUDIO
-	, DOT-ADAPTER
+	, LAYOUT-GRAPH
 #endif
 #ifdef TIMEOUT
         , AbortMetaEnvironment
