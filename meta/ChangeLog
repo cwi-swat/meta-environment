@@ -1,6 +1,7 @@
 # $Id$
 
 2001/06/28 (markvdb@cwi.nl)
+ * Added code to deal with parametrization and symbol renaming.
  * Print button added, a new file FN.txt is generated which
    contains both the Sdf and Asf text.
  * Rename button added (does not yet work correctly!)

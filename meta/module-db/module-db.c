@@ -20,6 +20,7 @@ static char myversion[] = "2.0";
 
 ATermTable modules_db;
 ATermTable import_db;
+ATermTable full_import_db;
 ATermTable trans_db;
 ATermTable eqs_db;
 
@@ -31,13 +32,11 @@ ATermTable eqs_db;
 /*{{{  Forward declarations */
 
 static ATbool complete_asf_specification(ATermList visited, ATerm module);
-static ATermList add_imports(ATerm name, ATermList mods);
-static ATermList replace_imports(ATerm name, ATermList mods);
+static ATermList add_imports(ATerm name, ATermList mods, SDF_ImportList imports);
+static ATermList replace_imports(ATerm name, ATermList mods, SDF_ImportList imports);
 static ATermList modules_depend_on(ATerm name, ATermList mods);
 static ATbool is_valid_parse_table(ATermList visited, ATerm module, 
 				   int timeOfEqsTable, int timeOfTrmTable);
-ATermList AFTgetImports(ATerm mod);
-
 /*}}}  */
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
@@ -72,7 +71,7 @@ ASF_CondEquationList getEquations(ATermList mods)
   PT_Tree eqsTree;
   ASF_Equations asfEqs;
 
-  while(!ATisEmpty(mods)) {
+  while (!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     entry = GetValue(modules_db, mod);
     eqsTerm = ATelementAt((ATermList)entry, EQS_TREE_LOC);
@@ -80,6 +79,7 @@ ASF_CondEquationList getEquations(ATermList mods)
     if (!ATisEqual(eqsTerm, ATparse("unavailable"))) {
       eqsParseTree = PT_makeParseTreeFromTerm(eqsTerm);
       eqsTree = PT_getParseTreeTree(eqsParseTree);
+/* Here should the renaming kick in! */
       asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
 
       if (ASF_isEquationsPresent(asfEqs)) {
@@ -193,6 +193,7 @@ void create_module_db(int cid)
 {
   modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
+  full_import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
   eqs_db = CreateValueStore(100,75);
 }
@@ -210,7 +211,9 @@ void clear_module_db(int cid)
 
   if (import_db != NULL) {
     ATtableDestroy(import_db);
+    ATtableDestroy(full_import_db);
     import_db = CreateValueStore(100,75);
+    full_import_db = CreateValueStore(100,75);
   }
 
   reset_trans_db();
@@ -251,15 +254,16 @@ calc_import_graph(void)
 ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
 		      int timestamp, char *changed)
 {
-  char          eqsPath[BUFSIZ];
-  ATerm         modName;
-  int           len;
-  ATerm         entry, import_graph;
-  ATermList     imports, unknowns;
-  ATerm         isChanged;
-  PT_Tree       tree;
-  PT_ParseTree  parseTree;
-  SDF_Module    sdfModule;
+  char           eqsPath[BUFSIZ];
+  ATerm          modName;
+  int            len;
+  ATerm          entry, import_graph;
+  ATermList      imports, unknowns;
+  ATerm          isChanged;
+  PT_Tree        tree;
+  PT_ParseTree   parseTree;
+  SDF_Module     sdfModule;
+  SDF_ImportList fullImports;
 
   if (!strcmp(changed, "changed")) {
     isChanged = Mtrue;
@@ -305,7 +309,8 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 
   PutValue(modules_db, modName, entry);
   imports = SDF_getImports(sdfModule);
-  unknowns = add_imports(modName, imports);
+  fullImports = SDF_getModuleImportsList(sdfModule);
+  unknowns = add_imports(modName, imports, fullImports);
   import_graph = calc_import_graph();
 
   return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
@@ -343,12 +348,13 @@ update_syntax_status_of_modules(ATermList mods)
 
 ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 {
-  ATerm        curSdfTree, entry, import_graph;
-  ATermList    imports, unknowns, chg_mods;
-  PT_ParseTree parseTree;
-  PT_Tree      tree;
-  SDF_Module   sdfModule;
-  ATerm        modName;
+  ATerm          curSdfTree, entry, import_graph;
+  ATermList      imports, unknowns, chg_mods;
+  PT_ParseTree   parseTree;
+  PT_Tree        tree;
+  SDF_Module     sdfModule;
+  ATerm          modName;
+  SDF_ImportList fullImports;
 
   parseTree = PT_makeParseTreeFromTerm(newSdfTree);
   if (!PT_isValidParseTree(parseTree)) {
@@ -381,7 +387,9 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
       chg_mods = modules_depend_on(modName, ATempty);
       update_syntax_status_of_modules(chg_mods); 
       imports = SDF_getImports(sdfModule);
-      unknowns = replace_imports(modName, imports);
+      fullImports = SDF_getModuleImportsList(sdfModule);
+/*ATwarning("fullImports = %t\n", fullImports);*/
+      unknowns = replace_imports(modName, imports, fullImports);
       import_graph = calc_import_graph();
 
       return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
@@ -428,7 +436,7 @@ ATerm add_empty_module(int cid, char *moduleName)
                            );
   PutValue(modules_db, ATmake("<str>", moduleName), entry);
 
-  discardValue = add_imports(atModuleName, ATempty);
+  discardValue = add_imports(atModuleName, ATempty, SDF_makeImportListEmpty());
   importGraph = calc_import_graph();
 
   return ATmake("snd-value(empty-module-added(<term>))", importGraph);
@@ -864,6 +872,7 @@ ATerm delete_module(int cid, char *moduleName)
   update_syntax_status_of_modules(changedMods); 
   RemoveKey(modules_db,name);
   RemoveKey(import_db,name);
+  RemoveKey(full_import_db,name);
   reset_trans_db();
   reset_eqs_db();
   return ATmake("snd-value(changed-modules([<term>,<list>]))",
@@ -932,9 +941,10 @@ select_unknowns(ATermList mods)
 
   while(!ATisEmpty(mods)) {
     ATerm mod = ATgetFirst(mods);
-    if(!GetValue(import_db, mod)) {
-      if (ATindexOf(result, mod, 0) < 0)
+    if (!GetValue(import_db,mod)) {
+      if (ATindexOf(result, mod, 0) < 0) {
         result = ATappend(result,mod);
+      }
     }
     mods = ATgetNext(mods);
   }
@@ -945,14 +955,15 @@ select_unknowns(ATermList mods)
 /*{{{  ATermList add_imports(ATerm name, ATermList mods) */
 
 static ATermList 
-add_imports(ATerm name, ATermList mods)
+add_imports(ATerm name, ATermList mods, SDF_ImportList imports)
 {
   ATermList unknowns = ATempty;
 
   reset_trans_db();
   reset_eqs_db();
-  if(!GetValue(import_db,name)) {
+  if (!GetValue(import_db,name)) {
     PutValue(import_db, name, (ATerm) mods);
+    PutValue(full_import_db, name, SDF_makeTermFromImportList(imports));
     unknowns = select_unknowns(mods);
   }
   return unknowns;
@@ -962,12 +973,13 @@ add_imports(ATerm name, ATermList mods)
 /*{{{  ATermList replace_imports(ATerm name, ATermList mods) */
 
 static ATermList 
-replace_imports(ATerm name, ATermList mods)
+replace_imports(ATerm name, ATermList mods, SDF_ImportList imports)
 {
   reset_trans_db();
   reset_eqs_db();
   ATtableRemove(import_db, name);
   PutValue(import_db, name, (ATerm) mods);
+  PutValue(full_import_db, name, SDF_makeTermFromImportList(imports));
   return select_unknowns(mods);
 }
 
@@ -1033,7 +1045,7 @@ is_valid_parse_table(ATermList visited, ATerm module,
     result = ATtrue;
   }
 
-  if(ATindexOf(visited, module, 0) < 0) {
+  if (ATindexOf(visited, module, 0) < 0) {
     imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
     while(imports && !ATisEmpty(imports)) {
@@ -1074,11 +1086,11 @@ complete_asf_specification(ATermList visited, ATerm module)
 
   if(ATindexOf(visited, module, 0) < 0) { 
     result = ATtrue;
-    imports = (ATermList) GetValue(import_db,module);
+    imports = (ATermList)GetValue(import_db,module);
 
     visited = ATinsert(visited,module); 
     
-    while(!ATisEmpty(imports) && result) {
+    while (!ATisEmpty(imports) && result) {
       first = ATgetFirst(imports);
       entry = GetValue(modules_db, first);
       if (entry) {
@@ -1145,14 +1157,14 @@ ATermList get_imported_modules(ATerm name)
   ATermList result;
   ATerm value;
 
-  value = GetValue(trans_db,name);
+  value = GetValue(trans_db, name);
   if (!value) {
     result = calc_trans(ATmakeList1(name));
-    PutValue(trans_db, name, (ATerm) result);
+    PutValue(trans_db, name, (ATerm)result);
     return result;
   }
   else {
-    return (ATermList) value;
+    return (ATermList)value;
   }
 }
 
@@ -1177,9 +1189,9 @@ ATerm eqs_available_for_modules(int cid, char *moduleName)
       entry = GetValue(modules_db, module);
       eqsText = ATelementAt((ATermList)entry, EQS_TEXT_LOC);
       eqsTree = ATelementAt((ATermList)entry, EQS_TREE_LOC);
-      if(ATisEqual(eqsTree, ATparse("unavailable")) &&
-	 !ATisEqual(eqsText, ATparse("unavailable"))) {
-        result = ATinsert(result,module);
+      if (ATisEqual(eqsTree, ATparse("unavailable")) &&
+	  !ATisEqual(eqsText, ATparse("unavailable"))) {
+        result = ATinsert(result, module);
       }
       modules = ATgetNext(modules);
     }
@@ -1291,9 +1303,6 @@ getSyntax(ATermList modules)
 ATerm get_all_sdf2_definitions(int cid, char *moduleName)
 {
   SDF_SDF definition;
-/*
-  char *emptyString = "\"\"";
-*/
   ATerm name;
   ATermList imports;
   PT_ParseTree parseTree;
