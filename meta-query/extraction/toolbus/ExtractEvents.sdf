@@ -2,7 +2,6 @@ module ExtractEvents
 
 imports Rstore
 imports Tscript
-imports ToolBusOperations
 imports utilities/Parsing[AtomArgs]
 imports utilities/Parsing[ProcessName]
 imports utilities/PosInfo[AtomArgs]

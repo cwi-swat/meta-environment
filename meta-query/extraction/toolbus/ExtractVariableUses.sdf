@@ -2,7 +2,6 @@ module ExtractVariableUses
 
 imports Rstore
 imports Tscript
-imports ToolBusOperations
 imports utilities/PosInfo[ProcessName]
 imports utilities/Parsing[Var]
 imports utilities/PosInfo[Var]
