@@ -569,6 +569,7 @@ void main(int argc, char **argv)
       header_file  = "termlib.h";
       placeholders = TBtrue;
       is_empty = "t_is_empty";
+      multitools = TBtrue;
     } else if(streq(argv[i], "-header")) {
       header_file = argv[++i];
       if(streq(header_file, "-"))
