@@ -36,6 +36,7 @@
 #include "preparation.h"
 #include "asfix_utils.h"
 #include "asfe.h"
+#include "asf-api.h"
 
 #include <MEPT.h>
 #include <ASFME-utils.h>
@@ -621,6 +622,28 @@ static PT_Tree ambToAmbConstructor(PT_Tree tree, PT_TreeVisitorData data)
 }
 
 /*}}}  */
+/*{{{  static PT_Tree APICallToNormalCall(PT_Tree tree) */
+
+static PT_Tree APICallToNormalCall(PT_Tree tree, PT_TreeVisitorData data)
+{
+  AA_Calls calls = getTreeAPICalls(tree);
+  AA_Call call = AA_getCallsHead(calls);
+  PT_Tree result;
+
+  if (AA_isCallConstructor(call)) {
+    if (ATgetLength((ATermList) calls) != 1) {
+      ATerror("APICallToNormalCall: ambiguous constructor\n");
+      return tree;
+    }
+    result = interpretConstructorCall(tree, calls);
+    return prepareTerm(result, data); 
+  }
+
+  /* other API calls are interpreted at run-time */
+  return tree;
+}
+
+/*}}}  */
 /*{{{  static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data) */
 
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
@@ -633,6 +656,9 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = (PT_Tree) 
                ASF_LexicalConstructorTreeToLexicalTree((ASF_Tree) tree);
   }
+  else if (isTreeAPIFunction(tree)) {
+    result = APICallToNormalCall(tree, data);
+  } 
   else if (PT_isTreeBracket(tree)) {
     result = prepareTerm(PT_getTreeBracketTree(tree), data);
   }

@@ -22,6 +22,7 @@
 
 #include <MEPT.h>
 #include <ASFME.h>
+#include <ASFAPI.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
@@ -124,6 +125,7 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
   ASF_initASFMEApi();
+  AA_initASFAPIApi();
 
   equations_db = ATdictCreate();
   ATprotect(&equations_db);

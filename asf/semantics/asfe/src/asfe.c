@@ -27,6 +27,7 @@
 #include "traversals.h"
 
 #include "traversals.h"
+#include "asf-api.h"
 
 #ifdef USE_TIDE
 #include "eval-tide.h"
@@ -116,6 +117,7 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra);
 static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void *extra);
 static PT_Args rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, void *extra);
 static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth, void *extra);
+static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void *extra);
 static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra);
 static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, void *extra);
 static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, void *extra);
@@ -1597,6 +1599,9 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
     /* only do this if we are not in a traversal already */
     reduct = rewriteTraversalAppl(trm, env, depth, extra);
   }
+  else if (isTreeAPIFunction(trm)) {
+    reduct = rewriteAPIAppl(trm, env, depth, extra);
+  }
   else if (PT_isTreeAppl(trm)) {
     reduct = rewriteNormalAppl(trm, env, depth, extra);
   }
@@ -1694,6 +1699,16 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
 
 /*}}}  */
 
+/*{{{  static PT_Tree rewriteAPIAppl(PT_Tree tree) */
+
+static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
+{
+  PT_Tree result = interpretAPICall(tree);
+
+  return rewriteNormalAppl(result, env, depth, extra);
+}
+
+/*}}}  */
 /*{{{  static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra)  */
 
 static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) 
