@@ -149,7 +149,8 @@ let
   ErrorMessage : str,
   Mode : term,
   Empty : term,
-  Ext : str
+  Ext : str,
+  Feedback : term
 in
    (
       rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?) .
