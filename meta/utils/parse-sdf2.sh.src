@@ -1,23 +1,4 @@
 #! /bin/sh
-#
-#   Meta-Environment - An environment for language prototyping.
-#   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-#                       The Netherlands. 
-#
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
 #   $Id$
 
 Revision='$Revision$'
@@ -28,7 +9,6 @@ pgen=__PGEN__
 
 PATH="$bindir:$PATH"
 
-A2TOA1="a2toa1"
 TABLE="${pgen}/share/pgen/Sdf2.baf"
 PARSE="sglr -p $TABLE"
 
@@ -49,21 +29,20 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="12bdDi:hlno:tvVx"
+myarguments="2bdi:hlmno:tvVx"
 
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
-        -1       : use AsFix1 output format             [off]
-        -2       : use AsFix2 output format             [on]
+        -2       : use AsFix2 output format             [off]
         -b       : use Binary AsFix (BAF) output format [on]
         -d       : run in debugging mode                [off]
-        -D       : generate dot output for parse tree   [<off>]
         -h       : display usage information
         -i file  : input from |file|                    [-]
         -l       : log statistics to file               [off]
+        -m       : use AsFix2ME output format           [on]
         -n       : don't write tree output              [off]
         -o file  : output to |file|                     [-]
         -t       : use PlainText AsFix output format    [off]
@@ -91,20 +70,20 @@ while [ $#  -gt 0 ]
 do
     case "$1"
     in
-        -1)
-            XOPTS="$XOPTS $1" ;;
         -2)
             XOPTS="$XOPTS $1" ;;
 	-b)
 	    bafmode=1 ;;
         -d|-l)
             XOPTS="$XOPTS $1" ;;
-        -D)
-            DOTOUT=1; dotout="-Dstdin.dot" ;;
         -i)
 	    Files="$2 $Files"; shift ;;
         -h)
             Usage ; exit 0 ;;
+        -l)
+            XOPTS="$XOPTS $1" ;;
+        -m)
+            XOPTS="$XOPTS $1" ;;
         -n)
 	    XOPTS="$XOPTS $1" ;;
         -o)

@@ -1,6 +1,8 @@
 # $Id$
 
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
+ * Removed AsFix1 dependency, parse-file, header/license stuff, 
+   change-extension stuff.
  * Removed all AsFix1 legacy code from Module-DB.
  * Removed directory containing headers stuff.
 

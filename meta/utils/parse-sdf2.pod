@@ -4,7 +4,7 @@ PARSE-SDF2 - parse sdf2 definitions
 
 =head1 SYNOPSIS
 
-B<parse-sdf2> [-B<12bdDh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] file0 ...
+B<parse-sdf2> [-B<2bdh>] [-B<i> I<file>] [-B<lmn>] [-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -13,10 +13,6 @@ Parse SDF2 syntax, generating various output formats.
 A number of options can be supplied; these are as follows:
 
 =over 4
-
-=item B<-1>
-
-Generate AsFix1 output term.
 
 =item B<-2>
 
@@ -30,10 +26,6 @@ Write term output in BAF (Binary AsFix) format. This is the default.
 
 Run in debug mode.
 
-=item B<-D>
-
-Generate a dot representation of the parse tree.
-
 =item -B<h>
 
 Displays concise usage information.
@@ -46,6 +38,10 @@ or from the named files supplied as arguments.
 =item B<-l>
 
 Collect some run-time statistics.
+
+=item B<-m>
+
+Generate AsFix2ME output term.
 
 =item B<-n>
 
@@ -88,7 +84,7 @@ A failure is returned on error.
 
 =head1 SEE ALSO
 
-L<sglr>, L<a2toa1>, L<tree2dot>
+L<sglr>, L<tree2dot>
 
 =head1 KNOWN BUGS
 
@@ -100,4 +96,4 @@ SDF2 may still give rise to ambiguity.
 
 =head1 AUTHOR
 
-Jeroen Scheerder <S<js@cwi.nl>>
+Mark van den Brand <S<Mark.van.den.Brand@cwi.nl>>
