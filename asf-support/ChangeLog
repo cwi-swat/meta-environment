@@ -1,3 +1,6 @@
+2003/10/16 (jurgenv@cwi.nl)
+ * Added syntax for conditional tests
+
 2003/10/15 (jurgenv@cwi.nl)
  * Added syntax for tests to ASF
  * Regenerated asf-support library
