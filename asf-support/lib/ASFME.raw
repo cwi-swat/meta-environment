@@ -16,7 +16,9 @@
 , lit ( "," ) ) ) ]
 , cf ( sort ( "Conditions" ) )
 , attrs ( [ id ( "Equations" ) ] ) )
-, [ < list ( Condition-list ) > ] ) ]
+, [ list ( cf ( iter-sep ( sort ( "Condition" )
+, lit ( "," ) ) )
+, < list ( Condition-list ) > ) ] ) ]
 , [ Condition-list
 , single
 , [ < head ( Condition ) > ] ]
@@ -42,7 +44,8 @@
 , attrs ( [ id ( "Equations" ) ] ) )
 , [ lit ( "equations" )
 , < "ws-after-equations" ( Layout ) >
-, < list ( CondEquation-list ) > ] ) ]
+, list ( cf ( iter-star ( sort ( "CondEquation" ) ) )
+, < list ( CondEquation-list ) > ) ] ) ]
 , [ CondEquation-list
 , empty
 , [  ] ]
@@ -139,7 +142,8 @@
 , < ws-after-name ( Layout ) >
 , lit ( "(" )
 , < "ws-after-(" ( Layout ) >
-, < list ( CHAR-list ) >
+, list ( cf ( iter-star ( sort ( "CHAR" ) ) )
+, < list ( CHAR-list ) > )
 , < ws-after-list ( Layout ) >
 , lit ( ")" ) ] ) ]
 , [ CHAR-list

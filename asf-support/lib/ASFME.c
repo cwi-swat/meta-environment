@@ -781,7 +781,7 @@ ATbool ASF_hasConditionsList(ASF_Conditions arg)
 ASF_ConditionList ASF_getConditionsList(ASF_Conditions arg)
 {
   if (ASF_isConditionsDefault(arg)) {
-    return (ASF_ConditionList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (ASF_ConditionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Conditions has no List: %t\n", arg);
@@ -794,7 +794,7 @@ ASF_ConditionList ASF_getConditionsList(ASF_Conditions arg)
 ASF_Conditions ASF_setConditionsList(ASF_Conditions arg, ASF_ConditionList list)
 {
   if (ASF_isConditionsDefault(arg)) {
-    return (ASF_Conditions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (ASF_Conditions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Conditions has no List: %t\n", arg);
@@ -1117,7 +1117,7 @@ ATbool ASF_hasEquationsList(ASF_Equations arg)
 ASF_CondEquationList ASF_getEquationsList(ASF_Equations arg)
 {
   if (ASF_isEquationsPresent(arg)) {
-    return (ASF_CondEquationList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
+    return (ASF_CondEquationList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
   }
 
   ATabort("Equations has no List: %t\n", arg);
@@ -1130,7 +1130,7 @@ ASF_CondEquationList ASF_getEquationsList(ASF_Equations arg)
 ASF_Equations ASF_setEquationsList(ASF_Equations arg, ASF_CondEquationList list)
 {
   if (ASF_isEquationsPresent(arg)) {
-    return (ASF_Equations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 2), 1);
+    return (ASF_Equations)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
   }
 
   ATabort("Equations has no List: %t\n", arg);
@@ -2122,7 +2122,7 @@ ATbool ASF_hasTreeList(ASF_Tree arg)
 ASF_CHARList ASF_getTreeList(ASF_Tree arg)
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
-    return (ASF_CHARList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (ASF_CHARList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), 1);
   }
 
   ATabort("Tree has no List: %t\n", arg);
@@ -2135,7 +2135,7 @@ ASF_CHARList ASF_getTreeList(ASF_Tree arg)
 ASF_Tree ASF_setTreeList(ASF_Tree arg, ASF_CHARList list)
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
-    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 4), 1);
+    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), (ATerm)list, 1), 4), 1);
   }
 
   ATabort("Tree has no List: %t\n", arg);
