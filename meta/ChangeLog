@@ -20,6 +20,12 @@
 #
 # $Id$
 
+2000/6/20 (jong@cwi.nl)
+   * In-output warns when it encounters unresolvable entries in searchpath.
+   * In-output warns when more than one match for a given module is found.
+   * In-output refuses to operate without a sensible searchpath.
+   * In-output is no longer linked against AsFix and asc-support libraries.
+
 2000/6/15 (jurgenv@cwi.nl)
    * Terms are now opened via two common dialogs: open term and new term.
    * Only terms in the paths of meta.conf can be openened.
@@ -49,6 +55,7 @@
 2000/4/26 (markvdb@cwi.nl)
    * Code added for dealing with {<symbol>}<nr>+ and {<symbol> <symbol>}<nr>+
      Sdf2 constructions.
+ 
 2000/4/25 (markvdb@cwi.nl)
    * Memory leak in parsetablegen fixed.   
 
