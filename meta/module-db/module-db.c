@@ -805,14 +805,16 @@ ATerm get_parse_table(int cid, ATerm moduleId)
   ATerm     contents, result;
   char      *moduleName;
   char      *path, pathExt[9], *newpath;
-  int       strLen, lenExtension;
+  int       strLen, lenExtension, lenType;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     strcpy(pathExt, rules_ext);
+    lenType = strlen(rules_ext);
     strcpy(pathExt+strlen(rules_ext), TBL_EXT);
   } 
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
     strcpy(pathExt, term_ext);
+    lenType = strlen(term_ext);
     strcpy(pathExt+strlen(term_ext), TBL_EXT);
   }
   else {
@@ -834,8 +836,8 @@ ATerm get_parse_table(int cid, ATerm moduleId)
       strLen = strlen(path);
       lenExtension = strlen(pathExt);
       newpath = malloc(strLen+lenExtension+1);
-      strncpy(newpath, path, strLen-lenExtension);
-      strcpy(newpath+strLen-lenExtension, pathExt);
+      strncpy(newpath, path, strLen-lenType);
+      strcpy(newpath+strLen-lenType, pathExt);
       if (!ATisEqual(table, MDB_NONE)) {
         ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
         contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
