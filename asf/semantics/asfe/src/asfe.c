@@ -96,11 +96,11 @@ static PT_Args prependSlice(Slice slice, PT_Args list);
 static PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems);
 static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem);
 static ATbool no_new_vars(PT_Tree trm, ATerm env);
-static ATerm argMatching(ATerm env, PT_Tree arg1, PT_Tree arg2, ASF_ConditionList conds, PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth);
-static ATerm argsMatching(ATerm env, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm subListMatching(ATerm env, PT_Tree elem, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
+static ATerm matchArgument(ATerm env, PT_Tree arg1, PT_Tree arg2, ASF_ConditionList conds, PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth);
+static ATerm matchArguments(ATerm env, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm matchListVariable(ATerm env, PT_Tree elem, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm matchList(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth);
 static PT_Tree reduce(PT_Tree trm, int depth);
 static PT_Tree rewrite(PT_Tree trm);
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void *extra);
@@ -590,22 +590,22 @@ static ATbool no_new_vars(PT_Tree trm, ATerm env)
 /*}}}  */
 
 /* Matching functionality */
-/*{{{  static ATerm varMatching(ATerm env, */
+/*{{{  static ATerm matchVariable(ATerm env, */
 
-static ATerm varMatching(ATerm env,
-			 PT_Tree var,
-			 PT_Tree arg2,
-			 ASF_ConditionList conds,
-			 PT_Args orgargs1, PT_Args orgargs2,
-			 ATerm lhs_posinfo, int depth)
+static ATerm matchVariable(ATerm env,
+			   PT_Tree var,
+			   PT_Tree arg2,
+			   ASF_ConditionList conds,
+			   PT_Args orgargs1, PT_Args orgargs2,
+			   ATerm lhs_posinfo, int depth)
 {
   PT_Tree trm = getVariableValue(env, var);
   ATerm newenv = fail_env;
 
   if (trm != NULL) {
     if (isAsFixEqual(arg2, trm)) {
-      newenv = argsMatching(env, conds, orgargs1, orgargs2,
-			  lhs_posinfo, depth);
+      newenv = matchArguments(env, conds, orgargs1, orgargs2,
+			      lhs_posinfo, depth);
     }
     else {
       newenv = fail_env;
@@ -613,22 +613,22 @@ static ATerm varMatching(ATerm env,
   }
   else {
     newenv = putVariableValue(env, var, arg2);
-    newenv = argsMatching(newenv, conds, orgargs1, orgargs2, lhs_posinfo, 
-			  depth);
+    newenv = matchArguments(newenv, conds, orgargs1, orgargs2, lhs_posinfo, 
+			    depth);
   }
 
   return newenv;
 }
 
 /*}}}  */
-/*{{{  static ATerm applMatching(ATerm env, */
+/*{{{  static ATerm matchAppl(ATerm env, */
 
-static ATerm applMatching(ATerm env,
-			 PT_Tree arg1,
-			 PT_Tree arg2,
-			 ASF_ConditionList conds,
-			 PT_Args orgargs1, PT_Args orgargs2,
-			 ATerm lhs_posinfo, int depth)
+static ATerm matchAppl(ATerm env,
+		       PT_Tree arg1,
+		       PT_Tree arg2,
+		       ASF_ConditionList conds,
+		       PT_Args orgargs1, PT_Args orgargs2,
+		       ATerm lhs_posinfo, int depth)
 {
   PT_Production prod1 = PT_getTreeProd(arg1);
   PT_Production prod2 = PT_getTreeProd(arg2);
@@ -638,10 +638,10 @@ static ATerm applMatching(ATerm env,
     PT_Args args1 = PT_getTreeArgs(arg1);
     PT_Args args2 = PT_getTreeArgs(arg2);
 
-    newenv = argsMatching(env, conds, 
-			  PT_concatArgs(args1, orgargs1),
-			  PT_concatArgs(args2, orgargs2),
-			  lhs_posinfo, depth);
+    newenv = matchArguments(env, conds, 
+			    PT_concatArgs(args1, orgargs1),
+			    PT_concatArgs(args2, orgargs2),
+			    lhs_posinfo, depth);
   }
   else {
     newenv = fail_env;
@@ -651,46 +651,46 @@ static ATerm applMatching(ATerm env,
 }
 
 /*}}}  */
-/*{{{  static ATerm argMatching(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
+/*{{{  static ATerm matchArgument(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
 
-static ATerm argMatching(ATerm env, 
-			 PT_Tree arg1, PT_Tree arg2,
-			 ASF_ConditionList conds,
-			 PT_Args orgargs1, PT_Args orgargs2,
-			 ATerm lhs_posinfo, int depth)
+static ATerm matchArgument(ATerm env, 
+			   PT_Tree arg1, PT_Tree arg2,
+			   ASF_ConditionList conds,
+			   PT_Args orgargs1, PT_Args orgargs2,
+			   ATerm lhs_posinfo, int depth)
 {
   ATerm newenv = fail_env;
 
   if (runVerbose) {
     ATwarning("%t:matching: %t\nwith\n%t\n\n",
 	      yieldTree((PT_Tree) tagCurrentRule), yieldTree(arg1), 
-              yieldTree(arg2));
+	      yieldTree(arg2));
   }
 
   /* equality check is cheap, so try this first */
   if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
 		     PT_removeTreeAnnotations(arg2))) {
-    newenv = argsMatching(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+    newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
   else if (PT_isTreeLayout(arg1)) {
-    newenv = argsMatching(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+    newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
   else if (PT_isTreeApplList(arg1)) {
     PT_Args elems1 = PT_getTreeArgs(arg1);
     PT_Args elems2 = PT_getTreeArgs(arg2);
     PT_Production prod1 = PT_getTreeProd(arg1);
 
-    newenv = listMatching(env, prod1, elems1, elems2,
-			conds, orgargs1, orgargs2, 
-			lhs_posinfo, depth);
-  }
-  else if (PT_isTreeVar(arg1)) {
-    newenv = varMatching(env, arg1, arg2, conds, orgargs1, orgargs2,
+    newenv = matchList(env, prod1, elems1, elems2,
+		       conds, orgargs1, orgargs2, 
 		       lhs_posinfo, depth);
   }
+  else if (PT_isTreeVar(arg1)) {
+    newenv = matchVariable(env, arg1, arg2, conds, orgargs1, orgargs2,
+			   lhs_posinfo, depth);
+  }
   else if (PT_isTreeAppl(arg1)) {
-    newenv = applMatching(env, arg1, arg2, conds, orgargs1, orgargs2,
-			lhs_posinfo, depth);
+    newenv = matchAppl(env, arg1, arg2, conds, orgargs1, orgargs2,
+		       lhs_posinfo, depth);
   }
 
   return newenv;
@@ -698,19 +698,19 @@ static ATerm argMatching(ATerm env,
 
 
 /*}}}  */
-/*{{{  static ATerm argsMatching(ATerm env, ASF_ConditionList conds, */
+/*{{{  static ATerm matchArguments(ATerm env, ASF_ConditionList conds, */
 
-static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
-			  PT_Args args1, PT_Args args2, 
-			  ATerm lhs_posinfo, int depth)
+static ATerm matchArguments(ATerm env, ASF_ConditionList conds,
+			    PT_Args args1, PT_Args args2, 
+			    ATerm lhs_posinfo, int depth)
 {
   PT_Tree arg1, arg2;
   ATerm newenv = env;
 
   if (runVerbose) {
     ATwarning("args %t matched against %t\n", 
-        yieldArgs(args1),
-        yieldArgs(args2));
+	      yieldArgs(args1),
+	      yieldArgs(args2));
   }
 
   assert(PT_getArgsLength(args1) == PT_getArgsLength(args2) &&
@@ -722,15 +722,15 @@ static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
     arg2 = PT_getArgsHead(args2);
     args2 = PT_getArgsTail(args2);
 
-    newenv = argMatching(newenv, arg1, arg2, conds, args1, args2, 
-			 lhs_posinfo, depth);
+    newenv = matchArgument(newenv, arg1, arg2, conds, args1, args2, 
+			   lhs_posinfo, depth);
   }
   else {
     if (lhs_posinfo) {
       TIDE_STEP(lhs_posinfo, newenv, depth);
     }
 
-    newenv = condsSatisfied(conds, newenv, depth);
+    newenv = matchConditions(conds, newenv, depth);
   }
 
   return newenv;
@@ -739,24 +739,24 @@ static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
 /*}}}  */
 
 /* List Matching functionality */
-/*{{{  static ATerm subListMatching(env, el, listProd, e1, e2, cnds, a1, a2, pos, d) */
+/*{{{  static ATerm matchListVariable(env, el, listProd, e1, e2, cnds, a1, a2, pos, d) */
 
 
-/* subListMatching
+/* matchListVariable
  *
  * Tries different sizes for a single list variable.
  */
 
 static ATerm
-subListMatching(ATerm env, PT_Tree listvar,
-		PT_Production listProd, PT_Args elems1, PT_Args elems2,
-		ASF_ConditionList conds,
-		PT_Args args1, PT_Args args2,
-                ATerm lhs_posinfo, int depth)
+matchListVariable(ATerm env, PT_Tree listvar,
+		  PT_Production listProd, PT_Args elems1, PT_Args elems2,
+		  ASF_ConditionList conds,
+		  PT_Args args1, PT_Args args2,
+		  ATerm lhs_posinfo, int depth)
 {
   ATerm newenv = fail_env;
   PT_Args last;
- 
+
   if (PT_isTreeVarListStar(listvar)) {
     last = elems2;
   }
@@ -772,9 +772,9 @@ subListMatching(ATerm env, PT_Tree listvar,
   while (is_fail_env(newenv)) {
     newenv = putListVariableValue(env, listvar, elems2, last);
 
-    newenv = listMatching(newenv, listProd, elems1, last,
-			  conds, args1, args2,
-			  lhs_posinfo, depth);
+    newenv = matchList(newenv, listProd, elems1, last,
+		       conds, args1, args2,
+		       lhs_posinfo, depth);
 
     if (PT_hasArgsHead(last)) {
       last = PT_getArgsTail(skipWhitespaceAndSeparator(last, listProd));
@@ -789,13 +789,13 @@ subListMatching(ATerm env, PT_Tree listvar,
 
 
 /*}}}  */
-/*{{{  static ATerm listMatching(ATerm env, PT_Production listProd, */
+/*{{{  static ATerm matchList(ATerm env, PT_Production listProd, */
 
-static ATerm listMatching(ATerm env, PT_Production listProd,
-			  PT_Args elems1, PT_Args elems2,
-			  ASF_ConditionList conds, 
-			  PT_Args args1, PT_Args args2,
-			  ATerm lhs_posinfo, int depth)
+static ATerm matchList(ATerm env, PT_Production listProd,
+		       PT_Args elems1, PT_Args elems2,
+		       ASF_ConditionList conds, 
+		       PT_Args args1, PT_Args args2,
+		       ATerm lhs_posinfo, int depth)
 {
   PT_Tree elem1;
   ATerm newenv = fail_env;
@@ -804,7 +804,7 @@ static ATerm listMatching(ATerm env, PT_Production listProd,
   elems2 = skipWhitespaceAndSeparator(elems2,listProd);
 
   if (PT_isArgsEmpty(elems1) && PT_isArgsEmpty(elems2)) {
-    newenv = argsMatching(env, conds, args1, args2, lhs_posinfo, depth);
+    newenv = matchArguments(env, conds, args1, args2, lhs_posinfo, depth);
   }
   else {
     if (PT_hasArgsHead(elems1)) {
@@ -814,17 +814,17 @@ static ATerm listMatching(ATerm env, PT_Production listProd,
       if (PT_isTreeVarList(elem1)) {
 	Slice slice = getListVariableValue(env, elem1);
 	if (slice != NULL) {
-	  newenv = listMatching(env, listProd, 
-				prependSlice(slice, elems1), 
-				elems2, conds,
-				args1, args2,
-				lhs_posinfo, depth);
+	  newenv = matchList(env, listProd, 
+			     prependSlice(slice, elems1), 
+			     elems2, conds,
+			     args1, args2,
+			     lhs_posinfo, depth);
 	}
 	else {
-	  newenv = subListMatching(env, elem1, 
-				   listProd, elems1, elems2,
-				   conds, args1, args2, 
-				   lhs_posinfo, depth);
+	  newenv = matchListVariable(env, elem1, 
+				     listProd, elems1, elems2,
+				     conds, args1, args2, 
+				     lhs_posinfo, depth);
 	}
       }
       else {
@@ -832,10 +832,10 @@ static ATerm listMatching(ATerm env, PT_Production listProd,
 	  PT_Tree elem2 = PT_getArgsHead(elems2);
 	  elems2 = PT_getArgsTail(elems2); 
 
-	  newenv=  argMatching(env, elem1, elem2, conds,
-			       addElemsToArgs(listProd, elems1, args1),
-			       addElemsToArgs(listProd, elems2, args2),
-			       lhs_posinfo, depth);
+	  newenv=  matchArgument(env, elem1, elem2, conds,
+				 addElemsToArgs(listProd, elems1, args1),
+				 addElemsToArgs(listProd, elems2, args2),
+				 lhs_posinfo, depth);
 	}
       }
     }
@@ -847,12 +847,12 @@ static ATerm listMatching(ATerm env, PT_Production listProd,
 /*}}}  */
 
 /* condition checking */
-/*{{{  static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,  */
+/*{{{  static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs, 
-				   ASF_ConditionList conds,
-				   ATerm env, 
-				   int depth)
+static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ConditionList conds,
+				    ATerm env, 
+				    int depth)
 {
   PT_Tree lhstrm, rhstrm;
 
@@ -880,15 +880,15 @@ static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,
     return fail_env;
   }
 
-  return condsSatisfied(conds, env, depth);
+  return matchConditions(conds, env, depth);
 }
 
 /*}}}  */
-/*{{{  static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs,  */
+/*{{{  static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs, 
-				   ASF_ConditionList conds,
-				   ATerm env, int depth)
+static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ConditionList conds,
+				    ATerm env, int depth)
 {
   PT_Tree lhstrm = lhs;
   PT_Tree rhstrm = rhs;
@@ -902,12 +902,12 @@ static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs,
       return fail_env;
     }
     TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), env, depth);
-    return argMatching(env, rhs, lhstrm, conds, 
-		       PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
-		       NULL, depth);
+    return matchArgument(env, rhs, lhstrm, conds, 
+			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+			 NULL, depth);
   }
   else if (!no_new_vars(lhs, env)) { /* flip the sides */
-    return positiveCondSatisfied(rhs, lhs, conds, env, depth);
+    return matchPositiveCondition(rhs, lhs, conds, env, depth);
   }
   else { /* an equality condition */
     TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), env, depth);
@@ -923,7 +923,7 @@ static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs,
     }
 
     if (isAsFixEqual(lhstrm, rhstrm)) {
-      return condsSatisfied(conds, env, depth);
+      return matchConditions(conds, env, depth);
     }
     else {
       return fail_env;
@@ -932,26 +932,26 @@ static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs,
 }
 
 /*}}}  */
-/*{{{  static ATerm condSatisfied(ASF_Condition cond, ASF_ConditionList conds, */
+/*{{{  static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds, */
 
-static ATerm condSatisfied(ASF_Condition cond, ASF_ConditionList conds,
-			   ATerm env, int depth)
+static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
+			    ATerm env, int depth)
 {
   PT_Tree lhs = ASFtoPT(ASF_getConditionLhs(cond));
   PT_Tree rhs = ASFtoPT(ASF_getConditionRhs(cond));
 
 
   if (ASF_isConditionPositive(cond)) {
-    return positiveCondSatisfied(lhs, rhs, conds, env, depth);
+    return matchPositiveCondition(lhs, rhs, conds, env, depth);
   }
   else {
-    return negativeCondSatisfied(lhs, rhs, conds, env, depth);
+    return matchNegativeCondition(lhs, rhs, conds, env, depth);
   }
 }
 
 /*}}}  */
-/*{{{  static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth) */
-static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
+/*{{{  static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth) */
+static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth)
 {
   ASF_Condition cond;
   ATerm newenv = env;
@@ -969,8 +969,8 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
     else {
       conds = NULL;
     }
- 
-    newenv = condSatisfied(cond, conds, env, depth);
+
+    newenv = matchCondition(cond, conds, env, depth);
 
   }
 
@@ -992,7 +992,7 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   tagCurrentRule = entry->tag;
   currentRule = entry;
 
-  env = argMatching((ATerm) ATempty, entry->lhs, trm, entry->conds,
+  env = matchArgument((ATerm) ATempty, entry->lhs, trm, entry->conds,
 		    PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 		    PT_getTreeAnnotation(entry->lhs, posinfo), depth);
 
