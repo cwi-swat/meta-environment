@@ -595,13 +595,27 @@ ATbool SG_Injection(parse_table *pt, ATermInt label)
   prod = SG_LookupProduction(pt, ATgetInt(label));
 
   if(ATmatch(prod, "prod([<term>],cf(sort(<str>)),<term>)",
-     &in, NULL, NULL)
-  && !ATmatch(in, "lit(<str>)", NULL)) {
-/* ATfprintf(stderr, "INJECTION (%t): %t\n", in, prod); */
-    return ATtrue; 
+     &in, NULL, NULL)) {
+    if(ATmatch(in, "lit(<str>)", NULL)) {
+      return ATfalse;
+    } else { 
+/* ATfprintf(stderr, "CF INJECTION (%t): %t\n", in, prod); */
+       return ATtrue;
+    }
   }
 
-/* ATfprintf(stderr, "PROD: %t\n", prod); */
+/* Do We Want This?! */
+  if(ATmatch(prod, "prod([<term>],lex(sort(<str>)),<term>)",
+     &in, NULL, NULL)) {
+    if(ATmatch(in, "lit(<str>)", NULL)) {
+      return ATfalse;
+    } else { 
+/* ATfprintf(stderr, "LEX INJECTION (%t): %t\n", in, prod); */
+       return ATtrue;
+    }
+  }
+
+/*  ATfprintf(stderr, "Not an injection -- PROD: %t\n", prod); */
   return ATfalse;
 }
 
