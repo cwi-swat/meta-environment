@@ -54,6 +54,10 @@ equalModuloWhitespace_LDADD   = \
 whitespace_SOURCES = \
                  whitespace.c
 
+prepare-restore.o: ../src/libeval.a
+equalModuloWhitespace.o: ../src/libeval.a
+whitespace.o: ../src/libeval.a
+
 whitespace_LDADD   = \
                  -L../src -leval \
                  -L$(ASCLIB) -lasc-support \

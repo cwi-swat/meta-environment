@@ -60,8 +60,9 @@ int main(int argc, char *argv[])
 	term1 = asfix_get_term(asfix1);
 	term2 = asfix_get_term(asfix2);
 
-	if(!isEqualModuloWhitespace(term1,term2))
-		ATerror("isEqualModuloWhitespace returns false instead of true.\n");
+	if(!isEqualModuloWhitespace(term1,term2)) {
+	  return 1;
+	}
 
 	return 0;
 }
