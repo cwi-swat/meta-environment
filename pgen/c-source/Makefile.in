@@ -90,6 +90,7 @@ SPEC_SRCS=\
           AUX-Table-To-ATerm16.c\
           AUX-Goto-Computation7.c\
           AUX-Sdf2-Parse-Table4.c\
+          AUX-Sdf2-Parse-Table5.c\
           AUX-Goto-Computation10.c\
           AUX-Sdf2-Parse-Table3.c\
           AUX-Goto-Computation12.c\
