@@ -23,7 +23,8 @@ dnl Check for required packages and perform version checks when needed.
 
 dnl Check for wish program
 AC_PACKAGE_REQUIRE(tk, 
-                   wish8.3 wish 8.2 wish8.1 wish8.0 wish,
+dnl                   wish8.3 wish 8.2 wish8.1 wish8.0 wish,
+                   meuk,
                    [  --with-tk=DIR           Tk package is in DIR],)
 META_WISH_VERSION_CHECK($TK)
 AC_SUBST(WISH)
@@ -70,26 +71,19 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
 
-SDF_SUPPORT='${prefix}'
-dnl Handle --with-sdf-support=... argument to configure
-AC_ARG_WITH(sdf-support,
-   [  --with-sdf-support=DIR  sdf-support is in DIR],
-   SDF_SUPPORT=${withval},)
+dnl Require sdf-support package
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+   [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
 
-ASF_SUPPORT='${prefix}'
-dnl Handle --with-asf-support=... argument to configure
-AC_ARG_WITH(asf-support,
-   [  --with-asf-support=DIR  asf-support is in DIR],
-   ASF_SUPPORT=${withval},)
+dnl Require asf-support package
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
 AC_SUBST(ASF_SUPPORT)
 
-
-ASC_SUPPORT='${prefix}'
-dnl Handle --with-asc-support=... argument to configure
-AC_ARG_WITH(asc-support,
-   [  --with-asc-support=DIR  asc-support is in DIR],
-   ASC_SUPPORT=${withval},)
+dnl Require asc-support package
+AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
+   [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
 
 dnl Our own version of libdir iwhose value is set dynamically
