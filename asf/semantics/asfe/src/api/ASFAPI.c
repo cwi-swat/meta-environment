@@ -143,7 +143,7 @@ AA_Result AA_makeResultTrue()
 
 AA_Result AA_makeResultFalse()
 {
-  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun5, (ATerm)ATmakeAppl3(AA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8))), (ATerm)ATmakeAppl1(AA_afun9, (ATerm)ATmakeAppl2(AA_afun10, (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8)), (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11)))), (ATerm)ATmakeAppl0(AA_afun12)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11))));
+  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun5, (ATerm)ATmakeAppl3(AA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11))), (ATerm)ATmakeAppl1(AA_afun9, (ATerm)ATmakeAppl2(AA_afun10, (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8)), (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11)))), (ATerm)ATmakeAppl0(AA_afun12)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11))));
 }
 
 /*}}}  */

@@ -1,5 +1,7 @@
 # $Id$
 
+EXTRA_DIST              = ASFAPI.adt
+
 noinst_LIBRARIES	= libASFAPI.a
 noinst_HEADERS		= ASFAPI.h ASFAPI_dict.h
 libASFAPI_a_SOURCES	= ASFAPI.c ASFAPI_dict.c 

@@ -1,0 +1,13 @@
+[ 
+  [Call, constructor, asf-constructor(<production(term)>)],
+  [Call, predicate, asf-predicate(<production(term)>)],
+  [Call, getter, asf-getter(<production(term)>,<arg-nr(int)>)],
+  [Call, setter, asf-setter(<production(term)>,<arg-nr(int)>)],
+  [Call, builtin, builtin(<function(str)>)],
+
+  [Calls, empty, []],
+  [Calls, list,[<head(Call)>,<[tail(Calls)]>]],
+
+  [Result, true, appl(prod([lit("true")],cf(alt(lit("true"),lit("false"))),no-attrs),[lit("true")])], 
+  [Result, false, appl(prod([lit("false")],cf(alt(lit("true"),lit("false"))),no-attrs),[lit("false")])] 
+]

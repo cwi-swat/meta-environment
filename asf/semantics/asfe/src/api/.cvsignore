@@ -1,6 +1,5 @@
 Makefile.in
 Makefile
-ASFAPI.adt
 ASFAPI.dict
 .deps
 
