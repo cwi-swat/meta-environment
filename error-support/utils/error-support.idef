@@ -12,7 +12,7 @@ let
   ES : error-support,
   Error : term,
   Errors : list,
-  FileName : str,
+  Filename : str,
   Id : str,
   Length : int,
   Line : int,
@@ -58,8 +58,8 @@ in
   +
     rec-msg(get-location-filename(Location?)) .
     snd-eval(ES, get-location-filename(Location)) .
-    rec-value(ES, filename(FileName?)) .
-    snd-msg(location-filename(FileName))
+    rec-value(ES, filename(Filename?)) .
+    snd-msg(location-filename(Filename))
   +
     rec-msg(has-location-area(Location?)) .
     snd-eval(ES, has-location-area(Location)) .
@@ -132,6 +132,11 @@ in
   +
     rec-msg(display-feedback(Summary?)) .
     snd-do(ES, display-summary(Summary))
+  +
+    rec-msg(es-add-filename-in-error(Filename?, Error?))
+    . snd-eval(ES, add-filename-in-error(Filename, Error))
+    . rec-value(ES, error(Error?))
+    . snd-msg(es-filename-in-error(Filename, Error))
   ) * delta
 endlet
 

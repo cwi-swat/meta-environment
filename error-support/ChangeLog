@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr  5 10:49:03 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add add_filename_in_error
+
 Tue Mar 30 13:00:04 CEST 2004 <{jong,kooiker}@cwi.nl>
  * Regenerated after change in Locations.sdf
 

@@ -263,6 +263,26 @@ void display_summary(int cid, ATerm summary)
 }
 
 /*}}}  */
+ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
+{
+  ERR_Error error = ERR_ErrorFromTerm(t);
+  ERR_SubjectList result = ERR_makeSubjectListEmpty();
+  ERR_SubjectList subjects = ERR_getErrorList(error);
+
+  while (!ERR_isSubjectListEmpty(subjects)) {
+    ERR_Subject subject = ERR_getSubjectListHead(subjects);
+    ERR_Location location = ERR_getSubjectLocation(subject);
+    ERR_Area area = ERR_getLocationArea(location);
+    location = ERR_makeLocationAreaInFile(filename, area);
+    subject = ERR_setSubjectLocation(subject, location);
+    result = ERR_makeSubjectListMany(subject, result);
+    subjects = ERR_getSubjectListTail(subjects);
+  }
+
+  error = ERR_setErrorList(error, ERR_reverseSubjectList(result));
+
+  return ATmake("snd-value(error(<term>))", ERR_ErrorToTerm(error));
+}
 
 /*{{{  int main(int argc, char *argv[]) */
 
