@@ -1,6 +1,11 @@
 $Id$
 
 
+2003/10/10 (jurgenv@cwi.nl)
+ * Reactivated ToolBus interface. I'm not happy with the way this
+   library is generated now. TODO: find a different solution that
+   avoids co-evolution.
+
 2003/10/09 (jurgenv@cwi.nl)
  * Added generation of prototypes for ASC builtin functions
  * Each builtin now has a declared arity in builtins/Makefile.am

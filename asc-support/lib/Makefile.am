@@ -1,6 +1,6 @@
 # $Id$
 
-#SUBDIRS=tb
+SUBDIRS=. tb
 
 BUILTIN_NAMES_ARITY=\
         set-anno_3\
