@@ -78,6 +78,10 @@ XLIBS		= -L$(ATERMLIB) -lATB -lAsFix -lATerm $(SOCKLIBS)
 CSRC		= evaluator.c preparation.c evaluator.tif.c asfix_utils.c
 CHDR		= preparation.h evaluator.tif.h
 OBJ		= $(subst .c,.o,$(CSRC))
+
+# uncomment to create layout enabled version of evaluator
+CCOPTIONS       = # -DKEEP_WHITESPACE 
+
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= evaluator
 # All files in LIBFILES are installed in $(libdir)
@@ -113,10 +117,10 @@ test:	all
 
 # Explicit rules
 evaluator: depend $(OBJ)
-	$(CC) -o $@ $(OBJ) $(LIBS)
+	$(CC) $(CCOPTIONS) -o $@ $(OBJ) $(LIBS)
 
 %.o: %.c $(INCLUDEFILES)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+	$(CC) $(CCOPTIONS) $(CFLAGS) $(INCLUDES) -c $<
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
