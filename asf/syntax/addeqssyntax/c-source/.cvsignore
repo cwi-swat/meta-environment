@@ -2,3 +2,5 @@ Makefile.in
 Makefile
 .deps
 init.c
+*.asfix
+Add-Eqs-Syntax

@@ -43,7 +43,7 @@ equations
                 sorts Tag TagId CondEquation Equation Implies
                       Condition Equations
                 lexical syntax
-                  "===" [\=]*    -> Implies
+                  "===" [\=]* [\>]?   -> Implies
                   [shortchar("A")-shortchar("Z")
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
@@ -60,6 +60,10 @@ equations
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
                    shortchar("\""'")]                   -> TagId {avoid}
+
+                lexical restrictions
+                  Implies -/- [\=]
+
                 context-free syntax
                   {Condition ","}+          -> Conditions
                                             -> Equations
