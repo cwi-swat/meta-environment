@@ -90,5 +90,6 @@ dnl Which files need updating?
 AC_OUTPUT(
   Makefile
   lib/Makefile
+  libME/Makefile
   test/Makefile
 )

@@ -20,6 +20,6 @@
 #
 # $Id$
 
-SUBDIRS		= lib test
+SUBDIRS		= lib libME test
 
 EXTRA_DIST	= make_rules reconf

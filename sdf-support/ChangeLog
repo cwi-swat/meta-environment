@@ -1,3 +1,6 @@
+2001/04/23 (markvdb@cwi.nl)
+ * First version SDF support library based on AsFix2ME.
+
 2001/02/27 (jurgenv@cwi.nl)
  * added test parsetrees to distribution
 
