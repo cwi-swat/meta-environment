@@ -4,3 +4,7 @@ imports Alignments-to-Text
 imports Basic-to-Text
 imports Comments-to-Text
 imports Fonts-to-Text
+
+exports
+  context-free start-symbols
+    BText

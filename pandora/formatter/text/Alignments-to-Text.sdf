@@ -1,6 +1,5 @@
 module Alignments-to-Text
 
-imports languages/box/syntax/Box
 imports Basic-to-Text
 imports ExtendedIntegers
 imports Text-Operators

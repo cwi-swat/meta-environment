@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Sep 20 14:54:17 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text:
+   - Added Alignments-to-Text 
+
 Fri Aug 27 14:57:12 CEST 2004 <jong@cwi.nl>
  * refactor to use new PT_yield functions in MEPT API
 

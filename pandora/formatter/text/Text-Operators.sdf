@@ -9,7 +9,6 @@ exports
   %%context-free syntax
   %%  TEXT "&&" POINT                                       -> TextStruct
   context-free syntax
-    String ":" String                                        -> String {left}
     "align" "left" TextStruct "with" Frame                   -> TextStruct
     "align" "right" TextStruct "with" Frame                  -> TextStruct
     "align" "center" TextStruct "with" Frame                 -> TextStruct
