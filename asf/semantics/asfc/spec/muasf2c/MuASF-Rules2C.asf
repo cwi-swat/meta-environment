@@ -243,7 +243,7 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               is-list-funid(Funid) = true,
               is-ignored-funid(Funid) = false,
               make-select-stat(Aint+) = Decl*,
-              list2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
+              list2cstats(C-rule+,Namepair*,succ(Aint1)) = (Stat*1,Aint2) 
               =====================================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
                 (Decl* ++d Stat*1,Aint2)
@@ -253,7 +253,7 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               is-list-funid(Funid) = true,
               is-ignored-funid(Funid) = true,
               make-ignored-select-stat(Aint+) = Decl*,
-              list2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
+              list2cstats(C-rule+,Namepair*,succ(Aint1)) = (Stat*1,Aint2) 
               =====================================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
                 (Decl* ++d Stat*1,Aint2)
@@ -283,7 +283,7 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               is-list-funid(Funid) = true,
               is-ignored-funid(Funid) = false,
               make-select-stat(Aint+) = Decl*,
-              list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
+              list2cstats(C-rule+1,Namepair*,succ(Aint1)) = (Stat*1,Aint2),
               select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
               asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat) = 
                 (Stat*2,Aint3),
@@ -299,7 +299,7 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               is-list-funid(Funid) = true,
               is-ignored-funid(Funid) = true,
               make-ignored-select-stat(Aint+) = Decl*,
-              list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
+              list2cstats(C-rule+1,Namepair*,succ(Aint1)) = (Stat*1,Aint2),
               select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
               asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,no-select-stat) = 
                 (Stat*2,Aint3),
