@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar 23 09:39:34 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/*.c: updated wrt new MEPT api
+
 Wed Mar 10 09:58:21 CET 2004 <{jong,kooiker}@cwi.nl>
  * Use new Error API
 
