@@ -191,6 +191,8 @@ AC_OUTPUT(
 Makefile
 compiler/Makefile
 compiler/c-source/Makefile
+compiler/regress-test/Makefile
+compiler/regress-test/terms/Makefile
 asfix2c-compiler/Makefile
 evaluator/Makefile
 evaluator/src/Makefile
