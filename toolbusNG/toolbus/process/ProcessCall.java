@@ -7,64 +7,121 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.*;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
+import aterm.*;
 import aterm.ATermList;
 
-public class ProcessCall implements ProcessExpression {
+public class ProcessCall implements ProcessExpression, StateElement {
   private String name;
-  private ATermList args;
+  private ATermList actuals;
+  private ATermList formals;
   private ProcessDefinition definition;
   private ProcessExpression PE;
+  private ProcessInstance processInstance;
+  private State startState;
 
-  public ProcessCall(String name, ATermList args) {
+  public ProcessCall(String name, ATermList actuals) {
     this.name = name;
-    this.args = args;
-    System.out.println("ProcessCall(\"" + name + "\", " + args + ")");
+    this.actuals = actuals;
+    startState = new State();
+    startState.add(this);
+    //System.out.println("ProcessCall(\"" + name + "\", " + actuals + ")");
   }
 
   public ProcessExpression copy() {
-    return new ProcessCall(name, args);
+    //System.out.println("ProcessCall.copy: " + name);
+    return new ProcessCall(name, actuals);
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    System.out.println("ProcessCall.expand(" + P + "," + calls + ")");
+    //System.out.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
     if (calls.contains(name)) {
       throw new ToolBusException("recursive call of " + name);
     }
+    processInstance = P;
     ToolBus TB = P.getToolBus();
     calls.push(name);
     definition = TB.getProcessDefinition(name);
-    PE = definition.expand(P, calls, args);
+    PE = definition.expand(P, calls, actuals);
     calls.pop();
   }
 
-  public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
-    System.out.println("ProcessCallcompile(" + P + "," + follows + ")");  
+  public void compile(ProcessInstance P, State follows) throws ToolBusException {
+    //System.out.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
     Environment env = P.getEnv();
-    definition.enterScope(env);
+    actuals = (ATermList) TBTerm.compileVars(actuals, env);
+    //System.out.println("actuals = " + actuals);
+    //System.out.println("definiton = " + definition);
+    definition.enterScope(env, actuals);
+    formals = definition.getCompiledFormals(env);
     PE.compile(P, follows);
     definition.leaveScope(env);
-    System.out.println("ProcessCall.compile:PE = " + PE);  
+    //System.out.println("ProcessCall.compile:PE = " + PE);
   }
 
-  public AtomSet getFirst() {
-    return PE.getFirst();
-  }
-  
-  public ProcessState getStartState(){
-    return PE.getStartState();
+  public State getFirst() {
+    return startState;
   }
 
-  public AtomSet getFollow() {
+  public State getStartState() {
+    return startState;
+  }
+
+  public State getFollow() {
     return PE.getFollow();
   }
 
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return PE.getAtoms();
   }
 
   public String toString() {
-    return "ProcessCall(" + name + ", " + args + ")";
+    return "ProcessCall(" + name + ", " + actuals + ")";
   }
+
+  // The StateElement interface
+
+  public boolean canCommunicate(StateElement a) {
+    return false;
+  }
+
+  public void addPartner(StateElement a) {
+  }
+  
+   public ProcessInstance getProcess(){
+    return processInstance;
+  }
+  
+  public boolean contains(StateElement b){
+    System.out.println(this + " contains " + b);
+    return startState.contains(b);
+  }
+
+  public boolean nextState() {
+    State s = PE.getStartState();
+    processInstance.setCurrentState(s);
+    return true;
+  }
+
+  public boolean execute() throws ToolBusException {
+    System.out.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
+    Environment env = processInstance.getEnv();
+    ATermList formals1 = formals;
+    ATermList actuals1 = actuals;
+    for (int i = 0; i < formals.getLength(); i++) {
+      ATerm formal = formals1.getFirst();
+      formals1 = formals1.getNext();
+      ATerm actual = actuals1.getFirst();
+      actuals1 = actuals1.getNext();
+      if(!TBTerm.isResVar(formal)){
+        env.putVar(formal, TBTerm.substitute(actual, env));
+        System.out.println(formal + " gets value " + env.getVar(formal));
+      }
+    }
+    startState = PE.getStartState();
+    processInstance.setCurrentState(startState);
+    return startState.execute();
+  }
+
 }

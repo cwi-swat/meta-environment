@@ -13,40 +13,41 @@ import aterm.*;
  */
 public class ProcessInstance {
   static int processCount = 0;
-  static AtomSet empty = new AtomSet();
+  static State empty = new State();
+  private ProcessDefinition definition;
   private ATerm processId;
-  private AtomSet atoms;
-  private ProcessState currentState;
+  private State elements;
+  private State currentState;
   private Environment env;
   private ToolBus toolbus;
   private ToolInstance toolinstance;
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
     toolbus = TB;
-    ProcessDefinition def = TB.getProcessDefinition(name);
+    definition = TB.getProcessDefinition(name);
 
     env = new Environment();
-    ProcessExpression call = new ProcessCall(name, actuals);
+    AFun afun = TBTerm.factory.makeAFun(name, 1, false);
+    processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
+
+    ProcessCall call = new ProcessCall(name, actuals);
     call.expand(this, new Stack());
     call.compile(this, empty);
     currentState = call.getStartState();
     env.setExecuting();
 
-    AFun afun = TBTerm.factory.makeAFun(name, 1, false);
-    processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-    
     Vector procs = TB.getProcesses();
-    atoms = call.getAtoms();
+    elements = call.getAtoms();
     for (int i = 0; i < procs.size(); i++) {
-      ((ProcessInstance) procs.elementAt(i)).findPartners(atoms);
+      ((ProcessInstance) procs.elementAt(i)).findPartners(elements);
     }
- 
-    toolinstance = def.createToolInstance();
+
+    toolinstance = definition.createToolInstance();
 
     System.out.println(processId + ": " + call);
-    System.out.println(processId + ": atoms: =" + atoms);
+    System.out.println(processId + ": atoms: =" + elements);
     System.out.println(processId + ": prefix = " + currentState);
-    for (Iterator it = atoms.getAtomsAsVector().iterator(); it.hasNext();) {
+    for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
       Atom a = (Atom) it.next();
       System.out.println(processId + ": " + a + " --> " + a.getFollow());
     }
@@ -74,23 +75,30 @@ public class ProcessInstance {
     }
   }
 
-  public void findPartners(AtomSet a) {
-    atoms.findPartners(a);
+  public void findPartners(State a) {
+    elements.findPartners(a);
   }
 
-  public ProcessState getProcessState() {
+  public State getProcessState() {
     return currentState;
   }
 
-  public boolean contains(Atom a) {
+  public boolean contains(StateElement a) {
     return currentState.contains(a);
   }
 
-  public void nestState(Atom a) {
-    if (!currentState.contains(a))
-      System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + currentState);
-    currentState = currentState.nextState(a);
-    //System.out.println("proc " + processId + ": follow(" + a + ") -> " + prefix);
+  //  public void nestState(StateElement a) {
+  //    if (!currentState.contains(a))
+  //      System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + currentState);
+  //    currentState = currentState.nextState(a);
+  //    //System.out.println("proc " + processId + ": follow(" + a + ") -> " + prefix);
+  //  }
+
+  public State getCurrentState() {
+    return currentState;
+  }
+  public void setCurrentState(State s) {
+    currentState = s;
   }
 
   public boolean step() throws ToolBusException {
@@ -99,10 +107,10 @@ public class ProcessInstance {
   }
 
   public boolean isTerminated() {
-    return (atoms.size() == 0);
+    return (elements.size() == 0);
   }
 
   public String toString() {
-    return "proc " + processId + " " + currentState;
+    return "ProcessInstance(" + definition.getName() + ", " + processId + ", " + currentState + ")";
   }
 }

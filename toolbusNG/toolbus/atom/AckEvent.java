@@ -19,7 +19,7 @@ public class AckEvent extends ToolAtom {
     return new AckEvent(getToolarg());
   }
 
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     super.compile(P, follow);
   }
 
@@ -30,7 +30,7 @@ public class AckEvent extends ToolAtom {
     ToolInstance ti = getToolInstance();
 
     ti.sndEvalToTool(getSubstitutedArg());
-    return true;
+    return nextState();
   }
 
 }

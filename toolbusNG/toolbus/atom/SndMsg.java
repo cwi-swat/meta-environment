@@ -3,12 +3,11 @@
  */
 
 package toolbus.atom;
-import toolbus.TBTerm;
 import toolbus.process.ProcessExpression;
 
 import aterm.*;
 
-public class SndMsg extends CommAtom {
+public class SndMsg extends MsgAtom {
 
   public SndMsg(ATerm msg) {
     super(msg);
@@ -18,7 +17,4 @@ public class SndMsg extends CommAtom {
     return new SndMsg(getMsg());
   }
 
-  public boolean canCommunicate(CommAtom a) {
-    return a instanceof RecMsg && TBTerm.mightMatch(getMsg(), a.getMsg());
-  }
 }

@@ -3,38 +3,38 @@ package toolbus.process;
 import toolbus.atom.*;
 
 abstract public class AbstractProcessExpression implements ProcessExpression {
-  private AtomSet first;
-  private AtomSet follow;
+  private State first;
+  private State follow;
   
   public AbstractProcessExpression() {
-    first = new AtomSet();
+    first = new State();
   }
   
-  public AtomSet getFirst() {
+  public State getFirst() {
     return first;
   }
   
-  protected void setFirst(AtomSet first) {
+  protected void setFirst(State first) {
     this.first = first;
   } 
   
-  public ProcessState getStartState(){
+  public State getStartState(){
     return first;
   }
   
-  protected void addToFirst(Atom atom) {
-    first.add(atom);
+  protected void addToFirst(StateElement a) {
+    first.add(a);
   }
 
-  public AtomSet getFollow() {
+  public State getFollow() {
     return follow;
   }
   
-  protected void addToFollow(AtomSet set) {
+  protected void addToFollow(State set) {
     follow = follow.union(set);
   }
   
-  protected void setFollow(AtomSet follow) {
+  protected void setFollow(State follow) {
     this.follow = follow;
   }
 

@@ -6,7 +6,7 @@ package toolbus.process;
 import java.util.*;
 
 import toolbus.*;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
 import aterm.ATermList;
 
@@ -28,26 +28,26 @@ public class LetDefinition implements ProcessExpression {
     PE.expand(P, calls);
    }
 
-  public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
+  public void compile(ProcessInstance P, State follows) throws ToolBusException {
     Environment env = P.getEnv();
     env.add(formals);
     PE.compile(P, follows);
     env.delete(formals.getLength());
   }
 
-  public AtomSet getFirst() {
+  public State getFirst() {
     return PE.getFirst();
   }
   
-  public ProcessState getStartState(){
+  public State getStartState(){
     return PE.getStartState();
   }
 
-  public AtomSet getFollow() {
+  public State getFollow() {
     return PE.getFollow();
   }
 
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return PE.getAtoms();
   }
 

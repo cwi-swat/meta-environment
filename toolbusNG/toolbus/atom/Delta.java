@@ -16,8 +16,8 @@ public class Delta extends Atom {
     return new Delta();
   }
   
-  public AtomSet getFirst() {
-    return new AtomSet(); // replace by single copy
+  public State getFirst() {
+    return new State(); // replace by single copy
   }
 
   public boolean isEnabled() {

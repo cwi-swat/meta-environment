@@ -22,7 +22,7 @@ public class Print extends Atom {
   }
 
   public boolean execute() throws ToolBusException {
-    if (super.execute()) {
+    if (isEnabled()) {
       Environment e = getEnv();
       //System.out.println("Print, env is: " + e);
       ATermList args = (ATermList) arg.value;
@@ -30,7 +30,7 @@ public class Print extends Atom {
         System.out.print(TBTerm.eval(args.elementAt(i), e));
       }
       System.out.println("");
-      return true;
+      return nextState();
     } else {
       return false;
     }

@@ -529,6 +529,7 @@ public class TBTerm {
   }
 
   public static boolean mightMatch(ATerm ta, ATerm tb) {
+    System.out.println("mightMatch(" + ta +", " + tb + ")");
 
     if (TBTerm.isVar(ta))
       return true;

@@ -24,15 +24,15 @@ public class Disrupt extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     left.compile(P, follow);
     right.compile(P, follow);
 
-    AtomSet rightFirst = right.getFirst();
+    State rightFirst = right.getFirst();
 
     setFollow(follow);
 
-    Vector atoms = left.getAtoms().getAtomsAsVector();
+    Vector atoms = left.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       Atom at = (Atom) atoms.get(i);
       if (at.getFollow().size() != 0) {
@@ -41,7 +41,7 @@ public class Disrupt extends AbstractProcessExpression {
     }
   }
 
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 

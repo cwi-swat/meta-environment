@@ -28,7 +28,7 @@ public class Event extends ToolAtom {
     MatchResult mr = ti.getEventFromTool(getToolarg(), getEnv());
     if (mr.matches()) {
       mr.getLeft().update(getEnv());
-      return true;
+      return nextState();
     } else
       return false;
   }

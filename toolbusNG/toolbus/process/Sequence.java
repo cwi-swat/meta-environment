@@ -7,7 +7,7 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.ToolBusException;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
 public class Sequence extends AbstractProcessExpression {
   private ProcessExpression left, right;
@@ -58,14 +58,14 @@ public class Sequence extends AbstractProcessExpression {
     setFirst(left.getFirst());
    }
  
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     right.compile(P, follow);
     left.compile(P, right.getFirst());
    
     setFollow(follow);
   }
   
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 

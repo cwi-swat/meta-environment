@@ -17,17 +17,17 @@ public class Main {
     
     //atomTest();
     //TauTest();
+    //SndRecTest();
     //PETest();
     //LetTest();
-    CallTest();
+    //CallTest();
      //CallTest2();
     //IfTest(); 
     //CreateTest();
     //NestedIterTest();
      //DisruptTest();
-    //MergeTest();
+    MergeTest();
     //SieveTest();
-    //NestedIterTest();
     //producerTest();
     //ToolTest();
   }
@@ -35,7 +35,7 @@ public class Main {
   static void atomTest(){
     Atom d = new Delta();
     Atom t = new Tau();
-    AtomSet set = new AtomSet();
+    State set = new State();
     
     set.add(d);
     set.add(t);
@@ -55,6 +55,25 @@ public class Main {
       System.out.println(e.getMessage());
     } 
      
+  }
+  
+  static void SndRecTest(){
+    ProcessDefinition P1 = new ProcessDefinition("P1", new SndMsg(aterms.make("z")));
+    ProcessDefinition P2 = new ProcessDefinition("P2", new RecMsg(aterms.make("z")));
+    try {    
+      ToolBus T = new ToolBus();
+      T.addProcessDefinition(P1);
+      T.addProcessDefinition(P2);
+    
+      T.addProcess("P1");
+      T.addProcess("P2");
+
+      T.execute();
+    }
+    catch (ToolBusException e) {
+      System.out.println(e.getMessage());
+    }
+    
   }
   
   static void PETest(){
@@ -169,19 +188,37 @@ public class Main {
       T.addProcess("P3");
       T.execute();
     }
-    catch (ToolBusException e) { System.out.println(e.getMessage()); }
+    catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
   }
   
   static void CallTest2(){
     ProcessDefinition P =
-    new ProcessDefinition("P", (ATermList) aterms.make("[var(-1,int,x)]"),
-      new Print((ATermList) aterms.make("[var(-1,int,x)]"))
+    new ProcessDefinition("P", (ATermList) aterms.make("[var(-1,int,x), var(-1,int, z)]"),
+      new Sequence(
+        new Print((ATermList) aterms.make("[var(-1,int,x)]")),
+        new ProcessCall("Q", (ATermList) aterms.make("[7, rvar(-1,int,z)]")),
+       new Print((ATermList) aterms.make("[var(-1,int,x)]")),
+        new Print((ATermList) aterms.make("[var(-1,int,z)]"))
+      )
+     );
+      
+    ProcessDefinition Q = new ProcessDefinition("Q", (ATermList) aterms.make("[var(-1,int,x), rvar(-1,int,y)]"),
+      new Sequence(
+        new Print((ATermList) aterms.make("[var(-1,int,x)]")),
+         new ProcessCall("R", (ATermList) aterms.make("[rvar(-1,int,z)]"))
+        )
       );
+      
+      ProcessDefinition R = new ProcessDefinition("R", (ATermList) aterms.make("[rvar(-1,int,t)]"),
+             new Assign(aterms.make("var(-1,int,t)"), aterms.make("19"))
+             );
       
       try {
           ToolBus T = new ToolBus();
           T.addProcessDefinition(P);
-          T.addProcess("P", (ATermList) aterms.make("[3]"));
+          T.addProcessDefinition(Q);
+          T.addProcessDefinition(R);
+          T.addProcess("P", (ATermList) aterms.make("[3, 4]"));
           T.execute();
       } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
   }
@@ -248,6 +285,7 @@ public class Main {
       
       T.addProcessDefinition(P1);
       T.addProcessDefinition(P2);
+      T.addProcess("P2");
       T.execute();
     }
     catch (ToolBusException e) { System.out.println(e.getMessage()); }
@@ -344,9 +382,10 @@ public class Main {
           T.addProcessDefinition(Pmain);
           T.addProcessDefinition(P1);
           T.addProcessDefinition(P2);
-          T.addProcess("Pmain");
+ 
           T.addProcess("P1");
           T.addProcess("P2");
+          T.addProcess("Pmain");
           T.execute();
           
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }

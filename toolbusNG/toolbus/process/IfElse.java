@@ -6,7 +6,7 @@ package toolbus.process;
 import java.util.*;
 
 import toolbus.ToolBusException;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
 import aterm.ATerm;
 
@@ -31,7 +31,7 @@ public class IfElse extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
+  public void compile(ProcessInstance P, State follows) throws ToolBusException {
     left.compile(P, follows);
     left.getFirst().setTest(test);
     right.compile(P, follows);
@@ -45,7 +45,7 @@ public class IfElse extends AbstractProcessExpression {
     //System.out.println("follow = "+ follow);
   }
 
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 

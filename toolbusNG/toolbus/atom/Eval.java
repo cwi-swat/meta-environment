@@ -22,7 +22,7 @@ public class Eval extends ToolAtom {
       return false;
     ToolInstance ti = getToolInstance();
     ti.sndEvalToTool(getSubstitutedArg());
-    return true;
+    return nextState();
   }
 
 }

@@ -16,7 +16,7 @@ public class ProcessDefinition {
   private static int ninstances = 0;
   private String name;
   private ATermList formals;
-  private ATermList nonResultFormals;
+//  private ATermList nonResultFormals;
   private ProcessExpression PE;
   private String toolname;
 
@@ -25,6 +25,15 @@ public class ProcessDefinition {
     this.formals = formals;
     this.PE = PE;
     this.toolname = toolname;
+
+//    nonResultFormals = formals.getFactory().makeList();
+//    int nargs = formals.getLength();
+//    for (int i = 0; i < nargs; i++) {
+//      ATerm formal = formals.elementAt(i);
+//      if (!TBTerm.isResVar(formal)) {
+//        nonResultFormals = nonResultFormals.append(formal);
+//      }
+//    }
 
     //System.out.println("procdef " + name + " " + formals + " " + PE);
   }
@@ -40,61 +49,81 @@ public class ProcessDefinition {
   public String getName() {
     return name;
   }
-  
-  public void enterScope(Environment env){
-     env.add(nonResultFormals);
+
+  public void enterScope(Environment env, ATermList actuals) throws ToolBusException {
+    env.add(formals, actuals);
   }
-  
-  public void leaveScope(Environment env){
-       env.delete(nonResultFormals.getLength());
+
+  public void leaveScope(Environment env) {
+    env.delete(formals.getLength());
   }
-  
+
+  public ATermList getCompiledFormals(Environment env) throws ToolBusException {
+    return (ATermList) TBTerm.compileVars(formals, env);
+  }
+
   public ProcessExpression expand(ProcessInstance P, Stack calls, ATermList actuals) throws ToolBusException {
-
-    if (actuals.getLength() != formals.getLength())
-      System.out.println("*** " + name + ": mismatch " + formals + " and " + actuals);
-
-    //		System.out.println("formals = " + formals);
-    //		System.out.println("actuals = " + actuals);
-
-    int nargs = actuals.getLength();
-    Environment env = P.getEnv();
-    ATermList actuals1 = (ATermList) TBTerm.compileVars(actuals, env);
-    //		System.out.println("actuals1 = " + actuals1);
-
-    ProcessExpression assigns = null;
-
-    nonResultFormals = formals.getFactory().makeList();
-
-    for (int i = 0; i < nargs; i++) {
-      ATerm formal = formals.elementAt(i);
-      if (TBTerm.isResVar(formal))
-        formal = TBTerm.compileVars(TBTerm.changeResVarIntoVar(formal), env);
-      else
-        nonResultFormals = nonResultFormals.append(formal);
-
-      ProcessExpression asg = new Assign(formal, actuals1.elementAt(i));
-      if (i == 0)
-        assigns = asg;
-      else
-        assigns = new Sequence(asg, assigns);
+    if (actuals.getLength() != formals.getLength()) {
+      throw new ToolBusException(name + ": mismatch " + formals + " and " + actuals);
     }
-    //		System.out.println("formals1 = " + formals1);
-    //		System.out.println("assigns = " + assigns);
-    ProcessExpression PE1 = (assigns == null) ? PE.copy(): new Sequence(assigns, PE.copy());
-    //		System.out.println("PE1 = " + PE1);
-    //		System.out.println("env = " + env);
+    for (int i = 0; i < actuals.getLength(); i++) {
+      ATerm formal = (ATerm) formals.getChildAt(i);
+      ATerm actual = (ATerm) formals.getChildAt(i);
+      if (TBTerm.isResVar(formal) && !TBTerm.isResVar(actual)) {
+        throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
+      }
+    };
+    ProcessExpression PE1 = PE.copy();
     PE1.expand(P, calls);
     return PE1;
   }
 
-  public String toString() {
-    return "ProcessDefinition(" + name + ", " + formals + ", " + PE + ")";
-  }
+  //  public ProcessExpression expand(ProcessInstance P, Stack calls, ATermList actuals) throws ToolBusException {
+  //
+  //    if (actuals.getLength() != formals.getLength())
+  //      System.out.println("*** " + name + ": mismatch " + formals + " and " + actuals);
+  //
+  //    		System.out.println("formals = " + formals);
+  //    		System.out.println("actuals = " + actuals);
+  //
+  //    int nargs = actuals.getLength();
+  //    Environment env = P.getEnv();
+  //    ATermList actuals1 = (ATermList) TBTerm.compileVars(actuals, env);
+  //    		System.out.println("actuals1 = " + actuals1);
+  //
+  //    ProcessExpression assigns = null;
+  //
+  //    nonResultFormals = formals.getFactory().makeList();
+  //
+  //    for (int i = 0; i < nargs; i++) {
+  //      ATerm formal = formals.elementAt(i);
+  //      if (TBTerm.isResVar(formal))
+  //        formal = TBTerm.compileVars(TBTerm.changeResVarIntoVar(formal), env);
+  //      else
+  //        nonResultFormals = nonResultFormals.append(formal);
+  //
+  //      ProcessExpression asg = new Assign(formal, actuals1.elementAt(i));
+  //      if (i == 0)
+  //        assigns = asg;
+  //      else
+  //        assigns = new Sequence(asg, assigns);
+  //    }
+  //    		System.out.println("nonResultFormals = " + nonResultFormals);
+  //    		System.out.println("assigns = " + assigns);
+  //    ProcessExpression PE1 = (assigns == null) ? PE.copy(): new Sequence(assigns, PE.copy());
+  //    		System.out.println("PE1 = " + PE1);
+  //    		System.out.println("env = " + env);
+  //    PE1.expand(P, calls);
+  //    return PE1;
+  //  }
+  //
+  //  public String toString() {
+  //    return "ProcessDefinition(" + name + ", " + formals + ", " + PE + ")";
+  //  }
 
   private ATermList makeSig() throws ToolBusException {
     ATermList sig = (ATermList) TBTerm.factory.make("[]");
-    Vector atoms = PE.getAtoms().getAtomsAsVector();
+    Vector atoms = PE.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       ATerm pat = ((Atom) atoms.get(i)).toATerm();
       sig = TBTerm.factory.makeList(pat, sig);
