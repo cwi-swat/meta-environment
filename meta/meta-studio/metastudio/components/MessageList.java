@@ -30,6 +30,8 @@ public class MessageList extends ToolComponent implements ListSelectionListener 
 		
 		setLayout(new BorderLayout());
         list.setBackground(Preferences.getColor("messagepane.background"));
+        list.setForeground(Preferences.getColor("feedback.info.foreground"));
+        list.setFont(Preferences.getFont("feedback.info.font"));
 
 		add(new JScrollPane(list), BorderLayout.CENTER);
 	}

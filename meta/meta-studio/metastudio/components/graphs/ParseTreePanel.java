@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import metastudio.MultiBridge;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
-import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
@@ -16,8 +15,6 @@ public class ParseTreePanel extends ZoomableGraphPanel {
     public ParseTreePanel(PureFactory factory, final MultiBridge bridge) {
         super(new MetaGraphFactory(factory), bridge, "parsetree");
         this.panel = getGraphPanel();
-        
-        setBackground(Preferences.getColor("treepane.background"));
         
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {

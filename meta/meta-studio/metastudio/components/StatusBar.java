@@ -28,10 +28,10 @@ public class StatusBar extends ToolComponent {
         statusMessages = new LinkedList();
 
         Color bgColor =
-            Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".background");
+            Preferences.getColor("statusbar.background");
         Color fgColor =
-            Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".foreground");
-        Font font = Preferences.getFont(Preferences.PREF_MSGPANE_STATUS + ".font");
+            Preferences.getColor("statusbar.foreground");
+        Font font = Preferences.getFont("statusbar.font");
 
         setBackground(bgColor);
         setForeground(fgColor);

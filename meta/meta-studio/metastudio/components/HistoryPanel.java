@@ -25,6 +25,8 @@ public class HistoryPanel extends ToolComponent {
 
         list.setModel(data);
         list.setBackground(Preferences.getColor("messagepane.background"));
+        list.setForeground(Preferences.getColor("feedback.info.foreground"));
+        list.setFont(Preferences.getFont("feedback.info.font"));
 
         add(new JScrollPane(list), BorderLayout.CENTER);
     }

@@ -1,6 +1,5 @@
 package metastudio.components;
 
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JList;
@@ -8,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
+import metastudio.utils.Preferences;
 import errorapi.types.Feedback;
 import errorapi.types.Location;
 import errorapi.types.SubjectList;
@@ -28,14 +28,21 @@ public class FeedbackListCellRenderer extends JTextField implements ListCellRend
         Feedback feedback = (Feedback) value;
 
         if (feedback.isInfo()) {
-            setForeground(Color.black);
+            setForeground(Preferences.getColor("feedback.info.foreground"));
+            setBackground(Preferences.getColor("feedback.info.background"));
+            setFont(Preferences.getFont("feedback.info.font"));
         } else if (feedback.isWarning()) {
-            setForeground(Color.blue);
+            setForeground(Preferences.getColor("feedback.warning.foreground"));
+            setBackground(Preferences.getColor("feedback.warning.background"));
+            setFont(Preferences.getFont("feedback.warning.font"));
         } else if (feedback.isError()) {
-            setForeground(Color.red);
+            setForeground(Preferences.getColor("feedback.error.foreground"));
+            setBackground(Preferences.getColor("feedback.error.background"));
+            setFont(Preferences.getFont("feedback.error.font"));
         } else if (feedback.isFatalError()) {
-            setForeground(Color.black);
-            setBackground(Color.red);
+            setForeground(Preferences.getColor("feedback.fatalerror.foreground"));
+            setBackground(Preferences.getColor("feedback.fatalerror.background"));
+            setFont(Preferences.getFont("feedback.fatalerror.font"));
         }
 
         setText(feedback.getDescription());

@@ -16,7 +16,6 @@ import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 import metastudio.data.graph.NodeList;
-import metastudio.utils.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -41,8 +40,6 @@ public class ImportGraphPanel
         panel.addMouseListener(makeMouseListener(moduleManager));
 
         initialize();
-        
-        setBackground(Preferences.getColor("graphpane.background"));
     }
 
     private void initialize() {

@@ -1,7 +1,6 @@
 package metastudio.components.graphs;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -51,7 +50,7 @@ public class ZoomableGraphPanel extends ToolComponent {
 
         JScrollPane scrolledPane = new JScrollPane(graphPanel);
         view = scrolledPane.getViewport();
-        view.setBackground(Color.white);
+        view.setBackground(Preferences.getColor("graph.background"));
         view.addMouseWheelListener(wheel);
 
         add(scrolledPane, BorderLayout.CENTER);
@@ -69,13 +68,13 @@ public class ZoomableGraphPanel extends ToolComponent {
     }
 
     private JSlider createSlider() {
-        SLIDER_MINIMUM = Preferences.getInteger("graphpane.scale.minimum");
-        SLIDER_MAXIMUM = Preferences.getInteger("graphpane.scale.minimum");
-        SLIDER_STEP_SIZE = Preferences.getInteger("graphpane.scale.stepsize");
-        SLIDER_DEFAULT = Preferences.getInteger("graphpane.scale.default");
-        slider = new JSlider(SLIDER_MINIMUM,SLIDER_MAXIMUM , SLIDER_STEP_SIZE);
+        SLIDER_MINIMUM = Preferences.getInteger("graph.scale.minimum");
+        SLIDER_MAXIMUM = Preferences.getInteger("graph.scale.maximum");
+        SLIDER_STEP_SIZE = Preferences.getInteger("graph.scale.stepsize");
+        SLIDER_DEFAULT = Preferences.getInteger("graph.scale.default");
+        slider = new JSlider(SLIDER_MINIMUM, SLIDER_MAXIMUM, SLIDER_STEP_SIZE);
         slider.setOrientation(SwingConstants.VERTICAL);
-        slider.setBackground(Preferences.getColor("graphpane.scale.background"));
+        slider.setBackground(Preferences.getColor("graph.scale.background"));
         slider.setValue(SLIDER_DEFAULT);
 
         slider.addChangeListener(new ChangeListener() {
@@ -104,11 +103,11 @@ public class ZoomableGraphPanel extends ToolComponent {
         NodeSizer sizer = new NodeSizer() {
             public int getWidth(Node node) {
                 return metrics.stringWidth(node.getLabel())
-                    + Preferences.getInteger(Preferences.PREF_NODE_BORDER_WIDTH) * 2;
+                    + Preferences.getInteger("node.border.width") * 2;
             }
             public int getHeight(Node node) {
                 return metrics.getHeight()
-                    + Preferences.getInteger(Preferences.PREF_NODE_BORDER_HEIGHT) * 2;
+                    + Preferences.getInteger("node.border.height") * 2;
             }
         };
 

@@ -39,7 +39,7 @@ public class ModuleBrowser extends ToolComponent {
 
     private void createModuleGraph() {
         importGraphPanel = new ImportGraphPanel(metaGraphFactory, getBridge(), moduleManager);
-        Color color = Preferences.getColor(Preferences.PREF_GRAPHPANE_BACKGROUND);
+        Color color = Preferences.getColor("graphpane.background");
         importGraphPanel.setBackground(color);
     }
     
