@@ -222,6 +222,10 @@ public class ATermsRef extends ATermRef
   }
 
   //}
+ 
+  public boolean empty() {
+    return (this.length() == 0);
+  }
 
 /* ToDo:
    insert, remove, delete, deleteOnce, replace, index, slice, reverse,
