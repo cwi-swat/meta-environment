@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:43 2005 -->
 <head>
 <title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.18 Equations</title>
 
@@ -22,7 +22,7 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_28.html"><img border="0" alt="2.19 Tests" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_26.html"><img border="0" alt="2.17 Libraries" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.18 Equations</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+    <td bgcolor="#99ccff"><a href="user-manual_28.html"><img border="0" alt="2.19 Tests" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_26.html"><img border="0" alt="2.17.2 Error messages" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.18 Equations</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
 <h2>2.18 Equations</h2>
 
 <p>
@@ -105,7 +105,7 @@ For the evaluation of matching conditions we have the following case:
   new or fresh variable not in <i>V</i>.
   Reduce the right-hand side of the matching condition to a normal form 
   and the matching condition succeeds if this normal form and the 
-  left-hand side side of the condition match. 
+  left-hand side of the condition match. 
   The new variables resulting from this match are added
   to <i>V</i>. This kind of condition is called a <em>match</em> condition.
   The variables occurring in both <i>V</i> and the left-hand side must
@@ -238,9 +238,11 @@ as result.
 
 <font size="-1">
 <pre>
+%% Split.sdf
 module Split
 
 imports basic/Integers
+imports basic/Whitespace
 
 exports
   context-free start-symbols List
@@ -249,27 +251,28 @@ exports
   lexical syntax
     [a-z]+ -&gt; El
   context-free syntax
-    {El ","}* -&gt; List
-    "length" "(" List ")"       -&gt; Integer
-    "split-in-two" "(" List ")" -&gt; List
+    {El ","}*          -&gt; List
+    length(List)       -&gt; Integer
+    split-in-two(List) -&gt; List
 
 hiddens
   variables
     "El"[0-9]*  -&gt; El
     "El*"[0-9]* -&gt; {El ","}* 
 
+%% Split.asf
 equations
 
   [l-1] length() = 0
 
   [l-2] length(El, El*) = 1 + length(El*)
 
-  [s-1] length(El*1) = length(El*2)
-        ===========================
+  [s-1] length(El*1) == length(El*2)
+        ====&gt;
         split-in-two(El*1, El*2) = El*1
 
-  [s-1] length(El*1) = length(El*2)
-        ===========================
+  [s-1] length(El*1) == length(El*2)
+        ====&gt;
         split-in-two(El*1, El, El*2) = El*1 
 </pre>
 </font></font> 
@@ -403,7 +406,7 @@ exports
     "natural"     -&gt; Type
     "string"      -&gt; Type
     "nil-type"    -&gt; Type
-    "compatible" "(" Type "," Type ")" -&gt; Boolean
+    compatible(Type, Type) -&gt; Boolean
 
 hiddens
   variables
@@ -531,7 +534,7 @@ recursive traversal function should consider many node categories and
 the size of its definition will grow accordingly.  This becomes even
 more dramatic if we realize that the traversal function will only do
 some real work (apart from traversing) for very few node categories.
-<p>Traversal functions in ASF+SDF&nbsp;<a href="user-manual_54.html#BKV03">[13]</a> solve this problem.
+<p>Traversal functions in ASF+SDF&nbsp;<a href="user-manual_55.html#BKV03">[13]</a> solve this problem.
 We distinguish three kinds of traversal functions, defined as follows.
 <dl><dt><b>Transformer:</b><dd> a sort-preserving transformation that 
 will traverse its first argument. Possible extra arguments may contain
@@ -560,7 +563,7 @@ second argument maintains the accumulated value. The return value of
 an accumulating transformer is a tuple consisting of the transformed
 first argument and accumulated value. An accumulating transformer
 is declared as follows:
-<blockquote><i>f(S<sub>1</sub> , S<sub>2</sub> , ..., S<sub>n</sub>)  -&gt; S<sub>1</sub> &#35; S<sub>2</sub> &#123;<tt>&nbsp;traversal(accu,&nbsp;trafo,&nbsp;...)</tt>&#125;</i></blockquote>
+<blockquote><i>f(S<sub>1</sub> , S<sub>2</sub> , ..., S<sub>n</sub>)  -&gt; &lt;S<sub>1</sub>, S<sub>2</sub>&gt; &#123;<tt>&nbsp;traversal(accu,&nbsp;trafo,&nbsp;...)</tt>&#125;</i></blockquote>
 <p>An accumulating transformer is used to simultaneously extract information from a
 tree and transform it.
 </dl>
@@ -603,14 +606,15 @@ Examples are <tt>f(0,1)</tt> and <tt>f(g(1,2), h(3,4))</tt>.
 <pre>
 module Tree-syntax
 
-imports Naturals
+imports basic/Integer
+imports basic/Whitespace
 
 exports
   context-free start-symbols Tree
   sorts Tree
 
   context-free syntax
-    Nat           -&gt; Tree
+    Integer       -&gt; Tree
     f(Tree, Tree) -&gt; Tree
     g(Tree, Tree) -&gt; Tree
     h(Tree, Tree) -&gt; Tree
@@ -631,13 +635,21 @@ all numbers have been incremented.
 
 <font size="-1">
 <pre>
+%% Tree-inc.sdf
 module Tree-inc
 imports Tree-syntax
-  exports
-    context-free syntax
-      inc(Tree) -&gt; Tree {traversal(trafo, top-down, continue)}
+
+exports
+  context-free syntax
+    inc(Tree) -&gt; Tree {traversal(trafo, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -&gt; Integer
+
+%% Tree-inc.asf
 equations
-[1] inc(N) = N + 1  
+  [1] inc(N) = N + 1  
 </pre>
 </font></font> 
    <hr />
@@ -648,21 +660,28 @@ equations
 <p>   
 <p>Our <a href="#FIG:sum">second example</a>
 computes the sum of all numbers in a tree.
-For many more examples and a detailed description of traversal functions
-see&nbsp;<a href="user-manual_54.html#BKV01">[11]</a>.
+For more examples and a detailed description of traversal functions
+see&nbsp;<a href="user-manual_55.html#BKV01">[11]</a>.
 <p><p><a name="FIG:sum"> 
 
    <hr />
 
 <font size="-1">
 <pre>
+%% Tree-sum.sdf
 module Tree-sum
 imports Tree-syntax
 exports
   context-free syntax
-    sum(Tree, Nat) -&gt; Nat {traversal(accu, top-down, continue)}
+    sum(Tree, Integer) -&gt; Integer {traversal(accu, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -&gt; Integer
+
+%% Tree-inc.asf
 equations
-[1] sum(N1, N2) = N1 + N2
+  [1] sum(N1, N2) = N1 + N2
 </pre>
 </font></font> 
    <hr />
@@ -681,18 +700,47 @@ of the tree that is traversed, for both accumulating as well as
 transformation functions.
 <li>In case of a transformation function the result sort should always
 be same as the sort of the first argument.
+<pre>
+tf(Tree, A_1, ..., A_n) -&gt; Tree {traversal(trafo, ...)}
+</pre>
 <li>In case of an accumulating function, the second argument represents
 the accumulator and the result sort should be of the same sort.
+<pre>
+tf(Tree, Accu, A_1, ..., A_n) -&gt; Accu {traversal(accu, ...)}
+</pre>
 <li>In case of an accumulating transformation function, the first
 argument
 represents the tree node, the second the accumulator, and the result sort
 should be a tuple consisting of the tree node sort (first element
 of the tuple) and the accumulator (second element of the tuple).
+<pre>
+tf(Tree, Accu, A_1, ..., A_n) -&gt; &lt;Tree, Accu&gt; {traversal(accu, trafo, ...)}
+</pre>
 <li>The traversal functions may have more arguments, the only restriction
 is that they should be consistent over the various occurrences of the
 same traversal function.
+<pre>
+tf(Tree1, Accu, A_1, A_2, ..., A_n) -&gt; Tree1 {traversal(trafo, continue, top-down)}
+tf(Tree2, Accu, A_2, A_1, ..., A_n) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</pre>
 <li>The order of the traversal attributes is free, but should be used
-consistently.
+consistently, for instance the following definition is not allowed.
+<pre>
+tf(Tree1, Accu, A_1, ..., A_n) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, ..., A_n) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</pre>
+<li>If the number of arguments of the traversal function changes, you
+should introduce a new function name. The following definitions are not
+correct:
+<pre>
+tf(Tree1, Accu, A_1, A_2) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, A_2, A_3) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</pre>
+but should be:
+<pre>
+tf1(Tree1, Accu, A_1, A_2) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf2(Tree2, Accu, A_1, A_2, A_3) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</pre>
 </ul>
 In the SDF&#32;part of a module it is needed to define traversal functions
 for all sorts which are needed in the equations. 
@@ -754,6 +802,6 @@ an infinite loop.
 <li>Be careful when a condition contains both instantiated and 
 uninstantiated variables.
 </ul>
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_28.html"><img border="0" alt="2.19 Tests" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_26.html"><img border="0" alt="2.17 Libraries" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.18 Equations</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_28.html"><img border="0" alt="2.19 Tests" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_26.html"><img border="0" alt="2.17.2 Error messages" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.18 Equations</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

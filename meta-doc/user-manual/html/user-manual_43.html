@@ -4,9 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:44 2005 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.1 Technology and Architecture of the ASF+SDF Meta-Environment</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,90 +23,38 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="5.2 Components" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
-<h2>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</h2>
-
-<p>So far, we have explained the functionality of the ASF+SDF Meta-Environment&#32;as an
-interactive development environment for ASF+SDF&#32;specifications.
-There are, however, good reasons to have a look under the hood and
-understand the architecture and technologies that have been used:
-<ul><li>Both architecture and technologies are very innovative
-and it is worthwhile to learn about them.
-<li>The ASF+SDF Meta-Environment&#32;has been constructed as a collection of
-cooperating components. All of these components have merits of their
-own and can be used independently of the ASF+SDF Meta-Environment.
+    <td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="5.1 Technology and Architecture of the ASF+SDF Meta-Environment" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="4.7 Type check errors for ASF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
+<h1>5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology</h1>
+<p>In this chapter we describe how to build simple and more complex
+stand-alone environments using the various components of the
+ASF+SDF Meta-Environment. It does not include building an
+environment based on the ToolBus.
+<p>First we will briefly introduce the underlying technology and
+architecture of the Meta-Environment. Secondly, we will describe 
+a selection of components that are useful for
+building stand-alone tools. <em>Be aware that the information in the
+following pages is still very much in a state of flux.</em>
+Note that all components mentioned have a <tt>-h</tt> options that 
+gives an overview of their command line options.
+Finally, we will describe how these components can be combined
+into stand-alone environments. We will describes various levels
+of integration. The first level is with UNIX pipes and files
+and the second level is invoking the various components from
+within C programs. The last level, which we will not discuss,
+is by writing ToolBus scripts.
+<ul>
+<li><a href="user-manual_44.html">5.1 Technology and Architecture of the ASF+SDF Meta-Environment</a>
+<li><a href="user-manual_45.html">5.2 Components</a>
+<li><a href="user-manual_46.html">5.3 Parsing</a>
+<li><a href="user-manual_47.html">5.4 Rewriting a Term using the Evaluator</a>
+<li><a href="user-manual_48.html">5.5 Compiling a Specification</a>
+<li><a href="user-manual_49.html">5.6 Rewriting a Term using a Compiled Specification</a>
+<li><a href="user-manual_50.html">5.7 Unparsing a (Parsed/Normalized) Term</a>
+<li><a href="user-manual_51.html">5.8 Applying a Function to a Term</a>
 </ul>
-<p>If you want to reuse components of the ASF+SDF Meta-Environment&#32;or want to build
-variants of it, then the following information is for you.
-
-<h3><a name="id1">5.1.1 Technological Background</a></h3>
-
-<h4><a name="id2">ToolBus</a></h4>
-<p>In many large systems control flow and actual computation are complete
-entangled. This leads to poor extensibility and maintenance problems.  To
-separate coordination from computation we use the ToolBus coordination
-architecture&nbsp;<a href="user-manual_54.html#BK98">[2]</a>, a programmable software bus based on process
-algebra.  Coordination is expressed by a formal description of the cooperation
-protocol between components while computation is expressed in components that
-may be written in any language. We thus obtain interoperability of
-heterogeneous components in a (possibly) distributed system.
-
-<h4><a name="id3">ATerms</a></h4>
-<p>Coordination protocol and components have to share data. We use
-ATerms&nbsp;<a href="user-manual_54.html#BJKO00">[8]</a> for this purpose. These are trees with optional annotations on
-each node.  The annotations are used to store tool-specific information
-like text coordinates or color attributes. The implementation of ATerms
-has two essential properties: terms are stored using maximal subterm
-sharing (reducing memory requirements and making deep equality tests
-very efficient) and they can be exchanged using a very dense binary encoding that
-preserves sharing. As a result very large terms (with over <i>1,000,000</i> nodes)
-can be processed.
-
-<h4><a name="id4">SGLR</a></h4>
-<p>In our language-centric approach the parser is an essential tool.  We
-use scannerless, generalized-LR parsing&nbsp;<a href="user-manual_54.html#Vis97">[35]</a>.  In this way we
-can parse arbitrary context-free grammars, an essential property when
-combining and parsing large grammars for (dialects of) real-world
-languages.
-
-<h4><a name="id5">Term rewriting</a></h4>
-<p>ASF+SDF&#32;specifications are executed as (conditional) rewrite rules. Both
-interpretation and compilation (using the ASF2C compiler&nbsp;<a href="user-manual_54.html#BKO99">[10]</a>) of
-these rewrite rules are supported. The compiler generates very efficient
-C code that implements pattern matching and term traversal. The generated
-code uses ATerms as its main data representation, and ensures a minimal
-use of memory during normalization of terms.
-
-<h3><a name="id6">5.1.2 Architecture</a></h3>
-<div align="center"><p>
-<a name="FIG:architecture">
-<img alt="" src="layered-arch.gif">
-<div align="center">Architecture of the ASF+SDF Meta-Environment</div>
-</a>
-</p></div>
-The architecture of the ASF+SDF Meta-Environment&#32;is shown <a href="#FIG:architecture">above</a>.
-It consists of a ToolBus that interconnects the following components:
-<ul><li><b>User interface (GUI)</b>: the top level user-interface of the system.
-      It consists primarily of a graph browser for the import graph
-      of the current specification. Furthermore, it offers facilities
-      to visualize parse trees of selected pieces of parsed texts.
-<li><b>Text Editor</b>: a customized version of <tt>XEmacs</tt>&#32;for text editing.
-<li><b>Structure Editor</b>: a syntax-directed editor that closely cooperates
-with the Text Editor.
-<li><b>Parser</b>:  scannerless, generalized-LR parser (SGLR) that is parametrized 
-with a parse table.
-<li><b>Parsetable generator</b>: takes an SDF syntax definition as input and 
-generates a parse table for SGLR.
-<li><b>Term Store</b>: stores all terms corresponding to specification 
-modules, parse tables, user-defined terms, etc.
-<li><b>ASF Compiler</b>: the ASF2C compiler.
-<li><b>ASF Interpreter</b>: executes specifiations by direct interpretation.
-<li><b>Unparser generator</b>: generates prettyprinters.
-</ul>
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="5.2 Components" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="5.1 Technology and Architecture of the ASF+SDF Meta-Environment" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="4.7 Type check errors for ASF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

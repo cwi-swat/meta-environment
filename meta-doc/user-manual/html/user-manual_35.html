@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:44 2005 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 4.1 Parse Errors</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 4 Well-formedness checks on SDF</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,33 +22,32 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="4.2 Type check warnings for plain SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="4 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="4 Well-formedness checks on SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>4.1 Parse Errors</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
-<h2>4.1 Parse Errors</h2>
-There are three different types of parse errors:
-<ol><li>A syntax error, which is reported by pinpointing the exact
-location in the file and the message <tt>Parse error near cursor</tt> in case
-of an editor or in the message pane an error message similar to
-<tt>Parse error: character '&lt;c&gt;' unexpected</tt>.
-This means that the parser detected a syntax error in the text to be parsed
-and can not proceed its parsing process.
-Clicking on the error in the <tt>Errors</tt>-pane moves the cursor to the
-exact error location and launches if needed the editor.
-A variant of the syntax error message is: <tt>Parse error: eof
-unexpected</tt>.
-<li>A cycle, in case of an editor the cursor is positioned at the
-position where the first cycle is detected in the input and the message
-is <tt>Cycle: &lt;list&#95;of&#95;production&#95;rules&gt;</tt> is printed.
-A cycle is reported whenever
-the parser detects a non terminating chain of reductions.
-All production rules on the cycle are shown as <tt>&lt;list&#95;of&#95;production&#95;rules&gt;</tt>.
-<li>An ambiguity, again in case of an editor the cursor is
-positioned at the position where the first ambiguity is detected in the
-input and the message <tt>Ambiguity: &lt;list&#95;of&#95;production&#95;rules&gt;</tt>
-is printed. An ambiguity is reported whenever the parser was able to
-recognized a (part of) the input sentence in different ways.
-The <tt>&lt;list&#95;of&#95;production&#95;rules&gt;</tt> shows all production rules
-that are involved in the ambiguity.
+    <td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="4.1 Parse Errors" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="3.5 Large ASF+SDF&#32;Specifications" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>4 Well-formedness checks on SDF</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
+<h1>4 Well-formedness checks on SDF</h1>
+
+<p>In order to improve the quality of the written specifications, a number
+of checks are performed before an SDF&#32;specification is transformed
+into a parse table. The checks are performed on two levels: the first
+level are SDF&#32;specific check, the second level are the ASF+SDF&#32;specific
+check.
+<p>There are various categories of messages in the ASF+SDF Meta-Environment.
+<ol><li>Parse errors.
+<li>SDF type check warnings.
+<li>SDF type check errors.
+<li>ASF type check errors.
 </ol>
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+We will briefly discuss each of the error messages and indicate what is
+exactly wrong in the specification. Furthermore we will hint at how the
+error can be fixed.
+<ul>
+<li><a href="user-manual_36.html">4.1 Parse Errors</a>
+<li><a href="user-manual_37.html">4.2 Type check warnings for plain SDF</a>
+<li><a href="user-manual_38.html">4.3 Type check errors for plain SDF</a>
+<li><a href="user-manual_39.html">4.4 Type check warnings for ASF+SDF</a>
+<li><a href="user-manual_40.html">4.5 Type check errors for ASF+SDF</a>
+<li><a href="user-manual_41.html">4.6 Type check warnings for ASF</a>
+<li><a href="user-manual_42.html">4.7 Type check errors for ASF</a>
+</ul>
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="4.2 Type check warnings for plain SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="4 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="4 Well-formedness checks on SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>4.1 Parse Errors</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="4.1 Parse Errors" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_34.html"><img border="0" alt="3.5 Large ASF+SDF&#32;Specifications" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>4 Well-formedness checks on SDF</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

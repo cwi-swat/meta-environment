@@ -2625,6 +2625,7 @@ different instances of the same module.
 \begin{verbatim}
 module Pair[X Y]
 
+imports basic/Whitespace
 imports basic/Booleans
 
 hiddens
@@ -2660,9 +2661,11 @@ actual parameters of the module {\tt Pair[X Y]} in the last import.
 \begin{verbatim}
 module TestPair
 
-imports basic/Booleans Pair[Boolean Boolean]
-        basic/Integers Pair[Integer Integer]
-        Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[Boolean Boolean]
+imports Pair[Integer Integer]
+imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
@@ -2689,6 +2692,7 @@ names when {\tt Pair} is imported.
 \begin{verbatim}
 module Pair
 
+imports basic/Whitespace
 imports basic/Booleans
 
 hiddens
@@ -2723,9 +2727,11 @@ written as {\tt X => Boolean}.
 \begin{verbatim}
 module TestPair
 
-imports basic/Booleans Pair[X => Boolean Y => Boolean]
-        basic/Integers Pair[X => Integer  Y => Integer]
-        Pair[X => Pair[[Boolean,Boolean]] Y => Pair[[Integer,Integer]]]
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[X => Boolean Y => Boolean]
+imports Pair[X => Integer  Y => Integer]
+imports Pair[X => Pair[[Boolean,Boolean]] Y => Pair[[Integer,Integer]]]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
@@ -3145,6 +3151,7 @@ number containing the letter {\tt a} is constructed.
 \begin{Label}{CODE:lcfs}
 \begin{IncCode}
 \begin{verbatim}
+%% Nats.sdf
 module Nats
 
 imports basic/Whitespace
@@ -3160,6 +3167,7 @@ hiddens
   variables
     "Char+"[0-9]* -> CHAR+
 
+%% Nats.asf
 equations
 
   [1] nat-con("0" Char+) = nat-con(Char+)  
@@ -3173,6 +3181,7 @@ equations
 \begin{Label}{CODE:illegallcfs}
 \begin{IncCode}
 \begin{verbatim}
+%% Nats.sdf
 module Nats
 
 imports basic/Whitespace
@@ -3188,6 +3197,7 @@ hiddens
   variables
     "Char+"[0-9]* -> CHAR+
 
+%% Nats.asf
 equations
 
   [1] nat-con(Char+) = nat-con(Char+ "a")  
@@ -3218,8 +3228,10 @@ an example of the use of a default equation.
 \begin{Label}{CODE:types}
 \begin{IncCode}
 \begin{verbatim}
+%% Types.sdf
 module Types
 
+imports basic/Whitespace
 imports basic/Booleans
 
 exports
@@ -3236,6 +3248,7 @@ hiddens
   variables
     "Type"[0-9]*  -> Type
 
+%% Types.asf
 equations
 
   [Type-1]  compatible(natural, natural) = true
@@ -3280,6 +3293,7 @@ is decorated with the memo attribute to improve its efficiency.
 \begin{Label}{CODE:fib}
 \begin{IncCode}
 \begin{verbatim}
+%% Fib.sdf
 module Fib
 
 imports basic/Whitespace
@@ -3301,6 +3315,7 @@ hiddens
   variables
     [xy][0-9]* -> Int
 
+%% Fib.asf
 equations
 
   [add-s] add(s(x), y) = s(add(x, y))
@@ -3655,6 +3670,7 @@ be exchanged, will lead to an infinite rewriting loop.
 \begin{Label}{CODE:itemsets}
 \begin{IncCode}
 \begin{verbatim}
+%% ItemSet.sdf
 module ItemSet
 
 imports basic/Whitespace
@@ -3674,6 +3690,7 @@ hiddens
     "i"[0-9]* -> Item
     "l"[0-9]* -> {Item ","}* 
 
+%% ItemSet.asf
 equations
 
   [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
@@ -3725,6 +3742,7 @@ expressions as defined in
 \begin{Label}{CODE:eval}
 \begin{IncCode}
 \begin{verbatim}
+%% Eval.sdf
 module Eval 
 
 imports SimpleExpr
@@ -3739,6 +3757,7 @@ hiddens
     "E"[0-9]* -> E
     "N"[0-9]* -> NatCon
 
+%% Eval.asf
 equations
  [e1] eval(E1 + E2) = eval(E1) + eval(E2)
  [e2] eval(E1 * E2) = eval(E1) * eval(E2)
@@ -3773,6 +3792,7 @@ compute constant expressions.
 \begin{Label}{CODE:diff}
 \begin{IncCode}
 \begin{verbatim}
+%% Diff.sdf
 module Diff 
 
 imports basic/Whitespace
@@ -3802,14 +3822,21 @@ hiddens
     "V"[0-9]* -> Var 
     "E"[0-9]* -> Exp 
 
+%% Diff.asf
 equations 
-  [ 1] dN/dV = 0            [ 2] dV/dV = 1 
-  [ 3] V1 != V2 ==> dV1/dV2 = 0 
+  [ 1] dN/dV = 0            
+  [ 2] dV/dV = 1 
+  [ 3] V1 != V2 
+       ====> 
+       dV1/dV2 = 0 
   [ 4] d(E1+E2)/dV = dE1/dV + dE2/dV 
   [ 5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
-  [ 6] E + 0 = E            [ 7] 0 + E = E 
-  [ 8] E * 1 = E            [ 9] 1 * E = E 
-  [10] 0 * E = 0            [11] E * 0 = 0
+  [ 6] E + 0 = E            
+  [ 7] 0 + E = E 
+  [ 8] E * 1 = E            
+  [ 9] 1 * E = E 
+  [10] 0 * E = 0            
+  [11] E * 0 = 0
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for differentiation}
@@ -3837,6 +3864,7 @@ order.
 \begin{Label}{CODE:flag}
 \begin{IncCode}
 \begin{verbatim}
+%% Flag.sdf
 module Flag
 
 imports basic/Whitespace
@@ -3856,6 +3884,7 @@ hiddens
     "Cs"[0-9]* -> Color* 
     "C"[0-9]*  -> Color 
 
+%% Flag.asf
 equations
 
   [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
@@ -4047,6 +4076,7 @@ replaced by a more sophisticated one.
 \begin{Label}{CODE:nextlabel}
 \begin{IncCode}
 \begin{verbatim}
+%% NextLabel.sdf
 module NextLabel
   
 imports AssemblyLanguage
@@ -4059,6 +4089,7 @@ hiddens
   variables
     "Char*"[0-9]* -> CHAR*
 
+%% NextLabel.asf
 equations
 
  [1] nextlabel(label(Char*)) = label(Char* "x")
@@ -4087,6 +4118,7 @@ the actual translation function.
 \begin{Label}{CODE:codegenerator.sdf}
 \begin{IncCode}
 \begin{verbatim}
+%% CodeGenerator.sdf
 module CodeGenerator
 
 imports Statements AssemblyLanguage NextLabel 
@@ -4127,6 +4159,7 @@ hiddens
 \begin{Label}{CODE:codegenerator.asf}
 \begin{IncCode}
 \begin{verbatim}
+%% CodeGenerator.asf
 equations 
 
 [1] <Instr-list, Label> := tr(Stat-list, x)

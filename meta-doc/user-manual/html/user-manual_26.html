@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:43 2005 -->
 <head>
 <title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.17 Libraries</title>
 
@@ -22,9 +22,35 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_27.html"><img border="0" alt="2.18 Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_25.html"><img border="0" alt="2.16 Variables" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.17 Libraries</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+    <td bgcolor="#99ccff"><a href="user-manual_27.html"><img border="0" alt="2.18 Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_25.html"><img border="0" alt="2.16 Variables" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.17 Libraries</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
 <h2>2.17 Libraries</h2>
 
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<p>Via the graphical user interface of the ASF+SDF Meta-Environment&#32;one has access to
+a number of predefined modules. These library modules are divided into
+4 different categories:
+<ol><li><tt>basic</tt>
+<li><tt>containers</tt>
+<li><tt>languages</tt>
+<li><tt>utilities</tt>
+</ol>
+<p>Each of these categories offers a number of useful library modules, e.g.,
+the category <tt>basic</tt> offers the library modules for <tt>Booleans</tt>,
+<tt>Integers</tt>, <tt>Strings</tt>, etc. The category <tt>containers</tt> offers
+modules <tt>List</tt>, <tt>Set</tt>, and <tt>Table</tt>. The category <tt>languages</tt> offers a number of predefined syntax definitions. 
+<p>One can import these library modules in a specification in the following
+way:
+<tt>imports basic/Booleans</tt> for a library module without parameters and
+<tt>imports containers/List[Boolean]</tt> if it is a parameterized library
+module. In the various examples presented upto now the library modules
+are used whenever appropriate.
+<p>When developing a new specification make sure that you check the libraries
+in order to reduce the amount of work.
+
+<h3><a name="id1">2.17.1 Position Information</a></h3>
+In a number of cases, for instance when producing error messages, it can
+be very useful to retrieve the position information of subterms.
+
+<h3><a name="id2">2.17.2 Error messages</a></h3>
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_27.html"><img border="0" alt="2.18 Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_25.html"><img border="0" alt="2.16 Variables" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.17 Libraries</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_27.html"><img border="0" alt="2.18 Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_25.html"><img border="0" alt="2.16 Variables" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.17 Libraries</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:44 2005 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.2 Components</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.1 Technology and Architecture of the ASF+SDF Meta-Environment</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,77 +22,90 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.3 Parsing" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5.1.2 Architecture" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.2 Components</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
-<h2>5.2 Components</h2>
-In the previous section we have described the overall architecture and very
-briefly mentioned the main components of the Meta-Environment. In order to
-understand how to build stand-alone environments, it is necessary to 
-understand some of the "flow-of-control" and "data-flow" within the
-Meta-Environment. There are in fact two main scenarios:
-<ul><li>Parsing a term
-<li>Reducing a term
-</ul>
-<p>An integrated environment as the ASF+SDF Meta-Environment&#32;takes
-care of a lot of administrative issues when developing your
-specifications. For syntax editors a fixed parse table will
-be used, namely a parse table derived from the SDF grammar.
-But when you invoke an equation or term editor 
-and hit the parse button, the environment will generate a 
-parse table, if necessary, before parsing the equations or 
-term. In order to do that the underlying syntax definition 
-will be checked on completeness and well-formedness, and if 
-this is the case the parse table will be generated and stored 
-in a repository. This storing of the parse table is just for 
-caching.
-<p>If you select the reduce button in a term editor all relevant
-equations have to be parsed, checked and combined into one list
-in order to be used by the interpreter for rewriting the term.
-<p>These parse tables and list of equations play an important
-role in the stand-alone setting.
+    <td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.2 Components" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
+<h2>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</h2>
 
-<h3><a name="id1">5.2.1 Parse Table Generation</a></h3>
-<p>Before you can parse terms over a module <tt>M</tt> outside the
-ASF+SDF Meta-Environment&#32;you have to obtain a parse table for this module.  
-There are currently three ways to achieve this:
-<ul><li>Interactively using the ASF+SDF Meta-Environment&#10;by selecting module <tt>M</tt> and pushing the <tt>Term ParseTable...</tt> button in 
-the menu <tt>Export</tt> for the module pop-up menu. A window pops up in which
-you can select the directory where the parse table will be saved and in
-which you have to give the desired name for the table.
-<li>From the command line using the command <tt>pt-dump</tt>.
-In the background the same actions are performed as in the interactive
-setting, only no user interface is activated. 
-If you want to obtain the parse table for <tt>basic/Booleans</tt> 
-you can do this via <tt>pt-dump -m basic/Booleans -o Booleans.trm.tbl</tt>.
-For further information use <tt>pt-dump -h</tt>.
-<li>From the command line using the command <tt>sdf2table</tt>.  You should
-be aware that <tt>sdf2table</tt> needs as input the <em>complete</em> grammar
-of <tt>M</tt>. This means in particular that all imports of <tt>M</tt> should
-be expanded before <tt>sdf2table</tt> can be used. Command line tools are
-available to do this, but we will not describe them here.
-<p>For further information use <tt>sdf2table -h</tt>.
+<p>So far, we have explained the functionality of the ASF+SDF Meta-Environment&#32;as an
+interactive development environment for ASF+SDF&#32;specifications.
+There are, however, good reasons to have a look under the hood and
+understand the architecture and technologies that have been used:
+<ul><li>Both architecture and technologies are very innovative
+and it is worthwhile to learn about them.
+<li>The ASF+SDF Meta-Environment&#32;has been constructed as a collection of
+cooperating components. All of these components have merits of their
+own and can be used independently of the ASF+SDF Meta-Environment.
 </ul>
-<p>Before a parse table is generated the SDF&#32;definition is checked with
-respect to well-formedness. When using the <tt>sdf2table</tt> only the 
-checks on SDF&#32;are performed, in the other two cases the checks
-on SDF&#32;and on ASF+SDF&#32;specific features are performed as well.
+<p>If you want to reuse components of the ASF+SDF Meta-Environment&#32;or want to build
+variants of it, then the following information is for you.
 
-<h3><a name="SEC:obtainingequations">5.2.2 Obtaining Equations</a></h3>
+<h3><a name="id1">5.1.1 Technological Background</a></h3>
 
-<p>In order to <a href="user-manual_46.html">rewrite a term</a>, 
-or <a href="user-manual_47.html">compile a specification</a> it is necessary
-to obtain the equations.
-The generation of equations given an ASF+SDF&#32;specification can be
-performed in two different ways:
-<ul><li>Interactively using the ASF+SDF Meta-Environment&#10;by selecting module <tt>M</tt> and pushing the <tt>Dump Equations...</tt> button in 
-the pop-up menu.
-<li>From the command line using the command <tt>eqs-dump</tt>.
-In the background the same actions are performed as in the interactive
-setting, only no user interface is activated.
-For further information use <tt>eqs-dump -h</tt>.
+<h4><a name="id2">ToolBus</a></h4>
+<p>In many large systems control flow and actual computation are complete
+entangled. This leads to poor extensibility and maintenance problems.  To
+separate coordination from computation we use the ToolBus coordination
+architecture&nbsp;<a href="user-manual_55.html#BK98">[2]</a>, a programmable software bus based on process
+algebra.  Coordination is expressed by a formal description of the cooperation
+protocol between components while computation is expressed in components that
+may be written in any language. We thus obtain interoperability of
+heterogeneous components in a (possibly) distributed system.
+
+<h4><a name="id3">ATerms</a></h4>
+<p>Coordination protocol and components have to share data. We use
+ATerms&nbsp;<a href="user-manual_55.html#BJKO00">[8]</a> for this purpose. These are trees with optional annotations on
+each node.  The annotations are used to store tool-specific information
+like text coordinates or color attributes. The implementation of ATerms
+has two essential properties: terms are stored using maximal subterm
+sharing (reducing memory requirements and making deep equality tests
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over <i>1,000,000</i> nodes)
+can be processed.
+
+<h4><a name="id4">SGLR</a></h4>
+<p>In our language-centric approach the parser is an essential tool.  We
+use scannerless, generalized-LR parsing&nbsp;<a href="user-manual_55.html#Vis97">[35]</a>.  In this way we
+can parse arbitrary context-free grammars, an essential property when
+combining and parsing large grammars for (dialects of) real-world
+languages.
+
+<h4><a name="id5">Term rewriting</a></h4>
+<p>ASF+SDF&#32;specifications are executed as (conditional) rewrite rules. Both
+interpretation and compilation (using the ASF2C compiler&nbsp;<a href="user-manual_55.html#BKO99">[10]</a>) of
+these rewrite rules are supported. The compiler generates very efficient
+C code that implements pattern matching and term traversal. The generated
+code uses ATerms as its main data representation, and ensures a minimal
+use of memory during normalization of terms.
+
+<h3><a name="id6">5.1.2 Architecture</a></h3>
+<div align="center"><p>
+<a name="FIG:architecture">
+<img alt="" src="layered-arch.gif">
+<div align="center">Architecture of the ASF+SDF Meta-Environment</div>
+</a>
+</p></div>
+The architecture of the ASF+SDF Meta-Environment&#32;is shown <a href="#FIG:architecture">above</a>.
+It consists of a ToolBus that interconnects the following components:
+<ul><li><b>User interface (GUI)</b>: the top level user-interface of the system.
+      It consists primarily of a graph browser for the import graph
+      of the current specification. Furthermore, it offers facilities
+      to visualize parse trees of selected pieces of parsed texts.
+<li><b>Text Editor</b>: a customized version of <tt>XEmacs</tt>&#32;for text editing.
+<li><b>Structure Editor</b>: a syntax-directed editor that closely cooperates
+with the Text Editor.
+<li><b>Parser</b>:  scannerless, generalized-LR parser (SGLR) that is parametrized 
+with a parse table.
+<li><b>Parsetable generator</b>: takes an SDF syntax definition as input and 
+generates a parse table for SGLR.
+<li><b>Term Store</b>: stores all terms corresponding to specification 
+modules, parse tables, user-defined terms, etc.
+<li><b>ASF Compiler</b>: the ASF2C compiler.
+<li><b>ASF Interpreter</b>: executes specifiations by direct interpretation.
+<li><b>Unparser generator</b>: generates prettyprinters.
 </ul>
-The result is a file named <tt>M.eqs</tt>.
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.3 Parsing" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5.1.2 Architecture" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.2 Components</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.2 Components" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technology and Architecture of the ASF+SDF Meta-Environment</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

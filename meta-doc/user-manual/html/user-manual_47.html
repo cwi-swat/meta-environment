@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:44 2005 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.5 Compiling a Specification</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.4 Rewriting a Term using the Evaluator</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,36 +22,33 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_48.html"><img border="0" alt="5.6 Rewriting a Term using a Compiled Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_46.html"><img border="0" alt="5.4 Rewriting a Term using the Evaluator" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.5 Compiling a Specification</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
-<h2>5.5 Compiling a Specification</h2>
+    <td bgcolor="#99ccff"><a href="user-manual_48.html"><img border="0" alt="5.5 Compiling a Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_46.html"><img border="0" alt="5.3 Parsing" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.4 Rewriting a Term using the Evaluator</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
+<h2>5.4 Rewriting a Term using the Evaluator</h2>
 
-<p>By means of the <tt>Compile ...</tt> button in the
-pop-up menu of the import pane the ASF+SDF2C
-compiler can be activated. C code is generated for the selected module
-(exactly <em>one</em> module can be selected for compilation) including
-the imported modules. The C code is immediately compiled into an
-executable.
-<p>	<img alt="" src="warning.gif">
-	
-
-The specification should be complete, i.e., no missing modules are
-allowed, and the equations sections should be error free.
-<p>If this requirement is satisfied, C code can be generated.
-This process of C code generation is described in detail in <a href="user-manual_54.html#BKO99">[10]</a>.
-We shall give a brief description of the main steps performed by the
-ASF+SDF2C compiler.
-<p>In ASF+SDF&#32;there is <em>no</em> restriction in which module an equation
-is defined, except that all applied syntax rules should be defined.
-This freedom asks for a `reshuffling' of the equations given the set of
-defined syntax rules. This reshuffling is needed because for each syntax
-rule a separate C function is generated. This C function must contain
-the C code for <em>all</em> equations with the C function as outermost
-function symbol in the left-hand side.  By having all equations with the
-same outermost function symbol in the left-hand side together an optimal
-matching automaton can be generated.  Equations with the same outermost
-function symbol are moved to the corresponding syntax rule.  
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<p>In order to rewrite a term <tt>term.txt</tt> using the ASF+SDF&#32;evaluator 
+<tt>asfe</tt> two inputs are required:
+<ul><li>The parse tree of <tt>term.txt</tt>. See <a href="user-manual_46.html">parsing of
+terms</a> how to do this.
+The result is <tt>term.tree</tt>.
+<li>The equations to be used for rewriting.  See 
+<a href="user-manual_45.html#SEC:obtainingequations">obtaing of equations</a> for
+obtaining the equations given an ASF+SDF&#32;specification.
+</ul>
+<p>Given this two inputs it is possible to call the interpreter and
+reduce terms via the command line. This can be performed in two
+different manners:
+The first is:
+<pre>
+   asfe -e M.eqs &lt; term.tree &gt; reduct.tree 
+</pre>  
+The second is:
+<pre>
+   asfe -e M.eqs -i term.tree -o reduct.tree 
+</pre>  
+<p><a href="user-manual_50.html">Unparsing</a>
+explains how <tt>reduct.tree</tt> can be converted to a textual representation.
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_48.html"><img border="0" alt="5.6 Rewriting a Term using a Compiled Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
-Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_46.html"><img border="0" alt="5.4 Rewriting a Term using the Evaluator" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.5 Compiling a Specification</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_48.html"><img border="0" alt="5.5 Compiling a Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_43.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_46.html"><img border="0" alt="5.3 Parsing" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.4 Rewriting a Term using the Evaluator</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Mon Sep 20 12:21:35 2004 -->
+     on Emacs 21.3.1, Mon Jan 17 14:45:43 2005 -->
 <head>
 <title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.13 Priorities</title>
 
@@ -22,7 +22,7 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_23.html"><img border="0" alt="2.14 Disambiguation" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_21.html"><img border="0" alt="2.12 Attributes of Lexical and Context-free Functions" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Priorities</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+    <td bgcolor="#99ccff"><a href="user-manual_23.html"><img border="0" alt="2.14 Disambiguation" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_21.html"><img border="0" alt="2.12 Attributes of Lexical and Context-free Functions" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Priorities</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table>
 <h2>2.13 Priorities</h2>
 
 <p>The context-free syntax defined in an ASF+SDF&#32;specification may be 
@@ -63,16 +63,15 @@ is given
 module BracketExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
-  context-free start-symbols Expr
-  sorts Expr
-
-  lexical syntax
-    [0-9]+ -&gt; Expr
+  context-free start-symbols E
+  sorts E
 
   context-free syntax
-    "(" Expr ")" -&gt; Expr {bracket}
+    NatCon    -&gt; E
+    "(" E ")" -&gt; E {bracket}
 </pre>
 </font></font> 
    <hr />
@@ -138,15 +137,14 @@ associativities.
 module SimpleExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
   context-free start-symbols E 
   sorts E 
 
-  lexical syntax
-    [0-9]+ -&gt; E 
-
   context-free syntax
+    NatCon    -&gt; E
     E "+" E   -&gt; E {left}
     E "*" E   -&gt; E {left}
     "(" E ")" -&gt; E {bracket}
@@ -185,15 +183,15 @@ an example of the use of grouped associativity.
 module ComplexExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
   context-free start-symbols E 
+
   sorts E 
 
-  lexical syntax
-    [0-9]+ -&gt; E
-
   context-free syntax
+    NatCon    -&gt; E
     E "+" E   -&gt; E {left}
     E "-" E   -&gt; E {non-assoc}
     E "*" E   -&gt; E {left}
@@ -252,7 +250,7 @@ The restriction operator <tt>-/-</tt> should be read as "may not be
 followed by".
 Before the restriction operator <tt>-/-</tt> a list of symbols
 is given for which the restriction holds.
-<p>In the example<sup><a href="user-manual_57.html#id1">1</a></sup>
+<p>In the example<sup><a href="user-manual_58.html#id1">1</a></sup>
 <a href="#CODE:functional">below</a>
 both <tt>let</tt> and <tt>in</tt> may not be followed by a letter.
 This example shows how lexical restrictions can be used to prevent
@@ -441,7 +439,7 @@ all other functions or to explicitly reject certain syntactic constructs.
 The former is achieved by the attributes <tt>prefer</tt> and <tt>avoid</tt>. The
 latter by the attribute <tt>reject</tt>. 
 <p>The use of the <tt>reject</tt> attribute leads also to improvements in the 
-performance of the parser, see <a href="user-manual_54.html#BSVV02">[17]</a> for more implementation
+performance of the parser, see <a href="user-manual_55.html#BSVV02">[17]</a> for more implementation
 details.
 <p>If a function <i>F</i> is attributed with <tt>prefer</tt> and there is a syntactic
 ambiguity in which it is involved, only the parse using <i>F</i> will remain.
@@ -461,6 +459,6 @@ In <a href="user-manual_23.html#id9">Context-free Ambiguities</a>
 we will give examples of how to use
 these attributes to solve context-free ambiguities, such as the
 famous dangling else problem.
-<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
+<hr /><address>M.G.J. van den Brand and P. Klint, January 17, 2005</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_23.html"><img border="0" alt="2.14 Disambiguation" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_21.html"><img border="0" alt="2.12 Attributes of Lexical and Context-free Functions" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Priorities</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_23.html"><img border="0" alt="2.14 Disambiguation" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_21.html"><img border="0" alt="2.12 Attributes of Lexical and Context-free Functions" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Priorities</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Index</a></td></tr></table></body></html>
