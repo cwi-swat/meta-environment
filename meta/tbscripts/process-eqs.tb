@@ -96,6 +96,7 @@ let
   Equations    : term,
   AllEquations : term,
   Modules      : list,
+  NewModules   : list,
   Module       : term,
   Renamings    : term,
   FormalName   : term,
@@ -107,7 +108,7 @@ in
     snd-msg(all-equations-available(ModuleName)) .
     (
       rec-msg(equations-available) .
-      AllEquations := [] .
+      NewModules   := [] .
       snd-msg(get-all-imported-modules(ModuleName)) .
       rec-msg(all-modules(Modules?)) .
       (
@@ -116,22 +117,22 @@ in
           Modules := next(Modules) .
           snd-msg(get-equations-for-module(Module)) .
           (
-            (
-	      rec-msg(plain-equations(Equations?)) 
-              +
-              rec-msg(renaming-equations(Renamings?, Equations?)) .
-              snd-msg(rename(Renamings, Equations)) .
-              rec-msg(equations(Equations?)) 
-	    ).
-	    snd-msg(union-equations(AllEquations, Equations)) .
-	    rec-msg(equations(AllEquations?))
+	    rec-msg(plain-equations(Equations?)) .
+	    NewModules := join(Equations, NewModules)
+          +
+            rec-msg(renaming-equations(Renamings?, Equations?)) .
+            snd-msg(rename(Renamings, Equations)) .
+            rec-msg(equations(Equations?)) .
+	    NewModules := join(Equations, NewModules)
           +
 	    rec-msg(no-equations)
           )
         fi
       )*
-      if equal(Modules,[]) then 
-        snd-msg(all-equations(AllEquations))
+      if equal(Modules,[]) then  
+	snd-msg(flatten-equations(NewModules)).
+	rec-msg(equations-flattened(AllEquations?)).
+	snd-msg(all-equations(AllEquations))
       fi 
     +
       rec-msg(equations-incomplete) .
