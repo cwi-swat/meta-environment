@@ -348,7 +348,7 @@ void init_expansion_terms()
                                      TmakeSimple(&local, "l(\"appl\")")));
 
   /* Building a list appl */
-  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ATypes\")"),
                            TmkList_n(&local,1,
                                      TmakeSimple(&local, "ql(\"list\")")),
                            TmakeSimple(&local, "sort(\"AFun\")"),

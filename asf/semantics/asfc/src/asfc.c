@@ -21,6 +21,19 @@
 #include <limits.h>
 #include "compiler.tif.c"
 
+extern aterm *pattern_asfix_iter;
+extern aterm *pattern_asfix_itersep;
+extern aterm *pattern_asfix_sort;
+extern aterm *pattern_asfix_prod;
+extern aterm *pattern_asfix_l;
+extern aterm *pattern_asfix_ql;
+extern aterm *pattern_asfix_noattrs;
+extern aterm *pattern_asfix_attrs;
+extern aterm *pattern_asfix_contextfreesyntax;
+extern aterm *pattern_asfix_exports;
+extern aterm *pattern_asfix_hiddens;
+extern aterm *pattern_asfix_id;
+
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
 aterm *expand_to_asfix(arena *ar,aterm *mod,char *name);
@@ -28,6 +41,7 @@ int print_source(FILE *f, aterm *term);
 void pp_rnx(FILE *f, aterm *t, int indent);
 aterm *asfix2rnx(arena *ar,aterm *asfix);
 void init_expansion_terms();
+void init_asfix_patterns();
 
 aterm_list *modules_db;
 
@@ -60,29 +74,27 @@ int equal_term(aterm *term1,aterm *term2)
   char *text1, *text2;
   aterm *t1[9], *t2[9];
 
-  if(Tmatch(term1,"sort(<str>)",&text1) &&
-     Tmatch(term2,"sort(<str>)",&text2))
+  if(TmatchTerm(term1,pattern_asfix_sort,&text1) &&
+     TmatchTerm(term2,pattern_asfix_sort,&text2))
     return t_equal(term1,term2);
-  else if(Tmatch(term1,"l(<str>)",&text1) &&
-          Tmatch(term2,"l(<str>)",&text2))
+  else if(TmatchTerm(term1,pattern_asfix_l,&text1) &&
+          TmatchTerm(term2,pattern_asfix_l,&text2))
     return t_equal(term1,term2);
-  else if(Tmatch(term1,"ql(<str>)",&text1) &&
-          Tmatch(term2,"ql(<str>)",&text2))
+  else if(TmatchTerm(term1,pattern_asfix_ql,&text1) &&
+          TmatchTerm(term2,pattern_asfix_ql,&text2))
     return t_equal(term1,term2);
-  else if(Tmatch(term1,"iter(<term>,<term>,<term>)",
-                 &t1[0],&t1[1],&t1[2]) &&
-          Tmatch(term2,"iter(<term>,<term>,<term>)",
-                 &t2[0],&t2[1],&t2[2]))
+  else if(TmatchTerm(term1,pattern_asfix_iter,
+                     &t1[0],&t1[1],&t1[2]) &&
+          TmatchTerm(term2,pattern_asfix_iter,
+                     &t2[0],&t2[1],&t2[2]))
     return equal_term(t1[0],t2[0]) &&
            equal_term(t1[2],t2[2]);
-  else if(Tmatch(term1,"iter-sep(<term>,<term>,<term>,<term>,<term>,<term>," \
-                                "<term>,<term>,<term>)",
-                 &t1[0],&t1[1],&t1[2],&t1[3],&t1[4],
-                 &t1[5],&t1[6],&t1[7],&t1[8]) &&
-          Tmatch(term2,"iter-sep(<term>,<term>,<term>,<term>,<term>,<term>," \
-                                "<term>,<term>,<term>)",
-                 &t2[0],&t2[1],&t2[2],&t2[3],&t2[4],
-                 &t2[5],&t2[6],&t2[7],&t2[8]))
+  else if(TmatchTerm(term1,pattern_asfix_itersep,
+                     &t1[0],&t1[1],&t1[2],&t1[3],&t1[4],
+                     &t1[5],&t1[6],&t1[7],&t1[8]) &&
+          TmatchTerm(term2,pattern_asfix_itersep,
+                     &t2[0],&t2[1],&t2[2],&t2[3],&t2[4],
+                     &t2[5],&t2[6],&t2[7],&t2[8]))
     return equal_term(t1[2],t2[2]) &&
            equal_term(t1[4],t2[4]) &&
            equal_term(t1[8],t2[8]);
@@ -112,15 +124,15 @@ int equal_attrs(aterm *attrs1,aterm *attrs2)
   aterm *w1[2],*w2[2];
   aterm_list *args1,*args2;
 
-  if(Tmatch(attrs1,"no-attrs") && Tmatch(attrs2,"no-attrs")) 
+  if(TmatchTerm(attrs1,pattern_asfix_noattrs) &&
+     TmatchTerm(attrs2,pattern_asfix_noattrs)) 
     return Ttrue;
-  else if(!Tmatch(attrs1,"no-attrs") && !Tmatch(attrs2,"no-attrs")) {
-    if(Tmatch(attrs1,
-              "attrs(l(\"{\"),<term>,<list>,<term>,l(\"}\"))",
-              &w1[0],&args1,&w1[1])) {
-      if(Tmatch(attrs2,
-                "attrs(l(\"{\"),<term>,<list>,<term>,l(\"}\"))",
-                &w2[0],&args2,&w2[1]))
+  else if(!TmatchTerm(attrs1,pattern_asfix_noattrs) &&
+          !TmatchTerm(attrs2,pattern_asfix_noattrs)) {
+    if(TmatchTerm(attrs1, pattern_asfix_attrs,
+                  &w1[0],&args1,&w1[1])) {
+      if(TmatchTerm(attrs2, pattern_asfix_attrs,
+                    &w2[0],&args2,&w2[1]))
         return equal_args(args1,args2);
       else
         return Tfalse;
@@ -138,12 +150,12 @@ int equal_prod(aterm *prod1,aterm *prod2)
   aterm *mname2,*lit2,*sort2,*w2[4],*attrs2;
   aterm_list *args1,*args2;
 
-  if(Tmatch(prod1,
-     "prod(<term>,<term>,<list>,<term>,<term>,<term>,<term>,<term>,<term>)",
-     &mname1,&w1[0],&args1,&w1[1],&lit1,&w1[2],&sort1,&w1[3],&attrs1)) {
-    if(Tmatch(prod2,
-       "prod(<term>,<term>,<list>,<term>,<term>,<term>,<term>,<term>,<term>)",
-       &mname2,&w2[0],&args2,&w2[1],&lit2,&w2[2],&sort2,&w2[3],&attrs2)) {
+  if(TmatchTerm(prod1, pattern_asfix_prod,
+                &mname1,&w1[0],&args1,&w1[1],&lit1,&w1[2],
+                &sort1,&w1[3],&attrs1)) {
+    if(TmatchTerm(prod2, pattern_asfix_prod,
+                  &mname2,&w2[0],&args2,&w2[1],&lit2,&w2[2],
+                  &sort2,&w2[3],&attrs2)) {
       if(t_equal(mname1,mname2) && equal_args(args1,args2) &&
          t_equal(sort1,sort2) && equal_attrs(attrs1,attrs2)) 
         return Ttrue;
@@ -281,12 +293,12 @@ aterm *remove_cffunc_from_subsections(arena *ar,aterm *cffunc, aterm *subsection
   
   while(!t_is_empty(subsections)) {
     subsection = t_list_first(subsections);
-    if(Tmatch(subsection, "context-free-syntax(<term>,<term>,<list>)",
-              &t[0], &t[1], &cffuncs)) {
+    if(TmatchTerm(subsection, pattern_asfix_contextfreesyntax,
+                  &t[0], &t[1], &cffuncs)) {
       newcffuncs = remove_cffunc_from_cffuncs(&local,cffunc,cffuncs);
       if(!t_is_empty(newcffuncs)) {
-        newsubsection = Tmake(&local,"context-free-syntax(<term>,<term>,<list>)",
-                              t[0], t[1], newcffuncs);
+        newsubsection = TmakeTerm(&local, pattern_asfix_contextfreesyntax,
+                                  t[0], t[1], newcffuncs);
         newsubsections = TlistAppend(&local,newsubsections,newsubsection);
       }
       else {
@@ -323,13 +335,13 @@ aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
   
   while(!t_is_empty(sections)) {
     section = t_list_first(sections);
-    if(Tmatch(section, "exports(<term>,<term>,<list>)",
+    if(TmatchTerm(section, pattern_asfix_exports,
               &t[0], &t[1], &subsections)) {
       newsubsections =
          remove_cffunc_from_subsections(&local,cffunc,subsections);
 /*Tprintf(stderr,"remove_cffunc_from_sections: %t\n",cffunc);*/
       if(!t_is_empty(newsubsections)) {
-        newsection = Tmake(&local,"exports(<term>,<term>,<list>)",
+        newsection = TmakeTerm(&local, pattern_asfix_exports,
                            t[0], t[1], newsubsections);
         newsections = TlistAppend(&local,newsections,newsection);
       }
@@ -345,13 +357,13 @@ aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
         }
       }
     }
-    else if(Tmatch(section, "hiddens(<term>,<term>,<list>)",
-                   &t[0], &t[1], &subsections)) {
+    else if(TmatchTerm(section, pattern_asfix_hiddens,
+                       &t[0], &t[1], &subsections)) {
       newsubsections = 
         remove_cffunc_from_subsections(&local,cffunc,subsections);
       if(!t_is_empty(newsubsections)) {
-        newsection = Tmake(&local,"hiddens(<term>,<term>,<list>)",
-                           t[0], t[1], newsubsections);
+        newsection = TmakeTerm(&local, pattern_asfix_hiddens,
+                               t[0], t[1], newsubsections);
         newsections = TlistAppend(&local,newsections,newsection);
       }
       else {
@@ -398,14 +410,14 @@ aterm *unique_new_name(arena *ar,aterm *name)
   aterm *newname;
   int n = 1;
 
-  assertp(Tmatch(name,"id(<str>)",&text));
+  assertp(TmatchTerm(name,pattern_asfix_id,&text));
   newtext = malloc(strlen(text)+6);
   sprintf(newtext,"%s%d",text,n);
-  newname = Tmake(ar,"id(<str>)",newtext);
+  newname = TmakeTerm(ar,pattern_asfix_id,newtext);
   while(TdictGet(modules_db,newname)) {
     n++;
     sprintf(newtext,"%s%d",text,n);
-    newname = Tmake(ar,"id(<str>)",newtext);
+    newname = TmakeTerm(ar,pattern_asfix_id,newtext);
   }
   free(newtext);
   return newname;
@@ -472,6 +484,8 @@ aterm *compile_modules(int cid,aterm_list *mods)
   FILE *output;
   int len;
   arena local;
+  /* char *path = "/home/markvdb/NEW-META/new-meta/pico/";*/
+  char *path = "/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/";
   struct tms start, compiling;
   clock_t user, system;
 
@@ -485,17 +499,14 @@ aterm *compile_modules(int cid,aterm_list *mods)
   while(!t_is_empty(newmods)) {
     mod = t_list_first(newmods);
     amod = TdictGet(modules_db,mod);
-    assertp(Tmatch(mod,"id(<str>)",&text));
-    len = strlen("/home/markvdb/NEW-META/new-meta/pico/") + 
-    /* len = strlen("/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/") + */
-          strlen(text) + strlen(".rnx");
+    assertp(TmatchTerm(mod,pattern_asfix_id,&text));
+    len = strlen(path) + strlen(text) + strlen(".rnx");
     fname = malloc(len + 1);
     if(!fname) {
       fprintf(stderr,"Not enough memory\n");
       exit(1);
     }
-    fname = strcpy(fname,"/home/markvdb/NEW-META/new-meta/pico/");
-    /* fname = strcpy(fname,"/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/"); */
+    fname = strcpy(fname,path);
     fname = strcat(fname,text);
     fname = strcat(fname,".rnx");
     expmod = expand_to_asfix(&local,amod,fname);
@@ -507,17 +518,16 @@ aterm *compile_modules(int cid,aterm_list *mods)
     else {
       pp_rnx(output,rnx,0);
       Tprintf(output, "\n");
-      /*Tprintf(output,"%t\n",expmod);*/
       fclose(output);
     }
-    print_source(stderr,amod);
+    /*print_source(stderr,amod); */
+    Tprintf(stderr,"Writing: %s\n", text);
     newmods = t_list_next(newmods);
     TflushArena(&local);
   }
   result = Tmake(TBgetArena(cid), "snd-value(ok)");
   Tunprotect(modlist);
   TdestroyArena(&local);
-  /*print_source(stderr,expmod);*/
   times(&compiling);
 
   user = compiling.tms_utime - start.tms_utime;
@@ -591,6 +601,7 @@ int main(int argc, char **argv)
 			 compiler_handler, compiler_check_in_sign);
   TBconnect(cid);
   init_expansion_terms();
+  init_asfix_patterns();
   TBeventloop();
 
   return 0;
