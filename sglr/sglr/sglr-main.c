@@ -66,7 +66,7 @@ ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
 
 ATerm open_language_from_term(int conn, ATerm L, ATerm tbl)
 {
-  return SGopenLanguageFromTerm(program_name, L, tbl);
+  return SGopenLanguageFromTerm(program_name, L, ATBunpack(tbl));
 }
 
 ATerm open_language(int conn, ATerm L, char *FN)

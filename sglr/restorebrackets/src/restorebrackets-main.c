@@ -165,10 +165,12 @@ static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, parse_table *pt)
   return PT_setParseTreeTop(pttree, newTree);
 }
 
-ATerm restore_brackets(int cid, ATerm term, ATerm tbl)
+ATerm restore_brackets(int cid, ATerm term, ATerm packedTbl)
 {
   parse_table *pt = NULL;
   ATerm restoredTerm;
+
+  ATerm tbl = ATBunpack(packedTbl);
 
   pt = SG_BuildParseTable((ATermAppl) tbl);
   restoredTerm = PT_ParseTreeToTerm(

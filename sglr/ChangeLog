@@ -1,5 +1,8 @@
 $Id$
 
+2003/05/19 ({jong,markvdb}@cwi.nl)
+ * Added explicit ATBpack and ATBunpack.
+
 2003/0307 (markvdb@cwi.nl)
  * The sglr.idef contained an error when returning a cycle, T? instead T.
 
