@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 KERNEL_CONFIGURATION = "$(pkgdatadir)/meta-kernel.properties"
 USER_CONFIGURATION = "./meta.buttons"
 LIBRARY_PATH = 
-API_VERSION=0.1
+API_VERSION=1.0
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
@@ -32,7 +32,8 @@ EXTRA_DIST = \
 	configuration-manager.idef \
 	kernel-configuration.tb.src \
 	user-configuration.tb.src \
-	meta-kernel.properties
+	meta-kernel.properties \
+	meta-config-${API_VERSION}.jar
 
 noinst_HEADERS = \
 	configuration-manager.tif.h \
