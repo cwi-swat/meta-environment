@@ -47,7 +47,7 @@ a unique identification for it (URL?), and the name of
 the module over which the text has to be parsed.
 <LI> The <EM>parser</EM> intercepts this request and check if it
 already has a parse table for this module.
-<LI> The <EM>parser</EM> generates a requesting the most up-to-date
+<LI> The <EM>parser</EM> generates requests the most up-to-date
 syntax for the given top module. This request contains a list
 of version numbers for the modules on which the old parse table
 was based.
@@ -103,8 +103,11 @@ Case: The <EM>hybrid editor</EM>, a combination of a
 to edit terms, and syntax and equations of modules.
 
 <OL>
-<LI> The <EM>hybrid editor</EM> component intercepts an edit request,
-     and asks the <EM>module database</EM> or <EM>term database</EM>
+<LI> The <EM>hybrid editor</EM> component intercepts an edit request.
+     This edit request contains the type of object (syn, equ, or trm)
+     that is to be edited, and a unique identifier for the object.
+<LI> The <EM>hybrid editor</EM>
+     asks the <EM>module database</EM> or <EM>term database</EM>
      to supply the AsFix term representation of the object that is to
      be edited. This AsFix representation is then stored in the 
      <EM>structure editor.</EM>
