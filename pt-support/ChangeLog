@@ -1,3 +1,7 @@
+2001/13/03 (jurgenv@cwi.nl)
+ * changed flattening of cons attributes in conversion from asfix2me to asfix1.
+   It used to be "cons(name)", and now it is cons("name").
+
 2001/03/02 (jurgenv@cwi.nl)
  * implemented PT_addParseTreePosInfo in libasfix1
  * added add-posinfo tool to libasfix1
