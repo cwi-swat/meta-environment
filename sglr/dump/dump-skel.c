@@ -45,36 +45,33 @@ int main (int argc, char **argv)
 {
   ATerm       bottomOfStack;
   char        *err;
-  char        *pt_name;
+  char        *pt_name = NULL;
   ATbool      unparsed = ATfalse;
   language    lang_name;
   parse_table *pt;
   int         requested = -1;
   int         lcv;
 
-  for(lcv = 0; lcv < argc; lcv++) {
+  for(lcv = 1; lcv < argc; lcv++) {
     if (!strcmp(argv[lcv],"-u")) {
       unparsed = ATtrue;
     }
-    if (!strcmp(argv[lcv],"-h")) {
+    else if (!strcmp(argv[lcv],"-h")) {
       usage(argv[0]);
       exit(0);
     }
+    else if (pt_name == NULL) {
+      pt_name = argv[lcv];
+    }
+    else if (pt_name != NULL) {
+      requested = atoi(argv[lcv]);
+    }
   }
+
+  ATwarning("%d %s %d\n", unparsed, pt_name, requested);
 
   ATinit(argc, argv, &bottomOfStack);     /* Initialize Aterm library */
   PT_initMEPTApi();
-
-  switch(argc - (unparsed ? 1 : 0)) {
-    case 1:
-      pt_name = "-";
-      break;
-    case 3:
-      requested = atoi(argv[argc + (unparsed ? 1 : 0)]);
-    default:
-      pt_name = argv[1 + (unparsed ? 1 : 0)];
-      break;
-  }
 
   lang_name = ATmake("<str>", pt_name);
   if(ATmatch(SGopenLanguage("dump", lang_name, pt_name),
