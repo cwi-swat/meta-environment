@@ -3,16 +3,17 @@
  */
 process Save-modules is
 let
-  Id      : term,
-  Syntax  : term,
-  Eqs     : term,
-  Module  : term,
-  Path    : str,
-  Modules : list,
-  Table   : term,
-  Text    : str,
+  Id           : term,
+  Syntax       : term,
+  Eqs          : term,
+  Snapshot     : term,
+  Module       : term,
+  Path         : str,
+  Modules      : list,
+  Table        : term,
+  Text         : str,
   ErrorMessage : str,
-  FileName : str
+  FileName     : str
 in
   Id := process-id. 
   (
@@ -20,23 +21,6 @@ in
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
-    snd-msg(io-get-filename(Path, Module, ".asf.baf")) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(get-eqs-tree(Module)).
-    (
-      rec-msg(tree(Eqs?)).
-      snd-msg(io-write-term-file(FileName, Eqs)).
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
-      )
-    +
-      rec-msg(no-eqs)
-    +
-      rec-msg(unavailable)
-    ).
     snd-msg(io-get-filename(Path, Module, ".trm.tbl")) .
     rec-msg(io-filename(FileName?)) .
     snd-msg(get-table-from-db(trm(Module))).
@@ -139,56 +123,16 @@ in
     
   +
     rec-msg(save-all) .
-    snd-note(ui-status(errorf("Saving not yet implemented!",[])))
-
-    /*
-    snd-msg(get-all-module-names).
-    rec-msg(all-module-names(Modules?)).
-    ( if not-equal(Modules, []) then
-       Module := first(Modules).
-       Modules := next(Modules).
-	     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-       snd-msg(get-sdf2-path-from-db(Module)).
-       rec-msg(path(Path?)).
-       snd-msg(get-sdf2-asfix(Module)).
-       rec-msg(syntax(Syntax?)).
-       snd-msg(save-tree(Module,Path,Syntax)).
-       rec-msg(save-done) .
-       snd-msg(get-eqs-tree(Module)).
-       ( rec-msg(tree(Eqs?)).
-         snd-msg(get-eqs-path-from-db(Module)).
-         rec-msg(path(Path?)).
-         snd-msg(save-tree(Module,Path,Eqs)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-eqs)
-       +
-         rec-msg(unavailable)
-       ) .
-       snd-msg(get-table-from-db(trm(Module))).
-       (
-         rec-msg(table(Table?, Path?)). 
-         snd-msg(save-table(Module, Path, Table)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-table)
-       ).
-       snd-msg(get-table-from-db(eqs(Module))).
-       (
-         rec-msg(table(Table?, Path?)).
-         snd-msg(save-table(Module, Path, Table)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-table)
-       ).
-       snd-note(ui-status(endstat(Id)))
-      fi
-    )*
-    if equal(Modules,[]) then
-     snd-msg(saved)
-    fi
+    snd-msg(ts-get-snapshot) .
+    rec-msg(ts-snapshot(Snapshot?)) .
+    snd-msg(io-write-term-file("Meta.snapshot", Snapshot)) .
+    (
+      rec-msg(io-file-written) 
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+    ) .
     snd-msg(saved)
-    */
   )*
   delta
 endlet
