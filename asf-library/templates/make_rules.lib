@@ -32,11 +32,11 @@ INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 # Register the source files for the built-in library
 $(PACKAGE_SRC): Makefile
-	echo "${subdir}/$*.o" >> $(top_builddir)/src/objects.lst
+	echo "${subdir}:$*.o" >> $(top_builddir)/src/objects.lst
 
 # create the stub and at the same time register the built-ins
 link-test.c: $(PACKAGE_SRC) $(MODULES)
-	echo "${BUILTINS}" >> $(top_builddir)/src/builtins.lst
+	echo "${subdir}:${BUILTINS}" >> $(top_builddir)/src/builtins.lst
 	${top_srcdir}/utils/gen-link-test.sh "${BUILTINS}" > $@
 
 # Installation hooks take care of modifying access bits and installing
