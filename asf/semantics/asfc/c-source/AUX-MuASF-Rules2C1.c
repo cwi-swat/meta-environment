@@ -58,9 +58,11 @@ if( check_sym( arg0 , lf_AUX_MuASF_Rules2C1_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
 if( check_sym( arg1 , ef1sym)) {
+t_protect( atmp00);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( arg2);
-return ( * ef2)( arg0 , ( * ef3)( ));
+return ( * ef2)( lf_AUX_MuASF_Rules2C1_1( make_list( atmp00)) , ( * ef3)( ));
 }
 if( check_sym( arg1 , ef4sym)) {
 {
@@ -85,11 +87,13 @@ aterm * atmp22= arg_2( arg2);
 aterm * atmp23= arg_3( arg2);
 t_protect( atmp1000);
 if( not_empty_list( atmp1000)) {
+t_protect( atmp00);
 t_protect( atmp1000);
 t_protect( atmp200);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( arg2);
-return ( * ef7)( arg0 , lf3( make_list( atmp1000)) , lf4( make_list( atmp200)));
+return ( * ef7)( lf_AUX_MuASF_Rules2C1_1( make_list( atmp00)) , lf3( make_list( atmp1000)) , lf4( make_list( atmp200)));
 }
 }
 }
@@ -100,9 +104,11 @@ return ( * ef7)( arg0 , lf3( make_list( atmp1000)) , lf4( make_list( atmp200)));
 }
 t_protect( atmp1000);
 if( ! not_empty_list( atmp1000)) {
+t_protect( atmp00);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( arg2);
-return ( * ef2)( arg0 , ( * ef3)( ));
+return ( * ef2)( lf_AUX_MuASF_Rules2C1_1( make_list( atmp00)) , ( * ef3)( ));
 }
 }
 }

@@ -22,7 +22,7 @@ ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"fun
 }
 aterm * lf_AUX_C_Basics24_1( ) {
 PROF( prof_lf_AUX_C_Basics24_1);
-return ( * ef1)( lf2( cons( make_list( make_char( 34)) , cons( make_list( make_char( 777)) , make_list( make_char( 34))))));
+return ( * ef1)( lf2( cons( make_list( make_char( 34)) , cons( make_list( make_char( 32)) , make_list( make_char( 34))))));
 }
 aterm * lf2( aterm * arg0) {
 PROF( prof_lf2);

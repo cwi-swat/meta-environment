@@ -101,8 +101,8 @@ t_unprotect( arg1);
 return ( * ef2)( ( * ef11)( ( * ef12)( ( * ef13)( ( * ef8)( ( * ef14)( ( * ef9)( ( * ef10)( lf3( cons( make_list( make_char( 109)) , cons( make_list( make_char( 97)) , cons( make_list( make_char( 107)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 110)) , cons( make_list( make_char( 102)) , make_list( make_char( 48)))))))))))) , ( * ef7)( lf4( make_list( ( * ef8)( ( * ef9)( ( * ef10)( lf3( cons( make_list( atmp000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))))))))))) , ( * ef3)( lf3( make_list( make_char( 48)))));
 }
 else {
-t_protect( arg1);
-tmp[ 0]= ( * ef4)( arg1 , ( * ef3)( lf3( make_list( make_char( 48)))));
+t_protect( atmp10);
+tmp[ 0]= ( * ef4)( lf_AUX_MuASF_Rules2C2_1( make_list( atmp10)) , ( * ef3)( lf3( make_list( make_char( 48)))));
 if( check_sym( tmp[ 0] , ef5sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 tmp[ 2]= arg_1( tmp[ 0]);

@@ -102,8 +102,8 @@ if( check_sym( atmp10 , lf3sym)) {
 aterm * atmp100= arg_0( atmp10);
 t_protect( atmp100);
 if( not_empty_list( atmp100)) {
-t_protect( arg1);
-tmp[ 0]= ( * ef13)( arg1 , ( * ef12)( lf2( make_list( make_char( 48)))));
+t_protect( atmp100);
+tmp[ 0]= ( * ef13)( ( * ef2)( lf3( make_list( atmp100))) , ( * ef12)( lf2( make_list( make_char( 48)))));
 if( check_sym( tmp[ 0] , ef14sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 tmp[ 2]= arg_1( tmp[ 0]);

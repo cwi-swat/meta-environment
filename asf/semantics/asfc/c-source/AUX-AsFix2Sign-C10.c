@@ -47,8 +47,6 @@ static asymbol * ef18sym;
 static funcptr ef18;
 static asymbol * ef19sym;
 static funcptr ef19;
-static asymbol * new__1__lf_AUX_AsFix2Sign_C10_1sym;
-static aterm * new__1__lf_AUX_AsFix2Sign_C10_1( aterm * arg1 , aterm * arg2 , aterm * arg3);
 void register_AUX_AsFix2Sign_C10( ) {
 arena local;
 TinitArena( NULL , & local);
@@ -58,7 +56,6 @@ lf2sym= TmkSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , SYM_STRING);
 lf5sym= TmkSymbol( "listtype(sort(\"SigArg\"),ql(\",\"))" , SYM_STRING);
 lf3sym= TmkSymbol( "listtype(sort(\"ATerm\"),ql(\";\"))" , SYM_STRING);
 lf4sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
-new__1__lf_AUX_AsFix2Sign_C10_1sym= TmkSymbol( "new__1__lf_AUX_AsFix2Sign_C10_1" , SYM_STRING);
 register_prod( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"lexfunc2sign\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SortList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncSortStruct\"),w(\"\"),no-attrs)") , lf_AUX_AsFix2Sign_C10_1 , lf_AUX_AsFix2Sign_C10_1sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf2 , lf2sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"ATerm\"),ql(\";\"))") , lf3 , lf3sym);
@@ -107,10 +104,20 @@ ef18sym= lookup_sym( TmakeSimple( & local , "prod(id(\"VarEnv\"),w(\"\"),[l(\"nt
 ef19= lookup_func( TmakeSimple( & local , "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IdTablePair\"),w(\"\"),no-attrs)"));
 ef19sym= lookup_sym( TmakeSimple( & local , "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IdTablePair\"),w(\"\"),no-attrs)"));
 }
-aterm * new__1__lf_AUX_AsFix2Sign_C10_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
+aterm * lf_AUX_AsFix2Sign_C10_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
 {
 aterm * tmp[14];
-PROF( prof_new__1__lf_AUX_AsFix2Sign_C10_1);
+PROF( prof_lf_AUX_AsFix2Sign_C10_1);
+t_protect( arg0);
+tmp[ 0]= ( * ef3)( arg0 , ( * ef4)( ));
+t_protect( tmp[ 0]);
+t_protect( arg1);
+if( term_equal( ( * ef5)( tmp[ 0] , arg1) , ( * ef6)( ))) {
+t_unprotect( arg0);
+t_unprotect( tmp[ 0]);
+return ( * ef1)( ( * ef2)( lf2( make_list( null( )))) , arg1 , arg2);
+}
+t_unprotect( tmp[ 0]);
 if( check_sym( arg1 , ef7sym)) {
 {
 aterm * atmp10= arg_0( arg1);
@@ -168,34 +175,6 @@ t_unprotect( tmp[ 6]);
 }
 }
 t_unprotect( tmp[ 0]);
-}
-}
-}
-}
-return make_nf3( new__1__lf_AUX_AsFix2Sign_C10_1sym , arg0 , arg1 , arg2);
-}
-}
-aterm * lf_AUX_AsFix2Sign_C10_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-{
-aterm * tmp[1];
-PROF( prof_lf_AUX_AsFix2Sign_C10_1);
-t_protect( arg0);
-tmp[ 0]= ( * ef3)( arg0 , ( * ef4)( ));
-t_protect( tmp[ 0]);
-t_protect( arg1);
-if( term_equal( ( * ef5)( tmp[ 0] , arg1) , ( * ef6)( ))) {
-t_unprotect( arg0);
-t_unprotect( tmp[ 0]);
-return ( * ef1)( ( * ef2)( lf2( make_list( null( )))) , arg1 , arg2);
-}
-t_unprotect( tmp[ 0]);
-if( check_sym( arg1 , ef7sym)) {
-{
-aterm * atmp10= arg_0( arg1);
-if( check_sym( atmp10 , lf3sym)) {
-{
-aterm * atmp100= arg_0( atmp10);
-return new__1__lf_AUX_AsFix2Sign_C10_1( arg0 , arg1 , arg2);
 }
 }
 }

@@ -43,8 +43,6 @@ static asymbol * ef7sym;
 static funcptr ef7;
 static asymbol * lf3sym;
 static aterm * lf3( aterm * arg1);
-static asymbol * new__1__lf_AUX_AsFix2Sign_C12_1sym;
-static aterm * new__1__lf_AUX_AsFix2Sign_C12_1( aterm * arg1 , aterm * arg2);
 void register_AUX_AsFix2Sign_C12( ) {
 arena local;
 TinitArena( NULL , & local);
@@ -53,7 +51,6 @@ lf_AUX_AsFix2Sign_C12_1sym= TmkSymbol( "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"c
 lf4sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
 lf2sym= TmkSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , SYM_STRING);
 lf3sym= TmkSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , SYM_STRING);
-new__1__lf_AUX_AsFix2Sign_C12_1sym= TmkSymbol( "new__1__lf_AUX_AsFix2Sign_C12_1" , SYM_STRING);
 register_prod( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"cfelem2args\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncTermTableTuple\"),w(\"\"),no-attrs)") , lf_AUX_AsFix2Sign_C12_1 , lf_AUX_AsFix2Sign_C12_1sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf2 , lf2sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"Term\"),ql(\",\"))") , lf3 , lf3sym);
@@ -98,11 +95,6 @@ ef17= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\
 ef17sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\"make-funcdef\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),sort(\"TermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
 ef18= lookup_func( TmakeSimple( & local , "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
 ef18sym= lookup_sym( TmakeSimple( & local , "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
-}
-aterm * new__1__lf_AUX_AsFix2Sign_C12_1( aterm * arg0 , aterm * arg1) {
-PROF( prof_new__1__lf_AUX_AsFix2Sign_C12_1);
-t_unprotect( arg0);
-return ( * ef6)( lf2( make_list( null( ))) , ( * ef7)( lf3( make_list( null( )))) , arg1);
 }
 aterm * lf_AUX_AsFix2Sign_C12_1( aterm * arg0 , aterm * arg1) {
 {
@@ -216,7 +208,8 @@ t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
-return new__1__lf_AUX_AsFix2Sign_C12_1( arg0 , arg1);
+t_unprotect( arg0);
+return ( * ef6)( lf2( make_list( null( ))) , ( * ef7)( lf3( make_list( null( )))) , arg1);
 }
 }
 aterm * lf3( aterm * arg0) {

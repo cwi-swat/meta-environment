@@ -76,15 +76,17 @@ tmp[ 2]= ( * ef2)( tmp[ 0]);
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , ( * ef6)( ))) {
 t_protect( tmp[ 0]);
-t_protect( arg1);
-tmp[ 3]= ( * ef5)( tmp[ 0] , arg1);
+t_protect( atmp100);
+tmp[ 3]= ( * ef5)( tmp[ 0] , ( * ef1)( lf2( make_list( atmp100))));
 t_protect( tmp[ 3]);
 if( term_equal( tmp[ 3] , ( * ef3)( ))) {
+t_protect( atmp100);
 t_unprotect( arg0);
+t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 2]);
 t_unprotect( tmp[ 3]);
-return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , arg1);
+return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 }
 tmp[ 4]= ( * ef6)( );
 t_protect( tmp[ 3]);
@@ -93,13 +95,13 @@ if( term_equal( tmp[ 3] , tmp[ 4])) {
 t_protect( tmp[ 0]);
 tmp[ 5]= ( * ef7)( tmp[ 0]);
 t_protect( tmp[ 5]);
-t_protect( arg1);
-tmp[ 6]= ( * ef5)( tmp[ 5] , arg1);
+t_protect( atmp100);
+tmp[ 6]= ( * ef5)( tmp[ 5] , ( * ef1)( lf2( make_list( atmp100))));
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , ( * ef6)( ))) {
 t_protect( tmp[ 1]);
-t_protect( arg1);
-tmp[ 7]= lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , arg1);
+t_protect( atmp100);
+tmp[ 7]= lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 if( check_sym( tmp[ 7] , ef1sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
 if( check_sym( tmp[ 8] , lf2sym)) {
@@ -122,8 +124,8 @@ t_unprotect( tmp[ 7]);
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , ( * ef3)( ))) {
 t_protect( tmp[ 5]);
-t_protect( arg1);
-tmp[ 7]= ( * ef8)( tmp[ 5] , arg1);
+t_protect( atmp100);
+tmp[ 7]= ( * ef8)( tmp[ 5] , ( * ef1)( lf2( make_list( atmp100))));
 if( check_sym( tmp[ 7] , ef1sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
 if( check_sym( tmp[ 8] , lf2sym)) {
@@ -167,45 +169,49 @@ if( term_equal( tmp[ 2] , tmp[ 3])) {
 t_protect( tmp[ 0]);
 tmp[ 4]= ( * ef4)( tmp[ 0]);
 t_protect( tmp[ 4]);
-t_protect( arg1);
-tmp[ 5]= ( * ef5)( tmp[ 4] , arg1);
+t_protect( atmp100);
+tmp[ 5]= ( * ef5)( tmp[ 4] , ( * ef1)( lf2( make_list( atmp100))));
 t_protect( tmp[ 5]);
 if( term_equal( tmp[ 5] , ( * ef3)( ))) {
+t_protect( atmp100);
 t_unprotect( arg0);
+t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 2]);
 t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 5]);
-return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , arg1);
+return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 }
 t_protect( tmp[ 5]);
 if( term_equal( tmp[ 5] , ( * ef6)( ))) {
 t_protect( tmp[ 0]);
-t_protect( arg1);
-if( term_equal( ( * ef5)( tmp[ 0] , arg1) , ( * ef3)( ))) {
+t_protect( atmp100);
+if( term_equal( ( * ef5)( tmp[ 0] , ( * ef1)( lf2( make_list( atmp100)))) , ( * ef3)( ))) {
+t_protect( atmp100);
 t_unprotect( arg0);
+t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 2]);
 t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 5]);
-return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , arg1);
+return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 }
 }
 t_unprotect( tmp[ 5]);
 t_unprotect( tmp[ 4]);
 t_protect( tmp[ 0]);
-t_protect( arg1);
-if( term_equal( ( * ef5)( tmp[ 0] , arg1) , ( * ef6)( ))) {
+t_protect( atmp100);
+if( term_equal( ( * ef5)( tmp[ 0] , ( * ef1)( lf2( make_list( atmp100)))) , ( * ef6)( ))) {
 t_protect( tmp[ 0]);
 tmp[ 4]= ( * ef4)( tmp[ 0]);
 t_protect( tmp[ 4]);
-t_protect( arg1);
-if( term_equal( ( * ef5)( tmp[ 4] , arg1) , ( * ef6)( ))) {
+t_protect( atmp100);
+if( term_equal( ( * ef5)( tmp[ 4] , ( * ef1)( lf2( make_list( atmp100)))) , ( * ef6)( ))) {
 t_protect( tmp[ 1]);
-t_protect( arg1);
-tmp[ 5]= lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , arg1);
+t_protect( atmp100);
+tmp[ 5]= lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 if( check_sym( tmp[ 5] , ef1sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf2sym)) {

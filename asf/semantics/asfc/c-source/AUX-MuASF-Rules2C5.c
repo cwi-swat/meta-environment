@@ -76,8 +76,8 @@ t_protect( atmp10);
 if( not_empty_list( atmp10)) {
 t_protect( atmp20);
 if( not_empty_list( atmp20)) {
-t_protect( arg1);
-tmp[ 0]= ( * ef4)( arg1);
+t_protect( atmp10);
+tmp[ 0]= ( * ef4)( lf_AUX_MuASF_Rules2C5_2( make_list( atmp10)));
 if( check_sym( tmp[ 0] , ef5sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf_AUX_MuASF_Rules2C5_2sym)) {
@@ -85,12 +85,12 @@ tmp[ 2]= arg_0( tmp[ 1]);
 t_protect( tmp[ 2]);
 if( not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
-t_protect( arg3);
-tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , arg3);
-t_protect( arg0);
-t_protect( arg2);
-t_protect( arg3);
-tmp[ 4]= ( * ef8)( arg0 , arg2 , arg3);
+t_protect( atmp30);
+tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , lf_AUX_MuASF_Rules2C5_3( make_list( atmp30)));
+t_protect( atmp00);
+t_protect( atmp20);
+t_protect( atmp30);
+tmp[ 4]= ( * ef8)( lf_AUX_MuASF_Rules2C5_1( make_list( atmp00)) , lf_AUX_MuASF_Rules2C5_2( make_list( atmp20)) , lf_AUX_MuASF_Rules2C5_3( make_list( atmp30)));
 if( check_sym( tmp[ 4] , ef1sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 tmp[ 6]= arg_1( tmp[ 4]);
@@ -115,8 +115,8 @@ t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 0]);
 }
 else {
-t_protect( arg1);
-tmp[ 0]= ( * ef4)( arg1);
+t_protect( atmp10);
+tmp[ 0]= ( * ef4)( lf_AUX_MuASF_Rules2C5_2( make_list( atmp10)));
 if( check_sym( tmp[ 0] , ef5sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf_AUX_MuASF_Rules2C5_2sym)) {
@@ -124,13 +124,15 @@ tmp[ 2]= arg_0( tmp[ 1]);
 t_protect( tmp[ 2]);
 if( not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
-t_protect( arg3);
-tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , arg3);
+t_protect( atmp30);
+tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , lf_AUX_MuASF_Rules2C5_3( make_list( atmp30)));
+t_protect( atmp00);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( arg2);
 t_unprotect( arg3);
 t_unprotect( tmp[ 0]);
-return ( * ef1)( arg0 , ( * ef2)( ( * ef3)( tmp[ 3])));
+return ( * ef1)( lf_AUX_MuASF_Rules2C5_1( make_list( atmp00)) , ( * ef2)( ( * ef3)( tmp[ 3])));
 }
 }
 }

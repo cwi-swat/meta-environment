@@ -86,9 +86,9 @@ t_protect( tmp[ 0]);
 if( not_empty_list( tmp[ 0])) {
 t_protect( atmp10000);
 tmp[ 1]= list_last( atmp10000);
-t_protect( arg0);
+t_protect( atmp00000);
 t_protect( tmp[ 0]);
-tmp[ 2]= lf_AUX_Integers6_1( arg0 , ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 0]))))));
+tmp[ 2]= lf_AUX_Integers6_1( ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( atmp00000))))) , ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 0]))))));
 if( check_sym( tmp[ 2] , ef1sym)) {
 tmp[ 3]= arg_0( tmp[ 2]);
 if( check_sym( tmp[ 3] , ef2sym)) {
@@ -100,10 +100,12 @@ tmp[ 6]= arg_0( tmp[ 5]);
 t_protect( tmp[ 6]);
 if( not_empty_list( tmp[ 6])) {
 t_protect( tmp[ 6]);
+t_protect( atmp00000);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 2]);
-return ( * ef4)( ( * ef1)( ( * ef2)( ( * ef3)( lf2( cons( make_list( tmp[ 6]) , make_list( make_char( 48))))))) , lf_AUX_Integers6_1( arg0 , ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 1])))))));
+return ( * ef4)( ( * ef1)( ( * ef2)( ( * ef3)( lf2( cons( make_list( tmp[ 6]) , make_list( make_char( 48))))))) , lf_AUX_Integers6_1( ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( atmp00000))))) , ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 1])))))));
 }
 }
 }

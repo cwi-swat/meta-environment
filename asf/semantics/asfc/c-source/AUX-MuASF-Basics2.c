@@ -36,8 +36,10 @@ if( check_sym( arg1 , lf_AUX_MuASF_Basics2_1sym)) {
 aterm * atmp10= arg_0( arg1);
 t_protect( atmp10);
 if( not_empty_list( atmp10)) {
+t_protect( atmp10);
 t_unprotect( arg0);
-return ( * ef2)( ( * ef3)( arg1));
+t_unprotect( arg1);
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics2_1( make_list( atmp10))));
 }
 else {
 t_unprotect( arg0);
@@ -63,8 +65,10 @@ t_protect( atmp0000);
 if( ! not_empty_list( atmp0000)) {
 t_protect( atmp10);
 if( not_empty_list( atmp10)) {
+t_protect( atmp10);
 t_unprotect( arg0);
-return ( * ef2)( ( * ef3)( arg1));
+t_unprotect( arg1);
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics2_1( make_list( atmp10))));
 }
 else {
 t_unprotect( arg0);

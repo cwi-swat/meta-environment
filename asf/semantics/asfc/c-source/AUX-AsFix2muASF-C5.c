@@ -93,8 +93,6 @@ static asymbol * ef3sym;
 static funcptr ef3;
 static asymbol * lf3sym;
 static aterm * lf3( aterm * arg1);
-static asymbol * new__1__lf_AUX_AsFix2muASF_C5_1sym;
-static aterm * new__1__lf_AUX_AsFix2muASF_C5_1( aterm * arg1 , aterm * arg2 , aterm * arg3);
 void register_AUX_AsFix2muASF_C5( ) {
 arena local;
 TinitArena( NULL , & local);
@@ -103,7 +101,6 @@ lf_AUX_AsFix2muASF_C5_1sym= TmkSymbol( "prod(id(\"AsFix2muASF-C\"),w(\"\"),[l(\"
 lf4sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
 lf2sym= TmkSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , SYM_STRING);
 lf3sym= TmkSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , SYM_STRING);
-new__1__lf_AUX_AsFix2muASF_C5_1sym= TmkSymbol( "new__1__lf_AUX_AsFix2muASF_C5_1" , SYM_STRING);
 register_prod( TmakeSimple( & local , "prod(id(\"AsFix2muASF-C\"),w(\"\"),[l(\"aterm2muasf\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncTermTableTuple\"),w(\"\"),no-attrs)") , lf_AUX_AsFix2muASF_C5_1 , lf_AUX_AsFix2muASF_C5_1sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf2 , lf2sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"Term\"),ql(\",\"))") , lf3 , lf3sym);
@@ -198,12 +195,6 @@ ef42= lookup_func( TmakeSimple( & local , "prod(id(\"AsFix2muASFnames\"),w(\"\")
 ef42sym= lookup_sym( TmakeSimple( & local , "prod(id(\"AsFix2muASFnames\"),w(\"\"),[l(\"make-caller-func\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
 ef43= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"lit2str\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
 ef43sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"lit2str\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-}
-aterm * new__1__lf_AUX_AsFix2muASF_C5_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-PROF( prof_new__1__lf_AUX_AsFix2muASF_C5_1);
-t_unprotect( arg0);
-t_unprotect( arg1);
-return ( * ef2)( lf2( make_list( null( ))) , ( * ef3)( lf3( make_list( null( )))) , arg2);
 }
 aterm * lf_AUX_AsFix2muASF_C5_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
 {
@@ -467,7 +458,9 @@ t_unprotect( tmp[ 6]);
 }
 t_unprotect( tmp[ 0]);
 }
-return new__1__lf_AUX_AsFix2muASF_C5_1( arg0 , arg1 , arg2);
+t_unprotect( arg0);
+t_unprotect( arg1);
+return ( * ef2)( lf2( make_list( null( ))) , ( * ef3)( lf3( make_list( null( )))) , arg2);
 }
 }
 aterm * lf3( aterm * arg0) {

@@ -27,15 +27,12 @@ static asymbol * ef2sym;
 static funcptr ef2;
 static asymbol * lf2sym;
 static aterm * lf2( aterm * arg1);
-static asymbol * new__1__lf_AUX_AsFix2Sign_C6_1sym;
-static aterm * new__1__lf_AUX_AsFix2Sign_C6_1( aterm * arg1 , aterm * arg2 , aterm * arg3);
 void register_AUX_AsFix2Sign_C6( ) {
 arena local;
 TinitArena( NULL , & local);
 lf_AUX_AsFix2Sign_C6_1sym= TmkSymbol( "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"section2sign\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SortList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncSortStruct\"),w(\"\"),no-attrs)"
  , SYM_STRING);
 lf2sym= TmkSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , SYM_STRING);
-new__1__lf_AUX_AsFix2Sign_C6_1sym= TmkSymbol( "new__1__lf_AUX_AsFix2Sign_C6_1" , SYM_STRING);
 register_prod( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"section2sign\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SortList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncSortStruct\"),w(\"\"),no-attrs)") , lf_AUX_AsFix2Sign_C6_1 , lf_AUX_AsFix2Sign_C6_1sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf2 , lf2sym);
 }
@@ -66,11 +63,6 @@ ef11= lookup_func( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(
 ef11sym= lookup_sym( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[l(\"cffuncs2sign\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FNT-tuple\"),w(\"\"),no-attrs)"));
 ef12= lookup_func( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FNT-tuple\"),w(\"\"),no-attrs)"));
 ef12sym= lookup_sym( TmakeSimple( & local , "prod(id(\"AsFix2Sign-C\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FNT-tuple\"),w(\"\"),no-attrs)"));
-}
-aterm * new__1__lf_AUX_AsFix2Sign_C6_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-PROF( prof_new__1__lf_AUX_AsFix2Sign_C6_1);
-t_unprotect( arg0);
-return ( * ef1)( ( * ef2)( lf2( make_list( null( )))) , arg1 , arg2);
 }
 aterm * lf_AUX_AsFix2Sign_C6_1( aterm * arg0 , aterm * arg1 , aterm * arg2) {
 {
@@ -130,7 +122,8 @@ t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
-return new__1__lf_AUX_AsFix2Sign_C6_1( arg0 , arg1 , arg2);
+t_unprotect( arg0);
+return ( * ef1)( ( * ef2)( lf2( make_list( null( )))) , arg1 , arg2);
 }
 }
 aterm * lf2( aterm * arg0) {

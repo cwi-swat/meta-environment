@@ -5,15 +5,12 @@ static asymbol * ef1sym;
 static funcptr ef1;
 static asymbol * lf2sym;
 static aterm * lf2( aterm * arg1);
-static asymbol * new__1__lf_AUX_AsFix2muASFnames13_1sym;
-static aterm * new__1__lf_AUX_AsFix2muASFnames13_1( aterm * arg1);
 void register_AUX_AsFix2muASFnames13( ) {
 arena local;
 TinitArena( NULL , & local);
 lf_AUX_AsFix2muASFnames13_1sym= TmkSymbol( "prod(id(\"AsFix2muASFnames\"),w(\"\"),[l(\"upper2lower\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"
  , SYM_STRING);
 lf2sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
-new__1__lf_AUX_AsFix2muASFnames13_1sym= TmkSymbol( "new__1__lf_AUX_AsFix2muASFnames13_1" , SYM_STRING);
 register_prod( TmakeSimple( & local , "prod(id(\"AsFix2muASFnames\"),w(\"\"),[l(\"upper2lower\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)") , lf_AUX_AsFix2muASFnames13_1 , lf_AUX_AsFix2muASFnames13_1sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
@@ -22,30 +19,6 @@ arena local;
 TinitArena( NULL , & local);
 ef1= lookup_func( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
 ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
-}
-aterm * new__1__lf_AUX_AsFix2muASFnames13_1( aterm * arg0) {
-{
-aterm * tmp[1];
-PROF( prof_new__1__lf_AUX_AsFix2muASFnames13_1);
-if( check_sym( arg0 , ef1sym)) {
-{
-aterm * atmp00= arg_0( arg0);
-if( check_sym( atmp00 , lf2sym)) {
-{
-aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( is_single_element( atmp000)) {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
-t_unprotect( arg0);
-return ( * ef1)( lf2( make_list( tmp[ 0])));
-}
-}
-}
-}
-}
-return make_nf1( new__1__lf_AUX_AsFix2muASFnames13_1sym , arg0);
-}
 }
 aterm * lf_AUX_AsFix2muASFnames13_1( aterm * arg0) {
 {
@@ -280,7 +253,7 @@ if( is_single_element( atmp000)) {
 t_protect( atmp000);
 tmp[ 0]= list_head( atmp000);
 t_unprotect( arg0);
-return new__1__lf_AUX_AsFix2muASFnames13_1( ( * ef1)( lf2( make_list( tmp[ 0]))));
+return ( * ef1)( lf2( make_list( tmp[ 0])));
 }
 }
 }

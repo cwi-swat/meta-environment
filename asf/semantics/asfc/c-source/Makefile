@@ -1,7 +1,6 @@
 include Make.modules
 
 ATERM	= /home/markvdb/NEW-META/new-meta/..
-#ATERM	= /home/olivierp/Research
 #CC	= gcc
 CC	= cc
 INCLUDE = -I$(ATERM)/include -I../support

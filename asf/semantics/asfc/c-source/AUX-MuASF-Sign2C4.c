@@ -225,8 +225,8 @@ if( not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 if( term_equal( list_last( tmp[ 2]) , make_char( 125))) {
 t_protect( tmp[ 3]);
-t_protect( arg1);
-tmp[ 4]= ( * ef24)( ( * ef2)( lf3( cons( make_list( make_char( 34)) , cons( make_list( make_char( 123)) , cons( make_list( tmp[ 3]) , cons( make_list( make_char( 125)) , make_list( make_char( 34)))))))) , arg1);
+t_protect( atmp10);
+tmp[ 4]= ( * ef24)( ( * ef2)( lf3( cons( make_list( make_char( 34)) , cons( make_list( make_char( 123)) , cons( make_list( tmp[ 3]) , cons( make_list( make_char( 125)) , make_list( make_char( 34)))))))) , lf_AUX_MuASF_Sign2C4_1( make_list( atmp10)));
 if( check_sym( tmp[ 4] , ef2sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 if( check_sym( tmp[ 5] , lf3sym)) {
@@ -260,8 +260,8 @@ t_unprotect( tmp[ 0]);
 t_protect( atmp0000);
 if( term_equal( ( * ef25)( ( * ef2)( lf3( make_list( atmp0000)))) , ( * ef26)( ))) {
 t_protect( atmp0000);
-t_protect( arg1);
-tmp[ 0]= ( * ef27)( ( * ef2)( lf3( make_list( atmp0000))) , arg1);
+t_protect( atmp10);
+tmp[ 0]= ( * ef27)( ( * ef2)( lf3( make_list( atmp0000))) , lf_AUX_MuASF_Sign2C4_1( make_list( atmp10)));
 if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf3sym)) {
@@ -269,10 +269,12 @@ tmp[ 2]= arg_0( tmp[ 1]);
 t_protect( atmp0000);
 t_protect( atmp0000);
 t_protect( atmp0000);
+t_protect( atmp0000);
 t_protect( tmp[ 2]);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef3)( lf4( make_list( arg0)) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))))) , ( * ef12)( ( * ef13)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))))) , ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 114)) , make_list( make_char( 109))))))))))))) , ( * ef12)( ( * ef14)( ( * ef11)( lf3( make_list( atmp0000))) , ( * ef15)( lf6( make_list( null( ))))))))) , ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))) , ( * ef20)( ( * ef22)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 84)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 107)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))) , ( * ef23)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( make_list( tmp[ 2])))))) , make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 83)) , cons( make_list( make_char( 89)) , cons( make_list( make_char( 77)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 84)) , cons( make_list( make_char( 82)) , cons( make_list( make_char( 73)) , cons( make_list( make_char( 78)) , make_list( make_char( 71))))))))))))))))))))))))));
+return ( * ef3)( lf4( make_list( ( * ef1)( ( * ef2)( lf3( make_list( atmp0000)))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))))) , ( * ef12)( ( * ef13)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))))) , ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 114)) , make_list( make_char( 109))))))))))))) , ( * ef12)( ( * ef14)( ( * ef11)( lf3( make_list( atmp0000))) , ( * ef15)( lf6( make_list( null( ))))))))) , ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))) , ( * ef20)( ( * ef22)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 84)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 107)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))) , ( * ef23)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( make_list( tmp[ 2])))))) , make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 83)) , cons( make_list( make_char( 89)) , cons( make_list( make_char( 77)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 84)) , cons( make_list( make_char( 82)) , cons( make_list( make_char( 73)) , cons( make_list( make_char( 78)) , make_list( make_char( 71))))))))))))))))))))))))));
 }
 }
 t_unprotect( tmp[ 0]);
@@ -459,8 +461,8 @@ if( term_equal( list_last( tmp[ 2]) , make_char( 125))) {
 t_protect( atmp010);
 if( not_empty_list( atmp010)) {
 t_protect( tmp[ 3]);
-t_protect( arg1);
-tmp[ 4]= ( * ef24)( ( * ef2)( lf3( cons( make_list( make_char( 34)) , cons( make_list( make_char( 123)) , cons( make_list( tmp[ 3]) , cons( make_list( make_char( 125)) , make_list( make_char( 34)))))))) , arg1);
+t_protect( atmp10);
+tmp[ 4]= ( * ef24)( ( * ef2)( lf3( cons( make_list( make_char( 34)) , cons( make_list( make_char( 123)) , cons( make_list( tmp[ 3]) , cons( make_list( make_char( 125)) , make_list( make_char( 34)))))))) , lf_AUX_MuASF_Sign2C4_1( make_list( atmp10)));
 if( check_sym( tmp[ 4] , ef2sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 if( check_sym( tmp[ 5] , lf3sym)) {
@@ -500,8 +502,8 @@ if( not_empty_list( atmp010)) {
 t_protect( atmp0000);
 if( term_equal( ( * ef25)( ( * ef2)( lf3( make_list( atmp0000)))) , ( * ef26)( ))) {
 t_protect( atmp0000);
-t_protect( arg1);
-tmp[ 0]= ( * ef27)( ( * ef2)( lf3( make_list( atmp0000))) , arg1);
+t_protect( atmp10);
+tmp[ 0]= ( * ef27)( ( * ef2)( lf3( make_list( atmp0000))) , lf_AUX_MuASF_Sign2C4_1( make_list( atmp10)));
 if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf3sym)) {
@@ -509,12 +511,15 @@ tmp[ 2]= arg_0( tmp[ 1]);
 t_protect( atmp010);
 tmp[ 3]= ( * ef33)( lf9( make_list( atmp010)) , ( * ef34)( lf3( make_list( make_char( 49)))));
 t_protect( atmp0000);
+t_protect( atmp010);
+t_protect( atmp0000);
 t_protect( atmp0000);
 t_protect( atmp0000);
 t_protect( tmp[ 2]);
+t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef3)( lf4( make_list( arg0)) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))))) , ( * ef12)( ( * ef13)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))))) , ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 114)) , make_list( make_char( 109))))))))))))) , ( * ef12)( ( * ef14)( ( * ef11)( lf3( make_list( atmp0000))) , tmp[ 3]))))) , ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))) , ( * ef20)( ( * ef22)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 84)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 107)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))) , ( * ef23)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( make_list( tmp[ 2])))))) , make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 83)) , cons( make_list( make_char( 89)) , cons( make_list( make_char( 77)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 84)) , cons( make_list( make_char( 82)) , cons( make_list( make_char( 73)) , cons( make_list( make_char( 78)) , make_list( make_char( 71))))))))))))))))))))))))));
+return ( * ef3)( lf4( make_list( ( * ef32)( ( * ef2)( lf3( make_list( atmp0000))) , lf9( make_list( atmp010))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))))) , ( * ef12)( ( * ef13)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))))) , ( * ef7)( ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( cons( make_list( make_char( 97)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 114)) , make_list( make_char( 109))))))))))))) , ( * ef12)( ( * ef14)( ( * ef11)( lf3( make_list( atmp0000))) , tmp[ 3]))))) , ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( atmp0000) , cons( make_list( make_char( 115)) , cons( make_list( make_char( 121)) , make_list( make_char( 109))))))))) , ( * ef20)( ( * ef22)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 84)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 107)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 98)) , cons( make_list( make_char( 111)) , make_list( make_char( 108))))))))))))) , ( * ef23)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( make_list( tmp[ 2])))))) , make_list( ( * ef20)( ( * ef21)( ( * ef11)( lf3( cons( make_list( make_char( 83)) , cons( make_list( make_char( 89)) , cons( make_list( make_char( 77)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 83)) , cons( make_list( make_char( 84)) , cons( make_list( make_char( 82)) , cons( make_list( make_char( 73)) , cons( make_list( make_char( 78)) , make_list( make_char( 71))))))))))))))))))))))))));
 }
 }
 t_unprotect( tmp[ 0]);

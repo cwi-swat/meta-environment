@@ -82,8 +82,8 @@ t_unprotect( arg2);
 return ( * ef7)( ( * ef8)( ) , ( * ef9)( lf5( make_list( make_char( 48)))));
 }
 else {
-t_protect( arg0);
-tmp[ 0]= ( * ef3)( arg0);
+t_protect( atmp00);
+tmp[ 0]= ( * ef3)( lf_AUX_MuASF_Rules2C8_1( make_list( atmp00)));
 if( check_sym( tmp[ 0] , ef4sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf4sym)) {
@@ -99,10 +99,12 @@ if( check_sym( tmp[ 5] , lf4sym)) {
 tmp[ 7]= arg_0( tmp[ 5]);
 t_protect( tmp[ 6]);
 t_protect( tmp[ 7]);
+t_protect( atmp10);
 t_unprotect( arg0);
+t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 3]);
-return ( * ef1)( ( * ef2)( ) , lf4( make_list( tmp[ 6])) , lf4( make_list( tmp[ 7])) , arg2 , arg1);
+return ( * ef1)( ( * ef2)( ) , lf4( make_list( tmp[ 6])) , lf4( make_list( tmp[ 7])) , arg2 , lf_AUX_MuASF_Rules2C8_2( make_list( atmp10)));
 }
 }
 }

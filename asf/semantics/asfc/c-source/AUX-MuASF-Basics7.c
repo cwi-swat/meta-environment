@@ -48,10 +48,12 @@ aterm * atmp10= arg_0( arg1);
 aterm * atmp11= arg_1( arg1);
 t_protect( atmp00);
 if( not_empty_list( atmp00)) {
+t_protect( atmp00);
 t_protect( atmp10);
 t_protect( atmp11);
+t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef3)( arg0) , atmp10 , atmp11);
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics7_1( make_list( atmp00))) , atmp10 , atmp11);
 }
 }
 }
@@ -63,10 +65,12 @@ aterm * atmp10= arg_0( arg1);
 aterm * atmp11= arg_1( arg1);
 t_protect( atmp00);
 if( not_empty_list( atmp00)) {
+t_protect( atmp00);
 t_protect( atmp10);
 t_protect( atmp11);
+t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef5)( ( * ef3)( arg0) , atmp10 , atmp11);
+return ( * ef5)( ( * ef3)( lf_AUX_MuASF_Basics7_1( make_list( atmp00))) , atmp10 , atmp11);
 }
 }
 }

@@ -15,10 +15,12 @@ static asymbol * ef11sym;
 static funcptr ef11;
 static asymbol * ef12sym;
 static funcptr ef12;
-static asymbol * ef4sym;
-static funcptr ef4;
 static asymbol * ef16sym;
 static funcptr ef16;
+static asymbol * ef4sym;
+static funcptr ef4;
+static asymbol * ef17sym;
+static funcptr ef17;
 static asymbol * ef9sym;
 static funcptr ef9;
 static asymbol * ef5sym;
@@ -29,12 +31,12 @@ static asymbol * ef14sym;
 static funcptr ef14;
 static asymbol * ef15sym;
 static funcptr ef15;
-static asymbol * ef17sym;
-static funcptr ef17;
-static asymbol * lf6sym;
-static aterm * lf6( aterm * arg1);
 static asymbol * ef18sym;
 static funcptr ef18;
+static asymbol * lf6sym;
+static aterm * lf6( aterm * arg1);
+static asymbol * ef19sym;
+static funcptr ef19;
 static asymbol * lf_AUX_Rules2C_Aux3_1sym;
 static aterm * lf_AUX_Rules2C_Aux3_1( aterm * arg1);
 static asymbol * lf_AUX_Rules2C_Aux3_2sym;
@@ -97,12 +99,14 @@ ef14= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(
 ef14sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funargs\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)"));
 ef15= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)"));
 ef15sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)"));
-ef16= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-ef16sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-ef17= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef17sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef18= lookup_func( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef18sym= lookup_sym( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
+ef16= lookup_func( TmakeSimple( & local , "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)"));
+ef16sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)"));
+ef17= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
+ef17sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
+ef18= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
+ef18sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
+ef19= lookup_func( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
+ef19sym= lookup_sym( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
 }
 aterm * lf_AUX_Rules2C_Aux3_3( aterm * arg0 , aterm * arg1) {
 {
@@ -167,11 +171,11 @@ tmp[ 7]= arg_0( tmp[ 6]);
 t_protect( tmp[ 7]);
 if( not_empty_list( tmp[ 7])) {
 t_protect( tmp[ 0]);
-tmp[ 8]= ( * ef17)( tmp[ 0]);
+tmp[ 8]= ( * ef18)( tmp[ 0]);
 t_protect( tmp[ 7]);
 t_protect( tmp[ 2]);
 t_protect( tmp[ 3]);
-tmp[ 9]= lf_AUX_Rules2C_Aux3_3( lf_AUX_Rules2C_Aux3_1( make_list( tmp[ 7])) , lf_AUX_Rules2C_Aux3_2( cons( make_list( tmp[ 2]) , cons( make_list( tmp[ 3]) , make_list( ( * ef18)( lf6( make_list( make_char( 48)))))))));
+tmp[ 9]= lf_AUX_Rules2C_Aux3_3( lf_AUX_Rules2C_Aux3_1( make_list( tmp[ 7])) , lf_AUX_Rules2C_Aux3_2( cons( make_list( tmp[ 2]) , cons( make_list( tmp[ 3]) , make_list( ( * ef19)( lf6( make_list( make_char( 48)))))))));
 if( check_sym( tmp[ 9] , ef1sym)) {
 tmp[ 10]= arg_0( tmp[ 9]);
 tmp[ 11]= arg_1( tmp[ 9]);
@@ -202,7 +206,7 @@ t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 5]);
 t_unprotect( tmp[ 9]);
 t_unprotect( tmp[ 14]);
-return ( * ef1)( ( * ef2)( lf4( cons( make_list( ( * ef4)( ( * ef16)( tmp[ 8]) , lf_AUX_Rules2C_Aux3_2( cons( make_list( tmp[ 2]) , make_list( tmp[ 3]))))) , cons( make_list( tmp[ 13]) , make_list( tmp[ 18]))))) , ( * ef9)( tmp[ 11] , tmp[ 16]));
+return ( * ef1)( ( * ef2)( lf4( cons( make_list( ( * ef16)( lf4( cons( make_list( ( * ef4)( ( * ef17)( tmp[ 8]) , lf_AUX_Rules2C_Aux3_2( cons( make_list( tmp[ 2]) , make_list( tmp[ 3]))))) , make_list( tmp[ 13]))))) , make_list( tmp[ 18])))) , ( * ef9)( tmp[ 11] , tmp[ 16]));
 }
 }
 }

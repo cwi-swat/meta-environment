@@ -230,16 +230,16 @@ tmp[ 14]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 13] , lf_AUX_MuASF_Rules2C6_1sym)) {
 tmp[ 15]= arg_0( tmp[ 13]);
 t_protect( tmp[ 15]);
-t_protect( arg1);
+t_protect( atmp10);
 t_protect( tmp[ 10]);
-tmp[ 16]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( make_list( tmp[ 15])) , arg1 , tmp[ 10]);
+tmp[ 16]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( make_list( tmp[ 15])) , lf_AUX_MuASF_Rules2C6_2( make_list( atmp10)) , tmp[ 10]);
 if( check_sym( tmp[ 16] , ef19sym)) {
 tmp[ 17]= arg_0( tmp[ 16]);
 tmp[ 18]= arg_1( tmp[ 16]);
 t_protect( tmp[ 14]);
-t_protect( arg1);
+t_protect( atmp10);
 t_protect( tmp[ 10]);
-tmp[ 19]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( make_list( tmp[ 14])) , arg1 , tmp[ 10]);
+tmp[ 19]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( make_list( tmp[ 14])) , lf_AUX_MuASF_Rules2C6_2( make_list( atmp10)) , tmp[ 10]);
 if( check_sym( tmp[ 19] , ef19sym)) {
 tmp[ 20]= arg_0( tmp[ 19]);
 tmp[ 21]= arg_1( tmp[ 19]);
@@ -309,8 +309,8 @@ t_protect( tmp[ 0]);
 if( term_equal( ( * ef11)( tmp[ 0]) , ( * ef12)( lf6( make_list( null( )))))) {
 t_protect( tmp[ 0]);
 t_protect( tmp[ 1]);
-t_protect( arg1);
-tmp[ 5]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( cons( make_list( tmp[ 0]) , make_list( tmp[ 1]))) , arg1 , ( * ef34)( lf9( make_list( null( )))));
+t_protect( atmp10);
+tmp[ 5]= ( * ef18)( lf_AUX_MuASF_Rules2C6_1( cons( make_list( tmp[ 0]) , make_list( tmp[ 1]))) , lf_AUX_MuASF_Rules2C6_2( make_list( atmp10)) , ( * ef34)( lf9( make_list( null( )))));
 if( check_sym( tmp[ 5] , ef19sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
 tmp[ 7]= arg_1( tmp[ 5]);
