@@ -43,6 +43,7 @@ hiddens
     asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
     funargs2cargs({Term ","}+,IntCon)                    -> PA-tuple
     asfrules2cstats({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
+    asfrules2cstats-ignored({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
 
   context-free syntax
     asfrules2cstats({C-Rule ";"}*,{C-Rule ";"}*,
