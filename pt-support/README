@@ -37,3 +37,7 @@ runtime environment.
 In step 4 compiled specifications (Add-Eqs-Syntax and Remove-Vars) and
 pgen have to be adapted.
 In step 5 the libraries asfix-old and asfix1 can be removed.
+
+If you use gcc, these libraries are built with "gcc -Wall -g -O2". If you prefer
+different options use --with-cflags="<options>" when you run configure.
+
