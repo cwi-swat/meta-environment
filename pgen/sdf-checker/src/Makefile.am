@@ -5,6 +5,7 @@ include ${top_srcdir}/make_rules
 INCLUDES = \
 	-I$(ASC_SUPPORT)/include \
 	-I$(PT_SUPPORT)/include \
+	-I$(SGLR)/include \
 	-I$(SDF_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \

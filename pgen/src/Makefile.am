@@ -4,6 +4,7 @@ TESTS		= test-chars
 
 INCLUDES	= -I${ATERM}/include \
 		-I${TOOLBUSLIB}/include \
+		-I${SGLR}/include \
 		-I${ERROR_SUPPORT}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
