@@ -398,16 +398,10 @@ in
     fi
   +
     rec-msg(run-asf-tests, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Modulename?)
-      . StackPopTerm(Stack, Stack?, STree?)
-      . snd-msg(run-asf-tests(Modulename))
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Modulename?)
+    . StackPopTerm(Stack, Stack?, STree?)
+    . snd-msg(run-asf-tests(Modulename))
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(pretty-print, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
@@ -669,16 +663,10 @@ in
     fi
   +
     rec-msg(dump-module, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(save-asfsdf-module(Modulename))
-      . rec-msg(saved-asfsdf-module(Modulename))
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(save-asfsdf-module(Modulename))
+    . rec-msg(saved-asfsdf-module(Modulename))
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(close-module(Recursive?), Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
@@ -801,82 +789,46 @@ in
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(compile-module, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(compile-module(Modulename, Path))
-      . rec-msg(compilation-ready(Modulename))
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(compile-module(Modulename, Path))
+    . rec-msg(compilation-ready(Modulename))
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(dump-equations, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(dump-equations-given-file(Modulename, Path))
-      . rec-msg(equations-dumped)
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(dump-equations-given-file(Modulename, Path))
+    . rec-msg(equations-dumped)
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(dump-sdf-definition, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(dump-sdf-definition(Modulename, Path))
-      . rec-msg(sdf-definition-dumped)
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(dump-sdf-definition(Modulename, Path))
+    . rec-msg(sdf-definition-dumped)
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(dump-parse-table, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(dump-parse-table-given-file(Modulename, Path, trm))
-      . rec-msg(parse-table-dumped)
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(dump-parse-table-given-file(Modulename, Path, trm))
+    . rec-msg(parse-table-dumped)
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(dump-eqs-parse-table, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(dump-parse-table-given-file(Modulename, Path, eqs))
-      . rec-msg(parse-table-dumped)
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(dump-parse-table-given-file(Modulename, Path, eqs))
+    . rec-msg(parse-table-dumped)
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(print-module, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Path?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . snd-msg(print-module(Modulename, Path))
-      . rec-msg(module-printed(Modulename))
-      . ReturnSuccess(EditorId, Stack)
-    fi
+    . StackPopString(Stack, Stack?, Path?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . snd-msg(print-module(Modulename, Path))
+    . rec-msg(module-printed(Modulename))
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(clear-all, Stack?, EditorId?)
     . CloseAll

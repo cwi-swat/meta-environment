@@ -313,7 +313,7 @@ in
     . DeleteSession(Sid)
     .
     if and(HasText, not(HasStructure)) then
-      OpenSyntax(Path, sdf, ModuleId)
+      OpenSyntax(Path, sdf)
     else
       tau
     fi

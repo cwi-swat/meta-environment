@@ -1,5 +1,12 @@
 # $Id$
 
+Fri Jul 16 15:09:30 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/{editing,open-modules}.tb:
+   - Register weak modulename as soon as it is known, without passing it all
+     the way down
+ * tbscript/button-actions.tb:
+   - Removed rest of StackEmpty checks 
+
 Wed Jul 14 10:03:26 CEST 2004 <jurgenv@cwi.nl>
  * Bumped to 1.6
  * ./reconf: Added generation of libltdl directory using libtoolize

@@ -50,7 +50,8 @@ let
   Modulename: str,
   Imports: list
 in
-  OpenSyntax(Path, Type, ModuleId)
+  snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
+  . OpenSyntax(Path, Type)
   . snd-msg(ts-get-str-value("path-modulename", Path))
   .
   (
@@ -86,7 +87,8 @@ in
         rec-msg(ts-contains-key)
       +
         rec-msg(ts-not-contains-key)
-        . OpenSyntax(Path, Type, ModuleId)
+        . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
+        . OpenSyntax(Path, Type)
         . GetModuleImports(ModuleId, Imports?)
         . Todo := join(Imports, Todo)
       )
@@ -101,7 +103,7 @@ endlet
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
 
-process OpenSyntax(Path: str, Type: term, ModuleName: str) is
+process OpenSyntax(Path: str, Type: term) is
 let
   Error: term,
   Id: int,
@@ -123,7 +125,7 @@ in
       rec-msg(parse-table(Type, ParseTable?))
       . snd-msg(syntax-top-sort-hook(Type))
       . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-      . create(OpenSyntaxParseHandler(Path, ModuleName), Pid?)
+      . create(OpenSyntaxParseHandler(Path), Pid?)
       . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
@@ -143,7 +145,7 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process OpenSyntaxParseHandler(Path: str, ModuleName: str) is
+process OpenSyntaxParseHandler(Path: str) is
 let
   AnnotatedTree: term,
   Directory: str,
@@ -191,7 +193,6 @@ in
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
     rec-msg(parse-error(Pid, Error?))
-    . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleName))
     . ParseErrorToSummary(Error, Path, Summary?)
     . snd-msg(ui-show-feedback-summary(Summary))
     . snd-msg(open-syntax-parse-handler-done(Pid))
