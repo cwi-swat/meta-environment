@@ -16,7 +16,7 @@ import java.io.*;
   */
 
 abstract class ATermImpl 
-  implements SimpleHashtableEntry, Cloneable
+  implements SimpleHashtableEntry, Cloneable, Serializable
 {
   public static final int ATERMS	= 1;
   public static final int APPL		= 2;
