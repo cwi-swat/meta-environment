@@ -373,6 +373,8 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
   if (PT_isSymbolCf(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+
+    return idx;
   }
   if (PT_isSymbolLex(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
