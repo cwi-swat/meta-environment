@@ -361,7 +361,6 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    ATsetChecking(ATtrue);
     compile(name, eqs, parseTable, output);
   }
 
