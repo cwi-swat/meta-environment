@@ -29,8 +29,10 @@ process Set-parsetable is
 let
   ModuleName : str, 
   TableType  : term,
-  Table      : str
+  Table      : str,
+  Id         : int
 in
+Id := process-id.
 ( 
   rec-msg(set-parsetable(ModuleName?, TableType?)) .
   snd-msg(get-table-from-db(ModuleName, TableType)) .
@@ -39,7 +41,9 @@ in
     ReopenLanguage(ModuleName, Table)
   +
     rec-msg(no-table) .
-    MakeTable(ModuleName, TableType)
+    snd-note(ui-status(stat(Id, "Generating parsetable..."))).
+    MakeTable(ModuleName, TableType).
+    snd-note(ui-status(endstat(Id)))
   )
 ) *
 delta
