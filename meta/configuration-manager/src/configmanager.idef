@@ -14,15 +14,15 @@
 
 process ProcessButtons(CMNG : configmanager) is
 let
-  Term         : str,
+  Contents : str,
   ErrorMessage : str
 in
-  snd-msg(open-file(BUTTON_FILE, "")) .
+  snd-msg(read-file(BUTTON_FILE, "")) .
   (
-    rec-msg(opened-file(text(Term?))) .
-    snd-eval(CMNG, process-button-file(BUTTON_FILE, Term))
+    rec-msg(file-contents(Contents?)) .
+    snd-eval(CMNG, process-button-file(BUTTON_FILE, Contents))
   +
-    rec-msg(error-opening(ErrorMessage?)) .
+    rec-msg(error-reading(ErrorMessage?)) .
     snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
   ) .
   rec-value(CMNG, buttons-processed) .
@@ -34,7 +34,7 @@ let
   CMNG          : configmanager,
   Text          : str,
   Fid           : str,
-  Paths         : list,
+  SearchPaths : list,
   ButtonName    : list,
   ButtonNames   : list,
   ButtonActions : list,
@@ -44,25 +44,27 @@ let
   Term          : term,
   Pid           : int,
   LibraryPath   : str,
+  Directories : list,
   ErrorMessage  : str
 in
   execute(configmanager, CMNG?) .
-  snd-msg(open-file(CONFIG_FILE, "")) .
+  snd-msg(read-file(CONFIG_FILE, "")) .
   (
-    rec-msg(opened-file(text(Text?))) .
-    snd-eval(CMNG, process-config-file(CONFIG_FILE, Text))
+    rec-msg(file-contents(Text?))
   +
-    rec-msg(error-opening(ErrorMessage?)) .
-    snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
+    rec-msg(error-reading(ErrorMessage?)) .
+    Text := "."
   ) .
-  rec-value(CMNG, search-paths(Paths?)) .
+  snd-eval(CMNG, parse-config-file(Text)) .
+  rec-value(CMNG, directories(Directories?)) .
+  snd-msg(relative-to-absolute(Directories)) .
+  rec-msg(absolute-directories(Directories?)) .
+  snd-do(CMNG, register-user-directories(Directories)) .
+
   snd-msg(library-location-hook).
   rec-msg(library-location-hook-result(LibraryPath?)).
-  Paths := join(Paths, LibraryPath) .
-  snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
-  rec-msg(search-paths-processed(CONFIG_FILE)) .
+  snd-do(CMNG, register-library(LibraryPath)) .
   ProcessButtons(CMNG) .
-  snd-note(search-paths-processed) .
   (
     rec-msg(refresh-buttons) .
     ProcessButtons(CMNG) .
@@ -77,6 +79,11 @@ in
     snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
     snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
+  +
+    rec-msg(get-search-paths) .
+    snd-eval(CMNG, get-search-paths) .
+    rec-value(CMNG, search-paths(SearchPaths?)) .
+    snd-msg(search-paths(SearchPaths))
   ) * delta
 endlet
 

@@ -9,9 +9,11 @@
 
 #define MAX_MESSAGE_LENGTH 133
 
-static char myversion[] = "1.0";     
+static char myversion[] = "2.0";     
 static MB_ButtonList buttons = NULL;
-static MB_ButtonList standard_buttons = NULL;
+static MB_ButtonList standardButtons = NULL;
+static ATermList userSearchPaths = NULL;
+static ATerm librarySearchPath = NULL;
 
 /*{{{  static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2) */
 
@@ -31,9 +33,9 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
-/*{{{  ATerm process_config_file(int cid, char *filename, char *contents) */
+/*{{{  ATerm parse_config_file(int cid, const char *contents) */
 
-ATerm process_config_file(int cid, char *filename, char *contents)
+ATerm parse_config_file(int cid, char *contents)
 {
   int i;
   int j = 0;
@@ -71,7 +73,23 @@ ATerm process_config_file(int cid, char *filename, char *contents)
     paths = ATinsert(paths, ATmake("<str>", pathline));
   }
 
-  return ATmake("snd-value(search-paths(<term>))", ATreverse(paths));
+  return ATmake("snd-value(directories(<term>))", paths);
+}
+
+/*}}}  */
+/*{{{  void register_user_directories(int cid, ATerm paths) */
+
+void register_user_directories(int cid, ATerm paths)
+{
+  userSearchPaths = (ATermList) paths;
+}
+
+/*}}}  */
+/*{{{  void register_library(int cid, char *path) */
+
+void register_library(int cid, char *path)
+{
+  librarySearchPath = ATmake("<str>", path);
 }
 
 /*}}}  */
@@ -94,7 +112,7 @@ ATerm process_button_file(int cid, char *filename, char *contents)
 
 ATerm get_button_names(int cid, char *editortype, char *modulename)
 {
-  MB_ButtonList localButtons = MB_concatButtonList(buttons,standard_buttons);
+  MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
   ATermList buttonNames = ATempty;
   MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
 
@@ -124,7 +142,7 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,
 			 char *modulename)
 {
   char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
-  MB_ButtonList localButtons = MB_concatButtonList(buttons,standard_buttons);
+  MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
   MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
   ATermList buttonActions;
   
@@ -156,7 +174,16 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,
 }
 
 /*}}}  */
+/*{{{  ATerm get_search_paths(int cid) */
 
+ATerm get_search_paths(int cid)
+{
+  ATermList searchPaths = ATappend(userSearchPaths, librarySearchPath);
+
+  return ATmake("snd-value(search-paths(<term>))", searchPaths);
+}
+
+/*}}}  */
 /*{{{  void usage(char *prg, ATbool is_err) */
 
 void usage(char *prg, ATbool is_err)
@@ -198,14 +225,16 @@ int main(int argc, char *argv[])
   MB_initMetaButtonsApi();
 
   ATprotect((ATerm*) &buttons);
-  ATprotect((ATerm*) &standard_buttons);
+  ATprotect((ATerm*) &standardButtons);
+  ATprotect((ATerm*) &userSearchPaths);
+  ATprotect(&librarySearchPath);
 
   buttons = MB_makeButtonListEmpty();
   standard = ATreadFromNamedFile(STANDARD_BUTTONS);
 
   if (standard != NULL) {
     if (MB_isValidButtons(MB_ButtonsFromTerm(standard))) {
-      standard_buttons = MB_getButtonsList(MB_ButtonsFromTerm(standard));
+      standardButtons = MB_getButtonsList(MB_ButtonsFromTerm(standard));
     }
   }
   else {
