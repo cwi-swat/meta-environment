@@ -12,6 +12,7 @@
 #include "intset.h"
 #include "first.h"
 #include "pgen-symbol.h"
+#include "follow.h"
 
 /*}}}  */
 
@@ -44,7 +45,6 @@ extern ATbool statisticsMode;
 /*}}}  */
 /*{{{  function declarations */
 
-void calc_follow_table();
 void calc_goto_graph();
 
 /*}}}  */
@@ -156,6 +156,7 @@ void destroy_table_gen()
   int i;
 
   destroy_first();
+  destroy_follow_table();
   CC_cleanup();
   destroySymbols();
 
@@ -776,7 +777,7 @@ ATerm generate_parse_table(PT_ParseTree g)
 
       statelist = ATinsert(statelist,state);
     }
-
+ 
     IF_STATISTICS(fprintf(PT_log (), "Maximum number of gotos per state is %d\n", max_nr_gotos));
     IF_STATISTICS(fprintf(PT_log (), "Average number of gotos per state is %d\n", (nr_of_gotos/nr_of_states)));
     IF_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));

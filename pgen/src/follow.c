@@ -343,7 +343,7 @@ static void union_follow_sets()
   ATbool done;
   IS_IntSet deps;
 
-  follow_table = (CC_Class **)malloc(MAX_PROD*sizeof(CC_Class *));
+  follow_table = (CC_Class **)calloc(MAX_PROD, sizeof(CC_Class *));
   if (!follow_table) {
     ATerror("out of memory!\n");
   }
@@ -413,9 +413,14 @@ void destroy_follow_table()
     if (follow_table[i] != NULL) {
       CC_free(follow_table[i]);
     }
+    if (initial_follow_sets[i] != NULL) {
+      CC_free(initial_follow_sets[i]);
+    }
   }
   free(follow_table);
   follow_table = NULL;
+  free(initial_follow_sets);
+  initial_follow_sets = NULL;
 }
 
 /*}}}  */

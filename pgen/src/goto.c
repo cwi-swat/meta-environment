@@ -212,8 +212,8 @@ static void free_goto()
   memset(goto_classes, 0, MAX_STATES*sizeof(ATerm));
   ATunprotectArray(goto_states);
   memset(goto_states, 0, MAX_STATES*sizeof(ATerm));
-}
 
+}
 /*}}}  */
 
 /*{{{  static ATermList init()  */
@@ -347,8 +347,6 @@ void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos)
   ATermList actionset = ATempty;
   int idx;
 
-  nr_actions = 0;
-
   shifts(chars);
 
   reductions(vertex);
@@ -365,9 +363,18 @@ void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos)
 					    (ATerm)action_actions[idx]));
   }
 
+
   ATtablePut(state_gotos_pairs, (ATerm)kernel, (ATerm)gotos);
   ATtablePut(state_actions_pairs, (ATerm)kernel, (ATerm)actionset);
 
+  for (idx=0; idx<nr_actions; idx++) {
+    if (action_classes[idx] != NULL) {
+      CC_free(action_classes[idx]);
+      action_classes[idx] = NULL;
+    }
+  }
+
+  nr_actions = 0;
 }
 
 /*}}}  */
