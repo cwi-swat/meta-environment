@@ -38,7 +38,7 @@ in
   execute(genadapt, GENADAPT?) .
   execute(termgenadapt, TERMGENADAPT?) .
   (
-    rec-msg(activate-gen(Action?), Stack?, EditorId?) .
+    rec-msg(activate(Action?), Stack?, EditorId?) .
     ADAPTER(GENADAPT, Action, "", OutStr?) .
     if not-equal(OutStr, "") then
       RTree := quote(str(OutStr)) .
@@ -48,7 +48,7 @@ in
       snd-msg(stack(Stack))
     fi
   +
-    rec-msg(activate-gen-on-tree(Action?), Stack?, EditorId?) .
+    rec-msg(activate-given-tree(Action?), Stack?, EditorId?) .
     STree := first(Stack) .
     Stack := next(Stack) .
     FunSym := fun(STree) .
