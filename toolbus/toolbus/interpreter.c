@@ -70,6 +70,16 @@ static procs *AllProcesses = NULL;  /* PROTECTED */
 proc_def_list *Definitions = NULL;  /* PROTECTED */
 /* used in calls.c */
 
+#ifdef DBG_PROC_COMM
+static char *dbg_sending_procs[] =
+  { "Pend", NULL };
+static char *dbg_receiving_procs[] =
+  { "P", NULL };
+
+static TBbool dbg_first_proc_ok = TBfalse;
+#endif
+
+
 /*}}}  */
 
 /*{{{  static functions */
@@ -78,6 +88,35 @@ static ap_form *expand(proc *P, env *Env);
 static term *itp(term *T, proc_inst *ProcInst);
 static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
 			proc_inst **comm_ProcInst, term *Processes);
+
+/*}}}  */
+
+/*{{{  static TBbool dbg_proc_ok(int fun, proc_inst *proc_inst) */
+
+#ifdef DBG_PROC_COMM
+static TBbool dbg_proc_ok(int fun, proc_inst *proc_inst)
+{
+  int i;
+  char **array;
+  char *name;
+
+  name = str_val(pi_name(proc_inst));
+
+  if (fun == a_snd_msg) {
+    array = dbg_sending_procs;
+  } else {
+    array = dbg_receiving_procs;
+  }
+
+  for (i=0; array[i]; i++) {
+    if (strcmp(name, array[i]) == 0) {
+      return TBtrue;
+    }
+  }
+
+  return TBfalse;
+}
+#endif
 
 /*}}}  */
 
@@ -1479,13 +1518,16 @@ retry:
 	      {
 		proc_inst *comm_ProcInst; proc *P2; atom *Atom2;
 
+#ifdef DBG_PROC_COMM
+		dbg_first_proc_ok = dbg_proc_ok(at_fun(Atom), current_ProcInst);
+#endif
 		if(next(Processes) && find_comm(Atom, &Atom2, &P2, &comm_ProcInst,
 						next(Processes)))
 		{
 		  nu(Atom, P, current_ProcInst, comm_ProcInst);
 		  nu(Atom2, P2, comm_ProcInst, current_ProcInst);
-		  /* TBmsg("current_ProcInst = %t\n\n", current_ProcInst); */
-		  /* TBmsg("comm_ProcInst = %t\n\n", comm_ProcInst); */
+		  /*TBmsg("current_ProcInst = %t\n\n", current_ProcInst);*/
+		  /*TBmsg("comm_ProcInst = %t\n\n", comm_ProcInst);*/
 		  work = TBtrue;
 		  add_free_list(all_alts);
 		  /* move current_ProcInst and comm_ProcInst to adjacent positions in the process list,
@@ -1527,6 +1569,9 @@ static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
   register atom *Atom;
   register ap_form *all_alts, *alt, *alts;
   term_list *Previous = NULL;
+#ifdef DBG_PROC_COMM
+  TBbool dbg_interest = TBfalse;
+#endif
 
   for( ; Processes; Previous = Processes, Processes = next(Processes)){
     assert(is_list(Processes));
@@ -1551,7 +1596,24 @@ static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
       if(!is_enabled(Atom, ProcInst) || !communicate(at_fun(Atom1), at_fun(Atom)))
 	continue;
 
+#ifdef DBG_PROC_COMM
+      if (dbg_first_proc_ok) {
+	if (dbg_proc_ok(at_fun(Atom), ProcInst)) {
+	  dbg_interest = TBtrue;
+	  TBmsg("checking match between %t and %t (%t)\n", pi_name(current_ProcInst),
+		pi_name(ProcInst), Atom);
+	} else {
+	  TBmsg("not an interesting process: %t (%t)\n", pi_name(ProcInst), Atom);
+	}
+      }
+#endif
+
       if(match(at_args(Atom1), at_args(Atom), pi_env(current_ProcInst), pi_env(ProcInst))){
+#ifdef DBG_PROC_COMM
+	if (dbg_interest) {
+	  TBmsg("match ok: %t\n==\n%t\n", Atom1, Atom);
+	}
+#endif
 	pi_env(current_ProcInst) = update(pi_env(current_ProcInst), Bindings1);
 	pi_env(ProcInst) = update(pi_env(ProcInst), Bindings2);
 
@@ -1569,6 +1631,11 @@ static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
 	  next(Previous) = next(Processes);
 	return TBtrue;	  
       }
+#ifdef DBG_PROC_COMM
+      else if (dbg_interest) {
+        TBmsg("match failed: %t\n!=\n%t\n", Atom1, Atom);
+      }
+#endif
     }
   }
   return TBfalse;

@@ -40,9 +40,12 @@ CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
 
 YFLAGS               = -d
 
+xDEBUG_DEFS	     = -DDBG_PROC_COMM
+
 TOOLBUS_DEFS         = -DCPP='"$(CPP) $(CPPFLAGS)"' \
                        -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
-                       -DLOGGER_TCL=\"$(datadir)/logger.tcl\"
+                       -DLOGGER_TCL=\"$(datadir)/logger.tcl\" \
+		       ${DEBUG_DEFS}
 
 INCLUDES            = -I$(TOOLBUSLIB)/include -I$(srcdir) -I. $(TOOLBUS_DEFS)
 

@@ -154,11 +154,11 @@ Options for the preprocessor are:\n\
 int main(int argc, char *argv[])
 { 
   int i = 1;
+  unsigned int seed = time(NULL);
   char *s;
   char *sname = NULL;
   TBbool gen_tifs = TBfalse;
   term *monitor;
-  TBbool fixed_seed = TBfalse;
   struct sigaction act;
   struct sigaction act_ignore;
 
@@ -224,14 +224,16 @@ int main(int argc, char *argv[])
     } else if((argv[i][0] == '-') && ((argv[i][1] == 'I') || (argv[i][1] == 'D'))){
 
     } else if(streq(argv[i], "-fixed-seed")) {
-      fixed_seed = TBtrue;
+      seed = 0;
+    } else if (streq(argv[i], "-seed")) {
+      seed = atoi(argv[++i]);
     } else {
       sname = argv[i];
       break;
     }
   }
 
-  srand(fixed_seed ? 0 : time(NULL));
+  srand(seed);
 
   init_terms();
   init_env();
