@@ -10,6 +10,7 @@
 #define SG_AVOID_AFUN        "avoid"
 #define SG_APROD_AFUN        "aprod"
 #define SG_AMB_AFUN          "amb"
+#define SG_ARG_GTRPRIO_AFUN  "arg-gtr-prio"
 #define SG_GTRPRIO_AFUN      "gtr-prio"
 #define SG_SHIFT_AFUN        "shift"
 #define SG_REDUCE_AFUN       "reduce"

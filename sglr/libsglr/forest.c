@@ -476,19 +476,29 @@ tree SG_YieldTree(parse_table *pt, tree t)
  SG_GtrPriority(l0, l1) returns true iff priority(l0) > priority(l0)
  */
 
-static ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
+static ATbool SG_GtrPriority(parse_table *pt, int argNumber , 
+                             ATermInt lt0, ATermInt lt1)
 {
-  ATermList prios = SG_LookupGtrPriority(pt, ATgetInt(lt0));
+  ATermList prios = SG_LookupGtrPriority(pt, lt0);
 
   if (prios && ATindexOf(prios, (ATerm) lt1, 0) != -1) {
     return ATtrue;
   }
+  else {
+    ATermList prios;
+
+    prios = SG_LookupArgGtrPriority(pt, lt0, ATmakeInt(argNumber));
+
+    if (prios && ATindexOf(prios, (ATerm) lt1, 0) != -1) {
+      return ATtrue;
+    }
+  }
   return ATfalse;
 }
 
-ATbool SGGtrPriority(parse_table *pt, label l0, label l1)
+ATbool SGGtrPriority(parse_table *pt, int argNumber, label l0, label l1)
 {
-  return SG_GtrPriority(pt, ATmakeInt(l0), ATmakeInt(l1));
+  return SG_GtrPriority(pt, argNumber, ATmakeInt(l0), ATmakeInt(l1));
 }
 
 static int SG_ProdType_AFun(AFun f)
@@ -1277,8 +1287,9 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
   ATermInt l0       = SG_GetATint(prodl, 0);
   ATermInt l1;
   label proda;
+  int argNumber = 0;
 
-  for (;!ATisEmpty(sons); sons = ATgetNext(sons)) {
+  for (;!ATisEmpty(sons); sons = ATgetNext(sons), argNumber++) {
     tree son = (tree)ATgetFirst(sons);
     tree injSon = SG_Jump_Over_Injections(pt, son);
 
@@ -1295,7 +1306,7 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
           proda = SG_GetApplProdLabel(injAmb);
           l1 = SG_GetATint(proda, 0);
  
-          if (!SG_GtrPriority(pt, l0, l1)) {
+          if (!SG_GtrPriority(pt, argNumber, l0, l1)) {
             newambs = ATinsert(newambs, (ATerm) amb);
           }
           else {
@@ -1324,7 +1335,7 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
       proda = SG_GetApplProdLabel(injSon);
       l1 = SG_GetATint(proda, 0);
       
-      if (SG_GtrPriority(pt, l0, l1)) {
+      if (SG_GtrPriority(pt, argNumber, l0, l1)) {
         return NULL;
       }
     }
@@ -1353,9 +1364,7 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
     }
 
     if (t && SG_FILTER_PRIORITY) {
-      /* How about priority relations between parent and kids? */
-      ATermInt l0 = SG_GetATint(prodl, 0);
-      if (SG_LookupGtrPriority(pt, ATgetInt(l0))) {
+      if (SG_hasProductionPriority(pt, ATmakeInt(prodl))) {
         return SG_Priority_Filter(pt, t, prodl);
       }
     }

@@ -1,5 +1,8 @@
 $Id$
 
+Mon May 17 15:07:52 CEST 2004 <{markvdb,jurgenv}@cwi.nl>
+ * Introduced priorities on specific arguments as a filter.
+
 Tue Apr 27 17:26:14 CEST 2004 <markvdb@cwi.nl>
  * Restore brackets improved with respect to the interaction
    between left/right/non-associativity and priorities.

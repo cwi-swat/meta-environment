@@ -32,9 +32,11 @@ typedef struct _gototable {
   size_t     sizeclass;
 } gototable;
 
-typedef production *productiontable;
-typedef ATbool     *injectiontable;
-typedef ATermTable  prioritytable;
+typedef production      *productiontable;
+typedef ATbool          *injectiontable;
+typedef ATermTable       prioritytable;
+typedef ATermTable       argprioritytable;
+typedef ATermIndexedSet  productionset;
 
 typedef struct _parse_table  {
   state            initial;
@@ -44,7 +46,9 @@ typedef struct _parse_table  {
   gototable        gotos;
   productiontable  productions;
   injectiontable   injections;
+  productionset    production_has_priorities;
   prioritytable    gtr_priorities;
+  argprioritytable arg_gtr_priorities;
   prioritytable    associativities;
   ATbool           has_priorities;
   ATbool           has_rejects;
@@ -79,8 +83,10 @@ production    SG_LookupBracketProd(parse_table *pt, PT_Symbol r);
 label         SG_LookupLabel(parse_table *pt, production p);
 ATbool        SG_ProdIsInjection(parse_table *pt, label l);
 ATbool        SG_ProdIsUserDefinedInjection(parse_table *pt, label l);
-ATbool        SGGtrPriority(parse_table *pt, label l0, label l1);
-ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
+ATbool        SGGtrPriority(parse_table *pt, int argNumber, label l0, label l1);
+ATbool        SG_hasProductionPriority(parse_table *pt, ATermInt l);
+ATermList     SG_LookupGtrPriority(parse_table *pt, ATermInt l);
+ATermList     SG_LookupArgGtrPriority(parse_table *pt, ATermInt l, ATermInt argNum);
 ATermInt      SG_GetATint(int l, size_t numprods);
 ATbool SG_IsLeftAssociative(parse_table *pt, label l);
 ATbool SG_IsRightAssociative(parse_table *pt, label l);
@@ -126,7 +132,9 @@ parse_table  *SG_LookupParseTable(language L);
 #define       SG_PT_GOTOS(pt)           ((pt)->gotos)
 #define       SG_PT_PRODUCTIONS(pt)     ((pt)->productions)
 #define       SG_PT_INJECTIONS(pt)      ((pt)->injections)
+#define       SG_PT_PRODUCTION_HAS_PRIORITIES(pt)  ((pt)->production_has_priorities)
 #define       SG_PT_GTR_PRIORITIES(pt)  ((pt)->gtr_priorities)
+#define       SG_PT_ARG_GTR_PRIORITIES(pt)  ((pt)->arg_gtr_priorities)
 #define       SG_PT_ASSOCIATIVITIES(pt) ((pt)->associativities)
 #define       SG_PT_HAS_PRIORITIES(pt)  ((pt)->has_priorities)
 #define       SG_PT_HAS_REJECTS(pt)     ((pt)->has_rejects)

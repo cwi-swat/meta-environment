@@ -111,30 +111,30 @@ static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel,
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isProductionDefault(prod)) {
       int sonLabel = SG_LookupLabel(pt, (ATermAppl)PT_ProductionToTerm(prod));
-      if (SGGtrPriority(pt, fatherLabel, sonLabel)) {
+      if (SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
         return AddBrackets(tree, pt);
       }
       if (SG_IsLeftAssociative(pt, fatherLabel) && argNr == 4) {
         if (SG_IsLeftAssociative(pt, sonLabel) &&
-            SGGtrPriority(pt, fatherLabel, sonLabel)) {
+            SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsRightAssociative(pt, fatherLabel) && argNr == 0) {
         if (SG_IsRightAssociative(pt, sonLabel) &&
-            SGGtrPriority(pt, fatherLabel, sonLabel)) {
+            SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 0) {
         if (SG_IsNonAssocAssociative(pt, sonLabel) &&
-            SGGtrPriority(pt, fatherLabel, sonLabel)) {
+            SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 4) {
         if (SG_IsNonAssocAssociative(pt, sonLabel) &&
-            SGGtrPriority(pt, fatherLabel, sonLabel)) {
+            SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
