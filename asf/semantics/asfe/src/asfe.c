@@ -186,7 +186,7 @@ ATerm RWgetError()
  * Switch debugging on/off
  */
 
-void debugging(int conn, ATerm on)
+void debugging(ATerm on)
 {
 #ifdef USE_TIDE
   if (ATmatch(on, "on")) {
@@ -397,79 +397,19 @@ static PT_Args appendSlice(PT_Args list, Slice slice)
 
 /*}}}  */
 
-/*{{{  ATerm equations_available(int cid, char *name) */
-
-ATerm equations_available(int cid, char *name)
-{
-  if (find_module(name))
-    return ATmake("snd-value(eqs-available(<str>))", name);
-  else
-    return ATmake("snd-value(eqs-not-available(<str>))", name);
-}
-
-/*}}}  */
-/*{{{  void add_equations(int cid, char *modname, ATerm equs) */
-
-/* The procedure ``add_equations'' takes care of adding a new list
-   of equations that is added to the internal database. The arguments
-   of this function are a module name and a list of equations.
-   Before this list of equations is added to the database some
-   preprocessing is needed.
-   Layout and list separators are removed, and the lexicals are
-   expanded to a list of lexical characters.
-*/
-
-void add_equations(int cid, char *modname, ATerm equs)
-{
-  ASF_CondEquationList newequs;
-
-  if (runVerbose) {
-    ATwarning("preparing equations...\n");
-  }
-
-  newequs = RWprepareEquations(ASF_makeCondEquationListFromTerm(equs));
-
-  enter_equations(modname, newequs);
-}
-
-/*}}}  */
-/*{{{  void remove_equations(int cid, char *modname) */
-
-void remove_equations(int cid, char *modname)
-{
-  if (runVerbose) {
-    ATwarning("removing equations for module: %s\n", modname);
-  }
-
-  delete_equations(modname);
-}
-
-/*}}}  */
 
 /*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
 
-/* The function ``interpret'' recieves a module name and
-   the string (term) that has to be written within the
-   context of the given module.
-   1. The term is preprocessed. The abbreviations are expanded.
-      Next the layout and separators are
-      removed and lexicals are expanded to list of lexical
-      characters.
-   2. The appropriate set of equations is actived this is
-      done be retrieving from the equation database the
-      equations over the given module and assign the list
-      of equations to the global variable ``active_rules''.
-   3. The term is rewritten via ``rewrite'' with an empty
-      variable environment.
-   4. The result of rewriting is processed in order to
-      be visualized: layout and list separators are added and
-      the list of lexical characters are mapped into lexicals
-      again. */
-
-
-ATerm interpret(int cid, char *modname, ATerm trm)
+ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 {
-  ATerm result = evaluator(modname, trm);
+  PT_ParseTree parseTree;
+  ASF_CondEquationList eqsList;
+  ATerm result;
+
+  eqsList = ASF_makeCondEquationListFromTerm(eqs);
+  parseTree = PT_makeParseTreeFromTerm(trm);
+
+  result = evaluator(modname, parseTree, eqsList, tide);
 
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
@@ -482,13 +422,18 @@ ATerm interpret(int cid, char *modname, ATerm trm)
 /*}}}  */
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
-ATerm evaluator(char *name, ATerm term)
+ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
+                ATerm debug)
 {
   PT_Tree result;
-  PT_ParseTree parseTree;
   PT_Tree tree;
 
-  parseTree = PT_makeParseTreeFromTerm(term);
+  eqs = RWprepareEquations(eqs);
+  enter_equations(name, eqs);
+  select_equations(name);
+
+  debugging(debug);
+
   tree = PT_getParseTreeTree(parseTree);
   tree = RWprepareTerm(tree);
 

@@ -26,14 +26,10 @@
 #include <ASFME-utils.h>
 #include <MEPT.h>
 
-ATerm evaluator(char *name, ATerm term);
+ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs, ATerm debug);
 
 /* toolbus interface */
-ATerm equations_available(int cid, char *name);
-void add_equations(int cid, char *modname, ATerm equs);
-void remove_equations(int cid, char *modname);
-ATerm interpret(int cid, char *modname, ATerm trm);
-PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol);
+ATerm interpret(int cid, char *modname, ATerm trm, ATerm eqs, ATerm debug);
 
 /* error interface */
 void RWsetError(const char *message, ATerm subject);
@@ -50,6 +46,7 @@ extern ASF_Tag tagCurrentRule;
 extern AFun list_var, plain_var;
 
 /* variable environment interface */
+PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol);
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 #define get_term(cenv)		(PT_makeTreeFromTerm(ATgetFirst(cenv)))
 #define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
