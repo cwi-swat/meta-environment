@@ -1,0 +1,77 @@
+%%
+%%    Meta-Environment - An environment for language prototyping.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+equations
+
+  [raws-1'1] remove-ws(T1) = Tl,
+             aterms(Tl) = T2
+             ===============
+             remove-all-ws(T1) = T2
+
+  [rwst-1'1] remove-ws(T) = Tl
+             =================
+             remove-ws-trms([T]) = Tl
+
+  [rwst-1'2] remove-ws(T) = Tl1,
+             remove-ws-trms([Ts]) = Tl2
+             ==========================
+             remove-ws-trms([T, Ts]) = Tl1 ++ Tl2
+
+  [rws-1'1] remove-ws($L) = [$L]
+
+  [rws-1'2] remove-ws(w(Ts)) = []
+
+  [rws-1'3] AFun != w,
+            remove-ws-trms([Ts]) = Tl
+            =========================
+            remove-ws(AFun(Ts)) = [AFun(aterms(Tl))]
+
+  [rws-1'4] remove-ws([]) = [[]]
+
+  [rws-1'5] remove-ws([Ts]) = [remove-ws-trms([Ts])]
+
+  [rws-1'4] remove-ws(AFun) = [AFun]
+
+  [caws-1'1] change-ws(T1) = Tl,
+             aterms(Tl) = T2
+             ===============
+             change-all-ws(T1) = T2
+
+  [cwst-1'1] change-ws(T) = Tl
+             =================
+             change-ws-trms([T]) = Tl
+
+  [cwst-1'2] change-ws(T) = Tl1,
+             change-ws-trms([Ts]) = Tl2
+             ==========================
+             change-ws-trms([T, Ts]) = Tl1 ++ Tl2
+
+  [cws-1'1] change-ws($L) = [$L]
+
+  [cws-1'2] change-ws(w(Ts)) = [w("")]
+
+  [cws-1'3] AFun != w,
+            change-ws-trms([Ts]) = Tl
+            =========================
+            change-ws(AFun(Ts)) = [AFun(aterms(Tl))]
+
+  [cws-1'4] change-ws([]) = [[]]
+
+  [cws-1'5] change-ws([Ts]) = [change-ws-trms([Ts])]
+
+  [cws-1'4] change-ws(AFun) = [AFun]
