@@ -89,7 +89,7 @@ AC_DEFUN(AC_PACKAGE_REQUIRE1,
          AC_PATH_PROGS(translit($1,a-z-,A-Z_),$2)
          dnl Not found; abort configuration
          if test "a$translit($1,a-z-,A-Z_)" = "a" ; then
-            AC_ERROR(Required package or program \"$1\" not found.)
+            AC_MSG_ERROR(Required package or program \"$1\" not found.)
          fi
          dnl Program found; evaluate <actions_of_found>
          $4
