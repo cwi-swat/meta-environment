@@ -10,7 +10,7 @@ TIFS=${TOOLBUS}/bin/tifstoc
 tif:
 	for i in `ls *.idef`; do \
 	  ${IDEF} $$i; \
-	  ${TIFS} `basename $$i .idef` `basename $$i .idef`.tifs ;\
+	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs ;\
 	done
 
 tif-clean:
