@@ -35,6 +35,7 @@ exports
     "syntax"            -> UQLiteral {reject}
     "variables"         -> UQLiteral {reject}
     "module"            -> UQLiteral {reject}
+    "imports"           -> UQLiteral {reject}
     "exports"           -> UQLiteral {reject}
     "hiddens"           -> UQLiteral {reject}
     "left"              -> UQLiteral {reject}
@@ -55,6 +56,7 @@ exports
     "syntax"            -> ModuleName {reject}
     "variables"         -> ModuleName {reject}
     "module"            -> ModuleName {reject}
+    "imports"           -> ModuleName {reject}
     "exports"           -> ModuleName {reject}
     "hiddens"           -> ModuleName {reject}
     "left"              -> ModuleName {reject}
@@ -80,6 +82,7 @@ exports
     "syntax"
     "variables"
     "module"
+    "imports"
     "exports"
     "hiddens"
     "left"
