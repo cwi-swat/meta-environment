@@ -1,0 +1,20 @@
+#! /bin/sh
+#
+# $Id$
+#
+# For each individual package in the Asf+Sdf Meta-Environment
+# distribution that is controlled by automake, run "reconf" for
+# that package prior to "configure".
+
+PACKAGES=sglr
+
+for pkg in ${PACKAGES}
+do
+   cd ${pkg}
+   if [ -x ./reconf ]
+   then
+      ./reconf
+   fi
+   cd ..
+done
+
