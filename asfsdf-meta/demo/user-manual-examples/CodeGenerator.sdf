@@ -12,3 +12,15 @@ hiddens
     "<" Instrs "," Label ">"     -> Instrs-lab 
     "tr" "(" Stats "," Label ")" -> Instrs-lab 
     "tr" "(" Exp ")"             -> Instrs
+
+hiddens
+  variables
+    "Nat"[0-9\']*        -> Nat
+    "Id"[0-9\']*         -> Id
+    "Exp"[0-9\']*        -> Exp 
+    "Stat"[0-9\']*       -> Stat
+    "Stat-list"[0-9\']*  -> {Stat ";"}+
+    "Instr"[0-9\']*      -> Instr 
+    "Instr-list"[0-9\']* -> {Instr ";"}+
+    "Label"[0-9\']*      -> Label
+    

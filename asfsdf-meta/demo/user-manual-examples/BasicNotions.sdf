@@ -7,7 +7,3 @@ exports
   lexical syntax
     [0-9]+         -> Nat 
     [a-z][a-z0-9]* -> Id
-
-variables
-  "Nat"[0-9\']* -> Nat
-  "Id"[0-9\']*  -> Id

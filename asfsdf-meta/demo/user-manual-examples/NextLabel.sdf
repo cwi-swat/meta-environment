@@ -5,8 +5,6 @@ imports AssemblyLanguage
 exports
   context-free syntax
     "nextlabel" "(" Label ")" -> Label 
-  variables
-    "Label"[0-9\']* -> LABEL
 
 hiddens
   variables

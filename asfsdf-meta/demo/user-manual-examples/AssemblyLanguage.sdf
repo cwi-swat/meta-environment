@@ -18,8 +18,3 @@ exports
     "gotrue" Label  -> Instr 
     "gofalse" Label -> Instr
     {Instr ";"}+    -> Instrs 
-
-  variables
-    "Instr"[0-9\']*      -> Instr 
-    "Instr-list"[0-9\']* -> {Instr ";"}+
-    "Label"[0-9\']*      -> Label

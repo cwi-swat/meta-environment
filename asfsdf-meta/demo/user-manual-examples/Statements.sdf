@@ -7,8 +7,4 @@ exports
     Id ":=" Exp                 -> Stat 
     "if" Exp "then" Stats "fi"  -> Stat 
     "while" Exp "do" Stats "od" -> Stat
-    {Stat ";"}+                 -> Stats 
-
-  variables
-    "Stat"[0-9\']*      -> Stat
-    "Stat-list"[0-9\']* -> {Stat ";"}+
+    {Stat ";"}+                 -> Stats
