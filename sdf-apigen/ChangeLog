@@ -1,3 +1,7 @@
+2003/05/30 (jurgenv@cwi.nl)
+ * Fixed errors in configure.in script
+ * Set version to 1.6
+
 2003/03/20 (jurgenv@cwi.nl)
  * Bumped to 1.6beta
  * Removed dependency on shared-objects, this is taken care of by 
