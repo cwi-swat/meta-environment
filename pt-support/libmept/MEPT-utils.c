@@ -440,6 +440,14 @@ PT_Args PT_reverseArgs(PT_Args args)
 }
 
 /*}}}  */
+/*{{{  PT_Args PT_makeArgsSingle(PT_Tree arg) */
+
+PT_Args PT_makeArgsSingle(PT_Tree arg)
+{
+  return PT_makeArgsList(arg, PT_makeArgsEmpty());
+}
+
+/*}}}  */
 
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
 

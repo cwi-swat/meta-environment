@@ -46,6 +46,7 @@ int PT_getArgsLength(PT_Args args);
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 PT_Args PT_sliceArgs(PT_Args args, int start, int end);
+PT_Args PT_makeArgsSingle(PT_Tree arg);
 #define PT_insertArgs(args, arg) (PT_makeArgsList(arg, args))
 
 char *PT_yieldAny(ATerm t);
