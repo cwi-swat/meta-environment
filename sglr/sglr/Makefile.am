@@ -41,6 +41,7 @@ sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
 #                    -L$(top_builddir)/libtree2dot -ltree2dot \
 #                    -L$(ASFIXLIB) -lAsFix \
 #                    -L$(ATERMLIB) -lATerm-prof -lATB-prof $(SOCKLIBS)
+#CFLAGS		= -Wall
 
 
 # remove built files during "make clean"
