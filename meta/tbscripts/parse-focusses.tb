@@ -2,25 +2,146 @@
   $Id$
 */       
 
+process SetParseTable(ModuleId : term, Continue : term?) is
+let
+  Type       : str,
+  ModuleName : str
+in
+  Type := fun(ModuleId) .
+  ModuleName := first(args(ModuleId)).
+  if and(equal(Type, "trm"), equal(ModuleName, "Sdf2")) then
+    snd-msg(open-sdf2-language) .
+    (
+      rec-msg(sdf2-language-not-opened) .
+      snd-note(ui-status(errorf(
+        "Unable to open parse table for %s", [ModuleName]))) .
+      Continue := false
+    +
+      rec-msg(sdf2-language-opened) .
+      Continue := true
+    )
+  else
+    snd-msg(set-parsetable(ModuleId)) .
+    (
+      rec-msg(parsetable-not-set(ModuleId)) .
+      snd-note(ui-status(errorf(
+        "Unable to open parse table for %s", [ModuleName]))) .
+      Continue := false
+    +
+      rec-msg(parsetable-set(ModuleId)) .
+      Continue := true
+    )
+  fi
+endlet
+
+process ParseString(ModuleId : term, Nonterminal : str, Text : str,
+		    Tree : term?, ParseError : term?) is
+let
+  Id         : term,
+  ErrList    : list,
+  ErrContent : term,
+  Continue   : term
+in
+  Id := process-id .     
+  SetParseTable(ModuleId, Continue?) .
+  if equal(Continue, true) then 
+    snd-note(ui-status(statf(Id,"Parsing %s", [ModuleId]))).
+    snd-msg(Id, parse-string-as-asfix2me(ModuleId, Nonterminal, Text)).
+    (
+      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
+      ParseError := no-errors
+    +
+      rec-msg(parse-result-asfix2me(Id, ambiguous-tree(Tree?, 
+						       ErrList?, 
+						       ErrContent?))) .
+      ParseError := quote(ambiguous-parse(ErrList, ErrContent))
+    +
+      rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, ErrContent?))) .
+      Tree := error-tree .
+      ParseError := quote(parse-error(ErrList, ErrContent))
+    ) .
+    snd-note(ui-status(endstat(Id)))
+  else
+    Tree := error-tree .
+    ParseError := no-parse-table
+  fi
+endlet
+
+process ProcessTree(ModuleId : term, EditorId : term, 
+		    Focus : term, Tree : term) is
+  if not-equal(Tree, error-tree) then
+    snd-msg(replace-focus(EditorId, Focus, Tree)) .
+    snd-msg(parse-ok(ModuleId))
+  else
+    tau
+  fi
+
+process PrepareParseErrorForEditor(ModuleId : term, EditorId : term,
+			           Focus : term, ParseError : term) is
+let
+  Pos          : int,
+  Co           : int,
+  Li           : int,
+  I            : int,
+  Ch           : int,
+  Cycle        : term,
+  ErrorList    : list,
+  ErrorContent : term,
+  FunSym       : str,
+  ModuleName   : str
+in
+  ModuleName := first(args(ModuleId)).
+  FunSym := fun(ParseError) .
+  if not-equal(FunSym, "no-errors") then
+    ErrorList := first(args(ParseError)) .
+    snd-msg(get-error-position(Focus, ErrorList)) .
+    rec-msg(error-position(Pos?)) .
+    snd-msg(display-error(EditorId, Pos)) .
+    ErrorContent := first(next(args(ParseError))) .
+    FunSym := fun(ErrorContent) .
+    if equal(FunSym, "ambiguities") then
+      I := first(args(ErrorContent)) .
+      snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+				[ModuleName,I])))
+    else
+      tau
+    fi .
+    if equal(FunSym, "cycle") then
+      Cycle := first(args(ErrorContent)) .
+      snd-note(ui-status(errorf("Parse returned a cycle: %t\n", [Cycle]))) .
+      snd-msg(parse-failed(ModuleId, Focus))
+    else
+      tau
+    fi .
+    if equal(FunSym, "eof") then
+      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                [ModuleName]))) .
+      snd-msg(parse-failed(ModuleId, Focus))
+    else
+      tau
+    fi .
+    if equal(FunSym, "plain") then
+      snd-msg(parse-failed(ModuleId, Focus))
+    else
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
 process ParseFocusses is
 let
   Id           : term,
-  Path         : str,
   Focus        : term,
-  SyntaxTree   : term,
   DirtyFoci    : list,
-  ErrorFoci    : list,
   Text         : str,
   Type         : str,
   ModuleName   : str,
   EditorId     : term,
-  Pos          : int,
   Nonterminal  : str,
   Tree         : term,
-  ErrList      : list,
-  Ambs         : list,
-  Cycle        : term,
-  Amount       : int,
+  Errors       : term,
   ModuleId     : term
 in                     
   Id := process-id .     
@@ -34,70 +155,21 @@ in
     else
       Nonterminal := ""
     fi . 
-    ErrorFoci := [] .
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) . 
-    (
-      if not-equal(DirtyFoci, []) then
-        Focus := first(DirtyFoci).
-        DirtyFoci := next(DirtyFoci).
-        snd-msg(get-focus-text(EditorId, Focus)).
-        rec-msg(focus-text(EditorId, Text?)).
-        snd-msg(get-focus-sort(Nonterminal, Focus)) .
-        rec-msg(focus-sort(Nonterminal?)) .
-        UpdateTextInModuleDb(Type, ModuleName, Text).
-        snd-msg(Id, parse-string-as-asfix2me(ModuleId, Nonterminal, Text)).
-        snd-note(ui-status(statf(Id,"Parsing %s",[ModuleId]))).
-        (
-          rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
-          snd-msg(replace-focus(EditorId, Focus, Tree))
-        +
-          rec-msg(parse-result-asfix2me(Id, 
-            ambiguous-tree(Tree?, ErrList?, ambiguities(Amount?, Ambs?)))) .
-          snd-msg(get-error-position(Focus, ErrList)).
-          rec-msg(error-position(Pos?)).
-          snd-msg(display-error(EditorId, Pos)).
-          snd-note(ui-status(errorf("Ambiguities detected (%d)",[Amount]))).
-          snd-msg(replace-focus(EditorId, Focus, Tree))
-        +
-          (
-            rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, plain)))
-          +
-            rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, eof)))
-          ) .
-          /* This should be improved. */ 
-          snd-msg(get-error-position(Focus, ErrList)) .
-          rec-msg(error-position(Pos?)) .
-          snd-msg(display-error(EditorId, Pos)) .
-          ErrorFoci := join(ErrorFoci, Focus)
-        +
-          rec-msg(parse-result-asfix2me(Id,
-            parse-error(ErrList?, ambiguities(Amount?, Ambs?)))) .
-          snd-msg(get-error-position(Focus, ErrList)).
-          rec-msg(error-position(Pos?)).
-          snd-msg(display-error(EditorId, Pos)).
-          snd-note(ui-status(errorf("Ambiguities detected (%d)",[Amount]))).
-          ErrorFoci := join(ErrorFoci, Focus)
-        +
-          rec-msg(parse-result-asfix2me(Id, 
-                  parse-error(ErrList?, cycle(Cycle?)))) .
-          snd-msg(get-error-position(Focus, ErrList)).
-          rec-msg(error-position(Pos?)).
-          snd-msg(display-error(EditorId, Pos)).
-          snd-note(ui-status(error("Cycle detected\n"))). 
-          ErrorFoci := join(ErrorFoci, Focus)
-        ).
-        snd-note(ui-status(endstat(Id)))
-      else
-        tau
-      fi
-    ) *
-    if equal(DirtyFoci, []) then
-      if equal(ErrorFoci, []) then
-        snd-msg(parse-ok(ModuleId))
-      else
-        snd-msg(parse-failed(ModuleId, ErrorFoci))
-      fi
+    if not-equal(DirtyFoci, []) then
+      Focus := first(DirtyFoci).
+      DirtyFoci := next(DirtyFoci).
+      snd-msg(get-focus-text(EditorId, Focus)).
+      rec-msg(focus-text(EditorId, Text?)).
+      snd-msg(get-focus-sort(Nonterminal, Focus)) .
+      rec-msg(focus-sort(Nonterminal?)) .
+      UpdateTextInModuleDb(Type, ModuleName, Text).
+      ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
+      PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
+      ProcessTree(ModuleId, EditorId, Focus, Tree)
+    else
+      snd-msg(parse-ok(ModuleId))
     fi 
   )
   *

@@ -1,5 +1,10 @@
 # $Id$
 
+2002/11/15 (markvdb@cs.vu.nl)
+ * Restructuring of the scripts with respect to setting of parse tables,
+   calling of sglr, processing of parse tree cq parse errors.
+   Scattered code is grouped into few new small processes.
+
 2002/11/13 (markvdb@cs.vu.nl)
  * Added a number of essential components to the -V of generic-meta.
  * Added a similar interface is used in "module-db" to "editor-manager".

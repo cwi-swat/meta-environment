@@ -1,24 +1,34 @@
 /*
   $Id$
  */
+
+process ProcessEqsTree(Module : str, Tree : term) is
+let
+  NewTree : term
+in
+  if not-equal(Tree, error-tree) then
+    snd-msg(postprocess-semantics-hook(Tree)) .
+    rec-msg(postprocess-semantics-hook-result(NewTree?)) .
+    snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
+    rec-msg(eqs-updated)
+  else
+    tau
+  fi
+endlet
+
 process ProcessEqs is
 let
   Id          : term,
   ModName     : str,
-  Module      : term,
+  ModuleName  : str,
+  Module      : str,
   Modules     : list,
-  I           : int,
-  Ch          : int,
-  Li          : int,
-  Co          : int,
-  Char        : term,
-  ErrList     : list,
-  Ambs        : list,
-  Cycle       : list,
   EqsText     : str,
   EqsTree     : term,
   Nonterminal : str,
-  Msgs        : list
+  ParseTree   : term,
+  Errors      : term,
+  ModuleId    : term
 in
   Id := process-id.
   (
@@ -35,55 +45,12 @@ in
         */
        snd-msg(get-eqs-text(Module)).
        (
-         rec-msg(eqs-text(Module?, EqsText?)).
-         snd-msg(set-parsetable(eqs(Module))).
-         (
-	   rec-msg(parsetable-set(eqs(Module))).
-           snd-note(ui-status(statf(Id,"Parsing equations of %s",[Module]))).
-           snd-msg(Id,parse-string-as-asfix2me(eqs(Module), Nonterminal, EqsText)).
-           (
-             rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
-	     snd-msg(postprocess-semantics-hook(EqsTree)) .
-	     rec-msg(postprocess-semantics-hook-result(EqsTree?)).
-             snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
-             rec-msg(eqs-updated)
-           + 
-	     (
-               rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                 ambiguities(I?, Ambs?))))
-	     +
-	       rec-msg(parse-result-asfix2me(Id,
-	                 ambiguous-tree(EqsTree?, ErrList?, 
-			 ambiguities(I?, Ambs?))))
-	     ).
-             snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
-                                       [Module,I])))
-	     
-           + 
-             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                         cycle(Cycle?)))).
-             snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
-                                       [Cycle])))
-           +
-             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))). 
-             snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
-                                       [Module])))
-           +
-             rec-msg(parse-result-asfix2me(Id?,
-                                         parse-error([character(Ch?),
-                                                      line(Li?),
-                                                      col(Co?),
-                                                      char(Char?)],plain))).
-             snd-note(ui-status(errorf(
-                      "Character %d unexpected in %s, line %d, column %d\n",
-                      [Ch, Module, Li, Co])))
-           )
-         +
-	   rec-msg(parsetable-not-set(eqs(Module))).
-	   snd-note(ui-status(errorf("Unable to open parse table for %s",
-				     [Module])))
-         ) .
-         snd-note(ui-status(endstat(Id)))
+        rec-msg(eqs-text(Module, EqsText?)).
+	ModuleId := quote(eqs(Module)) .
+	ParseString(ModuleId, 
+		    Nonterminal, EqsText, ParseTree?, Errors?) .
+	ProcessParseError(Module, Errors) .
+	ProcessEqsTree(Module, ParseTree)
       +
         rec-msg(no-eqs-text(Module))
       )

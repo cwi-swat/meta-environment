@@ -32,22 +32,14 @@ process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term
 in
-  snd-msg(set-parsetable(trm(ModuleName))) .
+  snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
-    rec-msg(parsetable-not-set(trm(ModuleName))) .
-    snd-note(ui-status(errorf(
-      "Unable to open parse table for %s", [ModuleName])))
+    rec-msg(parse-ok(trm(ModuleName))) .
+    snd-msg(clear-focus(EditorId))
   +
-    rec-msg(parsetable-set(trm(ModuleName))) .
-    snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
-    (
-      rec-msg(parse-ok(trm(ModuleName))) .
-      snd-msg(clear-focus(EditorId))
-    +
-      rec-msg(parse-failed(trm(ModuleName), ErrorFoci?)) .
-      snd-msg(set-focus(EditorId, ErrorFoci))
-    )
-  )  
+    rec-msg(parse-failed(trm(ModuleName), ErrorFoci?)) .
+    snd-msg(set-focus(EditorId, ErrorFoci))
+  )
 endlet
 
 process ParseTerm2(EditorId: term, ModuleName: str) is
@@ -89,35 +81,14 @@ process ParseText(Text: str, ModuleName: str, Nonterminal: str,
 let
   Id         : term,
   ErrList    : list,
-  ErrContent : term
+  ErrContent : term,
+  ModuleId   : term
 in
   Id := process-id . 
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules) .
-  snd-msg(set-parsetable(trm(ModuleName))) .
-  (
-    rec-msg(parsetable-not-set(trm(ModuleName))) .
-    snd-note(ui-status(errorf(
-      "Unable to open parse table for %s", [ModuleName]))) .
-    Tree := error-tree .
-    ParseError := no-errors
-  +
-    rec-msg(parsetable-set(trm(ModuleName))) .
-    snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), Nonterminal, Text)) . 
-    snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
-    (
-      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
-      ParseError := no-errors
-    +
-      rec-msg(parse-result-asfix2me(Id, ambiguous-tree(Tree?, ErrList?, ErrContent?))) .
-      ParseError := quote(ambigous-parse(ErrList, ErrContent))
-    +
-      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?, ErrContent?))) .
-      Tree := error-tree .
-      ParseError := quote(parse-error(ErrList, ErrContent))
-    ) .
-    snd-note(ui-status(endstat(Id)))
-  )  
+  ModuleId := quote(trm(ModuleName)) .
+  ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
 endlet
 
 process ProcessParseError(ModuleName : str, ParseError: term) is
