@@ -13,7 +13,7 @@ let
 in  
 ( printf("Process Focus is running").
 (
-  rec-msg(TE, set-focus(focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
+  rec-msg(TE, set-focus(Fid,focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
 /*  snd-do(TE,tb-unhighlight).
   snd-do(TE,tb-highlight(St,Ln)).*/
   snd-do(TE,tb-set-focus(Fid,Str,St,Ln))
@@ -22,10 +22,11 @@ in
 /*  snd-do(TE,tb-unhighlight).*/
   snd-do(TE,tb-unset-focus(Fid))
   +
-  rec-event(TE,get-focus(Fid,I?)).
-/*  snd-msg(TE,get-focus(Fid,I)).*/
+/*  rec-event(TE,get-focus(Fid,I?)).
+  snd-msg(TE,get-focus(Fid,I)).
   snd-ack-event(TE,get-focus(Fid,I))
   +
+*/
   rec-msg(TE,get-focus-text(focus(T1?,T2?,area(start(St?),length(Ln?))))).
   snd-eval(TE,tb-get-focus-text(Fid,St,Ln)).
   rec-value(TE,focus-text(Fid,Str?)).
