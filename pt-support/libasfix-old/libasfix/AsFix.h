@@ -59,8 +59,20 @@ ATbool AFcontainsVars(ATermList l);
 /*Check if a context-free function is a bracket function. */
 ATbool AFisBracketCfFunc(ATerm prod);
 
+/*Check if a context-free function is a traverse function. */
+ATbool AFisTraverseCfFunc(ATerm prod);
+
+/*Check if a context-free function is a memo function. */
+ATbool AFisMemoCfFunc(ATerm prod);
+
 /* Check whether the function of an AsFix application is a bracket function. */
 ATbool AFisBracketAppl(ATerm appl);
+
+/* Check whether the function of an AsFix application is a traverse function. */
+ATbool AFisTraverseAppl(ATerm appl);
+
+/* Check whether the function of an AsFix application is a memo function. */
+ATbool AFisMemoAppl(ATerm appl);
 
 /* Some access macros need some help, otherwise they get to long. */
 

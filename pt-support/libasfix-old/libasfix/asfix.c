@@ -66,6 +66,7 @@ ATerm pattern_prod = NULL;
 ATerm pattern_aprod = NULL;
 ATerm pattern_attrs = NULL;
 ATerm pattern_attr = NULL;
+ATerm pattern_noattrs = NULL;
 ATerm pattern_lex = NULL;
 ATerm pattern_list = NULL;
 ATerm pattern_list_w = NULL;
@@ -143,6 +144,7 @@ void AFinit(int argc, char *argv[], ATerm *bottomOfStack)
   ATprotect(&pattern_aprod);
   ATprotect(&pattern_attrs);
   ATprotect(&pattern_attr);
+  ATprotect(&pattern_noattrs);
   ATprotect(&pattern_lex);
   ATprotect(&pattern_list);
   ATprotect(&pattern_list_w);
@@ -171,6 +173,7 @@ void AFinit(int argc, char *argv[], ATerm *bottomOfStack)
   pattern_attrs = ATparse(
 		 "attrs(l(\"{\"),<term>,[<list>],<term>,l(\"}\"))");
   pattern_attr = ATparse("l(\"bracket\")");
+  pattern_noattrs = ATparse("no-attrs");
   pattern_lex = ATparse("lex(<str>,<term>)");
   pattern_list = ATparse("list(<term>,<term>,[<list>])");
   pattern_list_w = ATparse("list(<term>,w(\" \"),[<list>])");
@@ -352,6 +355,56 @@ ATbool AFisBracketCfFunc(ATerm prod)
   return ATfalse;
 }
 
+ATbool AFisMemoCfFunc(ATerm prod)
+{
+  ATerm attrs;
+
+  if(ATmatchTerm(prod,pattern_prod,
+		 NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,&attrs)) {
+
+    if(ATmatchTerm(attrs,pattern_noattrs)) {
+	return ATfalse;
+    } else {
+      ATermList list;
+		
+      if(ATmatchTerm(attrs,pattern_attrs,NULL,NULL,&list,NULL,NULL)) {
+        for(;!ATisEmpty(list);list = ATgetNext(list)) {
+          if(ATmatch(ATgetFirst(list),"l(\"memo\")")) {
+            return ATtrue;
+	  }
+        }
+      }
+    }
+  }
+
+  return ATfalse;
+}
+
+ATbool AFisTraverseCfFunc(ATerm prod)
+{
+  ATerm attrs;
+
+  if(ATmatchTerm(prod,pattern_prod,
+                 NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,&attrs)) {
+
+    if(ATmatchTerm(attrs,pattern_noattrs)) {
+        return ATfalse;
+    } else {
+      ATermList list;
+
+      if(ATmatchTerm(attrs,pattern_attrs,NULL,NULL,&list,NULL,NULL)) {
+        for(;!ATisEmpty(list);list = ATgetNext(list)) {
+          if(ATmatch(ATgetFirst(list),"l(\"memo\")")) {
+            return ATtrue;
+          }
+        }
+      }
+    }
+  }
+
+  return ATfalse;
+}
+
 /*
 Check whether the function of an AsFix application is a bracket function.
 */
@@ -363,6 +416,28 @@ ATbool AFisBracketAppl(ATerm appl)
 
   if(ATmatchTerm(appl, pattern_appl, &prod, &w, &args)) {
     return AFisBracketCfFunc(prod);
+  }
+  return ATfalse;
+}
+
+ATbool AFisMemoAppl(ATerm appl)
+{
+  ATerm w,prod;
+  ATermList args;
+
+  if(ATmatchTerm(appl, pattern_appl, &prod, &w, &args)) {
+    return AFisMemoCfFunc(prod);
+  }
+  return ATfalse;
+}
+
+ATbool AFisTraverseAppl(ATerm appl)
+{
+  ATerm w,prod;
+  ATermList args;
+
+  if(ATmatchTerm(appl, pattern_appl, &prod, &w, &args)) {
+    return AFisTraverseCfFunc(prod);
   }
   return ATfalse;
 }
