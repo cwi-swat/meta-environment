@@ -63,6 +63,7 @@ equations
               pre-check-imports(imports(Import*), Definition, InfoMsgTuple2)
  
   [pci-12] $ModuleName := get-modulename(Import),
+           $Location := get-location(Import),
            moduleid($Char*) := get-module-id($ModuleName),
            get-module(moduleid($Char*), Definition) == module-not-available,
            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
@@ -70,7 +71,7 @@ equations
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
            Msgs1 := get-messages(InfoMsgTuple2),
            Msgs2 := Msgs1,
-make-error("module not available", strcon(""" $Char* """)),
+make-error("module not available", strcon(""" $Char* """), $Location),
            InfoMsgTuple3 := put-messages(Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
@@ -100,11 +101,15 @@ make-error("module not available", strcon(""" $Char* """)),
 
             module-is-checked($ModuleId, ModuleInfoTable1) == false,
             ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
-            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
 
-            ImportsSet := get-all-imports(Module),
+            ImportsSet1 := get-all-imports-transitive(Module, Definition),
+            ModuleInfoTable3 := put-imports-info($ModuleId, ImportsSet1, ModuleInfoTable2),
+             
+            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable3, InfoMsgTuple1),
+
+            ImportsSet2 := get-all-imports(Module),
             InfoMsgTuple3 := 
-              pre-check-imports(ImportsSet, Definition, InfoMsgTuple2),
+              pre-check-imports(ImportsSet2, Definition, InfoMsgTuple2),
             InfoMsgTuple4 := pre-check-module-sorts(Module, InfoMsgTuple3)
             ==============================================================
             pre-check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple4
@@ -124,10 +129,11 @@ make-error("module not available", strcon(""" $Char* """)),
 
            ImportsSet := get-all-imports(Module),
            InfoMsgTuple4 := check-imports(ImportsSet, Definition, InfoMsgTuple2),
+
            InfoMsgTuple5 := check-module-sorts(Module, InfoMsgTuple4),
            InfoMsgTuple6 := check-module-prods(Module, InfoMsgTuple5),
            InfoMsgTuple7 := check-module-constructors(Module, InfoMsgTuple6)
-           ================================================================
+           ====>
            check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple7
 
  [pcm-1'1] post-check-modules(,ImportsSet, InfoMsgTuple) = 
@@ -150,8 +156,7 @@ make-error("module not available", strcon(""" $Char* """)),
            symbols($Symbol*4) := diff(symbols($Symbol*2 $Symbol*3),
                                       symbols($Symbol*1)),
            $String := symbols2str($Symbol*4),
-           $Msgs2 := $Msgs1,
-make-warning("unused sort definitions", $String),
-           InfoMsgTuple2 := put-messages($Msgs2, InfoMsgTuple1)
+           $Msgs2 := make-symbol-warnings($Symbol*4, "unused sort definitions"),
+           InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2

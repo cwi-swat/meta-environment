@@ -3,6 +3,7 @@ definition
 module Main
 exports
   sorts S
+  context-free start-symbols S
   lexical syntax
     [\ \t\n]   ->  LAYOUT
   context-free restrictions

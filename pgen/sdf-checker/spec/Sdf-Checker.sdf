@@ -3,9 +3,10 @@ module  Sdf-Checker
 imports Sdf-AttributeChecker LabelChecker SortChecker 
         ProductionChecker ConstructorChecker
         RemoveLabels DeprecatedSymbols
+imports utilities/PosInfo[Import]
 
 exports
-  context-free start-symbols Summary
+  context-free start-symbols Summary 
 
   context-free syntax
     check-sdf(SDF)           -> Summary
@@ -54,4 +55,5 @@ hiddens
 
     "$Char*"[0-9]* -> CHAR*
 
+    "$Location"[0-9]* -> Location
     "$String"[0-9]* -> StrCon

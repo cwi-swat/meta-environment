@@ -8,6 +8,7 @@ imports Layout
 
 exports
   sorts Symbol Condition
+  context-free start-symbols Symbol Condition
   lexical syntax
     [a-z][A-Za-z0-9]* -> Literal
     

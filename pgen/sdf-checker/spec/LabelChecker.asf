@@ -19,15 +19,16 @@ equations
            check-labels2($Literal(Symbol,*) -> $Symbol Attrs, 
                          Msgs1, $ModuleId) = Msgs2
 
-  [cl-1'4] contains($Literal, LabelsSet) == true,
-           %%$Location := get-location($Literal)
+  [cl-1'4] $Literal:$Symbol2 := $Symbol1,
+           contains($Literal, LabelsSet) == true,
+           $Location := get-location($Symbol1),
            $String1 := production2str(Prod),
            $String2 := moduleid2str($ModuleId),
            $String3 := "double used label in " || $String2
            ====>
-           check-labels3($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
+           check-labels3($Symbol1, [LabelsSet, Msgs], $ModuleId, Prod) =
              [LabelsSet, 
-              Msgs, make-error($String3, $String1)]
+              Msgs, make-error($String3, $String1, $Location)]
 
   [cl-1'4] contains($Literal, LabelsSet) == false
            ====>

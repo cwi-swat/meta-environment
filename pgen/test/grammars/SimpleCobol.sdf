@@ -9,6 +9,7 @@ imports DATA-NAMES LIT
 exports
 
   sorts A-exp A-exp-p A-term A-factor A-pow LorD LorD-p
+  context-free start-symbols  A-exp A-exp-p A-term A-factor A-pow LorD LorD-p
 
     context-free syntax
 

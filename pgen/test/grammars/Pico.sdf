@@ -17,6 +17,7 @@ lexical syntax
     "\"" ~[\"\n]* "\"" -> STR-CON
     "\"\"\""           -> STR-CON
   sorts EXP
+  context-free start-symbols EXP
   context-free syntax
     ID            -> EXP
     NAT-CON       -> EXP
@@ -32,11 +33,13 @@ lexical syntax
    EXP "||" EXP -> EXP {left}
 
   sorts TYPE
+  context-free start-symbols TYPE
   context-free syntax
     "natural"  -> TYPE
     "string"   -> TYPE
 
   sorts STATEMENT
+  context-free start-symbols STATEMENT
   context-free syntax
     ID ":=" EXP                            -> STATEMENT
     "if" EXP "then" {STATEMENT ";"}*
@@ -44,6 +47,7 @@ lexical syntax
     "while" EXP "do" {STATEMENT ";"}* "od" -> STATEMENT
 
   sorts PROGRAM DECLS IDTYPE
+  context-free start-symbols PROGRAM DECLS IDTYPE
   context-free syntax
     "begin" DECLS {STATEMENT ";"}* "end" -> PROGRAM
     ID ":" TYPE -> IDTYPE

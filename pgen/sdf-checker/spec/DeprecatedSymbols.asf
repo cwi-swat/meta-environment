@@ -9,17 +9,21 @@ equations
     check-for-deprecated-symbols2(Module, Msgs, get-module-name(Module))
 
 [cl-2'1]
-  $String1 := symbol2str($Symbol1 # $Symbol2),
+  $Symbol2 # $Symbol3 := $Symbol1,
+  $Location := get-location($Symbol1),
+  $String1 := symbol2str($Symbol1),
   $String2 := moduleid2str($ModuleId),
   $String3 := "deprecated tuple notation in " || $String2
   ====> 
-  check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
-    Msgs, make-warning($String3, $String1)
+  check-for-deprecated-symbols2($Symbol1, Msgs, $ModuleId) =
+    Msgs, make-warning($String3, $String1, $Location)
 
 [cl-2'2]
+  $UQLiteral := $Symbol,
+  $Location := get-location($Symbol),
   $String1 := symbol2str($UQLiteral),
   $String2 := moduleid2str($ModuleId),
   $String3 := "deprecated unquoted symbol notation in " || $String2
   ====> 
-  check-for-deprecated-symbols2($UQLiteral, Msgs, $ModuleId) =
-    Msgs, make-warning($String3, $String1)
+  check-for-deprecated-symbols2($Symbol, Msgs, $ModuleId) =
+    Msgs, make-warning($String3, $String1, $Location)

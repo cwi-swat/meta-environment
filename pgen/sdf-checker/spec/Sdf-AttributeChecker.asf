@@ -9,80 +9,80 @@ equations
              check-attributes2(Module, Msgs, $ModuleId)
 
   [ca-2'1] $Symbol* -> $Symbol {Attr*1, bracket, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            is-bracket-definition($Symbol* -> $Symbol) == false,
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: bracket", $String)
+             Msgs, make-warning("illegal attribute: bracket", $String, $Location)
 
   [ca-2'2] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) =
-             Msgs, make-warning("illegal attribute: bracket", $String)
+             Msgs, make-warning("illegal attribute: bracket", $String, $Location)
 
   [ca-2'3] $Symbol* -> $Symbol {Attr*1, left, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            is-binary-definition($Symbol* -> $Symbol) == false,
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: left", $String)
+             Msgs, make-warning("illegal attribute: left", $String, $Location)
 
   [ca-2'4] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: left", $String)
+             Msgs, make-warning("illegal attribute: left", $String, $Location)
 
   [ca-2'5] $Symbol* -> $Symbol {Attr*1, assoc, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            is-binary-definition($Symbol* -> $Symbol) == false,
            $String := production2str(Production)
            =================================================
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: assoc", $String)
+             Msgs, make-warning("illegal attribute: assoc", $String, $Location)
 
   [ca-2'6] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: assoc", $String)
+             Msgs, make-warning("illegal attribute: assoc", $String, $Location)
 
   [ca-2'7] $Symbol* -> $Symbol {Attr*1, right, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            is-binary-definition($Symbol* -> $Symbol) == false,
            $String := production2str(Production)
            =================================================
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: right", $String)
+             Msgs, make-warning("illegal attribute: right", $String, $Location)
 
 
   [ca-2'8] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: right", $String)
+             Msgs, make-warning("illegal attribute: right", $String, $Location)
 
   [ca-2'8] $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            is-binary-definition($Symbol* -> $Symbol) == false,
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: non-assoc", $String)
+             Msgs, make-warning("illegal attribute: non-assoc", $String, $Location)
 
   [ca-2'9] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
-           %%$Location := get-location(Production),
+           $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning("illegal attribute: non-assoc", $String)
+             Msgs, make-warning("illegal attribute: non-assoc", $String, $Location)
 
   [ibd-1'1] is-binary-definition($Symbol1 $Symbol2 $Symbol1 -> $Symbol1) = true 
 

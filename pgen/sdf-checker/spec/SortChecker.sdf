@@ -1,6 +1,9 @@
 module SortChecker
 
 imports Sdf-Type-Environment
+imports utilities/PosInfo[Symbol]
+imports utilities/PosInfo[Alias]
+
 exports
   context-free syntax
     pre-check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
@@ -92,10 +95,10 @@ hiddens
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, break, top-down)}
 
   context-free syntax
-    add-symbol(Symbol, Symbols-Msg-Tuple, ModuleId) -> Symbols-Msg-Tuple
+    add-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
 
   context-free syntax
-    check-symbol(Symbol, Symbols-Msg-Tuple, ModuleId) -> Symbols-Msg-Tuple
+    check-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
 
   context-free syntax
     check-CHAR-sort(Module, {Error ","}*, ModuleId)                  -> {Error ","}* {traversal(accu, break, top-down)}
@@ -103,6 +106,10 @@ hiddens
     check-CHAR-sort(Production, {Error ","}*, ModuleId)              -> {Error ","}* {traversal(accu, break, top-down)}
     check-CHAR-sort2(Production, {Error ","}*, Production, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
     check-CHAR-sort2(Sort, {Error ","}*, Production, ModuleId)       -> {Error ","}* {traversal(accu, break, top-down)}
+
+exports
+  context-free syntax
+    make-symbol-warnings(Symbol*, String) -> {Error ","}*
 
 hiddens
   variables
@@ -131,6 +138,7 @@ hiddens
     "SymbolsSet"[0-9]*      -> SymbolsSet
     "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
     "$Literal"[0-9]*        -> Literal
+    "$Alias"[0-9]*          -> Alias
 
     "Import*"[0-9]*         -> Import*
   
@@ -147,3 +155,4 @@ hiddens
     "ModuleInfoTable"[0-9]* -> Module-Info-Table
 
     "$String"[0-9]*         -> StrCon
+    "$Location"[0-9]*       -> Location

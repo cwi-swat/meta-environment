@@ -1,6 +1,6 @@
 module LabelChecker
 
-%%imports utilities/PosInfo[Literal]
+imports utilities/PosInfo[Symbol]
 imports SdfCheckerFeedback
 imports ModuleOperations
 
@@ -48,7 +48,7 @@ hiddens
 
     "LabelsSet"[0-9]*  -> LabelsSet
 
-%%    "$Location"[0-9]* -> Location
+    "$Location"[0-9]* -> Location
     "$String"[0-9]*   -> StrCon
 
 

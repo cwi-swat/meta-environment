@@ -100,6 +100,9 @@ exports
     "lexical"      "restrictions" Restrictions  -> Grammar
     "context-free" "restrictions" Restrictions  -> Grammar
     "definition" Definition                     -> SDF
+
+  context-free start-symbols Module Definition
+
   context-free priorities
     Symbol "|" Symbol  -> Symbol >
     Literal ":" Symbol -> Symbol

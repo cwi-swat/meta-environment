@@ -1,11 +1,11 @@
 equations
 
-  [mw-1'1] make-warning($StrCon, "") =
+  [mw-1'1] make-warning($StrCon, "", $Location) =
 
-  [default-mw-1'1] make-warning($StrCon1, $StrCon2) =
-                     warning($StrCon1, [subject($StrCon2)])
+  [default-mw-1'1] make-warning($StrCon1, $StrCon2, $Location) =
+                     warning($StrCon1, [localized($StrCon2, $Location)])
 
-  [me-1'1] make-error($StrCon, "") =
+  [me-1'1] make-error($StrCon, "", $Location) =
 
-  [default-me-1'1] make-error($StrCon1, $StrCon2) =
-                     error($StrCon1, [subject($StrCon2)])
+  [default-me-1'1] make-error($StrCon1, $StrCon2, $Location) =
+                     error($StrCon1, [localized($StrCon2, $Location)])

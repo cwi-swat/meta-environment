@@ -5,6 +5,7 @@ module Main
 imports Layout
 exports
   sorts Any
+  context-free start-symbols Any
   lexical syntax
     ~[ ]*         ->  Any
 

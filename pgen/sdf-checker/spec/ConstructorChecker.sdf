@@ -1,6 +1,7 @@
 module ConstructorChecker
 
 imports Sdf-Type-Environment
+imports utilities/PosInfo[Attribute]
 
 exports
   context-free syntax
@@ -48,6 +49,7 @@ hiddens
 
 hiddens
   variables
+    "$Attribute"[0-9]*      -> Attribute
     "Attrs"[0-9]*           -> Attributes
     "Msgs"[0-9]*            -> {Error ","}*
     "Module"[0-9]*          -> Module
@@ -71,3 +73,4 @@ hiddens
     "Group+"[0-9]*          -> {Group ">"}+
 
     "$String"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location

@@ -28,9 +28,14 @@ hiddens
     get-imports(Grammar, ImportsSet)       -> ImportsSet {traversal(accu, break, top-down)} 
     get-imports(ModuleId, ImportRelations) -> ImportsSet
 
+hiddens
+  context-free syntax
+    get-imports-transitive(Definition, ImportsSet, ImportsSet) -> ImportsSet
+
 exports
   context-free syntax
-    get-all-imports(Module) -> ImportsSet
+    get-all-imports(Module)            -> ImportsSet
+    get-all-imports-transitive(Module, Definition) -> ImportsSet
 
 exports
   context-free syntax

@@ -1,6 +1,6 @@
 module Sdf-AttributeChecker
 
-%%imports utilities/PosInfo[Production]
+imports utilities/PosInfo[Production]
 imports SdfCheckerFeedback
 imports ModuleOperations
 

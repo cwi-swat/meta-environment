@@ -4,6 +4,7 @@ imports CIG-If
 
 module CIG-Drop
 exports
+ context-free start-symbols CIG-Drop
  sorts CIG-Drop
 
  lexical restrictions
@@ -21,6 +22,11 @@ exports
 	CIG-ClosedIfNesting CIG-ClosedIfNestings
 	CIG-OpenIfNesting CIG-OpenIfNestings
 
+ context-free start-symbols
+	CIG-OpenIf CIG-ClosedIf CIG-SubIf CIG-If
+	CIG-ClosedIfNesting CIG-ClosedIfNestings
+	CIG-OpenIfNesting CIG-OpenIfNestings
+  
  context-free syntax
 
 	"IF" CIG-OpenIfNestings            -> CIG-OpenIf

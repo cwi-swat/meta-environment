@@ -29,6 +29,49 @@ equations
             ========================================================
             get-all-imports($Module) = $ImportsSet2
 
+  [gait-1'1] $ModuleName := get-module-name($Module)
+             ====>
+             get-all-imports-transitive($Module, $Definition) =
+               get-imports-transitive($Definition, 
+                                      imports($ModuleName),
+                                      imports())
+
+  [git-1'1] get-imports-transitive($Definition, imports(), imports($Import*)) =
+              imports($Import*)
+
+  [git-1'2] $ModuleName == get-modulename($Import)
+            ====>
+            get-imports-transitive($Definition,
+                                   imports($Import $Import*1),
+                                   imports($Import*2 $ModuleName $Import*3)) =
+              get-imports-transitive($Definition,
+                                     imports($Import*1),
+                                     imports($Import*2 $ModuleName $Import*3))
+
+  [default-git-1'2] $ModuleName := get-modulename($Import),
+                    $ModuleId := get-module-id($ModuleName),
+                    $Module := get-module($ModuleId, $Definition),
+                    $Module != module-not-available,
+                    imports($Import*3) := get-all-imports($Module)
+                    ====>
+                    get-imports-transitive($Definition,
+                                           imports($Import $Import*1),
+                                           imports($Import*2)) =
+                      get-imports-transitive($Definition,
+                                             imports($Import*1 $Import*3),
+                                             imports($ModuleName $Import*2))
+
+  [default-git-1'4] $ModuleName := get-modulename($Import),
+                    $ModuleId := get-module-id($ModuleName),
+                    get-module($ModuleId, $Definition) == module-not-available
+                    ====>
+                    get-imports-transitive($Definition,
+                                           imports($Import $Import*1),
+                                           imports($Import*2)) =
+                      get-imports-transitive($Definition,
+                                             imports($Import*1),
+                                             imports($ModuleName $Import*2))
+
   [gmn-1'1] get-modulename($ModuleName) = $ModuleName
 
   [gmn-1'2] get-modulename($ModuleName $Renamings) = $ModuleName

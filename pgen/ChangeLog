@@ -1,5 +1,16 @@
 $Id$
 
+Mon May  3 16:28:32 CEST 2004 <markvdb@cwi.nl>
+ * Introduced clickable error message.
+
+Tue Apr 27 16:45:27 CEST 2004 <markvdb@cwi.nl>
+* Fixed the erroneous error messages generated in case of circular
+  imports, see bug 219.
+
+Fri Apr 23 17:11:13 CEST 2004 <markvdb@cwi.nl>
+ * Declared symbols in the sorts section are no longer
+   promoted to start symbols. Regenerated the Sdf2-Normalizator.
+
 Thu Apr 15 13:03:25 CEST 2004 <markvdb@cwi.nl>
  * Removed dependency on sglr at build time.
 

@@ -13,6 +13,13 @@ exports
     IMPORTED-METH-DEF IMPORTS IMPORT-DEF
     METHOD-PARAMETERS RENAMING-TO-EXPR RENAMING-TO-ID
     COMP-HEADER PARAMETERS
+  context-free start-symbols
+    MOD-PRODUCT-DEF COMPONENT
+    MOD-USES-ONE-BLOCK MOD-USES-MANY-BLOCK MOD-USES-BLOCK-BODY
+    MOD-INTERMEDIATE-BLOCK MOD-INFO-BLOCK
+    IMPORTED-METH-DEF IMPORTS IMPORT-DEF
+    METHOD-PARAMETERS RENAMING-TO-EXPR RENAMING-TO-ID
+    COMP-HEADER PARAMETERS
 
   context-free syntax
     HEADER MOD-USES-ONE-BLOCK
@@ -84,6 +91,14 @@ exports
     INT-METHODS INFO-METHODS REG-METHODS
     INT-METH-DEF INFO-METH-DEF REG-METH-DEF
     DECL VAR-DECL FUN-ID STAT
+  context-free start-symbols
+    PRODUCT-DEF HEADER
+    USES-ONE-BLOCK USES-MANY-BLOCK USES-BLOCK-BODY
+    INTERMEDIATE-BLOCK INFO-BLOCK INFO-BLOCK-HEADER
+    DATA INST-VARIABLES INT-RESULTS INFO-VARIABLES
+    INT-METHODS INFO-METHODS REG-METHODS
+    INT-METH-DEF INFO-METH-DEF REG-METH-DEF
+    DECL VAR-DECL FUN-ID STAT
 
   context-free syntax
     HEADER USES-ONE-BLOCK USES-MANY-BLOCK* INFO-BLOCK*   -> PRODUCT-DEF
@@ -138,6 +153,9 @@ imports
 
 exports
   sorts
+    SPECIAL-CONSTANT ID-PLUS ID-OR-CONSTANT
+    FUN-APPL METH-INST EXPR EXPRS EXPR-PLUS
+  context-free start-symbols
     SPECIAL-CONSTANT ID-PLUS ID-OR-CONSTANT
     FUN-APPL METH-INST EXPR EXPRS EXPR-PLUS
 
@@ -227,6 +245,8 @@ imports
 exports
   sorts
     ID IDS
+  context-free start-symbols
+    ID IDS
 
   lexical syntax
     [A-Z\$][A-Z0-9\$\_\-\']*   -> ID
@@ -250,6 +270,8 @@ imports
 exports
   sorts
     RPOS RZERO RNEG RIS-NAT-CON RIS-INT-CON
+  context-free start-symbols
+    RPOS RZERO RNEG RIS-NAT-CON RIS-INT-CON
 
   lexical syntax
     [1-9][0-9]*   -> RPOS
@@ -267,6 +289,7 @@ imports Layout
 
 exports
   sorts REAL-CON UNS-REAL-CON
+  context-free start-symbols  REAL-CON UNS-REAL-CON
   lexical syntax
    %% ","[0-9]+   -> UNS-REAL-CON
    %% [0-9]+ ","   -> UNS-REAL-CON
@@ -280,6 +303,8 @@ imports
 
 exports
   sorts
+    TYPE-ID ID-TYPE TYPE TYPE-IDS ID-TYPES TYPES
+  context-free start-symbols
     TYPE-ID ID-TYPE TYPE TYPE-IDS ID-TYPES TYPES
 
   lexical syntax
@@ -303,6 +328,8 @@ imports Risla-modular
 
 exports
   sorts
+    COMPONENT-LIB
+  context-free start-symbols
     COMPONENT-LIB
 
   context-free syntax

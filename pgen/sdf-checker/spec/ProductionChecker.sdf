@@ -1,6 +1,8 @@
 module ProductionChecker
 
 imports Sdf-Type-Environment
+imports utilities/PosInfo[Symbol]
+
 exports
   context-free syntax
     check-module-prods(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
@@ -21,13 +23,13 @@ hiddens
 
 hiddens
   context-free syntax
-    check-priorities(Module, {Error ","}*, ModuleId, ProductionsSet)               -> {Error ","}* {traversal(accu, break, top-down)}
-    check-priorities(Priority, {Error ","}*, ModuleId, ProductionsSet)             -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities(Module, {Error ","}*, ModuleId, ProductionsSet)   -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities(Priority, {Error ","}*, ModuleId, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-priorities-given-symbol(Group, {Error ","}*, ModuleId, Symbol, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
-    check-priorities-given-symbol({Group ">"}+, {Error ","}*, ModuleId, Symbol, ProductionsSet) ->{Error ","}* {traversal(accu, break, top-down)}
-    check-priorities-given-symbol(Production, {Error ","}*, ModuleId, Symbol, ProductionsSet)   ->{Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Group, {Error ","}*, ModuleId, Symbol, ProductionsSet)        -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol({Group ">"}+, {Error ","}*, ModuleId, Symbol, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Production, {Error ","}*, ModuleId, Symbol, ProductionsSet)   -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
     get-rhs-production(Group, SymbolsSet)                                      -> SymbolsSet {traversal(accu, break, top-down)}
@@ -45,6 +47,9 @@ hiddens
     check-right-hand-side-lexical-prod(Grammar, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
     check-right-hand-side-lexical-prod(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
     check-right-hand-side-lexical-prod(Production, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    make-production-warnings(Production*, String) -> {Error ","}*
 
 
 hiddens
@@ -80,3 +85,4 @@ hiddens
     "Group+"[0-9]*          -> {Group ">"}+
 
     "$String"[0-9]*         -> StrCon
+    "$Location"[0-9]*       -> Location

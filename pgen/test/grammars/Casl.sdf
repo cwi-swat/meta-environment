@@ -5,8 +5,8 @@ imports ZCasl-Top ZCasl-Arch-disamb
 module ZCasl-Top
 imports ZCasl-Arch
 exports
-  sorts
-    Specs-Defn
+  sorts Specs-Defn
+  context-free start-symbols Specs-Defn
   context-free syntax
     Arch-Spec-Defn -> Specs-Defn
     Unit-Spec-Defn -> Specs-Defn
