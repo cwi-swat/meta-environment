@@ -62,7 +62,6 @@ usage: `basename $0` [-h] [-i] [-m] <target>
       -i       write generated Makefile.in on standard output
       -m       write generated Makefile on standard output
 ENDCAT
-	exit 1
 }
 
 version()
