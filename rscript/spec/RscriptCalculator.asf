@@ -225,7 +225,7 @@
 
 %%[bag1]	evalx($Bag, $Rstore) = sort($Bag)
 
-[bag1]	evalx($Bag, $Rstore) = $Bag
+[bag1]	evalx($Bag, $Rstore) = unique($Bag)     %% bags as sets!
 
 [VAR1]	$Elem := value($Var, $Rstore)
 	=================================================
@@ -638,7 +638,7 @@
 
 [FcarR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(carrierR($Exp1, $Exp2), $Rstore) = carierR($Rel, $Bag)
+	evalx(carrierR($Exp1, $Exp2), $Rstore) = carrierR($Rel, $Bag)
 
 [FdomX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================

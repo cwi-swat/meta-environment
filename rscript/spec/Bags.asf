@@ -4,7 +4,15 @@ equations
 
 %% --- insert($Elem, $Bag)
 
-[ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
+%%%%[ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
+
+[ins-1]  
+	in($Elem, $Bag) == true					
+	============================================
+	insert($Elem, $Bag) = $Bag
+
+[default-ins-2]
+	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
 
 %% --- delete($Elem, $Bag)
 
@@ -163,7 +171,7 @@ equations
 
 %% --- in($Elem, $Bag)
 
-[in-1]  %%elem-equal($Elem1, $Elem2) = true			%% Should be elem-equal, but this
+[in-1]  %%elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal, but this
 	$Elem1 == $Elem2					%% is much too expensive
 	============================================
 	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true

@@ -156,6 +156,9 @@ assert "<= 1" : 1 <= 2
 assert "<= 2" : 2 <= 2
 assert "<= 2a" : "a" <= "b"
 assert "<= 2b" : "b" <= "b"
+
+bool BBBB =  "b" <= "b"
+assert "BBBB": BBBB
 assert "<= 3" : A1 <= A1
 assert "<= 4" : A1 <= A2
 assert "<= 5" : A3 <= A4
@@ -210,6 +213,8 @@ assert "> 1" : not(1 > 2)
 assert "> 2" : not(2 > 2)
 assert "> 2a" : not ("a" > "b")
 assert "> 2b" : not("b" > "b")
+
+bool BBBB = not("b" > "b")
 assert "> 3" : not(A1 > A1)
 assert "> 4" : not(A1 > A2)
 assert "> 5" : not(A3 > A4)
@@ -281,8 +286,11 @@ assert "diff 6":  {} \ Rel1 == {}
 assert "diff 7": Rel1 \ Rel2 == {<1,10>, <2,20>}
 assert "diff 8": Rel2 \ Rel1 == {<4,40>, <5,50>}
 
-assert "diff 9": {1,2,3,2,1} \  {1,2,2,3,3,3} == {1}
-assert "diff 10": {1,2,3,2,1,4} \  {1,2,2,3,3,3} == {1,4}
+%%>>assert "diff 9": {1,2,3,2,1} \  {1,2,2,3,3,3} == {1}
+assert "diff 9": {1,2,3,2,1} \  {1,2,2,3,3,3} == {}
+
+%%>>assert "diff 10": {1,2,3,2,1,4} \  {1,2,2,3,3,3} == {1,4}
+assert "diff 10": {1,2,3,2,1,4} \  {1,2,2,3,3,3} == {4}
 
 %% --- o
 
