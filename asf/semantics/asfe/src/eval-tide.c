@@ -263,7 +263,19 @@ void Tide_step(ATerm position, ATerm newenv, int level)
    */
 
   if (TA_isConnected()) {
-    int old_state = TA_getProcessState(pid);
+    int old_state;
+
+    if (!position) {
+      static ATbool warning_printed = ATfalse;
+      if (!warning_printed) {
+	ATwarning("Position information not available or incomplete, "
+		  "debugging will probably not work!\n");
+	warning_printed = ATtrue;
+      }
+      return;
+    }
+
+    old_state = TA_getProcessState(pid);
     env = newenv;
 
 

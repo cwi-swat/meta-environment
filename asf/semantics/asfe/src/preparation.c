@@ -1,3 +1,6 @@
+
+/*{{{  file header */
+
 /*
 
     Meta-Environment - An environment for language prototyping.
@@ -19,6 +22,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+/*{{{  includes */
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -32,6 +39,17 @@
 #include <MEPT.h>
 #include <ASFME-utils.h>
 
+/*}}}  */
+/*{{{  defines */
+
+/* These constants are dependent on Asfix2ME!!! */
+#define DEPTH_OF_CONDITIONS_AND_EQUATION       2
+#define DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS 4
+#define DEPTH_OF_EQUATION_SIDES_IN_EQUATION    2
+
+/*}}}  */
+/*{{{  variables */
+
 equation_entry *currentRule = NULL;
 
 static equation_table *tables = NULL;
@@ -39,12 +57,15 @@ static equation_table *equations = NULL;
 
 extern ATbool runVerbose;
 
-/*
-Allocate memory for an equation table.
+
+/*}}}  */
+
+/*{{{  equation_table *create_equation_table(int size) */
+
+/* Allocate memory for an equation table.
 */
 
-equation_table *
-create_equation_table(int size)
+equation_table *create_equation_table(int size)
 {
   int i;
   equation_table *table = (equation_table *) malloc(sizeof(equation_table));
@@ -67,9 +88,10 @@ create_equation_table(int size)
   return table;
 }
 
+/*}}}  */
+/*{{{  void flush_equations(equation_table * table) */
 
-void
-flush_equations(equation_table * table)
+void flush_equations(equation_table * table)
 {
   int i;
   equation_entry *old, *entry;
@@ -92,14 +114,15 @@ flush_equations(equation_table * table)
   }
 }
 
-
+/*}}}  */
+/*{{{  void destroy_equation_table(equation_table * table) */
 
 /*
 Free all memory associated with an equation table.
 */
 
-void
-destroy_equation_table(equation_table * table)
+
+void destroy_equation_table(equation_table * table)
 {
   flush_equations(table);
   ATunprotect(&table->module);
@@ -107,20 +130,92 @@ destroy_equation_table(equation_table * table)
   free(table);
 }
 
+/*}}}  */
+/*{{{  static unsigned hash_function(table, top_ofs, first_ofs) */
 
-static unsigned
-hash_function(equation_table * table, PT_Production top_ofs, PT_Production first_ofs)
+static unsigned hash_function(equation_table *table, PT_Production top_ofs,
+			      PT_Production first_ofs)
 {
   return (((int) top_ofs >> 2) * 3007 + ((int) first_ofs >> 2)) % table->size;
 }
 
+/*}}}  */
 
-/*
-Enter an equation in an equation table.
+/*{{{  ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ) */
+
+ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
+{
+  PT_Tree tree;
+  char *path;
+  int start_line, start_col, end_line, end_col;
+  ASF_Equation equation;
+
+  tree = PT_TreeFromTerm(ASF_CondEquationToTerm(equ));
+
+  if (!PT_getTreePosInfo(tree, &path, &start_line,
+			 &start_col, &end_line, &end_col)) {
+    ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
+	      PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), tree);
+    return equ;
+  }
+  /*
+  fprintf(stderr, "pos-info to start equ %s: %s,%d,%d,%d,%d\n",
+	  PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), path, start_line, start_col, end_line, end_col);
+	  */
+
+
+  /* Annotate to a depth so that the list of conditions is annotated */
+  tree = PT_addTreePosInfoToDepth(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,
+				  start_line, start_col);
+  /*ATwarning("tree after annotating the equations: %t\n", tree);*/
+  equ = ASF_CondEquationFromTerm(PT_TreeToTerm(tree));
+
+  if (ASF_hasCondEquationConditions(equ)) {
+    ASF_Conditions conds = ASF_getCondEquationConditions(equ);
+    tree = PT_TreeFromTerm(ASF_ConditionsToTerm(conds));
+    if (!PT_getTreePosInfo(tree, &path, &start_line,
+			   &start_col, &end_line, &end_col)) {
+      ATwarning("no position information on conditions, "
+		"crippled debugging: %t\n", tree);
+    } else {
+      /* Annotate to a depth so that the lhs and rhs of the conditions is
+       * annotated
+       */
+      tree = PT_addTreePosInfoToDepth(path, tree,
+				      DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS,
+				      start_line, start_col);
+      conds = ASF_ConditionsFromTerm(PT_TreeToTerm(tree));
+      equ = ASF_setCondEquationConditions(equ, conds);
+      /*ATwarning("tree after annotating the conditions: %t\n", tree);*/
+    }
+  }
+
+  equation = ASF_getCondEquationEquation(equ);
+  tree = PT_TreeFromTerm(ASF_EquationToTerm(equation));
+  if (!PT_getTreePosInfo(tree, &path, &start_line, &start_col,
+			 &end_line, &end_col)) {
+    ATwarning("no position information on equation, crippled debugging: %t\n",
+	      tree);
+  } else {
+    tree = PT_addTreePosInfoToDepth(path, tree,
+				    DEPTH_OF_EQUATION_SIDES_IN_EQUATION,
+				    start_line, start_col);
+    equation = ASF_EquationFromTerm(PT_TreeToTerm(tree));
+    ATwarning("equation: %s\n", PT_yieldTree(tree));
+    equ = ASF_setCondEquationEquation(equ, equation);
+  }
+
+  return equ;
+}
+
+/*}}}  */
+
+/*{{{  void enter_equation(equation_table * table, ASF_CondEquation equation) */
+
+/* Enter an equation in an equation table.
 */
 
-void
-enter_equation(equation_table * table, ASF_CondEquation equation)
+void enter_equation(equation_table * table, ASF_CondEquation equation)
 {
   equation_entry *entry;
 
@@ -144,10 +239,11 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
 
   tag = ASF_getCondEquationTag(equation);
   equ = ASF_getCondEquationEquation(equation);
- 
+
   /* this is where we switch API's from ASF_ to PT_ for the user-defined
    * term syntax
    */
+
   lhs = ASFtoPT(ASF_getEquationLhs(equ));
   rhs = ASFtoPT(ASF_getEquationRhs(equ));
 
@@ -234,14 +330,18 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
   }
 }
 
-equation_entry *
-find_equation(equation_entry * from, PT_Production top_ofs, 
-              PT_Production first_ofs)
+/*}}}  */
+/*{{{  equation_entry *find_equation(from, top_ofs, first_ofs) */
+
+equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, 
+			      PT_Production first_ofs)
 {
   if (runVerbose) {
-    ATwarning("looking for equation with ofs: %s\n", PT_yieldProduction(top_ofs));
+    ATwarning("looking for equation with ofs: %s\n",
+	      PT_yieldProduction(top_ofs));
     if (first_ofs) {
-    ATwarning("................and first ofs: %s\n", PT_yieldProduction(first_ofs));
+    ATwarning("................and first ofs: %s\n",
+	      PT_yieldProduction(first_ofs));
     }
   }
 
@@ -271,9 +371,10 @@ find_equation(equation_entry * from, PT_Production top_ofs,
   return from;
 }
 
+/*}}}  */
+/*{{{  void select_equations(char *module) */
 
-void
-select_equations(char *module)
+void select_equations(char *module)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
@@ -289,9 +390,10 @@ select_equations(char *module)
   equations = cur;
 }
 
+/*}}}  */
+/*{{{  ATbool find_module(char *module) */
 
-ATbool 
-find_module(char *module)
+ATbool find_module(char *module)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
@@ -308,9 +410,10 @@ find_module(char *module)
   }
 }
 
+/*}}}  */
+/*{{{  equation_table *find_equation_table(char *modname) */
 
-equation_table *
-find_equation_table(char *modname)
+equation_table *find_equation_table(char *modname)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", modname);
@@ -322,7 +425,8 @@ find_equation_table(char *modname)
   return cur;
 }
 
-
+/*}}}  */
+/*{{{  void enter_equations(char *modname, ASF_CondEquationList eqsList) */
 
 /*
   The equations are ``sorted'' by outermost function symbols.
@@ -333,8 +437,8 @@ find_equation_table(char *modname)
   where stored.
 */
 
-void
-enter_equations(char *modname, ASF_CondEquationList eqsList)
+
+void enter_equations(char *modname, ASF_CondEquationList eqsList)
 {
   equation_table *table;
 
@@ -361,9 +465,10 @@ enter_equations(char *modname, ASF_CondEquationList eqsList)
   }
 }
 
+/*}}}  */
+/*{{{  void delete_equations(char *modname) */
 
-void
-delete_equations(char *modname)
+void delete_equations(char *modname)
 {
   equation_table *cur = tables, *prev = NULL;
   ATerm t_module = ATmake("<str>", modname);
@@ -384,6 +489,9 @@ delete_equations(char *modname)
   }
 }
 
+/*}}}  */
+/*{{{  ASF_Condition prepare_cond(ASF_Condition cond) */
+
 ASF_Condition prepare_cond(ASF_Condition cond)
 {
   PT_Tree lhs, rhs;
@@ -397,6 +505,9 @@ ASF_Condition prepare_cond(ASF_Condition cond)
   return cond;
 }
 
+/*}}}  */
+/*{{{  ASF_Conditions prepareConditions(ASF_Conditions conds) */
+
 ASF_Conditions prepareConditions(ASF_Conditions conds)
 {
   ASF_ConditionList  condList = ASF_getConditionsList(conds);
@@ -406,6 +517,9 @@ ASF_Conditions prepareConditions(ASF_Conditions conds)
   return ASF_setConditionsList(conds, condList);
 }
 
+/*}}}  */
+/*{{{  ASF_CondEquation prepareEquation(ASF_CondEquation equ) */
+
 /*
 Prepare an equation for rewriting. This includes removing the layout,
 and translating lexicals into lists.
@@ -414,6 +528,8 @@ and translating lexicals into lists.
 ASF_CondEquation prepareEquation(ASF_CondEquation equ)
 {
   ASF_Equation equation;
+
+  equ = add_equ_pos_info(equ);
 
   if (ASF_isCondEquationWhen(equ) || ASF_isCondEquationImplies(equ)) {
     equ = ASF_setCondEquationConditions(equ,
@@ -431,9 +547,13 @@ ASF_CondEquation prepareEquation(ASF_CondEquation equ)
   return ASF_setCondEquationEquation(equ, equation); 
 }
 
+/*}}}  */
+/*{{{  static PT_Tree lexicalToList(PT_Tree lextrm) */
+
 /*
  * lexicalToList converts a lexical into a list.
  */
+
 
 static PT_Tree lexicalToList(PT_Tree lextrm)
 {
@@ -512,15 +632,19 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   return newPTtree;
 }
 
+/*}}}  */
+/*{{{  static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data) */
+
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
 
   extern ATerm ASF_patternTreeLexicalConstructor;
+
   if (ATmatchTerm(PT_makeTermFromTree(tree), ASF_patternTreeLexicalConstructor, 
 		  NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-  /* <PO> was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {*/
+    /* <PO> was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {*/
     result = tree;
   }
   else if (PT_isTreeLexical(tree)) {
@@ -541,23 +665,31 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   return result;
 }
 
+/*}}}  */
+
+/*{{{  PT_Tree RWprepareTerm(PT_Tree tree) */
+
 PT_Tree RWprepareTerm(PT_Tree tree)
 {
-return  prepareTerm(tree, NULL);
+  return  prepareTerm(tree, NULL);
 }
 
+/*}}}  */
+/*{{{  ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList) */
 /*
 Prepare a list of equations for rewriting.
 */
+
 
 ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList)
 {
   return ASF_visitCondEquationList(eqsList, prepareEquation, NULL);
 }
 
+/*}}}  */
+/*{{{  void RWflushEquations() */
 
-void
-RWflushEquations()
+void RWflushEquations()
 {
   equation_table *table;
   while (tables) {
@@ -566,6 +698,9 @@ RWflushEquations()
     destroy_equation_table(table);
   }
 }
+
+/*}}}  */
+/*{{{  static PT_Production makeLexToCfProd(PT_Symbol symbol) */
 
 static PT_Production makeLexToCfProd(PT_Symbol symbol)
 {
@@ -577,9 +712,13 @@ static PT_Production makeLexToCfProd(PT_Symbol symbol)
   return PT_makeProductionDefault(symbols, cf, PT_makeAttributesNoAttrs());
 }
 
+/*}}}  */
+/*{{{  PT_Tree listToLexical(PT_Tree lexappl) */
+
 /* list_to_lexical converts  a list representing a lexical into a
  * lexical again. 
  */
+
 
 PT_Tree listToLexical(PT_Tree lexappl)
 {
@@ -627,6 +766,9 @@ PT_Tree listToLexical(PT_Tree lexappl)
   return newTree; 
 }
 
+/*}}}  */
+
+/*{{{  static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data) */
 
 static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
@@ -650,7 +792,12 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 }
 
 
+/*}}}  */
+/*{{{  PT_Tree RWrestoreTerm(PT_Tree tree) */
+
 PT_Tree RWrestoreTerm(PT_Tree tree)
 {
   return restoreTerm(tree, NULL);
 }
+
+/*}}}  */
