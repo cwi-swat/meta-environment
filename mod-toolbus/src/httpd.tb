@@ -14,30 +14,20 @@ process Httpd is
 let
   MYTOOL  : modToolbus,
   Id      : int,
-  MyTerm  : term,
+  Request  : term,
   S       : str
 in  
   %% loop, waiting for modToolbus tools to connect
   (
     printf( "Waiting for a mod_toolbus connection...\n" ) . 
     rec-connect(MYTOOL?) .
-    
-    %% now we can receive multiple events from the tool
-    (
-      %%printf( "connected tool (id: %t, MYTOOL )\n", MYTOOL ) .
-      rec-event( MYTOOL, MyTerm? ) .
-      printf( "event received from mod_toolbus: %t\n", MyTerm ) .
-      snd-ack-event( MYTOOL, MyTerm ) .
-      %% snd-ack-event( MYTOOL, html(hoideboi) ) .
-      snd-do( MYTOOL, show-html(html([head(),body([p([sexual,gypsies]),p([live,at,covent,garden])])])) ) .
-      printf( "event acknowledged\n" ) 
-      %% rec-disconnect( MYTOOL ) 
-    )*
-    printf( "done.\n" ) 
-    %%rec-disconnect( MYTOOL ) 
-    %% printf( "disconnected tool (id: %, MYTOOL )\n", MYTOOL ) 
-  ) *
-  
+    printf( "Connected\n") .
+    rec-event( MYTOOL, request(Request?) ) .
+    printf( "Event received: %t\n", Request ) .
+    snd-ack-event( MYTOOL, request(Request) ) .
+    snd-do(MYTOOL, reply(html([head(),body([p([sexual,gypsies]),p([live,at,covent,garden])])])) ) .
+    rec-disconnect( MYTOOL ) 
+  )*
   delta
 endlet
 
@@ -85,7 +75,7 @@ process ConnectHttpd is
 let
   ToolId  : modToolbus,
   Id      : int,
-  MyTerm  : term,
+  Request  : term,
   S       : str
 in  
   %% loop, waiting for modToolbus tools to connect
@@ -93,9 +83,9 @@ in
   rec-connect( ToolId? ) .
 
   %%printf( "connected tool (id: %t, ToolId )\n", ToolId ) .
-  rec-event( ToolId, MyTerm? ) .
-  printf( "event received from mod_toolbus: %t\n", MyTerm ) .
-  snd-ack-event( ToolId, MyTerm ) .
+  rec-event( ToolId, Request? ) .
+  printf( "event received from mod_toolbus: %t\n", Request ) .
+  snd-ack-event( ToolId, Request ) .
   %% snd-ack-event( ToolId, html(hoideboi) ) .
   printf( "event acknowledged\n" )
 endlet

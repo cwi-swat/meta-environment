@@ -20,7 +20,7 @@
  */
 
 #define VERBOSE
- 
+#define TOOLBUS_PORT 11000 
  
 /* Apache httpd */
 #include "httpd.h"
@@ -55,7 +55,7 @@
 /*
  *  misc constants
  */
-#define HTML_BUF_SIZE 4000
+#define HTML_BUF_SIZE 32000
 
 
 /*
@@ -176,7 +176,7 @@ static int http_req_handler( request_rec *http_req )
   ATBinit( tb_init_argc, tb_init_argv, &BottomOfStack );
   
   /* connect to toolbus and install our handler: toolbus_handler() */
-  if( (tb_conn = ATBconnect( NULL, NULL, -1, toolbus_handler )) >= 0 )
+  if( (tb_conn = ATBconnect( NULL, NULL, TOOLBUS_PORT, toolbus_handler )) >= 0 )
   {
     count = 1;        /* send one event */
     while( global_is_tb_session_done == 0 )
@@ -204,9 +204,9 @@ static int http_req_handler( request_rec *http_req )
            */
           tb_event_to_send = ATreadFromString( send_buf_ascii );
           ATBwriteTerm( tb_conn, 
-            ATmake( "snd-event(<term>)", tb_event_to_send ) );
+            ATmake( "snd-event(request(<term>))", tb_event_to_send ) );
           ATfprintf( stderr, "\nsending event to toolbus: %t\n",
-            ATmake( "snd-event(<term>)", tb_event_to_send ) );
+            ATmake( "snd-event(request(<term>))", tb_event_to_send ) );
           fflush( stderr );
           count --;
         } 
@@ -265,9 +265,9 @@ ATerm toolbus_handler( int tb_conn, ATerm input )
     rv = NULL;
   }
   /* toolbus asked us to display an HTML page encoded as an ATerm  */
-  else if( ATmatch( input, "rec-do(show-html(<term>))", &myterm ) )
+  else if( ATmatch( input, "rec-do(reply(<term>))", &myterm ) )
   {
-    ATfprintf( stderr, "mod_toolbus: toolbus_handler(): rec-do(show-html())\n" );
+    ATfprintf( stderr, "mod_toolbus: toolbus_handler(): rec-do(reply())\n" );
     ATparseHTML( myterm, html_buf, HTML_BUF_SIZE );
     ap_rprintf( global_http_req, html_buf );  
     global_is_tb_session_done ++;  /* after this we're done */
