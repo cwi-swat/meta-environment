@@ -23,7 +23,7 @@
 /*
  * $Id$
  */
-process Compiler is
+process Asfc is
 let
   COM           : asfc,
   OutputDir     : str,
