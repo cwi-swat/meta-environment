@@ -18,7 +18,7 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input);
 
 `
 for b in \${BUILTIN_NAMES}; do 
-  echo "PT_Tree ${b}(ATerm builtin, PT_Tree input);" 
+  echo "PT_Tree ${b}(ATerm builtin, PT_Tree input);" | sed 's@-@_@g'
 done
 `
 

@@ -22,6 +22,6 @@ forward.c: $(LIB_OBJECTS)
 asf-builtins.h: $(LIB_OBJECTS)
 	$(top_srcdir)/utils/gen-protos.sh "${BUILTIN_NAMES}" > $@
 
-CLEANFILES+=asf-builtins.h asf-forward.c
+CLEANFILES+=asf-builtins.h forward.c
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include

@@ -73,7 +73,7 @@ PACKAGE_SRC = annos.c
 PACKAGE_OBJECTS = $(PACKAGE_SRC:%.c=%.o)
 
 # Collect built-in names from SDF2 source files
-PACKAGE_BUILTINS = $(shell grep "built-in" *.sdf |                          sed -e 's@.*built-in(\"\(.*\)\").*@\1@g' |                          sed -e 's@-@_@g')
+PACKAGE_BUILTINS = $(shell grep "built-in" *.sdf |                          sed -e 's@.*built-in(\"\(.*\)\").*@\1@g')
 
 
 # What gets installed, distributed, cleaned

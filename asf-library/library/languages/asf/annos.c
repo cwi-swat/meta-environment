@@ -20,7 +20,7 @@ PT_Tree set_anno(ATerm builtin, PT_Tree input)
   PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
   PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
   PT_Tree value = NULL;
-
+ATwarning("hiero\n");
   value = PT_TreeFromTerm(PT_getTreeAnnotation(term, PT_TreeToTerm(key)));
 
   if (value != NULL) {
