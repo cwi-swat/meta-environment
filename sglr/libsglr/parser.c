@@ -822,11 +822,11 @@ void SG_Reducer(stack *st0, state s, label prodl,
       if (attribute == SG_PT_REJECT) {
         /*  Reject?  */
         SG_MarkLinkRejected(nl);
-        SG_Amb(table, (tree) SG_LK_TREE(nl), (tree) t,
+        SG_CreateAmbCluster((tree) SG_LK_TREE(nl), (tree) t,
                sg_tokens_read - SG_LK_LENGTH(nl) - 1);
       } else {
         /*  Don't add the rejects themselves to the amb cluster!  */
-        SG_Amb(table, (tree) SG_LK_TREE(nl), (tree) t,
+        SG_CreateAmbCluster((tree) SG_LK_TREE(nl), (tree) t,
                sg_tokens_read - SG_LK_LENGTH(nl) - 1);
       }
     }

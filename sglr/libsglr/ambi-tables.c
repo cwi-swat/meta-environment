@@ -9,6 +9,7 @@
 #include <assert.h>
 
 #include "ambi-tables.h"
+#include "forest.h"
 
 static ATermTable cluster_table = NULL;  
 static ATermTable index_table = NULL;  
@@ -98,7 +99,7 @@ ATermInt SG_AmbiTablesGetIndex(ATerm key, size_t pos)
   return (ATermInt)SG_IndexTableGet(key, pos);
 }
 
-void SG_AmbiTablesAddIndex(ATerm key, size_t pos, ATermInt idx)
+static void SG_AmbiTablesAddIndex(ATerm key, size_t pos, ATermInt idx)
 {
   ATerm ambikey = SG_CreateAmbiKey(key, pos);
 
@@ -114,4 +115,43 @@ void SG_AmbiTablesUpdateCluster(ATermInt idx, ATermList cluster)
     SG_AmbiTablesCreate();
   }
   ATtablePut(cluster_table, (ATerm)idx, (ATerm)cluster);
+}
+
+/*
+ |SG_Amb| maintains the ambiguity table, needed for the mapping from
+ terms to ambiguity clusters.  On a new ambiguity, it makes a new
+ entry.
+ */
+
+void SG_CreateAmbCluster(tree existing, tree new, size_t pos) {
+  ATermList newambs;
+  ATermInt  ambidx;
+
+  IF_STATISTICS(SG_AmbCalls(SG_NR_INC));
+  
+  ambidx = SG_AmbiTablesGetIndex((ATerm) existing, pos);
+  if (!ambidx) { 
+    /* New ambiguity */
+    ambidx = ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
+    /* Add mapping for existing term also */
+    SG_AmbiTablesAddIndex((ATerm) existing, pos, ambidx);
+
+    newambs = ATmakeList2((ATerm) existing, (ATerm) new);
+  }
+  else {
+    /* Expand (or update) existing ambiguity */
+    ATermList oldambs;
+
+    oldambs = SG_AmbiTablesGetClusterOnIndex(ambidx);
+    if (ATindexOf(oldambs, (ATerm) new, 0) != -1) {
+      return;  /*  Already present?  Done.  */
+    }
+    newambs = ATinsert(oldambs, (ATerm) new);
+  }
+
+  /*   Update ambiguity cluster  */
+  SG_AmbiTablesAddIndex((ATerm) new, pos, ambidx);
+  SG_AmbiTablesUpdateCluster(ambidx, newambs);
+
+  return;
 }

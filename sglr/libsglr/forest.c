@@ -268,24 +268,22 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
               Bitmap visited)
 {
   ATermList ambs;
+  ATermInt cluster_idx;
 
   if (Cycle) {
     /*  Cycle has been detected, done  */
     return ATtrue;
   }
 
-  if (SG_IsMarked((ATerm) t)) {
-    /*  Cycle detected  */
-    Cycle = ATempty;
-    return ATtrue;
-  }
+  
 
-  SG_Mark((ATerm) t);
 
   switch (ATgetType(t)) {
     case AT_APPL:
       /*  Ambiguity cluster?  */
-      ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
+      cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
+      ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
+
       if (inAmbs ||  ATisEmpty(ambs)) {
         /*  No ambiguity  */
         SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t, 1),
@@ -293,9 +291,17 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
       } 
       else {
         /*  Encountered an ambiguity cluster  */
-        int idx = ATgetInt(SG_AmbiTablesGetIndex((ATerm) t, *pos));
+        int idx = ATgetInt(cluster_idx);
         size_t saved_pos = *pos;
+
+	if (SG_IsMarked((ATerm) t)) {
+          /*  Cycle detected  */
+          Cycle = ATempty;
+          return ATtrue;
+        }
+
         if (!BitmapIsSet(visited, idx)) {
+          SG_Mark((ATerm) t);
 
           SGnrAmb(SG_NR_INC); /* new ambcluster */
 
@@ -306,6 +312,7 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
           *pos = saved_pos;
           SG_TermIsCyclicAmbs(t, pos, ambs, visited);
           visited = BitmapSet(visited, idx);
+          SG_UnMark((ATerm) t);
         }
       }
       break;
@@ -324,9 +331,7 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
       break;
   }
 
-  /*  Out of recursion here: restore term state  */
 
-  SG_UnMark((ATerm) t);
 
 
   /*  Remember labels of productions in cycle */
@@ -1407,9 +1412,6 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
   case AT_APPL:
     ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
     if (!inAmbs && !ATisEmpty(ambs)) {
-
-        int idx = ATgetInt(SG_AmbiTablesGetIndex((ATerm) t, *pos));
-  
       IF_VERBOSE(
         SG_PrintStatusBar("sglr: filtering", 
 			  SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
@@ -1516,45 +1518,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
    return newT; 
 }
 
-/*
- |SG_Amb| maintains the ambiguity table, needed for the mapping from
- terms to ambiguity clusters.  On a new ambiguity, it makes a new
- entry; existing ambiguities get expanded, applying filtering wherever
- applicable.
- */
 
-void SG_Amb(parse_table *pt, tree existing, tree new, size_t pos) {
-  ATermList newambs;
-  ATermInt  ambidx;
-
-  IF_STATISTICS(SG_AmbCalls(SG_NR_INC));
-  
-  ambidx = SG_AmbiTablesGetIndex((ATerm) existing, pos);
-  if (!ambidx) { 
-    /* New ambiguity */
-    ambidx = ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
-    /* Add mapping for existing term also */
-    SG_AmbiTablesAddIndex((ATerm) existing, pos, ambidx);
-
-    newambs = ATmakeList2((ATerm) existing, (ATerm) new);
-  }
-  else {
-    /* Expand (or update) existing ambiguity */
-    ATermList oldambs;
-
-    oldambs = SG_AmbiTablesGetClusterOnIndex(ambidx);
-    if (ATindexOf(oldambs, (ATerm) new, 0) != -1) {
-      return;  /*  Already present?  Done.  */
-    }
-    newambs = ATinsert(oldambs, (ATerm) new);
-  }
-
-  /*   Update ambiguity cluster  */
-  SG_AmbiTablesAddIndex((ATerm) new, pos, ambidx);
-  SG_AmbiTablesUpdateCluster(ambidx, newambs);
-
-  return;
-}
 
 tree SG_SelectOnTopSort(parse_table *pt, tree t, char *sort)
 {

@@ -1,5 +1,19 @@
 $Id$
 
+2001/10/29 (jurgenv@cwi.nl, markvdb@cwi.nl)
+ * Replaced SG_MARK and UNMARK by an ATermIndexedSet implementation.
+ * Marking only ambiguity clusters when detecting cycles.
+ * Completely refactored the code for ambiguity clusters (markvdb).
+ * The changes of the last days fix a major bug in sglr; sharing of ambiguity
+   clusters caused ambiguities to occur in terms were there are no ambiguities
+   due to lexical or context-free restrictions.
+ * NOTE: SGLR is now quite a bit slower! 
+         A smarter implementation of the current bugfix is needed.
+ * NOTE: SGLR can yield different parse trees than previous versions 
+         because there are less ambiguities. This effect can be expected
+         for grammars that are highly ambiguous (e.g Casl, Island Grammars).
+ * The regression tests for Casl have been updated.
+
 2001/10/25-26 (jurgenv@cwi.nl,markvdb@cwi.nl)
  * Added position information to the ambiguity cluster table in order
    to make ambiguity clusters unique.
