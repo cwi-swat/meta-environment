@@ -1,6 +1,7 @@
 $Id$
 
-2001/07/18 (jurgenv@cwi.nl)
+2001/07/18 (markvdb@cwi.nl, jurgenv@cwi.nl)
+ * Fixed a bug with respect to the renaming of labelled symbols.
  * Regenerated normalizer with new compiler, the performance gain
    is significant.
 
