@@ -7,9 +7,11 @@ $Id$
    - Added first version of transparent toolbus-to-toolbus adapter
    - Both sides of the adapter are generic now
    - Added startup parameters:
-     -TB_HOST_NAME1, -TB_HOST_NAME2,
-     -TB_PORT1, -TB_PORT2,
-     -TB_TOOL_NAME1, -TB_TOOL_NAME2
+     -TB_MASKERADE_HOST, -TB_DELEGATE_HOST,
+     -TB_MASKERADE_PORT, -TB_DELEGATE_PORT,
+     -TB_MASKERADE_TOOL, -TB_DELEGATE_TOOL
+   - Refactoring: connection1 has become the maskerade side
+                  connection2 has become the delegate side
  
 2003-06-26 <jurgenv@cwi.nl>
  * Added package definition file
