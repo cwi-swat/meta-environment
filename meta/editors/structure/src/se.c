@@ -157,7 +157,7 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
   PT_Tree tree;
   PT_ParseTree parse_tree;
   
-  parse_tree = PT_makeParseTreeFromTerm(t);
+  parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
   assert(PT_isValidParseTree(parse_tree));
 
   focus = SE_makeFocusFromTerm(f);
