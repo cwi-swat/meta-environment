@@ -1,7 +1,6 @@
 buttons([
   button("Rscript",
-         ["term"],
-         ["Rscript", "Check Rscript"],
+         [description(term-editor, menu(["Rscript", "Check Rscript"]))], 
          [push-active-module,
           get-root,
           check-sort("RSCRIPT"),
@@ -14,8 +13,7 @@ buttons([
          ]),
 
   button("Sdf",
-         ["term"],
-         ["Sdf", "Show"],
+         [description(term-editor, menu(["Sdf", "Show"]))], 
          [push-filename("query-result.rvalue"),
           read-tree,
           check-sort("RVALUE"),
@@ -23,16 +21,13 @@ buttons([
           apply("display-result", "List", 1),
           rewrite("DisplayQuery"),
 
-          unpack-tree,
-          execute-action("unparsePT"),
-
+          unparse,
           push-active-module,
           show-list
         ]),
 
   button("Sdf",
-         ["term"],
-         ["Sdf", "Calculate"],
+         [description(term-editor, menu(["Sdf", "Calculate"]))], 
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
@@ -51,8 +46,7 @@ buttons([
         ]),
 
   button("Sdf",
-         ["term"],
-         ["Sdf", "Extract Relations"],
+         [description(term-editor, menu(["Sdf", "Extract Relations"]))], 
          [push-active-module,
           get-root,
           check-sort("Module"),
@@ -65,8 +59,7 @@ buttons([
          ]),
 
   button("Sdf",
-         ["term"],
-         ["Sdf", "TestCalculate"],
+         [description(term-editor, menu(["Sdf", "TestCalculate"]))], 
          [push-active-module,
           get-focus,
           push-filename("focus.tree"),
@@ -89,8 +82,7 @@ buttons([
          ]),
 
   button("Sdf",
-         ["term"],
-         ["Sdf", "TestShow"],
+         [description(term-editor, menu(["Sdf", "TestShow"]))], 
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
@@ -119,8 +111,7 @@ buttons([
         ]),
 
   button("Booleans",
-         ["term"],
-         ["Query", "FindProduction"],
+         [description(term-editor, menu(["Query", "FindProduction"]))], 
          [ push-active-module,
           get-focus,
           push-filename("focus.tree"),
@@ -143,8 +134,7 @@ buttons([
          ]),
 
   button("Booleans",
-         ["term"],
-         ["Query", "ShowProduction"],
+         [description(term-editor, menu(["Query", "ShowProduction"]))], 
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
