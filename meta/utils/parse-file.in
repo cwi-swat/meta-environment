@@ -26,10 +26,10 @@ bindir=@bindir@
 libdir=@libdir@
 datadir=@datadir@
 
-PATH="$PATH:$bindir"
+PATH="$bindir:$PATH"
 
-PARSE="${bindir}/sglr"
-A2TOA1="${bindir}/a2toa1"
+PARSE="sglr"
+A2TOA1="a2toa1"
 TABLES="${datadir}"
 LANGTYPEDIR="${datadir}"
 LANGTYPEFILE="lang.types"

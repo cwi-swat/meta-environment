@@ -26,11 +26,11 @@ bindir=@bindir@
 libdir=@libdir@
 datadir=@datadir@
 
-PATH="$PATH:$bindir"
+PATH="$bindir:$PATH"
 
-A2TOA1="${bindir}/a2toa1"
+A2TOA1="a2toa1"
 TABLE="${datadir}/Sdf2.baf"
-PARSE="${bindir}/sglr -p $TABLE"
+PARSE="sglr -p $TABLE"
 
 XOPTS=""
 DOTOUT=0

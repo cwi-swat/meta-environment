@@ -26,7 +26,7 @@ bindir=@bindir@
 libdir=@libdir@
 PERL=perl
 
-PATH="$PATH:$bindir"
+PATH="$bindir:$PATH"
 
 verbose=0
 Out=""
