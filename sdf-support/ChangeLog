@@ -1,3 +1,6 @@
+2002/11/05 (vinju@loria.fr)
+ * libME renamed to lib
+
 2002/11/04 (vinju@loria.fr)
  * Regenerated library with new sdf-apigen features
  * Removed dependency on pt-support where possible

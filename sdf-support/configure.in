@@ -57,7 +57,7 @@ AC_SET_MAKE
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
-  libME/Makefile
+  lib/Makefile
   utils/Makefile
   test/Makefile
 )

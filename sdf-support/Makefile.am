@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS		= libME utils test
+SUBDIRS		= lib utils test
