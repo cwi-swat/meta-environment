@@ -1105,6 +1105,44 @@ ATbool SG_HasPreferredProds(tree t)
   }
 }
 
+ATbool SG_HasAvoidedProds(tree t)
+{
+  switch(ATgetType(t)) {
+    case AT_APPL:
+      {
+        AFun fun;
+
+        fun = ATgetAFun(t);
+        if(ATisEqual(fun, SG_Uneager_AFun)) {
+          return ATtrue;
+        }
+        /*  Preferred subtrees in trees that are to be preferred don't count  */
+        if(ATisEqual(fun, SG_Eager_AFun)) {
+          return ATfalse;
+        }
+        /*
+            Tree t may be an ambiguity cluster.  Even if it is,
+            inspection of a single subtree suffices: by filtering,
+            either all trees in the ambiguity node have been built using
+            a preferred rule, or they have all been built without.
+         */
+        return SG_HasAvoidedProds((forest) ATgetArgument((ATermAppl) t, 1));
+      }
+    case AT_LIST:
+      for(; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        if(SG_HasAvoidedProds((tree) ATgetFirst((ATermList) t))) {
+          return ATtrue;
+        }
+      }
+      return ATfalse;
+    case AT_INT:
+    default:
+      return ATfalse;
+  }
+}
+
+
+
 size_t SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
 {
   size_t ret = 0;
@@ -1177,26 +1215,21 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   if(!SG_FILTER)
     return NULL;
 
-  /*
-      One of the trees might have been constructed by a preferred
-      bit of the syntax...
-   */
+	/* the next code is a filter that finds the topmost preference in both
+	 * trees. If one of them is prefered or avoided, and the other has no
+	 * explicit preference, then it throws one of them away.
+	 */
+	
   /*  Don't even bother unless there are preferred actions  */
-  if(SG_PT_HAS_PREFERS(pt)) {
-#ifdef DOPREFCOUNT
-    size_t num_prefs0 = 0, num_prefs1 = 0;
-
-    num_prefs0 = SG_CountPreferredProds(t0);
-    num_prefs1 = SG_CountPreferredProds(t1);
-    if((num_prefs0 > 0) && (num_prefs1 == 0))
-      return t0;
-    if((num_prefs1 > 0) && (num_prefs0 == 0))
-      return t1;
-#else
-    ATbool has_prefs0 = ATfalse, has_prefs1 = ATfalse;
-
-    has_prefs0 = SG_HasPreferredProds(t0);
-    has_prefs1 = SG_HasPreferredProds(t1);
+  if(SG_PT_HAS_PREFERENCES(pt)) {
+		/* search for prefers */
+    ATbool has_prefs0  = SG_HasPreferredProds(t0);
+		ATbool has_prefs1  = SG_HasPreferredProds(t1);
+		/* search for avoids */
+		ATbool has_avoids0 = SG_HasAvoidedProds(t0);
+		ATbool has_avoids1 = SG_HasAvoidedProds(t1);
+	
+		/* draw safe conclusions */
     if(has_prefs0 && !has_prefs1) {
       IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t > %t\n", l0, l1))
       return t0;
@@ -1204,8 +1237,15 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
       IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t < %t\n", l0, l1))
       return t1;
     }
-#endif
-  }
+
+		if(has_avoids0 && !has_avoids1) {
+			IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t < %t\n", l0, l1))
+				return t1;
+		} else if(has_avoids1 && !has_avoids0) {
+			IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t > %t\n", l0, l1))
+				return t0;
+		}
+	}
 
   /*  Don't filter START symbols when start symbol subselection is on  */
   if(SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0)))
