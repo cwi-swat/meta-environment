@@ -249,8 +249,9 @@ static PT_Tree termToTree(ATerm tree)
   result = (PT_Tree) ATtableGet(treeTable,tree); 
 
   if (result == NULL) {
+#ifdef KEEP_ANNOTATIONS
     ATerm annos = ATgetAnnotations(tree);
-
+#endif
     if(ATgetType(tree) == AT_APPL) {
       prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
       if(!prod) {
@@ -275,9 +276,11 @@ static PT_Tree termToTree(ATerm tree)
       result = (PT_Tree) tree;
     }
 
+#ifdef KEEP_ANNOTATIONS
     if (annos != NULL) {
       result = PT_setTreeAnnotations(result, annos);
     }
+#endif
 
     ATtablePut(treeTable, tree, (ATerm) result);
   }

@@ -132,7 +132,9 @@ void print_memo_table_sizes()
 ATerm innermost(PT_Tree tree)
 {
   ATerm result = (ATerm) tree;
+#ifdef KEEP_ANNOTATIONS  
   ATerm annos = PT_getTreeAnnotations(tree);
+#endif
 
   if (PT_isTreeLayout(tree)) {
     result = NULL;
@@ -170,9 +172,11 @@ ATerm innermost(PT_Tree tree)
     return NULL;
   }
 
+#ifdef KEEP_ANNOTATIONS  
   if (annos != NULL) {
     result = ATsetAnnotations(result, annos);
   }
+#endif
 
   return result;
 }
