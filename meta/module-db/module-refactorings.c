@@ -209,6 +209,11 @@ static SDF_ImpSection delete_modulename_from_impsection(
     delete_modulename_from_importlist(importsList, oldModuleName);
   SDF_Imports newImports;
 
+  if (SDF_isImportListEmpty(newImportsList)) {
+    ATwarning("hier!\n");
+    return NULL;
+  }
+
   newImports = SDF_setImportsList(imports, newImportsList);
   
   return SDF_setImpSectionList(impSection, newImports);
@@ -230,7 +235,8 @@ static SDF_Grammar delete_modulename_from_grammar(
       orgGrammar = SDF_setGrammarImpSection(orgGrammar, newImpSection);
     }
     else {
-      orgGrammar = NULL;
+      ATwarning("voila!\n");
+      return NULL;
     }
   }
   if (SDF_isGrammarConcGrammars(orgGrammar)) {
@@ -240,8 +246,20 @@ static SDF_Grammar delete_modulename_from_grammar(
       delete_modulename_from_grammar(leftGrammar, oldModuleName);
     SDF_Grammar newRightGrammar = 
       delete_modulename_from_grammar(rightGrammar, oldModuleName);
-    orgGrammar = SDF_setGrammarLeft(orgGrammar, newLeftGrammar);
-    orgGrammar = SDF_setGrammarRight(orgGrammar, newRightGrammar);
+
+    if (newLeftGrammar == NULL && newRightGrammar == NULL) {
+      orgGrammar = NULL;
+    }
+    else if (newLeftGrammar == NULL) {
+      orgGrammar = newRightGrammar;
+    }
+    else if (newRightGrammar == NULL) {
+      orgGrammar = newLeftGrammar;
+    }
+    else {
+      orgGrammar = SDF_setGrammarLeft(orgGrammar, newLeftGrammar);
+      orgGrammar = SDF_setGrammarRight(orgGrammar, newRightGrammar);
+    }
   }
   return orgGrammar;
 }
@@ -317,6 +335,7 @@ static SDF_ImpSectionList delete_modulename_from_impsections(
     SDF_ImpSection impSection  = SDF_getImpSectionListHead(orgImpSections);
     SDF_ImpSection newImpSection = 
       delete_modulename_from_impsection(impSection, oldModuleName);
+
     if (SDF_hasImpSectionListTail(orgImpSections)) {
       SDF_ImpSectionList impSections = 
         SDF_getImpSectionListTail(orgImpSections);
@@ -327,7 +346,16 @@ static SDF_ImpSectionList delete_modulename_from_impsections(
                                                    newImpSections);
       }
     }
-    if (!SDF_isEqualImpSection(newImpSection, impSection)) {
+
+    if (newImpSection == NULL) {
+      if (SDF_hasImpSectionListTail(orgImpSections)) {
+	orgImpSections = SDF_getImpSectionListTail(orgImpSections);
+      }
+      else {
+	orgImpSections = SDF_makeImpSectionListEmpty();
+      }
+    }
+    else if (!SDF_isEqualImpSection(newImpSection, impSection)) {
       orgImpSections = SDF_setImpSectionListHead(orgImpSections, 
                                                  newImpSection);
     }
@@ -516,6 +544,10 @@ SDF_Module delete_modulename_from_module(SDF_Module module,
   SDF_ImpSectionList impSections = SDF_getModuleList(module);
   SDF_ImpSectionList newImpSections =
     delete_modulename_from_impsections(impSections, oldModuleName);
+
+  if (newImpSections == NULL) {
+    newImpSections = SDF_makeImpSectionListEmpty();
+  }
 
   module = SDF_setModuleList(module, newImpSections);
 
