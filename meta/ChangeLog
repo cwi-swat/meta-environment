@@ -2,6 +2,7 @@
 
 Wed Feb  5 13:30:47 CET 2003 <jong@cwi.nl>
  * configure/automake stuff added for C implementation of query-tool
+ * refactored query-tool directory structure into query-tool/src/{c,spec}/FILES
 
 2003/02/05 (markvdb@cs.vu.nl)
  * New message/function "close-module" which deals with "deleting"
