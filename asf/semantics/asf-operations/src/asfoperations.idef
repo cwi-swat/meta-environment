@@ -24,11 +24,6 @@ in
     rec-value(AO, equations(Equations?)) .
     snd-msg(equations(Equations))
   +
-    rec-msg(substitute(ModuleName?, Parameters?, Equations?)) .
-    snd-eval(AO, substitute-in-equations(ModuleName, Parameters, Equations)) .
-    rec-value(AO, equations(Equations?)) .
-    snd-msg(equations(Equations))
-  +
     rec-msg(union-equations(Equations1?, Equations2?)) .
     snd-eval(AO, union-equations(Equations1, Equations2)) .
     rec-value(AO, equations(Equations3?)) .

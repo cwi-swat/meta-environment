@@ -35,68 +35,6 @@ ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree, */
-
-static
-ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
-                                                  SDF_Symbols formalParams,
-                                                  SDF_Symbols actualParams)
-{
-  SDF_SymbolList formalParamList = SDF_getSymbolsList(formalParams);
-  SDF_SymbolList actualParamList = SDF_getSymbolsList(actualParams);
-  SDF_Symbol formalParam, actualParam;
-
-  while (SDF_hasSymbolListHead(formalParamList)) {
-    formalParam = SDF_getSymbolListHead(formalParamList);
-    if (SDF_hasSymbolListHead(actualParamList)) {
-      actualParam = SDF_getSymbolListHead(actualParamList);
-      asfTree = replaceParameterInEquations(asfTree, 
-                  SDFSymbolToPtSymbol(formalParam),
-                  SDFSymbolToPtSymbol(actualParam));
-    }
-    else {
-      return asfTree;
-    }
-
-    if (SDF_hasSymbolListTail(formalParamList)) {
-      formalParamList = SDF_getSymbolListTail(formalParamList);
-      if (SDF_hasSymbolListTail(actualParamList)) {
-        actualParamList = SDF_getSymbolListTail(actualParamList);
-      }
-      else {
-        return asfTree;
-      }
-    }
-    else {
-      if (!SDF_hasSymbolListTail(formalParamList)) {
-        break;
-      }
-      else {
-        return asfTree;
-      }
-    }
-  }
-  return asfTree;
-}
-
-/*}}}  */
-/*{{{  ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,  */
-
-ASF_CondEquationList renameParametersInEquations(SDF_ModuleName moduleName,
-                                                 ASF_CondEquationList asfTree, 
-                                                 SDF_Symbols actualParams)
-{
-  if (SDF_isModuleNameParameterized(moduleName)) {
-    SDF_Symbols formalParams = SDF_getModuleNameParams(moduleName);
-
-    return replaceParametersInEquations(asfTree, formalParams, actualParams);
-  }
-  else {
-    return asfTree;
-  }
-}
-
-/*}}}  */
 /*{{{  ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,  */
 
 ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree, 
@@ -106,28 +44,7 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
   SDF_RenamingList symbolRenamingList = SDF_getRenamingsList(renamings);
   SDF_Renaming renaming;
   SDF_Symbol fromSymbol, toSymbol;
-  /*SDF_Production fromProd, toProd;*/
 
-/*
-  while (SDF_hasRenamingListHead(prodRenamingList)) {
-    renaming = SDF_getRenamingListHead(prodRenamingList);
-    if (SDF_isRenamingProduction(renaming)) {
-      fromProd = SDF_getRenamingFromProd(renaming);
-      toProd = SDF_getRenamingToProd(renaming);
-
-      asfTree = replaceProductionInEquations(asfTree, 
-                  SDFProductionToPtProduction(fromProd),
-                  SDFProductionToPtProduction(toProd));
-    }
-
-    if (SDF_hasRenamingListTail(prodRenamingList)) {
-      prodRenamingList = SDF_getRenamingListTail(prodRenamingList);
-    }
-    else {
-      break;
-    }
-  }
-*/
   while (SDF_hasRenamingListHead(symbolRenamingList)) {
     renaming = SDF_getRenamingListHead(symbolRenamingList);
     if (SDF_isRenamingSymbol(renaming)) {
