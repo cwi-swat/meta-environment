@@ -14,7 +14,7 @@ context-free syntax
 Tag Bytes "=" Bytes -> Equation
 Tag String "=" String -> Equation
 
-"[" "default"? "]" -> Tag
+"[" "default-equation"? "]" -> Tag
 
 hiddens
 

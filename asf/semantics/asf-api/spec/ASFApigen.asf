@@ -27,8 +27,8 @@ equations
 String := "is-" || strcon("""c*"""),
 Pattern :=  generate-pattern(Symbol* -> Symbol, 0), 
 Type := generate-field(Symbol, 0),
-Equation1 := [] String || "(" || Pattern || ")" = "true",
-Equation2 := [default] String || "(" || Type || ")" = "false",
+Equation1 := [ ] String || "(" || Pattern || ")" = "true",
+Equation2 := [default-equation] String || "(" || Type || ")" = "false",
 Equation*1 := generate-make(strcon("""c*"""), Symbol*, Symbol),
 Equation*2 := generate-get-and-set(Symbol*, Pattern, 0)
 ====>
@@ -59,15 +59,11 @@ generate-field(qliteral("""c*"""), ArgNr) = strcon("""c*""")
 
 [default]
 generate-field(Symbol, natcon(c*)) = 
-"$" || symbol2string(Symbol) || strcon("""c*""")
+"$" || symbol2string(Symbol) || "_" || strcon("""c*""")
 
-[unquoted-labelled]
-generate-field(uqliteral(c*) : Symbol, ArgNr) = 
-generate-field(qliteral("""c*""") : Symbol, ArgNr)
-
-[quoted-labelled]
-generate-field(qliteral("""c*1""") : Symbol, natcon(c*2)) =
-"$" || strcon("""c*1""") || strcon("""c*2""") 
+[labelled]
+generate-field(Literal : Symbol, NatCon) =
+generate-field(Symbol, NatCon)
 
 equations
 
@@ -82,21 +78,18 @@ generate-get-and-set(Symbol*, Pattern, ArgNr + 1)
 [literal]
 generate-get-and-set-field(Literal, Pattern, ArgNr) =
 
-[unquoted-field]
-generate-get-and-set-field(uqliteral(c*) : Symbol, Pattern, ArgNr) =
-generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern, ArgNr) 
-
 [quoted-field]
+strcon("""c*""") := symbol2string(Symbol),
 natcon(c*3) := ArgNr,
 String := strcon("""c*""") || strcon("""c*3"""),
-Field := "$" || String,
-Field2 := "$" || String || "'",
+Field := "$" || String || "_",
+Field2 := "$" || String || "_" || "'",
 Equation1 := [] "get-" || strcon("""c*""") || "(" || Pattern || ")" = Field,
 strcon("""c*1 "$" c* c*3 c*2 """) := Pattern,
 Pattern2 := strcon("""c*1 "$" c* c*3 "'" c*2 """),
 Equation2 := [] "set-" || strcon("""c*""") || "(" || Pattern || "," || Field2 || ")" = Pattern2
 ====>
-generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern, ArgNr) =
+generate-get-and-set-field(Literal : Symbol, Pattern, ArgNr) =
 Equation1
 Equation2
 
@@ -153,13 +146,9 @@ generate-make-arg(Literal, ArgNr) = ""
 
 [default-single]
 generate-make-arg(Symbol, natcon(c*)) = 
-"$" || symbol2string(Symbol) || strcon("""c*""")
-
-[unquoted-labelled]
-generate-make-arg(uqliteral(c*) : Symbol, ArgNr) = 
-generate-make-arg(qliteral("""c*""") : Symbol, ArgNr)
+"$" || symbol2string(Symbol) || "_" || strcon("""c*""")
 
 [quoted-labelled]
-generate-make-arg(qliteral("""c*1""") : Symbol, natcon(c*2)) =
-"$" || strcon("""c*1""") || strcon("""c*2""") 
+generate-make-arg(Literal : Symbol, NatCon) =
+generate-make-arg(Symbol, NatCon)
 

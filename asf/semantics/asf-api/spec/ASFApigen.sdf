@@ -62,3 +62,4 @@ variables
 "Type" -> String
 "ArgNr"[0-9]* -> Integer
 "Name" -> String
+"NatCon"[0-9]* -> NatCon

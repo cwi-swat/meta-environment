@@ -50,22 +50,15 @@ equations
 generate-variables() =
 
 [quoted-labelled]
-generate-variables(qliteral(c*) : Symbol Symbol*) = 
-"$" qliteral(c*)[0-9\']* -> Symbol 
-generate-variables(Symbol*)
-
-[unquoted-labelled]
-generate-variables(uqliteral(c*) : Symbol Symbol*) = 
-"$" qliteral("""c*""")[0-9\']* -> Symbol 
-generate-variables(Symbol*)
+generate-variables(Literal : Symbol Symbol*) = 
+generate-variables(Symbol Symbol*)
 
 [non-labelled]
-Literal : Symbol2 !:= Symbol,
 Literal !:= Symbol,
 strcon("""c*""") := symbol2string(Symbol)
 ===>
 generate-variables(Symbol Symbol*) =
-"$" qliteral(""" c* """)[0-9\']* -> Symbol 
+"$" qliteral(""" c* "_" """)[0-9\']* -> Symbol 
 generate-variables(Symbol*)
 
 [default-ignore-symbol]
