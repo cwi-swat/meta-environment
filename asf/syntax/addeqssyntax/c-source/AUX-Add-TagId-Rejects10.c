@@ -32,6 +32,10 @@ static Symbol lf4sym ;
 static ATerm lf4 ( ATerm arg1 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
 static Symbol lf5sym ;
@@ -42,14 +46,10 @@ static Symbol ef10sym ;
 static funcptr ef10 ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol ef11sym ;
-static funcptr ef11 ;
-static Symbol ef6sym ;
-static funcptr ef6 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
-static Symbol ef7sym ;
-static funcptr ef7 ;
+static Symbol ef11sym ;
+static funcptr ef11 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol lf3sym ;
@@ -104,7 +104,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Add_TagId_Rejects10_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 5 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Add_TagId_Rejects10_1sym , ATmakeAppl ( lf_AUX_Add_TagId_Rejects10_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -134,51 +134,7 @@ FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf4 ( make_lis
 }
 }
 }
-if ( check_sym ( arg0 , ef6sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , ef7sym ) ) {
-{
-ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf2sym ) ) {
-{
-ATerm atmp0000 = arg_0 ( atmp000 ) ;
-if ( not_empty_list ( atmp0000 ) ) {
-if ( term_equal ( list_head ( atmp0000 ) , make_char ( 83 ) ) ) {
-( tmp [ 0 ] = list_tail ( atmp0000 ) ) ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 121 ) ) ) {
-( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 109 ) ) ) {
-( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 2 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 98 ) ) ) {
-( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 111 ) ) ) {
-( tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( is_single_element ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 108 ) ) ) {
 FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
 FUNC_EXIT ( make_nf1 ( lf_AUX_Add_TagId_Rejects10_1sym , arg0 ) ) ;
 }
 }
