@@ -26,6 +26,7 @@ asfe_SOURCES		= main.c
 asfe_LDADD		= libeval.a \
 			-L$(PT_SUPPORT)/lib -lmept \
 			-L$(ASF_SUPPORT)/lib -lASFME \
+			-L$(ASF_LIBRARY)/lib -lasf-builtins \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
                         -L./api -lASFAPI \
@@ -37,6 +38,7 @@ INCLUDES		= ${TIDEINC} \
 			-I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ASF_SUPPORT)/include \
+			-I$(ASF_LIBRARY)/include \
                         -I$(srcdir)/api \
 			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 

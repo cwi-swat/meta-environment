@@ -18,6 +18,7 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
+#include <asf-builtins.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
@@ -239,10 +240,10 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   rewrite_steps = 0;
   memo_table = MemoTableCreate();
   aborted = ATfalse;
+  initBuiltins();
 
   tree = PT_getParseTreeTree(parseTree);
   tree = RWprepareTerm(tree, allow_ambs);
-
 
   select_equations(name);
 

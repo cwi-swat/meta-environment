@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <MEPT-utils.h>
 #include <ASFAPI.h>
+#include <asf-builtins.h>
 
 #define CF_PREFIX_API_FIRST_ARG 4
 #define LEX_PREFIX_API_FIRST_ARG 2
@@ -295,18 +296,15 @@ PT_Tree interpretSetterCall(PT_Tree in, AA_Calls calls)
 
 PT_Tree interpretBuiltinCall(PT_Tree in, AA_Calls calls)
 {
-  char *funcname;
+  ATerm func;
   AA_Call call;
 
   assert((ATgetLength((ATermList) calls) == 1) && "ambiguous builtin");
 
   call = AA_getCallsHead(calls);
-  funcname = AA_getCallFunction(call);
+  func = AA_getCallFunction(call);
 
-  ATwarning("Builtin function %s called! (no effect implemented yet)\n", 
-	    funcname);
-
-  return in;
+  return forwardBuiltin(func, in);
 }
 
 /*}}}  */

@@ -3,7 +3,7 @@
   [Call, predicate, asf-predicate(<production(term)>)],
   [Call, getter, asf-getter(<production(term)>,<arg-nr(int)>)],
   [Call, setter, asf-setter(<production(term)>,<arg-nr(int)>)],
-  [Call, builtin, builtin(<function(str)>)],
+  [Call, builtin, built-in(<function(term)>)],
 
   [Calls, empty, []],
   [Calls, list,[<head(Call)>,<[tail(Calls)]>]],

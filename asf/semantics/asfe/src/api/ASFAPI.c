@@ -107,11 +107,11 @@ AA_Call AA_makeCallSetter(ATerm production, int argNr)
 }
 
 /*}}}  */
-/*{{{  AA_Call AA_makeCallBuiltin(char * function) */
+/*{{{  AA_Call AA_makeCallBuiltin(ATerm function) */
 
-AA_Call AA_makeCallBuiltin(char * function)
+AA_Call AA_makeCallBuiltin(ATerm function)
 {
-  return (AA_Call)(ATerm)ATmakeAppl1(AA_afun4, (ATerm)ATmakeAppl0(ATmakeAFun(function, 0, ATtrue)));
+  return (AA_Call)(ATerm)ATmakeAppl1(AA_afun4, (ATerm)function);
 }
 
 /*}}}  */
@@ -380,21 +380,21 @@ ATbool AA_hasCallFunction(AA_Call arg)
 }
 
 /*}}}  */
-/*{{{  char * AA_getCallFunction(AA_Call arg) */
+/*{{{  ATerm AA_getCallFunction(AA_Call arg) */
 
-char * AA_getCallFunction(AA_Call arg)
+ATerm AA_getCallFunction(AA_Call arg)
 {
   
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (ATerm)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  AA_Call AA_setCallFunction(AA_Call arg, char * function) */
+/*{{{  AA_Call AA_setCallFunction(AA_Call arg, ATerm function) */
 
-AA_Call AA_setCallFunction(AA_Call arg, char * function)
+AA_Call AA_setCallFunction(AA_Call arg, ATerm function)
 {
   if (AA_isCallBuiltin(arg)) {
-    return (AA_Call)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(function, 0, ATtrue)), 0);
+    return (AA_Call)ATsetArgument((ATermAppl)arg, (ATerm)function, 0);
   }
 
   ATabort("Call has no Function: %t\n", arg);
@@ -582,9 +582,9 @@ inline ATbool AA_isResultFalse(AA_Result arg)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), char * (*acceptFunction)(char *)) */
+/*{{{  AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), ATerm (*acceptFunction)(ATerm)) */
 
-AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), char * (*acceptFunction)(char *))
+AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), ATerm (*acceptFunction)(ATerm))
 {
   if (AA_isCallConstructor(arg)) {
     return AA_makeCallConstructor(
