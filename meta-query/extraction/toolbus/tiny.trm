@@ -1,0 +1,40 @@
+extractEvents(
+
+process UI is
+let
+  UI: user-interface,
+  FileName: str,
+  ParseTree: term
+in
+  execute(user-interface, UI?) .
+  (
+    rec-event(UI, parse-file(FileName?)) .
+    snd-msg(parse-file(FileName)) .
+    rec-msg(parse-file-result(FileName, ParseTree?)) .
+    snd-do(UI, show-tree(ParseTree)) .
+    snd-ack-event(UI, parse-file(FileName))
+  +
+    rec-event(UI, quit) .
+    snd-ack-event(UI, quit) .
+    snd-note(user-quit)
+  ) * delta
+endlet
+
+process Parser is
+let
+  Parser: parser,
+  FileName: str,
+  ParseTree: term
+in
+  execute(parser, Parser?) .
+  (
+    rec-msg(parse-file(FileName?)) .
+    snd-eval(Parser, parse(FileName)) .
+    rec-value(Parser, parse-result(ParseTree?)) .
+    snd-msg(parse-file-result(FileName, ParseTree))
+  ) * delta
+endlet
+
+toolbus(UI, Parser)
+
+, rstore())
