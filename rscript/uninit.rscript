@@ -1,0 +1,11 @@
+ 	node ROOT
+        rel[node,node] PRED
+        rel[<node,str>,node] USE_OCCURS
+        rel[<node,str>,node] DEF_OCCURS
+        rel[node,str] USES
+        rel[node,str] DEFS
+
+        rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
+
+        rel[str,node] UNDEF = { <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
+                           occurrences(<N,V>)}

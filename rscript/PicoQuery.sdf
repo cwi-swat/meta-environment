@@ -1,0 +1,15 @@
+module PicoQuery
+
+imports PicoExtraction
+
+exports
+  context-free syntax
+	pico-query(PROGRAM, REXP, RSTORE) -> List
+
+hiddens
+  variables
+	"$Rstore" [0-9\']*  -> RSTORE
+	"$Program" [0-9\']* -> PROGRAM
+	"$Exp" [0-9\']*	    -> REXP
+
+
