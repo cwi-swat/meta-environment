@@ -174,7 +174,7 @@ AC_OUTPUT(
 	editor/Makefile editor/editor \
 	evaluator/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
-	in-output/Makefile \
+	in-output/Makefile in-output/test/Makefile \
 	module-db/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/test/Makefile \
