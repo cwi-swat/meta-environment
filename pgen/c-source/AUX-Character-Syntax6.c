@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Character_Syntax6_1sym ;
 static ATerm lf_AUX_Character_Syntax6_1 ( ) ;
 static Symbol ef1sym ;

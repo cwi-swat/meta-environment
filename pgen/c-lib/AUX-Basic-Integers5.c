@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 
 ATermList int2aterm(int value);
 int aterm2int(ATermList arg);

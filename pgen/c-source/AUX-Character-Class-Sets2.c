@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Character_Class_Sets2_2sym ;
 static ATerm lf_AUX_Character_Class_Sets2_2 ( ATerm arg1 ) ;
 static Symbol ef1sym ;

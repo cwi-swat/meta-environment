@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Renaming_Sdf_ATerms1_1sym ;
 static ATerm lf_AUX_Renaming_Sdf_ATerms1_1 ( ATerm arg1 ) ;
 static Symbol lf_AUX_Renaming_Sdf_ATerms1_2sym ;

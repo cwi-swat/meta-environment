@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Layout1_1sym ;
 static ATerm lf_AUX_Layout1_1 ( ) ;
 void register_AUX_Layout1 ( ) {

@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Parse_Table_Constructors1_1sym ;
 static ATerm lf_AUX_Parse_Table_Constructors1_1 ( ) ;
 static Symbol lf_AUX_Parse_Table_Constructors1_2sym ;

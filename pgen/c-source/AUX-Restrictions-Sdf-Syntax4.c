@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Restrictions_Sdf_Syntax4_2sym ;
 static ATerm lf_AUX_Restrictions_Sdf_Syntax4_2 ( ATerm arg1 ) ;
 static Symbol ef5sym ;
