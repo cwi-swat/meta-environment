@@ -1,10 +1,10 @@
 SUBDIRS=lift-error
 
-bin_SCRIPTS = meta-errors-config
+bin_SCRIPTS = ${PACKAGE}-config
 
 CLEANFILES=${bin_SCRIPTS}
 
-meta-errors-config: Makefile
+${PACKAGE}-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo ${prefix}/share/meta-errors/errorAPI-${VERSION}.jar" \
+		echo "echo ${prefix}/share/meta-errors/errorapi-${VERSION}.jar" \
 	) > $@ && chmod +x $@

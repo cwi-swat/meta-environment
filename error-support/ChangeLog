@@ -1,5 +1,8 @@
 $Id$
 
+2003/12/18 (jurgenv@cwi.nl)
+ * Renamed package to error-support
+
 2003/12/16 ({jong,jurgenv}@cwi.nl)
  * Renamed library to libErrorAPI
  * Completed lifting of abstract errors to parsed errors.

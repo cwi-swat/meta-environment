@@ -1,7 +1,7 @@
 # $Id$
 
-pkgdata_DATA=ErrorAPI-${VERSION}.jar
-EXTRA_DIST=ErrorAPI-${VERSION}.jar
+pkgdata_DATA=errorapi-${VERSION}.jar
+EXTRA_DIST=errorapi-${VERSION}.jar
 
 lib_LIBRARIES=libErrorAPI.a
 
@@ -49,7 +49,7 @@ java-api: MetaErrors.impl.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
-		--name ErrorAPI \
+		--name errorapi \
 		--output . \
 		--version ${VERSION}
 
