@@ -241,6 +241,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 
     //}}}
+    */
     //{{{ Create module menu
 
     modulePopup = new JPopupMenu("Module Menu");
@@ -279,7 +280,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     });
 
     //}}}
-*/
+
     //{{{ Create menubar
 
     menuBar = new JMenuBar();
