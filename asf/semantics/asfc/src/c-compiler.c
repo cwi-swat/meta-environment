@@ -28,21 +28,17 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -I" PT_SUPPORT "/include \\\n"
 	 "  -I" ATERM "/include \\\n"
 	 "  -I" ERROR_SUPPORT "/include \\\n"
-	 "  -L" ASC_SUPPORT "/lib" " -l%sasc-support-me \\\n"
+	 "  -L" ASC_SUPPORT "/lib" " -lasc-support-me \\\n"
 	 "  -L" SGLR "/lib" " -lsglr \\\n"
 	 "  -L" ASF_SUPPORT "/lib" " -lASFME \\\n"
 	 "  -L" PT_SUPPORT "/lib" " -lmept -lPTMEPT \\\n"
 	 "  -L" ERROR_SUPPORT "/lib" " -lErrorAPI \\\n"
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
-	 "  %s"
-	 "  -DASF_MAIN"
-	 "  %s\n",
+	 "  -L" TOOLBUSLIB "/lib -lATB \\\n"
+	 "  -DASF_MAIN\n",
 	 run_verbose ? "" : "-Wno-unused",
 	 binary, 
-	 sourcefiles,
-	 make_toolbus_tool ? "tb-" : "",
-	 make_toolbus_tool ? "-L" TOOLBUSLIB "/lib -lATB \\\n": "",
-	 make_toolbus_tool ? "  -DTOOLBUS " : ""
+	 sourcefiles
 	 );
 
   if (run_verbose) {

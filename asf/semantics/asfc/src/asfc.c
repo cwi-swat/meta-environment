@@ -194,7 +194,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable,
       make_idef_script(saveName);
       
       if (use_c_compiler) {
-	idef2c(name);
+	idef2c(saveName);
       }
     }
 

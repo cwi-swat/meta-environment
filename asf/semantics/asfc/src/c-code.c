@@ -29,10 +29,8 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
 
   if (make_toolbus_tool) {
     ATfprintf(file,
-	      "#ifdef TOOLBUS\n"
-	      "#include <tb-asc-client.h>\n"
-	      "#include <tool%s.tif.h>\n"
-	      "#endif\n", name);
+	      "#include <asc-client.h>\n"
+	      "#include <tool%s.tif.h>\n", name);
   }
 
   ATfprintf(file,
@@ -55,19 +53,13 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
   }
 
   if (make_toolbus_tool) {
-    ATfprintf(file,
-	      "\n#ifdef TOOLBUS\n"
-	      ", tool%s_handler\n"
-	      "#endif\n"
-	      ");", name);
+    ATfprintf(file, ", tool%s_handler);\n", name);
   }
   else {
-    ATfprintf(file, ");");
+    ATfprintf(file, ", NULL);\n");
   }
 
-  ATfprintf(file,
-	    "}                                                        \n"
-	    "#endif                                                   \n\n");
+  ATfprintf(file, "}\n#endif\n");
 
 }
 
