@@ -1,5 +1,17 @@
 # $Id$
 
+2002/05/08 (jurgenv@cwi.nl)
+ * Added check on module name consistency
+ * Support for compound module names improved (not done yet, because
+   creating and renaming compound module names is only partly supported
+   so far).
+ * Improved implementation of opening of modules and restoring 
+   saved parse tables.
+ * Improved behavior for handling modules that were edited outside of
+   the Meta-Environment containing errors.
+ * Changing the module name using the editor is handled like a parse error.
+   I.o.w, it is not allowed. The rename module functionality should be used.
+
 2002/05/07 (vandenbr@loria.fr) 
  * Improved button manipulation:
    - Check on top sort added.
