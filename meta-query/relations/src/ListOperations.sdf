@@ -1,0 +1,16 @@
+module ListOperations
+
+imports ListItems
+imports Rstore
+
+exports
+  context-free syntax
+    convert(String, Area # String) -> ListItem
+    convertl(Elem) -> List
+
+hiddens
+  variables
+    "$Area"[0-9]* -> Area
+    "$String"[0-9]* -> String
+    "$Elem*"[0-9]* -> {Elem ","}*
+    "$ListItem*"[0-9]* -> {ListItem ","}*

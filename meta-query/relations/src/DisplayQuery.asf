@@ -1,0 +1,37 @@
+equations
+
+[display-result-1]
+  display-result($Elem) = convertl($Elem)
+
+[evaluate-rscript-1]
+  evaluate-query($Script, $Rstore)
+  = eval-rscript-with-rstore($Script, $Rstore)
+
+[sv1]
+  str2rvar(strcon("""  $Char* """)) = rvar($Char*)
+
+[rth-0]
+  convertl($Elem) = $List,
+  list-to-hrefs($List) = $HRefs
+  ===>
+  result-to-html($Elem) = <html><body>$HRefs</body></html>
+
+[lth-0]
+  list-to-hrefs([]) = 
+
+[lth-1]
+  item-to-href($ListItem) = $HRef,
+  list-to-hrefs([$ListItems]) = $HRefs
+  ===>
+  list-to-hrefs([$ListItem, $ListItems]) = $HRef $HRefs
+
+[ith-0]
+  $Area = area($Literal, $Int1, $Int2, $Int3, $Int4),
+  $LinkText = str2link($String),
+  $HRef = <a href=$Literal>$LinkText</a> <br>
+  ===>
+  item-to-href(listitem($String, $Area)) = $HRef
+
+[s2l-0]
+  str2link(strcon("""  $Char* """)) = linktext($Char*)
+

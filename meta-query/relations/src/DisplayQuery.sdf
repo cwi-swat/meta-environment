@@ -1,0 +1,47 @@
+module DisplayQuery
+ 
+imports ListOperations
+imports RscriptCalculator
+
+exports
+  context-free syntax
+    evaluate-query(RSCRIPT, RSTORE) -> RSTORE
+    display-result(Elem) -> List
+    result-to-html(Elem) -> HTML
+
+exports
+  sorts HTML Body HRef HRef*
+  context-free syntax
+    "<html>" Body "</html>" -> HTML
+    "<body>" HRef* "</body>" -> Body
+    "<a href=" Literal ">" LinkText "</a>" "<br>" -> HRef
+    list-to-hrefs(List) -> HRef*
+    item-to-href(ListItem) -> HRef
+
+exports
+  sorts LinkText
+  lexical syntax
+    [A-Za-z0-9\ ]* -> LinkText
+
+exports
+  context-free syntax
+    str2rvar(String) -> RVAR
+    str2link(String) -> LinkText
+
+hiddens
+  variables
+    "$Char*" -> CHAR*
+    "$Rstore"[0-9]* -> RSTORE
+    "$Elem" -> Elem
+    "$ListItem" -> ListItem
+    "$ListItems" -> {ListItem ","}*
+    "$List" -> List
+    "$HRef" -> HRef
+    "$HRefs" -> HRef*
+    "$Rvalue"[0-9]* -> RVALUE
+    "$Script"[0-9]* -> RSCRIPT
+    "$Literal" -> Literal
+    "$Int"[0-9]* -> IntCon
+    "$LinkText" -> LinkText
+    "$Area" -> Area
+    "$String"[0-9]* -> String
