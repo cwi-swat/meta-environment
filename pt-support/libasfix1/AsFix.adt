@@ -1,0 +1,11 @@
+[
+ [AsFix, Tree, term(l("term"),
+                    w(" "),
+					<path(PathName)>,
+					w(" "),
+					<module-name(ModuleName)>,
+					<ws-before-tree(Layout)>,
+					<tree(Tree)>,
+					<ws-after-tree(Layout)>,
+					no-abbreviations) ]
+]
