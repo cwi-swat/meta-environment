@@ -115,11 +115,14 @@ ATfprintf(stderr,"Registering and resolving finished\n");
     t = ATreadFromTextFile(stdin);
 ATfprintf(stderr,"Term read\n");
     t = AFexpandTerm(t);
+ATfprintf(stderr, "%t\n", t);
     if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                   &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
 ATfprintf(stderr,"Reducing ...\n",trm);
       reduct = innermost(trm);
-      /*      ATfprintf(stderr, "%t\n", reduct);*/
+/*
+ATfprintf(stderr, "%t\n", reduct);
+*/
 ATfprintf(stderr,"Reducing finished.\n");
       asfix = toasfix(reduct, file, modname);
       ATwriteToTextFile(asfix,stdout);
