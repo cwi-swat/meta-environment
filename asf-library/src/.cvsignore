@@ -1,6 +1,5 @@
 Makefile.in
 Makefile
-asf-builtins.c
 asf-builtins.h
 .deps
 
