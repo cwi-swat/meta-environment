@@ -1,0 +1,20 @@
+#! /bin/perl
+
+$instring = 0;
+
+while (<STDIN>) {
+    if ((/\"/ && !(/\".*\"/)) && $instring) {
+	chop;
+	print $_; 
+	$instring = 0;
+    } elsif ((/\"/ && !(/\".*\"/)) && !$instring) {
+	chop;
+	print $_;
+	$instring = 1;
+    } elsif ($instring) {
+	chop;
+	print $_;
+    } elsif (!$instring) {
+	print $_;
+    }
+}

@@ -1,0 +1,17 @@
+%%  Atom
+
+imports Terms
+
+exports
+  sorts Atom ProcessName ProcessInvocation
+  lexical syntax
+    [A-Z][a-zA-Z\-0-9]*      -> ProcessName
+  context-free syntax
+    TERM                                -> Atom
+    VAR ":=" TERM                       -> Atom
+
+
+  variables
+    A[0-9']*            -> Atom
+    B[0-9']*            -> Atom
+    C[0-9']*            -> Atom

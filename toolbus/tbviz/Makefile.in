@@ -1,0 +1,24 @@
+# @configure_input@
+# directory: tbviz
+
+PRODUCT 	= @PRODUCT@
+VERSION 	= @VERSION@
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+prefix 		= @prefix@
+exec_prefix 	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+
+SUBDIRS         = sh spec
+
+all clean distclean install uninstall:
+	@SUBDIRS="${SUBDIRS}";\
+	for SUBDIR in $$SUBDIRS; \
+	do \
+		echo Make $@ in $$SUBDIR; \
+		cd $${SUBDIR}; \
+		${MAKE} $@; \
+		cd ..; \
+	done

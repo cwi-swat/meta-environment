@@ -1,0 +1,49 @@
+$Id$
+tbviz -- Visualization for the ToolBus
+
+author: Tobias Kuipers, <kuipers@cwi.nl>, 1997
+
+To get started, install the ToolBus as described in the toplevel
+ToolBus directory.
+
+This will install (among other things) an executable called
+  tbgraph
+in your bin directory. 
+
+To create a graph from a ToolBus script file.tb, type
+  tbgraph file.tb
+This will create the files file.tb.dot and file.tb.ps. The .dot file is a
+dot representation of the graph. It can be viewed using doted. The .ps file
+is a PostScript picture of the same graph. If the graph is too large to fit
+on a single page, the PostScript file consists of more pages, which can be 
+arranged together to form the full graph.
+
+The graph that is created displays each process in the ToolBus script
+as a single node. The edges in the graph represent a *possible*
+communication between two processes. To be more precise: A snd-msg
+term from a process matches a rec-msg term from a (not necessarily
+another) process. Not even may such a communication never occur, it can
+even be impossible for such a communication to occur. (For instance is
+the snd and rcv are by the same process). 
+
+Currently, only messages are considered. Notes, and communications
+between processes and tools are not considered (yet).
+
+In order to use tbgraph, you need to have an executable called "dot"
+in your PATH. If you can't find it, ask around. If you still can't
+find it, it is part of the AT&T graphviz package:
+<http://www.research.att.com/sw/tools/graphviz/>
+
+The generation of the PostScript file is currently not
+parameterized. If you want another (font|color|size|shape), use the
+.dot file to create a new PostScript file. The .dot file does not
+contain any information on the above (font|color|size|shape). You can
+look in the tbgraph script to see which parameters I use.
+
+Finally, you'll need to have perl in your PATH.
+
+Please let me know if you have any complaints/bugs/praise
+
+Have fun,
+
+Tobias

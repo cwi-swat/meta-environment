@@ -1,0 +1,16 @@
+   imports Layout
+   exports
+      sorts BOOL BOOL-CON
+      context-free syntax
+         true                   -> BOOL-CON
+         false                  -> BOOL-CON
+         BOOL-CON               -> BOOL
+         BOOL "||" BOOL         -> BOOL {left}
+         BOOL "&&" BOOL         -> BOOL {left}
+         not (BOOL)             -> BOOL
+         "(" BOOL ")"           -> BOOL {bracket}
+      variables
+         Bool [0-9']*           -> BOOL
+
+   priorities
+      BOOL "||" BOOL -> BOOL < BOOL "&&" BOOL -> BOOL < not(BOOL) -> BOOL

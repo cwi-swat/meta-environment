@@ -1,0 +1,77 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+imports Layout
+exports
+  sorts DotId DotGraph DotStats DotStat AttrStat DotAttr DotAttrs
+        NodeStat NodeId OptAttrs EdgeStat EdgeRHS SubGraph EdgeOp
+
+  lexical syntax
+    [A-Za-z_][A-Za-z0-9__]*                      -> DotId
+   %% "\""                                        -> InDotId
+
+  %% "\"" ~[\n\"]* "\""                            -> DotId
+
+  context-free syntax
+    "graph"   DotId "{" DotStats "}"            -> DotGraph
+    "digraph" DotId "{" DotStats "}"            -> DotGraph
+    "strict" "graph"   DotId "{" DotStats "}"   -> DotGraph
+    "strict" "digraph" DotId "{" DotStats "}"   -> DotGraph
+
+                                                -> DotStats
+    { DotStat ";" }+ ";"                        -> DotStats
+
+    AttrStat                                    -> DotStat
+    NodeStat                                    -> DotStat
+    EdgeStat                                    -> DotStat
+    SubGraph                                    -> DotStat
+    DotId "=" DotId                             -> DotStat
+
+    graph "[" DotAttrs "]"                      -> AttrStat
+    node  "[" DotAttrs "]"                      -> AttrStat
+    edge  "[" DotAttrs "]"                      -> AttrStat
+
+    DotAttr*                                    -> DotAttrs
+
+    DotId "=" DotId                             -> DotAttr
+
+    NodeId OptAttrs                             -> NodeStat
+
+    DotId                                       -> NodeId
+    DotId ":" DotId                             -> NodeId
+
+    "[" DotAttrs "]"                            -> OptAttrs
+                                                -> OptAttrs
+
+
+    NodeId  EdgeRHS OptAttrs                    -> EdgeStat
+    SubGraph  EdgeRHS OptAttrs                  -> EdgeStat
+
+
+    EdgeOp NodeId                               -> EdgeRHS
+    EdgeOp NodeId EdgeRHS                       -> EdgeRHS
+    EdgeOp SubGraph                             -> EdgeRHS
+    EdgeOp SubGraph EdgeRHS                     -> EdgeRHS
+
+    "subgraph" DotId "{" DotStats "}"           -> SubGraph
+    "subgraph" DotId                            -> SubGraph
+
+    "->"                                        -> EdgeOp
+    "--"                                        -> EdgeOp
+
+  variables
+    ds[0-9']*                           -> DotStat
+    "ds*"[0-9']*                        -> {DotStat ";"}*
+    dss[0-9']*                          -> DotStats
+    da[0-9']*                           -> DotAttr
+    "da*"[0-9']*                        -> DotAttr*
+    di[0-9']*                           -> DotId

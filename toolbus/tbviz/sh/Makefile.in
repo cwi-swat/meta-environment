@@ -1,0 +1,35 @@
+# @configure_input@
+# directory: tbviz/sh
+
+PRODUCT 	= @PRODUCT@
+VERSION 	= @VERSION@
+
+SHELL		= /bin/sh
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+INSTALL		= @INSTALL@
+
+@SET_MAKE@
+prefix 		= @prefix@
+exec_prefix 	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+
+DISTFILES	= Makefile.in tbgraph.in postgraph
+TARGETS         = tbgraph postgraph
+
+all:
+
+clean:
+	${CLEAN}
+
+distclean: clean
+	rm -f Makefile tbgraph
+
+install: ${TARGETS}
+	$(INSTALL) tbgraph $(bindir)
+	$(INSTALL) postgraph $(bindir)
+
+uninstall:
+	rm -f $(bindir)/tbgraph
+	rm -f $(bindir)/postgraph
