@@ -92,6 +92,19 @@ FUNC_EXIT ( ( * ef2 ) ( ltmp [ 0 ] ) ) ;
 goto lbl_lf_AUX_Restrictions_Sdf_Syntax2_1 ;
 }
 }
+{
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( check_sym ( atmp10 , lf_AUX_Restrictions_Sdf_Syntax2_1sym ) ) {
+{
+ATerm atmp100 = arg_0 ( atmp10 ) ;
+{
+ATerm atmp101 = arg_1 ( atmp10 ) ;
+( arg1 = ( * ef3 ) ( lf2 ( make_list ( lf_AUX_Restrictions_Sdf_Syntax2_1 ( atmp100 , atmp101 ) ) ) ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax2_1 ;
+}
+}
+}
+}
 }
 }
 if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
