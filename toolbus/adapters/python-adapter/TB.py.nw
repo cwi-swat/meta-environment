@@ -1079,7 +1079,7 @@ def lex(S, i):
 	while S[i] in string.whitespace:
 		i = i + 1
 	if S[i] in CCstart_int:
-		j = i
+		j = i + 1
 		while S[j] in CCint:
 			j = j + 1
 		if S[j] in CCreal:
