@@ -24,8 +24,7 @@ booltest_DEPENDENCIES	= booltest.pt
 # Java programs
 javadir = ${top_builddir}/test/classfiles
 JAVAROOT = ${top_builddir}
-CLASSPATH_ENV = CLASSPATH=${top_builddir}:${SHARED_OBJECTS}:${JAVA_ATERM}:${srcdir}/$(JAVAROOT)::$$CLASSPATH
-
+CLASSPATH_ENV=CLASSPATH=${top_builddir}:${EXTERNAL_JARS}:${srcdir}/$(JAVAROOT)
 
 check_JAVA = ${PeanoAPI} PeanoTest.java
 
@@ -60,6 +59,6 @@ ${PeanoAPI}: Peano.sdf
 
 %.java.test: %.java Makefile
 	@(echo "#! /bin/sh";\
-          echo "CLASSPATH=${top_builddir}:${JAVA_ATERM}:${SHARED_OBJECTS}";\
+          echo "CLASSPATH=${top_builddir}:${EXTERNAL_JARS}";\
           echo "export CLASSPATH";\
           echo "java test.$*") > $@ && chmod +x $@
