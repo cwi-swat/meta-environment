@@ -142,7 +142,7 @@ annotateTreeWithPosInfo(ATerm tree)
 	   || asfix_is_whitespace(tree)) {
     txt = ATgetName(ATgetAFun((ATermAppl) ATgetArgument(tree, 0)));
 
-    return ATsetAnnotation(tree, ATparse("length"),
+		return ATsetAnnotation(tree, ATparse("length"),
 			   ATmake("length(<int>)", strlen(txt)));
   }
   else if (asfix_is_appl(tree) || asfix_is_list(tree)) {
@@ -154,7 +154,7 @@ annotateTreeWithPosInfo(ATerm tree)
     newTree = (ATerm) ATmakeAppl3(fun, t0, t1, t2);
     totalLength = calcYieldLength((ATermList) t2);
     return ATsetAnnotation(newTree, ATparse("length"),
-			   ATmake("length(<int>)", totalLength));
+			   ATmake("length(<int>)", totalLength)); 
   }
   return tree;
 }
@@ -168,6 +168,11 @@ getTreeLength(ATerm term)
 {
   int length;
   ATerm termLength = ATgetAnnotation(term, ATparse("length"));
+
+	if(!termLength) {
+		ATerror("Length of %t not available\n", term);
+		return 0;
+	}
 
   if (ATmatch(termLength, "length(<int>)", &length)) {
     return length;
