@@ -59,6 +59,10 @@ char* escape(const char* str)
 	escaped[j++] = '\\';
 	escaped[j] = 'r';
 	break;
+      case '\\':
+	escaped[j++] = '\\';
+	escaped[j] = '\\';
+	break;
       case ' ':
 	escaped[j++] = '\\';
 	escaped[j] = ' ';
