@@ -35,7 +35,7 @@ production SG_LookupProduction(parse_table *pt, int token);
 
 #define    SG_INIT(ptable)    ((ptable)->init)
 
-int       SG_A_KIND(action a);
+int       SG_ActionKind(action a);
 #ifdef A_FUNCS
   state   SG_A_STATE(action a);
   int     SG_A_NR_ARGS(action a);

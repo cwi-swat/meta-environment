@@ -26,13 +26,13 @@
 /*
   \paragraph{Actions}
 
-  The function |SG_A_KIND| analyses an action and returns its
+  The function |SG_ActionKind| analyses an action and returns its
   kind.
 */
-int     SG_A_KIND(action a)
+int     SG_ActionKind(action a)
 {
   if(!a) {
-    ATfprintf(stderr, "SG_A_KIND error!\n");ATerror(NULL);
+    ATfprintf(stderr, "SG_ActionKind error!\n");ATerror(NULL);
     return ERROR;
   } else if (ATmatch(a, "shift(<int>)", NULL))
     return SHIFT;

@@ -366,7 +366,7 @@ void SG_Actor(stack *st)
 //ATfprintf(stderr, "SG_Actor: actions[%d,%d] = %t\n", SG_ST_STATE(st), current_token, as);
   for(; as != NULL && !ATisEmpty(as); as = ATgetNext(as)) {
     a = ATgetFirst(as);
-    switch(SG_A_KIND(a)) {
+    switch(SG_ActionKind(a)) {
       case SHIFT:
         SG_AddShiftPair(st, SG_A_STATE(a), for_shifter);
         break;
@@ -480,7 +480,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
           as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
           for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
             a = ATgetFirst(as);
-            if(SG_A_KIND(a) == REDUCE)
+            if(SG_ActionKind(a) == REDUCE)
               SG_DoLimitedReductions(st2, a, nl);
           }
         }
