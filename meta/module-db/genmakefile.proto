@@ -79,7 +79,7 @@ NEW_META        = @NEW_META@
 XINCLUDES       = -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
 
-SPEC_SRCS=$(shell grep -v '^\#' @TARGET@.module-list)
+SPEC_SRCS=$(shell grep -v '^\#' $(srcdir)/@TARGET@.module-list)
 SRCS=$(SPEC_SRCS) init.c
 
 STD-OBJS=$(SRCS:.c=-$(CC).o)

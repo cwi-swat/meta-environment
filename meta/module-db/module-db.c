@@ -822,7 +822,6 @@ ATerm get_syntax(ATerm name, ATermList modules)
   ATermList syntaxes = ATempty;
   ATerm t[8], nameterm, appl, elem, module, result, term, entry;
 
-  ATfprintf(stderr, "get_syntax entered for %t\n", modules);
 
   nameterm = make_name_term(name);
   while(!ATisEmpty(modules)) {
@@ -983,7 +982,6 @@ void gen_makefile(ATerm name)
   if(ATmatchTerm(name,pattern_asfix_id,&text)) {
 
     sprintf(buf, "%s/%s.module-list", output_path, text);
-    ATfprintf(stderr,"Writing: %s\n", buf);
     output = fopen(buf,"w");
     if(!output)
       ATfprintf(stderr,"Cannot open file %s\n",buf);
@@ -1055,7 +1053,6 @@ void compile_module(int cid, ATerm mod)
       initialize_output_path(mod);
       modules_to_process = ATempty;
       imports = get_imported_modules(mod);
-ATfprintf(stderr,"Imported modules are %t\n", imports);
       AFTreshuffleModules(cid,imports);
       ATfprintf(stderr,"Finished reshuffling\n");
     }
