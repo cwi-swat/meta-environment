@@ -393,7 +393,7 @@ ATerm get_focus_sort(int cid, ATerm editorId)
 }
 
 /*}}}  */
-/*{{{  ATerm get_focus_sort(int cid, ATerm editorId) */
+/*{{{  ATerm get_focus_location(int cid, ATerm editorId) */
 
 ATerm get_focus_location(int cid, ATerm editorId)
 {
@@ -415,7 +415,8 @@ ATerm get_focus_location(int cid, ATerm editorId)
     }
   }
 
-  return ATmake("snd-value(no-focus-location)");
+  return ATmake("snd-value(focus-location(<term>))", 
+		ERR_makeLocationNoLocation());
 }
 
 /*}}}  */
