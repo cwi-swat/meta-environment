@@ -48,18 +48,18 @@ equations
 
 %% --- union1(E, Bag)
 
-[un1-1]	in(E, Bag) = true
-	=============================
-	union1(E, Bag) = Bag
+[un1-1]	in(E, {E*}) = true			%% Note does not work with
+	=============================		%% {E*} replaced by var Bag??
+	union1(E, {E*}) = {E*}
 
 [default-un1-2]
 	union1(E, {E*}) = {E, E*}
 
 %% --- union2(Bag, E)
 
-[un2-1]	in(E, Bag) = true
+[un2-1]	in(E, {E*}) = true
 	=============================
-	union2(Bag, E) = Bag
+	union2({E*}, E) = {E*}
 
 [default-un2-2]
 	union2({E*}, E) = {E*, E}

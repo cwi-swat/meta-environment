@@ -156,6 +156,15 @@
 [S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Exp>, $Store)
 
+[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5) = $Exp, $Store) 
+						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Exp>, $Store)
+
+[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6) = $Exp, $Store) 
+						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Var6, $Exp>, $Store)
+
+[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6, $Etype7 $Var7) = $Exp, $Store) 
+						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Var6, $Var7, $Exp>, $Store)
+
 [S15]	evalp($Exp,$Store) = true
 	===================================================
 	eval-rscript(assert $String : $Exp, $Store)= increment(NPASSED, $Store)
@@ -556,23 +565,32 @@
 %% ---- Auxiliary functions for bag and relation formers
 
 [AP1]	append(*empty*, *empty*)	= *empty*
-[AP2]	append(*empty*, $Elem)		= $Elem
-[AP2]	append($Elem, *empty*)		= $Elem
+[AP2]	is-bag-or-rel($Elem) = false 
+	==================================================
+	append(*empty*, $Elem)		= {$Elem}
 
-[AP3]	is-tuple($Elem1) = false, is-tuple($Elem2) = false
+[AP2]		is-bag-or-rel($Elem) = false 
+	==================================================
+	append($Elem, *empty*)		= {$Elem}
+
+[AP3]	is-tuple($Elem1) = false, is-tuple($Elem2) = false,
+	is-bag-or-rel($Elem1) = false,	is-bag-or-rel($Elem2) = false
 	==================================================
 	append($Elem1, $Elem2)		= union1($Elem1, {$Elem2})
 
-[AP4]	is-tuple($Elem) = false
+[AP4]	is-tuple($Elem) = false, is-bag($Elem) = false,
+	is-bag-or-rel($Elem) = false
 	=================================================
 	append($Elem, {$Elem*})		= union1($Elem, {$Elem*})
 
-[AP5]		is-tuple($Elem) = false
+[AP5]		is-tuple($Elem) = false, is-bag-or-rel($Elem) = false
 	=================================================
 	append({$Elem*}, $Elem)		= union2({$Elem*}, $Elem)
 
+[AP6]	append({$Elem*1}, *empty*) 	= {$Elem*1}
+[AP6]	append(*empty*, {$Elem*2}) 	=  {$Elem*2}
 [AP6]	append({$Elem*1}, {$Elem*2}) 	= union({$Elem*1}, {$Elem*2})
-[AP7]	append(*empty*, $Tuple) 	= $Tuple
+[AP7]	append(*empty*, $Tuple) 	= {$Tuple}
 
 [AP8]	append($Tuple1, $Tuple2)	= union1($Tuple1, {$Tuple2})
 [AP9]	append($Tuple, {$Tuple*})	= union1($Tuple, {$Tuple*})
@@ -585,6 +603,12 @@
 [it1]   is-tuple(<$Elem1,$Elem2>) = true
 [default-it2]
 	is-tuple($Val)= false
+
+[ib1]	is-bag-or-rel({$Elem*}) = true
+
+[ib2]	is-bag-or-rel({$Tuple*}) = true
+[default-ib2]
+	is-bag-or-rel($Val) = false
 
 %% --- Exists in bag
 
@@ -725,7 +749,7 @@
 
 	$Store' = assign($Var1, $Val1, $Store),
 	$Store'' = assign($Var2, $Val2, $Store'),
-	$Store''' = assign($Var3, $Val3, $Store')
+	$Store''' = assign($Var3, $Val3, $Store'')
 	==================================================
 	evalx($Var($Exp1, $Exp2, $Exp3), $Store) = evalx($Exp4, $Store''')
 
@@ -741,7 +765,64 @@
         $Rel  = evalr($Exp3, $Store)
         ================================================= 
         evalx(reachR($Exp1, $Exp2, $Exp3), $Store) =
-        reachR($Bag1, $Bag2, $Rel)	
+        reachR($Bag1, $Bag2, $Rel)
+
+[default-fun4]
+	value($Var, $Store) = <$Var1, $Var2, $Var3, $Var4, $Exp5>,
+	$Val1 = evalx($Exp1, $Store),
+	$Val2 = evalx($Exp2, $Store),
+	$Val3 = evalx($Exp3, $Store),
+	$Val4 = evalx($Exp4, $Store),
+
+	$Store' = assign($Var1, $Val1, $Store),
+	$Store'' = assign($Var2, $Val2, $Store'),
+	$Store''' = assign($Var3, $Val3, $Store''),
+	$Store'''' = assign($Var4, $Val4, $Store''')
+	==================================================
+	evalx($Var($Exp1, $Exp2, $Exp3, $Exp4), $Store) = evalx($Exp5, $Store'''')
+
+[default-fun5]
+	value($Var, $Store) = <$Var1, $Var2, $Var3, $Var4, $Var5, $Exp6>,
+	$Val1 = evalx($Exp1, $Store),
+	$Val2 = evalx($Exp2, $Store),
+	$Val3 = evalx($Exp3, $Store),
+	$Val4 = evalx($Exp4, $Store),
+	$Val5 = evalx($Exp5, $Store),
+
+	$Store' = assign($Var1, $Val1, $Store),
+	$Store'' = assign($Var2, $Val2, $Store'),
+	$Store''' = assign($Var3, $Val3, $Store''),
+	$Store'''' = assign($Var4, $Val4, $Store'''),
+	$Store''''' = assign($Var5, $Val5, $Store'''')
+
+	==================================================
+	evalx($Var($Exp1, $Exp2, $Exp3, $Exp4, $Exp5), $Store) = evalx($Exp6, $Store''''')
+
+[default-fun6]
+	value($Var, $Store) = <$Var1, $Var2, $Var3, $Var4, $Var5, $Var6, $Exp7>,
+	$Val1 = evalx($Exp1, $Store),
+	$Val2 = evalx($Exp2, $Store),
+	$Val3 = evalx($Exp3, $Store),
+	$Val4 = evalx($Exp4, $Store),
+	$Val5 = evalx($Exp5, $Store),
+	$Val6 = evalx($Exp6, $Store),
+
+	$Store' = assign($Var1, $Val1, $Store),
+	$Store'' = assign($Var2, $Val2, $Store'),
+	$Store''' = assign($Var3, $Val3, $Store''),
+	$Store'''' = assign($Var4, $Val4, $Store'''),
+	$Store''''' = assign($Var5, $Val5, $Store''''),
+	$Store'''''' = assign($Var6, $Val6, $Store''''')
+
+	==================================================
+	evalx($Var($Exp1, $Exp2, $Exp3, $Exp4, $Exp5, $Exp6), $Store) = evalx($Exp7, $Store'''''')
+
+
+%% --- Where expressions
+
+[WH1]	eval-rscript($Stat+, $Store) = $Store'
+	=================================================
+	evalx($Exp where $Stat+ endwhere, $Store) =  evalx($Exp, $Store')	
 
 
 

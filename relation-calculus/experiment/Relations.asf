@@ -3,4 +3,4 @@ equations
 
 %%[car-0]  carrier({E, Tuple*})	= union({E}, carrier({Tuple*}))
 [car-1]  carrier({<E,E'>, Tuple*}) = union(union({E},{E'}), carrier({Tuple*}))
-[car-2]  carrier({}) = EmptyRel
+[car-2]  carrier({}) = {}

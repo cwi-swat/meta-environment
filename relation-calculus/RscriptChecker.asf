@@ -796,4 +796,12 @@ $Error]>
 
         ]
 
+%% --- Where expressions
+
+[WH1]	$Tenv = <$Table, $Errors>,
+	check-rscript($Stat+, $Tenv) = $Tenv',
+	check($Exp, $Tenv') = <$Etype, <$Table', $Errors'>>
+	===================================================
+	check($Exp where $Stat+ endwhere, $Tenv) = <$Etype, <$Table, $Errors'>>
+
 

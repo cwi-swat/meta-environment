@@ -3,7 +3,7 @@ module Relations[RElem]
 
 exports
 
-imports Bags[RElem | RElem # RElem]
+%%imports Bags[RElem | RElem # RElem]
 imports Bags[RElem]
 imports Bags[RElem # RElem]
 
