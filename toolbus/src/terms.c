@@ -128,7 +128,6 @@ void TBunprotect(term **pt)
 			if(!add_segment())\
 			   err_fatal("new_term: cannot add a segment");\
 		     }\
-                     TBprintf(stderr, "*");\
                      t = free_list;\
                      free_list = next(free_list);\
                      nfree--;
