@@ -10,20 +10,32 @@ let
 IO   : in-output,
 Id   : term,
 Name : str,
-Fn: str,
-Type: str,
+Path : str,
+Type : str,
 T    : term,
-Text: str
+Text : str
 in
   execute(in-output,IO?).
   ( rec-msg(Id?,open-file(id(Name?))).
-    snd-eval(IO, open-file(Name))
-    .
-    ( rec-value(IO,opened-file("asfix",Name,T?,Fn?)).
-      snd-msg(Id,opened-file(asfix,id(Name),T,Fn))
-    + rec-value(IO,opened-file("raw",Name,Text?,Fn?)).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Fn))
+    snd-eval(IO, open-old-asfix-file(Name)).
+    ( rec-value(IO,opened-file(Name,T?,Path?)).
+      snd-msg(Id,opened-file(asfix,id(Name),T,Path))
     + rec-value(IO,error-opening(Name?)).
+      snd-eval(IO,open-sdf2-file(Name)).
+      ( rec-value(IO,opened-file(Name,Text?,Path?)).
+        snd-msg(Id,opened-file(raw,id(Name),Text,Path))
+        + 
+        rec-value(IO,error-opening(Name?)).
+        snd-msg(Id, error-opening(Name))
+      )
+    )
+  + 
+    rec-msg(Id?,open-eqs2-file(id(Name?))).
+    snd-eval(IO,open-eqs2-file(Name)).
+    ( rec-value(IO,opened-file(Name,Text?,Path?)).
+      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
+      +
+      rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
     )
   )*
