@@ -16,6 +16,7 @@ extern Symbol record_sym;
 
 #define CONS_ENTRY(sym,appl) ++rewrite_steps
 #define CONS_EXIT(rhs)		 return rhs
+#define CONS_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 
 #define FUNC_ENTRY(sym,appl) \
   unsigned int steps, count, start = rewrite_steps++; \
@@ -26,24 +27,31 @@ extern Symbol record_sym;
   result = rhs;                          \
   steps = rewrite_steps - start;         \
                                          \
-  record = get_result(prof_table, (ATerm)term); \
-  if(record) {                           \
-		count = ATgetInt((ATermInt)ATgetArgument(record, 0))+1; \
-		term_steps = ATgetArgument(record, 1); \
-  } else {                               \
-		count = 1;                           \
-		term_steps = (ATerm)ATmakeInt(steps);\
-	} \
-  record = (ATerm)ATmakeAppl2(record_sym, (ATerm)ATmakeInt(count), term_steps); \
-  put_result(prof_table, (ATerm)term, record); \
-  return result
+  if(steps > 2) {                        \
+    record = get_result(prof_table, (ATerm)term); \
+    if(record) {                           \
+		  count = ATgetInt((ATermInt)ATgetArgument(record, 0))+1; \
+		  term_steps = ATgetArgument(record, 1); \
+    } else {                               \
+		  count = 1;                           \
+		  term_steps = (ATerm)ATmakeInt(steps);\
+	  } \
+    record = (ATerm)ATmakeAppl2(record_sym, (ATerm)ATmakeInt(count), term_steps); \
+    put_result(prof_table, (ATerm)term, record); \
+  } \
+  return result;
+
+#define FUNC_EXIT_CONST(constant,rhs) \
+  return ( constant ? constant : ( constant = rhs)) ;  \
 
 #else
 
 #define CONS_ENTRY(sym,appl)
 #define CONS_EXIT(rhs) return rhs
+#define CONS_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 #define FUNC_ENTRY(sym,appl)
-#define FUNC_EXIT(rhs) return rhs
+#define FUNC_EXIT(rhs) return rhs;
+#define FUNC_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 
 #endif
 /*
@@ -147,6 +155,8 @@ extern Symbol record_sym;
 
 #define make_tuple1(t0) (ATerm)(t0)
 #define make_tuple2(t0,t1) (ATerm)(ATmakeList2(t0,t1))
+#define make_tuple3(t0,t1,t2) (ATerm)(ATmakeList3(t0,t1,t2))
+#define make_tuple4(t0,t1,t2,t3) (ATerm)(ATmakeList4(t0,t1,t2,t3))
 
 #define ok(t) (ATmakeAppl1(oksym,t))
 

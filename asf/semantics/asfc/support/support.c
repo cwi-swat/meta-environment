@@ -872,9 +872,10 @@ void write_memo_profile()
 		ATermAppl stats = (ATermAppl)ATtableGet(prof_table, key);
 		ATerm asfix = lookup_prod(ATgetSymbol((ATermAppl)key));
 		
-		AFsourceToFile(asfix, f);
 		/*AFsourceToFile(ATparse(AFsourceToBuf(key)), f);*/
-		ATfprintf(f, ": %t\n", stats);
+		ATfprintf(f, "%t ", stats);
+		AFsourceToFile(asfix, f);
+		ATfprintf(f, "\n");
 		keys = ATgetNext(keys);
 	}
 	ATfprintf(f, "\n");
