@@ -17,7 +17,7 @@ public class DelegateBridge extends DelegateTool {
 		if (tool != null) {
 			tool.postMaskeradeEvent(term);
 		} else {
-			throw new UnsupportedOperationException("method `postEventCon1' not supported.");
+			throw new UnsupportedOperationException("method `postMaskeradeEvent' not supported.");
 		}
 	}
 	

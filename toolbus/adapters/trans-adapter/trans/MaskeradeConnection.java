@@ -26,13 +26,13 @@ public class MaskeradeConnection implements MaskeradeTif {
 		this.factory = factory;
 		bridge = new MaskeradeBridge(factory, this);
 
-//		args = new String[6];
-//		args[0] = "-TB_HOST_NAME";
-//		args[1] = "localhost";
-//		args[2] = "-TB_PORT";
-//		args[3] = "8999";
-//		args[4] = "-TB_TOOL_NAME";
-//		args[5] = "tb1";
+		args = new String[6];
+		args[0] = "-TB_HOST_NAME";
+		args[1] = "localhost";
+		args[2] = "-TB_PORT";
+		args[3] = "8999";
+		args[4] = "-TB_TOOL_NAME";
+		args[5] = "tb1";
 
 		bridge.init(args);
 		bridge.connect();

@@ -18,7 +18,7 @@ public class MaskeradeBridge extends MaskeradeTool {
 		if (tool != null) {
 			tool.postDelegateEvent(term);
 		} else {
-			throw new UnsupportedOperationException("method `postEventCon2' not supported.");
+			throw new UnsupportedOperationException("method `postDelegateEvent' not supported.");
 		}
 	}
 
