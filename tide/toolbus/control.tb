@@ -1,0 +1,23 @@
+
+tool tide-control  is { 
+#if DEVELOP
+    command="java-adapter -class tide.TideMainFrame -jvm-arg -Dtide.develop=true"
+#else
+    command="java-adapter -class tide.TideMainFrame"
+#endif
+}
+
+
+process CONTROL is
+let
+  Control : tide-control
+in
+#ifdef TIDE_PASSIVE
+  rec-connect(Control?) .
+#else
+  execute(tide-control, Control?) .
+#endif
+  rec-event(Control, quit) .
+  shutdown("Thank you for using tide!\n")
+endlet
+

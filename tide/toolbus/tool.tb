@@ -1,0 +1,90 @@
+
+tool debug-tool    is { /* All kinds of tools */    }
+
+
+/*{{{  process TOOL(T : debug-tool) */
+
+process TOOL(T : debug-tool) is
+let
+  Process : proc(<debug-adapter>, <int>),
+  Dap	  : debug-adapter,
+  Name    : str,
+  Port    : term,
+  Cond    : term,
+  Expr    : term,
+  Result  : term,
+  Tag     : term,
+  Enabled : term,
+  Rule    : int,
+  Pattern : term
+in
+  subscribe(event(<term>,<int>,<term>)) .
+  subscribe(process-created(<term>,<str>)) .
+  subscribe(process-destroyed(<term>)) .
+  (
+    rec-event(T, evaluate(Process?, Expr?, Tag?)) .
+    snd-msg(evaluate(Process, Expr)) .
+    rec-msg(evaluated(Process, Result?)) .
+    snd-ack-event(T, evaluate(Process, Expr, Tag, Result))
+    +
+    rec-event(T, create-rule(Process?, Port?, Cond?, Expr?, Tag?, Enabled?)) .
+    snd-msg(create-rule(Process, Port, Cond, Expr, Tag, Enabled)) .
+    rec-msg(rule-created(Process, Rule?)) .
+    snd-ack-event(T, create-rule(Process, Port, Cond, Expr, Tag, Enabled, Rule))
+    +
+    rec-event(T, enable-rule(Process?, Rule?)) .
+    snd-msg(enable-rule(Process, Rule)) .
+    rec-msg(rule-enabled(Process)) .
+    snd-ack-event(T, rule-enabled(Process, Rule))
+    +
+    rec-event(T, disable-rule(Process?, Rule?)) .
+    snd-msg(disable-rule(Process, Rule)) .
+    rec-msg(rule-disabled(Process)) .
+    snd-ack-event(T, rule-disabled(Process, Rule))
+    +
+    rec-event(T, modify-rule(Process?, Rule?, Port?, Cond?, Expr?, Enabled?)) .
+    snd-msg(modify-rule(Process, Rule, Port, Cond, Expr, Enabled)) .
+    rec-msg(rule-modified(Process)) .
+    snd-ack-event(T, modify-rule(Process, Rule, Port, Cond, Expr, Enabled))
+    +
+    rec-event(T, delete-rule(Process?, Rule?)) .
+    snd-msg(delete-rule(Process, Rule)) .
+    rec-msg(rule-deleted(Process)) .
+    snd-ack-event(T, delete-rule(Process, Rule))
+    + 
+    rec-msg(adapter-connected(Dap?)) .
+    snd-do(T, adapter-connected(Dap))
+    +
+    rec-event(T, quit-tide) .
+    shutdown("Thank you for using tide.")
+    +
+    rec-msg(adapter-disconnected(Dap?)) .
+    snd-do(T, adapter-disconnected(Dap))
+    +
+    rec-note(process-created(Process?, Name?)) .
+    snd-do(T, process-created(Process, Name))
+    +
+    rec-note(process-destroyed(Process?)) .
+    snd-do(T, process-destroyed(Process))
+    +
+    rec-note(event(Process?, Rule?, Result?)) .
+    snd-do(T, event(Process, Rule, Result))
+  ) * rec-disconnect(T)
+endlet
+
+/*}}}  */
+
+/*{{{  process TOOL-CONNECT */
+
+process TOOL-CONNECT is
+let
+  T : debug-tool,
+  P : int
+in
+  ( rec-connect(T?) .
+    create(TOOL(T), P?)
+  ) * delta
+endlet
+
+
+/*}}}  */
