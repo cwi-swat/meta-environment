@@ -80,7 +80,8 @@ int asc_support_main(int argc, char *argv[],
         inputs[nInputs++] = strdup(argv[++i]);
       }
       else {
-	ATerror("Maximim number of %d arguments exceeded.\n", MAX_ARGS);
+	ATerror("%s: Maximum number of %d \'-i\' arguments exceeded.\n", 
+		argv[0], MAX_ARGS);
       }
     } 
     else if(streq(argv[i], "-o")) {
@@ -128,7 +129,7 @@ int asc_support_main(int argc, char *argv[],
     pt = PT_applyFunctionToArgsParseTree(function, result, args);
   } 
   else {
-    if (nInputs != 1) {
+    if (nInputs != 1 && (!streq(inputs[0],"-"))) {
       ATerror("Can only process one argument if no -f and -r option "
 	      "are supplied.\n");
       return 1;
