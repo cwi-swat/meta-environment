@@ -84,8 +84,11 @@ in
     snd-msg(sm-import-renamed-in-module(Module))
   +
     rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(sm-import-removed-from-module(Module))
+    snd-eval(SM, remove-import-from-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-import-removed-from-module(Module)) .
+    Module := no-tree
   +
     rec-msg(sm-rename-module(Module?, ModuleId?)) .
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .

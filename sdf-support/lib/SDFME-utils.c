@@ -118,6 +118,24 @@ SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
 }
 
 /*}}}  */
+/*{{{  SDF_Module SDF_removeModuleImport(SDF_Module module, SDF_Import import) */
+
+SDF_Module SDF_removeModuleImport(SDF_Module module, SDF_Import import)
+{
+  SDF_OptLayout s = SDF_makeLayoutSpace();
+  SDF_OptLayout nl = SDF_makeLayoutNewline();
+
+  SDF_ImpSectionList list = SDF_getModuleList(module);
+  SDF_ImportList ilist = SDF_makeImportListSingle(import);
+  SDF_Imports imports = SDF_makeImportsDefault(ilist);
+  SDF_ImpSection section = SDF_makeImpSectionImports(s, imports);
+  
+  list = SDF_makeImpSectionListMany(section, nl, list);
+
+  return SDF_setModuleList(module, list);
+}
+
+/*}}}  */
 
 /*{{{  SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1, */
 

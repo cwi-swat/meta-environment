@@ -231,6 +231,22 @@ ATerm add_import_to_module(int cid, ATerm atModule, char* name)
 }
 
 /*}}}  */
+/*{{{  ATerm remove_import_from_module(int cid, ATerm atModule, char* name) */
+
+ATerm remove_import_from_module(int cid, ATerm atModule, char* name)
+{
+  SDF_Import sdfImport = SDF_makeImport(name);
+  SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
+  SDF_Module oldModule = SDF_getStartTopModule(start);
+  SDF_Module newModule = SDF_removeModuleImport(oldModule, sdfImport);
+
+  start = SDF_setStartTopModule(start, newModule);
+  atModule = SDF_StartToTerm(start);
+
+  return ATmake("snd-value(module(<term>))", ATBpack(atModule));
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
