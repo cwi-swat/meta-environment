@@ -4,6 +4,10 @@
  * Button/action registration changed.
  * Number of buttons/actions moved to ASF+SDF package.
 
+2003/07/15 (jurgenv@cwi.nl)
+ * The cursor moves only to the beginning of the focus when it
+   is not already inside the focus.
+
 2003/07/14 ({jurgenv,markvdb}@cwi.nl)
  * Added graph attributes to the graph format (updated MetaStudio)
  * Dot bounding box information used to calculate size of canvas
