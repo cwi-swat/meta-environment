@@ -161,6 +161,7 @@ int main( int argc, char* argv[] )
    /* Convert to graph format:
     *    graph(nodes([id("node_1"),...,id("node_n")]),
     *          edges([ [id("node_i"), id("node_j")], ... ]) )
+    */
    if( options & Graph )
    {
       ATermList nodes;
