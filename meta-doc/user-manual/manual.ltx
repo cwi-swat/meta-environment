@@ -131,7 +131,8 @@ language. The \ASmetaenv\ can help you if:
 \end{itemize}
 
 The \asfsdf\ formalism allows the definition of syntactic as well as
-semantic issues. It can be used for the definition of languages (for
+semantic aspects of a (programming) language. 
+It can be used for the definition of languages (for
 programming, for writing specifications, for querying databases, for
 text processing, or for dedicated applications). In addition it can be
 used for the formal specification of a wide variety of
@@ -143,7 +144,7 @@ problems. \asfsdf\ provides you with:
 
   \item Modular structuring of specifications.
 
-  \item Integrated definition of lexical, context-free and abstract syntax. 
+  \item Integrated definition of lexical, context-free, and abstract syntax. 
 
   \item User-defined syntax, allowing you to write specifications using your own notation. 
 
@@ -158,7 +159,7 @@ The \ASmetaenv\ offers:
 
   \item Syntax-directed editing of \asfsdf\ specifications.
 
-  \item Incremental compilation and testing of specifications.
+  \item Testing of specifications by means of interpretation.
 
   \item Compilation of \asfsdf\ specifications into dedicated
 interactive environments containing various tools such as a parser, 
@@ -186,8 +187,9 @@ The advantages of creating interactive environments in this way are twofold:
 
 You can create new specifications or modify and test existing ones
 using the Meta-Environment. Specifications consist of a series of
-modules, and individual modules can be edited by invoking a module
-editor. All editing in the Meta-environment is done by creating
+modules, and individual modules can be edited by invoking editors
+for the syntax part and the equations part of a module.
+All editing in the Meta-environment is done by creating
 instances of a \emph{generic syntax-directed editor}.
 
 After each editing operation on a module its \emph{implementation} is updated
@@ -288,7 +290,8 @@ overview of selected publications:
 
 \item{ASF+SDF:} \cite{BHK89}, \cite{DHK96}.
 
-\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90}, \cite{RK91}, \cite{R92}, \cite{Vis97}.
+\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90},
+\cite{RK91}, \cite{R92}, \cite{Vis97}, \cite{BSVV02}.
 
 \item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
 
@@ -301,7 +304,7 @@ overview of selected publications:
 
 \item{Applications:} \cite{BDKKM96},\cite{BS00}, \cite{BR00}.
 
-\item{Generic debugging}: 
+\item{Generic debugging}: \cite{Oli00}.
 
 \item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
 \cite{MEmanual}.
@@ -393,50 +396,106 @@ path `{\tt .}', i.e., only the current directory will be searched.
 The \link{main window}[, see Figure~\ref{FIG:meta-start}]{FIG:meta-start}
 of the \ASmetaenv\ immediately after starting the
 system was already shown.
+\begin{iftex}
 After loading a specification it may look like Figure~\ref{FIG:meta-pico}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:meta-pico} to see how teh main window looks like after loading
+a specification.
+\end{ifhtml}
 The main window consists of the following parts:
 
 \begin{itemize}
 \item At the top of the window is a menu bar that contains the following menus:
   \begin{itemize}
 
-   \item {\tt File}: for creating, opening, saving and printing
+   \item {\tt File}: for creating, opening, saving, and printing
     specifications as well as for leaving the \ASmetaenv.
-    The {\tt File} menu is described in Section~\ref{FileMenu}.
+    The {\tt File} menu is described in 
+\begin{iftex}
+Section~\ref{FileMenu}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{File Menu}[]{FileMenu}.
+\end{ifhtml}
 
    \item {\tt Edit}: for setting user preferences.
-      The {\tt Edit} menu is described in Section~\ref{EditMenu}.
+      The {\tt Edit} menu is described in 
+\begin{iftex}
+Section~\ref{EditMenu}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Edit Menu}[]{EditMenu}.
+\end{ifhtml}
 
    \item {\tt Graph}: for setting options for the display of 
         the graph in the import pane (see below).
-       The {\tt Graph} menu is described in Section~\ref{GraphMenu}.
+       The {\tt Graph} menu is described in 
+\begin{iftex}
+Section~\ref{GraphMenu}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Graph Menu}[]{GraphMenu}.
+\end{ifhtml}
 
    \item {\tt Debug}: for turning on/off the display of diagnostic messages.
-    The {\tt Debug} menu is described in Section~\ref{DebugMenu}.
+    The {\tt Debug} menu is described in
+\begin{iftex}
+Section~\ref{DebugMenu}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Debug Menu}[]{DebugMenu}.
+\end{ifhtml}
 
    \item {\tt Help} for various forms of information and online help.
-    The {\tt Help} menu is described in Section~\ref{HelpMenu}.
+    The {\tt Help} menu is described in 
+\begin{iftex}
+Section~\ref{HelpMenu}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Help Menu}[]{HelpMenu}.
+\end{ifhtml}
 
   \end{itemize}
   
-\item The \emph{import pane}: A graphical canvas (empty in
-  Figure~\ref{FIG:meta-start}, but containing rectangles and arrows in
-  Figure~\ref{FIG:meta-pico}) at the left hand side of the window shows
+\item The \emph{import pane}: A graphical canvas (
+\link{empty}[ in Figure~\ref{FIG:meta-start}]{FIG:meta-start}, 
+but containing \link{rectangles and arrows}[ in
+Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) 
+  at the left hand side of the window shows
   the import graph of the specification you are editing.  The import pane is
-  described in Section~\ref{ImportPane}.
+  described in 
+\begin{iftex}
+Section~\ref{ImportPane}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Import Pane}[]{ImportPane}.
+\end{ifhtml}
   
-\item The \emph{module pane}: a vertical list (empty in
-  Figure~\ref{FIG:meta-start}, but containing names like {\tt Layout}, {\tt
-    Pico-Booleans}, ...  in Figure~\ref{FIG:meta-pico}) at the right/middle
+\item The \emph{module pane}: a vertical list 
+(\link{empty}[ in Figure~\ref{FIG:meta-start}]{FIG:meta-start}, 
+but containing names like \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[
+in Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the right/middle
   part of the window that shows the names of all modules in the current
-  specification.  The module pane is described in Section~\ref{ModulePane}.
+  specification.  The module pane is described in 
+\begin{iftex}
+Section~\ref{ModulePane}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Module Pane}[]{ModulePane}.
+\end{ifhtml}
   
 \item The \emph{button pane}: a vertical row of buttons at the right hand side
   of the window containing buttons like {\tt Edit Syntax} and {\tt Edit
     Equations}: they are used for common operations on the
-  current specification like editing, saving or deleting a module, or
+  current specification like editing, saving, or deleting a module or
   compiling the complete specification. The button pane is described in
-  Section~\ref{ButtonPane}.
+\begin{iftex}
+Section~\ref{ButtonPane}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Button Pane}[]{ButtonPane}.
+\end{ifhtml}
   
 \item A \emph{status bar} at the bottom of the window that shows the current
   activity of the system. Examples are: {\tt idle} (the system is doing
@@ -486,18 +545,18 @@ The main window consists of the following parts:
 \end{figure}
 
 The {\tt File} menu is used for creating, opening, saving and printing
-specifications as well as for leaving the \ASmetaenv.  It is shown in
+specifications as well as for quitting the \ASmetaenv.  It is shown in
 Figure \ref{FIG:file-menu}.
 
 {\tt New} and {\tt Open} are used for creating
 a new module and opening an existing one, respectively.
-In all three cases a dialog window appears as shown in
+In all these cases a dialog window appears as shown in
 Figure~\ref{FIG:open-file}.
 
 {\tt Save All} save all modules that have been opened so far.
 {\tt Clear All} removes all modules that have been opened so far from the
 Meta-Environment. If modules have been modified, you are explicitly
-asked to save them. The same effect can be achieved by leaving the
+asked to save them. The same effect can be achieved by exiting the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
 
@@ -606,7 +665,7 @@ messages will be displayed.  Otherwise the systems runs silently.
 \end{figure}
 
 The {\tt Help} menu is shown in Figure~\ref{FIG:help-menu}.
-
+the features discussed in this section are all a very experimental.
 
 {\tt About Meta-Environment} and {\tt About Graph Browser}
 give background on the  \ASmetaenv\ and on the graph browser
@@ -683,15 +742,16 @@ The import pane has the following interaction facilities:
 module, the import graph can be dragged across the import pane.
 
 \item Clicking \emph{on} a module yields 
-a \link{pop up menu}[ as shown in Figure~\ref]{FIG:module-menu}. 
+a \link{pop up menu}[ as shown in Figure~\ref{FIG:module-menu}]{FIG:module-menu}. 
 It contains the same entries as the
-button pane of the main window (see Section \ref{ButtonPane}).
+\link{button pane of the main window}[ (see 
+Section \ref{ButtonPane})]{ButtonPane}.
 
-\item Clicking \emph{outside} any module yields a pop up menu as shown
-in Figure~\ref{FIG:new-open}.  It contains the entries {\tt New} and
+\item Clicking \emph{outside} any module yields a \link{pop-up menu}[ as shown
+in Figure~\ref{FIG:new-open}]{FIG:new-open}.  It contains the entries {\tt New} and
 {\tt Open} for creating a new and opening an existing module, respectively. 
-These two operations are also available from the {\tt File}
-menu (see Section~\ref{FileMenu}).
+These two operations are also available from the 
+\link{{\tt File} menu}[ (see Section~\ref{FileMenu})]{FileMenu}.
 
 \end{itemize}
 
@@ -707,8 +767,9 @@ It presents a vertical, scrollable, list of the names of all the modules in
 the specification.
 
 The main purpose of the module pane is to select one or more modules from
-the specification on which an operation from the button pane
-(Section~\ref{ButtonPane}) is to be performed.  One module is selected
+the specification on which an operation from the 
+\link{button pane}[ (Section~\ref{ButtonPane})]{ButtonPane}
+is to be performed.  One module is selected
 by clicking on the corresponding module name in the module pane.  More
 than one module can be selected by clicking on a module name, keeping
 the mouse button down and and then dragging the mouse to the last
@@ -721,15 +782,18 @@ the syntax of all the selected modules.
 
 \subsection{The Button Pane of the Main Window} \label{ButtonPane}
 
-The entries in the button pane (at the right-hand side of the main
-window, see Figure~\ref{FIG:meta-start}) and in the module pop-up menu
-(see Figure \ref{FIG:module-menu} and Section~\ref{ImportPane}) are
-mostly identical in function, except that the latter may operate on
+The entries in the 
+\link{button pane (at the right-hand side of the main window}
+[, see Figure~\ref{FIG:meta-start}]{FIG:meta-start}) 
+and in the 
+\link{module pop-up menu}[ (see Figure~\ref{FIG:module-menu} and
+Section~\ref{ImportPane})]{FIG:module-menu}
+are mostly identical in function, except that the latter may operate on
 more than one module while the former operate on a single module only.
 
 We describe them here together. The names of the entries in the
-pop-up menu are given in parentheses when they differ from the corresponding button
-in the button pane.
+pop-up menu are given in parentheses when they differ from the 
+corresponding button in the button pane.
 
 First, one or more modules are selected via the import pane or the
 module pane. Next, one of the following operations can be applied to
@@ -744,21 +808,40 @@ editing syntax, equations, or terms, respectively, for the selected module(s).
 syntax definition and the equations section of the selected module(s).
 {\tt Save All} saves the tree representation of the 
 syntax definition and the equations section of all modules.
-{\tt Revert} {\tt Revert Module}) removes modules and re-opens the removed modules, 
+{\tt Revert} ({\tt Revert Module}) removes modules and 
+re-opens the removed modules, 
 the effect is that modifications made to these modules are discarded.
-{\tt Delete} ({\tt Delete Module}) removes modules.
+{\tt Delete} ({\tt Delete Module}) removes modules, 
+\emph{beware the deleted modules are also physically removed from 
+the file system}.
 
 {\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  
-Section~\ref{compiling-specs} gives more details on the compilation of \asfsdf\ specifications.
+Section 
+\begin{iftex}
+\ref{compiling-specs}
+\end{iftex}
+\begin{ifhtml}
+\link{Compiling Specifications}[]{compiling-specs} 
+\end{ifhtml} 
+gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Dump} ({\tt Dump Equations...}) dumps the equation of the selected
-module and all its imports. This feature is needed in order to run
-the evaluator in a stand-alone way, see Section \ref{SEC:interpretationgofterms}.
+{\tt Dump Equations...} dumps the equation of the selected
+module and all its imports. This feature is needed in order to 
+\link{run the evaluator in a stand-alone way}[, see Section
+\ref{SEC:interpretationgofterms}]{SEC:interpretationgofterms}.
 
 {\tt Dump Parse Table...} dumps the parse table of the selected module and
 all its imports in order to parse terms. This functionality is needed in
-order to use the parser in a stand-alone way, see Section
-\ref{SEC:parsingofterms}.
+order to 
+\link{use the parser in a stand-alone way}[, see Section
+\ref{SEC:parsingofterms}]{SEC:parsingofterms}.
+
+{\tt Rename Module...} renames a module, not only in the
+Meta-En\-vir\-on\-ment but also physically on the file system.
+
+{\tt Print}({\tt Print Module}) prints the syntax and the equation part
+together in one file.
+
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
 
@@ -772,15 +855,20 @@ for documentation on \xemacs.
 There are two additions to the standard user-interface of \xemacs:
 
 \begin{itemize}
-\item The {\tt Meta-Environment} pull-down menu
-(Figure~\ref{FIG:meta-env-menu1}) for applying the \asfsdf\ parser to
+\item The {\tt Meta-Environment} 
+\link{pull-down menu}[
+(Figure~\ref{FIG:meta-env-menu1})]{FIG:meta-env-menu1}
+for applying the \asfsdf\ parser to
 the complete text buffer ({\tt Parse}).
-For term editors this menu also contains a
+For term editors this \link{menu}[
+(Figure~\ref{FIG:meta-env-menu2})]{FIG:meta-env-menu2}
+also contains a
 ({\tt Reduce}) entry, that applies the evaluator to the text in
-the editor (Figure~\ref{FIG:meta-env-menu2}).
+the editor.
 
-\item The {\tt Move} pull-down menu (Figure~\ref{FIG:move-menu}) for
-structured traversal of the syntax tree of the text in the editor.
+\item The \link{{\tt Move} pull-down menu}[
+(Figure~\ref{FIG:move-menu})]{FIG:move-menu}
+for structured traversal of the syntax tree of the text in the editor.
 Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
 \end{itemize}
@@ -800,9 +888,15 @@ user can navigate in the tree.
 \subsection{Editing the Syntax Part of a Module}
 
 An editor for editing the syntax part of a module can be activated by
-pressing the {\tt Edit Syntax} button. An example is shown in
-Figure~\ref{FIG:Bool-example.sdf}.  Initially the entire text is
-highlighted and the message ``{\tt Focus sort is invalid}'' appears
+pressing the {\tt Edit Syntax} button. 
+\begin{iftex}
+An example is shown in Figure~\ref{FIG:Bool-example.sdf}.  
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.sdf} for an example.  
+\end{ifhtml}
+Initially the entire text is
+highlighted and the message ``{\tt Focus symbol: term}'' appears
 in the status line at the bottom of the main window.
 
 Via the entry {\tt Parse Buffer} in the {\tt Meta-Environment} menu of the
@@ -846,8 +940,13 @@ and changes the bottom line message.
 \subsection{Editing the Equations Section of a Module}
 
 An editor for editing the equations section of a module is activated
-via the button {\tt Edit Equations}.  An example is shown in Figure
-\ref{FIG:Bool-example.asf}.  
+via the button {\tt Edit Equations}.  
+\begin{iftex}
+An example is shown in Figure \ref{FIG:Bool-example.asf}.  
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.asf} for an example.  
+\end{ifhtml}
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
 activate the parser for the
@@ -858,8 +957,13 @@ message {\tt Generating Parse Table}.
 \subsection{Editing Terms} \label{EditingTerms}
 
 An editor for editing a term over a module is activated via the button
-{\tt Edit Term}.  An example is shown in Figure
-\ref{FIG:Bool-example.trm},
+{\tt Edit Term}.  
+\begin{iftex}
+An example is shown in Figure \ref{FIG:Bool-example.trm}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.trm} for an example.  
+\end{ifhtml}
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
 activate the parser for this
@@ -881,15 +985,22 @@ to initialize the evaluator with this set of equations.
 Some (but not all!) \asfsdf\ specifications can be executed by interpreting
 each equation as a (conditional) rewrite rule from left to right.
 
-When you have created a term (using a term editor, see
-Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt
-Reduce} entry from the {\tt Meta-Environment} menu of the term
+When you have created a term (using a \link{term editor}[, see
+Section~\ref{EditingTerms}]{EditingTerms}), 
+you can reduce it (by selecting the {\tt Reduce} entry from 
+the {\tt Meta-Environment} menu of the term
 editor).  As a result, rewrite rules will be applied until a normal
 form is reached (a term for which no applicable rule can be
 found). This normal form is the result of the execution and is
 displayed in a new term window.
 
-The rewriting process is further described in Section~\ref{Equations}.
+The rewriting process is further described in Section
+\begin{iftex}
+\ref{Equations}
+\end{iftex}
+\begin{ifhtml}
+\link{Equations}[]{Equations} 
+\end{ifhtml}.
 
 \section{Guided Tour} \label{GuidedTour}
 
@@ -908,7 +1019,7 @@ The rewriting process is further described in Section~\ref{Equations}.
 To help you get acquainted with the \ASmetaenv\ the system
 contains two example specifications. The first is the one-module specification:
 {\tt Bool-example}, and the second is the specification of the syntax, 
-typechecker and dynamic semantics of the small programming language Pico.
+typechecker, and dynamic semantics of the small programming language Pico.
 
 This Guided Tour is meant to guide you through these specifications, and show
 you the main features of the \ASmetaenv. Only global information
@@ -924,8 +1035,8 @@ You will then find the files needed for this Guided Tour in the directory
 It is advisable to make your personal copy of this
 directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
 copy of the directory. Furthermore, all the examples given in this
-manual can be found in {\tt
-<path>/asfsdf-meta/share/demo/user-manual-examples}.
+manual can be found in$\\$
+{\tt <path>/asfsdf-meta/share/demo/user-manual-examples}.
 
 For each module in a specification two files exist: `{\tt
   $module$.sdf}' contains the syntax of $module$ and `{\tt
@@ -950,8 +1061,14 @@ For each module in a specification two files exist: `{\tt
 \begin{itemize}
 
 \item Go to directory {\tt pico}. 
-\item Type the command {\tt meta}. The main window of the Meta-environment
-  will appear as shown in Figure~\ref{FIG:meta-start}.
+\item Type the command {\tt meta}. The \link{main window}[]{FIG:meta-start}
+of the Meta-environment will
+\begin{ifhtml}
+appear.
+\end{ifhtml}
+\begin{iftex}
+appear as shown in Figure~\ref{FIG:meta-start}.
+\end{iftex}
   
 \item Add the module {\tt Bool-example} by selecting the File menu, and
   choosing the Open button. In a dialog window, the system asks you to give
@@ -961,8 +1078,9 @@ For each module in a specification two files exist: `{\tt
   (both its syntax and equations!) into the system.
   
 \item Verify that module {\tt Bool-example} appears as a rectangle in
-the import pane as well as in the module pane of the main window as
-shown in Figure~\ref{FIG:meta-Bool-example}.
+the import pane as well as in the module pane of the 
+\link{main window}[ as shown in
+Figure~\ref{FIG:meta-Bool-example}]{FIG:meta-Bool-example}.
 
 \end{itemize}
 
@@ -1062,18 +1180,26 @@ refer to Section~\ref{ASF+SDF}.
 \item Push the button {\tt Edit Syntax} in the button pane at the right-hand
   side of the main window.  An editor will appear containing the syntax part
   of the {\tt Bool-example} specification: the \sdf\ section.  This editor is
-  a version of the standard text editor Emacs extended with the menus {\tt
-    Meta-Environment} and {\tt Move}. The result is shown in
-  Figure~\ref{FIG:Bool-example.sdf}.
+  a version of the standard text editor Emacs extended with the menus 
+ {\tt Move} and {\tt Meta-Environment}.
+\begin{iftex}  
+The result is shown in Figure~\ref{FIG:Bool-example.sdf}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.sdf} for inspecting the editor window.
+\end{ifhtml}
   
-\item Push the button {\tt Edit Equations}.  This will reuse the already 
-  existing
-  instance of Emacs by adding a new buffer to it containing the semantic part
+\item Push the button {\tt Edit Equations}.  This will open a new 
+  instance of Emacs containing the semantic part
   of the {\tt Bool-example} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
-  the \sdf\ section. Use the {\tt Buffers} menu of Emacs to see which buffers
-  are open and to switch between buffers.
+  the \sdf\ section. 
+\begin{iftex}  
 The result is shown in Figure~\ref{FIG:Bool-example.asf}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.asf} for inspecting the editor window.
+\end{ifhtml}
 
 \end{itemize}
 
@@ -1137,7 +1263,13 @@ The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 \item 
   Type the term `{\tt true \& false}' in this editor. Observe how the text
   that you type gets a different background color.
-  This is called a \emph{focus}. The result is shown in Figure~\ref{FIG:Bool-example.trm}.
+  This is called a \emph{focus}. 
+\begin{iftex}  
+The result is shown in Figure~\ref{FIG:Bool-example.trm}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.trm} for inspecting the term editor window.
+\end{ifhtml}
 
 \item Click in the focus, this will move the cursor (a single character-sized
   rectangle) 
@@ -1145,7 +1277,12 @@ The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 \item From menu {\tt Meta-Environment} click the {\tt Parse Buffer} button.  The text
   in the focus is now parsed and the different background color has 
   disappeared.
-  The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
+\begin{iftex}  
+The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.trm2} for inspecting the term editor window.
+\end{ifhtml}
 
 \end{itemize}
 
@@ -1157,7 +1294,13 @@ errors.
 
 \item Click on one of the characters of the word `{\tt false}'.  You
 have selected `{\tt false}' as new focus and the blue background
-reappears. This is shown in Figure~\ref{FIG:Bool-example.trm3}.
+reappears. 
+\begin{iftex}  
+This is shown in Figure~\ref{FIG:Bool-example.trm3}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Bool-example.trm2} for inspecting the effect.
+\end{ifhtml}
 
 \item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
   now selected as focus.
@@ -1173,7 +1316,8 @@ will be selected and becomes the focus.
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
   in the {\tt Meta-Environment} menu of the editor.  The result will appear in
-  a new term editor window (Figure~\ref{FIG:reduct.out}).
+  a new \link{term editor window}[
+(Figure~\ref{FIG:reduct.out})]{FIG:reduct.out}.
 
 \end{itemize}
 
@@ -1332,12 +1476,7 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 
 \begin{itemize}
   
-\item Delete the module {\tt Bool-example} from the specification.  Click on
-  {\tt Bool-example} in the module pane and push the {\tt Delete} button. The
-  module remains known to the system and its graphical representation is
-  changed form a rectangle to an ellipse. It can be re-opened later on.
-  
-\item Leave the system by pushing the {\tt Quit} entry in the {\tt File} menu
+\item Exit the system by pushing the {\tt Quit} entry in the {\tt File} menu
   of the main window of the \ASmetaenv.
 
 \end{itemize}
@@ -1399,9 +1538,15 @@ syntax and equations with {\tt Bool-example}.
 
 \end{itemize}
 
-Editors for syntax and equations of {\tt Pico-Booleans} are show in
+\begin{iftex} 
+Editors for syntax and equations of {\tt Pico-Booleans} are shown in
 Figures \ref{FIG:Pico-Booleans-sdf} and \ref{FIG:Pico-Booleans-eqs}.
-
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{FIG:Pico-Booleans-sdf} for the editor for the syntax
+of  {\tt Pico-Booleans} and \link{here}[]{FIG:Pico-Booleans-eqs} for the
+editor for the equations.
+\end{ifhtml}
 
 \begin{itemize}
   
@@ -1412,9 +1557,10 @@ Figures \ref{FIG:Pico-Booleans-sdf} and \ref{FIG:Pico-Booleans-eqs}.
   selecting the {\tt Open...} button.  In the dialog window that appears, click
   on {\tt Pico-syntax.sdf} and push the {\tt Open} button.
   
-\item As you can see in both the import pane and the module pane, not only
+\item As you can see in both \link{the import pane and the module pane}[
+(see Figure~\ref{FIG:Pico-syntax})]{FIG:Pico-syntax}, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
-  transitively imported by {\tt Pico-syntax}. See Figure~\ref{FIG:Pico-syntax}.
+  transitively imported by {\tt Pico-syntax}.
 
 \end{itemize}
 
@@ -1711,7 +1857,13 @@ $M$.asf}' contains the equations section of $M$.
 
 A {\tt <ModuleName>} is either a simple {\tt <ModuleId>} or a {\tt
 <ModuleId>} followed by zero or more parameter symbols, e.g., 
-{\tt <Module>[<Symbol>*]}, the symbols will be explained in Section~\ref{Symbols}.
+{\tt <Module>[<Symbol>*]}, the symbols will be explained in 
+\begin{iftex}
+Section~\ref{Symbols}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Symbols}[]{Symbols}.
+\end{ifhtml}
 An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
 \emph{hidden section}. The former starts with the keyword {\tt exports} and
 makes all entities in the section visible to other modules.  The latter starts
@@ -1728,27 +1880,31 @@ exports                               hiddens
 \noindent A {\tt <Grammar>} 
 can be a definition of one of the following: 
 \begin{itemize}
-\item Imports (Section~\ref{Imports}).
-\item Aliases (Section~\ref{Aliases}).
-\item Sorts (Section~\ref{Sorts}).
-\item Lexical syntax (Section~\ref{LexicalSyntax}).
-\item Context-free syntax (Section~\ref{ContexFreeSyntax}).
+\item \link{Imports}[ (Section~\ref{Imports})]{Imports}.
+\item \link{Aliases}[ (Section~\ref{Aliases})]{Aliases}.
+\item \link{Sorts}[ (Section~\ref{Sorts})]{Sorts}.
+\item \link{Lexical syntax}[ (Section~\ref{LexicalSyntax})]{LexicalSyntax}.
+\item \link{Context-free syntax}[
+(Section~\ref{ContexFreeSyntax})]{ContexFreeSyntax}.
 %\item lexical variables;
 %\item lexical priorities;
-\item Priorities (Section~\ref{Priorities}).
-\item Variables (Section~\ref{Variables}).
+\item \link{Priorities}[ (Section~\ref{Priorities})]{Priorities}.
+\item \link{Variables}[ (Section~\ref{Variables})]{Variables}.
 \end{itemize}
 
 There are a number of related properties which have an effect across the
 various grammar items, these items are intermixed with the discussion
 of the grammars:
 \begin{itemize}
-\item \sdf\ comment convention (Section~\ref{SdfComment}).
-\item Symbols (Section~\ref{Symbols}).
-\item Attributes of Lexical and Context-free Functions (Section~\ref{Attributes}).
-\item Parameterization and Renamings (Section~\ref{Renamings}).
-\item Disambiguation (Section~\ref{Disambiguation}).
-\item Equations (Section~\ref{Equations}).
+\item \link{\sdf\ comment convention}[
+(Section~\ref{SdfComment})]{SdfComment}.
+\item \link{Symbols}[ (Section~\ref{Symbols})]{Symbols}.
+\item \link{Attributes of Lexical and Context-free Functions}[
+(Section~\ref{Attributes})]{Attributes}.
+\item \link{Parameterization and Renamings}[
+(Section~\ref{Renamings})]{Renamings}.
+\item \link{Disambiguation}[ (Section~\ref{Disambiguation})]{Disambiguation}.
+\item \link{Equations}[ (Section~\ref{Equations})]{Equations}.
 \end{itemize}
 
 \noindent Each of these entities and properties
@@ -1760,8 +1916,14 @@ will now be described and illustrated by examples.
 The comment convention within an \sdf\ specification is that character
 between {\tt "\%\%"} and the end of line is comment as well as every
 character between two {\tt "\%"} including the newline character.
+\begin{iftex}
 See Figure~\ref{CODE:sdfcomment} for an example, more details on
 defining layout can be found in Section~\ref{Restrictions}.
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:sdfcomment} for an example, more details on
+defining layout can be found in Section \link{Restrictions}[]{Restrictions}.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -1801,8 +1963,13 @@ by the importing module.  However, if the import section occurs within the
 scope of a hiddens keyword, the exported entities are only visible in the
 importing module but they are not exported by the importing module.
 
-An imported module can be parameterized or decorated with renamings, see
-Section~\ref{Renamings} for more details.
+An imported module can be parameterized or decorated with renamings, 
+\begin{iftex}
+see Section~\ref{Renamings} for more details.
+\end{iftex}
+\begin{ifhtml}
+see Section \link{Renamings}[]{Renamings} for more details.
+\end{ifhtml}
 
 \subsection{Symbols} \label{Symbols}
 
@@ -1821,14 +1988,25 @@ formalisms. The elementary symbols are:
 \item \emph{character class}: corresponds to a set of characters, 
 e.g., {\tt [a-z]}.
 Character classes will be explained in
-  Section~\ref{CharacterClasses}, they are mainly used when describing the
-  lexical syntax of a language.
+\begin{iftex}
+Section~\ref{CharacterClasses}, 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Character Classes}[]{CharacterClasses}, 
+\end{ifhtml}
+they are mainly used when describing the lexical syntax of a language.
 \end{itemize}
 
 Starting with the elementary symbols, more complex symbols can be constructed
 by way of operators that we will discuss now.
 Examples of the use of the various operators will be given in the
+\begin{iftex}
 Sections~\ref{LexicalSyntax} and~\ref{ContexFreeSyntax}.
+\end{iftex}
+\begin{ifhtml}
+Sections \link{Lexical Syntax}[]{LexicalSyntax} and \link{Context-free
+Syntax}[]{ContexFreeSyntax}. 
+\end{ifhtml}
 
 \subsubsection{Option} \label{OptionOperator}
 
@@ -1912,6 +2090,22 @@ exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} represents
 a function with two argument (of types {\tt Bool} and {\tt Int}, respectively)
 and a result type {\tt Int}.
 
+\subsubsection{Parameterized Sorts} \label{ParameterizedSorts}
+
+Sort names can have parameters. This provides a way of distinguishing 
+a generic sort {\tt List} for integers, e.g. {\tt List[[Int]]},
+and for booleans, e.g. {\tt List[[Bool]]}.
+These sort parameters can be instantiated via the parameters of 
+the module name.
+See
+\begin{iftex} 
+Section~\ref{Renamings}
+\end{iftex}
+\begin{ifhtml}
+Section  \link{Parameterization and Renamings}[]{Renamings}
+\end{ifhtml}
+for more details.
+
 \subsection{Aliases} \label{Aliases}
 
 In ordinary programming it is good practice to use named constants to
@@ -1946,32 +2140,36 @@ aliases
 
 \subsection{Sorts} \label{Sorts}
 
+Note: the keyword {\tt sorts} is a bit misleading, not only {\tt SortName}s
+can be declared, but in fact {\tt Symbol}s can be declare in the sorts section.
 Sorts are declared by listing their name in a sorts section of the form:
 
 \begin{verbatim}
 sorts
-  <SortName>*
+  (<SortName>|<Symbol>)*
 \end{verbatim}
 
 \noindent Recall that a sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
+\begin{iftex}
 Section~\ref{LexicalSyntax}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Lexical Syntax}[]{LexicalSyntax}.
+\end{ifhtml}
 
-In fact, sort declarations have a more liberal form and may contain
-arbitrary symbols rather than just sort names:
-
-\begin{verbatim}
-sorts
-  <Symbol>*
-\end{verbatim} 
+Sort declarations have a more liberal form and may contain
+arbitrary symbols rather than just sort names.
 
 It is required that all sorts that occur in some symbol in the specification
 are declared. This has also the effect that input sentences corresponding to
 these sorts can be parsed. Technically speaking each sort can act as start
-symbol for the underlying grammar. This is not true for arbitrary symbols.
-However, declaring an arbitrary symbol has the effect that that symbol can
-also act as start symbol.
+symbol for the underlying grammar.
+Declaring an arbitrary symbol has the effect that that symbol can
+act as start symbol.
+
+Sorts sections can either be hidden or exported. XXXXXXX
 
 \subsection{Lexical Syntax} \label{LexicalSyntax}
 \label{lexical-syntax}
@@ -1986,14 +2184,26 @@ A lexical syntax contains a set of declarations for \emph{lexical functions},
 each consisting of a regular expression and a result sort. All functions with
 the same result sort together define the lexical syntax of tokens of that
 sort. Regular expressions may contain any basic symbol and any symbol
-operator as described in Section~\ref{Symbols}. 
+operator as described in 
+\begin{iftex}
+Section~\ref{Symbols}. 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Symbols}[]{Symbols}. 
+\end{ifhtml}
 Spaces are only significant inside strings and character classes.
 
 The sort name {\tt LAYOUT} is predefined and may not be redeclared.  
 {\tt LAYOUT} defines which parts of the text are \emph{layout symbols} (also
 known as \emph{white space}) between lexical tokens and are to be skipped
 during lexical analysis. It may only be used as result sort of lexical
-functions (Section~\ref{LexicalFunctions}). When a string is matched by both a
+functions
+\begin{iftex}
+(Section~\ref{LexicalFunctions}).  
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Lexical Functions}[]{LexicalFunctions}).
+When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation as
 layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
 and comment conventions.
@@ -2027,7 +2237,13 @@ $L$.  All sort names appearing in left-hand sides of declarations are replaced
 by the regular expression associated with them. 
 %%Circular dependencies between declarations in the lexical syntax are 
 %%forbidden.\footnote{Does this limitation still apply?}  
-Figure \ref{CODE:simplelex} shows an example of a
+\begin{iftex}
+Figure \ref{CODE:simplelex} shows 
+\end{iftex} 
+\begin{ifhtml}
+Click \link{here}[]{CODE:simplelex} for
+\end{ifhtml}
+an example of a
 simple lexical function definition for defining the first three words that
 Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
   Mies}, each recognize, respectively, the strings {\tt aap}, {\tt noot} and
@@ -2086,8 +2302,19 @@ character code of $c_2$ is greater than that of $c_1$.
 
 Definitions for lower-case letter ({\tt LCLetter}), upper-case letters
 ({\tt UCLetter}), lower-case and upper-case letters ({\tt Letter}) and
-digits ({\tt Digit}) are shown in Figure~\ref{CODE:LettersDigits1}.
+digits ({\tt Digit}) are shown 
+\begin{iftex}
+in Figure~\ref{CODE:LettersDigits1}. 
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:LettersDigits1}.
+\end{ifhtml}
+\begin{iftex}
 Figure~\ref{CODE:LettersDigits2} gives
+\end{iftex}
+\begin{ifhtml} 
+Click \link{here}[]{CODE:LettersDigits2} for
+\end{ifhtml}
 a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
@@ -2189,11 +2416,23 @@ exports
 \caption{Defining a single letter or digit using the alternative operator}\label{CODE:LettersDigits3}
 \end{figure}
 
-Figure~\ref{CODE:LettersDigits3} shows the definion of a single letter or digit
+\begin{iftex} 
+Figure~\ref{CODE:LettersDigits3} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:LettersDigits3} for
+\end{ifhtml}
+the definion of a single letter or digit
 using the alternative operator {\tt  \verb+\+/}.
-This definition is equivalent to the one given earlier in 
-Figure~\ref{CODE:LettersDigits2}.
-Another example is shown in Figure \ref{CODE:charclasses}.
+This definition is equivalent to the one given 
+\link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
+Another example is 
+\begin{iftex}
+shown in Figure \ref{CODE:charclasses}.
+\end{iftex}
+\begin{ifhtml}
+given \link{here}[]{CODE:charclasses}.
+\end{ifhtml}
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via their decimal representation.
@@ -2246,20 +2485,45 @@ exports
 \subsubsection{Repetition}
 
 Lexical tokens are often described by patterns that exhibit a certain
-repetition. The operator described in Section~\ref{RepetitionOperator}
+repetition. The operator described in 
+\begin{iftex} 
+Section~\ref{RepetitionOperator}
+\end{iftex}
+\begin{ifhtml}
+Section \link{Repetition}[]{RepetitionOperator} 
+\end{ifhtml}
 can be used to express repetitions.
 
-Figure \ref{CODE:repetition} shows the use of the repetition
+\begin{iftex}
+Figure \ref{CODE:repetition} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:repetition} for an example of
+\end{ifhtml} 
+the use of the repetition
 operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
 
 \subsubsection{Option}
 
 If zero or exactly one occurrence of a lexical token is desired the
-option operator described in Section~\ref{OptionOperator} can be used.
+option operator described in 
+\begin{iftex} 
+Section~\ref{OptionOperator}  
+\end{iftex}
+\begin{ifhtml}
+Section \link{Option}[]{OptionOperator}
+\end{ifhtml}
+can be used.
 
-The use of the option operator is illustrated in Figure \ref{CODE:option}
-which defines identifiers consisting of one letter followed by one, optional,
+The use of the option operator is illustrated 
+\begin{iftex} 
+in Figure \ref{CODE:option} which 
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:option}, it 
+\end{ifhtml} 
+defines identifiers consisting of one letter followed by one, optional,
 digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
   z789}.
 
@@ -2289,10 +2553,23 @@ tokens of that sort. The left-hand sides of these function definitions form
 the alternatives for this function. Sometimes, it is more convenient to list
 these alternatives explicitly in a single left-hand side or to list
 alternative parts inside a left-hand side.  This is precisely the role of the
-alternative operator described in Section~\ref{AlternativeOperator}.
+alternative operator described in 
+\begin{iftex}
+Section~\ref{AlternativeOperator}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Alternative}[]{AlternativeOperator}.
+\end{ifhtml}
 
-The example  in Figure \ref{CODE:alternative1} shows how this operator
-can be used.  It describes identifiers starting with an upper-case letter
+The example 
+\begin{iftex}
+in Figure \ref{CODE:alternative1} 
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:alternative1}
+\end{ifhtml}
+shows how this operator can be used.  
+It describes identifiers starting with an upper-case letter
 followed by one of the following:
 \begin{itemize}
 \item  zero or more lower-case letters, 
@@ -2345,9 +2622,16 @@ exports
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
 \end{figure}   
 
-\noindent A slightly more readable definition that is equivalent to the original one
-in Figure~\ref{CODE:alternative1} is shown in Figure~\ref{CODE:alternative2}.  In
-any case, we recommend to use parentheses to make the scope of alternatives
+\noindent A slightly more readable definition that is equivalent to the 
+\link{original one}[ in Figure~\ref{CODE:alternative1}]{CODE:alternative1}
+is shown 
+\begin{iftex}
+in Figure~\ref{CODE:alternative2}.  
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:alternative2}.
+\end{ifhtml}
+In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
 \begin{figure}
@@ -2371,9 +2655,15 @@ exports
 \end{figure}   
 
 \subsubsection{Miscellaneous Operators}
-The other operators described in Section~\ref{Symbols} are less frequently
-used within lexical syntax definitions and will not be illustrated by
-means of an example.
+The other operators described in 
+\begin{iftex}
+Section~\ref{Symbols} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Symbols}[]{Symbols}
+\end{ifhtml}
+are less frequently used within lexical syntax definitions 
+and will not be illustrated by means of an example.
 
 
 \subsubsection{Examples of Lexical Syntax Definitions}
@@ -2384,8 +2674,14 @@ in order to get some ideas what can be specified using
 
 \paragraph{Defining Numbers}
 
-Definitions of integers and real numbers are shown in Figure
-\ref{CODE:numbers}. Note the use of the alternative operator in the
+Definitions of integers and real numbers are shown 
+\begin{iftex}
+in Figure \ref{CODE:numbers}. 
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:numbers}.
+\end{ifhtml}
+Note the use of the alternative operator in the
 definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
 of the option operator in the definitions of {\tt SignedReal} and {\tt
 UnsignedReal}.
@@ -2416,7 +2712,13 @@ exports
 
 \paragraph{Defining Strings}
 
-Figure \ref{CODE:string} gives the lexical definition of
+\begin{iftex} 
+Figure \ref{CODE:string} gives 
+\end{iftex}
+\begin{ifhtml}
+\link{Here}[]{CODE:string} an example is given of
+\end{ifhtml} 
+the lexical definition of
 strings which may contain escaped double quote characters.
 It defines a {\tt StringChar} as either
 \begin{itemize}
@@ -2455,8 +2757,14 @@ declarations for \emph{context-free functions}, each consisting of zero or
 more symbols followed by `$\rightarrow$' and a result symbol.
 They may be followed by attributes that control how parentheses and brackets
 affect the abstract syntax, by attributes that define the associativity of a
-rule, or by attributes which influence the rewriting process, see
-Section~\ref{Attributes}.  All functions with the same result sort together
+rule, or by attributes which influence the rewriting process, 
+\begin{iftex}
+see Section~\ref{Attributes}.  
+\end{iftex}
+\begin{ifhtml}
+see Section \link{Attributes}[]{Attributes}.
+\end{ifhtml}
+All functions with the same result sort together
 define the alternatives for that symbol.
 
 Elements of the left-hand side of a context-free function
@@ -2470,8 +2778,13 @@ In their simplest form, declarations of context-free functions consist of a
 sequence of zero or more symbols followed by `$\rightarrow$'
 and a result symbol. All literal strings appearing in a context-free
 function declaration are implicitly added to the lexical syntax. Consider the
-language of coordinates and drawing commands presented in 
-Figure \ref{CODE:simple-cf}.
+language of coordinates and drawing commands presented
+\begin{iftex}
+in Figure \ref{CODE:simple-cf}.
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:simple-cf}.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -2497,8 +2810,14 @@ exports
 
 
 An equivalent conventional BNF grammar (and not considering lexical syntax) 
-of the grammar of Figure~\ref{CODE:simple-cf} is presented in Figure
-\ref{CODE:simple-bnf}.
+of the \link{grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf}
+is presented 
+\begin{iftex}
+in Figure \ref{CODE:simple-bnf}.
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:simple-bnf}.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -2513,7 +2832,13 @@ of the grammar of Figure~\ref{CODE:simple-cf} is presented in Figure
 When a literal in a context-free function consists only of lower-case letters
 and digits and is not a keyword of \asfsdf, it need not be surrounded with
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-definition given in Figure~\ref{CODE:simple-cf}.
+definition given 
+\begin{iftex}
+in Figure \ref{CODE:simple-cf}.
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:simple-cf}.
+\end{ifhtml}
 
 \subsubsection{Lists}
 
@@ -2525,7 +2850,13 @@ purpose.
 
 Lists may be used in both the left-hand side and right-hand side of a
 context-free function as well as in the right-hand side of a variable
-declaration (see Section~\ref{Variables}).
+declaration 
+\begin{iftex}
+(see Section~\ref{Variables}). 
+\end{iftex}
+\begin{ifhtml}
+(see Section \link{Variables}[]{Variables}). 
+\end{ifhtml}
 
 Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
 the syntax of a list of identifiers (occurring in a declaration
@@ -2608,7 +2939,14 @@ exports
 
 \subsubsection{Miscellaneous Operators}
 
-In Section~\ref{Symbols} a number of sophisticated operators, like
+In 
+\begin{iftex}
+Section~\ref{Symbols} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Symbols}[]{Symbols}
+\end{ifhtml}
+a number of sophisticated operators, like
 alternative, option, set, function, sequence, tuple, and permutation.
 are discussed. These operators allow a concise manner of defining
 grammars. There are a number of issues to take in consideration
@@ -2649,8 +2987,14 @@ operator. See Figure~\ref{CODE:alternative-alternatives} for an example.
 The definition of the binary operators {\tt "|"} and {\tt "\&"} can
 be made more concise as shown by {\tt Bool2}, however, it is now
 impossible to express that {\tt "\&"} has a higher priority
-than {\tt "|"}, see Section~\ref{Priorities} for more details on
-priority definitions.
+than {\tt "|"}, see 
+\begin{iftex}
+Section~\ref{Priorities} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Priorities}[]{Priorities}
+\end{ifhtml}
+for more details on priority definitions.
 
 \begin{figure}
 \begin{IncCode}
@@ -2712,23 +3056,54 @@ that function.  The following syntax-related attributes exist:
 
 \item {\tt bracket} allows the definitions of parenthesis and other
 kinds of brackets that are mostly used for overruling the priorities
-of operators in expressions (Section~\ref{BracketFunctions}).
+of operators in expressions
+\begin{iftex}
+(Section~\ref{BracketFunctions}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Bracket Functions}[]{BracketFunctions}).
+\end{ifhtml}
 
 \item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
 are used to define the associativity of functions 
+\begin{iftex}
 (Section~\ref{Priorities}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Priorities}[]{Priorities}).
+\end{ifhtml}
 
 \item {\tt prefer} is used to indicate that the attributed function should
 always be preferred over other functions (without this attribute)
-in certain cases of syntactic ambiguity (Section~\ref{PreferAvoidReject}).
+in certain cases of syntactic ambiguity
+\begin{iftex}
+(Section~\ref{PreferAvoidReject}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Preferring, Avoiding or Rejection
+Parses}[]{PreferAvoidReject}).
+\end{ifhtml}
 
 \item {\tt avoid} is used to indicate that a function should
 only be used as a last resort in certain cases of
-syntactic ambiguity (Section~\ref{PreferAvoidReject}).
-
+syntactic ambiguity
+\begin{iftex}
+(Section~\ref{PreferAvoidReject}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Preferring, Avoiding or Rejection
+Parses}[]{PreferAvoidReject}).
+\end{ifhtml}
 
 \item {\tt reject} can be used to explicitly forbid certain syntactic
-  constructs (Section~\ref{PreferAvoidReject}).
+  constructs
+\begin{iftex}
+(Section~\ref{PreferAvoidReject}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Preferring, Avoiding or Rejection
+Parses}[]{PreferAvoidReject}).
+\end{ifhtml}
 
 \end{itemize}
 
@@ -2743,14 +3118,25 @@ in the left hand side.
 
 \item {\tt memo} declares a function to be a \emph{memo function} for
 which all calls and results will be cached during evaluation
+\begin{iftex}
 (Section~\ref{MemoFunctions}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Memo Functions}[]{MemoFunctions}).
+\end{ifhtml}
 
 %%\item {\tt delay} is used to influence the evaluation order of the
 %%arguments of a function (Section~\ref{Delay}).
 
 \item {\tt traversal} is used to declare so-called traversal functions
 that greatly simply the specification of functions that have to visit
-(parts of) a term (Section~\ref{Traversal}).
+(parts of) a term 
+\begin{iftex}
+(Section~\ref{Traversal}).
+\end{iftex}
+\begin{ifhtml}
+(Section \link{Traversal Functions}[]{Traversal}).
+\end{ifhtml}
 
 \end{itemize}
 
@@ -2765,13 +3151,16 @@ three mechanisms for defining associativity and priority:
 \begin{itemize}
 
 \item Relative priorities of functions (defined in 
-the `{\tt context-free priorities}' section, see Section~\ref{RelativePriorities}). 
+the \link{`{\tt context-free priorities}' section}[, see
+Section~\ref{RelativePriorities})]{RelativePriorities}).
 
-\item Associativity of functions (defined as an attribute following 
-the function declaration, see Section~\ref{AssociativeFunctions}).
+\item Associativity of functions (defined as 
+\link{attributes following the function declaration}[, see
+Section~\ref{AssociativeFunctions}]{AssociativeFunctions}).
 
 \item Associativity of groups of functions (defined in 
-the `{\tt context-free priorities}' section, see Section~\ref{GroupAssoc}).
+the \link{`{\tt context-free priorities}' section}[, see
+Section~\ref{GroupAssoc}]{GroupAssoc}).
 
 \end{itemize}
 
@@ -2957,9 +3346,10 @@ exports
 Lexical syntax can be highly ambiguous.  Consider a simple lexical definition
 for identifiers like the one in Figure~\ref{CODE:repetition}.  When
 recognizing the text {\tt abc}, what should we return: {\tt a}, {\tt ab}
-or,
-{\tt abc}? In Section \ref{lex-ambiguity} we will discuss the strategy
-\emph{Prefer Longest Match} for resolving this kind of ambiguity.
+or, {\tt abc}? 
+\link{We discuss the strategy \emph{Prefer Longest Match} for
+resolving this kind of ambiguity}[ in
+Section~\ref{lex-ambiguity}]{lex-ambiguity}.
 
 Here, we describe the notion of \emph{restrictions} that enable the formulation
 of this and other lexical disambiguation strategies.
@@ -2981,12 +3371,18 @@ in two flavors:
 \end{verbatim}
  
 \noindent In case of lexical restrictions {\tt <Symbol>} may be   
-either a literal or a sort.  In case of context-free restrictions only a sort
-is allowed.
+either a literal or sort.  
+In case of context-free restrictions only a sort or symbol is allowed.
 The restriction operator {\tt -/-} should be read as ``may not be
 followed by''.
 Before the restriction operator {\tt -/-} a list of symbols
-is given for which the restriction holds, see Figure \ref{CODE:functional}
+is given for which the restriction holds, 
+\begin{iftex}
+see Figure \ref{CODE:functional}
+\end{iftex}
+\begin{ifhtml}
+click \link{here}[]{CODE:functional}
+\end{ifhtml}
 for an example, both {\tt let} and {\tt in} may not be followed
 by a letter.
 
@@ -3004,18 +3400,18 @@ context-free syntax
   "[[" {Lookahead ","}* "]]"   -> Lookaheads 
 \end{verbatim}
 
-Our first example\footnote{Taken from~\cite{Vis97}} (Figure
-\ref{CODE:functional}) shows how lexical restrictions can be used to prevent
+\link{Our first example\footnote{Taken from~\cite{Vis97}}}[ (Figure
+\ref{CODE:functional})]{CODE:functional}
+shows how lexical restrictions can be used to prevent
 the recognition of erroneous expressions in a small functional language.
-
 The lexical restriction deals with the possible confusion between
 the reserved words {\tt let} and {\tt in} and variables (of sort {\tt Var}).
 It forbids the recognition of, for instance, {\tt let} as part
 of {\tt letter}. Without this restriction {\tt letter} would be recognized
 as the keyword {\tt let} followed by the variable  {\tt ter}.
-
 The context-free restriction forbids that a variable is directly
-followed by a letter. 
+followed by a letter. It does not forbid layout characters between
+the letters, e.g. {\tt a b} is a legal recognizable string.
 
 \begin{figure}
 \begin{IncCode}
@@ -3044,14 +3440,22 @@ exports
 \end{figure}   
 
 The second example illustrates the use of restrictions to define a
-`safe' way of layout.  Recall from Section~\ref{LexicalSyntax} that optional
-layout may be recognized between the members of the left-hand side of a
-context-free syntax rule.
+`safe' way of layout.  
+\link{Recall}[ from Section~\ref{LexicalSyntax}]{LexicalSyntax}
+that optional layout, represented by the symbol {\tt LAYOUT?},
+may be recognized between the 
+members of the left-hand side of a context-free syntax rule.
 
 However, if a such a member recognizes the empty string, this gives rise to a
-lexical ambiguity, (Section \ref{lex-ambiguity}). This problem is avoided by
-the definition in Figure \ref{CODE:safe-layout}: it simply forbids that
-optional layout is followed by layout characters.
+\link{lexical ambiguity}[, (Section \ref{lex-ambiguity})]{lex-ambiguity}. 
+This problem is avoided by the definition 
+\begin{iftex}
+in Figure \ref{CODE:safe-layout}:
+\end{iftex}
+\begin{ifhtml}
+\link{here}[]{CODE:safe-layout}:
+\end{ifhtml}
+it simply forbids that optional layout is followed by layout characters.
 
 \begin{figure}
 \begin{IncCode}
@@ -3069,11 +3473,15 @@ exports
 \caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
 \end{figure}
 
-The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
+\link{The last example}[ is shown in
+Figure~\ref{CODE:c-comment}]{CODE:c-comment} 
+and illustrates the
 use of restrictions to extend the previous layout definition with C-style
 comments. For readability we give here \emph{two} restrictions whereas the
-first one is already imported from module {\tt Layout}
-(Figure~\ref{CODE:safe-layout}).  The repetition of this first restriction is
+first one is already imported from 
+\link{module {\tt Layout}}[
+(Figure~\ref{CODE:safe-layout})]{CODE:safe-layout}.  
+The repetition of this first restriction is
 redundant and could be eliminated.
 
 \begin{figure}
@@ -3089,8 +3497,8 @@ exports
     ~[\ \n\t\/]+ -> ComWord
 
   context-free syntax
-    "/*" ComWord * "*/" -> Comment
-    Comment             -> LAYOUT
+    "/*" ComWord* "*/" -> Comment
+    Comment            -> LAYOUT
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n]
@@ -3104,7 +3512,7 @@ One frequently asked question is when to use lexical restrictions
 and when to use context-free restrictions. 
 The lexical restrictions on {\tt let} and {\tt in} in
 Figure \ref{CODE:functional} can not be defined context-free 
-because these keywords do not "live" at the lexical level.
+because these keywords do not "live" at the context-free level.
 Is it possible to put a lexical restriction on {\tt Var}?
 Yes, but it will have no effect, because internally the
 lexical {\tt Var} is injected in the context-free {\tt Var}.
@@ -3133,7 +3541,13 @@ exports
 \caption{Erroneous use of restrictions in the definition of simple expressions}\label{CODE:restrictedexpressions}
 \end{figure}   
 
-Figure \ref{CODE:restrictedexpressions} shows an erroneous use of
+\begin{iftex}
+Figure \ref{CODE:restrictedexpressions} shows
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:restrictedexpressions} for an example of
+\end{ifhtml}
+an erroneous use of
 context-free expressions, because it prevents the recognition of
 {\tt (abc)def}. If we want to enforce the correct restriction, it
 is necessary to transform this context-free restriction into
@@ -3159,14 +3573,27 @@ removed from the set of ambiguities.
 
 If a function $F$ is attributed with {\tt reject}, then independent of the
 number of ambiguities, the parse using $F$ will be removed.  While
-restrictions (Section~\ref{Restrictions}) only impose restrictions on the
+\link{restrictions}[ (Section~\ref{Restrictions})]{Restrictions}
+only impose restrictions on the
 immediate lookahead that follows a symbol, the reject mechanism can be used
 to eliminate complicated syntactic structures.
 
 Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} in order
 to solve lexical ambiguities will be discussed in
+\begin{iftex}
 Section~\ref{lex-ambiguity}.
-In Section~\ref{cf-ambiguity} we will give examples of how to use
+\end{iftex}
+\begin{ifhtml}
+Section \link{Lexical Ambiguities}[]{lex-ambiguity}.
+\end{ifhtml}
+In 
+\begin{iftex}
+Section~\ref{cf-ambiguity} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Context-free Ambiguities}[]{cf-ambiguity}
+\end{ifhtml}
+we will give examples of how to use
 these attributes to solve context-free ambiguities, such as the
 famous dangling else problem.
 
@@ -3189,8 +3616,9 @@ will thus lead to recognition of the identifier `{\tt xyz}' and not to
 either `{\tt x}' or `{\tt xy}'.
 
 This is achieved by defining a restriction on this lexical sort. This
-can be done in either the lexical restrictions or the context-free restrictions 
-section (see Section \ref{Restrictions}).
+can be done in either the 
+\link{lexical restrictions or the context-free restrictions section}[ (see
+Section \ref{Restrictions})]{Restrictions}.
 Figure \ref{CODE:restrict-id} shows how to enforce the longest match
 for the sort {\tt Id}.
 
@@ -3226,8 +3654,10 @@ given the lexical definition of Figure \ref{CODE:restrict-id}.  There are
 two approaches to implement Prefer Literals.
 
 In the first approach, we can explicitly forbid the recognition of
-literals as tokens of a specific sort using the reject mechanism (see
-Section~\ref{PreferAvoidReject}).  The idea is to define context-free
+literals as tokens of a specific sort using 
+\link{the reject mechanism}[ (see
+Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.  
+The idea is to define context-free
 grammar rules for all literals with the undesired lexical sort (e.g.,
 {\tt Id}) in the right-hand side followed by the attribute {\tt reject},
 Figure \ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute
@@ -3260,10 +3690,11 @@ exports
 The second approach is more attractive. The lexical definition of the general
 notion that interferes with our literals is written in such a way that it is
 only used as a last resort. In other words, it is avoided as much as possible
-and is only used when no alternative exists.  The attribute {\tt avoid}
-defines precisely this behaviour (Section~\ref{PreferAvoidReject}).  Figure
-\ref{CODE:avoid-id} shows how the lexical definition of {\tt Id} is attributed
-with {\tt avoid}.
+and is only used when no alternative exists.  
+\link{The attribute {\tt avoid} defines precisely this behaviour}[ 
+(Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.
+Figure \ref{CODE:avoid-id} shows how the lexical 
+definition of {\tt Id} is attributed with {\tt avoid}.
 
 Although the first approach is more tedious, it allows more flexibility
 than the second one.
@@ -3293,8 +3724,9 @@ symbol. This is built-in behaviour of \asfsdf.
 \paragraph{Prefer Variables} Give preference to interpretation as a 
 variable (as defined in a variables section) over interpretation as a lexical
 token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
-extending each variable declaration with the attribute {\tt prefer}
-(Section~\ref{PreferAvoidReject}).
+extending each variable declaration with 
+\link{the attribute {\tt prefer}}[
+(Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.
 
 \subsubsection{Context-free Ambiguities} \label{cf-ambiguity}
 
@@ -3408,8 +3840,8 @@ exports
 
   context-free syntax
     "a"                      -> E 
-    "if" E "then" S          -> S
-    "if" E "then" S "else" S -> S {avoid}
+    "if" E "then" S          -> S {prefer}
+    "if" E "then" S "else" S -> S
     "s"                      -> S
 \end{verbatim}
 \end{IncCode}
@@ -3429,20 +3861,35 @@ superscript in a special way. Therefore, the special case `{\tt E sub E sup E
 functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
 See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
 
-In Figure~\ref{CODE:dangling-else} the {\tt avoid} attribute is used to
+In Figure~\ref{CODE:dangling-else} the {\tt prefer} attribute is used to
 solve the dangling else problem in a nice way.
+The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
+in two ways: {\tt if 0 then (if 1 then hi) else ho} and
+{\tt if 0 then (if 1 then hi else ho)}.
+We can select the latter derivation by adding the {\tt prefer}
+attribute to the production without the {\tt else} part.
+The parser will still construct an ambiguity node containing both
+deriviations,
+namely, {\tt if 0 then (if 1 then hi \{prefer\}) else ho} and
+{\tt if 0 then (if 1 then hi else ho) \{prefer\}}.
+But given the fact that the \emph{top} node of the latter derivation tree
+has the prefer attribute this derivation is selected and the other
+tree is removed from the ambiguity node.
 
 \subsection{Parametrization and Renaming} \label{Renamings}
 
 \subsection{Variables} \label{Variables}
 
 Variables are declared in the `{\tt variables}' section of a module.  Like all
-other entities in a module---except equations---variables may be exported
-(Section \ref{modules}). A variables section consists of a list of variable
-names followed by their sort. In fact, a variable declaration can define an
+other entities in a 
+\link{module---except equations---variables may be exported}[
+(Section \ref{modules})]{modules}. 
+A variables section consists of a list of variable
+names followed by a symbol. In fact, a variable declaration can define an
 infinite collection of variables by using a \emph{naming scheme} instead of a
 simple variable name.  A naming scheme is a regular expression like the ones
-allowed in the lexical syntax (Section \ref{lexical-syntax}) except that sorts
+allowed in the \link{lexical syntax}[ (Section
+\ref{lexical-syntax})]{lexical-syntax} except that sorts
 are not allowed. A variable may represent any symbol. 
 
 In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
@@ -3484,11 +3931,18 @@ Declared variables can only be used when defining equations. It is not
 allowed to use them in terms.
 
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
-strategy that was discussed in Section \ref{lex-ambiguity}.
+strategy that was discussed in
+\begin{iftex}
+Section~\ref{lex-ambiguity}.
+\end{iftex}
+\begin{ifhtml}
+Section \link{Lexical Ambiguities}[]{lex-ambiguity}.
+\end{ifhtml}
 
 \subsubsection{Set Operator}
 
-The set operator (see Section~\ref{SetOperator}) is an abbrevation for
+\link{The set operator}[ (see Section~\ref{SetOperator})]{SetOperator} 
+is an abbrevation for
 representing sets. However, to obtain access to the elements of such
 a set an auxilary variable has to be defined, see
 Figure~\ref{CODE:set-variable} for an example.
@@ -3528,8 +3982,9 @@ terms possibly containing variables.
 
 In the context of \asfsdf, an open term is any string that can be parsed
 according to one of the sorts in the specification (possibly including
-variables).  Recalling the {\tt Bool-example} specification in
-Section~\ref{Bool-example}, examples of open terms are `{\tt true}', 
+variables).  Recalling \link{the {\tt Bool-example} specification}[ in
+Section~\ref{Bool-example}]{Bool-example}, 
+examples of open terms are `{\tt true}', 
 `{\tt not(false)}' and `{\tt true | Bool}'.
 
 \subsubsection{Unconditional Equations}
@@ -3681,7 +4136,8 @@ each subterm encountered an attempt is made to reduce it.
 Next, the rules are traversed one after the other.  The textual order of the
 rules is irrelevant.  Instead they are ordered according to their
 \emph{specificity}: more specific rules come before more general rules and
-default rules (see Section~\ref{DefaultEquations}) come last.  
+\link{default rules}[ (see
+Section~\ref{DefaultEquations})]{DefaultEquations} come last.  
 If the selected subterm and the left-hand side of a
 rule (more precisely: of the left-hand side of its conclusion) match, we say
 that a \emph{redex} has been found and the following happens. The conditions
@@ -3990,9 +4446,7 @@ A transformer is declared as follows:
 \[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo)\}}\]
 
 Because a transformer always returns the same sort, it is type-safe. A
-transformer is used to transform a tree\footnote{The additions {\tt trafo}
-and {\tt accu} are not yet supported by the parser, so in the example you
-will only see the attribute {\tt traversal}}.
+transformer is used to transform a tree.
 
 \item[Accumulator:] a mapping of all node types to a single type. 
 It will traverse its first argument, while the second
@@ -4044,32 +4498,20 @@ type of traversal:
 \end{description}
 
 We give two simple examples of traversal functions that are both
-based on the tree language defined in Figure~\ref{FIG:tree-language}.
-Our first example transforms a given tree into a new tree in which
-all numbers have been incremented (Figure~\ref{FIG:inc}).  Our second
-example computes the sum of all numbers in a tree (Figure~\ref{FIG:sum}).
+based on the \link{tree language}[ defined in
+Figure~\ref{FIG:tree-language}]{FIG:tree-language}.
+\link{Our first example}[ (Figure~\ref{FIG:inc})]{FIG:inc} 
+transforms a given tree into a new tree in which
+all numbers have been incremented.  
+\link{Our second example}[ (Figure~\ref{FIG:sum})]{FIG:sum}
+computes the sum of all numbers in a tree.
 For many more examples and a detailed description of traversal functions
 see~\cite{BKV01}.
 
 Implicitly, each traversal function corresponds to a set of functions,
 one for each sort that can be reached during a traversal.
-There are two approaches how to define these functions:
-
-\begin{itemize}
-
-\item They are explicitly defined by the specification writer
+They are explicitly defined by the specification writer
 (this is the default).
-
-\item They  are generated automatically. This is achived with
-  the attribute {\tt generate-syntax}.
-
-\end{itemize}
-
-Experience learns that the automatic generation of syntax is nice for
-smaller examples but becomes a burden for real-life specifications:
-generation times become much longer and the generated function definitions
-may yield undesired, and hard to resolve syntactic ambiguities.
-
 
 \begin{figure}
 \begin{IncCode}
@@ -4078,7 +4520,7 @@ module Tree-syntax
 imports Naturals
 exports
   sorts TREE
-  contextfreesyntax
+  context-free syntax
     NAT           -> TREE
     f(TREE, TREE) -> TREE
     g(TREE, TREE) -> TREE
@@ -4094,8 +4536,8 @@ exports
 module Tree-inc
 imports Tree-syntax
 exports
-  contextfreesyntax
-    inc(TREE) -> TREE {traversal}
+  context-free syntax
+    inc(TREE) -> TREE {traversal(trafo)}
 equations
 [1] inc(N) = N + 1  
 \end{verbatim}
@@ -4109,8 +4551,8 @@ equations
 module Tree-sum
 imports Tree-syntax
 exports
-contextfreesyntax
-   sum(TREE, NAT) -> NAT {traversal}
+context-free syntax
+   sum(TREE, NAT) -> NAT {traversal(accu)}
 equations
 [1] sum(N1, N2) = N1 + N2
 \end{verbatim}
@@ -4237,7 +4679,7 @@ Computing the derivative of an expression with respect to some variable is a
 classical problem we discuss in this example. 
 Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
 \begin{quote}
-{\tt d(X * (X + Y + Z)) / dX ) X + Y + Z + X}
+{\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
 \end{quote}
 
 \noindent Differentiation is defined in three stages. First, the sorts {\tt NAT}
@@ -4609,27 +5051,15 @@ By means of the button {\tt Compile ...} in the pop up menu for module
 operations (Figure \ref{FIG:module-menu}) or the button pane the \asfsdf2C
 compiler can be activated. C code is generated for the selected module
 (exactly {\em one} module can be selected for compilation) including
-the imported modules.
+the imported modules. The C code is immediately compiled into an
+executable.
 
 \begin{itemize}
 \item The specification should be complete, i.e., no missing modules are
 allowed, and the equations sections should be error free.
-
-\item Not all \sdf\ syntax features are yet supported by the compiler.
-This poses several extra restrictions:
-
-\begin{itemize}
-\item Result symbols in lexical syntax rules are restricted to
-      plain basic sorts.
-\item In the context-free syntax rules only literals, basic sorts, and
-      lists (without the minimal repetition) are allowed. Furthermore
-      lists are not allowed as result symbol.
-\item Aliases are not supported by the compiler.
 \end{itemize}
 
-\end{itemize}
-
-If these requirements are satisfied, C code can be generated.
+If this requirement is satisfied, C code can be generated.
 This process of C code generation is described in detail in \cite{BKO99}.
 We shall give a brief description of the main steps performed by the
 \asfsdf2C compiler.
@@ -4643,51 +5073,7 @@ the C code for {\em all} equations with the C function as outermost
 function symbol in the left-hand side.  By having all equations with the
 same outermost function symbol in the left-hand side together an optimal
 matching automaton can be generated.  Equations with the same outermost
-function symbol are moved to the corresponding syntax rule.  This syntax
-rule together with the equations is `stored' in an intermediate module
-`$\mbox{\tt AUX-M}_{ij}$' where $\mbox{\tt M}_i$ is the module which
-contained the definition of the syntax rule and the corresponding
-equations, see Figure~\ref{CODE:reshuffled-module}.
-
-\begin{figure}
-\begin{IncCode}
-\begin{verbatim}
-module AUX-Booleans2
-exports               
-  context-free syntax
-    BOOL "|" BOOL -> BOOL {left}
-equations
-  [B1]   true | Bool   = true
-  [B2]   false | Bool  = Bool
-\end{verbatim}
-\end{IncCode}
-\caption{Module generated after reshuffling}\label{CODE:reshuffled-module}
-\end{figure}
-
-These intermediate modules are input to the actual \asfsdf2C compiler.
-For each $\mbox{\tt AUX-M}_{ij}$ module a separate C file is generated
-in the {\tt COMPILER\_OUTPUT} directory, see
-Figure~\ref{CODE:generated-c-code}.
-The code presented in this figure is only a small part of the generated
-code, there are some extra functions generated which take care of 
-the administration of used functions in the code and how such a 
-generated function can be used by other functions.
-
-\begin{figure}
-\begin{IncCode}
-\begin{verbatim}
-ATerm lf_AUX_Booleans2_1 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_AUX_Booleans2_1sym , 
-ATmakeAppl ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) { FUNC_EXIT ( arg1 ) ; }
-if ( check_sym ( arg0 , ef2sym ) ) { FUNC_EXIT ( arg0 ) ; }
-FUNC_EXIT ( make_nf2 ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
-}                       
-\end{verbatim}
-\end{IncCode}
-\caption{Generated C code for the reshuffled module of
-Figure~\ref{CODE:reshuffled-module}}\label{CODE:generated-c-code}
-\end{figure}
+function symbol are moved to the corresponding syntax rule.  
 
 \section{Technology and Architecture of the \ASmetaenv}\label{SEC:TechnologyandArchitecture}
 
@@ -4801,26 +5187,19 @@ their command line options.
 
 Before you can parse terms over a module {\tt M} outside the
 \ASmetaenv\ you have to obtain a parse table for this module.  There
-are currently two ways to achieve this:
+are currently three ways to achieve this:
 
 \begin{itemize}
 
-\item Interactively using the \ASmetaenv:
+\item Interactively using the \ASmetaenv\
 
-\begin{itemize}
+via {\tt Dump Parse Table...} for module {\tt M}.
 
-\item Open a term editor for module {\tt M}.
+\item From the command line using the command {\tt pt-dump}.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated.
 
-\item Parse the contents of the editor by pressing the button {\tt
-Parse Buffer}. If necessary this will generate the parse table.  Note
-that all modules imported by {\tt M} are also used for generating the
-parse table.
-
-\item Press the {\tt Save} button on the file menu (see Figure~\ref{FIG:file-menu})
-of module {\tt M}. The parse table is now saved as {\tt M.trm.tbl} in
-the same directory as {\tt M.sdf}.
-
-\end{itemize}
+For further information use {\tt pt-dump -h}.
 
 \item From the command line using the command {\tt sdf2table}.  You should
 be aware that {\tt sdf2table} needs as input the \emph{complete} grammar
@@ -4852,12 +5231,6 @@ contains a syntax error) or a parse tree in a format called AsFixMe.\
 Note that {\tt sglr} can generate parse trees in several formats:
 
 \begin{itemize}
-\item Use the flag {\tt -1} to generate AsFix1: this is an old parse
-tree format that is in the process of being replaced.  \emph{Be aware that
-compiled specifications currently still use this format: add the
-option {\tt -1} if the term is to be rewritten using a compiled
-specification (also see Section \ref{SEC:reducingofterms})}.
-
 \item Use the flag {\tt -2} to generate AsFix2: this is the format
 introduced for the latest version of \sdf.  This format is only in use
 by some tools outside the \ASmetaenv.  AsFix2 is very verbose: even
@@ -4883,23 +5256,37 @@ two inputs are required:
 this. The result is {\tt term.tree}.
 
 \item The equations to be used for rewriting.  Select the desired
-module and use {\tt Dump Equations...} (see Section~\ref{ButtonPane})
+module and 
+\link{use {\tt Dump Equations...}}[ (see
+Section~\ref{ButtonPane})]{ButtonPane}
 to dump the equations of the selected module and all its imports.
 The results is a file named {\tt M.eqs}.
 
 \end{itemize}
 
 \begin{verbatim}
-   asfe -e M.eqs <term.tree >reduct.tree 
+   asfe -e M.eqs < term.tree > reduct.tree 
 \end{verbatim}  
 
-Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
-converted to a textual representation.
+\begin{iftex}
+Section~\ref{SEC:unparsing} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Unparsing}[]{SEC:unparsing}
+\end{ifhtml}
+explains how {\tt reduct.tree} can be converted to a textual representation.
 
 \subsection{Rewriting a Term using a Compiled Specification}
 \label{SEC:reducingofterms}
 
-In Section~\ref{compiling-specs} we explained how a given module {\tt M}
+In 
+\begin{iftex}
+Section~\ref{compiling-specs} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Compiling Specifications}[]{compiling-specs}
+\end{ifhtml}
+we explained how a given module {\tt M}
 can be compiled into C code. Here we describe how to compile and
 use this generated C code. The steps are as follows:
 
@@ -4922,19 +5309,27 @@ ModuleName.module-list} in the directory with generated C code.
 The result is both a library {\tt libM.a}
 and an executable {\tt M}. This library can be used 
 when several compiled specifications have to be combined into a single executable
-or when compiled specifications have to be combined with with hand-written C code.
+or when compiled specifications have to be combined with hand-written C code.
 
 \item
 
-After parsing the term that has to be reduced (as explained in
-Section \ref{SEC:parsingofterms}), this term can
+After 
+\link{parsing the term}[ (as explained in
+Section \ref{SEC:parsingofterms})]{SEC:parsingofterms}
+that has to be reduced, this term can
 be reduced via the compiled code as follows:
 
 \begin{verbatim}
 COMPILER_OUTPUT/ModuleName < term.tree > reduct.tree
 \end{verbatim}
 
-Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
+\begin{iftex}
+Section~\ref{SEC:unparsing} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Unparsing}[]{SEC:unparsing}
+\end{ifhtml}
+explains how {\tt reduct.tree} can be
 converted to a textual representation.
 \end{itemize}
 
