@@ -12,9 +12,9 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	get-imports.c
 
 sdf_modules_LDADD =\
-                 -L$(ATERM)/lib -lATerm-dbg \
+                 -L$(ATERM)/lib -lATerm \
                  -L$(TOOLBUSLIB)/lib -lATB \
-		 -L$(top_builddir)/lib -lSDFME -lmept \
+		 -L$(top_builddir)/lib -lSDFME \
                  $(SOCKLIBS)
 
 noinst_HEADERS = sdf-modules.tif.h \
