@@ -136,5 +136,17 @@ AC_OUTPUT(
    sglr/test/first/Makefile
    sglr/test/tables/Makefile
    sglr/test/terms/Makefile
-  , chmod +x sglr/test/trmdiff sglr/test/regress-terms
+   pgen/Makefile \
+   pgen/c-lib/Makefile \
+   pgen/c-source/Makefile \
+   pgen/src/Makefile \
+   pgen/grammar/Makefile \
+   pgen/sdf2stats/Makefile \
+   pgen/normalizer/Makefile
+   pgen/test/Makefile
+   pgen/test/trmdiff
+   pgen/test/first/Makefile
+   pgen/test/grammars/Makefile
+   pgen/test/tables/Makefile
+  , chmod +x sglr/test/regress-terms pgen/test/regress-lang
 )
