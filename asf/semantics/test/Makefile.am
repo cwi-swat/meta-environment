@@ -1,4 +1,5 @@
 SUBDIRS=eqs input output c-code
+EXTRA_DIST=README
 
 TEST_MODULES=Bracket \
              Collect \
@@ -29,41 +30,32 @@ IN=${srcdir}/input
 OUT=${srcdir}/output
 CODE=${srcdir}/c-code
 
-EXTRA_DIST=README
-CLEANFILES = *.out *.c ${TEST_MODULES}
+CLEANFILES = *.out *.c ${TEST_MODULES} *.sh
 
-check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
-	rm -f *.out *.c
+TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) \
+        $(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.asfe.sh )
 
-asfe.test: ${TEST_MODULES:=.asfe.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
-asfc.test: ${TEST_MODULES:=.asfc.test} 
+%.diff.sh: 
+	(echo 'set -e' ; \
+         echo 'for i in $*.*.asfc.out; do'; \
+         echo ' ${ATDIFF} $$i `basename $$i .asfc.out`.asfe.out ' ;\
+         echo ' rm -f $$i `basename $$i .asfc.out`.asfe.out ' ;\
+	 echo 'done' ) > $@ && chmod +x $@
 
-%.test: %.asfe.test %.asfc.test
-	@printf "Testing $*, comparing asfe and asfc: "
-	@set -e; for i in *.asfc.out; do \
-          ${ATDIFF} $$i `basename $$i .asfc.out`.asfe.out ;\
-          printf "."; \
-	done;
-	@printf "\n"
-	rm -f $* *.out *.c
+%.asfe.sh:
+	(echo 'set -e'  ;\
+         echo 'for i in ${IN}/$*.*.pt; do' ; \
+	 echo '  ${ASFE} -l -e ${EQS}/$*.eqs -i $$i | \'; \
+         echo '  ${ATRMANNOS} -a -o `basename $$i`.asfe.out ' ; \
+         echo '  ${ATDIFF} `basename $$i`.asfe.out ${OUT}/`basename $$i`' ; \
+	 echo 'done' ;\
+         echo 'printf "\n"' ) > $@ && chmod +x $@
 
-%.asfe.test: 
-	@printf "Testing $* with asfe: "
-	@set -e; for i in ${IN}/$*.*.pt; do \
-	  ${ASFE} -l -e ${EQS}/$*.eqs -i $$i | \
-          ${ATRMANNOS} -a -o `basename $$i`.asfe.out; \
-          ${ATDIFF} `basename $$i`.asfe.out ${OUT}/`basename $$i` ; \
-          printf "."; \
-	done;
-	@printf "\n"
-
-%.asfc.test: 
-	@printf "Testing $* with asfc: "
-	@${ASFC} -c -i ${EQS}/$*.eqs -n $* -o $*.c
-#	@diff $*.c ${CODE}/$*.c 
-	@set -e; for i in ${IN}/$*.*.pt; do \
-	  $* -i $$i -o `basename $$i`.asfc.out; \
-          ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` ; \
-          printf "."; \
-        done;
-	@printf "\n"
+%.asfc.sh: 
+	(echo 'set -e' ; \
+         echo '${ASFC} -c -i ${EQS}/$*.eqs -n $* -o $*.c'; \
+	 echo 'for i in ${IN}/$*.*.pt; do ' ;\
+	 echo ' $* -i $$i -o `basename $$i`.asfc.out '; \
+         echo ' ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` '; \
+         echo 'done' ; \
+         echo 'printf "\n"') > $@ && chmod +x $@
