@@ -3,6 +3,10 @@
 2003/05/28 (markvdb@cs.vu.nl)
  * Added a number of "empty" assignments.
 
+2003/05/28 (jurgenv@cwi.nl)
+ * The meta-studio.idef subscribes to notes before executing the studio
+   to prevent loosing any notes.
+
 2003/05/27 (jurgenv@cwi.nl)
  * Term-store has two types of tables now: str and term. 
  * Pos-info is added up to depth 4 for equations as it used to  be,
