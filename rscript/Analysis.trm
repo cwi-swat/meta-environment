@@ -1,14 +1,15 @@
-label(
 
+collect(
 begin
 declare x : natural;
 
-x := 3;
-if y then y := 3; y := 4 else y := 5 fi;
-y := 6
+[1] x := 3;
+if [2] y then [3] y := 3; [4] y := 4 else [5] y := 5 fi;
+[6] y := 6
 end
 ,
 
-0)
+[]
+)
 
 

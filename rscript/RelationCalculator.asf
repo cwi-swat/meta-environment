@@ -7,9 +7,24 @@
 
 [ASG1]  assign(Var, Val, [VPair*]) = [<Var, Val>, VPair*]
 
-[add1]  add(Var, Val1, [<Var, Val2>, VPair*]) = [<Var, apply(Val1 union Val2)>, VPair*]
-[add2]  Var != Var' ===> add(Var, Val1, [<Var', Val2>, VPair*]) = add(Var, Val1, [VPair*])
-[add3]  add(Var, Val, []) = [<Var, Val>]
+[add1a]  add(Var, E, [<Var, Val>, VPair*]) = [<Var, apply({E} union Val)>, VPair*]
+
+[add1b]  Var != Var',
+         [VPair*'] = add(Var, E, [VPair*])
+         ===============================================================
+         add(Var, E, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+
+[add1c]  add(Var, E, []) = [<Var, {E}>]
+
+[add2a]  add(Var, <E1, E2>, [<Var, Val>, VPair*]) = [<Var, apply({<E1, E2>} union Val)>, VPair*]
+
+[add2b]  Var != Var', 
+	 [VPair*'] =add(Var, <E1, E2>, [VPair*])
+         ===============================================================
+         add(Var, <E1, E2>, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+
+[add2c]  add(Var, <E1, E2>, []) = [< Var, {<E1, E2>} >]
+
 
 %%---- if
 
@@ -111,6 +126,13 @@
 
 [EE3]  evalx(Var, Store)  = value(Var, Store)
 
+%% ---- Eval tuples
+
+[ET1]  E1 = evale(Exp1, Store),
+       E2 = evale(Exp2, Store)
+       ==================================================
+       evalx(<Exp1, Exp2>, Store) = <E1, E2>
+
 %% ---- Eval bags
 
 [EB1]  evalx('Bag, Store) = Bag
@@ -142,13 +164,23 @@
        ====================================================
        evalx(Exp1 union Exp2, Store) = apply(Val1 union Val2)
 
-[UN2]  apply(Bag1 union Bag2) = Bag1 union Bag2
+[UN2]  apply(Bag1 union Bag2)   = Bag1 union Bag2
 [UN3]  apply(*empty* union Bag) = Bag 
 [UN4]  apply(Bag union *empty*) = Bag
+[UN5]  apply(E union *empty*)   = E
+[UN6]  apply(*empty* union E)   = E
+[UN7]  apply(E1 union E2)       = {E1} union {E2}
+[UN8]  apply(E union Bag)       = {E} union Bag
+[UN9]  apply(Bag union E)       = Bag union {E}
 
-[UN5]  apply(Rel1 union Rel2) = Rel1 union Rel2
-[UN6]  apply(*empty* union Rel) = Rel
-[UN7]  apply(Rel union *empty*) = Rel
+[UN10] apply(Rel1 union Rel2)     = Rel1 union Rel2
+[UN11] apply(*empty* union Rel)   = Rel
+[UN12] apply(Rel union *empty*)   = Rel
+[UN13] apply(Tuple union *empty*) = Tuple
+[UN14] apply(*empty* union Tuple) = Tuple
+[UN15] apply(Tuple1 union Tuple2) = {Tuple1} union {Tuple2}
+[UN16] apply(Tuple union Rel)     = {Tuple} union Rel
+[UN17] apply(Rel union Tuple)     = Rel union {Tuple}
 
 [IN1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
@@ -190,6 +222,7 @@
        Rel = evalr(Exp3, Store)
        ===================================================
        evalx(Exp1 until(Exp2, Exp3), Store) = Bag1 until(Bag2, Rel)
+       
 
 [TC1] Rel = evalr(Exp, Store)
       ===================================================
@@ -360,6 +393,34 @@
         ====================================================
         evalx(carX(Exp1, Exp2), Store) = Rel carX Bag
 
-[Felm]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
+[Felm1]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
         evalx(elem(Exp1, Exp2), Store) = E in Bag
+
+%% Note elem(Tuple, Rel)
+
+%% ---- FUN ( EXP , EXP , EXP)  -> EXP
+
+[default-fun3]
+        value(Var, Store) = <Var1, Var2, Var3, Exp4>,
+        Val1 = evalx(Exp1, Store),
+        Val2 = evalx(Exp2, Store),
+        Val3 = evalx(Exp3, Store),
+
+        Store' = assign(Var1, Val1, Store),
+	Store'' = assign(Var2, Val2, Store'),
+	Store''' = assign(Var3, Val3, Store')
+        ==================================================
+	evalx(Var(Exp1, Exp2, Exp3), Store) = evalx(Exp4, Store''')
+
+[Fdms]  Rel1 = evalr(Exp1, Store),
+        Rel2 = evalr(Exp2, Store),
+        Rel3 = evalr(Exp3, Store)
+        ================================================= 
+        evalx(dominators(Exp1, Exp2, Exp3), Store) = 
+        dominators(Rel1, Rel2, Rel3)
+
+
+
+
+

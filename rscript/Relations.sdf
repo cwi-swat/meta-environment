@@ -68,6 +68,9 @@ imports Bags[Elem]
 
      Bag[[Elem]] "until" "(" Bag[[Elem]] "," Rel[[Elem]] ")" -> Bag[[Elem]]
 
+     dominators(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) -> Rel[[Elem]]
+    dominators1(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) -> Rel[[Elem]]
+
 
      "(" Rel[[Elem]] ")"              -> Rel[[Elem]] {bracket}
 

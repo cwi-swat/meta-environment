@@ -6,7 +6,7 @@ exports
   sorts SCRIPT STAT VAR FROM TEXP EXP
 
   lexical syntax
-     [\$]?[A-Za-z][A-Za-z0-9]*               -> VAR
+     [\$]?[A-Za-z][A-Za-z0-9\_]*               -> VAR
 
   context-free syntax
 
@@ -32,6 +32,7 @@ exports
      "{" {EXP ","}* "}"                      -> EXP
      "<" EXP "," EXP ">"                     -> TEXP
      "{" {TEXP ","}* "}"                     -> EXP
+     TEXP                                    -> EXP
 
 %% Operators
 
@@ -44,6 +45,7 @@ exports
      EXP "+"                                 -> EXP
      EXP "*"                                 -> EXP
      EXP "until" "(" EXP "," EXP ")"         -> EXP
+%%     "dominators" "(" EXP "," EXP "," EXP ")"-> EXP
 
 %% value formers
 
@@ -57,6 +59,7 @@ exports
 
      VAR "(" EXP ")"                         -> EXP
      VAR "(" EXP "," EXP ")"                 -> EXP
+     VAR "(" EXP "," EXP "," EXP")"          -> EXP
      "(" EXP ")"                             -> EXP {bracket}
 
      "def" VAR "=" EXP                       -> STAT

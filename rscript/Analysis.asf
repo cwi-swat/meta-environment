@@ -1,5 +1,7 @@
 equations
 
+%% -- label the program
+
 [1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
 
 [2] label(if Exp then Stat*1 else Stat*2 fi, Int) =
@@ -8,7 +10,15 @@ equations
 [3] label(while Exp do Stat* od, Int) =
     < while [Int] Exp do Stat* od, Int + 1>
 
-[4] collect([Int] Id := Exp, Rstore) = add(Rstore, DEFS, Int, Id)
+%% -- collect basic relations
+
+%% -- collect defines
+
+[4] Rstore' = collect-uses(Exp, Rstore, Int)
+    ==========================================================
+    collect([Int] Id := Exp, Rstore) = add(DEFS, <Int, Id>, Rstore')
+
+[5] collect-uses(Id, Rstore, Int) = add(USES, <Int, Id> , Rstore)
          
 
 

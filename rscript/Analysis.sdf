@@ -20,11 +20,15 @@ exports
  
   context-free syntax
 
-      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, top-down, continue)} 
-      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, top-down, continue)} 
+      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
+      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
 
-      collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
-      collect(STATEMENT, RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
+      collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,top-down,break)}            
+      collect(STATEMENT, RSTORE)  -> RSTORE  {traversal(accu,top-down,break)} 
+
+      collect-uses(EXP, RSTORE, Integer)	  -> RSTORE  {traversal(accu,bottom-up,continue)} 
+      collect-uses(PICO-ID, RSTORE, Integer)	  -> RSTORE  {traversal(accu,bottom-up,continue)} 
+
 
   imports asf/syntax/Comments
 
