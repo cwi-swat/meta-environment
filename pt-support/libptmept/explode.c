@@ -4,7 +4,17 @@
 #include <assert.h>
 
 static PTPT_OptLayout e = NULL;
+/*
 ATermTable store = NULL;
+*/
+
+static void initEmptyLayout() 
+{
+  if (e == NULL) {
+    e = PTPT_makeOptLayoutAbsent();
+    ATprotect((ATerm*) &e);
+  }
+}
 
 /*{{{  static PTPT_NatCon   PTPT_explodeNatCon(int val) */
 
@@ -141,8 +151,7 @@ PTPT_ATerm PTPT_explodeATerm(ATerm term)
     ann = PTPT_explodeAnnotations((ATermList) annos);
   }
 
-  e = PTPT_makeOptLayoutAbsent();
-  ATprotect((ATerm*) &e);
+  initEmptyLayout();
 
   if (ATgetType(term) == AT_LIST) {
     PTPT_ATermList list = PTPT_explodeATermList((ATermList) term);
@@ -266,6 +275,8 @@ static PTPT_Attrs PTPT_explodeAttrs(PT_Attrs attrs)
 static PTPT_Symbol PTPT_explodeSymbol(PT_Symbol symbol)
 {
   PTPT_Symbol result = NULL;
+
+  initEmptyLayout();
 
   if (PT_isSymbolLit(symbol)) {
     PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolString(symbol), ATtrue);
@@ -544,8 +555,7 @@ PTPT_Tree PTPT_explodeTree(PT_Tree pt)
   PTPT_Tree result = NULL;
   ATerm annos = NULL;
 
-  e = PTPT_makeOptLayoutAbsent();
-  ATprotect((ATerm*) &e);
+  initEmptyLayout();
 
   if (PT_isTreeAmb(pt)) {
     PT_Args args = PT_getTreeArgs(pt);
@@ -590,8 +600,7 @@ PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt)
   PT_Tree tree = PT_getParseTreeTop(pt);
   int ambCnt = PT_getParseTreeAmbCnt(pt);
 
-  e = PTPT_makeOptLayoutAbsent();
-  ATprotect((ATerm*) &e);
+  initEmptyLayout();
 
   return PTPT_makeParseTreeTop(e,e,
 			       (PTPT_Tree) PTPT_explodeTree(tree),
