@@ -287,19 +287,13 @@ ATerm open_trm_file(int cid, char *name)
 }
 
 ATerm save_sdf2_asfix(int cid, char *name, char *fn, ATerm syntax)
-{
-  char full[PATH_LEN];
-
-  sprintf(full, "%s%s", fn, ".baf");
-  return write_term_to_named_file(syntax, full, name);
+{ 
+  return write_term_to_named_file(syntax, fn, name);
 }
 
 ATerm save_eqs2_asfix(int cid, char *name, char *fn, ATerm eqs)
-{
-  char full[PATH_LEN];
-
-  sprintf(full, "%s%s", fn, ".baf");
-  return write_term_to_named_file(eqs, full, name);
+{ 
+  return write_term_to_named_file(eqs, fn, name);
 }
 
 void rec_terminate(int cid, ATerm arg)
