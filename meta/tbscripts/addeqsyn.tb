@@ -3,7 +3,7 @@
  */
 process AddEqSyn(AES: add-eqs-syntax) is
 let
-  Name      : term,
+  Name      : str,
   NewSyntax : term,
   Syntax    : term
 in  
