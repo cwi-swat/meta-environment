@@ -10,10 +10,7 @@ CLEANFILES	= meta-studio
 	sed "\
 	     s@__JAVA__@${JAVA}@g;\
 	     s@__JARDIR__@${pkgdatadir}@g;\
-	     s@__TBDIR__@${pkgdatadir}@g;\
-	     s@__ATERM__@${ATERM}@g;\
-	     s@__JJTRAVELER__@${JJTRAVELER}@g;\
-	     s@__TOOLBUS__@${TOOLBUS}@g;\
+	     s@__EXTERNAL_JARS@${EXTERNAL_JARS}@g;\
 	     s@__BUILDDIR__@$$reldir_to_absdir@g;\
 	     s@__TIDEDEF__@${TIDEDEF}@g;\
 	" < $< > $@ && chmod +x $@
