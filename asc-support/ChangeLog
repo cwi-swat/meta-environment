@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/07 (jurgenv@cwi.nl)
+ * Moved builtins library from the asf package to this package
+ * Renamed the libME subdirectory to 'lib'
+
 2003/10/07 (markvdb@cwi.nl)
  * Introduced the new tuple concept.
 

@@ -53,7 +53,7 @@ link_test_LDADD=\
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include -I$(TOOLBUSLIB)/include \
 	 -I$(srcdir)/booleans
 
-UTILS=${top_srcdir}/semantics/builtins/utils
+UTILS=${top_srcdir}/builtins/utils
 GENFWD=${UTILS}/gen-forward.sh
 GENPRTS=${UTILS}/gen-protos.sh
 GENLNKTST=${UTILS}/gen-link-test.sh

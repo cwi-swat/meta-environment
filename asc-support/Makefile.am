@@ -1,4 +1,4 @@
-SUBDIRS			= utils libME builtins
+SUBDIRS			= utils lib builtins
 
 EXTRA_DIST=$(wildcard *.pkg)
 

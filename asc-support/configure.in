@@ -42,6 +42,32 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl {{{  Require socket/gethostname
+
+NOSOCKLIBS=$LIBS
+dnl {{{  check for socket in -lsun and -lsocket
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+
+dnl }}}
+dnl {{{  check for gethostname in -lsun and -lsocket
+
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+dnl }}}
+AC_SUBST(SOCKLIBS)
+LIBS=$NOSOCKLIBS
+
+dnl }}}
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -56,7 +82,10 @@ AC_SET_MAKE
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
-  libME/Makefile
-  libME/tb/Makefile
+  lib/Makefile
+  lib/tb/Makefile
   utils/Makefile
+  builtins/Makefile
+  builtins/utils/Makefile
+  builtins/lib/Makefile
 )

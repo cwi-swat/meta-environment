@@ -12,14 +12,14 @@ libtb_asc_support_me_a_SOURCES = tb-asc-support.c \
                               tb-main.c \
                               client.c
  
-tb-%.c : ${top_srcdir}/libME/%.c
+tb-%.c : ${top_srcdir}/lib/%.c
 	cp -f $< $@
 
 CLEANFILES+=tb-*.c
 
 # Default include directories
 INCLUDES   = -DTOOLBUS  \
-             -I${top_srcdir}/libME \
+             -I${top_srcdir}/lib \
              -I$(PT_SUPPORT)/include \
              -I$(ASF_SUPPORT)/include \
              -I$(TOOLBUSLIB)/include \
