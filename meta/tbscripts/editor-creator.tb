@@ -5,11 +5,11 @@
 */
 
 process DeleteAndKillEditor(EditorId : term) is
+  snd-msg(kill-editor(EditorId)) .
+  rec-msg(kill-editor-done(EditorId)) .
   snd-msg(delete-text-editor(EditorId)) .
   snd-msg(delete-structure-editor(EditorId)) .
-  snd-note(delete-editor(EditorId)) .
-  snd-msg(kill-editor(EditorId)) .
-  rec-msg(kill-editor-done(EditorId))
+  snd-note(delete-editor(EditorId))
 
 process DeleteEditorsForModule(ModuleName: str) is
 let
