@@ -1,4 +1,4 @@
-#line 42 "armcmd.c.nw"
+#line 43 "armcmd.c.nw"
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -9,7 +9,7 @@
 #include <TB.h>
 #include <tool2.h>
 #include "armcmd.tif.c"
-#line 58 "armcmd.c.nw"
+#line 59 "armcmd.c.nw"
 #define MAX_ID_LEN    64
 
 term_list *tasks = NULL;	/* The list of tasks that have to be done */
@@ -18,13 +18,13 @@ char *interpreter = NULL;	/* The arm-interpreter to use */
 term_list *search_paths = NULL; /* The list of search paths */
 int TBcid;			/* Global ToolBus connection id */
 
-#line 72 "armcmd.c.nw"
+#line 73 "armcmd.c.nw"
 void exit_gracefully(int code)
 {
   TB_send(TBcid, TB_make("snd-disconnect"));
   exit(code);
 }
-#line 86 "armcmd.c.nw"
+#line 87 "armcmd.c.nw"
 void check_interpreter()
 {
   if(!interpreter) {
@@ -33,7 +33,7 @@ void check_interpreter()
   }
   tasks = list_concat_term(tasks, TB_make("is-present(<str>)", interpreter));
 }
-#line 100 "armcmd.c.nw"
+#line 101 "armcmd.c.nw"
 term *make_term(char *t)
 {
   FILE *f;
@@ -52,7 +52,7 @@ term *make_term(char *t)
 
   return TBmake(t);
 }
-#line 124 "armcmd.c.nw"
+#line 125 "armcmd.c.nw"
 term_list *read_file_list(char *file)
 {
   FILE *f;
@@ -69,23 +69,23 @@ term_list *read_file_list(char *file)
   }
   return result;
 }
-#line 146 "armcmd.c.nw"
+#line 147 "armcmd.c.nw"
 void value(char *var, term *val)
 {
   TBprintf(stdout, "%t\n", val);
 }
-#line 156 "armcmd.c.nw"
+#line 157 "armcmd.c.nw"
 void error(int cid, char *msg)
 {
   TBprintf(stderr, "error while processing %t:\n%s\n", current_task, msg);
 }
-#line 167 "armcmd.c.nw"
+#line 168 "armcmd.c.nw"
 void reduction_result(int cid, term *t)
 {
   TBprintf(stdout, "%t\n", t);
 }
 
-#line 177 "armcmd.c.nw"
+#line 178 "armcmd.c.nw"
 void rec_ack_event(int cid, term *ev)
 {
   char *interp, *msg;
@@ -141,14 +141,14 @@ void rec_ack_event(int cid, term *ev)
     TB_send(TBcid, TB_make("snd-event(<term>)", current_task));
   }
 }
-#line 238 "armcmd.c.nw"
+#line 239 "armcmd.c.nw"
 void rec_terminate(int cid, term *arg)
 {
   TBprintf(stderr, "rec-terminate called: %t\n", arg);
   exit(1);
 }
 
-#line 250 "armcmd.c.nw"
+#line 251 "armcmd.c.nw"
 void task_create_interpreter(char *id)
 {
   char *sep, *machine = NULL;
@@ -166,19 +166,28 @@ void task_create_interpreter(char *id)
 		TB_make("create-interpreter(<str>,<str>)", id, machine));
   interpreter = id;
 }
-#line 273 "armcmd.c.nw"
+#line 274 "armcmd.c.nw"
 void task_clear_arm()
 {
   check_interpreter();
   tasks = list_concat_term(tasks, TBmake("clear-arm(%s)", interpreter));
 }
-#line 284 "armcmd.c.nw"
+#line 285 "armcmd.c.nw"
+void task_load_mappings(char *trm)
+{
+  term *t = make_term(trm);
+
+  check_interpreter();
+  tasks = list_concat_term(tasks, TB_make("load-mappings(<str>,<term>)", 
+							interpreter, t));
+}
+#line 299 "armcmd.c.nw"
 void task_link_arm()
 {
   check_interpreter();
   tasks = list_concat_term(tasks, TBmake("link-arm(%s)", interpreter));
 }
-#line 295 "armcmd.c.nw"
+#line 310 "armcmd.c.nw"
 void task_load_arm_files(term_list *files)
 {
   check_interpreter();
@@ -186,7 +195,7 @@ void task_load_arm_files(term_list *files)
 		TBmake("load-arm-files(%s,%t,%t)", 
 		       interpreter, files, search_paths));
 }
-#line 308 "armcmd.c.nw"
+#line 323 "armcmd.c.nw"
 void task_get_value(char *trm)
 {
   term *t = make_term(trm);
@@ -195,7 +204,7 @@ void task_get_value(char *trm)
   tasks = list_concat_term(tasks, TB_make("get-value(<str>,term(<term>))", 
 						interpreter, t));
 }
-#line 322 "armcmd.c.nw"
+#line 337 "armcmd.c.nw"
 void task_match(char *term1, char *term2)
 {
   term *t1 = make_term(term1);
@@ -205,7 +214,7 @@ void task_match(char *term1, char *term2)
   tasks = list_concat_term(tasks, 
 	TB_make("match(<str>,term(<term>),term(<term>))", interpreter, t1, t2));
 }
-#line 352 "armcmd.c.nw"
+#line 367 "armcmd.c.nw"
 void task_reduce(char *trm)
 {
   term *t;
@@ -215,7 +224,7 @@ void task_reduce(char *trm)
   tasks = list_concat_term(tasks, TB_make("reduce(<str>,term(<term>))", 
 							interpreter, t));
 }
-#line 337 "armcmd.c.nw"
+#line 352 "armcmd.c.nw"
 void task_reduce_match(char *term1, char *term2)
 {
   term *t1 = make_term(term1);
@@ -225,7 +234,7 @@ void task_reduce_match(char *term1, char *term2)
   tasks = list_concat_term(tasks, 
 	TB_make("match(<str>,term(<term>),reduce(<term>))", interpreter, t1, t2));
 }
-#line 367 "armcmd.c.nw"
+#line 382 "armcmd.c.nw"
 void task_apply_reduce(char *func, char *trm)
 {
   term *t;
@@ -235,7 +244,7 @@ void task_apply_reduce(char *func, char *trm)
   tasks = list_concat_term(tasks, TB_make("reduce(<str>,<appl>)", 
 					 interpreter, func, t));
 }
-#line 382 "armcmd.c.nw"
+#line 397 "armcmd.c.nw"
 void task_reduce_asfix_file(char *in)
 {
   FILE *ifile;
@@ -257,18 +266,18 @@ void task_reduce_asfix_file(char *in)
   tasks = list_concat_term(tasks,
 		TBmake("reduce-asfix(%s,%t)", interpreter, t));
 }
-#line 410 "armcmd.c.nw"
+#line 425 "armcmd.c.nw"
 void task_query()
 {
   tasks = list_concat_term(tasks, TBmake("query"));
 }
-#line 420 "armcmd.c.nw"
+#line 435 "armcmd.c.nw"
 void task_shutdown()
 {
   tasks = list_concat_term(tasks, TBmake("do-shutdown"));
 }
 
-#line 431 "armcmd.c.nw"
+#line 446 "armcmd.c.nw"
 void usage(char *prg, int rv)
 {
   FILE *f;
@@ -281,6 +290,7 @@ void usage(char *prg, int rv)
   fprintf(f, "usage: %s <toolbus-options> [<task>|<interpreter>]*\n", prg);
   fprintf(f, "  <interpreter>               - switch uarm-interpreter to use\n");
   fprintf(f, "tasks:\n");
+  fprintf(f, "  -load-mappings <term>       - load a number of mappings\n");
   fprintf(f, "  -create <uarm-id>[:machine] - create new uarm-interpreter\n");
   fprintf(f, "  -load-arm <arm-files>       - load a set of arm files\n");
   fprintf(f, "  -get-var <var-name>         - retrieve the value of a variable\n");
@@ -310,7 +320,7 @@ void usage(char *prg, int rv)
     TBsend(TBmake("snd-disconnect"));
   exit(rv);
 }
-#line 479 "armcmd.c.nw"
+#line 495 "armcmd.c.nw"
 void handle_options(int argc, char *argv[])
 {
   int i;
@@ -323,6 +333,8 @@ void handle_options(int argc, char *argv[])
       task_create_interpreter(argv[++i]);
     } else if(streq(argv[i], "-clear-arm")) {
       task_clear_arm();
+    } else if(streq(argv[i], "-load-mappings")) {
+      task_load_mappings(argv[++i]);
     } else if(streq(argv[i], "-link-arm")) {
       task_link_arm();
     } else if(streq(argv[i], "-load-arm")) {
@@ -380,13 +392,13 @@ void handle_options(int argc, char *argv[])
     }
   }
 }
-#line 554 "armcmd.c.nw"
+#line 572 "armcmd.c.nw"
 void first_task()
 {
   /* Start the ball rolling */
   rec_ack_event(-1, NULL);
 }
-#line 566 "armcmd.c.nw"
+#line 584 "armcmd.c.nw"
 int main(int argc, char *argv[])
 {
   if(argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h')

@@ -70,7 +70,7 @@ arm-adapter.c arm-adapter.h: arm-adapter.c.nw
 	touch arm-adapter.c arm-adapter.h
 
 arm.tif.c: arm.tifs
-	ctif -newstyle -tool arm -tifs arm.tifs 
+	ctif -backdoor -newstyle -tool arm -tifs arm.tifs 
 
 arm.tifs: arm.tb
 	toolbus -gentifs arm.tb

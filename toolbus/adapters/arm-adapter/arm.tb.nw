@@ -26,7 +26,7 @@ We need two tool types in this script:
 <<tools>>=
 tool arm(H:str) is { 
 	host = "H"
-	command = "/home/olivierp/epic/toolbus/arm-adapter"
+	command = "arm-adapter"
 }
 
 tool armcmd is { }
@@ -91,11 +91,14 @@ process ARM(A:arm, Name:str) is
 let
   Files  : list, Dirs : list,
   T      : term, Success : term,
-  T2     : term
+  T2     : term, Mappings : list
 in
   subscribe(query) .
   ( rec-msg(Name, clear-arm) .
     snd-do(A, clear-arm)
+    +
+    rec-msg(Name, load-mappings(Mappings?)) .
+    snd-do(A, load-mappings(Mappings))
     +
     rec-msg(Name, load-arm-files(Files?, Dirs?)) .
     snd-eval(A, load-arm(Files, Dirs)) .
@@ -137,7 +140,7 @@ process ARMCMD(Do:armcmd) is
 let
   Name	: str,  Host   : str,  Msg   : str,
   A	: arm,
-  Files : list, Dirs   : list,
+  Mappings : list, Files : list, Dirs   : list,
   Term  : term, Reduct : term,
   P	: int,
   T     : term, T1     : term, T2 : term,
@@ -147,6 +150,8 @@ in
   ( <<clear-arm>>
     +
     <<create-interpreter>>
+    +
+    <<load-mappings>>
     +
     <<load-arm-files>>
     +
@@ -187,6 +192,15 @@ Clients can create interpreters.
   create(ARM(A, Name), P?) .
   snd-msg(new-interpreter(Name, Host)) .
   snd-ack-event(Do, create-interpreter(Name, Host))
+@
+
+%}}}
+%{{{ load-mappings
+
+<<load-mappings>>=
+  rec-event(Do, load-mappings(Name?, Mappings?)) .
+  snd-msg(Name, load-mappings(Mappings)) .
+  snd-ack-event(Do, load-mappings(Name, Mappings))
 @
 
 %}}}

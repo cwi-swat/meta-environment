@@ -17,6 +17,7 @@
 
 <<task_create_interpreter>>
 <<task_clear_arm>>
+<<task_load_mappings>>
 <<task_link_arm>>
 <<task_load_arm_files>>
 <<task_get_value>>
@@ -267,7 +268,7 @@ void task_create_interpreter(char *id)
 @
 
 %}}}
-%{{{ void task_clear_arm(char *id)
+%{{{ void task_clear_arm()
 
 <<task_clear_arm>>=
 void task_clear_arm()
@@ -278,7 +279,21 @@ void task_clear_arm()
 @
 
 %}}}
-%{{{ void task_link_arm(char *id)
+%{{{ void task_load_mappings()
+
+<<task_load_mappings>>=
+void task_load_mappings(char *trm)
+{
+  term *t = make_term(trm);
+
+  check_interpreter();
+  tasks = list_concat_term(tasks, TB_make("load-mappings(<str>,<term>)", 
+							interpreter, t));
+}
+@
+
+%}}}
+%{{{ void task_link_arm()
 
 <<task_link_arm>>=
 void task_link_arm()
@@ -440,6 +455,7 @@ void usage(char *prg, int rv)
   fprintf(f, "usage: %s <toolbus-options> [<task>|<interpreter>]*\n", prg);
   fprintf(f, "  <interpreter>               - switch uarm-interpreter to use\n");
   fprintf(f, "tasks:\n");
+  fprintf(f, "  -load-mappings <term>       - load a number of mappings\n");
   fprintf(f, "  -create <uarm-id>[:machine] - create new uarm-interpreter\n");
   fprintf(f, "  -load-arm <arm-files>       - load a set of arm files\n");
   fprintf(f, "  -get-var <var-name>         - retrieve the value of a variable\n");
@@ -488,6 +504,8 @@ void handle_options(int argc, char *argv[])
       task_create_interpreter(argv[++i]);
     } else if(streq(argv[i], "-clear-arm")) {
       task_clear_arm();
+    } else if(streq(argv[i], "-load-mappings")) {
+      task_load_mappings(argv[++i]);
     } else if(streq(argv[i], "-link-arm")) {
       task_link_arm();
     } else if(streq(argv[i], "-load-arm")) {

@@ -1,7 +1,7 @@
 #line 27 "arm.tb.nw"
 tool arm(H:str) is { 
 	host = "H"
-	command = "/home/olivierp/epic/toolbus/arm-adapter"
+	command = "arm-adapter"
 }
 
 tool armcmd is { }
@@ -43,11 +43,14 @@ process ARM(A:arm, Name:str) is
 let
   Files  : list, Dirs : list,
   T      : term, Success : term,
-  T2     : term
+  T2     : term, Mappings : list
 in
   subscribe(query) .
   ( rec-msg(Name, clear-arm) .
     snd-do(A, clear-arm)
+    +
+    rec-msg(Name, load-mappings(Mappings?)) .
+    snd-do(A, load-mappings(Mappings))
     +
     rec-msg(Name, load-arm-files(Files?, Dirs?)) .
     snd-eval(A, load-arm(Files, Dirs)) .
@@ -76,12 +79,12 @@ in
     printf("Arm interpreter %s (%t)\n", Name, A)
   ) * rec-disconnect(A)
 endlet
-#line 136 "arm.tb.nw"
+#line 139 "arm.tb.nw"
 process ARMCMD(Do:armcmd) is
 let
   Name	: str,  Host   : str,  Msg   : str,
   A	: arm,
-  Files : list, Dirs   : list,
+  Mappings : list, Files : list, Dirs   : list,
   Term  : term, Reduct : term,
   P	: int,
   T     : term, T1     : term, T2 : term,
@@ -89,23 +92,30 @@ let
   Success : term
 in
   ( 
-#line 174 "arm.tb.nw"
+#line 179 "arm.tb.nw"
   rec-event(Do, clear-arm(Name?)) .
   snd-msg(Name, clear-arm) .
   snd-ack-event(Do, clear-arm(Name))
-#line 148 "arm.tb.nw"
+#line 151 "arm.tb.nw"
     +
     
-#line 185 "arm.tb.nw"
+#line 190 "arm.tb.nw"
   rec-event(Do, create-interpreter(Name?, Host?)) .
   execute(arm(Host), A?) .
   create(ARM(A, Name), P?) .
   snd-msg(new-interpreter(Name, Host)) .
   snd-ack-event(Do, create-interpreter(Name, Host))
-#line 150 "arm.tb.nw"
+#line 153 "arm.tb.nw"
     +
     
-#line 198 "arm.tb.nw"
+#line 201 "arm.tb.nw"
+  rec-event(Do, load-mappings(Name?, Mappings?)) .
+  snd-msg(Name, load-mappings(Mappings)) .
+  snd-ack-event(Do, load-mappings(Name, Mappings))
+#line 155 "arm.tb.nw"
+    +
+    
+#line 212 "arm.tb.nw"
   rec-event(Do, load-arm-files(Name?, Files?, Dirs?)) .
   snd-msg(Name, load-arm-files(Files, Dirs)) .
   ( rec-msg(Name, ok)
@@ -114,26 +124,26 @@ in
     snd-do(Do, error(Msg))
   ) .
   snd-ack-event(Do, load-arm-files(Name, Files, Dirs))
-#line 152 "arm.tb.nw"
+#line 157 "arm.tb.nw"
     +
     
-#line 212 "arm.tb.nw"
+#line 226 "arm.tb.nw"
   rec-event(Do, link-arm(Name?)) .
   snd-msg(Name, link-arm) .
   snd-ack-event(Do, link-arm(Name))
-#line 154 "arm.tb.nw"
+#line 159 "arm.tb.nw"
     +
     
-#line 223 "arm.tb.nw"
+#line 237 "arm.tb.nw"
   rec-event(Do, reduce(Name?, Term?)) .
   snd-msg(Name, reduce(Term)) .
   rec-msg(Name, reduct(Reduct?)) .
   snd-do(Do, reduction-result(Reduct)) .
   snd-ack-event(Do, reduce(Name, Term))
-#line 156 "arm.tb.nw"
+#line 161 "arm.tb.nw"
     +
     
-#line 234 "arm.tb.nw"
+#line 248 "arm.tb.nw"
   rec-event(Do, is-present(Name?)) .
   snd-msg(is-present(Name)) .
   ( rec-msg(present(Name)) .
@@ -142,38 +152,38 @@ in
     rec-msg(not-present(Name)) .
     snd-ack-event(Do, is-present(Name, not-present))
   )
-#line 158 "arm.tb.nw"
+#line 163 "arm.tb.nw"
     +
     
-#line 250 "arm.tb.nw"
+#line 264 "arm.tb.nw"
   rec-event(Do, query) .
   snd-msg(get-interpreters) .
   rec-msg(interpreters(Interpreters?)) .
   snd-ack-event(Do, query(Interpreters))
-#line 160 "arm.tb.nw"
+#line 165 "arm.tb.nw"
     +
     
-#line 272 "arm.tb.nw"
+#line 286 "arm.tb.nw"
   rec-event(Do, match(Name?, T1?, T2?)) .
   snd-msg(Name, match(T1, T2)) .
   rec-msg(Name, match(Success?)) .
   snd-ack-event(Do, match(Name, T1, T2, Success))
-#line 162 "arm.tb.nw"
+#line 167 "arm.tb.nw"
     +
     
-#line 282 "arm.tb.nw"
+#line 296 "arm.tb.nw"
   rec-event(Do, get-value(Name?, T?)) .
   snd-msg(Name, get-value(T)) .
   rec-msg(Name, value(T2?)) .
   snd-ack-event(Do, get-value(Name, T, T2))
-#line 164 "arm.tb.nw"
+#line 169 "arm.tb.nw"
     +
     
-#line 262 "arm.tb.nw"
+#line 276 "arm.tb.nw"
   rec-event(Do, do-shutdown) .
   snd-ack-event(Do, do-shutdown) .
   shutdown("bye!")
-#line 166 "arm.tb.nw"
+#line 171 "arm.tb.nw"
   ) *
   rec-disconnect(Do)
 endlet

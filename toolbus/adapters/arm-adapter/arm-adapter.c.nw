@@ -86,14 +86,17 @@ typedef struct variable
 variable *vars = NULL;
 
 <<char_table>>
+<<mappings>>
 
 <<assign>>
 <<value>>
 <<substitute>>
 <<substitute_list>>
 <<del_var>>
+<<apply_mappings>>
 
 <<clear_arm>>
+<<load_mappings>>
 <<load_arm>>
 <<link_arm>>
 <<reduce>>
@@ -102,6 +105,8 @@ variable *vars = NULL;
 <<get_value>>
 <<delete_value>>
 
+<<arm_backdoor_handler>>
+<<arm_backdoor_check_in_sign>>
 <<rec_terminate>>
 
 <<main>>
@@ -136,6 +141,14 @@ char *char_table[] =
 @
 
 %}}}
+%{{{ mappings
+
+<<mappings>>=
+term_list *mappings = NULL;
+term_list *reverse_mappings = NULL;
+@
+
+%}}}
 
 %{{{ int main(int argc, char *argv[])
 
@@ -149,6 +162,9 @@ int main(int argc, char *argv[])
 
   /*ARM_DBGMSK = 16;  Tracing on */
   TB_init();
+  TBprotect(&mappings);
+  TBprotect(&reverse_mappings);
+
   ARM_set_up();
 
   xfunuse("pair",v_pair);
@@ -167,6 +183,28 @@ int main(int argc, char *argv[])
 void clear_arm(int cid)
 {
   ARM_clear();
+}
+@
+
+%}}}
+%{{{ void load_mappings(int cid, term_list *mappings)
+
+<<load_mappings>>=
+void load_mappings(int cid, term_list *maps)
+{
+  term *map;
+
+  mappings = maps;
+  reverse_mappings = NULL;
+
+  while(maps) {
+    map = list_first(maps);
+    maps = list_next(maps);
+    reverse_mappings = list_concat_term(reverse_mappings, 
+					list_reverse(list_copy(map)));
+  }
+
+  TBprintf(stderr, "mappings = %t, reverse = %t\n", mappings, reverse_mappings);
 }
 @
 
@@ -265,21 +303,24 @@ Load and reduce a term.
 %{{{ term *reduce(int cid, term *t)
 
 <<reduce>>=
-term *reduce(int cid, term *t)
+term *reduce(int cid, term *trm)
 {
   ARM_ref r;
+  term *t;
 
-  if(!TB_match(t, "term(<term>)", &t)) {
+  if(!TB_match(trm, "term(<term>)", &t)) {
     TBprintf(stderr, "malformed term in reduce: %t\n", t);
     exit(1);
   }
-  t = substitute(t);
+  t = apply_mappings(substitute(t), mappings);
+
+  TBprintf(stderr, "reducing term: %t, after subst and maps: %t\n", trm, t);
 
   ARM_ready();
   push_term(t);
   r = ARM_reduce();
   /*ARM_display(0,r,0);*/
-  t = ref_to_term(r);
+  t = apply_mappings(ref_to_term(r), reverse_mappings);
   return TB_make("snd-value(reduct(<term>))", t);
 }
 @
@@ -635,6 +676,41 @@ void delete_value(int cid, term *v)
 
 %}}}
 
+%{{{ term *arm_backdoor_handler(int cid, term *t)
+
+Handle ToolBus calls that are not handled by the generated
+function {\tt arm\_handler}.
+
+<<arm_backdoor_handler>>=
+term *arm_backdoor_handler(int cid, term *t)
+{
+  term *trm;
+  ARM_ref r;
+
+  if(TB_match(t, "rec-eval(<term>)", &trm)) {
+    trm = apply_mappings(substitute(trm), mappings);
+
+    ARM_ready();
+    push_term(trm);
+    r = ARM_reduce();
+    trm = apply_mappings(ref_to_term(r), reverse_mappings);
+    return TB_make("snd-value(<term>)", trm);
+  }
+}
+@
+
+%}}}
+%{{{ term *arm_backdoor_check_in_sign(int cid, term *t)
+
+<<arm_backdoor_check_in_sign>>=
+term *arm_backdoor_check_in_sign(int cid, term *t)
+{
+  return NULL;
+}
+@
+
+%}}}
+
 %{{{ void rec_terminate(int cid, term *arg)
 
 Quit the arm interpreter.
@@ -681,6 +757,99 @@ void assign(term *var, term *val)
 
 %}}}
 
+%{{{ term *apply_mappings(term *t, term_list *mappings)
+
+<<apply_mappings>>=
+term *apply_mappings(term *t, term_list *mappings);
+
+<<str_apply_mappings>>
+<<appl_apply_mappings>>
+<<list_apply_mappings>>
+
+term *apply_mappings(term *t, term_list *mappings)
+{
+  switch(tkind(t)) {
+    case t_str:		return str_apply_mappings(t, mappings);
+    case t_appl:	return appl_apply_mappings(t, mappings);
+    case t_list:	return list_apply_mappings(t, mappings);
+    default: assert(0);
+  }
+}
+@
+
+%{{{ term *str_apply_mappings(term *t, term_list *mappings)
+
+Apply a set of mappings on a term string.
+
+<<str_apply_mappings>>=
+term *str_apply_mappings(term *t, term_list *mappings)
+{
+  term *val;
+
+  val = list_get(mappings, t);
+  if(!val)
+    return t;
+  return val;
+}
+@
+
+%}}}
+%{{{ term *appl_apply_mappings(term *t, term_list *mappings)
+
+Apply a set of mappings to an application.
+
+<<appl_apply_mappings>>=
+term *list_apply_mappings(term_list *l, term_list *mappings);
+term *appl_apply_mappings(term *t, term_list *mappings)
+{
+  sym_idx fun = fun_sym(t);
+  term_list *args = fun_args(t);
+  TBbool str_sym = fun_str_sym(t);
+  term *key, *val;
+
+  assert(tkind(t) == t_appl);
+
+  key = mk_appl(fun, NULL);
+  fun_str_sym(key) = str_sym;
+  val = list_get(mappings, key);
+  if(val) {
+    args = list_apply_mappings(args, mappings);
+    if(tkind(val) == t_appl) {
+      t = mk_appl(fun_sym(val), args);
+      fun_str_sym(t) = fun_str_sym(val);
+    } else {
+      assert(tkind(val) == t_str);
+      t = TB_make("<appl>", str_val(val), args);
+      fun_str_sym(t) = TBtrue;      
+    }
+  }
+  return t;
+}
+@
+
+%}}}
+%{{{ term *list_apply_mappings(term_list *l, term_list *mappings)
+
+Apply a set of mappings to a list of terms.
+
+<<list_apply_mappings>>=
+term *list_apply_mappings(term_list *l, term_list *mappings)
+{
+  term *el, *tail, *result;
+
+  if(l) {
+    el = apply_mappings(list_first(l), mappings);
+    tail = list_apply_mappings(list_next(l), mappings);
+    if(el != list_first(l) || tail != list_next(l))
+      return mk_list(el, tail);
+  }
+  return l;
+}
+@
+
+%}}}
+
+%}}}
 %{{{ term *substitute(term *t)
 
 Construct a new term by replacing all placeholder occurences in t

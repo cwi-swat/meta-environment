@@ -20,7 +20,7 @@ typedef struct variable
 
 variable *vars = NULL;
 
-#line 115 "arm-adapter.c.nw"
+#line 120 "arm-adapter.c.nw"
 char *char_table[] =
 {
   "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007",
@@ -42,8 +42,11 @@ char *char_table[] =
   "'q", "'r", "'s", "'t",  "'u", "'v", "'w", "'x", "'y", "'z",
   "'{", "'|", "'}", "'~", "-"
 };
+#line 147 "arm-adapter.c.nw"
+term_list *mappings = NULL;
+term_list *reverse_mappings = NULL;
 
-#line 657 "arm-adapter.c.nw"
+#line 733 "arm-adapter.c.nw"
 void assign(term *var, term *val)
 {
   variable *cur = vars;
@@ -67,7 +70,7 @@ void assign(term *var, term *val)
   TBprotect(&cur->var);
   TBprotect(&cur->val);
 }
-#line 752 "arm-adapter.c.nw"
+#line 921 "arm-adapter.c.nw"
 term *value(term *var)
 {
   variable *cur = vars;
@@ -79,7 +82,7 @@ term *value(term *var)
   }
   return NULL;
 }
-#line 690 "arm-adapter.c.nw"
+#line 859 "arm-adapter.c.nw"
 term_list *substitute_list(term_list *l);
 
 term *substitute(term *t)
@@ -112,7 +115,7 @@ term *substitute(term *t)
 			break;
   }
 }
-#line 731 "arm-adapter.c.nw"
+#line 900 "arm-adapter.c.nw"
 term_list *substitute_list(term_list *l)
 {
   term_list *result = l;
@@ -124,7 +127,7 @@ term_list *substitute_list(term_list *l)
 
   return result;
 }
-#line 772 "arm-adapter.c.nw"
+#line 941 "arm-adapter.c.nw"
 TBbool del_var(term *var)
 {
   variable *cur = vars, *prev = NULL;
@@ -144,13 +147,94 @@ TBbool del_var(term *var)
   }
   return TBfalse;
 }
+#line 763 "arm-adapter.c.nw"
+term *apply_mappings(term *t, term_list *mappings);
 
-#line 167 "arm-adapter.c.nw"
+#line 785 "arm-adapter.c.nw"
+term *str_apply_mappings(term *t, term_list *mappings)
+{
+  term *val;
+
+  val = list_get(mappings, t);
+  if(!val)
+    return t;
+  return val;
+}
+#line 802 "arm-adapter.c.nw"
+term *list_apply_mappings(term_list *l, term_list *mappings);
+term *appl_apply_mappings(term *t, term_list *mappings)
+{
+  sym_idx fun = fun_sym(t);
+  term_list *args = fun_args(t);
+  TBbool str_sym = fun_str_sym(t);
+  term *key, *val;
+
+  assert(tkind(t) == t_appl);
+
+  key = mk_appl(fun, NULL);
+  fun_str_sym(key) = str_sym;
+  val = list_get(mappings, key);
+  if(val) {
+    args = list_apply_mappings(args, mappings);
+    if(tkind(val) == t_appl) {
+      t = mk_appl(fun_sym(val), args);
+      fun_str_sym(t) = fun_str_sym(val);
+    } else {
+      assert(tkind(val) == t_str);
+      t = TB_make("<appl>", str_val(val), args);
+      fun_str_sym(t) = TBtrue;      
+    }
+  }
+  return t;
+}
+#line 836 "arm-adapter.c.nw"
+term *list_apply_mappings(term_list *l, term_list *mappings)
+{
+  term *el, *tail, *result;
+
+  if(l) {
+    el = apply_mappings(list_first(l), mappings);
+    tail = list_apply_mappings(list_next(l), mappings);
+    if(el != list_first(l) || tail != list_next(l))
+      return mk_list(el, tail);
+  }
+  return l;
+}
+
+#line 769 "arm-adapter.c.nw"
+term *apply_mappings(term *t, term_list *mappings)
+{
+  switch(tkind(t)) {
+    case t_str:		return str_apply_mappings(t, mappings);
+    case t_appl:	return appl_apply_mappings(t, mappings);
+    case t_list:	return list_apply_mappings(t, mappings);
+    default: assert(0);
+  }
+}
+
+#line 183 "arm-adapter.c.nw"
 void clear_arm(int cid)
 {
   ARM_clear();
 }
-#line 225 "arm-adapter.c.nw"
+#line 193 "arm-adapter.c.nw"
+void load_mappings(int cid, term_list *maps)
+{
+  term *map;
+
+  mappings = maps;
+  reverse_mappings = NULL;
+
+  while(maps) {
+    map = list_first(maps);
+    maps = list_next(maps);
+    reverse_mappings = list_concat_term(reverse_mappings, 
+					list_reverse(list_copy(map)));
+  }
+
+  TBprintf(stderr, "mappings = %t, reverse = %t\n", mappings, reverse_mappings);
+}
+#line 263 "arm-adapter.c.nw"
 int try_load_arm(char *path)
 {
   FILE *f;
@@ -165,7 +249,7 @@ int try_load_arm(char *path)
   return 0;
 }
 
-#line 182 "arm-adapter.c.nw"
+#line 220 "arm-adapter.c.nw"
 term *load_arm(int cid, term_list *files, term_list *dirs)
 {
   term *file, *dir;
@@ -206,12 +290,12 @@ term *load_arm(int cid, term_list *files, term_list *dirs)
   }
   return TB_make("snd-value(load-arm(<list>,<list>,ok))", files, dirs);
 }
-#line 246 "arm-adapter.c.nw"
+#line 284 "arm-adapter.c.nw"
 void link_arm(int cid)
 {
   ARM_link();
 }
-#line 324 "arm-adapter.c.nw"
+#line 365 "arm-adapter.c.nw"
 void push_symbol(char *fun)
 {
   int i = 1;
@@ -229,7 +313,7 @@ void push_symbol(char *fun)
   buf[i++] = '\0';
   ARM_push(buf);
 }
-#line 418 "arm-adapter.c.nw"
+#line 459 "arm-adapter.c.nw"
 term *tb_term(char *id, term_list *args)
 {
   int i;
@@ -253,7 +337,7 @@ term *tb_term(char *id, term_list *args)
 /*  TBprintf(stderr, "result: %s\n", buf);*/
   return TB_make("<appl>", buf, args);
 }
-#line 291 "arm-adapter.c.nw"
+#line 332 "arm-adapter.c.nw"
 void push_term(term *t)
 {
   char *fun;
@@ -281,7 +365,7 @@ void push_term(term *t)
       TBmsg("not an application or char (int): %t\n", t);
   }
 }
-#line 348 "arm-adapter.c.nw"
+#line 389 "arm-adapter.c.nw"
 term_list *reftag_to_term(ARM_ref r);
 
 term *ref_to_term(ARM_ref r)
@@ -304,7 +388,7 @@ term *ref_to_term(ARM_ref r)
   }
   return t;
 }
-#line 376 "arm-adapter.c.nw"
+#line 417 "arm-adapter.c.nw"
 term_list *reftag_to_term(ARM_ref r)
 {
   char *ptr;
@@ -328,26 +412,29 @@ term_list *reftag_to_term(ARM_ref r)
   /* Build an application */
   return TB_make("[<term>]", tb_term(fun2hdr(r->fsym)->name, args));
 }
-#line 268 "arm-adapter.c.nw"
-term *reduce(int cid, term *t)
+#line 306 "arm-adapter.c.nw"
+term *reduce(int cid, term *trm)
 {
   ARM_ref r;
+  term *t;
 
-  if(!TB_match(t, "term(<term>)", &t)) {
+  if(!TB_match(trm, "term(<term>)", &t)) {
     TBprintf(stderr, "malformed term in reduce: %t\n", t);
     exit(1);
   }
-  t = substitute(t);
+  t = apply_mappings(substitute(t), mappings);
+
+  TBprintf(stderr, "reducing term: %t, after subst and maps: %t\n", trm, t);
 
   ARM_ready();
   push_term(t);
   r = ARM_reduce();
   /*ARM_display(0,r,0);*/
-  t = ref_to_term(r);
+  t = apply_mappings(ref_to_term(r), reverse_mappings);
   return TB_make("snd-value(reduct(<term>))", t);
 }
 
-#line 494 "arm-adapter.c.nw"
+#line 535 "arm-adapter.c.nw"
 TBbool check_match_list(term_list *m, term_list *l);
 
 TBbool check_match_term(term *m, term *t)
@@ -385,7 +472,7 @@ TBbool check_match_term(term *m, term *t)
 			return TBfalse;
   }
 }
-#line 539 "arm-adapter.c.nw"
+#line 580 "arm-adapter.c.nw"
 TBbool check_match_list(term_list *m, term_list *l)
 {
   if(m == l)
@@ -396,7 +483,7 @@ TBbool check_match_list(term_list *m, term_list *l)
   return check_match_term(list_first(m), list_first(l)) &&
 	 check_match_list(list_next(m), list_next(l));
 }
-#line 555 "arm-adapter.c.nw"
+#line 596 "arm-adapter.c.nw"
 void do_match_list(term_list *m, term_list *l);
 
 void do_match_term(term *m, term *t)
@@ -429,7 +516,7 @@ void do_match_term(term *m, term *t)
 			break;
   }
 }
-#line 595 "arm-adapter.c.nw"
+#line 636 "arm-adapter.c.nw"
 void do_match_list(term_list *m, term_list *l)
 {
   if(m == NULL || l == NULL) {
@@ -440,7 +527,7 @@ void do_match_list(term_list *m, term_list *l)
   do_match_term(list_first(m), list_first(l));
   do_match_list(list_next(m), list_next(l));
 }
-#line 459 "arm-adapter.c.nw"
+#line 500 "arm-adapter.c.nw"
 term *match(int cid, term *m, term *t)
 {
   term *t2;
@@ -469,7 +556,7 @@ term *match(int cid, term *m, term *t)
     return TB_make("snd-value(match(failure))");
   } 
 }
-#line 615 "arm-adapter.c.nw"
+#line 656 "arm-adapter.c.nw"
 term *get_value(int cid, term *t)
 {
   int result;
@@ -478,25 +565,49 @@ term *get_value(int cid, term *t)
   assert(TB_match(t, "term(<term>)", &trm));
   return TB_make("snd-value(value(<term>))", substitute(t));
 }
-#line 630 "arm-adapter.c.nw"
+#line 671 "arm-adapter.c.nw"
 void delete_value(int cid, term *v)
 {
   del_var(v);
 }
 
-#line 643 "arm-adapter.c.nw"
+#line 685 "arm-adapter.c.nw"
+term *arm_backdoor_handler(int cid, term *t)
+{
+  term *trm;
+  ARM_ref r;
+
+  if(TB_match(t, "rec-eval(<term>)", &trm)) {
+    trm = apply_mappings(substitute(trm), mappings);
+
+    ARM_ready();
+    push_term(trm);
+    r = ARM_reduce();
+    trm = apply_mappings(ref_to_term(r), reverse_mappings);
+    return TB_make("snd-value(<term>)", trm);
+  }
+}
+#line 706 "arm-adapter.c.nw"
+term *arm_backdoor_check_in_sign(int cid, term *t)
+{
+  return NULL;
+}
+#line 719 "arm-adapter.c.nw"
 void rec_terminate(int cid, term *arg)
 {
   exit(1);
 }
 
-#line 146 "arm-adapter.c.nw"
+#line 159 "arm-adapter.c.nw"
 int main(int argc, char *argv[])
 {
   extern int ARM_DBGMSK;
 
   /*ARM_DBGMSK = 16;  Tracing on */
   TB_init();
+  TBprotect(&mappings);
+  TBprotect(&reverse_mappings);
+
   ARM_set_up();
 
   xfunuse("pair",v_pair);
