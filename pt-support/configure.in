@@ -92,5 +92,6 @@ AC_OUTPUT(
   libasfix1/Makefile
   libconversion/Makefile
   libmept/Makefile
+  libasfix2/Makefile
   utils/Makefile
 )
