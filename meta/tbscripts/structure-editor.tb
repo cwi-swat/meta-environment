@@ -19,11 +19,11 @@ in
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   execute(se, SE?).
-printf("newEditor is being started\n").
+/*printf("newEditor is being started\n").*/
   snd-eval(SE, newEditor(Fid, Text)).
-printf("newEditor waiting\n").
+/*printf("newEditor waiting\n").*/
   rec-value(SE,Fl?).
-printf("newEditor is started\n").
+/*printf("newEditor is started\n").*/
   Foc := first(Fl).
   snd-msg(TE,set-focus(Fid,Foc)).
   snd-note(ui-status(endstat(Id))). ( ( 
@@ -36,6 +36,7 @@ printf("newEditor is started\n").
       snd-ack-event(TE,delete(Fid,Loc))
     ).
     rec-value(SE,Fl?).
+/*    printf("Fl: %t\n", Fl).*/
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid, Foc))
     +

@@ -17,7 +17,7 @@ let
   I  : int,
   Pos: int
 in  
-( printf("Process Focus is running").
+/*( printf("Process Focus is running").*/
 (
   rec-msg(TE, set-focus(Fid,focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
 /*  snd-do(TE,tb-unhighlight).
@@ -43,6 +43,6 @@ in
   snd-do(TE,tb-set-char-pos(Fid,Pos)).
   snd-do(TE,tb-set-msg("Parse error near cursor"))
 )
-) *
+ *
 delta
 endlet
