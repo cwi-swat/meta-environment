@@ -1,4 +1,6 @@
-# $Id$
+2003/06/25 (jurgenv@cwi.nl)
+ * Renamed modules of the asfc compiler specification to use
+   compound module names.
 
 Thu Jun 19 13:33:12 CEST 2003 <jong@cwi.nl>
  * Use compiled DisplayQuery
