@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS		= libmept libasfix2 libconversion utils
+SUBDIRS		= libmept libptmept libasfix2 libconversion utils 
