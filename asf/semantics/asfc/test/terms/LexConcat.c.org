@@ -13,11 +13,11 @@ lf_list_1sym = ATmakeSymbol ( "list(iter-star(char-class([range(0,255)])))"
 ATprotectSymbol ( lf_list_1sym ) ;
 lf_2sym = ATmakeSymbol ( "prod([lex(sort(\"ID\"))],cf(sort(\"ID\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_2sym ) ;
-lf_3sym = ATmakeSymbol ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" , 2 , ATtrue ) ;
+lf_3sym = ATmakeSymbol ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_3sym ) ;
 register_prod ( ATparse ( "list(iter-star(char-class([range(0,255)])))" ) , lf_list_1 , lf_list_1sym ) ;
 register_prod ( ATparse ( "prod([lex(sort(\"ID\"))],cf(sort(\"ID\")),no-attrs)" ) , lf_2 , lf_2sym ) ;
-register_prod ( ATparse ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" ) , lf_3 , lf_3sym ) ;
+register_prod ( ATparse ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),no-attrs)" ) , lf_3 , lf_3sym ) ;
 }
 void resolve_LexConcat ( ) {
 }
