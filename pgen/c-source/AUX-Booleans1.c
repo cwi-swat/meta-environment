@@ -1,0 +1,40 @@
+#include  "support.h"
+static Symbol lf_AUX_Booleans1_1sym ;
+static ATerm lf_AUX_Booleans1_1 ( ) ;
+static Symbol lf_AUX_Booleans1_2sym ;
+static ATerm lf_AUX_Booleans1_2 ( ) ;
+static Symbol lf_AUX_Booleans1_3sym ;
+static ATerm lf_AUX_Booleans1_3 ( ATerm arg1 ) ;
+void register_AUX_Booleans1 ( ) {
+lf_AUX_Booleans1_1sym = ATmakeSymbol ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 0 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Booleans1_1sym ) ;
+lf_AUX_Booleans1_2sym = ATmakeSymbol ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Booleans1_2sym ) ;
+lf_AUX_Booleans1_3sym = ATmakeSymbol ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Booleans1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Booleans1_1 , lf_AUX_Booleans1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Booleans1_2 , lf_AUX_Booleans1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Booleans1_3 , lf_AUX_Booleans1_3sym ) ;
+}
+void resolve_AUX_Booleans1 ( ) {
+}
+static ATerm constant0 = NULL ;
+static ATerm constant1 = NULL ;
+void init_AUX_Booleans1 ( ) {
+ATprotect ( & constant0 ) ;
+ATprotect ( & constant1 ) ;
+}
+ATerm lf_AUX_Booleans1_3 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Booleans1_3sym , ATmakeAppl ( lf_AUX_Booleans1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Booleans1_3sym , arg0 ) ) ;
+}
+ATerm lf_AUX_Booleans1_2 ( ) {
+CONS_ENTRY ( lf_AUX_Booleans1_2sym , ATmakeAppl0 ( lf_AUX_Booleans1_2sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Booleans1_2sym ) ) ;
+}
+ATerm lf_AUX_Booleans1_1 ( ) {
+CONS_ENTRY ( lf_AUX_Booleans1_1sym , ATmakeAppl0 ( lf_AUX_Booleans1_1sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Booleans1_1sym ) ) ;
+}
+
