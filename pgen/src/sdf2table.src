@@ -29,7 +29,8 @@ PATH="$bindir:$PATH"
 SGLR=sglr
 RM=rm
 SDF2TBL=${datadir}/Sdf2.baf
-PARSER="${SGLR} -1 -p ${SDF2TBL}"
+TOPSORT=SDF
+PARSER="${SGLR} -1 -s ${TOPSORT} -p ${SDF2TBL}"
 GENERATOR="parsetablegen"
 
 modulename="-";
