@@ -25,7 +25,6 @@ let
   Equations : term,
   Pairs     : list,
   ActualMods: list,
-  Status    : str,
   Language  : str,
   ErrorMsg  : str,
   OutputDir : str, 
@@ -66,9 +65,8 @@ snd-do(Mdb, create-module-db).
 /* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf2-module-to-db(Name?, Path?, AsFixModule?,
-                                timestamp(Time?), Status?)) .
-  snd-eval(Mdb, add-sdf2-module(Name, Path, AsFixModule, Time, Status)) .
+  rec-msg(add-sdf-module-to-db(Name?, Path?, AsFixModule?, timestamp(Time?))) .
+  snd-eval(Mdb, add-sdf-module(Name, Path, AsFixModule, Time)) .
   ( 
     rec-value(Mdb,imports(need-modules(Modules?),
                   import-graph(ActualMods?, Pairs?))).
@@ -113,10 +111,16 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(rename-module-in-db(OldName?, NewName?)) .
   snd-eval(Mdb, rename-module(OldName, NewName)) .
-  rec-value(Mdb, imports(changed-modules(Modules?),
-                         import-graph(ActualMods?, Pairs?))) .
-  snd-note(import-graph(ActualMods, Pairs)) .
-  snd-msg(renaming-done(OldName, Modules))
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(renaming-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(renaming-not-done(OldName))
+  )
 +
   /* Get the list of modules for which the equations are not yet
      available in the database */
@@ -235,9 +239,6 @@ snd-do(Mdb, create-module-db).
   (
     rec-value(Mdb, asfix(syntax(Syntax?))).
     snd-msg(syntax(Syntax))
-  +
-    rec-value(Mdb, asfix(syntax-unchanged(Syntax?))).
-    snd-msg(syntax-unchanged(Syntax))
   +
     rec-value(Mdb, asfix(unavailable)) .
     snd-msg(unavailable)

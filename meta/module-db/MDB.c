@@ -41,11 +41,11 @@ ATerm MDB_EntryToTerm(MDB_Entry arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, int sdfUpdated, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime) */
+/*{{{  MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime) */
 
-MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, int sdfUpdated, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime)
+MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime)
 {
-  return (MDB_Entry)(ATerm)ATmakeAppl(MDB_afun0, (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)), (ATerm)sdfTree, (ATerm)ATmakeInt(sdfTreeCreationTime), (ATerm)ATmakeInt(sdfUpdated), (ATerm)asfTree, (ATerm)asfText, (ATerm)ATmakeInt(asfTreeCreationTime), (ATerm)asfTable, (ATerm)ATmakeInt(asfTableCreationTime), (ATerm)trmTable, (ATerm)ATmakeInt(trmTableCreationTime));
+  return (MDB_Entry)(ATerm)ATmakeAppl(MDB_afun0, (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)), (ATerm)sdfTree, (ATerm)ATmakeInt(sdfTreeCreationTime), (ATerm)asfTree, (ATerm)asfText, (ATerm)ATmakeInt(asfTreeCreationTime), (ATerm)asfTable, (ATerm)ATmakeInt(asfTableCreationTime), (ATerm)trmTable, (ATerm)ATmakeInt(trmTableCreationTime));
 }
 
 /*}}}  */
@@ -78,7 +78,7 @@ inline ATbool MDB_isEntryDefault(MDB_Entry arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MDB_patternEntryDefault, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, MDB_patternEntryDefault, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -183,39 +183,6 @@ MDB_Entry MDB_setEntrySdfTreeCreationTime(MDB_Entry arg, int sdfTreeCreationTime
 }
 
 /*}}}  */
-/*{{{  ATbool MDB_hasEntrySdfUpdated(MDB_Entry arg) */
-
-ATbool MDB_hasEntrySdfUpdated(MDB_Entry arg)
-{
-  if (MDB_isEntryDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int MDB_getEntrySdfUpdated(MDB_Entry arg) */
-
-int MDB_getEntrySdfUpdated(MDB_Entry arg)
-{
-  
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
-}
-
-/*}}}  */
-/*{{{  MDB_Entry MDB_setEntrySdfUpdated(MDB_Entry arg, int sdfUpdated) */
-
-MDB_Entry MDB_setEntrySdfUpdated(MDB_Entry arg, int sdfUpdated)
-{
-  if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(sdfUpdated), 3);
-  }
-
-  ATabort("Entry has no SdfUpdated: %t\n", arg);
-  return (MDB_Entry)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool MDB_hasEntryAsfTree(MDB_Entry arg) */
 
 ATbool MDB_hasEntryAsfTree(MDB_Entry arg)
@@ -232,7 +199,7 @@ ATbool MDB_hasEntryAsfTree(MDB_Entry arg)
 ATerm MDB_getEntryAsfTree(MDB_Entry arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 4);
+    return (ATerm)ATgetArgument((ATermAppl)arg, 3);
 }
 
 /*}}}  */
@@ -241,7 +208,7 @@ ATerm MDB_getEntryAsfTree(MDB_Entry arg)
 MDB_Entry MDB_setEntryAsfTree(MDB_Entry arg, ATerm asfTree)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfTree, 4);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfTree, 3);
   }
 
   ATabort("Entry has no AsfTree: %t\n", arg);
@@ -265,7 +232,7 @@ ATbool MDB_hasEntryAsfText(MDB_Entry arg)
 ATerm MDB_getEntryAsfText(MDB_Entry arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 5);
+    return (ATerm)ATgetArgument((ATermAppl)arg, 4);
 }
 
 /*}}}  */
@@ -274,7 +241,7 @@ ATerm MDB_getEntryAsfText(MDB_Entry arg)
 MDB_Entry MDB_setEntryAsfText(MDB_Entry arg, ATerm asfText)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfText, 5);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfText, 4);
   }
 
   ATabort("Entry has no AsfText: %t\n", arg);
@@ -298,7 +265,7 @@ ATbool MDB_hasEntryAsfTreeCreationTime(MDB_Entry arg)
 int MDB_getEntryAsfTreeCreationTime(MDB_Entry arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 6));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 5));
 }
 
 /*}}}  */
@@ -307,7 +274,7 @@ int MDB_getEntryAsfTreeCreationTime(MDB_Entry arg)
 MDB_Entry MDB_setEntryAsfTreeCreationTime(MDB_Entry arg, int asfTreeCreationTime)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(asfTreeCreationTime), 6);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(asfTreeCreationTime), 5);
   }
 
   ATabort("Entry has no AsfTreeCreationTime: %t\n", arg);
@@ -331,7 +298,7 @@ ATbool MDB_hasEntryAsfTable(MDB_Entry arg)
 ATerm MDB_getEntryAsfTable(MDB_Entry arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 7);
+    return (ATerm)ATgetArgument((ATermAppl)arg, 6);
 }
 
 /*}}}  */
@@ -340,7 +307,7 @@ ATerm MDB_getEntryAsfTable(MDB_Entry arg)
 MDB_Entry MDB_setEntryAsfTable(MDB_Entry arg, ATerm asfTable)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfTable, 7);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)asfTable, 6);
   }
 
   ATabort("Entry has no AsfTable: %t\n", arg);
@@ -364,7 +331,7 @@ ATbool MDB_hasEntryAsfTableCreationTime(MDB_Entry arg)
 int MDB_getEntryAsfTableCreationTime(MDB_Entry arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 8));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 7));
 }
 
 /*}}}  */
@@ -373,7 +340,7 @@ int MDB_getEntryAsfTableCreationTime(MDB_Entry arg)
 MDB_Entry MDB_setEntryAsfTableCreationTime(MDB_Entry arg, int asfTableCreationTime)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(asfTableCreationTime), 8);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(asfTableCreationTime), 7);
   }
 
   ATabort("Entry has no AsfTableCreationTime: %t\n", arg);
@@ -397,7 +364,7 @@ ATbool MDB_hasEntryTrmTable(MDB_Entry arg)
 ATerm MDB_getEntryTrmTable(MDB_Entry arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 9);
+    return (ATerm)ATgetArgument((ATermAppl)arg, 8);
 }
 
 /*}}}  */
@@ -406,7 +373,7 @@ ATerm MDB_getEntryTrmTable(MDB_Entry arg)
 MDB_Entry MDB_setEntryTrmTable(MDB_Entry arg, ATerm trmTable)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)trmTable, 9);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)trmTable, 8);
   }
 
   ATabort("Entry has no TrmTable: %t\n", arg);
@@ -430,7 +397,7 @@ ATbool MDB_hasEntryTrmTableCreationTime(MDB_Entry arg)
 int MDB_getEntryTrmTableCreationTime(MDB_Entry arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 10));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 9));
 }
 
 /*}}}  */
@@ -439,7 +406,7 @@ int MDB_getEntryTrmTableCreationTime(MDB_Entry arg)
 MDB_Entry MDB_setEntryTrmTableCreationTime(MDB_Entry arg, int trmTableCreationTime)
 {
   if (MDB_isEntryDefault(arg)) {
-    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(trmTableCreationTime), 10);
+    return (MDB_Entry)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(trmTableCreationTime), 9);
   }
 
   ATabort("Entry has no TrmTableCreationTime: %t\n", arg);
@@ -451,16 +418,15 @@ MDB_Entry MDB_setEntryTrmTableCreationTime(MDB_Entry arg, int trmTableCreationTi
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), int (*acceptSdfUpdated)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int)) */
+/*{{{  MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int)) */
 
-MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), int (*acceptSdfUpdated)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int))
+MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int))
 {
   if (MDB_isEntryDefault(arg)) {
     return MDB_makeEntryDefault(
         acceptPath ? acceptPath(MDB_getEntryPath(arg)) : MDB_getEntryPath(arg),
         acceptSdfTree ? acceptSdfTree(MDB_getEntrySdfTree(arg)) : MDB_getEntrySdfTree(arg),
         acceptSdfTreeCreationTime ? acceptSdfTreeCreationTime(MDB_getEntrySdfTreeCreationTime(arg)) : MDB_getEntrySdfTreeCreationTime(arg),
-        acceptSdfUpdated ? acceptSdfUpdated(MDB_getEntrySdfUpdated(arg)) : MDB_getEntrySdfUpdated(arg),
         acceptAsfTree ? acceptAsfTree(MDB_getEntryAsfTree(arg)) : MDB_getEntryAsfTree(arg),
         acceptAsfText ? acceptAsfText(MDB_getEntryAsfText(arg)) : MDB_getEntryAsfText(arg),
         acceptAsfTreeCreationTime ? acceptAsfTreeCreationTime(MDB_getEntryAsfTreeCreationTime(arg)) : MDB_getEntryAsfTreeCreationTime(arg),

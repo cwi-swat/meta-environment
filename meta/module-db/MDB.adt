@@ -2,7 +2,6 @@
 [Entry, Default, entry(<path(str)>,
                        <sdf-tree(term)>,
                        <sdf-tree-creation-time(int)>,
-                       <sdf-updated(int)>,
                        <asf-tree(term)>,
                        <asf-text(term)>,
                        <asf-tree-creation-time(int)>,

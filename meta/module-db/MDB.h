@@ -24,7 +24,7 @@ ATerm MDB_EntryToTerm(MDB_Entry arg);
 /*}}}  */
 /*{{{  constructors */
 
-MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, int sdfUpdated, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime);
+MDB_Entry MDB_makeEntryDefault(char * path, ATerm sdfTree, int sdfTreeCreationTime, ATerm asfTree, ATerm asfText, int asfTreeCreationTime, ATerm asfTable, int asfTableCreationTime, ATerm trmTable, int trmTableCreationTime);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -45,9 +45,6 @@ MDB_Entry MDB_setEntrySdfTree(MDB_Entry arg, ATerm sdfTree);
 ATbool MDB_hasEntrySdfTreeCreationTime(MDB_Entry arg);
 int MDB_getEntrySdfTreeCreationTime(MDB_Entry arg);
 MDB_Entry MDB_setEntrySdfTreeCreationTime(MDB_Entry arg, int sdfTreeCreationTime);
-ATbool MDB_hasEntrySdfUpdated(MDB_Entry arg);
-int MDB_getEntrySdfUpdated(MDB_Entry arg);
-MDB_Entry MDB_setEntrySdfUpdated(MDB_Entry arg, int sdfUpdated);
 ATbool MDB_hasEntryAsfTree(MDB_Entry arg);
 ATerm MDB_getEntryAsfTree(MDB_Entry arg);
 MDB_Entry MDB_setEntryAsfTree(MDB_Entry arg, ATerm asfTree);
@@ -73,7 +70,7 @@ MDB_Entry MDB_setEntryTrmTableCreationTime(MDB_Entry arg, int trmTableCreationTi
 /*}}}  */
 /*{{{  sort visitors */
 
-MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), int (*acceptSdfUpdated)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int));
+MDB_Entry MDB_visitEntry(MDB_Entry arg, char * (*acceptPath)(char *), ATerm (*acceptSdfTree)(ATerm), int (*acceptSdfTreeCreationTime)(int), ATerm (*acceptAsfTree)(ATerm), ATerm (*acceptAsfText)(ATerm), int (*acceptAsfTreeCreationTime)(int), ATerm (*acceptAsfTable)(ATerm), int (*acceptAsfTableCreationTime)(int), ATerm (*acceptTrmTable)(ATerm), int (*acceptTrmTableCreationTime)(int));
 
 /*}}}  */
 

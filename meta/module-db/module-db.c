@@ -363,29 +363,21 @@ calc_import_graph(void)
 }
 
 /*}}}  */
-/*{{{  ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,  */
+/*{{{  ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,  */
 /* Creation of a new entry in the database of a new Sdf2 definition. 
  */
 
-ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
-		      int timestamp, char *changed)
+ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
+		      int timestamp)
 {
   ATerm          modName;
   MDB_Entry      entry; 
   ATerm          import_graph;
   ATermList      imports, unknowns;
-  ATbool         isChanged;
   PT_Tree        tree;
   PT_ParseTree   parseTree;
   SDF_Module     sdfModule;
   SDF_ImportList fullImports;
-
-  if (!strcmp(changed, "changed")) {
-    isChanged = ATtrue;
-  }
-  else {
-    isChanged = ATfalse;
-  }
 
   parseTree = PT_makeParseTreeFromTerm(sdfTree);
 
@@ -405,7 +397,6 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   entry = MDB_makeEntryDefault(path,
                                sdfTree,
                                timestamp,
-                               isChanged,
                                MDB_NONE,
                                MDB_NONE,
                                0,
@@ -463,6 +454,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
   ATerm          modName;
   SDF_ImportList fullImports;
 
+  newSdfTree = ATremoveAllAnnotations(newSdfTree);
   parseTree = PT_makeParseTreeFromTerm(newSdfTree);
   if (!PT_isValidParseTree(parseTree)) {
     ATerror("not an asfix module: %t\n", newSdfTree);
@@ -478,7 +470,6 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
     curSdfTree = MDB_getEntrySdfTree(entry);
     if (!ATisEqual(curSdfTree, newSdfTree)) {
       entry = MDB_setEntrySdfTree(entry, newSdfTree);
-      entry = MDB_setEntrySdfUpdated(entry, ATtrue);
 
       entry = MDB_setEntryAsfTree(entry, MDB_NONE);
       entry = MDB_setEntryAsfTable(entry, MDB_NONE);
@@ -524,7 +515,6 @@ ATerm add_empty_module(int cid, char *moduleName)
   entry = MDB_makeEntryDefault(fileName,
                                MDB_NONE,
                                0,
-                               ATtrue,
                                MDB_NONE,
                                MDB_NONE,
                                0,
@@ -613,14 +603,12 @@ void update_eqs_text(int cid, char *moduleName, char *eqsText)
 void invalidate_sdf(int cid, char *moduleName)
 {
   MDB_Entry entry;
-  ATbool isChanged = ATtrue;
   ATerm atModuleName;
 
   atModuleName = ATmake("<str>", moduleName);
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, atModuleName));
 
-  entry = MDB_setEntrySdfUpdated(entry, isChanged);
   entry = MDB_setEntrySdfTree(entry, MDB_NONE);
 
   PutValue(modules_db, atModuleName, MDB_EntryToTerm(entry));
@@ -640,7 +628,7 @@ void add_empty_eqs_section(int cid, char *moduleName, char* path)
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, atModuleName));
   entry = MDB_setEntryAsfText(entry, atEqsText);
-  entry = MDB_setEntrySdfTree(entry, MDB_NONE);
+  entry = MDB_setEntryAsfTree(entry, MDB_NONE);
   PutValue(modules_db, atModuleName, MDB_EntryToTerm(entry));
 }
 
@@ -805,15 +793,7 @@ ATerm get_sdf_tree(int cid, char *modulename)
     return ATmake("snd-value(asfix(unavailable))");
   }
   else {
-    if (MDB_getEntrySdfUpdated(entry)) {
-      entry = MDB_setEntrySdfUpdated(entry, ATfalse);
-      PutValue(modules_db, modname, MDB_EntryToTerm(entry));
-      return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(tree));
-    }
-    else {
-      return ATmake("snd-value(asfix(syntax-unchanged(<term>)))", 
-                    ATBpack(tree));
-    }
+    return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(tree));
   }
 }
 
@@ -968,7 +948,7 @@ rename_modulename_in_modules(ATermList mods,
     modName = ATgetFirst(mods);
     entry = MDB_EntryFromTerm(GetValue(modules_db, modName));
 
-    oldSdfTree = MDB_getEntrySdfTree(entry);
+    oldSdfTree   = MDB_getEntrySdfTree(entry);
     oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
     oldTree      = PT_getParseTreeTree(oldParseTree);
     oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
@@ -1008,6 +988,20 @@ changeSdfPath(char *path, char *oldModuleName, char *newModuleName)
   return newPath;
 }
 
+static ATbool checkModuleName(const char *moduleName)  
+{
+  int i;
+  int len = strlen(moduleName);
+
+  for (i = 0; i < len; i++) {
+    if (!isalnum(moduleName[i]) 
+        && moduleName[i] != '-'  
+        && moduleName[i] != '_') {
+      return ATfalse;
+    }
+  }
+  return ATtrue;
+}
 
 ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
 {
@@ -1023,6 +1017,10 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
+
+  if (!checkModuleName(newModuleName)) {
+    return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
+  }
 
   changedMods = modules_depend_on(oldName, ATempty);
   update_syntax_status_of_modules(changedMods); 
@@ -1046,15 +1044,13 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
     newPath = changeSdfPath(path, oldModuleName, newModuleName);
     entry   = MDB_setEntryPath(entry, newPath);
 
-    entry = MDB_setEntrySdfUpdated(entry, ATtrue);
-
     entry = MDB_setEntryAsfTable(entry, MDB_NONE);
     entry = MDB_setEntryTrmTable(entry, MDB_NONE);
     entry = MDB_setEntryAsfTree(entry, MDB_NONE);
     PutValue(modules_db, newName, MDB_EntryToTerm(entry));
 
-    RemoveKey(modules_db,oldName);
-    RemoveKey(import_db,oldName);
+    RemoveKey(modules_db, oldName);
+    RemoveKey(import_db, oldName);
 
     imports = SDF_getImports(newSdfModule);
     fullImports = SDF_getModuleImportsList(newSdfModule);

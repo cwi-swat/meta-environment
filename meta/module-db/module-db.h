@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "module-db.tif.h"
 
