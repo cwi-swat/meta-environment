@@ -11,4 +11,5 @@ imports utilities/Lifting[X][
 	Attr => P-Attr
 	Attrs => P-Attrs
 	Production => P-Production
+	Annotation => P-Annotation
 ]

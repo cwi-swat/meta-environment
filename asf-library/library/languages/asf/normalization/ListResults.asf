@@ -16,13 +16,25 @@ equations
 
 equations
 
+
+%% TODO: removed the first rule when it is no longer necessary because
+%% we will ALWAYS have annotations:
+
 [remove-appl-list-wrapper-around-singletons-that-return-lists]
 	Lhs := get-lhs(Equation),
-	appl(list(cf(Symbol)),
-             [appl(prod(Symbols,cf(Symbol),Attrs),Args)]) := Lhs
+	appl(list(Symbol),
+             [appl(prod(Symbols,Symbol,Attrs),Args)]) := Lhs
 	===>
 	lists(Equation)
 	=
-	set-lhs(Equation,appl(prod(Symbols,cf(Symbol),Attrs),Args))
+	set-lhs(Equation,appl(prod(Symbols,Symbol,Attrs),Args))
 
-tests
+[remove-appl-list-wrapper-around-singletons-that-return-lists-with-ann]
+	Lhs := get-lhs(Equation),
+	appl(list(Symbol),
+             [appl(prod(Symbols,Symbol,Attrs),Args) Ann]) _Ann := Lhs
+	===>
+	lists(Equation)
+	=
+	set-lhs(Equation,appl(prod(Symbols,cf(Symbol),Attrs),Args) Ann)
+

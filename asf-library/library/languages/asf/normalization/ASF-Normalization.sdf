@@ -31,6 +31,7 @@ imports languages/asf/normalization/RenamedNormalization[
 	P-Attr 		=> Attr
 	P-Attrs		=> Attrs
 	P-Production	=> Production
+	P-Annotation	=> Annotation
 
 %% Here we takes measures to prevent this specification to normalize itself.
 %% All traversal function names are renamed here.

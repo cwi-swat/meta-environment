@@ -25,9 +25,12 @@ variables
 "Symbol"[\']* -> P-Symbol {strict}
 "Lit"[\']* -> P-Tree {strict}
 "Ws"[0-9]* -> P-Tree {strict}
+"Ann"[\']* -> P-Annotation {strict}
+"Eq"[\']* -> P-Tree {strict}
 
 variables
 
+"_Ann"[0-9]* -> P-Annotation {wild}
 "_Ws"[0-9]* -> P-Tree {wild}
 "_Prod"[\']* -> P-Production {wild}
 "_Lhs"[\']* -> P-Tree {wild}

@@ -2,10 +2,15 @@ equations
 
 [module]
 	LiftedModule := lift-module(Module),
+	write-parse-tree("lifted.debug", LiftedModule) == written,
 	LiftedModule' := constructors(LiftedModule),
+	write-parse-tree("constructors.debug", LiftedModule) == written,
 	LiftedModule'' := remove-brackets(LiftedModule'),
+	write-parse-tree("brackets.debug", LiftedModule) == written,
 	LiftedModule''' := list-results(LiftedModule''),
-	Module' := lower-module(LiftedModule''')
+	write-parse-tree("lists.debug", LiftedModule) == written,
+	Module' := lower-module(LiftedModule'''),
+	write-parse-tree("lowered.debug", LiftedModule) == written
 	===>
 	normalize(Module) = Module'
 

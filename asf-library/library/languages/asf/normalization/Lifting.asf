@@ -22,5 +22,11 @@ equations
 [lower-condition]
 	lower(condition(Tree)) = lower-from-tree(Tree)
 
+[lower-equation]
+	lower(equation(Tree Ann)) = lower-from-tree(Tree Ann)
+
+[lower-condition]
+	lower(condition(Tree Ann)) = lower-from-tree(Tree Ann)
+
 
 

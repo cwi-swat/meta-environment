@@ -7,6 +7,8 @@ imports languages/asf/normalization/RenamedLifting[Equation]
 imports languages/asf/normalization/RenamedLifting[Condition]
 imports languages/asf/normalization/LiftedEquations
 
+imports utilities/Parsing[Module]
+
 exports
 
 context-free syntax
@@ -31,3 +33,4 @@ variables
 	"Equation"[0-9]* -> Equation {strict}
 	"Condition" -> Condition {strict}
 	"Tree" -> P-Tree {strict}
+	"Ann" -> P-Annotation {strict}

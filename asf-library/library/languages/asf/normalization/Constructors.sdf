@@ -41,6 +41,10 @@ context-free syntax
 	digits(P-Args) -> P-Tree
 
 context-free syntax
+	is-layout-tree(P-Tree) -> Boolean
+	is-layout-symbol(P-Symbol) -> Boolean
+
+context-free syntax
 	remove-layout(P-Args) -> P-Args
 	remove-layout(P-Symbols) -> P-Symbols
 
@@ -72,7 +76,7 @@ variables
 	"NatCon"[0-9]* -> NatCon {strict}
 	"Module"[0-9]* -> Module {strict}
 	"QLit" -> StrCon {strict}
-
+	"Ann"[0-9]* -> P-Annotation {strict}
 
 variables
 	"_QLit" -> StrCon {wild}
@@ -84,5 +88,7 @@ variables
 	"_L"[0-9]* -> P-Tree {wild}
 	"_Symbol" -> P-Symbol {wild}
 	"_P-Tree"[0-9]* -> P-Tree {wild}
+	"_Tree"[0-9]* -> P-Tree {wild}
 	"_Attr*"[0-9]* -> {P-Attr ","}* {wild}
+	"_Ann"[0-9]* -> P-Annotation {wild}
  

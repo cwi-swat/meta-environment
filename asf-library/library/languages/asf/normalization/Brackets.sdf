@@ -27,4 +27,5 @@ variables
 	"_Attr*"[0-9]* -> {P-Attr","}* {wild}
 	"_Symbol*"[0-9]* -> {P-Symbol ","}* {wild}
 	"_Symbol"[0-9]* -> P-Symbol {wild}
+	"_Ann"[0-9]* -> P-Annotation {wild}
 

@@ -1,17 +1,37 @@
 equations
 
+[lhs-ann]
+get-lhs(equation(Eq _Ann)) = get-lhs(equation(Eq))
+
 [lhs]
 get-lhs(equation(appl(_Prod,[Lhs,_Ws1,_Lit,_Ws2,_Rhs]))) = Lhs
 
+equations
+
+[rhs-ann]
+get-rhs(equation(Eq _Ann)) = get-rhs(equation(Eq))
+
 [rhs]
-get-lhs(equation(appl(_Prod,[_Lhs,_Ws1,_Lit,_Ws2,Rhs]))) = Rhs
+get-rhs(equation(appl(_Prod,[_Lhs,_Ws1,_Lit,_Ws2,Rhs]))) = Rhs
 
 equations
+
+[lhs-ann]
+equation(Eq') := set-lhs(equation(Eq), Lhs)
+===>
+set-lhs(equation(Eq Ann), Lhs) = equation(Eq' Ann)
 
 [lhs]
 set-lhs(equation(appl(Prod,[_Lhs,Ws1,Lit,Ws2,Rhs])),Lhs) =
 	equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))
 
+equations
+
+[rhs-ann]
+equation(Eq') := set-rhs(equation(Eq), Rhs)
+===>
+set-rhs(equation(Eq Ann), Rhs) = equation(Eq' Ann)
+
 [rhs]
-set-lhs(equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,_Rhs])),Rhs) =
+set-rhs(equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,_Rhs])),Rhs) =
 	equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))

@@ -31,3 +31,7 @@ variables
 	"Attrs"[0-9]* -> P-Attributes {strict}
 	"Lit"[0-9]* -> P-Tree {strict}
 	"Lhs"[0-9]* -> P-Tree {strict}
+	"Ann"[0-9]* -> P-Annotation {strict}
+
+variables
+	"_Ann"[0-9]* -> P-Annotation {wild}
