@@ -18,6 +18,7 @@ EPIC='$(prefix)'
 GEL='$(prefix)'
 TOOLBUS='${prefix}'
 ATERM='$(prefix)'
+NEWATERM='$(prefix)'
 
 dnl Installation scripts 
 INSTALL='$(top_srcdir)/install-sh'
@@ -92,6 +93,12 @@ AC_ARG_WITH(aterm,
 [  --with-aterm		which aterm-library to use],
 ATERM=${withval},)
 AC_SUBST(ATERM)
+
+dnl Handle --with-new-aterm=... argument to configure
+AC_ARG_WITH(new-aterm,
+[  --with-new-aterm		which new-aterm-library to use],
+NEWATERM=${withval},)
+AC_SUBST(NEWATERM)
 
 dnl Handle --with-toolbus=... argument to configure
 AC_ARG_WITH(toolbus,
