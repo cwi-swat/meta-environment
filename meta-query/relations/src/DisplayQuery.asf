@@ -34,4 +34,3 @@ equations
 
 [s2l-0]
   str2link(strcon("""  $Char* """)) = linktext($Char*)
-
