@@ -9,7 +9,11 @@
 #include "item.h"
 
 /*}}}  */
+/*{{{  defines */
 
+#define MAX_INPUTS 256
+
+/*}}}  */
 /*{{{  global variables */
 
 #define INITIAL_TABLE_SIZE 8191  
@@ -48,6 +52,7 @@ extern void resolve_Sdf2_Normalization();
 extern void init_Sdf2_Normalization();
  
 /*}}}  */
+
 /*{{{  ATerm *get_name(int cid) */
 
 ATerm get_name(int cid)
@@ -191,7 +196,7 @@ static void usage(void)
 	"\t-c              activate ATerm debugging mode (expensive!)\n"
         "\t-g              take kernel sdf as input and generate table\n"
         "\t-h              display help information (usage)\n"
-        "\t-i filename     input from file (default stdin)\n"
+        "\t-i filename     input from file (default stdin, can be repeated)\n"
         "\t-l              display statistic information\n"
         "\t-m modulename   name of top module (default Main)\n"
         "\t-n              only normalization of grammar\n"
@@ -220,12 +225,14 @@ int main(int argc, char *argv[])
   int cid;
   ATerm bottomOfStack, pt;
   PT_ParseTree term;
-  char *input = "-";
+  char *input[MAX_INPUTS] = { "-" };
   char *output = "-";
   char *moduleName = "-";
   int bafMode = 1;
   int proceed = 1;
   int i;
+  int nr_inputs = 0;
+  ATbool need_closing;
   
   extern char *optarg;
   extern int   optind;
@@ -272,7 +279,8 @@ int main(int argc, char *argv[])
         case 'b':  bafMode = 1;                            break;
 	case 'c':  ATsetChecking(ATtrue);		   break;
 	case 'g':  generationMode = ATtrue;                break;
-        case 'i':  input=optarg;                           break;
+        case 'i':  assert(nr_inputs < (MAX_INPUTS-1));
+		   input[nr_inputs++]=optarg;              break;
         case 'l':  statisticsMode = ATtrue;                break;
         case 'm':  moduleName=optarg;                      break;
         case 'n':  normalizationMode=ATtrue;               break;
@@ -288,45 +296,72 @@ int main(int argc, char *argv[])
     argc -= optind;
     argv += optind;
 
+    if (nr_inputs > 1 && strcmp(output, "-") != 0) {
+      usage();
+      proceed = 0;
+    }
+
     if(proceed) {
-      if (!strcmp(input, "") || !strcmp(input, "-")) {
-        iofile = stdin;
-      }
-      else if (!(iofile = fopen(input, "r")))
-        ATerror("%s: cannot open %s\n", myname, input);
+      for (i=0; i<nr_inputs; i++) {
+	if (!strcmp(input[i], "") || !strcmp(input[i], "-")) {
+	  iofile = stdin;
+	}
+	else {
+	  if (!(iofile = fopen(input[i], "r"))) {
+	    ATerror("%s: cannot open %s\n", myname, input[i]);
+	  }
+	}
 
-      term = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
-  
-      if (run_verbose) {
-        ATwarning("Parse table generation in fast mode\n");
-      }
+	if (run_verbose) {
+	  ATwarning("generating parsetable from %s\n", input[i]);
+	}
 
-      IF_STATISTICS(
-        if(!PT_log()) {
-          ATwarning("Warning: implicitly opening logfile\n");
-          PT_OpenLog(myname, "pgen-stats.txt");
-        }
-      );
+	term = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
+	assert(term);
 
-      if (!strcmp(moduleName, "-")) {
-        pt = normalize_and_generate_table("Main", term);
-      }
-      else {
-        pt = normalize_and_generate_table(moduleName, term);
-      }
+	IF_STATISTICS(
+		      if(!PT_log()) {
+		      ATwarning("Warning: implicitly opening logfile\n");
+		      PT_OpenLog(myname, "pgen-stats.txt");
+		      }
+		     );
 
-      if (!strcmp(output, "") || !strcmp(output, "-")) {
-        iofile = stdout;
-      }
-      else if (!(iofile = fopen(output, "w"))) {
-        ATerror("%s: cannot open %s\n", myname, output);
-      }
+	if (!strcmp(moduleName, "-")) {
+	  pt = normalize_and_generate_table("Main", term);
+	}
+	else {
+	  pt = normalize_and_generate_table(moduleName, term);
+	}
 
-      if (bafMode) {
-        ATwriteToBinaryFile(pt, iofile);
-      }
-      else {
-        ATwriteToTextFile(pt, iofile);
+	if (nr_inputs > 1) {
+	  char buf[BUFSIZ];
+	  sprintf(buf, "%s.tbl", input[i]);
+	  iofile = fopen(buf, "w");
+	  if (iofile == NULL) {
+	    ATerror("%s: cannot open %s\n", myname, buf);
+	  }
+	  need_closing = ATtrue;
+	} else if (!strcmp(output, "") || !strcmp(output, "-")) {
+	  iofile = stdout;
+	  need_closing = ATfalse;
+	}
+	else {
+	  iofile = fopen(output, "w");
+	  if (iofile == NULL) {
+	    ATerror("%s: cannot open %s\n", myname, output);
+	  }
+	  need_closing = ATtrue;
+	}
+
+	if (bafMode) {
+	  ATwriteToBinaryFile(pt, iofile);
+	}
+	else {
+	  ATwriteToTextFile(pt, iofile);
+	}
+	if (need_closing && iofile != NULL) {
+	  fclose(iofile);
+	}
       }
     }
   }
