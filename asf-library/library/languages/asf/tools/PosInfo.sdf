@@ -21,6 +21,7 @@ get-posinfo(X)      -> ATerm
 variables
 
 "X"        -> X
+"ATerm" -> ATerm
 "Col"[SE]  -> IntCon
 "Line"[SE] -> IntCon
 "Path"     -> Literal
