@@ -22,5 +22,6 @@
 #include "pgen.tb"
 #include "addeqsyn.tb"
 #include "module-db.idef"
+#include "process-eqs.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB)
+toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB,ProcessEqs)

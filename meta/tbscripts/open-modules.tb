@@ -55,7 +55,7 @@ in
                 if equal(I,0) then
                  snd-msg(Id,a2toa1(T)).
                  rec-msg(Id,converted(T1?)).
-                 snd-msg(add-module-to-db(T1)).
+                 snd-msg(add-sdf2-module-to-db(T1)).
                  rec-msg(need-modules(M1s?)).
                  Ms := join(Ms,M1s)
                 else

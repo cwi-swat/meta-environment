@@ -1,16 +1,17 @@
 process ModuleDB is
 let
-Id : term,
-T1 : term,
-T2 : term,
-Module: term,
-Syntax: term,
-NewSyntax: term,
-Name: term,
-Mdb : module-db,
-Modules: list,
-Equations: list,
-Pairs: list
+Id        : term,
+T1        : term,
+T2        : term,
+Module    : term,
+Syntax    : term,
+NewSyntax : term,
+Eqs       : term,
+Name      : term,
+Mdb       : module-db,
+Modules   : list,
+Equations : list,
+Pairs     : list
 in
 
 /* First, execute the module db */
@@ -65,6 +66,28 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb,irels(Pairs?)).
   snd-note(import-relations(irels(Pairs)))
 +
+  rec-msg(add-sdf2-module-to-db(Module?)).
+  snd-eval(Mdb,add-sdf2-module(Module)).
+  rec-value(Mdb,imports(Name?,need-modules(Modules?))).
+  snd-msg(need-modules(Modules)).
+/* If a new module is added, we tell the world the new import relations */
+  snd-eval(Mdb,calc-import-rels(Name)).
+  rec-value(Mdb,irels(Pairs?)).
+  snd-note(import-relations(irels(Pairs)))
++
+/* Get the list of modules for which the equations are not yet
+   available in the database */
+  rec-msg(update-eqs-for-modules(Module?)).
+  snd-eval(Mdb,update-eqs-for-modules(Module)).
+  rec-value(Mdb,modules(Modules?)).
+  snd-msg(eqs-for-modules(Modules))
++
+/* Add the equations to the database for the given module name */
+  rec-msg(add-eqs-to-db(Module?,Eqs?)).
+  snd-eval(Mdb,add-eqs-module(Module,Eqs)).
+  rec-value(Mdb,done).
+  snd-msg(done)
++
 /* Return a list of all modules imported by this one*/
   rec-msg(get-all-imported-modules(Module?)).
   snd-eval(Mdb, get-all-imported-modules(Module)).
@@ -84,8 +107,8 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb, syntax(Syntax?)).
   snd-msg(total-syntax(Syntax))
 +
-  rec-msg(add-pgen-func(Syntax?)).
-  snd-eval(Mdb, add-pgen-func(Syntax)).
+  rec-msg(add-pgen-func(Module?,Syntax?)).
+  snd-eval(Mdb, add-pgen-func(Module,Syntax)).
   rec-value(Mdb, decorated-syntax(NewSyntax?)).
   snd-msg(decorated-syntax(NewSyntax))
 ) *

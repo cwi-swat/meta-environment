@@ -20,7 +20,9 @@ Graph : term,
 Mod   : term,
 Pairs : list,
 ModName : str,
-T       : str
+T       : str,
+FT      : str,
+Path    : str
 in
   Id := process-id.
   subscribe(import-relations(<term>)).
@@ -87,11 +89,9 @@ in
      snd-ack-event(UI,compile-module(Str))
    ) +
    ( rec-event(UI,parse-equations(Str?)).
-     snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
-     snd-msg(generate-parsetable(Str)).
-     rec-msg(parsetable-generation-done).
-     snd-note(ui-status(endstat(Id))).
-     snd-ack-event(UI,generate-parsetable(Str))
+     snd-msg(process-eqs(Str)).
+     rec-msg(eqs-processed(Str1?)).
+     snd-ack-event(UI,parse-equations(Str))
    ) +
    ( rec-event(UI,edit-term(Mod?,Str?)).
      create(Edit-term(Mod,Str),ET?).

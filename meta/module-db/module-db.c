@@ -14,6 +14,7 @@
 #include "module-db.h"
 
 ATermTable modules_db;
+ATermTable new_modules_db;
 ATermTable import_db;
 ATermTable trans_db;
 extern ATermTable compile_db;
@@ -32,17 +33,9 @@ ATerm exists(int cid,ATerm name)
     return ATmake("snd-value(result(notexists(<term>)))", name);
 }
 
-/*
-ATerm get_section(int cid,ATerm name,ATerm module)
-{
-  return (ATerm) ATempty;
-}
-*/
-
 ATerm get_module(int cid, ATerm name)
 {
-  ATerm asfix;
-ATfprintf(stderr,"Get module entered with %t\n",name);
+  ATerm asfix; 
   asfix = GetValue(modules_db,name);
   return ATmake("snd-value(getmod(<term>))",asfix);
 }
@@ -66,6 +59,7 @@ ATerm get_equations(int cid,ATerm mods)
 
 void create_module_db(int cid)
 {
+  new_modules_db = CreateValueStore(100,75);
   modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
@@ -73,6 +67,7 @@ void create_module_db(int cid)
 
 void clear_module_db(int cid)
 {
+  new_modules_db = CreateValueStore(100,75);
   modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
@@ -83,10 +78,11 @@ ATermList add_imports(ATerm name, ATermList mods);
 ATerm get_module_name(ATerm module);
 ATermList get_import_section_sdf2(ATerm module);
 
+/*The Asf+Sdf variant */
 ATerm add_module(int cid, ATerm asfix)
 {
   ATerm t[8]; 
-  ATerm modname, appl;
+  ATerm modname;
   ATermList sections, imports, unknowns;
   ATerm newasfix;
 
@@ -103,11 +99,27 @@ ATerm add_module(int cid, ATerm asfix)
     return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
                   modname,unknowns);
   }
+  else {
+    ATerror("not an asfix module: %t\n", asfix);
+    return NULL;
+  }
+}
+
+/* The Sdf2 variant */
+ATerm add_sdf2_module(int cid, ATerm asfix)
+{
+  ATerm t[8]; 
+  ATerm modname, appl, entry;
+  ATermList imports, unknowns;
+
   if(ATmatchTerm(asfix,pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
                  &appl, &t[6], &t[7])) {
-    modname = get_module_name(appl); 
-    PutValue(modules_db,modname,asfix); 
+    modname = get_module_name(appl);
+    entry = (ATerm) ATmakeList3(asfix,
+                                ATparse("unavailable"),
+                                ATparse("unavailable"));
+    PutValue(new_modules_db, modname, entry); 
     imports = get_import_section_sdf2(appl); 
     unknowns = add_imports(modname,imports); 
     return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
@@ -117,6 +129,16 @@ ATerm add_module(int cid, ATerm asfix)
     ATerror("not an asfix module: %t\n", asfix);
     return NULL;
   }
+}
+
+ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
+{
+  ATerm entry;
+
+  entry = GetValue(new_modules_db, modname);
+  entry = (ATerm)ATreplace((ATermList)entry, eqs, 1);
+  PutValue(new_modules_db, modname, entry); 
+  return ATmake("snd-value(done)");
 }
 
 ATermList get_import_section(ATermList sections)
@@ -143,6 +165,7 @@ void delete_module(int cid, ATerm name)
 {
 ATfprintf(stderr, "Deleting: %t\n", name);
   RemoveKey(modules_db,name);
+  RemoveKey(new_modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
 }
@@ -199,6 +222,31 @@ ATbool complete_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
+ATbool complete_sdf2_specification(ATermList visited, ATerm module)
+{
+  if(ATindexOf(visited, module, 0) < 0) {
+    if(GetValue(new_modules_db, module)) {
+      ATerm first;
+      ATbool result = ATtrue;
+      ATermList imports = (ATermList) GetValue(import_db,module);
+
+      visited = ATinsert(visited,module);
+      while(!ATisEmpty(imports) && result) {
+        first = ATgetFirst(imports);
+        result = complete_sdf2_specification(visited,first);
+        imports = ATgetNext(imports);
+      }
+      return result; 
+    }
+    else {
+      ATfprintf(stderr,"%t is missing\n",module);
+      return ATfalse;
+    }
+  }  
+  else 
+    return ATtrue;
+}
+
 ATermList calc_trans(ATermList todo)
 {
   ATerm name;
@@ -231,9 +279,29 @@ ATermList get_imported_modules(ATerm name)
     return (ATermList) value;
 }
 
+ATerm update_eqs_for_modules(int cid, ATerm name)
+{
+  ATerm module, entry, eqs;
+  ATermList result = ATempty;
+  ATermList modules = get_imported_modules(name);
+ATfprintf(stderr,"update_eqs_for_modules entered with %t\n",name);
+
+  while (!ATisEmpty(modules)) {
+    module = ATgetFirst(modules);
+    entry = GetValue(new_modules_db, module);
+    eqs = ATelementAt((ATermList)entry, 1);
+    if(ATisEqual(eqs,ATparse("unavailable")))
+      result = ATinsert(result,module);
+    modules = ATgetNext(modules);
+  }
+ATfprintf(stderr,"update_eqs_for_modules left with %t\n",result);
+  return ATmake("snd-value(modules([<list>]))",result);
+}
+
 ATerm get_all_imported_modules(int cid, ATerm name)
 {
   ATermList result = get_imported_modules(name);
+
   return ATmake("snd-value(all-imports([<list>]))",result);
 }
 
@@ -471,27 +539,27 @@ ATerm make_name_term(ATerm name)
 ATerm get_syntax(ATerm name, ATermList modules)
 {
   ATermList syntaxes = ATempty;
-  ATerm t[8], nameterm, appl, elem, module, result, term;
+  ATerm t[8], nameterm, appl, elem, module, result, term, entry;
 
   ATfprintf(stderr, "get_syntax entered\n");
-/*
-  appl = make_main_module(name);
-  syntaxes = ATinsert(syntaxes,appl);
-*/
+
   nameterm = make_name_term(name);
   while(!ATisEmpty(modules)) {
-    elem = ATgetFirst(modules);
-    module = GetValue(modules_db,elem);
+    elem = ATgetFirst(modules); 
+    entry = GetValue(new_modules_db,elem);
+    module = ATgetFirst((ATermList)entry);
     if(ATmatchTerm(module,pattern_asfix_term,
                    &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
                    &appl, &t[6], &t[7])) {
       if(ATisEmpty(syntaxes))
         syntaxes = ATinsert(syntaxes,appl);
-      syntaxes = ATinsert(syntaxes,pattern_asfix_ews);
-      syntaxes = ATinsert(syntaxes,appl);
+      else {
+        syntaxes = ATinsert(syntaxes,pattern_asfix_ews);
+        syntaxes = ATinsert(syntaxes,appl);
+      }
     }
     modules = ATgetNext(modules);
-  }
+  } 
   result = ATmakeTerm(pattern_asfix_list,
                       ATparse("iter(sort(\"Module\"),w(\"\"),l(\"*\"))"),
                       pattern_asfix_ews,
@@ -523,7 +591,7 @@ ATerm get_syntax(ATerm name, ATermList modules)
                     pattern_asfix_ews,
                     result,
                     pattern_asfix_ews,
-                    ATparse("no-abbreviations")); 
+                    ATparse("no-abbreviations"));  
   return term;
 }
 
@@ -534,7 +602,7 @@ ATerm retrieve_syntax(int cid, ATerm name)
 
 ATfprintf(stderr,"Module name is %t\n", name);
 
-  if(complete_specification(ATempty,name)) {
+  if(complete_sdf2_specification(ATempty,name)) {
     imports = get_imported_modules(name);
     result = get_syntax(name,imports);
     return ATmake("snd-value(syntax(<term>))",result);
@@ -545,24 +613,29 @@ ATfprintf(stderr,"Module name is %t\n", name);
     return ATmake("snd-value(syntax(done)))");  
   }
 }
-
-ATerm add_pgen_func(int cid, ATerm syntax)
+ 
+ATerm add_pgen_func(int cid, ATerm name, ATerm syntax)
 {
-  ATerm t[8], result, term, appl;
+  ATerm t[8], result, term, appl, nameterm;
 
   if(ATmatchTerm(syntax,pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                  &appl, &t[6], &t[7])) {
+    nameterm = make_name_term(name);
     result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"parse-table\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"),
+                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"parse-table\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"),
                         pattern_asfix_ews,
-                        ATmakeList(7,ATparse("l(\"parse-table\")"),
-                                     pattern_asfix_ews,
-                                     ATparse("l(\"(\")"),
-                                     pattern_asfix_ews,
-                                     appl,
-                                     pattern_asfix_ews,
-                                     ATparse("l(\")\")")));
+                        ATmakeList(11,ATparse("l(\"parse-table\")"),
+                                      pattern_asfix_ews,
+                                      ATparse("l(\"(\")"),
+                                      pattern_asfix_ews,
+                                      nameterm,
+                                      pattern_asfix_ews,
+                                      ATparse("l(\",\")"),
+                                      pattern_asfix_ews,
+                                      appl,
+                                      pattern_asfix_ews,
+                                      ATparse("l(\")\")")));
     term = ATmakeTerm(pattern_asfix_term,
                       ATparse("l(\"term\")"),
                       pattern_asfix_ews,
