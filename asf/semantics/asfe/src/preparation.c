@@ -37,6 +37,8 @@ static equation_table *equations = NULL;
 
 extern ATbool runVerbose;
 
+static ATerm prepare_annos(ATermList annos);
+
 /*
 Allocate memory for an equation table.
 */
@@ -475,7 +477,6 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
 
 /* Strip all annotations except "pos-info" */
 
-#if 0 /* Avoid 'defined but not used' warning */
 static ATerm prepare_annos(ATermList annos)
 {
   extern ATerm posinfo;
@@ -494,16 +495,15 @@ static ATerm prepare_annos(ATermList annos)
   }
   return NULL;
 }
-#endif
 
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
 
-/*
-  ATerm annos = AT_getAnnotations((ATerm)tree);
-*/
+
+  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(tree));
+
 
   if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
     return tree;
@@ -520,17 +520,20 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = tree;
   }
 
-/*
+
   if (annos) {
     ATerm preparedAnnos = prepare_annos((ATermList) annos);
     if (preparedAnnos) {
-      result = AT_setAnnotations(result, preparedAnnos);
+      result = PT_makeTreeFromTerm(
+                 AT_setAnnotations(PT_makeTermFromTree(result), 
+                                   preparedAnnos));
     }
     else {
-      result = AT_removeAnnotations(result);
+      result = PT_makeTreeFromTerm(
+                 AT_removeAnnotations(PT_makeTermFromTree(result)));
     }
   }
-*/
+
 
   return result;
 }
