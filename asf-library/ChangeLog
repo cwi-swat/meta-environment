@@ -1,3 +1,8 @@
+2001/05/14 (jurgenv@cwi.nl)
+  * Added automatic installation of the library modules
+  * Removed all dependencies on other packages for the moment
+  * Set version to 0.2beta
+
 2001/05/13 (jurgenv@cwi.nl)
   * Removed generation of configure script
   * Restarted asf library initiative using compound module names

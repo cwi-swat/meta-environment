@@ -5,13 +5,12 @@ asfe		= ${ASF}/bin/asfe
 unparsePT	= ${PT_SUPPORT}/bin/unparsePT
 
 
-
 # ASF rules
 %.eqs: %.sdf %.asf dump.conf
-	${eqs_dump} -C dump.conf -m $* -o $@
+	${eqs_dump} -m $* -o $@
 
 %.trm.tbl: %.sdf dump.conf
-	${pt_dump} -C dump.conf -m $* -o $@
+	${pt_dump} -m $* -o $@
 
 %.test.run: %.test %.trm.tbl %.eqs
 	${sglr} -m -s TestSuite -p $*.trm.tbl -i $< | \
@@ -27,6 +26,5 @@ dump.conf:
 	echo $(srcdir) >> $@
 
 EXTRA_DIST 	+= ${modules}
-pkgdata_DATA 	+= ${modules}
 
 CLEANFILES 	+= *.trm.tbl *.eqs dump.conf

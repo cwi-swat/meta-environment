@@ -1,3 +1,9 @@
   equations
      [S1]   strcon(""" Chars1 """) || strcon(""" Chars2 """) =
                 strcon(""" Chars1 Chars2 """)
+
+ [] remove-continuations(strcon(""" Chars1 "\""
+" Chars2 """)) =
+     remove-continuations(strcon(""" Chars1 Chars2 """))
+ 
+ [default] remove-continuations(Str) = Str

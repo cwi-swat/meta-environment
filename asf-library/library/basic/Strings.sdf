@@ -1,24 +1,24 @@
 module basic/Strings
 
+%% This module defines strings with continuations and escaped newlines, tabs and 
+%% backslashes
 
 hiddens 
-  sorts Escaped Normal
-
+  sorts Escaped Normal Contents
 
 exports
   sorts StrCon String
   lexical syntax
-    "\\n" |  "\\\"" -> Escaped
-    ~[\n\t\\]      -> Normal
-
-    "\"" (Normal | Escaped)*  "\"" -> StrCon
-
-  lexical restrictions
-    Normal -/- ~[\"\n]
+    ~[\0-\31\"\\\n]                  -> Normal
+    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped
+    (Normal | Escaped)*              -> Contents
+    "\"" {Contents "\\\n"}+ "\""     -> StrCon
 
   context-free syntax
     StrCon             -> String {constructor}
     String "||" String -> String {left}
+    remove-continuations(String) -> String
+
   variables
     "Str-con" [0-9\']* -> StrCon
     "Str" [0-9\']*     -> String

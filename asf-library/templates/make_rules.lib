@@ -1,12 +1,13 @@
 libpackagedir = ${pkgdatadir}$(subst src/LIB,,$(subdir))
 
 MODULES=$(wildcard *.asf *.sdf) 
+PREPARED=$(wildcard *.baf *.tbl)
 
 EXTRA_DIST = $(MODULES)
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
-	@list='$(MODULES)'; for p in $$list; do \
+	@list='$(MODULES) $(PREPARED)'; for p in $$list; do \
           if test -f $(srcdir)/$$p; then \
             echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
             $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
@@ -14,4 +15,10 @@ install-data-hook:
             echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
             $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p; \
           fi; fi; \
-        done
+        done; \
+        echo "touch $(DESTDIR)$(libpackagedir)/*.sdf" ; \
+        touch $(DESTDIR)$(libpackagedir)/*.sdf ; \
+        echo "touch $(DESTDIR)$(libpackagedir)/*.baf" ; \
+        touch $(DESTDIR)$(libpackagedir)/*.baf ; \
+        echo "touch $(DESTDIR)$(libpackagedir)/*.tbl" ; \
+        touch $(DESTDIR)$(libpackagedir)/*.tbl ; 
