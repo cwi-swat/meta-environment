@@ -24,7 +24,7 @@ static size_t size;
 
 #define  INITIAL_SIZE 4096
 #define  STEP_SIZE    2048
-
+#define XOR(p,q) ((!p && q) || (!q && p))
 /*}}}  */
 
 /*{{{  static long makeNodeId(PT_Tree tree) */
@@ -172,7 +172,8 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     PT_Symbol rhs = PT_getProductionRhs(prod);
     ATbool layout = PT_isTreeLayout(tree);
     ATbool literal = PT_isSymbolLit(rhs); /* for asfix2 compliance */
-    Shape shape = PT_isProductionList(prod) ? makeShapeBox() : 
+    Shape shape = XOR(PT_isProductionList(prod),productions_on) ? 
+                                              makeShapeBox() : 
                                               makeShapeEllipse();
 
     if (!layout && (literals_on || !literal)) {
