@@ -11,6 +11,7 @@ let
   Char: term, G: str, ErrList: list, Cycle: list
 in
   Id := process-id.
+  subscribe(disconnected(<term>)).
 /* We're not selective about start symbols yet */
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
@@ -83,6 +84,21 @@ in
     rec-value(SE,Foc?).
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,get-focus(Fid,I))
+    +
+    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
+    printf("Tree display not yet implemented\n").
+    snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
+    +
+    rec-event(TE,menu-event("Move",Str?,Fid)).
+    printf("Focus moving not yet implemented\n").
+    snd-eval(SE,moveFocus(Fid,Str)).
+    printf("After moveFocus\n").
+    rec-value(SE,Fl?).
+    printf("List coming back: %l",Fl).
+    Foc := first(Fl).
+    snd-msg(TE,set-focus(Fid,Foc)).
+    snd-ack-event(TE,menu-event("Move",Str,Fid))
   ) *
-  delta
+  rec-note(disconnected(TE)).
+  snd-terminate(SE,"Editor terminated")
 endlet
