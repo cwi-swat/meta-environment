@@ -20,7 +20,7 @@ LDADD     = -L${top_builddir}/libsglr -lsglr \
             -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
 
 test: all
-	for prg in ${bin_PROGRAMS}; \
+	@for prg in ${bin_PROGRAMS}; \
 	do \
 		${top_srcdir}/test-help ./$$prg; \
 	done

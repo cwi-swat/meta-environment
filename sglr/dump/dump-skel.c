@@ -17,13 +17,13 @@ void usage(char *prg)
     fprintf(stderr, "usage: %s [parse-table [state]]\n", prg);
     fprintf(stderr, "note that no -at-xxx options can be used, "
             "except -at-help :-(\n");
-    exit(1);
+    exit(0);
 }
 
 int main (int argc, char **argv)
 {
   ATerm       bottomOfStack;
-  char        *ATlibArgv[] = {"", "-silent"};
+  /*char        *ATlibArgv[] = {"", "-silent"};*/
   char        *err;
   char        *pt_name;
   parse_table *pt;
