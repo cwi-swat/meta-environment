@@ -57,6 +57,9 @@
 #define EQS_TBL_EXT	".eqs.tbl"
 #define TRM_TBL_EXT	".trm.tbl"
 
+/* Macro for extension of dump of all equations for a module */
+#define EQSDUMP_BAF_EXT ".asf.baf"
+
 ATbool run_verbose = ATfalse;
 
 static char myversion[] = "1.4";
@@ -256,6 +259,29 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
 	fclose(fd);
     }
     return ATmake("snd-value(save-done(<str>))", n);
+}
+
+ATerm create_equations_dump_file(int cid, char *module, ATerm equations)
+{
+	FILE *f = NULL;
+	char filename[PATH_LEN] = {'\0'};
+	
+	sprintf(filename,"%s%s", module, EQSDUMP_BAF_EXT);
+
+	if(!(f = fopen(filename, "w"))) {
+		char *errmsg = strerror(errno);
+		if (run_verbose) {
+			ATwarning("create_equations_dump_file: %s\n", errmsg);
+			return ATmake("snd-value(create-equations-dump-file-failed(<str>, <str>))", 
+										module, errmsg);
+		}
+	}
+
+	ATwriteToBinaryFile(equations, f);
+
+	fclose(f);
+		
+	return ATmake("snd-value(create-equations-dump-file-done(<str>))", module);
 }
 
 ATerm read_raw_from_named_file(char *fn, char *n)
