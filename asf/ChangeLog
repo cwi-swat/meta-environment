@@ -3,6 +3,10 @@
 2003/10/09 (markvdb@cwi.nl)
  * Added a check on ASF sorts.
 
+2003/10/09 (jurgenv@cwi.nl)
+ * Results from calls to builtin functions are always normalized before
+   continuing. 
+
 2003/10/07 (markvdb@cwi.nl)
  * Adapted to new tuples.
 
