@@ -27,7 +27,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:dhm:tT:vV"
+myarguments="C:dhm:o:T:V"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -38,6 +38,7 @@ Options:
     -d              run in debug mode (with viewer)
     -h              display help information (usage)
     -m modulename   specifies the modulename for which a table has to generated
+    -o filename     specifies the output file for the generated table 
     -T <port>       specifies TB_PORT for toolbus
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
@@ -59,6 +60,7 @@ set -- $args
 # Argument interpretation...
 
 configfile="meta.conf"        
+filename=""        
 
 while [ $#  -gt 0 ]
 do
@@ -75,6 +77,10 @@ do
         -m)
                 shift
                 modulename=$1
+                ;;
+        -o)
+                shift
+                filename=$1
                 ;;
         -T)
 		shift; xargs="$xargs -TB_PORT $1" ;;
@@ -93,7 +99,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
+toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
 
 toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share \

@@ -4,22 +4,28 @@
 
 process DumpEquations is
 let
-  Id : term,
+  Id         : term,
   ModuleName : str,
-  Equations : term,
-  Text : str
+  FileName   : str,
+  Equations  : term,
+  Text       : str
 in
   Id := process-id.
 
   (
-    rec-msg(dump-equations(ModuleName?)).
+    (
+      rec-msg(dump-equations(ModuleName?)) .
+      FileName := ""
+    +
+      rec-msg(dump-equations(ModuleName?, FileName?))
+    ) .
     snd-note(ui-status(statf(Id, "Dumping equations for %s",[ModuleName]))).
     snd-msg(process-eqs(ModuleName)).
     rec-msg(eqs-processed(ModuleName)).
     snd-msg(get-all-equations(ModuleName)).
     (
       rec-msg(all-equations(Equations?)).
-      snd-msg(create-equations-dump-file(ModuleName, Equations)).
+      snd-msg(create-equations-dump-file(ModuleName, FileName, Equations)).
       (
         rec-msg(create-equations-dump-file-done(ModuleName))
         +

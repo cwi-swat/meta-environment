@@ -17,7 +17,7 @@ in
     snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
   )*
   rec-msg(finished-opening-modules) .
-  snd-msg(dump-parse-table(MODULENAME)) .
+  snd-msg(dump-parse-table-given-file(MODULENAME, FILENAME)) .
   rec-msg(parse-table-dumped) .
   shutdown("")
 
