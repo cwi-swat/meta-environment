@@ -18,8 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.xalan.processor.StopParseException;
-
 import tide.tool.ToolManager;
 import tide.tool.prefeditor.PreferencesEditorFactory;
 import tide.tool.proclist.ProcessList;
