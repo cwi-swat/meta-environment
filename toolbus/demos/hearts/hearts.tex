@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage{noweb}
+\noweboptions{longchunks,smallcode,nomargintag}
+\nwcodepenalty=0
+
+\title{Extensible Hearts \\ \normalsize{A ToolBus case study}}
+\author{Pieter Olivier}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\input{hearts.tb.tex}
+\input{common.h.tex}
+\input{umpire.c.tex}
+\input{robot.c.tex}
+\input{ui-hearts.tcl.tex}
+
+\end{document}

@@ -1,0 +1,775 @@
+%{{{ umpire.c
+
+The file {\tt umpire.c} implements the umpire tool. This tool
+supervices the game and makes sure nobody is cheating!
+
+<<umpire.c*>>=
+<<includes>>
+<<declarations>>
+
+<<find_game>>
+<<find_player>>
+<<remove_game>>
+<<get_cards>>
+<<get_played_cards>>
+<<get_legal_cards>>
+<<deal>>
+<<request_card>>
+<<card_played>>
+<<next_trick>>
+<<next_game>>
+
+
+<<abort_game>>
+<<start_game>>
+
+<<rec_terminate>>
+<<rec_ack_event>>
+
+<<main>>
+@
+
+%}}}
+
+%{{{ includes
+
+<<includes>>=
+#include <TB.h>
+#include "umpire.tif.c"
+#include "common.h"
+@
+
+%}}}
+%{{{ declarations
+
+We need some constant and type declarations. 
+
+<<declarations>>=
+<<typedef player>>
+<<typedef game>>
+
+<<global variables>>
+@
+
+
+The type {\tt player} holds a single player in one game.
+<<typedef player>>=
+typedef struct player
+{
+  int pid;
+  int score;
+  card cards[CARDS_DEALT];
+  TBbool ready_for_next_trick;
+  int next_game;
+} player;
+
+#define STILL_THINKING		0
+#define READY_FOR_ANOTHER	1
+#define WANTS_TO_QUIT		2
+@
+
+Now we declare the type {\tt game}
+that holds complete games in progress.
+
+<<typedef game>>=
+typedef struct game
+{
+  struct game *next;
+  int cid;
+  int gid;
+  int nr_players;
+  player players[MAX_PLAYERS];
+  int round;
+  int leader;
+  int current;
+  card highest;
+  int new_leader;
+  TBbool hearts_broken;
+  card played[MAX_PLAYERS];
+  int card_nr;
+  TBbool game_done;
+} game;
+@
+
+<<global variables>>=
+game *games = NULL;
+@
+
+%}}}
+
+%{{{ game *find_game(int gid)
+
+Find a game with the given gid. Return NULL when none is found.
+
+<<find_game>>=
+game *find_game(int gid)
+{
+  game *cur = games;
+
+  while(cur && cur->gid != gid)
+    cur = cur->next;
+
+  return cur;
+}
+@
+
+%}}}
+%{{{ game *find_player(game *g, int pid)
+
+Find a player with the given pid. Return -1 when not found.
+
+<<find_player>>=
+int find_player(game *g, int pid)
+{
+  int i;
+
+  for(i=0; i<MAX_PLAYERS; i++) {
+    if(g->players[i].pid == pid)
+      return i;
+  }
+
+  return -1;
+}
+@
+
+%}}}
+%{{{ void remove_game(int gid)
+
+Remove a game from the list of games.
+
+<<remove_game>>=
+void remove_game(int gid)
+{
+  game *prev = NULL, *cur = games;
+@
+
+First, we lookup the game, and store the previous game in {\tt prev}.
+<<remove_game>>=
+  while(cur->gid != gid) {
+    assert(cur);
+    prev = cur;
+    cur = cur->next;
+  }
+@
+
+Now we remove the game from the chain, and {\tt free} its memory.
+<<remove_game>>=
+  if(prev)
+    prev->next = cur->next;
+  else
+    games = cur->next;
+
+  free(cur);
+}
+@
+
+%}}}
+%{{{ void deal(game *g)
+
+The function {\tt deal} shuffles the deck, and gives every player
+one hand of randomly dealt cards.
+
+<<deal>>=
+void deal(game *g)
+{
+  int nr, deck, suit, face, other, nr2, player, card;
+  int decks, total_cards, cards_to_deal = CARDS_DEALT * g->nr_players;
+  static int cards[MAX_DECKS*52];
+
+  g->game_done = TBfalse;
+  decks = cards_to_deal/52;
+  if(cards_to_deal % 52 != 0)
+    decks++;
+  total_cards = decks*52;
+  TBmsg("decks = %d\n", decks);
+
+  <<init decks>>
+  <<shuffle>>
+  <<deal cards>>
+}
+@
+
+%{{{ init decks
+
+Initialize all the needed decks.
+<<init decks>>=
+  for(nr=0, deck=0; deck<decks; deck++) 
+    for(nr=0, suit=SPADES; suit<=CLUBS; suit++)
+      for(face=2; face<=ACE; face++, nr++)
+        cards[nr] = CARD(suit, face);
+@
+
+%}}}
+%{{{ shuffle
+
+Swap every card with another one at a random position.
+<<shuffle>>=
+  for(nr=0; nr<total_cards; nr++) {
+    nr2 = (rand() % total_cards);
+    other = cards[nr2];
+    cards[nr2] = cards[nr];
+    cards[nr] = other;
+  }
+  fprintf(stdout, "The shuffled decks looks like this:\n");
+  for(nr=0; nr<total_cards; nr++)
+     fprintf(stdout, "%d,", cards[nr]);
+  fprintf(stdout, "\n");
+@
+
+%}}}
+%{{{ deal cards
+
+Now the decks are sufficiently randomized, start dealing.
+<<deal cards>>=
+  nr = 0;
+  for(player=0; player<g->nr_players; player++) {
+    for(card=0; card<CARDS_DEALT; card++, nr++) {
+      if(cards[nr] == CARD(CLUBS,2)) {
+        g->leader = player;
+        g->current = player;
+        g->new_leader = player;
+        g->highest = CARD(CLUBS,2);
+      }
+      g->players[player].cards[card] = cards[nr];
+    }
+    fprintf(stdout, "player %d gets cards: ", g->players[player].pid);
+    for(card=0; card<CARDS_DEALT; card++)
+      fprintf(stdout, "%d, ", g->players[player].cards[card]);
+    fprintf(stdout, "\n");
+  }
+@
+
+%}}}
+
+%}}}
+%{{{ term_list *get_cards(game *g, int player)
+
+Built a list of all the cards of one player.
+<<get_cards>>=
+term_list *get_cards(game *g, int player)
+{
+  term_list *cards = NULL;
+  int i, card;
+
+  for(i=0; i<CARDS_DEALT; i++) {
+    card = g->players[player].cards[i];
+    if(card != NO_CARD)
+      cards = list_concat_term(cards, TB_make("<int>", card));
+  }
+  return cards;
+}
+@
+
+%}}}
+%{{{ term_list *get_played_cards(game *g)
+
+Built a list of all the cards played sofar.
+
+<<get_played_cards>>=
+term_list *get_played_cards(game *g)
+{
+  term_list *cards = NULL;
+  int i, card;
+
+  for(i=0; i<CARDS_DEALT; i++) {
+    card = g->played[i];
+    if(card != NO_CARD)
+      cards = list_concat_term(cards, TB_make("<int>", card));
+  }
+  return cards;
+}
+@
+
+%}}}
+%{{{ term_list *get_legal_cards(game *g, int player)
+
+Built a list of all the cards that a certain player is allowed to play.
+
+<<get_legal_cards>>=
+term_list *get_legal_cards(game *g, int player)
+{
+  term_list *cards = NULL;
+  int i, card;
+
+  if(player == g->leader) {
+    <<leaders choice>>
+  } else {
+    <<followers choice>>
+  }
+  TBprintf(stderr, "*** legal cards of player %d are %t\n", player, cards);
+  return cards;
+}
+@
+
+%{{{ leaders choice
+
+The player must lead the trick. This means he is the first one to play 
+a card for this trick. If it is the first trick of the game, he has to
+play the two of clubs.
+<<leaders choice>>=
+  if(g->round == 0) {
+      cards = TB_make("[<int>]", CARD(CLUBS,2));
+@
+Otherwise, he can play any card, except for hearts when they are not
+broken yet.
+<<leaders choice>>=
+  } else {
+    for(i=0; i<CARDS_DEALT; i++) {
+      card = g->players[player].cards[i];
+      if(card != NO_CARD && (g->hearts_broken || SUIT(card) != HEARTS))
+        cards = list_concat_term(cards, TB_make("<int>", card));
+    }
+  }
+@
+
+%}}}
+%{{{ followers choice
+
+The player must follow the leader if he can. If he can't, he is
+free to play any card he has left.
+<<followers choice>>=
+  int suit = SUIT(g->played[0]);
+  for(i=0; i<CARDS_DEALT; i++) {
+    card = g->players[player].cards[i];
+    if(card != NO_CARD && SUIT(card) == suit)
+      cards = list_concat_term(cards, TB_make("<int>", card));
+  }
+  if(cards == NULL)
+    cards = get_cards(g, player);
+@
+
+%}}}
+
+%}}}
+
+%{{{ term *start_game(int gid, term_list *players)
+
+A new game is about to start. Initialize a new {\tt game} structure,
+and hook it up with the global list of games in {\tt games}.
+
+<<start_game>>=
+void start_game(int cid, int gid, term_list *players)
+{
+  int i;
+
+  <<allocate new game structure>>
+  <<initialize basic game fields>>
+  <<initialize players>>
+
+  deal(new_game);
+
+  <<distribute cards>>
+  
+@
+Now its time to actually start playing. We just request the first
+card to be played.
+<<start_game>>=
+  request_card(new_game);
+}
+@
+
+%{{{ allocate new game structure
+
+We need to allocate some memory for a new game structure. We immediately
+add it to the global list of games stored in the variable {\tt games}.
+
+<<allocate new game structure>>=
+  game *new_game = malloc(sizeof(game));
+  term_list *cards = NULL;
+
+  if(!new_game) {
+    TBmsg("out of memory, giving up!\n");
+    exit(1);
+  }
+  new_game->next = games;
+  games = new_game;
+@
+
+%}}}
+%{{{ initialize basic game fields
+
+A new game structure has just been allocated. Now its time to
+initialize its fields to some sensible starting values.
+
+<<initialize basic game fields>>=
+  new_game->cid  = cid;
+  new_game->gid  = gid;
+  new_game->nr_players = 4;
+  new_game->round = 0;
+  new_game->leader = -1;
+  new_game->current = -1;
+  new_game->highest = -1;
+  new_game->hearts_broken = TBfalse;
+  for(i=0; i<MAX_PLAYERS; i++)
+    new_game->played[i] = NO_CARD;
+  new_game->card_nr = 0;
+@
+
+%}}}
+%{{{ initialize players
+
+Information about a player
+is stored in the {\tt players} field of the {\tt game} structure.
+Now we initialize these players.
+
+<<initialize players>>=
+  for(i=0; i<new_game->nr_players; i++) {
+    term *p = first(players);
+    players = next(players);
+    if(!TB_match(p, "<int>", &new_game->players[i].pid)) {
+      TBmsg("malformed term <pid> in start_game: %t\n", p);
+      exit(1);
+    }
+  }
+@
+
+%}}}
+%{{{ distribute cards
+
+Built a term holding the cards of all the players.
+<<distribute cards>>=
+  for(i=0; i<new_game->nr_players; i++)
+    cards = list_concat_term(cards, TB_make("[<int>,<term>]", 
+			new_game->players[i].pid, get_cards(new_game, i)));
+@
+
+Distribute the cards among the players.
+<<distribute cards>>=
+  TB_send(new_game->cid, 
+	TB_make("snd-event(deal-cards(<int>,<term>))", new_game->gid, cards));
+@
+
+%}}}
+
+%}}}
+%{{{ void request_card(game *g)
+
+Request the next card to be played in a game.
+
+<<request_card>>=
+void request_card(game *g)
+{
+  term_list *played = get_played_cards(g);
+  term_list *legal = get_legal_cards(g, g->current);
+
+  TB_send(g->cid, 
+	TB_make("snd-event(play-card(<int>,<int>,<int>,<list>,<list>))",
+		g->players[g->current].pid, g->gid, g->round, played, legal));
+}
+@
+
+%}}}
+%{{{ void card_played(int pid, int gid, int round, int card)
+
+A new cards has been played. Update the game, and continue
+with the trick (if any).
+
+<<card_played>>=
+void card_played(int cid, int pid, int gid, int round, int card)
+{
+  int i;
+  game *g = find_game(gid);
+
+  assert(pid == g->players[g->current].pid);
+@
+A new card is played, so add it to the list of played cards.
+<<card_played>>=
+  g->played[g->card_nr++] = card;
+@
+Remove it from the list of cards the player holds.
+<<card_played>>=
+  for(i=0; i<CARDS_DEALT; i++)
+    if(g->players[g->current].cards[i] == card) {
+      g->players[g->current].cards[i] = NO_CARD;
+      break;
+    }
+  assert(i!=CARDS_DEALT); /* assert that we found the card! */
+@
+Check if the current player might become the new leader.
+<<card_played>>=
+  if(g->highest == NO_CARD || 
+	(SUIT(g->highest) == SUIT(card) && FACE(card) > FACE(g->highest))) {
+    fprintf(stderr, "$$$ highest = %d, new_leader = %d\n", card, g->current);
+    g->highest = card;
+    g->new_leader = g->current;
+  }
+@
+Now we move on to the next player.
+<<card_played>>=
+  g->current = (g->current + 1) % g->nr_players;
+@
+Check if hearts are broken.
+<<card_played>>=
+  if(SUIT(card) == HEARTS)
+    g->hearts_broken = TBtrue;
+@
+We need to check if this game and/or trick are done.
+<<card_played>>=
+  if(g->current == g->leader) {
+    <<trick done>>
+    if(g->round == CARDS_DEALT) {
+      <<game done>>
+    }
+  } else {
+@
+We can safely play on.
+<<card_played>>=
+    request_card(g);
+  }
+}
+@
+
+%{{{ trick done
+
+The trick is done. Calculate the scores, and move on to the
+next trick. Scoring is as follows:
+\begin{itemize}
+\item All hearts are 1 point.
+\item Queen of spades is 13 points.
+\end{itemize}
+
+<<trick done>>=
+  int i, score = 0;
+  term_list *played = get_played_cards(g);
+  
+  for(i=0; i<g->card_nr; i++) {
+    if(SUIT(g->played[i]) == HEARTS)
+      score++;
+    if(g->played[i] == CARD(SPADES,QUEEN))
+      score += 13;
+    g->played[i] = NO_CARD;
+  }
+  g->players[g->new_leader].score += score;
+@
+Make sure we are ready for the next trick.
+<<trick done>>=
+  g->leader = g->new_leader;
+  g->current = g->new_leader;
+  g->round++;
+  g->card_nr = 0;
+  g->highest = NO_CARD;
+@
+Mark the players as 'not ready' until they tell us otherwise.
+<<trick done>>=
+  for(i=0; i<g->nr_players; i++)
+    g->players[i].ready_for_next_trick = TBfalse;
+@
+Let the outside world know the trick is ready.
+<<trick done>>=
+  TB_send(g->cid, 
+	TB_make("snd-event(trick-done(<int>,<int>,<int>,<int>,<list>))",
+		gid, g->round-1, g->players[g->leader].pid, score, played));
+@
+
+%}}}
+%{{{ game done
+
+<<game done>>=
+  int i;
+  term_list *scores = NULL;
+
+  g->game_done = TBtrue;
+  for(i=0; i<g->nr_players; i++) {
+    scores = list_concat_term(scores, 
+	TB_make("[<int>,<int>]", g->players[i].pid, g->players[i].score));
+    g->players[i].next_game = STILL_THINKING;
+  }
+  TB_send(g->cid, TB_make("snd-event(game-done(<int>,<list>))", gid, scores));
+@
+
+%}}}
+
+%}}}
+%{{{ void next_trick(int cid, int pid, int gid)
+
+A player indicates he is ready for the next round. If all players are
+ready, we start the next trick (if any).
+
+<<next_trick>>=
+void next_trick(int cid, int pid, int gid)
+{
+  int i;
+  TBbool go = TBtrue;
+
+  game *g = find_game(gid);
+  if(!g->game_done) {
+    for(i=0; i<g->nr_players; i++) {
+      if(g->players[i].pid == pid)
+        g->players[i].ready_for_next_trick = TBtrue;
+      else
+        if(!g->players[i].ready_for_next_trick)
+          go = TBfalse;
+    }
+    if(go)
+      request_card(g);
+  }
+}
+@
+
+%}}}
+%{{{ void next_game(int cid, int pid, int gid, term *yes)
+
+A player indicates he is ready for a next game. When all players
+have cast their vote, we see if they unanimously want to continue.
+
+<<next_game>>=
+void next_game(int cid, int pid, int gid, term *yes)
+{
+  int i;
+  term_list *quitting = NULL;
+
+  game *g = find_game(gid);
+  for(i=0; i<g->nr_players; i++) {
+    if(g->players[i].pid == pid)
+      if(TB_match(yes, "true"))
+        g->players[i].next_game = READY_FOR_ANOTHER;
+      else
+	g->players[i].next_game = WANTS_TO_QUIT;
+  }
+@
+Check if everybody has cast their vote.
+<<next_game>>=
+  for(i=0; i<g->nr_players; i++) {
+    if(g->players[i].next_game == STILL_THINKING)
+      /* We didn't receive everybody's answer yet! */
+      return;
+  }
+@
+
+We received all the answers. Now gather all the participants that want
+to quit.
+
+<<next_game>>=
+  for(i=0; i<g->nr_players; i++)
+    if(g->players[i].next_game == WANTS_TO_QUIT)
+      quitting = list_concat_term(quitting, TB_make("<int>", g->players[i].pid));
+@
+
+Now we can make the decision to go on or not.
+
+<<next_game>>=
+  if(quitting) {
+    <<game over>>
+  } else {
+    <<start next game>>
+  }
+}
+@
+
+At least one player indicated that he didn't want to go on.
+Inform everybody the game has ended.
+
+<<game over>>=
+  TBprintf(stdout, "game %d is over! (%t)\n", gid, quitting);
+  TB_send(cid, TB_make("snd-event(match-done(<int>,<list>))", gid, quitting));
+  remove_game(gid);
+@
+
+Everybody wants to go on. Launch a new game (with the same gid).
+We start by dealing a new hand.
+<<start next game>>=
+  term_list *cards = NULL;
+
+  g->round = 0;
+  g->leader = -1;
+  g->current = -1;
+  g->highest = -1;
+  g->hearts_broken = TBfalse;
+  for(i=0; i<MAX_PLAYERS; i++)
+    g->played[i] = NO_CARD;
+  g->card_nr = 0;
+  deal(g);
+@
+
+Built a term holding the cards of all the players.
+<<start next game>>=
+  for(i=0; i<g->nr_players; i++)
+    cards = list_concat_term(cards, TB_make("[<int>,<term>]", 
+				g->players[i].pid, get_cards(g, i)));
+@
+
+Distribute the cards among the players, and start playing.
+<<start next game>>=
+  TB_send(g->cid, TB_make("snd-event(deal-cards(<int>,<list>))", g->gid, cards));
+  request_card(g);
+@
+
+%}}}
+
+%{{{ void abort_game(int cid, int gid, int by)
+
+<<abort_game>>=
+void abort_game(int cid, int gid, int by)
+{
+  TBmsg("game %d aborted by: %d\n", gid, by);
+  remove_game(gid);
+}
+@
+
+%}}}
+
+%{{{ void rec_terminate(int cid, term *arg)
+
+{\tt rec\_terminate} is called when the ToolBus closes the
+connection with the tool. Exit gracefully.
+<<rec_terminate>>=
+void rec_terminate(int cid, term *arg)
+{
+  exit(0);
+}
+@
+
+%}}}
+%{{{ void rec_ack_event(int cid, term *ev)
+
+When an event is acknowledged by the ToolBus, {\tt rec\_ack\_event} is
+called. The {\tt umpire} tool doesn't have to bother with these 
+acknowledgements, so we just ignore them.
+
+<<rec_ack_event>>=
+void rec_ack_event(int cid, term *ev)
+{
+/*  int pid, gid, round, card;
+  term_list *played, *legal;
+
+  if(TB_match(ev, "play-card(<int>,<int>,<int>,<list>,<list>,<int>)",
+			&pid, &gid, &round, &played, &legal, &card)) {
+    if(card >= 0)
+      card_played(pid, gid, round, card);
+  }
+*/
+}
+@
+
+%}}}
+
+%{{{ int main(int argc, char *argv[])
+
+<<main>>=
+int main(int argc, char *argv[])
+{
+  int cid;
+
+  /* Initialize ToolBus library */
+  TB_init();
+
+  /* Allocate a new connection identifier */
+  cid = TB_parseArgs(argc, argv, umpire_handler, umpire_check_in_sign);
+
+  /* Connect to the ToolBus */
+  if(TB_connect(cid) >= 0) {
+    /* Start receiving messages */
+    TB_eventloop();
+  }
+
+  /* Something went wrong, give up! */
+  exit(1);
+}
+@
+
+%}}}
+
+
+
+
+

@@ -1,0 +1,340 @@
+%{{{ randi.c
+
+{\tt randi} is een robot speler geschreven in C. Helaas is hij erg dom.
+Het enige dat randi kan op het moment dat hem gevraagd wordt om een
+kaart te spelen uit een lijst van legale kaarten, is het kiezen van de
+willekeurige kaart.
+
+<<randi.c*>>=
+<<includes>>
+<<global variables>>
+
+<<rec_terminate>>
+<<rec_ack_event>>
+
+<<who_am_i>>
+<<players>>
+<<games>>
+<<trick_done>>
+<<game_done>>
+<<match_done>>
+<<game_aborted>>
+<<invited>>
+<<invitation>>
+<<message>>
+<<broadcast>>
+<<deal>>
+<<play_card>>
+<<card_played>>
+<<cheating>>
+
+<<usage>>
+<<handle_args>>
+<<main>>
+@
+
+%}}}
+
+%{{{ includes
+
+<<includes>>=
+#include <TB.h>
+#include "player.tif.c"
+#include "common.h"
+
+#define ROBOT_VERSION "randi-0.1"
+#define ROBOT_NAME    "randi"
+#define ROBOT_LEVEL   "random"
+@
+
+%}}}
+%{{{ global variables
+
+<<global variables>>=
+char *robot_name = NULL;
+@
+
+%}}}
+
+%{{{ void rec_terminate(term *arg)
+
+Just exit when we receive a {\tt rec-terminate} message.
+
+<<rec_terminate>>=
+void rec_terminate(term *arg)
+{
+  exit(0);
+}
+@
+
+%}}}
+%{{{ void rec_ack_event(term *event)
+
+An event acknowledgment came in. Just ignore it.
+
+<<rec_ack_event>>=
+void rec_ack_event(term *event)
+{
+}
+@
+
+%}}}
+
+%{{{ term *who_am_i(int pid)
+
+{\tt randi} is asked to provide some information about himself.
+He returns his name, level, and version.
+
+<<who_am_i>>=
+term *who_am_i(int pid)
+{
+  if(!robot_name)
+    robot_name = strdup(TBsprintf("%s(%d)", ROBOT_NAME, pid));
+
+  return TBmake("snd-value(i-am(%s,%s,%s,%s))", 
+		 robot_name, "robot", ROBOT_LEVEL, ROBOT_VERSION);
+}
+@
+
+%}}}
+%{{{ void players(term_list *players)
+
+When {\tt randi} receives an update on which players are in
+the system, he just ignores it.
+
+<<players>>=
+void players(term_list *players)
+{
+}
+@
+
+%}}}
+%{{{ void games(term_list *games)
+
+{\tt randi} also ignores all information about which games are in progress.
+<<games>>=
+void games(term_list *games)
+{
+}
+@
+
+%}}}
+%{{{ term *invited(int pid, int gid, int by)
+
+The player received an invitation from another player.
+This friendly robot player always accepts the invitation.
+
+<<invited>>=
+term *invited(int pid, int gid, int by)
+{
+  return TBmake("snd-value(invited(%d,%d,%d,true))", pid,gid,by);
+}
+@
+
+%}}}
+%{{{ void invitation(int, int, int, term *)
+
+The result of an invitation request. This robot never
+makes these requests, so this function will never be called.
+However, if we do not implement this function, the ToolBus
+will complain.
+
+<<invitation>>=
+void invitation(int pid, int gid, int by, term *accepted)
+{
+  assert(0);
+}
+@
+
+%}}}
+%{{{ void message(int pid, int gid, char *msg, int from)
+
+{\tt randi} is to shy to react to incoming messages.
+
+<<message>>=
+void message(int pid, int gid, char *msg, int from)
+{
+}
+@
+
+%}}}
+%{{{ void broadcast(int pid, char *msg, int from)
+
+{\tt randi} also ingores broadcasts.
+
+<<broadcast>>=
+void broadcast(int pid, char *msg, int from)
+{
+}
+@
+
+%}}}
+%{{{ void deal(int pid, int gid, term_list *cards)
+
+A new game has started. {\tt randi} is not interested.
+
+<<deal>>=
+void deal(int pid, int gid, term_list *cards)
+{
+}
+@
+
+%}}}
+%{{{ void play_card(int, int, int, term_list *, term_list *)
+
+When asked to play a card,
+{\tt randi} picks a random card from the list of legal cards.
+
+<<play_card>>=
+void play_card(int pid, int gid, 
+			int round, term_list *played, term_list *legal)
+{
+  term *t;
+  int index, len, card;
+
+  len = list_length(legal);
+  index = rand() % len;
+  t = list_index(legal, index);
+  assert(t);
+
+  TBmatch(t, "%d", &card);
+
+  TBmsg("robot (%d) is playing card: %d\n", pid, card);
+  TBsend(TBmake("snd-event(play-card(%d,%d,%d,%d))", pid, gid, round, card));
+}
+@
+
+%}}}
+%{{{ void card_played(int pid, int gid, int round, int player, int card)
+
+Some player has played a card. {\tt randi} doesn't care.
+
+<<card_played>>=
+void card_played(int pid, int gid, int round, int player, int card)
+{
+}
+@
+
+%}}}
+%{{{ void cheating(int pid, int gid, int round, term_list *legal, int card)
+
+If the robot cheats, the umpire will detect this and
+let the robot now by calling this function. Off course, {\tt randi}
+doesn't cheat, but somebody might modify him to do so!
+
+<<cheating>>=
+void cheating(int pid, int gid, int round, term_list *legal, int card)
+{
+  TBprintf(stderr, "*** robot cheated, legal cards are: %t, played: %d\n",
+		legal, card);
+}
+@
+
+%}}}
+
+%{{{ void trick_done(int pid, int gid, int winner, int score, term_list *plyd)
+
+A trick has finished. {\tt randi} is immediately ready for the next one.
+
+<<trick_done>>=
+void trick_done(int pid, int gid, int round, int winner, int score, term_list *played)
+{
+  TBsend(TBmake("snd-event(next-trick(%d,%d))", pid, gid));
+}
+@
+
+%}}}
+%{{{ void game_done(int pid, int gid, term_list *scores)
+
+A game has finished, {\tt randi} always wants to play another one.
+
+<<game_done>>=
+void game_done(int pid, int gid, term_list *scores)
+{
+  TBsend(TBmake("snd-event(next-game(%d,%d,true))", pid, gid));
+}
+@
+
+%}}}
+%{{{ void match_done(int pid, int gid, term_list *quitting)
+
+A match has ended.
+
+<<match_done>>=
+void match_done(int pid, int gid, term_list *quitting)
+{
+}
+@
+
+%}}}
+%{{{ void game_aborted(int pid, int gid, int by)
+
+A game has been aborted. {\tt randi} doesn't care.
+
+<<game_aborted>>=
+void game_aborted(int pid, int gid, int by)
+{
+}
+@
+
+%}}}
+
+%{{{ usage
+
+Print the usage of this program and exit.
+
+<<usage>>=
+void usage(char *prg, TBbool error)
+{
+  FILE *f = stdout;
+
+  if(error)
+    f = stderr;
+
+  fprintf(f, "usage: %s [-Help] [-name <name>] <toolbus options>\n", prg);
+  if(error)
+    exit(1);
+  
+  exit(0);
+}
+@
+
+%}}}
+%{{{ handle_args
+
+Handle arguments. The only extra argument recognized is the
+argument ``-name'', indicating the {\tt randi}'s name.
+
+<<handle_args>>=
+void handle_args(int argc, char *argv[])
+{
+  int i;
+
+  for(i=1; i<argc; i++) {
+    if(streq(argv[i], "-name"))
+      robot_name = argv[++i];
+    if(streq(argv[i], "-Help"))
+      usage(argv[0], TBfalse);
+  }
+}
+@
+
+%}}}
+%{{{ main
+
+This is {\tt randi}'s {\tt main} function.
+It begins by looking at the arguments, and initializing the ToolBus.
+It then starts the ToolBus eventloop.
+<<main>>=
+int main(int argc, char *argv[])
+{
+  int cid;
+
+  handle_args(argc, argv);
+  TBinit("player", argc, argv, player_handler, player_check_in_sign);
+  TBeventloop();
+}
+@
+
+%}}}
+

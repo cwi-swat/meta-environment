@@ -1,0 +1,33 @@
+
+The include file {\tt common.h} contains some constants and
+macros common to most of the C tools in the system. It is
+also a convenient way to find the limits of this implementation.
+
+<<common.h*>>=
+#ifndef COMMON_H
+#define MAX_PLAYERS	128
+#define CARDS_DEALT	13
+#define MAX_DECKS	((CARDS_DEALT*MAX_PLAYERS)/52)+1
+@
+
+The type {\tt card} holds one card. There are 13 cards in a suit,
+and 4 suits in a deck. The access macros make it easy to get at the
+suit and face of a card.
+<<common.h*>>=
+typedef int card;
+
+#define NO_CARD  -1
+#define SUIT(c) (((c) >> 4) & 3)
+#define FACE(c) ((c) & 15)
+#define CARD(s,f) (((s) << 4) | (f))
+#define SPADES		0
+#define HEARTS		1
+#define DIAMONDS	2
+#define CLUBS		3
+
+#define JACK		11
+#define QUEEN		12
+#define KING		13
+#define ACE		14
+#endif COMMON_H
+@

@@ -1,0 +1,1407 @@
+%{{{ heart-breaker.tcl
+
+<<heart-breaker.tcl>>=
+<<proc who-am-i>>
+<<proc message>>
+<<proc broadcast>>
+<<proc players>>
+<<proc games>>
+<<proc invited>>
+<<proc invitation>>
+<<proc deal>>
+<<proc play-card>>
+<<proc card-played>>
+<<proc cheating>>
+<<proc trick-done>>
+<<proc game-done>>
+<<proc match-done>>
+<<proc game-aborted>>
+
+<<proc rec-terminate>>
+<<proc rec-ack-event>>
+
+<<proc createMainWindow>>
+<<proc selectedPlayer>>
+<<proc selectedGame>>
+<<proc getName>>
+<<proc updateButtons>>
+
+<<proc startGame>>
+<<proc restartGame>>
+<<proc cleanUp>>
+<<proc createGameWindow>>
+<<proc calcGeometry>>
+<<proc drawCardOutlines>>
+<<proc drawCards>>
+<<proc drawCard>>
+
+<<proc DoQuit>>
+<<proc DoInvite>>
+<<proc DoNewGame>>
+<<proc DoJoinGame>>
+<<proc SendToPlayer>>
+<<proc SendToGame>>
+<<proc SendToAll>>
+
+<<proc DoPlayCard>>
+<<proc DoNextTrick>>
+<<proc DoAbort>>
+
+source "bitmaps/decks"
+
+set myName [lindex $argv 0]
+set myLevel [lindex $argv 1]
+
+set myType "human"
+set myVersion "0.1"
+set myGames {}
+set activeGames {}
+
+createMainWindow
+updateButtons
+@
+
+%}}}
+
+%{{{ proc who-am-i { Pid }
+
+Request the name of this player.
+
+<<proc who-am-i>>=
+proc who-am-i { Pid } {
+  global myName myType myLevel myVersion
+  global myPid
+
+  set myPid $Pid
+  wm title . "Hearts: $Pid ($myName, level $myLevel)"
+
+  set Name	[TBstring $myName]
+  set Type	[TBstring $myType]
+  set Level	[TBstring $myLevel]
+  set Version	[TBstring $myVersion]
+
+  TBsend "snd-value(i-am($Name,$Type,$Level,$Version))"
+}
+@
+
+%}}}
+%{{{ proc message { Pid Gid Message From }
+
+<<proc message>>=
+proc message {Pid Gid Message From} {
+  global win players
+
+  if { $Gid != -1 } {
+    $win(msg) insert end "$Gid> $players($From,name): $Message\n"
+  } else {
+    $win(msg) insert end "> $players($From,name): $Message\n"
+  }
+}
+@
+
+%}}}
+%{{{ proc broadcast { Pid Message From }
+
+<<proc broadcast>>=
+proc broadcast {Pid Message From} {
+  global win players
+
+  $win(msg) insert end ">>> $players($From,name): $Message\n"
+}
+@
+
+%}}}
+%{{{ proc players { Players }
+
+The set of players that are logged on has changed. We must update
+the display to reflect this.
+
+<<proc players>>=
+proc players { Players } {
+  global win players allPlayers
+
+  set allPlayers {}
+  $win(players) delete 0 end
+  foreach Player $Players {
+    set Pid [lindex $Player 0]
+    set Info [lindex $Player 1]
+    set Name [lindex $Info 0]
+    set Type [lindex $Info 1]
+    set Level [lindex $Info 2]
+
+    if { $Name == "" } {
+      set Name "<anonymous>"
+    }
+    if { $Level == "" } {
+      set Level "<unknown>"
+    }
+
+    lappend allPlayers $Pid
+    set players($Pid,name) $Name
+    set players($Pid,type) $Type
+    set players($Pid,level) $Level
+
+    if {$Type == "robot"} {
+      $win(players) insert end "[format "%3d" $Pid]\[$Level\]: $Name"
+    } else {
+      $win(players) insert end "[format "%3d" $Pid]($Level): $Name"
+    }
+    $win(players) insert end 
+  }
+  updateButtons
+}
+@
+
+%}}}
+%{{{ proc games { Games }
+
+The list of active games has changed. Update the appropriate listbox
+to reflect this change.
+
+<<proc games>>=
+proc games { Games } {
+  global win myPid myGames allGames
+
+  set myGames {}
+  set sel [$win(games) curselection]
+  $win(games) delete 0 end
+  foreach Game $Games {
+    set Gid [lindex $Game 0]
+    set Info [lindex $Game 1]
+    set Players [lindex $Info 0]
+    set Started [lindex $Info 1]
+
+    set allGames($Gid) $Players
+    set allGames($Gid,started) $Started
+    foreach Player $Players {
+      if { $Player == $myPid } {
+        lappend myGames $Gid
+      }
+    }
+
+    if { $Started == "true" } {
+      $win(games) insert end [format " %3d: [join $Players ,]" $Gid]   
+    } else {
+      $win(games) insert end [format "?%3d: [join $Players ,]" $Gid]
+    }
+  }
+  foreach item $sel {
+    $win(games) selection set $item
+  }
+  updateButtons
+}
+@
+
+%}}}
+%{{{ proc invited { Pid Gid By }
+
+The player received an invitation from another player.
+Display a dialog box, so the player can accept or decline
+the invitation.
+
+<<proc invited>>=
+proc invited { Pid Gid By } {
+  set result [tk_dialog .invite "Invitation" \
+		"Player $By invites you to join game $Gid" \
+		{} \
+		0 \
+		"Accept" "Decline"]
+
+  if { $result == 0 } {
+    TBsend "snd-value(invited($Pid,$Gid,$By,true))"
+  } else {
+    TBsend "snd-value(invited($Pid,$Gid,$By,false))"
+  } 
+}
+@
+
+%}}}
+%{{{ proc invitation { Pid Gid By Accepted }
+
+<<proc invitation>>=
+proc invitation { Pid Gid By Accepted } {
+  global win
+
+  if { $Accepted == "true" } {
+    $win(msg) insert end \
+	"- Player $By accepted your invitation to join game $Gid\n"
+  } else {
+    $win(msg) insert end \
+	"- Player $By declined your invitation to join game $Gid\n"
+  }
+}
+@
+
+%}}}
+
+%{{{ proc deal { Pid Gid Cards }
+
+A new game has started. Initialize a new game window.
+
+<<proc deal>>=
+proc deal { Pid Gid Cards } { 
+  global activeGames
+
+  if { [lsearch $activeGames $Gid] == -1 } {
+    startGame $Pid $Gid [lsort -integer $Cards]
+  } else {
+    restartGame $Pid $Gid [lsort -integer $Cards]
+  }
+}
+@
+
+%}}}
+%{{{ proc play-card { Pid Gid Round Played Legal }
+
+Request to play a card. Notify the player, and raise the cards
+that he can play.
+
+<<proc play-card>>=
+proc play-card { Pid Gid Round Played Legal } {
+  global games Msg myName
+
+  set games($Gid,$Pid,raised) {}
+  foreach card $Legal {
+    set idx [lsearch $games($Gid,$Pid,cards) $card]
+    if { $idx != -1 } {
+      set item [lindex $games($Gid,$Pid,items) $idx]
+      set coords [$games($Gid,canvas) coords $item]
+      set x [lindex $coords 0]
+      set y [lindex $coords 1]
+      $games($Gid,canvas) coords $item $x [expr $y-16]
+      $games($Gid,canvas) bind $item <Button-1> "DoPlayCard $Pid $Gid $Round $card"
+      lappend games($Gid,$Pid,raised) [list $item $x $y]
+    }
+
+    set Msg($Gid) "Round $Round, your turn $myName. You can play any one of the raised cards."
+  }
+}
+@
+
+%}}}
+%{{{ proc card-played { Pid Gid Round Player Card }
+
+Some player has played a card.
+
+<<proc card-played>>=
+proc card-played { Pid Gid Round Player Card } {
+  global games activeGames myPid
+
+  # puts stderr "card-played: $Gid,$Round,$Player,$Card ($activeGames)"
+  if { [lsearch $activeGames $Gid] != -1 } {
+    incr games($Gid,$Player,nr_cards) -1
+    if { $Player == $myPid } {
+      set idx [lsearch $games($Gid,$myPid,cards) $Card]
+      set games($Gid,$myPid,cards) \
+		[lreplace $games($Gid,$myPid,cards) $idx $idx]
+    } else {
+      set idx $games($Gid,$Player,nr_cards)
+    }
+    set item [lindex $games($Gid,$Player,items) $idx]
+    $games($Gid,canvas) delete $item
+    set games($Gid,$Player,items) \
+			[lreplace $games($Gid,$Player,items) $idx $idx]
+
+    set pos [lindex {south west north east} [lsearch $games($Gid,pids) $Player]] 
+    drawCard $Gid $pos $Card
+  }
+}
+@
+
+%}}}
+%{{{ proc cheating { Pid Gid Round Legal Card }
+
+This user interface has been built in such a way that
+cheating is not possible. This function is called by
+the ToolBus when the user did manage to cheat.
+
+<<proc cheating>>=
+proc cheating { Pid Gid Round Legal Card } {
+  global activeGames players
+
+  if { [lsearch $activeGames $Gid] != -1 } {
+    tk_dialog .cheat$Gid "You cheated!" {} 0 "Try again"
+  }
+}
+@
+
+%}}}
+%{{{ proc trick-done { Pid Gid Round Winner Score Played }
+
+A trick has finished. Clean up the cards and update the score.
+
+<<proc trick-done>>=
+proc trick-done { Pid Gid Round Winner Score Played } {
+  global games Msg activeGames
+
+  if {[lsearch $activeGames $Gid] != -1} {
+    set Msg($Gid) "[getName $Winner] won trick $Round, he scored $Score points. Press left button to continue."
+    set games($Gid,next-trick) 1
+    set games($Gid,$Winner,gscore) [expr $games($Gid,$Winner,gscore)+$Score]
+  }
+}
+@
+
+%}}}
+%{{{ proc game-done { Pid Gid Scores }
+
+A game is finished. Display the score, and ask the user if she/he wants
+to play again.
+
+<<proc game-done>>=
+proc game-done { Pid Gid Scores } {
+  global games Msg activeGames players
+
+  if {[lsearch $activeGames $Gid] != -1} {
+    set m "Scoring:\n"
+    foreach Pair $Scores {
+      set PPid [lindex $Pair 0]
+      set Player $players([lindex $Pair 0],name)
+      set Score  [lindex $Pair 1]
+      set games($Gid,$PPid,score) $Score
+      set m "$m\n[format "%4d points for player $Player" $Score]"
+    }
+    set m "$m\n\nDo you want to play again?"
+    set choice [tk_dialog .done$Gid "Game $Gid is done!" $m {} 0 \
+		"Play Again" "I've had enough"]
+    if { $choice == 0 } {
+      TBsend "snd-event(next-game($Pid,$Gid,true))"
+    } else {
+      TBsend "snd-event(next-game($Pid,$Gid,false))"
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc match-done { Pid Gid Quitting }
+
+Some players didn't want to continue, so the match ends here.
+
+<<proc match-done>>=
+proc match-done { Pid Gid Quitting } {
+  global activeGames players
+
+  set Names ""
+  foreach Player $Quitting {
+    set Names "$Names $players($Player,name),"
+  }
+
+  if { [lsearch $activeGames $Gid] != -1 } {
+    tk_dialog .over$Gid "Game Over!" "The games is over.
+The following players did not want to continue:
+$Names." {} 0 "Ok"
+    cleanUp $Pid $Gid
+  }
+}
+@
+
+%}}}
+%{{{ proc game-aborted { Pid Gid Player }
+
+One of the players aborted the game. Display a message and exit.
+
+<<proc game-aborted>>=
+proc game-aborted { Pid Gid Player } {
+  global activeGames players
+
+  if { [lsearch $activeGames $Gid] != -1 } {
+    tk_dialog .abort$Gid "Game Aborted!" \
+	"Player $players($Player,name) aborted the game!" {} 0 "Shame on him!"
+    cleanUp $Pid $Gid
+  }
+}
+@
+
+%}}}
+
+%{{{ proc rec-terminate
+
+<<proc rec-terminate>>=
+proc rec-terminate {arg} {
+  exit 1
+}
+@
+
+%}}}
+%{{{ proc rec-ack-event
+
+<<proc rec-ack-event>>=
+proc rec-ack-event {event} {
+
+}
+@
+
+%}}}
+
+%{{{ proc createMainWindow
+
+<<proc createMainWindow>>=
+
+proc createMainWindow {} {
+  global tk_version win button
+
+  <<window manager interaction>>
+
+  frame .top
+
+  <<frame .top.players>>
+  <<frame .top.games>>
+  <<frame .message>>
+
+  pack append .top \
+	.top.players {left frame center expand fill} \
+	.top.games {left frame center expand fill}
+
+  pack append . \
+	.top  {top frame center expand fill} \
+	.message {bottom frame center expand fill}
+}
+<<bindSSL>>
+@
+
+%{{{ window manager interaction
+
+We need to specify the way in which our toplevel window interacts
+with the window manager.
+
+<<window manager interaction>>=
+  wm positionfrom . program
+  wm sizefrom . program
+  wm maxsize . 1152 900
+  wm title . "Hearts"
+  wm geometry . 400x300
+@
+
+%}}}
+
+%{{{ frame .top.players 
+
+The topleft frame contains a list of players logged on, and
+`Quit' and `Invite' buttons.
+
+<<frame .top.players>>=
+  frame .top.players -relief groove -borderwidth 2
+
+  label .top.players.label -text "Players:"
+  frame .top.players.list
+  if { $tk_version == "3.6"} {
+    listbox .top.players.list.box -borderwidth 2 -relief sunken \
+	-geometry 1x1 \
+	-yscrollcommand ".top.players.list.vbar set" \
+	-xscrollcommand ".top.players.hbar set"
+	-exportselection 0
+	bindSSL .top.players.list.box
+  } else {
+    listbox .top.players.list.box -borderwidth 2 -relief sunken \
+	-width 1 -height 1 \
+	-yscrollcommand ".top.players.list.vbar set" \
+	-xscrollcommand ".top.players.hbar set" \
+	-selectmode single \
+	-exportselection 0
+    bind .top.players.list.box <1> { tkListboxBeginSelect %W [%W index @%x,%y]
+                                     updateButtons
+                                   }
+  }
+  set win(players) .top.players.list.box
+
+  scrollbar .top.players.list.vbar \
+	-command ".top.players.list.box yview" \
+	-orient vert
+
+  scrollbar .top.players.hbar \
+	-command ".top.players.list.box xview" \
+	-orient hor
+  
+  pack append .top.players.list \
+	.top.players.list.box {left frame center expand fill} \
+	.top.players.list.vbar {left frame center filly}
+
+  frame .top.players.buttons
+  button .top.players.buttons.quit -text "Quit" -command DoQuit
+  button .top.players.buttons.invite -text "Invite" -command DoInvite
+  set button(quit) .top.players.buttons.quit
+  set button(invite) .top.players.buttons.invite
+
+  pack append .top.players.buttons \
+	.top.players.buttons.quit {left frame center expand fillx} \
+	.top.players.buttons.invite {left frame center expand fillx}
+
+  pack append .top.players \
+	.top.players.label {top frame center fillx} \
+	.top.players.list {top frame center expand fill} \
+	.top.players.hbar {top frame center fillx} \
+	.top.players.buttons {top frame center fillx}
+@
+
+%}}}
+%{{{ frame .top.games
+
+The topright frame contains a list of ongoing games, and
+`new' and `join' buttons.
+
+<<frame .top.games>>=
+  frame .top.games -relief groove -borderwidth 2
+  label .top.games.label -text "Games:"
+  frame .top.games.list
+  if { $tk_version == "3.6"} {
+    listbox .top.games.list.box -borderwidth 2 -relief sunken \
+	-geometry 1x1 \
+	-yscrollcommand ".top.games.list.vbar set" \
+	-xscrollcommand ".top.games.hbar set"
+	-exportselection 0
+	bindSSL .top.games.list.box
+  } else {
+    listbox .top.games.list.box -borderwidth 2 -relief sunken \
+	-width 1 -height 4 \
+	-yscrollcommand ".top.games.list.vbar set" \
+	-xscrollcommand ".top.games.hbar set" \
+	-selectmode browse \
+	-exportselection 0
+    bind .top.games.list.box <1> { tkListboxBeginSelect %W [%W index @%x,%y]
+                                   updateButtons
+                                 }
+  }
+  set win(games) .top.games.list.box
+
+  scrollbar .top.games.list.vbar \
+	-command ".top.games.list.box yview" \
+	-orient vert
+
+  scrollbar .top.games.hbar \
+	-command ".top.games.list.box xview" \
+	-orient hor
+  
+  pack append .top.games.list \
+	.top.games.list.box {left frame center expand fill} \
+	.top.games.list.vbar {left frame center filly}
+
+  frame .top.games.buttons
+  button .top.games.buttons.new -text "New" -command DoNewGame
+  button .top.games.buttons.join -text "Join" -command DoJoinGame
+  set button(new) .top.games.buttons.new
+  set button(join) .top.games.buttons.join
+
+  pack append .top.games.buttons \
+	.top.games.buttons.new {left frame center expand fillx} \
+	.top.games.buttons.join {left frame center expand fillx}
+
+
+  pack append .top.games \
+	.top.games.label {top frame center fillx} \
+	.top.games.list {top frame center expand fill} \
+	.top.games.hbar {top frame center fillx} \
+	.top.games.buttons {top frame center fillx}
+@
+
+%}}}
+%{{{ frame .message
+
+The {\tt .message} frame consists of a text window that contains
+messages from the system and from other players, an entry widget
+where the user can type messages, and three buttons:
+\begin{itemize}
+\item The {\tt Player} button, to send a message to one player;
+\item The {\tt Game} button, to send a message to all the players
+      in a single game;
+\item The {\tt All} button, to send a message to all the players
+      that are logged on.
+\end{itemize}
+
+<<frame .message>>=
+  frame .message -relief groove -borderwidth 2
+  label .message.label -text Messages:
+  frame .message.msg
+  text  .message.msg.text -height 1 -width 1 \
+	-yscrollcommand ".message.msg.vbar set"
+  set win(msg) .message.msg.text
+
+  scrollbar .message.msg.vbar -orient vert -command ".message.msg.text yview"
+  entry .message.entry -textvariable MainMsg
+  frame .message.buttons
+  
+  label .message.buttons.label -text "Send to:"
+
+  button .message.buttons.player -text "Player" -command SendToPlayer
+  button .message.buttons.game -text "Game" -command SendToGame
+  button .message.buttons.all -text "All" -command SendToAll
+  set button(msg2player) .message.buttons.player
+  set button(msg2game) .message.buttons.game
+  set button(msg2all) .message.buttons.all
+
+  pack append .message.msg \
+	.message.msg.text {left frame center expand fill} \
+	.message.msg.vbar {left frame center filly}
+
+  pack append .message.buttons \
+	.message.buttons.label {left frame center} \
+	.message.buttons.player {left frame center expand fill} \
+	.message.buttons.game {left frame center expand fill} \
+	.message.buttons.all {left frame center expand fill}
+
+  pack append .message \
+	.message.label {top frame center fillx} \
+	.message.msg  {top frame center expand fill} \
+	.message.entry {top frame center fillx} \
+	.message.buttons {top frame center fillx}
+@
+
+%}}}
+%{{{ bindSSL
+
+procedure {\tt bindSSL}: adjust binding for single selection listbox
+(Tk 3.6 only).
+
+<<bindSSL>>=
+# procedure: bindSSL, 
+proc bindSSL { Box } {
+  global tk_version
+
+ bind $Box <1> {updateButtons}
+ if { $tk_version == "3.6" } {
+    bind $Box <B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-Button-1> {%W select from [%W nearest %y]; updateButtons}
+  } else {
+    $Box configure -selectmode single
+  }
+}
+@
+
+%}}}
+
+%}}}
+%{{{ proc selectedPlayer {}
+
+Get the pid of the selected player.
+
+<<proc selectedPlayer>>=
+proc selectedPlayer {} {
+  global win
+
+  set sel [$win(players) curselection]
+  set players {}
+  set val ""
+  foreach el $sel {
+    set val [string trimleft [$win(players) get $el]]
+    regexp {([0-9]+)} $val val player
+    lappend players $player
+  }
+
+  return $players
+}
+@
+
+%}}}
+%{{{ proc selectedGame {}
+
+Get the pid of the selected player.
+
+<<proc selectedGame>>=
+proc selectedGame {} {
+  global win
+
+  set sel [$win(games) curselection]
+  set games {}
+  foreach el $sel {
+    set val [string trimleft [$win(games) get $el]]
+    regexp {([0-9]+)} $val val game
+    lappend games $game
+  }  
+
+  return [lindex $games 0]
+}
+@
+
+%}}}
+%{{{ proc getName { Pid }
+
+Retrieve the name of the player with a given pid.
+
+<<proc getName>>=
+proc getName { Pid } {
+  global players
+
+  return $players($Pid,name)
+}
+@
+
+%}}}
+%{{{ proc updateButtons {}
+
+Enable/disable buttons depending on listbox selections.
+
+<<proc updateButtons>>=
+proc updateButtons {} {
+  global win button myPid myGames allGames
+
+  set pid [selectedPlayer]
+  set gid [selectedGame]
+
+  if { $pid == "" || $pid == $myPid } {
+    $button(invite) configure -state disabled
+    $button(msg2player) configure -state disabled
+  } else {
+    if { $gid != "" && [lsearch $myGames $gid] != -1 && \
+	               [lsearch $allGames($gid) $pid] == -1 && \
+		       $allGames($gid,started) != "true" } {
+      $button(invite) configure -state normal
+    } else {
+      $button(invite) configure -state disabled
+    }
+    $button(msg2player) configure -state normal
+  }
+
+  if { $gid == "" } {
+    $button(join) configure -state disabled
+    $button(msg2game) configure -state disabled  
+  } else {
+    if { [lsearch $myGames $gid] != -1 || $allGames($gid,started) == "true"} {
+      $button(join) configure -state disabled
+    } else {
+      $button(join) configure -state normal
+    }
+    $button(msg2game) configure -state normal
+  }
+
+  if { $myGames == {}} {
+    $button(quit) configure -state normal
+  } else {
+    $button(quit) configure -state disabled
+  }
+}
+@
+
+%}}}
+
+%{{{ proc startGame { Pid Gid Cards }
+
+<<proc startGame>>=
+proc startGame { Pid Gid Cards } {
+  global games activeGames allGames decks
+
+  lappend activeGames $Gid
+  set games($Gid,pid) $Pid
+  set games($Gid,$Pid,cards) $Cards
+  set games($Gid,deck) $decks(default)
+  set games($Gid,next-trick) 0
+
+  set games($Gid,color,card) white
+  set games($Gid,color,cardcover) blue
+
+  set Pids $allGames($Gid)
+  set start [lsearch $Pids $Pid]
+  set Pid1 [lindex $Pids $start]
+  set Pid2 [lindex $Pids [expr ($start+1)%4]]
+  set Pid3 [lindex $Pids [expr ($start+2)%4]]
+  set Pid4 [lindex $Pids [expr ($start+3)%4]]
+
+  set games($Gid,pids) [list $Pid1 $Pid2 $Pid3 $Pid4]
+  
+  foreach pid $games($Gid,pids) {
+    set games($Gid,$pid,nr_cards) 13
+    set games($Gid,$pid,items) {}
+    set games($Gid,$pid,gscore) 0
+    set games($Gid,$pid,score) 0
+  }
+
+  set games($Gid,$Pid1,place) south
+  set games($Gid,$Pid2,place) west
+  set games($Gid,$Pid3,place) north
+  set games($Gid,$Pid4,place) east
+
+  createGameWindow $Gid
+  calcGeometry $Gid
+  drawCards $Gid
+}
+@
+
+%}}}
+%{{{ proc restartGame { Pid Gid Cards }
+
+<<proc restartGame>>=
+proc restartGame { Pid Gid Cards } {
+  global games activeGames allGames decks
+
+  set games($Gid,$Pid,cards) $Cards
+  set games($Gid,next-trick) 0
+
+  foreach pid $games($Gid,pids) {
+    set games($Gid,$pid,nr_cards) 13
+    set games($Gid,$pid,gscore) 0
+  }
+
+  foreach side {north east south west} {
+    if { $games($Gid,$side,heap_item) != "" } {
+      $games($Gid,canvas) delete $games($Gid,$side,heap_item)
+      set games($Gid,$side,heap_item) ""
+    }
+  }
+
+  drawCards $Gid
+}
+@
+
+%}}}
+%{{{ proc cleanUp { Pid Gid }
+
+Cleanup after a game has ended.
+
+<<proc cleanUp>>=
+proc cleanUp { Pid Gid } {
+  global games activeGames
+
+  # Remove $Gid from the list of active games.
+  set idx [lsearch $activeGames $Gid]
+  set activeGames [lreplace $activeGames $idx $idx]
+
+  destroy $games($Gid)
+  # We might want to use a bunch of "unset's" here to really clean up!
+}
+@
+
+%}}}
+%{{{ proc createGameWindow { Gid }
+
+Create a new game window.
+
+<<proc createGameWindow>>=
+proc createGameWindow { Gid } {
+  global games players myName
+
+  set w .g$Gid
+  set games($Gid) $w
+
+  toplevel $w
+   
+#  puts stderr "createGameWindow $Gid"  
+  # Window manager configuration
+  wm positionfrom $w user
+  wm sizefrom $w ""
+  wm maxsize $w 1152 900
+  wm title $w "Hearts: $myName ($games($Gid,pid)) in game $Gid" 
+  # wm geometry $w "600x350"
+
+  frame $w.scores -borderwidth 2 -relief sunken
+  label $w.scores.label -text "Scores:"
+  frame $w.scores.b
+  frame $w.scores.b.b1
+  frame $w.scores.b.b2
+  frame $w.scores.b.b3
+  frame $w.scores.b.b4
+ 
+  frame $w.table -borderwidth 2 -relief groove
+  frame $w.table.top
+  canvas $w.table.top.cards \
+	-width 748 \
+	-height 582 \
+	-xscrollcommand "$w.table.scroll.hbar set" \
+	-yscrollcommand "$w.table.top.vbar set" \
+	-confine true
+  set games($Gid,canvas) $w.table.top.cards
+  bind $games($Gid,canvas) <Button-1> "DoNextTrick $Gid"
+
+  frame $w.table.top.cards.scores -borderwidth 2 -relief sunken
+  frame $w.table.top.cards.scores.names
+  frame $w.table.top.cards.scores.scores
+  frame $w.table.top.cards.scores.gscores
+  label $w.table.top.cards.scores.names.l -text "Player:"
+  label $w.table.top.cards.scores.scores.l -text "Total:"
+  label $w.table.top.cards.scores.gscores.l -text "Game:"
+
+  pack append $w.table.top.cards.scores.names \
+	$w.table.top.cards.scores.names.l {top frame center}
+  pack append $w.table.top.cards.scores.scores \
+	$w.table.top.cards.scores.scores.l {top frame center}
+  pack append $w.table.top.cards.scores.gscores \
+	$w.table.top.cards.scores.gscores.l {top frame center}
+
+  foreach pid $games($Gid,pids) {
+    label $w.table.top.cards.scores.names.name$pid \
+			-text $players($pid,name) -width 10
+    label $w.table.top.cards.scores.scores.score$pid \
+			-textvariable games($Gid,$pid,score)
+    label $w.table.top.cards.scores.gscores.gscore$pid \
+			-textvariable games($Gid,$pid,gscore)
+    pack append $w.table.top.cards.scores.names \
+	$w.table.top.cards.scores.names.name$pid {top frame center}
+    pack append $w.table.top.cards.scores.scores \
+	$w.table.top.cards.scores.scores.score$pid {top frame center}
+    pack append $w.table.top.cards.scores.gscores \
+	$w.table.top.cards.scores.gscores.gscore$pid {top frame center}
+  }
+
+  pack append $w.table.top.cards.scores \
+	$w.table.top.cards.scores.names {left frame center} \
+	$w.table.top.cards.scores.scores {left frame center} \
+	$w.table.top.cards.scores.gscores {left frame center}
+
+  $w.table.top.cards create window 0 0 -anchor nw -window $w.table.top.cards.scores
+
+  scrollbar $w.table.top.vbar -orient vert -command "$w.table.top.cards yview"
+  frame $w.table.scroll
+
+  scrollbar $w.table.scroll.hbar -orient hor -command "$w.table.top.cards xview"
+  frame $w.table.scroll.dummy -width 22 -height 19 -borderwidth 2 -relief flat
+
+  frame $w.message
+  label $w.message.label -textvariable Msg($Gid)
+
+  frame $w.buttons
+  button $w.buttons.quit -text "Abort" -command "DoAbort $Gid"
+
+  pack append $w.table.top \
+	$w.table.top.cards {left frame center expand fill} \
+	$w.table.top.vbar {left frame center filly}
+
+  pack append $w.table.scroll \
+	$w.table.scroll.hbar {left frame center expand fillx} \
+	$w.table.scroll.dummy {left frame center}
+
+  pack append $w.table \
+	$w.table.top {top frame center expand fill} \
+	$w.table.scroll {top frame center fillx}
+
+  pack append $w.message \
+	$w.message.label {top frame center expand fillx}
+
+  pack append $w.buttons \
+	$w.buttons.quit {left frame center expand fillx}
+
+  pack append $w \
+	$w.table {top frame center expand fill} \
+	$w.message {top frame center fillx} \
+	$w.buttons {top frame center fillx}
+}
+@
+
+%}}}
+%{{{ proc calcGeometry { Gid }
+
+This function calculates where the cards are located on the table top.
+Also draw some 'stable' items, like the players names.
+
+<<proc calcGeometry>>=
+proc calcGeometry { Gid } {
+  global games decks
+
+  set deck $decks(default)
+  set cw $decks($deck,width)
+  set ch $decks($deck,height)
+  set overlap_w [expr $cw/3]
+  set overlap_h [expr $ch+4]
+
+  set ew_width [expr 4*$overlap_w+$cw]
+  set ew_height [expr 2*$overlap_h+$ch]
+  set ns_width [expr 12*$overlap_w+$cw]
+  set ns_height $ch
+
+  set xoff 10
+  set yoff 24
+  set xspace 0
+  set yspace 24
+
+  set north_x [expr $xoff+$ew_width+$xspace]
+  set north_y $yoff
+
+  set west_x $xoff
+  set west_y [expr $north_y+$ns_height+$yspace]
+
+  set east_x [expr $north_x+$ns_width+$xspace]
+  set east_y $west_y
+
+  set south_x $north_x
+  set south_y [expr $west_y+$ew_height+$yspace]
+
+  set north_heap_x [expr $north_x+($ns_width-$cw)/2]
+  set north_heap_y [expr $north_y+$ns_height+$yspace]
+
+  set west_heap_x [expr $west_x+$ew_width+$xspace] 
+  set west_heap_y [expr $west_y+($ew_height-$ch)/2]
+
+  set east_heap_x [expr $east_x-$xspace-$cw]
+  set east_heap_y $west_heap_y
+
+  set south_heap_x $north_heap_x
+  set south_heap_y [expr $south_y-$yspace-$ch]
+
+  set games($Gid,card,width) $cw
+  set games($Gid,card,height) $ch
+
+  set north {}
+  for { set i 0 } { $i < 13 } { incr i } {
+    lappend north [list [expr $north_x+$i*$overlap_w] $north_y]
+  }
+
+  set south {}
+  for { set i 0 } { $i < 13 } { incr i } {
+    lappend south [list [expr $south_x+$i*$overlap_w] $south_y]
+  }
+
+  set west {}
+  for { set i 0 } { $i < 3 } { incr i } {
+    for { set j 0 } { $j < 4 } { incr j } {
+      lappend west \
+	[list [expr $west_x+$j*$overlap_w] [expr $west_y+$i*$overlap_h]]
+    }
+  }
+  lappend west [list [expr $west_x+4*$overlap_w] [expr $west_y+1*$overlap_h]]
+
+  set east {}
+  for { set i 0 } { $i < 3 } { incr i } {
+    for { set j 0 } { $j < 4 } { incr j } {
+      lappend east \
+	[list [expr $east_x+$j*$overlap_w] [expr $east_y+$i*$overlap_h]]
+    }
+  }
+  lappend east [list [expr $east_x+4*$overlap_w] [expr $east_y+1*$overlap_h]]
+
+  <<set geometry values in {\tt games} array>>
+  <<draw names>>
+}
+@
+
+%{{{ set geometry values in {\tt games} array
+
+To avoid an abundance of global variables, we use the
+{\tt games} array to tie all the variables of one game
+together. This array holds the geometry values just
+calculated.
+
+<<set geometry values in {\tt games} array>>=
+  set games($Gid,north) $north
+  set games($Gid,north,heap) [list $north_heap_x $north_heap_y]
+  set games($Gid,south) $south
+  set games($Gid,south,heap) [list $south_heap_x $south_heap_y]
+  set games($Gid,east) $east
+  set games($Gid,east,heap) [list $east_heap_x $east_heap_y]
+  set games($Gid,west) $west
+  set games($Gid,west,heap) [list $west_heap_x $west_heap_y]
+@
+
+%}}}
+%{{{ draw names
+
+Draw the names of the players above their hand of cards.
+
+<<draw names>>=
+  $games($Gid,canvas) configure \
+	-scrollregion "0 0 \
+	  [expr $east_x+$ew_width] [expr $south_y+$ns_height]"
+
+  $games($Gid,canvas) create text [expr $south_x+$ns_width/2] [expr $south_y-16] \
+		-text [getName [lindex $games($Gid,pids) 0]] \
+		-anchor n
+
+  $games($Gid,canvas) create text $west_x [expr $west_y-16] \
+		-text [getName [lindex $games($Gid,pids) 1]] \
+		-anchor nw
+
+  $games($Gid,canvas) create text [expr $north_x+$ns_width/2] \
+				  [expr $north_y-16] \
+		-text [getName [lindex $games($Gid,pids) 2]] \
+		-anchor n
+
+  $games($Gid,canvas) create text $east_x [expr $east_y-16] \
+		-text [getName [lindex $games($Gid,pids) 3]] \
+		-anchor nw
+@
+
+%}}}
+
+%}}}
+%{{{ proc drawCardOutlines { Gid }
+
+<<proc drawCardOutlines>>=
+proc drawCardOutlines { Gid } {
+  global games
+
+  set c $games($Gid,canvas)
+  set cw $games($Gid,card,width)
+  set ch $games($Gid,card,height)
+
+  foreach player { north east south west } {
+    foreach card $games($Gid,$player) {
+      set x [lindex $card 0]
+      set y [lindex $card 1]
+      $c create rectangle $x $y [expr $x+$cw-1] [expr $y+$ch-1] \
+						-outline black
+    }
+  }  
+}
+@
+
+%}}}
+%{{{ proc drawCards { Gid }
+
+Draw all cards, and remember their item id's.
+
+<<proc drawCards>>=
+proc drawCards { Gid } {
+  global games myPid decks
+
+  <<draw open cards>>
+  <<draw closed cards>>
+}
+
+<<proc drawClosedCards>>
+@
+
+<<draw open cards>>=
+  foreach item $games($Gid,$myPid,items) {
+    $games($Gid,canvas) delete $item
+  }
+  set games($Gid,$myPid,items) {}
+  for { set i 0 } { $i < $games($Gid,$myPid,nr_cards) } { incr i } {
+    set card [lindex $games($Gid,$myPid,cards) $i]
+    set bitmap "@bitmaps/$games($Gid,deck)/$decks(table,$card)"
+    set pos [lindex $games($Gid,south) $i]
+    set x [lindex $pos 0]
+    set y [lindex $pos 1]
+    set suit [expr $card/16]
+    if { $suit == 0 || $suit == 3 } {
+      set fg "black"
+    } else {
+      set fg "red"
+    }
+    set bg $games($Gid,color,card)
+    set item [$games($Gid,canvas) create bitmap $x $y \
+		-bitmap $bitmap -background $bg -foreground $fg -anchor nw]
+    lappend games($Gid,$myPid,items) $item    
+  }
+@
+
+<<draw closed cards>>=
+  drawClosedCards $Gid [lindex $games($Gid,pids) 1] west
+  drawClosedCards $Gid [lindex $games($Gid,pids) 2] north
+  drawClosedCards $Gid [lindex $games($Gid,pids) 3] east
+@
+%{{{ proc drawClosedCards
+
+Draw one hand, all cards facing down.
+
+<<proc drawClosedCards>>=
+proc drawClosedCards { Gid Pid Pos } {
+  global games
+
+  foreach item $games($Gid,$Pid,items) {
+    $games($Gid,canvas) delete $item
+  }
+  set $games($Gid,$Pid,items) {}
+  for { set i 0 } { $i < $games($Gid,$Pid,nr_cards) } { incr i } {
+    set pos [lindex $games($Gid,$Pos) $i]
+    set x [lindex $pos 0]
+    set y [lindex $pos 1]
+
+    set bg $games($Gid,color,cardcover)
+
+    set item [$games($Gid,canvas) create bitmap $x $y \
+		-bitmap "@bitmaps/$games($Gid,deck)/facedown" \
+		-foreground black -background $bg \
+		-anchor nw]
+    lappend games($Gid,$Pid,items) $item
+  }
+}
+@
+
+%}}}
+
+%}}}
+%{{{ proc drawCard { Gid Pos Card }
+
+Display a played card.
+
+<<proc drawCard>>=
+proc drawCard { Gid Pos card } {
+  global games decks
+
+  set bitmap "@bitmaps/$games($Gid,deck)/$decks(table,$card)"
+  set at $games($Gid,$Pos,heap)
+  set x [lindex $at 0]
+  set y [lindex $at 1]
+
+  set suit [expr $card/16]
+  if { $suit == 0 || $suit == 3 } {
+    set fg "black"
+  } else {
+    set fg "red"
+  }
+  set bg $games($Gid,color,card)
+  set item [$games($Gid,canvas) create bitmap $x $y \
+	-bitmap $bitmap -background $bg -foreground $fg -anchor nw]
+  set games($Gid,$Pos,heap_item) $item
+}
+@
+
+%}}}
+
+%{{{ proc DoQuit {}
+
+The user pushed the ``Quit'' button. Exit gracefully.
+
+<<proc DoQuit>>=
+proc DoQuit {} {
+  global activeGames
+
+  if { $activeGames == {} } {
+    TBsend "snd-disconnect"
+    exit 0
+  }
+}
+@
+
+%}}}
+%{{{ proc DoInvite {}
+
+Invite a player to a game. Make sure the player is not inviting himself.
+
+<<proc DoInvite>>=
+proc DoInvite {} {
+  global myPid
+
+  set gid [selectedGame]
+  set pid [selectedPlayer]
+
+  if { $gid >= 0 && $pid > 0 && $pid != $myPid } {
+    TBsend "snd-event(invite($myPid,$gid,$pid))" 
+  }
+}
+@
+
+%}}}
+%{{{ proc DoNewGame {}
+
+<<proc DoNewGame>>=
+proc DoNewGame {} {
+  global myPid
+
+  TBsend "snd-event(new-game($myPid))"
+}
+@
+
+%}}}
+%{{{ proc DoJoinGame {}
+
+<<proc DoJoinGame>>=
+proc DoJoinGame {} {
+  global myPid
+
+  set gid [selectedGame]
+
+  if { $gid >= 0 } {
+    TBsend "snd-event(join-game($myPid,$gid))"
+  }
+}
+@
+
+%}}}
+%{{{ proc SendToPlayer {}
+
+Send a message to a specific player.
+
+<<proc SendToPlayer>>=
+proc SendToPlayer {} {
+  global MainMsg myPid
+
+  set pid [selectedPlayer]
+
+  if { $pid >= 0 } {
+    TBsend "snd-event(msg2player($myPid,[TBstring $MainMsg],$pid))"
+  }
+}
+@
+
+%}}}
+%{{{ proc SendToGame {}
+
+Send a message to all the players in a game.
+
+<<proc SendToGame>>=
+proc SendToGame {} {
+  global MainMsg myPid
+
+  set gid [selectedGame]
+ 
+  if { $gid >= 0 } {
+    TBsend "snd-event(msg2game($myPid,[TBstring $MainMsg],$gid))"
+  }
+}
+@
+
+%}}}
+%{{{ proc SendToAll {}
+
+Send a message to all the players in a game.
+
+<<proc SendToAll>>=
+proc SendToAll {} {
+  global MainMsg myPid
+
+  TBsend "snd-event(msg2all($myPid,[TBstring $MainMsg]))"
+}
+@
+
+%}}}
+
+%{{{ proc DoPlayCard { Pid Gid Round Card }
+
+Play a card selected by the user.
+
+<<proc DoPlayCard>>=
+proc DoPlayCard { Pid Gid Round Card } {
+  global games
+
+  # unraise and unbind cards
+  foreach triple $games($Gid,$Pid,raised) {
+    set item [lindex $triple 0]
+    set x [lindex $triple 1]
+    set y [lindex $triple 2]
+    $games($Gid,canvas) coord $item $x $y
+    $games($Gid,canvas) bind $item <Button-1> {}
+  }
+  set games($Gid,$Pid,raised) {}
+
+  TBsend "snd-event(play-card($Pid,$Gid,$Round,$Card))"
+}
+@
+
+%}}}
+%{{{ proc DoNextTrick { Gid }
+
+The user clicked on the left mouse button, to signal that
+the next trick may begin. First we remove the played cards,
+then we send an event to indicate that we are ready to
+continue.
+
+<<proc DoNextTrick>>=
+proc DoNextTrick { Gid } {
+  global games myPid
+
+  if { $games($Gid,next-trick) } {
+    foreach side {north east south west} {
+      if { $games($Gid,$side,heap_item) != "" } {
+        $games($Gid,canvas) delete $games($Gid,$side,heap_item)
+        set games($Gid,$side,heap_item) ""
+      }
+    }
+
+    TBsend "snd-event(next-trick($myPid,$Gid))"
+    set games($Gid,next-trick) 0
+  }
+}
+@
+
+%}}}
+%{{{ proc DoAbort { Gid }
+
+The user pushed the ``Abort'' button. Forfeit the game.
+
+<<proc DoAbort>>=
+proc DoAbort {Gid} {
+  global myPid
+
+  TBsend "snd-event(abort-game($myPid,$Gid))"
+}
+@
+
+%}}}
