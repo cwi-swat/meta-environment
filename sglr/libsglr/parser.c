@@ -1048,21 +1048,26 @@ tree SG_ParseResult(char *sort)
 
     /*  Now detect, and report, cycles in the tree */
     if (SG_CYCLE) {
-      IF_STATISTICS(SG_Timer());
-      cycle = SG_CyclicTerm(table, t);
-      IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
-      if (!ATisEmpty(cycle)) {
-        return SG_ParseError(cycle, 0, NULL);
+      if (SG_MaxNrAmb(SG_NR_ASK) > 0) {
+
+        IF_STATISTICS(SG_Timer());
+        cycle = SG_CyclicTerm(table, t);
+        IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
+        if (!ATisEmpty(cycle)) {
+          return SG_ParseError(cycle, 0, NULL);
+        }
+      }
+
+      /* Now filtering starts, if SG_FILTER is false, it only
+       * converts amb clusters to amb nodes
+       */
+
+      if (SGnrAmb(SG_NR_ASK) > 0) {
+        IF_STATISTICS(SG_Timer());
+        t = SG_FilterTree(table, t);
+        IF_STATISTICS(fprintf(SG_log(), "Filtering took %.4fs\n", SG_Timer()));
       }
     }
-
-    /* Now filtering starts, if SG_FILTER is false, it only
-     * converts amb clusters to amb nodes
-     */
-
-    IF_STATISTICS(SG_Timer());
-    t = SG_FilterTree(table, t);
-    IF_STATISTICS(fprintf(SG_log(), "Filtering took %.4fs\n", SG_Timer()));
 
     /* Finally, the parse tree (in AsFix format) is produced, if desired. */
     SGnrAmb(SG_NR_ZERO);
