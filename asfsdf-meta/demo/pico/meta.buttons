@@ -13,7 +13,8 @@ buttons([
                      apply("evp", "VENV", 1),
 	             exists("Pico-eval"),
                      execute-action("Pico-eval -t"),
-                     edit("Pico-eval", "reduct.out")],
+                     push-filename("reduct.out"),
+                     edit-given-filename("Pico-eval")],
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
@@ -24,7 +25,8 @@ buttons([
            apply("tcp", "PICO-BOOL", 1),
 	   exists("Pico-typecheck"),
            execute-action("Pico-typecheck -t"),
-           edit("Pico-typecheck", "reduct.out")]),
+           push-filename("reduct.out"),
+           edit-given-filename("Pico-typecheck")]),
 
    button("Pico-syntax",
           "term",
@@ -33,7 +35,8 @@ buttons([
            check-sort("PROGRAM"),
            apply("evp", "VENV", 1),
            reduce("Pico-eval"),
-           edit("Pico-eval", "reduct.out")]),
+           push-filename("reduct.out"),
+           edit-given-filename("Pico-eval")]),
 
    button("Pico-syntax",
           "term",
@@ -42,7 +45,8 @@ buttons([
            check-sort("PROGRAM"),
            apply("tcp", "PICO-BOOL", 1),
            reduce("Pico-typecheck"),
-           edit("Pico-typecheck", "reduct.out")]),
+           push-filename("reduct.out"),
+           edit-given-filename("Pico-typecheck")]),
 
    button("Pico-syntax",
           "term",
@@ -76,13 +80,6 @@ buttons([
 
    button("Pico-Booleans",
           "term",
-          "FocusToDot",
-          [get-focus,
-           activate-given-tree("tree2dot"),
-           activate-given-tree("showdot &")]),
-
-   button("Pico-Booleans",
-          "term",
           "ShowTreeWithProds",
           [get-root,    
            activate-given-tree("tree2dot -p"),
@@ -104,20 +101,6 @@ buttons([
 
    button("Booleans",
           "term",
-          "FocusToDot",
-          [get-focus,
-           activate-given-tree("tree2dot"),
-           activate-given-tree("showdot &")]),
-
-   button("Booleans",
-          "term",
-          "ShowTree", 
-          [get-root,
-           activate-given-tree("tree2dot"),
-           activate-given-tree("showdot &")]),
-
-   button("Booleans",
-          "term",
           "ApplyTrans",
           [get-focus,
            check-sort("BOOL"),
@@ -134,5 +117,6 @@ buttons([
 	   parse("ApplyTrans", "ErrorMsgs"),
 	   if-equal([],
 	            [get-argument(6),
-		     edit("ApplyTrans", "errors")])])
+                     push-filename("errors"),
+		     edit-given-filename("ApplyTrans")])])
   ])
