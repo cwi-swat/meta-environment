@@ -79,8 +79,12 @@ alc-term(Funid) = Funid
 [alc-13]
 alc-term(Var) = Var
 
+[alc-13-2]
+alc-term(Term1 : Term2) = alc-term(Term1) : Term2
+
 [alc-13]
 alc-termlist(Term) = alc-term(Term)
+
 
 [alc-14]
 alc-term(Term) = Term2,

@@ -32,6 +32,7 @@ equations
 %% 3. the embedding should be made of only constructors
 %% 4. the embedding should be the same for the left-hand side of all rules
 %% 5. the embedding should be the same in each recursive call
+%% 6. it should not be a traversal function
 
 %%
 %% It is this embedding that we are going to factorize out of 
@@ -43,7 +44,9 @@ equations
 [cr-0] is-recursive(Rule+)                = true,                %% req 1
        find-list-arg(Rule+, Nametable)    = FunIdHasEmbeddingAt, %% req 2,3
        check-emb-lhs-rules(Rule+,FunIdHasEmbeddingAt) = true,    %% req 4
-       check-emb-rhs-rules(Rule+,FunIdHasEmbeddingAt) = true     %% req 5
+       check-emb-rhs-rules(Rule+,FunIdHasEmbeddingAt) = true,     %% req 5
+       FunIdHasEmbeddingAt = Funid has EmbeddingAt,
+       is-traversal-funid(Funid) = false                         %% req 6
        ========================================================
        get-list-embedding(Rule+, Nametable)    = FunIdHasEmbeddingAt
 

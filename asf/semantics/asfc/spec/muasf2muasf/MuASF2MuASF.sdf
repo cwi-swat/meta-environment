@@ -6,6 +6,9 @@ imports Find-Constructors
         Remove-Lists 
         Make-Left-Linear 
         Make-Assign-Conds
+        Add-Type-Checks
+        Remove-Types
+
         
 
 exports
