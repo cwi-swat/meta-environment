@@ -13,6 +13,10 @@ UTILSRCS		= get-imports.c get-module-name.c grammar.c prod.c \
 
 EXTRA_DIST		= SDF.adt
 
+regen:
+	adt-to-c --compat-term -i SDF.adt --prefix SDF_ --prologue SDF.pro \
+		-o SDF
+
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include
 LDFLAGS			= -L${ATERM}/lib
