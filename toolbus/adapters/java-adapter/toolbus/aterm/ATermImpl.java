@@ -217,8 +217,9 @@ abstract class ATermImpl
   public void print(PrintWriter w)
   { 
     if(anno != null) { 
-      w.print(':'); 
+      w.print('{'); 
       anno.print(w);
+      w.print('}'); 
     }
   }
 
