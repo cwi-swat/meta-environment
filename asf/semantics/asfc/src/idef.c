@@ -20,12 +20,11 @@ void make_idef_script(char *name)
     fprintf(fp,
 	    "process %s is\n"
 	    "let\n"
-	    "%sTool : tool%s,\n"
-	    "Term       : term,\n"
-	    "Args       : list,\n"
-	    " Function   : str,\n"
-	    " Sort       : str\n"
-
+	    "  %sTool : tool%s,\n"
+	    "  Term       : term,\n"
+	    "  Args       : list,\n"
+	    "  Function   : str,\n"
+	    "  Sort       : str\n"
 	    "in\n"
 	    "  (\n"
 	    "    (\n"

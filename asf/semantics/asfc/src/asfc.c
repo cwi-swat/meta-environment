@@ -181,7 +181,8 @@ static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable,
       fp = fopen(output, "wb");
     }
     if (fp == NULL) {
-      ATerror("Error: unable to open %s for writing\n", output);
+      ATwarning("Error: unable to open %s for writing\n", output);
+      return NULL;
     }
 
     VERBOSE("pretty printing C code");
