@@ -1,6 +1,6 @@
 // Java tool interface class SwingEditorTool
 // This file is generated automatically, please do not edit!
-// generation time: Oct 21, 2004 11:57:29 AM
+// generation time: Jan 4, 2005 10:48:01 AM
 
 package metaedit.toolbus;
 
@@ -20,12 +20,14 @@ abstract public class SwingEditorTool
   private ATerm PisModified0;
   private ATerm PwriteContents0;
   private ATerm PsetFocus0;
+  private ATerm PregisterTextCategories0;
   private ATerm PaddActions0;
   private ATerm PclearFocus0;
   private ATerm PdisplayMessage0;
   private ATerm PkillEditor0;
   private ATerm PsetCursorAtOffset0;
   private ATerm PeditFile0;
+  private ATerm PhighlightSlices0;
   private ATerm PeditorToFront0;
   private ATerm PrereadContents0;
   private ATerm PrecAckEvent0;
@@ -58,6 +60,8 @@ abstract public class SwingEditorTool
     sigTable.put(factory.parse("rec-do(<swing-editor>,set-focus(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<swing-editor>,set-cursor-at-offset(<int>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<swing-editor>,clear-focus)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<swing-editor>,register-text-categories(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<swing-editor>,highlight-slices(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<swing-editor>,display-message(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<swing-editor>,editor-to-front)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<swing-editor>,kill-editor)"), new Boolean(true));
@@ -74,12 +78,14 @@ abstract public class SwingEditorTool
     PisModified0 = factory.parse("rec-do(is-modified)");
     PwriteContents0 = factory.parse("rec-do(write-contents)");
     PsetFocus0 = factory.parse("rec-do(set-focus(<term>))");
+    PregisterTextCategories0 = factory.parse("rec-do(register-text-categories(<term>))");
     PaddActions0 = factory.parse("rec-do(add-actions(<term>))");
     PclearFocus0 = factory.parse("rec-do(clear-focus)");
     PdisplayMessage0 = factory.parse("rec-do(display-message(<str>))");
     PkillEditor0 = factory.parse("rec-do(kill-editor)");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<int>))");
     PeditFile0 = factory.parse("rec-do(edit-file(<str>))");
+    PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front)");
     PrereadContents0 = factory.parse("rec-do(reread-contents)");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -110,6 +116,11 @@ abstract public class SwingEditorTool
       setFocus((ATerm)result.get(0));
       return null;
     }
+    result = term.match(PregisterTextCategories0);
+    if (result != null) {
+      registerTextCategories((ATerm)result.get(0));
+      return null;
+    }
     result = term.match(PaddActions0);
     if (result != null) {
       addActions((ATerm)result.get(0));
@@ -138,6 +149,11 @@ abstract public class SwingEditorTool
     result = term.match(PeditFile0);
     if (result != null) {
       editFile((String)result.get(0));
+      return null;
+    }
+    result = term.match(PhighlightSlices0);
+    if (result != null) {
+      highlightSlices((ATerm)result.get(0));
       return null;
     }
     result = term.match(PeditorToFront0);

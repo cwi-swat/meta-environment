@@ -1,6 +1,6 @@
 // Java tool bridge SwingEditorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Oct 21, 2004 11:57:29 AM
+// generation time: Jan 4, 2005 10:48:01 AM
 
 package metaedit.toolbus;
 
@@ -56,6 +56,19 @@ public class SwingEditorBridge
     }
     else {
       throw new UnsupportedOperationException("method `setFocus' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void registerTextCategories(ATerm t0)
+
+  public void registerTextCategories(ATerm t0)
+  {
+    if (tool != null) {
+      tool.registerTextCategories(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `registerTextCategories' not supported.");
     }
   }
 
@@ -134,6 +147,19 @@ public class SwingEditorBridge
     }
     else {
       throw new UnsupportedOperationException("method `editFile' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void highlightSlices(ATerm t0)
+
+  public void highlightSlices(ATerm t0)
+  {
+    if (tool != null) {
+      tool.highlightSlices(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `highlightSlices' not supported.");
     }
   }
 

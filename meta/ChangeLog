@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jan  4 10:50:12 CET 2005 <kooiker@cwi.nl>
+ * editors/text/swing/metaedit/toolbus/editor-swing.idef:
+   - Added te-register-text-categories and te-highlight-slices
+
 Thu Dec  9 13:30:12 CET 2004 <kooiker@cwi.nl>
  * meta-studio/metastudio/components/statushistory/StatusHistory.java:
    - Added setLayout to make panel resize to its parents size 

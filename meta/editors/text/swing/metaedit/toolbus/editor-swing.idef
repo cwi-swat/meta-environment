@@ -13,7 +13,9 @@ let
   MenuEvent : term,
   Message : str,
   Modified : term,
-  SortName: str
+  SortName: str,
+  Categories: term,
+  Slices: term
 in
   execute(swing-editor, Editor?)
   .
@@ -41,6 +43,12 @@ in
   +
     rec-msg(te-clear-focus)
     . snd-do(Editor, clear-focus)
+  +
+    rec-msg(te-register-text-categories(Categories?))
+    . snd-do(Editor, register-text-categories(Categories))
+  +
+    rec-msg(te-highlight-slices(Slices?))
+    . snd-do(Editor, highlight-slices(Slices))
   +
     rec-msg(te-display-message(Message?))
     . snd-do(Editor, display-message(Message))
