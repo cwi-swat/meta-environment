@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/pgen
    info=http://www.cwi.nl/projects/MetaEnv/pgen
 
    description='Pgen is a parser generator for SDF to be used in combination
