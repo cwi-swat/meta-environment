@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <atb-tool.h>
+#include <assert.h>
 
 #include "table-store.h"
 
@@ -68,23 +69,41 @@ ATbool TS_tableExists(char *name)
 }
 
 /*}}}  */
+/*{{{  void addTable(char *name, char* valueType) */
+
+void addTable(char *name, char* valueType)
+{
+  int i;
+
+  if (!TS_tableExists(name)) {
+    for (i = 0; i < MAX_NR_OF_TABLES; i++) {
+      if (tableStore[i].name == NULL) {
+	tableStore[i].name = strdup(name);
+	tableStore[i].valueType = strdup(valueType);
+	tableStore[i].table = T_createTable();
+	return;
+      }
+    }
+  }
+  else {
+    if (!streq(tableStore[TS_findTable(name)].valueType,valueType)) {
+      ATwarning("WARNING: Table %s already exists with different "
+		"value type than %s\n", name, valueType);
+    }
+
+    return;
+  }
+
+  ATabort("addTable: table store exhausted.\n");
+}  
+
+/*}}}  */
 /*{{{  void TS_addTable(char *name, char* valueType) */
 
 void TS_addTable(char *name, char* valueType)
 {
-  int i;
-  
   if (!TS_tableExists(name)) {
-    for (i = 0; i < MAX_NR_OF_TABLES; i++) {
-      if (tableStore[i].name == NULL) {
-        tableStore[i].name = strdup(name);
-	tableStore[i].valueType = strdup(valueType);
-        tableStore[i].table = T_createTable();
-        return;
-      }
-    }
-
-    ATabort("addTable: table store exhausted.\n");
+    addTable(name, valueType);
   }
   else {
     ATwarning("addTable: table %s already exists.\n", name);
@@ -336,14 +355,19 @@ void loadTable(SS_Table table)
   char *valueType = SS_getTableValueType(table);
   SS_Rows rows = SS_getTableRows(table);
 
-  TS_addTable(name, valueType);
+  if (TS_tableExists(name)) {
+    addTable(name, valueType);
 
-  for (; !SS_isRowsEmpty(rows); rows = SS_getRowsTail(rows)) {
-    SS_Row row = SS_getRowsHead(rows);
-    ATerm key = SS_getRowKey(row);
-    ATerm value = SS_getRowValue(row);
+    for (; !SS_isRowsEmpty(rows); rows = SS_getRowsTail(rows)) {
+      SS_Row row = SS_getRowsHead(rows);
+      ATerm key = SS_getRowKey(row);
+      ATerm value = SS_getRowValue(row);
 
-    TS_putValue(name, key, value);
+      TS_putValue(name, key, value);
+    }
+  }
+  else {
+    ATwarning("Table %s does not exist, contents not loaded!\n", name);
   }
 }
 
