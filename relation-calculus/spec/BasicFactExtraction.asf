@@ -8,6 +8,7 @@ extract-facts(appl(prod([Symbol*],cf(sort(qliteral("""Char*"""))),Attributes),
                    [Tree*])
                 {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
 when
+  [lex(cf(sort(qliteral("""Char*3"""))))] !:= [Symbol*],
   Location := posinfo-to-location(ATerm),
   RSTORE2 := add-elem(TREES,Location, RSTORE),
   RSTORE3 := 
@@ -15,7 +16,8 @@ when
   RSTORE4 := add-tuple(TREE_TYPES,<Location,strcon("""Char*""")>, RSTORE3),
   RSTORE5 := add-constructor(Location, Attributes, RSTORE4),
   RSTORE6 := add-children(Location, Tree*, RSTORE5),
-  RSTORE' := RSTORE6
+  RSTORE7 := store-lexical-value(Location,Symbol*,Tree*,RSTORE6),
+  RSTORE' := RSTORE7
 
 [default-non-cf-appl-without-cons]
 extract-facts(appl(prod([Symbol*],Symbol,Attributes),[Tree*])
@@ -34,6 +36,7 @@ when
   RSTORE2 := add-elem(LISTS, Location, RSTORE),
   RSTORE3 := add-children(Location, Tree*, RSTORE2),
   RSTORE' := RSTORE3
+
 
 equations
 
@@ -65,3 +68,18 @@ equations
 
 [] posinfo-to-location(area-in-file(qliteral(Char*),area(N1,N2,N3,N4,N5,N6)))=
      area-in-file(strcon(Char*),area(N1,N2,N3,N4,N5,N6))
+
+equations
+
+[] 
+store-lexical-value(Location, lex(sort(qliteral("""Char*"""))), Tree*, RSTORE) =
+RSTORE3
+when
+  Tree := appl(list(sort("dummy")),[Tree*]),
+  String := unparse-to-string(lower-from-tree(Tree)),
+  RSTORE2 := add-tuple(LEXICALS, <Location, String>,RSTORE),
+  RSTORE3 := add-tuple(rvar("""Char*"_""V""A""L""U""E""S""""),
+               <Location,String>,RSTORE2)
+
+[default]
+store-lexical-value(Location, Symbol*, Tree*, RSTORE) = RSTORE

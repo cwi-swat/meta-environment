@@ -2,6 +2,7 @@ module BasicFactExtraction[X]
 
 imports Rstore
 imports utilities/Lifting[X]
+imports utilities/Parsing[X]
 
 exports
 
@@ -17,6 +18,7 @@ extract-facts(Tree, RSTORE) -> RSTORE {traversal(accu, bottom-up, continue)}
 add-constructor(Location, Attributes, RSTORE) -> RSTORE
 add-children(Location, {Tree ","}*, RSTORE) -> RSTORE
 posinfo-to-location(ATerm)  -> Location
+store-lexical-value(Location, {Symbol ","}*, {Tree ","}*, RSTORE) -> RSTORE
 
 variables
 
@@ -40,3 +42,4 @@ variables
 "StrCon"[0-9\']* -> StrCon
 "N"[0-9\']* -> NatCon
 "Attr*"[0-9\']* -> {Attr ","}*
+"String"[0-9\']* -> String
