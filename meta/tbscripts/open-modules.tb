@@ -124,7 +124,7 @@ in
     fi *
     if equal(Modules, []) then
       if equal(Changed, true) then
-        DrawImportGraph()
+        DrawImportGraph().
       else
         tau
       fi .

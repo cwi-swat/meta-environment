@@ -144,7 +144,9 @@ let
   Tree : term,
   Text : str,
   TimeStamp : int,
-  ErrorMessage : str
+  ErrorMessage : str,
+  Mode : term,
+  Ext : str
 in
    (
       rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?) .
@@ -439,6 +441,10 @@ in
         StackPushInt(Stack,Stack?,Integer) .
         ReturnSuccess(EditorId,Stack)
       +
+        rec-msg(push-term(Tree?), Stack?, EditorId?) .
+        StackPushTerm(Stack,Stack?, Tree) .
+        ReturnSuccess(EditorId,Stack)
+      +
         rec-msg(message(String?), Stack?, EditorId?) .
         snd-note(ui-status(errorf("%s", [String]))) .
         ReturnSuccess(EditorId,Stack)
@@ -494,6 +500,171 @@ in
         rec-msg(query(Query?), Stack?, EditorId?) .
 	snd-msg(execute-query(EditorId, Query)) .
         ReturnSuccess(EditorId, Stack)
+      +
+	rec-msg(edit-syntax, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(edit-syntax(ModuleName)) .
+	rec-msg(editor-opened(ModuleName,EditorId2?)) .
+	ReturnSuccess(EditorId, Stack)
+      +
+	rec-msg(edit-equations, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(edit-equations(ModuleName)) .
+        rec-msg(editor-opened(ModuleName,EditorId2?)) .
+	ReturnSuccess(EditorId, Stack)
+      +
+	rec-msg(save-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(save-module(ModuleName)).
+        rec-msg(saved-module(ModuleName)).
+	ReturnSuccess(EditorId, Stack)	
+      + 
+	rec-msg(revert-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(revert-module(ModuleName)) .           
+        rec-msg(module-reverted(ModuleName)) .
+	ReturnSuccess(EditorId, Stack)	
+      + 
+	rec-msg(close-module(Mode?), Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(close-module(ModuleName, Mode)) .           
+	ReturnSuccess(EditorId, Stack)	
+      + 
+	rec-msg(delete-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(delete-module(ModuleName)) .           
+	ReturnSuccess(EditorId, Stack)	
+      + 
+	rec-msg(open-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(open-initial-module(Path, ModuleName, Ext)) .           
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(new-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(create-new-module(Path, ModuleName)) .           
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
+	snd-msg(ask-for-file(String, Path, Ext)) .
+	rec-msg(ask-for-file-result(FileName?)) .
+        StackPushString(Stack,Stack?,FileName) .
+	ReturnSuccess(EditorId, Stack)
+      +
+	rec-msg(edit-term, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,FileName?) .
+        StackPopString(Stack,Stack?,NewModName?) .
+        snd-msg(edit-term-file(NewModName, FileName)) .
+        rec-msg(editor-opened(NewModName, EditorId2?)).
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(ask-question(String?), Stack?, EditorId?) .
+	snd-msg(ask-question(String)) .
+	rec-msg(ask-question-result(Tree?)) .
+        StackPushTerm(Stack,Stack?,Tree) .
+	ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(split-file-name(Ext?), Stack?, EditorId?) .   
+	StackPopString(Stack, Stack?, FileName?) .
+	snd-msg(decons-file-name(FileName, Ext)) .
+        rec-msg(decons-file-name-result(Path?, FileName?, Ext?)) .
+	StackPushString(Stack, Stack?, FileName) .	
+	StackPushString(Stack, Stack?, Path) .	
+	StackPushString(Stack, Stack?, Ext) .	
+	ReturnSuccess(EditorId, Stack)	
+      +
+        rec-msg(copy-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	snd-msg(copy-module(ModuleName, NewModName, Path, Ext)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+        rec-msg(rename-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	snd-msg(rename-module(ModuleName, NewModName, Path, Ext)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+        rec-msg(import-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	snd-msg(import-module(ModuleName, NewModName, Path)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+        rec-msg(unimport-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Path?) .
+       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	snd-msg(unimport-module(ModuleName, NewModName, Path, Ext)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(compile-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(compile-module(ModuleName)) .
+	rec-msg(compilation-ready(ModuleName)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(dump-equations, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(dump-equations(ModuleName)) .
+	rec-msg(equations-dumped) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(dump-parse-table, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(dump-parse-table(ModuleName)) .
+	rec-msg(parse-table-dumped) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(print-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(print-module(ModuleName)) .
+	rec-msg(module-printed(ModuleName)) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+        rec-msg(clear-all, Stack?, EditorId?) .
+	snd-msg(clear-all) .
+	rec-msg(cleared-all) .
+	ReturnSuccess(EditorId, Stack)		
+      +
+        rec-msg(save-all, Stack?, EditorId?) .
+	snd-msg(save-all) .
+	rec-msg(saved) .
+	ReturnSuccess(EditorId, Stack)		
+      +
+        rec-msg(clear-history-list, Stack?, EditorId?) .
+	snd-msg(clear-history) .
+	ReturnSuccess(EditorId, Stack)		
+      +
+        rec-msg(refresh-buttons, Stack?, EditorId?) .
+	snd-msg(refresh-buttons) .
+	rec-msg(buttons-refreshed) .
+	ReturnSuccess(EditorId, Stack)		
+      +
+        rec-msg(exit, Stack?, EditorId?) .
+	shutdown("MetaStudio exiting\n") .
+	ReturnSuccess(EditorId, Stack)		
+      +
+	rec-msg(dup, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,Tree?) .
+        StackPushTerm(Stack,Stack?,Tree) .
+        StackPushTerm(Stack,Stack?,Tree) .
+	ReturnSuccess(EditorId, Stack)
+      +
+	rec-msg(pop, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,Tree?) .
+	ReturnSuccess(EditorId, Stack)
   ) * delta
 endlet
 

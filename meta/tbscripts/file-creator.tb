@@ -13,7 +13,7 @@ let
 in
   (
     %% Handle request to create a new module.
-    rec-msg(create-new-module(Path?, ModuleName?, ".sdf")) .
+    rec-msg(create-new-module(Path?, ModuleName?)) .
     snd-msg(is-module-in-db(ModuleName)) .
     (
       rec-msg(exists-in-module-db(ModuleName)) .
