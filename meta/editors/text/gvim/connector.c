@@ -270,7 +270,7 @@ static void getContents(int write_to_hive_fd, TE_Action edAction)
 
 static void writeContents(int write_to_editor_fd)
 {
-  sendToVim(":w!");
+  sendToVim(":update");
 }
 
 /*}}}  */
