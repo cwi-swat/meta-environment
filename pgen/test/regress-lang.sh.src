@@ -23,15 +23,15 @@ Revision='$Revision$'
 ###
 #  Some global variables, that might require occasional modification
 ###
-set -x;
+
 update=0
 verbose=0
 
-mydir=../test
+mydir=__TOP_SRCDIR__/test
 MV=mv
 RM=rm
-COMPARE=/ufs/jurgenv/meta-env/bin/atdiff
-SDF2TABLE=../src/sdf2table
+COMPARE=__ATERM__/bin/atdiff
+SDF2TABLE=__TOP_SRCDIR__/src/sdf2table
 
 reference=$mydir/tables
 dirs="$mydir/first $mydir/grammars"
