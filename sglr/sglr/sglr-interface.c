@@ -152,13 +152,15 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
       ATfprintf(SGlog(), "Reading parse table for language %s\n", L);
     table = SG_BuildParseTable(ATreadFromFile(input_file));
     SGcloseFile(input_file);
-  }
-  if (table == NULL)
-    return ATmake("snd-value(open-language-failed(<str>,<str>))", L, FN);
-  else {
+    if(table != NULL)
       SG_SaveParseTable(L, table);
-      return ATmake("snd-value(language-opened(<str>,<str>))", L, FN);
   }
+
+  return ATmake(
+    (table != NULL)
+      ?  "snd-value(language-opened(<str>,<str>))"
+      :  "snd-value(open-language-failed(<str>,<str>))",
+    L, FN);
 }
 
 
