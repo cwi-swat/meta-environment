@@ -630,7 +630,7 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/test/Assign3.tb");
+      T.parse("toolbus/test/Assign5.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
