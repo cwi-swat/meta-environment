@@ -92,6 +92,7 @@ void abort_handler(int signal)
 
 void rec_terminate(int cid, ATerm t)
 {
+  Tide_disconnect();
   exit(0);
 }
 
