@@ -1,5 +1,8 @@
 $Id$
 
+2001/11/13 (jong@cwi.nl)
+ * released version 1.2
+
 2001/11/13 (markvdb@cwi.nl)
  * Removed unused argument from applyFunctionToTree.
 
