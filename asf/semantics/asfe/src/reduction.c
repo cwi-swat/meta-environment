@@ -14,6 +14,7 @@
 #include "errors.h"
 #include "asf-api.h"
 #include "debug.h"
+#include <string.h>
 
 /*
 #ifdef USE_TIDE
@@ -23,6 +24,7 @@
 
 
 #define FAIL NULL
+#define TERM_PREFIX_LENGTH 50
 
 /*{{{  local function declarations */
 
@@ -53,6 +55,22 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 /*}}}  */
 
+/* Printing a term for verbose messages */
+/*{{{  static char* term_prefix(PT_Tree trm) */
+
+static char* term_prefix(PT_Tree trm)
+{
+  static const char abbreviated[] = " ... (etc.)";
+  char *tmp = PT_yieldTree(trm);
+
+  if (strlen(tmp) > TERM_PREFIX_LENGTH - strlen(abbreviated)) {
+    sprintf(tmp+TERM_PREFIX_LENGTH,abbreviated);
+  }
+
+  return tmp;
+}
+
+/*}}}  */
 
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
@@ -142,6 +160,10 @@ static PT_Tree reduce(PT_Tree trm, int depth)
 static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
+
+  if (runVerbose) {
+    ATwarning("rewriting: %s\n", term_prefix(trm));
+  }
 
   /* The order of this if-then-else is important because the conditions
    * are not mutually exclusive.

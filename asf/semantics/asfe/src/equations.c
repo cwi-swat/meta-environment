@@ -39,7 +39,7 @@ ATerm posinfo;
 
 /*}}}  */
 
-/*{{{  static void printShortRule(int stack, const char *msg, equation_entry *entry) */
+/*{{{  void print_short_equation(int stack, const char *msg, equation_entry *entry) */
 
 void print_short_equation(int stack, const char *msg, equation_entry *entry)
 {
