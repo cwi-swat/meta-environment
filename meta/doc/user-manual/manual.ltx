@@ -236,37 +236,42 @@ button to a term editor. (** check; not in Release 1.**)
 
 \subsection{About this Manual}
 
-This manual is intended for the first generation user of the new
-\ASmetaenv. In the sequel we will use \ASmetaenv\ to address the new
-system and old \ASmetaenv\ when addressing the old system.
+This manual is intended for those courageous users that want to try
+out the new brand new implementation of the \ASmetaenv. This manual is
+still under development and we welcome all feed back and comments.
 
-The focus in this manual will be on using the system to write a specification
-like a type checker or evaluator for the toy language PICO.
-Topics that will be addressed are:
+%%In the sequel we will use \ASmetaenv\ to address the new
+%%system and old \ASmetaenv\ when addressing the old system.
+
+The focus in this manual will be on using the system to write a
+specification like a type checker or evaluator for the toy language
+PICO. It follows the user-interface to explain the capabilities of the
+system.  Topics that will be addressed include:
 \begin{itemize}
-\item How to start the system.
-\item How to open a specification.
-\item How to save a specification.
+\item How to start the system, and how to leave it.
+\item How to create, open and save a specification.
 \item How to edit the syntax and/or equations part of a module.
 \item How to edit a term.
 \item How to evaluate a term.
 \item How to compile a specification.
-\item How to shutdown the system.
 \item How to parse a term outside the \ASmetaenv.
 \item How to rewrite a term using a compiled specification outside the
 \ASmetaenv.
 \item How to unparse parse and/or normalized terms.
 \end{itemize}
 
-(****) The first version of the \ASmetaenv\ supports not full \sdf2. Furthermore
-this manual is restricted to the usage of the \ASmetaenv\ and abstracts
-from \sdf, \sdf2, and \asf. How to use the separate tools, like SGLR, compiled
-specification, etc., will be addressed in the final sections.
+\noindent We do \emph{not} explain:
 
-\section{Starting the system}
+\begin{itemize}
+\item The formalism \asfsdf.
+\item The architectural and implementational aspects of the system.
+\item The stand alone usage of various parts fot he system.
+\end{itemize}
+
+\section{Starting the System}
 
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
-result, the \ASmetaenv\ screen pops up. This is shown in
+result, the \ASmetaenv\ main window pops up. This is shown in
 Figure~\ref{FIG:meta1}.
 
 
@@ -293,7 +298,6 @@ in use by someone else (or by a aborted previous run of the
 \ASmetaenv). In that case, it is advisable to use other value in the
 range 9000 and up.
 
-
 \item {\tt -v} runs the \ASmetaenv\ in verbose mode.
 
 \item {\tt -V} shows the version number of the \ASmetaenv\ you are running.
@@ -304,36 +308,152 @@ Search paths can initialized via creating a file ``meta.conf''. This file
 may contain a list of absolute and/or relative paths. See the meta.conf
 file in the demo directory for an example. (**)
 
-
-
 \begin{figure}[tb]
   \centerline{\epsfig{file=meta1.ps,width=10cm}}
   \caption{\label{FIG:meta1} Initial window of \ASmetaenv}
 \end{figure}
+
+\section{The Main Window}
+
+The main window of the  \ASmetaenv\ consists of the following parts:
+
+\begin{itemize}
+\item At the top of the window is a menu bar that contains the following menus:
+  \begin{itemize}
+
+   \item {\tt File}: for creating, opening, saving and printing
+    specifications as well as for leaving the \ASmetaenv.
+
+   \item {\tt Edit}: for cut, copy, paste style editing and for setting user
+      preferences.
+
+   \item {\tt Graph}: for setting options for the display of 
+        the graph in the import pane (see below).
+
+   \item {\tt Debug}: for turning on/off the display of diagnostic messages.
+
+   \item {\tt Help} for various forms of information and online help.
+
+  \end{itemize}
+
+\item The \emph{import pane}: A graphical canvas (empty in Figure~\ref{FIG:meta1}) at the left
+hand side of the window that shows the import graph of the
+specification you are editing.
+
+\item The \emph{module list}: a vertical list (empty in Figure~\ref{FIG:meta1}) at
+the right/middle part of the window that shows the names of
+all modules in the current specification.
+
+\item A vertical row of buttons at the right hand side of the window:
+they are used for common operations on the current specification like
+editing, saving or deleting a module, or compiling the complete
+specification.
+
+\item A status bar at the bottom of the window that shows the current
+activity of the system. 
+
+\end{itemize}
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=meta-pico.ps,width=10cm,rot=-90}}
+  \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
+\end{figure}
+\section{The Menus of the Main Window}
  
-\section{Opening a specification: the File menu}
+\subsection{The File menu}
 
 If the \ASmetaenv\ is running a module can be opened by either clicking
-in the leftmost canvas or via the pull down menu {\tt File}.
+in the import pane or via the pull down menu {\tt File}.
 
-\section{Saving a specification}
+The {\tt File} menu contains the following entries:
 
-\section{Editing the syntax part of a module}
+\begin{itemize}
 
-\section{Editing the equations of a module}
+\item {\tt New}
+\item {\tt Open}
+\item {\tt Save}
 
-\section{Editing terms}
+\item {\tt Clear }
+\item {\tt Revert}
 
-\section{Evaluating terms}
+\item {\tt Export}
 
-\section{Compiling a specification}
+\item {\tt Print Setup}
+\item {\tt Print}
+\item {\tt Quit}
 
-\section{Shutting down the system}
+\end{itemize} 
 
-\section{Parsing a term outside the \ASmetaenv}
+\subsection{The Edit menu}
 
-\section{Rewriting a term using a compiled specification}
+\begin{itemize}
+\item {\tt Undo}
+\item {\tt Copy}
+\item {\tt Paste}
+\item {\tt Preferences}
+\end{itemize}
 
-\section{Unparsing a (parsed/normalized) term}
+\subsection{The Graph Menu}
+
+\begin{itemize}
+\item {\tt View All}
+\item {\tt Autoresize after loading}
+\item {\tt Animate while loading}
+\end{itemize}
+
+\subsection{The Debug Menu}
+
+\begin{itemize}
+\item {\tt Diagnostic messages}
+\end{itemize}
+
+\subsection{The Help Menu}
+
+\begin{itemize}
+\item {\tt About NewMeta}
+\item {\tt Meta-Envrionment}
+\item {\tt Mouse operations}
+\item {\tt Online help}
+\end{itemize}
+
+\section{The Panes of the Main Window}
+
+\subsection{The Import Pane}
+\subsection{The Module List}
+
+\section{The Buttons of the Main Window}
+
+  \begin{itemize}
+  \item {\tt Edit Sdf2}
+  \item {\tt Edit Eqs}
+  \item {\tt Term}
+  \item {\tt Save}
+  \item {\tt Revert}
+  \item {\tt Delete}
+  \item {\tt Info}
+  \item {\tt Compile}
+  \end{itemize}
+
+\section{Editing Specifications}
+
+\subsection{Editing the syntax part of a module}
+
+\subsection{Editing the equations of a module}
+
+\subsection{Editing terms}
+
+\section{Executing Specifications}
+
+\subsection{Evaluating terms}
+
+\subsection{Compiling a specification}
+
+\section{Miscellaneous}
+
+\subsection{Parsing a term outside the \ASmetaenv}
+
+\subsection{Rewriting a term using a compiled specification}
+
+\subsection{Unparsing a (parsed/normalized) term}
 
 \end{document}
