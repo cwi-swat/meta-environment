@@ -1,5 +1,9 @@
 $Id$
 
+2002/09/18 (vandenbr@loria.fr)
+ * The -c option (switch cycle detection off) does no longer imply
+   switching of filtering as well.
+
 2002/09/16 (vandenbr@loria.fr)
  * Treatment of eagerness and injections improved, jumping
    over injections stops as soon as an (un)eager node is 
