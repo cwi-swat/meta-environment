@@ -1043,9 +1043,9 @@ public class MetaStudio
 
   //}}}
 
-  //{{{ File showFileBrowser(String label, File defaultFileName) 
+  //{{{ File showFileBrowser(String label) 
 
-  File showFileBrowser(String label, File defaultFile) 
+  File showFileBrowser(String label) 
   {
     String extension = Preferences.getString("module.extension");
     String[] exts = { extension };
@@ -1053,7 +1053,6 @@ public class MetaStudio
     JFileChooser chooser = 
       new JFileChooser(System.getProperty("user.dir"));
     chooser.setFileFilter(new ExtensionFilter(exts, description));
-    chooser.setSelectedFile(defaultFile);
 
     int option = chooser.showDialog(this, label);
     if (option == JFileChooser.APPROVE_OPTION) {
@@ -1097,7 +1096,7 @@ public class MetaStudio
 
   void doNewModule()
   {
-    File file = showFileBrowser(Preferences.getString("text.new-module"), null);
+    File file = showFileBrowser(Preferences.getString("text.new-module"));
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
@@ -1114,8 +1113,7 @@ public class MetaStudio
 
   void doOpenModule()
   {
-    File file = showFileBrowser(Preferences.getString("text.open-module"), 
-				null);
+    File file = showFileBrowser(Preferences.getString("text.open-module")); 
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
@@ -1134,14 +1132,12 @@ public class MetaStudio
   void doRenameModule(String oldModule)
   {
     File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.rename-module"),
-				new File(oldFile.getName()));
+    File file = showFileBrowser(Preferences.getString("text.rename-module"));
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
       String path = getFilePath(file, extension);
-      path += extension;
 
       ATerm event = factory.make("rename-module(<str>,<str>,<str>)", oldModule,
 				 module, path);
