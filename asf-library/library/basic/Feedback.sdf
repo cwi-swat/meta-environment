@@ -5,43 +5,33 @@ imports basic/Locations
 
 exports
 
-sorts Error FatalError Warning Information Producer Description Feedback
+sorts Producer Feedback Subject 
 
 context-free syntax
 
-Information -> Feedback {cons("info")}
-Warning -> Feedback {cons("warning")}
-Error -> Feedback {cons("error")}
-FatalError -> Feedback {cons("fatal-error")}
+"information" "(" id:String "," 
+                  producer-id:String "," 
+                  producer-type:String "," 
+                  description:String "," 
+                  "[" {Subject ","}* "]" ")" -> Feedback {cons("information")}
 
-"information" "(" id:String         "," 
-                  producer:Producer "," 
-                  description:Description ","
-                  subjects:Subjects
-              ")"  -> Information {cons("information")}
+"warning" "(" id:String "," 
+              producer-id:String "," 
+              producer-type:String "," 
+              description:String "," 
+              "[" {Subject ","}* "]" ")" -> Feedback {cons("warning")}
 
-"warning"     "(" id:String         "," 
-                  producer:Producer "," 
-                  description:Description ","
-                  subjects:Subjects
-              ")"  -> Warning {cons("warning")}
+"error" "(" id:String "," 
+            producer-id:String "," 
+            producer-type:String "," 
+            description:String "," 
+            "[" {Subject ","}* "]" ")" -> Feedback {cons("error")}
 
-"error"       "(" id:String         "," 
-                  producer:Producer "," 
-                  description:Description ","
-                  subjects:Subjects
-              ")"  -> Error {cons("error")}
+"fatal-error" "(" id:String "," 
+                  producer-id:String "," 
+                  producer-type:String "," 
+                  description:String "," 
+                  "[" {Subject ","}* "]" ")" -> Feedback {cons("fatal-error")}
 
-"fatal-error" "(" id:String         "," 
-                  producer:Producer "," 
-                  description:Description ","
-                  subjects:Subjects
-              ")"  -> FatalError {cons("fatal-error")}
-
-"producer" "(" id:String "," type:String ")" -> Producer {cons("producer")}
-"description" "(" String ")"              -> Description {cons("description")}
-
-"[" subject-list:{Subject ","}* "]" -> Subjects {cons("subjects")}
-
-"subject""("id:String "," location:Location ")" -> Subject {cons("without-location")}
-"subject""("id:String ")"              -> Subject {cons("with-location")}
+"subject""("id:String "," Location ")" -> Subject {cons("locatable")}
+"subject""("id:String ")"              -> Subject {cons("unlocatable")}
