@@ -8802,8 +8802,9 @@ CONS_EXIT ( make_nf1 ( lf_1sym , arg0 ) ) ;
 }
 #ifdef ASF_MAIN                                           
 int main(int argc, char *argv[])                         
-{                                                        
-  return asc_support_main(argc, argv,                    
+{
+  ATerm bottom;  
+  return asc_support_main(&bottom, argc, argv,                    
                           register_Sdf2_to_AsFix2ME_ADT,                   
                           resolve_Sdf2_to_AsFix2ME_ADT,                    
                           init_Sdf2_to_AsFix2ME_ADT);                      
