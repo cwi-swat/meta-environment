@@ -245,9 +245,8 @@ public class GraphPanel extends JComponent implements Scrollable {
 			return;
 		}
 
-    System.err.println(node.getLabel());
-		int x = node.getX(); System.err.println("  x: " + x);
-		int y = node.getY(); System.err.println("  y: " + y);
+		int x = node.getX(); 
+		int y = node.getY(); 
 		int w = node.getWidth();
 		int h = node.getHeight();
 
