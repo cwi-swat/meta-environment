@@ -482,7 +482,7 @@ in
         snd-msg(edit-term-file(ModuleName, FileName)) .
         rec-msg(editor-opened(ModuleName, EditorId2?)).
         GetTree(EditorId2, ModuleName, Tree?) .
-        snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
+        snd-msg(goto-focus-at-posinfo(EditorId2, STree)) .    
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-list, Stack?, EditorId?) .
