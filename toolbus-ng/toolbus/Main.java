@@ -23,8 +23,8 @@ public class Main {
     //IfTest(); 
     //CreateTest();
     //NestedIterTest();
-    MergeTest();
-    //SieveTest();
+//    MergeTest();
+    SieveTest();
     //producerTest();
     //ToolTest();
   }

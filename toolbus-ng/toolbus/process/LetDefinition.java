@@ -3,64 +3,49 @@
  */
 
 package toolbus.process;
-import toolbus.Environment;
-import toolbus.ToolBusException;
+import toolbus.*;
 import toolbus.atom.AtomSet;
 
 import aterm.ATermList;
 
 public class LetDefinition implements ProcessExpression {
-	private ATermList formals;
-	private ProcessExpression PE;
+  private ATermList formals;
+  private ProcessExpression PE;
 
-	public LetDefinition(ATermList formals, ProcessExpression PE) {
-		this.formals = formals;
-		this.PE = PE;
-		//System.out.println("LetDefinition: " + PE);
-	}
-	
-	public ProcessExpression copy(){
-		return new LetDefinition(formals, PE.copy());
-	}
+  public LetDefinition(ATermList formals, ProcessExpression PE) {
+    this.formals = formals;
+    this.PE = PE;
+    //System.out.println("LetDefinition: " + PE);
+  }
 
-	/**
-	 * @see ProcessExpression#compile(AtomSet)
-	 */
-	public void compile(ProcessInstance P, AtomSet follows)
-	throws ToolBusException
-	 {
-		Environment env = P.getEnv();
-		env.add(formals);
-		PE.compile(P, follows);
-		env.delete(formals.getLength());
-	}
+  public ProcessExpression copy() {
+    return new LetDefinition(formals, PE.copy());
+  }
 
-	/**
-	 * @see ProcessExpression#getFirst()
-	 */
-	public AtomSet getFirst() {
-		return PE.getFirst();
-	}
+  public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
+    Environment env = P.getEnv();
+    env.add(formals);
+    PE.compile(P, follows);
+    env.delete(formals.getLength());
+  }
 
-	/**
-	 * @see ProcessExpression#getFollow()
-	 */
-	public AtomSet getFollow() {
-		return PE.getFollow();
-	}
-	
-	public void extendFollow(AtomSet f){
-		PE.extendFollow(f);
-	}
+  public AtomSet getFirst() {
+    return PE.getFirst();
+  }
 
-	/**
-	 * @see ProcessExpression#getAtoms()
-	 */
-	public AtomSet getAtoms() {
-		return PE.getAtoms();
-	}
+  public AtomSet getFollow() {
+    return PE.getFollow();
+  }
 
-	public String toString() {
-		return "LetDefinition(" + formals + ", " + PE + ")";
-	}
+  public void extendFollow(AtomSet f) {
+    PE.extendFollow(f);
+  }
+
+  public AtomSet getAtoms() {
+    return PE.getAtoms();
+  }
+
+  public String toString() {
+    return "LetDefinition(" + formals + ", " + PE + ")";
+  }
 }
