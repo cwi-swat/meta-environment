@@ -27,8 +27,15 @@ func! Parse()
   call libcallnr(g:meta_dlso, "send", desc)
 endfunc
 
+func! SetModified()
+  let desc=g:tb_pipe . '#' . v:servername . '#_modified'
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
 " Remap <CTRL-]> to update focus around current location
 map <silent> <C-]> :call SetLocation()<CR>
 
 " Map <CTRL-p> to invoke parser
 map <C-p> :call Parse()<CR>
+
+autocmd BufWritePost * :call SetModified()
