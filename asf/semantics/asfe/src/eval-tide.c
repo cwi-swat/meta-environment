@@ -22,6 +22,7 @@
 #include <aterm2.h>
 #include <atb-tool.h>
 
+#include "asfe.h"
 #include "eval-tide.h"
 #include "preparation.h"
 
@@ -35,10 +36,51 @@
 
 /*{{{  variables */
 
-static ATbool connected = ATfalse;
-
 static int pid;
 static ATerm env = NULL;
+
+/*}}}  */
+
+/*{{{  static PT_Tree find_variable(tree, line, col, target_line, target_col) */
+
+static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
+			     int target_line, int target_col)
+{
+  char *yield;
+  int i, length, cur_line, cur_col;
+
+  if (PT_isTreeVar(tree)) {
+    return tree;
+  }
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    while (!PT_isArgsEmpty(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+      yield = PT_yieldTree(arg);
+      length = strlen(yield);
+      cur_line = *line;
+      cur_col  = *col;
+      for (i=0; i<length; i++) {
+	if (yield[length] == '\n') {
+	  cur_line++;
+	  cur_col = 0;
+	} else {
+	  cur_col++;
+	}
+      }
+      if (cur_line > target_line
+	  || (cur_line == target_line && cur_col >= target_col)) {
+	return find_variable(arg, line, col, target_line, target_col);
+      }
+      *line = cur_line;
+      *col  = cur_col;
+      args = PT_getArgsTail(args);
+    }
+  }
+
+  return NULL;
+}
 
 /*}}}  */
 
@@ -64,13 +106,12 @@ static TA_Expr eval_break(int pid, AFun fun, TA_ExprList args)
 /*}}}  */
 /*{{{  static TA_Expr eval_var(int pid, AFun fun, TA_Values args) */
 
+
 static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
 {
   char *var = ATgetName(ATgetAFun((ATermAppl)ATgetFirst(args)));
   char result[BUFSIZ];
   ATermList list = (ATermList) env;
-
-  /*{{{  Lookup variable in environment */
 
   while (list && !ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -84,8 +125,6 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
     list = ATgetNext(list);
   }
 
-  /*}}}  */
-
   return ATmake(result, "error(\"unknown variable\",<str>)", var);
 }
 
@@ -96,109 +135,79 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
 
 static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 {
-#if 0
-  int i, pos, linenr, column, posstart, start, end, len;
-  int diff_start, length, dist, nat_value;
-  char *line, *str_value;
-  char var[MAX_VAR_LENGTH];
-  AFun name;
-  ATerm value;
+  char *req_file, *file, *name, *yield;
+  int req_pos, req_line, req_col, diff_start;
+  int start_line, start_col, end_line, end_col;
+  int line, col;
+  PT_Tree equ_tree;
+  ATerm pos_anno;
+  PT_Tree var, value, restored;
+  ATerm val;
 
 
-  pos    = ATgetInt((ATermInt)ATgetFirst(args));
-  args   = ATgetNext(args);
-  linenr = ATgetInt((ATermInt)ATgetFirst(args));
-  args   = ATgetNext(args);
-  column = ATgetInt((ATermInt)ATgetFirst(args));
-  args   = ATgetNext(args);
-  name   = ATgetAFun((ATermAppl)ATgetFirst(args));
-  line   = ATgetName(name);
+  /*ATfprintf(stderr, "getting source var: %t\n", args);*/
 
-  len = strlen(line);
-  if (len <= column) {
-    return ATparse("error(\"illegal column\"");
+  if (!currentRule) {
+    return TA_makeExprError("no current rule", NULL);
   }
 
-  for (dist=0; dist<len; dist++) {
-    int left, right;
-
-    right = column + dist;
-    if (right < len && isalnum(line[right])) {
-      pos += (right-column);
-      column = right;
-      break;
-    }
-
-    left = column - dist;
-    if (left >= 0 && isalnum(line[left])) {
-      pos -= (column-left);
-      column = left;
-      break;
-    }
+  if (!ATmatch((ATerm)args, "[<str>,<int>,<int>,<int>,<str>]",
+	       &req_file, &req_pos, &req_line, &req_col, NULL)) {
+    return TA_makeExprError("illegal arguments", (ATerm)args);
   }
 
-  /* Extend start to the left */
-  start = column;
-  while(ATtrue) {
-    while (start > 1 && isalpha(line[start-1])) {
-      start--;
-    }
-    for (posstart=start-1; posstart > 0 && isdigit(line[posstart]); posstart--) {
-    }
-    if (isalpha(line[posstart])) {
-      start = posstart;
-    } else {
-      break;
-    }
+  equ_tree =
+    PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
+  pos_anno = PT_getTreeAnnotation(equ_tree, posinfo);
+  /*ATfprintf(stderr, "finding variable at line %d, col %d in %s (%t)\n",*/
+	    /*req_line, req_col, PT_yieldTree(equ_tree), pos_anno);*/
+  if (!pos_anno) {
+    return TA_makeExprError("no position information on equation", NULL);
   }
 
-  /* Extend end to the right */
-  end = column;
-  while (end < (len-1) && isalnum(line[end+1])) {
-    end++;
+  if (!ATmatch(pos_anno, "area(<str>,<int>,<int>,<int>,<int>)",
+	       &file, &start_line, &start_col, &end_line, &end_col)) {
+    return TA_makeExprError("malformed position information", pos_anno);
+  }
+    
+  if ((strcmp(file, req_file) != 0)
+      || (req_line < start_line)
+      || (req_line == start_line && req_col < start_col)
+      || (req_line > end_line)
+      || (req_line == end_line && req_col >= end_col)) {
+    return TA_makeExprVarUnknown("outside current equation");
   }
 
-  diff_start = start - column;
-  length     = end   - start + 1;
+  /*fprintf(stderr, "coordinates are inside current equation\n");*/
 
-  length = MIN(length, MAX_VAR_LENGTH-1);
+  line = start_line;
+  col  = start_col;
 
-  strncpy(var, line+start, length);
-  var[length] = '\0';
+  var = find_variable(equ_tree, &line, &col, req_line, req_col);
+
+  if (var == NULL) {
+    return TA_makeExprError("not a variable", NULL);
+  }
+  diff_start = col - req_col;
+
+  /*fprintf(stderr, "variable found: '%s' at %d,%d (diff_start=%d)\n",*/
+	  /*PT_yieldTree(var), line, col, diff_start);*/
+
+  value = getVariableValue(env, var, PT_getProductionRhs(PT_getTreeProd(var)));
+
+  if (value == NULL) {
+    yield = "<uninitialized>";
+  } else {
+    restored = RWrestoreTerm(value);
+    yield = PT_yieldTree(restored);
+  }
   
-  fprintf(stderr, "looking up variable: %s\n", var);
+  /*fprintf(stderr, "value = '%s'\n", yield);*/
 
-  value = ATparse("unknown");
-
-  for(i=0; i<nr_vars; i++) {
-    if(strcmp(variables[i].name, var) == 0) {
-      switch(variables[i].type) {
-	case TYPE_NAT:
-	  if (done) {
-	    nat_value = variables[i].value.nat_value;
-	  } else {
-	    nat_value = *variables[i].address.nat_ptr;
-	  }
-	  fprintf(stderr, "retrieving var %s, done=%d, value=%d\n",
-		  var, done, nat_value);
-	  value = (ATerm)ATmakeInt(nat_value);
-	  break;
-
-	case TYPE_STR:
-	  if (done) {
-	    str_value = variables[i].value.str_value;
-	  } else {
-	    str_value = *variables[i].address.str_ptr;
-	  }
-	  value = ATmake("<str>", str_value);
-	  break;
-      }
-    }
-  }
-  return ATmake("var(<str>,<term>,<int>,<int>,<int>,<int>)", var, value,
-		pos + diff_start, linenr, column + diff_start, length);
-#endif
-  return ATmake("error(\"function not supported\",src-var)");
+  val = ATmake("<str>", yield);
+  name = PT_yieldTree(var);
+  
+  return TA_makeExprVar(name, val, req_pos + diff_start, line, col, strlen(name));
 }
 
 /*}}}  */
@@ -213,16 +222,14 @@ void Tide_connect()
 {
   char *name = "Asf+Sdf";
 
+  TA_registerFunction(ATmakeAFun("resume",     0, ATfalse), eval_resume);
+  TA_registerFunction(ATmakeAFun("break",      0, ATfalse), eval_break);
+  TA_registerFunction(ATmakeAFun("var",        1, ATfalse), eval_var);
+  TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
+
   TA_connect();
 
-  TA_registerFunction(ATmakeAFun("resume", 0, ATfalse), eval_resume);
-  TA_registerFunction(ATmakeAFun("break",  0, ATfalse), eval_break);
-  TA_registerFunction(ATmakeAFun("var",    1, ATfalse), eval_var);
-  TA_registerFunction(ATmakeAFun("source-var", 4, ATfalse), eval_source_var);
-
   pid = TA_createProcess(name);
-
-  connected = ATtrue;
 }
 
 /*}}}  */
@@ -231,10 +238,9 @@ void Tide_connect()
 void Tide_disconnect()
 {
   /* Switch off debugging */
-  TA_disconnect(ATtrue);
-  fprintf(stderr, "tide connection terminated.\n");
-
-  connected = ATfalse;
+  if (TA_isConnected()) {
+    TA_disconnect(ATtrue);
+  }
 }
 
 /*}}}  */
@@ -246,20 +252,23 @@ void Tide_disconnect()
 
 void Tide_step(ATerm position, ATerm newenv, int level)
 {
-  if (connected) {
+  if (TA_isConnected()) {
+    int old_state = TA_getProcessState(pid);
     env = newenv;
 
     TA_atCPE(pid, TA_makeLocationFromTerm(position));
     TA_activateRules(pid, TA_makePortStep());
 
     if (TA_getProcessState(pid) == STATE_STOPPED) {
-      TA_activateRules(pid, TA_makePortStopped());
+      if (old_state != STATE_STOPPED) {
+	TA_activateRules(pid, TA_makePortStopped());
+      }
 
       while (TA_getProcessState(pid) == STATE_STOPPED) {
 	TA_handleOne();
       }
 
-      if (connected) {
+      if (TA_isConnected()) {
 	TA_activateRules(pid, TA_makePortStarted());
       }
     }

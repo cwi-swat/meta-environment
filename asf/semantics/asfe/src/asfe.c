@@ -1,3 +1,5 @@
+/*{{{  File header */
+
 /*
 
     Meta-Environment - An environment for language prototyping.
@@ -22,6 +24,11 @@
 /*
   $Id$
  */
+
+
+/*}}}  */
+
+/*{{{  includes */
 
 #include <unistd.h>
 #include <stdio.h>
@@ -56,6 +63,9 @@ ATbool traversals_on = ATfalse;
 #endif
 
 
+/*}}}  */
+/*{{{  defines */
+
 #define MAX_DEPTH 2000
 
 #ifdef USE_TIDE
@@ -63,6 +73,9 @@ ATbool traversals_on = ATfalse;
 #else
 #define TIDE_STEP(posinfo, env, depth)
 #endif
+
+/*}}}  */
+/*{{{  variables */
 
 
 static unsigned rewrite_steps = 0;
@@ -93,6 +106,9 @@ static MemoTable memo_table = NULL;
 static char error_buf[BUFSIZ];
 static ATbool aborted = ATfalse;
 
+/*}}}  */
+/*{{{  declarations */
+
 /* innermost strategy */
 static PT_Tree rewrite(PT_Tree trm);
 static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
@@ -115,14 +131,19 @@ static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
                           Traversal *traversal);
 
 
-void
-rec_terminate(int cid, ATerm t)
+/*}}}  */
+
+/*{{{  void rec_terminate(int cid, ATerm t) */
+
+void rec_terminate(int cid, ATerm t)
 {
   exit(0);
 }
 
-void
-RWclearError()
+/*}}}  */
+/*{{{  void RWclearError() */
+
+void RWclearError()
 {
   static ATbool is_protected = ATfalse;
 
@@ -135,8 +156,10 @@ RWclearError()
   rewriteError = NULL;
 }
 
-void
-RWsetError(const char *message, ATerm subject)
+/*}}}  */
+/*{{{  void RWsetError(const char *message, ATerm subject) */
+
+void RWsetError(const char *message, ATerm subject)
 {
   if (rewriteError == NULL) {
     RWclearError();		/* Protect rewrite_error if necessary */
@@ -147,18 +170,23 @@ RWsetError(const char *message, ATerm subject)
   aborted = ATtrue;
 }
 
+/*}}}  */
+/*{{{  ATerm RWgetError() */
+
 ATerm RWgetError()
 {
   return rewriteError;
 }
 
+/*}}}  */
+
+/*{{{  void debugging(int conn, ATerm on) */
 
 /*
  * Switch debugging on/off
  */
 
-void
-debugging(int conn, ATerm on)
+void debugging(int conn, ATerm on)
 {
 #ifdef USE_TIDE
   if (ATmatch(on, "on")) {
@@ -173,27 +201,28 @@ debugging(int conn, ATerm on)
   }
 #else
   fprintf(stderr, "*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
-	  "(you might want to try configure --with-tide)\n");
+	  "(you might want to try to configure the asf module --with-tide)\n");
 #endif
 }
 
+/*}}}  */
+/*{{{  static PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol) */
 
 /*
  * Retrieve the value of a variable
  */
 
-
-static PT_Tree
-getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
+PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
 {
   if (PT_isIterSepSymbol(symbol) || 
       PT_isIterSymbol(symbol)) {
     Slice slice = getListVariableValue(env, var);
     PT_Args newelems;
     
-    assert(slice);
-    newelems = appendSlice(PT_makeArgsEmpty(), slice);
-    return PT_makeTreeAppl(PT_makeProductionList(symbol), newelems);
+    if (slice) {
+      newelems = appendSlice(PT_makeArgsEmpty(), slice);
+      return PT_makeTreeAppl(PT_makeProductionList(symbol), newelems);
+    }
   }
   else {
     ATermList list = (ATermList) env;
@@ -213,12 +242,14 @@ getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
   return NULL;
 }
 
+/*}}}  */
+/*{{{  static Slice getListVariableValue(ATerm env, PT_Tree var) */
+
 /*
  * Retrieve the value of a list variable
  */
 
-static Slice
-getListVariableValue(ATerm env, PT_Tree var)
+static Slice getListVariableValue(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
   /*ATerm atVar = PT_makeTermFromTree(var);*/
@@ -237,13 +268,14 @@ getListVariableValue(ATerm env, PT_Tree var)
   return NULL;
 }
 
+/*}}}  */
+/*{{{  static ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value) */
 
 /* 
  * Store the value of a variable in the value environment
  */
 
-static ATerm
-putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
+static ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 {
   ATerm atVar = ATmake("<str>", PT_yieldTree(var));
   ATerm atValue = PT_makeTermFromTree(value);
@@ -252,8 +284,10 @@ putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 			  (ATerm) ATmakeAppl2(plain_var, atVar, atValue));
 }
 
-static ATerm
-putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
+/*}}}  */
+/*{{{  static ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end) */
+
+static ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 {
   ATerm atVar = ATmake("<str>", PT_yieldTree(var));
   ATerm atStart = PT_makeTermFromArgs(start);
@@ -264,31 +298,39 @@ putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 					      atStart, atEnd));
 }
 
-static PT_Args
-getSliceFirst(Slice slice)
+/*}}}  */
+/*{{{  static PT_Args getSliceFirst(Slice slice) */
+
+static PT_Args getSliceFirst(Slice slice)
 {
   return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 1));
 }
 
-static PT_Args
-getSliceLast(Slice slice)
+/*}}}  */
+/*{{{  static PT_Args getSliceLast(Slice slice) */
+
+static PT_Args getSliceLast(Slice slice)
 {
   return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 2));
 }
 
-static ATbool
-isSliceEmpty(Slice slice)
+/*}}}  */
+/*{{{  static ATbool isSliceEmpty(Slice slice) */
+
+static ATbool isSliceEmpty(Slice slice)
 {
   return PT_isEqualArgs(skipWhitespace(getSliceFirst(slice)), 
                         getSliceLast(slice));
 }
 
+/*}}}  */
+/*{{{  static ATbool isBoundVariable(ATerm env, PT_Tree var) */
+
 /*
   * See if a variable is bound.
   */
 
-static ATbool
-isBoundVariable(ATerm env, PT_Tree var)
+static ATbool isBoundVariable(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
   ATerm atVar = ATmake("<str>", PT_yieldTree(var));
@@ -304,13 +346,14 @@ isBoundVariable(ATerm env, PT_Tree var)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  static PT_Args prepend(PT_Args first, PT_Args last, PT_Args list) */
 
 /*
  * Prepend a slice to the front of a list
  */
 
-static PT_Args
-prepend(PT_Args first, PT_Args last, PT_Args list)
+static PT_Args prepend(PT_Args first, PT_Args last, PT_Args list)
 {
   PT_Args temp;
   PT_Tree elem;
@@ -329,8 +372,10 @@ prepend(PT_Args first, PT_Args last, PT_Args list)
   return PT_makeArgsList(elem, temp);
 }
 
-static PT_Args
-prependSlice(Slice slice, PT_Args list)
+/*}}}  */
+/*{{{  static PT_Args prependSlice(Slice slice, PT_Args list) */
+
+static PT_Args prependSlice(Slice slice, PT_Args list)
 {
   PT_Args first = getSliceFirst(slice);
   PT_Args last = getSliceLast(slice);
@@ -338,24 +383,21 @@ prependSlice(Slice slice, PT_Args list)
   return prepend(first, last, list);
 }
 
+/*}}}  */
+/*{{{  static PT_Args appendSlice(PT_Args list, Slice slice) */
+
 /*
  * Append a slice to a list
  */
 
-static PT_Args
-appendSlice(PT_Args list, Slice slice)
+static PT_Args appendSlice(PT_Args list, Slice slice)
 {
   return PT_concatArgs(list, prependSlice(slice, PT_makeArgsEmpty()));
 }
 
+/*}}}  */
 
-/* Functions to be called by the ToolBus:
-   - ``exists'' checks whether the equations for a certain module are
-     available.
-   - ``create_equations_db'' to initialize the database.
-   - ``clear_equations_db'' to re-initialize the database.
-   - ``add_equations'' to add a set of equations for a certain module.
-   - ``interpret'' to rewrite a given term over a given module.  */
+/*{{{  ATerm equations_available(int cid, char *name) */
 
 ATerm equations_available(int cid, char *name)
 {
@@ -365,6 +407,8 @@ ATerm equations_available(int cid, char *name)
     return ATmake("snd-value(eqs-not-available(<str>))", name);
 }
 
+/*}}}  */
+/*{{{  void add_equations(int cid, char *modname, ATerm equs) */
 
 /* The procedure ``add_equations'' takes care of adding a new list
    of equations that is added to the internal database. The arguments
@@ -374,8 +418,8 @@ ATerm equations_available(int cid, char *name)
    Layout and list separators are removed, and the lexicals are
    expanded to a list of lexical characters.
 */
-void
-add_equations(int cid, char *modname, ATerm equs)
+
+void add_equations(int cid, char *modname, ATerm equs)
 {
   ASF_CondEquationList newequs;
 
@@ -388,10 +432,10 @@ add_equations(int cid, char *modname, ATerm equs)
   enter_equations(modname, newequs);
 }
 
+/*}}}  */
+/*{{{  void remove_equations(int cid, char *modname) */
 
-
-void
-remove_equations(int cid, char *modname)
+void remove_equations(int cid, char *modname)
 {
   if (runVerbose) {
     ATwarning("removing equations for module: %s\n", modname);
@@ -400,6 +444,9 @@ remove_equations(int cid, char *modname)
   delete_equations(modname);
 }
 
+/*}}}  */
+
+/*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
 
 /* The function ``interpret'' recieves a module name and
    the string (term) that has to be written within the
@@ -419,6 +466,7 @@ remove_equations(int cid, char *modname)
       the list of lexical characters are mapped into lexicals
       again. */
 
+
 ATerm interpret(int cid, char *modname, ATerm trm)
 {
   ATerm result = evaluator(modname, trm);
@@ -430,6 +478,9 @@ ATerm interpret(int cid, char *modname, ATerm trm)
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
   }
 }
+
+/*}}}  */
+/*{{{  ATerm evaluator(char *name, ATerm term) */
 
 ATerm evaluator(char *name, ATerm term)
 {
@@ -463,13 +514,13 @@ ATerm evaluator(char *name, ATerm term)
   return PT_makeTermFromParseTree(parseTree);
 }
 
-
-
+/*}}}  */
+/*{{{  static ATbool no_new_vars(PT_Tree trm, ATerm env) */
 /* A predicate which checks whether a term introduces new
    variables. This functions is used when dealing with the
    conditions of equations. */
-static ATbool
-no_new_vars(PT_Tree trm, ATerm env)
+
+static ATbool no_new_vars(PT_Tree trm, ATerm env)
 {
   PT_Tree arg;
   PT_Args args;
@@ -496,7 +547,9 @@ no_new_vars(PT_Tree trm, ATerm env)
   }
 }
 
+/*}}}  */
 
+/*{{{  static ATerm argMatching(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
 
 /* Function which tries to match two arguments.
    First it is checked whether one of the arguments is a variable
@@ -559,7 +612,8 @@ argMatching(ATerm env,
       args1 = PT_getTreeArgs(arg1);
       args2 = PT_getTreeArgs(arg2);
 
-      newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, lhs_posinfo, depth);
+      /*newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, lhs_posinfo, depth);*/
+      newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, NULL, depth);
       if (newenv == fail_env) {
 	if (runVerbose) {
 	  ATwarning("*** fail_env on line %d\n", __LINE__);
@@ -609,6 +663,10 @@ argMatching(ATerm env,
   return fail_env;
 }
 
+
+/*}}}  */
+
+/*{{{  static ATerm argsMatching(env, conds, args1, args2, lhs_posinfo, depth) */
 
 /* Two arguments lists are matched. As long as there are arguments
    to be matched this is performed if both argument lists are empty
@@ -689,8 +747,11 @@ compareLists(Slice tuple, PT_Args list)
   return PT_isArgsEmpty(list);
 }
 
-static PT_Args
-compareSubLists(Slice slice, PT_Args elems2)
+
+/*}}}  */
+/*{{{  static PT_Args compareSubLists(Slice slice, PT_Args elems2) */
+
+static PT_Args compareSubLists(Slice slice, PT_Args elems2)
 {
   PT_Tree elem1, elem2;
   PT_Args first, last;
@@ -733,6 +794,10 @@ compareSubLists(Slice slice, PT_Args elems2)
     return NULL;
   }
 }
+
+/*}}}  */
+
+/*{{{  static ATerm subListMatching(env, el, listProd, e1, e2, cnds, a1, a2, pos, d) */
 
 
 /* subListMatching
@@ -796,6 +861,10 @@ subListMatching(ATerm env, PT_Tree elem,
 
   return subenv;
 }
+
+
+/*}}}  */
+/*{{{  static ATerm lastListElementMatching(env, el1, els2, conds, a1, a2, pos, d) */
 
 static ATerm
 lastListElementMatching(ATerm env, PT_Tree elem1, 
@@ -871,8 +940,11 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
   return newenv;
 }
 
-static ATbool 
-isListSeparator(PT_Tree elem, PT_Production listProd)
+
+/*}}}  */
+/*{{{  static ATbool isListSeparator(PT_Tree elem, PT_Production listProd) */
+
+static ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
 {
   PT_Symbol symbol, listSymbol;
   PT_Symbol separator;
@@ -898,6 +970,10 @@ isListSeparator(PT_Tree elem, PT_Production listProd)
   }
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
+
 
 static ATerm
 nextListElementMatching(ATerm env, PT_Tree elem1, 
@@ -958,9 +1034,13 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
         elems2 = skipWhitespace(PT_getArgsTail(elems2));
         pedantic_assert(isValidList(elems2));
       
-	newenv = argMatching(env, elem1, elem2, NULL,
+	/*<PO> newenv = argMatching(env, elem1, elem2, NULL,
 			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 			     lhs_posinfo, depth);
+	 */
+	newenv = argMatching(env, elem1, elem2, NULL,
+			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
+			     NULL, depth);
 	if (newenv == fail_env) {
 	  return fail_env;
 	}
@@ -1010,9 +1090,13 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
                               lhs_posinfo, depth);
       }
       else {
-	newenv = argMatching(env, elem1, elem2, NULL,
+	/*<PO> newenv = argMatching(env, elem1, elem2, NULL,
 			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 			     lhs_posinfo, depth);
+	 */
+	newenv = argMatching(env, elem1, elem2, NULL,
+			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
+			     NULL, depth);
 	if (newenv == fail_env) {
 	  return fail_env;
 	}
@@ -1040,6 +1124,10 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
   }
   return newenv;
 }
+
+
+/*}}}  */
+/*{{{  static ATerm listMatching(env, listProd, elems1, elems2, conds, args1, ...) */
 
 static ATerm
 listMatching(ATerm env, PT_Production listProd,
@@ -1101,11 +1189,15 @@ listMatching(ATerm env, PT_Production listProd,
 }
 
 
+/*}}}  */
+
+/*{{{  static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth) */
 
 /* Function ``condSatisfied'' check whether the conditions
    of an equation can be satisfied.
    Remark access functions needed to retrieve the operator,
    lhs, and rhs. */
+
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 {
   ASF_Condition cond;
@@ -1211,7 +1303,8 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
   return newenv;
 }
 
-
+/*}}}  */
+/*{{{  static ATermList apply_rule(PT_Tree trm, int depth) */
 
 /* The function ``apply_rule'' tries to rewrite a term
    given a list of equations. As long as there is no
@@ -1220,8 +1313,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
    the equation are matched.
 */
 
-static ATermList
-apply_rule(PT_Tree trm, int depth)
+static ATermList apply_rule(PT_Tree trm, int depth)
 {
   PT_Production top_ofs, first_ofs;
   PT_Args termargs, equargs, tmpargs;
@@ -1255,6 +1347,7 @@ apply_rule(PT_Tree trm, int depth)
         }
 
         tagCurrentRule = entry->tag;
+	currentRule = entry;
 
         conds = entry->conds;
         equargs = PT_getTreeArgs(entry->lhs);
@@ -1269,6 +1362,7 @@ apply_rule(PT_Tree trm, int depth)
         }
 
         tagCurrentRule = entry->tag;
+	currentRule = entry;
 
         if (!is_fail_env(env)) {
 	  TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
@@ -1327,14 +1421,16 @@ apply_rule(PT_Tree trm, int depth)
   return make_cenv(trm, fail_env);
 }
 
+/*}}}  */
+
+/*{{{  static PT_Tree selectAndRewrite(PT_Tree trm, int depth) */
 
 /* The function ``select_and_rewrite'' selects the
    the set of rewrite rules from the active rules and
    tries to rewrite the term via the function ``apply_rule''.
 */
 
-static PT_Tree
-selectAndRewrite(PT_Tree trm, int depth)
+static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
 {
   PT_Tree newtrm;
   ATermList complexenv;
@@ -1350,13 +1446,14 @@ selectAndRewrite(PT_Tree trm, int depth)
   return trm;
 }
 
+/*}}}  */
 
+/*{{{  static PT_Args rewriteArgs(args, ATerm env, int depth, Traversal *traversal) */
 
 /* The list of arguments is rewritten and a new argumentlist
    is constructed. */
 
-static PT_Args
-rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traversal)
+static PT_Args rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traversal)
 {
   PT_Tree arg, newarg;
   PT_Args newargs = PT_makeArgsEmpty();
@@ -1401,12 +1498,14 @@ rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traversal)
   return newargs;
 }
 
+/*}}}  */
+/*{{{  static PT_Args concatElems(listProd, PT_Args elems, PT_Args newElems) */
 
 /* The list of elements is rewritten and a new elementlist
    is constructed. */
 
-static PT_Args 
-concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
+
+static PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
 {
   PT_Args newList;
 
@@ -1442,8 +1541,11 @@ concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
   return newList;
 }
 
-static PT_Args 
-appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
+/*}}}  */
+
+/*{{{  static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) */
+
+static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
 {
   if (PT_isArgsEmpty(elems)) {
     if (PT_isTreeLayout(elem)) {
@@ -1455,6 +1557,9 @@ appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
   }
   return PT_appendArgs(elems, elem);
 }
+
+/*}}}  */
+/*{{{  static PT_Args rewriteElems(listProd, elems, env, depth, traversal) */
 
 static PT_Args
 rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, 
@@ -1497,11 +1602,17 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
   return newelems;
 }
 
-static PT_Tree 
-rewrite(PT_Tree trm)
+
+/*}}}  */
+/*{{{  static PT_Tree rewrite(PT_Tree trm) */
+
+static PT_Tree rewrite(PT_Tree trm)
 {
   return rewriteInnermost(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
 }
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, traversal) */
 
 /* The core function. It is checked whether the term
    is an application, a variable, or a list. And the
@@ -1511,7 +1622,6 @@ rewrite(PT_Tree trm)
    The resulting term can then be rewritten.
    REMARK: comments should be improved.
 */
-
 
 static PT_Tree
 rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
@@ -1556,26 +1666,26 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
       rewtrm = getVariableValue(env, trm, rhs);
 
       if (!rewtrm) {
-        rewtrm = trm;
+	rewtrm = trm;
       }
     }
     else {
       args = PT_getTreeArgs(trm);
       newargs = rewriteArgs(args, env, depth, NO_TRAVERSAL);
       if (PT_hasProductionBracketAttr(prod)) {
-        newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
-        rewtrm = newtrm;
+	newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
+	rewtrm = newtrm;
       }
       else if (traversals_on && 
-               PT_hasProductionTraverseAttr(PT_getTreeProd(trm))) {
-        Traversal traversal;
+	       PT_hasProductionTraverseAttr(PT_getTreeProd(trm))) {
+	Traversal traversal;
 
-        if (runVerbose) {
+	if (runVerbose) {
 	  ATwarning("Traversal...\n");
-        }
+	}
 
-        /* traversal and memo function */
-        if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {
+	/* traversal and memo function */
+	if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {
 	  newtrm = PT_setTreeArgs(trm, newargs);
 	  assert(memo_table != NULL);
 	  rewtrm = MemoTableLookup(memo_table, newtrm);
@@ -1588,33 +1698,33 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
 	    rewtrm = chooseNormalform(rewtrm, traversal);
 	    memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
 	  }
-        }
-        else { /* traversal, not memo function */
+	}
+	else { /* traversal, not memo function */
 	  newtrm = PT_setTreeArgs(trm, newargs);
-  
+
 	  traversal = createTraversalPattern(newtrm);
-  
+
 	  newtrm = selectTraversedArg(newargs);
 	  rewtrm =
 	    rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
 	  rewtrm = chooseNormalform(rewtrm, traversal);
-        }
+	}
       }
       /* memo, not traversal function */
       else if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {	
-        newtrm = PT_setTreeArgs(trm, newargs);
-        assert(memo_table != NULL);
-        rewtrm = MemoTableLookup(memo_table, newtrm);
+	newtrm = PT_setTreeArgs(trm, newargs);
+	assert(memo_table != NULL);
+	rewtrm = MemoTableLookup(memo_table, newtrm);
 
-        if (!rewtrm) {
+	if (!rewtrm) {
 	  rewtrm = selectAndRewrite(newtrm, depth);
 	  memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
-        }
+	}
       }
       else {			/* all other function types */
-        newtrm = PT_setTreeArgs(trm, newargs);
+	newtrm = PT_setTreeArgs(trm, newargs);
 
-        rewtrm = selectAndRewrite(newtrm, depth);
+	rewtrm = selectAndRewrite(newtrm, depth);
       }
     }
   }
@@ -1625,11 +1735,15 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
   return rewtrm;
 }
 
+/*}}}  */
+
+/*{{{  PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, traversal) */
+
 /* now follows the traversal strategy, copy pasted from the innermost
  * strategy. fix me fix me fix me
  */
-PT_Tree
-rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
+
+PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
 {
   PT_Tree newtrm, rewtrm, travtrm;
   PT_Args args, newargs;
@@ -1708,5 +1822,7 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
 
   return rewtrm;
 }
+
+/*}}}  */
 
 

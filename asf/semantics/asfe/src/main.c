@@ -1,3 +1,5 @@
+/*{{{  file header */
+
 /*
 
     Meta-Environment - An environment for language prototyping.
@@ -22,6 +24,11 @@
   $Id$
  */
 
+
+/*}}}  */
+
+/*{{{  includes */
+
 #include <time.h>
 
 #define TICK2SEC(t)             (((double)(t))/CLK_TCK)
@@ -41,21 +48,33 @@
 #include "traversals.h"
 #include "asfe.h"
 
+#ifdef USE_TIDE
+#include "eval-tide.h"
+#endif
 
-static char myarguments[] = "be:hi:o:w:tvV";
+/*}}}  */
+/*{{{  variables */
+
+static char myarguments[] = "bde:hi:o:w:tvV";
 static char myname[] = "asfe";
 static char myversion[] = "0.1";
 
 
+/*}}}  */
+
+/*{{{  void usage(char *prg, ATbool is_err) */
+
 /*     Usage: displays helpful usage information
  */
 
-void
-usage(char *prg, ATbool is_err)
+void usage(char *prg, ATbool is_err)
 {
   ATwarning("Usage: %s [options]\n"
 	    "Options:\n"
 	    "\t-b              output terms in BAF format (default)\n"
+#ifdef USE_TIDE
+	    "\t-d              connect to the tide debugger\n"
+#endif
 	    "\t-t              output terms in plaintext format\n"
 	    "\t-h              display help information (usage)\n"
 	    "\t-e file         use the equations |file|\n"
@@ -69,26 +88,28 @@ usage(char *prg, ATbool is_err)
   exit(is_err ? 1 : 0);
 }
 
+/*}}}  */
+/*{{{  void version(char *prg) */
 
-void
-version(char *prg)
+void version(char *prg)
 {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
 }
 
+/*}}}  */
+/*{{{  void abort_handler(int signal) */
 
-
-void
-abort_handler(int signal)
+void abort_handler(int signal)
 {
   RWsetError("aborted by user", (ATerm) ATempty);
 }
 
+/*}}}  */
 
+/*{{{  int main(int argc, char *argv[]) */
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
 
@@ -103,6 +124,7 @@ main(int argc, char *argv[])
   char *output = "-";
   char *eqsfile = "-";
   int bafmode = 1;
+  ATbool use_tide = ATfalse;
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
@@ -151,32 +173,34 @@ main(int argc, char *argv[])
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-      case 'b': bafmode = 1;                     break;
-      case 't': bafmode = 0;                     break;
-      case 'v': runVerbose = ATtrue;             break;
-      case 'e': eqsfile = optarg;                break;
-      case 'i': input = optarg;                  break;
-      case 'o': output = optarg;                 break;
-      case 'w':
-	if (!strcmp(optarg, "on")) {
-	  traversals_on = ATtrue;
-	}
-	else if (!strcmp(optarg, "off")) {
-	  traversals_on = ATfalse;
-	}
-	else {
-	  usage(argv[0], ATtrue);
-	}
-	break;
-      case 'V': version(argv[0]);                break;
-      case 'h': usage(argv[0], ATfalse);         break;
-      default: usage(argv[0], ATtrue);           break;
+	case 'b': bafmode = 1;                     break;
+	case 't': bafmode = 0;                     break;
+	case 'v': runVerbose = ATtrue;             break;
+	case 'e': eqsfile = optarg;                break;
+	case 'i': input = optarg;                  break;
+	case 'o': output = optarg;                 break;
+	case 'w':
+		  if (!strcmp(optarg, "on")) {
+		    traversals_on = ATtrue;
+		  }
+		  else if (!strcmp(optarg, "off")) {
+		    traversals_on = ATfalse;
+		  }
+		  else {
+		    usage(argv[0], ATtrue);
+		  }
+		  break;
+	case 'd': use_tide = ATtrue;		   break;
+	case 'V': version(argv[0]);                break;
+	case 'h': usage(argv[0], ATfalse);         break;
+	default: usage(argv[0], ATtrue);           break;
       }
     }
 
     /* Get the equations from file */
-    if (!(iofile = fopen(eqsfile, "r")))
+    if (!(iofile = fopen(eqsfile, "r"))) {
       ATerror("%s: cannot open %s\n", myname, eqsfile);
+    }
 
     eqs = ATreadFromFile(iofile);
     fclose(iofile);
@@ -187,13 +211,25 @@ main(int argc, char *argv[])
     enter_equations(name, neweqs);
 
     /* Get the term from file */
-    if (!strcmp(input, "") || !strcmp(input, "-"))
+    if (!strcmp(input, "") || !strcmp(input, "-")) {
       iofile = stdin;
-    else if (!(iofile = fopen(input, "r")))
+    } else if (!(iofile = fopen(input, "r"))) {
       ATerror("%s: cannot open %s\n", myname, input);
+    }
 
     term = ATreadFromFile(iofile);
     fclose(iofile);
+
+    /* Optionally connect to the tide debugger */
+    if (use_tide) {
+#ifdef USE_TIDE
+      ATBinit(argc, argv, &bottomOfStack);
+      Tide_connect();
+#else
+      fprintf(stderr, "tide support is not enabled! (try configuring --with-tide)\n");
+      exit(1);
+#endif
+    }
 
     /* Rewrite the term */
     result = evaluator(name, term);
@@ -242,5 +278,13 @@ main(int argc, char *argv[])
     fclose(iofile);
   }
 
+#ifdef USE_TIDE
+  if (use_tide) {
+    Tide_disconnect();
+  }
+#endif
+
   return returncode;
 }
+
+/*}}}  */

@@ -32,6 +32,8 @@
 #include <MEPT.h>
 #include <ASFME-utils.h>
 
+equation_entry *currentRule = NULL;
+
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
 

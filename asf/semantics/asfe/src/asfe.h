@@ -24,6 +24,7 @@
  */
 
 #include <ASFME-utils.h>
+#include <MEPT.h>
 
 ATerm evaluator(char *name, ATerm term);
 
@@ -32,6 +33,7 @@ ATerm equations_available(int cid, char *name);
 void add_equations(int cid, char *modname, ATerm equs);
 void remove_equations(int cid, char *modname);
 ATerm interpret(int cid, char *modname, ATerm trm);
+PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol);
 
 /* error interface */
 void RWsetError(const char *message, ATerm subject);

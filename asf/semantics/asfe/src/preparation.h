@@ -41,6 +41,8 @@ typedef struct equation_entry
   PT_Tree rhs;
 } equation_entry;
 
+extern equation_entry *currentRule;
+
 typedef struct equation_table
 {
   struct equation_table *next;
