@@ -80,7 +80,7 @@ ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
-  imports = SDF_getTransitiveImports(list, id);
+  imports = GI_getTransitiveImports(list, id);
 
   return ATmake("snd-value(all-needed-module-names(<term>))", 
 		importsToModuleList(imports));
@@ -93,7 +93,7 @@ ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)
 {
   ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList result = SDF_getTransitiveImportedModules(list, id);
+  ATermList result = GI_getTransitiveImportedModules(list, id);
 
   return ATmake("snd-value(all-needed-modules(<term>))", result);
 }
@@ -107,7 +107,7 @@ ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
-  imports = SDF_getTransitiveImports(list, id);
+  imports = GI_getTransitiveImports(list, id);
 
   return ATmake("snd-value(all-needed-imports(<term>))", imports);
 }
@@ -119,7 +119,7 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
 {
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module module = SDF_getStartTopModule(start);
-  ATermList imports = SDF_getImports(module);
+  ATermList imports = GI_getImports(module);
  
   return ATmake("snd-value(imported-module-names(<term>))", imports);
 }
@@ -134,7 +134,7 @@ ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
 
   return ATmake("snd-value(all-depending-module-names(<term>))",
-		(ATerm) SDF_getDependingModuleIds(list, id));
+		(ATerm) GI_getDependingModuleIds(list, id));
 }
 
 /*}}}  */
@@ -203,7 +203,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 {
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   ATermList list = 
-    SDF_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
+    GI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
   SDF_ModuleList modules = SDF_makeModuleListEmpty();
   SDF_OptLayout space = SDF_makeLayoutSpace();
   SDF_SDF sdf;

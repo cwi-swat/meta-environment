@@ -22,7 +22,6 @@ void       SDFforeachGrammarInModule   (SDF_Module      module,
 
 
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName);
-ATerm SDF_getImportModuleNamePlain(SDF_Import import);
 
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1, SDF_ImportList l2);
 ATbool SDF_containsImportListImport(SDF_ImportList list, 

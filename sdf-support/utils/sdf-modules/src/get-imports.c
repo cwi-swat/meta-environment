@@ -6,19 +6,37 @@
 
 static ModuleTable moduleTable = NULL;
 
-/*{{{  ATerm SDF_getImportModuleNamePlain(SDF_Import import) */
+/*{{{  static void initModuleTable(ATermList modules) */
 
-ATerm SDF_getImportModuleNamePlain(SDF_Import import)
+static void initModuleTable(ATermList modules)
+{
+  /* initialize the hash table with all modules */
+  for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
+    ATerm atModule = ATBunpack(ATgetFirst(modules));
+    SDF_Start smodule = SDF_StartFromTerm(atModule);
+    SDF_Module module = SDF_getStartTopModule(smodule);
+    SDF_ModuleId id = SDF_removeModuleIdAnnotations(
+			SDF_getModuleNameModuleId(
+	     	          SDF_getModuleModuleName(module)));
+    MT_putModule(moduleTable, id, smodule);
+  }
+}
+
+/*}}}  */
+
+/*{{{  ATerm GI_getImportModuleNamePlain(SDF_Import import) */
+
+ATerm GI_getImportModuleNamePlain(SDF_Import import)
 {
   SDF_ModuleName modname = SDF_getImportModuleName(import);
   return SDF_getModuleNamePlain(modname);
 }
 
 /*}}}  */
-/*{{{  getImpsectionImports(SDF_ImpSection impsection) */
 
-static ATermList
-getImpsectionImports(SDF_ImpSection impsection)
+/*{{{  static ATermList getImpsectionImports(SDF_ImpSection impsection) */
+
+static ATermList getImpsectionImports(SDF_ImpSection impsection)
 {
   ATermList      modules     = ATempty;
   SDF_Imports    imports     = SDF_getImpSectionList(impsection);
@@ -27,7 +45,7 @@ getImpsectionImports(SDF_ImpSection impsection)
   while (!SDF_isImportListEmpty(importslist)) {
     SDF_Import import = SDF_getImportListHead(importslist);
     modules = ATinsert(modules, 
-                       SDF_getImportModuleNamePlain(import));
+                       GI_getImportModuleNamePlain(import));
 
     if (SDF_isImportListSingle(importslist)) {
       break;
@@ -39,10 +57,9 @@ getImpsectionImports(SDF_ImpSection impsection)
 }
 
 /*}}}  */
-/*{{{  collect_imports(SDF_Grammar grammar, ATermList *imports) */
+/*{{{  static void collect_imports(SDF_Grammar grammar, ATermList *imports) */
 
-static void
-collect_imports(SDF_Grammar grammar, ATermList *imports)
+static void collect_imports(SDF_Grammar grammar, ATermList *imports)
 {
   if (SDF_hasGrammarImpSection(grammar)) {
     SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
@@ -51,20 +68,17 @@ collect_imports(SDF_Grammar grammar, ATermList *imports)
 }
 
 /*}}}  */
+/*{{{  static SDF_ImportList getImpsectionImportsList(SDF_ImpSection impsection) */
 
-/*{{{  KLOON: getImpsectionImportsList(SDF_ImpSection impsection) */
-
-static  SDF_ImportList
-getImpsectionImportsList(SDF_ImpSection impsection)
+static SDF_ImportList getImpsectionImportsList(SDF_ImpSection impsection)
 {
-    return SDF_getImportsList(SDF_getImpSectionList(impsection));
+  return SDF_getImportsList(SDF_getImpSectionList(impsection));
 }
 
 /*}}}  */
-/*{{{ KLOON:  collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports) */
+/*{{{  static void collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports) */
 
-static void
-collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
+static void collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
 {
     if (SDF_hasGrammarImpSection(grammar)) {
           SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
@@ -74,9 +88,10 @@ collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
 }
 
 /*}}}  */
-/*{{{  KLOON: SDF_ImportList SDF_getModuleImportsList(SDF_Module module) */
 
-SDF_ImportList SDF_getModuleImportsList(SDF_Module module)
+/*{{{  SDF_ImportList GI_getModuleImportsList(SDF_Module module) */
+
+SDF_ImportList GI_getModuleImportsList(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_Sections       sections;
@@ -103,10 +118,9 @@ SDF_ImportList SDF_getModuleImportsList(SDF_Module module)
 }
 
 /*}}}  */
+/*{{{  ATermList GI_getImports(SDF_Module module) */
 
-/*{{{  ATermList SDF_getImports(SDF_Module module) */
-
-ATermList SDF_getImports(SDF_Module module)
+ATermList GI_getImports(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_Sections       sections;
@@ -455,7 +469,7 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       SDF_ModuleName actualName = SDF_getImportModuleName(import);
       renamings = makeRenamingsFromModuleNames(formalName, actualName);
 
-      imports = SDF_getModuleImportsList(module);
+      imports = GI_getModuleImportsList(module);
       imports = applyRenamingsToImports(renamings, imports);
       todo = SDF_concatImportList(todo, imports);
 
@@ -475,56 +489,6 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 }
 
 /*}}}  */
-
-/*{{{  static void initModuleTable(ATermList modules) */
-
-static void initModuleTable(ATermList modules)
-{
-  /* initialize the hash table with all modules */
-  for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
-    ATerm atModule = ATBunpack(ATgetFirst(modules));
-    SDF_Start smodule = SDF_StartFromTerm(atModule);
-    SDF_Module module = SDF_getStartTopModule(smodule);
-    SDF_ModuleId id = SDF_removeModuleIdAnnotations(
-			SDF_getModuleNameModuleId(
-	     	          SDF_getModuleModuleName(module)));
-    MT_putModule(moduleTable, id, smodule);
-  }
-}
-
-/*}}}  */
-
-/*{{{  static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) { */
-
-static SDF_ImportList do_get_transitive_imports(SDF_ModuleId moduleId) 
-{
-  SDF_Import import = SDF_makeImportModule(
-		      SDF_makeModuleNameUnparameterized(moduleId)); 
-
-  assert(moduleTable != NULL);
-
-  return get_transitive_imports(SDF_makeImportListSingle(import));
-}
-
-/*}}}  */
-
-/*{{{  ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId) */
-
-SDF_ImportList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
-{
-  SDF_ImportList result;
-
-  moduleTable = MT_createModuleTable();
-  initModuleTable(modules);
- 
-  result = do_get_transitive_imports(moduleId);
-  MT_destroyModuleTable(moduleTable);
-  moduleTable = NULL;
-  return result;
-}
-
-/*}}}  */
-
 /*{{{  static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id) */
 
 static ATbool imports_contains_id(SDF_ImportList imports, SDF_ModuleId id)
@@ -547,6 +511,19 @@ static ATbool imports_contains_id(SDF_ImportList imports, SDF_ModuleId id)
   }
 
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) { */
+
+static SDF_ImportList do_get_transitive_imports(SDF_ModuleId moduleId) 
+{
+  SDF_Import import = SDF_makeImportModule(
+		      SDF_makeModuleNameUnparameterized(moduleId)); 
+
+  assert(moduleTable != NULL);
+
+  return get_transitive_imports(SDF_makeImportListSingle(import));
 }
 
 /*}}}  */
@@ -575,26 +552,6 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
 }
 
 /*}}}  */
-
-/*{{{  ATermList SDF_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId) */
-
-ATermList SDF_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
-{
-  ATermList result;
-
-  moduleTable = MT_createModuleTable();
-  initModuleTable(modules);
- 
-  result = get_depending_module_ids(moduleId);
-
-  MT_destroyModuleTable(moduleTable);
-  moduleTable = NULL;
-
-  return result;
-}
-
-/*}}}  */
-
 /*{{{  static ATermList collect_imported_modules(SDF_ImportList imports) */
 
 static ATermList collect_imported_modules(SDF_ImportList imports)
@@ -627,9 +584,43 @@ static ATermList collect_imported_modules(SDF_ImportList imports)
 
 /*}}}  */
 
-/*{{{  ATermList SDF_getTransitiveImportedModules(ATermList modules,  */
+/*{{{  ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId) */
 
-ATermList SDF_getTransitiveImportedModules(ATermList modules, 
+SDF_ImportList GI_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
+{
+  SDF_ImportList result;
+
+  moduleTable = MT_createModuleTable();
+  initModuleTable(modules);
+ 
+  result = do_get_transitive_imports(moduleId);
+  MT_destroyModuleTable(moduleTable);
+  moduleTable = NULL;
+  return result;
+}
+
+/*}}}  */
+/*{{{  ATermList GI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId) */
+
+ATermList GI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
+{
+  ATermList result;
+
+  moduleTable = MT_createModuleTable();
+  initModuleTable(modules);
+ 
+  result = get_depending_module_ids(moduleId);
+
+  MT_destroyModuleTable(moduleTable);
+  moduleTable = NULL;
+
+  return result;
+}
+
+/*}}}  */
+/*{{{  ATermList GI_getTransitiveImportedModules(ATermList modules,  */
+
+ATermList GI_getTransitiveImportedModules(ATermList modules, 
 					   SDF_ModuleId moduleId)
 {
   ATermList result = ATempty;
