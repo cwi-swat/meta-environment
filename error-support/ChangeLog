@@ -1,0 +1,8 @@
+$Id$
+
+2003/12/04 (jurgenv@cwi.nl)
+ * Initial version 0.1 of meta-errors package. This package will contain
+   generated data-structures from basic/Errors and some convenience functions.
+   The data-structures are to be used as:
+     - a general error description mechanism in the Meta-Environment
+     - a reusable error description mechanism for ASF+SDF specifications
