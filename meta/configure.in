@@ -186,5 +186,4 @@ AC_OUTPUT(
    doc/html/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
-, chmod +x utils/genmakefile
 )
