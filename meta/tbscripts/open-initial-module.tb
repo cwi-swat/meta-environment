@@ -31,7 +31,8 @@ let
   ErrList : list,
   Ambs    : list,
   Cycle   : list,
-  AnonymousError : term
+  AnonymousError : term,
+  RealName : str
 in
   Id := process-id. 
   (
@@ -49,6 +50,8 @@ in
         snd-msg(open-file(Path)). ( 
           rec-msg(opened-file(Name2?,tree(T?), SdfPath?,Time?)).
           snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
+	  rec-msg(real-module-name(Name, RealName?)).
+          Name := RealName.
           rec-msg(need-modules(Ms?)).
           snd-msg(open-parse-table(Name, SdfPath, asf)).
           ( 
@@ -102,6 +105,8 @@ in
           snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",FT)).
           ( rec-msg(parse-result-asfix2me(Id?,parse-tree(T?))).
             snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)).
+	    rec-msg(real-module-name(Name,RealName?)) .
+	    Name := RealName .
             rec-msg(need-modules(Ms?)).
             snd-msg(open-rules-file(Name, SdfPath)).
             (
