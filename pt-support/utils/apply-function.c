@@ -48,7 +48,8 @@ void rec_terminate(int cid, ATerm t)
 
 ATerm equal_trees(int cid, ATerm tree1, ATerm tree2)
 {
-  if (ATisEqual(tree1, tree2)) {
+  if (ATisEqual(ATremoveAllAnnotations(tree1),  
+                ATremoveAllAnnotations(tree2))) {
     return ATmake("snd-value(result(true))");
   }
   else {
