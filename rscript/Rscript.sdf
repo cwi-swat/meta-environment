@@ -7,6 +7,7 @@ exports
 %%sorts Elem would be reasonable :-) but gives double declaration error
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE EQU TARGET
+	{REXP ","}+
 
   imports Relations[Elem]
 
@@ -28,18 +29,18 @@ exports
 %% Extend Elem to allow nested bags and relations
 
      Bag[[Elem]]                   	    	-> Elem  
-%%     Rel[[Elem]]                           	-> Elem  
      Tuple					-> Elem
 
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
      REXP # REXP			     	-> REXP {avoid}
+     "<" REXP "," REXP "," {REXP ","}+ ">"	-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
-%%     "["  {REXP ","}* "]"                     	-> REXP {avoid}
 
 %% Binary Operators
      REXP "and" REXP                         	-> REXP {left}
      REXP "or" REXP                          	-> REXP {left}
+     REXP "implies" REXP			-> REXP {left}
 
      REXP "in" REXP			     	-> REXP {non-assoc}
      REXP "notin" REXP			     	-> REXP {non-assoc}
@@ -73,8 +74,10 @@ exports
      "bool" | "int" | "str" | "node"	     	-> ElemType
      ElemType                                	-> REXPTYPE
      "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
+     "<" REXPTYPE "," REXPTYPE "," {REXPTYPE ","}+">" 
+				          	-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
-     "rel" "[" REXPTYPE "," REXPTYPE "]"     	-> REXPTYPE
+     "rel" "[" REXPTYPE "," {REXPTYPE ","}+ "]" -> REXPTYPE
      RVAR				     	-> REXPTYPE
 
 %% Bag and relation formers
@@ -84,6 +87,7 @@ exports
 
 	RVAR 					-> TARGET
 	"<" RVAR "," RVAR ">"			-> TARGET
+	"<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> TARGET
 
      TARGET ":" REXP                           	-> FROM
      REXP					-> FROM
@@ -149,7 +153,8 @@ exports
     }   				>
     REXP "and" REXP -> REXP 		>
     REXP "or" REXP -> REXP 		>
-    "not" REXP -> REXP
+    "not" REXP -> REXP			>
+    REXP "implies" REXP -> REXP
  
 
      

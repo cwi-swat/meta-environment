@@ -1,5 +1,4 @@
 
-check-rscript(
 %% A relational definiton of program slicing
 %%
 %% Based on the definitions given in 
@@ -307,4 +306,3 @@ DU == {<<"sum", 6>, <"eps", 3>>, <<"sum", 6>, <"sum", 6>>,
 
 
 endcomment
-)

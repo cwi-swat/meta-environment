@@ -4,41 +4,16 @@ imports Bags[Elem]
 
 exports
 
-  sorts Tuple 
+  sorts Tuple {Elem ","}+
 
  %%aliases
 %%	Rel[[Elem]]					-> Bag[[Elem]]
 
   context-free syntax
-	Elem # Elem					-> Tuple
-	Tuple						-> Elem
-%%   	"{" {Tuple ","}* "}"                   		-> Rel[[Elem]] {constructor}
+     Elem # Elem					-> Tuple
+     Tuple						-> Elem
 
-%% --- functions cloned from Bag
-
-%%   	add(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
-%%   	del(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
-%%
-%%   	equal(Rel[[Elem]], Rel[[Elem]])           	-> Boolean
-%%   	subset(Rel[[Elem]], Rel[[Elem]])          	-> Boolean
-%%   	strict-subset(Rel[[Elem]], Rel[[Elem]])   	-> Boolean
-%%   	superset(Rel[[Elem]], Rel[[Elem]])        	-> Boolean
-%%   	strict-superset(Rel[[Elem]], Rel[[Elem]])	-> Boolean
-
-%%   	union1(Tuple, Rel[[Elem]])			-> Rel[[Elem]]
-%%   	union2(Rel[[Elem]], Tuple)			-> Rel[[Elem]]
-%%   	union(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
-%%   	inter(Rel[[Elem]], Rel[[Elem]])          	-> Rel[[Elem]]
-%%   	diff(Rel[[Elem]], Rel[[Elem]])            	-> Rel[[Elem]]
-
- %%  	size(Rel[[Elem]])                         	-> Integer
-%%   	in(Tuple, Rel[[Elem]])                   	-> Boolean
-%%
-%%   	"if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
-                                           		-> Rel[[Elem]]
-
-%% --- end of cloned functions
-
+     "<" Elem "," Elem "," {Elem ","}+ ">"		-> Tuple
 
      compose(Bag[[Elem]], Bag[[Elem]])       		-> Bag[[Elem]]	%%RRR
     
@@ -65,11 +40,12 @@ exports
 
      id(Bag[[Elem]])                   			-> Bag[[Elem]]	%%BR
 
-     Bag[[Elem]] "." Elem             			-> Bag[[Elem]]	%%REB
-     Bag[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]	%%RBB
+     limage(Bag[[Elem]], Elem)             		-> Bag[[Elem]]	%%REB
+     limage(Bag[[Elem]], Bag[[Elem]])      		-> Bag[[Elem]]	%%RBB
 
-     Elem "." Bag[[Elem]]             			-> Bag[[Elem]]	%%ERB
-     Bag[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]	%%BRB
+     rimage(Elem, Bag[[Elem]])             		-> Bag[[Elem]]	%%ERB
+     rimage(Bag[[Elem]], Bag[[Elem]])     		-> Bag[[Elem]]	%%BRB
+
      reachX(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
      reachR(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
      trans-closure(Bag[[Elem]])                		-> Bag[[Elem]]	%%RR

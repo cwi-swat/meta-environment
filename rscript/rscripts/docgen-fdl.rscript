@@ -1,0 +1,34 @@
+bag[bag[str]] PresentationSpecializations = power({"frameSize"})
+
+bag[str] Interaction = {"crawled", "dynamic"}
+
+bag[str] Localization = {"english", "dutch"}
+
+bag[bag[str]] SourceSections = power({"annotationSection" }) 
+				%%, "activationSection", "entitiesSection",  "parametersSection"})
+
+bag[bag[str]] UsersGuide = power({ "indexpage", "programHelp" }) 
+				%%, "copybookHelp", "statisticsHelp",
+           			%%  "annotationHelp", "activationHelp", "entitiesHelp", "parametersHelp"})
+
+bag[bag[str]] AnalysisSpecializations = power({"callHandlers"}) %%,
+           			%%  "columnPositions", "codingConventions", "fileNameConventions"})
+
+bag[bag[str]] RelationSet = power({"callHandlers", "columnPositions" }) 
+				%% , "codingConventions",  "fileNameConventions"}),
+
+bag[bag[str]] DocGen =
+	{ {DocGen1} | 
+
+	MainBlocks: { {U union B} | U : UsersGuide, B : power({"programBlock", "copybookBlock", "statisticsBlock"})},
+
+	Presentation :  { {L union I union M union S union P}  | 
+			   L : Localization, I : Interaction, M :  MainBlocks, S : SourceSections,
+        		   P : PresentationSpecializations },
+
+	Analysis : { {R union A} | R : RelationSet, A : AnalysisSpecializations },
+
+	DocGen1 :  { {A union P} | A : Analysis, P : Presentation }
+	}
+
+	

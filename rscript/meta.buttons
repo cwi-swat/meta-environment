@@ -1,118 +1,85 @@
 buttons([
+ button("Rscript",
+        [description(term-editor, menu(["Rscript", "Check"]))],
+        [push-active-module,
+         get-root,
+         check-sort("RSCRIPT"),
+         apply("check-rscript", "List", 1),
+         push-modulename("RscriptChecker"),
+         reduce,
+         unparse,
+         push-active-module,
+         show-list
+        ]),
 
  button("Rscript",
-          ["term"],
-          ["Actions", "Exec Rscript"],
+	  [description(term-editor, menu(["Rscript", "Execute"]))],
           [push-active-module,
-	   get-root,
+           get-root,
            check-sort("RSCRIPT"),
            apply("eval-rscript", "RSTORE", 1),
            push-modulename("RscriptCalculator"),
            reduce,
-	   push-filename("RscriptCalculator.results"),
-	   push-active-module,
-	   activate-editor
+           push-filename("RscriptCalculator.results"),
+           push-active-module,
+           activate-editor
            ]),
 
  button("Rscript",
-          ["term"],
-          ["Actions", "Exec Rscript Testsuite"],
+	  [description(term-editor, menu(["Rscript", "TestSuite"]))],
           [push-active-module,
-	   get-root,
+           get-root,
            check-sort("RSCRIPT"),
            apply("eval-rscript-testsuite", "TESTREPORT", 1),
            push-modulename("RscriptCalculator"),
            reduce,
-	   push-filename("RscriptCalculator.results"),
-	   push-active-module,
-	   activate-editor
+           push-filename("RscriptCalculator.results"),
+           push-active-module,
+           activate-editor
            ]),
 
-  button("Rscript",
-          ["term"],
-          ["Actions", "Check Rscript"],
-          [push-active-module,
-	   get-root,
-           check-sort("RSCRIPT"),
-           apply("check-rscript", "List", 1),
-           push-modulename("RscriptChecker"),
-           reduce,
-	   execute-action("unparsePT"),
-	   show-list
-           ]),
+ button("Tscript",
+        [description(term-editor, menu(["ToolBus",
+                                        "Show Query Results"]))],
+        [push-filename("query-result.rvalue"),
+         read-tree,
+         check-sort("RVALUE"),
+         apply("display-result", "List", 1),
+         rewrite("DisplayQuery"),
+         unparse,
+         push-active-module,
+         show-list
+       ]),
+ button("Tscript",
+        [description(term-editor, menu(["ToolBus",
+                                        "Evaluate Query"]))],
+        [push-filename("all.rscript"),
+         parse("Rscript", "RSCRIPT"),
 
-  button("*",
-           ["term"],
-           ["Actions", "Show List"],
-           [get-root,
-            execute-action("unparsePT"),
-            show-list]),
+         push-string("\"ALL_MESSAGES\""),
+         parse("basic/Strings", "String"),
 
-    button("*",
-          ["message-list"],
-          ["ShowRscriptSource"],
-          [show-area("Rscript")]),
+         push-filename("extracted-relations.trm"),
+         read-tree,
+         check-sort("RSTORE"),
 
-
-    button("*",
-          ["message-list"],
-          ["ShowPicoSource"],
-          [show-area("Pico-syntax")]),
-
-
- 
-
-  button("Pico-syntax",
-          ["term"],
-          ["Actions", "Extract Relations"],
-          [push-active-module,
-	   get-root,
-           check-sort("PROGRAM"),
-           apply("extractRelations", "RSTORE", 1),
-           push-modulename("PicoExtraction"),
-           reduce,
-	   push-filename("extracted-relations.trm"),
-	   push-active-module,
-	   activate-editor
-           ]),
-
-   button("Pico-syntax",
-          ["term"],    
-          ["Actions", "ShowRelations"],
-          [ 
-            push-filename("extracted-relations.trm"),
-            parse("PicoExtraction", "RSTORE"),
-            push-filename("extracted-relations.trm"),
-	    push-modulename("RscriptCalculator"),
-            activate-editor
-          ]),
-
-  button("Pico-syntax",
-          ["term"],    
-          ["Actions", "Uninitialized Vars"],
-          [
-	  push-active-module,
-	  get-root,
-           check-sort("PROGRAM"),
-
-	   push-filename("rscripts/uninit.rscript"),
-           parse("Rscript", "RSCRIPT"),
-
-	   push-string("\"UNDEF\""),
-           parse("basic/Strings", "String"),
-
-	   push-filename("extracted-relations.trm"),
-           parse("RscriptCalculator", "RSTORE"),
-
-           apply("pico-query", "List", 4),
-           push-modulename("PicoQuery"),
-           reduce,
-	   execute-action("unparsePT"),
-           show-list
-           ])
-
-
-
-
-
+         apply("evaluate-query", "RVALUE", 3),
+         rewrite("DisplayQuery"),
+         push-filename("query-result.rvalue"),
+         save-tree,
+         message("Derived query-results saved.")
+       ]),
+ button("Tscript",
+        [description(term-editor, menu(["ToolBus",
+                                        "Extract Relations"]))],
+        [push-active-module,
+         get-root,
+         check-sort("Tscript"),
+         apply("extractRelations", "RSTORE", 1),
+         push-modulename("ToolBusExtraction"),
+         reduce,
+         push-filename("extracted-relations.trm"),
+         save-tree,
+         message("Extracted relations saved.")
+        ])
 ])

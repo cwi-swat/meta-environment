@@ -1,4 +1,4 @@
-check-rscript(
+
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -41,7 +41,7 @@ assert "rel 10": {<0,1>, ONE-TWO, <3,4>} == {<0,1>, <1,2>,<3,4>}
 
 
 %% --- Boolean operators
-%%
+
 assert "true 1"  : true == true
 assert "false 1" : false == false
 
@@ -60,6 +60,11 @@ assert "or 1" : (true or true) == true
 assert "or 2" : (true or false) == true
 assert "or 3" :  (false or true) == true
 assert "or 4" : (false and false) == false
+
+assert "implies 1" : (true implies true) == true
+assert "implies 2" : (true implies false) == false
+assert "implies 3" : (false implies true) == true
+assert "implies 4" : (false implies false) == true
 
 %% --- in/notin
 
@@ -274,6 +279,7 @@ assert "Bag former 7": {  1 | X : {1,2,3}, false} 	== EMPTYBAG
 assert "Bag former 8": {  X | X : {1,2,3}} 		== {1,2,3}
 assert "Bag former 9": {  X | X : {1,2,3}, true} 	== {1,2,3}
 assert "Bag former 10": {  X | X : {1,2,3}, false} 	== EMPTYBAG
+assert "Bag former 10a": {  X | X : {1,2,3}, X >= 2, X < 3} 	== {2}
 
 assert "Bag former 11": {  EMPTYBAG | X : {1,2,3}} 	== EMPTYBAG
 assert "Bag former 12": {  EMPTYBAG | X : {1,2,3}, true} == EMPTYBAG
@@ -281,10 +287,12 @@ assert "Bag former 13": {  EMPTYBAG | X : {1,2,3}, false} == EMPTYBAG
 
 assert "Bag former 14": {  Bag1 | X : {1,2,3}} 	== {1,2,3}
 assert "Bag former 15": {  Bag1 | X : {1,2,3}, true} 	== {1,2,3}
-assert "Bag former 16": {  Bag1 | X : {1,2,3}, false}	== EMPTYBAG 
+assert "Bag former 16": {  Bag1 | X : {1,2,3}, true, true} 	== {1,2,3}
+assert "Bag former 17": {  Bag1 | X : {1,2,3}, false}	== EMPTYBAG 
 
-assert "Bag former 17": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
+assert "Bag former 18": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
 	{ 1,2,3,10,20,30,100,200,300}
+
 
 %% --- Relation former
 
@@ -305,4 +313,18 @@ assert "Rel former 8": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, false} ==
 			EMPTYREL
 assert "Rel former 9": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, X >= Y} ==
 			{<2, 2>, <3, 2>, <3, 3>}
-)
+
+%% --- n-ary tuples
+
+rel[int,int,int] R3 = {<1,2,3>, <10,20,30>}
+
+bag[int] RR = {{X, Y, Z} | <X,Y,Z> : R3 }
+
+assert "Advanced value former 1":
+	{<X, Z> | <X, Y, Z> : R3} == {<1,3>, <10,30>}
+
+assert "Advanced value former 2":
+	{<S,Q,P> | <P, Q, R, S> : {<1,2,3,4>, <10,20,30,40>}} == {<4,2,1>, <40,20,10>}
+
+assert "Advanced value former 3":
+	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}

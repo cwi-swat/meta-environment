@@ -24,9 +24,8 @@ exports
         "if" Boolean "then" RVALUE "else" RVALUE "fi"       
                                       -> RVALUE
 
-%%	"EmptyBag"				-> RVALUE
-%%	"EmptyRel"				-> RVALUE
 	is-tuple(RVALUE)			-> Boolean
+	is-rel(RVALUE)				-> Boolean
 
 %% The RSTORE itself, maps RVARs to RVALUEs
         
@@ -86,10 +85,14 @@ exports
         apply(PREFIXOP, RVALUE)         	-> RVALUE
         apply(RVALUE, POSTFIXOP)        	-> RVALUE
 
+	add-element(Elem, Bag[[Elem]])		-> Bag[[Elem]]
+	power(Bag[[Elem]])			-> Bag[[Elem]]
+
 %% Binary operators
 
 	"and"					-> INFIXOP
 	"or"					-> INFIXOP
+	"implies"				-> INFIXOP
 
         "in"			       		-> INFIXOP
         "notin"			       		-> INFIXOP
@@ -122,8 +125,9 @@ exports
 	equal-rval(RVALUE, RVALUE)					-> Boolean
 
         eval-iter(RVAR, RVALUE, RVALUE, REXP, RSTORE)			-> RVALUE
-
         eval-iter2(RVAR, RVAR, RVALUE, RVALUE, REXP, RSTORE)		-> RVALUE
+	eval-itern({RVAR ","}+,  RVALUE, RVALUE, REXP, RSTORE)		-> RVALUE
+	store-var({RVAR ","}+, RVALUE, RSTORE)				-> RSTORE
 
 	append(RVALUE, RVALUE)						-> RVALUE
 	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
@@ -143,10 +147,14 @@ hiddens
         "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
 
         "$Var" [0-9\']*                -> RVAR
+        "$Var*" [0-9\']*               -> {RVAR ","}*
+        "$Var+" [0-9\']*               -> {RVAR ","}+
+
         "$Exp"  [0-9\']*               -> REXP
         "$Test"  [0-9\']*              -> REXP
         "$Exp*"  [0-9\']*              -> { REXP ","}*
         "$Exp+"  [0-9\']*              -> { REXP ","}+
+        "$Exps"  [0-9\']*              -> { REXP ","}+
 
         "$Rel" [0-9\']*                -> Bag[[Elem]] 
         "$Bag" [0-9\']*                -> Bag[[Elem]]
@@ -172,7 +180,10 @@ hiddens
         "$Bool" [0-9\']*               -> Boolean
         "$Integer" [0-9\']*            -> Integer
         "$String" [0-9\']*             -> String
+
 	"$Etype" [0-9\']*              -> REXPTYPE
+	"$Etype*" [0-9\']*             -> {REXPTYPE ","}*
+	"$Etype+" [0-9\']*             -> {REXPTYPE ","}+
 
 	"$Iop"				-> INFIXOP
 	"$Preop"			-> PREFIXOP
