@@ -117,8 +117,6 @@ int main(int argc, char *argv[])
 
   AFinit(argc, argv, &bottomOfStack);
 
-	
-
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
 

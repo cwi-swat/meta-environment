@@ -161,8 +161,6 @@ ATerm make_traversal_appl(ATerm appl, ATerm traversal)
 	ATerm travprod;
 	ATerm tuple = NULL;
 
-	/* kan netter */
-
 	if(run_verbose) ATwarning("Generating traversal appl.\n");
 
 	sort = AFgetProdSort(asfix_get_appl_prod(appl)); 
@@ -185,7 +183,6 @@ ATerm make_traversal_appl(ATerm appl, ATerm traversal)
 		
 		args = asfix_get_appl_args(travprod);
 		args = (ATermList) ATmakeTerm((ATerm) args, appl);
-		
 		newappl = AFmakeAppl(prod,args);
 	
 		return newappl;
@@ -332,12 +329,13 @@ ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
 				args = (ATermList) asfix_get_appl_args(trm);
 				newargs = rewrite_args_traversal(args,env,depth,traversal);
 				rewtrm = (ATerm) asfix_put_appl_args(trm,newargs);
-			}  else {
+
+			}  else { /* reduction occurred, we need postprocessing */
 				if(is_analyzer(*traversal)) {
 					/* We update the traversal with the rhs */
 					*traversal = change_traversal_appl(*traversal, rewtrm);
 					/* We just return the input to construct a well-formed term */
-					rewtrm = newtrm;
+					rewtrm = trm;
 				} 
 				if(is_combination(*traversal)) {
 					ATerm second;

@@ -1235,12 +1235,13 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 #ifdef TRAVERSALS
     } else if(is_traversal_prod(asfix_get_appl_prod(trm))) {
 			ATerm traversal;
-		
+
 			if(run_verbose) 
 				ATwarning("Traversal...\n");
 			
 			newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
 			traversal = create_traversal_pattern(newtrm); 
+
 			newtrm    = select_traversed_arg(newargs);
 			rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
 			rewtrm    = choose_normalform(rewtrm, traversal);
