@@ -72,16 +72,16 @@ in
         rec-msg(focus-text(EditorId, Text?)).
         snd-msg(get-focus-sort(Nonterminal, Focus)) .
         rec-msg(focus-sort(Nonterminal?)) .
-        snd-msg(Id, parse-string-as-asfix1(ModuleId, Nonterminal, Text)).
+        snd-msg(Id, parse-string-as-asfix2me(ModuleId, Nonterminal, Text)).
         snd-note(ui-status(statf(Id,"Parsing %s",[ModuleId]))).
         (
-          rec-msg(parse-result-asfix1(Id, parse-tree(Tree?))) .
+          rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
           snd-msg(replace-focus(EditorId, Focus, Tree))
         +
           (
-            rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, plain)))
+            rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, plain)))
           +
-            rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, eof)))
+            rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, eof)))
           ) .
           /* This should be improved. */ 
           snd-msg(get-error-position(Focus, ErrList)) .
@@ -89,7 +89,7 @@ in
           snd-msg(display-error(EditorId, Pos)) .
           ErrorFoci := join(ErrorFoci, Focus)
         +
-          rec-msg(parse-result-asfix1(Id,
+          rec-msg(parse-result-asfix2me(Id,
             parse-error(ErrList?, ambiguities(Amount?, Ambs?)))) .
           snd-msg(get-error-position(Focus, ErrList)).
           rec-msg(error-position(Pos?)).
@@ -98,7 +98,7 @@ in
           printf("Ambiguities(%d):\n%t\n",Amount, Ambs).
           ErrorFoci := join(ErrorFoci, Focus)
         +
-          rec-msg(parse-result-asfix1(Id, 
+          rec-msg(parse-result-asfix2me(Id, 
                   parse-error(ErrList?, cycle(Cycle?)))) .
           snd-msg(get-error-position(Focus, ErrList)).
           rec-msg(error-position(Pos?)).

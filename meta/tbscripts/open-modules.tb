@@ -123,8 +123,8 @@ in
               rec-msg(opened-file(Name2?,text(FT?),Path?,Time?)). 
               snd-msg(open-sdf2-language).
               rec-msg(sdf2-language-opened).
-              snd-msg(Id,parse-string-as-asfix1(trm("Sdf2"),"Module",FT)).
-              ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
+              snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",FT)).
+              ( rec-msg(parse-result-asfix2me(Id?,parse-tree(T?))).
                 snd-msg(add-sdf2-module-to-db(Name, Path, T, Time, "changed")).
                 rec-msg(need-modules(M1s?)).
                 Ms := join(Ms,M1s) .
@@ -143,7 +143,7 @@ in
                   rec-msg(error-opening(Name?))
                 )
               + 
-                rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,AnonymousError?))).
+                rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,AnonymousError?))).
                 snd-msg(add-empty-module-to-db(Name2)).
                 rec-msg(empty-module-added).
                 snd-note(ui-status(errorf("Please fix syntax error in module %s.",

@@ -61,26 +61,26 @@ in
          (
 	   rec-msg(parsetable-set(eqs(Module))).
            snd-note(ui-status(statf(Id,"Parsing equations of %s",[Module]))).
-           snd-msg(Id,parse-string-as-asfix1(eqs(Module), "Equations", EqsText)).
-           ( rec-msg(parse-result-asfix1(Id?, parse-tree(EqsTree?))).
+           snd-msg(Id,parse-string-as-asfix2me(eqs(Module), "Equations", EqsText)).
+           ( rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 
-             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
                                                          ambiguities(I?, Ambs?)))).
              snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
                                        [Module,I])))
            + 
-             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
                                                          cycle(Cycle?)))).
              snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
                                        [Cycle])))
            +
-             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
+             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))). 
              snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
                                        [Module])))
            +
-             rec-msg(parse-result-asfix1(Id?,
+             rec-msg(parse-result-asfix2me(Id?,
                                          parse-error([character(Ch?),
                                                       line(Li?),
                                                       col(Co?),
