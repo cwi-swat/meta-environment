@@ -1,7 +1,7 @@
 package 
 identification
-   name=pt-support
-   version=0.12beta
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/pt-support
    description='The AsFix Parsetree support library containing support for
