@@ -76,6 +76,7 @@ void  SGinitParser(ATbool toolbus_mode)
   SG_FILTER_ON();
   SG_BINARY_ON();
   SG_CYCLE_ON();
+  SG_GC_ON();
 /*
   SG_POSINFO_ON();
  */
@@ -290,7 +291,7 @@ ATerm SGparseStringAsAsFix1(language L, char *G, char *S)
   ATerm t;
 
   SG_ASFIX1_ON();
-
+ 
   t = SGparseString(L, G, S);
 
   if (!SGisParseError(t)) {

@@ -19,6 +19,9 @@
 
 $Id$
 
+2000/11/17 (markvdb@cwi.nl)
+  * Several (serious) memory leaks fixed.
+
 2000/11/08 (jurgenv@cwi.nl)
     * ambtrakker renamed to ambtracker
 

@@ -144,6 +144,7 @@ stacks *SG_CollectOldStacks(stacks **old, int nr_old, stacks *new, stack *accept
   }
 #endif
 
+
   /*  Count references: mark...  */
   if(accept)
     SG_MarkStack(accept);

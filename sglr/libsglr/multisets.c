@@ -63,6 +63,7 @@ void MultiSetTableDestroy(MultiSetTable table)
     }
   }
   free(table->sets);
+  free(table);
 }
 
 /*}}}  */

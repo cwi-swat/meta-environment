@@ -413,6 +413,7 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
 
   sg_total_tokens = length;
   table = ptable;
+
   SG_ParserPreparation();
 
   do {
@@ -442,6 +443,7 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
     }
 
   } while (current_token != SG_EOF_Token && active_stacks);
+
 
   IF_VERBOSE( SG_PrintDotAndNewLine() );
 
@@ -885,7 +887,9 @@ char *SG_ProdSort(production t)
 
       if(!ATmatch(elt, "cf(opt(layout))",elt)
       &&  ATmatch(elt, "cf(<term>)", &symbol)) {
-        SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol, ATfalse));
+        char *symstr = SG_PrintSymbolToString(symbol, ATfalse);
+        SG_AddStringToGrowBuf(gb, symstr);
+        free(symstr);
       }
     }
 
@@ -1077,6 +1081,8 @@ void SG_PrintStatusBar(char *subject, long part, long whole, long freq)
   if(!isatty(fileno(stderr))) {
     return;
   }
+
+  factor = (long double) part / (long double) whole;
 
   if(whole == 0.0 || (part % freq && part != whole)) {
     return;
