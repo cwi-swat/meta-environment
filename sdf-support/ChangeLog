@@ -1,5 +1,8 @@
 $Id$
 
+2003/07/02 (jurgenv@cwi.nl)
+ * Release 0.2
+
 2003/07/01 (jurgenv@cwi.nl)
  * Removed debug statement "Initializing module cache with %d modules"
 
