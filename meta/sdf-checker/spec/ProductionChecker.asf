@@ -25,6 +25,9 @@ equations
   [gpp-1'1] get-prods-in-prios(variables Prod*, 
                                ProductionsSet) = ProductionsSet
 
+  [gpp-1'1] get-prods-in-prios(lexical variables Prod*, 
+                               ProductionsSet) = ProductionsSet
+
   [gpp-1'1] get-prods-in-prios(context-free priorities Priorities, 
                                ProductionsSet) =
               get-prods-in-prios(Priorities, ProductionsSet)

@@ -361,20 +361,22 @@ static Symbol lf_174sym ;
 static ATerm lf_174 ( ATerm arg1 ) ;
 static Symbol lf_175sym ;
 static ATerm lf_175 ( ATerm arg1 ) ;
-static Symbol lf_accu_td_176sym ;
-static ATerm lf_accu_td_176 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_176sym ;
+static ATerm lf_176 ( ATerm arg1 ) ;
 static Symbol lf_accu_td_177sym ;
 static ATerm lf_accu_td_177 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_accu_td_178sym ;
 static ATerm lf_accu_td_178 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_accu_td_179sym ;
-static ATerm lf_accu_td_179 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_180sym ;
-static ATerm lf_180 ( ATerm arg1 ) ;
+static ATerm lf_accu_td_179 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_accu_td_180sym ;
+static ATerm lf_accu_td_180 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_181sym ;
-static ATerm lf_181 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_181 ( ATerm arg1 ) ;
 static Symbol lf_182sym ;
-static ATerm lf_182 ( ATerm arg1 ) ;
+static ATerm lf_182 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_183sym ;
+static ATerm lf_183 ( ATerm arg1 ) ;
 void register_Sdf_Checker ( ) {
 lf_72_recursivesym = ATmakeSymbol ( "prod([lit(\"imports\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ImportsSet\")),no-attrs)"
  , 1 , ATtrue ) ;
@@ -733,24 +735,26 @@ lf_accu_td_172sym = ATmakeSymbol ( "prod([lit(\"get-prods-in-prios\"),cf(opt(lay
 ATprotectSymbol ( lf_accu_td_172sym ) ;
 lf_173sym = ATmakeSymbol ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_173sym ) ;
-lf_174sym = ATmakeSymbol ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_174sym = ATmakeSymbol ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_174sym ) ;
-lf_175sym = ATmakeSymbol ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_175sym = ATmakeSymbol ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_175sym ) ;
-lf_accu_td_176sym = ATmakeSymbol ( "prod([lit(\"get-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_176sym ) ;
-lf_accu_td_177sym = ATmakeSymbol ( "prod([lit(\"get-cf-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" , 2 , ATtrue ) ;
+lf_176sym = ATmakeSymbol ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_176sym ) ;
+lf_accu_td_177sym = ATmakeSymbol ( "prod([lit(\"get-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_177sym ) ;
-lf_accu_td_178sym = ATmakeSymbol ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" , 2 , ATtrue ) ;
+lf_accu_td_178sym = ATmakeSymbol ( "prod([lit(\"get-cf-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_178sym ) ;
-lf_accu_td_179sym = ATmakeSymbol ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" , 3 , ATtrue ) ;
+lf_accu_td_179sym = ATmakeSymbol ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_179sym ) ;
-lf_180sym = ATmakeSymbol ( "prod([lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_180sym ) ;
-lf_181sym = ATmakeSymbol ( "prod([lit(\"kernel-syntax-construction\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
+lf_accu_td_180sym = ATmakeSymbol ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_180sym ) ;
+lf_181sym = ATmakeSymbol ( "prod([lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_181sym ) ;
-lf_182sym = ATmakeSymbol ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_182sym = ATmakeSymbol ( "prod([lit(\"kernel-syntax-construction\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_182sym ) ;
+lf_183sym = ATmakeSymbol ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_183sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\":\"),cf(opt(layout)),cf(sort(\"Symbol\"))],cf(sort(\"Symbol\")),no-attrs)" ) , lf_1 , lf_1sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down))]))" ) , lf_trafo_td_2 , lf_trafo_td_2sym ) ;
 register_prod ( ATparse ( "prod([lit(\"check-module-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Module\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Info-Msg-Tuple\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Info-Msg-Tuple\")),no-attrs)" ) , lf_3 , lf_3sym ) ;
@@ -929,15 +933,16 @@ register_prod ( ATparse ( "prod([lit(\"get-exported-cf-prods\"),cf(opt(layout)),
 register_prod ( ATparse ( "prod([lit(\"get-hidden-cf-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_171 , lf_accu_td_171sym ) ;
 register_prod ( ATparse ( "prod([lit(\"get-prods-in-prios\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_172 , lf_accu_td_172sym ) ;
 register_prod ( ATparse ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_173 , lf_173sym ) ;
-register_prod ( ATparse ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_174 , lf_174sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_175 , lf_175sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_176 , lf_accu_td_176sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-cf-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_177 , lf_accu_td_177sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" ) , lf_accu_td_178 , lf_accu_td_178sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" ) , lf_accu_td_179 , lf_accu_td_179sym ) ;
-register_prod ( ATparse ( "prod([lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_180 , lf_180sym ) ;
-register_prod ( ATparse ( "prod([lit(\"kernel-syntax-construction\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_181 , lf_181sym ) ;
-register_prod ( ATparse ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_182 , lf_182sym ) ;
+register_prod ( ATparse ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_174 , lf_174sym ) ;
+register_prod ( ATparse ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_175 , lf_175sym ) ;
+register_prod ( ATparse ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_176 , lf_176sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_177 , lf_accu_td_177sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-cf-prods\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),attrs([term(traversal(accu,top-down)),id(\"ProductionChecker\")]))" ) , lf_accu_td_178 , lf_accu_td_178sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" ) , lf_accu_td_179 , lf_accu_td_179sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,top-down)),id(\"KernelSyntaxChecker\")]))" ) , lf_accu_td_180 , lf_accu_td_180sym ) ;
+register_prod ( ATparse ( "prod([lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_181 , lf_181sym ) ;
+register_prod ( ATparse ( "prod([lit(\"kernel-syntax-construction\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_182 , lf_182sym ) ;
+register_prod ( ATparse ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_183 , lf_183sym ) ;
 }
 void resolve_Sdf_Checker ( ) {
 }
@@ -971,9 +976,9 @@ ATprotect ( & constant11 ) ;
 ATprotect ( & constant12 ) ;
 ATprotect ( & constant13 ) ;
 }
-ATerm lf_accu_td_179 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-FUNC_ENTRY ( lf_accu_td_179sym , ATmakeAppl ( lf_accu_td_179sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg0 , lf_180sym ) ) {
+ATerm lf_accu_td_180 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+FUNC_ENTRY ( lf_accu_td_180sym , ATmakeAppl ( lf_accu_td_180sym , arg0 , arg1 , arg2 ) ) ;
+if ( check_sym ( arg0 , lf_181sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_153sym ) ) {
@@ -982,35 +987,35 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_list_93sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( lf_34 ( arg1 , make_nf2 ( lf_181sym , arg2 , make_nf1 ( lf_104sym , make_nf1 ( lf_list_25sym , ( ATerm ) ATmakeList ( 8 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 121 ] , char_table [ 110 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 120 ] , char_table [ 34 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_34 ( arg1 , make_nf2 ( lf_182sym , arg2 , make_nf1 ( lf_104sym , make_nf1 ( lf_list_25sym , ( ATerm ) ATmakeList ( 8 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 121 ] , char_table [ 110 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 120 ] , char_table [ 34 ] ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-if ( check_sym ( arg0 , lf_182sym ) ) {
+if ( check_sym ( arg0 , lf_183sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_34 ( arg1 , make_nf2 ( lf_181sym , arg2 , make_nf1 ( lf_104sym , make_nf1 ( lf_list_25sym , ( ATerm ) ATmakeList ( 12 , char_table [ 34 ] , char_table [ 112 ] , char_table [ 114 ] , char_table [ 105 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 105 ] , char_table [ 116 ] , char_table [ 105 ] , char_table [ 101 ] , char_table [ 115 ] , char_table [ 34 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_34 ( arg1 , make_nf2 ( lf_182sym , arg2 , make_nf1 ( lf_104sym , make_nf1 ( lf_list_25sym , ( ATerm ) ATmakeList ( 12 , char_table [ 34 ] , char_table [ 112 ] , char_table [ 114 ] , char_table [ 105 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 105 ] , char_table [ 116 ] , char_table [ 105 ] , char_table [ 101 ] , char_table [ 115 ] , char_table [ 34 ] ) ) ) ) ) ) ;
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_179 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_180 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
 }
-ATerm lf_accu_td_178 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_accu_td_179 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-FUNC_ENTRY ( lf_accu_td_178sym , ATmakeAppl ( lf_accu_td_178sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_accu_td_179sym , ATmakeAppl ( lf_accu_td_179sym , arg0 , arg1 ) ) ;
 if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"Module\"))" ) ) ) {
 ( tmp [ 0 ] = lf_4 ( arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_179 ( arg0 , arg1 , tmp [ 0 ] ) ) ;
+FUNC_EXIT ( lf_accu_td_180 ( arg0 , arg1 , tmp [ 0 ] ) ) ;
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_178 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_179 , arg0 , arg1 , ATempty ) ) ;
 }
 }
 ATerm lf_65 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_65sym , ATmakeAppl ( lf_65sym , arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_178 ( arg0 , lf_11 ( make_nf1 ( lf_list_10sym , make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_accu_td_179 ( arg0 , lf_11 ( make_nf1 ( lf_list_10sym , make_list ( null ( ) ) ) ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_65sym , arg0 ) ) ;
 }
 ATerm lf_accu_td_170 ( ATerm arg0 , ATerm arg1 ) {
@@ -1018,7 +1023,7 @@ FUNC_ENTRY ( lf_accu_td_170sym , ATmakeAppl ( lf_accu_td_170sym , arg0 , arg1 ) 
 if ( check_sym ( arg0 , lf_126sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_177 ( atmp00 , arg1 ) ) ;
+FUNC_EXIT ( lf_accu_td_178 ( atmp00 , arg1 ) ) ;
 }
 }
 FUNC_EXIT ( call_kids_accu ( lf_accu_td_170 , arg0 , arg1 , ATempty ) ) ;
@@ -1028,14 +1033,14 @@ FUNC_ENTRY ( lf_accu_td_171sym , ATmakeAppl ( lf_accu_td_171sym , arg0 , arg1 ) 
 if ( check_sym ( arg0 , lf_126sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_177 ( atmp00 , arg1 ) ) ;
+FUNC_EXIT ( lf_accu_td_178 ( atmp00 , arg1 ) ) ;
 }
 }
 FUNC_EXIT ( call_kids_accu ( lf_accu_td_171 , arg0 , arg1 , ATempty ) ) ;
 }
-ATerm lf_accu_td_177 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_accu_td_177sym , ATmakeAppl ( lf_accu_td_177sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_174sym ) ) {
+ATerm lf_accu_td_178 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_accu_td_178sym , ATmakeAppl ( lf_accu_td_178sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg0 , lf_175sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_153sym ) ) {
@@ -1044,17 +1049,17 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_list_93sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( lf_accu_td_176 ( make_nf1 ( lf_list_93sym , make_list ( atmp0000 ) ) , arg1 ) ) ;
+FUNC_EXIT ( lf_accu_td_177 ( make_nf1 ( lf_list_93sym , make_list ( atmp0000 ) ) , arg1 ) ) ;
 }
 }
 }
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_177 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_178 , arg0 , arg1 , ATempty ) ) ;
 }
-ATerm lf_accu_td_176 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_accu_td_176sym , ATmakeAppl ( lf_accu_td_176sym , arg0 , arg1 ) ) ;
+ATerm lf_accu_td_177 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_accu_td_177sym , ATmakeAppl ( lf_accu_td_177sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_24sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1117,7 +1122,7 @@ FUNC_EXIT ( make_nf1 ( lf_94sym , make_nf1 ( lf_list_93sym , cons ( make_list ( 
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_176 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_177 , arg0 , arg1 , ATempty ) ) ;
 }
 ATerm lf_accu_td_172 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_accu_td_172sym , ATmakeAppl ( lf_accu_td_172sym , arg0 , arg1 ) ) ;
@@ -1194,22 +1199,6 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 goto lbl_lf_accu_td_172 ;
 }
 }
-if ( check_sym ( ltmp [ 0 ] , lf_154sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_153sym ) ) {
-{
-ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf_list_93sym ) ) {
-{
-ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( ltmp [ 1 ] ) ;
-}
-}
-}
-}
-}
-}
 if ( check_sym ( ltmp [ 0 ] , lf_174sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1226,7 +1215,39 @@ FUNC_EXIT ( ltmp [ 1 ] ) ;
 }
 }
 }
+if ( check_sym ( ltmp [ 0 ] , lf_154sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp00 , lf_153sym ) ) {
+{
+ATerm atmp000 = arg_0 ( atmp00 ) ;
+if ( check_sym ( atmp000 , lf_list_93sym ) ) {
+{
+ATerm atmp0000 = arg_0 ( atmp000 ) ;
+FUNC_EXIT ( ltmp [ 1 ] ) ;
+}
+}
+}
+}
+}
+}
 if ( check_sym ( ltmp [ 0 ] , lf_175sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp00 , lf_153sym ) ) {
+{
+ATerm atmp000 = arg_0 ( atmp00 ) ;
+if ( check_sym ( atmp000 , lf_list_93sym ) ) {
+{
+ATerm atmp0000 = arg_0 ( atmp000 ) ;
+FUNC_EXIT ( ltmp [ 1 ] ) ;
+}
+}
+}
+}
+}
+}
+if ( check_sym ( ltmp [ 0 ] , lf_176sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_153sym ) ) {
@@ -5381,17 +5402,21 @@ goto lbl_lf_trafo_td_2 ;
 FUNC_EXIT ( call_kids_trafo ( lf_trafo_td_2 , ltmp [ 0 ] , ATempty ) ) ;
 }
 }
-ATerm lf_182 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_182sym , ATmakeAppl ( lf_182sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_182sym , arg0 ) ) ;
+ATerm lf_183 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_183sym , ATmakeAppl ( lf_183sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_183sym , arg0 ) ) ;
 }
-ATerm lf_181 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_181sym , ATmakeAppl ( lf_181sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_181sym , arg0 , arg1 ) ) ;
+ATerm lf_182 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_182sym , ATmakeAppl ( lf_182sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_182sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_180 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_180sym , ATmakeAppl ( lf_180sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_180sym , arg0 ) ) ;
+ATerm lf_181 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_181sym , ATmakeAppl ( lf_181sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_181sym , arg0 ) ) ;
+}
+ATerm lf_176 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_176sym , ATmakeAppl ( lf_176sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_176sym , arg0 ) ) ;
 }
 ATerm lf_175 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_175sym , ATmakeAppl ( lf_175sym , arg0 ) ) ;
