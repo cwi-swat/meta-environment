@@ -114,6 +114,10 @@ let
   Pid        : int,
   Focus      : term
 in
+    /* The 'creates' in the following process are essential to 
+     * spawn the actual editors and make the editor creation 
+     * process available to the next request.
+     */
     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName,ButtonList?)).
     snd-msg(get-editor-id(FileName, ModuleName)) .
@@ -126,7 +130,7 @@ in
       snd-msg(editor-opened(ModuleName))
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
-      EditorExists(EditorId,ModuleName,Type,FileName,Text,Tree)
+      create(EditorExists(EditorId,ModuleName,Type,FileName,Text,Tree), Pid?)
     )
 endlet
 
@@ -134,9 +138,7 @@ process EditorExists(EditorId : term, ModuleName : str, Type : str,
                      FileName : str, Text : str, Tree : term) is
   if equal(Type,"term") then
     snd-msg(kill-editor(EditorId)).
-    rec-msg(kill-editor-done(EditorId)).
-    /* We start all over again */
-    snd-msg(edit-term-file-with-tree(ModuleName,FileName,Tree))
+    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) 
   else 
     snd-msg(move-editor-to-front(EditorId)) .
     snd-msg(editor-opened(ModuleName))
