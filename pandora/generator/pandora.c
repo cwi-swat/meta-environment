@@ -10,11 +10,13 @@
 
 static char *quoteString(const char *input) 
 {
-  char *buf = NULL, *s = NULL;
+  static char *buf = NULL;
+  char *s = NULL;
   const char *p = NULL;
   int len;
   
   len = strlen(input);
+  /*ATwarning("About to allocate %d bytes\n", len + 2);*/
   buf = realloc(buf, len + 2);
   
   p = input;
@@ -31,9 +33,9 @@ static char *quoteString(const char *input)
 
 /*}}}  */
 
-/*{{{  ATbool isIndentedType(PT_Production production) */
+/*{{{  static ATbool isIndentedType(PT_Production production) */
 
-ATbool isIndentedType(PT_Production production)
+static ATbool isIndentedType(PT_Production production)
 {
   int symbolCount;
   PT_Symbol symbol;
@@ -60,63 +62,88 @@ ATbool isIndentedType(PT_Production production)
 }
 
 /*}}}  */
+/*{{{  static ATbool isNonTerminal(PT_Tree tree) */
 
-/*{{{  BOX_Box treeToBox(PT_Tree tree)  */
+static ATbool isNonTerminal(PT_Tree tree)
+{
+  if (PT_isLexicalInjectionProd(PT_getTreeProd(tree))) {
+    return ATfalse;
+  }
+  if (PT_isTreeLit(tree)) {
+    return ATfalse;
+  }
+  if (PT_isTreeLayout(tree)) {
+    return ATfalse;
+  }
+  return ATtrue;
+}
 
-BOX_Box treeToBox(PT_Tree tree) 
+/*}}}  */
+
+/*{{{  static BOX_Box treeToBox(PT_Tree tree)  */
+
+static BOX_Box treeToBox(PT_Tree tree) 
 {
   if (PT_isLexicalInjectionProd(PT_getTreeProd(tree))) {
     BOX_StrCon strcon = BOX_makeStrConDefault(quoteString(PT_yieldTree(tree)));
-    ATprintf("+- Lexical: %t\n", strcon); 
-    return(BOX_makeBoxString(strcon)); 
+    return BOX_makeBoxString(strcon); 
   }
   else if (PT_isTreeLayout(tree)) {
     BOX_StrCon strcon = BOX_makeStrConDefault(PT_yieldTree(tree));
-    ATprintf("+- Layout: %t\n", strcon); 
-    return(BOX_makeBoxString(strcon));
+    return BOX_makeBoxString(strcon);
   }
   else if (PT_isTreeLit(tree)) {
     BOX_StrCon strcon = BOX_makeStrConDefault(quoteString(PT_yieldTree(tree)));
-    ATprintf("+- Literal: %t\n", strcon); 
-    return(BOX_makeBoxString(strcon)); 
+    return BOX_makeBoxString(strcon); 
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     BOX_BoxList boxlist = BOX_makeBoxListEmpty();
 
     BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
-    BOX_SOptions soptions = BOX_makeSOptionsDefault(BOX_makeSOptionListEmpty()); 
-    ATprintf("+- Appl\n"); 
+    BOX_SpaceOptionOptions soptions = BOX_makeSpaceOptionOptionsEmpty(); 
 
-    /* if Tree has one argument */
+    /* if tree has one argument */
     if (PT_isProductionInjection(PT_getTreeProd(tree))) {
       PT_Tree head = PT_getArgsHead(args);
-      return(treeToBox(head));
+      return treeToBox(head);
     }
     
     for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree head = PT_getArgsHead(args);
-      boxlist = BOX_reverseBoxList(BOX_makeBoxListMany(treeToBox(head), optLayout, boxlist)); 
+      BOX_Box prettyHead = treeToBox(head);
+      
+      if (isNonTerminal(head)) {
+        prettyHead = BOX_makeBoxI(optLayout, 
+				  soptions, 
+				  optLayout, 
+				  optLayout, 
+				  prettyHead, 
+				  optLayout);
+      } 
+      boxlist = BOX_makeBoxListMany(prettyHead, optLayout, boxlist); 
     }
+    
+    boxlist = BOX_reverseBoxList(boxlist);
 
     if (isIndentedType(PT_getTreeProd(tree))) {
-      return(BOX_makeBoxV(optLayout,
+      return BOX_makeBoxV(optLayout,
 			  soptions,
 			  optLayout,
 			  optLayout,
 			  boxlist,
-			  optLayout));
+			  optLayout);
     } else {
-      return(BOX_makeBoxHV(optLayout,
+      return BOX_makeBoxHv(optLayout,
 			   soptions,
 			   optLayout, 
 			   optLayout, 
 			   boxlist, 
-			   optLayout));
+			   optLayout);
     }  
   } 
   else {
-    printf("+- Error\n");
+    ATwarning("+- Unhandled parsetree type: %t\n", tree);
     return NULL;
   }
 }

@@ -72,12 +72,10 @@ int main(int argc, char *argv[])
     }
   }
 
-  printf("Reading file %s...\n", input);
+  ATsetChecking(ATtrue);
 
   at_tree = ATreadFromNamedFile(input);
  
-  printf("Parsetree read...\n");
-  
   if (at_tree != NULL) {
 
     tree = PT_ParseTreeFromTerm(at_tree);

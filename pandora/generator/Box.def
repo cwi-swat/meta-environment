@@ -1,4 +1,20 @@
- definition module basic/NatCon
+ definition module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r] module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n"	-> LAYOUT
+    "%" ~[\%\n]+ "%"	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\%] module basic/NatCon
 
 exports
 
@@ -23,23 +39,7 @@ lexical syntax
     "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
     "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
 
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")} module basic/Whitespace
-
-exports
-  lexical syntax
-    [\ \t\n\r]	-> LAYOUT
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n\r] module basic/Comments
-
-imports
-  basic/Whitespace
-
-exports
-  lexical syntax
-    "%%" ~[\n]* "\n"	-> LAYOUT
-    "%" ~[\%\n]+ "%"	-> LAYOUT
-  context-free restrictions
-    LAYOUT? -/- [\%] module languages/box/syntax/Box
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")} module languages/box/syntax/Basic
 %% This module describes the most elementary box
 %% operators and their options. The box language
 %% can be extended in a very simple way. We will
@@ -52,7 +52,7 @@ imports basic/NatCon
 
         
 exports
-  sorts SpaceSymbol SOption SOptions
+  sorts SpaceSymbol SpaceOption
 
 %%\smallskip\noindent
 %% Space options are used to adapt the amount
@@ -66,11 +66,10 @@ exports
 %%\smallskip
 
   context-free syntax
-    "hs"                    -> SpaceSymbol {cons("hs")}
-    "vs"                    -> SpaceSymbol {cons("vs")}
-    "is"                    -> SpaceSymbol {cons("is")}
-    SpaceSymbol "=" NatCon  -> SOption     
-    SOption*                -> SOptions
+    "hs"                    -> SpaceSymbol {cons("horizontal")}
+    "vs"                    -> SpaceSymbol {cons("vertical")}
+    "is"                    -> SpaceSymbol {cons("indentation")}
+    SpaceSymbol "=" NatCon  -> SpaceOption     
 
 %% We distinguish 6 basic operators in the box
 %% language: {\sf H} (horizontal composition),
@@ -97,10 +96,45 @@ exports
   sorts Box
 
   context-free syntax
-    StrCon  -> Box {cons("string")}
-    "H" SOptions "[" list:Box* "]" -> Box {cons("H")}
-    "V" SOptions "[" list:Box* "]" -> Box {cons("V")}
-    "HV" SOptions "[" list:Box* "]" -> Box {cons("HV")}
-    "HOV" SOptions "[" list:Box* "]" -> Box {cons("HOV")}
-    "I" SOptions "[" Box "]" -> Box {cons("I")}
-    "WD" "[" Box "]" -> Box {cons("WD")} 
+    StrCon                                       -> Box {cons("string")}
+    "H" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("h")}
+    "V" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("v")}
+    "HV" options:SpaceOption* "[" list:Box* "]"  -> Box {cons("hv")}
+    "HOV" options:SpaceOption* "[" list:Box* "]" -> Box {cons("hov")}
+    "I" options:SpaceOption* "[" Box "]"         -> Box {cons("i")}
+    "WD" "[" Box "]"                             -> Box {cons("wd")} module languages/box/syntax/Fonts
+
+imports languages/box/syntax/Basic
+imports basic/Comments
+
+exports
+  sorts FontId
+  lexical syntax
+    [A-Za-z]+ -> FontId {cons("default")}
+
+exports
+  sorts FontParam FontOption FontValue FontOperator
+  context-free syntax
+    NatCon                   -> FontValue {cons("natural")}
+    FontId                   -> FontValue {cons("font-id")}
+    FontParam "=" FontValue  -> FontOption
+    "F" FontOption*          -> FontOperator
+    FontOperator "[" Box "]" -> Box {cons("font-operator")}
+
+    "fn" -> FontParam {cons("name")}
+    "fm" -> FontParam {cons("family")}
+    "se" -> FontParam {cons("series")}
+    "sh" -> FontParam {cons("shape")}
+    "sz" -> FontParam {cons("size")}
+    "cl" -> FontParam {cons("color")}
+
+    "KW"      -> FontOperator {cons("keyword")}
+    "VAR"     -> FontOperator {cons("variable")}
+    "NUM"     -> FontOperator {cons("number")}
+    "MATH"    -> FontOperator {cons("math")}
+    "ESC"     -> FontOperator {cons("escape")}
+    "COMM"    -> FontOperator {cons("comment")}
+    "STRING"  -> FontOperator {cons("string")} module languages/box/syntax/Box
+
+imports languages/box/syntax/Fonts
+ 
