@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 27 15:26:34 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Alignments.sdf
+   - Added box alignments 
+
 Thu Aug 19 11:25:08 CEST 2004 <jong@cwi.nl>
  * repair configure.in: sdf-idioms dir is not in sdf2 subdir
 
