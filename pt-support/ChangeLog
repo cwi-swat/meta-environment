@@ -1,3 +1,6 @@
+2001/08/01 (jurgenv@cwi.nl)
+ * Bugfix: ambiguities inside of lists could not be converted to AsFix2ME.
+
 2001/07/30 (jurgenv@cwi.nl)
  * Added PT_yieldAny library function that can unparse any valid subparsetree
    like: a parsetree, an appl, a lit, a character an amb or a list of 
