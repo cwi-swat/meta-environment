@@ -25,7 +25,7 @@ datadir=__DATADIR__
 srcdir=__SRCDIR__
 
 evaluator=../src/asfe
-removeannos="${aterm}/bin/atremove-annotation -a"
+removeannos="${aterm}/bin/atrmannos -a"
 diff=${aterm}/bin/atdiff
 
 # HOW TO ADD A REGRESSION TEST:
