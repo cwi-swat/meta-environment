@@ -1,4 +1,4 @@
 equations
 
-[pq1] pico-query($Script, $Rstore, $String) =
-      convert2summary(eval-rscript-with-rstore-and-yield($Script, $Rstore, $String))
+[pq1] pico-query($Script, $Rstore, $StrCon) =
+      convert2summary(eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon))
