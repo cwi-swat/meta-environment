@@ -333,10 +333,10 @@ assert "trans 4":	{<1,2>, <2,3>, <3,4>, <4,2>, <4,5>}* ==
 
 %% --- #
 
-assert "size 1": (# {}) == 0
-assert "size 2": (# {}) == 0
-assert "size 3": (# Bag1) == 3
-assert "size 4": (# Rel1) == 3
+assert "size 1": # {} == 0
+assert "size 2": # {} == 0
+assert "size 3": # Bag1 == 3
+assert "size 4": # Rel1 == 3
 
 %% --- Bag former
 

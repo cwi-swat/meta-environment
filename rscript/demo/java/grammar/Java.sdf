@@ -2,6 +2,8 @@ module Java
 imports ClassDecl ConstructorDecl FieldDecl MethodDecl Statements Comment
 
 exports
+  context-free start-symbols CompilationUnit
+
   sorts CompilationUnit File TypeDeclaration TypeImportOnDemandDeclaration SingleTypeImportDeclaration ImportDeclaration PackageDeclaration FileHeader
 
   lexical syntax

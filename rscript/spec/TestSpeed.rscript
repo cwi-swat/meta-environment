@@ -488,17 +488,17 @@ bag[int] B2 = {
 
 bag[int] do(bag[int] P1, bag[int] P2)  = 
 	 {X | 
-	   X1 <- P1 union P2, 
+	   bag[int] X1 <- P1 union P2, 
 	 %%   X2 <- P1 inter P2, 
 	 %%     X2 <- P1 \ P2, 
 	 %%     P1 <= P2, 
 	 %%     43 in P1,
          %%     183 in P1,
 	 %%     <"AbstractFigure_2788", "Geom_3544"> in CALL,
-              X <- 1}
+              int X <- 1}
 
 bag [int] nrange =  {1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40}
 
-bag[int] work = {N | N : nrange , M : nrange, Z <- do(B1, B2)}
+bag[int] work = {N | int N : nrange , int M : nrange, bag[int] Z <- do(B1, B2)}
 
 
