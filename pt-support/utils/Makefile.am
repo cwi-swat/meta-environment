@@ -18,13 +18,13 @@ bin_PROGRAMS = \
 	comparePT
 
 INCLUDES = \
+	-I${ATERM}/include \
+	-I${ERROR_SUPPORT}/include \
+	-I${TOOLBUSLIB}/include \
 	-I${top_srcdir}/libmept \
 	-I${top_srcdir}/libasfix2 \
 	-I${top_srcdir}/libconversion \
-	-I${top_srcdir}/libptmept \
-	-I${ATERM}/include \
-	-I${ERROR_API}/include \
-	-I${TOOLBUSLIB}/include
+	-I${top_srcdir}/libptmept 
 
 pkgdata_DATA = \
 	unparser.idef \

@@ -15,4 +15,5 @@ mept_test_LDADD=\
 INCLUDES =\
 	-I${top_srcdir}/libmept\
 	-I${top_srcdir}/test/terms\
+	-I${ERROR_SUPPORT}/include \
 	-I${ATERM}/include
