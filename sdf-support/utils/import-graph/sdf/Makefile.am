@@ -7,6 +7,8 @@ EXTRA_DIST = \
 	sdf-import-graph.sh.src \
 	sdf-import-graph.idef
 
+CLEANFILES = sdf-import-graph
+
 bin_SCRIPTS = sdf-import-graph
 
 pkgdata_DATA = sdf-import-graph.idef
