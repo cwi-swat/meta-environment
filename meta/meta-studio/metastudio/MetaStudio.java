@@ -159,6 +159,7 @@ public class MetaStudio
     bridge = new UserInterfaceBridge(factory, this);
     bridge.init(args);
     bridge.connect();
+    bridge.setLockObject(getTreeLock());
 
     //}}}
     //{{{ Handle 'close' requests
