@@ -7,10 +7,13 @@ INSTALL_READONLY = ${INSTALL} -m 0444
 
 EXTRA_DIST = $(MODULES) $(PREPARED)
 
-install-data-hook:
-	@echo " chmod u+w $(DESTDIR)$(libpackagedir)"
+install-data-hook: make-dir install-modules install-prepared make-read-only
+
+make-dir:
 	chmod u+w $(DESTDIR)$(libpackagedir)
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
+
+install-modules:
 	@list='$(MODULES)'; for p in $$list; do \
           if test -f $(srcdir)/$$p; then \
             echo " $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
@@ -20,6 +23,8 @@ install-data-hook:
             $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p; \
           fi; fi; \
         done; 
+
+install-prepared:
 	@list='$(PREPARED)'; for p in $$list; do \
           if test -f $(srcdir)/$$p; then \
             echo " $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
@@ -29,5 +34,6 @@ install-data-hook:
             $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p; \
           fi; fi; \
         done;
-	@echo " chmod ugo-w $(DESTDIR)$(libpackagedir)" 
+
+make-read-only:
 	chmod ugo-w $(DESTDIR)$(libpackagedir) 
