@@ -269,7 +269,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
       }
       else if(streq(argv[i], "-i")) {
 	assert(nInputs <= MAX_ARGS);
-	inputs[nInputs++] = parsetreeFromFile(argv[i++], parseInput);
+	inputs[nInputs++] = parsetreeFromFile(argv[++i], parseInput);
       } 
       else if(streq(argv[i], "-s")) {
 	assert(nInputs <= MAX_ARGS);
