@@ -16,8 +16,7 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-//TODO: * fix difference between module-popup and new-module-popup, this
-//        has dissappeared in the last refactoring...
+//TODO: 
 //      * apification of button API stuff
 //      * see what's in common with the MenuBar
 //      * refactor constant strings...

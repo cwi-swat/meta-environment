@@ -1,6 +1,7 @@
 package metastudio.components;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -80,8 +81,16 @@ public class FeedbackList extends UserInterfacePanel {
         for (; !messages.isEmpty(); messages = messages.getTail()) {
             data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
         }
-        list.setSelectedIndex(data.getSize());
-        list.repaint();
+        
+        scrollToLast();
+    }
+
+    private void scrollToLast() {
+        Rectangle last = list.getCellBounds(data.getSize() - 1, data.getSize() - 1);
+        if (last != null) {
+            list.scrollRectToVisible(last);
+        }
+        repaint();
     }
 
     private FeedbackItem makeAnonymousError(String msg) {

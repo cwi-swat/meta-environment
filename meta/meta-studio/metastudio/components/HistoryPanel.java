@@ -1,6 +1,7 @@
 package metastudio.components;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,8 +10,8 @@ import java.util.LinkedList;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import metastudio.*;
 import metastudio.MultiBridge;
+import metastudio.UserInterfacePanel;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
@@ -39,10 +40,19 @@ public class HistoryPanel extends UserInterfacePanel {
         dateFormat = new SimpleDateFormat(format);
         add(new JScrollPane(list), BorderLayout.CENTER);
     }
-
+    
+    private void scrollToLast() {
+        Rectangle last = list.getCellBounds(data.getSize() - 1, data.getSize() - 1);
+        if (last != null) {
+            list.scrollRectToVisible(last);
+        }
+        repaint();
+    }
+    
     private void addMessage(String id, String message) {
         String date = dateFormat.format(Calendar.getInstance().getTime());
         data.add(date + " - " + id + " - " + message);
+        scrollToLast();
     }
     
     public void addStatus(ATerm id, String message) {
