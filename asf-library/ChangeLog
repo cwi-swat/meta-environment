@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun  2 11:03:57 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/box/utilities:
+   - Added generic prettyprinting of lists 
+
 Fri May 28 12:04:52 CEST 2004 <markvdb@cwi.nl>
  * Removed the Symbol Natcon+ -> Symbol
  * Removed the "{" {Symbol Symbol "}" Natcon+ -> Symbol

@@ -7,19 +7,7 @@ equations
 
 [processsignature2box-0]
   ProcessName ( FormalParam* ) =
-    box2processsignature(H hs=0 [processname2box(ProcessName) "(" formalparams2box(FormalParam*) ")"])
-
-[formalparams2box-0]
-  formalparams2box() = HV hs=1 []
-
-[formalparams2box-1]
-  formalparams2box(FormalParam) = HV hs=1 [formalparam2box(FormalParam)]
-
-[formalparams2box-2]
-  Box := formalparams2box(FormalParam+),
-  HV hs=1 [Box*] := Box
-  ===>
-  formalparams2box(FormalParam, FormalParam+) = HV hs=1 [H hs=0 [formalparam2box(FormalParam) ","] Box*]
+    box2processsignature(H hs=0 [processname2box(ProcessName) "(" HVlist2box(FormalParam*) ")"])
 
 [formalparam2box-0]
   Var : Term = box2formalparam(H hs=1 [H hs=0 [var2box(Var) ":"] term2box(Term)])
@@ -106,30 +94,18 @@ equations
     box2processcreation(H hs=0 ["create" "(" processinvocation2box(ProcessInvocation) H hs=1 ["," genvar2box(GenVar)] ")"])
 
 [processinvocation2box-0]
-  ProcessName ( Term* ) = box2processinvocation(H hs=0 [processname2box(ProcessName) "(" termlist2box(Term*) ")"])
+  ProcessName ( Term* ) = box2processinvocation(H hs=0 [processname2box(ProcessName) "(" HVlist2box(Term*) ")"])
 
-[term2box-0]
-  Id ( Term* ) = box2term(H hs=0 [id2box(Id) "(" termlist2box(Term*) ")"])
+[term2box-id]
+  Id ( Term* ) = box2term(H hs=0 [id2box(Id) "(" HVlist2box(Term*) ")"])
 
-[term2box-1]
-  [ Term* ] = box2term(H hs=0 ["[" termlist2box(Term*) "]"])
+[term2box-list]
+  [ Term* ] = box2term(H hs=0 ["[" HVlist2box(Term*) "]"])
 
-[term2box-2]
+[term2box-placeholder]
   < Term > = box2term(H hs=0 ["<" term2box(Term) ">"])
 
-[termlist2box-0]
-  termlist2box() = HV hs=1 []
-
-[termlist2box-1]
-  termlist2box(Term) = HV hs=1 [term2box(Term)]
-
-[termlist2box-1]
-  Box := termlist2box(Term+),
-  HV hs=1 [Box*] := Box
-  ===>
-  termlist2box(Term, Term+) = HV hs=1 [H hs=0 [term2box(Term) ","] Box*]
-
-[genvar2box-0]
+[genvar2box-result]
   Var ? = box2genvar(H hs=0 [var2box(Var) "?"])
 
 [default-processexpr2box-seq]
@@ -186,37 +162,14 @@ equations
                             "fi"])
 
 [atomargs2box-0]
-   atomargs2box(Term+) = termlist2box(Term+)
+   atomargs2box(Term+) = HVlist2box(Term+)
 
 [tscript2box-0]
-  Preprocessor* TscriptDef* = box2tscript(V vs=2 [preprocessors2box(Preprocessor*) tscriptdefs2box(TscriptDef*)]) 
-
-[tscriptdefs2box-0]
-  tscriptdefs2box() = V vs=2 []
-
-[tscriptdefs2box-1]
-  tscriptdefs2box(TscriptDef) = V vs=2 [tscriptdef2box(TscriptDef)]
-
-[tscriptdefs2box-2]
-  Box := tscriptdefs2box(TscriptDef+),
-  V vs=2 [Box*] := Box
-  ===>
-  tscriptdefs2box(TscriptDef TscriptDef+) = V vs=2 [tscriptdef2box(TscriptDef) Box*]
+  Preprocessor* TscriptDef* = box2tscript(V vs=2 [preprocessors2box(Preprocessor*) Vlist2box(TscriptDef*)]) 
 
 [tscriptdef2box-0]
   toolbus ( ProcessInvocation+ ) =
-    box2tscriptdef(H hs=0 ["toolbus" "(" processinvocations2box(ProcessInvocation+) ")" ])
-
-[processinvocations2box-0]
-  processinvocations2box(ProcessInvocation) = 
-    H hs=1 [processinvocation2box(ProcessInvocation)]
-
-[processinvocations2box-1]
-  Box := processinvocations2box(ProcessInvocation+),
-  H hs=1 [Box*] := Box
-  ===>
-  processinvocations2box(ProcessInvocation, ProcessInvocation+) =
-    H hs=1 [H hs=0 [processinvocation2box(ProcessInvocation) ","] Box*]
+    box2tscriptdef(H hs=0 ["toolbus" "(" Hlist2box(ProcessInvocation+) ")" ])
 
 [bracket-context-choice]
   ( box2processexpr(V vs=1 [Box*1 "+" Box*2]) ) =
@@ -246,3 +199,6 @@ equations
 
 [simplify]
   processexpr2box(box2processexpr(Box)) = Box
+
+[get-vs-tscriptdef]
+  get-vs(TscriptDef) = 2

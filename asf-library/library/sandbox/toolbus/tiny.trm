@@ -1,36 +1,64 @@
-process Editor1 is
-let
-  Editor: term,
-  Pid: int
-in
-  snd-msg(open(Editor, Pid?))
-  .
-  (
+process
+  Editor1 (
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  A : term,
+  B : int,
+  C : term )
+is
+  let
+    Editor : term,
+    Pid : int
+  in
+    snd-msg (
+    open (
+    Editor,
+    Pid ? ) ) .
     (
-      rec-msg(bla)
-    ||
-      rec-msg(bla2)
+      (
+        rec-msg ( bla ) || rec-msg ( bla2 )
+      ) * delta
+    ) .
+    (
+      create ( EditorManager , Pid ? ) . create ( EditorCreator , Pid ? ) .
+      create ( SE , Pid ? )
     )
-    *
-    delta
-  )
-  .
-  (
-    create(EditorManager, Pid?)
-    . create(EditorCreator, Pid?)
-    . create(SE, Pid?)
-  )
-endlet
-
-process Editor2 is
-let
-  Editor: str,
-  Pid: int
-in
-  rec-msg(open(Editor, Pid?))
-  . create(EditorManager, Pid?)
-  . create(EditorCreator, Pid?)
-  . create(SE, Pid?)
-endlet
-
-toolbus(Editor1, Editor2)
+  endlet
+process
+  Editor2
+is
+  let
+    Editor : str,
+    Pid : int
+  in
+    rec-msg (
+    open (
+    Editor,
+    Pid ? ) ) . create ( EditorManager , Pid ? ) .
+    create ( EditorCreator , Pid ? ) . create ( SE , Pid ? )
+  endlet
+toolbus (
+Editor1,
+Editor2 )

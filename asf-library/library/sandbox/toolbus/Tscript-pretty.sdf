@@ -2,25 +2,23 @@ module Tscript-pretty
 
 imports languages/box/syntax/Box
 imports Tscript 
+imports languages/box/utilities/PPSeparatedList["FormalParam" FormalParam ","]
+imports languages/box/utilities/PPSeparatedList["Term" Term ","]
+imports languages/box/utilities/PPSeparatedList["ProcessInvocation" ProcessInvocation ","]
+imports languages/box/utilities/PPList["TscriptDef" TscriptDef]
 
 exports
   context-free syntax
     atomargs2box(AtomArgs) -> Box {to-box}
-    formalparam2box(FormalParam) -> Box {to-box}
-    formalparams2box({FormalParam ","}*) -> Box {to-box}
     genvar2box(GenVar) -> Box {to-box}
     id2box(Id) -> Box {to-box}
     preprocessors2box(Preprocessor*) -> Box {to-box}
     processbody2box(ProcessBody) -> Box {to-box}
     processexpr2box(ProcessExpr) -> Box {to-box}
     processinvocation2box(ProcessInvocation) -> Box {to-box}
-    processinvocations2box({ProcessInvocation ","}+) -> Box {to-box}
     processname2box(ProcessName) -> Box {to-box}
     processsignature2box(ProcessSignature) -> Box {to-box}
     term2box(Term) -> Box {to-box}
-    termlist2box({Term ","}*) -> Box {to-box}
-    tscriptdef2box(TscriptDef) -> Box {to-box}
-    tscriptdefs2box(TscriptDef*) -> Box {to-box}
     var2box(Var) -> Box {to-box}
 
     box2atom(Box) -> Atom {from-box}
