@@ -505,8 +505,6 @@ in
       +
         rec-msg(read-tree, Stack?, EditorId?) . 
         StackPopString(Stack,Stack?,FileName?) .
-        rec-msg(read-tree, Stack?, EditorId?) . 
-        StackPopString(Stack,Stack?,FileName?) .
         snd-msg(io-read-term-file(FileName)) .
         (
           rec-msg(io-file-contents(Tree?)) .
