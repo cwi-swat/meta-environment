@@ -31,8 +31,7 @@ CODE=${srcdir}/c-code
 
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh
 
-TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) \
-        $(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.asfe.sh )
+TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) 
 
 %.diff.sh: 
 	@(echo 'set -e' ; \
