@@ -1,7 +1,0 @@
-%%  TBviz
-
-imports MatchTable Dot-operations
-
-exports
-  context-free syntax
-    vizualize( Tscript ) -> DotGraph

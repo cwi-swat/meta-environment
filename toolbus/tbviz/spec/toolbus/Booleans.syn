@@ -1,9 +1,0 @@
-   imports Layout
-   exports
-      sorts BOOL
-      context-free syntax
-         true                   -> BOOL
-         false                  -> BOOL
-         "(" BOOL ")"           -> BOOL {bracket}
-      variables
-         Bool [0-9']*           -> BOOL
