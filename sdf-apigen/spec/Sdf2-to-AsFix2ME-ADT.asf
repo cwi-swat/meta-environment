@@ -103,6 +103,20 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
   production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
     $Entry, $Entries
 
+[equ-production-to-adt-cons-parametrized]
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId   := uqliteral($Char*),
+  $TypeId  := sort-to-afun($Sort1),
+  $AFProd  := 
+    build-asfix-prod(cf, $ModName, $Symbol*, $Sort1[[$Sort2]], 
+                     $Attributes, $ConsOption),
+  $AFArgs  := build-asfix-appl-args($Symbol*),
+  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
+  $Entries := build-list-entries($Symbol*)
+  ===>
+  production-to-adt($ModName, $Symbol* -> $Sort1[[<$Sort2-PARAM>]] $Attributes, $ConsOption) = 
+    $Entry, $Entries
+
 [equ-production-to-adt-bracket]
   $Attributes == { bracket },
   $AltId   := uqliteral("B" "r" "a" "c" "k" "e" "t"),

@@ -13,7 +13,12 @@ exports
     sdf-to-asfix2me-adt ( Module, ConsOption )        -> ATerm
     sdf-module-to-asfix2me-adt ( Module, ConsOption ) -> ATerm
 
+context-free start-symbols
+  ATerm SDF 
+
 context-free syntax
+
+%% Literal -> Symbol {avoid}
 
 start-sorts-to-asfix2me-adt(Module) -> ATerm
 
@@ -37,7 +42,6 @@ context-free syntax
   start-sort-to-adt(Symbol, ATerm)    -> ATerm
 
 hiddens
-  sorts {ATerm ","}*
 
   context-free syntax
     section-to-adt ( ModuleName, Section, ConsOption )		-> {ATerm ","}*
@@ -95,7 +99,7 @@ hiddens
     "$Section"		-> Section
     "$Section*"[0-9]* 	-> Section*
     "$Sep"		-> Literal
-    "$Sort"		-> Sort
+    "$Sort"[0-9]*	-> Sort
     "$Symbol"		-> Symbol
     "$Symbol*"[0-9]*    -> Symbol*
     "$Symbol+"		-> Symbol+

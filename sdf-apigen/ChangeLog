@@ -1,5 +1,9 @@
 # $Id$
 
+Mon May  3 18:02:19 CEST 2004 <jurgenv@cwi.nl>
+ * Added rudimentary support for productions that return a parameterized
+   sort. Only parameterized sorts with a single argument are allowed!
+
 Mon Apr 26 19:05:02 CEST 2004 <jurgenv@cwi.nl>
  * Removed dependency on asf package. It was no longer used! 
 

@@ -9,6 +9,31 @@ equations
                    $ConsOption) =
     prod([$AFArgs],$SymbolType(sort($AFSort)),$AFAttrs)
 
+  [equ-build-asfix-prod-parametrized]
+  $AFArgs    := build-asfix-prod-args($SymbolType, $Symbol*),
+  $AFAttrs   := build-asfix-attrs($Attributes, $ConsOption)
+  ===>
+  build-asfix-prod($SymbolType, no-module-name, $Symbol*, 
+                   $Sort1[[$Sort2]], 
+                   $Attributes, 
+                   $ConsOption) =
+    prod([$AFArgs],$SymbolType(parameterized-sort(sort(sort-to-lit($Sort1),
+                  				       [sort(<sort-to-lit($Sort2)(str)>)]))),
+ 	 $AFAttrs)
+
+ [equ-build-asfix-prod-parametrized]
+   $ModName  != no-module-name,
+  $AFArgs    := build-asfix-prod-args($SymbolType, $Symbol*),
+  $AFAttrs   := build-asfix-attrs($ModName, $Attributes, $ConsOption),
+  $AFSort    := sort-to-lit($Sort2)
+  ===>
+  build-asfix-prod($SymbolType, $ModName, $Symbol*, $Sort1[[$Sort2]], 
+                   $Attributes, 
+                   $ConsOption) =
+    prod([$AFArgs],$SymbolType(parameterized-sort(sort(sort-to-lit($Sort1),
+                  				       [sort(<$AFSort(str)>)]))),
+ 	 $AFAttrs)
+
   [equ-build-asfix-prod]
   $ModName  != no-module-name,
   $AFArgs    := build-asfix-prod-args($SymbolType, $Symbol*),
@@ -48,12 +73,16 @@ equations
     build-asfix-prod-arg($SymbolType, $Symbol)
 
 [default-equ-build-asfix-prod-arg-strip-param]
-  uqliteral($c*) := sdflit-to-afun($Label),
-  $FieldId := uqliteral($c* "-" "s""o""r""t")
+  $FieldId := afun-concat(sdflit-to-afun($Label) sort)
   ===>
   build-asfix-prod-arg($SymbolType, $Label : <$Symbol-PARAM>) = 
   cf(sort(<$FieldId(str)>))
     
+[default-equ-build-asfix-prod-arg-strip-param]
+  $FieldId := afun-concat(sdflit-to-afun($Label) sort)
+  ===>
+  build-asfix-prod-arg($SymbolType, $Label : $Sort[[<$Symbol-PARAM>]]) = 
+  cf(parameterized-sort(sort(sort-to-lit($Sort),[sort(<$FieldId(str)>)])))
 
 [equ-build-asfix-prod-arg-sort]
   build-asfix-prod-arg($SymbolType, $Sort) = 

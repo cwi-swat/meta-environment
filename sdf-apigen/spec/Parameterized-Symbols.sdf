@@ -2,8 +2,12 @@ module Parameterized-Symbols
 
 imports languages/sdf2/syntax/Sdf2
 
-exports
+hiddens
 
+context-free start-symbols
+  Symbol Section*
+
+exports
 context-free syntax
 
 

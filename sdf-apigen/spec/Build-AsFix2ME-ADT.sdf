@@ -79,7 +79,7 @@ hiddens
     "$Section"		-> Section
     "$Section*"		-> Section*
     "$Sep"		-> Literal
-    "$Sort"		-> Sort
+    "$Sort"[0-9]*		-> Sort
     "$Symbol"		-> Symbol
     "$Symbol*"		-> Symbol*
     "$Symbol+"		-> Symbol+

@@ -6871,6 +6871,7 @@ CONS_EXIT ( make_nf1 ( lf_1sym , arg0 ) ) ;
 int main(int argc, char *argv[])                         
 {                                                        
   ATerm bottom;
+  setKeepAnnotations(ATfalse);
   return asc_support_main(&bottom, argc, argv,           
                           register_Sdf2_to_Imploded_ADT,                   
                           resolve_Sdf2_to_Imploded_ADT,                    
