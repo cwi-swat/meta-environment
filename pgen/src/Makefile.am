@@ -49,6 +49,12 @@ sdf-help.o : parsetablegen.tif.h
 		mv ${srcdir}/$@ $@ ;\
 	fi
 
+POD2MAN	= pod2man
+CENTER	= "Meta-Environment Documentation"
+
+%.1: %.pod
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
+
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
 %.test: %.src Makefile
