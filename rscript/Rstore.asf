@@ -121,7 +121,7 @@ export(rstore($VPair*))
 [exp1]	export(rstore()) =
 
 [expp1]	export-pair($Var1, rel[$Var2,area], {<$String, $Area>, $Elem*}) = 
-item rvar2str($Var2) $String get-filename($Area) get-beginline($Area) get-begincol($Area)  get-endline($Area) get-endcol($Area);
+item rvar2str($Var2) $String "~jurgen/says/this/should/be/based/on/location/not/area" get-begin-line($Area) get-begin-column($Area) get-end-line($Area) get-end-column($Area);
 export-pair($Var1, rel[$Var2,area], {$Elem*}) 
 
 

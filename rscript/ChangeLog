@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan 20 16:57:03 CET 2004 <jong@cwi.nl>
+ * remove MyPosInfo as its contents are in the asf-library now
+ * remove access functions from MyArea that are in the asf-library
+
 Tue Jan  6 13:08:00 CET 2004 <jong@cwi.nl>
  * Bag[[Elem]] and BagIterator[[Elem]] are now context-free start-symbols
    (fixes another warning)
