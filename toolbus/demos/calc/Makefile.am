@@ -43,11 +43,11 @@ BUILT_SOURCES	= clock.tif.c calc.tif.c log.tif.c batch.tif.c
 #${srcdir}/batch.o: batch.tif.c
 
 %.tif.c: calc.tifs
-	$(ATERM)/bin/tifstoc -tool $* $<
+	${ATERM}/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
 	@if [ "a$(VPATH)" != "a" ]; then \
-	   mv $(srcdir)/$@ $@ ;\
+	   mv ${srcdir}/$@ $@ ;\
 	fi
 
