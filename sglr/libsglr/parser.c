@@ -14,9 +14,6 @@
 
 #include <aterm2.h>
 
-#include <tree-to-dot.h>
-#include <sg_growbuf.h>
-
 #include "parser.h"
 #include "forest.h"
 #include "mem-alloc.h"
@@ -955,30 +952,13 @@ char *SG_ProdSort(production t)
 {
   char          *sort = NULL;
 
-  if(ATmatch((ATerm) t, "prod(<term>,sort(\"<START>\"),<term>)", &t, NULL)) {
-    ATermList list = (ATermList) t;
-    ATerm elt, symbol;
-    static sg_growbuf *gb = NULL;
-
-    if(!gb) {
-      gb = SG_Create_GrowBuf(32, 16, sizeof(char));
-    } else {
-      gb = SG_Reset_GrowBuf(gb);
+  PT_Symbol symbol = PT_getProductionRhs((PT_Production) t);
+  
+  if (!PT_isOptLayoutSymbol(symbol)) {
+    if (PT_isSymbolCf(symbol)) {
+      symbol = PT_getSymbolSymbol(symbol);
+      sort = PT_yieldSymbol(symbol);
     }
-
-    for(;!sort && !ATisEmpty(list); list = ATgetNext(list)) {
-      elt = ATgetFirst(list);
-
-      if(!ATmatch(elt, "cf(opt(layout))",elt)
-      &&  ATmatch(elt, "cf(<term>)", &symbol)) {
-        char *symstr = SG_PrintSymbolToString(symbol, ATfalse);
-        SG_AddStringToGrowBuf(gb, symstr);
-        free(symstr);
-      }
-    }
-
-    SG_AddToGrowBuf(gb,"\0",1); /* Don't forget null termination */
-    sort = SG_GetGrowBufContent(gb);
   }
 
   return SG_SAFE_STRING(sort);
