@@ -1,4 +1,4 @@
-SUBDIRS = relations utils
+SUBDIRS = utils
 
 EXTRA_DIST=$(wildcard *.pkg)
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Oct  7 13:05:46 CEST 2003 <jong@cwi.nl>
+ * removed relations subdirectory from Makefile.am, leaving
+   DisplayQuery.sdf and list operations for now
+
 Thu Sep 18 13:44:49 CEST 2003 <jong@cwi.nl>
  * generalize 'tbscan' (which did TB specific extraction)
    to 'extract-relations', which has parse-table and equations as
