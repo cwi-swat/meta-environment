@@ -7,7 +7,7 @@ bin_SCRIPTS	= tide.sh
 
 data_DATA	= tide.jar
 
-JARCLASSDIRS	= tide/tool tide/tool/support \
+JARCLASSDIRS	= tide tide/tool tide/tool/support \
 		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer \
 		tide/tool/prefeditor
 
