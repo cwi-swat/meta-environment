@@ -73,9 +73,9 @@ equations
 
         $Msgs3 = get-messages(InfoMsgTuple1),
         $Msgs4 = $Msgs3 + 
-undeclared($ModuleId, diff(symbols($Symbol*3), 
+undeclared-symbols($ModuleId, diff(symbols($Symbol*3), 
                              symbols($Symbol*1 $Symbol*2 $Symbol*5))) +
-declared-but-undefined($ModuleId,  diff(symbols($Symbol*1 $Symbol*2), 
+symbols-without-production-definitions($ModuleId,  diff(symbols($Symbol*1 $Symbol*2), 
                                         symbols($Symbol*4))),
         InfoMsgTuple3 = put-messages($Msgs1 ++ $Msgs2 ++ $Msgs4, InfoMsgTuple1),
 

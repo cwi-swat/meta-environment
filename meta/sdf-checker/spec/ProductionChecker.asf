@@ -50,7 +50,7 @@ equations
 
         Msgs1 = get-messages(InfoMsgTuple1),
         Msgs2 = Msgs1 + 
-used-but-undefined($ModuleId, diff(productions(Prod*3), 
+used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3), 
                                      productions(Prod*1 Prod*2 Prod*4))),
         Msgs3 = Msgs2 ++ Msgs0,
         InfoMsgTuple3 = put-messages(Msgs3, InfoMsgTuple1),

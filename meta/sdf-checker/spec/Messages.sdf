@@ -7,14 +7,13 @@ exports
 
   context-free syntax
     "none"					                 -> Message
-    undeclared(ModuleId, SymbolsSet)		                 -> Message
-    not-implemented(ModuleId, SymbolsSet)	                 -> Message
-    declared-but-undefined(ModuleId, SymbolsSet)                 -> Message
+    undeclared-symbols(ModuleId, SymbolsSet)		         -> Message
+    symbols-without-production-definitions(ModuleId, SymbolsSet) -> Message
     double-declared-symbol(ModuleId, Symbol)                     -> Message
     illegal-attribute(ModuleId, Production)                      -> Message
     illegal-traversal-attribute(ModuleId, Attribute)             -> Message
     not-supported-symbol(ModuleId, Symbol)                       -> Message
-    used-but-undefined(ModuleId, ProductionsSet)                 -> Message
+    used-in-priorities-but-undefined(ModuleId, ProductionsSet)   -> Message
     kernel-syntax-construction(ModuleId, Literal)                -> Message
     inconsistent-rhs-in-priorities(ModuleId, Symbol, Production) -> Message
 
