@@ -1,6 +1,7 @@
 
 2002-07-23	Jurgen Vinju	<jurgenv@cwi.nl>
   * Fixed configure.in bug
+  * Fixed some compiler warnings
 
 2002-12-09	Jurgen Vinju	<jurgenv@cwi.nl>
   * Brought up-to-date with latest sdf-support version
