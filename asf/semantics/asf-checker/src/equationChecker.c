@@ -1,6 +1,21 @@
 /* $Id$ */
 
+/* TODO: Aren't error messages slightly off-topic in this file?
+** TODO: Refactor locatePossibleVariables() away?
+**       (by makinbg it part of checkVariables())
+** TODO: See whether we can eliminate some other *Variables() functions?
+** TODO: checkVariables() delivers a listof newly introduced variables
+**       These can be shown in an error message
+** TODO: Add error-messages for used wild's in reportUsedWildVariables()
+** TODO: Add error-messages for unused strict's in reportUnusedVariables()
+** TODO: Delete is done by creating a new list, which is kind of expensive
+** TODO: Do we want a single error message with a single subject for each single variable,
+**       or a single message for each variable? (in generateVariablesMessage())
+** TODO: A lot of functions do not use their formal parameter 'tag'
+*/
+
 #include <ctype.h>
+#include <assert.h>
 
 #include <Error.h>
 #include "equationChecker.h"
@@ -50,12 +65,102 @@ ERR_Error makeWarning(const char *msg, ATerm subject)
 
 /*}}}  */
 
+/*{{{  static ATbool findVariableAttr(PT_Tree var, PT_Attr attr) */
+
+static ATbool findVariableAttr(PT_Tree var, PT_Attr attr)
+{
+  PT_Args args;
+  PT_Tree arg;
+
+  assert(PT_isTreeAppl(var));
+
+  args = PT_getTreeArgs(var);
+
+  assert(!PT_isArgsEmpty(args));
+
+  arg = PT_getArgsHead(args);
+
+  assert(PT_isArgsEmpty(PT_getArgsTail(args)));
+
+  return PT_hasProductionCertainAttr(PT_getTreeProd(arg), attr);
+}
+
+/*}}}  */
+/*{{{  static ATbool isStrictVariable(PT_Tree var) */
+
+static ATbool isStrictVariable(PT_Tree var)
+{
+  PT_Attr strictAttr = PT_makeAttrTerm(ATparse("strict"));
+
+  return findVariableAttr(var, strictAttr);
+}
+
+/*}}}  */
+/*{{{  static ATbool isWildVariable(PT_Tree var) */
+
+static ATbool isWildVariable(PT_Tree var)
+{
+  PT_Attr wildAttr = PT_makeAttrTerm(ATparse("wild"));
+
+  return findVariableAttr(var, wildAttr);
+}
+
+/*}}}  */
 /*{{{  ERR_ErrorList makeAmbiguityMessage(void *subject) */
 
 ERR_ErrorList makeAmbiguityMessage(void *subject)
 {
   return ERR_makeErrorListSingle(makeMessage("equations contain ambiguities",
 						(ATerm) subject));
+}
+
+/*}}}  */
+
+/*{{{  static ERR_ErrorList reportUnusedVariables(ASF_ASFTag tag, PT_Args definedVars) */
+
+static ERR_ErrorList reportUnusedVariables(ASF_ASFTag tag, PT_Args definedVars)
+{
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  ERR_Error message;
+
+  while (!PT_isArgsEmpty(definedVars)) {
+    PT_Tree variable = PT_getArgsHead(definedVars);
+
+    if (isStrictVariable(variable)) {
+      message = makeWarning("\"strict\" variable must be used at least once", 
+			    PT_TreeToTerm(variable));
+      messages = ERR_concatErrorList(messages,
+				   ERR_makeErrorListSingle(message));
+    }
+
+    definedVars = PT_getArgsTail(definedVars);
+  }
+
+  return messages;
+}
+
+/*}}}  */
+/*{{{  static ERR_ErrorList reportUsedWildVariables(ASF_ASFTag tag, PT_Args usedVars) */
+
+static ERR_ErrorList reportUsedWildVariables(ASF_ASFTag tag, PT_Args usedVars)
+{
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  ERR_Error message;
+
+  while (!PT_isArgsEmpty(usedVars)) {
+    PT_Tree variable = PT_getArgsHead(usedVars);
+
+    if (isWildVariable(variable)) {
+      message = makeWarning("\"wild\" variable may not be used", 
+			    PT_TreeToTerm(variable));
+      messages = ERR_concatErrorList(messages,
+				   ERR_makeErrorListSingle(message));
+    }
+
+    usedVars = PT_getArgsTail(usedVars);
+  }
+
+  return messages;
 }
 
 /*}}}  */
@@ -77,6 +182,26 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 }
 
 /*}}}  */
+
+/*{{{  static PT_Args deleteVariable(PT_Tree tree, PT_Args variables) */
+
+static PT_Args deleteVariable(PT_Tree tree, PT_Args variables)
+{
+  PT_Args newVariables = PT_makeArgsEmpty();
+
+  while (!PT_isArgsEmpty(variables)) {
+    PT_Tree variable = PT_getArgsHead(variables);
+
+    if (!ATisEqualModuloAnnotations((ATerm) tree, (ATerm) variable)) {
+      newVariables = PT_makeArgsMany(variable,newVariables);
+    }
+
+    variables = PT_getArgsTail(variables);
+  }
+  return newVariables;
+}
+/*}}}  */
+
 /*{{{  static void normalizeSortname(char *name) */
 
 static void normalizeSortname(char *name)
@@ -150,136 +275,91 @@ static ERR_ErrorList locatePossibleVariables(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,  */
+/* {{{ static ERR_ErrorList generateVariablesMessage(char *msg, PT_Args vars) */
 
-static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, 
-						PT_Tree tree, 
-						PT_Args variables)
+static ERR_ErrorList generateVariablesMessage(char *msg, PT_Args vars)
 {
   ERR_Error message;
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
+
+  while(!PT_isArgsEmpty(vars)) {
+    PT_Tree variable = PT_getArgsHead(vars);
+
+    message = makeMessage(msg, PT_TreeToTerm(variable));
+    messages = ERR_concatErrorList(messages,
+					     ERR_makeErrorListSingle(message));
+
+    vars = PT_getArgsTail(vars);
+  }
+
+  return messages;
+}
+/*}}} */
+
+/*{{{  static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVars) */
+
+static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVars)
+{
+  PT_Tree arg;
+  PT_Args args, newVars;
+
+  if (PT_isTreeAmb(tree)) {
+    return PT_makeArgsEmpty();
+  }
+  if (PT_isTreeVar(tree)) {
+    if(lookupVariable(tree, *pUsedVars)) {
+      return PT_makeArgsEmpty();
+    }
+    if(!lookupVariable(tree, *pDefVars)) {
+      *pDefVars = PT_makeArgsMany(tree, *pDefVars);
+      return PT_makeArgsMany(tree, PT_makeArgsEmpty());
+    }
+    /* defined and not used -> move the var */
+    *pDefVars = deleteVariable(tree, *pDefVars);
+    *pUsedVars = PT_makeArgsMany(tree,*pUsedVars);
+    return PT_makeArgsEmpty();
+  }
+  else if (PT_isTreeAppl(tree)) {
+    newVars = PT_makeArgsEmpty();
+    args = PT_getTreeArgs(tree);
+    while (PT_hasArgsHead(args)) {
+      arg = PT_getArgsHead(args);
+
+      newVars = PT_concatArgs(checkVariables(arg, pDefVars, pUsedVars),
+                               newVars);
+
+      args = PT_getArgsTail(args);
+    };
+
+    return newVars;
+  }
+  else {
+    return PT_makeArgsEmpty();
+  }
+}
+
+/*}}}  */
+
+/* 1. The call to locatePossibleVariables() is not needed in the function
+ *    (after each call to checkTreeGivenVariables, locatePossibleVariables 
+ *    is also called, and the latter also recursively descends the tree)
+ * 2. 'tag' is not used here
+ */
+/*{{{  static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, PT_Tree tree,  */
+
+static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, PT_Tree tree, 
+					PT_Args *pDefVars, PT_Args *pUsedVars)
+{
+  PT_Args newVars;
 
   if (PT_isTreeAmb(tree)) {
     return makeAmbiguityMessage(tree);
   }
 
-  if (PT_isTreeVar(tree)) {
-    if (!lookupVariable(tree, variables)) {
-      message = makeMessage("uninstantiated variable occurrence",  
-			    PT_TreeToTerm(tree));
-      return ERR_makeErrorListSingle(message);
-    }
-  }
+  newVars=checkVariables(tree,pDefVars,pUsedVars);
 
-  if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-
-    while (!PT_isArgsEmpty(args)) {
-      PT_Tree arg = PT_getArgsHead(args);
-
-      messages = ERR_concatErrorList(messages,
-				     checkTreeGivenVariables(tag, 
-							     arg, variables));
-      messages = ERR_concatErrorList(messages, locatePossibleVariables(arg));
-
-      args = PT_getArgsTail(args);
-    }
-  }
-
-  return messages;
-}
-
-/*}}}  */
-/*{{{  static PT_Args collectVariables(PT_Tree tree, PT_Args varList) */
-
-static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
-{
-  if (PT_isTreeAmb(tree)) {
-    return varList;
-  }
-  if (PT_isTreeVar(tree)) {
-    return PT_makeArgsMany(tree, varList);
-  }
-
-  if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-
-    while (!PT_isArgsEmpty(args)) {
-      PT_Tree arg = PT_getArgsHead(args);
-
-      varList = collectVariables(arg, varList);
-
-      args = PT_getArgsTail(args);
-    }
-  }
-
-  return varList;
-}
-
-/*}}}  */
-/*{{{  static ATbool noNewVariables(PT_Tree tree, PT_Args varList) */
-
-static ATbool noNewVariables(PT_Tree tree, PT_Args varList)
-{
-  PT_Tree arg;
-  PT_Args args;
-  ATbool existing;
-
-  if (PT_isTreeAmb(tree)) {
-    return ATfalse;
-  }
-  if (PT_isTreeVar(tree)) {
-    return lookupVariable(tree, varList);
-  }
-  else if (PT_isTreeAppl(tree)) {
-    existing = ATtrue;
-    args = PT_getTreeArgs(tree);
-    while (existing && PT_hasArgsHead(args)) {
-      arg = PT_getArgsHead(args);
-
-      existing = noNewVariables(arg, varList);
-
-      args = PT_getArgsTail(args);
-    };
-
-    return existing;
-  }
-  else {
-    return ATtrue;
-  }
-}
-
-/*}}}  */
-/*{{{  static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList) */
-
-static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
-{
-  PT_Tree arg;
-  PT_Args args;
-  ATbool instantiated;
-
-  if (PT_isTreeAmb(tree)) {
-    return ATfalse;
-  }
-  if (PT_isTreeVar(tree)) {
-    return lookupVariable(tree, varList);
-  }
-  else if (PT_isTreeAppl(tree)) {
-    instantiated = ATfalse;
-    args = PT_getTreeArgs(tree);
-    while (!instantiated && PT_hasArgsHead(args)) {
-      arg = PT_getArgsHead(args);
-
-      instantiated = instantiatedVariables(arg, varList);
-
-      args = PT_getArgsTail(args);
-    };
-
-    return instantiated;
-  }
-  else {
-    return ATfalse;
-  }
+  return generateVariablesMessage("uninstantiated variable occurrence",
+						newVars);
 }
 
 /*}}}  */
@@ -318,10 +398,12 @@ static ATbool isContextFreeSingleton(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
-static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
+  PT_Args lhsNewVars;
+  PT_Args rhsNewVars;
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
@@ -330,93 +412,115 @@ static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition con
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(rhsCond)))) {
     return makeAmbiguityMessage(rhsCond);
   }
-  if (!noNewVariables((PT_Tree)lhsCond, *variables) ||
-      !noNewVariables((PT_Tree)rhsCond, *variables)) {
-    return ERR_makeErrorListSingle(makeMessage(
-					     "negative condition introduces variable(s)", 
-					     ASF_ASFConditionToTerm(condition)));
+
+  lhsNewVars = checkVariables((PT_Tree)lhsCond, pDefVars, pUsedVars);
+  rhsNewVars = checkVariables((PT_Tree)rhsCond, pDefVars, pUsedVars);
+
+  if (!PT_isArgsEmpty(lhsNewVars) || !PT_isArgsEmpty(rhsNewVars)) {
+    return ERR_makeErrorListSingle(
+                        makeMessage("negative condition introduces variable(s)", 
+				    ASF_ASFConditionToTerm(condition)));
   }
   else {
     return messages;
   }
 }
 
-/*}}}  */
-/*{{{  static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
-
-static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  PT_Args tempDefVars=*pDefVars;
+  PT_Args tempUsedVars=*pUsedVars;
+  PT_Args newVars;
 
-  messages = ERR_makeErrorListSingle(makeWarning("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)",
-						 ASF_ASFConditionToTerm(condition)));
+  messages = ERR_makeErrorListSingle(
+			   makeWarning("Deprecated condition syntax \"=\". "
+                                "Please use either \"==\" for equality, or "
+                                "\":=\" for matching (Hint: see the Upgrade "
+                                "menu)", ASF_ASFConditionToTerm(condition)));
 
-  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
-    *variables = collectVariables((PT_Tree)rhsCond, *variables);
+  /* Use a copy of pDefVars and pUsedVars to prevent corruption in case the if
+  ** statement fails
+  */
+  newVars = checkVariables((PT_Tree) lhsCond, &tempDefVars,&tempUsedVars);
+  if (PT_isArgsEmpty(newVars)) {
+    *pDefVars=tempDefVars; *pUsedVars=tempUsedVars;
+    checkVariables((PT_Tree)rhsCond, pDefVars, pUsedVars);
+
     messages = ERR_concatErrorList(messages, 
 				   locatePossibleVariables((PT_Tree) rhsCond));
     return messages;
   }
-  else if (noNewVariables((PT_Tree) rhsCond, *variables)) {
-    *variables = collectVariables((PT_Tree)lhsCond, *variables);
+
+  /* lhs introduces new variables -> lhs:=rhs match condition */
+
+  newVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
+  if (PT_isArgsEmpty(newVars)) {
+    checkVariables((PT_Tree)lhsCond, pDefVars, pUsedVars);
     messages = ERR_concatErrorList(messages, 
 				   locatePossibleVariables((PT_Tree) lhsCond));
     return messages;
   }
   else {
-    return ERR_makeErrorListMany(makeMessage("uninstantiated variables in both sides of condition",
-					     ASF_ASFConditionToTerm(condition)),
-				 messages);
+    return ERR_makeErrorListMany(makeMessage("uninstantiated variables in "
+                                      "both sides of condition",
+                                      ASF_ASFConditionToTerm(condition)),
+                                 messages);
   }
-
 
 }
 
 /*}}}  */
-/*{{{  static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
-static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
+  ERR_Error message;
   ERR_ErrorList messages;
+  PT_Args lhsNewVars;
+  PT_Args rhsNewVars;
 
   messages = locatePossibleVariables((PT_Tree) lhsCond);
   messages = ERR_concatErrorList(messages,
 				 locatePossibleVariables((PT_Tree) rhsCond));
 
-  if (!noNewVariables((PT_Tree) lhsCond, *variables) || 
-      !noNewVariables((PT_Tree) rhsCond, *variables)) {
+  lhsNewVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars); 
+  rhsNewVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
+  if (!PT_isArgsEmpty(lhsNewVars) || !PT_isArgsEmpty(rhsNewVars)) {
+
+    message = makeMessage("uninstantiated variables in equality condition",
+			        ASF_ASFConditionToTerm(condition));
     messages = ERR_concatErrorList(messages,
-				   ERR_makeErrorListSingle(
-				 makeMessage(
-			    "uninstantiated variables in equality condition",
-			     ASF_ASFConditionToTerm(condition))));
+				           ERR_makeErrorListSingle(message));
   }
 
   return messages;
 }
 
 /*}}}  */
-/*{{{  static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
-static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  PT_Args newVars;
 
-  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
+  newVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
+  if (!PT_isArgsEmpty(newVars)) {
     return ERR_makeErrorListSingle(
 	 makeMessage(
 	     "right-hand side of matching condition introduces variables",
 	     ASF_ASFConditionToTerm(condition)));
   }
 
-  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
+  newVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
+  if (PT_isArgsEmpty(newVars)) {
     return ERR_makeErrorListSingle(
-	 makeMessage(
-	     "matching condition does not introduce new variables",
+	 makeMessage("matching condition does not introduce new variables",
 		     ASF_ASFConditionToTerm(condition)));
   }
   else {
-    *variables = collectVariables((PT_Tree)lhsCond, *variables);
+    /* variables already collected */
     messages = ERR_concatErrorList(messages, 
 				   locatePossibleVariables((PT_Tree) lhsCond));
   }
@@ -425,27 +529,33 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
 }
 
 /*}}}  */
-/*{{{  static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
-static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
-  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
-    return ERR_makeErrorListSingle(makeMessage("matching condition does not use new variables",
-					       ASF_ASFConditionToTerm(condition)));
+  PT_Args newVars;
+
+  newVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
+  if (PT_isArgsEmpty(newVars)) {
+    return ERR_makeErrorListSingle(
+				 makeMessage(
+					     "matching condition does not use new variables",
+					     ASF_ASFConditionToTerm(condition)));
   }
 
-  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeErrorListSingle(makeMessage("right-hand side of matching condition introduces variables",
-					       ASF_ASFConditionToTerm(condition)));
+  newVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
+  if (!PT_isArgsEmpty(newVars)) {
+    return ERR_makeErrorListSingle(
+			 makeMessage("right-hand side of matching condition introduces variables",
+					 ASF_ASFConditionToTerm(condition)));
   }
 
   return ERR_makeErrorListEmpty();
 }
 
 /*}}}  */
-/*{{{  static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables)  */
 
-static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
+static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
 
   SCOUNT(nrConditions);
@@ -466,23 +576,28 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
 
     if (ASF_isASFConditionNegative(condition)) {
       SCOUNT(nrInequalityConditions);
-      return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
+      return checkNegativeCondition(tag, condition, lhsCond, rhsCond,
+                                    pDefVars, pUsedVars);
     }
     else if (ASF_isASFConditionPositive(condition)) {
       SCOUNT(nrEqualityConditions);
-      return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
+      return checkPositiveCondition(tag, condition, lhsCond, rhsCond,
+                                    pDefVars, pUsedVars);
     }
     else if (ASF_isASFConditionMatch(condition)) {
       SCOUNT(nrAssignmentConditions);
-      return checkMatchCondition(tag, condition, lhsCond, rhsCond, variables);
+      return checkMatchCondition(tag, condition, lhsCond, rhsCond,
+                                 pDefVars, pUsedVars);
     }
     else if (ASF_isASFConditionNoMatch(condition)) {
       SCOUNT(nrNonAssignmentConditions);
-      return checkNoMatchCondition(tag, condition, lhsCond, rhsCond, variables);
+      return checkNoMatchCondition(tag, condition, lhsCond, rhsCond,
+                                   pDefVars, pUsedVars);
     }
     else if (ASF_isASFConditionEquality(condition)) {
       SCOUNT(nrEqualityConditions);
-      return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
+      return checkEqualityCondition(tag, condition, lhsCond, rhsCond,
+                                    pDefVars, pUsedVars);
     }
     else {
       return ERR_makeErrorListSingle(makeMessage("strange condition encountered", 
@@ -491,10 +606,7 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
   }
 }
 
-/*}}}  */
-/*{{{  static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables)  */
-
-static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables) 
+static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
@@ -513,7 +625,8 @@ static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condition
 	ASF_getASFConditionListHead(conditionList);
 
       messages = ERR_concatErrorList(messages,
-					checkCondition(tag, condition, variables));
+					checkCondition(tag, condition,
+                                                       pDefVars, pUsedVars));
 
       if (!ASF_hasASFConditionListTail(conditionList)) {
 	break;
@@ -538,10 +651,9 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     SADD(outermostFunctions, PT_getTreeProd(ptTree));
 
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
-      ERR_Error message = 
-	makeWarning(
-    "constructor not expected as outermost function symbol of left hand side", 
-    PT_TreeToTerm(ptTree));
+      ERR_Error message = makeWarning("constructor not expected as "
+						  "outermost function symbol of left hand side", 
+						  PT_TreeToTerm(ptTree));
       return ERR_makeErrorListSingle(message);
     }
     else if (isContextFreeSingleton(ptTree)) {
@@ -583,8 +695,12 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
     else {
       ASF_Tree lhsEq = ASF_getASFEquationLhs(equation);
       ASF_Tree rhsEq = ASF_getASFEquationRhs(equation);
-      PT_Args variables = collectVariables((PT_Tree)lhsEq, 
-					   PT_makeArgsEmpty());
+
+      PT_Args definedVars = PT_makeArgsEmpty(); /* defined but not used */
+      PT_Args usedVars    = PT_makeArgsEmpty(); /* defined and used */
+
+      /* collect variables of lhs */
+      checkVariables((PT_Tree)lhsEq, &definedVars, &usedVars);
 
       messages = ERR_concatErrorList(messages, checkLhs(tag, lhsEq));
       messages = ERR_concatErrorList(messages, 
@@ -593,18 +709,23 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
       if (ASF_hasASFConditionalEquationASFConditions(condEquation)) {
 	SCOUNT(nrEquationsWithConditions);
 	messages = ERR_concatErrorList(messages,
-					  checkConditions(tag,
-							  ASF_getASFConditionalEquationASFConditions(condEquation),
-							  &variables));
+			  checkConditions(tag,
+					  ASF_getASFConditionalEquationASFConditions(condEquation),
+					  &definedVars, &usedVars));
       }
 
       messages =  ERR_concatErrorList(messages,
-				      checkTreeGivenVariables(tag, 
-							      (PT_Tree)rhsEq, 
-								 variables));
+		          checkTreeGivenVariables(tag, (PT_Tree)rhsEq, 
+					&definedVars, &usedVars));
       messages = ERR_concatErrorList(messages, 
-				     locatePossibleVariables((PT_Tree) rhsEq));
+			  locatePossibleVariables((PT_Tree) rhsEq));
 
+      /* for variables defined and not used, report an error */
+      messages = ERR_concatErrorList(messages,
+				     reportUnusedVariables(tag,definedVars));
+      /* for used dummy variables, report an error */
+      messages = ERR_concatErrorList(messages,
+				     reportUsedWildVariables(tag,usedVars));
       return messages;
     }
   }
@@ -632,28 +753,38 @@ static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)
     else {
       ASF_Tree lhsCond = ASF_getASFConditionLhs(condition);
       ASF_Tree rhsCond = ASF_getASFConditionRhs(condition);
-      PT_Args variables = collectVariables((PT_Tree)lhsCond, 
-					   PT_makeArgsEmpty());
+      PT_Args definedVars=PT_makeArgsEmpty();
+      PT_Args usedVars=PT_makeArgsEmpty();
+      
+      checkVariables((PT_Tree)lhsCond, &definedVars, &usedVars);
 
-      if (!PT_isArgsEmpty(variables)) {
-	message = makeMessage("no variables may be introduced in left hand side of test", ASF_TreeToTerm(lhsCond));
+      if (!PT_isArgsEmpty(definedVars) || !PT_isArgsEmpty(usedVars)) {
+	message = makeMessage("no variables may be introduced in left hand side "
+                              "of test", ASF_TreeToTerm(lhsCond));
 	messages = ERR_makeErrorListMany(message, messages);
-	variables = PT_makeArgsEmpty();
+        definedVars=PT_makeArgsEmpty();
+        usedVars=PT_makeArgsEmpty();
       }
 
       if (ASF_hasASFTestEquationASFConditions(testEquation)) {
 	messages = ERR_concatErrorList(messages,
-					  checkConditions(tag,
-							  ASF_getASFTestEquationASFConditions(testEquation),
-							  &variables));
+			  checkConditions(tag,
+					  ASF_getASFTestEquationASFConditions(testEquation),
+					  &definedVars, &usedVars));
       }
 
       messages =  ERR_concatErrorList(messages,
-				      checkTreeGivenVariables(tag, 
-							      (PT_Tree)rhsCond, 
-								 variables));
+		          checkTreeGivenVariables(tag, (PT_Tree)rhsCond, 
+						  &definedVars, &usedVars));
       messages = ERR_concatErrorList(messages, 
 				     locatePossibleVariables((PT_Tree)rhsCond));
+
+      /* for variables defined and not used, report an error */
+      messages = ERR_concatErrorList(messages,
+				     reportUnusedVariables(tag,definedVars));
+      /* for used dummy variables, report an error */
+      messages = ERR_concatErrorList(messages,
+				     reportUsedWildVariables(tag,usedVars));
       return messages;
     }
   }

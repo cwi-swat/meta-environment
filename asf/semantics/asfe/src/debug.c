@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*{{{  eval-tide.c */
 
 /*
@@ -26,6 +24,7 @@
 #include "pre-post.h"
 
 #include <tide-adapter.h>
+#include <asc-support-me.h>
 
 /*}}}  */
 
@@ -301,6 +300,7 @@ void Tide_connect(int port)
   ATprotect(&pos_info);
 
   cid = TA_connect(port);
+  setCid(cid);
 
   pid = TA_createProcess(cid, name);
 
@@ -360,9 +360,11 @@ void Tide_step(ATerm position, ATerm newenv, int level)
 	TA_activateRules(pid, TA_makePortStopped());
       }
 
+
       while (TA_getProcessState(pid) == STATE_STOPPED) {
 	TA_handleAny(pid);
       }
+
 
       if (TA_isConnected()) {
 			TA_activateRules(pid, TA_makePortStarted());

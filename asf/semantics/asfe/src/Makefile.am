@@ -1,5 +1,3 @@
-# $Id$
-
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = asfe
@@ -48,7 +46,7 @@ asfe_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(ATERM)/lib -lATerm \
-	-L$(TIDE)/lib -ltide-adapter \
+	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
 	$(SOCKLIBS)
 
 INCLUDES = \

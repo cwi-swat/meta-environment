@@ -1,5 +1,3 @@
-# $Id$
-
 pkgdata_DATA = $(wildcard *.idef)
 
 EXTRA_DIST = $(wildcard *.idef)
@@ -15,7 +13,7 @@ ASFSDFApigen_SOURCES = \
 ASFSDFApigen_LDADD =\
 	-L${ASC_SUPPORT}/lib -lasc-support-me \
 	-L${SGLR}/lib -lsglr \
-	-L${TIDE}/lib -ltide-adapter \
+	-L${TIDE_SUPPORT}/lib -ltide-adapter \
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \

@@ -9,8 +9,14 @@ exports
   context-free start-symbols Summary
 
   context-free syntax
-    check-asfsdf(SDF)           -> Summary
-    check-asfsdf(SDF, ModuleId) -> Summary
+    check-asfsdf(SDF)                     -> Summary
+    check-asfsdf(SDF, ModuleId)           -> Summary
+    check-asfsdf-equations(SDF)           -> Summary
+    check-asfsdf-equations(SDF, ModuleId) -> Summary
+
+hiddens 
+  context-free syntax
+    check-asfsdf-specificities(Definition, Info-Msg-Tuple) -> {Error ","}*
 
 hiddens
   variables

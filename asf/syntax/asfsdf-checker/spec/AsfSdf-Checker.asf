@@ -1,6 +1,32 @@
 equations
 
-  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown),
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, false),
+        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+        ====>
+        check-asfsdf(definition Definition1) =
+          summary("AsfSdfChecker", "Unknown", [Msgs])
+
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, false),
+        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        moduleid($Char*) := $ModuleId
+        ====>
+        check-asfsdf(definition Definition1, $ModuleId) =
+          summary("AsfSdfChecker", strcon(""" $Char* """), [Msgs])
+
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, true),
+        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+        ====>
+        check-asfsdf-equations(definition Definition1) =
+          summary("AsfSdfChecker", "Unknown", [Msgs])
+
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, true),
+        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        moduleid($Char*) := $ModuleId
+        ====>
+        check-asfsdf-equations(definition Definition1, $ModuleId) =
+          summary("AsfSdfChecker", strcon(""" $Char* """), [Msgs])
+
+  [cass-1'1] 
         Definition2 := remove-labels(Definition1),
         InfoMsgTuple2 := check-constructors(Definition2, InfoMsgTuple1),
         Msgs1 := get-messages(InfoMsgTuple2),
@@ -10,21 +36,6 @@ equations
         Msgs5 := check-for-kernel-syntax(Definition2),
         Msgs6 := check-for-exported-variables(Definition2)
         ====>
-        check-asfsdf(definition Definition1) =
-          summary("AsfSdfChecker", "Unknown", 
-                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
-
-  [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId),
-        Definition2 := remove-labels(Definition1),
-        InfoMsgTuple2 := check-constructors(Definition2, InfoMsgTuple1),
-        Msgs1 := get-messages(InfoMsgTuple2),
-        Msgs2 := check-asf-attributes(Definition2),
-        Msgs3 := check-symbols(Definition2),
-        Msgs4 := check-for-asf-sorts(Definition2),
-        Msgs5 := check-for-kernel-syntax(Definition2),
-        Msgs6 := check-for-exported-variables(Definition2),
-        moduleid($Char*) := $ModuleId
-        ====>
-        check-asfsdf(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", strcon(""" $Char* """), 
-                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
+        check-asfsdf-specificities(Definition1, InfoMsgTuple1) = 
+          Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6
+     

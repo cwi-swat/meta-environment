@@ -1,5 +1,25 @@
-# $Id$
 
+
+Fri Nov 19 16:30:44 CET 2004 <jurgenv@cwi.nl>
+ * Merged whole package asf from 1.5 branch to trunk. Most changes had
+   to be done in asf-checker. In asfsdf-checker something happened to,
+   I removed the merged AsfSdfChecker.c file, keeping the one in the trunk.
+   Other changes in asfsdfchecker.c I can not explain.
+
+Fri Nov 19 14:58:25 CET 2004 <jurgenv@cwi.nl>
+ * Replaced dependency on Tide by dependency on small package tide-support.
+
+Mon Nov  1 14:53:06 CET 2004 <a.t.hofkamp@tue.nl,jurgenv@cwi.nl>
+ * introduced Albert Hofkamps improvements to the asf-checker:
+  - Support for {wild} and {strict} variable attributes added.
+    A {wild} attribute indicates that the variable is a wildcard,
+    warnings will be issued when you use a {wild} variable after it
+    has been instantiated.
+    A {strict} attributes indicates that the variable is intended to  
+    be used after instantiation, if not a warning will be issued.
+  - For backward compatibility, a variable without any attributes
+    does not provoke any warnings.
+  
 Wed Sep 29 15:35:02 CEST 2004  <markvdb@cwi.nl>
  * Moved the cons attribute check from SdfChecker to AsfSdfChecker.
 

@@ -3,15 +3,16 @@
    */
 process AsfSdfChecker is
 let
-  Feedback : term,
-  Syntax   : term,
-  ASC      : asfsdfchecker,
-  ModuleName : str
+  Feedback   : term,
+  Syntax     : term,
+  ASC        : asfsdfchecker,
+  ModuleName : str,
+  Type       : term
 in
   (
-    rec-msg(check-asfsdf(Syntax?, ModuleName?)) .
+    rec-msg(check-asfsdf(Syntax?, ModuleName?, Type?)) .
     execute(asfsdfchecker, ASC?) .
-    snd-eval(ASC, check-asfsdf(Syntax, ModuleName)) .
+    snd-eval(ASC, check-asfsdf(Syntax, ModuleName, Type)) .
     rec-value(ASC, feedback(Feedback?)) .
     snd-msg(feedback(Feedback)) .
     Syntax := none .

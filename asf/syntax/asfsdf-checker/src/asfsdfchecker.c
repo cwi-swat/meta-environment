@@ -40,7 +40,9 @@ extern void init_AsfSdf_Checker();
 
 /*{{{  static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) */
 
-static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
+static PT_Tree addAsfSdfCheckerFunction(PT_ParseTree parseTree, 
+                                        const char *str, 
+                                        ATerm type)
 {
   PT_Tree newTree = NULL;
 
@@ -48,8 +50,15 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("check-asfsdf", "Summary", 2, ptSyntax,
-                                     SDF_ModuleIdToTerm(strCon));
+    if (ATisEqual(type, ATmake("eqs"))) {
+      newTree = PT_applyFunctionToTree("check-asfsdf-equations", 
+                                       "Summary", 2, ptSyntax,
+                                       SDF_ModuleIdToTerm(strCon));
+    }
+    else {
+      newTree = PT_applyFunctionToTree("check-asfsdf", "Summary", 2, ptSyntax,
+                                       SDF_ModuleIdToTerm(strCon));
+    }
   }
   else {
     ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
@@ -61,7 +70,7 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
 
 /*}}}  */
 
-static ATerm checkSdf(ATerm term, const char *name)
+static ATerm checkAsfSdf(ATerm term, const char *name, ATerm type)
 {
   PT_ParseTree parseTree;
   PT_Tree ptApplied;
@@ -70,7 +79,7 @@ static ATerm checkSdf(ATerm term, const char *name)
 
   setKeepAnnotations(ATtrue);
   parseTree = PT_ParseTreeFromTerm(term);
-  ptApplied = addSdfCheckerFunction(parseTree, name);
+  ptApplied = addAsfSdfCheckerFunction(parseTree, name, type);
   reduct = innermost(ptApplied);
   asfix = toasfix(reduct);
 
@@ -85,9 +94,9 @@ static void displayMessages(ATerm term)
   ERR_displaySummary(summary);
 }
 
-ATerm check_asfsdf(int cid, ATerm term, const char *name)
+ATerm check_asfsdf(int cid, ATerm term, const char *name, ATerm type)
 {
-  ATerm  output = checkSdf(ATBunpack(term), name);
+  ATerm output = checkAsfSdf(ATBunpack(term), name, type);
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
@@ -163,7 +172,7 @@ int main(int argc, char *argv[])
 
     syntax = ATreadFromNamedFile(input);
 
-    msgs = checkSdf(syntax, input);
+    msgs = checkAsfSdf(syntax, input, ATmake("trm"));
 
     displayMessages(msgs);
   }

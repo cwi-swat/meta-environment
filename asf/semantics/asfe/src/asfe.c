@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*{{{  includes */
 
 #include <time.h>

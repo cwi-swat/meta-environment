@@ -1,5 +1,3 @@
-# $Id$
-
 include ${top_srcdir}/make_rules
 
 INCLUDES = \
@@ -24,14 +22,14 @@ removevarsyntax_SOURCES = \
 	Remove-Var-Syntax.c \
 	removevarsyntax.tif.c
 
-removevarsyntax_LDADD = \
-	-L$(ASC_SUPPORT)/lib -lasc-support-me \
-	-L$(SGLR)/lib -lsglr \
-	-L$(TIDE)/lib -ltide-adapter \
-	-L$(SDF_SUPPORT)/lib -lSDFME \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(ATERM)/lib -lATerm \
-	$(SOCKLIBS)
+removevarsyntax_LDADD   = \
+                       -L$(ASC_SUPPORT)/lib -lasc-support-me \
+                       -L$(SGLR)/lib -lsglr \
+                       -L$(TIDE_SUPPORT)/lib -ltide-adapter \
+                       -L$(SDF_SUPPORT)/lib -lSDFME \
+                       -L$(ASF_SUPPORT)/lib -lASFME \
+                       -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+                       -L$(TOOLBUSLIB)/lib -lATB \
+                       -L$(ERROR_SUPPORT)/lib -lErrorAPI \
+                       -L$(ATERM)/lib -lATerm \
+			$(SOCKLIBS)
