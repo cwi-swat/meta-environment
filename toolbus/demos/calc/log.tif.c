@@ -35,7 +35,7 @@ term *log_handler(term *e){
  *          does NOT appear in the actual terms that will be sent to the tool.
  */
 
-term *log_check_in_sign(term_list *reqs){
+term *log_check_in_sign(term *reqs){
 	char *in_sign[3];
 	int i;
 
@@ -43,12 +43,12 @@ term *log_check_in_sign(term_list *reqs){
 	in_sign[1] = "rec-eval(<log>,readLog)";
 	in_sign[2] = "rec-terminate(<log>,<term>)";
 
-	for( ; reqs; reqs = next(reqs)){
-		for(i = 0; i < 3; i++){
-			if(TBmatch(first(reqs), in_sign[i])) goto found;
-		}
-		return first(reqs);
-		found:;
+	for( ; reqs; reqs=list_next(reqs)) {
+	  for(i=0; i<3; i++) {
+	    if(TBmatch(list_first(reqs), in_sign[i])) goto found;
+	  }
+	  return list_first(reqs);
+	  found:;
 	}
 	return NULL;
 }

@@ -54,9 +54,9 @@ large terms in the arm-adapter, and only send operations on them
 to the arm-adapter. The result of such operations need to be
 split and only subterms need to be transmitted back to the \TB.
 
-In order to implement this functionality, we introduce \emph{interface
+In order to implement this functionality, we introduce \emp{interface
 variables} in the arm-adapter. A value can be assigned to a interface
-variable using \emph{matching}. For example, the following
+variable using \emp{matching}. For example, the following
 \TB\ fragment assigns the term {\tt aap(1,2,3)} to the interface variable
 named {\tt x}. {\tt A} is the tool identifier of the arm-adapter.
 \begin{verbatim}
@@ -110,7 +110,7 @@ or from Makefiles. This setup offers a significant advantage over using
 the plain arm interpreter which could also be used to accomplish this.
 Using the arm-adapter tools, the arm interpreter can stay resident as
 a \TB\ application, so the user only has to load in the arm files once
-and then reduce a number of terms \emph{without reloading the arm files!}.
+and then reduce a number of terms \emp{without reloading the arm files!}.
 This can result in an enormous performance gain, because loading arm files
 can be very time consuming.
 

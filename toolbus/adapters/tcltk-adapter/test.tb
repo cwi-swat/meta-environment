@@ -14,7 +14,7 @@ in
   tau delay(sec(100))
 endlet
 
-tool test is { command = "./tcltk-adapter -script test.tcl" }
+tool test is { command = "./tcltk-adapter -tide -script test.tcl" }
 
 toolbus(TEST)
 

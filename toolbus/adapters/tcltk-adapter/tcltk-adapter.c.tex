@@ -191,7 +191,7 @@ static void error( const char* msg )
 %{{{ static void wputc(int c)
 
 Print a character to wish. Duplicate it on
-the stderr stream when {\tt DEBUG_ON} is defined.
+the stderr stream when {\tt DEBUG\_ON} is defined.
 
 \nwenddocs{}\nwbegincode{21}\sublabel{NWtclI-wpu5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\moddef{wputc~{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void wputc( int c )
@@ -207,7 +207,7 @@ static void wputc( int c )
 %{{{ static void wprintf(char *fmt, ...)
 
 Print a formatted string to the wish BUFfer. Duplicate it to stderr
-when {\tt DEBUG_ON} is defined.
+when {\tt DEBUG\_ON} is defined.
 
 \nwenddocs{}\nwbegincode{23}\sublabel{NWtclI-wpr7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\moddef{wprintf~{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void wprintf(char* fmt, ...)
@@ -263,7 +263,7 @@ static void print_string(char* s, int n)
 %}}}
 %{{{ static void print_var(term* e)
 
-{\tt print_var} prints variables to the {\tt to\_wish} channel.
+{\tt print\_var} prints variables to the {\tt to\_wish} channel.
 
 \nwenddocs{}\nwbegincode{27}\sublabel{NWtclI-pri9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\moddef{print_var~{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_var(term* e)
@@ -281,7 +281,7 @@ static void print_var(term* e)
 %}}}
 %{{{ static void print_env(env* e)
 
-{\tt print_env} prints environment terms to the {\tt to\_wish} channel.
+{\tt print\_env} prints environment terms to the {\tt to\_wish} channel.
 
 \nwenddocs{}\nwbegincode{29}\sublabel{NWtclI-pri9.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\moddef{print_env~{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_env(env* e)

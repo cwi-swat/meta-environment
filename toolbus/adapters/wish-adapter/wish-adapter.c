@@ -654,10 +654,11 @@ static void wish_start()
    }
    wprintf("}\n");
    wprintf("set argc %d\n", script_nr_args);
+   wprintf("set TB_LIBDIR %s\n", LIBDIR);
    wprintf("source %s\n", script);
    check_in_sign();
 }
-#line 1013 "wish-adapter.c.nw"
+#line 1014 "wish-adapter.c.nw"
 static void signal_handler( int sig )
 {
    int status;
@@ -679,14 +680,14 @@ static void signal_handler( int sig )
          shutdown( 1 );
    }
 }
-#line 1042 "wish-adapter.c.nw"
+#line 1043 "wish-adapter.c.nw"
 static void disconnect()
 {
    if(connected)
       TBsend(TBmake("snd-disconnect"));
    connected = TBfalse;
 }
-#line 1056 "wish-adapter.c.nw"
+#line 1057 "wish-adapter.c.nw"
 static void shutdown( int ret )
 {
    sleep(1);
@@ -696,7 +697,7 @@ static void shutdown( int ret )
    
    exit(ret);
 }
-#line 1073 "wish-adapter.c.nw"
+#line 1074 "wish-adapter.c.nw"
 static void signals_set()
 {
    struct sigaction act;
@@ -712,12 +713,12 @@ static void signals_set()
    sigaction( SIGQUIT, &act, NULL );
    sigaction( SIGCHLD, &act, NULL );  
 }
-#line 1096 "wish-adapter.c.nw"
+#line 1097 "wish-adapter.c.nw"
 static void help()
 {
    fprintf( stderr, USAGE_MSG );
 }
-#line 1108 "wish-adapter.c.nw"
+#line 1109 "wish-adapter.c.nw"
 static void cmd_options( int argc, char* argv[] )
 {
    int i;
@@ -745,7 +746,7 @@ static void cmd_options( int argc, char* argv[] )
       i++;
    }
 }
-#line 1145 "wish-adapter.c.nw"
+#line 1146 "wish-adapter.c.nw"
 void main( int argc, char* argv[] )
 {
    cmd_options(argc, argv);

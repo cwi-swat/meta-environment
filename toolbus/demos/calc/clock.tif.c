@@ -30,19 +30,19 @@ term *clock_handler(term *e){
  *          does NOT appear in the actual terms that will be sent to the tool.
  */
 
-term *clock_check_in_sign(term_list *reqs){
+term *clock_check_in_sign(term *reqs){
 	char *in_sign[2];
 	int i;
 
 	in_sign[0] = "rec-eval(<clock>,readTime)";
 	in_sign[1] = "rec-terminate(<clock>,<term>)";
 
-	for( ; reqs; reqs = next(reqs)){
-		for(i = 0; i < 2; i++){
-			if(TBmatch(first(reqs), in_sign[i])) goto found;
-		}
-		return first(reqs);
-		found:;
+	for( ; reqs; reqs=list_next(reqs)) {
+	  for(i=0; i<2; i++) {
+	    if(TBmatch(list_first(reqs), in_sign[i])) goto found;
+	  }
+	  return list_first(reqs);
+	  found:;
 	}
 	return NULL;
 }
