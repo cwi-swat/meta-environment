@@ -274,13 +274,13 @@ pretty printing it.
 \subsection{About this Manual}
 
 This manual is intended for those courageous users that want to try
-out the new brand new implementation of the \ASmetaenv. This manual is
+out the brand new implementation of the \ASmetaenv. This manual is
 still under development and we welcome all feed back and comments.
 
 %%In the sequel we will use \ASmetaenv\ to address the new
 %%system and old \ASmetaenv\ when addressing the old system.
 
-The focus in this manual will be on using the system to write a
+The focus of this manual will be on using the system to write a
 specification like a type checker or evaluator for the toy language
 PICO. It follows the user-interface to explain the capabilities of the
 system.  Topics that will be addressed include:
@@ -294,7 +294,7 @@ system.  Topics that will be addressed include:
 \item How to parse a term outside the \ASmetaenv.
 \item How to rewrite a term using a compiled specification outside the
 \ASmetaenv.
-\item How to unparse parse and/or normalized terms.
+\item How to unparse parsed and/or normalized terms.
 \end{itemize}
 
 \noindent We do \emph{not} explain:
@@ -305,6 +305,8 @@ to \asfsdf\ in Section~\ref{ASF+SDF}.
 \item The architectural and implementational aspects of the system.
 \item The stand alone usage of various parts of the system.
 \end{itemize}
+
+\subsection{\sdf1 versus \sdf2}
 
 \subsection{Further Reading}
 
@@ -325,7 +327,7 @@ and continue with Section~\ref{MainWindow}.
 
 \item {\tt -c \emph{dir}} instructs the \asfsdf\ compiler to generate
 C files in the directory \emph{dir}. Note that this directory is also
-controlled by the environment variable {\tt COMPILER\_OUTPUT}
+controlled by the environment variable {\tt COMPILER\_OUTPUT}.
 
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
 an interactive viewer (``ToolBus viewer'') will be started that 
@@ -338,8 +340,8 @@ The viewer is shown in Figure~\ref{FIG:viewer}.
 be used for communication between the components of the \ASmetaenv.
 Note that these ports are also controlled by the environment variable
 {\tt TB\_PORT}.  The default value is {\tt 8999}, but this port may be
-in use by someone else (or by a aborted previous run of the
-\ASmetaenv). In that case, it is advisable to use other value in the
+in use by someone else (or by an aborted previous run of the
+\ASmetaenv). In that case, it is advisable to use other values in the
 range 9000 and up.
 
 \item {\tt -v} runs the \ASmetaenv\ in verbose mode.
@@ -374,7 +376,7 @@ path `{\tt .}', i.e., only the current directory will be searched.
 The main window of \ASmetaenv\ immediately after starting of the
 system was already shown in Figure~\ref{FIG:meta-start}.  After
 loading a specification it may look like Figure~\ref{FIG:meta-pico}.
-The main window of the consists of the following parts:
+The main window consists of the following parts:
 
 \begin{itemize}
 \item At the top of the window is a menu bar that contains the following menus:
@@ -401,7 +403,7 @@ The main window of the consists of the following parts:
   
 \item The \emph{import pane}: A graphical canvas (empty in
   Figure~\ref{FIG:meta-start}, but containing rectangles and arrows in
-  Figure~\ref{FIG:meta-pico}) at the left hand side of the window that shows
+  Figure~\ref{FIG:meta-pico}) at the left hand side of the window shows
   the import graph of the specification you are editing.  The import pane is
   described in Section~\ref{ImportPane}.
   
@@ -411,7 +413,7 @@ The main window of the consists of the following parts:
   part of the window that shows the names of all modules in the current
   specification.  The module pane is described in Section~\ref{ModulePane}.
   
-\item The \emph{button pane}: vertical row of buttons at the right hand side
+\item The \emph{button pane}: a vertical row of buttons at the right hand side
   of the window containing buttons like {\tt Edit Syntax} and {\tt Edit
     Equations}: they are used for common operations on the
   current specification like editing, saving or deleting a module, or
@@ -554,7 +556,7 @@ is a {\tt Netscape} running, other browsers are not yet supported.
 The two left-most panes of the main window give two, alternative,
 views on the same information: the \asfsdf\ specification that has
 been loaded into the Meta-Environment.  Using one of these views, the
-same set of operations is available either via a pop menu or via the
+same set of operations is available either via a popup menu or via the
 buttons in the pane at the right-hand side of the main window.
 
 \subsection{The Import Pane} \label{ImportPane}
@@ -586,8 +588,8 @@ button pane of the main window (see Section \ref{ButtonPane}).
 
 \item Clicking \emph{outside} any module yields a pop up menu as shown
 in Figure~\ref{FIG:new-open}.  It contains the entries {\tt New} and
-{\tt Open} for creating a new, respectively, opening an existing
-module. These two operations are also available from the {\tt File}
+{\tt Open} for creating a new and opening an existing module, respectively. 
+These two operations are also available from the {\tt File}
 menu (see Section~\ref{FileMenu}).
 
 \end{itemize}
@@ -604,21 +606,20 @@ menu (see Section~\ref{FileMenu}).
 
 \subsection{The Module Pane} \label{ModulePane}
 
-The import pane is particularly usefull when you want to understand the
+The import pane is particularly useful when you want to understand the
 overall structure of a specification but it may become unwieldy for
 very large specifications. For large specifications the module pane
 may give you quicker access to the modules in the specification.
 It presents a vertical, scrollable, list of the names of all the modules in
 the specification.
 
-The main purpose of the module pane is to select one or modeles from
+The main purpose of the module pane is to select one or more modules from
 the specification on which an operation from the button pane
 (Section~\ref{ButtonPane}) is to be performed.  One module is selected
 by clicking on the corresponding module name in the module pane.  More
 than one module can be selected by clicking on a module name, keeping
 the mouse button down and and then dragging the mouse to the last
-desired module name.  Note that only consecutive modules can be
-selected.
+desired module name.
 
 After making the selection, an operation can be performed on all the
 selected modules by pushing a button from the button pane.  For
@@ -646,12 +647,14 @@ and the equations section of the selected module(s).
 the effect is that modifications made to these modules are discarded.
 {\tt Delete} removes modules.
 
-{\tt Compile} invokes the \asfsdf-compiler to generate C code.  If no
-or more than one module ihas been selected, a warning appears (Figure
-\ref{FIG:compiler-warning}).  Otherwise, a dialog window appears (Figure
-\ref{FIG:compiler-dir}) containing the current directory path where the output of the compiler
+{\tt Compile} invokes the \asfsdf-compiler to generate C code.  If no module
+or more than one module has been selected, a warning appears 
+(Figure~\ref{FIG:compiler-warning}).  Otherwise, a dialog window appears 
+(Figure~\ref{FIG:compiler-dir}) containing the current directory path 
+where the output of the compiler
 will be written. It can be modified as well.
-Pushing the {\tt Cancel} button aborts the compilation. Section~\ref{compiling-specs}
+Pushing the {\tt Cancel} button aborts the compilation. 
+Section~\ref{compiling-specs}
 gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Info} gives module information (not yet implemented).
@@ -693,20 +696,24 @@ user can navigate in the tree.
 
 \subsection{Editing the Syntax Part of a Module}
 
-An editor for editing the syntax part of a module is activated via the
-button {\tt Edit Syntax}. An example is shown in
+An editor for editing the syntax part of a module can be activated by
+pressing the {\tt Edit Syntax} button. An example is shown in
 Figure~\ref{FIG:Bool-example.sdf2}.  Initially the entire text is
-highlighted and the message ``{\tt Focus sort is invalid}'', appears
+highlighted and the message ``{\tt Focus sort is invalid}'' appears
 in the status line at the bottom of the main window.
 
 Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
 editor, the parser can be activated.  The parser is finished when the
 status line in the main window displays ``{\tt Idle}'' again.
 
-\paragraph{Note:} if the term to be parsed is a large one, it may take
+\paragraph{Note:} when parsing a large term it may take
 some time for the editor to be active again. If the parse was
-successful the bottom line in the \xemacs\ window contains the message
-{\tt Focus sort: None}. Clicking on an arbitrary place sets the focus
+successful, the bottom line in the \xemacs\ window displays the message
+{\tt Focus sort: None}. If the term contains an error, the cursor is
+located at the position where the error was detected and the bottom line
+in the \xemacs\ window displays the message
+{\tt Parse error near cursor}.
+Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
 \begin{figure}[t]
@@ -725,7 +732,7 @@ via the button {\tt Edit Equations}.  An example is shown in Figure
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor
 activates the parser for the equations. It is possible that in order
-to parse the equations, a parse table needs to be generated. This is
+to parse the equations, a parse table must be generated. This is
 visible through the status message {\tt Generating Parse Table}.  The
 entry {\tt Reduce} in the {\tt Meta-Environment} menu of the editor
 has no effect when editing equations.
@@ -739,15 +746,17 @@ An editor for editing a term over a module is activated via the button
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor
 activates the
 parser for this term. It is possible that in order to parse
-the term, a parse table needs to be generated. This is visible
+the term, a parse table must be generated. This is visible
 through the status message {\tt Generating Parse Table}.
 
 The entry {\tt Reduce} in the {\tt Meta-Environment} menu of the
-editor activates the evaluator (also called interpreter). The term is
+editor activates the evaluator\footnote{We will also use interpreter,
+rewriter, or reducer instead of evaluator, and equivalently we use 
+evaluating, interpreting, rewriting, or reducing of a term}. The term is
 reduced given the specified equations (if any). In order to reduce the
 term it may be necessary to parse the equations of various modules and
 to initialize the evaluator with this set of equations.  Section
-\ref{eval-term} gives more details on evaluating terms.
+\ref{eval-term} gives more details on reducing terms.
 
 
 \section{Guided Tour} \label{GuidedTour}
@@ -757,15 +766,15 @@ to initialize the evaluator with this set of equations.  Section
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
 \end{figure}
 
-To help you to get acquainted with the \ASmetaenv\ the system
-comprises two example specifications, namely the one-module specification:
-{\tt Bool-example}, and the specification of the syntax, typechecker and dynamic
-semantics of the small programming language Pico.
+To help you get acquainted with the \ASmetaenv\ the system
+contains two example specifications. The first is the one-module specification:
+{\tt Bool-example}, and the second is the specification of the syntax, 
+typechecker and dynamic semantics of the small programming language Pico.
 
 This Guided Tour is meant to guide you through these specifications, and show
 you the main features of the \ASmetaenv. Only global information
 is given about these features but references are made to parts of the
-user-manual with detailed information.
+user-manual where detailed information can be found.
 
 \subsection{Before you start the Guided Tour}
 
@@ -778,8 +787,8 @@ copy of the directory.
 
 For each module in a specification two files exist: `{\tt
   $module$.sdf2}' contains the syntax of $module$ and `{\tt
-  $module$.eqs}' contains the semantics (equations) of $module$. The
-  directory pico contains:
+  $module$.eqs}' contains the equations (semantics) of $module$. The
+  directory {\tt pico} contains:
 
 \begin{itemize}
 
@@ -890,7 +899,8 @@ module Bool-example
   version of the standard text editor Emacs extended with the menu {\tt
     Meta-Environment}. The result is shown in Figure~\ref{FIG:Bool-example.sdf2}.
   
-\item Push the button {\tt Edit Equations}.  This will reuse the already created
+\item Push the button {\tt Edit Equations}.  This will reuse the already 
+  existing
   instance of Emacs by adding a new buffer to it containing the semantic part
   of the {\tt Bool-example} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
@@ -927,14 +937,15 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 
 \item 
   Type the term `{\tt true \& false}' in this editor. Observe how the text
-  that you type gets a light blue background.
+  that you type gets a different background color.
   This is called a \emph{focus}. The result is shown in Figure~\ref{FIG:Bool-example.trm}.
 
 \item Click in the focus, this will move the cursor (a single character-sized
-  red rectangle) 
+  rectangle) 
   
 \item From menu {\tt Meta-Environment} click the {\tt Parse} button.  The text
-  in the focus is now parsed and the blue background has disappeared.
+  in the focus is now parsed and the different background color has 
+  disappeared.
   The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
 
 \end{itemize}
@@ -975,8 +986,8 @@ will be selected and becomes the focus.
   parse of the term by selecting the {\tt Parse} button of the 
   {\tt Meta-Environment} menu.
   
-  In the status line at the bottom of the edit window a message will appear
-  message `{\tt Parse error near cursor}' and the cursor will be positioned in
+  In the status line at the bottom of the edit window a message appears
+  `{\tt Parse error near cursor}' and the cursor will be positioned in
   the word `{\tt wrong}'
 
 \end{itemize}
@@ -1038,12 +1049,12 @@ The \ASmetaenv\ is an \emph{incremental environment generator}. After
 each edit operation on a module, its \emph{implementation} (i.e., scanner, parser and
 term rewriting system) is updated immediately.
 
-The editing of both the syntax section and the equations secion of a module is
+The editing of both the syntax section and the equations section of a module is
 syntax-directed like the editing of terms in a term editor.
 
 \paragraph{Modifying the Equations}
 
-The equation section of a module begins with the keyword {\tt equations}
+The equations section of a module begins with the keyword {\tt equations}
 and is saved in files ending on `{\tt .eqs}'.
 
 \begin{itemize}
@@ -1103,15 +1114,15 @@ Modifying layout in the lexical section:
 
 \end{itemize}
 
-\paragraph{Note:} Not defining {\tt LAYOUT} is one of the errors most commonly
-made when writing a new specification; always make sure your syntax
+\paragraph{Note:} Omitting the {\tt LAYOUT} definition is one of most common
+errors made when writing a new specification; always make sure your syntax
 definitions define at least spaces and newlines to be {\tt LAYOUT}.
 
 \begin{itemize}
   
 \item End the editing of your term and the module {\tt Bool-example} by
-  selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  You
-  may or may not save the changes to module Bool-example.
+  selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  
+  If you like, you can save the changes to module Bool-example.
 
 \end{itemize}
 
@@ -1177,7 +1188,7 @@ Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
     pico}, and type `{\tt meta}'.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
-  choosing the {\tt Open...} button.  In the dialog window that appears, click
+  selecting the {\tt Open...} button.  In the dialog window that appears, click
   on {\tt Pico-syntax.sdf2} and push the {\tt Open} button.
   
 \item As you can see in both the import pane and the module pane, not only
@@ -1195,35 +1206,33 @@ Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
 
 \end{itemize}
   
-  A Pico program consist of the word `{\tt begin}', a declaration section, a
+  A Pico program consists of the word `{\tt begin}', a declaration section, a
   series of zero or more statements, and the word `{\tt end}'. The declaration
   section consists of the word `{\tt declare}', a list of zero or more tuples
-  `{\tt $identifier$ : $type$}' and a semi-colon `{\tt ;}'. Types are `{\tt
-    string}' and `{\tt natural}'.  There are three kinds of statements:
-  assignments, if-then-else statements and while-loops. And there are
-  expressions.
+  `{\em identifier} {\tt :} {\em type}' and a semi-colon `{\tt ;}'. 
+  Types are `{\tt string}' and `{\tt natural}'.  
+  There are three kinds of statements:
+  assignments, if-then-else statements and while-loops. The Pico language
+  has also expressions for adding and substracting natural numbers and
+  for concatenating strings.
 
 \paragraph{Notes:}
 
 \begin{itemize}
   
 \item A module {\tt Layout} is imported, in which the 
-sort {\tt LAYOUT} has been
-  specified.
+sort {\tt LAYOUT} has been specified.
   
-\item The use of list constructs in the context-free section: 
-`{\tt \{ID-TYPE ","\}*}' and 
-`{\tt \{STATEMENT ","\}*}'. In fact, the sort {\tt SERIES}
+\item In the context-free section the list constructs 
+`{\tt \{ID-TYPE ","\}*}' and `{\tt \{STATEMENT ","\}*}' are used. 
+In fact, the sort {\tt SERIES}
   could have been left out entirely and be replaced by 
 `{\tt \{STATEMENT ","\}*}' all through the specification. 
 {\tt SERIES} is only used for
   abbreviation in the syntax rules. Also, variables over list constructs are
-  being declared.
-  
-\item When a literal in a context-free function consists only of lower case
-  letters and digits, and it is not a \sdf-keyword, it need not be quoted.
+  declared.
 
-\item  The Pico-syntax module naturally contains no equations.
+\item  The Pico-syntax module contains no equations.
 
 \end{itemize}
 
@@ -1262,9 +1271,9 @@ This has the following effects:
 
   
 Reducing a term for the second time is notably faster: the equations have been
-compiled already. If you are curious what is going, have a look at the
+processed already. If you are curious what is going, have a look at the
 status field at the bottom of the main window. It reveals the steps that
-are necessary to arrive at an executable specification.
+are necessary to arrive at a specification which can be interpreted.
 
 \begin{itemize}
 \item Verify this by pushing the {\tt Reduce} button once more.
@@ -1290,7 +1299,8 @@ This has the following effects:
   {\tt small.pico}, except that the program has been surrounded by `{\tt tcp(}'
   and `{\tt )}'.  The function {\tt tcp} (for type check program), applies the
   typing rules for the Pico language to its single argument: a complete Pico
-  program. The result is {\tt true} or {\tt false}.
+  program. The result is {\tt true} or {\tt false}, depending on whether
+  the Pico program is properly typed.
   
 \item All equations of {\tt Pico-typecheck} and its imported
   modules are being compiled.
@@ -1317,8 +1327,8 @@ modules have been added already and the equations have been compiled.
 
 \end{itemize}
 
-The evaluation (execution) of programs is achieved in a similar fashion as
-typechecking. The evaluation rules are defined in the module `{\tt
+The evaluation of Pico programs is achieved in a similar fashion. 
+The evaluation rules are defined in the module `{\tt
   Pico-eval}'. Applications of the evaluation function `{\tt evp}' can be
 found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
 
@@ -1370,7 +1380,7 @@ of statements uses a type-environment and yields a Boolean value.
 
 \end{itemize}
 
-In the equations is defined how a Pico-program is typechecked. Equation {\tt
+The equations define how a Pico-program is typechecked. Equation {\tt
   [Tc1]} says that the typechecking of a program is `{\tt true}' if the
 typechecking of the Series in the type-environments, `{\tt tcd(Decls)}', is
 `{\tt true}'.
@@ -1405,7 +1415,7 @@ does not have an output-statement.)
 
 \end{itemize}
 
-In the equations is defined how a program is evaluated. Equation {\tt [Ev1]}
+The equations define how a program is evaluated. Equation {\tt [Ev1]}
 says that the evaluation of a program is the evaluation of the Series in the
 value-environments, `{\tt evs(Decls)}'.
 
@@ -1421,7 +1431,7 @@ evaluated using the information from the type-environment. Evaluating
 statements means updating the value-environment.
 
 The rest of the equations deal with the evaluation of expressions. Evaluating
-expressions results in a value.
+an expression results in a value.
 
 \section{An Introduction to \asfsdf} \label{ASF+SDF}
 
@@ -1430,11 +1440,11 @@ Specification Formalism) and \sdf\ (Syntax Definition Formalism).  \asf\ is
 based on the notion of a module consisting of a signature defining the
 abstract syntax of functions and a set of conditional equations defining their
 semantics. Modules can be imported in other modules. \sdf\footnote{To be more
-  precise, we will describe here \sdf2, a new version of \sdf. \sdf2 is more
-  expressive and offers some special features to write more powerfull lexical
+  precise, we will describe \sdf2, a new version of \sdf. \sdf2 is more
+  expressive and offers some special features to write more powerful lexical
   grammar definitions as well as more concise context-free grammar
   definitions. However, some built-in features of \sdf, like lexical
-  disambiguation, have disappeared, and a specification writer has to be aware
+  disambiguation, have disappeared, and a specification writer should be aware
   of this.
   
   Currently, the \ASmetaenv\ only supports a subset of \sdf2\ that is mostly
@@ -1447,9 +1457,9 @@ translation from text strings to abstract syntax trees.
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
 implicitly by an \sdf\ specification, thus yielding a standard mapping 
-from text to abstract syntax tree. This gives the possibility to 
-associate semantics with (the tree representation of) text and to 
-introduce user-defined notation in specifications.
+from text to abstract syntax tree. This allows the 
+association of semantics with (the tree representation of) text and 
+introduces user-defined notation in specifications.
 
 \asfsdf\ is therefore a modular specification formalism for the integrated
 definition of syntax and semantics.
@@ -1559,7 +1569,7 @@ sorts
 
 \noindent A sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
-There is one predefined sort name ({\tt LAYOUT}). We will describe it in
+There is one predefined sort name ({\tt LAYOUT}). It is described in
 Section~\ref{LexicalSyntax}.
 
 \subsection{Lexical Syntax} \label{LexicalSyntax}
@@ -1612,7 +1622,7 @@ In their simplest form, declarations of lexical functions consist of a
 sequence of zero or more strings or sort names followed by `{\tt ->}'
 and the name of a result sort, say $L$.  A lexical function may be
 followed by a list of attributes. The regular expression associated
-with $L$ consists of the \emph{or} of all left-hand sides of lexical
+with $L$ consists of the logical \emph{or} of all left-hand sides of lexical
 functions with result sort $L$.  All sort names appearing in left-hand
 sides of declarations are replaced by the regular expression
 associated with them. Circular dependencies between declarations in
@@ -1637,7 +1647,7 @@ exports
     "aap"         -> Aap
     "noot"        -> Noot
     "mies"        -> Mies
-    Aap Noot Mies -> LeesPlank
+    Aap Noot Mies -> LeesPlank  
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Simple lexical functions}\label{CODE:simplelex}
@@ -1649,8 +1659,8 @@ exports
 For each sort that appears as result sort in the lexical syntax a lexical
 constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
 added to the context-free syntax of the specification.  Here, `{\tt l}' is the
-name of sort `{\tt L}' written in lower case letters.  In this way, you can
-get access to the text of lexical tokens.
+name of sort `{\tt L}' written in lower-case letters.  In this way, you can
+get access to the characters of lexical tokens.
 
 \subsubsection{Character Classes}
 
@@ -1664,22 +1674,22 @@ In a character range of the form {\tt $c_1$-$c_2$} one of the following
 restrictions should apply:
 
 \begin{itemize}
-\item $c_1$ and $c_2$ are both lower case letters and $c_2$ follows $c_1$ in
+\item $c_1$ and $c_2$ are both lower-case letters and $c_2$ follows $c_1$ in
   the alphabet, or 
-\item $c_1$ and $c_2$ are both upper case letters and $c_2$ follows $c_1$ in
+\item $c_1$ and $c_2$ are both upper-case letters and $c_2$ follows $c_1$ in
   the alphabet, or 
 \item $c_1$ and $c_2$ are both digits and the numeric value of $c_2$ is
   greater than that of $c_1$, or 
 \item $c_1$ and $c_2$ are both escaped non-printable characters and the 
-character code of $c_2$ is larger than that of $c_1$.
+character code of $c_2$ is greater than that of $c_1$.
 \end{itemize}
 
-Definitions for lower case letter ({\tt LCLetter}), uppercase letters
-({\tt UCLetter}), lower and upper case letters ({\tt Letter}) and
+Definitions for lower-case letter ({\tt LCLetter}), upper-case letters
+({\tt UCLetter}), lower-case and upper-case letters ({\tt Letter}) and
 digits ({\tt Digit}) are shown in Figure~\ref{CODE:LettersDigits1}.
 Figure~\ref{CODE:LettersDigits2} gives
 a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
-(upper case or lower case) or digit.
+(upper-case or lower-case) or digit.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1697,7 +1707,7 @@ exports
     [0-9]    -> Digit
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Defining letter (lower case and upper case) and digit}\label{CODE:LettersDigits1}
+\caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
 \end{figure}   
 
 \begin{figure}[tb]
@@ -1823,12 +1833,12 @@ module Identifiers-repetition
 imports Layout
 
 exports
-  sorts Let NumLet
+  sorts Letter DigitLetter
   lexical syntax
-    [a-z]       -> Let
-    [a-z0-9]    -> NumLet
+    [a-z]       -> Letter
+    [a-z0-9]    -> DigitLetter
 
-    Let NumLet* -> Id
+    Letter DigitLetter* -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
@@ -1836,7 +1846,7 @@ exports
 
 \subsubsection{Repetition Operators}
 
-It is common, that lexical tokens can only be described by patterns that
+Lexical tokens are often be described by patterns that
 exhibit a certain repetition. Two postfix operators are available for this
 purpose:
 
@@ -1872,12 +1882,12 @@ module Identifiers-optional
 imports Layout
 
 exports
-  sorts Let Num
+  sorts Letter Digit
   lexical syntax
-    [a-z]+   -> Let
-    [0-9]    -> Num
+    [a-z]+   -> Letter
+    [0-9]    -> Digit
 
-    Let Num? -> Id
+    Letter Digit? -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Defining a letter followed by an optional number using the option operator {\tt ?} }\label{CODE:option}
@@ -1896,11 +1906,11 @@ invisible operator for the concatenation of tokens).
 
 The example  in Figure \ref{CODE:alternative1} shows how this operator can be used.
 It describes identifiers starting
-with a capital letter followed by one of the following:
+with a upper-case letter followed by one of the following:
 \begin{itemize}
-\item  zero or more small letters, 
+\item  zero or more lower-case letters, 
 
-\item zero or more capital letters, or
+\item zero or more upper-case letters, or
 
 \item zero or more digits.
 \end{itemize}
@@ -1914,7 +1924,7 @@ understood by looking at the line defining {\tt Id}. A parenthesized
 version of this same line would read as follows:
 \begin{quote}
 \begin{verbatim}
-  UcLet (ScLets | UcLet* | Digs) -> Id
+  UCLetter (LCLetters | UCLetter* | Digits) -> Id
 \end{verbatim}
 \end{quote}
 
@@ -1925,14 +1935,14 @@ module Identifiers-alternative1
 
 imports Layout
 
-exports\
-  sorts UcLet ScLets Digs
+exports
+  sorts UCLetter LCLetters Digits
   lexical syntax
-    [A-Z]    -> UcLet
-    [a-z]*   -> ScLets
-    [0-9]*   -> Digs
+    [A-Z]    -> UCLetter
+    [a-z]*   -> LCLetters
+    [0-9]*   -> Digits
 
-  UcLet ScLets | UcLet* | Digs -> Id
+  UCLetter LCLetters | UCLetter* | Digits -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
@@ -1950,13 +1960,13 @@ module Identifiers-alternative2
 imports Layout
 
 exports
-  sorts UcLet ScLets Digs
+  sorts UCLetter LCLetters Digits
   lexical syntax
-    [A-Z]    -> UcLet
-    [a-z]*   -> ScLets
-    [0-9]*   -> Digs
+    [A-Z]    -> UCLetter
+    [a-z]*   -> LCLetters
+    [0-9]*   -> Digits
 
-    (UcLet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
+    (UCLetter LCLetters) | (UCLetter UCLetter*) | (UCLetter Digits) -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative2}
@@ -2102,14 +2112,14 @@ of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
 \caption{BNF definition of simple grammar}\label{CODE:simple-bnf}
 \end{figure}   
 
-%When a literal in a context-free function consists only of lower case letters
+%When a literal in a context-free function consists only of lower-case letters
 %and digits and is not a keyword of \asfsdf, it need not be surrounded with
 %quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
 %definition given above.
 
 \subsubsection{List Structures}
 
-It happens quite often that a context-free syntax requires the description of
+Context-free syntax often requires the description of
 the repetition of a syntactic notion or of list structures (with or without
 separators) containing a syntactic notion. \asfsdf\ provides the following
 primitives for this:
@@ -2118,17 +2128,17 @@ primitives for this:
 
 \item Lists without separators:
 
-\begin{itemize}
+\begin{description}
 
 \item[{\tt $S$*}] defines zero or more repetitions of sort $S$. 
 
 \item[{\tt $S$+}] defines one or more repetitions of sort $S$.
 
-\end{itemize} 
+\end{description} 
 
 \item Lists with separators:
 
-\begin{itemize}
+\begin{description}
 
 \item[{\tt \{$S$ $sep$\}*}] defines zero or more repetitions of 
 sort $S$ separated by the literal $sep$.
@@ -2136,7 +2146,7 @@ sort $S$ separated by the literal $sep$.
 \item[{\tt \{$S$ $sep$\}+}] defines one or more repetitions of 
 sort $S$ separated by the literal $sep$.
 
-\end{itemize}
+\end{description}
 
 \end{itemize}
 
@@ -2145,7 +2155,7 @@ right-hand side of a variable declaration, see Section \ref{Variables}. They
 may {\em not} be used as result sort in the right-hand side of a context-free
 function.
 This imposes no real restriction since a new sort can be introduced
-representing a list. This new sort may then be used in the left-hand side of
+representing a list. This new sort may then be used in the right-hand side of
 other context-free rules.
 
 Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
@@ -2186,16 +2196,16 @@ numbers in reals. Such a \emph{chain function} has one of the following forms:
 
 \begin{itemize}
 
-\item {\tt $SMALL$ -> $BIG$} 
-\item {\tt \{$SMALL$ $sep$\}* -> $BIG$} 
-\item {\tt $SMALL$* -> $BIG$} 
-\item {\tt \{$SMALL$ $sep$\}+ -> $BIG$} 
-\item {\tt $SMALL$+ -> $BIG$}
+\item {\tt SMALL -> BIG} 
+\item {\tt \{SMALL $sep$\}* -> BIG} 
+\item {\tt SMALL* -> BIG} 
+\item {\tt \{SMALL $sep$\}+ -> BIG} 
+\item {\tt SMALL+ -> BIG}
 
 \end{itemize}
 
 Chain functions do not appear in the abstract syntax but correspond to a
-\emph{subsort relation} between $SMALL$ and $BIG$.
+\emph{subsort relation} between {\tt SMALL} and {\tt BIG}.
 If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
 tree a tree of sort {\tt SORT-A} can be put wherever a tree of
 sort {\tt SORT-B} is required.
@@ -2205,7 +2215,7 @@ sort {\tt SORT-B} is required.
 \subsection{Attributes of Lexical and Context-free Functions}
 
 The definition of a lexical or context-free functions may be followed by
-\emph{attibutes} that define additional (syntactic or semantic) properties of
+\emph{attributes} that define additional (syntactic or semantic) properties of
 that function.  The following syntax-related attributes exist:
 
 \begin{itemize}
@@ -2215,11 +2225,15 @@ kinds of brackets that are mostly used for overruling the priorities
 of operators in expressions (Section~\ref{BracketFunctions}).
 
 \item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
-are used for defining the associativity of functions 
+are used to define the associativity of functions 
 (Section~\ref{Priorities}).
 
-\item {\tt prefer} and {\tt avoid} are used to define that a function should
-either be preferred over other or only be used as a last resort in certain cases of
+\item {\tt prefer} is used to indicate that the attributed function should
+always be preferred over other functions (without this attribute)
+in certain cases of syntactic ambiguity (Section~\ref{PreferAvoidReject}).
+
+\item {\tt avoid} is used to indicate that a function should
+only be used as a last resort in certain cases of
 syntactic ambiguity (Section~\ref{PreferAvoidReject}).
 
 
@@ -2254,7 +2268,7 @@ arguments of a function (Section~\ref{Delay}).
 
 The context-free syntax defined in an \asfsdf\ specification may be 
 ambiguous: there are sentences which have more than one associated tree. 
-The common example are the arithmetic expressions in which definitions 
+The common example is the arithmetic expressions in which definitions 
 of the priority or associativity of operators are missing. There are 
 three mechanisms for defining associativity and priority:
 
@@ -2263,8 +2277,8 @@ three mechanisms for defining associativity and priority:
 \item relative priorities of functions (defined in 
 the `{\tt context-free priorities}' section); 
 
-\item associativity of functions (defined as attribute following the function
-  declaration); 
+\item associativity of functions (defined as an attribute following 
+the function declaration); 
 
 \item associativity of groups of functions (defined in 
 the `{\tt context-free priorities}' section).
@@ -2272,7 +2286,7 @@ the `{\tt context-free priorities}' section).
 \end{itemize}
 
 Closely related with priorities are brackets that can be used to
-overrule priorities.  We will now first describe bracket functions,
+overrule priorities.  We will first describe bracket functions,
 and then the various forms of defining priorities.
 
 \subsubsection{Bracket Functions} \label{BracketFunctions}
@@ -2332,7 +2346,8 @@ the nodes corresponding to them should
 thus appear at lower levels in the tree than nodes corresponding to functions
 with lower priorities. Lists of functions may be used in a priority
 declaration: {\tt $F$ > \{$G$, $H$\}} is an 
-abbreviation for {\tt $F$ > $G$, $F$ > $H$} . 
+abbreviation for {\tt $F$ > $G$, $F$ > $H$}.
+Note that this tells us nothing about the priority relation between $G$ and $H$. 
 
 \subsubsection{Associative Functions}
 
@@ -2362,16 +2377,17 @@ related occurrences of the same function, $F$:
 \end{itemize}
 
 Currently, there is no syntactic or semantic difference between `{\tt left}'
-and `{\tt assoc}', but we may change that in the future.
+and `{\tt assoc}', but we may change the semantics of the '{\tt assoc}'
+attribute in the future.
 
 Figure \ref{CODE:simple-prio} gives an example of a definition of
-simple arithmetic expressions with usual priorities and
+simple arithmetic expressions with the usual priorities and
 associativities.
 
 \begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
-module Expr1
+module SimpleExpr
 
 imports Layout
 
@@ -2416,7 +2432,7 @@ associativity.
 \begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
-module Expr2
+module ComplexExpr
 
 imports Layout
 
@@ -2558,7 +2574,7 @@ exports
 \end{figure}
 
 The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
-use of restrictions to extend the previous layout definition with C-style
+use of restrictions to extend the previous layout definition with C++-style
 comments. The context-free restriction defined in Figure~\ref{CODE:safe-layout}
 is here repeated. This repetition is redundant but it makes the example
 more self contained.
@@ -2584,7 +2600,7 @@ exports
     LAYOUT? -/- [\/].[\*]
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Definition of C comments}\label{CODE:c-comment}
+\caption{Definition of C++ comments}\label{CODE:c-comment}
 \end{figure}
 
 \subsubsection{Preferring, avoiding or rejecting parses} 
@@ -2608,11 +2624,11 @@ removed from the set of ambiguities.
 If a function $F$ is attributed with {\tt reject}, then independent of the
 number of ambiguities, the parse using $F$ will be removed.  While
 restrictions (Section~\ref{Restrictions}) only impose restrictions on the
-immediate look ahead that follows a symbol, the reject mechanism can be used
+immediate lookahead that follows a symbol, the reject mechanism can be used
 to eliminate complicated syntactic structures.
 
-Examples of {\tt prefer}, {\tt avoid} and {\tt reject} will be discussed in
-Section~\ref{Disambiguation}.
+Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} 
+will be discussed in Section~\ref{Disambiguation}.
 
 \subsection{Variables} \label{Variables}
 
@@ -2725,8 +2741,8 @@ There are two approaches to implement Prefer Literals.
 In the first approach, we can explicitly forbid the recognition of literals as
 tokens of a specific sort using the reject mechanism (see
 Section~\ref{PreferAvoidReject}).  The idea is to define context-free grammar
-rules for all literals with the undesired lexical sort (e.g., {\tt Id} )in the
-right-hand side followed by the attribute {\tt reject}.  Figure
+rules for all literals with the undesired lexical sort (e.g., {\tt Id}) in the
+right-hand side followed by the attribute {\tt reject},  Figure
 \ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute indicates
 that the recognizition of a keyword as a literal of the given sort should be
 rejected. This approach has the major disadvantage that the addition of a
@@ -2758,9 +2774,12 @@ The second approach is more attractive. The lexical definition of the general
 notion that interferes with our literals is written in such a way that it is
 only used as a last resort. In other words, it is avoided as much as possible
 and is only used when no alternative exists.  The attribute {\tt avoid}
-defines precisely this behaviour (Section~\ref{PreferAvoidReject}.  Figure
+defines precisely this behaviour (Section~\ref{PreferAvoidReject}).  Figure
 \ref{CODE:avoid-id} shows how the lexical definition of {\tt Id} is attributed
 with {\tt avoid}.
+
+Although the first approach is more tedious, it allows more flexibility
+than the second one.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2793,15 +2812,18 @@ extending each variable declaration with the attribute {\tt prefer}
 
 \paragraph{Removing Trees using Priorities}
 
-The priority and associativity declarations are used to eliminate trees in two
-phases: 
+The priority and associativity declarations are used to eliminate trees 
+in three phases: 
 
 \begin{itemize}
 
-\item First, trees containing internal conflicts (regarding priority or 
+\item First, trees containing {\em prefer}ed nodes are selected, the
+other trees are removed.
+
+\item Next, trees containing internal conflicts (regarding priority or 
 associativity) are eliminated.
 
-\item Next, the remaining trees are compared pair-wise and trees 
+\item Finally, the remaining trees are compared pair-wise and trees 
 are eliminated that are dominated by another one. The ordering used 
 is obtained by extending the priority
 ordering on context-free functions to an ordering on trees.
