@@ -29,6 +29,10 @@ do
 		-v*)
 			VERBOSE=0
 			OPTS="$OPTS $1" ;;
+		-f*)
+			PGOPTS="$PGOPTS $1" ;;
+		-s*)
+			PGOPTS="$PGOPTS $1" ;;
 		-*)
 			echo Unknown option ignored: $1 ;;
 		*)
@@ -46,7 +50,7 @@ do
 	if $PARSER $OPTS $f -o $af1name
 	then
 	        Notify "Generating parse table ..."
-	        if $GENERATOR $OPTS $af1name
+	        if $GENERATOR $PGOPTS $OPTS $af1name
 		then
 			rm -f $af1name
 		else

@@ -12,11 +12,15 @@ TMP=/tmp/`basename $0`.$$	# Junk files
 trap "rm -f $TMP*" 0 1 2 15	# Clean up afterwards
 
 PGEN="${bindir}/ParseTable-Generator -silent"
+TABLEGEN="${bindir}/ksdf2table"
 A2TOA1="${bindir}/a2toa1 -silent"
 ASOURCE="${bindir}/asource -silent"
-ADDFUNC="${bindir}/add-pt-func -silent"
+ADDPTFUNC="${bindir}/add-pt-func -silent"
+ADDNORMFUNC="${bindir}/add-norm-func -silent"
 TRM2BAF="${bindir}/trm2baf"
 EXTENSIONS=".sdf .sdf2"
+
+FASTGEN=1;	# Which parse table generator to use
 VERBOSE=0;
 
 Notify () {
@@ -29,10 +33,13 @@ Notify () {
 
 while [ $# -gt 0 ]	# Handle command line options
 do
-	case $1
-	in
+	case $1 in
 		-v*)
 			VERBOSE=1 ;;
+		-f*)
+			FASTGEN=1 ;;
+		-s*)
+			FASTGEN=0 ;;
 		-*)
 			echo Unknown option ignored: $1 ;;
 		*)
@@ -40,6 +47,14 @@ do
 	esac
 	shift
 done
+
+case $FASTGEN in
+	0)
+		ADDFUNC=$ADDPTFUNC
+		TABLEGEN="cat -u" ;;
+	*)
+		ADDFUNC=$ADDNORMFUNC ;;
+esac
 
 for f in $Files
 do
@@ -76,10 +91,15 @@ do
 	do
 		file=`basename $file $ext`
 	done
+
 	Notify "Adding parse-table function and generating parse table for $f..."
-	out=$TMP.asrc
+	if [ $FASTGEN -eq 0 ] ; then
+		out=$TMP.asrc
+	else
+		out=$dir/$file.tbl
+	fi
 	err=$dir/$file.pgen.err
-	if $ADDFUNC < $f | $PGEN > $out 2> $err
+	if $ADDFUNC < $f | $PGEN | $TABLEGEN > $out 2> $err
 	then
 		rm -f $err
 	else
@@ -87,18 +107,22 @@ do
 		echo "PT-Gen: error (see $err)"
 		exit 2
 	fi
-	in=$out
-	Notify "Running asource..."
-	out=$dir/$file.tbl
-	err=$dir/$file.asource.err
-	if $ASOURCE $TERMTABLE < $in 2> $err | $TRM2BAF > $out  2>> $err
-	then
-		rm -f $err
-	else
-		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
-		echo "asource: error (see $err)"
-		exit 3
+
+	if [ $FASTGEN -eq 0 ] ; then
+	        Notify "Running asource..."
+	        in=$out
+	        out=$dir/$file.tbl
+	        err=$dir/$file.asource.err
+	        if $ASOURCE $TERMTABLE < $in 2> $err | $TRM2BAF > $out  2>> $err
+	        then
+		        rm -f $err
+	        else
+		        if [ -f $out -a ! -s $out ]; then rm -f $out; fi
+		        echo "asource: error (see $err)"
+		        exit 3
+	        fi
 	fi
+
 	Notify "Parse table (trm format):"
 	Notify `ls -l $out`
 done
