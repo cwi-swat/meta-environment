@@ -118,7 +118,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
   }
 
   sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
-  start = SDF_makeStartSDF(space, sdf, space);
+  start = SDF_makeStartSDF(space, sdf, space, 0);
 
   return ATmake("snd-result(sdf-definition(<term>))", start); 
 }

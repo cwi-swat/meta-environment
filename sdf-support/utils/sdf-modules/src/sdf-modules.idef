@@ -12,7 +12,9 @@ let
  Module : term,
  Id : str,
  Depending : list,
- Definition : term
+ Definition : term,
+ Nodes : list,
+ Edges : list
 in
   execute(sdf-modules, SM?) .
   (
