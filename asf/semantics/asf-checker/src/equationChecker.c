@@ -207,6 +207,9 @@ static ATermList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition conditi
 {
   ATermList messages = ATempty;
 
+  messages = ATmakeList1(
+			 makeMessage("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)", tag, ASF_makeTermFromASFCondition(condition)));
+
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
     return messages;
@@ -216,7 +219,7 @@ static ATermList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition conditi
     return messages;
   }
   else {
-    return ATmakeList1(
+    return ATinsert(messages,
 	       makeMessage(
 		   "uninstantiated variables in both sides of condition",
 		   tag,
