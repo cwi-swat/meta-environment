@@ -1,6 +1,6 @@
 process CREATE-ADDRESS(AB : address-book) is
 let
-  AID : str
+  AID : int
 in
   rec-msg(create-address) .
   snd-eval(AB, create-address) .
@@ -10,16 +10,18 @@ endlet
 
 process UPDATE-ADDRESS(AB : address-book) is
 let
-  AID : str,
-  Street : str,
-  Number : int,
+  AID : int,
+  Name : str,
+  Address : str,
   Zip : str
 in
   rec-msg(update-address(AID?)) .
-  (
-    rec-msg(set-street(AID, Street?)) . snd-do(AB, set-street(AID, Street))
-  + rec-msg(set-number(AID, Number?)) . snd-do(AB, set-number(AID, Number))
-  + rec-msg(set-zip(AID, Zip?)) .  snd-do(AB, set-zip(AID, Zip))
+  ( rec-msg(set-name(AID, Name?)) .
+    snd-do(AB, set-name(AID, Name))
+  + rec-msg(set-address(AID, Address?)) .
+    snd-do(AB, set-address(AID, Address))
+  + rec-msg(set-zip(AID, Zip?)) .
+    snd-do(AB, set-zip(AID, Zip))
   ) *
   rec-msg(update-address-done(AID))
 endlet
@@ -27,7 +29,7 @@ endlet
 process DELETE-ADDRESS(AB : address-book) is
 let
   Name : str,
-  AID : str
+  AID : int
 in
   rec-msg(delete-address(AID?)) .
   snd-do(AB, delete-address(AID)) .
@@ -39,11 +41,22 @@ let
   AB : address-book
 in
   execute(address-book, AB?) .
-  (
-    CREATE-ADDRESS(AB) + UPDATE-ADDRESS(AB) + DELETE-ADDRESS(AB)
+  ( CREATE-ADDRESS(AB) + UPDATE-ADDRESS(AB) + DELETE-ADDRESS(AB)
   ) * delta
 endlet
 
-tool address-book is { command = "java-adapter -class AddressBook" }
+tool address-book is { command = "java-adapter -class AddressBookService" }
 
-toolbus(ADDRESS-BOOK)
+process CLIENT is
+let
+  AID : int
+in
+  snd-msg(create-address) .
+  rec-msg(address-created(AID?)) .
+  snd-msg(update-address(AID)) .
+  snd-msg(set-name(AID, "John Doe")) .
+  snd-msg(set-address(AID, "1342 Elm Street")) .
+  snd-msg(update-address-done(AID))
+endlet
+
+toolbus(ADDRESS-BOOK, CLIENT)
