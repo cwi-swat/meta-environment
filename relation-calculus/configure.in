@@ -1,12 +1,16 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
-AC_PREREQ(2.53)
-AM_INIT_AUTOMAKE(relation-calculus, 0.1)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
+GLT_INIT_PACKAGE
+AC_PREREQ(2.59)
+
+dnl AC_CANONICAL_TARGET([])
 
 
-ACLOCAL="${ACLOCAL} -I ."
+
+dnl ACLOCAL="${ACLOCAL} -I ."
 
 dnl {{{  Which compiler to use?
 AC_PROG_CC
@@ -155,7 +159,7 @@ dnl assume that "wish" is at version 8 or higher.
 AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
 
 dnl {{{  Which files need updating?
-AC_OUTPUT(
+AC_CONFIG_FILES(
 Makefile
 dnl  doc/Makefile
 spec/Makefile
@@ -170,5 +174,7 @@ dnl  demo/java/example-hotdraw/Makefile
   demo/java/grammar/Makefile
   demo/java/rscripts/Makefile
 )
+
+AC_OUTPUT
 
 dnl }}}

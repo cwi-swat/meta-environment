@@ -4,7 +4,17 @@ include $(top_srcdir)/make_rules
 
 bin_SCRIPTS 	= extract-java
 
-EXTRA_DIST	= $(wildcard *.sh.src)
+bin_PROGRAMS	= JavaAnalysis
+
+pkgdata_DATA    =  $(wildcard *.sdf) \
+		   $(wildcard *.asf) 
+
+EXTRA_DIST	= $(wildcard *.sdf) \
+		  $(wildcard *.asf) \
+		  $(wildcard *.tbl) \
+		  $(wildcard *.eqs) \
+		  meta.buttons \
+		  meta.conf
 
 CLEANFILES	= extract-java
 
@@ -23,7 +33,7 @@ JAVAEXTRACTION 	=  \
 		  meta.buttons \
 		  meta.conf
 
-EXTRA_DIST 	+= $(JAVAEXTRACTION)
+JavaAnalysis_SOURCES = JavaAnalysis.c
 
 javaextraction_DATA = $(JAVAEXTRACTION)
 

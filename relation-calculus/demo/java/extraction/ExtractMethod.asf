@@ -1,16 +1,9 @@
 equations
 
 [extractMethod-1]
-	&Rstore1 := assign-when-undef(METHODS, rel[Method, loc], {}, &Rstore),
-	&Rstore2 := extractMethod1(&CompilationUnit, &Rstore1)
-	=========================================================
-	extractMethod(&CompilationUnit, &Rstore) = &Rstore2
-
-[extractMethod1-1]
 	&MethodHeader &MethodBody := &MethodDeclaration,
 	&Modifiers &MethodRes &MethodDeclarator &Throws := &MethodHeader,
-	&Identifier ( &FormalParameters ) := &MethodDeclarator,
-	&Tuple1 := <id2str(&Identifier), get-location(&MethodDeclaration) >,
-	&Rstore2 := add-tuple(METHODS, &Tuple1, &Rstore1)
+	&Identifier ( &FormalParameters ) := &MethodDeclarator
 	=========================================================
-	extractMethod1(&MethodDeclaration, &Rstore1) = &Rstore2
+	extractMethod(&MethodDeclaration, &Rel) = 
+	&Rel union { <id2str(&Identifier), get-location(&MethodDeclaration) >}

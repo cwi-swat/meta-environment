@@ -6,10 +6,10 @@ exports
 
   context-free syntax
     Modifier* "interface" Identifier ExtendsInterfaces? InterfaceBody -> InterfaceDeclaration {cons("interface")}
-    "extends" {InterfaceType ","}+ -> ExtendsInterfaces {cons("extends-comma")}
-    "{" InterfaceMemberDeclaration* "}" -> InterfaceBody {cons("InterfaceMemberDeclaration-s")}
-    ConstantDeclaration -> InterfaceMemberDeclaration {cons("ConstantDeclaration")}
-    AbstractMethodDeclaration -> InterfaceMemberDeclaration {cons("AbstractMethodDeclaration")}
-    FieldDeclaration -> ConstantDeclaration {cons("FieldDeclaration")}
-    MethodHeader ";" -> AbstractMethodDeclaration {cons("semicolon4")}
+    "extends" {InterfaceType ","}+				      -> ExtendsInterfaces {cons("extends-comma")}
+    "{" InterfaceMemberDeclaration* "}"				      -> InterfaceBody {cons("InterfaceMemberDeclaration-s")}
+    ConstantDeclaration						      -> InterfaceMemberDeclaration {cons("ConstantDeclaration")}
+    AbstractMethodDeclaration					      -> InterfaceMemberDeclaration {cons("AbstractMethodDeclaration")}
+    FieldDeclaration						      -> ConstantDeclaration {cons("FieldDeclaration")}
+    MethodHeader ";"						      -> AbstractMethodDeclaration {cons("semicolon4")}
 

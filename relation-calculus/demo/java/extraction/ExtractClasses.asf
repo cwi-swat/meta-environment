@@ -1,36 +1,31 @@
 equations
 
-[extract-classes-start]
-	&Rstore1 := assign-when-undef(CLASSES, rel[Class,loc], {}, &Rstore),
-	&Rstore2 := assign-when-undef(CLASS_USES, rel[ClassUse,loc], {}, &Rstore1),
-	&Rstore3 := extract(&CompilationUnit, &Rstore2)
-	============================================================================
-	extractClasses(&CompilationUnit, &Rstore) = &Rstore3
-
-[extract-classes-0]
-	&Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
-	&Tuple1 := <id2str(&Identifier), get-location(&ClassDeclaration)>,
-	&Rstore2 := add-tuple(CLASSES, &Tuple1, &Rstore1)
-	==============================================================================
-	extract(&ClassDeclaration, &Rstore1) = &Rstore2
-
 [extract-classes-1]
-	new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
-	&Tuple1 := <mkAnonymousClassId(&ClassInstanceCreationExpression), 
-		get-location(&ClassInstanceCreationExpression)>,
-	&Rstore2 := add-tuple(CLASSES, &Tuple1, &Rstore1),
-	&Rstore3 := add-tuple(CLASS_USES, &Tuple1, &Rstore2)
+	&Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration
 	==============================================================================
-	extract(&ClassInstanceCreationExpression, &Rstore1) = &Rstore3
+	extractClasses(&ClassDeclaration, &Rel) =
+	&Rel union {<id2str(&Identifier), get-location(&ClassDeclaration)>}
 
 [extract-classes-2]
-	new &ClassType ( &Expressions ) := &ClassInstanceCreationExpression,
-	&Name := &ClassType,
-	&Tuple1 := <name2str(&Name), get-location(&ClassInstanceCreationExpression) >,
-	&Rstore2 := add-tuple(CLASS_USES, &Tuple1, &Rstore1)
+	new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression
 	==============================================================================
-	extract(&ClassInstanceCreationExpression, &Rstore1) = &Rstore2
+	extractClasses(&ClassInstanceCreationExpression, &Rel) = 
+	&Rel union {<mkAnonymousClassId(&ClassInstanceCreationExpression), 
+		     get-location(&ClassInstanceCreationExpression)>}
 
+[extract-class-uses-1]
+	new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression
+	==============================================================================
+	extractClassUses(&ClassInstanceCreationExpression, &Rel) = 
+	&Rel union {<mkAnonymousClassId(&ClassInstanceCreationExpression), 
+		     get-location(&ClassInstanceCreationExpression)>}
+
+[extract-class-uses-2]
+	new &ClassType ( &Expressions ) := &ClassInstanceCreationExpression,
+	&Name := &ClassType
+	==============================================================================
+	extractClassUses(&ClassInstanceCreationExpression, &Rel) = 
+	&Rel union {<name2str(&Name), get-location(&ClassInstanceCreationExpression) >}
 
 [mkId]  new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
 	&Name := &ClassType,

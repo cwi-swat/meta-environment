@@ -4,6 +4,18 @@ set -e
 
 # {{{  variables
 
+prefix=__PREFIX__
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PRG=`basename $0`
+VERBOSE=
+CHECK_ONLY=
+
+RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
+RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
+EVALUATOR=${bindir}/RscriptCalculator
+
 PRG=`basename $0`
 OUTPUT_DIR=./extracted-rstores
 TOP_SORT=
@@ -21,7 +33,7 @@ Usage: $PRG [options] <input-files>
 Parameters:
 
   -d | --output-dir <dir>   specify output directory (default: $OUTPUT_DIR)
-  -e | --equations <file>   specify extraction equations (default: none)
+  -e | --executable <file>  specify executable for perforing extraction extraction (default: none)
   -s | --sort <sort>        specify top sort for parsing input files (default: none)
   -f | --function <name>    specificy the extraction function to be applied (default: extractRelations)
   -p | --parse-table <file> specify parse table for input files (default: none)
@@ -29,7 +41,7 @@ Parameters:
   -t | --table <file>       specify parse table for input files (DEPRECATED)
 
 Example:
-  $PRG -e TBExtraction.eqs -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
+  $PRG -e TBExtraction -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
 
 ENDCAT
 }
@@ -64,16 +76,22 @@ addposinfo() {
 
 extract() {
 #  echo -n "Rewriting $1 .."
-  apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
-    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
+   $EXECUTABLE -f  $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
 #  echo " done."
 }
+
+#extract() {
+#  echo -n "Rewriting $1 .."
+#  apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
+#    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
+#  echo " done."
+#}
 
 # }}}
 # {{{  cleanup
 
 cleanup() {
-  rm -f $1.{c,pt,pos}
+  rm -f $1.{pt,pos}
 }
 
 # }}}
@@ -98,8 +116,8 @@ do
   case "$1" in
     -d | --output-dir)
       shift; OUTPUT_DIR=$1 ;;
-    -e | --equations)
-      shift; EQUATIONS=$1 ;;
+    -e | --executable)
+      shift; EXECUTABLE=$1 ;;
     -f | --function)
       shift; EXTRACTION_FUNCTION=$1 ;;
     -h | --help)

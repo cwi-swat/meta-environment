@@ -5,7 +5,7 @@
    This will take 3 minutes on a 1 Gig machine for 15 Kloc of souce code.
 
    This command creates a local directory called `extracted-rstores'.
-   For each file F.java it creates a new file rstore/F.java.rstore.pt
+   For each file F.java it creates a new file extracted-rstores/F.java.rstore.pt
 
    This is an rstore that contains the facts extracted from that file.
    The extension .pt indicates that the restore is in binary 

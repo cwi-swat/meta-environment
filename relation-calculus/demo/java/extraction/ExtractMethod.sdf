@@ -2,46 +2,29 @@ module ExtractMethod
 
 imports Rstore
 imports JavaOperations
-imports utilities/PosInfo[ClassDeclaration]
-imports utilities/PosInfo[ClassType]
-imports utilities/PosInfo[CompilationUnit]
-imports utilities/PosInfo[Identifier]
 imports utilities/PosInfo[MethodDeclaration]
 
 exports
   context-free syntax
-    extractMethod(CompilationUnit, RSTORE) -> RSTORE
 
-exports
-  context-free syntax
+    extractMethod(CompilationUnit, Rel[[Elem]]) -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
-    extractMethod1(CompilationUnit, RSTORE) -> RSTORE {traversal(accu, top-down, break)}
-
-    extractMethod1(MethodDeclaration, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractMethod(MethodDeclaration, Rel[[Elem]])
+      -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
 hiddens
   variables
-    "&Loc"				-> Location
-    "&ClassBody"			-> ClassBody
-    "&ClassDeclaration"			-> ClassDeclaration
-    "&ClassId"				-> Area
-    "&ClassInstanceCreationExpression"	-> ClassInstanceCreationExpression
-    "&ClassType"			-> ClassType
-    "&CompilationUnit"			-> CompilationUnit
-    "&Expressions"			-> {Expression ","}*
-    "&FormalParameters"			-> {FormalParameter ","}*
-    "&Identifier"			-> Identifier
-    "&Interfaces"			-> Interfaces?
-    "&MethodBody"			-> MethodBody
-    "&MethodDeclaration"		-> MethodDeclaration
-    "&MethodDeclarator"			-> MethodDeclarator
-    "&MethodHeader"			-> MethodHeader
-    "&MethodId"				-> Area
-    "&MethodRes"			-> MethodRes
-    "&Modifiers"			-> Modifier*
-    "&Name"				-> Name
-    "&Rstore"[0-9]*			-> RSTORE
-    "&Super"				-> Super?
-    "&Throws"				-> Throws?
-    "&Tuple"[0-9]*			-> Tuple
+
+   "&MethodHeader"		-> MethodHeader
+   "&MethodBody"		-> MethodBody
+   "&MethodDeclaration"		-> MethodDeclaration
+   "&Modifiers"			-> Modifier*
+   "&MethodRes"			-> MethodRes
+   "&MethodDeclarator"		-> MethodDeclarator
+   "&Throws"			-> Throws?
+   "&Identifier"		-> Identifier
+   "&FormalParameters"		-> {FormalParameter ","}*
+   "&Rel"[0-9]*			-> Rel[[Elem]]
+ 
+
+
