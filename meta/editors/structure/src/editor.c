@@ -66,7 +66,9 @@ static SE_Editor moveFocusRight(SE_Editor editor)
   focus = createFocus(parse_tree, path, FOCUS_PARSED);
   editor = SE_setEditorFocus(editor, focus);
 
-  if (PT_isTreeLayout(tree)) {
+  /* jump over keywords and layout */
+  if (PT_isTreeLayout(tree) ||
+      PT_isTreeLit(tree)) {
     return moveFocusRight(editor);
   }
 
@@ -104,6 +106,12 @@ static SE_Editor moveFocusDown(SE_Editor editor)
         editor = SE_setEditorFocus(editor, focus);
       }
 
+      /* jump over keywords and layout */
+      if (PT_isTreeLayout(tree) ||
+	PT_isTreeLit(tree)) {
+	return moveFocusRight(editor);
+      }
+
       return editor;
     }
   }
@@ -130,7 +138,9 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
       focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
 
-     if (PT_isTreeLayout(tree)) {
+     /* jump over keywords and layout */
+     if (PT_isTreeLayout(tree) ||
+         PT_isTreeLit(tree)) {
        return moveFocusLeft(editor);
      }
 
