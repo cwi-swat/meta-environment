@@ -355,7 +355,6 @@ ATerm get_module_events(int cid, ATerm type, const char *moduleId)
   boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
                                            ATmake("<str>", moduleId));
   /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
-ATwarning("type = %t, moduleId = %s, boundType = %t\n", type, moduleId, boundType);
 
   result1 = getEvents(type);
   result2 = getEvents(boundType);
