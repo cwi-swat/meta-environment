@@ -109,7 +109,9 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 
   if (ATmatch(tide, "on")) {
     debug = ATtrue;
+#ifdef USE_TIDE
     Tide_connect();
+#endif
   }
   else {
     debug = ATfalse;
