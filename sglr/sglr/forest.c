@@ -223,7 +223,7 @@ void SG_ShowCycle(ATerm CurrTerm, ATerm CycleStart)
   #define SG_UNMARK(t)		ATtableRemove(MarkTable, t)
 #endif
 
-void SG_TermIsCyclic(ATerm t, long depth)
+void SG_TermIsCyclic(ATerm t, int depth)
 {
   ATermList ambs;
   ATermInt  idx;
@@ -232,19 +232,19 @@ void SG_TermIsCyclic(ATerm t, long depth)
     return;
 
   if(SG_IS_MARKED(t)) {                     /*  Cycle detected  */
-if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: CYCLE\n", depth, "", SG_IS_MARKED(t)?"M":"U", t);
+if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: CYCLE\n", depth, "", SG_IS_MARKED(t)?"M":"U", (int) t);
     CycleStart = t;
     return;
   } else {
     SG_MARK(t);
   }
 
-if(SG_DEBUG) fprintf(stderr, "%*.*s> %d\n", depth, depth, "", t);
+if(SG_DEBUG) fprintf(stderr, "%*.*s> %d\n", depth, depth, "", (int) t);
 
   switch(ATgetType(t)) {
     case AT_APPL:
 
-if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U", t,
+if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U", (int) t,
         ATgetInt(SG_GetApplProdLabel((ATermAppl) t)));
 
       idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
@@ -272,7 +272,7 @@ if(SG_DEBUG) fprintf(stderr, " (amb)\n");
   }
 
   SG_UNMARK(t);
-if(SG_DEBUG) fprintf(stderr, "%*.*s< %d\n", depth, depth, "", t);
+if(SG_DEBUG) fprintf(stderr, "%*.*s< %d\n", depth, depth, "", (int) t);
 }
 
 
