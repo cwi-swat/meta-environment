@@ -1,31 +1,17 @@
-/* this file deals with errorapi terms, they are apified, but of course
- * not in ToolBus... where should this decomposition be done??? 
- *
- * Some changes in the editor interface might make it possible to get
- * rid of most of this file
- *
- * Known problems: the errorapi does not know the language of the file
- * that the error occurred in. That means that an editor is opened over
- * the "unknown language" with obvious disadvantages
- */
+/* $Id$ */
 
-process ShowFeedbackLocation(Feedback : term) is
+process GoToEditorLocation(EditorId : term, Location : term) is
 let
-  Subjects : list
+  Offset : int
 in
-  Subjects := first(next(args(Feedback))) .
-  ShowSubjectLocation(first(Subjects))
-endlet
-
-process ShowSubjectLocation(Subject : term) is
-let
-  Description : str,
-  Location : term,
-  Filename : str
-in
-  Description := first(args(Subject)) .
-  Location := first(next(args(Subject))) .
-  ShowLocation(Location)
+  snd-msg(get-location-offset(Location)) .
+  (
+    rec-msg(location-offset(Offset?)) .
+    snd-msg(te-set-cursor-at-offset(EditorId, Offset)) .
+    snd-msg(te-set-focus-at-location(EditorId, Location)) 
+  +
+    rec-msg(no-location-offset)
+  )
 endlet
 
 process ShowLocation(Location : term) is
@@ -34,13 +20,22 @@ let
   ModuleName : str,
   FileName : str
 in
-  if not(equal(Location, no-location)) then
-    FileName := first(args(Location)) .
+  snd-msg(get-location-filename(Location)) .
+  (
+    rec-msg(location-filename(FileName?)) .
     snd-msg(edit-general(FileName)) .
     rec-msg(editor-opened(ModuleName?, EditorId?)) .
-    snd-msg(te-set-cursor-at-location(EditorId, Location)) .
-    snd-msg(te-set-focus-at-location(EditorId, Location)) 
-  else
-    tau
-  fi
-endlet  
+    GoToEditorLocation(EditorId, Location)
+  +
+    rec-msg(no-location-filename)
+  )
+endlet
+
+process ShowFeedbackLocation(Feedback : term) is
+let
+  Location : term
+in
+  snd-msg(get-feedback-first-location(Feedback)) .
+  rec-msg(feedback-first-location(Location?)) .
+  ShowLocation(Location)
+endlet

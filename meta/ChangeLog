@@ -1,6 +1,8 @@
 # $Id$
 
 Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * tbscripts/feedback.tb: refactored and reimplemented (in error-support)
+   the ShowXXX functions
  * editors/text/*:
    - remove double functionality to go to a specific offset in
      a file, "goto-cursor-at-offset" is the only one left.

@@ -93,6 +93,7 @@ let
   Location : term,
   FunSym : str,
   Offset : int,
+  Feedback : term,
   FileName : str
 in
   FunSym := fun(ParseError) .
@@ -104,8 +105,10 @@ in
     rec-msg(editor-filename(FileName?)) .
     snd-note(remove-feedback-summary("sglr", FileName)) .
     if not-equal(FunSym, "no-errors") then
-      snd-msg(get-error-location(ParseError)) .
-      rec-msg(error-location(Location?)) .
+      snd-msg(get-summary-first-feedback(ParseError)) .
+      rec-msg(summary-first-feedback(Feedback?)) .
+      snd-msg(get-feedback-first-location(Feedback)) .
+      rec-msg(feedback-first-location(Location?)) .
       snd-msg(get-location-offset(Location)) .
       (
 	rec-msg(location-offset(Offset?)) .
