@@ -1177,11 +1177,6 @@ tree SG_ParseResult(char *sort)
 
       SGsort(SG_SET, t);     
 
-      /*  Convert the forest in-line to AsFix1 upon request  */
-      if (SG_ASFIX1) {
-        return SG_ConvertA2ToA1(t);
-      }
-
       if(SG_TOOLBUS) {
         ATerm ambtrak = SG_AmbTracker(t);
 

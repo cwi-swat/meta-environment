@@ -1,24 +1,3 @@
-/*
-
-    SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 /*  $Id$  */
 
 #include <assert.h>
@@ -90,7 +69,6 @@ void SGshowMode()
   ATfprintf(stderr, "VERBOSE:     %s\n", SG_VERBOSE?"y":"n");
   ATfprintf(stderr, "DEBUG:       %s\n", SG_DEBUG?"y":"n");
   ATfprintf(stderr, "SHOWSTAT:    %s\n", SG_SHOWSTAT?"y":"n");
-  ATfprintf(stderr, "ASFIX1:      %s\n", SG_ASFIX1?"y":"n");
   ATfprintf(stderr, "ASFIX2ME:    %s\n", SG_ASFIX2ME?"y":"n");
   ATfprintf(stderr, "BINARY:      %s\n", SG_BINARY?"y":"n");
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
@@ -267,7 +245,6 @@ ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
   ATerm tree;
   ATerm amb;
   
-  SG_ASFIX1_OFF();
   SG_ASFIX2ME_OFF();
 
   t = SGparseString(L, G, S);
@@ -281,26 +258,6 @@ ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
     }
     else {
       t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, tree, amb);
-    }
-  }
-
-  return SG_TermToToolbus(t);
-}
-
-ATerm SGparseStringAsAsFix1(language L, char *G, char *S)
-{
-  ATerm t;
-
-  SG_ASFIX1_ON();
- 
-  t = SGparseString(L, G, S);
-
-  if (!SGisParseError(t)) {
-    if (SG_TOOLBUS) {
-      t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, ATBpack(t));
-    }
-    else {
-      t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, t);
     }
   }
 
@@ -436,12 +393,7 @@ ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
 
 ATbool SGisParseTree(ATerm t)
 {
-  if (SG_ASFIX1) {
-    return ATgetAFun(t) == SG_Term_AFun;
-  }
-  else {
-    return ATgetAFun(t) == SG_ParseTree_AFun;
-  }
+  return ATgetAFun(t) == SG_ParseTree_AFun;
 }
 
 ATbool SGisParseError(ATerm t)

@@ -1,6 +1,10 @@
 $Id$
 
-2001/04/07 (markvdb@cwi.nl)
+2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
+  * Removed AsFix1 stuff and AsFix2ME is now the default output
+    of SGLR.
+
+2001/07/04 (markvdb@cwi.nl)
   * Propagation of NULL trees was not correctly handled.
 
 2001/06/27 (markvdb@cwi.nl)

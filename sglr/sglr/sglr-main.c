@@ -52,7 +52,6 @@ int     debugflag         = ATfalse;
 int     statisticsflag    = ATfalse;
 int     supplexflag       = ATfalse;
 int     printprodsflag    = ATfalse;
-int     asfix1flag        = ATfalse;
 int     asfix2meflag      = ATfalse;
 
 char   *input_file_name   = "-";
@@ -73,11 +72,6 @@ ATerm parse_file(int conn, ATerm L, char *G, char *FN)
 ATerm parse_string(int conn, ATerm L, char *G, char *S)
 {
   return SGparseStringAsAsFix2(L, G, S);
-}
-
-ATerm parse_string_as_asfix1(int conn, ATerm L, char *G, char *S)
-{
-  return SGparseStringAsAsFix1(L, G, S);
 }
 
 ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
@@ -124,7 +118,7 @@ void term_to_file(ATerm t, char *FN)
 
 void SG_Usage(FILE *stream, ATbool long_message)
 {
-  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcdhlmnPtvV] "
+  const char usage[] = "Usage:\n\t%s\t-p file [-2?bcdhlmnPtvV] "
   "[-f[adeirp]] [-i file] [-o file] \\"
   "\n\t\t[-s sort]\n";
 
@@ -132,7 +126,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
   if(long_message) {
     ATfprintf(stream,
               "Parameters:\n"
-              "\t-1         : use AsFix1 output format             [%s]\n"
               "\t-2         : use AsFix2 output format             [%s]\n"
               "\t-b         : output AsFix in binary format (BAF)  [%s]\n"
               "\t-c         : toggle cycle detection               [%s]\n"
@@ -156,8 +149,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-t         : output AsFix in textual format       [%s]\n"
               "\t-v         : toggle verbose mode                  [%s]\n"
               "\t-V         : reveal program version (i.e. %s)\n",
-              DEFAULTMODE(asfix1flag),
-              DEFAULTMODE(!asfix1flag),
+              DEFAULTMODE(!asfix2meflag),
               DEFAULTMODE(binaryflag), 
               DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
@@ -195,8 +187,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
 struct option longopts[] =
 {
   {"binary-output", no_argument,       &binaryflag,        ATtrue},
-  {"asfix1",        no_argument,       &asfix1flag,        ATtrue},
-  {"asfix2",        no_argument,       &asfix1flag,        ATfalse},
+  {"asfix2",        no_argument,       &asfix2meflag,      ATtrue},
   {"debug",         no_argument,       &debugflag,         ATtrue},
   {"no-filter",     optional_argument, &filterflag,        ATfalse},
   {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
@@ -271,8 +262,7 @@ void handle_options (int argc, char **argv)
          != EOF) {
     switch (c) {
       case 0:   break;
-      case '1':   asfix1flag       = ATtrue;              break;
-      case '2':   asfix1flag       = ATfalse;             break;
+      case '2':   asfix2meflag     = ATfalse;             break;
       case '?':   show_help        = ATtrue;              break;
       case 'b':   binaryflag       = ATtrue;              break;
       case 'c':   cycleflag        = !cycleflag;          break;
@@ -318,7 +308,6 @@ ATbool set_global_options(void)
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();
   if(outputflag)     SG_OUTPUT_ON();
-  if(asfix1flag)     SG_ASFIX1_ON();
   if(asfix2meflag)   SG_ASFIX2ME_ON();
   if(binaryflag)     SG_BINARY_ON();
   if(posinfoflag)    SG_POSINFO_ON();
@@ -490,9 +479,7 @@ int main (int argc, char **argv)
     ATinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
-/*
-    AFinit(6, ATlibArgv, &bottomOfStack);
-*/
+
     handle_options(argc, argv);
     have_complete_config = set_global_options();
     SG_TOOLBUS_OFF();
