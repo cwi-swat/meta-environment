@@ -20,7 +20,7 @@
 #
 # $Id$
 
-SUBDIRS         = terms
+SUBDIRS         = terms eqs ref fail
 
 TESTS           = reduce-test prepare-restore-test \
                   equalModuloWhitespace-test whitespace-test regress-test
