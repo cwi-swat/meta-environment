@@ -33,7 +33,7 @@ usage(void)
         "\t-V              reveal program version (i.e. %s)\n"
         "\n"
 	"For example:\n" 
-	"concat-asf -o Module.eqs.baf Hoi.asf.asfix1 Hallo.asf.asfix1",
+	"concat-asf -o Module.eqs.baf Hoi.asf.asfix1 Hallo.asf.asfix1\n\n",
         myversion);
 }
 
