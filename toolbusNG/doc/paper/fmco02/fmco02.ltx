@@ -301,7 +301,116 @@ Table~\ref{Tab:Tscript-features}.
 
 \section{An example}
 
-\note{The adress book}
+In this example, an \emph{AddressBookEntry} contains the following
+elements:
+
+\begin{description}
+%%\item[id] a unique \emph{id} (used for internal reference);
+  \item[name] a string representing the \emph{name} of the entry;
+  \item[address] a string representing the \emph{address} of the entry.
+\end{description}
+
+In Java, we implement the \emph{AddressBookEntry} as follows:
+\begin{footnotesize}
+\verbatiminput{AddressBookEntry.java}
+\end{footnotesize}
+
+The \emph{AddressBookService} has the following interface:
+
+\begin{footnotesize}
+\begin{verbatim}
+public interface IAddressBookService {
+  public int createEntry();
+  public void deleteEntry(int id);
+  public void setName(int id, String name);
+  public void setAddress(int id, String address);
+}
+\end{verbatim}
+\end{footnotesize}
+
+\begin{footnotesize}
+\verbatiminput{AddressBookService.java}
+\end{footnotesize}
+
+Given the following use cases of our \emph{address book service}:
+
+\begin{description}
+  \item[create] a new entry in the addressbook database;
+  \item[update] an existing entry in the database;
+  \item[delete] an existing entry from the database.
+\end{description}
+
+The desired behaviour of these use cases can now easily be described in
+a number of ToolBus processes: one for each use case and one to describe
+their interaction and the startup procedure of the service:
+
+\begin{verbatim}
+process ADDRESS-BOOK is
+let ABTool : address-book
+in
+  execute(address-book, ABTool?) . (
+    CREATE(ABTool) + UPDATE(ABTool) + DELETE(ABTool)
+  ) * delta
+endlet
+\end{verbatim}
+
+The process \texttt{ADDRESS-BOOK} tells the ToolBus that an instance
+of our \texttt{address-book} tool is to be executed, followed by a
+loop which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE}
+or \texttt{DELETE} processes each iteration. This construction, using
+the \texttt{+} operator ensures that at this level, the sub-processes
+can be regarded atomically: e.g. no \texttt{DELETE} will happen during
+an \texttt{UPDATE}.
+
+The operating system level details of starting the tool are defined in
+a separate section:
+\begin{verbatim}
+  tool address-book is {
+    command = "java-adapter -class TBAddressBookService"
+  }
+\end{verbatim}
+
+In this case, the we tell the ToolBus that our tool is written
+in Java, and that the main class to be started is called
+\texttt{TBAddressBookService}.
+
+The \emph{creation} of a new addressbook entry can be described as
+a ToolBus process as follows:
+
+\begin{footnotesize}
+\begin{verbatim}
+process CREATE(AB : address-book) is
+let AID : int
+in
+  rec-msg(create-address) .
+  snd-eval(AB, create-entry) .
+  rec-value(AB, new-entry(AID?)) .
+  snd-msg(address-created(AID))
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+The request to create a new addressbook entry is received and delegated
+to the tool, so it can update its state. In this case, our tool yields
+a unique id for reference to the new entry, which is returned as the
+result of the creation message.
+
+The \texttt{DELETE} process is defined in a similar way, except
+there is no result value, which is demonstrated by the fact that a
+\texttt{snd-do} is sent to the tool, as opposed to the \texttt{snd-eval},
+\texttt{rec-value} construct which is used in the \texttt{CREATE} process.
+
+\begin{footnotesize}
+\begin{verbatim}
+process DELETE(AB : address-book) is
+let AID : int
+in
+  rec-msg(delete-address(AID?)) .
+  snd-do(AB, delete-entry(AID)) .
+  snd-msg(address-deleted(AID))
+endlet
+\end{verbatim}
+\end{footnotesize}
 
 \section{Application to the \asdf\ Meta-Environment}
 
@@ -599,121 +708,6 @@ could be implemented in both the ToolBus and the Java RMI setting.
 The example is quite small, and as such it is not intended to be a real
 world production version of an address book. It does, however, highlight
 the differences between ToolBus and RMI.
-
-In this example, an \emph{AddressBookEntry} contains the following
-elements:
-
-\begin{description}
-%%\item[id] a unique \emph{id} (used for internal reference);
-  \item[name] a string representing the \emph{name} of the entry;
-  \item[address] a string representing the \emph{address} of the entry.
-\end{description}
-
-In Java, we implement the \emph{AddressBookEntry} as follows:
-\begin{footnotesize}
-\verbatiminput{AddressBookEntry.java}
-\end{footnotesize}
-
-The \emph{AddressBookService} has the following interface:
-
-\begin{footnotesize}
-\begin{verbatim}
-public interface IAddressBookService {
-  public int createEntry();
-  public void deleteEntry(int id);
-  public void setName(int id, String name);
-  public void setAddress(int id, String address);
-}
-\end{verbatim}
-\end{footnotesize}
-
-\begin{footnotesize}
-\verbatiminput{AddressBookService.java}
-\end{footnotesize}
-
-Given the following use cases of our \emph{address book service}:
-
-\begin{description}
-  \item[create] a new entry in the addressbook database;
-  \item[update] an existing entry in the database;
-  \item[delete] an existing entry from the database.
-\end{description}
-
-The desired behaviour of these use cases can now easily be described in
-a number of ToolBus processes: one for each use case and one to describe
-their interaction and the startup procedure of the service:
-
-\begin{verbatim}
-process ADDRESS-BOOK is
-let ABTool : address-book
-in
-  execute(address-book, ABTool?) .
-  (
-    CREATE(ABTool) + UPDATE(ABTool) + DELETE(ABTool)
-  ) * delta
-endlet
-\end{verbatim}
-
-The process \texttt{ADDRESS-BOOK} tells the ToolBus that an instance
-of our \texttt{address-book} tool is to be executed, followed by a
-loop which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE}
-or \texttt{DELETE} processes each iteration. This construction, using
-the \texttt{+} operator ensures that at this level, the sub-processes
-can be regarded atomically: e.g. no \texttt{DELETE} will happen during
-an \texttt{UPDATE}.
-
-The operating system level details of starting the tool are defined in
-a separate section:
-\begin{verbatim}
-  tool address-book is {
-    command = "java-adapter -class TBAddressBookService"
-  }
-\end{verbatim}
-
-In this case, the we tell the ToolBus that our tool is written
-in Java, and that the main class to be started is called
-\texttt{TBAddressBookService}.
-
-The \emph{creation} of a new addressbook entry can be described as
-a ToolBus process as follows:
-
-\begin{footnotesize}
-\begin{verbatim}
-process CREATE(AB : address-book) is
-let AID : int
-in
-  rec-msg(create-address) .
-  snd-eval(AB, create-entry) .
-  rec-value(AB, new-entry(AID?)) .
-  snd-msg(address-created(AID))
-endlet
-\end{verbatim}
-\end{footnotesize}
-
-The request to create a new addressbook entry is received and delegated
-to the tool, so it can update its state. In this case, our tool gives a
-unique id as a reference to the new entry, which is returned as the result
-of the creation message.
-
-The \texttt{DELETE} process is defined in a similar way, except
-there is no result value, which is demonstrated by the fact that a
-\texttt{snd-do} is sent to the tool, as opposed to the \texttt{snd-eval},
-\texttt{rec-value} construct which is used in the \texttt{CREATE} process.
-
-\begin{footnotesize}
-\begin{verbatim}
-process DELETE(AB : address-book) is
-let AID : int
-in
-  rec-msg(delete-address(AID?)) .
-  snd-do(AB, delete-entry(AID)) .
-  snd-msg(address-deleted(AID))
-endlet
-\end{verbatim}
-\end{footnotesize}
-
-\texttt{TODO: move to appendix? remove?}
-\verbatiminput{address-book.tb}
 
 \section{Concluding Remarks}
 
