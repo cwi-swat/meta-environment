@@ -408,7 +408,7 @@ ATerm get_tree_slices(int cid, ATerm editorId)
 					   ATtrue, ATtrue);
     slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
 
-    return ATmake("snd-value(tree-slices(<term>))", slices);
+    return ATmake("snd-value(tree-slices(<term>))", ATBpack((ATerm) slices));
   }
 
   return ATmake("snd-value(no-tree-slices)"); 

@@ -240,7 +240,7 @@ void highlight_slices(int c, ATerm editorId, ATerm slices)
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionHighlightSlices(slices));
+    sendToEditor(process, TE_makeActionHighlightSlices(ATBunpack(slices)));
   }
 }
 

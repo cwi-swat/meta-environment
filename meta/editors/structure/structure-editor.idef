@@ -14,7 +14,7 @@ let
   SE: structure-editor,
   Sort: str,
   Tree: term,
-  Slices : list
+  Slices : term
 in
   execute(structure-editor, SE?)
   .
