@@ -1,0 +1,11 @@
+module Cycle
+
+imports Layout
+
+exports
+  sorts A P T
+
+  context-free syntax
+    "a"        -> A
+    A?         -> P
+    "[" P+ "]" -> T
