@@ -137,7 +137,7 @@ Notify () {
 
 
 RegressGenTable () {
-	ptbl=`basename $1 .sdf2`.tbl
+	ptbl=`basename $1 .sdf`.tbl
 	if [ ! -f $reference/$ptbl ] ; then
 		Notify "No reference table for $ptbl"
 		continue
@@ -177,7 +177,7 @@ error=0
 for dir in $dirs
 do
 	cd $dir
-        for stx in `ls *.sdf2` ; do
+        for stx in `ls *.sdf` ; do
 	        RegressGenTable $stx
         done
 	${RM} -f *.asfix[12]
