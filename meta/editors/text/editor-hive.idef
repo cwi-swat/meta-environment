@@ -65,11 +65,14 @@ in
   +
     rec-event(Hive, contents-changed(EditorId?))
     . snd-ack-event(Hive, contents-changed(EditorId))
+    /*. printf("contents-changed(%t)\n", EditorId)*/
     . snd-msg(editor-contents-changed(EditorId))
   +
     rec-event(Hive, mouse-event(EditorId?, MouseEvent?))
     . snd-ack-event(Hive, mouse-event(EditorId, MouseEvent))
-    . snd-msg(set-location(EditorId, MouseEvent))
+    /*. printf("set-location(%t, %t)\n", EditorId, MouseEvent)*/
+    /* TODO: remove reference to Structure Editor internals */
+    . snd-msg(se-set-location(EditorId, MouseEvent))
   +
     rec-event(Hive, menu-event(EditorId?, MenuEvent?))
     . snd-ack-event(Hive, menu-event(EditorId, MenuEvent))

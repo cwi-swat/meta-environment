@@ -221,19 +221,19 @@ in
       fi
     +
     rec-msg(move-left, Stack?, EditorId?).
-    snd-msg(move-focus(EditorId,"Left")) .
+    snd-msg(se-move-focus(EditorId,"Left")) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(move-right, Stack?, EditorId?).
-    snd-msg(move-focus(EditorId,"Right")) .
+    snd-msg(se-move-focus(EditorId,"Right")) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(move-up, Stack?, EditorId?).
-    snd-msg(move-focus(EditorId,"Up")) .
+    snd-msg(se-move-focus(EditorId,"Up")) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(move-down, Stack?, EditorId?).
-    snd-msg(move-focus(EditorId,"Down")) .
+    snd-msg(se-move-focus(EditorId,"Down")) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-action, Stack?, EditorId?) .
@@ -282,8 +282,8 @@ in
         fi
       +
         rec-msg(get-focus-location, Stack?, EditorId?) .
-	snd-msg(get-focus-location(EditorId)) .
-	rec-msg(focus-location(EditorId, PosInfo?)) .
+	snd-msg(se-get-focus-location(EditorId)) .
+	rec-msg(se-focus-location(EditorId, PosInfo?)) .
 	StackPushTerm(Stack, Stack?, PosInfo) .
 	ReturnSuccess(EditorId, Stack)
       +
@@ -973,9 +973,9 @@ in
   snd-msg(parse-focusses(EditorId, ModuleId, sdf)) .
   (
     rec-msg(parse-ok(ModuleId)) .
-    snd-msg(get-tree(EditorId)) .
+    snd-msg(se-get-tree(EditorId)) .
     (
-      rec-msg(tree(Tree?)) .
+      rec-msg(se-tree(Tree?)) .
       snd-msg(unparse(Tree)) .
       rec-msg(unparsed-text(Text?)) .
       snd-msg(update-module-text-in-db(ModuleName, Text, Tree, Type)) .
@@ -1007,7 +1007,7 @@ in
           errorf("Changing the name of %s is not permitted.",[ModuleName])))
       )
     +
-      rec-msg(no-tree) /* editor dissappeared */
+      rec-msg(se-no-tree)
     )
   +
     rec-msg(parse-failed(ModuleId, Focus?)) .
@@ -1024,16 +1024,16 @@ in
   snd-msg(parse-focusses(EditorId, ModuleName, eqs)) .
   (
     rec-msg(parse-ok(ModuleName)) .
-    snd-msg(get-tree(EditorId)) .
+    snd-msg(se-get-tree(EditorId)) .
     (
-      rec-msg(tree(Tree?)) .
+      rec-msg(se-tree(Tree?)) .
       snd-msg(postprocess-semantics-hook(ModuleName, Tree)).
       rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?)).
       snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
       rec-msg(eqs-updated) .
       snd-msg(clear-focus(EditorId))
     +
-      rec-msg(no-tree)
+      rec-msg(se-no-tree)
     )
   +
     rec-msg(parse-failed(ModuleName, Focus?))
@@ -1048,22 +1048,22 @@ in
   snd-msg(get-dirty-focuses(EditorId)) .
   rec-msg(dirty-focuses(DirtyFoci?)) .
   if equal(DirtyFoci, []) then
-    snd-msg(get-tree(EditorId)) .
+    snd-msg(se-get-tree(EditorId)) .
     (
-      rec-msg(tree(Tree?))
+      rec-msg(se-tree(Tree?))
     +
-      rec-msg(no-tree)
+      rec-msg(se-no-tree)
     )
   else
     ParseTerm(EditorId, ModuleName) .
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) . 
     if equal(DirtyFoci, []) then
-      snd-msg(get-tree(EditorId)) .
+      snd-msg(se-get-tree(EditorId)) .
       (
-        rec-msg(tree(Tree?))
+        rec-msg(se-tree(Tree?))
       +
-        rec-msg(no-tree)
+        rec-msg(se-no-tree)
       )
     else 
       tau
@@ -1075,18 +1075,18 @@ process ReplaceRoot(EditorId: term, Tree: term) is
 let
   Focus : term
 in
-  snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(focus-moved(EditorId, Focus?)) .
+  snd-msg(se-move-focus-to-root(EditorId)) .
+  rec-msg(se-focus-moved(EditorId, Focus?)) .
   ReplaceFocus(EditorId, Tree)
 endlet
 
 
 process GetFocus(EditorId: term, Tree: term?) is
-  snd-msg(get-focussed-tree(EditorId)) .
+  snd-msg(se-get-focussed-tree(EditorId)) .
   (
-    rec-msg(tree(Tree?))
+    rec-msg(se-tree(Tree?))
   +
-    rec-msg(no-tree) .
+    rec-msg(se-no-tree) .
     Tree := error-tree
   )
 
@@ -1098,11 +1098,11 @@ let
   FileName : str,
   ErrorMessage : str
 in
-  snd-msg(replace-focussed-tree(EditorId, Tree)) .
-  rec-msg(focus(Focus?)) .
-  snd-msg(get-tree(EditorId)) .
+  snd-msg(se-replace-focussed-tree(EditorId, Tree)) .
+  rec-msg(se-focus(Focus?)) .
+  snd-msg(se-get-tree(EditorId)) .
   (
-    rec-msg(tree(TotalTree?)) .
+    rec-msg(se-tree(TotalTree?)) .
     snd-msg(unparse(TotalTree)) .
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-filename(EditorId)) .
@@ -1118,7 +1118,7 @@ in
       snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
     )
   +
-    rec-msg(no-tree)
+    rec-msg(se-no-tree)
   )
 endlet
 
@@ -1126,14 +1126,14 @@ process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
 let 
   TreeSort : str 
 in
-  snd-msg(check-tree-sort(Sort, Tree)) .
+  snd-msg(se-check-tree-sort(Sort, Tree)) .
   ( 
-    rec-msg(wrong-sort(TreeSort?)) .
+    rec-msg(se-wrong-sort(TreeSort?)) .
     snd-note(ui-status(errorf("Top sort %s of tree does not match %s", 
                               [TreeSort, Sort]))) .
     RTree := error-tree
   +
-    rec-msg(sort-ok) .
+    rec-msg(se-sort-ok) .
     RTree := Tree
   )
 endlet

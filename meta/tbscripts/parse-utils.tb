@@ -61,7 +61,7 @@ in
     rec-msg(editor-filename(FileName?)) .
     snd-msg(add-posinfo-packed(FileName, Tree)) .
     rec-msg(tree-with-pos-info(NewTree?)) .
-    snd-msg(replace-focus(EditorId, Focus, NewTree)) .
+    snd-msg(se-replace-focus(EditorId, Focus, NewTree)) .
     NewTree := no-tree .
     FunSym := fun(ParseError) .
     if equal(FunSym, "no-errors") then
