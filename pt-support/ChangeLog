@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 19 08:34:16 CET 2004 <jong@cwi.nl>
+ * libptmept/PTMEPT_bottom.c:
+   - add missing #include <stdlib.h> for malloc()
+
 Fri Mar 12 17:13:32 CET 2004 <markvdb@cwi.nl>
  * Fixed bug 197, ambtracker returned NULL if there are
    no ambiguities.
