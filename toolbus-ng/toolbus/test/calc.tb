@@ -1,4 +1,4 @@
-process UI is
+tool process UI is
      ( ( CALC-BUTTON() + LOG-BUTTON() ) * delta
      ||
        TIME-BUTTON() * delta
@@ -35,7 +35,7 @@ process TIME-BUTTON is
         do display-time(T) .                   %% void display-time(time)
       } ack-event
   endlet
-
+  
 process QUIT-BUTTON is
   event button(quit) .
   shutdown "End of calc demo"
@@ -106,7 +106,7 @@ tool clock-tool defines
 		  time readtime()
 	kind = externa/c
 	command = "./clock"
-end	  
+end	 
 
 %% -------------------------------------------------------------------------------
 
