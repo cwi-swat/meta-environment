@@ -4,7 +4,7 @@ SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 
-B<sglr> -B<p> file [-B<12?bcdfghlnPstvV>] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+B<sglr> -B<p> file [-B<12?bcdghlnPstvV>] [-B<f>[adeirp]] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
 
 =head1 DESCRIPTION
 
@@ -39,8 +39,21 @@ rather big.
 
 =item -B<f>
 
-Toggles filtering mode (on by default).  The affected filters are
-multiset and injection count filtering.
+The parser applies a number of filters to ambiguous trees after the parsing
+process has finished. Just supplying the -B<f> option toggles the application
+of all filters. Specific filters can be toggled by using -B<f> with an
+additional letter:
+
+ a : associativity        
+ d : direct eagerness    
+ e : eagerness          
+ i : injection count   
+ p : priority         
+ r : reject          
+
+ e.g., "sglr -fi" will toggle the injection count filter.
+
+These specific toggles are supposed to be used for debugging purposes only.
 
 =item -B<g>
 

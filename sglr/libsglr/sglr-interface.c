@@ -75,7 +75,15 @@ void  SGinitParser(ATbool toolbus_mode)
   if(toolbus_mode) {
     SG_TOOLBUS_ON();
   }
+
   SG_FILTER_ON();
+  SG_FILTER_ASSOCIATIVITY_ON();
+  SG_FILTER_DIRECTEAGERNESS_ON();
+  SG_FILTER_EAGERNESS_ON();
+  SG_FILTER_INJECTIONCOUNT_ON();
+  SG_FILTER_PRIORITY_ON();
+  SG_FILTER_REJECT_ON();
+  
   SG_BINARY_ON();
   SG_CYCLE_ON();
   SG_GC_ON();

@@ -63,6 +63,18 @@ SGLR library (libsglr, -lsglr)
 
 =item ATbool B<SG_FILTER>;  B<SG_FILTER_ON>(), B<SG_FILTER_OFF>()
 
+=item ATbool B<SG_FILTER_ASSOCIATIVITY>; B<SG_FILTER_ASSOCIATIVITY_ON>(), B<SG_FILTER_ASSOCIATIVITY_OFF>
+
+=item ATbool B<SG_FILTER_DIRECTEAGERNESS>; B<SG_FILTER_DIRECTEAGERNESS_ON>(), B<SG_FILTER_DIRECTEAGERNESS_OFF>
+
+=item ATbool B<SG_FILTER_EAGERNESS>; B<SG_FILTER_EAGERNESS_ON>(), B<SG_FILTER_EAGERNESS_OFF>
+
+=item ATbool B<SG_FILTER_INJECTIONCOUNT>; B<SG_FILTER_INJECTIONCOUNT_ON>(), B<SG_FILTER_INJECTIONCOUNT_OFF>
+
+=item ATbool B<SG_FILTER_PRIORITY>; B<SG_FILTER_PRIORITY_ON>(), B<SG_FILTER_PRIORITY_OFF>
+
+=item ATbool B<SG_FILTER_REJECT>; B<SG_FILTER_REJECT_ON>(), B<SG_FILTER_REJECT_OFF>
+
 =back
 
 
@@ -191,7 +203,9 @@ B<SG_BINARY_OFF>() act as should be expected.
 applies a few common disambiguation strategies: subtree preference
 filtering, multiset filtering, and injection count filtering.  By
 default, filtering is applied; use B<SG_FILTER_ON>() to enable,
-B<SG_FILTER_OFF>() to disable these ad-hoc filters.
+B<SG_FILTER_OFF>() to disable all filters. If filtering is enabled,
+each filter can be toggled specifically also. This is meant for
+debugging purposes.
 
 =back
 

@@ -1110,7 +1110,7 @@ static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
 }
 */
 
-static tree SG_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
+static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
  ATermInt l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
  ATermInt l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
@@ -1255,38 +1255,37 @@ tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
     return NULL;
   }
  
-  /* the first filters are based on priorities and preferences */
-  if (SG_PT_HAS_REJECTS(pt)) {
+  if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
     max = SG_RejectFilter(t0, t1);
     if (max) {
       return max;
     }
   }
+
+  /* only try these filters if the parsetable contains such info */
   if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
-
-    /*  Always apply direct priority filtering first  */
-/*
-    max = SG_Priority_Filter(pt, t0, t1);
-    if (max) {
-      return max;
-    }
-*/
-
+    
     /*  Next, inspect eager/avoid status  */
-    max = SG_Eagerness_Filter(pt, t0, t1);
-    if(max) {
-      return max;
+    if (SG_FILTER_DIRECTEAGERNESS) {
+      max = SG_Direct_Eagerness_Filter(pt, t0, t1);
+      if(max) {
+	return max;
+      }
     }
  
-    /* multiset filter */
-    max = SG_Multiset_Filter(pt, mst, t0, t1);
-    if (max) {
-      return max;
+    /* deep eagerness filter */
+    if (SG_FILTER_EAGERNESS) {
+      max = SG_Multiset_Filter(pt, mst, t0, t1);
+      if (max) {
+	return max;
+      }
     }
   }
- 
-  /* injectionscount filter always applies */
-  max = SG_InjectionCount_Filter(pt, t0, t1);
+
+  /* injectionscount filter */
+  if (SG_FILTER_INJECTIONCOUNT) {
+    max = SG_InjectionCount_Filter(pt, t0, t1);
+  }
 
   return max;
 }
@@ -1466,13 +1465,16 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
   if (ATgetType(t) == AT_APPL && ATgetAFun(t) != SG_Amb_AFun) {
     label     prodl   = SG_GetApplProdLabel(t);
 
-    if (SG_IsLeftAssociative(pt, prodl)) {
-      t = SG_Left_Associativity_Filter(t, prodl);
+    if (SG_FILTER_ASSOCIATIVITY) {
+      if (SG_IsLeftAssociative(pt, prodl)) {
+	t = SG_Left_Associativity_Filter(t, prodl);
+      }
+      else if (SG_IsRightAssociative(pt, prodl)) {
+	t = SG_Right_Associativity_Filter(t, prodl);
+      }
     }
-    else if (SG_IsRightAssociative(pt, prodl)) {
-      t = SG_Right_Associativity_Filter(t, prodl);
-    }
-    if (t) {
+
+    if (t && SG_FILTER_PRIORITY) {
       /* How about priority relations between parent and kids? */
       ATermInt l0 = SG_GetATint(prodl, 0);
       if (SG_LookupGtrPriority(pt, ATgetInt(l0))) {

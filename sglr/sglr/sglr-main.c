@@ -60,6 +60,12 @@
 int     outputflag        = ATtrue;
 int     binaryflag        = ATtrue;
 int     filterflag        = ATtrue;
+int     filter_associativityflag   = ATtrue;
+int     filter_directeagernessflag = ATtrue;
+int     filter_eagernessflag       = ATtrue;
+int     filter_injectioncountflag  = ATtrue;
+int     filter_priorityflag        = ATtrue;
+int     filter_rejectflag          = ATtrue;
 int     cycleflag         = ATtrue;
 int     posinfoflag       = ATfalse;
 int     verboseflag       = ATfalse;
@@ -142,51 +148,63 @@ void term_to_file(ATerm t, char *FN)
 
 void SG_Usage(FILE *stream, ATbool long_message)
 {
-  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcdf"
+  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcd"
 #if !defined(HAVE_BOEHMGC)
   "g"
 #endif
-  "hlmnPtvV] [-i file] [-o file] \\"
+  "hlmnPtvV] [-f[adeirp]] [-i file] [-o file] \\"
   "\n\t\t[-s sort]\n";
 
   ATfprintf(stream, usage, program_name);
   if(long_message) {
     ATfprintf(stream,
               "Parameters:\n"
-              "\t-1       : use AsFix1 output format             [%s]\n"
-              "\t-2       : use AsFix2 output format             [%s]\n"
-              "\t-b       : output AsFix in binary format (BAF)  [%s]\n"
-              "\t-c       : toggle cycle detection               [%s]\n"
-              "\t-d       : toggle debug mode                    [%s]\n"
-              "\t-f       : toggle filtering                     [%s]\n"
+              "\t-1         : use AsFix1 output format             [%s]\n"
+              "\t-2         : use AsFix2 output format             [%s]\n"
+              "\t-b         : output AsFix in binary format (BAF)  [%s]\n"
+              "\t-c         : toggle cycle detection               [%s]\n"
+              "\t-d         : toggle debug mode                    [%s]\n"
+              "\t-f[adeipr] : toggle filtering, or specific filter [%s]\n"
+              "\t  a : associativity                               [%s]\n"
+              "\t  d : direct eagerness                            [%s]\n"
+              "\t  e : eagerness                                   [%s]\n"
+              "\t  i : injection count                             [%s]\n"
+              "\t  p : priority                                    [%s]\n"
+              "\t  r : reject                                      [%s]\n"
 #if !defined(HAVE_BOEHMGC)
-              "\t-g       : perform garbage collection           [%s]\n"
+              "\t-g         : perform garbage collection           [%s]\n"
 #endif
-              "\t-h, -?   : display usage information\n"
-              "\t-i file  : input from |file|                    [%s]\n"
-              "\t-l       : toggle statistics logging            [%s]\n"
-              "\t-m       : use AsFix2ME output format           [%s]\n"
-              "\t-n       : do not create parse tree             [%s]\n"
-              "\t-o file  : output to |file|                     [%s]\n"
-              "\t-p file  : use parse table |file| (required)    [%s]\n"
-              "\t-P       : toggle position information          [%s]\n"
-              "\t-s symbol: define start symbol                  [%s]\n"
-              "\t-t       : output AsFix in textual format       [%s]\n"
-              "\t-v       : toggle verbose mode                  [%s]\n"
-              "\t-V       : reveal program version (i.e. %s)\n",
+              "\t-h, -?     : display usage information\n"
+              "\t-i file    : input from |file|                    [%s]\n"
+              "\t-l         : toggle statistics logging            [%s]\n"
+              "\t-m         : use AsFix2ME output format           [%s]\n"
+              "\t-n         : do not create parse tree             [%s]\n"
+              "\t-o file    : output to |file|                     [%s]\n"
+              "\t-p file    : use parse table |file| (required)    [%s]\n"
+              "\t-P         : toggle position information          [%s]\n"
+              "\t-s symbol  : define start symbol                  [%s]\n"
+              "\t-t         : output AsFix in textual format       [%s]\n"
+              "\t-v         : toggle verbose mode                  [%s]\n"
+              "\t-V         : reveal program version (i.e. %s)\n",
               DEFAULTMODE(asfix1flag),
               DEFAULTMODE(!asfix1flag),
-              DEFAULTMODE(!outputflag), 
               DEFAULTMODE(binaryflag), 
               DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
               DEFAULTMODE(filterflag),
+              DEFAULTMODE(filter_associativityflag),
+              DEFAULTMODE(filter_directeagernessflag),
+              DEFAULTMODE(filter_eagernessflag),
+              DEFAULTMODE(filter_injectioncountflag),
+              DEFAULTMODE(filter_priorityflag),
+              DEFAULTMODE(filter_rejectflag),
 #if !defined(HAVE_BOEHMGC)
               DEFAULTMODE(gcflag),
 #endif
               input_file_name, 
               DEFAULTMODE(statisticsflag),
               DEFAULTMODE(asfix2meflag),
+              DEFAULTMODE(outputflag),
               output_file_name,
               parse_table_name?parse_table_name:"unspecified",
               DEFAULTMODE(posinfoflag),
@@ -213,7 +231,7 @@ struct option longopts[] =
   {"asfix1",        no_argument,       &asfix1flag,        ATtrue},
   {"asfix2",        no_argument,       &asfix1flag,        ATfalse},
   {"debug",         no_argument,       &debugflag,         ATtrue},
-  {"no-filter",     no_argument,       &filterflag,        ATfalse},
+  {"no-filter",     optional_argument, &filterflag,        ATfalse},
   {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
 #if !defined(HAVE_BOEHMGC)
   {"no-gc",         no_argument,       &gcflag,            ATfalse},
@@ -234,6 +252,42 @@ struct option longopts[] =
   {0, 0, 0, 0}
 };
 
+void handle_filter_options(void)
+{
+  if (optarg == NULL) {
+    filterflag = !filterflag;
+  }
+  else {
+    if (strlen(optarg) == 1) {
+      switch(optarg[0]) {
+	case 'a':
+          filter_associativityflag = !filter_associativityflag;
+          break; 
+        case 'd':
+          filter_directeagernessflag = !filter_directeagernessflag;
+          break;
+        case 'e':
+          filter_eagernessflag = !filter_eagernessflag;
+          break;
+        case 'i':
+          filter_injectioncountflag = !filter_injectioncountflag;
+          break;
+        case 'p':
+          filter_priorityflag = !filter_priorityflag;
+        case 'r':
+          filter_rejectflag = !filter_rejectflag;
+          break;
+        default:
+          SG_Usage(stderr, ATfalse); 
+          exit(1);
+      }
+    }
+    else {
+      SG_Usage(stderr, ATfalse); 
+      exit(1);
+    }
+  }
+}
 
 /*
  The actual argument interpretation is done by the function
@@ -248,7 +302,7 @@ void handle_options (int argc, char **argv)
   ATbool show_help = ATfalse, show_version = ATfalse;
 
   while ((c = getopt_long(argc, argv,
-                          "12?bcdf"
+                          "12?bcdf::"
 #if !defined(HAVE_BOEHMGC)
                           "g"
 #endif
@@ -263,7 +317,7 @@ void handle_options (int argc, char **argv)
       case 'b':   binaryflag       = ATtrue;              break;
       case 'c':   cycleflag        = !cycleflag;          break;
       case 'd':   debugflag        = !debugflag;          break;
-      case 'f':   filterflag       = !filterflag;         break;
+      case 'f':   handle_filter_options();                break;     
 #if !defined(HAVE_BOEHMGC)
       case 'g':   gcflag           = ATfalse;             break;
 #endif
@@ -297,6 +351,12 @@ ATbool set_global_options(void)
   if(debugflag)      SG_DEBUG_ON();
   if(verboseflag)    SG_VERBOSE_ON();
   if(filterflag)     SG_FILTER_ON();
+  if(filter_associativityflag)   SG_FILTER_ASSOCIATIVITY_ON();
+  if(filter_directeagernessflag) SG_FILTER_DIRECTEAGERNESS_ON();
+  if(filter_eagernessflag)       SG_FILTER_EAGERNESS_ON();
+  if(filter_injectioncountflag)  SG_FILTER_INJECTIONCOUNT_ON();
+  if(filter_priorityflag)        SG_FILTER_PRIORITY_ON();
+  if(filter_rejectflag)          SG_FILTER_REJECT_ON();
   if(cycleflag)      SG_CYCLE_ON();
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();

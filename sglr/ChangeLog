@@ -19,6 +19,10 @@
 
 $Id$
 
+2001/03/27 (jurgenv@cwi.nl)
+  * added six options to libsglr. Each option toggles the use of
+    a specific disambigation filter.
+
 2001/03/22 (markvdb@cwi.nl)
   * Fixed a serious bug in filtering of assocativity. 
     Revealed by the following grammar (by Peter D. Mosses):
