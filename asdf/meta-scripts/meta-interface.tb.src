@@ -1,0 +1,336 @@
+/*
+ * $Id$
+ */
+#include "asfc.idef"
+#include "asfoperations.idef"
+#include "asfchecker.idef"
+#include "asfsdfchecker.idef"
+#include "asfe.idef"
+#include "addeqssyntax.idef"
+#include "removevarsyntax.idef"
+#include "error-display.tb"
+#include "error-support.idef"
+#include "asfsdfapigen.tb"
+#include "asdf-modules.tb"
+
+process Create-Asf-Processes is
+let Pid : int 
+in
+printf("Creating Create-Asf-Processes process\n").
+  create(Asfe, Pid?).
+  create(AsfSdfChecker, Pid?).
+  create(AsfChecker, Pid?).
+  create(AsfOperations, Pid?).
+  create(AddEqSyn, Pid?).
+  create(RemoveVars, Pid?).
+  create(Asfc, Pid?).
+  create(DisplayErrors, Pid?) .
+  create(ErrorSupport, Pid?) .
+  create(Preprocess-syntax, Pid?) .
+  create(Interpret-term, Pid?) .
+  create(Postprocess-semantics, Pid?) .
+  create(Compile-semantics, Pid?) .
+  create(Postprocess-collected-semantics, Pid?) .
+  create(TestAsfSpecification, Pid?).
+  create(ASDF, Pid?)
+endlet
+ 
+process TestAsfSpecification is
+let
+  Specification : term,
+  Equations : term,
+  Tests : term,
+  ModuleName : str,
+  Id : int,
+  Total : int,
+  Failed : int,
+  Tags : list,
+  Errors : list
+in
+  Id := process-id .
+  (
+    rec-msg(run-asf-tests(ModuleName?)) .
+    snd-note(ui-status(stat(Id, "Retrieving equations and tests"))) .
+    snd-msg(get-specification(ModuleName)) .
+    (
+      rec-msg(specification(Specification?)) .
+      snd-msg(extract-equations(Specification)) .
+      rec-msg(extract-equations-result(Equations?)) .
+      snd-msg(extract-tests(Specification)) .
+      rec-msg(extract-tests-result(Tests?))  .
+      snd-note(ui-status(endstat(Id))) .
+      snd-note(ui-status(stat(Id, "Running tests"))) .
+      snd-msg(run-tests(ModuleName, Equations, Tests)) .
+      (
+        rec-msg(test-results(Errors?)) .
+        snd-note(remove-feedback-summary("asf-tests",ModuleName)) .
+        snd-note(show-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
+      +
+        rec-msg(rewrite-errors(Errors?)).
+        snd-msg(display-rewrite-errors(ModuleName, Errors))
+      ) .
+      snd-note(ui-status(endstat(Id))) 
+    +  
+      rec-msg(specification-incomplete) .
+      snd-note(ui-status(endstat(Id))) .
+      snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+    )
+  ) * delta
+
+endlet
+
+process CheckSyntaxSpecification(ModuleName : str) is
+let
+  Syntax    : term,
+  ErrorMessage : str,
+  Feedback  : term
+in
+  snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
+  (
+    rec-msg(syntax(Syntax?)) .
+    snd-msg(check-asfsdf(Syntax, ModuleName)) .
+    rec-msg(feedback(Feedback?)) .
+    snd-msg(display-sdf-errors(Feedback)) .
+    Syntax := no-tree
+  +
+    rec-msg(no-syntax(ErrorMessage?))
+  )
+endlet
+
+process Preprocess-syntax is
+let
+  Syntax     : term, 
+  Checking   : term, 
+  ModuleName : str,
+  Feedback   : term
+in
+  (
+    rec-msg(pre-preprocess-syntax-hook(ModuleName?)).
+    CheckSyntaxSpecification(ModuleName) .
+    snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
+  +
+    rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
+    if equal(Checking, quote(true)) then
+      CheckSyntaxSpecification(ModuleName)
+    else
+      tau
+    fi .
+    snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
+    rec-msg(extended-syntax(Syntax?)) .
+    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
+    Syntax := no-tree
+  +
+    rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
+    if equal(Checking, quote(true)) then
+      CheckSyntaxSpecification(ModuleName)
+    else
+      tau
+    fi .
+    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) .
+    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
+    Syntax := no-tree
+  )*delta
+endlet
+
+process Interpret-term is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Tree       : term,
+  NormalForm : term,
+  Errors     : list,
+  Text       : str
+in
+  Id := process-id.
+  (
+    rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
+    snd-note(ui-status(stat(Id, "Rewriting"))) .
+    snd-msg(rewrite(ModuleName, Semantics, Tree)).
+    (
+      rec-msg(rewrite-result(NormalForm?)).
+      snd-msg(restore-term-brackets(ModuleName, NormalForm)).
+      rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
+    +
+      rec-msg(rewrite-text(Text?)) .
+      NormalForm := quote(str(Text))
+    +
+      rec-msg(rewrite-errors(Errors?)).
+      snd-msg(display-rewrite-errors(ModuleName, Errors)).
+      NormalForm := error-tree
+    ).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(interpret-term-hook-result(NormalForm))
+  )*delta
+endlet
+
+process Postprocess-semantics is
+let
+  Semantics : term,
+  Msgs      : list,
+  Name : str
+in
+  (
+    rec-msg(postprocess-semantics-hook(Name?, Semantics?)).
+    snd-msg(check-asf(Semantics)).
+    rec-msg(messages(Msgs?)).
+    snd-msg(display-asf-errors(Name, Msgs)).
+    snd-msg(postprocess-semantics-hook-result(Name, Semantics))
+  )*delta
+endlet
+
+process Compile-semantics is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Progress   : str
+in
+  Id := process-id .
+  subscribe(asfc-progress(<term>)) .
+  (
+    rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
+    snd-msg(compile-module(ModuleName, Semantics)) .
+    (
+      rec-note(asfc-progress(Progress?)).
+      snd-note(ui-status(endstat(Id))).
+      snd-note(ui-status(statf(Id,"Compiling %s - %s",
+                              [ModuleName, Progress])))
+    )*
+    rec-msg(compilation-done(ModuleName)).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(compile-semantics-hook-done(ModuleName))
+  )*delta
+endlet
+
+process Postprocess-collected-semantics is
+let
+  Semantics : term,
+  ModuleName : str,
+  Modules   : list
+in 
+  (
+    rec-msg(postprocess-collected-semantics-hook(ModuleName?, Modules?)).
+    snd-msg(extract-equations(Modules)).
+    rec-msg(extract-equations-result(Semantics?)).
+    snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics)) 
+  ) * delta
+endlet
+
+process GetActions(Actions : str?) is
+let
+  ErrorMessage : str
+in
+  snd-msg(io-read-file("__ASDF__/standard.asdf.buttons")) .
+  (
+    rec-msg(io-file-contents(Actions?))
+  +
+    rec-msg(io-error-reading(ErrorMessage?)) .
+    Actions := "buttons([])"
+  )
+endlet
+
+process Meta-Interface is
+let
+  Id : int,
+  Pid : int,
+  Module : str,
+  Actions : str,
+  ModuleNames : list,
+  Modules : list,
+  Table : term,
+  Checking : term
+in
+  Id := process-id.
+  Create-Asf-Processes.
+  create(ParseTable-hooks, Pid?) .
+  (
+    rec-msg(actions-hook) .
+    GetActions(Actions?) .
+    snd-msg(actions-hook-result(Actions))
+  +
+    rec-msg(environment-name-hook).
+    snd-msg(environment-name-hook-result("Action Environment"))
+  +
+    rec-msg(library-location-hook).
+    snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
+  +
+    rec-msg(file-extension-hook(sdf)).
+    snd-msg(file-extension-hook-result(".sdf"))
+  +
+    rec-msg(file-extension-hook(asf)).
+    snd-msg(file-extension-hook-result(".asf"))
+  +
+    rec-msg(file-extension-hook(trm)).
+    snd-msg(file-extension-hook-result(".trm"))
+  +
+    rec-msg(file-extensions-hook).
+    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+  +
+    rec-msg(parsetable-extension-hook(trm)) .
+    snd-msg(parsetable-extension-hook-result(".trm.tbl"))
+  +
+    rec-msg(parsetable-extension-hook(eqs)) .
+    snd-msg(parsetable-extension-hook-result(".asf.tbl"))
+  +
+    rec-msg(get-module-id-hook(sdf)) .
+    snd-msg(get-module-id-hook-result("Sdf2")) 
+  +
+    rec-msg(extension-to-type-hook(".sdf")).
+    snd-msg(extension-to-type-hook-result(sdf))
+  +
+    rec-msg(syntax-top-sort-hook(sdf)).
+    snd-msg(syntax-top-sort-hook-result(sort("Module")))
+  +
+    rec-msg(other-top-sort-hook(trm)).
+    snd-msg(other-top-sort-hook-result(sort("")))
+  +
+    rec-msg(semantics-top-sort-hook).
+    snd-msg(semantics-top-sort-hook-result(sort("ASF-Module")))
+  + 
+    rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
+    snd-msg(other-tables-invalidated-hook)
+  +
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm)) .
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
+  +
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree"))) 
+  +
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, sdf)) .
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
+  +
+    rec-msg(add-initial-syntax-modules-hook(Modules?, sdf)) .
+    snd-msg(initial-modules-added(Modules)) 
+  ) * delta
+endlet
+
+process ParseTable-hooks is
+let
+  Module : str,
+  Table : term,
+  Checking : term
+in
+  (
+    rec-msg(obtain-parse-table-hook(trm, Module?, Checking?)) .
+    snd-msg(get-parsetable(Module, trm, Checking)) .
+    (
+      rec-msg(parse-table(Table?))
+    +
+      rec-msg(no-parse-table(Module?)) .
+      Table := no-table
+    ).
+    snd-msg(obtain-parse-table-hook-result(Table)) 
+  + 
+    rec-msg(obtain-parse-table-hook(eqs, Module?, Checking?)) .
+    snd-msg(get-parsetable(Module, eqs, Checking)) .
+    (
+      rec-msg(parse-table(Table?))
+    +
+      rec-msg(no-parse-table(Module?)) .
+      Table := no-table
+    ).
+    snd-msg(obtain-parse-table-hook-result(Table)) 
+  ) * delta
+endlet

@@ -1,0 +1,33 @@
+dnl $Id$
+
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
+AM_INIT_AUTOMAKE(asdf,0.1)
+AC_PREREQ(2.59)
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_PROG_MAKE_SET([])
+
+AC_PACKAGE_REQUIRE(meta, generic-meta,
+   [  --with-meta=DIR          Meta-Environment is in DIR])
+AC_SUBST(META)
+
+AC_PACKAGE_REQUIRE(asf, asfc,
+   [  --with-asf=DIR           Asf is in DIR])
+AC_SUBST(ASF)
+
+AC_PACKAGE_REQUIRE(pgen, sdf2table,
+   [  --with-pgen=DIR         pgen is in DIR])
+AC_SUBST(PGEN)
+
+AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
+   [  --with-asf=DIR           Asf+Sdf library is in DIR])
+AC_SUBST(ASF_LIBRARY)
+
+dnl Which files need updating?
+AC_CONFIG_FILES([Makefile
+  meta-scripts/Makefile
+  src/Makefile
+  test/Makefile
+])
+AC_OUTPUT

@@ -1,0 +1,38 @@
+/*
+  $Id$
+ */
+
+/* Rewrite-Errors parses a list of errors coming from the Evaluator,
+ * uses the unparser and displays them.
+ */
+process DisplayErrors is
+let
+  Message : str,
+  Errors : list,
+  Feedback : term,
+  Producer : str,
+  Identification : str,
+  ModuleName : str
+in
+  (
+    rec-msg(display-rewrite-errors(ModuleName?, Errors?)).
+    snd-note(remove-feedback-summary("asfe","all")) .
+    snd-note(show-feedback-summary(summary("asfe","all",Errors)))
+  +
+    rec-msg(display-asf-errors(ModuleName?, Errors?)).
+    snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
+    snd-note(show-feedback-summary(summary("asf-checker",ModuleName,Errors)))
+  +
+    rec-msg(display-sdf-errors(Feedback?)) .
+    snd-msg(convert-feedback(Feedback)) .
+    rec-msg(converted-feedback(Feedback?)) .
+    snd-msg(get-feedback-producer(Feedback)) .
+    rec-msg(producer(Producer?)) .
+    snd-msg(get-feedback-identification(Feedback)) .
+    rec-msg(identification(Identification?)) .
+    snd-note(remove-feedback-summary(Producer, Identification)) .
+    snd-note(show-feedback-summary(Feedback))
+  ) * 
+  delta
+endlet
+
