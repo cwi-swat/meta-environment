@@ -152,6 +152,8 @@ cat ${PROTO} |
 		$INCLUDES = q{@INCLUDES@};
 		$LIBS     = q{@LIBS@};
 		$SOCKLIBS = q{@SOCKLIBS@};
+		$ATERM    = q{@ATERM@};
+		$NEWMETA  = q{@NEW_META@};
 
 		s|\@srcdir\@|$srcdir|g;
 		s|\@top_srcdir\@|$topsrc|g;
@@ -166,7 +168,7 @@ cat ${PROTO} |
 		s|\@LIBS\@|$LIBS|g;
 		s|\@SOCKLIBS\@|$SOCKLIBS|g;
 		s|\@ATERM\@|$ATERM|g;
-		s|\@NEW_META\@|$NEW_META|g;'
+		s|\@NEW_META\@|$NEWMETA|g;'
 ) |\
 # When the '-m' command line option was specified we write the generated
 # Makefile.in to standard output, otherwise we write to Makefile
