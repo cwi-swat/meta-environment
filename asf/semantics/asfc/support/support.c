@@ -35,7 +35,9 @@ typedef struct bucket
 /*}}}  */
 /*{{{  defines */
 
+/*
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
+*/
 #define MAX_STORE 10240
 
 /*}}}  */
