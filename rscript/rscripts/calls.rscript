@@ -3,7 +3,7 @@
 	rel[proc, proc] Calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
 	"e">, <"f", "e">, <"f", "g">, <"g", "e">}
 
-	int nCalls = # Calls
+	str nCalls = # Calls
 
 	bag[proc] procs = carrier(Calls)
 
@@ -49,3 +49,4 @@
 		     { <C1, C2> | <proc P1, proc P2> : aCalls, <comp C1, comp C2> : aPartOf[P1] x aPartOf[P2]}
 
 	rel[comp,comp] ComponentCalls = lift(Calls2, PartOf)
+

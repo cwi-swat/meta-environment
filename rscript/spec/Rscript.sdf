@@ -3,7 +3,7 @@ module Rscript
 exports
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
-	REXP0 REXP REXPTYPE EQU DESTINATION %% {REXP ","}+ 
+	REXP REXPTYPE EQU DESTINATION
 	INITVAR TARGET
 
   imports RscriptElem basic/Comments
@@ -32,8 +32,8 @@ exports
 
      "(" REXP ")"                             	-> REXP0
 
-     REXP0					-> REXP 
-
+     REXP0					-> REXP {avoid}
+ 
 
      REXP "and" REXP                         	-> REXP {left}
      REXP "or" REXP                          	-> REXP {left}
@@ -146,10 +146,6 @@ exports
     {	REXP "+" -> REXP
        	REXP "*" -> REXP
     }					>
-%%    {	REXP "[" REXP "]" -> REXP
-%%	REXP "[" REXP "," "-" "]"  -> REXP
-%%	REXP "[" "-" "," REXP  "]" -> REXP
-%%    }					>
 
     REXP "." REXP -> REXP		>
     REXP "o" REXP -> REXP		>
