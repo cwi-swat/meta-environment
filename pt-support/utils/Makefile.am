@@ -3,7 +3,7 @@
 EXTRA_DIST		= unparsePT.idef
 
 bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
-                        addPosInfo
+                          addPosInfo ambtracker
 
 CFLAGS			= -g -Wall -Werror -O2
 INCLUDES		= -I${top_srcdir}/libmept \
@@ -41,6 +41,10 @@ unparseProd_LDADD	= -L../libmept -lmept \
 implodePT_SOURCES	= implodePT-main.c
 implodePT_LDADD		= -L../libmept -lmept \
 			-L${ATERM}/lib -lATerm
+
+ambtracker_SOURCES      = ambtracker.c
+ambtracker_LDADD        = -L../libmept -lmept \
+                        -L${ATERM}/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
 	$(TOOLBUS)/bin/tifstoc -tool $* $<
