@@ -504,39 +504,56 @@ PT_Tree getTupleSecond(PT_Tree tuple)
 
 static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
 {
-   PT_Symbol treeSymbol = PT_getProductionRhs(PT_getTreeProd(tree));
-   PT_Symbol accuSymbol = PT_getProductionRhs(PT_getTreeProd(accu));
+   PT_Symbol treeSymbolCf = PT_getProductionRhs(PT_getTreeProd(tree));
+   PT_Symbol accuSymbolCf = PT_getProductionRhs(PT_getTreeProd(accu));
+   PT_Symbol treeSymbol = treeSymbolCf;
+   PT_Symbol accuSymbol = accuSymbolCf;
    PT_Symbol layoutSymbol  = PT_makeSymbolCf(
                             PT_makeSymbolOpt(PT_makeSymbolLayout()));
+   PT_Symbols lhs;
+   PT_Symbol rhs;
+   PT_Attributes attrs;
+   PT_Production prod;
+   PT_Tree layoutTree;
+   PT_Args args;
 
-   PT_Symbols lhs = PT_makeSymbolsList(
-                      PT_makeSymbolLit("<"),
-                    PT_makeSymbolsList(
-                      layoutSymbol, 
-                    PT_makeSymbolsList(
-                      treeSymbol,
-                    PT_makeSymbolsList(
-                      layoutSymbol,
-                    PT_makeSymbolsList(
-                      PT_makeSymbolLit(","),
-                    PT_makeSymbolsList(
-                      layoutSymbol,
-                    PT_makeSymbolsList(
-                      accuSymbol,
-                    PT_makeSymbolsList(
-                      layoutSymbol,
-                    PT_makeSymbolsList(
-                      PT_makeSymbolLit(">"),
-                    PT_makeSymbolsEmpty())))))))));
+   if (PT_isSymbolCf(treeSymbolCf) ||
+       PT_isSymbolLex(treeSymbolCf)) {
+     treeSymbol = PT_getSymbolSymbol(treeSymbolCf);
+   }
+
+   if (PT_isSymbolCf(accuSymbolCf) ||
+       PT_isSymbolLex(accuSymbolCf)) {
+     accuSymbol = PT_getSymbolSymbol(accuSymbolCf);
+   }
+
+   lhs = PT_makeSymbolsList(
+            PT_makeSymbolLit("<"),
+            PT_makeSymbolsList(
+              layoutSymbol, 
+            PT_makeSymbolsList(
+              treeSymbolCf,
+            PT_makeSymbolsList(
+              layoutSymbol,
+            PT_makeSymbolsList(
+              PT_makeSymbolLit(","),
+            PT_makeSymbolsList(
+              layoutSymbol,
+            PT_makeSymbolsList(
+              accuSymbolCf,
+            PT_makeSymbolsList(
+              layoutSymbol,
+            PT_makeSymbolsList(
+              PT_makeSymbolLit(">"),
+            PT_makeSymbolsEmpty())))))))));
                        
-   PT_Symbol rhs = PT_makeSymbolPair(treeSymbol, accuSymbol);
-   PT_Attributes attrs = PT_makeAttributesNoAttrs();
-   PT_Production prod = PT_makeProductionDefault(lhs,rhs,attrs);
-                     
-   PT_Tree layoutTree = PT_makeTreeLayoutEmpty();
-   PT_Args args = PT_makeArgsList(
-                    PT_makeTreeLit("<"),
-		  PT_makeArgsList(
+   rhs = PT_makeSymbolCf(PT_makeSymbolPair(treeSymbol, accuSymbol));
+   attrs = PT_makeAttributesNoAttrs();
+   prod = PT_makeProductionDefault(lhs,rhs,attrs);
+   layoutTree = PT_makeTreeLayoutEmpty();
+   args = PT_makeArgsList(
+             PT_makeTreeLit("<"),
+             PT_makeArgsList(
 		    layoutTree, 
 		  PT_makeArgsList(
 		    tree,
