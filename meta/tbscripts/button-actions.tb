@@ -473,8 +473,8 @@ in
           rec-msg(save-done(Name))
         else
           Text := first(args(Tree)) .
-          snd-msg(save-text-file(Path,Text)).
-          rec-msg(save-done(Path))
+          snd-msg(write-text-file(Path,"",[Text])).
+          rec-msg(file-written)
         fi .
         ReturnSuccess(EditorId,Stack)
       +
@@ -690,12 +690,16 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
-    snd-note(reload-file(EditorId, FileName)) .
-    snd-msg(move-focus-to-root(EditorId)) .
-    rec-msg(focus-moved(EditorId, Focus?)) .
-    snd-note(set-focus(EditorId, Focus))
+    snd-msg(write-text-file(FileName,"",[Text])) .
+    (
+      rec-msg(file-written(FileName)) .
+      snd-note(reload-file(EditorId, FileName)) .
+      snd-msg(move-focus-to-root(EditorId)) .
+      rec-msg(focus-moved(EditorId, Focus?)) .
+      snd-note(set-focus(EditorId, Focus))
+    +
+      rec-msg(file-not-written)
+    )
   +
     rec-msg(no-tree)
   )
@@ -727,8 +731,8 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
+    snd-msg(write-text-file(FileName,"",[Text])) .
+    rec-msg(file-written) .
     snd-note(reload-file(EditorId, FileName)) .
     snd-note(set-focus(EditorId, Focus))
   +
@@ -787,8 +791,8 @@ in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
+    snd-msg(write-text-file(FileName,"",[Text])) .
+    rec-msg(file-written) .
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
     rec-msg(editor-opened(ModuleName, EditorId?))
   fi
@@ -799,8 +803,8 @@ let
   EditorId    : term,
   NewModuleName : str
 in
-  snd-msg(save-text-file(FileName, Text)) .
-  rec-msg(save-done(FileName)) .
+  snd-msg(write-text-file(FileName,"",[Text])) .
+  rec-msg(file-written) .
   snd-msg(edit-term-file(ModuleName, FileName)) .
   rec-msg(editor-opened(ModuleName, EditorId?))
 endlet
