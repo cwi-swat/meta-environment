@@ -49,7 +49,7 @@ int toolbus_id;
 char myname[] = "asfc";
 char myversion[] = "2.5";
 
-static char myarguments[] = "chi:lmn:o:tvV";
+static char myarguments[] = "chi:lmn:o:p:tvV";
 
 
 /*}}}  */
@@ -82,6 +82,7 @@ static void usage(void)
 	    "\t-m              output muasf code             (default %s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
 	    "\t-o filename     output c code to file         (default stdout)\n"
+	    "\t-p filename     include parse table           (default none)\n"
 	    "\t-t              make toolbus tool             (default %s)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
@@ -130,7 +131,8 @@ static char *basename(const char *source)
 /*}}}  */
 /*{{{  static PT_ParseTree compile(char *name, ATerm equations, char *output) */
 
-static PT_ParseTree compile(char *name, ATerm eqs, char *output)
+static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable, 
+			    char *output)
 {
   MA_Module muasf;
   PT_ParseTree c_code;
@@ -183,7 +185,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
     }
 
     VERBOSE("pretty printing C code");
-    ToC_code(saveName, c_code, fp , myversion);
+    ToC_code(saveName, c_code, parseTable, fp , myversion);
     fclose(fp);
 
     if (make_toolbus_tool) {
@@ -239,7 +241,7 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
 
   sprintf(output, "%s.c", moduleName);
 
-  result = compile(moduleName, ATBunpack(equations), output);
+  result = compile(moduleName, ATBunpack(equations), NULL, output);
 
   return ATmake("snd-value(compilation-done)");
 }                              
@@ -255,8 +257,10 @@ int main(int argc, char *argv[])
   char *equations = "-";
   char *output = "-";
   char *name = "";
+  char *table = NULL;
 
   ATerm eqs;
+  ATerm parseTable = NULL;
 
   run_verbose = ATfalse;
   input_muasf = ATfalse;
@@ -297,6 +301,7 @@ int main(int argc, char *argv[])
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
+      case 'p':  table=optarg;          break;
       case 't':  make_toolbus_tool=ATtrue; break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
@@ -315,6 +320,13 @@ int main(int argc, char *argv[])
       }
     }
 
+    if (table != NULL) {
+      parseTable = ATreadFromNamedFile(table);
+      if (parseTable == NULL) {
+	ATerror("Unable to read table from %s\n", table);
+      }
+    }
+
     if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
       char tmp[_POSIX_PATH_MAX];
       sprintf(tmp, "%s.c", name);
@@ -330,7 +342,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    compile(name, eqs, output);
+    compile(name, eqs, parseTable, output);
   }
 
   return 0;
