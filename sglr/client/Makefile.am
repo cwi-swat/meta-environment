@@ -20,5 +20,3 @@ CLEANFILES   = parse-client.tif.c parse-client.tif.h
 
 # extra dependency for parse-client.c to generate parse-client.tif.[ch]
 ${srcdir}/parse-client.c : parse-client.tif.h parse-client.tif.c
-
-TESTS = not_implemented_yet

@@ -28,7 +28,5 @@ EXTRA_DIST = sglr.idef
 # remove built files during "make clean"
 CLEANFILES = sglr.tif.c sglr.tif.h
 
-TESTS      = not_implemented_yet
-
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
 ${srcdir}/sglr-main.c : sglr.tif.c sglr.tif.h

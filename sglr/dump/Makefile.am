@@ -19,5 +19,3 @@ LDADD     = -L${top_builddir}/libsglr -lsglr \
             -L${top_builddir}/liba2toa1 -la2toa1 \
             -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
             $(SOCKLIBS)
-
-TESTS = not_implemented_yet

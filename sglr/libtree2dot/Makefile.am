@@ -12,5 +12,3 @@ libtree2dot_a_SOURCES      = $(SRCS) $(HDRS)
 
 libtree2dot_prof_a_SOURCES = $(HDRS)
 libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
-
-TESTS = not_implemented_yet

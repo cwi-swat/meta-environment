@@ -20,5 +20,3 @@ libsglr_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
 
 libsglr_gc_a_SOURCES   = $(HDRS)
 libsglr_gc_a_LIBADD    = $(SRCS:.c=-gc.o) -lgc
-
-TESTS = not_implemented_yet
