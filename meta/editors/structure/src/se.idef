@@ -42,18 +42,6 @@ in
     snd-msg(ack-change-status(EditorId)) .
     snd-msg(set-focus-unchanged(EditorId, Focus))
   +
-    rec-msg(insert-chars(EditorId?, Location?, Text?)) .
-    snd-eval(SE, insert-chars(EditorId, Location, Text)) .
-    rec-value(SE, focus(Focus?)) .       
-    snd-msg(ack-insert-chars(EditorId)) .
-    snd-msg(set-focus(EditorId, Focus))
-  +
-    rec-msg(delete-chars(EditorId?, Location?, Number?)).
-    snd-eval(SE, delete-chars(EditorId, Location, Number)) .
-    rec-value(SE, focus(Focus?)) .
-    snd-msg(ack-delete-chars(EditorId)) .
-    snd-msg(set-focus(EditorId, Focus))
-  +
     rec-msg(replace-focus(EditorId?, Focus?, Tree?)) .
     snd-do(SE, replace-focus(EditorId, Focus, Tree))
   +
