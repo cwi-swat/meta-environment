@@ -2,6 +2,7 @@ package tide.tool.srcviewer;
 
 import javax.swing.Icon;
 
+import tide.*;
 import tide.tool.*;
 import tide.tool.support.*;
 
