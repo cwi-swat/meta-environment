@@ -938,6 +938,7 @@ module Bool-example
       "not" "(" BOOL ")" -> BOOL
       "(" BOOL ")"       -> BOOL {bracket}
 
+  hiddens
     variables
       "Bool"[0-9\']* -> BOOL
 
@@ -2554,8 +2555,8 @@ syntactic ambiguity (Section~\ref{PreferAvoidReject}).
 which all calls and results will be cached during evaluation
 (Section~\ref{MemoFunctions}).
 
-\item {\tt delay} is used to influence the evaluation order of the
-arguments of a function (Section~\ref{Delay}).
+%%\item {\tt delay} is used to influence the evaluation order of the
+%%arguments of a function (Section~\ref{Delay}).
 
 \item {\tt traversal} is used to declare so-called traversal functions
 that greatly simply the specification of functions that have to visit
@@ -3278,6 +3279,7 @@ exports
     "integer"                 -> TYPE 
     "real"                    -> TYPE 
 
+hiddens
   variables
     "Id"           -> ID 
     "Type"[0-9]*   -> TYPE 
@@ -3317,6 +3319,7 @@ exports
   context-free syntax
     Set[ID] -> IdSet 
 
+hiddens
   variables
     "Id"[0-9]*     -> Id
     "Id*"[0-9]*    -> {Id ","}* 
@@ -3329,14 +3332,15 @@ exports
 \subsection{Equations} \label{Equations}
 
 With equations a meaning or semantics may be added to functions declared in
-the context-free syntax. In particular, equations consist of two \emph{open
-  terms}, i.e. terms possibly containing variables.
+the lexical and context-free syntax sections. 
+In particular, equations consist of two \emph{open terms}, i.e.
+terms possibly containing variables.
 
 In the context of \asfsdf, an open term is any string that can be parsed
 according to one of the sorts in the specification (possibly including
 variables).  Recalling the {\tt Bool-example} specification in
-Section~\ref{Bool-example}, examples of open terms are `{\tt true}', `{\tt
-  not(false)}' and `{\tt true | Bool}'.
+Section~\ref{Bool-example}, examples of open terms are `{\tt true}', 
+`{\tt not(false)}' and `{\tt true | Bool}'.
 
 \subsubsection{Unconditional Equations}
 
@@ -3367,37 +3371,6 @@ The equality of two terms $L$ and $R$ is defined  in \asfsdf\ by the following
 \noindent where $TagId$ is a sequence of letters, digits, and/or minus signs ({\tt -}) 
 starting with an letter or a digit.
 
-In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
-above equation is thus executed as the rewrite rule $L \rightarrow R$. This
-can be used to reduce some initial closed term (i.e., not containing
-variables) to a \emph{normal form} (i.e., a term that is not reducible any
-further) by repeatedly applying rules from the specification.
-
-A term is always reduced in the context of a certain module, say $M$. The
-rewrite rules that may be used for the reduction of the term are the rules
-declared in $M$ itself and in the modules that are (directly or indirectly)
-imported by $M$.
-
-The search for an applicable rule is determined by the reduction strategy,
-that is, the procedure used to select a subterm for possible reduction. In our
-case the \emph{leftmost-innermost} reduction strategy is used. This means that a
-left-to-right, depth-first traversal of the term is performed and that for
-each subterm encountered an attempt is made to reduce it.
-
-Next, the rules are traversed one after the other.  The textual order of the
-rules is irrelevant.  Instead they are ordered according to their
-\emph{specificity}: more specific rules come before more general rules and
-default rules come last.  If the selected subterm and the left-hand side of a
-rule (more precisely: of the left-hand side of its conclusion) match, we say
-that a \emph{redex} has been found and the following happens. The conditions
-of the rule are evaluated and if the evaluation of a condition fails, other
-rules (if any) with matching left-hand sides are tried.  If the evaluation of
-all conditions succeeds, the selected subterm is replaced by the right-hand
-side of the rule (more precisely: the right-hand side of the conclusion of the
-rule) after performing proper \emph{substitutions}. Substitutions come into
-existence by the initial matching of the rule and by the evaluation of its
-conditions.  For the resulting term the above process is repeated until no
-further reductions are possible and a normal form is reached (if any).
 
 \subsubsection{Conditional Equations}
 
@@ -3473,6 +3446,7 @@ exports
     "length" "(" List ")"       -> Int
     "split-in-two" "(" List ")" -> List
 
+hiddens
   variables
     "El"[0-9]*  -> El
     "El*"[0-9]* -> {El ","}* 
@@ -3495,6 +3469,41 @@ equations
 \caption{Split-in-two specification}\label{CODE:split}
 \end{figure}  
 
+\subsubsection{Executing Equations} \label{ExecutingEquations}
+
+In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
+above equation is thus executed as the rewrite rule $L \rightarrow R$. This
+can be used to reduce some initial closed term (i.e., not containing
+variables) to a \emph{normal form} (i.e., a term that is not reducible any
+further) by repeatedly applying rules from the specification.
+
+A term is always reduced in the context of a certain module, say $M$. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in $M$ itself and in the modules that are (directly or indirectly)
+imported by $M$.
+
+The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the \emph{leftmost-innermost} reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+
+Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+\emph{specificity}: more specific rules come before more general rules and
+default rules (see Section~\ref{DefaultEquations} come last.  
+If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a \emph{redex} has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper \emph{substitutions}. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+
 \subsubsection{List Matching}
 
 List matching also known as associative matching is a powerful
@@ -3516,8 +3525,9 @@ exports
     [a-z]+ -> Elem
 
   context-free syntax
-    "{" {Elem ","}* "}" -> Set
+    Set[Elem] -> Set
 
+hiddens
   variables
     "Elem"[0-9]*  -> Elem
     "Elem*"[0-9]* -> {Elem ","}*
@@ -3536,7 +3546,7 @@ arbitrary length.
 
 As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
 expression containing the two list variables {\tt X} and {\tt Y} indicating
-the division of a list into twbo sublists) with the list {\tt ab} (a list
+the division of a list into two sublists) with the list {\tt ab} (a list
 containing two elements) the following three alternatives have to be
 considered:
 
@@ -3599,12 +3609,10 @@ variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
 In Figure \ref{CODE:lcfs} a lexical constructor function is used
 to remove the leading zeros for a number.
 
-
-
 \noindent Note: there is no check on the use of characters within the
 lexical constructor function.
 
-\subsubsection{Default Equations}
+\subsubsection{Default Equations} \label{DefaultEquations}
 
 The evaluation strategy for normalizing terms given the equations is
 based on innermost rewriting. All equations have the same priority.
@@ -3633,6 +3641,8 @@ exports
     "string"      -> Type
     "nil-type"    -> Type
     "compatible" "(" Type "," Type ")" -> Bool 
+
+hiddens
   variables
     "Type"[0-9]*  -> Type
 
@@ -3651,8 +3661,7 @@ equations
 \subsubsection{Memo Functions} \label{MemoFunctions}
 
 Rewriting as execution model is not very efficient. Memo functions
-are an experiment to improve the efficiency of a compiled
-\asfsdf\ specification (see Section \ref{compiling-specs}).
+improve the efficiency of \asfsdf\ specifications.
 Given a set of argument values for some function the normal
 form can be obtained via rewriting. It is possible that
 some function is called with the same set of arguments
@@ -3666,16 +3675,103 @@ exists a normal form in the memo-table. If so, this normal is returned.
 If not, the function given this set of argument values
 is normalized and stored in a memo-table.
 
-For the moment this memo behaviour is only supported by
-the compiler. Furthermore, there is some overhead involved
-in accessing the memo-table. Therefore, it is not wise
-to add to each function this memo attribute.
+There is some overhead involved in accessing the memo-table. 
+Therefore, it is not wise to add to each function this memo attribute.
+With respect to the operational behaviour adding a memo attribute does not
+have any effect.
+In Figure~\ref{CODE:fib} the Fibonacci function is decorated with the
+memo attribute and has thus a more efficient behaviour, see 
+Table~\ref{TABLE:fibn} for some figures on the performance improvement.
 
-\subsubsection{Delaying} \label{Delay}
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{|l|c|c|} \hline
+fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
+fib(16)          & \ 2.0 & 0.7  \\ \hline
+fib(17)          & \ 3.5 & 1.1  \\ \hline
+fib(18)          & \ 5.9 & 1.8  \\ \hline
+fib(19)          &  10.4 & 3.3  \\ \hline
+\end{tabular}
+\vspace{\baselineskip}
+\caption{The execution times for the evaluation of $\mbox{\em fib}(n)$}
+\label{TABLE:fibn}
+\end{center}
+\end{table}
 
-Both the compiler and the evaluator are based on innermost rewriting.
-In some cases it is more efficient to overrule this rewriting
-strategy.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Fib
+
+imports Layout
+
+exports
+  sorts Int
+  context-free syntax
+    "0"             -> Int
+    "s" "(" Int ")" -> Int
+
+  context-free syntax
+    add(Int, Int) -> Int
+
+    fib(Int)      -> Int {memo}
+
+hiddens
+  variables
+    [xy][0-9]* -> Int
+
+equations
+
+  [add-s] add(s(x), y) = s(add(x, y))
+  [add-z] add(0, y) = y
+
+  [fib-z] fib(0) = s(0)
+  [fib-o] fib(s(0)) = s(0)
+  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))
+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Use of the memo attribute when defining Fibonacci
+functionality}\label{CODE:fib}
+\end{figure}   
+
+%%\subsubsection{Delaying} \label{Delay}
+%%
+%%Both the compiler and the evaluator are based on innermost rewriting.
+%%In some cases it is more efficient to overrule this rewriting
+%%strategy. The disadvantage of innermost rewriting are redundant work
+%%in some cases and in some cases even non-termination. An example
+%%of the first point and indirectly of the second point is the
+%%evaluation of a conditional (see Figure~\ref{CODE:conditional}), 
+%%using innermost rewriting the evaluation of an conditional 
+%%amounts to evaluating the expression, then part, and else part, independent
+%%of the result of the evaluation of the expression.
+%%
+%%\begin{figure}
+%%\begin{IncCode}
+%%\begin{boxedverbatim}
+%%module Conditional
+%%
+%%imports Layout Expr Booleans
+%%
+%%exports
+%%  context-free syntax
+%%    "if" Bool "then" Expr "else" Expr "fi" -> Expr
+%%
+%%hiddens
+%%  variables
+%%    "Bool"[0-9]* -> Bool
+%%    "Expr"[0-9]* -> Expr
+%%
+%%equations
+%%
+%%  [if-t] if true then Expr1 else Expr2 fi = Expr1
+%%  [if-f] if false then Expr1 else Expr2 fi = Expr2
+%%\end{boxedverbatim}
+%%\end{IncCode}
+%%\caption{Equations for conditions}\label{CODE:conditional}
+%%\end{figure}   
 
 \subsubsection{Traversal Functions} \label{Traversal}
 
@@ -3697,9 +3793,9 @@ This becomes even more dramatic if we realize that the traversal
 function will only do some real work (apart from traversing) for very
 few node categories.
 
-Traversal functions in \asfsdf~\cite{BKV01} solve this problem
-\footnote{Traversal functions are currently only supported by the evaluator
-and not by the compiler.}.
+Traversal functions in \asfsdf~\cite{BKV01} solve this 
+problem\footnote{Traversal functions are currently only supported 
+by the evaluator and not by the compiler.}.
 We distinguish three kinds of traversal functions, defined as follows.
 
 \begin{description}
@@ -3712,7 +3808,9 @@ A transformer is declared as follows:
 \transformerprod{n} \{{\tt \traversal(\trafo)}\}
 
 Because a transformer always returns the same sort, it is type-safe. A
-transformer is used to transform a tree.
+transformer is used to transform a tree\footnote{The additions {\tt trafo}
+and {\tt accu} are not yet supported by the parser, so in the example you
+will only see the attribute {\tt traversal}}.
 
 \item[Accumulator:] a mapping of all node types to a single type. 
 It will traverse its first argument, while the second
@@ -3814,7 +3912,7 @@ module Tree-inc
 imports Tree-syntax
 exports
   contextfreesyntax
-    inc(TREE) -> TREE {traversal(trafo)}
+    inc(TREE) -> TREE {traversal}
 equations
 [1] inc(N) = N + 1  
 \end{boxedverbatim}
@@ -3829,7 +3927,7 @@ module Tree-sum
 imports Tree-syntax
 exports
 contextfreesyntax
-   sum(TREE, NAT) -> NAT {traversal(accu)}
+   sum(TREE, NAT) -> NAT {traversal}
 equations
 [1] sum(N1, N2) = N1 + N2
 \end{boxedverbatim}
@@ -3853,8 +3951,9 @@ exports
     [a-z]+ -> Item 
 
   context-free syntax
-    "{" { Item "," }* "}" -> Set
+    Set[Item] -> Set
 
+hiddens
   variables
     "i"[0-9]* -> Item
     "l"[0-9]* -> {Item ","}* 
@@ -3901,7 +4000,7 @@ uninstantiated variables.
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
 
-\begin{figure}
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Diff 
@@ -3923,13 +4022,14 @@ exports
     "(" EXP ")"         -> EXP {bracket} 
     "d" EXP "/" "d" VAR -> EXP
 
+ context-free priorities
+   EXP "*" EXP -> EXP > EXP "+" EXP -> EXP
+
+hiddens
   variables
     "N"       -> NAT 
     "V"[0-9]* -> VAR 
     "E"[0-9]* -> EXP 
-
- context-free priorities
-   EXP "*" EXP -> EXP > EXP "+" EXP -> EXP
 
 equations 
   [ 1] dN/dV = 0            [ 2] dV/dV = 1 
@@ -3984,7 +4084,8 @@ exports
     "blue"         -> Color 
     "{" Color+ "}" -> Flag 
 
-variables
+hiddens
+  variables
     "Cs"[0-9]* -> Color* 
     "C"[0-9]*  -> Color 
 
@@ -4013,7 +4114,8 @@ Flag. We want:
 {\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
  white blue blue\}}
 
-In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
+In the specification of Figure~\ref{CODE:flag}, 
+the list variables {\tt Cs1} and {\tt Cs2}
 permit a succinct formulation of the search for adjacent colours that are in
 the wrong order.
 
@@ -4026,10 +4128,6 @@ exports
   lexical syntax
     [0-9]+         -> Nat 
     [a-z][a-z0-9]* -> Id
-
-variables
-  "Nat"[0-9\']* -> Nat 
-  "Id"[0-9\']*  -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
@@ -4050,9 +4148,6 @@ exports
     Exp "+" Exp -> Exp {left}
     Exp "-" Exp -> Exp {left}
     Exp "*" Exp -> Exp {left}
-
-  variables
-    "Exp"[0-9\']* -> Exp 
 
   context-free priorities
     Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
@@ -4076,10 +4171,6 @@ exports
     "if" Exp "then" Stats "fi"  -> Stat 
     "while" Exp "do" Stats "od" -> Stat
     {Stat ";"}+                 -> Stats 
-
-  variables
-    "Stat"[0-9\']*  -> Stat
-    "Stat+"[0-9\']* -> {Stat ";"}+
 \end{boxedverbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Statements}\label{CODE:statements}
@@ -4107,12 +4198,7 @@ exports
     "goto" Label    -> Instr 
     "gotrue" Label  -> Instr 
     "gofalse" Label -> Instr
-    {Instr ";"}+   -> Instrs 
-
-  variables
-    "Instr"[0-9\']*      -> Instr 
-    "Instr-list"[0-9\']* -> {Instr ";"}+
-    "Label"[0-9\']*      -> Label
+    {Instr ";"}+    -> Instrs 
 \end{boxedverbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
@@ -4128,8 +4214,6 @@ imports AssemblyLanguage
 exports
   context-free syntax
     "nextlabel" "(" Label ")" -> Label 
-  variables
-    "Label"[0-9\']* -> LABEL
 
 hiddens
   variables
@@ -4157,10 +4241,30 @@ exports
 hiddens
   sorts Instrs-lab 
   context-free syntax
-    "<" Instrs "," Label ">"     -> Instrs-lab 
+    Instrs # Label               -> Instrs-lab 
     "tr" "(" Stats "," Label ")" -> Instrs-lab 
     "tr" "(" Exp ")"             -> Instrs
 
+hiddens
+  variables
+    "Exp"[0-9\']*        -> Exp 
+    "Id"[0-9\']*         -> Id
+    "Instr"[0-9\']*      -> Instr 
+    "Instr-list"[0-9\']* -> {Instr ";"}+
+    "Label"[0-9\']*      -> Label
+    "Nat"[0-9\']*        -> Nat 
+    "Stat"[0-9\']*       -> Stat
+    "Stat+"[0-9\']*      -> {Stat ";"}+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for
+CodeGenerator}\label{CODE:codegenerator.sdf}
+\end{figure}
+
+    
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
 equations 
 
 [1] tr(Stat-list, x) = <Instr-list, Label>
@@ -4205,7 +4309,8 @@ equations
 [10] tr(Id) = rvalue Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{\asfsdf\ specification for CodeGenerator}\label{CODE:codegenerator}
+\caption{\asfsdf\ specification for
+CodeGenerator}\label{CODE:codegenerator.asf}
 \end{figure}
 
 \newpage
@@ -4287,13 +4392,13 @@ frequently occurring problem: how do we maintain global information (in this
 case: the last label name generated)? A standard solution is to introduce an
 auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
 sequence and the last label name generated so far.
-Figure \ref{CODE:codegenerator} show the module containing this actual
-translation function.
+The Figures \ref{CODE:codegenerator.sdf} and \ref{CODE:codegenerator.asf} 
+show the module containing this actual translation function.
 
 This completes the specification of our code generator.
 
 
-\subsection{Large \asfsdf\ specifications}
+\subsection{Large \asfsdf\ Specifications}
 
 There are a quite a few very large \asfsdf\ specifications around:
 
@@ -4342,6 +4447,11 @@ The name of this directory can be communicated via
 \item The specification should be complete, no missing modules and
 the equations sections should be error free.
 
+\item Not all \sdf\ syntax features are supported by the compiler,
+in the result symbol in the lexical syntax rules are restricted to
+plain basic sorts. In the context-free syntax rules only literals,
+basic sorts, and lists (without the minimal repetition) are allowed.
+Aliases are also not supported by the compiler.
 \end{itemize}
 
 If these requirements are fulfilled the C code can be generated.
@@ -4364,15 +4474,48 @@ Equations with the same outermost function symbol are moved to the
 corresponding syntax rule.
 This syntax rule together with the equations is `stored' in an
 intermediate module `$\mbox{\tt AUX-M}_{ij}$' where $\mbox{\tt M}_i$
-is the module which contained the definition of the syntax rule.
+is the module which contained the definition of the syntax rule
+and the corresponding equations, see Figure~\ref{CODE:reshuffled-module}.
 
-XXX Example??? XXX
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module AUX-Booleans2
+exports               
+  context-free syntax
+    BOOL "|" BOOL -> BOOL {left}
+equations
+  [B1]   true | Bool   = true
+  [B2]   false | Bool  = Bool
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Module generated after reshuffling}\label{CODE:reshuffled-module}
+\end{figure}
 
 These intermediate modules are input to the actual \asfsdf2C compiler.
 For each $\mbox{\tt AUX-M}_{ij}$ module a separate C file is generated
-in the {\tt COMPILER\_OUTPUT} directory.
+in the {\tt COMPILER\_OUTPUT} directory, see
+Figure~\ref{CODE:generated-c-code}.
+The code presented in this figure is only a small part of the generated
+code, there are some extra functions generated which take care of 
+the administration of used functions in the code and how such a 
+generated function can be used by other functions.
 
-XXX Example??? XXX
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+ATerm lf_AUX_Booleans2_1 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_AUX_Booleans2_1sym , 
+ATmakeAppl ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg0 , ef1sym ) ) { FUNC_EXIT ( arg1 ) ; }
+if ( check_sym ( arg0 , ef2sym ) ) { FUNC_EXIT ( arg0 ) ; }
+FUNC_EXIT ( make_nf2 ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
+}                       
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Generated C code for the reshuffled module of
+Figure~\ref{CODE:reshuffled-module}}\label{CODE:generated-c-code}
+\end{figure}
 
 The \asfsdf2C compiler has some notion of incremental compilation.
 The intermediate $\mbox{\tt AUX-M}_{ij}$ modules are stored
@@ -4493,7 +4636,7 @@ e.g., {\tt man sglr} gives the manual page for the command {\tt sglr}.
 All components also have a {\tt -h} options that gives an overview of
 their command line options.
 
-\subsection{Parse table generation}
+\subsection{Parse Table Generation}
 
 Before you can parse terms over a module {\tt M} outside the
 \ASmetaenv\ you have to obtain a parse table for this module.  There
@@ -4568,7 +4711,7 @@ parse tree format that is becoming the standard inside the \ASmetaenv.
 
 For further information see the manual page for {\tt sglr}.
 
-\subsection{Rewriting a term using the evaluator}
+\subsection{Rewriting a Term using the Evaluator}
 \label{SEC:interpretationgofterms}
 
 In order to rewrite a term {\tt term.txt} using the \asfsdf\ evaluator {\tt asfe}
@@ -4593,7 +4736,7 @@ The results is a file named {\tt M.eqs}.
 Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
 converted to a textual representation.
 
-\subsection{Rewriting a term using a compiled specification}
+\subsection{Rewriting a Term using a Compiled Specification}
 \label{SEC:reducingofterms}
 
 In Section~\ref{compiling-specs} we explained how a given module {\tt M}
@@ -4635,7 +4778,7 @@ Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
 converted to a textual representation.
 \end{itemize}
 
-\subsection{Unparsing a (parsed/normalized) term} \label{SEC:unparsing}
+\subsection{Unparsing a (Parsed/Normalized) Term} \label{SEC:unparsing}
 
 The unparsing of parsed/normalized terms is currently quite primitive.
 It is achieved as follows:
@@ -4667,7 +4810,7 @@ be reduced.
 \newpage 
 \section{Examples of Stand-alone Tools}
 
-\subsection{A Stand-alone Boolean tool}
+\subsection{A Stand-alone Boolean Tool}
 
 A stand-alone tool for parsing and reducing Boolean terms can be created in
 the following steps:
@@ -4718,10 +4861,10 @@ The result (in textual form) of reducing {\tt term.txt} is now {\tt reduct.txt}
 Of course, the last steps can be written more concisely in a pipeline:
 \begin{verbatim}
   sglr -p Pico-Booleans.trm.tbl -i term.txt | \
-  asfe  asfe -e Pico-Booleans.eqs | asource > reduct.txt
+  asfe -e Pico-Booleans.eqs | asource > reduct.txt
 \end{verbatim}
 
-\subsection{A stand-alone Pico typechecker}
+\subsection{A Stand-alone Pico Typechecker}
 
 Now we show how to create a stand-alone typechecker for the Pico language.  We
 follow the same steps as in the previous example, but there is one additional
@@ -4752,7 +4895,7 @@ The \ASmetaenv\ is a system that is continuously evolving.  In this
 section, we give a brief sketch of the developments that we expect in
 the near future. Don't hesitate to give us feedback on these plans!
 
-\subsection{Near future (within 6 month)}
+\subsection{Near Future (within 6 month)}
 
 \begin{itemize}
 
@@ -4775,7 +4918,7 @@ the near future. Don't hesitate to give us feedback on these plans!
 
 \end{itemize}
 
-\subsection{Medium term (within 1.5 year)}
+\subsection{Medium Term (within 1.5 year)}
 
 \begin{itemize}
 
@@ -4797,7 +4940,7 @@ the near future. Don't hesitate to give us feedback on these plans!
 
 \end{itemize}
 
-\subsection{Long term (more than 1.5 year)}
+\subsection{Long Term (more than 1.5 year)}
 
 The long term ambition is to build a very flexible tool kit that can
 be used to build many kinds of interactive systems for program
