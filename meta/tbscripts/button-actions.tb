@@ -286,7 +286,9 @@ in
               StackPushTerm(Stack,Stack?,RTree) .
               ReturnSuccess(EditorId,Stack)
             else
-              ReturnFailed(EditorId,Stack)
+              snd-note(ui-status(errorf("please set a focus %s", 
+                                        [FilePath]))) .
+              ReturnAbort(EditorId,Stack)
             fi
           +
             rec-msg(non-existing-editor(FilePath?)).
