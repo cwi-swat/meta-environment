@@ -1,23 +1,27 @@
 equations
 
-[] get-location(X) = location(strcon(Char*), area(LineS, ColS, LineE, ColE, 0, 0))
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X),
-          qliteral(Char*) := Path
+[get-location-0]
+  get-location(X) = get-posinfo(X)
 
-[] get-posinfo(X) = get-term-anno(X,"pos-info")
+[] get-posinfo(X) = location(strcon(Char*), area(BeginLine, BeginColumn,
+                              EndLine, EndColumn,
+                              Offset, Length)) 
+     when location(qliteral(Char*), area(BeginLine, BeginColumn,
+                              EndLine, EndColumn,
+                              Offset, Length)) := get-term-anno(X, "pos-info")
 
-[] get-start-column(X) = ColS
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X)
-   
-[] get-end-column(X) = ColE
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X)
-   
-[] get-start-line(X) = LineS
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X)
-   
-[] get-end-line(X) = LineE
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X)
-   
-[] get-path(X) = Path
-     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X)
-   
+[] get-begin-line(X) = get-begin-line(get-area(get-location(X)))
+
+[] get-begin-column(X) = get-begin-column(get-area(get-location(X)))
+
+[] get-end-line(X) = get-end-line(get-area(get-location(X)))
+
+[] get-end-column(X) = get-end-column(get-area(get-location(X)))
+
+[] get-offset(X) = get-offset(get-area(get-location(X)))
+
+[] get-length(X) = get-length(get-area(get-location(X)))
+
+[] get-area(X) = get-area(get-location(X))
+
+[] get-filename(X) = get-filename(get-location(X))

@@ -6,23 +6,32 @@ imports utilities/ATermAnnotations[X]
 exports
 
 context-free syntax
+  get-location(X) -> Location
 
-get-location(X)     -> Location
+context-free syntax
+  get-posinfo(X) -> Location
 
-get-posinfo(X)      -> ATerm
-get-start-column(X) -> IntCon
-get-end-column(X)   -> IntCon
-get-path(X)         -> Literal
-get-start-line(X)   -> IntCon
-get-end-line(X)     -> IntCon
+context-free syntax
+  get-begin-line(X) -> NatCon
+  get-begin-column(X) -> NatCon
+  get-end-line(X) -> NatCon
+  get-end-column(X) -> NatCon
+  get-offset(X) -> NatCon
+  get-length(X) -> NatCon
 
+context-free syntax
+  get-area(X) -> Area
+  get-filename(X) -> StrCon
+  
 hiddens
-
 variables
-
-"X"        -> X
-"ATerm" -> ATerm
-"Col"[SE]  -> NatCon
-"Line"[SE] -> NatCon
-"Path"     -> Literal
-"Char*" -> CHAR*
+  "ATerm" -> ATerm
+  "Char*" -> CHAR*
+  "BeginColumn" -> NatCon
+  "EndColumn" -> NatCon
+  "Length" -> NatCon
+  "BeginLine" -> NatCon
+  "EndLine" -> NatCon
+  "Offset" -> NatCon
+  "Path" -> StrCon
+  "X" -> X

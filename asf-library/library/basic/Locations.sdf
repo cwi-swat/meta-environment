@@ -21,3 +21,27 @@ context-free syntax
        ")" -> Area {cons("area")}
 
 "no-area" -> Area {cons("no-area")}
+
+context-free syntax
+  get-filename(Location) -> StrCon
+  get-area(Location) -> Area
+
+context-free syntax
+  get-begin-line(Area) -> NatCon
+  get-begin-column(Area) -> NatCon
+  get-end-line(Area) -> NatCon
+  get-end-column(Area) -> NatCon
+  get-offset(Area) -> NatCon
+  get-length(Area) -> NatCon
+
+hiddens
+  imports basic/Whitespace
+  variables
+    "Filename" -> StrCon
+    "Area" -> Area
+    "BeginLine" -> NatCon
+    "BeginColumn" -> NatCon
+    "EndLine" -> NatCon
+    "EndColumn" -> NatCon
+    "Offset" -> NatCon
+    "Length" -> NatCon
