@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/11 (markvdb@cwi.nl)
+ * Added a button to read the term store from disk.
+
 2003/07/10 (markvdb@cwi.nl)
  * Simplified the listitems of the Iversen lists.
  * Introduced the notion of clicks in the button scripts.
