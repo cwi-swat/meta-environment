@@ -216,14 +216,22 @@ ATerm lf_AUX_MuASF_Conds2C9_4 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg
 {
 ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Conds2C9_4sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C9_4sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 ) ) ;
-lbl_lf_AUX_MuASF_Conds2C9_4 : if ( check_sym ( arg0 , ef3sym ) ) {
-if ( check_sym ( arg1 , lf_AUX_MuASF_Conds2C9_1sym ) ) {
+{
+ATerm ltmp [ 6 ] ;
+lbl_lf_AUX_MuASF_Conds2C9_4 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+ltmp [ 2 ] = arg2 ;
+ltmp [ 3 ] = arg3 ;
+ltmp [ 4 ] = arg4 ;
+ltmp [ 5 ] = arg5 ;
+if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_MuASF_Conds2C9_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( arg2 , lf_AUX_MuASF_Conds2C9_2sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( arg4 , lf_AUX_MuASF_Conds2C9_3sym ) ) {
+if ( check_sym ( ltmp [ 4 ] , lf_AUX_MuASF_Conds2C9_3sym ) ) {
 {
 ATerm atmp40 = arg_0 ( arg4 ) ;
 if ( not_empty_list ( atmp10 ) ) {
@@ -233,21 +241,21 @@ tmp [ 1 ] = list_tail ( atmp10 ) ;
 {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( not_empty_list ( atmp20 ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] ) , ( * ef6 ) ( ) ) ) {
-if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , arg0 ) ) {
-tmp [ 2 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , ltmp [ 0 ] ) ) {
+tmp [ 2 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , tmp [ 2 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef14sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-tmp [ 6 ] = lf_AUX_MuASF_Conds2C9_4 ( arg0 , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 6 ] = lf_AUX_MuASF_Conds2C9_4 ( ltmp [ 0 ] , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
 tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ;
-tmp [ 10 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( * ef24 ) ( ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 2 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ) ) ) ) ) ) ;
+tmp [ 10 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 2 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 7 ] , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 }
 }
@@ -257,15 +265,15 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 7 ] , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef31sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-if ( term_equal ( ( * ef32 ) ( ( * ef31 ) ( tmp [ 2 ] ) ) , arg0 ) ) {
-tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+if ( term_equal ( ( * ef32 ) ( ( * ef31 ) ( tmp [ 2 ] ) ) , ltmp [ 0 ] ) ) {
+tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 4 ] = ( * ef33 ) ( tmp [ 2 ] , tmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) ) ;
-tmp [ 5 ] = lf_AUX_MuASF_Conds2C9_4 ( arg0 , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 5 ] = lf_AUX_MuASF_Conds2C9_4 ( ltmp [ 0 ] , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef4sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ;
 tmp [ 8 ] = arg_2 ( tmp [ 5 ] ) ;
-tmp [ 9 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( * ef24 ) ( ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( * ef24 ) ( ) , tmp [ 7 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 9 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , tmp [ 7 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 6 ] , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
@@ -282,14 +290,14 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 6 ] , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
 }
-if ( check_sym ( arg0 , ef6sym ) ) {
-if ( check_sym ( arg1 , lf_AUX_MuASF_Conds2C9_1sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_MuASF_Conds2C9_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( arg2 , lf_AUX_MuASF_Conds2C9_2sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( arg4 , lf_AUX_MuASF_Conds2C9_3sym ) ) {
+if ( check_sym ( ltmp [ 4 ] , lf_AUX_MuASF_Conds2C9_3sym ) ) {
 {
 ATerm atmp40 = arg_0 ( arg4 ) ;
 if ( not_empty_list ( atmp10 ) ) {
@@ -299,21 +307,21 @@ tmp [ 1 ] = list_tail ( atmp10 ) ;
 {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( not_empty_list ( atmp20 ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] ) , arg0 ) ) {
-if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-tmp [ 2 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] ) , ltmp [ 0 ] ) ) {
+if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , ( constant5 ? constant5 : ( constant5 = ( * ef3 ) ( ) ) ) ) ) {
+tmp [ 2 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , tmp [ 2 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef14sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-tmp [ 6 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 6 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant5 ? constant5 : ( constant5 = ( * ef3 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
 tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ;
-tmp [ 10 ] = ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 2 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ;
+tmp [ 10 ] = ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 2 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 7 ] , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 }
 }
@@ -323,15 +331,15 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 7 ] , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef31sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-if ( term_equal ( ( * ef32 ) ( ( * ef31 ) ( tmp [ 2 ] ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+if ( term_equal ( ( * ef32 ) ( ( * ef31 ) ( tmp [ 2 ] ) ) , ( constant5 ? constant5 : ( constant5 = ( * ef3 ) ( ) ) ) ) ) {
+tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 4 ] = ( * ef33 ) ( tmp [ 2 ] , tmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) ) ;
-tmp [ 5 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 5 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant5 ? constant5 : ( constant5 = ( * ef3 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef4sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ;
 tmp [ 8 ] = arg_2 ( tmp [ 5 ] ) ;
-tmp [ 9 ] = ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , tmp [ 7 ] ) ) ) ) ) ) ) ;
+tmp [ 9 ] = ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , tmp [ 7 ] ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 6 ] , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
@@ -348,13 +356,13 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 6 ] , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
 }
-if ( check_sym ( arg1 , lf_AUX_MuASF_Conds2C9_1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_MuASF_Conds2C9_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( arg2 , lf_AUX_MuASF_Conds2C9_2sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( arg4 , lf_AUX_MuASF_Conds2C9_3sym ) ) {
+if ( check_sym ( ltmp [ 4 ] , lf_AUX_MuASF_Conds2C9_3sym ) ) {
 {
 ATerm atmp40 = arg_0 ( arg4 ) ;
 if ( is_single_element ( atmp10 ) ) {
@@ -388,12 +396,9 @@ tmp [ 11 ] = list_head ( tmp [ 7 ] ) ;
 tmp [ 12 ] = list_tail ( tmp [ 7 ] ) ;
 if ( is_single_element ( tmp [ 12 ] ) ) {
 tmp [ 13 ] = list_head ( tmp [ 12 ] ) ;
-arg0 = arg0 ;
 arg1 = lf_AUX_MuASF_Conds2C9_1 ( cons ( make_list ( tmp [ 11 ] ) , make_list ( tmp [ 13 ] ) ) ) ;
 arg2 = lf_AUX_MuASF_Conds2C9_2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ;
-arg3 = arg3 ;
 arg4 = lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) ;
-arg5 = arg5 ;
 goto lbl_lf_AUX_MuASF_Conds2C9_4 ;
 }
 }
@@ -410,20 +415,20 @@ goto lbl_lf_AUX_MuASF_Conds2C9_4 ;
 }
 }
 tmp [ 1 ] = ( * ef5 ) ( tmp [ 0 ] ) ;
-if ( term_equal ( tmp [ 1 ] , ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) ) ) {
-tmp [ 2 ] = ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) ;
+if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+tmp [ 2 ] = ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ;
 if ( term_equal ( ( * ef30 ) ( tmp [ 0 ] ) , tmp [ 2 ] ) ) {
-tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , arg3 ) ) ) ) ) ;
+tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , ltmp [ 3 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef14sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-tmp [ 6 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , arg5 ) ;
+tmp [ 6 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ltmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , ef35sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
-tmp [ 9 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , tmp [ 7 ] ) ) ) ) ) ) ;
+tmp [ 9 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , tmp [ 7 ] ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
@@ -431,13 +436,13 @@ FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 9 ] , tmp [ 8 ] ) ) ;
 }
 }
 if ( term_equal ( ( * ef28 ) ( tmp [ 0 ] ) , tmp [ 2 ] ) ) {
-tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , arg3 ) ) ) ) ) ;
+tmp [ 3 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , ltmp [ 3 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef14sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-tmp [ 6 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , arg5 ) ;
+tmp [ 6 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 5 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ltmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , ef35sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
@@ -447,19 +452,19 @@ FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 7 ] , tmp [ 8 ] ) ) ;
 }
 }
 }
-if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+if ( term_equal ( ( * ef7 ) ( tmp [ 0 ] ) , ( constant5 ? constant5 : ( constant5 = ( * ef3 ) ( ) ) ) ) ) {
+tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 4 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , tmp [ 3 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef14sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( check_sym ( tmp [ 5 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
-tmp [ 7 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 7 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , ef35sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ;
-tmp [ 10 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant6 ? constant6 : ( constant6 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 103 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ) ) ) ) ) ) ;
+tmp [ 10 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant6 ? constant6 : ( constant6 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 103 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 8 ] ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 }
 }
@@ -471,13 +476,13 @@ FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 10 ] , tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef31sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( ! term_equal ( tmp [ 2 ] , ( * ef2 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 117 ) ) , cons ( make_list ( make_char ( 108 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) {
-tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
+tmp [ 3 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
 tmp [ 4 ] = ( * ef33 ) ( tmp [ 2 ] , tmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) ) ;
-tmp [ 5 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( arg5 ) ) ;
+tmp [ 5 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ltmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef35sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ;
-tmp [ 8 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant6 ? constant6 : ( constant6 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 103 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , tmp [ 6 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 8 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant6 ? constant6 : ( constant6 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 103 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 104 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 97 ) ) , make_list ( make_char ( 100 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( tmp [ 4 ] , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , tmp [ 6 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 8 ] , tmp [ 7 ] ) ) ;
 }
 }
@@ -496,11 +501,11 @@ if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 108 ) ) ) {
 tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 108 ) ) ) {
-tmp [ 8 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , arg5 ) ;
+tmp [ 8 ] = ( * ef34 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ltmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 8 ] , ef35sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
 tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ;
-tmp [ 11 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef36 ) ( ( constant7 ? constant7 : ( constant7 = ( * ef37 ) ( ) ) ) , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , tmp [ 9 ] ) ) ) ) ) ) ;
+tmp [ 11 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( make_list ( ( * ef18 ) ( ( * ef36 ) ( ( constant7 ? constant7 : ( constant7 = ( * ef37 ) ( ) ) ) , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , tmp [ 9 ] ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef24 ) ( ) , tmp [ 11 ] , tmp [ 10 ] ) ) ;
 }
 }
@@ -527,23 +532,23 @@ tmp [ 1 ] = list_tail ( atmp10 ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( not_empty_list ( atmp20 ) ) {
 tmp [ 2 ] = ( * ef5 ) ( tmp [ 0 ] ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) ) ) {
-tmp [ 3 ] = ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+tmp [ 3 ] = ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ;
 if ( term_equal ( ( * ef30 ) ( tmp [ 0 ] ) , tmp [ 3 ] ) ) {
-tmp [ 4 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
-tmp [ 5 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef15 ) ( arg5 ) ) ) ) ;
+tmp [ 4 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
+tmp [ 5 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef15 ) ( ltmp [ 5 ] ) ) ) ) ;
 tmp [ 6 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant8 ? constant8 : ( constant8 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 99 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( cons ( make_list ( tmp [ 4 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef14sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-tmp [ 9 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 8 ] ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ( * ef15 ) ( arg5 ) ) ) ;
+tmp [ 9 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 8 ] ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ( * ef15 ) ( ltmp [ 5 ] ) ) ) ;
 if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ;
 tmp [ 12 ] = arg_2 ( tmp [ 9 ] ) ;
-tmp [ 13 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 4 ] , arg3 ) ) ) , make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , arg3 ) ) ) , make_list ( ( * ef29 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( tmp [ 11 ] , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 13 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 4 ] , ltmp [ 3 ] ) ) ) , make_list ( ( * ef18 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ltmp [ 3 ] ) ) ) , make_list ( ( * ef29 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( tmp [ 11 ] , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 10 ] , tmp [ 13 ] , tmp [ 12 ] ) ) ;
 }
 }
@@ -551,20 +556,20 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 10 ] , tmp [ 13 ] , tmp [ 12 ] ) ) ;
 }
 }
 if ( term_equal ( ( * ef28 ) ( tmp [ 0 ] ) , tmp [ 3 ] ) ) {
-tmp [ 4 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( arg5 ) ) ) ;
-tmp [ 5 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef15 ) ( arg5 ) ) ) ) ;
+tmp [ 4 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ltmp [ 5 ] ) ) ) ;
+tmp [ 5 ] = ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef15 ) ( ltmp [ 5 ] ) ) ) ) ;
 tmp [ 6 ] = ( * ef11 ) ( lf_AUX_MuASF_Conds2C9_2 ( make_list ( atmp20 ) ) , ( * ef12 ) ( lf6 ( make_list ( ( * ef13 ) ( tmp [ 0 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant8 ? constant8 : ( constant8 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 99 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( cons ( make_list ( tmp [ 4 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef14sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_MuASF_Conds2C9_2sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-tmp [ 9 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 8 ] ) ) , arg3 , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ( * ef15 ) ( arg5 ) ) ) ;
+tmp [ 9 ] = lf_AUX_MuASF_Conds2C9_4 ( ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) , lf_AUX_MuASF_Conds2C9_1 ( make_list ( tmp [ 1 ] ) ) , lf_AUX_MuASF_Conds2C9_2 ( make_list ( tmp [ 8 ] ) ) , ltmp [ 3 ] , lf_AUX_MuASF_Conds2C9_3 ( make_list ( atmp40 ) ) , ( * ef15 ) ( ( * ef15 ) ( ltmp [ 5 ] ) ) ) ;
 if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ;
 tmp [ 12 ] = arg_2 ( tmp [ 9 ] ) ;
-tmp [ 13 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 4 ] , arg3 ) ) ) , cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , arg3 ) ) ) , make_list ( ( * ef29 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( arg3 ) ) ) ) ) ) , ( * ef23 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( tmp [ 11 ] , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( arg3 , tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 13 ] = ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 4 ] , ltmp [ 3 ] ) ) ) , cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ltmp [ 3 ] ) ) ) , make_list ( ( * ef29 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 110 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 101 ) ) , cons ( make_list ( make_char ( 109 ) ) , cons ( make_list ( make_char ( 112 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 121 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( ltmp [ 3 ] ) ) ) ) ) ) , ( * ef23 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef24 ) ( ) ) ) , ( * ef25 ) ( tmp [ 11 ] , ( * ef16 ) ( ( * ef17 ) ( lf7 ( cons ( make_list ( ( * ef26 ) ( ( * ef27 ) ( tmp [ 5 ] , ( * ef8 ) ( ( * ef9 ) ( ( * ef19 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef20 ) ( ( * ef21 ) ( lf5 ( cons ( make_list ( make_char ( 108 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 108 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef22 ) ( lf8 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef26 ) ( ( * ef27 ) ( ltmp [ 3 ] , tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 10 ] , tmp [ 13 ] , tmp [ 12 ] ) ) ;
 }
 }
@@ -584,7 +589,8 @@ FUNC_EXIT ( ( * ef4 ) ( tmp [ 10 ] , tmp [ 13 ] , tmp [ 12 ] ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf6 ( lf_AUX_MuASF_Conds2C9_4sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 ) ) ;
+FUNC_EXIT ( make_nf6 ( lf_AUX_MuASF_Conds2C9_4sym , ltmp [ 0 ] , ltmp [ 1 ] , ltmp [ 2 ] , ltmp [ 3 ] , ltmp [ 4 ] , ltmp [ 5 ] ) ) ;
+}
 }
 }
 ATerm lf8 ( ATerm arg0 ) {

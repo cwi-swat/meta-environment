@@ -26,19 +26,25 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"tr
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"NatCon\"),w(\"\"),ql(\"-//\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"NatCon\"),w(\"\"),ql(\"-//\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_Integers11 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Integers11_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Integers11_1sym , ATmakeAppl ( lf_AUX_Integers11_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_Integers11_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_Integers11_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -56,7 +62,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( is_single_element ( tmp [ 4 ] ) ) {
 tmp [ 5 ] = list_head ( tmp [ 4 ] ) ;
 if ( ! term_equal ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -75,8 +81,8 @@ tmp [ 2 ] = list_prefix ( atmp100 ) ;
 {
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 tmp [ 3 ] = list_last ( atmp100 ) ;
-if ( term_equal ( lf_AUX_Integers11_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) , ( * ef2 ) ( ) ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ) ) ;
+if ( term_equal ( lf_AUX_Integers11_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , tmp [ 2 ] ) ) {
 arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
@@ -88,7 +94,7 @@ goto lbl_lf_AUX_Integers11_1 ;
 }
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 2 ] = list_head ( atmp100 ) ;
-FUNC_EXIT ( ( * ef2 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -103,7 +109,8 @@ FUNC_EXIT ( ( * ef2 ) ( ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_Integers11_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers11_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 ATerm lf2 ( ATerm arg0 ) {

@@ -52,20 +52,25 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ParseTrees10_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 FUNC_ENTRY ( lf_AUX_ParseTrees10_1sym , ATmakeAppl ( lf_AUX_ParseTrees10_1sym , arg0 , arg1 , arg2 ) ) ;
-lbl_lf_AUX_ParseTrees10_1 : if ( check_sym ( arg2 , ef1sym ) ) {
+{
+ATerm ltmp [ 3 ] ;
+lbl_lf_AUX_ParseTrees10_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+ltmp [ 2 ] = arg2 ;
+if ( check_sym ( ltmp [ 2 ] , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , ef2sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-if ( term_equal ( ( * ef3 ) ( arg1 ) , ( * ef4 ) ( arg0 ) ) ) {
+if ( term_equal ( ( * ef3 ) ( ltmp [ 1 ] ) , ( * ef4 ) ( ltmp [ 0 ] ) ) ) {
 FUNC_EXIT ( atmp200 ) ;
 }
 }
 }
 }
 }
-if ( check_sym ( arg1 , ef5sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
@@ -73,15 +78,14 @@ if ( check_sym ( atmp10 , ef6sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp101 = arg_1 ( atmp10 ) ;
-if ( check_sym ( arg2 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , ef2sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-arg0 = arg0 ;
 arg1 = ( * ef5 ) ( atmp101 ) ;
-arg2 = ( * ef7 ) ( arg2 , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ( * ef2 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+arg2 = ( * ef7 ) ( ltmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ( * ef2 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
 goto lbl_lf_AUX_ParseTrees10_1 ;
 }
 }
@@ -92,7 +96,8 @@ goto lbl_lf_AUX_ParseTrees10_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees10_1sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees10_1sym , ltmp [ 0 ] , ltmp [ 1 ] , ltmp [ 2 ] ) ) ;
+}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;

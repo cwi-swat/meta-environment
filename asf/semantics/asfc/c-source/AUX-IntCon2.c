@@ -20,7 +20,10 @@ ATerm lf_AUX_IntCon2_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_IntCon2_2sym , ATmakeAppl ( lf_AUX_IntCon2_2sym , arg0 ) ) ;
-lbl_lf_AUX_IntCon2_2 : if ( check_sym ( arg0 , lf_AUX_IntCon2_1sym ) ) {
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_AUX_IntCon2_2 : ltmp [ 0 ] = arg0 ;
+if ( check_sym ( ltmp [ 0 ] , lf_AUX_IntCon2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -34,7 +37,8 @@ goto lbl_lf_AUX_IntCon2_2 ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_AUX_IntCon2_2sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_IntCon2_2sym , ltmp [ 0 ] ) ) ;
+}
 }
 }
 ATerm lf_AUX_IntCon2_1 ( ATerm arg0 ) {

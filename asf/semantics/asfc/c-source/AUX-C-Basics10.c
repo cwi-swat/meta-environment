@@ -32,7 +32,11 @@ ATerm lf_AUX_C_Basics10_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_C_Basics10_1sym , ATmakeAppl ( lf_AUX_C_Basics10_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_C_Basics10_1 : if ( check_sym ( arg1 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_C_Basics10_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -46,11 +50,10 @@ tmp [ 1 ] = list_tail ( atmp100 ) ;
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
+if ( term_equal ( ltmp [ 0 ] , tmp [ 2 ] ) ) {
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] ) ) ;
 }
 else {
-arg0 = arg0 ;
 arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
 goto lbl_lf_AUX_C_Basics10_1 ;
 }
@@ -62,7 +65,8 @@ goto lbl_lf_AUX_C_Basics10_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics10_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics10_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 ATerm lf2 ( ATerm arg0 ) {

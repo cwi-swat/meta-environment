@@ -44,14 +44,19 @@ ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fals
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
+static ATerm constant1 = NULL ;
 void init_AUX_Check_List_Pats26 ( ) {
 ATprotect ( & constant0 ) ;
+ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Check_List_Pats26_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 11 ] ;
 FUNC_ENTRY ( lf_AUX_Check_List_Pats26_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats26_1sym , arg0 ) ) ;
-lbl_lf_AUX_Check_List_Pats26_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_AUX_Check_List_Pats26_1 : ltmp [ 0 ] = arg0 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -91,10 +96,10 @@ tmp [ 8 ] = list_tail ( atmp010 ) ;
 if ( is_single_element ( tmp [ 8 ] ) ) {
 tmp [ 9 ] = list_head ( tmp [ 8 ] ) ;
 tmp [ 10 ] = ( * ef4 ) ( tmp [ 7 ] ) ;
-if ( term_equal ( tmp [ 10 ] , ( * ef5 ) ( ) ) ) {
+if ( term_equal ( tmp [ 10 ] , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 9 ] ) ) ;
 }
-if ( term_equal ( tmp [ 10 ] , ( * ef6 ) ( ) ) ) {
+if ( term_equal ( tmp [ 10 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 arg0 = tmp [ 9 ] ;
 goto lbl_lf_AUX_Check_List_Pats26_1 ;
 }
@@ -123,7 +128,8 @@ goto lbl_lf_AUX_Check_List_Pats26_1 ;
 }
 }
 FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_AUX_Check_List_Pats26_1sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Check_List_Pats26_1sym , ltmp [ 0 ] ) ) ;
+}
 }
 }
 ATerm lf3 ( ATerm arg0 ) {

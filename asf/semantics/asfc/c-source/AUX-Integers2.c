@@ -37,26 +37,32 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\")
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"+\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"+\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_Integers2 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Integers2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Integers2_1sym , ATmakeAppl ( lf_AUX_Integers2_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_Integers2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_Integers2_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 tmp [ 0 ] = ( * ef4 ) ( atmp000 , atmp100 ) ;
-if ( term_equal ( tmp [ 0 ] , ( * ef5 ) ( ) ) ) {
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( atmp000 , atmp100 ) ) ) ) ;
 }
 else {
@@ -69,7 +75,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( ( * ef7 ) ( arg0 , ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ltmp [ 0 ] , ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ) ;
 }
 }
 }
@@ -82,13 +88,13 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef6sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-tmp [ 0 ] = ( * ef7 ) ( ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) , arg1 ) ;
+tmp [ 0 ] = ( * ef7 ) ( ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) , ltmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
@@ -116,7 +122,8 @@ goto lbl_lf_AUX_Integers2_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_Integers2_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers2_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 

@@ -27,16 +27,22 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_AsFix2muASF_C12 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_AsFix2muASF_C12_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 13 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2muASF_C12_2sym , ATmakeAppl ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_AsFix2muASF_C12_2 : if ( check_sym ( arg0 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_AsFix2muASF_C12_2 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp00 ) ) {
@@ -73,7 +79,7 @@ tmp [ 11 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 11 ] ) ) {
 tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
 arg0 = lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 10 ] ) ) ;
-arg1 = lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( cons ( make_list ( make_char ( 99 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 115 ) ) ) ) ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+arg1 = lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( lf3 ( cons ( make_list ( make_char ( 99 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 115 ) ) ) ) ) ) ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 goto lbl_lf_AUX_AsFix2muASF_C12_2 ;
 }
 }
@@ -102,10 +108,10 @@ FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
-if ( check_sym ( arg0 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp00 ) ) {
@@ -119,7 +125,8 @@ FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table 
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2muASF_C12_2sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 ATerm lf_AUX_AsFix2muASF_C12_1 ( ATerm arg0 ) {

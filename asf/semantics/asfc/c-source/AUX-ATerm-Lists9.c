@@ -42,14 +42,20 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Lists9 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Lists9_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_ATerm_Lists9_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists9_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_ATerm_Lists9_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_ATerm_Lists9_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , ef2sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef3sym ) ) {
@@ -63,7 +69,7 @@ if ( check_sym ( atmp1000 , lf2sym ) ) {
 ATerm atmp10000 = arg_0 ( atmp1000 ) ;
 if ( is_single_element ( atmp10000 ) ) {
 if ( term_equal ( list_head ( atmp10000 ) , make_char ( 48 ) ) ) {
-FUNC_EXIT ( ( * ef5 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ltmp [ 0 ] ) ) ;
 }
 }
 }
@@ -73,8 +79,8 @@ FUNC_EXIT ( ( * ef5 ) ( arg0 ) ) ;
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( ! term_equal ( atmp100 , ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) {
-arg0 = ( * ef6 ) ( arg0 ) ;
-arg1 = ( * ef7 ) ( arg1 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+arg0 = ( * ef6 ) ( ltmp [ 0 ] ) ;
+arg1 = ( * ef7 ) ( ltmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
 goto lbl_lf_AUX_ATerm_Lists9_1 ;
 }
 }
@@ -84,7 +90,8 @@ goto lbl_lf_AUX_ATerm_Lists9_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Lists9_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Lists9_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;

@@ -38,13 +38,17 @@ ATerm lf_AUX_VarEnv20_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_VarEnv20_2sym , ATmakeAppl ( lf_AUX_VarEnv20_2sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_VarEnv20_2 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_VarEnv20_2 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf3sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , lf_AUX_VarEnv20_1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_VarEnv20_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( ! not_empty_list ( atmp10 ) ) {
@@ -56,7 +60,7 @@ FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( atmp000 ) ) ) ) ;
 }
 }
 }
-if ( check_sym ( arg1 , lf_AUX_VarEnv20_1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , lf_AUX_VarEnv20_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
@@ -71,8 +75,7 @@ tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
 {
 if ( check_sym ( tmp [ 4 ] , lf4sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-if ( ! term_equal ( arg0 , tmp [ 3 ] ) ) {
-arg0 = arg0 ;
+if ( ! term_equal ( ltmp [ 0 ] , tmp [ 3 ] ) ) {
 arg1 = lf_AUX_VarEnv20_1 ( make_list ( tmp [ 1 ] ) ) ;
 goto lbl_lf_AUX_VarEnv20_2 ;
 }
@@ -87,7 +90,8 @@ FUNC_EXIT ( tmp [ 2 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_VarEnv20_2sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_VarEnv20_2sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 ATerm lf_AUX_VarEnv20_1 ( ATerm arg0 ) {

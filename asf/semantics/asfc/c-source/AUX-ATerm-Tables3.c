@@ -45,19 +45,25 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AT
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"rest\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"rest\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Tables3 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Tables3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_ATerm_Tables3_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_ATerm_Tables3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_ATerm_Tables3_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
 }
-if ( check_sym ( arg0 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-tmp [ 0 ] = ( * ef5 ) ( arg0 ) ;
+tmp [ 0 ] = ( * ef5 ) ( ltmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , ef4sym ) ) {
@@ -67,7 +73,7 @@ tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef8sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-if ( term_equal ( arg1 , tmp [ 3 ] ) ) {
+if ( term_equal ( ltmp [ 1 ] , tmp [ 3 ] ) ) {
 FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
@@ -76,15 +82,15 @@ FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
-if ( check_sym ( arg0 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-arg0 = ( * ef9 ) ( arg0 ) ;
-arg1 = arg1 ;
+arg0 = ( * ef9 ) ( ltmp [ 0 ] ) ;
 goto lbl_lf_AUX_ATerm_Tables3_1 ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables3_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 

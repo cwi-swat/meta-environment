@@ -31,31 +31,37 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
+static ATerm constant2 = NULL ;
 void init_AUX_AsFix_Basics8 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
+ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_AsFix_Basics8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix_Basics8_1sym , ATmakeAppl ( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_AsFix_Basics8_1 : if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ) ) ;
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_AsFix_Basics8_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
-tmp [ 0 ] = ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
-if ( ! term_equal ( arg0 , tmp [ 0 ] ) ) {
-tmp [ 1 ] = ( * ef4 ) ( arg0 ) ;
-if ( term_equal ( tmp [ 1 ] , arg1 ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( ) ) ;
+tmp [ 0 ] = ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( ) ) ) ;
+if ( ! term_equal ( ltmp [ 0 ] , tmp [ 0 ] ) ) {
+tmp [ 1 ] = ( * ef4 ) ( ltmp [ 0 ] ) ;
+if ( term_equal ( tmp [ 1 ] , ltmp [ 1 ] ) ) {
+FUNC_EXIT_CONST ( constant2 , ( * ef3 ) ( ) ) ;
 }
 else {
-tmp [ 2 ] = ( * ef5 ) ( arg0 ) ;
+tmp [ 2 ] = ( * ef5 ) ( ltmp [ 0 ] ) ;
 arg0 = tmp [ 2 ] ;
-arg1 = arg1 ;
 goto lbl_lf_AUX_AsFix_Basics8_1 ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix_Basics8_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 

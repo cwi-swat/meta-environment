@@ -33,30 +33,38 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fa
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 }
+static ATerm constant0 = NULL ;
+static ATerm constant1 = NULL ;
 void init_AUX_Integers4 ( ) {
+ATprotect ( & constant0 ) ;
+ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Integers4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_Integers4_1sym , ATmakeAppl ( lf_AUX_Integers4_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_Integers4_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_Integers4_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 tmp [ 0 ] = ( * ef4 ) ( atmp000 , atmp100 ) ;
-if ( term_equal ( tmp [ 0 ] , ( * ef3 ) ( ) ) ) {
-FUNC_EXIT ( ( * ef3 ) ( ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 else {
-FUNC_EXIT ( ( * ef5 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 }
@@ -65,7 +73,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( ( * ef3 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -78,13 +86,13 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef6sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( ( * ef5 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 {
@@ -105,7 +113,8 @@ goto lbl_lf_AUX_Integers4_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_Integers4_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers4_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 }
 

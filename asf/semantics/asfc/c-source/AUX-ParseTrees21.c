@@ -84,7 +84,10 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ParseTrees21_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_ParseTrees21_1sym , ATmakeAppl ( lf_AUX_ParseTrees21_1sym , arg0 ) ) ;
-lbl_lf_AUX_ParseTrees21_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_AUX_ParseTrees21_1 : ltmp [ 0 ] = arg0 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -95,7 +98,7 @@ FUNC_EXIT ( atmp000 ) ;
 }
 }
 }
-if ( check_sym ( arg0 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -110,7 +113,7 @@ goto lbl_lf_AUX_ParseTrees21_1 ;
 }
 }
 }
-if ( check_sym ( arg0 , ef5sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef5sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef6sym ) ) {
@@ -145,7 +148,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char
 }
 }
 }
-if ( check_sym ( arg0 , ef11sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef11sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -159,7 +162,7 @@ FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef13 ) ( atmp00 ) ) , ( * ef
 }
 }
 }
-if ( check_sym ( arg0 , ef14sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef14sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -173,7 +176,7 @@ FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef1 ) ( atmp00 ) ) , ( * ef8
 }
 }
 }
-if ( check_sym ( arg0 , ef15sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef15sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -190,7 +193,7 @@ FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef3 ) ( atmp00 , atmp01 ) ) 
 }
 }
 }
-if ( check_sym ( arg0 , ef16sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef16sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -204,7 +207,8 @@ FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( atmp00 ) ) , ( * ef8
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_AUX_ParseTrees21_1sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ParseTrees21_1sym , ltmp [ 0 ] ) ) ;
+}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;

@@ -100,7 +100,12 @@ ATerm lf_AUX_Matching2_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Matching2_1sym , ATmakeAppl ( lf_AUX_Matching2_1sym , arg0 , arg1 , arg2 ) ) ;
-lbl_lf_AUX_Matching2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 3 ] ;
+lbl_lf_AUX_Matching2_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+ltmp [ 2 ] = arg2 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -112,7 +117,7 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( check_sym ( atmp0000 , lf2sym ) ) {
 {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
@@ -124,7 +129,7 @@ ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( check_sym ( atmp1000 , lf2sym ) ) {
 {
 ATerm atmp10000 = arg_0 ( atmp1000 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
@@ -149,7 +154,7 @@ if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
 tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
 if ( is_single_element ( tmp [ 5 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 116 ) ) ) {
-FUNC_EXIT ( arg2 ) ;
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
 }
 }
@@ -184,39 +189,39 @@ FUNC_EXIT ( arg2 ) ;
 }
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( term_equal ( ( * ef12 ) ( atmp00 , atmp20 ) , arg1 ) ) {
-FUNC_EXIT ( arg2 ) ;
+if ( term_equal ( ( * ef12 ) ( atmp00 , atmp20 ) , ltmp [ 1 ] ) ) {
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
-if ( term_equal ( ( * ef8 ) ( atmp00 , atmp20 ) , ( * ef9 ) ( ) ) ) {
-if ( term_equal ( ( * ef10 ) ( ( * ef11 ) ( arg0 ) , arg1 ) , ( * ef9 ) ( ) ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef7 ) ( atmp00 , atmp20 , arg1 ) ) ) ;
-}
-}
+if ( term_equal ( ( * ef8 ) ( atmp00 , atmp20 ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef10 ) ( ( * ef11 ) ( ltmp [ 0 ] ) , ltmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
+FUNC_EXIT ( ( * ef4 ) ( ( * ef7 ) ( atmp00 , atmp20 , ltmp [ 1 ] ) ) ) ;
 }
 }
 }
 }
 }
-if ( check_sym ( arg0 , ef5sym ) ) {
+}
+}
+if ( check_sym ( ltmp [ 0 ] , ef5sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef6sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef5sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( term_equal ( atmp000 , atmp100 ) ) {
-FUNC_EXIT ( arg2 ) ;
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
 }
 }
@@ -228,23 +233,22 @@ FUNC_EXIT ( arg2 ) ;
 }
 }
 }
-if ( check_sym ( arg0 , ef13sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef13sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-if ( check_sym ( arg1 , ef13sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef13sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( term_equal ( atmp00 , atmp10 ) ) {
 arg0 = ( * ef14 ) ( ( * ef15 ) ( atmp01 ) ) ;
 arg1 = ( * ef14 ) ( ( * ef15 ) ( atmp11 ) ) ;
-arg2 = arg2 ;
 goto lbl_lf_AUX_Matching2_1 ;
 }
 }
@@ -255,18 +259,18 @@ goto lbl_lf_AUX_Matching2_1 ;
 }
 }
 }
-if ( check_sym ( arg0 , ef14sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef14sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef16sym ) ) {
-if ( check_sym ( arg1 , ef14sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef14sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef16sym ) ) {
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-FUNC_EXIT ( arg2 ) ;
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
 }
 }
@@ -278,16 +282,16 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef15sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef14sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef14sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef15sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-tmp [ 0 ] = lf_AUX_Matching2_1 ( ( * ef18 ) ( ( * ef15 ) ( atmp000 ) ) , ( * ef18 ) ( ( * ef15 ) ( atmp100 ) ) , arg2 ) ;
+tmp [ 0 ] = lf_AUX_Matching2_1 ( ( * ef18 ) ( ( * ef15 ) ( atmp000 ) ) , ( * ef18 ) ( ( * ef15 ) ( atmp100 ) ) , ltmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 arg0 = ( * ef14 ) ( ( * ef17 ) ( ( * ef15 ) ( atmp000 ) ) ) ;
@@ -306,39 +310,40 @@ goto lbl_lf_AUX_Matching2_1 ;
 }
 }
 }
-if ( check_sym ( arg1 , ef1sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( term_equal ( ( * ef8 ) ( atmp10 , atmp20 ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
-if ( term_equal ( ( * ef10 ) ( ( * ef11 ) ( arg1 ) , arg0 ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef7 ) ( atmp10 , atmp20 , arg0 ) ) ) ;
+if ( term_equal ( ( * ef10 ) ( ( * ef11 ) ( ltmp [ 1 ] ) , ltmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
+FUNC_EXIT ( ( * ef4 ) ( ( * ef7 ) ( atmp10 , atmp20 , ltmp [ 0 ] ) ) ) ;
 }
 }
-if ( term_equal ( ( * ef12 ) ( atmp10 , atmp20 ) , arg0 ) ) {
-FUNC_EXIT ( arg2 ) ;
+if ( term_equal ( ( * ef12 ) ( atmp10 , atmp20 ) , ltmp [ 0 ] ) ) {
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
 }
 }
 }
 }
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( term_equal ( arg0 , arg1 ) ) {
-FUNC_EXIT ( arg2 ) ;
+if ( term_equal ( ltmp [ 0 ] , ltmp [ 1 ] ) ) {
+FUNC_EXIT ( ltmp [ 2 ] ) ;
 }
 }
 }
-if ( check_sym ( arg2 , ef4sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 FUNC_EXIT_CONST ( constant1 , ( * ef19 ) ( ) ) ;
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_AUX_Matching2_1sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_Matching2_1sym , ltmp [ 0 ] , ltmp [ 1 ] , ltmp [ 2 ] ) ) ;
+}
 }
 }
 ATerm lf2 ( ATerm arg0 ) {

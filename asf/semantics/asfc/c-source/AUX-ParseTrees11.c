@@ -29,10 +29,15 @@ void init_AUX_ParseTrees11 ( ) {
 }
 ATerm lf_AUX_ParseTrees11_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 FUNC_ENTRY ( lf_AUX_ParseTrees11_1sym , ATmakeAppl ( lf_AUX_ParseTrees11_1sym , arg0 , arg1 , arg2 ) ) ;
-lbl_lf_AUX_ParseTrees11_1 : if ( term_equal ( ( * ef1 ) ( arg1 ) , ( * ef2 ) ( arg0 ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( arg2 ) ) ;
+{
+ATerm ltmp [ 3 ] ;
+lbl_lf_AUX_ParseTrees11_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+ltmp [ 2 ] = arg2 ;
+if ( term_equal ( ( * ef1 ) ( ltmp [ 1 ] ) , ( * ef2 ) ( ltmp [ 0 ] ) ) ) {
+FUNC_EXIT ( ( * ef1 ) ( ltmp [ 2 ] ) ) ;
 }
-if ( check_sym ( arg1 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef4sym ) ) {
@@ -40,7 +45,7 @@ if ( check_sym ( atmp10 , ef4sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp101 = arg_1 ( atmp10 ) ;
-if ( check_sym ( arg2 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 2 ] , ef3sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , ef4sym ) ) {
@@ -48,7 +53,6 @@ if ( check_sym ( atmp20 , ef4sym ) ) {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
 {
 ATerm atmp201 = arg_1 ( atmp20 ) ;
-arg0 = arg0 ;
 arg1 = ( * ef3 ) ( atmp101 ) ;
 arg2 = ( * ef3 ) ( atmp201 ) ;
 goto lbl_lf_AUX_ParseTrees11_1 ;
@@ -62,6 +66,7 @@ goto lbl_lf_AUX_ParseTrees11_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees11_1sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees11_1sym , ltmp [ 0 ] , ltmp [ 1 ] , ltmp [ 2 ] ) ) ;
+}
 }
 

@@ -105,17 +105,23 @@ ef23sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"A
 ef24 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[sort(\"ATerms\"),w(\"\"),ql(\"++a\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 ef24sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[sort(\"ATerms\"),w(\"\"),ql(\"++a\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Operations16 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Operations16_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_ATerm_Operations16_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations16_1sym , arg0 , arg1 ) ) ;
-lbl_lf_AUX_ATerm_Operations16_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 2 ] ;
+lbl_lf_AUX_ATerm_Operations16_1 : ltmp [ 0 ] = arg0 ;
+ltmp [ 1 ] = arg1 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( arg1 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 FUNC_EXIT ( ( * ef4 ) ( atmp000 , atmp10 ) ) ;
@@ -126,7 +132,7 @@ FUNC_EXIT ( ( * ef4 ) ( atmp000 , atmp10 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef5sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef7sym ) ) {
@@ -149,7 +155,7 @@ FUNC_EXIT ( ( * ef8 ) ( atmp100 , atmp110 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef9sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -167,7 +173,7 @@ FUNC_EXIT ( ( * ef10 ) ( atmp10 , atmp110 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef11sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -185,7 +191,7 @@ FUNC_EXIT ( ( * ef12 ) ( atmp10 , atmp110 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef13sym ) ) {
-if ( check_sym ( arg1 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef7sym ) ) {
@@ -200,7 +206,7 @@ FUNC_EXIT ( ( * ef14 ) ( atmp100 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef15sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -223,7 +229,7 @@ FUNC_EXIT ( ( * ef16 ) ( atmp10 , atmp1100 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef17sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -246,7 +252,7 @@ FUNC_EXIT ( ( * ef18 ) ( atmp10 , atmp1100 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef19sym ) ) {
-if ( check_sym ( arg1 , ef6sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -264,10 +270,10 @@ FUNC_EXIT ( ( * ef20 ) ( atmp10 , atmp110 ) ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef21sym ) ) {
-if ( check_sym ( arg1 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( ( * ef22 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef22 ) ( ) ) ;
 }
 }
 }
@@ -281,17 +287,18 @@ FUNC_EXIT ( ( * ef22 ) ( ) ) ;
 }
 }
 }
-if ( check_sym ( arg0 , ef23sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef23sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
 arg0 = ( * ef1 ) ( atmp00 ) ;
-arg1 = ( * ef24 ) ( atmp01 , arg1 ) ;
+arg1 = ( * ef24 ) ( atmp01 , ltmp [ 1 ] ) ;
 goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations16_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations16_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+}
 }
 
