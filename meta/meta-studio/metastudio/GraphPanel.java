@@ -410,6 +410,8 @@ private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, C
     }
 
     Polygon poly = edge.getPolygon();
+    
+    /* we expect either 4 or 5 curve points, this code breaks otherwise */
     Point from = poly.getHead();
     poly = poly.getTail();
 
@@ -418,8 +420,8 @@ private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, C
 
     GeneralPath gp = new GeneralPath(GeneralPath.WIND_NON_ZERO);
     gp.moveTo(fromx, fromy);
-
-    while (!poly.getTail().isEmpty()) {
+    
+    while (poly.hasTail() && !poly.getTail().isEmpty()) {
       Point cp1 = poly.getHead();
       poly = poly.getTail();
       Point cp2 = poly.getHead();
@@ -431,12 +433,13 @@ private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, C
 		 (float)cp2.getX().intValue(), (float)cp2.getY().intValue(),
 		 (float)cur.getX().intValue(), (float)cur.getY().intValue());
     }
-    Point to = poly.getHead();
-    poly = poly.getTail();
-    //assert poly.isEmpty();
-
-    gp.lineTo((float)to.getX().intValue(), (float)to.getY().intValue());
-
+    
+    if (poly.hasHead()) {
+        Point to = poly.getHead();
+        poly = poly.getTail();
+        gp.lineTo((float)to.getX().intValue(), (float)to.getY().intValue());
+    }
+    
     Graphics2D g2d = (Graphics2D)g;
     if (edge.connectedTo(hoveredNode)) {
       g2d.setColor(nodeBorderHovered);
