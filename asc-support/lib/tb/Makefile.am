@@ -10,18 +10,19 @@ COPIED =\
 	tb-asc-main.c\
 	tb-asc-muasf2pt.c\
 	tb-asc-nametable.c\
+	tb-asc-parsetable.c\
 	tb-asc-prod2str.c\
 	tb-asc-support.c\
 	tb-asc-traversals.c\
 	tb-builtin-annos.c\
 	tb-builtin-common.c\
-	tb-builtin-fileio.c\
+	tb-builtin-io.c\
 	tb-builtin-forward.c\
+	tb-builtin-implode.c\
 	tb-builtin-lifting.c\
 	tb-builtin-link-test.c\
 	tb-builtin-shell.c\
-	tb-builtin-term-compare.c\
-	tb-builtin-unparse.c
+	tb-builtin-term-compare.c
 
 libtb_asc_support_me_a_SOURCES = client.c ${COPIED}
  
