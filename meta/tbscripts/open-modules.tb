@@ -48,7 +48,7 @@ in
               +
               rec-msg(Id, opened-file(raw,Name,FT?,Fn?)).
               snd-msg(ui,add-module(Name)).
-              snd-msg(open-language("Sdf2","/home/markvdb/NEW-META/new-meta/sglr/regress-test/tables/Sdf2.tbl")).
+              snd-msg(open-language("Sdf2","Sdf2.baf")).
               snd-msg(Id,parse-string("Sdf2","",FT)).
               ((
                 rec-msg(Id,parse-result(parsetree(T?,I?))).

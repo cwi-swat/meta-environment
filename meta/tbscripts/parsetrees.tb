@@ -13,12 +13,11 @@ tool compiler is {
 }
 
 tool pgen is {
-/*  command = "/home/markvdb/NEW-META/new-meta/pgen/lst-source/Sdf2-Parse-Table -termtable 20" */
   command = "pgen -termtable 20"
 }
 
 tool add-eqs-syntax is { 
-  command = "/home/markvdb/NEW-META/new-meta/pgen/addeqs/c-source/Add-Eqs-Syntax"
+  command = "add-eqs-syntax"
 }
 
 process Parsetrees is 
