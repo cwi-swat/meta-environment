@@ -4,7 +4,7 @@ exports
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
 	REXP0 REXP REXPTYPE EQU DESTINATION
-	INITVAR TARGET
+	INITVAR TARGET YIELD
 
   imports RscriptElem basic/Comments %% RscriptChecker
 
@@ -19,7 +19,7 @@ exports
      "forall" | "bool" | "int" | "str" | 
      "loc" | "bag" | "rel" | "init" | "yield" | 
      "equations" | "limit" | "initial" | 
-     "satisfy" | "end"	| "type"			-> RVAR {reject}
+     "satisfy" | "end"	| "type" |"yield" 	-> RVAR {reject}
 
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
@@ -115,16 +115,17 @@ exports
 
 %% Declarations and Statements
 
-     REXPTYPE RVAR			      	-> DCLRVAR
+     REXPTYPE RVAR				-> DCLRVAR
+     "yield"?					-> YIELD
 
-     DCLRVAR				      	-> RSTAT
+     YIELD DCLRVAR				-> RSTAT
 
      "type" RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
      "type" RVAR "=" REXPTYPE			-> RSTAT
 
-     DCLRVAR "=" REXP                         	-> INITVAR
-     DCLRVAR "+=" REXP                         	-> INITVAR
-     DCLRVAR "-=" REXP                         	-> INITVAR
+     YIELD DCLRVAR "=" REXP                 	-> INITVAR
+     YIELD DCLRVAR "+=" REXP                	-> INITVAR
+ %%  YIELD DCLRVAR "-=" REXP                	-> INITVAR
 
      DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?
      INITVAR					-> RSTAT

@@ -229,8 +229,9 @@ hiddens
       "$Eq*" [0-9\']*		-> EQU*
       "$Eq+" [0-9\']*		-> EQU+
 
-      "$Rstore" [0-9\']*             -> RSTORE
+      "$Rstore" [0-9\']*        -> RSTORE
 
-      "$ListOfTypes" [0-9\']*	     -> List[[REXPTYPE]]
+      "$ListOfTypes" [0-9\']*	-> List[[REXPTYPE]]
 	
-      "Char*" [0-9\']* -> CHAR*
+      "Char*" [0-9\']*          -> CHAR*
+      "$Yield"                  -> YIELD
