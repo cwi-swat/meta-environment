@@ -549,14 +549,14 @@ proc EditEquationsModules { modlist } {
 
 
 #--
-# EditTerm(M,W)
+# EditTerm(M,F)
 #-
-# generates the toolbus event to request editing of a term over module M
-# and destroys the widget $w.
+# generates the toolbus event to request editing of a term in F over module M
+# 
 #--
-proc EditTerm {mod w} {
-    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId [$w.editTerm get]]]
-    destroy $w
+proc EditTerm {mod file} {
+    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId [GetBasename $file ""]]]
+
 }
 
 
@@ -825,22 +825,22 @@ proc NewModuleWidget {} {
   }
 }
 
-proc EditTermWidget {mod} {
-    global g
-    set w .editterm
-    catch {destroy $w}
-    toplevel $w
-    wm title $w "Edit Term"
-    wm iconname $w "Edit Term"
-    label $w.message -text "Edit Term:"
-    entry $w.editTerm
-    bind $w.editTerm <Return> "EditTerm $mod $w"
-    frame $w.buttons
-    button $w.buttons.confirm -text OK -command "EditTerm $mod $w"
-    button $w.buttons.cancel -text Cancel -command "destroy $w"
-    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-    pack $w.message $w.editTerm -side top -anchor w
-    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+proc EditTermWidget {mod operation} {
+
+set types {
+   {{Trm} {.trm} }
+   {{Any} * }
+}
+
+if {$operation == "open"} {
+  set file [tk_getOpenFile -filetypes $types -title "Edit Term over $mod"]
+} else {
+  set file [tk_getSaveFile -filetypes $types -title "New Term over $mod"]
+}
+
+if [ expr [ string length $file ] > 0 ] {
+    EditTerm $mod $file
+  }
 }
 
 
@@ -1115,8 +1115,12 @@ proc define-modules-frame {} {
 	-command {EditEquationsModules [SelectedModules]}
     button .modules.buttons.editterm -text "Edit Term" \
 	-command {foreach i [SelectedModules] {
-	    EditTermWidget $i
-	} }
+	    EditTermWidget $i "open"
+	}}
+    button .modules.buttons.newterm -text "New Term" \
+  -command {foreach i [SelectedModules] {
+      EditTermWidget $i "new"
+  } } 
     button .modules.buttons.savemod -text "Save" \
         -command {SaveModules [SelectedModules]}
     button .modules.buttons.revertmod -text "Revert" \
@@ -1207,7 +1211,9 @@ proc define-module-popup {} {
     $m add command -label "Edit Equations" \
         -command {EditEquationsModules [GetObjectName $c]}
     $m add command -label "Edit Term" \
-        -command {EditTermWidget [GetObjectName $c]}
+        -command {EditTermWidget [GetObjectName $c] "open"}
+    $m add command -label "New Term" \
+        -command {EditTermWidget [GetObjectName $c] "new"}
     $m add separator
     $m add command -label "Save module" \
         -command {SaveModules [GetObjectName $c]}
