@@ -105,7 +105,7 @@ XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ASFIX)/include -I$(ATERM)/include -
 XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ASFIX)/lib -L$(ATERM)/lib -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
-INCLUDES	:= @INCLUDES@ $(XINCLUDES)
+INCLUDES	:= $(XINCLUDES)
 LIBS		:= @LIBS@ $(XLIBS)
 
 SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/${TARGET}.module-list)
