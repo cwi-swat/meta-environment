@@ -1,11 +1,15 @@
 equations
 
+[1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
 
-%%[1]  uninitialized(Defines, Uses, Pred) = Uses \ ((inv ((dom Defines) .+ Pred)) o Defines)
-   
-%%    uninitialized(Defines, Uses, Pred) = Uses.x until(Defines.x, inv Pred)
+[2] label(if Exp then Stat*1 else Stat*2 fi, Int) =
+    < if [Int] Exp then Stat*1 else Stat*2 fi, Int+1 >
 
-[1]  uninitialized(Defines, Uses, Pred) =  ((inv Uses) until(inv Defines, inv Pred)) ranR {s0}
+[3] label(while Exp do Stat* od, Int) =
+    < while [Int] Exp do Stat* od, Int + 1>
+
+[4] collect([Int] Id := Exp, Rstore) = add(Rstore, DEFS, Int, Id)
+         
 
 
 

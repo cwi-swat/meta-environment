@@ -15,12 +15,15 @@ exports
         Rel[[Elem]]                  -> VALUE
         VAR # EXP                    -> VALUE
         VAR # VAR # EXP              -> VALUE
-
         
         "[" { VAR # VALUE ","}* "]"   -> RSTORE
         assign(VAR, VALUE, RSTORE)    -> RSTORE
         value(VAR, RSTORE)            -> VALUE
         add(VAR, VALUE, RSTORE)       -> RSTORE
+        add(VAR, VALUE, VALUE, RSTORE)       -> RSTORE
+
+        add(RSTORE, VAR, VALUE, VALUE)       -> RSTORE
+        add(RSTORE, VAR, VALUE)       -> RSTORE
 
         evalp(EXP, RSTORE)            -> Boolean
         evale(EXP, RSTORE)            -> Elem
