@@ -6,14 +6,15 @@ equations
 %% the font.
 
    [Fname]
-        fname(F fn = fontid(chr*)) = strcon(""" "\" chr* "{" "}" """)
+        fname(F fn = fontid(Char*)) = strcon(""" "\" Char* "{" "}" """)
 
    [Fnt]
-        fname(f) = b, ["~" / " "] rm-adj(" ", specials(deslash(a))) = a'
-        ================================================================
-        tex(f [a]) = (\S{rmq(b * a')})
+        b := fname(f), 
+        a2 := replace("~", " ", rm-adj(" ", specials(deslash(a1))))
+        ====>
+        tex(f [a1]) = (\S{rmq(b || a2)})
 
-   [default-Fnt] tex(F fn = fid(chr*) [B]) = ({cs("\" chr* "{" "}")tex(B)})
+   [default-Fnt] tex(F fn = fontid(Char*) [B]) = ({cs("\" Char* "{" "}")tex(B)})
 
 %% We do not yet give a translation for the other font options. These were
 %% designed for use with the New Font Selection Scheme of \LaTeX, and will
@@ -26,11 +27,11 @@ equations
 
    [default-ESC] tex(ESC[a])    = tex(MATH[T-ESC[a]])
 
-   [0] tex(MTH[a]) = (\S{rmq("$" * a * "$")})
+   [0] tex(MTH[a]) = (\S{rmq("$" || a || "$")})
 
-   [0] tex(a * b) = (\H{texstr(a*b)})
+%%   [0] tex(a * b) = (\H{texstr(a*b)})
 
-   [0]         texstr(a * b) = (texstr(a)texstr(b))
-   [default-0] texstr(a)     = tex(a)
+%%   [0]         texstr(a * b) = (texstr(a)texstr(b))
+%%   [default-0] texstr(a)     = tex(a)
 
 %%%

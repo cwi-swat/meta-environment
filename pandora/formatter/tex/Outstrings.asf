@@ -16,24 +16,6 @@ equations
               string of Int strcon(""" Ch """) chars =
                 strcon(""" Ch Ch Ch Ch Ch Ch Ch """) || string of Int-7 strcon(""" Ch """) chars
 
-%%    [Sop7'1]  deslash(strcon(""" """)) =
-%%                strcon(""" """)
-%%
-%%    [Sop7'2]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%              ========================================================
-%%              deslash(strcon(""" "\"""" Char*2 """)) =
-%%                strcon(""" """ Char*4 """)
-%%
-%%    [Sop7'3]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%              ==================================================================
-%%              deslash(strcon(""" "\""\" Char*2 """)) =
-%%                strcon(""" "\" Char*4 """)
-%%
-%%    [default-Sop7'4] strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%                     ==================================================================
-%%                     deslash(strcon(""" Char Char*2 """)) =
-%%                       strcon(""" Char Char*4 """)
-
 [deslash-0]
   anychar(Char*2) := deslash-chars(anychar(Char*1))
   ===>
@@ -56,3 +38,32 @@ equations
   anychar(Char*2) := deslash-chars(anychar(Char*1))
   ===>
   deslash-chars(anychar(Char Char*1)) = anychar(Char Char*2)
+
+   [replace-0] replace(a, b, "") = ""
+
+   [replace-1]  c := a || replace(a, strcon(""" Char+ """), strcon(""" Char* """))
+                ====>
+                replace(a, strcon(""" Char+ """), strcon(""" Char+ Char* """)) = c
+
+   [default-replace-2] c := strcon(""" Char """) || replace(a, b, strcon(""" Char* """))
+                       ====>
+                       replace(a, b, strcon(""" Char Char* """)) = c
+
+%% Substring Removal
+
+   [remove-1'1] rm-adj(strcon(""" Char+ """), strcon(""" Char*1  Char+ Char+ Char*2 """))
+                  = rm-adj(strcon(""" Char+ """), strcon(""" Char*1  Char+ Char*2 """))
+
+   [default-remove-1'2] rm-adj(a, b) = b
+
+   [remove-2'1] rm-suffix(strcon(""" Char+ """), strcon(""" Char*1  Char+ """))
+                  = rm-suffix(strcon(""" Char+ """), strcon(""" Char*1  """))
+
+   [default-remove-2'2] rm-suffix(a, b) = b
+
+   [remove-3'1] rm-prefix(strcon(""" Char+ """), strcon(""" Char+ Char*1  """) )
+                  = rm-prefix(strcon(""" Char+ """), strcon(""" Char*1  """) )
+   [default-remove-3'2] rm-prefix(a, b) = b
+
+   [remove-4'1] rm-occ(a, b) = rm-suffix(a, rm-prefix(a, rm-adj(a, b)))
+%%%

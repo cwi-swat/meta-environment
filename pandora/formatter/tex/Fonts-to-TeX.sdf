@@ -1,18 +1,16 @@
 module Fonts-to-TeX
 
 imports Basic-to-TeX 
-imports languages/box/syntax/Fonts 
-imports laws/Font-Laws 
 imports Escapes
 
 exports
   context-free syntax
     fname(FontOperator) -> StrCon
 hiddens
-  context-free syntax
-    texstr(StrCon) -> TEX
+%%  context-free syntax
+%%    texstr(StrCon) -> TEX
   variables
-    "chr*"[0-9]* -> CHAR*
+    "Char*"[0-9]* -> CHAR*
 
 hiddens
   variables

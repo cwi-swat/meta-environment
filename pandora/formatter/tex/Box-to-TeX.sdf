@@ -2,11 +2,13 @@ module Box-to-TeX
 
 imports Basic-to-TeX
 %%        Comments-to-TeX
-%%imports Fonts-to-TeX
-        Alignments-to-TeX
+imports Fonts-to-TeX
+imports Alignments-to-TeX
 %%imports Crossreferences-to-TeX
 %%imports Escapes
 %%imports Over-to-TeX
-        laws/Box-Laws
+imports laws/Box-Laws
 
-exports context-free start-symbols Box TEX
+exports 
+  context-free start-symbols 
+    Box TEX

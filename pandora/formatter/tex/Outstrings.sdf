@@ -13,6 +13,13 @@ module Outstrings
       "string" "of" Integer "layoutchars"  -> String
       "string" "of" Integer String "chars" -> String
       deslash(StrCon)                      -> StrCon 
+      replace(StrCon, StrCon, StrCon)      -> StrCon
+
+      rm-adj(StrCon, StrCon)    -> StrCon
+      rm-suffix(StrCon, StrCon) -> StrCon
+      rm-prefix(StrCon, StrCon) -> StrCon
+      rm-occ(StrCon, StrCon)    -> StrCon
+
 
   hiddens
     context-free syntax
@@ -33,4 +40,5 @@ module Outstrings
       "Char+"[0-9]*  -> CHAR+
       "Int"[0-9]*    -> Integer
       "String"[0-9]* -> String
+      [abc][0-9]*    -> StrCon
       
