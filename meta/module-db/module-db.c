@@ -599,13 +599,12 @@ ATerm get_parse_table(int cid, char *modulename, ATerm tableType)
   } else {
     tableLoc = TRM_TABLE_LOC;
   }
-  modname = ATmake("<str>",modulename);
+  modname = ATmake("<str>", modulename);
   if((entry = (ATermList) GetValue(new_modules_db, modname))) {
     table = ATelementAt((ATermList)entry, tableLoc);
-    if(ATmatch(table,"table(<str>)",&place))
+    if(ATmatch(table,"table(<str>)", &place))
       return ATmake("snd-value(table(<str>))",place);
   }
-
   return ATmake("snd-value(no-table)");
 }
 
@@ -781,7 +780,8 @@ ATbool is_valid_parse_table(ATermList visited, ATerm module,
   time = (int)ATelementAt((ATermList)entry, SYN_TIME_LOC);
   time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, SYN_TIME_LOC));
 
-  if(time > timeOfEqsTable || time > timeOfTrmTable) {
+  if((timeOfEqsTable > 0 && time > timeOfEqsTable) ||
+     (timeOfTrmTable > 0 && time > timeOfTrmTable)) {
     result = ATfalse;
   } else {
     result = ATtrue;
@@ -823,7 +823,6 @@ ATbool complete_asf_specification(ATermList visited, ATerm module)
       EqsText = ATelementAt((ATermList)entry, EQS_TEXT_LOC);
       if (ATisEqual(EqsTree, ATparse("unavailable")) &&
           !ATisEqual(EqsText, ATparse("unavailable"))) {
-ATwarning("no equations for: %t\n", first);
         result = ATfalse;
       } else {
         result = complete_asf_specification(visited,first);
