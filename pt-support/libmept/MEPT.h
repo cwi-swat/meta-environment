@@ -56,12 +56,12 @@ ATerm PT_makeTermFromCharRanges(PT_CharRanges arg);
 
 PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree layoutBeforeTree, PT_Tree tree, PT_Tree layoutAfterTree, int ambCnt);
 PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args);
-PT_Tree PT_makeTreeList(PT_Symbol symbol, PT_Args args);
 PT_Tree PT_makeTreeChar(int character);
 PT_Tree PT_makeTreeLit(char * string);
 PT_Tree PT_makeTreeFlatLayout(char * string);
 PT_Tree PT_makeTreeAmb(PT_Args args);
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes);
+PT_Production PT_makeProductionList(PT_Symbol rhs);
 PT_Attributes PT_makeAttributesNoAttrs();
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
 PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
@@ -133,7 +133,6 @@ PT_ParseTree PT_setParseTreeAmbCnt(PT_ParseTree arg, int ambCnt);
 
 ATbool PT_isValidTree(PT_Tree arg);
 ATbool PT_isTreeAppl(PT_Tree arg);
-ATbool PT_isTreeList(PT_Tree arg);
 ATbool PT_isTreeChar(PT_Tree arg);
 ATbool PT_isTreeLit(PT_Tree arg);
 ATbool PT_isTreeFlatLayout(PT_Tree arg);
@@ -144,9 +143,6 @@ PT_Tree PT_setTreeProd(PT_Tree arg, PT_Production prod);
 ATbool PT_hasTreeArgs(PT_Tree arg);
 PT_Args PT_getTreeArgs(PT_Tree arg);
 PT_Tree PT_setTreeArgs(PT_Tree arg, PT_Args args);
-ATbool PT_hasTreeSymbol(PT_Tree arg);
-PT_Symbol PT_getTreeSymbol(PT_Tree arg);
-PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol);
 ATbool PT_hasTreeCharacter(PT_Tree arg);
 int PT_getTreeCharacter(PT_Tree arg);
 PT_Tree PT_setTreeCharacter(PT_Tree arg, int character);
@@ -159,6 +155,7 @@ PT_Tree PT_setTreeString(PT_Tree arg, char * string);
 
 ATbool PT_isValidProduction(PT_Production arg);
 ATbool PT_isProductionDefault(PT_Production arg);
+ATbool PT_isProductionList(PT_Production arg);
 ATbool PT_hasProductionLhs(PT_Production arg);
 PT_Symbols PT_getProductionLhs(PT_Production arg);
 PT_Production PT_setProductionLhs(PT_Production arg, PT_Symbols lhs);
@@ -299,7 +296,7 @@ PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail);
 /*{{{  sort visitors */
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int));
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptSymbol)(PT_Symbol), int (*acceptCharacter)(int), char * (*acceptString)(char *));
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *));
 PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));

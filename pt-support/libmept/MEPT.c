@@ -225,14 +225,6 @@ PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeList(PT_Symbol symbol, PT_Args args) */
-
-PT_Tree PT_makeTreeList(PT_Symbol symbol, PT_Args args)
-{
-  return (PT_Tree)ATmakeTerm(PT_patternTreeList, symbol, args);
-}
-
-/*}}}  */
 /*{{{  PT_Tree PT_makeTreeChar(int character) */
 
 PT_Tree PT_makeTreeChar(int character)
@@ -270,6 +262,14 @@ PT_Tree PT_makeTreeAmb(PT_Args args)
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
 {
   return (PT_Production)ATmakeTerm(PT_patternProductionDefault, lhs, rhs, attributes);
+}
+
+/*}}}  */
+/*{{{  PT_Production PT_makeProductionList(PT_Symbol rhs) */
+
+PT_Production PT_makeProductionList(PT_Symbol rhs)
+{
+  return (PT_Production)ATmakeTerm(PT_patternProductionList, rhs);
 }
 
 /*}}}  */
@@ -782,9 +782,6 @@ ATbool PT_isValidTree(PT_Tree arg)
   if (PT_isTreeAppl(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeList(arg)) {
-    return ATtrue;
-  }
   else if (PT_isTreeChar(arg)) {
     return ATtrue;
   }
@@ -806,14 +803,6 @@ ATbool PT_isValidTree(PT_Tree arg)
 ATbool PT_isTreeAppl(PT_Tree arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternTreeAppl, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeList(PT_Tree arg) */
-
-ATbool PT_isTreeList(PT_Tree arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternTreeList, NULL, NULL);
 }
 
 /*}}}  */
@@ -893,9 +882,6 @@ ATbool PT_hasTreeArgs(PT_Tree arg)
   if (PT_isTreeAppl(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeList(arg)) {
-    return ATtrue;
-  }
   else if (PT_isTreeAmb(arg)) {
     return ATtrue;
   }
@@ -908,9 +894,6 @@ ATbool PT_hasTreeArgs(PT_Tree arg)
 PT_Args PT_getTreeArgs(PT_Tree arg)
 {
   if (PT_isTreeAppl(arg)) {
-    return (PT_Args)ATgetArgument((ATermAppl)arg, 1);
-  }
-  else if (PT_isTreeList(arg)) {
     return (PT_Args)ATgetArgument((ATermAppl)arg, 1);
   }
   else if (PT_isTreeAmb(arg)) {
@@ -929,51 +912,11 @@ PT_Tree PT_setTreeArgs(PT_Tree arg, PT_Args args)
   if (PT_isTreeAppl(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 1);
   }
-  else if (PT_isTreeList(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 1);
-  }
   else if (PT_isTreeAmb(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 0);
   }
 
   ATabort("Tree has no Args: %t\n", arg);
-  return (PT_Tree)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasTreeSymbol(PT_Tree arg) */
-
-ATbool PT_hasTreeSymbol(PT_Tree arg)
-{
-  if (PT_isTreeList(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Symbol PT_getTreeSymbol(PT_Tree arg) */
-
-PT_Symbol PT_getTreeSymbol(PT_Tree arg)
-{
-  if (PT_isTreeList(arg)) {
-    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
-  }
-
-  ATabort("Tree has no Symbol: %t\n", arg);
-  return (PT_Symbol)NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol) */
-
-PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol)
-{
-  if (PT_isTreeList(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
-  }
-
-  ATabort("Tree has no Symbol: %t\n", arg);
   return (PT_Tree)NULL;
 }
 
@@ -1072,6 +1015,9 @@ ATbool PT_isValidProduction(PT_Production arg)
   if (PT_isProductionDefault(arg)) {
     return ATtrue;
   }
+  else if (PT_isProductionList(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1081,6 +1027,14 @@ ATbool PT_isValidProduction(PT_Production arg)
 ATbool PT_isProductionDefault(PT_Production arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternProductionDefault, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isProductionList(PT_Production arg) */
+
+ATbool PT_isProductionList(PT_Production arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternProductionList, NULL);
 }
 
 /*}}}  */
@@ -1128,6 +1082,9 @@ ATbool PT_hasProductionRhs(PT_Production arg)
   if (PT_isProductionDefault(arg)) {
     return ATtrue;
   }
+  else if (PT_isProductionList(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1138,6 +1095,9 @@ PT_Symbol PT_getProductionRhs(PT_Production arg)
 {
   if (PT_isProductionDefault(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else if (PT_isProductionList(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
 
   ATabort("Production has no Rhs: %t\n", arg);
@@ -1151,6 +1111,9 @@ PT_Production PT_setProductionRhs(PT_Production arg, PT_Symbol rhs)
 {
   if (PT_isProductionDefault(arg)) {
     return (PT_Production)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
+  }
+  else if (PT_isProductionList(arg)) {
+    return (PT_Production)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 0);
   }
 
   ATabort("Production has no Rhs: %t\n", arg);
@@ -2424,18 +2387,13 @@ PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symb
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptSymbol)(PT_Symbol), int (*acceptCharacter)(int), char * (*acceptString)(char *)) */
+/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *)) */
 
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptSymbol)(PT_Symbol), int (*acceptCharacter)(int), char * (*acceptString)(char *))
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *))
 {
   if (PT_isTreeAppl(arg)) {
     return PT_makeTreeAppl(
         acceptProd ? acceptProd(PT_getTreeProd(arg)) : PT_getTreeProd(arg),
-        acceptArgs ? acceptArgs(PT_getTreeArgs(arg)) : PT_getTreeArgs(arg));
-  }
-  if (PT_isTreeList(arg)) {
-    return PT_makeTreeList(
-        acceptSymbol ? acceptSymbol(PT_getTreeSymbol(arg)) : PT_getTreeSymbol(arg),
         acceptArgs ? acceptArgs(PT_getTreeArgs(arg)) : PT_getTreeArgs(arg));
   }
   if (PT_isTreeChar(arg)) {
@@ -2468,6 +2426,10 @@ PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_S
         acceptLhs ? acceptLhs(PT_getProductionLhs(arg)) : PT_getProductionLhs(arg),
         acceptRhs ? acceptRhs(PT_getProductionRhs(arg)) : PT_getProductionRhs(arg),
         acceptAttributes ? acceptAttributes(PT_getProductionAttributes(arg)) : PT_getProductionAttributes(arg));
+  }
+  if (PT_isProductionList(arg)) {
+    return PT_makeProductionList(
+        acceptRhs ? acceptRhs(PT_getProductionRhs(arg)) : PT_getProductionRhs(arg));
   }
   ATabort("not a Production: %t\n", arg);
   return (PT_Production)NULL;

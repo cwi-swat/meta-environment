@@ -37,7 +37,7 @@ lengthOfTree(PT_Tree tree)
     return 1;
   }
 
-  if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
+  if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     return lengthOfArgs(args);
   }
@@ -80,7 +80,7 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
   if (PT_isTreeChar(tree)) {
     buf[idx++] = PT_getTreeCharacter(tree);
   }
-  else if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
+  else if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     idx = yieldArgsRecursive(args, idx, buf, bufSize);
   }

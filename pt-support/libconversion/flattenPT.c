@@ -322,7 +322,7 @@ static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
   if (PT_isTreeChar(tree)) {
     chars = PT_appendArgs(chars, tree);
   }
-  else if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
+  else if (PT_isTreeAppl(tree)) {
     PT_Args treeArgs = PT_getTreeArgs(tree);
     chars = flattenArgsRecursive(treeArgs, chars);
   }
@@ -358,7 +358,9 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
     PT_Tree newTree = flattenLexical(tree);
     PT_Args charList = flattenLexicalRecursive(newTree, PT_makeArgsEmpty());
     PT_Args newArgs = PT_makeArgsList(
-                        PT_makeTreeList(makeSymbolAllChars(), charList),
+                        PT_makeTreeAppl(
+                          PT_makeProductionList(makeSymbolAllChars()),
+                          charList),
                         PT_makeArgsEmpty());
     return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
   }
@@ -505,23 +507,23 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
       newArgs = PT_makeArgsList(
                   flattenVar(tree),
                   PT_makeArgsEmpty());
-      return PT_makeTreeList(listSymbol,newArgs);
+      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     if (isSepListProd(prod)) {
       newArgs = flattenSepList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeList(listSymbol,newArgs);
+      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     if (isListProd(prod)) {
       newArgs = flattenList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeList(listSymbol,newArgs);
+      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     if (isLexicalListProd(prod)) {
       newArgs = flattenLexicalList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeList(listSymbol,newArgs);
+      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     if (isCharClassListProd(prod)) {
       newArgs = flattenCharClassList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeList(listSymbol,newArgs);
+      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 

@@ -38,7 +38,6 @@ ATbool PT_prodHasLitAsRhs(PT_Production prod)
     return PT_isSymbolLit(rhs);
   }
 
-  ATerror("PT_prodHasLitAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -55,7 +54,6 @@ ATbool PT_isLexicalProd(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_isLexicalProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -72,7 +70,6 @@ ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
     return ATfalse;
   }
 
-  ATerror("PT_prodHasLexLayoutAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -89,7 +86,6 @@ ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_prodHasCfLayoutAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -101,7 +97,6 @@ ATbool PT_isOptLayoutProd(PT_Production  prod)
     return PT_isOptLayoutSymbol(rhs);
   }
 
-  ATerror("PT_isOptLayoutProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -113,7 +108,6 @@ ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
     return PT_isSymbolVarSym(rhs);
   }
 
-  ATerror("PT_prodHasVarSymAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -132,7 +126,6 @@ ATbool PT_isVarDefault(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_isVarDefault: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -155,7 +148,6 @@ ATbool PT_isLexicalInjectionProd(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_isLexicalInjectionProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -204,7 +196,6 @@ ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
     return PT_isIterSepSymbol(rhs);
   }
 
-  ATabort("PT_prodHasIterSepAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -219,16 +210,18 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
     return PT_isIterSymbol(rhs);
   }
 
-  ATerror("PT_prodHasListSepAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
+/*
 ATbool PT_isProductionList(PT_Production prod)
 {                                       
   return PT_prodHasIterAsRhs(prod) ||
          PT_prodHasIterSepAsRhs(prod);
 }
+*/
 
+/*
 ATbool PT_isTreeApplList(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
@@ -246,6 +239,16 @@ ATbool PT_isTreeApplList(PT_Tree tree)
   }
   return ATfalse;
 }
+*/
+
+ATbool PT_isTreeApplList(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isProductionList(prod);
+  }
+  return ATfalse;
+}
 
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
 {
@@ -260,7 +263,6 @@ ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
     }
   }
 
-  ATerror("PT_prodHasSTARTAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -814,7 +816,8 @@ PT_Symbol makeSymbolAllChars()
 
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 {
-  return PT_makeTreeList(makeSymbolAllChars(), charList);
+  return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
+                         charList);
 }
 
 /*}}}  */

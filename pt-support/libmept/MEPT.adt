@@ -10,9 +10,6 @@
   [Tree, appl, appl(<prod(Production)>,
                     <args(Args)>)],
 
-  [Tree, list, list(<symbol(Symbol)>,
-                    <args(Args)>)],
-
   [Tree, char, <character(int)>],
 
   [Tree, Lit, lit(<string(str)>)],
@@ -26,6 +23,8 @@
                              <attributes(Attributes)>
                             )
   ],
+
+  [Production, List, list(<rhs(Symbol)>)],
 
   [Attributes, no-attrs, no-attrs],
   [Attributes, attrs, attrs(<attrs(Attrs)>)],

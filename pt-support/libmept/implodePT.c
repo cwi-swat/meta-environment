@@ -63,7 +63,7 @@ static PT_Args implodeList(PT_Args list)
   if (PT_hasArgsHead(list)) {
     PT_Tree argHead = PT_getArgsHead(list);
 
-    if (PT_isTreeList(argHead)) {
+    if (PT_isTreeApplList(argHead)) {
       PT_Args argList = PT_getTreeArgs(argHead);
 
       while (PT_hasArgsHead(argList)) {

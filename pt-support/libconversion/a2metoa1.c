@@ -140,14 +140,14 @@ argsToAsFix1(PT_Symbols symbols, PT_Args args)
     PT_Tree   arg    = PT_getArgsHead(args);
 
     if (PT_isIterSymbol(symbol) &&
-        PT_isTreeList(arg)) {
+        PT_isTreeApplList(arg)) {
       return ATinsert(argsToAsFix1(PT_getSymbolsTail(symbols),
                                    PT_getArgsTail(args)),
                       iterToAsFix1(PT_getSymbolSymbol(symbol), 
                                    PT_getTreeArgs(arg)));
     }
     else if (PT_isIterSepSymbol(symbol) &&
-             PT_isTreeList(arg)) {
+             PT_isTreeApplList(arg)) {
       return ATinsert(argsToAsFix1(PT_getSymbolsTail(symbols),
                                    PT_getArgsTail(args)),
                       iterSepToAsFix1(PT_getSymbolSymbol(symbol),
