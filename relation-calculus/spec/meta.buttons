@@ -2,7 +2,7 @@ configuration([
 
  extension("Rscript", ".rscript"),
 
- button("--disabled--Rscript",
+ button("Rscript",
         [description(term-editor, menu(["Rscript", "Check (interpreted)"]))],
         [push-active-module,
          get-root,

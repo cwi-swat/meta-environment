@@ -123,6 +123,9 @@ exports
      "type" RVAR "=" REXPTYPE			-> RSTAT
 
      DCLRVAR "=" REXP                         	-> INITVAR
+     DCLRVAR "+=" REXP                         	-> INITVAR
+     DCLRVAR "-=" REXP                         	-> INITVAR
+
      DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?
      INITVAR					-> RSTAT
 

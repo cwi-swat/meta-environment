@@ -64,6 +64,10 @@ equations
 
 [ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, undefined, $Rel >)
 
+%% ---- Execute statement on given Rstore
+
+[EX1]   $Rstore[$Stat*] = eval-rstats($Stat*, $Rstore)
+
 [UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
 [UN3]	xunion($Elem, $Bag) 	= union(insert($Elem, empty-bag), $Bag)
 [UN4]	xunion($Bag, $Elem) 	= union($Bag, insert($Elem, empty-bag))
