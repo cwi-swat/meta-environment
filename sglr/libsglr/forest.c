@@ -901,35 +901,33 @@ static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
     return SG_Direct_Eagerness_Filter(pt, t0, t1);
   }
   else {
-    if (SG_FILTER_INDIRECTEAGERNESS) {
-      ATermList args0 = (ATermList)ATgetArgument((ATerm)t0, 1);
-      ATermList args1 = (ATermList)ATgetArgument((ATerm)t1, 1);
-      int diffs = countDistinctArguments(args0, args1);
+    ATermList args0 = (ATermList)ATgetArgument((ATerm)t0, 1);
+    ATermList args1 = (ATermList)ATgetArgument((ATerm)t1, 1);
+    int diffs = countDistinctArguments(args0, args1);
     
-      if (diffs == 1) {
-        while (!ATisEmpty(args0)) {
-          tree arg0 = (tree)ATgetFirst(args0);
-          tree arg1 = (tree)ATgetFirst(args1);
+    if (diffs == 1) {
+      while (!ATisEmpty(args0)) {
+        tree arg0 = (tree)ATgetFirst(args0);
+        tree arg1 = (tree)ATgetFirst(args1);
 
-          if (!ATisEqual(arg0, arg1)) {
-            max = SG_Indirect_Eagerness_Filter(pt, arg0, arg1);
+        if (!ATisEqual(arg0, arg1)) {
+          max = SG_Indirect_Eagerness_Filter(pt, arg0, arg1);
 
-            if (max) {
-	      if (ATisEqual(max, arg0)) {
-	        return t0;
-	      }
-	      else {
-	        return t1;
-	      }
+          if (max) {
+            if (ATisEqual(max, arg0)) {
+	      return t0;
 	    }
 	    else {
-	      return NULL;
+	      return t1;
 	    }
-          }
-         
-          args1 = ATgetNext(args1);
-          args0 = ATgetNext(args0);
+	  }
+	  else {
+	    return NULL;
+	  }
         }
+         
+        args1 = ATgetNext(args1);
+        args0 = ATgetNext(args0);
       }
     }
   }

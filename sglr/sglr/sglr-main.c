@@ -25,7 +25,6 @@ int     binaryflag                       = ATtrue;
 int     filterflag                       = ATtrue;
 int     filter_associativityflag         = ATtrue;
 int     filter_directeagernessflag       = ATtrue;
-int     filter_nesteddirecteagernessflag = ATtrue;
 int     filter_eagernessflag             = ATtrue;
 int     filter_injectioncountflag        = ATtrue;
 int     filter_priorityflag              = ATtrue;
@@ -132,7 +131,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(filterflag),
               DEFAULTMODE(filter_associativityflag),
               DEFAULTMODE(filter_directeagernessflag),
-              DEFAULTMODE(filter_nesteddirecteagernessflag),
               DEFAULTMODE(filter_eagernessflag),
               DEFAULTMODE(filter_injectioncountflag),
               DEFAULTMODE(filter_priorityflag),
@@ -202,9 +200,6 @@ void handle_filter_options(void)
           break;
         case 'i':
           filter_injectioncountflag = !filter_injectioncountflag;
-          break;
-        case 'n':
-          filter_nesteddirecteagernessflag = !filter_nesteddirecteagernessflag;
           break;
         case 'p':
           filter_priorityflag = !filter_priorityflag;
@@ -280,7 +275,6 @@ ATbool set_global_options(void)
   if(filterflag)                   SG_FILTER_ON();
   if(filter_associativityflag)     SG_FILTER_ASSOCIATIVITY_ON();
   if(filter_directeagernessflag)   SG_FILTER_DIRECTEAGERNESS_ON();
-  if(filter_nesteddirecteagernessflag) SG_FILTER_INDIRECTEAGERNESS_ON();
   if(filter_eagernessflag)         SG_FILTER_EAGERNESS_ON();
   if(filter_injectioncountflag)    SG_FILTER_INJECTIONCOUNT_ON();
   if(filter_priorityflag)          SG_FILTER_PRIORITY_ON();
