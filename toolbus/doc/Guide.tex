@@ -1122,21 +1122,14 @@ In the Korn shell this can, for instance, be achieved by:
       export TB_VERBOSE
 \end{verbatim}
 
-\item {\tt -TB\_INPORT} {\em port\_name}: defines the ``well known input socket'' {\em port\_name}
+\item {\tt -TB\_PORT} {\em port\_name}: defines the ``well known socket'' {\em port\_name}
 to which all tools temporarily connect in order to set up their
-own private socket pair that connects them permanently to the \TB\ interpreter.
-When omitted, input socket 8998 will be used.
-\item {\tt -TB\_OUTPORT} {\em port\_name}:  defines the ``well known output socket'' {\em port\_name}
-of the \TB\ interpreter used during initialization.
-When omitted, output socket 8999 will be used.
-\item {\tt -TB\_LOCAL\_PORTS}: run with only local ports (useful for testing
-purposes on systems with only a dial-up Internet connection).
+own private socket that connects them permanently to the \TB\ interpreter.
+When omitted, socket 8998 will be used.
 
 \end{itemize}
 
-For the input/output sockets that connect each tool with the \TB\ interpreter,
-consecutive socket addresses starting at {\tt TB\_OUTPORT}$+1$ are used.
-Note that explicit arguments defining the input/output sockets are {\em only}
+Note that explicit arguments defining the sockets are {\em only}
 needed when several \TB\ interpreters are running simultaneously on
 the {\em same} host machine.
 
@@ -1197,10 +1190,11 @@ reproducible across multiple runs of the {\tt toolbus} command.
 \end{verbatim}
 which starts interpreting the script ``{\tt hello.tb}''. Next, consider
 \begin{verbatim}
-      toolbus -TB_INPORT 4000 -TB_OUTPORT 4001 hello.tb
+      toolbus -TB_PORT 4000 hello.tb
 \end{verbatim}
-which interprets the same script, but uses sockets {\tt 4000} and {\tt 4001} for
-input, respectively, output. Next, consider,
+which interprets the same script, but uses socket {\tt 4000} to find
+the ToolBus.
+Next, consider,
 \begin{verbatim}
       toolbus -Imy-include-dir -DCNT=33 wave.tb
 \end{verbatim}
@@ -1247,7 +1241,7 @@ As an example, consider the ``{\tt hello}'' application described in Section~\re
 The {\tt hello} tool will be executed by the \TB\ using
 the command
 \begin{verbatim}
-      hello -TB_INPORT 8998 -TB_OUTPORT 8999 -TB_HOST host1.institute.nl
+      hello -TB_PORT 8998 -TB_HOST host1.institute.nl
 \end{verbatim}
 when running on machine {\tt host1.institute.nl}.
 
