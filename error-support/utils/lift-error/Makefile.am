@@ -3,8 +3,8 @@
 bin_PROGRAMS = lift-error
 
 INCLUDES= \
-	-I${ATERM}/include\
-	-I${top_srcdir}/lib
+	-I${top_srcdir}/lib \
+	-I${ATERM}/include
 
 lift_error_SOURCES=\
 	lift-error.c

@@ -15,9 +15,9 @@ bin_PROGRAMS = \
 	error-support
 
 INCLUDES = \
+	-I${top_srcdir}/lib \
 	-I${ATERM}/include \
-	-I${TOOLBUSLIB}/include \
-	-I${top_srcdir}/lib
+	-I${TOOLBUSLIB}/include 
 
 error_support_SOURCES = \
 	error-support.tif.c \

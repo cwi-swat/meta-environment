@@ -2,8 +2,8 @@
 bin_PROGRAMS=lower-error
 
 INCLUDES=\
-	-I${ATERM}/include\
-	-I${top_srcdir}/lib
+	-I${top_srcdir}/lib \
+	-I${ATERM}/include
 
 lower_error_SOURCES=\
 	lower-error.c

@@ -2,8 +2,8 @@
 bin_PROGRAMS=error-diff
 
 INCLUDES= \
-	-I${ATERM}/include\
-	-I${top_srcdir}/lib
+	-I${top_srcdir}/lib \
+	-I${ATERM}/include
 
 error_diff_SOURCES=\
 	error-diff.c
