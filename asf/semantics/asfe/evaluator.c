@@ -737,10 +737,9 @@ aterm *select_and_rewrite(aterm *trm)
   env = get_env(complexenv);
   if(!is_fail_env(env)) {
     newtrm = get_term(complexenv);
-    return rewrite(newtrm,env);
+    trm = rewrite(newtrm,env);
   }
-  else
-    return trm;
+  return trm;
 }
 
 /* The list of arguments is rewritten and a new argumentlist
@@ -798,6 +797,8 @@ aterm *rewrite(aterm *trm,aterm_list *env)
 
   if(asfix_is_appl(trm)) {
     args = asfix_get_appl_args(trm);
+    if(!args)
+      Tprintf(stderr, "trm = %t\n", trm);
     newargs = rewrite_args(args,env);
     if(asfix_is_bracket_func(trm)) {
       newtrm = t_list_first(t_list_next(newargs));
