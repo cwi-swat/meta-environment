@@ -710,7 +710,7 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
   
   char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles3/";
   if( getenv( "COMPILER_OUTPUT" ) != NULL )
-     path = strdup( getenv( "COMPILER_OUTPUT" ) );
+     path = getenv( "COMPILER_OUTPUT" );
 
   TinitArena(NULL, &local);
 
@@ -758,7 +758,8 @@ Tprintf(stderr,"compile_module entered\n");
           Tprintf(output, "\n");
           fclose(output);
         }
-        Tprintf(stderr,"Writing: %s.asfix\n", text);
+        /* write full path name instead of only module name */
+        Tprintf(stderr,"Writing: %s.asfix\n", fname);
 
         expmod = expand_to_asfix(&local,amod,fname);
 
