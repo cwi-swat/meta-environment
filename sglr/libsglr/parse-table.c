@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -909,6 +910,7 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
 {
   FILE        *input_file;
   parse_table *pt = NULL;
+  ATerm t;
 
   if(!(input_file = SG_OpenFile(prgname, "parse table not specified", FN))) {
     return NULL;
@@ -916,7 +918,8 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
 
   IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
 
-  pt = SG_BuildParseTable((ATermAppl) ATreadFromFile(input_file));
+  t = ATreadFromFile(input_file);
+  pt = SG_BuildParseTable((ATermAppl) t);
 
   IF_STATISTICS(ATfprintf(SG_log(),
                         "Obtaining parse table for %t took %.4fs\n",

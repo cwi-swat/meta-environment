@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -922,24 +923,60 @@ ATermList SG_GetMultiSetKeys(multiset ms)
   return ATtableKeys(ms);
 }
 
-multiset SG_GetMultiSet(register tree t, register multiset ms)
+multiset SG_GetMultiSetRecursive(register tree t, register multiset ms);
+multiset SG_GetMultiSetInAmbCluster(ATermList ambs, register multiset ms)
 {
   label    l;
   int      count;
 
-  switch(ATgetType(t)) {
+  for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+    tree thisamb = (tree) ATgetFirst(ambs);   
+    switch (ATgetType(thisamb)) {
+      case AT_APPL:
+        l = SG_GetApplProdLabel(thisamb);
+        count = 1 + SG_GetMultiSetEntry(ms, SG_GetATint(l, 0));
+        ms = SG_PutMultiSetEntry(ms, SG_GetATint(l,0), SG_GetATint(count, 0));
+        ms = SG_GetMultiSetRecursive((tree) ATgetArgument((ATermAppl) thisamb, 1), ms);
+        break;
+      default:
+        IF_DEBUG(fprintf(SG_log(),
+                          "A non appl node found in an ambiguity cluster\n")); 
+        break;
+    }
+  }
+  return ms;
+}
+
+/* For each production in the tree the number of occurrences is
+ * calculated.
+ */
+multiset SG_GetMultiSetRecursive(register tree t, register multiset ms)
+{
+  label    l;
+  int      count;
+  ATermList ambs;
+
+  switch (ATgetType(t)) {
     case AT_APPL:
-      l = SG_GetApplProdLabel(t);
-      count = 1 + SG_GetMultiSetEntry(ms, SG_GetATint(l, 0));
-      ms = SG_PutMultiSetEntry(ms, SG_GetATint(l,0), SG_GetATint(count, 0));
-      ms = SG_GetMultiSet((tree) ATgetArgument((ATermAppl) t, 1), ms);
+      ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+      if (ATisEmpty(ambs)) { 
+        l = SG_GetApplProdLabel(t);
+        count = 1 + SG_GetMultiSetEntry(ms, SG_GetATint(l, 0));
+        ms = SG_PutMultiSetEntry(ms, SG_GetATint(l,0), SG_GetATint(count, 0));
+        ms = SG_GetMultiSetRecursive((tree) ATgetArgument((ATermAppl) t, 1), ms);
+      }
+      else {
+        ms = SG_GetMultiSetInAmbCluster(ambs, ms);
+      }
       break;
     case AT_LIST:
-      if(ATisEmpty((ATermList) t))
+      if (ATisEmpty((ATermList) t)) {
         break;
-      for(; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t))
-        ms = SG_GetMultiSet((tree) ATgetFirst((ATermList) t), ms);
-        break;
+      }
+      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        ms = SG_GetMultiSetRecursive((tree) ATgetFirst((ATermList) t), ms);
+      }
+      break;
     case AT_INT:
     case AT_REAL:
     case AT_PLACEHOLDER:
@@ -950,6 +987,35 @@ multiset SG_GetMultiSet(register tree t, register multiset ms)
   return ms;
 }
 
+multiset SG_GetMultiSet(register tree t, register multiset ms)
+{
+  label    l;
+  int      count;
+
+  switch (ATgetType(t)) {
+    case AT_APPL:
+      l = SG_GetApplProdLabel(t);
+      count = 1 + SG_GetMultiSetEntry(ms, SG_GetATint(l, 0));
+      ms = SG_PutMultiSetEntry(ms, SG_GetATint(l,0), SG_GetATint(count, 0));
+      ms = SG_GetMultiSetRecursive((tree) ATgetArgument((ATermAppl) t, 1), ms);
+      break;
+    case AT_LIST:
+      if (ATisEmpty((ATermList) t)) {
+        break;
+      }
+      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        ms = SG_GetMultiSetRecursive((tree) ATgetFirst((ATermList) t), ms);
+      }
+      break;
+    case AT_INT:
+    case AT_REAL:
+    case AT_PLACEHOLDER:
+    case AT_BLOB:
+    default:
+      break;
+  }
+  return ms;
+}    
 
 ATbool SG_MultiSetGtr(parse_table *pt, multiset msM, ATermList kM,
                       multiset msN, ATermList kN)
@@ -1072,33 +1138,68 @@ ATbool SG_MultiSetEqual(multiset M1, multiset M2, ATermList k1, ATermList k2)
   return ATtableIsEqual(M1, M2, k1, k2);
 }
 
+ATbool SG_HasPreferredProds(tree t);
+/* Looking depth-first for a prefer attribute in an ambiguity
+ * cluster. We assume that an ambiguity cluster only contains appls.
+ */
+ATbool SG_HasPreferredProdsInAmbCluster(ATermList ambs)
+{
+  for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+    tree thisamb = (tree) ATgetFirst(ambs); 
+    switch (ATgetType(thisamb)) {
+      case AT_APPL:
+        {
+          AFun fun;
+
+          fun = ATgetAFun(thisamb);
+          if (ATisEqual(fun, SG_Eager_AFun)) {
+            return ATtrue;
+          }
+          if (SG_HasPreferredProds((forest) ATgetArgument((ATermAppl) thisamb,
+                                                          1))) {
+            return ATtrue;
+          }
+        }
+     default: 
+       {
+         IF_DEBUG(fprintf(SG_log(), 
+                          "A non appl node found in an ambiguity cluster\n"));
+         return ATfalse;
+       }
+    }
+  }
+  return ATfalse;
+}
+
 ATbool SG_HasPreferredProds(tree t)
 {
-  switch(ATgetType(t)) {
+  switch (ATgetType(t)) {
     case AT_APPL:
       {
         AFun fun;
+        ATermList ambs;
 
-        fun = ATgetAFun(t);
-        if(ATisEqual(fun, SG_Eager_AFun)) {
-          return ATtrue;
+        ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+        if (ATisEmpty(ambs)) {
+          fun = ATgetAFun(t);
+          if (ATisEqual(fun, SG_Eager_AFun)) {
+            return ATtrue;
+          }
+          /*  Preferred subtrees in trees that are to be avoided don't count  */
+          if (ATisEqual(fun, SG_Uneager_AFun)
+              || ATisEqual(fun, SG_Reject_AFun)) {
+            return ATfalse;
+          }
+          return SG_HasPreferredProds((forest) ATgetArgument((ATermAppl) t, 1));
         }
-        /*  Preferred subtrees in trees that are to be avoided don't count  */
-        if(ATisEqual(fun, SG_Uneager_AFun)
-        || ATisEqual(fun, SG_Reject_AFun)) {
-          return ATfalse;
+        else { /* We have an ambiguity cluster. Then the nodes of this
+                  cluster have to be inspected. */
+          return SG_HasPreferredProdsInAmbCluster(ambs);
         }
-        /*
-            Tree t may be an ambiguity cluster.  Even if it is,
-            inspection of a single subtree suffices: by filtering,
-            either all trees in the ambiguity node have been built using
-            a preferred rule, or they have all been built without.
-         */
-        return SG_HasPreferredProds((forest) ATgetArgument((ATermAppl) t, 1));
       }
     case AT_LIST:
-      for(; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-        if(SG_HasPreferredProds((tree) ATgetFirst((ATermList) t))) {
+      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        if (SG_HasPreferredProds((tree) ATgetFirst((ATermList) t))) {
           return ATtrue;
         }
       }
@@ -1109,28 +1210,64 @@ ATbool SG_HasPreferredProds(tree t)
   }
 }
 
+/* Looking depth-first for an avoid attribute in an ambiguity
+ * cluster. We assume that an ambiguity cluster only contains appls.
+ */
+ATbool SG_HasAvoidedProds(tree t);
+ATbool SG_HasAvoidedProdsInAmbCluster(ATermList ambs)
+{
+  for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+    tree thisamb = (tree) ATgetFirst(ambs); 
+    switch (ATgetType(thisamb)) {
+      case AT_APPL:
+        {
+          AFun fun;
+  
+          fun = ATgetAFun(thisamb);
+          if(ATisEqual(fun, SG_Uneager_AFun)) {
+            return ATtrue;
+          }
+          
+          if (SG_HasAvoidedProds((forest) ATgetArgument((ATermAppl) thisamb,
+                                                            1))) {
+            return ATtrue;
+          }
+       }
+     default: 
+       {
+         IF_DEBUG(fprintf(SG_log(), 
+                          "A non appl node found in an ambiguity cluster\n"));
+         return ATfalse;
+       }
+    }
+  }
+  return ATfalse;
+}
+
 ATbool SG_HasAvoidedProds(tree t)
 {
   switch(ATgetType(t)) {
     case AT_APPL:
       {
         AFun fun;
+        ATermList ambs;
 
-        fun = ATgetAFun(t);
-        if(ATisEqual(fun, SG_Uneager_AFun)) {
-          return ATtrue;
+        ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+        if (ATisEmpty(ambs)) {
+          fun = ATgetAFun(t);
+          if(ATisEqual(fun, SG_Uneager_AFun)) {
+            return ATtrue;
+          }
+          /*  Avoided subtrees in trees that are to be preferred don't count  */
+          if(ATisEqual(fun, SG_Eager_AFun)) {
+            return ATfalse;
+          }
+        
+          return SG_HasAvoidedProds((forest) ATgetArgument((ATermAppl) t, 1));
         }
-        /*  Preferred subtrees in trees that are to be preferred don't count  */
-        if(ATisEqual(fun, SG_Eager_AFun)) {
-          return ATfalse;
+        else {
+          return SG_HasAvoidedProdsInAmbCluster(ambs);
         }
-        /*
-            Tree t may be an ambiguity cluster.  Even if it is,
-            inspection of a single subtree suffices: by filtering,
-            either all trees in the ambiguity node have been built using
-            a preferred rule, or they have all been built without.
-         */
-        return SG_HasAvoidedProds((forest) ATgetArgument((ATermAppl) t, 1));
       }
     case AT_LIST:
       for(; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
@@ -1184,15 +1321,25 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   ATermList  k1  = NULL;
   ATbool     m0made = ATfalse;
 
+/* If one of the terms is cyclic, no comparison is possible.
+ * This should be improved one way or the other.
+ */
+  if (SG_TermIsCyclic(t0)) {
+    return NULL;
+  }
+  if (SG_TermIsCyclic(t1)) {
+    return NULL;
+  } 
+
   /*  Always apply direct priority filtering first  */
   l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
   l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
 
-  if(SG_GtrPriority(pt, l0, l1)) {
+  if (SG_GtrPriority(pt, l0, l1)) {
     IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t > %t\n", l0, l1))
     return t0;
   }
-  if(SG_GtrPriority(pt, l1, l0)) {
+  if (SG_GtrPriority(pt, l1, l0)) {
     IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t < %t\n", l0, l1))
     return t1;
   }
@@ -1200,12 +1347,12 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   /*  Next, inspect eager/avoid status  */
 #ifndef NO_EAGERNESS
   /*  Don't even bother unless there are preferred actions  */
-  if(SG_PT_HAS_PREFERENCES(pt)) {
-    if(SG_EagerPriority_Tree(t0, t1)) {
+  if (SG_PT_HAS_PREFERENCES(pt)) {
+    if (SG_EagerPriority_Tree(t0, t1)) {
       IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
       return t0;
     }
-    if(SG_EagerPriority_Tree(t1, t0)) {
+    if (SG_EagerPriority_Tree(t1, t0)) {
       IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
       return t1;
     }
@@ -1216,8 +1363,9 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
      Don't even bother filtering any further if filtering is disabled
      or there's nothing to filter with (no prios, no preferences)
    */
-  if(!SG_FILTER)
+  if (!SG_FILTER) {
     return NULL;
+  }
 
 	/* the next code is a filter that finds the topmost preference in both
 	 * trees. If one of them is prefered or avoided, and the other has no
@@ -1225,59 +1373,65 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 	 */
 	
   /*  Don't even bother unless there are preferred actions  */
-  if(SG_PT_HAS_PREFERENCES(pt)) {
-		/* search for prefers */
+  if (SG_PT_HAS_PREFERENCES(pt)) {
+    /* search for prefers */
     ATbool has_prefs0  = SG_HasPreferredProds(t0);
-		ATbool has_prefs1  = SG_HasPreferredProds(t1);
-		/* search for avoids */
-		ATbool has_avoids0 = SG_HasAvoidedProds(t0);
-		ATbool has_avoids1 = SG_HasAvoidedProds(t1);
+    ATbool has_prefs1  = SG_HasPreferredProds(t1);
+    /* search for avoids */
+    ATbool has_avoids0 = SG_HasAvoidedProds(t0);
+    ATbool has_avoids1 = SG_HasAvoidedProds(t1);
 	
-		/* draw safe conclusions */
-    if(has_prefs0 && !has_prefs1) {
-      IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t > %t\n", l0, l1))
+    /* draw safe conclusions */
+    if (has_prefs0 && !has_prefs1) {
+      IF_DEBUG(ATfprintf(SG_log(), 
+                         "Implicit Preference Priority: %t > %t\n", l0, l1))
       return t0;
-    } else if(has_prefs1 && !has_prefs0) {
-      IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t < %t\n", l0, l1))
+    } else if (has_prefs1 && !has_prefs0) {
+      IF_DEBUG(ATfprintf(SG_log(), 
+                         "Implicit Preference Priority: %t < %t\n", l0, l1))
       return t1;
     }
 
-		if(has_avoids0 && !has_avoids1) {
-			IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t < %t\n", l0, l1))
-				return t1;
-		} else if(has_avoids1 && !has_avoids0) {
-			IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t > %t\n", l0, l1))
-				return t0;
-		}
-	}
+    if (has_avoids0 && !has_avoids1) {
+      IF_DEBUG(ATfprintf(SG_log(), 
+                         "Implicit Preference Priority: %t < %t\n", l0, l1))
+      return t1;
+    } else if (has_avoids1 && !has_avoids0) {
+      IF_DEBUG(ATfprintf(SG_log(), 
+                         "Implicit Preference Priority: %t > %t\n", l0, l1))
+      return t0;
+    }
+  }
 
   /*  Don't filter START symbols when start symbol subselection is on  */
-  if(SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0)))
+  if (SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0))) {
     return (tree) NULL;
+  }
 
   /*
       No direct priority relation?  Apply multiset ordering,
       if there is anything to filter on
    */
-  if(SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
-    if(!m0) {
+  if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
+    if (!m0) {
       m0made = ATtrue;
       m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
     }
     m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
 
-    if(!k0)
+    if (!k0) {
       k0 = SG_GetMultiSetKeys(m0);
+    }
     k1 = SG_GetMultiSetKeys(m1);
 
-    if(!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
+    if (!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
       /*  multi-prio is irreflexive  */
-      if(SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
+      if (SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
         IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
         max = t0;
       }
-      if(SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
-        if(max) {                             /*  shouldn't happen, really  */
+      if (SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
+        if (max) {                             /*  shouldn't happen, really  */
           IF_DEBUG(fprintf(SG_log(),
                            "Symmetric multiset priority relation ignored\n"))
           ATwarning("Ignoring symmetric multiset priority relation\n");
@@ -1291,7 +1445,7 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   }
 
   /*  Did we find a multiset ordering?  */
-  if(max) {
+  if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
   } else {
   /*  No multiset ordering either?  Count injections.  */
@@ -1305,39 +1459,46 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
        In extreme cases (no priorities, no preferences) the multisets
        are not yet constructed at this point
      */
-    if(!m0) {
+    if (!m0) {
       m0made = ATtrue;
       m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
     }
-    if(!m1)
+    if (!m1) {
       m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
-    if(!k0)
+    }
+    if (!k0) {
       k0 = SG_GetMultiSetKeys(m0);
-    if(!k1)
+    }
+    if (!k1) {
       k1 = SG_GetMultiSetKeys(m1);
+    }
 
     in0 = SG_CountInjections(pt, m0, k0);
     in1 = SG_CountInjections(pt, m1, k1);
+    IF_DEBUG(ATfprintf(SG_log(), "%t: in0 = %d\n%t: in1 = %d\n", t0, in0, t1, in1)); 
 #endif
     IF_STATISTICS(
-      if(in0 != in1)
-        SG_InjectionFilterSucceeded(SG_NR_INC)
+      if (in0 != in1) {
+        SG_InjectionFilterSucceeded(SG_NR_INC);
+      }
     );
-    if(in0 > in1) {
+    if (in0 > in1) {
       IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
                          l0, l1, in0, in1))
       max = t1;
-    } else if(in0 < in1) {
+    } else if (in0 < in1) {
       IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t > %t (%d < %d)\n",
                          l0, l1, in0, in1))
       max = t0;
     }
   }
 
-  if(m0made)
+  if (m0made) {
     ATtableDestroy(m0);
-  if(m1)
+  }
+  if (m1) {
     ATtableDestroy(m1);
+  }
 
   return max;
 }
@@ -1349,24 +1510,29 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
   tree       prev, max;
   ATbool     term_filtered_out = ATfalse;
 
-  if(ATisEmpty(old))
+  if (ATisEmpty(old))
     return ATmakeList1((ATerm) t);
 
+  if (SG_TermIsCyclic(t)) {
+    return ATinsert(old, (ATerm) t);
+  }
+
   /*  Multiset construction is needed only when really filtering  */
-  if(SG_FILTER) {
+  if (SG_FILTER) {
     m = SG_GetMultiSet(t, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
     k = SG_GetMultiSetKeys(m);
   }
 
   /*  Filter term against existing terms in ambiguity cluster  */
-  for(; !ATisEmpty(old); old = ATgetNext(old)) {
+  for (; !ATisEmpty(old); old = ATgetNext(old)) {
     prev = (tree) ATgetFirst(old);
 
-    /* Add prev to new, unless new has a higher priority  */
+    /* Add prev to new, unless t has a higher priority  */
     max = SG_Filter(pt, t, prev, m, k);
-    if(!max || (term_filtered_out=ATisEqual(max, prev)))
+    if (!max || (term_filtered_out=ATisEqual(max, prev))) {
       new = ATinsert(new, (ATerm) prev);
-    if(max) {
+    }
+    if (max) {
       IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
                        SG_GetApplProdLabel(prev),
                        ATisEqual(max, prev)?'>':'<',
@@ -1374,11 +1540,13 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
                );
     }
   }
-  if(!term_filtered_out)
+  if (!term_filtered_out) {
     new = ATinsert(new, (ATerm) t);
+  }
 
-  if(m)
+  if (m) {
     ATtableDestroy(m);
+  }
 
   return new;
 }
@@ -1413,7 +1581,7 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
 
     /*  Filter the two  */
     if(!(max = SG_Filter(pt, new, existing, NULL, NULL))) {
-      /*  max and new are not priority-related */
+      /*  existing and new are not priority-related */
       newambs = ATmakeList2((ATerm) existing, (ATerm) new);
     } else {
       /*  new and existing are in a priority relation, max is top  */
@@ -1431,8 +1599,9 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
     ATermList oldambs;
 
     oldambs = (ATermList) SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, ambidx, NULL);
-    if(ATindexOf(oldambs, (ATerm) new, 0) != -1)
+    if(ATindexOf(oldambs, (ATerm) new, 0) != -1) {
       return;  /*  Already present?  Done.  */
+    }
     newambs = SG_FilterList(pt, oldambs, new);
   }
 
