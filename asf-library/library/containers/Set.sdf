@@ -1,6 +1,7 @@
 module containers/Set[X]
 
 imports basic/Whitespace
+imports basic/Booleans
 
 exports
   context-free syntax
@@ -12,8 +13,6 @@ exports
 
 
 hiddens
-  imports basic/Booleans
-
   sorts Set[[X]]
 
   variables
