@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/17 <jurgenv@cwi.nl>
+ * Added dump sdf definition action to the action language (alias button lang)
+
 2003/09/16 <markvdb@cwi.nl>
  * Removed the query action.
 
