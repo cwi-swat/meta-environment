@@ -5,20 +5,12 @@ SUBDIRS = graph
 pkgdata_DATA = meta-studio.idef
 EXTRA_DIST = meta-studio.idef
 
-CLASSPATH_ENV = \
-	CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${JJTRAVELER}:${SHARED_OBJECTS}:${JAVA_ATERM}:${TOOLBUS}/classes
-
+CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 
 JAVAROOT = ${top_builddir}/meta-studio
 javadir = ${prefix}/classes/metastudio
 
 TYPES = Module.ace
-
-api: metastudio.ace ${TYPES}
-	autocode \
-		--application metastudio \
-		--property "java->rootdir:=\"${JAVAROOT}\"" \
-		metastudio.ace
 
 jtif: 
 	${IDEF} meta-studio.idef

@@ -5,8 +5,7 @@ include MetaGraphMakeRules.am
 JAVAROOT = ${top_builddir}/meta-studio
 javadir = ${prefix}/classes/metastudio/graph
 
-CLASSPATH_ENV = \
-	CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${JJTRAVELER}:${JAVA_ATERM}:${SHARED_OBJECTS}
+CLASSPATH_ENV=CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 
 java_JAVA = ${MetaGraphAPI}
 

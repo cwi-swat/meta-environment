@@ -40,8 +40,6 @@ AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
 dnl ATERM_JAVA is not allowed in Makefile.am's
 JAVA_ATERM=`${ATERM_JAVA}/bin/aterm-java-config`
 AC_SUBST(JAVA_ATERM)
-JJTRAVELER="${ATERM_JAVA}/share/jjtraveler-1.3.jar"
-AC_SUBST(JJTRAVELER)
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
@@ -52,6 +50,10 @@ dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
+
+dnl This variable holds all external jarfiles
+EXTERNAL_JARS=${SHARED_OBJECTS}:${JAVA_ATERM}:${ATERM_JAVA}/share/jjtraveler-1.3.jar:${TOOLBUS}/classes
+AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
 AC_PACKAGE_REQUIRE(sglr, sglr,
