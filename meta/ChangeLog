@@ -9,6 +9,8 @@
  * split parsing, conversion to absolute paths and registering of the
    meta.conf file
  * dialog with io tool extended
+ * brought scripts up-to-date with changes in in-output and configuration-
+   manager
 
 2003/05/19 (jurgenv@cwi.nl)
  * Moved term-store tool to toplevel
