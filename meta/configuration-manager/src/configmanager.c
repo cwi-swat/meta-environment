@@ -277,12 +277,37 @@ ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
 }
 
 /*}}}  */
-/*{{{  ATerm get_extensions(int cid) */
+/*{{{  ATerm get_extension_modulename(int cid, char *extension) */
 
-ATerm get_extensions(int cid)
+ATerm get_extension_modulename(int cid, char *extension)
 {
   MC_Properties properties = getProperties();
-  ATermList extensions = ATempty;
+
+  while (!MC_isPropertiesEmpty(properties)) {
+    MC_Property property = MC_getPropertiesHead(properties);
+
+    if (MC_isPropertyExtension(property)) {
+      char *language = MC_getPropertyLanguage(property);
+      char *stored = MC_getPropertyExtension(property);
+
+      if (strcmp(extension, stored) == 0) {
+	return ATmake("snd-value(extension-modulename(<str>))",
+		      language);
+      }
+    }
+
+    properties = MC_getPropertiesTail(properties);
+  }
+
+  return ATmake("snd-value(no-modulename)");
+}
+
+/*}}}  */
+/*{{{  ATerm get_extension_modulename(int cid, char *extension) */
+
+ATerm get_modulename_extension(int cid, char *modulename)
+{
+  MC_Properties properties = getProperties();
 
   while (!MC_isPropertiesEmpty(properties)) {
     MC_Property property = MC_getPropertiesHead(properties);
@@ -290,14 +315,17 @@ ATerm get_extensions(int cid)
     if (MC_isPropertyExtension(property)) {
       char *language = MC_getPropertyLanguage(property);
       char *extension = MC_getPropertyExtension(property);
-      ATerm lang = (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue));
-      ATerm ext = (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue));
-      extensions = ATinsert(extensions, (ATerm) ATmakeList2(lang, ext));
+
+      if (strcmp(language, modulename) == 0) {
+	return ATmake("snd-value(modulename-extension(<str>))",
+		      extension);
+      }
     }
+
     properties = MC_getPropertiesTail(properties);
   }
 
-  return ATmake("snd-value(extensions(<term>))", extensions);
+  return ATmake("snd-value(no-extension)");
 }
 
 /*}}}  */

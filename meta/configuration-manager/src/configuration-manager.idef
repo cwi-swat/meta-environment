@@ -50,7 +50,7 @@ let
   ModuleName : str,
   Pid : int,
   SearchPaths : list,
-  Extensions : list,
+  Extension : str,
   Term : term,
   Text : str,
   Tree : term
@@ -89,10 +89,25 @@ in
     rec-value(CMNG, button-actions(ButtonActions?)) .
     snd-msg(button-actions(ButtonName, EditorType, ModuleName, ButtonActions))
   +
-    rec-msg(get-extensions) .
-    snd-eval(CMNG, get-extensions) .
-    rec-value(CMNG, extensions(Extensions?)) .
-    snd-msg(extensions(Extensions)) 
+    rec-msg(get-extension-modulename(Extension?)) .
+    snd-eval(CMNG, get-extension-modulename(Extension)) .
+    (
+      rec-value(CMNG, extension-modulename(ModuleName?)) .
+      snd-msg(extension-modulename(Extension, ModuleName))
+    +
+      rec-value(CMNG, no-modulename) .
+      snd-msg(no-extension-modulename(Extension))
+    )
+  +
+    rec-msg(get-modulename-extension(ModuleName?)) .
+    snd-eval(CMNG, get-modulename-extension(ModuleName)) .
+    (
+      rec-value(CMNG, modulename-extension(Extension?)) .
+      snd-msg(modulename-extension(ModuleName, Extension))
+    +
+      rec-value(CMNG, no-extension) .
+      snd-msg(no-modulename-extension(ModuleName))
+    )
   +
     rec-msg(get-search-paths) .
     snd-eval(CMNG, get-search-paths) .
