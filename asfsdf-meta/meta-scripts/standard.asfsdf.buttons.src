@@ -5,9 +5,11 @@ configuration([
           [prompt-for-file("New Module", "", ".sdf"),
            dup,
            push-string(""),
-           if-equal([],
-           [split-file-name,
-            new-module])]),
+           if-equal(
+             [],
+             [split-file-name,
+              new-module]
+           )]),
    button("*",
           [description(studio-menubar, menu(["File", "Open Module"])),
            description(studio-toolbar, icon("Open Module", "filled-page.gif"))],
@@ -205,9 +207,10 @@ configuration([
           [prompt-for-file("Copy module to", "", ".sdf"),
            dup,
            push-string(""),
-           if-equal([],
-           [split-file-name,
-            copy-module])
+           if-equal(
+             [],
+	     [split-file-name,
+              copy-module])
            ]),
    button("*",
           [description(module-popup, menu(["Refactor", "Delete..."]))],
