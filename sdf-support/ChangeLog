@@ -1,3 +1,6 @@
+2002/10/10 (jurgenv@cwi.nl)
+ * Added functionality to add an import to a module
+
 2002/10/08 (jurgenv@cwi.nl)
  * Added functionality to compute a list of renamings from a list
    of formal parameters and a list of actual parameters of an SDF2 module
