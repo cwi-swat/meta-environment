@@ -1,5 +1,3 @@
 module languages/c/syntax/C
 imports languages/c/syntax/ReservedKeywords
-imports languages/c/syntax/Comments
 imports languages/c/syntax/Program 
-

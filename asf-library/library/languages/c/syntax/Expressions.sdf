@@ -31,9 +31,9 @@ sorts Expression CommaExpression CommaExpressionOpt StringLiteralList Constant
 
   context-free syntax
     "++" | "--" | "sizeof"  Expression -> Expression 
-    "sizeof" "(" TypeName ")"          -> Expression 
+    "sizeof" "(" TypeName ")"          -> Expression {prefer}
     "&" | "*" | "+" | "-" | "~" | "!" Expression -> Expression 
-    "(" TypeName ")" Expression -> Expression
+    "(" TypeName ")" Expression -> Expression {prefer} %% ambiguous with normal expression brackets
     Expression "*" | "/" | "%" Expression -> Expression {left}
     Expression "+" |  "-" Expression -> Expression {left}
     Expression "<<" | ">>" Expression -> Expression {left}

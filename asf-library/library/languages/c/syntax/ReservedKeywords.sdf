@@ -42,4 +42,3 @@ lexical restrictions
    "&" -/- [\&] %% a && b should not be a &(&b)
    "+" -/- [\+] %% (a ++ b) is illegal and ++b should not be +(+b)
    "-" -/- [\-] %% --b should not be -(-b)
-

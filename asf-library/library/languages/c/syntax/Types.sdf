@@ -75,7 +75,6 @@ exports
     TypedefDeclarationSpecifier DeclarationQualifier -> TypedefDeclarationSpecifier 
 
   context-free syntax
-    Identifier                         -> TypedefTypeSpecifier 
     TypeQualifierList Identifier       -> TypedefTypeSpecifier 
     TypedefTypeSpecifier TypeQualifier -> TypedefTypeSpecifier 
 
@@ -162,9 +161,11 @@ exports
     {ParameterDeclaration ","}+ -> ParameterList
 
   context-free syntax
+    (DeclarationSpecifier | TypeSpecifier)  -> ParameterDeclaration
+
     (DeclarationSpecifier | TypeSpecifier)  
-    (AbstractDeclarator | IdentifierDeclarator | ParameterTypedefDeclarator)?
-		-> ParameterDeclaration 
+    (AbstractDeclarator | IdentifierDeclarator | ParameterTypedefDeclarator) -> ParameterDeclaration {prefer}
+
 
     (DeclarationQualifierList | TypeQualifierList)
     (AbstractDeclarator | IdentifierDeclarator)? -> ParameterDeclaration 

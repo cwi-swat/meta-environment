@@ -1,0 +1,5 @@
+module languages/c/syntax/CWithCppComments
+
+imports languages/c/syntax/C
+imports languages/cpp/syntax/CommentsAsLayout
+imports languages/c/syntax/Whitespace

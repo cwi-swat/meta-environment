@@ -1,0 +1,11 @@
+module languages/c/syntax/Whitespace
+
+exports
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+context-free restrictions
+
+LAYOUT? -/- [\ \t\n]
