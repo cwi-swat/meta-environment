@@ -1,0 +1,13 @@
+process P is
+let A : int
+in
+  snd-msg 123 . rec-msg A? . print A
+endlet
+
+process Q is
+let N : int 
+in
+  rec-msg N? . N := add(N,1) . snd-msg N
+endlet
+
+toolbus(P, Q)

@@ -12,6 +12,10 @@ import toolbus.process.*;
 
 import aterm.*;
 
+/**
+ * ToolBus implements the complete behaviour of one ToolBus.
+ */
+
 public class ToolBus {
 
   private static Random rand = new Random();
@@ -25,6 +29,10 @@ public class ToolBus {
   private static String parseTable = "/home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
   private static String implodePT = "/home/paulk/bin/implodePT";
   private static boolean verbose = false;
+  
+  /**
+   * Constructor with explicit PrintWriter
+   */
 
   public ToolBus(PrintWriter out) {
     TBTerm.init();
@@ -39,16 +47,28 @@ public class ToolBus {
     }
     parser = new TscriptParser(new ExternalParser(sglr, parseTable, implodePT));
   }
+  
+  /**
+   * Constructir with implicit PrintWriter
+   */
 
   public ToolBus() {
     this(new PrintWriter(System.out));
   }
+  
+  /**
+   * Constructor with explicit StringWriter
+   */
 
   public ToolBus(StringWriter out) {
     this(new PrintWriter(out));
   }
+  
+  /**
+   * Get the name of the property file to be used
+   */
 
-  public static String getPropertyFile() {
+  private static String getPropertyFile() {
     String stdName = "toolbus.props";
     String user = System.getProperty("user.name");
     File f;
@@ -66,8 +86,12 @@ public class ToolBus {
     }
     return null;
   }
+  
+  /**
+   * Load properties from property file; use defaults if absent
+   */
 
-  public static void loadProperties() throws IOException {
+  private static void loadProperties() throws IOException {
     Properties props = new Properties();
     String pname = getPropertyFile();
     if (pname != null) {
@@ -77,38 +101,74 @@ public class ToolBus {
       implodePT = props.getProperty("implodePT.path", implodePT);
     }
   }
+  
+  /**
+   * Get the ATermFactory used.
+   */
 
   public ATermFactory getFactory() {
     return factory;
   }
+  
+  /**
+   *  Get the current vector of processes.
+   */
 
   public Vector getProcesses() {
     return processes;
   }
+  
+  /**
+   * Set verbose mode.
+   */
 
   public static void setVerbose(boolean b) {
     verbose = b;
   }
+  
+  /**
+   * Get verbose mode
+   */
 
   public static boolean isVerbose() {
     return verbose;
   }
+  
+  /**
+   * Get current PrintWriter.
+   */
 
   public PrintWriter getPrintWriter() {
     return out;
   }
+  
+  /**
+   * Generate next random integer.
+   */
 
   public static int nextInt(int n) {
     return rand.nextInt(n);
   }
+  
+  /**
+   * Generate next random boolean.
+   */
 
   public static boolean nextBoolean() {
     return rand.nextBoolean();
   }
+  
+  /**
+   * Parse a Tscript from file and add definitions to this ToolBus.
+   */
 
   public void parse(String filename) throws ToolBusException {
     parser.parse(this, filename);
   }
+  
+  /**
+   * Add a process definition.
+   */
 
   public void addProcessDefinition(ProcessDefinition PD) throws ToolBusException {
     String name = PD.getName();
@@ -119,22 +179,38 @@ public class ToolBus {
     }
     procdefs.add(PD);
   }
+  
+  /**
+   * Add a process (with actuals).
+   */
 
   public ProcessInstance addProcess(String name, ATermList actuals) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, name, actuals);
     processes.add(P);
     return P;
   }
+  
+  /**
+   * Add a process (without actuals).
+   */
 
   public ProcessInstance addProcess(String name) throws ToolBusException {
     return addProcess(name, (ATermList) factory.make("[]"));
   }
+  
+  /**
+   * Add a process (as ProcessCall); previous two will become obsolete.
+   */
 
   public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, call);
     processes.add(P);
     return P;
   }
+  
+  /**
+   * Get a process definition by name.
+   */
 
   public ProcessDefinition getProcessDefinition(String name) throws ToolBusException {
     for (int i = 0; i < procdefs.size(); i++) {
@@ -144,6 +220,10 @@ public class ToolBus {
     }
     throw new ToolBusException("no definition for process " + name);
   }
+  
+  /**
+   * Shutdown of this ToolBus.
+   */
 
   public void shutdown(String msg) throws ToolBusDeathException {
     for (int i = 0; i < processes.size(); i++) {
@@ -152,6 +232,10 @@ public class ToolBus {
     }
     throw new ToolBusDeathException(msg);
   }
+  
+  /**
+   * Execute all the processes.
+   */
 
   public void execute() {
     boolean work = true;

@@ -1,0 +1,7 @@
+process P is Q
+
+process Q is R
+
+process R is print r
+
+toolbus(P)

@@ -1,0 +1,10 @@
+process P is
+  snd-msg 123
+
+process Q is
+  rec-msg 123 . print q
+
+process R is
+  rec-msg 124 . print r
+
+toolbus(P, Q, R)

@@ -20,6 +20,7 @@ exports
 %%    Atom TimeExpr 				-> ProcessExpr
    "create" "(" Invocation  "," GenVar ")" 	-> ProcessExpr {cons("Create")}
     Invocation					-> ProcessCall  {cons("ProcessCall")}
+    ProcessCall					-> ProcessExpr
 
     ProcessExpr "." ProcessExpr 		-> ProcessExpr {right, cons("Sequence")}
     ProcessExpr "+" ProcessExpr 		-> ProcessExpr {left, cons("Alternative")}

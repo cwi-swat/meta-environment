@@ -1,5 +1,5 @@
 process SIEVE(Max : int) is
-  let ThisSieve: SIEVE, N : int, Filter2 : FILTER
+  let ThisSieve: term, N : int, Filter2 : term
   in
      ThisSieve := processId .
      create(FILTER(ThisSieve, 2), Filter2?) .
@@ -9,13 +9,14 @@ process SIEVE(Max : int) is
   endlet
 
 process FILTER(NumberSource: process, P : int) is
-  let Z : int, N : int, NextPrimeFilter : FILTER
+  let Z : int, N : int, ThisFilter : term, NextPrimeFilter : term
   in
      print P .
      ( rec-msg Z? from NumberSource .
        if equal(mod(Z, P), 0) then tau
        else
-          create(FILTER(Z), NextPrimeFilter?) .
+	  ThisFilter := processId .
+          create(FILTER(ThisFilter, Z), NextPrimeFilter?) .
           ( rec-msg N? .
             if equal(mod(N, P), 0) then tau
             else snd-msg N to NextPrimeFilter fi

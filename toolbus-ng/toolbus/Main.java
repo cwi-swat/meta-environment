@@ -15,9 +15,7 @@ public class Main {
   public static void main(String[] args) {
     TBTerm.init();
     aterms = TBTerm.factory;
-    
-    //atomTest();
-    //TauTest();
+
     //SndRecTest1();
     //SndRecTest2();
     //PETest();
@@ -34,85 +32,7 @@ public class Main {
     ParseTest();
     //ToolTest();
   }
-  
-  static void atomTest(){
-    Atom d = new Delta();
-    Atom t = new Tau();
-    State set = new State();
-    
-    set.add(d);
-    set.add(t);
-    set.add(d);
-    System.out.println(set);
-  }
-  
-  static void TauTest(){
-     ProcessDefinition P = new ProcessDefinition("P", new Tau());
-      try {    
-      ToolBus T = new ToolBus();
-      T.addProcessDefinition(P);
-      T.addProcess("P");
-      T.execute();
-      }
-    catch (ToolBusException e) {
-      System.out.println(e.getMessage());
-    } 
-     
-  }
-  
-  static void SndRecTest1(){
-    ProcessDefinition P1 = new ProcessDefinition("P1", new SndMsg(aterms.make("z")));
-    ProcessDefinition P2 = new ProcessDefinition("P2", new RecMsg(aterms.make("z")));
-    try {    
-      ToolBus T = new ToolBus();
-      T.addProcessDefinition(P1);
-      T.addProcessDefinition(P2);
-    
-      T.addProcess("P1");
-      T.addProcess("P2");
-
-      T.execute();
-    }
-    catch (ToolBusException e) {
-      System.out.println(e.getMessage());
-    }
-    
-  }
-  
-   static void SndRecTest2(){
-    ProcessDefinition P1 = new ProcessDefinition("P1", 
-     new LetDefinition((ATermList) aterms.make("[var(-1,int,x)]"),
-      new Sequence(
-        new RecMsg(aterms.make("rvar(-1,int,x)")),
-        new Print((ATermList) aterms.make("[var(-1,int,x)]"))
-        )
-       )
-      );
-        
-    ProcessDefinition P2 = new ProcessDefinition("P2", 
-     new LetDefinition((ATermList) aterms.make("[var(-1,int,x)]"),
-      new Sequence(
-        new Assign(aterms.make("var(-1,int,x)"), aterms.make("27")),
-        new SndMsg(aterms.make("var(-1,int,x)"))
-        )
-       )
-      );
-    
-    try {    
-      ToolBus T = new ToolBus();
-      T.addProcessDefinition(P1);
-      T.addProcessDefinition(P2);
-    
-      T.addProcess("P1");
-      T.addProcess("P2");
-
-      T.execute();
-    }
-    catch (ToolBusException e) {
-      System.out.println(e.getMessage());
-    }
-    
-  }
+ 
   
   static void PETest(){
     ATermList al = aterms.makeList(aterms.make("a"));
@@ -630,8 +550,8 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      T.setVerbose(true);
-      T.parse("toolbus/test/Iter0.tb");
+      //T.setVerbose(true);
+      T.parse("toolbus/test/sieve.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

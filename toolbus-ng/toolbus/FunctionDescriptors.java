@@ -94,15 +94,15 @@ abstract class FunctionDescriptor {
     return true;
   }
 
-  abstract public ATerm apply(ATerm args[]);
+  abstract public ATerm apply(ATerm args[], ProcessInstance pi);
 
 }
 
 public class FunctionDescriptors {
   private static Hashtable Funs;
   private static ATermFactory factory;
-  
-  public static void init(ATermFactory fac){
+
+  public static void init(ATermFactory fac) {
     factory = fac;
     Funs = new Hashtable();
     defineFuns();
@@ -119,97 +119,98 @@ public class FunctionDescriptors {
   protected static void defineFuns() {
 
     define(new FunctionDescriptor("not", TBTerm.BoolType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return args[0] == TBTerm.True ? TBTerm.False : TBTerm.True;
       }
     });
     define(new FunctionDescriptor("and", TBTerm.BoolType, TBTerm.BoolType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return (args[0] == TBTerm.True) && (args[1] == TBTerm.True) ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("or", TBTerm.BoolType, TBTerm.BoolType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return (args[0] == TBTerm.True) || (args[1] == TBTerm.True) ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("equal", TBTerm.TermType, TBTerm.TermType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return (args[0] == args[1]) ? TBTerm.True : TBTerm.False;
       }
     });
 
     define(new FunctionDescriptor("not-equal", TBTerm.TermType, TBTerm.TermType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return (args[0] != args[1]) ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("greater", TBTerm.IntType, TBTerm.IntType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return ((ATermInt) args[0]).getInt() > ((ATermInt) args[1]).getInt() ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("greater-equal", TBTerm.IntType, TBTerm.IntType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return ((ATermInt) args[0]).getInt() >= ((ATermInt) args[1]).getInt() ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("less", TBTerm.IntType, TBTerm.IntType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return ((ATermInt) args[0]).getInt() < ((ATermInt) args[1]).getInt() ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("less-equal", TBTerm.IntType, TBTerm.IntType, TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return ((ATermInt) args[0]).getInt() > ((ATermInt) args[1]).getInt() ? TBTerm.True : TBTerm.False;
       }
     });
     define(new FunctionDescriptor("abs", TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(Math.abs(((ATermInt) args[0]).getInt()));
       }
     });
     define(new FunctionDescriptor("add", TBTerm.IntType, TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(((ATermInt) args[0]).getInt() + ((ATermInt) args[1]).getInt());
       }
     });
     define(new FunctionDescriptor("sub", TBTerm.IntType, TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(((ATermInt) args[0]).getInt() - ((ATermInt) args[1]).getInt());
       }
     });
 
     define(new FunctionDescriptor("mul", TBTerm.IntType, TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(((ATermInt) args[0]).getInt() * ((ATermInt) args[1]).getInt());
       }
     });
     define(new FunctionDescriptor("div", TBTerm.IntType, TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(((ATermInt) args[0]).getInt() / ((ATermInt) args[1]).getInt());
       }
     });
 
     define(new FunctionDescriptor("mod", TBTerm.IntType, TBTerm.IntType, TBTerm.IntType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return factory.makeInt(((ATermInt) args[0]).getInt() % ((ATermInt) args[1]).getInt());
       }
     });
 
-    //    define(new FunctionDescriptor("processId", TermType){
-    //      public ATerm apply(ATerm args[]) {
-    //        return process.getProcessId();
-    //      }
-    //    });
+    define(new FunctionDescriptor("processId", TBTerm.TermType) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
+        return pi.getProcessId();
+      }
+    });
+
     define(new FunctionDescriptor("true", TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return TBTerm.True;
       }
     });
 
     define(new FunctionDescriptor("false", TBTerm.BoolType) {
-      public ATerm apply(ATerm args[]) {
+      public ATerm apply(ATerm args[], ProcessInstance pi) {
         return TBTerm.False;
       }
     });
@@ -236,7 +237,7 @@ public class FunctionDescriptors {
       fd.checkRunTime(args); // redundant after typecheck!
     } catch (ToolBusException e) {
     }
-    return fd.apply(args);
+    return fd.apply(args, process);
   }
 
   public static ATerm eval(ATerm t, ProcessInstance process) throws ToolBusException {
@@ -316,7 +317,5 @@ public class FunctionDescriptors {
     }
     throw new ToolBusInternalError("illegal ATerm in checkType: " + t);
   }
-
-
 
 }

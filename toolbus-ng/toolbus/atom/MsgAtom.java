@@ -76,8 +76,7 @@ abstract class MsgAtom extends Atom {
       matchPattern =
         factory.makeList(getMsg(), factory.makeList(processInstance.getProcessId(), factory.makeList(getQual())));
     }
-    
-    System.err.println(matchPattern);
+   // System.err.println(matchPattern);
   }
 
   public boolean execute() throws ToolBusException {

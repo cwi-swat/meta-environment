@@ -58,7 +58,7 @@ public class ProcessDefinition {
     }
     for (int i = 0; i < actuals.getLength(); i++) {
       ATerm formal = (ATerm) formals.getChildAt(i);
-      ATerm actual = (ATerm) formals.getChildAt(i);
+      ATerm actual = (ATerm) actuals.getChildAt(i);
       if (TBTerm.isResVar(formal) && !TBTerm.isResVar(actual)) {
         throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
       }

@@ -1,0 +1,7 @@
+process P(N : int, M : int) is Q(N, M?) . print N . print M
+
+process Q(N : int, M : int?) is N := mul(N,2) . M := mul(M, 2) . R(N, M?) . print N . print M
+
+process R(N : int, M : int?) is N := mul(N,3) . M := mul(M,3) . print N . print M
+
+toolbus(P(5, 100))
