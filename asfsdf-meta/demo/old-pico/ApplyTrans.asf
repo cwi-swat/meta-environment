@@ -1,0 +1,60 @@
+equations
+
+  [1] apply(Bool1, Bool1 => Bool2) = <Bool2, no-errors>
+
+  [2] match(Bool1, Bool2, []) = BEnv,
+      BEnv != []
+      ==========
+      apply(Bool1, Bool2 => Bool3) =
+        <replace(Bool3, BEnv), no-errors>
+
+  [default-3] apply(Bool1, Bool2 => Bool3) = 
+                <Bool1,
+                 rule Bool2 => Bool3 could not be applied>
+
+  [4] match(Bool, BoolVar, [BEntry*]) =
+        [(BoolVar,Bool), BEntry*] 
+
+  [5] match(Bool1, Bool3, BEnv1) = BEnv2,
+      BEnv2 != [],
+      match(Bool2, Bool4, BEnv2) = BEnv3,
+      BEnv3 != []
+      ===========
+      match(Bool1 & Bool2, Bool3 & Bool4, BEnv1) =
+        BEnv3 
+
+  [6] match(Bool1, Bool3, BEnv1) = BEnv2,
+      BEnv2 != [],
+      match(Bool2, Bool4, BEnv2) = BEnv3,
+      BEnv3 != []
+      ===========
+      match(Bool1 | Bool2, Bool3 | Bool4, BEnv1) =
+        BEnv3 
+
+  [7] match(Bool1, Bool2, BEnv1) = BEnv2,
+      BEnv2 != []
+      ===========
+      match(not(Bool1), not(Bool2), BEnv1) =
+        BEnv2
+
+  [default-8] match(Bool1, Bool2, BEnv) = []
+
+  [9] replace(BoolVar, 
+              [BEntry*1, (BoolVar,Bool), BEntry*2]) =
+        Bool
+
+  [10] replace(Bool1, BEnv) = Bool3,
+       replace(Bool2, BEnv) = Bool4
+       ============================
+       replace(Bool1 & Bool2, BEnv) = Bool3 & Bool4
+
+  [11] replace(Bool1, BEnv) = Bool3,
+       replace(Bool2, BEnv) = Bool4
+       ============================
+       replace(Bool1 | Bool2, BEnv) = Bool3 | Bool4
+
+  [12] replace(Bool1, BEnv) = Bool2
+       ============================
+       replace(not(Bool1), BEnv) = not(Bool2)
+
+  [default-13] replace(Bool, BEnv) = Bool

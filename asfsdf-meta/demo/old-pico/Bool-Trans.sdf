@@ -1,0 +1,16 @@
+module Bool-Trans
+
+imports Booleans
+
+exports
+  sorts BOOL-VAR 
+        TransRule TransRules
+  lexical syntax
+    "B"[0-9]* -> BOOL-VAR
+  context-free syntax
+    BOOL-VAR       -> BOOL
+    BOOL "=>" BOOL -> TransRule
+    TransRule*     -> TransRules
+
+  variables
+    "BoolVar"[0-9]* -> BOOL-VAR
