@@ -18,6 +18,7 @@
 #include <term-list.h>
 #include <abbrevs.h>
 #include <sys/times.h>
+#include <stdlib.h>
 #include <limits.h>
 #include "compiler.tif.h"
 #include "support/support.h"
@@ -699,7 +700,17 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
   char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles1/";
 */
 
+  /* Temporary solution to obtain path where generated C files should be
+   * stored. We now use the environment variable "COMPILER_OUTPUT" to obtain
+   * the directory. When this variable is not defined we use the original
+   * value (so the compiler does not depend on this change).
+   *
+   * Merijn.
+   */
+  
   char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles3/";
+  if( getenv( "COMPILER_OUTPUT" ) != NULL )
+     path = strdup( getenv( "COMPILER_OUTPUT" ) );
 
   TinitArena(NULL, &local);
 
@@ -712,15 +723,18 @@ Tprintf(stderr,"compile_module entered\n");
       newmods = t_list_next(newmods);
     } while (strncmp(text,"AUX-",4) != 0);
     if(strncmp(text,"AUX-",4) == 0) {
-      len = strlen(path) + strlen(text) + strlen(".asfix");
+      len = strlen(path) + 1 + strlen(text) + strlen(".asfix");
       fname = malloc(len + 1);
       if(!fname) {
         fprintf(stderr,"Not enough memory\n");
         exit(1);
       }
-      fname = strcpy(fname,path);
+
+      sprintf( fname, "%s/%s.asfix", path, text );
+/*      fname = strcpy(fname,path);
       fname = strcat(fname,text);
       fname = strcat(fname,".asfix");
+*/
 /* Check whether it is necessary to generate new C code. */
       input = fopen(fname,"r");
       if(input) {
@@ -765,15 +779,17 @@ Tprintf(stderr,"Reducing finished.\n");
         cmod = toasfix(&local, reduct, aname, idname);
 Tprintf(stderr,"toasfix finished.\n");
         free(fname);
-        len = strlen(path) + strlen(text) + strlen(".c");
+        len = strlen(path) + 1 + strlen(text) + strlen(".c");
         fname = malloc(len + 1);
         if(!fname) {
           fprintf(stderr,"Not enough memory\n");
           exit(1);
         }
-        fname = strcpy(fname,path);
+        sprintf( fname, "%s/%s.c", path, text );
+/*        fname = strcpy(fname,path);
         fname = strcat(fname,text);
         fname = strcat(fname,".c");
+*/
         output = fopen(fname,"w");
         free(fname);
         if(!output) 
