@@ -1,12 +1,29 @@
 <HTML>
 <HEAD>
-<TITLE>Scenarios for Parsing</TITLE>
+<TITLE>Scenarios</TITLE>
 </HEAD>
 <BODY TEXT="#000000" BGCOLOR="#FFFFFF">
 
-<H1>Scenario for Editing</H1>
+<H1>Scenarios</H1>
+Here we describe a number of scenarios on which the design and therefore
+the implementation of the new Meta-environment is based. Each scenario
+describes a list of actions that is performed to complete a certain
+task. These actions are informal descriptions of a subtask, which 
+in turn can be scenarios themselves.
 
-<H1>Scenario for Parsing Terms</H1>
+The sole purpose of these scenarios is to develop an understanding for
+the interaction between the different components, and their responsibilities.
+
+Sofar, we have developed scenarios for the following tasks:
+<UL>
+<LI> <A HREF="#ParsingTerms">Scenario for Parsing Terms</A>
+<LI> <A HREF="#ParserGenerator">Scenario for Generating Parse Tables</A>
+<LI> <A HREF="#GetSyntaxRules">Scenarios for Retrieving the Syntax Rules</A>
+</UL>
+
+<A NAME="ParsingTerms">
+<H2>Scenario for Parsing Terms</H2>
+</A>
 
 Given that a user wants to parse a unparsed term over a certain module.
 We assume that at least this module and all modules imported by this
@@ -34,8 +51,8 @@ this is presented to the user. If the parse result contains
 a parse tree the editor switches to 'structure editing mode'.
 </OL>
 
-<A NAME="#ParserGenerator">
-<H1>Scenario for Generating Parse Tables</H1>
+<A NAME="ParserGenerator">
+<H2>Scenario for Generating Parse Tables</H2>
 </A>
 
 Given that the parser wants a parse table to be generated for a certain module.
@@ -52,7 +69,7 @@ the module for which the parse-table has to be build.
 the parser generator generates a get-syntax request, for obtaining the
 all relevant syntax for this module and its transitive closure.
 The module database must provide the requested syntax definitions,
-see <A href="#ModuleDataBase">scenario for retrieving the syntax rules</A>.
+see <A href="#GetSyntaxRules">scenario for retrieving the syntax rules</A>.
 <LI> Given the list of syntax rules (consisting of
 lexical syntax, context-free syntax, and priority rules) parser generator can
 generate the requested parse table. A parse table ready messge will be 
@@ -65,9 +82,26 @@ The generated parse table must then contain information which transitions
 are valid for each specific module. This will reduce the number of tables
 considerably.
 
-<A NAME="#ModuleDataBase">
-<H1>Scenarios for the Module Database</H1>
+<A NAME="GetSyntaxRules">
+<H2>Scenarios for Retrieving the Syntax Rules</H2>
 </A>
+
+Given that some component wants to retrieve the syntax definitions
+based on a given top module. We assume that at least this module and
+all modules imported by this module are in the module database.
+<OL>
+<LI> The module database intercepts a request for the complete set of
+     syntax definitions for a given top module. The request contains
+     the name of the top module.
+<LI> The module database determines the transitive closure of the
+     set of modules imported by the top module.
+<LI> The module database retrieves all public syntax sections 
+     of all modules in this set, together with the hidden syntax sections
+     in the top module and combines them in one large set of syntax 
+     definitions.
+<LI> The resulting set of definitions is returned to the component that
+     originally requested the syntax definitions.
+</OL>
 
 </BODY>
 </HTML>
