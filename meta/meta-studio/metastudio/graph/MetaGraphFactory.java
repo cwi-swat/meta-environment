@@ -90,165 +90,165 @@ public class MetaGraphFactory extends PureFactory
     Graph.initialize(this);
 
     Graph_Default.initializePattern();
-    funGraph_Default = makeAFun("default", 2, false);
+    funGraph_Default = makeAFun("_Graph_default", 2, false);
     protoGraph_Default = new Graph_Default();
 
     NodeList.initialize(this);
 
     NodeList_Empty.initializePattern();
-    funNodeList_Empty = makeAFun("empty", 0, false);
+    funNodeList_Empty = makeAFun("_NodeList_empty", 0, false);
     protoNodeList_Empty = new NodeList_Empty();
 
     NodeList_Multi.initializePattern();
-    funNodeList_Multi = makeAFun("multi", 2, false);
+    funNodeList_Multi = makeAFun("_NodeList_multi", 2, false);
     protoNodeList_Multi = new NodeList_Multi();
 
     Node.initialize(this);
 
     Node_Default.initializePattern();
-    funNode_Default = makeAFun("default", 2, false);
+    funNode_Default = makeAFun("_Node_default", 2, false);
     protoNode_Default = new Node_Default();
 
     NodeId.initialize(this);
 
     NodeId_Default.initializePattern();
-    funNodeId_Default = makeAFun("default", 1, false);
+    funNodeId_Default = makeAFun("_NodeId_default", 1, false);
     protoNodeId_Default = new NodeId_Default();
 
     AttributeList.initialize(this);
 
     AttributeList_Empty.initializePattern();
-    funAttributeList_Empty = makeAFun("empty", 0, false);
+    funAttributeList_Empty = makeAFun("_AttributeList_empty", 0, false);
     protoAttributeList_Empty = new AttributeList_Empty();
 
     AttributeList_Multi.initializePattern();
-    funAttributeList_Multi = makeAFun("multi", 2, false);
+    funAttributeList_Multi = makeAFun("_AttributeList_multi", 2, false);
     protoAttributeList_Multi = new AttributeList_Multi();
 
     Attribute.initialize(this);
 
     Attribute_Label.initializePattern();
-    funAttribute_Label = makeAFun("label", 1, false);
+    funAttribute_Label = makeAFun("_Attribute_label", 1, false);
     protoAttribute_Label = new Attribute_Label();
 
     Attribute_Shape.initializePattern();
-    funAttribute_Shape = makeAFun("shape", 1, false);
+    funAttribute_Shape = makeAFun("_Attribute_shape", 1, false);
     protoAttribute_Shape = new Attribute_Shape();
 
     Attribute_Location.initializePattern();
-    funAttribute_Location = makeAFun("location", 2, false);
+    funAttribute_Location = makeAFun("_Attribute_location", 2, false);
     protoAttribute_Location = new Attribute_Location();
 
     Attribute_Size.initializePattern();
-    funAttribute_Size = makeAFun("size", 2, false);
+    funAttribute_Size = makeAFun("_Attribute_size", 2, false);
     protoAttribute_Size = new Attribute_Size();
 
     Attribute_CurvePoints.initializePattern();
-    funAttribute_CurvePoints = makeAFun("curve-points", 1, false);
+    funAttribute_CurvePoints = makeAFun("_Attribute_curve-points", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints();
 
     Attribute_Direction.initializePattern();
-    funAttribute_Direction = makeAFun("direction", 1, false);
+    funAttribute_Direction = makeAFun("_Attribute_direction", 1, false);
     protoAttribute_Direction = new Attribute_Direction();
 
     Shape.initialize(this);
 
     Shape_Plaintext.initializePattern();
-    funShape_Plaintext = makeAFun("plaintext", 0, false);
+    funShape_Plaintext = makeAFun("_Shape_plaintext", 0, false);
     protoShape_Plaintext = new Shape_Plaintext();
 
     Shape_Ellipse.initializePattern();
-    funShape_Ellipse = makeAFun("ellipse", 0, false);
+    funShape_Ellipse = makeAFun("_Shape_ellipse", 0, false);
     protoShape_Ellipse = new Shape_Ellipse();
 
     Shape_Circle.initializePattern();
-    funShape_Circle = makeAFun("circle", 0, false);
+    funShape_Circle = makeAFun("_Shape_circle", 0, false);
     protoShape_Circle = new Shape_Circle();
 
     Shape_Egg.initializePattern();
-    funShape_Egg = makeAFun("egg", 0, false);
+    funShape_Egg = makeAFun("_Shape_egg", 0, false);
     protoShape_Egg = new Shape_Egg();
 
     Shape_Triangle.initializePattern();
-    funShape_Triangle = makeAFun("triangle", 0, false);
+    funShape_Triangle = makeAFun("_Shape_triangle", 0, false);
     protoShape_Triangle = new Shape_Triangle();
 
     Shape_Box.initializePattern();
-    funShape_Box = makeAFun("box", 0, false);
+    funShape_Box = makeAFun("_Shape_box", 0, false);
     protoShape_Box = new Shape_Box();
 
     Shape_Diamond.initializePattern();
-    funShape_Diamond = makeAFun("diamond", 0, false);
+    funShape_Diamond = makeAFun("_Shape_diamond", 0, false);
     protoShape_Diamond = new Shape_Diamond();
 
     Shape_Trapezium.initializePattern();
-    funShape_Trapezium = makeAFun("trapezium", 0, false);
+    funShape_Trapezium = makeAFun("_Shape_trapezium", 0, false);
     protoShape_Trapezium = new Shape_Trapezium();
 
     Shape_Parallelogram.initializePattern();
-    funShape_Parallelogram = makeAFun("parallelogram", 0, false);
+    funShape_Parallelogram = makeAFun("_Shape_parallelogram", 0, false);
     protoShape_Parallelogram = new Shape_Parallelogram();
 
     Shape_House.initializePattern();
-    funShape_House = makeAFun("house", 0, false);
+    funShape_House = makeAFun("_Shape_house", 0, false);
     protoShape_House = new Shape_House();
 
     Shape_Hexagon.initializePattern();
-    funShape_Hexagon = makeAFun("hexagon", 0, false);
+    funShape_Hexagon = makeAFun("_Shape_hexagon", 0, false);
     protoShape_Hexagon = new Shape_Hexagon();
 
     Shape_Octagon.initializePattern();
-    funShape_Octagon = makeAFun("octagon", 0, false);
+    funShape_Octagon = makeAFun("_Shape_octagon", 0, false);
     protoShape_Octagon = new Shape_Octagon();
 
     Direction.initialize(this);
 
     Direction_Forward.initializePattern();
-    funDirection_Forward = makeAFun("forward", 0, false);
+    funDirection_Forward = makeAFun("_Direction_forward", 0, false);
     protoDirection_Forward = new Direction_Forward();
 
     Direction_Back.initializePattern();
-    funDirection_Back = makeAFun("back", 0, false);
+    funDirection_Back = makeAFun("_Direction_back", 0, false);
     protoDirection_Back = new Direction_Back();
 
     Direction_Both.initializePattern();
-    funDirection_Both = makeAFun("both", 0, false);
+    funDirection_Both = makeAFun("_Direction_both", 0, false);
     protoDirection_Both = new Direction_Both();
 
     Direction_None.initializePattern();
-    funDirection_None = makeAFun("none", 0, false);
+    funDirection_None = makeAFun("_Direction_none", 0, false);
     protoDirection_None = new Direction_None();
 
     EdgeList.initialize(this);
 
     EdgeList_Empty.initializePattern();
-    funEdgeList_Empty = makeAFun("empty", 0, false);
+    funEdgeList_Empty = makeAFun("_EdgeList_empty", 0, false);
     protoEdgeList_Empty = new EdgeList_Empty();
 
     EdgeList_Multi.initializePattern();
-    funEdgeList_Multi = makeAFun("multi", 2, false);
+    funEdgeList_Multi = makeAFun("_EdgeList_multi", 2, false);
     protoEdgeList_Multi = new EdgeList_Multi();
 
     Edge.initialize(this);
 
     Edge_Default.initializePattern();
-    funEdge_Default = makeAFun("default", 3, false);
+    funEdge_Default = makeAFun("_Edge_default", 3, false);
     protoEdge_Default = new Edge_Default();
 
     Polygon.initialize(this);
 
     Polygon_Empty.initializePattern();
-    funPolygon_Empty = makeAFun("empty", 0, false);
+    funPolygon_Empty = makeAFun("_Polygon_empty", 0, false);
     protoPolygon_Empty = new Polygon_Empty();
 
     Polygon_Multi.initializePattern();
-    funPolygon_Multi = makeAFun("multi", 2, false);
+    funPolygon_Multi = makeAFun("_Polygon_multi", 2, false);
     protoPolygon_Multi = new Polygon_Multi();
 
     Point.initialize(this);
 
     Point_Default.initializePattern();
-    funPoint_Default = makeAFun("default", 2, false);
+    funPoint_Default = makeAFun("_Point_default", 2, false);
     protoPoint_Default = new Point_Default();
 
   }
