@@ -90,6 +90,7 @@ in
   . create(EditorCreator, Pid?)
   . create(File-creator, Pid?)
   . create(GetEquations, Pid?)
+  . create(GetSpecification, Pid?)
   . create(GetParseTable, Pid?)
   . create(Meta-Interface, Pid?)
   . create(Module-Utilities, Pid?)
