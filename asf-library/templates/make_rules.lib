@@ -8,13 +8,11 @@ include ${top_srcdir}/templates/make_rules
 PACKAGE_SRC=
 PACKAGE_OBJECTS=$(PACKAGE_SRC:%.c=%.o)
 
-# Determine installation directory
-libpackagedir=${pkgdatadir}$(subst lib,,$(subdir))
-
 # Collect built-in names from SDF2 source files
-BUILTINS=$(shell grep "built-in" *.sdf | \
-                 sed -e 's@.*built-in(\"\(.*\)\").*@\1@g' | \
-                 sed -e 's@-@_@g')
+PACKAGE_BUILTINS=$(shell grep "built-in" *.sdf | \
+                         sed -e 's@.*built-in(\"\(.*\)\").*@\1@g' | \
+                         sed -e 's@-@_@g')
+
 
 # What gets installed, distributed, cleaned
 MODULES=$(wildcard *.asf *.sdf) 
@@ -29,26 +27,22 @@ link_test_LDADD=-L${PT_SUPPORT}/lib -lmept \
                 -L${ATERM}/lib -lATerm
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
-# create the stub and at the same time register the built-ins
-link-test.c: remove-old $(PACKAGE_SRC) $(MODULES)
-	echo "${subdir}:${BUILTINS}" >> $(top_builddir)/src/builtins.lst
-	for o in ${PACKAGE_OBJECTS}; do \
-          echo "${subdir}:$${o}" >> $(top_builddir)/src/objects.lst ; \
-        done
-	${top_srcdir}/utils/gen-link-test.sh "${BUILTINS}" > $@
+REGISTER=${top_srcdir}/utils/register.sh -r
+GENLINKTEST=${top_srcdir}/utils/gen-link-test.sh
+BUILTINS_REGISTRY=${top_builddir}/src/builtins.lst
+OBJECTS_REGISTRY=${top_builddir}/src/objects.lst
 
-remove-old:
-	touch $(top_builddir)/src/builtins.lst
-	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/builtins.lst > \
-           $(top_builddir)/src/builtins.lst.tmp 
-	mv $(top_builddir)/src/builtins.lst.tmp $(top_builddir)/src/builtins.lst
-	touch $(top_builddir)/src/objects.lst
-	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/objects.lst > \
-           $(top_builddir)/src/objects.lst.tmp
-	mv $(top_builddir)/src/objects.lst.tmp $(top_builddir)/src/objects.lst
+# create the stub and at the same time register the built-ins
+link-test.c: $(PACKAGE_SRC) $(MODULES)
+	${REGISTER} ${BUILTINS_REGISTRY} ${subdir} "${PACKAGE_BUILTINS}"
+	${REGISTER} ${OBJECTS_REGISTRY} ${subdir} "${PACKAGE_OBJECTS}"
+	${GENLINKTEST} "${BUILTINS}" > $@
 
 # Installation hooks take care of modifying access bits and installing
 # the files in the right order (time stamps are important here)
+
+# Determine installation directory
+libpackagedir=${pkgdatadir}$(subst lib,,$(subdir))
 
 INSTALL_READONLY = ${INSTALL} -m 0444
 
