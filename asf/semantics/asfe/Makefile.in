@@ -71,7 +71,7 @@ CLEANFILES	= evaluator evaluator.tif.c
 DISTCLEANFILES	=
 
 # all target must be defined:
-all: $(BINFILES)
+all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 MODULES	= evaluator.o preparation.o
 
@@ -87,7 +87,7 @@ evaluator: $(MODULES)
 ##########################################################
 
 # install target (install binaries, include files, and libraries)
-install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+install: all
 	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)

@@ -44,7 +44,6 @@ LIBS	= -L$(ATERM)/lib   \
 AR	= ar
 
 BASE	= ..
-PPC	= $(BASE)/clib/ppc
 
 FILES	:= $(notdir $(ASFIX))
 NAMES   := $(patsubst %.asfix,%,$(FILES))
@@ -75,4 +74,4 @@ init.c:
 clean: 
 	rm -f *.o *~ $(CLEANFILES)
 
-install:
+install: all
