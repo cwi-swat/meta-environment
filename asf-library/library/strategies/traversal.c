@@ -29,6 +29,10 @@ static void initPatterns(void)
     appl_pattern = ATparse(appl_pattern_str);
     fail_pattern = ATparse(fail_pattern_str);
     fail_list_pattern = ATparse(fail_list_pattern_str);
+
+    ATprotect(&appl_pattern);
+    ATprotect(&fail_pattern);
+    ATprotect(&fail_list_pattern);
   }
 }
 
@@ -44,7 +48,6 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
   initPatterns();
   strategy = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
   term = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
-ATwarning("all: %s\n", PT_yieldTree(term));
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -59,7 +62,7 @@ ATwarning("all: %s\n", PT_yieldTree(term));
 	kids = PT_getArgsTail(kids)) {
       PT_Tree kid = PT_getArgsHead(kids);
 
-      if (PT_isTreeLayout(kid)) {
+      if (PT_isTreeLayout(kid) || PT_isTreeLit(kid)) {
 	newkids = PT_makeArgsList(kid, newkids);
       }
       else if (PT_isTreeAppl(kid)) {
@@ -67,12 +70,20 @@ ATwarning("all: %s\n", PT_yieldTree(term));
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
-	PT_Tree  newkid = rewrite(kidappl);
+	PT_Tree newkid;
+
+	if (PT_isProductionList(kidprod)) {
+	  kidappl = PT_makeTreeAppl(kidprod,PT_makeArgsList(kidappl,
+							    PT_makeArgsEmpty())
+				   );
+	}
+
+	newkid = rewrite(kidappl);
+
 
 	if (PT_isEqualTree(newkid, kidappl)) {
-	  ATwarning("Equations incomplete - please import strategies/Operators"
-		    " for sort %s\n", PT_yieldSymbol(kidtype));
-	  ATwarning("kidappl: %t\n", kidappl);
+	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
+		    PT_yieldSymbol(kidtype));
 	  return term;
 	}
 	else if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
@@ -127,12 +138,19 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
+	PT_Tree newkid;
 
-	PT_Tree newkid = rewrite(kidappl);
+	if (PT_isProductionList(kidprod)) {
+	  kidappl = PT_makeTreeAppl(kidprod,PT_makeArgsList(kidappl,
+							    PT_makeArgsEmpty())
+				   );
+	}
+
+  	  newkid = rewrite(kidappl);
 
 	if (PT_isEqualTree(newkid, kidappl)) {
-	  ATwarning("Equations incomplete - please import strategies/Operators"
-		    " for sort %s\n", PT_yieldSymbol(kidtype));
+	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
+		    PT_yieldSymbol(kidtype));
 	  return term;
 	}
 	if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
@@ -187,12 +205,19 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
+	PT_Tree newkid;
 
-	PT_Tree newkid = rewrite(kidappl);
+	if (PT_isProductionList(kidprod)) {
+	  kidappl = PT_makeTreeAppl(kidprod,PT_makeArgsList(kidappl,
+							    PT_makeArgsEmpty())
+				   );
+	}
+
+	newkid = rewrite(kidappl);
 
 	if (PT_isEqualTree(newkid, kidappl)) {
-	  ATwarning("Equations incomplete - please import strategies/Operators"
-		    " for sort %s\n", PT_yieldSymbol(kidtype));
+	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
+		    PT_yieldSymbol(kidtype));
 	  return term;
 	}
 	if (!ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
