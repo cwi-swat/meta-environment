@@ -3,6 +3,7 @@ module asdf/asdf2sdf
 imports 
 	
   asdf/asdf
+  asdf/an-supplement
   languages/sdf2/syntax/Sdf2 
   basic/Booleans
 
@@ -62,7 +63,7 @@ exports
     "$extract-req-imports"(Sort, Import*)        -> Import* 
 					{traversal(top-down,accu,break)}
 
-    AS-Eqs-Tag AS-Eqs-Lhs "=" AS-Eqs-Rhs		-> ASFequation
+    AS-Eqs-Tag AS-Eqs-Lhs "=" Action	-> ASFequation
 
     "equations" ASFequation+		-> ASFEquations
 					-> ASFEquations
@@ -130,3 +131,4 @@ exports
     "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
     "AS-Eqs-Rhs"[0-9]?	   -> AS-Eqs-Rhs
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
+    "A"[0-9]?		   -> Action

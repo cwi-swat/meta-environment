@@ -129,7 +129,7 @@ Grammar2
   [tsm-2] $transform-semantics(Literal : Sort1 -> Sort2) = context-free syntax
   Literal Sort1 -> Sort2
 
-  [tsm-3] $transform-semantics(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs) = 
+  [tsm-3] $transform-semantics(AS-Eqs-Tag AS-Eqs-Lhs = A) = 
 context-free syntax
 
   [tsm-1] eqlist(ASFequation*1) := $get-equations(AS-Semantics),
@@ -140,7 +140,7 @@ ASFequation*2)
 
   [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Symbol1 -> Symbol2 := AS-Semantics
 
-  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs)
+  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = A)
 
 
   [tp-1] Sort1 == sort("D""a""t""u""m"), 

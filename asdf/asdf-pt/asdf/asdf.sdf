@@ -75,7 +75,8 @@ exports
     
     AS-FunctionDef | AS-FunctionSig 	   -> AS-Function {cons("function")}
     Literal ":" Sort "->" Sort 		   -> AS-FunctionSig {cons("funsig")}
-    AS-Eqs-Tag AS-Eqs-Lhs "=" AS-Eqs-Rhs   -> AS-FunctionDef {cons("fundef")}
+    AS-Eqs-Tag AS-Eqs-Lhs "=" Action	   -> AS-FunctionDef {cons("fundef")}
+
 
   context-free syntax
 
