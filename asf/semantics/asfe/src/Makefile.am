@@ -20,6 +20,7 @@
 #
 # $Id$
 
+CFLAGS+=-pg -DNDEBUG
 
 include $(top_srcdir)/make_rules
 
@@ -41,8 +42,8 @@ libeval_a_LIBADD  = evaluator.tif.o
 evaluator_SOURCES = main.c
 evaluator_LDADD   = libeval.a \
                    -L$(ASCLIB) -lasc-support \
-                   -L$(ASFIXLIB) -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                   -L$(ASFIXLIB) -lAsFix-prof \
+                   -L$(ATERMLIB) -lATB -lATerm-prof $(SOCKLIBS)
 
 INCLUDES          = ${TIDEINC} -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 

@@ -39,35 +39,6 @@ extern ATerm pattern_asfix_attrs;
 extern ATerm pattern_asfix_prod;
 extern ATbool run_verbose;
 
-/* is_traversal_prod
- *
- * Predicate to determine if a production has the "traverse" attribute
- */
-ATbool is_traversal_prod(ATerm prod) 
-{
-	ATerm attrs;
-
-	if(ATmatchTerm(prod,pattern_asfix_prod,
-						 NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,&attrs)) {
-
-		if(ATmatchTerm(attrs,pattern_asfix_noattrs)) {
-			return ATfalse;
-		} else {
-			ATermList list;
-		
-			if(ATmatchTerm(attrs,pattern_asfix_attrs,NULL,NULL,&list,NULL,NULL)) {
-				for(;!ATisEmpty(list);list = ATgetNext(list)) {
-					if(ATmatch(ATgetFirst(list),"l(\"traverse\")")) {
-						return ATtrue;
-					}
-				}
-			}
-		}
-	}
-
-	return ATfalse;
-}
-
 /* select_traversed_arg
  *
  * input: a traversal appl
@@ -78,73 +49,38 @@ ATbool is_traversal_prod(ATerm prod)
  */
 ATerm select_traversed_arg(ATermList args)
 {
-	int traversed_pos = keep_layout ? 4 : 2;
-	
-	return ATelementAt(args, traversed_pos);
+	return ATelementAt(args, TRAVERSED_POS);
 }
 
 /* create_traversal_pattern
  *
  * input: an asfix appl.
- * output: an asfix appl with placeholders in both the prod and
- *         the args. 
+ * output: a Traversal struct, containing the original traversal term
+ *         and an indication if it is a transformer or an analyzer.
  * 
- * note: the number and location of the placeholders depends on the
- *       type of traversal. The type of traversals is computed from
- *       the form of the production. 
  */
-ATerm create_traversal_pattern(ATerm term)
+Traversal create_traversal_pattern(ATerm term)
 {
 	ATerm prod;
+	ATermList args;
 	ATermList symbols;
 	ATerm symbol;
-	ATerm name;
 	ATerm traversed;
-	ATerm tail;
-	ATerm ws = ATparse("w(\"\")");
-	ATerm arrow;
-	ATerm id;
-	ATerm attrs;
-	ATerm placeholder = ATparse("<term>");
-	ATermList args;
-	int traversed_pos = keep_layout ? 4 : 2;
-	
-	if(run_verbose) {
-		ATwarning("Creating traversal pattern: ");
-	}
+	Traversal traversal;
 
 	prod = asfix_get_appl_prod(term);
 	args = asfix_get_appl_args(term);
 
-	if(ATmatchTerm(prod,pattern_asfix_prod,&id,NULL,&symbols,NULL,&arrow,NULL,
-								 &symbol,NULL,&attrs)) {
-
-		if(ATmatch((ATerm) symbols,"[<term>,<term>,ql(\"(\"),<term>,<term>,<list>]",
-							 &name,NULL,NULL,&traversed,&tail)) {
-
-			if(symbol == traversed) { /* then it is a sort preserving traversal */
-				if(run_verbose) {
-					ATwarning("transform pattern.\n");
-				}
-				symbols = ATreplace(symbols,placeholder,4);
-				prod = ATmakeTerm(pattern_asfix_prod,id,ws,symbols,ws,arrow,ws,
-															placeholder,ws,attrs);
-				term = ATmake("traversal(<term>)",AFmakeAppl(prod,args));
-
-			} else { /* otherwise we have an analyzer */
-				if(run_verbose) {
-					ATwarning("analyze pattern.\n");
-				}
-				symbols = ATreplace(symbols,placeholder,4);
-				prod = ATmakeTerm(pattern_asfix_prod,id,ws,symbols,ws,arrow,ws,
-															symbol,ws,attrs);
-				term = ATmake("analyzer(<term>)",AFmakeAppl(prod,args));
+	symbols = (ATermList) AFgetProdSymbols(prod);
+	symbol = AFgetProdSymbol(prod);
+	traversed = ATelementAt(symbols, TRAVERSED_SYMBOL_POS);
 	
-			}
-		}
-	}
+	traversal.type = ATisEqual(traversed, symbol) ? TRANSFORMER : ANALYZER;
+	traversal.prod = prod;
+	traversal.symbols = symbols;
+	traversal.args = args;
 
-	return term;
+	return traversal;
 }
 
 /* make_traversal_appl
@@ -153,63 +89,38 @@ ATerm create_traversal_pattern(ATerm term)
  * output: the traversal pattern instantiated by the symbol and the term 
  *         of the first argument.
  */
-ATerm make_traversal_appl(ATerm appl, ATerm traversal)
+ATerm make_traversal_appl(ATerm appl, Traversal traversal)
 {
   ATerm prod;
 	ATermList args;
 	ATerm sort; 
 	ATerm newappl;
-	ATerm travprod;
-  static ATermTable SaveAppls = NULL;
-	ATerm appltrav = (ATerm) ATmakeAppl2(index_afun, appl, traversal);
-	AFun traversal_type;
-	
-	if(SaveAppls == NULL) {
-		SaveAppls = ATtableCreate(1024, 75);
-	}
-	
-	if(run_verbose) ATwarning("Generating traversal appl.\n");
+	ATermList symbols;
 
-	if((newappl = ATtableGet(SaveAppls, appltrav))) {
-		return newappl;
+	sort = AFgetProdSymbol(asfix_get_appl_prod(appl)); 
+	symbols = ATreplace(traversal.symbols, sort, TRAVERSED_SYMBOL_POS);
+	prod = AFsetProdSymbols(traversal.prod, symbols);
+	args = ATreplace(traversal.args, appl, TRAVERSED_POS);
+
+	if(traversal.type == TRANSFORMER) {
+		prod = AFsetProdSymbol(prod, sort);	
 	}
 
-	travprod = ATgetArgument(traversal, 0);
-	prod = asfix_get_appl_prod(travprod);
-	sort = AFgetProdSort(asfix_get_appl_prod(appl)); 
-	prod = ATmakeTerm(prod, sort, sort);
-	
-	args = asfix_get_appl_args(travprod);
-	args = ATreplace(args, appl, keep_layout ? 4 : 2);
-	
 	newappl = AFmakeAppl(prod,args);
-	ATtablePut(SaveAppls, appltrav, newappl);
-
+	
 	return newappl;
 }
 
-/* change_traversal_appl
+/* update_accumulator
  *
  * Changes the second argument of the traversal pattern. This is used
  * as a value environment for traversals.
  */
-ATerm change_traversal_appl(ATerm traversal, ATerm newarg)
+Traversal update_accumulator(Traversal traversal, ATerm newarg)
 {
-	ATermList args;
-	ATerm appl;
-	ATerm tuple;
+	assert(traversal.type == ANALYZER);
 
-	if(ATmatch(traversal,"analyzer(<term>)", &appl)) {
-		args = asfix_get_appl_args(appl);
-		args = ATreplace(args, newarg, keep_layout ? 8 : 4);
-		traversal = ATmake("analyzer(<term>)", asfix_put_appl_args(appl, args));	
-	}
-	if(ATmatch(traversal,"combination(<term>,tuple(<term>))",&appl,&tuple)) {
-		args = asfix_get_appl_args(appl);
-		args = ATreplace(args, newarg, keep_layout ? 8 : 4);
-		traversal = ATmake("combination(<term>,tuple(<term>))",
-											 asfix_put_appl_args(appl,args),tuple);
-	}
+	traversal.args = ATreplace(traversal.args, newarg, ACCUMULATED_POS);
 	
 	return traversal;
 }
@@ -219,92 +130,25 @@ ATerm change_traversal_appl(ATerm traversal, ATerm newarg)
  * depending on the type of traversal, constructs a normal form.
  * This function is used after the toplevel traversal prod returns.
  */
-ATerm choose_normalform(ATerm term, ATerm traversal) 
+ATerm choose_normalform(ATerm term, Traversal traversal) 
 {
-	ATermList args;
-	ATerm appl;
-	ATerm tuple;
-	ATerm second;
-	ATerm firstsort, secondsort;
-	ATerm ws;
-
-	if(ATmatch(traversal,"traversal(<term>)", &appl)) {
-		/* we return the tree */
-		return term;
-	}
-	if(ATmatch(traversal,"analyzer(<term>)", &appl)) {
+	switch(traversal.type) {
+	case TRANSFORMER:
+		/* we just return the term */
+		break;
+	case ANALYZER:
 		/* we only return the accumulated value */
-		args = asfix_get_appl_args(appl);
-		return ATelementAt(args, keep_layout ? 8 : 4);
-	}
-	if(ATmatch(traversal,"combination(<term>,tuple(<term>))",&appl, &tuple)) {
-		/* we take the current tree, and the accumulated value and create a nice
-		 * tuple for it using the tuple template in traversal.
-		 */
-		ws = ATparse("w(\" \")");
-		args = asfix_get_appl_args(appl);
-		second = ATelementAt(args,keep_layout ? 8 : 4);
-		firstsort = AFgetProdSort(asfix_get_appl_prod(term));
-		secondsort = AFgetProdSort(asfix_get_appl_prod(second));
-		return keep_layout ? ATmakeTerm(tuple,firstsort,secondsort,ws,term,ws,ws,second,ws) :
-		                         ATmakeTerm(tuple,firstsort,secondsort,term,second);
+		term = ATelementAt(traversal.args, ACCUMULATED_POS);
+		break;
+	default:
+		ATerror("Unknown traversal type");
+		break;
 	}
 
-	ATerror("Unknown traversal type");
-	return NULL;
+	return term;
 }
 
-/* get_first
- *
- * Projection function which abstracts from tuple layout using a tuple pattern
- * with placeholders.
- */
-ATerm get_first(ATerm tuple, ATerm combination) 
-{
-	ATerm prod, ctuple, first, second;
-	
-	/* We extract the first element of the tuple using the template in the 
-	 * combination argument 
-	 */
-
-	if(ATmatch(combination,"combination(<term>,tuple(<term>))",&prod, &ctuple)) {
-		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,
-																		&second,NULL,NULL)) ||
-			 (!keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,&first,&second))) {
-			return first;
-		}
-	}
-	
-	ATerror("Unable to retrieve first from tuple.\n");
-	return NULL;
-}
-
-/* get_second
- *
- * Projection function which abstracts from tuple layout using a tuple pattern
- * with placeholders.
- */
-ATerm get_second(ATerm tuple, ATerm combination)
-{
-	ATerm prod, ctuple, first, second;
-	
-	/* We extract the second element of the tuple using the template in 
-	 * the combination argument
-	 */
-	
-	if(ATmatch(combination,"combination(<term>,tuple(<term>))",&prod,&ctuple)) {
- 		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,
-																		&second,NULL)) ||
-			 (!keep_layout &&	ATmatchTerm(tuple,ctuple,NULL,NULL,&first,&second))) {
-			return second;
-		}
-	}
-	
-	ATerror("Unable to retrieve second from tuple.\n");
-	return NULL;
-}
-
-ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
+ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, Traversal *traversal)
 {
   ATerm newtrm, sym, rewtrm, travtrm;
   ATermList args, newargs;
@@ -316,35 +160,26 @@ ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
 			newargs = rewrite_args_traversal(args,env, depth, traversal);
       newtrm = ATgetFirst(ATgetNext(newargs));
       rewtrm = newtrm;
-    } 
-    else {
+    } else {
 			/* check for a match */
 			travtrm = make_traversal_appl(trm, *traversal);
 			rewtrm = select_and_rewrite(travtrm, depth);
-			
+
 			if(ATisEqual(rewtrm, travtrm)) {
 				/* if no match, traverse down to the children */
 				args = (ATermList) asfix_get_appl_args(trm);
 				newargs = rewrite_args_traversal(args,env,depth,traversal);
         /* on the way back, we check for new redices */
 				rewtrm = select_and_rewrite(asfix_put_appl_args(trm,newargs), depth);
+			 
+			} else { /* reduction occurred, we need postprocessing */
 
-			}  else { /* reduction occurred, we need postprocessing */
-				if(is_analyzer(*traversal)) {
+				if(traversal->type == ANALYZER) {
 					/* We update the traversal with the rhs */
-					*traversal = change_traversal_appl(*traversal, rewtrm);
+					*traversal = update_accumulator(*traversal, rewtrm);
 					/* We just return the input to construct a well-formed term */
 					rewtrm = trm;
 				} 
-				if(is_combination(*traversal)) {
-					ATerm second;
-					/* We retrieve the accumulator to update the traversal */
-					second = get_second(rewtrm, *traversal);
-					second = select_and_rewrite(second, depth + 1);
-					*traversal = change_traversal_appl(*traversal, second);
-					/* We retrieve the tree to construct a well-formed term */
-					rewtrm = get_first(rewtrm,*traversal);
-				}
 			}
 		}
   } else if(asfix_is_var(trm)) {
@@ -363,7 +198,8 @@ ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
   return rewtrm;
 }
 
-ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, ATerm *traversal)
+ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, 
+																 Traversal *traversal)
 {
   ATerm arg, newarg;
   ATermList newargs = ATempty;
@@ -403,7 +239,7 @@ ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, ATerm *tr
 
 
 ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int depth,
-																	ATerm *traversal)
+																	Traversal *traversal)
 {
   ATerm elem, newelem;
   ATermList newelems = ATempty;

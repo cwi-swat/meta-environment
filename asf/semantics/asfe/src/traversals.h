@@ -22,27 +22,37 @@
   $Id$
  */
 
+#ifndef TRAVERSALS_H
+#define TRAVERSALS_H
 #include <aterm2.h>
 
-ATerm make_traversal_appl(ATerm trm, ATerm traversal);
-ATerm create_traversal_pattern(ATerm prod);
-ATerm change_traversal_appl(ATerm analyzer, ATerm newarg);
-ATerm choose_normalform(ATerm term, ATerm traversal);
-ATerm select_traversed_arg(ATermList args);
-
-#define is_analyzer(t) ATmatch(t,"analyzer(<term>)", NULL)
-#define is_traversal(t) ATmatch(t,"traversal(<term>)", NULL)
-#define is_combination(t) ATmatch(t,"combination(<term>,tuple(<term>))",NULL,NULL)
-ATbool is_traversal_prod(ATerm prod);
-
-ATerm get_first(ATerm tuple, ATerm combination);
-ATerm get_second(ATerm tuple, ATerm combination);
-
-ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal);
-ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, 
-																 ATerm *traversal);
-ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int depth, 
-																	ATerm *traversal);
-
-
 extern ATbool traversals_on;
+
+typedef enum { UNDEFINED = 0, TRANSFORMER = 1, ANALYZER = 2 } TraversalType;
+typedef struct Traversal_tag {
+	TraversalType type;
+	ATerm     prod;
+	ATermList symbols;
+	ATermList args;
+} Traversal;
+
+#define ACCUMULATED_POS (keep_layout ? 8 : 4)
+#define TRAVERSED_POS (keep_layout ? 4 : 2)
+#define TRAVERSED_SYMBOL_POS 4
+
+/* operations  on Traversals */
+Traversal create_traversal_pattern(ATerm term);
+Traversal update_accumulator(Traversal trav, ATerm newarg);
+ATerm     make_traversal_appl(ATerm trm, Traversal traversal);
+ATerm     choose_normalform(ATerm term, Traversal trav);
+ATerm     select_traversed_arg(ATermList args);
+
+
+/* rewriting functionality */
+ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, Traversal *traversal);
+ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, 
+																 Traversal *traversal);
+ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int depth, 
+																	Traversal *traversal);
+
+#endif
