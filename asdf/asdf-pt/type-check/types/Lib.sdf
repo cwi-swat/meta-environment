@@ -1,0 +1,19 @@
+module type-check/types/Lib
+
+imports 
+
+  type-check/Layout
+
+exports
+
+sorts
+
+  Type Answer
+
+context-free syntax
+
+  "nothing"		-> Type
+
+lexical syntax
+
+  "yes" | "no"	-> Answer

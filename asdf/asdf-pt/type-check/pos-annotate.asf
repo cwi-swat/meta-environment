@@ -1,0 +1,14 @@
+equations
+
+[pos-an-give] pos-annotate(give DO) = give (DO @ get-location(DO))
+
+[pos-an-check] pos-annotate(check DO) = check (DO @ get-location(DO))
+
+[pos-an-infix] pos-annotate(A1 IA A2) = 
+	  (pos-annotate(A1) IA pos-annotate(A2)) @ get-location(A1 IA A2)
+
+[pos-an-prefix] pos-annotate(PA A1) = (PA pos-annotate(A1)) 
+				    @ get-location(PA A1)
+
+[default-pos] pos-annotate(A) = A @ get-location(A)
+	

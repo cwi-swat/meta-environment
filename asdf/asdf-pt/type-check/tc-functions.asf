@@ -1,0 +1,94 @@
+equations
+
+[tcf-1] $SE := collect-signatures($F+, sigs()), 
+        defs($FD*) := collect-definitions($F+, defs()),
+	$ENV := set-signatures(empty-env, $SE),
+	$ANS := typecheck-definitions(defs($FD*), $ENV)
+        ============================================
+        typecheck($F+) = $ANS
+
+[col-sig-1] collect-signatures($FS $FD, sigs($FS*)) = sigs($FS*, $FS)
+
+[col-sig-2] collect-signatures($FS $FD $F+, sigs($FS*)) = sigs($FS*, $FS)
+
+[loo-sig-1] lookup-signature($LT1 : $SO -> $AT1, $AT2, $LT1) = $AT1
+
+[col-def-0] collect-definitions($FS $FD, defs($FD*)) =  defs($FD, $FD*) 
+
+[col-def-1] collect-definitions($FD, defs($FD*)) = defs($FD, $FD*)
+
+[col-def-2] collect-definitions($FS $FD $F+, defs($FD*)) = defs($FD, $FD*)
+
+[col-def-3] collect-definitions($FD $F+, defs($FD*)) = defs($FD, $FD*)
+
+[tcd-1] $ANS1 := typecheck-definitions(defs($FD), $ENV),
+	$ANS2 := typecheck-definitions(defs($FDS), $ENV)
+        ====================================================
+        typecheck-definitions(defs($FD, $FDS), $ENV) = $ANS1 $ANS2
+
+
+
+[tcd-3] 	
+
+      sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
+      $LT: $SO -> action[using $TY1 giving $TY3 raising $TY4] := $FS1, 
+      AR[nor=$TY5, exc=$TY6, $END] := typecheck-action($AC, $TY1, $ENV),
+      yes == $TY5 subtype-of $TY3, 
+      yes == $TY6 subtype-of $TY4
+      =========================================================================
+      typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = yes
+
+[tcd-4] 
+
+     sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
+     $LT: $SO -> action[using $TY1 giving $TY3 raising $TY4] := $FS1, 
+     $ER := typecheck-action($AC, $TY1, $ENV)
+     ========================================================================
+     typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = $ER
+
+
+[default-tcd] typecheck-definitions(defs($FD*), $ENV) = 
+	      error("Type error", 
+	         [localized("Error in function definitions", get-location($FD*))])
+
+[tca-function] 
+
+     sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
+     $LT: $SO -> action[using $TY2 giving $TY3 raising $TY4] := $FS1,
+     $TY5 := unify($TY1, $TY2)
+     ============================================================
+     typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, no]
+
+[default-function] typecheck-action($LT $CO, $TY1, $ENV) = 
+		error("Type error", 
+	          [localized("Unable to find semantic function with right type", 
+			get-location($LT $CO))])
+
+
+[feedback-0] yes $ANS = $ANS
+
+[feedback-0] $ANS yes = $ANS
+
+[feedback-1] 
+
+  summary("","",[$ER1, $ER1*, info("Type check OK", [localized("", file($SC))]), $ER2*]) =
+	      summary("","",[$ER1, $ER1*, $ER2*])
+
+[feedback-2] 
+
+  summary("","",[$ER1*, info("Type check OK", [localized("", file($SC))]), $ER2, $ER2*]) =
+	      summary("","",[$ER1*, $ER2, $ER2*])
+
+ 
+[summary-1] $ER := $AN,
+	    summary("", "",[$ER*]) := gen-summary($ANS)
+	    ===========================================
+	    gen-summary($AN $ANS) = summary("", "", [$ER, $ER*])
+
+[default-summary-1] $ER := $AN
+	    ===========================================
+	    gen-summary($AN) = summary("", "", [$ER])
+
+[default-summary-3] 
+
+            gen-summary(yes) = summary("","",[info("Type check OK", [localized("", file(""))])])

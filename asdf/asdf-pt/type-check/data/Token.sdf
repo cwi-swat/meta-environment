@@ -1,0 +1,17 @@
+module type-check/data/Token
+
+imports type-check/data/Data
+
+exports
+
+sorts
+
+  Token
+
+context-free syntax
+
+  Token	-> Data
+
+lexical syntax
+
+  ("\""[a-zA-Z0-9\-]+"\"") | [0-9]+	-> Token {avoid}

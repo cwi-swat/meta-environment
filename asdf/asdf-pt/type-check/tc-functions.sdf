@@ -1,0 +1,58 @@
+module type-check/tc-functions
+
+imports
+
+  type-check/tc-actions
+
+exports
+
+sorts 
+
+  Function Functions SignatureEnv Answers
+
+context-free syntax
+
+  typecheck(Functions) -> Answers
+  typecheck(AS-Module, AS-FunctionDefs)	-> Answers
+  typecheck-definitions(AS-FunctionDefs, Environment) -> Answers
+
+  gen-summary(Answers)	-> Summary
+
+  Error		-> Answer
+  Answer+	-> Answers
+
+hiddens 
+
+variables
+
+  "$F"[1-9]?	-> Function
+  "$F+"		-> Functions {prefer}
+  "$FS"[1-9]?	-> FunctionSignature
+  "$FS"[1-9]?"*"	-> {FunctionSignature ","}*
+  "$FD"[1-9]?	-> AS-FunctionDef
+  "$FDS"[1-9]?	-> {AS-FunctionDef ","}+
+  "$FD"[1-9]?"*"	-> {AS-FunctionDef ","}*
+
+  "$SE"[1-9]?	-> SignatureEnv
+  "$ENV"[1-9]?	-> Environment
+  "$LT"[1-9]?	-> Literal
+  "$SO"[1-9]?	-> Sort
+  "$AT"[1-9]?	-> ActionType
+  "$TY"[1-9]?	-> Type
+  "$CO"[1-9]?	-> Constructor
+  "$ET"		-> AS-Eqs-Tag
+  "$END"[1-9]?	-> ExcepNoData
+
+  "$AN"		-> Answer
+  "$ANS"[1-9]?	-> Answer+
+  "$ER"[1-9]?	-> Error
+  "$ER"[1-9]?"*"	-> {Error "," }*
+  "$ER"[1-9]?"+"	-> Error+
+  "$AC"[1-9]?	-> Action
+  "$SC"[0-9]?	-> StrCon
+		
+sorts
+
+  FunctionSignature AS-FunctionDef AS-FunctionDefs LangConst 
+  SyntaxSort EquationName ExcepNoData Type ActionType 
+

@@ -1,0 +1,72 @@
+module type-check/types
+
+imports 
+
+  basic/Errors
+  type-check/pos-annotate
+  type-check/types/all
+  
+
+exports 
+
+sorts 
+
+  ActionResult Answer
+
+exports
+
+context-free syntax
+
+%% Types
+
+  "action" "[" AMusing? AMgiving? AMraising? "]" 	-> ActionType
+  "using" Type	 	-> AMusing
+  "giving" Type	 	-> AMgiving
+  "raising" Type	-> AMraising
+  ActionType		-> Type
+
+  "AR" "[" NormalType"," ExceptionalType"," ExcepNoData "]" 
+				-> ActionResult
+  "nor" "=" Type		-> NormalType
+  "exc" "=" Type		-> ExceptionalType
+  "yes" | "no"			-> ExcepNoData
+
+  ActionResult  		-> Type
+
+  "empty"			-> Type
+ 
+%% Type operators
+
+  type-concat(Type, Type) 	-> Type
+  unify(Type, Type) 		-> Type
+
+  Type subtype-of Type 			-> Answer
+  ExcepNoData answerOr ExcepNoData 	-> ExcepNoData
+
+%% Error messages
+
+  Error+ 			-> ActionResult
+		
+lexical syntax
+
+  "value"	-> Type
+
+  "yes"		-> Answer
+  "no"		-> Answer
+
+
+hiddens 
+
+variables
+
+  "AT"[1-9]?	-> ActionType	
+  "END"[1-9]?	-> ExcepNoData
+  "TY"[1-9]?	-> Type
+  "TY"[1-9]?"*"	-> {Type ","}*
+  "SW"[1-9]?	-> TypeWithPosition
+
+sorts
+
+  DataType ActionType NormalType ExceptionalType ExcepNoData 
+  AMusing AMgiving AMraising 
+

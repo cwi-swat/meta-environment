@@ -1,0 +1,43 @@
+module type-check/functions
+
+imports
+
+  type-check/Layout
+  asdf/asdf
+
+exports
+
+context-free syntax
+
+  Function Functions -> Functions
+  Function	     -> Functions
+
+  FunctionSignature AS-FunctionDef	-> Function
+  AS-FunctionDef			-> Function
+
+  Literal ":" Sort "->" ActionType	-> FunctionSignature
+
+  Literal Constructor			-> Action
+
+  AS-FunctionDef AS-FunctionDefs 	-> AS-FunctionDefs
+  AS-FunctionDef 		 	-> AS-FunctionDefs
+  "EmptyDefs"				-> AS-FunctionDefs
+
+  {AS-FunctionDef ","}* 	-> SortWithPosition
+
+  collect-signatures(Functions, SignatureEnv) 	
+		-> SignatureEnv {traversal(accu, continue, bottom-up)} 	
+  collect-definitions(Functions, AS-FunctionDefs) 	
+		-> AS-FunctionDefs {traversal(accu, continue, bottom-up)}
+  lookup-signature(SignatureEnv, ActionType, Literal) 
+		-> ActionType {traversal(accu, break, bottom-up)}
+  lookup-signature(FunctionSignature, ActionType, Literal) 
+		-> ActionType {traversal(accu, break, bottom-up)}
+
+  sigs({FunctionSignature ","}*)	-> SignatureEnv
+  defs({AS-FunctionDef ","}*)		-> AS-FunctionDefs	
+
+lexical syntax
+
+  [a-z\_]+ 	-> EquationName {avoid}
+  [A-Z][a-zA-Z]*   -> SyntaxSort

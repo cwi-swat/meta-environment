@@ -1,0 +1,23 @@
+module type-check/types/Composed
+
+imports 
+
+  type-check/types/Lib
+  type-check/data/Token
+
+exports
+
+sorts
+
+  ListType CellType TokenType
+
+context-free syntax
+
+  ListType		  -> Type
+  "list" "(" Type ")"	  -> ListType 
+
+  CellType		  -> Type
+  "cell" "(" Type ")"	  -> CellType
+	
+  TokenType		  -> Type
+  "token" "(" Token? ")"  -> TokenType

@@ -1,0 +1,85 @@
+equations
+
+[subtype-1] TY1 == TY2
+	    ======================
+	    TY1 subtype-of TY2 = yes 
+
+[subtype-2] empty subtype-of TY = yes
+
+[subtype-3] 
+
+	    TY1 subtype-of TY4 == yes, 
+	    TY5 subtype-of TY2 == yes, 
+	    TY6 subtype-of TY3 == yes 
+	    ================================================
+	    action[using TY1 giving TY2 raising TY3] subtype-of 
+	    action[using TY4 giving TY5 raising TY6] = yes 
+
+[subtype-4] () subtype-of () = yes
+
+[subtype-5] TY1 subtype-of TY2 == yes
+	    ==========================
+	    (TY1) subtype-of (TY2) = yes
+
+[subtype-5] TY1 subtype-of TY2 == yes
+	    ==========================
+	    TY1 subtype-of (TY2) = yes
+
+[subtype-5] TY1 subtype-of TY2 == yes
+	    ==========================
+	    (TY1) subtype-of TY2 = yes
+
+[subtype-6] TY1 subtype-of TY2 == yes, 
+	    (TY1*) subtype-of (TY2*) == yes
+	    ====================================
+	    (TY1, TY1*) subtype-of (TY2, TY2*) = yes 
+	     
+
+[subtype-7] (TY*) subtype-of data = yes
+
+[subtype-8] TY subtype-of datum = yes
+
+[subtype-9] cell(TY) subtype-of cell = yes
+
+[subtype-10] integer subtype-of value = yes
+
+[subtype-11] boolean subtype-of value = yes
+
+[subtype-10] integer subtype-of storable = yes
+
+[subtype-11] boolean subtype-of storable = yes
+
+[subtype-11] value subtype-of storable = yes
+
+[subtype-12] cell subtype-of bindable = yes
+
+[concat-1] type-concat((TY1*), (TY2*)) = (TY1*, TY2*)
+
+[concat-2] type-concat(TY1, (TY1*)) = (TY1, TY1*) 
+
+[concat-2] type-concat((TY1*), TY1) = (TY1*, TY1) 
+
+[concat-2] type-concat(empty, TY2) = empty
+
+[concat-2] type-concat(TY1, empty) = empty
+
+[default-concat] type-concat(TY1, TY2) = (TY1, TY2) 
+
+[unify-1] TY1 subtype-of TY2 == yes
+	  ======================
+	  unify(TY1, TY2) = TY1 
+
+[unify-1] TY2 subtype-of TY1 == yes
+	  ======================
+	  unify(TY1, TY2) = TY2  
+
+[unify-1] unify(empty, TY) = TY
+
+[unify-1] unify(TY, empty) = TY
+
+[or-1] END answerOr yes = yes
+
+[or-2] yes answerOr END = yes
+
+[or-2] no answerOr no = no
+

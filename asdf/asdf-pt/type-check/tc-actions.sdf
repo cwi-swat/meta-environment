@@ -1,0 +1,45 @@
+module type-check/tc-actions
+
+imports
+
+  type-check/types 
+  type-check/environment
+  type-check/data/all
+  asdf/an-supplement
+
+exports 
+
+context-free syntax 
+  typecheck-action(Action, Type, Environment)	-> ActionResult {memo}
+  typecheck-data(Data, Environment)		-> Type
+  typecheck-dataop(DataOp, Type)		-> ActionResult
+  typecheck-datapred(DataOp, Type)		-> ActionResult
+
+hiddens 
+
+variables
+
+  "TY"[1-9]?	-> Type
+  "TY"[1-9]?"*"	-> {Type ","}*
+  "AT"[1-9]?	-> ActionType	
+	
+  "SE"		-> SignatureEnv
+  "EN"		-> Environment
+  "$CH+"[1-9]?	-> CHAR+
+  "SC"[1-9]?	-> StrCon		
+  "A"[1-9]?	-> Action
+  "$A"[1-9]?	-> Action
+  "IA"		-> InfixAction
+  "D+"		-> {Data ","}+
+  "D"[0-9]?	-> Data
+  "N"		-> Number
+  "B"		-> Boolean
+  "END"[1-9]?	-> ExcepNoData
+  "R"[1-9]?	-> ActionResult
+  "ER"[1-9]?"+"	-> Error+
+  "DO"[0-9]?	-> DataOp
+  "IN"[0-9]?	-> Index
+
+sorts
+
+  ExcepNoData SignatureEnv ActionType Type ErrorMessage	

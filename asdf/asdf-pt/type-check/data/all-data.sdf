@@ -1,0 +1,90 @@
+module type-check/data/all-data
+
+imports 
+
+  type-inferer/all-type-inf
+  type-check/types/all-types
+  code-gen/all-code-gen
+
+exports
+
+sorts
+
+  DataOp InfixDataOp Data PrefixDataOp Boolean Number Token
+
+context-free syntax
+
+%% Data
+
+  type-of-data(Data, Environment)	-> <RecordType, Environment>
+  type-of-data-op(DataOp, Environment)	-> <ActionType, Environment>
+
+  generate-code-data(Data, CodeInfoIn)	-> CodeInfoOut
+  generate-code-dataop(DataOp, ActionType, CodeInfoIn)	-> CodeInfoOut
+
+  InfixDataOp   -> DataOp
+  PrefixDataOp  -> DataOp
+
+  "the" Type	-> DataOp
+
+%% Action
+
+  Action	-> Data {avoid}
+
+%% Bindings
+
+  "no-bindings"		-> Data
+
+%% Boolean
+
+  Boolean	-> Data
+
+%% Numbers
+
+  Number	-> Data
+
+%% Token
+
+  Token		-> Data
+
+lexical syntax
+
+%% Data
+
+  "="		-> InfixDataOp
+  "defined"	-> PrefixDataOp
+
+%% Bindings
+
+  "disj-union"          -> PrefixDataOp
+  "binding"             -> PrefixDataOp
+  "bound"               -> PrefixDataOp
+  "overriding"          -> PrefixDataOp
+
+%% Boolean
+
+  "true" | "false"	-> Boolean
+
+  "not"		-> PrefixDataOp
+
+%% Numbers
+
+  "-"?[0-9]*		-> Number
+
+  "+" | "*" | "<" | ">" | "-"	-> InfixDataOp
+
+%% Token
+
+  [a-z0-9\-]+	-> Token {avoid}
+
+
+variables
+
+  "D"[0-9]?	-> Data
+  "DO"[0-9]?	-> DataOp
+
+hiddens variables
+
+  "A"[0-9]?	-> Action
+  "B"[0-9]?	-> Boolean
+  "N"[0-9]?	-> Number

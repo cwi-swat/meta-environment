@@ -1,0 +1,10 @@
+module type-check/types/Layout
+
+exports lexical syntax
+
+  [\ \t\n]	-> LAYOUT
+
+context-free restrictions
+
+  LAYOUT? -/- [\ \t\n]
+

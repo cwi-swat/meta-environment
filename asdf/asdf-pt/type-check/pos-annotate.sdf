@@ -1,0 +1,48 @@
+module type-check/pos-annotate
+
+imports 
+
+  utilities/PosInfo[SortWithPosition]
+  asdf/an
+
+exports
+
+sorts
+
+  Action Area SortWithPosition ActionWP
+
+context-free syntax
+
+  pos-annotate(Action)		-> ActionWP 
+
+  Action "@" Location		-> ActionWP 
+  ActionWP "@" Location		-> ActionWP 
+  "(" DataOp "@" Location ")"	-> DataOpWP 
+  "(" DataPred "@" Location ")"	-> DataPredWP
+  "give" DataOpWP		-> ActionWP
+  "check" DataOpWP		-> ActionWP
+  PrefixAction ActionWP		-> ActionWP
+  ActionWP InfixAction ActionWP	-> ActionWP {left}
+
+  "(" ActionWP ")"	-> ActionWP {bracket}
+
+  DataOp | Action | InfixAction	-> SortWithPosition
+
+hiddens 
+
+variables
+
+  "A"[1-9]?	-> Action
+  "IA"		-> InfixAction
+  "PA"		-> PrefixAction
+  "D"[1-9]?	-> Data
+  "DO"[1-9]?	-> DataOp
+  "SW"[1-9]?	-> SortWithPosition
+
+  "Col"[SE]  -> IntCon
+  "Line"[SE] -> IntCon
+  "Path"     -> Literal
+
+sorts
+
+  ActionInfix ActionPrefix DataOp DataPred

@@ -1,0 +1,27 @@
+module type-check/environment
+
+imports
+
+  type-check/functions
+  type-check/types
+
+exports
+
+context-free syntax
+
+%% Signatures , Unfold type
+
+  <SignatureEnv, ActionType>	-> Environment
+
+  get-signatures(Environment)  -> SignatureEnv
+  get-unfold-type(Environment)	   -> ActionType
+
+  set-signatures(Environment, SignatureEnv)		-> Environment
+  set-unfold-type(Environment, ActionType)		-> Environment
+
+  "empty-env"						-> Environment
+
+hiddens variables
+
+  "SE"[0-9]?	-> SignatureEnv
+  "AT"[0-9]?	-> ActionType

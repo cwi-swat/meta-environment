@@ -1,0 +1,15 @@
+equations
+
+[concat-1] type-concat((T1*), (T2*)) = (T1*, T2*)
+
+[concat-2] type-concat(T1, (T1*)) = (T1, T1*) 
+
+[concat-2] type-concat((T1*), T1) = (T1*, T1) 
+
+[concat-2] type-concat(no-tuple, T2) = no-tuple
+
+[concat-2] type-concat(T1, no-tuple) = no-tuple
+
+[concat-3] type-concat(data, data) = data
+
+[default-concat] type-concat(T1, T2) = (T1, T2) 

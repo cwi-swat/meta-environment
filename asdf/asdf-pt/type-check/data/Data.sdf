@@ -1,0 +1,32 @@
+module type-check/data/Data
+
+imports 
+
+  type-check/Layout
+
+exports
+
+sorts
+
+  DataOp InfixDataOp Data PrefixDataOp
+
+context-free syntax
+
+  InfixDataOp   -> DataOp
+  PrefixDataOp  -> DataOp
+
+  "the" Type	-> PrefixDataOp
+
+  "#" Index	-> PrefixDataOp
+
+lexical syntax
+
+  "="		-> InfixDataOp
+  "defined"	-> PrefixDataOp
+
+  "-1" | [1-9][0-9]*   -> Index
+
+variables
+
+  "D"[0-9]?	-> Data
+  "DO"[0-9]?	-> DataOp

@@ -1,0 +1,26 @@
+equations
+
+[equal-1] T1 subtype-of T2 = yes when T1 == T2
+
+[cell-1] cell(T) subtype-of cell = yes
+
+[token-1] token(X) subtype-of token = yes
+
+[datum-1] T subtype-of datum = yes
+
+[tuple-1] (T1) subtype-of (T2) = yes 
+	  when T1 subtype-of T2 == yes
+
+[tuple-2] (T1, T1*) subtype-of (T2, T2*) = yes 
+	    when T1 subtype-of T2 == yes, (T1*) subtype-of (T2*) == yes
+
+[tuple-3] (T*) subtype-of data = yes
+
+[action-1] action[using T1 giving T2 raising T3] subtype-of 
+	    action[using T4 giving T5 raising T6] = yes 
+	    when T1 subtype-of T4 == yes, 
+		 T5 subtype-of T2 == yes, 
+	  	 T6 subtype-of T3 == yes 
+
+[subtype-2] T1 subtype-of T2 = yes 
+	    when T1 subtype-of T3 == yes, T3 subtype-of T2 == yes

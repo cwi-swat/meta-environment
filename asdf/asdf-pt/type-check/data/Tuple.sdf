@@ -1,0 +1,16 @@
+module type-check/data/Tuple
+
+imports
+
+  type-check/data/Data
+
+exports
+
+context-free syntax
+
+  "(" {Data ","}2+ ")"    -> Data
+
+  "(" Data ")"		  -> Data {bracket}
+
+  "(" ")"		  -> Data
+

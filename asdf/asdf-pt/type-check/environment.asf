@@ -1,0 +1,11 @@
+equations
+
+[empty-1] empty-env = <sigs(), action[]>
+
+[get-1] get-signatures(<SE, AT>) = SE
+
+[get-2] get-unfold-type(<SE, AT>) = AT
+
+[set-1] set-signatures(<SE1, AT>, SE2) = <SE2, AT>
+
+[set-2] set-unfold-type(<SE, AT1>, AT2) = <SE, AT2>

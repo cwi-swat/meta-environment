@@ -1,0 +1,462 @@
+equations
+
+[brackets-1] (TY) = TY
+
+[tcd-1] typecheck-data((), EN) = ()
+
+[tcd-3] typecheck-data((D1, D2), EN) = 
+			    (typecheck-data(D1, EN), typecheck-data(D2, EN))
+
+[tcd-4] 
+
+	(TY*) := typecheck-data((D2, D+), EN)
+	================================================================
+	typecheck-data((D1, D2, D+), EN) = (typecheck-data(D1, EN), TY*)
+
+[tcd-5] typecheck-data(N, EN) = integer
+
+[tcd-6] typecheck-data(B, EN) = boolean
+
+[tcd-7] 
+
+        AR[nor=TY1, exc=TY2, END] := typecheck-action($A, data, EN)
+	=================================================================
+        typecheck-data($A, EN) = action[using data giving TY1 raising TY2]
+
+
+[tcd-8] typecheck-data("v1", EN) = token
+
+
+[tcdo-plus] 
+
+	TY1 subtype-of (integer, integer) == yes	
+	=========================================================
+	typecheck-dataop(+, TY1) = AR[nor=integer, exc=empty, no]
+
+
+[tcdo-minus] 
+
+        TY1 subtype-of (integer, integer) == yes
+	=========================================================
+        typecheck-dataop(-, TY1) = AR[nor=integer, exc=empty, no]
+
+
+[tcdo-mult] 
+
+        TY1 subtype-of (integer, integer) == yes
+	=========================================================
+        typecheck-dataop(*, TY1) = AR[nor=integer, exc=empty, no]
+
+
+[tcdo-binding] 
+
+        TY1 subtype-of (token, bindable) == yes
+	================================================================
+        typecheck-dataop(binding, TY1) = AR[nor=bindings, exc=empty, no]
+
+
+[tcdo-bound] 
+
+	TY1 subtype-of (bindings, token) == yes
+	==============================================================
+        typecheck-dataop(bound, TY1) = AR[nor=bindable, exc=empty, no]
+
+
+[tcdo-overriding] 
+
+        TY1 subtype-of (bindings, bindings) == yes
+        ===================================================================
+	typecheck-dataop(overriding, TY1) = AR[nor=bindings, exc=empty, no]
+
+
+[tcdo-select-1] typecheck-dataop(#1, (TY)) = AR[nor=TY, exc=empty, no]
+
+[tcdo-select-1] typecheck-dataop(#1, (TY, TY*)) = AR[nor=TY, exc=empty, no]
+
+[tcdo-select-2] typecheck-dataop(#2, (TY1, TY2)) = AR[nor=TY2, exc=empty, no]
+
+[tcdo-select-2] typecheck-dataop(#2, (TY1, TY2, TY*)) = 
+			AR[nor=TY2, exc=empty, no]
+
+[tcdo-select-3] typecheck-dataop(#3, (TY1, TY2, TY3)) = 
+			AR[nor=TY3, exc=empty, no]
+
+[tcdo-select-3] typecheck-dataop(#3, (TY1, TY2, TY3, TY*)) = 
+			AR[nor=TY3, exc=empty, no]	 
+
+[tcdo-select-1] typecheck-dataop(#IN, data) = AR[nor=data, exc=empty, no]
+
+[tcdo-the-sort-1] 
+
+      TY1 subtype-of TY2 == yes
+      ===========================================================
+      typecheck-dataop(the TY1, TY2) = AR[nor=TY1, exc=(), no] 
+	 	
+[tcdo-the-sort-2] 
+
+      TY2 subtype-of TY1 == yes
+      ===========================================================
+      typecheck-dataop(the TY1, TY2) = AR[nor=TY1, exc=(), no] 
+
+[default-tcdo] 
+
+      prefixdataop($CH+) := DO,
+      SC := "Bad argument for " || strcon(""" $CH+ """)
+      ===============================================================
+      typecheck-dataop(DO, TY1) = error("Type error", 
+					    [localized(SC, get-location(DO))])
+
+[default-tcdo] 
+
+      the TY := DO
+      ====================================================================
+      typecheck-dataop(DO, TY1) = error("Type error", 
+   [localized("Can't project to this sort", get-location(DO))])
+
+[default-tcdo] 
+
+      # index($CH+) := DO,
+      SC := "Wrong number of arguments for #" || strcon(""" $CH+ """)
+      ================================================================
+      typecheck-dataop(DO, TY1) = error("Type error", 
+				        [localized(SC, get-location(DO))])
+		
+[default-tcdo] 
+
+      infixdataop($CH+) := DO,
+      SC := "Bad argument for " || strcon(""" $CH+ """)
+      ===============================================================
+      typecheck-dataop(DO, TY1) = error("Type error", 
+   [localized(SC, get-location(DO))])
+
+
+[tcdo-equal] 
+
+      TY1 subtype-of TY2 == yes
+      ================================================================
+      typecheck-dataop(=, (TY1, TY2)) = AR[nor=(boolean), exc=(), no]
+
+[tcdo-equal] 
+
+      TY2 subtype-of TY1 == yes
+      ================================================================
+      typecheck-dataop(=, (TY1, TY2)) = AR[nor=(boolean), exc=(), no]
+
+
+[tcdo-less] 
+
+      (TY1, TY2) subtype-of (integer, integer) == yes
+      ================================================================   
+      typecheck-dataop(<, (TY1, TY2)) = AR[nor=(boolean), exc=(), no]
+
+[tcdp-1] AR[nor=TY2, exc=TY3, END] := typecheck-dataop(DO, TY1),
+	 TY2 subtype-of boolean == yes
+	 ===========================================================
+	 typecheck-datapred(DO, TY1) = AR[nor=TY1, exc=TY3, no]
+
+[tca-copy] typecheck-action(copy, TY, EN) = AR[nor=TY, exc=empty, no]
+
+[tca-skip] typecheck-action(skip, TY, EN) = AR[nor=(), exc=empty, no]
+
+[tca-then] 
+
+      AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
+      TY2 != empty,
+      AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, TY2, EN),
+      TY6 := unify(TY3, TY5)
+      ==========================================================
+      typecheck-action(A1 then A2, TY1, EN) = 
+			AR[nor=TY4, exc=TY6, END1 answerOr END2] 
+
+[tca-then] 
+
+      AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
+      TY2 != empty,
+      ER+ := typecheck-action(A2, TY2, EN)
+      ==========================================
+      typecheck-action(A1 then A2, TY1, EN) = ER+
+
+[tca-then] 
+
+      AR[nor=empty, exc=TY2, END1] := typecheck-action(A1, TY1, EN)
+      ====================================================================
+      typecheck-action(A1 then A2, TY1, EN) = AR[nor=empty, exc=TY2, END1] 
+
+
+[tca-then] 
+
+      ER+ := typecheck-action(A1, TY1, EN)
+      ==========================================
+      typecheck-action(A1 then A2, TY1, EN) = ER+
+
+
+[tca-and-then] 
+
+      AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
+      AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, TY1, EN),
+      TY6 := type-concat(TY2, TY4),
+      TY7 := unify(TY3, TY5)
+      =====================================================
+      typecheck-action(A1 and-then A2, TY1, EN) = 
+		   AR[nor=TY6, exc=TY7, END1 answerOr END2] 
+
+[tca-and-then] 
+
+      ER+ := typecheck-action(A1, TY1, EN)
+      ==============================================
+      typecheck-action(A1 and-then A2, TY1, EN) = ER+
+
+[tca-and-then] 
+
+      ER+ := typecheck-action(A2, TY1, EN)
+      ==============================================
+      typecheck-action(A1 and-then A2, TY1, EN) = ER+
+
+[tca-and] typecheck-action(A1 and A2, TY1, EN) = 
+	  typecheck-action(A1 and-then A2, TY1, EN)
+
+[tca-provide] 
+
+      TY2 := typecheck-data(D, EN)  
+      ================================================================
+      typecheck-action(result D, TY1, EN) = AR[nor=TY2, exc=empty, no] 
+
+
+[default-provide] 
+
+      result D := A
+      =====================================================
+      typecheck-action(A, TY1, EN) = error("Type error", 
+		   [localized("Type error at provide", get-location(A))])
+		
+
+[tca-give] typecheck-action(give DO, TY, EN) = typecheck-dataop(DO, TY) 
+
+[tca-check] typecheck-action(check DO, TY, EN) = typecheck-datapred(DO, TY) 
+
+[tca-indivisibly] typecheck-action(indivisibly A, TY, EN) = 
+			typecheck-action(A, TY, EN) 
+
+[tca-throw] typecheck-action(throw, TY, EN) = AR[nor=empty, exc=TY, no]
+
+[tca-catch] 
+
+    AR[nor=TY2, exc=TY3, no] := typecheck-action(A1, TY1, EN),
+    TY3 != empty, 
+    AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, TY3, EN),
+    TY6 := unify(TY2, TY4)
+    ===================================================================
+    typecheck-action(A1 catch A2, TY1, EN) = AR[nor=TY6, exc=TY5, END2] 
+
+[tca-catch] 
+
+    AR[nor=TY2, exc=TY3, no] := typecheck-action(A1, TY1, EN),
+    TY3 != empty, 
+    ER+ := typecheck-action(A2, TY3, EN)
+    ===================================================
+    typecheck-action(A1 catch A2, TY1, EN) = ER+
+
+[tca-catch] 
+
+    ER+ := typecheck-action(A1, TY1, EN)
+    ===================================================
+    typecheck-action(A1 catch A2, TY1, EN) = ER+
+
+
+[tca-catch] 
+
+    AR[nor=TY2, exc=empty, no] := typecheck-action(A1, TY1, EN)
+    ===================================================================
+    typecheck-action(A1 catch A2, TY1, EN) = AR[nor=TY2, exc=empty, no] 
+       
+
+[tca-catch] 
+
+    AR[nor=TY2, exc=TY3, no] := typecheck-action(A1, TY1, EN),
+    AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, (), EN),
+    TY6 := unify(TY2, TY4)
+    ===================================================================
+    typecheck-action(A1 catch A2, TY1, EN) = AR[nor=TY6, exc=TY5, END2] 
+
+[tca-catch] 
+
+    AR[nor=TY2, exc=TY3, no] := typecheck-action(A1, TY1, EN),
+    ER+ := typecheck-action(A2, (), EN)
+    ==========================================================
+    typecheck-action(A1 catch A2, TY1, EN) = ER+
+
+[tca-err] typecheck-action(err, TY, EN) = AR[nor=empty, exc=(), no]
+
+[tca-fail] typecheck-action(fail, TY, EN) = AR[nor=empty, exc=empty, yes]
+
+[tca-maybe-1] 
+
+  AR[nor=TY1, exc=TY2, END] := typecheck-action(A, TY, EN),
+  TY2 != empty
+  ==================================================
+  typecheck-action(maybe A, TY, EN) = AR[nor=TY1, exc=empty, yes]
+
+
+[tca-maybe-1] 
+
+  AR[nor=TY1, exc=empty, END] := typecheck-action(A, TY, EN)
+  ==================================================
+  typecheck-action(maybe A, TY, EN) = AR[nor=TY1, exc=empty, END]
+
+[tca-else] 
+
+
+    AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
+    AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, (), EN),
+    TY6 := unify(TY2, TY4),
+    TY7 := unify(TY3, TY5),
+    END3 := END1 answerOr END2
+    ==================================================================
+    typecheck-action(A1 else A2, TY1, EN) = AR[nor=TY6, exc=TY7, END3]
+
+[tca-else] 
+
+    AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
+    ER+ := typecheck-action(A2, (), EN)
+    ==================================================
+    typecheck-action(A1 else A2, TY1, EN) = ER+
+
+[default-tca-else] 
+
+    ER+ := typecheck-action(A1, TY1, EN)
+    ==========================================
+    typecheck-action(A1 else A2, TY1, EN) = ER+
+	
+
+[tca-choose-nat] 
+
+    typecheck-action(choose-nat, TY, EN) = AR[nor=integer, exc=empty, no]
+
+[tca-unfolding] 
+
+    typecheck-action(unfolding A, TY, EN) = typecheck-action(A, TY, EN)
+
+[tca-unfold] typecheck-action(unfold, TY, EN) = AR[nor=data, exc=data, yes]
+
+[tca-recursively] 
+
+    AR[nor=TY1, exc=TY2, END] := typecheck-action(A, TY, EN),
+    TY1 subtype-of bindings == yes
+    =====================================================================
+    typecheck-action(recursively A, TY, EN) = AR[nor=TY1, exc=TY2, END]
+
+[default-tca-recursively] 
+
+    ER+ := typecheck-action(A, TY, EN)
+    =====================================================================
+    typecheck-action(recursively A, TY, EN) = ER+
+
+[tca-give-current-bindings] 
+
+    typecheck-action(copy-bindings, TY, EN) = AR[nor=bindings, exc=empty, no]
+
+[tca-scope] 
+
+    AR[nor=bindings, exc=TY2, END1] := typecheck-action(A1, TY1, EN),
+    AR[nor=TY3, exc=TY4, END2] := typecheck-action(A2, TY1, EN),
+    TY5 := unify(TY2, TY4),
+    END3 := END1 answerOr END2
+    ===================================================================
+    typecheck-action(A1 scope A2, TY1, EN) = AR[nor=TY3, exc=TY5, END3]
+
+[tca-hence] 
+
+    AR[nor=bindings, exc=TY2, END1] := typecheck-action(A1, TY1, EN),
+    ER+ := typecheck-action(A2, TY1, EN)
+    ====================================================
+    typecheck-action(A1 scope A2, TY1, EN) = ER+
+
+[tca-hence] 
+
+    ER+ := typecheck-action(A1, TY1, EN)
+    ===========================================
+    typecheck-action(A1 scope A2, TY1, EN) = ER+
+	    
+
+[tca-enact] 	  
+
+    TY subtype-of action[using () giving data raising data] == yes
+    ================================================================
+    typecheck-action(enact, TY, EN) = AR[nor=data, exc=data, no] 
+
+
+[default-enact] 
+
+    A == enact
+    ====================================================================
+    typecheck-action(A, TY, EN) = error("Type error", 
+   [localized("Enact expects an action", get-location(A))])
+
+[tca-apply] 	  
+
+    TY1 subtype-of action[using (TY*) giving data raising data] == yes
+    =================================================================
+    typecheck-action(apply, (TY1, TY*), EN) = AR[nor=data, exc=data, no] 
+
+[default-tca-apply] 	  
+
+    A == apply
+    =================================================================
+    typecheck-action(A, (TY1, TY*), EN) = error("Type error", 
+       [localized("Apply expects an action and data", get-location(A))])
+
+
+[tca-create] 
+
+    TY subtype-of storable == yes 
+    ================================================================
+    typecheck-action(create, TY, EN) = AR[nor=cell(TY), exc=empty, no]  
+
+
+[default-create] 
+
+    A == create
+    ====================================================================
+    typecheck-action(A, TY, EN) = error("Type error", 
+        [localized("Create expects a storable", get-location(A))])
+
+[tca-update] 
+
+    TY subtype-of (cell, storable) == yes
+    ============================================================
+    typecheck-action(update, TY, EN) = AR[nor=(), exc=empty, no]
+
+[default-update] 
+
+    A == update
+    ============================================================
+    typecheck-action(A, TY, EN) = error("Type error", 
+        [localized("Update expects a cell and a storable", get-location(A))])
+
+
+[tca-14] typecheck-action(inspect, cell(TY), EN) = AR[nor=TY, exc=empty, no]
+
+[tca-14] 
+
+    TY subtype-of cell == yes
+    ====================================================================
+    typecheck-action(inspect, TY, EN) = AR[nor=storable, exc=empty, no]
+	 
+
+[default-inspect]
+
+    A == inspect
+    ===========================================================
+    typecheck-action(A, TY, EN) = error("Type error", 
+        [localized("Inspect expects a cell", get-location(A))])
+
+
+
+[default-infix-action] 
+
+    infixaction($CH+) := IA,
+    SC := "Type error at " || strcon(""" $CH+ """)
+    ============================================================
+    typecheck-action(A1 IA A2, TY1, EN) = error("Type error", 
+        [localized(SC, get-location(IA))])
+

@@ -1,0 +1,20 @@
+module type-check/data/Boolean
+
+imports type-check/data/Data
+
+exports
+
+sorts
+
+  Boolean 
+
+context-free syntax
+
+  Boolean	-> Data
+
+lexical syntax
+
+  "true" | "false"	-> Boolean
+
+  "not"		-> PrefixDataOp
+
