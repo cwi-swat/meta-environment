@@ -1,5 +1,9 @@
 /* $Id$ */
 
+2003/09/24 (markvdb@cwi.nl)
+ * Added "Edit Equations" to syntax editor and
+   added "Edit Syntax" to equation editor.
+
 2003/09/16 (jurgenv@cwi.nl)
  * Added dump sdf definition in the export menu
 
