@@ -1228,13 +1228,12 @@ rel[proc, comp] PartOf = \{<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c", "
 \noindent Actual lifting, amounts to translating each call between procedures by a call between components.
 This is achieved by the following function {\tt lift}:
 
-\begin{quote}
-{\tt rel[comp,comp] lift(rel[proc,proc] aCalls, \\
-                         rel[proc,comp] aPartOf) =\\
-	            \{ <C1, C2> | <proc P1, proc P2> : aCalls, \\
-                               <comp C1, comp C2> : aPartOf[P1] x aPartOf[P2]\}
-}
-\end{quote}
+\begin{verbatim}
+rel[comp,comp] lift(rel[proc,proc] aCalls,  rel[proc,comp] aPartOf) =
+   { <C1, C2> | <proc P1, proc P2> : aCalls, 
+                <comp C1, comp C2> : aPartOf[P1] x aPartOf[P2]
+   }
+\end{verbatim}
 
 \noindent In our example, the lifted call relation between components is obtained by
 
@@ -1431,8 +1430,9 @@ more of these path do \emph{not} contain a definition of \emph{V}, then
 follows:
 \begin{verbatim}
 rel[stat,var] UNINIT = 
-   { <S, V> | <stat S, var V>: USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
-    }
+   { <S, V> | <stat S, var V>: USES, 
+              <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
+   }
 \end{verbatim}
 
 \noindent We analyze this definition in detail:
@@ -1530,22 +1530,51 @@ rel[var,var-occ] OCCURS
 \end{quote}
 Remains the transformation of {\tt UNINIT}. This is done as follows:
 
-\begin{quote}
-{\tt rel[var, var-occ] UNINIT-OCC =
-   \{ <V, VO> | <stat S, var V> : UNINIT, var-occ VO : OCCURS[V], VO <= S \}}
-\end{quote}
+\begin{verbatim}
+rel[var, var-occ] UNINIT-OCC =
+   { <V, VO> | <stat S, var V> : UNINIT, 
+               var-occ VO : OCCURS[V], 
+               VO <= S
+   }
+\end{verbatim}
 Here we consider all tuples {\tt <S, V>} in {\tt UNINIT} and all occurrences of variable {\tt V}.
 Those variable occurrences that are contained in {\tt S} (using a comparison of areas)
 are included in the result.
+
+\subsection{McCabe Cyclomatic Complexity}
+The \emph{cyclomatic complexity} of a program is defined as $e - n + 2$, where
+$e$ and $n$ are the number of edges and nodes in the control flow graph,
+respectively.  It was proposed by McCabe~\cite{McCabe76} as a measure of
+program complexity.
+
+Experiments have shown that programs with a higher cyclomatic complexity are
+more difficult to understand and test and have more errors.  It is generally
+accepted that a program, module or procedure with a cyclomatic complexity
+larger than 15 is \emph{too complex}.  Essentially, cyclomatic complexity
+measures the number of decision points in a program and can be computed by
+counting all if statement, case branches in switch statements and the number
+of conditional loops.
+
+Given a control flow in the form of a predecessor relation {\tt rel[stat,stat]
+PRED} between statements,
+the cyclomatic complexity can be computed in an \rscript as follows:
+\begin{verbatim}
+int cyclomatic-complexity(rel[stat,stat] PRED) = 
+    #PRED - #carrier(PRED) + 2
+\end{verbatim}
+
+The number of edges $e$ is equal to the number of tuples in {\tt PRED}.
+The number of nodes $n$ is equal to the number of elements in the carrier of
+{\tt PRED}, i.e., all elements that occur in a tuple in {\tt PRED}.
 
 \subsection{Dataflow Analysis}
 
 \begin{figure}[tb]
 \begin{center}
-\epsfig{figure=figs/reach.eps,width=10cm}
+\epsfig{figure=figs/df-graph.eps,width=10cm}
 \vspace*{-6cm}
 \end{center}
-\caption{\label{FIG:reach} Flow graph for reaching definitions}
+\caption{\label{FIG:df-graph} Flow graph for various dataflow problems}
 \end{figure}
 
 \emph{Dataflow analysis} is a program analysis technique that forms the basis
@@ -1563,8 +1592,16 @@ the effect of statements on their surroundings. Typical examples are:
 
 \subsubsection{Reaching Definitions}
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/reach.eps,width=10cm}
+\vspace*{-6cm}
+\end{center}
+\caption{\label{FIG:reach} Reaching definitions for flow graph in Figure~\ref{FIG:df-graph}}
+\end{figure}
+
 We illustrate the calculation of reaching definitions using the example in
-Figure~\ref{FIG:reach} which was inspired by \cite[Example 10.15]{ASU86}.
+Figure~\ref{FIG:df-graph} which was inspired by \cite[Example 10.15]{ASU86}.
 
 As before, we assume the following basic relations {\tt PRED}, {\tt DEFS} and
 {\tt USES} about the program:
@@ -1615,19 +1652,18 @@ are placed in its kill set. In the example, {\tt KILL} gets the value
  <4, <1, "i">>, <4, <7, "i">>, <5, <2, "j">>, <6, <3, "a">>, 
  <7, <1, "i">>, <7, <4, "i">>}
 \end{verbatim}
-and, for instance, the definition of variable {\tt i} in statement
-{\tt 1} kills the definitions of {\tt i} in statements {\tt 4} and {\tt 7}.
-Next, we introduce two convenience variables:
+and, for instance, the definition of variable {\tt i} in statement {\tt 1}
+kills the definitions of {\tt i} in statements {\tt 4} and {\tt 7}.  Next, we
+introduce the collection of statements
 \begin{verbatim}
 bag[stat] STATEMENTS = carrier(PRED)
 \end{verbatim}
 which gets as value {\tt \{1, 2, 3, 4, 5, 6, 7\}} and
+two convenience functions to obtain
+the predecessor, respectively, the successor of a statement:
 \begin{verbatim}
-rel[stat,stat] PRED-OF = inv(PRED)
-\end{verbatim}
-which gets as value
-\begin{verbatim}
-{<2,1>, <3,2>, <4,3>, <5,4>, <6,5>, <7,5>, <7,6>, <4,7>}
+bag[stat] predecessor(stat S) = PRED[-,S]
+bag[stat] successor(stat S) = PRED[S,-]
 \end{verbatim}
 
 After these preparations, we are ready to formulate the reaching definitions
@@ -1650,11 +1686,14 @@ IN[S] = \bigcup_{P \in predecessor of S} OUT[P] \]
 \begin{verbatim}
 equations
   initial
-    rel[stat,def] IN init {}
-    rel[stat,def] OUT init DEF
+        rel[stat,def] IN init {}
+        rel[stat,def] OUT init DEF
   satisfy
-    IN  =  {<S, D> | stat S : STATEMENTS, stat P : PRED-OF[S], def D : OUT[P]}
-    OUT =  {<S, D> | stat S : STATEMENTS, def D : DEF[S] union (IN[S] \ KILL[S])}
+        IN  = {<S, D> | stat S : STATEMENTS, 
+                        stat P : predecessor(S), 
+                        def D : OUT[P]}
+        OUT = {<S, D> | stat S : STATEMENTS, 
+                        def D : DEF[S] union (IN[S] \ KILL[S])}
 end equations
 \end{verbatim}
 First, the relations {\tt IN} and {\tt OUT} are declared and initialized. Next, 
@@ -1698,23 +1737,54 @@ Observe, again for statement {\tt 4}, that
 all definitions of variable  {\tt i} are missing in {\tt OUT[4]} since
 they are killed by the definition of {\tt i} in statement {\tt 4} itself. Definitions for
 {\tt a} and {\tt j} are, however, contained in {\tt OUT[4]}.
+The result of reaching definitions computation is illustrated in Figure~\ref{FIG:reach}.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/live.eps,width=10cm}
+\vspace*{-6cm}
+\end{center}
+\caption{\label{FIG:live} Live variables for flow graph in Figure~\ref{FIG:df-graph}}
+\end{figure}
 
 \subsubsection{Live Variables}
 
-The live variables of a certain statement are those variables whose value will
-be used by some successor of that statement. The mathematical formulation of
-this problem is as follows:
+The live variables of a statement are those variables whose value will be used
+by the current statement or some successor of it. The mathematical formulation
+of this problem is as follows:
 
 \[
 IN[S] =USE[S] \cup (OUT[S] - DEF[S]) \]
 \[ OUT[S] = \bigcup_{S' \in successor of S} IN[S'] \]
 
+The first equation says that a variable is live coming into a statement if
+either it is used before redefinition in that statement or it is live coming
+out of the statement and is not redefined in it.  The second equation says
+that a variable is live coming out of a statement if and only if it is live
+coming into one of its successors.
 
+This can be expressed in \rscript as follows:
+\begin{verbatim}
+equations
+  initial
+        rel[stat,def] LIN init {}
+        rel[stat,def] LOUT init DEF
+  satisfy
+        LIN  =  { < S, D> | stat S : STATEMENTS,  
+                            def D : USE[S] union (LOUT[S] \ (DEF[S]))}
+        LOUT =  { < S, D> | stat S : STATEMENTS,  
+                            stat Succ : successor(S), 
+                            def D : LIN[Succ] }
+end equations
+\end{verbatim}
+
+\noindent The results of live variable analysis for our running example are illustrated in Figure~\ref{FIG:live}.
 \subsubsection{Others}
 \note{Some ideas:
 \begin{itemize}
 \item Dominator tree
-\item McCabe complexity
+\item Type system
+\item Constraint-like puzzle
 \end{itemize}
 }
 
