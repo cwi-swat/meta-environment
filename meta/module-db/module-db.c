@@ -31,7 +31,6 @@ Manipulation of modules in database:
    ATerm add_parse_table(char *modulename, char *table, int timestamp)
    ATerm validate_parse_tables(char *modulename)
    ATerm get_all_modules()
-   ATerm add_pgen_func(char *modulename, ATerm syntax)
    void process_next_module()
    void reshuffle_modules_from(char *modulename)
 */
@@ -1054,47 +1053,6 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
     ATfprintf(stderr,
               "Specification is incomplete, can not generate parse table\n");
     return ATmake("snd-value(syntax(done)))");
-  }
-}
-
-ATerm add_pgen_func(int cid, char *modulename, ATerm syntax)
-{
-  ATerm t[8], result, term, appl, nameterm, name;
-
-  name = ATmake("<str>",modulename);
-  if(ATmatchTerm(syntax,pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) {
-    nameterm = make_name_term(name);
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"parse-table\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"),
-                        pattern_asfix_ews,
-                        ATmakeList(11,ATparse("l(\"parse-table\")"),
-                                      pattern_asfix_ews,
-                                      ATparse("l(\"(\")"),
-                                      pattern_asfix_ews,
-                                      nameterm,
-                                      pattern_asfix_ews,
-                                      ATparse("l(\",\")"),
-                                      pattern_asfix_ews,
-                                      appl,
-                                      pattern_asfix_ews,
-                                      ATparse("l(\")\")")));
-    term = ATmakeTerm(pattern_asfix_term,
-                      ATparse("l(\"term\")"),
-                      pattern_asfix_ews,
-                      ATparse("l(\"X\")"),
-                      pattern_asfix_ews,
-                      ATparse("id(\"X\")"),
-                      pattern_asfix_ews,
-                      result,
-                      pattern_asfix_ews,
-                      ATparse("no-abbreviations"));
-    return ATmake("snd-value(decorated-syntax(<term>)))",term);
-  }
-  else {
-    ATerror("not a legal term: %t\n", syntax);
-    return NULL;
   }
 }
 
