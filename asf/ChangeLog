@@ -4,7 +4,8 @@
  * ASF extended with new builtins that can generate ToolBus events from
    within a specification. This can be used to connect other tools to
    a specification or to let a specification influence the Meta-Environment 
-   at run-time
+   at run-time. For example: tb-snd-note(ATerm) sends a note into the
+   ToolBus.
    
 2003/02/12 (markvdb@cs.vu.nl)
  * Improved the asfchecker with respect to ambiguities.
