@@ -2,6 +2,8 @@
 
 SUBDIRS		= libmept libptmept libasfix2 libconversion utils 
 
+EXTRA_DIST=$(wildcard *.pkg)
+
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
