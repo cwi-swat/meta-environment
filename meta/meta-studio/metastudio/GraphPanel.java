@@ -320,17 +320,19 @@ public class GraphPanel
       node_fg = nodeFG;
       node_border = nodeBorder;
     }
-    g.setColor(node_bg);
-    g.fillRect(x, y, w, h);
-
-    g.setColor(node_border);
-
+   
     Shape shape = getNodeShape(node);
     
     if (shape.isBox()) {
+      g.setColor(node_bg);
+      g.fillRect(x, y, w, h);
+      g.setColor(node_border);
       g.drawRect(x, y, w, h);
     }
     else if (shape.isEllipse()) {
+        g.setColor(node_bg);
+        g.fillOval(x,y,w,h);
+        g.setColor(node_border);
         g.drawOval(x,y,w,h);
     }
     else {
