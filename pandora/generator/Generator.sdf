@@ -1,0 +1,31 @@
+module Generator
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    "PPgenerator"(Module) -> Module
+
+hiddens
+  context-free syntax
+    generateProductions(Module, Productions)
+      -> Productions {traversal(accu, top-down, break)}
+
+    generateProductions(Grammar, Productions)
+      -> Productions {traversal(accu, top-down, break)}    
+
+    generateProd(Productions, Productions)
+      -> Productions {traversal(accu, top-down, break)}
+
+    generateProd(Production, Productions)
+      -> Productions {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "Grammar"[0-9]* -> Grammar
+    "ImpSection"[0-9]* -> ImpSection
+    "Module"[0-9]* -> Module
+    "Production"[0-9]* -> Production
+    "Productions"[0-9]* -> Productions
+    "Production*"[0-9]* -> Production*
+    "Section"[0-9]* -> Section
