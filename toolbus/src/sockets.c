@@ -72,6 +72,15 @@ static void set_connect_options(int sock)
 }
 
 /*}}}  */
+
+static char * SOCKETFILE;
+
+/* This gets calls upon termination of the ToolBus from bus_shutdown in main.c
+*/
+void remove_socketfile() {
+	unlink(SOCKETFILE);
+}
+
 /*{{{  static int connect_unix_socket(int port) */
 
 static int connect_unix_socket(int port)
@@ -85,7 +94,7 @@ static int connect_unix_socket(int port)
     int result;
 
     sprintf (name, "/var/tmp/%d", port);
-    if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
+   if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
 
     if(TBverbose)
@@ -106,8 +115,7 @@ static int connect_unix_socket(int port)
       if(attempts > 1000)
         err_sys_fatal("cannot connect, giving up"); 
       attempts++;
-    } else {
-      /* Connection established */
+    } else { /* Connection established */
       chmod(name, 0777);
       set_connect_options(sock);
       return sock;
@@ -206,7 +214,8 @@ static int create_unix_socket(int port)
 
   sprintf (name, "/var/tmp/%d", port);
   unlink (name);
-
+	SOCKETFILE = strdup(name);
+ 
   if((sock=socket(AF_UNIX,SOCK_STREAM,0)) < 0)
     err_sys_fatal("cannot open AF_UNIX stream socket");
 
@@ -220,7 +229,7 @@ static int create_unix_socket(int port)
   /* Assign an address to this socket */
   if(TBverbose)
     TBmsg("Binding %s\n", name);
-
+	
   while(bind(sock,(struct sockaddr *)&usin,
     strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
     if(attempts > 1000)

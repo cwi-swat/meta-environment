@@ -22,6 +22,7 @@
 
 extern tool_inst_list *Tools;
 extern TBbool local_ports;
+extern void remove_socketfile();
 
 void bus_shutdown(term *arg)
 { tool_inst_list *til;
@@ -40,6 +41,9 @@ void bus_shutdown(term *arg)
     destroy_ports_for_tool(ti);
     Tools = list_delete(Tools, ti);
   }
+	
+	/* Remove sockets that have been made by this toolbus. Defined in sockets.c */
+	remove_socketfile();
   fflush(stderr);
   /* kill(0, SIGKILL); */
   exit(0);
