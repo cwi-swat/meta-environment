@@ -24,12 +24,11 @@ Revision='$Revision$'
 bindir=__BINDIR__
 datadir=__DATADIR__
 
-SGLR=__SGLR__/bin/sglr
 RM=rm
 SDF2TBL=${datadir}/Sdf2.baf
 TOPSORT=SDF
-PARSER="${SGLR} -1 -s ${TOPSORT} -p ${SDF2TBL}"
-GENERATOR=${bindir}/parsetablegen"
+PARSER="__SGLR__/bin/sglr -1 -s ${TOPSORT} -p ${SDF2TBL}"
+GENERATOR="${bindir}/parsetablegen"
 
 modulename="-";
 
@@ -181,7 +180,7 @@ do
 		then
 			${RM} -f $af1name
 		else
-			Warn "Error rewriting $f"
+			Warn "Error rewriting $f (see $af1name)"
 			error=1
 		fi
 	else
