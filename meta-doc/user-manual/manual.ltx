@@ -140,10 +140,7 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 \section*{Update with respect to previous version}
 
 \begin{itemize}
-\item Updated the text at various places.
-\item Added a section on \link{parameterized sorts}[, see Section~\Ref]{ParameterizedSorts}.
-\item Completed the conversion to HyperLaTex.
-\item Added section on \link{well-formedness checks for \sdf}[ (Section~\Ref)]{SEC:SDF-checker}.
+\item Introduced the new user interface.
 \end{itemize}
 
 \section{Overview}
@@ -235,7 +232,7 @@ You can create new specifications or modify and test existing ones
 using the Meta-Environment. Specifications consist of a series of
 modules, and individual modules can be edited by invoking editors
 for the syntax part and the equations part of a module.
-All editing in the Meta-environment is done by creating
+All editing in the Meta-Environment is done by creating
 instances of a \emph{generic syntax-directed editor}.
 
 After each editing operation on a module, its \emph{implementation} is updated
@@ -263,8 +260,8 @@ to textual form by pretty printing it.
 
 \subsection{About this Manual}
 
-This manual is intended for those courageous users that want to try
-out the brand new implementation of the \ASmetaenv. This manual is
+This manual is intended for those users that want to try
+out the \ASmetaenv. This manual is
 still under development and we welcome all feed back and comments.
 
 %%In the sequel we will use \ASmetaenv\ to address the new
@@ -275,8 +272,8 @@ specification like a type checker or evaluator for the toy language
 PICO. It follows the user-interface to explain the capabilities of the
 system.  Topics that will be addressed include:
 \begin{itemize}
-\item How to start the system, and how to exit it.
-\item How to create, open and save a specification.
+\item How to start the system and exit it.
+\item How to create, open, and save a specification.
 \item How to edit the syntax and/or equations part of a module.
 \item How to edit a term.
 \item How to evaluate a term.
@@ -293,7 +290,7 @@ system.  Topics that will be addressed include:
 \item The formalism \asfsdf. 
 We only give a \link{quick introduction to \asfsdf}[ (Section~\Ref)]{ASF+SDF}.
 
-\item The architectural and implementational aspects of the system.
+\item The architecture and implementation of the system.
 We only give a brief sketch of the underlying 
 \link{technology and architecture of the \ASmetaenv}
 [ (Section~\Ref)]{SEC:TechnologyandArchitecture}.
@@ -325,7 +322,7 @@ overview of selected publications:
 
 \item{Overviews:} \cite{HKKL85}, \cite{Kli93}, \cite{B*97}, \cite{B*01}.
 
-\item {General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
+\item{General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
 
 \item{ASF:} \cite{BHK89}.
 
@@ -334,14 +331,14 @@ overview of selected publications:
 \item{ASF+SDF:} \cite{BHK89}, \cite{DHK96}.
 
 \item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90},
-\cite{RK91}, \cite{R92}, \cite{Vis97}, \cite{BSVV02}.
+\cite{RK91}, \cite{R92}, \cite{Vis97}, \cite{BSVV02}, \cite{BKMV03}.
 
 \item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
 
 \item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00},
-\cite{BKV01}.
+\cite{BKV01}, \cite{BHKO02}.
 
-\item{ToolBus}: ~\cite{BK98}.
+\item{ToolBus}: \cite{BK98}.
 
 \item{ATerms:} \cite{BJKO00}.
 
@@ -349,13 +346,15 @@ overview of selected publications:
 
 \item{Generic debugging}: \cite{Oli00}.
 
+\item{Traversal functions}: \cite{BKV02}, \cite{BKV03}.
+
 \item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
 \cite{MEmanual}.
 
 \end{description}
 
 \section*{Acknowledgements}
-Peter D. Mosses, Arthur Hofkamp, Akim Demaille, Jurgen Vinju.
+Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
 
 
 \section{Starting the System}
@@ -394,6 +393,12 @@ allows the study of the internal behaviour of the system,
 the so-called \link{``ToolBus viewer''}[. This viewer is shown in Figure~\Ref]{FIG:viewer}.
 
 \item {\tt -h } shows help information for the {\tt meta} command.
+
+\item {\tt -m \emph{modulename}} starts the Meta-Environment and the
+module with the name \emph{modulename} is automatically opened.
+
+\item {\tt -t \emph{int}}  the Meta-Environment will abort after \emph{int}
+seconds.
 
 \item {\tt -T \emph{port}} controls the communication ports that will
 be used for communication between the components of the \ASmetaenv.
@@ -1044,7 +1049,7 @@ For each module in a specification two files exist: `{\tt
 
 \item Go to your personal copy of the directory {\tt pico}. 
 \item Type the command {\tt meta}. The \link{main window}[]{FIG:meta-start}
-of the Meta-environment will
+of the Meta-Environment will
 \begin{ifhtml}
 appear.
 \end{ifhtml}
