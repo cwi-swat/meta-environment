@@ -30,7 +30,8 @@ CLEANFILES = module-db-test
 
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
-	     s@__DATADIR__@$(datadir)@g' < $< >$@ && \
+	     s@__DATADIR__@$(datadir)@g;\
+	     s@__ASFIX__@$(ASFIX)@g' < $< >$@ && \
 	chmod +x $@
 
 	

@@ -22,7 +22,7 @@
 */
 #include "../../in-output/in-output.idef"
 #include "../module-db.idef"
-#include "../../asfix/asfix-tools/asource.idef"
+#include "asource.idef"
 #include "../../toolbus/notification.tb"
 
 process Test is
