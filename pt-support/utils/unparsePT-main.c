@@ -55,11 +55,14 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  void rec_terminate(int cid, ATerm t) */
+/*{{{  ATerm unparse_asfix(int cid, ATerm t) */
 
 ATerm unparse_asfix(int cid, ATerm t)
 {
-  char *text = PT_yieldParseTree(PT_makeParseTreeFromTerm(t));
+  char *text = NULL;
+
+  text = PT_yieldAny(t);
+
   return ATmake("snd-value(unparsed-text(<str>))", text);
 }
 
@@ -142,8 +145,7 @@ int main(int argc, char *argv[])
 	ATerror("%s: parse error in input term.\n", argv[0]);
       }
       else {
-	char *text = PT_yieldParseTreeVisualAmbs(
-		       PT_makeParseTreeFromTerm(term), visualAmbs);
+	char *text = PT_yieldAnyVisualAmbs(term, visualAmbs);
 	fprintf(outputFile, "%s", text);
 	fclose(outputFile);
      }

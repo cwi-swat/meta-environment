@@ -35,17 +35,21 @@ PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 PT_Args PT_sliceArgs(PT_Args args, int start, int end);
 
+char *PT_yieldAny(ATerm t);
 char *PT_yieldParseTree(PT_ParseTree tree);
-char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs);
 char *PT_yieldTree(PT_Tree tree);
-char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs);                 
 char *PT_yieldArgs(PT_Args tree);
+
+char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs);
+char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs);
+char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs);                 
+char *PT_yieldArgsVisualAmbs(PT_Args tree, ATbool visualAmbs);
+
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
 
 ATerm PT_reportTreeAmbiguities(PT_Tree tree);
 ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree);
-
 
 char* PT_printTreeToDot(PT_Tree tree, ATbool sharing, ATbool characters, 
 			ATbool characters_sharing, ATbool productions, 

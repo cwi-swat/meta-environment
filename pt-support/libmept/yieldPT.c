@@ -1,24 +1,4 @@
 /*
-
-    MEPT -- The Meta-Environment Parse Tree library
-
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
     $Id$
 */
 
@@ -190,17 +170,6 @@ static int yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx,
 
 /*}}}  */
 
-/*{{{  char *PT_yieldArgs(PT_Args args) */
-
-char *PT_yieldArgs(PT_Args args)
-{
-  return PT_yieldTree(
-           PT_makeTreeAppl(
-             PT_makeProductionList(
-               PT_makeSymbolSort("")), args));  
-}
-
-/*}}}  */
 /*{{{  char *PT_yieldTree(PT_Tree tree)  */
 
 char *PT_yieldTree(PT_Tree tree) 
@@ -209,11 +178,27 @@ char *PT_yieldTree(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  char *PT_yieldArgs(PT_Args args) */
+
+char *PT_yieldArgs(PT_Args args)
+{
+  return PT_yieldArgsVisualAmbs(args, ATfalse);
+}
+
+/*}}}  */
 /*{{{  char *PT_yieldParseTree(PT_ParseTree tree) */
 
 char *PT_yieldParseTree(PT_ParseTree tree)
 {
   return PT_yieldParseTreeVisualAmbs(tree,ATfalse);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldAny(ATerm tree) */
+
+char *PT_yieldAny(ATerm tree)
+{
+  return PT_yieldAnyVisualAmbs(tree, ATfalse);
 }
 
 /*}}}  */
@@ -242,6 +227,17 @@ char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs)
 }
 
 /*}}}  */
+/*{{{  char *PT_yieldArgs(PT_Args args, ATbool visualAmbs) */
+
+char *PT_yieldArgsVisualAmbs(PT_Args args, ATbool visualAmbs)
+{
+  return PT_yieldTreeVisualAmbs(
+           PT_makeTreeAppl(
+             PT_makeProductionList(
+               PT_makeSymbolSort("")), args), visualAmbs);  
+}
+
+/*}}}  */
 /*{{{  char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs) */
 
 char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs)
@@ -252,6 +248,32 @@ char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs)
 
   ATerror("PT_yieldParseTreeWithVisualAmbs: not a parsetree: %t\n", tree);
   return NULL;
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs) */
+
+char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs)
+{
+  char *text = NULL;
+
+  if (ATmatch(t,"parsetree(<term>,<term>)",NULL,NULL)) {
+    text = PT_yieldParseTreeVisualAmbs(PT_ParseTreeFromTerm(t), visualAmbs);
+  }
+  else if (ATmatch(t,"[<list>]",NULL)) {
+    text = PT_yieldArgsVisualAmbs(PT_ArgsFromTerm(t), visualAmbs);
+  }
+  else if (ATmatch(t,"appl(<term>,<term>)",NULL,NULL) 
+        || ATmatch(t,"amb(<term>)",NULL)
+        || ATmatch(t,"<int>",NULL)
+        || ATmatch(t,"lit(<term>)",NULL)) {
+    text = PT_yieldTreeVisualAmbs(PT_TreeFromTerm(t), visualAmbs);
+  }
+  else {
+    ATerror("PT_yieldAny: Unknown term: %t\n", t);
+  }
+
+  return text;
 }
 
 /*}}}  */

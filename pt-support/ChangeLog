@@ -1,3 +1,9 @@
+2001/07/30 (jurgenv@cwi.nl)
+ * Added PT_yieldAny library function that can unparse any valid subparsetree
+   like: a parsetree, an appl, a lit, a character an amb or a list of 
+   trees.
+ * Adapted unparsePT to handle any part of a parse tree.
+
 2001/07/25 (jurgenv@cwi.nl)
  * PT2dot functionality added to the library. This is a highly refactored
    and parametrized version of tree2dot which migrated from the sglr package.
