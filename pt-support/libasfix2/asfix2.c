@@ -8,6 +8,9 @@
 
 #include "asfix2.h"
 
+/* Pattern for literal */
+static ATerm asfix2_literal = NULL;
+
 /* Patterns to deal with unflattened lists for lexicals */
 static ATerm asfix2_empty_to_star_lex_sort = NULL;
 static ATerm asfix2_single_to_plus_lex_sort = NULL;
@@ -46,6 +49,9 @@ static ATerm asfix2_plus_sep_star_sep_to_plus_sep = NULL;
 
 static void init_asfix_patterns()
 {
+  ATprotect(&asfix2_literal);
+  asfix2_literal = ATparse("lit(<term>)"); 
+
   ATprotect(&asfix2_empty_to_star_lex_sort);
   asfix2_empty_to_star_lex_sort  =
     ATparse("prod([],lex(iter-star(sort(<term>))),no-attrs)"); 
@@ -303,11 +309,13 @@ ATbool isSepListProd(PT_Production prod)
     return ATtrue;
   }
 
-  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
+  if (ATmatchTerm((ATerm)prod, 
+		  asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
     return ATisEqual(sort1, sort2);
   }
 
-  if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
+  if (ATmatchTerm((ATerm)prod, 
+		  asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
     return ATisEqual(sortSep1, sortSep2);
   }
 
@@ -322,10 +330,16 @@ ATbool isSepListProd(PT_Production prod)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep,
                   &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)) {
-    sep2 = ATgetLast(sortSep1);
-    return ATisEqual(sortSep1, sortSep2) && 
-           ATisEqual(sortSep1, sortSep3) &&
-           ATisEqual(sep1, sep2);
+    if (ATmatchTerm(sep1, asfix2_literal, NULL)) {
+      sep2 = ATgetLast(sortSep1);
+      return ATisEqual(sortSep1, sortSep2) && 
+             ATisEqual(sortSep1, sortSep3) &&
+             ATisEqual(sep1, sep2);
+    }
+    else {
+      return ATisEqual(sortSep1, sortSep2) && 
+             ATisEqual(sortSep1, sortSep3);
+    }
   }
 
   return ATfalse;
