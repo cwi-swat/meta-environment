@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -138,7 +139,7 @@ extern int  _SG_Mode;
 
 enum SGmodeFlags {
   SG_TOOLBUSFLAG, SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG,
-  SG_SHOWSTATFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
+  SG_SHOWSTATFLAG, SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
   SG_SHOWSTACKFLAG, SG_FILTERFLAG,
   SG_STARTSYMBOLFLAG, SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
 };
@@ -161,6 +162,9 @@ enum SGmodeFlags {
 #define SG_SHOWSTAT_ON()     (_SG_Mode |=  SG_BIT(SG_SHOWSTATFLAG))
 #define SG_SHOWSTAT_OFF()    (_SG_Mode &= ~SG_BIT(SG_SHOWSTATFLAG))
 
+#define SG_OUTPUT            (_SG_Mode  &  SG_BIT(SG_OUTPUTFLAG))
+#define SG_OUTPUT_ON()       (_SG_Mode |=  SG_BIT(SG_OUTPUTFLAG))
+#define SG_OUTPUT_OFF()      (_SG_Mode &= ~SG_BIT(SG_OUTPUTFLAG)) 
 #define SG_ASFIX1            (_SG_Mode  &  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_ON()       (_SG_Mode |=  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_OFF()      (_SG_Mode &= ~SG_BIT(SG_ASFIX1FLAG))

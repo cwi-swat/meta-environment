@@ -353,31 +353,33 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
 {
   FILE *output_file;
 
-  if(t == NULL) {
+  if (t == NULL) {
     return NULL;
   }
 
-  if (!strcmp(FN, "") || !strcmp(FN, "-")) {
-    output_file = stdout;
-  }
-  else if (!(output_file = fopen(FN, "w"))) {
-    ATerror("%s: cannot create %s\n", prgname, FN);
-  }
-  IF_VERBOSE(ATwarning("%s: writing %s to %s\n", prgname,
-                       SG_ERROR?"error output":"parse result", FN));
-  if(SG_BINARY) {
-    ATwriteToBinaryFile(t, output_file);
-  }
-  else {
-    ATwriteToTextFile(t, output_file);
-    putc('\n', output_file);                /*  For convenience; sosumi!  */
-  }
-
-  if(output_file != stdout) {
-    fclose(output_file);
-  }
-  else {
-    fflush(output_file);                    /*  Avoid mixing stdout/stderr  */
+  if (SG_OUTPUT) {
+    if (!strcmp(FN, "") || !strcmp(FN, "-")) {
+      output_file = stdout;
+    }
+    else if (!(output_file = fopen(FN, "w"))) {
+      ATerror("%s: cannot create %s\n", prgname, FN);
+    }
+    IF_VERBOSE(ATwarning("%s: writing %s to %s\n", prgname,
+                         SG_ERROR?"error output":"parse result", FN));
+    if(SG_BINARY) {
+      ATwriteToBinaryFile(t, output_file);
+    }
+    else {
+      ATwriteToTextFile(t, output_file);
+      putc('\n', output_file);                /*  For convenience; sosumi!  */
+    }
+  
+    if(output_file != stdout) {
+      fclose(output_file);
+    }
+    else {
+      fflush(output_file);                    /*  Avoid mixing stdout/stderr  */
+    }
   }
   return t;
 }

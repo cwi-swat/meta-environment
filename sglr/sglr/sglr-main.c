@@ -54,6 +54,7 @@
 
 #define program_name "sglr"
 
+int     outputflag        = ATtrue;
 int     binaryflag        = ATtrue;
 int     filterflag        = ATtrue;
 int     cycleflag         = ATtrue;
@@ -144,7 +145,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
 #if !defined(HAVE_BOEHMGC)
   "g"
 #endif
-  "hlPtvV] [-i file] [-o file] \\"
+  "hlnPtvV] [-i file] [-o file] \\"
   "\n\t\t[-s sort] [-S file]\n";
 
   ATfprintf(stream, usage, program_name);
@@ -165,6 +166,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-h, -?   : display usage information\n"
               "\t-i file  : input from |file|                    [%s]\n"
               "\t-l       : toggle statistics logging            [%s]\n"
+              "\t-n       : do not create parse tree             [%s]\n"
               "\t-o file  : output to |file|                     [%s]\n"
               "\t-p file  : use parse table |file| (required)    [%s]\n"
               "\t-P       : toggle position information          [%s]\n"
@@ -177,6 +179,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(asfix1flag), 
               DEFAULTMODE(!asfix1flag),
 #endif
+              DEFAULTMODE(!outputflag), 
               DEFAULTMODE(binaryflag), 
               DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
@@ -223,6 +226,7 @@ struct option longopts[] =
   {"help",          no_argument,       NULL,               'h'},
   {"input",         required_argument, NULL,               'i'},
   {"log",           no_argument,       NULL,               'l'},
+  {"no-output",     no_argument,       &outputflag,        ATfalse}, 
   {"output",        required_argument, NULL,               'o'},
   {"parse-table",   required_argument, NULL,               'p'},
   {"position-info", no_argument,       &posinfoflag,       'P'},
@@ -276,6 +280,7 @@ void handle_options (int argc, char **argv)
       case 'h':   show_help        = ATtrue;              break;
       case 'i':   input_file_name  = optarg;              break;
       case 'l':   statisticsflag   = !statisticsflag;     break;
+      case 'n':   outputflag       = !outputflag;         break;  
       case 'o':   output_file_name = optarg;              break;
       case 'p':   parse_table_name = optarg;              break;
       case 'P':   posinfoflag      = !posinfoflag;        break;
@@ -307,6 +312,7 @@ ATbool set_global_options(void)
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();
   if(stackoutput)    SG_SHOWSTACK_ON();
+  if(outputflag)     SG_OUTPUT_ON();
 #ifndef NO_A2TOA1
   if(asfix1flag)     SG_ASFIX1_ON();
 #endif
@@ -356,13 +362,17 @@ int SG_Batch (int argc, char **argv)
 
   parse_tree = SGparseFileUsingTable(program_name, parse_table_name, start_symbol,
                                      input_file_name, output_file_name);
-  if(!parse_tree) {
+  if (!SG_OUTPUT) {
+    return 0;
+  }
+
+  if (!parse_tree) {
     ATwarning("%s: error in %s: unexpected error\n",
               program_name, input_file_name);
     return 2;
   }
 
-  if(SGisParseError(parse_tree)) {
+  if (SGisParseError(parse_tree)) {
     ATermList errlist;
     ATerm     errcode;
     AFun      err;
@@ -375,11 +385,6 @@ int SG_Batch (int argc, char **argv)
     col  = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 2), 0));
     err  = ATgetAFun(errcode);
 
-    /*
-     if(err == SG_Plain_Error_AFun) {
-       SG_ReportErrLine(line, col);
-     }
-     */
     if(err == SG_EOF_Error_AFun) {
       ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
                 program_name, input_file_name, line, col);

@@ -4,7 +4,7 @@ SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 
-B<sglr> -B<p> file [-B<12?bcdfghlPstvV>] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+B<sglr> -B<p> file [-B<12?bcdfghlnPstvV>] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
 
 =head1 DESCRIPTION
 
@@ -61,6 +61,10 @@ Prints concise usage information (reflecting current setup).
 Toggles statistics mode (off by default).  Produces some run-time
 statistics in F<sglr-stats.txt>, including time and - on platforms
 on which these can be obtained - memory usage data.
+
+=item -B<n>
+
+Toggles the contruction of the parse tree (on by default).  
 
 =item -B<o> I<file>
 

@@ -248,6 +248,10 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr, ATerm pi)
   tree t;
   AFun fun = (AFun) NULL;
 
+/* We need no tree, so nothing needs to be constructed! */
+  if (!SG_OUTPUT) {
+    return NULL;
+  }
 
   IF_STATISTICS(if(attr == SG_PT_REJECT) sg_nr_rejects++;);
 

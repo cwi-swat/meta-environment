@@ -239,6 +239,32 @@ static path *SG_FindAllPaths(stack *st, int nrArgs, ATermList sons, path *paths)
 }
 
 /*
+ Function |SG_FindAllPathsWithoutSons| yields all paths from stack |st| 
+ with length |nrArgs| without constructing a list of sons, because
+ we are not interested in this list.
+ */
+
+static path *SG_FindAllPathsWithoutSons(stack *st, int nrArgs, path *paths)
+{
+  register st_links  *ls = NULL;
+
+  if (!st) {
+    return paths;
+  }
+
+  if (nrArgs == 0) {
+    paths = SG_NewPath(st, ATempty, paths);
+  }
+  else if (nrArgs > 0) {
+    for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
+      st_link *l = SG_HEAD(ls);
+      paths = SG_FindAllPathsWithoutSons(SG_LK_STACK(l), nrArgs - 1, paths);
+    }
+  }
+  return paths;
+}
+
+/*
  Function |SG_FindLinks| searches all paths from stack |st| with length
  |nrArgs|, until link |l0| is found.
  */
@@ -290,6 +316,36 @@ static path *SG_FindPaths(stack *st, int nrArgs, st_link *l0, ATbool link_seen,
 }                        
 
 /*
+ Function |SG_FindPathsWithoutSons| yields all paths from stack |st| with 
+ length |nrArgs|, containing link |l0| if |link_seen| is |ATtrue|,
+ without constructing a list of sons.
+ */
+
+static path *SG_FindPathsWithoutSons(stack *st, int nrArgs, 
+                                     st_link *l0, ATbool link_seen,
+                                     path *paths)
+{
+  register st_links  *ls = NULL;
+  st_link   *l1 = NULL;
+
+  if (!st) {
+    return paths;
+  }
+
+  if (nrArgs == 0 && link_seen) {
+    paths = SG_NewPath(st, ATempty, paths);
+  }
+  else if (nrArgs > 0) {
+    for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
+      l1 = SG_HEAD(ls);
+      paths = SG_FindPathsWithoutSons(SG_LK_STACK(l1), nrArgs - 1, l0,
+                                      link_seen || (l0 == l1), paths);
+    }
+  }
+  return paths;
+}                        
+
+/*
  Function |SG_FindLimitedPaths| first checks if the link |l0|
  is present in the stack, if so it finds the appropriate paths.
  */
@@ -297,7 +353,12 @@ static path *SG_FindPaths(stack *st, int nrArgs, st_link *l0, ATbool link_seen,
 path *SG_FindLimitedPaths(stack *st, int nrArgs, st_link *l0)
 {
   if (SG_FindLink(st, nrArgs, l0)) {
-    return SG_FindPaths(st, nrArgs, l0, ATfalse, ATempty, NULL);
+    if (SG_OUTPUT) {
+      return SG_FindPaths(st, nrArgs, l0, ATfalse, ATempty, NULL);
+    }
+    else {
+      return SG_FindPathsWithoutSons(st, nrArgs, l0, ATfalse, NULL);
+    }
   }
   else {
     return NULL;
@@ -684,7 +745,13 @@ void SG_DoReductions(stack *st, action a)
 
   prod = SG_A_PROD(a);
 
-  fps = SG_FindAllPaths(st, SG_A_NR_ARGS(a), ATempty, NULL);
+  if (SG_OUTPUT) {
+    fps = SG_FindAllPaths(st, SG_A_NR_ARGS(a), ATempty, NULL);
+  }
+  else {
+    fps = SG_FindAllPathsWithoutSons(st, SG_A_NR_ARGS(a), NULL);
+  }
+
   for(ps = fps; ps; ps = SG_P_NEXT(ps)) {
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
@@ -841,7 +908,8 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
   prod = SG_A_PROD(a);
 
   fps = SG_FindLimitedPaths(st, SG_A_NR_ARGS(a), l);
-  for(ps = fps; ps; ps = SG_P_NEXT(ps)) {
+
+  for (ps = fps; ps; ps = SG_P_NEXT(ps)) {
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
@@ -1094,76 +1162,81 @@ tree SG_ParseResult(char *sort)
      * So, before printing the tree (forest) cycle detection,
      * and filtering is performed. 
      */
-    
-    t = (tree) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-    if (sort) {
-      IF_STATISTICS(SG_Timer());
-      t = SG_SelectOnTopSort(table, t, sort);
-      IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.4fs\n",
-                            SG_Timer()));
-      if (!t) {
-        /*  Flag this error at start, not end, of file  */
-        SG_ResetCoordinates();
-        return SG_ParseError(ATempty, 0, NULL);
-      }
-    }
+    if (SG_OUTPUT) {
+      t = (tree) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-    /*  Now detect, and report, cycles in the tree */
-    if (SG_CYCLE) {
-      if (SG_MaxNrAmb(SG_NR_ASK) > 0) {
-
+      if (sort) {
         IF_STATISTICS(SG_Timer());
-        cycle = SG_CyclicTerm(table, t);
-        IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
-        if (!ATisEmpty(cycle)) {
-          return SG_ParseError(cycle, 0, NULL);
+        t = SG_SelectOnTopSort(table, t, sort);
+        IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.4fs\n",
+                              SG_Timer()));
+        if (!t) {
+          /*  Flag this error at start, not end, of file  */
+          SG_ResetCoordinates();
+          return SG_ParseError(ATempty, 0, NULL);
         }
       }
 
-      /* Now filtering starts, if SG_FILTER is false, it only
-       * converts amb clusters to amb nodes
+      /*  Now detect, and report, cycles in the tree */
+      if (SG_CYCLE) {
+        if (SG_MaxNrAmb(SG_NR_ASK) > 0) {
+  
+          IF_STATISTICS(SG_Timer());
+          cycle = SG_CyclicTerm(table, t);
+          IF_STATISTICS(fprintf(SG_log(), 
+                                "Cycle detection took %.4fs\n", SG_Timer()));
+          if (!ATisEmpty(cycle)) {
+            return SG_ParseError(cycle, 0, NULL);
+          }
+        }
+
+        /* Now filtering starts, if SG_FILTER is false, it only
+         * converts amb clusters to amb nodes
+         */
+
+        if (SGnrAmb(SG_NR_ASK) > 0) {
+          IF_STATISTICS(SG_Timer());
+          t = SG_FilterTree(table, t);
+          IF_STATISTICS(fprintf(SG_log(), 
+                                "Filtering took %.4fs\n", SG_Timer()));
+        }
+      }
+
+      /* Finally, the parse tree (in AsFix format) is produced, if desired. */
+      SGnrAmb(SG_NR_ZERO);
+      IF_STATISTICS(SG_Timer());
+      t = SG_YieldTree(table, t);
+      IF_STATISTICS(fprintf(SG_log(),
+                            "Aprod expansion took %.4fs\n", SG_Timer()));
+
+      SGsort(SG_SET, t);     
+
+      /*  Convert the forest in-line to AsFix1 upon request  */
+      if(SG_ASFIX1) {
+        return SG_ConvertA2ToA1(t);
+      }
+
+      /* If you'd want return ambiguity tracks instead of ambiguous
+       * AsFix2, that could be taken care of here...
        */
+      if(SG_TOOLBUS) {
+        ATerm ambtrak = SG_AmbTracker(t);
 
-      if (SGnrAmb(SG_NR_ASK) > 0) {
-        IF_STATISTICS(SG_Timer());
-        t = SG_FilterTree(table, t);
-        IF_STATISTICS(fprintf(SG_log(), "Filtering took %.4fs\n", SG_Timer()));
+        if(ambtrak) {
+          return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+        }
       }
+
+      t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
+                             (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
+
+      return t;
     }
-
-    /* Finally, the parse tree (in AsFix format) is produced, if desired. */
-    SGnrAmb(SG_NR_ZERO);
-    IF_STATISTICS(SG_Timer());
-    t = SG_YieldTree(table, t);
-    IF_STATISTICS(fprintf(SG_log(),
-                          "Aprod expansion took %.4fs\n", SG_Timer()));
-
-    SGsort(SG_SET, t);     
-
-
-    /*  Convert the forest in-line to AsFix1 upon request  */
-    if(SG_ASFIX1) {
-      return SG_ConvertA2ToA1(t);
+    else {
+      ATwarning("Successful parse yielded no parse tree\n");
+      return SG_ParseError(ATempty, 0, NULL);
     }
-
-
-    /*
-        If you'd want return ambiguity tracks instead of ambiguous
-        AsFix2, that could be taken care of here...
-     */
-    if(SG_TOOLBUS) {
-      ATerm ambtrak = SG_AmbTracker(t);
-
-      if(ambtrak) {
-        return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
-      }
-    }
-
-    t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
-                           (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
-
-    return t;
   }
 }
 

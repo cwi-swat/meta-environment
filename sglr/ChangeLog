@@ -19,6 +19,11 @@
 
 $Id$
 
+2000/12/14 (markvdb@cwi.nl)
+  * Re-implemented the "no parse tree contruction" option, however
+    in a slightly different way. No nodes are constructed, and in
+    FindPaths the list of sons is neither constructed.
+
 2000/12/14 (markvdb@cwi.nl, olivierp@cwi.nl, jong@cwi.nl)
   * Simplified actiontable implementation
   * Counting avoids and prefers filter improved.
