@@ -25,4 +25,4 @@ noinst_HEADERS		= table.h table-store.h term-store.tif.h
 
 INCLUDES	        = -I$(ATERM)/include \
                           -I$(TOOLBUSLIB)/include \
-			  -I./snapshot
+			  -I$(srcdir)/snapshot
