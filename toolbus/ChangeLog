@@ -1,5 +1,17 @@
 $Id$
 
+2003-07-13 <kooiker@cwi.nl>
+
+  * toolbus/viewer.tcl.src:
+    - Tool and process breakpoints do work now
+    - Right click (re-)sets breakpoint at line or on process/tool
+    - After extending the toolbus view with a new line of processes, tool 
+      breakpoints stay visible
+    - After changing scriptview, breakpoints are colored again
+    - Reaching a linebreak causes the scriptview to switch to the breaking 
+      script
+    - By resizing the viewer window, hidden tools will be displayed 
+
 2003-06-11 <kooiker@cwi.nl>
 
  * fix toolbus/viewer.tcl.src: bug introduced in previous version prevented 

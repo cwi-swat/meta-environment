@@ -41,6 +41,7 @@ proc create_proc {pid name} {
 }
 
 proc create_tool {tid name} {
+  # don't show the viewer process
   if { [string compare $name viewer] != 0 } {
       mk_tool .tbviewer.canvas $name $tid
   }
@@ -79,15 +80,23 @@ proc proc_proc_comm {pid1 pid2 dir} {
 }
 
 proc proc_tool_comm {pid tid size} {
-   global last_pids
+   global last_pids tracer_state
 #   puts stderr "proc_tool_comm $pid $tid\n"; flush stderr
    con_proc_tool .tbviewer.canvas $pid $tid 1 [llength $last_pids]
+
+   if { [lsearch $tracer_state(tool_breaks) $tid] >= 0 } {
+      do_stop
+   }
 }
 
 proc tool_proc_comm {pid tid size} {
-   global last_pids
+   global last_pids tracer_state
 #   puts stderr "tool_proc_comm $pid $tid\n"; flush stderr
    con_proc_tool .tbviewer.canvas $pid $tid -1  [llength $last_pids]
+ 
+   if { [lsearch $tracer_state(tool_breaks) $tid] >= 0 } {
+      do_stop
+   }
 }
 
 # Maintain a global list of the process-ids received for which a
@@ -105,19 +114,16 @@ proc monitor_atom {pid atfun src blino bpos elino epos} {
      act_proc $c $pid
      recordAtom $pid $src $blino $bpos $elino $epos
      
-     set line_break [concat $src,$blino]
+     set linebreak "$src $blino"
 
-#    hack to be able to stop at line breakpoints
-     if { [lsearch $tracer_state(line_breaks) $line_break] >= 0 } {
-        do_stop
-     }
-
-#    this if statement should have stopped viewer
-     if { [string compare $tracer_state(mode) step_mode] == 0|| \
-          [lsearch $tracer_state(proc_breaks) $pid] >= 0 || \
-          [lsearch $tracer_state(line_breaks) $line_break] == 0 } {
-       set $tracer_state(mode) step_mode
+     if { [lsearch $tracer_state(line_breaks) $linebreak] >= 0} {
        enable
+       do_stop
+       gotoAtom $c $pid
+     } elseif { [string compare $tracer_state(mode) step_mode] == 0|| \
+                [lsearch $tracer_state(proc_breaks) $pid] >= 0 } {
+       enable
+       do_stop
      } else {
        update idletasks
        after $tracer_state(delay)
@@ -164,13 +170,20 @@ set tb_glob(ntool)   0;   # current number of tools connected
 set tb_glob(trunc_value) 64; # maximum length of value in display
 set tb_glob(toolspace) 120; # space reserved for tools
 
-proc drawBus {c} {
+proc drawBus {c {width 0}} {
      global tb_glob
      set tb_glob(busbase) [expr (1 + $tb_glob(nrow)) * $tb_glob(dy)]
-     $c create rectangle 4 4 \
-                      [expr $tb_glob(xp0) + (1 + $tb_glob(maxcol))*$tb_glob(dx)] \
-                      $tb_glob(busbase) \
-                       -width 4 -tags rect
+     if {$width == 0} {
+        set width [.tbviewer.canvas cget -width]
+     } else {
+        set width [expr $width - 4]
+     }
+     #$c create rectangle 4 4 \
+     #                 [expr $tb_glob(xp0) + (1 + $tb_glob(maxcol))*$tb_glob(dx)] \
+     #                 $tb_glob(busbase) \
+     #                 -width 4 -tags rect
+    $c delete tag rect
+    $c create rectangle 4 4 $width $tb_glob(busbase) -width 4 -tags rect
     set tb_glob(ybase) [expr $tb_glob(busbase) - $tb_glob(dy)/2]
     set tb_glob(tbase) [expr $tb_glob(busbase) + $tb_glob(dy)]
 }
@@ -223,8 +236,10 @@ proc mkViewer {} {
    defHelp $w.canvas \
    "Click on process to view its text ; Double click on process to view its variables"
    pack $w.help -side bottom -fill both
-   pack $w.canvas -side bottom -expand 1 -fill y
-   drawBus $w.canvas   
+   pack $w.canvas -side bottom -expand true -fill both ;#y
+   bind $w.canvas <Configure> "drawBus $w.canvas %w"
+
+   #drawBus $w.canvas; #binding <Configure> is called by init of window, so drawBus will be executed anyway   
 
    frame $w.buttons
    label $w.buttons.txt -text "Name:"
@@ -251,6 +266,7 @@ proc mkViewer {} {
    pack $w.text -side left -expand 1 -fill x
 
    bind $w.text <Double-Button-1> "addBreak $w.text"
+   bind $w.text <Button-3> "addBreak $w.text"
    defHelp $w.text "Double click to (re)set breakpoint on a line"
    defHelp $w.scroll "Scroll text of script"
 
@@ -271,10 +287,13 @@ proc newDelay {sc value} {
    set tracer_state(delay) $value
 }
 
-# list of current breakpoints
-           
+# delay time between two succeeding communications
 set tracer_state(delay) 150
+
+# initial trace mode
 set tracer_state(mode) step_mode
+
+# list of current breakpoints
 set tracer_state(line_breaks) {}
 set tracer_state(proc_breaks) {}
 set tracer_state(tool_breaks) {}
@@ -285,10 +304,10 @@ proc addBreak {w} {
      set lp [$w index insert]
      regexp {([0-9]+)\.([0-9]+)} $lp clp l p;
      set breaks $tracer_state(line_breaks)
-     set line_break [concat $current_src,$l]
-     set i [lsearch $breaks $line_break]
+     set linebreak "$current_src $l"
+     set i [lsearch $breaks $linebreak]
      if { $i < 0 } {     
-        lappend tracer_state(line_breaks) $line_break
+        lappend tracer_state(line_breaks) $linebreak
         $w tag add break $l.0 [expr $l + 1].0
         $w tag configure break -foreground Red
      } else {
@@ -303,8 +322,8 @@ proc delBreak {w} {
      set lp [$w index insert]
      regexp {([0-9]+)\.([0-9]+)} $lp clp l p
      set breaks $tracer_state(line_breaks)
-     set line_break [concat $current_src,$l]
-     set i [lsearch $breaks $line_break]
+     set linebreak "$current_src $l"
+     set i [lsearch $breaks $linebreak]
      if { $i >= 0 } {
          set  $tracer_state(line_breaks) [lreplace $breaks $i $i]
          $w tag remove break $l.0 [expr $l + 1].0
@@ -371,7 +390,7 @@ proc recordAtom {pid src blino bpos elino epos} {
 }
 
 proc gotoAtom {w pid} {
-     global current_src atoms
+     global current_src atoms tracer_state
 
      if { [info exists atoms($pid)] } {
         set descr $atoms($pid)
@@ -387,7 +406,7 @@ proc gotoAtom {w pid} {
    }
 
 proc load_text {filename} {
-   global current_src atoms
+   global current_src atoms tracer_state
 
   .tbviewer.text delete 0.0 end
   set file [open $filename r]
@@ -397,6 +416,13 @@ proc load_text {filename} {
     wm title .tbviewer "ToolBus Viewer ($filename)"
     while {![eof $file]} {
        .tbviewer.text insert end [read $file 1000]
+       foreach i $tracer_state(line_breaks) {
+          if {[lsearch $i $filename] == 0} {
+             set line [lindex $i 1]
+             .tbviewer.text tag add break $line.0 [expr $line + 1].0
+             .tbviewer.text tag configure break -foreground Red
+          }   
+       }
     }
   }
   set current_src $filename
@@ -442,7 +468,8 @@ proc mk_process {c name index} {
 	               [expr $x + $rp] [expr $y + $rp] \
 		       -outline Black -width 2 -fill $colors(proc,inactive)\
 		       -tags "proc$index proc"
-        $c bind proc$index <Button> "gotoAtom $c $index" ;# "addProcBreak $c $index"
+        $c bind proc$index <Button-1> "gotoAtom $c $index"
+        $c bind proc$index <Button-3> "addProcBreak $c $index"
         $c bind proc$index <Double-Button> "addProcVars $name $index"
         
         set bname [string range $name 0 4]
@@ -561,7 +588,7 @@ proc limit_size {val} {
 }
 
 proc mk_tool {c name index} {
-        global xtcon colors tb_glob tool_name
+        global xtcon colors tb_glob tool_name tracer_state
 
         set xt0 [expr $tb_glob(xp0) - $tb_glob(dx) / 2]
 
@@ -572,10 +599,14 @@ proc mk_tool {c name index} {
 	               [expr $x + $rp] [expr $y + $rp] \
 		       -outline black -width 2 -fill $colors(tool,inactive) \
 		       -tags "tool$index tool"
-        $c bind tool$index <Button-1> "addToolBreak $c $index"
+        $c bind tool$index <Button-3> "addToolBreak $c $index"
         $c create text $x [expr $y + $rp + 10] -text $name -tags "tool_txt$index"
         $c create line $x [expr $y - $rp] $x $tb_glob(busbase) -width 1.5 \
 	               -tags "tool_line$index"
+
+	if { [lsearch $tracer_state(tool_breaks) $index] >= 0 } {
+           $c itemconfigure tool$index -outline Red
+    	}
 
         set tool_name($index) $name
         set xtcon($index) $x
