@@ -1,7 +1,7 @@
 # $Id$
 
 Thu Mar 11 08:35:20 CET 2004 <kooiker@cwi.nl>
- * Use new Error API 
+ * Use new Error API.
 
 Fri Mar  5 10:08:44 CET 2004 <kooiker@cwi.nl>
  * formatter/Text.{asf,sdf}:
