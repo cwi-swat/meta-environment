@@ -220,7 +220,7 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 
   len = strlen(path) - strlen("sdf");
   strncpy(eqsPath, path, len);
-  strcat(eqsPath, "eqs");
+  strcpy(eqsPath+len, "eqs");
 
   if(ATmatchTerm(sdfTree,pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
@@ -518,7 +518,7 @@ ATerm get_path(int cid, char *modulename, ATerm type)
 
   if (ATmatch(type, "eqs")) {
       location = PATH_EQS_LOC;
-  } else if (ATmatch(type, "sdf")) {
+  } else if (ATmatch(type, "sdf2")) {
       location = PATH_SYN_LOC;
   } else {
       ATerror("Unsupported database type: %t", type);
