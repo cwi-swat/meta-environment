@@ -3,7 +3,7 @@
  */
 
 tool pgen is {
-  command = "pgen -termtable 20"
+  command = "ParseTable-Generator -termtable 20"
 }
 
 process PGen is
@@ -16,10 +16,7 @@ let
   Syntax    : term,
   NewSyntax : term,
   Str       : str,
-  Table     : str/*
-  $Id$
- */
-,
+  Table     : str,
   Mods      : list,
   Id        : int
 in
