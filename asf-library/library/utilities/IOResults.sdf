@@ -20,8 +20,8 @@ context-free syntax
 sorts BytesResult
 context-free syntax
 
-  "read" "(" Bytes ")" -> BytesResult {cons("success")}
-  "read-error" "(" Feedback ")" -> BytesResult {cons("failure")}
+  "bytes" "(" Bytes ")" -> BytesResult {cons("success")}
+  "bytes-error" "(" Feedback ")" -> BytesResult {cons("failure")}
 
 sorts WriteResult
 context-free syntax
