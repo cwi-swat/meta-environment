@@ -1042,7 +1042,7 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
 
   SG_ERROR_ON();
 
-  if(!ATisEmpty(cycle)) {
+  if (!ATisEmpty(cycle)) {
     errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
   }
   else if(excess_ambs) {
@@ -1078,7 +1078,7 @@ tree SG_ParseResult(char *sort)
   ATermList cycle;
   tree      t;
 
-  if(!accepting_stack) {
+  if (!accepting_stack) {
     return SG_ParseError(ATempty, 0, NULL);
   } 
   else {
@@ -1136,7 +1136,7 @@ tree SG_ParseResult(char *sort)
 
         SGsort(SG_SET, t);     
 
-        if(SG_TOOLBUS) {
+        if (SG_TOOLBUS || SG_AMBIGUITY_ERROR) {
 	  ATerm ambtrak = NULL;
 	  
           ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);

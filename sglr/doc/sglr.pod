@@ -4,7 +4,7 @@ SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 
-B<sglr> -B<p> file [-B<2?bcdhlmnPstvV>] [-B<f>[adeirp]] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>]
+B<sglr> -B<p> file [-B<2?AbcdhlmnstvV>] [-B<f>[adeirp]] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>]
 
 =head1 DESCRIPTION
 
@@ -19,6 +19,10 @@ A number of options can be supplied; these are as follows:
 =item -B<2>
 
 Generate AsFix2 output format.  
+
+=item -B<A>
+
+Ambiguities are treated as errors.
 
 =item -B<b>, -B<t>
 
@@ -84,11 +88,6 @@ Write output to F<file>; by default, output is written to stdout.
 Note that strange things are bound to happen when writing binary
 output to a tty.
 
-=item -B<P>
-
-Parse forests are annotated with position information.  This can
-be quite expensive in terms of time- ane memory usage.
-
 =item -B<s> I<sort>
 
 Only parse trees that have I<sort> at their root are accepted.
@@ -113,7 +112,7 @@ the grammar corresponding to the specified parse table.
 
     $ sglr -h
     Usage:
-      sglr    -p file [-2?bcdhlmnPtvV] [-f[adeirp]] [-i file] [-o file] \
+      sglr    -p file [-2?AbcdhlmntvV] [-f[adeirp]] [-i file] [-o file] \
               [-s sort]
     [. . .]
     $ sglr -vp Test.tbl -i MyCode.cod -o Output.File -l

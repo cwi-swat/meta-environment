@@ -20,23 +20,23 @@
 
 #define program_name "sglr"
 
-int     outputflag        = ATtrue;
-int     binaryflag        = ATtrue;
-int     filterflag        = ATtrue;
+int     outputflag                 = ATtrue;
+int     binaryflag                 = ATtrue;
+int     filterflag                 = ATtrue;
 int     filter_associativityflag   = ATtrue;
 int     filter_directeagernessflag = ATtrue;
 int     filter_eagernessflag       = ATtrue;
 int     filter_injectioncountflag  = ATtrue;
 int     filter_priorityflag        = ATtrue;
 int     filter_rejectflag          = ATtrue;
-int     cycleflag         = ATtrue;
-int     posinfoflag       = ATfalse;
-int     verboseflag       = ATfalse;
-int     debugflag         = ATfalse;
-int     statisticsflag    = ATfalse;
-int     supplexflag       = ATfalse;
-int     printprodsflag    = ATfalse;
-int     asfix2meflag      = ATtrue;
+int     cycleflag                  = ATtrue;
+int     verboseflag                = ATfalse;
+int     debugflag                  = ATfalse;
+int     statisticsflag             = ATfalse;
+int     supplexflag                = ATfalse;
+int     printprodsflag             = ATfalse;
+int     ambiguityerrorflag         = ATfalse;
+int     asfix2meflag               = ATtrue;
 
 char   *input_file_name   = "-";
 char   *output_file_name  = "-";
@@ -111,6 +111,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
     ATfprintf(stream,
               "Parameters:\n"
               "\t-2         : use AsFix2 output format             [%s]\n"
+              "\t-A         : ambiguities are treated as errors    [%s]\n"
               "\t-b         : output AsFix in binary format (BAF)  [%s]\n"
               "\t-c         : toggle cycle detection               [%s]\n"
               "\t-d         : toggle debug mode                    [%s]\n"
@@ -128,12 +129,12 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-n         : toggle parse tree creation           [%s]\n"
               "\t-o file    : output to |file|                     [%s]\n"
               "\t-p file    : use parse table |file| (required)    [%s]\n"
-              "\t-P         : toggle position information          [%s]\n"
               "\t-s symbol  : define start symbol                  [%s]\n"
               "\t-t         : output AsFix in textual format       [%s]\n"
               "\t-v         : toggle verbose mode                  [%s]\n"
               "\t-V         : reveal program version (i.e. %s)\n",
               DEFAULTMODE(!asfix2meflag),
+              DEFAULTMODE(ambiguityerrorflag),
               DEFAULTMODE(binaryflag), 
               DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
@@ -150,7 +151,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(outputflag),
               output_file_name,
               parse_table_name?parse_table_name:"unspecified",
-              DEFAULTMODE(posinfoflag),
               start_symbol ? start_symbol:"any", 
               DEFAULTMODE(!binaryflag),
               DEFAULTMODE(verboseflag),
@@ -170,24 +170,24 @@ void SG_Usage(FILE *stream, ATbool long_message)
 
 struct option longopts[] =
 {
-  {"binary-output", no_argument,       &binaryflag,        ATtrue},
-  {"asfix2",        no_argument,       &asfix2meflag,      ATtrue},
-  {"debug",         no_argument,       &debugflag,         ATtrue},
-  {"no-filter",     optional_argument, &filterflag,        ATfalse},
-  {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
-  {"help",          no_argument,       NULL,               'h'},
-  {"input",         required_argument, NULL,               'i'},
-  {"log",           no_argument,       NULL,               'l'},
-  {"no-output",     no_argument,       &outputflag,        ATfalse}, 
-  {"output",        required_argument, NULL,               'o'},
-  {"parse-table",   required_argument, NULL,               'p'},
-  {"position-info", no_argument,       &posinfoflag,       'P'},
-  {"start-symbol",  required_argument, NULL,               's'},
-  {"statistics",    no_argument,       &statisticsflag,    ATfalse},
-  {"asfix2me",      no_argument,       &asfix2meflag,      ATfalse},
-  {"text-output",   no_argument,       &binaryflag,        ATfalse},
-  {"verbose",       no_argument,       &verboseflag,       ATtrue},
-  {"version",       no_argument,       NULL,               'V'},
+  {"ambiguity-error", no_argument,       &ambiguityerrorflag,  ATtrue},
+  {"binary-output",   no_argument,       &binaryflag,          ATtrue},
+  {"asfix2",          no_argument,       &asfix2meflag,        ATtrue},
+  {"debug",           no_argument,       &debugflag,           ATtrue},
+  {"no-filter",       optional_argument, &filterflag,          ATfalse},
+  {"cycle-detect",    no_argument,       &cycleflag,           ATtrue},
+  {"help",            no_argument,       NULL,                 'h'},
+  {"input",           required_argument, NULL,                 'i'},
+  {"log",             no_argument,       NULL,                 'l'},
+  {"no-output",       no_argument,       &outputflag,          ATfalse}, 
+  {"output",          required_argument, NULL,                 'o'},
+  {"parse-table",     required_argument, NULL,                 'p'},
+  {"start-symbol",    required_argument, NULL,                 's'},
+  {"statistics",      no_argument,       &statisticsflag,      ATfalse},
+  {"asfix2me",        no_argument,       &asfix2meflag,        ATfalse},
+  {"text-output",     no_argument,       &binaryflag,          ATfalse},
+  {"verbose",         no_argument,       &verboseflag,         ATtrue},
+  {"version",         no_argument,       NULL,                 'V'},
   {0, 0, 0, 0}
 };
 
@@ -242,13 +242,14 @@ void handle_options (int argc, char **argv)
   ATbool show_help = ATfalse, show_version = ATfalse;
 
   while ((c = getopt_long(argc, argv,
-                          "12?bcdf::hi:lmno:p:Ps:S:tvV",
+                          "12?Abcdf::hi:lmno:p:s:S:tvV",
                           longopts, NULL))
          != EOF) {
     switch (c) {
       case 0:   break;
       case '2':   asfix2meflag     = ATfalse;             break;
       case '?':   show_help        = ATtrue;              break;
+      case 'A':   ambiguityerrorflag = !ambiguityerrorflag; break;
       case 'b':   binaryflag       = ATtrue;              break;
       case 'c':   cycleflag        = !cycleflag;          break;
       case 'd':   debugflag        = !debugflag;          break;
@@ -260,7 +261,6 @@ void handle_options (int argc, char **argv)
       case 'n':   outputflag       = !outputflag;         break;  
       case 'o':   output_file_name = optarg;              break;
       case 'p':   parse_table_name = optarg;              break;
-      case 'P':   posinfoflag      = !posinfoflag;        break;
       case 's':   start_symbol     = optarg;              break;
       case 't':   binaryflag       = ATfalse;             break;
       case 'v':   verboseflag      = !verboseflag;        break;
@@ -280,37 +280,37 @@ void handle_options (int argc, char **argv)
 
 ATbool set_global_options(void)
 {
-  if(debugflag)      SG_DEBUG_ON();
-  if(verboseflag)    SG_VERBOSE_ON();
-  if(filterflag)     SG_FILTER_ON();
+  if(debugflag)                  SG_DEBUG_ON();
+  if(verboseflag)                SG_VERBOSE_ON();
+  if(filterflag)                 SG_FILTER_ON();
   if(filter_associativityflag)   SG_FILTER_ASSOCIATIVITY_ON();
   if(filter_directeagernessflag) SG_FILTER_DIRECTEAGERNESS_ON();
   if(filter_eagernessflag)       SG_FILTER_EAGERNESS_ON();
   if(filter_injectioncountflag)  SG_FILTER_INJECTIONCOUNT_ON();
   if(filter_priorityflag)        SG_FILTER_PRIORITY_ON();
   if(filter_rejectflag)          SG_FILTER_REJECT_ON();
-  if(cycleflag)      SG_CYCLE_ON();
-  if(start_symbol)   SG_STARTSYMBOL_ON();
-  if(statisticsflag) SG_SHOWSTAT_ON();
-  if(outputflag)     SG_OUTPUT_ON();
-  if(asfix2meflag)   SG_ASFIX2ME_ON();
-  if(binaryflag)     SG_BINARY_ON();
-  if(posinfoflag)    SG_POSINFO_ON();
+  if(cycleflag)                  SG_CYCLE_ON();
+  if(start_symbol)               SG_STARTSYMBOL_ON();
+  if(statisticsflag)             SG_SHOWSTAT_ON();
+  if(outputflag)                 SG_OUTPUT_ON();
+  if(asfix2meflag)               SG_ASFIX2ME_ON();
+  if(binaryflag)                 SG_BINARY_ON();
+  if(ambiguityerrorflag)         SG_AMBIGUITY_ERROR_ON();
 
   if(!parse_table_name) {
     SG_DEBUG_OFF();
     SG_SHOWSTAT_OFF();
   }
-/*
-  SG_DEBUG_ON(); 
-*/
-  if(SG_STATISTICS)
+
+  if(SG_STATISTICS) {
     SG_OpenLog(program_name, SG_DEBUG?".sglr-log":"sglr-stats.txt");
+  }
 
   /*  Return whether a possibly runnable instantiation has been obtained...  */
   if(parse_table_name) {
     return ATtrue;
-  } else {
+  }
+  else {
     return ATfalse;
   }
 }
@@ -335,8 +335,11 @@ int SG_Batch (int argc, char **argv)
 {
   ATerm      parse_tree;
 
-  parse_tree = SGparseFileUsingTable(program_name, parse_table_name, start_symbol,
-                                     input_file_name, output_file_name);
+  parse_tree = SGparseFileUsingTable(program_name, 
+                                     parse_table_name, 
+                                     start_symbol,
+                                     input_file_name, 
+                                     output_file_name);
   if (!SG_OUTPUT) {
     return 0;
   }
@@ -378,13 +381,21 @@ int SG_Batch (int argc, char **argv)
     } 
     else if (err == SG_Cycle_Error_AFun) {
       ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
-                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
+                program_name, 
+                input_file_name, 
+                line, 
+                col, 
+                ATgetArgument(errcode, 0));
     }
     else if (err == SG_Amb_Error_AFun) {
-			int ambiescount = ATgetInt((ATermInt) ATgetArgument(errcode,0));
+      int ambiescount = ATgetInt((ATermInt) ATgetArgument(errcode,0));
       ATwarning("%s: error in %s, line %d, col %d: cannot represent %d ambiguit%s\n",
-                program_name, input_file_name, line, col, ambiescount,
-								(ambiescount > 1) ? "ies" : "y" );
+                program_name, 
+                input_file_name, 
+                line, 
+                col, 
+                ambiescount,
+                (ambiescount > 1) ? "ies" : "y" );
     }
     else {
       ATwarning("%s: error in %s, line %d, col %d: unknown error",
@@ -444,13 +455,13 @@ int main (int argc, char **argv)
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
     IF_STATISTICS(
-                  fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
-                  if(maxrss) {
-                    fprintf(SG_log(), "[mem] ATerm init: %ld before, %ld after\n",
-                            maxrss, SG_ResidentSetSize());
-                  }
-                  )
-      cid = ATBconnect(NULL, NULL, -1, sglr_handler);
+      fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
+      if (maxrss) {
+        fprintf(SG_log(), "[mem] ATerm init: %ld before, %ld after\n",
+                maxrss, SG_ResidentSetSize());
+      }
+    )
+    cid = ATBconnect(NULL, NULL, -1, sglr_handler);
     ATBeventloop();
 #endif
   } else {

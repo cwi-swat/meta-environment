@@ -140,7 +140,7 @@ enum SGmodeFlags {
   SG_STARTSYMBOLFLAG, 
   SG_GCFLAG, 
   SG_CYCLEFLAG, 
-  SG_POSINFOFLAG
+  SG_AMBIGUITY_ERRORFLAG
 };
 
 #define SG_BIT(i)            (1 << i)
@@ -233,9 +233,9 @@ enum SGmodeFlags {
 #define SG_CYCLE_ON()        (_SG_Mode |=  SG_BIT(SG_CYCLEFLAG))
 #define SG_CYCLE_OFF()       (_SG_Mode &= ~SG_BIT(SG_CYCLEFLAG))
 
-#define SG_POSINFO           (_SG_Mode  &  SG_BIT(SG_POSINFOFLAG))
-#define SG_POSINFO_ON()      (_SG_Mode |=  SG_BIT(SG_POSINFOFLAG))
-#define SG_POSINFO_OFF()     (_SG_Mode &= ~SG_BIT(SG_POSINFOFLAG))
+#define SG_AMBIGUITY_ERROR       (_SG_Mode  &  SG_BIT(SG_AMBIGUITY_ERRORFLAG))
+#define SG_AMBIGUITY_ERROR_ON()  (_SG_Mode |=  SG_BIT(SG_AMBIGUITY_ERRORFLAG))
+#define SG_AMBIGUITY_ERROR_OFF() (_SG_Mode &= ~SG_BIT(SG_AMBIGUITY_ERRORFLAG))
 
 #define SG_STATISTICS        (SG_SHOWSTAT || SG_DEBUG)
 
