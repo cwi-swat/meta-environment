@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 
