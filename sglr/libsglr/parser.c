@@ -986,12 +986,13 @@ void SG_Shifter(void)
   t = SG_LookupProduction(table, current_token);
 
   for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
-    next_tuple = cur_tuple->next;
     ATermList token = SG_STPL_TOKEN(cur_tuple);
     int index       = SG_STPL_INDEX(cur_tuple);
     int length      = SG_STPL_LENGTH(cur_tuple);
     s               = SG_STPL_STATE(cur_tuple);
     st0             = SG_STPL_STACK(cur_tuple);
+
+    next_tuple = cur_tuple->next;
 
     /*ATwarning("entering shifter with %t and %d\n", token, index);  */
 
