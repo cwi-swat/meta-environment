@@ -42,7 +42,7 @@ public class TreeNode {
 		}
 
 		if (tokens.hasMoreTokens()) {
-			if (childNode == null) {
+			if (childNode == null || childNode.isLeaf()) {
 				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
 				children.add(i, childNode);
 			}
