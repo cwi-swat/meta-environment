@@ -137,7 +137,7 @@ exports
 
         find-result-type(RVAR, REXPTYPE, TENV)   		-> REXPTYPE # TENV
 
-        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]])	-> Boolean #  Table[[RVAR,REXPTYPE]]
+        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]], TENV)	-> Boolean #  Table[[RVAR,REXPTYPE]]
         substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
 
 hiddens
