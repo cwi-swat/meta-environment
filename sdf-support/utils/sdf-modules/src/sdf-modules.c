@@ -47,7 +47,7 @@ static void version(const char *msg)
 
 /*{{{  ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)  */
 
-ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name) 
+ATerm get_all_needed_module_names(int cid, ATerm pairs, const char* name) 
 {
   ATerm id = ATmake("<str>", name);
   ATermList imports = PI_getTransitiveImports((ATermList) ATBunpack(pairs), id);
@@ -55,12 +55,12 @@ ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)  */
+/*{{{  ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name)  */
 
-ATerm get_all_needed_imports(int cid, ATerm atModules, char* name) 
+ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name) 
 {
   ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString((char*) name));
   SDF_ImportList imports;
  
   imports = SI_getTransitiveImports(list, id);
@@ -82,9 +82,9 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
 
 /*}}}  */
 
-/*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, char* name) */
+/*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, const char* name) */
 
-ATerm get_all_depending_module_names(int cid, ATerm pairs, char* name)
+ATerm get_all_depending_module_names(int cid, ATerm pairs, const char* name)
 {
   ATerm id = ATmake("<str>", name);
   ATermList depending = PI_getDependingModules((ATermList) pairs, id);
@@ -94,9 +94,9 @@ ATerm get_all_depending_module_names(int cid, ATerm pairs, char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm get_depending_modules(int cid, ATerm atModules, char* name) */
+/*{{{  ATerm get_depending_modules(int cid, ATerm atModules, const char* name) */
 
-ATerm get_depending_module_names(int cid, ATerm pairs, char* name)
+ATerm get_depending_module_names(int cid, ATerm pairs, const char* name)
 {
   ATerm id = ATmake("<str>", name);
   ATermList depending = PI_getDirectDependingModules((ATermList) pairs, id);
@@ -118,12 +118,21 @@ ATerm get_module_id(int cid, ATerm atModule)
 }
 
 /*}}}  */
-/*{{{  ATerm get_module_path(int cid, char *path, char *id) */
+/*{{{  ATerm get_module_path(int cid, const char *path, const char *id) */
 
-ATerm get_module_path(int cid, char *path, char *id)
+ATerm get_module_path(int cid, const char *path, const char *id)
 {
+  char *pathBuf;
+  char *idBuf;
   int p;
   int i;
+  ATerm result;
+
+  pathBuf = strdup(path);
+  assert(pathBuf != NULL);
+
+  idBuf = strdup(id);
+  assert(idBuf != NULL);
 
   /* If path equals "/bla/basic/" and id equals "basic/Booleans"
    * then we should return "/bla".
@@ -132,22 +141,22 @@ ATerm get_module_path(int cid, char *path, char *id)
    * then we should return "/bla/basic"
    */
   
-  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--) {
-    path[p] = '\0';
+  for(p = strlen(pathBuf) - 1; p >= 0 && pathBuf[p] == SEP; p--) {
+    pathBuf[p] = '\0';
   }
   
-  for(i = strlen(id) - 1; i >= 0 && id[i] != SEP; i--);
+  for(i = strlen(idBuf) - 1; i >= 0 && idBuf[i] != SEP; i--);
 
   /* if i < 0, then the module name is not compound */
   if (i >= 0) {
     int lp = p;
-    assert(id[i] == SEP);
-    id[i] = '\0';
+    assert(idBuf[i] == SEP);
+    idBuf[i] = '\0';
     i--;
 
     /* Eat up as much overlap as possible */
     for(; p >= 0 && i >= 0; p--, i--) {
-      if (path[p] != id[i]) {
+      if (pathBuf[p] != idBuf[i]) {
 	break;
       }
     }
@@ -159,17 +168,21 @@ ATerm get_module_path(int cid, char *path, char *id)
   }
 
   /* remove trailing directory separators */
-  for(; p >= 0 && path[p] == SEP; p--) {
-    path[p] = '\0';
+  for(; p >= 0 && pathBuf[p] == SEP; p--) {
+    pathBuf[p] = '\0';
   }
 
-  return ATmake("snd-value(module-path(<str>))", path);
+  result = ATmake("snd-value(module-path(<str>))", path);
+
+  free(pathBuf);
+  free(idBuf);
+  return result;
 }
 
 /*}}}  */
-/*{{{  ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id) */
+/*{{{  ATerm get_new_module_name(int cid, ATerm searchPaths, const char *path, const char* id) */
 
-ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
+ATerm get_new_module_name(int cid, ATerm searchPaths, const char *path, const char* id)
 {
   ATermList search = (ATermList) searchPaths;
   char chosenPath[PATH_LEN] = "";
@@ -262,9 +275,9 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
 
 /*}}}  */
 
-/*{{{  ATerm is_valid_modulename(int cid, char* path, char *moduleName) */
+/*{{{  ATerm is_valid_modulename(int cid, const char* path, const char *moduleName) */
 
-ATerm is_valid_modulename(int cid, char *moduleName)
+ATerm is_valid_modulename(int cid, const char *moduleName)
 {
   int j;
   int namelen = strlen(moduleName);
@@ -285,11 +298,11 @@ ATerm is_valid_modulename(int cid, char *moduleName)
 
 /*}}}  */
 
-/*{{{  ATerm add_import_to_module(int cid, ATerm atModule, char* name) */
+/*{{{  ATerm add_import_to_module(int cid, ATerm atModule, const char* name) */
 
-ATerm add_import_to_module(int cid, ATerm atModule, char* name)
+ATerm add_import_to_module(int cid, ATerm atModule, const char* name)
 {
-  SDF_Import sdfImport = SDF_makeImport(name);
+  SDF_Import sdfImport = SDF_makeImport((char*) name);
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module oldModule = SDF_getStartTopModule(start);
   SDF_Module newModule = SDF_addModuleImport(oldModule, sdfImport);
@@ -301,11 +314,11 @@ ATerm add_import_to_module(int cid, ATerm atModule, char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm remove_import_from_module(int cid, ATerm atModule, char* name) */
+/*{{{  ATerm remove_import_from_module(int cid, ATerm atModule, const char* name) */
 
-ATerm remove_import_from_module(int cid, ATerm atModule, char* name)
+ATerm remove_import_from_module(int cid, ATerm atModule, const char* name)
 {
-  SDF_Import sdfImport = SDF_makeImport(name);
+  SDF_Import sdfImport = SDF_makeImport((char*) name);
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module oldModule = SDF_getStartTopModule(start);
   SDF_Module newModule = SDF_removeModuleImport(oldModule, sdfImport);
@@ -317,13 +330,13 @@ ATerm remove_import_from_module(int cid, ATerm atModule, char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm rename_modulename_in_module(int cid, ATerm atModule, char* from, ) */
+/*{{{  ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* from, ) */
 
-ATerm rename_modulename_in_module(int cid, ATerm atModule, char* name)
+ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* name)
 {
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module oldModule = SDF_getStartTopModule(start);
-  SDF_Module newModule = SDF_setModuleName(oldModule, name);
+  SDF_Module newModule = SDF_setModuleName(oldModule, (char*) name);
 
   start = SDF_setStartTopModule(start, newModule);
   atModule = SDF_StartToTerm(start);
