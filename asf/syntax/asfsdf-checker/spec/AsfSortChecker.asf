@@ -1,0 +1,30 @@
+equations
+
+  [cs-1'1] check-for-asf-sorts(Definition) = 
+             check-for-asf-sorts(Definition, {})
+
+  [cs-1'2] get-module-name(Module) = $ModuleId
+           ====================================
+           check-for-asf-sorts(Module, Msgs) = 
+             check-asf-sorts(Module, Msgs, $ModuleId)
+
+  [cs-2'2] is-asf-sort($Sort) = true
+           =========================
+           check-asf-sorts($Sort, Msgs, $ModuleId) =
+              Msgs + asf-equation-sort-must-not-be-used($ModuleId, $Sort)
+
+  [ias-1'1] is-asf-sort(ASF-Tag) = true
+
+  [ias-1'2] is-asf-sort(ASF-TagId) = true
+
+  [ias-1'3] is-asf-sort(ASF-ConditionalEquation) = true
+
+  [ias-1'4] is-asf-sort(ASF-Equation) = true
+
+  [ias-1'5] is-asf-sort(ASF-Implies) = true
+
+  [ias-1'6] is-asf-sort(ASF-Condition) = true
+
+  [ias-1'7] is-asf-sort(ASF-Equations) = true
+
+  [default-ias-1'8] is-asf-sort($Sort) = false

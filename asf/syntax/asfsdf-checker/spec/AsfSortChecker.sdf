@@ -1,0 +1,27 @@
+module AsfSortChecker
+
+imports
+   basic/Booleans 
+   AsfSdf-Messages 
+   ModuleOperations
+
+exports
+  context-free syntax
+    check-for-asf-sorts(Definition) -> Messages
+
+hiddens
+  context-free syntax
+    check-for-asf-sorts(Definition, Messages)   -> Messages {traversal(accu, break, top-down)}
+    check-for-asf-sorts(Module, Messages)       -> Messages {traversal(accu, break, top-down)}
+    check-asf-sorts(Module, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-asf-sorts(Sort, Messages, ModuleId)   -> Messages {traversal(accu, break, top-down)}
+
+    is-asf-sort(Sort) -> Boolean
+
+hiddens
+  variables
+    "Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*  -> ModuleId
+    "Definition"[0-9]* -> Definition
+    "Msgs"[0-9]*       -> Messages
+    "$Sort"[0-9]*    -> Sort
