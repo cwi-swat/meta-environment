@@ -38,6 +38,14 @@ asfc_SOURCES = asfc.c \
                muasf2c.c \
                c-compiler.c
 
+noinst_HEADERS = chars.h \
+                 c-code.h \
+                 asf2muasf.h \
+                 lex-cons.h \
+                 asfc.tif.h \
+                 muasf2c.h \
+                 c-compiler.h
+
 asfc_LDADD   = -L$(top_builddir)/asfc/c-source -lCompiler \
                -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept  \
