@@ -1,33 +1,35 @@
 #
-#
-# ModView: UI for minimal stand-alone ASF+SDF meta-environment
-#          (and viewer for ASF+SDF import graphs)
+# GraphBrowser: UI for ASF+SDF meta-environment
+#               (and viewer for ASF+SDF import graphs)
 #
 
 #----------------------------------------------------------------------
 # help texts
 #----------------------------------------------------------------------
 
-set help_msm "MSM
+set toolname "GraphBrowser"
+set metaname "NewMeta"
 
-A Minimal Standalone Meta-environment for ASF+SDF
+set help_meta "$metaname
+
+A New Standalone Meta-environment for ASF+SDF
 Copyright (C) 1997  UvA, CWI
 
-MSM development team:
+$metaname development team:
 Mark van den Brand, Leon Moonen, 
 Tobias Kuipers, Pieter Olivier
 
 Programming Research Group, University of Amsterdam
 Department of Software Technology, CWI"
                  
-set help_about "ModView  -  ASF+SDF Module Viewer
+set help_about "$toolname  -  ASF+SDF Import Graph Browser
 Copyright (C) 1997  Leon Moonen <leon@wins.uva.nl>
 
-ModView provides a graphical view of an ASF+SDF import graph. 
-The layout of this graph is computed using the dot layout 
-algorithm developed by AT&T."
+$toolname provides a graphical view of an ASF+SDF import graph.
+The layout of this graph is computed using the dot layout algorithm
+developed by AT&T."
   
-set help_mouse "                       ModView - Mouse Operations
+set help_mouse "                       $toolname - Mouse Operations
 
 Button-1: 
    There are no actions associated with Button 1 yet.
@@ -268,15 +270,15 @@ proc end-status { id } {
 # are interpreted as strings.
 #---
 proc module-info { mod infolist } {
-    global windowcnt SBW
+    global windowcnt SBW toolname
     MVin "module-info($mod,$infolist)"
     set mod [StripId $mod]
     set w ".info$windowcnt"
     set windowcnt [expr $windowcnt + 1]
     catch {destroy $w}
     toplevel $w
-    wm title $w "ModView Info $mod"
-    wm iconname $w "Info $mod"
+    wm title $w "$toolname Info on $mod"
+    wm iconname $w "Info on $mod"
 
     frame $w.info -relief raised -bd 2
     pack $w.info -side top -fill x
@@ -576,8 +578,7 @@ proc AddModule {w} {
 proc ClearAll {c g} {
     MVevent "clear-all"
     $g delete
-    set g [dotnew digraph]
-    $g setnodeattribute shape box
+    set g [make-and-init-new-graph]
     $c delete all
     update-graph
 }
@@ -590,6 +591,16 @@ proc ClearAll {c g} {
 #--
 proc RevertAll {} {
     MVevent "revert-all"
+}
+
+
+#--
+# CompileAll
+#-
+# generates the toolbus event to request compilation of all modules
+#--
+proc CompileAll {} {
+    MVevent "compile-all"
 }
 
 
@@ -692,11 +703,12 @@ proc AddUniqueEdge { graph from to } {
 
 
 proc Help {msg just class} {
+    global toolname
     set w ".help$class"
     catch {destroy $w}
     toplevel $w
-    wm title $w "ModView Help"
-    wm iconname $w "ModView"
+    wm title $w "$toolname Help"
+    wm iconname $w $toolname
     frame $w.menu -relief raised -bd 2
     pack $w.menu -side top -fill x
     label $w.msg -justify $just -text $msg
@@ -825,15 +837,13 @@ proc UpdateModuleList { graph } {
 
 
 proc define-menu-bar {} {
+    global toolname metaname
+
     frame .menu -relief raised -borderwidth 1
 
     menubutton .menu.file -text "File" -underline 0 -menu .menu.file.menu
     set m .menu.file.menu
     menu $m
-    # $m add command -label "Load ..." -underline 0 -command {loadFile $c}
-    $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
-    $m add command -label "Revert All" -underline 0 -command {RevertAll}
-    # $m add command -label "Save" -underline 0 -command {saveFile dot}
     $m add command -label "Save As ..." -underline 5 -command {saveFileAs ig}
     $m add separator
     $m add cascade -label "Export" -underline 1 -menu $m.export
@@ -851,10 +861,16 @@ proc define-menu-bar {} {
     $m add separator
     $m add command -label "Exit" -underline 0 -command {MVevent button(quit)}
     
-    menubutton .menu.module -text "Module" -underline 0 -menu .menu.module.menu
-    set m .menu.module.menu
+    menubutton .menu.specification -text "Specification" -underline 0 \
+	-menu .menu.specification.menu 
+    set m .menu.specification.menu
     menu $m
     $m add command -label "Add module" -underline 0 -command {AddModuleWidget}
+    $m add separator
+    $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
+    $m add command -label "Revert All" -underline 0 -command {RevertAll}
+    $m add separator
+    $m add command -label "Compile All" -underline 0 -command {CompileAll}
     
     menubutton .menu.window -text "Window" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
@@ -863,9 +879,9 @@ proc define-menu-bar {} {
     
     menubutton .menu.help -text "Help" -underline 0 -menu .menu.help.menu
     menu .menu.help.menu
-    .menu.help.menu add command -label "About MSM" -underline 0 \
-        -command {Help $help_msm center a}
-    .menu.help.menu add command -label "About ModView" -underline 9 \
+    .menu.help.menu add command -label "About $metaname" -underline 0 \
+        -command {Help $help_meta center a}
+    .menu.help.menu add command -label "About $toolname" -underline 9 \
         -command {Help $help_about center b}
     .menu.help.menu add command -label "Mouse Operations" -underline 0 \
         -command {Help $help_mouse left c}
@@ -875,10 +891,10 @@ proc define-menu-bar {} {
     menu $m
     $m add check -label "Diagnostic messages"  -variable DIAG
 
-    pack append .menu .menu.file {left} .menu.module {left} \
+    pack append .menu .menu.file {left} .menu.specification {left} \
 	.menu.window {left} .menu.debug {left} .menu.help {right}
 
-    tk_menuBar .menu.file .menu.module .menu.window .menu.help  
+    tk_menuBar .menu.file .menu.specification .menu.window .menu.help  
 }
 
 proc define-modules-frame {} {
@@ -1008,20 +1024,24 @@ proc define-canvas-popup {} {
     $m add command -label "Add module" -command "AddModuleWidget"
 }
 
+proc make-and-init-new-graph {} {
+  set g [dotnew digraph]
+  $g setnodeattribute shape box
+  return $g
+}
 
 
 #----------------------------------------------------------------------
 # "main" program
 #----------------------------------------------------------------------
 
-set g [dotnew digraph]
-$g setnodeattribute shape box
+set g [make-and-init-new-graph]
 set saveFill {}
 set fileName {no_name.dot}
 set printCommand {lpr}
 
-wm title . "ModView"
-wm iconname . "ModView"
+wm title . $toolname
+wm iconname . $toolname
 
 define-menu-bar
 define-graph-frame
