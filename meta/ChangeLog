@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Apr 15 10:31:44 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed a nasty bug: modules would dissappear if you would rename them into
+   a non-existing directory
+
 Wed Apr  7 15:49:26 CEST 2004 <{jong,kooiker}@cwi.nl>
  * editors/*
    - fold set-focus-at-area into set-focus: only 1 set-focus remains :-)
