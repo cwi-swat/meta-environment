@@ -1,6 +1,6 @@
 SUBDIRS		= tool .
 
-CLASSPATH	:= ${ATERM}/classes:${TOOLBUS}/classes
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${TOOLBUS}/classes:${JAVA_ATERM}:${SHARED_OBJECTS}
 
 javadir		= ${prefix}/classes/tide
 JAVAROOT	= ${top_builddir}
@@ -31,6 +31,6 @@ ${CONTROL_GEN}: ${top_builddir}/toolbus/tide.tifs
 		-tool tide-control \
 		-package tide
 
-%.class: %.java
-	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<
+#%.class: %.java
+#	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<
 
