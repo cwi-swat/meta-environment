@@ -73,7 +73,7 @@ CLEANFILES	= compiler compile-one-module compiler.tif.c compiler.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
-SUBDIRS=support c-source
+SUBDIRS=support c-source support-muasf
 
 # The all target must be defined:
 all: subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
