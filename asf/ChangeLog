@@ -1,5 +1,11 @@
 # $Id$
 
+2003/09/20 (jurgenv@cwi.nl)
+ * The asf-builtins library now contains a generated API from a selected
+   number of modules in the asf-library package. Currently, only
+   basic/Booleans is included. Modules can be added by editing a 
+   make variable (after adding cons and label attributes in the SDF module).
+
 2003/09/19 ({paulk,jurgenv}@cwi.nl)
  * Added very unsafe term comparison builtin to ASF. It's unsafe because
    it does not take LAYOUT and annotations into account. Obviously,
