@@ -347,17 +347,13 @@ result,
 Figure~\ref{FIG:meta-start}.]{FIG:meta-start}
 
 \begin{figure}[t]
-
-\begin{iftex}
-  \centerline{\epsfig{file=meta-start.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-start}
 \begin{center}
-  \htmlimage{meta-start.gif}
+\T \epsfig{file=meta-start.ps,width=12cm}
+\W \htmlimage{meta-start.gif}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
-
+\caption{Main window of \ASmetaenv}
+\end{Label}
 \end{figure}
 
 The {\tt meta} command has the following options, which may come in handy
@@ -401,34 +397,24 @@ the \link{Guided Tour}[, Section~\ref{GuidedTour}]{GuidedTour})
 you will find an example {\tt meta.conf} file which only contains the
 path `{\tt .}', i.e., only the current directory will be searched.
 
-
 \begin{figure}[t]
-
-\begin{iftex}
-  \centerline{\epsfig{file=viewer.ps,width=14cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:viewer}
 \begin{center}
-  \htmlimage{viewer.gif}
+\T \epsfig{file=viewer.ps,width=14cm}
+\W \htmlimage{viewer.gif}
+\caption{ToolBus viewer}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:viewer} ToolBus viewer}
-
+\end{Label}
 \end{figure}
 
 \section{The Main Window}
 \label{MainWindow}
 
-The \link{main window}[, see Figure~\ref{FIG:meta-start}]{FIG:meta-start}
-of the \ASmetaenv\ immediately after starting the
-system was already shown.
-\begin{iftex}
-After loading a specification it may look like Figure~\ref{FIG:meta-pico}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:meta-pico} to see how the main window looks like after loading
-a specification.
-\end{ifhtml}
+The main window of the \ASmetaenv\ immediately after starting the system was
+already \link{shown}[ (Figure~\ref{FIG:meta-start})]{FIG:meta-start}.
+After loading a specification it may look as shown
+\link{\htmlonly{below}}[in Figure~]{FIG:meta-pico}.
+
 The main window consists of the following parts:
 
 \begin{itemize}
@@ -438,90 +424,56 @@ The main window consists of the following parts:
    \item {\tt File}: for creating, opening, saving, and printing
     specifications as well as for leaving the \ASmetaenv.
     The {\tt File} menu is described in 
-\begin{iftex}
-Section~\ref{FileMenu}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{File Menu}[]{FileMenu}.
-\end{ifhtml}
-
-   \item {\tt Edit}: for setting user preferences.
-      The {\tt Edit} menu is described in 
-\begin{iftex}
-Section~\ref{EditMenu}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Edit Menu}[]{EditMenu}.
-\end{ifhtml}
-
-   \item {\tt Graph}: for setting options for the display of 
-        the graph in the import pane (see below).
-       The {\tt Graph} menu is described in 
-\begin{iftex}
-Section~\ref{GraphMenu}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Graph Menu}[]{GraphMenu}.
-\end{ifhtml}
-
-   \item {\tt Debug}: for turning on/off the display of diagnostic messages.
-    The {\tt Debug} menu is described in
-\begin{iftex}
-Section~\ref{DebugMenu}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Debug Menu}[]{DebugMenu}.
-\end{ifhtml}
-
-   \item {\tt Help} for various forms of information and online help.
-    The {\tt Help} menu is described in 
-\begin{iftex}
-Section~\ref{HelpMenu}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Help Menu}[]{HelpMenu}.
-\end{ifhtml}
+    \T Section~\ref{FileMenu}.
+    \W \link{File Menu}[]{FileMenu}.
+    
+  \item {\tt Edit}: for setting user preferences.  The {\tt Edit} menu is
+    described in 
+    \T Section~\ref{EditMenu}.  
+    \W \link{Edit Menu}[]{EditMenu}.
+    
+  \item {\tt Graph}: for setting options for the display of the graph in the
+    import pane (see below).  The {\tt Graph} menu is described in
+    \T Section~\ref{GraphMenu}.
+    \W \link{Graph Menu}[]{GraphMenu}.
+    
+  \item {\tt Debug}: for turning on/off the display of diagnostic messages.
+    The {\tt Debug} menu is described in 
+    \T \Section~\ref{DebugMenu}.
+    \W \link{DebugMenu}[]{DebugMenu}.
+    
+  \item {\tt Help} for various forms of information and online help.  The {\tt
+      Help} menu is described in
+      \T Section~\ref{HelpMenu}.
+      \W \link{Help Menu}[]{HelpMenu}.
 
   \end{itemize}
   
-\item The \emph{import pane}: A graphical canvas (
-\link{empty}[ in Figure~\ref{FIG:meta-start}]{FIG:meta-start}, 
-but containing \link{rectangles and arrows}[ in
-Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) 
-  at the left hand side of the window shows
-  the import graph of the specification you are editing.  The import pane is
-  described in 
-\begin{iftex}
-Section~\ref{ImportPane}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Import Pane}[]{ImportPane}.
-\end{ifhtml}
+\item The \emph{import pane}: A graphical canvas (either \link{empty}[ in
+  Figure~\ref{FIG:meta-start}]{FIG:meta-start}, or containing \link{rectangles
+    and arrows}[ in Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the left
+  hand side of the window shows the import graph of the specification you are
+  editing.  The import pane is described in 
+  \T Section~\ref{ImportPane}.
+  \W \link{Import Pane}[]{ImportPane}.
   
-\item The \emph{module pane}: a vertical list 
-(\link{empty}[ in Figure~\ref{FIG:meta-start}]{FIG:meta-start}, 
-but containing names like \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[
-in Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the right/middle
-  part of the window that shows the names of all modules in the current
-  specification.  The module pane is described in 
-\begin{iftex}
-Section~\ref{ModulePane}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Module Pane}[]{ModulePane}.
-\end{ifhtml}
-  
+\item The \emph{module pane}: a vertical list (either \link{empty}[ in
+  Figure~\ref{FIG:meta-start}]{FIG:meta-start}, or containing names like
+  \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[ in
+  Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the right/middle part of the
+  window that shows the names of all modules in the current specification.
+  The module pane is described in 
+  \T Section~\ref{ModulePane}.
+  \W \link{Module Pane}[]{ModulePane}.
+
+ 
 \item The \emph{button pane}: a vertical row of buttons at the right hand side
   of the window containing buttons like {\tt Edit Syntax} and {\tt Edit
-    Equations}: they are used for common operations on the
-  current specification like editing, saving, or deleting a module or
-  compiling the complete specification. The button pane is described in
-\begin{iftex}
-Section~\ref{ButtonPane}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Button Pane}[]{ButtonPane}.
-\end{ifhtml}
+    Equations}: they are used for common operations on the current
+  specification like editing, saving, or deleting a module or compiling the
+  complete specification. The button pane is described in 
+  \T Section~\ref{ButtonPane}.
+  \W \link{Button Pane}[]{ButtonPane}.
   
 \item A \emph{status bar} at the bottom of the window that shows the current
   activity of the system. Examples are: {\tt idle} (the system is doing
@@ -531,15 +483,13 @@ Section \link{Button Pane}[]{ButtonPane}.
 \end{itemize}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=meta-pico.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-pico}
 \begin{center}
-  \htmlimage{meta-pico.gif}
+\T \epsfig{file=meta-pico.ps,width=12cm}
+\W \htmlimage{meta-pico.gif}
+\caption{Main window after loading the Pico specification}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
+\end{Label}
 \end{figure}
 
 \section{The Menus of the Main Window}
@@ -548,27 +498,23 @@ Section \link{Button Pane}[]{ButtonPane}.
 \label{FileMenu}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=file-menu.ps,width=3cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:file-menu}
 \begin{center}
-  \htmlimage{file-menu.gif}
+\T \epsfig{file=file-menu.ps,width=3cm}
+\W \htmlimage{file-menu.gif}
+\caption{{\tt File} menu (main window)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:file-menu} {\tt File} menu (main window)}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:printer-setup}
 \begin{center}
-  \htmlimage{printer-setup.gif}
+\T \epsfig{file=printer-setup.ps,width=3cm}
+\W \htmlimage{printer-setup.gif}
+\caption{Dialog for printer setup}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:printer-setup} Dialog for printer setup}
+\end{Label}
 \end{figure}
 
 The \link{{\tt File} menu}[]{FIG:file-menu} 
@@ -606,42 +552,36 @@ Figure~\ref{FIG:printer-setup}.
 {\tt Quit} ends the execution of the \ASmetaenv.
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=open-file.ps,width=8cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:open-file}
 \begin{center}
-  \htmlimage{open-file.gif}
+\T \epsfig{file=open-file.ps,width=8cm}
+\W \htmlimage{open-file.gif}
+\caption{Dialog for opening a module ({\tt File} menu)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:open-file} Dialog for opening a module ({\tt File} menu)}
+\end{Label}
 \end{figure}
 
 \subsection{The Edit menu}
 \label{EditMenu}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=edit-menu.ps,width=3cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:edit-menu}
 \begin{center}
-  \htmlimage{edit-menu.gif}
+\T \epsfig{file=edit-menu.ps,width=3cm}
+\W \htmlimage{edit-menu.gif}
+\caption{{\tt Edit} menu (main window)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:edit-menu} {\tt Edit} menu (main window)}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=graph-menu.ps,width=4cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:graph-menu}
 \begin{center}
-  \htmlimage{graph-menu.gif}
+\T \epsfig{file=graph-menu.ps,width=4cm}
+\W \htmlimage{graph-menu.gif}
+\caption{{\tt Graph} menu (main window)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:graph-menu} {\tt Graph} menu (main window)}
+\end{Label}
 \end{figure}
 
 The {\tt Edit} menu is used for setting the preferences of a user.
@@ -678,15 +618,13 @@ will only be shown when the loading of the specification is complete.
 \label{DebugMenu}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=debug-menu.ps,width=4cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:debug-menu}
 \begin{center}
-  \htmlimage{debug-menu.gif}
+\T \epsfig{file=debug-menu.ps,width=4cm}
+\W \htmlimage{debug-menu.gif}
+\caption{{\tt Debug}  menu (main window)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:debug-menu}{\tt Debug}  menu (main window)}
+\end{Label}
 \end{figure}
 
 The \link{{\tt Debug} menu}[ is shown in
@@ -699,15 +637,13 @@ messages will be displayed.  Otherwise the systems runs silently.
 \label{HelpMenu}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=help-menu.ps,width=5cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:help-menu}
 \begin{center}
-  \htmlimage{help-menu.gif}
+\T \epsfig{file=help-menu.ps,width=5cm}
+\W \htmlimage{help-menu.gif}
+\caption{{\tt Help}  menu (main window)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:help-menu}{\tt Help}  menu (main window)}
+\end{Label}
 \end{figure}
 
 The \link{{\tt Help} menu}[ is shown in
@@ -755,27 +691,23 @@ module but never defined, or containing syntax errors) are represented
 by a circle.
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=module-menu.ps,width=3cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:module-menu}
 \begin{center}
-  \htmlimage{module-menu.gif}
+\T \epsfig{file=module-menu.ps,width=3cm}
+\W \htmlimage{module-menu.gif}
+\caption{Pop up menu for module operations (import pane)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:module-menu}Pop up menu for module operations (import pane)}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=new-open.ps,width=2cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:new-open}
 \begin{center}
-  \htmlimage{new-open.gif}
+\T \epsfig{file=new-open.ps,width=2cm}
+\W \htmlimage{new-open.gif}
+\caption{Pop up menu for adding a module (import pane)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:new-open}Pop up menu for adding a module (import pane)}
+\end{Label}
 \end{figure}
 
 The import pane has the following interaction facilities:
@@ -924,15 +856,13 @@ user can navigate in the tree.
 \end{itemize}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=move-menu.ps,width=1.2cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:move-menu}
 \begin{center}
-  \htmlimage{move-menu.gif}
+\T \epsfig{file=move-menu.ps,width=1.2cm}
+\W \htmlimage{move-menu.gif}
+\caption{{\tt Move} menu (editor)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:move-menu}{\tt Move} menu (editor)}
+\end{Label}
 \end{figure}
 
 \subsection{Editing the Syntax Part of a Module}
@@ -964,27 +894,23 @@ Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=meta-env-menu1.ps,width=1.2cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-env-menu1}
 \begin{center}
-  \htmlimage{meta-env-menu1.gif}
+\T \epsfig{file=meta-env-menu1.ps,width=1.2cm}
+\W \htmlimage{meta-env-menu1.gif}
+\caption{{\tt Meta-Environment} menu (editor)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-env-menu1} {\tt Meta-Environment} menu (editor)}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=meta-env-menu2.ps,width=1.6cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-env-menu2}
 \begin{center}
-  \htmlimage{meta-env-menu2.gif}
+\T \epsfig{file=meta-env-menu2.ps,width=1.6cm}
+\W \htmlimage{meta-env-menu2.gif}
+\caption{{\tt Meta-Environment} menu (term editor)}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-env-menu2} {\tt Meta-Environment} menu (term editor)}
+\end{Label}
 \end{figure}
 
 \subsection{Editing the Equations Section of a Module}
@@ -1057,15 +983,13 @@ The rewriting process is further described in Section
 \label{GuidedTour}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=meta-booleans.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-booleans}
 \begin{center}
-  \htmlimage{meta-booleans.gif}
+\T \epsfig{file=meta-booleans.ps,width=12cm}
+\W \htmlimage{meta-booleans.gif}
+\caption{Main window after opening {\tt Pico-Booleans}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
+\end{Label}
 \end{figure}
 
 To help you get acquainted with the \ASmetaenv\ the system
@@ -1137,15 +1061,13 @@ Figure~\ref{FIG:meta-Bool-example}]{FIG:meta-Bool-example}.
 \end{itemize}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=meta-Bool-example.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:meta-Bool-example}
 \begin{center}
-  \htmlimage{meta-Bool-example.gif}
+\T \epsfig{file=meta-Bool-example.ps,width=12cm}
+\W \htmlimage{meta-Bool-example.gif}
+\caption{Main window after opening {\tt Bool-example}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:meta-Bool-example}Main window after opening {\tt Bool-example}}
+\end{Label}
 \end{figure}
 
 \subsection{The Module Bool-example}
@@ -1206,27 +1128,23 @@ we refer to Section~\ref{ASF+SDF}.
 \end{ifhtml}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Bool-example.sdf}
 \begin{center}
-  \htmlimage{Bool-example.sdf2.gif}
+\T \epsfig{file=Bool-example.sdf2.ps,width=12cm}
+\W \htmlimage{Bool-example.sdf2.gif}
+\caption{Editor for the syntax of {\tt Bool-example}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Bool-example.sdf}Editor for the syntax of {\tt Bool-example}}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=Bool-example.asf.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Bool-example.asf}
 \begin{center}
-  \htmlimage{Bool-example.asf.gif}
+\T \epsfig{file=Bool-example.asf.ps,width=12cm}
+\W \htmlimage{Bool-example.asf.gif}
+\caption{Editor for the equations of {\tt Bool-example}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Bool-example.asf}Editor for the equations of {\tt Bool-example}}
+\end{Label}
 \end{figure}
 
 \subsubsection{The Module Editor for {\tt Bool-example}}
@@ -1265,58 +1183,49 @@ Click \link{here}[]{FIG:Bool-example.asf} for inspecting the editor window.
 
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=Bool-example.trm.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Bool-example.trm}
 \begin{center}
-  \htmlimage{Bool-example.trm.gif}
+\T \epsfig{file=Bool-example.trm.ps,width=12cm}
+\W \htmlimage{Bool-example.trm.gif}
+\caption{Term editor for {\tt Bool-example} after entering `{\tt true \&
+    false}'}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Bool-example.trm}Term editor for {\tt Bool-example} after entering `{\tt true \& false}'}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=Bool-example.trm2.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Bool-example.trm2}
 \begin{center}
-  \htmlimage{Bool-example.trm2.gif}
-\end{center}
-\end{ifhtml}
+\T \epsfig{file=Bool-example.trm2.ps,width=12cm}
+\W  \htmlimage{Bool-example.trm2.gif}
 \begin{iftex}
-  \caption{\label{FIG:Bool-example.trm2} Same term editor as in
-Figure~\ref{FIG:Bool-example.trm} after parsing}
+\caption{Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parsing}
 \end{iftex}
 \begin{ifhtml}
-  \caption{\label{FIG:Bool-example.trm2} Same term editor 
-\link{for the Booleans example}[]{FIG:Bool-example.trm} after parsing}
+  \caption{Same term editor as \link{above}[]{FIG:Bool-example.trm} after parsing}
 \end{ifhtml}
+\end{center}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=Bool-example.trm3.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Bool-example.trm3}
 \begin{center}
-  \htmlimage{Bool-example.trm3.gif}
+\T \epsfig{file=Bool-example.trm3.ps,width=12cm}
+\W \htmlimage{Bool-example.trm3.gif}
+\caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Bool-example.trm3}Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
+\end{Label}
 \end{figure}
 
 \begin{figure}
-\begin{iftex}
-  \centerline{\epsfig{file=reduct.out.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:reduct.out}
 \begin{center}
-  \htmlimage{reduct.out.gif}
+\T \epsfig{file=reduct.out.ps,width=12cm}
+\W \htmlimage{reduct.out.gif}
+\caption{New term editor with normal form of `{\tt true \& false}'}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:reduct.out}New term editor with normal form of `{\tt true \& false}'}
+\end{Label}
 \end{figure}
 
 \subsubsection{A Term Editor for {\tt Bool-example}}
@@ -1549,17 +1458,13 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 \end{itemize}
 
 \begin{figure}
-
-\begin{iftex}
-  \centerline{\epsfig{file=meta-Pico-syntax.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Pico-syntax}
 \begin{center}
-  \htmlimage{meta-Pico-syntax.gif}
+\T \epsfig{file=meta-Pico-syntax.ps,width=12cm}
+\W \htmlimage{meta-Pico-syntax.gif}
+\caption{Main window after opening {\tt Pico-syntax}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Pico-syntax} Main window after opening {\tt Pico-syntax}}
-
+\end{Label}
 \end{figure}
 
 \subsection{The Pico Specification}
@@ -1569,34 +1474,25 @@ Pico specification.
 
 
 \begin{figure}[t]
-
-\begin{iftex}
-  \centerline{\epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Pico-Booleans-sdf}
 \begin{center}
-  \htmlimage{Pico-Booleans.sdf2.gif}
+\T \epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}
+\W \htmlimage{Pico-Booleans.sdf2.gif}
+\caption{Editor for syntax of {\tt Pico-Booleans}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Pico-Booleans-sdf}Editor for syntax of {\tt Pico-Booleans}}
-
+\end{Label}
 \end{figure}
 
 
 \begin{figure}
-
-\begin{iftex}
-  \centerline{\epsfig{file=Pico-Booleans.asf.ps,width=12cm}}
-\end{iftex}
-\begin{ifhtml}
+\begin{Label}{FIG:Pico-Booleans-eqs}
 \begin{center}
-  \htmlimage{Pico-Booleans.asf.gif}
+\T \epsfig{file=Pico-Booleans.asf.ps,width=12cm}
+\W \htmlimage{Pico-Booleans.asf.gif}
+\caption{Editor for equations of {\tt Pico-Booleans}}
 \end{center}
-\end{ifhtml}
-  \caption{\label{FIG:Pico-Booleans-eqs}Editor for equations of {\tt Pico-Booleans}}
-
+\end{Label}
 \end{figure}
-
 
 \begin{itemize}
 
