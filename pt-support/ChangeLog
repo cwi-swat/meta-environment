@@ -1,3 +1,10 @@
+2001/07/20 (jurgenv@cwi.nl)
+ * added yielding of ambiguity clusters to yieldPT (=unparsePT tool). The
+   first alternative of a cluster is yielded, the rest is ignored.
+ * added '-a' option to unparsePT that triggers 'diff-like' visualization of
+   ambiguity clusters. 
+ * bumped version of unparsePT to 1.2
+
 2001/07/17 (jong@cwi.nl)
  * version 0.4 released, bumped to 0.5
  * unparsePT transformed into a hybrid commandline/TB-tool
