@@ -93,9 +93,9 @@ void enter_equation(equation_table *table, ATerm equation)
 { 
   equation_entry *entry;
 
-  ATerm equ, lhs, top_ofs,first_ofs, tag, rhs;
-  ATermList lhsargs, conds;
-	ATerm condlist, conditions;
+  ATerm equ, lhs = NULL, top_ofs,first_ofs, tag = NULL , rhs = NULL;
+  ATermList lhsargs, conds = ATempty;
+  ATerm condlist, conditions;
   unsigned hnr;
 
   if(AFTisSimpleCondEqu(equation)) {
@@ -501,7 +501,7 @@ ATerm lexical_to_list(ATerm lextrm)
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
   newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",qnewname, newiter);
   newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
-  newprod  = ATmake("prod(id(\"Equations\"),w(\"\"),<term>,w(\"\")," \
+  newprod  = ATmake("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),<term>,w(\"\")," \
 			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
   newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
 
@@ -518,10 +518,10 @@ Remove the layout of a term.
 
 ATerm prepare_term(ATerm t, ATbool lexcons)
 {
-	ATerm result, annos;
+  ATerm result, annos;
   ATermList args, elems, newargs;
 
-	annos = AT_getAnnotations(t);
+  annos = AT_getAnnotations(t);
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
     if(AFTisLexConstructor(t)) {
@@ -535,7 +535,7 @@ ATerm prepare_term(ATerm t, ATbool lexcons)
   } else if(asfix_is_lex(t) && !lexcons)
     result = lexical_to_list(t);
   else 
-		result = t;
+    result = t;
 
 	if(annos)
 		result = AT_setAnnotations(result, annos);

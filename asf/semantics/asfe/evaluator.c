@@ -1046,12 +1046,12 @@ int main(int argc, char **argv)
   ATprotect(&equations_db);
 
   fail_env = ATparse("[fail]");
-	ATprotect(&fail_env);
+  ATprotect(&fail_env);
 
-	list_var  = ATmakeAFun("*list-var*", 3, ATtrue);
-	plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
-	ATprotectAFun(list_var);
-	ATprotectAFun(plain_var);
+  list_var  = ATmakeAFun("*list-var*", 3, ATtrue);
+  plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
+  ATprotectAFun(list_var);
+  ATprotectAFun(plain_var);
 
   ATBeventloop();
 
