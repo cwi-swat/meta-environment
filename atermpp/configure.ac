@@ -7,21 +7,16 @@ GLT_INIT_PACKAGE
 AC_PROG_CC
 AC_PROG_CXX
 
-dnl Require Boost include path
-AC_ARG_WITH(boost-include,
-  [  --with-boost-include=DIR    /path/to/include/boost-version],
-  BOOST_INCLUDE=${withval},
-  BOOST_INCLUDE="/usr/local/include"
+dnl Require Boost path
+AC_ARG_WITH(boost,
+  [  --with-boost=DIR    /path/to/boost],
+  BOOST=${withval},
+  BOOST="/usr/local/boost"
 )
-AC_SUBST(BOOST_INCLUDE)
+AC_SUBST(BOOST)
 
-dnl Require Boost lib path
-AC_ARG_WITH(boost-lib,
-  [  --with-boost-lib=DIR    /path/to/boost/lib],
-  BOOST_LIB=${withval},
-  BOOST_LIB="/usr/local/lib"
-)
-AC_SUBST(BOOST_LIB)
+BOOST_INCLUDE=${BOOST}/include
+AC_SUBST(BOOST_INCLUDE)
 
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
