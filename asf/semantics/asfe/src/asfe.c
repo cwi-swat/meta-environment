@@ -21,6 +21,7 @@
 #include <aterm2.h>
 
 #include <MEPT.h>
+#include <PTMEPT.h>
 #include <ASFME.h>
 #include <ASFAPI.h>
 
@@ -170,6 +171,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
   AA_initASFAPIApi();
 
