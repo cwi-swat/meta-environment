@@ -47,7 +47,7 @@ in
     rec-msg(se-move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(set-focus(EditorId, Focus))
+    snd-msg(te-set-focus(EditorId, Focus))
   +
     rec-msg(se-invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .
@@ -58,7 +58,7 @@ in
     snd-eval(SE, set-focus(EditorId, Location)) .
     rec-value(SE, focus(Focus?)) .  
     /* TODO: remove reference to Text Editor internals */
-    snd-msg(set-focus(EditorId, Focus)) 
+    snd-msg(te-set-focus(EditorId, Focus)) 
   +
     rec-msg(se-get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .
@@ -126,7 +126,7 @@ in
     snd-do(SE, remove-tree(EditorId)) 
   +
     /* TODO: remove reference to Text Editor internals */
-    rec-msg(editor-contents-changed(EditorId?)) .
+    rec-msg(te-editor-contents-changed(EditorId?)) .
     snd-do(SE, modify(EditorId))
   +
     rec-msg(se-is-editor-modified(EditorId?)) .

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 process EditorCreator is
 let
   EditorId   : term,
@@ -201,13 +203,13 @@ in
       rec-msg(new-editor(EditorId?)) .
       snd-msg(se-initialize-structure-editor(EditorId, Text, Tree)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
-      snd-msg(edit-text(EditorId, EDITOR, FileName, ButtonList))
+      snd-msg(te-edit-text(EditorId, EDITOR, FileName, ButtonList))
     +
       rec-msg(existing-editor(EditorId?)) .
       snd-msg(get-editor-modulename(EditorId)) .
       rec-msg(editor-modulename(EditorId, CurrentModuleName?)) .
       if equal(CurrentModuleName, ModuleName) then
-	snd-msg(editor-to-front(EditorId))
+	snd-msg(te-editor-to-front(EditorId))
       else
 	Error("Term %s is already being edited for a different module",
 	      [FileName])
@@ -238,14 +240,14 @@ in
   subscribe(delete-editor(<term>)) .
   subscribe(syntax-changed(ModuleName)) .
   (
-    rec-msg(extra-button-action(EditorId, ActionEvent?)) .
+    rec-msg(te-menu-event(EditorId, ActionEvent?)) .
     snd-msg(extra-button-action(ActionEvent, [], Type, ModuleName, EditorId)) 
   +
-    rec-msg(text-editor-disconnected(EditorId)) .
+    rec-msg(te-text-editor-disconnected(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-msg(kill-editor(EditorId)) .
-    snd-msg(kill-text-editor(EditorId)) .
+    snd-msg(te-kill-text-editor(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-note(syntax-changed(ModuleName)).

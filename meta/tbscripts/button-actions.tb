@@ -923,7 +923,7 @@ in
   snd-msg(parse-focusses(EditorId, ModuleName, trm)) .
   (
     rec-msg(parse-ok(ModuleName)) .
-    snd-msg(clear-focus(EditorId))
+    snd-msg(te-clear-focus(EditorId))
   +
     rec-msg(parse-failed(ModuleName, Focus?))
   )
@@ -981,7 +981,7 @@ in
       snd-msg(update-module-text-in-db(ModuleName, Text, Tree, Type)) .
       (
 	rec-msg(no-updating-needed) .
-        snd-note(clear-focus(EditorId))
+        snd-note(te-clear-focus(EditorId))
       +
         rec-msg(updating-succeeded(DependingModules?)).
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
@@ -991,7 +991,7 @@ in
 	  rec-msg(notify-about-changed-modules-done) .
           snd-msg(open-modules(NewModules, Type)).
           rec-msg(finished-opening-modules) .
-          snd-msg(clear-focus(EditorId))
+          snd-msg(te-clear-focus(EditorId))
         +
           rec-msg(error-opening(ModuleName, name-inconsistent)).
           snd-msg(invalidate-sdf-in-db(ModuleName)).
@@ -1031,7 +1031,7 @@ in
       rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?)).
       snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
       rec-msg(eqs-updated) .
-      snd-msg(clear-focus(EditorId))
+      snd-msg(te-clear-focus(EditorId))
     +
       rec-msg(se-no-tree)
     )
@@ -1110,9 +1110,9 @@ in
     snd-msg(io-write-text-file(FileName,[Text])) .
     (
       rec-msg(io-file-written) . 
-      snd-msg(reread-contents(EditorId)) .
-      snd-msg(set-cursor-at-focus(EditorId, Focus)) .
-      snd-msg(set-focus(EditorId, Focus))
+      snd-msg(te-reread-contents(EditorId)) .
+      snd-msg(te-set-cursor-at-focus(EditorId, Focus)) .
+      snd-msg(te-set-focus(EditorId, Focus))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
