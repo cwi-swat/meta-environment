@@ -18,4 +18,7 @@ ERR_Subject PERR_lowerSubject(PERR_Subject subject);
 ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList subjects);
 ERR_Feedback PERR_lowerFeedback(PERR_Feedback feedback);
 ERR_Summary PERR_lowerSummary(PERR_Summary pSummary);
+
+void ERR_displayFeedback(ERR_Summary summary);
+
 #endif

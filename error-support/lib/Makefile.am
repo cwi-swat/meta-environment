@@ -18,6 +18,7 @@ libErrorAPI_a_SOURCES = \
 	ParsedErrorAPI.c \
 	ParsedErrorAPI_dict.c \
 	init.c\
+	display.c\
 	lift.c\
 	lower.c
 
