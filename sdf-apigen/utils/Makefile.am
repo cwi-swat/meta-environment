@@ -6,7 +6,7 @@
 
 include $(top_srcdir)/make_rules
 
-EXTRA_DIST = sdf2-to-adt.sh.src CHARLIST.java.template
+EXTRA_DIST = sdf2-to-adt.sh.src sdf2-to-java.sh.src CHARLIST.java.template
 
 pkgdata_DATA= CHARLIST.java.template
 
