@@ -31,7 +31,7 @@ LIBS		= $(top_srcdir)/src/libtb.a @LIBS@ $(EXTRA_LIBS)
 
 NOWEB		= @NOWEB@
 
-COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+COMPILE 	= $(CC) $(DEFS)  -DWISH=\"${WISH}\" $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
 DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 
@@ -49,6 +49,8 @@ GENSRC          = wish-adapter.c
 EXTRA_INCLUDES	=
 EXTRA_DEFS	= -DTBTCL=\"$(datadir)/tb.tcl\" -DLIBDIR=\"$(datadir)\"
 EXTRA_LIBS	=
+
+WISH            = @WISH@
 
 # Here you can add the rules that actually build your adapter:
 
