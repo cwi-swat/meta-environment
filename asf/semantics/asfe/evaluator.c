@@ -483,10 +483,17 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       newenv = fail_env;
   } 
   else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
+		ATbool ok = ATfalse;
     sym1 = asfix_get_list_sym(arg1);
-    sym2 = asfix_get_list_sym(arg2); 
-    if(ATisEqual(asfix_get_sort_of_list_sym(sym1),
-                 asfix_get_sort_of_list_sym(sym2))) {
+    sym2 = asfix_get_list_sym(arg2);
+		if(asfix_is_iter(sym1) && asfix_is_iter(sym2)) {
+			ok = (asfix_get_iter_sort(sym1) == asfix_get_iter_sort(sym2));
+		} else if(asfix_is_itersep(sym1) && asfix_is_itersep(sym2)) {
+			ok = (asfix_get_itersep_sort(sym1) == asfix_get_itersep_sort(sym2));
+			ok &= (asfix_get_itersep_sep(sym1) == asfix_get_itersep_sep(sym2));
+		}
+			
+		if(ok) {
       elems1 = (ATermList) asfix_get_list_elems(arg1);
       elems2 = (ATermList) asfix_get_list_elems(arg2); 
       newenv = list_matching(sym1,newenv,elems1,elems2,
