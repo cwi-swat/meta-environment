@@ -1184,8 +1184,7 @@ proc define-modules-frame {} {
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
         .modules.buttons.modinfo {top fillx} \
-        .modules.buttons.compile {top fillx} \
-        .modules.buttons.parseeqs {top fillx}
+        .modules.buttons.compile {top fillx} 
 
     grid .modules.list    -row 0 -column 0 -rowspan 1 \
         -columnspan 1 -sticky news
