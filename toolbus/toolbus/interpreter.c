@@ -133,10 +133,13 @@ static proc_id *create_process(sym_idx pname, term_list *args,
   proc_inst *ProcInst;
   proc_id *pid;
 
-  if(!pd)
+  if(!pd) {
     err_fatal("process %s not defined\n", get_txt(pname));
+  }
 
-  if(TBverbose) fprintf(stderr, "create_process %d: %s\n", nproc, get_txt(pname));
+  if(TBverbose) {
+    fprintf(stderr, "create_process %d: %s\n", nproc, get_txt(pname));
+  }
 
   pid = mk_int(nproc);
   Env1 = NULL;

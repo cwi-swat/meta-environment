@@ -769,7 +769,12 @@ toolbus_def : toolbus {
               ;
 
 script:
-       def_list { range($$,$1,$1); }
+       def_list { 
+         range($$,$1,$1); 
+         if (initial_toolbus_proc == NULL) {
+           err_fatal("No toolbus commands found. At least one initial process must be supplied.");
+         }
+       }
      ;
 %%
 

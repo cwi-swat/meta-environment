@@ -419,6 +419,8 @@ rec_monitor(term * e, term ** out)
     return TBfalse;
   }
 
+  // TBprintf(stderr, "step: %s(%l)\n", AtFun, AtArgs);
+
   wprintf("if [catch { ");
 
 
