@@ -14,9 +14,6 @@ exports
     extractProcessCreations(ProcessCreation, RSTORE)
       -> RSTORE {traversal(accu, top-down, break)}
 
-hiddens
-  sorts <Elem, Elem>
-
   context-free syntax
     addProcessCreation(RSTORE, ProcessName) -> RSTORE
 
