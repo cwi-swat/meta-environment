@@ -6,6 +6,7 @@ INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
+	-I$(ASC_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
