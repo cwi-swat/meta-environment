@@ -19,6 +19,9 @@
 
 $Id$
 
+2001/02/01 (jurgenv@cwi.nl)
+   * regress-test moved to test directory
+
 2001/01/15 ({markvdb,jurgenv}@cwi.nl)
    * Bumped version of parsetablegen to 2.3
    * Removed gen-table script. From now on use sdf2table only.

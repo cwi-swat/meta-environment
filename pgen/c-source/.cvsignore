@@ -2,4 +2,4 @@ Makefile.in
 Makefile
 .deps
 init.c
-ParseTable-Generator
+Sdf2-Normalization
