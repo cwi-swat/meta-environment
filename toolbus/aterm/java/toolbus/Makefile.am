@@ -1,6 +1,8 @@
 javadir		= ${prefix}/classes/toolbus
 
-CLEANFILES	= test.tifs example.tifs
+CLEANFILES	= test.tifs example.tifs \
+		Example{Tif,Tool,Bridge}.java \
+		Testing{Tif,Tool,Bridge}.java
 
 EXTRA_DIST	= test.tb test.tifs example.tb example.tifs
 
