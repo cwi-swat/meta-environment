@@ -1,9 +1,9 @@
 package 
 identification
-   name=__PACKAGE__
-   version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
-   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   name=pandora
+   version= 1.1
+   location=http://www.cwi.nl/projects/MetaEnv/pandora
+   info=http://www.cwi.nl/projects/MetaEnv/pandora
    description='MetaEnvironment pretty printer based on Box language'
 
    keywords=meta-environment, asfix, pretty printing, formatting, box
