@@ -1090,29 +1090,6 @@ tree SG_ConvertA2ToA2ME(tree t)
   return t;
 }    
 
-tree SG_ConvertA2ToA1(tree t)
-{
-  int nr_ambs = SGnrAmb(SG_NR_ASK);
-
-  if(nr_ambs > 0) {
-    IF_DEBUG(
-      ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
-                " in AsFix1\n",
-                nr_ambs, nr_ambs > 1 ? "ies":"y")
-    );
-
-    return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(t));
-  }
-
-  IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
-
-  IF_STATISTICS(SG_Timer());
-  t = (tree)tree2a1(flattenTree(PT_makeTreeFromTerm((ATerm)t)));
-  IF_STATISTICS(fprintf(SG_log(),
-                        "AsFix1 conversion took %.6fs\n", SG_Timer()));
-  return t;
-}
-
 tree SG_ParseResult(char *sort)
 {
   ATermList cycle;
