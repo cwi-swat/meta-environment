@@ -21,7 +21,7 @@ CONTROL_GEN	= TideControlTif.java TideControlTool.java \
 noinst_SCRIPTS	= ${CONTROL_GEN}
 
 ${noinst_SCRIPTS}: ${top_builddir}/toolbus/tide.tifs
-	tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
+	${ATERM}/bin/tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
 		-tool tide-control -package tide.tool
 
 %.class: %.java

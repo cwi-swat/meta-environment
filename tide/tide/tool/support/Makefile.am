@@ -19,7 +19,7 @@ noinst_SCRIPTS = ${TOOL_GEN}
 java_JAVA	= ${TOOL_GEN} ${JAVA}
 
 ${TOOL_GEN}: ${top_builddir}/toolbus/tide.tifs
-	tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
+	${ATERM}/bin/tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
 		-tool debug-tool -package tide.tool.support
 
 #ADT	= ${top_srcdir}/lib-c/TA.adt

@@ -8,7 +8,7 @@ libtide_adapter_a_SOURCES	= TA.c TA_dict.c tide-adapter.c \
 				debug-adapter.c
 
 debug-adapter.tif.c debug-adapter.tif.h: ../toolbus/tide.tifs
-	tifstoc -tool debug-adapter ../toolbus/tide.tifs -prefix ta_
+	${ATERM}/bin/tifstoc -tool debug-adapter ../toolbus/tide.tifs -prefix ta_
 
 #TA.h TA.c TA_dict.c TA_dict.h: TA.adt
 
