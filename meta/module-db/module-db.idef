@@ -29,7 +29,10 @@ let
   ErrorMsg  : str,
   OutputDir : str, 
   TableType : term,
-  RealName  : str
+  RealName  : str,
+  EqsList1  : term,
+  EqsList2  : term,
+  EqsList3  : term
 in
 
 /* First, execute the module db */
@@ -122,10 +125,10 @@ snd-do(Mdb, create-module-db).
 +
   /* Get the list of modules for which the equations are not yet
      available in the database */
-  rec-msg(eqs-available-for-modules(Name?)).
-  snd-eval(Mdb,eqs-available-for-modules(Name)).
+  rec-msg(eqs-not-available-for-modules(Name?)).
+  snd-eval(Mdb,eqs-not-available-for-modules(Name)).
   rec-value(Mdb,modules(Modules?)).
-  snd-msg(eqs-for-modules(Modules))
+  snd-msg(eqs-needed-for-modules(Modules))
 +
   /* Get the text of an unparsed equations section.
   */
@@ -201,24 +204,29 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb, all-depending-modules(Modules?)).
   snd-msg(all-depending-modules(Modules))
 +
+  rec-msg(get-all-imported-modules(Name?)).
+  snd-eval(Mdb, get-all-imported-modules(Name)).
+  rec-value(Mdb, all-modules(Modules?)).
+  snd-msg(all-modules(Modules))
++
 /* Return a list of all modules */
   rec-msg(get-all-modules).
   snd-eval(Mdb, get-all-modules).
   rec-value(Mdb, all-modules(Modules?)).
   snd-msg(all-modules(Modules))
-+
-
-/* Get all equations for a list of modules */
-  rec-msg(get-all-equations(Name?)).
-  snd-eval(Mdb, get-all-equations(Name)).
++ 
+/* See if all equations are available given the top module */
+  rec-msg(all-equations-available(Name?)).
+  snd-eval(Mdb, all-equations-available(Name)).
   (
-    rec-value(Mdb, equations(Equations?)).
-    snd-msg(all-equations(Equations))
+    rec-value(Mdb, equations-available).
+    snd-msg(equations-available)
   +
     rec-value(Mdb, equations-incomplete) .
     snd-msg(equations-incomplete)
   )
 +
+
 /* Get the syntax for a list of modules */
   (
     rec-msg(get-all-sdf2-definitions(eqs(Name?)))
@@ -248,6 +256,16 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb, get-asf-tree(Name)).
   rec-value(Mdb, asfix(EqsTree?)).
   snd-msg(EqsTree)
++
+  rec-msg(get-equations-for-module(ModuleId?)).
+  snd-eval(Mdb, get-equations-for-module(ModuleId)).
+  rec-value(Mdb, equations(Equations?)).
+  snd-msg(equations(Equations))
++
+  rec-msg(union-equations(EqsList1?, EqsList2?)) .
+  snd-eval(Mdb, union-equations(EqsList1, EqsList2)) .
+  rec-value(Mdb, equations(EqsList3?)) .
+  snd-msg(equations(EqsList3))
 +
 /* Validate the parse table */
   rec-msg(invalidate-parse-tables(Name?)).

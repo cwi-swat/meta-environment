@@ -25,8 +25,8 @@ in
     rec-msg(process-eqs(ModName?)).
     snd-msg(get-rules-top-sort) .
     rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
-    snd-msg(eqs-available-for-modules(ModName)) .
-    rec-msg(eqs-for-modules(Modules?)).
+    snd-msg(eqs-not-available-for-modules(ModName)) .
+    rec-msg(eqs-needed-for-modules(Modules?)).
     (
      if not-equal(Modules, []) then
        Module  := first(Modules).
@@ -87,4 +87,42 @@ in
       snd-msg(eqs-processed(ModName))
     fi 
   )* delta
+endlet
+
+process GetEquations is
+let
+  Id           : term,
+  ModuleName   : str,
+  Equations    : term,
+  AllEquations : term,
+  Modules      : list,
+  Module       : term
+in
+  Id := process-id .
+  (
+    rec-msg(get-all-equations(ModuleName?)) .
+    snd-msg(all-equations-available(ModuleName)) .
+    (
+      rec-msg(equations-available) .
+      AllEquations := [] .
+      snd-msg(get-all-imported-modules(ModuleName)) .
+      rec-msg(all-modules(Modules?)) .
+      (
+        if not-equal(Modules, []) then
+          Module  := first(Modules) .
+          Modules := next(Modules) .
+          snd-msg(get-equations-for-module(Module)) .
+          rec-msg(equations(Equations?)) .
+          snd-msg(union-equations(AllEquations, Equations)) .
+          rec-msg(equations(AllEquations?))
+        fi
+      )*
+      if equal(Modules,[]) then 
+        snd-msg(all-equations(AllEquations))
+      fi 
+    +
+      rec-msg(equations-incomplete) .
+      snd-msg(equations-incomplete)
+    )
+  )*delta
 endlet
