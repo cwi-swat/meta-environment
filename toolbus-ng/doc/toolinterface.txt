@@ -115,10 +115,17 @@ Discussion
     eval(compute(expr), int)
     do(store(str, int))
     event(showTime(),time)
+    
+    Note: perhaps is "function" better than "eval"
   ]
 
 - In the current tool interface we also support viewing/monitoring. 
   [Let's postpone that; maybe we end up with a *process* that handles this.]
+  
+- This proposal does not yet handle connect/disconnect.
+
+- What is the effect of "remote terms" (i.e. terms that are shipped via direct connection between tools)
+  on the tool interface?
 
 
 
