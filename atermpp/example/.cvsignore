@@ -1,3 +1,5 @@
 Makefile
 Makefile.in
 .deps
+aterm_list
+make_term
