@@ -50,7 +50,8 @@ process ParseFocusses is
           snd-msg(syntax-top-sort-hook(sdf)) .
           rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
         else
-          Nonterminal := ""
+          snd-msg(other-top-sort-hook(Type)) .
+          rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
         fi
       fi .
       GetText(EditorId, Text?, Focus?, Status?) .
