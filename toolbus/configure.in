@@ -67,6 +67,13 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
+   [  --with-aterm-java=DIR   ATerm-java-library is in DIR])
+dnl ATERM_JAVA is not allowed in Makefile.am's
+JAVA_ATERM="${ATERM_JAVA}"   
+AC_SUBST(JAVA_ATERM)
+
 dnl Require toolbuslib library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
@@ -120,22 +127,6 @@ AC_ARG_WITH(graphviz,
 )
 AC_SUBST(DOT)
 AC_SUBST(DOT_ADAPTER)
-
-dnl No longer support swi prolog in standard toolbus distribution
-dnl TBSWIPL=true
-dnl AC_ARG_WITH(swipl,
-dnl    [  --with-swipl		   include swi-prolog support (swipl-adapter)],
-dnl    if test ${withval} = "yes"
-dnl    then
-dnl       echo "You will have to edit the file adapters/swipl-adapter/Makefile"
-dnl       echo "so it can locate the swi-prolog home directory and the swi-prolog"
-dnl       echo "architecture."
-dnl       ADAPTERS="${ADAPTERS} swipl-adapter"
-dnl       DEMOS="${DEMOS} ${SWIPL_DEMOS}"
-dnl       TBSWIPL=tbswipl
-dnl    fi,)
-dnl AC_SUBST(TBSWIPL)
-
 
 AC_HEADER_CHECK(arpa/inet.h,:, AC_MSG_ERROR("*** no arpa/inet.h"))
 AC_HEADER_CHECK(assert.h,:, AC_MSG_ERROR("*** no assert.h"))
