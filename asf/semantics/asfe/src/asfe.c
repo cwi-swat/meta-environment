@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
   signal(SIGUSR1, abort_handler);
 
   ATinit(argc, argv, &bottomOfStack);
-  ATsetChecking(ATtrue);
+  /*ATsetChecking(ATtrue);*/
   PT_initMEPTApi();
   ERR_initErrorApi();
   LOC_initLocationApi();
