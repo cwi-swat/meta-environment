@@ -1,19 +1,30 @@
-#line 3 "preparation.c.nw"
+
+
 #include <ctype.h>
-#include <asfix.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <strings.h>
+
+#include <AsFix.h>
+#include <deprecated.h>
 #include "preparation.h"
 
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
 
-#line 28 "preparation.c.nw"
+/*{{{  equation_table *create_equation_table(int size) */
+
+/*
+Allocate memory for an equation table.
+*/
+
 equation_table *create_equation_table(int size)
 {
   int i;
   equation_table *table = (equation_table *)malloc(sizeof(equation_table));
 
   if(!table)
-    fatal_error("out of memory in create_equation_table\n");
+    ATerror("out of memory in create_equation_table\n");
   table->next = NULL;
   table->module = NULL;
   table->size = size;
@@ -21,11 +32,14 @@ equation_table *create_equation_table(int size)
   for(i=0; i<size; i++)
     table->table[i] = NULL;
   if(!table->table)
-    fatal_error("out of memory in create_equation_table\n");
+    ATerror("out of memory in create_equation_table\n");
 
   return table;
 }
-#line 66 "preparation.c.nw"
+
+/*}}}  */
+/*{{{  void flush_equations(equation_table *table) */
+
 void flush_equations(equation_table *table)
 {
   int i;
@@ -36,58 +50,76 @@ void flush_equations(equation_table *table)
     while(entry) {
       old = entry;
       entry = entry->hnext;
-      t_unprotect(old->equation);
+      ATunprotect(&old->equation);
       free(old);
     }
     table->table[i] = NULL;
   }
 }
-#line 54 "preparation.c.nw"
+
+
+/*}}}  */
+/*{{{  void destroy_equation_table(equation_table *table) */
+
+/*
+Free all memory associated with an equation table.
+*/
+
 void destroy_equation_table(equation_table *table)
 {
   flush_equations(table);
   free(table->table);
   free(table);
 }
-#line 88 "preparation.c.nw"
-static unsigned hash_function(equation_table *table, aterm *top_ofs, aterm *first_ofs)
+
+/*}}}  */
+/*{{{  unsigned hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs) */
+
+static unsigned hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs)
 {
-  return (top_ofs->hnr ^ first_ofs->hnr) % table->size;
+	return (((int)top_ofs >> 2) * 3007 + ((int)first_ofs >> 2)) % table->size;
 }
-#line 100 "preparation.c.nw"
-void enter_equation(equation_table *table, aterm *equation)
+
+/*}}}  */
+/*{{{  void enter_equation(equation_table *table, ATerm equation) */
+
+/*
+Enter an equation in an equation table.
+*/
+
+void enter_equation(equation_table *table, ATerm equation)
 {
-  aterm *lhs = asfix_get_equ_lhs(equation);
-  aterm_list *lhsargs = asfix_get_appl_args(lhs);
-  aterm *top_ofs = asfix_get_appl_ofs(lhs);
-  aterm *first_ofs;
+  ATerm lhs = asfix_get_equ_lhs(equation);
+  ATermList lhsargs = (ATermList)asfix_get_appl_args(lhs);
+  ATerm top_ofs = asfix_get_appl_ofs(lhs);
+  ATerm first_ofs;
   equation_entry *entry = (equation_entry *)malloc(sizeof(equation_entry));
   unsigned hnr;
 
   if(!entry)
-    fatal_error("out of memory in enter_equation");
+    ATerror("out of memory in enter_equation");
 
-  while(!t_is_empty(lhsargs) && !asfix_is_appl(t_list_first(lhsargs)) 
-                                && !asfix_is_var(t_list_first(lhsargs))) {
-    lhsargs = t_list_next(lhsargs);
+  while(!ATisEmpty(lhsargs) && !asfix_is_appl(ATgetFirst(lhsargs)) 
+				&& !asfix_is_var(ATgetFirst(lhsargs))) {
+    lhsargs = ATgetNext(lhsargs);
   }
 
-  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs))
-        || asfix_is_default_equ(equation))
-    first_ofs = t_empty(t_world(equation));
+  if(ATisEmpty(lhsargs) || asfix_is_var(ATgetFirst(lhsargs))
+		 || asfix_is_default_equ(equation))
+    first_ofs = (ATerm)ATempty; /* <PO> ? */
   else
-    first_ofs = asfix_get_appl_ofs(t_list_first(lhsargs));
+    first_ofs = asfix_get_appl_ofs(ATgetFirst(lhsargs));
 
   hnr = hash_function(table, top_ofs, first_ofs);
-/*  Tprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
-  Tprintf(stderr, "\t hash-nr=%d\n", hnr); 
+/*  ATfprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
+  ATfprintf(stderr, "\t hash-nr=%d\n", hnr); 
 */
 
   entry->hashnr = hnr;
   entry->top_ofs = top_ofs;
   entry->first_ofs = first_ofs;
   entry->equation = equation;
-  t_protect(equation);  
+  ATprotect(&entry->equation);  
   if(asfix_is_default_equ(equation)) {
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
@@ -103,9 +135,13 @@ void enter_equation(equation_table *table, aterm *equation)
     table->table[hnr] = entry;
   }
 }
-#line 156 "preparation.c.nw"
-equation_entry *find_equation(equation_entry *from, aterm *top_ofs, 
-                                                        aterm *first_ofs)
+
+/*}}}  */
+
+/*{{{  equation_entry *find_equation(equation_entry *prev, ATerm top_ofs, ATerm first) */
+
+equation_entry *find_equation(equation_entry *from, ATerm top_ofs, 
+															ATerm first_ofs)
 {
   if(!equations)
     return NULL;
@@ -113,46 +149,53 @@ equation_entry *find_equation(equation_entry *from, aterm *top_ofs,
     from = from->hnext;
   } else {
     int hnr = hash_function(equations, top_ofs, first_ofs);
-/*    Tprintf(stderr, "first try, finding top_ofs=%t, first_ofs=%t\n", top_ofs,first_ofs);
-    Tprintf(stderr, "\t hnr = %d\n", hnr);
+/*    ATfprintf(stderr, "first try, finding top_ofs=%t, first_ofs=%t\n", top_ofs,first_ofs);
+    ATfprintf(stderr, "\t hnr = %d\n", hnr);
 */
     from = equations->table[hnr];
   }
-  while(from && (!t_equal(from->top_ofs,top_ofs) || 
-                 !t_equal(from->first_ofs,first_ofs)))
+  while(from && (!ATisEqual(from->top_ofs,top_ofs) || 
+								 !ATisEqual(from->first_ofs,first_ofs)))
     from = from->hnext;
 /*  if(from)
-    Tprintf(stderr, "found: %t\n", from->equation);
+    ATfprintf(stderr, "found: %t\n", from->equation);
   else
-    Tprintf(stderr, "no luck!\n");
+    ATfprintf(stderr, "no luck!\n");
 */
   return from;
 }
-#line 186 "preparation.c.nw"
-void select_equations(aterm *module)
+
+/*}}}  */
+/*{{{  void select_equations(ATerm module) */
+
+void select_equations(ATerm module)
 {
   equation_table *cur = tables;
 
-  while(cur && !t_equal(cur->module, module))
+  while(cur && !ATisEqual(cur->module, module))
     cur = cur->next;
 
   if(!cur)
-    fatal_error("equations of module %t have not been registered.");
+    ATerror("equations of module %t have not been registered.");
 
   equations = cur;
 }
-#line 204 "preparation.c.nw"
-void enter_equations(aterm *module, aterm_list *eqs)
+
+
+/*}}}  */
+/*{{{  void enter_equations(ATerm module, ATermList eqs) */
+
+void enter_equations(ATerm module, ATermList eqs)
 {
   equation_table *cur = tables;
 
-  while(cur && !t_equal(cur->module, module))
+  while(cur && !ATisEqual(cur->module, module))
     cur = cur->next;
 
   if(!cur) {
-    cur = create_equation_table(TlistSize(eqs)*2);
+    cur = create_equation_table(ATgetLength(eqs)*2);
     cur->module = module;
-    Tprotect(cur->module);
+		ATprotect(&cur->module);
     cur->next = tables;
     tables = cur;
   }
@@ -160,84 +203,29 @@ void enter_equations(aterm *module, aterm_list *eqs)
   equations = cur;
   flush_equations(equations);
 
-  while(!t_is_empty(eqs)) {
-    enter_equation(equations, t_list_first(eqs));
+  while(!ATisEmpty(eqs)) {
+    enter_equation(equations, ATgetFirst(eqs));
     do {
-      eqs = t_list_next(eqs);
-    } while(!t_is_empty(eqs) && asfix_is_layout(t_list_first(eqs)));
+      eqs = ATgetNext(eqs);
+    } while(!ATisEmpty(eqs) && asfix_is_layout(ATgetFirst(eqs)));
   }
 }
 
-#line 702 "preparation.c.nw"
-aterm *lexical_to_list(arena *ar, aterm *lextrm)
-{
-  aterm *sort, *newtrm, *newlex, *newname, *newiter;
-  aterm *newargs, *newfargs, *newprod, *newappl;
-  int i, l;
-  char cbuf[4] = "\" \"", *lexstr, *sortstr;
-  aterm_list *newtrmlist = t_empty(t_world(lextrm));
+/*}}}  */
 
-  sort = asfix_get_lex_sort(lextrm);
-  assertp(Tmatch(sort, "sort(<str>)", &sortstr));
-  sortstr = strdup(sortstr);
-  for(i=0; sortstr[i]; i++)
-     sortstr[i] = tolower(sortstr[i]);
-  /* Get the string name that represents the lexical */
-  lexstr = t_sym_name(t_appl_sym(asfix_get_lex_str(lextrm)));
-  l = strlen(lexstr);
-  for(i=0; i<l; i++) {
-    cbuf[1] = lexstr[i];
-    newtrm = Tmake(ar, "lex(<str>,sort(\"CHAR\"))", cbuf, sort);
-    newtrmlist = TlistAppend(ar, newtrmlist, newtrm);
-  }
-  newname  = Tmake(ar, "l(<str>)", sortstr);
-  newiter  = Tmake(ar, "iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))");
-  newlex   = Tmake(ar, "list(<term>,w(\"\"),<list>)", newiter, newtrmlist);
-  newfargs = Tmake(ar, "[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",newname, newiter);
-  newargs  = Tmake(ar, "[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
-  newprod  = Tmake(ar, "prod(id(\"caller\"),w(\"\"),<term>,w(\"\")," \
-                        "l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
-  newappl  = Tmake(ar, "appl(<term>,w(\"\"),<term>)", newprod, newargs);
 
-  free(sortstr);
-  return newappl;
-}
-#line 744 "preparation.c.nw"
-aterm *list_to_lexical(arena *ar, aterm *lexappl)
-{
-  aterm *modname, *lit, *sort, *w[4], *prod, *sym, *lexlist;
-  aterm *listarg, *charsort, *newlexappl;
-  char *lexstr, *newlexstr;
-  aterm_list *args, *lexargs, *listargs;
-  int len, i;
+/*{{{  Preparation */
 
-  assertp(Tmatch(lexappl, "appl(<term>,<term>,<list>)", &prod, &w[0], &lexargs));
-  assertp(Tmatch(prod, "prod(<term>,<term>,<list>,<term>,<term>,<term>," \
-        "<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
-                                                &lit, &w[2], &sort, &w[3]));
-  lexlist = TlistIndex(lexargs, 2);
-  assertp(Tmatch(lexlist,"list(<term>,<term>,<list>)",&sym,&w[0],&listargs));
-  len = TlistSize(listargs);
-  newlexstr = (char *)malloc(len+1);
-  i = 0;
-  while(!t_is_empty(listargs)) {
-    listarg = t_list_first(listargs);
-    if(Tmatch(listarg, "lex(<str>,<term>)", &lexstr, &charsort))
-      newlexstr[i++] = lexstr[1];
-    listargs = t_list_next(listargs);
-  }
-  newlexstr[i] = '\0';
-  newlexappl = Tmake(ar, "lex(<str>,<term>)", newlexstr, sort);
-  free(newlexstr);
-  return newlexappl;
-}
-#line 257 "preparation.c.nw"
-void update_geometry_whitespace(aterm *ws, int *line, int *col)
+/*{{{  void update_geometry_whitespace(ATerm ws, int *line, int *col) */
+
+void update_geometry_whitespace(ATerm ws, int *line, int *col)
 {
   int i;
   char *w;
 
-  assertp(TmatchTerm(ws, pattern_whitespace, &w));
+	if(!ATmatchTerm(ws, pattern_whitespace, &w))
+		ATerror("not whitespace: %t\n", ws);
+
   for(i=0; w[i]; i++) {
     if(w[i] == '\n') {
       (*line)++;
@@ -246,13 +234,18 @@ void update_geometry_whitespace(aterm *ws, int *line, int *col)
       (*col)++;
   }
 }
-#line 277 "preparation.c.nw"
-void update_geometry_literal(aterm *lit, int *line, int *col)
+
+/*}}}  */
+/*{{{  void update_geometry_literal(ATerm lit, int *line, int *col) */
+
+void update_geometry_literal(ATerm lit, int *line, int *col)
 {
   int i;
   char *l;
 
-  assertp(TmatchTerm(lit, pattern_literal, &l));
+ if(!ATmatchTerm(lit, pattern_literal, &l))
+	 ATerror("not a literal: %t\n", lit);
+
   for(i=0; l[i]; i++) {
     if(l[i] == '\n') {
       (*line)++;
@@ -261,14 +254,19 @@ void update_geometry_literal(aterm *lit, int *line, int *col)
       (*col)++;
   }
 }
-#line 297 "preparation.c.nw"
-void update_geometry_variable(aterm *var, int *line, int *col)
+
+/*}}}  */
+/*{{{  void update_geometry_variable(ATerm var, int *line, int *col) */
+
+void update_geometry_variable(ATerm var, int *line, int *col)
 {
   int i;
   char *name;
-  aterm *sort;
+  ATerm sort;
 
-  assertp(TmatchTerm(var, pattern_var, &name, &sort));
+ if(!ATmatchTerm(var, pattern_var, &name, &sort))
+	 ATerror("not a variable: %t\n", var);
+
   for(i=0; name[i]; i++) {
     if(name[i] == '\n') {
       (*line)++;
@@ -277,17 +275,20 @@ void update_geometry_variable(aterm *var, int *line, int *col)
       (*col)++;
   }
 }
-#line 318 "preparation.c.nw"
-void update_geometry_list(aterm *l, int *line, int *col);
-void update_geometry_term(aterm *trm, int *line, int *col)
-{
-  aterm *prod, *w, *sym;
-  aterm_list *args, *elems;
 
-  if(TmatchTerm(trm, pattern_appl, &prod, &w, &args)) {
+/*}}}  */
+/*{{{  void update_geometry_term(ATerm trm, int *line, int *col) */
+
+void update_geometry_list(ATermList l, int *line, int *col);
+void update_geometry_term(ATerm trm, int *line, int *col)
+{
+  ATerm prod, w, sym;
+  ATermList args, elems;
+
+  if(ATmatchTerm(trm, pattern_appl, &prod, &w, &args)) {
     update_geometry_whitespace(w, line, col);
     update_geometry_list(args, line, col);
-  } else if(TmatchTerm(trm, pattern_list, &sym, &w, &elems)) {
+  } else if(ATmatchTerm(trm, pattern_list, &sym, &w, &elems)) {
     update_geometry_whitespace(w, line, col);
     update_geometry_list(elems, line, col);
   } else if(asfix_is_whitespace(trm)) {
@@ -297,78 +298,109 @@ void update_geometry_term(aterm *trm, int *line, int *col)
   } else if(asfix_is_var(trm)) {
     update_geometry_variable(trm, line, col);
   } else {
-    Tprintf(stderr, "unknown construction in term: %t\n", trm);
+    ATfprintf(stderr, "unknown construction in term: %t\n", trm);
   }
 }
-#line 346 "preparation.c.nw"
-void update_geometry_list(aterm *l, int *line, int *col)
+
+/*}}}  */
+/*{{{  void update_geometry_list(ATermList l, int *line, int *col)*/
+
+void update_geometry_list(ATermList l, int *line, int *col)
 {
-  while(!t_is_empty(l)) {
-    update_geometry_term(t_list_first(l), line, col);
-    l = t_list_next(l);
+  while(!ATisEmpty(l)) {
+    update_geometry_term(ATgetFirst(l), line, col);
+    l = ATgetNext(l);
   }
 }
-#line 359 "preparation.c.nw"
-void update_geometry_list_sep(aterm *sep, int *line, int *col)
+
+
+/*}}}  */
+/*{{{  void update_geometry_list_sep(ATerm ws, int *line, int *col)*/
+
+void update_geometry_list_sep(ATerm sep, int *line, int *col)
 {
-  Tprintf(stderr, "update_geometry_list_sep: %t\n", sep);
+  ATfprintf(stderr, "update_geometry_list_sep: %t\n", sep);
   
 }
 
-#line 374 "preparation.c.nw"
-aterm *prepare_term(arena *ar, aterm *el, Tbool lexcons);
 
-aterm_list *prepare_list(arena *ar, aterm_list *l, Tbool lexcons)
+/*}}}  */
+
+/*{{{  ATermList *prepare_list(ATermList *l, ATbool lexcons)*/
+
+/*
+Prepare a list of AsFix terms. This includes removing any layout,
+and translating lexical constructors into lists.
+*/
+
+ATerm prepare_term(ATerm el, ATbool lexcons);
+
+ATermList prepare_list(ATermList l, ATbool lexcons)
 {
-  aterm *el;
-  aterm_list *result = t_empty(t_world(l));
+  ATerm el;
+  ATermList result = ATempty;
 
-  while(!t_is_empty(l)) {
+  while(!ATisEmpty(l)) {
     do {
-      el = t_list_first(l);
-      l = t_list_next(l);
+      el = ATgetFirst(l);
+      l = ATgetNext(l);
     } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
-    result = TlistAppend(ar, result, prepare_term(ar, el, lexcons)); 
+    result = ATappend(result, prepare_term(el, lexcons)); 
   }
   return result;
 }
-#line 398 "preparation.c.nw"
-aterm_list *prepare_conds(arena *ar, aterm_list *conds)
-{
-  aterm *cond, *lhs, *w[2], *lit, *rhs;
-  aterm *newlhs, *newrhs, *newcond;
-  aterm_list *newconds = t_empty(NULL);
 
-  while(!t_is_empty(conds)) {
+/*}}}  */
+/*{{{  ATermList prepare_conds(ATermList conds)*/
+
+/*
+Remove all layout from a list of conditions.
+*/
+
+ATermList prepare_conds(ATermList conds)
+{
+  ATerm cond, lhs, w[2], lit, rhs;
+  ATerm newlhs, newrhs, newcond;
+  ATermList newconds = ATempty;
+
+  while(!ATisEmpty(conds)) {
     do {
-      cond = t_list_first(conds);
-      conds = t_list_next(conds);
+      cond = ATgetFirst(conds);
+      conds = ATgetNext(conds);
     } while(asfix_is_whitespace(cond) || asfix_is_list_sep(cond));
-    if(Tmatch(cond, "condition(<term>,<term>,<term>,<term>,<term>)",
-                        &lhs, &w[0], &lit, &w[1], &rhs)) {
-      newlhs = prepare_term(ar, lhs, Tfalse);
-      newrhs = prepare_term(ar, rhs, Tfalse);
-      newcond = Tmake(ar, "condition(<term>,<term>,<term>,<term>,<term>)",
-                        newlhs, w[0], lit, w[1], newrhs);
-      newconds = TlistAppend(ar, newconds, newcond);
+    if(ATmatch(cond, "condition(<term>,<term>,<term>,<term>,<term>)",
+			&lhs, &w[0], &lit, &w[1], &rhs)) {
+      newlhs = prepare_term(lhs, ATfalse);
+      newrhs = prepare_term(rhs, ATfalse);
+      newcond = ATmake("condition(<term>,<term>,<term>,<term>,<term>)",
+			newlhs, w[0], lit, w[1], newrhs);
+      newconds = ATappend(newconds, newcond);
     }
   }
   return newconds;
 }
-#line 429 "preparation.c.nw"
-aterm_list *prepare_equ(arena *ar, aterm *equ, int *line, int *col)
-{
-  aterm *w[6], *l[2], *modname, *tag, *lhs, *rhs;
-  aterm *newlhs, *newrhs;
-  aterm_list *conds, *newconds;
 
-  if(Tmatch(equ, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",    
-        &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
-    newlhs = prepare_term(ar, lhs, Tfalse);
-    newrhs = prepare_term(ar, rhs, Tfalse);
+/*}}}  */
+/*{{{  ATerm prepare_equ(ATerm equ, int *line, int *col)*/
 
 /*
-    Tprintf(stderr, "equation: %t starts at %d,%d, ", tag, *line, *col);
+Prepare an equation for rewriting. This includes removing the layout,
+and translating lexicals into lists.
+*/
+
+ATerm prepare_equ(ATerm equ, int *line, int *col)
+{
+  ATerm w[6], l[2], modname, tag, lhs, rhs;
+  ATerm newlhs, newrhs;
+  ATermList conds, newconds;
+
+  if(ATmatch(equ, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",    
+	&modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
+    newlhs = prepare_term(lhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse);
+
+/*
+    ATfprintf(stderr, "equation: %t starts at %d,%d, ", tag, *line, *col);
     update_geometry_whitespace(w[0], line, col);
     update_geometry_literal(tag, line, col);
     update_geometry_whitespace(w[1], line, col);
@@ -377,98 +409,157 @@ aterm_list *prepare_equ(arena *ar, aterm *equ, int *line, int *col)
     update_geometry_literal(l[0], line, col);
     update_geometry_whitespace(w[3], line, col);
     update_geometry_term(rhs, line, col);
-    Tprintf(stderr, "and ends at: %d,%d\n", *line, *col);
+    ATfprintf(stderr, "and ends at: %d,%d\n", *line, *col);
 */
-    return Tmake(ar, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-        modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3], newrhs);
+    return ATmake("ceq-equ(<term>,<term>,<term>,<term>,<term>,"
+									"<term>,<term>,<term>,<term>)",
+									modname, w[0], tag, w[1], newlhs, w[2], l[0], 
+									w[3], newrhs);
   }
-
-  if(Tmatch(equ, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-                                "<term>,<term>,<term>,<term>,<term>,<term>)",
-        &modname, &w[0], &tag, &w[1], &conds, &w[2], &l[0], &w[3], 
-        &lhs, &w[4], &l[1], &w[5], &rhs)) {
-    newlhs = prepare_term(ar, lhs, Tfalse);
-    newrhs = prepare_term(ar, rhs, Tfalse);
-    newconds = prepare_conds(ar, conds);
-    return Tmake(ar, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>," \
-                        "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-        modname, w[0], tag, w[1], newconds, w[2], l[0], w[3], 
-        newlhs, w[4], l[1], w[5], newrhs);
+	
+  if(ATmatch(equ, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
+						 "<term>,<term>,<term>,<term>,<term>,<term>)",
+						 &modname, &w[0], &tag, &w[1], &conds, &w[2], &l[0], &w[3], 
+						 &lhs, &w[4], &l[1], &w[5], &rhs)) {
+    newlhs = prepare_term(lhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse);
+    newconds = prepare_conds(conds);
+    return ATmake("ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>," \
+									"<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
+									modname, w[0], tag, w[1], newconds, w[2], l[0], w[3], 
+									newlhs, w[4], l[1], w[5], newrhs);
   }
-
-  if(Tmatch(equ, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-                                "<term>,<term>,<term>,<term>,<term>,<term>)",
-        &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3],
-        &rhs, &w[4], &l[1], &w[5], &conds)) {
-    newlhs = prepare_term(ar, lhs, Tfalse);
-    newrhs = prepare_term(ar, rhs, Tfalse);
-    newconds = prepare_conds(ar, conds);
-    return Tmake(ar, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
-                        "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-        modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
-        newrhs, w[4], l[1], w[5], newconds);
+	
+  if(ATmatch(equ, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
+						 "<term>,<term>,<term>,<term>,<term>,<term>)",
+						 &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3],
+						 &rhs, &w[4], &l[1], &w[5], &conds)) {
+    newlhs = prepare_term(lhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse);
+    newconds = prepare_conds(conds);
+    return ATmake("ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
+									"<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
+									modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
+									newrhs, w[4], l[1], w[5], newconds);
   }
-  Tprintf(stderr, "equation: %t not supported..\n", equ);
+  ATfprintf(stderr, "equation: %t not supported..\n", equ);
   assert(0);
-  return NULL;  /* Silence the compiler */
+  return NULL;	/* Silence the compiler */
 }
-#line 493 "preparation.c.nw"
-aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
-{
-  aterm_list *args, *elems, *newargs, *result;
-  arena local;
 
-  TinitArena(t_world(*ar), &local);
+/*}}}  */
+/*{{{  ATerm lexical_to_list(ATerm lextrm)*/
+
+/*
+{\tt lexical\_to\_list} converts a lexical into a list.
+*/
+
+ATerm lexical_to_list(ATerm lextrm)
+{
+  ATerm sort, newtrm, newlex, newname, newiter;
+  ATerm newargs, newfargs, newprod, newappl;
+  int i, l;
+  char cbuf[4] = "\" \"", *lexstr, *sortstr;
+  ATermList newtrmlist = ATempty;
+
+  sort = asfix_get_lex_sort(lextrm);
+  if(!ATmatch(sort, "sort(<str>)", &sortstr))
+		ATerror("not a sort: %t\n", sort);
+  sortstr = strdup(sortstr);
+  for(i=0; sortstr[i]; i++)
+     sortstr[i] = tolower(sortstr[i]);
+  /* Get the string name that represents the lexical */
+  lexstr = ATgetName(ATgetAFun((ATermAppl)asfix_get_lex_str(lextrm)));
+  l = strlen(lexstr);
+  for(i=0; i<l; i++) {
+    cbuf[1] = lexstr[i];
+    newtrm = ATmake("lex(<str>,sort(\"CHAR\"))", cbuf, sort);
+    newtrmlist = ATappend(newtrmlist, newtrm);
+  }
+  newname  = ATmake("l(<str>)", sortstr);
+  newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))");
+  newlex   = ATmake("list(<term>,w(\"\"),<list>)", newiter, newtrmlist);
+  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",newname, newiter);
+  newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
+  newprod  = ATmake("prod(id(\"caller\"),w(\"\"),<term>,w(\"\")," \
+			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
+  newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
+
+  free(sortstr);
+  return newappl;
+}
+
+/*}}}  */
+/*{{{  ATerm prepare_term(ATerm t, ATbool lexcons)*/
+
+/*
+Remove the layout of a term.
+*/
+
+ATerm prepare_term(ATerm t, ATbool lexcons)
+{
+	ATerm result;
+  ATermList args, elems, newargs;
 
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
     if(asfix_is_lex_constructor(t))
-      newargs = prepare_list(&local, args, Ttrue);
+      newargs = prepare_list(args, ATtrue);
     else
-      newargs = prepare_list(&local, args, Tfalse);
-    result = asfix_put_appl_args(&local, t, newargs);
+      newargs = prepare_list(args, ATfalse);
+    result = asfix_put_appl_args(t, newargs);
   } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
-    result = asfix_put_list_elems(&local, t, 
-                        prepare_list(&local, elems, lexcons));
+    result = asfix_put_list_elems(t, prepare_list(elems, lexcons));
   } else if(asfix_is_lex(t) && !lexcons)
-    result = lexical_to_list(&local, t);
-  else {
-    TdestroyArena(&local);
-    return t;
-  }
-
-  Tadd2Arena(ar, result);
-  TdestroyArena(&local);
+    result = lexical_to_list(t);
+  else 
+		result = t;
 
   return result;
 }
-#line 530 "preparation.c.nw"
-aterm *RWprepareTerm(arena *ar, aterm *t)
+
+/*}}}  */
+
+/*{{{  ATerm RWprepareTerm(ATerm t)*/
+
+ATerm RWprepareTerm(ATerm t)
 {
-  return prepare_term(ar, t, Tfalse);
+  return prepare_term(t, ATfalse);
 }
-#line 542 "preparation.c.nw"
-aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
+
+
+/*}}}  */
+/*{{{  ATermList RWprepareEqs(ATermList eqs)*/
+
+/*
+Prepare a list of equations for rewriting.
+*/
+
+ATermList RWprepareEqs(ATermList eqs)
 {
-  aterm *el;
-  aterm_list *result = t_empty(t_world(*ar));
+  ATerm el;
+  ATermList result = ATempty;
   int line = 0, col = 0;
   
-  while(!t_is_empty(eqs)) {
+  while(!ATisEmpty(eqs)) {
     do {
-      el = t_list_first(eqs);
-      eqs = t_list_next(eqs);
+      el = ATgetFirst(eqs);
+      eqs = ATgetNext(eqs);
       if(asfix_is_whitespace(el))
-        update_geometry_whitespace(el, &line, &col);
+	update_geometry_whitespace(el, &line, &col);
       if(asfix_is_list_sep(el))
         update_geometry_list_sep(el, &line, &col);
     } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
-    result = TlistAppend(ar, result, prepare_equ(ar, el, &line, &col)); 
+    result = ATappend(result, prepare_equ(el, &line, &col)); 
   }
   return result;
 }
-#line 567 "preparation.c.nw"
+
+
+/*}}}  */
+/*{{{  void RWflushEquations()*/
+
 void RWflushEquations()
 {
   equation_table *table;
@@ -478,78 +569,146 @@ void RWflushEquations()
     destroy_equation_table(table);
   }
 }
-#line 597 "preparation.c.nw"
-aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
-{
-  aterm *lit;
-  aterm *el, *sep, *newsep, *ws[2];
-  aterm_list *newl = t_empty(t_world(l));
 
-  ws[0] = Tmake(ar, "w(\" \")");
-  ws[1] = Tmake(ar, "w(\"\\n\")");
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  Restoration*/
+
+/*{{{  ATermList restore_list(ATerm sym, ATermList l)*/
+
+/*
+Restore a list after reweriting. Insert whitespace and optionally
+separators.
+*/
+
+ATermList restore_list(ATerm sym, ATermList l)
+{
+  ATerm lit;
+  ATerm el, sep, newsep, ws[2];
+  ATermList newl = ATempty;
+
+  ws[0] = ATmake("w(\" \")");
+  ws[1] = ATmake("w(\"\\n\")");
   if(asfix_is_itersep(sym)) {
     sep = asfix_get_separator(sym);
-    assertp(Tmatch(sep, "ql(<term>)", &lit));
-    newsep = Tmake(ar, "sep(<term>)", lit);
-    while(!t_is_empty(l)) {
-      el = t_list_first(l);
-      newl  = TlistAppend(ar, newl, RWrestoreTerm(ar, el));
-      l = t_list_next(l);
-      if(!t_is_empty(l))
-        newl = TlistConcat(ar, newl, TmkList_n(ar, 3, ws[0], newsep, ws[1]));
+    if(!ATmatch(sep, "ql(<term>)", &lit))
+			ATerror("not a quoted literal: %t\n", sep);
+    newsep = ATmake("sep(<term>)", lit);
+    while(!ATisEmpty(l)) {
+      el = ATgetFirst(l);
+      newl  = ATappend(newl, RWrestoreTerm(el));
+      l = ATgetNext(l);
+      if(!ATisEmpty(l))
+				newl = ATconcat(newl, ATmakeList3(ws[0], newsep, ws[1]));
     }
   } else {
-    while(!t_is_empty(l)) {
-      el = t_list_first(l);
-      newl  = TlistAppend(ar, newl, RWrestoreTerm(ar, el));
-      l = t_list_next(l);
-      if(!t_is_empty(l))
-        newl = TlistAppend(ar, newl, ws[0]);
+    while(!ATisEmpty(l)) {
+      el = ATgetFirst(l);
+      newl  = ATappend(newl, RWrestoreTerm(el));
+      l = ATgetNext(l);
+      if(!ATisEmpty(l))
+        newl = ATappend(newl, ws[0]);
     }
   }
   return newl;
 }
-#line 636 "preparation.c.nw"
-aterm_list *restore_args(arena *ar, aterm_list *l)
-{
-  aterm *arg, *ws;
-  aterm_list *newl = t_empty(t_world(l));
 
-  ws = Tmake(ar, "w(\" \")");
-  while(!t_is_empty(l)) {
-    arg = t_list_first(l);
-    newl = TlistAppend(ar, newl, RWrestoreTerm(ar, arg));
-    l = t_list_next(l);
-    if(!t_is_empty(l))
-      newl = TlistAppend(ar, newl, ws);
+
+/*}}}  */
+/*{{{  ATermList restore_args(ATermList l)*/
+
+/*
+Restore a list of arguments after rewriting. This includes
+the restoration of layout between arguments.
+*/
+
+ATermList restore_args(ATermList l)
+{
+  ATerm arg, ws;
+  ATermList newl = ATempty;
+
+  ws = ATmake("w(\" \")");
+  while(!ATisEmpty(l)) {
+    arg = ATgetFirst(l);
+    newl = ATappend(newl, RWrestoreTerm(arg));
+    l = ATgetNext(l);
+    if(!ATisEmpty(l))
+      newl = ATappend(newl, ws);
   }
   return newl;
 }
-#line 657 "preparation.c.nw"
-aterm *RWrestoreTerm(arena *ar, aterm *t)
-{
-  aterm_list *args, *elems;
-  aterm *sym, *result;
-  arena local;
-  
-  TinitArena(NULL, &local);
 
+
+/*}}}  */
+/*{{{  ATerm list_to_lexical(ATerm lexappl)*/
+
+/*{\tt list_to_lexical} converts  a list representing a lexical into a
+lexical again. 
+*/
+
+ATerm list_to_lexical(ATerm lexappl)
+{
+  ATerm modname, lit, sort, w[4], prod, sym, lexlist;
+  ATerm listarg, charsort, newlexappl;
+  char *lexstr, *newlexstr;
+  ATermList args, lexargs, listargs;
+  int len, i;
+	
+  if(!ATmatch(lexappl, "appl(<term>,<term>,<list>)", &prod, &w[0], &lexargs))
+    ATerror("not an appl: %t\n", lexappl);
+	
+  if(!ATmatch(prod, "prod(<term>,<term>,<list>,<term>,<term>,<term>," \
+							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
+							&lit, &w[2], &sort, &w[3]))
+		ATerror("not a prod: %t\n", prod);
+  lexlist = ATelementAt(lexargs, 2);
+  if(!ATmatch(lexlist,"list(<term>,<term>,<list>)",&sym,&w[0],&listargs))
+		ATerror("not a list: %t\n", lexlist);
+  len = ATgetLength(listargs);
+  newlexstr = (char *)malloc(len+1);
+  i = 0;
+  while(!ATisEmpty(listargs)) {
+    listarg = ATgetFirst(listargs);
+    if(ATmatch(listarg, "lex(<str>,<term>)", &lexstr, &charsort))
+      newlexstr[i++] = lexstr[1];
+    listargs = ATgetNext(listargs);
+  }
+  newlexstr[i] = '\0';
+  newlexappl = ATmake("lex(<str>,<term>)", newlexstr, sort);
+  free(newlexstr);
+  return newlexappl;
+}
+
+
+/*}}}  */
+/*{{{  ATerm RWrestoreTerm(ATerm t)*/
+
+ATerm RWrestoreTerm(ATerm t)
+{
+  ATermList args, elems;
+  ATerm sym, result;
+	
   if(asfix_is_appl(t)) {
     if(asfix_is_lex_constructor(t))
-      return list_to_lexical(&local, t);
+      return list_to_lexical(t);
     args = asfix_get_appl_args(t);
-    result = asfix_put_appl_args(&local, t, restore_args(&local, args));    
+    result = asfix_put_appl_args(t, restore_args(args));    
   } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
     sym   = asfix_get_list_sym(t);
-    return asfix_put_list_elems(&local, t, restore_list(&local, sym, elems));
-  } else {
-    TdestroyArena(&local);
-    return t;
-  }
+    return asfix_put_list_elems(t, restore_list(sym, elems));
+  } else
+    result = t;
 
-  Tadd2Arena(ar, result);
-  TdestroyArena(&local);
-  
-  return result;
+	return result;
 }
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  lexicals*/
+
+
+/*}}}  */

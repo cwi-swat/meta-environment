@@ -51,8 +51,8 @@ XDEFS		= -DPROFILING
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
-		-L$(GEL)/lib -lgel $(SOCKLIBS)
+XLIBS		= -L$(ATERM)/lib -lATB-dbg -lAsFix-dbg -lATerm-dbg \
+			$(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -78,13 +78,8 @@ all: $(BINFILES)
 MODULES	= evaluator.o preparation.o
 
 # Explicit rules
-evaluator.c: evaluator.c.nw
-preparation.c: preparation.c.nw
-preparation.h: preparation.h.nw
-
 evaluator.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(TOOLBUS)/bin/ctif -newstyle -tifs $(top_srcdir)/toolbus/meta.tifs \
-							-tool evaluator
+	$(TOOLBUS)/bin/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
 
 evaluator: $(MODULES)
 	$(CC) -o evaluator $(MODULES) $(LIBS)
