@@ -44,6 +44,6 @@ echo === not binary identical -- text diff for `basename $1`/`basename $2` ===
 trap 'rm -f $A $B' 0 1
 trmcat $1 | $PERL5 -pe "$break"	> $A
 trmcat $2 | $PERL5 -pe "$break"	> $B
-diff $A $B
+diff $A $B; error=$?
 
-echo "==="
+exit $error
