@@ -1,3 +1,7 @@
+2002/10/12 (jurgenv@cwi.nl)
+  * Moved entire library to asf package. We will maintain this ChangeLog
+    since the library is such an isolated subtree in the package.
+
 2002/07/29 (jurgenv@cwi.nl)
   * Updated STYLE-GUIDE and README
   * Release 0.3

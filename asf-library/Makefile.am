@@ -1,3 +1,5 @@
+EXTRA_DIST=make_rules
+
 SUBDIRS=asf basic aterm sdf2 system \
         disambiguation containers strategies functions 
 

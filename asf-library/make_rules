@@ -1,0 +1,48 @@
+# $Id$
+
+LIBROOT=${top_srcdir}/lib
+
+# What gets installed, distributed, cleaned
+MODULES=$(wildcard *.asf *.sdf) 
+PREPARED=$(wildcard *.tbl)
+EXTRA_DIST = $(MODULES) $(PREPARED) 
+
+# Determine installation directory
+libpackagedir=${pkgdatadir}/library$(subst library,,$(subdir))
+
+INSTALL_READONLY = ${INSTALL} -m 0444
+
+install-data-hook: make-dir install-modules install-prepared make-read-only
+
+make-dir:
+	@if test -d $(DESTDIR)$(libpackagedir); then \
+           echo " chmod 755 $(DESTDIR)$(libpackagedir)"; \
+           chmod 755 $(DESTDIR)$(libpackagedir); \
+        fi
+	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
+
+install-modules:
+	@list='$(MODULES)'; for p in $$list; do \
+          if test -f $(srcdir)/$$p; then \
+            echo " $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
+          else if test -f $$p; then \
+            echo " $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p; \
+          fi; fi; \
+        done; 
+
+install-prepared:
+	@list='$(PREPARED)'; for p in $$list; do \
+          if test -f $(srcdir)/$$p; then \
+            echo " $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
+          else if test -f $$p; then \
+            echo " $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p; \
+          fi; fi; \
+        done;
+
+
+make-read-only:
+	chmod 555 $(DESTDIR)$(libpackagedir) 
