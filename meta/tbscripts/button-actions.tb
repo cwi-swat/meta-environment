@@ -1120,7 +1120,6 @@ let
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing equations of %s", [Modulename])))
-  . snd-msg(te-write-contents(Sid))
   . GetParseTable(Modulename, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
