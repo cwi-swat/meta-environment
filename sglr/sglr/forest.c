@@ -76,7 +76,7 @@ AFun  SG_Amb2Afun(void)
 
   if(!inited) {
     fun = ATmakeSymbol("appl", 2, ATfalse);
-    ATprotect((ATerm *) &fun);
+    ATprotectSymbol(fun);
   }
   return fun;
 }
@@ -88,7 +88,7 @@ AFun  SG_Amb3Afun(void)
 
   if(!inited) {
     fun = ATmakeSymbol("appl", 3, ATfalse);
-    ATprotect((ATerm *) &fun);
+    ATprotectSymbol(fun);
   }
   return fun;
 }

@@ -113,9 +113,9 @@ parse_table *SG_NewParseTable(int states, int productions)
   pt               = SG_Malloc(sizeof(struct _parse_table));
   pt->init         = -1;
 
-  pt->action_table = ATtableCreate(1024,    75);
-  pt->goto_table   = ATtableCreate(states, 100);
-  pt->productions  = ATtableCreate(productions + 256, 100);
+  pt->action_table = ATtableCreate(65536,    75);
+  pt->goto_table   = ATtableCreate(states*1.4,  75);
+  pt->productions  = ATtableCreate((productions + 256)*1.4, 75);
 
 //  pt->vertices     = SG_Malloc(sizeof(ATerm ) * states);
 //  pt->org_table    = ATempty;
