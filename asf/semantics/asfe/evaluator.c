@@ -86,6 +86,7 @@ ATerm equations_db = NULL;
 
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 #define v_lookup(var,env)	(ATdictGet(env,var))
+#define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env,(ATerm)ATmakeList2(var,val)))
 #define get_term(cenv)		(ATgetFirst(cenv))
 #define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
 #define make_cenv(t,e)		(ATmakeList(2, t, e))
@@ -315,29 +316,9 @@ ATbool no_new_vars(ATerm trm, ATerm env)
       args = ATgetNext(args);
     };
     return existing;
-  }
-  else
+  } else
     return ATtrue;
-  return ATtrue;
 }
-
-
-/*}}}  */
-/*{{{  ATermList elems_matching(ar,sym,env,elems1,elems2,conds,args1,args2) */
-
-/* Functions which take care of the matching of arguments of
-   ``appls'' and ``lists''. 
-   The matching is a very recursive process. This is needed to
-   take care of the backtracking needed when dealing with
-   list matching. */
-ATerm elems_matching(ATerm sym, ATerm env,
-                     ATermList elems1, ATermList elems2,
-                     ATermList conds,
-                     ATermList args1, ATermList args2)
-{
-  return list_matching(sym,env,elems1,elems2,conds,args1,args2);
-}
-
 
 /*}}}  */
 /*{{{  ATermList arg_matching(env, arg1, arg2, conds, orgargs1, orgargs2) */
@@ -396,15 +377,15 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       newenv = fail_env;
   } 
   else if(asfix_is_var(arg1)) {
-    if(ATdictGet(newenv,arg1)) {
-      trm = v_lookup(arg1,newenv);
+    trm = v_lookup(arg1,newenv);
+    if(trm) {
       if(ATisEqual(arg2,trm))
         newenv = args_matching(newenv,conds,orgargs1,orgargs2);
       else
         newenv = fail_env;
     }
     else {
-      newenv = ATdictPut(newenv,arg1,arg2);
+      newenv = v_put(newenv,arg1,arg2);
       newenv = args_matching(newenv,conds,orgargs1,orgargs2);
     }
   }
@@ -413,7 +394,6 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   }
   return newenv;
 }
-
 
 /*}}}  */
 /*{{{  ATerm args_matching(env, conds, args1, args2) */
@@ -490,7 +470,7 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
   ATermList subelems = ATempty;
  
   if(asfix_is_star_var(elem)) {
-    newenv = ATdictPut(env,elem,(ATerm) subelems);
+    newenv = v_put(env,elem, (ATerm)subelems);
     subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
   }
   else
@@ -501,7 +481,7 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
       elem2 = ATgetFirst(elems2);
       subelems = ATappend(subelems,elem2);
       elems2 = ATgetNext(elems2);
-      newenv = ATdictPut(env,elem,(ATerm) subelems);
+      newenv = v_put(env, elem, (ATerm)subelems);
       subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
    }
    else
@@ -519,7 +499,7 @@ ATerm list_matching(ATerm sym,
                     ATermList conds, ATermList args1, ATermList args2)
 {
   ATerm elem1, elem2;
-  ATerm trms, rlist;
+  ATerm rlist;
   ATerm newenv;
   ATerm newarg1, newarg2;
   ATermList newargs1, newargs2;
@@ -528,9 +508,9 @@ ATerm list_matching(ATerm sym,
     elem1 = ATgetFirst(elems1);
     if(ATgetLength(elems1) == 1) {
       if(asfix_is_list_var(elem1)) {
-        if(ATdictGet(env,elem1)) {
-          trms = v_lookup(elem1,env);
-          rlist = compare_sub_lists((ATermList) trms,elems2);
+				ATermList trms = (ATermList)v_lookup(elem1, env);
+        if(trms) {
+          rlist = compare_sub_lists(trms, elems2);
           if(ATisEmpty((ATermList) rlist)) {
             newenv = args_matching(env,conds,args1,args2);
           }
@@ -540,14 +520,14 @@ ATerm list_matching(ATerm sym,
         else { /* TdictGet(env,elem1) == Tfalse */
           if(asfix_is_plus_var(elem1)) {
             if(!ATisEmpty(elems2)) {
-              newenv = ATdictPut(env,elem1,(ATerm) elems2);
+              newenv = v_put(env,elem1,(ATerm) elems2);
               newenv = args_matching(newenv,conds,args1,args2);
             }
             else
               newenv = fail_env;
           }
           else {
-            newenv = ATdictPut(env,elem1,(ATerm) elems2);
+            newenv = v_put(env, elem1, (ATerm)elems2);
             newenv = args_matching(newenv,conds,args1,args2);
           }
         }
@@ -564,8 +544,8 @@ ATerm list_matching(ATerm sym,
     else { /* TlistSize(elems1) != 1 */
       elems1 = ATgetNext(elems1);
       if(asfix_is_list_var(elem1)) {
-        if(ATdictGet(env,elem1)) {
-          trms = v_lookup(elem1,env);
+				ATerm trms = v_lookup(elem1, env);
+        if(trms) {
           elems2 = (ATermList) compare_sub_lists((ATermList) trms,elems2);
           if(!is_fail_env(elems2)) 
             newenv = list_matching(sym,env,elems1,elems2,conds,args1,args2);
@@ -615,11 +595,14 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
   ATerm newenv = env;
 
   if(!ATisEmpty(conds)) {
+		/* <PO:opt> we could do with iteration instead of recursion on the
+			 list of conditions! */
     cond = ATgetFirst(conds);
     conds = ATgetNext(conds);
     lhs = asfix_get_cond_lhs(cond);
     rhs = asfix_get_cond_rhs(cond);
     if(asfix_is_equality_cond(cond)) {
+			/* <PO:opt> couldn't we determine this statically? */
       if(no_new_vars(lhs,newenv)) {
         lhstrm = rewrite(lhs,newenv);
         if(no_new_vars(rhs,newenv)) {
@@ -691,7 +674,11 @@ ATerm apply_rule(ATerm trm)
 
   if(!ATisEmpty(tmpargs)) {
     first_ofs = asfix_get_appl_ofs(ATgetFirst(tmpargs));
-  
+
+		/* <PO:opt> we could build a table for each ofs in the
+			 specification, containing an entry for each first_ofs.
+			 Each entry consists of all the equations for this combination.
+		*/
     while((entry = find_equation(entry, top_ofs, first_ofs))) {
       equ = entry->equation;
       conds = (ATermList) asfix_get_equ_conds(equ);
@@ -781,14 +768,11 @@ ATermList rewrite_args(ATermList args, ATerm env)
       ++i;
     }
     assert(i==len);
-    for(--i; i > 0; i--) {
+    for(--i; i >= 0; i--)
       newargs = ATinsert(newargs,newarg_table[i]);
-    }
-    newargs = ATinsert(newargs,newarg_table[0]);
   }
   return newargs;
 }
-
 
 /*}}}  */
 /*{{{  ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env) */
@@ -802,7 +786,9 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
   ATermList newelems = ATempty;
   int len = ATgetLength(elems);
 
-  if(len >= 0) {
+	/* <PO:opt> why not first do the first len-32 elements and then
+     the last 32 using the 'fast' method below? */
+  if(len >= 32) {
     while(!ATisEmpty(elems)) {
       elem = ATgetFirst(elems);
       newelem = rewrite(elem, env);
@@ -821,7 +807,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
       elems = ATgetNext(elems);
       i++;
     }
-    for(--i; i>0; i--) {
+    for(--i; i>=0; i--) {
       newelem = newelem_table[i];
       if(ATgetType(newelem) == AT_LIST) {
         newelems = ATconcat((ATermList)newelem, newelems); 
@@ -829,11 +815,6 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
         newelems = ATinsert(newelems, newelem);
       } 
     }
-    newelem = newelem_table[i];
-    if(ATgetType(newelem) == AT_LIST)
-      newelems = ATconcat((ATermList) newelem, newelems);
-    else
-      newelems = ATinsert(newelems, newelem);
   }
   return newelems;
 }
@@ -870,14 +851,11 @@ ATerm rewrite(ATerm trm, ATerm env)
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs); 
       rewtrm = select_and_rewrite(newtrm); 
     }
-  }
-  else if(asfix_is_var(trm)) {
-    if(ATdictGet(env,trm))
-      rewtrm = v_lookup(trm,env);
-    else 
-      rewtrm = trm;
-  }
-  else if(asfix_is_list(trm)) {
+  } else if(asfix_is_var(trm)) {
+		rewtrm = v_lookup(trm,env);
+		if(!rewtrm)
+			rewtrm = trm;
+  } else if(asfix_is_list(trm)) {
     elems = (ATermList) asfix_get_list_elems(trm);
     sym = asfix_get_list_sym(trm);
     newelems = rewrite_elems(sym, elems, env);
@@ -887,7 +865,6 @@ ATerm rewrite(ATerm trm, ATerm env)
     rewtrm = trm; 
   return rewtrm;
 }
-
 
 /*}}}  */
 
@@ -906,6 +883,8 @@ int main(int argc, char **argv)
   ATprotect(&equations_db);
 
   fail_env = ATparse("[fail]"); 
+	ATprotect(&fail_env);
+
   ATBeventloop();
 
   return 0;
