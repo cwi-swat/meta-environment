@@ -323,10 +323,7 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
 
   filestr = PT_yieldTree(file_arg);
 
-  if (filestr != NULL && strlen(filestr) > 2) {
-    filestr[strlen(filestr) -1 ] = '\0';
-    ATwriteToNamedTextFile(PT_ParseTreeToTerm(pt), filestr+1);
-  }
+  ATwriteToNamedTextFile(PT_ParseTreeToTerm(pt), filestr);
 
   return tree_arg;
 }
