@@ -104,13 +104,21 @@ AC_ARG_WITH(toolbus,
    [  --with-toolbus      Specify location of the ToolBus], 
    TOOLBUS=$withval)
 
+AC_ARG_WITH(toolbus-bin,
+   [  --with-toolbus-bin=DIR  ToolBus executables are in DIR],
+   TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
+AC_SUBST(TOOLBUSBIN)
+
 if test "a${TOOLBUS}" = "a"; then
- dnl Try to find the location of the toolbus
- AC_CHECK_PROG(TOOLBUS,toolbus,toolbus,false)
- if test ${TOOLBUS} = "false" 
- then
-   echo "Warning: toolbus not found. You might need it when developing the AsFix library." >&2
-   TOOLBUS="toolbus"
+ dnl Default locations of used components
+ AC_PATH_PROG(TOOLBUS, toolbus, no)
+ if test "${TOOLBUS}" = "no"; then
+  echo "Warning: toolbus not found. You might need it when developing the asfix library." >&2
+  TOOLBUS=
+  TOOLBUSBIN=
+ else
+  TOOLBUSBIN=`dirname ${TOOLBUS}`
+  TOOLBUS=`dirname ${TOOLBUSBIN}`
  fi
 fi
 
