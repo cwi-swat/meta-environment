@@ -23,14 +23,18 @@ ABSOLUTE_SOURCE_MODULES=\
 
 MetaErrors.def: Makefile
 	@(echo "definition"; \
-	  cat ${ABSOLUTE_SOURCE_MODULES}) > $@
+	  cat ${ABSOLUTE_SOURCE_MODULES} ${top_srcdir}/lib/Lexicals.sdf) > $@
 	
+MetaErrors.impl.def: Makefile
+	@(echo "definition"; \
+	  cat ${ABSOLUTE_SOURCE_MODULES} ${top_srcdir}/lib/Lexicals.sdf) > $@
+
 api: parsed-api imploded-api 
 
 parsed-api: MetaErrors.def Makefile  
 	sdf2-to-c --input $< --prefix PME_ --output ParsedErrors	
 
-imploded-api: MetaErrors.def Makefile 
+imploded-api: MetaErrors.impl.def Makefile 
 	sdf2-to-c --imploded --input $< --prefix ME_ --output Errors	
 
 api-clean:

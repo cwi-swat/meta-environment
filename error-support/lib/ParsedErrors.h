@@ -24,15 +24,15 @@ typedef struct _PME_SubjectSubjectList *PME_SubjectSubjectList;
 typedef struct _PME_Subject *PME_Subject;
 typedef struct _PME_Location *PME_Location;
 typedef struct _PME_Area *PME_Area;
-typedef struct _PME_Start *PME_Start;
+typedef struct _PME_NatCon *PME_NatCon;
+typedef struct _PME_String *PME_String;
 typedef struct _PME_OptLayout *PME_OptLayout;
+typedef struct _PME_Start *PME_Start;
 
 /*}}}  */
 
 /*{{{  definition of bottom types */
 
-typedef ATerm PME_String;
-typedef ATerm PME_NatCon;
 
 /*}}}  */
 
@@ -64,10 +64,14 @@ PME_Location PME_LocationFromTerm(ATerm t);
 ATerm PME_LocationToTerm(PME_Location arg);
 PME_Area PME_AreaFromTerm(ATerm t);
 ATerm PME_AreaToTerm(PME_Area arg);
-PME_Start PME_StartFromTerm(ATerm t);
-ATerm PME_StartToTerm(PME_Start arg);
+PME_NatCon PME_NatConFromTerm(ATerm t);
+ATerm PME_NatConToTerm(PME_NatCon arg);
+PME_String PME_StringFromTerm(ATerm t);
+ATerm PME_StringToTerm(PME_String arg);
 PME_OptLayout PME_OptLayoutFromTerm(ATerm t);
 ATerm PME_OptLayoutToTerm(PME_OptLayout arg);
+PME_Start PME_StartFromTerm(ATerm t);
+ATerm PME_StartToTerm(PME_Start arg);
 
 /*}}}  */
 /*{{{  list functions */
@@ -92,7 +96,7 @@ PME_Feedback PME_makeFeedbackInfo(PME_Information Information);
 PME_Feedback PME_makeFeedbackWarning(PME_Warning Warning);
 PME_Feedback PME_makeFeedbackError(PME_Error Error);
 PME_Feedback PME_makeFeedbackFatalError(PME_FatalError FatalError);
-PME_Information PME_makeInformationInformation(PME_OptLayout wsAfterInformation, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId, PME_OptLayout wsAfterComma, PME_Producer producer, PME_OptLayout wsAfterProducer, PME_OptLayout wsAfterComma1, PME_Description description, PME_OptLayout wsAfterDescription, PME_OptLayout wsAfterComma2, PME_Subjects subjects, PME_OptLayout wsAfterSubjects);
+PME_Information PME_makeInformationInformation(PME_OptLayout wsAfterInformation, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId, PME_OptLayout wsAfterC1, PME_Producer producer, PME_OptLayout wsAfterProducer, PME_OptLayout wsAfterC2, PME_Description description, PME_OptLayout wsAfterDescription, PME_OptLayout wsAfterC3, PME_Subjects subjects, PME_OptLayout wsAfterSubjects);
 PME_Warning PME_makeWarningWarning(PME_OptLayout wsAfterWarning, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId, PME_OptLayout wsAfterC1, PME_Producer producer, PME_OptLayout wsAfterProducer, PME_OptLayout wsAfterC2, PME_Description description, PME_OptLayout wsAfterDescription, PME_OptLayout wsAfterC3, PME_Subjects subjects, PME_OptLayout wsAfterSubjects);
 PME_Error PME_makeErrorError(PME_OptLayout wsAfterError, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId, PME_OptLayout wsAfterC1, PME_Producer producer, PME_OptLayout wsAfterProducer, PME_OptLayout wsAfterC2, PME_Description description, PME_OptLayout wsAfterDescription, PME_OptLayout wsAfterC3, PME_Subjects subjects, PME_OptLayout wsAfterSubjects);
 PME_FatalError PME_makeFatalErrorFatalError(PME_OptLayout wsAfterFatalError, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId, PME_OptLayout wsAfterC1, PME_Producer producer, PME_OptLayout wsAfterProducer, PME_OptLayout wsAfterC2, PME_Description description, PME_OptLayout wsAfterDescription, PME_OptLayout wsAfterC3, PME_Subjects subjects, PME_OptLayout wsAfterSubjects);
@@ -106,6 +110,10 @@ PME_Subject PME_makeSubjectWithoutLocation(PME_OptLayout wsAfterSubject, PME_Opt
 PME_Subject PME_makeSubjectWithLocation(PME_OptLayout wsAfterSubject, PME_OptLayout wsAfterParenOpen, PME_String id, PME_OptLayout wsAfterId);
 PME_Location PME_makeLocationLocation(PME_OptLayout wsAfterLocation, PME_OptLayout wsAfterParenOpen, PME_String file, PME_OptLayout wsAfterFile, PME_OptLayout wsAfterComma, PME_Area area, PME_OptLayout wsAfterArea);
 PME_Area PME_makeAreaArea(PME_OptLayout wsAfterArea, PME_OptLayout wsAfterParenOpen, PME_NatCon startLine, PME_OptLayout wsAfterStartLine, PME_OptLayout wsAfterC1, PME_NatCon startColumn, PME_OptLayout wsAfterStartColumn, PME_OptLayout wsAfterC2, PME_NatCon endLine, PME_OptLayout wsAfterEndLine, PME_OptLayout wsAfterC3, PME_NatCon endColumn, PME_OptLayout wsAfterEndColumn, PME_OptLayout wsAfterC4, PME_NatCon startOffset, PME_OptLayout wsAfterStartOffset, PME_OptLayout wsAfterC5, PME_NatCon endOffset, PME_OptLayout wsAfterEndOffset);
+PME_NatCon PME_makeNatConString(char* string);
+PME_String PME_makeStringString(char* string);
+PME_OptLayout PME_makeOptLayoutAbsent();
+PME_OptLayout PME_makeOptLayoutPresent(char* string);
 PME_Start PME_makeStartArea(PME_OptLayout wsBefore, PME_Area topArea, PME_OptLayout wsAfter, int ambCnt);
 PME_Start PME_makeStartLocation(PME_OptLayout wsBefore, PME_Location topLocation, PME_OptLayout wsAfter, int ambCnt);
 PME_Start PME_makeStartFeedback(PME_OptLayout wsBefore, PME_Feedback topFeedback, PME_OptLayout wsAfter, int ambCnt);
@@ -115,8 +123,6 @@ PME_Start PME_makeStartInformation(PME_OptLayout wsBefore, PME_Information topIn
 PME_Start PME_makeStartWarning(PME_OptLayout wsBefore, PME_Warning topWarning, PME_OptLayout wsAfter, int ambCnt);
 PME_Start PME_makeStartFatalError(PME_OptLayout wsBefore, PME_FatalError topFatalError, PME_OptLayout wsAfter, int ambCnt);
 PME_Start PME_makeStartError(PME_OptLayout wsBefore, PME_Error topError, PME_OptLayout wsAfter, int ambCnt);
-PME_OptLayout PME_makeOptLayoutAbsent();
-PME_OptLayout PME_makeOptLayoutPresent(char* string);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -133,8 +139,10 @@ ATbool PME_isEqualSubjectSubjectList(PME_SubjectSubjectList arg0, PME_SubjectSub
 ATbool PME_isEqualSubject(PME_Subject arg0, PME_Subject arg1);
 ATbool PME_isEqualLocation(PME_Location arg0, PME_Location arg1);
 ATbool PME_isEqualArea(PME_Area arg0, PME_Area arg1);
-ATbool PME_isEqualStart(PME_Start arg0, PME_Start arg1);
+ATbool PME_isEqualNatCon(PME_NatCon arg0, PME_NatCon arg1);
+ATbool PME_isEqualString(PME_String arg0, PME_String arg1);
 ATbool PME_isEqualOptLayout(PME_OptLayout arg0, PME_OptLayout arg1);
+ATbool PME_isEqualStart(PME_Start arg0, PME_Start arg1);
 
 /*}}}  */
 /*{{{  PME_Feedback accessors */
@@ -174,27 +182,27 @@ PME_Information PME_setInformationId(PME_Information arg, PME_String id);
 ATbool PME_hasInformationWsAfterId(PME_Information arg);
 PME_OptLayout PME_getInformationWsAfterId(PME_Information arg);
 PME_Information PME_setInformationWsAfterId(PME_Information arg, PME_OptLayout wsAfterId);
-ATbool PME_hasInformationWsAfterComma(PME_Information arg);
-PME_OptLayout PME_getInformationWsAfterComma(PME_Information arg);
-PME_Information PME_setInformationWsAfterComma(PME_Information arg, PME_OptLayout wsAfterComma);
+ATbool PME_hasInformationWsAfterC1(PME_Information arg);
+PME_OptLayout PME_getInformationWsAfterC1(PME_Information arg);
+PME_Information PME_setInformationWsAfterC1(PME_Information arg, PME_OptLayout wsAfterC1);
 ATbool PME_hasInformationProducer(PME_Information arg);
 PME_Producer PME_getInformationProducer(PME_Information arg);
 PME_Information PME_setInformationProducer(PME_Information arg, PME_Producer producer);
 ATbool PME_hasInformationWsAfterProducer(PME_Information arg);
 PME_OptLayout PME_getInformationWsAfterProducer(PME_Information arg);
 PME_Information PME_setInformationWsAfterProducer(PME_Information arg, PME_OptLayout wsAfterProducer);
-ATbool PME_hasInformationWsAfterComma1(PME_Information arg);
-PME_OptLayout PME_getInformationWsAfterComma1(PME_Information arg);
-PME_Information PME_setInformationWsAfterComma1(PME_Information arg, PME_OptLayout wsAfterComma1);
+ATbool PME_hasInformationWsAfterC2(PME_Information arg);
+PME_OptLayout PME_getInformationWsAfterC2(PME_Information arg);
+PME_Information PME_setInformationWsAfterC2(PME_Information arg, PME_OptLayout wsAfterC2);
 ATbool PME_hasInformationDescription(PME_Information arg);
 PME_Description PME_getInformationDescription(PME_Information arg);
 PME_Information PME_setInformationDescription(PME_Information arg, PME_Description description);
 ATbool PME_hasInformationWsAfterDescription(PME_Information arg);
 PME_OptLayout PME_getInformationWsAfterDescription(PME_Information arg);
 PME_Information PME_setInformationWsAfterDescription(PME_Information arg, PME_OptLayout wsAfterDescription);
-ATbool PME_hasInformationWsAfterComma2(PME_Information arg);
-PME_OptLayout PME_getInformationWsAfterComma2(PME_Information arg);
-PME_Information PME_setInformationWsAfterComma2(PME_Information arg, PME_OptLayout wsAfterComma2);
+ATbool PME_hasInformationWsAfterC3(PME_Information arg);
+PME_OptLayout PME_getInformationWsAfterC3(PME_Information arg);
+PME_Information PME_setInformationWsAfterC3(PME_Information arg, PME_OptLayout wsAfterC3);
 ATbool PME_hasInformationSubjects(PME_Information arg);
 PME_Subjects PME_getInformationSubjects(PME_Information arg);
 PME_Information PME_setInformationSubjects(PME_Information arg, PME_Subjects subjects);
@@ -539,6 +547,34 @@ PME_OptLayout PME_getAreaWsAfterEndOffset(PME_Area arg);
 PME_Area PME_setAreaWsAfterEndOffset(PME_Area arg, PME_OptLayout wsAfterEndOffset);
 
 /*}}}  */
+/*{{{  PME_NatCon accessors */
+
+ATbool PME_isValidNatCon(PME_NatCon arg);
+inline ATbool PME_isNatConString(PME_NatCon arg);
+ATbool PME_hasNatConString(PME_NatCon arg);
+char* PME_getNatConString(PME_NatCon arg);
+PME_NatCon PME_setNatConString(PME_NatCon arg, char* string);
+
+/*}}}  */
+/*{{{  PME_String accessors */
+
+ATbool PME_isValidString(PME_String arg);
+inline ATbool PME_isStringString(PME_String arg);
+ATbool PME_hasStringString(PME_String arg);
+char* PME_getStringString(PME_String arg);
+PME_String PME_setStringString(PME_String arg, char* string);
+
+/*}}}  */
+/*{{{  PME_OptLayout accessors */
+
+ATbool PME_isValidOptLayout(PME_OptLayout arg);
+inline ATbool PME_isOptLayoutAbsent(PME_OptLayout arg);
+inline ATbool PME_isOptLayoutPresent(PME_OptLayout arg);
+ATbool PME_hasOptLayoutString(PME_OptLayout arg);
+char* PME_getOptLayoutString(PME_OptLayout arg);
+PME_OptLayout PME_setOptLayoutString(PME_OptLayout arg, char* string);
+
+/*}}}  */
 /*{{{  PME_Start accessors */
 
 ATbool PME_isValidStart(PME_Start arg);
@@ -589,20 +625,10 @@ PME_Error PME_getStartTopError(PME_Start arg);
 PME_Start PME_setStartTopError(PME_Start arg, PME_Error topError);
 
 /*}}}  */
-/*{{{  PME_OptLayout accessors */
-
-ATbool PME_isValidOptLayout(PME_OptLayout arg);
-inline ATbool PME_isOptLayoutAbsent(PME_OptLayout arg);
-inline ATbool PME_isOptLayoutPresent(PME_OptLayout arg);
-ATbool PME_hasOptLayoutString(PME_OptLayout arg);
-char* PME_getOptLayoutString(PME_OptLayout arg);
-PME_OptLayout PME_setOptLayoutString(PME_OptLayout arg, char* string);
-
-/*}}}  */
 /*{{{  sort visitors */
 
 PME_Feedback PME_visitFeedback(PME_Feedback arg, PME_Information (*acceptInformation)(PME_Information), PME_Warning (*acceptWarning)(PME_Warning), PME_Error (*acceptError)(PME_Error), PME_FatalError (*acceptFatalError)(PME_FatalError));
-PME_Information PME_visitInformation(PME_Information arg, PME_OptLayout (*acceptWsAfterInformation)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterComma)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterComma1)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterComma2)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
+PME_Information PME_visitInformation(PME_Information arg, PME_OptLayout (*acceptWsAfterInformation)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
 PME_Warning PME_visitWarning(PME_Warning arg, PME_OptLayout (*acceptWsAfterWarning)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
 PME_Error PME_visitError(PME_Error arg, PME_OptLayout (*acceptWsAfterError)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
 PME_FatalError PME_visitFatalError(PME_FatalError arg, PME_OptLayout (*acceptWsAfterFatalError)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
@@ -613,8 +639,10 @@ PME_SubjectSubjectList PME_visitSubjectSubjectList(PME_SubjectSubjectList arg, P
 PME_Subject PME_visitSubject(PME_Subject arg, PME_OptLayout (*acceptWsAfterSubject)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterComma)(PME_OptLayout), PME_Location (*acceptLocation)(PME_Location), PME_OptLayout (*acceptWsAfterLocation)(PME_OptLayout));
 PME_Location PME_visitLocation(PME_Location arg, PME_OptLayout (*acceptWsAfterLocation)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptFile)(PME_String), PME_OptLayout (*acceptWsAfterFile)(PME_OptLayout), PME_OptLayout (*acceptWsAfterComma)(PME_OptLayout), PME_Area (*acceptArea)(PME_Area), PME_OptLayout (*acceptWsAfterArea)(PME_OptLayout));
 PME_Area PME_visitArea(PME_Area arg, PME_OptLayout (*acceptWsAfterArea)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_NatCon (*acceptStartLine)(PME_NatCon), PME_OptLayout (*acceptWsAfterStartLine)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_NatCon (*acceptStartColumn)(PME_NatCon), PME_OptLayout (*acceptWsAfterStartColumn)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_NatCon (*acceptEndLine)(PME_NatCon), PME_OptLayout (*acceptWsAfterEndLine)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_NatCon (*acceptEndColumn)(PME_NatCon), PME_OptLayout (*acceptWsAfterEndColumn)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC4)(PME_OptLayout), PME_NatCon (*acceptStartOffset)(PME_NatCon), PME_OptLayout (*acceptWsAfterStartOffset)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC5)(PME_OptLayout), PME_NatCon (*acceptEndOffset)(PME_NatCon), PME_OptLayout (*acceptWsAfterEndOffset)(PME_OptLayout));
-PME_Start PME_visitStart(PME_Start arg, PME_OptLayout (*acceptWsBefore)(PME_OptLayout), PME_Area (*acceptTopArea)(PME_Area), PME_OptLayout (*acceptWsAfter)(PME_OptLayout), int (*acceptAmbCnt)(int), PME_Location (*acceptTopLocation)(PME_Location), PME_Feedback (*acceptTopFeedback)(PME_Feedback), PME_Description (*acceptTopDescription)(PME_Description), PME_Producer (*acceptTopProducer)(PME_Producer), PME_Information (*acceptTopInformation)(PME_Information), PME_Warning (*acceptTopWarning)(PME_Warning), PME_FatalError (*acceptTopFatalError)(PME_FatalError), PME_Error (*acceptTopError)(PME_Error));
+PME_NatCon PME_visitNatCon(PME_NatCon arg, char* (*acceptString)(char*));
+PME_String PME_visitString(PME_String arg, char* (*acceptString)(char*));
 PME_OptLayout PME_visitOptLayout(PME_OptLayout arg, char* (*acceptString)(char*));
+PME_Start PME_visitStart(PME_Start arg, PME_OptLayout (*acceptWsBefore)(PME_OptLayout), PME_Area (*acceptTopArea)(PME_Area), PME_OptLayout (*acceptWsAfter)(PME_OptLayout), int (*acceptAmbCnt)(int), PME_Location (*acceptTopLocation)(PME_Location), PME_Feedback (*acceptTopFeedback)(PME_Feedback), PME_Description (*acceptTopDescription)(PME_Description), PME_Producer (*acceptTopProducer)(PME_Producer), PME_Information (*acceptTopInformation)(PME_Information), PME_Warning (*acceptTopWarning)(PME_Warning), PME_FatalError (*acceptTopFatalError)(PME_FatalError), PME_Error (*acceptTopError)(PME_Error));
 
 /*}}}  */
 

@@ -1,0 +1,10 @@
+module Lexicals
+
+exports
+
+context-free syntax
+ %% needed to circumvent bug
+
+lexical syntax
+  "dummy" -> NatCon {cons("string")}
+  "dummy" -> String {cons("string")}
