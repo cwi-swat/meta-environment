@@ -191,22 +191,34 @@ $Error]>
 [e2i-8]	e2i($Var not initialized in Rstore)
 					= error("Not initialized in Rstore: ", [subject( rvar2str($Var), get-location($Var))])
 
-[e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore)
-					= error("Conflicting initialization in Rscript and in Rstore: ", [subject(rvar2str($Var), get-location($Var))])
+[e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore) =
+	error("Conflicting initialization in Rscript and in Rstore: ", 
+	[subject(rvar2str($Var), get-location($Var))])
 
 [e2i-10] e2i(Incompatible argument types $Etype in $Exp) = 
-		error("Incompatible arguments of type ", [subject(t2s($Etype), get-location($Exp))])
-[e2i-11] e2i($Exp should have type $Etype)= 
-	error("Expression should have type ", [subject(t2s($Etype), get-location($Exp))])
-[e2i-12] e2i($Exp should be of type bag) = error("Expression should be of type bag", [subject("exp", get-location($Exp))])
-[e2i-13] e2i($Exp should be of type rel) = error("Expression should be of type relation", [subject("exp", get-location($Exp))])
-%%[e2i-14] e2i(No definition for $Var with argument $Etype) = 
-%%        error("No definition for ", [subject(rvar2str($Var), get-location($Var)), 
-%%				     subject(" with argument " || t2s($Etype), get-location($$Etype))])
+	 error("Incompatible arguments of type ", [subject(t2s($Etype), get-location($Exp))])
 
-[e2i-15] e2i(No definition for field $Var) =  error("No definition for ", [subject(rvar2str($Var), get-location($Var))])
+[e2i-11] e2i($Exp should have type $Etype)= 
+	 error("Expression should have type ", [subject(t2s($Etype), get-location($Exp))])
+
+[e2i-12] e2i($Exp should be of type bag) = 
+	 error("Expression should be of type bag", [subject("exp", get-location($Exp))])
+
+[e2i-13] e2i($Exp should be of type rel) = 
+	 error("Expression should be of type relation", [subject("exp", get-location($Exp))])
+
+%%[e2i-14] $StrCon = " with argument " || t2s($Etype)
+%%	 ==============================================================
+%%	 e2i(No definition for $Var with argument $Etype) = 
+%%	 error("No definition for ", [subject(rvar2str($Var), get-location($Var)), 
+%%				      subject($StrCon, get-location($Etype))])
+
+[e2i-15] e2i(No definition for field $Var) =  
+	 error("No definition for ", [subject(rvar2str($Var), get-location($Var))])
+
 [e2i-16] e2i($Var exceeds number of targets of generator) =  
 	 error("Destination contains too many targets", [subject("var", get-location($Var))])
+
 %%[e2i-17] e2i(Field name $Var used at different record positions) =
 %%		   error("Field " || rvar2str($Var) || " used at different record positions", get-location($Var))
 
