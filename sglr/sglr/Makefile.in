@@ -65,6 +65,7 @@ uninstall:
 	done
 
 distclean realclean:	clean
+	rm -f $(PROGS) longest_match
 
 clean:
 	rm -f core sglr.tif.c $(OBJ)
