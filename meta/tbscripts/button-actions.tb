@@ -27,12 +27,10 @@ let
 in
   ButtonActions := quote(Actions)
   . Stack := Arguments
-  /*. printf("Performing %t\n", Actions)*/
   .
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions)
-      /*. printf("+- %t\n", ButtonAction)*/
       . ButtonActions := next(ButtonActions)
       . FunName := fun(ButtonAction)
       .
@@ -317,7 +315,7 @@ in
       . ReturnSuccess(EditorId, Stack)
     else
       ReturnAbort(EditorId, Stack)
-    fi 
+    fi
   +
     rec-msg(get-root, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
@@ -361,11 +359,11 @@ in
       . snd-msg(pa-get-origin(Cursor))
       .
       (
-	rec-msg(pa-origin(Origin?))
-	. StackPushTerm(Stack, Stack?, Origin)
+        rec-msg(pa-origin(Origin?))
+        . StackPushTerm(Stack, Stack?, Origin)
       +
-	rec-msg(pa-no-origin)
-	. StackPushTerm(Stack, Stack?, no-origin)
+        rec-msg(pa-no-origin)
+        . StackPushTerm(Stack, Stack?, no-origin)
       )
       . ReturnSuccess(EditorId, Stack)
     +
@@ -438,30 +436,6 @@ in
       ReturnAbort(EditorId, Stack)
     fi
   +
-#if 0    
-    rec-msg(get-other-focus(Modulename?), Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . FunSym := fun(STree)
-    .
-    if equal(FunSym, "path") then
-      FilePath := first(args(STree))
-      . snd-msg(check-editor-id(FilePath, Modulename))
-      .
-      (
-        rec-msg(existing-editor(EditorId2?))
-        . GetFocus(EditorId2, RTree?)
-        . StackPushTerm(Stack, Stack?, RTree)
-        . ReturnSuccess(EditorId, Stack)
-      +
-        rec-msg(non-existing-editor(FilePath?))
-        . snd-note(ui-status(messagef("editor for %s not active", [FilePath])))
-        . ReturnAbort(EditorId, Stack)
-      )
-    else
-      ReturnFailed(EditorId, Stack)
-    fi
-  +
-#endif
     rec-msg(push-editor-name, Stack?, EditorId?)
     . snd-msg(get-editor-filename(EditorId))
     . rec-msg(editor-filename(Filename?))
@@ -484,6 +458,7 @@ in
   +
     rec-msg(close-editor, Stack?, Sid?)
     . DeleteSession(Sid)
+    /*. snd-msg(kill-editor(Sid))*/
     . ReturnSuccess(Sid, Stack)
   +
     rec-msg(debug-print-stack, Stack?, EditorId?)
@@ -685,18 +660,12 @@ in
     )
   +
     rec-msg(edit-syntax, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
-    .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      StackPopString(Stack, Stack?, Modulename?)
+      . StackPopString(Stack, Stack?, Modulename?)
       . LocateFile(Modulename, sdf, Path?)
-      . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
+      /*. snd-msg(ts-put-str-value("path-modulename", Path, Modulename))*/
       . create(EditSyntax(Path), Pid?)
       . rec-msg(syntax-editor-started(Path, Sid?))
       . ReturnSuccess(EditorId, Stack)
-    fi
   +
     rec-msg(edit-equations, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
@@ -729,7 +698,6 @@ in
     rec-msg(close-module(Recursive?), Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . CloseModule(Modulename, Recursive)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(open-module, Stack?, EditorId?)
@@ -738,7 +706,6 @@ in
     . StackPopString(Stack, Stack?, Modulename?)
     . BuildPath(Directory, Modulename, Extension, Path?)
     . OpenModule(Path, sdf)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(new-module, Stack?, EditorId?)
@@ -747,7 +714,6 @@ in
     . StackPopString(Stack, Stack?, Filename?)
     . create(NewModuleContentHandler(), Pid?)
     . CreateModule(Pid, Directory, Filename, sdf)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(create-module, Stack?, EditorId?)
@@ -756,7 +722,6 @@ in
     . rec-msg(io-absolute-directories([Directory?]))
     . create(NewModuleContentHandler(), Pid?)
     . CreateModule(Pid, Directory, Filename, sdf)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(prompt-for-file(String?, Path?, Extension?), Stack?, EditorId?)
@@ -825,7 +790,6 @@ in
     . StackPopString(Stack, Stack?, Modulename?)
     . CopySdfModule(Modulename, Directory, Filename)
     . CopyAsfModule(Modulename, Directory, Filename)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(rename-module, Stack?, EditorId?)
@@ -834,25 +798,21 @@ in
     . StackPopString(Stack, Stack?, Filename?)
     . StackPopString(Stack, Stack?, Modulename?)
     . RenameModule(Modulename, Directory, Filename)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(delete-module, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . DeleteModule(Modulename)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(add-import, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . GUIAddImport(Modulename)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(remove-import, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . GUIRemoveImport(Modulename)
-    . DrawImportGraph()
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(compile-module, Stack?, EditorId?)
@@ -1090,7 +1050,6 @@ in
       (
         rec-msg(updating-succeeded(NewModules?))
         . OpenModules(NewModules, Type)
-        . DrawImportGraph()
         . snd-msg(te-clear-focus(Sid))
         . snd-msg(te-display-message(Sid, "Parse successful"))
       +
@@ -1233,7 +1192,6 @@ let
 in
   Id := process-id
   . OpenModules([Modulename], sdf)
-  . DrawImportGraph()
   . snd-note(ui-status(stat(Id, "Retrieving equations")))
   . create(GetSpecification(Modulename), Pid?)
   .
@@ -1307,7 +1265,8 @@ in
   .
   (
     rec-msg(list-choice(ModuleId, Import?))
-    . snd-note(ui-status(statf(Id, "Adding import %s to %s", [Import, ModuleId])))
+    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
+                               [Import, ModuleId])))
     . AddImport(ModuleId, Import)
     . snd-note(ui-status(endstat(Id)))
   +
@@ -1431,18 +1390,17 @@ in
     rec-msg(cancel-content-handler(Pid))
   )
 endlet
-    
+
 process MoveCursor(Sid: term, Direction: term) is
 let
   Registered: bool
 in
   IsStructureEditorRegistered(Sid, Registered?)
-  . 
+  .
   if equal(Registered, true) then
     snd-msg(se-move-cursor(Sid, Direction))
     . SynchronizeFocus(Sid)
   else
-    tau 
+    tau
   fi
 endlet
-

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 process CloseAll is
 let
   Id: term,
@@ -9,7 +7,7 @@ in
   Id := process-id
   . snd-note(ui-status(stat(Id, "Closing")))
   . snd-msg(get-all-module-names)
-  . rec-msg(all-module-names(Modules?)) 
+  . rec-msg(all-module-names(Modules?))
   .
   (
     if not-equal(Modules, []) then
@@ -18,11 +16,11 @@ in
       . Modules := next(Modules)
     fi
   )
-  * if equal(Modules, []) then
+  *
+  if equal(Modules, []) then
     tau
   fi
   . snd-msg(clear-module-db)
   . rec-msg(module-db-cleared)
-  . DrawImportGraph()
   . snd-note(ui-status(endstat(Id)))
 endlet

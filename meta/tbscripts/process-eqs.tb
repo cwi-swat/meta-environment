@@ -1,7 +1,3 @@
-/* $Id$ */
-
-/*{{{  process BuildEquationsFilename(ModuleId: str, Filename: str?) */
-
 process BuildEquationsFilename(ModuleId: str, Filename: str?) is
 let
   Directory: str,
@@ -15,10 +11,6 @@ in
   . rec-msg(io-filename(Filename?))
 endlet
 
-/*}}}  */
-
-/*{{{  process ParseEquationsText(ModuleId: str, Text: str) */
-
 process ParseEquationsText(ModuleId: str, Text: str) is
 let
   Nonterminal: term,
@@ -31,9 +23,6 @@ in
   . create(ParseEquationsHandler(ModuleId), Pid?)
   . ParseText(Pid, Text, Table, Nonterminal)
 endlet
-
-/*}}}  */
-/*{{{  process ParseEquationsHandler(ModuleId: str) */
 
 process ParseEquationsHandler(ModuleId: str) is
 let
@@ -60,10 +49,6 @@ in
   )
 endlet
 
-/*}}}  */
-
-/*{{{ process GetAsfModule(ModuleId: str) */
-
 process GetAsfModule(ModuleId: str) is
 let
   Error: term,
@@ -82,46 +67,40 @@ in
     . BuildEquationsFilename(ModuleId, Filename?)
     . ReadFile(Filename, Text?)
     .
-    if equal(Text, "")
-    then
+    if equal(Text, "") then
       snd-msg(no-equations(ModuleId))
     else
       ParseEquationsText(ModuleId, Text)
       .
       (
-	rec-msg(parse-equations-ok(ModuleId, Equations?))
-	. snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
-	. snd-msg(equations(ModuleId, Equations))
+        rec-msg(parse-equations-ok(ModuleId, Equations?))
+        . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
+        . snd-msg(equations(ModuleId, Equations))
       +
-	rec-msg(parse-equations-failed(ModuleId, Error?))
-	. ParseErrorToSummary(Error, Filename, Summary?)
-	. snd-msg(error-in-equations(ModuleId, Summary))
+        rec-msg(parse-equations-failed(ModuleId, Error?))
+        . ParseErrorToSummary(Error, Filename, Summary?)
+        . snd-msg(error-in-equations(ModuleId, Summary))
       )
     fi
   )
 endlet
 
-/*}}}  */
-/*{{{ process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) */
-
-process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) is
-let 
+process GetImportsForRenaming(ModuleName: str, ModuleNames: list,
+                              Imports: term?) is
+let
   Modules: list
 in
-  snd-msg(get-modules(ModuleNames)) .
+  snd-msg(get-modules(ModuleNames))
+  .
   (
-    rec-msg(modules(Modules?)) .
-    snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
-    rec-msg(sm-all-needed-imports(Imports?))  
+    rec-msg(modules(Modules?))
+    . snd-msg(sm-get-all-needed-imports(Modules, ModuleName))
+    . rec-msg(sm-all-needed-imports(Imports?))
   +
-    rec-msg(no-modules) .
-    Imports := []
+    rec-msg(no-modules)
+    . Imports := []
   )
 endlet
-
-/*}}}  */
-
-/*{{{ process GetSpecification(ModuleId: str) */
 
 process GetSpecification(ModuleId: str) is
 let
@@ -138,11 +117,10 @@ in
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
   . Specification := []
   .
-  if and(not-equal(Modules, []), equal(Error, undefined))
-  then
+  if and(not-equal(Modules, []), equal(Error, undefined)) then
     CurModule := first(Modules)
     . create(GetAsfModule(CurModule), Pid?)
-    . 
+    .
     (
       rec-msg(no-equations(CurModule))
     +
@@ -157,19 +135,15 @@ in
   fi
   *
   (
-    if not-equal(Error, undefined)
-    then
+    if not-equal(Error, undefined) then
       snd-msg(specification-incomplete(Error))
     fi
   +
-    if equal(Modules, [])
-    then
+    if equal(Modules, []) then
       snd-msg(specification(Specification))
     fi
   )
 endlet
-
-/*}}}  */
 
 process GetSpecificationEquations(Specification: term, Equations: term?) is
   snd-msg(extract-equations(Specification))

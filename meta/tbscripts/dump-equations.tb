@@ -1,5 +1,3 @@
-/* $Id$ */
-
 process DumpEquations is
 let
   Equations: term,
@@ -12,46 +10,49 @@ let
   Specification: term,
   Syntax: term
 in
-  Id := process-id .
+  Id := process-id
+  .
   (
     (
-      rec-msg(dump-equations(ModuleName?)) .
-      FileName := ""
+      rec-msg(dump-equations(ModuleName?))
+      . FileName := ""
     +
       rec-msg(dump-equations-given-file(ModuleName?, FileName?))
-    ) .
-    snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName]))) .
-    snd-msg(pre-preprocess-syntax-hook(ModuleName)) .
-    rec-msg(pre-preprocess-syntax-hook-result(ModuleName)) .
-    create(GetSpecification(ModuleName), Pid?)
+    )
+    . snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName])))
+    . snd-msg(pre-preprocess-syntax-hook(ModuleName))
+    . rec-msg(pre-preprocess-syntax-hook-result(ModuleName))
+    . create(GetSpecification(ModuleName), Pid?)
     .
     (
-      rec-msg(specification(Specification?)) .
-      GetSpecificationEquations(Specification, Equations?) .
-      if equal(FileName, "") then 
-        snd-msg(get-path-from-db(ModuleName)) .
-        rec-msg(path(Path?)) .
-        snd-msg(io-get-filename(Path, ModuleName, ".eqs")) .
-	rec-msg(io-filename(FileName?)) 
+      rec-msg(specification(Specification?))
+      . GetSpecificationEquations(Specification, Equations?)
+      .
+      if equal(FileName, "") then
+        snd-msg(get-path-from-db(ModuleName))
+        . rec-msg(path(Path?))
+        . snd-msg(io-get-filename(Path, ModuleName, ".eqs"))
+        . rec-msg(io-filename(FileName?))
       else
         tau
-      fi .
-      snd-msg(io-unpack-and-write-term-in-baf(FileName, Equations)) .
+      fi
+      . snd-msg(io-unpack-and-write-term-in-baf(FileName, Equations))
+      .
       (
         rec-msg(io-file-written)
       +
-        rec-msg(io-file-not-written(Error?)) .
-	snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
+        rec-msg(io-file-not-written(Error?))
+        . snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
       )
     +
-      rec-msg(specification-incomplete(Error?)) .
-      printf("DumpEquations: %t\n", Error) .
-      snd-note(ui-status(statf(Id, "Specification incomplete for %s", 
-			       [ModuleName])))
-    ) .
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(equations-dumped)
-  ) * delta
-
+      rec-msg(specification-incomplete(Error?))
+      . printf("DumpEquations: %t\n", Error)
+      . snd-note(ui-status(statf(Id, "Specification incomplete for %s",
+                                 [ModuleName])))
+    )
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(equations-dumped)
+  )
+  *
+  delta
 endlet
-

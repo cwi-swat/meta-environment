@@ -15,6 +15,6 @@ in
   . create(EditEquations(ModuleName), Pid?)
   . rec-msg(equations-editor-started(ModuleName, Sid?))
   . shutdown("")
-endlet   
+endlet
 
 toolbus(StandAloneEquationsEditor)

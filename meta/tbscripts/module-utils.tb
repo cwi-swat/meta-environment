@@ -521,7 +521,6 @@ in
         (
           rec-msg(updating-succeeded(Imports?))
           . OpenModules(Imports, Type)
-          . DrawImportGraph()
         +
           rec-msg(error-opening(ModuleName, name-inconsistent))
           . Error("Check consistency: module name %s contains an error",
@@ -628,7 +627,6 @@ in
         tau
       fi
       . snd-note(ui-status(endstat(Id)))
-      . DrawImportGraph()
     +
       rec-msg(io-error-reading(Error?))
     )

@@ -1,41 +1,42 @@
-/* $Id$ */
-
 process DumpSdfDefinition is
 let
-  Id : int,
-  ModuleName   : str,
-  Syntax    : term,
-  Path         : str,
-  Text : str, 
-  FileName : str,
+  Id: int,
+  ModuleName: str,
+  Syntax: term,
+  Path: str,
+  Text: str,
+  FileName: str,
   Error: term,
-  ErrorMessage : str
+  ErrorMessage: str
 in
-  Id := process-id .
+  Id := process-id
+  .
   (
-    rec-msg(dump-sdf-definition(ModuleName?, FileName?)) .
-    snd-note(ui-status(statf(Id, "Dumping SDF for %s", [ModuleName]))) .
-    snd-msg(get-all-syntax-definitions(ModuleName, trm)) .
+    rec-msg(dump-sdf-definition(ModuleName?, FileName?))
+    . snd-note(ui-status(statf(Id, "Dumping SDF for %s", [ModuleName])))
+    . snd-msg(get-all-syntax-definitions(ModuleName, trm))
+    .
     (
-      rec-msg(syntax(Syntax?)) .
-      snd-msg(get-path-from-db(ModuleName)) .
-      rec-msg(path(Path?)) .
-      snd-msg(unparse(Syntax)) .
-      rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-list(FileName, [Text])) .
+      rec-msg(syntax(Syntax?))
+      . snd-msg(get-path-from-db(ModuleName))
+      . rec-msg(path(Path?))
+      . snd-msg(unparse(Syntax))
+      . rec-msg(unparsed-text(Text?))
+      . snd-msg(io-write-text-list(FileName, [Text]))
+      .
       (
         rec-msg(io-file-written)
       +
-        rec-msg(io-file-not-written(Error?)) .
-	snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
+        rec-msg(io-file-not-written(Error?))
+        . snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
       )
     +
-      rec-msg(no-syntax(ErrorMessage?)) .
-      snd-note(ui-status(errorf("%s: %s", [ModuleName, ErrorMessage])))
-    ) .
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(sdf-definition-dumped)
-  ) * delta
-
+      rec-msg(no-syntax(ErrorMessage?))
+      . snd-note(ui-status(errorf("%s: %s", [ModuleName, ErrorMessage])))
+    )
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(sdf-definition-dumped)
+  )
+  *
+  delta
 endlet
-

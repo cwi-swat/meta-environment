@@ -24,8 +24,8 @@ in
       .
       (
         rec-msg(ts-value(AsfTree?))
-	. snd-msg(unparse(AsfTree))
-	. rec-msg(unparsed-text(AsfText?))
+        . snd-msg(unparse(AsfTree))
+        . rec-msg(unparsed-text(AsfText?))
         . snd-msg(io-write-text-list(FileName, [SdfText, "\n", AsfText]))
       +
         rec-msg(ts-no-value)

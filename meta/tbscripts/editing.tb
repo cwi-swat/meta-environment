@@ -242,9 +242,10 @@ in
     .
     (
       if not-equal(Sids, []) then
-	Sid := first(Sids)
-	. DeleteSession(Sid)
-	. Sids := next(Sids)
+        Sid := first(Sids)
+        . DeleteSession(Sid)
+	/*. snd-msg(kill-editor(Sid))*/
+        . Sids := next(Sids)
       fi
     )
     *
@@ -294,9 +295,9 @@ in
       . GetSyntaxTree(ModuleId, Tree?, Available?)
       .
       if equal(Available, true) then
-	EditStructure(Sid, Tree)
+        EditStructure(Sid, Tree)
       else
-	tau
+        tau
       fi
     +
       rec-msg(ts-no-value)
@@ -317,7 +318,6 @@ in
     .
     if and(HasText, not(HasStructure)) then
       OpenSyntax(Path, sdf)
-      . DrawImportGraph() /* FIXME */
     else
       tau
     fi
@@ -361,9 +361,9 @@ in
       . GetEquationsTree(ModuleId, Tree?, Available?)
       .
       if equal(Available, true) then
-	EditStructure(Sid, Tree)
+        EditStructure(Sid, Tree)
       else
-	tau
+        tau
       fi
     +
       rec-msg(ts-no-value)
@@ -432,24 +432,23 @@ in
     . EditText(Sid, EditorType, AlreadyExists?)
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
-    if equal(AlreadyExists, false)
-    then
+    if equal(AlreadyExists, false) then
       snd-msg(em-bind-session(Sid, ModuleId))
       . rec-msg(em-session-bound(Sid, ModuleId))
       . GetTermTree(Path, Tree?, Available?)
       .
       if equal(Available, true) then
-	EditStructure(Sid, Tree)
+        EditStructure(Sid, Tree)
       else
-	tau
+        tau
       fi
       .
       (
-	MenuSelected(Sid, EditorType)
+        MenuSelected(Sid, EditorType)
       +
-	MouseClicked(Sid)
+        MouseClicked(Sid)
       +
-	TextChanged(Sid)
+        TextChanged(Sid)
       )
       *
       EditorDisconnected(Sid)
