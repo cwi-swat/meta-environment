@@ -1,6 +1,6 @@
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(toolbus, 1.1)
+AM_INIT_AUTOMAKE(toolbus, 1.3)
 AC_PREREQ(2.59)
 
 dnl Which compiler to use?
@@ -185,9 +185,6 @@ AC_CONFIG_FILES([Makefile
   adapters/wish-adapter/Makefile
   adapters/tcltk-adapter/Makefile
   adapters/perl-adapter/Makefile
-  adapters/java-adapter/Makefile
-  adapters/java-adapter/toolbus/Makefile
-  adapters/java-adapter/toolbus/tifstojava
   adapters/gen-adapter/Makefile
   adapters/toolbus-adapter/Makefile
   adapters/trans-adapter/Makefile
