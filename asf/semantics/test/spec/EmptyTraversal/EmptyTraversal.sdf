@@ -1,0 +1,14 @@
+module EmptyTraversal
+imports basic/Whitespace
+imports basic/Integers
+
+exports
+
+context-free start-symbols
+  Integer
+
+context-free syntax
+
+start-nothing    -> Integer
+nothing(Integer) -> Integer {traversal(trafo,top-down,break)}
+

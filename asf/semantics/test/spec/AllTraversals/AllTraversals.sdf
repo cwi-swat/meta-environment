@@ -1,0 +1,64 @@
+module AllTraversals
+imports basic/Comments
+imports basic/Whitespace
+
+
+exports
+
+sorts Tree Integer
+
+lexical syntax
+
+[0-9]+ -> Integer
+
+context-free start-symbols
+  Tree Integer <Tree, Integer>
+
+context-free syntax
+
+Integer "-" Integer -> Integer {left}
+
+"fork" "(" Tree "," Tree ")" -> Tree
+"node" "(" Integer "," Tree "," Tree ")" -> Tree
+"leaf" "(" Integer ")" -> Tree
+"test" -> Tree
+"simple-test" -> Tree
+
+context-free syntax
+
+top-down-trafo-break(Tree) -> Tree {traversal(top-down,trafo,break)}
+top-down-accu-break(Tree,Integer) -> Integer {traversal(top-down,accu,break)}
+top-down-accutrafo-break(Tree,Integer) -> <Tree,Integer> {traversal(top-down,accu,trafo,break)}
+top-down-trafo-continue(Tree) -> Tree {traversal(top-down,trafo,continue)}
+top-down-accu-continue(Tree,Integer) -> Integer {traversal(top-down,accu,continue)}
+top-down-accutrafo-continue(Tree,Integer) -> <Tree,Integer> {traversal(top-down,accu,trafo,continue)}
+
+bottom-up-trafo-break(Tree) -> Tree {traversal(bottom-up,trafo,break)}
+bottom-up-accu-break(Tree,Integer) -> Integer {traversal(bottom-up,accu,break)}
+bottom-up-accutrafo-break(Tree,Integer) -> <Tree,Integer> {traversal(bottom-up,accu,trafo,break)}
+bottom-up-trafo-continue(Tree) -> Tree {traversal(bottom-up,trafo,continue)}
+bottom-up-accu-continue(Tree,Integer) -> Integer {traversal(bottom-up,accu,continue)}
+bottom-up-accutrafo-continue(Tree,Integer) -> <Tree,Integer> {traversal(bottom-up,accu,trafo,continue)}
+
+context-free syntax
+
+start-top-down-trafo-break(Tree) -> Tree 
+start-top-down-accu-break(Tree) -> Integer 
+start-top-down-accutrafo-break(Tree) -> <Tree,Integer> 
+start-top-down-trafo-continue(Tree) -> Tree 
+start-top-down-accu-continue(Tree) -> Integer 
+start-top-down-accutrafo-continue(Tree) -> <Tree,Integer> 
+
+start-bottom-up-trafo-break(Tree) -> Tree 
+start-bottom-up-accu-break(Tree) -> Integer 
+start-bottom-up-accutrafo-break(Tree) -> <Tree,Integer> 
+start-bottom-up-trafo-continue(Tree) -> Tree 
+start-bottom-up-accu-continue(Tree) -> Integer 
+start-bottom-up-accutrafo-continue(Tree) -> <Tree,Integer> 
+
+hiddens
+
+variables
+
+"i"[0-9]* -> Integer
+"t"[0-9]* -> Tree

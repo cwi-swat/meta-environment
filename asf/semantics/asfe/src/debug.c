@@ -205,8 +205,10 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
     return TA_makeExprError("no position information on equation", NULL);
   }
 
-  if (!ATmatch(pos_anno, "area(<str>,<int>,<int>,<int>,<int>)",
-	       &file, &start_line, &start_col, &end_line, &end_col)) {
+  /* TODO: why is this not apified? */
+  if (!ATmatch(pos_anno, 
+	       "area-in-file(<str>,area(<int>,<int>,<int>,<int>,<int>,<int>))",
+	       &file, &start_line, &start_col, &end_line, &end_col, NULL, NULL)) {
     return TA_makeExprError("malformed position information", pos_anno);
   }
     

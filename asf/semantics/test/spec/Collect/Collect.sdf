@@ -14,8 +14,8 @@ context-free syntax
 hiddens
 
 context-free syntax
-"collect" "(" PROGRAM "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up)}
-"collect" "(" PICO-STR-CON "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up)}
+"collect" "(" PROGRAM "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up, continue)}
+"collect" "(" PICO-STR-CON "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up, continue)}
 
 variables
   "Str-con*"[0-9]* -> PICO-STR-CON*

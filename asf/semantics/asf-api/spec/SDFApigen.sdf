@@ -1,9 +1,7 @@
 module SDFApigen
+
 imports SymbolToString
 imports SdfCollect
-
-
-
 
 exports
 
@@ -13,6 +11,8 @@ generate-syntax(Module, StrCon) -> Module
 generate-syntax(Module, ModuleId) -> Module
 
 hiddens
+context-free start-symbols
+  SDF
 
 context-free syntax
 
@@ -34,7 +34,7 @@ context-free syntax
   generate-make-fields(Symbol*) -> {Symbol ","}*
 
 context-free start-symbols
-  {Symbol ","}*
+  {Symbol ","}* Production*
 
 variables
 

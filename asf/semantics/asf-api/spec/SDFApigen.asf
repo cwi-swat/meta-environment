@@ -1,5 +1,10 @@
 equations
 
+[dup-prod]
+Production*1 Production Production*2 Production Production*3 =
+Production*1 Production Production*2 Production*3
+
+
 [string-main]
 generate-syntax(Module, strcon("""c*""")) =
 generate-syntax(Module, moduleid(c*))

@@ -2,6 +2,9 @@ SUBDIRS=eqs input output c-code
 EXTRA_DIST=README
 
 TEST_MODULES=\
+	AllTraversals \
+	EmptyTraversal \
+	Tree \
 	NoMatch \
 	Builtins\
 	Bracket \
@@ -29,7 +32,24 @@ TEST_MODULES=\
 	Traversal-Typecheck \
 	Tuple
 
-TEST_MODULES_ASFE_ONLY=Tree 
+noinst_SCRIPTS=.cvsignore
+
+IGNORES="\
+	*.out\
+	*.sh\
+	Makefile.in\
+	Makefile"
+
+.cvsignore: Makefile
+	(for i in ${TEST_MODULES}; do \
+		echo "$$i"; \
+		echo "$$i.c"; \
+	done ;\
+	for i in ${IGNORES}; do \
+		echo "$$i"; \
+	done) > $@
+
+TEST_MODULES_ASFE_ONLY=
 
 ASFC=${top_builddir}/semantics/asfc/src/asfc
 ASFE=${top_builddir}/semantics/asfe/src/asfe

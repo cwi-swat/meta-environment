@@ -2,7 +2,11 @@ module NumberTree
 
 exports
 
-sorts Tree {Number ";"}*
+
+sorts Tree Number
+
+context-free start-symbols 
+  Tree {Number ";"}*
 
 lexical syntax
 
@@ -21,10 +25,16 @@ Number "(" {Tree ","}+ ")" -> Tree
 context-free syntax
 
 do-collect(Tree)                     -> {Number ";"}*
-collect(Tree, {Number ";"}*)         -> {Number ";"}* {traversal(accu, top-down)}
-collect({Tree ","}*, {Number ";"}*)  -> {Number ";"}* {traversal(accu, top-down)}
-collect(Number, {Number ";"}*)       -> {Number ";"}* {traversal(accu, top-down)}
+collect(Tree, {Number ";"}*)         -> {Number ";"}* {traversal(accu, top-down, break)}
+collect({Tree ","}*, {Number ";"}*)  -> {Number ";"}* {traversal(accu, top-down, break)}
+collect(Number, {Number ";"}*)       -> {Number ";"}* {traversal(accu, top-down, break)}
 
+do-collect2(Tree)                     -> {Number ";"}*
+collect2(Tree, {Number ";"}*)         -> {Number ";"}* {traversal(accu, top-down, continue)}
+collect2({Tree ","}*, {Number ";"}*)  -> {Number ";"}* {traversal(accu, top-down, continue)}
+collect2(Number, {Number ";"}*)       -> {Number ";"}* {traversal(accu, top-down, continue)}
+
+hiddens
 variables
 
 "T"[0-9]* -> Tree
