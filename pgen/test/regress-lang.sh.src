@@ -31,7 +31,7 @@ mydir=__TOP_SRCDIR__/test
 MV=mv
 RM=rm
 COMPARE=__ATERM__/bin/atdiff
-SDF2TABLE=__TOP_SRCDIR__/src/sdf2table.test
+SDF2TABLE=__TOP_BUILDDIR__/src/sdf2table.test
 
 reference=$mydir/tables
 dirs="$mydir/first $mydir/grammars"
