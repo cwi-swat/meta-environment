@@ -13,9 +13,9 @@ undef $/;
 
 $_ = <STDIN>;
 
-open OUTPUT,">/tmp/dot/dot-$$.out";
-print OUTPUT $_;
-close OUTPUT;
+#open OUTPUT,">/tmp/dot/dot-$$.out";
+#print OUTPUT $_;
+#close OUTPUT;
 
 /^digraph\s\w+\s{/m || die("not a valid graph");
 $_ = $';
