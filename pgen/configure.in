@@ -44,7 +44,7 @@ AC_SUBST(TOOLBUS)
 
 dnl Require sglr package
 AC_PACKAGE_REQUIRE(sglr, sglr,
-   [  --with-sglr=DIR      ToolBus distribution is in DIR])
+   [  --with-sglr=DIR         Pgen distribution is in DIR])
 AC_SUBST(SGLR)
 
 dnl Require PT package (for AsFix)
