@@ -2,5 +2,5 @@
 .libs
 Makefile
 Makefile.in
-term-base
-term-base.tifs
+module-db
+module-db.tifs

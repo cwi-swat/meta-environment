@@ -3,34 +3,36 @@
 #include "table.h"
 #include <SDFME.h>
 
-#define makeString(s) ((ATerm) ATmakeAppl0(ATmakeAFun(s,0,ATtrue)))
-#define makeKey(s) (makeString(s))
 #define makeTextValue(text,path,timeStamp)  ((ATermList) ATmakeList3(makeString(text),makeString(path),(ATerm) ATmakeInt(timeStamp)))
+#define getTextValuePath(value) ((ATerm) ATgetFirst(ATgetNext(value)))
 #define makeTreeValue(tree)  ((ATermList) ATmakeList1((ATerm) tree))
+#define getTreeValue(value) ((ATerm) ATgetFirst(value))
+#define makeParseTableValue(table,timeStamp)  ((ATermList) ATmakeList2(table,(ATerm) ATmakeInt(timeStamp)))
+#define getParseTableValueTable(value) ((ATerm) ATgetFirst(value))
+#define getParseTableValueTimeStamp(value) ((ATerm) ATgetFirst(ATgetNext(value)))
+
 
 void MS_initModuleStore()
 {
   TS_initTableStore();
   TS_addTable("active-modules");
-  TS_addTable("transitive-imports");
   TS_addTable("sdf-tree");
   TS_addTable("sdf-text");
   TS_addTable("asf-tree");
   TS_addTable("asf-text");
-  TS_addTable("asf-table");
-  TS_addTable("term-table");
+  TS_addTable("asf-parse-table");
+  TS_addTable("term-parse-table");
 }
 
 void MS_destroyModuleStore()
 {
   TS_removeTable("active-modules");
-  TS_removeTable("transitive-imports");
   TS_removeTable("sdf-tree");
   TS_removeTable("sdf-text");
   TS_removeTable("asf-tree");
   TS_removeTable("asf-text");
-  TS_removeTable("asf-table");
-  TS_removeTable("term-table");
+  TS_removeTable("asf-parse-table");
+  TS_removeTable("term-parse-table");
 }
 
 void MS_clearModuleStore()
@@ -39,43 +41,67 @@ void MS_clearModuleStore()
   MS_initModuleStore();
 }
 
-void MS_clearTransitiveImports()
+ATbool MS_existsModule(ATerm moduleName)
 {
-  TS_clearTable("transitive-imports");
+  return TS_containsKey("active-modules", moduleName);
 }
 
-ATbool MS_moduleExists(char *moduleName)
+void MS_putModuleName(ATerm moduleName)
 {
-  return TS_containsKey("active-modules",makeKey(moduleName));
+  TS_putValue("active-modules",  moduleName, ATempty);
 }
 
-ATermList MS_getTransitiveImports(char *moduleName) 
+ATermList MS_getActiveModules()
 {
-  return TS_getValue("transitive-imports",makeKey(moduleName));
+  return TS_getAllKeys("active-modules");
 }
 
-SDF_Module MS_getSdfTree(char *moduleName)
+ATerm MS_getSdfTree(ATerm moduleName)
 {
-  return (SDF_Module) TS_getValue("sdf-tree", makeKey(moduleName));
+  return getTreeValue(TS_getValue("sdf-tree", moduleName));
 }
 
-void MS_putSdfTree(char *moduleName, SDF_Module moduleTree)
+void MS_putSdfTree(ATerm moduleName, ATerm moduleTree)
 {
-  TS_putValue("sdf-tree", makeKey(moduleName), 
-	      makeTreeValue(SDF_ModuleToTerm(moduleTree)));
+  TS_putValue("sdf-tree",  moduleName, 
+	      makeTreeValue(moduleTree));
 }
 
-void MS_addSdfText(char *moduleName, char *text, char *path, int timeStamp)
+void MS_putSdfText(ATerm moduleName, char *text, char *path, int timeStamp)
 {
-  TS_putValue("sdf-tree", moduleName, makeTextValue(text,path,timeStamp));
+  TS_putValue("sdf-text",  moduleName, 
+              makeTextValue(text,path,timeStamp));
 }
 
-void MS_addAsfTree(char *moduleName, SDF_Module moduleTree)
+char* MS_getSdfTextPath(ATerm moduleName)
 {
-  TS_putValue("sdf-tree", makeKey(moduleName), makeTreeValue(moduleTree));
+  ATerm value = getTextValuePath(
+                  TS_getValue("sdf-text", moduleName));
+  return getString(value);
 }
 
-void MS_addAsfText(char *moduleName, char *text, char *path, int timeStamp)
+void MS_putAsfTree(ATerm moduleName, SDF_Module moduleTree)
 {
-  TS_putValue("asf-text", makeKey(moduleName),makeTextValue(text,path,timeStamp)); 
+  TS_putValue("asf-tree",  moduleName, 
+              makeTreeValue(moduleTree));
+}
+
+void MS_putAsfText(ATerm moduleName, char *text, char *path, int timeStamp)
+{
+  TS_putValue("asf-text",  moduleName,
+              makeTextValue(text,path,timeStamp)); 
+}
+
+void MS_putAsfParseTable(ATerm moduleName, ATerm table, 
+                         int timeStamp)
+{
+  TS_putValue("asf-parse-table", moduleName,
+              makeParseTableValue(table,timeStamp)); 
+}
+
+void MS_putTermParseTable(ATerm moduleName, ATerm table, 
+                         int timeStamp)
+{
+  TS_putValue("term-parse-table", moduleName,
+              makeParseTableValue(table,timeStamp)); 
 }

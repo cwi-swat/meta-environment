@@ -40,15 +40,14 @@ let
   RulesExt  : str,
   TermExt   : str
 in
+  execute(module-db, Mdb?) .
+  snd-do(Mdb, init-module-db) .
 
-/* First, execute the module db */
-execute(module-db, Mdb?).
-/* And initialize it */
-snd-do(Mdb, create-module-db) .
-snd-msg(get-file-extensions) .
-rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
-snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
-(
+  snd-msg(get-file-extensions) .
+  rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
+  snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
+
+  (
 
 /* If we get the request to empty the db, we'll do it. */
   rec-msg(clear-module-db).
@@ -69,10 +68,10 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
 /* See if a module is in the db */
   rec-msg(is-module-in-db(Name?)).
   snd-eval(Mdb, exists(Name)).
-  ( rec-value(Mdb, result(exists(Name?))).
+  ( rec-value(Mdb, exists).
     snd-msg(exists-in-module-db(Name))
   +
-    rec-value(Mdb, result(notexists(Name?))).
+    rec-value(Mdb, notexists).
     snd-msg(not-exists-in-module-db(Name))
   )
 +

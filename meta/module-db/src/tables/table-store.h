@@ -2,6 +2,7 @@
 #define TABLE_STORE_H
 
 #include "table.h"
+#include "term-conversion.h"
 
 /* Table store operations */
 void  TS_initTableStore();
