@@ -2,6 +2,8 @@
 
 SUBDIRS		= libmept libptmept utils  test
 
+CLEANFILES = $PPACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST=$(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
