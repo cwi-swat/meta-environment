@@ -66,7 +66,6 @@ in
   snd-msg(get-focus-sort(SortName, Focus)) .
   rec-msg(focus-sort(SortName?)) .
   ParseText(Text, ModuleName, SortName, Tree?, Error?) .
-  tau .
   ProcessParseError(ModuleName, Error)
 endlet
 
@@ -510,15 +509,12 @@ in
 	if or(equal(FunSym, "file"), equal(FunSym, "path")) then
 	  FilePath := first(args(STree)) .
 	  GetTextFromFile(FilePath, String?) .
-	  tau .
           ParseText(String, NewModName, SortName, RTree?, Error?) .
-	  tau .
 	  ProcessParseError(NewModName, Error)
 	else 
 	  if equal(FunSym, "str") then
 	    String := first(args(STree)) .
 	    ParseText(String, NewModName, SortName, RTree?, Error?) .
-	    tau .
 	    ProcessParseError(NewModName, Error)
 	  else
 	    RTree := error-tree

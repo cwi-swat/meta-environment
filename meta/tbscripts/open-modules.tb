@@ -56,7 +56,7 @@ in
       )
     fi *
     if equal(Modules, []) then
-      Invalidate-Dirty-ParseTables(RealModules).tau.
+      Invalidate-Dirty-ParseTables(RealModules) .
       snd-msg(finished-opening-modules)
     fi.
     snd-note(ui-status(endstat(Id)))
@@ -92,10 +92,8 @@ in
   Imports := [].
   (
     Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
-    tau .
     if equal(Status, success) then
       Open-ParseTables(RealModule, RealPath).
-      tau.
       Open-Equations(RealModule, RealPath)
     else
       RealModule := Module.
