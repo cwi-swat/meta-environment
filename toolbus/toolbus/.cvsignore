@@ -1,0 +1,10 @@
+Makefile.in
+Makefile
+.deps
+y.tab.[ch]
+lex.yy.c
+toolbus
+ctif
+idef2tif
+logger.tcl
+viewer.tcl
