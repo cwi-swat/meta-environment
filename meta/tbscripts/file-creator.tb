@@ -71,6 +71,8 @@ in
 	snd-msg(create-empty-equations(ModuleName)) .
 	(
 	  rec-msg(empty-equations-created(FileName?)) .
+          snd-msg(add-empty-eqs-to-db(ModuleName, FileName)) .
+          rec-msg(empty-eqs-added) .
 	  snd-msg(new-equations-created(ModuleName, FileName))
 	+
 	  rec-msg(empty-equations-not-created(ModuleName, ErrMsg?)) .
