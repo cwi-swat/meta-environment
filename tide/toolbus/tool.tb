@@ -53,7 +53,7 @@ in
     shutdown("Thank you for using tide.")
     +
     rec-msg(adapter-disconnected(Dap?)) .
-    snd-do(T, adapter-disconnected(Dap))
+    snd-do(T, adapter-disconnected(Dap)) 
     +
     rec-msg(process-created(Process?, Name?)) .
     snd-do(T, process-created(Process, Name))

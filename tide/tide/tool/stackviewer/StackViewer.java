@@ -236,6 +236,8 @@ public class StackViewer
 	public void processDestroyed(DebugAdapter adapter, DebugProcess proc) {
 		if (proc == process) {
 			// Rules do not need to be removed!
+			ruleStackTrace = null;
+			ruleStackUnwind = null;
 			destroy();
 		}
 	}
@@ -390,8 +392,6 @@ public class StackViewer
 			displayStackFrame((StackFrame) trace.getSelectedValue());
 		}
 	}
-
-	//}}}
 }
 
 class StackFrame {

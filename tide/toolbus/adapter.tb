@@ -59,7 +59,7 @@ in
     snd-msg(process-destroyed(proc(A, Pid))) .
     snd-ack-event(A, process-destroyed(Pid))
   ) *  rec-disconnect(A) .
-  snd-msg(adapter-disconnected(A)) 
+  snd-msg(adapter-disconnected(A))
 endlet 
 
 process TIDE-ADAPTER-CONNECT is
