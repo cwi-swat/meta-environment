@@ -199,7 +199,7 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 
   len = strlen(path) - strlen("sdf");
   strncpy(eqsPath, path, len);
-  strcpy(eqsPath+len, "eqs");
+  strcpy(eqsPath+len, "asf");
 
   parseTree = PT_makeParseTreeFromTerm(sdfTree);
 
@@ -638,7 +638,7 @@ ATerm get_parse_table(int cid, ATerm moduleId)
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     tableLoc = EQS_TABLE_LOC;
-    strcpy(pathExt, ".eqs.tbl");
+    strcpy(pathExt, ".asf.tbl");
   } 
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
     tableLoc = TRM_TABLE_LOC;
