@@ -8,34 +8,26 @@ exports
   lexical syntax
     [A-Za-z]+ -> FontId
 
-hiddens
-  variables
-   "Id"[0-9]* -> FontId
-
 exports
+  sorts FontParam FontOption FontValue FontOperator
   context-free syntax
-    ic -> BoxString
-exports
-  sorts FontParam FOption FOptions FontOperator
-  context-free syntax
-    FontParam "=" Integer        -> FOption
-    FontParam "=" FontId         -> FOption
-    FOption*                     -> FOptions
-    "F" FOptions                 -> FontOperator
-    FontOperator "[" Box "]"     -> Box
-%%    FontOperator "(" BoxList ")" -> BoxList
+    Integer                  -> FontValue {cons("integer")}
+    FontId                   -> FontValue {cons("font-id")}
+    FontParam "=" FontValue  -> FontOption
+    "F" FontOption*          -> FontOperator
+    FontOperator "[" Box "]" -> Box {cons("font-operator")}
 
-    "fn" -> FontParam
-    "fm" -> FontParam
-    "se" -> FontParam
-    "sh" -> FontParam
-    "sz" -> FontParam
-    "cl" -> FontParam
+    "fn" -> FontParam {cons("name")}
+    "fm" -> FontParam {cons("family")}
+    "se" -> FontParam {cons("series")}
+    "sh" -> FontParam {cons("shape")}
+    "sz" -> FontParam {cons("size")}
+    "cl" -> FontParam {cons("color")}
 
-    "KW"      -> FontOperator
-    "VAR"     -> FontOperator
-    "NUM"     -> FontOperator
-    "MATH"    -> FontOperator
-    "ESC"     -> FontOperator
-    "COMM"    -> FontOperator
-    "STRING"  -> FontOperator
+    "KW"      -> FontOperator {cons("keyword")}
+    "VAR"     -> FontOperator {cons("variable")}
+    "NUM"     -> FontOperator {cons("number")}
+    "MATH"    -> FontOperator {cons("math")}
+    "ESC"     -> FontOperator {cons("escape")}
+    "COMM"    -> FontOperator {cons("comment")}
+    "STRING"  -> FontOperator {cons("string")}
