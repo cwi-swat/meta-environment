@@ -268,15 +268,10 @@ ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
 /*}}}  */
 /*{{{  ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,  */
 
-ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree, 
+ASF_CondEquationList renameParametersInEquations(SDF_ModuleName moduleName,
                                                  ASF_CondEquationList asfTree, 
                                                  SDF_Symbols actualParams)
 {
-  SDF_ModuleName moduleName;
-
-  moduleName = SDF_getModuleModuleName(
-                 SDF_makeModuleFromTerm(
-                   PT_makeTermFromTree(sdfTree)));
   if (SDF_isModuleNameParameterized(moduleName)) {
     SDF_Symbols formalParams = SDF_getModuleNameParams(moduleName);
 

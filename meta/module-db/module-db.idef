@@ -4,14 +4,10 @@
 process ModuleDB is
 let
   Id        : term,
-  T1        : term,
   Path      : str,
   Table     : term,
-  T2        : term,
-  AsFixModule: term,
   ModuleId  : term,
   Syntax    : term,
-  NewSyntax : term,
   EqsTree   : term,
   EqsText   : str,
   Name      : str,
@@ -23,6 +19,9 @@ let
   Modules   : list,
   ChngMods  : list,
   Equations : term,
+  Renamings : term,
+  ModName   : term,
+  Params    : term,
   Pairs     : list,
   ActualMods: list,
   Language  : str,
@@ -70,8 +69,8 @@ snd-do(Mdb, create-module-db).
 /* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf-module-to-db(Name?, Path?, AsFixModule?, timestamp(Time?))) .
-  snd-eval(Mdb, add-sdf-module(Name, Path, AsFixModule, Time)) .
+  rec-msg(add-sdf-module-to-db(Name?, Path?, Syntax?, timestamp(Time?))) .
+  snd-eval(Mdb, add-sdf-module(Name, Path, Syntax, Time)) .
   ( 
     rec-value(Mdb,module(RealName?,imports(need-modules(Modules?),
                   import-graph(ActualMods?, Pairs?)))).
@@ -92,9 +91,9 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(Name?, AsFixModule?,Language?)).
+  rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
   if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(Name, AsFixModule)) .
+    snd-eval(Mdb,update-sdf2-module(Name, Syntax)) .
     (
       rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
                             import-graph(ActualMods?, Pairs?))).
@@ -259,7 +258,25 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(get-equations-for-module(ModuleId?)).
   snd-eval(Mdb, get-equations-for-module(ModuleId)).
-  rec-value(Mdb, equations(Equations?)).
+  (
+    rec-value(Mdb, plain-equations(Equations?)) .
+    snd-msg(plain-equations(Equations))
+  +
+    rec-value(Mdb, renaming-equations(Renamings?, Equations?)) .
+    snd-msg(renaming-equations(Renamings, Equations))
+  +
+    rec-value(Mdb, parameterized-equations(ModName?, Params?, Equations?)) .
+    snd-msg(parameterized-equations(ModName, Params, Equations))
+  )
++
+  rec-msg(rename(Renamings?, Equations?)) .
+  snd-eval(Mdb, rename-in-equations(Renamings, Equations)) .
+  rec-value(Mdb, equations(Equations?)) .
+  snd-msg(equations(Equations))
++
+  rec-msg(substitute(ModName?, Params?, Equations?)) .
+  snd-eval(Mdb, substitute-in-equations(ModName, Params, Equations)) .
+  rec-value(Mdb, equations(Equations?)) .
   snd-msg(equations(Equations))
 +
   rec-msg(union-equations(EqsList1?, EqsList2?)) .

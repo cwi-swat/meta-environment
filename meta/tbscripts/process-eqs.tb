@@ -96,7 +96,10 @@ let
   Equations    : term,
   AllEquations : term,
   Modules      : list,
-  Module       : term
+  Module       : term,
+  Renamings    : term,
+  FormalName   : term,
+  Parameters   : term
 in
   Id := process-id .
   (
@@ -112,7 +115,17 @@ in
           Module  := first(Modules) .
           Modules := next(Modules) .
           snd-msg(get-equations-for-module(Module)) .
-          rec-msg(equations(Equations?)) .
+          (
+            rec-msg(plain-equations(Equations?))
+          +
+            rec-msg(renaming-equations(Renamings?, Equations?)) .
+            snd-msg(rename(Renamings, Equations)) .
+            rec-msg(equations(Equations?)) 
+          +
+            rec-msg(parameterized-equations(FormalName?, Parameters?, Equations?)) .
+            snd-msg(substitute(FormalName, Parameters, Equations)) .
+            rec-msg(equations(Equations?)) 
+          ) .
           snd-msg(union-equations(AllEquations, Equations)) .
           rec-msg(equations(AllEquations?))
         fi

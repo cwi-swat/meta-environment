@@ -664,7 +664,7 @@ ATerm get_asf_tree(int cid, char *modulename)
 }
 
 /*}}}  */
-/*{{{  ATerm get_equations_for_module(int cid, ATerm modulename) */
+/*{{{  ATerm get_equations_for_module(int cid, ATerm atImport) */
 
 ATerm get_equations_for_module(int cid, ATerm atImport)
 {
@@ -688,22 +688,59 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
         if (SDF_isImportRenamedModule(import)) {
           SDF_Renamings renamings = SDF_getImportRenamings(import);
 
-          asfEqsList = renameSymbolsInEquations(asfEqsList, renamings);
+          return ATmake("snd-value(renaming-equations(<term>,<term>))", 
+                        SDF_makeTermFromRenamings(renamings),
+                        ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
         }
 
         if (SDF_isModuleNameParameterized(moduleName)) {
           SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
       
           ATerm sdfTerm = MDB_getEntrySdfTree(entry);
-          PT_Tree sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
-      
-          asfEqsList = renameParametersInEquations(sdfTree, asfEqsList, actualParams);
-      
+          SDF_ModuleName formalModuleName = SDF_getModuleModuleName( 
+                                              SDF_makeModuleFromTerm(
+                                                PT_makeTermFromTree(
+                                                  PT_getParseTreeTree(
+                                                    PT_makeParseTreeFromTerm(sdfTerm)))));
+
+          return ATmake("snd-value(parameterized-equations(<term>,<term>,<term>))", 
+                        SDF_makeTermFromModuleName(formalModuleName),
+                        SDF_makeTermFromSymbols(actualParams),
+                        ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
         }
       }
     }
   }
+  return ATmake("snd-value(plain-equations(<term>))", 
+                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
+}
+
+/*}}}  */
+/*{{{  ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm atEqs) */
+
+ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm atEqs)
+{
+  SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
+  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListFromTerm(atEqs);
+
+  asfEqsList = renameSymbolsInEquations(asfEqsList, renamings);
+  
   return ATmake("snd-value(equations(<term>))", 
+                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
+}
+
+/*}}}  */
+/*{{{  ATerm substitute_in_equations(int cid, ATerm atModuleName, ATerm atParameters, ATerm atEqs) */
+
+ATerm substitute_in_equations(int cid, ATerm atModuleName, ATerm atParameters, ATerm atEqs)
+{
+  SDF_ModuleName formalModuleName = SDF_makeModuleNameFromTerm(atModuleName);
+  SDF_Symbols actualParams = SDF_makeSymbolsFromTerm(atParameters);
+  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListFromTerm(atEqs);
+
+  asfEqsList = renameParametersInEquations(formalModuleName, asfEqsList, actualParams);
+
+  return ATmake("snd-value(equations(<term>))",
                 ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
 }
 
