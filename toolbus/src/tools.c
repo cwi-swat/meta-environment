@@ -140,6 +140,23 @@ TBbool event_present(term *ev, term *l)
   return TBfalse;
 }
 
+term_list *event_delete(term_list *l, term *ev)
+{
+  term *et;
+  term_list *result = NULL;
+  TBbool removed = TBfalse;
+
+  while(l) {
+    et = first(l);
+    l = next(l);
+    if(removed || !has_prefix(ev, et))
+      result = list_concat_term(result, et);
+    else
+      removed = TBtrue;
+  }
+  return result;
+}
+
 /*
  * Transition function for Tool Control Protocol.
  * Note that the protocol is defined from the
@@ -203,7 +220,7 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
       t = first(fun_args(event));
       if(event_present(t, pending)){
 	if(update)
-	  ti_pending(ti) = list_delete(pending, t);
+	  ti_pending(ti) = event_delete(pending, t);
 	  return_phase(PHASE2);
       } else
 	return -1;
@@ -243,7 +260,7 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
       t = first(fun_args(event));
       if(event_present(t, pending)){
 	if(update)
-	  ti_pending(ti) = list_delete(pending, t);
+	  ti_pending(ti) = event_delete(pending, t);
 	  return_phase(PHASE3);
       } else
 	  return -1;
