@@ -129,7 +129,15 @@ public class TBTermTest extends TestCase {
 
     assertEquals(check("add(1,2)"), TBTerm.IntType);
     assertEquals(check("greater(1,2)"), TBTerm.BoolType);
-
+  }
+  
+  public boolean compatible(String s1, String s2) throws ToolBusException {
+    return TBTerm.checkCompatible(factory.make(s1), factory.make(s2));
+  }
+  
+  public void testCompatible() throws ToolBusException {
+    assertTrue(compatible("1", "1"));
+    assertTrue(compatible("<term>", "1"));
   }
 
   public static Test suite() {

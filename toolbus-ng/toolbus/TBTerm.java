@@ -61,18 +61,22 @@ class FunctionDescriptor {
     if (argtypes.length != actual.length)
       throw new ToolBusException(name + " has wrong number of arguments");
     for (int i = 0; i < argtypes.length; i++) {
-      if (argtypes[i] == TBTerm.BoolType) {
-        if (actual[i] != TBTerm.BoolType)
-          throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be boolean");
-      } else if (argtypes[i] == TBTerm.IntType) {
-        if (actual[i] != TBTerm.IntType)
-          throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be integer");
-      } else if (argtypes[i] == TBTerm.TermType) {
-      } else if (argtypes[i] == TBTerm.ListType) {
-        if (actual[i] != TBTerm.ListType)
-          throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be list");
-      } else
-        throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
+      if (actual[i] == TBTerm.TermType) {
+        System.err.println("arg # " + i + " of " + name + " is term (requires dynamic check)");
+      } else {
+        if (argtypes[i] == TBTerm.BoolType) {
+          if (actual[i] != TBTerm.BoolType)
+            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be boolean");
+        } else if (argtypes[i] == TBTerm.IntType) {
+          if (actual[i] != TBTerm.IntType)
+            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be integer");
+        } else if (argtypes[i] == TBTerm.TermType) {
+        } else if (argtypes[i] == TBTerm.ListType) {
+          if (actual[i] != TBTerm.ListType)
+            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be list");
+        } else
+          throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
+      }
     }
     return true;
   }

@@ -11,7 +11,6 @@ import toolbus.parser.TscriptParser;
 import toolbus.process.*;
 
 import aterm.*;
-import aterm.pure.PureFactory;
 
 public class ToolBus {
 
