@@ -2,13 +2,14 @@
   $Id$
  */
 
-tool pgen is {
-  command = "ParseTable-Generator -termtable 20"
+tool gentable is {
+  command = "ksdf2table"
 }
+
 
 process PGen is
 let
-  PGEN      : pgen,
+  GENTABLE  : gentable,
   T         : term,
   T1        : term,
   Name      : term,
@@ -24,17 +25,14 @@ in
     Id := process-id .
     rec-msg(generate-parsetable(Str?)) .
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
-    execute(pgen,PGEN?) .
+    execute(gentable,GENTABLE?) .
     snd-msg(add-eqs-syntax(Str)) .
     rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(add-pgen-func(Str,Syntax)) .
-    rec-msg(decorated-syntax(NewSyntax?)) .
-    snd-eval(PGEN,reduce-and-asource(NewSyntax,Str,"tbl")) .
-    rec-value(PGEN,reduction-finished(Table?)) .
+    snd-eval(GENTABLE,generate-table(Syntax,Str,"tbl")) .
+    rec-value(GENTABLE,generation-finished(Table?)) .
     snd-msg(parsetable(Table)) .
     snd-note(ui-status(endstat(Id))) .
-    snd-terminate(PGEN,"terminate")
+    snd-terminate(GENTABLE,"terminate")
   )*
   delta
 endlet
-

@@ -5,7 +5,6 @@ T1        : term,
 Path      : str,
 Table     : str,
 T2        : term,
-/*Module    : str,*/
 AsFixModule: term,
 Syntax    : term,
 NewSyntax : term,
@@ -169,8 +168,8 @@ snd-do(Mdb, create-module-db).
 /* Get the syntax for a list of modules */
   rec-msg(get-all-sdf2-definitions(Name?)).
   snd-eval(Mdb, get-all-sdf2-definitions(Name)).
-  rec-value(Mdb, syntax-with-rewrite-function(Syntax?)).
-  snd-msg(syntax-with-rewrite-function(Syntax))
+  rec-value(Mdb, syntax(Syntax?)).
+  snd-msg(syntax(Syntax))
 +
   rec-msg(get-sdf2-asfix(Name?)).
   snd-eval(Mdb, get-asfix(Name, sdf2)).
@@ -199,11 +198,6 @@ snd-do(Mdb, create-module-db).
     rec-value(Mdb, unavailable).
     snd-msg(unavailable)
   )
-+
-  rec-msg(add-pgen-func(Name?,Syntax?)).
-  snd-eval(Mdb, add-pgen-func(Name,Syntax)).
-  rec-value(Mdb, decorated-syntax(NewSyntax?)).
-  snd-msg(decorated-syntax(NewSyntax))
 +
 /* Validate the parse table */
   rec-msg(validate-parse-tables(Name?)).

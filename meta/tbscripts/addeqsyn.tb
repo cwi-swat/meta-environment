@@ -1,7 +1,7 @@
 /*
   $Id$
  */
-process AddEqSyn(AES: add-eqs-syntax) is
+process AddEqSyn(AES: addeqssyntax) is
 let
   Name      : str,
   NewSyntax : term,
@@ -9,9 +9,9 @@ let
 in  
   ( rec-msg(add-eqs-syntax(Name?)).
     snd-msg(get-all-sdf2-definitions(Name)).
-    rec-msg(syntax-with-rewrite-function(Syntax?)).
-    snd-eval(AES,reduce(Syntax)).
-    rec-value(AES,reduct(NewSyntax?)). 
+    rec-msg(syntax(Syntax?)).
+    snd-eval(AES,add-eqs-syntax(Name,Syntax)).
+    rec-value(AES,extended-syntax(NewSyntax?)). 
     snd-msg(extended-syntax(NewSyntax))
   )*
   delta

@@ -414,28 +414,6 @@ ATerm get_path(int cid, char *modulename, ATerm type)
       return NULL;
   }
 }
-/*
-ATerm get_eqs_path(int cid, ATerm modname)
-{
-  ATerm entry, place;
-  char *path, *mod;
-
-  if(ATmatch(modname,"id(<str>)",&mod)) {
-    entry = GetValue(new_modules_db, modname);
-    place = ATelementAt((ATermList)entry, PATH_EQS_LOC);
-    if(ATmatch(place,"<str>",&path)) {
-      return ATmake("snd-value(path(<str>))",path);
-    }
-    else {
-      return ATmake("snd-value(path(<str>))","");
-    }
-  }
-  else {
-    ATerror("Illegal module name: %t", modname);
-    return NULL;
-  }
-}
-*/
 
 /* As above, type is either sdf2 or eqs, because slightly different
    actions need to be taken when the module does not exist. */
@@ -593,17 +571,6 @@ ATerm delete_module(int cid, char *modulename)
   trans_db = CreateValueStore(100,75);
   return ATmake("snd-value(done)");
 }
-
-/*
-void save_module(int cid, ATerm name)
-{
-  ATerm entry;
-
-ATfprintf(stderr, "Saving: %t\n", name);
-
-  entry = GetValue(new_modules_db, name);
-}
-*/
 
 ATermList select_unknowns(ATermList mods)
 {
@@ -817,19 +784,6 @@ ATfprintf(stderr,"update_eqs_for_modules left with %t\n",result);
   return ATmake("snd-value(modules([<list>]))",result);
 }
 
-/*
-ATerm get_all_imported_modules(int cid, char *modulename)
-{
-  ATerm name;
-  ATermList result;
-
-  name = ATmake("<str>",modulename);
-  result = get_imported_modules(name);
-
-  return ATmake("snd-value(all-imports([<list>]))",result);
-}
-*/
-
 ATerm get_all_modules(int cid)
 {
   ATermList list = ATtableKeys(import_db);
@@ -864,15 +818,6 @@ ATermList modules_depend_on(ATerm name, ATermList dependent)
   }
   return dependent;
 }
-
-/*
-ATerm calc_import_rels(int cid, char *modulename)
-{
-  ATerm name = ATmake("<str>",modulename);
-  ATermList imports = calc_import_relations(name);
-  return ATmake("snd-value(irels([<list>]))", imports);
-}
-*/
 
 /* A number of function to deal with modules which are recognized
    via Sdf2. */
@@ -1050,7 +995,7 @@ ATerm make_name_term(ATerm name)
   return result;
 }
 
-ATerm get_syntax_and_add_rewrite_function(ATerm name, ATermList modules)
+ATerm get_syntax(ATerm name, ATermList modules)
 {
   ATermList syntaxes = ATempty;
   ATerm t[8], nameterm, appl, elem, module, result, term, entry;
@@ -1081,20 +1026,6 @@ ATerm get_syntax_and_add_rewrite_function(ATerm name, ATermList modules)
                       ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Definition\"),w(\"\"),no-attrs)"),
                       pattern_asfix_ews,
                       ATmakeList1(result));
-  result = ATmakeTerm(pattern_asfix_appl,
-                      ATparse("prod(id(\"Add-Eqs-Syntax\"),w(\"\"),[l(\"add-equation-module\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Definition\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
-                      pattern_asfix_ews,
-                      ATmakeList(11,ATparse("l(\"add-equation-module\")"),
-                                    pattern_asfix_ews,
-                                    ATparse("l(\"(\")"),
-                                    pattern_asfix_ews,
-                                    nameterm,
-                                    pattern_asfix_ews,
-                                    ATparse("l(\",\")"),
-                                    pattern_asfix_ews,
-                                    result,
-                                    pattern_asfix_ews,
-                                    ATparse("l(\")\")")));
   term = ATmakeTerm(pattern_asfix_term,
                     ATparse("l(\"term\")"),
                     pattern_asfix_ews,
@@ -1116,8 +1047,8 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
   name = ATmake("<str>",modulename);
   if(complete_sdf2_specification(ATempty,name)) {
     imports = get_imported_modules(name);
-    result = get_syntax_and_add_rewrite_function(name,imports);
-    return ATmake("snd-value(syntax-with-rewrite-function(<term>))",result);
+    result = get_syntax(name,imports);
+    return ATmake("snd-value(syntax(<term>))",result);
   }
   else {
     ATfprintf(stderr,
