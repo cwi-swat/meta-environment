@@ -39,8 +39,8 @@ FLAGS-gcc     = -Wall -O4
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
-bindir          = @bindir@
-libdir          = @libdir@
+bindir		= @bindir@
+libdir		= @libdir@
 includedir      = @includedir@
 
 DEFS            = @DEFS@ $(XDEFS)
