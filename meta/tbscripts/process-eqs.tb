@@ -5,8 +5,8 @@ let
   NewTree : term
 in
   if not-equal(Tree, error-tree) then
-    snd-msg(postprocess-semantics-hook(Tree)) .
-    rec-msg(postprocess-semantics-hook-result(NewTree?)) .
+    snd-msg(postprocess-semantics-hook(Module, Tree)) .
+    rec-msg(postprocess-semantics-hook-result(Module, NewTree?)) .
     snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
     NewTree := no-tree .
     rec-msg(eqs-updated)
