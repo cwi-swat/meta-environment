@@ -20,6 +20,7 @@ cat  << END_OF_FILE
 /* #include <asfix2.h> */
 #include "asc-builtins.h"
 #include "Library.h"
+#include "ErrorAPI-utils.h"
 
 /* DO NOT EDIT: This file is generated */
 

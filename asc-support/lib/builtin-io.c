@@ -76,11 +76,11 @@ static PT_Tree make_natcon(int value)
 }
 
 /*}}}  */
-/*{{{  static PT_Tree make_bytes(const char *value) */
+/*{{{  static CO_Bytes make_bytes(const char *value) */
 
-static PT_Tree make_bytes(const char *value)
+static CO_Bytes make_bytes(const char *value)
 {
-  return PT_makeTreeLexToCf(PT_makeSymbolSort("Bytes"), 
+  return (CO_Bytes) PT_makeTreeLexToCf(PT_makeSymbolSort("Bytes"), 
 			    PT_makeTreeFlatLexicalFromString(value));
 }
 
@@ -253,7 +253,10 @@ PT_Tree ASC_parse_bytes(ATerm aterm)
 
 static PT_Tree unparse_to_bytes(PT_Tree tree)
 {
-  return make_bytes(PT_yieldTree(tree));
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
+
+  return (PT_Tree)
+    CO_makeBytesResultSuccess(l,l,make_bytes(PT_yieldTree(tree)),l);
 }
 
 /*}}}  */
