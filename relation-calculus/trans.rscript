@@ -1,6 +1,5 @@
 
 
-eval-rscript(
 
 rel[int,int] M =  {<1,2>, <2,3>, <3,4>}
 
@@ -8,9 +7,6 @@ int I = 0
 
 rel[int,int] T = M
 
-solve (
+solve {
 	T = T union (T o M)
-)
-
-
-)
+}

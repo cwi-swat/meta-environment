@@ -586,6 +586,26 @@ $Error]>
 
 [xxx] fun [] to $Etype = $Etype
 
+%% --- Check set of equations
+
+[CSL11]	check-stat(solve ($Integer) { $Var = $Exp }, $Tenv) = 
+	check-stat(solve { $Var = $Exp }, $Tenv)
+
+[CSL12]	check($Var, $Tenv) = <$Etype, $Tenv1>,
+	require-type($Exp, $Etype, $Tenv1) = $Tenv2
+	==========================================
+	check-stat(solve { $Var = $Exp }, $Tenv) = $Tenv2
+
+[CSL21]	check-stat(solve ($Integer) { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv) =
+	check-stat(solve { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv)
+
+[CSL22]	check($Var1, $Tenv) = <$Etype1, $Tenv1>,
+	require-type($Exp1, $Etype1, $Tenv1) = $Tenv2,
+	check($Var2, $Tenv2) = <$Etype2, $Tenv3>,
+	require-type($Exp2, $Etype2, $Tenv3) = $Tenv4
+	==========================================
+	check-stat(solve { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv) = $Tenv4
+
 %% -- Default cases for check and compat
 
 [default-check]

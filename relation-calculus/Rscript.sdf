@@ -4,7 +4,8 @@ imports basic/Booleans basic/Integers basic/Strings
 imports MyArea
 
 exports
-  sorts Elem ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE
+%%sorts Elem would be reasonable :-)
+  sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE EQU
 
   imports Relations[Elem]
 
@@ -84,6 +85,11 @@ exports
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
      "(" REXP ")"                             	-> REXP {bracket}
 
+%% Highly experimental sets of equations
+     RVAR "=" REXP				-> EQU
+
+     "solve" ("(" Integer ")")? "{" { EQU  "," }+ "}" -> RSTAT
+
 %% Statements and script
 
      REXPTYPE RVAR			      	-> DCLRVAR
@@ -95,8 +101,6 @@ exports
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
  
      RSTAT*                                     -> RSCRIPT
-
-     "dominators"				-> UQLiteral {avoid}
 
   context-free priorities
 
