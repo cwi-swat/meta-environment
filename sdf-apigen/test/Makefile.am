@@ -14,49 +14,22 @@ GENERATOR		= ${top_builddir}/spec/Sdf2-to-ADT
 PARSETABLE		= ${top_srcdir}/spec/Sdf2-to-ADT.trm.tbl 
 LABEL_EQS		= ${top_srcdir}/spec/add-labels/AddLabels.eqs 
 
-TESTS			= rolotest booltest listtest
+TESTS			= booltest 
 noinst_PROGRAMS		= ${TESTS}
-noinst_LIBRARIES	= librolodex.a liblist.a libBooleans.a
+noinst_LIBRARIES	= libBooleans.a
 
-librolodex_a_SOURCES	= rolodex.c rolodex_dict.c
-liblist_a_SOURCES	= list.c list_dict.c
 libBooleans_a_SOURCES	= Booleans.c Booleans_dict.c
-
-rolotest_SOURCES	= rolotest.c
-rolotest_LDADD		= -L. -lrolodex -lATerm
-rolotest_DEPENDENCIES	= librolodex.a
-
-listtest_SOURCES	= listtest.c
-listtest_LDADD		= -L. -llist -lATerm
-listtest_DEPENDENCIES	= liblist.a
-
 booltest_SOURCES	= booltest.c
 booltest_LDADD		= -L. -lBooleans -L$(PT_SUPPORT)/lib -lmept \
 			-L$(ATERM)/lib -lATerm
 booltest_DEPENDENCIES	= booltest.pt libBooleans.a
 
 CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
-			rolodex*.[ch] rolodex_dict.[ch] \
-			list.[ch] list_dict.[ch] \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
 			booltest.pt
 
-EXTRA_DIST		= rolodex.adt Booleans.sdf Booleans.pro list.adt list.pro \
-			booltest.trm
-
-rolodex.c rolodex.h: rolodex.adt
-	${ADT_TO_C} \
-		--input ${top_srcdir}/test/rolodex.adt \
-		--compat-term \
-		--classpath ${top_builddir}:${ATERM}/classes
-
-list.c list.h: list.adt list.pro
-	${ADT_TO_C} \
-		--input ${top_srcdir}/test/list.adt \
-		--prologue ${top_srcdir}/test/list.pro \
-		--compat-term \
-		--classpath ${top_builddir}:${ATERM}/classes
+EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm
 
 Booleans.c Booleans.h: Booleans.adt
 	${ADT_TO_C} \

@@ -1,5 +1,0 @@
-  [
-    [Modules, List, modules([<first(Module)>,<[next(Modules)]>])],
-    [Modules, Body, [<first(Module)>,<[next(Modules)]>]],
-    [ModuleList, Modules, list(<modules(Modules)>)]
-  ]

@@ -6,6 +6,8 @@
 
 include $(top_srcdir)/make_rules
 
+EXTRA_DIST = sdf2-to-adt.sh.src
+
 bin_SCRIPTS		= sdf2-to-adt 
 
 % : %.sh.src Makefile

@@ -99,12 +99,9 @@ AC_SUBST(SGLRBIN)
 dnl }}}
 dnl {{{ Handle --with-asfe
 
-AC_PACKAGE_REQUIRE(asfe, asfe,
-	[  --with-asfe=DIR         asf-evaluator is in DIR])
-AC_SUBST(ASFE)
-
-ASFBIN=${ASFE}/bin
-AC_SUBST(ASFBIN)
+AC_PACKAGE_REQUIRE(asf, asfe,
+	[  --with-asf=DIR         asf is in DIR])
+AC_SUBST(ASF)
 
 dnl }}}
 dnl {{{ Handle --with-apigen
