@@ -1,7 +1,7 @@
 equations
 
 [get-filename-0]
-  get-filename(location(Filename, Area)) = Filename
+  get-filename(area-in-file(Filename, Area)) = Filename
 
 [get-area-0]
-  get-area(location(Filename, Area)) = Area
+  get-area(area-in-file(Filename, Area)) = Area
