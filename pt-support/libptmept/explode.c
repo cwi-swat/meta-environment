@@ -84,7 +84,7 @@ static PTPT_Literal PTPT_explodeLiteral(char *string, ATbool quoted)
   if (quoted) {
     char quoted[1024];
     sprintf(quoted, "\"%s\"", string);
-    string = quoted;
+    return PTPT_makeLiteralUnquoted(PTPT_makeCHARLISTString(quoted));
   }
 
   return PTPT_makeLiteralUnquoted(PTPT_makeCHARLISTString(string));
@@ -358,7 +358,7 @@ static PTPT_Symbol PTPT_explodeSymbol(PT_Symbol symbol)
   else {
     ATwarning("explode: unknown symbol %t\n", symbol);
   }
-
+ 
   return result;
 }
 
@@ -468,7 +468,7 @@ static PTPT_Attributes PTPT_explodeAttributes(PT_Attributes attributes)
     ATwarning("explode: unknown attributes: %t\n", attributes);
   }
 
-  return NULL;
+  return result;
 }
 
 /*}}}  */
@@ -480,11 +480,13 @@ static PTPT_Production PTPT_explodeProd(PT_Production prod)
   PTPT_Production result = NULL;
 
   if (PT_isProductionDefault(prod)) {
-    PTPT_Symbols lhs = PTPT_explodeSymbols(PT_getProductionLhs(prod));
-    PTPT_Symbol  rhs  = PTPT_explodeSymbol(PT_getProductionRhs(prod));
-    PTPT_Attributes attrs = 
-      PTPT_explodeAttributes(PT_getProductionAttributes(prod));
+    PTPT_Symbols lhs;
+    PTPT_Symbol  rhs;
+    PTPT_Attributes attrs;
 
+    lhs = PTPT_explodeSymbols(PT_getProductionLhs(prod));
+    rhs  = PTPT_explodeSymbol(PT_getProductionRhs(prod));
+    attrs = PTPT_explodeAttributes(PT_getProductionAttributes(prod));
     result = PTPT_makeProductionDefault(e,e,lhs,e,e,rhs,e,e,attrs,e);
   }
   else if (PT_isProductionList(prod)) {
@@ -536,11 +538,13 @@ PTPT_Tree PTPT_explodeTree(PT_Tree pt)
     result = PTPT_makeTreeAmb(e,e, PTPT_explodeArgs(args),e);
   }
   else if (PT_isTreeAppl(pt)) {
-    PT_Production prod = PT_getTreeProd(pt);
-    PT_Args args = PT_getTreeArgs(pt);
+    PTPT_Production prod;
+    PTPT_Args args;
 
-    result = PTPT_makeTreeAppl(e,e,PTPT_explodeProd(prod),e,e,
-			       PTPT_explodeArgs(args),e);
+    prod = PTPT_explodeProd(PT_getTreeProd(pt));
+    args = PTPT_explodeArgs(PT_getTreeArgs(pt));
+
+    result = PTPT_makeTreeAppl(e,e,prod,e,e,args,e);
   }
   else if (PT_isTreeLit(pt)) {
     PTPT_Literal lit = PTPT_explodeLiteral(PT_getTreeString(pt), ATtrue);
