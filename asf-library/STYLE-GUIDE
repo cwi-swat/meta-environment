@@ -9,13 +9,28 @@ Modular structure
     fashion. This prevents conflicts with the layout of the user of
     the library.
 
-* hidden variables
+* all variables should be hidden.
+
+* all module names should be relative to the root of the library
 
 Formatting
 ----------
 
-* sort names
-     Sort names with all capitals are discouraged.
+* sort names should be in CamelCase: BoolCon
+* module names should be with dashes: Pico-Booleans
+* constructor names should be lowercase with dashes: cons("add-op")
+* variables should look like:
+    "Boolean"[0-9\']* -> Boolean
+    "Boolean*"[0-9\']* -> Boolean*
+    "Boolean,*"[0-9\']* -> {Boolean ","}*
+
+Files
+-----
+
+* all modules in the library should be saved as baf with parsetables
+* all baf files and parsetables should be committed to the repository
+  (this prevents a circular dependency between the library and the
+   Meta Environment at configure time).
 
 Miscelaneous
 -----------
@@ -25,3 +40,4 @@ Miscelaneous
     represent constructors (as opposed to functions). This makes the
     module easier to understand, and it may be used by the ASF interpreter
     or compiler.
+
