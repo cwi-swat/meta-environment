@@ -116,5 +116,53 @@ buttons([
           unparse,
           push-active-module,
           show-list
-        ])
+        ]),
+
+  button("Booleans",
+         ["term"],
+         ["Query", "FindProduction"],
+         [ push-active-module,
+          get-focus,
+          push-filename("focus.tree"),
+          save-tree,
+          activate("baf2trm -i focus.tree -o focus.text"),
+          push-filename("focus.text"),
+          parse("asfix/syntax/Parsetree", "ParseTree"),
+
+          push-filename("extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("add-production-to-rstore", "RSTORE", 2),
+          push-modulename("FindProduction"),
+          reduce,
+
+          push-filename("new-extracted-relations.trm"),
+          save-tree,
+          message("Saving done")
+         ]),
+
+  button("Booleans",
+         ["term"],
+         ["Query", "ShowProduction"],
+         [push-filename("all.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"RESULT_PRODUCTIONS\""),
+          parse("basic/Strings", "String"),
+
+          push-filename("new-extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("evaluate-query", "RVALUE", 3),
+          rewrite("DisplayQuery"),
+
+          apply("display-result", "List", 1),
+          rewrite("DisplayQuery"),
+
+          unparse,
+          push-modulename("Sdf"),
+          show-list
+         ])
 ])
