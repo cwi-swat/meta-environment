@@ -1,3 +1,6 @@
+2002/06/27 (jurgenv@cwi.nl)
+ * Simplified (list) matching and condition checking algorithms in asfe.
+
 2002/06/26 (jurgenv@cwi.nl)
  * Improved asf-checker a bit. Less 'cascading' error messages. 
  * Removed 'instantiated and uninstantiated variables' error message.
