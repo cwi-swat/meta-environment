@@ -98,16 +98,17 @@ main (int argc, char **argv)
   for (--nInputs; nInputs >= 0; nInputs--) {
     parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
     if (parseTree == NULL) {
-      ATerror("Unable to read in %s\n", inputs[nInputs]);
-      exit(1);
+      ATwarning("concat-asf: Unable to read anything from %s\n", 
+		inputs[nInputs]);
+    }
+    else {
+      tree = PT_getParseTreeTree(parseTree);
+      equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
+
+      list = ASF_getEquationsList(equations);
+      alleqs = ASF_concatCondEquationList(list,alleqs);
     }
     free(inputs[nInputs]);
-
-    tree = PT_getParseTreeTree(parseTree);
-    equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
-
-    list = ASF_getEquationsList(equations);
-    alleqs = ASF_concatCondEquationList(list,alleqs);
   }
  
   ATwriteToNamedBinaryFile(ASF_makeTermFromCondEquationList(alleqs), output);
