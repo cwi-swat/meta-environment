@@ -12,4 +12,6 @@ identification
 configuration interface
 
 requires
-   aterm	2.0.2
+   aterm PARSE_ERROR_IN_PACKAGE_DEF
+
+
