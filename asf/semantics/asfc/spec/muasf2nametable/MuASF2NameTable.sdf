@@ -1,0 +1,39 @@
+module MuASF2NameTable
+
+imports VarEnv
+
+exports
+
+context-free syntax
+
+muasf2nametable(Module) -> MN-struct
+
+hiddens
+
+context-free syntax
+  rename-signatureopt(SignatureOpt, NameTable) -> SignatureOpt
+  rename-rulesopt(RulesOpt, NameTable)     -> RulesOpt
+  rename-funcdeflist(FuncDefList, NameTable)  -> FuncDefList
+  rename-funcdef(FuncDef, NameTable)      -> FuncDef
+  rename-termlist(TermList, NameTable)     -> TermList
+  rename-funid(FunId, NameTable)        -> FunId
+
+
+context-free syntax
+
+  remove-duplicates(SignatureOpt) -> SignatureOpt
+  rmdups(FuncDefList) -> FuncDefList
+
+  create-name-table(SignatureOpt,NameTable) -> NameTable
+
+hiddens
+  context-free syntax
+    funcdefs2table({FuncDef ";"}+,NameTable)  -> NameTable
+    funcdef2table(FuncDef,NameTable)          -> NameTable
+
+hiddens
+
+variables
+
+"Char*" -> CHAR*
+"Char+" -> CHAR+
