@@ -11,70 +11,100 @@ import toolbus.process.*;
 
 import aterm.*;
 
+class Ref {
+  protected ATerm value;
+
+  public Ref(ATerm at) {
+    this.value = at;
+  }
+}
+
 abstract public class Atom extends AbstractProcessExpression {
-  private ATermList args; // arguments of this atom (modified by compile)
+  //private ATermList args; // arguments of this atom (modified by compile)
   private ProcessInstance processInstance;
   // process instance to which the atom belongs
   private Environment env; // the environment of that process instance
   private ATerm test; // optional test that guards this atom
+  private Ref[] atomArgs = new Ref[0];
 
-  public Atom() {
-    this.args = null;
-    addToFirst(this);
-    test = null;
+
+  public void setAtomArgs(Ref r) {
+    atomArgs = new Ref[] { r };
   }
 
-  public Atom(ATermList args) {
-    this();
-    this.args = args;
-    //System.out.println("constructed: " + this);
+  public void setAtomArgs(Ref r1, Ref r2) {
+    atomArgs = new Ref[] { r1, r2 };
   }
 
-  public Atom(ATermList args, ATerm arg) {
-    this();
-    this.args = args.append(arg);
-    //System.out.println("constructed: " + this);
+  public void setAtomArgs(Ref r1, Ref r2, Ref r3) {
+    atomArgs = new Ref[] { r1, r2, r3 };
   }
 
-  public Atom(ATerm arg1, ATerm arg2) {
-    this();
-    this.args = TBTerm.factory.makeList(arg1, TBTerm.factory.makeList(arg2));
+  public void setAtomArgs(Ref[] refs) {
+    atomArgs = refs;
   }
 
-  public Atom(ATerm arg) {
-    this();
-    this.args = TBTerm.factory.makeList(arg);
-  }
+//  public void setAtomArgs(ATermList alist) {
+//    args = alist;
+//    atomArgs = new Ref[args.getLength()];
+//    for (int i = 0; i < args.getLength(); i++) {
+//      atomArgs[i] = new Ref(alist.getFirst());
+//      alist = alist.getNext();
+//      System.out.println("setAtomArgs: atomArgs[" + i + "] = " + atomArgs[i]);
+//    }
+//    System.out.println("setAtomArgs: " + this.args);
+//  }
 
-  public ATermList getArgs() {
-    return args;
-  }
-
-  public void addArgs(ATermList args) {
-    if (this.args != null)
-      System.out.println("*** redefining arguments");
-    this.args = args;
-  }
-
-  public ProcessExpression copy() {
-    Atom newAtom;
-    try {
-      newAtom = (Atom) this.getClass().newInstance();
-    } catch (Exception e) {
-      throw new ToolBusInternalError(e.getMessage());
-    }
-    newAtom.addArgs(this.args);
-    return newAtom;
-  }
+//  public ProcessExpression copy() {
+//    try {
+//      System.out.println("before");
+//      System.out.println(this.getClass());
+//      System.out.println(atomArgs.getClass());
+//
+//      Constructor[] constructors = this.getClass().getConstructors();
+//      Constructor cons = null;
+//      for (int i = 0; i < constructors.length; i++) {
+//        Class parameters[] = constructors[i].getParameterTypes();
+//        if (parameters.length != 1 || !parameters[0].getName().equals("toolbus.atom.Ref"))
+//          continue;
+//        else
+//          cons = constructors[i];
+//      }
+//
+//      if (cons == null)
+//        System.out.println("is null!");
+//      System.out.println("after: " + cons);
+//      return (Atom) cons.newInstance(new Object[] { atomArgs });
+//
+//    } catch (Exception e) {
+//      throw new ToolBusInternalError(e.getMessage());
+//    }
+//  }
 
   public Environment getEnv() {
     return env;
   }
 
+//  public ATermList getArgs() {
+//    return args;
+//  }
+
   public String toString() {
-    ATerm pid = processInstance.getProcessId();
+    ATerm pid;
+    if(processInstance != null){
+      pid = processInstance.getProcessId();
+    } else {
+      pid = null;
+    }
+      
     String strtest = (test == null) ? "" : " if " + test;
-    return this.getClass().getName() + "[" + pid + "]( " + args + ")" + strtest;
+    String res =  this.getClass().getName() + "[" + pid + "]( " ;
+    String sep = "";
+    for(int i = 0; i < atomArgs.length; i++){
+      res = res + sep + atomArgs[i].value;
+      sep = ", ";
+    }
+    return res + ")" + strtest;
   }
 
   public AtomSet getAtoms() {
@@ -86,12 +116,11 @@ abstract public class Atom extends AbstractProcessExpression {
   }
 
   public void addPartner(Atom a) {
-    //partners.add(a);
+    throw new ToolBusInternalError("addPartner not defined");
   }
 
   public AtomSet getPartners() {
-    //return partners;
-    return null;
+    throw new ToolBusInternalError("getPartners not defined");
   }
 
   public boolean hasPartners() {
@@ -100,13 +129,13 @@ abstract public class Atom extends AbstractProcessExpression {
   }
 
   public ATerm toATerm() throws ToolBusException {
-    ATermList args = getArgs();
-    int nargs = args.getLength();
-
-    AFun afun = TBTerm.factory.makeAFun(this.getClass().getName(), nargs, false);
-    ATerm pat = TBTerm.makePattern(args, getEnv(), true);
-
-    return TBTerm.factory.makeAppl(afun, (ATermList) pat);
+    return null;
+//    int nargs = args.getLength();
+//
+//    AFun afun = TBTerm.factory.makeAFun(this.getClass().getName(), nargs, false);
+//    ATerm pat = TBTerm.makePattern(args, getEnv(), true);
+//
+//    return TBTerm.factory.makeAppl(afun, (ATermList) pat);
   }
 
   public void expand(ProcessInstance P, Stack calls) {
@@ -117,9 +146,11 @@ abstract public class Atom extends AbstractProcessExpression {
     this.processInstance = processInstance;
     env = processInstance.getEnv();
     setFollow(follow);
-    //System.out.println(this.getClass().getName() + ": compiling " + args);
-    if (args != null) {
-      args = (ATermList) TBTerm.compileVars(args, env);
+    System.out.println(this.getClass().getName() + ": compiling");
+    for (int i = 0; i < atomArgs.length; i++) {
+      System.out.println("atomArg[" + i + "] = " + atomArgs[i]);
+      ATerm arg = TBTerm.compileVars(atomArgs[i].value, env);
+      atomArgs[i].value = arg;
     }
   }
 
@@ -130,8 +161,8 @@ abstract public class Atom extends AbstractProcessExpression {
       return true;
     }
   }
-  
-  public ProcessState getStartState(){
+
+  public ProcessState getStartState() {
     return getFirst();
   }
 
@@ -161,13 +192,4 @@ abstract public class Atom extends AbstractProcessExpression {
     return processInstance.getToolBus();
   }
 
-  public MatchResult matchArgs(Atom b) throws ToolBusException {
-    if (args.getLength() == 0) {
-      if (b.getArgs().getLength() == 0)
-        return new MatchResult(true, null, null);
-      else
-        return new MatchResult(false, null, null);
-    } else
-      return TBTerm.match(args, env, b.getArgs(), b.getEnv());
-  }
 }

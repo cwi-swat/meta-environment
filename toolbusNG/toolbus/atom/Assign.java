@@ -3,33 +3,34 @@
  */
 package toolbus.atom;
 
-import toolbus.Environment;
-import toolbus.TBTerm;
-import toolbus.ToolBusException;
+import toolbus.*;
+import toolbus.process.*;
 import toolbus.process.ProcessInstance;
 
 import aterm.ATerm;
 
 public class Assign extends Atom {
+  private Ref var;
+  private Ref exp;
 
-  public Assign(ATerm var, ATerm exp) {
-    super(var, exp);
+  public Assign(ATerm v, ATerm e) {
+    var = new Ref(v);
+    exp = new Ref(e);
+    setAtomArgs(var, exp);
   }
-
-  public Assign() {
-    super();
+  
+  public ProcessExpression copy(){
+    return new Assign(var.value,  exp.value);
   }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     super.compile(P, follow);
 
-    ATerm var = getArgs().getFirst();
-    if (!TBTerm.isVar(var))
+    if (!TBTerm.isVar(var.value))
       throw new ToolBusException("left-hand side of := should be a variable");
-    ATerm vartype = TBTerm.getVarType(var);
+    ATerm vartype = TBTerm.getVarType(var.value);
 
-    ATerm exp = getArgs().getLast();
-    ATerm exptype = TBTerm.checkType(exp, this.getEnv());
+    ATerm exptype = TBTerm.checkType(exp.value, this.getEnv());
 
     if (vartype != exptype) // lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
@@ -39,10 +40,8 @@ public class Assign extends Atom {
     if (!isEnabled())
       return false;
     Environment e = this.getEnv();
-    ATerm var = getArgs().getFirst();
-    ATerm exp = getArgs().getLast();
-    ATerm val = TBTerm.eval(exp, e);
-    e.putVar(var, val);
+
+    e.putVar(var.value, TBTerm.eval(exp.value, e));
     return true;
   }
 }

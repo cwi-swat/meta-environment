@@ -81,7 +81,7 @@ public class ProcessDefinition {
     }
     //		System.out.println("formals1 = " + formals1);
     //		System.out.println("assigns = " + assigns);
-    ProcessExpression PE1 = (assigns == null) ? PE.copy() : new Sequence(assigns, PE.copy());
+    ProcessExpression PE1 = (assigns == null) ? PE.copy(): new Sequence(assigns, PE.copy());
     //		System.out.println("PE1 = " + PE1);
     //		System.out.println("env = " + env);
     PE1.expand(P, calls);

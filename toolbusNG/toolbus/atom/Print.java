@@ -2,27 +2,29 @@
  * @author paulk
  */
 package toolbus.atom;
-import toolbus.Environment;
-import toolbus.TBTerm;
-import toolbus.ToolBusException;
+import toolbus.*;
+import toolbus.process.ProcessExpression;
 
+import aterm.*;
 import aterm.ATermList;
 
 public class Print extends Atom {
+  private Ref arg;
 
-  public Print(ATermList args) {
-    super(args);
+  public Print(ATerm a) {
+    arg = new Ref(a);
+    setAtomArgs(arg);
   }
-
-  public Print() {
-    super();
+  
+  public ProcessExpression copy(){
+    return new Print(arg.value);
   }
 
   public boolean execute() throws ToolBusException {
     if (super.execute()) {
       Environment e = getEnv();
       //System.out.println("Print, env is: " + e);
-      ATermList args = getArgs();
+      ATermList args = (ATermList) arg.value;
       for (int i = 0; i < args.getLength(); i++) {
         System.out.print(TBTerm.eval(args.elementAt(i), e));
       }

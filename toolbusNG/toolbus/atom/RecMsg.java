@@ -1,8 +1,9 @@
 package toolbus.atom;
 
 import toolbus.TBTerm;
+import toolbus.process.ProcessExpression;
 
-import aterm.ATermList;
+import aterm.*;
 
 /**
  * @author paulk, Aug 3, 2002
@@ -10,15 +11,15 @@ import aterm.ATermList;
 
 public class RecMsg extends CommAtom {
 
-  public RecMsg(ATermList args) {
-    super(args);
+  public RecMsg(ATerm msg) {
+    super(msg);
+  }
+  
+  public ProcessExpression copy(){
+    return new RecMsg(getMsg());
   }
 
-  public RecMsg() {
-    super();
-  }
-
-  public boolean canCommunicate(Atom a) {
-    return a instanceof SndMsg && TBTerm.mightMatch(getArgs(), a.getArgs());
+  public boolean canCommunicate(CommAtom a) {
+    return a instanceof SndMsg && TBTerm.mightMatch(getMsg(), a.getMsg());
   }
 }

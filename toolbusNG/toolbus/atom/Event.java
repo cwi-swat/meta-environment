@@ -1,8 +1,7 @@
 package toolbus.atom;
 
-import toolbus.MatchResult;
-import toolbus.ToolBusException;
-import toolbus.process.ProcessInstance;
+import toolbus.*;
+import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
@@ -13,16 +12,12 @@ import aterm.ATerm;
 
 public class Event extends ToolAtom {
 
-  public Event(ATerm trm) {
-    super(trm);
+  public Event(ATerm toolarg) {
+    super(toolarg);
   }
-
-  public Event() {
-    super();
-  }
-
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    super.compile(P, follow);
+  
+  public ProcessExpression copy(){
+    return new Event(getToolarg());
   }
 
   public boolean execute() throws ToolBusException {
