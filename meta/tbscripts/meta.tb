@@ -24,7 +24,6 @@
 #include "button-actions.tb"
 #include "notification.tb"
 #include "dump-equations.tb"
-#include "query.tb"
 #include "meta-interface.tb"
 
 /* Tool interfaces */
@@ -43,7 +42,7 @@
 #include "apply-function.idef"
 
 #ifdef QUERY
-#include "query-tool.idef" 
+#include "DisplayQuery.idef" 
 #endif
 
 process META is
