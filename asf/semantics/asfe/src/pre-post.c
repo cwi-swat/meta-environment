@@ -28,18 +28,10 @@ ASF_ASFCondition prepareCondition(ASF_ASFCondition cond)
   PT_Tree lhs, rhs;
   
   lhs = ASFtoPT(ASF_getASFConditionLhs(cond));
-  lhs = RWprepareTerm(lhs, ATfalse);
-
-    
-  rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
-  rhs = RWprepareTerm(rhs, ATfalse);
-  
   cond = ASF_setASFConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
-  cond = ASF_setASFConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
 
-  if (ASF_isASFConditionPositive(cond)) {
-    RWsetError("Using deprecated condition syntax \"=\"", PT_makeTreeLit(""));
-  }
+  rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
+  cond = ASF_setASFConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
 
   return cond;
 }
