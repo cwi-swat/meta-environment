@@ -906,12 +906,14 @@ static ATbool SG_MoreEager(int prodtype0, int prodtype1)
 
 static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
 {
-  tree newt0 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t0);
-  tree newt1 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t1);
+  tree newt0, newt1;
 
   if (SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(t1))) {
     return ATtrue;
   }
+
+  newt0 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t0);
+  newt1 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t1);
   if (ATgetType(newt0) == AT_APPL &&
       ATgetAFun(newt0) != SG_Amb_AFun &&
       ATgetType(newt1) == AT_APPL &&
