@@ -5,8 +5,6 @@ AC_INIT(configure.in)
 
 AM_INIT_AUTOMAKE(relation-calculus, 0.1)
 
-AC_CONFIG_HEADERS
-
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -153,7 +151,11 @@ dnl  doc/Makefile
 dnl  vis/Makefile
   demo/Makefile
   demo/pico/Makefile
-dnl  demo/java/Makefile
+  demo/java/Makefile
+dnl  demo/java/example-hotdraw/Makefile
+  demo/java/extraction/Makefile
+  demo/java/grammar/Makefile
+  demo/java/rscripts/Makefile
 )
 
 dnl }}}

@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# extract-java -- extract fact from Java source code
+
+set -e
+
+# {{{  variables
+prefix=__PREFIX__
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PRG=`basename $0`
+EVALUATOR=${bindir}/RscriptCalculator
+JAVA_PARSE_TABLE=${datadir}/java.trm.tbl
+JAVA_ANALYSIS=${datadir}/JavaAnalysis.eqs
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG dirname
+
+Options:
+
+Examples:
+  $PRG JHotDraw5.2-sources
+
+ENDCAT
+}
+
+# }}}
+
+find . -name "*.java" -a -exec "extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -t $JAVA_PARSE_TABLE {}"
+
+
+#for d in $SUBDIRS
+#do
+#	echo $d
+#	extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -t $JAVA_PARSE_TABLE $SOURCE/$d/*.java
+#done
