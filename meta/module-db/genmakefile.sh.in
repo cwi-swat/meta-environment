@@ -126,9 +126,7 @@ XLIBS           = -L$(prefix)/lib -L$(ATERM)/lib \\
 VAR-LIBS        = -lsupport-cc -lATB-cc -lAsFix-cc -lATerm-cc
 VAR-FLAGS       = @CFLAGS@ $(XCFLAGS)
 
-SRCS="`cat $1.module-list` init.c"\\
-#`ls AUX*.c | sed 's/^/     /g'|fmt | sed 's/$/ \\\\/g'`
-#     init.c
+SRCS=`cat $1.module-list` init.c
 
 OBJS=$(SRCS:.c=.o)
 
