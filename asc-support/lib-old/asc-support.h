@@ -251,4 +251,6 @@ extern void init_all();
 extern ATerm traverse(Symbol func, int argc, int traverse_arg, ...);
 extern ATerm analyze(Symbol func, Symbol synthesizer, ATerm start, int argc, int traverse_arg, ...);
 
+extern ATerm innermost(ATerm );
+extern ATerm toasfix(ATerm, ATerm, ATerm );
 #endif  /* ASC_SUPPORT_H */
