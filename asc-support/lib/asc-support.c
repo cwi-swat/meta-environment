@@ -633,6 +633,7 @@ static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, ATerm accu,
 ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
 {
   int type = ATgetType(arg0);
+  ATerm annos = keep_annotations ? ATgetAnnotations(arg0) : NULL;
 
   if (type == AT_APPL) {
     Symbol sym;
@@ -677,6 +678,9 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
     arg0 = (ATerm) call_kids_trafo_list(trav, (ATermList) arg0, extra_args);
   }
 
+  if (arg0 != NULL && annos != NULL) {
+    arg0 = ATsetAnnotations(arg0, annos);
+  }
 
   return arg0;
 }
@@ -728,6 +732,7 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
 			  ATermList extra_args)
 {
   int type = ATgetType(arg0);
+  ATerm annos = keep_annotations ? ATgetAnnotations(arg0) : NULL;
 
   if (type == AT_APPL) {
     int idx;
@@ -774,7 +779,11 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
     }
   }
   else if (type == AT_LIST) {
-     return call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
+     arg0 = call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
+  }
+
+  if (arg0 != NULL && annos != NULL) {
+    arg0 = ATsetAnnotations(arg0, annos);
   }
 
   return (ATerm) ATmakeAppl2(tuplesym , arg0,arg1);

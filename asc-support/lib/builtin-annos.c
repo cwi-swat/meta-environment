@@ -80,6 +80,7 @@ static PT_Tree get_anno(PT_Tree term, PT_Tree key)
   PT_Tree anno = PT_TreeFromTerm(PT_getTreeAnnotation(term, (ATerm) key));
 
   if (anno == NULL) {
+    /* TODO: fix this type incorrect solution! */
     return noAnno();
   }
 
