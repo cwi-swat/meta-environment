@@ -1,0 +1,11 @@
+process P is
+let X : int, Y : int
+in
+   X := 10 . Y := 20 .
+   if greater(X,Y) then print ko
+   else 
+      if equal(X,10) then print ok else print ko fi
+   fi
+endlet
+
+toolbus(P)

@@ -64,6 +64,7 @@ public class TscriptParser {
 
   private static final int trueFun = id + 1;
   private static final int falseFun = trueFun + 1;
+  private static final int strcon = falseFun + 1;
 
   private boolean shouldBuildArgs(int op) {
     return op < apply;
@@ -108,6 +109,7 @@ public class TscriptParser {
     Funs.put("id", new Integer(id));
     Funs.put("true", new Integer(trueFun));
     Funs.put("false", new Integer(falseFun));
+    Funs.put("strcon", new Integer(strcon));
   }
 
   private ATerm unquote(ATerm type) {
@@ -165,7 +167,7 @@ public class TscriptParser {
 
     if (obj == null) {
       if (args.length == 0)
-        return t;
+        return unquote(t);
       else
         throw new ToolBusException("Unkown: " + name);
     }
@@ -228,6 +230,9 @@ public class TscriptParser {
       case id :
         return args[0];
 
+      case strcon :
+        return unquote(args[0]);
+        
       case trueFun :
         return TBTerm.True;
 

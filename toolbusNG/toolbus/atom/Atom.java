@@ -59,7 +59,12 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   }
 
   public void setTest(ATerm test) throws ToolBusException {
-    this.test = TBTerm.resolveVars(test, env);
+    ATerm rtst = TBTerm.resolveVars(test, env);
+    if(this.test == null){
+      this.test = rtst;
+    } else {
+      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+    }
   }
 
   public ToolBus getToolBus() {

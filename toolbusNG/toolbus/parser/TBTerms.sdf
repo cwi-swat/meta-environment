@@ -1,39 +1,48 @@
-module TBTerms
-
-imports Integers 
+module TBTerms 
 
 imports asf/Comments
 
 exports
 
-  sorts Id Vname  TBTerm TBTermList Var GenVar
-  sorts String  L-Char EscChar
+  sorts  NatCon Nat Int Real Id Vname  TBTerm TBTermList Var GenVar
+  sorts StrCon String  L-Char EscChar
 
   lexical syntax
+    [0-9]+ 		-> NatCon
     [a-z] [a-zA-Z0-9\-]* 	-> Id
     "\\" ~[] 			-> EscChar {avoid}
     ~[\0-\31\"\\] \/ [\t\n] 	-> L-Char
     EscChar 			-> L-Char
-    "\"" L-Char* "\"" 		-> String
+    "\"" L-Char* "\"" 		-> StrCon
     [A-Z] [a-zA-Z0-9]* 		-> Vname
 
   lexical restrictions
+    NatCon -/- [0-9]
     Id -/- [a-zA-Z0-9\-]
     Vname -/- [a-zA-Z0-9\-]
 
   context-free syntax
+    NatCon			-> Nat 	  {cons("natcon")}
+    Int "." NatCon 		-> Real   {cons("real")}
+    "(" Nat ")" 		-> Nat    {bracket}
+    Nat 			-> Int
+    "+" Nat 			-> Int    {cons("posint")}
+    "-" Nat 			-> Int    {cons("negint")}
+    "(" Int ")" 		-> Int    {bracket}
+    StrCon			-> String {cons("strcon")}
+
     Int 			-> TBTerm
     Real			-> TBTerm
     String 			-> TBTerm 
-    Vname 			-> Var
 
+    Vname 			-> Var
     Var 			-> GenVar  {cons("var")}
     Var "?" 			-> GenVar  {cons("resvar")}
     GenVar 			-> TBTerm
 
     "<" TBTerm ">" 		-> TBTerm  {cons("placeholder")}
 
-    Id 				-> TBTerm  %% {cons("Id")}
+    Id 				-> TBTerm   %% {cons("apply")}
 
     Id "(" TBTermList ")" 	-> TBTerm  {cons("apply")}
 

@@ -2,6 +2,8 @@
  * @author paulk
  */
 package toolbus.atom;
+import java.io.*;
+
 import toolbus.*;
 import toolbus.process.ProcessExpression;
 import aterm.*;
@@ -22,7 +24,9 @@ public class Print extends Atom {
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
       Environment e = getEnv();
-      getToolBus().getPrintWriter().println(TBTerm.substitute(arg.value, e).toString());
+      PrintWriter out = getToolBus().getPrintWriter();
+      out.println(TBTerm.substitute(arg.value, e).toString());
+      out.flush();
       return nextState();
     } else {
       return false;
