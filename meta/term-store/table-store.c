@@ -36,9 +36,9 @@ void TS_initTableStore()
 }
 
 /*}}}  */
-/*{{{  static int TS_findTable(char *name) */
+/*{{{  static int TS_findTable(const char *name) */
 
-static int TS_findTable(char *name)
+static int TS_findTable(const char *name)
 {
   int i;
 
@@ -53,25 +53,25 @@ static int TS_findTable(char *name)
 }
 
 /*}}}  */
-/*{{{  char* TS_getTableValueType(char *name) */
+/*{{{  char* TS_getTableValueType(const char *name) */
 
-char* TS_getTableValueType(char *name)
+char* TS_getTableValueType(const char *name)
 {
   return tableStore[TS_findTable(name)].valueType;
 }
 
 /*}}}  */
-/*{{{  ATbool TS_tableExists(char *name) */
+/*{{{  ATbool TS_tableExists(const char *name) */
 
-ATbool TS_tableExists(char *name)
+ATbool TS_tableExists(const char *name)
 {
   return (TS_findTable(name) != NO_SUCH_TABLE);
 }
 
 /*}}}  */
-/*{{{  void addTable(char *name, char* valueType) */
+/*{{{  void addTable(const char *name, const char * valueType) */
 
-void addTable(char *name, char* valueType)
+void addTable(const char *name, const char * valueType)
 {
   int i;
 
@@ -98,9 +98,9 @@ void addTable(char *name, char* valueType)
 }  
 
 /*}}}  */
-/*{{{  void TS_addTable(char *name, char* valueType) */
+/*{{{  void TS_addTable(const char *name, const char * valueType) */
 
-void TS_addTable(char *name, char* valueType)
+void TS_addTable(const char *name, const char * valueType)
 {
   if (!TS_tableExists(name)) {
     addTable(name, valueType);
@@ -111,9 +111,9 @@ void TS_addTable(char *name, char* valueType)
 }  
 
 /*}}}  */
-/*{{{  void TS_removeTable(char *name) */
+/*{{{  void TS_removeTable(const char *name) */
 
-void TS_removeTable(char *name)
+void TS_removeTable(const char *name)
 {
   int i;
 
@@ -131,9 +131,9 @@ void TS_removeTable(char *name)
 }
 
 /*}}}  */
-/*{{{  Table TS_getTable(char *name) */
+/*{{{  Table TS_getTable(const char *name) */
 
-Table TS_getTable(char *name)
+Table TS_getTable(const char *name)
 {
   int i;
 
@@ -149,9 +149,9 @@ Table TS_getTable(char *name)
 }
 
 /*}}}  */
-/*{{{  void TS_clearTable(char *name) */
+/*{{{  void TS_clearTable(const char *name) */
 
-void TS_clearTable(char *name)
+void TS_clearTable(const char *name)
 {
   char *valueType = strdup(TS_getTableValueType(name));
 
@@ -176,9 +176,9 @@ void TS_removeValueFromAllTables(ATerm key)
 }
 
 /*}}}  */
-/*{{{  void TS_putValue(char* name, ATerm key, ATermList value) */
+/*{{{  void TS_putValue(const char * name, ATerm key, ATermList value) */
 
-void TS_putValue(char* name, ATerm key, ATerm value)
+void TS_putValue(const char * name, ATerm key, ATerm value)
 {
   Table table = TS_getTable(name);
 
@@ -188,9 +188,9 @@ void TS_putValue(char* name, ATerm key, ATerm value)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getValue(char* name, ATerm key) */
+/*{{{  ATermList TS_getValue(const char * name, ATerm key) */
 
-ATerm TS_getValue(char* name, ATerm key)
+ATerm TS_getValue(const char* name, ATerm key)
 {
   Table table = TS_getTable(name);
 
@@ -202,9 +202,9 @@ ATerm TS_getValue(char* name, ATerm key)
 }
 
 /*}}}  */
-/*{{{  void TS_removeValue(char* name, ATerm key) */
+/*{{{  void TS_removeValue(const char * name, ATerm key) */
 
-void TS_removeValue(char* name, ATerm key)
+void TS_removeValue(const char * name, ATerm key)
 {
   Table table = TS_getTable(name);
 
@@ -214,9 +214,9 @@ void TS_removeValue(char* name, ATerm key)
 }
 
 /*}}}  */
-/*{{{  ATbool    TS_containsKey(char* name, ATerm key) */
+/*{{{  ATbool    TS_containsKey(const char * name, ATerm key) */
 
-ATbool    TS_containsKey(char* name, ATerm key)
+ATbool    TS_containsKey(const char * name, ATerm key)
 {
   Table table = TS_getTable(name);
 
@@ -228,9 +228,9 @@ ATbool    TS_containsKey(char* name, ATerm key)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getAllKeys(char* name) */
+/*{{{  ATermList TS_getAllKeys(const char * name) */
 
-ATermList TS_getAllKeys(char* name)
+ATermList TS_getAllKeys(const char * name)
 {
   Table table = TS_getTable(name);
 
@@ -242,9 +242,9 @@ ATermList TS_getAllKeys(char* name)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getAllValues(char* name) */
+/*{{{  ATermList TS_getAllValues(const char * name) */
 
-ATermList TS_getAllValues(char* name)
+ATermList TS_getAllValues(const char * name)
 {
   Table table = TS_getTable(name);
 
@@ -256,9 +256,9 @@ ATermList TS_getAllValues(char* name)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getValues(char* name, ATermList keys) */
+/*{{{  ATermList TS_getValues(const char * name, ATermList keys) */
 
-ATermList TS_getValues(char* name, ATermList keys)
+ATermList TS_getValues(const char * name, ATermList keys)
 {
   Table table = TS_getTable(name);
 
@@ -270,9 +270,9 @@ ATermList TS_getValues(char* name, ATermList keys)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getAllKeyValuePairs(char *table) */
+/*{{{  ATermList TS_getAllKeyValuePairs(const char *table) */
 
-ATermList TS_getAllKeyValuePairs(char *table)
+ATermList TS_getAllKeyValuePairs(const char *table)
 {
   Table t = TS_getTable(table);
 
@@ -284,9 +284,9 @@ ATermList TS_getAllKeyValuePairs(char *table)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_filterKeys(char *name, ATermList keysList) */
+/*{{{  ATermList TS_filterKeys(const char *name, ATermList keysList) */
 
-ATermList TS_filterKeys(char *table, ATermList keysList)
+ATermList TS_filterKeys(const char *table, ATermList keysList)
 {
   ATerm key;
   ATermList unknownKeys = ATempty;

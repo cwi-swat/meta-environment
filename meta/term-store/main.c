@@ -47,12 +47,12 @@ static void version(const char *msg)
 #define streq(s1,s2) (strcmp(s1,s2) == 0)
 #endif
 
-/*{{{  ATerm get_str_value(int conn, char *table, ATerm key) */
+/*{{{  ATerm get_str_value(int conn, const char *table, ATerm key) */
 
-ATerm get_str_value(int conn, char *table, ATerm key)
+ATerm get_str_value(int conn, const char *table, ATerm key)
 {
   ATerm value = TS_getValue(table, key);
-  char *valueType = TS_getTableValueType(table);
+  const char *valueType = TS_getTableValueType(table);
 
   if (!streq(valueType, TS_STR_TYPE)) {
     ATwarning("Warning: trying to obtain string from a term table");
@@ -69,9 +69,9 @@ ATerm get_str_value(int conn, char *table, ATerm key)
 }
 
 /*}}}  */
-/*{{{  ATerm get_term_value(int conn, char *table, ATerm key) */
+/*{{{  ATerm get_term_value(int conn, const char *table, ATerm key) */
 
-ATerm get_term_value(int conn, char *table, ATerm key)
+ATerm get_term_value(int conn, const char *table, ATerm key)
 {
   ATerm value = TS_getValue(table, key);
   char *valueType = TS_getTableValueType(table);
@@ -91,33 +91,33 @@ ATerm get_term_value(int conn, char *table, ATerm key)
 }
 
 /*}}}  */
-/*{{{  void remove_value(int conn, char *table, ATerm key) */
+/*{{{  void remove_value(int conn, const char *table, ATerm key) */
 
-void remove_value(int conn, char *table, ATerm key)
+void remove_value(int conn, const char *table, ATerm key)
 {
   TS_removeValue(table, key);
 }
 
 /*}}}  */
-/*{{{  void put_value(int conn, char *table, ATerm key, ATerm value) */
+/*{{{  void put_value(int conn, const char *table, ATerm key, ATerm value) */
 
-void put_term_value(int conn, char *table, ATerm key, ATerm value)
+void put_term_value(int conn, const char *table, ATerm key, ATerm value)
 {
   TS_putValue(table, key, value);
 }
 
 /*}}}  */
-/*{{{  void put_str_value(int conn, char *table, ATerm key, char* value) */
+/*{{{  void put_str_value(int conn, const char *table, ATerm key, const char* value) */
 
-void put_str_value(int conn, char *table, ATerm key, char* value)
+void put_str_value(int conn, const char *table, ATerm key, const char* value)
 {
   TS_putValue(table, key, ATmake("<str>", value));
 }
 
 /*}}}  */
-/*{{{  ATerm contains_key(int conn, char *table, ATerm key) */
+/*{{{  ATerm contains_key(int conn, const char *table, ATerm key) */
 
-ATerm contains_key(int conn, char *table, ATerm key)
+ATerm contains_key(int conn, const char *table, ATerm key)
 {
   return TS_containsKey(table,key) ?
     RESULT(ATmake("yes")) :
@@ -125,33 +125,33 @@ ATerm contains_key(int conn, char *table, ATerm key)
 }
 
 /*}}}  */
-/*{{{  void clear_table(int conn, char *table) */
+/*{{{  void clear_table(int conn, const char *table) */
 
-void clear_table(int conn, char *table)
+void clear_table(int conn, const char *table)
 {
   TS_clearTable(table);
 }
 
 /*}}}  */
-/*{{{  ATerm get_all_keys(int conn, char *table) */
+/*{{{  ATerm get_all_keys(int conn, const char *table) */
 
-ATerm get_all_keys(int conn, char *table)
+ATerm get_all_keys(int conn, const char *table)
 {
   return RESULT((ATerm) TS_getAllKeys(table));
 }
 
 /*}}}  */
-/*{{{  ATerm get_all_values(int conn, char *table) */
+/*{{{  ATerm get_all_values(int conn, const char *table) */
 
-ATerm get_all_values(int conn, char *table)
+ATerm get_all_values(int conn, const char *table)
 {
   return RESULT((ATerm) TS_getAllValues(table));
 }
 
 /*}}}  */
-/*{{{  ATerm get_values(int conn, char *table, ATerm keys) */
+/*{{{  ATerm get_values(int conn, const char *table, ATerm keys) */
 
-ATerm get_values(int conn, char *table, ATerm keys)
+ATerm get_values(int conn, const char *table, ATerm keys)
 {
   ATermList values = TS_getValues(table, (ATermList) keys);
   if (values != NULL) {
@@ -163,25 +163,25 @@ ATerm get_values(int conn, char *table, ATerm keys)
 }
 
 /*}}}  */
-/*{{{  ATerm get_key_value_pairs(int conn, char *table) */
+/*{{{  ATerm get_key_value_pairs(int conn, const char *table) */
 
-ATerm get_key_value_pairs(int conn, char *table)
+ATerm get_key_value_pairs(int conn, const char *table)
 {
   return RESULT((ATerm) TS_getAllKeyValuePairs(table));
 }
 
 /*}}}  */
-/*{{{  void remove_table(int conn, char *table) */
+/*{{{  void remove_table(int conn, const char *table) */
 
-void remove_table(int conn, char *table)
+void remove_table(int conn, const char *table)
 {
   TS_removeTable(table);
 }
 
 /*}}}  */
-/*{{{  void add_table(int conn, char *table) */
+/*{{{  void add_table(int conn, const char *table) */
 
-void add_table(int conn, char *table, char *valueType)
+void add_table(int conn, const char *table, const char *valueType)
 {
   TS_addTable(table, valueType);
 }
@@ -196,9 +196,9 @@ void remove_value_from_all_tables(int conn, ATerm key)
 
 /*}}}  */
 
-/*{{{  ATerm filter_keys(int conn, char *table, ATerm keys) */
+/*{{{  ATerm filter_keys(int conn, const char *table, ATerm keys) */
 
-ATerm filter_keys(int conn, char *table, ATerm keys)
+ATerm filter_keys(int conn, const char *table, ATerm keys)
 {
   return RESULT((ATerm) TS_filterKeys(table, (ATermList) keys));
 }

@@ -9,23 +9,23 @@
 
 /* Table store operations */
 void  TS_initTableStore();
-void  TS_addTable(char *name, char* valueType);
-void  TS_removeTable(char *name);
-Table TS_getTable(char *name);
-void  TS_clearTable(char *name);
-char* TS_getTableValueType(char *name);
+void  TS_addTable(const char *name, const char* valueType);
+void  TS_removeTable(const char *name);
+Table TS_getTable(const char *name);
+void  TS_clearTable(const char *name);
+char* TS_getTableValueType(const char *name);
 
 /* Table operations */
-void      TS_putValue(char* table, ATerm key, ATerm value);
-ATerm     TS_getValue(char* table, ATerm key);
-void      TS_removeValue(char* table, ATerm key);
+void      TS_putValue(const char* table, ATerm key, ATerm value);
+ATerm     TS_getValue(const char* table, ATerm key);
+void      TS_removeValue(const char* table, ATerm key);
 void      TS_removeValueFromAllTables(ATerm key);
-ATbool    TS_containsKey(char* table, ATerm key);
-ATermList TS_getAllKeys(char* table);
-ATermList TS_getAllValues(char* table);
-ATermList TS_getValues(char* table, ATermList keys);
-ATermList TS_getAllKeyValuePairs(char *table);
-ATermList TS_filterKeys(char* table, ATermList keys);
+ATbool    TS_containsKey(const char* table, ATerm key);
+ATermList TS_getAllKeys(const char* table);
+ATermList TS_getAllValues(const char* table);
+ATermList TS_getValues(const char* table, ATermList keys);
+ATermList TS_getAllKeyValuePairs(const char *table);
+ATermList TS_filterKeys(const char* table, ATermList keys);
 ATerm     TS_getSnapshot();
 void	  TS_loadSnapshot(ATerm snapshot);
 
