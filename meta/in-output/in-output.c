@@ -499,6 +499,49 @@ ATerm open_file(int cid, char *path)
 }
 
 /*}}}  */
+/*{{{  ATerm remove_module(int cid, char *name) */
+
+ATerm remove_module(int cid, char *name)
+{
+  char   *full;
+  char   bafsdffile[PATH_LEN] = {'\0'};
+  char   textsdffile[PATH_LEN] = {'\0'};
+  char   bafasffile[PATH_LEN] = {'\0'};
+  char   textasffile[PATH_LEN] = {'\0'};
+  char   *p;
+
+  sprintf(textsdffile, "%s%s", name, SDF_EXT);
+  full = find_in_path(textsdffile);
+  if (full != NULL) {
+    remove(full);
+
+    strcpy(textsdffile, full);
+    sprintf(bafsdffile, "%s%s", textsdffile, BAF_EXT);
+  
+    if (fileexists(bafsdffile)) {
+      remove(bafsdffile);
+    }
+
+    strcpy(textasffile, textsdffile);
+    p = strrchr(textasffile, '.');
+    if (p != NULL) {
+      strcpy(p, ASF_EXT);
+    }
+
+    if (fileexists(textasffile)) {
+      remove(textasffile);
+
+      sprintf(bafasffile, "%s%s", textasffile, BAF_EXT);
+
+      if (fileexists(bafasffile)) {
+        remove(bafasffile);
+      }
+    }
+  }
+  return ATmake("snd-value(removed-module)");
+}
+
+/*}}}  */
 /*{{{  ATerm open_sdf_file(int cid, char *name) */
 
 ATerm open_sdf_file(int cid, char *name)

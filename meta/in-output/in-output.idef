@@ -166,6 +166,11 @@ in
       rec-value(IO, create-equations-dump-file-failed(Name, Text?)) .
 	  snd-msg(create-equations-dump-file-failed(Name, Text))
     )
+  +
+    rec-msg(remove-module(Name?)) .
+    snd-eval(IO, remove-module(Name)) .
+    rec-value(IO, removed-module) .
+    snd-msg(removed-module)
   ) *
   delta
 endlet
