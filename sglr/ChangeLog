@@ -1,7 +1,14 @@
 $Id$
 
+Sun Oct 24 11:48:15 CEST 2004 <jong@cwi.nl>
+ * package:
+   - bump version to 3.12.1 as 3.12 was apparently already
+     released (says daybuild)
+ * libsglr/parse-table.c:
+   - fix variable declaration not at the beginning of a block
+
 Fri Oct 22 11:42:47 CEST 2004 <jong@cwi.nl>
- * sglr/libsglr/parse-table.c:
+ * libsglr/parse-table.c:
    - fix SG_addParseTableErrorError did not deal with a NULL path.
      This happens when it is invoked by the Meta Environment, as
      opposed to commandline.

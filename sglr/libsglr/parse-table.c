@@ -418,6 +418,8 @@ void SG_addParseTableErrorError(const char *path, const char *contentDescription
 {
   if (ERR_isErrorListEmpty(ptErrorList)) {
     ERR_Subject subject;
+    ERR_Error error;
+
     if (path != NULL) {
       ERR_Location posinfo = ERR_makeLocationFile(path);
       subject = ERR_makeSubjectLocalized(contentDescription, posinfo);
@@ -425,8 +427,9 @@ void SG_addParseTableErrorError(const char *path, const char *contentDescription
     else {
       subject = ERR_makeSubjectSubject(contentDescription);
     }
-    ERR_Error error = ERR_makeErrorError("Parse Table error",
-	     		                 ERR_makeSubjectListSingle(subject));
+
+    error = ERR_makeErrorError("Parse Table error",
+			       ERR_makeSubjectListSingle(subject));
     ptErrorList = ERR_makeErrorListMany(error, ptErrorList);
   }
 }
