@@ -119,7 +119,7 @@ ATbool PT_isVarDefault(PT_Production prod)
     PT_Symbols lhs = PT_getProductionLhs(prod);
     PT_Symbol rhs = PT_getProductionRhs(prod);
 
-    if (PT_isSymbolCf(rhs) && PT_hasSymbolsHead(lhs)) {
+    if ((PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) && PT_hasSymbolsHead(lhs)) {
       PT_Symbol lhssym = PT_getSymbolsHead(lhs);
       PT_Symbols tail = PT_getSymbolsTail(lhs);
       return PT_isSymbolsEmpty(tail) && PT_isSymbolVarSym(lhssym);
@@ -704,12 +704,12 @@ ATbool PT_isTreeVarList(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isVarDefault(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym)) {
-        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterPlus(cfsym) 
-               || PT_isSymbolIterStar(cfsym)
-               || PT_isSymbolIterPlusSep(cfsym) 
-               || PT_isSymbolIterStarSep(cfsym);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(sym) 
+               || PT_isSymbolIterStar(sym)
+               || PT_isSymbolIterPlusSep(sym) 
+               || PT_isSymbolIterStarSep(sym);
       }
     }
   }
@@ -722,10 +722,10 @@ ATbool PT_isTreeVarListStar(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isVarDefault(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym)) {
-        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterStar(cfsym)
-               || PT_isSymbolIterStarSep(cfsym);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterStar(sym)
+               || PT_isSymbolIterStarSep(sym);
       }
     }
   }
@@ -738,10 +738,10 @@ ATbool PT_isTreeVarListPlus(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isVarDefault(prod)) {
       PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym)) {
-        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterPlus(cfsym) 
-               || PT_isSymbolIterPlusSep(cfsym);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(sym) 
+               || PT_isSymbolIterPlusSep(sym);
       }
     }
   }
