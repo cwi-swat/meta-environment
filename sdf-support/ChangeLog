@@ -1,5 +1,8 @@
 $Id$
 
+Fri Aug 27 14:52:49 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
 Mon Jul 19 11:34:53 CEST 2004 <jong@cwi.nl>
  * sdf-support.pkg:
    - remove dependency on toolbus

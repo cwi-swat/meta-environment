@@ -65,9 +65,8 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
     ptSymbols = SDFSymbolsToPtSymbols(sdfSymbols);
   }
   else {
-/* This should be a warning instead of an error!!! */
     ATwarning("SDFProductionToPtProduction: unable to convert %s\n", 
-	      PT_yieldTree((PT_Tree) sdfProduction));
+	      PT_yieldTreeToString((PT_Tree) sdfProduction, ATfalse));
     return NULL;
   }
 
@@ -146,12 +145,13 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     result = PT_makeSymbolSort("<Start>"); 
   }
   else if (SDF_isSymbolSort(sdfSymbol)) {
-    char *str = PT_yieldTree((PT_Tree) SDF_getSymbolSort(sdfSymbol));
+    char *str = PT_yieldTreeToString((PT_Tree) SDF_getSymbolSort(sdfSymbol),
+				     ATfalse);
     result = PT_makeSymbolSort(str); 
   }
   else if (SDF_isSymbolLit(sdfSymbol)) {
     SDF_Literal sdfLit = SDF_getSymbolLiteral(sdfSymbol);
-    char *str = unquote_str(PT_yieldTree((PT_Tree) sdfLit));
+    char *str = unquote_str(PT_yieldTreeToString((PT_Tree) sdfLit, ATfalse));
     result = PT_makeSymbolLit(str);
   }
   else if (SDF_isSymbolIter(sdfSymbol)) {
@@ -182,7 +182,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Symbol sdfIterSymbol = SDF_getSymbolSymbol(sdfSymbol);
     SDF_NatCon sdfN = SDF_getSymbolN(sdfSymbol);
     PT_Symbol ptIterSymbol = SDFSymbolToPtSymbol(sdfIterSymbol);
-    int ptN = atoi(PT_yieldTree((PT_Tree) sdfN));
+    int ptN = atoi(PT_yieldTreeToString((PT_Tree) sdfN, ATfalse));
     result = PT_makeSymbolIterN(ptIterSymbol,ptN);
   }
   else if (SDF_isSymbolIterSepN(sdfSymbol)) {
@@ -191,7 +191,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_NatCon sdfN = SDF_getSymbolN(sdfSymbol);
     PT_Symbol ptIterSymbol = SDFSymbolToPtSymbol(sdfIterSymbol);
     PT_Symbol ptSepSymbol = SDFSymbolToPtSymbol(sdfIterSep);
-    int ptN = atoi(PT_yieldTree((PT_Tree) sdfN));
+    int ptN = atoi(PT_yieldTreeToString((PT_Tree) sdfN, ATfalse));
     result = PT_makeSymbolIterSepN(ptIterSymbol,ptSepSymbol,ptN);
   }
   else if (SDF_isSymbolCf(sdfSymbol)) {
@@ -254,7 +254,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Sort sdfSort = SDF_getSymbolSort(sdfSymbol);
     SDF_SymbolParameters sdfParameters = SDF_getSymbolParameters(sdfSymbol);
     PT_Symbols ptParameters = SDFSymbolParametersToPtSymbols(sdfParameters);
-    char *ptSort = PT_yieldTree((PT_Tree) sdfSort);
+    char *ptSort = PT_yieldTreeToString((PT_Tree) sdfSort, ATfalse);
     result = PT_makeSymbolParameterizedSort(ptSort, ptParameters);
   }
   else if (SDF_isSymbolAlt(sdfSymbol)) {
@@ -286,7 +286,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
   }
   else {
     ATerror("SDFSymbolToPtSymbol: unable to convert symbol %t: %s\n", 
-	    sdfSymbol, PT_yieldTree((PT_Tree) sdfSymbol));
+	    sdfSymbol, PT_yieldTreeToString((PT_Tree) sdfSymbol, ATfalse));
     result = NULL;
   }
 	    
@@ -357,7 +357,8 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   else if (SDF_isAttributeId(sdfAttribute)) {
     SDF_ModuleName sdfModuleName = SDF_getAttributeModuleName(sdfAttribute);
     SDF_ModuleId  sdfModuleId = SDF_getModuleNameModuleId(sdfModuleName);
-    char *str = unquote_str(PT_yieldTree((PT_Tree) sdfModuleId));
+    char *str = unquote_str(PT_yieldTreeToString((PT_Tree) sdfModuleId,
+						 ATfalse));
     ptAttr = PT_makeAttrId(str);         
   }
   else if (SDF_isAttributeAssoc(sdfAttribute)) {
@@ -380,14 +381,14 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
     ptAttr = PT_makeAttrAssoc(ptAssoc);
   }
   else if (SDF_isAttributeId(sdfAttribute)) {
-    char *moduleName = PT_yieldTree((PT_Tree) sdfAttribute);
+    char *moduleName = PT_yieldTreeToString((PT_Tree) sdfAttribute, ATfalse);
     ptAttr = PT_makeAttrId(moduleName);
   }
   else if (SDF_isAttributeTerm(sdfAttribute)) {
-    ATerm term = ATmake(PT_yieldTree((PT_Tree) sdfAttribute));
+    ATerm term = ATmake(PT_yieldTreeToString((PT_Tree) sdfAttribute, ATfalse));
     if (term == NULL) {
       ATerror("SDFAttributeToPtAttr (term): unable to convert %s\n",
-	      PT_yieldTree((PT_Tree) sdfAttribute));
+	      PT_yieldTreeToString((PT_Tree) sdfAttribute, ATfalse));
       ptAttr = NULL;
     }
     else {
@@ -396,7 +397,7 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   }
   else {
      ATerror("SDFAttributeToPtAttr: unable to convert %s\n", 
-	     PT_yieldTree((PT_Tree) sdfAttribute));
+	     PT_yieldTreeToString((PT_Tree) sdfAttribute, ATfalse));
      ptAttr = NULL;
   }
 
@@ -409,12 +410,12 @@ static int SDFCharacterToInt(SDF_Character sdfCharacter)
 
   if (SDF_isCharacterNumeric(sdfCharacter)) {
     SDF_NumChar sdfNumChar = SDF_getCharacterNumChar(sdfCharacter);
-    char *numchar = PT_yieldTree((PT_Tree) sdfNumChar);
+    char *numchar = PT_yieldTreeToString((PT_Tree) sdfNumChar, ATfalse);
     result = atoi(numchar+1); /* remove leading backslash */ 
   }
   else if (SDF_isCharacterShort(sdfCharacter)) {
     SDF_ShortChar sdfShortChar = SDF_getCharacterShortChar(sdfCharacter);
-    char *numchar = PT_yieldTree((PT_Tree) sdfShortChar);
+    char *numchar = PT_yieldTreeToString((PT_Tree) sdfShortChar, ATfalse);
     if (numchar[0] != '\\') {
       result = (int) numchar[0];
     } 
@@ -424,7 +425,7 @@ static int SDFCharacterToInt(SDF_Character sdfCharacter)
   }
   else {
     ATerror("SDFCharacterToInt: unable to convert %s\n",
-	    PT_yieldTree((PT_Tree) sdfCharacter));
+	    PT_yieldTreeToString((PT_Tree) sdfCharacter, ATfalse));
     result = -1;
   }
 
@@ -449,7 +450,7 @@ static PT_CharRange SDFCharRangeToPtCharRange(SDF_CharRange sdfCharRange)
   }
   else {
     ATerror("SDFCharRangeToPtCharRange: unable to convert %s\n",
-	    PT_yieldTree((PT_Tree) sdfCharRange));
+	    PT_yieldTreeToString((PT_Tree) sdfCharRange, ATfalse));
     result = NULL;
   } 
  
@@ -474,7 +475,7 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
   }
   else {
     ATerror("SDFCharRangesToPtCharRanges: unable to convert %s\n",
-	    PT_yieldTree((PT_Tree) sdfCharRanges));
+	    PT_yieldTreeToString((PT_Tree) sdfCharRanges, ATfalse));
     result = NULL;
   }
 
@@ -498,7 +499,7 @@ static PT_CharRanges SDFCharClassToPtCharRanges(SDF_CharClass sdfCharClass)
   }
   else {
     ATerror("SDFCharClassToPtCharRanges: unable to convert characterclass: %s\n",
-	    PT_yieldTree((PT_Tree) sdfCharClass));
+	    PT_yieldTreeToString((PT_Tree) sdfCharClass, ATfalse));
     result = NULL;
   }
   
