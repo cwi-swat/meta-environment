@@ -19,7 +19,8 @@ cat << ENDCAT >&2
 Usage: $PRG -i <sdf2-specification> [options]
 
 Parameters:
-  
+
+  -b | --bottom           only generate bottom sorts       [off]
   -i | --input  <FILE>    specify input specification      [?]
   -f | --folding          enable folding mode              [off]
   -o | --output <DIR>     specify basedir for output       [.]
@@ -77,6 +78,7 @@ JTOM=0
 FOLDINGOPT=""
 VISITABLEOPT=""
 GENBOTTOMSORT=1
+ONLYBOTTOM=0
 
 # binaries
 SDF2TOADT=${bindir}/sdf2-to-adt
@@ -93,6 +95,9 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
+    -b | --bottom)
+      ONLYBOTTOM=1;;
+
     -f | --folding)
       FOLDINGOPT='-f';;
 
@@ -159,9 +164,11 @@ err() {
 # {{{  generate Java from SDF
 info "Generating Java code in ${OUTPUT}/${PACKAGE} from ${INPUT}:"
 
+if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || err
+fi
 
 info " generating CHARLIST.java"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
@@ -169,16 +176,20 @@ if [ ${GENBOTTOMSORT} -gt 0 ]; then
   sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST.java.template > \
     ${OUTPUT}/${PACKAGE}/CHARLIST.java
   sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_String.java.template > \
-      ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
+     ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
 fi
 
+if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
              -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} 
+fi
 
-if [ ${JTOM} -gt 0 ]; then
-  info "adding CHARLIST to Tom signature file"
-  cat ${PKGDATA}/CHARLIST.t.template >> ${OUTPUT}/${PACKAGE}/${BASE}.t
+if [ ${GENBOTTOMSORT} -gt 0 ]; then
+  if [ ${JTOM} -gt 0 ]; then
+    info "adding CHARLIST to Tom signature file"
+    cat ${PKGDATA}/CHARLIST.t.template >> ${OUTPUT}/${PACKAGE}/${BASE}.t
+  fi
 fi
 
 # }}}
