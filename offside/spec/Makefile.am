@@ -1,14 +1,14 @@
 SUBDIRS=offside asfix utils
 EXTRA_DIST=meta.conf
 
-noinst_DATA = Offside.eqs
+noinst_DATA = OffSide.eqs
 data_DATA = OffSide.trm.tbl
 
 %.trm.tbl:
-	pt-dump -m $*
+	${META}/bin/pt-dump -m $*
 	mv */$@ $@
 
 %.eqs:
-	eqs-dump -m $*
+	${META}/bin/eqs-dump -m $*
 
 
