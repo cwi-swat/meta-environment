@@ -61,7 +61,7 @@ Displays the current version number.
 
 =head1 SEE ALSO
 
-L<sglr>, L<a2toa1>, L<sdf2table>, L<graph-browser>
+L<sglr>, L<sdf2table>, L<graph-browser>
 
 =head1 KNOWN BUGS
 
