@@ -60,6 +60,7 @@ public class FeedbackList extends ToolComponent {
 
     public void clearHistory() {
         data.setList(new LinkedList());
+        repaint();
     }
 
     public void displayFeedbackSummary(ATerm t0) {
@@ -126,4 +127,6 @@ public class FeedbackList extends ToolComponent {
     public void warning(String message) {
         addFeedback(makeAnonymousWarning(message));
     }
+    
+  
 }
