@@ -209,7 +209,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	char buf[BUFSIZ];
 	int size, resident, shared, trs, lrs, drs, dt;
 
-	sprintf(buf, "/proc/%d/statm", getpid());
+	sprintf(buf, "/proc/%d/statm", (int) getpid());
 	file = fopen(buf, "r");
 	if (file) {
 	  fscanf(file, "%d %d %d %d %d %d %d",

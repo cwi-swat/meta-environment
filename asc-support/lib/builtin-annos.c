@@ -26,6 +26,20 @@ static ATerm unquoteAppl(ATerm appl)
 }
 
 /*}}}  */
+/*{{{  static PTPT_ATerm noAnno() */
+
+static PT_Tree noAnno()
+{
+  static PTPT_ATerm trm = NULL;
+
+  if (trm == NULL) {
+    trm = PTPT_liftATerm(ATparse("annotation-unavailable"));
+  }
+
+  return (PT_Tree) trm;
+}
+
+/*}}}  */
 
 /*{{{  static PT_Tree set_anno(PT_Tree term, PT_Tree key, PT_Tree value) */
 
@@ -62,7 +76,13 @@ PT_Tree ASC_set_anno(ATerm type, ATerm aterm, ATerm akey, ATerm avalue)
 
 static PT_Tree get_anno(PT_Tree term, PT_Tree key)
 {
-  return PT_TreeFromTerm(PT_getTreeAnnotation(term, (ATerm) key));
+  PT_Tree anno = PT_TreeFromTerm(PT_getTreeAnnotation(term, (ATerm) key));
+
+  if (anno == NULL) {
+    return noAnno();
+  }
+
+  return anno;
 }
 
 /*}}}  */
@@ -70,15 +90,7 @@ static PT_Tree get_anno(PT_Tree term, PT_Tree key)
 
 PT_Tree ASFE_get_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 {
-  PT_Tree value = NULL;
-
-  value = get_anno(term, key);
-
-  if (value != NULL) {
-    return value;
-  }
-
-  return NULL;
+  return get_anno(term, key);
 }
 
 /*}}}  */
@@ -88,12 +100,8 @@ PT_Tree ASC_get_anno(ATerm type, ATerm aterm, ATerm akey)
 {
   PT_Tree term = muASFToTree(aterm);
   PT_Tree key = muASFToTree(akey);
-  PT_Tree value = NULL;
 
-
-  value = get_anno(term, key);
-
-  return PT_makeTreeLit("TODO: give a proper normal form");
+  return get_anno(term, key);
 }
 
 /*}}}  */
@@ -117,7 +125,7 @@ static PT_Tree get_term_anno(PT_Tree term, PT_Tree key)
     return (PT_Tree) PTPT_liftATerm(anno);
   }
 
-  return NULL;
+  return noAnno();
 }
 
 /*}}}  */
@@ -137,7 +145,7 @@ PT_Tree ASFE_get_term_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 }
 
 /*}}}  */
-/*{{{  PT_Tree get_term_anno(PT_Tree input)  */
+/*{{{  PT_Tree ASC_get_term_anno(ATerm type, ATerm aterm, ATerm akey) */
 
 PT_Tree ASC_get_term_anno(ATerm type, ATerm aterm, ATerm akey)
 {

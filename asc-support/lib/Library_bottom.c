@@ -1,5 +1,6 @@
 #include <string.h>
 #include <aterm2.h>
+#include <stdlib.h>
 #include "Library.h"
 
 typedef struct ATerm _CO_CHARLIST;

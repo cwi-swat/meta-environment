@@ -188,7 +188,6 @@ static PT_Tree parse_result(const char *builtin, const char *file, ATerm result)
     return (PT_Tree) makeParseError(builtin, file, result);
   }
 
-  ATwarning("result is: %t\n", result);
   return (PT_Tree) 
     makeGeneralError(builtin, "unknown parse tree format");
 }
@@ -447,7 +446,7 @@ static char *readFileContents(char *fnam)
 { 
   char *buf = NULL;
   FILE *fd; 
-  int size;
+  unsigned int size;
     
   size = getFileSize(fnam);
     

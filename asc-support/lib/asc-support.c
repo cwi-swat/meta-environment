@@ -66,6 +66,7 @@ Symbol tuplesym;
 Symbol make_listsym;
 Symbol concsym;    
 
+ATbool keep_annotations = ATfalse;
 
 /*}}}  */
 /*{{{  declarations for memotables */
@@ -117,6 +118,14 @@ void print_memo_table_sizes()
 
 /*}}}  */
 
+/*{{{  void setKeepAnnotations(ATbool on)  */
+
+void setKeepAnnotations(ATbool on) 
+{
+  keep_annotations = on;
+}
+
+/*}}}  */
 
 /*{{{  ATerm innermost(PT_Tree tree) */
 
@@ -129,9 +138,7 @@ void print_memo_table_sizes()
 ATerm innermost(PT_Tree tree)
 {
   ATerm result = (ATerm) tree;
-#ifdef KEEP_ANNOTATIONS  
-  ATerm annos = PT_getTreeAnnotations(tree);
-#endif
+  ATerm annos = keep_annotations ? PT_getTreeAnnotations(tree) : NULL;
 
   if (PT_isTreeLayout(tree)) {
     result = NULL;
@@ -169,11 +176,9 @@ ATerm innermost(PT_Tree tree)
     return NULL;
   }
 
-#ifdef KEEP_ANNOTATIONS  
   if (annos != NULL) {
     result = ATsetAnnotations(result, annos);
   }
-#endif
 
   return result;
 }
