@@ -1024,7 +1024,7 @@ ATerm internal_trans_top(ATerm t, ATbool standalone, ATbool interpret_cons)
     arg[0] = ATgetFirst(args);
     arg[1] = ATelementAt(args,1);
     arg[2] = ATelementAt(args,2);
-    result = ATmake("term(l(\"term\"),w(\" \"),l(\"X\"),w(\" \"),id(\"X\"),"
+    result = ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
                     "w(<term>),<term>,w(<term>),no-abbreviations)",
                     trm_yield(arg[0]),
                     internal_trans(arg[1],interpret_cons), trm_yield(arg[2]));
