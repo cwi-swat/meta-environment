@@ -35,7 +35,7 @@ AC_SUBST(PT_SUPPORT)
 dnl Require asf-support package
 AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
    [  --with-asf-support=DIR  asf-support is in DIR])
-AC_SUBST(PT_SUPPORT)
+AC_SUBST(ASF_SUPPORT)
 
 
 dnl Our own version of libdir whose value is set dynamically
