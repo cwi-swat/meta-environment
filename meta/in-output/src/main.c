@@ -59,9 +59,9 @@ static size_t getFileSize(const char *s)
 }
 
 /*}}}  */
-/*{{{  static char *readFileContents(char *fnam, size_t *size) */
+/*{{{  static char *readFileContents(const char *fnam, size_t *size) */
 
-static char *readFileContents(char *fnam, size_t *size)
+static char *readFileContents(const char *fnam, size_t *size)
 {
   char *buf = NULL;
   FILE *fd;
@@ -236,9 +236,9 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 }
 
 /*}}}  */
-/*{{{  ATerm remove_file(int cid, char *fileName) */
+/*{{{  void remove_file(int cid, const char *directory, const char *name, const char *extension) */
 
-void remove_file(int cid, char *directory, char *name, char *extension)
+void remove_file(int cid, const char *directory, const char *name, const char *extension)
 {
   char fileName[PATH_LEN];
 
@@ -248,9 +248,9 @@ void remove_file(int cid, char *directory, char *name, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm read_text_file(int cid, char *fileName) */
+/*{{{  ATerm read_text_file(int cid, const char *fileName) */
 
-ATerm read_text_file(int cid, char *fileName)
+ATerm read_text_file(int cid, const char *fileName)
 {
   ATerm t;
   char *buf = NULL;
@@ -269,9 +269,9 @@ ATerm read_text_file(int cid, char *fileName)
 }
 
 /*}}}  */
-/*{{{  ATerm read_term_file(int cid, char *fileName) */
+/*{{{  ATerm read_term_file(int cid, const char *fileName) */
 
-ATerm read_term_file(int cid, char *fileName)
+ATerm read_term_file(int cid, const char *fileName)
 {
   ATerm result, contents;
 
@@ -305,9 +305,9 @@ ATerm unpack_term(int cid, ATerm term)
 
 /*}}}  */
 
-/*{{{  ATerm read_packed_term_file(int cid, char *fileName) */
- 
-ATerm read_packed_term_file(int cid, char *fileName)
+/*{{{  ATerm read_packed_term_file(int cid, const char *fileName) */
+
+ATerm read_packed_term_file(int cid, const char *fileName)
 {
   ATerm result, contents;
  
@@ -321,11 +321,11 @@ ATerm read_packed_term_file(int cid, char *fileName)
  
   return result;
 }
- 
-/*}}}  */
-/*{{{  ATerm write_text_file(int cid, char *fileName, ATerm content) */
 
-ATerm write_text_file(int cid, char *fileName, ATerm content)
+/*}}}  */
+/*{{{  ATerm write_text_file(int cid, const char *fileName, ATerm content) */
+
+ATerm write_text_file(int cid, const char *fileName, ATerm content)
 {
   ATermList list = (ATermList) content;
   FILE *file = NULL;
@@ -355,9 +355,9 @@ ATerm write_text_file(int cid, char *fileName, ATerm content)
 }
 
 /*}}}  */
-/*{{{  ATerm write_term_file(int cid,  char *fileName, ATerm packedContent) */
+/*{{{  ATerm write_term_file(int cid, const char *fileName, ATerm packedContent) */
 
-ATerm write_term_file(int cid,  char *fileName, ATerm packedContent)
+ATerm write_term_file(int cid, const char *fileName, ATerm packedContent)
 {
   ATerm message;
 
@@ -392,9 +392,9 @@ ATerm write_term_file(int cid,  char *fileName, ATerm packedContent)
 }
 
 /*}}}  */
-/*{{{  ATerm write_packed_term_file(int cid,  char *fileName, ATerm packedContent) */
+/*{{{  ATerm write_packed_term_file(int cid, const char *fileName, ATerm content) */
 
-ATerm write_packed_term_file(int cid,  char *fileName, ATerm content)
+ATerm write_packed_term_file(int cid, const char *fileName, ATerm content)
 {
   ATerm message;
 
@@ -429,7 +429,7 @@ ATerm write_packed_term_file(int cid,  char *fileName, ATerm content)
 /*}}}  */
 /*{{{  ATerm exists_file(int cid, char *path, char *name, char *extension) */
 
-ATerm exists_file(int cid, char *fileName)
+ATerm exists_file(int cid, const char *fileName)
 {
   ATerm result;
 
@@ -444,9 +444,9 @@ ATerm exists_file(int cid, char *fileName)
 }
 
 /*}}}  */
-/*{{{  ATerm find_file(int cid, ATerm paths, char *name, char *extension) */
+/*{{{  ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) */
 
-ATerm find_file(int cid, ATerm paths, char *name, char *extension)
+ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
 {
   char filename[PATH_LEN];
   ATermList searchPaths = (ATermList) paths;
@@ -471,9 +471,9 @@ ATerm find_file(int cid, ATerm paths, char *name, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm compare_files(int cid, char *f1, char *f2) */
+/*{{{  ATerm compare_files(int cid, const char *f1, const char *f2) */
 
-ATerm compare_files(int cid, char *f1, char *f2)
+ATerm compare_files(int cid, const char *f1, const char *f2)
 {
   if (filesEqual(f1, f2)) {
     return createFilesEqualMessage();
@@ -484,26 +484,37 @@ ATerm compare_files(int cid, char *f1, char *f2)
 }
 
 /*}}}  */
-/*{{{  ATerm get_filename(int cid, char *directory, char *name, char *extension) */
+/*{{{  ATerm get_filename(int cid, const char *directory, const char *name, const char *extension) */
 
-ATerm get_filename(int cid, char *directory, char *name, char *extension)
+ATerm get_filename(int cid, const char *directory, const char *name, const char *extension)
 {
+  ATerm result;
+  char *buf;
   char fileName[PATH_LEN];
-  int directoryLen = strlen(directory);
+  int directoryLen;
 
-  if (directoryLen > 0 && directory[directoryLen-1] == SEP) {
-    directory[directoryLen-1] = '\0';
+  buf = strdup(directory);
+  assert(buf != NULL);
+
+  directoryLen = strlen(buf);
+
+  if (directoryLen > 0 && buf[directoryLen-1] == SEP) {
+    buf[directoryLen-1] = '\0';
   }
 
-  sprintf(fileName, "%s%c%s%s", directory, SEP, name, extension);
+  sprintf(fileName, "%s%c%s%s", buf, SEP, name, extension);
 
-  return ATmake("snd-value(filename(<str>))", fileName);
+  result = ATmake("snd-value(filename(<str>))", fileName);
+
+  free(buf);
+
+  return result;
 }
 
 /*}}}  */
-/*{{{  ATerm decons_filename(int conn, char *filename, char *extension) */
+/*{{{  ATerm decons_filename(int conn, const char *filename, const char *extension) */
 
-ATerm decons_filename(int conn, char *filename, char *extension)
+ATerm decons_filename(int conn, const char *filename, const char *extension)
 {
   ATerm result;
   char *buf, *save;
@@ -543,9 +554,9 @@ ATerm decons_filename(int conn, char *filename, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm get_extension(int conn, char *filename) */
+/*{{{  ATerm get_extension(int conn, const char *filename) */
 
-ATerm get_extension(int conn, char *filename)
+ATerm get_extension(int conn, const char *filename)
 {
   char *extension = NULL;
 
