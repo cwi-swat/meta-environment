@@ -144,6 +144,10 @@ fi
 LIBS=$NOSOCKLIBS
 AC_CHECK_LIB(dl, dlopen)
 
+dnl Checks for header files.
+AC_CHECK_HEADER(getopt.h)
+
+
 AC_SUBST(SOCKLIBS)
  
 dnl Which files need updating?
