@@ -1,0 +1,34 @@
+#! /bin/sh
+
+set -e
+#set -x
+
+DEFS="-DEDITOR=\"gvim-editor\" -DSAVING=\"false\" -DINFILENAME=\"\" -DOUTFILENAME=\"\" -DMODULENAME=\"\" -DCONFIG_FILE=\"meta.conf\""
+
+TABLE=/ufs/jong/local/meta/build/asf/library/sandbox/toolbus/Tscript.trm.tbl
+EQS=/ufs/jong/local/meta/build/asf/library/sandbox/toolbus/analysis/ToolBusExtraction.eqs
+
+mkdir -p rstore
+
+echo -n "Preprocessing $1 .."
+grep -v '^#include' $1 > $1.c
+gcc -E ${DEFS} $1.c \
+  | grep -v '^#' \
+  > $1.pp
+echo " done."
+
+echo -n "Parsing $1 .."
+sglr -p ${TABLE} -i $1.pp -o $1.tree -s Tscript
+echo " done."
+
+echo -n "AddPosInfo $1 .."
+addPosInfo -i $1.tree -o $1.pos -p $1
+echo " done."
+
+echo -n "Rewriting $1 .."
+apply-function -f "extractRelations" -s "RSTORE" -i $1.pos \
+  | asfe -e ${EQS} -o rstore/$1.rstore
+echo " done."
+
+rm -f $1.{c,pp,tree,pos}
+echo

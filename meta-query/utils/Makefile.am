@@ -1,6 +1,12 @@
-EXTRA_DIST = meta-query-config.src
+EXTRA_DIST = \
+	merge-rstores \
+	meta-query-config.src \
+	tbscan
 
-bin_SCRIPTS = meta-query-config
+bin_SCRIPTS = \
+	merge-rstores \
+	meta-query-config \
+	tbscan
 
 CLEANFILES = meta-query-config
 
