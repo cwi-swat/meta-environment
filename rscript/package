@@ -20,6 +20,7 @@ requires
    asf          1.8
    pt-support   1.1
    error-support   0.1
+   tide-support   1.1
    sdf-support  2.0
    asf-support  1.2
    asc-support  1.8

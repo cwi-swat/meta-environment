@@ -140,6 +140,14 @@ AC_SUBST(ASF)
 
 dnl }}}
 
+dnl {{{ Handle --with-tide-support
+
+AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
+[  --with-tide-support=DIR tide-support is in DIR])
+AC_SUBST(TIDE_SUPPORT)
+
+dnl }}}
+
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish 8.3, wish8.2 or wish8.1, we'll
 dnl assume that "wish" is at version 8 or higher.
