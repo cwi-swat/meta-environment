@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <SDF-utils.h>
 
-#define TEST_GRAMMAR_FILE "Layout.pt"
+#define TEST_GRAMMAR_FILE SRC_DIR "/Layout.pt"
 
 int
 testGrammars(void)
