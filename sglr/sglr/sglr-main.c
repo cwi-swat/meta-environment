@@ -69,13 +69,11 @@ ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort)
   result = SGparseStringAsAsFix2ME(input, (SGLR_ParseTable)pt, topSort, NULL);
 
   if (ERR_isValidError(ERR_ErrorFromTerm(result))) {
-    ATwarning("sglr-main.c:parse-error: %t\n", result);
     result = ATmake("parse-error(<term>)", result);
   }
   else if (ATgetAFun((ATermAppl)result) == SG_AmbiguousTree_AFun) {
     ATerm error = ATgetArgument((ATermAppl)result, 1);
     tree = ATgetArgument((ATermAppl)result, 0);
-    ATwarning("sglr-main.c:ambiguities: %t\n", error);
     result = ATmake("parse-forest(<term>,<term>)", ATBpack(tree), error);
   }
   else if (ATmatch(result, "parsetree(<term>,<int>)", &tree, &ambiguityCount)) {
