@@ -1,6 +1,7 @@
 2000/02/06 (jong@cwi.nl)
  * removed some configuration files from the bowels of libasfix-old
  * added toplevel make_rules
+ * make_rules and reconf added to EXTRA_DIST
  * changed packagename in configure.in to pt-support
 
 2000/02/05 (jong@cwi.nl)
