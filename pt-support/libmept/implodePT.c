@@ -27,6 +27,8 @@ static ATerm implodeLayout(PT_Tree t);
 static ATerm implodeVar(PT_Tree t);
 static ATerm implodeProd(PT_Production prod, ATermList args);
 
+/*{{{  static ATermList implodeArgs(PT_Args args) */
+
 static ATermList implodeArgs(PT_Args args)
 {
   ATerm newTerm;
@@ -43,6 +45,10 @@ static ATermList implodeArgs(PT_Args args)
     return implodeArgs(PT_getArgsTail(args));
   }
 }
+
+/*}}}  */
+
+/*{{{  static PT_Production removeLayoutFromProd(PT_Production prod) */
 
 static PT_Production removeLayoutFromProd(PT_Production prod)
 {
@@ -64,6 +70,9 @@ static PT_Production removeLayoutFromProd(PT_Production prod)
   return prod;
 }
 
+/*}}}  */
+/*{{{  static PT_Production removeLiteralsFromProd(PT_Production prod) */
+
 static PT_Production removeLiteralsFromProd(PT_Production prod)
 {
   if (PT_isProductionDefault(prod)) {
@@ -83,6 +92,9 @@ static PT_Production removeLiteralsFromProd(PT_Production prod)
 
   return prod;
 }
+
+/*}}}  */
+/*{{{  static ATerm implodeProd(PT_Production prod, ATermList args) */
 
 static ATerm implodeProd(PT_Production prod, ATermList args)
 {
@@ -127,6 +139,10 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
 		PT_makeTermFromProduction(prod), args);
 }
 
+/*}}}  */
+
+/*{{{  static ATerm implodeLayout(PT_Tree tree) */
+
 static ATerm implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
@@ -151,6 +167,9 @@ static ATerm implodeLayout(PT_Tree tree)
   }
 }
 
+/*}}}  */
+/*{{{  static ATerm implodeFlatList(PT_Tree tree) */
+
 static ATerm implodeFlatList(PT_Tree tree)
 {
   PT_Args args = PT_getTreeArgs(tree);
@@ -159,25 +178,8 @@ static ATerm implodeFlatList(PT_Tree tree)
   return ATmake("<term>", newList);
 }
 
-static ATerm implodeListInjection(PT_Tree tree)
-{
-  ATermList newList;
-  ATerm newTerm;
-
-  PT_Tree arg = PT_getArgsHead(PT_getTreeArgs(tree));
-  PT_Production prod = PT_getTreeProd(arg);
-
-  if (PT_isProductionList(prod)) {
-    newList = implodeArgs(PT_getTreeArgs(arg));
-  
-    return ATmake("<term>", newList);
-  }
-  else {
-    newTerm = implodeTerm(arg);
-
-    return ATmake("[<term>]", newTerm);
-  }
-}
+/*}}}  */
+/*{{{  static ATerm implodeLexical(PT_Tree tree) */
 
 static ATerm implodeLexical(PT_Tree tree)
 {
@@ -188,6 +190,9 @@ static ATerm implodeLexical(PT_Tree tree)
   return PT_makeTermFromTree(tree);
 }
 
+/*}}}  */
+/*{{{  static ATerm implodeLiteral(PT_Tree tree) */
+
 static ATerm implodeLiteral(PT_Tree tree)
 {
   if (remove_literals) {
@@ -196,6 +201,9 @@ static ATerm implodeLiteral(PT_Tree tree)
 
   return PT_makeTermFromTree(tree);
 }
+
+/*}}}  */
+/*{{{  static ATerm implodeAlt(PT_Tree tree) */
 
 static ATerm implodeAlt(PT_Tree tree)
 {
@@ -231,6 +239,9 @@ static ATerm implodeAlt(PT_Tree tree)
   return PT_makeTermFromTree(tree);
 }
 
+/*}}}  */
+/*{{{  static ATerm implodeSeqRecursive(PT_Args args) */
+
 static ATerm implodeSeqRecursive(PT_Args args)
 {
   ATerm lhs;
@@ -256,12 +267,18 @@ static ATerm implodeSeqRecursive(PT_Args args)
 		implodeSeqRecursive(PT_getArgsTail(args)));
 }
 
+/*}}}  */
+/*{{{  static ATerm implodeSeq(PT_Tree tree) */
+
 static ATerm implodeSeq(PT_Tree tree)
 {
   ATerm seq = implodeSeqRecursive(PT_getTreeArgs(tree));
 
   return seq;
 }
+
+/*}}}  */
+/*{{{  static ATerm implodeOpt(PT_Tree tree) */
 
 static ATerm implodeOpt(PT_Tree tree)
 {
@@ -278,6 +295,8 @@ static ATerm implodeOpt(PT_Tree tree)
   return ATmake("Some(<term>)", implodeTerm(PT_getArgsHead(args)));
 }
 
+/*}}}  */
+/*{{{  static ATerm implodeVar(PT_Tree tree) */
 
 static ATerm implodeVar(PT_Tree tree)
 {
@@ -288,6 +307,9 @@ static ATerm implodeVar(PT_Tree tree)
 
   return PT_makeTermFromTree(tree);
 }
+
+/*}}}  */
+/*{{{  static ATerm implodeApplication(PT_Tree tree) */
 
 static ATerm implodeApplication(PT_Tree tree)
 {
@@ -311,12 +333,17 @@ static ATerm implodeApplication(PT_Tree tree)
   return implodeProd(prod, newList);
 }
 
+/*}}}  */
+
+/*{{{  static ATerm implodeTerm(PT_Tree tree) */
+
 static ATerm implodeTerm(PT_Tree tree)
 {
   PT_Args args;
   ATerm result = NULL;
   ATerm annos = ATgetAnnotations((ATerm)tree);
 
+  
   if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
     result = ATmake("amb(<list>)", implodeArgs(args));
@@ -327,9 +354,6 @@ static ATerm implodeTerm(PT_Tree tree)
   else if (PT_isTreeLit(tree)) { 
     result = implodeLiteral(tree);
   }                        
-  else if (PT_isTreeListInjection(tree)) {
-    result = implodeListInjection(tree);
-  }
   else if (interpret_alt && PT_isTreeAlt(tree)) {
     result = implodeAlt(tree);
   }
@@ -355,6 +379,10 @@ static ATerm implodeTerm(PT_Tree tree)
   return result;
 }
 
+/*}}}  */
+
+/*{{{  ATerm implodeParseTree(PT_ParseTree tree) */
+
 ATerm implodeParseTree(PT_ParseTree tree)
 {
   ATerm atermTree;
@@ -376,3 +404,5 @@ ATerm implodeParseTree(PT_ParseTree tree)
   ATerror("implodeParseTree: not a parsetree: %t\n", tree);
   return NULL;
 }
+
+/*}}}  */
