@@ -228,7 +228,7 @@ equations
       parsetree(appl(prod(
                      [cf(opt(layout)),cf(sort($FieldType)),cf(opt(layout))],
                        sort("<START>"), no-attrs),
-                [<ws-before(Layout)>,<$AltId($FieldType)>,<ws-after(Layout)>]),
+                [<ws-before(Layout)>,<top($FieldType)>,<ws-after(Layout)>]),
                               <amb-cnt(int)>)], $Entries]
 
 
