@@ -36,9 +36,9 @@ exports
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
 
-	add-element(Elem, Bag[[Elem]])				-> Bag[[Elem]]
-	power0(Bag[[Elem]])					-> Bag[[Elem]]
-	power1(Bag[[Elem]])					-> Bag[[Elem]]
+	add-element(Elem, BagIterator[[Elem]])			-> Bag[[Elem]]
+	power0(BagIterator[[Elem]])				-> Bag[[Elem]]
+	power1(BagIterator[[Elem]])				-> Bag[[Elem]]
 
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
@@ -46,7 +46,7 @@ exports
         equal-elem(Elem, Elem)              			-> Boolean
 	equal-rval(RVALUE, RVALUE)				-> Boolean
 
-	eval-itern({RVAR ","}+,  RVALUE, RVALUE, REXP, RSTORE)	-> Elem
+	eval-itern({RVAR ","}+,  BagIterator[[Elem]], RVALUE, REXP, RSTORE)	-> Elem
 	store-rvars({RVAR ","}+, RVALUE, RSTORE)		-> RSTORE
 
 	append(RVALUE, RVALUE)					-> Elem
@@ -55,23 +55,22 @@ exports
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
 
-	is-rel(RVALUE)						-> Boolean
+	is-rel(BagIterator[[Elem]])				-> Boolean
 
+%%	"get-filename"						-> RVAR {reject}
+%%	"get-beginline"						-> RVAR {reject}
+%%	"get-begincol"						-> RVAR {reject}
+%%	"get-endline"						-> RVAR {reject}
+%%	"get-endcol"						-> RVAR {reject}
 
-	"get-filename"						-> RVAR {reject}
-	"get-beginline"						-> RVAR {reject}
-	"get-begincol"						-> RVAR {reject}
-	"get-endline"						-> RVAR {reject}
-	"get-endcol"						-> RVAR {reject}
+	sumx(BagIterator[[Elem]], Integer)			-> Integer
+	max1(BagIterator[[Elem]])				-> Integer
+	max2(BagIterator[[Elem]], Integer)			-> Integer
 
-	sumx(Bag[[Elem]], Integer)				-> Integer
-	max1(Bag[[Elem]])					-> Integer
-	max2(Bag[[Elem]], Integer)				-> Integer
+	min1(BagIterator[[Elem]])				-> Integer
+	min2(BagIterator[[Elem]], Integer)			-> Integer
 
-	min1(Bag[[Elem]])					-> Integer
-	min2(Bag[[Elem]], Integer)				-> Integer
-
-	Integer "==" Integer					-> Boolean	%% Should be  in Integers!
+	Integer "==" Integer					-> Boolean	%% Should be in Integers!
 
 hiddens
 %%  imports asf/syntax/Comments
@@ -94,6 +93,7 @@ hiddens
 
         "$Rel" [0-9\']*                -> Bag[[Elem]] 
         "$Bag" [0-9\']*                -> Bag[[Elem]]
+        "$BagIter" [0-9\']*            -> BagIterator[[Elem]]
 
         "$Elem"   [0-9\']*             -> Elem
         "$Elem*"  [0-9\']*             -> {Elem ","}*

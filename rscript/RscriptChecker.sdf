@@ -78,7 +78,7 @@ exports
 
 	check-const(Elem, TENV) 				-> REXPTYPE # TENV
 	check-const-tuple(Elem, TENV)				-> REXPTYPE # TENV
-	check-const-bag-or-rel(Bag[[Elem]], TENV) 		-> REXPTYPE # TENV
+	check-const-bag-or-rel(BagIterator[[Elem]], TENV) 	-> REXPTYPE # TENV
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -160,6 +160,7 @@ hiddens
 
 
      "$Bag" [0-9\']*        	-> Bag[[Elem]]
+     "$BagIter" [0-9\']*        -> BagIterator[[Elem]]
      "$Rel" [0-9\']*        	-> Bag[[Elem]]
 
      "$BoolCon" [0-9\']*    	-> BoolCon

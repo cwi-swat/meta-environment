@@ -1,6 +1,6 @@
 equations
 
-[ETS1]	$Rstore = eval-rstats($Stat*, rstore(<NPASSED,0>,<NFAILED,0>,<FAILED,{}>)),
+[ETS1]	$Rstore = eval-rstats($Stat*, rstore(<NPASSED,0>,<NFAILED,0>,<FAILED,empty-bag>)),
 	$NatCon1 = value(NPASSED, $Rstore),
 	$NatCon2 = value(NFAILED, $Rstore),
 	$Val = value(FAILED, $Rstore)
@@ -13,13 +13,15 @@ equations
 	testsuite-report($NatCon1, $NatCon2, $Val) = 
 	$NatCon2 of $NatCon1 tests failed: $Val
 
-%% Increment a variable
+%% ---- Increment a variable
 
 [INC1]	value($Var, $Rstore) = $NatCon,
 	$Integer =  $NatCon + 1,
 	$NatCon' = $Integer
 	==================================================
 	increment($Var, $Rstore) = assign($Var, $NatCon', $Rstore)
+
+%% ---- Evaluate assert
 
 [S10]	evalp($Exp,$Rstore) = true
 	===================================================

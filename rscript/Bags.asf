@@ -1,15 +1,34 @@
 equations
 
+[empty]	empty-bag = {}
 
-%% --- add($Elem, $Bag)
+%% --- insert($Elem, $Bag)
 
-[a1]	add($Elem, {$Elem*}) = {$Elem, $Elem*}
+[ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
 
-%% --- del($Elem, $Bag)
+%% --- delete($Elem, $Bag)
 
-[r1]	del($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}
-[default-r2]
-	del($Elem, $Bag) = $Bag
+[del1]	delete($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}
+
+[default-del]
+	delete($Elem, $Bag) = $Bag
+
+%% ---- is-empty-iter
+
+[is-ei1]
+	is-empty-iter({}) = true
+[default-is-ei]
+	is-empty-iter($Bag) = false
+
+%% ---- head
+
+[head1]	head({$Elem, $Elem*}) = $Elem
+
+%% ---- tail
+
+[tail1]	tail ({$Elem, $Elem*}) = {$Elem*}
+
+[tail2]	tail({}) = {}
 
 %% --- equal(Rel1, Rel2)
 

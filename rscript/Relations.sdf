@@ -1,6 +1,7 @@
 module Relations[Elem]
 
-imports Bags[Elem]
+imports FastBagsNC[Elem]
+%%imports Bags[Elem]
 
 exports
 
@@ -10,40 +11,38 @@ exports
      Elem #  Elem					-> Tuple
      Tuple						-> Elem
 
-     "silence-the-checker"				-> {Elem ","}+
-
      "<" Elem "," Elem "," {Elem ","}+ ">"		-> Tuple
 
-     compose(Bag[[Elem]], Bag[[Elem]])       		-> Bag[[Elem]]	%%RRR
+     compose(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RRR
     
-     product(Elem, Bag[[Elem]])                		-> Bag[[Elem]]	%%EBR
-     product(Bag[[Elem]], Bag[[Elem]])         		-> Bag[[Elem]]	%%BBR
+     product(Elem, Bag[[Elem]])				-> Bag[[Elem]]	%%EBR
+     product(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%BBR
      
-     domain(Bag[[Elem]])                       		-> Bag[[Elem]]	%%RB
-     range(Bag[[Elem]])                        		-> Bag[[Elem]]	%%RB
-     carrier(Bag[[Elem]])                     		-> Bag[[Elem]]	%%RB
+     domain(Bag[[Elem]])				-> Bag[[Elem]]	%%RB
+     range(Bag[[Elem]])					-> Bag[[Elem]]	%%RB
+     carrier(Bag[[Elem]])				-> Bag[[Elem]]	%%RB
 
-     domR(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
-     ranR(Bag[[Elem]], Bag[[Elem]])  			-> Bag[[Elem]]	%%RBR
-     carR(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
+     domR(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
+     ranR(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
+     carR(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
 
-     domX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
-     ranX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
-     carX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
+     domX(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
+     ranX(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
+     carX(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBR
 
      top(Bag[[Elem]])                 			-> Bag[[Elem]]	%%RB
      bottom(Bag[[Elem]])                  		-> Bag[[Elem]]	%%RB
 
-     inv(Bag[[Elem]])                  			-> Bag[[Elem]]	%%RR
-     compl(Bag[[Elem]])                			-> Bag[[Elem]]	%%RR
+     inv(Bag[[Elem]])					-> Bag[[Elem]]	%%RR
+     compl(Bag[[Elem]])					-> Bag[[Elem]]	%%RR
 
-     id(Bag[[Elem]])                   			-> Bag[[Elem]]	%%BR
+     id(Bag[[Elem]])					-> Bag[[Elem]]	%%BR
 
-     limage(Bag[[Elem]], Elem)             		-> Bag[[Elem]]	%%REB
-     limage(Bag[[Elem]], Bag[[Elem]])      		-> Bag[[Elem]]	%%RBB
+     limage(Bag[[Elem]], Elem)				-> Bag[[Elem]]	%%REB
+     limage(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBB
 
-     rimage(Elem, Bag[[Elem]])             		-> Bag[[Elem]]	%%ERB
-     rimage(Bag[[Elem]], Bag[[Elem]])     		-> Bag[[Elem]]	%%BRB
+     rimage(Elem, Bag[[Elem]])				-> Bag[[Elem]]	%%ERB
+     rimage(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%BRB
 
      reachX(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
      reachR(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
@@ -59,8 +58,36 @@ hiddens
   context-free syntax
      closure(Bag[[Elem]],Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]
 
+     compose(BagIterator[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]	%%RRR
+
+     product(Elem, BagIterator[[Elem]])        		-> Bag[[Elem]]	%%EBR
+     product(BagIterator[[Elem]], Bag[[Elem]])  	-> Bag[[Elem]]	%%BBR
+     
+
+     domain(BagIterator[[Elem]])			-> Bag[[Elem]]	%%RB
+     range(BagIterator[[Elem]])				-> Bag[[Elem]]	%%RB
+     carrier(BagIterator[[Elem]])			-> Bag[[Elem]]  %%RB
+
+     domR(BagIterator[[Elem]], Bag[[Elem]]) 		-> Bag[[Elem]]	%%RBR
+     ranR(BagIterator[[Elem]], Bag[[Elem]])  		-> Bag[[Elem]]	%%RBR
+     carR(BagIterator[[Elem]], Bag[[Elem]])   		-> Bag[[Elem]]	%%RBR
+
+     domX(BagIterator[[Elem]], Bag[[Elem]])  		-> Bag[[Elem]]	%%RBR
+     ranX(BagIterator[[Elem]], Bag[[Elem]]) 		-> Bag[[Elem]]	%%RBR
+     carX(BagIterator[[Elem]], Bag[[Elem]])  		-> Bag[[Elem]]	%%RBR
+
+     limage(BagIterator[[Elem]], Elem)         		-> Bag[[Elem]]	%%REB
+     limage(Bag[[Elem]], BagIterator[[Elem]])   	-> Bag[[Elem]]	%%RBB
+
+     rimage(Elem, BagIterator[[Elem]])         		-> Bag[[Elem]]	%%ERB
+     rimage(BagIterator[[Elem]], Bag[[Elem]])  		-> Bag[[Elem]]	%%BRB
+
+     inv(BagIterator[[Elem]])          			-> Bag[[Elem]]	%%RR
+     id(BagIterator[[Elem]])           			-> Bag[[Elem]]	%%BR
+
   variables
      "$Bag" [0-9\']*             -> Bag[[Elem]]
+     "$BagIter" [0-9\']*         -> BagIterator[[Elem]]
      "$Rel" [0-9\']*             -> Bag[[Elem]]
 
      "$Elem" [0-9\']*            -> Elem
