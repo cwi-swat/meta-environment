@@ -1,4 +1,4 @@
-ASBIN=/home/markvdb/Research/bin
-ASSHARE=/home/markvdb/Research/share/asdf/asdf-pt
+ASBIN=/users/jive/PROGRAMS/asenv/install/bin
+ASSHARE=/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt
 $ASBIN/apply-function -f getImportedModules -s ATermList | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT
 

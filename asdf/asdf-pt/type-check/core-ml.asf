@@ -9,7 +9,6 @@ equations
 	 typecheck-dataop(action, TY1) = 
 	   AR[nor=action[using data giving data raising data], exc=empty, no]
 
-[tcdo-3] typecheck-dataop(it, TY1) = AR[nor=TY1, exc=empty, no]
 
 [tcdo-4] typecheck-dataop(tuple, TY1) = AR[nor=tuple, exc=empty, no]
 
@@ -25,12 +24,6 @@ equations
 	 ================================================================
 	 typecheck-dataop(invert, TY1) = AR[nor=val, exc=empty, no]
 
-[tcdo-8] typecheck-dataop(def, TY1) = AR[nor=boolean, exc=empty, no]
-
-[tcdo-9] TY1 subtype-of boolean == yes
-	 ================================================================
-	 typecheck-dataop(not, TY1) = AR[nor=boolean, exc=empty, no]
-
 
 [tcd-1] typecheck-data(func-no-apply, EN) = val
 
@@ -41,3 +34,15 @@ equations
 [subtype-3] cons subtype-of bindable = yes
 
 [subtype-4] val subtype-of bindable = yes
+
+[subtype-10] integer subtype-of val = yes
+
+[subtype-11] boolean subtype-of val = yes
+
+[subtype-10] integer subtype-of storable = yes
+
+[subtype-11] boolean subtype-of storable = yes
+
+[subtype-11] val subtype-of storable = yes
+
+[subtype-12] cell subtype-of bindable = yes

@@ -8,11 +8,11 @@ exports
 
 sorts 
 
-  Function Functions SignatureEnv Answers
+  Function Functions SignatureEnv Answers TypeInfo
 
 context-free syntax
 
-  typecheck(AS-Module, Signatures)		-> Summary
+  typecheck(AS-Module, TypeInfo)		-> Summary
   typecheck-definitions(FunctionDefs, Environment) -> Answers
 
   gen-summary(Answers)	-> Summary
@@ -36,6 +36,10 @@ variables
   "$FD"[1-9]?	-> AS-FunctionDef
   "$FD"[1-9]?"*"	-> {AS-FunctionDef ","}*
   "$FD"[1-9]?"+"	-> {AS-FunctionDef ","}+
+  "$TI"[0-9]?		-> TypeInfo
+  "$STS"[0-9]?		-> SubTypes
+  "$DOS"[0-9]?		-> DataOpSigs
+  "$LDF"[0-9]?		-> List[[<DataOp, FunResult>]]
 
   "$SE"[1-9]?	-> SignatureEnv
   "$ENV"[1-9]?	-> Environment

@@ -1,16 +1,75 @@
 equations
 
+[get-type-info-1]
+
+    get-type-info($ASM) = 
+	   <get-signatures($ASM), 
+	    get-subtypes($ASM, []), 
+	    get-dataop-sigs($ASM, [])>
+
 [get-sig-0] get-signatures($ASM) = get-sigs($ASM, sigs())
 
 [get-sig-1] 
 
-  get-sigs(module $MN $IS* $AS*, sigs($FS*)) = 
-				 get-sigs($AS*, sigs($FS*))
+  get-sigs(module $MN $IS* $AS*, sigs($FS*)) = get-sigs($AS*, sigs($FS*))
 
 [get-sig-2] get-sigs($FS, sigs($FS*)) = sigs($FS, $FS*)
 
-[join-sigs-1] join-signatures(sigs($FS*1), sigs($FS*2)) = 
-					    sigs($FS*1, $FS*2)
+[get-subtypes-1] 
+
+   get-subtypes($SO ::= $ARR, $STS) = 
+		    get-subs(sort-to-type($SO), $ARR, $STS)
+
+[get-subs-2] get-subs($ATY, $SO, $STS) = 
+		    <$ATY, sort-to-type($SO)>:$STS
+
+[get-subs-3] get-subs($ATY, $ARR1 | $ARR2, $STS) = 
+		    get-subs($ATY, $ARR1, get-subs($ATY, $ARR2, $STS))
+
+[default-get-subs-1] get-subs($ATY, $ARR, $STS) = $STS
+
+[get-dataop-sigs-1] get-dataop-sigs($SO ::= $ARR, $DOS) = 
+		get-dataop-sigs(sort-to-type($SO), $ARR, $DOS)
+
+
+[get-dataop-sigs-2] 
+
+      $DOS2 := concat(get-selectors($ATY, $LS*), $DOS1)
+      =====================================================
+      get-dataop-sigs($ATY, uqliteral($CH+)($LS*), $DOS1) = 
+	  <prefixdataop($CH+), giving $ATY & using get-dataop-type($LS*)>:$DOS2
+
+[get-dataop-sigs-3] get-dataop-sigs($ATY, $ARR1 | $ARR2, $DOS) = 
+	get-dataop-sigs($ATY, $ARR1, get-dataop-sigs($ATY, $ARR2, $DOS))
+
+[default-get-dataop-sigs-1] get-dataop-sigs($ATY, $ARR, $DOS) = $DOS
+
+[get-selectors-1] 
+    
+      get-selectors($ATY, uqliteral($CH+) : $SO, $LS*) = 
+		<prefixdataop($CH+), using sort-to-type($SO) & giving $ATY>:
+		get-selectors($ATY, $LS*)
+
+[get-selectors-1] get-selectors($ATY, ) = []
+
+[get-dataop-type-1] 
+
+	($TY*) := get-dataop-type($LS*)
+	==================================
+	get-dataop-type($LT : $SO, $LS*) = (sort-to-type($SO), $TY*)
+
+[get-dataop-type-1] get-dataop-type() = ()
+
+[sort-to-type-1] 
+
+   bytes($CH2) := lower-case(bytes($CH1))
+   =================================================================
+   sort-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
+
+[join-sigs-1] 
+
+   join-type-info(<sigs($FS*1), $STS1, $DOS1>, <sigs($FS*2), $STS2, $DOS2>) = 
+   	<sigs($FS*1, $FS*2), concat($STS1, $STS2), concat($DOS1, $DOS2)>
 
 [get-fun-0] get-function-defs($ASM) = get-fun-defs($ASM, defs())
 

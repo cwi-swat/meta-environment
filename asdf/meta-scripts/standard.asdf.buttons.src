@@ -44,6 +44,8 @@ configuration([
   button("*",
          [description(syntax-editor, menu(["Actions", "Type check"]))],
          [push-active-module,
+          prompt-for-file("Extra type constraints (default is none)", "",".asdf"),
+	  split-file-name(".asdf"),
 	  type-check-asdf]),
   button("*",
          [description(syntax-editor, menu(["Move", "Left"])),

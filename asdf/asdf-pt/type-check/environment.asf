@@ -1,14 +1,31 @@
 equations
 
-[empty-1] empty-env = <sigs(), action[]>
+[empty-1] empty-env = 
+	  <sigs(), [], initial-dataop-sigs, action[]>
 
-[get-1] get-signatures(<SIGS, AT>) = SIGS
+[type-info-1] 
 
-[get-2] get-unfold-type(<SIGS, AT>) = AT
+   type-info-to-env(<$SIGS, $STS, $DOS>) = <$SIGS, $STS, $DOS, action[]>
 
-[set-1] set-signatures(<SIGS1, AT>, SIGS2) = <SIGS2, AT>
+[get-1] get-signatures(<$SIGS, $STS, $DOS, $AT>) = $SIGS
 
-[set-2] set-unfold-type(<SIGS, AT1>, AT2) = <SIGS, AT2>
+[get-2] get-subtypes(<$SIGS, $STS, $DOS, $AT>) = $STS
+
+[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $AT>) = $DOS
+
+[get-4] get-unfold-type(<$SIGS, $STS, $DOS, $AT>) = $AT
+
+[set-1] set-signatures(<$SIGS1, $STS, $DOS, $AT>, $SIGS2) = 
+				      <$SIGS2, $STS, $DOS, $AT>
+
+[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $AT>, $STS2) = 
+				      <$SIGS, $STS2, $DOS, $AT>
+
+[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $AT>, $DOS2) = 
+				      <$SIGS, $STS, $DOS2, $AT>
+
+[set-4] set-unfold-type(<$SIGS, $STS, $DOS, $AT1>, $AT2) = 
+				      <$SIGS, $STS, $DOS, $AT2>
 
 [get-fun-name-1] get-fun-name($LT : $SO -> $FR) = $LT
 
@@ -49,51 +66,51 @@ equations
     $LT : $SO -> $FR1 := $FS1,
     $LT : $SO -> $FR2 := $FS2,
     $SFR1+ := $FR1,
-    $FR3 := join-results($SFR1+, $FR2),
+    $FR3 := join-results($SFR1+, $FR2, $STS),
     $FS3 := $LT : $SO -> $FR3
     =======================================================================
-    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*)) = 
-                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*))
+    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*), $STS) = 
+                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*), $STS)
 
 [default-rm-dobble-sigs-2] 
 
-    remove-dobble-sigs(sigs($FS1*)) = sigs($FS1*)
+    remove-dobble-sigs(sigs($FS1*), $STS) = sigs($FS1*)
 
 [join-res-1] 
 	     
     $TY2 := get-using(test : Test -> $FR),
-    $TY3 := lowest-type($TY1, $TY2)
+    $TY3 := lowest-type($TY1, $TY2, $STS)
     ==================================================================
-    join-results($SFR1* & using $TY1 & $SFR2*, $FR) = 
-	using $TY3 & join-results($SFR1* & $SFR2*, Action & remove-using($FR))
+    join-results($SFR1* & using $TY1 & $SFR2*, $FR, $STS) = 
+    using $TY3 & join-results($SFR1* & $SFR2*, Action & remove-using($FR),$STS)
 
 [join-res-2] 
 	     
     $TY2 := get-giving(test : Test -> $FR),
-    $TY3 := highest-type($TY1, $TY2)
+    $TY3 := highest-type($TY1, $TY2, $STS)
     ==================================================================
-    join-results($SFR1* & giving $TY1 & $SFR2*, $FR) = 
-       giving $TY3 & join-results($SFR1* & $SFR2*, Action & remove-giving($FR))
+    join-results($SFR1* & giving $TY1 & $SFR2*, $FR, $STS) = giving $TY3 & 
+	     join-results($SFR1* & $SFR2*, Action & remove-giving($FR), $STS)
 
 [join-res-3] 
 	     
     $TY2 := get-raising(test : Test -> $FR),
-    $TY3 := highest-type($TY1, $TY2)
+    $TY3 := highest-type($TY1, $TY2, $STS)
     ==================================================================
-    join-results($SFR1* & raising $TY1 & $SFR2*, $FR) = 
-     raising $TY3 & join-results($SFR1* & $SFR2*, Action & remove-raising($FR))
+    join-results($SFR1* & raising $TY1 & $SFR2*, $FR, $STS) = raising $TY3 & 
+	      join-results($SFR1* & $SFR2*, Action & remove-raising($FR), $STS)
 
 [join-res-3] 
 	     
-    join-results($SFR1* & failing & $SFR2*, $FR) = 
-      failing & join-results($SFR1* & $SFR2*, Action & remove-failing($FR))
+    join-results($SFR1* & failing & $SFR2*, $FR, $STS) = 
+     failing & join-results($SFR1* & $SFR2*, Action & remove-failing($FR),$STS)
 
 [join-res-4] 
 	     
-    join-results(Action & $SFR1*, $FR) = 
-            Action & join-results($SFR1*, Action & remove-action($FR))
+    join-results(Action & $SFR1*, $FR, $STS) = 
+            Action & join-results($SFR1*, Action & remove-action($FR), $STS)
 
 [join-res-5]
 
-    join-results(, $SFR+) = $SFR+
+    join-results(, $SFR+, $STS) = $SFR+
 

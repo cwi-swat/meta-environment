@@ -11,15 +11,22 @@ context-free syntax
 
 %% Signatures , Unfold type
 
-  <Signatures, ActionType>	-> Environment
+  <Signatures, SubTypes, DataOpSigs, ActionType>	-> Environment
 
-  get-signatures(Environment)  -> Signatures
+  type-info-to-env(TypeInfo)	     -> Environment
+
+  get-signatures(Environment)	   -> Signatures
+  get-subtypes(Environment)	   -> SubTypes
+  get-dataop-sigs(Environment)	   -> DataOpSigs
   get-unfold-type(Environment)	   -> ActionType
 
-  set-signatures(Environment, Signatures)		-> Environment
-  set-unfold-type(Environment, ActionType)		-> Environment
+  set-signatures(Environment, Signatures)	-> Environment
+  set-subtypes(Environment, SubTypes)		-> Environment
+  set-dataop-sigs(Environment, DataOpSigs)	-> Environment
+  set-unfold-type(Environment, ActionType)	-> Environment
 
-  "empty-env"						-> Environment
+  "empty-env"					-> Environment
+  "initial-dataop-sigs"				-> DataOpSigs
 
   get-fun-name(AS-FunctionSig)	-> Literal
   get-using(AS-FunctionSig)	-> Type
@@ -30,14 +37,17 @@ context-free syntax
   remove-raising(FunResult)	-> { SingleFunResult "&" }*
   remove-failing(FunResult)	-> { SingleFunResult "&" }*
   remove-action(FunResult)	-> { SingleFunResult "&" }*
-  remove-dobble-sigs(Signatures)	-> Signatures
-  join-results({ SingleFunResult "&" }*, FunResult)	-> { SingleFunResult "&" }+
+  remove-dobble-sigs(Signatures, SubTypes)	-> Signatures
+  join-results({ SingleFunResult "&" }*, FunResult, SubTypes)	
+				-> { SingleFunResult "&" }+
 
 
 hiddens variables
 
-  "SIGS"[0-9]?	-> Signatures
-  "AT"[0-9]?	-> ActionType
+  "$SIGS"[0-9]?		-> Signatures
+  "$AT"[0-9]?		-> ActionType
+  "$STS"[0-9]?		-> SubTypes
+  "$DOS"[0-9]?		-> DataOpSigs
   "$LT"[0-9]?		-> Literal
   "$SO"[0-9]?		-> Sort
   "$FR"[0-9]?		-> FunResult

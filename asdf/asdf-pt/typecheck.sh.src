@@ -1,4 +1,4 @@
 ASBIN=__META__/bin
 ASSHARE=__META__/share/asdf/asdf-pt
-$ASBIN/apply-function -f typecheck -i module -i signatures -s Summary | $ASBIN/asfe -e $ASSHARE/type-check/typecheck.eqs | $ASBIN/unparsePT
+$ASBIN/apply-function -f typecheck -i .module -i .type-info -s Summary | $ASBIN/asfe -e $ASSHARE/type-check/typecheck.eqs | $ASBIN/unparsePT
 

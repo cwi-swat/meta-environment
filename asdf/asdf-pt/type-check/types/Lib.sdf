@@ -17,3 +17,5 @@ context-free syntax
 lexical syntax
 
   "yes" | "no"	-> Answer
+
+  "empty"	-> Type {prefer}  

@@ -2,16 +2,24 @@ module asdf/functions
 
 imports
 
-  type-check/Layout
+  type-check/subtype
   asdf/asdf-sem-sec
+  asdf/lower-case
+  containers/List[<DataOp, FunResult>]
 
 exports
 
 sorts
 
-  FunctionDefs
+  FunctionDefs TypeInfo SubTypes DataOpSigs
 
 context-free syntax
+
+  get-type-info(AS-Module)	-> TypeInfo
+
+  <Signatures, SubTypes, DataOpSigs>	-> TypeInfo
+
+  List[[<DataOp, FunResult>]]		-> DataOpSigs
 
   get-signatures(AS-Module)	-> Signatures
 
@@ -19,7 +27,29 @@ context-free syntax
   get-sigs(AS-Section*, Signatures)	-> Signatures {traversal(accu, break, top-down)}
   get-sigs(AS-FunctionSig, Signatures)	-> Signatures {traversal(accu, break, top-down)}
 
-  join-signatures(Signatures, Signatures)  -> Signatures
+  get-subtypes(AS-Module, SubTypes)	
+			  -> SubTypes {traversal(accu, break, top-down)}
+  get-subtypes(AS-Requires-Production, SubTypes)	
+			  -> SubTypes {traversal(accu, break, top-down)}
+
+  get-subs(AtomicType, AS-Requires-Rhs, SubTypes)	  -> SubTypes 
+
+  get-dataop-sigs(AS-Module, DataOpSigs)  
+			     -> DataOpSigs {traversal(accu, break, top-down)}
+
+  get-dataop-sigs(AS-Requires-Production, DataOpSigs)  
+			     -> DataOpSigs {traversal(accu, break, top-down)}
+
+  get-dataop-sigs(AtomicType, AS-Requires-Rhs, DataOpSigs)	 -> DataOpSigs 
+
+  get-selectors(AtomicType, {(Literal ":" Sort) ","}*)	
+					  -> List[[<DataOp, FunResult>]]
+
+  get-dataop-type({(Literal ":" Sort) ","}*)	-> Type
+
+  sort-to-type(Sort)	  -> AtomicType
+
+  join-type-info(TypeInfo, TypeInfo)  -> TypeInfo
 
   get-function-defs(AS-Module)	     -> FunctionDefs
 
@@ -49,4 +79,17 @@ hiddens variables
   "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
   "$FR"[0-9]?		-> FunResult
   "$TY"[0-9]?		-> Type
+  "$ATY"[0-9]?		-> AtomicType    
+  "$TY"[0-9]?"*"	-> { Type ","}*
+
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$DOS"[0-9]?		-> List[[<DataOp, FunResult>]]
+
+  "$ARR"[0-9]?		-> AS-Requires-Rhs
+  "$CH"[0-9]?		-> CHAR
+  "$CH"[0-9]?"*"	-> CHAR*
+  "$CH"[0-9]?"+"	-> CHAR+
+  "$LT"[0-9]?		-> Literal
+
+  "$LS"[0-9]?"*"	-> {(Literal ":" Sort) ","}*
 

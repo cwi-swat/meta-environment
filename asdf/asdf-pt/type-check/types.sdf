@@ -4,7 +4,7 @@ imports
 
   basic/Errors
   type-check/pos-annotate
-  type-check/types/asdf-types
+  type-check/subtype
 
 exports 
 
@@ -18,12 +18,6 @@ context-free syntax
 
 %% Types
 
-  "action" "[" AMusing? AMgiving? AMraising? "]" 	-> ActionType
-  "using" Type	 	-> AMusing
-  "giving" Type	 	-> AMgiving
-  "raising" Type	-> AMraising
-  ActionType		-> Type
-
   "AR" "[" NormalType"," ExceptionalType"," ExcepNoData "]" 
 				-> ActionResult
   "nor" "=" Type		-> NormalType
@@ -36,36 +30,25 @@ context-free syntax
 %% Type operators
 
   type-concat(Type, Type) 	-> Type
-  unify(Type, Type) 		-> Type
+  unify(Type, Type, SubTypes)	-> Type
 
-  Type subtype-of Type 			-> Answer
   ExcepNoData answerOr ExcepNoData 	-> ExcepNoData
 
-  highest-type(Type, Type)	-> Type
-  lowest-type(Type, Type)	-> Type
+  highest-type(Type, Type, SubTypes)	-> Type
+  lowest-type(Type, Type, SubTypes)	-> Type
 
 %% Error messages
 
   Error+ 			-> ActionResult
 		
-lexical syntax
-
-  "value"	-> AtomicType
-
-  "yes"		-> Answer
-  "no"		-> Answer
-
-  "empty"	-> Type {prefer}
-
 hiddens 
 
 variables
 
-  "AT"[1-9]?	-> ActionType	
-  "END"[1-9]?	-> ExcepNoData
-  "TY"[1-9]?	-> Type
-  "TY"[1-9]?"*"	-> {Type ","}*
-  "SW"[1-9]?	-> TypeWithPosition
+  "$END"[1-9]?	-> ExcepNoData
+  "$TY"[1-9]?	-> Type
+  "$TY"[1-9]?"*"	-> {Type ","}*
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
 
 sorts
 

@@ -2,15 +2,20 @@ equations
 
 [tcm-1] defs() == get-function-defs($AM)
 	=====================================================
-	typecheck($AM, sigs($AFS*)) = gen-summary(yes)
+	typecheck($AM, $TI) = gen-summary(yes)
 
-[tcm-1] defs($FD+) := get-function-defs($AM),
-	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*)),
-	$ENV := set-signatures(empty-env, sigs($AFS2*)),
-	$ANS := typecheck-definitions(defs($FD+), $ENV),
+[tcm-1] <sigs($AFS1*), $STS, $DOS1> := $TI,	
+	defs($FD+) := get-function-defs($AM),
+	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*), $STS),
+	$ENV1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),
+	$LDF1 := get-dataop-sigs($ENV1),
+	$LDF2 := initial-dataop-sigs,
+	$DOS2 := concat($LDF1, $LDF2),
+        $ENV2 := set-dataop-sigs($ENV1, $DOS2),
+	$ANS := typecheck-definitions(defs($FD+), $ENV2),
 	$SUM := gen-summary($ANS)
 	=====================================================
-	typecheck($AM, sigs($AFS1*)) = $SUM
+	typecheck($AM, $TI) = $SUM
 
 [tcd-1] $ANS1 := typecheck-definitions(defs($FD), $ENV),
 	$ANS2 := typecheck-definitions(defs($FD+), $ENV)
@@ -25,8 +30,8 @@ equations
       $TY2 := get-giving($AFS1),
       $TY3 := get-raising($AFS1),
       AR[nor=$TY4, exc=$TY5, $END] := typecheck-action($AC, $TY1, $ENV),
-      yes == $TY4 subtype-of $TY2, 
-      yes == $TY5 subtype-of $TY3
+      yes == subtype-of($TY4, $TY2, get-subtypes($ENV)), 
+      yes == subtype-of($TY5, $TY3, get-subtypes($ENV))
       =========================================================================
       typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = yes
 
@@ -50,7 +55,7 @@ equations
       $TY2 := get-using($AFS1),
       $TY3 := get-giving($AFS1),
       $TY4 := get-raising($AFS1),
-      $TY5 := unify($TY1, $TY2)
+      $TY5 := unify($TY1, $TY2, get-subtypes($ENV))
       ============================================================
       typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, no]
 

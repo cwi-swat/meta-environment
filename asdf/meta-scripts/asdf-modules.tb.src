@@ -684,6 +684,7 @@ endlet
 process ASDFButtons is
 let
   ModuleName : str,
+  ConstraintMod : str,
   Stack : list,
   EditorId : term,
   EditorId2 : term,
@@ -761,8 +762,12 @@ in
   ReturnSuccess(EditorId, Stack)			
 +
   rec-msg(type-check-asdf, Stack?, EditorId?) .
+printf("Stack = %t\n", Stack) .
+  StackPopString(Stack, Stack?, Ext?) .
+  StackPopString(Stack, Stack?, Path?) .
+  StackPopString(Stack, Stack?, ConstraintMod?) .
   StackPopString(Stack, Stack?, ModuleName?) .
-  TypeCheckModule(ModuleName).
+  TypeCheckModule(ModuleName, ConstraintMod).
   ReturnSuccess(EditorId, Stack)
 ) * delta
 endlet
@@ -851,16 +856,15 @@ in
     )
 endlet
 
-process TypeCheckModule(ModuleName : str) is
+process TypeCheckModule(ModuleName : str, ConstraintsModule : str) is
 let
    ModuleNames : list,
    ImModuleTrees : list,
    ImModuleTree : term,
    ModuleTree : term,
    ModuleText : str,
-   Signatures : term,
-   AllSignatures : term, 
-   SignatureText : str,
+   TypeInfo : term,
+   AllTypeInfo : term, 
    ErrorTree : term,
    ErrorText : str
 in
@@ -874,39 +878,52 @@ in
      rec-msg(ts-no-values) .
      ImModuleTrees := []    
    ) .
+   if equal(ConstraintsModule, "") then
+     tau   
+   else
+     snd-msg(open-modules([ConstraintsModule], asdf)) .
+     rec-msg(finished-opening-modules) .
+     snd-msg(ts-get-term-value("asdf-tree",ConstraintsModule)) .
+     (
+       rec-msg(ts-value(ModuleTree?)) .
+       ImModuleTrees := join([ModuleTree], ImModuleTrees) 
+     +
+       rec-msg(ts-no-value)
+     )
+   fi.
    ImModuleTree := first(ImModuleTrees) .
    ImModuleTrees := next(ImModuleTrees) .
-   snd-msg(apply-rewrite("Asdfsupport", "get-signatures", 
-                         "Signatures", [ImModuleTree])) .
-   rec-msg(normalform("Asdfsupport", AllSignatures?)) .
+   snd-msg(apply-rewrite("Asdfsupport", "get-type-info", 
+                         "TypeInfo", [ImModuleTree])) .
+   rec-msg(normalform("Asdfsupport", AllTypeInfo?)) .
    (
      if not-equal(ImModuleTrees, []) then
        ImModuleTree := first(ImModuleTrees) .
        ImModuleTrees := next(ImModuleTrees) .
-       snd-msg(apply-rewrite("Asdfsupport", "get-signatures", 
-	 		    "Signatures", [ImModuleTree])) .
-       rec-msg(normalform("Asdfsupport", Signatures?)) .
-       snd-msg(apply-rewrite("Asdfsupport", "join-signatures", 
-	 		    "Signatures", [AllSignatures, Signatures])) .
-       rec-msg(normalform("Asdfsupport", AllSignatures?)) 
+       snd-msg(apply-rewrite("Asdfsupport", "get-type-info", 
+	 		    "TypeInfo", [ImModuleTree])) .
+       rec-msg(normalform("Asdfsupport", TypeInfo?)) .
+       snd-msg(apply-rewrite("Asdfsupport", "join-type-info", 
+	 		    "TypeInfo", [AllTypeInfo, TypeInfo])) .
+       rec-msg(normalform("Asdfsupport", AllTypeInfo?)) 
      fi
    )*
    if equal(ImModuleTrees, []) then
      tau
    fi .
    /* typecheck with signatures */
-   snd-msg(io-unpack-term(AllSignatures)) .
-   rec-msg(io-term(AllSignatures?)).
+   snd-msg(io-unpack-term(AllTypeInfo)) .
+   rec-msg(io-term(AllTypeInfo?)).
    snd-msg(ts-get-term-value("asdf-tree",ModuleName)) .
    rec-msg(ts-value(ModuleTree?)) .
    snd-msg(io-unpack-term(ModuleTree)) .
    rec-msg(io-term(ModuleTree?)).
-   snd-msg(io-write-packed-term-file("module", ModuleTree)) .
+   snd-msg(io-write-packed-term-file(".module", ModuleTree)) .
    rec-msg(io-file-written) .
-   snd-msg(io-write-packed-term-file("signatures", AllSignatures)) .
+   snd-msg(io-write-packed-term-file(".type-info", AllTypeInfo)) .
    rec-msg(io-file-written) .
 /*   snd-msg(apply-rewrite("Typecheck", "typecheck", 
-	 		"Summary", [ModuleTree, AllSignatures])).
+	 		"Summary", [ModuleTree, AllTypeInfo])).
    rec-msg(normalform("Typecheck", ErrorTree?)).*/
    snd-msg(gen-adapter-term-evaluate(asdf-typecheck-id,"__ASDF_BIN__/typecheck", hest)).
    rec-msg(gen-adapter-term-result(asdf-typecheck-id, ErrorTree?)).

@@ -11,6 +11,13 @@ context-free syntax
 
   AtomicType	-> Type
 
+  "action" "[" AMusing? AMgiving? AMraising? "]" 	-> ActionType
+  "using" Type	 	-> AMusing
+  "giving" Type	 	-> AMgiving
+  "raising" Type	-> AMraising
+  ActionType		-> Type
+
+
 lexical syntax
 
   [a-z\-]+	-> AtomicType
