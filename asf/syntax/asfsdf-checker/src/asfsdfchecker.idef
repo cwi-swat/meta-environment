@@ -7,13 +7,14 @@ let
   Syntax : term,
   ASC    : asfsdfchecker
 in
-  execute(asfsdfchecker, ASC?) .
   (
     rec-msg(check-asfsdf(Syntax?)) .
+    execute(asfsdfchecker, ASC?) .
     snd-eval(ASC, check-asfsdf(Syntax)) .
     rec-value(ASC, messages(Msgs?)) .
     snd-msg(messages(Msgs)) .
-    Syntax := none
+    Syntax := none .
+    snd-terminate(ASC, "done")
   )*
   delta
 endlet
