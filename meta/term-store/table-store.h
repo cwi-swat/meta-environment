@@ -18,5 +18,6 @@ void      TS_removeValueFromAllTables(ATerm key);
 ATbool    TS_containsKey(char* table, ATerm key);
 ATermList TS_getAllKeys(char* table);
 ATermList TS_getAllValues(char* table);
+ATermList TS_filterKeys(char* table, ATermList keys);
 
 #endif

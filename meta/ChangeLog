@@ -1,5 +1,8 @@
 # $Id$
 
+2003/05/27 (markvdb@cwi.nl)
+ * Imports are filter against the contents of the term-store.
+
 2003/05/26 ({markvdb,jurgenv}@cwi.nl)
  * In-output idef messages are all prefix with "io-"
  * A path in the module name is always up to the module name, not

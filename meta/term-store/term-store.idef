@@ -54,6 +54,11 @@ in
     snd-eval(TS,get-all-keys(TableName)).
     rec-value(TS,result(Keys?)).
     snd-msg(ts-all-keys(Keys))
+  +  
+    rec-msg(ts-filter-keys(TableName?, Keys?)) .
+    snd-eval(TS, filter-keys(TableName, Keys)) .
+    rec-value(TS,result(Keys?)).
+    snd-msg(ts-keys(Keys))
   +
     rec-msg(ts-get-all-values(TableName?)) .
     snd-eval(TS, get-all-values(TableName)) .

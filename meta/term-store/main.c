@@ -132,6 +132,15 @@ void remove_value_from_all_tables(int conn, ATerm key)
 
 /*}}}  */
 
+/*{{{  ATerm filter_keys(int conn, char *table, ATerm keys) */
+
+ATerm filter_keys(int conn, char *table, ATerm keys)
+{
+  return RESULT_TERM((ATerm) TS_filterKeys(table, (ATermList) keys));
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])

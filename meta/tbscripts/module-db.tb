@@ -100,8 +100,9 @@ in
     snd-msg(ts-put-value("active-modules", ModuleId, path(Path))) .
     snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
     snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
-    printf("DEBUG: just get the imported modules, not just the new ones?\n").
-    snd-msg(adding-succeeded(Name,ModuleId,Path,Modules))
+    snd-msg(ts-filter-keys("active-modules", Modules)) .
+    rec-msg(ts-keys(Modules?)) .
+    snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
   +
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))

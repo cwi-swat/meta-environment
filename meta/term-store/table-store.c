@@ -221,3 +221,25 @@ ATermList TS_getAllValues(char* name)
 }
 
 /*}}}  */
+
+/*{{{  ATermList TS_filterKeys(char *name, ATermList keysList) */
+
+ATermList TS_filterKeys(char *table, ATermList keysList)
+{
+  ATerm key;
+  ATermList unknownKeys = ATempty;
+   
+  while (!ATisEmpty(keysList)) {
+    key = ATgetFirst(keysList);
+	   
+    if (!TS_containsKey(table,key)) {
+      unknownKeys = ATinsert(unknownKeys, key);
+    }
+
+    keysList = ATgetNext(keysList);
+  }
+     
+  return unknownKeys;
+}
+
+/*}}}  */
