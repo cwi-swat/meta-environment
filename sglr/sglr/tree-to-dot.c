@@ -80,15 +80,15 @@ print_symbol(FILE *dot, term *t)
     }
   else if (TBmatch(t, "lex(%t)", &arg))
     {
-      fprintf(dot, "\\<");
+      fprintf(dot, "<");
       print_symbol(dot, arg);
-      fprintf(dot, "-LEX\\>");
+      fprintf(dot, "-LEX>");
     }
   else if (TBmatch(t, "cf(%t)", &arg))
     {
-      fprintf(dot, "\\<");
+      fprintf(dot, "<");
       print_symbol(dot, arg);
-      fprintf(dot, "-CF\\>");
+      fprintf(dot, "-CF>");
     }
   else if (TBmatch(t, "iter-star(%t)", &arg))
     {
@@ -311,10 +311,12 @@ tree_to_dotfile(char *file, term *t)
   prev_char_parent = NULL;
 
   fprintf(dot, "strict digraph ParseTree { \n"
-	       "\tcenter=true;\n"
 	       "\tordering=out;\n"
+/* These belong on dot's command line, really
+	       "\tcenter=true;\n"
 	       "\tranksep=.44;\n"
 	       "\tnode[shape=plaintext fontname=\"Helvetica-Bold\" fontsize=12 height=.32];\n\n"
+*/
 	  );
   tree_to_dot(dot, t, 0, NULL);
   fprintf(dot, "}\n");
