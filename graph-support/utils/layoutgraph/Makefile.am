@@ -27,9 +27,12 @@ layoutgraph_SOURCES = \
 
 layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \
-	-L$(ATERM)/lib -lATerm \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${top_builddir}/lib -lGraph \
+	-L${top_builddir}/lib \
+	-L$(ATERM)/lib \
+	-L${TOOLBUSLIB}/lib \
+	-lATerm \
+	-lATB \
+	-lGraph \
         ${SOCKLIBS}
 
 graph2dot_SOURCES = \

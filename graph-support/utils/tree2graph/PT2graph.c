@@ -165,6 +165,10 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   NodeList nodes;
   Edge edge;
   EdgeList edges; 
+  Style style;
+  Attribute styleAttr;
+  Color color;
+  Attribute colorAttr;
   Attribute shapeAttr;
   NodeId nodeId;
   NodeId parentId;
@@ -181,6 +185,18 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   shape = makeShapeDiamond(); 
   shapeAttr = makeAttributeShape(shape);
   attrList = makeAttributeListMulti(shapeAttr, attrList);
+
+  color = makeColorRgb(205, 55, 0);
+  colorAttr = makeAttributeColor(color);
+  attrList = makeAttributeListMulti(colorAttr, attrList);
+
+  color = makeColorRgb(255, 165, 0);
+  colorAttr = makeAttributeFillColor(color);
+  attrList = makeAttributeListMulti(colorAttr, attrList);
+
+  style = makeStyleFilled();
+  styleAttr = makeAttributeStyle(style);
+  attrList = makeAttributeListMulti(styleAttr, attrList);
  
   node = makeNodeDefault(nodeId, attrList);
 

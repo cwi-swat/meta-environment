@@ -27,16 +27,16 @@ static EdgeList edgeList = NULL;
 static void initTermStore()
 {
   termStore = ATempty;
-  ATprotect((ATerm *)&termStore);
+  ATprotect((ATerm*)((void*)&termStore));
 
   nodeList = ATempty;
-  ATprotect((ATerm*) &nodeList);
+  ATprotect((ATerm*)((void*)&nodeList));
 
   edgeList = makeEdgeListEmpty();
-  ATprotect((ATerm*) &edgeList);
+  ATprotect((ATerm*) ((void*)&edgeList));
   
   graphAttributeList = makeAttributeListEmpty();
-  ATprotect((ATerm*) &graphAttributeList);
+  ATprotect((ATerm*) ((void*)&graphAttributeList));
 }
 
 /*}}}  */
@@ -112,7 +112,7 @@ static Graph buildGraph()
   ATermList list, nodes = ATempty;
   EdgeList edges;
  
-  for (list=nodeList; !ATisEmpty(list); list=ATgetNext(list)) {
+  for (list=(ATermList)nodeList; !ATisEmpty(list); list=ATgetNext(list)) {
     Node node = NodeFromTerm(ATgetFirst(list));
     NodeId id = getNodeId(node);
     ATerm newNode = ATtableGet(nodeTable, NodeIdToTerm(id));
@@ -132,7 +132,7 @@ static Graph buildGraph()
 
 void protectTerm(ATerm term)
 {
-  termStore = ATinsert(termStore, term);
+  termStore = ATinsert((ATermList)termStore, term);
 }
 
 /*}}}  */

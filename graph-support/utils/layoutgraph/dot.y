@@ -2,7 +2,6 @@
  * vim:ts=2
  */
 
-
 %{
 #include <stdlib.h>
 #include <string.h>
@@ -244,6 +243,17 @@ static Attribute parseBoundaries(char *coords)
   return makeAttributeBoundingBox(p1,p2);
 }
 
+static Color parseColor(const char *rgb)
+{
+  int r, g, b;
+
+	if (sscanf(rgb, "#%2x%2x%2x", &r, &g, &b) != 3) {
+	  ATabort("parseColor: got invalid rgb specification: %s\n", rgb);
+	}
+
+  return makeColorRgb(r, g, b);
+}
+
 static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 {
   AttributeList list = makeAttributeListEmpty();
@@ -255,35 +265,53 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 		ATerm key = ATgetFirst(pair);
 		ATerm value = ATgetFirst(ATgetNext(pair));
 		char *sval = ATgetName(ATgetAFun((ATermAppl)value));
-		/* ATwarning("key=%t, value=%s\n", key, sval);  */
+
+		/*ATwarning("key=%t, value=%s\n", key, sval);  */
 
     if (ATisEqual(key, ATparse("\"bb\""))) {
        Attribute attr = parseBoundaries(sval);
 			 list = makeAttributeListMulti(attr, list);
     }
+		else if (ATisEqual(key, ATparse("\"fillcolor\""))) {
+			Color color = parseColor(sval);
+			list = makeAttributeListMulti(makeAttributeFillColor(color), list);
+		}
+		else if (ATisEqual(key, ATparse("\"color\""))) {
+			Color color = parseColor(sval);
+			list = makeAttributeListMulti(makeAttributeColor(color), list);
+		}
+		else if (ATisEqual(key, ATparse("\"style\""))) {
+		  Style style = StyleFromTerm(ATparse(sval));
+			list = makeAttributeListMulti(makeAttributeStyle(style), list);
+		}
 		else if (ATisEqual(key, ATparse("\"width\""))) {
       width = inchToPixel(atof(sval));
-		} else if (ATisEqual(key, ATparse("\"height\""))) {
+		}
+		else if (ATisEqual(key, ATparse("\"height\""))) {
       height = inchToPixel(atof(sval));
-		} else if (ATisEqual(key, ATparse("\"shape\""))) {
+		}
+		else if (ATisEqual(key, ATparse("\"shape\""))) {
       Shape shape = ShapeFromTerm(ATparse(sval));
       list = makeAttributeListMulti(makeAttributeShape(shape), list);
 		}
     else if (ATisEqual(key, ATparse("\"dir\""))) {
       Direction dir = DirectionFromTerm(ATparse(sval));
       list = makeAttributeListMulti(makeAttributeDirection(dir), list);
-		} else if (ATisEqual(key, ATparse("\"pos\""))) {
+		}
+		else if (ATisEqual(key, ATparse("\"pos\""))) {
       if (sval[0] == 'e') {
         /* List of coordinates, last element first but the rest in order */
         Attribute attr = makeAttributeCurvePoints(
                            parseCoordinateList(sval+2, ATtrue));
 				list = makeAttributeListMulti(attr, list);
-			} else if (sval[0] == 's') {
+			}
+			else if (sval[0] == 's') {
         /* List of coordinates, all in order */
         Attribute attr = makeAttributeCurvePoints(
                            parseCoordinateList(sval+2, ATfalse));
 				list = makeAttributeListMulti(attr, list);
-			} else {
+			}
+			else {
         if (type == NODE) {
 					/* x,y pair */
 					char *sep = strchr(sval, ',');

@@ -11,4 +11,6 @@ INCLUDES = -I${ATERM}/include
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 
 api: Graph.adt
-	adt-to-c -i $<
+	upgrade-adt -i $< -o $<.upgraded
+	adt-to-c --input $<.upgraded --output Graph
+	rm -f $<.upgraded

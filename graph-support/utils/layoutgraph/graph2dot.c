@@ -33,26 +33,55 @@ static void printPolygon(Polygon poly, FILE *file)
 }
 
 /*}}}  */
+/*{{{  static void printColor(Color color, FILE *file) */
+
+static void printColor(Color color, FILE *file)
+{
+  fprintf(file, "\"#%02x%02x%02x\"",
+	  getColorRed(color),
+	  getColorGreen(color),
+	  getColorBlue(color));
+}
+
+/*}}}  */
 /*{{{  static void printAttribute(Attribute attr, FILE *file) */
 
 static void printAttribute(Attribute attr, FILE *file)
 {
   if (isAttributeLabel(attr)) {
     ATfprintf(file, "label=%y", ATmakeAFun(getAttributeLabel(attr), 0, ATtrue));
-  } else if (isAttributeShape(attr)) {
+  }
+  else if (isAttributeColor(attr)) {
+    fprintf(file, "color=");
+    printColor(getAttributeColor(attr), file);
+  }
+  else if (isAttributeFillColor(attr)) {
+    fprintf(file, "fillcolor=");
+    printColor(getAttributeColor(attr), file);
+  }
+  else if (isAttributeStyle(attr)) {
+    ATfprintf(file, "style=%t\n", StyleToTerm(getAttributeStyle(attr)));
+  }
+  else if (isAttributeShape(attr)) {
     ATfprintf(file, "shape=%t", ShapeToTerm(getAttributeShape(attr)));
-  } else if (isAttributeLocation(attr)) {
+  }
+  else if (isAttributeLocation(attr)) {
     ATfprintf(file, "pos=\"%f,%f\"", pixelToInch(getAttributeX(attr)),
 	      pixelToInch(getAttributeY(attr)));
-  } else if (isAttributeSize(attr)) {
+  }
+  else if (isAttributeSize(attr)) {
     ATfprintf(file, "width=\"%f\" ", pixelToInch(getAttributeWidth(attr)));
     ATfprintf(file, "height=\"%f\"", pixelToInch(getAttributeHeight(attr)));
-  } else if (isAttributeCurvePoints(attr)) {
+  }
+  else if (isAttributeCurvePoints(attr)) {
     printPolygon(getAttributePoints(attr), file);
-  } else if (isAttributeDirection(attr)) {
+  }
+  else if (isAttributeDirection(attr)) {
     ATfprintf(file, "dir=%t", DirectionToTerm(getAttributeDirection(attr)));   
-  } else if (isAttributeInfo(attr)) {
-  } else {
+  }
+  else if (isAttributeInfo(attr)) {
+  }
+  else {
     ATwarning("unknown attribute type: %t\n", attr);
   }
 }

@@ -1,5 +1,9 @@
 $Id$
 
+Wed Oct  8 16:14:39 CEST 2003 <{jong,jurgenv}@cwi.nl>
+ * Added support for color, fillcolor and style attributes. Closes: #64
+ * utils/tree2graph: arbitrary colors used to draw attention to ambiguities.
+
 Thu Oct  2 13:19:41 CEST 2003 <jong@cwi.nl>
  * utils/layoutgraph/dot.y:  Closes #54
    - #define YYERROR_VERBOSE to get better error message

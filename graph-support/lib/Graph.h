@@ -16,6 +16,8 @@ typedef struct _Node *Node;
 typedef struct _NodeId *NodeId;
 typedef struct _AttributeList *AttributeList;
 typedef struct _Attribute *Attribute;
+typedef struct _Color *Color;
+typedef struct _Style *Style;
 typedef struct _Shape *Shape;
 typedef struct _Direction *Direction;
 typedef struct _EdgeList *EdgeList;
@@ -41,6 +43,10 @@ AttributeList AttributeListFromTerm(ATerm t);
 ATerm AttributeListToTerm(AttributeList arg);
 Attribute AttributeFromTerm(ATerm t);
 ATerm AttributeToTerm(Attribute arg);
+Color ColorFromTerm(ATerm t);
+ATerm ColorToTerm(Color arg);
+Style StyleFromTerm(ATerm t);
+ATerm StyleToTerm(Style arg);
 Shape ShapeFromTerm(ATerm t);
 ATerm ShapeToTerm(Shape arg);
 Direction DirectionFromTerm(ATerm t);
@@ -55,6 +61,10 @@ Point PointFromTerm(ATerm t);
 ATerm PointToTerm(Point arg);
 
 /*}}}  */
+/*{{{  list functions */
+
+
+/*}}}  */
 /*{{{  constructors */
 
 Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes);
@@ -64,26 +74,36 @@ Node makeNodeDefault(NodeId id, AttributeList attributes);
 NodeId makeNodeIdDefault(char* id);
 AttributeList makeAttributeListEmpty();
 AttributeList makeAttributeListMulti(Attribute head, AttributeList tail);
-Attribute makeAttributeLabel(char* label);
-Attribute makeAttributeShape(Shape shape);
-Attribute makeAttributeLocation(int x, int y);
-Attribute makeAttributeSize(int width, int height);
-Attribute makeAttributeCurvePoints(Polygon points);
 Attribute makeAttributeBoundingBox(Point first, Point second);
+Attribute makeAttributeColor(Color color);
+Attribute makeAttributeCurvePoints(Polygon points);
 Attribute makeAttributeDirection(Direction direction);
+Attribute makeAttributeFillColor(Color color);
 Attribute makeAttributeInfo(char* key, ATerm value);
-Shape makeShapePlaintext();
-Shape makeShapeEllipse();
-Shape makeShapeCircle();
-Shape makeShapeEgg();
-Shape makeShapeTriangle();
+Attribute makeAttributeLabel(char* label);
+Attribute makeAttributeLocation(int x, int y);
+Attribute makeAttributeShape(Shape shape);
+Attribute makeAttributeSize(int width, int height);
+Attribute makeAttributeStyle(Style style);
+Color makeColorRgb(int red, int green, int blue);
+Style makeStyleBold();
+Style makeStyleDashed();
+Style makeStyleDotted();
+Style makeStyleFilled();
+Style makeStyleInvisible();
+Style makeStyleSolid();
 Shape makeShapeBox();
+Shape makeShapeCircle();
 Shape makeShapeDiamond();
-Shape makeShapeTrapezium();
-Shape makeShapeParallelogram();
-Shape makeShapeHouse();
+Shape makeShapeEgg();
+Shape makeShapeEllipse();
 Shape makeShapeHexagon();
+Shape makeShapeHouse();
 Shape makeShapeOctagon();
+Shape makeShapeParallelogram();
+Shape makeShapePlaintext();
+Shape makeShapeTrapezium();
+Shape makeShapeTriangle();
 Direction makeDirectionForward();
 Direction makeDirectionBack();
 Direction makeDirectionBoth();
@@ -104,6 +124,8 @@ ATbool isEqualNode(Node arg0, Node arg1);
 ATbool isEqualNodeId(NodeId arg0, NodeId arg1);
 ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1);
 ATbool isEqualAttribute(Attribute arg0, Attribute arg1);
+ATbool isEqualColor(Color arg0, Color arg1);
+ATbool isEqualStyle(Style arg0, Style arg1);
 ATbool isEqualShape(Shape arg0, Shape arg1);
 ATbool isEqualDirection(Direction arg0, Direction arg1);
 ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1);
@@ -177,41 +199,29 @@ AttributeList setAttributeListTail(AttributeList arg, AttributeList tail);
 /*{{{  Attribute accessors */
 
 ATbool isValidAttribute(Attribute arg);
-inline ATbool isAttributeLabel(Attribute arg);
-inline ATbool isAttributeShape(Attribute arg);
-inline ATbool isAttributeLocation(Attribute arg);
-inline ATbool isAttributeSize(Attribute arg);
-inline ATbool isAttributeCurvePoints(Attribute arg);
 inline ATbool isAttributeBoundingBox(Attribute arg);
+inline ATbool isAttributeColor(Attribute arg);
+inline ATbool isAttributeCurvePoints(Attribute arg);
 inline ATbool isAttributeDirection(Attribute arg);
+inline ATbool isAttributeFillColor(Attribute arg);
 inline ATbool isAttributeInfo(Attribute arg);
-ATbool hasAttributeLabel(Attribute arg);
-char* getAttributeLabel(Attribute arg);
-Attribute setAttributeLabel(Attribute arg, char* label);
-ATbool hasAttributeShape(Attribute arg);
-Shape getAttributeShape(Attribute arg);
-Attribute setAttributeShape(Attribute arg, Shape shape);
-ATbool hasAttributeX(Attribute arg);
-int getAttributeX(Attribute arg);
-Attribute setAttributeX(Attribute arg, int x);
-ATbool hasAttributeY(Attribute arg);
-int getAttributeY(Attribute arg);
-Attribute setAttributeY(Attribute arg, int y);
-ATbool hasAttributeWidth(Attribute arg);
-int getAttributeWidth(Attribute arg);
-Attribute setAttributeWidth(Attribute arg, int width);
-ATbool hasAttributeHeight(Attribute arg);
-int getAttributeHeight(Attribute arg);
-Attribute setAttributeHeight(Attribute arg, int height);
-ATbool hasAttributePoints(Attribute arg);
-Polygon getAttributePoints(Attribute arg);
-Attribute setAttributePoints(Attribute arg, Polygon points);
+inline ATbool isAttributeLabel(Attribute arg);
+inline ATbool isAttributeLocation(Attribute arg);
+inline ATbool isAttributeShape(Attribute arg);
+inline ATbool isAttributeSize(Attribute arg);
+inline ATbool isAttributeStyle(Attribute arg);
 ATbool hasAttributeFirst(Attribute arg);
 Point getAttributeFirst(Attribute arg);
 Attribute setAttributeFirst(Attribute arg, Point first);
 ATbool hasAttributeSecond(Attribute arg);
 Point getAttributeSecond(Attribute arg);
 Attribute setAttributeSecond(Attribute arg, Point second);
+ATbool hasAttributeColor(Attribute arg);
+Color getAttributeColor(Attribute arg);
+Attribute setAttributeColor(Attribute arg, Color color);
+ATbool hasAttributePoints(Attribute arg);
+Polygon getAttributePoints(Attribute arg);
+Attribute setAttributePoints(Attribute arg, Polygon points);
 ATbool hasAttributeDirection(Attribute arg);
 Direction getAttributeDirection(Attribute arg);
 Attribute setAttributeDirection(Attribute arg, Direction direction);
@@ -221,23 +231,70 @@ Attribute setAttributeKey(Attribute arg, char* key);
 ATbool hasAttributeValue(Attribute arg);
 ATerm getAttributeValue(Attribute arg);
 Attribute setAttributeValue(Attribute arg, ATerm value);
+ATbool hasAttributeLabel(Attribute arg);
+char* getAttributeLabel(Attribute arg);
+Attribute setAttributeLabel(Attribute arg, char* label);
+ATbool hasAttributeX(Attribute arg);
+int getAttributeX(Attribute arg);
+Attribute setAttributeX(Attribute arg, int x);
+ATbool hasAttributeY(Attribute arg);
+int getAttributeY(Attribute arg);
+Attribute setAttributeY(Attribute arg, int y);
+ATbool hasAttributeShape(Attribute arg);
+Shape getAttributeShape(Attribute arg);
+Attribute setAttributeShape(Attribute arg, Shape shape);
+ATbool hasAttributeWidth(Attribute arg);
+int getAttributeWidth(Attribute arg);
+Attribute setAttributeWidth(Attribute arg, int width);
+ATbool hasAttributeHeight(Attribute arg);
+int getAttributeHeight(Attribute arg);
+Attribute setAttributeHeight(Attribute arg, int height);
+ATbool hasAttributeStyle(Attribute arg);
+Style getAttributeStyle(Attribute arg);
+Attribute setAttributeStyle(Attribute arg, Style style);
+
+/*}}}  */
+/*{{{  Color accessors */
+
+ATbool isValidColor(Color arg);
+inline ATbool isColorRgb(Color arg);
+ATbool hasColorRed(Color arg);
+int getColorRed(Color arg);
+Color setColorRed(Color arg, int red);
+ATbool hasColorGreen(Color arg);
+int getColorGreen(Color arg);
+Color setColorGreen(Color arg, int green);
+ATbool hasColorBlue(Color arg);
+int getColorBlue(Color arg);
+Color setColorBlue(Color arg, int blue);
+
+/*}}}  */
+/*{{{  Style accessors */
+
+ATbool isValidStyle(Style arg);
+inline ATbool isStyleBold(Style arg);
+inline ATbool isStyleDashed(Style arg);
+inline ATbool isStyleDotted(Style arg);
+inline ATbool isStyleFilled(Style arg);
+inline ATbool isStyleInvisible(Style arg);
+inline ATbool isStyleSolid(Style arg);
 
 /*}}}  */
 /*{{{  Shape accessors */
 
 ATbool isValidShape(Shape arg);
-inline ATbool isShapePlaintext(Shape arg);
-inline ATbool isShapeEllipse(Shape arg);
-inline ATbool isShapeCircle(Shape arg);
-inline ATbool isShapeEgg(Shape arg);
-inline ATbool isShapeTriangle(Shape arg);
 inline ATbool isShapeBox(Shape arg);
+inline ATbool isShapeCircle(Shape arg);
 inline ATbool isShapeDiamond(Shape arg);
-inline ATbool isShapeTrapezium(Shape arg);
-inline ATbool isShapeParallelogram(Shape arg);
-inline ATbool isShapeHouse(Shape arg);
+inline ATbool isShapeEgg(Shape arg);
+inline ATbool isShapeEllipse(Shape arg);
 inline ATbool isShapeHexagon(Shape arg);
+inline ATbool isShapeHouse(Shape arg);
 inline ATbool isShapeOctagon(Shape arg);
+inline ATbool isShapeParallelogram(Shape arg);
+inline ATbool isShapePlaintext(Shape arg);
+inline ATbool isShapeTrapezium(Shape arg);
+inline ATbool isShapeTriangle(Shape arg);
 
 /*}}}  */
 /*{{{  Direction accessors */
@@ -309,7 +366,9 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
 Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm));
+Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style));
+Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int));
+Style visitStyle(Style arg);
 Shape visitShape(Shape arg);
 Direction visitDirection(Direction arg);
 EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge));

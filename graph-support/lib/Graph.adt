@@ -12,27 +12,39 @@
 [AttributeList, empty, []],
 [AttributeList, multi, [<head(Attribute)>,<[tail(AttributeList)]>]],
 
-[Attribute, label, label(<label(str)>)],
-[Attribute, shape, shape(<shape(Shape)>)],
-[Attribute, location, location(<x(int)>,<y(int)>)],
-[Attribute, size, size(<width(int)>,<height(int)>)],
-[Attribute, curve-points, curve-points(<points(Polygon)>)],
 [Attribute, bounding-box, bounding-box(<first(Point)>,<second(Point)>)],
+[Attribute, color, color(<color(Color)>)],
+[Attribute, curve-points, curve-points(<points(Polygon)>)],
 [Attribute, direction, direction(<direction(Direction)>)],
+[Attribute, fill-color, fill-color(<color(Color)>)],
 [Attribute, info, info(<key(str)>,<value(term)>)],
+[Attribute, label, label(<label(str)>)],
+[Attribute, location, location(<x(int)>,<y(int)>)],
+[Attribute, shape, shape(<shape(Shape)>)],
+[Attribute, size, size(<width(int)>,<height(int)>)],
+[Attribute, style, style(<style(Style)>)],
 
-[Shape, plaintext, plaintext],
-[Shape, ellipse, ellipse],
-[Shape, circle, circle],
-[Shape, egg, egg],
-[Shape, triangle, triangle],
+[Color, rgb, rgb(<red(int)>,<green(int)>,<blue(int)>)],
+
+[Style, bold, bold],
+[Style, dashed, dashed],
+[Style, dotted, dotted],
+[Style, filled, filled],
+[Style, invisible, invisible],
+[Style, solid, solid],
+
 [Shape, box, box],
+[Shape, circle, circle],
 [Shape, diamond, diamond],
-[Shape, trapezium, trapezium],
-[Shape, parallelogram, parallelogram],
-[Shape, house, house],
+[Shape, egg, egg],
+[Shape, ellipse, ellipse],
 [Shape, hexagon, hexagon],
+[Shape, house, house],
 [Shape, octagon, octagon],
+[Shape, parallelogram, parallelogram],
+[Shape, plaintext, plaintext],
+[Shape, trapezium, trapezium],
+[Shape, triangle, triangle],
 
 [Direction, forward, forward],
 [Direction, back, back],
@@ -49,4 +61,3 @@
 
 [Point, default, point(<x(int)>,<y(int)>)]
 ]
-
