@@ -1,3 +1,7 @@
+2000/03/23 (jurgenv@cwi.nl)
+  * added concat-asf, a tool that reads in parse trees of .asf files and
+    dumps their equations concatenated in a single list of equations.
+
 2000/03/08 (jurgenv@cwi.nl)
   * addeqssyntax and removevarsyntax based on PT and SDF libraries
 

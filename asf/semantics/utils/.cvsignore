@@ -4,4 +4,4 @@ Makefile.in
 genmakefile
 genamakefile
 apply-function
-remove-annotation
+concat-asf
