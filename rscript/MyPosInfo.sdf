@@ -9,7 +9,7 @@ exports
 
     get-area(X)			                 -> Area
 
-   imports asf/tools/PosInfo[X]
+   imports utilities/PosInfo[X]
 
    context-free syntax
 

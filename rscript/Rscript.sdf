@@ -1,7 +1,6 @@
 module Rscript
 
 exports
-%%sorts Elem would be reasonable :-) but gives double declaration error
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
 	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR
@@ -120,7 +119,7 @@ exports
 
 %% Complete Rscript
 
-     RSTAT*                                     -> RSCRIPT
+     RSTAT*                             -> RSCRIPT
 
   context-free priorities
 

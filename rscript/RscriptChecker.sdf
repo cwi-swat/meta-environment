@@ -130,7 +130,7 @@ exports
 
 
 hiddens
-%%    imports asf/syntax/Comments
+    imports basic/Comments
     variables
      "$Table" [0-9\']* 		-> Table[[RVAR,REXPTYPE]]
      "$Tenv"[0-9\']* 		-> TENV
