@@ -1,7 +1,10 @@
-begin declare x : natural, y : natural, z : natural;
+begin declare x : natural, y : natural, 
+              z : natural;
   x := 3; 
-  y := z;
-  if q then x:=1 else x := 2; x := r fi
- end
-
-
+  if q then 
+        z := y + x
+  else
+        x := 4
+  fi;
+  y := z
+end

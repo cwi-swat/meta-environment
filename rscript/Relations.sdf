@@ -65,7 +65,7 @@ imports Bags[Elem]
      Rel[[Elem]] "+"                  -> Rel[[Elem]]
      Rel[[Elem]] "*"                  -> Rel[[Elem]]
 
-%%     Bag[[Elem]] ".+" Rel[[Elem]]     -> Rel[[Elem]]
+     closure(Bag[[Elem]], Rel[[Elem]])     -> Bag[[Elem]]
 
 %%     closurex(Rel[[Elem]], Bag[[Elem]], Bag[[Elem]], Bag[[Elem]]) -> Bag[[Elem]]
 

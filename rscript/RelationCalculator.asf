@@ -410,6 +410,12 @@
 
 %% Note elem(Tuple, Rel)
 
+[Fcls1] Bag = evalb(Exp1, Store),  Rel = evalr(Exp2, Store)
+        ==================================================== 
+        evalx(closure(Exp1, Exp2), Store) =  closure(Bag, Rel)
+
+
+
 %% ---- FUN ( EXP , EXP , EXP)  -> EXP
 
 [default-fun3]
