@@ -516,7 +516,7 @@ proc limit_size {val} {
   global tb_glob
 
   if [expr [string length $val] > $tb_glob(trunc_value)] {
-    return "[string map {\n \ } [string range $val 0 $maxlength]]..."
+    return "[string map {\n \ } [string range $val 0 $tb_glob(trunc_value)]]..."
   }
 
   return $val
@@ -528,7 +528,7 @@ proc mk_tool {c name index} {
         set xt0 [expr $tb_glob(xp0) - $tb_glob(dx) / 2]
 
         set x [expr $xt0 + $index * $tb_glob(dx)]
-        set y  $tb_glob(tbase)
+        set y  [expr $tb_glob(tbase) + ($index % 2) * 10]
         set rp $tb_glob(rp)
     	$c create rectangle  [expr $x - $rp] [expr $y - $rp ] \
 	               [expr $x + $rp] [expr $y + $rp] \
