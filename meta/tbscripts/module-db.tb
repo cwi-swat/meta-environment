@@ -346,11 +346,9 @@ in
     )
   +
     rec-msg(put-term-tree(Filename?, TermTree?))
-    . printf("put-term-tree for: %s\n", Filename)
     . snd-msg(ts-put-term-value("term-tree", Filename, TermTree))
   +
     rec-msg(get-term-tree(Filename?))
-    . printf("get-term-tree for: %s\n", Filename)
     . snd-msg(ts-get-term-value("term-tree", Filename))
     .
     (

@@ -1,6 +1,7 @@
 # $Id$
 
 Fri Apr 16 10:02:50 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts: fixed ReduceTerm and ShowOrigin
  * editors/text/editor-hive.c:removeEditorProcess()
    invoke waitpid() to cleanup child process resources. (closes #204)
 

@@ -106,9 +106,6 @@ process StackPushString(Stack : list, NewStack : list?, Top : str) is
 process StackPushInt(Stack : list, NewStack : list?, Top : int) is
   StackPushTerm(Stack,NewStack?, quote(int(Top)))
 
-process StackPushFile(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?, quote(file(Top)))
- 
 process StackPushPath(Stack : list, NewStack : list?, Top : str) is
   StackPushTerm(Stack,NewStack?, quote(path(Top)))
 
@@ -127,6 +124,7 @@ let
   ActionEvent : term,
   Available: bool,
   ArgList : list,
+  Cursor: term,
   Direction: term,
   Directory: str,
   EditorId : term,
@@ -153,6 +151,7 @@ let
   Name : str,
   NewModuleName : str,
   NrOfArgs : int,
+  Origin: term,
   OutStr : str,
   Path : str,
   Pid: int,
@@ -328,6 +327,14 @@ in
 	StackPushTerm(Stack, Stack?, PosInfo) .
 	ReturnSuccess(EditorId, Stack)
       +
+        rec-msg(get-focus-origin, Stack?, EditorId?)
+	. snd-msg(se-get-cursor(EditorId))
+	. rec-msg(se-cursor(EditorId, Cursor?))
+	. snd-msg(pa-get-origin(Cursor))
+	. rec-msg(pa-origin(Origin?))
+	. StackPushTerm(Stack, Stack?, Origin)
+	. ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(set-focus, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         ReplaceFocus(EditorId, STree) .
@@ -354,9 +361,11 @@ in
         .
 	if not-equal(RTree, error-tree)
 	then
-          StackPushTerm(Stack, Stack?, RTree)
-          . StackPushTerm(Stack, Stack?, RTree)
+	  snd-msg(promote-posinfo-to-origin(RTree))
+	  . rec-msg(promoted-posinfo-to-origin(RTree?))
+	  . AnnotateTree(RTree, "reduct.out", RTree?)
 	  . snd-msg(put-term-tree("reduct.out", RTree))
+          . StackPushTerm(Stack, Stack?, RTree)
           . ReturnSuccess(EditorId, Stack)
         else
           ReturnAbort(EditorId, Stack)
@@ -516,7 +525,7 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-filename(Filename?), Stack?, EditorId?) .
-        StackPushFile(Stack,Stack?,Filename) .
+        StackPushString(Stack,Stack?,Filename) .
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-string(String?), Stack?, EditorId?) .
@@ -733,7 +742,7 @@ in
       +
         rec-msg(str-to-filename, Stack?, EditorId?) .
 	StackPopString(Stack, Stack?, Filename?) .
-	StackPushFile(Stack, Stack?, Filename) .
+	StackPushString(Stack, Stack?, Filename) .
 	ReturnSuccess(EditorId, Stack)
       +
 	rec-msg(edit-term, Stack?, EditorId?) .
@@ -998,7 +1007,7 @@ in
   (
     rec-msg(parse-editor-ok(Sid))
     . snd-msg(te-clear-focus(Sid))
-    . snd-msg(te-display-message(Sid, "Mies"))
+    . snd-msg(te-display-message(Sid, "Parse OK"))
   +
     rec-msg(parse-editor-failed(Sid))
   )
@@ -1007,7 +1016,7 @@ endlet
 
 process GetTextFromFile(Filename: str, Text: str?) is
 let
-  ErrorMessage      : str
+  ErrorMessage: str
 in
   snd-msg(io-read-file(Filename)).
   (
@@ -1250,14 +1259,12 @@ let
   NewModulename : str,
   ErrorMessage : str
 in
-  printf("ActivateEditorWithTree: [%s] [%s]\n", Modulename, Filename) .
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
     snd-msg(io-write-text-file(Filename, [Text])) .
     (
       rec-msg(io-file-written) .
-      /*snd-msg(edit-term-file-with-tree(Modulename, Filename, Tree))*/
       snd-msg(edit-term(Filename, Modulename))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
