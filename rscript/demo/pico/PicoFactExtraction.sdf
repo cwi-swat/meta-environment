@@ -1,0 +1,45 @@
+module PicoFactExtraction
+
+imports Pico-syntax
+imports basic/Integers
+imports utilities/PosInfo[PROGRAM]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[PICO-ID]
+
+exports
+   imports Rstore
+
+  context-free syntax 
+
+      cflow({ STATEMENT ";"}*)	        -> <Bag[[Elem]], Rel[[Elem]], Bag[[Elem]]>
+
+      uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
+      uses(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+ 
+      defs(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
+      defs(STATEMENT, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
+
+      id2str(PICO-ID)		 	-> String
+
+ hiddens
+%%  imports asf/syntax/Comments
+
+  variables
+      "$Entry" [0-9\']*		-> Bag[[Elem]]
+      "$Exit" [0-9\']*		-> Bag[[Elem]]
+      
+      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Loc" [0-9\']*	 	-> Location
+      "$Start" [0-9\']*	 	-> Location
+      "$Control" [0-9\']* 	-> Location
+ 	
+      "$Stat" [0-9\']*          -> STATEMENT
+      "$Stat*"[0-9\']*          -> {STATEMENT ";"}*
+      "$Stat+"[0-9\']*          -> {STATEMENT ";"}+
+      "$Exp" [0-9\']*           -> EXP
+      "$Id" [0-9\']*            -> PICO-ID
+
+      "$Char*" [0-9]*   	-> CHAR*
+
+	
