@@ -94,6 +94,7 @@ in
           snd-msg(get-error-position(Focus, ErrList)).
           rec-msg(error-position(Pos?)).
           snd-msg(display-error(EditorId, Pos)).
+          snd-note(ui-status(errorf("Ambiguities detected (%d)",[Amount]))).
           printf("Ambiguities(%d):\n%t\n",Amount, Ambs).
           ErrorFoci := join(ErrorFoci, Focus)
         +
