@@ -155,18 +155,14 @@ let
   ErrorContent : term,
   FunSym       : str,
   ModuleName   : str,
-  Type         : str
+  FileName     : str
 in
   ModuleName := first(args(ModuleId)).
-  Type := fun(ModuleId) .  
-  if equal(Type, "eqs") then 
-    Type := "asf"
-  else
-    tau
-  fi .
   FunSym := fun(ParseError) .
   if not-equal(FunSym, "no-errors") then
     ErrorList := first(args(ParseError)) .
+    snd-msg(get-editor-name(EditorId)) .
+    rec-msg(editor-name(FileName?)) .
     snd-msg(get-error-position(Focus, ErrorList)) .
     rec-msg(error-position(Pos?)) .
     snd-note(display-error(EditorId, Pos)) .
@@ -175,11 +171,11 @@ in
     if equal(FunSym, "ambiguities") then
       I := first(args(ErrorContent)) .
       if greater(I, 1) then
-        snd-note(ui-status(errorf("Parse of %s.%s returned %d ambiguities",
-                                  [ModuleName,Type,I])))
+        snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                  [FileName,I])))
       else 
-        snd-note(ui-status(errorf("Parse of %s.%s returned 1 ambiguity",
-                                  [ModuleName,Type])))
+        snd-note(ui-status(errorf("Parse of %s returned 1 ambiguity",
+                                  [FileName])))
       fi
     else
       tau
@@ -192,8 +188,8 @@ in
       tau
     fi .
     if equal(FunSym, "eof") then
-      snd-note(ui-status(errorf("EOF unexpected while parsing %s.%s\n",
-                                [ModuleName, Type]))) .
+      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                [FileName]))) .
       snd-msg(parse-failed(ModuleId, Focus))
     else
       tau
