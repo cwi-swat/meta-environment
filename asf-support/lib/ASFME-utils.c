@@ -164,7 +164,7 @@ ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l)
     equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
 
     list = ASF_getEquationsList(equations);
-    alleqs = ASF_concatCondEquationList(list,alleqs);
+    alleqs = ASF_unionCondEquationList(list,alleqs);
   }
 
   return alleqs;

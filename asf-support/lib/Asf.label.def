@@ -2,9 +2,12 @@ definition
 
 module Equations
 imports Characters
-
 exports
+  sorts Equations
+
+hiddens
   sorts Tag TagId CondEquation Equation Implies Condition Equations
+exports
   lexical syntax
     "===" [\=]* [\>]?  -> Implies {cons("default")}
     [A-Za-z0-9\"\']                                  -> TagId {avoid,cons("one-char")}
@@ -73,8 +76,9 @@ exports
    context-free syntax
 
 module Characters
-exports
+hiddens
   sorts CHAR
+exports
   lexical syntax
     [\"] value:~[\257] [\"]         -> CHAR {cons("default")}
 

@@ -21,6 +21,7 @@ typedef struct ATerm _ASF_Equation;
 typedef struct ATerm _ASF_Condition;
 typedef struct ATerm _ASF_TreeAmbs;
 typedef struct ATerm _ASF_CHAR;
+typedef struct ATerm _ASF_Start;
 
 /*}}}  */
 
@@ -275,6 +276,22 @@ ATerm ASF_CHARToTerm(ASF_CHAR arg)
 }
 
 /*}}}  */
+/*{{{  ASF_Start ASF_StartFromTerm(ATerm t) */
+
+ASF_Start ASF_StartFromTerm(ATerm t)
+{
+  return (ASF_Start)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ASF_StartToTerm(ASF_Start arg) */
+
+ATerm ASF_StartToTerm(ASF_Start arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  constructors */
@@ -503,6 +520,14 @@ ASF_CHAR ASF_makeCHARLexToCf(ASF_Lexical lex)
 }
 
 /*}}}  */
+/*{{{  ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt) */
+
+ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt)
+{
+  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun37, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun38)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun39)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)top), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  equality functions */
@@ -578,6 +603,11 @@ ATbool ASF_isEqualTreeAmbs(ASF_TreeAmbs arg0, ASF_TreeAmbs arg1)
 }
 
 ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ASF_isEqualStart(ASF_Start arg0, ASF_Start arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -3590,6 +3620,165 @@ ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, ASF_Lexical lex)
 /*}}}  */
 
 /*}}}  */
+/*{{{  ASF_Start accessors */
+
+/*{{{  ATbool ASF_isValidStart(ASF_Start arg) */
+
+ATbool ASF_isValidStart(ASF_Start arg)
+{
+  if (ASF_isStartEquations(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isStartEquations(ASF_Start arg) */
+
+inline ATbool ASF_isStartEquations(ASF_Start arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternStartEquations, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasStartWsBefore(ASF_Start arg) */
+
+ATbool ASF_hasStartWsBefore(ASF_Start arg)
+{
+  if (ASF_isStartEquations(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Layout ASF_getStartWsBefore(ASF_Start arg) */
+
+ASF_Layout ASF_getStartWsBefore(ASF_Start arg)
+{
+  
+    return (ASF_Layout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
+}
+
+/*}}}  */
+/*{{{  ASF_Start ASF_setStartWsBefore(ASF_Start arg, ASF_Layout wsBefore) */
+
+ASF_Start ASF_setStartWsBefore(ASF_Start arg, ASF_Layout wsBefore)
+{
+  if (ASF_isStartEquations(arg)) {
+    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsBefore, 0), 1), 0);
+  }
+
+  ATabort("Start has no WsBefore: %t\n", arg);
+  return (ASF_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasStartTop(ASF_Start arg) */
+
+ATbool ASF_hasStartTop(ASF_Start arg)
+{
+  if (ASF_isStartEquations(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Equations ASF_getStartTop(ASF_Start arg) */
+
+ASF_Equations ASF_getStartTop(ASF_Start arg)
+{
+  
+    return (ASF_Equations)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top) */
+
+ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top)
+{
+  if (ASF_isStartEquations(arg)) {
+    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)top, 1), 1), 0);
+  }
+
+  ATabort("Start has no Top: %t\n", arg);
+  return (ASF_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasStartWsAfter(ASF_Start arg) */
+
+ATbool ASF_hasStartWsAfter(ASF_Start arg)
+{
+  if (ASF_isStartEquations(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Layout ASF_getStartWsAfter(ASF_Start arg) */
+
+ASF_Layout ASF_getStartWsAfter(ASF_Start arg)
+{
+  
+    return (ASF_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+}
+
+/*}}}  */
+/*{{{  ASF_Start ASF_setStartWsAfter(ASF_Start arg, ASF_Layout wsAfter) */
+
+ASF_Start ASF_setStartWsAfter(ASF_Start arg, ASF_Layout wsAfter)
+{
+  if (ASF_isStartEquations(arg)) {
+    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)wsAfter, 2), 1), 0);
+  }
+
+  ATabort("Start has no WsAfter: %t\n", arg);
+  return (ASF_Start)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasStartAmbCnt(ASF_Start arg) */
+
+ATbool ASF_hasStartAmbCnt(ASF_Start arg)
+{
+  if (ASF_isStartEquations(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  int ASF_getStartAmbCnt(ASF_Start arg) */
+
+int ASF_getStartAmbCnt(ASF_Start arg)
+{
+  
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  ASF_Start ASF_setStartAmbCnt(ASF_Start arg, int ambCnt) */
+
+ASF_Start ASF_setStartAmbCnt(ASF_Start arg, int ambCnt)
+{
+  if (ASF_isStartEquations(arg)) {
+    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
+  }
+
+  ATabort("Start has no AmbCnt: %t\n", arg);
+  return (ASF_Start)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  sort visitors */
 
 /*{{{  ASF_Production ASF_visitProduction(ASF_Production arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol)) */
@@ -3888,6 +4077,22 @@ ASF_CHAR ASF_visitCHAR(ASF_CHAR arg, ASF_Lexical (*acceptLex)(ASF_Lexical))
   }
   ATabort("not a CHAR: %t\n", arg);
   return (ASF_CHAR)NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int)) */
+
+ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int))
+{
+  if (ASF_isStartEquations(arg)) {
+    return ASF_makeStartEquations(
+        acceptWsBefore ? acceptWsBefore(ASF_getStartWsBefore(arg)) : ASF_getStartWsBefore(arg),
+        acceptTop ? acceptTop(ASF_getStartTop(arg)) : ASF_getStartTop(arg),
+        acceptWsAfter ? acceptWsAfter(ASF_getStartWsAfter(arg)) : ASF_getStartWsAfter(arg),
+        acceptAmbCnt ? acceptAmbCnt(ASF_getStartAmbCnt(arg)) : ASF_getStartAmbCnt(arg));
+  }
+  ATabort("not a Start: %t\n", arg);
+  return (ASF_Start)NULL;
 }
 
 /*}}}  */

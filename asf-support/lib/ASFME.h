@@ -33,6 +33,7 @@ typedef struct _ASF_Equation *ASF_Equation;
 typedef struct _ASF_Condition *ASF_Condition;
 typedef struct _ASF_TreeAmbs *ASF_TreeAmbs;
 typedef struct _ASF_CHAR *ASF_CHAR;
+typedef struct _ASF_Start *ASF_Start;
 
 /*}}}  */
 
@@ -100,6 +101,10 @@ ATerm ASF_TreeAmbsToTerm(ASF_TreeAmbs arg);
 ASF_CHAR ASF_CHARFromTerm(ATerm t);
 #define ASF_makeTermFromCHAR(t) (ASF_CHARToTerm(t))
 ATerm ASF_CHARToTerm(ASF_CHAR arg);
+#define ASF_makeStartFromTerm(t) (ASF_StartFromTerm(t))
+ASF_Start ASF_StartFromTerm(ATerm t);
+#define ASF_makeTermFromStart(t) (ASF_StartToTerm(t))
+ATerm ASF_StartToTerm(ASF_Start arg);
 
 /*}}}  */
 /*{{{  constructors */
@@ -132,6 +137,7 @@ ASF_TreeAmbs ASF_makeTreeAmbsEmpty();
 ASF_TreeAmbs ASF_makeTreeAmbsSingle(ASF_Tree head);
 ASF_TreeAmbs ASF_makeTreeAmbsMany(ASF_Tree head, ASF_Layout wsAfterFirst, char * sep, ASF_Layout wsAfterSep, ASF_TreeAmbs tail);
 ASF_CHAR ASF_makeCHARLexToCf(ASF_Lexical lex);
+ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -151,6 +157,7 @@ ATbool ASF_isEqualEquation(ASF_Equation arg0, ASF_Equation arg1);
 ATbool ASF_isEqualCondition(ASF_Condition arg0, ASF_Condition arg1);
 ATbool ASF_isEqualTreeAmbs(ASF_TreeAmbs arg0, ASF_TreeAmbs arg1);
 ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
+ATbool ASF_isEqualStart(ASF_Start arg0, ASF_Start arg1);
 
 /*}}}  */
 /*{{{  ASF_Production accessors */
@@ -439,6 +446,24 @@ ASF_Lexical ASF_getCHARLex(ASF_CHAR arg);
 ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, ASF_Lexical lex);
 
 /*}}}  */
+/*{{{  ASF_Start accessors */
+
+ATbool ASF_isValidStart(ASF_Start arg);
+inline ATbool ASF_isStartEquations(ASF_Start arg);
+ATbool ASF_hasStartWsBefore(ASF_Start arg);
+ASF_Layout ASF_getStartWsBefore(ASF_Start arg);
+ASF_Start ASF_setStartWsBefore(ASF_Start arg, ASF_Layout wsBefore);
+ATbool ASF_hasStartTop(ASF_Start arg);
+ASF_Equations ASF_getStartTop(ASF_Start arg);
+ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top);
+ATbool ASF_hasStartWsAfter(ASF_Start arg);
+ASF_Layout ASF_getStartWsAfter(ASF_Start arg);
+ASF_Start ASF_setStartWsAfter(ASF_Start arg, ASF_Layout wsAfter);
+ATbool ASF_hasStartAmbCnt(ASF_Start arg);
+int ASF_getStartAmbCnt(ASF_Start arg);
+ASF_Start ASF_setStartAmbCnt(ASF_Start arg, int ambCnt);
+
+/*}}}  */
 /*{{{  sort visitors */
 
 ASF_Production ASF_visitProduction(ASF_Production arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol));
@@ -456,6 +481,7 @@ ASF_Equation ASF_visitEquation(ASF_Equation arg, ASF_Symbol (*acceptLhsSymbol)(A
 ASF_Condition ASF_visitCondition(ASF_Condition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_Layout (*acceptWsAfterLhs)(ASF_Layout), ASF_Layout (*acceptWsAfterEquals)(ASF_Layout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_Layout (*acceptWsAfterUnequal)(ASF_Layout));
 ASF_TreeAmbs ASF_visitTreeAmbs(ASF_TreeAmbs arg, ASF_Tree (*acceptHead)(ASF_Tree), ASF_Layout (*acceptWsAfterFirst)(ASF_Layout), char * (*acceptSep)(char *), ASF_Layout (*acceptWsAfterSep)(ASF_Layout));
 ASF_CHAR ASF_visitCHAR(ASF_CHAR arg, ASF_Lexical (*acceptLex)(ASF_Lexical));
+ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int));
 
 /*}}}  */
 
