@@ -40,7 +40,7 @@ AC_SUBST(NOWEB)
 
 AC_PROG_MAKE_SET([])
 
-ALL_ADAPTERS="gen-adapter emacs-adapter perl-adapter java-adapter \
+ALL_ADAPTERS="gen-adapter emacs-adapter perl-adapter \
               python-adapter tcltk-adapter"
 AC_SUBST(ALL_ADAPTERS)
 
@@ -73,27 +73,12 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
-
-EXTERNAL_JARS=${JAVA_ATERM}
-AC_SUBST(EXTERNAL_JARS)
-
 dnl Require toolbuslib library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
 dnl Which additional adapters to build?
-
-AC_ARG_WITH(java,
-   [  --with-java             include java support  (java-adapter)],
-   JAVA_ADAPTER=java-adapter)
-AC_SUBST(JAVA_ADAPTER)
 
 AC_ARG_WITH(trans,
    [  --with-trans-adapter    transparently connects to another toolbus],
@@ -200,6 +185,4 @@ AC_CONFIG_FILES([Makefile
   demos/hello/Makefile
   demos/wave/Makefile
   test/Makefile])
-AC_CONFIG_COMMANDS([default],[[chmod +x adapters/java-adapter/toolbus/tifstojava
-]],[[]])
 AC_OUTPUT 

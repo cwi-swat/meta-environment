@@ -11,9 +11,7 @@ identification
    keywords=meta-environment, toolbus, coordination, distributed, applications
 
 configuration interface
-  java 'include java support  (java-adapter)'
 
 requires
    aterm	2.2
-   aterm-java   1.6
    toolbuslib	0.6
