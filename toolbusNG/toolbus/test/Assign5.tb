@@ -1,0 +1,6 @@
+process P is
+  let N : int, X : term, Y : term
+  in
+	N := 10 . X := 20 . Y := add(X, N) . print Y
+  endlet
+toolbus(P)
