@@ -17,8 +17,8 @@ equations
                    $Sort1[[$Sort2]], 
                    $Attributes, 
                    $ConsOption) =
-    prod([$AFArgs],$SymbolType(parameterized-sort(sort(sort-to-lit($Sort1),
-                  				       [sort(<sort-to-lit($Sort2)(str)>)]))),
+    prod([$AFArgs],$SymbolType(parameterized-sort(sort-to-lit($Sort1),
+                  				       [sort(<sort-to-lit($Sort2)(str)>)])),
  	 $AFAttrs)
 
  [equ-build-asfix-prod-parametrized]
@@ -30,8 +30,8 @@ equations
   build-asfix-prod($SymbolType, $ModName, $Symbol*, $Sort1[[$Sort2]], 
                    $Attributes, 
                    $ConsOption) =
-    prod([$AFArgs],$SymbolType(parameterized-sort(sort(sort-to-lit($Sort1),
-                  				       [sort(<$AFSort(str)>)]))),
+    prod([$AFArgs],$SymbolType(parameterized-sort(sort-to-lit($Sort1),
+                  				       [sort(<$AFSort(str)>)])),
  	 $AFAttrs)
 
   [equ-build-asfix-prod]
@@ -82,7 +82,7 @@ equations
   $FieldId := afun-concat(sdflit-to-afun($Label) sort)
   ===>
   build-asfix-prod-arg($SymbolType, $Label : $Sort[[<$Symbol-PARAM>]]) = 
-  cf(parameterized-sort(sort(sort-to-lit($Sort),[sort(<$FieldId(str)>)])))
+  cf(parameterized-sort(sort-to-lit($Sort),[sort(<$FieldId(str)>)]))
 
 [equ-build-asfix-prod-arg-sort]
   build-asfix-prod-arg($SymbolType, $Sort) = 
