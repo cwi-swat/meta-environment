@@ -2,7 +2,6 @@ SUBDIRS = \
 	gen-adapter \
 	toolbus-adapter \
 	@EMACS_ADAPTER@ \
-	@JAVA_ADAPTER@ \
 	@PERL_ADAPTER@ \
 	@PYTHON_ADAPTER@ \
 	@TCLTK_ADAPTER@ \
