@@ -20,6 +20,6 @@
 #
 # $Id$
 
-SUBDIRS = addeqssyntax removevarsyntax asfc asfe utils test
+SUBDIRS = addeqssyntax removevarsyntax asfe utils test
 
 EXTRA_DIST = reconf make_rules
