@@ -54,7 +54,7 @@ in
   subscribe(get-focus-text(<term>,<term>)).
   subscribe(display-error(<term>,<int>)) .
   subscribe(move-editor-to-front(<term>)) .
-  subscribe(reload-file(<term>)) .
+  subscribe(reload-file(<term>,<term>)) .
   subscribe(kill-text-editor(<term>)) .
   (
     rec-note(set-focus(EditorId,
