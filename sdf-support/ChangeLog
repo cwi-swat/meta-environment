@@ -1,5 +1,7 @@
 2002/11/05 (vinju@loria.fr)
  * libME renamed to lib
+ * Split of SDF2PT.a library such that SDFME.a becomes independent of
+   pt-support
 
 2002/11/04 (vinju@loria.fr)
  * Regenerated library with new sdf-apigen features

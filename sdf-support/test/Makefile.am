@@ -12,7 +12,7 @@ INCLUDES		= -I${top_srcdir}/libME \
 			-I$(ATERM)/include \
 			-DSRC_DIR=\"${srcdir}\"
 
-LDLIBS			= -L../libME -lSDFME \
+LDLIBS			= -L../lib -lSDFME \
                           -L$(ATERM)/lib -lATerm
 
 grammars_SOURCES	= grammars.c
