@@ -11,18 +11,26 @@ class StringDialog extends Dialog
   private Button ok;
   private Button cancel;
 
-  public StringDialog(Frame handler, String title, boolean modal, int id, Object arg)
+  public StringDialog(Frame handler, String title, String msg, 
+		      boolean modal, int id, Object arg)
   {
     super(handler, title, modal);
     this.handler = handler;
     this.id = id;
     this.arg = arg;
+    Panel text = new Panel();
+    BorderLayout layout = new BorderLayout();
+    text.setLayout(layout);
+    Label label = new Label(msg);
     string = new TextField();
+    text.add("West", label);
+    text.add("East", string);
+
     ok = new Button("Ok");
     cancel = new Button("Cancel");
-    BorderLayout layout = new BorderLayout();
+    layout = new BorderLayout();
     setLayout(layout);
-    add("North", string);
+    add("North", text);
     add("West", ok);
     add("East", cancel);
     layout.addLayoutComponent("North", string);
@@ -35,12 +43,18 @@ class StringDialog extends Dialog
   public boolean action(Event evt, Object what)
   {
     if(evt.target == ok) {
-      handler.action(new Event(this, id, arg), string.getText());
+      if(handler != null)
+	handler.action(new Event(this, id, arg), string.getText());
+      else
+	action(new Event(this, id, arg), string.getText());
       dispose();
       return true;
     }
     if(evt.target == cancel) {
-      handler.action(new Event(this, id, arg), null);
+      if(handler != null)
+	handler.action(new Event(this, id, arg), null);
+      else
+	action(new Event(this, id, arg), null);
       dispose();
       return true;
     }

@@ -55,6 +55,7 @@ dist: $(DISTFILES)
 	done
 
 install: $(CLASSES)
+	-mkdir $(classdir)/$(COMPONENT)
 	for file in $(CLASSES); do\
 	  $(INSTALL) $$file $(classdir)/$(COMPONENT); \
 	done

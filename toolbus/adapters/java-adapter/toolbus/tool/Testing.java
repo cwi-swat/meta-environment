@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 12-May-97 4:24:42 PM
+// generation time: 23-Jun-97 11:50:41 AM
 
 package toolbus.tool;
 import toolbus.aterm.*;
@@ -25,7 +25,7 @@ abstract public class Testing extends toolbus.tool.Tool
 
   // Mimic the three constructors from the Tool class
   protected Testing(String name) throws UnknownHostException { super(name); init(); }
-  protected Testing(String name, InetAddress address, int port) throws UnknownHostException  { super(name, address, port); initSigTable(); }
+  protected Testing(String name, InetAddress address, int port) throws UnknownHostException  { super(name, address, port); init(); }
   protected Testing(String[] args) throws UnknownHostException { super(args); init(); }
 
   // Initializations common to all constructors

@@ -19,6 +19,8 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   // Some useful patterns
   ATermPattern patternExecActions;
   ATermPattern patternCreateRule;
+  ATermPattern patternAskWatchpointVar;
+  ATermPattern patternAskWatchpointExpr;
 
   //{ public RemoteDebugAdapterInfo(ATermRef dap, ATermsRef inf, Tool tool)
 
@@ -61,6 +63,10 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
 	new ATermPattern("exec-actions(debug-adapter(<int>),<term>,<term>)");
       patternCreateRule = new ATermPattern("create-rule(<str>," +
 		   "debug-adapter(<int>),<term>,<term>,<term>,<term>,<term>)");
+      patternAskWatchpointVar = 
+	new ATermPattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,var)");
+      patternAskWatchpointExpr = 
+	new ATermPattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,expr)");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -110,6 +116,30 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
       System.exit(1);
     }
     
+  }
+
+  //}
+  //{ public void askWatchpoint(ATermRef procs, DebugPort port)
+
+  /**
+   * Send a message to the watchpoint viewer in order to create a watchpoint.
+   */
+
+  public void askWatchpoint(ATermRef procs, DebugPort port, boolean var)
+  {
+    try {
+      ATermRef term;
+      if(var)
+	term = patternAskWatchpointVar.make(new Integer(getId()),
+					    procs, port.onthewire());
+      else
+	term = patternAskWatchpointExpr.make(new Integer(getId()),
+					     procs, port.onthewire());
+      tool.post((ATermApplRef)term);
+    } catch (ToolException e) {
+      System.err.println("ToolBus connection failure, giving up!");
+      System.exit(1);
+    }
   }
 
   //}

@@ -19,33 +19,10 @@ CLEAN           = @CLEAN@
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-PROGRAMS	= www-bidder
-CLASSES		= BidderTif.class BidderTool.class BidderUI.class \
-		BidderApplet.class
-JAVASRC		= BidderTif.java BidderTool.java BidderUI.java \
-		BidderApplet.java
-DISTFILES	= Makefile.in master.tcl bidder.tcl auction.tb bidder \
-		www-auction.tb www-bidder $(JAVASRC)
+PROGRAMS	=
+DISTFILES	= Makefile.in master.tcl bidder.tcl auction.tb bidder
 
-all:	${PROGRAMS} ${CLASSES} auction.tb.tex
-
-www-auction.tifs: www-auction.tb
-	${bindir}/toolbus -gentifs www-auction.tb
-
-BidderTif.java: www-auction.tifs
-	${bindir}/javatif -class BidderTif -tifs www-auction.tifs -tool bidder
-
-BidderTif.class: BidderTif.java
-	javac BidderTif.java
-
-BidderTool.class: BidderTool.java
-	javac BidderTool.java
-
-BidderUI.class: BidderUI.java
-	javac BidderUI.java
-
-BidderApplet.class: BidderApplet.java
-	javac BidderApplet.java
+all:	${PROGRAMS} auction.tb.tex
 
 auction.tb.tex: auction.tb
 	${bindir}/script2latex <auction.tb >auction.tb.tex

@@ -1,6 +1,6 @@
 // Java tool interface class ProcessViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 27-May-97 4:05:21 PM
+// generation time: 23-Jun-97 11:51:21 AM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -49,6 +49,7 @@ abstract public class ProcessViewerTif extends toolbus.tool.Tool
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-disconnected(<debug-adapter>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-connected(<debug-adapter>,<list>,<term>))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,ask-watchpoint(<debug-adapter>,<term>,<term>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,create-watchpoint(<debug-adapter>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-ack-event(<process-viewer>,<term>)"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,disconnected(<term>))"), new Boolean(true));

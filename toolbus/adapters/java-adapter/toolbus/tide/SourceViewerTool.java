@@ -977,7 +977,12 @@ class SourceViewer extends Frame implements TextHandler
       if(selection != null) {
 	selection.setModule(module.getText());
 	LocationPort port = new LocationPort(selection, DebugPort.WHEN_AT);
-	new StringDialog(this, "Enter variable to watch", true, WATCHVAR, port);
+	try {
+	  int pid = curProcess.getPid();
+	  dap.askWatchpoint(ATermParser.makeSimple("[" + pid + "]"), port, true);
+	} catch (ParseError e) {
+	  throw new IllegalArgumentException("internal parse error");
+	}
       }
       return true;
     }
@@ -992,7 +997,12 @@ class SourceViewer extends Frame implements TextHandler
       if(selection != null) {
 	selection.setModule(module.getText());
 	LocationPort port = new LocationPort(selection, DebugPort.WHEN_AT);
-	new StringDialog(this, "Enter expression to watch", true, WATCHEXPR, port);
+	try {
+	  int pid = curProcess.getPid();
+	  dap.askWatchpoint(ATermParser.makeSimple("[" + pid + "]"), port, false);
+	} catch (ParseError e) {
+	  throw new IllegalArgumentException("internal parse error");
+	}
       }
       return true;
     }
@@ -1046,7 +1056,6 @@ class SourceViewer extends Frame implements TextHandler
   }
 
   //}
-
 }
 
 //}
@@ -1817,3 +1826,10 @@ class Tag
 }
 
 //}
+
+
+
+
+
+
+

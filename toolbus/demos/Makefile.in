@@ -11,7 +11,7 @@ top_srcdir      = @top_srcdir@
 SHELL           = /bin/sh
 CLEAN           = @CLEAN@
 DEMOS		= @DEMOS@
-SUBDIRS		= auction calc edit game  \
+SUBDIRS		= auction www-auction calc edit game  \
 		hello ttt wave swipl-ttt perl spec
 DISTFILES	= Makefile.in Makefile.in.template
 

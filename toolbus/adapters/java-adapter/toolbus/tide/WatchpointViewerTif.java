@@ -1,6 +1,6 @@
 // Java tool interface class WatchpointViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 27-May-97 4:05:34 PM
+// generation time: 23-Jun-97 11:55:24 AM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -19,6 +19,7 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
   private ATermPattern PdapDisconnected0;
   private ATermPattern Pwatchpoint0;
   private ATermPattern PruleCreated0;
+  private ATermPattern PaskWatchpoint0;
   private ATermPattern PcreateWatchpoint0;
   private ATermPattern PruleDestroyed0;
   private ATermPattern PdapConnected0;
@@ -50,6 +51,7 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-disconnected(<debug-adapter>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-connected(<debug-adapter>,<list>,<term>))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,ask-watchpoint(<debug-adapter>,<term>,<term>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,create-watchpoint(<debug-adapter>,<term>))"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-ack-event(<process-viewer>,<term>)"), new Boolean(true));
       sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,disconnected(<term>))"), new Boolean(true));
@@ -96,6 +98,7 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
       PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>))");
       Pwatchpoint0 = new ATermPattern("rec-do(watchpoint(<debug-adapter>,<term>,<int>,<list>))");
       PruleCreated0 = new ATermPattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))");
+      PaskWatchpoint0 = new ATermPattern("rec-do(ask-watchpoint(<debug-adapter>,<term>,<term>,<term>))");
       PcreateWatchpoint0 = new ATermPattern("rec-do(create-watchpoint(<debug-adapter>,<term>))");
       PruleDestroyed0 = new ATermPattern("rec-do(rule-destroyed(<debug-adapter>,<term>,<int>))");
       PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>))");
@@ -110,6 +113,7 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
   abstract void dapDisconnected(ATermApplRef a0) throws ToolException;
   abstract void watchpoint(ATermApplRef a0, ATermRef t1, int i2, ATermListRef l3) throws ToolException;
   abstract void ruleCreated(ATermApplRef a0, ATermRef t1, int i2, ATermRef t3, ATermRef t4, ATermRef t5, ATermRef t6) throws ToolException;
+  abstract void askWatchpoint(ATermApplRef a0, ATermRef t1, ATermRef t2, ATermRef t3) throws ToolException;
   abstract void createWatchpoint(ATermApplRef a0, ATermRef t1) throws ToolException;
   abstract void ruleDestroyed(ATermApplRef a0, ATermRef t1, int i2) throws ToolException;
   abstract void dapConnected(ATermApplRef a0, ATermListRef l1, ATermRef t2) throws ToolException;
@@ -130,6 +134,9 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
     } else if(PruleCreated0.match(term)) {
       ATermPattern P = PruleCreated0;
       ruleCreated((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATermRef)P.elementAt(3), (ATermRef)P.elementAt(4), (ATermRef)P.elementAt(5), (ATermRef)P.elementAt(6));
+    } else if(PaskWatchpoint0.match(term)) {
+      ATermPattern P = PaskWatchpoint0;
+      askWatchpoint((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), (ATermRef)P.elementAt(2), (ATermRef)P.elementAt(3));
     } else if(PcreateWatchpoint0.match(term)) {
       ATermPattern P = PcreateWatchpoint0;
       createWatchpoint((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1));

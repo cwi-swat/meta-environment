@@ -275,7 +275,7 @@ let
   ES   : term,          %% The current state of execution of a process (run)
   Name : str,           %% The name of a newly created process
   Aliases : list,       %% A list of the aliases of a process
-  Type : term		%% Rule type (handy to recognize the ack w.o. matching)
+  Type : term		%% Rule/Watchpoint type (handy to recognize the ack w.o. matching)
 in
   execute(source-viewer, S?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
@@ -345,6 +345,10 @@ in
     rec-event(S, current-port(D?,P?,Port?)) .
     snd-msg(event(proc(D,P),current-port(Port))) .
     snd-ack-event(S, current-port(D,P,Port))
+    +
+    rec-event(S, ask-watchpoint(D?,P?,Port?,Type?)) .
+    snd-msg(ask-watchpoint(D,P,Port,Type)) .
+    snd-ack-event(S, ask-watchpoint(D,P,Port,Type))
   ) * delta
 endlet
 @
@@ -445,6 +449,9 @@ in
   snd-note(new-tool("Watchpoint", V, [["Create", "process"]])) .
   ( rec-msg(tool-cmd(V, "Create", [proc(D?,P?)])) .
     snd-do(V, create-watchpoint(D, P))
+    +
+    rec-msg(ask-watchpoint(D?,P?,Port?,Type?)) .
+    snd-do(V, ask-watchpoint(D,P,Port,Type))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
     snd-do(V, dap-connected(D, Info, P))

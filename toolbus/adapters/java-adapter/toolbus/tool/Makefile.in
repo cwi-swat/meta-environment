@@ -60,6 +60,7 @@ dist: $(DISTFILES)
 	done
 
 install: $(PROGRAMS) $(CLASSES)
+	-mkdir $(classdir)/$(COMPONENT)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done

@@ -1,0 +1,3 @@
+#!/bin/sh
+PORT=9004
+java-adapter -TB_PORT $PORT -TB_TOOL_NAME bidder -class BidderTool

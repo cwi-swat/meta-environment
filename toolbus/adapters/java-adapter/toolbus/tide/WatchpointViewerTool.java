@@ -240,8 +240,19 @@ public class WatchpointViewerTool extends WatchpointViewerTif
     RemoteDebugAdapterInfo dapInfo = 
       (RemoteDebugAdapterInfo)adapterTable.get(dapid);
     DebugPort dbgport = DebugPort.newPort(port);
-    Dialog dialog = new WatchpointDialog(dapInfo, procs, dbgport);
-    dialog.show();
+    //Dialog dialog = new WatchpointDialog(dapInfo, procs, dbgport);
+    //dialog.show();
+  }
+
+  //}
+  //{ void askWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port, ATermRef type)
+
+  /**
+   * Ask the user which expression/variable to watch.
+   */
+
+  void askWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port, ATermRef type)
+  {
   }
 
   //}
@@ -252,13 +263,29 @@ public class WatchpointViewerTool extends WatchpointViewerTif
  * which watchpoint he/she wants to create.
  */
 
-class WatchpointDialog extends Dialog
+/*class WatchpointDialog extends StringDialog
 {
   public WatchpointDialog(RemoteDebugAdapterInfo dap, ATermRef procs, 
-			  DebugPort port)
+			  DebugPort port, boolean var)
   {
-    super(null, "Create Watchpoint: " + dap.getName(), false);
+    super(null, "Create Watchpoint: " + dap.getName(), 
+	  var ? "Watch variable:" : "Watch expression:", false, Event.LIST_SELECT);
     resize(300, 200);
     show();
   }
+
+  public boolean action(Event evt, Object what)
+  {
+    if(evt.id == Event.LIST_SELECT) {
+      System.err.println("create watchpoint: " + what);
+      return true;
+    }
+    return false;
+  }
 }
+*/
+
+
+
+
+

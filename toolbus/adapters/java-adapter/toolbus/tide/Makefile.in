@@ -58,7 +58,6 @@ TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
 		TextBrowserCanvas.class TextLine.class Tag.class \
 		TextHandler.class StringDialog.class \
 		WatchpointViewerTif.class WatchpointViewerTool.class \
-		WatchpointDialog.class \
 		DebugProcessGroup.class DebugProcessGroupAll.class \
 		DebugProcessGroupNone.class DebugProcessGroupOne.class \
 		DebugProcessGroupList.class
@@ -103,6 +102,7 @@ dist: $(DISTFILES)
 	done
 
 install: $(PROGRAMS) $(CLASSES)
+	@-mkdir $(classdir)/$(COMPONENT)
 	for file in $(CLASSES); do\
 	  $(INSTALL) $$file $(classdir)/$(COMPONENT); \
 	done
