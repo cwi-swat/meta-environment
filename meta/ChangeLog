@@ -1,5 +1,8 @@
 # $Id$
 
+2004/01/12 (jurgenv@cwi.nl)
+ * Reimplemented module status panel to a tree
+ 
 2004/01/06 (markvdb@cwi.nl)
  * Simplified the TB interface of SGLR. A parse request contains
    directly the parse table.

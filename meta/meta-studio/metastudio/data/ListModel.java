@@ -1,7 +1,10 @@
 package metastudio.data;
 
-import javax.swing.AbstractListModel;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.AbstractListModel;
 
 public class ListModel extends AbstractListModel {
 	private List list;
@@ -34,5 +37,16 @@ public class ListModel extends AbstractListModel {
     public void add(Object o) {
         list.add(list.size(), o);
         elementAdded();
+    }
+    
+    public void addAll(Collection c) {
+        Iterator iter = c.iterator();
+        
+        while (iter.hasNext()) {
+            Object elem = iter.next();
+            list.add(list.size(), elem);
+        }
+        
+        fireIntervalAdded(list, list.size() - c.size(), list.size());
     }
 }

@@ -14,7 +14,7 @@ HistoryPanel.java \
 ToolComponent.java \
 MessageList.java \
 ModuleSelectionListener.java \
-ModuleStatusPanel.java \
+ModuleInfoPanel.java \
 StatusBar.java\
 QuestionDialog.java\
 FileDialog.java\

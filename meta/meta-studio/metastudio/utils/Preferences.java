@@ -31,6 +31,8 @@ public class Preferences {
 	static public String getString(String key) {
 		return properties.getProperty(key);
 	}
+    
+    
 
 	static public void setString(String key, String value) {
 		properties.setProperty(key, value);
@@ -70,6 +72,11 @@ public class Preferences {
 
 		return Integer.parseInt(spec);
 	}
+    
+    static public double getDouble(String key) {
+        String spec = properties.getProperty(key);
+        return Double.parseDouble(spec);
+    }
 
 	static public boolean getBoolean(String key) {
 
