@@ -31,6 +31,8 @@
 #include "asfix_utils.h"
 #include <AsFix.h>
 
+extern ATbool run_verbose;
+
 ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace);
 
 /* externs */
@@ -77,6 +79,7 @@ int main(int argc, char *argv[])
 		if(!(termfile = fopen(argv[2],"r")))
 			ATerror("Could not open %s.\n", argv[2]);
 	}
+
 	
 	eqs = ATreadFromFile(eqsfile);
 	term = ATreadFromFile(termfile);
@@ -84,11 +87,20 @@ int main(int argc, char *argv[])
 	fclose(eqsfile);
 	fclose(termfile);
 
+
+        if(run_verbose) {
+           ATwarning("=====================%s=======================\n",argv[2]);
+        }
+
 	/* first we use normal reduction */
 	result[0] = reduce_test(eqs,term, ATfalse);
 
 	/* re-init db */
 	equations_db = ATdictCreate();
+
+	if(run_verbose) {
+           ATwarning("=====================%s=======================\n",argv[2]);
+        }
 
 	/* then we reduce with whitespace */
 	result[1] = reduce_test(eqs, term,ATtrue);
