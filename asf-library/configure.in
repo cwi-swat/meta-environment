@@ -1,0 +1,37 @@
+dnl $Id$
+
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(asf-library,0.2beta)
+AC_REVISION($Id$)
+
+dnl Let aclocal use macros in ./config directory
+ACLOCAL="${ACLOCAL} -I ./ac-macros"
+
+dnl Package switches.
+
+AC_PROG_CC
+AC_PROG_INSTALL
+
+
+AC_PATH_PROGS(SH, sh)
+
+TOOLS="util templates "
+UNRELEASED=""
+RELEASED="util templates"
+
+AC_SUBST(TOOLS)
+AC_SUBST(RELEASED)
+AC_SUBST(UNRELEASED)
+
+AC_OUTPUT( 
+	Makefile 
+        ac-macros/Makefile
+        templates/Makefile
+	utils/Makefile 
+	src/Makefile 
+	src/LIB/Makefile 
+	src/LIB/asf/Makefile 
+	src/LIB/sdf/Makefile 
+	src/LIB/basic/Makefile 
+	src/LIB/containers/Makefile 
+)
