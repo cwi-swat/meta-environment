@@ -2667,6 +2667,7 @@ trap 'rm -fr `echo "Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	demos/spec/Makefile \
 	demos/wave/Makefile \
 	demos/ttt/Makefile \
+	demos/hearts/Makefile \
 	demos/swipl-ttt/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \
@@ -2685,12 +2686,6 @@ trap 'rm -fr `echo "Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/java-adapter/toolbus/tool/javatif \
 	adapters/java-adapter/toolbus/tide/Makefile \
 	tbviz/Makefile \
-	tbviz/sh/Makefile \
-	tbviz/sh/tbgraph \
-	tbviz/spec/Makefile \
-	tbviz/spec/dot/Makefile \
-	tbviz/spec/tbviz/Makefile \
-	tbviz/spec/toolbus/Makefile \
 	www/Makefile" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -2773,6 +2768,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile tide/Makefile tide/tide doc/
 	demos/spec/Makefile \
 	demos/wave/Makefile \
 	demos/ttt/Makefile \
+	demos/hearts/Makefile \
 	demos/swipl-ttt/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \
@@ -2791,12 +2787,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile tide/Makefile tide/tide doc/
 	adapters/java-adapter/toolbus/tool/javatif \
 	adapters/java-adapter/toolbus/tide/Makefile \
 	tbviz/Makefile \
-	tbviz/sh/Makefile \
-	tbviz/sh/tbgraph \
-	tbviz/spec/Makefile \
-	tbviz/spec/dot/Makefile \
-	tbviz/spec/tbviz/Makefile \
-	tbviz/spec/toolbus/Makefile \
 	www/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
