@@ -10,11 +10,13 @@ SDF2TBL=${datadir}/Sdf2.baf
 TOPSORT=SDF
 PARSER="__SGLR__/bin/sglr -m -s ${TOPSORT} -p ${SDF2TBL}"
 GENERATOR="${bindir}/parsetablegen"
+CHECKER="${bindir}/sdfchecker"
 
 modulename="-";
 
 verbose=0;
 error=0;
+checker=0;
 
 ###
 #  Handle the command line, &c.
@@ -26,7 +28,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bhi:lm:no:tvV"
+myarguments="bhi:lm:no:stvV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -40,6 +42,7 @@ Options:
     -m _name_       parse table is generated for module _name_ (default: Main)
     -n              only normalization of grammar
     -o _file_       output to _file_ (default: _inputfile_.tbl)
+    -s              check sdf definition and show warnings on stderr
     -t              write output in plain text format
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
@@ -78,6 +81,8 @@ do
             PGOPTS="$PGOPTS $1" ;;
         -o)
             shift ; output=$1 ;;
+        -s)
+	    checker=1 ;;
 	-t)
             PGOPTS="$PGOPTS $1" ;;
         -v)
@@ -159,6 +164,12 @@ do
 	Notify "Parsing $f..."
 	if $PARSER $VERBOSE -i $f -o $af1name
 	then
+	        if [ $checker -gt 0 ] ;
+		then
+		        Notify "Checking definition: $f"
+		        $CHECKER -i $af1name
+                fi
+
 	        Notify "Generating parse table ..."
 	        if $GENERATOR $PGOPTS -i $af1name -o $tblname
 		then
