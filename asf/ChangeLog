@@ -1,3 +1,8 @@
+2002/03/25 (vandenbr@loria.fr)
+ * Regenerated the C code of the AsfSdf-Checker, because the
+   Sdf-Checker can handle incomplete specifications and
+   aliases.
+
 2002/03/22 (vandenbr@loria.fr)
  * Restructured the Sdf-Checker, partly moved to asf directory.
 
