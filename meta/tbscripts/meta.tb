@@ -30,5 +30,6 @@
 #include "help.tb" 
 #include "anno.tb"
 #include "se.tb"
+#include "set-parsetable.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,SE,Anno) 
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,SE,Anno,Set-parsetable) 
