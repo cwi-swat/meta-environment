@@ -2,7 +2,7 @@ dnl $Id$
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(asf-library, 1.1)
+GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
 AC_PROG_MAKE_SET([])
@@ -32,6 +32,10 @@ AC_CONFIG_FILES([Makefile
    library/languages/sdf2/projection/Makefile
    library/languages/sdf2/renaming/Makefile
    library/languages/sdf2/pretty/Makefile
+<<<<<<< configure.in
+   library/languages/sdf-idioms/Makefile
+=======
+>>>>>>> 1.37
    library/languages/pico/Makefile
    library/languages/pico/syntax/Makefile
    library/languages/pico/pretty/Makefile
