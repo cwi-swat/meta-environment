@@ -18,13 +18,13 @@ in
 Id := process-id.
 ( 
   rec-msg(get-parsetable(ModuleId?)) .
-  snd-msg(get-table-from-db(ModuleId)) .
+  Str := first(args(ModuleId)).
+  snd-msg(get-table-from-db(Str)) .
   (
     rec-msg(table(Table?)).
     snd-msg(parse-table(Table))
   +
     rec-msg(no-table) .
-    Str := first(args(ModuleId)).
     snd-note(ui-status(statf(Id, "Generating parsetable %s",[Str]))).
     snd-msg(get-all-sdf2-definitions(Str)).
     (
@@ -55,4 +55,3 @@ Id := process-id.
 ) *
 delta
 endlet
-

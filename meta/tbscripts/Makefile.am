@@ -39,7 +39,6 @@ TBSCRIPTS = \
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \
-  help.tb \
   sdf2-language.tb
 
 EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)

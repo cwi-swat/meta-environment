@@ -93,8 +93,6 @@ in
       if not-equal(ModuleNames, []) then
         Module  := first(ModuleNames) .
         ModuleNames := next(ModuleNames) .
-	printf("doing %s\n", Module) .
-	printf("to go: %t\n", ModuleNames) .
         snd-msg(get-equations-for-module(Module)) .
         (
            rec-msg(equations(Equations?)) .
@@ -109,8 +107,7 @@ in
       if equal(ModuleNames,[]) then  
         snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
 	rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-	snd-msg(all-equations(AllEquations)) .
-	printf("all equations send!!\n")
+	snd-msg(all-equations(AllEquations))
       fi 
     +
       rec-msg(equations-incomplete) .

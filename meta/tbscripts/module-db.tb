@@ -28,7 +28,6 @@ endlet
 process ModuleDB is
 let
   Pid       : int,
-  Id        : term,
   Path      : str,
   Table     : term,
   ModuleId  : term,
@@ -41,31 +40,7 @@ let
   Name      : str,
   OldName   : str,
   NewName   : str,
-  ErrorName : str,
-  Mdb       : module-db,
   Modules   : list,
-  ChngMods  : list,
-  Import    : term,
-  Imports   : list,
-  NewImports   : list,
-  Equations : term,
-  Renamings : list,
-  NewRenamings : term,
-  ModName   : term,
-  Params    : term,
-  Pairs     : list,
-  ActualMods: list,
-  Language  : str,
-  ErrorMsg  : str,
-  OutputDir : str, 
-  TableType : term,
-  RealName  : str,
-  EqsList1  : term,
-  EqsList2  : term,
-  EqsList3  : term,
-  SyntaxExt : str,
-  RulesExt  : str,
-  TermExt   : str,
   Nodes     : list,
   Edges     : list,
   DependingModules : list,
@@ -144,7 +119,6 @@ in
       snd-msg(ts-get-value("sdf-tree", Name)) .
       rec-msg(ts-value(tree(OldSyntaxTree?))) .
       if equal(SyntaxTree, OldSyntaxTree) then
-        printf("DEBUG: Nothing has changed in %s\n", Name) .
 	snd-msg(updating-succeeded([],[]))
       else
         snd-msg(sm-get-imported-module-names(SyntaxTree)) .
@@ -265,11 +239,10 @@ in
     fi
   +
     rec-msg(get-all-sdf2-definitions(Name?)) .
-    printf("DEBUG: returning all modules instead of just the imported\n") .
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
     Stripper(Modules, Modules?) .
-    snd-msg(sm-make-sdf-definition(Modules)) .
+    snd-msg(sm-make-sdf-definition(Modules, Name)) .
     rec-msg(sm-sdf-definition(Syntax?)) .
     snd-msg(syntax(Syntax))
   +
@@ -302,10 +275,6 @@ in
       rec-msg(ts-no-value) .
       snd-msg(no-equations)
     )
-  +
-    rec-msg(get-equations-for-renamed-import(Import?, Renamings?)) .
-    printf("DEBUG: this message will dissappear\n") .
-    snd-msg(no-equations)
   +
     rec-msg(invalidate-parse-tables(Name?)).
     MDB-InvalidateParseTables(Name)
