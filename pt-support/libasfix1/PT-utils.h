@@ -11,6 +11,7 @@ ATbool PT_isSymbolIter(PT_Symbol arg);
 
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
+PT_Tree PT_getArgsTreeAt(PT_Args args, int index);
 int     PT_getArgsLength(PT_Args args);
 
 typedef void* PT_TreeVisitorData;

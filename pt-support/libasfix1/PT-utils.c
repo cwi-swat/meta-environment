@@ -56,6 +56,12 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
                                       (ATerm)PT_makeTermFromTree(arg)));
 }
 
+PT_Tree PT_getArgsTreeAt(PT_Args args, int index)
+{
+  return PT_makeTreeFromTerm(
+           ATelementAt((ATermList)PT_makeTermFromArgs(args), index));
+}
+
 PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
                              PT_TreeVisitorData data)
 {
