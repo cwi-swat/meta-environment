@@ -139,10 +139,12 @@ in
    ) +
    ( rec-event(UI, dump-equations(Str?)).
      snd-msg(dump-equations(Str)).
+     rec-msg(equations-dumped).
      snd-ack-event(UI, dump-equations(Str))
    )+
    ( rec-event(UI, dump-parse-table(Str?)).
      snd-msg(dump-parse-table(Str)).
+     rec-msg(parse-table-dumped) .
      snd-ack-event(UI, dump-parse-table(Str))
    )+
    ( rec-event(UI,parse-equations(Str?)).

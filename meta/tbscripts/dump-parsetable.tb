@@ -24,7 +24,8 @@ in
     +
       rec-msg(no-parse-table)
     ) .
-    snd-note(ui-status(endstat(Id)))
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(parse-table-dumped)
 
   ) * delta
 

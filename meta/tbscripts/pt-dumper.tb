@@ -1,0 +1,27 @@
+/*
+  $Id$
+ */
+
+#include "sglr.idef"
+#include "in-output.idef"
+#include "open-modules.tb"
+#include "file-creator.tb"
+#include "module-db.idef"
+#include "unparsePT.idef"
+#include "get-parsetable.tb"
+#include "set-parsetable.tb"
+#include "dump-parsetable.tb"
+#include "sdf2-language.tb"
+#include "notification.tb"
+#include "parsetablegen.idef"
+#include "asf-syntax.tb"
+#include "addeqssyntax.idef"
+#include "removevarsyntax.idef"
+#include "configmanager.idef"
+#include "standalone-pt-dumper.tb"
+
+toolbus(Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
+        ModuleDB, File-creator, 
+	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
+	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable) 
+
