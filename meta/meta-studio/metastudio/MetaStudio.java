@@ -109,7 +109,8 @@ public class MetaStudio
   {
     MetaStudio studio = new MetaStudio(args);
     studio.bridge.run();
-    System.out.println("Thank you for using MetaStudio");
+    System.out.println("Thank you for using " + 
+                       Preferences.getString("metastudio.name"));
   }
 
   //}}}
@@ -882,9 +883,10 @@ public class MetaStudio
 
   //{{{ public void initialize_ui(String libloc, String syn_ext, String sem_ext,
 
-  public void initializeUi(String libloc, String syn_ext, String sem_ext,
-			    String trm_ext)
+  public void initializeUi(String name, String libloc, String syn_ext, 
+                           String sem_ext, String trm_ext)
   {
+    Preferences.setString("metastudio.name", name);
     Preferences.setString("library.dir", libloc);
     Preferences.setString("module.extension",syn_ext);
     Preferences.setString("term.extension",trm_ext);
