@@ -13,12 +13,10 @@ let
 in 
   Id := process-id. 
   (
-    rec-msg(print-module(ModuleName?)) .
+    rec-msg(print-module(ModuleName?, FileName?)) .
     snd-note(ui-status(statf(Id,"Printing %s",[ModuleName]))) .
     snd-msg(get-path-from-db(ModuleName)) .
     rec-msg(path(Path?)) .
-    snd-msg(io-get-filename(Path, ModuleName, ".txt")) .
-    rec-msg(io-filename(FileName?)) .
     snd-msg(ts-get-str-value("sdf-text", ModuleName)) .
     (
       rec-msg(ts-value(SdfText?)) .

@@ -12,18 +12,16 @@ let
 in
   Id := process-id .
   (
-    rec-msg(dump-sdf-definition(ModuleName?)) .
-    FileName := "" .
+    rec-msg(dump-sdf-definition(ModuleName?, FileName?)) .
     snd-note(ui-status(statf(Id, "Dumping SDF for %s", [ModuleName]))) .
     snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
-      snd-msg(io-get-filename(Path, ModuleName, ".def.pt")) .
-      rec-msg(io-filename(FileName?))  .
-      printf("file: %s\n", FileName) .
-      snd-msg(io-write-term-file(FileName, Syntax)) .
+      snd-msg(unparse(Syntax)) .
+      rec-msg(unparsed-text(Text?)) .
+      snd-msg(io-write-text-file(FileName, [Text])) .
       (
         rec-msg(io-file-written)
       +

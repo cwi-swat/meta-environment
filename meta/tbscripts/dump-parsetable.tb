@@ -42,7 +42,7 @@ in
         rec-msg(io-file-not-written(ErrorMessage?))
       )
     +
-      rec-msg(no-parse-table(trm(ModuleName)))
+      rec-msg(no-parse-table(ModuleName))
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(parse-table-dumped)
