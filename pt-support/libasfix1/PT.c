@@ -2736,9 +2736,9 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  PT_ParseTree visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout)) */
+/*{{{  PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout)) */
 
-PT_ParseTree visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout))
+PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout))
 {
   if (PT_isParseTreeTree(arg)) {
     return PT_makeParseTreeTree(
@@ -2751,9 +2751,9 @@ PT_ParseTree visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree
 }
 
 /*}}}  */
-/*{{{  PT_ModuleName visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String)) */
+/*{{{  PT_ModuleName PT_visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String)) */
 
-PT_ModuleName visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String))
+PT_ModuleName PT_visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String))
 {
   if (PT_isModuleNameDefault(arg)) {
     return PT_makeModuleNameDefault(
@@ -2764,9 +2764,9 @@ PT_ModuleName visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String
 }
 
 /*}}}  */
-/*{{{  PT_Tree visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator)) */
+/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator)) */
 
-PT_Tree visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator))
+PT_Tree PT_visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator))
 {
   if (PT_isTreeLayout(arg)) {
     return PT_makeTreeLayout(
@@ -2807,9 +2807,9 @@ PT_Tree visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*ac
 }
 
 /*}}}  */
-/*{{{  PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol)) */
+/*{{{  PT_Var PT_visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol)) */
 
-PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol))
+PT_Var PT_visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol))
 {
   if (PT_isVarDefault(arg)) {
     return PT_makeVarDefault(
@@ -2821,9 +2821,9 @@ PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acce
 }
 
 /*}}}  */
-/*{{{  PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes)) */
+/*{{{  PT_Production PT_visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes)) */
 
-PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes))
+PT_Production PT_visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes))
 {
   if (PT_isProductionDefault(arg)) {
     return PT_makeProductionDefault(
@@ -2837,9 +2837,9 @@ PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(P
 }
 
 /*}}}  */
-/*{{{  PT_Attributes visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs)) */
+/*{{{  PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs)) */
 
-PT_Attributes visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs))
+PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs))
 {
   if (PT_isAttributesNoAttrs(arg)) {
     return PT_makeAttributesNoAttrs();
@@ -2853,14 +2853,14 @@ PT_Attributes visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attr
 }
 
 /*}}}  */
-/*{{{  PT_Attrs visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr)) */
+/*{{{  PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr)) */
 
-PT_Attrs visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
+PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 {
   if (PT_isAttrsMany(arg)) {
     return PT_makeAttrsMany(
         acceptHead ? acceptHead(PT_getAttrsHead(arg)) : PT_getAttrsHead(arg),
-        visitAttrs(PT_getAttrsTail(arg), acceptHead));
+        PT_visitAttrs(PT_getAttrsTail(arg), acceptHead));
   }
   if (PT_isAttrsSingle(arg)) {
     return PT_makeAttrsSingle(
@@ -2871,9 +2871,9 @@ PT_Attrs visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 }
 
 /*}}}  */
-/*{{{  PT_Attr visitAttr(PT_Attr arg, char * (*acceptString)(char *)) */
+/*{{{  PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *)) */
 
-PT_Attr visitAttr(PT_Attr arg, char * (*acceptString)(char *))
+PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *))
 {
   if (PT_isAttrCons(arg)) {
     return PT_makeAttrCons(
@@ -2893,26 +2893,26 @@ PT_Attr visitAttr(PT_Attr arg, char * (*acceptString)(char *))
 }
 
 /*}}}  */
-/*{{{  PT_Symbol visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral)) */
+/*{{{  PT_Symbol PT_visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral)) */
 
-PT_Symbol visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral))
+PT_Symbol PT_visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral))
 {
   if (PT_isSymbolIterStar(arg)) {
     return PT_makeSymbolIterStar(
-        visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral));
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral));
   }
   if (PT_isSymbolIterPlus(arg)) {
     return PT_makeSymbolIterPlus(
-        visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral));
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral));
   }
   if (PT_isSymbolIterStarSep(arg)) {
     return PT_makeSymbolIterStarSep(
-        visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral),
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral),
         acceptSeparator ? acceptSeparator(PT_getSymbolSeparator(arg)) : PT_getSymbolSeparator(arg));
   }
   if (PT_isSymbolIterPlusSep(arg)) {
     return PT_makeSymbolIterPlusSep(
-        visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral),
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptSeparator, acceptString, acceptLiteral, acceptQliteral),
         acceptSeparator ? acceptSeparator(PT_getSymbolSeparator(arg)) : PT_getSymbolSeparator(arg));
   }
   if (PT_isSymbolEmptyLayout(arg)) {
@@ -2935,9 +2935,9 @@ PT_Symbol visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separato
 }
 
 /*}}}  */
-/*{{{  PT_Literal visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String)) */
+/*{{{  PT_Literal PT_visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String)) */
 
-PT_Literal visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String))
+PT_Literal PT_visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String))
 {
   if (PT_isLiteralDefault(arg)) {
     return PT_makeLiteralDefault(
@@ -2948,9 +2948,9 @@ PT_Literal visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String))
 }
 
 /*}}}  */
-/*{{{  PT_QLiteral visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String)) */
+/*{{{  PT_QLiteral PT_visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String)) */
 
-PT_QLiteral visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String))
+PT_QLiteral PT_visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String))
 {
   if (PT_isQLiteralDefault(arg)) {
     return PT_makeQLiteralDefault(
@@ -2961,9 +2961,9 @@ PT_QLiteral visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String))
 }
 
 /*}}}  */
-/*{{{  PT_Lexical visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol)) */
+/*{{{  PT_Lexical PT_visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol)) */
 
-PT_Lexical visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol))
+PT_Lexical PT_visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol))
 {
   if (PT_isLexicalDefault(arg)) {
     return PT_makeLexicalDefault(
@@ -2975,9 +2975,9 @@ PT_Lexical visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT
 }
 
 /*}}}  */
-/*{{{  PT_Separator visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String)) */
+/*{{{  PT_Separator PT_visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String)) */
 
-PT_Separator visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String))
+PT_Separator PT_visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String))
 {
   if (PT_isSeparatorDefault(arg)) {
     return PT_makeSeparatorDefault(
@@ -2988,9 +2988,9 @@ PT_Separator visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_Strin
 }
 
 /*}}}  */
-/*{{{  PT_Layout visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String)) */
+/*{{{  PT_Layout PT_visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String)) */
 
-PT_Layout visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String))
+PT_Layout PT_visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String))
 {
   if (PT_isLayoutDefault(arg)) {
     return PT_makeLayoutDefault(
@@ -3001,14 +3001,14 @@ PT_Layout visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String))
 }
 
 /*}}}  */
-/*{{{  PT_Args visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree)) */
+/*{{{  PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree)) */
 
-PT_Args visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree))
+PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree))
 {
   if (PT_isArgsList(arg)) {
     return PT_makeArgsList(
         acceptHead ? acceptHead(PT_getArgsHead(arg)) : PT_getArgsHead(arg),
-        visitArgs(PT_getArgsTail(arg), acceptHead));
+        PT_visitArgs(PT_getArgsTail(arg), acceptHead));
   }
   if (PT_isArgsEmpty(arg)) {
     return PT_makeArgsEmpty();
@@ -3018,14 +3018,14 @@ PT_Args visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree))
 }
 
 /*}}}  */
-/*{{{  PT_Symbols visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol)) */
+/*{{{  PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol)) */
 
-PT_Symbols visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol))
+PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol))
 {
   if (PT_isSymbolsList(arg)) {
     return PT_makeSymbolsList(
         acceptHead ? acceptHead(PT_getSymbolsHead(arg)) : PT_getSymbolsHead(arg),
-        visitSymbols(PT_getSymbolsTail(arg), acceptHead));
+        PT_visitSymbols(PT_getSymbolsTail(arg), acceptHead));
   }
   if (PT_isSymbolsEmpty(arg)) {
     return PT_makeSymbolsEmpty();

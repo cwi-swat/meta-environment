@@ -366,22 +366,22 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 /*}}}  */
 /*{{{  sort visitors */
 
-PT_ParseTree visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout));
-PT_ModuleName visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String));
-PT_Tree visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator));
-PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol));
-PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
-PT_Attributes visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
-PT_Attrs visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
-PT_Attr visitAttr(PT_Attr arg, char * (*acceptString)(char *));
-PT_Symbol visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral));
-PT_Literal visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String));
-PT_QLiteral visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String));
-PT_Lexical visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol));
-PT_Separator visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String));
-PT_Layout visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String));
-PT_Args visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
-PT_Symbols visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));
+PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree)(PT_Layout), PT_Tree (*acceptTree)(PT_Tree), PT_Layout (*acceptLayoutAfterTree)(PT_Layout));
+PT_ModuleName PT_visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String));
+PT_Tree PT_visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator));
+PT_Var PT_visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol));
+PT_Production PT_visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
+PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
+PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
+PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *));
+PT_Symbol PT_visitSymbol(PT_Symbol arg, PT_Separator (*acceptSeparator)(PT_Separator), PT_String (*acceptString)(PT_String), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral));
+PT_Literal PT_visitLiteral(PT_Literal arg, PT_String (*acceptString)(PT_String));
+PT_QLiteral PT_visitQLiteral(PT_QLiteral arg, PT_String (*acceptString)(PT_String));
+PT_Lexical PT_visitLexical(PT_Lexical arg, PT_String (*acceptString)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol));
+PT_Separator PT_visitSeparator(PT_Separator arg, PT_String (*acceptString)(PT_String));
+PT_Layout PT_visitLayout(PT_Layout arg, PT_String (*acceptString)(PT_String));
+PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
+PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));
 
 /*}}}  */
 
