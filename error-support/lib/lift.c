@@ -150,27 +150,21 @@ PERR_SubjectList ERR_liftSubjects(ERR_SubjectList subjects)
 
 PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
 {
-  char *producer;
   char *description;
   ERR_SubjectList subjects;
-  PERR_StrCon pProducer;
   PERR_StrCon pDescription;
   PERR_SubjectList pSubjects;
   PERR_OptLayout e;
 
-  producer = ERR_getFeedbackProducer(feedback);
   description = ERR_getFeedbackDescription(feedback);
   subjects = ERR_getFeedbackList(feedback);
 
-  pProducer = ERR_liftStrCon(producer);
   pDescription = ERR_liftStrCon(description);
   pSubjects = ERR_liftSubjects(subjects);
   e = PERR_makeOptLayoutAbsent();
 
   if (ERR_isFeedbackInfo(feedback)) {
     return PERR_makeFeedbackInfo(e,e,
-				pProducer,
-				e,e,
 				pDescription,
 				e,e,e,
 				pSubjects,
@@ -178,8 +172,6 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackWarning(feedback)) {
     return PERR_makeFeedbackWarning(e,e,
-				   pProducer,
-				   e,e,
 				   pDescription,
 				   e,e,e,
 				   pSubjects,
@@ -187,8 +179,6 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackError(feedback)) {
     return PERR_makeFeedbackError(e,e,
-				 pProducer,
-				 e,e,
 				 pDescription,
 				 e,e,e,
 				 pSubjects,
@@ -196,8 +186,6 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackFatalError(feedback)) {
     return PERR_makeFeedbackFatalError(e,e,
-				      pProducer,
-				      e,e,
 				      pDescription,
 				      e,e,e,
 				      pSubjects,

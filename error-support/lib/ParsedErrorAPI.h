@@ -169,6 +169,12 @@ PERR_SubjectList PERR_makeSubjectList6(PERR_OptLayout wsAfterHead,
 
 PERR_Summary PERR_makeSummaryFeedback(PERR_OptLayout wsAfterFeedback,
 				      PERR_OptLayout wsAfterParenOpen,
+				      PERR_StrCon producer,
+				      PERR_OptLayout wsAfterProducer,
+				      PERR_OptLayout wsAfterComma,
+				      PERR_StrCon id,
+				      PERR_OptLayout wsAfterId,
+				      PERR_OptLayout wsAfterComma1,
 				      PERR_OptLayout wsAfterBracketOpen,
 				      PERR_FeedbackList list,
 				      PERR_OptLayout wsAfterList,
@@ -181,48 +187,36 @@ PERR_FeedbackList PERR_makeFeedbackListMany(PERR_Feedback head,
 					    PERR_FeedbackList tail);
 PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo,
 				    PERR_OptLayout wsAfterParenOpen,
-				    PERR_StrCon producer,
-				    PERR_OptLayout wsAfterProducer,
-				    PERR_OptLayout wsAfterComma,
 				    PERR_StrCon description,
 				    PERR_OptLayout wsAfterDescription,
-				    PERR_OptLayout wsAfterComma1,
+				    PERR_OptLayout wsAfterComma,
 				    PERR_OptLayout wsAfterBracketOpen,
 				    PERR_SubjectList list,
 				    PERR_OptLayout wsAfterList,
 				    PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning,
 				       PERR_OptLayout wsAfterParenOpen,
-				       PERR_StrCon producer,
-				       PERR_OptLayout wsAfterProducer,
-				       PERR_OptLayout wsAfterComma,
 				       PERR_StrCon description,
 				       PERR_OptLayout wsAfterDescription,
-				       PERR_OptLayout wsAfterComma1,
+				       PERR_OptLayout wsAfterComma,
 				       PERR_OptLayout wsAfterBracketOpen,
 				       PERR_SubjectList list,
 				       PERR_OptLayout wsAfterList,
 				       PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError,
 				     PERR_OptLayout wsAfterParenOpen,
-				     PERR_StrCon producer,
-				     PERR_OptLayout wsAfterProducer,
-				     PERR_OptLayout wsAfterComma,
 				     PERR_StrCon description,
 				     PERR_OptLayout wsAfterDescription,
-				     PERR_OptLayout wsAfterComma1,
+				     PERR_OptLayout wsAfterComma,
 				     PERR_OptLayout wsAfterBracketOpen,
 				     PERR_SubjectList list,
 				     PERR_OptLayout wsAfterList,
 				     PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError,
 					  PERR_OptLayout wsAfterParenOpen,
-					  PERR_StrCon producer,
-					  PERR_OptLayout wsAfterProducer,
-					  PERR_OptLayout wsAfterComma,
 					  PERR_StrCon description,
 					  PERR_OptLayout wsAfterDescription,
-					  PERR_OptLayout wsAfterComma1,
+					  PERR_OptLayout wsAfterComma,
 					  PERR_OptLayout wsAfterBracketOpen,
 					  PERR_SubjectList list,
 					  PERR_OptLayout wsAfterList,
@@ -313,6 +307,28 @@ ATbool PERR_hasSummaryWsAfterParenOpen(PERR_Summary arg);
 PERR_OptLayout PERR_getSummaryWsAfterParenOpen(PERR_Summary arg);
 PERR_Summary PERR_setSummaryWsAfterParenOpen(PERR_Summary arg,
 					     PERR_OptLayout wsAfterParenOpen);
+ATbool PERR_hasSummaryProducer(PERR_Summary arg);
+PERR_StrCon PERR_getSummaryProducer(PERR_Summary arg);
+PERR_Summary PERR_setSummaryProducer(PERR_Summary arg, PERR_StrCon producer);
+ATbool PERR_hasSummaryWsAfterProducer(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterProducer(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterProducer(PERR_Summary arg,
+					    PERR_OptLayout wsAfterProducer);
+ATbool PERR_hasSummaryWsAfterComma(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterComma(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterComma(PERR_Summary arg,
+					 PERR_OptLayout wsAfterComma);
+ATbool PERR_hasSummaryId(PERR_Summary arg);
+PERR_StrCon PERR_getSummaryId(PERR_Summary arg);
+PERR_Summary PERR_setSummaryId(PERR_Summary arg, PERR_StrCon id);
+ATbool PERR_hasSummaryWsAfterId(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterId(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterId(PERR_Summary arg,
+				      PERR_OptLayout wsAfterId);
+ATbool PERR_hasSummaryWsAfterComma1(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterComma1(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterComma1(PERR_Summary arg,
+					  PERR_OptLayout wsAfterComma1);
 ATbool PERR_hasSummaryWsAfterBracketOpen(PERR_Summary arg);
 PERR_OptLayout PERR_getSummaryWsAfterBracketOpen(PERR_Summary arg);
 PERR_Summary PERR_setSummaryWsAfterBracketOpen(PERR_Summary arg,
@@ -372,18 +388,6 @@ PERR_OptLayout PERR_getFeedbackWsAfterParenOpen(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterParenOpen(PERR_Feedback arg,
 					       PERR_OptLayout
 					       wsAfterParenOpen);
-ATbool PERR_hasFeedbackProducer(PERR_Feedback arg);
-PERR_StrCon PERR_getFeedbackProducer(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackProducer(PERR_Feedback arg,
-				       PERR_StrCon producer);
-ATbool PERR_hasFeedbackWsAfterProducer(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterProducer(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterProducer(PERR_Feedback arg,
-					      PERR_OptLayout wsAfterProducer);
-ATbool PERR_hasFeedbackWsAfterComma(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterComma(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterComma(PERR_Feedback arg,
-					   PERR_OptLayout wsAfterComma);
 ATbool PERR_hasFeedbackDescription(PERR_Feedback arg);
 PERR_StrCon PERR_getFeedbackDescription(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg,
@@ -393,10 +397,10 @@ PERR_OptLayout PERR_getFeedbackWsAfterDescription(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterDescription(PERR_Feedback arg,
 						 PERR_OptLayout
 						 wsAfterDescription);
-ATbool PERR_hasFeedbackWsAfterComma1(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterComma1(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterComma1(PERR_Feedback arg,
-					    PERR_OptLayout wsAfterComma1);
+ATbool PERR_hasFeedbackWsAfterComma(PERR_Feedback arg);
+PERR_OptLayout PERR_getFeedbackWsAfterComma(PERR_Feedback arg);
+PERR_Feedback PERR_setFeedbackWsAfterComma(PERR_Feedback arg,
+					   PERR_OptLayout wsAfterComma);
 ATbool PERR_hasFeedbackWsAfterBracketOpen(PERR_Feedback arg);
 PERR_OptLayout PERR_getFeedbackWsAfterBracketOpen(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterBracketOpen(PERR_Feedback arg,
@@ -670,6 +674,16 @@ PERR_Summary PERR_visitSummary(PERR_Summary arg,
 			       (PERR_OptLayout),
 			       PERR_OptLayout(*acceptWsAfterParenOpen)
 			       (PERR_OptLayout),
+			       PERR_StrCon(*acceptProducer) (PERR_StrCon),
+			       PERR_OptLayout(*acceptWsAfterProducer)
+			       (PERR_OptLayout),
+			       PERR_OptLayout(*acceptWsAfterComma)
+			       (PERR_OptLayout),
+			       PERR_StrCon(*acceptId) (PERR_StrCon),
+			       PERR_OptLayout(*acceptWsAfterId)
+			       (PERR_OptLayout),
+			       PERR_OptLayout(*acceptWsAfterComma1)
+			       (PERR_OptLayout),
 			       PERR_OptLayout(*acceptWsAfterBracketOpen)
 			       (PERR_OptLayout),
 			       PERR_FeedbackList(*acceptList)
@@ -690,16 +704,11 @@ PERR_Feedback PERR_visitFeedback(PERR_Feedback arg,
 				 (PERR_OptLayout),
 				 PERR_OptLayout(*acceptWsAfterParenOpen)
 				 (PERR_OptLayout),
-				 PERR_StrCon(*acceptProducer) (PERR_StrCon),
-				 PERR_OptLayout(*acceptWsAfterProducer)
-				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterComma)
-				 (PERR_OptLayout),
 				 PERR_StrCon(*acceptDescription)
 				 (PERR_StrCon),
 				 PERR_OptLayout(*acceptWsAfterDescription)
 				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterComma1)
+				 PERR_OptLayout(*acceptWsAfterComma)
 				 (PERR_OptLayout),
 				 PERR_OptLayout(*acceptWsAfterBracketOpen)
 				 (PERR_OptLayout),

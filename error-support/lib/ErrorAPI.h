@@ -110,18 +110,16 @@ ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2,
 /*}}}  */
 /*{{{  constructors */
 
-ERR_Summary ERR_makeSummaryFeedback(ERR_FeedbackList list);
+ERR_Summary ERR_makeSummaryFeedback(char *producer, char *id,
+				    ERR_FeedbackList list);
 ERR_FeedbackList ERR_makeFeedbackListEmpty();
 ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head);
 ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head,
 					  ERR_FeedbackList tail);
-ERR_Feedback ERR_makeFeedbackInfo(char *producer, char *description,
-				  ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackWarning(char *producer, char *description,
-				     ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackError(char *producer, char *description,
-				   ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackFatalError(char *producer, char *description,
+ERR_Feedback ERR_makeFeedbackInfo(char *description, ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackWarning(char *description, ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackError(char *description, ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackFatalError(char *description,
 					ERR_SubjectList list);
 ERR_SubjectList ERR_makeSubjectListEmpty();
 ERR_SubjectList ERR_makeSubjectListSingle(ERR_Subject head);
@@ -150,6 +148,12 @@ ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1);
 
 ATbool ERR_isValidSummary(ERR_Summary arg);
 inline ATbool ERR_isSummaryFeedback(ERR_Summary arg);
+ATbool ERR_hasSummaryProducer(ERR_Summary arg);
+char *ERR_getSummaryProducer(ERR_Summary arg);
+ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, char *producer);
+ATbool ERR_hasSummaryId(ERR_Summary arg);
+char *ERR_getSummaryId(ERR_Summary arg);
+ERR_Summary ERR_setSummaryId(ERR_Summary arg, char *id);
 ATbool ERR_hasSummaryList(ERR_Summary arg);
 ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg);
 ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list);
@@ -178,9 +182,6 @@ inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackError(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg);
-ATbool ERR_hasFeedbackProducer(ERR_Feedback arg);
-char *ERR_getFeedbackProducer(ERR_Feedback arg);
-ERR_Feedback ERR_setFeedbackProducer(ERR_Feedback arg, char *producer);
 ATbool ERR_hasFeedbackDescription(ERR_Feedback arg);
 char *ERR_getFeedbackDescription(ERR_Feedback arg);
 ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char *description);
@@ -257,13 +258,14 @@ ERR_Area ERR_setAreaLength(ERR_Area arg, int length);
 /*{{{  sort visitors */
 
 ERR_Summary ERR_visitSummary(ERR_Summary arg,
+			     char *(*acceptProducer) (char *),
+			     char *(*acceptId) (char *),
 			     ERR_FeedbackList(*acceptList)
 			     (ERR_FeedbackList));
 ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg,
 				       ERR_Feedback(*acceptHead)
 				       (ERR_Feedback));
 ERR_Feedback ERR_visitFeedback(ERR_Feedback arg,
-			       char *(*acceptProducer) (char *),
 			       char *(*acceptDescription) (char *),
 			       ERR_SubjectList(*acceptList)
 			       (ERR_SubjectList));
