@@ -1,8 +1,8 @@
 SUBDIRS=eqs input output c-code
 EXTRA_DIST=README
 
-#	Builtins
 TEST_MODULES=\
+	Builtins\
 	Bracket \
 	Collect \
 	Combination-Typecheck \
