@@ -8,10 +8,12 @@ let
   Tree : term,
   Text : term
 in
-  execute(unparsePT, UPT?).
-  ( rec-msg(unparse(Tree?)).
+  (
+    rec-msg(unparse(Tree?)).
+    execute(unparsePT, UPT?).
     snd-eval(UPT, unparse-asfix(Tree)).
     rec-value(UPT, unparsed-text(Text?)).
+    snd-terminate(UPT, "done") .
     snd-msg(unparsed-text(Text))
   ) *
   delta
