@@ -37,6 +37,8 @@ context-free syntax
 "#" "error" Expression?			-> Preprocessor
 "#" "pragma" Expression?		-> Preprocessor
 
+StringConstant StringConstant 		-> StringConstant {right}
+
 context-free syntax
 
 Preprocessor -> Declaration

@@ -18,6 +18,10 @@ module languages/c/syntax/Simplified-C
 %%
 %% TODO: - The priority definitions still contain a lot of duplication
 %%       - Check the priorities with actual ANSI standard
+%%
+%% DONT: try to fully disambiguate this grammar because that would ruin
+%%       its declarative nature. C is ambiguous. However, the expression
+%%       grammar should be fully unambiguous (Expression).
 
 imports basic/Whitespace
 imports languages/cpp/syntax/CommentsAsLayout
@@ -198,13 +202,24 @@ context-free syntax
 Expression "," Expression 	-> Expression {left}
 
 context-free priorities
+{
+"(" TypeName ")" Expression 	-> Expression
+"sizeof" Expression 	  	-> Expression
+"sizeof" "(" TypeName ")"	-> Expression
+} >
+{left:
+Expression "<" Expression 	-> Expression {left}
+Expression ">" Expression 	-> Expression {left}
+Expression "<=" Expression 	-> Expression {left}
+Expression ">=" Expression 	-> Expression {left}
+Expression "==" Expression 	-> Expression {left}
+Expression "!=" Expression 	-> Expression {left}
+}
+
+context-free priorities
 Expression "(" {Expression ","}* ")"	-> Expression <0>
 >
 {
-Expression "." Identifier 		-> Expression 
-Expression "->" Identifier 		-> Expression
-Expression "++" 			-> Expression
-Expression "--" 			-> Expression
 "++" Expression 			-> Expression
 "--" Expression 			-> Expression
 "&" Expression 				-> Expression
@@ -219,10 +234,6 @@ Expression "--" 			-> Expression
 context-free priorities
 Expression "["	Expression "]"	 	-> Expression <0> 
 > {
-Expression "." Identifier 		-> Expression 
-Expression "->" Identifier 		-> Expression
-Expression "++" 			-> Expression
-Expression "--" 			-> Expression
 "++" Expression 			-> Expression
 "--" Expression 			-> Expression
 "&" Expression 				-> Expression
@@ -267,14 +278,17 @@ Expression ">>" Expression -> Expression {left}}
 Expression "<" Expression -> Expression {left}
 Expression ">" Expression -> Expression {left}
 Expression "<=" Expression -> Expression {left}
-Expression ">=" Expression -> Expression {left}}
+Expression ">=" Expression -> Expression {left}
+Expression "==" Expression -> Expression {left}
+Expression "!=" Expression -> Expression {left}
+}
 > Expression "&" Expression -> Expression {left}
 > Expression "^" Expression -> Expression {left}
 > Expression "|" Expression -> Expression {left}
 > Expression "&&" Expression -> Expression {left}
 > Expression "||" Expression -> Expression {left}
 >
-{non-assoc:
+{right:
 Expression "=" Expression -> Expression {right}
 Expression "*=" Expression -> Expression {right}
 Expression "/=" Expression -> Expression {right}
@@ -287,6 +301,7 @@ Expression "&=" Expression -> Expression {right}
 Expression "^=" Expression -> Expression {right}
 Expression "|=" Expression -> Expression {right}
 }
+
 >
 Expression "," Expression -> Expression {left}
 
