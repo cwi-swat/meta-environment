@@ -36,6 +36,8 @@ merge_tifs_LDADD = \
 	-L$(ATBLIB) -lATB \
 	-L$(ATLIB) -lATerm
 
+noinst_HEADERS = logger.tif.h  tblog_dict.h  tifs.h
+
 tblog.o: tblog_dict.h logger.tif.h
 
 logger.tif.c logger.tif.h: tblog-interface.tifs
