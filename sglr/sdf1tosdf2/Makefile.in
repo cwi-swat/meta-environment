@@ -34,7 +34,7 @@ AR		= @AR@
 AR_FLAGS        = cr
 
 # Implicit rules
-include ${top_srcdir}/implicit-rules
+# include ${top_srcdir}/implicit-rules
 
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= sdf1tosdf2

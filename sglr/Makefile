@@ -8,6 +8,8 @@ SUBDIRS		= a2toa1 client tree2dot parser dump sdf1tosdf2
 
 all doc install:	libs
 
+libs:	configure
+
 all libs doc clean install uninstall distclean:
 	@for DIR in $(SUBDIRS);	\
 	do \
@@ -19,4 +21,7 @@ all libs doc clean install uninstall distclean:
 		fi \
 	done
 
-
+configure:	configure.in
+	@echo "Warning: configure script is out of date."
+	@echo "Please (re)run autoconf and configure."
+	@false

@@ -42,9 +42,9 @@ ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
 
-A2TOA1DIR	= ${top_srcdir}/sglr/a2toa1
-PARSERDIR	= ${top_srcdir}/sglr/parser
-TREE2DOTDIR	= ${top_srcdir}/sglr/tree2dot
+A2TOA1DIR	= ${srcdir}/../a2toa1
+PARSERDIR	= ${srcdir}/../parser
+TREE2DOTDIR	= ${srcdir}/../tree2dot
 
 XCFLAGS		= ${DEFS}
 XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include

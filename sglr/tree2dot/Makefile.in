@@ -44,8 +44,8 @@ UNINSTALL	= @UNINSTALL@
 ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
-A2TOA1DIR	= ${top_srcdir}/sglr/a2toa1
-PARSERDIR	= ${top_srcdir}/sglr/parser
+A2TOA1DIR	= ${srcdir}/../a2toa1
+PARSERDIR	= ${srcdir}/../parser
 
 # The eXtra parts of some variables
 XCFLAGS		= ${DEFS}
