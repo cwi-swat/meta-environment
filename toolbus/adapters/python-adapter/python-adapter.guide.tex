@@ -113,7 +113,7 @@ scripts executed by a \TB -aware Python interpreter.
       case the local host is always used. This function returns the new
       tool instance id, or raises an exception.
 
-\item {\tt TB.connect($Id$)}: Create the actual connection with the \TB,
+\item {\tt TB.connect($Cid$)}: Create the actual connection with the \TB,
       or raise an exception.
 
 \item {\tt TB.eventloop()}: Start the ToolBus eventloop. Please do not use
@@ -231,7 +231,7 @@ TB.error: term is not of type str
 
 Writing the hello tool in Python requires two steps:
 \begin{itemize}
-\item Write the required Python code {\tt hello.tcl}. 
+\item Write the required Python code {\tt hello.py}. 
       The result is shown in Figure~\ref{fig:hello.py}.
 \item Replace {\tt hello}'s tool definition in {\tt hello2.tb} by:
 \begin{verbatim}

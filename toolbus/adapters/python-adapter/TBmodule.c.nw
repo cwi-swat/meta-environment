@@ -1074,7 +1074,7 @@ void tk_handler(ClientData CID, int mask)
 {
   int cid = (int)CID;
 
-  fprintf(stderr, "tk_handler called: %d\n", cid);
+  /*fprintf(stderr, "tk_handler called: %d\n", cid);*/
   TB_handle_one(cid);
 }
 #endif

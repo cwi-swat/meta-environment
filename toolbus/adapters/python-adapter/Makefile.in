@@ -32,7 +32,7 @@ NOWEB		= @NOWEB@
 
 COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
-DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
+DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) python-adapter
 
 # With a little bit of luck, you only have to change the value of
 # these variables, and add some rules to actually build your programs:
