@@ -3,10 +3,10 @@
 
 #include "SDFME.h"
 
-char      *SDFgetModuleName (SDF_Module sdfModule);
-SDF_Module SDFsetModuleName (SDF_Module sdfModule, char *name);
-SDF_ModuleId SDFmakeModuleId(char *moduleStr);
-SDF_ModuleName SDFmakeModuleName(char *moduleStr);
+char      *SDF_getModuleName (SDF_Module sdfModule);
+SDF_Module SDF_setModuleName (SDF_Module sdfModule, char *name);
+SDF_ModuleId SDF_makeModuleId(char *moduleStr);
+SDF_ModuleName SDF_makeModuleName(char *moduleStr);
 
 ATermList  SDFgetGrammars              (SDF_Module module);
 typedef    void (*SDFGrammarFunc)      (SDF_Grammar, ATerm *);

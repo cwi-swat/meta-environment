@@ -1,8 +1,8 @@
 #include "SDFME-utils.h"
 
-/*{{{  char *SDFgetModuleName(SDF_Module sdfModule) */
+/*{{{  char *SDF_getModuleName(SDF_Module sdfModule) */
 
-char *SDFgetModuleName(SDF_Module sdfModule)
+char *SDF_getModuleName(SDF_Module sdfModule)
 {
   SDF_ModuleName moduleName;
   SDF_ModuleId   moduleId;
@@ -16,25 +16,25 @@ char *SDFgetModuleName(SDF_Module sdfModule)
 /*}}}  */
 /*{{{  SDF_ModuleId SDFmakeModuleId(char *moduleName) */
 
-SDF_ModuleId SDFmakeModuleId(char *moduleStr)   
+SDF_ModuleId SDF_makeModuleId(char *moduleStr)   
 {
   return SDF_makeModuleIdWord(SDF_makeCHARLISTString(moduleStr));
 }
 /*}}}  */
 /*{{{  SDF_Module SDFmakeModuleName(char *moduleName) */
 
-SDF_ModuleName SDFmakeModuleName(char *moduleStr)   
+SDF_ModuleName SDF_makeModuleName(char *moduleStr)   
 {
   return SDF_makeModuleNameUnparameterized(
-           SDFmakeModuleId(moduleStr));
+           SDF_makeModuleId(moduleStr));
 }
 /*}}}  */
 /*{{{  SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *moduleName) */
 
-SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *newName)
+SDF_Module SDF_setModuleName(SDF_Module sdfModule, char *newName)
 {
   SDF_ModuleName oldModuleName, newModuleName;
-  SDF_ModuleId   moduleId = SDFmakeModuleId(newName);
+  SDF_ModuleId   moduleId = SDF_makeModuleId(newName);
 
   oldModuleName = SDF_getModuleModuleName(sdfModule);
 
