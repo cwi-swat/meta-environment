@@ -131,7 +131,7 @@ do
                 af1name=${TMPDIR:-/var/tmp}/stdin.$$.asfix1
 		tblname=${output:-"-"}
 	else
-		base=`basename $f`.sdf2
+		base=`basename $f .sdf2`
 		dir=`dirname $f`
                 af1name=${TMPDIR:-/var/tmp}/$base.asfix1
 		tblname=${output:-$dir/$base.tbl}
