@@ -18,7 +18,10 @@
 
 $Id$
 
-2000/4/10 (markvdb@cwi.nl)
+2000/4/13 (mdejonge@cwi.nl)
+   * no longer perform normalize-normalize-check
+
+2000/4/11 (markvdb@cwi.nl)
    * Added removevars tool
 
 2000/4/10 (mdejonge@cwi.nl)
