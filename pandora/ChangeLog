@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Mar  2 15:21:26 CET 2004 <{jurgenv,kooiker}@cwi.nl>
+ * generator/main.c: 
+   - Pack term before sending it to the toolbus. 
+
 Fri Feb 20 13:51:44 MET 2004 <markvdb@cwi.nl>
  * Context switches from and to box added.
 

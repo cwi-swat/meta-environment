@@ -109,8 +109,8 @@ ATerm pretty_print(int cid, ATerm input)
   }
 
   if (result != NULL) {
-    return ATmake("snd-value(pretty-printed(<term>))", 
-		  PT_ParseTreeToTerm(result));
+    ATerm value = ATBpack(PT_ParseTreeToTerm(result));
+    return ATmake("snd-value(pretty-printed(<term>))", value);
   }
   else {
     ERR_Summary summary = ERR_makeSummaryFeedback("pandora","all", 
