@@ -15,6 +15,26 @@
 [default-ASG1]	
 	assign($Var, $Val, [$VPair*]) = [<$Var, $Val>, $VPair*]
 
+%% Assign when undefined
+
+[AWU1]  assign-when-undef($Var, $Val, [$VPair*1, <$Var, $Val'>, $VPair*2]) = [$VPair*1, <$Var, $Val'>, $VPair*2]
+	
+
+[default-AWU2]	
+	assign-when-undef($Var, $Val, [$VPair*]) = [<$Var, $Val>, $VPair*]
+
+
+%% Increment a variable
+
+[INC1]	value($Var, $Store) = $Integer
+	==================================================
+	increment($Var, $Store) = assign($Var, $Integer + 1, $Store)
+
+%% Add elem to tuple
+
+[AE1]	add-elem($Var, $Elem, $Store) = assign($Var, append(value($Var, $Store), $Elem), $Store)
+
+
 %% Add tuple to a relation
 
 [AT1]	add-tuple($Var, <$Elem1, $Elem2>, [<$Var, $Val>, $VPair*]) = 
@@ -80,12 +100,27 @@
 
 [EVR1]	*empty* = evalx($Exp, $Store)  ===> evalr($Exp, $Store) = {}
 
+%% --- Test suite support
+
+[ETS1]	$Store = eval-rscript($Rscript),
+	$Integer1 = value(NPASSED, $Store),
+	$Integer2 = value(NFAILED, $Store),
+	$Val = value(FAILED, $Store)
+	==========================================================
+	eval-rscript-testsuite($Rscript) = testsuite-report($Integer1, $Integer2, $Val)
+
+[TSR1] testsuite-report($Integer, 0, $Val) = All $Integer tests passed
+
+[TSR1] 	$Integer2 != 0
+	===========================================================
+	testsuite-report($Integer1, $Integer2, $Val) = 
+	$Integer2 of $Integer1 tests failed: $Val
+
 %% ---- Eval complete script
 
 [ES0]	eval-rscript($Stat*, $Var, $Store) = value($Var, eval-rscript($Stat*, $Store))
 
-[ES1]	eval-rscript($Stat*) = eval-rscript($Stat*, [])
-
+[ES1]	eval-rscript($Stat*) = eval-rscript($Stat*, [<NPASSED,0>,<NFAILED,0>,<FAILED,*empty*>])
 [ES2]	eval-rscript($Stat $Stat*, $Store) = eval-rscript($Stat*, eval-rscript($Stat, $Store))
 [ES3]	eval-rscript( , $Store) = $Store
 
@@ -96,33 +131,40 @@
 
 %% ---- Eval statements
 
-%%[S1]	eval-rscript(bool $Var, $Store) 	= assign($Var, true, $Store)
-%%[S2]	eval-rscript(int $Var, $Store)  	= assign($Var, 0, $Store)
-%%[S3]	eval-rscript(str $Var, $Store)  	= assign($Var, "", $Store)
-%%[S4]	eval-rscript(node $Var, $Store)		= assign($Var, area("",0,0,0,0), $Store)
-%%[S4]	eval-rscript(bag[$Etype] $Var, $Store)  = assign($Var, *empty*, $Store)	
+[S1]	eval-rscript(bool $Var, $Store) 	= assign-when-undef($Var, true, $Store)
+[S2]	eval-rscript(int $Var, $Store)  	= assign-when-undef($Var, 0, $Store)
+[S3]	eval-rscript(str $Var, $Store)  	= assign-when-undef($Var, "", $Store)
+[S4]	eval-rscript(node $Var, $Store)		= assign-when-undef($Var, area("",0,0,0,0), $Store)
+[S5]	eval-rscript(bag[$Etype] $Var, $Store)  = assign-when-undef($Var, *empty*, $Store)	
 	
-%%[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
-%%						 = assign($Var, *empty*, $Store)
-%%[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
-%%						 = assign($Var, *empty*, $Store)
-[S1]	eval-rscript($Etype $Var, $Store)	= $Store
+[S6]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
+						 = assign-when-undef($Var, *empty*, $Store)
+[S7]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
+						 = assign-when-undef($Var, *empty*, $Store)
+[S8]	eval-rscript($Etype $Var, $Store)	= $Store
 
-[S4]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
-[S5] 	eval-rscript(rel[$Etype1,$Etype2] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
+[S9]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
+[S10] 	eval-rscript(rel[$Etype1,$Etype2] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
 
-[S6]	eval-rscript($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
-[S7]	eval-rscript($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 
+[S11]	eval-rscript($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
+[S12]	eval-rscript($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Exp>, $Store)
 
-[S8]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3) = $Exp, $Store) 
+[S13]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Exp>, $Store)
 
-[S9]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) 
+[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Exp>, $Store)
 
-%% --- Solve Sets of equations
+[S15]	evalp($Exp,$Store) = true
+	===================================================
+	eval-rscript(assert $String : $Exp, $Store)= increment(NPASSED, $Store)
 
+[S16]	evalp($Exp,$Store) = false, add-elem(FAILED, $String, $Store) = $Store'
+	===================================================
+	eval-rscript(assert $String : $Exp, $Store)= increment(NFAILED, $Store')
+
+%% --- Solve Sets of equations
 
 [SL1]	eval-rscript(solve {$Var1 = $Exp1}, $Store) = 
 	solve1(1000, $Var1, $Exp1, $Store)
@@ -257,22 +299,26 @@
 	evalx($Exp1 != $Exp2, $Store) 	= not($Bool)
 
 [LE1]	evalx($Exp1 <= $Exp2, $Store) 	= apply(evalx($Exp1, $Store) <= evalx($Exp2, $Store))
-[LE2]	apply(*empty* <= $Bag2) 	= true
-[LE3]	apply($Bag <= *empty*) 		= subset($Bag, EmptyBag)
-[LE4]	apply($Bag1 <= $Bag2) 		= subset($Bag1, $Bag2)
-[LE5]	apply(*empty* <= $Rel2) 	= true
-[LE6]	apply($Rel <= *empty*) 		= subset($Rel, EmptyRel)
-[LE7]	apply($Rel1 <= $Rel2) 		= subset($Rel1,  $Rel2)
-[LE8]	apply($Integer1 <= $Integer2) 	= $Integer1 <= $Integer2
+
+[LE2]	apply(*empty* <= *empty*)	= true
+[LE3]	apply(*empty* <= $Bag2) 	= true
+[LE4]	apply($Bag <= *empty*) 		= subset($Bag, EmptyBag)
+[LE5]	apply($Bag1 <= $Bag2) 		= subset($Bag1, $Bag2)
+[LE6]	apply(*empty* <= $Rel2) 	= true
+[LE7]	apply($Rel <= *empty*) 		= subset($Rel, EmptyRel)
+[LE8]	apply($Rel1 <= $Rel2) 		= subset($Rel1,  $Rel2)
+[LE9]	apply($Integer1 <= $Integer2) 	= $Integer1 <= $Integer2
 
 [LT1]	evalx($Exp1 < $Exp2, $Store) 	= apply(evalx($Exp1, $Store) < evalx($Exp2, $Store))
-[LT2]	apply(*empty* < $Bag2) 		= strict-subset(EmptyBag, $Bag2)
-[LT3]	apply($Bag1 < *empty*) 		= false
-[LT4]	apply($Bag1 < $Bag2) 		= strict-subset($Bag1, $Bag2)
-[LT5]	apply(*empty* < $Rel2) 		= strict-subset(EmptyRel,  $Rel2)
-[LT6]	apply($Rel1 < *empty*) 		= false
-[LT7]	apply($Rel1 < $Rel2) 		= strict-subset($Rel1,  $Rel2)
-[LT8]	apply($Integer1 < $Integer2) 	= $Integer1 < $Integer2
+
+[LT2]	apply(*empty* < *empty*)	= false
+[LT3]	apply(*empty* < $Bag2) 		= strict-subset(EmptyBag, $Bag2)
+[LT4]	apply($Bag1 < *empty*) 		= false
+[LT5]	apply($Bag1 < $Bag2) 		= strict-subset($Bag1, $Bag2)
+[LT6]	apply(*empty* < $Rel2) 		= strict-subset(EmptyRel,  $Rel2)
+[LT7]	apply($Rel1 < *empty*) 		= false
+[LT8]	apply($Rel1 < $Rel2) 		= strict-subset($Rel1,  $Rel2)
+[LT9]	apply($Integer1 < $Integer2) 	= $Integer1 < $Integer2
 
 [GE1]	$Bool = apply(evalx($Exp1, $Store) < evalx($Exp2, $Store))
 	==========================================================
@@ -422,12 +468,12 @@
 [TC1]	evalx($Exp +, $Store)		= apply(evalx($Exp, $Store) +)
 
 [TC2]	apply(*empty* +)		= *empty*
-[TC3]	apply($Rel +)			= $Rel +
+[TC3]	apply($Rel +)			= trans-closure($Rel)
 
 [RTC1]	evalx($Exp *, $Store)		= apply(evalx($Exp, $Store) *)
 
 [RTC2]	apply(*empty* *)		= *empty*
-[TRC3]	apply($Rel *)			= $Rel *
+[TRC3]	apply($Rel *)			= rtrans-closure($Rel)
 
 %% ---- Eval bag and relation formers
 

@@ -1,5 +1,33 @@
 buttons([
 
+ button("Rscript",
+          ["term"],
+          ["Actions", "Exec Rscript"],
+          [push-active-module,
+	   get-root,
+           check-sort("RSCRIPT"),
+           apply("eval-rscript", "RSTORE", 1),
+           push-modulename("RscriptCalculator"),
+           reduce,
+	   push-filename("RscriptCalculator.results"),
+	   push-active-module,
+	   activate-editor
+           ]),
+
+ button("Rscript",
+          ["term"],
+          ["Actions", "Exec Rscript Testsuite"],
+          [push-active-module,
+	   get-root,
+           check-sort("RSCRIPT"),
+           apply("eval-rscript-testsuite", "TESTREPORT", 1),
+           push-modulename("RscriptCalculator"),
+           reduce,
+	   push-filename("RscriptCalculator.results"),
+	   push-active-module,
+	   activate-editor
+           ]),
+
   button("Rscript",
           ["term"],
           ["Actions", "Check Rscript"],
@@ -32,19 +60,7 @@ buttons([
           [show-area("Pico-syntax")]),
 
 
-  button("Rscript",
-          ["term"],
-          ["Actions", "Exec Rscript"],
-          [push-active-module,
-	   get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript", "RSTORE", 1),
-           push-modulename("RscriptCalculator"),
-           reduce,
-	   push-filename("RscriptCalculator.results"),
-	   push-active-module,
-	   activate-editor
-           ]),
+ 
 
   button("Pico-syntax",
           ["term"],

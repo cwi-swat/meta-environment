@@ -44,7 +44,7 @@ equations
 
 [ranX-1] in(E', {E*}) = true
          ==================================================
-         ranX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
+         ranX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranX({Tuple*1, Tuple*2}, {E*})
 
 [default-ranX]
 	 ranX({Tuple*}, {E*}) = {Tuple*}
@@ -111,9 +111,9 @@ equations
        	=========================================
        	closure(Rel, Rel1, Rel2) = closure(Rel, Rel2, union(Rel2, compose(Rel2, Rel)))
 
-[tcl-1]  Rel + = closure(Rel, {}, Rel)
+[tcl-1]  trans-closure(Rel) = closure(Rel, {}, Rel)
 
-[rtcl-1] Rel* = union(Rel+, id(carrier(Rel)))
+[rtcl-1] rtrans-closure(Rel) = union(trans-closure(Rel), id(carrier(Rel)))
 
 %% --- reachX
 

@@ -4,7 +4,7 @@ imports Rscript
 %% imports Relations[Elem]
 
 exports
-   sorts RVALUE RSTORE
+   sorts RVALUE RSTORE TESTREPORT
 
    context-free syntax
 
@@ -24,10 +24,14 @@ exports
         
         "[" { RVAR # RVALUE ","}* "]"         -> RSTORE
         assign(RVAR, RVALUE, RSTORE)          -> RSTORE
+	assign-when-undef(RVAR, RVALUE, RSTORE)	-> RSTORE
+	increment(RVAR, RSTORE)			-> RSTORE
         value(RVAR, RSTORE)                   -> RVALUE
 
         rval2rel(RVALUE)	 	      -> Rel[[Elem]]
         rval2bag(RVALUE)		      -> Bag[[Elem]]
+
+	add-elem(RVAR, Elem, RSTORE)		-> RSTORE
 
 	add-tuple(RVAR, Elem # Elem, RSTORE)  -> RSTORE
 
@@ -44,6 +48,15 @@ exports
         eval-rscript(RSTAT*, RSTORE)          -> RSTORE
 
         eval-rexp(REXP, RSTORE)		      -> RVALUE
+
+%% Test suite support
+
+	 "All" Integer "tests" "passed"		-> TESTREPORT
+	Integer "of" Integer "tests" "failed:" RVALUE -> TESTREPORT
+
+	testsuite-report(Integer, Integer, RVALUE) -> TESTREPORT
+
+	eval-rscript-testsuite(RSCRIPT)		-> TESTREPORT
 
 %% should be hidden
 
@@ -143,7 +156,7 @@ hiddens
         "$From*" [0-9\']*              -> {FROM ","}*
         "$From+" [0-9\']*              -> {FROM ","}+
 
-        "$Script" [0-9\']*             -> RSCRIPT
+        "$Rscript" [0-9\']*             -> RSCRIPT
 
         "$Stat" [0-9\']*               -> RSTAT
         "$Stat*" [0-9\']*              -> RSTAT*

@@ -46,8 +46,8 @@ imports Bags[Elem]
      size(Rel[[Elem]])                  		-> Integer
      reachX(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
      reachR(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
-     Rel[[Elem]] "+"                  			-> Rel[[Elem]]
-     Rel[[Elem]] "*"                  			-> Rel[[Elem]]
+     trans-closure(Rel[[Elem]])                		-> Rel[[Elem]]
+     rtrans-closure(Rel[[Elem]])             		-> Rel[[Elem]]
 
      "(" Rel[[Elem]] ")"              			-> Rel[[Elem]] {bracket}
 

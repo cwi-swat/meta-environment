@@ -108,6 +108,8 @@ exports
      DCLRVAR "=" "{" "}"			-> RSTAT
 
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
+
+     "assert" String ":"  REXP			-> RSTAT
  
      RSTAT*                                     -> RSCRIPT
 

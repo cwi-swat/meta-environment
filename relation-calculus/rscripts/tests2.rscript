@@ -1,5 +1,6 @@
 %%
 %% Test all built-in functions
+%%
 
 rel[int,int] Rel1 = {<1,10>}
 rel[int,int] Rel2 = {<1,10>, <2,20>, <3,30>}
@@ -7,36 +8,126 @@ rel[int,int] Rel2 = {<1,10>, <2,20>, <3,30>}
 bag[int] EMPTYBAG = {}
 rel[int,int] EMPTYREL = {}
 
-%% A -- id
+%% --- id
 
-%%bool A01 = id(EMPTYBAG) == EMPTYREL
-%%bool A02 = id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
+assert "id-1": id(EMPTYBAG) == EMPTYREL
+assert "id-2": id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
 
-%% B -- domain
+%% --- domain
 
-bool B01 = domain(EMPTYREL) == EMPTYBAG
-bool B02 = domain(Rel1) == {1}
-bool B03 = domain(Rel2) ==  {1, 2, 3}
+assert "domain-1" : domain(EMPTYREL) == EMPTYBAG
+assert "domain-2" : domain(Rel1) == {1}
+assert "domain-3" : domain(Rel2) ==  {1, 2, 3}
 
-%% C -- range
+%% --- range
 
-bag[int] C01 = range(EMPTYREL)
-bag[int] C02 = range(Rel1)
-bag[int] C03 = range (Rel2)
+assert "range-1" : range(EMPTYREL) == EMPTYBAG
+assert "range-2" : range(Rel1) == {10}
+assert "range-3" : range (Rel2) == {10,20,30}
 
-%% D -- carrier
-%% E -- top
-%% F -- bottom
-%% G -- inv
-%% H -- compl
-%% I -- domR
-%% J -- ranR
-%% K -- carR
-%% L -- domX
-%% M -- ranX
-%% N -- carX
-%% O -- fst
-%% P -- sec
-%% Q -- reachX
-%% R -- reachR
+%% --- carrier
+
+assert "carrier-1": carrier(EMPTYREL) == EMPTYBAG
+assert "carrier-1": carrier(Rel2) == {1,2,3,10,20,30}
+
+%% --- top
+
+rel[int,int] G = {<1,2>, <1,3>, <2,4>, <3,4>}
+
+assert "top-1": top(EMPTYREL) == EMPTYBAG
+assert "top-2": top(G) == {1}
+
+%% --- bottom
+
+assert "bottom-1": bottom(EMPTYREL) == EMPTYBAG
+assert "bottom-2": bottom(G) == {4}
+
+%% --- inv
+
+assert "inv-1": inv(EMPTYREL) == EMPTYREL
+assert "inv-2": inv(Rel2) == {<10,1>,<20,2>,<30,3>}
+
+%% --- compl
+
+assert "compl-1": compl(EMPTYREL) == EMPTYREL
+assert "compl-2": compl(Rel1) ==  {<1, 1>, <10, 1>, <10, 10>}
+
+%% --- domR
+
+assert "domR-1": domR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "domR-2": domR(EMPTYREL, {1}) == EMPTYREL
+assert "domR-3": domR(Rel2, EMPTYBAG) == EMPTYREL
+assert "domR-4": domR(Rel2, {1}) == {<1,10>}
+assert "domR-5": domR(Rel2, {3, 1}) == {<1,10>,<3,30>}
+assert "domR-6": domR(Rel2, {7, 17}) == EMPTYREL
+
+%% --- ranR
+
+assert "ranR-1": ranR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "ranR-2": ranR(EMPTYREL, {10}) == EMPTYREL
+assert "ranR-3": ranR(Rel2, EMPTYBAG) == EMPTYREL
+assert "ranR-4": ranR(Rel2, {10}) == {<1,10>}
+assert "ranR-5": ranR(Rel2, {30, 10}) == {<1,10>,<3,30>}
+assert "ranR-6": ranR(Rel2, {7, 17}) == EMPTYREL
+
+%% --- carR
+
+assert "carR-1": carR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "carR-2": carR(EMPTYREL, {10}) == EMPTYREL
+assert "carR-3": carR(Rel2, EMPTYBAG) == EMPTYREL
+assert "carR-4": carR(Rel2, {10, 1, 20}) == {<1,10>}
+assert "carR-5": carR(Rel2, {30, 1, 3, 10}) == {<1,10>,<3,30>}
+assert "carR-6": carR(Rel2, {7, 17}) == EMPTYREL
+
+%% --- domX
+
+assert "domX-1": domX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "domX-2": domX(EMPTYREL, {1}) == EMPTYREL
+assert "domX-3": domX(Rel2, EMPTYBAG) == Rel2
+assert "domX-4": domX(Rel2, {1}) == {<2,20>,<3,30>}
+assert "domX-5": domX(Rel2, {3, 1}) == {<2,20>}
+assert "domX-6": domX(Rel2, {7, 17}) == Rel2
+
+%% --- ranX
+
+assert "ranX-1": ranX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "ranX-2": ranX(EMPTYREL, {10}) == EMPTYREL
+assert "ranX-3": ranX(Rel2, EMPTYBAG) == Rel2
+assert "ranX-4": ranX(Rel2, {10}) ==  {<2,20>,<3,30>}
+assert "ranX-5": ranX(Rel2, {30, 10}) == {<2,20>}
+assert "ranX-6": ranX(Rel2, {7, 17}) == Rel2
+
+%% --- carX
+
+assert "carX-1": carX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "carX-2": carX(EMPTYREL, {10}) == EMPTYREL
+assert "carX-3": carX(Rel2, EMPTYBAG) == Rel2
+assert "carX-4": carX(Rel2, {10, 1, 20}) == {<3,30>}
+assert "carX-5": carX(Rel2, {30, 1, 3, 10}) == {<2,20>}
+assert "carX-6": carX(Rel2, {7, 17}) == Rel2
+
+%% --- fst
+
+assert "fst-1": fst(<1,2>) == 1
+
+%% --- sec
+
+assert "sec-2": sec(<1,2>) == 2
+
+%% --- reachX
+
+assert "reachX-1":  reachX(EMPTYBAG, EMPTYBAG, EMPTYREL) == EMPTYREL
+assert "reachX-2":  reachX({1}, EMPTYBAG, G) ==  {<1,2>, <1,3>, <1, 4>}
+assert "reachX-3":  reachX({1}, {2}, G) ==  {<1,3>, <1, 4>}
+assert "reachX-4":  reachX({1}, {2,3}, G) ==  EMPTYREL
+assert "reachX-5":  reachX({1}, {4}, G) ==  {<1,2>,<1,3>}
+
+%% --- reachR
+
+assert "reachR-1":  reachR(EMPTYBAG, EMPTYBAG, EMPTYREL) == EMPTYREL
+assert "reachR-2":  reachR({1}, EMPTYBAG, G) ==  EMPTYREL
+assert "reachR-3":  reachR({1}, {1,2}, G) ==  {<1,2>}
+assert "reachR-4":  reachR({1}, {1,2,3}, G) ==  {<1,2>, <1,3>}
+assert "reachR-5":  reachR({1}, {1,2,4}, G) ==  {<1,2>,<1,4>}
+
 
