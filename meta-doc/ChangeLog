@@ -1,3 +1,9 @@
+2001/08/27 (mdejonge@cwi.nl)
+  * All source files are now included in the meta-doc distribution
+  * Added --with-build-manual configuration switch to explicitely state that
+    the manual should be build  (useful for developers).
+  * Manual is now installed as asf+sdf-user-manual.ps in <prefix>/doc
+  * Added autobundle package description file.
 
 
 2001/07/31 (jurgenv@cwi.nl)

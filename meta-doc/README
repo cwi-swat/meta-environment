@@ -1,9 +1,25 @@
 
-This package contains the user-manual of the ASF+SDF Meta-Environment. 
+This package contains the user-manual of the ASF+SDF Meta-Environment. If
+you are interested in reading/installing the documentation only from the
+meta-doc distribution simply run:
 
-The distributed package only contains the postscript files of the manual.
+> ./configure --prefix=<installation-prefix> 
+> gmake install
 
-DEVELOPERS:
+to install the ASF+SDF user manual in <installation-prefix>/doc. 
 
-Just type the following to generate Makefile's:
-  ./reconf ; ./configure
+
+If you are a developer and obtained the meta-doc pacakge from CVS or
+if you explicitely want to rebuild the manual run:
+
+> ./reconf (only needed when you obtained meta-doc from CVS)
+> ./configure --prefix=<installation-prefix> --with-build-manual
+> gmake 
+> gmake install
+
+to build and install the ASF+SDF user manual in <installation-prefix>/doc.
+
+If you forget to specify the --with-build-manual switch and, during
+configuration, the user manual does not yet exist, the system is configured
+to automatically build the manual.
+

@@ -6,6 +6,19 @@ AM_INIT_AUTOMAKE(meta-doc, 0.1beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
+AC_ARG_WITH(build_manual,
+   [  --with-build-manual     Build the manual from its sources ],
+   [build_manual=true],)
+AC_MSG_CHECKING([whether asf+sdf-user-manual.ps already exists])
+if test -f asf+sdf-user-manual.ps; then
+   AC_MSG_RESULT(yes);
+else
+   AC_MSG_RESULT(no);
+   build_manual=true
+fi
+AM_CONDITIONAL(BUILD_MANUAL, test x$build_manual = xtrue)
+
+
 dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 

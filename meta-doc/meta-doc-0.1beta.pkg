@@ -1,0 +1,13 @@
+package
+identification
+  name=meta-doc
+  version=0.1beta
+  location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+  info=http://www.cwi.nl/projects/MetaEnv/
+  description='The ASF+SDF Meta-Environemtn user manual'
+
+  keywords=asf, sdf, manual, asf+sdf, meta-environment
+
+interface
+
+requires
