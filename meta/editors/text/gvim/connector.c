@@ -117,6 +117,24 @@ static char *menuToString(TE_Menu menu)
 
 /*}}}  */
 
+/*{{{  static void protocol_expect(int fd, const char *expected) */
+
+static void protocol_expect(int fd, const char *expected)
+{
+  char buf[BUFSIZ];
+  int len = strlen(expected);
+
+  if (read(fd, buf, len) != len) {
+    perror("protocol_expect:read");
+    exit(errno);
+  }
+  else if (strncmp(buf, expected, len)) {
+    ATabort("protocol error: expecting %s, got: %s\n", expected, buf);
+  }
+}
+
+/*}}}  */
+
 /*{{{  static void sendToVimVerbatim(const char *cmd) */
 
 static void sendToVimVerbatim(const char *cmd)
@@ -156,7 +174,7 @@ static void makeVimMenuItem(char *menu, char *item)
   strcat(buf, "\")");
 
   sendToVim(buf);
-  sendToVimVerbatim("");
+  protocol_expect(read_from_editor_fd, HANDSHAKE);
 }
 
 /*}}}  */
@@ -191,6 +209,7 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
     makeVimMenuItem(TE_getMenuMain(menu), TE_getMenuSub(menu));
     actionList = TE_getActionListTail(actionList);
   }
+  sendToVimVerbatim("");
 }
 
 /*}}}  */
@@ -343,23 +362,6 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 
 /*}}}  */
 
-/*{{{  static void protocol_expect(int fd, const char *expected) */
-
-static void protocol_expect(int fd, const char *expected)
-{
-  char buf[BUFSIZ];
-  int len = strlen(expected);
-
-  if (read(fd, buf, len) != len) {
-    perror("protocol_expect:read");
-    exit(errno);
-  }
-  else if (strncmp(buf, expected, len)) {
-    ATabort("protocol error: expecting %s, got: %s\n", expected, buf);
-  }
-}
-
-/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -435,7 +437,6 @@ int main(int argc, char *argv[])
 
     sprintf(buf, ":source %s", path_vim);
     sendToVim(buf);
-
     protocol_expect(read_from_editor_fd, HANDSHAKE);
 
     hiveToEditor = TE_makePipeDefault(read_from_hive_fd, -1);

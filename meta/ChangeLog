@@ -1,5 +1,12 @@
 # $Id$
 
+Mon Dec  8 14:12:18 CET 2003 <{jong,jurgenv,kooiker}@cwi.nl>
+ * editors/text/gvim/{connector.c,meta.vim.src}:
+   - explicitly synchronise gvim-connector and gvim instance between
+     each AddMenu call.
+   - repaint (cleanup) gvim once after *all* menu entries have been
+     i.s.o. in between each AddMenu call.
+
 2003/12/08 <markvdb@cwi.nl>
  * Fixed a bug when the specification is incomplete wrt
    parsed equations.

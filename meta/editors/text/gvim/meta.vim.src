@@ -12,6 +12,9 @@ func! AddMenu(vim_fd, menu, item, action)
 
   " add menu, binding menu-item to callback using encoded menu-item
   exe menu . ':silent call libcallnr(meta_dlso, "send", ' . cmd . ')<CR>'
+
+  " synchronize with gvim-connector
+  call libcallnr(g:meta_dlso, "handshake", g:tb_pipe)
 endfunc
 
 " Update current location
