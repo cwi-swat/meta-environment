@@ -4,7 +4,7 @@
 
 #include <aterm.h>
 
-#line 27 "preparation.h.nw"
+#line 28 "preparation.h.nw"
 typedef struct equation_entry
 {
   struct equation_entry *hnext;
@@ -13,7 +13,7 @@ typedef struct equation_entry
   aterm *first_ofs;
   aterm *equation;
 } equation_entry;
-#line 41 "preparation.h.nw"
+#line 42 "preparation.h.nw"
 typedef struct equation_table
 {
   struct equation_table *next;
@@ -22,14 +22,16 @@ typedef struct equation_table
   equation_entry **table;
 } equation_table;
 
-#line 58 "preparation.h.nw"
+#line 59 "preparation.h.nw"
 aterm *RWprepareTerm(arena *ar, aterm *t);
-#line 67 "preparation.h.nw"
+#line 68 "preparation.h.nw"
 aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs);
-#line 76 "preparation.h.nw"
+#line 77 "preparation.h.nw"
 aterm *RWrestoreTerm(arena *ar, aterm *t);
+#line 85 "preparation.h.nw"
+void RWflushEquations();
 
-#line 17 "preparation.h.nw"
+#line 18 "preparation.h.nw"
 equation_entry *find_equation(equation_entry *prev, aterm *top_ofs, aterm *first_ofs);
 void select_equations(aterm *module);
 void enter_equations(aterm *module, aterm_list *eqs);

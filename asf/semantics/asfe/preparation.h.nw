@@ -13,6 +13,7 @@
 <<RWprepareTerm>>
 <<RWprepareEqs>>
 <<RWrestoreTerm>>
+<<RWflushEquations>>
 
 equation_entry *find_equation(equation_entry *prev, aterm *top_ofs, aterm *first_ofs);
 void select_equations(aterm *module);
@@ -75,6 +76,14 @@ rewriting.}
 <<RWrestoreTerm>>=
 aterm *RWrestoreTerm(arena *ar, aterm *t);
 @ %def RWrestoreTerm
+
+%}}}
+%{{{ RWflushEquations
+
+\Function{RWflushEquations}{void }{}{Remove all equations from the system.}
+<<RWflushEquations>>=
+void RWflushEquations();
+@ %def RWflushEquations
 
 %}}}
 

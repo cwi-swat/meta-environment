@@ -107,6 +107,8 @@ void enter_equation(equation_table *table, aterm *equation)
 equation_entry *find_equation(equation_entry *from, aterm *top_ofs, 
                                                         aterm *first_ofs)
 {
+  if(!equations)
+    return NULL;
   if(from) {
     from = from->hnext;
   } else {
@@ -126,7 +128,7 @@ equation_entry *find_equation(equation_entry *from, aterm *top_ofs,
 */
   return from;
 }
-#line 184 "preparation.c.nw"
+#line 186 "preparation.c.nw"
 void select_equations(aterm *module)
 {
   equation_table *cur = tables;
@@ -139,7 +141,7 @@ void select_equations(aterm *module)
 
   equations = cur;
 }
-#line 202 "preparation.c.nw"
+#line 204 "preparation.c.nw"
 void enter_equations(aterm *module, aterm_list *eqs)
 {
   equation_table *cur = tables;
@@ -166,7 +168,7 @@ void enter_equations(aterm *module, aterm_list *eqs)
   }
 }
 
-#line 545 "preparation.c.nw"
+#line 702 "preparation.c.nw"
 aterm *lexical_to_list(arena *ar, aterm *lextrm)
 {
   aterm *sort, *newtrm, *newlex, *newname, *newiter;
@@ -200,7 +202,7 @@ aterm *lexical_to_list(arena *ar, aterm *lextrm)
   free(sortstr);
   return newappl;
 }
-#line 587 "preparation.c.nw"
+#line 744 "preparation.c.nw"
 aterm *list_to_lexical(arena *ar, aterm *lexappl)
 {
   aterm *modname, *lit, *sort, *w[4], *prod, *sym, *lexlist;
@@ -229,7 +231,91 @@ aterm *list_to_lexical(arena *ar, aterm *lexappl)
   free(newlexstr);
   return newlexappl;
 }
-#line 250 "preparation.c.nw"
+#line 257 "preparation.c.nw"
+void update_geometry_whitespace(aterm *ws, int *line, int *col)
+{
+  int i;
+  char *w;
+
+  assertp(TmatchTerm(ws, pattern_whitespace, &w));
+  for(i=0; w[i]; i++) {
+    if(w[i] == '\n') {
+      (*line)++;
+      (*col) = 0;
+    } else
+      (*col)++;
+  }
+}
+#line 277 "preparation.c.nw"
+void update_geometry_literal(aterm *lit, int *line, int *col)
+{
+  int i;
+  char *l;
+
+  assertp(TmatchTerm(lit, pattern_literal, &l));
+  for(i=0; l[i]; i++) {
+    if(l[i] == '\n') {
+      (*line)++;
+      *col = 0;
+    } else
+      (*col)++;
+  }
+}
+#line 297 "preparation.c.nw"
+void update_geometry_variable(aterm *var, int *line, int *col)
+{
+  int i;
+  char *name;
+  aterm *sort;
+
+  assertp(TmatchTerm(var, pattern_var, &name, &sort));
+  for(i=0; name[i]; i++) {
+    if(name[i] == '\n') {
+      (*line)++;
+      *col = 0;
+    } else
+      (*col)++;
+  }
+}
+#line 318 "preparation.c.nw"
+void update_geometry_list(aterm *l, int *line, int *col);
+void update_geometry_term(aterm *trm, int *line, int *col)
+{
+  aterm *prod, *w, *sym;
+  aterm_list *args, *elems;
+
+  if(TmatchTerm(trm, pattern_appl, &prod, &w, &args)) {
+    update_geometry_whitespace(w, line, col);
+    update_geometry_list(args, line, col);
+  } else if(TmatchTerm(trm, pattern_list, &sym, &w, &elems)) {
+    update_geometry_whitespace(w, line, col);
+    update_geometry_list(elems, line, col);
+  } else if(asfix_is_whitespace(trm)) {
+    update_geometry_whitespace(trm, line, col);
+  } else if(asfix_is_literal(trm)) {
+    update_geometry_literal(trm, line, col);
+  } else if(asfix_is_var(trm)) {
+    update_geometry_variable(trm, line, col);
+  } else {
+    Tprintf(stderr, "unknown construction in term: %t\n", trm);
+  }
+}
+#line 346 "preparation.c.nw"
+void update_geometry_list(aterm *l, int *line, int *col)
+{
+  while(!t_is_empty(l)) {
+    update_geometry_term(t_list_first(l), line, col);
+    l = t_list_next(l);
+  }
+}
+#line 359 "preparation.c.nw"
+void update_geometry_list_sep(aterm *sep, int *line, int *col)
+{
+  Tprintf(stderr, "update_geometry_list_sep: %t\n", sep);
+  
+}
+
+#line 374 "preparation.c.nw"
 aterm *prepare_term(arena *ar, aterm *el, Tbool lexcons);
 
 aterm_list *prepare_list(arena *ar, aterm_list *l, Tbool lexcons)
@@ -246,7 +332,7 @@ aterm_list *prepare_list(arena *ar, aterm_list *l, Tbool lexcons)
   }
   return result;
 }
-#line 274 "preparation.c.nw"
+#line 398 "preparation.c.nw"
 aterm_list *prepare_conds(arena *ar, aterm_list *conds)
 {
   aterm *cond, *lhs, *w[2], *lit, *rhs;
@@ -269,8 +355,8 @@ aterm_list *prepare_conds(arena *ar, aterm_list *conds)
   }
   return newconds;
 }
-#line 305 "preparation.c.nw"
-aterm_list *prepare_equ(arena *ar, aterm *equ)
+#line 429 "preparation.c.nw"
+aterm_list *prepare_equ(arena *ar, aterm *equ, int *line, int *col)
 {
   aterm *w[6], *l[2], *modname, *tag, *lhs, *rhs;
   aterm *newlhs, *newrhs;
@@ -280,6 +366,19 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
         &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
     newlhs = prepare_term(ar, lhs, Tfalse);
     newrhs = prepare_term(ar, rhs, Tfalse);
+
+/*
+    Tprintf(stderr, "equation: %t starts at %d,%d, ", tag, *line, *col);
+    update_geometry_whitespace(w[0], line, col);
+    update_geometry_literal(tag, line, col);
+    update_geometry_whitespace(w[1], line, col);
+    update_geometry_term(lhs, line, col);
+    update_geometry_whitespace(w[2], line, col);
+    update_geometry_literal(l[0], line, col);
+    update_geometry_whitespace(w[3], line, col);
+    update_geometry_term(rhs, line, col);
+    Tprintf(stderr, "and ends at: %d,%d\n", *line, *col);
+*/
     return Tmake(ar, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
         modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3], newrhs);
   }
@@ -313,7 +412,7 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
   assert(0);
   return NULL;  /* Silence the compiler */
 }
-#line 356 "preparation.c.nw"
+#line 493 "preparation.c.nw"
 aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 {
   aterm_list *args, *elems, *newargs, *result;
@@ -344,29 +443,42 @@ aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 
   return result;
 }
-#line 393 "preparation.c.nw"
+#line 530 "preparation.c.nw"
 aterm *RWprepareTerm(arena *ar, aterm *t)
 {
   return prepare_term(ar, t, Tfalse);
 }
-#line 405 "preparation.c.nw"
+#line 542 "preparation.c.nw"
 aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
 {
   aterm *el;
   aterm_list *result = t_empty(t_world(*ar));
+  int line = 0, col = 0;
   
   while(!t_is_empty(eqs)) {
     do {
       el = t_list_first(eqs);
       eqs = t_list_next(eqs);
+      if(asfix_is_whitespace(el))
+        update_geometry_whitespace(el, &line, &col);
+      if(asfix_is_list_sep(el))
+        update_geometry_list_sep(el, &line, &col);
     } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
-    Tprintf(stderr,"Starting prepare_equ\n");
-    result = TlistAppend(ar, result, prepare_equ(ar, el)); 
-    Tprintf(stderr,"Finished prepare_equ\n");
+    result = TlistAppend(ar, result, prepare_equ(ar, el, &line, &col)); 
   }
   return result;
 }
-#line 440 "preparation.c.nw"
+#line 567 "preparation.c.nw"
+void RWflushEquations()
+{
+  equation_table *table;
+  while(tables) {
+    table = tables;
+    tables = tables->next;
+    destroy_equation_table(table);
+  }
+}
+#line 597 "preparation.c.nw"
 aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
 {
   aterm *lit;
@@ -397,7 +509,7 @@ aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
   }
   return newl;
 }
-#line 479 "preparation.c.nw"
+#line 636 "preparation.c.nw"
 aterm_list *restore_args(arena *ar, aterm_list *l)
 {
   aterm *arg, *ws;
@@ -413,7 +525,7 @@ aterm_list *restore_args(arena *ar, aterm_list *l)
   }
   return newl;
 }
-#line 500 "preparation.c.nw"
+#line 657 "preparation.c.nw"
 aterm *RWrestoreTerm(arena *ar, aterm *t)
 {
   aterm_list *args, *elems;

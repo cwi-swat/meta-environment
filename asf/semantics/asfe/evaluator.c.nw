@@ -58,12 +58,9 @@ A first version of an INTERPRETER in ToolBus C.
 <<rec_terminate>>
 <<exists>>
 <<create_equations_db>>
-<<change_equations_db>>
-<<change_active_rules>>
 <<clear_equations_db>>
 <<add_equations>>
 <<interpret>>
-<<sort_and_filter_on_ofs>>
 <<no_new_vars>>
 <<elems_matching>>
 <<arg_matching>>
@@ -110,9 +107,6 @@ static unsigned rewrite_steps = 0;
 
 FATAL_ERROR
 
-
-aterm_list *equations_db;
-aterm_list *active_rules;
 aterm_list *fail_env;
 arena Ar;
 aterm *tmp1, *tmp2, *tmp3;
@@ -166,7 +160,7 @@ aterm *exists(int cid, aterm *name)
   aterm *result;
 
 /*Tprintf(stderr,"exists entered with %t and db %t\n",name,equations_db);*/
-  if(TdictGet(equations_db,name))
+  if(find_equation(NULL, name, NULL))
     result = Tmake(&Ar,"snd-value(result(exists(<term>)))", name);
   else 
     result = Tmake(&Ar,"snd-value(result(notexists(<term>)))", name);
@@ -180,10 +174,6 @@ aterm *exists(int cid, aterm *name)
 <<create_equations_db>>=
 void create_equations_db(int cid)
 {
-  equations_db = t_empty(NULL);
-  active_rules = t_empty(NULL);
-  t_protect(equations_db);
-  t_protect(active_rules);
 }
 @
 
@@ -217,7 +207,7 @@ void change_active_rules(aterm_list *ar)
 <<clear_equations_db>>=
 void clear_equations_db(int cid)
 {
-  change_equations_db(t_empty(NULL));
+  RWflushEquations();
 }
 @
 
