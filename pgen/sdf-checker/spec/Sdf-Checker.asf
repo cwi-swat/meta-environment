@@ -4,7 +4,7 @@ equations
            remove-labels(Definition1) = Definition2,
            check-sorts-and-prods(Definition2) = Msgs2,
            check-sdf-attributes(Definition2) = Msgs3,
-           check-for-depricated-symbols(Definition2) = Msgs4
+           check-for-deprecated-symbols(Definition2) = Msgs4
            =================================================
            check-sdf(definition Definition1) =
              Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4

@@ -1,0 +1,22 @@
+module DeprecatedSymbols
+
+imports Sdf-Messages ModuleOperations
+
+exports
+  context-free syntax
+    check-for-deprecated-symbols(Definition) -> Messages
+
+hiddens
+  context-free syntax
+    check-for-deprecated-symbols(Definition, Messages) -> Messages {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols(Module, Messages)     -> Messages {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols2(Module, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols2(Symbol, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)} 
+
+hiddens
+  variables
+    "Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*  -> ModuleId
+    "Definition"[0-9]* -> Definition 
+    "Msgs"[0-9]*       -> Messages
+    "$Symbol"[0-9]*    -> Symbol
