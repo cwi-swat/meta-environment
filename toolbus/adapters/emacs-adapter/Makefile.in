@@ -37,7 +37,7 @@ DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 # With a little bit of luck, you only have to change the value of
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = emacs-adapter
-PROGRAMS        = emacs-adapter
+PROGRAMS        = emacs-adapter start-emacs
 SOURCE          = emacs-adapter.c
 LIBFILES        = tb.el
 DOC             =  #emacs-adapter.guide.tex
@@ -45,7 +45,7 @@ SRCDOC          = #emacs-adapter.c.tex
 GENSRC          = emacs-adapter.c
 
 EXTRA_INCLUDES	=
-EXTRA_DEFS	= -DTBEL=\"$(libdir)/tb.el\"
+EXTRA_DEFS	= 
 EXTRA_LIBS	=
 
 # Here you can add the rules that actually build your adapter:

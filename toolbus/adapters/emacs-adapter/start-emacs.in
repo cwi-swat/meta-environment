@@ -1,0 +1,10 @@
+#! /bin/sh
+
+#echo $* 2>&1
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+libdir=@libdir@
+
+xemacs -load ${libdir}/tb.el -eval "(TBinit \"$*\")"
