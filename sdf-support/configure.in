@@ -31,20 +31,17 @@ AC_SUBST(ATERM)
 
 
 dnl }}}
-dnl {{{  ATerm Java Library
-
-dnl Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
-
-dnl }}}
 dnl {{{  toolbus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
+dnl }}}
+dnl {{{  Toolbus Java Adapter 
+
+AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
+   [  --with-toolbus-java-adapter=DIR   java-adapter is in DIR])
+AC_SUBST(TOOLBUS_JAVA_ADAPTER)
+
 dnl }}}
 dnl {{{  error-support
 
@@ -105,7 +102,7 @@ if test "x${JAVA}" = "x"; then
 fi
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
+EXTERNAL_JARS=\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Our own version of libdir whose value is set dynamically

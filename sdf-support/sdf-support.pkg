@@ -15,5 +15,4 @@ requires
   pt-support 1.1
   toolbus-lib 0.6
   toolbus-java-adapter 1.0
-  aterm-java 1.6
   graph-support 0.2
