@@ -148,15 +148,19 @@ void finish()
 void debugstep(int linenr)
 {
   if (TA_isConnected()) {
+    int old_state = TA_getProcessState(pid);
     TA_Location cpe = TA_makeLocationLine(source, linenr);
     last_line = linenr;
 
     TA_atCPE(pid, cpe);
 
+
     TA_activateRules(pid, TA_makePortStep());
 
     if(TA_getProcessState(pid) == STATE_STOPPED) {
-      TA_activateRules(pid, TA_makePortStopped());
+      if (old_state != STATE_STOPPED) {
+	TA_activateRules(pid, TA_makePortStopped());
+      }
       while(TA_getProcessState(pid) == STATE_STOPPED) {
 	TA_handleOne();
       }
@@ -237,6 +241,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   ATerm value;
 
 
+  args   = ATgetNext(args); /* Skip source filename */
   pos    = ATgetInt((ATermInt)ATgetFirst(args));
   args   = ATgetNext(args);
   linenr = ATgetInt((ATermInt)ATgetFirst(args));
@@ -300,7 +305,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   
   fprintf(stderr, "looking up variable: %s\n", var);
 
-  value = ATparse("unknown");
+  value = NULL;
 
   for(i=0; i<nr_vars; i++) {
     if(strcmp(variables[i].name, var) == 0) {
@@ -327,6 +332,11 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
       }
     }
   }
+
+  if (value == NULL) {
+    return TA_makeExprVarUnknown(var);
+  }
+  
   return ATmake("var(<str>,<term>,<int>,<int>,<int>,<int>)", var, value,
 		pos + diff_start, linenr, column + diff_start, length);
 }
@@ -344,7 +354,7 @@ static void init_debugging()
   TA_registerFunction(ATmakeAFun("resume", 0, ATfalse), eval_resume);
   TA_registerFunction(ATmakeAFun("break",  0, ATfalse), eval_break);
   TA_registerFunction(ATmakeAFun("var",    1, ATfalse), eval_var);
-  TA_registerFunction(ATmakeAFun("source-var", 4, ATfalse), eval_source_var);
+  TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
 
   name = strrchr(source, '/');
   if (name) {

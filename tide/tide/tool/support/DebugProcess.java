@@ -345,18 +345,23 @@ public class DebugProcess
 
   public void event(int rid, ATerm result)
   {
+    info.info("event: " + result);
+
     Rule rule = (Rule)ruleTable.get(new Integer(rid));
     Expr value = Expr.fromTerm(result);
 
     fireRuleTriggered(rule, value);
     if (rule == started) {
       running++;
+      info.info("rule == started, running = " + running);
       if (running == 1) {
 	fireProcessStatusChanged();
       }
     } else if (rule == stopped) {
       running--;
+      info.info("rule == stopped, running = " + running);
       if (running == 0) {
+	info.info("running is now 0, firing processStatusChanged");
 	lastLocation = value;
 	fireProcessStatusChanged();
       }

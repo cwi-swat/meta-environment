@@ -37,4 +37,9 @@ void TA_setProcessState(int pid, int state);
 
 TA_Expr TA_evaluate(int pid, TA_Expr expr);
 
+TA_Expr TA_makeExprError(char *msg, ATerm data);
+TA_Expr TA_makeExprVarUnknown(char *msg);
+TA_Expr TA_makeExprVar(char *var, TA_Expr value, int pos,
+		       int line, int column, int length);
+
 #endif

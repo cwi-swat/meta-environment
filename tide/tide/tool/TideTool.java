@@ -1,6 +1,8 @@
 package tide.tool;
 
-import javax.swing.JInternalFrame;
+import javax.swing.*;
+
+import tide.tool.support.*;
 
 public abstract class TideTool
   extends JInternalFrame
@@ -36,6 +38,32 @@ public abstract class TideTool
   public int getId()
   {
     return id;
+  }
+
+  //}}}
+
+  //{{{ public void displayError(Expr error)
+
+  public void displayError(Expr error)
+  {
+    displayError(error.getErrorMessage(), error.getErrorData());
+  }
+
+  //}}}
+  //{{{ public void displayError(Expr error)
+
+  public void displayError(String msg, Expr data)
+  {
+    String string = data.toString();
+    if (!string.equals("[]")) {
+      msg += ": " + string;
+    }
+
+
+
+    JOptionPane.showMessageDialog(this, msg, "Tide Error",
+				  JOptionPane.ERROR_MESSAGE);
+    System.err.println("Tide Error: " + msg + ": " + data);
   }
 
   //}}}

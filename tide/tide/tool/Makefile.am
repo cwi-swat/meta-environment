@@ -20,8 +20,9 @@ CONTROL_GEN	= TideControlTif.java TideControlTool.java \
 # during a make dist.
 noinst_SCRIPTS	= ${CONTROL_GEN}
 
-${noinst_SCRIPTS}: ../../tide.tifs
-	tifstojava -tifs ../../tide.tifs -tool tide-control -package tide.tool
+${noinst_SCRIPTS}: ${top_builddir}/toolbus/tide.tifs
+	tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
+		-tool tide-control -package tide.tool
 
 %.class: %.java
 	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<

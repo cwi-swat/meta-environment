@@ -1,19 +1,24 @@
 
-SUBDIRS		= . tide lib-c examples
+SUBDIRS		= toolbus lib-c tide META-INF images examples .
 
-data_DATA	= tide.tb tide.tifs
+EXTRA_DIST	= tide.sh.src
 
-EXTRA_DIST	= tide.tb tide.sh.src
+bin_SCRIPTS	= tide.sh
 
-bin_SCRIPTS	= tide
+data_DATA	= tide.jar
 
-tide.tifs: ${srcdir}/tide.tb
-	cp ${srcdir}/tide.tb tmp-tide.tb
-	${TOOLBUS}/bin/toolbus -gentifs tmp-tide.tb
-	mv tmp-tide.tifs tide.tifs
-	rm tmp-tide.tb
+JARCLASSDIRS	= tide/tool tide/tool/support \
+		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer
 
-%: %.sh.src Makefile
+JARCLASSES	= ${JARCLASSDIRS:%=%/*.class}
+JARIMAGES	= ${srcdir}/images/*.gif
+JARFILES	= META-INF/MANIFEST.MF ${JARIMAGES}  ${JARCLASSES}
+
+tide.jar: ${JARFILES}
+	FILES="${JARFILES}"; \
+	jar cf tide.jar $$FILES
+
+%.sh: %.sh.src Makefile
 	sed 's@__JARDIR__@${datadir}@g;\
 	     s@__TBDIR__@${datadir}@g;\
 	' < $< > $@ && chmod +x $@

@@ -251,6 +251,7 @@ void TA_disconnect(ATbool close)
   if (close) {
     ATBwriteTerm(tide_cid, ATparse("snd-disconnect"));
   }
+  ATBdisconnect(tide_cid);
 
   /* Activate all processes */
   for (pid=0; pid<MAX_PROCESSES; pid++) {
@@ -279,7 +280,8 @@ int TA_createProcess(char *name)
       if (processes[pid].name == NULL) {
 	ATerror("TA_createProcess: out of memory\n");
       }
-      processes[pid].cpe = NULL;
+      processes[pid].state = STATE_STOPPED;
+      processes[pid].cpe = TA_makeLocationUnknown();
       ATprotect((ATerm *)&processes[pid].cpe);
       for (port=0; port<MAX_PORT_TYPES; port++) {
 	processes[pid].enabled_rules[port] = NULL;
@@ -491,7 +493,7 @@ void TA_activateRules(int pid, TA_Port port)
 
   port_type = TA_getPortType(port);
 
-  ATfprintf(stderr, "activating rules of type %d (%t)\n", port_type, port);
+  /*ATfprintf(stderr, "activating rules of type %d (%t)\n", port_type, port);*/
 
   rules = processes[pid].enabled_rules[port_type];
 
@@ -580,6 +582,37 @@ TA_Expr TA_evaluate(int pid, TA_Expr expr)
     default:
       return expr;
   }
+}
+
+/*}}}  */
+
+/*{{{  TA_Expr TA_makeExprError(char *msg, ATerm data) */
+
+TA_Expr TA_makeExprError(char *msg, ATerm data)
+{
+  if (data == NULL) {
+    data = (ATerm)ATempty;
+  }
+
+  return ATmake("error(<str>,<term>)", msg, data);
+}
+
+/*}}}  */
+/*{{{  TA_Expr TA_makeExprUnknownVar(char *msg) */
+
+TA_Expr TA_makeExprVarUnknown(char *msg)
+{
+  return ATmake("var-unknown(<str>)", msg);
+}
+
+/*}}}  */
+/*{{{  TA_Expr TA_makeExprVar(var, value, pos, line, column, length) */
+
+TA_Expr TA_makeExprVar(char *var, TA_Expr value, int pos,
+		       int line, int column, int length)
+{
+  return ATmake("var(<str>,<term>,<int>,<int>,<int>,<int>)",
+		var, value, pos, line, column, length);
 }
 
 /*}}}  */

@@ -12,9 +12,13 @@ public class VarFormat
 
   public String format(Expr expr)
   {
-    Iterator args = expr.toTerm().match(PAT_VAR).iterator();
-    String var = (String)args.next();
-    return args.next().toString();
+    if (expr.isVar()) {
+      return expr.getVarValue().toString();
+    } else if (expr.isVarUnknown()) {
+      return expr.getVarUnknownMessage();
+    } else {
+      return "???";
+    }
   }
 }
 

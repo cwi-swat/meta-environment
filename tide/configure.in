@@ -59,6 +59,7 @@ AC_CHECK_FUNCS(lrand48 srand48)
 
 AC_OUTPUT( \
 	Makefile \
+	toolbus/Makefile \
 	lib-c/Makefile \
 	tide/Makefile \
 	tide/tool/Makefile \
@@ -66,8 +67,8 @@ AC_OUTPUT( \
 	tide/tool/proclist/Makefile \
 	tide/tool/ruleinspector/Makefile \
 	tide/tool/srcviewer/Makefile \
-	tide/tool/META-INF/Makefile \
-	tide/tool/images/Makefile \
+	images/Makefile \
+	META-INF/Makefile \
         examples/Makefile \
 	examples/pico/Makefile \
 	, )

@@ -1,8 +1,9 @@
 [
   [Location, line,     line(<file(str)>,<line(int)>)],
-  [Location, area,     line(<file(str)>,<start-line(int)>,<start-col(int)>,
+  [Location, area,     area(<file(str)>,<start-line(int)>,<start-col(int)>,
                             <end-line(int)>,<end-col(int)>)],
   [Location, line-col, lc(<file(str)>,<line(int)>,<col(int)>)],
+  [Location, unknown,  unknown],
 
   [Port, step,     step],
   [Port, stopped,  stopped],

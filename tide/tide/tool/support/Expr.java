@@ -14,6 +14,17 @@ public class Expr
     "location(lc(<str>,<int>,<int>))";
   private static final String PATTERN_LOC_LINE =
     "location(line(<str>,<int>))";
+  private static final String PATTERN_LOC_AREA =
+    "location(area(<str>,<int>,<int>,<int>,<int>))";
+  private static final String PAT_SOURCE_VAR =
+    "source-var(<str>,<int>,<int>,<int>,<str>)";
+  private static final String PAT_VAR =
+    "var(<str>,<term>,<int>,<int>,<int>,<int>)";
+  private static final String PAT_VAR_UNKNOWN =
+    "var-unknown(<str>)";
+  private static final String PAT_ERROR =
+    "error(<str>,<term>)";
+
 
   public static ATermFactory factory;
 
@@ -115,6 +126,20 @@ public class Expr
 
   //}}}
 
+  //{{{ public static Expr makeSourceVar(file, pos, linenr, col, line)
+
+  public static Expr makeSourceVar(String file, int pos,
+				   int linenr, int col, String line)
+  {
+    return Expr.make(Expr.factory.make(PAT_SOURCE_VAR,
+				       file,
+				       new Integer(pos),
+				       new Integer(linenr),
+				       new Integer(col), line));
+  }
+
+  //}}}
+
   //{{{ Expr(ATerm term)
 
   Expr(ATerm term)
@@ -124,11 +149,56 @@ public class Expr
 
   //}}}
 
+  //{{{ public boolean isError()
+
+  public boolean isError()
+  {
+    return term.match(PAT_ERROR) != null;
+  }
+
+  //}}}
+  //{{{ public String getErrorMessage()
+
+  public String getErrorMessage()
+  {
+    List result = term.match(PAT_ERROR);
+
+    if (result != null) {
+      return (String)result.get(0);
+    }
+    
+    throw new RuntimeException("not an error: " + term);
+  }
+
+  //}}}
+  //{{{ public Expr getErrorData()
+
+  public Expr getErrorData()
+  {
+    List result = term.match(PAT_ERROR);
+
+    if (result != null) {
+      return Expr.make((ATerm)result.get(1));
+    }
+    
+    throw new RuntimeException("not an error: " + term);
+  }
+
+  //}}}
+
   //{{{ public boolean isLocation()
 
   public boolean isLocation()
   {
     return term.match("location(<list>)") != null;
+  }
+
+  //}}}
+  //{{{ public boolean isLocationUnknown()
+
+  public boolean isLocationUnknown()
+  {
+    return term.match("location(unknown)") != null;
   }
 
   //}}}
@@ -146,6 +216,10 @@ public class Expr
       return (String)args.get(0);
     }
 
+    args = term.match(PATTERN_LOC_AREA);
+    if (args != null) {
+      return (String)args.get(0);
+    }
 
     throw new RuntimeException("illegal location: " + term);
   }
@@ -161,6 +235,11 @@ public class Expr
     }
 
     args = term.match(PATTERN_LOC_LC);
+    if (args != null) {
+      return ((Integer)args.get(1)).intValue();
+    }
+
+    args = term.match(PATTERN_LOC_AREA);
     if (args != null) {
       return ((Integer)args.get(1)).intValue();
     }
@@ -183,6 +262,11 @@ public class Expr
       return ((Integer)args.get(2)).intValue();
     }
 
+    args = term.match(PATTERN_LOC_AREA);
+    if (args != null) {
+      return ((Integer)args.get(2)).intValue();
+    }
+
     throw new RuntimeException("illegal location: " + term);
   }
 
@@ -199,6 +283,11 @@ public class Expr
     args = term.match(PATTERN_LOC_LC);
     if (args != null) {
       return ((Integer)args.get(1)).intValue();
+    }
+
+    args = term.match(PATTERN_LOC_AREA);
+    if (args != null) {
+      return ((Integer)args.get(3)).intValue();
     }
 
     throw new RuntimeException("illegal location: " + term);
@@ -219,7 +308,122 @@ public class Expr
       return ((Integer)args.get(2)).intValue();
     }
 
+    args = term.match(PATTERN_LOC_AREA);
+    if (args != null) {
+      return ((Integer)args.get(4)).intValue();
+    }
+
     throw new RuntimeException("illegal location: " + term);
+  }
+
+  //}}}
+
+  //{{{ public boolean isVar()
+
+  public boolean isVar()
+  {
+    List result = term.match(PAT_VAR);
+    return result != null;
+  }
+
+  //}}}
+  //{{{ public String getVarName()
+
+  public String getVarName()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return (String)result.get(0);
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+  //{{{ public Expr getVarValue()
+
+  public Expr getVarValue()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return Expr.make((ATerm)result.get(1));
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+  //{{{ public int getVarSourceStart()
+
+  public int getVarSourceStart()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return ((Integer)result.get(2)).intValue();
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+  //{{{ public int getVarSourceLineNr()
+
+  public int getVarSourceLineNr()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return ((Integer)result.get(3)).intValue();
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+  //{{{ public int getVarSourceStartColumn()
+
+  public int getVarSourceStartColumn()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return ((Integer)result.get(4)).intValue();
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+  //{{{ public int getVarSourceLength()
+
+  public int getVarSourceLength()
+  {
+    List result = term.match(PAT_VAR);
+    if (result != null) {
+      return ((Integer)result.get(5)).intValue();
+    }
+
+    throw new RuntimeException("not a variable spec: " + term);
+  }
+
+  //}}}
+
+  //{{{ public boolean isVarUnknown()
+
+  public boolean isVarUnknown()
+  {
+    List result = term.match(PAT_VAR_UNKNOWN);
+    return result != null;
+  }
+
+  //}}}
+  //{{{ public String getVarUnknownMessage()
+
+  public String getVarUnknownMessage()
+  {
+    List result = term.match(PAT_VAR_UNKNOWN);
+    if (result != null) {
+      return (String)result.get(0);
+    }
+    throw new RuntimeException("not a var-unknown spec: " + term);
   }
 
   //}}}

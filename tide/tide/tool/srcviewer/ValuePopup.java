@@ -47,7 +47,7 @@ class ValuePopup
 
   private int id;
   private ToolManager manager;
-  private SourceViewer viewer;
+  private SourceFileViewer viewer;
 
   private String tag_update;
 
@@ -73,7 +73,7 @@ class ValuePopup
 
   //{{{ public ValuePopup(manager, viewer, process, expr, label, initial)
 
-  public ValuePopup(ToolManager manager, SourceViewer viewer,
+  public ValuePopup(ToolManager manager, SourceFileViewer viewer,
 		    DebugProcess process, Expr expr,
 		    String label, Expr initial_value, ExprFormat fmt)
   {
