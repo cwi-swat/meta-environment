@@ -7,7 +7,7 @@ module Trav
 imports Layout
 
 exports
-  sorts Symbol
+  sorts Symbol Condition
   lexical syntax
     [a-z][A-Za-z0-9]* -> Literal
     
@@ -17,8 +17,13 @@ exports
     Literal          -> Symbol  
     Sort             -> Symbol                  
 
+  context-free syntax
+    Sort "=" Sort           -> Condition
+    ImportSet "=" ImportSet -> Condition  
+
   variables
-    "Literal"[0-9]* -> Literal {prefer}
+    "Literal"[0-9]*   -> Literal {prefer}
+    "ImportSet"[0-9]* -> ImportSet {prefer}   
 
 
 module Layout

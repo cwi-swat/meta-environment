@@ -191,7 +191,7 @@ void MultiSetPrint(FILE *file, MultiSet set)
       } else {
 	fprintf(file, ", ");
       }
-      fprintf(file, "%d:%d", i, count);
+      fprintf(file, "%d:%d", i+257, count);
     }
   }
   fprintf(file, " }");

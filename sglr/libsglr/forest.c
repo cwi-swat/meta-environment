@@ -801,16 +801,23 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
   ATermInt lx, ly;
   int x, y;
   int My, Ny, Mx, Nx;
-  ATbool result, foundone;
+  ATbool result, foundone, totalresult;
   int size = MultiSetGetSize(msM); /* equal to the other one */
   
   IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
 
   /*  For all y in M such that M(y) > N(y) ...  */
 
-  result = ATtrue;
-  foundone = ATfalse;
-  for (y = 0; result && y < size; y++) {
+/*
+ATwarning("msM: ");
+MultiSetPrint(stderr, msM);
+ATwarning("\nmsN: ");
+MultiSetPrint(stderr, msN);
+ATwarning("\n");
+*/
+
+  totalresult = ATfalse;
+  for (y = 0; y < size; y++) {
 
     My = MultiSetGetCount(msM, y);
     if (My > 0) {
@@ -821,7 +828,9 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
       if (My > Ny) {
 
         /*  ... there exists an x in N such that ( y >> x and M(x) < N(x) )  */
-        for (x = 0; result && (x < size); x++) {
+        result = ATfalse;
+        foundone = ATfalse;
+        for (x = 0; !result && (x < size); x++) {
           Nx = MultiSetGetCount(msN, x);  
           if (Nx > 0) {
             Mx = MultiSetGetCount(msM, x);  
@@ -834,6 +843,12 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
               foundone = ATtrue;
             }
           }
+        }
+        if (foundone && !result) {
+          return ATfalse;
+        }
+        else {
+          totalresult = totalresult || result;
         }
       }
     }
@@ -848,7 +863,7 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
    there was something to check in the first place.  If not, there's
    no relation.
    */
-  return foundone && result;
+  return totalresult;
 }
 
 ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
