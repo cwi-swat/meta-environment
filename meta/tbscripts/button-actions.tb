@@ -262,7 +262,9 @@ in
       snd-msg(se-move-cursor(EditorId, Direction)) .
       snd-msg(se-get-focus-at-cursor(EditorId)) .
       rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
-      snd-msg(te-set-focus(EditorId, Focus)) .
+      snd-msg(se-get-sort-at-cursor(EditorId)) .
+      rec-msg(se-sort-at-cursor(EditorId, SortName?)) .
+      snd-msg(te-set-focus(EditorId, Focus, SortName)) .
       ReturnSuccess(EditorId, Stack)
     +
     rec-msg(convert-feedback, Stack?, EditorId?) .
