@@ -87,8 +87,6 @@ LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
 noinst_LIBRARIES	= lib$1.a
 
-BUILT_SOURCES		= init.c
-
 bin_PROGRAMS		= $1
 
 ${MOD}_SOURCES		= init.c
