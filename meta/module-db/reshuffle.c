@@ -388,7 +388,7 @@ void gen_makefile(ATerm name)
       }
       fclose( output );
 
-      sprintf(buf, "cd %s ; %s/genmakefile.sh %s", output_path, BINDIR, text );
+      sprintf(buf, "cd %s; %s/genmakefile.sh %s", output_path, BINDIR, text );
       ATfprintf(stderr,"Executing: %s\n", buf );
       system(buf );
     }
