@@ -1,0 +1,44 @@
+%%
+%% httpd.tb
+%%
+%% Erik Post, Jurgen Vinju
+%% epost@science.uva.nl, jurgenv@cwi.nl
+%% Universiteit van Amsterdam
+%%
+
+tool modToolbus is {}
+
+process Httpd is
+let
+  Apache  : modToolbus,
+  Request : term,
+  Reply   : term,
+  Id      : int
+in  
+  Id := process-id .
+  (
+    rec-connect(Apache?) .
+    rec-event(Apache, request(Request?)) .
+    snd-ack-event( Apache, request(Request)) .
+    snd-msg(http-request(Id, Request)) .
+    rec-msg(http-reply(Id, Reply?)) .
+    snd-eval(Apache, show-html(Reply)) .
+    rec-value(Apache, done) .
+    rec-disconnect(Apache) 
+  )*
+  delta
+endlet
+
+process TestHttpd is
+let
+  Sender : int,
+  Request : term
+in
+  (
+    rec-msg(http-request(Sender?, Request?)) .
+    snd-msg(http-reply(Sender,html(head(),
+                              body([p("hello"),p(Request)])))) 
+  ) * delta
+endlet
+
+toolbus( Httpd, TestHttpd )
