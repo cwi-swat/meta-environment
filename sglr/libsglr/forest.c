@@ -1024,7 +1024,8 @@ static ATbool SG_FilterOnPreferAndAvoid(parse_table *pt,
   aM = SG_GetNrOfAvoids(pt, msM);
   aN = SG_GetNrOfAvoids(pt, msN);
 
-  if ((pM >= pN) && (aM <= aN)) {
+  if (((pM > pN) && (aM <= aN)) ||
+      ((pM == pN) && (aM < aN))) {
     return ATtrue;
   }
   else {

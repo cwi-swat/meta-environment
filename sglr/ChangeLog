@@ -1,5 +1,9 @@
 $Id$
 
+2001/05/21 ({jurgenv,markvdb,jong}@cwi.nl)
+  * Fixed bug in prefer/avoid filtering. Trees with equal avoids and prefers
+    can not be disambiguated.
+ 
 2001/05/11 (markvdb@cwi.nl)
   * Added Set, Perm, Numbered iterator, and Function.
 
