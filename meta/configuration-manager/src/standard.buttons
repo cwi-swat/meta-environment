@@ -35,7 +35,7 @@ buttons([
           reduce,
           push-filename("reduct.out"),
           push-modulename,
-          edit-given-filename
+          activate-editor
          ]),
   button("*",
          "term",
