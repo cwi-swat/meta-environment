@@ -1,0 +1,55 @@
+module ASFApigen
+imports SymbolToString
+imports EquationsSkeleton
+imports SdfCollect
+
+
+exports
+
+context-free syntax
+
+generate-equations(Module) -> Skeleton
+generate(Production*) -> Equation*
+
+hiddens
+
+context-free start-symbols 
+  Skeleton
+
+context-free syntax
+
+  generate-for-production(Production) -> Equation*
+  generate-pattern(Production) -> String
+  generate-field(Symbol) -> String
+  
+  generate-get-and-set(Symbol*, String) -> Equation*
+  generate-get-and-set-field(Symbol, String) -> Equation*
+
+variables
+
+"Equation"[0-9]* -> Equation
+"Attributes"[0-9]* -> Attributes
+"Sort"[0-9]* -> Sort
+"Result" -> Symbol
+"Module"[0-9]* -> Module
+"Symbol"[0-9]* -> Symbol
+"Symbol*"[0-9]* -> Symbol*
+"Field*"[0-9]* -> Symbol*
+"c*"[0-9]* -> CHAR*
+"Production"[0-9]* -> Production
+"Production*"[0-9]* -> Production*
+"ATerm"[0-9]* -> ATerm
+"Attribute*"[0-9]* -> {Attribute ","}*
+"NewModuleName"[0-9]* -> ModuleName
+"ModuleName"[0-9]* -> ModuleName
+"ModuleId"[0-9]* -> ModuleId
+"Sections"[0-9]* -> Sections
+"NewSections"[0-9]* -> Sections
+"ImpSection*"[0-9]* -> ImpSection*
+"Literal"[0-9]* -> Literal
+"Field"[0-9]* -> String
+"Pattern"[0-9]* -> String
+"String"[0-9]* -> String
+"Postfix"[0-9]* -> String
+"Equation*"[0-9]* -> Equation*
+"Type" -> String

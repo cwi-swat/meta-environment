@@ -1,0 +1,22 @@
+module EquationsSkeleton
+
+imports basic/Strings
+imports basic/Whitespace
+
+exports
+
+context-free syntax
+
+"equations" Equation* -> Skeleton
+
+Tag Bytes "=" Bytes -> Equation
+Tag String "=" String -> Equation
+
+"[" "default"? "]" -> Tag
+
+hiddens
+
+variables
+
+"String"[0-9]* -> String
+"Tag" -> Tag

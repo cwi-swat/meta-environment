@@ -1,0 +1,17 @@
+equations
+
+[]
+generate-api-and-write(Module) = written
+  when <Module2, Skeleton> := generate-api(Module)
+
+[main]
+Module2 := generate-syntax(Module),
+Skeleton := generate-equations(Module),
+moduleid(c*) := modid(Module2, Default),
+unparse-to-file(strcon("""c* """) || ".sdf", Module2) == written,
+unparse-to-file(strcon("""c* """) || ".asf", Skeleton) == written
+===>
+generate-api(Module) = <Module2,Skeleton>
+
+[id-a]
+modid(ModuleId, Default) = ModuleId

@@ -1,0 +1,15 @@
+equations
+
+[] 
+syntax Symbol2 -> X := lift[[syntax `Symbol` -> X]]
+===>
+symbol2string( Symbol ) = merge(Symbol2, "")
+
+[] 
+merge(qliteral("""c*1"""), strcon("""c*2""")) =
+strcon("""c*2 c*1""")
+
+tests
+
+[complex] symbol2string(<A , B?>) = "<A,B?>"
+

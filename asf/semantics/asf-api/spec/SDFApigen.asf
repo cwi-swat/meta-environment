@@ -1,0 +1,115 @@
+equations
+
+[main]
+NewModuleName := make-modulename(ModuleName),
+NewSections := make-sections(Sections)
+===>
+generate-syntax(module ModuleName ImpSection* Sections) =
+module NewModuleName 
+imports basic/Booleans 
+ImpSection* 
+NewSections
+
+
+equations
+
+[modid]
+make-modulename(moduleid(c*)) = moduleid(c* "-" "A" "P" "I")
+
+
+tests
+[complex-name] make-modulename(Aap [X Y]) = Aap-API [ X Y ]
+
+equations
+
+[sections]
+
+Production* := collect-productions(Sections, ),
+Symbol*     := collect-symbols(Sections, )
+===>
+make-sections(Sections) = 
+
+exports
+context-free syntax
+
+generate-functions(Production*)
+
+hiddens
+variables
+
+generate-variables(Symbol*)
+
+equations
+
+[no-variables]
+generate-variables() =
+
+[quoted-labelled]
+generate-variables(qliteral(c*) : Symbol Symbol*) = 
+"$" qliteral(c*)[0-9\']* -> Symbol
+generate-variables(Symbol*)
+
+[unquoted-labelled]
+generate-variables(uqliteral(c*) : Symbol Symbol*) = 
+"$" qliteral("""c*""")[0-9\']* -> Symbol
+generate-variables(Symbol*)
+
+[non-labelled]
+Literal : Symbol2 !:= Symbol,
+Literal !:= Symbol,
+strcon("""c*""") := symbol2string(Symbol)
+===>
+generate-variables(Symbol Symbol*) =
+"$" qliteral(""" c* """)[0-9\']* -> Symbol
+generate-variables(Symbol*)
+
+[default-ignore-symbol]
+generate-variables(Symbol Symbol*) =
+generate-variables(Symbol*)
+
+equations
+
+[done]
+generate-functions() =
+
+[single]
+generate-functions(Production Production*) = 
+generate-functions-prod(Production)
+generate-functions(Production*)
+
+equations
+
+[main]
+
+Field* := collect-labelled-symbols(Symbol* -> Symbol, )
+===>
+generate-functions-prod(
+Symbol* -> Symbol {Attribute*1, cons(qliteral("""c*""")), Attribute*2}
+) = 
+qliteral(""" "i" "s" "-" c* """) "(" Symbol ")" -> Boolean
+generate-get-and-set(Field*, Symbol)
+
+[default]
+generate-functions-prod(Production) =
+
+equations
+
+[normalize-quoting]
+generate-get-and-set(uqliteral(c*) : Symbol, Result) =
+generate-get-and-set(qliteral("""c*""") : Symbol, Result)
+
+[generate]
+generate-get-and-set(qliteral("""c*""") : Symbol, Result) =
+qliteral(""" "g" "e" "t" "-" c* """) "(" Result ")" -> Symbol
+qliteral(""" "s" "e" "t" "-" c* """) "(" Result "," Symbol ")" -> Result
+
+[loop]
+generate-get-and-set(Symbol Symbol2 Symbol*, Result) =
+generate-get-and-set(Symbol, Result)
+generate-get-and-set(Symbol2 Symbol*, Result)
+
+[empty]
+generate-get-and-set( , Result) =
+
+[default]
+generate-get-and-set(Symbol, Result) = 

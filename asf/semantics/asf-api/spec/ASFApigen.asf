@@ -1,0 +1,94 @@
+equations
+
+[main]
+Production* := collect-productions(Sections, )
+===>
+generate-equations(module ModuleName ImpSection* Sections) =
+  equations
+generate(Production*)
+
+
+equations
+
+[empty]
+generate() =
+
+[loop]
+generate(Production Production*) = 
+generate-for-production(Production) 
+generate(Production*)
+
+equations
+
+[tryout]
+
+String := "is-" || strcon("""c*"""),
+Pattern :=  generate-pattern(Symbol* -> Symbol), 
+Type := generate-field(Symbol),
+Equation1 := [] String || "(" || Pattern || ")" = "true",
+Equation2 := [default] String || "(" || Type || ")" = "false",
+Equation* := generate-get-and-set(Symbol*, Pattern)
+====>
+generate-for-production(Symbol* -> Symbol
+                        {Attribute*1, cons(qliteral("""c*""")), Attribute*2})
+= 
+Equation1
+Equation2
+Equation*
+
+
+equations
+
+[empty]
+generate-pattern( -> Symbol Attributes) = ""
+
+[loop]
+generate-pattern(Symbol Symbol* -> Symbol2 Attributes) =
+generate-field(Symbol) || generate-pattern(Symbol* -> Symbol2 Attributes)
+
+[literal]
+generate-field(qliteral("""c*""")) = strcon("""c*""")
+
+[default]
+generate-field(Symbol) = "$" || symbol2string(Symbol)
+
+[unquoted-labelled]
+generate-field(uqliteral(c*) : Symbol) = 
+generate-field(qliteral("""c*""") : Symbol)
+
+[quoted-labelled]
+generate-field(qliteral("""c*""") : Symbol) =
+strcon(""""$"c*""")
+
+equations
+
+[empty]
+generate-get-and-set( ,Pattern) =
+
+[loop]
+generate-get-and-set(Symbol Symbol*, Pattern) =
+generate-get-and-set-field(Symbol, Pattern)
+generate-get-and-set(Symbol*, Pattern)
+
+[literal]
+generate-get-and-set-field(Literal, Pattern) =
+
+[unquoted-field]
+generate-get-and-set-field(uqliteral(c*) : Symbol, Pattern) =
+generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern) 
+
+[quoted-field]
+String := strcon("""c*"""),
+Field := "$" || String,
+Field2 := "$" || String || "'",
+Equation1 := [] "get-" || String || "(" || Pattern || ")" = Field,
+strcon("""c*1 "$" c* c*2 """) := Pattern,
+Pattern2 := strcon("""c*1 "$" c* "'" c*2 """),
+Equation2 := [] "set-" || String || "(" || Pattern || "," || Field2 || ")" = Pattern2
+====>
+generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern) =
+Equation1
+Equation2
+
+[default]
+generate-get-and-set-field(Symbol, Pattern) = 

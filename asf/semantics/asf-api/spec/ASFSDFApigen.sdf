@@ -1,0 +1,34 @@
+module ASFSDFApigen
+imports SDFApigen
+imports ASFApigen
+imports utilities/IO[Module]
+imports utilities/IO[Skeleton]
+
+exports
+
+context-free syntax
+
+generate-api-and-write(Module) -> WriteResult
+
+context-free start-symbols
+  WriteResult
+
+hiddens
+
+context-free syntax
+
+generate-api(Module) -> <Module,Skeleton>
+modid(ModuleId, ModuleId) -> ModuleId {traversal(accu, top-down, break)}
+modid(Module, ModuleId) -> ModuleId {traversal(accu, top-down, break)}
+
+variables
+
+"Skeleton"[0-9]* -> Skeleton
+"Module"[0-9]* -> Module
+"ModuleId"[0-9]* -> ModuleId
+"c*" -> CHAR*
+"Ambs" -> NatCon
+"L"[0-9]* -> Bytes
+"Sections" -> Sections
+"ImpSection*" -> ImpSection*
+"ModuleName" -> ModuleName

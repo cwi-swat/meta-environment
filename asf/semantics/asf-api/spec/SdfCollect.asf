@@ -1,0 +1,11 @@
+equations
+
+[productions]
+collect-productions(Production, Production*) = Production Production*
+
+[symbols]
+collect-symbols(Symbol, Symbol*) = Symbol Symbol*
+
+[labeled]
+collect-labelled-symbols(Literal : Symbol, Symbol*) =
+Literal : Symbol Symbol*

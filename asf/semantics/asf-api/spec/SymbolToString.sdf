@@ -1,0 +1,24 @@
+module SymbolToString
+imports languages/sdf2/normalization/Lifting
+imports basic/Strings
+
+exports
+
+context-free syntax
+
+symbol2string(Symbol) -> String
+
+
+hiddens
+
+context-free syntax
+
+merge(Symbol, String) -> String {traversal(accu,top-down,break)}
+
+variables
+
+"String"[0-9]* -> String
+"c*"[0-9]* -> CHAR*
+"Symbol"[0-9]* -> Symbol
+"Symbol*"[0-9]* -> Symbol*
+"Literal"[0-9]* -> Literal

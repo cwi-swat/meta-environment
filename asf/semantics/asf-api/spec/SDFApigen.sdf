@@ -1,0 +1,47 @@
+module SDFApigen
+imports SymbolToString
+imports SdfCollect
+
+
+
+
+exports
+
+context-free syntax
+
+generate-syntax(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+make-modulename(ModuleName) -> ModuleName {traversal(trafo,top-down,break)}
+make-modulename(ModuleId) -> ModuleId {traversal(trafo,top-down,break)}
+make-sections(Sections) -> Sections
+
+context-free syntax
+
+  generate-variables(Symbol*) -> Production*
+  generate-functions(Production*) -> Production*
+  generate-functions-prod(Production) -> Production*
+  generate-get-and-set(Symbol*, Symbol) -> Production*
+
+variables
+
+"Result" -> Symbol
+"Module"[0-9]* -> Module
+"Symbol"[0-9]* -> Symbol
+"Symbol*"[0-9]* -> Symbol*
+"Field*"[0-9]* -> Symbol*
+"c*" -> CHAR*
+"Production"[0-9]* -> Production
+"Production*"[0-9]* -> Production*
+"ATerm"[0-9]* -> ATerm
+"Attribute*"[0-9]* -> {Attribute ","}*
+"NewModuleName"[0-9]* -> ModuleName
+"ModuleName"[0-9]* -> ModuleName
+"ModuleId"[0-9]* -> ModuleId
+"Sections"[0-9]* -> Sections
+"NewSections"[0-9]* -> Sections
+"ImpSection*"[0-9]* -> ImpSection*
+"Literal"[0-9]* -> Literal

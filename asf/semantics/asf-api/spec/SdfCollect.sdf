@@ -1,0 +1,37 @@
+module SdfCollect
+imports languages/sdf2/syntax/Sdf2-Syntax
+
+exports
+
+context-free syntax
+
+collect-productions(Sections, Production*) -> Production* 
+{traversal(accu, top-down, break)}
+collect-productions(Production, Production*) -> Production* 
+{traversal(accu, top-down, break)}
+
+
+context-free syntax
+
+collect-symbols(Sections, Symbol*) -> Symbol* 
+{traversal(accu, top-down, break)}
+
+collect-symbols(Symbol, Symbol*) -> Symbol* 
+{traversal(accu, top-down, break)}
+
+collect-labelled-symbols(Production, Symbol*) -> Symbol* 
+{traversal(accu, top-down, break)}
+
+collect-labelled-symbols(Symbol, Symbol*) -> Symbol* 
+{traversal(accu, top-down, break)}
+
+hiddens
+
+variables
+
+"Symbol"[0-9]* -> Symbol
+"Symbol*"[0-9]* -> Symbol*
+"Production"[0-9]* -> Production
+"Production*"[0-9]* -> Production*
+"Sections"[0-9]* -> Sections
+"Literal"[0-9]* -> Literal
