@@ -1,0 +1,15 @@
+tifs(
+  version(1),
+  package("nl.cwi.toolbus"),
+  [
+    process(
+      name("CLOCK"),
+      [
+        eval("timeofday", Time),
+        eval("start-timing", int),
+        eval("elapsed(<int>)", Time),
+        eval("stop-timing(<int>), Time)
+      ]
+    )
+  ]
+)
