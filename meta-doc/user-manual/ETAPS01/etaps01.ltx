@@ -26,13 +26,13 @@
 
 \institute{
         {\small\sl 
-$^1$Centrum voor Wiskunde en Informatica (CWI),}
-{\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}\\
+$^1$Centrum voor Wiskunde en Informatica (CWI),
+Kruislaan 413, 1098 SJ Amsterdam, The Netherlands\\
 $^2$ Faculty of Philosophy, Utrecht University,
      Heidelberglaan 8, 3584 CS Utrecht, The Netherlands\\
 $^3$ Faculty of Mathematics and Computer Science, Utrecht University,
      Padualaan 14, 2584 CH Utrecht, The Netherlands\\
-}
+}}
 
 
  
@@ -61,7 +61,7 @@ programs, specifications, or other texts written in a formal
 language. The generation process is controlled by a definition of the
 target language, which typically includes such features as syntax,
 pretty printing, type checking and execution of programs in the target
-language. The \ASmetaenv\ can help you if:
+language. The \ASmetaenv\ can help if:
  
 \begin{itemize}
  
@@ -80,7 +80,7 @@ semantic issues. It can be used for the definition of languages (for
 programming, for writing specifications, for querying databases, for
 text processing, or for dedicated applications). In addition it can be
 used for the formal specification of a wide variety of
-problems. \asfsdf\ provides you with:    
+problems. \asfsdf\ provides:    
 
 \begin{itemize}
  
@@ -115,7 +115,9 @@ The \ASmetaenv\ offers:
   \item User-defined extensions of the default user-interface.
 \end{itemize}
 
-The design goals of this new implementation include: openness, reuse and extensibility.
+The design goals of this new implementation include: openness, reuse, extensibility
+and in particular the possibility to generate completely tailored stand-alone environments
+for user-defined languages.
 
 \section{Technological background}
 
@@ -147,7 +149,7 @@ terms (with more than $10^6$ nodes) can be processed.
 In our language-centric approach a parser is an essential tool.  We
 use scannerless, generalized, LR parsing~\cite{Vis97}.  In this way we
 can parse arbitrary context-free grammars, an essential property when
-combining and parsing large grammars of (dialects of) real-life
+combining and parsing large grammars for (dialects of) real-life
 languages.
 
 \paragraph{Term rewriting}
@@ -156,7 +158,6 @@ languages.
 interpreter and a compiler (ASF2C, see~\cite{BKO99}) are supported.  The
 latter generates very efficient C code that implements pattern
 matching and term traversal.
-
 
 \begin{figure}
 \centerline{\psfig{file=newarch.eps,width=12cm}}
@@ -169,13 +170,19 @@ The architecture of \ASmetaenv\ is shown in figure~\ref{FIG:architecture}.
 It consists of a ToolBus that interconnects the following components:
 
 \begin{itemize}
-\item User interface: the top level user-interface of the system.
-\item Parser generator: takes an SDF definition as input and generates a parse table for SGLR.
-\item SGLR:  scannerless, generalized, LR parser that is parametrized with a parse table.
-\item Term database: stores all terms corresponding to specification modules, parse tables,
+\item User interface: the top level user-interface of the system
+      that consists primarily of a graph browser for the import graph of the current specication.
+
+\item Text Editor: a customized version of XEmacs for text editing.
+\item Structure Editor: a syntax-directed editor that closely cooperates with the Text Editor.
+
+\item Parser:  scannerless, generalized, LR parser (SGLR) that is parametrized with a parse table.
+\item Parsertable generator: takes an SDF definition as input and generates a parse table for SGLR.
+\item Tree Repository: stores all terms corresponding to specification modules, parse tables,
 user-defined terms, etc.
 \item Compiler: the ASF2C compiler.
-\item Editor: we use a customized version of XEmacs for editing.
+\item Interpreter: executes specifiations by direct interpretation.
+\item Unparser generator: generates pretty printers.
 \end{itemize}
 
 \begin{figure}
@@ -197,15 +204,20 @@ user-defined terms, etc.
 
 \end{figure} 
         
-\section{Examples}
+\section{Demonstration}
 
 We will first demonstrate the ToolBus architecture.  Next we will show how the
-Meta-Environment uses the ToolBus while editing a very simple data type for,
-say, the Booleans (Figure~\ref{FIG:viewer}).
+Meta-Environment uses the ToolBus while editing a very simple specification
+(Figure~\ref{FIG:viewer}).
 
-Next we will show a number of applications ranging from a simple
+Next we will show a number of applications of the Meta-Environment ranging from a simple
 typechecking problem (Figure~\ref{FIG:meta-pico}), to syntax-directed
-editing (Figure~\ref{FIG:edit-cobol}) and transformation of COBOL
+editing (Figure ~ \ref
+	 {
+FIG:	 edit - cobol}
+
+)
+     and transformation of COBOL
 systems.
 
 \bibliographystyle{alpha}
