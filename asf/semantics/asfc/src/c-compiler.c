@@ -22,12 +22,11 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -L" ASC_SUPPORT "/lib" " -lasc-support-me \\\n"
 	 "  -L" PT_SUPPORT "/lib" " -lmept \\\n"
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
-	 "  -DMAIN_%s"
+	 "  -DASF_MAIN"
 	 "%s\n",
 	 run_verbose ? "-Wall" : "",
 	 binary, 
 	 source,
-	 name,
 	 run_verbose ? "" : ">& /dev/null" 
 	 );
 
