@@ -6,7 +6,6 @@ let
 in
   (
     rec-msg(layout-graph(Graph?)) .
-    printf("%t", Graph) .
     execute(layoutgraph, D?) .
     snd-eval(D, layout-graph(Graph)) .
     rec-value(D, graph-layouted(Graph?)) .
