@@ -102,6 +102,7 @@ in
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       MDB-GetAllDependingModules(Name, DependingModules?) .
+      MDB-InvalidateModules(DependingModules) .
       snd-msg(updating-succeeded(DependingModules, Modules))
     else
       snd-msg(error-opening(Name, name-inconsistent))
@@ -258,7 +259,9 @@ in
     )
   +
     rec-msg(invalidate-parse-tables(Name?)).
-    MDB-InvalidateParseTables(Name)
+    MDB-InvalidateModule(Name) .
+    MDB-GetAllDependingModules(Name, DependingModules?) .
+    MDB-InvalidateModules(DependingModules)
   +
     rec-msg(get-module-info(Name?)) .
     snd-msg(ts-get-str-value("module-paths", Name)) .
@@ -318,7 +321,8 @@ in
     rec-msg(ts-all-values(Modules?)) .
     snd-msg(sm-get-all-depending-module-names(Modules, Name)) .
     Modules := [] .
-    rec-msg(sm-all-depending-module-names(DependingModules?)) 
+    rec-msg(sm-all-depending-module-names(DependingModules?)) .
+    printf("DEBUG: %t depend on %s\n", DependingModules, Name) 
 endlet
 
 process MDB-GetAllImportedModuleNames(Name : str, Imported : list?) is
@@ -410,7 +414,24 @@ in
 endlet
 
 process MDB-InvalidateModules(Modules : list) is
-  tau
+let
+  Module : str,
+  Runner : list
+in
+  Runner := Modules .
+  if not-equal(Runner, []) then
+    Module := first(Runner) .
+    Runner := next(Runner) .
+    MDB-InvalidateModule(Module)
+  fi
+  *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
 
-process MDB-InvalidateParseTables(Module : str) is
-  tau
+process MDB-InvalidateModule(Module : str) is
+  printf("DEBUG: removing asf parse trees and all tables for: %s\n", Module) .
+  snd-msg(ts-remove-value("asf-tree", Module)) .
+  snd-msg(ts-remove-value("asf-parse-table", Module)) .
+  snd-msg(ts-remove-value("term-parse-table", Module))
