@@ -277,14 +277,18 @@ in
         ReplaceFocus(EditorId, STree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(check-sort(SortName?), Stack?, EditorId?) .
-        StackPopTerm(Stack,Stack?,STree?).
+        rec-msg(check-sort, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, SortName?) .
+        StackPopTerm(Stack, Stack?, STree?).
         CheckTreeSort(STree, SortName, RTree?) .
         if not-equal(RTree, error-tree) then
-          StackPushTerm(Stack,Stack?,RTree) .
-          ReturnSuccess(EditorId,Stack)
+          StackPushTerm(Stack, Stack?, RTree) .
+          StackPushTerm(Stack, Stack?, quote(true)) .
+          ReturnSuccess(EditorId, Stack)
         else
-          ReturnAbort(EditorId,Stack)
+          StackPushTerm(Stack, Stack?, STree) .
+          StackPushTerm(Stack, Stack?, quote(false)) .
+          ReturnSuccess(EditorId, Stack)
         fi
       +
         rec-msg(reduce, Stack?, EditorId?) .
