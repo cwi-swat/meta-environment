@@ -1,3 +1,9 @@
+/* $Id$ */
+
+Fri Jul 11 10:38:38 CEST 2003 <jong@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - removed debug print
+
 2003/07/02 (markvdb@cs.vu.nl)
  * Added a hook to obtain the parsetable extension.
  * The type (trm/eqs) is now made explicit.

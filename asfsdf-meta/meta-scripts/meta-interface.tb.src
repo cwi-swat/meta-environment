@@ -141,10 +141,8 @@ in
     rec-msg(postprocess-collected-semantics-hook(ModuleName?, Modules?)).
     snd-msg(extract-equations(Modules)).
     rec-msg(extract-equations-result(Semantics?)).
-   printf("Equations extracted from parse trees\n") .
-   snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics)) 
-
-  )*delta
+    snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics)) 
+  ) * delta
 endlet
 
 process Meta-Interface is
