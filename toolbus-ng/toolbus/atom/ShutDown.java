@@ -20,7 +20,8 @@ public class ShutDown extends Atom {
 
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
-      throw new ToolBusDeathException(getArgs().getFirst().toString());
+    	getToolBus().shutdown(getArgs().getFirst().toString());
+    	return true;
     } else {
       return false;
     }

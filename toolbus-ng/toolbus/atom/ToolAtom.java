@@ -4,8 +4,10 @@ import toolbus.TBTerm;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
-import toolbus.tool.ToolDefinition;
+import toolbus.tool.DeletedToolDefinition;
+import toolbus.tool.ToolInstance;
 
+import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -14,7 +16,6 @@ import aterm.ATermList;
  * @author paulk, Aug 7, 2002
  */
 public class ToolAtom extends Atom {
-	private ATerm toolvar;
 	private ATerm toolarg;
 	private ToolBus TB;
 
@@ -26,8 +27,8 @@ public class ToolAtom extends Atom {
 		super(args);
 	}
 
-	public ToolAtom(ATerm toolvar, ATerm toolarg) {
-		super(toolvar, toolarg);
+	public ToolAtom(ATerm toolarg) {
+		super(toolarg);
 	}
 
 	public ToolBus getTB() {
@@ -38,8 +39,13 @@ public class ToolAtom extends Atom {
 		return toolarg;
 	}
 
-	public ATerm getToolvar() {
-		return toolvar;
+	public ToolInstance getToolInstance() throws ToolBusException {
+		ToolInstance ti = getProcess().getToolInstance();
+		if (ti == null) {
+			throw new ToolBusException("null tool instance");
+		} else {
+			return ti;
+		}
 	}
 
 	public ATermAppl getSubstitutedArg() throws ToolBusException {
@@ -51,33 +57,18 @@ public class ToolAtom extends Atom {
 			return (ATermAppl) trm;
 	}
 
-	public void compile(
-		ProcessInstance P,
-		AtomSet follow,
-		String name,
-		String complName)
+
+
+	public void compile(ProcessInstance P, AtomSet follow)
 		throws ToolBusException {
 		super.compile(P, follow);
 
 		ATermList args = getArgs();
-		toolvar = args.getFirst();
 		TB = getProcess().getToolBus();
 		toolarg = args.getLast();
-		if (!TBTerm.isVar(toolvar))
-			throw new ToolBusException(
-				"first argument of " + name + " should be a variable");
-
-		ATerm vartype = TBTerm.getVarType(toolvar);
-		String toolname = ((ATermAppl) vartype).getName();
-
-		ToolDefinition TD = TB.getToolDefinition(toolname);
-
-		TD.registerOccurrence(
-			complName,
-			TBTerm.makePattern(args, getEnv(), true));
 
 		if (toolarg.getType() != ATerm.APPL)
-			throw new ToolBusException("malformed second argument in " + name);
+			throw new ToolBusException("malformed second argument");
 	}
 
 }

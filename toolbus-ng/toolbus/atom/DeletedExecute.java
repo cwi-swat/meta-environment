@@ -4,7 +4,7 @@ import toolbus.TBTerm;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
-import toolbus.tool.ToolDefinition;
+import toolbus.tool.DeletedToolDefinition;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
@@ -14,15 +14,15 @@ import aterm.ATermList;
 /**
  * @author paulk, Jul 29, 2002
  */
-public class Execute extends Atom {
+public class DeletedExecute extends Atom {
 	private ATerm toolcall;
 	private ATerm rvar;
 
-	public Execute(ATerm tcall, ATerm rvar) {
+	public DeletedExecute(ATerm tcall, ATerm rvar) {
 		super(tcall, rvar);
 	}
 	
-	public Execute() {
+	public DeletedExecute() {
 		super();
 	}
 	
@@ -50,13 +50,13 @@ public class Execute extends Atom {
 
 		ToolBus TB = getProcess().getToolBus();
 				
-		ToolDefinition TD = TB.getToolDefinition(toolname);
+//>>		ToolDefinition TD = TB.getToolDefinition(toolname);
 		
-		ToolInstance TI = TD.instantiate(TB, evargs);
+//>>		ToolInstance TI = TD.instantiate(TB, evargs);
 		
-		TB.addTool(TI);
+//>>		TB.addTool(TI);
 		
-		getEnv().putVar(rvar, TI.getToolId());
+//>>		getEnv().putVar(rvar, TI.getToolId());
 		
 		return true;
       } else {

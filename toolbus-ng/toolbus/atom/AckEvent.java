@@ -8,25 +8,26 @@ import aterm.ATerm;
 /**
  * @author paulk, Jul 31, 2002
  */
-public class SndAckEvent extends ToolAtom {
+public class AckEvent extends ToolAtom {
 
-	public SndAckEvent(ATerm toolvar, ATerm trm) {
-		super(toolvar, trm);
+	public AckEvent(ATerm trm) {
+		super(trm);
 	}
 
-	public SndAckEvent() {
+	public AckEvent() {
 		super();
 	}
 
 	public void compile(ProcessInstance P, AtomSet follow)
 		throws ToolBusException {
-		super.compile(P, follow, "snd-ack-event", "rec-ack-event");
+		super.compile(P, follow);
 	}
 
 	public boolean execute() throws ToolBusException {
 		if (!isEnabled())
 			return false;
-		ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
+		
+		ToolInstance ti = getToolInstance();
 
 		ti.sndEvalToTool(getSubstitutedArg());
 		return true;

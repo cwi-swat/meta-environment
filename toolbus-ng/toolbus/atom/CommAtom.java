@@ -41,7 +41,7 @@ class CommAtom extends Atom {
 	{
 		if(!isEnabled())
 				return false;
-		Vector partnervec = partners.getAtoms();
+		Vector partnervec = partners.getAtomsAsVector();
 		int psize = partnervec.size();
 			//System.out.println("psize = " + psize);
 			

@@ -11,25 +11,27 @@ import aterm.ATerm;
  * @author paulk, Aug 7, 2002
  */
 
-public class RecEvent extends ToolAtom {
+public class Event extends ToolAtom {
 
-	public RecEvent(ATerm toolvar, ATerm trm) {
-		super(toolvar, trm);
+	public Event(ATerm trm) {
+		super(trm);
 	}
 
-	public RecEvent() {
+	public Event() {
 		super();
 	}
 
 	public void compile(ProcessInstance P, AtomSet follow)
 		throws ToolBusException {
-		super.compile(P, follow, "rec-event", "snd-event");
+		super.compile(P, follow);
 	}
+	
 
 	public boolean execute() throws ToolBusException {
 		if (!isEnabled())
 			return false;
-		ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
+
+		ToolInstance ti = getToolInstance();
 		MatchResult mr = ti.getEventFromTool(getToolarg(), getEnv());
 		if (mr.matches()) {
 			mr.getLeft().update(getEnv());

@@ -33,15 +33,6 @@ public class Example extends Frame implements ActionListener {
 		show();
 	}
 
-	public ATerm aap(int n) {
-		try {
-			Thread.sleep(1);
-		} catch (InterruptedException e) {
-			System.out.println("aap: " + e);
-		}
-		return factory.makeInt(2 * n);
-	}
-
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == button) {
 			System.out.println("actionPerformed(" + event + ")");
@@ -63,13 +54,13 @@ public class Example extends Frame implements ActionListener {
 		return factory.make("count(<int>))", new Integer(count++));
 	}
 
-	public void recAckEvent(ATerm event) {
+	public void ackEvent(ATerm event) {
 		// This simple tool ignores event acknowledgements
 	}
 
-	public void recTerminate(ATerm arg) {
-		// Just exit when the ToolBus terminates
-		System.exit(0);
+	public void terminate(String msg) {
+		// Just exit when the ToolBus terminate
+		bridge.terminate(msg);
 	}
 
 }
