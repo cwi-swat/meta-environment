@@ -2,7 +2,6 @@
 
 process PrettyPrintTerm(ModuleName: str, Tree: term, Result: term?) is
 let
-  Syntax: term,
   Feedback: term,
   Id: int
 in

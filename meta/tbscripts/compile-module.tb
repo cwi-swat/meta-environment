@@ -6,8 +6,7 @@ let
   ModuleName: str,
   OutputFile: str,
   Pid: int,
-  Specification: term,
-  Syntax: term
+  Specification: term
 in
   Id := process-id
   .

@@ -3,7 +3,6 @@
 
 process StandAloneAsfEditor is
 let
-  ModuleName: str,
   Pid: int,
   Sid: term
 in

@@ -49,12 +49,9 @@ let
   Modules: list,
   Name: str,
   NewName: str,
-  NewPath: str,
   OldName: str,
-  OldSyntaxTree: term,
   Pairs: list,
   Path: str,
-  RealFilename: str,
   Syntax: term,
   SyntaxText: str,
   SyntaxTree: term,
@@ -427,9 +424,6 @@ in
 endlet
 
 process MDB-GetImportedModules(Name: str, Imported: list?) is
-let
-  Syntax: term
-in
   snd-msg(ts-get-term-value("import-relations", Name))
   .
   (
@@ -438,7 +432,6 @@ in
     rec-msg(ts-no-value)
     . Imported := []
   )
-endlet
 
 process MDB-StoreModuleTree(Name: str, Syntax: term) is
 let
@@ -502,7 +495,6 @@ process MDB-RegisterPath(Path: str, ModuleId: str) is
 
 process MDB-CopyModule(OldName: str, NewName: str, NewPath: str) is
 let
-  Path: str,
   Text: str,
   Syntax: term,
   Tree: term

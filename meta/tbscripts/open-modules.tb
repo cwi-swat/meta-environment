@@ -64,7 +64,6 @@ endlet
 
 process OpenModules(Modules: list, Type: term) is
 let
-  FileName: str,
   Imports: list,
   ModuleId: str,
   Path: str,
@@ -128,7 +127,6 @@ process OpenSyntax(Path: str, Type: term) is
 let
   Error: term,
   Id: int,
-  Message: str,
   ModuleId: str,
   ParseTable: term,
   Pid: int,

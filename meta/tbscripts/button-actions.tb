@@ -110,7 +110,6 @@ process ReturnAbort(EditorId: term, Stack: list) is
 process ButtonActionExecutor is
 let
   Action: str,
-  ActionEvent: term,
   Available: bool,
   ArgList: list,
   AsfExt: str,
@@ -118,9 +117,6 @@ let
   Direction: term,
   Directory: str,
   EditorId: term,
-  EditorId2: term,
-  EditorName: str,
-  EditorType: term,
   Empty: term,
   Error: term,
   ErrorMessage: str,
@@ -129,18 +125,13 @@ let
   Feedback: term,
   Filename: str,
   FilePath: str,
-  Focus: term,
   FunSym: str,
   FuncName: str,
   InStr: str,
   Integer: int,
   Location: term,
   Message: str,
-  Mode: term,
   Modulename: str,
-  Modulenames: list,
-  Name: str,
-  NewModulename: str,
   NrOfArgs: int,
   Origin: term,
   OutStr: str,
@@ -151,20 +142,15 @@ let
   Query: str,
   Recursive: bool,
   RTree: term,
-  SdfExt: str,
   SdfPath: str,
   Sid: term,
-  SList: list,
   STree: term,
   SortName: str,
   Stack: list,
   String: str,
   Subject: term,
   Subjects: list,
-  Text: str,
-  TimeStamp: int,
-  Tree: term,
-  Trees: list
+  Tree: term
 in
   (
     rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?)
@@ -1212,7 +1198,6 @@ endlet
 process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
 let
   Error: term,
-  NewModulename: str,
   Pid: int,
   Sid: term,
   Text: str
@@ -1236,7 +1221,6 @@ endlet
 process ActivateEditorWithString(Text: str, Modulename: str, Filename: str) is
 let
   Error: term,
-  NewModulename: str,
   Pid: int,
   Sid: term
 in

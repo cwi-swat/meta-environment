@@ -2,11 +2,6 @@ process StatusDisplay is
 let
   Lst: list,
   Str: str,
-  Id: term,
-  Tool: str,
-  Identification: str,
-  Error: term,
-  Errors: list,
   Summary: term
 in
   subscribe(ui-status(<term>))

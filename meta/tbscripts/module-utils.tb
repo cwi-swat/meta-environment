@@ -1,6 +1,5 @@
 process CloseModule(ModuleId: str, Recursive: bool) is
 let
-  Changed: list,
   Depending: list,
   Id: int,
   ToBeClosed: list
@@ -124,8 +123,7 @@ let
   Extension: str,
   Id: int,
   NewModule: str,
-  Path: str,
-  Status: term
+  Path: str
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Renaming %s", [ModuleId])))
@@ -296,7 +294,6 @@ endlet
 process GetRealModuleName(Name: str, Path: str, Status: term?, RealName: str?,
                           RealPath: str?) is
 let
-  ErrMsg: str,
   Paths: list
 in
   Status := success
@@ -340,8 +337,7 @@ process SaveAsfSdfModule(Module: str, Status: term?) is
 process RemoveModuleFromDisk(Directory: str, Module: str) is
 let
   Extension: str,
-  Path: str,
-  Summary: term
+  Path: str
 in
   snd-msg(file-extension-hook(sdf))
   . rec-msg(file-extension-hook-result(Extension?))
@@ -367,7 +363,6 @@ process CloseModuleInDBandInvalidateDependingModules(ModuleName: str) is
 
 process RenameImports(OldImport: str, NewImport: str) is
 let
-  Imports: list,
   ImportRelations: list,
   ModuleId: str,
   Depending: list
@@ -485,7 +480,6 @@ process HandleCopyModuleErrors(Old: str, New: str, Status: term) is
 
 process CheckSyntaxConsistency(ModuleName: str, Path: str) is
 let
-  ErrorMessage: str,
   FileName: str,
   FileText: str,
   RepositoryText: str,

@@ -3,7 +3,6 @@
 
 process StandaloneEqsDumper is
 let
-  Equations: term,
   ErrorMessage: str,
   Pid: int
 in

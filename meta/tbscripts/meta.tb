@@ -25,7 +25,6 @@
 
 /* to be resolved */
 #include "feedback.tb"
-#include "abort.tb"
 #include "editing.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"
@@ -46,19 +45,13 @@
 #include "pretty-print.tb"
 #include "meta-interface.tb"
 
-/* Experimental */
-#ifdef QUERY
-#include "DisplayQuery.idef" 
-#endif
-
 process META is
 let 
   Id : term,
   Syntax : str,
   Semantics : str,
   Term : str,
-  Sort : term,
-  Pid : int
+  Sort : term
 in
   Id := process-id
   . KernelConfiguration()
@@ -102,12 +95,6 @@ in
   . create(RestoreTermBrackets, Pid?)
   . create(Save-modules, Pid?)
   . create(UserInterfaceHandler, Pid?)
-#ifdef QUERY
-  . create(DisplayQuery, Pid?)
-#endif
-#ifdef TIMEOUT
-  . create(AbortMetaEnvironment, Pid?)
-#endif
   . rec-msg(termstore-initialized) 
   . snd-msg(creation-finished)
 endlet

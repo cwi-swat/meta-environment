@@ -17,7 +17,6 @@ process BuildParseTable is
 let
   ModuleName: str,
   Type: term,
-  TableType: term,
   Checking: term,
   Table: term,
   Syntax: term,

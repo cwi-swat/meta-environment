@@ -2,12 +2,9 @@ process Save-modules is
 let
   Id: term,
   Syntax: term,
-  Eqs: term,
   Snapshot: term,
   Module: term,
   Path: str,
-  Modules: list,
-  Table: term,
   Text: str,
   Error: term,
   FileName: str,

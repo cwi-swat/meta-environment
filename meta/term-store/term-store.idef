@@ -9,7 +9,6 @@ let
   Key: term,
   TermValue: term,
   StrValue: str,
-  ContainsKey: bool,
   Keys: list,
   Values: list,
   ValueType: str,

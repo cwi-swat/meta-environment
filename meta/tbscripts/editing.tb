@@ -72,7 +72,6 @@ process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Events: list,
   Path: str,
-  ModuleId: str,
   Categories: term
 in
   IsTextEditorRegistered(Sid, AlreadyExists?)
@@ -155,8 +154,7 @@ endlet
 process MouseClicked(Sid: term) is
 let
   Offset: int,
-  Registered: bool,
-  Tid: term
+  Registered: bool
 in
   rec-msg(te-mouse-click-at-offset(Sid, Offset?))
   . snd-msg(em-request-transaction(Sid))
@@ -284,7 +282,6 @@ let
   HasText: bool,
   HasStructure: bool,
   ModuleId: str,
-  ParseSucceeded: bool,
   Sid: term,
   Tree: term
 in
@@ -423,7 +420,6 @@ endlet
 
 process EditTerm(Path: str, ModuleId: str) is
 let
-  Actions: list,
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,

@@ -8,7 +8,6 @@ let
   Directories: list,
   Directory: str,
   Error: term,
-  ErrorMessage: str,
   Extension: str,
   Filename: str,
   Filename1: str,

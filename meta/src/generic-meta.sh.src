@@ -58,7 +58,6 @@ Options:
     -r <file>       uses given file as term-store
     -s              save intermediate files to disk
     -S              execute the given tb-script
-    -t <int>        MetaEnvironment will abort after <int> seconds
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)
     -V              reveal program version (i.e. $myversion)
@@ -147,10 +146,6 @@ do
 	-S)     
 		shift
 		meta_script="$1"
-		;;
-	-t)     
-	        shift
-		time_out_def="-DTIMEOUT=$1"
 		;;
         -T)
 		shift; 

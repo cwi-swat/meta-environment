@@ -11,13 +11,11 @@ let
   EditorId : term,
   Editor : str,
   Filename : str,
-  Focus : term,
   Hive : editor-hive,
   Offset : int,
   MenuEvent : term,
   Message : str,
   Modified : term,
-  SortName: str,
   Pid: int,
   Categories: term,
   Slices: term

@@ -3,7 +3,6 @@
 
 process StandAloneSyntaxEditor is
 let
-  ModuleName: str,
   Pid: int,
   Sid: term
 in

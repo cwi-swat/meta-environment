@@ -110,8 +110,7 @@ let
   Imports: list,
   Modules: list,
   Pid: int,
-  Specification: term,
-  Todo: list
+  Specification: term
 in
   MDB-GetAllImportedModulenames(ModuleId, Modules?)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)

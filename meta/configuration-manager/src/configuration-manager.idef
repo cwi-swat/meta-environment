@@ -1,4 +1,4 @@
-#if 0
+/*
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
@@ -43,7 +43,7 @@ endlet
     . AddUserProperties(CM)
     . snd-msg(buttons-refreshed)
   +
-#endif
+*/
 
 tool configuration-manager is {
   command = "configmanager"
@@ -54,21 +54,12 @@ let
   Actions: list,
   CM: configuration-manager,
   Contents: str,
-  ButtonActions: list,
   Event: term,
   Events: list,
-  Directories: list,
   Type: term,
-  ErrorMessage: str,
-  Fid: str,
-  LibraryPath: str,
   ModuleId: str,
-  Pid: int,
   ModulePaths: list,
   Extension: str,
-  Term: term,
-  Text: str,
-  Tree: term,
   Categories: term
 in
   execute(configuration-manager, CM?)

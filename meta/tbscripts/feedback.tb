@@ -10,9 +10,7 @@ endlet
 
 process ShowLocation(Sid: term, Location: term, Description: str) is
 let
-  Area: term,
-  ModuleName: str,
-  FileName: str
+  Area: term
 in
   snd-msg(has-location-area(Location))
   .
