@@ -8,17 +8,43 @@
 
     <h1>Sdf1 to Sdf2 Conversion</h1>
 
-<p> The new Asf+Sdf Meta-Environment is based on a new version of <em>Sdf</em>
+<p>The new Asf+Sdf Meta-Environment is based on a new version of <em>Sdf</em>
 (syntax definition formalism).
 If you have an Asf+Sdf language definition developed with the old 
-Asf+Sdf Meta-Environment you have to perform the following (simple) 
+Asf+Sdf Meta-Environment you have to perform some (simple) 
 modifications.
+
+<p>The main differences between Sdf1 and Sdf2 are in the range of
+lexical disambiguation.
+
+    <h2>Lexical and Syntactic Modifications</h2>
+
+       <ul>
+          <li>All characters not being a (uppercase) letter or a digit have
+              to be escaped.
+          <p>Sdf1: [!@#$%^] -> StrangeChar
+          <p>Sdf2: [\!\@\#\$\%\^] -> StrangeChar
+
+          <p>This has also effect on the way the layout characters are
+             defined, the space character must be escaped.
+          <p>Sdf1: [ \n\t\r] -> LAYOUT
+          <p>Sdf2: [\ \n\t\r] -> LAYOUT
+
+          <li>The syntax of priority section in Sdf1 is changed:
+              <ul>
+                 <li>The keyword "context-free" is added to "priorities".
+                 <li>Only the ascending priority changes are supported.
+                 <li>The abbreviations are no longer supported.
+              </ul>
+              <p>Example in Sdf1:
+                  priorities "|" < "$"
+       </ul>
 
     <hr>
     <address><a href="mailto:Mark.van.den.Brand@cwi.nl">Mark van den Brand</a></address>
 <!-- Created: Mon Jun 21 11:28:10 MET DST 1999 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 21 11:34:28 MET DST 1999
+Last modified: Mon Jun 21 12:14:06 MET DST 1999
 <!-- hhmts end -->
   </body>
 </html>
