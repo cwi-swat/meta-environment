@@ -9,22 +9,19 @@ sorts Summary Feedback Subject
 
 context-free syntax
 
-"feedback" "(" "[" {Feedback ","}* "]" ")" -> Summary {cons("feedback")}
+"feedback" "(" producer:StrCon "," id:StrCon ","
+              "[" {Feedback ","}* "]" ")" -> Summary {cons("feedback")}
 
-"info" "(" producer:StrCon "," 
-           description:StrCon "," 
+"info" "(" description:StrCon "," 
            "[" {Subject ","}* "]" ")" -> Feedback {cons("info")}
 
-"warning" "(" producer:StrCon "," 
-              description:StrCon "," 
+"warning" "(" description:StrCon "," 
               "[" {Subject ","}* "]" ")" -> Feedback {cons("warning")}
 
-"error" "(" producer:StrCon "," 
-            description:StrCon "," 
+"error" "(" description:StrCon "," 
             "[" {Subject ","}* "]" ")" -> Feedback {cons("error")}
 
-"fatal-error" "(" producer:StrCon "," 
-                  description:StrCon "," 
+"fatal-error" "(" description:StrCon "," 
                   "[" {Subject ","}* "]" ")" -> Feedback {cons("fatal-error")}
 
 "subject""(" description:StrCon "," Location ")" -> Subject {cons("subject")}
