@@ -394,6 +394,6 @@ make-arg-list(Sigarg, natcon(Char*)) = varid("V" "_" Char*)
 Natcon2 := Natcon + 1,
 Natcon3 := Natcon2 + 1,
 Term+1 := make-arg-list(Sigarg, Natcon2),
-Term+2 := make-arg-list(Sigarg, Natcon3)
+Term+2 := make-arg-list(Sigarg+, Natcon3)
 ===>
 make-arg-list(Sigarg, Sigarg+, Natcon) = Term+1, Term+2 
