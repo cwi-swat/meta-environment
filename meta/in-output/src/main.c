@@ -277,33 +277,24 @@ ATerm write_text_file(int cid, char *fileName, ATerm content)
   FILE *file = NULL;
   ATerm message;
 
-  if (fileName != NULL) {
-    if (!(file = fopen(fileName, "w"))) {
-      message = createErrorMessage(strerror(errno));
+  if (!(file = fopen(fileName, "w"))) {
+    message = createErrorMessage(strerror(errno));
+  }
+  else {
+    for (; !ATisEmpty(list); list = ATgetNext(list)) {
+      ATerm atString = ATgetFirst(list);
+      char *string = ATgetName(ATgetAFun((ATermAppl) atString));
+      fputs(string, file);
+    }
+
+    if (!ferror(file)) {
+      message = createSuccessMessage();
     }
     else {
-      int error = 1;
-
-      for (; !ATisEmpty(list); list = ATgetNext(list)) {
-	ATerm atString = ATgetFirst(list);
-	char *string = ATgetName(ATgetAFun((ATermAppl) atString));
-	error = fputs(string, file);
-      }
-
-      if (!ferror(file)) {
-	message = createSuccessMessage();
-      }
-      else {
-	message = createErrorMessage(strerror(errno));
-      }
-
-      fclose(file);
+      message = createErrorMessage(strerror(errno));
     }
 
-    free(fileName);
-  }
-  else{
-    message = createErrorMessage("out of memory");
+    fclose(file);
   }
 
   return message;
