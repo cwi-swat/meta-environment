@@ -13,3 +13,9 @@ EXTRA_DIST		= SDFME.adt
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include \
                           -I${PT_SUPPORT}/include
+
+# Developers only:
+api: Sdf.label.def
+	sdf2-to-adt -s -r -i $< -o SDFME.adt
+	adt-to-c --compat-term -i SDFME.adt --prologue SDFME.pro \
+                                --prefix SDF_ -o SDFME
