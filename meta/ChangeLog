@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/27 (markvdb@cwi.nl)
+ * metastudio is able to deal with graphs with extra information.
+
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
 

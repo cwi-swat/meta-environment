@@ -1,16 +1,17 @@
 package metastudio.graph;
 
+import aterm.*;
 import java.io.InputStream;
 import java.io.IOException;
 
 abstract public class ShapeImpl extends MetaGraphConstructor
 {
-  static Shape fromString(String str)
+  public static Shape fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  static Shape fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  public static Shape fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

@@ -17,5 +17,6 @@ api:
 		--folding \
 		--package metastudio.graph \
 		--name MetaGraph \
+		--import 'aterm.*' \
 		--verbose
 	mv ${srcdir}/MetaGraphMakeRules ${srcdir}/MetaGraphMakeRules.am

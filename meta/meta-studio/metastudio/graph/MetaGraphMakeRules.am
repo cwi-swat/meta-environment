@@ -20,6 +20,7 @@ Attribute_LocationImpl.java Attribute_Location.java\
 Attribute_SizeImpl.java Attribute_Size.java\
 Attribute_CurvePointsImpl.java Attribute_CurvePoints.java\
 Attribute_DirectionImpl.java Attribute_Direction.java\
+Attribute_InfoImpl.java Attribute_Info.java\
 Shape.java ShapeImpl.java\
 Shape_PlaintextImpl.java Shape_Plaintext.java\
 Shape_EllipseImpl.java Shape_Ellipse.java\

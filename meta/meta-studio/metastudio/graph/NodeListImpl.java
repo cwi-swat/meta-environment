@@ -1,16 +1,17 @@
 package metastudio.graph;
 
+import aterm.*;
 import java.io.InputStream;
 import java.io.IOException;
 
 abstract public class NodeListImpl extends MetaGraphConstructor
 {
-  static NodeList fromString(String str)
+  public static NodeList fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  static NodeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  public static NodeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

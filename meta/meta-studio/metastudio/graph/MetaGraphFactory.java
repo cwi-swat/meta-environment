@@ -1,5 +1,6 @@
 package metastudio.graph;
 
+import aterm.*;
 import aterm.pure.PureFactory;
 public class MetaGraphFactory extends PureFactory
 {
@@ -29,6 +30,8 @@ public class MetaGraphFactory extends PureFactory
   private Attribute protoAttribute_CurvePoints;
   private aterm.AFun funAttribute_Direction;
   private Attribute protoAttribute_Direction;
+  private aterm.AFun funAttribute_Info;
+  private Attribute protoAttribute_Info;
   private aterm.AFun funShape_Plaintext;
   private Shape protoShape_Plaintext;
   private aterm.AFun funShape_Ellipse;
@@ -150,6 +153,10 @@ public class MetaGraphFactory extends PureFactory
     Attribute_Direction.initializePattern();
     funAttribute_Direction = makeAFun("_Attribute_direction", 1, false);
     protoAttribute_Direction = new Attribute_Direction();
+
+    Attribute_Info.initializePattern();
+    funAttribute_Info = makeAFun("_Attribute_info", 2, false);
+    protoAttribute_Info = new Attribute_Info();
 
     Shape.initialize(this);
 
@@ -407,6 +414,18 @@ public class MetaGraphFactory extends PureFactory
   public Attribute_Direction makeAttribute_Direction(Direction _direction) {
     aterm.ATerm[] args = new aterm.ATerm[] {_direction};
     return makeAttribute_Direction( funAttribute_Direction, args, empty);
+  }
+
+  protected Attribute_Info makeAttribute_Info(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Info) {
+      protoAttribute_Info.initHashCode(annos,fun,args);
+      return (Attribute_Info) build(protoAttribute_Info);
+    }
+  }
+
+  public Attribute_Info makeAttribute_Info(String _key, aterm.ATerm _value) {
+    aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_key, 0, true)), _value};
+    return makeAttribute_Info( funAttribute_Info, args, empty);
   }
 
   protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
