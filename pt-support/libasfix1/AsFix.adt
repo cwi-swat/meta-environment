@@ -46,7 +46,7 @@
   ],
 
   [Attributes, no-attrs, no-attrs],
-  [Attributes, attrs, attrs(Attrs)],
+  [Attributes, attrs, <attrs(Attrs)>],
 
   [Attrs, list, [<head(Attr)>,<[tail(Attrs)]>]],
   [Attrs, empty, []],
