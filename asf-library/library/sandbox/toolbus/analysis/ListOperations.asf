@@ -1,12 +1,12 @@
 equations
 
-  [cvt-1] convert(<$Area, $String>) = 
-            listitem("Unused variable " || $String, [ "ShowSource" ], $Area)
+  [cvt-1] convert($String1, <$Area, $String2>) = 
+            listitem($String1 || $String2, [ "ShowSource" ], $Area)
 
-  [cvtl-1] convertl({$Tuple*}) = list([$ListItem*])
+  [cvtl-1] convertl($String1, {$Tuple*}) = list([$ListItem*])
            ===>
-           convertl({<$Area, $String>, $Tuple*}) = 
-             list([convert(<$Area, $String>),
+           convertl($String1, {<$Area, $String2>, $Tuple*}) = 
+             list([convert($String1, <$Area, $String2>),
 $ListItem*])
 
-  [cvtl-2] convertl({}) = list([])
+  [cvtl-2] convertl($String, {}) = list([])

@@ -4,8 +4,24 @@ equations
     extractRelations($TscriptDefs) = extractRelations($TscriptDefs, [])
 
   [extractRelations-process]
-    extractRelations($ProcessDef, $Rstore)
-	= findVarInProcess($ProcessDef, $Rstore, get-area($ProcessDef))
+    findVarInProcess($ProcessDef, $Rstore1, get-area($ProcessDef)) = $Rstore2,
+    findProcessInfoInProcessDef($ProcessDef, $Rstore2) = $Rstore3
+    ===>
+    extractRelations($ProcessDef, $Rstore1) = $Rstore3
+
+  [extractRelations-tscriptdef]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+    ===>
+    extractRelations(toolbus($ProcessName), $Rstore1) = $Rstore2
+
+  [extractRelations-tscriptdef-parameters]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+    ===>
+    extractRelations(toolbus($ProcessName($Terms)), $Rstore1) = $Rstore2
 
   [extractRelations-vardecl]
     $Tuple = <$ProcessDefId, var2str($Var)>,
@@ -24,7 +40,7 @@ equations
     ===>
     findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore3
 
-  [extractRelations-genvar-q]
+  [extractRelations-genvar-result]
     $VarId = get-area($Var),
     $Tuple = <$ProcessDefId, var2str($Var)>,
     $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
@@ -33,7 +49,7 @@ equations
     ===>
     findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3
 
-  [extractRelations-genvar-q]
+  [extractRelations-genvar-assign]
     $VarId = get-area($Var),
     $Tuple = <$ProcessDefId, var2str($Var)>,
     $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
@@ -42,3 +58,56 @@ equations
     $Rstore4 = findVarInProcess($Term, $Rstore3, $ProcessDefId)
     ===>
     findVarInProcess($Var := $Term, $Rstore1, $ProcessDefId) = $Rstore4
+
+
+  [findProcessInfoInProcessDef-start]
+    findProcessNameInSignature($ProcessSignature, $Rstore1) = $Rstore2,
+    findProcessApplicationInBody($ProcessBody, $Rstore2) = $Rstore3
+    ===>
+    findProcessInfoInProcessDef(process $ProcessSignature is $ProcessBody,
+                                $Rstore1) = $Rstore3
+
+  [findProcessNameInSignature-processname]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
+    ===>
+    findProcessNameInSignature($ProcessName, $Rstore1) = $Rstore2
+
+  [findProcessNameInSignature-start]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
+    ===>
+    findProcessNameInSignature($ProcessName($FormalParams), $Rstore1) = 
+      $Rstore2
+      
+  [findProcessApplicationsInBody-create-basic]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
+    ===>
+    findProcessApplicationInBody(create($ProcessName, $Var?), 
+                                 $Rstore1) = $Rstore2
+      
+  [findProcessApplicationsInBody-create-arguments]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
+    ===>
+    findProcessApplicationInBody(create($ProcessName($Terms), $Var?), 
+                                 $Rstore1) = $Rstore2
+
+  [findProcessApplicationsInBody-invocation-basic]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+    ===>
+    findProcessApplicationInBody($ProcessName, $Rstore1) = $Rstore2
+
+  [findProcessApplicationsInBody-invocation-arguments]
+    $ProcessNameId = get-area($ProcessName),
+    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+    ===>
+    findProcessApplicationInBody($ProcessName($Terms), $Rstore1) = $Rstore2

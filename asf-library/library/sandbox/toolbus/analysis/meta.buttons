@@ -35,7 +35,10 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unused Variables"],
-         [push-filename("complexunused.rscript"),
+         [push-string("\"Unused variable \""),
+          parse("basic/Strings", "String"),
+
+          push-filename("complexunused.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNUSED_VARS\""),
@@ -48,7 +51,32 @@ buttons([
           push-modulename("ToolBusExtraction"),
           reduce,
 
-          apply("toolbus-query", "List", 3),
+          apply("toolbus-query", "List", 4),
+          push-modulename("ToolBusQuery"),
+          reduce,
+          execute-action("unparsePT"),
+          show-list
+        ]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Unused Processes"],
+         [push-string("\"Unused process \""),
+          parse("basic/Strings", "String"),
+
+          push-filename("unusedprocesses.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"UNUSED_PROCESSES\""),
+          parse("basic/Strings", "String"),
+
+          push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+
+          apply("toolbus-query", "List", 4),
           push-modulename("ToolBusQuery"),
           reduce,
           execute-action("unparsePT"),

@@ -5,6 +5,7 @@ imports ToolBusOperations
 imports MyPosInfo[Var]
 imports MyPosInfo[VarDecl]
 imports MyPosInfo[ProcessDef]
+imports MyPosInfo[ProcessName]
 
 exports
   context-free syntax
@@ -15,9 +16,14 @@ hiddens
     extractRelations(TscriptDef*, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
+    extractRelations(TscriptDef, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
     extractRelations(ProcessDef, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
+hiddens
+  context-free syntax
     findVarInProcess(ProcessDef, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
@@ -33,15 +39,37 @@ hiddens
     findVarInProcess(GenVar, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
+hiddens
+  context-free syntax
+    findProcessInfoInProcessDef(ProcessDef, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    findProcessNameInSignature(ProcessSignature, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    findProcessApplicationInBody(ProcessBody, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+    findProcessApplicationInBody(ProcessInvocation, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+    findProcessApplicationInBody(ProcessCreation, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
   variables
     "$Area"[0-9]*		-> Area      
     "$Rstore"[0-9]*		-> RSTORE
     "$Tuple"[0-9]*		-> Elem # Elem
     "$VarId"[0-9]*		-> Area
     "$ProcessDefId"		-> Area
+    "$ProcessNameId"		-> Area
 
     "$TscriptDefs"[0-9]*	-> TscriptDef*
     "$ProcessDef"[0-9]*		-> ProcessDef
+    "$ProcessSignature"[0-9]*	-> ProcessSignature
+    "$ProcessBody"[0-9]*	-> ProcessBody
     "$ProcessName"[0-9]*	-> ProcessName
+    "$FormalParams"[0-9]* 	-> {FormalParam ","}*
     "$Term"[0-9]*		-> Term
+    "$Terms"[0-9]*		-> {Term ","}*
     "$Var"[0-9]*		-> Var

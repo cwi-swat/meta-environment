@@ -6,6 +6,7 @@ imports basic/Strings
 exports
   context-free syntax
     var2str(Var) -> String
+    processname2str(ProcessName) -> String
 
 hiddens
   variables

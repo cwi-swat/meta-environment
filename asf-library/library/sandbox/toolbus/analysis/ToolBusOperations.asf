@@ -2,3 +2,6 @@ equations
 
   [variable2string] 
     var2str(vname(Char*)) = strcon(""" Char* """)
+
+  [processname2string]
+    processname2str(processname(Char*)) = strcon(""" Char* """)

@@ -5,8 +5,8 @@ imports RscriptCalculator
 
 exports
   context-free syntax
-    convertl(Rel[[Elem]])  -> List
-    convert(Area # String) -> ListItem
+    convertl(String, Rel[[Elem]])  -> List
+    convert(String, Area # String) -> ListItem
 
 hiddens
   variables

@@ -5,7 +5,7 @@ imports ListOperations
 
 exports
   context-free syntax
-    toolbus-query(RSCRIPT, String, RSTORE) -> List
+    toolbus-query(String, RSCRIPT, String, RSTORE) -> List
 
     str2rvar(String) -> RVAR
 
@@ -14,3 +14,4 @@ hiddens
     "$Rstore"[0-9]*  -> RSTORE
     "$Script"[0-9]*  -> RSCRIPT
     "$String"[0-9]*  -> String
+    "$ActionName"[0-9]*  -> String
