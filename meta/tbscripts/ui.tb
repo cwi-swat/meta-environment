@@ -51,6 +51,10 @@ in
     ( rec-msg(ui, open-module(Str1?)).
       snd-do(UI,open-module(Str1))
     ) + 
+    ( rec-msg(cannot-open-module(ModName?)).
+      snd-do(UI,open-empty-module(id(ModName))).
+      snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
+    ) +
     ( rec-event(UI,delete-module(Str?)).
       snd-msg(close-module(Str)).
       rec-msg(closed-module(Str)).
