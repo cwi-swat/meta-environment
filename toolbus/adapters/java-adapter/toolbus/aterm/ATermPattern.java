@@ -207,6 +207,49 @@ public class ATermPattern extends Vector
   }
 
   //}
+  //{ public ATermRef make(Oject a1, a2, a3, a4, a5, a6)
+
+  /**
+    * Make a term with six placeholders.
+    */
+
+  public ATermRef make(Object a1, Object a2, Object a3, Object a4, Object a5,
+		       Object a6)
+    throws IllegalPlaceholder
+  {
+    setSize(0);
+    addElement(a1);
+    addElement(a2);
+    addElement(a3);
+    addElement(a4);
+    addElement(a5);
+    addElement(a6);
+    return makeTerm(pattern.getATerm(), elements());
+  }
+
+  //}
+  //{ public ATermRef make(Object a1, a2, a3, a4, a5, a6, a7)
+
+  /**
+    * Make a term with seven placeholders.
+    */
+
+  public ATermRef make(Object a1, Object a2, Object a3, Object a4, Object a5,
+		       Object a6, Object a7)
+    throws IllegalPlaceholder
+  {
+    setSize(0);
+    addElement(a1);
+    addElement(a2);
+    addElement(a3);
+    addElement(a4);
+    addElement(a5);
+    addElement(a6);
+    addElement(a7);
+    return makeTerm(pattern.getATerm(), elements());
+  }
+
+  //}
   //{ protected ATermRef makeTerm(int index)
 
   /**

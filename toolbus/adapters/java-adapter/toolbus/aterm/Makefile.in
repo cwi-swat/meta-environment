@@ -40,7 +40,7 @@ CLASSES		= ATerm.class ATerms.class ATermAppl.class ATermInt.class \
 		ATermRealRef.class ATermChannel.class ATermParser.class \
 		ATermPattern.class IllegalPlaceholder.class ParseError.class \
 		ATermSize.class ATest.class InputChannel.class \
-		TestFailedException.class
+		TestFailedException.class DummyEntry.class
 PROGRAMS	= aterm-size
 
 all:	${CLASSES}

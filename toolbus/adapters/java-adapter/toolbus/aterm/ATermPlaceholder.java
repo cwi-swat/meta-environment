@@ -273,7 +273,7 @@ public class ATermPlaceholder extends ATerm
 	// Another application, make sure it matches with the
 	// function symbol we are looking for.
 	if(fun.equals(termfun)) {
-	  subterms.addElement(termfun);
+	  subterms.addElement(new ATermApplRef((ATermAppl)term));
 	  if(args == null)
 	    return true;
 	  return args.match(termargs, subterms);
