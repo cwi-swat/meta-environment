@@ -81,8 +81,8 @@ system.
 
 
 <H3>The First Stage in Propagating Syntax Changes</H3>
-There are four points at which the first stage of syntax change
-propagation can occur:
+There are basically four alternative moments at which the first stage 
+of syntax change propagation can occur:
 <OL>
 <LI> When the user performs a <EM>text editing operation</EM> on
      the syntax of a module. An advantage could be that changes
@@ -107,10 +107,10 @@ propagation can occur:
      changes take effect, but some form of visual feedback would
      make a huge difference in this area.
 <LI> When some tool needs the most up-to-date version of any tree
-     that depends on syntax currently being edited, or instance
+     that depends on syntax currently being edited, for instance
      when the evaluator wants to evaluate a term, all editors in
      the system are queried to see where the newest version is
-     available.
+     available, and whether this newest version needs reparsing or not.
 </OL>
 
 <!--
