@@ -166,6 +166,9 @@ in
   +
     rec-note(syntax-changed(ModuleName)).
     InvalidateDependendEditor(EditorId,Type)
+  +
+    rec-msg(get-editor-modulename(EditorId)) .
+    snd-msg(editor-modulename(EditorId,ModuleName))
   ) *
   rec-note(delete-editor(EditorId)) 
 endlet

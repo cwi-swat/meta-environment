@@ -129,32 +129,33 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *type, char *moduleName
       ATerm action = NULL;
 
       if (strcmp(type,"equations") == 0) {
-	action = ATmake("parse-equations-action(<str>)", moduleName);
+	action = ATmake("parse-equations-action");
       }
       else if (strcmp(type,"syntax") == 0) {
-	action = ATmake("parse-syntax-action(<str>)", moduleName);
+	action = ATmake("parse-syntax-action");
       }
       else {
-	action = ATmake("parse-action(<str>)", moduleName);
+	action = ATmake("parse-action");
       }
-      buttonActions = ATinsert(buttonActions,  action);
+      buttonActions = ATinsert(buttonActions, action);
+      buttonActions = ATinsert(buttonActions, ATmake("push-modulename)"));
     }
     else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"Reduce\"]"))) {
       buttonActions = ATinsert(buttonActions, 
-			       ATmake("edit-given-filename(<str>)",
-				      moduleName));
+			       ATmake("edit-given-filename"));
+      buttonActions = ATinsert(buttonActions, 
+			       ATmake("push-modulename)"));
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("push-filename(\"reduct.out\")"));
+      buttonActions = ATinsert(buttonActions, ATmake("reduce"));
       buttonActions = ATinsert(buttonActions, 
-			       ATmake("reduce(<str>)", moduleName));
+			       ATmake("push-modulename)"));
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("get-root"));
     }
     else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"ViewTree\"]"))) {
-      buttonActions = ATinsert(buttonActions,
-			       ATmake("show-tree"));
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("get-focus"));
+      buttonActions = ATinsert(buttonActions, ATmake("show-tree"));
+      buttonActions = ATinsert(buttonActions, ATmake("get-focus"));
     }
     else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Left\"]"))) {
       buttonActions = ATinsert(buttonActions,ATparse("move-left"));

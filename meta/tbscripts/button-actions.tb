@@ -20,6 +20,7 @@ let
 in
   (
     rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)).
+    printf("received: %t\n", ButtonName) .
     snd-msg(get-button-actions(ButtonName,EditorType,ModuleName)).
     rec-msg(button-actions(ButtonName,EditorType,ModuleName,Actions?)).
     PerformButtonActions(EditorId, Actions) 
@@ -43,6 +44,7 @@ in
       if equal(FunName, "if-equal") then
         IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
       else
+        printf("Sending: %t\n", ButtonAction).
         snd-msg(ButtonAction, Stack, EditorId) .
         (
           rec-msg(stack(Stack?), EditorId)
@@ -203,15 +205,18 @@ in
     snd-msg(move-focus(EditorId,"Down")) .
     ReturnSuccess(EditorId,Stack)
     +
-    rec-msg(parse-action(NewModName?), Stack?, EditorId?) .
+    rec-msg(parse-action, Stack?, EditorId?) .
+    StackPopString(Stack,Stack?,NewModName?) .
     ParseTerm(EditorId, NewModName) .
     ReturnSuccess(EditorId,Stack)
     +
-    rec-msg(parse-syntax-action(NewModName?), Stack?, EditorId?).
+    rec-msg(parse-syntax-action, Stack?, EditorId?).
+    StackPopString(Stack,Stack?,NewModName?) .
     ParseSyntax(EditorId,NewModName).
     ReturnSuccess(EditorId,Stack)
     +
-    rec-msg(parse-equations-action(NewModName?), Stack?, EditorId?).
+    rec-msg(parse-equations-action, Stack?, EditorId?).
+    StackPopString(Stack,Stack?,NewModName?) .
     ParseEquations(EditorId,NewModName).
     ReturnSuccess(EditorId,Stack)
     +
@@ -253,8 +258,9 @@ in
           ReturnFailed(EditorId,Stack)
         fi
       +
-        rec-msg(reduce(NewModName?), Stack?, EditorId?) .
-        StackPopTerm(Stack,Stack?,STree?).
+        rec-msg(reduce, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopTerm(Stack,Stack?,STree?) .
         ReduceTerm(STree, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           StackPushTerm(Stack,Stack?,RTree) .
@@ -294,7 +300,8 @@ in
         StackPushString(Stack,Stack?,FileName) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(edit-given-filename(NewModName?), Stack?, EditorId?) .
+        rec-msg(edit-given-filename, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,NewModName?) .
         StackPopString(Stack,Stack?,FileName?) .
         StackPopTerm(Stack,Stack?,STree?) .
         FunSym := fun(STree) .
@@ -375,6 +382,18 @@ in
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
           ReturnFailed(EditorId,Stack)
+        )
+      +
+        rec-msg(push-modulename, Stack?, EditorId?) .
+        subscribe(delete-editor(EditorId)) .
+        snd-msg(get-editor-modulename(EditorId)) .
+        (
+          rec-msg(editor-modulename(EditorId,ModuleName?)) .
+          StackPushString(Stack,Stack?,ModuleName) .
+          ReturnSuccess(EditorId,Stack)
+        +
+          rec-note(delete-editor(EditorId)) .
+          ReturnFailed(EditorId, Stack)
         )
       +
         rec-msg(push-filename(FileName?), Stack?, EditorId?) .

@@ -22,11 +22,11 @@ buttons([
   button("*",
          "syntax"
          ["Actions","Parse"],
-         [push-modulename,parse-syntax]),
+         [push-modulename,parse-syntax-action]),
   button("*",
          "equations"
          ["Actions","Parse"],
-         [push-modulename,parse-equations]),
+         [push-modulename,parse-equations-action]),
   button("*",
          "equations"
          ["Actions","Reduce"],
