@@ -14,7 +14,6 @@ equations
 
 [card]	cardinality(t) = size(t)
 
-
 %% From the technical report
 
 [w]	weight = 4
