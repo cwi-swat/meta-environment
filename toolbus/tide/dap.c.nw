@@ -104,6 +104,7 @@ term  *dap_get_info(int cid);
 void   dap_rec_ack_event(int cid, term *event);
 void   dap_rec_terminate(int cid, term *arg);
 void   dap_change_cpe(int cid, term *pids, term *cpe);
+TBbool dap_exec(term *procs, term *acts, term **result, char **msg);
 int    dap_create_rule(term *procs, term *port, term *cond, term *acts, term *life);
 void   dap_destroy_rule(int rid);
 void   dap_activate_rules(int pid, term *port);
@@ -147,6 +148,7 @@ void cbdap_change_exec_state(int pid, int exec_state);
 <<dap_init>>
 <<dap_evaluate>>
 <<dap_execute>>
+<<dap_exec>>
 <<dap_get_info>>
 <<dap_change_exec_state>>
 <<dap_rec_ack_event>>
@@ -674,6 +676,33 @@ term *dap_get_info(int cid)
     info = list_concat_term(info, mk_list2(key, val));
   }
   return info;
+}
+@
+
+%}}}
+%{{{ TBbool dap_exec(term *procs, term *acts, char **msg)
+
+Execute a list of actions.
+
+<<dap_exec>>=
+TBbool dap_exec(term *procs, term *acts, term **result, char **msg)
+{
+  int i, pid;
+
+  if(TBmatch(procs, "all")) {
+    for(i=0; i<MAX_PROCESSES; i++) {
+      if(dap_get_process(0, i))
+        if(!dap_execute_list(acts, i, result, msg))
+	  return TBfalse;
+    }
+  } else {
+    while(procs) {
+      TB_match(list_first(procs), "<int>", &pid);
+      procs = list_next(procs);  
+      if(!dap_execute_list(acts, pid, result, msg))
+	return TBfalse;
+    }
+  }
 }
 @
 

@@ -35,6 +35,7 @@ term  *dap_get_info(int cid);
 void   dap_rec_ack_event(int cid, term *event);
 void   dap_rec_terminate(int cid, term *arg);
 void   dap_change_cpe(int cid, term *pids, term *cpe);
+TBbool dap_exec(term *procs, term *acts, term **result, char **msg);
 int    dap_create_rule(term *procs, term *port, term *cond, term *acts, term *life);
 void   dap_destroy_rule(int rid);
 void   dap_activate_rules(int pid, term *port);
@@ -46,7 +47,7 @@ TBbool dap_change_exec_state(int pid, int new_state);
 /*TBbool dap_typecheck_expr(term *t, int pid, term **result, char **msg);
 TBbool dap_typecheck_action(term *t, int pid, term **result, char **msg);
 */
-#line 126 "dap.c.nw"
+#line 127 "dap.c.nw"
 term *cbdap_supply_info(char *key);
 void cbdap_change_exec_state(int pid, int exec_state);
 #line 18 "dap.c.nw"

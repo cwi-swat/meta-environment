@@ -9,11 +9,10 @@
 <<process RULE-VIEWER>>
 <<process PROCESS-VIEWER>>
 <<process WATCHPOINT-VIEWER>>
-<<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
-toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
+toolbus(DAP-CONNECT, BROADCAST, 
 	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)
 @
 
@@ -27,7 +26,6 @@ In this section, we define the tools used in this ToolBus script.
 
 <<tool definitions>>=
 tool debug-adapter is { }
-tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
@@ -127,6 +125,12 @@ in
     rec-msg(proc(D,P?), destroy-rule(Rid?)) .
     snd-do(D, destroy-rule(P,Rid))
     +
+    rec-msg(proc(D,P?), exec-actions(Acts?)) .
+	printf("exec-actions(%t) to debug-adapter %t\n", Acts, D) .
+    snd-eval(D, exec-actions(P, Acts)) .
+    rec-value(D, exec-result(Result?)) .
+    snd-msg(proc(D,P), exec-result(Result))
+    +
     rec-event(D, watchpoint(P?, Rid?, Exprs?)) .
     snd-note(event(proc(D,P), watchpoint(Rid, Exprs))) .
     snd-ack-event(D, watchpoint(P, Rid, Exprs))
@@ -159,47 +163,6 @@ endlet
 
 %}}}
 
-%{{{ process MASTER-CONTROL
-
-The master control window gives the user an overview of all
-debuggable systems currently running, and enables the user to 
-activate the other debugger components.
-
-<<process MASTER-CONTROL>>=
-process MASTER-CONTROL is
-let
-  M     : master-control,
-  D     : debug-adapter,
-  P     : term,
-  Name  : str,
-  Tool  : term,
-  Info  : list,
-  Event : term
-in
-  subscribe(new-tool(<str>,<term>,<term>)) .
-  execute(master-control, M?) .
-  subscribe(event(<term>, dap-connected(<list>,<list>))) .
-  subscribe(event(<term>, dap-disconnected)) .
-  ( rec-note(new-tool(Name?, Tool?, Event?)) .
-    snd-do(M, new-tool(Name, Tool, Event))
-    +
-    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
-    printf("dap-connected received: %t\n", D) .
-    snd-do(M, dap-connected(D, Info, P))
-    +
-    rec-note(event(proc(D?,P?), dap-disconnected)) .
-    snd-do(M, dap-disconnected(D))
-    +
-    rec-event(M, button(Tool?, Event?, D?)) .
-    snd-msg(Tool, Event, D) .
-    snd-ack-event(M, button(Tool, Event, D))
-  ) * rec-event(M, tide-shutdown) .
-  snd-ack-event(M, tide-shutdown) .
-  shutdown("Thank you for using tide!\n")
-endlet
-@
-
-%}}}
 %{{{ process SOURCE-VIEWER
 
 <<process SOURCE-VIEWER>>=
@@ -228,6 +191,7 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
   snd-note(new-tool("View source", S, view-source)) .
+  snd-note(new-tool("View source", S, view-source, [adapter])) .
   ( rec-msg(S, view-source, D?) .
     snd-do(S, view-source(D))
     +
@@ -296,6 +260,7 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
   snd-note(new-tool("View rules", R, view-rules)) .
+  snd-note(new-tool("View rules", R, view-rules, [adapter])) .
   ( rec-msg(R, view-rules, D?) .
     snd-do(R, view-rules(D))
     +
@@ -362,6 +327,7 @@ in
   subscribe(event(<term>,rule-destroyed(<int>))) .
   subscribe(event(<term>,watchpoint(<int>,<list>))) .
   snd-note(new-tool("Create watchpoint", V, view-watchpoint)) .
+  snd-note(new-tool("Create watchpoint", V, view-watchpoint, [adapter])) .
   ( rec-msg(V, view-watchpoint, D?) .
     snd-do(V, view-watchpoint(D))
     +
@@ -412,19 +378,29 @@ process PROCESS-VIEWER is
 let
   V : process-viewer,
   D : debug-adapter,	%% Which debug adapter
+  Name : str,		%% The name of a tool
+  Tool : term,		%% The tool-id of a tool
+  Event : term,		%% The event needed to activate a tool
+  Args  : list,		%% A list describing arguments needed for activation
   P : term,		%% List of processes (or in some cases 'all')
   Info : list,		%% Information about a debug adapter
   Exprs: term,		%% A list of expression,value pairs
-  Rid : int		%% Event rule identifier
+  Port : term,		%% Event rule port
+  Cond : term,		%% Event rule condition
+  Acts : term,		%% Event rule actions
+  Life : term,		%% Event rule lifetime
+  Rid : int,		%% Event rule identifier
+  Type : term,		%% The type of rule
+  Result : term		%% ok(<term>) or error(<str>)
 in
+  subscribe(new-tool(<str>,<term>,<term>,<list>)) .
   execute(process-viewer, V?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
   subscribe(event(<term>,dap-disconnected)) .
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
-  snd-note(new-tool("View processes", V, view-processes)) .
-  ( rec-msg(V, view-processes, D?) .
-    snd-do(V, view-processes(D))
+  ( rec-note(new-tool(Name?, Tool?, Event?, Args?)) .
+    snd-do(V, new-tool(Name, Tool, Event, Args))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
     snd-do(V, dap-connected(D, Info, P))
@@ -434,7 +410,25 @@ in
     +
     rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
     snd-do(V, watchpoint(D, P, Rid, Exprs))
-  ) * delta
+    +
+    rec-event(V, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
+    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
+    snd-ack-event(V, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(V, exec-actions(D?, P?, Acts?)) .
+	printf("rec-event exec-actions.\n") .
+    snd-msg(proc(D,P), exec-actions(Acts)) .
+    rec-msg(proc(D,P), exec-result(Result?)) .
+	printf("exec-result = %t\n", Result) .
+    snd-ack-event(V, exec-actions(D, P, Acts, Result))
+    +
+    rec-event(V, button(Tool?, Event?, D?)) .
+    snd-msg(Tool, Event, D) .
+    snd-ack-event(V, button(Tool, Event, D))
+  ) * rec-event(V, tide-shutdown) .
+  snd-ack-event(V, tide-shutdown) .
+  shutdown("Thank you for using tide!\n")
 endlet
 @
 

@@ -27,6 +27,7 @@ view, it is a \emph{debug-nub}.
 
 <<get_info>>
 <<get_processes>>
+<<exec_actions>>
 <<create_rule>>
 <<modify_rule>>
 <<destroy_rule>>
@@ -387,6 +388,25 @@ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term
   return TB_make(
 	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
 	procs, port, cond, acts, life, rid);
+}
+@
+
+%}}}
+%{{{ term *exec_actions(int cid, term *procs, term *acts)
+
+This ToolBus callback function is called to execute a list of actions.
+
+<<exec_actions>>=
+term *exec_actions(int cid, term *procs, term *acts)
+{
+  char *msg;
+  term *result;
+
+  TBbool ok = dap_exec(procs, acts, &result, &msg);
+  if(ok)
+    return TB_make("snd-value(exec-result(ok(<term>)))", result);
+
+  return TB_make("snd-value(exec-result(error(<str>)))", msg);
 }
 @
 

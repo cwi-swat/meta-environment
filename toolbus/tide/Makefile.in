@@ -54,7 +54,7 @@ LIBFILES= libtide.a
 TIDEFILES= tide.tb $(GENTCL)
 INCFILES= tide.h dap-admin.h dap.h
 NWSRC	= buscontrol.c.nw dap.c.nw dap-admin.c.nw \
-	source-viewer.tcl.nw process-viewer.tcl.nw master-control.tcl.nw \
+	source-viewer.tcl.nw process-viewer.tcl.nw \
 	rule-viewer.tcl.nw tide-modules.tcl.nw tide.tb.nw \
 	watchpoint-viewer.tcl.nw
 TIDEMODS= dap.o dap-admin.o
@@ -64,11 +64,11 @@ TCLMODS	= tide-modules.tcl tide-daps.tcl tide-processes.tcl \
 	tide-ui-process-list.tcl tide-ui-rule-list.tcl
 GENCSRC	= buscontrol.c dap.c dap-admin.c
 GENCHDR	= viewer.tif.c debug-adapter.tif.c dap-admin.h dap.h
-GENTCL	= source-viewer.tcl process-viewer.tcl master-control.tcl \
+GENTCL	= source-viewer.tcl process-viewer.tcl \
 	rule-viewer.tcl watchpoint-viewer.tcl \
 	$(TCLMODS)
 GENTEX	= buscontrol.c.tex \
-	source-viewer.tcl.tex process-viewer.tcl.tex master-control.tcl.tex \
+	source-viewer.tcl.tex process-viewer.tcl.tex \
 	tide.tb.tex rule-viewer.tcl.tex tide-modules.tcl.tex \
 	watchpoint-viewer.tcl.tex
 DIRS	= bitmaps test help
@@ -150,7 +150,6 @@ source-viewer.tcl: source-viewer.tcl.nw
 rule-viewer.tcl: rule-viewer.tcl.nw
 watchpoint-viewer.tcl: watchpoint-viewer.tcl.nw
 process-viewer.tcl: process-viewer.tcl.nw
-master-control.tcl: master-control.tcl.nw
 buscontrol.c buscontrol.c.tex: buscontrol.c.nw
 dap.c: dap.c.nw
 dap.h: dap.c.nw
