@@ -18,8 +18,8 @@ context-free start-symbols TextStruct
 
 hiddens
   variables
-    "Text"[0-9]*      -> {TextBlock ","}*
-    "TextBlock"[0-9]* -> String*
+    "Text"[0-9]*      -> String* %%{TextBlock ","}*
+%%    "TextBlock"[0-9]* -> String*
     "Struct"[0-9]*    -> TextStruct
 
 
@@ -32,7 +32,7 @@ hiddens
       "reshuffle" Box* "given" Frame "and" TextStruct "h" Integer "v" Integer "i" Integer -> TextStruct
       "dplace" Box* "with" Frame "and" TextStruct "and" Context                       -> TextStruct
       "startNewLine"(Text)                                 -> Text
-      lengthTextBlock(TextBlock) -> Integer
+%%      lengthTextBlock(TextBlock) -> Integer
       "add" "to" "last" "line" "(" Text "," String ")"                                 -> Text
 
 hiddens

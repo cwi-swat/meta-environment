@@ -9,22 +9,18 @@ imports basic/Comments
         NewLine
 
 exports
-  sorts TextBlock
-  context-free syntax
-    String* -> TextBlock {constructor}  
-
   sorts Text
   context-free syntax
-    {TextBlock ","}* -> Text {constructor} 
+    String* -> Text {constructor}
 
   sorts BText
   context-free syntax
     Bytes*  -> BText {constructor} 
 
   context-free syntax
-    text2btext({TextBlock ","}*) -> Bytes*
-    strings2bytes(String*)       -> Bytes*
-    string2bytes(String)         -> Bytes
+    text2btext(String*)            -> Bytes*
+    strings2bytes(String*, Bytes*) -> Bytes*
+    string2bytes(String)           -> Bytes
 
   context-free syntax
       Bytes "||" Bytes -> Bytes {right}
@@ -32,11 +28,10 @@ exports
 
 hiddens
   variables
-    "string" -> String
+    "string"  -> String
     "string*" -> String*
-    "textblock" -> String* 
-    "textblock*" -> {TextBlock ","}*
     "bytes"   -> Bytes
+    "bytes*"  -> Bytes*
 
     "Char+"[0-9]*  -> CHAR+
 
