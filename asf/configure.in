@@ -125,6 +125,7 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
+   filtereqssyntax/Makefile
    addeqssyntax/Makefile
    addeqssyntax/spec/Makefile
    addeqssyntax/src/Makefile
