@@ -26,6 +26,7 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 classdir=${prefix}/classes
 toolbus=__TOOLBUS__
+toolbusdefs=__TOOLBUS_DEFS__
 
 PATH="${bindir}:${PATH}"; export PATH
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
@@ -133,7 +134,7 @@ done
 if [ $verbose -gt 0 ] ; then
 	echo CLASSPATH: $CLASSPATH
 	echo COMPILER_OUTPUT: $COMPILER_OUTPUT
-	echo "Running \`$toolbus $xargs -I${datadir} ${datadir}/meta.tb'"
+	echo "Running \`$toolbus $xargs ${toolbusdefs} -I${datadir} ${datadir}/meta.tb'"
 fi
 
-$toolbus $xargs -I${datadir} ${datadir}/meta.tb
+$toolbus $xargs ${toolbusdefs} -I${datadir} ${datadir}/meta.tb
