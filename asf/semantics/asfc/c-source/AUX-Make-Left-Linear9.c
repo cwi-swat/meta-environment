@@ -32,25 +32,25 @@ if ( check_sym ( arg0 , lf_AUX_Make_Left_Linear9_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
 }
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ;
+( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 6 ] = lf_AUX_Make_Left_Linear9_2 ( lf_AUX_Make_Left_Linear9_1 ( make_list ( tmp [ 1 ] ) ) , arg1 , tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
+( tmp [ 6 ] = lf_AUX_Make_Left_Linear9_2 ( lf_AUX_Make_Left_Linear9_1 ( make_list ( tmp [ 1 ] ) ) , arg1 , tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Make_Left_Linear9_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }

@@ -42,8 +42,8 @@ ef2 = lookup_func ( ATreadFromString ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"if\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"then\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\"fi\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"if\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"then\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\"fi\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"AVars\"),w(\"\"),[l(\"is-result-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
@@ -74,22 +74,22 @@ FUNC_ENTRY ( lf_AUX_Substitution2_1sym , ATmakeAppl ( lf_AUX_Substitution2_1sym 
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_Substitution2_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
 FUNC_EXIT ( ( * ef2 ) ( ltmp [ 0 ] ) ) ;
 }
-tmp [ 0 ] = ( * ef10 ) ( ltmp [ 1 ] ) ;
+( tmp [ 0 ] = ( * ef10 ) ( ltmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef11sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef12sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef13sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef2sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef14sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( ( * ef8 ) ( ( * ef2 ) ( tmp [ 5 ] ) ) , ( * ef8 ) ( ( * ef2 ) ( ltmp [ 0 ] ) ) ) ) {
 FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 6 ] ) , ( * ef6 ) ( tmp [ 6 ] ) ) , lf_AUX_Substitution2_1 ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 6 ] ) ) , ( * ef9 ) ( ltmp [ 1 ] ) ) , tmp [ 6 ] ) ) ;
 }
@@ -98,7 +98,7 @@ FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 6 ] ) , ( * ef6 ) ( tmp [ 
 }
 }
 }
-arg1 = ( * ef9 ) ( ltmp [ 1 ] ) ;
+( arg1 = ( * ef9 ) ( ltmp [ 1 ] ) ) ;
 goto lbl_lf_AUX_Substitution2_1 ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Substitution2_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
 }

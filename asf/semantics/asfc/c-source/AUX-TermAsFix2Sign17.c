@@ -63,8 +63,8 @@ ef7 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-no-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-no-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef10 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef11 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"l\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
@@ -191,22 +191,22 @@ if ( check_sym ( atmp01110001111010000 , lf2sym ) ) {
 ATerm atmp011100011110100000 = arg_0 ( atmp01110001111010000 ) ;
 if ( not_empty_list ( atmp01110000100000 ) ) {
 if ( term_equal ( list_head ( atmp01110000100000 ) , make_char ( 34 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp01110000100000 ) ;
+( tmp [ 0 ] = list_tail ( atmp01110000100000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 123 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( is_single_element ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp011100011110100000 ) ) {
 if ( term_equal ( list_head ( atmp011100011110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 2 ] = list_tail ( atmp011100011110100000 ) ;
+( tmp [ 2 ] = list_tail ( atmp011100011110100000 ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 125 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 34 ) ) ) {
 if ( term_equal ( ( * ef16 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
-tmp [ 4 ] = ( * ef17 ) ( atmp0111000110 ) ;
+( tmp [ 4 ] = ( * ef17 ) ( atmp0111000110 ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 25 , char_table [ 34 ] , char_table [ 97 ] , char_table [ 116 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 115 ] , char_table [ 40 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 123 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 34 ] ) ) ) , tmp [ 4 ] ) , ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 20 , char_table [ 34 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 125 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
 }
 }

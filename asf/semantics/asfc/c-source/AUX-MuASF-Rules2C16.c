@@ -55,12 +55,10 @@ ef4 = lookup_func ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\")
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)" ) ) ;
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[l(\"listpattern2cstats\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[l(\"listpattern2cstats\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)" ) ) ;
-ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_MuASF_Rules2C16 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_MuASF_Rules2C16_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
@@ -73,41 +71,43 @@ if ( check_sym ( arg2 , lf_AUX_MuASF_Rules2C16_2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
-tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ;
-tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ;
-tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ) ;
+( tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ) ;
+( tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf4sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf6sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-tmp [ 10 ] = list_head ( tmp [ 8 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 8 ] ) ;
+( tmp [ 10 ] = list_head ( tmp [ 8 ] ) ) ;
+( tmp [ 11 ] = list_tail ( tmp [ 8 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , ef2sym ) ) {
-tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ;
+( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( check_sym ( tmp [ 12 ] , lf4sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
 if ( not_empty_list ( tmp [ 13 ] ) ) {
-tmp [ 14 ] = list_head ( tmp [ 13 ] ) ;
-tmp [ 15 ] = list_tail ( tmp [ 13 ] ) ;
+( tmp [ 14 ] = list_head ( tmp [ 13 ] ) ) ;
+( tmp [ 15 ] = list_tail ( tmp [ 13 ] ) ) ;
 if ( not_empty_list ( tmp [ 15 ] ) ) {
 if ( check_sym ( tmp [ 14 ] , ef3sym ) ) {
-tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
-tmp [ 17 ] = arg_1 ( tmp [ 14 ] ) ;
+( tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ) ;
+( tmp [ 17 ] = arg_1 ( tmp [ 14 ] ) ) ;
 if ( check_sym ( tmp [ 17 ] , lf5sym ) ) {
-tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ;
-tmp [ 19 ] = ( * ef5 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) , lf4 ( make_list ( tmp [ 15 ] ) ) , lf_AUX_MuASF_Rules2C16_1 ( cons ( make_list ( ( * ef1 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) , lf6 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 1 ] ) ) ) , arg1 , lf_AUX_MuASF_Rules2C16_2 ( make_list ( atmp20 ) ) , arg3 ) ;
+( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
+if ( not_empty_list ( tmp [ 18 ] ) ) {
+( tmp [ 19 ] = ( * ef5 ) ( ( * ef6 ) ( ) , lf4 ( make_list ( tmp [ 15 ] ) ) , lf_AUX_MuASF_Rules2C16_1 ( cons ( make_list ( ( * ef1 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) , lf6 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 1 ] ) ) ) , arg1 , lf_AUX_MuASF_Rules2C16_2 ( make_list ( atmp20 ) ) , arg3 ) ) ;
 if ( check_sym ( tmp [ 19 ] , ef4sym ) ) {
-tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ;
-tmp [ 21 ] = arg_1 ( tmp [ 19 ] ) ;
-tmp [ 22 ] = arg_2 ( tmp [ 19 ] ) ;
+( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
+( tmp [ 21 ] = arg_1 ( tmp [ 19 ] ) ) ;
+( tmp [ 22 ] = arg_2 ( tmp [ 19 ] ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( tmp [ 20 ] , tmp [ 21 ] , tmp [ 22 ] ) ) ;
+}
 }
 }
 }

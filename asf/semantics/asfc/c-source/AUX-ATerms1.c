@@ -69,9 +69,7 @@ register_prod ( ATparse ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),q
 }
 void resolve_AUX_ATerms1 ( ) {
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerms1 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerms1_13 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 CONS_ENTRY ( lf_AUX_ATerms1_13sym , ATmakeAppl ( lf_AUX_ATerms1_13sym , arg0 , arg1 , arg2 ) ) ;
@@ -115,7 +113,7 @@ CONS_EXIT ( make_nf1 ( lf_AUX_ATerms1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_ATerms1_3 ( ) {
 CONS_ENTRY ( lf_AUX_ATerms1_3sym , ATmakeAppl0 ( lf_AUX_ATerms1_3sym ) ) ;
-CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ATerms1_3sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_ATerms1_3sym ) ) ;
 }
 ATerm lf_AUX_ATerms1_2 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_AUX_ATerms1_2sym , ATmakeAppl ( lf_AUX_ATerms1_2sym , arg0 , arg1 ) ) ;

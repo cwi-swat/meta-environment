@@ -45,8 +45,8 @@ ef3 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Integers-Extended\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers-Extended\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
@@ -71,29 +71,29 @@ ATerm atmp12 = arg_2 ( arg1 ) ;
 {
 ATerm atmp13 = arg_3 ( arg1 ) ;
 if ( not_empty_list ( atmp100 ) ) {
-tmp [ 0 ] = list_head ( atmp100 ) ;
+( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 {
-tmp [ 1 ] = list_tail ( atmp100 ) ;
+( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 {
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
 {
 if ( check_sym ( tmp [ 4 ] , lf4sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( ! term_equal ( arg0 , tmp [ 2 ] ) ) {
-tmp [ 6 ] = lf_AUX_VarEnv19_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) , atmp11 , atmp12 , atmp13 ) ) ;
+( tmp [ 6 ] = lf_AUX_VarEnv19_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) , atmp11 , atmp12 , atmp13 ) ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 8 ] , ef1sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
-tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ;
-tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ;
-tmp [ 12 ] = arg_3 ( tmp [ 8 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+( tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ) ;
+( tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ) ;
+( tmp [ 12 ] = arg_3 ( tmp [ 8 ] ) ) ;
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 9 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 9 ] ) ) ;
 FUNC_EXIT ( ( * ef2 ) ( tmp [ 7 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( tmp [ 2 ] , tmp [ 3 ] , lf4 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , tmp [ 11 ] , tmp [ 12 ] ) ) ) ;
 }
 }
@@ -110,11 +110,11 @@ FUNC_EXIT ( ( * ef2 ) ( tmp [ 3 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4
 }
 else {
 if ( check_sym ( atmp13 , ef6sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp13 ) ;
+( tmp [ 0 ] = arg_0 ( atmp13 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef7sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf3sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 108 ) , cons ( make_list_char ( 102 ) , make_list ( tmp [ 2 ] ) ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( ( * ef4 ) ( arg0 , ( * ef3 ) ( lf3 ( cons ( make_list_char ( 108 ) , cons ( make_list_char ( 102 ) , make_list ( tmp [ 2 ] ) ) ) ) ) , lf4 ( make_list ( null ( ) ) ) ) ) ) , atmp11 , atmp12 , ( * ef5 ) ( atmp13 ) ) ) ) ;
 }
 }

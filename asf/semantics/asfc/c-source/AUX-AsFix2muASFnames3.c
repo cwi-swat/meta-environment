@@ -32,11 +32,11 @@ ATerm lf_AUX_AsFix2muASFnames3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2muASFnames3_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames3_1sym , arg0 ) ) ;
-tmp [ 0 ] = ( * ef2 ) ( arg0 ) ;
+( tmp [ 0 ] = ( * ef2 ) ( arg0 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ;
 }
 }

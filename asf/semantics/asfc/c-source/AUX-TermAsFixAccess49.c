@@ -61,10 +61,10 @@ ef10 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w(\
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sort\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef11 = lookup_func ( ATreadFromString ( "prod(id(\"AsFix-Constructors\"),w(\"\"),[ql(\"ql\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"AsFix-Constructors\"),w(\"\"),[ql(\"ql\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
-ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef12 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef13 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -316,86 +316,86 @@ if ( check_sym ( atmp0111111111010000 , lf2sym ) ) {
 ATerm atmp01111111110100000 = arg_0 ( atmp0111111111010000 ) ;
 if ( not_empty_list ( atmp010100000 ) ) {
 if ( term_equal ( list_head ( atmp010100000 ) , make_char ( 34 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp010100000 ) ;
+( tmp [ 0 ] = list_tail ( atmp010100000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 123 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( is_single_element ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp0110100000 ) ) {
 if ( term_equal ( list_head ( atmp0110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 2 ] = list_tail ( atmp0110100000 ) ;
+( tmp [ 2 ] = list_tail ( atmp0110100000 ) ) ;
 if ( is_single_element ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp01110100000 ) ) {
 if ( term_equal ( list_head ( atmp01110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 3 ] = list_tail ( atmp01110100000 ) ;
+( tmp [ 3 ] = list_tail ( atmp01110100000 ) ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 67 ) ) ) {
-tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 111 ) ) ) {
-tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 110 ) ) ) {
-tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
+( tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 100 ) ) ) {
-tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 105 ) ) ) {
-tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ;
+( tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 116 ) ) ) {
-tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
+( tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ) ;
 if ( not_empty_list ( tmp [ 9 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 105 ) ) ) {
-tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ;
+( tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 111 ) ) ) {
-tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ;
+( tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 110 ) ) ) {
-tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ;
+( tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ) ;
 if ( is_single_element ( tmp [ 12 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp011110100000 ) ) {
 if ( term_equal ( list_head ( atmp011110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 13 ] = list_tail ( atmp011110100000 ) ;
+( tmp [ 13 ] = list_tail ( atmp011110100000 ) ) ;
 if ( is_single_element ( tmp [ 13 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp0111110100000 ) ) {
 if ( term_equal ( list_head ( atmp0111110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 14 ] = list_tail ( atmp0111110100000 ) ;
+( tmp [ 14 ] = list_tail ( atmp0111110100000 ) ) ;
 if ( not_empty_list ( tmp [ 14 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 44 ) ) ) {
-tmp [ 15 ] = list_tail ( tmp [ 14 ] ) ;
+( tmp [ 15 ] = list_tail ( tmp [ 14 ] ) ) ;
 if ( is_single_element ( tmp [ 15 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 15 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp01111110100000 ) ) {
 if ( term_equal ( list_head ( atmp01111110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 16 ] = list_tail ( atmp01111110100000 ) ;
+( tmp [ 16 ] = list_tail ( atmp01111110100000 ) ) ;
 if ( is_single_element ( tmp [ 16 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 16 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp011111110100000 ) ) {
 if ( term_equal ( list_head ( atmp011111110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 17 ] = list_tail ( atmp011111110100000 ) ;
+( tmp [ 17 ] = list_tail ( atmp011111110100000 ) ) ;
 if ( not_empty_list ( tmp [ 17 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 17 ] ) , make_char ( 125 ) ) ) {
-tmp [ 18 ] = list_tail ( tmp [ 17 ] ) ;
+( tmp [ 18 ] = list_tail ( tmp [ 17 ] ) ) ;
 if ( is_single_element ( tmp [ 18 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp0111111110100000 ) ) {
 if ( term_equal ( list_head ( atmp0111111110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 19 ] = list_tail ( atmp0111111110100000 ) ;
+( tmp [ 19 ] = list_tail ( atmp0111111110100000 ) ) ;
 if ( is_single_element ( tmp [ 19 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 19 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp01111111110100000 ) ) {
 if ( term_equal ( list_head ( atmp01111111110100000 ) , make_char ( 34 ) ) ) {
-tmp [ 20 ] = list_tail ( atmp01111111110100000 ) ;
+( tmp [ 20 ] = list_tail ( atmp01111111110100000 ) ) ;
 if ( not_empty_list ( tmp [ 20 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 20 ] ) , make_char ( 42 ) ) ) {
-tmp [ 21 ] = list_tail ( tmp [ 20 ] ) ;
+( tmp [ 21 ] = list_tail ( tmp [ 20 ] ) ) ;
 if ( is_single_element ( tmp [ 21 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef12 ) ( ) ) ;

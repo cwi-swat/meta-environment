@@ -24,11 +24,7 @@ register_prod ( ATparse ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"cons2lit\"),w(\"
 }
 void resolve_AUX_ParseTrees1 ( ) {
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_ParseTrees1 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ParseTrees1_4 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_ParseTrees1_4sym , ATmakeAppl ( lf_AUX_ParseTrees1_4sym , arg0 ) ) ;
@@ -40,10 +36,10 @@ CONS_EXIT ( make_nf1 ( lf_AUX_ParseTrees1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_ParseTrees1_2 ( ) {
 CONS_ENTRY ( lf_AUX_ParseTrees1_2sym , ATmakeAppl0 ( lf_AUX_ParseTrees1_2sym ) ) ;
-CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ParseTrees1_2sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_ParseTrees1_2sym ) ) ;
 }
 ATerm lf_AUX_ParseTrees1_1 ( ) {
 CONS_ENTRY ( lf_AUX_ParseTrees1_1sym , ATmakeAppl0 ( lf_AUX_ParseTrees1_1sym ) ) ;
-CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ParseTrees1_1sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_ParseTrees1_1sym ) ) ;
 }
 

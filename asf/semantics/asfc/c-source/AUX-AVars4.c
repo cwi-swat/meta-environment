@@ -60,16 +60,16 @@ if ( check_sym ( atmp0000 , lf2sym ) ) {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( term_equal ( list_head ( atmp00000 ) , make_char ( 65 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00000 ) ;
+( tmp [ 0 ] = list_tail ( atmp00000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 78 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 97 ) ) ) {
-tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 109 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 78 ] , char_table [ 97 ] , char_table [ 109 ] , char_table [ 101 ] ) ) ) ) ;
@@ -104,16 +104,16 @@ ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 ATerm atmp001 = arg_1 ( atmp00 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( term_equal ( list_head ( atmp00000 ) , make_char ( 65 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00000 ) ;
+( tmp [ 0 ] = list_tail ( atmp00000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 78 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 97 ) ) ) {
-tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 109 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 78 ] , char_table [ 97 ] , char_table [ 109 ] , char_table [ 101 ] ) ) ) ) ;
@@ -147,16 +147,16 @@ if ( check_sym ( atmp0000 , lf2sym ) ) {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( term_equal ( list_head ( atmp00000 ) , make_char ( 65 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00000 ) ;
+( tmp [ 0 ] = list_tail ( atmp00000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 78 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 97 ) ) ) {
-tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 109 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 78 ] , char_table [ 97 ] , char_table [ 109 ] , char_table [ 101 ] ) ) ) ) ;
@@ -191,16 +191,16 @@ ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 ATerm atmp001 = arg_1 ( atmp00 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( term_equal ( list_head ( atmp00000 ) , make_char ( 65 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00000 ) ;
+( tmp [ 0 ] = list_tail ( atmp00000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 78 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 97 ) ) ) {
-tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 109 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 78 ] , char_table [ 97 ] , char_table [ 109 ] , char_table [ 101 ] ) ) ) ) ;

@@ -61,40 +61,36 @@ ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
 void init_AUX_AsFix2muASFnames4 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_AsFix2muASFnames4_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2muASFnames4_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames4_1sym , arg0 ) ) ;
-tmp [ 0 ] = ( * ef3 ) ( arg0 ) ;
+( tmp [ 0 ] = ( * ef3 ) ( arg0 ) ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
-tmp [ 1 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , ( constant1 ? constant1 : ( constant1 = lf3 ( make_list ( ( * ef7 ) ( ) ) ) ) ) ) ) ;
+( tmp [ 1 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , lf3 ( make_list ( ( * ef7 ) ( ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef8sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef2 ) ( lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ;
 }
 }
 }
-if ( term_equal ( tmp [ 0 ] , ( constant2 ? constant2 : ( constant2 = ( * ef9 ) ( ) ) ) ) ) {
-tmp [ 1 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , ( constant1 ? constant1 : ( constant1 = lf3 ( make_list ( ( * ef7 ) ( ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef9 ) ( ) ) ) ) ) {
+( tmp [ 1 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , lf3 ( make_list ( ( * ef7 ) ( ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef8sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , ( constant3 ? constant3 : ( constant3 = lf3 ( make_list ( ( * ef10 ) ( ) ) ) ) ) ) ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = ( * ef5 ) ( ( * ef6 ) ( arg0 , lf3 ( make_list ( ( * ef10 ) ( ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef8sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf2sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef1 ) ( ( * ef1 ) ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef2 ) ( lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 44 ] , char_table [ 34 ] ) ) ) ) , ( * ef2 ) ( lf2 ( make_list ( tmp [ 6 ] ) ) ) ) , ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ;
 }
 }

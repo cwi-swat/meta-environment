@@ -41,7 +41,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-tmp [ 0 ] = ( * ef3 ) ( atmp000 ) ;
+( tmp [ 0 ] = ( * ef3 ) ( atmp000 ) ) ;
 FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
@@ -52,8 +52,8 @@ if ( check_sym ( atmp00 , ef4sym ) ) {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 {
 ATerm atmp001 = arg_1 ( atmp00 ) ;
-tmp [ 0 ] = ( * ef3 ) ( atmp000 ) ;
-tmp [ 1 ] = lf_AUX_RemAsFixWspace7_1 ( ( * ef1 ) ( atmp001 ) ) ;
+( tmp [ 0 ] = ( * ef3 ) ( atmp000 ) ) ;
+( tmp [ 1 ] = lf_AUX_RemAsFixWspace7_1 ( ( * ef1 ) ( atmp001 ) ) ) ;
 FUNC_EXIT ( ( * ef5 ) ( tmp [ 0 ] , tmp [ 1 ] ) ) ;
 }
 }

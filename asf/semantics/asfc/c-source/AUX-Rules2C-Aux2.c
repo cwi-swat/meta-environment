@@ -39,14 +39,14 @@ if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
-tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] ) ;
-tmp [ 3 ] = lf_AUX_Rules2C_Aux2_2 ( lf_AUX_Rules2C_Aux2_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = lf_AUX_Rules2C_Aux2_2 ( lf_AUX_Rules2C_Aux2_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef1sym ) ) {
-tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }

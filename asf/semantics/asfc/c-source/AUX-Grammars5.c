@@ -57,16 +57,16 @@ if ( ! not_empty_list ( atmp000 ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 else {
-tmp [ 0 ] = list_head ( atmp000 ) ;
-tmp [ 1 ] = list_tail ( atmp000 ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) ) ) , lf_AUX_Grammars5_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }

@@ -76,8 +76,8 @@ FUNC_ENTRY ( lf_AUX_ParseTrees13_2sym , ATmakeAppl ( lf_AUX_ParseTrees13_2sym , 
 {
 ATerm ltmp [ 3 ] ;
 lbl_lf_AUX_ParseTrees13_2 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-ltmp [ 2 ] = arg2 ;
+( ltmp [ 1 ] = arg1 ) ;
+( ltmp [ 2 ] = arg2 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -87,11 +87,11 @@ if ( check_sym ( ltmp [ 1 ] , lf_AUX_ParseTrees13_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp10 ) ) {
-tmp [ 0 ] = list_head ( atmp10 ) ;
-tmp [ 1 ] = ( * ef10 ) ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+( tmp [ 1 ] = ( * ef10 ) ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( atmp00 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp01 ) , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 0 ] , ( * ef5 ) ( tmp [ 3 ] ) , ( * ef6 ) ( ( * ef7 ) ( ( * ef9 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) , ltmp [ 2 ] ) ) ) ) ) ;
 }
 }
@@ -111,11 +111,11 @@ if ( check_sym ( ltmp [ 1 ] , lf_AUX_ParseTrees13_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp10 ) ) {
-tmp [ 0 ] = list_head ( atmp10 ) ;
-tmp [ 1 ] = lf_AUX_ParseTrees13_2 ( ( * ef1 ) ( atmp00 , atmp01 ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) , ltmp [ 2 ] ) ;
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+( tmp [ 1 ] = lf_AUX_ParseTrees13_2 ( ( * ef1 ) ( atmp00 , atmp01 ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) , ltmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef11 ) ( atmp00 , tmp [ 3 ] , atmp02 ) ) ;
 }
 }
@@ -129,11 +129,11 @@ if ( check_sym ( ltmp [ 1 ] , lf_AUX_ParseTrees13_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-tmp [ 0 ] = list_head ( atmp10 ) ;
-tmp [ 1 ] = list_tail ( atmp10 ) ;
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-arg1 = lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ;
-arg2 = lf_AUX_ParseTrees13_2 ( ( * ef12 ) ( ltmp [ 0 ] , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 1 ] ) ) , ltmp [ 2 ] ) ;
+( arg1 = lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ) ;
+( arg2 = lf_AUX_ParseTrees13_2 ( ( * ef12 ) ( ltmp [ 0 ] , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 1 ] ) ) , ltmp [ 2 ] ) ) ;
 goto lbl_lf_AUX_ParseTrees13_2 ;
 }
 }

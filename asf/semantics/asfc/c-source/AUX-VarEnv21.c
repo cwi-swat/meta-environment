@@ -41,7 +41,7 @@ FUNC_ENTRY ( lf_AUX_VarEnv21_2sym , ATmakeAppl ( lf_AUX_VarEnv21_2sym , arg0 , a
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_VarEnv21_2 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -64,19 +64,19 @@ if ( check_sym ( ltmp [ 1 ] , lf_AUX_VarEnv21_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-tmp [ 0 ] = list_head ( atmp10 ) ;
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 {
-tmp [ 1 ] = list_tail ( atmp10 ) ;
+( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
 {
 if ( check_sym ( tmp [ 4 ] , lf4sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( ! term_equal ( ltmp [ 0 ] , tmp [ 2 ] ) ) {
-arg1 = lf_AUX_VarEnv21_1 ( make_list ( tmp [ 1 ] ) ) ;
+( arg1 = lf_AUX_VarEnv21_1 ( make_list ( tmp [ 1 ] ) ) ) ;
 goto lbl_lf_AUX_VarEnv21_2 ;
 }
 else {

@@ -90,16 +90,16 @@ ATerm atmp1001 = arg_1 ( atmp100 ) ;
 if ( check_sym ( atmp1001 , ef5sym ) ) {
 {
 ATerm atmp10010 = arg_0 ( atmp1001 ) ;
-tmp [ 0 ] = ( * ef8 ) ( arg0 ) ;
+( tmp [ 0 ] = ( * ef8 ) ( arg0 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef4sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef5sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( atmp1000 , tmp [ 3 ] ) ) {
 FUNC_EXIT ( ( * ef6 ) ( arg1 , ( * ef7 ) ( arg0 ) ) ) ;
 }

@@ -47,8 +47,8 @@ if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux37_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) ) , lf_AUX_Rules2C_Aux37_2 ( lf_AUX_Rules2C_Aux37_1 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 }
 else {

@@ -67,8 +67,8 @@ ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Substitution\"),w(\"\"),[l(\"a
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Substitution\"),w(\"\"),[l(\"assign\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AVar\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Substitution\"),w(\"\"),[l(\"undefined\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AVar\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Substitution\"),w(\"\"),[l(\"undefined\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AVar\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef10 = lookup_func ( ATreadFromString ( "prod(id(\"ATypes\"),w(\"\"),[l(\"require-type\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATypes\"),w(\"\"),[l(\"require-type\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef11 = lookup_func ( ATreadFromString ( "prod(id(\"ATypes\"),w(\"\"),[l(\"type-of\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
@@ -103,8 +103,8 @@ FUNC_ENTRY ( lf_AUX_Matching2_1sym , ATmakeAppl ( lf_AUX_Matching2_1sym , arg0 ,
 {
 ATerm ltmp [ 3 ] ;
 lbl_lf_AUX_Matching2_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-ltmp [ 2 ] = arg2 ;
+( ltmp [ 1 ] = arg1 ) ;
+( ltmp [ 2 ] = arg2 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -134,24 +134,24 @@ if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( term_equal ( list_head ( atmp00000 ) , make_char ( 65 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00000 ) ;
+( tmp [ 0 ] = list_tail ( atmp00000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 73 ) ) ) {
-tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 110 ) ) ) {
-tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( is_single_element ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 116 ) ) ) {
 if ( not_empty_list ( atmp10000 ) ) {
 if ( term_equal ( list_head ( atmp10000 ) , make_char ( 65 ) ) ) {
-tmp [ 3 ] = list_tail ( atmp10000 ) ;
+( tmp [ 3 ] = list_tail ( atmp10000 ) ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 73 ) ) ) {
-tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
-tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ) ;
 if ( is_single_element ( tmp [ 5 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 116 ) ) ) {
 FUNC_EXIT ( ltmp [ 2 ] ) ;
@@ -247,8 +247,8 @@ if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( term_equal ( atmp00 , atmp10 ) ) {
-arg0 = ( * ef14 ) ( ( * ef15 ) ( atmp01 ) ) ;
-arg1 = ( * ef14 ) ( ( * ef15 ) ( atmp11 ) ) ;
+( arg0 = ( * ef14 ) ( ( * ef15 ) ( atmp01 ) ) ) ;
+( arg1 = ( * ef14 ) ( ( * ef15 ) ( atmp11 ) ) ) ;
 goto lbl_lf_AUX_Matching2_1 ;
 }
 }
@@ -291,12 +291,12 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( check_sym ( ltmp [ 2 ] , ef4sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-tmp [ 0 ] = lf_AUX_Matching2_1 ( ( * ef18 ) ( ( * ef15 ) ( atmp000 ) ) , ( * ef18 ) ( ( * ef15 ) ( atmp100 ) ) , ltmp [ 2 ] ) ;
+( tmp [ 0 ] = lf_AUX_Matching2_1 ( ( * ef18 ) ( ( * ef15 ) ( atmp000 ) ) , ( * ef18 ) ( ( * ef15 ) ( atmp100 ) ) , ltmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-arg0 = ( * ef14 ) ( ( * ef17 ) ( ( * ef15 ) ( atmp000 ) ) ) ;
-arg1 = ( * ef14 ) ( ( * ef17 ) ( ( * ef15 ) ( atmp100 ) ) ) ;
-arg2 = ( * ef4 ) ( tmp [ 1 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( arg0 = ( * ef14 ) ( ( * ef17 ) ( ( * ef15 ) ( atmp000 ) ) ) ) ;
+( arg1 = ( * ef14 ) ( ( * ef17 ) ( ( * ef15 ) ( atmp100 ) ) ) ) ;
+( arg2 = ( * ef4 ) ( tmp [ 1 ] ) ) ;
 goto lbl_lf_AUX_Matching2_1 ;
 }
 }

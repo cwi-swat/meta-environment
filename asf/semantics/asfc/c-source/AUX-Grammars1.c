@@ -99,15 +99,7 @@ register_prod ( ATparse ( "prod(id(\"Grammars\"),w(\"\"),[ql(\"{\"),w(\"\"),iter
 }
 void resolve_AUX_Grammars1 ( ) {
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
 void init_AUX_Grammars1 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_Grammars1_18 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_Grammars1_18sym , ATmakeAppl ( lf_AUX_Grammars1_18sym , arg0 ) ) ;
@@ -119,7 +111,7 @@ CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_19sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_17 ( ) {
 CONS_ENTRY ( lf_AUX_Grammars1_17sym , ATmakeAppl0 ( lf_AUX_Grammars1_17sym ) ) ;
-CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Grammars1_17sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Grammars1_17sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_16 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_AUX_Grammars1_16sym , ATmakeAppl ( lf_AUX_Grammars1_16sym , arg0 , arg1 ) ) ;
@@ -175,14 +167,14 @@ CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_3 ( ) {
 CONS_ENTRY ( lf_AUX_Grammars1_3sym , ATmakeAppl0 ( lf_AUX_Grammars1_3sym ) ) ;
-CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Grammars1_3sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Grammars1_3sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_2 ( ) {
 CONS_ENTRY ( lf_AUX_Grammars1_2sym , ATmakeAppl0 ( lf_AUX_Grammars1_2sym ) ) ;
-CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_Grammars1_2sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Grammars1_2sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_1 ( ) {
 CONS_ENTRY ( lf_AUX_Grammars1_1sym , ATmakeAppl0 ( lf_AUX_Grammars1_1sym ) ) ;
-CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_Grammars1_1sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Grammars1_1sym ) ) ;
 }
 

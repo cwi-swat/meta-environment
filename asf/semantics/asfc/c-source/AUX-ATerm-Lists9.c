@@ -42,16 +42,14 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Lists9 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Lists9_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_ATerm_Lists9_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists9_1sym , arg0 , arg1 ) ) ;
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_ATerm_Lists9_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -79,8 +77,8 @@ FUNC_EXIT ( ( * ef5 ) ( ltmp [ 0 ] ) ) ;
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( ! term_equal ( atmp100 , ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) {
-arg0 = ( * ef6 ) ( ltmp [ 0 ] ) ;
-arg1 = ( * ef7 ) ( ltmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+( arg0 = ( * ef6 ) ( ltmp [ 0 ] ) ) ;
+( arg1 = ( * ef7 ) ( ltmp [ 1 ] , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ;
 goto lbl_lf_AUX_ATerm_Lists9_1 ;
 }
 }

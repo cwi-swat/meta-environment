@@ -37,33 +37,33 @@ if ( check_sym ( arg0 , lf_AUX_Normalize_Conds7_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 ) ;
+( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
-tmp [ 5 ] = arg_2 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
+( tmp [ 5 ] = arg_2 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_Normalize_Conds7_1sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( ! not_empty_list ( tmp [ 6 ] ) ) {
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-tmp [ 8 ] = lf_AUX_Normalize_Conds7_2 ( lf_AUX_Normalize_Conds7_1 ( make_list ( tmp [ 1 ] ) ) , tmp [ 5 ] ) ;
+( tmp [ 8 ] = lf_AUX_Normalize_Conds7_2 ( lf_AUX_Normalize_Conds7_1 ( make_list ( tmp [ 1 ] ) ) , tmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
-tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ;
-tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+( tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ) ;
+( tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ) ;
 if ( check_sym ( tmp [ 9 ] , lf3sym ) ) {
-tmp [ 12 ] = arg_0 ( tmp [ 9 ] ) ;
+( tmp [ 12 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , lf_AUX_Normalize_Conds7_1sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( ! not_empty_list ( tmp [ 12 ] ) ) {
 if ( not_empty_list ( tmp [ 13 ] ) ) {
 FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Normalize_Conds7_1 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 11 ] ) ) ;

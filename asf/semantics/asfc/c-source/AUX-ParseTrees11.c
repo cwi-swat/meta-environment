@@ -32,8 +32,8 @@ FUNC_ENTRY ( lf_AUX_ParseTrees11_1sym , ATmakeAppl ( lf_AUX_ParseTrees11_1sym , 
 {
 ATerm ltmp [ 3 ] ;
 lbl_lf_AUX_ParseTrees11_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-ltmp [ 2 ] = arg2 ;
+( ltmp [ 1 ] = arg1 ) ;
+( ltmp [ 2 ] = arg2 ) ;
 if ( term_equal ( ( * ef1 ) ( ltmp [ 1 ] ) , ( * ef2 ) ( ltmp [ 0 ] ) ) ) {
 FUNC_EXIT ( ( * ef1 ) ( ltmp [ 2 ] ) ) ;
 }
@@ -53,8 +53,8 @@ if ( check_sym ( atmp20 , ef4sym ) ) {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
 {
 ATerm atmp201 = arg_1 ( atmp20 ) ;
-arg1 = ( * ef3 ) ( atmp101 ) ;
-arg2 = ( * ef3 ) ( atmp201 ) ;
+( arg1 = ( * ef3 ) ( atmp101 ) ) ;
+( arg2 = ( * ef3 ) ( atmp201 ) ) ;
 goto lbl_lf_AUX_ParseTrees11_1 ;
 }
 }

@@ -83,7 +83,7 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( is_single_element ( atmp000 ) ) {
-tmp [ 0 ] = list_head ( atmp000 ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 67 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 99 ) ) ) ) ) ;
 }
@@ -164,21 +164,21 @@ FUNC_EXIT_CONST ( constant25 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 98 ) ) 
 }
 }
 if ( not_empty_list ( atmp000 ) ) {
-tmp [ 0 ] = list_head ( atmp000 ) ;
-tmp [ 1 ] = list_tail ( atmp000 ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-tmp [ 2 ] = lf_AUX_AsFix2muASFnames10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+( tmp [ 2 ] = lf_AUX_AsFix2muASFnames10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
-tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( is_single_element ( tmp [ 4 ] ) ) {
-tmp [ 5 ] = list_head ( tmp [ 4 ] ) ;
-tmp [ 6 ] = lf_AUX_AsFix2muASFnames10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
+( tmp [ 6 ] = lf_AUX_AsFix2muASFnames10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
+( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ;
 }
@@ -200,7 +200,7 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( is_single_element ( atmp000 ) ) {
-tmp [ 0 ] = list_head ( atmp000 ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }

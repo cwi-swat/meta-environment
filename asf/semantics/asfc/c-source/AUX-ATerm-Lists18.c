@@ -49,7 +49,7 @@ FUNC_EXIT ( arg1 ) ;
 if ( check_sym ( arg2 , ef2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-tmp [ 0 ] = lf_AUX_ATerm_Lists18_1 ( arg0 , arg1 , ( * ef7 ) ( arg2 ) ) ;
+( tmp [ 0 ] = lf_AUX_ATerm_Lists18_1 ( arg0 , arg1 , ( * ef7 ) ( arg2 ) ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( arg0 , ( * ef4 ) ( ( * ef5 ) ( arg2 ) , ( * ef6 ) ( tmp [ 0 ] ) ) ) ) ;
 }
 }

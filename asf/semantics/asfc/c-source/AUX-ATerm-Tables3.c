@@ -56,23 +56,23 @@ FUNC_ENTRY ( lf_AUX_ATerm_Tables3_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables3_1sym 
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_ATerm_Tables3_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
 }
 if ( check_sym ( ltmp [ 0 ] , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-tmp [ 0 ] = ( * ef5 ) ( ltmp [ 0 ] ) ;
+( tmp [ 0 ] = ( * ef5 ) ( ltmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef4sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef7sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef8sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( ltmp [ 1 ] , tmp [ 3 ] ) ) {
 FUNC_EXIT ( tmp [ 5 ] ) ;
 }
@@ -85,7 +85,7 @@ FUNC_EXIT ( tmp [ 5 ] ) ;
 if ( check_sym ( ltmp [ 0 ] , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-arg0 = ( * ef9 ) ( ltmp [ 0 ] ) ;
+( arg0 = ( * ef9 ) ( ltmp [ 0 ] ) ) ;
 goto lbl_lf_AUX_ATerm_Tables3_1 ;
 }
 }

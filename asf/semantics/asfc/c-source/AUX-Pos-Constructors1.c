@@ -14,18 +14,14 @@ register_prod ( ATparse ( "prod(id(\"Pos-Constructors\"),w(\"\"),[ql(\"pos\")],w
 }
 void resolve_AUX_Pos_Constructors1 ( ) {
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Pos_Constructors1 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Pos_Constructors1_2 ( ) {
 CONS_ENTRY ( lf_AUX_Pos_Constructors1_2sym , ATmakeAppl0 ( lf_AUX_Pos_Constructors1_2sym ) ) ;
-CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Pos_Constructors1_2sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Pos_Constructors1_2sym ) ) ;
 }
 ATerm lf_AUX_Pos_Constructors1_1 ( ) {
 CONS_ENTRY ( lf_AUX_Pos_Constructors1_1sym , ATmakeAppl0 ( lf_AUX_Pos_Constructors1_1sym ) ) ;
-CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Pos_Constructors1_1sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Pos_Constructors1_1sym ) ) ;
 }
 

@@ -41,13 +41,13 @@ if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux31_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 116 ) , cons ( make_list_char ( 109 ) , cons ( make_list_char ( 112 ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ) ;
 }
@@ -56,21 +56,21 @@ FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_ch
 }
 }
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_prefix ( atmp00 ) ;
+( tmp [ 0 ] = list_prefix ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 1 ] = list_last ( atmp00 ) ;
+( tmp [ 1 ] = list_last ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
-tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-tmp [ 5 ] = lf_AUX_Rules2C_Aux31_2 ( lf_AUX_Rules2C_Aux31_1 ( make_list ( tmp [ 0 ] ) ) ) ;
+( tmp [ 5 ] = lf_AUX_Rules2C_Aux31_2 ( lf_AUX_Rules2C_Aux31_1 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef3sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 6 ] , lf3sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
 FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 4 ] ) ) ) ) ) ;
 }

@@ -43,10 +43,8 @@ ef7 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"re
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"rest\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_ATerm_Lists8 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ATerm_Lists8_1 ( ATerm arg0 ) {
 {
@@ -58,9 +56,9 @@ FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_cha
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-tmp [ 0 ] = ( * ef5 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf_AUX_ATerm_Lists8_1 ( ( * ef7 ) ( arg0 ) ) ) ) ;
+( tmp [ 0 ] = ( * ef5 ) ( ( * ef6 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) , ( * ef6 ) ( lf_AUX_ATerm_Lists8_1 ( ( * ef7 ) ( arg0 ) ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 }

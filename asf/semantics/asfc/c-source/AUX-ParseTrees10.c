@@ -46,17 +46,15 @@ ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[s
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ParseTrees10 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ParseTrees10_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 FUNC_ENTRY ( lf_AUX_ParseTrees10_1sym , ATmakeAppl ( lf_AUX_ParseTrees10_1sym , arg0 , arg1 , arg2 ) ) ;
 {
 ATerm ltmp [ 3 ] ;
 lbl_lf_AUX_ParseTrees10_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-ltmp [ 2 ] = arg2 ;
+( ltmp [ 1 ] = arg1 ) ;
+( ltmp [ 2 ] = arg2 ) ;
 if ( check_sym ( ltmp [ 2 ] , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
@@ -84,8 +82,8 @@ ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , ef2sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-arg1 = ( * ef5 ) ( atmp101 ) ;
-arg2 = ( * ef7 ) ( ltmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ( * ef2 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+( arg1 = ( * ef5 ) ( atmp101 ) ) ;
+( arg2 = ( * ef7 ) ( ltmp [ 2 ] , ( * ef1 ) ( ( * ef2 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ;
 goto lbl_lf_AUX_ParseTrees10_1 ;
 }
 }

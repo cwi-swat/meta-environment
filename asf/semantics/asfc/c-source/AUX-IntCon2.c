@@ -28,9 +28,9 @@ if ( check_sym ( ltmp [ 0 ] , lf_AUX_IntCon2_1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
 if ( term_equal ( list_head ( atmp00 ) , make_char ( 48 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-arg0 = lf_AUX_IntCon2_1 ( make_list ( tmp [ 0 ] ) ) ;
+( arg0 = lf_AUX_IntCon2_1 ( make_list ( tmp [ 0 ] ) ) ) ;
 goto lbl_lf_AUX_IntCon2_2 ;
 }
 }

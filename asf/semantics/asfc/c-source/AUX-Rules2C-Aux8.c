@@ -38,19 +38,19 @@ if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux8_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
-tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ;
-tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ;
-tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ) ;
+( tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ) ;
+( tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf4sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ) ;
 FUNC_EXIT ( tmp [ 7 ] ) ;
 }
 }

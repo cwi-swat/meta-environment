@@ -95,7 +95,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( ! term_equal ( atmp00 , ( * ef6 ) ( ) ) ) {
-tmp [ 0 ] = ( * ef10 ) ( ( * ef3 ) ( atmp01 ) ) ;
+( tmp [ 0 ] = ( * ef10 ) ( ( * ef3 ) ( atmp01 ) ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp00 , ( * ef8 ) ( ( * ef9 ) ( tmp [ 0 ] ) ) ) ) ) ) ;
 }
 }

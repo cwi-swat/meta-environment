@@ -60,9 +60,9 @@ ATerm atmp30 = arg_0 ( arg3 ) ;
 if ( check_sym ( arg4 , ef4sym ) ) {
 {
 ATerm atmp40 = arg_0 ( arg4 ) ;
-tmp [ 0 ] = ( * ef8 ) ( arg3 ) ;
-tmp [ 1 ] = ( * ef8 ) ( arg4 ) ;
-tmp [ 2 ] = lf_AUX_ATerm_Lists20_1 ( arg0 , arg1 , arg2 , ( * ef9 ) ( arg3 ) , ( * ef9 ) ( arg4 ) ) ;
+( tmp [ 0 ] = ( * ef8 ) ( arg3 ) ) ;
+( tmp [ 1 ] = ( * ef8 ) ( arg4 ) ) ;
+( tmp [ 2 ] = lf_AUX_ATerm_Lists20_1 ( arg0 , arg1 , arg2 , ( * ef9 ) ( arg3 ) , ( * ef9 ) ( arg4 ) ) ) ;
 FUNC_EXIT ( ( * ef5 ) ( arg0 , ( * ef6 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] , ( * ef7 ) ( tmp [ 2 ] ) ) ) ) ) ;
 }
 }

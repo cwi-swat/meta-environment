@@ -44,51 +44,51 @@ if ( check_sym ( arg1 , lf_AUX_Rules2C_Aux14_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-tmp [ 0 ] = list_head ( atmp10 ) ;
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 {
-tmp [ 1 ] = list_tail ( atmp10 ) ;
+( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
-tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ;
-tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ;
-tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = arg_3 ( tmp [ 0 ] ) ) ;
+( tmp [ 6 ] = arg_4 ( tmp [ 0 ] ) ) ;
+( tmp [ 7 ] = arg_5 ( tmp [ 0 ] ) ) ;
 {
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 8 ] = arg_0 ( tmp [ 2 ] ) ) ;
 {
 if ( check_sym ( tmp [ 3 ] , lf4sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ) ;
 {
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-tmp [ 10 ] = list_head ( tmp [ 8 ] ) ;
+( tmp [ 10 ] = list_head ( tmp [ 8 ] ) ) ;
 {
-tmp [ 11 ] = list_tail ( tmp [ 8 ] ) ;
+( tmp [ 11 ] = list_tail ( tmp [ 8 ] ) ) ;
 if ( ! term_equal ( arg0 , tmp [ 10 ] ) ) {
-tmp [ 12 ] = lf_AUX_Rules2C_Aux14_2 ( arg0 , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+( tmp [ 12 ] = lf_AUX_Rules2C_Aux14_2 ( arg0 , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 12 ] , ef1sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
-tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
+( tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ) ;
 if ( check_sym ( tmp [ 13 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
-tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ;
+( tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( check_sym ( tmp [ 14 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
-tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
+( tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 15 ] ) ) , lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 16 ] ) ) ) ) ) ;
 }
 }
 }
 }
 else {
-tmp [ 12 ] = lf_AUX_Rules2C_Aux14_2 ( arg0 , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+( tmp [ 12 ] = lf_AUX_Rules2C_Aux14_2 ( arg0 , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 12 ] , ef1sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
-tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
+( tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ) ;
 if ( check_sym ( tmp [ 13 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
-tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ;
+( tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( check_sym ( tmp [ 14 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
-tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
+( tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( arg0 ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 15 ] ) ) ) , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 16 ] ) ) ) ) ;
 }
 }

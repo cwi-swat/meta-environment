@@ -37,29 +37,29 @@ if ( check_sym ( arg0 , lf_AUX_Normalize_Conds14_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
-tmp [ 1 ] = list_tail ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ;
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
-tmp [ 5 ] = arg_2 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
+( tmp [ 5 ] = arg_2 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf_AUX_Normalize_Conds14_1sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
-tmp [ 8 ] = list_head ( tmp [ 6 ] ) ;
-tmp [ 9 ] = lf_AUX_Normalize_Conds14_2 ( lf_AUX_Normalize_Conds14_1 ( make_list ( tmp [ 1 ] ) ) , tmp [ 5 ] ) ;
+( tmp [ 8 ] = list_head ( tmp [ 6 ] ) ) ;
+( tmp [ 9 ] = lf_AUX_Normalize_Conds14_2 ( lf_AUX_Normalize_Conds14_1 ( make_list ( tmp [ 1 ] ) ) , tmp [ 5 ] ) ) ;
 if ( check_sym ( tmp [ 9 ] , ef1sym ) ) {
-tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
-tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ;
-tmp [ 12 ] = arg_2 ( tmp [ 9 ] ) ;
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
+( tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ) ;
+( tmp [ 12 ] = arg_2 ( tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , lf_AUX_Normalize_Conds14_1sym ) ) {
-tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ;
+( tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , lf3sym ) ) {
-tmp [ 14 ] = arg_0 ( tmp [ 11 ] ) ;
+( tmp [ 14 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( not_empty_list ( tmp [ 13 ] ) ) {
 FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Normalize_Conds14_1 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 13 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 14 ] ) ) ) , tmp [ 12 ] ) ) ;
 }
@@ -73,7 +73,7 @@ FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Normalize_Conds14_1 ( cons ( make_list ( tmp [ 8 
 }
 }
 if ( is_single_element ( atmp00 ) ) {
-tmp [ 0 ] = list_head ( atmp00 ) ;
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 }

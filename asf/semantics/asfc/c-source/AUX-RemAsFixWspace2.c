@@ -31,10 +31,10 @@ ATerm lf_AUX_RemAsFixWspace2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_RemAsFixWspace2_1sym , ATmakeAppl ( lf_AUX_RemAsFixWspace2_1sym , arg0 ) ) ;
-tmp [ 0 ] = ( * ef1 ) ( arg0 ) ;
-tmp [ 1 ] = ( * ef2 ) ( ( * ef3 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 0 ] = ( * ef1 ) ( arg0 ) ) ;
+( tmp [ 1 ] = ( * ef2 ) ( ( * ef3 ) ( tmp [ 0 ] ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef4sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( tmp [ 2 ] ) ;
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_RemAsFixWspace2_1sym , arg0 ) ) ;

@@ -45,9 +45,7 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AF
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"fail\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"fail\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerms2 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerms2_1 ( ATerm arg0 ) {
 {
@@ -75,18 +73,18 @@ ATerm atmp01001 = arg_1 ( atmp0100 ) ;
 if ( check_sym ( atmp01001 , ef4sym ) ) {
 {
 ATerm atmp010010 = arg_0 ( atmp01001 ) ;
-tmp [ 0 ] = ( * ef5 ) ( ( * ef2 ) ( atmp000 ) ) ;
+( tmp [ 0 ] = ( * ef5 ) ( ( * ef2 ) ( atmp000 ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , lf_AUX_ATerms2_1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef4sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( atmp01000 , tmp [ 3 ] ) ) {
-tmp [ 6 ] = ( * ef6 ) ( ( * ef7 ) ( atmp010010 , tmp [ 5 ] ) , lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef8 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) , ( * ef3 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef4 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( ( * ef3 ) ( atmp01000 , ( * ef4 ) ( atmp010010 ) ) ) ) ) ) ) ) ;
+( tmp [ 6 ] = ( * ef6 ) ( ( * ef7 ) ( atmp010010 , tmp [ 5 ] ) , lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef8 ) ( ( * ef9 ) ( ) , ( * ef3 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef4 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( ( * ef3 ) ( atmp01000 , ( * ef4 ) ( atmp010010 ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }

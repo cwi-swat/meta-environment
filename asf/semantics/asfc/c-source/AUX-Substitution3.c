@@ -70,18 +70,18 @@ FUNC_ENTRY ( lf_AUX_Substitution3_1sym , ATmakeAppl ( lf_AUX_Substitution3_1sym 
 if ( check_sym ( arg1 , ef1sym ) ) {
 FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef2 ) ( ( * ef5 ) ( ( * ef6 ) ( arg0 ) , ( * ef3 ) ( arg2 ) ) ) ) ) ) ) ;
 }
-tmp [ 0 ] = ( * ef13 ) ( arg1 ) ;
+( tmp [ 0 ] = ( * ef13 ) ( arg1 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef5sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef6sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef3sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( ( * ef11 ) ( ( * ef6 ) ( tmp [ 5 ] ) ) , ( * ef11 ) ( ( * ef6 ) ( arg0 ) ) ) ) {
 FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 6 ] ) , ( * ef9 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef2 ) ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 5 ] ) , ( * ef3 ) ( tmp [ 6 ] ) ) ) ) ) ) , lf_AUX_Substitution3_1 ( ( * ef10 ) ( ( * ef11 ) ( tmp [ 6 ] ) ) , ( * ef12 ) ( arg1 ) , arg2 ) ) , ( * ef9 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef2 ) ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 5 ] ) , ( * ef3 ) ( arg2 ) ) ) ) ) ) , ( * ef12 ) ( arg1 ) ) ) ) ;
 }

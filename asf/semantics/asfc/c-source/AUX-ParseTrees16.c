@@ -61,10 +61,10 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-tmp [ 0 ] = ( * ef9 ) ( atmp00 ) ;
+( tmp [ 0 ] = ( * ef9 ) ( atmp00 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( atmp01 ) , ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( arg1 , ( * ef3 ) ( tmp [ 2 ] ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
 }
 }

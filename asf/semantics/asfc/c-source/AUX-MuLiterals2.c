@@ -38,15 +38,15 @@ if ( check_sym ( atmp10 , lf2sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( not_empty_list ( atmp000 ) ) {
 if ( term_equal ( list_head ( atmp000 ) , make_char ( 34 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp000 ) ;
+( tmp [ 0 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ) ;
 if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp100 ) ) {
 if ( term_equal ( list_head ( atmp100 ) , make_char ( 34 ) ) ) {
-tmp [ 2 ] = list_tail ( atmp100 ) ;
+( tmp [ 2 ] = list_tail ( atmp100 ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-tmp [ 3 ] = list_prefix ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = list_prefix ( tmp [ 2 ] ) ) ;
 if ( term_equal ( list_last ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 1 ] ) , cons ( make_list ( tmp [ 3 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
 }

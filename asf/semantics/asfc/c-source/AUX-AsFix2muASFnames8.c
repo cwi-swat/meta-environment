@@ -91,9 +91,9 @@ if ( check_sym ( atmp010000 , lf2sym ) ) {
 ATerm atmp0100000 = arg_0 ( atmp010000 ) ;
 if ( not_empty_list ( atmp0100000 ) ) {
 if ( term_equal ( list_head ( atmp0100000 ) , make_char ( 34 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp0100000 ) ;
+( tmp [ 0 ] = list_tail ( atmp0100000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ) ;
 if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ) , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 1 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ;
 }
@@ -163,9 +163,9 @@ if ( check_sym ( atmp0200001 , ef3sym ) ) {
 ATerm atmp02000010 = arg_0 ( atmp0200001 ) ;
 if ( not_empty_list ( atmp0100000 ) ) {
 if ( term_equal ( list_head ( atmp0100000 ) , make_char ( 34 ) ) ) {
-tmp [ 0 ] = list_tail ( atmp0100000 ) ;
+( tmp [ 0 ] = list_tail ( atmp0100000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ) ;
 if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT ( atmp02000010 ) ;
 }

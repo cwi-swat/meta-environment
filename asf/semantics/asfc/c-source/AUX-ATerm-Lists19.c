@@ -46,17 +46,17 @@ FUNC_ENTRY ( lf_AUX_ATerm_Lists19_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists19_1sym 
 {
 ATerm ltmp [ 3 ] ;
 lbl_lf_AUX_ATerm_Lists19_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-ltmp [ 2 ] = arg2 ;
+( ltmp [ 1 ] = arg1 ) ;
+( ltmp [ 2 ] = arg2 ) ;
 if ( check_sym ( ltmp [ 2 ] , ef1sym ) ) {
 FUNC_EXIT ( ltmp [ 1 ] ) ;
 }
 if ( check_sym ( ltmp [ 2 ] , ef2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-tmp [ 0 ] = ( * ef4 ) ( ltmp [ 0 ] , ( * ef5 ) ( ltmp [ 1 ] , ( * ef6 ) ( ( * ef7 ) ( ltmp [ 2 ] ) ) ) ) ;
-arg1 = tmp [ 0 ] ;
-arg2 = ( * ef3 ) ( ltmp [ 2 ] ) ;
+( tmp [ 0 ] = ( * ef4 ) ( ltmp [ 0 ] , ( * ef5 ) ( ltmp [ 1 ] , ( * ef6 ) ( ( * ef7 ) ( ltmp [ 2 ] ) ) ) ) ) ;
+( arg1 = tmp [ 0 ] ) ;
+( arg2 = ( * ef3 ) ( ltmp [ 2 ] ) ) ;
 goto lbl_lf_AUX_ATerm_Lists19_1 ;
 }
 }

@@ -56,8 +56,8 @@ if ( check_sym ( atmp01 , ef3sym ) ) {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 {
 ATerm atmp011 = arg_1 ( atmp01 ) ;
-tmp [ 0 ] = ( * ef2 ) ( atmp00 ) ;
-tmp [ 1 ] = lf_AUX_TermAsFix2Sign13_1 ( atmp011 ) ;
+( tmp [ 0 ] = ( * ef2 ) ( atmp00 ) ) ;
+( tmp [ 1 ] = lf_AUX_TermAsFix2Sign13_1 ( atmp011 ) ) ;
 FUNC_EXIT ( ( * ef4 ) ( ( * ef4 ) ( tmp [ 0 ] , ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 11 , char_table [ 34 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 34 ] ) ) ) ) , tmp [ 1 ] ) ) ;
 }
 }

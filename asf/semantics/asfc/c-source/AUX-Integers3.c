@@ -41,8 +41,8 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"In
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[l(\"gt\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[l(\"gt\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 }
@@ -61,7 +61,7 @@ FUNC_ENTRY ( lf_AUX_Integers3_1sym , ATmakeAppl ( lf_AUX_Integers3_1sym , arg0 ,
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_Integers3_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -88,18 +88,18 @@ if ( check_sym ( atmp1000 , lf2sym ) ) {
 ATerm atmp10000 = arg_0 ( atmp1000 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
 if ( not_empty_list ( atmp10000 ) ) {
-tmp [ 0 ] = list_prefix ( atmp10000 ) ;
+( tmp [ 0 ] = list_prefix ( atmp10000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 1 ] = list_last ( atmp10000 ) ;
-tmp [ 2 ] = lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp00000 ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ) ) ;
+( tmp [ 1 ] = list_last ( atmp10000 ) ) ;
+( tmp [ 2 ] = lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp00000 ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef2sym ) ) {
-tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef3sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf2sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
 FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( make_char ( 48 ) ) ) ) ) ) ) , lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp00000 ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
@@ -137,11 +137,11 @@ if ( check_sym ( atmp1000 , lf2sym ) ) {
 {
 ATerm atmp10000 = arg_0 ( atmp1000 ) ;
 if ( is_single_element ( atmp10000 ) ) {
-tmp [ 0 ] = list_head ( atmp10000 ) ;
+( tmp [ 0 ] = list_head ( atmp10000 ) ) ;
 if ( term_equal ( ( * ef6 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
 FUNC_EXIT ( ( * ef4 ) ( ltmp [ 0 ] , lf_AUX_Integers3_1 ( ltmp [ 0 ] , ( * ef5 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ;
 }
-tmp [ 0 ] = list_head ( atmp10000 ) ;
+( tmp [ 0 ] = list_head ( atmp10000 ) ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 48 ) ) ) {
 FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
@@ -160,11 +160,11 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef8sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-tmp [ 0 ] = lf_AUX_Integers3_1 ( ltmp [ 0 ] , ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ;
+( tmp [ 0 ] = lf_AUX_Integers3_1 ( ltmp [ 0 ] , ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef8 ) ( tmp [ 2 ] ) ) ) ;
 }
 }
@@ -187,11 +187,11 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-tmp [ 0 ] = lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) , ltmp [ 1 ] ) ;
+( tmp [ 0 ] = lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) , ltmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef8 ) ( tmp [ 2 ] ) ) ) ;
 }
 }
@@ -202,8 +202,8 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef8sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-arg0 = ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ;
-arg1 = ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ;
+( arg0 = ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ) ;
+( arg1 = ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ;
 goto lbl_lf_AUX_Integers3_1 ;
 }
 }

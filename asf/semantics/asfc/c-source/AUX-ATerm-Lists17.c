@@ -56,10 +56,10 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( arg2 , ef2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-tmp [ 0 ] = ( * ef7 ) ( arg1 ) ;
-tmp [ 1 ] = ( * ef7 ) ( arg2 ) ;
-tmp [ 2 ] = ( * ef8 ) ( arg1 ) ;
-tmp [ 3 ] = ( * ef8 ) ( arg2 ) ;
+( tmp [ 0 ] = ( * ef7 ) ( arg1 ) ) ;
+( tmp [ 1 ] = ( * ef7 ) ( arg2 ) ) ;
+( tmp [ 2 ] = ( * ef8 ) ( arg1 ) ) ;
+( tmp [ 3 ] = ( * ef8 ) ( arg2 ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( arg0 , ( * ef5 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] ) ) ) , lf_AUX_ATerm_Lists17_1 ( arg0 , tmp [ 2 ] , tmp [ 3 ] ) ) ) ;
 }
 }

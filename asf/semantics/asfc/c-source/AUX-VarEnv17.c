@@ -46,26 +46,26 @@ ATerm atmp22 = arg_2 ( arg2 ) ;
 {
 ATerm atmp23 = arg_3 ( arg2 ) ;
 if ( not_empty_list ( atmp200 ) ) {
-tmp [ 0 ] = list_head ( atmp200 ) ;
+( tmp [ 0 ] = list_head ( atmp200 ) ) ;
 {
-tmp [ 1 ] = list_tail ( atmp200 ) ;
+( tmp [ 1 ] = list_tail ( atmp200 ) ) ;
 {
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
 {
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( ! term_equal ( arg0 , tmp [ 2 ] ) ) {
-tmp [ 6 ] = lf_AUX_VarEnv17_1 ( arg0 , arg1 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) , atmp21 , atmp22 , atmp23 ) ) ;
+( tmp [ 6 ] = lf_AUX_VarEnv17_1 ( arg0 , arg1 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) , atmp21 , atmp22 , atmp23 ) ) ) ;
 if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
-tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ;
-tmp [ 10 ] = arg_3 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
+( tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ) ;
+( tmp [ 10 ] = arg_3 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
-tmp [ 11 ] = arg_0 ( tmp [ 7 ] ) ;
+( tmp [ 11 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] , lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 11 ] ) ) ) , tmp [ 8 ] , tmp [ 9 ] , tmp [ 10 ] ) ) ;
 }
 }

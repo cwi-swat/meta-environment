@@ -65,50 +65,50 @@ ATerm lf_AUX_AsFix_Basics5_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 24 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix_Basics5_1sym , ATmakeAppl ( lf_AUX_AsFix_Basics5_1sym , arg0 ) ) ;
-tmp [ 0 ] = ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+( tmp [ 0 ] = ( * ef1 ) ( ) ) ;
 if ( ! term_equal ( arg0 , tmp [ 0 ] ) ) {
-tmp [ 1 ] = ( * ef4 ) ( arg0 ) ;
+( tmp [ 1 ] = ( * ef4 ) ( arg0 ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef5sym ) ) {
-tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef6sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 6 ] = arg_1 ( tmp [ 3 ] ) ;
-if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
+( tmp [ 6 ] = arg_1 ( tmp [ 3 ] ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
 if ( check_sym ( tmp [ 6 ] , ef8sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , ef9sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
+( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( check_sym ( tmp [ 8 ] , ef10sym ) ) {
-tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef5sym ) ) {
-tmp [ 10 ] = arg_0 ( tmp [ 4 ] ) ;
-tmp [ 11 ] = arg_1 ( tmp [ 4 ] ) ;
+( tmp [ 10 ] = arg_0 ( tmp [ 4 ] ) ) ;
+( tmp [ 11 ] = arg_1 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , ef6sym ) ) {
-tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ;
-tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ;
-if ( term_equal ( tmp [ 12 ] , ( constant2 ? constant2 : ( constant2 = ( * ef11 ) ( ) ) ) ) ) {
+( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
+( tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ) ;
+if ( term_equal ( tmp [ 12 ] , ( constant1 ? constant1 : ( constant1 = ( * ef11 ) ( ) ) ) ) ) {
 if ( check_sym ( tmp [ 13 ] , ef8sym ) ) {
-tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ;
+( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( check_sym ( tmp [ 14 ] , ef9sym ) ) {
-tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ;
+( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
 if ( check_sym ( tmp [ 15 ] , ef10sym ) ) {
-tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
+( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , ef5sym ) ) {
-tmp [ 17 ] = arg_0 ( tmp [ 11 ] ) ;
-tmp [ 18 ] = arg_1 ( tmp [ 11 ] ) ;
+( tmp [ 17 ] = arg_0 ( tmp [ 11 ] ) ) ;
+( tmp [ 18 ] = arg_1 ( tmp [ 11 ] ) ) ;
 if ( check_sym ( tmp [ 17 ] , ef6sym ) ) {
-tmp [ 19 ] = arg_0 ( tmp [ 17 ] ) ;
-tmp [ 20 ] = arg_1 ( tmp [ 17 ] ) ;
-if ( term_equal ( tmp [ 19 ] , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
+( tmp [ 19 ] = arg_0 ( tmp [ 17 ] ) ) ;
+( tmp [ 20 ] = arg_1 ( tmp [ 17 ] ) ) ;
+if ( term_equal ( tmp [ 19 ] , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
 if ( check_sym ( tmp [ 20 ] , ef8sym ) ) {
-tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ;
+( tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ) ;
 if ( check_sym ( tmp [ 21 ] , ef9sym ) ) {
-tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ;
+( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( check_sym ( tmp [ 22 ] , ef10sym ) ) {
-tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ;
+( tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 18 ] ) ) ;
 }
 }
@@ -129,8 +129,8 @@ FUNC_EXIT ( ( * ef3 ) ( tmp [ 18 ] ) ) ;
 }
 }
 }
-if ( term_equal ( ( * ef2 ) ( arg0 ) , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+if ( term_equal ( ( * ef2 ) ( arg0 ) , ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( ) ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix_Basics5_1sym , arg0 ) ) ;

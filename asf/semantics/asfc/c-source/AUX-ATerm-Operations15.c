@@ -152,10 +152,10 @@ ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"is-
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"is-cons\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
-ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"fun-wmap\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"fun-wmap\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATermList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
@@ -279,13 +279,9 @@ ef67sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\")
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
 void init_AUX_ATerm_Operations15 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_ATerm_Operations15_1 ( ATerm arg0 , ATerm arg1 ) {
 {
@@ -294,7 +290,7 @@ FUNC_ENTRY ( lf_AUX_ATerm_Operations15_1sym , ATmakeAppl ( lf_AUX_ATerm_Operatio
 {
 ATerm ltmp [ 2 ] ;
 lbl_lf_AUX_ATerm_Operations15_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
+( ltmp [ 1 ] = arg1 ) ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -307,12 +303,12 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( ltmp [ 1 ] , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-tmp [ 0 ] = ( * ef4 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) , atmp10 ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
-arg0 = atmp010 ;
+( tmp [ 0 ] = ( * ef4 ) ( ( * ef5 ) ( ) , atmp10 ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+( arg0 = atmp010 ) ;
 goto lbl_lf_AUX_ATerm_Operations15_1 ;
 }
-if ( term_equal ( tmp [ 0 ] , ( constant2 ? constant2 : ( constant2 = ( * ef7 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
 FUNC_EXIT ( atmp10 ) ;
 }
 }
@@ -352,7 +348,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef3sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-arg0 = atmp010 ;
+( arg0 = atmp010 ) ;
 goto lbl_lf_AUX_ATerm_Operations15_1 ;
 }
 }
@@ -363,8 +359,8 @@ if ( check_sym ( atmp01 , ef13sym ) ) {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 {
 ATerm atmp011 = arg_1 ( atmp01 ) ;
-arg0 = atmp010 ;
-arg1 = ( * ef3 ) ( lf_AUX_ATerm_Operations15_1 ( ( * ef1 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef64 ) ( ) ) ) , atmp011 ) , ltmp [ 1 ] ) ) ;
+( arg0 = atmp010 ) ;
+( arg1 = ( * ef3 ) ( lf_AUX_ATerm_Operations15_1 ( ( * ef1 ) ( ( * ef64 ) ( ) , atmp011 ) , ltmp [ 1 ] ) ) ) ;
 goto lbl_lf_AUX_ATerm_Operations15_1 ;
 }
 }
@@ -376,8 +372,8 @@ goto lbl_lf_AUX_ATerm_Operations15_1 ;
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-arg0 = ( * ef11 ) ( atmp00 ) ;
-arg1 = ( * ef30 ) ( atmp01 , ltmp [ 1 ] ) ;
+( arg0 = ( * ef11 ) ( atmp00 ) ) ;
+( arg1 = ( * ef30 ) ( atmp01 , ltmp [ 1 ] ) ) ;
 goto lbl_lf_AUX_ATerm_Operations15_1 ;
 }
 }
@@ -580,9 +576,9 @@ ATerm atmp110 = arg_0 ( atmp11 ) ;
 if ( check_sym ( atmp110 , ef9sym ) ) {
 {
 ATerm atmp1100 = arg_0 ( atmp110 ) ;
-tmp [ 0 ] = ( * ef30 ) ( ( * ef3 ) ( ( * ef9 ) ( atmp100 ) ) , ( * ef3 ) ( ( * ef9 ) ( atmp1100 ) ) ) ;
+( tmp [ 0 ] = ( * ef30 ) ( ( * ef3 ) ( ( * ef9 ) ( atmp100 ) ) , ( * ef3 ) ( ( * ef9 ) ( atmp1100 ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 }
@@ -999,8 +995,8 @@ if ( check_sym ( ltmp [ 1 ] , ef13sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-arg0 = atmp10 ;
-arg1 = atmp11 ;
+( arg0 = atmp10 ) ;
+( arg1 = atmp11 ) ;
 goto lbl_lf_AUX_ATerm_Operations15_1 ;
 }
 }
