@@ -17,9 +17,7 @@ class DebugProcess
   static public int ES_RUN		= 0x0002;
   static public int ES_SINGLE_STEP	= 0x0004;
   static public int ES_STEP_OVER	= 0x0008;
-  static public int ES_RUN_UNTIL_PARENT	= 0x0010;
-  static public int ES_HIGH_WATER	= 0x0020;
-  static public int ES_ALL		= 0x003F;
+  static public int ES_ALL		= 0x000F;
 
   //}
 
@@ -31,6 +29,31 @@ class DebugProcess
   int rule_id = -1;
   DebugPort port = null;
   
+  //{ static public int execStateTerm2Int(ATermRef es)
+
+  /**
+    * Transform a term representing an exec-state into an integer.
+    */
+
+  static public int execStateTerm2Int(ATermRef es)
+  {
+    String fun = ((ATermApplRef)es).getFun();
+    if(fun.equals("stop"))
+      return ES_STOP;
+    if(fun.equals("run"))
+      return ES_RUN;
+    if(fun.equals("single-step"))
+      return ES_SINGLE_STEP;
+    if(fun.equals("step-over"))
+      return ES_STEP_OVER;
+    if(fun.equals("all"))
+      return ES_ALL;
+
+    throw new IllegalArgumentException("illegal exec-state term: " + es.toString());
+  }
+
+  //}
+
   //{ public DebugProcess(int pid)
 
   /**
@@ -40,6 +63,19 @@ class DebugProcess
   public DebugProcess(int procid)
   {
     pid = procid;
+  }
+
+  //}
+  //{ public DebugProcess(int pid, String name)
+
+  /**
+   * Construct a new process.
+   */
+
+  public DebugProcess(int procid, String name)
+  {
+    pid = procid;
+    this.name = name;
   }
 
   //}

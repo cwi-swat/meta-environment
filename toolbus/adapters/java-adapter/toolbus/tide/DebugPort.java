@@ -10,20 +10,20 @@ abstract public class DebugPort
 {
   //{ Port types
 
-  static public int EXEC_STATE            = 0;
-  static public int ALWAYS                = 1;
-  static public int LOCATION              = 2;
-  static public int CALL                  = 3;
-  static public int RETRY                 = 4;
-  static public int FAIL                  = 5;
-  static public int SUCCEED		  = 6;
-  static public int EXCEPTION	          = 7;
-  static public int VARIABLE	          = 8;
-  static public int SEND		  = 9;
-  static public int RECEIVE		  = 10;
-  static public int PROCESS_CREATION      = 11;
-  static public int PROCESS_DESTRUCTION   = 12;
-  static public int NR_PORT_TYPES	  = 13;
+  static final public int EXEC_STATE            = 0;
+  static final public int ALWAYS                = 1;
+  static final public int LOCATION              = 2;
+  static final public int CALL                  = 3;
+  static final public int RETRY                 = 4;
+  static final public int FAIL                  = 5;
+  static final public int SUCCEED		= 6;
+  static final public int EXCEPTION	        = 7;
+  static final public int VARIABLE	        = 8;
+  static final public int SEND		        = 9;
+  static final public int RECEIVE		= 10;
+  static final public int PROCESS_CREATION      = 11;
+  static final public int PROCESS_DESTRUCTION   = 12;
+  static final public int NR_PORT_TYPES	        = 13;
 
   //}
   //{ When constants
@@ -37,6 +37,60 @@ abstract public class DebugPort
   private int type;
   private int when;
 
+  //{ static public int typeTerm2Int(ATermRef port)
+
+  /**
+    * Translate a port type into an integer.
+    */
+
+  static public int typeTerm2Int(ATermRef port)
+  {
+    String fun = ((ATermApplRef)port).getFun();
+    switch(fun.charAt(0)) {
+      case 'e': 
+	if(fun.equals("exec-state"))
+	  return EXEC_STATE;
+	return EXCEPTION;
+      case 'a': return ALWAYS;
+      case 'l': return LOCATION;
+      case 'c': return CALL;
+      case 'r': 
+	if(fun.equals("retry"))
+	  return RETRY;
+	return RECEIVE;
+      case 'f': return FAIL;
+      case 's':
+	if(fun.equals("succeed"))
+	  return SUCCEED;
+	return SEND;
+      case 'v': return VARIABLE;
+      case 'p':
+	if(fun.equals("process-creation"))
+	  return PROCESS_CREATION;
+	return PROCESS_DESTRUCTION;
+    }
+    throw new IllegalArgumentException("illegal port: " + fun);
+  }
+
+  //}
+  //{ static public int whenTerm2Int(ATermRef when)
+
+  /**
+    * Translate a when term into the corresponding integer.
+    */
+
+  static public int whenTerm2Int(ATermRef when)
+  {
+    String fun = ((ATermApplRef)when).getFun();
+    if(fun.equals("before"))
+      return WHEN_BEFORE;
+    if(fun.equals("after"))
+      return WHEN_AFTER;
+    return WHEN_AT;
+  }
+
+  //}
+
   //{ public DebugPort(int type, int when)
 
   /**
@@ -49,6 +103,45 @@ abstract public class DebugPort
   {
     this.type = type;
     this.when = when;
+  }
+
+  //}
+  //{ static public DebugPort newPort(ATermRef port)
+
+  /**
+    * Construct a debug port from its term representation.
+    */
+
+  static public DebugPort newPort(ATermRef port)
+  {
+    DebugPort result;
+    ATermsRef Data = ((ATermListRef)port).getATerms();
+
+    ATermRef Port = Data.getFirst();
+    Data = Data.getNext();
+    ATermRef When = Data.getFirst();
+    Data = Data.getNext();
+    
+    int type = typeTerm2Int(Port);
+    int when = whenTerm2Int(When);
+
+    switch(type) {
+      case EXCEPTION:
+	result = new ExceptionPort(Data.getFirst(), when);
+	break;
+
+      case LOCATION:
+	result = new LocationPort(Data, when);
+	break;
+
+      case EXEC_STATE:
+	result = new ExecStatePort(Data.getFirst(), when);
+	break;
+
+      default:
+	throw new IllegalArgumentException("illegal port type: " + port.toString());
+    }
+    return result;
   }
 
   //}

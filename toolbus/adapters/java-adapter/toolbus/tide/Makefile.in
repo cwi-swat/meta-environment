@@ -30,12 +30,19 @@ SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
 		ExceptionPort.java DebugRule.java \
 		DebugAdapterInfo.java SourceArea.java DebugProcess.java \
 		$(TOOLSOURCE)
-TOOLSOURCE	= ProcessListTif.java ProcessListTool.java
+TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
+		ProcessViewer.java \
+		DebugAdapterTif.java DebugAdapterTool.java \
+		JavaDebugger.java
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 		ExceptionPort.class DebugRule.class \
 		DebugAdapterInfo.class SourceArea.class DebugProcess.class \
 		$(TOOLCLASSES)
-TOOLCLASSES	= ProcessListTif.class ProcessListTool.class
+TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
+		ProcessViewer.class ProcessCanvas.class DapPicture.class \
+		ProcessPicture.class \
+		DebugAdapterTif.class DebugAdapterTool.class \
+		JavaDebugger.class
 PROGRAMS	=
 
 JAVATIF		= java -classpath $(top_srcdir)/adapters/java-adapter:$$CLASSPATH toolbus.tool.JavaTif
@@ -45,9 +52,13 @@ all:	${CLASSES}
 %.class: %.java
 	javac -classpath ../..:$$CLASSPATH $<
 
-ProcessListTif.java: $(top_srcdir)/tide/tide.tifs
-	$(JAVATIF) -package toolbus.tide -class ProcessListTif \
-		-tool process-list -tifs $(top_srcdir)/tide/tide.tifs
+ProcessViewerTif.java: $(top_srcdir)/tide/tide.tifs
+	$(JAVATIF) -package toolbus.tide -class ProcessViewerTif \
+		-tool process-viewer -tifs $(top_srcdir)/tide/tide.tifs
+
+DebugAdapterTif.java: $(top_srcdir)/tide/tide.tifs
+	$(JAVATIF) -package toolbus.tide -class DebugAdapterTif \
+		-tool debug-adapter -tifs $(top_srcdir)/tide/tide.tifs
 
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.

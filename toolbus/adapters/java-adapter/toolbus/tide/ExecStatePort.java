@@ -24,6 +24,19 @@ public class ExecStatePort extends DebugPort
   }
 
   //}
+  //{ public ExecStatePort(ATermRef es, int when)
+
+  /**
+    * Construct a new ExecStatePort object given its term representation.
+    */
+
+  public ExecStatePort(ATermRef es, int when)
+  {
+    super(EXEC_STATE, when);
+    exec_state = DebugProcess.execStateTerm2Int(es);
+  }
+
+  //}
   //{ public int getExecState()
 
   /**

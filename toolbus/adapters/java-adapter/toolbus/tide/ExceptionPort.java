@@ -24,6 +24,19 @@ public class ExceptionPort extends DebugPort
   }
 
   //}
+  //{ public ExceptionPort(ATermRef excep, int when)
+
+  /**
+    * Construct a new ExceptionPort object given its term representation.
+    */
+  
+  public ExceptionPort(ATermRef excep, int when)
+  {
+    super(EXCEPTION, when);
+    exception = ((ATermApplRef)excep).getFun();
+  }
+
+  //}
   //{ public String getException()
 
   /**

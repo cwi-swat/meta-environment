@@ -31,20 +31,52 @@ class ProcessListTool extends ProcessListTif
   }
 
   //}
+  //{ void watchpoint(ATermApplRef dp, ATermRef proc, int r, ATermRef exprs)
 
-  void watchpoint(ATermApplRef a0, ATermRef t1, int i2, ATermRef t3)
+  /**
+    * A watchpoint was triggered. This might indicate a change
+    * in the list of processes.
+    */
+
+  void watchpoint(ATermApplRef dap, ATermRef proc, int rid, ATermRef exprs)
   {
   }
 
-  void dapConnected(ATermApplRef a0, ATermListRef l1, ATermRef t2)
+  //}
+  //{ void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+
+  /**
+    * A new dap has connected to the debugger.
+    */
+
+  void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+  {
+    System.out.println("dapConnected: " + dap.toString());
+  }
+
+  //}
+
+  //{ void listProcesses(ATermApplRef dap)
+
+  /**
+    * List the processes of a certain debug adapter.
+    */
+
+  void listProcesses(ATermApplRef dap)
   {
   }
 
-  void listProcesses(ATermApplRef a0)
+  //}
+
+  //{ void recTerminate(ATermRef arg)
+
+  /**
+    * A termination request has been received.
+    */
+
+  void recTerminate(ATermRef arg)
   {
   }
 
-  void recTerminate(ATermRef t0)
-  {
-  }
+  //}
 }

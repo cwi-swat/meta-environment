@@ -1,6 +1,6 @@
 // Java tool interface class ProcessListTif
 // This file is generated automatically, please do not edit!
-// generation time: 10-Apr-97 11:59:22 AM
+// generation time: 10-Apr-97 7:18:31 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;

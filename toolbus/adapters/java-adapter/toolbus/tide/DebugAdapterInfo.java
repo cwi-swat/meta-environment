@@ -10,41 +10,14 @@ import java.util.*;
 
 public class DebugAdapterInfo
 {
-  static protected int MAX_ADAPTERS = 128;
   static protected int MAX_RULES = 256;
 
-  static DebugAdapterInfo[] adapters = new DebugAdapterInfo[MAX_ADAPTERS];
-
-  ATermsRef info;
   int id;
   Vector[] ports;
   DebugRule[] rules;
   Hashtable processes;
+  Hashtable info;
 
-  //{ static public DebugAdapterInfo getAdapter(int id)
-
-  /**
-   * Retrieve an adapter given its id.
-   */
-
-  static public DebugAdapterInfo getAdapter(int id)
-  {
-    return adapters[id];
-  }
-
-  //}
-  //{ static public DebugAdapterInfo getAdapter(ATermRef dap)
-
-  /**
-   * Retrieve an adapter given its id as a term.
-   */
-
-  static public DebugAdapterInfo getAdapter(ATermRef dap)
-  {
-    return getAdapter(debugAdapterId(dap));
-  }
-
-  //}
   //{ static protected int debugAdapterId(ATermRef dap)
 
   /**
@@ -73,11 +46,25 @@ public class DebugAdapterInfo
 
   public DebugAdapterInfo(int ident, ATermsRef inf)
   {
-    info = inf;
-    id = ident;
+    // Enter the information in the info hashtable
+    try {
+      info = new Hashtable();
+      ATermPattern patPair = new ATermPattern("[<appl>,<term>]");
+      while(inf != null) {
+	if(!patPair.match(inf.getFirst()))
+	  throw new IllegalArgumentException("malformed information list: " 
+					     + inf.getFirst().toString());
+	String cat = ((ATermApplRef)patPair.elementAt(0)).getFun();
+	ATermRef val  = (ATermRef)patPair.elementAt(1);
+	System.out.println(cat + ": " + val.toString());
+	info.put(cat, val);
+	inf = inf.getNext();
+      }
+    } catch (ParseError e) {
+      throw new IllegalArgumentException("internal parse error");
+    }
 
-    // Insert the adapter in the global adapter table.
-    adapters[id] = this;
+    id = ident;
 
     // Create the table that contains all rules divided by type.
     ports = new Vector[DebugPort.NR_PORT_TYPES];
@@ -92,19 +79,20 @@ public class DebugAdapterInfo
   }
 
   //}
-
-  //{ protected void remove()
+  //{ public DebugAdapterInfo(ATermRef dap, ATermsRef inf)
 
   /**
-   * Remove this object from the global adapter table.
+   * Construct a new DebugAdapterInfo object given the term
+   * representation of its id and information list.
    */
 
-  public void remove()
+  public DebugAdapterInfo(ATermRef dap, ATermsRef inf)
   {
-    adapters[id] = null;
+    this(debugAdapterId(dap), inf);
   }
 
   //}
+
   //{ int getId()
 
   /**
@@ -115,6 +103,91 @@ public class DebugAdapterInfo
   int getId()
   {
     return id;
+  }
+
+  //}
+  //{ DebugProcess[] getProcessArray(ATermRef procs)
+
+  /**
+    * Build an array of processes consisting of the process-id's
+    * found in procs.
+    */
+
+  DebugProcess[] getProcessArray(ATermRef procs)
+  {
+    DebugProcess[] result;
+
+    switch(procs.getType()) {
+      case ATerm.APPL:
+	// must be 'all'
+	result = new DebugProcess[processes.size()];
+	Enumeration e = processes.elements();
+	for(int i=0; e.hasMoreElements(); i++)
+	  result[i] = (DebugProcess)e.nextElement();
+	break;
+
+      case ATerm.LIST:
+	// A list of process-ids
+	ATermsRef cur = ((ATermListRef)procs).getATerms();
+	result = new DebugProcess[cur.length()];
+	try {
+	  ATermPattern pat = new ATermPattern("<int>");
+	  for(int i=0; cur != null; i++) {
+	    pat.match(cur.getFirst());
+	    result[i] = (DebugProcess)processes.get(pat.elementAt(0));
+	    cur = cur.getNext();
+	  }
+	  break;
+	} catch (ParseError except) {
+	  System.err.println("internal parse error in getProcessArray");
+	  System.exit(1);
+	}
+
+      default: throw new IllegalArgumentException("illegal process list: " +
+						  procs.toString());
+    }
+    return result;
+  }
+
+  //}
+
+  //{ ATermRef getInfo(String category)
+
+  /**
+   * Retrieve information about a specific category.
+   */
+
+  ATermRef getInfo(String category)
+  {
+    return (ATermRef)info.get(category);
+  }
+
+  //}
+  //{ public String getName()
+
+  /**
+   * Get the name of this debug-adapter. The name can be
+   * found in the information table.
+   */
+
+  public String getName()
+  {
+    ATermApplRef name = (ATermApplRef)info.get("name");
+    return name.getFun();
+  }
+
+  //}
+  //{ public String getType()
+
+  /**
+   * Get the name of this debug-adapter. The name can be
+   * found in the information table.
+   */
+
+  public String getType()
+  {
+    ATermApplRef type = (ATermApplRef)info.get("type");
+    return type.getFun();
   }
 
   //}
@@ -211,6 +284,18 @@ public class DebugAdapterInfo
   public void removeProcess(int pid)
   {
     processes.remove(new Integer(pid));
+  }
+
+  //}
+  //{ public Enumeration getProcesses()
+
+  /**
+    * Return the list of all processes.
+    */
+
+  public Enumeration getProcesses()
+  {
+    return processes.elements();
   }
 
   //}

@@ -23,6 +23,20 @@ public class LocationPort extends DebugPort
   }
 
   //}
+  //{ public LocationPort(ATermRef loc, int when)
+
+  /**
+    * Construct a new LocationPort object given the term representation
+    * of the location.
+    */
+
+  public LocationPort(ATermsRef loc, int when)
+  {
+    super(LOCATION, when);
+    location = new SourceArea(loc);
+  }
+
+  //}
   //{ public SourceArea getLocation()
 
   /**
