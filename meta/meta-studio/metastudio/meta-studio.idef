@@ -82,7 +82,6 @@ in
   ||
     (
       rec-msg(ui-display-graph(GraphId?, Graph?))
-      . printf("display-graph: GraphId: %t = %t\n", GraphId, Graph)
       . snd-do(UI, display-graph(GraphId, Graph))
     +
       rec-event(UI,clear-all)
@@ -95,21 +94,18 @@ in
       . snd-ack-event(UI,debugging(On))
     +
       rec-msg(ui-render-graph(GraphId?, Graph?))
-      . printf("render-graph: GraphId: %t = %t\n", GraphId, Graph)
       . snd-do(UI, render-graph(GraphId, Graph))
     +
       rec-event(UI, rendered-graph(GraphId?, Graph?))
       . snd-msg(ui-rendered-graph(GraphId, Graph))
     +
       rec-event(UI, get-events(Type?))
-      /*. printf("meta-studio: get-events(%t)\n", Type)*/
       . snd-msg(cm-get-events(Type))
       . rec-msg(cm-events(EventList?))
       . snd-do(UI, add-events(Type, EventList))
       . snd-ack-event(UI, get-events(Type))
     +
       rec-event(UI, get-events(Type?, ModuleId?))
-      /*. printf("meta-studio: get-events(%t, %s)\n", Type, ModuleId)*/
 
       . snd-msg(cm-get-events(Type))
       . rec-msg(cm-events(EventList?))
