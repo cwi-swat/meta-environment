@@ -24,8 +24,8 @@
 \usepackage{latexsym}
 \usepackage{a4}
 \usepackage{times}
-\usepackage{ASF+SDF}
-\usepackage{ASF+SDF-options}
+%\usepackage{ASF+SDF}
+%\usepackage{ASF+SDF-options}
 %\usepackage{epsfig}
 \usepackage{psfig}
 
@@ -182,16 +182,16 @@ since arbitrary context-free grammars can be defined.  The syntax
 defined in the \sdf-part of a module can be used immediately when
 defining equations, the syntax in equations is thus \emph{user-defined}.
 
-\begin{figure}
-\centerline{\fbox{
-\begin{minipage}[tb]{10cm}
-{\NOAUTOHEADER  \input{./Booleans.mtx}}
-\vspace{-1.7\baselineskip}
-\end{minipage}
-}
-}
-\caption{\label{boolexmpl} \asdf\ specification of the Booleans.}
-\end{figure}
+%\begin{figure}
+%\centerline{\fbox{
+%\begin{minipage}[tb]{10cm}
+%{\NOAUTOHEADER  \input{./Booleans.mtx}}
+%\vspace{-1.7\baselineskip}
+%\end{minipage}
+%}
+%}
+%\caption{\label{boolexmpl} \asdf\ specification of the Booleans.}
+%\end{figure}
 
 The emphasis in this paper will be on the compilation of the equations
 appearing in a specification. They have the following distinctive features:
@@ -233,16 +233,16 @@ For instance, the term
 reduces to {\tt true} when applying the equations of Figure
 \ref{boolexmpl}.
 
-\begin{figure}
-\centerline{\fbox{
-\begin{minipage}[tb]{10cm}
-{\NOAUTOHEADER  \input{./Sets.mtx}}
-\vspace{-1.7\baselineskip}
-\end{minipage}
-}
-}
-\caption{\label{setexmpl} \asdf\ specification of the Set equation.}
-\end{figure}
+%\begin{figure}
+%\centerline{\fbox{
+%\begin{minipage}[tb]{10cm}
+%{\NOAUTOHEADER  \input{./Sets.mtx}}
+%\vspace{-1.7\baselineskip}
+%\end{minipage}
+%}
+%}
+%\caption{\label{setexmpl} \asdf\ specification of the Set equation.}
+%\end{figure}
 
 \subsection{Intermediate Representation Language: \muasf}
 

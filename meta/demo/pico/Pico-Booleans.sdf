@@ -2,8 +2,11 @@ module Pico-Booleans
 
 imports Layout
 
+hiddens
+  sorts PICO-BOOL-CON
+
 exports
-  sorts PICO-BOOL PICO-BOOL-CON
+  sorts PICO-BOOL
   context-free syntax
     "true"  -> PICO-BOOL-CON
     "false" -> PICO-BOOL-CON

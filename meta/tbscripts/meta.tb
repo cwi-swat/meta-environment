@@ -34,6 +34,7 @@
 #include "process-eqs.tb"
 #include "save-module.tb" 
 #include "help.tb" 
+#include "gen.tb" 
 #include "se.idef"
 #include "get-parsetable.tb"
 #include "set-parsetable.tb"
@@ -71,7 +72,7 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB,
 	RestoreBrackets, Notify-about-changed-modules, DisplayErrors,
 	Asf-Syntax, AddEqSyn, AddAPISyn, RemoveVars, Open-initial-module,
         Open-modules, Asfc, PGen, 
-	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
+	Help, GenAdapt, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         DumpParseTable, Compile-module, RenameModule
 #ifdef METASTUDIO
 	, DOT-ADAPTER)

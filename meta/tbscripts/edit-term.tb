@@ -34,8 +34,7 @@ let
   FileName    : term,
   ErrList     : list,
   Equations   : term,
-  Table       : term,
-  ReductEditorId : term
+  Table       : term
 in
   Id := process-id .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
@@ -73,13 +72,140 @@ in
   )
 endlet
 
+process ParseFile(FileName: str, ModuleName: str, Tree: term?) is
+let
+  Id        : term,
+  Name      : str,
+  Text      : str,
+  Co        : int,
+  Li        : int,
+  I         : int,
+  Ch        : int,
+  Char      : term, 
+  Ambs      : list,
+  Cycle     : term,
+  ErrList   : list,
+  TimeStamp : term, 
+  Path      : str
+in
+  Id := process-id . 
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules) .
+  snd-msg(set-parsetable(trm(ModuleName))) .
+  (
+    rec-msg(parsetable-not-set(trm(ModuleName))) .
+    snd-note(ui-status(errorf(
+      "Unable to open parse table for %s", [ModuleName])))
+  +
+    rec-msg(parsetable-set(trm(ModuleName))) .
+    snd-msg(open-file(FileName)).
+    (
+      rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?)).
+      snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), "", Text)) . 
+      snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
+      (
+        rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?)))
+      +
+        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
+                                                      ambiguities(I?, Ambs?)))).        snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                  [ModuleName,I]))) .
+        Tree := error-tree
+      +
+        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
+                                                      cycle(Cycle?)))).
+        snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
+                                  [Cycle]))) . 
+        Tree := error-tree 
+      +
+        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))).
+        snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                  [ModuleName]))) . 
+        Tree := error-tree
+      + 
+        rec-msg(parse-result-asfix2me(Id?,
+                                      parse-error([character(Ch?),
+                                                   line(Li?),
+                                                   col(Co?),
+                                                   char(Char?)],plain))).
+        snd-note(ui-status(errorf(
+                 "Character %d unexpected in %s, line %d, column %d\n",
+                 [Ch, ModuleName, Li, Co]))) . 
+        Tree := error-tree
+      ) .
+      snd-note(ui-status(endstat(Id)))
+    +
+      rec-msg(error-opening(Name?)) .
+      Tree := error-tree
+    )
+  )  
+endlet
+
+process PlainReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
+let
+  Id          : int,
+  ErrList     : list,
+  Equations   : term
+in
+  Id := process-id .
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules) .
+  snd-note(ui-status(stat(Id, "Retrieving equations"))) .
+  snd-msg(process-eqs(ModuleName)) .
+  rec-msg(eqs-processed(ModuleName)) .
+  snd-msg(get-all-equations(ModuleName)) .
+  (
+    rec-msg(all-equations(Equations?)) .
+    snd-note(ui-status(endstat(Id))).
+ 
+    snd-note(ui-status(stat(Id, "Rewriting"))) .
+    snd-msg(rewrite(ModuleName, Equations, Tree)).
+    (
+      rec-msg(rewrite-result(NormalForm?))
+    +
+      rec-msg(rewrite-errors(ErrList?)) .
+      snd-msg(display-rewrite-errors(ErrList))
+    ) .
+    snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(equations-incomplete) .
+    snd-note(ui-status(endstat(Id))).
+    snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+  )
+endlet
+
+process ActivateEditor(Tree: term, ModuleName: str, FileName: str) is
+let
+  Id          : int,
+  Text        : str,
+  Path        : str,
+  Name        : str,
+  TimeStamp   : term
+in
+  Id := process-id .
+  snd-msg(unparse(Tree)) . 
+  rec-msg(unparsed-text(Text?)) .
+ 
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
+endlet
+
 process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
 let
   NormalForm : term,
   Focus      : term,
   DirtyFoci  : term,
   ErrList    : list,
-  Killed     : term
+  Stack      : list,
+  Killed     : term,
+  ActionTree : term,
+  STree      : term,
+  RTree      : term,
+  Trees      : list,
+  ButtonName : str,
+  FilePath   : str,
+  NewModName : str,
+  EditorName : str
 in
   subscribe(syntax-changed(ModuleName)) . 
   if equal(quote(Tree), none) then 
@@ -119,6 +245,45 @@ in
           tau
          fi
        fi
+       +
+       rec-msg(extra-button-action(EditorId, ButtonName?)) .
+       snd-msg(get-dirty-focuses(EditorId)) .
+       rec-msg(dirty-focuses(DirtyFoci?)) .
+       if equal(DirtyFoci, []) then
+         snd-msg(get-tree(EditorId)) . 
+         rec-msg(tree(ActionTree?)) .
+         snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+       else
+         snd-msg(invalidate-tree(EditorId)) .
+         ParseTerm(EditorId, ModuleName) .
+	 snd-msg(get-dirty-focuses(EditorId)) .
+	 rec-msg(dirty-focuses(DirtyFoci?)) . 
+	 if equal(DirtyFoci, []) then
+           snd-msg(get-tree(EditorId)) . 
+           rec-msg(tree(ActionTree?)) .
+           snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+         else 
+           tau
+         fi
+       fi
+       +
+       rec-msg(reduce-action(NewModName?), Stack?) .
+       STree := first(Stack) .
+       Stack := next(Stack) .
+       PlainReduceTerm(STree, NewModName, RTree?) .
+       Stack := join(RTree, Stack) .
+       snd-msg(stack(Stack))
+       +
+       rec-msg(activate-editor(NewModName?, EditorName?), Stack?) .
+       STree := first(Stack) .
+       Stack := next(Stack) .
+       ActivateEditor(STree, NewModName, EditorName) .
+       snd-msg(stack(Stack))
+       +
+       rec-msg(parse-file(FilePath?, NewModName?), Stack?) .
+       ParseFile(FilePath, NewModName, RTree?) .
+       Stack := join(RTree, Stack) .
+       snd-msg(stack(Stack))
       ) *
       if equal(Killed, true) then
         tau

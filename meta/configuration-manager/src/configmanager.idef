@@ -5,12 +5,25 @@
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
+#ifndef BUTTON_FILE
+#define BUTTON_FILE "meta.buttons"
+#endif
 
 process ConfigManager is
 let
-  CMNG  : configmanager,
-  Text  : str,
-  Paths : list
+  CMNG          : configmanager,
+  Text          : str,
+  Fid           : str,
+  Paths         : list,
+  ButtonName    : str,
+  ButtonNames   : list,
+  Stack         : list,
+  ButtonActions : list,
+  ButtonAction  : term,
+  ModuleName    : str,
+  EditorType    : str,
+  Tree          : term,
+  Term          : term
 in
   execute(configmanager, CMNG?) .
   snd-msg(get-config-file(CONFIG_FILE)) .
@@ -24,8 +37,39 @@ in
   rec-value(CMNG, search-paths(Paths?)) .
   snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
   rec-msg(search-paths-processed(CONFIG_FILE)) .
+  snd-msg(get-button-file(BUTTON_FILE)) .
+  (
+    rec-msg(button-file(BUTTON_FILE, Term?)) .
+    snd-eval(CMNG, process-button-file(BUTTON_FILE, Term))
+  +
+    rec-msg(no-button-file(BUTTON_FILE)) .
+    snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
+  ) .
+  rec-value(CMNG, buttons-processed) .
   snd-note(search-paths-processed) .
-  snd-terminate(CMNG, "done")
+  (
+    rec-msg(get-auxilary-buttons(EditorType?, ModuleName?)) .
+    snd-eval(CMNG, get-button-names(EditorType, ModuleName)) .
+    rec-value(CMNG, button-names(ButtonNames?)) .
+    snd-msg(button-list(ModuleName, ButtonNames))
+  +
+    rec-msg(extra-button-action(ButtonName?, ModuleName?, Tree?)) .
+    snd-eval(CMNG, get-button-actions(ButtonName, ModuleName)) .
+    rec-value(CMNG, button-actions(ButtonActions?)) .
+    Stack := [Tree] .
+    (
+      if not-equal(ButtonActions, []) then
+        ButtonAction := first(ButtonActions) .
+        ButtonActions := next(ButtonActions) .
+        snd-msg(ButtonAction, Stack) .
+        rec-msg(stack(Stack?))
+
+      fi
+    )*
+    if equal(ButtonActions, []) then
+      tau
+    fi
+  ) * delta
 endlet
 
 tool configmanager is { command = "configmanager" }

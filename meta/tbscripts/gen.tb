@@ -1,0 +1,30 @@
+/*
+   $Id$
+*/
+tool genadapt is {
+  command = "gen-adapter"
+}
+
+process ADAPTER(Id : genadapt, Cmd : str, Inp : str) is
+let
+  Out : str
+in
+   snd-eval(Id,cmd(Cmd, input(Inp))).
+   rec-value(Id, output(Out?))
+endlet
+
+process GenAdapt is
+let
+  GENADAPT : genadapt,
+  Action   : str,
+  Stack    : list
+in
+  execute(genadapt, GENADAPT?) .
+  (
+    rec-msg(activate-gen(Action?), Stack?) .
+    ADAPTER(GENADAPT, Action, "") .
+    printf("") .
+    snd-msg(stack(Stack))
+  )*
+  delta
+endlet

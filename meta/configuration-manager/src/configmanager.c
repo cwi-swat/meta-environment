@@ -3,14 +3,16 @@
  */   
 
 #include "configmanager.h"
+#include <unistd.h> 
 
 static char myversion[] = "1.0";     
+static ATermList buttons;
 
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
 }
-   
+ 
 ATerm process_config_file(int cid, char *filename, char *contents)
 {
   int i,
@@ -19,7 +21,7 @@ ATerm process_config_file(int cid, char *filename, char *contents)
       len = strlen(contents);
   char pathline[len];
   ATermList paths = ATempty;
-
+ 
   for (i = 0; i < len; i++) {
     if (contents[i] == '\n') {
       if (j != 0 && pathline[0] != '#') {
@@ -30,7 +32,7 @@ ATerm process_config_file(int cid, char *filename, char *contents)
         line_number++;
         j = 0;
         paths = ATinsert(paths, ATmake("<str>", pathline));
-      }
+      } 
       else {
         j = 0;
       }
@@ -48,8 +50,64 @@ ATerm process_config_file(int cid, char *filename, char *contents)
     j = 0;
     paths = ATinsert(paths, ATmake("<str>", pathline));
   }
-
+ 
   return ATmake("snd-value(search-paths(<term>))", ATreverse(paths));
+}
+
+ATerm process_button_file(int cid, char *filename, ATerm contents)
+{
+  ATermList buttonList = ATgetArguments((ATermAppl)contents);
+
+  if (!ATisEmpty(buttonList)) {
+    buttons = (ATermList)ATgetFirst(buttonList);
+  }
+  else {
+    buttons = buttonList;
+  }
+  return ATmake("snd-value(buttons-processed)");
+}
+
+ATerm get_button_names(int cid, char *editortype, char *modulename)
+{
+  ATermList localButtons = buttons;
+  ATermList buttonNames = ATempty;
+
+  while (!ATisEmpty(localButtons)) {
+    ATerm buttonDesc = ATgetFirst(localButtons);
+    ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
+    if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",modulename))) {
+      buttonArgs = ATgetNext(buttonArgs);
+      if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",editortype))) {
+        buttonArgs = ATgetNext(buttonArgs);
+        buttonNames = ATinsert(buttonNames,ATgetFirst(buttonArgs));
+      }
+    }
+    localButtons = ATgetNext(localButtons);
+  }
+
+  return ATmake("snd-value(button-names(<term>))", buttonNames);
+}
+
+ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
+{
+  ATermList localButtons = buttons;
+  ATermList buttonActions = ATempty;
+
+  while (!ATisEmpty(localButtons)) {
+    ATerm buttonDesc = ATgetFirst(localButtons);
+    ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
+    if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", moduleName))) {
+      buttonArgs = ATgetNext(buttonArgs);
+      buttonArgs = ATgetNext(buttonArgs);
+      if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", buttonName))) {
+        buttonArgs = ATgetNext(buttonArgs);
+        buttonActions = (ATermList)ATgetFirst(buttonArgs);
+      }
+    }
+    localButtons = ATgetNext(localButtons);
+  }
+
+  return ATmake("snd-value(button-actions(<term>))", buttonActions);
 }
 
 void usage(char *prg, ATbool is_err)

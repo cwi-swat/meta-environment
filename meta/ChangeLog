@@ -1,5 +1,10 @@
 # $Id$
 
+2002/04/26 (markvdb@cs.vu.nl)
+ * Experimental version with buttons.
+ * See meta.buttons in meta/demo/pico for an example of its use.
+ * Started version 0.10beta.
+
 2002/04/24 <olivierp@cwi.nl>
  * Dragging when the menu is active no longer moves the graph
  * Operations on multiple modules are now possible

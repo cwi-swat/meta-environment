@@ -377,6 +377,28 @@ ATerm read_file(int cid, char *name)
 }
 
 /*}}}  */
+/*{{{  ATerm read_aterm_file(int cid, char *name)  */
+
+ATerm read_aterm_file(int cid, char *name) 
+{
+  ATerm ft, t;
+
+  if(!(t = ATreadFromNamedFile(name))) {
+    if (run_verbose) {
+      ATwarning("error reading %s\n", name);
+    }
+    return open_error(name);
+  }
+  else {
+    if (run_verbose) {
+      ATwarning("reading %s (ascii)\n", name);
+    }
+    ft = ATmake("snd-value(file-contents(<str>,<term>))", name, t);
+  }
+  return ft; 
+}
+
+/*}}}  */
 /*{{{  ATerm exists_syntax_module(int cid, char *moduleName) */
 
 ATerm exists_syntax_module(int cid, char *moduleName)
