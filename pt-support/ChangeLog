@@ -1,5 +1,9 @@
 $Id$
 
+2003/11/03 (jurgenv@cwi.nl)
+ * Added lowering, the opposite of lifting to ptmept. The liftPT tool supports
+   it via the -l flag. Lowering of parsed ATerms and parsed AsFix is supported.
+
 2003/10/09 (markvdb@cwi.nl)
  * By accident the strategy symbol was removed, added again.
 
