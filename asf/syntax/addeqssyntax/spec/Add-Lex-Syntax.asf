@@ -49,66 +49,66 @@ equations
                      add-lcf-for-productions(Symbol*1 -> Sort Attrs Prod*1,
                                              Symbol*2) = Prod Prod*2
 
-  [alfp-2'1] upper2lower(Sort) = literal(Char*)
+  [alfp-2'1] upper2lower(Sort) = qliteral(Char*)
              ==================================
              add-lcf-for-production(Symbol* -> Sort) =
-               literal(""" Char* """) "(" CHAR* ")" -> Sort {cons("lexical-constructor")}
+               qliteral(""" Char* """) "(" CHAR* ")" -> Sort {cons("lexical-constructor")}
 
-  [u2l-1'1]  upper2lower(sort("A")) = literal("a")
+  [u2l-1'1]  upper2lower(sort("A")) = qliteral("a")
 
-  [u2l-1'2]  upper2lower(sort("B")) = literal("b")
+  [u2l-1'2]  upper2lower(sort("B")) = qliteral("b")
 
-  [u2l-1'3]  upper2lower(sort("C")) = literal("c")
+  [u2l-1'3]  upper2lower(sort("C")) = qliteral("c")
 
-  [u2l-1'4]  upper2lower(sort("D")) = literal("d")
+  [u2l-1'4]  upper2lower(sort("D")) = qliteral("d")
 
-  [u2l-1'5]  upper2lower(sort("E")) = literal("e")
+  [u2l-1'5]  upper2lower(sort("E")) = qliteral("e")
 
-  [u2l-1'6]  upper2lower(sort("F")) = literal("f")
+  [u2l-1'6]  upper2lower(sort("F")) = qliteral("f")
 
-  [u2l-1'7]  upper2lower(sort("G")) = literal("g")
+  [u2l-1'7]  upper2lower(sort("G")) = qliteral("g")
 
-  [u2l-1'8]  upper2lower(sort("H")) = literal("h")
+  [u2l-1'8]  upper2lower(sort("H")) = qliteral("h")
 
-  [u2l-1'9]  upper2lower(sort("I")) = literal("i")
+  [u2l-1'9]  upper2lower(sort("I")) = qliteral("i")
 
-  [u2l-1'10] upper2lower(sort("J")) = literal("j")
+  [u2l-1'10] upper2lower(sort("J")) = qliteral("j")
 
-  [u2l-1'11] upper2lower(sort("K")) = literal("k")
+  [u2l-1'11] upper2lower(sort("K")) = qliteral("k")
 
-  [u2l-1'12] upper2lower(sort("L")) = literal("l")
+  [u2l-1'12] upper2lower(sort("L")) = qliteral("l")
 
-  [u2l-1'13] upper2lower(sort("M")) = literal("m")
+  [u2l-1'13] upper2lower(sort("M")) = qliteral("m")
 
-  [u2l-1'14] upper2lower(sort("N")) = literal("n")
+  [u2l-1'14] upper2lower(sort("N")) = qliteral("n")
 
-  [u2l-1'15] upper2lower(sort("O")) = literal("o")
+  [u2l-1'15] upper2lower(sort("O")) = qliteral("o")
 
-  [u2l-1'16] upper2lower(sort("P")) = literal("p")
+  [u2l-1'16] upper2lower(sort("P")) = qliteral("p")
 
-  [u2l-1'17] upper2lower(sort("Q")) = literal("q")
+  [u2l-1'17] upper2lower(sort("Q")) = qliteral("q")
 
-  [u2l-1'18] upper2lower(sort("R")) = literal("r")
+  [u2l-1'18] upper2lower(sort("R")) = qliteral("r")
 
-  [u2l-1'19] upper2lower(sort("S")) = literal("s")
+  [u2l-1'19] upper2lower(sort("S")) = qliteral("s")
 
-  [u2l-1'20] upper2lower(sort("T")) = literal("t")
+  [u2l-1'20] upper2lower(sort("T")) = qliteral("t")
 
-  [u2l-1'21] upper2lower(sort("U")) = literal("u")
+  [u2l-1'21] upper2lower(sort("U")) = qliteral("u")
 
-  [u2l-1'22] upper2lower(sort("V")) = literal("v")
+  [u2l-1'22] upper2lower(sort("V")) = qliteral("v")
 
-  [u2l-1'23] upper2lower(sort("W")) = literal("w")
+  [u2l-1'23] upper2lower(sort("W")) = qliteral("w")
 
-  [u2l-1'24] upper2lower(sort("X")) = literal("x")
+  [u2l-1'24] upper2lower(sort("X")) = qliteral("x")
 
-  [u2l-1'25] upper2lower(sort("Y")) = literal("y")
+  [u2l-1'25] upper2lower(sort("Y")) = qliteral("y")
 
-  [u2l-1'26] upper2lower(sort("Z")) = literal("z")
+  [u2l-1'26] upper2lower(sort("Z")) = qliteral("z")
 
-  [u2l-1'27] upper2lower(sort(Char1)) = literal(Char2),
-             upper2lower(sort(Char+1)) = literal(Char+2)
+  [u2l-1'27] upper2lower(sort(Char1)) = qliteral(Char2),
+             upper2lower(sort(Char+1)) = qliteral(Char+2)
              ==============================================
-             upper2lower(sort(Char1 Char+1)) = literal(Char2 Char+2)
+             upper2lower(sort(Char1 Char+1)) = qliteral(Char2 Char+2)
 
-  [default-u2l-1'28] upper2lower(sort(Char)) = literal(Char)
+  [default-u2l-1'28] upper2lower(sort(Char)) = qliteral(Char)

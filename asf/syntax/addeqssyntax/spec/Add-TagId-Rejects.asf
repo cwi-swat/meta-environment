@@ -62,150 +62,150 @@ equations
              ======================================
              add-tir-for-symbols(Symbol Symbol*1) = Prod*1 Prod*2
 
-  [atfs-2'1] are-tagid-chars(literal(Char*)) = true
+  [atfs-2'1] are-tagid-chars(qliteral(Char*)) = true
              ======================================
-             add-tir-for-symbol(literal(""" Char* """)) =
-               literal(""" Char* """) -> ASF-TagId {reject}
+             add-tir-for-symbol(qliteral(""" Char* """)) =
+               qliteral(""" Char* """) -> ASF-TagId {reject}
 
-  [atfs-2'2] are-tagid-chars(literal(Char*)) = true
+  [atfs-2'2] are-tagid-chars(qliteral(Char*)) = true
              ======================================
              add-tir-for-symbol(uqliteral(Char*)) =
-               literal(""" Char* """) -> ASF-TagId {reject}
+               qliteral(""" Char* """) -> ASF-TagId {reject}
 
 
   [default-atfs-2'3] add-tir-for-symbol(Symbol) =
 
-  [atc-1'1] are-tagid-chars(literal("A")) = true
+  [atc-1'1] are-tagid-chars(qliteral("A")) = true
 
-  [atc-1'2] are-tagid-chars(literal("B")) = true
+  [atc-1'2] are-tagid-chars(qliteral("B")) = true
 
-  [atc-1'3] are-tagid-chars(literal("C")) = true
+  [atc-1'3] are-tagid-chars(qliteral("C")) = true
 
-  [atc-1'4] are-tagid-chars(literal("D")) = true
+  [atc-1'4] are-tagid-chars(qliteral("D")) = true
 
-  [atc-1'5] are-tagid-chars(literal("E")) = true
+  [atc-1'5] are-tagid-chars(qliteral("E")) = true
 
-  [atc-1'6] are-tagid-chars(literal("F")) = true
+  [atc-1'6] are-tagid-chars(qliteral("F")) = true
 
-  [atc-1'7] are-tagid-chars(literal("G")) = true
+  [atc-1'7] are-tagid-chars(qliteral("G")) = true
 
-  [atc-1'8] are-tagid-chars(literal("H")) = true
+  [atc-1'8] are-tagid-chars(qliteral("H")) = true
 
-  [atc-1'9] are-tagid-chars(literal("I")) = true
+  [atc-1'9] are-tagid-chars(qliteral("I")) = true
 
-  [atc-1'10] are-tagid-chars(literal("J")) = true
+  [atc-1'10] are-tagid-chars(qliteral("J")) = true
 
-  [atc-1'11] are-tagid-chars(literal("K")) = true
+  [atc-1'11] are-tagid-chars(qliteral("K")) = true
 
-  [atc-1'12] are-tagid-chars(literal("L")) = true
+  [atc-1'12] are-tagid-chars(qliteral("L")) = true
 
-  [atc-1'13] are-tagid-chars(literal("M")) = true
+  [atc-1'13] are-tagid-chars(qliteral("M")) = true
 
-  [atc-1'14] are-tagid-chars(literal("N")) = true
+  [atc-1'14] are-tagid-chars(qliteral("N")) = true
 
-  [atc-1'15] are-tagid-chars(literal("O")) = true
+  [atc-1'15] are-tagid-chars(qliteral("O")) = true
 
-  [atc-1'16] are-tagid-chars(literal("P")) = true
+  [atc-1'16] are-tagid-chars(qliteral("P")) = true
 
-  [atc-1'17] are-tagid-chars(literal("Q")) = true
+  [atc-1'17] are-tagid-chars(qliteral("Q")) = true
 
-  [atc-1'18] are-tagid-chars(literal("R")) = true
+  [atc-1'18] are-tagid-chars(qliteral("R")) = true
 
-  [atc-1'19] are-tagid-chars(literal("S")) = true
+  [atc-1'19] are-tagid-chars(qliteral("S")) = true
 
-  [atc-1'20] are-tagid-chars(literal("T")) = true
+  [atc-1'20] are-tagid-chars(qliteral("T")) = true
 
-  [atc-1'21] are-tagid-chars(literal("U")) = true
+  [atc-1'21] are-tagid-chars(qliteral("U")) = true
 
-  [atc-1'22] are-tagid-chars(literal("V")) = true
+  [atc-1'22] are-tagid-chars(qliteral("V")) = true
 
-  [atc-1'23] are-tagid-chars(literal("W")) = true
+  [atc-1'23] are-tagid-chars(qliteral("W")) = true
 
-  [atc-1'24] are-tagid-chars(literal("X")) = true
+  [atc-1'24] are-tagid-chars(qliteral("X")) = true
 
-  [atc-1'25] are-tagid-chars(literal("Y")) = true
+  [atc-1'25] are-tagid-chars(qliteral("Y")) = true
 
-  [atc-1'26] are-tagid-chars(literal("Z")) = true
+  [atc-1'26] are-tagid-chars(qliteral("Z")) = true
 
-  [atc-1'27] are-tagid-chars(literal("a")) = true
+  [atc-1'27] are-tagid-chars(qliteral("a")) = true
 
-  [atc-1'28] are-tagid-chars(literal("b")) = true
+  [atc-1'28] are-tagid-chars(qliteral("b")) = true
 
-  [atc-1'29] are-tagid-chars(literal("c")) = true
+  [atc-1'29] are-tagid-chars(qliteral("c")) = true
 
-  [atc-1'30] are-tagid-chars(literal("d")) = true
+  [atc-1'30] are-tagid-chars(qliteral("d")) = true
 
-  [atc-1'31] are-tagid-chars(literal("e")) = true
+  [atc-1'31] are-tagid-chars(qliteral("e")) = true
 
-  [atc-1'32] are-tagid-chars(literal("f")) = true
+  [atc-1'32] are-tagid-chars(qliteral("f")) = true
 
-  [atc-1'33] are-tagid-chars(literal("g")) = true
+  [atc-1'33] are-tagid-chars(qliteral("g")) = true
 
-  [atc-1'34] are-tagid-chars(literal("h")) = true
+  [atc-1'34] are-tagid-chars(qliteral("h")) = true
 
-  [atc-1'35] are-tagid-chars(literal("i")) = true
+  [atc-1'35] are-tagid-chars(qliteral("i")) = true
 
-  [atc-1'36] are-tagid-chars(literal("j")) = true
+  [atc-1'36] are-tagid-chars(qliteral("j")) = true
 
-  [atc-1'37] are-tagid-chars(literal("k")) = true
+  [atc-1'37] are-tagid-chars(qliteral("k")) = true
 
-  [atc-1'38] are-tagid-chars(literal("l")) = true
+  [atc-1'38] are-tagid-chars(qliteral("l")) = true
 
-  [atc-1'39] are-tagid-chars(literal("m")) = true
+  [atc-1'39] are-tagid-chars(qliteral("m")) = true
 
-  [atc-1'40] are-tagid-chars(literal("n")) = true
+  [atc-1'40] are-tagid-chars(qliteral("n")) = true
 
-  [atc-1'41] are-tagid-chars(literal("o")) = true
+  [atc-1'41] are-tagid-chars(qliteral("o")) = true
 
-  [atc-1'42] are-tagid-chars(literal("p")) = true
+  [atc-1'42] are-tagid-chars(qliteral("p")) = true
 
-  [atc-1'43] are-tagid-chars(literal("q")) = true
+  [atc-1'43] are-tagid-chars(qliteral("q")) = true
 
-  [atc-1'44] are-tagid-chars(literal("r")) = true
+  [atc-1'44] are-tagid-chars(qliteral("r")) = true
 
-  [atc-1'45] are-tagid-chars(literal("s")) = true
+  [atc-1'45] are-tagid-chars(qliteral("s")) = true
 
-  [atc-1'46] are-tagid-chars(literal("t")) = true
+  [atc-1'46] are-tagid-chars(qliteral("t")) = true
 
-  [atc-1'47] are-tagid-chars(literal("u")) = true
+  [atc-1'47] are-tagid-chars(qliteral("u")) = true
 
-  [atc-1'48] are-tagid-chars(literal("v")) = true
+  [atc-1'48] are-tagid-chars(qliteral("v")) = true
 
-  [atc-1'49] are-tagid-chars(literal("w")) = true
+  [atc-1'49] are-tagid-chars(qliteral("w")) = true
 
-  [atc-1'50] are-tagid-chars(literal("x")) = true
+  [atc-1'50] are-tagid-chars(qliteral("x")) = true
 
-  [atc-1'51] are-tagid-chars(literal("y")) = true
+  [atc-1'51] are-tagid-chars(qliteral("y")) = true
 
-  [atc-1'52] are-tagid-chars(literal("z")) = true
+  [atc-1'52] are-tagid-chars(qliteral("z")) = true
 
-  [atc-1'53] are-tagid-chars(literal("0")) = true
+  [atc-1'53] are-tagid-chars(qliteral("0")) = true
 
-  [atc-1'54] are-tagid-chars(literal("1")) = true
+  [atc-1'54] are-tagid-chars(qliteral("1")) = true
 
-  [atc-1'55] are-tagid-chars(literal("2")) = true
+  [atc-1'55] are-tagid-chars(qliteral("2")) = true
 
-  [atc-1'56] are-tagid-chars(literal("3")) = true
+  [atc-1'56] are-tagid-chars(qliteral("3")) = true
 
-  [atc-1'57] are-tagid-chars(literal("4")) = true
+  [atc-1'57] are-tagid-chars(qliteral("4")) = true
 
-  [atc-1'58] are-tagid-chars(literal("5")) = true
+  [atc-1'58] are-tagid-chars(qliteral("5")) = true
 
-  [atc-1'59] are-tagid-chars(literal("6")) = true
+  [atc-1'59] are-tagid-chars(qliteral("6")) = true
 
-  [atc-1'60] are-tagid-chars(literal("7")) = true
+  [atc-1'60] are-tagid-chars(qliteral("7")) = true
 
-  [atc-1'61] are-tagid-chars(literal("8")) = true
+  [atc-1'61] are-tagid-chars(qliteral("8")) = true
 
-  [atc-1'62] are-tagid-chars(literal("9")) = true
+  [atc-1'62] are-tagid-chars(qliteral("9")) = true
 
-  [atc-1'63] are-tagid-chars(literal("'")) = true
+  [atc-1'63] are-tagid-chars(qliteral("'")) = true
 
-  [atc-1'64] are-tagid-chars(literal("-")) = true
+  [atc-1'64] are-tagid-chars(qliteral("-")) = true
 
-  [atc-1'65] are-tagid-chars(literal(Char1)) = true,
-             are-tagid-chars(literal(Char+1)) = true
+  [atc-1'65] are-tagid-chars(qliteral(Char1)) = true,
+             are-tagid-chars(qliteral(Char+1)) = true
              =======================================
-             are-tagid-chars(literal(Char1 Char+1)) = true
+             are-tagid-chars(qliteral(Char1 Char+1)) = true
 
-  [default-atc-1'66] are-tagid-chars(literal(Char)) = false
+  [default-atc-1'66] are-tagid-chars(qliteral(Char)) = false
