@@ -49,7 +49,7 @@
 ATbool run_verbose;
 
 static char myname[] = "asfix2c";
-static char myversion[] = "1.0";
+static char myversion[] = "1.4";
 
 static char *outputDirName = NULL;
 
