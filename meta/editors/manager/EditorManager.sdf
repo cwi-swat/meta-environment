@@ -13,12 +13,19 @@ exports
   context-free syntax
     name:StrCon -> EditorType
 
+  sorts SessionStatus
+  context-free syntax
+    "running" -> SessionStatus {cons("running")}
+    "zombie" -> SessionStatus {cons("zombie")}
+
   sorts Session
   context-free syntax
-    "session-data" "("
+    "session" "("
       id:Sid ","
       filename:StrCon ","
       modulename:StrCon ","
+      status:SessionStatus ","
+      reference-count:NatCon ","
       "{" {EditorType ","}* "}"
     ")"
     -> Session

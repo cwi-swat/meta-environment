@@ -1,9 +1,10 @@
+*.tifs
 .*.swp
 .deps
+.libs
 EditorManager.adt
 EditorManager.def
 EditorManager.dict
 Makefile
 Makefile.in
-.libs
 editor-manager

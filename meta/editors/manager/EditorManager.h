@@ -14,6 +14,7 @@
 
 typedef struct _EM_Sid *EM_Sid;
 typedef struct _EM_EditorType *EM_EditorType;
+typedef struct _EM_SessionStatus *EM_SessionStatus;
 typedef struct _EM_Session *EM_Session;
 typedef struct _EM_EditorTypeList *EM_EditorTypeList;
 
@@ -25,6 +26,7 @@ void EM_initEditorManagerApi(void);
 
 void EM_protectSid(EM_Sid *arg);
 void EM_protectEditorType(EM_EditorType *arg);
+void EM_protectSessionStatus(EM_SessionStatus *arg);
 void EM_protectSession(EM_Session *arg);
 void EM_protectEditorTypeList(EM_EditorTypeList *arg);
 
@@ -35,6 +37,8 @@ EM_Sid EM_SidFromTerm(ATerm t);
 ATerm EM_SidToTerm(EM_Sid arg);
 EM_EditorType EM_EditorTypeFromTerm(ATerm t);
 ATerm EM_EditorTypeToTerm(EM_EditorType arg);
+EM_SessionStatus EM_SessionStatusFromTerm(ATerm t);
+ATerm EM_SessionStatusToTerm(EM_SessionStatus arg);
 EM_Session EM_SessionFromTerm(ATerm t);
 ATerm EM_SessionToTerm(EM_Session arg);
 EM_EditorTypeList EM_EditorTypeListFromTerm(ATerm t);
@@ -61,8 +65,10 @@ EM_EditorTypeList EM_makeEditorTypeList6(EM_EditorType elem1, EM_EditorType elem
 
 EM_Sid EM_makeSidDefault(int id);
 EM_EditorType EM_makeEditorTypeDefault(const char* name);
-EM_Session EM_makeSessionDefault(EM_Sid id, const char* filename, const char* modulename, EM_EditorTypeList list);
-EM_EditorTypeList EM_makeEditorTypeListEmpty();
+EM_SessionStatus EM_makeSessionStatusRunning(void);
+EM_SessionStatus EM_makeSessionStatusZombie(void);
+EM_Session EM_makeSessionDefault(EM_Sid id, const char* filename, const char* modulename, EM_SessionStatus status, int referenceCount, EM_EditorTypeList list);
+EM_EditorTypeList EM_makeEditorTypeListEmpty(void);
 EM_EditorTypeList EM_makeEditorTypeListSingle(EM_EditorType head);
 EM_EditorTypeList EM_makeEditorTypeListMany(EM_EditorType head, EM_EditorTypeList tail);
 
@@ -71,6 +77,7 @@ EM_EditorTypeList EM_makeEditorTypeListMany(EM_EditorType head, EM_EditorTypeLis
 
 ATbool EM_isEqualSid(EM_Sid arg0, EM_Sid arg1);
 ATbool EM_isEqualEditorType(EM_EditorType arg0, EM_EditorType arg1);
+ATbool EM_isEqualSessionStatus(EM_SessionStatus arg0, EM_SessionStatus arg1);
 ATbool EM_isEqualSession(EM_Session arg0, EM_Session arg1);
 ATbool EM_isEqualEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeList arg1);
 
@@ -93,6 +100,13 @@ char* EM_getEditorTypeName(EM_EditorType arg);
 EM_EditorType EM_setEditorTypeName(EM_EditorType arg, const char* name);
 
 /*}}}  */
+/*{{{  EM_SessionStatus accessors */
+
+ATbool EM_isValidSessionStatus(EM_SessionStatus arg);
+inline ATbool EM_isSessionStatusRunning(EM_SessionStatus arg);
+inline ATbool EM_isSessionStatusZombie(EM_SessionStatus arg);
+
+/*}}}  */
 /*{{{  EM_Session accessors */
 
 ATbool EM_isValidSession(EM_Session arg);
@@ -106,6 +120,12 @@ EM_Session EM_setSessionFilename(EM_Session arg, const char* filename);
 ATbool EM_hasSessionModulename(EM_Session arg);
 char* EM_getSessionModulename(EM_Session arg);
 EM_Session EM_setSessionModulename(EM_Session arg, const char* modulename);
+ATbool EM_hasSessionStatus(EM_Session arg);
+EM_SessionStatus EM_getSessionStatus(EM_Session arg);
+EM_Session EM_setSessionStatus(EM_Session arg, EM_SessionStatus status);
+ATbool EM_hasSessionReferenceCount(EM_Session arg);
+int EM_getSessionReferenceCount(EM_Session arg);
+EM_Session EM_setSessionReferenceCount(EM_Session arg, int referenceCount);
 ATbool EM_hasSessionList(EM_Session arg);
 EM_EditorTypeList EM_getSessionList(EM_Session arg);
 EM_Session EM_setSessionList(EM_Session arg, EM_EditorTypeList list);
@@ -129,7 +149,8 @@ EM_EditorTypeList EM_setEditorTypeListTail(EM_EditorTypeList arg, EM_EditorTypeL
 
 EM_Sid EM_visitSid(EM_Sid arg, int (*acceptId)(int));
 EM_EditorType EM_visitEditorType(EM_EditorType arg, char* (*acceptName)(char*));
-EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptFilename)(char*), char* (*acceptModulename)(char*), EM_EditorTypeList (*acceptList)(EM_EditorTypeList));
+EM_SessionStatus EM_visitSessionStatus(EM_SessionStatus arg);
+EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptFilename)(char*), char* (*acceptModulename)(char*), EM_SessionStatus (*acceptStatus)(EM_SessionStatus), int (*acceptReferenceCount)(int), EM_EditorTypeList (*acceptList)(EM_EditorTypeList));
 EM_EditorTypeList EM_visitEditorTypeList(EM_EditorTypeList arg, EM_EditorType (*acceptHead)(EM_EditorType));
 
 /*}}}  */

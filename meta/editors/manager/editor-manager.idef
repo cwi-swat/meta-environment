@@ -81,6 +81,20 @@ in
   +
     rec-msg(em-delete-session(Sid?))
     . snd-do(EM, delete-session(Sid))
+  +
+    rec-msg(em-request-transaction(Sid?))
+    . snd-eval(EM, request-transaction(Sid))
+    .
+    (
+      rec-value(EM, transaction-started)
+      . snd-msg(em-transaction-started(Sid))
+    +
+      rec-value(EM, no-transaction)
+      . snd-msg(em-no-transaction(Sid))
+    )
+  +
+    rec-msg(em-end-transaction(Sid?))
+    . snd-do(EM, end-transaction(Sid))
   )
   * delta
 endlet

@@ -35,7 +35,7 @@ static EM_Sid makeUniqueSessionId()
 
 static ATerm sndValue(ATerm result)
 {
-  assert(result);
+  assert(result != NULL);
 
   return ATmake("snd-value(<term>)", result);
 }
@@ -59,6 +59,8 @@ static void putSession(EM_Session session)
   EM_Sid sid;
 
   assert(session != NULL);
+
+  /*ATwarning("  [%t] -> [%t]\n", sid, session);*/
 
   sid = EM_getSessionId(session);
   ATtablePut(sessions, EM_SidToTerm(sid), EM_SessionToTerm(session));
@@ -118,17 +120,16 @@ static ATermList findSessions(const char *modulename)
 ATerm create_session(int cid, const char *filename, const char *modulename)
 {
   EM_Session session;
-  EM_Sid sid;
 
   assert(filename != NULL);
   assert(modulename != NULL);
 
   session = findSession(filename);
   if (session == NULL) {
-    session = EM_makeSessionDefault(makeUniqueSessionId(),
-				    filename,
-				    modulename,
-				    EM_makeEditorTypeListEmpty());
+    EM_Sid sid = makeUniqueSessionId();
+    EM_EditorTypeList list = EM_makeEditorTypeListEmpty();
+    EM_SessionStatus status = EM_makeSessionStatusRunning();
+    session = EM_makeSessionDefault(sid, filename, modulename, status, 0, list);
     putSession(session);
   }
   else {
@@ -139,9 +140,7 @@ ATerm create_session(int cid, const char *filename, const char *modulename)
     }
   }
 
-  sid = EM_getSessionId(session);
-
-  return sndValue(ATmake("session(<term>)", EM_SidToTerm(sid)));
+  return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
 }
 
 /*}}}  */
@@ -177,16 +176,22 @@ ATerm get_sessions_by_modulename(int cid, const char *modulename)
 
 void delete_session(int cid, ATerm sid)
 {
-  EM_Session session;
+  EM_Session session = getSession(sid);
 
-  assert(sid != NULL);
-
-  session = getSession(sid);
-  if (session == NULL) {
+  if (session != NULL) {
+    int referenceCount = EM_getSessionReferenceCount(session);
+    if (referenceCount == 0) {
+      ATwarning("delete session: %t\n", sid);
+      ATtableRemove(sessions, sid);
+    }
+    else {
+      putSession(EM_setSessionStatus(session, EM_makeSessionStatusZombie()));
+      ATwarning("making zombie: %t\n", sid);
+    }
+  }
+  else {
     ATabort("delete_session: no such session: %t\n", sid);
   }
-
-  ATtableRemove(sessions, sid);
 }
 
 /*}}}  */
@@ -197,8 +202,6 @@ ATerm get_filename(int cid, ATerm sid)
 {
   EM_Session session;
   const char *filename;
-
-  assert(sid != NULL);
 
   session = getSession(sid);
   if (session == NULL) {
@@ -217,8 +220,6 @@ ATerm get_modulename(int cid, ATerm sid)
   EM_Session session;
   const char *modulename;
 
-  assert(sid != NULL);
-
   session = getSession(sid);
   if (session == NULL) {
     return sndValue(ATmake("no-such-session"));
@@ -229,13 +230,12 @@ ATerm get_modulename(int cid, ATerm sid)
 }
 
 /*}}}  */
+
 /*{{{  void register_editor(int cid, ATerm sid, ATerm editorType) */
 
 void register_editor(int cid, ATerm sid, ATerm editorType)
 {
   EM_Session session;
-
-  assert(sid != NULL);
 
   session = getSession(sid);
   if (session != NULL) {
@@ -260,8 +260,6 @@ ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType)
 {
   EM_Session session;
 
-  assert(sid != NULL);
-
   session = getSession(sid);
   if (session != NULL) {
     EM_EditorType type = EM_EditorTypeFromTerm(editorType);
@@ -285,8 +283,6 @@ void unregister_editor(int cid, ATerm sid, ATerm editorType)
 {
   EM_Session session;
 
-  assert(sid != NULL);
-
   session = getSession(sid);
   if (session != NULL) {
     EM_EditorType type = EM_EditorTypeFromTerm(editorType);
@@ -307,6 +303,62 @@ void unregister_editor(int cid, ATerm sid, ATerm editorType)
 }
 
 /*}}}  */
+
+/*{{{  ATerm request_transaction(int cid, ATerm sid) */
+
+ATerm request_transaction(int cid, ATerm sid)
+{
+  EM_Session session = getSession(sid);
+
+  ATwarning("request_transaction: %t\n", sid);
+
+  if (session != NULL) {
+    EM_SessionStatus status = EM_getSessionStatus(session);
+    if (EM_isSessionStatusRunning(status)) {
+      int referenceCount = EM_getSessionReferenceCount(session);
+      assert(referenceCount >= 0);
+
+      referenceCount++;
+      session = EM_setSessionReferenceCount(session, referenceCount);
+      putSession(session);
+      return sndValue(ATparse("transaction-started"));
+    }
+  }
+
+  return sndValue(ATparse("no-transaction"));
+}
+
+/*}}}  */
+/*{{{  void end_transaction(int cid, ATerm) */
+
+void end_transaction(int cid, ATerm sid)
+{
+  EM_Session session = getSession(sid);
+
+  ATwarning("end_transaction: %t\n", sid);
+
+  if (session != NULL) {
+    int referenceCount = EM_getSessionReferenceCount(session);
+    assert(referenceCount > 0);
+
+    referenceCount--;
+    session = EM_setSessionReferenceCount(session, referenceCount);
+    putSession(session);
+
+    if (referenceCount == 0) {
+      EM_SessionStatus status = EM_getSessionStatus(session);
+      if (EM_isSessionStatusZombie(status)) {
+	ATtableRemove(sessions, sid);
+      }
+    }
+  }
+  else {
+    ATabort("editor-manager.c:end_transaction: no such session %t\n", sid);
+  }
+}
+
+/*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm msg) */
 
 void rec_terminate(int cid, ATerm msg)
