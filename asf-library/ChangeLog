@@ -1,5 +1,9 @@
 $Id$
 
+Sat Nov 13 10:43:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * library/languages/Makefile.am:
+   add tex to SUBDIRS (fixes distcheck issue)
+
 Fri Nov 12 13:10:01 CET 2004 <kooiker@cwi.nl>
  * library/languages/tex:
    - Added TeX grammar

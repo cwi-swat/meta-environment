@@ -1,13 +1,14 @@
 include $(top_srcdir)/library/make_rules
 
-SUBDIRS=\
-	asf\
-	asfix\
-	aterm\
-	casl\
-	cpp\
-	c\
-	pico\
-	sdf2\
+SUBDIRS = \
+	asf \
+	asfix \
+	aterm \
 	box \
-	sdf-idioms
+	casl \
+	cpp \
+	c \
+	pico \
+	sdf2 \
+	sdf-idioms \
+	tex
