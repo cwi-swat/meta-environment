@@ -275,23 +275,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         String option;
         int choice = JOptionPane.showConfirmDialog(topFrame, "Do you want to recursively close the imported modules?");
 
-        switch (choice) {
-          case 0 :
-            option = "recursive";
-            break;
-          case 1 :
-            option = "top";
-            break;
-          default :
-            option = "???";
-        }
-
-        if (choice != 2) {
-          Object[] values = moduleList.getSelectedValues();
-          for (int i = 0; i < values.length; i++) {
-            bridge.postEvent(factory.make("close-module(<str>," + option + ")", (String) values[i]));
-          }
-        }
+	if (choice != JOptionPane.CANCEL_OPTION) {
+	  option = (choice == JOptionPane.YES_OPTION ? "recursive" : "top");
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i = 0; i < values.length; i++) {
+	    bridge.postEvent(factory.make("close-module(<str>," + option + ")", (String) values[i]));
+	  }
+	}
       }
     });
 
@@ -310,7 +300,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       public void actionPerformed(ActionEvent event) {
         int choice = JOptionPane.showConfirmDialog(topFrame, "Are you sure you want delete this module (from disk)?");
 
-        if (choice == 0) {
+        if (choice == YES_OPTION) {
           Object[] values = moduleList.getSelectedValues();
           for (int i = 0; i < values.length; i++) {
             bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
