@@ -126,6 +126,9 @@ proc delete-module { mod } {
     foreach edge [$node listinedges] {
         $edge delete
     }
+
+    $node delete
+
     update-graph
 }
 
