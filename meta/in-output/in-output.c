@@ -282,7 +282,7 @@ ATerm create_empty_sdf2_module(int cid, char *moduleName)
 	if (run_verbose) {
 	    ATwarning("create_empty_sdf2_module: %s\n", errmsg);
 	}
-	return ATmake("snd-value(creation-failed(%s))", errmsg);
+	return ATmake("snd-value(creation-failed(<str>))", errmsg);
     }
 
     /* Insert proper sdf2 syntax. */
@@ -291,6 +291,30 @@ ATerm create_empty_sdf2_module(int cid, char *moduleName)
     fclose(f);
     
     return ATmake("snd-value(creation-succeeded)");
+}
+
+/*
+ * Create an empty equations section for a given module.
+ */
+ATerm create_empty_eqs_section(int cid, char *moduleName)
+{
+    FILE *f;
+    char txtFileName[PATH_LEN] = {'\0'};
+
+    /* Build eqs-text-filename from moduleName */
+    sprintf(txtFileName, "%s%s", moduleName, EQS_TXT_EXT);
+
+    if (!(f = fopen(txtFileName, "w"))) {
+	char *errmsg = strerror(errno);
+	if (run_verbose) {
+	    ATwarning("create_empty_eqs_section: %s\n", errmsg);
+	}
+	return ATmake("snd-value(creation-failed(<str>))", errmsg);
+    }
+
+    fclose(f);
+    
+    return ATmake("snd-value(creation-succeeded(<str>))", txtFileName);
 }
 
 ATerm open_sdf2_file(int cid, char *name)

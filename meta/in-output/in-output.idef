@@ -1,14 +1,15 @@
 process Io is
 let
-  IO   : in-output,
-  Id   : term,
-  Asfix: term,
-  Name : str,
-  Dir  : str,
-  Path : str,
-  T    : term,
-  Text : str,
-  TS   : int
+  IO       : in-output,
+  Id       : term,
+  Asfix    : term,
+  Name     : str,
+  Dir      : str,
+  Path     : str,
+  T        : term,
+  Text     : str,
+  FileName : str,
+  TS       : int
 in
   execute(in-output,IO?).
   (
@@ -56,6 +57,17 @@ in
     +
       rec-value(IO, creation-failed(Text?)) .
       snd-msg(module-creation-failed(Name, Text))
+    )
+  +
+    %% Create a (new) equations section for a given module
+    rec-msg(create-empty-equations(Name?)) .
+    snd-eval(IO, create-empty-eqs-section(Name)) .
+    (
+      rec-value(IO, creation-succeeded(FileName?)) .
+      snd-msg(equations-created(FileName))
+    +
+      rec-value(IO, creation-failed(Text?)) .
+      snd-msg(equations-creation-failed(Name, Text))
     )
   +
     %% Name represents the module-name (without extension)
