@@ -139,7 +139,7 @@ equations
                                            n := |'a| - 1
   [0] assoc[[p]]          = p <n>> p  when 'a -> _A {attr*1, assoc, attr*2} := p,
                                            n := |'a| - 1
-  [0] assoc[[p]]          = p <0,n>> p  when 'a -> _A {attr*1, non-assoc, attr*2} := p,
+  [0] assoc[[p]]          = p <0>> p ++ p <n>> p  when 'a -> _A {attr*1, non-assoc, attr*2} := p,
                                            n := |'a| - 1
 %%  [0] assoc[[p]]          = p as p  when 'a -> _A {attr*1, as, attr*2} := p
   [default-0] assoc[[p]]  =
