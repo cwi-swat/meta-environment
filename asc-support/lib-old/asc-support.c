@@ -1707,12 +1707,12 @@ ATerm slice(ATerm l1, ATerm l2)
 
 ATerm make_list(ATerm t)
 {
-  if(ATgetType(t) == AT_LIST) 
+  if(ATgetType(t) == AT_LIST)  {
     return t;
-  else
-    return  singleton(t);
+  }
+  else {
+    return singleton(t);
+  }
 }
 
 /*}}}  */
-
-
