@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jun 3, 2003 1:08:20 PM
+// generation time: Jul 2, 2003 2:33:16 PM
 
 package metastudio;
 
@@ -86,12 +86,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void initializeUi(String s0, String s1, String s2, String s3, String s4)
+  //{{{  public void initializeUi(String s0)
 
-  public void initializeUi(String s0, String s1, String s2, String s3, String s4)
+  public void initializeUi(String s0)
   {
     if (tool != null) {
-      tool.initializeUi(s0, s1, s2, s3, s4);
+      tool.initializeUi(s0);
     }
     else {
       throw new UnsupportedOperationException("method `initializeUi' not supported.");
@@ -177,12 +177,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void updateList(ATerm t0)
+  //{{{  public void updateList(String s0)
 
-  public void updateList(ATerm t0)
+  public void updateList(String s0)
   {
     if (tool != null) {
-      tool.updateList(t0);
+      tool.updateList(s0);
     }
     else {
       throw new UnsupportedOperationException("method `updateList' not supported.");

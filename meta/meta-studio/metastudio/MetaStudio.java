@@ -726,12 +726,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //{{{ public void initialize_ui(String libloc, String syn_ext, String sem_ext,
 
-  public void initializeUi(String name, String libloc, String syn_ext, String sem_ext, String trm_ext) {
+  public void initializeUi(String name) {
     setTitle(name);
     Preferences.setString("metastudio.name", name);
-    Preferences.setString("library.dir", libloc);
-    Preferences.setString("module.extension", syn_ext);
-    Preferences.setString("term.extension", trm_ext);
   }
 
   //}}}
@@ -877,44 +874,45 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
+  //{{{ //{{{ public void moduleSelected(Module module)
+
   //{{{ public void moduleSelected(Module module)
 
   public void moduleSelected(Module module) {
-      if (module == null) {
-	  moduleTree.clearSelection();
-      } else {
-	  TreePath path = moduleManager.makeTreePath(module.getName());
+    if (module == null) {
+      moduleTree.clearSelection();
+    } else {
+      TreePath path = moduleManager.makeTreePath(module.getName());
 
-	  moduleTree.setSelectionPath(path);
-	  moduleTree.scrollPathToVisible(path);
+      moduleTree.setSelectionPath(path);
+      moduleTree.scrollPathToVisible(path);
 
-	  if (module.getState() == Module.STATE_NORMAL) {
-	      bridge.postEvent(factory.make("get-module-info(<str>)", module.getName()));
-	  }
+      if (module.getState() == Module.STATE_NORMAL) {
+	bridge.postEvent(factory.make("get-module-info(<str>)", module.getName()));
       }
+    }
   }
 
   //}}}
-  //{{{ public void updateList(ATerm data) 
+  public void updateList(String str) {
+    ATerm data = factory.parse(str);
 
-  public void updateList(ATerm data) {
+    messageWindow.setVisible(true);
 
-      messageWindow.setVisible(true);
+    if (data instanceof ATermAppl) {
+      ATermAppl applData = (ATermAppl)data;
+      data = (ATerm)applData.getArguments().getFirst();
+      System.out.println("Depricated use of list with function symbol " 
+			 + applData.getAFun());
+    }
 
-      if (data instanceof ATermAppl) {
-        ATermAppl applData = (ATermAppl)data;
-        data = (ATerm)applData.getArguments().getFirst();
-        System.out.println("Depricated use of list with function symbol " 
-                           + applData.getAFun());
-      }
-
-      if (data instanceof ATermList) {
-	  messageList.setContent((ATermList)data);
-      }
-      else {
-	  System.out.println(data.toString());	    
-	  messageList.errMessage("Can't show something in list view which is not a ATermList");
-      }
+    if (data instanceof ATermList) {
+      messageList.setContent((ATermList)data);
+    }
+    else {
+      System.out.println(data.toString());	    
+      messageList.errMessage("Can't show something in list view which is not a ATermList");
+    }
   }
 
   //}}}

@@ -69,15 +69,10 @@ in
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
 
-  snd-msg(library-location-hook).
-  rec-msg(library-location-hook-result(LibraryPath?)).
-  snd-msg(file-extensions-hook).
-  rec-msg(file-extensions-hook-result(SyntaxExt?,SemanticsExt?,TermExt?)).
   snd-msg(environment-name-hook).
   rec-msg(environment-name-hook-result(EnvironmentName?)).
 
-  snd-do(UI, initialize-ui(EnvironmentName, LibraryPath, SyntaxExt, 
-                           SemanticsExt, TermExt)).
+  snd-do(UI, initialize-ui(EnvironmentName)) .
   Mods := [] .
   Pairs := [] .
   ( 

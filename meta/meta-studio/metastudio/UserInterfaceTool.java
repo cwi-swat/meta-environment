@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Jun 3, 2003 1:08:20 PM
+// generation time: Jul 2, 2003 2:33:16 PM
 
 package metastudio;
 
@@ -61,7 +61,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,end-status(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,error(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,errorf(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>,<str>,<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,delete-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
@@ -88,7 +88,7 @@ abstract public class UserInterfaceTool
     PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
     PgraphLayouted0 = factory.parse("rec-do(graph-layouted(<str>,<term>))");
-    PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>,<str>,<str>,<str>,<str>))");
+    PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PbuttonsFound0 = factory.parse("rec-do(buttons-found(<str>,<str>,<term>))");
     PclearHistory0 = factory.parse("rec-do(clear-history)");
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
@@ -140,7 +140,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PinitializeUi0);
     if (result != null) {
-      initializeUi((String)result.get(0), (String)result.get(1), (String)result.get(2), (String)result.get(3), (String)result.get(4));
+      initializeUi((String)result.get(0));
       return null;
     }
     result = term.match(PbuttonsFound0);
@@ -175,7 +175,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PupdateList0);
     if (result != null) {
-      updateList(factory.parse((String)result.get(0)));
+      updateList((String)result.get(0));
       return null;
     }
     result = term.match(PendStatus0);
