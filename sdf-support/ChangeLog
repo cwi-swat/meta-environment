@@ -1,4 +1,5 @@
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
+ * Removed AsFix1 depending functionality.
  * Fixed some problems in sdf2pt.c and added sdf2pt.c
  * added a function to construct a modulename given a string.
 

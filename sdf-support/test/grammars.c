@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include <SDF-utils.h>
+#include <SDFME-utils.h>
 
 #define TEST_GRAMMAR_FILE SRC_DIR "/Layout.pt"
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   ATinit(argc, argv, &bottomOfStack);
-  SDF_initSDFApi();
+  SDF_initSDFMEApi();
 
   return testGrammars();
 }
