@@ -1,5 +1,23 @@
 $Id$
 
+2001/09/27 (jurgenv@cwi.nl)
+ * Made some important changes in the SDF grammar:
+     - added:   ATerm                      -> Attribute 
+     - removed: "cons" "(" term:ATerm ")"  -> Attribute 
+                "constructor"              -> Attribute 
+                "memo"                     -> Attribute 
+                "traverse"                 -> Attribute 
+     - refactored the ATerm grammar a bit
+ * NOTE: These changes affect any tool using SDF or AsFix[2,me].
+ * Any ATerm can be an attribute now.
+ * Bootstrapped the Sdf2.baf parsetable and the normalizer for the new SDF 
+   grammar and the corresponding AsFix attribute format. See the ChangeLog
+   of pt-support for details.
+ * Due to the changes in SDF, several changes in AsFix have been made as well.
+   See the pt-support package for details. Parsetables generated with the new
+   SDF/AsFix have not changed, only the format of the productions is 
+   slightly changed. 
+
 2001/08/28 (jong@cwi.nl)
  * Added proper #include directives to satisfy gcc-3.0.1
 
