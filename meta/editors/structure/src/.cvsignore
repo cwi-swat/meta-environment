@@ -3,4 +3,5 @@ Makefile
 .deps
 se.tif.h
 se.tif.c
+se.tifs
 se
