@@ -1395,7 +1395,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
     args = (ATermList) asfix_get_appl_args(trm);
     newargs = rewrite_args(args, env, depth);
     
-		if(asfix_is_bracket_func(trm)) {
+		if(asfix_is_bracket_func(trm)) { /* bracket function */
       newtrm = ATgetFirst(keep_layout ? 
 			  skipWhitespace(ATgetNext(newargs)) :
 			  ATgetNext(newargs));
@@ -1408,7 +1408,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 				ATwarning("Traversal...\n");
 			}
 			
-			if (AFisMemoCfFunc(trm)) {
+			if (AFisMemoCfFunc(trm)) { /* traversal and memo function */
 				newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
 				rewtrm = MemoTableLookup(memo_table, newtrm);
 
@@ -1420,7 +1420,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 					rewtrm    = choose_normalform(rewtrm, traversal);
 					memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
 				}
-			} else { /* not a memo func */
+			} else { /* traversal, not memo function */
 					newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
 
 					traversal = create_traversal_pattern(newtrm); 
@@ -1429,7 +1429,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 					rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
 					rewtrm    = choose_normalform(rewtrm, traversal);
 			}
-		} else if (AFisMemoCfFunc(trm)) {
+		} else if (AFisMemoCfFunc(trm)) { /* memo, not traversal function */
 			newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
 			rewtrm = MemoTableLookup(memo_table, newtrm);
 			
@@ -1437,7 +1437,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 				rewtrm = select_and_rewrite(newtrm,depth);
 				memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
 			}
-    } else {
+    } else { /* all other function types */
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
       rewtrm = select_and_rewrite(newtrm,depth);
     }
