@@ -1,8 +1,10 @@
 # $Id$
 
+2003/10/09 (markvdb@cwi.nl)
+ * Added a check on ASF sorts.
+
 2003/10/07 (markvdb@cwi.nl)
  * Adapted to new tuples.
-
 
 2003/10/06 (jurgenv@cwi.nl)
  * Extended asfc compiler to support calls to builtin functions. For each
