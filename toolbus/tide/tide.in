@@ -1,6 +1,6 @@
 #!/bin/sh
-prefix=/home/olivierp/ToolBus
-exec_prefix=${prefix}
+prefix=@prefix@
+exec_prefix=@exec_prefix@
 libdir=$exec_prefix/lib
 cd $libdir/tide
 toolbus $@ -TB_PORT 9500 tide.tb &
