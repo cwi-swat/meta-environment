@@ -8,5 +8,5 @@ rel[str,<node,str>] ALL_PRODUCTIONS = ORDINARY_PRODUCTIONS union PREFIX_PRODUCTI
 
 bag[str] NEEDLE
 
-rel[str,<node,str>] RESULT_PRODUCTIONS = {<"Found ",<N,V>> : V in NEEDLE, <N,V> in PRODUCTIONS}
+rel[str,<node,str>] RESULT_PRODUCTIONS = {<"Found ",<N,V>> : <N,V> in PRODUCTIONS | V in NEEDLE}
 

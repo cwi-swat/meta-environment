@@ -2,10 +2,15 @@ module FindProduction
 
 imports RscriptCalculator
 imports ParsetreeOperations
-imports Bags[String]
 
 exports
   context-free syntax
-    create-bag(Production) -> Bag[[String]]
-    add-relation(Bag[[String]], RSTORE) -> RSTORE  
+    add-production-to-rstore(ParseTree, RSTORE) -> RSTORE  
+
+hiddens
+  variables
+    "$ParseTree"[0-9]* -> ParseTree
+    "$Production"[0-9]* -> Production
+    "$String"[0-9]* -> String
+    "$Rstore"[0-9]* -> RSTORE 
   

@@ -30,8 +30,11 @@ equations
        ptSymbol2String($Symbol)
        || ptSymbols2String([$Symbol*])
 
-  [] ptSymbol2String(lit(literal($Char*))) = 
+  [default-p] ptSymbol2String(lit(literal($Char*))) = 
        strcon(""" $Char* """)
+
+  [] ptSymbol2String(lit(literal(""" $Char* """))) = 
+       strcon(""""\"""" $Char* "\""""""")
 
   [] ptSymbol2String(sort(literal($Char*))) = 
        strcon($Char*)

@@ -12,6 +12,24 @@ buttons([
           push-active-module,
           show-list
          ]),
+
+  button("Sdf",
+         ["term"],
+         ["Sdf", "Show"],
+         [push-filename("query-result.rvalue"),
+          read-tree,
+          check-sort("RVALUE"),
+
+          apply("display-result", "List", 1),
+          rewrite("DisplayQuery"),
+
+          unpack-tree,
+          execute-action("unparsePT"),
+
+          push-active-module,
+          show-list
+        ]),
+
   button("Sdf",
          ["term"],
          ["Sdf", "Calculate"],
@@ -27,25 +45,9 @@ buttons([
 
           apply("evaluate-query", "RVALUE", 3),
           rewrite("DisplayQuery"),
-          dup,
           push-filename("query-result.rvalue"),
           save-tree,
           message("Derived query-results saved.")
-        ]),
-
-  button("Sdf",
-         ["term"],
-         ["Sdf", "Show"],
-         [push-filename("query-result.rvalue"),
-          read-tree,
-          check-sort("RVALUE"),
-
-          apply("display-result", "List", 1),
-          rewrite("DisplayQuery"),
-
-          unparse,
-          push-active-module,
-          show-list
         ]),
 
   button("Sdf",
@@ -61,9 +63,10 @@ buttons([
           save-tree,
           message("Saving done")
          ]),
+
   button("Sdf",
          ["term"],
-         ["Sdf", "Test"],
+         ["Sdf", "TestCalculate"],
          [push-active-module,
           get-focus,
           push-filename("focus.tree"),
@@ -71,14 +74,47 @@ buttons([
           activate("baf2trm -i focus.tree -o focus.text"),
           push-filename("focus.text"),
           parse("asfix/syntax/Parsetree", "ParseTree"),
-          apply("getTopProduction", "Production", 1),
-          push-modulename("ParsetreeOperations"),
+
+          push-filename("extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("add-production-to-rstore", "RSTORE", 2),
+          push-modulename("FindProduction"),
           reduce,
-          apply("ptProduction2String", "String", 1),
-          push-modulename("ParsetreeOperations"),
-          reduce,
-          push-filename("focus.str"),
-          push-modulename("ParsetreeOperations"),
-          activate-editor
-         ])
+
+          push-filename("new-extracted-relations.trm"),
+          save-tree,
+          message("Saving done")
+         ]),
+
+  button("Sdf",
+         ["term"],
+         ["Sdf", "TestShow"],
+         [push-filename("all.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"RESULT_PRODUCTIONS\""),
+          parse("basic/Strings", "String"),
+
+          push-filename("new-extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("evaluate-query", "RVALUE", 3),
+          rewrite("DisplayQuery"),
+
+          apply("display-result", "List", 1),
+          rewrite("DisplayQuery"),
+
+          dup,
+
+          push-filename("query-result.rvalue"),
+          save-tree,
+          message("Derived query-results saved."),
+
+          unparse,
+          push-active-module,
+          show-list
+        ])
 ])
