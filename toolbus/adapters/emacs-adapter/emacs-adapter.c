@@ -31,6 +31,7 @@ char *gnuclient = "gnuclient"; /* The name of the gnuclient executable */
 char *gnuc_flag1 = "-batch";
 char *gnuc_flag2 = "-f";          
 char *gnuc_func; /* command array for exec */
+char *initfile = NULL; /* The e-lisp file to load initially */
 
 char **def_cmd = NULL;      /* default command array */
 char **the_cmd;             /* current command array */
@@ -275,7 +276,9 @@ Synopsis: emacs-adapter [options]\n\
 Options are:\n\
 -help                 print this message\n\
 -emacs file           use file as emacs. Default is xemacs\n\
--gnuclient file       use file as gnuclient. Default is gnuclient\n";
+-gnuclient file       use file as gnuclient. Default is gnuclient\n\
+-initfile file        load e-lisp file file before accepting commands\n\
+                      from the ToolBus";
   fprintf(stderr, str);
 }
 
@@ -335,6 +338,13 @@ void emacs_create(char *emacsapp) {
     exec_cmd();
     sprintf(cmd_buf,"set-minmsgsize %d", MIN_MSG_SIZE);
     exec_cmd();
+    /* If we have an init file, load it: */
+    if (initfile) {
+	sprintf(cmd_buf,"load-file \"");
+	strcat(cmd_buf,initfile);
+	strcat(cmd_buf,"\"");
+	exec_cmd();
+    }
     from_emacs = fdopen(pipe_et[0], "r");
     close(pipe_et[1]);
     TBaddTermPort(pipe_et[0], handle_input_from_emacs);
@@ -359,6 +369,9 @@ void main(int argc, char *argv[])
     } else if(streq(argv[i], "-gnuclient")){
 	i++;
 	gnuclient = argv[i];
+    } else if(streq(argv[i], "-initfile")) {
+	i++;
+	initfile = argv[i];
     }
     i++;
   } 
