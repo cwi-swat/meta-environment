@@ -261,6 +261,8 @@ Options are:\n\
 -term-output          represent output as toolbus term\n\
 -cmd C1 ...           use C1 ... as the default command to execute\n";
   fprintf(stderr, str);
+
+  exit(0);
 }
 
 int main(int argc, char *argv[])
@@ -269,7 +271,7 @@ int main(int argc, char *argv[])
   char *name = "gen-adapter";
 
   while(i < argc){
-    if(streq(argv[i], "-help")){
+    if(streq(argv[i], "-help") || streq(argv[i], "-h")){
       help();
     } else if(streq(argv[i], "-keepnewline")){
       keepnewline = TBtrue;

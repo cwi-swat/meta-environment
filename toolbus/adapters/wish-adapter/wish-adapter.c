@@ -53,7 +53,7 @@
 
 #define USAGE_MSG \
    "\n" \
-   "Synopsis: wa [options]\n" \
+   "Synopsis: wish-adapter [options]\n" \
    "\n" \
    "Options are:\n" \
    "-help                 print this message\n" \
@@ -717,6 +717,7 @@ static void signals_set()
 static void help()
 {
    fprintf( stderr, USAGE_MSG );
+   exit(0);
 }
 #line 1109 "wish-adapter.c.nw"
 static void cmd_options( int argc, char* argv[] )
@@ -727,7 +728,7 @@ static void cmd_options( int argc, char* argv[] )
 
    while( i < argc )
    {
-      if( streq( argv[i], "-help" ) )
+      if( streq( argv[i], "-help" ) || streq(argv[i], "-h") )
          help();
       if( streq( argv[i], "-TB_TOOL_NAME" ) )
          name = argv[++i];
