@@ -34,7 +34,6 @@ in
   execute(evaluator, Eval?).
   printf("evaluator tool connected.\n") .
   snd-do(Eval, create-equations-db).
-  execute(compiler,Com?).
   execute(pgen,Pgen?).
   execute(add-eqs-syntax,Addsyn?).
   /* Start all controlling processes */
@@ -42,7 +41,7 @@ in
   create(Open-modules(Eval),Tid?).
   create(Rewrite(Eval), Tid?).
   create(Evaluator(Eval), Tid?).
-  create(Compiler(Com), Tid?).
+  create(Compiler(), Tid?).
   create(PGen(Pgen), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
   create(Clear-all(Eval), Tid?).
