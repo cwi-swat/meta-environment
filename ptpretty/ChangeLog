@@ -1,6 +1,7 @@
 # $Id$
 
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * fix distcheck target
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
