@@ -1,6 +1,6 @@
 module RscriptCalculator
 
-imports Rstore
+imports Rstore ExtendedIntegers
 
 exports
 

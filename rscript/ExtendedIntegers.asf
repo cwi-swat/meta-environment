@@ -1,0 +1,26 @@
+equations
+
+[ndiv1]	$Nat1 / 1 = $Nat1
+
+[ndiv2]	$Nat2 > 0 = true ===> $Nat1 / $Nat2 = ($Nat1 -/ $Nat2) / ($Nat2 -/ 1)
+
+[idiv1]	(- $Nat1) / $Nat2 = - ($Nat1 / $Nat2)
+
+[idiv1]	$Nat1 / (- $Nat2) = - ($Nat1 / $Nat2)
+
+[idiv1]	(- $Nat1) / (- $Nat2) = $Nat1 / $Nat2
+
+[idiv] 	$Nat1 = $Int1, $Nat2 = $Int2
+	========================================
+	$Int1 / $Int2 = $Nat1 / $Nat2
+
+[max1]	$Int1 > $Int2 = true ===> max($Int1, $Int2) = $Int1
+
+[default-max]
+	max($Int1, $Int2) = $Int2
+
+[min1]	$Int1 < $Int2 = true ===> min($Int1, $Int2) = $Int1
+
+[default-min]
+	min($Int1, $Int2) = $Int2
+

@@ -410,7 +410,7 @@ and {\tt false} otherwise\\ \hline
 \emph{int}$_1$ and \emph{int}$_2$\\ \hline
 
 \emph{int}$_1$ {\tt /} \emph{int}$_2$ & yields the integer division of
-\emph{int}$_1$ and \emph{int}$_2$ ({\bf not yet implemented})\\ \hline
+\emph{int}$_1$ and \emph{int}$_2$ \\ \hline
 
 \end{tabular}
 
@@ -928,6 +928,13 @@ bag {\tt Excl} are used.
 {Yields the sum of the integers in bag {\tt B}.}
 {
 \item {\tt sum(\{1, 2, 3\})} yields {\tt 6}.
+}
+
+\function{Average of a bag of integers}{average}
+{\tt int average(bag[int] B) = sum(B)/(#B)}
+{Yields the average of the integers in bag {\tt B}.}
+{
+\item {\tt average(\{1, 2, 3\})} yields {\tt 3}.
 }
 
 \function{Maximum of a bag of integers}{max}
@@ -1623,6 +1630,7 @@ New:
 
 {\bf Function}    & {\bf Description}   & {\bf Section} \\ \hline \hline
 
+{\tt average}     & Average of a bag of integers & \ref{BI:average} \\
 {\tt begincol}    & First column of an area & \ref{BI:begincol}\\
 {\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
 {\tt bottom}      & Bottom of a relation & \ref{BI:bottom} \\

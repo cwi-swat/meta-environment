@@ -80,8 +80,10 @@ assert "notin 4" : not(<2,20> notin Rel1)
 
 %% --- ==
 
-assert "== 1" : 1 == 1
-assert "== 2" : not(1 == 2)
+assert "== 1a" : 1 == 1
+assert "== 1b" : -1 == -1
+assert "== 2a" : not(1 == 2)
+assert "== 2b" : not(1 == -1)
 assert "== 3" : "a" == "a"
 assert "== 4" : not("a" == "b")
 
@@ -361,5 +363,26 @@ assert "Advanced value former 2":
 assert "Advanced value former 3":
 	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}
  
+%% ---- Arithmetic expressions
 
-%%)
+assert "+, 1":  1 + 1 == 2
+assert "+, 2":  {X + 1 | X : {1,2,3}} == {2,3,4}
+assert "+, 3":  {X | X : {1,2,3}, X + 1 < 3} == {1}
+
+assert "-, 1":  2 - 3 == -1
+assert "-, 2":  {X - 1 | X : {1,2,3}} == {0,1,2}
+assert "-, 3":  {X | X : {1,2,3}, X - 1 < 3} == {1,2,3}
+
+assert "*, 1":  3 * 4 == 12
+assert "*, 2":  3 * -4 == -12
+assert "*, 3":  {X * 2 | X : {1,2,3}} == {2,4,6}
+
+assert "/, 1":  4 / 2 == 2
+assert "/, 2":  -4 / 2 == -2
+assert "/, 3":  4 / 5 == 0
+assert "/, 4":  {X * 2 | X : {1,2,3}} == {2,4,6}
+
+
+
+
+

@@ -22,7 +22,7 @@ exports
 
 %% Elementary values
      BoolCon                                	-> Elem  
-     NatCon                               	-> Elem  
+     Integer                               	-> Elem  
      String				    	-> Elem  
      Area				    	-> Elem  
 
@@ -56,6 +56,7 @@ exports
      REXP "+" REXP				-> REXP {left}
      REXP "-" REXP				-> REXP {left}
      REXP "*" REXP				-> REXP {left}
+     REXP "/" REXP				-> REXP {left}
 
      REXP "union" REXP                       	-> REXP {left}
      REXP "inter" REXP                       	-> REXP {left}
@@ -151,6 +152,8 @@ exports
     "#" REXP -> REXP 			> 
 
     REXP "*" REXP -> REXP 		>
+    REXP "/" REXP -> REXP 		>
+
     {	   
      	REXP "+" REXP -> REXP
      	REXP "-" REXP -> REXP 
