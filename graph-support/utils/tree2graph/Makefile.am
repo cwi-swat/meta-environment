@@ -27,5 +27,6 @@ tree2graph_LDADD = \
    -L${top_builddir}/lib/ -lGraph \
    -L${PT_SUPPORT}/lib -lmept \
    -L${TOOLBUSLIB}/lib -lATB \
+   -L$(ERROR_SUPPORT)/lib -lErrorAPI \
    -L${ATERM}/lib -lATerm \
    ${SOCKLIBS}

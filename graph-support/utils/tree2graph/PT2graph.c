@@ -3,6 +3,7 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
+#include <ErrorAPI.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -224,7 +225,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 static Graph treeToGraph(char *name, Graph graph, PT_Tree tree, int parent)
 {
   long key = makeNodeId(tree);
-  ATerm posInfoArea = PT_getTreePosInfoArea(tree);
+  ATerm posInfoArea = (ATerm)PT_getTreeLocation(tree);
 
   nr_of_nodes++;
   if (nr_of_nodes == MAX_NR_OF_NODES) {
