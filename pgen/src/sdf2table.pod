@@ -4,7 +4,7 @@ SDF2TABLE - generate parse tables from SDF2 language definitions
 
 =head1 SYNOPSIS
 
-B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<l>] [-B<m> I<name>] [-B<o> I<file>] [-B<tvVx>] file0 ...
+B<sdf2table> [-B<bh>] [-B<i> I<file>] [-B<l>] [-B<m> I<name>] [-B<n>] [-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -18,10 +18,6 @@ A number of options can be supplied; these are as follows:
 =item B<-b>
 
 Write term output in BAF (Binary ATerm) format. This is the default.
-
-=item B<-f>
-
-Use the handcrafted -- `fast' -- normalizer.  This is the default.
 
 =item -B<h>
 
@@ -39,6 +35,10 @@ Displays statistic information.
 =item -B<m> I<name>
 
 Use F<name> as top module when generating a parse table.
+
+=item -B<n>
+
+Generated only normalized grammar.
 
 =item -B<o> I<file>
 

@@ -8,7 +8,7 @@ datadir=__DATADIR__
 RM=rm
 SDF2TBL=${datadir}/Sdf2.baf
 TOPSORT=SDF
-PARSER="__SGLR__/bin/sglr -1 -s ${TOPSORT} -p ${SDF2TBL}"
+PARSER="__SGLR__/bin/sglr -m -s ${TOPSORT} -p ${SDF2TBL}"
 GENERATOR="${bindir}/parsetablegen"
 
 modulename="-";
@@ -26,7 +26,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bhi:lm:o:tvV"
+myarguments="bhi:lm:no:tvV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -38,6 +38,7 @@ Options:
     -i _file_       input from _file_ (default: all file arguments)
     -l              display statistic information
     -m _name_       parse table is generated for module _name_ (default: Main)
+    -n              only normalization of grammar
     -o _file_       output to _file_ (default: _inputfile_.tbl)
     -t              write output in plain text format
     -v              verbose mode
@@ -73,6 +74,8 @@ do
             PGOPTS="$PGOPTS $1" ;;
         -m)
             shift ; modulename=$1 ;;
+        -n)
+            PGOPTS="$PGOPTS $1" ;;
         -o)
             shift ; output=$1 ;;
 	-t)
