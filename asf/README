@@ -2,7 +2,22 @@ $Id$
 
 ASF rewriting engines
 
+This package contains the implementation of the rewriting language ASF. ASF rewrites terms in user-defined syntax. 
 
+The following tools are provided: 
+
+addeqssyntax    - add ASF syntax to the user-defined term syntax for parsing                       equations. 
+removevarsyntax - removes variables syntax to obtain efficient parsetables for 
+                  parsing closed terms.
+asfe            - an interpreter for ASF specifications.
+asfc            - a compiler for ASF specifications to C programs.
+genmakefile     - a tool that generates Makefiles or Makefile.in's for compiled 
+                  specifications.
+genamakefile    - a tool that generates Makefile.am's for compiled 
+                  specifications. 
+
+These tools have a standalone interface that read and writes from files, but addeqssyntax, removevarsyntax, asfe and asfc also have a ToolBus interface. 
+	    
 Installation Instructions
 =========================
 
