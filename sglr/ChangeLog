@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/23 (markvdb@cs.vu.nl)
+ * Fixed a serious bug wrt the combination of ambiguities and
+   cycles.
+
 2003/07/02 (jurgenv@cwi.nl)
  * Release 3.10
 

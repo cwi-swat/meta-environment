@@ -10,7 +10,6 @@
 
 #include <aterm2.h>
 
-#include "bitmap.h"
 #include "mem-alloc.h"
 #include "forest.h"
 #include "parse-table.h"
@@ -226,10 +225,9 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
 
 ATermList Cycle = NULL;
 
-ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, 
-              Bitmap visited);
+ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs);
 
-ATbool SG_TermIsCyclicAmbs(tree t, size_t *pos, ATermList ambs, Bitmap visited)
+ATbool SG_TermIsCyclicAmbs(tree t, size_t *pos, ATermList ambs)
 {
   tree amb;
   ATbool hasCycle = ATfalse;
@@ -240,7 +238,7 @@ ATbool SG_TermIsCyclicAmbs(tree t, size_t *pos, ATermList ambs, Bitmap visited)
     if (!ATisEqual((ATerm) t, (ATerm) amb)) {
       *pos = saved_pos;
       hasCycle =
-        SG_TermIsCyclicRecursive((tree) amb, pos, ATtrue, visited);
+        SG_TermIsCyclicRecursive((tree) amb, pos, ATtrue);
     }
   }
   return hasCycle;
@@ -261,11 +259,9 @@ label SG_GetRejectProdLabel(tree appl)
   return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
 }
 
-ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
-              Bitmap visited)
+ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs)
 {
   ATermList ambs;
-  ATermInt cluster_idx;
 
   if (Cycle) {
     /*  Cycle has been detected, done  */
@@ -274,43 +270,43 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
 
   switch (ATgetType(t)) {
     case AT_APPL:
-      /*  Ambiguity cluster?  */
-      if (SG_InputAmbiMapIsSet(*pos) > 0) {
-	SGnrAmb(SG_NR_INC);       
-        cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
-        ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
-      }
-      else {
-        cluster_idx = NULL;
-        ambs = ATempty;
-      }
-
-      if (inAmbs ||  ATisEmpty(ambs)) {
-        /*  No ambiguity  */
+      if (inAmbs) {
         SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t, 1),
-                                 pos, ATfalse, visited);
+                                 pos, ATfalse);
       } 
       else {
-        /*  Encountered an ambiguity cluster  */
-        int idx = ATgetInt(cluster_idx);
-        size_t saved_pos = *pos;
-
-        if (SG_IsMarked((ATerm) t)) {
-            /*  Cycle detected  */
-          Cycle = ATempty;
-          return ATtrue;
+        /*  Ambiguity cluster?  */
+        if (SG_InputAmbiMapIsSet(*pos) > 0) {
+	  SGnrAmb(SG_NR_INC);       
+          ambs = (ATermList)SG_AmbiTablesGetCluster((ATerm) t, *pos);
+        }
+        else {
+          ambs = ATempty;
         }
 
-        if (!BitmapIsSet(visited, idx)) {
+        if (ATisEmpty(ambs)) {
+          SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t, 1),
+                                   pos, ATfalse);
+        } 
+        else {
+          /*  Encountered an ambiguity cluster  */
+          size_t saved_pos = *pos;
+
+          if (SG_IsMarked((ATerm) t)) {
+            /*  Cycle detected  */
+            Cycle = ATempty;
+            return ATtrue;
+          }
+
           SG_Mark((ATerm) t);
 
           /*  First check whether or not t itself is cyclic...  */
-
           SG_TermIsCyclicRecursive((forest) ATgetArgument((ATermAppl) t, 1),
-                                    pos, ATtrue, visited);   
+                                    pos, ATfalse);   
+
           *pos = saved_pos;
-          SG_TermIsCyclicAmbs(t, pos, ambs, visited);
-          visited = BitmapSet(visited, idx);
+          SG_TermIsCyclicAmbs(t, pos, ambs);
+
           SG_UnMark((ATerm) t);
         }
       }
@@ -318,9 +314,9 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
     case AT_LIST:
       if (!ATisEmpty((ATermList) t)) {
         SG_TermIsCyclicRecursive((forest) ATgetFirst((ATermList) t), 
-                                 pos, ATfalse, visited);
+                                 pos, ATfalse);
         SG_TermIsCyclicRecursive((forest) ATgetNext((ATermList) t), 
-                                 pos, ATfalse, visited);
+                                 pos, ATfalse);
       }
       break;
     case AT_INT:
@@ -329,9 +325,6 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
     default:
       break;
   }
-
-
-
 
   /*  Remember labels of productions in cycle */
   if (Cycle && ATgetType(t) == AT_APPL) {
@@ -346,15 +339,14 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
 ATbool SG_TermIsCyclic(tree t)
 {
   ATbool cyclic;
-  Bitmap visited = BitmapCreate(SG_MaxNrAmb(SG_NR_ASK));
   size_t pos = 0;
 
   SGnrAmb(SG_NR_ZERO);
   SG_initMarks();
 
-  cyclic = SG_TermIsCyclicRecursive(t, &pos, ATfalse, visited);
+/*ATwarning("tree = %t\n\n", t);*/
+  cyclic = SG_TermIsCyclicRecursive(t, &pos, ATfalse);
 
-  BitmapDestroy(visited);
   SG_cleanupMarks();
 
   /*  
@@ -1450,6 +1442,9 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
   case AT_APPL:
     if (SG_InputAmbiMapIsSet(*pos) > 0) {
       ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
+/*if (*pos > 50) {
+ATwarning("ambs at %d for %t gives %t\n\n", *pos, t, ambs);
+}*/
     }
     else {
       ambs = ATempty;
