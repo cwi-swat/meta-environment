@@ -1243,7 +1243,7 @@ lf_283sym = ATmakeSymbol ( "prod([cf(iter-sep(sort(\"Group\"),lit(\">\")))],cf(s
 ATprotectSymbol ( lf_283sym ) ;
 lf_list_284sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"Group\"),lit(\">\"))))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_list_284sym ) ;
-lf_285sym = ATmakeSymbol ( "prod([cf(sort(\"Group\")),cf(opt(layout)),cf(sort(\"ArgumentIndicator\"))],cf(sort(\"Group\")),attrs([assoc(non-assoc)]))" , 2 , ATtrue ) ;
+lf_285sym = ATmakeSymbol ( "prod([cf(sort(\"Group\")),cf(opt(layout)),cf(sort(\"ArgumentIndicator\"))],cf(sort(\"Group\")),attrs([assoc(non-assoc,term(cons(\"with-arguments\")))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_285sym ) ;
 lf_286sym = ATmakeSymbol ( "prod([lit(\"<\"),cf(opt(layout)),cf(iter-sep(sort(\"NatCon\"),lit(\",\"))),cf(opt(layout)),lit(\">\")],cf(sort(\"ArgumentIndicator\")),attrs([term(cons(\"default\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_286sym ) ;
@@ -1398,7 +1398,7 @@ register_prod ( ATparse ( "prod([cf(iter-star-sep(sort(\"Priority\"),lit(\",\"))
 register_prod ( ATparse ( "prod([lit(\"<\"),cf(opt(layout)),cf(sort(\"Priorities\")),cf(opt(layout)),lit(\"-LEXp\"),cf(opt(layout)),lit(\">\")],cf(sort(\"Priorities\")),no-attrs)" ) , lf_288 , lf_288sym ) ;
 register_prod ( ATparse ( "prod([lit(\"<\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\"-LEX\"),cf(opt(layout)),lit(\">\")],cf(sort(\"Production\")),no-attrs)" ) , lf_287 , lf_287sym ) ;
 register_prod ( ATparse ( "prod([lit(\"<\"),cf(opt(layout)),cf(iter-sep(sort(\"NatCon\"),lit(\",\"))),cf(opt(layout)),lit(\">\")],cf(sort(\"ArgumentIndicator\")),attrs([term(cons(\"default\"))]))" ) , lf_286 , lf_286sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Group\")),cf(opt(layout)),cf(sort(\"ArgumentIndicator\"))],cf(sort(\"Group\")),attrs([assoc(non-assoc)]))" ) , lf_285 , lf_285sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Group\")),cf(opt(layout)),cf(sort(\"ArgumentIndicator\"))],cf(sort(\"Group\")),attrs([assoc(non-assoc),term(cons(\"with-arguments\"))]))" ) , lf_285 , lf_285sym ) ;
 register_prod ( ATparse ( "list(cf(iter-sep(sort(\"Group\"),lit(\">\"))))" ) , lf_list_284 , lf_list_284sym ) ;
 register_prod ( ATparse ( "prod([cf(iter-sep(sort(\"Group\"),lit(\">\")))],cf(sort(\"Priority\")),attrs([term(cons(\"chain\"))]))" ) , lf_283 , lf_283sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"Priorities\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Priorities\")),attrs([assoc(assoc)]))" ) , lf_282 , lf_282sym ) ;
