@@ -88,7 +88,7 @@ CLEANFILES+=builtin-forward.c asc-builtins.h builtin-link-test.c
 builtin-forward.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile
 	${GENFWD} "${BUILTIN_NAMES_ARITY}" > $@
 
-asc-builtins.h: ${BUILTIN_SOURCES} Makefile
+asc-builtins.h: ${BUILTIN_SOURCEFILES} Makefile
 	${GENPRTS} "${BUILTIN_NAMES_ARITY}" > $@
 
 builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile 
