@@ -135,6 +135,7 @@ let
   NrOfArgs   : int,
   Location   : int,
   Integer    : int,
+  Query : str,
   Action       : str,
   OutStr       : str,
   InStr        : str,
@@ -477,11 +478,15 @@ in
           snd-msg(write-text-file(Path,"",[Text])).
           rec-msg(file-written)
         fi .
-        ReturnSuccess(EditorId,Stack)
+        ReturnSuccess(EditorId, Stack)
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) . 
 	printf("not yet implemented at line %d", __LINE__) .
         ReturnAbort(EditorId,Stack) 
+      +
+        rec-msg(query(Query?), Stack?, EditorId?) .
+	snd-msg(execute-query(EditorId, Query)) .
+        ReturnSuccess(EditorId, Stack)
   ) * delta
 endlet
 
