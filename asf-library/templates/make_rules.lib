@@ -36,7 +36,7 @@ OBJECTS_REGISTRY=${top_builddir}/src/objects.lst
 link-test.c: $(PACKAGE_SRC) $(MODULES)
 	${REGISTER} ${BUILTINS_REGISTRY} ${subdir} "${PACKAGE_BUILTINS}"
 	${REGISTER} ${OBJECTS_REGISTRY} ${subdir} "${PACKAGE_OBJECTS}"
-	${GENLINKTEST} "${BUILTINS}" > $@
+	${GENLINKTEST} "${PACKAGE_BUILTINS}" > $@
 
 # Installation hooks take care of modifying access bits and installing
 # the files in the right order (time stamps are important here)
