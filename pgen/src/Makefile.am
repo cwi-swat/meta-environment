@@ -59,12 +59,14 @@ sdf-help.o : parsetablegen.tif.h
 # this is needed for testing
 %.test: %.src Makefile
 	sed 's@__BINDIR__@$(top_srcdir)/src@g;\
+             s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
         chmod +x $@
 
 # and one sdf2table for installed binaries and data
 % : %.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
+             s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
 
