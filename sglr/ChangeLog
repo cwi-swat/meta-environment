@@ -1,5 +1,8 @@
 $Id$
 
+2003/08/01 (markvdb@cwi.nl)
+ * Fine-tuned the way user-defined injections are treated.
+
 2003/08/01 (jurgenv@cwi.nl)
  * Set version to 3.10.1
 
