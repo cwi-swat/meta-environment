@@ -1061,12 +1061,12 @@ ATwarning("contentDescription = %s\n", contentDescription);
 
 static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak)
 {
-  SG_ERROR_ON();
-
   ERR_Feedback ambiguities = ERR_FeedbackFromTerm(ambtrak);
   int nrOfAmbs = SG_CountAmbiguities(ambiguities);
   ERR_Summary ambiguityError;
   ATerm result;
+
+  SG_ERROR_ON();
 
   t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t, 
                          (ATerm) SG_GetATint(nrOfAmbs, 0));
