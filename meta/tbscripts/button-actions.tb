@@ -678,7 +678,8 @@ in
 	  rec-msg(modulename-extension(ModuleName, Ext?)) 
 	+
 	  rec-msg(no-modulename-extension(ModuleName)) .
-	  Ext := ".trm"
+	  snd-msg(file-extension-hook(trm)) .
+	  rec-msg(file-extension-hook-result(Ext?))
         ) .
 	snd-msg(ask-for-file(String, Path, Ext)) .
 	rec-msg(ask-for-file-result(FileName?)) .
