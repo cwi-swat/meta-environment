@@ -27,16 +27,6 @@ is
    snd-eval(Id, cmd(Cmd, input-term(Inp))).
    rec-value(Id, output(Outp?))
 
-process Execute(Cmd: str, Inp: term, Outp: term?) is
-let
-  Adapter: term-generic-adapter
-in
-  execute(term-generic-adapter, Adapter?) .
-  snd-eval(Adapter, cmd(Cmd, input-term(Inp))) .
-  rec-value(Adapter, output(Outp?)) .
-  snd-terminate(Adapter, "")
-endlet 
-
 process GenericAdapter is
 let
   GENADAPT: generic-adapter,
