@@ -102,10 +102,13 @@ dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
 [  --with-tide		TIDE is in DIR],
 TIDE=${withval}
-TIDEDEF=-DUSE_TIDE,
+TIDEDEF=-DUSE_TIDE
+USE_TIDE=1,
+USE_TIDE=0
 )
 AC_SUBST(TIDE)
 AC_SUBST(TIDEDEF)
+AC_SUBST(USE_TIDE)
 
 dnl Handle --with-graphviz=... argument to configure
 AC_ARG_WITH(graphviz,
@@ -174,7 +177,7 @@ asfix2c-compiler/Makefile
 editor/Makefile
 evaluator/Makefile evaluator/src/Makefile evaluator/test/Makefile 
 evaluator/test/terms/Makefile
-graph-browser/Makefile
+graph-browser/Makefile graph-browser/graph-browser.tcl
 in-output/Makefile in-output/test/Makefile
 module-db/Makefile module-db/test/Makefile
 stred/Makefile stred/nl/Makefile stred/nl/cwi/Makefile
