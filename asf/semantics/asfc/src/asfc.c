@@ -147,7 +147,6 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
     }
 
     VERBOSE("pretty printing C code");
-
     ToC_code(saveName, c_code, fp , myversion);
     fclose(fp);
 
