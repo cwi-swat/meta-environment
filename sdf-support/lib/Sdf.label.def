@@ -172,6 +172,7 @@ exports
     "(" arguments:Symbols "=>" results:Symbol ")"  -> Symbol	{cons("func")}
     "left":Symbol "|" "right":Symbol -> Symbol 			{right,cons("alt")}
     "<<" Symbols ">>"                -> Symbol			{cons("perm")}
+    "(" "left":Symbol "->" "right":Symbol ")" -> Symbol         {cons("strategy")}
   context-free priorities
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol

@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Mar  4 13:20:10 2002
+ * Generated at Fri May 24 10:08:19 2002
  */
 
 #ifndef __SDFME_dict_H
@@ -146,7 +146,6 @@ extern AFun SDF_afun135;
 extern AFun SDF_afun136;
 extern AFun SDF_afun137;
 extern AFun SDF_afun138;
-extern AFun SDF_afun139;
 
 extern ATerm SDF_patternRealConRealCon;
 extern ATerm SDF_patternOptExpAbsent;
@@ -159,8 +158,6 @@ extern ATerm SDF_patternCharacterShort;
 extern ATerm SDF_patternCharacterNumeric;
 extern ATerm SDF_patternShortCharLexToCf;
 extern ATerm SDF_patternNumCharLexToCf;
-extern ATerm SDF_patternTagIdEmpty;
-extern ATerm SDF_patternTagIdLexToCf;
 extern ATerm SDF_patternATermAnnosMany;
 extern ATerm SDF_patternATermAnnosSingle;
 extern ATerm SDF_patternAnnAnnotation;
@@ -325,6 +322,7 @@ extern ATerm SDF_patternSymbolLit;
 extern ATerm SDF_patternSymbolParameterizedSort;
 extern ATerm SDF_patternSymbolSort;
 extern ATerm SDF_patternSymbolCharClass;
+extern ATerm SDF_patternSymbolStrategy;
 extern ATerm SDF_patternSymbolPerm;
 extern ATerm SDF_patternSymbolAlt;
 extern ATerm SDF_patternSymbolFunc;

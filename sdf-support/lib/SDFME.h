@@ -85,7 +85,6 @@ typedef struct _SDF_ATerm *SDF_ATerm;
 typedef struct _SDF_ATermArgs *SDF_ATermArgs;
 typedef struct _SDF_Ann *SDF_Ann;
 typedef struct _SDF_ATermAnnos *SDF_ATermAnnos;
-typedef struct _SDF_TagId *SDF_TagId;
 typedef struct _SDF_NumChar *SDF_NumChar;
 typedef struct _SDF_ShortChar *SDF_ShortChar;
 typedef struct _SDF_Character *SDF_Character;
@@ -366,10 +365,6 @@ ATerm SDF_AnnToTerm(SDF_Ann arg);
 SDF_ATermAnnos SDF_ATermAnnosFromTerm(ATerm t);
 #define SDF_makeTermFromATermAnnos(t) (SDF_ATermAnnosToTerm(t))
 ATerm SDF_ATermAnnosToTerm(SDF_ATermAnnos arg);
-#define SDF_makeTagIdFromTerm(t) (SDF_TagIdFromTerm(t))
-SDF_TagId SDF_TagIdFromTerm(ATerm t);
-#define SDF_makeTermFromTagId(t) (SDF_TagIdToTerm(t))
-ATerm SDF_TagIdToTerm(SDF_TagId arg);
 #define SDF_makeNumCharFromTerm(t) (SDF_NumCharFromTerm(t))
 SDF_NumChar SDF_NumCharFromTerm(ATerm t);
 #define SDF_makeTermFromNumChar(t) (SDF_NumCharToTerm(t))
@@ -414,6 +409,7 @@ SDF_Symbol SDF_makeSymbolPair(SDF_Symbol left, SDF_Layout wsAfterLeft, SDF_Layou
 SDF_Symbol SDF_makeSymbolFunc(SDF_Layout wsAfterParenOpen, SDF_Symbols arguments, SDF_Layout wsAfterArguments, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol results, SDF_Layout wsAfterResults);
 SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterBar, SDF_Symbol right);
 SDF_Symbol SDF_makeSymbolPerm(SDF_Layout wsAfterLessThanLessThan, SDF_Symbols Symbols, SDF_Layout wsAfterSymbols);
+SDF_Symbol SDF_makeSymbolStrategy(SDF_Layout wsAfterParenOpen, SDF_Symbol left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterGreaterThan, SDF_Symbol right, SDF_Layout wsAfterRight);
 SDF_Symbol SDF_makeSymbolCharClass(SDF_CharClass CharClass);
 SDF_Symbol SDF_makeSymbolSort(SDF_Sort Sort);
 SDF_Symbol SDF_makeSymbolParameterizedSort(SDF_Sort Sort, SDF_Layout wsAfterSort, SDF_Layout wsAfterBracketOpenBracketOpen, SDF_SymbolParameters parameters, SDF_Layout wsAfterParameters);
@@ -578,8 +574,6 @@ SDF_ATermArgs SDF_makeATermArgsMany(SDF_ATerm head, SDF_Layout wsAfterFirst, cha
 SDF_Ann SDF_makeAnnAnnotation(SDF_Layout wsAfterBraceOpen, SDF_ATermAnnos annos, SDF_Layout wsAfterAnnos);
 SDF_ATermAnnos SDF_makeATermAnnosSingle(SDF_ATerm head);
 SDF_ATermAnnos SDF_makeATermAnnosMany(SDF_ATerm head, SDF_Layout wsAfterFirst, char * sep, SDF_Layout wsAfterSep, SDF_ATermAnnos tail);
-SDF_TagId SDF_makeTagIdLexToCf(SDF_Lexical lex);
-SDF_TagId SDF_makeTagIdEmpty();
 SDF_NumChar SDF_makeNumCharLexToCf(SDF_Lexical lex);
 SDF_ShortChar SDF_makeShortCharLexToCf(SDF_Lexical lex);
 SDF_Character SDF_makeCharacterNumeric(SDF_NumChar NumChar);
@@ -662,7 +656,6 @@ ATbool SDF_isEqualATerm(SDF_ATerm arg0, SDF_ATerm arg1);
 ATbool SDF_isEqualATermArgs(SDF_ATermArgs arg0, SDF_ATermArgs arg1);
 ATbool SDF_isEqualAnn(SDF_Ann arg0, SDF_Ann arg1);
 ATbool SDF_isEqualATermAnnos(SDF_ATermAnnos arg0, SDF_ATermAnnos arg1);
-ATbool SDF_isEqualTagId(SDF_TagId arg0, SDF_TagId arg1);
 ATbool SDF_isEqualNumChar(SDF_NumChar arg0, SDF_NumChar arg1);
 ATbool SDF_isEqualShortChar(SDF_ShortChar arg0, SDF_ShortChar arg1);
 ATbool SDF_isEqualCharacter(SDF_Character arg0, SDF_Character arg1);
@@ -693,6 +686,7 @@ inline ATbool SDF_isSymbolPair(SDF_Symbol arg);
 inline ATbool SDF_isSymbolFunc(SDF_Symbol arg);
 inline ATbool SDF_isSymbolAlt(SDF_Symbol arg);
 inline ATbool SDF_isSymbolPerm(SDF_Symbol arg);
+inline ATbool SDF_isSymbolStrategy(SDF_Symbol arg);
 inline ATbool SDF_isSymbolCharClass(SDF_Symbol arg);
 inline ATbool SDF_isSymbolSort(SDF_Symbol arg);
 inline ATbool SDF_isSymbolParameterizedSort(SDF_Symbol arg);
@@ -795,6 +789,12 @@ SDF_Symbol SDF_setSymbolSymbols(SDF_Symbol arg, SDF_Symbols Symbols);
 ATbool SDF_hasSymbolWsAfterSymbols(SDF_Symbol arg);
 SDF_Layout SDF_getSymbolWsAfterSymbols(SDF_Symbol arg);
 SDF_Symbol SDF_setSymbolWsAfterSymbols(SDF_Symbol arg, SDF_Layout wsAfterSymbols);
+ATbool SDF_hasSymbolWsAfterGreaterThan(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterGreaterThan(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterGreaterThan(SDF_Symbol arg, SDF_Layout wsAfterGreaterThan);
+ATbool SDF_hasSymbolWsAfterRight(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterRight(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterRight(SDF_Symbol arg, SDF_Layout wsAfterRight);
 ATbool SDF_hasSymbolCharClass(SDF_Symbol arg);
 SDF_CharClass SDF_getSymbolCharClass(SDF_Symbol arg);
 SDF_Symbol SDF_setSymbolCharClass(SDF_Symbol arg, SDF_CharClass CharClass);
@@ -2080,16 +2080,6 @@ SDF_ATermAnnos SDF_getATermAnnosTail(SDF_ATermAnnos arg);
 SDF_ATermAnnos SDF_setATermAnnosTail(SDF_ATermAnnos arg, SDF_ATermAnnos tail);
 
 /*}}}  */
-/*{{{  SDF_TagId accessors */
-
-ATbool SDF_isValidTagId(SDF_TagId arg);
-inline ATbool SDF_isTagIdLexToCf(SDF_TagId arg);
-inline ATbool SDF_isTagIdEmpty(SDF_TagId arg);
-ATbool SDF_hasTagIdLex(SDF_TagId arg);
-SDF_Lexical SDF_getTagIdLex(SDF_TagId arg);
-SDF_TagId SDF_setTagIdLex(SDF_TagId arg, SDF_Lexical lex);
-
-/*}}}  */
 /*{{{  SDF_NumChar accessors */
 
 ATbool SDF_isValidNumChar(SDF_NumChar arg);
@@ -2164,7 +2154,7 @@ SDF_RealCon SDF_setRealConOptExp(SDF_RealCon arg, SDF_OptExp OptExp);
 /*}}}  */
 /*{{{  sort visitors */
 
-SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_Layout (*acceptWsAfterLessThan)(SDF_Layout), SDF_Layout (*acceptWsAfterSymbol)(SDF_Layout), SDF_Layout (*acceptWsAfterCF)(SDF_Layout), SDF_Layout (*acceptWsAfterLEX)(SDF_Layout), SDF_Layout (*acceptWsAfterVAR)(SDF_Layout), SDF_Layout (*acceptWsAfterParenOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterHead)(SDF_Layout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_Layout (*acceptWsAfterTail)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterSep)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceClose)(SDF_Layout), SDF_NatCon (*acceptN)(SDF_NatCon), SDF_Layout (*acceptWsAfterN)(SDF_Layout), SDF_Layout (*acceptWsAfterSet)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterLeft)(SDF_Layout), SDF_Layout (*acceptWsAfterHash)(SDF_Layout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_Layout (*acceptWsAfterArguments)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Layout (*acceptWsAfterResults)(SDF_Layout), SDF_Layout (*acceptWsAfterBar)(SDF_Layout), SDF_Layout (*acceptWsAfterLessThanLessThan)(SDF_Layout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_Layout (*acceptWsAfterSymbols)(SDF_Layout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Sort (*acceptSort)(SDF_Sort), SDF_Layout (*acceptWsAfterSort)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpenBracketOpen)(SDF_Layout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_Layout (*acceptWsAfterParameters)(SDF_Layout), SDF_Literal (*acceptLiteral)(SDF_Literal), SDF_Literal (*acceptLabel)(SDF_Literal), SDF_Layout (*acceptWsAfterLabel)(SDF_Layout), SDF_Layout (*acceptWsAfterColon)(SDF_Layout));
+SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_Layout (*acceptWsAfterLessThan)(SDF_Layout), SDF_Layout (*acceptWsAfterSymbol)(SDF_Layout), SDF_Layout (*acceptWsAfterCF)(SDF_Layout), SDF_Layout (*acceptWsAfterLEX)(SDF_Layout), SDF_Layout (*acceptWsAfterVAR)(SDF_Layout), SDF_Layout (*acceptWsAfterParenOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterHead)(SDF_Layout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_Layout (*acceptWsAfterTail)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterSep)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceClose)(SDF_Layout), SDF_NatCon (*acceptN)(SDF_NatCon), SDF_Layout (*acceptWsAfterN)(SDF_Layout), SDF_Layout (*acceptWsAfterSet)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterLeft)(SDF_Layout), SDF_Layout (*acceptWsAfterHash)(SDF_Layout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_Layout (*acceptWsAfterArguments)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Layout (*acceptWsAfterResults)(SDF_Layout), SDF_Layout (*acceptWsAfterBar)(SDF_Layout), SDF_Layout (*acceptWsAfterLessThanLessThan)(SDF_Layout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_Layout (*acceptWsAfterSymbols)(SDF_Layout), SDF_Layout (*acceptWsAfterGreaterThan)(SDF_Layout), SDF_Layout (*acceptWsAfterRight)(SDF_Layout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Sort (*acceptSort)(SDF_Sort), SDF_Layout (*acceptWsAfterSort)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpenBracketOpen)(SDF_Layout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_Layout (*acceptWsAfterParameters)(SDF_Layout), SDF_Literal (*acceptLiteral)(SDF_Literal), SDF_Literal (*acceptLabel)(SDF_Literal), SDF_Layout (*acceptWsAfterLabel)(SDF_Layout), SDF_Layout (*acceptWsAfterColon)(SDF_Layout));
 SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_Layout (*acceptWsAfterLexical)(SDF_Layout), SDF_Layout (*acceptWsAfterPriorities)(SDF_Layout), SDF_Priorities (*acceptPriorities)(SDF_Priorities), SDF_Layout (*acceptWsAfterContextFree)(SDF_Layout), SDF_Layout (*acceptWsAfterRestrictions)(SDF_Layout), SDF_Restrictions (*acceptRestrictions)(SDF_Restrictions), SDF_Layout (*acceptWsAfterSyntax)(SDF_Layout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_Layout (*acceptWsAfterVariables)(SDF_Layout), SDF_ImpSection (*acceptImpSection)(SDF_ImpSection), SDF_Layout (*acceptWsAfterSorts)(SDF_Layout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_Layout (*acceptWsAfterAliases)(SDF_Layout), SDF_Aliases (*acceptAliases)(SDF_Aliases), SDF_Layout (*acceptWsAfterLeft)(SDF_Layout), SDF_Layout (*acceptWsAfterParenOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterGrammar)(SDF_Layout));
 SDF_SDF SDF_visitSDF(SDF_SDF arg, SDF_Layout (*acceptWsAfterDefinition)(SDF_Layout), SDF_Definition (*acceptDefinition)(SDF_Definition));
 SDF_Attribute SDF_visitAttribute(SDF_Attribute arg, SDF_ATerm (*acceptAterm)(SDF_ATerm), SDF_Layout (*acceptWsAfterId)(SDF_Layout), SDF_Layout (*acceptWsAfterParenOpen)(SDF_Layout), SDF_ModuleName (*acceptModuleName)(SDF_ModuleName), SDF_Layout (*acceptWsAfterModuleName)(SDF_Layout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity));
@@ -2231,7 +2221,6 @@ SDF_ATerm SDF_visitATerm(SDF_ATerm arg, SDF_ACon (*acceptACon)(SDF_ACon), SDF_AT
 SDF_ATermArgs SDF_visitATermArgs(SDF_ATermArgs arg, SDF_ATerm (*acceptHead)(SDF_ATerm), SDF_Layout (*acceptWsAfterFirst)(SDF_Layout), char * (*acceptSep)(char *), SDF_Layout (*acceptWsAfterSep)(SDF_Layout));
 SDF_Ann SDF_visitAnn(SDF_Ann arg, SDF_Layout (*acceptWsAfterBraceOpen)(SDF_Layout), SDF_ATermAnnos (*acceptAnnos)(SDF_ATermAnnos), SDF_Layout (*acceptWsAfterAnnos)(SDF_Layout));
 SDF_ATermAnnos SDF_visitATermAnnos(SDF_ATermAnnos arg, SDF_ATerm (*acceptHead)(SDF_ATerm), SDF_Layout (*acceptWsAfterFirst)(SDF_Layout), char * (*acceptSep)(char *), SDF_Layout (*acceptWsAfterSep)(SDF_Layout));
-SDF_TagId SDF_visitTagId(SDF_TagId arg, SDF_Lexical (*acceptLex)(SDF_Lexical));
 SDF_NumChar SDF_visitNumChar(SDF_NumChar arg, SDF_Lexical (*acceptLex)(SDF_Lexical));
 SDF_ShortChar SDF_visitShortChar(SDF_ShortChar arg, SDF_Lexical (*acceptLex)(SDF_Lexical));
 SDF_Character SDF_visitCharacter(SDF_Character arg, SDF_NumChar (*acceptNumChar)(SDF_NumChar), SDF_ShortChar (*acceptShortChar)(SDF_ShortChar));

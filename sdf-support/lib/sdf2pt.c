@@ -250,6 +250,13 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_CharRanges ptCR = SDFCharClassToPtCharRanges(sdfCC);
     result = PT_makeSymbolCharClass(ptCR);
   }
+  else if (SDF_isSymbolStrategy(sdfSymbol)) {
+    SDF_Symbol sdfLeft = SDF_getSymbolLeft(sdfSymbol);
+    SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
+    PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
+    PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
+    result = PT_makeSymbolStrategy(ptLeft, ptRight);
+  }
   else {
     ATerror("SDFSymbolToPtSymbol: unable to flatten symbol %t: %s\n", 
 	    sdfSymbol, PT_yieldTree((PT_Tree) sdfSymbol));
