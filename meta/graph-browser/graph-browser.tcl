@@ -1,4 +1,4 @@
-#
+# $Id$
 # GraphBrowser: UI for ASF+SDF meta-environment
 #               (and viewer for ASF+SDF import graphs)
 #
@@ -949,6 +949,10 @@ proc define-modules-frame {} {
 
     button .modules.buttons.editmod -text "Edit" \
 	-command {EditModules [SelectedModules]}
+    button .modules.buttons.editterm -text "Term" \
+	-command {foreach i [SelectedModules] {
+	    EditTermWidget $i
+	} }
     button .modules.buttons.revertmod -text "Revert" \
 	-command {RevertModules [SelectedModules]}
     button .modules.buttons.deletemod -text "Delete" \
@@ -960,6 +964,7 @@ proc define-modules-frame {} {
 
     pack append .modules.buttons \
         .modules.buttons.editmod {top fillx} \
+	.modules.buttons.editterm {top fillx} \
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
         .modules.buttons.modinfo {top fillx} \
