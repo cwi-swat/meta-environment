@@ -3,4 +3,5 @@
  * Started new package sdf-apigen that contains the mapping from
    SDF to ADT.
  * Generating sdf-to-adt script using Makefile instead of configure.in
+ * Release 1.3
 
