@@ -96,8 +96,7 @@ public abstract class TideTool
 
   public void displayError(Expr error)
   {
-  	throw new RuntimeException("hallo");
-    // displayError(error.getErrorMessage(), error.getErrorData());
+     displayError(error.getErrorMessage(), error.getErrorData());
   }
 
   //}}}
@@ -111,11 +110,6 @@ public abstract class TideTool
     }
 
     manager.displayError(msg);
-    /* Removed due to a bug in JDK-1.[234]
-    JOptionPane.showInternalMessageDialog(this, msg, "Tide Error",
-					  JOptionPane.ERROR_MESSAGE);
-					  */
-    System.err.println(msg + ": " + data);
   }
 
   //}}}
