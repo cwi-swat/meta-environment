@@ -22,17 +22,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
 	private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
 
-	private static final String PREF_TOOLBAR_OPEN_MODULE = "toolbar.open-module";
-	private static final String PREF_TOOLBAR_OPEN_LIB_MODULE = "toolbar.open-lib-module";
-	private static final String PREF_TOOLBAR_NEW_MODULE = "toolbar.new-module";
-	private static final String PREF_TOOLBAR_SAVE_ALL = "toolbar.save-all";
-	private static final String PREF_TOOLBAR_CLEAR_ALL = "toolbar.clear-all";
-	private static final String PREF_TOOLBAR_REFRESH_BUTTONS = "toolbar.refresh-buttons";
-	private static final String PREF_TOOLBAR_CLEAR_HISTORY = "toolbar.clear-history";
-	private static final String PREF_TOOLBAR_QUIT = "toolbar.quit";
-
-	private static final String PREF_TOOLBAR_TIDE = "toolbar.tide";
-
 	private static final int NODE_BORDER_WIDTH = 5;
 	private static final int NODE_BORDER_HEIGHT = 5;
 
@@ -46,7 +35,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
-	private JToolBar toolBar;
 	private JTree moduleTree;
 	private JPopupMenu modulePopup;
 	private JPopupMenu newModulePopup;
@@ -254,12 +242,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		menuBar.add(scaleBox);
 
 		//}}}
-		//{{{ Create toolbar
-
-		toolBar = new JToolBar();
-
-		//}}}
-
+		
 		graphPane = new JTabbedPane();
 
 		//{{{ Create module graph
@@ -360,7 +343,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
 		content.setLayout(new BorderLayout());
-		content.add(toolBar, BorderLayout.NORTH);
 		content.add(mainPanel, BorderLayout.CENTER);
 
 		//}}}
@@ -418,12 +400,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		StyleConstants.setForeground(style, foreground);
 
 		return style;
-	}
-
-	private void addTool(Action action, String prefKey) {
-		JButton button = toolBar.add(action);
-		String tip = Preferences.getString(prefKey + ".text");
-		button.setToolTipText(tip);
 	}
 
 	private void resetGraph() {
