@@ -64,4 +64,11 @@ ATermList skipToEndOfWhitespace(ATermList list);
  */
 ATerm asource(ATerm asfix);
 
+/*
+ * isValidList, isValidSlice both check:
+ *    - if no consecutive whitespace nodes occur in a list
+ */
+ATbool isValidList(ATermList list);
+ATbool isValidSlice(ATermList begin, ATermList end);
+
 #endif

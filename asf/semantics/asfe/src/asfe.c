@@ -127,21 +127,6 @@
 #define TIDE_STEP(posinfo, env, depth)
 #endif
 
-#define is_fail_env(env)	(ATisEqual(env,fail_env))
-/*#define v_lookup(env,var)	(ATdictGet(env,var))*/
-#define v_is_slice(val)   (ATgetAFun((ATermAppl)val) == list_var)
-#define v_get_first(val)  ((ATermList)ATgetArgument((ATermAppl)val, 1))
-#define v_get_last(val)  ((ATermList)ATgetArgument((ATermAppl)val, 2))
-#define v_is_empty_slice(val) (v_get_first(val) == v_get_last(val))
-#define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env, \
-													(ATerm)ATmakeAppl2(plain_var, var,val)))
-#define v_put_list(env,var,start,end) \
-  ((ATerm)ATinsert((ATermList)env, \
-		 (ATerm)ATmakeAppl3(list_var, var, (ATerm)start, (ATerm)end)))
-#define get_term(cenv)		(ATgetFirst(cenv))
-#define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
-#define make_cenv(t,e)		(ATmakeList(2, t, e))
-
 /*}}}  */
 /*{{{  globals */
 
@@ -282,6 +267,30 @@ ATermAppl v_lookup_list(ATerm env, ATerm var)
 }
 
 /*}}}  */
+
+void v_print_slice(ATerm slice)
+{
+	ATermList begin, end;
+	assert(v_is_slice(slice));
+
+	begin = v_get_first(slice);
+	end = v_get_last(slice);
+
+	ATwarning("\n\n[ ");
+
+	if(!ATisEmpty(begin)) {
+		ATwarning("%t", ATgetFirst(begin));
+		begin = ATgetNext(begin);
+	}
+
+	for(; begin != end; begin = ATgetNext(begin)) {
+		ATwarning(", %t", ATgetFirst(begin));
+	}
+	
+	ATwarning(" ]\n\n");
+	return;
+}
+
 /*{{{  ATbool v_is_bound(ATerm env, ATerm var) */
 
 /**
@@ -326,10 +335,12 @@ ATermList prepend(ATermList first, ATermList last, ATermList list)
 	
 	if(keep_layout && ATisEmpty(temp) && 
 		 (asfix_is_list_sep(elem) || asfix_is_whitespace(elem))) {
-		return temp;
+		return ATempty;
 	}
 
-	return ATinsert(temp, elem);
+	temp = ATinsert(temp, elem);
+
+	return temp;
 }
 
 ATermList prepend_slice(ATermAppl slice, ATermList list)
@@ -563,9 +574,10 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList elems1, elems2;
   ATerm newenv = env;
 
-	if(run_verbose)
+	if(run_verbose) {
 		ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
-		
+	}
+
 	if(!keep_layout && isAsFixEqual(arg1,arg2)) {
 		/* we don't test for equality with whitespace, because we might need some
 		 * skipping in case of lists. */
@@ -599,6 +611,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 		if(ok) {
       elems1 = (ATermList) asfix_get_list_elems(arg1);
       elems2 = (ATermList) asfix_get_list_elems(arg2);
+
       newenv = list_matching(sym1,newenv,elems1,elems2,
 			     conds,orgargs1,orgargs2, lhs_posinfo, depth);
     }
@@ -625,8 +638,9 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   } else { /* terms are not any of the above, and not equal */
 		if(keep_layout) {
 			/* we didn't test for equality if rewriting with ws, so do it now */
+			/* NOTE: is this still necessary? */
 			 if(isEqualModuloWhitespace(arg1,arg2)) {
-	return args_matching(newenv, conds, orgargs1, orgargs2,
+				 return args_matching(newenv, conds, orgargs1, orgargs2,
 			     lhs_posinfo, depth);
 			 } else {
 				 newenv = fail_env;
@@ -678,7 +692,6 @@ ATerm args_matching(ATerm env, ATermList conds,
   return newenv;
 }
 
-
 /*}}}  */
 /*{{{  ATbool compare_lists(ATermAppl tuple, ATermList list) */
 
@@ -725,6 +738,9 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
 	if(keep_layout) {
 		first = skipWhitespace(first);
 		elems2 = skipWhitespace(elems2);
+
+		assert(isValidSlice(first, last));
+		assert(isValidList(elems2));
 	}
 
   while(first != last && match) {
@@ -735,6 +751,7 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
 
 			if(keep_layout) {
 				elems2 = skipWhitespace(ATgetNext(elems2));
+				assert(isValidList(elems2));
 			} else {
 				elems2 = ATgetNext(elems2);
 			}
@@ -742,24 +759,31 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
     else {
       match = ATfalse;
 		}
-
+		
 		if(keep_layout) {
 			first = skipWhitespace(ATgetNext(first));
+			assert(isValidSlice(first, last));
 		} else {
 			first = ATgetNext(first);
 		}
   }
-
-  if(match)
+	
+  if(match) {
+		assert(isValidList(elems2));
     return elems2;
-  else
+	} else {
     return NULL;
+	}
 }
 
 
 /*}}}  */
 /*{{{  ATermList sub_list_matching(ar,sym,env,elem,elems1,elems2,conds,args1,args2,lp,d) */
 
+/* sub_list_matching
+ *
+ * Tries different sizes for a single list variable.
+ */
 ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
                         ATermList elems1, ATermList elems2,
                         ATermList conds,
@@ -773,30 +797,43 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 		elem = AT_removeAnnotations(elem);
 
   if(asfix_is_star_var(elem)) {
+		/* try to match with zero elements for star variable */
 		newenv = v_put_list(env, elem, ATempty, ATempty);
     subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2,
 			   lhs_posinfo, depth);
-  }
-  else {
-		/* A plus variable should at least contain one element! */
+  } else {
+		/* if plus variable, do not try to match with zero elements */
     subenv = fail_env;
 	}
 
 	if(keep_layout) {
+		/* Make sure we begin at a regular element */
 		elems2 = skipWhitespace(elems2);
+		assert(isValidList(elems2));
 	}
 
-	last  = elems2;
+	/* If the star variable didn't match or we have a plus variable
+	 * we continue matching with increasing length while possible.
+	 */
+	 
+	if(!ATisEmpty(elems2)) {
+		for(last = ATgetNext(elems2); /* create a singleton */           
+				is_fail_env(subenv); 
+				last = ATgetNext(keep_layout ? skipWhitespace(last) : last)) /* add an elem */ 
+		{
+			assert(isValidSlice(elems2, last));  
+			newenv = v_put_list(env, elem, elems2, last);
+			subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2,
+														 lhs_posinfo, depth);
 
-	while(is_fail_env(subenv) && !ATisEmpty(last)) {
-		
-		last = ATgetNext(last);
-    newenv = v_put_list(env, elem, elems2, last);
-    subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2,
-			   lhs_posinfo, depth);
-  }
-
-  return subenv;
+			if(ATisEmpty(last)) {
+				/* the entire list has been tried now */
+				break;
+			}
+		}
+	}
+	
+	return subenv;
 }
 
 /*}}}  */
@@ -811,9 +848,13 @@ ATerm list_matching(ATerm sym,
   ATerm newenv;
   ATerm newarg1, newarg2;
   ATermList newargs1, newargs2;
-	
+
+	assert(isValidList(skipWhitespace(elems1)));
+	assert(isValidList(skipWhitespace(elems2)));
+
 	if(keep_layout) {
 		elems1 = skipWhitespace(elems1);
+		assert(isValidList(elems1));		
 	}
 	
   if(!ATisEmpty(elems1)) {
@@ -838,14 +879,16 @@ ATerm list_matching(ATerm sym,
 
 						if(keep_layout) {
 							elems2 = skipWhitespace(elems2);						
+							assert(isValidList(elems2));
 						}
 						
 						if(!ATisEmpty(elems2)) {
 							elem2 = ATgetFirst(elems2);
 						}
 
+						assert(isValidSlice(elems2, ATempty));
 						newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
-	    newenv = args_matching(newenv, conds, args1, args2,
+						newenv = args_matching(newenv, conds, args1, args2,
 				   lhs_posinfo, depth);
 					}
         }
@@ -860,6 +903,7 @@ ATerm list_matching(ATerm sym,
       }
     } else { /* TlistSize(elems1) != 1 */
       elems1 = ATgetNext(elems1);
+
       if(asfix_is_list_var(elem1)) {
 				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
@@ -869,7 +913,7 @@ ATerm list_matching(ATerm sym,
 				   args1, args2, lhs_posinfo, depth);
           } else {
             newenv = fail_env;
-	  }
+					}
         } else  {/* TdictGet(env,elem1) == Tfalse */
           newenv = sub_list_matching(sym,env,elem1,elems1,elems2,
                                      conds, args1, args2, lhs_posinfo, depth);
@@ -877,12 +921,14 @@ ATerm list_matching(ATerm sym,
       } else { /*is_list_var(elem1) == Tfalse */
 				if(keep_layout) {
 					elems2 = skipWhitespace(elems2);
+					assert(isValidList(elems2));
 				}
         if(!ATisEmpty(elems2)) {
           elem2 = ATgetFirst(elems2);
           
 					if(keep_layout) {
 						elems2 = skipWhitespace(ATgetNext(elems2));
+						assert(isValidList(elems2));
 					} else {
 						elems2 = ATgetNext(elems2);
 					}
@@ -1132,7 +1178,7 @@ ATermList rewrite_args(ATermList args, ATerm env, int depth)
       arg = ATgetFirst(args);
       if(asfix_is_appl(arg) || asfix_is_var(arg) ||
          asfix_is_list(arg) || asfix_is_lex(arg)) {
-	newarg_table[i] = rewrite(arg, env, depth+1);
+				newarg_table[i] = rewrite(arg, env, depth+1);
 			} else {
         newarg_table[i] = arg;
 			}
@@ -1166,9 +1212,14 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
 			if(asfix_is_list_var(elem)) {
 				ATermAppl tuple = v_lookup_list(env, elem);
 				assert(tuple);
-				newelems = append_slice(newelems, tuple);
+				if(keep_layout && v_is_empty_slice(tuple)) {
+					newelems = skipWhitespace(newelems);
+					assert(isValidList(newelems));
+				} else {
+					newelems = append_slice(newelems, tuple);
+				}
 			} else {
-	newelem = rewrite(elem, env, depth+1);
+				newelem = rewrite(elem, env, depth+1);
         newelems = ATappend(newelems, newelem);
 			}
       elems = ATgetNext(elems);
@@ -1182,7 +1233,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
 				newelem_table[i] = (ATerm)v_lookup_list(env, elem);
 				assert(newelem_table[i]);
 			} else {
-	newelem_table[i] = rewrite(elem, env, depth+1);
+				newelem_table[i] = rewrite(elem, env, depth+1);
 			}
       elems = ATgetNext(elems);
 			i++;
@@ -1191,20 +1242,26 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
     for(--i; i>=0; i--) {
       newelem = newelem_table[i];
       if(ATgetAFun((ATermAppl)newelem) == list_var) {
+
 				if(keep_layout && v_is_empty_slice(newelem)) {
 					newelems = skipWhitespace(newelems);
+					assert(isValidList(newelems));
 				} else {
+					assert(isValidList(skipWhitespace(newelems)));
 					newelems = prepend_slice((ATermAppl)newelem, newelems);
+					assert(isValidList(newelems));
 				}
 			} else {
 				if(!(keep_layout && ATisEmpty(newelems) &&
-						 (asfix_is_list_sep(newelem) || asfix_is_whitespace(newelem)))) {												newelems = ATinsert(newelems, newelem);
+						 (asfix_is_list_sep(newelem) || asfix_is_whitespace(newelem)))) {
+					newelems = ATinsert(newelems, newelem);
+					assert(isValidList(skipWhitespace(newelems)));
 				}
 			}
 		}
   }
 
-  return newelems;
+	return newelems;
 }
 
 /*}}}  */
@@ -1259,6 +1316,8 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 		elems = (ATermList) asfix_get_list_elems(trm);
 		sym = asfix_get_list_sym(trm);
 		newelems = rewrite_elems(sym, elems, env, depth);
+		assert(isValidList(newelems));
+
 		rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
 	}
 

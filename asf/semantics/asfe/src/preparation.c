@@ -590,6 +590,9 @@ ATerm lexical_to_list(ATerm lextrm)
   for(i=0; i<l; i++) {
 		cbuf[1] = lexstr[i];
     newtrm = ATmake("lex(<str>,sort(\"CHAR\"))", cbuf, sort);
+		if(keep_layout && i != 0) {
+			newtrmlist = ATappend(newtrmlist, ATmake("w(\"\")"));
+		}
     newtrmlist = ATappend(newtrmlist, newtrm);
   }
   newname  = ATmake("l(<str>)", sortstr);

@@ -28,6 +28,7 @@ void rewrite_error(const char *message, ATerm subject);
 ATerm v_lookup_plain(ATerm env, ATerm var);
 ATermAppl v_lookup_list(ATerm env, ATerm var);
 ATbool v_is_bound(ATerm env, ATerm var);
+void v_print_slice(ATerm slice);
 ATermList prepend(ATermList first, ATermList last, ATermList list);
 ATermList prepend_slice(ATermAppl slice, ATermList list);
 ATermList append_slice(ATermList list, ATermAppl slice);
@@ -61,13 +62,16 @@ ATermList rewrite_args(ATermList args, ATerm env, int depth);
 ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
 
-
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 /*#define v_lookup(env,var)	(ATdictGet(env,var))*/
 #define v_is_slice(val)   (ATgetAFun((ATermAppl)val) == list_var)
 #define v_get_first(val)  ((ATermList)ATgetArgument((ATermAppl)val, 1))
 #define v_get_last(val)  ((ATermList)ATgetArgument((ATermAppl)val, 2))
+#ifndef KEEP_LAYOUT
 #define v_is_empty_slice(val) (v_get_first(val) == v_get_last(val))
+#else
+#define v_is_empty_slice(val) (skipWhitespace(v_get_first(val)) == v_get_last(val))
+#endif
 #define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env, \
 													(ATerm)ATmakeAppl2(plain_var, var,val)))
 #define v_put_list(env,var,start,end) \

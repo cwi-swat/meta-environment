@@ -41,6 +41,7 @@
 #include <assert.h>
 
 #include "asfix_utils.h"
+#include "evaluator.h"
 
 /* the KEEP_LAYOUT macro is supposed to be set at the commandline
  * of the compiler.
@@ -124,9 +125,7 @@ ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 			/* different or not handled types of asfix terms are not equal by definition */
 			
 			if(asfix_is_whitespace(asfix1) || asfix_is_whitespace(asfix2)) {
-				ATwarning("ABORT IN %t: %t AND %t\n",asource(tagCurrentRule),
-									asource(asfix1),asource(asfix2));
-				ATabort("Normal term compared with whitespace.\n");
+				ATabort("Internal error. Normal term compared with whitespace.\n");
 			}
 			
 			return ATfalse;
@@ -159,8 +158,8 @@ ATermList skipWhitespace(ATermList list)
 {
 	ATerm elem;
 
-	/* assert(asfix_is_whitespace(ATgetFirst(list)) || 
-		 asfix_is_list_sep(ATgetFirst(list))); */
+	/*	assert(asfix_is_whitespace(ATgetFirst(list)) || 
+			asfix_is_list_sep(ATgetFirst(list))); */
 
 	if(!ATisEmpty(list)) {
 		for(elem = ATgetFirst(list); !ATisEmpty(list) && 
@@ -190,3 +189,86 @@ ATermList skipToEndOfWhitespace(ATermList list)
 	assert(ATisEmpty(list) || asfix_is_whitespace(ATgetFirst(prev)) || asfix_is_list_sep(ATgetFirst(prev)));
 	return prev;
 }
+
+/* isValidList checks:
+ *    - if no consecutive whitespaces nodes occur
+ *    - if it doesn't begin or end with whitespace
+ */
+ATbool isValidList(ATermList list)
+{
+	ATerm elem1, elem2;
+	ATermList orig = list, next;
+
+	/* check if the first element is not whitespace */
+	if(!ATisEmpty(list) && asfix_is_whitespace(ATgetFirst(list))) {
+		ATwarning("Internal error. First element is whitespace in list:\n%t\n", orig);
+		return ATfalse;
+	}
+
+	/* check if no consecutive whitespace occurs */
+	for(;!ATisEmpty(list); list = ATgetNext(list)) {
+		elem1 = ATgetFirst(list);
+		next =  ATgetNext(list);
+		elem2 = ATgetFirst(next);
+
+		if(asfix_is_whitespace(elem1) && asfix_is_whitespace(elem2)) {
+			ATwarning("Internal error. Consecutive whitespace in list:\n%t\n", orig);
+			return ATfalse;
+		}
+
+		/* check if the last element is not whitespace */
+		if(ATisEmpty(next) && asfix_is_whitespace(elem1)) {
+			ATwarning("Internal error. Last element is whitespace in list:\n%t\n", orig);
+			return ATfalse;
+		}
+	}
+
+
+	return ATtrue;
+}
+
+/* isValidSlice does the same as isValidList but for a slice */
+ATbool isValidSlice(ATermList begin, ATermList end)
+{
+	ATerm elem1, elem2;
+	ATermList orig = begin, next;
+
+	/* check if the first element is not whitespace */
+	if(!ATisEmpty(begin) && asfix_is_whitespace(ATgetFirst(begin))) {
+			ATwarning("Internal error. First element of slice is whitespace in:\n[");
+			for(; orig != end; orig = ATgetNext(orig)) {
+				ATwarning(" %t,",ATgetFirst(orig));
+			}
+			ATwarning("]\n");
+
+		return ATfalse;
+	}
+
+	/* check if no consecutive whitespace occurs */
+	for(;begin != end; begin = ATgetNext(begin)) {
+		elem1 = ATgetFirst(begin);
+		next = ATgetNext(begin);
+		elem2 = ATgetFirst(next);
+
+		if(asfix_is_whitespace(elem1) && asfix_is_whitespace(elem2)) {
+			ATwarning("Internal error. Consecutive whitespace in slice:\n[");
+			for(; orig != end; orig = ATgetNext(orig)) {
+				ATwarning(" %t", ATgetFirst(orig));
+			}
+			ATwarning("]\n");
+			return ATfalse;
+		}
+		
+		/* check if the last element is not whitespace */
+		if(next == end && asfix_is_whitespace(elem1)) {
+			ATwarning("Internal error. Last element is whitespace in slice:\n[");
+			for(; orig != end; orig = ATgetNext(orig)) {
+				ATwarning(" %t,", ATgetFirst(orig));
+			}
+			ATwarning("]\n");
+			return ATfalse;
+		}
+	}
+
+	return ATtrue;
+}		
