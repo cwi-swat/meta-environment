@@ -3,12 +3,14 @@
 process DumpEquations is
 let
   Equations: term,
+  Error: term,
   ErrorMessage: str,
   FileName: str,
   Id: int,
   ModuleName: str,
   Path: str,
   Pid: int,
+  Specification: term,
   Syntax: term
 in
   Id := process-id .
@@ -25,7 +27,8 @@ in
     create(GetSpecification(ModuleName), Pid?)
     .
     (
-      rec-msg(specification(Equations?)) .
+      rec-msg(specification(Specification?)) .
+      GetSpecificationEquations(Specification, Equations?) .
       if equal(FileName, "") then 
         snd-msg(get-path-from-db(ModuleName)) .
         rec-msg(path(Path?)) .
@@ -42,9 +45,9 @@ in
 	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
       )
     +
-      rec-msg(specification-incomplete) .
-      snd-note(ui-status(statf(Id, 
-                               "Specification incomplete for %s", 
+      rec-msg(specification-incomplete(Error?)) .
+      printf("DumpEquations: %t\n", Error) .
+      snd-note(ui-status(statf(Id, "Specification incomplete for %s", 
 			       [ModuleName])))
     ) .
     snd-note(ui-status(endstat(Id))) .

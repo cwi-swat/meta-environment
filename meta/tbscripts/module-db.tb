@@ -283,18 +283,6 @@ in
     rec-msg(ts-all-keys(Modulenames?)) .
     snd-msg(all-module-names(Modulenames))
   + 
-    rec-msg(eqs-not-available-for-modules(Name?)) .
-    MDB-AllEquationsAvailable(Name, Modulenames?) .
-    snd-msg(eqs-needed-for-modules(Modulenames))
-  +
-    rec-msg(all-equations-available(Name?)).
-    MDB-AllEquationsAvailable(Name, Modulenames?) .
-    if equal(Modulenames, []) then
-      snd-msg(all-equations-available)
-    else
-      snd-msg(all-equations-incomplete)
-    fi
-  +
     rec-msg(get-modules(Modulenames?)) .
     snd-msg(ts-get-values("sdf-tree", Modulenames)) .
     (
@@ -638,42 +626,6 @@ in
   MDB-StoreModuleTree(OldName, Syntax) .
   Syntax := no-tree .
   MDB-DisplayGraph
-endlet
-
-process MDB-AllEquationsAvailable(Name : str, Missing : list?) is
-let
-  Modulenames : list,
-  Modulename  : str,
-  Text    : str,
-  Tree    : term
-in
-  MDB-GetAllImportedModulenames(Name, Modulenames?) .
-printf("MDB-GetAllImportedModulenames: %s -> %t\n", Name, Modulenames) .
-  Missing := [] .
-  if not(equal(Modulenames, [])) then
-    Modulename := first(Modulenames) .
-    Modulenames := next(Modulenames) .
-printf("MDB-AllEquationsAvailable: %s\n", Modulename) .
-    snd-msg(ts-get-str-value("asf-text", Modulename)) . 
-    (
-      rec-msg(ts-no-value) . printf("ts-no-value\n")
-    +
-      rec-msg(ts-value(Text?)) .
-      Text := "" .
-      snd-msg(ts-get-term-value("asf-tree", Modulename)) .
-      (
-        rec-msg(ts-no-value) .
-	Missing := join(Modulename, Missing)
-      +
-        rec-msg(ts-value(Tree?)) .
-	Tree := no-tree
-      )
-    )
-  fi
-  * 
-  if equal(Modulenames, []) then
-    tau
-  fi
 endlet
 
 process MDB-ContainedIn(Name : str, Modules : list, Status : term?) is

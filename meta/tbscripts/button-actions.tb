@@ -359,7 +359,6 @@ in
 	  . snd-msg(put-term-tree("reduct.out", RTree))
           . ReturnSuccess(EditorId, Stack)
         else
-	  printf("RTree: %t\n", error-tree) .
           ReturnAbort(EditorId, Stack)
         fi
       +
@@ -1018,23 +1017,6 @@ in
   )
 endlet
 
-#if 0
-process ParseText(Text: str, Path: str, ModuleName: str, Nonterminal: str, 
-                  Tree: term?, ParseError: term?) is
-let
-  Id         : term,
-  ErrList    : list,
-  ErrContent : term,
-  ModuleId   : term
-in
-  Id := process-id . 
-  snd-msg(open-modules([ModuleName], sdf)) .
-  rec-msg(finished-opening-modules) .
-  printf("ParseText: fixme\n")
-  /*ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)*/
-endlet
-#endif
- 
 process ParseSyntax(Sid: term, Type: term) is
 let
   Id: int,
@@ -1234,28 +1216,29 @@ endlet
 
 process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
-  Id: int,
-  ErrList: list,
+  Summary: term,
   Equations: term,
-  Pid: int
+  Id: int,
+  Pid: int,
+  Specification: term
 in
   Id := process-id .
   snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  printf("get-all-equations for %s\n", ModuleName) .
   create(GetSpecification(ModuleName), Pid?)
   .
   (
-    rec-msg(specification(Equations?)) .
+    rec-msg(specification(Specification?)) .
+    GetSpecificationEquations(Specification, Equations?) .
     snd-note(ui-status(endstat(Id))).
     snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
     rec-msg(interpret-term-hook-result(NormalForm?))
   +
-    rec-msg(specification-incomplete) .
-    NormalForm := error-tree .
+    rec-msg(specification-incomplete(Summary?)) .
     snd-note(ui-status(endstat(Id))) .
-    snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+    ShowSummaryInGUI(Summary) .
+    NormalForm := error-tree
   )
 endlet
 
@@ -1266,6 +1249,7 @@ let
   NewModulename : str,
   ErrorMessage : str
 in
+  printf("ActivateEditorWithTree: [%s] [%s]\n", Modulename, Filename) .
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .

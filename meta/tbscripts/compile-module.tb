@@ -3,11 +3,12 @@
 process Compile-module is
 let
   Equations: term,
-  ErrorMsg: str,
+  Error: str,
   Id: term,
   ModuleName: str,
   OutputFile: str,
   Pid: int,
+  Specification: term,
   Syntax: term
 in
   Id := process-id.
@@ -17,11 +18,13 @@ in
     create(GetSpecification(ModuleName), Pid?)
     .
     (
-      rec-msg(specification(Equations?)) .
+      rec-msg(specification(Specification?)) .
+      GetSpecificationEquations(Specification, Equations?) .
       snd-msg(compile-semantics-hook(ModuleName, Equations)).
       rec-msg(compile-semantics-hook-done(ModuleName))
     +
-      rec-msg(specification-incomplete) .
+      rec-msg(specification-incomplete(Error?)) .
+      printf("CompileModule: %t\n", Error) .
       snd-note(ui-status(statf(Id, "Specification incomplete for %s",
 				   [ModuleName])))
     ) .

@@ -1,13 +1,29 @@
 /* $Id$ */
 
-/*{{{ process ReadEquations(ModuleId: str, Equations: str?) */
+/*{{{ process ReadFile(Filename: str, Text: str?) */
 
-process ReadEquations(ModuleId: str, Equations: str?)  is
+process ReadFile(Filename: str, Text: str?)  is
+let
+  ErrorMessage: str
+in
+  snd-msg(io-read-file(Filename))
+  .
+  (
+    rec-msg(io-file-contents(Text?))
+  +
+    rec-msg(io-error-reading(ErrorMessage?)) 
+    . Text := ""
+  )
+endlet
+
+/*}}}  */
+
+/*{{{  process BuildEquationsFilename(ModuleId: str, Filename: str?) */
+
+process BuildEquationsFilename(ModuleId: str, Filename: str?) is
 let
   Directory: str,
-  ErrorMessage: str,
-  Extension: str,
-  Filename: str
+  Extension: str
 in
   snd-msg(ts-get-str-value("module-paths", ModuleId))
   . rec-msg(ts-value(Directory?))
@@ -15,44 +31,11 @@ in
   . rec-msg(file-extension-hook-result(Extension?))
   . snd-msg(io-get-filename(Directory, ModuleId, Extension))
   . rec-msg(io-filename(Filename?))
-  . snd-msg(io-read-file(Filename))
-  .
-  (
-    rec-msg(io-file-contents(Equations?))
-  +
-    rec-msg(io-error-reading(ErrorMessage?)) 
-    . Equations := ""
-  )
 endlet
 
 /*}}}  */
 
-process GetEquations(ModuleId: str) is
-let
-  Equations: term,
-  Text: str
-in
-  snd-msg(ts-get-term-value("asf-tree", ModuleId))
-  .
-  (
-    rec-msg(ts-value(Equations?))
-    . snd-msg(equations(ModuleId, Equations))
-  +
-    rec-msg(ts-no-value)
-    . ReadEquations(ModuleId, Text?)
-    . ParseEquationsText(ModuleId, Text)
-    .
-    (
-      rec-msg(parse-equations-ok(ModuleId, Equations?))
-      . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
-      . snd-msg(equations(ModuleId, Equations))
-    +
-      rec-msg(parse-equations-failed(ModuleId))
-      . snd-msg(ts-remove-term-value("asf-tree", ModuleId))
-      . snd-msg(no-equations(ModuleId))
-    )
-  )
-endlet
+/*{{{  process ParseEquationsText(ModuleId: str, Text: str) */
 
 process ParseEquationsText(ModuleId: str, Text: str) is
 let
@@ -66,6 +49,9 @@ in
   . create(ParseEquationsHandler(ModuleId), Pid?)
   . ParseText(Pid, Text, Table, Nonterminal)
 endlet
+
+/*}}}  */
+/*{{{  process ParseEquationsHandler(ModuleId: str) */
 
 process ParseEquationsHandler(ModuleId: str) is
 let
@@ -88,73 +74,62 @@ in
     +
       rec-msg(parse-error(Pid, ParseError?))
     )
-    . printf("ParseEquationsHandler: %t\n", ParseError)
-    . snd-msg(parse-equations-failed(ModuleId))
+    . snd-msg(parse-equations-failed(ModuleId, ParseError))
   )
 endlet
 
-process ParseSpecification(ModName : str) is
+/*}}}  */
+
+/*{{{ process GetAsfModule(ModuleId: str) */
+
+process GetAsfModule(ModuleId: str) is
 let
-  ModuleName: str,
-  Module: str,
-  Modules: list,
-  EqsText: str,
-  EqsTree: term,
-  Nonterminal: str,
-  ParseTree: term,
   Error: term,
-  ModuleId: term,
-  Extension: str,
-  Path: str,
-  FileName: str
+  Equations: term,
+  Filename: str,
+  Summary: term,
+  Text: str
 in
-  snd-msg(get-rules-top-sort) .
-  rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
-  snd-msg(eqs-not-available-for-modules(ModName)) .
-  rec-msg(eqs-needed-for-modules(Modules?))
-  . printf("equations needed for module %s -> %t\n", ModName, Modules)
+  snd-msg(ts-get-term-value("asf-tree", ModuleId))
   .
   (
-   if not-equal(Modules, []) then
-     Module := first(Modules).
-     Modules := next(Modules).
-     snd-msg(get-eqs-text(Module)).
-     (
-      rec-msg(eqs-text(Module, EqsText?)) .
-      snd-msg(get-path-from-db(Module)) .
-      rec-msg(path(Path?)) .
-      snd-msg(file-extension-hook(asf)) .
-      rec-msg(file-extension-hook-result(Extension?)) .
-      snd-msg(io-get-filename(Path, Module, Extension)) .
-      rec-msg(io-filename(FileName?)) .
-      printf("ParseAllEquations: fixme\n")
-      /*
-      ParseString(Module, FileName, eqs, false, Nonterminal, EqsText, 
-                  ParseTree?, Error?) .
-      ProcessParseError(Error) .
-      ProcessEqsTree(Module, ParseTree) .
-      ParseTree := no-tree
-      */
-    +
-      rec-msg(no-eqs-text(Module)) 
-    )
+    rec-msg(ts-value(Equations?))
+    . snd-msg(equations(ModuleId, Equations))
+  +
+    rec-msg(ts-no-value)
+    . BuildEquationsFilename(ModuleId, Filename?)
+    . ReadFile(Filename, Text?)
+    .
+    if equal(Text, "")
+    then
+      snd-msg(no-equations(ModuleId))
+    else
+      ParseEquationsText(ModuleId, Text)
+      .
+      (
+	rec-msg(parse-equations-ok(ModuleId, Equations?))
+	. snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
+	. snd-msg(equations(ModuleId, Equations))
+      +
+	rec-msg(parse-equations-failed(ModuleId, Error?))
+	. ParseErrorToSummary(Error, Filename, Summary?)
+	. snd-msg(error-in-equations(ModuleId, Summary))
+      )
     fi
-  )*
-  if equal(Modules,[]) then 
-    tau
-  fi 
+  )
 endlet
 
-process GetImportsForRenaming(ModuleName : str, ModuleNames : list, 
-                              Imports : term?) is
+/*}}}  */
+/*{{{ process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) */
+
+process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) is
 let 
-  Modules : list
+  Modules: list
 in
   snd-msg(get-modules(ModuleNames)) .
   (
     rec-msg(modules(Modules?)) .
     snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
-    Modules := [] .
     rec-msg(sm-all-needed-imports(Imports?))  
   +
     rec-msg(no-modules) .
@@ -162,49 +137,62 @@ in
   )
 endlet
 
+/*}}}  */
+
+/*{{{ process GetSpecification(ModuleId: str) */
+
 process GetSpecification(ModuleId: str) is
 let
+  Error: term,
   CurModule: str,
   Equations: term,
-  Imports: term,
+  Imports: list,
   Modules: list,
   Pid: int,
-  Specification: term
+  Specification: term,
+  Todo: list
 in
-  ParseSpecification(ModuleId)
-  . snd-msg(all-equations-available(ModuleId))
+  MDB-GetAllImportedModulenames(ModuleId, Modules?)
+  . GetImportsForRenaming(ModuleId, Modules, Imports?)
+  . Specification := []
   .
+  if and(not-equal(Modules, []), equal(Error, undefined))
+  then
+    CurModule := first(Modules)
+    . create(GetAsfModule(CurModule), Pid?)
+    . 
+    (
+      rec-msg(no-equations(CurModule))
+    +
+      rec-msg(equations(CurModule, Equations?))
+      . snd-msg(sr-rename-module(Imports, CurModule, Equations))
+      . rec-msg(sr-renamed-module(Equations?))
+      . Specification := join(Specification, Equations)
+    +
+      rec-msg(error-in-equations(CurModule, Error?))
+    )
+    . Modules := next(Modules)
+  fi
+  *
   (
-    rec-msg(all-equations-available)
-    . snd-msg(get-all-imported-module-names(ModuleId))
-    . rec-msg(all-imported-module-names(Modules?))
-    . snd-msg(add-initial-eqs-module-names-hook(Modules))
-    . rec-msg(initial-eqs-module-names-added(Modules?))
-    . GetImportsForRenaming(ModuleId, Modules, Imports?)
-    . Specification := []
-    .
-    if not-equal(Modules, []) then
-      CurModule := first(Modules)
-      . create(GetEquations(CurModule), Pid?)
-      .
-      (
-	 rec-msg(equations(CurModule, Equations?))
-	 . snd-msg(sr-rename-module(Imports, CurModule, Equations))
-	 . rec-msg(sr-renamed-module(Equations?))
-	 . Specification := join(Specification, Equations)
-      +
-	 rec-msg(no-equations(CurModule))
-      )
-      . Modules := next(Modules)
+    if not-equal(Error, undefined)
+    then
+      snd-msg(specification-incomplete(Error))
     fi
-    *
-    if equal(Modules,[]) then  
-      snd-msg(postprocess-collected-semantics-hook(ModuleId, Specification))
-      . rec-msg(postprocess-collected-semantics-hook-result(ModuleId, Specification?))
-      . snd-msg(specification(Specification))
-    fi 
   +
-    rec-msg(all-equations-incomplete)
-    . snd-msg(specification-incomplete)
+    if equal(Modules, [])
+    then
+      snd-msg(specification(Specification))
+    fi
   )
 endlet
+
+/*}}}  */
+
+process GetSpecificationEquations(Specification: term, Equations: term?) is
+  snd-msg(extract-equations(Specification))
+  . rec-msg(extract-equations-result(Equations?))
+
+process GetSpecificationTests(Specification: term, Tests: term?) is
+  snd-msg(extract-tests(Specification))
+  . rec-msg(extract-tests-result(Tests?))

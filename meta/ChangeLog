@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Apr 15 14:51:47 CEST 2004 <jong@cwi.nl>
+ * tbscripts/process-eqs:
+   - simplified GetSpecification, improved error handling in parsing
+   and retrieving of specification/equations/tests.
+
 Thu Apr 15 14:16:19 CEST 2004 <jurgenv@cwi.nl>
  * Added concept of ValueChangedListener to UserInterfacePanels. This
    can be used to let other components change their behaviour when the contents
