@@ -30,12 +30,14 @@ static ATerm MDB_NONE;
 
 /*{{{  Forward declarations */
 
-static ATbool all_rules_available(ATermList visited, ATerm module);
+static ATerm all_rules_available(ATermList visited, ATerm module);
 static ATermList add_imports(ATerm name, ATermList mods, SDF_ImportList imports);
 static ATermList replace_imports(ATerm name, ATermList mods, SDF_ImportList imports);
 static ATermList modules_depend_on(ATerm name, ATermList mods);
 static ATbool is_valid_parse_table(ATermList visited, ATerm module, 
 				   int timeOfEqsTable, int timeOfTrmTable);
+static ATbool checkModuleNameWithPath(const char *moduleName, const char *path);
+static ATbool checkModuleName(const char *moduleName); 
 /*}}}  */
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
@@ -264,12 +266,14 @@ ATerm get_all_equations(int cid, char *moduleName)
 {
   ATerm name;
   ATerm result;
+  ATerm missing;
 
 /* calculate the transitive closure of the imported modules. */
   
   name = ATmake("<str>", moduleName);
 
-  if (all_rules_available(ATempty, name)) {
+  missing = all_rules_available(ATempty, name);
+  if (missing == NULL) {
     result = ASF_makeTermFromCondEquationList(
                getEquations(SDFmakeImport(moduleName)));
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
@@ -388,14 +392,10 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   tree      = PT_getParseTreeTree(parseTree);
   sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
 
-  /* Sanity check: modulename inside module must equal name passed as str */
-/*  if (strcmp(moduleName, SDFgetModuleName(sdfModule)) != 0) {
+  if (!checkModuleNameWithPath(SDFgetModuleName(sdfModule), path)) {
     return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
   }
-  REMOVED BY JURGEN TO CHECK HOW FAR WE COME 
-*/
 
-//  modName = ATmake("<str>", moduleName); 
   modName = ATmake("<str>",  SDFgetModuleName(sdfModule));
   entry = MDB_makeEntryDefault(path,
                                sdfTree,
@@ -979,6 +979,8 @@ rename_modulename_in_modules(ATermList mods,
 
 /*}}}  */
 
+/*{{{  changeSdfPath(char *path, char *oldModuleName, char *newModuleName) */
+
 static char *
 changeSdfPath(char *path, char *oldModuleName, char *newModuleName)
 {
@@ -993,6 +995,36 @@ changeSdfPath(char *path, char *oldModuleName, char *newModuleName)
   return newPath;
 }
 
+/*}}}  */
+
+/*{{{  static ATbool checkModuleNameWithPath(const char *moduleName, const char *path) */
+
+static ATbool checkModuleNameWithPath(const char *moduleName, const char *path)
+{
+  int i,j;
+  int pathlen = strlen(path);
+  int namelen = strlen(moduleName);
+
+  /* first skip extension (may not use knowledge of which extension it is) */
+  for(i=pathlen - 1; i >= 0 && path[i] != '.'; i --);
+
+  for(j=namelen - 1, --i; i >= 0 && j >= 0; i--, j--) {
+    if (moduleName[j] != path[i]) {
+      return ATfalse;
+    }
+    if (!isalnum(moduleName[j]) 
+	&& moduleName[j] != '-'
+	&& moduleName[j] != '_'
+	&& moduleName[j] != '/') {
+      return ATfalse;
+    }
+  }
+
+  return ATtrue;
+}
+
+/*}}}  */
+
 static ATbool checkModuleName(const char *moduleName)  
 {
   int i;
@@ -1001,7 +1033,8 @@ static ATbool checkModuleName(const char *moduleName)
   for (i = 0; i < len; i++) {
     if (!isalnum(moduleName[i]) 
         && moduleName[i] != '-'  
-        && moduleName[i] != '_') {
+        && moduleName[i] != '_'
+	&& moduleName[i] != '/') {
       return ATfalse;
     }
   }
@@ -1125,7 +1158,7 @@ replace_imports(ATerm name, ATermList mods, SDF_ImportList imports)
 /*}}}  */
 /*{{{  ATbool complete_sdf2_specification(ATermList visited, ATerm module) */
 
-static ATbool 
+static ATerm 
 complete_sdf2_specification(ATermList visited, ATerm module)
 {
   MDB_Entry entry;
@@ -1137,11 +1170,11 @@ complete_sdf2_specification(ATermList visited, ATerm module)
       asfix = MDB_getEntrySdfTree(entry);
       if(!ATisEqual(asfix, MDB_NONE)) {
 	ATerm first;
-	ATbool result = ATtrue;
+	ATerm result = NULL;
 	ATermList imports = (ATermList)GetValue(import_db,module);
 	
 	visited = ATinsert(visited,module);
-	while(!ATisEmpty(imports) && result) {
+	while(!ATisEmpty(imports) && (result == NULL)) {
 	  first = ATgetFirst(imports);
 	  result = complete_sdf2_specification(visited,first);
 	  imports = ATgetNext(imports);
@@ -1149,17 +1182,16 @@ complete_sdf2_specification(ATermList visited, ATerm module)
 	return result;
       }
       else {
-	ATwarning("Sdf2: %t is missing\n", module);
-	return ATfalse;
+	return module;
       }
     } 
     else {
-      ATwarning("Sdf2: %t is missing\n", module);
-      return ATfalse;
+      return module;
     }
   }
-  else
-    return ATtrue;
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
@@ -1221,14 +1253,14 @@ is_valid_parse_table(ATermList visited, ATerm module,
 /*}}}  */
 /*{{{  ATbool all_rules_available(ATermList visited, ATerm module) */
 
-static ATbool 
+static ATerm 
 all_rules_available(ATermList visited, ATerm module)
 {
   ATerm first;
   MDB_Entry entry;
   ATerm EqsTree;
   ATerm EqsText;
-  ATbool result;
+  ATerm result;
   ATermList imports;
 
   if (ATindexOf(visited, module, 0) < 0) { 
@@ -1243,14 +1275,14 @@ all_rules_available(ATermList visited, ATerm module)
       EqsText = MDB_getEntryAsfText(entry);
       if (ATisEqual(EqsTree, MDB_NONE) &&
           !ATisEqual(EqsText, MDB_NONE)) {
-        return ATfalse;
+        return module;
       }
       else {
-        result = ATtrue;
+        result = NULL;
         imports = (ATermList)GetValue(import_db,module);
 
         if (imports == NULL) {
-          return ATfalse;
+          return module;
         }
 
         visited = ATinsert(visited,module); 
@@ -1265,23 +1297,29 @@ all_rules_available(ATermList visited, ATerm module)
       }
     }
     else {
-      return ATfalse;
+      return module;
     }
   }
   else {
-    return ATtrue;
+    return NULL;
   }
 }
 
 /*}}}  */
 /*{{{  ATbool complete_asf_sdf2_specification(ATerm module) */
 
-ATbool complete_asf_sdf2_specification(ATerm module)
+ATerm complete_asf_sdf2_specification(ATerm module)
 {
-  if(complete_sdf2_specification(ATempty,module))
+  ATerm missing;
+
+  missing = complete_sdf2_specification(ATempty, module);
+
+  if (missing == NULL) {
     return all_rules_available(ATempty, module);
-  else
-    return ATfalse;
+  }
+  else {
+    return missing;
+  }
 }
 
 /*}}}  */
@@ -1451,9 +1489,11 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
   ATerm result;
   PT_Symbol sort;
   PT_Symbols symbols;
+  ATerm missing;
 
   name = ATmake("<str>", moduleName);
-  if (complete_sdf2_specification(ATempty, name)) {
+  missing = complete_sdf2_specification(ATempty, name);
+  if (missing == NULL) {
     imports = get_imported_modules(moduleName);
     definition = getSyntax(imports);
     sdfTree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(definition));
@@ -1467,7 +1507,9 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
     return ATmake("snd-value(syntax(<term>))", ATBpack(result));
   }
   else {
-    return ATmake("snd-value(sdf2-definition-error(\"Specification is incomplete, can not generate parse table\"))");
+    char msg[256];
+    sprintf(msg, "Module %s has errors.", ATgetName(ATgetAFun(missing)));
+    return ATmake("snd-value(sdf2-definition-error(<str>))", msg);
   }
 }
 

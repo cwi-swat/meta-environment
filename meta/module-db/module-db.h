@@ -15,7 +15,7 @@
 
 #include "module-db.tif.h"
 
-ATbool complete_asf_sdf2_specification(ATerm module);
+ATerm complete_asf_sdf2_specification(ATerm module);
 SDF_SDF getSyntax(ATermList modules);
 
 ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree, ASF_CondEquationList asfEqs, SDF_Symbols actualParams);

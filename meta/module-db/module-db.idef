@@ -79,11 +79,11 @@ snd-do(Mdb, create-module-db).
     rec-value(Mdb, name-consistency-error(ErrorName?)) .
     snd-note(ui-status(errorf("Module name %s inconsistent with file name %s",
                               [ErrorName, Name]))) .
-    snd-msg(need-modules([]))
+    snd-msg(error-opening(Name))
   +
     rec-value(Mdb, illegal-module-error(ErrorName?)) .
     snd-note(ui-status(errorf("Illegal module: %s", [ErrorName]))) .
-    snd-msg(need-modules([]))
+    snd-msg(error-opening(Name))
   )
 +
   rec-msg(invalidate-sdf-in-db(Name?)).
@@ -91,7 +91,7 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(AsFixModule?,Language?)).
+  rec-msg(update-module-in-db(Name?, AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
     snd-eval(Mdb,update-sdf2-module(AsFixModule)) .
     (
@@ -105,7 +105,7 @@ snd-do(Mdb, create-module-db).
       rec-value(Mdb, name-consistency-error(ErrorName?)) .
       snd-note(ui-status(errorf("Module name %s inconsistent with file name",
                                 [ErrorName]))) .
-      snd-msg(extra-modules([]))
+      snd-msg(error-opening(ErrorName))
     )
   else
     snd-msg(extra-modules([]))
