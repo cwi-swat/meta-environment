@@ -18,9 +18,11 @@ ${JARFILE}: Makefile
 	jar cf ${JARFILE} \
 	  `cd ${top_builddir} && find . -name '*.class'`
 
-% : %.sh.src
-	sed 's@__PREFIX__@$(prefix)@g' < $< > $@ && \
-	chmod +x $@
+% : %.sh.src Makefile
+	sed 's@__PREFIX__@$(prefix)@g;\
+             s@__VERSION__@$(VERSION)@g;\
+             s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g' < $< > $@ \
+        && chmod +x $@
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
