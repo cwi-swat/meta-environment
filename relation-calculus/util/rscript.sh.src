@@ -17,6 +17,8 @@ PRG=`basename $0`
 VERBOSE=
 CHECK_ONLY=
 EVALUATOR=${bindir}/RscriptCalculator
+TESTSUITES=${bindir}/RscriptTestsuites
+USE_TESTSUITES=no
 RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
 RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
 THE_RSCRIPT=
@@ -41,12 +43,8 @@ Options:
   -o (--output-parse-tree)  filename  output as parse-tree to filename
   -s (--store)              filename  initial Rstore (default: empty)
   -c (--check-only)                   only check the Rscript, do not evaluate it
+  -t (--testsuite)                    execute as test suite
   -v (--verbose)                      verbose output (default:none)
-
-Advanced options:
-  -e (--evaluator)          filename  alternative Rscript evaluator
-  -p (--parse-table)        filename  alternative parse table
-  -t (--type-checker)       filename  alternative type checker
 
 Examples:
   $PRG query.rscript
@@ -116,15 +114,23 @@ check() {
 evaluate() {
   if [ -z $RSTORE ]
   then
-      $EVALUATOR $VERBOSE -s -f "eval-rscript" \
+      if [ $USE_TESTSUITES = no ]
+      then 
+          $EVALUATOR $VERBOSE -f "eval-rscript" \
 	  -i $THE_RSCRIPT.pt -r RSTORE \
 	  | $OUTPUT
+      else  
+	  $TESTSUITES $VERBOSE -f "eval-rscript-testsuite" \
+	  -i $THE_RSCRIPT.pt -r TESTREPORT \
+	  | $OUTPUT
+      fi
   else
       parse_rstore
-      $EVALUATOR $VERBOSE -s -f "eval-rscript-with-rstore" \
+      $EVALUATOR $VERBOSE -f "eval-rscript-with-rstore" \
 	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE -r RSTORE \
 	  | $OUTPUT
   fi
+  echo ""
 }
 
 # }}}
@@ -137,19 +143,15 @@ fi
 while [ $# -gt 0 ]
 do
   case "$1" in
-    -e | --evaluator)
-      shift; EVALUATOR=$1 ;;
     -o | --output-parse-tree)
       shift; OUTPUT_AS_TREE=$1 ;;
-    -p | --rscript-parse-table)
-      shift; RSCRIPT_PARSE_TABLE=$1 ;;
     -i | --input)
       shift; THE_RSCRIPT=$1 ;;
     -s | --store)
       shift; RSTORE=$1 ;;
-    -t | --type-checker)
-      shift; TYPE_CHECKER=$1 ;;
-    -c | --check-only)
+    -t | --testsuite)
+      USE_TESTSUITES=yes ;;
+     -c | --check-only)
       CHECK_ONLY=yes ;;
     -v | --verbose)
       VERBOSE=-v ;;

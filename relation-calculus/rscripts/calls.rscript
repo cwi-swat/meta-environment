@@ -3,7 +3,7 @@
 	rel[proc, proc] Calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
 	"e">, <"f", "e">, <"f", "g">, <"g", "e">}
 
-	str nCalls = # Calls
+	int nCalls = # Calls
 
 	bag[proc] procs = carrier(Calls)
 
