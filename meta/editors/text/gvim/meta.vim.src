@@ -92,7 +92,7 @@ endfunc
 
 " Remap <CTRL-]> to update focus around current location
 map <silent> <C-]> :call SetLocation()<CR>
-map <silent> <LeftRelease> :call SetLocation()<CR>
+map <silent> <2-LeftMouse> :call SetLocation()<CR>
 
 highlight Focus guibg=#f9f9bb
 let &filetype = 'asf-sdf-syntax-highlighting-override'

@@ -1,5 +1,14 @@
 # $Id$
 
+Thu Oct 21 16:08:43 CEST 2004 <jong@cwi.nl>
+ * editors/text/gvim:
+   - add syntax highlighting based on slices and categories
+   - color scheme now dictated by meta configuration
+   - focus request now done on mouse-double-click, so single
+     click+drag can still be used for select/copy/paste
+   - note: minor glitch in mapping between offset/length vs
+     row/column notation still to be dealt with
+
 Wed Oct 20 15:12:01 CEST 2004 <kooiker@cwi.nl>
  * editors/text/swing:
    - removed generated swing-editor

@@ -26,11 +26,10 @@ gvim_connector_DEPENDENCIES = $(COMMONLIB)
 
 gvim_connector_LDADD = \
 	$(COMMONLIB) \
-	-L$(TOOLBUSLIB)/lib \
+	-L$(TOOLBUSLIB)/lib -lATB \
         -L$(ERROR_SUPPORT)/lib -lLocationAPI \
-	-L$(ATERM)/lib \
-	-lATB \
-	-lATerm \
+	-L$(top_builddir)/configuration-manager/src -lMetaConfig \
+	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
 lib_gvim_la_SOURCES = comm.c startup.c

@@ -33,6 +33,8 @@
 #define ESCAPE_CHAR '\\'
 #define QUOTE '"'
 
+#define RGB "\"RGB:%02x/%02x/%02x\""
+
 /*}}}  */
 
 /*{{{  static char *escapeQuotes(const char *input) */
@@ -87,8 +89,6 @@ static char *stripIllegalMenuChars(const char *input)
 }
 
 /*}}}  */
-
-#define RGB "\"RGB:%02x/%02x/%02x\""
 
 /*{{{  static char *attributesToProperties(MC_TextAttributes attributes) */
 

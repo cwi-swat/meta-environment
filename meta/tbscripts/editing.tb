@@ -100,10 +100,10 @@ in
   .
   (
     rec-msg(se-sort-at-cursor(Sid, Sortname?))
-    . snd-msg(te-display-message(Sid, Sortname))
     . snd-msg(se-get-focus-at-cursor(Sid))
     . rec-msg(se-focus-at-cursor(Sid, Focus?))
     . snd-msg(te-set-focus(Sid, Focus))
+    . snd-msg(te-display-message(Sid, Sortname))
   +
     rec-msg(se-no-cursor(Sid))
   )

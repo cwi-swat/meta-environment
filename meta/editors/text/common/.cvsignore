@@ -1,4 +1,6 @@
+*.dict
 .deps
 Makefile
 Makefile.in
-*.dict
+texteditorapi-config
+texteditorapi-config.local
