@@ -418,6 +418,7 @@ in order to make the tool library available. It provides the following functions
 \item {\tt TBsprintf}: formatted output to a string (Section~\ref{TBprintf}).
 \item {\tt TBprotect}: protect a term against garbage collection (Section~\ref{Memory}).
 \item {\tt TBunprotect}: undo the protection of a term (Section~\ref{Memory}).
+\item {\tt TBcollect}: perform a garbage collection of the term memory (Section~\ref{Memory}).
 
 
 \end{itemize}
@@ -842,6 +843,63 @@ is volatile and may be overwritten by any other call to the
 \TB\ library. It is therefore good practice to duplicate or
 copy it immediately.}
 
+\subsection{\label{TermManipulation}Further term manipulation functions}
+
+In Figure~\ref{fig:TermMan}, we summarize the remaining term manipulation functions.
+All function arguments marked with $\dag$ may be modified by the function in question.
+
+{\tt list\_first} and {\tt list\_next} are actually implemented as macro's and 
+return an {\em lvalue} that can be used
+at the left-hand side of an assignment.
+For instance,
+\begin{verbatim}
+   term_list *tl; term *t;
+   ...
+   first(tl) = t;
+\end{verbatim}
+will set the first element of the list {\tt tl} to the value of {\tt t}.
+
+\begin{figure}[tb]
+\begin{center}
+\begin{tabular}{|l|p{5cm}|}
+\hline Function		& Description				\\ \hline \hline
+{\tt term **list\_first(term\_list *$L$)}					& Addres of first element of $L$\\
+{\tt term **list\_next(term\_list *$L$)}					& Address of remainder of $L$\\ \hline
+{\tt TBbool     list\_equal(term\_list *$L_1$, term\_list *$L_2$);}	& $L_1 = L_2$\\
+{\tt term\_list *list\_copy(term\_list *$L$);}					& Toplevel (shallow) copy of $L$\\
+{\tt term\_list *list\_reverse(term\_list *$L^{\dag}$);}			& Reverses the elements of $L$\\
+{\tt int        list\_length(term\_list *$L$);}					& Number of elements in $L$\\ \hline
+{\tt term      *list\_index(term\_list *$L$, int $N$);}				& $N$-th element of $L$\\
+{\tt term\_list *list\_replace(term\_list *$L^{\dag}$, int $N$, term *$T$);}	&  Replace $N$-the element of $L$ by $T$\\
+{\tt term      *list\_delete(term\_list *$L^{\dag}$, term *$T$);}		& Delete $T$ from $L$\\ \hline
+
+{\tt term\_list *list\_concat\_term(term\_list *$L^{\dag}$, term *$T$);}	& Concatenate $T$ at the end of $L$ \\
+{\tt term\_list *list\_concat(term\_list *$L_1^{\dag}$, term\_list *$L_2$);}	& Concatenate $L_2$ at the end of $L_1$\\
+{\tt term\_list *list\_append(term\_list *$L_1$, term\_list *$L_2$);}		& Append $L_1$ and $L_2$\\
+
+{\tt term\_list *list\_join(term *$T_1$, term *$T_2$);}				& First any non-list argument is converted
+										  to a list; then both lists are append\\
+{\tt TBbool     list\_elem(term *$T$, term\_list *$L$);}				& Is $T$ an element of $L$?\\
+
+{\tt TBbool     list\_subset(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \subseteq L_2$\\
+{\tt term\_list *list\_diff(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 - L_2$ (difference on multi-set)\\
+{\tt term\_list *list\_inter(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \cap L_2$ (intersection on multi-set)\\
+{\tt term\_list *list\_union(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \cup L_2$ (union on set)\\ \hline
+{\tt term      *list\_get(term\_list $L$*, term * $T$);}		& If $L$ contains a pair {\tt [$T$, $T'$]}, then
+									  $T'$, otherwise {\tt []}\\
+{\tt term\_list *list\_put(term\_list *$L^{\dag}$, term *$T_1$, term *$T_2$);}
+									& If $L$ contains a pair {\tt [$T_1$, $T$]}, then
+									  replace it by  {\tt [$T_1$, $T_2$]}. Otherwise,
+									  add {\tt [$T_1$, $T_2$]} to $L$\\ \hline
+{\tt term  *first\_function(char *$S$, term *$T$);}		& First subterm of $T$ with function symbol $S$\\
+{\tt term\_list  *all\_functions(char *$S$, term *$T$);}		& List of all subterms of $T$ with function symbol $S$\\
+\hline
+\end{tabular}
+\caption{Term manipulation functions}
+\label{fig:TermMan}
+\end{center}
+\end{figure}
+
 \subsection{\label{Memory}Memory management}
 The functions in the \TB\ library provide automatic memory management of
 terms that have been created but are no longer referenced.
@@ -884,6 +942,18 @@ main()                      /* main program for tool */
   ...
 }
 \end{verbatim}
+
+Under certain circumstances it may be necessary to explicitly force
+a garbage collection. This is done by the following function:
+\begin{verbatim}
+      void TBcollect(void);
+\end{verbatim}
+Usually, this function is called automatically after each invocation
+of an event handler. When large computations on terms are done--as
+may occur in stand-alone utilities that are not connected to
+the \TB--the above function must be called regularly.
+Be aware, that only protected term pointers can be trusted
+after a garbage collection.
 
 \subsection{Compiling tools written in C}
 When compiling a tool written in C the following questions
