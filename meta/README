@@ -1,0 +1,69 @@
+$Id$
+
+This is the README file for the ASF+SDF Meta-Environment distribution.
+
+Installation instructions:
+
+Prerequisite tools: 
+To compile this distribution you will need the following tools:
+ -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
+ -- noweb (The noweb set of literate programming utilities, from 
+      <http://www.cs.virginia.edu/~nr/noweb/>)
+ -- jdk (The Java Development Kit, from 
+      <http://www.javasoft.com/products/jdk/>)
+ -- wish (A user-interface system, part of Tcl/Tk, from 
+      <http://www.tclconsortium.org/resources/download.html>) Make sure you
+      get version 8.0 or higher.
+
+As well as a full set of UNIX development utilities.
+
+Platform specific notes:
+  On IRIX 6.3 you will need gcc to compile. cc will crash during linking of 
+  certain executables.
+
+The Meta-Environment distribution depends on three other distributions. 
+Using CVS, you can get these distributions as follows:
+
+- cd to the directory just above new-meta (new-meta/..)
+- issue the following commands: 
+$ cvs -d artemis.cwi.nl:/ufs/gipe/CVS-repository checkout gel
+$ cvs -d artemis.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
+$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm-lib
+(and, if you hadn't done so already)
+$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
+
+Now everything needs to be configured and compiled.
+
+Here is the basic set-up: These commands are the minimal config options for 
+the Meta-Environment to compile: (and remember, order is important here)
+This will install everything in the directory new-meta/../{bin,lib,include}
+$ cd gel
+$ ./configure
+$ gmake install
+$ cd ..
+$ cd toolbus
+$ ./configure --with-java
+$ gmake install
+$ cd ..
+$ cd aterm-lib
+$ ./configure
+$ gmake install
+$ cd ..
+$ cd new-meta
+$ ./config
+$ gmake install
+$ cd ..
+
+
+After compilation:
+To run the distribution you will need the following tools:
+ -- tcldot (A graph visualization library from AT&T. Part of their graphviz
+      package, from <http://www.research.att.com/sw/tools/graphviz/>)
+      You will need to set the variable TCLLIBPATH to the directory containing 
+      the file Tcldot.so.x.x (where x.x is the version number)
+
+If you now add the path to the directory new-meta/../bin to your PATH, you 
+are al set up.
+
+The Meta-Environment development team wishes you happy environmentaling, 
+and may all your grammars be context free.
