@@ -1,5 +1,9 @@
 # $Id$
 
+2003/03/20 (markvdb@cwi.nl)
+ * Added a "Delete this module" for a non-existing module, this
+   omission was reported by PDM.
+
 2003/03/19 (markvdb@cs.vu.nl)
  * Reduce-button adapted to the new button actions.
 
