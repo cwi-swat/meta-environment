@@ -30,7 +30,7 @@ in
   create(Status-display(UI),SD?).
   ( 
     /* Add a new module by a user via the user-interface */
-    ( rec-event(UI, add-module(Str?)).
+    ( rec-event(UI, open-module(Str?)).
       snd-msg(open-modules([Str])).
       ( rec-msg(ui,add-module(Str1?)).
         snd-do(UI,add-module(Str1))
@@ -42,8 +42,8 @@ in
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
       ) *
       rec-msg(ui,finished-opening-modules).
-      snd-do(UI,finished-opening-modules).
-      snd-ack-event(UI, add-module(Str))
+      snd-do(UI,finished-opening-modules(Str)).
+      snd-ack-event(UI, open-module(Str))
     ) +
     ( rec-event(UI,delete-module(Str?)).
       snd-msg(close-module(Str)).
@@ -55,6 +55,10 @@ in
       create(Edit-module(Str),EM?).
       snd-ack-event(UI,edit-module(Str))
     ) +
+    ( rec-event(UI,save-module(id(ModName?))).            /* Not yet implemented */
+      snd-note(ui-status(errorf("TB: not implemented: save-module(%s)",[ModName]))).
+      snd-ack-event(UI,save-module(id(ModName)))
+    ) +
     ( rec-event(UI,revert-module(id(ModName?))).            /* Not yet implemented */ 
       snd-note(ui-status(errorf("TB: not implemented: revert-module(%s)",[ModName]))).
       snd-ack-event(UI,revert-module(id(ModName)))
@@ -64,10 +68,13 @@ in
           ["example",""],["dir","/home/leon/asf+sdf/spec/"],["size","10kb"]])).
       snd-ack-event(UI,get-module-info(Str))
     ) +
+    ( rec-event(UI,save-all).                     /* Not yet implemented */
+      snd-note(ui-status(error("TB: not implemented: save-all"))).
+      snd-ack-event(UI,save-all)
+    ) +
     ( rec-event(UI,revert-all).                     /* Not yet implemented */
       snd-note(ui-status(error("TB: not implemented: revert-all"))).
       snd-ack-event(UI,revert-all)
-
     ) +
     ( rec-event(UI,clear-all).
       snd-msg(clear-all).
