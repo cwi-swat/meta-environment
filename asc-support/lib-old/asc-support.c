@@ -43,6 +43,11 @@ typedef struct bucket
 /*{{{  defines */
 
 #define MAX_STORE 10240
+#define MAGIC_HASH_CONST_APPL 3001
+#define MAGIC_HASH_CONST_LIST 4507
+
+#define HASH_PROD(prod, size) (((unsigned)(((int)(prod))>>2)) % (size))
+#define HASH_SYM(sym, size) (((unsigned)(((int)(sym))>>2)) % (size))
 
 /*}}}  */
 /*{{{  global variables */
@@ -133,8 +138,8 @@ static ATerm pattern_caller_id                = NULL;
 static ATerm ws                               = NULL;
 static ATerm spws                             = NULL;
 
-/* Pieter? Why this symbol is used is for the moment unknown!
- */
+/* The following symbol is used in innermost to check
+   whether a term is an appl or a lexical. */
 static Symbol symbol_asfix_lex;
 
 /* Function symbols associated with the priority handling.
@@ -181,18 +186,10 @@ void c_rehash(int newsize)
   bucket **newprodtable, **newsymtable, *b, *next;
 
   /* Allocate new hash tables */
-  /* Pieter? Why not use calloc instead of malloc, so we can skip
-   * explicit initialization to NULL ?
-   */
-  newprodtable = (bucket **)malloc(sizeof(bucket *)*newsize);
-  newsymtable = (bucket **)malloc(sizeof(bucket *)*newsize);
-  if(!newsymtable || !newprodtable)
+  newprodtable = (bucket **)calloc(newsize, sizeof(bucket *));
+  newsymtable = (bucket **)calloc(newsize, sizeof(bucket *));
+  if(!newsymtable || !newprodtable) {
     ATabort("out of memory in c_rehash(%d)", newsize);
-
-  /* Initialize the new hash tables */
-  for(i=0; i<newsize; i++) {
-    newprodtable[i] = NULL;
-    newsymtable[i] = NULL;
   }
 
   /* Rehash all the old buckets. */
@@ -201,8 +198,7 @@ void c_rehash(int newsize)
       b = prod_table[i];
       while(b) {
 	next = b->next_prod;
-	hnr = (((int) &(b->prod))>>2);
-        hnr %= newsize;
+	hnr = HASH_PROD(b->prod, newsize);
 	b->next_prod = newprodtable[hnr];
 	newprodtable[hnr] = b;
 	b = next;
@@ -210,8 +206,7 @@ void c_rehash(int newsize)
       b = sym_table[i];
       while(b) {
 	next = b->next_sym;
-	hnr = (((int) &(b->sym))>>2);
-        hnr %= newsize;
+	hnr = HASH_SYM(b->sym, newsize);
 	b->next_sym = newsymtable[hnr];
 	newsymtable[hnr] = b;
 	b = next;
@@ -249,8 +244,8 @@ unsigned int calc_hash(ATerm t)
       hnr = AT_hashSymbol(ATgetName(sym), arity);
 
       for(i=0; i<arity; i++) {
-	/* Pieter? constante in je code? */
-	hnr = hnr * 3001 + calc_hash(ATgetArgument(appl, i));
+				hnr = hnr * MAGIC_HASH_CONST_APPL + 
+					calc_hash(ATgetArgument(appl, i));
       }
     }
     break;
@@ -264,9 +259,9 @@ unsigned int calc_hash(ATerm t)
       ATermList list = (ATermList)t;
       hnr = 123;
       while(!ATisEmpty(list)) {
-	/* Pieter? constante in je code? */
-	hnr = hnr * 4507 + calc_hash(ATgetFirst(list));
-	list = ATgetNext(list);
+				hnr = hnr * MAGIC_HASH_CONST_LIST + 
+					calc_hash(ATgetFirst(list));
+				list = ATgetNext(list);
       }
     }
     break;
@@ -286,17 +281,16 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
   bucket *b; /* single bucket */
 
   /* Heuristics for deciding when to rehash */
-  if((nr_entries*100)/table_size > MAX_LOAD)
+  if((nr_entries*100)/table_size > MAX_LOAD) {
     c_rehash(table_size*2);
+  }
 
 #ifdef NO_SHARING
-  hnr = calc_hash(prod);
-  /* Pieter? Why is this mod not included in calc_hash? */
+  /* calc_hash is recursive, so no mod included */
+  hnr = calc_hash(prod); 
   hnr %= table_size;
 #else
-  /* Pieter? Create macros for simple hash operations? */
-  hnr = (((int) prod)>>2);
-  hnr %= table_size;
+  hnr = HASH_PROD(prod, table_size);
 #endif
 
   /* Find out if this function has already been registered */
@@ -316,8 +310,7 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
   prod_table[hnr] = b;
 
   /* Add it to the sym table also. */
-  hnr = (((int) sym)>>2);
-  hnr %= table_size;
+  hnr = HASH_SYM(sym, table_size);
   b->next_sym = sym_table[hnr];
   sym_table[hnr] = b;
 
@@ -343,9 +336,9 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
 funcptr lookup_func_given_sym(Symbol sym)
 {
   bucket *b;
-  /* Pieter? Create macros for simple hash operations? */
-  unsigned int hnr = (((int) sym)>>2);
-  hnr %= table_size;
+  unsigned int hnr;
+
+  hnr = HASH_SYM(sym, table_size);
 
   b = sym_table[hnr];
 
@@ -364,13 +357,13 @@ funcptr lookup_func_given_sym(Symbol sym)
 static funcptr basic_lookup_func(ATerm prod)
 {
   bucket *b;
+  unsigned int hnr;
 
 #ifdef NO_SHARING
-  unsigned int hnr = calc_hash(prod);
+  hnr = calc_hash(prod);
   hnr %= table_size;
 #else
-  unsigned int hnr = (((int) prod)>>2);
-  hnr %= table_size;
+  hnr = HASH_PROD(prod, table_size);
 #endif
   
   b = prod_table[hnr];
@@ -401,13 +394,13 @@ funcptr lookup_func(ATerm prod)
 Symbol lookup_sym(ATerm prod)
 {
   bucket *b;
+  unsigned int hnr;
 
 #ifdef NO_SHARING
-  unsigned int hnr = calc_hash(prod);
+  hnr = calc_hash(prod);
   hnr %= table_size;
 #else
-  unsigned int hnr = (((int) prod)>>2);
-  hnr %= table_size;
+  hnr = HASH_PROD(prod, table_size);
 #endif
   
   b = prod_table[hnr];
@@ -427,8 +420,9 @@ Symbol lookup_sym(ATerm prod)
 ATerm lookup_prod(Symbol sym)
 {
   bucket *b;
-  unsigned int hnr = (((int) sym)>>2);
-  hnr %= table_size;
+  unsigned int hnr;
+
+  hnr = HASH_SYM(sym, table_size);
 
   b = sym_table[hnr];
 
@@ -474,7 +468,6 @@ static ATerm call(ATerm prod, ATermList args)
 {
   funcptr func = lookup_func(prod);
   ATermList list;
-  /* Pieter? Please explain/define this arbitrary constant */
   ATerm arg[33];
 
   int idx = 0;
@@ -484,7 +477,9 @@ static ATerm call(ATerm prod, ATermList args)
     list = ATgetNext(list);
   }
 
-  /* Pieter? Can't this be written more concisely using a va_list? 
+  /* We cannot use C's variable argument list support,
+     because there is no portable way to build a va_list 
+     from an arbitrary list.
    */
   switch(ATgetLength(args)) {
   case  0: return (*func)();
@@ -752,8 +747,10 @@ static ATermList innermost_list(ATermList l)
     return ATreverse(result);
   } else {
 
-    /* Pieter? Why not use the "term_store" instead of allocating
-     * and freeing a list each time?
+    /* We don't use term_store here because of the
+     * recursive calls to innermost, and the fact that
+     * slice (which uses term_store) may be called by
+     * the generated code.
      */
     int idx = 0;
     ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
@@ -849,8 +846,9 @@ ATerm unquote(ATerm t)
 /*{{{  static ATerm make_asfix_list( ATermList l, char *sort) */
 
 /* A list is converted back into an AsFix list. 
-   Pieter? Why is the term_store not used here? Can this be more efficient?
    The elements of the list are recursively converted to AsFix.
+   Again, term_store cannot be used because of the
+   recursive nature of this function.
  */
 
 static ATerm make_asfix_list(ATermList l, char *sort)
@@ -921,7 +919,10 @@ static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep)
 
 static int get_list_length(ATermList chars)
 {
-  int len = 0;
+  return ATgetLength(chars);
+  /* <PO> To be removed after unit test.
+     21-2-2000
+    int len = 0;
   while(!ATisEmpty(chars)) {
     ATerm el = ATgetFirst(chars);
     chars = ATgetNext(chars);
@@ -931,6 +932,7 @@ static int get_list_length(ATermList chars)
       len++;
   }
   return len;
+  */
 }
 
 /*}}}  */
@@ -941,10 +943,13 @@ static char *get_chars_from_list(char *buf, ATermList chars)
   while(!ATisEmpty(chars)) {
     ATerm el = ATgetFirst(chars);
     chars = ATgetNext(chars);
-    if(t_is_asfix_list(el))
+    /* <PO> To be removed after unit test.
+       21-2-2000
+       if(t_is_asfix_list(el))
       buf = get_chars_from_list(buf,(ATermList) el);
     else
-      *buf++ = (char)ATgetInt((ATermInt) el);
+    */
+    *buf++ = (char)ATgetInt((ATermInt) el);
   }
   return buf;
 }
