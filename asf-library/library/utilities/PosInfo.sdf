@@ -37,6 +37,9 @@ hiddens
 context-free start-symbols
    Location NatCon StrCon
 
+lexical variables
+  "char*" -> StrChar*
+
 variables
   "ATerm" -> ATerm
   "Char*" -> CHAR*
