@@ -604,7 +604,12 @@ in
 	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
 	snd-msg(ask-for-file(String, Path, Ext)) .
 	rec-msg(ask-for-file-result(FileName?)) .
-        StackPushString(Stack,Stack?,FileName) .
+        StackPushString(Stack, Stack?, FileName) .
+	ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(str-to-filename, Stack?, EditorId?) .
+	StackPopString(Stack, Stack?, FileName?) .
+	StackPushFile(Stack, Stack?, FileName) .
 	ReturnSuccess(EditorId, Stack)
       +
 	rec-msg(edit-term, Stack?, EditorId?) .
