@@ -30,6 +30,6 @@ TABLEGEN=../src/parsetablegen
 	$(TABLEGEN) < $< > $@
 	
 %.asfix : %.sdf2
-	PATH=$(SGLR)/sglr/sglr:$$PATH; export PATH ;\
+	PATH=$(SGLR)/bin:$$PATH; export PATH ;\
 	sglr -p $(srcdir)/Sdf2-bootstrap.tbl -1 -i $(srcdir)/Sdf2.sdf2 -o $@
 

@@ -39,7 +39,7 @@ SGLR=__SGLR__
 
 PKGDATA=__PKGDATADIR__
 
-PATH=${BINDIR}:${PT_SUPPORT}/bin:${SGLR}:${PATH}
+PATH=${BINDIR}:${PT_SUPPORT}/bin:${SGLR}/bin:${PATH}
 
 SGLR=sglr
 ASOURCE=asource

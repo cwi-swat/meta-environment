@@ -31,20 +31,18 @@ EXTRA_DIST   = normalize-sdf.sh.src normalize-normalize-check.sh.src \
 CLEANFILES   = normalize-sdf normalize-normalize-check
 
 normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
-normalizer_LDADD   = -L$(PGEN)/c-source -lSdf2-Normalization \
-                     -L$(PGEN)/c-lib -lnative \
+normalizer_LDADD   = -L$(top_srcdir)/c-source -lSdf2-Normalization \
+                     -L$(top_srcdir)/c-lib -lnative \
                      -L$(ASC)/lib -lasc-support \
                      -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                      -L$(ATERM)/lib -lATB -lATerm \
                      $(SOCKLIBS)
 
-SGLRLOC=${SGLR}/sglr/sglr
-
 % : %.sh.src Makefile
 	sed 's@__PKGDATADIR__@$(pkgdatadir)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__BINDIR__@$(bindir)@g;\
-	     s@__SGLR__@$(SGLRLOC)@g;\
+	     s@__SGLR__@$(SGLR)@g;\
 	     s@__VERSION__@$(VERSION)@g;'\
 	   < $< > $@
 	chmod 755 $@
