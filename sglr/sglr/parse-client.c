@@ -187,12 +187,14 @@ int main (int argc, char **argv)
   int   cid;
   ATerm bottomOfStack;
   ATerm t;
+  char  *ATlibArgv[] = { "", "-silent"};
+
 
   handle_options(argc, argv);
 
-  ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
-  cid = ATBconnect(	tool, hostname?hostname:NULL, port?atoi(port):-1,
-		      parse_client_handler);
+  ATBinit(2, ATlibArgv, &bottomOfStack);    /* Initialize Aterm library */
+  cid = ATBconnect(tool, hostname?hostname:NULL, port?atoi(port):-1,
+                   parse_client_handler);
 
   t = ATmake("<str>", parse_table_name);
   ATBwriteTerm(cid,ATmake("snd-event(open-language(<term>,<term>))", t, t));
