@@ -35,84 +35,128 @@ and as output the values $O_1$,...,$O_m$ (with $O_m$ on top of the stack).
 Both the input and the output of an action may be empty.
 
 \begin{itemize}
-\action{}{activate($Command$)}{}{Execute the shell command $Command$.}
+
+\action{}{activate($Command$)}{$S?$}{Execute the shell command $Command$. 
+The result of the execution of a command can be nothing or some string value, 
+which is then pushed onto the stack.
+}
 
 \action{$Tree$, $FileName$, $ModName$}{activate-editor}{}
 {Activate an editor for a term over module $ModName$, given a $Tree$ and
-a $FileName$.
+a $FileName$, where $Tree$ can be some tree or string value.
+}
+
+\action{$Tree$}{activate-given-tree($Command$)}{$S?$}
+{Execute $Command$ (a shell command) with $Tree$ as input, $Tree$ can represent
+some tree or string value.
+The result of the execution of a command can be nothing or some string value,
+which is then pushed onto the stack.
 }
 
 \action{$T_1$, ..., $T_{N}$}{apply($FuncName$, $SortName$, $N$)}{$T$}
 {constructs a function application $T$ with function name $FuncName$,
- result sort $SortName$ and $N$ arguments (on the stack)
+ result sort $SortName$ and $N$ arguments (on the stack).
 }
-
-\action{$Tree$}{activate-given-tree($Command$)}{?}
-{Execute $Command$ (a shell command) with $Tree$ as string input.}
 
 \action{}{ask-question($String$)}{$T$}
 {Ask a question $String$ to the user with as answer the term $T$.
 \note{Wat voor type is die term?}}
 
 \action{$T$}{check-sort($SortName$)}{$T$}
-{Check that term $T$ is of sort $SortName$.}
+{Check that term $T$ is of sort $SortName$. If the top sort of $T$ is
+not the sort $SortName$ the button script is aborted.
+}
 
 \action{}{clear-all}{}
-{Close all modules that are currently open.}
+{Close all modules that are currently open. 
+This is an internal action.
+}
 
 \action{}{clear-history-list}{}
-{Clear the current history list.}
+{Clear the current history list.
+This is an internal action.
+}
 
 \action{$FileName$, $ModName$}{close-editor}{}
-{Close the editor for the term over module $ModName$ that has been saved as $FileName$.}
+{Close the editor for the term over module $ModName$ that has been saved as $FileName$.
+}
 
-\action{$ModName$}{close-module}{}
-{?? Close the editors for module $ModName$.}
+\action{$ModName$}{close-module($Mode$)}{}
+{Removes the selected module from the term store, depending on the $Mode$ this
+can be done recursively. However, if another module depends on this one,
+the action fails.
+This is an internal action.
+}
 
 \action{$ModName$}{compile-module}{}
-{Compile module $ModName$.}
+{Compiles the module $ModName$.
+This is an internal action.
+}
 
 \action{$ModName$, $NewModName$, $Path$, $Extension$}{copy-module}{}
-{Copy module $ModName$ to $NewModName$.}
+{Copy module $ModName$ to $NewModName$.
+This is an internal action.
+}
 
 \action{$ModName$}{create-module}{}
-{Create a new module $ModName$ in the current directory. \note{Verschil met
-  {\tt new-module}?}}
+{Create a new module $ModName$ in the current directory. 
+This is an internal action.
+\note{Verschil met {\tt new-module}?}}
 
 \action{$ModName$}{delete-module}{}
-{Delete module $ModName$. \note{Wat betekent dat precies?}}
+{Delete module $ModName$. This action resembles the {\tt close-module} action,
+except that it really removes the module from the disk and adapts the
+import relations from the active modules which import this module.
+This is an internal action.
+}
 
 \action{$ModName$}{dump-module}{}
-{?}
+{
+This is an internal action.
+}
 
 \action{$ModName$}{dump-equations}{}
-{Dump the equations of module $ModName$. \note{formaat}}
+{Dump the equations of module $ModName$. \note{formaat}.
+This is an internal action.  
+}
 
 \action{$ModName$}{dump-eqs-parse-table}{}
-{Dump a parse table for the equations of module $ModName$.\note{formaat}}
+{Dump a parse table for the equations of module $ModName$.\note{formaat}.
+This is an internal action.  
+}
 
 \action{$ModName$}{dump-parse-table}{}
-{Dump a parse table for terms over module $ModName$.}
+{Dump a parse table for terms over module $ModName$.
+This is an internal action.  
+}
 
 \action{$T$}{dup}{$T$, $T$}
 {Duplicates the top element on the stack.}
 
 \action{$ModName$}{edit-syntax}{}
-{Open an editor for the syntax section of module $ModName$.}
+{Open an editor for the syntax section of module $ModName$. 
+This is an internal action.
+}
 
 \action{$ModName$}{edit-equations}{}
-{Open en editor for the equations section of module $ModName$.}
+{Open en editor for the equations section of module $ModName$. 
+This is an internal action.
+}
 
 \action{$ModName$, $FileName$}{edit-term}{}
 {Open an editor, using the syntax rules in $ModName$, of the term residing
-in file $FileName$.}
+in file $FileName$. 
+This is an internal action.
+}
 
 \action{$T_{in}$}{execute-action($Executable$)}{$T_{out}$}
 {Execute the compiled specification $Executable$ with input term $T_{in}$ 
 and result $T_{out}$.}
 
 \action{}{exit}{}
-{Shutdown the whole Meta-Environment.}
+{Shutdown the whole Meta-Environment. 
+This is an internal action.
+}
 
 \action{}{exists($FileName$)}{}
 {Check that the file $FileName$ exists (in the current directory or as
