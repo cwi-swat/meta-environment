@@ -1,6 +1,6 @@
 /*
 
-    Meta-Environment - An environment for language prototyping.
+    Asf Sdf Compiler Runtime Library
     Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
@@ -530,6 +530,15 @@ extern void init_AUX_Integers2();
 extern void register_AUX_Integers1();
 extern void resolve_AUX_Integers1();
 extern void init_AUX_Integers1();
+extern void register_AUX_TermAsFixAccess57();
+extern void resolve_AUX_TermAsFixAccess57();
+extern void init_AUX_TermAsFixAccess57();
+extern void register_AUX_TermAsFixAccess56();
+extern void resolve_AUX_TermAsFixAccess56();
+extern void init_AUX_TermAsFixAccess56();
+extern void register_AUX_TermAsFixAccess55();
+extern void resolve_AUX_TermAsFixAccess55();
+extern void init_AUX_TermAsFixAccess55();
 extern void register_AUX_TermAsFixAccess54();
 extern void resolve_AUX_TermAsFixAccess54();
 extern void init_AUX_TermAsFixAccess54();
@@ -2129,6 +2138,9 @@ void register_all() {
   register_AUX_Integers3();
   register_AUX_Integers2();
   register_AUX_Integers1();
+  register_AUX_TermAsFixAccess57();
+  register_AUX_TermAsFixAccess56();
+  register_AUX_TermAsFixAccess55();
   register_AUX_TermAsFixAccess54();
   register_AUX_TermAsFixAccess53();
   register_AUX_TermAsFixAccess52();
@@ -2777,6 +2789,9 @@ void resolve_all() {
   resolve_AUX_Integers3();
   resolve_AUX_Integers2();
   resolve_AUX_Integers1();
+  resolve_AUX_TermAsFixAccess57();
+  resolve_AUX_TermAsFixAccess56();
+  resolve_AUX_TermAsFixAccess55();
   resolve_AUX_TermAsFixAccess54();
   resolve_AUX_TermAsFixAccess53();
   resolve_AUX_TermAsFixAccess52();
@@ -3425,6 +3440,9 @@ void init_all() {
   init_AUX_Integers3();
   init_AUX_Integers2();
   init_AUX_Integers1();
+  init_AUX_TermAsFixAccess57();
+  init_AUX_TermAsFixAccess56();
+  init_AUX_TermAsFixAccess55();
   init_AUX_TermAsFixAccess54();
   init_AUX_TermAsFixAccess53();
   init_AUX_TermAsFixAccess52();
