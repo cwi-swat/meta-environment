@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Aug 27 14:43:11 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
 Thu Jun 10 09:41:41 CEST 2004 <{jong,jurgenv}@cwi.nl>
  * semantics/asfc/src/lex-cons.c: explicit cast to (int) in PT_makeTreeChar
 

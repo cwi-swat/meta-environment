@@ -63,7 +63,7 @@ static char* term_prefix(PT_Tree trm)
   static const char abbreviated[] = " ... (etc.)";
   char *tmp;
 
-  tmp = PT_yieldTree(trm);
+  tmp = PT_yieldTreeToString(trm, ATfalse);
 
   if (strlen(tmp) > TERM_PREFIX_LENGTH - strlen(abbreviated)) {
     sprintf(tmp+TERM_PREFIX_LENGTH-strlen(abbreviated),abbreviated);
@@ -561,7 +561,7 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
   if (depth > MAX_DEPTH) {
     char tmp[256];
     sprintf(tmp, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    RWaddError(tmp, PT_yieldTree((PT_Tree) tagCurrentRule));
+    RWaddError(tmp, PT_yieldTreeToString((PT_Tree) tagCurrentRule, ATfalse));
     reduct = trm;
   }
 

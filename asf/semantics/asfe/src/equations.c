@@ -47,8 +47,10 @@ void print_short_equation(int stack, const char *msg, equation_entry *entry)
     for (i = 0; i < stack % 20; i++) {
       ATwarning(" ");
     }
-    ATwarning("%s\t: %s ", msg, PT_yieldTree((PT_Tree)entry->tag));
-    ATwarning("%s = ...\n", PT_yieldTree((PT_Tree)entry->lhs));
+    ATwarning("%s\t: %s ", msg,
+	      PT_yieldTreeToString((PT_Tree)entry->tag, ATfalse));
+    ATwarning("%s = ...\n",
+	      PT_yieldTreeToString((PT_Tree)entry->lhs, ATfalse));
   }
 }
 

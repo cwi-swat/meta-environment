@@ -118,7 +118,7 @@ void ToC_code(ATbool keep_annos,
 
   make_header(file, compiler_version);
 
-  buf = PT_yieldParseTree(ptCcode);
+  buf = PT_yieldParseTreeToString(ptCcode, ATfalse);
   size = strlen(buf);
 
   bp = buf;

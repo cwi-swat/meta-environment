@@ -23,7 +23,7 @@ static ERR_SubjectList treeToSubjectList(PT_Tree tree)
   LOC_Location location = PT_getTreeLocation(tree);
 
   if (location != NULL) {
-    char *yield = PT_yieldTree(tree);
+    char *yield = PT_yieldTreeToString(tree, ATfalse);
     ERR_Subject sub = ERR_makeSubjectLocalized(yield, (ERR_Location) location);
     subjects = ERR_makeSubjectListSingle(sub);
   }
@@ -103,7 +103,7 @@ static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
   PT_Production prod = PT_getTreeProd(lexical);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  char *treeString = strdup(PT_yieldTree(lexical));
+  char *treeString = strdup(PT_yieldTreeToString(lexical, ATfalse));
   char *symbolString = strdup(PT_yieldSymbol(rhs));
   char message[1024];
 
@@ -112,7 +112,7 @@ static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
 
   if (strcmp(treeString, symbolString) == 0) {
     sprintf(message, "Lexical probably intended to be a variable: %s",
-	    PT_yieldTree(lexical));
+	    PT_yieldTreeToString(lexical, ATfalse));
     messages = ERR_makeErrorListSingle(
       makeWarning(message, PT_TreeToTerm(lexical)));
   }

@@ -560,7 +560,7 @@ static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs)
 
 static MA_Term variableToTerm(PT_Tree var)
 {
-  char *str = strdup(PT_yieldTree(var));
+  char *str = strdup(PT_yieldTreeToString(var, ATfalse));
   MA_VarId varid = stringToVarId(str);
   MA_Var maVar = NULL;
   MA_Term type = NULL;
@@ -701,7 +701,7 @@ static MA_Cond conditionToCond(ASF_ASFCondition condition,
   }
   else {
     ATerror("conditionToCond: unable to process %s\n",
-	    PT_yieldTree((PT_Tree) condition));
+	    PT_yieldTreeToString((PT_Tree) condition, ATfalse));
     result = NULL;
   }
 

@@ -158,7 +158,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
       result = ambToAmbConstructor(tree,data);
     }
     else {
-      RWaddError("Illegal ambiguity", PT_yieldTree(tree));
+      RWaddError("Illegal ambiguity", PT_yieldTreeToString(tree, ATfalse));
       result = tree;
     }
   }

@@ -32,7 +32,7 @@ static ERR_Error prettyTag(ASF_ASFTag tag)
 
   if (!ASF_isASFTagEmpty(tag)) {
     ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
-    description = PT_yieldTree((PT_Tree) id);
+    description = PT_yieldTreeToString((PT_Tree) id, ATfalse);
   }
   else {
     description = "unnamed test";
@@ -87,12 +87,12 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
 
   if (!no_new_vars(lhs, environment)) {
     RWaddError("Left side of test introduces a variable", 
-	       PT_yieldTree((PT_Tree) tag));
+	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
     return tag;
   }
   if (!no_new_vars(rhs, environment)) {
     RWaddError("Right side of test introduces a variable", 
-	       PT_yieldTree((PT_Tree) tag));
+	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
     return tag;
   }
 

@@ -67,7 +67,7 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
     PT_Args args = PT_getTreeArgs(tree);
     while (!PT_isArgsEmpty(args)) {
       PT_Tree arg = PT_getArgsHead(args);
-      yield = PT_yieldTree(arg);
+      yield = PT_yieldTreeToString(arg, ATfalse);
       length = strlen(yield);
       cur_line = *line;
       cur_col  = *col;
@@ -109,12 +109,12 @@ static ATermList varlist_from_env(ATerm environment)
     if (ATgetArity(ATgetAFun((ATermAppl)tuple)) == 3) {
       PT_Args args = appendSlice(PT_makeArgsEmpty(), (Slice)tuple);
       args = RWrestoreArgs(args, ATfalse);
-      value = PT_yieldArgs(args);
+      value = PT_yieldArgsToString(args, ATfalse);
     } else {
       ATerm val = ATgetArgument(tuple, 1);
       PT_Tree tree = PT_TreeFromTerm(val);
       tree = RWrestoreTerm(tree, ATfalse);
-      value = PT_yieldTree(tree);
+      value = PT_yieldTreeToString(tree, ATfalse);
     }
     list = ATinsert(list, ATmake("variable(<term>,<str>)", variable, value));
     env = ATgetNext(env);
@@ -161,7 +161,7 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
     if (ATisEqual(name, var)) {
       PT_Tree val = PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
       val = RWrestoreTerm(val, ATfalse);
-      return ATmake("<str>", PT_yieldTree(val));
+      return ATmake("<str>", PT_yieldTreeToString(val, ATfalse));
     }
     list = ATgetNext(list);
   }
@@ -233,7 +233,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   diff_start = col - req_col;
 
   /*fprintf(stderr, "variable found: '%s' at %d,%d (diff_start=%d)\n",*/
-	  /*PT_yieldTree(var), line, col, diff_start);*/
+	  /*PT_yieldTreeToString(var, ATfalse), line, col, diff_start);*/
 
   value = getVariableValue(env, var);
 
@@ -241,13 +241,13 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
     yield = "<uninitialized>";
   } else {
     restored = RWrestoreTerm(value, ATfalse);
-    yield = PT_yieldTree(restored);
+    yield = PT_yieldTreeToString(restored, ATfalse);
   }
   
   /*fprintf(stderr, "value = '%s'\n", yield);*/
 
   val = ATmake("<str>", yield);
-  name = PT_yieldTree(var);
+  name = PT_yieldTreeToString(var, ATfalse);
   
   return TA_makeExprVar(name, val, req_pos + diff_start, line, col, strlen(name));
 }
@@ -295,7 +295,7 @@ static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
       frame = ATmake("frame(<int>,\"anonymous\",location(unknown),[])", i);
     } else {
       var_list = varlist_from_env(env_stack[i]);
-      frame_name = PT_yieldTree(PT_TreeFromTerm(ASF_ASFTagToTerm(tag_stack[i])));
+      frame_name = PT_yieldTreeToString(PT_TreeFromTerm(ASF_ASFTagToTerm(tag_stack[i])), ATfalse);
 
       frame = ATmake("frame(<int>,<str>,location(<term>),<term>)",
 		     i, frame_name, position_stack[i], var_list);

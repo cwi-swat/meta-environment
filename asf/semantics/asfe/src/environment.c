@@ -33,7 +33,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var)
   }
   else {
     ATermList list = (ATermList) env;
-    ATerm atVar = ATmake("<str>", PT_yieldTree(var));
+    ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
 
     while (!ATisEmpty(list)) {
       ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -58,7 +58,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var)
 Slice getListVariableValue(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
-  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
+  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
 
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -81,7 +81,7 @@ Slice getListVariableValue(ATerm env, PT_Tree var)
 
 ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 {
-  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
+  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
   ATerm atValue = PT_TreeToTerm(value);
 
   return (ATerm) ATinsert((ATermList) env,
@@ -94,7 +94,7 @@ ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 
 ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 {
-  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
+  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
   ATerm atStart = PT_ArgsToTerm(start);
   ATerm atEnd = PT_ArgsToTerm(end);
 
@@ -113,7 +113,7 @@ ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 ATbool isBoundVariable(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
-  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
+  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
 
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
