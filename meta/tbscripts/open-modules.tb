@@ -16,8 +16,8 @@ in
       Status := success.
       Open-Module(Module, Path, Status?, RealModule?, Imports?).
       snd-msg(open-modules(Imports)).
-      Invalidate-Dirty-ParseTables([RealModule]).
-      rec-msg(finished-opening-modules)
+      rec-msg(finished-opening-modules).
+      Invalidate-Dirty-ParseTables([RealModule])
     +
       rec-msg(exists-in-module-db(Module))
     ).
