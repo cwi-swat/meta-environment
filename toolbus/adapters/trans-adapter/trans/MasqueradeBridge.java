@@ -6,10 +6,10 @@ package trans;
 
 import aterm.*;
 
-public class MaskeradeBridge extends MaskeradeTool {
-	private MaskeradeTif tool;
+public class MasqueradeBridge extends MasqueradeTool {
+	private MasqueradeTif tool;
 
-	public MaskeradeBridge(ATermFactory factory, MaskeradeTif tool) {
+	public MasqueradeBridge(ATermFactory factory, MasqueradeTif tool) {
 		super(factory);
 		this.tool = tool;
 	}

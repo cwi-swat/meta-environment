@@ -9,7 +9,7 @@ import aterm.ATermFactory;
 public class DelegateConnection implements DelegateTif {
 	private ATermFactory factory;
 	private DelegateBridge bridge;
-	private MaskeradeConnection maskeradeConnection;
+	private MasqueradeConnection masqueradeConnection;
 
 	public DelegateConnection(String[] args, ATermFactory factory)
 		throws IOException {
@@ -23,8 +23,8 @@ public class DelegateConnection implements DelegateTif {
 		t2.start();
 	}
 
-	public void setMaskerade(MaskeradeConnection maskeradeConnection) {
-		this.maskeradeConnection = maskeradeConnection;
+	public void setMasquerade(MasqueradeConnection masqueradeConnection) {
+		this.masqueradeConnection = masqueradeConnection;
 	}
 
 	public void postEvent(ATerm term) {
@@ -60,17 +60,17 @@ public class DelegateConnection implements DelegateTif {
 		throw new RuntimeException("term not in input signature: " + term);
 	}
 
-	public void postMaskeradeEvent(ATerm term) {
-		maskeradeConnection.sendTerm(factory.make("snd-event(" + term + ")"));
+	public void postMasqueradeEvent(ATerm term) {
+		masqueradeConnection.sendTerm(factory.make("snd-event(" + term + ")"));
 	}
 
-	public void postMaskeradeValue(ATerm term) {
-		maskeradeConnection.sendTerm(factory.make("snd-value(" + term + ")"));
+	public void postMasqueradeValue(ATerm term) {
+		masqueradeConnection.sendTerm(factory.make("snd-value(" + term + ")"));
 	}
 
-	public void postMaskeradeTerminate(ATerm term) {
+	public void postMasqueradeTerminate(ATerm term) {
 		System.exit(1);
-//		maskeradeConnection.sendTerm(factory.make("snd-terminate(" + term + ")"));
+//		masqueradeConnection.sendTerm(factory.make("snd-terminate(" + term + ")"));
 	}
 
 	public void recAckEvent(ATerm t0) {

@@ -33,17 +33,17 @@ abstract public class DelegateTool extends AbstractTool implements DelegateTif {
 		
 		result = term.match(PrecEvent);
 		if (result != null) {
-			postMaskeradeEvent((ATerm)result.get(0));
+			postMasqueradeEvent((ATerm)result.get(0));
 			return null;		
 		}
 		result = term.match(PrecValue);
 		if (result != null) {
-			postMaskeradeValue((ATerm)result.get(0));
+			postMasqueradeValue((ATerm)result.get(0));
 			return null;
 		}
 		result = term.match(PrecTerminate);
 		if (result != null) {
-			postMaskeradeTerminate((ATerm)result.get(0));
+			postMasqueradeTerminate((ATerm)result.get(0));
 			return null;
 		}
 		

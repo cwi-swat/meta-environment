@@ -17,19 +17,19 @@ import aterm.ATermFactory;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class MaskeradeConnection implements MaskeradeTif {
+public class MasqueradeConnection implements MasqueradeTif {
 	private ATermFactory factory;
-	private MaskeradeBridge bridge;
+	private MasqueradeBridge bridge;
 	private DelegateConnection delegateConnection;
 
-	public MaskeradeConnection(String[] args, ATermFactory factory) throws IOException {
+	public MasqueradeConnection(String[] args, ATermFactory factory) throws IOException {
 		this.factory = factory;
-		bridge = new MaskeradeBridge(factory, this);
+		bridge = new MasqueradeBridge(factory, this);
 
 		bridge.init(args);
 		bridge.connect();
 
-		Thread t1 = new Thread(bridge, "Maskerade");
+		Thread t1 = new Thread(bridge, "Masquerade");
 		t1.start();
 	}
 

@@ -7,9 +7,9 @@ package trans;
 import aterm.*;
 import toolbus.*;
 
-abstract public class MaskeradeTool extends AbstractTool implements MaskeradeTif {
+abstract public class MasqueradeTool extends AbstractTool implements MasqueradeTif {
 	// Mimic the constructor from the AbstractTool class
-	protected MaskeradeTool(ATermFactory factory) {
+	protected MasqueradeTool(ATermFactory factory) {
 		super(factory);
 	}
 

@@ -7,7 +7,7 @@ package trans;
 
 import aterm.*;
 
-public interface MaskeradeTif
+public interface MasqueradeTif
 {
   public void postDelegateEvent(ATerm t0);
   public void recTerminate(ATerm t0);

@@ -20,7 +20,7 @@ import aterm.ATermFactory;
 public class Adapter {
 	private ATermFactory factory;
 
-	private List maskeradeArgsList, delegateArgsList;
+	private List masqueradeArgsList, delegateArgsList;
 
 	public static void main(String[] args) throws Exception {
 		Adapter a = new Adapter(args);
@@ -31,32 +31,32 @@ public class Adapter {
 
 		factory = new aterm.pure.PureFactory();
 
-		String[] maskeradeArgs = (String[])maskeradeArgsList.toArray(new String[maskeradeArgsList.size()]);
+		String[] masqueradeArgs = (String[])masqueradeArgsList.toArray(new String[masqueradeArgsList.size()]);
 		String[] delegateArgs = (String[])delegateArgsList.toArray(new String[delegateArgsList.size()]);
 
-		MaskeradeConnection maskeradeConnection = new MaskeradeConnection(maskeradeArgs, factory);
+		MasqueradeConnection masqueradeConnection = new MasqueradeConnection(masqueradeArgs, factory);
 		DelegateConnection delegateConnection = new DelegateConnection(delegateArgs, factory);
 
-		maskeradeConnection.setDelegate(delegateConnection);
-		delegateConnection.setMaskerade(maskeradeConnection);
+		masqueradeConnection.setDelegate(delegateConnection);
+		delegateConnection.setMasquerade(masqueradeConnection);
 	}
 
 	private void parseArguments(String[] args) {
-		maskeradeArgsList = new ArrayList();
+		masqueradeArgsList = new ArrayList();
 		delegateArgsList = new ArrayList();
 
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-TB_MASKERADE_PORT")) {
-				maskeradeArgsList.add(new String("-TB_PORT"));
-				maskeradeArgsList.add(new String(args[++i]));
+			if (args[i].equals("-TB_MASQUERADE_PORT")) {
+				masqueradeArgsList.add(new String("-TB_PORT"));
+				masqueradeArgsList.add(new String(args[++i]));
 			}
-			if (args[i].equals("-TB_MASKERADE_HOST")) {
-				maskeradeArgsList.add(new String("-TB_HOST"));
-				maskeradeArgsList.add(new String(args[++i]));
+			if (args[i].equals("-TB_MASQUERADE_HOST")) {
+				masqueradeArgsList.add(new String("-TB_HOST"));
+				masqueradeArgsList.add(new String(args[++i]));
 			}
-			if (args[i].equals("-TB_MASKERADE_TOOL")) {
-				maskeradeArgsList.add(new String("-TB_TOOL_NAME"));
-				maskeradeArgsList.add(new String(args[++i]));
+			if (args[i].equals("-TB_MASQUERADE_TOOL")) {
+				masqueradeArgsList.add(new String("-TB_TOOL_NAME"));
+				masqueradeArgsList.add(new String(args[++i]));
 			}
 			if (args[i].equals("-TB_DELEGATE_PORT")) {
 				delegateArgsList.add(new String("-TB_PORT"));

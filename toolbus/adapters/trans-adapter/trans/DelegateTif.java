@@ -6,9 +6,9 @@ package trans;
 import aterm.*;
 
 public interface DelegateTif {
-	public void postMaskeradeEvent(ATerm t0);	
-	public void postMaskeradeValue(ATerm t0);
-	public void postMaskeradeTerminate(ATerm t0);
+	public void postMasqueradeEvent(ATerm t0);	
+	public void postMasqueradeValue(ATerm t0);
+	public void postMasqueradeTerminate(ATerm t0);
 	public void recAckEvent(ATerm t0);
 	public void recTerminate(ATerm t0);
 }

@@ -13,27 +13,27 @@ public class DelegateBridge extends DelegateTool {
 		this.tool = tool;
 	}
 
-	public void postMaskeradeEvent(ATerm term) {
+	public void postMasqueradeEvent(ATerm term) {
 		if (tool != null) {
-			tool.postMaskeradeEvent(term);
+			tool.postMasqueradeEvent(term);
 		} else {
-			throw new UnsupportedOperationException("method `postMaskeradeEvent' not supported.");
+			throw new UnsupportedOperationException("method `postMasqueradeEvent' not supported.");
 		}
 	}
 	
-	public void postMaskeradeTerminate(ATerm term) {
+	public void postMasqueradeTerminate(ATerm term) {
 		if (tool != null) {
-			tool.postMaskeradeTerminate(term);
+			tool.postMasqueradeTerminate(term);
 		} else {
-			throw new UnsupportedOperationException("method `postMaskeradeTerminate' not supported.");
+			throw new UnsupportedOperationException("method `postMasqueradeTerminate' not supported.");
 		}
 	}
 	
-	public void postMaskeradeValue(ATerm term) {
+	public void postMasqueradeValue(ATerm term) {
 		if (tool != null) {
-			tool.postMaskeradeValue(term);
+			tool.postMasqueradeValue(term);
 		} else {
-			throw new UnsupportedOperationException("method `postMaskeradeValue' not supported.");			
+			throw new UnsupportedOperationException("method `postMasqueradeValue' not supported.");			
 		}
 	}
 	
