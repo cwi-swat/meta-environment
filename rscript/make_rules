@@ -14,7 +14,7 @@ SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src
 
 # ---- Convert from .eqs to .c
 
-CPPFLAGS       = -g -Wall -Wno-unused -O2 -DASF_MAIN \
+AM_CPPFLAGS       = -g -Wall -Wno-unused -O1 -DASF_MAIN \
 		  -I$(ASCINC) \
 		-I$(PT_SUPPORT)/include \
 		-I$(ERROR_SUPPORT)/include \
