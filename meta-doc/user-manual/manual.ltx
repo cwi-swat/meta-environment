@@ -18,6 +18,8 @@
 \W\usepackage{sequential}
 \T\usepackage{epsfig}
 
+\html{user-manual}
+
 \makeindex
 
 \xmlattributes{body}{bgcolor= "#ffffe6"}
@@ -3252,21 +3254,16 @@ $S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions.
 In most cases, such brackets are only
 introduced for grouping and disambiguation, but have no further meaning. By
 adding the attribute {\tt bracket} to the function declaration, it will not be
-included in the abstract syntax. Figure \ref{CODE:bracket-expr} shows the
+included in the abstract syntax. 
+\begin{iftex}
+Figure \ref{CODE:bracket-expr} shows the
 definition of a bracket function for the sort {\tt EXPR}.
-
-Since brackets are necessary for overruling the priority and associativity of
-functions,  it is required that bracket 
-functions are declared for the argument and result sorts of
-
-\begin{itemize}
-
-\item all functions appearing in priority declarations, and
-  
-\item all functions having one of the attributes {\tt left}, {\tt right}, 
-{\tt assoc}, or {\tt non-assoc}.
-
-\end{itemize}
+\end{iftex}
+\begin{ifhtml}
+Below an example of the
+definition of a bracket function for the sort {\tt EXPR} 
+is given.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -3287,6 +3284,19 @@ exports
 \end{IncCode}
 \caption{Syntax definition with a bracket function}\label{CODE:bracket-expr}
 \end{figure}
+
+Since brackets are necessary for overruling the priority and associativity of
+functions,  it is required that bracket 
+functions are declared for the argument and result sorts of
+
+\begin{itemize}
+
+\item all functions appearing in priority declarations, and
+  
+\item all functions having one of the attributes {\tt left}, {\tt right}, 
+{\tt assoc}, or {\tt non-assoc}.
+
+\end{itemize}
 
 \subsubsection{Relative Priorities}\label{RelativePriorities}
 
@@ -3335,9 +3345,16 @@ Currently, there is no syntactic or semantic difference between `{\tt left}'
 and `{\tt assoc}', but we may change the semantics of the `{\tt assoc}'
 attribute in the future.
 
+\begin{iftex}
 Figure \ref{CODE:simple-prio} gives an example of a definition of
 simple arithmetic expressions with the usual priorities and
 associativities.
+\end{iftex}
+\begin{ifhtml}
+Below an example of a definition of
+simple arithmetic expressions with the usual priorities and
+associativities is given.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -3381,8 +3398,13 @@ declaration with one of the following attributes:
 \end{itemize}
 
 \noindent where $F$ and $G$ are functions appearing in the list.
-See Figure \ref{CODE:complex-prio} for an example of the use of grouped
-associativity.
+\begin{iftex}
+See Figure \ref{CODE:complex-prio}
+for an example of the use of grouped associativity.
+\end{iftex}
+\begin{ifhtml}
+The following example shows the use of grouped associativity.
+\end{ifhtml}
 
 \begin{figure}
 \begin{IncCode}
@@ -3453,15 +3475,41 @@ In case of context-free restrictions only a sort or symbol is allowed.
 The restriction operator {\tt -/-} should be read as ``may not be
 followed by''.
 Before the restriction operator {\tt -/-} a list of symbols
-is given for which the restriction holds, 
+is given for which the restriction holds. 
 \begin{iftex}
-see Figure \ref{CODE:functional}
+See Figure \ref{CODE:functional} for an example, 
 \end{iftex}
 \begin{ifhtml}
-click \link{here}[]{CODE:functional}
+Below an example is given where 
 \end{ifhtml}
-for an example, both {\tt let} and {\tt in} may not be followed
-by a letter.
+both {\tt let} and {\tt in} may not be followed by a letter.
+
+\begin{figure}
+\label{CODE:functional}
+\begin{IncCode}
+\begin{verbatim}
+module Functional
+
+imports Layout
+
+exports
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -> Var
+  context-free syntax
+    Var                          -> Term
+    Term Term                    -> Term {left}
+    "let" Var "=" Term "in" Term -> Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]
+\end{verbatim}
+\end{IncCode}
+\caption{Using restrictions in the definition of a simple functional language}
+\end{figure}   
 
 {\tt <Lookaheads>} are slightly more complex.  The most compact way is to
 give the \sdf\ definition of the {\tt <Lookaheads>} and illustrate their use by
@@ -3490,31 +3538,6 @@ The context-free restriction forbids that a variable is directly
 followed by a letter. It does not forbid layout characters between
 the letters, e.g. {\tt a b} is a legal recognizable string.
 
-\begin{figure}
-\begin{IncCode}
-\begin{verbatim}
-module Functional
-
-imports Layout
-
-exports
-  sorts Var Term
-  lexical syntax
-    [a-z]+ -> Var
-  context-free syntax
-    Var                          -> Term
-    Term Term                    -> Term {left}
-    "let" Var "=" Term "in" Term -> Term
-
-  lexical restrictions
-    "let" "in" -/- [a-z]
-
-  context-free restrictions
-    Var -/- [a-z]
-\end{verbatim}
-\end{IncCode}
-\caption{Using restrictions in the definition of a simple functional language}\label{CODE:functional}
-\end{figure}   
 
 The second example illustrates the use of restrictions to define a
 `safe' way of layout.  
@@ -3530,11 +3553,12 @@ This problem is avoided by the definition
 in Figure \ref{CODE:safe-layout}:
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:safe-layout}:
+in the example below,
 \end{ifhtml}
 it simply forbids that optional layout is followed by layout characters.
 
 \begin{figure}
+\label{CODE:safe-layout}
 \begin{IncCode}
 \begin{verbatim}
 module Layout
@@ -3547,12 +3571,12 @@ exports
     LAYOUT? -/- [\ \t\n]
 \end{verbatim}
 \end{IncCode}
-\caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
+\caption{Safe way of defining {\tt LAYOUT}}
 \end{figure}
 
 \link{The last example}[ is shown in
-Figure~\ref{CODE:c-comment}]{CODE:c-comment} 
-and illustrates the
+Figure~\ref{CODE:c-comment} and]{CODE:c-comment}
+illustrates the
 use of restrictions to extend the previous layout definition with C-style
 comments. For readability we give here \emph{two} restrictions whereas the
 first one is already imported from 
@@ -3587,8 +3611,9 @@ exports
 
 One frequently asked question is when to use lexical restrictions
 and when to use context-free restrictions. 
-The lexical restrictions on {\tt let} and {\tt in} in
-Figure \ref{CODE:functional} can not be defined context-free 
+The \link{lexical restrictions on {\tt let} and {\tt in}}[ in
+Figure \ref{CODE:functional}]{CODE:functional}
+can not be defined context-free 
 because these keywords do not "live" at the context-free level.
 Is it possible to put a lexical restriction on {\tt Var}?
 Yes, but it will have no effect, because internally the
@@ -3622,7 +3647,7 @@ exports
 Figure \ref{CODE:restrictedexpressions} shows
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:restrictedexpressions} for an example of
+The specification above is an example of
 \end{ifhtml}
 an erroneous use of
 context-free expressions, because it prevents the recognition of
