@@ -1,0 +1,10 @@
+module languages/cpp/syntax/LineCommentsAsLayout
+
+imports languages/cpp/syntax/LineComments
+
+exports
+
+lexical syntax
+
+  LineComment -> LAYOUT
+

@@ -3,4 +3,4 @@ module languages/cpp/syntax/LineComments
 exports
 
 lexical syntax
-    "//" ~[\n]* [\n] -> Comment
+    "//" ~[\n]* [\n] -> LineComment
