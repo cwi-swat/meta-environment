@@ -1,0 +1,20 @@
+module DiGraph
+ 
+imports Rstore
+
+exports
+  sorts DiGraph
+
+  context-free start-symbols DiGraph
+
+  context-free syntax
+    "digraph" DiGraphId "{" LabelSection EdgeSection "}" -> DiGraph
+
+    Bytes -> GraphNode
+
+    GraphNode "[" "label" "=" StrCon "]" -> GraphLabel
+
+    GraphLabel* -> LabelSection
+
+    GraphNode "->" GraphNode -> GraphEdge
+    GraphEdge* -> EdgeSection  
