@@ -6,11 +6,13 @@ EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
                           apply-function.idef 
 
 bin_PROGRAMS		= flattenPT unparsePT unparseProd \
-                          addPosInfo ambtracker tree2dot apply-function
+                          addPosInfo ambtracker tree2dot apply-function \
+                          parsePT
 
 INCLUDES		= -I${top_srcdir}/libmept \
                         -I${top_srcdir}/libasfix2 \
                         -I${top_srcdir}/libconversion \
+                        -I${top_srcdir}/libptmept \
 			-I${ATERM}/include \
 			-I${TOOLBUSLIB}/include
 
@@ -35,6 +37,11 @@ flattenPT_SOURCES	= flattenPT-main.c
 flattenPT_LDADD		= -L../libconversion -lconversion \
                         -L../libmept -lmept \
                         -L../libasfix2 -lasfix2 \
+			-L${ATERM}/lib -lATerm
+
+parsePT_SOURCES	= parsePT-main.c
+parsePT_LDADD		= -L../libmept -lmept \
+                        -L../libptmept -lPTMEPT \
 			-L${ATERM}/lib -lATerm
 
 unparsePT_SOURCES	= unparsePT.tif.c unparsePT-main.c

@@ -4,6 +4,7 @@ Makefile.in
 flattenPT
 unparsePT
 implodePT
+parsePT
 unparseProd
 addPosInfo
 ambtracker
