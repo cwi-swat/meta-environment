@@ -67,7 +67,8 @@ equations
 
   [mci-1'1] make-call-id(funid(""""{" Char* "}"""")) = identifier(Char*)
 
-   [mci-debug] make-call-id(funid(Char*)) = identifier(Char*)
+   [default-mci] make-call-id(funid(Char*)) = identifier(Char*)
+
 
   [min-1'1] make-id-name(identifier("_")) = funid("-")
 
@@ -84,224 +85,15 @@ equations
             ================================================
             make-id-name(identifier(Char Char*1)) = funid(Char Char*2)
 
-  [ic-1'1] is-char(funid("'" Char)) = true
 
   [ic-1'2] is-char(funid("\" Char+)) = true
 
+  [ic-1'3] is-char(funid(""""\" Char+ """)) = true
+
   [default-ic-1'3] is-char(Funid) = false
 
-  [tc-1'4] translate-char(funid("\" "t")) = 9
+  [tc] translate-char(funid("\" Char+)) = integer-constant(Char+) 
 
-  [tc-1'4] translate-char(funid("\" "n")) = 10
+  [tc] translate-char(funid(""""\" Char+ """)) = integer-constant(Char+)
 
-  [tc-1'1] translate-char(funid("'" " ")) = 32
-
-  [tc-1'2] translate-char(funid("'" "!")) = 33
-
-  [tc-1'2] translate-char(funid("'" """)) = 34
-
-  [tc-1'2] translate-char(funid("'" "#")) = 35
-
-  [tc-1'2] translate-char(funid("'" "$")) = 36
-
-  [tc-1'2] translate-char(funid("'" "%")) = 37
-
-  [tc-1'2] translate-char(funid("'" "&")) = 38
-
-  [tc-1'2] translate-char(funid("'" "'")) = 39
-
-  [tc-1'2] translate-char(funid("'" "(")) = 40
-
-  [tc-1'2] translate-char(funid("'" ")")) = 41
-
-  [tc-1'2] translate-char(funid("'" "*")) = 42
-
-  [tc-1'2] translate-char(funid("'" "+")) = 43
-
-  [tc-1'2] translate-char(funid("'" ",")) = 44
-
-  [tc-1'2] translate-char(funid("'" "-")) = 45
-
-  [tc-1'2] translate-char(funid("'" ".")) = 46
-
-  [tc-1'2] translate-char(funid("'" "/")) = 47
-
-  [tc-1'2] translate-char(funid("'" "0")) = 48
-
-  [tc-1'2] translate-char(funid("'" "1")) = 49
-
-  [tc-1'2] translate-char(funid("'" "2")) = 50
-
-  [tc-1'2] translate-char(funid("'" "3")) = 51
-
-  [tc-1'2] translate-char(funid("'" "4")) = 52
-
-  [tc-1'2] translate-char(funid("'" "5")) = 53
-
-  [tc-1'2] translate-char(funid("'" "6")) = 54
-
-  [tc-1'2] translate-char(funid("'" "7")) = 55
-
-  [tc-1'2] translate-char(funid("'" "8")) = 56
-
-  [tc-1'2] translate-char(funid("'" "9")) = 57
-
-  [tc-1'2] translate-char(funid("'" ":")) = 58
-
-  [tc-1'2] translate-char(funid("'" ";")) = 59
-
-  [tc-1'2] translate-char(funid("'" "<")) = 60
-
-  [tc-1'2] translate-char(funid("'" "=")) = 61
-
-  [tc-1'2] translate-char(funid("'" ">")) = 62
-
-  [tc-1'2] translate-char(funid("'" "?")) = 63
-
-  [tc-1'2] translate-char(funid("'" "@")) = 64
-
-  [tc-1'2] translate-char(funid("'" "A")) = 65
-
-  [tc-1'2] translate-char(funid("'" "B")) = 66
-
-  [tc-1'2] translate-char(funid("'" "C")) = 67
-
-  [tc-1'2] translate-char(funid("'" "D")) = 68
-
-  [tc-1'2] translate-char(funid("'" "E")) = 69
-
-  [tc-1'2] translate-char(funid("'" "F")) = 70
-
-  [tc-1'2] translate-char(funid("'" "G")) = 71
-
-  [tc-1'2] translate-char(funid("'" "H")) = 72
-
-  [tc-1'2] translate-char(funid("'" "I")) = 73
-
-  [tc-1'2] translate-char(funid("'" "J")) = 74
-
-  [tc-1'2] translate-char(funid("'" "K")) = 75
-
-  [tc-1'2] translate-char(funid("'" "L")) = 76
-
-  [tc-1'2] translate-char(funid("'" "M")) = 77
-
-  [tc-1'2] translate-char(funid("'" "N")) = 78
-
-  [tc-1'2] translate-char(funid("'" "O")) = 79
-
-  [tc-1'2] translate-char(funid("'" "P")) = 80
-
-  [tc-1'2] translate-char(funid("'" "Q")) = 81
-
-  [tc-1'2] translate-char(funid("'" "R")) = 82
-
-  [tc-1'2] translate-char(funid("'" "S")) = 83
-
-  [tc-1'2] translate-char(funid("'" "T")) = 84
-
-  [tc-1'2] translate-char(funid("'" "U")) = 85
-
-  [tc-1'2] translate-char(funid("'" "V")) = 86
-
-  [tc-1'2] translate-char(funid("'" "W")) = 87
-
-  [tc-1'2] translate-char(funid("'" "X")) = 88
-
-  [tc-1'2] translate-char(funid("'" "Y")) = 89
-
-  [tc-1'2] translate-char(funid("'" "Z")) = 90
-
-  [tc-1'2] translate-char(funid("'" "[")) = 91
-
-  [tc-1'4] translate-char(funid("\" "\")) = 92
-
-  [tc-1'2] translate-char(funid("'" "]")) = 93
-
-  [tc-1'2] translate-char(funid("'" "^")) = 94
-
-  [tc-1'2] translate-char(funid("'" "_")) = 95
-
-  [tc-1'2] translate-char(funid("'" "`")) = 96
-
-  [tc-1'2] translate-char(funid("'" "a")) = 97
-
-  [tc-1'2] translate-char(funid("'" "b")) = 98
-
-  [tc-1'2] translate-char(funid("'" "c")) = 99
-
-  [tc-1'2] translate-char(funid("'" "d")) = 100
-
-  [tc-1'2] translate-char(funid("'" "e")) = 101
-
-  [tc-1'2] translate-char(funid("'" "f")) = 102
-
-  [tc-1'2] translate-char(funid("'" "g")) = 103
-
-  [tc-1'2] translate-char(funid("'" "h")) = 104
-
-  [tc-1'2] translate-char(funid("'" "i")) = 105
-
-  [tc-1'2] translate-char(funid("'" "j")) = 106
-
-  [tc-1'2] translate-char(funid("'" "k")) = 107
-
-  [tc-1'2] translate-char(funid("'" "l")) = 108
-
-  [tc-1'2] translate-char(funid("'" "m")) = 109
-
-  [tc-1'2] translate-char(funid("'" "n")) = 110
-
-  [tc-1'2] translate-char(funid("'" "o")) = 111
-
-  [tc-1'2] translate-char(funid("'" "p")) = 112
-
-  [tc-1'2] translate-char(funid("'" "q")) = 113
-
-  [tc-1'2] translate-char(funid("'" "r")) = 114
-
-  [tc-1'2] translate-char(funid("'" "s")) = 115
-
-  [tc-1'2] translate-char(funid("'" "t")) = 116
-
-  [tc-1'2] translate-char(funid("'" "u")) = 117
-
-  [tc-1'2] translate-char(funid("'" "v")) = 118
-
-  [tc-1'2] translate-char(funid("'" "w")) = 119
-
-  [tc-1'2] translate-char(funid("'" "x")) = 120
-
-  [tc-1'2] translate-char(funid("'" "y")) = 121
-
-  [tc-1'2] translate-char(funid("'" "z")) = 122
-
-  [tc-1'2] translate-char(funid("'" "{")) = 123
-
-  [tc-1'2] translate-char(funid("'" "|")) = 124
-
-  [tc-1'2] translate-char(funid("'" "}")) = 125
-
-  [tc-1'2] translate-char(funid("'" "~")) = 126
-
-  [tc-1'161] translate-char(funid("'" "¡")) = 161
-
-  [tc-1'162] translate-char(funid("'" "¢")) = 162
-
-  [tc-1'163] translate-char(funid("'" "£")) = 163
-
-  [tc-1'164] translate-char(funid("'" "¤")) = 164
-
-  [tc-1'165] translate-char(funid("'" "¥")) = 165
-
-  [tc-1'166] translate-char(funid("'" "¦")) = 166
-
-  [tc-1'167] translate-char(funid("'" "§")) = 167
-
-  [tc-1'168] translate-char(funid("'" "¨")) = 168
-
-  [tc-1'169] translate-char(funid("'" "©")) = 169
-
-  [tc-1'170] translate-char(funid("'" "ª")) = 170
-
-  [default-tc-1'3] translate-char(funid("'" Char)) = 777
+  [default-tc] translate-char(Funid) = 777
