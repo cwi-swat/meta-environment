@@ -590,17 +590,25 @@ char* normalize_filename(const char *path)
   for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
 
   prefix = strdup(path);
+  if (prefix == NULL) {
+    ATerror("normalize_filename: out of memory.\n");
+    return NULL;
+  }
   prefix[i] = '\0';
 
   newprefix = expand_path(prefix);
   if (newprefix != NULL) {
-    newpath = (char*) malloc(strlen(newprefix) + (len - i));
+    newpath = (char*) malloc(strlen(newprefix) + (len - i) + 1);
+
+    if (newpath == NULL) {
+      ATerror("normalize_filename: out of memory.\n");
+      return NULL;
+    }
   
     strcpy(newpath,newprefix);
     newpath[strlen(newpath)] = '/';
     strcpy(newpath+strlen(newprefix)+1,path+i+1);
   }
-
   free(prefix);
 
   return newpath;
