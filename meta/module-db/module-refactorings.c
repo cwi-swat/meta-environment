@@ -22,6 +22,8 @@ static SDF_ImportList rename_modulename_in_importlist(
       }
     }
 
+    moduleId = SDF_ModuleIdFromTerm(
+		 ATremoveAllAnnotations(SDF_ModuleIdToTerm(moduleId)));
     if (SDF_isEqualModuleId(moduleId, oldModuleName)) {
       SDF_ModuleName tmpModuleName = 
         SDF_setModuleNameModuleId(moduleName, newModuleName);
@@ -182,6 +184,8 @@ static SDF_ImportList delete_modulename_from_importlist(
       }
     }
 
+    moduleId = SDF_ModuleIdFromTerm(
+		 ATremoveAllAnnotations(SDF_ModuleIdToTerm(moduleId)));
     if (SDF_isEqualModuleId(moduleId, oldModuleName)) {
       if (SDF_hasImportListTail(orgImports)) {
 	orgImports = SDF_getImportListTail(orgImports);
