@@ -73,7 +73,7 @@ set MODULESTYLE box
 global saveFill fileName printCommand g c statuslist
 
 # animation of loading of modules
-set animate 1
+set animate 0
 
 # resizing after loading of modules
 set autoresize 1
