@@ -55,7 +55,7 @@ Options:
     -p <path>       add <path> to PATH of Meta-Environment
     -q		    enable Meta-Environment query support
     -r <file>       uses given file as term-store
-    -s              save intermediate files to disk (only works with -P and -E)
+    -s              save intermediate files to disk
     -S              execute the given tb-script
     -t <int>        MetaEnvironment will abort after <int> seconds
     -T <port>       specifies TB_PORT for toolbus
