@@ -313,14 +313,6 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
                                     sdfNatCon,
                                     SDF_makeLayoutEmpty());
   }
-  else if (PT_isSymbolPerm(ptSymbol)) { 
-    ATabort("PTSymbolToSDFSymbol: permutation not implemented.\n");
-    result = NULL;
-  }
-  else if (PT_isSymbolSet(ptSymbol)) { 
-    ATabort("PTSymbolToSDFSymbol: set not implemented.\n");
-    result = NULL;
-  }
   else if (PT_isSymbolLayout(ptSymbol)) {
     ATabort("PTSymbolToSDFSymbol: layout.\n");
     result = NULL;
