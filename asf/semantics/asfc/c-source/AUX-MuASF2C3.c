@@ -90,7 +90,7 @@ if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ;
 tmp [ 8 ] = ( * ef10 ) ( lf3 ( make_list ( tmp [ 7 ] ) ) ) ;
 tmp [ 9 ] = ( * ef11 ) ( atmp00 , ( * ef6 ) ( tmp [ 6 ] , tmp [ 8 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 11 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 117 ] , char_table [ 112 ] , char_table [ 112 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] , char_table [ 46 ] , char_table [ 104 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] , tmp [ 9 ] ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 15 , char_table [ 34 ] , char_table [ 97 ] , char_table [ 115 ] , char_table [ 99 ] , char_table [ 45 ] , char_table [ 115 ] , char_table [ 117 ] , char_table [ 112 ] , char_table [ 112 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] , char_table [ 46 ] , char_table [ 104 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] , tmp [ 9 ] ) ) ) ;
 }
 }
 }
