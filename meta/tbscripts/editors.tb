@@ -41,7 +41,7 @@ let
   Text : str,
   FileName : str,
   Path : str,
-  Time : int
+  Time : term
 in
   Tree := none.
   Text := "".
@@ -94,7 +94,7 @@ process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
 let
   Text : str,
   Path : str,
-  Time : int
+  Time : term
 in
   Text := "".
   snd-msg(open-trm-file(FileName)) .
@@ -145,11 +145,14 @@ process EditorExists(EditorId : term, ModuleName : str, Type : str,
 process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
 let
   ButtonName : str,
-  Pid : int
+  Pid : int,
+  Command : term
 in
+  subscribe(delete-editor(<term>)) .
+  subscribe(syntax-changed(ModuleName)) .
   (
     rec-msg(extra-button-action(EditorId, ButtonName?)) .
-    snd-msg(extra-button-action(ButtonName, Type, ModuleName, EditorId))
+    snd-msg(extra-button-action(ButtonName, Type, ModuleName, EditorId)) 
   +
     rec-msg(text-editor-disconnected(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
@@ -158,12 +161,30 @@ in
     snd-msg(kill-text-editor(EditorId)) .
     rec-msg(text-editor-killed(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
+  +
+    rec-note(syntax-changed(ModuleName)).
+    InvalidateDependendEditor(EditorId,Type)
   ) *
-  rec-msg(end-editor-action-loop(EditorId)) 
+  rec-note(delete-editor(EditorId)) 
+endlet
+
+process InvalidateDependendEditor(EditorId : term, Type : str) is
+  if not(equal(Type,"syntax")) then
+    InvalidateEditor(EditorId)
+  else
+    tau
+  fi
+
+process InvalidateEditor(EditorId : term) is
+let
+  Focus : term
+in
+  snd-msg(invalidate-tree(EditorId)) .
+  rec-msg(invalidation-done(EditorId,Focus?)) .
+  snd-msg(set-focus(EditorId, Focus))
 endlet
 
 process KillEditor(EditorId : term, Type : str, ModuleName : str) is
-  snd-msg(end-editor-action-loop(EditorId)) .
   snd-note(delete-editor(EditorId)) .
   if not(equal(type, "term")) then
     KillModuleEditor(EditorId, ModuleName)

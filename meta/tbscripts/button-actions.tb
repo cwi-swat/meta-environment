@@ -22,7 +22,7 @@ in
     rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)).
     snd-msg(get-button-actions(ButtonName,EditorType,ModuleName)).
     rec-msg(button-actions(ButtonName,EditorType,ModuleName,Actions?)).
-    PerformButtonActions(EditorId, Actions)
+    PerformButtonActions(EditorId, Actions) 
   )* delta
 endlet
 
@@ -385,7 +385,7 @@ in
         rec-msg(show-area(NewModName), Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?).
         snd-msg(edit-term-file(NewModName, FileName)) .
-        rec-msg(edit-term-file(NewModName?, EditorId2?)).
+        rec-msg(editor-opened(NewModName)).
         ParseTerm(EditorId2, NewModName) .
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
         ReturnSuccess(EditorId,Stack)        
@@ -474,15 +474,6 @@ in
   +
     rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
-endlet
-
-process InvalidateEditor(EditorId : term) is
-let
-  Focus : term
-in
-  snd-msg(invalidate-tree(EditorId)).
-  rec-msg(invalidation-done(EditorId,Focus?)).
-  snd-msg(set-focus(EditorId, Focus))
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
@@ -699,7 +690,7 @@ in
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
-    rec-msg(edit-term-file(NewModuleName?, EditorId?))
+    rec-msg(editor-opened(ModuleName))
   fi
 endlet
 
@@ -711,5 +702,5 @@ in
   snd-msg(save-text-file(FileName, Text)) .
   rec-msg(save-done(FileName)) .
   snd-msg(edit-term-file(ModuleName, FileName)) .
-  rec-msg(edit-term-file(NewModuleName?, EditorId?))
+  rec-msg(editor-opened(ModuleName))
 endlet

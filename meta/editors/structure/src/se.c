@@ -223,7 +223,10 @@ ATerm set_focus(int cid, ATerm editorId, int location)
   SE_Editor editor = getEditor(editorId);
   PT_ParseTree parse_tree;
   
-  assert(editor);
+  if(editor == NULL) {
+    ATwarning("Internal error: no such editor: %t\n", editorId);
+    return ATmake("snd-value(focus(<term>))", SE_makeFocusEmpty());
+  }
 
   parse_tree = SE_getEditorParseTree(editor);
 

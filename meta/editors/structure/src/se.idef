@@ -23,13 +23,12 @@ let
 in 
   execute(se, SE?) .
   (
-    rec-msg(initialize-structure-editor(EditorId?, Text?)) .
-    snd-eval(SE, new-editor-given-text(EditorId, Text)) .
-    rec-value(SE, initial-focus(Focus?)) .       
-    snd-msg(initial-focus(Focus))
-  +
-    rec-msg(initialize-structure-editor-with-tree(EditorId?, Tree?)) .
-    snd-eval(SE, new-editor-given-tree(EditorId, Tree)) .
+    rec-msg(initialize-structure-editor(EditorId?, Text?, Tree?)) .
+    if equal(Tree,none) then
+      snd-eval(SE, new-editor-given-text(EditorId, Text)) 
+    else 
+      snd-eval(SE, new-editor-given-tree(EditorId, Tree)) 
+    fi .
     rec-value(SE, initial-focus(Focus?)) .       
     snd-msg(initial-focus(Focus))
   +
@@ -116,7 +115,7 @@ in
     snd-msg(error-position(Location))
   +
     rec-msg(delete-structure-editor(EditorId?)).
-    snd-do(SE, remove-tree(EditorId))
+    snd-do(SE, remove-tree(EditorId)) 
   +
     rec-msg(set-modified(EditorId?)) .
     snd-do(SE, modify(EditorId))
