@@ -23,7 +23,6 @@ collect(FuncDef, Table[[FunId,FunId]]) -> Table[[FunId,FunId]] {traversal(accu, 
 
 variables
 
-"SigArg+"[0-9]* -> {SigArg ","}+
 "c*"[0-9]* -> CHAR*
 "FunId"[0-9]* -> FunId
 "Term"[0-9]* -> Term
@@ -34,3 +33,4 @@ variables
 "ModuleId"[0-9]* -> ModId
 "SignatureOpt"[0-9]* -> SignatureOpt
 "RulesOpt"[0-9]* -> RulesOpt
+"SigArg+"[0-9]* -> {SigArg ","}+

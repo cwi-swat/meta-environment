@@ -1,3 +1,26 @@
 module muasf2tom/MuASFtoTOM
+imports tom/TomSyntax
 imports muasf2tom/RenameFunctions
 imports muasf2muasf/MuASF2MuASF
+
+exports
+context-free syntax
+
+muasf2tom(Module) -> TomSpecification
+
+hiddens
+
+context-free syntax
+
+translate({Rule ";"}*) -> TomRuleSection*
+
+variables
+
+"TomRuleSection*"[0-9]* -> TomRuleSection*
+"TomRule*"[0-9]* -> TomRule*
+"FunId"[0-9]* -> FunId
+"Term"[0-9]* -> Term
+"Term+"[0-9]* -> {Term ","}+
+"Rule*"[0-9]* -> {Rule ";"}*
+"SignatureOpt"[0-9]* -> SignatureOpt
+"ModuleId"[0-9]* -> ModId

@@ -1,0 +1,29 @@
+equations
+
+[main] 
+muasf2tom(Module) = TomRuleSection*
+when module ModuleId SignatureOpt rules Rule* := rename-functions(Module),
+     TomRuleSection* := translate(Rule*)
+
+[grouping] 
+   TomRuleSection*1
+   %rule { TomRule*1 FunId ( Term+1 ) -> Term1 TomRule*2 } 
+   TomRuleSection*2
+   %rule { TomRule*3 FunId ( Term+2 ) -> Term2 TomRule*4 }
+   TomRuleSection*3
+   =
+   TomRuleSection*1
+   %rule { TomRule*1 FunId ( Term+1 ) -> Term1 TomRule*2
+           TomRule*3 FunId ( Term+2)  -> Term2 TomRule*4
+         }
+   TomRuleSection*2
+   TomRuleSection*3
+
+[t-empty] 
+translate() =
+
+[t-many] 
+translate(Term1 = Term2; Rule*) = 
+%rule { Term1 -> Term2 }
+translate(Rule*)
+
