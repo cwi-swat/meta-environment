@@ -284,11 +284,6 @@ AC_OUTPUT(
    asf/removevars/src/Makefile
    asf/removevars/c-source/Makefile
    asf/removevars/spec/Makefile
-   asf/traversals/Makefile
-   asf/traversals/src/Makefile
-   asf/traversals/c-source/Makefile
-   asf/traversals/spec/Makefile
-   asf/traversals/test/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
 , chmod +x utils/genmakefile
