@@ -44,16 +44,11 @@ buttons([
           push-string("\"UNUSED_VARS\""),
           parse("basic/Strings", "String"),
 
-          push-active-module,
-          get-root,
-          check-sort("Tscript"),
-          apply("extractRelations", "RSTORE", 1),
-          push-modulename("ToolBusExtraction"),
-          reduce,
+          push-filename("extracted-relations.trm"),
+	  parse("RscriptCalculator", "RSTORE"),
 
           apply("display-query", "List", 4),
-          push-modulename("DisplayQuery"),
-          reduce,
+          rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
         ]),
@@ -69,16 +64,11 @@ buttons([
           push-string("\"UNUSED_PROCESSES\""),
           parse("basic/Strings", "String"),
 
-          push-active-module,
-          get-root,
-          check-sort("Tscript"),
-          apply("extractRelations", "RSTORE", 1),
-          push-modulename("ToolBusExtraction"),
-          reduce,
+          push-filename("extracted-relations.trm"),
+	  parse("RscriptCalculator", "RSTORE"),
 
           apply("display-query", "List", 4),
-          push-modulename("DisplayQuery"),
-          reduce,
+          rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
         ]),
@@ -94,16 +84,11 @@ buttons([
           push-string("\"UNMATCHED_MESSAGES\""),
           parse("basic/Strings", "String"),
 
-          push-active-module,
-          get-root,
-          check-sort("Tscript"),
-          apply("extractRelations", "RSTORE", 1),
-          push-modulename("ToolBusExtraction"),
-          reduce,
+          push-filename("extracted-relations.trm"),
+	  parse("RscriptCalculator", "RSTORE"),
 
           apply("display-query", "List", 4),
-          push-modulename("DisplayQuery"),
-          reduce,
+          rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
         ]),
@@ -119,12 +104,8 @@ buttons([
           push-string("\"UNMATCHED_MESSAGES\""),
           parse("basic/Strings", "String"),
 
-          push-active-module,
-          get-root,
-          check-sort("Tscript"),
-          apply("extractRelations", "RSTORE", 1),
-          push-modulename("ToolBusExtraction"),
-          reduce,
+          push-filename("extracted-relations.trm"),
+	  parse("RscriptCalculator", "RSTORE"),
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
