@@ -1,37 +1,27 @@
 equations
 
-%% -- label the program
+%% --- Label the statements in a program
 
-[l1] label(Program, 1) = <Program', Int>
-     ============================
-     label(Program) = Program'
+[lb-1] label(Program, 1) = <Program', Int>
+       ============================
+       label(Program) = Program'
 
-[l2] label(Stat, Int) = < [Int] Stat, Int+1 >
+[lb-2] label(Stat, Int) = < [Int] Stat, Int+1 >
 
-[l3] label(  , Int) = < [Int] skip, Int+1 >
+[lb-3] label(  , Int) = < [Int] skip, Int+1 >
 
-%%[l2] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
+%% --- Add successors
 
-%%[l3] label(if Exp then Stat*1 else Stat*2 fi, Int) =
-%%     < if [Int] Exp then Stat*1 else Stat*2 fi [Int+1], Int+2 >
-
-%%[l4] label(while Exp do Stat* od, Int) =
-%%     < while [Int] Exp do Stat* od [Int+1], Int + 2>
+[as-1] add-succ(Rel, Rstore) = add(SUCC, Rel, Rstore)
 
 %% -- Construct the control flow graph
 
-[as1] add-succ(Rel, Rstore) = add(SUCC, Rel, Rstore)
-
-[as2] add-succ(Pair, Rstore) = add(SUCC, Pair, Rstore)
-
-[cf1] 
-      Rstore' = add-succ({<Int, get-first(Stat*)>}, Rstore),
+[cf1] Rstore' = add-succ({<Int, get-first(Stat*)>}, Rstore),
       Rstore''= add-last(Stat*, Int, Rstore'),
       ========================================================
       controlflow([Int] while Exp do Stat* od, Rstore) = Rstore''
 
-[cf2]
-      Rstore' = add-succ({ <Int1, get-first(Stat*1)>,
+[cf2] Rstore' = add-succ({ <Int1, get-first(Stat*1)>,
                            <Int1, get-first(Stat*2)> }, Rstore)
       ========================================================
       controlflow([Int1] if Exp then Stat*1 else Stat*2 fi, Rstore) = Rstore'
@@ -39,52 +29,53 @@ equations
 [cf3] controlflow(Stat+, Rstore) = Rstore'
       ========================================================
       controlflow(Stat ; Stat+, Rstore) = 
-      add(SUCC, <get-last(Stat), get-first(Stat+)>, Rstore')
+      add-succ(product(get-last(Stat), {get-first(Stat+)}), Rstore')
+
+%% --- Get first statement of a series
 
 [gf-1] get-first([Int] Stat; Stat*) = Int
 
-[gl-1] get-last(Stat*; [Int] Stat) = {Int}
-[gl-1] get-last(Stat*; [Int] if Exp then Stat*1 else Stat*2 fi) = get-last(Stat*1) union get-last(Stat*2)
+%% --- Get last statement(s) of a series
+
+[gl-2] get-last(Stat*; [Int] if Exp then Stat*1 else Stat*2 fi) = 
+       union(get-last(Stat*1), get-last(Stat*2))
+
+[default-gl-3] 
+       get-last(Stat*; [Int] Stat) = {Int}
+
+%% --- Add a successor to all last statements of a series
 
 [al-1] get-last(Stat*) = Bag
        ========================================================
-       add-last(Stat*, Int, Rstore) = add-succ(Bag x {Int}, Rstore)
+       add-last(Stat*, Int, Rstore) = add-succ(product(Bag, {Int}), Rstore)
 
-%% -- collect defines and uses
+%% --- Collect defines and uses
 
-[4] Rstore' = uses(Exp, Rstore, Int)
-    ==========================================================
-    use-defs([Int] Id := Exp, Rstore) = add(DEFS, <Id, Int>, Rstore')
+[ud-1] Rstore' = use-defs(Exp, Rstore, Int)
+       ==========================================================
+       use-defs([Int] Id := Exp, Rstore, Int') = add(DEFS, <Id, Int>, Rstore')
 
-[5] Rstore' = uses(Exp, Rstore, Int),
-    ==========================================================
-    use-defs([Int] if Exp then Stat*1 else Stat*2 fi, Rstore) = Rstore'
+[default-ud-2] 
+       use-defs([Int] Stat, Rstore, Int') = use-defs(Stat, Rstore, Int)
 
-[6] Rstore' = uses(Exp, Rstore, Int),
-    ==========================================================
-    use-defs([Int] while Exp do  Stat* od, Rstore) = Rstore'
+[ud-3] use-defs(Id, Rstore, Int) = add(USES, <Id, Int> , Rstore)
 
+%% --- Analyze a program
+ 
+[an-1] Program1 = label(Program),
+       controlflow(Program1, []) = Rstore,
+       use-defs(Program1, Rstore, 0) = Rstore',
+       undefined-query(Rstore') = Rstore''
+       =========================================================
+       analyze(Program) = rel-value(UN, Rstore'')
 
-[7] uses(Id, Rstore, Int) = add(USES, <Id, Int> , Rstore)
-
-%% -- Analyze a program
-
-[an1] Program1 = label(Program),
-      controlflow(Program1, []) = Rstore,
-      use-defs(Program1, Rstore) = Rstore',
-      undefined-query(Rstore') = Rstore''
-      =========================================================
-      analyze(Program) = rel-value(UN, Rstore'')
-
-
-[an2] undefined-query(Rstore) = 
-      eval-rscript(
+[uq-1] undefined-query(Rstore) =
+       eval-rscript(
       	def PRED   = inv(SUCC)
-        fun reaches_root(R) = elem('1, ran(R))
+        fun reaches_root(R) = elem('1, range(R))
         def UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) },
         Rstore
-      )
-
+       )
 
 
          
