@@ -4,7 +4,7 @@
 
 /*{{{   evaluator.c */
 /*
-A first version of an INTERPRETER in ToolBus C.
+   A first version of an INTERPRETER in ToolBus C.
    This program is written by Mark van den Brand.
 
    The interpreter has its own database in which per module the
@@ -68,8 +68,9 @@ A first version of an INTERPRETER in ToolBus C.
 #include <time.h>
 #include <limits.h>
 #include <assert.h>
+#include <deprecated.h>
+
 #include "preparation.h"
-#include "deprecated.h"
 #include "evaluator.tif.c"
 
 /*}}}  */
