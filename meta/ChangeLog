@@ -1,5 +1,9 @@
 # $Id$
 
+2002/08/03 (mdejonge@cwi.nl)
+ * configure.in: fixed configuration bug when graphviz package was not
+   specified with the --with-graphviz switch and could not be automatically
+   found. Issue an error message and terminate.
 
 2002/07/24 (jurgenv@cwi.nl)
  * Fixed generation of graphbrowser TCL script bug

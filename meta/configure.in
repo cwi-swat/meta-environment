@@ -114,6 +114,9 @@ AC_ARG_WITH(graphviz,
 dnl Only check version if location of graphviz is determined automagically
 if test x${GRAPHVIZ} = "x"; then
   AC_PATH_PROGS(GRAPHVIZ, dot)
+  if test x${GRAPHVIZ} = "x"; then
+     AC_ERROR( [ Required package \"graphviz\" not found and not specified with --with-graphviz configuration switch. ])
+  fi     
   GRAPHVIZ=`dirname ${GRAPHVIZ}`
   GRAPHVIZ=`dirname ${GRAPHVIZ}`
   META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
