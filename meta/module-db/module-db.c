@@ -1228,45 +1228,46 @@ complete_asf_specification(ATermList visited, ATerm module)
   ATbool result;
   ATermList imports;
 
-  if(ATindexOf(visited, module, 0) < 0) { 
-    result = ATtrue;
-    imports = (ATermList)GetValue(import_db,module);
+  if (ATindexOf(visited, module, 0) < 0) { 
+    entry = MDB_EntryFromTerm(GetValue(modules_db, module));
 
-    if (imports == NULL) {
+    if (entry == NULL) {
       return ATfalse;
     }
 
-    visited = ATinsert(visited,module); 
-    
-    while (!ATisEmpty(imports) && result) {
-      first = ATgetFirst(imports);
-
-      entry = MDB_EntryFromTerm(GetValue(modules_db, first));
-
-      if (entry == NULL) {
-	 return ATfalse;
+    if (MDB_isValidEntry(entry)) {
+      EqsTree = MDB_getEntryAsfTree(entry);
+      EqsText = MDB_getEntryAsfText(entry);
+      if (ATisEqual(EqsTree, MDB_NONE) &&
+          !ATisEqual(EqsText, MDB_NONE)) {
+        return ATfalse;
       }
+      else {
+        result = ATtrue;
+        imports = (ATermList)GetValue(import_db,module);
 
-      if (MDB_isValidEntry(entry)) {
-        EqsTree = MDB_getEntryAsfTree(entry);
-        EqsText = MDB_getEntryAsfText(entry);
-        if (ATisEqual(EqsTree, MDB_NONE) &&
-            !ATisEqual(EqsText, MDB_NONE)) {
-          result = ATfalse;
+        if (imports == NULL) {
+          return ATfalse;
         }
-        else {
+
+        visited = ATinsert(visited,module); 
+    
+        while (!ATisEmpty(imports) && result) {
+          first = ATgetFirst(imports);
+
           result = complete_asf_specification(visited,first);
           imports = ATgetNext(imports);
         }
-      }
-      else {
-        result = ATfalse;
+        return result;
       }
     }
-    return result;
+    else {
+      return ATfalse;
+    }
   }
-  else
+  else {
     return ATtrue;
+  }
 }
 
 /*}}}  */

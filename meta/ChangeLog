@@ -2,7 +2,9 @@
 
 2001/12/07 (vandenbr@loria.fr)
  * Replaced a snd-do by a snd-eval and rec-value in order to
-  synchronize, with respect to storing equation text.
+   synchronize, with respect to storing equation text.
+ * Fixed a bug in the complete_asf_specification top module was not
+   inspected. Restructured code and problem should be fixed now.
 
 2001/12/04  (vandenbr@loria.fr)
  * Fixed the deadlock in both stand-alone scripts.
