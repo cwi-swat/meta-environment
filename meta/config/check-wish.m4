@@ -19,11 +19,11 @@ dnl $Id$
 
 dnl Author Merijn de Jonge (mdejonge@cwi.nl)
 
-dnl Check for version of wish. WISH variable should be defined.
-AC_DEFUN(META_WISH_VERSION,
+dnl Check for version of wish. 
+AC_DEFUN(META_WISH_VERSION_CHECK,
 [
    dnl See if we found a valid verion of wish; version 8.0 or above
-   wish_version=`echo 'puts "$tk_version" ; exit;' | ${WISH} 2>/dev/null`
+   wish_version=`echo 'puts "$tk_version" ; exit;' | $1 2>/dev/null`
    if test "a${wish_version}" = "a"; then
       AC_ERROR( [ No wish program available or other error. ] )
    fi

@@ -21,6 +21,8 @@
 # $Id$
 
 2001/02/01 (mdejonge@cwi.nl)
+   * Simplified configure.in by using (meta env specific) m4 macros
+   * Improved configuration macros in ./config
    * Added ./config directory containing m4 macro files implementing meta
      -environment specific configuration macros used in the top-level
      configure.in script.

@@ -19,16 +19,16 @@ dnl $Id$
 
 dnl Author Merijn de Jonge (mdejonge@cwi.nl)
 
-dnl Check for version of graphviz. GRAPHVIZ variable should be defined.
+dnl Check for version of graphviz.
 
-AC_DEFUN(META_GRAPHVIZ_VERSION,
+AC_DEFUN(META_GRAPHVIZ_VERSION_CHECK,
 [
    dnl Extract dot version in the following steps:
    dnl 1) get full version: "dot version gviz1.5.1 (09-29-99)"
    dnl 2) extract version part: "gviz1.5.1"
    dnl 3) remove gviz prefix: "1.5.1"
 
-   dot_version_string=`${GRAPHVIZ}/bin/dot -V 2>&1`
+   dot_version_string=`$1/bin/dot -V 2>&1`
    if test $? -ne 0; then
       AC_ERROR( [ No dot program available or other error.] )
    fi
@@ -38,24 +38,26 @@ AC_DEFUN(META_GRAPHVIZ_VERSION,
 
    case $dot_version_number in
       0.* | 1.[[0-4]]* )
-         AC_ERROR( [ dot version >= 1.5 required (found $dot_version_string), check your graphviz configuration. ] )
+         AC_ERROR( [ dot version >= 1.5 required (found $dot_version_number), check your graphviz configuration. ] )
          ;;
    esac
 ])
 
 dnl Check for graphviz package and test for corrrect verion >= 1.5
-AC_DEFUN(META_CHECK_GRAPHVIZ,
-[
-   AC_PACKAGE_REQUIRE(graphviz, 
-                      dot, 
-                      [  --with-graphviz=DIR     graphviz package is in DIR],
-                      GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\`` )
+dnl AC_DEFUN(META_CHECK_GRAPHVIZ,
+dnl [
+dnl    AC_PACKAGE_REQUIRE(graphviz, 
+dnl                      dot, 
+dnl                      [  --with-graphviz=DIR     graphviz package is in DIR],
+dnl                      GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\`` )
 
-   META_GRAPHVIZ_VERSION
+dnl   META_GRAPHVIZ_VERSION
 
-   dnl Try to find tcldot library
-   f=`echo ${GRAPHVIZ}/lib/Tcldot/Tcldot.so.*`
-   if test "a$f" = 'a${GRAPHVIZ}/lib/Tcldot/Tcldot.so.*' ; then
+
+AC_DEFUN(META_TCLDOT_CHECK,
+[   dnl Try to find tcldot library
+   f=`echo $1/lib/Tcldot/Tcldot.so.*`
+   if test "a$f" = 'a$1/lib/Tcldot/Tcldot.so.*' ; then
       AC_ERROR( "No Tcldot library found; check your graphviz configuration." )
    fi
 ])
