@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include <aterm2.h>
+#include <a2toa1.h>
 
 #include "mem-alloc.h"
 #include "forest.h"
@@ -626,7 +627,7 @@ ATermList  SG_AmbTrakker(forest t, size_t *currpos)
          new_currpos = *currpos;
       }
       /*  Add this node to current ambiguity  */
-      thisamb = ATinsert(thisamb, ATgetArgument(thistree, 0));
+      thisamb = ATinsert(thisamb, AF2ProdToText(ATgetArgument(thistree, 0)));
 
       /*  Join existing ambiguities from subtrees  */
       if(res && !ATisEmpty((ATermList) res)) {
