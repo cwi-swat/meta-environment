@@ -24,8 +24,8 @@ equations
 
   [default-x] get-imports($ModuleId, {$ImportRelation*}) = imports()
 
-  [gai-1'1] get-exported-imports($Module, imports()) = $ImportsSet1,
-            get-hidden-imports($Module, $ImportsSet1) = $ImportsSet2
+  [gai-1'1] $ImportsSet1 := get-exported-imports($Module, imports()),
+            $ImportsSet2 := get-hidden-imports($Module, $ImportsSet1)
             ========================================================
             get-all-imports($Module) = $ImportsSet2
 

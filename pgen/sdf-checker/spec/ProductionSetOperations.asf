@@ -13,7 +13,7 @@ equations
 
   [c-2'1] conc(, Prod*) = Prod*
 
-  [c-2'2] conc(Prod*1, Prod*2) = Prod*3
+  [c-2'2] Prod*3 := conc(Prod*1, Prod*2)
           =============================
           conc(Prod Prod*1, Prod*2) = 
             if includes(Prod, Prod*2) 

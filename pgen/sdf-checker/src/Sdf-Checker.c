@@ -3,22 +3,22 @@
 #include  "asc-support-me.h"
 static Symbol lf_63_recursivesym ;
 static ATerm lf_63_recursive ( ATerm arg1 ) ;
-static Symbol lf_195_recursivesym ;
-static ATerm lf_195_recursive ( ATerm arg1 ) ;
+static Symbol lf_194_recursivesym ;
+static ATerm lf_194_recursive ( ATerm arg1 ) ;
 static Symbol lf_48_recursivesym ;
 static ATerm lf_48_recursive ( ATerm arg1 ) ;
-static Symbol lf_190_recursivesym ;
-static ATerm lf_190_recursive ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_189_recursivesym ;
+static ATerm lf_189_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_133_recursivesym ;
 static ATerm lf_133_recursive ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_147_recursivesym ;
-static ATerm lf_147_recursive ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_146_recursivesym ;
+static ATerm lf_146_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_131_recursivesym ;
 static ATerm lf_131_recursive ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_178_recursivesym ;
-static ATerm lf_178_recursive ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_176_recursivesym ;
-static ATerm lf_176_recursive ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_177_recursivesym ;
+static ATerm lf_177_recursive ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_175_recursivesym ;
+static ATerm lf_175_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_23_recursivesym ;
 static ATerm lf_23_recursive ( ATerm arg1 ) ;
 static Symbol lf_26_recursivesym ;
@@ -317,66 +317,66 @@ static Symbol lf_143sym ;
 static ATerm lf_143 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_144sym ;
 static ATerm lf_144 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_145sym ;
-static ATerm lf_145 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_accu_td_146sym ;
-static ATerm lf_accu_td_146 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_147sym ;
-static ATerm lf_147 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_list_148sym ;
-static ATerm lf_list_148 ( ATerm arg1 ) ;
+static Symbol lf_accu_td_145sym ;
+static ATerm lf_accu_td_145 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_146sym ;
+static ATerm lf_146 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_list_147sym ;
+static ATerm lf_list_147 ( ATerm arg1 ) ;
+static Symbol lf_148sym ;
+static ATerm lf_148 ( ATerm arg1 ) ;
 static Symbol lf_149sym ;
-static ATerm lf_149 ( ATerm arg1 ) ;
-static Symbol lf_150sym ;
-static ATerm lf_150 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_accu_td_151sym ;
-static ATerm lf_accu_td_151 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_152sym ;
-static ATerm lf_152 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_list_153sym ;
-static ATerm lf_list_153 ( ATerm arg1 ) ;
-static Symbol lf_154sym ;
-static ATerm lf_154 ( ATerm arg1 ) ;
-static Symbol lf_accu_td_155sym ;
-static ATerm lf_accu_td_155 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_156sym ;
-static ATerm lf_156 ( ATerm arg1 ) ;
-static Symbol lf_accu_td_157sym ;
-static ATerm lf_accu_td_157 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 ) ;
+static ATerm lf_149 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_accu_td_150sym ;
+static ATerm lf_accu_td_150 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_151sym ;
+static ATerm lf_151 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_list_152sym ;
+static ATerm lf_list_152 ( ATerm arg1 ) ;
+static Symbol lf_153sym ;
+static ATerm lf_153 ( ATerm arg1 ) ;
+static Symbol lf_accu_td_154sym ;
+static ATerm lf_accu_td_154 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_155sym ;
+static ATerm lf_155 ( ATerm arg1 ) ;
+static Symbol lf_accu_td_156sym ;
+static ATerm lf_accu_td_156 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 ) ;
+static Symbol lf_157sym ;
+static ATerm lf_157 ( ATerm arg1 ) ;
 static Symbol lf_158sym ;
 static ATerm lf_158 ( ATerm arg1 ) ;
 static Symbol lf_159sym ;
 static ATerm lf_159 ( ATerm arg1 ) ;
-static Symbol lf_160sym ;
-static ATerm lf_160 ( ATerm arg1 ) ;
-static Symbol lf_list_161sym ;
-static ATerm lf_list_161 ( ATerm arg1 ) ;
+static Symbol lf_list_160sym ;
+static ATerm lf_list_160 ( ATerm arg1 ) ;
+static Symbol lf_161sym ;
+static ATerm lf_161 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_162sym ;
-static ATerm lf_162 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_162 ( ATerm arg1 ) ;
 static Symbol lf_163sym ;
-static ATerm lf_163 ( ATerm arg1 ) ;
+static ATerm lf_163 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_164sym ;
 static ATerm lf_164 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_165sym ;
 static ATerm lf_165 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_166sym ;
-static ATerm lf_166 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_accu_td_167sym ;
-static ATerm lf_accu_td_167 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 ) ;
+static Symbol lf_accu_td_166sym ;
+static ATerm lf_accu_td_166 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 ) ;
+static Symbol lf_167sym ;
+static ATerm lf_167 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_168sym ;
 static ATerm lf_168 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_169sym ;
-static ATerm lf_169 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_list_170sym ;
-static ATerm lf_list_170 ( ATerm arg1 ) ;
+static Symbol lf_list_169sym ;
+static ATerm lf_list_169 ( ATerm arg1 ) ;
+static Symbol lf_170sym ;
+static ATerm lf_170 ( ATerm arg1 ) ;
 static Symbol lf_171sym ;
-static ATerm lf_171 ( ATerm arg1 ) ;
+static ATerm lf_171 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_172sym ;
-static ATerm lf_172 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_172 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
 static Symbol lf_173sym ;
-static ATerm lf_173 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
+static ATerm lf_173 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_174sym ;
-static ATerm lf_174 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static ATerm lf_174 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_175sym ;
 static ATerm lf_175 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_176sym ;
@@ -387,22 +387,22 @@ static Symbol lf_178sym ;
 static ATerm lf_178 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_179sym ;
 static ATerm lf_179 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_180sym ;
-static ATerm lf_180 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_accu_td_180sym ;
+static ATerm lf_accu_td_180 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_accu_td_181sym ;
-static ATerm lf_accu_td_181 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_accu_td_182sym ;
-static ATerm lf_accu_td_182 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_list_183sym ;
-static ATerm lf_list_183 ( ATerm arg1 ) ;
+static ATerm lf_accu_td_181 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_list_182sym ;
+static ATerm lf_list_182 ( ATerm arg1 ) ;
+static Symbol lf_183sym ;
+static ATerm lf_183 ( ATerm arg1 ) ;
 static Symbol lf_184sym ;
-static ATerm lf_184 ( ATerm arg1 ) ;
-static Symbol lf_185sym ;
-static ATerm lf_185 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_accu_td_186sym ;
-static ATerm lf_accu_td_186 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
+static ATerm lf_184 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_accu_td_185sym ;
+static ATerm lf_accu_td_185 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
+static Symbol lf_186sym ;
+static ATerm lf_186 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_187sym ;
-static ATerm lf_187 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static ATerm lf_187 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_188sym ;
 static ATerm lf_188 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_189sym ;
@@ -410,61 +410,59 @@ static ATerm lf_189 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_190sym ;
 static ATerm lf_190 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_191sym ;
-static ATerm lf_191 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_191 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_192sym ;
-static ATerm lf_192 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static ATerm lf_192 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_193sym ;
-static ATerm lf_193 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_193 ( ATerm arg1 ) ;
 static Symbol lf_194sym ;
 static ATerm lf_194 ( ATerm arg1 ) ;
-static Symbol lf_195sym ;
-static ATerm lf_195 ( ATerm arg1 ) ;
+static Symbol lf_accu_td_195sym ;
+static ATerm lf_accu_td_195 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_accu_td_196sym ;
-static ATerm lf_accu_td_196 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_accu_td_197sym ;
-static ATerm lf_accu_td_197 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_198sym ;
-static ATerm lf_198 ( ) ;
-static Symbol lf_list_199sym ;
-static ATerm lf_list_199 ( ATerm arg1 ) ;
+static ATerm lf_accu_td_196 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_197sym ;
+static ATerm lf_197 ( ) ;
+static Symbol lf_list_198sym ;
+static ATerm lf_list_198 ( ATerm arg1 ) ;
+static Symbol lf_199sym ;
+static ATerm lf_199 ( ATerm arg1 ) ;
 static Symbol lf_200sym ;
-static ATerm lf_200 ( ATerm arg1 ) ;
+static ATerm lf_200 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_201sym ;
-static ATerm lf_201 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_201 ( ATerm arg1 ) ;
 static Symbol lf_202sym ;
-static ATerm lf_202 ( ATerm arg1 ) ;
+static ATerm lf_202 ( ) ;
 static Symbol lf_203sym ;
-static ATerm lf_203 ( ) ;
+static ATerm lf_203 ( ATerm arg1 ) ;
 static Symbol lf_204sym ;
 static ATerm lf_204 ( ATerm arg1 ) ;
 static Symbol lf_205sym ;
-static ATerm lf_205 ( ATerm arg1 ) ;
+static ATerm lf_205 ( ) ;
 static Symbol lf_206sym ;
 static ATerm lf_206 ( ) ;
 static Symbol lf_207sym ;
 static ATerm lf_207 ( ) ;
-static Symbol lf_208sym ;
-static ATerm lf_208 ( ) ;
 void register_Sdf_Checker ( ) {
 lf_63_recursivesym = ATmakeSymbol ( "prod([lit(\"symbolpairs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_63_recursivesym ) ;
-lf_195_recursivesym = ATmakeSymbol ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_195_recursivesym ) ;
+lf_194_recursivesym = ATmakeSymbol ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_194_recursivesym ) ;
 lf_48_recursivesym = ATmakeSymbol ( "prod([lit(\"symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Symbol\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolsSet\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_48_recursivesym ) ;
-lf_190_recursivesym = ATmakeSymbol ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_190_recursivesym ) ;
+lf_189_recursivesym = ATmakeSymbol ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_189_recursivesym ) ;
 lf_133_recursivesym = ATmakeSymbol ( "prod([lit(\"diff\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_133_recursivesym ) ;
-lf_147_recursivesym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_147_recursivesym ) ;
+lf_146_recursivesym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_146_recursivesym ) ;
 lf_131_recursivesym = ATmakeSymbol ( "prod([lit(\"get-defined-productions\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_131_recursivesym ) ;
-lf_178_recursivesym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_178_recursivesym ) ;
-lf_176_recursivesym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_176_recursivesym ) ;
+lf_177_recursivesym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_177_recursivesym ) ;
+lf_175_recursivesym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_175_recursivesym ) ;
 lf_23_recursivesym = ATmakeSymbol ( "prod([lit(\"mark-modules-as-unchecked\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_23_recursivesym ) ;
 lf_26_recursivesym = ATmakeSymbol ( "prod([lit(\"imports\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ImportsSet\")),no-attrs)" , 1 , ATtrue ) ;
@@ -759,138 +757,136 @@ lf_141sym = ATmakeSymbol ( "prod([cf(sort(\"UQLiteral\"))],cf(sort(\"Literal\"))
 ATprotectSymbol ( lf_141sym ) ;
 lf_accu_td_142sym = ATmakeSymbol ( "prod([lit(\"check-for-deprecated-symbols2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_142sym ) ;
-lf_143sym = ATmakeSymbol ( "prod([lit(\"deprecated-unquoted-symbol-notation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
+lf_143sym = ATmakeSymbol ( "prod([lit(\"deprecated-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_143sym ) ;
 lf_144sym = ATmakeSymbol ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"#\"),cf(opt(layout)),cf(sort(\"Symbol\"))],cf(sort(\"Symbol\")),attrs([assoc(right),term(cons(\"pair\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_144sym ) ;
-lf_145sym = ATmakeSymbol ( "prod([lit(\"deprecated-tuple-notation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_145sym ) ;
-lf_accu_td_146sym = ATmakeSymbol ( "prod([lit(\"check-for-deprecated-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_146sym ) ;
-lf_147sym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_147sym ) ;
-lf_list_148sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"SymbolConsPair\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_148sym ) ;
-lf_149sym = ATmakeSymbol ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolConsPair\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 1 , ATtrue ) ;
+lf_accu_td_145sym = ATmakeSymbol ( "prod([lit(\"check-for-deprecated-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_145sym ) ;
+lf_146sym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_146sym ) ;
+lf_list_147sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"SymbolConsPair\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_147sym ) ;
+lf_148sym = ATmakeSymbol ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolConsPair\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_148sym ) ;
+lf_149sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([id(\"ConstructorChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_149sym ) ;
-lf_150sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([id(\"ConstructorChecker\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_150sym ) ;
-lf_accu_td_151sym = ATmakeSymbol ( "prod([lit(\"get-constructor-symbol-pairs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_151sym ) ;
-lf_152sym = ATmakeSymbol ( "prod([lit(\"put-constructor-info\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_152sym ) ;
-lf_list_153sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Priority\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_153sym ) ;
-lf_154sym = ATmakeSymbol ( "prod([cf(iter-star-sep(sort(\"Priority\"),lit(\",\")))],cf(sort(\"Priorities\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_154sym ) ;
-lf_accu_td_155sym = ATmakeSymbol ( "prod([lit(\"check-constructor-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_155sym ) ;
-lf_156sym = ATmakeSymbol ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"priorities\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_156sym ) ;
-lf_accu_td_157sym = ATmakeSymbol ( "prod([lit(\"get-constructor-symbol-pairs2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 5 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_157sym ) ;
-lf_158sym = ATmakeSymbol ( "prod([lex(sort(\"UQLiteral\"))],cf(sort(\"UQLiteral\")),no-attrs)" , 1 , ATtrue ) ;
+lf_accu_td_150sym = ATmakeSymbol ( "prod([lit(\"get-constructor-symbol-pairs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_150sym ) ;
+lf_151sym = ATmakeSymbol ( "prod([lit(\"put-constructor-info\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_151sym ) ;
+lf_list_152sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Priority\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_152sym ) ;
+lf_153sym = ATmakeSymbol ( "prod([cf(iter-star-sep(sort(\"Priority\"),lit(\",\")))],cf(sort(\"Priorities\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_153sym ) ;
+lf_accu_td_154sym = ATmakeSymbol ( "prod([lit(\"check-constructor-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_154sym ) ;
+lf_155sym = ATmakeSymbol ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"priorities\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_155sym ) ;
+lf_accu_td_156sym = ATmakeSymbol ( "prod([lit(\"get-constructor-symbol-pairs2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 5 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_156sym ) ;
+lf_157sym = ATmakeSymbol ( "prod([lex(sort(\"UQLiteral\"))],cf(sort(\"UQLiteral\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_157sym ) ;
+lf_158sym = ATmakeSymbol ( "prod([cf(sort(\"Literal\"))],cf(sort(\"AFun\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_158sym ) ;
-lf_159sym = ATmakeSymbol ( "prod([cf(sort(\"Literal\"))],cf(sort(\"AFun\")),no-attrs)" , 1 , ATtrue ) ;
+lf_159sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_159sym ) ;
-lf_160sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_160sym ) ;
-lf_list_161sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_161sym ) ;
-lf_162sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
+lf_list_160sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_160sym ) ;
+lf_161sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_161sym ) ;
+lf_162sym = ATmakeSymbol ( "prod([cf(sort(\"ATerm\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"term\")),avoid]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_162sym ) ;
-lf_163sym = ATmakeSymbol ( "prod([cf(sort(\"ATerm\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"term\")),avoid]))" , 1 , ATtrue ) ;
+lf_163sym = ATmakeSymbol ( "prod([lit(\"constructor-has-already-been-used\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_163sym ) ;
-lf_164sym = ATmakeSymbol ( "prod([lit(\"constructor-has-already-been-used\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 3 , ATtrue ) ;
+lf_164sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_164sym ) ;
-lf_165sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" , 3 , ATtrue ) ;
+lf_165sym = ATmakeSymbol ( "prod([lit(\"add\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_165sym ) ;
-lf_166sym = ATmakeSymbol ( "prod([lit(\"add\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_166sym ) ;
-lf_accu_td_167sym = ATmakeSymbol ( "prod([lit(\"check-constructor-in-priorities2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 5 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_167sym ) ;
-lf_168sym = ATmakeSymbol ( "prod([lit(\"unknown-constructor-used-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
+lf_accu_td_166sym = ATmakeSymbol ( "prod([lit(\"check-constructor-in-priorities2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" , 5 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_166sym ) ;
+lf_167sym = ATmakeSymbol ( "prod([lit(\"unknown-constructor-used-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_167sym ) ;
+lf_168sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"SymbolConsPair\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_168sym ) ;
-lf_169sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"SymbolConsPair\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_169sym ) ;
-lf_list_170sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Module-Info-Entry\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_170sym ) ;
-lf_171sym = ATmakeSymbol ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star(sort(\"Module-Info-Entry\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Module-Info-Table\")),no-attrs)" , 1 , ATtrue ) ;
+lf_list_169sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Module-Info-Entry\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_169sym ) ;
+lf_170sym = ATmakeSymbol ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star(sort(\"Module-Info-Entry\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Module-Info-Table\")),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_170sym ) ;
+lf_171sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Info-Msg-Tuple\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_171sym ) ;
-lf_172sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Info-Msg-Tuple\")),no-attrs)" , 2 , ATtrue ) ;
+lf_172sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info\")),no-attrs)" , 4 , ATtrue ) ;
 ATprotectSymbol ( lf_172sym ) ;
-lf_173sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info\")),no-attrs)" , 4 , ATtrue ) ;
+lf_173sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info-Entry\")),no-attrs)" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_173sym ) ;
-lf_174sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info-Entry\")),no-attrs)" , 3 , ATtrue ) ;
+lf_174sym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_174sym ) ;
-lf_175sym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" , 2 , ATtrue ) ;
+lf_175sym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_175sym ) ;
-lf_176sym = ATmakeSymbol ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
+lf_176sym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_176sym ) ;
-lf_177sym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" , 2 , ATtrue ) ;
+lf_177sym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_177sym ) ;
-lf_178sym = ATmakeSymbol ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" , 2 , ATtrue ) ;
+lf_178sym = ATmakeSymbol ( "prod([lit(\"get-defined-productions\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_178sym ) ;
-lf_179sym = ATmakeSymbol ( "prod([lit(\"get-defined-productions\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" , 2 , ATtrue ) ;
+lf_179sym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_179sym ) ;
-lf_180sym = ATmakeSymbol ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_180sym ) ;
-lf_accu_td_181sym = ATmakeSymbol ( "prod([lit(\"check-labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
+lf_accu_td_180sym = ATmakeSymbol ( "prod([lit(\"check-labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_180sym ) ;
+lf_accu_td_181sym = ATmakeSymbol ( "prod([lit(\"check-labels2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_181sym ) ;
-lf_accu_td_182sym = ATmakeSymbol ( "prod([lit(\"check-labels2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_182sym ) ;
-lf_list_183sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Literal\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_183sym ) ;
-lf_184sym = ATmakeSymbol ( "prod([lit(\"labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Literal\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" , 1 , ATtrue ) ;
+lf_list_182sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Literal\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_182sym ) ;
+lf_183sym = ATmakeSymbol ( "prod([lit(\"labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Literal\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_183sym ) ;
+lf_184sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_184sym ) ;
-lf_185sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_185sym ) ;
-lf_accu_td_186sym = ATmakeSymbol ( "prod([lit(\"check-labels3\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Labels-Msgs-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 4 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_186sym ) ;
-lf_187sym = ATmakeSymbol ( "prod([lit(\"double-used-label\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 3 , ATtrue ) ;
+lf_accu_td_185sym = ATmakeSymbol ( "prod([lit(\"check-labels3\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Labels-Msgs-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" , 4 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_185sym ) ;
+lf_186sym = ATmakeSymbol ( "prod([lit(\"double-used-label\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_186sym ) ;
+lf_187sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_187sym ) ;
-lf_188sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
+lf_188sym = ATmakeSymbol ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"LabelsSet\"))],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_188sym ) ;
-lf_189sym = ATmakeSymbol ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"LabelsSet\"))],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" , 2 , ATtrue ) ;
+lf_189sym = ATmakeSymbol ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_189sym ) ;
-lf_190sym = ATmakeSymbol ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
+lf_190sym = ATmakeSymbol ( "prod([lit(\"includes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_190sym ) ;
-lf_191sym = ATmakeSymbol ( "prod([lit(\"includes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"ProductionSetOperations\")]))" , 2 , ATtrue ) ;
+lf_191sym = ATmakeSymbol ( "prod([lit(\"if\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\"then\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"else\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"fi\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_191sym ) ;
-lf_192sym = ATmakeSymbol ( "prod([lit(\"if\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\"then\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"else\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"fi\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" , 3 , ATtrue ) ;
+lf_192sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_192sym ) ;
-lf_193sym = ATmakeSymbol ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" , 2 , ATtrue ) ;
+lf_193sym = ATmakeSymbol ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"*\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter-star\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_193sym ) ;
-lf_194sym = ATmakeSymbol ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"*\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter-star\"))]))" , 1 , ATtrue ) ;
+lf_194sym = ATmakeSymbol ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_194sym ) ;
-lf_195sym = ATmakeSymbol ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_195sym ) ;
-lf_accu_td_196sym = ATmakeSymbol ( "prod([lit(\"check-attributes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" , 2 , ATtrue ) ;
+lf_accu_td_195sym = ATmakeSymbol ( "prod([lit(\"check-attributes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_accu_td_195sym ) ;
+lf_accu_td_196sym = ATmakeSymbol ( "prod([lit(\"check-attributes2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_accu_td_196sym ) ;
-lf_accu_td_197sym = ATmakeSymbol ( "prod([lit(\"check-attributes2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_accu_td_197sym ) ;
-lf_198sym = ATmakeSymbol ( "prod([lit(\"bracket\")],cf(sort(\"Attribute\")),attrs([term(cons(\"bracket\"))]))" , 0 , ATtrue ) ;
-ATprotectSymbol ( lf_198sym ) ;
-lf_list_199sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_199sym ) ;
-lf_200sym = ATmakeSymbol ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" , 1 , ATtrue ) ;
+lf_197sym = ATmakeSymbol ( "prod([lit(\"bracket\")],cf(sort(\"Attribute\")),attrs([term(cons(\"bracket\"))]))" , 0 , ATtrue ) ;
+ATprotectSymbol ( lf_197sym ) ;
+lf_list_198sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_198sym ) ;
+lf_199sym = ATmakeSymbol ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_199sym ) ;
+lf_200sym = ATmakeSymbol ( "prod([lit(\"illegal-attribute\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_200sym ) ;
-lf_201sym = ATmakeSymbol ( "prod([lit(\"illegal-attribute\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" , 2 , ATtrue ) ;
+lf_201sym = ATmakeSymbol ( "prod([lit(\"is-bracket-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_201sym ) ;
-lf_202sym = ATmakeSymbol ( "prod([lit(\"is-bracket-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" , 1 , ATtrue ) ;
+lf_202sym = ATmakeSymbol ( "prod([lit(\"left\")],cf(sort(\"Associativity\")),attrs([term(cons(\"left\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_202sym ) ;
-lf_203sym = ATmakeSymbol ( "prod([lit(\"left\")],cf(sort(\"Associativity\")),attrs([term(cons(\"left\"))]))" , 0 , ATtrue ) ;
+lf_203sym = ATmakeSymbol ( "prod([cf(sort(\"Associativity\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"assoc\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_203sym ) ;
-lf_204sym = ATmakeSymbol ( "prod([cf(sort(\"Associativity\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"assoc\"))]))" , 1 , ATtrue ) ;
+lf_204sym = ATmakeSymbol ( "prod([lit(\"is-binary-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_204sym ) ;
-lf_205sym = ATmakeSymbol ( "prod([lit(\"is-binary-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" , 1 , ATtrue ) ;
+lf_205sym = ATmakeSymbol ( "prod([lit(\"assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"assoc\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_205sym ) ;
-lf_206sym = ATmakeSymbol ( "prod([lit(\"assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"assoc\"))]))" , 0 , ATtrue ) ;
+lf_206sym = ATmakeSymbol ( "prod([lit(\"right\")],cf(sort(\"Associativity\")),attrs([term(cons(\"right\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_206sym ) ;
-lf_207sym = ATmakeSymbol ( "prod([lit(\"right\")],cf(sort(\"Associativity\")),attrs([term(cons(\"right\"))]))" , 0 , ATtrue ) ;
+lf_207sym = ATmakeSymbol ( "prod([lit(\"non-assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"non-assoc\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_207sym ) ;
-lf_208sym = ATmakeSymbol ( "prod([lit(\"non-assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"non-assoc\"))]))" , 0 , ATtrue ) ;
-ATprotectSymbol ( lf_208sym ) ;
 register_prod ( ATparse ( "prod([lit(\"check-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Module\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Definition\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Info-Msg-Tuple\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Info-Msg-Tuple\")),attrs([id(\"Sdf-Checker\")]))" ) , lf_1 , lf_1sym ) ;
 register_prod ( ATparse ( "prod([lit(\"get-module-name\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ModuleId\")),no-attrs)" ) , lf_2 , lf_2sym ) ;
 register_prod ( ATparse ( "prod([lit(\"get-module-info\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Info-Msg-Tuple\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" ) , lf_3 , lf_3sym ) ;
@@ -1042,77 +1038,76 @@ register_prod ( ATparse ( "prod([lit(\"get-cf-prods\"),cf(opt(layout)),lit(\"(\"
 register_prod ( ATparse ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\":\"),cf(opt(layout)),cf(sort(\"Symbol\"))],cf(sort(\"Symbol\")),attrs([term(cons(\"label\"))]))" ) , lf_140 , lf_140sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"UQLiteral\"))],cf(sort(\"Literal\")),attrs([term(cons(\"uqlit\"))]))" ) , lf_141 , lf_141sym ) ;
 register_prod ( ATparse ( "prod([lit(\"check-for-deprecated-symbols2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" ) , lf_accu_td_142 , lf_accu_td_142sym ) ;
-register_prod ( ATparse ( "prod([lit(\"deprecated-unquoted-symbol-notation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_143 , lf_143sym ) ;
+register_prod ( ATparse ( "prod([lit(\"deprecated-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_143 , lf_143sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"#\"),cf(opt(layout)),cf(sort(\"Symbol\"))],cf(sort(\"Symbol\")),attrs([assoc(right),term(cons(\"pair\"))]))" ) , lf_144 , lf_144sym ) ;
-register_prod ( ATparse ( "prod([lit(\"deprecated-tuple-notation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_145 , lf_145sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-for-deprecated-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" ) , lf_accu_td_146 , lf_accu_td_146sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_147 , lf_147sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_147_recursive , lf_147_recursivesym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"SymbolConsPair\"))))" ) , lf_list_148 , lf_list_148sym ) ;
-register_prod ( ATparse ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolConsPair\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_149 , lf_149sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([id(\"ConstructorChecker\")]))" ) , lf_150 , lf_150sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-constructor-symbol-pairs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_151 , lf_accu_td_151sym ) ;
-register_prod ( ATparse ( "prod([lit(\"put-constructor-info\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" ) , lf_152 , lf_152sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Priority\"),lit(\",\"))))" ) , lf_list_153 , lf_list_153sym ) ;
-register_prod ( ATparse ( "prod([cf(iter-star-sep(sort(\"Priority\"),lit(\",\")))],cf(sort(\"Priorities\")),no-attrs)" ) , lf_154 , lf_154sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-constructor-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_155 , lf_accu_td_155sym ) ;
-register_prod ( ATparse ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"priorities\"))]))" ) , lf_156 , lf_156sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-constructor-symbol-pairs2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_157 , lf_accu_td_157sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"UQLiteral\"))],cf(sort(\"UQLiteral\")),no-attrs)" ) , lf_158 , lf_158sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Literal\"))],cf(sort(\"AFun\")),no-attrs)" ) , lf_159 , lf_159sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" ) , lf_160 , lf_160sym ) ;
-register_prod ( ATparse ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" ) , lf_list_161 , lf_list_161sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" ) , lf_162 , lf_162sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"ATerm\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"term\")),avoid]))" ) , lf_163 , lf_163sym ) ;
-register_prod ( ATparse ( "prod([lit(\"constructor-has-already-been-used\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_164 , lf_164sym ) ;
-register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" ) , lf_165 , lf_165sym ) ;
-register_prod ( ATparse ( "prod([lit(\"add\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_166 , lf_166sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-constructor-in-priorities2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_167 , lf_accu_td_167sym ) ;
-register_prod ( ATparse ( "prod([lit(\"unknown-constructor-used-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_168 , lf_168sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"SymbolConsPair\")),no-attrs)" ) , lf_169 , lf_169sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"Module-Info-Entry\"))))" ) , lf_list_170 , lf_list_170sym ) ;
-register_prod ( ATparse ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star(sort(\"Module-Info-Entry\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Module-Info-Table\")),no-attrs)" ) , lf_171 , lf_171sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Info-Msg-Tuple\")),no-attrs)" ) , lf_172 , lf_172sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info\")),no-attrs)" ) , lf_173 , lf_173sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info-Entry\")),no-attrs)" ) , lf_174 , lf_174sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" ) , lf_175 , lf_175sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_176 , lf_176sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_176_recursive , lf_176_recursivesym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" ) , lf_177 , lf_177sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_178 , lf_178sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_178_recursive , lf_178_recursivesym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-defined-productions\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" ) , lf_179 , lf_179sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_180 , lf_180sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_181 , lf_accu_td_181sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-labels2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_182 , lf_accu_td_182sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"Literal\"))))" ) , lf_list_183 , lf_list_183sym ) ;
-register_prod ( ATparse ( "prod([lit(\"labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Literal\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" ) , lf_184 , lf_184sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([id(\"LabelChecker\")]))" ) , lf_185 , lf_185sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-labels3\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Labels-Msgs-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_186 , lf_accu_td_186sym ) ;
-register_prod ( ATparse ( "prod([lit(\"double-used-label\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_187 , lf_187sym ) ;
-register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"LabelChecker\")]))" ) , lf_188 , lf_188sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"LabelsSet\"))],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" ) , lf_189 , lf_189sym ) ;
-register_prod ( ATparse ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_190 , lf_190sym ) ;
-register_prod ( ATparse ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_190_recursive , lf_190_recursivesym ) ;
-register_prod ( ATparse ( "prod([lit(\"includes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"ProductionSetOperations\")]))" ) , lf_191 , lf_191sym ) ;
-register_prod ( ATparse ( "prod([lit(\"if\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\"then\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"else\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"fi\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_192 , lf_192sym ) ;
-register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" ) , lf_193 , lf_193sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"*\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter-star\"))]))" ) , lf_194 , lf_194sym ) ;
-register_prod ( ATparse ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" ) , lf_195 , lf_195sym ) ;
-register_prod ( ATparse ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" ) , lf_195_recursive , lf_195_recursivesym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-attributes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" ) , lf_accu_td_196 , lf_accu_td_196sym ) ;
-register_prod ( ATparse ( "prod([lit(\"check-attributes2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" ) , lf_accu_td_197 , lf_accu_td_197sym ) ;
-register_prod ( ATparse ( "prod([lit(\"bracket\")],cf(sort(\"Attribute\")),attrs([term(cons(\"bracket\"))]))" ) , lf_198 , lf_198sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))))" ) , lf_list_199 , lf_list_199sym ) ;
-register_prod ( ATparse ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" ) , lf_200 , lf_200sym ) ;
-register_prod ( ATparse ( "prod([lit(\"illegal-attribute\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_201 , lf_201sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-bracket-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" ) , lf_202 , lf_202sym ) ;
-register_prod ( ATparse ( "prod([lit(\"left\")],cf(sort(\"Associativity\")),attrs([term(cons(\"left\"))]))" ) , lf_203 , lf_203sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Associativity\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"assoc\"))]))" ) , lf_204 , lf_204sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-binary-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" ) , lf_205 , lf_205sym ) ;
-register_prod ( ATparse ( "prod([lit(\"assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"assoc\"))]))" ) , lf_206 , lf_206sym ) ;
-register_prod ( ATparse ( "prod([lit(\"right\")],cf(sort(\"Associativity\")),attrs([term(cons(\"right\"))]))" ) , lf_207 , lf_207sym ) ;
-register_prod ( ATparse ( "prod([lit(\"non-assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"non-assoc\"))]))" ) , lf_208 , lf_208sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-for-deprecated-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"DeprecatedSymbols\")]))" ) , lf_accu_td_145 , lf_accu_td_145sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_146 , lf_146sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_146_recursive , lf_146_recursivesym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"SymbolConsPair\"))))" ) , lf_list_147 , lf_list_147sym ) ;
+register_prod ( ATparse ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolConsPair\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_148 , lf_148sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([id(\"ConstructorChecker\")]))" ) , lf_149 , lf_149sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-constructor-symbol-pairs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_150 , lf_accu_td_150sym ) ;
+register_prod ( ATparse ( "prod([lit(\"put-constructor-info\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module-Info-Table\")),no-attrs)" ) , lf_151 , lf_151sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Priority\"),lit(\",\"))))" ) , lf_list_152 , lf_list_152sym ) ;
+register_prod ( ATparse ( "prod([cf(iter-star-sep(sort(\"Priority\"),lit(\",\")))],cf(sort(\"Priorities\")),no-attrs)" ) , lf_153 , lf_153sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-constructor-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_154 , lf_accu_td_154sym ) ;
+register_prod ( ATparse ( "prod([lit(\"priorities\"),cf(opt(layout)),cf(sort(\"Priorities\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"priorities\"))]))" ) , lf_155 , lf_155sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-constructor-symbol-pairs2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_156 , lf_accu_td_156sym ) ;
+register_prod ( ATparse ( "prod([lex(sort(\"UQLiteral\"))],cf(sort(\"UQLiteral\")),no-attrs)" ) , lf_157 , lf_157sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Literal\"))],cf(sort(\"AFun\")),no-attrs)" ) , lf_158 , lf_158sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" ) , lf_159 , lf_159sym ) ;
+register_prod ( ATparse ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" ) , lf_list_160 , lf_list_160sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" ) , lf_161 , lf_161sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"ATerm\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"term\")),avoid]))" ) , lf_162 , lf_162sym ) ;
+register_prod ( ATparse ( "prod([lit(\"constructor-has-already-been-used\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_163 , lf_163sym ) ;
+register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" ) , lf_164 , lf_164sym ) ;
+register_prod ( ATparse ( "prod([lit(\"add\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_165 , lf_165sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-constructor-in-priorities2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Constructors-Msg-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Constructors-Msg-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"ConstructorChecker\")]))" ) , lf_accu_td_166 , lf_accu_td_166sym ) ;
+register_prod ( ATparse ( "prod([lit(\"unknown-constructor-used-in-priorities\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_167 , lf_167sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"SymbolConsPair\")),no-attrs)" ) , lf_168 , lf_168sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"Module-Info-Entry\"))))" ) , lf_list_169 , lf_list_169sym ) ;
+register_prod ( ATparse ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star(sort(\"Module-Info-Entry\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Module-Info-Table\")),no-attrs)" ) , lf_170 , lf_170sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Info-Msg-Tuple\")),no-attrs)" ) , lf_171 , lf_171sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolPairsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ProductionsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ConstructorSet\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info\")),no-attrs)" ) , lf_172 , lf_172sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Module-Info-Entry\")),no-attrs)" ) , lf_173 , lf_173sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" ) , lf_174 , lf_174sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_175 , lf_175sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-declared-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_175_recursive , lf_175_recursivesym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SymbolPairsSet\")),no-attrs)" ) , lf_176 , lf_176sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_177 , lf_177sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-aliased-symbols\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Import\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"SymbolPair\"))),no-attrs)" ) , lf_177_recursive , lf_177_recursivesym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-defined-productions\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ProductionsSet\")),no-attrs)" ) , lf_178 , lf_178sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Module-Info-Table\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ConstructorSet\")),no-attrs)" ) , lf_179 , lf_179sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_180 , lf_accu_td_180sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-labels2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_181 , lf_accu_td_181sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"Literal\"))))" ) , lf_list_182 , lf_list_182sym ) ;
+register_prod ( ATparse ( "prod([lit(\"labels\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Literal\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" ) , lf_183 , lf_183sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\"]\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([id(\"LabelChecker\")]))" ) , lf_184 , lf_184sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-labels3\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Labels-Msgs-Tuple\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Labels-Msgs-Tuple\")),attrs([term(traversal(accu,break,top-down)),id(\"LabelChecker\")]))" ) , lf_accu_td_185 , lf_accu_td_185sym ) ;
+register_prod ( ATparse ( "prod([lit(\"double-used-label\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_186 , lf_186sym ) ;
+register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Literal\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"LabelsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"LabelChecker\")]))" ) , lf_187 , lf_187sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Literal\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"LabelsSet\"))],cf(sort(\"LabelsSet\")),attrs([id(\"LabelChecker\")]))" ) , lf_188 , lf_188sym ) ;
+register_prod ( ATparse ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_189 , lf_189sym ) ;
+register_prod ( ATparse ( "prod([lit(\"conc\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_189_recursive , lf_189_recursivesym ) ;
+register_prod ( ATparse ( "prod([lit(\"includes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"ProductionSetOperations\")]))" ) , lf_190 , lf_190sym ) ;
+register_prod ( ATparse ( "prod([lit(\"if\"),cf(opt(layout)),cf(sort(\"Boolean\")),cf(opt(layout)),lit(\"then\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"else\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\"fi\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"ProductionSetOperations\")]))" ) , lf_191 , lf_191sym ) ;
+register_prod ( ATparse ( "prod([lit(\"contains\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SymbolsSet\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),no-attrs)" ) , lf_192 , lf_192sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Symbol\")),cf(opt(layout)),lit(\"*\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter-star\"))]))" ) , lf_193 , lf_193sym ) ;
+register_prod ( ATparse ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" ) , lf_194 , lf_194sym ) ;
+register_prod ( ATparse ( "prod([lit(\"de-modularize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"SymbolPair\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Symbol\"))),attrs([id(\"SymbolSetOperations\")]))" ) , lf_194_recursive , lf_194_recursivesym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-attributes\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" ) , lf_accu_td_195 , lf_accu_td_195sym ) ;
+register_prod ( ATparse ( "prod([lit(\"check-attributes2\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Messages\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Messages\")),attrs([term(traversal(accu,break,top-down)),id(\"Sdf-AttributeChecker\")]))" ) , lf_accu_td_196 , lf_accu_td_196sym ) ;
+register_prod ( ATparse ( "prod([lit(\"bracket\")],cf(sort(\"Attribute\")),attrs([term(cons(\"bracket\"))]))" ) , lf_197 , lf_197sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))))" ) , lf_list_198 , lf_list_198sym ) ;
+register_prod ( ATparse ( "prod([lit(\"{\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Attribute\"),lit(\",\"))),cf(opt(layout)),lit(\"}\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" ) , lf_199 , lf_199sym ) ;
+register_prod ( ATparse ( "prod([lit(\"illegal-attribute\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleId\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Message\")),no-attrs)" ) , lf_200 , lf_200sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-bracket-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" ) , lf_201 , lf_201sym ) ;
+register_prod ( ATparse ( "prod([lit(\"left\")],cf(sort(\"Associativity\")),attrs([term(cons(\"left\"))]))" ) , lf_202 , lf_202sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Associativity\"))],cf(sort(\"Attribute\")),attrs([term(cons(\"assoc\"))]))" ) , lf_203 , lf_203sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-binary-definition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Boolean\")),attrs([id(\"Sdf-AttributeChecker\")]))" ) , lf_204 , lf_204sym ) ;
+register_prod ( ATparse ( "prod([lit(\"assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"assoc\"))]))" ) , lf_205 , lf_205sym ) ;
+register_prod ( ATparse ( "prod([lit(\"right\")],cf(sort(\"Associativity\")),attrs([term(cons(\"right\"))]))" ) , lf_206 , lf_206sym ) ;
+register_prod ( ATparse ( "prod([lit(\"non-assoc\")],cf(sort(\"Associativity\")),attrs([term(cons(\"non-assoc\"))]))" ) , lf_207 , lf_207sym ) ;
 }
 void resolve_Sdf_Checker ( ) {
 }
@@ -1152,10 +1147,10 @@ ATprotect ( & constant14 ) ;
 ATprotect ( & constant15 ) ;
 ATprotect ( & constant16 ) ;
 }
-ATerm lf_202 ( ATerm arg0 ) {
+ATerm lf_201 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
-FUNC_ENTRY ( lf_202sym , ATmakeAppl ( lf_202sym , arg0 ) ) ;
+FUNC_ENTRY ( lf_201sym , ATmakeAppl ( lf_201sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_79sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1200,13 +1195,13 @@ FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ;
 }
 }
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_202sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_201sym , arg0 ) ) ;
 }
 }
-ATerm lf_205 ( ATerm arg0 ) {
+ATerm lf_204 ( ATerm arg0 ) {
 {
 ATerm tmp [ 5 ] ;
-FUNC_ENTRY ( lf_205sym , ATmakeAppl ( lf_205sym , arg0 ) ) ;
+FUNC_ENTRY ( lf_204sym , ATmakeAppl ( lf_204sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_79sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1259,13 +1254,13 @@ FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ;
 }
 }
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_205sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_204sym , arg0 ) ) ;
 }
 }
-ATerm lf_accu_td_197 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+ATerm lf_accu_td_196 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_accu_td_197sym , ATmakeAppl ( lf_accu_td_197sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_ENTRY ( lf_accu_td_196sym , ATmakeAppl ( lf_accu_td_196sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_79sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1279,10 +1274,10 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-if ( check_sym ( atmp02 , lf_200sym ) ) {
+if ( check_sym ( atmp02 , lf_199sym ) ) {
 {
 ATerm atmp020 = arg_0 ( atmp02 ) ;
-if ( check_sym ( atmp020 , lf_list_199sym ) ) {
+if ( check_sym ( atmp020 , lf_list_198sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp020 ) ) ;
 {
 ATerm atmp02000 [ 2 ] ;
@@ -1291,9 +1286,9 @@ ATerm atmp02000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_198sym ) ) {
-if ( term_equal ( lf_202 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf0 ( lf_198sym ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_197sym ) ) {
+if ( term_equal ( lf_201 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf0 ( lf_197sym ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 ( atmp02000 [ 1 ] = list_tail ( atmp02000 [ 1 ] ) ) ;
@@ -1309,26 +1304,26 @@ ATerm atmp02000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp020010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp020010 , lf_204sym ) ) {
+if ( check_sym ( atmp020010 , lf_203sym ) ) {
 ( tmp [ 3 ] = arg_0 ( atmp020010 ) ) ;
-if ( term_equal ( tmp [ 3 ] , ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_207sym ) ) ) ) ) {
-if ( term_equal ( lf_205 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_207sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_206sym ) ) ) ) ) {
+if ( term_equal ( lf_204 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_206sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
-if ( term_equal ( tmp [ 3 ] , ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_208sym ) ) ) ) ) {
-if ( term_equal ( lf_205 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_208sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_207sym ) ) ) ) ) {
+if ( term_equal ( lf_204 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_207sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
-if ( term_equal ( tmp [ 3 ] , ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_203sym ) ) ) ) ) {
-if ( term_equal ( lf_205 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_203sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_202sym ) ) ) ) ) {
+if ( term_equal ( lf_204 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_202sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
-if ( term_equal ( tmp [ 3 ] , ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_206sym ) ) ) ) ) {
-if ( term_equal ( lf_205 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_206sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_205sym ) ) ) ) ) {
+if ( term_equal ( lf_204 ( make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_120sym ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_205sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1360,10 +1355,10 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 {
 ATerm atmp03 = arg_3 ( arg0 ) ;
-if ( check_sym ( atmp03 , lf_200sym ) ) {
+if ( check_sym ( atmp03 , lf_199sym ) ) {
 {
 ATerm atmp030 = arg_0 ( atmp03 ) ;
-if ( check_sym ( atmp030 , lf_list_199sym ) ) {
+if ( check_sym ( atmp030 , lf_list_198sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp030 ) ) ;
 {
 ATerm atmp03000 [ 2 ] ;
@@ -1372,8 +1367,8 @@ ATerm atmp03000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_198sym ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf0 ( lf_198sym ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_197sym ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf0 ( lf_197sym ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 ( atmp03000 [ 1 ] = list_tail ( atmp03000 [ 1 ] ) ) ;
 ( tmp [ 1 ] = atmp03000 [ 1 ] ) ;
@@ -1388,19 +1383,19 @@ ATerm atmp03000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp030010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp030010 , lf_204sym ) ) {
+if ( check_sym ( atmp030010 , lf_203sym ) ) {
 ( tmp [ 3 ] = arg_0 ( atmp030010 ) ) ;
-if ( term_equal ( tmp [ 3 ] , ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_207sym ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_207sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_206sym ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_206sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 3 ] , ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_208sym ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_208sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_207sym ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_207sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 3 ] , ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_203sym ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_203sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_202sym ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_202sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 3 ] , ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_206sym ) ) ) ) ) {
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_200sym , make_nf1 ( lf_list_199sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_204sym , make_nf0 ( lf_206sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_205sym ) ) ) ) ) {
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_200sym , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , make_nf1 ( lf_199sym , make_nf1 ( lf_list_198sym , cons ( slice ( atmp03000 [ 0 ] , atmp03000 [ 1 ] ) , cons ( make_list ( make_nf1 ( lf_203sym , make_nf0 ( lf_205sym ) ) ) , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 ( atmp03000 [ 1 ] = list_tail ( atmp03000 [ 1 ] ) ) ;
@@ -1418,23 +1413,23 @@ FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_201sym , arg2 , make_nf4 ( lf_78sym , a
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_197 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_196 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
 }
 }
-ATerm lf_accu_td_196 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_accu_td_195 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-FUNC_ENTRY ( lf_accu_td_196sym , ATmakeAppl ( lf_accu_td_196sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_accu_td_195sym , ATmakeAppl ( lf_accu_td_195sym , arg0 , arg1 ) ) ;
 if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"Module\"))" ) ) ) {
 ( tmp [ 0 ] = lf_2 ( arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_197 ( arg0 , arg1 , tmp [ 0 ] ) ) ;
+FUNC_EXIT ( lf_accu_td_196 ( arg0 , arg1 , tmp [ 0 ] ) ) ;
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_196 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_195 , arg0 , arg1 , ATempty ) ) ;
 }
 }
 ATerm lf_41 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_41sym , ATmakeAppl ( lf_41sym , arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_196 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_accu_td_195 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_41sym , arg0 ) ) ;
 }
 ATerm lf_90 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
@@ -1615,17 +1610,17 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_list_62sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-FUNC_EXIT ( lf_48 ( lf_195 ( make_nf1 ( lf_list_62sym , make_list ( atmp000 ) ) ) ) ) ;
+FUNC_EXIT ( lf_48 ( lf_194 ( make_nf1 ( lf_list_62sym , make_list ( atmp000 ) ) ) ) ) ;
 }
 }
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_73sym , arg0 ) ) ;
 }
-ATerm lf_195 ( ATerm arg0 ) {
+ATerm lf_194 ( ATerm arg0 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_195sym , ATmakeAppl ( lf_195sym , arg0 ) ) ;
+FUNC_ENTRY ( lf_194sym , ATmakeAppl ( lf_194sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_list_62sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1635,7 +1630,7 @@ if ( check_sym ( tmp [ 0 ] , lf_88sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_47 ( cons ( make_list ( tmp [ 2 ] ) , remove_list ( lf_195_recursive ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_47 ( cons ( make_list ( tmp [ 2 ] ) , remove_list ( lf_194_recursive ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ;
 }
 }
 else {
@@ -1643,13 +1638,13 @@ FUNC_EXIT_CONST ( constant7 , lf_list_47 ( make_list ( null ( ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_195sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_194sym , arg0 ) ) ;
 }
 }
-ATerm lf_195_recursive ( ATerm arg0 ) {
+ATerm lf_194_recursive ( ATerm arg0 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_195_recursivesym , ATmakeAppl ( lf_195_recursivesym , arg0 ) ) ;
+FUNC_ENTRY ( lf_194_recursivesym , ATmakeAppl ( lf_194_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -1658,20 +1653,20 @@ if ( check_sym ( tmp [ 0 ] , lf_88sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_47 ( cons ( make_list ( tmp [ 2 ] ) , remove_list ( lf_195_recursive ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_47 ( cons ( make_list ( tmp [ 2 ] ) , remove_list ( lf_194_recursive ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ;
 }
 }
 else {
 FUNC_EXIT_CONST ( constant7 , lf_list_47 ( make_list ( null ( ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_195_recursivesym , lf_list_62 ( arg0 ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_194_recursivesym , lf_list_62 ( arg0 ) ) ) ;
 }
 }
-ATerm lf_193 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_192 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 10 ] ;
-FUNC_ENTRY ( lf_193sym , ATmakeAppl ( lf_193sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_192sym , ATmakeAppl ( lf_192sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_48sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -1703,7 +1698,7 @@ if ( check_sym ( atmp10 , lf_list_47sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( is_single_element ( atmp100 ) ) {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_194sym ) ) {
+if ( check_sym ( tmp [ 0 ] , lf_193sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf_82sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
@@ -1750,7 +1745,7 @@ FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_193sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_192sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_48 ( ATerm arg0 ) {
@@ -1909,8 +1904,8 @@ FUNC_EXIT ( make_nf2 ( lf_74sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
 }
 }
 }
-ATerm lf_192 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-FUNC_ENTRY ( lf_192sym , ATmakeAppl ( lf_192sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_191 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+FUNC_ENTRY ( lf_191sym , ATmakeAppl ( lf_191sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , lf_list_43sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -1927,12 +1922,12 @@ FUNC_EXIT ( lf_list_43 ( make_list ( atmp20 ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_192sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_191sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_191 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_190 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_191sym , ATmakeAppl ( lf_191sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_190sym , ATmakeAppl ( lf_190sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_list_43sym ) ) {
 ( tmp [ 1 ] = arg_0 ( arg1 ) ) ;
 {
@@ -1957,13 +1952,13 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_191sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_190sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_190 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_189 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_190sym , ATmakeAppl ( lf_190sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_189sym , ATmakeAppl ( lf_189sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_43sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -1973,10 +1968,10 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
-( tmp [ 2 ] = lf_190_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) ) ;
+( tmp [ 2 ] = lf_189_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf_list_43sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-FUNC_EXIT ( lf_192 ( lf_191 ( tmp [ 0 ] , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) , make_nf1 ( lf_list_43sym , make_list ( tmp [ 3 ] ) ) , make_nf1 ( lf_list_43sym , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) ;
+FUNC_EXIT ( lf_191 ( lf_190 ( tmp [ 0 ] , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) , make_nf1 ( lf_list_43sym , make_list ( tmp [ 3 ] ) ) , make_nf1 ( lf_list_43sym , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) ;
 }
 }
 else {
@@ -1986,13 +1981,13 @@ FUNC_EXIT ( lf_list_43 ( make_list ( atmp10 ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_190sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_189sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_190_recursive ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_189_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_190_recursivesym , ATmakeAppl ( lf_190_recursivesym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_189_recursivesym , ATmakeAppl ( lf_189_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( check_sym ( arg1 , lf_list_43sym ) ) {
@@ -2001,9 +1996,9 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
-( tmp [ 2 ] = lf_190_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) ) ;
+( tmp [ 2 ] = lf_189_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) ) ;
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-FUNC_EXIT ( lf_192 ( lf_191 ( tmp [ 0 ] , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) , make_nf1 ( lf_list_43sym , make_list ( tmp [ 3 ] ) ) , make_nf1 ( lf_list_43sym , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) ;
+FUNC_EXIT ( lf_191 ( lf_190 ( tmp [ 0 ] , make_nf1 ( lf_list_43sym , make_list ( atmp10 ) ) ) , make_nf1 ( lf_list_43sym , make_list ( tmp [ 3 ] ) ) , make_nf1 ( lf_list_43sym , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT ( lf_list_43 ( make_list ( atmp10 ) ) ) ;
@@ -2011,7 +2006,7 @@ FUNC_EXIT ( lf_list_43 ( make_list ( atmp10 ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_190_recursivesym , lf_list_43 ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_189_recursivesym , lf_list_43 ( arg0 ) , arg1 ) ) ;
 }
 }
 ATerm lf_133 ( ATerm arg0 , ATerm arg1 ) {
@@ -2169,7 +2164,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf_list_43sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( make_nf1 ( lf_44sym , lf_190 ( make_nf1 ( lf_list_43sym , make_list ( atmp000 ) ) , make_nf1 ( lf_list_43sym , make_list ( atmp100 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_44sym , lf_189 ( make_nf1 ( lf_list_43sym , make_list ( atmp000 ) ) , make_nf1 ( lf_list_43sym , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }
@@ -2180,29 +2175,29 @@ FUNC_EXIT ( make_nf1 ( lf_44sym , lf_190 ( make_nf1 ( lf_list_43sym , make_list 
 }
 FUNC_EXIT ( make_nf2 ( lf_132sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_189 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_189sym , ATmakeAppl ( lf_189sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_184sym ) ) {
+ATerm lf_188 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_188sym , ATmakeAppl ( lf_188sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_183sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_183sym ) ) {
+if ( check_sym ( atmp10 , lf_list_182sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( make_nf1 ( lf_184sym , make_nf1 ( lf_list_183sym , cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_183sym , make_nf1 ( lf_list_182sym , cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_189sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_188sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_188 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_187 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_188sym , ATmakeAppl ( lf_188sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_184sym ) ) {
+FUNC_ENTRY ( lf_187sym , ATmakeAppl ( lf_187sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_183sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_183sym ) ) {
+if ( check_sym ( atmp10 , lf_list_182sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -2223,29 +2218,29 @@ FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ;
 }
 }
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_188sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_187sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_accu_td_186 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
+ATerm lf_accu_td_185 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
 ATerm tmp [ 1 ] ;
-FUNC_ENTRY ( lf_accu_td_186sym , ATmakeAppl ( lf_accu_td_186sym , arg0 , arg1 , arg2 , arg3 ) ) ;
+FUNC_ENTRY ( lf_accu_td_185sym , ATmakeAppl ( lf_accu_td_185sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg0 , lf_140sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_185sym ) ) {
+if ( check_sym ( arg1 , lf_184sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-( tmp [ 0 ] = lf_188 ( atmp00 , atmp10 ) ) ;
+( tmp [ 0 ] = lf_187 ( atmp00 , atmp10 ) ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_185sym , atmp10 , lf_32 ( atmp11 , make_nf3 ( lf_187sym , arg2 , atmp00 , arg3 ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_184sym , atmp10 , lf_32 ( atmp11 , make_nf3 ( lf_186sym , arg2 , atmp00 , arg3 ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_185sym , lf_189 ( atmp00 , atmp10 ) , atmp11 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_184sym , lf_188 ( atmp00 , atmp10 ) , atmp11 ) ) ;
 }
 }
 }
@@ -2253,13 +2248,13 @@ FUNC_EXIT ( make_nf2 ( lf_185sym , lf_189 ( atmp00 , atmp10 ) , atmp11 ) ) ;
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_186 , arg0 , arg1 , ATmakeList2 ( arg2 , arg3 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_185 , arg0 , arg1 , ATmakeList2 ( arg2 , arg3 ) ) ) ;
 }
 }
-ATerm lf_accu_td_182 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+ATerm lf_accu_td_181 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 3 ] ;
-FUNC_ENTRY ( lf_accu_td_182sym , ATmakeAppl ( lf_accu_td_182sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_ENTRY ( lf_accu_td_181sym , ATmakeAppl ( lf_accu_td_181sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_79sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -2273,8 +2268,8 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-( tmp [ 0 ] = lf_accu_td_186 ( make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) , make_nf2 ( lf_185sym , make_nf1 ( lf_184sym , make_nf1 ( lf_list_183sym , make_list ( null ( ) ) ) ) , arg1 ) , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_185sym ) ) {
+( tmp [ 0 ] = lf_accu_td_185 ( make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) , make_nf2 ( lf_184sym , make_nf1 ( lf_183sym , make_nf1 ( lf_list_182sym , make_list ( null ( ) ) ) ) , arg1 ) , arg2 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_184sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( tmp [ 2 ] ) ;
@@ -2299,8 +2294,8 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 {
 ATerm atmp03 = arg_3 ( arg0 ) ;
-( tmp [ 0 ] = lf_accu_td_186 ( make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , make_nf2 ( lf_185sym , make_nf1 ( lf_184sym , make_nf1 ( lf_list_183sym , make_list ( null ( ) ) ) ) , arg1 ) , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_185sym ) ) {
+( tmp [ 0 ] = lf_accu_td_185 ( make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , make_nf2 ( lf_184sym , make_nf1 ( lf_183sym , make_nf1 ( lf_list_182sym , make_list ( null ( ) ) ) ) , arg1 ) , arg2 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_184sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( tmp [ 2 ] ) ;
@@ -2312,25 +2307,25 @@ FUNC_EXIT ( tmp [ 2 ] ) ;
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_182 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_181 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
 }
 }
-ATerm lf_accu_td_181 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_accu_td_181sym , ATmakeAppl ( lf_accu_td_181sym , arg0 , arg1 ) ) ;
+ATerm lf_accu_td_180 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_accu_td_180sym , ATmakeAppl ( lf_accu_td_180sym , arg0 , arg1 ) ) ;
 if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"Module\"))" ) ) ) {
-FUNC_EXIT ( lf_accu_td_182 ( arg0 , arg1 , lf_2 ( arg0 ) ) ) ;
+FUNC_EXIT ( lf_accu_td_181 ( arg0 , arg1 , lf_2 ( arg0 ) ) ) ;
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_181 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_180 , arg0 , arg1 , ATempty ) ) ;
 }
 ATerm lf_39 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_39sym , ATmakeAppl ( lf_39sym , arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_181 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_accu_td_180 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_39sym , arg0 ) ) ;
 }
-ATerm lf_147 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_146 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 10 ] ;
-FUNC_ENTRY ( lf_147sym , ATmakeAppl ( lf_147sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_146sym , ATmakeAppl ( lf_146sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_25sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -2339,34 +2334,34 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_180 ( tmp [ 3 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_149sym ) ) {
+( tmp [ 4 ] = lf_179 ( tmp [ 3 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_148sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_list_147sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_147_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_149sym ) ) {
+( tmp [ 7 ] = lf_146_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
+if ( check_sym ( tmp [ 7 ] , lf_148sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_list_147sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
 }
 }
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant8 , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant8 , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_147sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_146sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_147_recursive ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_146_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 10 ] ;
-FUNC_ENTRY ( lf_147_recursivesym , ATmakeAppl ( lf_147_recursivesym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_146_recursivesym , ATmakeAppl ( lf_146_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -2374,37 +2369,37 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_180 ( tmp [ 3 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_149sym ) ) {
+( tmp [ 4 ] = lf_179 ( tmp [ 3 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_148sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_list_147sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_147 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_149sym ) ) {
+( tmp [ 7 ] = lf_146 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
+if ( check_sym ( tmp [ 7 ] , lf_148sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_list_147sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
 }
 }
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant8 , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant8 , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_147_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_146_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf_180 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_179 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_180sym , ATmakeAppl ( lf_180sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+FUNC_ENTRY ( lf_179sym , ATmakeAppl ( lf_179sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -2414,11 +2409,11 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
@@ -2435,17 +2430,17 @@ FUNC_EXIT ( tmp [ 8 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_180sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_179sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_152 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+ATerm lf_151 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_152sym , ATmakeAppl ( lf_152sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_171sym ) ) {
+FUNC_ENTRY ( lf_151sym , ATmakeAppl ( lf_151sym , arg0 , arg1 , arg2 ) ) ;
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
@@ -2455,17 +2450,17 @@ ATerm atmp2000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp20010 , lf_174sym ) ) {
+if ( check_sym ( atmp20010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp20010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
 ( tmp [ 8 ] = arg_3 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] , arg1 ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] , arg1 ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
@@ -2476,18 +2471,18 @@ FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( at
 }
 }
 }
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , arg1 ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , arg1 ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
 }
 }
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_152sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_151sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf_131 ( ATerm arg0 , ATerm arg1 ) {
@@ -2502,7 +2497,7 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_179 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_178 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_44sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_43sym ) ) {
@@ -2537,7 +2532,7 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_179 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_178 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_44sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_43sym ) ) {
@@ -2560,14 +2555,14 @@ FUNC_EXIT_CONST ( constant9 , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , m
 FUNC_EXIT ( make_nf2 ( lf_131_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf_179 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_178 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_179sym , ATmakeAppl ( lf_179sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+FUNC_ENTRY ( lf_178sym , ATmakeAppl ( lf_178sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -2577,11 +2572,11 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
@@ -2598,17 +2593,17 @@ FUNC_EXIT ( tmp [ 7 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_179sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_178sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_134 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 9 ] ;
 FUNC_ENTRY ( lf_134sym , ATmakeAppl ( lf_134sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
@@ -2618,17 +2613,17 @@ ATerm atmp2000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp20010 , lf_174sym ) ) {
+if ( check_sym ( atmp20010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp20010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
 ( tmp [ 8 ] = arg_3 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , tmp [ 5 ] , tmp [ 6 ] , arg1 , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , tmp [ 5 ] , tmp [ 6 ] , arg1 , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
@@ -2639,13 +2634,13 @@ FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( at
 }
 }
 }
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , arg1 , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , arg1 , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
 }
 }
 }
@@ -2660,7 +2655,7 @@ FUNC_ENTRY ( lf_64sym , ATmakeAppl ( lf_64sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_25sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-( tmp [ 0 ] = lf_178 ( make_nf1 ( lf_list_25sym , make_list ( atmp00 ) ) , arg1 ) ) ;
+( tmp [ 0 ] = lf_177 ( make_nf1 ( lf_list_25sym , make_list ( atmp00 ) ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 0 ] , lf_list_62sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_63 ( make_nf1 ( lf_list_62sym , make_list ( tmp [ 1 ] ) ) ) ) ;
@@ -2670,10 +2665,10 @@ FUNC_EXIT ( lf_63 ( make_nf1 ( lf_list_62sym , make_list ( tmp [ 1 ] ) ) ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_64sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_178 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_177 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_178sym , ATmakeAppl ( lf_178sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_177sym , ATmakeAppl ( lf_177sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_25sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -2682,12 +2677,12 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_177 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_176 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_63sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_62sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_178_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
+( tmp [ 7 ] = lf_177_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_list_62sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( lf_list_62 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ;
@@ -2700,13 +2695,13 @@ FUNC_EXIT_CONST ( constant10 , lf_list_62 ( make_list ( null ( ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_178sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_177sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_178_recursive ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_177_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_178_recursivesym , ATmakeAppl ( lf_178_recursivesym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_177_recursivesym , ATmakeAppl ( lf_177_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -2714,12 +2709,12 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_177 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_176 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_63sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_62sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_178 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
+( tmp [ 7 ] = lf_177 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_list_62sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( lf_list_62 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ;
@@ -2731,17 +2726,17 @@ else {
 FUNC_EXIT_CONST ( constant10 , lf_list_62 ( make_list ( null ( ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_178_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_177_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf_177 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_176 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_177sym , ATmakeAppl ( lf_177sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+FUNC_ENTRY ( lf_176sym , ATmakeAppl ( lf_176sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -2751,11 +2746,11 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
@@ -2772,17 +2767,17 @@ FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_177sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_176sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_76 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 9 ] ;
 FUNC_ENTRY ( lf_76sym , ATmakeAppl ( lf_76sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
@@ -2792,17 +2787,17 @@ ATerm atmp2000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp20010 , lf_174sym ) ) {
+if ( check_sym ( atmp20010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp20010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
 ( tmp [ 8 ] = arg_3 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , tmp [ 5 ] , arg1 , tmp [ 7 ] , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , tmp [ 5 ] , arg1 , tmp [ 7 ] , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
@@ -2813,13 +2808,13 @@ FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( at
 }
 }
 }
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , arg1 , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , arg1 , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
 }
 }
 }
@@ -2834,7 +2829,7 @@ FUNC_ENTRY ( lf_61sym , ATmakeAppl ( lf_61sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_25sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-( tmp [ 0 ] = lf_176 ( make_nf1 ( lf_list_25sym , make_list ( atmp00 ) ) , arg1 ) ) ;
+( tmp [ 0 ] = lf_175 ( make_nf1 ( lf_list_25sym , make_list ( atmp00 ) ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 0 ] , lf_list_62sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_63 ( make_nf1 ( lf_list_62sym , make_list ( tmp [ 1 ] ) ) ) ) ;
@@ -2844,10 +2839,10 @@ FUNC_EXIT ( lf_63 ( make_nf1 ( lf_list_62sym , make_list ( tmp [ 1 ] ) ) ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_61sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_176 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_175 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_176sym , ATmakeAppl ( lf_176sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_175sym , ATmakeAppl ( lf_175sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_25sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -2856,12 +2851,12 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_175 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_174 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_63sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_62sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_176_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
+( tmp [ 7 ] = lf_175_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_list_62sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( lf_list_62 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ;
@@ -2874,13 +2869,13 @@ FUNC_EXIT_CONST ( constant10 , lf_list_62 ( make_list ( null ( ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_176sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_175sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_176_recursive ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_175_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_176_recursivesym , ATmakeAppl ( lf_176_recursivesym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_175_recursivesym , ATmakeAppl ( lf_175_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -2888,12 +2883,12 @@ if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = lf_27 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = lf_28 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_175 ( tmp [ 3 ] , arg1 ) ) ;
+( tmp [ 4 ] = lf_174 ( tmp [ 3 ] , arg1 ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_63sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 5 ] , lf_list_62sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_176 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
+( tmp [ 7 ] = lf_175 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 1 ] ) ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_list_62sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 FUNC_EXIT ( lf_list_62 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ;
@@ -2905,17 +2900,17 @@ else {
 FUNC_EXIT_CONST ( constant10 , lf_list_62 ( make_list ( null ( ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_176_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_175_recursivesym , lf_list_25 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf_175 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_174 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_175sym , ATmakeAppl ( lf_175sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+FUNC_ENTRY ( lf_174sym , ATmakeAppl ( lf_174sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -2925,11 +2920,11 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
@@ -2946,17 +2941,17 @@ FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_175sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_174sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_75 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 9 ] ;
 FUNC_ENTRY ( lf_75sym , ATmakeAppl ( lf_75sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
@@ -2966,17 +2961,17 @@ ATerm atmp2000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp20010 , lf_174sym ) ) {
+if ( check_sym ( atmp20010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp20010 ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_173sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_172sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ) ;
 ( tmp [ 7 ] = arg_2 ( tmp [ 4 ] ) ) ;
 ( tmp [ 8 ] = arg_3 ( tmp [ 4 ] ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , arg1 , tmp [ 6 ] , tmp [ 7 ] , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , arg1 , tmp [ 6 ] , tmp [ 7 ] , tmp [ 8 ] ) ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
@@ -2987,13 +2982,13 @@ FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( at
 }
 }
 }
-if ( check_sym ( arg2 , lf_171sym ) ) {
+if ( check_sym ( arg2 , lf_170sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_170sym ) ) {
+if ( check_sym ( atmp20 , lf_list_169sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , arg1 , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , arg1 , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp200 ) ) ) ) ) ;
 }
 }
 }
@@ -3005,10 +3000,10 @@ ATerm lf_4 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 5 ] ;
 FUNC_ENTRY ( lf_4sym , ATmakeAppl ( lf_4sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -3018,7 +3013,7 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
@@ -3033,10 +3028,10 @@ FUNC_EXIT ( tmp [ 3 ] ) ;
 }
 }
 }
-if ( check_sym ( arg1 , lf_171sym ) ) {
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
@@ -3051,10 +3046,10 @@ ATerm lf_7 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 5 ] ;
 FUNC_ENTRY ( lf_7sym , ATmakeAppl ( lf_7sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
@@ -3064,12 +3059,12 @@ ATerm atmp1000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp10010 , lf_174sym ) ) {
+if ( check_sym ( atmp10010 , lf_173sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
 ( tmp [ 4 ] = arg_2 ( atmp10010 ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , tmp [ 4 ] ) ) , tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , tmp [ 4 ] ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 ( atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ) ;
@@ -3079,13 +3074,13 @@ FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( slice ( at
 }
 }
 }
-if ( check_sym ( arg1 , lf_171sym ) ) {
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp100 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }
@@ -3097,31 +3092,31 @@ ATerm lf_23 ( ATerm arg0 ) {
 {
 ATerm tmp [ 8 ] ;
 FUNC_ENTRY ( lf_23sym , ATmakeAppl ( lf_23sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_171sym ) ) {
+if ( check_sym ( arg0 , lf_170sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_list_170sym ) ) {
+if ( check_sym ( atmp00 , lf_list_169sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_174sym ) ) {
+if ( check_sym ( tmp [ 0 ] , lf_173sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_2 ( tmp [ 0 ] ) ) ;
 ( tmp [ 4 ] = list_tail ( atmp000 ) ) ;
 ( tmp [ 5 ] = lf_23_recursive ( make_list ( tmp [ 4 ] ) ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_171sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_170sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_list_170sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_list_169sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , tmp [ 1 ] , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , tmp [ 1 ] , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant11 , make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant11 , make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -3140,7 +3135,7 @@ ATerm atmp00 = arg0 ;
 ATerm atmp000 = atmp00 ;
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_174sym ) ) {
+if ( check_sym ( tmp [ 0 ] , lf_173sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_2 ( tmp [ 0 ] ) ) ;
@@ -3148,25 +3143,25 @@ if ( check_sym ( tmp [ 0 ] , lf_174sym ) ) {
 ( tmp [ 5 ] = lf_23_recursive ( make_list ( tmp [ 4 ] ) ) ) ;
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , tmp [ 1 ] , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , tmp [ 1 ] , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant11 , make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant11 , make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_23_recursivesym , lf_171 ( lf_list_170 ( arg0 ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_23_recursivesym , lf_170 ( lf_list_169 ( arg0 ) ) ) ) ;
 }
 }
 ATerm lf_33 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_33sym , ATmakeAppl ( lf_33sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_172sym ) ) {
+if ( check_sym ( arg1 , lf_171sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( make_nf2 ( lf_172sym , atmp10 , arg0 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_171sym , atmp10 , arg0 ) ) ;
 }
 }
 }
@@ -3174,12 +3169,12 @@ FUNC_EXIT ( make_nf2 ( lf_33sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_8 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_8sym , ATmakeAppl ( lf_8sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_172sym ) ) {
+if ( check_sym ( arg1 , lf_171sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( make_nf2 ( lf_172sym , arg0 , atmp11 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_171sym , arg0 , atmp11 ) ) ;
 }
 }
 }
@@ -3187,7 +3182,7 @@ FUNC_EXIT ( make_nf2 ( lf_8sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_20 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_20sym , ATmakeAppl ( lf_20sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_172sym ) ) {
+if ( check_sym ( arg0 , lf_171sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -3200,7 +3195,7 @@ FUNC_EXIT ( make_nf1 ( lf_20sym , arg0 ) ) ;
 }
 ATerm lf_3 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_3sym , ATmakeAppl ( lf_3sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_172sym ) ) {
+if ( check_sym ( arg0 , lf_171sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -3213,13 +3208,13 @@ FUNC_EXIT ( make_nf1 ( lf_3sym , arg0 ) ) ;
 }
 ATerm lf_16 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_16sym , ATmakeAppl ( lf_16sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_171sym ) ) {
+if ( check_sym ( arg1 , lf_170sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf_list_170sym ) ) {
+if ( check_sym ( atmp10 , lf_list_169sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , cons ( make_list ( make_nf3 ( lf_174sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_173sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp100 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , cons ( make_list ( make_nf3 ( lf_173sym , arg0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) , make_nf4 ( lf_172sym , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , lf_63 ( make_nf1 ( lf_list_62sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_44sym , make_nf1 ( lf_list_43sym , make_list ( null ( ) ) ) ) , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( null ( ) ) ) ) ) ) ) , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }
@@ -3228,32 +3223,32 @@ FUNC_EXIT ( make_nf2 ( lf_16sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_21 ( ) {
 FUNC_ENTRY ( lf_21sym , ATmakeAppl0 ( lf_21sym ) ) ;
-FUNC_EXIT_CONST ( constant12 , make_nf2 ( lf_172sym , make_nf1 ( lf_171sym , make_nf1 ( lf_list_170sym , make_list ( null ( ) ) ) ) , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant12 , make_nf2 ( lf_171sym , make_nf1 ( lf_170sym , make_nf1 ( lf_list_169sym , make_list ( null ( ) ) ) ) , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
 FUNC_EXIT_CONST ( constant13 , make_nf0 ( lf_21sym ) ) ;
 }
-ATerm lf_166 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-FUNC_ENTRY ( lf_166sym , ATmakeAppl ( lf_166sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_149sym ) ) {
+ATerm lf_165 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+FUNC_ENTRY ( lf_165sym , ATmakeAppl ( lf_165sym , arg0 , arg1 , arg2 ) ) ;
+if ( check_sym ( arg2 , lf_148sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_148sym ) ) {
+if ( check_sym ( atmp20 , lf_list_147sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-FUNC_EXIT ( make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , cons ( make_list ( make_nf2 ( lf_169sym , arg0 , arg1 ) ) , make_list ( atmp200 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , cons ( make_list ( make_nf2 ( lf_168sym , arg0 , arg1 ) ) , make_list ( atmp200 ) ) ) ) ) ;
 }
 }
 }
 }
-FUNC_EXIT ( make_nf3 ( lf_166sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_165sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_165 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+ATerm lf_164 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_165sym , ATmakeAppl ( lf_165sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , lf_149sym ) ) {
+FUNC_ENTRY ( lf_164sym , ATmakeAppl ( lf_164sym , arg0 , arg1 , arg2 ) ) ;
+if ( check_sym ( arg2 , lf_148sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( check_sym ( atmp20 , lf_list_148sym ) ) {
+if ( check_sym ( atmp20 , lf_list_147sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
@@ -3263,7 +3258,7 @@ ATerm atmp2000 [ 2 ] ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( check_sym ( atmp20010 , lf_169sym ) ) {
+if ( check_sym ( atmp20010 , lf_168sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
 ( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
@@ -3280,26 +3275,26 @@ FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ;
 }
 }
 FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ;
-FUNC_EXIT ( make_nf3 ( lf_165sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_164sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
-ATerm lf_accu_td_167 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
+ATerm lf_accu_td_166 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
 {
 ATerm tmp [ 10 ] ;
-FUNC_ENTRY ( lf_accu_td_167sym , ATmakeAppl ( lf_accu_td_167sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
-if ( check_sym ( arg0 , lf_163sym ) ) {
+FUNC_ENTRY ( lf_accu_td_166sym , ATmakeAppl ( lf_accu_td_166sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
+if ( check_sym ( arg0 , lf_162sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_162sym ) ) {
+if ( check_sym ( atmp00 , lf_161sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf_159sym ) ) {
+if ( check_sym ( atmp000 , lf_158sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( check_sym ( atmp0000 , lf_141sym ) ) {
 {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
-if ( check_sym ( atmp00000 , lf_158sym ) ) {
+if ( check_sym ( atmp00000 , lf_157sym ) ) {
 {
 ATerm atmp000000 = arg_0 ( atmp00000 ) ;
 if ( check_sym ( atmp000000 , lf_list_83sym ) ) {
@@ -3307,10 +3302,10 @@ if ( check_sym ( atmp000000 , lf_list_83sym ) ) {
 ATerm atmp0000000 = arg_0 ( atmp000000 ) ;
 {
 ATerm atmp001 = arg_1 ( atmp00 ) ;
-if ( check_sym ( atmp001 , lf_list_161sym ) ) {
+if ( check_sym ( atmp001 , lf_list_160sym ) ) {
 {
 ATerm atmp0010 = arg_0 ( atmp001 ) ;
-if ( check_sym ( arg1 , lf_150sym ) ) {
+if ( check_sym ( arg1 , lf_149sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -3328,12 +3323,12 @@ if ( is_single_element ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 115 ) ) ) {
 if ( is_single_element ( atmp0010 ) ) {
 ( tmp [ 3 ] = list_head ( atmp0010 ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_160sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_159sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_159sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_158sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( term_equal ( lf_165 ( arg3 , tmp [ 5 ] , atmp10 ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_150sym , atmp10 , lf_32 ( atmp11 , make_nf2 ( lf_168sym , arg2 , arg4 ) ) ) ) ;
+if ( term_equal ( lf_164 ( arg3 , tmp [ 5 ] , atmp10 ) , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf2 ( lf_149sym , atmp10 , lf_32 ( atmp11 , make_nf2 ( lf_167sym , arg2 , arg4 ) ) ) ) ;
 }
 }
 }
@@ -3362,12 +3357,12 @@ if ( is_single_element ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 115 ) ) ) {
 if ( is_single_element ( atmp0010 ) ) {
 ( tmp [ 3 ] = list_head ( atmp0010 ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_160sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_159sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_159sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_158sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_165sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_164sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 ( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
 ( tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ) ;
@@ -3403,11 +3398,11 @@ FUNC_EXIT ( arg1 ) ;
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_167 , arg0 , arg1 , ATmakeList3 ( arg2 , arg3 , arg4 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_166 , arg0 , arg1 , ATmakeList3 ( arg2 , arg3 , arg4 ) ) ) ;
 }
 }
-ATerm lf_accu_td_155 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-FUNC_ENTRY ( lf_accu_td_155sym , ATmakeAppl ( lf_accu_td_155sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_accu_td_154 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+FUNC_ENTRY ( lf_accu_td_154sym , ATmakeAppl ( lf_accu_td_154sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_79sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -3421,7 +3416,7 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_167 ( atmp02 , arg1 , arg2 , atmp01 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
+FUNC_EXIT ( lf_accu_td_166 ( atmp02 , arg1 , arg2 , atmp01 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
 }
 }
 }
@@ -3442,7 +3437,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 {
 ATerm atmp03 = arg_3 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_167 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
+FUNC_EXIT ( lf_accu_td_166 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
 }
 }
 }
@@ -3450,25 +3445,25 @@ FUNC_EXIT ( lf_accu_td_167 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_155 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_154 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
 }
-ATerm lf_accu_td_157 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
+ATerm lf_accu_td_156 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
 {
 ATerm tmp [ 11 ] ;
-FUNC_ENTRY ( lf_accu_td_157sym , ATmakeAppl ( lf_accu_td_157sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
-if ( check_sym ( arg0 , lf_163sym ) ) {
+FUNC_ENTRY ( lf_accu_td_156sym , ATmakeAppl ( lf_accu_td_156sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
+if ( check_sym ( arg0 , lf_162sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_162sym ) ) {
+if ( check_sym ( atmp00 , lf_161sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf_159sym ) ) {
+if ( check_sym ( atmp000 , lf_158sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( check_sym ( atmp0000 , lf_141sym ) ) {
 {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
-if ( check_sym ( atmp00000 , lf_158sym ) ) {
+if ( check_sym ( atmp00000 , lf_157sym ) ) {
 {
 ATerm atmp000000 = arg_0 ( atmp00000 ) ;
 if ( check_sym ( atmp000000 , lf_list_83sym ) ) {
@@ -3476,10 +3471,10 @@ if ( check_sym ( atmp000000 , lf_list_83sym ) ) {
 ATerm atmp0000000 = arg_0 ( atmp000000 ) ;
 {
 ATerm atmp001 = arg_1 ( atmp00 ) ;
-if ( check_sym ( atmp001 , lf_list_161sym ) ) {
+if ( check_sym ( atmp001 , lf_list_160sym ) ) {
 {
 ATerm atmp0010 = arg_0 ( atmp001 ) ;
-if ( check_sym ( arg1 , lf_150sym ) ) {
+if ( check_sym ( arg1 , lf_149sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
@@ -3504,17 +3499,17 @@ if ( is_single_element ( tmp [ 5 ] ) ) {
 if ( term_equal ( tmp [ 6 ] , make_char ( 115 ) ) ) {
 if ( is_single_element ( atmp0010 ) ) {
 ( tmp [ 7 ] = list_head ( atmp0010 ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_160sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_159sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 {
-if ( check_sym ( tmp [ 8 ] , lf_159sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_158sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-( tmp [ 10 ] = lf_165 ( arg3 , tmp [ 9 ] , atmp10 ) ) ;
+( tmp [ 10 ] = lf_164 ( arg3 , tmp [ 9 ] , atmp10 ) ) ;
 if ( term_equal ( tmp [ 10 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_6sym , make_nf0 ( lf_14sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_150sym , atmp10 , lf_32 ( atmp11 , make_nf3 ( lf_164sym , arg2 , tmp [ 9 ] , arg4 ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_149sym , atmp10 , lf_32 ( atmp11 , make_nf3 ( lf_163sym , arg2 , tmp [ 9 ] , arg4 ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 10 ] , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_6sym , make_nf0 ( lf_5sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_150sym , lf_166 ( arg3 , tmp [ 9 ] , atmp10 ) , atmp11 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_149sym , lf_165 ( arg3 , tmp [ 9 ] , atmp10 ) , atmp11 ) ) ;
 }
 }
 }
@@ -3549,20 +3544,20 @@ FUNC_EXIT ( make_nf2 ( lf_150sym , lf_166 ( arg3 , tmp [ 9 ] , atmp10 ) , atmp11
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_157 , arg0 , arg1 , ATmakeList3 ( arg2 , arg3 , arg4 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_156 , arg0 , arg1 , ATmakeList3 ( arg2 , arg3 , arg4 ) ) ) ;
 }
 }
-ATerm lf_accu_td_151 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+ATerm lf_accu_td_150 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 3 ] ;
-FUNC_ENTRY ( lf_accu_td_151sym , ATmakeAppl ( lf_accu_td_151sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_ENTRY ( lf_accu_td_150sym , ATmakeAppl ( lf_accu_td_150sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_135sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_154sym ) ) {
+if ( check_sym ( atmp00 , lf_153sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf_list_153sym ) ) {
+if ( check_sym ( atmp000 , lf_list_152sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( is_single_element ( atmp0000 ) ) {
@@ -3572,7 +3567,7 @@ if ( check_sym ( tmp [ 0 ] , lf_127sym ) ) {
 if ( check_sym ( tmp [ 1 ] , lf_list_126sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-FUNC_EXIT ( lf_accu_td_155 ( make_nf1 ( lf_list_126sym , make_list ( tmp [ 2 ] ) ) , arg1 , arg2 ) ) ;
+FUNC_EXIT ( lf_accu_td_154 ( make_nf1 ( lf_list_126sym , make_list ( tmp [ 2 ] ) ) , arg1 , arg2 ) ) ;
 }
 }
 }
@@ -3583,13 +3578,13 @@ FUNC_EXIT ( lf_accu_td_155 ( make_nf1 ( lf_list_126sym , make_list ( tmp [ 2 ] )
 }
 }
 }
-if ( check_sym ( arg0 , lf_156sym ) ) {
+if ( check_sym ( arg0 , lf_155sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_154sym ) ) {
+if ( check_sym ( atmp00 , lf_153sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf_list_153sym ) ) {
+if ( check_sym ( atmp000 , lf_list_152sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( is_single_element ( atmp0000 ) ) {
@@ -3599,7 +3594,7 @@ if ( check_sym ( tmp [ 0 ] , lf_127sym ) ) {
 if ( check_sym ( tmp [ 1 ] , lf_list_126sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-FUNC_EXIT ( lf_accu_td_155 ( make_nf1 ( lf_list_126sym , make_list ( tmp [ 2 ] ) ) , arg1 , arg2 ) ) ;
+FUNC_EXIT ( lf_accu_td_154 ( make_nf1 ( lf_list_126sym , make_list ( tmp [ 2 ] ) ) , arg1 , arg2 ) ) ;
 }
 }
 }
@@ -3623,7 +3618,7 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_157 ( atmp02 , arg1 , arg2 , atmp01 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
+FUNC_EXIT ( lf_accu_td_156 ( atmp02 , arg1 , arg2 , atmp01 , make_nf3 ( lf_79sym , make_nf1 ( lf_58sym , make_nf1 ( lf_list_47sym , make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) ) ;
 }
 }
 }
@@ -3644,7 +3639,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 {
 ATerm atmp03 = arg_3 ( arg0 ) ;
-FUNC_EXIT ( lf_accu_td_157 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
+FUNC_EXIT ( lf_accu_td_156 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym , atmp00 , make_nf1 ( lf_list_77sym , make_list ( atmp010 ) ) , atmp02 , atmp03 ) ) ) ;
 }
 }
 }
@@ -3652,7 +3647,7 @@ FUNC_EXIT ( lf_accu_td_157 ( atmp03 , arg1 , arg2 , atmp02 , make_nf4 ( lf_78sym
 }
 }
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_151 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_150 , arg0 , arg1 , ATmakeList1 ( arg2 ) ) ) ;
 }
 }
 ATerm lf_13 ( ATerm arg0 , ATerm arg1 ) {
@@ -3665,23 +3660,23 @@ if ( check_sym ( tmp [ 1 ] , lf_26sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf_list_25sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_147 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 3 ] ) ) , lf_3 ( arg1 ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_149sym ) ) {
+( tmp [ 4 ] = lf_146 ( make_nf1 ( lf_list_25sym , make_list ( tmp [ 3 ] ) ) , lf_3 ( arg1 ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_148sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_list_147sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = lf_accu_td_151 ( arg0 , make_nf2 ( lf_150sym , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( tmp [ 6 ] ) ) ) , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) , tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_150sym ) ) {
+( tmp [ 7 ] = lf_accu_td_150 ( arg0 , make_nf2 ( lf_149sym , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( tmp [ 6 ] ) ) ) , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) , tmp [ 0 ] ) ) ;
+if ( check_sym ( tmp [ 7 ] , lf_149sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 ( tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_149sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_148sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 10 ] , lf_list_148sym ) ) {
+if ( check_sym ( tmp [ 10 ] , lf_list_147sym ) ) {
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
 ( tmp [ 12 ] = lf_20 ( arg1 ) ) ;
 ( tmp [ 13 ] = lf_33 ( lf_38 ( tmp [ 9 ] , tmp [ 12 ] ) , arg1 ) ) ;
 ( tmp [ 14 ] = lf_3 ( tmp [ 13 ] ) ) ;
-( tmp [ 15 ] = lf_152 ( tmp [ 0 ] , make_nf1 ( lf_149sym , make_nf1 ( lf_list_148sym , make_list ( tmp [ 11 ] ) ) ) , tmp [ 14 ] ) ) ;
+( tmp [ 15 ] = lf_151 ( tmp [ 0 ] , make_nf1 ( lf_148sym , make_nf1 ( lf_list_147sym , make_list ( tmp [ 11 ] ) ) ) , tmp [ 14 ] ) ) ;
 ( tmp [ 16 ] = lf_8 ( tmp [ 15 ] , tmp [ 13 ] ) ) ;
 FUNC_EXIT ( tmp [ 16 ] ) ;
 }
@@ -3696,15 +3691,15 @@ FUNC_EXIT ( make_nf2 ( lf_13sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_42 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_42sym , ATmakeAppl ( lf_42sym , arg0 ) ) ;
-FUNC_EXIT ( lf_accu_td_146 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_accu_td_145 ( arg0 , lf_52 ( make_nf1 ( lf_list_51sym , make_list ( null ( ) ) ) ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_42sym , arg0 ) ) ;
 }
-ATerm lf_accu_td_146 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_accu_td_146sym , ATmakeAppl ( lf_accu_td_146sym , arg0 , arg1 ) ) ;
+ATerm lf_accu_td_145 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_accu_td_145sym , ATmakeAppl ( lf_accu_td_145sym , arg0 , arg1 ) ) ;
 if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"Module\"))" ) ) ) {
 FUNC_EXIT ( lf_accu_td_142 ( arg0 , arg1 , lf_2 ( arg0 ) ) ) ;
 }
-FUNC_EXIT ( call_kids_accu ( lf_accu_td_146 , arg0 , arg1 , ATempty ) ) ;
+FUNC_EXIT ( call_kids_accu ( lf_accu_td_145 , arg0 , arg1 , ATempty ) ) ;
 }
 ATerm lf_accu_td_142 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 FUNC_ENTRY ( lf_accu_td_142sym , ATmakeAppl ( lf_accu_td_142sym , arg0 , arg1 , arg2 ) ) ;
@@ -3724,7 +3719,7 @@ if ( check_sym ( arg0 , lf_144sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_145sym , arg2 , arg0 ) ) ) ;
+FUNC_EXIT ( lf_32 ( arg1 , make_nf2 ( lf_143sym , arg2 , arg0 ) ) ) ;
 }
 }
 }
@@ -5881,10 +5876,6 @@ FUNC_EXIT ( arg2 ) ;
 FUNC_EXIT ( make_nf3 ( lf_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
-ATerm lf_208 ( ) {
-CONS_ENTRY ( lf_208sym , ATmakeAppl0 ( lf_208sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_208sym ) ) ;
-}
 ATerm lf_207 ( ) {
 CONS_ENTRY ( lf_207sym , ATmakeAppl0 ( lf_207sym ) ) ;
 CONS_EXIT ( make_nf0 ( lf_207sym ) ) ;
@@ -5893,97 +5884,97 @@ ATerm lf_206 ( ) {
 CONS_ENTRY ( lf_206sym , ATmakeAppl0 ( lf_206sym ) ) ;
 CONS_EXIT ( make_nf0 ( lf_206sym ) ) ;
 }
-ATerm lf_204 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_204sym , ATmakeAppl ( lf_204sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_204sym , arg0 ) ) ;
+ATerm lf_205 ( ) {
+CONS_ENTRY ( lf_205sym , ATmakeAppl0 ( lf_205sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_205sym ) ) ;
 }
-ATerm lf_203 ( ) {
-CONS_ENTRY ( lf_203sym , ATmakeAppl0 ( lf_203sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_203sym ) ) ;
+ATerm lf_203 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_203sym , ATmakeAppl ( lf_203sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_203sym , arg0 ) ) ;
 }
-ATerm lf_201 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_201sym , ATmakeAppl ( lf_201sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_201sym , arg0 , arg1 ) ) ;
+ATerm lf_202 ( ) {
+CONS_ENTRY ( lf_202sym , ATmakeAppl0 ( lf_202sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_202sym ) ) ;
 }
-ATerm lf_200 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_200sym , ATmakeAppl ( lf_200sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_200sym , arg0 ) ) ;
+ATerm lf_200 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_200sym , ATmakeAppl ( lf_200sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_200sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_list_199 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_199sym , ATmakeAppl ( lf_list_199sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_199sym , arg0 ) ) ;
+ATerm lf_199 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_199sym , ATmakeAppl ( lf_199sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_199sym , arg0 ) ) ;
 }
-ATerm lf_198 ( ) {
-CONS_ENTRY ( lf_198sym , ATmakeAppl0 ( lf_198sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_198sym ) ) ;
+ATerm lf_list_198 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_198sym , ATmakeAppl ( lf_list_198sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_198sym , arg0 ) ) ;
 }
-ATerm lf_194 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_194sym , ATmakeAppl ( lf_194sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_194sym , arg0 ) ) ;
+ATerm lf_197 ( ) {
+CONS_ENTRY ( lf_197sym , ATmakeAppl0 ( lf_197sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_197sym ) ) ;
 }
-ATerm lf_187 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-CONS_ENTRY ( lf_187sym , ATmakeAppl ( lf_187sym , arg0 , arg1 , arg2 ) ) ;
-CONS_EXIT ( make_nf3 ( lf_187sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_193 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_193sym , ATmakeAppl ( lf_193sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_193sym , arg0 ) ) ;
 }
-ATerm lf_185 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_185sym , ATmakeAppl ( lf_185sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_185sym , arg0 , arg1 ) ) ;
+ATerm lf_186 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+CONS_ENTRY ( lf_186sym , ATmakeAppl ( lf_186sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_186sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_184 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_184sym , ATmakeAppl ( lf_184sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_184sym , arg0 ) ) ;
+ATerm lf_184 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_184sym , ATmakeAppl ( lf_184sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_184sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_list_183 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_183sym , ATmakeAppl ( lf_list_183sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_183sym , arg0 ) ) ;
+ATerm lf_183 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_183sym , ATmakeAppl ( lf_183sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_183sym , arg0 ) ) ;
 }
-ATerm lf_174 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-CONS_ENTRY ( lf_174sym , ATmakeAppl ( lf_174sym , arg0 , arg1 , arg2 ) ) ;
-CONS_EXIT ( make_nf3 ( lf_174sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_list_182 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_182sym , ATmakeAppl ( lf_list_182sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_182sym , arg0 ) ) ;
 }
-ATerm lf_173 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
-CONS_ENTRY ( lf_173sym , ATmakeAppl ( lf_173sym , arg0 , arg1 , arg2 , arg3 ) ) ;
-CONS_EXIT ( make_nf4 ( lf_173sym , arg0 , arg1 , arg2 , arg3 ) ) ;
+ATerm lf_173 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+CONS_ENTRY ( lf_173sym , ATmakeAppl ( lf_173sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_173sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_172 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_172sym , ATmakeAppl ( lf_172sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_172sym , arg0 , arg1 ) ) ;
+ATerm lf_172 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
+CONS_ENTRY ( lf_172sym , ATmakeAppl ( lf_172sym , arg0 , arg1 , arg2 , arg3 ) ) ;
+CONS_EXIT ( make_nf4 ( lf_172sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
-ATerm lf_171 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_171sym , ATmakeAppl ( lf_171sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_171sym , arg0 ) ) ;
+ATerm lf_171 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_171sym , ATmakeAppl ( lf_171sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_171sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_list_170 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_170sym , ATmakeAppl ( lf_list_170sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_170sym , arg0 ) ) ;
+ATerm lf_170 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_170sym , ATmakeAppl ( lf_170sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_170sym , arg0 ) ) ;
 }
-ATerm lf_169 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_169sym , ATmakeAppl ( lf_169sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_169sym , arg0 , arg1 ) ) ;
+ATerm lf_list_169 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_169sym , ATmakeAppl ( lf_list_169sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_169sym , arg0 ) ) ;
 }
 ATerm lf_168 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_168sym , ATmakeAppl ( lf_168sym , arg0 , arg1 ) ) ;
 CONS_EXIT ( make_nf2 ( lf_168sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_164 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-CONS_ENTRY ( lf_164sym , ATmakeAppl ( lf_164sym , arg0 , arg1 , arg2 ) ) ;
-CONS_EXIT ( make_nf3 ( lf_164sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_167 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_167sym , ATmakeAppl ( lf_167sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_167sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_163 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_163sym , ATmakeAppl ( lf_163sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_163sym , arg0 ) ) ;
+ATerm lf_163 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+CONS_ENTRY ( lf_163sym , ATmakeAppl ( lf_163sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_163sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_162 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_162sym , ATmakeAppl ( lf_162sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_162sym , arg0 , arg1 ) ) ;
+ATerm lf_162 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_162sym , ATmakeAppl ( lf_162sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_162sym , arg0 ) ) ;
 }
-ATerm lf_list_161 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_161sym , ATmakeAppl ( lf_list_161sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_161sym , arg0 ) ) ;
+ATerm lf_161 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_161sym , ATmakeAppl ( lf_161sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_161sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_160 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_160sym , ATmakeAppl ( lf_160sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_160sym , arg0 ) ) ;
+ATerm lf_list_160 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_160sym , ATmakeAppl ( lf_list_160sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_160sym , arg0 ) ) ;
 }
 ATerm lf_159 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_159sym , ATmakeAppl ( lf_159sym , arg0 ) ) ;
@@ -5993,33 +5984,33 @@ ATerm lf_158 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_158sym , ATmakeAppl ( lf_158sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_158sym , arg0 ) ) ;
 }
-ATerm lf_156 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_156sym , ATmakeAppl ( lf_156sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_156sym , arg0 ) ) ;
+ATerm lf_157 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_157sym , ATmakeAppl ( lf_157sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_157sym , arg0 ) ) ;
 }
-ATerm lf_154 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_154sym , ATmakeAppl ( lf_154sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_154sym , arg0 ) ) ;
+ATerm lf_155 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_155sym , ATmakeAppl ( lf_155sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_155sym , arg0 ) ) ;
 }
-ATerm lf_list_153 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_153sym , ATmakeAppl ( lf_list_153sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_153sym , arg0 ) ) ;
+ATerm lf_153 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_153sym , ATmakeAppl ( lf_153sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_153sym , arg0 ) ) ;
 }
-ATerm lf_150 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_150sym , ATmakeAppl ( lf_150sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_150sym , arg0 , arg1 ) ) ;
+ATerm lf_list_152 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_152sym , ATmakeAppl ( lf_list_152sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_152sym , arg0 ) ) ;
 }
-ATerm lf_149 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_149sym , ATmakeAppl ( lf_149sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_149sym , arg0 ) ) ;
+ATerm lf_149 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_149sym , ATmakeAppl ( lf_149sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_149sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_list_148 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_148sym , ATmakeAppl ( lf_list_148sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_148sym , arg0 ) ) ;
+ATerm lf_148 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_148sym , ATmakeAppl ( lf_148sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_148sym , arg0 ) ) ;
 }
-ATerm lf_145 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_145sym , ATmakeAppl ( lf_145sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_145sym , arg0 , arg1 ) ) ;
+ATerm lf_list_147 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_147sym , ATmakeAppl ( lf_list_147sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_147sym , arg0 ) ) ;
 }
 ATerm lf_144 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_144sym , ATmakeAppl ( lf_144sym , arg0 , arg1 ) ) ;

@@ -3,7 +3,9 @@ equations
   [msg-1] {$Msg*} + $Msg = 
 {$Msg* 
  $Msg}
+
   [msg-2] {$Msg*} + none = {$Msg*}
+
   [msg-3] {$Msg*1 none $Msg*2} = {$Msg*1 
 $Msg*2}
 
@@ -11,6 +13,7 @@ $Msg*2}
 $Msg*2}
 
   [msg-3] undeclared-symbols($ModuleId, symbols()) = none
+
   [msg-5] sorts-without-production-definitions($ModuleId, symbols()) = none
 
   [msg-6] used-in-priorities-but-undefined($ModuleId, productions()) = none

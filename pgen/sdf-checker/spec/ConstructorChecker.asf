@@ -1,26 +1,26 @@
 equations
 	
-  [cmc-1'1] get-module-name(Module) = $ModuleId,
+  [cmc-1'1] $ModuleId := get-module-name(Module),
        
-            get-all-imports(Module) = imports(Import*),
-            get-constructors(Import*, 
-                             get-module-info(InfoMsgTuple1)) = 
-              constructors(SymbolCons*1),
+            imports(Import*) := get-all-imports(Module),
+            constructors(SymbolCons*1) := 
+              get-constructors(Import*, 
+                             get-module-info(InfoMsgTuple1)),
 
-            get-constructor-symbol-pairs(Module, 
+            [constructors(SymbolCons*2), Msgs1] := 
+              get-constructor-symbol-pairs(Module, 
                                          [constructors(SymbolCons*1),{}], 
-                                         $ModuleId) = 
-              [constructors(SymbolCons*2), Msgs1],
+                                         $ModuleId),
 
-            Msgs2 = get-messages(InfoMsgTuple1), 
+            Msgs2 := get-messages(InfoMsgTuple1), 
 
-            InfoMsgTuple2 = put-messages(Msgs1 ++ Msgs2, InfoMsgTuple1),
+            InfoMsgTuple2 := put-messages(Msgs1 ++ Msgs2, InfoMsgTuple1),
 
-            get-module-info(InfoMsgTuple2) = ModuleInfoTable1,
-            put-constructor-info($ModuleId, 
+            ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
+            ModuleInfoTable2 := put-constructor-info($ModuleId, 
                                  constructors(SymbolCons*2), 
-                                 ModuleInfoTable1) = ModuleInfoTable2,
-            put-module-info(ModuleInfoTable2, InfoMsgTuple2) =  InfoMsgTuple3
+                                 ModuleInfoTable1),
+            InfoMsgTuple3 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple2)
             =================================================================
             check-module-constructors(Module, InfoMsgTuple1) = InfoMsgTuple3
 
@@ -52,7 +52,7 @@ equations
                                              $ModuleId, Symbol,
                                              $Literal(Symbol,*) -> Symbol Attrs)
 
-  [gcsp-2'1] contains(Symbol, $Literal, ConstructorSet) = true
+  [gcsp-2'1] contains(Symbol, $Literal, ConstructorSet) == true
              =================================================
              get-constructor-symbol-pairs2(cons( $Literal ), 
                                            [ConstructorSet, Msgs], 
@@ -60,7 +60,7 @@ equations
                [ConstructorSet, 
 Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
 
-  [gcsp-2'2] contains(Symbol, $Literal, ConstructorSet) = false
+  [gcsp-2'2] contains(Symbol, $Literal, ConstructorSet) == false
              ==================================================
              get-constructor-symbol-pairs2(cons( $Literal ), 
                                            [ConstructorSet, Msgs], 
@@ -81,14 +81,14 @@ Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
                                                $ModuleId, Symbol,
                                                $Literal(Symbol,*) -> Symbol Attrs)
 
-  [ccip-2'1] contains(Symbol, $Literal, ConstructorSet) = true
+  [ccip-2'1] contains(Symbol, $Literal, ConstructorSet) := true
              =================================================
              check-constructor-in-priorities2(cons( $Literal ), 
                                               ConsMsgTuple, 
                                               $ModuleId, Symbol, Prod) = 
                ConsMsgTuple
 
-  [ccip-2'2] contains(Symbol, $Literal, ConstructorSet) = false
+  [ccip-2'2] contains(Symbol, $Literal, ConstructorSet) == false
              ==================================================
              check-constructor-in-priorities2(cons( $Literal ), 
                                               [ConstructorSet, Msgs], 

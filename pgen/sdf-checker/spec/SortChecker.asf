@@ -17,16 +17,16 @@ equations
   [tc4] get-declared-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolPairsSet) =
           add-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolPairsSet)
 
-  [as-1'1] contains($Symbol, SymbolPairsSet2) = true,
-           contains($ModuleId, $Symbol, SymbolPairsSet2) = true,
-           contains($Symbol, SymbolPairsSet1) = false
+  [as-1'1] contains($Symbol, SymbolPairsSet2) == true,
+           contains($ModuleId, $Symbol, SymbolPairsSet2) == true,
+           contains($Symbol, SymbolPairsSet1) == false
            ==========================================
            add-symbol($Symbol,
                       [SymbolPairsSet1, $Msgs], $ModuleId, SymbolPairsSet2) =
              [SymbolPairsSet1, $Msgs]
 
-  [as-1'2] contains($Symbol, SymbolPairsSet2) = false,
-           contains($Symbol, symbolpairs(SymbolPair*)) = false
+  [as-1'2] contains($Symbol, SymbolPairsSet2) == false,
+           contains($Symbol, symbolpairs(SymbolPair*)) == false
            ===================================================
            add-symbol($Symbol, [symbolpairs(SymbolPair*), $Msgs], $ModuleId, SymbolPairsSet2) =
                      [symbolpairs(($ModuleId, $Symbol) SymbolPair*), $Msgs]
@@ -44,16 +44,16 @@ equations
                                         $ModuleId, SymbolPairsSet) =
        	       get-aliased-symbols($Grammar, SymbolsMsgs, $ModuleId, SymbolPairsSet)
 
-  [gas-1'1] contains($Symbol2, SymbolPairsSet2) = true,
-            contains($ModuleId, $Symbol, SymbolPairsSet2) = true,
-            contains($Symbol, SymbolPairsSet1) = false
+  [gas-1'1] contains($Symbol2, SymbolPairsSet2) == true,
+            contains($ModuleId, $Symbol, SymbolPairsSet2) := true,
+            contains($Symbol, SymbolPairsSet1) == false
             ==========================================
             get-aliased-symbols($Symbol1 -> $Symbol2,
                                 [SymbolPairsSet1, $Msgs], $ModuleId, SymbolPairsSet2) =
              [SymbolPairsSet1, $Msgs]
 
-  [gas-1'2] contains($Symbol2, SymbolPairsSet2) = false,
-            contains($Symbol2, symbolpairs(SymbolPair*)) = false
+  [gas-1'2] contains($Symbol2, SymbolPairsSet2) == false,
+            contains($Symbol2, symbolpairs(SymbolPair*)) == false
             ====================================================
             get-aliased-symbols($Symbol1 -> $Symbol2, 
                                 [symbolpairs(SymbolPair*), $Msgs], 
@@ -85,75 +85,75 @@ aliased-symbol-already-declared($ModuleId, $Symbol2)]
 
 %% Pre-check one module
 	
-  [cm1] get-module-name($Module) = $ModuleId,
+  [cm1] $ModuleId := get-module-name($Module),
 
-        get-exported-declared-symbols($Module, [symbolpairs(),{}], $ModuleId, 
-                                      symbolpairs()) = 
-          [symbolpairs(DeclaredSymbolPair*1), $Msgs1],
-        get-hidden-declared-symbols($Module, [symbolpairs(), {}], $ModuleId, 
-                                    symbolpairs()) = 
-          [symbolpairs(DeclaredSymbolPair*2), $Msgs2],
+        [symbolpairs(DeclaredSymbolPair*1), $Msgs1] := 
+          get-exported-declared-symbols($Module, [symbolpairs(),{}], $ModuleId, 
+                                      symbolpairs()),
+        [symbolpairs(DeclaredSymbolPair*2), $Msgs2] := 
+          get-hidden-declared-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+                                    symbolpairs()),
 
-        get-exported-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
-                                     symbolpairs()) = 
-          [symbolpairs(AliasedSymbolPair*1), $Msgs3],
-        get-hidden-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
-                                   symbolpairs()) = 
-          [symbolpairs(AliasedSymbolPair*2), $Msgs4],
+        [symbolpairs(AliasedSymbolPair*1), $Msgs3] := 
+          get-exported-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+                                     symbolpairs()),
+        [symbolpairs(AliasedSymbolPair*2), $Msgs4] := 
+          get-hidden-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+                                   symbolpairs()),
 
-        get-module-info(InfoMsgTuple1) = ModuleInfoTable1,
-        put-declared-symbols-info($ModuleId, 
+        ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
+        ModuleInfoTable2 := put-declared-symbols-info($ModuleId, 
                                   symbolpairs(DeclaredSymbolPair*2 DeclaredSymbolPair*1), 
-                                  ModuleInfoTable1) = ModuleInfoTable2,
-        put-aliased-symbols-info($ModuleId, 
+                                  ModuleInfoTable1),
+        ModuleInfoTable3 := put-aliased-symbols-info($ModuleId, 
                                  symbolpairs(AliasedSymbolPair*2 AliasedSymbolPair*1), 
-                                 ModuleInfoTable2) = ModuleInfoTable3,
-        put-module-info(ModuleInfoTable3, InfoMsgTuple1) =  InfoMsgTuple2
+                                 ModuleInfoTable2),
+        InfoMsgTuple2 :=  put-module-info(ModuleInfoTable3, InfoMsgTuple1)
         =================================================================
         pre-check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple2
 
 %% Check one module
 	
-  [cm1] get-module-name($Module) = $ModuleId,
+  [cm1] $ModuleId := get-module-name($Module),
 
-        get-all-imports($Module) = imports(Import*),
-        get-declared-symbols(Import*, 
-                             get-module-info(InfoMsgTuple1)) = 
-          symbolpairs(DeclaredSymbolPair*1),
-        get-aliased-symbols(Import*, 
-                            get-module-info(InfoMsgTuple1)) = 
-          symbolpairs(AliasedSymbolPair*1),
+        imports(Import*) := get-all-imports($Module),
+        symbolpairs(DeclaredSymbolPair*1) := 
+          get-declared-symbols(Import*, 
+                             get-module-info(InfoMsgTuple1)),
+        symbolpairs(AliasedSymbolPair*1) := 
+          get-aliased-symbols(Import*, 
+                            get-module-info(InfoMsgTuple1)),
 
-        get-parameter-symbols($Module, [symbolpairs(),{}], $ModuleId, symbolpairs()) = 
-          [symbolpairs(ParameterSymbolPair*), $Msgs0],
+        [symbolpairs(ParameterSymbolPair*), $Msgs0] := 
+          get-parameter-symbols($Module, [symbolpairs(),{}], $ModuleId, symbolpairs()),
 
-        get-exported-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*),{}], $ModuleId, 
-                                      symbolpairs(DeclaredSymbolPair*1)) = 
-          [symbolpairs(DeclaredSymbolPair*2), $Msgs1],
-        get-hidden-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*), {}], $ModuleId, 
+        [symbolpairs(DeclaredSymbolPair*2), $Msgs1] := 
+          get-exported-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*),{}], $ModuleId, 
+                                      symbolpairs(DeclaredSymbolPair*1)),
+        [symbolpairs(DeclaredSymbolPair*3), $Msgs2] := 
+          get-hidden-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*), {}], $ModuleId, 
                                     symbolpairs(DeclaredSymbolPair*2
-                                                DeclaredSymbolPair*1)) = 
-          [symbolpairs(DeclaredSymbolPair*3), $Msgs2],
+                                                DeclaredSymbolPair*1)),
 
-        get-exported-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
-                                     symbolpairs(AliasedSymbolPair*1)) = 
-          [symbolpairs(AliasedSymbolPair*2), $Msgs3],
-        get-hidden-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+        [symbolpairs(AliasedSymbolPair*2), $Msgs3] := 
+          get-exported-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+                                     symbolpairs(AliasedSymbolPair*1)),
+        [symbolpairs(AliasedSymbolPair*3), $Msgs4] := 
+          get-hidden-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
                                    symbolpairs(AliasedSymbolPair*2
-                                               AliasedSymbolPair*1)) = 
-          [symbolpairs(AliasedSymbolPair*3), $Msgs4],
+                                               AliasedSymbolPair*1)),
 
-        get-used-symbols($Module, symbols()) = symbols($Symbol*3),
-        get-defined-symbols($Module, symbols()) = symbols($Symbol*4),
+        symbols($Symbol*3) := get-used-symbols($Module, symbols()),
+        symbols($Symbol*4) := get-defined-symbols($Module, symbols()),
 
-        $Msgs5 = get-messages(InfoMsgTuple1),
-        symbols($Symbol*5) = diff(de-modularize(symbolpairs(DeclaredSymbolPair*3 
+        $Msgs5 := get-messages(InfoMsgTuple1),
+        symbols($Symbol*5) := diff(de-modularize(symbolpairs(DeclaredSymbolPair*3 
                                                             DeclaredSymbolPair*2)), 
                                   de-modularize(symbolpairs(AliasedSymbolPair*3
                                                             AliasedSymbolPair*2
                                                             AliasedSymbolPair*1))),
-        symbols($Symbol*6) = de-modularize(symbolpairs(ParameterSymbolPair*)),
-        $Msgs6 = $Msgs5 + 
+        symbols($Symbol*6) := de-modularize(symbolpairs(ParameterSymbolPair*)),
+        $Msgs6 := $Msgs5 + 
 undeclared-symbols($ModuleId, diff(symbols($Symbol*3), 
                                    de-modularize(symbolpairs(ParameterSymbolPair*
                                                              AliasedSymbolPair*3
@@ -164,17 +164,17 @@ undeclared-symbols($ModuleId, diff(symbols($Symbol*3),
                                                              DeclaredSymbolPair*1)))) +
 sorts-without-production-definitions($ModuleId,  diff(symbols($Symbol*5), 
                                                       symbols($Symbol*6 $Symbol*4))),
-        InfoMsgTuple3 = put-messages($Msgs1 ++ $Msgs2 ++ $Msgs3 ++ 
+        InfoMsgTuple3 := put-messages($Msgs1 ++ $Msgs2 ++ $Msgs3 ++ 
                                      $Msgs4 ++ $Msgs6, 
                                      InfoMsgTuple1),
 
-        get-module-info(InfoMsgTuple3) = ModuleInfoTable3,
-        put-declared-symbols-info($ModuleId, 
+        ModuleInfoTable3 := get-module-info(InfoMsgTuple3),
+        ModuleInfoTable4 := put-declared-symbols-info($ModuleId, 
                                   symbolpairs(DeclaredSymbolPair*2 DeclaredSymbolPair*1), 
-                                  ModuleInfoTable3) = ModuleInfoTable4,
-        put-aliased-symbols-info($ModuleId, 
+                                  ModuleInfoTable3),
+        ModuleInfoTable5 := put-aliased-symbols-info($ModuleId, 
                                  symbolpairs(AliasedSymbolPair*2 AliasedSymbolPair*1), 
-                                 ModuleInfoTable4) = ModuleInfoTable5,
-        put-module-info(ModuleInfoTable5, InfoMsgTuple3) =  InfoMsgTuple4
+                                 ModuleInfoTable4),
+        InfoMsgTuple4 :=  put-module-info(ModuleInfoTable5, InfoMsgTuple3)
         =================================================================
         check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4
