@@ -13,9 +13,9 @@ Configuring Apache
 
 1) Update Apache's httpd.conf to listen on port 21000 (and, if necessary, with the ServerName directive set to localhost).
 2) Extract the mod_toolbus tarball and cd to the directory.
-3) Update configure.in to reflect your ToolBus and Apache paths (yeah, i know...).
-4) run autoconf and, if necessary, automake -a
-5) run  ./configure
+4) run ./reconf
+5) run  ./configure --with-apache=/path/to/apache --with-aterm=/path/to/aterm \
+                    --with-toolbuslib=/path/to/toolbuslib
 6) run make
 
 
