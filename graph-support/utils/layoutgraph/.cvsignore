@@ -6,4 +6,5 @@ y.tab.[ch]
 y.output
 lex.yy.c
 layoutgraph
+graph2dot
 *.tifs

@@ -1,5 +1,5 @@
 
-bin_PROGRAMS = layoutgraph
+bin_PROGRAMS = layoutgraph graph2dot
 pkgdata_DATA = layoutgraph.idef 
 
 EXTRA_DIST = layoutgraph.idef dot.l dot.y
@@ -24,6 +24,10 @@ layoutgraph_LDADD = \
 	-L${TOOLBUSLIB}/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
         ${SOCKLIBS}
+
+graph2dot_SOURCES = graph2dot.c graph2dot-main.c
+graph2dot_LDADD = -L${top_builddir}/lib -lGraph \
+                  -L${ATERM}/lib -lATerm
 
 y.tab.c y.tab.h: dot.y
 	$(YACC) -v $(AM_YFLAGS) $(YFLAGS) $<
