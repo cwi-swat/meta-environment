@@ -17,5 +17,5 @@ CLEANFILES = toolbuslib-config ${PACKAGE}-${VERSION}.pkg
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $ < $@
+	cp $< $@
 
