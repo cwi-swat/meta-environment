@@ -18,6 +18,7 @@ in
       snd-msg(delete-structure-editor(EditorId)) .
       snd-note(delete-editor(EditorId)) .
       snd-msg(kill-editor(EditorId)) .
+      rec-msg(kill-editor-done(EditorId)).
       EditorList := next(EditorList)
     fi
   ) *
@@ -103,7 +104,7 @@ in
     snd-msg(edit-term-file(ModuleName, EditorId))
   +
     rec-msg(text-editor-disconnected(EditorId?)) .
-	  snd-msg(kill-editor(EditorId)) .
+    snd-msg(kill-editor(EditorId)) .
     rec-msg(kill-editor-done(EditorId)).
     snd-msg(delete-structure-editor(EditorId)) .
     snd-note(delete-editor(EditorId))

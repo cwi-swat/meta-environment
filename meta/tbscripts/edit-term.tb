@@ -460,15 +460,15 @@ in
         ShowTree(STree) .
         snd-msg(stack(Stack), EditorId)
       +
-        rec-msg(add-pos-info, Stack?, EditorId) .
+        rec-msg(show-area(NewModName), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
-        snd-msg(get-editor-name(EditorId)) .
-        rec-msg(editor-name(FileName?)) .
-	snd-msg(addPosInfo(FileName, STree)) .	
-	rec-msg(tree-with-pos-info(STree?)) .
-        Stack := join(STree, Stack) .	
-        snd-msg(stack(Stack), EditorId)		
+	FileName := first(args(STree)) .
+  	snd-msg(edit-term-file(NewModName, FileName)) .
+  	rec-msg(edit-term-file(NewModName?, EditorId2?)).
+	ParseTerm(EditorId2, NewModName) .
+	snd-msg(set-focus-at-posinfo(EditorId2, STree)) .		
+        snd-msg(stack(Stack), EditorId)				
       ) *
       rec-msg(kill-editor(EditorId)).
       snd-msg(kill-editor-done(EditorId))

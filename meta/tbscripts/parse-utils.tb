@@ -69,12 +69,21 @@ endlet
 
 process ProcessTree(ModuleId : term, EditorId : term, 
 		    Focus : term, Tree : term) is
+let
+  FileName : str,
+  NewTree : term
+in
   if not-equal(Tree, error-tree) then
-    snd-msg(replace-focus(EditorId, Focus, Tree)) .
+    snd-msg(get-editor-name(EditorId)) .
+    rec-msg(editor-name(FileName?)) .
+    snd-msg(addPosInfo(FileName, Tree)) .
+    rec-msg(tree-with-pos-info(NewTree?)) .
+    snd-msg(replace-focus(EditorId, Focus, NewTree)) .
     snd-msg(parse-ok(ModuleId))
   else
     tau
   fi
+endlet
 
 process ProcessParseError(ModuleName : str, ParseError: term, Type : str) is
 let
