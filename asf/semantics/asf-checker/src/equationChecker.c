@@ -14,7 +14,7 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 
   if (PT_getTreePosInfo((PT_Tree) subject,
       &path, &startLine, &startColumn, &endLine, &endColumn)) {
-    area = ERR_makeAreaArea(startLine, startColumn, endLine, endColumn, 0, 0);
+    area = ERR_makeAreaArea(startLine, startColumn, endLine, endColumn);
     location = ERR_makeLocationLocation(path, area);
     sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), 
 				     location);
