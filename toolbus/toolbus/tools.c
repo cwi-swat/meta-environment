@@ -349,12 +349,14 @@ TBbool write_to_tool(sym_idx af, term_list *args)
     assert(is_tool_inst(ti));
 
     if(equal_tool_id(tid, ti_tid(ti))){
-      if((out = ti_out(ti)) < 0)
+      if((out = ti_out(ti)) < 0) {
         if(stand_alone){
           TBprintf(stdout, "send to %s: %t\n", get_txt(ti_name(ti)), e);
           return TBtrue;
-        } else
+        } else {
           return TBfalse;
+	}
+      }
       if(TCP_transition(ti, e, TBtrue) >= 0){
 	void destroy_ports_for_tool(tool_inst *);
 	TBwrite(out,e);
@@ -737,7 +739,9 @@ retry:
         if(nelem == 0){
           ti_in(ti) = -1;
           err_warn("lost connection with %t\n", ti);
-          goto retry;
+          /* <PO> was: goto retry; */
+	  *pti = ti;
+	  return 0;
         }
         if(nelem < 0){
           err_sys_warn("%t: read failed", ti);
@@ -765,7 +769,13 @@ term *read_term(tool_inst **pti)
     nelem = read_from_any_channel(pti);
     if(nelem < 0)
       err_fatal("read_term: cannot find ready input channel");
-    if((trm = parse_buffer())){
+    if (nelem == 0) {
+      trm = TBmake("snd-disconnect");
+    } else {
+      trm = parse_buffer();
+    }
+
+    if(trm){
       tool_id *tid = ti_tid(*pti);
       sym_idx tool_name = ti_name(*pti);
 
