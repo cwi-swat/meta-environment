@@ -144,7 +144,7 @@ in
    (
      rec-event(UI, element-selected(ActionEvent?, ModuleName?, Tree?)).
      snd-msg(extra-button-action(ActionEvent, [Tree, str(ModuleName)], 
-                                 "message-list", "*", message-id)).
+                                 message-list, "*", message-id)).
      snd-ack-event(UI, element-selected(ActionEvent, ModuleName, Tree)) 
    )
    +
