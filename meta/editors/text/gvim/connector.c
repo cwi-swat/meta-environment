@@ -19,11 +19,11 @@
 #include <TextEditor.h>
 #include <EditorData.h>
 
+#include "protocol.h"
+
 /*}}}  */
 /*{{{  defines */
 
-#define SEPARATOR '#'
-#define HANDSHAKE "handshake"
 #define ANONYMOUS "anonymous"
 
 #define READ_FROM_HIVE "--read_from_hive_fd"
@@ -343,6 +343,24 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 
 /*}}}  */
 
+/*{{{  static void protocol_expect(int fd, const char *expected) */
+
+static void protocol_expect(int fd, const char *expected)
+{
+  char buf[BUFSIZ];
+  int len = strlen(expected);
+
+  if (read(fd, buf, len) != len) {
+    perror("protocol_expect:read");
+    exit(errno);
+  }
+  else if (strncmp(buf, expected, len)) {
+    ATabort("protocol error: expecting %s, got: %s\n", expected, buf);
+  }
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -407,24 +425,18 @@ int main(int argc, char *argv[])
   }
   else if (pid > 0) {
     /* parent */
-    int handshake_length = strlen(HANDSHAKE);
     TE_Pipe hiveToEditor;
     TE_Pipe editorToHive;
 
     close(from_vim[PIPE_WRITE]);
     read_from_editor_fd = from_vim[PIPE_READ];
 
-    if (read(read_from_editor_fd, buf, handshake_length) != handshake_length) {
-      perror("read");
-      return -1;
-    }
-    else if (strncmp(buf, HANDSHAKE, handshake_length)) {
-      ATerror("%s: protocol error in handshake.\n", argv[0]);
-      return -1;
-    }
+    protocol_expect(read_from_editor_fd, CONNECTED);
 
     sprintf(buf, ":source %s", path_vim);
     sendToVim(buf);
+
+    protocol_expect(read_from_editor_fd, HANDSHAKE);
 
     hiveToEditor = TE_makePipeDefault(read_from_hive_fd, -1);
     editorToHive = TE_makePipeDefault(read_from_editor_fd, write_to_hive_fd);
@@ -436,7 +448,7 @@ int main(int argc, char *argv[])
 
     sprintf(buf,
 	    "let tb_pipe = %d"
-	    "| call libcallnr(\"%s\", \"handshake\", tb_pipe)",
+	    "| call libcallnr(\"%s\", \"connected\", tb_pipe)",
 	    from_vim[PIPE_WRITE], path_lib);
 
     execlp("gvim", "gvim", "--servername", id, "-c", buf, filename, NULL);

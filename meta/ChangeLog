@@ -1,5 +1,13 @@
 # $Id$
 
+Thu Oct  9 14:11:48 CEST 2003 <jong@cwi.nl>
+ * editors/text/gvim:
+   - install meta.vim in pkgdata-dir: install/share/meta/meta.vim and read
+     it from that location. Closes: #18
+   - split handshaking protocol into two fases:
+     1. assert that gvim has connected to the connector;
+     2. assert that gvim has read the installed meta.vim file.
+
 Wed Oct  8 16:21:16 CEST 2003 <{jong,jurgenv}@cwi.nl>
  * regenerated Java Graph API:
    - why is this (still?) in Meta Studio anyway and not in graph-support?

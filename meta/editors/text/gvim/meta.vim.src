@@ -30,3 +30,5 @@ endfunc
 map <silent> <C-]> :call SetLocation()<CR>
 
 autocmd BufWritePost * :call SetModified()
+
+call libcallnr(g:meta_dlso, "handshake", g:tb_pipe)

@@ -7,11 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 
-/*}}}  */
-/*{{{  defines */
-
-#define SEPARATOR '#'
-#define HANDSHAKE "handshake"
+#include "protocol.h"
 
 /*}}}  */
 
@@ -20,6 +16,14 @@
 int handshake(int fd)
 {
   return write(fd, HANDSHAKE, strlen(HANDSHAKE));
+}
+
+/*}}}  */
+/*{{{  int connected(int fd) */
+
+int connected(int fd)
+{
+  return write(fd, CONNECTED, strlen(CONNECTED));
 }
 
 /*}}}  */
@@ -36,7 +40,7 @@ int send(const char *cmd)
     return 1;
   }
 
-  p = strchr(cmd, SEPARATOR);
+  p = strchr(cmd, '#');
   if (p == NULL) {
     return 2;
   }

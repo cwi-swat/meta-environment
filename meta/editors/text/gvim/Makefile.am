@@ -9,7 +9,7 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include \
 	-I$(PT_SUPPORT)/include \
 	-DLIBDIR="\"$(libdir)\"" \
-	-DDATADIR="\"$(datadir)\""
+	-DDATADIR="\"$(pkgdatadir)\""
 
 EXTRA_DIST = \
 	meta.vim.src
@@ -20,17 +20,20 @@ COMMONLIB = $(top_builddir)/editors/text/common/libTextEditor.a
 
 bin_PROGRAMS = gvim-connector
 lib_LTLIBRARIES = lib_gvim.la
-data_DATA = meta.vim
-
+pkgdata_DATA = meta.vim
+noinst_HEADERS = protocol.h
 
 gvim_connector_SOURCES = connector.c
 gvim_connector_DEPENDENCIES = $(COMMONLIB)
 
 gvim_connector_LDADD = \
 	$(COMMONLIB) \
-	-L$(top_builddir)/editors/structure/src -lStructure \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(top_builddir)/editors/structure/src \
+	-L$(TOOLBUSLIB)/lib \
+	-L$(ATERM)/lib \
+	-lStructure \
+	-lATB \
+	-lATerm \
 	$(SOCKLIBS)
 
 lib_gvim_la_SOURCES = comm.c startup.c
