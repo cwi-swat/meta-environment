@@ -8,9 +8,6 @@
 
 ATermTable mapping = NULL;
 static char layout_buffer[MAX_LAYOUT_LENGTH] = { '\0' };
-static int line;
-static int col;
-static int margin;
 
 static PT_Tree pTree(PT_Tree tree, int *i);
 static PT_Args pArgs(PT_Args args, int *i);
@@ -130,21 +127,12 @@ static PT_Tree createLayoutTree(int indent, PT_Tree layout)
   /* after every new line a amount of 'indent' spaces should be inserted */
   for (i=0, j=0; i < len; i++, j++) {
     assert(j < MAX_LAYOUT_LENGTH && "Maximum length of layout exceeded");
-    if (col >= margin) {
-      str[i] = '\n';
-    }
-
     layout_buffer[j] = str[i];
 
     if (str[i] == '\n') {
-      line++;
       for(k=0; k < indent; k++) {
 	layout_buffer[++j] = DEFAULT_LAYOUT_CHARACTER;
       }
-      col = indent;
-    }
-    else {
-      col++;
     }
   }
   layout_buffer[j] = '\0';
@@ -359,20 +347,6 @@ static PT_Tree pTree(PT_Tree tree, int *i)
   else if (PT_isTreeAppl(tree)) {
     return pAppl(tree, i);
   }
-  else if (PT_isTreeChar(tree)) {
-    char ch = PT_getTreeCharacter(tree);
-
-    switch(ch) {
-      case '\n':
-	line++;
-	col = 0;
-	break;
-      default:
-	col++;
-    }
-
-    return tree;
-  }
   else {
     return tree;
   }
@@ -392,11 +366,10 @@ static PT_ParseTree pParseTree(PT_ParseTree parsetree)
 
 /*{{{  PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree) */
 
-PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree, int m)
+PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree)
 {
   SDF_ProductionList productions = collectProductions(syntax);
   createMappingToPT(productions);
-  margin = m;
 
   return pParseTree(parsetree);
 }

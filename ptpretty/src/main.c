@@ -10,7 +10,7 @@
 
 static char* myname = "ptpretty";
 static char* myversion = "0.1";
-static char* myarguments = "c:i:o:vVhs:";
+static char* myarguments = "i:o:vVhs:";
 static ATbool run_verbose = ATfalse;
 
 /*{{{  void usage(void) */
@@ -25,7 +25,6 @@ static void usage(void)
         "Usage: %s [options]\n"
         "Options:\n"
         "\t-h              display help information\n"
-	"\t-c int          position of right margin           [75]\n"
         "\t-i filename     input (parsed) file                [stdin]\n"
         "\t-o filename     output (parsed) file               [stdout]\n"
 	"\t-s filename     input (parsed) syntax definition   [obligatory]\n"
@@ -51,8 +50,6 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *syntax = "";
-  char *smargin = "";
-  int margin = 75;
   int c;
 
   ATerm at_sdf;
@@ -66,7 +63,6 @@ int main(int argc, char *argv[])
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
-      case 'c':  smargin=optarg; break;
       case 'i':  input=optarg; break;
       case 's':  syntax=optarg; break;
       case 'o':  output=optarg; break;
@@ -83,20 +79,6 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  if (!strcmp(smargin,"")) {
-    margin = NO_MARGIN;
-  }
-  else {
-    char *end;
-
-    margin = (int) strtol(smargin, &end, 10);
-
-    if (strlen(end) != 0) {
-      ATwarning("Type a valid integer after the -c option");
-      usage();
-      exit(1);
-    }
-  }
 
   ATsetChecking(ATtrue);
 
@@ -106,7 +88,7 @@ int main(int argc, char *argv[])
   tree = PT_ParseTreeFromTerm(at_tree);
   sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(PT_ParseTreeFromTerm(at_sdf)));
 
-  tree = pretty(sdf, tree, margin);
+  tree = pretty(sdf, tree);
 
   ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
   
