@@ -18,7 +18,8 @@ in
     + 
       rec-value(PPT, error(ErrMsg?)) .
       snd-msg(ptpretty-error(ErrMsg))
-    )
+    ).
+    snd-terminate(PPT, "done")
   ) * delta
 endlet
 
