@@ -1,5 +1,8 @@
 $Id$
 
+Mon May 10 09:37:44 CEST 2004 <kooiker@cwi.nl>
+ * library/sandbox/toolbus: Added Tscript-pretty pretty print rules 
+
 Tue May  4 11:16:57 CEST 2004 <jurgenv@cwi.nl>
  * Refactored IO module into Parsing and Files, and IOResults into
    ParsetreeCon and ReadWriteCon.

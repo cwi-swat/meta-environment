@@ -3,6 +3,7 @@ module Tscript
 imports TscriptDef
 
 exports
+  context-free start-symbols Tscript
   sorts Tscript
   context-free syntax
 

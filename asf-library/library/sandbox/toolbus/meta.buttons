@@ -1,0 +1,17 @@
+configuration([
+   button("Tscript",
+          [description(term-editor, menu(["Tscript","PrettyPrint"]))],
+          [push-active-module,
+	   get-root,
+           push-string("Tscript"),
+           check-sort,
+           push-term(true),
+           if-equal([push-modulename("Tscript-pretty"),
+                     reduce,
+	             push-active-module,
+                     pretty-print,
+                     set-root,
+                     push-active-module,
+                     parse-action],
+		    [])])
+  ])
