@@ -33,7 +33,7 @@ dnl {{{  Require ToolBus library
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR      ToolBus library is in DIR])
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
 dnl }}}
