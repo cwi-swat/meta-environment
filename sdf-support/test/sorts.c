@@ -30,12 +30,14 @@ int testSorts(void)
   assert(ATgetLength((ATermList)SDF_SymbolListToTerm(sorts)) == 1);
 
   symbol = SDF_getSymbolListHead(sorts);
+
+  assert(SDF_hasSymbolSort(symbol));
+
   sort   = SDF_getSymbolSort(symbol);
+
   str    = PT_yieldTree((PT_Tree) sort);
 
   assert(strcmp(str, "PICO-BOOL") == 0);
-
-  free(str);
 
   return 0;
 }
@@ -50,6 +52,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
+  PT_initMEPTApi();
 
   return testSorts();
 }
