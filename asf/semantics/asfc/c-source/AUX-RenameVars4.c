@@ -51,7 +51,7 @@ void init_AUX_RenameVars4 ( ) {
 ATerm lf_AUX_RenameVars4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_RenameVars4_1 ) ;
+FUNC_ENTRY ( lf_AUX_RenameVars4_1sym , ATmakeAppl ( lf_AUX_RenameVars4_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -62,7 +62,7 @@ tmp [ 0 ] = ( * ef4 ) ( atmp000 , arg1 ) ;
 if ( check_sym ( tmp [ 0 ] , ef5sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-return ( * ef3 ) ( ( * ef1 ) ( ( * ef2 ) ( tmp [ 1 ] ) ) , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef1 ) ( ( * ef2 ) ( tmp [ 1 ] ) ) , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -84,7 +84,7 @@ tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-return ( * ef3 ) ( ( * ef6 ) ( atmp00 , lf2 ( make_list ( tmp [ 3 ] ) ) ) , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef6 ) ( atmp00 , lf2 ( make_list ( tmp [ 3 ] ) ) ) , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -94,11 +94,12 @@ return ( * ef3 ) ( ( * ef6 ) ( atmp00 , lf2 ( make_list ( tmp [ 3 ] ) ) ) , tmp 
 }
 }
 }
-return ( * ef3 ) ( arg0 , arg1 ) ;
+FUNC_EXIT ( ( * ef3 ) ( arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_RenameVars4_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

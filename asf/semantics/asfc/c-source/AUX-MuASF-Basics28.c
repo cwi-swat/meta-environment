@@ -45,16 +45,16 @@ ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"
 void init_AUX_MuASF_Basics28 ( ) {
 }
 ATerm lf_AUX_MuASF_Basics28_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
-PROF ( prof_lf_AUX_MuASF_Basics28_2 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics28_2sym , ATmakeAppl ( lf_AUX_MuASF_Basics28_2sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 if ( check_sym ( arg1 , lf_AUX_MuASF_Basics28_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( ! not_empty_list ( atmp10 ) ) {
-return ( * ef6 ) ( arg2 , arg3 ) ;
+FUNC_EXIT ( ( * ef6 ) ( arg2 , arg3 ) ) ;
 }
 else {
-return ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Basics28_1 ( make_list ( atmp10 ) ) ) , arg2 , arg3 ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Basics28_1 ( make_list ( atmp10 ) ) ) , arg2 , arg3 ) ) ;
 }
 }
 }
@@ -64,18 +64,18 @@ if ( check_sym ( arg1 , lf_AUX_MuASF_Basics28_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( ! not_empty_list ( atmp10 ) ) {
-return ( * ef7 ) ( arg2 , arg3 ) ;
+FUNC_EXIT ( ( * ef7 ) ( arg2 , arg3 ) ) ;
 }
 else {
-return ( * ef5 ) ( ( * ef3 ) ( lf_AUX_MuASF_Basics28_1 ( make_list ( atmp10 ) ) ) , arg2 , arg3 ) ;
+FUNC_EXIT ( ( * ef5 ) ( ( * ef3 ) ( lf_AUX_MuASF_Basics28_1 ( make_list ( atmp10 ) ) ) , arg2 , arg3 ) ) ;
 }
 }
 }
 }
-return make_nf4 ( lf_AUX_MuASF_Basics28_2sym , arg0 , arg1 , arg2 , arg3 ) ;
+FUNC_EXIT ( make_nf4 ( lf_AUX_MuASF_Basics28_2sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics28_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics28_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Basics28_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics28_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics28_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics28_1sym , arg0 ) ) ;
 }
 

@@ -131,7 +131,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_MuASF_Conds2C7_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
 ATerm tmp [ 24 ] ;
-PROF ( prof_lf_AUX_MuASF_Conds2C7_3 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Conds2C7_3sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C7_3sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_MuASF_Conds2C7_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -172,7 +172,7 @@ if ( check_sym ( tmp [ 20 ] , ef4sym ) ) {
 tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ;
 tmp [ 22 ] = arg_1 ( tmp [ 20 ] ) ;
 tmp [ 23 ] = ( * ef19 ) ( tmp [ 17 ] , ( * ef20 ) ( tmp [ 19 ] , tmp [ 21 ] ) ) ;
-return ( * ef4 ) ( tmp [ 23 ] , tmp [ 22 ] ) ;
+FUNC_EXIT ( ( * ef4 ) ( tmp [ 23 ] , tmp [ 22 ] ) ) ;
 }
 }
 }
@@ -187,35 +187,35 @@ return ( * ef4 ) ( tmp [ 23 ] , tmp [ 22 ] ) ;
 }
 }
 }
-return make_nf4 ( lf_AUX_MuASF_Conds2C7_3sym , arg0 , arg1 , arg2 , arg3 ) ;
+FUNC_EXIT ( make_nf4 ( lf_AUX_MuASF_Conds2C7_3sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Conds2C7_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C7_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C7_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C7_2sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C7_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C7_2sym , arg0 ) ) ;
 }
 ATerm lf6 ( ATerm arg0 ) {
-PROF ( prof_lf6 ) ;
-return make_nf1 ( lf6sym , arg0 ) ;
+CONS_ENTRY ( lf6sym , ATmakeAppl ( lf6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf6sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Conds2C7_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C7_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C7_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C7_1sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C7_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C7_1sym , arg0 ) ) ;
 }
 ATerm lf8 ( ATerm arg0 ) {
-PROF ( prof_lf8 ) ;
-return make_nf1 ( lf8sym , arg0 ) ;
+CONS_ENTRY ( lf8sym , ATmakeAppl ( lf8sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf8sym , arg0 ) ) ;
 }
 ATerm lf7 ( ATerm arg0 ) {
-PROF ( prof_lf7 ) ;
-return make_nf1 ( lf7sym , arg0 ) ;
+CONS_ENTRY ( lf7sym , ATmakeAppl ( lf7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf7sym , arg0 ) ) ;
 }
 

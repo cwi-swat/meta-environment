@@ -40,22 +40,22 @@ ATprotect ( & constant2 ) ;
 ATerm lf_AUX_AsFix_Basics8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_AsFix_Basics8_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix_Basics8_1sym , ATmakeAppl ( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 tmp [ 0 ] = ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( ) ) ) ;
 if ( ! term_equal ( arg0 , tmp [ 0 ] ) ) {
 tmp [ 1 ] = ( * ef4 ) ( arg0 ) ;
 if ( term_equal ( tmp [ 1 ] , arg1 ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef3 ) ( ) ) ;
 }
 else {
 tmp [ 2 ] = ( * ef5 ) ( arg0 ) ;
-return lf_AUX_AsFix_Basics8_1 ( tmp [ 2 ] , arg1 ) ;
+FUNC_EXIT ( lf_AUX_AsFix_Basics8_1 ( tmp [ 2 ] , arg1 ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1 ) ) ;
 }
 }
 

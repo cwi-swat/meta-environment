@@ -35,9 +35,9 @@ void init_AUX_MuASF2C6 ( ) {
 ATerm lf_AUX_MuASF2C6_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_MuASF2C6_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF2C6_1sym , ATmakeAppl ( lf_AUX_MuASF2C6_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
@@ -50,10 +50,10 @@ if ( check_sym ( atmp000 , lf2sym ) ) {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 tmp [ 0 ] = ( * ef4 ) ( lf2 ( make_list ( atmp0000 ) ) , arg1 ) ;
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 else {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 }
 }
@@ -61,11 +61,11 @@ return arg1 ;
 }
 }
 }
-return make_nf2 ( lf_AUX_MuASF2C6_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_MuASF2C6_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

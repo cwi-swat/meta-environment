@@ -61,7 +61,7 @@ void init_AUX_VarEnv16 ( ) {
 ATerm lf_AUX_VarEnv16_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 14 ] ;
-PROF ( prof_lf_AUX_VarEnv16_1 ) ;
+FUNC_ENTRY ( lf_AUX_VarEnv16_1sym , ATmakeAppl ( lf_AUX_VarEnv16_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -93,7 +93,7 @@ if ( check_sym ( tmp [ 0 ] , ef8sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf4sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-return ( * ef4 ) ( ( * ef3 ) ( lf4 ( cons ( make_list ( atmp2100 ) , make_list ( tmp [ 2 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef5 ) ( arg0 , ( * ef3 ) ( lf4 ( cons ( make_list ( atmp2100 ) , make_list ( tmp [ 2 ] ) ) ) ) , lf2 ( make_list ( atmp100 ) ) ) ) ) , ( * ef3 ) ( lf4 ( make_list ( atmp2100 ) ) ) , ( * ef6 ) ( atmp22 ) , atmp23 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef3 ) ( lf4 ( cons ( make_list ( atmp2100 ) , make_list ( tmp [ 2 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef5 ) ( arg0 , ( * ef3 ) ( lf4 ( cons ( make_list ( atmp2100 ) , make_list ( tmp [ 2 ] ) ) ) ) , lf2 ( make_list ( atmp100 ) ) ) ) ) , ( * ef3 ) ( lf4 ( make_list ( atmp2100 ) ) ) , ( * ef6 ) ( atmp22 ) , atmp23 ) ) ) ;
 }
 }
 }
@@ -134,13 +134,13 @@ tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ;
 tmp [ 12 ] = arg_3 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf3sym ) ) {
 tmp [ 13 ] = arg_0 ( tmp [ 9 ] ) ;
-return ( * ef4 ) ( tmp [ 7 ] , ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef5 ) ( tmp [ 2 ] , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , tmp [ 11 ] , tmp [ 12 ] ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( tmp [ 7 ] , ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef5 ) ( tmp [ 2 ] , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , tmp [ 11 ] , tmp [ 12 ] ) ) ) ;
 }
 }
 }
 }
 else {
-return ( * ef4 ) ( tmp [ 3 ] , ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef5 ) ( arg0 , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp21 , atmp22 , atmp23 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( tmp [ 3 ] , ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef5 ) ( arg0 , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp21 , atmp22 , atmp23 ) ) ) ;
 }
 }
 }
@@ -160,19 +160,19 @@ return ( * ef4 ) ( tmp [ 3 ] , ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef5 ) ( 
 }
 }
 }
-return make_nf3 ( lf_AUX_VarEnv16_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_VarEnv16_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 

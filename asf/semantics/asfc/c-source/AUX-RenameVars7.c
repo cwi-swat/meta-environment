@@ -38,7 +38,7 @@ void init_AUX_RenameVars7 ( ) {
 ATerm lf_AUX_RenameVars7_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_RenameVars7_1 ) ;
+FUNC_ENTRY ( lf_AUX_RenameVars7_1sym , ATmakeAppl ( lf_AUX_RenameVars7_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -52,7 +52,7 @@ tmp [ 3 ] = ( * ef3 ) ( atmp01 , tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ;
-return ( * ef2 ) ( ( * ef1 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef1 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ) ;
 }
 }
 }
@@ -71,7 +71,7 @@ tmp [ 3 ] = ( * ef3 ) ( atmp01 , tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ;
-return ( * ef2 ) ( ( * ef5 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef5 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ) ;
 }
 }
 }
@@ -90,13 +90,13 @@ tmp [ 3 ] = ( * ef3 ) ( atmp01 , tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ;
-return ( * ef2 ) ( ( * ef6 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef6 ) ( tmp [ 1 ] , tmp [ 4 ] ) , tmp [ 5 ] ) ) ;
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_RenameVars7_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_RenameVars7_1sym , arg0 , arg1 ) ) ;
 }
 }
 

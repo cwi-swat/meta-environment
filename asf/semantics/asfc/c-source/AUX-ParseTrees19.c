@@ -33,19 +33,19 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[sort(
 void init_AUX_ParseTrees19 ( ) {
 }
 ATerm lf_AUX_ParseTrees19_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_ParseTrees19_2 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees19_2sym , ATmakeAppl ( lf_AUX_ParseTrees19_2sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_ParseTrees19_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-return ( * ef1 ) ( arg0 , lf_AUX_ParseTrees19_1 ( make_list ( atmp10 ) ) , ( * ef2 ) ( arg2 , ( * ef3 ) ( ( * ef4 ) ( arg0 , lf_AUX_ParseTrees19_1 ( make_list ( atmp10 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , lf_AUX_ParseTrees19_1 ( make_list ( atmp10 ) ) , ( * ef2 ) ( arg2 , ( * ef3 ) ( ( * ef4 ) ( arg0 , lf_AUX_ParseTrees19_1 ( make_list ( atmp10 ) ) ) ) ) ) ) ;
 }
 }
 }
-return make_nf3 ( lf_AUX_ParseTrees19_2sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees19_2sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_ParseTrees19_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees19_1 ) ;
-return make_nf1 ( lf_AUX_ParseTrees19_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees19_1sym , ATmakeAppl ( lf_AUX_ParseTrees19_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_ParseTrees19_1sym , arg0 ) ) ;
 }
 

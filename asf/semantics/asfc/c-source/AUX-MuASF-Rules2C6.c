@@ -65,7 +65,7 @@ void init_AUX_MuASF_Rules2C6 ( ) {
 ATerm lf_AUX_MuASF_Rules2C6_4 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
 ATerm tmp [ 11 ] ;
-PROF ( prof_lf_AUX_MuASF_Rules2C6_4 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Rules2C6_4sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C6_4sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_MuASF_Rules2C6_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -99,7 +99,7 @@ tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 8 ] , lf_AUX_MuASF_Rules2C6_1sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
-return ( * ef1 ) ( lf_AUX_MuASF_Rules2C6_1 ( make_list ( tmp [ 10 ] ) ) , ( * ef8 ) ( tmp [ 9 ] , ( * ef2 ) ( ( * ef3 ) ( tmp [ 6 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Rules2C6_1 ( make_list ( tmp [ 10 ] ) ) , ( * ef8 ) ( tmp [ 9 ] , ( * ef2 ) ( ( * ef3 ) ( tmp [ 6 ] ) ) ) ) ) ;
 }
 }
 }
@@ -123,7 +123,7 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Rules2C6_2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 tmp [ 6 ] = ( * ef7 ) ( lf_AUX_MuASF_Rules2C6_2 ( make_list ( tmp [ 5 ] ) ) , lf_AUX_MuASF_Rules2C6_3 ( make_list ( atmp30 ) ) ) ;
-return ( * ef1 ) ( lf_AUX_MuASF_Rules2C6_1 ( make_list ( atmp00 ) ) , ( * ef2 ) ( ( * ef3 ) ( tmp [ 6 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Rules2C6_1 ( make_list ( atmp00 ) ) , ( * ef2 ) ( ( * ef3 ) ( tmp [ 6 ] ) ) ) ) ;
 }
 }
 }
@@ -140,19 +140,19 @@ return ( * ef1 ) ( lf_AUX_MuASF_Rules2C6_1 ( make_list ( atmp00 ) ) , ( * ef2 ) 
 }
 }
 }
-return make_nf4 ( lf_AUX_MuASF_Rules2C6_4sym , arg0 , arg1 , arg2 , arg3 ) ;
+FUNC_EXIT ( make_nf4 ( lf_AUX_MuASF_Rules2C6_4sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Rules2C6_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C6_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C6_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C6_1sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C6_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C6_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Rules2C6_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C6_3 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C6_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C6_3sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C6_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C6_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Rules2C6_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C6_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C6_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C6_2sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C6_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C6_2sym , arg0 ) ) ;
 }
 

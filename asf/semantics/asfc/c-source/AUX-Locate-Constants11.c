@@ -33,7 +33,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Locate_Constants11_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_Locate_Constants11_2 ) ;
+FUNC_ENTRY ( lf_AUX_Locate_Constants11_2sym , ATmakeAppl ( lf_AUX_Locate_Constants11_2sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Locate_Constants11_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -42,18 +42,18 @@ tmp [ 0 ] = list_head ( atmp00 ) ;
 tmp [ 1 ] = list_tail ( atmp00 ) ;
 tmp [ 2 ] = ( * ef3 ) ( tmp [ 0 ] ) ;
 tmp [ 3 ] = lf_AUX_Locate_Constants11_2 ( lf_AUX_Locate_Constants11_1 ( make_list ( tmp [ 1 ] ) ) ) ;
-return ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
 }
 else {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Locate_Constants11_2sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Locate_Constants11_2sym , arg0 ) ) ;
 }
 }
 ATerm lf_AUX_Locate_Constants11_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Locate_Constants11_1 ) ;
-return make_nf1 ( lf_AUX_Locate_Constants11_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Locate_Constants11_1sym , ATmakeAppl ( lf_AUX_Locate_Constants11_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Locate_Constants11_1sym , arg0 ) ) ;
 }
 

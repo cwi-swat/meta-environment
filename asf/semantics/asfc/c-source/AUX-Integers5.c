@@ -26,7 +26,7 @@ void init_AUX_Integers5 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Integers5_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Integers5_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers5_1sym , ATmakeAppl ( lf_AUX_Integers5_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -34,15 +34,15 @@ if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( ! term_equal ( atmp00 , atmp10 ) ) {
-return ( * ef2 ) ( arg0 , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , arg1 ) ) ;
 }
 else {
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_Integers5_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers5_1sym , arg0 , arg1 ) ) ;
 }
 

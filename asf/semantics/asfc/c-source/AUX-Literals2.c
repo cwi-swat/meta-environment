@@ -18,16 +18,12 @@ void resolve_AUX_Literals2 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Literals2 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Literals2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_Literals2_1 ) ;
+FUNC_ENTRY ( lf_AUX_Literals2_1sym , ATmakeAppl ( lf_AUX_Literals2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -52,7 +48,7 @@ tmp [ 2 ] = list_tail ( atmp100 ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 tmp [ 3 ] = list_prefix ( tmp [ 2 ] ) ;
 if ( term_equal ( list_last ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
-return ( * ef1 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 34 ) ) ) , cons ( make_list ( tmp [ 1 ] ) , cons ( make_list ( tmp [ 3 ] ) , ( constant1 ? constant1 : ( constant1 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 1 ] ) , cons ( make_list ( tmp [ 3 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -69,11 +65,11 @@ return ( * ef1 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_lis
 }
 }
 }
-return make_nf2 ( lf_AUX_Literals2_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Literals2_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

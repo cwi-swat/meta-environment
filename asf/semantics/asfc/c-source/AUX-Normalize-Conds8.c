@@ -44,15 +44,13 @@ ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[l(
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[l(\"normalize-terms\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Normalize_Conds8 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Normalize_Conds8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_Normalize_Conds8_1 ) ;
+FUNC_ENTRY ( lf_AUX_Normalize_Conds8_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds8_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -77,7 +75,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = lf2 ( make_list ( null ( ) ) ) ) ) , lf3 ( cons ( make_list ( ( * ef1 ) ( atmp00 , ( * ef5 ) ( atmp010 , lf2 ( make_list ( tmp [ 4 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( cons ( make_list ( ( * ef1 ) ( atmp00 , ( * ef5 ) ( atmp010 , lf2 ( make_list ( tmp [ 4 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }
@@ -90,8 +88,8 @@ return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = lf2 ( make_list ( nul
 }
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-if ( term_equal ( ( * ef3 ) ( atmp01 ) , ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( ) ) ) ) ) {
-return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = lf2 ( make_list ( null ( ) ) ) ) ) , lf3 ( make_list ( arg0 ) ) , arg1 ) ;
+if ( term_equal ( ( * ef3 ) ( atmp01 ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( arg0 ) ) , arg1 ) ) ;
 }
 }
 }
@@ -102,19 +100,19 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = lf2 ( make_list ( null ( ) ) ) ) ) , lf3 ( make_list ( arg0 ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( arg0 ) ) , arg1 ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Normalize_Conds8_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Normalize_Conds8_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

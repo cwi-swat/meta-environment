@@ -21,7 +21,7 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"[\")
 void init_AUX_VarEnv12 ( ) {
 }
 ATerm lf_AUX_VarEnv12_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv12_1 ) ;
+FUNC_ENTRY ( lf_AUX_VarEnv12_1sym , ATmakeAppl ( lf_AUX_VarEnv12_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -30,16 +30,16 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , lf2sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return atmp00 ;
+FUNC_EXIT ( atmp00 ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_VarEnv12_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_VarEnv12_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

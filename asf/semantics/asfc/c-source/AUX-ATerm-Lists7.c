@@ -30,9 +30,9 @@ void init_AUX_ATerm_Lists7 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Lists7_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Lists7_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists7_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists7_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
@@ -40,7 +40,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef3sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 }
 {
@@ -50,13 +50,13 @@ if ( check_sym ( atmp00 , ef4sym ) ) {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 {
 ATerm atmp001 = arg_1 ( atmp00 ) ;
-return ( * ef2 ) ( atmp001 ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp001 ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_ATerm_Lists7_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Lists7_1sym , arg0 ) ) ;
 }
 

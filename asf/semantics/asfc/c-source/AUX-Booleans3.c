@@ -20,13 +20,13 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fa
 void init_AUX_Booleans3 ( ) {
 }
 ATerm lf_AUX_Booleans3_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Booleans3_1 ) ;
+FUNC_ENTRY ( lf_AUX_Booleans3_1sym , ATmakeAppl ( lf_AUX_Booleans3_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
-return make_nf2 ( lf_AUX_Booleans3_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Booleans3_1sym , arg0 , arg1 ) ) ;
 }
 

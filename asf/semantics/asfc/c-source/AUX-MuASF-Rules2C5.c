@@ -53,7 +53,7 @@ void init_AUX_MuASF_Rules2C5 ( ) {
 ATerm lf_AUX_MuASF_Rules2C5_4 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 11 ] ;
-PROF ( prof_lf_AUX_MuASF_Rules2C5_4 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Rules2C5_4sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C5_4sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_MuASF_Rules2C5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -80,7 +80,7 @@ if ( check_sym ( tmp [ 8 ] , ef6sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf_AUX_MuASF_Rules2C5_1sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
-return ( * ef1 ) ( lf_AUX_MuASF_Rules2C5_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_MuASF_Rules2C5_2 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_MuASF_Rules2C5_2 ( make_list ( tmp [ 7 ] ) ) , lf_AUX_MuASF_Rules2C5_3 ( make_list ( atmp20 ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Rules2C5_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_MuASF_Rules2C5_2 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_MuASF_Rules2C5_2 ( make_list ( tmp [ 7 ] ) ) , lf_AUX_MuASF_Rules2C5_3 ( make_list ( atmp20 ) ) ) ) ;
 }
 }
 }
@@ -93,19 +93,19 @@ return ( * ef1 ) ( lf_AUX_MuASF_Rules2C5_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX
 }
 }
 }
-return make_nf3 ( lf_AUX_MuASF_Rules2C5_4sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_MuASF_Rules2C5_4sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Rules2C5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C5_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C5_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C5_1sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C5_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C5_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Rules2C5_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C5_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C5_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C5_2sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C5_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C5_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Rules2C5_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Rules2C5_3 ) ;
-return make_nf1 ( lf_AUX_MuASF_Rules2C5_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Rules2C5_3sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C5_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C5_3sym , arg0 ) ) ;
 }
 

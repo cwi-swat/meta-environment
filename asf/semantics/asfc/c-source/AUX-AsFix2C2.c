@@ -42,7 +42,7 @@ void init_AUX_AsFix2C2 ( ) {
 ATerm lf_AUX_AsFix2C2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_AsFix2C2_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2C2_1sym , ATmakeAppl ( lf_AUX_AsFix2C2_1sym , arg0 ) ) ;
 tmp [ 0 ] = ( * ef2 ) ( arg0 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
@@ -51,9 +51,9 @@ tmp [ 3 ] = ( * ef4 ) ( tmp [ 1 ] ) ;
 tmp [ 4 ] = ( * ef5 ) ( tmp [ 3 ] ) ;
 tmp [ 5 ] = ( * ef6 ) ( tmp [ 4 ] ) ;
 tmp [ 6 ] = ( * ef7 ) ( tmp [ 5 ] ) ;
-return ( * ef1 ) ( tmp [ 6 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 6 ] , tmp [ 2 ] ) ) ;
 }
-return make_nf1 ( lf_AUX_AsFix2C2_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2C2_1sym , arg0 ) ) ;
 }
 }
 

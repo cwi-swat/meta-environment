@@ -20,7 +20,8 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"RemAsFixWspace\"),w(\"\"),[l
 void init_AUX_AsFixPrint2 ( ) {
 }
 ATerm lf_AUX_AsFixPrint2_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_AsFixPrint2_1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( arg0 ) ) ;
+FUNC_ENTRY ( lf_AUX_AsFixPrint2_1sym , ATmakeAppl ( lf_AUX_AsFixPrint2_1sym , arg0 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( arg0 ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFixPrint2_1sym , arg0 ) ) ;
 }
 

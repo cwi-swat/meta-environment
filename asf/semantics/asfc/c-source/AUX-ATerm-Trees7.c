@@ -52,9 +52,10 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_ATerm_Trees7_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_ATerm_Trees7_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees7_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees7_1sym , arg0 , arg1 ) ) ;
 tmp [ 0 ] = ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( ) ) ) , ( * ef3 ) ( arg0 ) ) , ( * ef9 ) ( arg1 ) ) ) ;
-return ( * ef1 ) ( ( * ef2 ) ( arg0 , ( * ef3 ) ( arg1 ) ) , ( * ef4 ) ( arg1 , tmp [ 0 ] ) , tmp [ 0 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( arg0 , ( * ef3 ) ( arg1 ) ) , ( * ef4 ) ( arg1 , tmp [ 0 ] ) , tmp [ 0 ] ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Trees7_1sym , arg0 , arg1 ) ) ;
 }
 }
 

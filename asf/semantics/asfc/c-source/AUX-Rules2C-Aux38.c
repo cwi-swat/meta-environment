@@ -33,16 +33,15 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\")
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-c-brackets\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-c-brackets\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Rules2C_Aux38 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Rules2C_Aux38_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux38_1 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux38_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux38_1sym , arg0 , arg1 ) ) ;
 tmp [ 0 ] = ( * ef6 ) ( arg1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( arg0 , ( * ef4 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) , tmp [ 0 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( arg0 , ( * ef4 ) ( ( * ef5 ) ( ) , tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Rules2C_Aux38_1sym , arg0 , arg1 ) ) ;
 }
 }
 

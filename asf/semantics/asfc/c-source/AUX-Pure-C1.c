@@ -266,199 +266,199 @@ ATprotect ( & constant5 ) ;
 ATprotect ( & constant6 ) ;
 }
 ATerm lf_AUX_Pure_C1_48 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_48 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_48sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_48sym , ATmakeAppl ( lf_AUX_Pure_C1_48sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_48sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_49 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_49 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_49sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_49sym , ATmakeAppl ( lf_AUX_Pure_C1_49sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_49sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_47 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_47 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_47sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_47sym , ATmakeAppl ( lf_AUX_Pure_C1_47sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_47sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_46 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_46 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_46sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_46sym , ATmakeAppl ( lf_AUX_Pure_C1_46sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_46sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_45 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_45 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_45sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_45sym , ATmakeAppl ( lf_AUX_Pure_C1_45sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_45sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_44 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_44 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_44sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_44sym , ATmakeAppl ( lf_AUX_Pure_C1_44sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_44sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_43 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_43 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_43sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_43sym , ATmakeAppl ( lf_AUX_Pure_C1_43sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_43sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_42 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_42 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_42sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_42sym , ATmakeAppl ( lf_AUX_Pure_C1_42sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_42sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_41 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_41 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_41sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_41sym , ATmakeAppl ( lf_AUX_Pure_C1_41sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_41sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_40 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_40 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_40sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_40sym , ATmakeAppl ( lf_AUX_Pure_C1_40sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_40sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_39 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_39 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_Pure_C1_39sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_39sym , ATmakeAppl0 ( lf_AUX_Pure_C1_39sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Pure_C1_39sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_38 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_38 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_Pure_C1_38sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_38sym , ATmakeAppl0 ( lf_AUX_Pure_C1_38sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Pure_C1_38sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_37 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_37 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_Pure_C1_37sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_37sym , ATmakeAppl0 ( lf_AUX_Pure_C1_37sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_Pure_C1_37sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_36 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Pure_C1_36 ) ;
-return make_nf3 ( lf_AUX_Pure_C1_36sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_36sym , ATmakeAppl ( lf_AUX_Pure_C1_36sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Pure_C1_36sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_35 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_35 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_35sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_35sym , ATmakeAppl ( lf_AUX_Pure_C1_35sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_35sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_34 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_34 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_34sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_34sym , ATmakeAppl ( lf_AUX_Pure_C1_34sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_34sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_33 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_33 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_33sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_33sym , ATmakeAppl ( lf_AUX_Pure_C1_33sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_33sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_31 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_31 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_31sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_31sym , ATmakeAppl ( lf_AUX_Pure_C1_31sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_31sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_32 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_32 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_32sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_32sym , ATmakeAppl ( lf_AUX_Pure_C1_32sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_32sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_30 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_30 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_30sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_30sym , ATmakeAppl ( lf_AUX_Pure_C1_30sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_30sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_29 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_29 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_29sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_29sym , ATmakeAppl ( lf_AUX_Pure_C1_29sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_29sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_28 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_28 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_28sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_28sym , ATmakeAppl ( lf_AUX_Pure_C1_28sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_28sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_27 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_27 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_27sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_27sym , ATmakeAppl ( lf_AUX_Pure_C1_27sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_27sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_26 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_26 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_26sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_26sym , ATmakeAppl ( lf_AUX_Pure_C1_26sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_26sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_25 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_25 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_Pure_C1_25sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_25sym , ATmakeAppl0 ( lf_AUX_Pure_C1_25sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_Pure_C1_25sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_24 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_24 ) ;
-return ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_AUX_Pure_C1_24sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_24sym , ATmakeAppl0 ( lf_AUX_Pure_C1_24sym ) ) ;
+CONS_EXIT_CONST ( constant4 , make_nf0 ( lf_AUX_Pure_C1_24sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_22 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_22 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_22sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_22sym , ATmakeAppl ( lf_AUX_Pure_C1_22sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_22sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_23 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_23 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_23sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_23sym , ATmakeAppl ( lf_AUX_Pure_C1_23sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_23sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_21 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_21 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_21sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_21sym , ATmakeAppl ( lf_AUX_Pure_C1_21sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_21sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_20 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_20 ) ;
-return ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_AUX_Pure_C1_20sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_20sym , ATmakeAppl0 ( lf_AUX_Pure_C1_20sym ) ) ;
+CONS_EXIT_CONST ( constant5 , make_nf0 ( lf_AUX_Pure_C1_20sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_19 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_19 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_19sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_19sym , ATmakeAppl ( lf_AUX_Pure_C1_19sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_19sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_18 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_18 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_18sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_18sym , ATmakeAppl ( lf_AUX_Pure_C1_18sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_18sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_17 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Pure_C1_17 ) ;
-return make_nf3 ( lf_AUX_Pure_C1_17sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_17sym , ATmakeAppl ( lf_AUX_Pure_C1_17sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Pure_C1_17sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_16 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_16 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_16sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_16sym , ATmakeAppl ( lf_AUX_Pure_C1_16sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_16sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_15 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Pure_C1_15 ) ;
-return make_nf3 ( lf_AUX_Pure_C1_15sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_15sym , ATmakeAppl ( lf_AUX_Pure_C1_15sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Pure_C1_15sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_14 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_14 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_14sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_14sym , ATmakeAppl ( lf_AUX_Pure_C1_14sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_14sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_13 ( ) {
-PROF ( prof_lf_AUX_Pure_C1_13 ) ;
-return ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_AUX_Pure_C1_13sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_13sym , ATmakeAppl0 ( lf_AUX_Pure_C1_13sym ) ) ;
+CONS_EXIT_CONST ( constant6 , make_nf0 ( lf_AUX_Pure_C1_13sym ) ) ;
 }
 ATerm lf_AUX_Pure_C1_12 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_12 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_12sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_12sym , ATmakeAppl ( lf_AUX_Pure_C1_12sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_12sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_11 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_11 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_11sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_11sym , ATmakeAppl ( lf_AUX_Pure_C1_11sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_11sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_10 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_10 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_10sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_10sym , ATmakeAppl ( lf_AUX_Pure_C1_10sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_10sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_9 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_9 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_9sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_9sym , ATmakeAppl ( lf_AUX_Pure_C1_9sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_9sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_8 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Pure_C1_8 ) ;
-return make_nf3 ( lf_AUX_Pure_C1_8sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_8sym , ATmakeAppl ( lf_AUX_Pure_C1_8sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Pure_C1_8sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_7 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_7 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_7sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_7sym , ATmakeAppl ( lf_AUX_Pure_C1_7sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_7sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_6 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Pure_C1_6 ) ;
-return make_nf2 ( lf_AUX_Pure_C1_6sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_6sym , ATmakeAppl ( lf_AUX_Pure_C1_6sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Pure_C1_6sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_5 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_5 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_5sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_5sym , ATmakeAppl ( lf_AUX_Pure_C1_5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_5sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_4 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_4sym , ATmakeAppl ( lf_AUX_Pure_C1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_1 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_1sym , ATmakeAppl ( lf_AUX_Pure_C1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_3 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_3sym , ATmakeAppl ( lf_AUX_Pure_C1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Pure_C1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Pure_C1_2 ) ;
-return make_nf1 ( lf_AUX_Pure_C1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Pure_C1_2sym , ATmakeAppl ( lf_AUX_Pure_C1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Pure_C1_2sym , arg0 ) ) ;
 }
 

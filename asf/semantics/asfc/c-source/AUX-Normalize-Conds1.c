@@ -22,15 +22,15 @@ void resolve_AUX_Normalize_Conds1 ( ) {
 void init_AUX_Normalize_Conds1 ( ) {
 }
 ATerm lf_AUX_Normalize_Conds1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Normalize_Conds1_2 ) ;
-return make_nf1 ( lf_AUX_Normalize_Conds1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Normalize_Conds1_2sym , ATmakeAppl ( lf_AUX_Normalize_Conds1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds1_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Normalize_Conds1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Normalize_Conds1_1 ) ;
-return make_nf1 ( lf_AUX_Normalize_Conds1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Normalize_Conds1_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Normalize_Conds1_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Normalize_Conds1_3 ) ;
-return make_nf3 ( lf_AUX_Normalize_Conds1_3sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Normalize_Conds1_3sym , ATmakeAppl ( lf_AUX_Normalize_Conds1_3sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Normalize_Conds1_3sym , arg0 , arg1 , arg2 ) ) ;
 }
 

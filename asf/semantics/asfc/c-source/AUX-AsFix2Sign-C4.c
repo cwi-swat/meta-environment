@@ -73,20 +73,18 @@ ef12 = lookup_func ( ATreadFromString ( "prod(id(\"AsFix2Sign-C\"),w(\"\"),[ql(\
 ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"AsFix2Sign-C\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SortList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncSortStruct\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_AsFix2Sign_C4 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_AsFix2Sign_C4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_AsFix2Sign_C4_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2Sign_C4_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign_C4_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
 }
 if ( ! term_equal ( arg0 , ( * ef1 ) ( ) ) ) {
-tmp [ 0 ] = ( * ef4 ) ( arg0 , ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( lf3 ( make_list ( ( * ef6 ) ( ( * ef7 ) ( ) , ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( lf4 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 76 ) ) , cons ( make_list ( make_char ( 65 ) ) , cons ( make_list ( make_char ( 89 ) ) , cons ( make_list ( make_char ( 79 ) ) , cons ( make_list ( make_char ( 85 ) ) , cons ( make_list ( make_char ( 84 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , arg1 ) ;
+tmp [ 0 ] = ( * ef4 ) ( arg0 , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( lf3 ( make_list ( ( * ef6 ) ( ( * ef7 ) ( ) , ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( lf4 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 76 ) ) , cons ( make_list ( make_char ( 65 ) ) , cons ( make_list ( make_char ( 89 ) ) , cons ( make_list ( make_char ( 79 ) ) , cons ( make_list ( make_char ( 85 ) ) , cons ( make_list ( make_char ( 84 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , arg1 ) ;
 if ( check_sym ( tmp [ 0 ] , ef12sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
@@ -95,24 +93,24 @@ if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-return ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_AsFix2Sign_C4_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2Sign_C4_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

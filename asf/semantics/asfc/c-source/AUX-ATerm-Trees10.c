@@ -43,24 +43,22 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fa
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_ATerm_Trees10 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_ATerm_Trees10_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_ATerm_Trees10_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees10_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees10_1sym , arg0 , arg1 ) ) ;
 tmp [ 0 ] = ( * ef2 ) ( arg0 , ( * ef3 ) ( arg1 ) ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) ) ) {
-return ( * ef4 ) ( ( * ef5 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef6 ) ( ) ) ) , ( * ef3 ) ( arg0 ) ) , ( * ef7 ) ( arg1 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , ( * ef3 ) ( arg0 ) ) , ( * ef7 ) ( arg1 ) ) ) ;
 }
-return make_nf2 ( lf_AUX_ATerm_Trees10_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Trees10_1sym , arg0 , arg1 ) ) ;
 }
 }
 

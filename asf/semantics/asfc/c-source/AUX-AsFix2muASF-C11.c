@@ -20,7 +20,8 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"g
 void init_AUX_AsFix2muASF_C11 ( ) {
 }
 ATerm lf_AUX_AsFix2muASF_C11_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_AsFix2muASF_C11_1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( arg0 ) , arg0 , arg1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASF_C11_1sym , ATmakeAppl ( lf_AUX_AsFix2muASF_C11_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( arg0 ) , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2muASF_C11_1sym , arg0 , arg1 ) ) ;
 }
 

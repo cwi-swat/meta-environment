@@ -30,14 +30,14 @@ void init_AUX_RemAsFixWspace3 ( ) {
 ATerm lf_AUX_RemAsFixWspace3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_RemAsFixWspace3_1 ) ;
+FUNC_ENTRY ( lf_AUX_RemAsFixWspace3_1sym , ATmakeAppl ( lf_AUX_RemAsFixWspace3_1sym , arg0 ) ) ;
 tmp [ 0 ] = ( * ef1 ) ( arg0 ) ;
 tmp [ 1 ] = ( * ef2 ) ( ( * ef3 ) ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef4sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-return tmp [ 2 ] ;
+FUNC_EXIT ( tmp [ 2 ] ) ;
 }
-return make_nf1 ( lf_AUX_RemAsFixWspace3_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_RemAsFixWspace3_1sym , arg0 ) ) ;
 }
 }
 

@@ -47,15 +47,13 @@ ef8 = lookup_func ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[l(\"make-
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[l(\"make-c-name\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_C_Basics14 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_C_Basics14_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_C_Basics14_1 ) ;
+FUNC_ENTRY ( lf_AUX_C_Basics14_1sym , ATmakeAppl ( lf_AUX_C_Basics14_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -66,18 +64,19 @@ if ( not_empty_list ( atmp000 ) ) {
 if ( term_equal ( list_head ( atmp000 ) , make_char ( 101 ) ) ) {
 tmp [ 0 ] = list_tail ( atmp000 ) ;
 tmp [ 1 ] = ( * ef8 ) ( ( * ef1 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list ( make_char ( 101 ) ) ) ) , make_list ( tmp [ 0 ] ) ) ) ) ) ;
-return ( * ef2 ) ( ( * ef3 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( ) ) ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-return ( * ef7 ) ( ( * ef8 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( arg0 ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_C_Basics14_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -58,23 +58,23 @@ void init_AUX_ATerm_Operations20 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Operations20_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Operations20_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations20_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations20_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef5sym ) ) {
@@ -82,7 +82,7 @@ if ( check_sym ( arg0 , ef5sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -94,7 +94,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef7sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( atmp010 ) ;
+FUNC_EXIT ( ( * ef8 ) ( atmp010 ) ) ;
 }
 }
 }
@@ -108,7 +108,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef7sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( atmp010 ) ;
+FUNC_EXIT ( ( * ef8 ) ( atmp010 ) ) ;
 }
 }
 }
@@ -122,7 +122,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef7sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( atmp010 ) ;
+FUNC_EXIT ( ( * ef8 ) ( atmp010 ) ) ;
 }
 }
 }
@@ -138,13 +138,13 @@ ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( check_sym ( atmp02 , ef7sym ) ) {
 {
 ATerm atmp020 = arg_0 ( atmp02 ) ;
-return ( * ef8 ) ( atmp020 ) ;
+FUNC_EXIT ( ( * ef8 ) ( atmp020 ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_ATerm_Operations20_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations20_1sym , arg0 ) ) ;
 }
 

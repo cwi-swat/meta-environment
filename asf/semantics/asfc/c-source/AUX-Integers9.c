@@ -43,7 +43,7 @@ ATprotect ( & constant9 ) ;
 ATerm lf_AUX_Integers9_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 10 ] ;
-PROF ( prof_lf_AUX_Integers9_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers9_1sym , ATmakeAppl ( lf_AUX_Integers9_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -61,7 +61,7 @@ tmp [ 0 ] = list_head ( atmp000 ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 50 ) ) ) {
 if ( is_single_element ( atmp100 ) ) {
 if ( term_equal ( list_head ( atmp100 ) , make_char ( 49 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 }
 }
@@ -70,10 +70,10 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 1 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 2 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 2 ] , make_char ( 50 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 2 ] , make_char ( 49 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 }
 }
@@ -82,13 +82,13 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 2 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 3 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 3 ] , make_char ( 49 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 50 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 51 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 }
 }
@@ -97,16 +97,16 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 3 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 4 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 4 ] , make_char ( 52 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 4 ] , make_char ( 49 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 4 ] , make_char ( 50 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 4 ] , make_char ( 51 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 }
 }
@@ -115,19 +115,19 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 4 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 5 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 5 ] , make_char ( 52 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 5 ] , make_char ( 53 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 5 ] , make_char ( 49 ) ) ) {
-return ( constant4 ? constant4 : ( constant4 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 5 ] , make_char ( 50 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 5 ] , make_char ( 51 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 }
 }
@@ -136,22 +136,22 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 5 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 6 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 6 ] , make_char ( 52 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 6 ] , make_char ( 53 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 6 ] , make_char ( 54 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 6 ] , make_char ( 49 ) ) ) {
-return ( constant5 ? constant5 : ( constant5 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant5 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 6 ] , make_char ( 50 ) ) ) {
-return ( constant4 ? constant4 : ( constant4 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 6 ] , make_char ( 51 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 }
 }
@@ -160,25 +160,25 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 6 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 7 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 7 ] , make_char ( 52 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 53 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 54 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 55 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 49 ) ) ) {
-return ( constant6 ? constant6 : ( constant6 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant6 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 50 ) ) ) {
-return ( constant5 ? constant5 : ( constant5 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant5 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 7 ] , make_char ( 51 ) ) ) {
-return ( constant4 ? constant4 : ( constant4 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ;
 }
 }
 }
@@ -187,28 +187,28 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 7 ] ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 8 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 8 ] , make_char ( 52 ) ) ) {
-return ( constant4 ? constant4 : ( constant4 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 53 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 54 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 55 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 56 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 49 ) ) ) {
-return ( constant7 ? constant7 : ( constant7 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 56 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant7 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 56 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 50 ) ) ) {
-return ( constant6 ? constant6 : ( constant6 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant6 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 8 ] , make_char ( 51 ) ) ) {
-return ( constant5 ? constant5 : ( constant5 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant5 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ;
 }
 }
 }
@@ -218,10 +218,10 @@ tmp [ 8 ] = list_head ( atmp000 ) ;
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 9 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 8 ] , tmp [ 9 ] ) ) {
-return ( constant8 ? constant8 : ( constant8 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant8 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ;
 }
 if ( term_equal ( list_head ( atmp100 ) , make_char ( 48 ) ) ) {
-return ( * ef1 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) ) ) ;
 }
 }
 }
@@ -239,31 +239,31 @@ if ( term_equal ( tmp [ 2 ] , make_char ( 48 ) ) ) {
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 3 ] = list_head ( atmp100 ) ;
 if ( term_equal ( tmp [ 3 ] , make_char ( 50 ) ) ) {
-return ( constant7 ? constant7 : ( constant7 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 56 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant7 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 56 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 51 ) ) ) {
-return ( constant6 ? constant6 : ( constant6 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant6 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 55 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 52 ) ) ) {
-return ( constant5 ? constant5 : ( constant5 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant5 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 54 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 53 ) ) ) {
-return ( constant4 ? constant4 : ( constant4 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 53 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 54 ) ) ) {
-return ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 55 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 51 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 56 ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 50 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 57 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 49 ) ) ) {
-return ( constant9 ? constant9 : ( constant9 = ( * ef1 ) ( lf2 ( make_list ( make_char ( 57 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant9 , ( * ef1 ) ( lf2 ( make_list ( make_char ( 57 ) ) ) ) ) ;
 }
 }
 }
@@ -280,11 +280,11 @@ return ( constant9 ? constant9 : ( constant9 = ( * ef1 ) ( lf2 ( make_list ( mak
 }
 }
 }
-return make_nf2 ( lf_AUX_Integers9_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers9_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

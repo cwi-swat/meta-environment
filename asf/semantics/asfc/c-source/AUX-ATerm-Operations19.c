@@ -44,23 +44,23 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AF
 void init_AUX_ATerm_Operations19 ( ) {
 }
 ATerm lf_AUX_ATerm_Operations19_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Operations19_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations19_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations19_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
@@ -68,7 +68,7 @@ if ( check_sym ( arg0 , ef4sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
@@ -77,7 +77,7 @@ if ( check_sym ( arg0 , ef5sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef1 ) ( atmp00 ) ;
+FUNC_EXIT ( ( * ef1 ) ( atmp00 ) ) ;
 }
 }
 }
@@ -86,7 +86,7 @@ if ( check_sym ( arg0 , ef6sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef2 ) ( atmp00 ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp00 ) ) ;
 }
 }
 }
@@ -95,7 +95,7 @@ if ( check_sym ( arg0 , ef7sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef3 ) ( atmp00 ) ;
+FUNC_EXIT ( ( * ef3 ) ( atmp00 ) ) ;
 }
 }
 }
@@ -106,11 +106,11 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-return ( * ef4 ) ( atmp00 , atmp01 ) ;
+FUNC_EXIT ( ( * ef4 ) ( atmp00 , atmp01 ) ) ;
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_ATerm_Operations19_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations19_1sym , arg0 ) ) ;
 }
 

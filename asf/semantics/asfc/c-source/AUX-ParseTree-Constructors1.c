@@ -56,31 +56,31 @@ ATprotect ( & constant5 ) ;
 ATprotect ( & constant6 ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_7 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_7 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_ParseTree_Constructors1_7sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_7sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_7sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ParseTree_Constructors1_7sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_6 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_6 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_ParseTree_Constructors1_6sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_6sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_6sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ParseTree_Constructors1_6sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_5 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_5 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_ParseTree_Constructors1_5sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_5sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_5sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_ParseTree_Constructors1_5sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_4 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_4 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_ParseTree_Constructors1_4sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_4sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_4sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_ParseTree_Constructors1_4sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_3 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_3 ) ;
-return ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_AUX_ParseTree_Constructors1_3sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_3sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_3sym ) ) ;
+CONS_EXIT_CONST ( constant4 , make_nf0 ( lf_AUX_ParseTree_Constructors1_3sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_2 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_2 ) ;
-return ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_AUX_ParseTree_Constructors1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_2sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_2sym ) ) ;
+CONS_EXIT_CONST ( constant5 , make_nf0 ( lf_AUX_ParseTree_Constructors1_2sym ) ) ;
 }
 ATerm lf_AUX_ParseTree_Constructors1_1 ( ) {
-PROF ( prof_lf_AUX_ParseTree_Constructors1_1 ) ;
-return ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_AUX_ParseTree_Constructors1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTree_Constructors1_1sym , ATmakeAppl0 ( lf_AUX_ParseTree_Constructors1_1sym ) ) ;
+CONS_EXIT_CONST ( constant6 , make_nf0 ( lf_AUX_ParseTree_Constructors1_1sym ) ) ;
 }
 

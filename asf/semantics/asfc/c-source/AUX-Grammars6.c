@@ -31,15 +31,13 @@ ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Grammars\"),w(\"\"),[ql(\"Layo
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Grammars\"),w(\"\"),[ql(\"Layout\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Grammars6 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Grammars6_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Grammars6_1 ) ;
+FUNC_ENTRY ( lf_AUX_Grammars6_1sym , ATmakeAppl ( lf_AUX_Grammars6_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -53,7 +51,7 @@ tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 atmp0000 [ 1 ] = tmp [ 0 ] ;
 while ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-return ( * ef2 ) ( lf_AUX_Grammars6_1 ( ( * ef1 ) ( lf2 ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) ) ) ) , ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef3 ) ( ( * ef4 ) ( ) ) ) ) ) ) ) , lf_AUX_Grammars6_1 ( ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Grammars6_1 ( ( * ef1 ) ( lf2 ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) ) ) ) , ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef3 ) ( ( * ef4 ) ( ) ) ) ) ) , lf_AUX_Grammars6_1 ( ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ) ) ) ) ;
 }
 atmp0000 [ 1 ] = list_tail ( atmp0000 [ 1 ] ) ;
 tmp [ 0 ] = atmp0000 [ 1 ] ;
@@ -68,21 +66,21 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( ! not_empty_list ( atmp000 ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( is_single_element ( atmp000 ) ) {
 tmp [ 0 ] = list_head ( atmp000 ) ;
-return ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_Grammars6_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Grammars6_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

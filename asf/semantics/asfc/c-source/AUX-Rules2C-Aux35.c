@@ -64,15 +64,11 @@ ef11 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"intege
 ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"integer-constant\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_Rules2C_Aux35 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Rules2C_Aux35_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux35_1 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux35_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux35_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -84,7 +80,7 @@ if ( check_sym ( atmp000 , lf2sym ) ) {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( is_single_element ( atmp0000 ) ) {
 if ( term_equal ( list_head ( atmp0000 ) , make_char ( 48 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -102,21 +98,21 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf2sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-return ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) , ( * ef10 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 116 ] , char_table [ 109 ] , char_table [ 112 ] ) ) ) ) ) , ( * ef11 ) ( lf2 ( make_list ( atmp0000 ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef10 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 116 ] , char_table [ 109 ] , char_table [ 112 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( atmp0000 ) ) ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_Rules2C_Aux35_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux35_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

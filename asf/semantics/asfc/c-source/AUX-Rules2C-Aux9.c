@@ -29,7 +29,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Rules2C_Aux9_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 8 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux9_2 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux9_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux9_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_Rules2C_Aux9_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -46,7 +46,7 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_Rules2C_Aux9_1sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( check_sym ( tmp [ 5 ] , lf_AUX_Rules2C_Aux9_1sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_Rules2C_Aux9_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( make_list ( tmp [ 6 ] ) ) , lf_AUX_Rules2C_Aux9_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 }
@@ -60,22 +60,22 @@ if ( check_sym ( tmp [ 3 ] , lf_AUX_Rules2C_Aux9_1sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_Rules2C_Aux9_1sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 5 ] ) ) ) , lf_AUX_Rules2C_Aux9_1 ( make_list ( tmp [ 6 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 5 ] ) ) ) , lf_AUX_Rules2C_Aux9_1 ( make_list ( tmp [ 6 ] ) ) ) ) ;
 }
 }
 }
 }
 }
 else {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux9_1 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf_AUX_Rules2C_Aux9_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux9_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Rules2C_Aux9_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Rules2C_Aux9_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_Rules2C_Aux9_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux9_1 ) ;
-return make_nf1 ( lf_AUX_Rules2C_Aux9_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Rules2C_Aux9_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux9_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux9_1sym , arg0 ) ) ;
 }
 

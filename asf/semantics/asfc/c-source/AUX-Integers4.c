@@ -42,7 +42,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Integers4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Integers4_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers4_1sym , ATmakeAppl ( lf_AUX_Integers4_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -57,10 +57,10 @@ if ( check_sym ( atmp10 , ef2sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 tmp [ 0 ] = ( * ef4 ) ( atmp000 , atmp100 ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 else {
-return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 }
@@ -69,7 +69,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -88,7 +88,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 {
@@ -96,7 +96,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-return lf_AUX_Integers4_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) , ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ) ;
+FUNC_EXIT ( lf_AUX_Integers4_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) , ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ) ) ;
 }
 }
 }
@@ -107,7 +107,7 @@ return lf_AUX_Integers4_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) , ( * ef1 ) ( ( 
 }
 }
 }
-return make_nf2 ( lf_AUX_Integers4_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers4_1sym , arg0 , arg1 ) ) ;
 }
 }
 

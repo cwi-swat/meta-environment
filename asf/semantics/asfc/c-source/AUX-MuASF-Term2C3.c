@@ -63,7 +63,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_MuASF_Term2C3_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 , ATerm arg5 , ATerm arg6 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_MuASF_Term2C3_2 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Term2C3_2sym , ATmakeAppl ( lf_AUX_MuASF_Term2C3_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 ) ) ;
 if ( check_sym ( arg5 , lf_AUX_MuASF_Term2C3_1sym ) ) {
 {
 ATerm atmp50 = arg_0 ( arg5 ) ;
@@ -78,26 +78,26 @@ if ( check_sym ( tmp [ 4 ] , lf4sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( is_single_element ( tmp [ 5 ] ) ) {
 tmp [ 6 ] = list_head ( tmp [ 5 ] ) ;
-return ( * ef1 ) ( tmp [ 2 ] , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf7 ( lf_AUX_MuASF_Term2C3_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 ) ;
+FUNC_EXIT ( make_nf7 ( lf_AUX_MuASF_Term2C3_2sym , arg0 , arg1 , arg2 , arg3 , arg4 , arg5 , arg6 ) ) ;
 }
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Term2C3_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Term2C3_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Term2C3_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Term2C3_1sym , ATmakeAppl ( lf_AUX_MuASF_Term2C3_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Term2C3_1sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

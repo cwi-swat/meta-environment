@@ -29,12 +29,11 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AT
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"atermlist\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"atermlist\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ParseTrees7 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ParseTrees7_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ParseTrees7_1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) , ( * ef4 ) ( arg0 ) ) , ( * ef5 ) ( arg1 ) ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees7_1sym , ATmakeAppl ( lf_AUX_ParseTrees7_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ) , ( * ef4 ) ( arg0 ) ) , ( * ef5 ) ( arg1 ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ParseTrees7_1sym , arg0 , arg1 ) ) ;
 }
 

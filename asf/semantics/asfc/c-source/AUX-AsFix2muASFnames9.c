@@ -25,22 +25,22 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid
 void init_AUX_AsFix2muASFnames9 ( ) {
 }
 ATerm lf_AUX_AsFix2muASFnames9_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_AsFix2muASFnames9_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASFnames9_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames9_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( * ef2 ) ( lf2 ( make_list ( atmp000 ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( atmp000 ) ) ) ) ;
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_AsFix2muASFnames9_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2muASFnames9_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -35,16 +35,12 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[sort
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Remove_Lists_C6 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Remove_Lists_C6_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 17 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_C6_2 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_C6_2sym , ATmakeAppl ( lf_AUX_Remove_Lists_C6_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Remove_Lists_C6_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -74,7 +70,7 @@ if ( check_sym ( tmp [ 14 ] , ef4sym ) ) {
 tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ;
 if ( check_sym ( tmp [ 15 ] , lf3sym ) ) {
 tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
-return ( * ef1 ) ( lf3 ( make_list ( tmp [ 16 ] ) ) , lf_AUX_Remove_Lists_C6_1 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 11 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( tmp [ 16 ] ) ) , lf_AUX_Remove_Lists_C6_1 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 11 ] ) ) ;
 }
 }
 }
@@ -85,19 +81,19 @@ return ( * ef1 ) ( lf3 ( make_list ( tmp [ 16 ] ) ) , lf_AUX_Remove_Lists_C6_1 (
 }
 }
 else {
-return ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = lf3 ( make_list ( null ( ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = lf_AUX_Remove_Lists_C6_1 ( make_list ( null ( ) ) ) ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Remove_Lists_C6_1 ( make_list ( null ( ) ) ) , arg1 ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Remove_Lists_C6_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists_C6_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Remove_Lists_C6_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Remove_Lists_C6_1 ) ;
-return make_nf1 ( lf_AUX_Remove_Lists_C6_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Remove_Lists_C6_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_C6_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_C6_1sym , arg0 ) ) ;
 }
 

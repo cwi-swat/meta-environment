@@ -40,16 +40,16 @@ ATprotect ( & constant2 ) ;
 ATerm lf_AUX_ATerm_Operations23_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_ATerm_Operations23_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations23_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations23_1sym , arg0 ) ) ;
 tmp [ 0 ] = ( * ef2 ) ( arg0 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 if ( term_equal ( ( * ef2 ) ( arg0 ) , ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef4 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef4 ) ( ) ) ;
 }
-return make_nf1 ( lf_AUX_ATerm_Operations23_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations23_1sym , arg0 ) ) ;
 }
 }
 

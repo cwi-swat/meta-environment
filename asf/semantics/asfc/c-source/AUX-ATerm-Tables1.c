@@ -42,23 +42,23 @@ ATprotect ( & constant3 ) ;
 ATprotect ( & constant4 ) ;
 }
 ATerm lf_AUX_ATerm_Tables1_5 ( ) {
-PROF ( prof_lf_AUX_ATerm_Tables1_5 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_ATerm_Tables1_5sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Tables1_5sym , ATmakeAppl0 ( lf_AUX_ATerm_Tables1_5sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ATerm_Tables1_5sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Tables1_4 ( ) {
-PROF ( prof_lf_AUX_ATerm_Tables1_4 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_ATerm_Tables1_4sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Tables1_4sym , ATmakeAppl0 ( lf_AUX_ATerm_Tables1_4sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ATerm_Tables1_4sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Tables1_3 ( ) {
-PROF ( prof_lf_AUX_ATerm_Tables1_3 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_ATerm_Tables1_3sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Tables1_3sym , ATmakeAppl0 ( lf_AUX_ATerm_Tables1_3sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_ATerm_Tables1_3sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Tables1_2 ( ) {
-PROF ( prof_lf_AUX_ATerm_Tables1_2 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_ATerm_Tables1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Tables1_2sym , ATmakeAppl0 ( lf_AUX_ATerm_Tables1_2sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_ATerm_Tables1_2sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Tables1_1 ( ) {
-PROF ( prof_lf_AUX_ATerm_Tables1_1 ) ;
-return ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_AUX_ATerm_Tables1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Tables1_1sym , ATmakeAppl0 ( lf_AUX_ATerm_Tables1_1sym ) ) ;
+CONS_EXIT_CONST ( constant4 , make_nf0 ( lf_AUX_ATerm_Tables1_1sym ) ) ;
 }
 

@@ -20,7 +20,8 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),
 void init_AUX_ATerm_Operations22 ( ) {
 }
 ATerm lf_AUX_ATerm_Operations22_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Operations22_1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( arg0 ) , arg1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations22_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations22_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations22_1sym , arg0 , arg1 ) ) ;
 }
 

@@ -42,16 +42,14 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[sort(\"FuncDefList\"),w(\"\"),ql(\"++_ss\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[sort(\"FuncDefList\"),w(\"\"),ql(\"++_ss\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_AsFix2Sign_C9 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_AsFix2Sign_C9_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 14 ] ;
-PROF ( prof_lf_AUX_AsFix2Sign_C9_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2Sign_C9_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign_C9_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
 }
 if ( ! term_equal ( arg0 , ( * ef1 ) ( ) ) ) {
 tmp [ 0 ] = ( * ef4 ) ( arg0 ) ;
@@ -76,7 +74,7 @@ if ( check_sym ( tmp [ 11 ] , ef3sym ) ) {
 tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ;
 if ( check_sym ( tmp [ 12 ] , lf2sym ) ) {
 tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
-return ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 8 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }
 }
@@ -86,11 +84,11 @@ return ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 8 ] ) 
 }
 }
 }
-return make_nf2 ( lf_AUX_AsFix2Sign_C9_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2Sign_C9_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

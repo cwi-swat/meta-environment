@@ -48,19 +48,19 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_ATerm_Lists14_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_ATerm_Lists14_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists14_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists14_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 if ( check_sym ( arg1 , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 tmp [ 0 ] = ( * ef7 ) ( arg1 ) ;
 tmp [ 1 ] = ( * ef8 ) ( arg1 ) ;
-return ( * ef4 ) ( ( * ef5 ) ( arg0 , ( * ef6 ) ( tmp [ 0 ] ) ) , lf_AUX_ATerm_Lists14_1 ( arg0 , tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( arg0 , ( * ef6 ) ( tmp [ 0 ] ) ) , lf_AUX_ATerm_Lists14_1 ( arg0 , tmp [ 1 ] ) ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Lists14_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Lists14_1sym , arg0 , arg1 ) ) ;
 }
 }
 

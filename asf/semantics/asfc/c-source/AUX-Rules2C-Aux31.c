@@ -31,20 +31,12 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natco
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
 void init_AUX_Rules2C_Aux31 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_Rules2C_Aux31_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 8 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux31_2 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux31_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux31_2sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux31_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -57,7 +49,7 @@ tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-return ( * ef3 ) ( lf3 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 97 ) ) ) , cons ( ( constant1 ? constant1 : ( constant1 = make_list_char ( 116 ) ) ) , cons ( ( constant2 ? constant2 : ( constant2 = make_list_char ( 109 ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list_char ( 112 ) ) ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 116 ) , cons ( make_list_char ( 109 ) , cons ( make_list_char ( 112 ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -80,7 +72,7 @@ tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf3sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-return ( * ef3 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 4 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 4 ] ) ) ) ) ) ;
 }
 }
 }
@@ -92,15 +84,15 @@ return ( * ef3 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 4 ] 
 }
 }
 }
-return make_nf1 ( lf_AUX_Rules2C_Aux31_2sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux31_2sym , arg0 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Rules2C_Aux31_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux31_1 ) ;
-return make_nf1 ( lf_AUX_Rules2C_Aux31_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Rules2C_Aux31_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux31_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux31_1sym , arg0 ) ) ;
 }
 

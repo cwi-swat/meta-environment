@@ -52,7 +52,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_ATerms2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_ATerms2_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerms2_1sym , ATmakeAppl ( lf_AUX_ATerms2_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -87,7 +87,7 @@ if ( check_sym ( tmp [ 4 ] , ef4sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( term_equal ( atmp01000 , tmp [ 3 ] ) ) {
 tmp [ 6 ] = ( * ef6 ) ( ( * ef7 ) ( atmp010010 , tmp [ 5 ] ) , lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef8 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) , ( * ef3 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( atmp000 ) ) , ( * ef4 ) ( lf_AUX_ATerms2_1 ( ( * ef2 ) ( ( * ef3 ) ( atmp01000 , ( * ef4 ) ( atmp010010 ) ) ) ) ) ) ) ) ;
-return tmp [ 6 ] ;
+FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }
 }
@@ -107,7 +107,7 @@ return tmp [ 6 ] ;
 }
 }
 }
-return make_nf1 ( lf_AUX_ATerms2_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerms2_1sym , arg0 ) ) ;
 }
 }
 

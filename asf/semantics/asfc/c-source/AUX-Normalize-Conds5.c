@@ -27,13 +27,13 @@ void init_AUX_Normalize_Conds5 ( ) {
 ATerm lf_AUX_Normalize_Conds5_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_Normalize_Conds5_2 ) ;
+FUNC_ENTRY ( lf_AUX_Normalize_Conds5_2sym , ATmakeAppl ( lf_AUX_Normalize_Conds5_2sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Normalize_Conds5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
-return ( * ef1 ) ( lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ) ;
 }
 if ( not_empty_list ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
@@ -46,7 +46,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_Normalize_Conds5_1sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-return ( * ef1 ) ( lf_AUX_Normalize_Conds5_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Normalize_Conds5_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
 }
@@ -54,11 +54,11 @@ return ( * ef1 ) ( lf_AUX_Normalize_Conds5_1 ( cons ( make_list ( tmp [ 2 ] ) , 
 }
 }
 }
-return make_nf1 ( lf_AUX_Normalize_Conds5_2sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds5_2sym , arg0 ) ) ;
 }
 }
 ATerm lf_AUX_Normalize_Conds5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Normalize_Conds5_1 ) ;
-return make_nf1 ( lf_AUX_Normalize_Conds5_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Normalize_Conds5_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds5_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds5_1sym , arg0 ) ) ;
 }
 

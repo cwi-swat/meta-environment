@@ -42,19 +42,19 @@ void init_AUX_ATerm_Lists11 ( ) {
 ATerm lf_AUX_ATerm_Lists11_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_ATerm_Lists11_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists11_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists11_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 tmp [ 0 ] = ( * ef6 ) ( arg0 ) ;
 tmp [ 1 ] = lf_AUX_ATerm_Lists11_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ;
-return ( * ef3 ) ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) , tmp [ 1 ] , ( * ef5 ) ( tmp [ 0 ] , tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) , tmp [ 1 ] , ( * ef5 ) ( tmp [ 0 ] , tmp [ 1 ] ) ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Lists11_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Lists11_1sym , arg0 , arg1 ) ) ;
 }
 }
 

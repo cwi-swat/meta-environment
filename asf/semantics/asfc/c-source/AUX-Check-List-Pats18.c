@@ -24,16 +24,16 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Check-List-Pats\"),w(\"\"),[
 void init_AUX_Check_List_Pats18 ( ) {
 }
 ATerm lf_AUX_Check_List_Pats18_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Check_List_Pats18_1 ) ;
+FUNC_ENTRY ( lf_AUX_Check_List_Pats18_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats18_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef2 ) ( ( * ef3 ) ( atmp00 ) , ( * ef3 ) ( atmp01 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( atmp00 ) , ( * ef3 ) ( atmp01 ) ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Check_List_Pats18_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Check_List_Pats18_1sym , arg0 ) ) ;
 }
 

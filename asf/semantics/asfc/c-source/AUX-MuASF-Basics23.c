@@ -35,7 +35,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_MuASF_Basics23_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_MuASF_Basics23_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics23_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics23_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -48,7 +48,7 @@ tmp [ 0 ] = list_tail ( atmp000 ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ;
 if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -57,11 +57,12 @@ return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics23_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

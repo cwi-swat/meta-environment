@@ -16,7 +16,8 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\"),
 void init_AUX_Make_Left_Linear6 ( ) {
 }
 ATerm lf_AUX_Make_Left_Linear6_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Make_Left_Linear6_1 ) ;
-return ( * ef1 ) ( arg0 , arg1 , arg2 ) ;
+FUNC_ENTRY ( lf_AUX_Make_Left_Linear6_1sym , ATmakeAppl ( lf_AUX_Make_Left_Linear6_1sym , arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , arg1 , arg2 ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_Make_Left_Linear6_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 

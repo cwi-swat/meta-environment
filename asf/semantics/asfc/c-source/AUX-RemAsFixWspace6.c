@@ -65,19 +65,19 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_RemAsFixWspace6_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_RemAsFixWspace6_1 ) ;
+FUNC_ENTRY ( lf_AUX_RemAsFixWspace6_1sym , ATmakeAppl ( lf_AUX_RemAsFixWspace6_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ) ;
 }
 }
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ) ;
 }
 }
 }
@@ -87,7 +87,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef6sym ) ) {
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , ( * ef4 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , ( * ef4 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 {
@@ -96,7 +96,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( ! term_equal ( atmp00 , ( * ef6 ) ( ) ) ) {
 tmp [ 0 ] = ( * ef10 ) ( ( * ef3 ) ( atmp01 ) ) ;
-return ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp00 , ( * ef8 ) ( ( * ef9 ) ( tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp00 , ( * ef8 ) ( ( * ef9 ) ( tmp [ 0 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -106,24 +106,24 @@ if ( check_sym ( arg0 , ef9sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef11sym ) ) {
-return ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( arg0 ) ) ) ;
 }
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef3sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( * ef3 ) ( ( * ef4 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( atmp000 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( atmp000 ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_RemAsFixWspace6_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_RemAsFixWspace6_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -53,7 +53,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_AsFix2muASFnames11_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_AsFix2muASFnames11_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASFnames11_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames11_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -69,7 +69,7 @@ ATerm atmp0100 = arg_0 ( atmp010 ) ;
 if ( check_sym ( atmp0100 , ef5sym ) ) {
 {
 ATerm atmp01000 = arg_0 ( atmp0100 ) ;
-return ( * ef6 ) ( atmp01000 ) ;
+FUNC_EXIT ( ( * ef6 ) ( atmp01000 ) ) ;
 }
 }
 }
@@ -97,7 +97,7 @@ if ( term_equal ( list_head ( atmp00000 ) , make_char ( 34 ) ) ) {
 tmp [ 0 ] = list_tail ( atmp00000 ) ;
 if ( is_single_element ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef8 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ;
 }
 }
 }
@@ -110,11 +110,11 @@ return ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( lf2 ( ( ATerm ) ATmak
 }
 }
 }
-return make_nf1 ( lf_AUX_AsFix2muASFnames11_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2muASFnames11_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -30,12 +30,10 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"varid
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"+\"),w(\"\"),sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"+\"),w(\"\"),sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_VarEnv11 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_VarEnv11_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv11_1 ) ;
+FUNC_ENTRY ( lf_AUX_VarEnv11_1sym , ATmakeAppl ( lf_AUX_VarEnv11_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -49,7 +47,7 @@ if ( check_sym ( atmp0000 , lf2sym ) ) {
 {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
-return ( * ef3 ) ( lf2 ( cons ( make_list ( atmp00000 ) , ( constant0 ? constant0 : ( constant0 = ( ATerm ) ATmakeList ( 4 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf2 ( cons ( make_list ( atmp00000 ) , ( ATerm ) ATmakeList ( 4 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) ;
 }
 }
 }
@@ -69,7 +67,7 @@ if ( check_sym ( atmp0000 , lf2sym ) ) {
 {
 ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 if ( not_empty_list ( atmp00000 ) ) {
-return ( * ef3 ) ( lf2 ( cons ( make_list ( atmp00000 ) , ( constant0 ? constant0 : ( constant0 = ( ATerm ) ATmakeList ( 4 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf2 ( cons ( make_list ( atmp00000 ) , ( ATerm ) ATmakeList ( 4 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) ;
 }
 }
 }
@@ -80,10 +78,10 @@ return ( * ef3 ) ( lf2 ( cons ( make_list ( atmp00000 ) , ( constant0 ? constant
 }
 }
 }
-return make_nf1 ( lf_AUX_VarEnv11_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_VarEnv11_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

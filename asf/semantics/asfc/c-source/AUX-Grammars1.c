@@ -110,79 +110,79 @@ ATprotect ( & constant2 ) ;
 ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_Grammars1_18 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_18 ) ;
-return make_nf1 ( lf_AUX_Grammars1_18sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_18sym , ATmakeAppl ( lf_AUX_Grammars1_18sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_18sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_19 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_19 ) ;
-return make_nf1 ( lf_AUX_Grammars1_19sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_19sym , ATmakeAppl ( lf_AUX_Grammars1_19sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_19sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_17 ( ) {
-PROF ( prof_lf_AUX_Grammars1_17 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_Grammars1_17sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_17sym , ATmakeAppl0 ( lf_AUX_Grammars1_17sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Grammars1_17sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_16 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Grammars1_16 ) ;
-return make_nf2 ( lf_AUX_Grammars1_16sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_16sym , ATmakeAppl ( lf_AUX_Grammars1_16sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Grammars1_16sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Grammars1_14 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_14 ) ;
-return make_nf1 ( lf_AUX_Grammars1_14sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_14sym , ATmakeAppl ( lf_AUX_Grammars1_14sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_14sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_15 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_15 ) ;
-return make_nf1 ( lf_AUX_Grammars1_15sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_15sym , ATmakeAppl ( lf_AUX_Grammars1_15sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_15sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_13 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_Grammars1_13 ) ;
-return make_nf3 ( lf_AUX_Grammars1_13sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_13sym , ATmakeAppl ( lf_AUX_Grammars1_13sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_Grammars1_13sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_Grammars1_11 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_11 ) ;
-return make_nf1 ( lf_AUX_Grammars1_11sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_11sym , ATmakeAppl ( lf_AUX_Grammars1_11sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_11sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_12 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_12 ) ;
-return make_nf1 ( lf_AUX_Grammars1_12sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_12sym , ATmakeAppl ( lf_AUX_Grammars1_12sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_12sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_10 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Grammars1_10 ) ;
-return make_nf2 ( lf_AUX_Grammars1_10sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_10sym , ATmakeAppl ( lf_AUX_Grammars1_10sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Grammars1_10sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Grammars1_9 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_9 ) ;
-return make_nf1 ( lf_AUX_Grammars1_9sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_9sym , ATmakeAppl ( lf_AUX_Grammars1_9sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_9sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_8 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Grammars1_8 ) ;
-return make_nf2 ( lf_AUX_Grammars1_8sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_8sym , ATmakeAppl ( lf_AUX_Grammars1_8sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Grammars1_8sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Grammars1_7 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_7 ) ;
-return make_nf1 ( lf_AUX_Grammars1_7sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_7sym , ATmakeAppl ( lf_AUX_Grammars1_7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_7sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_6 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Grammars1_6 ) ;
-return make_nf2 ( lf_AUX_Grammars1_6sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_6sym , ATmakeAppl ( lf_AUX_Grammars1_6sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Grammars1_6sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Grammars1_5 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_5 ) ;
-return make_nf1 ( lf_AUX_Grammars1_5sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_5sym , ATmakeAppl ( lf_AUX_Grammars1_5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_5sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars1_4 ) ;
-return make_nf1 ( lf_AUX_Grammars1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_4sym , ATmakeAppl ( lf_AUX_Grammars1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Grammars1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Grammars1_3 ( ) {
-PROF ( prof_lf_AUX_Grammars1_3 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_Grammars1_3sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_3sym , ATmakeAppl0 ( lf_AUX_Grammars1_3sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Grammars1_3sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_2 ( ) {
-PROF ( prof_lf_AUX_Grammars1_2 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_Grammars1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_2sym , ATmakeAppl0 ( lf_AUX_Grammars1_2sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_Grammars1_2sym ) ) ;
 }
 ATerm lf_AUX_Grammars1_1 ( ) {
-PROF ( prof_lf_AUX_Grammars1_1 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_Grammars1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Grammars1_1sym , ATmakeAppl0 ( lf_AUX_Grammars1_1sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_Grammars1_1sym ) ) ;
 }
 

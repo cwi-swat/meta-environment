@@ -39,7 +39,7 @@ void init_AUX_ParseTrees12 ( ) {
 ATerm lf_AUX_ParseTrees12_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_ParseTrees12_2 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees12_2sym , ATmakeAppl ( lf_AUX_ParseTrees12_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -54,7 +54,7 @@ tmp [ 1 ] = ( * ef4 ) ( atmp00 ) ;
 if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ;
-return ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( tmp [ 3 ] ) , ( * ef3 ) ( atmp01 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( tmp [ 3 ] ) , ( * ef3 ) ( atmp01 ) ) ) ;
 }
 }
 }
@@ -74,7 +74,7 @@ if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
-return lf_AUX_ParseTrees12_2 ( ( * ef1 ) ( atmp00 , atmp01 ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) ;
+FUNC_EXIT ( lf_AUX_ParseTrees12_2 ( ( * ef1 ) ( atmp00 , atmp01 ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }
 }
@@ -89,16 +89,16 @@ if ( not_empty_list ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
 tmp [ 1 ] = list_tail ( atmp10 ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-return lf_AUX_ParseTrees12_2 ( lf_AUX_ParseTrees12_2 ( arg0 , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+FUNC_EXIT ( lf_AUX_ParseTrees12_2 ( lf_AUX_ParseTrees12_2 ( arg0 , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_ParseTrees12_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ParseTrees12_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_ParseTrees12_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees12_1 ) ;
-return make_nf1 ( lf_AUX_ParseTrees12_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees12_1sym , ATmakeAppl ( lf_AUX_ParseTrees12_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_ParseTrees12_1sym , arg0 ) ) ;
 }
 

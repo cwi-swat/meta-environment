@@ -102,24 +102,14 @@ ef19sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"*\"
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
-static ATerm constant4 = NULL ;
-static ATerm constant5 = NULL ;
-static ATerm constant6 = NULL ;
 void init_AUX_MuASF_Term2C11 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
-ATprotect ( & constant4 ) ;
-ATprotect ( & constant5 ) ;
-ATprotect ( & constant6 ) ;
 }
 ATerm lf_AUX_MuASF_Term2C11_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 12 ] ;
-PROF ( prof_lf_AUX_MuASF_Term2C11_2 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Term2C11_2sym , ATmakeAppl ( lf_AUX_MuASF_Term2C11_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -172,7 +162,7 @@ tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list_char ( 113 ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list_char ( 117 ) ) ) , cons ( ( constant4 ? constant4 : ( constant4 = make_list_char ( 111 ) ) ) , cons ( ( constant5 ? constant5 : ( constant5 = make_list_char ( 116 ) ) ) , cons ( ( constant6 ? constant6 : ( constant6 = make_list_char ( 101 ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( make_list_char ( 113 ) , cons ( make_list_char ( 117 ) , cons ( make_list_char ( 111 ) , cons ( make_list_char ( 116 ) , cons ( make_list_char ( 101 ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -213,7 +203,7 @@ if ( check_sym ( tmp [ 9 ] , ef6sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
-return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list_char ( 113 ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list_char ( 117 ) ) ) , cons ( ( constant4 ? constant4 : ( constant4 = make_list_char ( 111 ) ) ) , cons ( ( constant5 ? constant5 : ( constant5 = make_list_char ( 116 ) ) ) , cons ( ( constant6 ? constant6 : ( constant6 = make_list_char ( 101 ) ) ) , make_list ( tmp [ 6 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( make_list_char ( 113 ) , cons ( make_list_char ( 117 ) , cons ( make_list_char ( 111 ) , cons ( make_list_char ( 116 ) , cons ( make_list_char ( 101 ) , make_list ( tmp [ 6 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -304,7 +294,7 @@ tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list_char ( 113 ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list_char ( 117 ) ) ) , cons ( ( constant4 ? constant4 : ( constant4 = make_list_char ( 111 ) ) ) , cons ( ( constant5 ? constant5 : ( constant5 = make_list_char ( 116 ) ) ) , cons ( ( constant6 ? constant6 : ( constant6 = make_list_char ( 101 ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( make_list_char ( 113 ) , cons ( make_list_char ( 117 ) , cons ( make_list_char ( 111 ) , cons ( make_list_char ( 116 ) , cons ( make_list_char ( 101 ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf4 ( make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -349,22 +339,22 @@ return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( cons ( 
 if ( check_sym ( arg1 , lf_AUX_MuASF_Term2C11_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
-return make_nf2 ( lf_AUX_MuASF_Term2C11_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_MuASF_Term2C11_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Term2C11_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Term2C11_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Term2C11_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Term2C11_1sym , ATmakeAppl ( lf_AUX_MuASF_Term2C11_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Term2C11_1sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

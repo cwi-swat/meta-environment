@@ -34,15 +34,15 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_ANumerals3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_ANumerals3_1 ) ;
+FUNC_ENTRY ( lf_AUX_ANumerals3_1sym , ATmakeAppl ( lf_AUX_ANumerals3_1sym , arg0 , arg1 ) ) ;
 tmp [ 0 ] = ( * ef1 ) ( ( * ef2 ) ( arg0 ) , ( * ef2 ) ( arg1 ) ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( ) ) ) ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
-return make_nf2 ( lf_AUX_ANumerals3_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ANumerals3_1sym , arg0 , arg1 ) ) ;
 }
 }
 

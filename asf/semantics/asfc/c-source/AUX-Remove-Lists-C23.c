@@ -94,28 +94,14 @@ ef17sym = lookup_sym ( ATreadFromString ( "prod(id(\"Remove-Lists-C\"),w(\"\"),[
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
-static ATerm constant4 = NULL ;
-static ATerm constant5 = NULL ;
-static ATerm constant6 = NULL ;
-static ATerm constant7 = NULL ;
-static ATerm constant8 = NULL ;
 void init_AUX_Remove_Lists_C23 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
-ATprotect ( & constant4 ) ;
-ATprotect ( & constant5 ) ;
-ATprotect ( & constant6 ) ;
-ATprotect ( & constant7 ) ;
-ATprotect ( & constant8 ) ;
 }
 ATerm lf_AUX_Remove_Lists_C23_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 23 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_C23_2 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_C23_2sym , ATmakeAppl ( lf_AUX_Remove_Lists_C23_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Remove_Lists_C23_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -159,13 +145,13 @@ tmp [ 19 ] = ( * ef12 ) ( tmp [ 15 ] ) ;
 tmp [ 20 ] = ( * ef13 ) ( tmp [ 19 ] ) ;
 tmp [ 21 ] = ( * ef13 ) ( ( * ef14 ) ( tmp [ 19 ] ) ) ;
 tmp [ 22 ] = ( * ef15 ) ( ( * ef14 ) ( ( * ef14 ) ( tmp [ 19 ] ) ) , tmp [ 15 ] ) ;
-return ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 105 ] , char_table [ 108 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant5 ? constant5 : ( constant5 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 17 , char_table [ 105 ] , char_table [ 115 ] , char_table [ 45 ] , char_table [ 115 ] , char_table [ 105 ] , char_table [ 110 ] , char_table [ 103 ] , char_table [ 108 ] , char_table [ 101 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 108 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 101 ] , char_table [ 110 ] , char_table [ 116 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) ) , tmp [ 18 ] ) ) , make_list ( tmp [ 17 ] ) ) ) ) ) ) ) ) , tmp [ 22 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 105 ] , char_table [ 108 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 17 , char_table [ 105 ] , char_table [ 115 ] , char_table [ 45 ] , char_table [ 115 ] , char_table [ 105 ] , char_table [ 110 ] , char_table [ 103 ] , char_table [ 108 ] , char_table [ 101 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 108 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 101 ] , char_table [ 110 ] , char_table [ 116 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 21 ] ) ) ) ) ) , tmp [ 18 ] ) ) , make_list ( tmp [ 17 ] ) ) ) ) ) ) ) ) , tmp [ 22 ] ) ) ;
 }
 }
 }
 }
 }
-if ( term_equal ( tmp [ 11 ] , ( constant6 ? constant6 : ( constant6 = ( * ef16 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 11 ] , ( constant1 ? constant1 : ( constant1 = ( * ef16 ) ( ) ) ) ) ) {
 tmp [ 12 ] = ( * ef17 ) ( tmp [ 2 ] , tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 12 ] , ef1sym ) ) {
 tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
@@ -180,7 +166,7 @@ tmp [ 18 ] = list_head ( tmp [ 16 ] ) ;
 tmp [ 19 ] = ( * ef12 ) ( tmp [ 15 ] ) ;
 tmp [ 20 ] = ( * ef13 ) ( tmp [ 19 ] ) ;
 tmp [ 21 ] = ( * ef15 ) ( ( * ef14 ) ( tmp [ 19 ] ) , tmp [ 15 ] ) ;
-return ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 105 ] , char_table [ 108 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 18 ] ) ) , make_list ( tmp [ 17 ] ) ) ) ) ) ) , tmp [ 21 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 97 ] , char_table [ 100 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 105 ] , char_table [ 108 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 20 ] ) ) ) ) ) , tmp [ 18 ] ) ) , make_list ( tmp [ 17 ] ) ) ) ) ) ) , tmp [ 21 ] ) ) ;
 }
 }
 }
@@ -194,7 +180,7 @@ return ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 )
 }
 }
 }
-if ( term_equal ( tmp [ 3 ] , ( constant6 ? constant6 : ( constant6 = ( * ef16 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef16 ) ( ) ) ) ) ) {
 tmp [ 4 ] = ( * ef17 ) ( tmp [ 0 ] , arg1 ) ;
 if ( check_sym ( tmp [ 4 ] , ef1sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
@@ -221,7 +207,7 @@ tmp [ 17 ] = list_head ( tmp [ 15 ] ) ;
 tmp [ 18 ] = ( * ef12 ) ( tmp [ 14 ] ) ;
 tmp [ 19 ] = ( * ef13 ) ( tmp [ 18 ] ) ;
 tmp [ 20 ] = ( * ef15 ) ( ( * ef14 ) ( tmp [ 18 ] ) , tmp [ 14 ] ) ;
-return ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( constant7 ? constant7 : ( constant7 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 11 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 112 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( constant8 ? constant8 : ( constant8 = ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 97 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , tmp [ 17 ] ) ) , make_list ( tmp [ 16 ] ) ) ) ) ) ) , tmp [ 20 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) , lf3 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 14 , char_table [ 110 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 109 ] , char_table [ 112 ] , char_table [ 116 ] , char_table [ 121 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf4 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) , cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 11 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 112 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , tmp [ 10 ] ) ) , cons ( make_list ( tmp [ 9 ] ) , cons ( make_list ( ( * ef8 ) ( ( * ef5 ) ( ( * ef6 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 108 ] , char_table [ 105 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 45 ] , char_table [ 108 ] , char_table [ 97 ] , char_table [ 115 ] , char_table [ 116 ] ) ) ) , lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 19 ] ) ) ) ) ) , tmp [ 17 ] ) ) , make_list ( tmp [ 16 ] ) ) ) ) ) ) , tmp [ 20 ] ) ) ;
 }
 }
 }
@@ -238,19 +224,19 @@ return ( * ef1 ) ( lf_AUX_Remove_Lists_C23_1 ( make_list ( ( * ef2 ) ( ( * ef3 )
 }
 }
 }
-return make_nf2 ( lf_AUX_Remove_Lists_C23_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists_C23_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Remove_Lists_C23_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Remove_Lists_C23_1 ) ;
-return make_nf1 ( lf_AUX_Remove_Lists_C23_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Remove_Lists_C23_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_C23_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_C23_1sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 

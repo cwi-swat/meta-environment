@@ -47,35 +47,35 @@ void resolve_AUX_C1 ( ) {
 void init_AUX_C1 ( ) {
 }
 ATerm lf_AUX_C1_8 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_C1_8 ) ;
-return make_nf2 ( lf_AUX_C1_8sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_C1_8sym , ATmakeAppl ( lf_AUX_C1_8sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_C1_8sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_C1_7 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_7 ) ;
-return make_nf1 ( lf_AUX_C1_7sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_7sym , ATmakeAppl ( lf_AUX_C1_7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_7sym , arg0 ) ) ;
 }
 ATerm lf_AUX_C1_6 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_6 ) ;
-return make_nf1 ( lf_AUX_C1_6sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_6sym , ATmakeAppl ( lf_AUX_C1_6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_6sym , arg0 ) ) ;
 }
 ATerm lf_AUX_C1_5 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_C1_5 ) ;
-return make_nf2 ( lf_AUX_C1_5sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_C1_5sym , ATmakeAppl ( lf_AUX_C1_5sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_C1_5sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_C1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_4 ) ;
-return make_nf1 ( lf_AUX_C1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_4sym , ATmakeAppl ( lf_AUX_C1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_C1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_1 ) ;
-return make_nf1 ( lf_AUX_C1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_1sym , ATmakeAppl ( lf_AUX_C1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_C1_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_3 ) ;
-return make_nf1 ( lf_AUX_C1_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_3sym , ATmakeAppl ( lf_AUX_C1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_C1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C1_2 ) ;
-return make_nf1 ( lf_AUX_C1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C1_2sym , ATmakeAppl ( lf_AUX_C1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C1_2sym , arg0 ) ) ;
 }
 

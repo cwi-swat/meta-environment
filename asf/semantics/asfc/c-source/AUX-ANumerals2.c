@@ -37,17 +37,17 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_ANumerals2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_ANumerals2_1 ) ;
+FUNC_ENTRY ( lf_AUX_ANumerals2_1sym , ATmakeAppl ( lf_AUX_ANumerals2_1sym , arg0 ) ) ;
 tmp [ 0 ] = ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) , ( * ef2 ) ( arg0 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return tmp [ 1 ] ;
+FUNC_EXIT ( tmp [ 1 ] ) ;
 }
-return make_nf1 ( lf_AUX_ANumerals2_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ANumerals2_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

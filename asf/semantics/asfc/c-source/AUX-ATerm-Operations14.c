@@ -20,11 +20,11 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AT
 void init_AUX_ATerm_Operations14 ( ) {
 }
 ATerm lf_AUX_ATerm_Operations14_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Operations14_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations14_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations14_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef2 ) ( atmp00 , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp00 , arg1 ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
@@ -32,10 +32,10 @@ if ( check_sym ( arg0 , ef2sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef2 ) ( atmp00 , lf_AUX_ATerm_Operations14_1 ( atmp01 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp00 , lf_AUX_ATerm_Operations14_1 ( atmp01 , arg1 ) ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Operations14_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations14_1sym , arg0 , arg1 ) ) ;
 }
 

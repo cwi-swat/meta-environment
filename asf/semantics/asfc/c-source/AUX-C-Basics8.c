@@ -21,7 +21,7 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(
 void init_AUX_C_Basics8 ( ) {
 }
 ATerm lf_AUX_C_Basics8_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_C_Basics8_1 ) ;
+FUNC_ENTRY ( lf_AUX_C_Basics8_1sym , ATmakeAppl ( lf_AUX_C_Basics8_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -29,16 +29,16 @@ if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( not_empty_list ( atmp100 ) ) {
-return ( * ef1 ) ( lf2 ( cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_C_Basics8_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics8_1sym , arg0 , arg1 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

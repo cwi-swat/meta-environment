@@ -45,7 +45,7 @@ ATprotect ( & constant2 ) ;
 ATerm lf_AUX_Integers10_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 18 ] ;
-PROF ( prof_lf_AUX_Integers10_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers10_1sym , ATmakeAppl ( lf_AUX_Integers10_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -62,7 +62,7 @@ if ( is_single_element ( atmp000 ) ) {
 tmp [ 0 ] = list_head ( atmp000 ) ;
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 1 ] = list_head ( atmp100 ) ;
-return ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 {
@@ -88,7 +88,7 @@ tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-return ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 }
@@ -120,7 +120,7 @@ tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
 if ( check_sym ( tmp [ 16 ] , lf2sym ) ) {
 tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ;
 if ( not_empty_list ( tmp [ 17 ] ) ) {
-return ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ;
 }
 }
 }
@@ -154,18 +154,18 @@ if ( check_sym ( atmp10 , lf2sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( is_single_element ( atmp100 ) ) {
 if ( term_equal ( list_head ( atmp100 ) , make_char ( 48 ) ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_Integers10_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers10_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

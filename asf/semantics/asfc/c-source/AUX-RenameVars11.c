@@ -89,22 +89,16 @@ static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
 static ATerm constant2 = NULL ;
 static ATerm constant3 = NULL ;
-static ATerm constant4 = NULL ;
-static ATerm constant5 = NULL ;
-static ATerm constant6 = NULL ;
 void init_AUX_RenameVars11 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 ATprotect ( & constant2 ) ;
 ATprotect ( & constant3 ) ;
-ATprotect ( & constant4 ) ;
-ATprotect ( & constant5 ) ;
-ATprotect ( & constant6 ) ;
 }
 ATerm lf_AUX_RenameVars11_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_RenameVars11_2 ) ;
+FUNC_ENTRY ( lf_AUX_RenameVars11_2sym , ATmakeAppl ( lf_AUX_RenameVars11_2sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -127,7 +121,7 @@ if ( check_sym ( tmp [ 1 ] , lf5sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 tmp [ 3 ] = ( * ef14 ) ( lf5 ( cons ( ( constant1 ? constant1 : ( constant1 = make_list ( make_char ( 78 ) ) ) ) , cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 67 ) ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list ( make_char ( 86 ) ) ) ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ;
-return ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 3 ] ) ) , lf4 ( make_list ( ( * ef5 ) ( ( * ef1 ) ( ( constant4 ? constant4 : ( constant4 = ( * ef6 ) ( lf5 ( ( ATerm ) ATmakeList ( 10 , char_table [ 116 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 113 ] , char_table [ 117 ] , char_table [ 97 ] , char_table [ 108 ] ) ) ) ) ) , lf3 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 3 ] ) ) ) , make_list ( ( * ef1 ) ( atmp00 , lf3 ( make_list ( atmp010 ) ) ) ) ) ) ) , ( constant5 ? constant5 : ( constant5 = ( * ef7 ) ( ( * ef6 ) ( lf5 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) ) ) , ( * ef8 ) ( arg2 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 3 ] ) ) , lf4 ( make_list ( ( * ef5 ) ( ( * ef1 ) ( ( * ef6 ) ( lf5 ( ( ATerm ) ATmakeList ( 10 , char_table [ 116 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] , char_table [ 45 ] , char_table [ 101 ] , char_table [ 113 ] , char_table [ 117 ] , char_table [ 97 ] , char_table [ 108 ] ) ) ) , lf3 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 3 ] ) ) ) , make_list ( ( * ef1 ) ( atmp00 , lf3 ( make_list ( atmp010 ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf5 ( make_list ( make_char ( 116 ) ) ) ) ) ) ) ) , ( * ef8 ) ( arg2 ) ) ) ;
 }
 }
 }
@@ -145,26 +139,26 @@ return ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 3 ] ) ) , lf4 ( make_list ( ( *
 if ( check_sym ( arg1 , lf_AUX_RenameVars11_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef2 ) ( arg0 , ( constant6 ? constant6 : ( constant6 = lf4 ( make_list ( null ( ) ) ) ) ) , arg2 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , lf4 ( make_list ( null ( ) ) ) , arg2 ) ) ;
 }
 }
-return make_nf3 ( lf_AUX_RenameVars11_2sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_RenameVars11_2sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_RenameVars11_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_RenameVars11_1 ) ;
-return make_nf1 ( lf_AUX_RenameVars11_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_RenameVars11_1sym , ATmakeAppl ( lf_AUX_RenameVars11_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_RenameVars11_1sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

@@ -17,11 +17,11 @@ void resolve_AUX_Literals1 ( ) {
 void init_AUX_Literals1 ( ) {
 }
 ATerm lf_AUX_Literals1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Literals1_2 ) ;
-return make_nf1 ( lf_AUX_Literals1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Literals1_2sym , ATmakeAppl ( lf_AUX_Literals1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Literals1_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Literals1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Literals1_1 ) ;
-return make_nf1 ( lf_AUX_Literals1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Literals1_1sym , ATmakeAppl ( lf_AUX_Literals1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Literals1_1sym , arg0 ) ) ;
 }
 

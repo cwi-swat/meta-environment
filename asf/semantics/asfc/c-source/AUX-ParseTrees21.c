@@ -79,22 +79,18 @@ ef16 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATe
 ef16sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATermList\"),w(\"\"),sort(\"Ann\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_ParseTrees21 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_ParseTrees21_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees21_1 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees21_1sym , ATmakeAppl ( lf_AUX_ParseTrees21_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return atmp000 ;
+FUNC_EXIT ( atmp000 ) ;
 }
 }
 }
@@ -107,7 +103,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef4sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return lf_AUX_ParseTrees21_1 ( atmp010 ) ;
+FUNC_EXIT ( lf_AUX_ParseTrees21_1 ( atmp010 ) ) ;
 }
 }
 }
@@ -124,7 +120,7 @@ if ( check_sym ( atmp000 , ef7sym ) ) {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
 {
 ATerm atmp0001 = arg_1 ( atmp000 ) ;
-return ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( atmp0000 ) , lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp0001 ) ) ) ) ;
+FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( atmp0000 ) , lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp0001 ) ) ) ) ) ;
 }
 }
 }
@@ -133,7 +129,7 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , ef4sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-return lf_AUX_ParseTrees21_1 ( atmp0000 ) ;
+FUNC_EXIT ( lf_AUX_ParseTrees21_1 ( atmp0000 ) ) ;
 }
 }
 }
@@ -142,7 +138,7 @@ return lf_AUX_ParseTrees21_1 ( atmp0000 ) ;
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef9sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ;
 }
 }
 }
@@ -155,7 +151,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef12sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef13 ) ( atmp00 ) ) , ( * ef8 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef13 ) ( atmp00 ) ) , ( * ef8 ) ( ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -169,7 +165,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef12sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef1 ) ( atmp00 ) ) , ( * ef8 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef1 ) ( atmp00 ) ) , ( * ef8 ) ( ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -185,7 +181,7 @@ ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( check_sym ( atmp02 , ef12sym ) ) {
 {
 ATerm atmp020 = arg_0 ( atmp02 ) ;
-return ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef3 ) ( atmp00 , atmp01 ) ) , ( * ef8 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp020 ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef3 ) ( atmp00 , atmp01 ) ) , ( * ef8 ) ( ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp020 ) ) ) , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -200,16 +196,16 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef12sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-return ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( atmp00 ) ) , ( * ef8 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( atmp00 ) ) , ( * ef8 ) ( ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 34 ] ) ) ) , ( * ef8 ) ( lf_AUX_ParseTrees21_1 ( ( * ef5 ) ( ( * ef6 ) ( atmp010 ) ) ) , ( * ef10 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_ParseTrees21_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ParseTrees21_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

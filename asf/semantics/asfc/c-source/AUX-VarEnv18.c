@@ -36,7 +36,7 @@ void init_AUX_VarEnv18 ( ) {
 ATerm lf_AUX_VarEnv18_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
 ATerm tmp [ 12 ] ;
-PROF ( prof_lf_AUX_VarEnv18_1 ) ;
+FUNC_ENTRY ( lf_AUX_VarEnv18_1sym , ATmakeAppl ( lf_AUX_VarEnv18_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg2 , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
@@ -76,13 +76,13 @@ tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ;
 tmp [ 10 ] = arg_3 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf3sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 7 ] ) ;
-return ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 11 ] ) ) ) , tmp [ 8 ] , tmp [ 9 ] , tmp [ 10 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 11 ] ) ) ) , tmp [ 8 ] , tmp [ 9 ] , tmp [ 10 ] ) ) ;
 }
 }
 }
 else {
 if ( term_equal ( arg1 , tmp [ 3 ] ) ) {
-return ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp31 , atmp32 , atmp33 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp31 , atmp32 , atmp33 ) ) ;
 }
 }
 }
@@ -92,7 +92,7 @@ return ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make
 }
 }
 else {
-return ( * ef2 ) ( lf3 ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make_list ( atmp200 ) ) ) ) ) , atmp31 , atmp32 , atmp33 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make_list ( atmp200 ) ) ) ) ) , atmp31 , atmp32 , atmp33 ) ) ;
 }
 }
 }
@@ -105,15 +105,15 @@ return ( * ef2 ) ( lf3 ( make_list ( ( * ef3 ) ( arg0 , arg1 , lf2 ( make_list (
 }
 }
 }
-return make_nf4 ( lf_AUX_VarEnv18_1sym , arg0 , arg1 , arg2 , arg3 ) ;
+FUNC_EXIT ( make_nf4 ( lf_AUX_VarEnv18_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

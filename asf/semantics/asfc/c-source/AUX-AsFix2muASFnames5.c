@@ -36,7 +36,7 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"AsFix2muASFnames\"),w(\"\"),
 void init_AUX_AsFix2muASFnames5 ( ) {
 }
 ATerm lf_AUX_AsFix2muASFnames5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_AsFix2muASFnames5_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASFnames5_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames5_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -52,7 +52,7 @@ ATerm atmp0100 = arg_0 ( atmp010 ) ;
 if ( check_sym ( atmp0100 , ef5sym ) ) {
 {
 ATerm atmp01000 = arg_0 ( atmp0100 ) ;
-return ( * ef6 ) ( atmp01000 ) ;
+FUNC_EXIT ( ( * ef6 ) ( atmp01000 ) ) ;
 }
 }
 }
@@ -63,6 +63,6 @@ return ( * ef6 ) ( atmp01000 ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_AsFix2muASFnames5_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2muASFnames5_1sym , arg0 ) ) ;
 }
 

@@ -70,9 +70,9 @@ void init_AUX_Substitution2 ( ) {
 ATerm lf_AUX_Substitution2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_Substitution2_1 ) ;
+FUNC_ENTRY ( lf_AUX_Substitution2_1sym , ATmakeAppl ( lf_AUX_Substitution2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
-return ( * ef2 ) ( arg0 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 ) ) ;
 }
 tmp [ 0 ] = ( * ef10 ) ( arg1 ) ;
 if ( check_sym ( tmp [ 0 ] , ef11sym ) ) {
@@ -87,14 +87,15 @@ tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef14sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( term_equal ( ( * ef8 ) ( ( * ef2 ) ( tmp [ 5 ] ) ) , ( * ef8 ) ( ( * ef2 ) ( arg0 ) ) ) ) {
-return ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 6 ] ) , ( * ef6 ) ( tmp [ 6 ] ) ) , lf_AUX_Substitution2_1 ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 6 ] ) ) , ( * ef9 ) ( arg1 ) ) , tmp [ 6 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 6 ] ) , ( * ef6 ) ( tmp [ 6 ] ) ) , lf_AUX_Substitution2_1 ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 6 ] ) ) , ( * ef9 ) ( arg1 ) ) , tmp [ 6 ] ) ) ;
 }
 }
 }
 }
 }
 }
-return lf_AUX_Substitution2_1 ( arg0 , ( * ef9 ) ( arg1 ) ) ;
+FUNC_EXIT ( lf_AUX_Substitution2_1 ( arg0 , ( * ef9 ) ( arg1 ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Substitution2_1sym , arg0 , arg1 ) ) ;
 }
 }
 

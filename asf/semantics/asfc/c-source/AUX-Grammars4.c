@@ -33,7 +33,7 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Grammars\"),w(\"\"),[l(\"nor
 void init_AUX_Grammars4 ( ) {
 }
 ATerm lf_AUX_Grammars4_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Grammars4_1 ) ;
+FUNC_ENTRY ( lf_AUX_Grammars4_1sym , ATmakeAppl ( lf_AUX_Grammars4_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -51,7 +51,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( atmp010 , lf2sym ) ) {
 {
 ATerm atmp0100 = arg_0 ( atmp010 ) ;
-return ( * ef3 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) , ( * ef4 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0100 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) , ( * ef4 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0100 ) ) ) ) ) ) ;
 }
 }
 }
@@ -63,10 +63,10 @@ return ( * ef3 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) , ( * ef4 ) ( ( 
 }
 }
 }
-return make_nf1 ( lf_AUX_Grammars4_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Grammars4_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -39,7 +39,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Rules2C_Aux14_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 17 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux14_2 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux14_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux14_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_Rules2C_Aux14_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -73,7 +73,7 @@ if ( check_sym ( tmp [ 13 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
 tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ;
 if ( check_sym ( tmp [ 14 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
 tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 15 ] ) ) , lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 16 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 15 ] ) ) , lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 16 ] ) ) ) ) ) ;
 }
 }
 }
@@ -86,7 +86,7 @@ if ( check_sym ( tmp [ 13 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
 tmp [ 15 ] = arg_0 ( tmp [ 13 ] ) ;
 if ( check_sym ( tmp [ 14 ] , lf_AUX_Rules2C_Aux14_1sym ) ) {
 tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( arg0 ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 15 ] ) ) ) , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 16 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( arg0 ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( make_list ( tmp [ 9 ] ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) ) , make_list ( tmp [ 15 ] ) ) ) , lf_AUX_Rules2C_Aux14_1 ( make_list ( tmp [ 16 ] ) ) ) ) ;
 }
 }
 }
@@ -102,23 +102,23 @@ return ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( cons ( make_list ( ( * ef2 ) ( lf3 (
 }
 }
 else {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux14_1 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf_AUX_Rules2C_Aux14_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux14_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Rules2C_Aux14_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Rules2C_Aux14_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_Rules2C_Aux14_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux14_1 ) ;
-return make_nf1 ( lf_AUX_Rules2C_Aux14_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Rules2C_Aux14_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux14_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux14_1sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

@@ -12,7 +12,8 @@ void resolve_AUX_ATerm_Operations17 ( ) {
 void init_AUX_ATerm_Operations17 ( ) {
 }
 ATerm lf_AUX_ATerm_Operations17_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Operations17_1 ) ;
-return arg0 ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations17_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations17_1sym , arg0 ) ) ;
+FUNC_EXIT ( arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations17_1sym , arg0 ) ) ;
 }
 

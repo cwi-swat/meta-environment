@@ -47,8 +47,8 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_C_Basics22_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 12 ] ;
-PROF ( prof_lf_AUX_C_Basics22_1 ) ;
+ATerm tmp [ 11 ] ;
+FUNC_ENTRY ( lf_AUX_C_Basics22_1sym , ATmakeAppl ( lf_AUX_C_Basics22_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -69,37 +69,29 @@ tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 4 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 4 ] , 101 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 5 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 5 ] , 120 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 6 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 6 ] , 116 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 7 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 7 ] , 101 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 8 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 8 ] , 114 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 9 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 9 ] , 110 ) ) {
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 10 ] = list_head ( tmp [ 3 ] ) ;
-tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 10 ] , 97 ) ) {
-if ( is_single_element ( tmp [ 3 ] ) ) {
-tmp [ 11 ] = list_head ( tmp [ 3 ] ) ;
-if ( is_char ( tmp [ 11 ] , 108 ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ;
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
+tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 120 ) ) ) {
+tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
+if ( not_empty_list ( tmp [ 5 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 116 ) ) ) {
+tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
+if ( not_empty_list ( tmp [ 6 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 101 ) ) ) {
+tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
+if ( not_empty_list ( tmp [ 7 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 114 ) ) ) {
+tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ;
+if ( not_empty_list ( tmp [ 8 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 110 ) ) ) {
+tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
+if ( not_empty_list ( tmp [ 9 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 97 ) ) ) {
+tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ;
+if ( is_single_element ( tmp [ 10 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 108 ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -126,15 +118,16 @@ tmp [ 0 ] = atmp0000 [ 1 ] ;
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_C_Basics22_1sym , arg0 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

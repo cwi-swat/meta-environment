@@ -52,7 +52,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Check_List_Pats11_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 5 ] ;
-PROF ( prof_lf_AUX_Check_List_Pats11_1 ) ;
+FUNC_ENTRY ( lf_AUX_Check_List_Pats11_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats11_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -84,7 +84,7 @@ if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 34 ) ) ) {
 if ( is_single_element ( atmp110 ) ) {
 tmp [ 4 ] = list_head ( atmp110 ) ;
 if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
-return ( * ef3 ) ( tmp [ 4 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 4 ] ) ) ;
 }
 }
 }
@@ -117,7 +117,7 @@ ATerm atmp110 = arg_0 ( atmp11 ) ;
 if ( is_single_element ( atmp110 ) ) {
 tmp [ 0 ] = list_head ( atmp110 ) ;
 if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
-return lf_AUX_Check_List_Pats11_1 ( arg0 , tmp [ 0 ] ) ;
+FUNC_EXIT ( lf_AUX_Check_List_Pats11_1 ( arg0 , tmp [ 0 ] ) ) ;
 }
 }
 }
@@ -125,15 +125,16 @@ return lf_AUX_Check_List_Pats11_1 ( arg0 , tmp [ 0 ] ) ;
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef6 ) ( ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Check_List_Pats11_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

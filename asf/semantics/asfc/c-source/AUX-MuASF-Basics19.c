@@ -25,22 +25,22 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"
 void init_AUX_MuASF_Basics19 ( ) {
 }
 ATerm lf_AUX_MuASF_Basics19_2 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_Basics19_2 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics19_2sym , ATmakeAppl ( lf_AUX_MuASF_Basics19_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Basics19_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-return ( * ef2 ) ( arg0 , lf_AUX_MuASF_Basics19_1 ( make_list ( atmp10 ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , lf_AUX_MuASF_Basics19_1 ( make_list ( atmp10 ) ) ) ) ;
 }
 else {
-return ( * ef1 ) ( arg0 ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_MuASF_Basics19_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_MuASF_Basics19_2sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics19_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics19_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Basics19_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics19_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics19_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics19_1sym , arg0 ) ) ;
 }
 

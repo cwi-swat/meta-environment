@@ -50,23 +50,23 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_ATerm_Lists12_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_ATerm_Lists12_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists12_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists12_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( term_equal ( ( * ef4 ) ( ( * ef5 ) ( arg0 ) , arg1 ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-return ( * ef3 ) ( arg0 ) ;
+FUNC_EXIT ( ( * ef3 ) ( arg0 ) ) ;
 }
 tmp [ 0 ] = ( * ef5 ) ( arg0 ) ;
 if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) , ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) ) ) {
-return ( * ef7 ) ( tmp [ 0 ] , lf_AUX_ATerm_Lists12_1 ( ( * ef3 ) ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( tmp [ 0 ] , lf_AUX_ATerm_Lists12_1 ( ( * ef3 ) ( arg0 ) , arg1 ) ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Lists12_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Lists12_1sym , arg0 , arg1 ) ) ;
 }
 }
 

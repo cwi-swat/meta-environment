@@ -77,20 +77,18 @@ ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\")
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_Make_Left_Linear8 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Make_Left_Linear8_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_Make_Left_Linear8_1 ) ;
+FUNC_ENTRY ( lf_AUX_Make_Left_Linear8_1sym , ATmakeAppl ( lf_AUX_Make_Left_Linear8_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , ( constant0 ? constant0 : ( constant0 = lf3 ( make_list ( null ( ) ) ) ) ) , arg2 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , lf3 ( make_list ( null ( ) ) ) , arg2 ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
@@ -112,7 +110,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-return ( * ef2 ) ( lf2 ( make_list ( ( * ef3 ) ( atmp00 , lf2 ( make_list ( tmp [ 4 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 5 ] ) ) , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( ( * ef3 ) ( atmp00 , lf2 ( make_list ( tmp [ 4 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 5 ] ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }
@@ -126,30 +124,30 @@ return ( * ef2 ) ( lf2 ( make_list ( ( * ef3 ) ( atmp00 , lf2 ( make_list ( tmp 
 if ( check_sym ( arg0 , ef5sym ) ) {
 tmp [ 0 ] = arg_0 ( arg0 ) ;
 tmp [ 1 ] = ( * ef6 ) ( ( * ef5 ) ( tmp [ 0 ] ) , arg2 ) ;
-if ( term_equal ( tmp [ 1 ] , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
 tmp [ 2 ] = ( * ef8 ) ( ( * ef5 ) ( tmp [ 0 ] ) , arg2 ) ;
-return ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , ( constant0 ? constant0 : ( constant0 = lf3 ( make_list ( null ( ) ) ) ) ) , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , lf3 ( make_list ( null ( ) ) ) , tmp [ 2 ] ) ) ;
 }
-if ( term_equal ( tmp [ 1 ] , ( constant2 ? constant2 : ( constant2 = ( * ef9 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 1 ] , ( constant1 ? constant1 : ( constant1 = ( * ef9 ) ( ) ) ) ) ) {
 tmp [ 2 ] = ( * ef10 ) ( arg2 ) ;
 tmp [ 3 ] = ( * ef11 ) ( tmp [ 2 ] , ( * ef5 ) ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef5sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 tmp [ 5 ] = ( * ef12 ) ( ( * ef13 ) ( tmp [ 2 ] ) , arg2 ) ;
 tmp [ 6 ] = ( * ef14 ) ( ( * ef5 ) ( tmp [ 0 ] ) , ( * ef5 ) ( tmp [ 4 ] ) ) ;
-return ( * ef2 ) ( lf2 ( make_list ( ( * ef5 ) ( tmp [ 4 ] ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 5 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( ( * ef5 ) ( tmp [ 4 ] ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 5 ] ) ) ;
 }
 }
 }
-return make_nf3 ( lf_AUX_Make_Left_Linear8_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_Make_Left_Linear8_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

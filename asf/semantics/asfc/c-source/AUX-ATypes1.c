@@ -21,11 +21,11 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ATypes1_2 ( ) {
-PROF ( prof_lf_AUX_ATypes1_2 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_ATypes1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATypes1_2sym , ATmakeAppl0 ( lf_AUX_ATypes1_2sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ATypes1_2sym ) ) ;
 }
 ATerm lf_AUX_ATypes1_1 ( ) {
-PROF ( prof_lf_AUX_ATypes1_1 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_ATypes1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATypes1_1sym , ATmakeAppl0 ( lf_AUX_ATypes1_1sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ATypes1_1sym ) ) ;
 }
 

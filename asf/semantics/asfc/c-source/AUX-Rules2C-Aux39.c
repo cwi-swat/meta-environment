@@ -45,14 +45,12 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Rules2C_Aux39 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Rules2C_Aux39_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux39_1 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux39_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux39_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -73,11 +71,11 @@ if ( check_sym ( atmp00110 , ef5sym ) ) {
 {
 ATerm atmp00111 = arg_1 ( atmp0011 ) ;
 if ( check_sym ( arg1 , ef6sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 tmp [ 0 ] = ( * ef7 ) ( arg1 ) ;
 tmp [ 1 ] = ( * ef8 ) ( arg0 , tmp [ 0 ] ) ;
-return tmp [ 1 ] ;
+FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 }
 }
@@ -93,10 +91,10 @@ return tmp [ 1 ] ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef1 ) ( ( * ef9 ) ( ( * ef4 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) , ( * ef8 ) ( arg0 , arg1 ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef9 ) ( ( * ef4 ) ( ( * ef5 ) ( ) , ( * ef8 ) ( arg0 , arg1 ) ) ) ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_Rules2C_Aux39_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Rules2C_Aux39_1sym , arg0 , arg1 ) ) ;
 }
 }
 

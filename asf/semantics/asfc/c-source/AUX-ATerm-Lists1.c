@@ -140,79 +140,79 @@ ATprotect ( & constant17 ) ;
 ATprotect ( & constant18 ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_19 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_19 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_ATerm_Lists1_19sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_19sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_19sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ATerm_Lists1_19sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_18 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_18 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_ATerm_Lists1_18sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_18sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_18sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ATerm_Lists1_18sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_17 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_17 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_ATerm_Lists1_17sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_17sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_17sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_ATerm_Lists1_17sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_16 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_16 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_ATerm_Lists1_16sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_16sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_16sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_ATerm_Lists1_16sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_15 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_15 ) ;
-return ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_AUX_ATerm_Lists1_15sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_15sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_15sym ) ) ;
+CONS_EXIT_CONST ( constant4 , make_nf0 ( lf_AUX_ATerm_Lists1_15sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_14 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_14 ) ;
-return ( constant5 ? constant5 : ( constant5 = make_nf0 ( lf_AUX_ATerm_Lists1_14sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_14sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_14sym ) ) ;
+CONS_EXIT_CONST ( constant5 , make_nf0 ( lf_AUX_ATerm_Lists1_14sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_13 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_13 ) ;
-return ( constant6 ? constant6 : ( constant6 = make_nf0 ( lf_AUX_ATerm_Lists1_13sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_13sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_13sym ) ) ;
+CONS_EXIT_CONST ( constant6 , make_nf0 ( lf_AUX_ATerm_Lists1_13sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_12 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_12 ) ;
-return ( constant7 ? constant7 : ( constant7 = make_nf0 ( lf_AUX_ATerm_Lists1_12sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_12sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_12sym ) ) ;
+CONS_EXIT_CONST ( constant7 , make_nf0 ( lf_AUX_ATerm_Lists1_12sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_11 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_11 ) ;
-return ( constant8 ? constant8 : ( constant8 = make_nf0 ( lf_AUX_ATerm_Lists1_11sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_11sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_11sym ) ) ;
+CONS_EXIT_CONST ( constant8 , make_nf0 ( lf_AUX_ATerm_Lists1_11sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_10 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_10 ) ;
-return ( constant9 ? constant9 : ( constant9 = make_nf0 ( lf_AUX_ATerm_Lists1_10sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_10sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_10sym ) ) ;
+CONS_EXIT_CONST ( constant9 , make_nf0 ( lf_AUX_ATerm_Lists1_10sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_9 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_9 ) ;
-return ( constant10 ? constant10 : ( constant10 = make_nf0 ( lf_AUX_ATerm_Lists1_9sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_9sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_9sym ) ) ;
+CONS_EXIT_CONST ( constant10 , make_nf0 ( lf_AUX_ATerm_Lists1_9sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_8 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_8 ) ;
-return ( constant11 ? constant11 : ( constant11 = make_nf0 ( lf_AUX_ATerm_Lists1_8sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_8sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_8sym ) ) ;
+CONS_EXIT_CONST ( constant11 , make_nf0 ( lf_AUX_ATerm_Lists1_8sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_7 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_7 ) ;
-return ( constant12 ? constant12 : ( constant12 = make_nf0 ( lf_AUX_ATerm_Lists1_7sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_7sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_7sym ) ) ;
+CONS_EXIT_CONST ( constant12 , make_nf0 ( lf_AUX_ATerm_Lists1_7sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_6 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_6 ) ;
-return ( constant13 ? constant13 : ( constant13 = make_nf0 ( lf_AUX_ATerm_Lists1_6sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_6sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_6sym ) ) ;
+CONS_EXIT_CONST ( constant13 , make_nf0 ( lf_AUX_ATerm_Lists1_6sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_5 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_5 ) ;
-return ( constant14 ? constant14 : ( constant14 = make_nf0 ( lf_AUX_ATerm_Lists1_5sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_5sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_5sym ) ) ;
+CONS_EXIT_CONST ( constant14 , make_nf0 ( lf_AUX_ATerm_Lists1_5sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_4 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_4 ) ;
-return ( constant15 ? constant15 : ( constant15 = make_nf0 ( lf_AUX_ATerm_Lists1_4sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_4sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_4sym ) ) ;
+CONS_EXIT_CONST ( constant15 , make_nf0 ( lf_AUX_ATerm_Lists1_4sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_3 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_3 ) ;
-return ( constant16 ? constant16 : ( constant16 = make_nf0 ( lf_AUX_ATerm_Lists1_3sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_3sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_3sym ) ) ;
+CONS_EXIT_CONST ( constant16 , make_nf0 ( lf_AUX_ATerm_Lists1_3sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_2 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_2 ) ;
-return ( constant17 ? constant17 : ( constant17 = make_nf0 ( lf_AUX_ATerm_Lists1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_2sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_2sym ) ) ;
+CONS_EXIT_CONST ( constant17 , make_nf0 ( lf_AUX_ATerm_Lists1_2sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Lists1_1 ( ) {
-PROF ( prof_lf_AUX_ATerm_Lists1_1 ) ;
-return ( constant18 ? constant18 : ( constant18 = make_nf0 ( lf_AUX_ATerm_Lists1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ATerm_Lists1_1sym , ATmakeAppl0 ( lf_AUX_ATerm_Lists1_1sym ) ) ;
+CONS_EXIT_CONST ( constant18 , make_nf0 ( lf_AUX_ATerm_Lists1_1sym ) ) ;
 }
 

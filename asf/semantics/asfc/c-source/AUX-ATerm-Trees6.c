@@ -32,18 +32,18 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Trees\"),w(\"\"),[l(\"
 void init_AUX_ATerm_Trees6 ( ) {
 }
 ATerm lf_AUX_ATerm_Trees6_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_ATerm_Trees6_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees6_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees6_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-return ( * ef3 ) ( arg0 , ( * ef4 ) ( ( * ef5 ) ( arg0 ) , arg1 , arg2 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( arg0 , ( * ef4 ) ( ( * ef5 ) ( arg0 ) , arg1 , arg2 ) ) ) ;
 }
 }
 }
 }
-return make_nf3 ( lf_AUX_ATerm_Trees6_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ATerm_Trees6_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 

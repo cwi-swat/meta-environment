@@ -73,16 +73,14 @@ ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[l(\"newl
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_Remove_Lists_C13 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Remove_Lists_C13_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 8 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_C13_1 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_C13_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_C13_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -104,7 +102,7 @@ tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-return ( * ef2 ) ( lf2 ( make_list ( ( * ef1 ) ( atmp00 , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 4 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( ( * ef1 ) ( atmp00 , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 4 ] ) ) ;
 }
 }
 }
@@ -122,7 +120,7 @@ if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 tmp [ 7 ] = ( * ef8 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) ;
-return ( * ef2 ) ( lf2 ( make_list ( ( * ef1 ) ( atmp00 , lf2 ( make_list ( tmp [ 7 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 4 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( ( * ef1 ) ( atmp00 , lf2 ( make_list ( tmp [ 7 ] ) ) ) ) ) , lf3 ( make_list ( tmp [ 6 ] ) ) , tmp [ 4 ] ) ) ;
 }
 }
 }
@@ -137,18 +135,19 @@ return ( * ef2 ) ( lf2 ( make_list ( ( * ef1 ) ( atmp00 , lf2 ( make_list ( tmp 
 if ( term_equal ( ( * ef9 ) ( arg0 ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 if ( term_equal ( ( * ef10 ) ( arg0 , arg1 ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 tmp [ 0 ] = ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( arg0 ) ) ) ;
-return ( * ef2 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) , ( constant2 ? constant2 : ( constant2 = lf3 ( make_list ( null ( ) ) ) ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) , lf3 ( make_list ( null ( ) ) ) , arg1 ) ) ;
 }
 }
-return ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , ( constant2 ? constant2 : ( constant2 = lf3 ( make_list ( null ( ) ) ) ) ) , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( arg0 ) ) , lf3 ( make_list ( null ( ) ) ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists_C13_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

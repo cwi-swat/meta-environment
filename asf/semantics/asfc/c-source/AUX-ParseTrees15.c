@@ -58,16 +58,12 @@ ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natc
 ef11 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"init\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"init\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_ParseTrees15 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ParseTrees15_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_ParseTrees15_1 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees15_1sym , ATmakeAppl ( lf_AUX_ParseTrees15_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -77,16 +73,16 @@ tmp [ 0 ] = ( * ef11 ) ( atmp00 ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-return ( * ef1 ) ( atmp00 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp01 ) , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( arg1 , ( * ef5 ) ( tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ( * ef8 ) ( ( * ef10 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ( * ef8 ) ( ( * ef10 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) , arg2 ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( atmp00 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( atmp01 ) , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( arg1 , ( * ef5 ) ( tmp [ 2 ] ) , ( * ef7 ) ( ( * ef8 ) ( ( * ef10 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( ( * ef10 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) , arg2 ) ) ) ) ) ;
 }
 }
 }
 }
-return make_nf3 ( lf_AUX_ParseTrees15_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ParseTrees15_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

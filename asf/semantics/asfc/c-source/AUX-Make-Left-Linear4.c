@@ -27,14 +27,14 @@ void init_AUX_Make_Left_Linear4 ( ) {
 ATerm lf_AUX_Make_Left_Linear4_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_Make_Left_Linear4_2 ) ;
+FUNC_ENTRY ( lf_AUX_Make_Left_Linear4_2sym , ATmakeAppl ( lf_AUX_Make_Left_Linear4_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Make_Left_Linear4_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
 tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ;
-return ( * ef1 ) ( lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 if ( not_empty_list ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
@@ -47,7 +47,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf_AUX_Make_Left_Linear4_1sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-return ( * ef1 ) ( lf_AUX_Make_Left_Linear4_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Make_Left_Linear4_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
 }
@@ -55,11 +55,11 @@ return ( * ef1 ) ( lf_AUX_Make_Left_Linear4_1 ( cons ( make_list ( tmp [ 2 ] ) ,
 }
 }
 }
-return make_nf2 ( lf_AUX_Make_Left_Linear4_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Make_Left_Linear4_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_Make_Left_Linear4_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Make_Left_Linear4_1 ) ;
-return make_nf1 ( lf_AUX_Make_Left_Linear4_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Make_Left_Linear4_1sym , ATmakeAppl ( lf_AUX_Make_Left_Linear4_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Make_Left_Linear4_1sym , arg0 ) ) ;
 }
 

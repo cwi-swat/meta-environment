@@ -19,11 +19,11 @@ void init_AUX_Matching1 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Matching1_2 ( ) {
-PROF ( prof_lf_AUX_Matching1_2 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_Matching1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_Matching1_2sym , ATmakeAppl0 ( lf_AUX_Matching1_2sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_Matching1_2sym ) ) ;
 }
 ATerm lf_AUX_Matching1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Matching1_1 ) ;
-return make_nf1 ( lf_AUX_Matching1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Matching1_1sym , ATmakeAppl ( lf_AUX_Matching1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Matching1_1sym , arg0 ) ) ;
 }
 

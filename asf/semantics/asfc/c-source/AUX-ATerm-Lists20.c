@@ -50,9 +50,9 @@ void init_AUX_ATerm_Lists20 ( ) {
 ATerm lf_AUX_ATerm_Lists20_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_ATerm_Lists20_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists20_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists20_1sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
 if ( check_sym ( arg3 , ef1sym ) ) {
-return ( * ef2 ) ( ( * ef3 ) ( arg4 ) , arg1 , arg2 ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( arg4 ) , arg1 , arg2 ) ) ;
 }
 if ( check_sym ( arg3 , ef4sym ) ) {
 {
@@ -63,15 +63,15 @@ ATerm atmp40 = arg_0 ( arg4 ) ;
 tmp [ 0 ] = ( * ef8 ) ( arg3 ) ;
 tmp [ 1 ] = ( * ef8 ) ( arg4 ) ;
 tmp [ 2 ] = lf_AUX_ATerm_Lists20_1 ( arg0 , arg1 , arg2 , ( * ef9 ) ( arg3 ) , ( * ef9 ) ( arg4 ) ) ;
-return ( * ef5 ) ( arg0 , ( * ef6 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] , ( * ef7 ) ( tmp [ 2 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( arg0 , ( * ef6 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] , ( * ef7 ) ( tmp [ 2 ] ) ) ) ) ) ;
 }
 }
 }
 }
 if ( check_sym ( arg4 , ef1sym ) ) {
-return ( * ef2 ) ( ( * ef3 ) ( arg3 ) , arg1 , arg2 ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( arg3 ) , arg1 , arg2 ) ) ;
 }
-return make_nf5 ( lf_AUX_ATerm_Lists20_1sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ;
+FUNC_EXIT ( make_nf5 ( lf_AUX_ATerm_Lists20_1sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
 }
 }
 

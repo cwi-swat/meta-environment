@@ -22,18 +22,12 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"liter
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_AsFix2muASFnames10 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_AsFix2muASFnames10_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_AsFix2muASFnames10_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASFnames10_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames10_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -46,7 +40,7 @@ tmp [ 0 ] = list_tail ( atmp000 ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ;
 if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
-return ( * ef2 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 34 ) ) ) , cons ( ( constant1 ? constant1 : ( constant1 = make_list_char ( 92 ) ) ) , cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 34 ) ) ) , cons ( make_list ( tmp [ 1 ] ) , ( constant2 ? constant2 : ( constant2 = ( ATerm ) ATmakeList ( 3 , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 92 ) , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 1 ] ) , ( ATerm ) ATmakeList ( 3 , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -55,11 +49,11 @@ return ( * ef2 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_lis
 }
 }
 }
-return make_nf1 ( lf_AUX_AsFix2muASFnames10_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2muASFnames10_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

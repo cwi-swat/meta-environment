@@ -31,11 +31,11 @@ void init_AUX_MuASF_Basics6 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_MuASF_Basics6_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics6_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics6_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics6_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
@@ -47,17 +47,17 @@ if ( check_sym ( atmp01 , lf2sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( not_empty_list ( atmp010 ) ) {
-return ( * ef2 ) ( lf2 ( make_list ( atmp010 ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( atmp010 ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_MuASF_Basics6_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics6_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -24,7 +24,8 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Trees\"),w(\"\"),[l(\"
 void init_AUX_ATerm_Trees5 ( ) {
 }
 ATerm lf_AUX_ATerm_Trees5_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Trees5_1 ) ;
-return ( * ef1 ) ( arg1 , ( * ef2 ) ( arg0 , ( * ef3 ) ( arg1 ) ) ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees5_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees5_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg1 , ( * ef2 ) ( arg0 , ( * ef3 ) ( arg1 ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Trees5_1sym , arg0 , arg1 ) ) ;
 }
 

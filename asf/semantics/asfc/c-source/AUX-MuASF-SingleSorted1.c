@@ -202,151 +202,151 @@ ATprotect ( & constant3 ) ;
 ATprotect ( & constant4 ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_37 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_37 ) ;
-return make_nf3 ( lf_AUX_MuASF_SingleSorted1_37sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_37sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_37sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_SingleSorted1_37sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_36 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_36 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_36sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_36sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_36sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_36sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_35 ( ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_35 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_MuASF_SingleSorted1_35sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_35sym , ATmakeAppl0 ( lf_AUX_MuASF_SingleSorted1_35sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_MuASF_SingleSorted1_35sym ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_34 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_34 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_34sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_34sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_34sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_34sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_33 ( ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_33 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_MuASF_SingleSorted1_33sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_33sym , ATmakeAppl0 ( lf_AUX_MuASF_SingleSorted1_33sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_MuASF_SingleSorted1_33sym ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_32 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_32 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_32sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_32sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_32sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_32sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_31 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_31 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_31sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_31sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_31sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_31sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_30 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_30 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_30sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_30sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_30sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_30sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_28 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_28 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_28sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_28sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_28sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_28sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_29 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_29 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_29sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_29sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_29sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_29sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_27 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_27 ) ;
-return make_nf3 ( lf_AUX_MuASF_SingleSorted1_27sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_27sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_27sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_SingleSorted1_27sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_26 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_26 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_26sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_26sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_26sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_26sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_25 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_25 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_25sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_25sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_25sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_25sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_24 ( ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_24 ) ;
-return ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_AUX_MuASF_SingleSorted1_24sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_24sym , ATmakeAppl0 ( lf_AUX_MuASF_SingleSorted1_24sym ) ) ;
+CONS_EXIT_CONST ( constant2 , make_nf0 ( lf_AUX_MuASF_SingleSorted1_24sym ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_23 ( ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_23 ) ;
-return ( constant3 ? constant3 : ( constant3 = make_nf0 ( lf_AUX_MuASF_SingleSorted1_23sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_23sym , ATmakeAppl0 ( lf_AUX_MuASF_SingleSorted1_23sym ) ) ;
+CONS_EXIT_CONST ( constant3 , make_nf0 ( lf_AUX_MuASF_SingleSorted1_23sym ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_22 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_22 ) ;
-return make_nf3 ( lf_AUX_MuASF_SingleSorted1_22sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_22sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_22sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_SingleSorted1_22sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_21 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_21 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_21sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_21sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_21sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_21sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_19 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_19 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_19sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_19sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_19sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_19sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_20 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_20 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_20sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_20sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_20sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_20sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_18 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_18 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_18sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_18sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_18sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_18sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_16 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_16 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_16sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_16sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_16sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_16sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_17 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_17 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_17sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_17sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_17sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_17sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_11 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_11 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_11sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_11sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_11sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_11sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_15 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_15 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_15sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_15sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_15sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_15sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_5 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_5 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_5sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_5sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_5sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_14 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_14 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_14sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_14sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_14sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_14sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_13 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_13 ) ;
-return make_nf3 ( lf_AUX_MuASF_SingleSorted1_13sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_13sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_13sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_SingleSorted1_13sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_12 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_12 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_12sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_12sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_12sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_12sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_10 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_10 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_10sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_10sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_10sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_10sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_9 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_9 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_9sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_9sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_9sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_9sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_8 ( ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_8 ) ;
-return ( constant4 ? constant4 : ( constant4 = make_nf0 ( lf_AUX_MuASF_SingleSorted1_8sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_8sym , ATmakeAppl0 ( lf_AUX_MuASF_SingleSorted1_8sym ) ) ;
+CONS_EXIT_CONST ( constant4 , make_nf0 ( lf_AUX_MuASF_SingleSorted1_8sym ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_7 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_7 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_7sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_7sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_7sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_6 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_6 ) ;
-return make_nf2 ( lf_AUX_MuASF_SingleSorted1_6sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_6sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_6sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_SingleSorted1_6sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_4 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_4sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_3 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_3sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_2sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_SingleSorted1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_SingleSorted1_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_SingleSorted1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_SingleSorted1_1sym , ATmakeAppl ( lf_AUX_MuASF_SingleSorted1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_SingleSorted1_1sym , arg0 ) ) ;
 }
 

@@ -46,16 +46,16 @@ void init_AUX_ATerm_Tables6 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Tables6_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Tables6_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Tables6_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables6_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef6 ) ( arg0 ) ) ) , arg1 ) , lf_AUX_ATerm_Tables6_1 ( ( * ef8 ) ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef6 ) ( arg0 ) ) ) , arg1 ) , lf_AUX_ATerm_Tables6_1 ( ( * ef8 ) ( arg0 ) , arg1 ) ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Tables6_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables6_1sym , arg0 , arg1 ) ) ;
 }
 

@@ -34,23 +34,23 @@ void init_AUX_ATerm_Trees4 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Trees4_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Trees4_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees4_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees4_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 if ( check_sym ( arg0 , ef5sym ) ) {
@@ -58,10 +58,10 @@ if ( check_sym ( arg0 , ef5sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( * ef4 ) ( atmp00 ) ;
+FUNC_EXIT ( ( * ef4 ) ( atmp00 ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_ATerm_Trees4_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Trees4_1sym , arg0 ) ) ;
 }
 

@@ -46,15 +46,11 @@ ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_ParseTrees5 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_ParseTrees5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees5_1 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees5_1sym , ATmakeAppl ( lf_AUX_ParseTrees5_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -123,7 +119,7 @@ if ( check_sym ( atmp001110100 , ef7sym ) ) {
 ATerm atmp0011101000 = arg_0 ( atmp001110100 ) ;
 {
 ATerm atmp001111 = arg_1 ( atmp00111 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp00101000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp001101000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp0011101000 ) ) ) ) , atmp001111 ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp00101000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( ( * ef8 ) ( ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp001101000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ) , ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( atmp0011101000 ) ) ) ) , atmp001111 ) ) ) ) ) ;
 }
 }
 }
@@ -171,12 +167,12 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef5sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( constant2 ? constant2 : ( constant2 = ( * ef9 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef9 ) ( ) ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_ParseTrees5_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ParseTrees5_1sym , arg0 ) ) ;
 }
 

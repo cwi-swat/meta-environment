@@ -47,7 +47,7 @@ void init_AUX_Locate_Constants6 ( ) {
 ATerm lf_AUX_Locate_Constants6_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 11 ] ;
-PROF ( prof_lf_AUX_Locate_Constants6_1 ) ;
+FUNC_ENTRY ( lf_AUX_Locate_Constants6_1sym , ATmakeAppl ( lf_AUX_Locate_Constants6_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -66,7 +66,7 @@ tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_2 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ;
-return ( * ef3 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) , ( * ef4 ) ( ( * ef1 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) , ( * ef4 ) ( ( * ef1 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }
@@ -105,7 +105,7 @@ tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
 tmp [ 9 ] = arg_2 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 7 ] ) ;
-return ( * ef3 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) , ( * ef4 ) ( ( * ef7 ) ( tmp [ 5 ] , tmp [ 8 ] ) ) , tmp [ 9 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) , ( * ef4 ) ( ( * ef7 ) ( tmp [ 5 ] , tmp [ 8 ] ) ) , tmp [ 9 ] ) ) ;
 }
 }
 }
@@ -119,11 +119,11 @@ return ( * ef3 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) , ( * ef4 ) ( ( * ef7 ) ( tm
 }
 }
 }
-return make_nf2 ( lf_AUX_Locate_Constants6_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Locate_Constants6_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

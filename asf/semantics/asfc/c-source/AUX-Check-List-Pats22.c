@@ -35,7 +35,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Check_List_Pats22_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_Check_List_Pats22_2 ) ;
+FUNC_ENTRY ( lf_AUX_Check_List_Pats22_2sym , ATmakeAppl ( lf_AUX_Check_List_Pats22_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_Check_List_Pats22_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -48,12 +48,12 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 tmp [ 2 ] = ( * ef2 ) ( arg0 , tmp [ 0 ] ) ;
 if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
 if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 }
 if ( term_equal ( tmp [ 2 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
 if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 }
 }
@@ -62,15 +62,15 @@ return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
 }
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
-return ( * ef2 ) ( arg0 , tmp [ 0 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Check_List_Pats22_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Check_List_Pats22_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_Check_List_Pats22_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Check_List_Pats22_1 ) ;
-return make_nf1 ( lf_AUX_Check_List_Pats22_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Check_List_Pats22_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats22_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Check_List_Pats22_1sym , arg0 ) ) ;
 }
 

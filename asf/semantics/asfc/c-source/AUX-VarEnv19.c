@@ -52,18 +52,12 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"Na
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_VarEnv19 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_VarEnv19_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 14 ] ;
-PROF ( prof_lf_AUX_VarEnv19_1 ) ;
+FUNC_ENTRY ( lf_AUX_VarEnv19_1sym , ATmakeAppl ( lf_AUX_VarEnv19_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -100,13 +94,13 @@ tmp [ 11 ] = arg_2 ( tmp [ 8 ] ) ;
 tmp [ 12 ] = arg_3 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 tmp [ 13 ] = arg_0 ( tmp [ 9 ] ) ;
-return ( * ef2 ) ( tmp [ 7 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( tmp [ 2 ] , tmp [ 3 ] , lf4 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , tmp [ 11 ] , tmp [ 12 ] ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 7 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( tmp [ 2 ] , tmp [ 3 ] , lf4 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , tmp [ 11 ] , tmp [ 12 ] ) ) ) ;
 }
 }
 }
 }
 else {
-return ( * ef2 ) ( tmp [ 3 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( arg0 , tmp [ 3 ] , lf4 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp11 , atmp12 , atmp13 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 3 ] , ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( arg0 , tmp [ 3 ] , lf4 ( make_list ( tmp [ 5 ] ) ) ) ) , make_list ( tmp [ 1 ] ) ) ) , atmp11 , atmp12 , atmp13 ) ) ) ;
 }
 }
 }
@@ -121,7 +115,7 @@ if ( check_sym ( tmp [ 0 ] , ef7sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf3sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-return ( * ef2 ) ( ( * ef3 ) ( lf3 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 108 ) ) ) , cons ( ( constant1 ? constant1 : ( constant1 = make_list_char ( 102 ) ) ) , make_list ( tmp [ 2 ] ) ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( ( * ef4 ) ( arg0 , ( * ef3 ) ( lf3 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 108 ) ) ) , cons ( ( constant1 ? constant1 : ( constant1 = make_list_char ( 102 ) ) ) , make_list ( tmp [ 2 ] ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) , atmp11 , atmp12 , ( * ef5 ) ( atmp13 ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 108 ) , cons ( make_list_char ( 102 ) , make_list ( tmp [ 2 ] ) ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( ( * ef4 ) ( arg0 , ( * ef3 ) ( lf3 ( cons ( make_list_char ( 108 ) , cons ( make_list_char ( 102 ) , make_list ( tmp [ 2 ] ) ) ) ) ) , lf4 ( make_list ( null ( ) ) ) ) ) ) , atmp11 , atmp12 , ( * ef5 ) ( atmp13 ) ) ) ) ;
 }
 }
 }
@@ -133,19 +127,19 @@ return ( * ef2 ) ( ( * ef3 ) ( lf3 ( cons ( ( constant0 ? constant0 : ( constant
 }
 }
 }
-return make_nf2 ( lf_AUX_VarEnv19_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_VarEnv19_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

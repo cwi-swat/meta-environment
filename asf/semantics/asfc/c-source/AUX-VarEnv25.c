@@ -44,170 +44,74 @@ void init_AUX_VarEnv25 ( ) {
 }
 ATerm lf_AUX_VarEnv25_2 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 46 ] ;
-PROF ( prof_lf_AUX_VarEnv25_2 ) ;
+ATerm tmp [ 41 ] ;
+FUNC_ENTRY ( lf_AUX_VarEnv25_2sym , ATmakeAppl ( lf_AUX_VarEnv25_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_VarEnv25_1sym ) ) {
-tmp [ 0 ] = arg_0 ( arg1 ) ;
 {
-ATerm atmp100 ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-atmp100 = list_head ( tmp [ 0 ] ) ;
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-if ( check_sym ( atmp100 , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( atmp100 ) ;
-tmp [ 2 ] = arg_1 ( atmp100 ) ;
-tmp [ 3 ] = arg_2 ( atmp100 ) ;
-if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
-tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 5 ] = tmp [ 4 ] ;
-tmp [ 6 ] = tmp [ 4 ] ;
-while ( not_empty_list ( tmp [ 4 ] ) ) {
-tmp [ 7 ] = list_head ( tmp [ 4 ] ) ;
-tmp [ 4 ] = list_tail ( tmp [ 4 ] ) ;
-if ( check_sym ( tmp [ 7 ] , ef2sym ) ) {
-tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
-tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ;
-if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
-tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
-if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
-tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 12 ] , 100 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 13 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 13 ] , 101 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 14 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 14 ] , 108 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 15 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 15 ] , 97 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 16 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 16 ] , 121 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 17 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 17 ] , 105 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 18 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 18 ] , 110 ) ) {
-if ( is_single_element ( tmp [ 11 ] ) ) {
-tmp [ 19 ] = list_head ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 19 ] , 103 ) ) {
-if ( check_sym ( tmp [ 9 ] , lf3sym ) ) {
-tmp [ 20 ] = arg_0 ( tmp [ 9 ] ) ;
-if ( not_empty_list ( tmp [ 20 ] ) ) {
-if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-return ( * ef4 ) ( lf3 ( tmp [ 20 ] ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-tmp [ 6 ] = list_tail ( tmp [ 6 ] ) ;
-tmp [ 4 ] = tmp [ 6 ] ;
-}
-}
-}
-}
-}
-tmp [ 0 ] = arg_0 ( arg1 ) ;
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( not_empty_list ( atmp10 ) ) {
+tmp [ 0 ] = list_head ( atmp10 ) ;
 {
-ATerm atmp100 ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-atmp100 = list_head ( tmp [ 0 ] ) ;
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-if ( check_sym ( atmp100 , ef1sym ) ) {
-tmp [ 21 ] = arg_0 ( atmp100 ) ;
-tmp [ 22 ] = arg_1 ( atmp100 ) ;
-tmp [ 23 ] = arg_2 ( atmp100 ) ;
-if ( check_sym ( tmp [ 23 ] , lf3sym ) ) {
+tmp [ 1 ] = list_tail ( atmp10 ) ;
+{
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
+tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
+tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
+tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
+{
+if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
+tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
+tmp [ 21 ] = tmp [ 5 ] ;
+tmp [ 22 ] = tmp [ 5 ] ;
+while ( not_empty_list ( tmp [ 5 ] ) ) {
+tmp [ 23 ] = list_head ( tmp [ 5 ] ) ;
+tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ;
+if ( check_sym ( tmp [ 23 ] , ef2sym ) ) {
 tmp [ 24 ] = arg_0 ( tmp [ 23 ] ) ;
-tmp [ 25 ] = tmp [ 24 ] ;
-tmp [ 26 ] = tmp [ 24 ] ;
-while ( not_empty_list ( tmp [ 24 ] ) ) {
-tmp [ 27 ] = list_head ( tmp [ 24 ] ) ;
-tmp [ 24 ] = list_tail ( tmp [ 24 ] ) ;
-if ( check_sym ( tmp [ 27 ] , ef2sym ) ) {
-tmp [ 28 ] = arg_0 ( tmp [ 27 ] ) ;
-tmp [ 29 ] = arg_1 ( tmp [ 27 ] ) ;
-if ( check_sym ( tmp [ 28 ] , ef3sym ) ) {
-tmp [ 30 ] = arg_0 ( tmp [ 28 ] ) ;
-if ( check_sym ( tmp [ 30 ] , lf4sym ) ) {
-tmp [ 31 ] = arg_0 ( tmp [ 30 ] ) ;
+tmp [ 25 ] = arg_1 ( tmp [ 23 ] ) ;
+if ( check_sym ( tmp [ 24 ] , ef3sym ) ) {
+tmp [ 26 ] = arg_0 ( tmp [ 24 ] ) ;
+if ( check_sym ( tmp [ 26 ] , lf4sym ) ) {
+tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ;
+if ( check_sym ( tmp [ 25 ] , lf3sym ) ) {
+tmp [ 28 ] = arg_0 ( tmp [ 25 ] ) ;
+if ( not_empty_list ( tmp [ 27 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 27 ] ) , make_char ( 100 ) ) ) {
+tmp [ 29 ] = list_tail ( tmp [ 27 ] ) ;
+if ( not_empty_list ( tmp [ 29 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 29 ] ) , make_char ( 101 ) ) ) {
+tmp [ 30 ] = list_tail ( tmp [ 29 ] ) ;
+if ( not_empty_list ( tmp [ 30 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 30 ] ) , make_char ( 108 ) ) ) {
+tmp [ 31 ] = list_tail ( tmp [ 30 ] ) ;
 if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 32 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 32 ] , 100 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 33 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 33 ] , 101 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 34 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 34 ] , 108 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 35 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 35 ] , 97 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 36 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 36 ] , 121 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 37 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 37 ] , 105 ) ) {
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-tmp [ 38 ] = list_head ( tmp [ 31 ] ) ;
-tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 38 ] , 110 ) ) {
-if ( is_single_element ( tmp [ 31 ] ) ) {
-tmp [ 39 ] = list_head ( tmp [ 31 ] ) ;
-if ( is_char ( tmp [ 39 ] , 103 ) ) {
-if ( check_sym ( tmp [ 29 ] , lf3sym ) ) {
-tmp [ 40 ] = arg_0 ( tmp [ 29 ] ) ;
-if ( not_empty_list ( tmp [ 40 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 31 ] ) , make_char ( 97 ) ) ) {
+tmp [ 32 ] = list_tail ( tmp [ 31 ] ) ;
+if ( not_empty_list ( tmp [ 32 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 32 ] ) , make_char ( 121 ) ) ) {
+tmp [ 33 ] = list_tail ( tmp [ 32 ] ) ;
+if ( not_empty_list ( tmp [ 33 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 33 ] ) , make_char ( 105 ) ) ) {
+tmp [ 34 ] = list_tail ( tmp [ 33 ] ) ;
+if ( not_empty_list ( tmp [ 34 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 34 ] ) , make_char ( 110 ) ) ) {
+tmp [ 35 ] = list_tail ( tmp [ 34 ] ) ;
+if ( is_single_element ( tmp [ 35 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 35 ] ) , make_char ( 103 ) ) ) {
+if ( not_empty_list ( tmp [ 28 ] ) ) {
 if ( check_sym ( arg0 , ef3sym ) ) {
-tmp [ 41 ] = arg_0 ( arg0 ) ;
-if ( check_sym ( tmp [ 41 ] , lf4sym ) ) {
-tmp [ 42 ] = arg_0 ( tmp [ 41 ] ) ;
-if ( check_sym ( tmp [ 22 ] , ef3sym ) ) {
-tmp [ 43 ] = arg_0 ( tmp [ 22 ] ) ;
-if ( check_sym ( tmp [ 43 ] , lf4sym ) ) {
-tmp [ 44 ] = arg_0 ( tmp [ 43 ] ) ;
-if ( not_empty_list ( tmp [ 44 ] ) ) {
-tmp [ 45 ] = list_head ( tmp [ 44 ] ) ;
-tmp [ 44 ] = list_tail ( tmp [ 44 ] ) ;
-if ( is_char ( tmp [ 45 ] , 95 ) ) {
-if ( term_equal ( ( * ef3 ) ( lf4 ( tmp [ 42 ] ) ) , ( * ef3 ) ( lf4 ( tmp [ 44 ] ) ) ) ) {
-return ( * ef4 ) ( lf3 ( tmp [ 40 ] ) ) ;
+tmp [ 36 ] = arg_0 ( arg0 ) ;
+if ( check_sym ( tmp [ 36 ] , lf4sym ) ) {
+tmp [ 37 ] = arg_0 ( tmp [ 36 ] ) ;
+if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
+tmp [ 38 ] = arg_0 ( tmp [ 3 ] ) ;
+if ( check_sym ( tmp [ 38 ] , lf4sym ) ) {
+tmp [ 39 ] = arg_0 ( tmp [ 38 ] ) ;
+if ( not_empty_list ( tmp [ 39 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 39 ] ) , make_char ( 95 ) ) ) {
+tmp [ 40 ] = list_tail ( tmp [ 39 ] ) ;
+if ( term_equal ( ( * ef3 ) ( lf4 ( make_list ( tmp [ 37 ] ) ) ) , ( * ef3 ) ( lf4 ( make_list ( tmp [ 40 ] ) ) ) ) ) {
+FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 28 ] ) ) ) ) ;
 }
 }
 }
@@ -236,8 +140,76 @@ return ( * ef4 ) ( lf3 ( tmp [ 40 ] ) ) ;
 }
 }
 }
-tmp [ 26 ] = list_tail ( tmp [ 26 ] ) ;
-tmp [ 24 ] = tmp [ 26 ] ;
+tmp [ 22 ] = list_tail ( tmp [ 22 ] ) ;
+tmp [ 5 ] = tmp [ 22 ] ;
+}
+tmp [ 6 ] = tmp [ 5 ] ;
+tmp [ 7 ] = tmp [ 5 ] ;
+while ( not_empty_list ( tmp [ 5 ] ) ) {
+tmp [ 8 ] = list_head ( tmp [ 5 ] ) ;
+tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ;
+if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
+tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
+tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ;
+if ( check_sym ( tmp [ 9 ] , ef3sym ) ) {
+tmp [ 11 ] = arg_0 ( tmp [ 9 ] ) ;
+if ( check_sym ( tmp [ 11 ] , lf4sym ) ) {
+tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ;
+if ( check_sym ( tmp [ 10 ] , lf3sym ) ) {
+tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ;
+if ( not_empty_list ( tmp [ 12 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 100 ) ) ) {
+tmp [ 14 ] = list_tail ( tmp [ 12 ] ) ;
+if ( not_empty_list ( tmp [ 14 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 101 ) ) ) {
+tmp [ 15 ] = list_tail ( tmp [ 14 ] ) ;
+if ( not_empty_list ( tmp [ 15 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 15 ] ) , make_char ( 108 ) ) ) {
+tmp [ 16 ] = list_tail ( tmp [ 15 ] ) ;
+if ( not_empty_list ( tmp [ 16 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 16 ] ) , make_char ( 97 ) ) ) {
+tmp [ 17 ] = list_tail ( tmp [ 16 ] ) ;
+if ( not_empty_list ( tmp [ 17 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 17 ] ) , make_char ( 121 ) ) ) {
+tmp [ 18 ] = list_tail ( tmp [ 17 ] ) ;
+if ( not_empty_list ( tmp [ 18 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 105 ) ) ) {
+tmp [ 19 ] = list_tail ( tmp [ 18 ] ) ;
+if ( not_empty_list ( tmp [ 19 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 19 ] ) , make_char ( 110 ) ) ) {
+tmp [ 20 ] = list_tail ( tmp [ 19 ] ) ;
+if ( is_single_element ( tmp [ 20 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 20 ] ) , make_char ( 103 ) ) ) {
+if ( not_empty_list ( tmp [ 13 ] ) ) {
+if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
+FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+tmp [ 7 ] = list_tail ( tmp [ 7 ] ) ;
+tmp [ 5 ] = tmp [ 7 ] ;
+}
+}
+}
 }
 }
 }
@@ -256,25 +228,25 @@ tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-return lf_AUX_VarEnv25_2 ( arg0 , lf_AUX_VarEnv25_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+FUNC_EXIT ( lf_AUX_VarEnv25_2 ( arg0 , lf_AUX_VarEnv25_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_VarEnv25_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_VarEnv25_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_VarEnv25_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv25_1 ) ;
-return make_nf1 ( lf_AUX_VarEnv25_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv25_1sym , ATmakeAppl ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 

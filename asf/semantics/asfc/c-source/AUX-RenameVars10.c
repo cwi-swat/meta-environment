@@ -41,7 +41,7 @@ void init_AUX_RenameVars10 ( ) {
 ATerm lf_AUX_RenameVars10_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 13 ] ;
-PROF ( prof_lf_AUX_RenameVars10_3 ) ;
+FUNC_ENTRY ( lf_AUX_RenameVars10_3sym , ATmakeAppl ( lf_AUX_RenameVars10_3sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_RenameVars10_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -57,7 +57,7 @@ tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ;
 tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf4sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ;
-return ( * ef1 ) ( lf_AUX_RenameVars10_1 ( make_list ( tmp [ 2 ] ) ) , lf4 ( make_list ( tmp [ 5 ] ) ) , tmp [ 4 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars10_1 ( make_list ( tmp [ 2 ] ) ) , lf4 ( make_list ( tmp [ 5 ] ) ) , tmp [ 4 ] ) ) ;
 }
 }
 }
@@ -82,7 +82,7 @@ tmp [ 11 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf4sym ) ) {
 tmp [ 12 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-return ( * ef1 ) ( lf_AUX_RenameVars10_1 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 12 ] ) ) ) , tmp [ 10 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars10_1 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( tmp [ 11 ] ) ) ) , lf4 ( cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 12 ] ) ) ) , tmp [ 10 ] ) ) ;
 }
 }
 }
@@ -95,19 +95,19 @@ return ( * ef1 ) ( lf_AUX_RenameVars10_1 ( cons ( make_list ( tmp [ 3 ] ) , make
 }
 }
 }
-return make_nf3 ( lf_AUX_RenameVars10_3sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_RenameVars10_3sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_RenameVars10_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_RenameVars10_1 ) ;
-return make_nf1 ( lf_AUX_RenameVars10_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_RenameVars10_1sym , ATmakeAppl ( lf_AUX_RenameVars10_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_RenameVars10_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_RenameVars10_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_RenameVars10_2 ) ;
-return make_nf1 ( lf_AUX_RenameVars10_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_RenameVars10_2sym , ATmakeAppl ( lf_AUX_RenameVars10_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_RenameVars10_2sym , arg0 ) ) ;
 }
 

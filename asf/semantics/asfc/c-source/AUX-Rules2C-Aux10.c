@@ -50,7 +50,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Rules2C_Aux10_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 12 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux10_2 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux10_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux10_2sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux10_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -74,7 +74,7 @@ if ( check_sym ( tmp [ 8 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 9 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) , make_list ( tmp [ 11 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) , make_list ( tmp [ 11 ] ) ) ) ) ) ;
 }
 }
 }
@@ -99,7 +99,7 @@ if ( check_sym ( tmp [ 8 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( check_sym ( tmp [ 9 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 9 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef6 ) ( ( * ef5 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) , make_list ( tmp [ 10 ] ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 11 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef6 ) ( ( * ef5 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) , make_list ( tmp [ 10 ] ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 11 ] ) ) ) ) ;
 }
 }
 }
@@ -118,7 +118,7 @@ if ( check_sym ( tmp [ 5 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 6 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 7 ] ) ) , lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( tmp [ 8 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 7 ] ) ) , lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( tmp [ 8 ] ) ) ) ) ) ;
 }
 }
 }
@@ -134,26 +134,26 @@ if ( check_sym ( tmp [ 5 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf_AUX_Rules2C_Aux10_1sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 6 ] ) ;
-return ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 8 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( cons ( make_list ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( tmp [ 7 ] ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( tmp [ 8 ] ) ) ) ) ;
 }
 }
 }
 }
 }
 else {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf_AUX_Rules2C_Aux10_1 ( make_list ( null ( ) ) ) , lf_AUX_Rules2C_Aux10_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Rules2C_Aux10_2sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux10_2sym , arg0 ) ) ;
 }
 }
 ATerm lf_AUX_Rules2C_Aux10_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux10_1 ) ;
-return make_nf1 ( lf_AUX_Rules2C_Aux10_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Rules2C_Aux10_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux10_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux10_1sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

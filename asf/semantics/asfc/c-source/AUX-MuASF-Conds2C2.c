@@ -101,16 +101,14 @@ ef15sym = lookup_sym ( ATreadFromString ( "prod(id(\"ANumerals\"),w(\"\"),[l(\"g
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_MuASF_Conds2C2 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_MuASF_Conds2C2_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 31 ] ;
-PROF ( prof_lf_AUX_MuASF_Conds2C2_3 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Conds2C2_3sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C2_3sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_MuASF_Conds2C2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -183,7 +181,7 @@ tmp [ 28 ] = ( * ef12 ) ( lf_AUX_MuASF_Conds2C2_1 ( cons ( make_list ( ( * ef3 )
 if ( check_sym ( tmp [ 28 ] , ef1sym ) ) {
 tmp [ 29 ] = arg_0 ( tmp [ 28 ] ) ;
 tmp [ 30 ] = arg_1 ( tmp [ 28 ] ) ;
-return ( * ef1 ) ( tmp [ 29 ] , tmp [ 30 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 29 ] , tmp [ 30 ] ) ) ;
 }
 }
 }
@@ -244,7 +242,7 @@ tmp [ 18 ] = ( * ef7 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) )
 if ( check_sym ( tmp [ 18 ] , ef1sym ) ) {
 tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ;
 tmp [ 20 ] = arg_1 ( tmp [ 18 ] ) ;
-return ( * ef1 ) ( ( * ef4 ) ( tmp [ 16 ] , tmp [ 19 ] ) , tmp [ 20 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef4 ) ( tmp [ 16 ] , tmp [ 19 ] ) , tmp [ 20 ] ) ) ;
 }
 }
 }
@@ -258,7 +256,7 @@ return ( * ef1 ) ( ( * ef4 ) ( tmp [ 16 ] , tmp [ 19 ] ) , tmp [ 20 ] ) ;
 }
 }
 else {
-return ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( ) ) ) , arg2 ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ) , arg2 ) ) ;
 }
 if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
@@ -278,7 +276,7 @@ tmp [ 9 ] = ( * ef12 ) ( lf_AUX_MuASF_Conds2C2_1 ( make_list ( ( * ef3 ) ( lf4 (
 if ( check_sym ( tmp [ 9 ] , ef1sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
 tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ;
-return ( * ef1 ) ( tmp [ 10 ] , tmp [ 11 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 10 ] , tmp [ 11 ] ) ) ;
 }
 }
 }
@@ -329,7 +327,7 @@ tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ;
 tmp [ 20 ] = arg_1 ( tmp [ 18 ] ) ;
 tmp [ 21 ] = ( * ef14 ) ( tmp [ 16 ] , tmp [ 19 ] ) ;
 tmp [ 22 ] = ( * ef15 ) ( tmp [ 17 ] , tmp [ 20 ] ) ;
-return ( * ef1 ) ( tmp [ 21 ] , tmp [ 22 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 21 ] , tmp [ 22 ] ) ) ;
 }
 }
 }
@@ -345,31 +343,31 @@ return ( * ef1 ) ( tmp [ 21 ] , tmp [ 22 ] ) ;
 }
 }
 }
-return make_nf3 ( lf_AUX_MuASF_Conds2C2_3sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_MuASF_Conds2C2_3sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Conds2C2_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C2_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C2_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C2_2sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C2_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C2_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Conds2C2_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C2_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C2_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C2_1sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C2_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C2_1sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf7 ( ATerm arg0 ) {
-PROF ( prof_lf7 ) ;
-return make_nf1 ( lf7sym , arg0 ) ;
+CONS_ENTRY ( lf7sym , ATmakeAppl ( lf7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf7sym , arg0 ) ) ;
 }
 ATerm lf6 ( ATerm arg0 ) {
-PROF ( prof_lf6 ) ;
-return make_nf1 ( lf6sym , arg0 ) ;
+CONS_ENTRY ( lf6sym , ATmakeAppl ( lf6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf6sym , arg0 ) ) ;
 }
 

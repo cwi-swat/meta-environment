@@ -35,7 +35,7 @@ ATprotect ( & constant3 ) ;
 ATerm lf_AUX_Literals3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_Literals3_1 ) ;
+FUNC_ENTRY ( lf_AUX_Literals3_1sym , ATmakeAppl ( lf_AUX_Literals3_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -49,7 +49,7 @@ tmp [ 1 ] = list_tail ( atmp000 ) ;
 {
 if ( is_single_element ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 34 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 34 ] , char_table [ 34 ] ) ) ) ) ;
 }
 }
 {
@@ -61,7 +61,7 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 tmp [ 4 ] = list_prefix ( tmp [ 3 ] ) ;
 if ( term_equal ( list_last ( tmp [ 3 ] ) , make_char ( 34 ) ) ) {
 tmp [ 5 ] = ( * ef2 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 92 ) ) , cons ( make_list ( make_char ( 34 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) , lf_AUX_Literals3_1 ( ( * ef1 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) , cons ( make_list ( tmp [ 4 ] ) , ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ;
-return tmp [ 5 ] ;
+FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
@@ -71,7 +71,7 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 tmp [ 4 ] = list_prefix ( tmp [ 3 ] ) ;
 if ( term_equal ( list_last ( tmp [ 3 ] ) , make_char ( 34 ) ) ) {
 tmp [ 5 ] = ( * ef2 ) ( ( constant3 ? constant3 : ( constant3 = ( * ef1 ) ( lf2 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 92 ) ) , cons ( make_list ( make_char ( 92 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) , lf_AUX_Literals3_1 ( ( * ef1 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) , cons ( make_list ( tmp [ 4 ] ) , ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ;
-return tmp [ 5 ] ;
+FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
@@ -100,7 +100,7 @@ if ( not_empty_list ( tmp [ 2 ] ) ) {
 tmp [ 3 ] = list_prefix ( tmp [ 2 ] ) ;
 if ( term_equal ( list_last ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
 tmp [ 4 ] = ( * ef2 ) ( ( * ef1 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) , cons ( make_list ( tmp [ 1 ] ) , ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) , lf_AUX_Literals3_1 ( ( * ef1 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) , cons ( make_list ( tmp [ 3 ] ) , ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ;
-return tmp [ 4 ] ;
+FUNC_EXIT ( tmp [ 4 ] ) ;
 }
 }
 }
@@ -110,11 +110,11 @@ return tmp [ 4 ] ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Literals3_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Literals3_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

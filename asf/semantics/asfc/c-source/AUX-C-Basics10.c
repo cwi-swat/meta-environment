@@ -31,7 +31,7 @@ void init_AUX_C_Basics10 ( ) {
 ATerm lf_AUX_C_Basics10_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_C_Basics10_1 ) ;
+FUNC_ENTRY ( lf_AUX_C_Basics10_1sym , ATmakeAppl ( lf_AUX_C_Basics10_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -47,10 +47,10 @@ if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-return ( * ef3 ) ( tmp [ 3 ] ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] ) ) ;
 }
 else {
-return lf_AUX_C_Basics10_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( lf_AUX_C_Basics10_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
@@ -60,11 +60,11 @@ return lf_AUX_C_Basics10_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) 
 }
 }
 }
-return make_nf2 ( lf_AUX_C_Basics10_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics10_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

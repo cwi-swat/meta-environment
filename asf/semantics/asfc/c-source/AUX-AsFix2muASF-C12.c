@@ -27,14 +27,12 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_AsFix2muASF_C12 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_AsFix2muASF_C12_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 13 ] ;
-PROF ( prof_lf_AUX_AsFix2muASF_C12_2 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASF_C12_2sym , ATmakeAppl ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -45,7 +43,7 @@ if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
 {
 if ( ! not_empty_list ( atmp10 ) ) {
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 1 ] = list_head ( atmp10 ) ;
@@ -74,7 +72,7 @@ tmp [ 10 ] = list_head ( tmp [ 6 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 11 ] ) ) {
 tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
-return lf_AUX_AsFix2muASF_C12_2 ( lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_AUX_AsFix2muASF_C12_2 ( lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -95,7 +93,7 @@ return lf_AUX_AsFix2muASF_C12_2 ( lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 1
 if ( ! not_empty_list ( atmp00 ) ) {
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
@@ -112,22 +110,22 @@ if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 1 ] = list_head ( atmp10 ) ;
-return ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_AsFix2muASF_C12_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_AsFix2muASF_C12_1 ) ;
-return make_nf1 ( lf_AUX_AsFix2muASF_C12_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_AsFix2muASF_C12_1sym , ATmakeAppl ( lf_AUX_AsFix2muASF_C12_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_AsFix2muASF_C12_1sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

@@ -24,10 +24,11 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ATerm_Operations11_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Operations11_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations11_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations11_1sym , arg0 , arg1 ) ) ;
 if ( term_equal ( arg0 , arg1 ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations11_1sym , arg0 , arg1 ) ) ;
 }
 

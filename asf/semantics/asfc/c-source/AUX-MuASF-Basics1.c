@@ -52,39 +52,39 @@ void resolve_AUX_MuASF_Basics1 ( ) {
 void init_AUX_MuASF_Basics1 ( ) {
 }
 ATerm lf_AUX_MuASF_Basics1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Basics1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_2sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics1_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_9 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_9 ) ;
-return make_nf2 ( lf_AUX_MuASF_Basics1_9sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_9sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_9sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_Basics1_9sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_7 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_7 ) ;
-return make_nf1 ( lf_AUX_MuASF_Basics1_7sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_7sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics1_7sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Basics1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_8 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_8 ) ;
-return make_nf3 ( lf_AUX_MuASF_Basics1_8sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_8sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_8sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_Basics1_8sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_6 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_6 ) ;
-return make_nf3 ( lf_AUX_MuASF_Basics1_6sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_6sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_6sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_Basics1_6sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_5 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_5 ) ;
-return make_nf3 ( lf_AUX_MuASF_Basics1_5sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_5sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_5sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_Basics1_5sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_4 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_4 ) ;
-return make_nf2 ( lf_AUX_MuASF_Basics1_4sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_4sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_4sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_MuASF_Basics1_4sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_Basics1_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_Basics1_3 ) ;
-return make_nf3 ( lf_AUX_MuASF_Basics1_3sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Basics1_3sym , ATmakeAppl ( lf_AUX_MuASF_Basics1_3sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_MuASF_Basics1_3sym , arg0 , arg1 , arg2 ) ) ;
 }
 

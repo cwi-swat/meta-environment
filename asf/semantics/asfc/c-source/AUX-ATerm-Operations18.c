@@ -18,7 +18,8 @@ void init_AUX_ATerm_Operations18 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Operations18_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Operations18_1 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations18_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations18_1sym , arg0 ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations18_1sym , arg0 ) ) ;
 }
 

@@ -31,20 +31,20 @@ void init_AUX_AsFix2muASFnames3 ( ) {
 ATerm lf_AUX_AsFix2muASFnames3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_AsFix2muASFnames3_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2muASFnames3_1sym , ATmakeAppl ( lf_AUX_AsFix2muASFnames3_1sym , arg0 ) ) ;
 tmp [ 0 ] = ( * ef2 ) ( arg0 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-return ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ;
 }
 }
-return make_nf1 ( lf_AUX_AsFix2muASFnames3_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2muASFnames3_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

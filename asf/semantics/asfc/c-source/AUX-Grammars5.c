@@ -46,7 +46,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Grammars5_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_Grammars5_1 ) ;
+FUNC_ENTRY ( lf_AUX_Grammars5_1sym , ATmakeAppl ( lf_AUX_Grammars5_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -54,7 +54,7 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( ! not_empty_list ( atmp000 ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 else {
 tmp [ 0 ] = list_head ( atmp000 ) ;
@@ -67,7 +67,7 @@ if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
-return ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) ) ) , lf_AUX_Grammars5_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) , tmp [ 3 ] , tmp [ 4 ] ) ) ) ) , lf_AUX_Grammars5_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -76,15 +76,15 @@ return ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3
 }
 }
 }
-return make_nf1 ( lf_AUX_Grammars5_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Grammars5_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

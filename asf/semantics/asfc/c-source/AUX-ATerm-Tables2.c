@@ -42,9 +42,9 @@ void init_AUX_ATerm_Tables2 ( ) {
 ATerm lf_AUX_ATerm_Tables2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_ATerm_Tables2_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Tables2_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
@@ -60,7 +60,7 @@ tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef6sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( term_equal ( arg1 , tmp [ 3 ] ) ) {
-return tmp [ 5 ] ;
+FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
@@ -71,10 +71,10 @@ return tmp [ 5 ] ;
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return lf_AUX_ATerm_Tables2_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ;
+FUNC_EXIT ( lf_AUX_ATerm_Tables2_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Tables2_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables2_1sym , arg0 , arg1 ) ) ;
 }
 }
 

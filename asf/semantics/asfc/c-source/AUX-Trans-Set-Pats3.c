@@ -88,16 +88,14 @@ ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_Trans_Set_Pats3 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Trans_Set_Pats3_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
 {
 ATerm tmp [ 59 ] ;
-PROF ( prof_lf_AUX_Trans_Set_Pats3_2 ) ;
+FUNC_ENTRY ( lf_AUX_Trans_Set_Pats3_2sym , ATmakeAppl ( lf_AUX_Trans_Set_Pats3_2sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_Trans_Set_Pats3_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -235,7 +233,7 @@ tmp [ 56 ] = arg_0 ( tmp [ 55 ] ) ;
 if ( check_sym ( tmp [ 56 ] , ef8sym ) ) {
 tmp [ 57 ] = arg_0 ( tmp [ 56 ] ) ;
 tmp [ 58 ] = ( * ef13 ) ( ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) ) ) , arg0 ) ;
-return ( * ef3 ) ( lf5 ( make_list ( tmp [ 58 ] ) ) , lf6 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf_AUX_Trans_Set_Pats3_1 ( cons ( make_list ( atmp10 ) , make_list ( ( * ef6 ) ( ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 13 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 46 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 13 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef5 ) ( lf_AUX_Trans_Set_Pats3_1 ( cons ( make_list ( atmp10 ) , cons ( make_list ( ( * ef6 ) ( ( * ef1 ) ( arg0 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( arg0 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef6 ) ( ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( tmp [ 57 ] ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef1 ) ( ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf3 ( cons ( make_list ( tmp [ 46 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( tmp [ 57 ] ) ) ) ) ) ) , ( * ef10 ) ( arg3 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf5 ( make_list ( tmp [ 58 ] ) ) , lf6 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf_AUX_Trans_Set_Pats3_1 ( cons ( make_list ( atmp10 ) , make_list ( ( * ef6 ) ( ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 13 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 46 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 13 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef5 ) ( lf_AUX_Trans_Set_Pats3_1 ( cons ( make_list ( atmp10 ) , cons ( make_list ( ( * ef6 ) ( ( * ef1 ) ( arg0 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) , ( * ef1 ) ( arg0 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( tmp [ 51 ] ) ) ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef6 ) ( ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef7 ) ( ( * ef9 ) ( tmp [ 54 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( tmp [ 57 ] ) ) ) ) ) ) ) ) , ( * ef1 ) ( atmp20 , lf3 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf3 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 24 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 35 ] ) , make_list ( ( * ef1 ) ( ( * ef2 ) ( lf4 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf3 ( cons ( make_list ( tmp [ 46 ] ) , make_list ( tmp [ 48 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( tmp [ 57 ] ) ) ) ) ) ) , ( * ef10 ) ( arg3 ) ) ) ;
 }
 }
 }
@@ -310,27 +308,27 @@ return ( * ef3 ) ( lf5 ( make_list ( tmp [ 58 ] ) ) , lf6 ( cons ( make_list ( (
 }
 }
 }
-return make_nf4 ( lf_AUX_Trans_Set_Pats3_2sym , arg0 , arg1 , arg2 , arg3 ) ;
+FUNC_EXIT ( make_nf4 ( lf_AUX_Trans_Set_Pats3_2sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Trans_Set_Pats3_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Trans_Set_Pats3_1 ) ;
-return make_nf1 ( lf_AUX_Trans_Set_Pats3_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Trans_Set_Pats3_1sym , ATmakeAppl ( lf_AUX_Trans_Set_Pats3_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Trans_Set_Pats3_1sym , arg0 ) ) ;
 }
 ATerm lf6 ( ATerm arg0 ) {
-PROF ( prof_lf6 ) ;
-return make_nf1 ( lf6sym , arg0 ) ;
+CONS_ENTRY ( lf6sym , ATmakeAppl ( lf6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf6sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 

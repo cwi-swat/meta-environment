@@ -78,14 +78,14 @@ void init_AUX_ATermTools2 ( ) {
 ATerm lf_AUX_ATermTools2_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_ATermTools2_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATermTools2_1sym , ATmakeAppl ( lf_AUX_ATermTools2_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( term_equal ( arg0 , atmp10 ) ) {
-return ( * ef1 ) ( arg2 , ( * ef2 ) ( ( * ef1 ) ( arg0 , atmp11 ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg2 , ( * ef2 ) ( ( * ef1 ) ( arg0 , atmp11 ) ) ) ) ;
 }
 else {
 tmp [ 0 ] = lf_AUX_ATermTools2_1 ( arg0 , ( * ef3 ) ( ( * ef4 ) ( atmp11 ) ) , arg2 ) ;
@@ -93,7 +93,7 @@ if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , ef4sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-return ( * ef1 ) ( atmp10 , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( atmp10 , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -104,14 +104,14 @@ if ( check_sym ( arg1 , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef5sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef4sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-return ( * ef3 ) ( ( * ef6 ) ( ( * ef4 ) ( ( * ef2 ) ( lf_AUX_ATermTools2_1 ( arg0 , ( * ef7 ) ( ( * ef4 ) ( atmp100 ) ) , arg2 ) ) ) , ( * ef8 ) ( lf_AUX_ATermTools2_1 ( arg0 , ( * ef3 ) ( ( * ef9 ) ( ( * ef4 ) ( atmp100 ) ) ) , arg2 ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef6 ) ( ( * ef4 ) ( ( * ef2 ) ( lf_AUX_ATermTools2_1 ( arg0 , ( * ef7 ) ( ( * ef4 ) ( atmp100 ) ) , arg2 ) ) ) , ( * ef8 ) ( lf_AUX_ATermTools2_1 ( arg0 , ( * ef3 ) ( ( * ef9 ) ( ( * ef4 ) ( atmp100 ) ) ) , arg2 ) ) ) ) ) ;
 }
 }
 }
@@ -128,7 +128,7 @@ ATerm atmp110 = arg_0 ( atmp11 ) ;
 tmp [ 0 ] = lf_AUX_ATermTools2_1 ( arg0 , ( * ef12 ) ( atmp10 ) , arg2 ) ;
 if ( check_sym ( tmp [ 0 ] , ef12sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( * ef10 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ;
+FUNC_EXIT ( ( * ef10 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ) ;
 }
 }
 }
@@ -146,7 +146,7 @@ ATerm atmp110 = arg_0 ( atmp11 ) ;
 tmp [ 0 ] = lf_AUX_ATermTools2_1 ( arg0 , ( * ef14 ) ( atmp10 ) , arg2 ) ;
 if ( check_sym ( tmp [ 0 ] , ef14sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( * ef13 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ;
+FUNC_EXIT ( ( * ef13 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ) ;
 }
 }
 }
@@ -167,7 +167,7 @@ tmp [ 0 ] = lf_AUX_ATermTools2_1 ( arg0 , ( * ef1 ) ( atmp10 , atmp11 ) , arg2 )
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-return ( * ef15 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef11 ) ( atmp120 ) ) ;
+FUNC_EXIT ( ( * ef15 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef11 ) ( atmp120 ) ) ) ;
 }
 }
 }
@@ -186,14 +186,15 @@ ATerm atmp110 = arg_0 ( atmp11 ) ;
 tmp [ 0 ] = lf_AUX_ATermTools2_1 ( arg0 , ( * ef3 ) ( atmp10 ) , arg2 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( * ef16 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ;
+FUNC_EXIT ( ( * ef16 ) ( tmp [ 1 ] , ( * ef11 ) ( atmp110 ) ) ) ;
 }
 }
 }
 }
 }
 }
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ATermTools2_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 

@@ -62,12 +62,12 @@ ATprotect ( & constant2 ) ;
 ATerm lf_AUX_AsFix2Sign_C3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_AsFix2Sign_C3_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix2Sign_C3_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign_C3_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -76,19 +76,19 @@ if ( term_equal ( ( * ef5 ) ( arg0 ) , ( constant1 ? constant1 : ( constant1 = (
 tmp [ 0 ] = ( * ef7 ) ( arg0 , ( constant2 ? constant2 : ( constant2 = lf3 ( make_list ( ( * ef6 ) ( ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef8sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( * ef4 ) ( tmp [ 1 ] ) ;
+FUNC_EXIT ( ( * ef4 ) ( tmp [ 1 ] ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_AsFix2Sign_C3_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix2Sign_C3_1sym , arg0 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -16,16 +16,16 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AF
 void init_AUX_ParseTrees4 ( ) {
 }
 ATerm lf_AUX_ParseTrees4_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees4_1 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees4_1sym , ATmakeAppl ( lf_AUX_ParseTrees4_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return atmp00 ;
+FUNC_EXIT ( atmp00 ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_ParseTrees4_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ParseTrees4_1sym , arg0 ) ) ;
 }
 

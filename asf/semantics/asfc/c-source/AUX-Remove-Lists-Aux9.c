@@ -30,7 +30,7 @@ void init_AUX_Remove_Lists_Aux9 ( ) {
 ATerm lf_AUX_Remove_Lists_Aux9_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_Aux9_1 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_Aux9_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_Aux9_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -39,11 +39,11 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 tmp [ 0 ] = ( * ef2 ) ( ( * ef3 ) ( atmp00 ) ) ;
 tmp [ 1 ] = ( * ef4 ) ( tmp [ 0 ] , atmp00 ) ;
 tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] , atmp01 ) ;
-return ( * ef1 ) ( tmp [ 1 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Remove_Lists_Aux9_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_Aux9_1sym , arg0 ) ) ;
 }
 }
 

@@ -27,13 +27,13 @@ void init_AUX_Remove_Lists_C16 ( ) {
 ATerm lf_AUX_Remove_Lists_C16_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 10 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_C16_2 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_C16_2sym , ATmakeAppl ( lf_AUX_Remove_Lists_C16_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Remove_Lists_C16_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
-return ( * ef1 ) ( tmp [ 0 ] , arg1 ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 if ( not_empty_list ( atmp00 ) ) {
 tmp [ 0 ] = list_head ( atmp00 ) ;
@@ -53,7 +53,7 @@ tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_Remove_Lists_C16_1sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( not_empty_list ( tmp [ 9 ] ) ) {
-return ( * ef2 ) ( lf_AUX_Remove_Lists_C16_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Remove_Lists_C16_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }
 }
@@ -64,11 +64,11 @@ return ( * ef2 ) ( lf_AUX_Remove_Lists_C16_1 ( cons ( make_list ( tmp [ 5 ] ) , 
 }
 }
 }
-return make_nf2 ( lf_AUX_Remove_Lists_C16_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists_C16_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_Remove_Lists_C16_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Remove_Lists_C16_1 ) ;
-return make_nf1 ( lf_AUX_Remove_Lists_C16_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Remove_Lists_C16_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_C16_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_C16_1sym , arg0 ) ) ;
 }
 

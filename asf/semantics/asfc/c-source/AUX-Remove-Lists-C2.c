@@ -44,7 +44,7 @@ void init_AUX_Remove_Lists_C2 ( ) {
 ATerm lf_AUX_Remove_Lists_C2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 7 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_C2_1 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_C2_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_C2_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -62,7 +62,7 @@ if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 2 ] ) ;
 tmp [ 5 ] = ( * ef4 ) ( atmp01 , lf2 ( make_list ( tmp [ 3 ] ) ) ) ;
 tmp [ 6 ] = ( * ef5 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) ;
-return ( * ef1 ) ( atmp00 , tmp [ 5 ] , tmp [ 6 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( atmp00 , tmp [ 5 ] , tmp [ 6 ] ) ) ;
 }
 }
 }
@@ -70,15 +70,15 @@ return ( * ef1 ) ( atmp00 , tmp [ 5 ] , tmp [ 6 ] ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Remove_Lists_C2_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_C2_1sym , arg0 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

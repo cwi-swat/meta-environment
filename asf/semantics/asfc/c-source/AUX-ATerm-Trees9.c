@@ -29,12 +29,11 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AF
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Trees\"),w(\"\"),[l(\"tmapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Trees\"),w(\"\"),[l(\"tmapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Trees9 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Trees9_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Trees9_1 ) ;
-return ( * ef1 ) ( arg0 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) , ( * ef2 ) ( arg0 ) ) , arg1 ) ) ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees9_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees9_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ) , ( * ef2 ) ( arg0 ) ) , arg1 ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Trees9_1sym , arg0 , arg1 ) ) ;
 }
 

@@ -18,7 +18,7 @@ void init_AUX_Pure_C2 ( ) {
 ATerm lf_AUX_Pure_C2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Pure_C2_1 ) ;
+FUNC_ENTRY ( lf_AUX_Pure_C2_1sym , ATmakeAppl ( lf_AUX_Pure_C2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -29,14 +29,14 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 ATerm atmp001 = arg_1 ( atmp00 ) ;
 if ( term_equal ( atmp000 , arg1 ) ) {
 tmp [ 0 ] = ( * ef1 ) ( atmp001 ) ;
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_Pure_C2_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Pure_C2_1sym , arg0 , arg1 ) ) ;
 }
 }
 

@@ -52,14 +52,15 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Rules2C_Aux37_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 3 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux37_1 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux37_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux37_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg2 , ef1sym ) ) {
-return ( * ef2 ) ( arg0 , arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , arg1 ) ) ;
 }
 tmp [ 0 ] = ( * ef3 ) ( arg1 ) ;
 tmp [ 1 ] = ( * ef3 ) ( arg2 ) ;
 tmp [ 2 ] = ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( arg0 , ( * ef8 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) , tmp [ 0 ] ) ) ) ) , tmp [ 1 ] ) ;
-return tmp [ 2 ] ;
+FUNC_EXIT ( tmp [ 2 ] ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_Rules2C_Aux37_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 

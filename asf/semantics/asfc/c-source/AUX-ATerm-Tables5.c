@@ -44,7 +44,7 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"
 void init_AUX_ATerm_Tables5 ( ) {
 }
 ATerm lf_AUX_ATerm_Tables5_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Tables5_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Tables5_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables5_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 if ( check_sym ( arg1 , ef2sym ) ) {
 {
@@ -60,7 +60,7 @@ ATerm atmp1001 = arg_1 ( atmp100 ) ;
 if ( check_sym ( atmp1001 , ef5sym ) ) {
 {
 ATerm atmp10010 = arg_0 ( atmp1001 ) ;
-return ( * ef3 ) ( ( * ef5 ) ( arg1 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef5 ) ( arg1 ) ) ) ;
 }
 }
 }
@@ -74,9 +74,9 @@ return ( * ef3 ) ( ( * ef5 ) ( arg1 ) ) ;
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef6 ) ( ( * ef7 ) ( arg0 ) , lf_AUX_ATerm_Tables5_1 ( ( * ef8 ) ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( ( * ef7 ) ( arg0 ) , lf_AUX_ATerm_Tables5_1 ( ( * ef8 ) ( arg0 ) , arg1 ) ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Tables5_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables5_1sym , arg0 , arg1 ) ) ;
 }
 

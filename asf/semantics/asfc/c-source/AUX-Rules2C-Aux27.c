@@ -46,7 +46,7 @@ void init_AUX_Rules2C_Aux27 ( ) {
 ATerm lf_AUX_Rules2C_Aux27_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 19 ] ;
-PROF ( prof_lf_AUX_Rules2C_Aux27_2 ) ;
+FUNC_ENTRY ( lf_AUX_Rules2C_Aux27_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux27_2sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux27_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -85,7 +85,7 @@ tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ;
 tmp [ 17 ] = arg_1 ( tmp [ 14 ] ) ;
 if ( check_sym ( tmp [ 17 ] , lf4sym ) ) {
 tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ;
-return ( * ef2 ) ( tmp [ 16 ] , lf4 ( make_list ( tmp [ 18 ] ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 16 ] , lf4 ( make_list ( tmp [ 18 ] ) ) ) ) ;
 }
 }
 }
@@ -97,7 +97,7 @@ tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ;
 tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ;
 if ( check_sym ( tmp [ 13 ] , lf4sym ) ) {
 tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ;
-return ( * ef2 ) ( tmp [ 12 ] , lf4 ( make_list ( tmp [ 14 ] ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 12 ] , lf4 ( make_list ( tmp [ 14 ] ) ) ) ) ;
 }
 }
 }
@@ -112,23 +112,23 @@ return ( * ef2 ) ( tmp [ 12 ] , lf4 ( make_list ( tmp [ 14 ] ) ) ) ;
 }
 }
 }
-return make_nf1 ( lf_AUX_Rules2C_Aux27_2sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux27_2sym , arg0 ) ) ;
 }
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Rules2C_Aux27_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Rules2C_Aux27_1 ) ;
-return make_nf1 ( lf_AUX_Rules2C_Aux27_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Rules2C_Aux27_1sym , ATmakeAppl ( lf_AUX_Rules2C_Aux27_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Rules2C_Aux27_1sym , arg0 ) ) ;
 }
 

@@ -55,7 +55,7 @@ void init_AUX_Remove_Lists_Aux8 ( ) {
 ATerm lf_AUX_Remove_Lists_Aux8_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_Remove_Lists_Aux8_1 ) ;
+FUNC_ENTRY ( lf_AUX_Remove_Lists_Aux8_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_Aux8_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -64,7 +64,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 tmp [ 0 ] = ( * ef2 ) ( ( * ef3 ) ( atmp00 ) ) ;
 tmp [ 1 ] = ( * ef4 ) ( tmp [ 0 ] , atmp00 ) ;
 tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] , atmp01 ) ;
-return ( * ef1 ) ( tmp [ 1 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -76,7 +76,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 tmp [ 0 ] = ( * ef2 ) ( ( * ef3 ) ( atmp00 ) ) ;
 tmp [ 1 ] = ( * ef4 ) ( tmp [ 0 ] , atmp00 ) ;
 tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] , atmp01 ) ;
-return ( * ef5 ) ( tmp [ 1 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef5 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -103,7 +103,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-return ( * ef6 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 1 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef6 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 1 ] , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -139,7 +139,7 @@ tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-return ( * ef9 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 1 ] , tmp [ 2 ] ) ;
+FUNC_EXIT ( ( * ef9 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 1 ] , tmp [ 2 ] ) ) ;
 }
 }
 }
@@ -152,11 +152,11 @@ return ( * ef9 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 1 ] , t
 }
 }
 }
-return make_nf1 ( lf_AUX_Remove_Lists_Aux8_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Remove_Lists_Aux8_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -46,7 +46,7 @@ void init_AUX_ATerm_Tables4 ( ) {
 ATerm lf_AUX_ATerm_Tables4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_ATerm_Tables4_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Tables4_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables4_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 if ( check_sym ( arg1 , ef2sym ) ) {
 {
@@ -62,7 +62,7 @@ ATerm atmp1001 = arg_1 ( atmp100 ) ;
 if ( check_sym ( atmp1001 , ef5sym ) ) {
 {
 ATerm atmp10010 = arg_0 ( atmp1001 ) ;
-return ( * ef3 ) ( ( * ef5 ) ( arg1 ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef5 ) ( arg1 ) ) ) ;
 }
 }
 }
@@ -101,7 +101,7 @@ tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef5sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( term_equal ( atmp1000 , tmp [ 3 ] ) ) {
-return ( * ef6 ) ( arg1 , ( * ef7 ) ( arg0 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( arg1 , ( * ef7 ) ( arg0 ) ) ) ;
 }
 }
 }
@@ -118,7 +118,8 @@ return ( * ef6 ) ( arg1 , ( * ef7 ) ( arg0 ) ) ;
 }
 }
 }
-return ( * ef6 ) ( ( * ef8 ) ( arg0 ) , lf_AUX_ATerm_Tables4_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( ( * ef8 ) ( arg0 ) , lf_AUX_ATerm_Tables4_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables4_1sym , arg0 , arg1 ) ) ;
 }
 }
 

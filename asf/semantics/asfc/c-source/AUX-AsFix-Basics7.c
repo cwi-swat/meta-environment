@@ -69,32 +69,31 @@ ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"f
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_AsFix_Basics7 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_AsFix_Basics7_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_AsFix_Basics7_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix_Basics7_1sym , ATmakeAppl ( lf_AUX_AsFix_Basics7_1sym , arg0 ) ) ;
 if ( ! term_equal ( ( * ef8 ) ( arg0 , lf3 ( make_list ( ( * ef9 ) ( ) ) ) ) , ( * ef5 ) ( ( * ef10 ) ( ) ) ) ) {
 tmp [ 0 ] = ( * ef8 ) ( ( * ef8 ) ( arg0 , ( constant0 ? constant0 : ( constant0 = lf3 ( make_list ( ( * ef9 ) ( ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = lf3 ( make_list ( ( * ef9 ) ( ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef11sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-return ( * ef1 ) ( tmp [ 1 ] , ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ( * ef3 ) ( ) , ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 9 , char_table [ 34 ] , char_table [ 98 ] , char_table [ 114 ] , char_table [ 97 ] , char_table [ 99 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 116 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 1 ] , ( * ef2 ) ( ( * ef3 ) ( ) , ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf2 ( ( ATerm ) ATmakeList ( 9 , char_table [ 34 ] , char_table [ 98 ] , char_table [ 114 ] , char_table [ 97 ] , char_table [ 99 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 116 ] , char_table [ 34 ] ) ) ) ) ) ) ) ) ) ;
 }
 }
-return ( constant2 ? constant2 : ( constant2 = ( * ef12 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef12 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_AsFix_Basics7_1sym , arg0 ) ) ;
 }
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

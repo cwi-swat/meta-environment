@@ -44,9 +44,9 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"
 void init_AUX_C_Basics5 ( ) {
 }
 ATerm lf_AUX_C_Basics5_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_C_Basics5_1 ) ;
+FUNC_ENTRY ( lf_AUX_C_Basics5_1sym , ATmakeAppl ( lf_AUX_C_Basics5_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
@@ -57,7 +57,7 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , ef4sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 {
@@ -77,7 +77,7 @@ ATerm atmp000100 = arg_0 ( atmp00010 ) ;
 if ( check_sym ( atmp000100 , ef4sym ) ) {
 {
 ATerm atmp0001000 = arg_0 ( atmp000100 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
@@ -92,7 +92,7 @@ ATerm atmp000101 = arg_1 ( atmp00010 ) ;
 if ( check_sym ( atmp000101 , ef4sym ) ) {
 {
 ATerm atmp0001010 = arg_0 ( atmp000101 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
@@ -118,7 +118,7 @@ ATerm atmp001 = arg_1 ( atmp00 ) ;
 if ( check_sym ( atmp001 , ef4sym ) ) {
 {
 ATerm atmp0010 = arg_0 ( atmp001 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 {
@@ -138,7 +138,7 @@ ATerm atmp001100 = arg_0 ( atmp00110 ) ;
 if ( check_sym ( atmp001100 , ef4sym ) ) {
 {
 ATerm atmp0011000 = arg_0 ( atmp001100 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
@@ -153,7 +153,7 @@ ATerm atmp001101 = arg_1 ( atmp00110 ) ;
 if ( check_sym ( atmp001101 , ef4sym ) ) {
 {
 ATerm atmp0011010 = arg_0 ( atmp001101 ) ;
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
 }
 }
@@ -176,9 +176,9 @@ return arg0 ;
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return ( * ef8 ) ( arg0 , arg1 ) ;
+FUNC_EXIT ( ( * ef8 ) ( arg0 , arg1 ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_C_Basics5_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics5_1sym , arg0 , arg1 ) ) ;
 }
 

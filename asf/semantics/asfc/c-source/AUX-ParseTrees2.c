@@ -40,15 +40,16 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ParseTrees2_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ParseTrees2_1 ) ;
+FUNC_ENTRY ( lf_AUX_ParseTrees2_1sym , ATmakeAppl ( lf_AUX_ParseTrees2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( term_equal ( ( * ef3 ) ( arg0 , ( * ef2 ) ( arg0 , atmp10 ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
-return ( * ef2 ) ( arg0 , atmp10 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , atmp10 ) ) ;
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ( * ef6 ) ( ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ( * ef6 ) ( ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ParseTrees2_1sym , arg0 , arg1 ) ) ;
 }
 

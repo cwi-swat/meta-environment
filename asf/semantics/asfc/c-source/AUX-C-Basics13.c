@@ -47,7 +47,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_C_Basics13_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_C_Basics13_2 ) ;
+FUNC_ENTRY ( lf_AUX_C_Basics13_2sym , ATmakeAppl ( lf_AUX_C_Basics13_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_C_Basics13_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
@@ -56,18 +56,18 @@ tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] ) ;
 if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
 tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] ) ;
 tmp [ 3 ] = ( * ef5 ) ( tmp [ 2 ] , lf_AUX_C_Basics13_1 ( make_list ( atmp10 ) ) ) ;
-return tmp [ 3 ] ;
+FUNC_EXIT ( tmp [ 3 ] ) ;
 }
 if ( term_equal ( tmp [ 1 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_C_Basics13_2sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_C_Basics13_2sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_AUX_C_Basics13_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_C_Basics13_1 ) ;
-return make_nf1 ( lf_AUX_C_Basics13_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_C_Basics13_1sym , ATmakeAppl ( lf_AUX_C_Basics13_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_C_Basics13_1sym , arg0 ) ) ;
 }
 

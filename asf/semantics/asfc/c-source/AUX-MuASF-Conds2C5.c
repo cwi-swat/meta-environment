@@ -151,7 +151,7 @@ ATprotect ( & constant2 ) ;
 ATerm lf_AUX_MuASF_Conds2C5_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
 {
 ATerm tmp [ 39 ] ;
-PROF ( prof_lf_AUX_MuASF_Conds2C5_3 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Conds2C5_3sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C5_3sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
 if ( check_sym ( arg0 , lf_AUX_MuASF_Conds2C5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -228,7 +228,7 @@ if ( check_sym ( tmp [ 35 ] , ef13sym ) ) {
 tmp [ 36 ] = arg_0 ( tmp [ 35 ] ) ;
 tmp [ 37 ] = arg_1 ( tmp [ 35 ] ) ;
 tmp [ 38 ] = ( * ef23 ) ( tmp [ 33 ] , tmp [ 37 ] ) ;
-return ( * ef13 ) ( ( * ef14 ) ( tmp [ 34 ] , tmp [ 36 ] ) , tmp [ 38 ] ) ;
+FUNC_EXIT ( ( * ef13 ) ( ( * ef14 ) ( tmp [ 34 ] , tmp [ 36 ] ) , tmp [ 38 ] ) ) ;
 }
 }
 }
@@ -256,7 +256,7 @@ if ( check_sym ( tmp [ 26 ] , ef13sym ) ) {
 tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ;
 tmp [ 28 ] = arg_1 ( tmp [ 26 ] ) ;
 tmp [ 29 ] = ( * ef23 ) ( tmp [ 25 ] , tmp [ 28 ] ) ;
-return ( * ef13 ) ( ( * ef14 ) ( tmp [ 24 ] , tmp [ 27 ] ) , tmp [ 29 ] ) ;
+FUNC_EXIT ( ( * ef13 ) ( ( * ef14 ) ( tmp [ 24 ] , tmp [ 27 ] ) , tmp [ 29 ] ) ) ;
 }
 }
 }
@@ -282,7 +282,7 @@ if ( check_sym ( tmp [ 19 ] , ef11sym ) ) {
 tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ;
 if ( check_sym ( tmp [ 20 ] , lf_AUX_MuASF_Conds2C5_1sym ) ) {
 tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ;
-return lf_AUX_MuASF_Conds2C5_3 ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 18 ] ) ) , lf_AUX_MuASF_Conds2C5_1 ( cons ( make_list ( atmp10 ) , make_list ( tmp [ 21 ] ) ) ) , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) , arg3 , arg4 ) ;
+FUNC_EXIT ( lf_AUX_MuASF_Conds2C5_3 ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 18 ] ) ) , lf_AUX_MuASF_Conds2C5_1 ( cons ( make_list ( atmp10 ) , make_list ( tmp [ 21 ] ) ) ) , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) , arg3 , arg4 ) ) ;
 }
 }
 }
@@ -304,7 +304,7 @@ return lf_AUX_MuASF_Conds2C5_3 ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 18 
 }
 }
 else {
-return ( * ef1 ) ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( atmp10 ) ) , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) , arg3 ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( atmp10 ) ) , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) , arg3 ) ) ;
 }
 }
 }
@@ -312,35 +312,35 @@ return ( * ef1 ) ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( atmp10 ) ) , lf_AUX_MuA
 }
 }
 }
-return make_nf5 ( lf_AUX_MuASF_Conds2C5_3sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ;
+FUNC_EXIT ( make_nf5 ( lf_AUX_MuASF_Conds2C5_3sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
 }
 }
 ATerm lf_AUX_MuASF_Conds2C5_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C5_2 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C5_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C5_2sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C5_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C5_2sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuASF_Conds2C5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Conds2C5_1 ) ;
-return make_nf1 ( lf_AUX_MuASF_Conds2C5_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuASF_Conds2C5_1sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C5_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Conds2C5_1sym , arg0 ) ) ;
 }
 ATerm lf7 ( ATerm arg0 ) {
-PROF ( prof_lf7 ) ;
-return make_nf1 ( lf7sym , arg0 ) ;
+CONS_ENTRY ( lf7sym , ATmakeAppl ( lf7sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf7sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
-PROF ( prof_lf5 ) ;
-return make_nf1 ( lf5sym , arg0 ) ;
+CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf8 ( ATerm arg0 ) {
-PROF ( prof_lf8 ) ;
-return make_nf1 ( lf8sym , arg0 ) ;
+CONS_ENTRY ( lf8sym , ATmakeAppl ( lf8sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf8sym , arg0 ) ) ;
 }
 ATerm lf6 ( ATerm arg0 ) {
-PROF ( prof_lf6 ) ;
-return make_nf1 ( lf6sym , arg0 ) ;
+CONS_ENTRY ( lf6sym , ATmakeAppl ( lf6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf6sym , arg0 ) ) ;
 }
 

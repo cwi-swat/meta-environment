@@ -24,14 +24,14 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\")
 void init_AUX_Basic_Integers3 ( ) {
 }
 ATerm lf_AUX_Basic_Integers3_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Basic_Integers3_1 ) ;
+FUNC_ENTRY ( lf_AUX_Basic_Integers3_1sym , ATmakeAppl ( lf_AUX_Basic_Integers3_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return atmp000 ;
+FUNC_EXIT ( atmp000 ) ;
 }
 }
 {
@@ -39,12 +39,12 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef3sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return atmp000 ;
+FUNC_EXIT ( atmp000 ) ;
 }
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_Basic_Integers3_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Basic_Integers3_1sym , arg0 ) ) ;
 }
 

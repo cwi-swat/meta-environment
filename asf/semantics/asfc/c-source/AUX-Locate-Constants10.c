@@ -76,7 +76,7 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Locate_Constants10_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 13 ] ;
-PROF ( prof_lf_AUX_Locate_Constants10_1 ) ;
+FUNC_ENTRY ( lf_AUX_Locate_Constants10_1sym , ATmakeAppl ( lf_AUX_Locate_Constants10_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -155,7 +155,7 @@ tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ;
 if ( is_single_element ( tmp [ 12 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 116 ) ) ) {
 if ( not_empty_list ( atmp001100 ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef7 ) ( ) ) ;
 }
 }
 }
@@ -224,7 +224,7 @@ if ( check_sym ( atmp00010 , lf3sym ) ) {
 {
 ATerm atmp000100 = arg_0 ( atmp00010 ) ;
 tmp [ 0 ] = ( * ef9 ) ( lf3 ( make_list ( atmp000100 ) ) ) ;
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
@@ -243,7 +243,7 @@ ATerm atmp00000 = arg_0 ( atmp0000 ) ;
 if ( check_sym ( atmp00000 , lf2sym ) ) {
 {
 ATerm atmp000000 = arg_0 ( atmp00000 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef7 ) ( ) ) ;
 }
 }
 }
@@ -270,7 +270,7 @@ if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 121 ) ) ) {
 tmp [ 2 ] = list_prefix ( tmp [ 1 ] ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_last ( tmp [ 1 ] ) , make_char ( 115 ) ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef7 ) ( ) ) ;
 }
 }
 }
@@ -290,15 +290,16 @@ return ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ;
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef12 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef12 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Locate_Constants10_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

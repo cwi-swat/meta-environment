@@ -565,6 +565,9 @@ extern void init_AUX_Check_List_Pats27();
 extern void register_AUX_Check_List_Pats28();
 extern void resolve_AUX_Check_List_Pats28();
 extern void init_AUX_Check_List_Pats28();
+extern void register_AUX_Check_List_Pats29();
+extern void resolve_AUX_Check_List_Pats29();
+extern void init_AUX_Check_List_Pats29();
 extern void register_AUX_Check_List_Pats3();
 extern void resolve_AUX_Check_List_Pats3();
 extern void init_AUX_Check_List_Pats3();
@@ -715,6 +718,9 @@ extern void init_AUX_Locate_Constants22();
 extern void register_AUX_Locate_Constants23();
 extern void resolve_AUX_Locate_Constants23();
 extern void init_AUX_Locate_Constants23();
+extern void register_AUX_Locate_Constants24();
+extern void resolve_AUX_Locate_Constants24();
+extern void init_AUX_Locate_Constants24();
 extern void register_AUX_Locate_Constants3();
 extern void resolve_AUX_Locate_Constants3();
 extern void init_AUX_Locate_Constants3();
@@ -1829,6 +1835,7 @@ void register_all() {
    register_AUX_Check_List_Pats26();
    register_AUX_Check_List_Pats27();
    register_AUX_Check_List_Pats28();
+   register_AUX_Check_List_Pats29();
    register_AUX_Check_List_Pats3();
    register_AUX_Check_List_Pats4();
    register_AUX_Check_List_Pats5();
@@ -1879,6 +1886,7 @@ void register_all() {
    register_AUX_Locate_Constants21();
    register_AUX_Locate_Constants22();
    register_AUX_Locate_Constants23();
+   register_AUX_Locate_Constants24();
    register_AUX_Locate_Constants3();
    register_AUX_Locate_Constants4();
    register_AUX_Locate_Constants5();
@@ -2378,6 +2386,7 @@ void resolve_all() {
    resolve_AUX_Check_List_Pats26();
    resolve_AUX_Check_List_Pats27();
    resolve_AUX_Check_List_Pats28();
+   resolve_AUX_Check_List_Pats29();
    resolve_AUX_Check_List_Pats3();
    resolve_AUX_Check_List_Pats4();
    resolve_AUX_Check_List_Pats5();
@@ -2428,6 +2437,7 @@ void resolve_all() {
    resolve_AUX_Locate_Constants21();
    resolve_AUX_Locate_Constants22();
    resolve_AUX_Locate_Constants23();
+   resolve_AUX_Locate_Constants24();
    resolve_AUX_Locate_Constants3();
    resolve_AUX_Locate_Constants4();
    resolve_AUX_Locate_Constants5();
@@ -2927,6 +2937,7 @@ void init_all() {
    init_AUX_Check_List_Pats26();
    init_AUX_Check_List_Pats27();
    init_AUX_Check_List_Pats28();
+   init_AUX_Check_List_Pats29();
    init_AUX_Check_List_Pats3();
    init_AUX_Check_List_Pats4();
    init_AUX_Check_List_Pats5();
@@ -2977,6 +2988,7 @@ void init_all() {
    init_AUX_Locate_Constants21();
    init_AUX_Locate_Constants22();
    init_AUX_Locate_Constants23();
+   init_AUX_Locate_Constants24();
    init_AUX_Locate_Constants3();
    init_AUX_Locate_Constants4();
    init_AUX_Locate_Constants5();

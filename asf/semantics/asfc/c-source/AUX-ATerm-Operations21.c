@@ -68,7 +68,7 @@ ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\")
 void init_AUX_ATerm_Operations21 ( ) {
 }
 ATerm lf_AUX_ATerm_Operations21_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Operations21_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations21_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations21_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -76,7 +76,7 @@ if ( check_sym ( arg1 , ef2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( term_equal ( atmp00 , atmp10 ) ) {
-return atmp00 ;
+FUNC_EXIT ( atmp00 ) ;
 }
 }
 }
@@ -88,7 +88,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef6 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ) ;
 }
 }
 }
@@ -99,7 +99,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef9 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef9 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ) ;
 }
 }
 }
@@ -110,7 +110,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef11 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef11 ) ( atmp00 , ( * ef7 ) ( atmp10 ) ) ) ;
 }
 }
 }
@@ -123,7 +123,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef13 ) ( atmp00 , atmp01 , ( * ef7 ) ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef13 ) ( atmp00 , atmp01 , ( * ef7 ) ( atmp10 ) ) ) ;
 }
 }
 }
@@ -140,7 +140,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef6 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ) ;
 }
 }
 }
@@ -159,7 +159,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef9 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ;
+FUNC_EXIT ( ( * ef9 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ) ;
 }
 }
 }
@@ -178,7 +178,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef11 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ;
+FUNC_EXIT ( ( * ef11 ) ( atmp00 , ( * ef7 ) ( ( * ef14 ) ( atmp010 , atmp10 ) ) ) ) ;
 }
 }
 }
@@ -199,7 +199,7 @@ ATerm atmp020 = arg_0 ( atmp02 ) ;
 if ( check_sym ( arg1 , ef5sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef13 ) ( atmp00 , atmp01 , ( * ef7 ) ( ( * ef14 ) ( atmp020 , atmp10 ) ) ) ;
+FUNC_EXIT ( ( * ef13 ) ( atmp00 , atmp01 , ( * ef7 ) ( ( * ef14 ) ( atmp020 , atmp10 ) ) ) ) ;
 }
 }
 }
@@ -209,8 +209,8 @@ return ( * ef13 ) ( atmp00 , atmp01 , ( * ef7 ) ( ( * ef14 ) ( atmp020 , atmp10 
 }
 }
 if ( check_sym ( arg1 , ef3sym ) ) {
-return arg0 ;
+FUNC_EXIT ( arg0 ) ;
 }
-return make_nf2 ( lf_AUX_ATerm_Operations21_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Operations21_1sym , arg0 , arg1 ) ) ;
 }
 

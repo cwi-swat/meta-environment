@@ -31,17 +31,13 @@ ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"l
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"lit2str\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_MuASF_Basics30 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_MuASF_Basics30_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 9 ] ;
-PROF ( prof_lf_AUX_MuASF_Basics30_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics30_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics30_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -72,7 +68,7 @@ tmp [ 8 ] = list_prefix ( tmp [ 7 ] ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 if ( not_empty_list ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_last ( tmp [ 7 ] ) , make_char ( 92 ) ) ) {
-return ( * ef4 ) ( ( * ef1 ) ( lf2 ( cons ( ( constant0 ? constant0 : ( constant0 = make_list_char ( 34 ) ) ) , cons ( make_list ( tmp [ 8 ] ) , ( constant1 ? constant1 : ( constant1 = make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -88,7 +84,7 @@ if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 34 ) ) ) {
 tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 34 ) ) ) {
-return ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 110 ] , char_table [ 117 ] , char_table [ 108 ] , char_table [ 108 ] ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 110 ] , char_table [ 117 ] , char_table [ 108 ] , char_table [ 108 ] ) ) ) ) ) ;
 }
 }
 }
@@ -107,11 +103,12 @@ return ( constant2 ? constant2 : ( constant2 = ( * ef2 ) ( ( * ef3 ) ( lf2 ( ( A
 }
 }
 }
-return ( * ef4 ) ( arg0 ) ;
+FUNC_EXIT ( ( * ef4 ) ( arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics30_1sym , arg0 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

@@ -77,59 +77,59 @@ void resolve_AUX_VarEnv1 ( ) {
 void init_AUX_VarEnv1 ( ) {
 }
 ATerm lf_AUX_VarEnv1_14 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_14 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_14sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_14sym , ATmakeAppl ( lf_AUX_VarEnv1_14sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_14sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_12 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv1_12 ) ;
-return make_nf1 ( lf_AUX_VarEnv1_12sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_12sym , ATmakeAppl ( lf_AUX_VarEnv1_12sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv1_12sym , arg0 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_13 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
-PROF ( prof_lf_AUX_VarEnv1_13 ) ;
-return make_nf4 ( lf_AUX_VarEnv1_13sym , arg0 , arg1 , arg2 , arg3 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_13sym , ATmakeAppl ( lf_AUX_VarEnv1_13sym , arg0 , arg1 , arg2 , arg3 ) ) ;
+CONS_EXIT ( make_nf4 ( lf_AUX_VarEnv1_13sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv1_1 ) ;
-return make_nf1 ( lf_AUX_VarEnv1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_1sym , ATmakeAppl ( lf_AUX_VarEnv1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_11 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_VarEnv1_11 ) ;
-return make_nf3 ( lf_AUX_VarEnv1_11sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_11sym , ATmakeAppl ( lf_AUX_VarEnv1_11sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_VarEnv1_11sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_8 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv1_8 ) ;
-return make_nf1 ( lf_AUX_VarEnv1_8sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_8sym , ATmakeAppl ( lf_AUX_VarEnv1_8sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv1_8sym , arg0 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_10 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_10 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_10sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_10sym , ATmakeAppl ( lf_AUX_VarEnv1_10sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_10sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_9 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_VarEnv1_9 ) ;
-return make_nf3 ( lf_AUX_VarEnv1_9sym , arg0 , arg1 , arg2 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_9sym , ATmakeAppl ( lf_AUX_VarEnv1_9sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_AUX_VarEnv1_9sym , arg0 , arg1 , arg2 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_7 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_7 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_7sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_7sym , ATmakeAppl ( lf_AUX_VarEnv1_7sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_7sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_5 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv1_5 ) ;
-return make_nf1 ( lf_AUX_VarEnv1_5sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_5sym , ATmakeAppl ( lf_AUX_VarEnv1_5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv1_5sym , arg0 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_6 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_6 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_6sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_6sym , ATmakeAppl ( lf_AUX_VarEnv1_6sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_6sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_4 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_4 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_4sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_4sym , ATmakeAppl ( lf_AUX_VarEnv1_4sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_4sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_3 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_VarEnv1_3 ) ;
-return make_nf2 ( lf_AUX_VarEnv1_3sym , arg0 , arg1 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_3sym , ATmakeAppl ( lf_AUX_VarEnv1_3sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_3sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_VarEnv1_2 ) ;
-return make_nf1 ( lf_AUX_VarEnv1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_VarEnv1_2sym , ATmakeAppl ( lf_AUX_VarEnv1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv1_2sym , arg0 ) ) ;
 }
 

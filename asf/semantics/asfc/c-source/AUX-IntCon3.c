@@ -16,7 +16,8 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"Na
 void init_AUX_IntCon3 ( ) {
 }
 ATerm lf_AUX_IntCon3_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_IntCon3_1 ) ;
-return ( * ef1 ) ( arg0 ) ;
+FUNC_ENTRY ( lf_AUX_IntCon3_1sym , ATmakeAppl ( lf_AUX_IntCon3_1sym , arg0 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_IntCon3_1sym , arg0 ) ) ;
 }
 

@@ -32,13 +32,13 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ATerm_Operations5_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ATerm_Operations5_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Operations5_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations5_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -49,11 +49,12 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef4 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_ATerm_Operations5_1sym , arg0 ) ) ;
 }
 

@@ -28,13 +28,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"
 void init_AUX_MuASF_Basics27 ( ) {
 }
 ATerm lf_AUX_MuASF_Basics27_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-PROF ( prof_lf_AUX_MuASF_Basics27_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics27_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics27_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( * ef2 ) ( arg1 , arg2 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg1 , arg2 ) ) ;
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
-return ( * ef4 ) ( arg1 , arg2 ) ;
+FUNC_EXIT ( ( * ef4 ) ( arg1 , arg2 ) ) ;
 }
-return make_nf3 ( lf_AUX_MuASF_Basics27_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_MuASF_Basics27_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 

@@ -52,9 +52,9 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_ATerm_Tables3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
-PROF ( prof_lf_AUX_ATerm_Tables3_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Tables3_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
@@ -70,7 +70,7 @@ tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef8sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( term_equal ( arg1 , tmp [ 3 ] ) ) {
-return tmp [ 5 ] ;
+FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
 }
@@ -81,10 +81,10 @@ return tmp [ 5 ] ;
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return lf_AUX_ATerm_Tables3_1 ( ( * ef9 ) ( arg0 ) , arg1 ) ;
+FUNC_EXIT ( lf_AUX_ATerm_Tables3_1 ( ( * ef9 ) ( arg0 ) , arg1 ) ) ;
 }
 }
-return make_nf2 ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;
 }
 }
 

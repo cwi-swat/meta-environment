@@ -39,14 +39,15 @@ ATprotect ( & constant1 ) ;
 ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Check_List_Pats4_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Check_List_Pats4_1 ) ;
+FUNC_ENTRY ( lf_AUX_Check_List_Pats4_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats4_1sym , arg0 ) ) ;
 if ( term_equal ( ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 101 ] , char_table [ 116 ] , char_table [ 34 ] ) ) ) ) ) , arg0 ) , ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( ) ) ) ) ) {
-return ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ) ) ;
 }
-return ( constant2 ? constant2 : ( constant2 = ( * ef4 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef4 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Check_List_Pats4_1sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

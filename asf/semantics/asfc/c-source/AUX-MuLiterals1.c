@@ -32,23 +32,23 @@ void resolve_AUX_MuLiterals1 ( ) {
 void init_AUX_MuLiterals1 ( ) {
 }
 ATerm lf_AUX_MuLiterals1_5 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuLiterals1_5 ) ;
-return make_nf1 ( lf_AUX_MuLiterals1_5sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuLiterals1_5sym , ATmakeAppl ( lf_AUX_MuLiterals1_5sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuLiterals1_5sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuLiterals1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuLiterals1_1 ) ;
-return make_nf1 ( lf_AUX_MuLiterals1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuLiterals1_1sym , ATmakeAppl ( lf_AUX_MuLiterals1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuLiterals1_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuLiterals1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuLiterals1_4 ) ;
-return make_nf1 ( lf_AUX_MuLiterals1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuLiterals1_4sym , ATmakeAppl ( lf_AUX_MuLiterals1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuLiterals1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuLiterals1_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuLiterals1_3 ) ;
-return make_nf1 ( lf_AUX_MuLiterals1_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuLiterals1_3sym , ATmakeAppl ( lf_AUX_MuLiterals1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuLiterals1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_MuLiterals1_2 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuLiterals1_2 ) ;
-return make_nf1 ( lf_AUX_MuLiterals1_2sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_MuLiterals1_2sym , ATmakeAppl ( lf_AUX_MuLiterals1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_MuLiterals1_2sym , arg0 ) ) ;
 }
 

@@ -22,7 +22,7 @@ void init_AUX_Normalize_Conds2 ( ) {
 ATerm lf_AUX_Normalize_Conds2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Normalize_Conds2_1 ) ;
+FUNC_ENTRY ( lf_AUX_Normalize_Conds2_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds2_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -31,12 +31,12 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
 tmp [ 0 ] = ( * ef2 ) ( atmp02 ) ;
-return ( * ef1 ) ( atmp00 , atmp01 , tmp [ 0 ] ) ;
+FUNC_EXIT ( ( * ef1 ) ( atmp00 , atmp01 , tmp [ 0 ] ) ) ;
 }
 }
 }
 }
-return make_nf1 ( lf_AUX_Normalize_Conds2_1sym , arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds2_1sym , arg0 ) ) ;
 }
 }
 

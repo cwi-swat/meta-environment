@@ -12,7 +12,7 @@ void resolve_AUX_Basic_Integers1 ( ) {
 void init_AUX_Basic_Integers1 ( ) {
 }
 ATerm lf_AUX_Basic_Integers1_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_Basic_Integers1_1 ) ;
-return make_nf1 ( lf_AUX_Basic_Integers1_1sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_Basic_Integers1_1sym , ATmakeAppl ( lf_AUX_Basic_Integers1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Basic_Integers1_1sym , arg0 ) ) ;
 }
 

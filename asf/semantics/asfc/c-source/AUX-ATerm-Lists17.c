@@ -46,9 +46,9 @@ void init_AUX_ATerm_Lists17 ( ) {
 ATerm lf_AUX_ATerm_Lists17_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 4 ] ;
-PROF ( prof_lf_AUX_ATerm_Lists17_1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Lists17_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists17_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg1 , ef2sym ) ) {
 {
@@ -60,15 +60,15 @@ tmp [ 0 ] = ( * ef7 ) ( arg1 ) ;
 tmp [ 1 ] = ( * ef7 ) ( arg2 ) ;
 tmp [ 2 ] = ( * ef8 ) ( arg1 ) ;
 tmp [ 3 ] = ( * ef8 ) ( arg2 ) ;
-return ( * ef3 ) ( ( * ef4 ) ( arg0 , ( * ef5 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] ) ) ) , lf_AUX_ATerm_Lists17_1 ( arg0 , tmp [ 2 ] , tmp [ 3 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( arg0 , ( * ef5 ) ( tmp [ 0 ] , ( * ef6 ) ( tmp [ 1 ] ) ) ) , lf_AUX_ATerm_Lists17_1 ( arg0 , tmp [ 2 ] , tmp [ 3 ] ) ) ) ;
 }
 }
 }
 }
 if ( check_sym ( arg2 , ef1sym ) ) {
-return arg2 ;
+FUNC_EXIT ( arg2 ) ;
 }
-return make_nf3 ( lf_AUX_ATerm_Lists17_1sym , arg0 , arg1 , arg2 ) ;
+FUNC_EXIT ( make_nf3 ( lf_AUX_ATerm_Lists17_1sym , arg0 , arg1 , arg2 ) ) ;
 }
 }
 

@@ -55,11 +55,11 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Make_Assign_Conds_C6_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-PROF ( prof_lf_AUX_Make_Assign_Conds_C6_1 ) ;
+FUNC_ENTRY ( lf_AUX_Make_Assign_Conds_C6_1sym , ATmakeAppl ( lf_AUX_Make_Assign_Conds_C6_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
@@ -72,7 +72,7 @@ if ( check_sym ( atmp01 , lf2sym ) ) {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( not_empty_list ( atmp010 ) ) {
 tmp [ 0 ] = ( * ef3 ) ( lf2 ( make_list ( atmp010 ) ) , arg1 ) ;
-return tmp [ 0 ] ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
@@ -85,18 +85,18 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 tmp [ 0 ] = ( * ef5 ) ( arg0 , arg1 ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
 tmp [ 1 ] = ( * ef7 ) ( arg0 , arg1 ) ;
-return tmp [ 1 ] ;
+FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) ) ) {
-return arg1 ;
+FUNC_EXIT ( arg1 ) ;
 }
 }
 }
-return make_nf2 ( lf_AUX_Make_Assign_Conds_C6_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Make_Assign_Conds_C6_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

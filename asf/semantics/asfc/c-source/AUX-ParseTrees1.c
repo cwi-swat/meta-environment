@@ -31,19 +31,19 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_ParseTrees1_4 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees1_4 ) ;
-return make_nf1 ( lf_AUX_ParseTrees1_4sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees1_4sym , ATmakeAppl ( lf_AUX_ParseTrees1_4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_ParseTrees1_4sym , arg0 ) ) ;
 }
 ATerm lf_AUX_ParseTrees1_3 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_ParseTrees1_3 ) ;
-return make_nf1 ( lf_AUX_ParseTrees1_3sym , arg0 ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees1_3sym , ATmakeAppl ( lf_AUX_ParseTrees1_3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_ParseTrees1_3sym , arg0 ) ) ;
 }
 ATerm lf_AUX_ParseTrees1_2 ( ) {
-PROF ( prof_lf_AUX_ParseTrees1_2 ) ;
-return ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_AUX_ParseTrees1_2sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees1_2sym , ATmakeAppl0 ( lf_AUX_ParseTrees1_2sym ) ) ;
+CONS_EXIT_CONST ( constant0 , make_nf0 ( lf_AUX_ParseTrees1_2sym ) ) ;
 }
 ATerm lf_AUX_ParseTrees1_1 ( ) {
-PROF ( prof_lf_AUX_ParseTrees1_1 ) ;
-return ( constant1 ? constant1 : ( constant1 = make_nf0 ( lf_AUX_ParseTrees1_1sym ) ) ) ;
+CONS_ENTRY ( lf_AUX_ParseTrees1_1sym , ATmakeAppl0 ( lf_AUX_ParseTrees1_1sym ) ) ;
+CONS_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_ParseTrees1_1sym ) ) ;
 }
 

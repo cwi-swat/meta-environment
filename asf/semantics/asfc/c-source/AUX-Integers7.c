@@ -24,18 +24,18 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"
 void init_AUX_Integers7 ( ) {
 }
 ATerm lf_AUX_Integers7_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_Integers7_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers7_1sym , ATmakeAppl ( lf_AUX_Integers7_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-return ( * ef2 ) ( ( * ef3 ) ( arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( arg0 , arg1 ) ) ) ;
 }
 }
 }
 }
-return make_nf2 ( lf_AUX_Integers7_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers7_1sym , arg0 , arg1 ) ) ;
 }
 

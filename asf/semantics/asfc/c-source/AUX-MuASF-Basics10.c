@@ -36,14 +36,14 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_MuASF_Basics10_1 ( ATerm arg0 ) {
-PROF ( prof_lf_AUX_MuASF_Basics10_1 ) ;
+FUNC_ENTRY ( lf_AUX_MuASF_Basics10_1sym , ATmakeAppl ( lf_AUX_MuASF_Basics10_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 {
@@ -51,12 +51,13 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef4sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-return ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 }
 }
 }
 }
-return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_MuASF_Basics10_1sym , arg0 ) ) ;
 }
 

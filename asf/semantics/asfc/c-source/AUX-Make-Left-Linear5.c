@@ -83,7 +83,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Make_Left_Linear5_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 11 ] ;
-PROF ( prof_lf_AUX_Make_Left_Linear5_1 ) ;
+FUNC_ENTRY ( lf_AUX_Make_Left_Linear5_1sym , ATmakeAppl ( lf_AUX_Make_Left_Linear5_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -100,7 +100,7 @@ if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( is_single_element ( tmp [ 4 ] ) ) {
 tmp [ 6 ] = list_head ( tmp [ 4 ] ) ;
-return ( * ef2 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) , ( * ef1 ) ( tmp [ 6 ] , atmp01 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) , ( * ef1 ) ( tmp [ 6 ] , atmp01 ) ) ) ;
 }
 }
 }
@@ -124,7 +124,7 @@ if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( is_single_element ( tmp [ 4 ] ) ) {
 tmp [ 6 ] = list_head ( tmp [ 4 ] ) ;
-return ( * ef2 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) , ( * ef8 ) ( tmp [ 6 ] , atmp01 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) , ( * ef8 ) ( tmp [ 6 ] , atmp01 ) ) ) ;
 }
 }
 }
@@ -164,7 +164,7 @@ tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 8 ] , lf2sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-return ( * ef9 ) ( ( * ef10 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 10 ] ) ) ) ) , tmp [ 6 ] , atmp02 ) ;
+FUNC_EXIT ( ( * ef9 ) ( ( * ef10 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 10 ] ) ) ) ) , tmp [ 6 ] , atmp02 ) ) ;
 }
 }
 }
@@ -213,7 +213,7 @@ tmp [ 9 ] = arg_1 ( tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 8 ] , lf2sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 8 ] ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-return ( * ef13 ) ( ( * ef10 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 10 ] ) ) ) ) , tmp [ 6 ] , atmp02 ) ;
+FUNC_EXIT ( ( * ef13 ) ( ( * ef10 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 10 ] ) ) ) ) , tmp [ 6 ] , atmp02 ) ) ;
 }
 }
 }
@@ -230,19 +230,19 @@ return ( * ef13 ) ( ( * ef10 ) ( lf2 ( cons ( make_list ( tmp [ 5 ] ) , make_lis
 }
 }
 }
-return make_nf2 ( lf_AUX_Make_Left_Linear5_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Make_Left_Linear5_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf4 ( ATerm arg0 ) {
-PROF ( prof_lf4 ) ;
-return make_nf1 ( lf4sym , arg0 ) ;
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
-PROF ( prof_lf3 ) ;
-return make_nf1 ( lf3sym , arg0 ) ;
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

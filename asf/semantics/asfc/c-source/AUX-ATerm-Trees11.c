@@ -25,12 +25,11 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Trees11 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Trees11_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_ATerm_Trees11_1 ) ;
-return ( * ef1 ) ( ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) , ( * ef4 ) ( arg0 ) ) , arg1 ) ;
+FUNC_ENTRY ( lf_AUX_ATerm_Trees11_1sym , ATmakeAppl ( lf_AUX_ATerm_Trees11_1sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ) , ( * ef4 ) ( arg0 ) ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Trees11_1sym , arg0 , arg1 ) ) ;
 }
 

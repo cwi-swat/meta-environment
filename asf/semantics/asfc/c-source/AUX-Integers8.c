@@ -39,19 +39,19 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Integers8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
-PROF ( prof_lf_AUX_Integers8_1 ) ;
+FUNC_ENTRY ( lf_AUX_Integers8_1sym , ATmakeAppl ( lf_AUX_Integers8_1sym , arg0 , arg1 ) ) ;
 tmp [ 0 ] = ( * ef2 ) ( arg0 , arg1 ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-return ( * ef1 ) ( arg0 , arg1 ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , arg1 ) ) ;
 }
 else {
-return ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ;
 }
-return make_nf2 ( lf_AUX_Integers8_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_Integers8_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
-PROF ( prof_lf2 ) ;
-return make_nf1 ( lf2sym , arg0 ) ;
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

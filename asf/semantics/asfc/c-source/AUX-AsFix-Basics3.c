@@ -28,13 +28,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\
 void init_AUX_AsFix_Basics3 ( ) {
 }
 ATerm lf_AUX_AsFix_Basics3_1 ( ATerm arg0 , ATerm arg1 ) {
-PROF ( prof_lf_AUX_AsFix_Basics3_1 ) ;
+FUNC_ENTRY ( lf_AUX_AsFix_Basics3_1sym , ATmakeAppl ( lf_AUX_AsFix_Basics3_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-return ( * ef2 ) ( arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( arg1 ) ) ;
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
-return ( * ef4 ) ( arg1 ) ;
+FUNC_EXIT ( ( * ef4 ) ( arg1 ) ) ;
 }
-return make_nf2 ( lf_AUX_AsFix_Basics3_1sym , arg0 , arg1 ) ;
+FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix_Basics3_1sym , arg0 , arg1 ) ) ;
 }
 
