@@ -83,6 +83,6 @@ dnl Which files need updating?
 AC_OUTPUT(
   Makefile
   lib/Makefile
-  lib/tb/Makefile
+#  lib/tb/Makefile
   utils/Makefile
 )

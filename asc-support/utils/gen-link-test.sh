@@ -77,7 +77,7 @@ done
 `
   }
 
-  return 1; 
+  return 0; 
 }
 
 END_OF_FILE

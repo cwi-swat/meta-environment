@@ -5,6 +5,7 @@ $Id$
  * Added generation of prototypes for ASC builtin functions
  * Each builtin now has a declared arity in builtins/Makefile.am
  * Merged asc-support-me and asf-builtins library
+ * Temporarily disabled ToolBus interface for generated code
 
 2003/10/08 (jurgenv@cwi.nl)
  * Adapted package dependencies.
