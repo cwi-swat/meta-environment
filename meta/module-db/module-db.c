@@ -98,6 +98,7 @@ void clear_module_db(int cid)
 
 ATermList get_import_section(ATermList sections);
 ATermList add_imports(ATerm name, ATermList mods);
+ATermList GetallKeys(ATermList modules_db);
 
 ATerm add_module(int cid, ATerm asfix)
 {
@@ -196,8 +197,10 @@ ATbool complete_specification(ATermList visited, ATerm module)
       }
       return result; 
     }
-    else
+    else {
+      ATfprintf(stderr,"%t is missing\n",module);
       return ATfalse;
+    }
   }  
   else 
     return ATtrue;
