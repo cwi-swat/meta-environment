@@ -897,10 +897,14 @@ in
       +
         rec-msg(read-termstore, Stack?, EditorId?) .
 	CloseAll .
-	TermStoreActivation .
+	StackPopString(Stack, Stack?, Path?) .
+	InitializeTermStore(Path) .
 	ReturnSuccess(EditorId, Stack)		
       +
         rec-msg(save-termstore, Stack?, EditorId?) .
+	StackPopString(Stack, Stack?, Path?) .
+	snd-msg(register-termstore-name(Path)) .
+	rec-msg(termstore-name-registered) .
 	snd-msg(save-termstore) .
 	( 
 	  rec-msg(saved) .
