@@ -180,10 +180,9 @@ public class JavaTool implements ToolInstance {
     Constructor[] constructors = toolClass.getConstructors();
     for (int i = 0; i < constructors.length; i++) {
       Class parameters[] = constructors[i].getParameterTypes();
-      if (parameters.length != 1 || !parameters[0].getName().equals("toolbus.tool.ToolBridge"))
-        continue;
-      else
+      if (parameters.length == 1 && parameters[0].getName().equals("toolbus.tool.ToolBridge")) {
         return constructors[i];
+      }
     }
     throw new ToolBusException("no appropriate constructor found for " + className);
   }
@@ -193,17 +192,20 @@ public class JavaTool implements ToolInstance {
    */
 
   static private boolean equalType(ATerm t, Class c) {
-    if (t.getType() == ATerm.PLACEHOLDER)
+    if (t.getType() == ATerm.PLACEHOLDER) {
       t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
+    }
+    
     String ctype = c.getName();
-    if (t == TBTerm.IntType)
+    if (t == TBTerm.IntType) {
       return ctype.equals("int");
-    else if (t == TBTerm.StrType)
+    } else if (t == TBTerm.StrType) {
       return ctype.equals("java.lang.String");
-    else if (t == TBTerm.TermType)
+    } else if (t == TBTerm.TermType) {
       return ctype.equals("aterm.ATerm");
-    else if (t == TBTerm.VoidType)
+    } else if (t == TBTerm.VoidType) {
       return ctype.equals("void");
+    }
 
     return false;
   }
@@ -215,21 +217,30 @@ public class JavaTool implements ToolInstance {
   private Method findMethod(String name, ATermList args, boolean returnsVoid) throws ToolBusException {
     System.err.println("findMethod(" + name + ", " + args + ")");
     Method methods[] = toolClass.getDeclaredMethods();
+    
+    // HDJ: todo: refactor inner loop to separate method to avoid the need for label.
     searchMethods : for (int i = 0; i < methods.length; i++) {
       Class returntype = methods[i].getReturnType();
       Class parameters[] = methods[i].getParameterTypes();
 
       if (methods[i].getName().equals(name) && Modifier.isPublic(methods[i].getModifiers())) {
-        if (args.getLength() != parameters.length)
+        if (args.getLength() != parameters.length) {
           continue;
-        for (int j = 0; j < parameters.length; j++) {
-          if (!equalType(args.getFirst(), parameters[j]))
-            continue searchMethods;
         }
-        if (returnsVoid && equalType(TBTerm.VoidType, returntype))
+        
+        for (int j = 0; j < parameters.length; j++) {
+          // HDJ: Shouldn't we loop over args here as well?
+          //      i.e. args = args.getNext();
+          if (!equalType(args.getFirst(), parameters[j])) {
+            continue searchMethods;
+          }
+        }
+        
+        if (returnsVoid && equalType(TBTerm.VoidType, returntype)) {
           return methods[i];
-        else if (!returnsVoid && equalType(TBTerm.TermType, returntype))
+        } else if (!returnsVoid && equalType(TBTerm.TermType, returntype)) {
           return methods[i];
+        }
       }
     }
     throw new ToolBusException("no method " + name + " found");
@@ -369,7 +380,7 @@ public class JavaTool implements ToolInstance {
    * * Pass a value obtained from the ToolShield to the ToolBus
    * @see toolbus.tool.ToolInstance#getValueFromTool(ATerm, ATerm, Environment)
    */
-  
+
   synchronized public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException {
     System.err.println("getValueFormTool: " + id + " " + trm);
     ATerm result = (ATerm) valuesFromTool.get(id);
