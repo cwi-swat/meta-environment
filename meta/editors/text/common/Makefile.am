@@ -26,4 +26,4 @@ libTextEditor_a_SOURCES = \
 	TextEditor_dict.c
 
 api: TextEditor.adt
-	/home/markvdb/sdf-apigen/bin/adt-to-c --prefix TE_ --input $<
+	adt-to-c --prefix TE_ --input $<
