@@ -83,9 +83,9 @@ state SG_LookupGoto(parse_table *pt, state s, int token)
                   (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
                                       (ATerm) ATmakeInt(token)));
   retstate = (val == NULL)?-1:ATgetInt((ATermInt) val);
-/*
+
   if (SG_DEBUG) ATfprintf(SGlog(), "Goto(%d,%d) == %d\n", s, token, retstate);
- */
+
   return retstate;
 }
 
@@ -97,9 +97,9 @@ actions SG_LookupAction(parse_table *pt, state s, int token)
                  (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
                                      (ATerm) ATmakeInt(token)));
   as = as ? as : ATempty;
-/*
+
   if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, token, as);
- */
+
   return as;
 }
 

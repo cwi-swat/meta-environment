@@ -744,10 +744,6 @@ void SG_PropagateReject(stack *st)
     a rejected term by its non-rejected counterpart in the ambiguity
     cluster
 */
-/*
-      if(oldlen >= 2 && newlen < 2)
-        SG_MaxNrAmb(SG_NRAMB_DEC);
- */
       if(newlen > 0) {
         /*  Don't reject this link/propagate if part of this amb-cluster
             is still valid
@@ -755,6 +751,9 @@ void SG_PropagateReject(stack *st)
         return;
       } /*  If no terms were left in the amb-cluster: reject & propagate  */
     }
+    if (SG_DEBUG && st->kid)
+      ATfprintf(SGlog(), "Reject: propagating (%d->%d)\n",
+                SG_ST_STATE(st), SG_ST_STATE(st->kid));
     SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
     st = st->kid;
   }
