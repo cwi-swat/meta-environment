@@ -116,7 +116,6 @@
 2001/11/13 (markvdb@cwi.nl)
  * removed unused argument from applyFunctionToTree.
 
->>>>>>> 1.42
 2001/11/12 (jurgenv@cwi.nl)
  * Added apply-function functionality to MEPT-utils.
  * Added apply-function tool to utils
