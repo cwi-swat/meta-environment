@@ -4,7 +4,7 @@ PARSE-SDF2 - parse sdf2 definitions
 
 =head1 SYNOPSIS
 
-B<parse-sdf2> [-B<12bdDh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] 
+B<parse-sdf2> [-B<12bdDh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -40,7 +40,8 @@ Displays concise usage information.
 
 =item -B<i> I<file>
 
-Read input from F<file>; by default, input is read from stdin.
+Read input from F<file>; by default, input is either read from stdin,
+or from the named files supplied as arguments.
 
 =item B<-l>
 
@@ -52,8 +53,9 @@ Do not generate output (check syntactic validity).
 
 =item -B<o> I<file>
 
-Write output to F<file>.  By default, output is written to the infile,
-with its extension (if present) replaced by `
+Write output to F<file>.  By default, output is written to file with a
+name derived from the name of the input file for named files, and to
+standard output on input from standard input.
 
 =item B<-t>
 
