@@ -22,7 +22,11 @@
 
 process META is
 let
-  Id      : term
+  Id      : term,
+  Syntax  : str,
+  Semantics : str,
+  Term : str,
+  Sort : term
 in
   Id := process-id.
   (
