@@ -1,27 +1,11 @@
 #! /bin/sh
-#
-#    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
 
 # $Id$
 
 datadir=__DATADIR__
 asfix=__PT_SUPPORT__
+builddir=__TOP_BUILDDIR__/module-db/test
+
 toolbus="__TOOLBUS__/bin/toolbus \
            -I__TOP_SRCDIR__/in-output \
            -I__TOP_SRCDIR__/module-db \
@@ -54,13 +38,13 @@ call_toolbus () {
 touch Pico-Booleans.sdf.baf Pico-Booleans.asf.baf Test.sdf.baf
 
 # Test 1. Add an equations section as text to the db.
-echo "" > Test.asf
-rm -f Test.sdf2
+echo "" > ${builddir}/Test.asf
+rm -f ${builddir}/Test.sdf2
 call_toolbus module-db-test-1.tb
 
 # Test 2. Add a non-empty equations section as text and try to retrieve
 # again.
-echo "equations" > Test.asf
+echo "equations" > ${builddir}/Test.asf
 call_toolbus module-db-test-2.tb
 
 # Test 3. Add a non-empty equations section as tree.
