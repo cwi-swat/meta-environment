@@ -176,7 +176,7 @@ ATerm innermost(PT_Tree tree)
     return NULL;
   }
 
-  if (annos != NULL) {
+  if (annos != NULL && result != NULL) {
     result = ATsetAnnotations(result, annos);
   }
 

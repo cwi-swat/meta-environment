@@ -34,6 +34,7 @@ static PT_Tree noAnno()
 
   if (trm == NULL) {
     trm = PTPT_liftATerm(ATparse("annotation-unavailable"));
+    ATprotect((ATerm*) ((void*) &trm));
   }
 
   return (PT_Tree) trm;
