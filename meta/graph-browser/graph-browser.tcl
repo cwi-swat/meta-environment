@@ -4,34 +4,6 @@
 #
 
 
-
-# Opmerking m.b.t. het tekenen van module-blokken
-# -----------------------------------------------
-#
-# Er wordt nu aangenomen dat als er een import relatie bestaat tussen
-# twee modules dat die modules ook bestaan (en de blokken voor de
-# modules worden dus ook getekend op grond van deze info).
-#
-# Dit gaat fout als je een module toevoegt die verder niets
-# importeert (bijv. Layout).
-#
-# In de toekomst moet het TB script zo aangepast worden dat ook
-# 'add-module(M)' en 'delete-module(M)' acties gegenereerd worden.
-#
-# Op grond van de importrelatie worden module-blokken dan gestippeld
-# toegevoegd ("er zou zo'n module moeten zijn"), op grond van de
-# 'add-module' actie krijgen ze een 'solid line' ("er is zo'n module")
-# en op grond van een 'delete-module' actie worden ze weer
-# gestippeld... 
-#
-# Deze aanpassing zal pas gedaan worden na het gereedkomen v/d editor
-# omdat dan (naar verwachting) veel van het TB-script herschreven zal
-# worden.
-#
-# -- Leon
-
-
-
 #----------------------------------------------------------------------
 # help texts
 #----------------------------------------------------------------------
@@ -108,6 +80,7 @@ set MODULESTYLE box
 # global variables (bweghh!)
 #----------------------------------------------------------------------
 global saveFill fileName printCommand g c statuslist 
+global nodefontsize nodewidth nodeheight
 
 # animation of loading of modules
 set animate 1
@@ -165,12 +138,12 @@ proc new-graph { graph } {
     # all nodes are `wrapped' in id("...") function appl's
   
     foreach node [lindex $graph 0] {
-	$g addnode [StripId $node]
+	AddNode $g [StripId $node]
     }
 
     foreach edge [lindex $graph 1] {
-	AddUniqueEdge $g [$g addnode [StripId [lindex $edge 0]]] \
-	       [$g addnode [StripId [lindex $edge 1]]]
+	AddUniqueEdge $g [AddNode $g [StripId [lindex $edge 0]]] \
+	       [AddNode $g [StripId [lindex $edge 1]]]
     }
     update-graph
 }
@@ -185,8 +158,11 @@ proc new-graph { graph } {
 #---
 proc add-module { mod } { 
     global g MODULESTYLE
+
     GBin "add-module($mod)"
-    $g addnode [StripId $mod] shape $MODULESTYLE
+    set m [StripId $mod] 
+    set-status "Opening module $m"
+    AddNode $g $m {shape $MODULESTYLE}
     update-graph
 }
 
@@ -222,9 +198,9 @@ proc delete-module { mod } {
 proc imports { mod modlist } {
     global g SHADOWSTYLE
     GBin "imports($mod,$modlist)"
-    set i [$g addnode [StripId $mod]]
+    set i [AddNode $g [StripId $mod]]
     foreach j $modlist {
-	AddUniqueEdge $g $i [$g addnode [StripId $j]]
+	AddUniqueEdge $g $i [AddNode $g [StripId $j]]
     }
     update-graph
 }
@@ -242,20 +218,20 @@ proc add-imports { implist } {
     global g SHADOWSTYLE
     GBin "add-imports($implist)"
     foreach rel $implist {
-	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]]	\
-		[$g addnode [StripId [lindex $rel 1]]]
+	AddUniqueEdge $g [AddNode $g [StripId [lindex $rel 0]]]	\
+		[AddNode $g [StripId [lindex $rel 1]]]
     }
     update-graph
 }
 
 
 #---
-# snd-do(finished-opening-modules)
+# snd-do(finished-opening-modules(Mod))
 #-
 # notifies finishing of opening of modules (to turn on/off animation)
 #---
-proc finished-opening-modules {} {
-    global opening
+proc finished-opening-modules { mod } {
+    global opening g c
 
     set opening 0
     update-graph
@@ -268,7 +244,7 @@ proc finished-opening-modules {} {
 # redraws the canvas based on the internal TclDot graph-structure
 #---
 proc update-graph {} {
-    global g c opening animate
+    global g c opening animate scale
 
     if {$animate || !$opening} {
 	$c delete all
@@ -298,7 +274,7 @@ proc set-status { str } {
 #---
 # snd-do(add-status(id,s))
 #-
-# sets status message to s, for process with id id. Only called from process
+# sets status message to s, for process with id. Only called from process
 # Status-display. Should not be used directly.
 #---
 proc add-status { id str } {
@@ -648,26 +624,38 @@ proc CompileModules { modlist } {
 
 
 #--
-# AddModule(M)
+# SaveModules(ML)
 #-
-# generates the toolbus event to request addition of a module 
-# and destroys the widget $w.
+# generates the toolbus event to request saving of modules ML
 #--
-proc AddModule { mod } {
-    global opening
-
-    set opening 1
-    GBevent [format "add-module(%s)" [ToId $mod]]
+proc SaveModules { modlist } {
+    foreach mod $modlist {
+        GBpost [format "save-module(%s)" [ToId $mod]] 
+    }
 }
 
 
 #--
-# AddModuleHelper(w)
+# OpenModule(M)
 #-
-# calls AddModule for requested module and destroys the widget $w.
+# generates the toolbus event to request opening of a module 
+# and destroys the widget $w.
 #--
-proc AddModuleHelper {w} {
-    AddModule [$w.addModule get]
+proc OpenModule { mod } {
+    global opening 
+
+    set opening 1
+    GBevent [format "open-module(%s)" [ToId $mod]]
+}
+
+
+#--
+# OpenModuleHelper(w)
+#-
+# calls OpenModule for requested module and destroys the widget $w.
+#--
+proc OpenModuleHelper {w} {
+    OpenModule [$w.openModule get]
     destroy $w
 }
 
@@ -703,6 +691,16 @@ proc RevertAll {} {
 #--
 proc CompileAll {} {
     GBevent "compile-all"
+}
+
+
+#--
+# SaveAll
+#-
+# generates the toolbus event to request saving of all modules
+#--
+proc SaveAll {} {
+    GBevent "save-all"
 }
 
 
@@ -760,20 +758,26 @@ proc ViewAll {} {
 }
 
 
-proc AddModuleWidget {} {
-    set w .addmodule
+proc AddNode { graph name {args {}} } {
+ global nodefontsize nodewidth nodeheight
+ eval "set n \[$graph addnode $name fontsize $nodefontsize width $nodewidth height $nodeheight $args\]"
+ return $n
+}
+
+proc OpenModuleWidget {} {
+    set w .openmodule
     catch {destroy $w}
     toplevel $w
-    wm title $w "Add module"
-    wm iconname $w "Add module"
-    label $w.message -text "Add module:"
-    entry $w.addModule
-    bind $w.addModule <Return> "AddModuleHelper $w"
+    wm title $w "Open module"
+    wm iconname $w "Open module"
+    label $w.message -text "Open module:"
+    entry $w.openModule
+    bind $w.openModule <Return> "OpenModuleHelper $w"
     frame $w.buttons
-    button $w.buttons.confirm -text OK -command "AddModuleHelper $w"
+    button $w.buttons.confirm -text OK -command "OpenModuleHelper $w"
     button $w.buttons.cancel -text Cancel -command "destroy $w"
     pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-    pack $w.message $w.addModule -side top -anchor w
+    pack $w.message $w.openModule -side top -anchor w
     pack $w.buttons -side bottom -expand y -fill x -pady 2m
 }
 
@@ -796,6 +800,25 @@ proc EditTermWidget {mod} {
     pack $w.buttons -side bottom -expand y -fill x -pady 2m
 }
 
+proc ScaleNodes { graph scale } {
+    global nodefontsize nodewidth nodeheight
+    if {$scale == 75} {
+	set nodefontsize 10
+	set nodewidth 0.75
+        set nodeheight 0.38
+    } elseif {$scale == 50} {
+	set nodefontsize 8
+	set nodewidth 0.5
+        set nodeheight 0.25
+    } else {
+	set nodefontsize 14
+	set nodewidth 1
+        set nodeheight 0.5
+    } 
+    foreach node [$graph listnodes] {
+        catch { $node setattributes fontsize $nodefontsize width $nodewidth height $nodeheight }
+    }
+}
 
 proc AddUniqueEdge { graph from to } {
     if [catch {$graph findedge [$from showname] [$to showname]} ] {
@@ -967,8 +990,9 @@ proc define-menu-bar {} {
 	-menu .menu.specification.menu 
     set m .menu.specification.menu
     menu $m
-    $m add command -label "Add module" -underline 0 -command {AddModuleWidget}
+    $m add command -label "Open module" -underline 0 -command {OpenModuleWidget}
     $m add separator
+    $m add command -label "Save All" -underline 0 -command {SaveAll}
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add command -label "Revert All" -underline 0 -command {RevertAll}
 
@@ -979,6 +1003,18 @@ proc define-menu-bar {} {
     menubutton .menu.window -text "Window" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
     menu $m
+    $m add command -label "Scale to 100%" -underline 0 -command {
+	ScaleNodes $g 100; update-graph
+    }
+
+    $m add command -label "Scale to 75%" -underline 0 -command {
+	ScaleNodes $g 75; update-graph
+    }
+
+    $m add command -label "Scale to 50%" -underline 0 -command {
+	ScaleNodes $g 50; update-graph
+    }
+
     $m add command -label "View all" -underline 0 -command {ViewAll}
     $m add check -label "Animate loading" -underline 0 -variable animate
     
@@ -1021,6 +1057,8 @@ proc define-modules-frame {} {
 	-command {foreach i [SelectedModules] {
 	    EditTermWidget $i
 	} }
+    button .modules.buttons.savemod -text "Save" \
+        -command {SaveModules [SelectedModules]}
     button .modules.buttons.revertmod -text "Revert" \
 	-command {RevertModules [SelectedModules]}
     button .modules.buttons.deletemod -text "Delete" \
@@ -1122,8 +1160,8 @@ proc define-module-popup {} {
 proc define-shadowmodule-popup {} {
     set m .shadowmodule-popup
     menu $m -tearoff 0
-    $m add command -label "Add this module" \
-        -command {AddModule [GetObjectName $c]}
+    $m add command -label "Open this module" \
+        -command {OpenModule [GetObjectName $c]}
 }
 
 proc define-modlist-popup {} {
@@ -1144,7 +1182,7 @@ proc define-modlist-popup {} {
 proc define-canvas-popup {} {
     set m .canvas-popup
     menu $m -tearoff 0
-    $m add command -label "Add module" -command "AddModuleWidget"
+    $m add command -label "Open module" -command "OpenModuleWidget"
 }
 
 proc make-and-init-new-graph {} {
@@ -1160,6 +1198,7 @@ proc make-and-init-new-graph {} {
 #----------------------------------------------------------------------
 
 set g [make-and-init-new-graph]
+ScaleNodes $g 100
 set saveFill {}
 set fileName {no_name.dot}
 set printCommand {lpr}
