@@ -1,6 +1,22 @@
 
 equations
 
+
+%% Additional Interface
+
+[ebt]	empty() = empty
+
+[ins]	insert(t, x) = add(t, x)
+
+[enu1]	enumerate(empty) = []
+
+[enu2]	enumerate(tree(x, n, l, r)) = x:concat(enumerate(l),enumerate(r))
+
+[card]	cardinality(t) = size(t)
+
+
+%% From the technical report
+
 [w]	weight = 4
 
 [s]	size(empty) = 0
