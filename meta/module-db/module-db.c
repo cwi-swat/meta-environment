@@ -99,6 +99,9 @@ ATerm get_all_equations(int cid, char *moduleName)
       entry = GetValue(modules_db,mod);
       eqsterm = ATelementAt((ATermList)entry, EQS_TREE_LOC);
       eqs = AFTgetEqs(eqsterm);
+      if (!ATisEmpty(eqs) && !ATisEmpty(equations)) {
+        eqs = ATinsert(eqs, ATparse("w(\"\")"));
+      }
       equations = ATconcat(equations, eqs); 
       mods = ATgetNext(mods);
     };
@@ -187,6 +190,7 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   strcpy(eqsPath+len, "eqs");
 
   parseTree = PT_makeParseTreeFromTerm(sdfTree);
+
   if (!PT_isValidParseTree(parseTree)) {
     return ATmake("snd-value(illegal-module-error(<str>))", moduleName);
   }
