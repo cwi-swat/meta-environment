@@ -501,7 +501,6 @@ ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
     /* Insert proper syntax syntax. */
     fprintf(f, "module %s\n", compoundName);
 
-    ATwarning("created: %s, %s\n", txtFileName, compoundName);
     result = ATmake("snd-value(creation-succeeded(<str>,<str>))", txtFileName,
 		    compoundName);
     fclose(f);
@@ -598,8 +597,6 @@ static char* normalize_filename(const char *path)
   char *prefix;
   char *newprefix = NULL;
   char *newpath = NULL;
-
-  ATwarning("normalize_filename: %s\n", path);
 
   for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
 
