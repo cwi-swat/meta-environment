@@ -29,7 +29,6 @@ noinst_HEADERS = chars.h \
 
 asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept  \
-               -L$(SDF_SUPPORT)/lib -lSDFME \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
                -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
@@ -41,6 +40,7 @@ DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
 INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
+            -I$(ASF_SUPPORT)/include \
             -I$(ATERM)/include \
             -I$(srcdir)/muasf 
 

@@ -1,7 +1,6 @@
-#ifndef _ASFSDF2MUASF_H
-#define _ASFSDF2MUASF_H
+#ifndef _ASF2MUASF_H
+#define _ASF2MUASF_H
 
-#include <SDFME.h>
 #include <ASFME.h>
 
 MA_Module asfToMuASF(char* name, ASF_CondEquationList equations);

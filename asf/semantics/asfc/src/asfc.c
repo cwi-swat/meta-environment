@@ -16,7 +16,6 @@
 /*}}}  */
 /*{{{  meta includes */
 
-#include <SDFME-utils.h>  
 #include <ASFME-utils.h>
 #include <MEPT-utils.h>
 #include <MuASF.h>
@@ -203,7 +202,6 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottom);
   PT_initMEPTApi();
-  SDF_initSDFMEApi();
   ASF_initASFMEApi();
   MA_initMuASFApi();
 
