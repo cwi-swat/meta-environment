@@ -45,8 +45,8 @@
 [default-e2] 
        equal($Elem, $Elem') = false
 
-[v2b]  val2bag($Bag) = $Bag
-[v2r]  val2rel($Rel) = $Rel
+[v2b]  rval2bag($Bag) = $Bag
+[v2r]  rval2rel($Rel) = $Rel
 
 %%---- Specialized versions of evalx that return value of required type
 

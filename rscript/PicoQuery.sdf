@@ -4,12 +4,14 @@ imports PicoExtraction
 
 exports
   context-free syntax
-	pico-query(PROGRAM, REXP, RSTORE) -> List
+	pico-query(PROGRAM, RSCRIPT, String, RSTORE) -> List
 
+	str2rvar(String)		-> RVAR
 hiddens
   variables
 	"$Rstore" [0-9\']*  -> RSTORE
 	"$Program" [0-9\']* -> PROGRAM
-	"$Exp" [0-9\']*	    -> REXP
+	"$Script" [0-9\']*  -> RSCRIPT
+	"$String" [0-9\']*  -> String
 
 
