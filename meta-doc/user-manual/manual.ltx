@@ -4,21 +4,33 @@
 \documentclass[a4paper,twoside]{article}
 
 %\usepackage{fullpage}
+\usepackage[english]{babel}
 \usepackage{times}
 \usepackage{a4wide}
 \usepackage{verbatim}
-\usepackage{makeidx}
-\usepackage{epsfig}
 \usepackage{alltt}
 \usepackage{moreverb}  
-\usepackage{url}
+
+\usepackage{hyperlatex} 
+\usepackage{xspace}
+\W\usepackage{longtable}
+\W\usepackage{makeidx}
+\W\usepackage{frames}
+\T\usepackage{epsfig}
 
 \makeindex
 
-\newcommand{\ASmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
-\newcommand{\sdf}{{\sc Sdf}}
-\newcommand{\asf}{{\sc Asf}}
-\newcommand{\asfsdf}{{\sc Asf}+{\sc Sdf}}
+\newcommand{\printindex}{%
+  \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
+  \texorhtml{\input{hyperlatex.ind}}{\htmlprintindex}}
+
+\htmlpanelfield{Contents}{hlxcontents}
+\htmlpanelfield{Index}{hlxindex}
+
+\newcommand{\ASmetaenv}{{Asf}+{Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{Sdf}}
+\newcommand{\asf}{{Asf}}
+\newcommand{\asfsdf}{{Asf}+{Sdf}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 \newcommand{\xemacs}{{\tt XEmacs}}
@@ -28,19 +40,15 @@
 \newcommand{\fignegspaceafter}{\vspace*{-0.5cm}}        
 
 \newenvironment{Code}
-        {\vspace*{-0.15cm}\begin{small}\begin{center}}
-        {\end{center}\end{small}\vspace*{-0.2cm}}
+        {\begin{small}\begin{center}}
+        {\end{center}\end{small}}
 
 \newenvironment{IncCode}
         {\begin{Code}\begin{small}}
         {\end{small}\end{Code}}      
 
-\def\aterms{\mbox{ATerms}}
-\def\aterm{\mbox{ATerm}}
-\def\asfix{\mbox{\sc AsFix}}
-
 \newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
-\newcommand{\transformerprod}[1]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow S_1}}
+\newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
 \newcommand{\accumulatorprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_2}}
 \newcommand{\combinationprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_1 \# S_2}}
 \newcommand{\accu}[0]{{\tt accu}}
@@ -57,8 +65,18 @@
 %----[ TITLE PAGE ]----           
 \title{\ASmetaenv\ User Manual \\ $Revision$}
 \author{M.G.J. van den Brand and P. Klint\\
-        {\small\sl Centrum voor Wiskunde en Informatica (CWI),}\\
-{\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
+        {\small Centrum voor Wiskunde en Informatica (CWI),}\\
+{\small Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
+
+\htmltitle{ASF+SDF Meta-Environment\ User Manual \\ $Revision$}
+\htmldirectory{html} 
+\htmladdress{M.G.J. van den Brand and P. Klint}
+
+\newcommand{\homepage}{http://www.cwi.nl/\~{}markvdb/}
+
+\xmlattributes{BODY}{BGCOLOR="#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+\setcounter{htmldepth}{3}
 
 \date{\today}
 \begin{document}
@@ -70,7 +88,6 @@ This is work under construction.
 \end{abstract}
 
 \tableofcontents
-\newpage
 
 %}}}
 
@@ -82,11 +99,11 @@ This is work under construction.
 
 \begin{itemize}
 \item Updated a number of screendumps.
-\item Added a section on comment convention in \sdf\
-(Section~\ref{SdfComment})
-\item Added a section on renaming and adapted the text of imports
-(Section~\ref{Renamings}).
-\item Added a section on lists and optional symbols (Section~ref{??}).
+\item Added a section on 
+\link{comment convention in \sdf}[, see Section~\ref{SdfComment}]{SdfComment}.
+\item Added a section on 
+\link{renaming and adapted the text of imports}[, see
+Section~\ref{Renamings}]{Renamings}.
 \end{itemize}
 
 \section{Overview}\label{overview} 
@@ -225,14 +242,19 @@ system.  Topics that will be addressed include:
 \noindent We do \emph{not} explain in detail:
 
 \begin{itemize}
-\item The formalism \asfsdf. See, however, Section~\ref{ASF+SDF} for a quick
-  introduction to \asfsdf.
+\item The formalism \asfsdf. 
+See, for a quick introduction to \link{\asfsdf}
+[, Section~\ref{ASF+SDF}]{ASF+SDF}.
 
 \item The architectural and implementational aspects of the system.
-You can find a brief sketch in Section~\ref{SEC:TechnologyandArchitecture}.
+You can find a brief sketch of the underlying 
+\link{technology and architecture of the \ASmetaenv}
+[ in Section~\ref{SEC:TechnologyandArchitecture}]{SEC:TechnologyandArchitecture}.
 
 \item The stand-alone usage of various parts of the system.
-Section~\ref{SEC:Components} briefly describes the most important components.
+The usage of the
+\link{most important components is described}[ in
+Section~\ref{SEC:Components}]{SEC:Components}.
 \end{itemize}
 
 \subsection{Downloading the \ASmetaenv}
@@ -247,9 +269,11 @@ You can download the \ASmetaenv\ from the following location:
 \subsection{Further Reading}
 
 There are many publications about the \ASmetaenv\ itself, about the
-implementation techniques used, and about applications.  See
-Section~\ref{SEC:TechnologyandArchitecture} for an overview of
-architecture and implementation techniques.  We give here a brief
+implementation techniques used, and about applications.  See,
+for an overview of
+\link{architecture and implementation techniques}
+[, Section~\ref{SEC:TechnologyandArchitecture}]{SEC:TechnologyandArchitecture}. 
+We give here a brief
 overview of selected publications:
 
 \begin{description}
@@ -287,17 +311,31 @@ overview of selected publications:
 
 
 
-\newpage
 \section{Starting the System}
 
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
-result, the \ASmetaenv\ main window pops up. This is shown in
-Figure~\ref{FIG:meta-start}.
+result, 
+\link{the \ASmetaenv\ main window pops up.}[ This is shown in
+Figure~\ref{FIG:meta-start}.]{FIG:meta-start}
 
+\begin{figure}[t]
+
+\begin{iftex}
+  \centerline{\epsfig{file=meta-start.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-start.gif}
+\end{center}
+\end{ifhtml}
+  \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
+
+\end{figure}
 
 The {\tt meta} command has the following options, which may come in handy
 later on. As a novice user, you may want to skip the remainder of this section
-and continue with Section~\ref{MainWindow}.
+and continue with the description of the 
+\link{Main Window}[ (Section~\ref{MainWindow})]{MainWindow}.
 
 \begin{itemize}
 
@@ -305,9 +343,10 @@ and continue with Section~\ref{MainWindow}.
 in the default case the configuration file {\tt meta.conf} is used.
 
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
-an interactive viewer (``ToolBus viewer'') will be started that 
-allows the study of the internal behaviour of the system.
-The viewer is shown in Figure~\ref{FIG:viewer}.
+an interactive viewer will be started that 
+allows the study of the internal behaviour of the system,
+the so-called \link{``ToolBus viewer''}[. This viewer is shown in
+Figure~\ref{FIG:viewer}]{FIG:viewer}.
 
 \item {\tt -h } shows help information for the {\tt meta} command.
 
@@ -329,25 +368,26 @@ Search paths can be initialized by creating a file ``meta.conf'' in
 the directory from which the {\tt meta} command is initiated.  This
 file may contain a list of absolute and/or relative path names (each
 on a separate line) that will be searched when opening modules.  For
-instance, in the {\tt pico} directory (see Section~\ref{GuidedTour})
+instance, in the {\tt pico} directory (see 
+the \link{Guided Tour}[, Section~\ref{GuidedTour}]{GuidedTour})
 you will find an example {\tt meta.conf} file which only contains the
 path `{\tt .}', i.e., only the current directory will be searched.
 
-\begin{figure}[t]
-
-  \centerline{\epsfig{file=meta-start.ps,width=12cm}}
-  \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
-
-\end{figure}
 
 \begin{figure}[t]
 
+\begin{iftex}
   \centerline{\epsfig{file=viewer.ps,width=14cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{viewer.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:viewer} ToolBus viewer}
 
 \end{figure}
 
-\newpage
 \section{The Main Window} \label{MainWindow}
 
 The main window of the \ASmetaenv\ immediately after starting of the
@@ -405,22 +445,42 @@ The main window consists of the following parts:
 \end{itemize}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=meta-pico.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-pico.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
 
-\newpage
 \section{The Menus of the Main Window}
  
 \subsection{The File menu} \label{FileMenu}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=file-menu.ps,width=3cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{file-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:file-menu} {\tt File} menu (main window)}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{printer-setup.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:printer-setup} Dialog for printer setup}
 \end{figure}
 
@@ -449,19 +509,40 @@ pane.
 {\tt Quit} ends the execution of the \ASmetaenv.
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=open-file.ps,width=8cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{open-file.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:open-file} Dialog for opening a module ({\tt File} menu)}
 \end{figure}
 
 \subsection{The Edit menu} \label{EditMenu}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=edit-menu.ps,width=3cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{edit-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:edit-menu} {\tt Edit} menu (main window)}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=graph-menu.ps,width=4cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{graph-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:graph-menu} {\tt Graph} menu (main window)}
 \end{figure}
 
@@ -494,7 +575,14 @@ will only be shown when the loading of the specification is complete.
 \subsection{The Debug Menu} \label{DebugMenu}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=debug-menu.ps,width=4cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{debug-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:debug-menu}{\tt Debug}  menu (main window)}
 \end{figure}
 
@@ -505,7 +593,14 @@ messages will be displayed.  Otherwise the systems runs silently.
 \subsection{The Help Menu} \label{HelpMenu}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=help-menu.ps,width=5cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{help-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:help-menu}{\tt Help}  menu (main window)}
 \end{figure}
 
@@ -530,7 +625,6 @@ facility to report bugs to the developers.
 Both {\tt Online Help} and {\tt JitterBug Activated} assume that there
 is a {\tt Netscape} running, other browsers are not yet supported.
 
-\newpage
 \section{The Panes of the Main Window}
 
 The two left-most panes of the main window give two, alternative,
@@ -553,12 +647,26 @@ module but never defined, or containing syntax errors) are represented
 by a circle.
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=module-menu.ps,width=3cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{module-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:module-menu}Pop up menu for module operations (import pane)}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=new-open.ps,width=2cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{new-open.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:new-open}Pop up menu for adding a module (import pane)}
 \end{figure}
 
@@ -573,8 +681,9 @@ The import pane has the following interaction facilities:
 \item By clicking and holding the middle mouse button outside any
 module, the import graph can be dragged across the import pane.
 
-\item Clicking \emph{on} a module yields a pop up menu as shown in
-Figure~\ref{FIG:module-menu}.  It contains the same entries as the
+\item Clicking \emph{on} a module yields 
+a \link{pop up menu}[ as shown in Figure~\ref]{FIG:module-menu}. 
+It contains the same entries as the
 button pane of the main window (see Section \ref{ButtonPane}).
 
 \item Clicking \emph{outside} any module yields a pop up menu as shown
@@ -638,9 +747,7 @@ syntax definition and the equations section of all modules.
 the effect is that modifications made to these modules are discarded.
 {\tt Delete} ({\tt Delete Module}) removes modules.
 
-{\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  If no module
-or more than one module has been selected, a warning appears 
-(Figure~\ref{FIG:compiler-warning}).  
+{\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  
 Section~\ref{compiling-specs} gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump} ({\tt Dump Equations...}) dumps the equation of the selected
@@ -653,22 +760,12 @@ order to use the parser in a stand-alone way, see Section
 \ref{SEC:parsingofterms}.
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
-%%\begin{figure}
-%%  \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
-%%  \caption{\label{FIG:compiler-warning}Warning ({\tt Compile module...})}
-%%\end{figure}
 
-%%\begin{figure}
-%%  \centerline{\epsfig{file=compiler-dir.ps,width=4cm}}
-%%  \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
-%%\end{figure}
-
-\newpage
 \section{Editing Specifications}
 
 The editors used to create and modify specifications and terms are
 based on \xemacs, so some familiarity with this editor is assumed.
-See \url{http://www.xemacs.org/Documentation/index.html}
+See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
 for documentation on \xemacs.
 
 There are two additions to the standard user-interface of \xemacs:
@@ -688,7 +785,14 @@ user can navigate in the tree.
 \end{itemize}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=move-menu.ps,width=1.2cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{move-menu.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:move-menu}{\tt Move} menu (editor)}
 \end{figure}
 
@@ -715,12 +819,26 @@ Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=meta-env-menu1.ps,width=1.2cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-env-menu1.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:meta-env-menu1} {\tt Meta-Environment} menu (editor)}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=meta-env-menu2.ps,width=1.6cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-env-menu2.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:meta-env-menu2} {\tt Meta-Environment} menu (term editor)}
 \end{figure}
 
@@ -756,7 +874,6 @@ reduced given the specified equations (if any). In order to reduce the
 term it may be necessary to parse the equations of various modules and
 to initialize the evaluator with this set of equations.
 
-\newpage
 \section{Executing Specifications} 
 \label{ExecutingSpecifications}
 
@@ -773,11 +890,17 @@ displayed in a new term window.
 
 The rewriting process is further described in Section~\ref{Equations}.
 
-\newpage
 \section{Guided Tour} \label{GuidedTour}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=meta-booleans.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-booleans.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
 \end{figure}
 
@@ -843,7 +966,14 @@ shown in Figure~\ref{FIG:meta-Bool-example}.
 \end{itemize}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=meta-Bool-example.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-Bool-example.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:meta-Bool-example}Main window after opening {\tt Bool-example}}
 \end{figure}
 
@@ -897,12 +1027,26 @@ For an explanation of the \asfsdf\ features used in this specification we
 refer to Section~\ref{ASF+SDF}.
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Bool-example.sdf2.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Bool-example.sdf}Editor for the syntax of {\tt Bool-example}}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=Bool-example.asf.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Bool-example.asf.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Bool-example.asf}Editor for the equations of {\tt Bool-example}}
 \end{figure}
 
@@ -934,22 +1078,50 @@ The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=Bool-example.trm.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Bool-example.trm.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Bool-example.trm}Term editor for {\tt Bool-example} after entering `{\tt true \& false}'}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=Bool-example.trm2.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Bool-example.trm2.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Bool-example.trm2} Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parse}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=Bool-example.trm3.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Bool-example.trm3.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Bool-example.trm3}Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 \end{figure}
 
 \begin{figure}
+\begin{iftex}
   \centerline{\epsfig{file=reduct.out.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{reduct.out.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:reduct.out}New term editor with normal form of `{\tt true \& false}'}
 \end{figure}
 
@@ -1171,7 +1343,14 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 
 \begin{figure}
 
+\begin{iftex}
   \centerline{\epsfig{file=meta-Pico-syntax.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{meta-Pico-syntax.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Pico-syntax} Main window after opening {\tt Pico-syntax}}
 
 \end{figure}
@@ -1184,7 +1363,14 @@ Pico specification.
 
 \begin{figure}[t]
 
+\begin{iftex}
   \centerline{\epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Pico-Booleans.sdf2.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Pico-Booleans-sdf}Editor for syntax of {\tt Pico-Booleans}}
 
 \end{figure}
@@ -1192,7 +1378,14 @@ Pico specification.
 
 \begin{figure}
 
+\begin{iftex}
   \centerline{\epsfig{file=Pico-Booleans.asf.ps,width=12cm}}
+\end{iftex}
+\begin{ifhtml}
+\begin{center}
+  \htmlimage{Pico-Booleans.asf.gif}
+\end{center}
+\end{ifhtml}
   \caption{\label{FIG:Pico-Booleans-eqs}Editor for equations of {\tt Pico-Booleans}}
 
 \end{figure}
@@ -1460,7 +1653,6 @@ statements means updating the value-environment.
 The rest of the equations deal with the evaluation of expressions. Evaluating
 an expression results in a value.
 
-\newpage
 \section{An Introduction to \asfsdf} \label{ASF+SDF}
 
 \asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
@@ -1561,7 +1753,8 @@ of the grammars:
 \noindent Each of these entities and properties
 will now be described and illustrated by examples.
 
-\subsection{\sdf\ comment convention} \label{SdfComment}
+\subsection{\sdf\ comment convention} 
+\label{SdfComment}
 
 The comment convention within an \sdf\ specification is that character
 between {\tt "\%\%"} and the end of line is comment as well as every
@@ -1571,7 +1764,7 @@ defining layout can be found in Section~\ref{Restrictions}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Layout
 
 %% In this module we define the comment convention for Sdf.
@@ -1580,7 +1773,7 @@ exports
   lexical syntax
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\sdf\ comment}\label{CODE:sdfcomment}
 \end{figure}   
@@ -1595,11 +1788,9 @@ imports
   <ModuleName>+
 \end{verbatim}
 
-\begin{sloppypar}
 \noindent Modules can be combined by importing one module in another. 
 Imports can occur as {\tt <ImportSection>} at the topmost level of a module
 or they can occur within an exports or hiddens section.
-\end{sloppypar}
 
 When importing modules at the topmost level of a module or when the import
 section occurs within the scope of an exports keyword, all exported entities
@@ -1845,7 +2036,7 @@ education) recognizes the single string {\tt aapnootmies}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module LeesPlank
 
 imports Layout
@@ -1857,7 +2048,7 @@ exports
     "noot"        -> Noot
     "mies"        -> Mies
     Aap Noot Mies -> LeesPlank  
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Simple lexical functions}\label{CODE:simplelex}
 \end{figure}   
@@ -1901,7 +2092,7 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module LettersDigits1
 
 imports Layout
@@ -1913,14 +2104,14 @@ exports
     [A-Z]    -> UCLetter
     [a-zA-Z] -> Letter
     [0-9]    -> Digit
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
 \end{figure}   
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module LettersDigits2
 
 imports Layout
@@ -1931,7 +2122,7 @@ exports
     [a-z]    -> LetterOrDigit
     [A-Z]    -> LetterOrDigit
     [0-9]    -> LetterOrDigit
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit}\label{CODE:LettersDigits2}
 \end{figure}   
@@ -1986,13 +2177,13 @@ left-associative binary operators.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module LettersDigits3
 exports
   sorts LetterOrDigit
   lexical syntax
     [a-z] \/ [A-Z] \/ [0-9]   -> LetterOrDigit
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit using the alternative operator}\label{CODE:LettersDigits3}
 \end{figure}
@@ -2008,7 +2199,7 @@ or via their decimal representation.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Characters
 
 imports Layout
@@ -2027,14 +2218,14 @@ exports
 
     ~[\0-\31\"\\] \/ [\t\n]  -> L-Char
     EscChar                  -> L-Char
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Example of character classes}\label{CODE:charclasses}
 \end{figure}  
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-repetition
 
 imports Layout
@@ -2046,7 +2237,7 @@ exports
     [a-z0-9]    -> DigitLetter
 
     Letter DigitLetter* -> Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
 \end{figure}   
@@ -2073,7 +2264,7 @@ digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\t
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-optional
 
 imports Layout
@@ -2085,7 +2276,7 @@ exports
     [0-9]  -> Digit
 
     Letter Digit? -> Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Defining a letter followed by an optional number using the option operator {\tt ?} }\label{CODE:option}
 \end{figure}   
@@ -2135,7 +2326,7 @@ uppercase letters or digits. According to this definition {\tt MiES}, {\tt
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-alternative1
 
 imports Layout
@@ -2148,7 +2339,7 @@ exports
     [0-9]   -> Digit
 
   UCLetter LCLetter* | UCLetter* | Digit* -> Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
 \end{figure}   
@@ -2160,7 +2351,7 @@ explicit.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-alternative2
 
 imports Layout
@@ -2173,7 +2364,7 @@ exports
     [0-9]   -> Digit
 
     (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -> Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative2}
 \end{figure}   
@@ -2200,7 +2391,7 @@ UnsignedReal}.
 
 \begin{figure}[t]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Numbers
 
 imports Layout
@@ -2217,7 +2408,7 @@ exports
     UnsignedInt [eE] SignedInt                    -> UnsignedReal
 
     UnsignedInt | UnsignedReal                    -> Number
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of Numbers}\label{CODE:numbers}
 \end{figure}   
@@ -2238,7 +2429,7 @@ double quotes.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Strings
 
 imports Layout
@@ -2250,7 +2441,7 @@ exports
     ~[\"\n]*              -> StringChar
     [\\][\"]              -> StringChar
     "\"" StringChar* "\"" -> String
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of String}\label{CODE:string}
 \end{figure}   
@@ -2283,7 +2474,7 @@ Figure \ref{CODE:simple-cf}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module DrawingCommands
 
 imports Layout
@@ -2298,7 +2489,7 @@ exports
     "(" NAT "," NAT ")" -> COORD
     "line" "to" COORD   -> CMND 
     "move" "to" COORD   -> CMND
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Simple context-free syntax definition}\label{CODE:simple-cf}
 \end{figure}   
@@ -2310,10 +2501,10 @@ of the grammar of Figure~\ref{CODE:simple-cf} is presented in Figure
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
 <CMND>  ::= "line" "to" <COORD> | "move" "to" <COORD>
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{BNF definition of simple grammar}\label{CODE:simple-bnf}
 \end{figure}   
@@ -2341,7 +2532,7 @@ in a Pascal-like language).
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Decls
 
 imports Layout
@@ -2356,7 +2547,7 @@ exports
     "decl" {ID ","}+ ":" TYPE -> DECL
     "integer"                 -> TYPE 
     "real"                    -> TYPE
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Definition of a list of identifiers}\label{CODE:pascal-ids}
 \end{figure}
@@ -2393,7 +2584,7 @@ are injected in {\tt EXP}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Exp
 
 imports Layout
@@ -2409,7 +2600,7 @@ exports
     NAT                 -> EXP
     VAR                 -> EXP
     EXP "+" EXP         -> EXP
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Definition of expressions that uses injections}\label{CODE:inj-exp}
 \end{figure}
@@ -2430,7 +2621,7 @@ by commas.
 
 \begin{figure}[t]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Lists
 
 imports Layout
@@ -2444,7 +2635,7 @@ exports
   context-free syntax
     {NAT ","}+   -> LIST1
     (LIST ",")+  -> LIST2
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Definition of two list variants}\label{CODE:lists-usage}
 \end{figure}
@@ -2462,7 +2653,7 @@ priority definitions.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Bool
 
 imports Layout
@@ -2478,7 +2669,7 @@ exports
 
     true | false            -> Bool2
     Bool2 ("|" | "&") Bool2 -> Bool2 {left}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Two ways of defining {\tt |} and {\tt \&}}\label{CODE:alternative-alternatives}
 \end{figure}
@@ -2492,7 +2683,7 @@ of such a specification.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}   
+\begin{verbatim}   
 module Cycle
 
 imports Layout
@@ -2504,7 +2695,7 @@ exports
     "a"        -> A
     A?         -> P
     "[" P+ "]" -> T
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Dangerous combination of lists and
 optionals}\label{CODE:listcycle}
@@ -2613,7 +2804,7 @@ functions are declared for the argument and result sorts of
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module BracketExpr
 
 imports Layout
@@ -2626,7 +2817,7 @@ exports
 
   context-free syntax
     "(" EXPR ")" -> EXPR {bracket}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Syntax definition with a bracket function}\label{CODE:bracket-expr}
 \end{figure}
@@ -2684,7 +2875,7 @@ associativities.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module SimpleExpr
 
 imports Layout
@@ -2703,7 +2894,7 @@ exports
   context-free priorities
     E "*" E -> E > 
     E "+" E -> E
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Simple context-free priority definition}\label{CODE:simple-prio}
 \end{figure}   
@@ -2729,7 +2920,7 @@ associativity.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module ComplexExpr
 
 imports Layout
@@ -2754,7 +2945,7 @@ exports
                 E "/" E -> E} >
     {left: E "+" E -> E
            E "-" E -> E}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{More complex associativity and priority definitions}\label{CODE:complex-prio}
 \end{figure}   
@@ -2827,7 +3018,7 @@ followed by a letter.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Functional
 
 imports Layout
@@ -2846,7 +3037,7 @@ exports
 
   context-free restrictions
     Var -/- [a-z]
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using restrictions in the definition of a simple functional language}\label{CODE:functional}
 \end{figure}   
@@ -2863,7 +3054,7 @@ optional layout is followed by layout characters.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Layout
 
 exports
@@ -2872,7 +3063,7 @@ exports
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n]
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
 \end{figure}
@@ -2886,7 +3077,7 @@ redundant and could be eliminated.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Comment
 
 imports Layout
@@ -2903,7 +3094,7 @@ exports
   context-free restrictions
     LAYOUT? -/- [\ \t\n]
     LAYOUT? -/- [\/].[\*]
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Definition of C comments}\label{CODE:c-comment}
 \end{figure}
@@ -2919,7 +3110,7 @@ lexical {\tt Var} is injected in the context-free {\tt Var}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module RestrictedExpressions
 
 imports Layout
@@ -2936,7 +3127,7 @@ exports
 
   context-free restrictions
     Expr -/- [a-z]
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Erroneous use of restrictions in the definition of simple expressions}\label{CODE:restrictedexpressions}
 \end{figure}   
@@ -3004,7 +3195,7 @@ for the sort {\tt Id}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-restrict
 
 imports Layout
@@ -3016,7 +3207,7 @@ exports
 
   context-free restrictions
     Id -/- [a-zA-Z0-9]  
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using context-free restrictions to define a longest match for identifiers}\label{CODE:restrict-id}
 \end{figure}   
@@ -3046,7 +3237,7 @@ the addition of a new reject rule for that literal.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-reject
 
 imports Layout
@@ -3060,7 +3251,7 @@ exports
 
   context-free syntax
     "begin" -> Id {reject}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using {\tt reject} to implement Prefer Literals}\label{CODE:reject-id}
 \end{figure}   
@@ -3078,7 +3269,7 @@ than the second one.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Identifiers-avoid
 
 imports Layout
@@ -3089,7 +3280,7 @@ exports
 
   context-free restrictions
     Id -/- [a-zA-Z0-9]  
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using {\tt avoid} to implement Prefer Literals}\label{CODE:avoid-id}
 \end{figure}   
@@ -3185,7 +3376,7 @@ is prefered.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Eqn
 
 imports Layout
@@ -3199,14 +3390,14 @@ exports
     E "sub" E "sup" E -> E {prefer}
     "{" E "}"         -> E {bracket}
     "a"               -> E 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
 \end{figure}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module DanglingElse
 
 imports Layout
@@ -3219,7 +3410,7 @@ exports
     "if" E "then" S          -> S
     "if" E "then" S "else" S -> S {avoid}
     "s"                      -> S
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of conditionals}\label{CODE:dangling-else}
 \end{figure}
@@ -3261,7 +3452,7 @@ should {\em always} be quoted.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module VarDecls
 
 imports Layout
@@ -3283,7 +3474,7 @@ hiddens
     "Type"[0-9]*   -> TYPE 
     "Id-list"[\']* -> {ID ","}* 
     "Id-ne-list"   -> {ID ","}+
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Variable declarations using naming schemes}\label{CODE:variables}
 \end{figure}         
@@ -3303,7 +3494,7 @@ Figure~\ref{CODE:set-variable} for an example.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Set
 
 imports Layout
@@ -3322,7 +3513,7 @@ hiddens
     "Id"[0-9]*     -> Id
     "Id*"[0-9]*    -> {Id ","}* 
     "IdSet"[0-9]*  -> IdSet
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Variable declarations for Set}\label{CODE:set-variable}
 \end{figure}         
@@ -3430,7 +3621,7 @@ or in the right-hand side of the conclusion.
 
 \begin{figure}[t]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Split
 
 imports Integers
@@ -3462,7 +3653,7 @@ equations
   [s-1] length(El*1) = length(El*2)
         ===========================
         split-in-two(El*1, El, El*2) = El*1 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Split-in-two specification}\label{CODE:split}
 \end{figure}  
@@ -3511,7 +3702,7 @@ from a set.
 
 \begin{figure}[tb]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Sets
 
 imports Layout
@@ -3533,7 +3724,7 @@ hiddens
 equations
   
   [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Set specification}\label{CODE:sets}
 \end{figure}   
@@ -3570,7 +3761,7 @@ as result.
 
 \begin{figure}[tb]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Nats
 
 imports Layout
@@ -3587,7 +3778,7 @@ hiddens
 equations
 
   [1] nat-con("0" Char+) = nat-con(Char+)  
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Use of lexical constructor functions}\label{CODE:lcfs}
 \end{figure}    
@@ -3626,7 +3817,7 @@ Figure \ref{CODE:types} shows an example of the use of a default equation.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Types
 
 imports Booleans
@@ -3650,7 +3841,7 @@ equations
   [Type-2]  compatible(string, string) = true
 
   [default-Type] compatible(Type1,Type2) = false
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using a default equation}\label{CODE:types}
 \end{figure}   
@@ -3685,7 +3876,6 @@ fib(17)          & \ 3.5 & 1.1  \\ \hline
 fib(18)          & \ 5.9 & 1.8  \\ \hline
 fib(19)          &  10.4 & 3.3  \\ \hline
 \end{tabular}
-\vspace{\baselineskip}
 \caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
 \label{TABLE:fibn}
 \end{center}
@@ -3694,7 +3884,7 @@ fib(19)          &  10.4 & 3.3  \\ \hline
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Fib
 
 imports Layout
@@ -3723,7 +3913,7 @@ equations
   [fib-o] fib(s(0)) = s(0)
   [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))
 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Using the memo attribute when defining Fibonacci}\label{CODE:fib}
 \end{figure}   
@@ -3742,7 +3932,7 @@ equations
 %%
 %%\begin{figure}
 %%\begin{IncCode}
-%%\begin{boxedverbatim}
+%%\begin{verbatim}
 %%module Conditional
 %%
 %%imports Layout Expr Booleans
@@ -3760,7 +3950,7 @@ equations
 %%
 %%  [if-t] if true then Expr1 else Expr2 fi = Expr1
 %%  [if-f] if false then Expr1 else Expr2 fi = Expr2
-%%\end{boxedverbatim}
+%%\end{verbatim}
 %%\end{IncCode}
 %%\caption{Equations for conditions}\label{CODE:conditional}
 %%\end{figure}   
@@ -3796,7 +3986,7 @@ will traverse its first argument. Possible extra arguments may contain
 additional data that can be used (but not modified) during the traversal.
 A transformer is declared as follows:
 
-\transformerprod{n} \{{\tt \traversal(\trafo)}\}
+\[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo)\}}\]
 
 Because a transformer always returns the same sort, it is type-safe. A
 transformer is used to transform a tree\footnote{The additions {\tt trafo}
@@ -3807,7 +3997,7 @@ will only see the attribute {\tt traversal}}.
 It will traverse its first argument, while the second
 argument keeps the accumulated value. An accumulator is declared as follows:
 
-\accumulatorprod{n} \{{\tt \traversal(\accu)}\}
+\[f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt \{traversal(accu)\}}\] 
 
 After each application of an accumulator, the accumulated argument is updated.
 The next application of the accumulator, possibly somewhere else in the term,
@@ -3829,7 +4019,7 @@ an accumulating transformer is a tuple consisting of the transformed
 first argument and accumulated value. An accumulating transformer
 is declared as follows:
 
-\combinationprod{n}  \{{\tt \traversal(\accutrafo)}\}
+\[f(S_1 , S_2 , ..., S_n) \rightarrow S_1 \# S_2 \mbox{\{{\tt traversal(accutrafo)}\}}\]
 
 An accumulating transformer is used to simultaneously extract information from a
 tree and transform it.
@@ -3843,13 +4033,13 @@ type of traversal:
 \begin{description}
 \item[Bottom-up:] the traversal visits \emph{all} the subtrees of a node where
   the visiting function applies in an \emph{bottom-up}\ fashion.  The
-  annotation \innerm\ selects this behavior.  A traversal function without an
+  annotation {\tt bottom-up} selects this behavior.  A traversal function without an
   explicit indication of a visiting strategy also uses the bottom-up strategy.
   
 \item[Top-down:] the traversal visits the subtrees of a node in an top-down
   fashion and stops recurring at the first node where the visiting function
   applies and does not visit the subtrees of that node. The annotation
-  \outerm\ selects this behavior.
+  {\tt top-down} selects this behavior.
 \end{description}
 
 We give two simple examples of traversal functions that are both
@@ -3882,7 +4072,7 @@ may yield undesired, and hard to resolve syntactic ambiguities.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Tree-syntax
 imports Naturals
 exports
@@ -3892,14 +4082,14 @@ exports
     f(TREE, TREE) -> TREE
     g(TREE, TREE) -> TREE
     h(TREE, TREE) -> TREE
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{A simple tree language}\label{FIG:tree-language}
 \end{figure}     
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Tree-inc
 imports Tree-syntax
 exports
@@ -3907,14 +4097,14 @@ exports
     inc(TREE) -> TREE {traversal}
 equations
 [1] inc(N) = N + 1  
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{The transformer {\tt inc} increments all numbers in a tree} \label{FIG:inc}
 \end{figure}  
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Tree-sum
 imports Tree-syntax
 exports
@@ -3922,7 +4112,7 @@ contextfreesyntax
    sum(TREE, NAT) -> NAT {traversal}
 equations
 [1] sum(N1, N2) = N1 + N2
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{The accumulator {\tt sum} that sums all numbers in a tree.}\label{FIG:sum} 
 \end{figure}   
@@ -3931,7 +4121,7 @@ equations
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module ItemSet
 
 imports Layout
@@ -3954,7 +4144,7 @@ equations
 
   [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
   [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Non-executable specification for sets}\label{CODE:itemsets}
 \end{figure}   
@@ -3988,13 +4178,12 @@ uninstantiated variables.
 
 \end{itemize}
 
-\newpage
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Diff 
 
 imports Layout
@@ -4031,7 +4220,7 @@ equations
   [ 6] E + 0 = E            [ 7] 0 + E = E 
   [ 8] E * 1 = E            [ 9] 1 * E = E 
   [10] 0 * E = 0            [11] E * 0 = 0
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for differentiation}\label{CODE:diff}
 \end{figure}   
@@ -4041,7 +4230,6 @@ Here are some examples of \asfsdf\ specifications, which are selected to
 illustrate specific features of the formalism. Larger examples can be found in
 the online specifications.
 
-\newpage
 \subsection{Symbolic Differentiation}
 
 Computing the derivative of an expression with respect to some variable is a
@@ -4062,7 +4250,7 @@ compute constant expressions.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Flag
 
 imports Layout
@@ -4088,13 +4276,12 @@ equations
   [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
 
   [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for sorting}\label{CODE:flag}
 \end{figure} 
 
 
-\newpage
 \subsection{Sorting}
 
 The use of list structures is illustrated by the specification of
@@ -4113,21 +4300,21 @@ the wrong order.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module BasicNotions 
 exports
   sorts Nat Id 
   lexical syntax
     [0-9]+         -> Nat 
     [a-z][a-z0-9]* -> Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
 \end{figure}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Expressions 
 
 imports BasicNotions
@@ -4144,14 +4331,14 @@ exports
   context-free priorities
     Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
                                 Exp "-" Exp -> Exp}
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Expressions}\label{CODE:expressions}
 \end{figure}
 
 \begin{figure}[tb]
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module Statements 
 
 imports Expressions 
@@ -4163,14 +4350,14 @@ exports
     "if" Exp "then" Stats "fi"  -> Stat 
     "while" Exp "do" Stats "od" -> Stat
     {Stat ";"}+                 -> Stats 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Statements}\label{CODE:statements}
 \end{figure}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module AssemblyLanguage
 
 imports BasicNotions 
@@ -4191,14 +4378,14 @@ exports
     "gotrue" Label  -> Instr 
     "gofalse" Label -> Instr
     {Instr ";"}+    -> Instrs 
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
 \end{figure}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module NextLabel
   
 imports AssemblyLanguage
@@ -4214,14 +4401,14 @@ hiddens
 equations
 
  [1] nextlabel(label(Char*)) = label(Char* "x")
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for NextLabel}\label{CODE:nextlabel}
 \end{figure}
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module CodeGenerator
 
 imports Statements AssemblyLanguage NextLabel 
@@ -4247,7 +4434,7 @@ hiddens
     "Nat"[0-9\']*        -> Nat 
     "Stat"[0-9\']*       -> Stat
     "Stat+"[0-9\']*      -> {Stat ";"}+
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for
 CodeGenerator}\label{CODE:codegenerator.sdf}
@@ -4256,7 +4443,7 @@ CodeGenerator}\label{CODE:codegenerator.sdf}
     
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 equations 
 
 [1] tr(Stat-list, x) = <Instr-list, Label>
@@ -4299,13 +4486,12 @@ equations
 
 [9] tr(Nat) = push Nat 
 [10] tr(Id) = rvalue Id
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for
 CodeGenerator}\label{CODE:codegenerator.asf}
 \end{figure}
 
-\newpage
 \subsection{Code Generation}
 
 Consider a simple statement language (with assignment, if-statement and
@@ -4415,7 +4601,6 @@ describing financial products.
 
 \end{itemize}
 
-\newpage
 \section{Compiling Specifications}
 \label{compiling-specs}
 
@@ -4465,7 +4650,7 @@ equations, see Figure~\ref{CODE:reshuffled-module}.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 module AUX-Booleans2
 exports               
   context-free syntax
@@ -4473,7 +4658,7 @@ exports
 equations
   [B1]   true | Bool   = true
   [B2]   false | Bool  = Bool
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Module generated after reshuffling}\label{CODE:reshuffled-module}
 \end{figure}
@@ -4489,7 +4674,7 @@ generated function can be used by other functions.
 
 \begin{figure}
 \begin{IncCode}
-\begin{boxedverbatim}
+\begin{verbatim}
 ATerm lf_AUX_Booleans2_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_Booleans2_1sym , 
 ATmakeAppl ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
@@ -4497,13 +4682,12 @@ if ( check_sym ( arg0 , ef1sym ) ) { FUNC_EXIT ( arg1 ) ; }
 if ( check_sym ( arg0 , ef2sym ) ) { FUNC_EXIT ( arg0 ) ; }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
 }                       
-\end{boxedverbatim}
+\end{verbatim}
 \end{IncCode}
 \caption{Generated C code for the reshuffled module of
 Figure~\ref{CODE:reshuffled-module}}\label{CODE:generated-c-code}
 \end{figure}
 
-\newpage
 \section{Technology and Architecture of the \ASmetaenv}\label{SEC:TechnologyandArchitecture}
 
 So far, we have explained the functionality of the \ASmetaenv\ as an
@@ -4572,11 +4756,11 @@ use of memory during normalization of terms.
 
 \subsection{Architecture}
 
-\begin{figure}
-\centerline{\psfig{file=newarch.eps,width=8cm}}
-\caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
-\vspace{-1.0\baselineskip}                  
-\end{figure}
+%\begin{figure}
+%\psfig{file=newarch.eps,width=8cm}}
+%\caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
+%\vspace{-1.0\baselineskip}                  
+%\end{figure}
 
 The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
 It consists of a ToolBus that interconnects the following components:
@@ -4601,7 +4785,6 @@ modules, parse tables, user-defined terms, etc.
 \item {\bf Unparser generator}: generates prettyprinters.
 \end{itemize}
 
-\newpage
 \section{Selected Components of the \ASmetaenv}\label{SEC:Components}
 
 Now we will describe a selection of components that are useful for
@@ -4783,7 +4966,6 @@ with result sort {\tt <sort>} defined in module {\tt <modulename>} to a term
 In order to actually \emph{apply} {\tt <name>}, the term {\tt out} has to
 be reduced by {\tt asfe}.
 
-\newpage 
 \section{Examples of Stand-alone Tools}
 
 \subsection{A Stand-alone Boolean Tool}
@@ -4865,7 +5047,6 @@ steps are as follows:
 \end{itemize}
 
 
-\newpage
 \section{Future Developments}
 The \ASmetaenv\ is a system that is continuously evolving.  In this
 section, we give a brief sketch of the developments that we expect in
@@ -4935,7 +5116,6 @@ application areas. Emphasis will be on:
 
 \end{itemize}
 
-\newpage
 \bibliographystyle{plain}
 \bibliography{manual} 
 
