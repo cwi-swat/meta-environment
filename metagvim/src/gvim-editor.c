@@ -32,6 +32,8 @@ static int vim_fd = -1;
 static int tb_fd = -1;
 static char filename[BUFSIZ] = { 0 };
 
+static char parseMenuName[BUFSIZ];
+
 /*}}}  */
 
 /*{{{  static void sendToVimVerbatim(const char *cmd) */
@@ -60,6 +62,7 @@ static void sendToVim(const char *cmd)
 static void makeVimMenuItem(const char *menu, const char *item)
 {
   char buf[BUFSIZ];
+
   sprintf(buf, ":call AddMetaMenu(tb_pipe, \"%s\", \"%s\")", menu, item);
   sendToVim(buf);
 }
@@ -94,6 +97,10 @@ static void handleVimInput(const char *cmd)
     p++;
     if (strcmp(p, "modified") == 0) {
       event = ATmake("modified(<str>)", fid);
+    }
+    else if (strcmp(p, "parse") == 0) {
+      event = ATmake("menu-event(<str>,<str>,<str>)",
+		     parseMenuName, "Parse", fid);
     }
     else {
       ATwarning("unrecognized input: [%s]\n", p);
@@ -159,6 +166,14 @@ void tb_set_focus(int conn, char *fid, char *s, int start, int len)
 }
 
 /*}}}  */
+/*{{{  void tb_set_focus_unchanged(int conn, char *fid, char *s, int start, int len) */
+
+void tb_set_focus_unchanged(int conn, char *fid, char *s, int start, int len)
+{
+  ATwarning("tb_set_focus_unchanged not yet implemented in gvim-adapter!\n");
+}
+
+/*}}}  */
 /*{{{  ATerm tb_get_focus_text(int conn, char *fid, int start, int len) */
 
 ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
@@ -202,7 +217,8 @@ ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
   }
 
   if (contents == NULL) {
-    ATerror("Unable to get focus text (%s, %d, %d)\n", fid, start, len);
+    ATwarning("meta-gvim: No focus text available, winging it so we don't crash.\n");
+    contents = strdup("");
   }
 
   /*fprintf(stderr, "focus-text(%d,%d) = [%s]\n", start, len, contents);*/
@@ -217,6 +233,10 @@ void tb_add_menu_item(int conn, char *menu, char *item)
 {
   /*ATwarning("tb_add_menu_item: menu=%s, item=%s\n", menu, item);*/
   makeVimMenuItem(menu, item);
+
+  if (strcmp(item, "Parse") == 0) {
+    strcpy(parseMenuName, menu);
+  }
 }
 
 /*}}}  */

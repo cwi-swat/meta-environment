@@ -1,5 +1,21 @@
 # $Id$
 
+Fri Jan 17 11:12:35 CET 2003 <jong@cwi.nl>
+ * version 0.4
+ * fix "Parse" submenu-item is no longer always in a well-known place,
+   sometimes it's "Meta-Environment|Parse", sometimes "Term-Actions|Parse":
+   Solution for now (hack): check all incoming menu-items and remember
+   the menu-item that introduces the "Parse" submenu-item. This makes
+   hitting "ctrl-p" to parse the current file transparent for end-users
+   again.
+ * add more robust implementation of tb_get_focus_text:
+   When parsing (e.g.) empty equations, it is more useful to just report
+   that the file is empty, rather than ATerror() with the complaint that
+   gvim was "unable to get focus text". Wing it by sending "" as contents.
+ * add "not-yet-implemented" version of "tb-set-focus-unchanged" interface:
+   This appears to be needed only in the emacs-implementation of the
+   text-editor interface?
+
 Fri Jun  7 14:09:11 CEST 2002 <jong@cwi.nl>
  * version 0.3
  * add "reload_file" support
