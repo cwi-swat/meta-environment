@@ -48,7 +48,7 @@
 
 static char  buffer[_POSIX_PATH_MAX];
 
-static void metaPathsPrint( meta_paths* mp );
+/*static void metaPathsPrint( meta_paths* mp );*/
 
 /*
  * basename = ~[/]*
@@ -169,6 +169,7 @@ void metaPathsClose( meta_paths* mp )
    mp->nr_entries = 0;
 }
 
+#if 0
 /*
  * Print entries in meta.conf_paths. For debugging purposes only
  */
@@ -180,6 +181,7 @@ static void metaPathsPrint( meta_paths* mp )
       printf( "%d \"%s\"\n", i, mp->meta_entries[i] );
    }
 }
+#endif
 
 /*
  * Locate a file/dir using entries in meta.conf_paths file
