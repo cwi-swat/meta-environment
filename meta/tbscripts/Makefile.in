@@ -81,7 +81,7 @@ all: meta.tifs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 meta.tifs: $(LIBFILES)
-	$(TOOLBUS)/bin/toolbus -I$(top_srcdir)/module-db -gentifs meta.tb
+	$(TOOLBUS)/bin/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -gentifs meta.tb
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
