@@ -22,6 +22,11 @@ myversion=`echo $Revision| cut -d' ' -f2`
 verbose=0
 xargs=""
 
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="bc:dhi:o:tT:vV"
+
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
