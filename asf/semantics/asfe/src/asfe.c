@@ -1547,8 +1547,16 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
   PT_Tree reduct = FAIL;
 
   if (PT_hasTreeArgs(trm)) {
-    PT_Tree travtrm, reduct_args;
+    PT_Tree travtrm, reduct_args, reduct_args_tmp;
     reduct_args = rewriteArgs(trm, env, depth, traversal);
+
+    if (reduct_args != FAIL) {
+      reduct_args_tmp = rewriteTop(reduct_args, env, depth, NO_TRAVERSAL);
+
+      if (reduct_args_tmp != FAIL) {
+	reduct_args = reduct_args_tmp;
+      }
+    }
 
     if ((traversal->continuation == BREAK && reduct_args == FAIL) ||
 	traversal->continuation == CONTINUE) {
@@ -1561,7 +1569,6 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
     if (reduct == FAIL) {
       reduct = reduct_args;
     }
-
   }
 
   return reduct;
