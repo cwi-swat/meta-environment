@@ -1812,6 +1812,25 @@ exports
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Example of character classes}\label{CODE:charclasses}
+\end{figure}  
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Identifiers-repetition
+
+imports Layout
+
+exports
+  sorts Let NumLet
+  lexical syntax
+    [a-z]       -> Let
+    [a-z0-9]    -> NumLet
+
+    Let NumLet* -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
 \end{figure}   
 
 \subsubsection{Repetition Operators}
@@ -1834,24 +1853,6 @@ purpose:
 operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
 
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Identifiers-repetition
-
-imports Layout
-
-exports
-  sorts Let NumLet
-  lexical syntax
-    [a-z]       -> Let
-    [a-z0-9]    -> NumLet
-
-    Let NumLet* -> Id
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
-\end{figure}   
 
 \subsubsection{The Option Operator}
 
@@ -1860,7 +1861,7 @@ postfix operator {\tt ?} is available. It indicates that there
 should be zero or one occurence of the sort, literal or
 character class preceding the {\tt ?}. 
 
-Figure \ref{CODE:option} shows the use of the optionoperator.
+Figure \ref{CODE:option} shows the use of the option operator.
 
 \begin{figure}[tb]
 \begin{IncCode}
