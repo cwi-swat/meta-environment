@@ -31,7 +31,7 @@ public class ATermIntImpl extends ATermImpl
   public boolean equals(Object obj) 
   {
     if(obj instanceof ATermIntImpl)
-      return val == ((ATermIntImpl)obj).val && super.equals(obj);
+	return val == ((ATermIntImpl)obj).val && super.equals(obj);
     return false;
   }
 
@@ -52,7 +52,8 @@ public class ATermIntImpl extends ATermImpl
   }
 
   public int printSize() {
-    return super.printSize() + (""+val).length();
+   String tmp = new String(Integer.toString(val));
+    return super.printSize() + tmp.length();
   }
 
   public int size()		{ return 1 + super.size(); }
