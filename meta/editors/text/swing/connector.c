@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
   sprintf(command, COMMANDLINE, port, filename);
 
   ATwarning("command: [%s]\n", command);
-  retval = 0; /*system(command);*/
+  retval = system(command);
   if (retval == -1) {
     perror("system");
     exit(1);

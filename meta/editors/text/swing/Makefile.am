@@ -12,6 +12,7 @@ INCLUDES = \
 COMMONLIB = $(top_builddir)/editors/text/common/libTextEditor.a
 
 bin_PROGRAMS = swing-connector
+bin_SCRIPTS = swing-editor
 lib_LTLIBRARIES = lib_swing.la
 
 swing_connector_SOURCES = connector.c
