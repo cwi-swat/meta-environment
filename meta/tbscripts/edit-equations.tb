@@ -15,8 +15,7 @@ let
   ModifiedStatus : term,
   Killed         : term,
   Msgs           : list,
-  ButtonName     : str,
-  Stack          : list
+  ButtonName     : str
 in
   Text := "" .
   subscribe(syntax-changed(ModuleName)) . 
@@ -49,45 +48,11 @@ in
   Killed := false .
   (
     (
-      (
-	rec-note(syntax-changed(ModuleName)) .
+        rec-note(syntax-changed(ModuleName)) .
 	snd-msg(invalidate-tree(EditorId))
       + 
         rec-msg(extra-button-action(EditorId, ButtonName?)) .
-        snd-msg(extra-button-action(ButtonName, "Equations", EditorId))
-      +
-        rec-msg(get-focus, Stack?, EditorId) .
-        GetFocus(EditorId, RTree?) .
-        if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
-        else
-          snd-msg(error-stack, EditorId)
-        fi 
-      +
-        rec-msg(show-tree, Stack?, EditorId) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
-        ShowTree(STree) .
-        snd-msg(stack(Stack), EditorId)
-      +
-	rec-msg(parse-buffer, Stack?, EditorId) .
-	snd-msg(invalidate-tree(EditorId)).
-	snd-msg(parse-focusses(EditorId, eqs(ModuleName))) .
-	(
-	  rec-msg(parse-ok(eqs(ModuleName))) .
-	  snd-msg(get-tree(EditorId)) .
-          rec-msg(tree(Tree?)) .
-	  snd-msg(postprocess-semantics-hook(Tree)).
-	  rec-msg(postprocess-semantics-hook-result(Tree?)).
-          snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
-          rec-msg(eqs-updated) .
-          snd-msg(clear-focus(EditorId))
-	+
-	  rec-msg(parse-failed(eqs(ModuleName), ErrorFoci?))
-	) .
-        snd-msg(stack(Stack), EditorId)
-      )
+        snd-msg(extra-button-action(ButtonName, "Equations", ModuleName, EditorId))
     ) *
     if equal(Killed, true) then
       tau

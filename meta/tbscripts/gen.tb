@@ -40,59 +40,28 @@ let
   OutStr       : str,
   InStr        : str,
   FunSym       : str,
-  EditorId     : term,
-  Stack        : list,
+  Id           : term,
   STree        : term,
   RTree        : term
 in
   execute(genadapt, GENADAPT?) .
   execute(termgenadapt, TERMGENADAPT?) .
   (
-    rec-msg(activate(Action?), Stack?, EditorId?) .
+    rec-msg(gen-adapter-activate(Id?, Action?)).
     ADAPTER(GENADAPT, Action, "", OutStr?) .
-    if not-equal(OutStr, "") then
-      RTree := quote(str(OutStr)) .
-      Stack := join(RTree, Stack) .
-      snd-msg(stack(Stack), EditorId)
-    else
-      snd-msg(stack(Stack), EditorId)
-    fi
+    snd-msg(gen-adapter-result(Id, OutStr))
   +
-    rec-msg(activate-given-tree(Action?), Stack?, EditorId?) .
-    STree := first(Stack) .
-    Stack := next(Stack) .
-    FunSym := fun(STree) .
-    if not-equal(FunSym, "str") then
-      TERM-IN-ADAPTER(GENADAPT, Action, STree, OutStr?) .
-      if not-equal(OutStr, "") then
-        RTree := quote(str(OutStr)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
-      else
-        snd-msg(stack(Stack), EditorId)
-      fi
-    else
-      InStr := first(args(STree)) .
-      ADAPTER(GENADAPT, Action, InStr, OutStr?) .
-      if not-equal(OutStr, "") then
-        RTree := quote(str(OutStr)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
-      else
-        snd-msg(stack(Stack), EditorId)
-      fi
-    fi
+    rec-msg(gen-adapter-string-to-string-evaluate(Id?,Action?,InStr?)).
+    ADAPTER(GENADAPT, Action, InStr, OutStr?) .
+    snd-msg(gen-adapter-string-to-string-result(Id,OutStr))
   +
-    rec-msg(execute-action(Action?), Stack?, EditorId?) .
-    STree := first(Stack) .
-    Stack := next(Stack) .
+    rec-msg(gen-adapter-term-to-string-evaluate(Id?,Action?,STree?)).
+    TERM-IN-ADAPTER(GENADAPT, Action, STree, OutStr?) .
+    snd-msg(gen-adapter-term-to-string-result(Id,OutStr))
+  +
+    rec-msg(gen-adapter-term-evaluate(Id?,Action?,STree?)).
     TERM-IN-OUT-ADAPTER(TERMGENADAPT, Action, STree, RTree?) .
-    if not-equal(RTree, error-tree) then
-      Stack := join(RTree, Stack) .
-      snd-msg(stack(Stack), EditorId)
-    else
-      snd-msg(error-stack, EditorId)
-    fi
+    snd-msg(gen-adapter-term-result(Id,RTree))
   )*
   delta
 endlet
