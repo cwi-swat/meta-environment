@@ -145,7 +145,7 @@ PT_Tree ASC_transformTraversalFunction(PT_Tree tree)
   symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
   symbolVisitorData.symbol = PT_makeSymbolSort(GEN_TRAVERSED_SORT);
   symbols = PT_foreachSymbolInSymbols(symbols, replaceSymbol, 
-				  (PT_SymbolVisitorData*) &symbolVisitorData);
+				  (PT_SymbolVisitorData) &symbolVisitorData);
 
   prod = PT_setProductionLhs(prod, symbols);
 
