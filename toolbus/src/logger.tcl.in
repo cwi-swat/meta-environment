@@ -1,4 +1,4 @@
-#!/usr/local/bin/wish -f        			    -*- C -*-
+#! @WISH@ -f        			    -*- C -*-
 
 # User interface for ToolBus logger
 
