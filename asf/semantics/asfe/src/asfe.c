@@ -278,8 +278,11 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
  * Retrieve the value of a variable
  */
 
-PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
+PT_Tree getVariableValue(ATerm env, PT_Tree var)
 {
+  PT_Production prod = PT_getTreeProd(var);
+  PT_Symbol symbol = PT_getProductionRhs(prod);
+
   if (PT_isIterSepSymbol(symbol) || 
       PT_isIterSymbol(symbol)) {
     Slice slice = getListVariableValue(env, var);
@@ -298,7 +301,6 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
     while (!ATisEmpty(list)) {
       ATermAppl tuple = (ATermAppl) ATgetFirst(list);
       if (ATisEqual(ATgetArgument(tuple, 0), atVar)) {
-/*      assert(ATgetAFun(tuple) == plain_var);*/
         return PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
       }
 
@@ -560,36 +562,76 @@ static ATbool no_new_vars(PT_Tree trm, ATerm env)
 /*}}}  */
 
 /* Matching functionality */
+/*{{{  static ATerm varMatching(ATerm env, */
+
+static ATerm varMatching(ATerm env,
+			 PT_Tree var,
+			 PT_Tree arg2,
+			 ASF_ConditionList conds,
+			 PT_Args orgargs1, PT_Args orgargs2,
+			 ATerm lhs_posinfo, int depth)
+{
+  PT_Tree trm = getVariableValue(env, var);
+  ATerm newenv = fail_env;
+
+  if (trm != NULL) {
+    if (isAsFixEqual(arg2, trm)) {
+      newenv = argsMatching(env, conds, orgargs1, orgargs2,
+			  lhs_posinfo, depth);
+    }
+    else {
+      newenv = fail_env;
+    }
+  }
+  else {
+    newenv = putVariableValue(env, var, arg2);
+    newenv = argsMatching(newenv, conds, orgargs1, orgargs2, lhs_posinfo, 
+			  depth);
+  }
+
+  return newenv;
+}
+
+/*}}}  */
+/*{{{  static ATerm applMatching(ATerm env, */
+
+static ATerm applMatching(ATerm env,
+			 PT_Tree arg1,
+			 PT_Tree arg2,
+			 ASF_ConditionList conds,
+			 PT_Args orgargs1, PT_Args orgargs2,
+			 ATerm lhs_posinfo, int depth)
+{
+  PT_Production prod1 = PT_getTreeProd(arg1);
+  PT_Production prod2 = PT_getTreeProd(arg2);
+  ATerm newenv;
+
+  if (PT_isEqualProduction(prod1, prod2)) {
+    PT_Args args1 = PT_getTreeArgs(arg1);
+    PT_Args args2 = PT_getTreeArgs(arg2);
+
+    newenv = argsMatching(env, conds, 
+			  PT_concatArgs(args1, orgargs1),
+			  PT_concatArgs(args2, orgargs2),
+			  lhs_posinfo, depth);
+  }
+  else {
+    newenv = fail_env;
+  }
+
+  return newenv;
+}
+
+/*}}}  */
 /*{{{  static ATerm argMatching(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
 
-/* Function which tries to match two arguments.
-   First it is checked whether one of the arguments is a variable
-   and the other is not. If one is a variable it is checked
-   whether it is a fresh one. If the variable is in the environment
-   its value is retrieved and compared with the other argument.
-   If they are equal the matching can proceed otherwise the matching
-   must be aborted.  If the variable is a fresh one it is
-   stored in the variable environment
-   with the term of the other argument.
-
-   If both arguments are ``appls'' their arguments should match.
-
-   If both arguments are ``lists'' their elements shoudl match.
-
-   Otherwise the arguments should be equal. If the do not
-   match the matching should be aborted. */
-
-static ATerm
-argMatching(ATerm env, 
-            PT_Tree arg1, PT_Tree arg2,
-	    ASF_ConditionList conds,
-	    PT_Args orgargs1, PT_Args orgargs2,
-            ATerm lhs_posinfo, int depth)
+static ATerm argMatching(ATerm env, 
+			 PT_Tree arg1, PT_Tree arg2,
+			 ASF_ConditionList conds,
+			 PT_Args orgargs1, PT_Args orgargs2,
+			 ATerm lhs_posinfo, int depth)
 {
-  PT_Production prod1, prod2;
-  PT_Args args1, args2;
-  PT_Args elems1, elems2;
-  ATerm newenv = env;
+  ATerm newenv = fail_env;
 
   if (runVerbose) {
     ATwarning("%t:matching: %t\nwith\n%t\n\n",
@@ -597,89 +639,42 @@ argMatching(ATerm env,
               yieldTree(arg2));
   }
 
-  if (PT_isTreeAppl(arg1)) {
-    pedantic_assert(PT_isTreeAppl(arg2));
-    prod1 = PT_getTreeProd(arg1);
-
-    if (PT_isOptLayoutProd(prod1)) {
-      pedantic_assert(PT_isOptLayoutProd(PT_getTreeProd(arg2)));
-      return argsMatching(newenv, conds, orgargs1, orgargs2,
-			  lhs_posinfo, depth);
-    }
-
-    if (PT_isProductionList(prod1)) {
-      pedantic_assert(PT_isProductionList(PT_getTreeProd(arg2)));
-
-      elems1 = PT_getTreeArgs(arg1);
-      elems2 = PT_getTreeArgs(arg2);
-
-      return listMatching(newenv, prod1, elems1, elems2,
-			  conds, orgargs1, orgargs2, 
-			  lhs_posinfo, depth);
-    }
-
-    prod2 = PT_getTreeProd(arg2);
-    if (PT_isEqualProduction(prod1, prod2)) {
-      args1 = PT_getTreeArgs(arg1);
-      args2 = PT_getTreeArgs(arg2);
-
-      return (ATerm) argsMatching(newenv, conds, 
-                                  PT_concatArgs(args1, orgargs1),
-                                  PT_concatArgs(args2, orgargs2),
-                                  lhs_posinfo, depth);
-    }
-
-    if (PT_isVarDefault(prod1)) {
-      PT_Symbol rhs = PT_getProductionRhs(prod1);
-      PT_Tree trm = getVariableValue(newenv, arg1, rhs);
-      if (trm) {
-	if (isAsFixEqual(arg2, trm)) {
-	  return argsMatching(newenv, conds, orgargs1, orgargs2,
-			      lhs_posinfo, depth);
-	}
-	else {
-	  if (runVerbose) {
-	    ATwarning("*** fail_env on line %d\n", __LINE__);
-	  }
-	  return fail_env;
-	}
-      }
-      else {
-	newenv = putVariableValue(newenv, arg1, arg2);
-	return argsMatching(newenv, conds, orgargs1, orgargs2,
-			    lhs_posinfo, depth);
-      }
-    }
-
-    if (runVerbose) {
-      ATwarning("*** fail_env on line %d\n", __LINE__);
-    }
-    return fail_env;
-  }
-
+  /* equality check is cheap, so try this first */
   if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
 		     PT_removeTreeAnnotations(arg2))) {
-    return argsMatching(newenv, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+    newenv = argsMatching(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+  }
+  else if (PT_isTreeLayout(arg1)) {
+    newenv = argsMatching(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+  }
+  else if (PT_isTreeApplList(arg1)) {
+    PT_Args elems1 = PT_getTreeArgs(arg1);
+    PT_Args elems2 = PT_getTreeArgs(arg2);
+    PT_Production prod1 = PT_getTreeProd(arg1);
+
+    newenv = listMatching(env, prod1, elems1, elems2,
+			conds, orgargs1, orgargs2, 
+			lhs_posinfo, depth);
+  }
+  else if (PT_isTreeVar(arg1)) {
+    newenv = varMatching(env, arg1, arg2, conds, orgargs1, orgargs2,
+		       lhs_posinfo, depth);
+  }
+  else if (PT_isTreeAppl(arg1)) {
+    newenv = applMatching(env, arg1, arg2, conds, orgargs1, orgargs2,
+			lhs_posinfo, depth);
   }
 
-  if (runVerbose) {
-    ATwarning("*** fail_env on line %d\n", __LINE__);
-  }
-  return fail_env;
+  return newenv;
 }
 
 
 /*}}}  */
-/*{{{  static ATerm argsMatching(env, conds, args1, args2, lhs_posinfo, depth) */
+/*{{{  static ATerm argsMatching(ATerm env, ASF_ConditionList conds, */
 
-/* Two arguments lists are matched. As long as there are arguments
-   to be matched this is performed if both argument lists are empty
-   the conditions are inspected. 
-*/
-static ATerm
-argsMatching(ATerm env, ASF_ConditionList conds,
-             PT_Args args1, PT_Args args2, 
-             ATerm lhs_posinfo, int depth)
+static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
+			  PT_Args args1, PT_Args args2, 
+			  ATerm lhs_posinfo, int depth)
 {
   PT_Tree arg1, arg2;
   ATerm newenv = env;
@@ -690,47 +685,35 @@ argsMatching(ATerm env, ASF_ConditionList conds,
         yieldArgs(args2));
   }
 
+  assert(PT_getArgsLength(args1) == PT_getArgsLength(args2) &&
+	 "if prods are equal, then the number of arguments should be too");
+
   if (PT_hasArgsHead(args1)) {
     arg1 = PT_getArgsHead(args1);
     args1 = PT_getArgsTail(args1);
+    arg2 = PT_getArgsHead(args2);
+    args2 = PT_getArgsTail(args2);
 
-    if (PT_hasArgsHead(args2)) {
-      arg2 = PT_getArgsHead(args2);
-      args2 = PT_getArgsTail(args2);
-
-      newenv = argMatching(newenv, arg1, arg2, conds, 
-                           args1, args2,
-                           lhs_posinfo, depth);
-    }
-    else {
-      newenv = fail_env;
-      if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
+    newenv = argMatching(newenv, arg1, arg2, conds, args1, args2, 
+			 lhs_posinfo, depth);
   }
   else {
-    if (PT_hasArgsHead(args2)) {
-      newenv = fail_env;
-      if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
+    if (lhs_posinfo) {
+      TIDE_STEP(lhs_posinfo, newenv, depth);
     }
-    else {
-      if (lhs_posinfo) {
-	TIDE_STEP(lhs_posinfo, newenv, depth);
-      }
 
-      newenv = condsSatisfied(conds, newenv, depth);
-    }
+    newenv = condsSatisfied(conds, newenv, depth);
   }
 
   return newenv;
 }
 
+/*}}}  */
 
-static ATbool
-compareLists(Slice tuple, PT_Args list)
+/* List Matching functionality */
+/*{{{  static ATbool compareLists(Slice tuple, PT_Args list) */
+
+static ATbool compareLists(Slice tuple, PT_Args list)
 {
   PT_Args first, last;
 
@@ -758,7 +741,6 @@ compareLists(Slice tuple, PT_Args list)
 
   return PT_isArgsEmpty(list);
 }
-
 
 /*}}}  */
 /*{{{  static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
@@ -970,15 +952,17 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
 
 
 /*}}}  */
-/*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
+/*{{{  static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args)  */
 
-
-static PT_Args addElemsToArgs(PT_Production listProd,
-                              PT_Args elems, PT_Args args) 
+static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, 
+			      PT_Args args) 
 {
   PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
   return PT_makeArgsList(listArg, args);
 }
+
+/*}}}  */
+/*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
 
 static ATerm
 nextListElementMatching(ATerm env, PT_Tree elem1, 
@@ -1110,7 +1094,6 @@ listMatching(ATerm env, PT_Production listProd,
 
   if (PT_hasArgsHead(elems1)) {
     elem1 = PT_getArgsHead(elems1);
-
     elems1 = PT_getArgsTail(elems1);
 
     if (PT_isArgsEmpty(elems1)) { /* elems1 was a single element list */
@@ -1777,9 +1760,7 @@ static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
 
 static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) 
 {
-  PT_Production prod = PT_getTreeProd(var);
-  PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Tree value = getVariableValue(env, var, rhs);
+  PT_Tree value = getVariableValue(env, var);
 
   assert(value != NULL && "uninitialized variable");
 

@@ -234,7 +234,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   /*fprintf(stderr, "variable found: '%s' at %d,%d (diff_start=%d)\n",*/
 	  /*PT_yieldTree(var), line, col, diff_start);*/
 
-  value = getVariableValue(env, var, PT_getProductionRhs(PT_getTreeProd(var)));
+  value = getVariableValue(env, var);
 
   if (value == NULL) {
     yield = "<uninitialized>";

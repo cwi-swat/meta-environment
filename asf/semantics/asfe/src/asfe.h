@@ -29,7 +29,7 @@ extern ASF_Tag tagCurrentRule;
 extern AFun list_var, plain_var;
 
 /* variable environment interface */
-PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol);
+PT_Tree getVariableValue(ATerm env, PT_Tree var);
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 #define get_term(cenv)		(PT_makeTreeFromTerm(ATgetFirst(cenv)))
 #define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
