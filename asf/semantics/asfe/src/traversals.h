@@ -41,6 +41,8 @@ typedef struct Traversal_tag {
 #define TRAVERSED_ARG_POS    4 
 #define TRAVERSED_SYMBOL_POS 4
 
+#define NO_TRAVERSAL NULL
+
 #define selectTraversedArg(args) (selectTree(args, TRAVERSED_ARG_POS))
 #define selectAccumulatedArg(args) (selectTree(args, ACCUMULATED_ARG_POS))
 

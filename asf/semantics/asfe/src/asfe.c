@@ -94,7 +94,8 @@ static char error_buf[BUFSIZ];
 static ATbool aborted = ATfalse;
 
 /* innermost strategy */
-static PT_Tree rewrite(PT_Tree trm, ATerm env, int depth);
+static PT_Tree rewrite(PT_Tree trm);
+static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
 static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
 			  PT_Args args1, PT_Args args2, 
                           ATerm lhs_posinfo,
@@ -112,10 +113,6 @@ static Slice getListVariableValue(ATerm env, PT_Tree var);
 /* traversal strategy */
 static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
                           Traversal *traversal);
-static PT_Args rewriteArgsTraversal(PT_Args args, ATerm env, int depth,
-                                    Traversal *traversal);
-static PT_Args rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env,
-                                    int depth, Traversal *traversal);
 
 
 void
@@ -475,7 +472,7 @@ ATerm evaluator(char *name, ATerm term)
     ATwarning("rewriting...\n");
   }
 
-  result = rewrite(tree, (ATerm) ATempty, 0);
+  result = rewrite(tree);
 
   result = RWrestoreTerm(result);
   parseTree = PT_setParseTreeTree(parseTree, result);
@@ -1156,10 +1153,10 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
     if (ASF_isConditionPositive(cond)) {
       if (no_new_vars(lhs, newenv)) {
 	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
-	lhstrm = rewrite(lhs, newenv, depth + 1);
+	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
 	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewrite(rhs, newenv, depth + 1);
+	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
 	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
 	  if (isAsFixEqual(lhstrm, rhstrm)) {
 	    newenv = condsSatisfied(conds, newenv, depth);
@@ -1183,7 +1180,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
 	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewrite(rhs, newenv, depth + 1);
+	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
 	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
 	  newenv =
 	    argMatching(newenv, lhs, rhstrm, conds,
@@ -1212,9 +1209,9 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
       }
       else {
 	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
-	lhstrm = rewrite(lhs, newenv, depth + 1);
+	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
 	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
-	rhstrm = rewrite(rhs, newenv, depth + 1);
+	rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
 	TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
 	if (isAsFixEqual(lhstrm, rhstrm)) {
 	  newenv = fail_env;
@@ -1351,7 +1348,7 @@ selectAndRewrite(PT_Tree trm, int depth)
   env = get_env(complexenv);
   if (!is_fail_env(env)) {
     newtrm = get_term(complexenv);
-    trm = rewrite(newtrm, env, depth + 1);
+    trm = rewriteInnermost(newtrm, env, depth + 1, NO_TRAVERSAL);
   }
 
   return trm;
@@ -1363,7 +1360,7 @@ selectAndRewrite(PT_Tree trm, int depth)
    is constructed. */
 
 static PT_Args
-rewriteArgs(PT_Args args, ATerm env, int depth)
+rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traversal)
 {
   PT_Tree arg, newarg;
   PT_Args newargs = PT_makeArgsEmpty();
@@ -1376,7 +1373,7 @@ rewriteArgs(PT_Args args, ATerm env, int depth)
 	  PT_isTreeList(arg) || 
 	  PT_isTreeVar(arg) ||
           PT_isTreeLexical(arg)) {
-	newarg = rewrite(arg, env, depth + 1);
+	newarg = rewriteInnermost(arg, env, depth + 1, traversal);
       }
       else {
 	newarg = arg;
@@ -1394,7 +1391,7 @@ rewriteArgs(PT_Args args, ATerm env, int depth)
 	  PT_isTreeList(arg) || 
 	  PT_isTreeVar(arg) || 
           PT_isTreeLexical(arg)) {
-	newarg_table[i] = rewrite(arg, env, depth + 1);
+	newarg_table[i] = rewriteInnermost(arg, env, depth + 1, traversal);
       }
       else {
 	newarg_table[i] = arg;
@@ -1466,7 +1463,8 @@ appendElem(PT_Symbol listSymbol, PT_Args elems, PT_Tree elem)
 }
 
 static PT_Args
-rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth)
+rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth, 
+             Traversal *traversal)
 {
   PT_Tree elem, newelem;
   PT_Args newelems = PT_makeArgsEmpty();
@@ -1488,7 +1486,7 @@ rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth)
       }
     }
     else {
-      newelem = rewrite(elem, env, depth + 1);
+      newelem = rewriteInnermost(elem, env, depth + 1, traversal);
       if (PT_isTreeList(newelem)) {
         PT_Args elemArgs = PT_getTreeArgs(newelem);
 	newelems = concatElems(listSymbol, newelems, elemArgs);
@@ -1505,6 +1503,12 @@ rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth)
   return newelems;
 }
 
+static PT_Tree 
+rewrite(PT_Tree trm)
+{
+  return rewriteInnermost(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
+}
+
 /* The core function. It is checked whether the term
    is an application, a variable, or a list. And the
    appropriate actions are performed.
@@ -1514,11 +1518,17 @@ rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth)
    REMARK: comments should be improved.
 */
 
+
 static PT_Tree
-rewrite(PT_Tree trm, ATerm env, int depth)
+rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
 {
   PT_Tree newtrm, rewtrm;
   PT_Args args, newargs;
+
+  /* fix me, control flow guidance by using arguments ;-( */
+  if (traversal != NO_TRAVERSAL) {
+    return rewriteTraversal(trm,env,depth,traversal);
+  }
 
   if (aborted) {
     return trm;
@@ -1542,7 +1552,7 @@ rewrite(PT_Tree trm, ATerm env, int depth)
       PT_Production prod = PT_getTreeProd(trm);
       listSymbol = PT_getProductionRhs(prod);
     }
-    newelems = rewriteElems(listSymbol, elems, env, depth);
+    newelems = rewriteElems(listSymbol, elems, env, depth, NO_TRAVERSAL);
     if (newelems) {
       assert(isValidList(newelems));
       rewtrm = PT_setTreeArgs(trm, newelems);
@@ -1563,7 +1573,7 @@ rewrite(PT_Tree trm, ATerm env, int depth)
     }
     else {
       args = PT_getTreeArgs(trm);
-      newargs = rewriteArgs(args, env, depth);
+      newargs = rewriteArgs(args, env, depth, NO_TRAVERSAL);
       if (PT_hasProductionBracketAttr(prod)) {
         newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
         rewtrm = newtrm;
@@ -1584,7 +1594,6 @@ rewrite(PT_Tree trm, ATerm env, int depth)
 
 	  if (!rewtrm) {
 	    traversal = createTraversalPattern(newtrm);
-
 	    newtrm = selectTraversedArg(newargs);
 	    rewtrm =
 	      rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
@@ -1650,7 +1659,7 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
   if (PT_isTreeAppl(trm)) {
     if (PT_hasProductionBracketAttr(PT_getTreeProd(trm))) {
       args = PT_getTreeArgs(trm);
-      newargs = rewriteArgsTraversal(args, env, depth, traversal);
+      newargs = rewriteArgs(args, env, depth, traversal);
       newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
       rewtrm = newtrm;
     }
@@ -1662,12 +1671,12 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
       if (PT_isEqualTree(rewtrm, travtrm)) {
         /* if no match, traverse down to the children */
         args = PT_getTreeArgs(trm);
-        newargs = rewriteArgsTraversal(args, env, depth, traversal);
+        newargs = rewriteArgs(args, env, depth, traversal);
         /* on the way back, we check for new redices */
         rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newargs), depth);
 
       }
-      else {                    /* reduction occurred, we need postprocessing */
+      else {    /* reduction occurred, we need postprocessing */
 
         if (traversal->type == ANALYZER) {
           /* We update the traversal with the rhs */
@@ -1684,129 +1693,34 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
       rewtrm = trm;
     }
   }
-  else if (PT_isTreeApplList(trm)) {
-    PT_Production prod = PT_getTreeProd(trm);
+  else if (PT_isTreeApplList(trm) || PT_isTreeList(trm)) {
     PT_Args elems = PT_getTreeArgs(trm);
-    PT_Symbol sym = PT_getProductionRhs(prod);
-    PT_Args newelems = rewriteElemsTraversal(sym, elems, env, depth, traversal);
-    rewtrm = PT_setTreeArgs(trm, newelems);
+    PT_Args newelems;
+    PT_Symbol listSymbol;
+
+    if (PT_isTreeList(trm)) {
+      listSymbol = PT_getTreeSymbol(trm);
+    }
+    else {
+      PT_Production prod = PT_getTreeProd(trm);
+      listSymbol= PT_getProductionRhs(prod);
+    }
+
+    newelems = rewriteElems(listSymbol, elems, env, depth, traversal);
+
+    if (newelems) {
+      assert(isValidList(newelems));
+      rewtrm = PT_setTreeArgs(trm, newelems);
+    }
+    else {
+      rewtrm = trm;
+    }
   }
   else {
     rewtrm = trm;
   }
+
   return rewtrm;
 }
 
-PT_Args
-rewriteArgsTraversal(PT_Args args, ATerm env, int depth, Traversal * traversal)
-{
-  PT_Tree arg, newarg;
-  PT_Args newargs = PT_makeArgsEmpty();
-  int len = PT_getArgsLength(args);
 
-  if (len > 32) {
-    while (PT_hasArgsHead(args)) {
-      arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) || 
-          PT_isTreeVar(arg) ||
-          PT_isTreeLexical(arg)) {
-        newarg = rewriteTraversal(arg, env, depth + 1, traversal);
-      }
-      else {
-        newarg = arg;
-      }
-      newargs = PT_appendArgs(newargs, newarg);
-      args = PT_getArgsTail(args);
-    }
-  }
-  else {
-    PT_Tree newarg_table[32];
-    int i = 0;
-    while (PT_hasArgsHead(args)) {
-      arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) || 
-          PT_isTreeVar(arg) ||
-          PT_isTreeLexical(arg)) {
-        newarg_table[i] = rewriteTraversal(arg, env, depth + 1, traversal);
-      }
-      else {
-        newarg_table[i] = arg;
-      }
-      args = PT_getArgsTail(args);
-      ++i;
-    }
-    assert(i == len);
-    for (--i; i >= 0; i--)
-      newargs = PT_makeArgsList(newarg_table[i], newargs);
-  }
-  return newargs;
-}
-
-PT_Args
-rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
-                        Traversal * traversal)
-{
-  PT_Tree elem, newelem;
-  PT_Args newelems = PT_makeArgsEmpty();
-  int len = PT_getArgsLength(elems);
-
-  if (len >= 32) {
-    while (PT_hasArgsHead(elems)) {
-      elem = PT_getArgsHead(elems);
-      if (PT_isTreeVarList(elem)) {
-        Slice tuple = getListVariableValue(env, elem);
-        assert(tuple);
-        if (isSliceEmpty(tuple)) {
-          newelems = skipWhitespace(newelems);
-          assert(isValidList(newelems));
-        }
-        else {
-          newelems = appendSlice(newelems, tuple);
-        }
-      }
-      else {
-        newelem = rewriteTraversal(elem, env, depth + 1, traversal);
-        newelems = PT_appendArgs(newelems, newelem);
-      }
-      elems = PT_getArgsTail(elems);
-    }
-  }
-  else {
-    PT_Tree newelem_table[32];
-    int i = 0;
-    while (PT_hasArgsHead(elems)) {
-      elem = PT_getArgsHead(elems);
-      if (PT_isTreeVarList(elem)) {
-        newelem_table[i] = (PT_Tree) getListVariableValue(env, elem);
-        if (newelem_table[i] == NULL) {
-          RWsetError("variable not initialized", (ATerm) elem);
-          return NULL;
-        }
-      }
-      else {
-        newelem_table[i] = rewriteTraversal(elem, env, depth + 1, traversal);
-      }
-      elems = PT_getArgsTail(elems);
-      i++;
-    }
-
-    for (--i; i >= 0; i--) {
-      newelem = newelem_table[i];
-      if (ATgetAFun((ATermAppl) newelem) == list_var) {
-        if (isSliceEmpty((Slice) newelem)) {
-          newelems = skipWhitespace(newelems);
-        }
-        else {
-          newelems = prependSlice((Slice) newelem, newelems);
-        }
-      }
-      else {
-        if (!(PT_isArgsEmpty(newelems) && PT_isTreeLayout(newelem))) {
-          newelems = PT_makeArgsList(newelem, newelems);
-        }
-      }
-    }
-  }
-
-  return newelems;
-}
