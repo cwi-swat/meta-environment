@@ -895,7 +895,7 @@ receivers have retrieved their copy.  Adding expiration times to values
 or reference counting at the \TB\ level may solve this problem.
 
 
-\subsubsection{Case study: Java RMI}
+\subsubsection{Case study: Java RMI and CORBA}
 
 Given our needs and desires for a next generation ToolBus, it is
 interesting to see what solutions have been applied in similar projects.
@@ -971,6 +971,19 @@ be noted that there are no security features (yet) in the ToolBus, whereas
 RMI offers security-related support using \texttt{SecurityManagers}.
 
 \end{itemize}
+
+Apart from Java RMI, which is optimized for connecting components
+that are all written in Java, there is also a connection from Java to
+CORBA\cite{XXX}. Using this bridge, it becomes possible to let Java
+components communicate with CORBA objects written in any language that
+has Interface Definition Language (IDL) mappings.
+
+Instead of writing a Java interface as is done in RMI, in CORBA the
+programmer writes the definition in IDL: a special purpose, interface
+language used as the base for CORBA implementations. This IDL definition
+is then used to generate the necessary \emph{stubs} (client side proxies
+to delegate method invocations to the server) and \emph{skeletons} (server
+side classes that hide low-level CORBA details which can be extended).
 
 %%Using the ToolBus communication primitives we can exactly specify which
 %%pattern of messages (communications) are allowed and in what order. The
