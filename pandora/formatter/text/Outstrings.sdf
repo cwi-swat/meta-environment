@@ -6,12 +6,18 @@ module Outstrings
     basic/Integers
 
   exports
+    context-free start-symbols String
+
+  exports
     context-free syntax
       "string" "of" Integer "layoutchars"  -> String
       "string" "of" Integer String "chars" -> String
       deslash(String)                      -> String 
 
+    context-free syntax
+      deslash-chars(CHAR*) -> CHAR*
 hiddens
+
     variables
       "Ch"[0-9]*     -> CHAR
       "Char"[0-9]*   -> CHAR
