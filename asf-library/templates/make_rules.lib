@@ -53,13 +53,9 @@ INSTALL_READONLY = ${INSTALL} -m 0444
 install-data-hook: make-dir install-modules install-prepared make-read-only
 
 make-dir:
-	@if test -d $(DESTDIR); then \
-           echo " chmod u+w $(DESTDIR)"; \
-           chmod u+w $(DESTDIR); \
-        fi
 	@if test -d $(DESTDIR)$(libpackagedir); then \
-           echo " chmod u+w $(DESTDIR)$(libpackagedir)"; \
-           chmod u+w $(DESTDIR)$(libpackagedir); \
+           echo " chmod 755 $(DESTDIR)$(libpackagedir)"; \
+           chmod 755 $(DESTDIR)$(libpackagedir); \
         fi
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
 
@@ -87,4 +83,4 @@ install-prepared:
 
 
 make-read-only:
-	chmod ugo-w $(DESTDIR)$(libpackagedir) 
+	chmod 555 $(DESTDIR)$(libpackagedir) 
