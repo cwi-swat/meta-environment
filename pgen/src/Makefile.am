@@ -40,6 +40,12 @@ CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1 sdf2table.test
 parsetablegen.o : parsetablegen.tif.h
 sdf-help.o : parsetablegen.tif.h
 
+%.tifs: %.idef
+    @PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
+    @if [ "a${VPATH}" != "a" ]; then \
+       mv ${srcdir}/$@ $@ ;\
+    fi
+
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
 %.test: %.src Makefile
