@@ -662,7 +662,8 @@ void pr_term(const term *t)
   case t_appl:
     ftxt = get_txt(fun_sym(t));
     print_fsym(fun_str_sym(t), ftxt);
-    if(fun_args(t) != NULL || (!fun_str_sym(t) && isupper(ftxt[0]))){
+    if(fun_args(t) != NULL
+       || (!fun_str_sym(t) && isupper((int)ftxt[0]))){
       /* Note: something fishy is going on here:
 	 (a) Currently, Process names are also permitted as funcion symbol 
 	     (although there start with an uppercase letter.
