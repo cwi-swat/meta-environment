@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Sep 15 10:55:29 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * meta-studio/metastudio/Message{List,Window}.java:
+   - refactored
+   - fixed scrollbar bug
+
 Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
  * configure.in:
    - banish PERL :-)

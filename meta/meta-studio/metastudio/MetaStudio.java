@@ -1,19 +1,78 @@
 package metastudio;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.swing.text.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.JViewport;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.tree.TreePath;
 
-import metastudio.graph.*;
-import aterm.*;
+import metastudio.graph.AttributeList;
+import metastudio.graph.EdgeList;
+import metastudio.graph.Graph;
+import metastudio.graph.MetaGraphFactory;
+import metastudio.graph.Node;
+import metastudio.graph.NodeList;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, ModuleSelectionListener {
@@ -72,7 +131,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private String currentModule;
   private ModuleTreeModel moduleManager;
 
-  private MessageList messageList;
   private MessageWindow messageWindow;
 
   public static final void main(String[] args) throws IOException {
@@ -132,7 +190,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     moduleManager.addModuleSelectionListener(this);
     //		popupMenu = createPopupMenu();
     createContentPane();
-    createMessageList();
+   	messageWindow = createMessageWindow();
 
     makeStudioVisible();
   }
@@ -172,9 +230,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     setVisible(true);
   }
 
-  private void createMessageList() throws IOException {
-    messageList = new MessageList(bridge, factory);
-    messageWindow = new MessageWindow(messageList);
+  private MessageWindow createMessageWindow() throws IOException {
+    return new MessageWindow(bridge, factory);
   }
 
   private void createParsetreePanel() {
@@ -735,7 +792,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     }
 
     if (data instanceof ATermList) {
-      messageList.setContent(moduleName, (ATermList) data);
+      messageWindow.setContent(moduleName, (ATermList) data);
     } else {
       error("Can't show something in list view which is not a ATermList: " + data);
     }

@@ -42,7 +42,6 @@ java_JAVA = \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
 	MessageWindow.java \
-	MessageList.java \
 	ButtonAction.java \
 	ModuleTreeModel.java \
 	TreeModelSupport.java \

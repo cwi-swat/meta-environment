@@ -27,7 +27,8 @@ let
   Answer : term,
   Type : term,
   Arguments : list,
-  ModuleList : term
+  ModuleList : term,
+  EditorId : term
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
@@ -125,6 +126,11 @@ in
       snd-msg(open-modules([ModuleName], sdf)) .
       rec-msg(finished-opening-modules) .
       snd-ack-event(UI, eclipse-open-initial-module(FileName))
+    +
+      rec-event(UI, eclipse-edit-term-file(ModuleName?, FileName?)) .
+      snd-msg(edit-term-file(ModuleName, FileName)) .
+      rec-msg(editor-opened(ModuleName?, EditorId?)) .
+      snd-ack-event(UI, eclipse-edit-term-file(ModuleName, FileName))
     +
 #endif
       rec-event(UI, button-selected(Type?, ActionEvent?)) .
