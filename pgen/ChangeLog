@@ -5,6 +5,7 @@ $Id$
    ATerm functions are no longer quoted automatically.
  * Bootstrapped the normalizer and the sdf2 table after that.
  * Regenerated regression tests.
+ * Bumped version of parsetablegen to 4.1
 
 2001/11/25 (mdejonge@cwi.nl)
  * src/Makefile.am: added miussing generated .h file to EXTRA_DIST variable
