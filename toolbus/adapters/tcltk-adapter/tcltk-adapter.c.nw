@@ -892,6 +892,7 @@ act_entry act_table[] =
 <<information table>>=
 char *information_table[] =
 { "name",		NULL,
+  "type",		"\"Tcl/Tk\"",
   "search-paths", 	NULL,
   "ports",		"[[exec-state,at], [always,before], [always,after]," \
 			"[location,before], [location,after]," \
