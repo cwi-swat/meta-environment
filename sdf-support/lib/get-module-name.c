@@ -1,5 +1,4 @@
 #include "SDFME-utils.h"
-#include "MEPT-utils.h"
 
 /*{{{  char *SDFgetModuleName(SDF_Module sdfModule) */
 

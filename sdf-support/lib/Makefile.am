@@ -1,17 +1,15 @@
 # $Id$
 
-lib_LIBRARIES		= libSDFME.a
-include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h
+lib_LIBRARIES		= libSDFME.a libSDF2PT.a
+include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h SDF2PT.h
 
 libSDFME_a_SOURCES	= SDFME.c SDFME_dict.c SDFME_bottom.c ${UTILSRCS}
-
+libSDF2PT_a_SOURCES     = sdf2pt.c
 UTILSRCS		= get-module-name.c get-imports.c grammar.c prod.c \
-			  sort.c prio.c restrict.c sdf2pt.c SDFME-utils.c \
-			  renamings.c
+			  sort.c prio.c restrict.c SDFME-utils.c renamings.c
 
 EXTRA_DIST		= Sdf.label.def
 
-CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include \
                           -I${PT_SUPPORT}/include
 

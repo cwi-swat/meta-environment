@@ -4,6 +4,7 @@
 
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+#include <SDF2PT.h>
 
 static PT_Symbols    SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols);
 static PT_Attributes SDFAttributesToPtAttributes(SDF_Attributes sdfAttributes);

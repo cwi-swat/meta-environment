@@ -1,5 +1,4 @@
 #include "SDFME-utils.h"
-#include <MEPT-utils.h>
 
 SDF_Import SDFmakeImport(char *moduleName)
 {

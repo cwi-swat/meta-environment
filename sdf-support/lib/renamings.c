@@ -1,5 +1,4 @@
 #include <SDFME-utils.h>
-#include <MEPT-utils.h>
 
 SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 					      SDF_Symbols actuals)
