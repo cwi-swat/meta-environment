@@ -22,17 +22,15 @@ INCLUDES		= -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 LDFLAGS			= -L${ASCLIB} -L${ASFIXLIB} -L${ATERMLIB}
 LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
-noinst_LIBRARIES	= libParseTable-Generator.a
+noinst_LIBRARIES	= libSdf2-Normalization.a
 
-BUILT_SOURCES		= init.c
+bin_PROGRAMS		= Sdf2-Normalization
 
-bin_PROGRAMS		= ParseTable-Generator
+Sdf2_Normalization_SOURCES		= init.c
+Sdf2_Normalization_LDADD		= libSdf2-Normalization.a ${LDLIBS} ${SOCKLIBS}
 
-ParseTable_Generator_SOURCES		= init.c
-ParseTable_Generator_LDADD		= libParseTable-Generator.a ${LDLIBS} ${SOCKLIBS}
-
-libParseTable_Generator_a_SOURCES	= $(SPEC_SRCS)
-libParseTable_Generator_a_LIBADD	= init.o
+libSdf2_Normalization_a_SOURCES	= $(SPEC_SRCS)
+libSdf2_Normalization_a_LIBADD	= init.o
 
 # Old versions of automake put all dependencies on a single line which
 # causes several tools to crash (sed for instance) because of line length
@@ -42,153 +40,70 @@ libParseTable_Generator_a_LIBADD	= init.o
 # ... $(SPEC_SRCSn)
 #
 SPEC_SRCS1=\
-   AUX-ATerm-Operations24.c AUX-ATerm-Operations23.c\
-   AUX-ATerm-Operations22.c AUX-ATerm-Operations21.c AUX-ATerm-Operations20.c\
-   AUX-ATerm-Operations19.c AUX-ATerm-Operations18.c AUX-ATerm-Operations17.c\
-   AUX-ATerm-Operations16.c AUX-ATerm-Operations15.c AUX-ATerm-Operations14.c\
-   AUX-ATerm-Operations13.c AUX-ATerm-Operations12.c AUX-ATerm-Operations11.c\
-   AUX-ATerm-Operations10.c AUX-ATerm-Operations9.c AUX-ATerm-Operations8.c\
-   AUX-ATerm-Operations7.c AUX-ATerm-Operations6.c AUX-ATerm-Operations5.c\
-   AUX-ATerm-Operations4.c AUX-ATerm-Operations3.c AUX-ATerm-Operations2.c\
-   AUX-ATerm-Operations1.c AUX-ATerm-Lists20.c AUX-ATerm-Lists19.c\
-   AUX-ATerm-Lists18.c AUX-ATerm-Lists17.c AUX-ATerm-Lists16.c\
-   AUX-ATerm-Lists15.c AUX-ATerm-Lists14.c AUX-ATerm-Lists13.c\
-   AUX-ATerm-Lists12.c AUX-ATerm-Lists11.c AUX-ATerm-Lists10.c\
-   AUX-ATerm-Lists9.c AUX-ATerm-Lists8.c AUX-ATerm-Lists7.c\
-   AUX-ATerm-Lists6.c AUX-ATerm-Lists5.c AUX-ATerm-Lists4.c\
-   AUX-ATerm-Lists3.c AUX-ATerm-Lists2.c AUX-ATerm-Lists1.c\
-   AUX-Renaming-Sdf-Tree-Constructors1.c AUX-Symbols-ATerms5.c\
-   AUX-Symbols-ATerms4.c AUX-Symbols-ATerms3.c AUX-Symbols-ATerms2.c\
-   AUX-Symbols-ATerms1.c AUX-Grammar-ATerms3.c AUX-Grammar-ATerms2.c\
-   AUX-Grammar-ATerms1.c AUX-Grammar-Tree-Constructors1.c\
-   AUX-Character-Normalization1.c AUX-Basic-Integers5.c\
    AUX-Basic-Integers4.c AUX-Basic-Integers3.c AUX-Basic-Integers2.c\
-   AUX-Basic-Integers1.c AUX-Renaming-Sdf-ATerms1.c AUX-Kernel-Sdf-ATerms10.c\
-   AUX-Kernel-Sdf-ATerms9.c AUX-Kernel-Sdf-ATerms8.c AUX-Kernel-Sdf-ATerms7.c\
-   AUX-Kernel-Sdf-ATerms6.c AUX-Kernel-Sdf-ATerms5.c AUX-Kernel-Sdf-ATerms4.c\
-   AUX-Kernel-Sdf-ATerms3.c AUX-Kernel-Sdf-ATerms2.c AUX-Kernel-Sdf-ATerms1.c\
-   AUX-Kernel-Sdf-Tree-Constructors1.c AUX-First-CFG8.c AUX-First-CFG7.c\
-   AUX-First-CFG6.c AUX-First-CFG5.c AUX-First-CFG4.c AUX-First-CFG3.c\
-   AUX-First-CFG2.c AUX-First-CFG1.c AUX-Earley-Items5.c AUX-Earley-Items4.c\
-   AUX-Earley-Items3.c AUX-Earley-Items2.c AUX-Earley-Items1.c AUX-IntCon4.c\
-   AUX-IntCon3.c AUX-IntCon2.c AUX-IntCon1.c AUX-Character-Syntax7.c
-
-SPEC_SRCS2=\
+   AUX-Basic-Integers1.c AUX-Character-Normalization1.c AUX-Integers11.c\
+   AUX-Integers10.c AUX-Integers9.c AUX-Integers8.c AUX-Integers7.c\
+   AUX-Integers6.c AUX-Integers5.c AUX-Integers4.c AUX-Integers3.c\
+   AUX-Integers2.c AUX-Integers1.c AUX-RealCon1.c AUX-Character-Syntax7.c\
    AUX-Character-Syntax6.c AUX-Character-Syntax5.c AUX-Character-Syntax4.c\
    AUX-Character-Syntax3.c AUX-Character-Syntax2.c AUX-Character-Syntax1.c\
    AUX-Character-Arithmetic10.c AUX-Character-Arithmetic9.c\
    AUX-Character-Arithmetic8.c AUX-Character-Arithmetic7.c\
    AUX-Character-Arithmetic6.c AUX-Character-Arithmetic5.c\
    AUX-Character-Arithmetic4.c AUX-Character-Arithmetic3.c\
-   AUX-Character-Arithmetic2.c AUX-Character-Arithmetic1.c AUX-Integers11.c\
-   AUX-Integers10.c AUX-Integers9.c AUX-Integers8.c AUX-Integers7.c\
-   AUX-Integers6.c AUX-Integers5.c AUX-Integers4.c AUX-Integers3.c\
-   AUX-Integers2.c AUX-Integers1.c AUX-Labels9.c AUX-Labels8.c AUX-Labels7.c\
-   AUX-Labels6.c AUX-Labels5.c AUX-Labels4.c AUX-Labels3.c AUX-Labels2.c\
-   AUX-Labels1.c AUX-Basic-Sdf-ATerms1.c AUX-Modular-Sdf-ATerms3.c\
-   AUX-Modular-Sdf-ATerms2.c AUX-Modular-Sdf-ATerms1.c\
-   AUX-Regular-Sdf-ATerms1.c AUX-Priority-Sdf-ATerms1.c AUX-CC-Sdf-ATerms6.c\
-   AUX-CC-Sdf-ATerms5.c AUX-CC-Sdf-ATerms4.c AUX-CC-Sdf-ATerms3.c\
-   AUX-CC-Sdf-ATerms2.c AUX-CC-Sdf-ATerms1.c AUX-Sorts-Sdf-ATerms1.c\
-   AUX-Literals-Sdf-ATerms1.c AUX-Label-Sdf-ATerms1.c\
-   AUX-Restrictions-Sdf-ATerms1.c AUX-Earley-Graphs3.c\
-   AUX-Earley-Graphs2.c AUX-Earley-Graphs1.c AUX-Goto-Computation13.c\
-   AUX-Goto-Computation12.c AUX-Goto-Computation11.c AUX-Goto-Computation10.c\
-   AUX-Goto-Computation9.c AUX-Goto-Computation8.c AUX-Goto-Computation7.c\
-   AUX-Goto-Computation6.c AUX-Goto-Computation5.c AUX-Goto-Computation4.c\
-   AUX-Goto-Computation3.c AUX-Goto-Computation2.c AUX-Goto-Computation1.c\
-   AUX-Basic-Sdf-Tree-Constructors1.c AUX-Modular-Sdf-Tree-Constructors1.c\
-   AUX-Regular-Sdf-Tree-Constructors1.c AUX-Priority-Sdf-Tree-Constructors1.c\
-   AUX-CC-Sdf-Tree-Constructors1.c AUX-Sorts-Sdf-Tree-Constructors1.c\
-   AUX-Literals-Sdf-Tree-Constructors1.c AUX-Character-Class-Sets6.c\
-   AUX-Character-Class-Sets5.c AUX-Character-Class-Sets4.c\
-   AUX-Character-Class-Sets3.c AUX-Character-Class-Sets2.c\
-   AUX-Character-Class-Sets1.c AUX-Follow-Earley10.c AUX-Follow-Earley9.c
-
-SPEC_SRCS3=\
-   AUX-Follow-Earley8.c AUX-Follow-Earley7.c AUX-Follow-Earley6.c\
-   AUX-Follow-Earley5.c AUX-Follow-Earley4.c AUX-Follow-Earley3.c\
-   AUX-Follow-Earley2.c AUX-Follow-Earley1.c AUX-Priority-Conflict2.c\
-   AUX-Priority-Conflict1.c AUX-Symbols-Projection4.c\
-   AUX-Symbols-Projection3.c AUX-Symbols-Projection2.c\
-   AUX-Symbols-Projection1.c AUX-Basic-Sdf-Normalization13.c\
-   AUX-Basic-Sdf-Normalization12.c AUX-Basic-Sdf-Normalization11.c\
-   AUX-Basic-Sdf-Normalization10.c AUX-Basic-Sdf-Normalization9.c\
-   AUX-Basic-Sdf-Normalization8.c AUX-Basic-Sdf-Normalization7.c\
-   AUX-Basic-Sdf-Normalization6.c AUX-Basic-Sdf-Normalization5.c\
-   AUX-Basic-Sdf-Normalization4.c AUX-Basic-Sdf-Normalization3.c\
-   AUX-Basic-Sdf-Normalization2.c AUX-Basic-Sdf-Normalization1.c\
-   AUX-Renaming-Sdf-Renaming2.c AUX-Renaming-Sdf-Renaming1.c AUX-RealCon1.c\
-   AUX-Symbols1.c AUX-Character-Class-Syntax8.c AUX-Character-Class-Syntax7.c\
+   AUX-Character-Arithmetic2.c AUX-Character-Arithmetic1.c\
+   AUX-Symbols-Projection4.c AUX-Symbols-Projection3.c\
+   AUX-Symbols-Projection2.c AUX-Symbols-Projection1.c AUX-ATerms1.c\
+   AUX-Basic-Sdf-Normalization13.c AUX-Basic-Sdf-Normalization12.c\
+   AUX-Basic-Sdf-Normalization11.c AUX-Basic-Sdf-Normalization10.c\
+   AUX-Basic-Sdf-Normalization9.c AUX-Basic-Sdf-Normalization8.c\
+   AUX-Basic-Sdf-Normalization7.c AUX-Basic-Sdf-Normalization6.c\
+   AUX-Basic-Sdf-Normalization5.c AUX-Basic-Sdf-Normalization4.c\
+   AUX-Basic-Sdf-Normalization3.c AUX-Basic-Sdf-Normalization2.c\
+   AUX-Basic-Sdf-Normalization1.c AUX-Renaming-Sdf-Renaming2.c\
+   AUX-Renaming-Sdf-Renaming1.c AUX-Layout1.c AUX-Symbols1.c\
+   AUX-Character-Class-Syntax8.c AUX-Character-Class-Syntax7.c\
    AUX-Character-Class-Syntax6.c AUX-Character-Class-Syntax5.c\
    AUX-Character-Class-Syntax4.c AUX-Character-Class-Syntax3.c\
    AUX-Character-Class-Syntax2.c AUX-Character-Class-Syntax1.c\
    AUX-Character-Class-Membership5.c AUX-Character-Class-Membership4.c\
    AUX-Character-Class-Membership3.c AUX-Character-Class-Membership2.c\
-   AUX-Character-Class-Membership1.c AUX-Vertices8.c AUX-Vertices7.c\
-   AUX-Vertices6.c AUX-Vertices5.c AUX-Vertices4.c AUX-Vertices3.c\
-   AUX-Vertices2.c AUX-Vertices1.c AUX-Actions5.c AUX-Actions4.c\
-   AUX-Actions3.c AUX-Actions2.c AUX-Actions1.c AUX-Symbol-Tables4.c\
-   AUX-Symbol-Tables3.c AUX-Symbol-Tables2.c AUX-Symbol-Tables1.c\
-   AUX-Sdf2-ATerms1.c AUX-Goto-Earley9.c AUX-Goto-Earley8.c\
-   AUX-Goto-Earley7.c AUX-Goto-Earley6.c AUX-Goto-Earley5.c\
-   AUX-Goto-Earley4.c AUX-Goto-Earley3.c AUX-Goto-Earley2.c\
-   AUX-Goto-Earley1.c AUX-Sdf2-Tree-Constructors1.c AUX-Action-Earley7.c\
-   AUX-Action-Earley6.c AUX-Action-Earley5.c AUX-Action-Earley4.c\
-   AUX-Action-Earley3.c AUX-Action-Earley2.c AUX-Action-Earley1.c
+   AUX-Character-Class-Membership1.c AUX-Symbol-Sets4.c AUX-Symbol-Sets3.c\
+   AUX-Symbol-Sets2.c AUX-Symbol-Sets1.c AUX-Renaming-Sdf-Syntax1.c
 
-SPEC_SRCS4=\
-   AUX-Goto-PCC5.c AUX-Goto-PCC4.c AUX-Goto-PCC3.c AUX-Goto-PCC2.c\
-   AUX-Goto-PCC1.c AUX-Follow-Priorities1.c AUX-Symbol-Sets4.c\
-   AUX-Symbol-Sets3.c AUX-Symbol-Sets2.c AUX-Symbol-Sets1.c\
-   AUX-Renaming-Sdf-Syntax1.c AUX-Basic-Sdf-Syntax4.c\
-   AUX-Basic-Sdf-Syntax3.c AUX-Basic-Sdf-Syntax2.c AUX-Basic-Sdf-Syntax1.c\
-   AUX-Modular-Sdf-Syntax4.c AUX-Modular-Sdf-Syntax3.c\
-   AUX-Modular-Sdf-Syntax2.c AUX-Modular-Sdf-Syntax1.c\
+SPEC_SRCS2=\
+   AUX-Basic-Sdf-Syntax4.c AUX-Basic-Sdf-Syntax3.c AUX-Basic-Sdf-Syntax2.c\
+   AUX-Basic-Sdf-Syntax1.c AUX-Modular-Sdf-Syntax4.c\
+   AUX-Modular-Sdf-Syntax3.c AUX-Modular-Sdf-Syntax2.c\
+   AUX-Modular-Sdf-Syntax1.c AUX-Label-Sdf-Syntax1.c\
    AUX-Basic-Sdf-Renaming3.c AUX-Basic-Sdf-Renaming2.c\
    AUX-Basic-Sdf-Renaming1.c AUX-Modular-Sdf-Section3.c\
    AUX-Modular-Sdf-Section2.c AUX-Modular-Sdf-Section1.c\
    AUX-Grammar-Syntax2.c AUX-Grammar-Syntax1.c AUX-Booleans6.c\
    AUX-Booleans5.c AUX-Booleans4.c AUX-Booleans3.c AUX-Booleans2.c\
-   AUX-Booleans1.c AUX-Literals5.c AUX-Literals4.c AUX-Literals3.c\
-   AUX-Literals2.c AUX-Literals1.c AUX-ATerms2.c AUX-ATerms1.c\
-   AUX-Kernel-Sdf-Syntax3.c AUX-Kernel-Sdf-Syntax2.c AUX-Kernel-Sdf-Syntax1.c\
+   AUX-Booleans1.c AUX-IntCon1.c AUX-Literals1.c AUX-Kernel-Sdf-Syntax3.c\
+   AUX-Kernel-Sdf-Syntax2.c AUX-Kernel-Sdf-Syntax1.c\
    AUX-CC-Sdf-Syntax1.c AUX-Character-Class-Normalization16.c\
    AUX-Character-Class-Normalization15.c\
    AUX-Character-Class-Normalization14.c\
    AUX-Character-Class-Normalization13.c\
    AUX-Character-Class-Normalization12.c\
    AUX-Character-Class-Normalization11.c\
-   AUX-Character-Class-Normalization10.c AUX-Character-Class-Normalization9.c\
-   AUX-Character-Class-Normalization8.c AUX-Character-Class-Normalization7.c\
-   AUX-Character-Class-Normalization6.c AUX-Character-Class-Normalization5.c\
-   AUX-Character-Class-Normalization4.c AUX-Character-Class-Normalization3.c\
-   AUX-Character-Class-Normalization2.c AUX-Character-Class-Normalization1.c\
-   AUX-Alias-Sdf-Syntax2.c AUX-Alias-Sdf-Syntax1.c\
-   AUX-Grammar-Normalization2.c AUX-Grammar-Normalization1.c\
-   AUX-Parse-Table38.c AUX-Parse-Table37.c AUX-Parse-Table36.c\
-   AUX-Parse-Table35.c AUX-Parse-Table34.c AUX-Parse-Table33.c
-
-SPEC_SRCS5=\
-   AUX-Parse-Table32.c AUX-Parse-Table31.c AUX-Parse-Table30.c\
-   AUX-Parse-Table29.c AUX-Parse-Table28.c AUX-Parse-Table27.c\
-   AUX-Parse-Table26.c AUX-Parse-Table25.c AUX-Parse-Table24.c\
-   AUX-Parse-Table23.c AUX-Parse-Table22.c AUX-Parse-Table21.c\
-   AUX-Parse-Table20.c AUX-Parse-Table19.c AUX-Parse-Table18.c\
-   AUX-Parse-Table17.c AUX-Parse-Table16.c AUX-Parse-Table15.c\
-   AUX-Parse-Table14.c AUX-Parse-Table13.c AUX-Parse-Table12.c\
-   AUX-Parse-Table11.c AUX-Parse-Table10.c AUX-Parse-Table9.c\
-   AUX-Parse-Table8.c AUX-Parse-Table7.c AUX-Parse-Table6.c\
-   AUX-Parse-Table5.c AUX-Parse-Table4.c AUX-Parse-Table3.c\
-   AUX-Parse-Table2.c AUX-Parse-Table1.c AUX-Parse-Table-Constructors1.c\
-   AUX-Action-PCC8.c AUX-Action-PCC7.c AUX-Action-PCC6.c AUX-Action-PCC5.c\
-   AUX-Action-PCC4.c AUX-Action-PCC3.c AUX-Action-PCC2.c AUX-Action-PCC1.c\
-   AUX-Kernel-Sdf-Projection16.c AUX-Kernel-Sdf-Projection15.c\
+   AUX-Character-Class-Normalization10.c\
+   AUX-Character-Class-Normalization9.c AUX-Character-Class-Normalization8.c\
+   AUX-Character-Class-Normalization7.c AUX-Character-Class-Normalization6.c\
+   AUX-Character-Class-Normalization5.c AUX-Character-Class-Normalization4.c\
+   AUX-Character-Class-Normalization3.c AUX-Character-Class-Normalization2.c\
+   AUX-Character-Class-Normalization1.c AUX-Alias-Sdf-Syntax2.c\
+   AUX-Alias-Sdf-Syntax1.c AUX-Grammar-Normalization2.c\
+   AUX-Grammar-Normalization1.c AUX-Kernel-Sdf-Projection15.c\
    AUX-Kernel-Sdf-Projection14.c AUX-Kernel-Sdf-Projection13.c\
    AUX-Kernel-Sdf-Projection12.c AUX-Kernel-Sdf-Projection11.c\
    AUX-Kernel-Sdf-Projection10.c AUX-Kernel-Sdf-Projection9.c\
    AUX-Kernel-Sdf-Projection8.c AUX-Kernel-Sdf-Projection7.c\
-   AUX-Kernel-Sdf-Projection6.c AUX-Kernel-Sdf-Projection5.c\
+   AUX-Kernel-Sdf-Projection6.c AUX-Kernel-Sdf-Projection5.c
+
+SPEC_SRCS3=\
    AUX-Kernel-Sdf-Projection4.c AUX-Kernel-Sdf-Projection3.c\
    AUX-Kernel-Sdf-Projection2.c AUX-Kernel-Sdf-Projection1.c\
    AUX-Sorts-Sdf-Projection2.c AUX-Sorts-Sdf-Projection1.c\
@@ -199,9 +114,7 @@ SPEC_SRCS5=\
    AUX-Restrictions-Sdf-Projection1.c AUX-Sdf2-Syntax1.c\
    AUX-Priority-Sdf-Renaming3.c AUX-Priority-Sdf-Renaming2.c\
    AUX-Priority-Sdf-Renaming1.c AUX-Regular-Sdf-Renaming1.c\
-   AUX-Literals-Sdf-Renaming1.c AUX-CC-Sdf-Renaming1.c
-
-SPEC_SRCS6=\
+   AUX-Literals-Sdf-Renaming1.c AUX-CC-Sdf-Renaming1.c\
    AUX-Sorts-Sdf-Renaming1.c AUX-Restrictions-Sdf-Renaming2.c\
    AUX-Restrictions-Sdf-Renaming1.c AUX-Modular-Sdf-Renaming2.c\
    AUX-Modular-Sdf-Renaming1.c AUX-Alias-Sdf-Renaming2.c\
@@ -216,31 +129,22 @@ SPEC_SRCS6=\
    AUX-Regular-Sdf-Syntax2.c AUX-Regular-Sdf-Syntax1.c\
    AUX-Priority-Sdf-Syntax2.c AUX-Priority-Sdf-Syntax1.c\
    AUX-Literals-Sdf-Syntax3.c AUX-Literals-Sdf-Syntax2.c\
-   AUX-Literals-Sdf-Syntax1.c AUX-Label-Sdf-Syntax1.c AUX-Sorts-Sdf-Syntax2.c\
-   AUX-Sorts-Sdf-Syntax1.c AUX-Restrictions-Sdf-Syntax6.c\
-   AUX-Restrictions-Sdf-Syntax5.c AUX-Restrictions-Sdf-Syntax4.c\
-   AUX-Restrictions-Sdf-Syntax3.c AUX-Restrictions-Sdf-Syntax2.c\
-   AUX-Restrictions-Sdf-Syntax1.c AUX-CC-Sdf-Normalization1.c\
-   AUX-Alias-Sdf-Projection4.c AUX-Alias-Sdf-Projection3.c\
-   AUX-Alias-Sdf-Projection2.c AUX-Alias-Sdf-Projection1.c\
-   AUX-Kernel-Sdf-Normalization7.c AUX-Kernel-Sdf-Normalization6.c\
-   AUX-Kernel-Sdf-Normalization5.c AUX-Kernel-Sdf-Normalization4.c\
-   AUX-Kernel-Sdf-Normalization3.c AUX-Kernel-Sdf-Normalization2.c\
-   AUX-Kernel-Sdf-Normalization1.c AUX-Kernel-Sdf-Renaming7.c\
-   AUX-Kernel-Sdf-Renaming6.c AUX-Kernel-Sdf-Renaming5.c\
-   AUX-Kernel-Sdf-Renaming4.c AUX-Kernel-Sdf-Renaming3.c\
-   AUX-Kernel-Sdf-Renaming2.c AUX-Kernel-Sdf-Renaming1.c AUX-Layout1.c\
-   AUX-Table-To-ATerm21.c AUX-Table-To-ATerm20.c AUX-Table-To-ATerm19.c\
-   AUX-Table-To-ATerm18.c AUX-Table-To-ATerm17.c AUX-Table-To-ATerm16.c
+   AUX-Literals-Sdf-Syntax1.c AUX-Sorts-Sdf-Syntax2.c AUX-Sorts-Sdf-Syntax1.c\
+   AUX-Restrictions-Sdf-Syntax6.c AUX-Restrictions-Sdf-Syntax5.c\
+   AUX-Restrictions-Sdf-Syntax4.c AUX-Restrictions-Sdf-Syntax3.c\
+   AUX-Restrictions-Sdf-Syntax2.c AUX-Restrictions-Sdf-Syntax1.c\
+   AUX-CC-Sdf-Normalization1.c AUX-Alias-Sdf-Projection4.c
 
-SPEC_SRCS7=\
-   AUX-Table-To-ATerm15.c AUX-Table-To-ATerm14.c AUX-Table-To-ATerm13.c\
-   AUX-Table-To-ATerm12.c AUX-Table-To-ATerm11.c AUX-Table-To-ATerm10.c\
-   AUX-Table-To-ATerm9.c AUX-Table-To-ATerm8.c AUX-Table-To-ATerm7.c\
-   AUX-Table-To-ATerm6.c AUX-Table-To-ATerm5.c AUX-Table-To-ATerm4.c\
-   AUX-Table-To-ATerm3.c AUX-Table-To-ATerm2.c AUX-Table-To-ATerm1.c\
-   AUX-Action-Longest-Match3.c AUX-Action-Longest-Match2.c\
-   AUX-Action-Longest-Match1.c AUX-Sdf2-Projection1.c AUX-Sdf2-Renaming1.c\
+SPEC_SRCS4=\
+   AUX-Alias-Sdf-Projection3.c AUX-Alias-Sdf-Projection2.c\
+   AUX-Alias-Sdf-Projection1.c AUX-Kernel-Sdf-Normalization7.c\
+   AUX-Kernel-Sdf-Normalization6.c AUX-Kernel-Sdf-Normalization5.c\
+   AUX-Kernel-Sdf-Normalization4.c AUX-Kernel-Sdf-Normalization3.c\
+   AUX-Kernel-Sdf-Normalization2.c AUX-Kernel-Sdf-Normalization1.c\
+   AUX-Kernel-Sdf-Renaming7.c AUX-Kernel-Sdf-Renaming6.c\
+   AUX-Kernel-Sdf-Renaming5.c AUX-Kernel-Sdf-Renaming4.c\
+   AUX-Kernel-Sdf-Renaming3.c AUX-Kernel-Sdf-Renaming2.c\
+   AUX-Kernel-Sdf-Renaming1.c AUX-Sdf2-Projection1.c AUX-Sdf2-Renaming1.c\
    AUX-Modular-Sdf-Normalization11.c AUX-Modular-Sdf-Normalization10.c\
    AUX-Modular-Sdf-Normalization9.c AUX-Modular-Sdf-Normalization8.c\
    AUX-Modular-Sdf-Normalization7.c AUX-Modular-Sdf-Normalization6.c\
@@ -257,29 +161,21 @@ SPEC_SRCS7=\
    AUX-Regular-Sdf-Normalization2.c AUX-Regular-Sdf-Normalization1.c\
    AUX-Literals-Sdf-Normalization5.c AUX-Literals-Sdf-Normalization4.c\
    AUX-Literals-Sdf-Normalization3.c AUX-Literals-Sdf-Normalization2.c\
-   AUX-Literals-Sdf-Normalization1.c AUX-Label-Sdf-Normalization1.c\
-   AUX-Sorts-Sdf-Normalization1.c AUX-Restrictions-Sdf-Normalization1.c\
-   AUX-Alias-Sdf-Normalization4.c AUX-Alias-Sdf-Normalization3.c\
-   AUX-Alias-Sdf-Normalization2.c AUX-Alias-Sdf-Normalization1.c\
-   AUX-Dot-Graphs1.c AUX-Parse-Table-PCC1.c AUX-Sdf2-Normalization9.c\
+   AUX-Literals-Sdf-Normalization1.c AUX-Sorts-Sdf-Normalization1.c\
+   AUX-Restrictions-Sdf-Normalization1.c AUX-Alias-Sdf-Normalization4.c\
+   AUX-Alias-Sdf-Normalization3.c AUX-Alias-Sdf-Normalization2.c\
+   AUX-Alias-Sdf-Normalization1.c AUX-Sdf2-Normalization11.c\
+   AUX-Sdf2-Normalization10.c AUX-Sdf2-Normalization9.c
+
+SPEC_SRCS5=\
    AUX-Sdf2-Normalization8.c AUX-Sdf2-Normalization7.c\
-   AUX-Sdf2-Normalization6.c AUX-Sdf2-Normalization5.c
-
-SPEC_SRCS8=\
+   AUX-Sdf2-Normalization6.c AUX-Sdf2-Normalization5.c\
    AUX-Sdf2-Normalization4.c AUX-Sdf2-Normalization3.c\
-   AUX-Sdf2-Normalization2.c AUX-Sdf2-Normalization1.c\
-   AUX-Table-to-Dot14.c AUX-Table-to-Dot13.c AUX-Table-to-Dot12.c\
-   AUX-Table-to-Dot11.c AUX-Table-to-Dot10.c AUX-Table-to-Dot9.c\
-   AUX-Table-to-Dot8.c AUX-Table-to-Dot7.c AUX-Table-to-Dot6.c\
-   AUX-Table-to-Dot5.c AUX-Table-to-Dot4.c AUX-Table-to-Dot3.c\
-   AUX-Table-to-Dot2.c AUX-Table-to-Dot1.c AUX-Sdf2-Parse-Table7.c\
-   AUX-Sdf2-Parse-Table6.c AUX-Sdf2-Parse-Table5.c AUX-Sdf2-Parse-Table4.c\
-   AUX-Sdf2-Parse-Table3.c AUX-Sdf2-Parse-Table2.c AUX-Sdf2-Parse-Table1.c\
-   AUX-ParseTable-Generator1.c Basic-Integers.c
+   AUX-Sdf2-Normalization2.c AUX-Sdf2-Normalization1.c
 
-SPEC_SRCS = $(SPEC_SRCS1) $(SPEC_SRCS2) $(SPEC_SRCS3) $(SPEC_SRCS4) $(SPEC_SRCS5) $(SPEC_SRCS6) $(SPEC_SRCS7) $(SPEC_SRCS8)
+SPEC_SRCS = $(SPEC_SRCS1) $(SPEC_SRCS2) $(SPEC_SRCS3) $(SPEC_SRCS4) $(SPEC_SRCS5)
 
-init.c: $(SPEC_SRCS)
+init.c: $(SPEC_SRCS) Makefile
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\
 	SPEC_SRCS="$(SPEC_SRCS)" ;\
 	for file in $$SPEC_SRCS; do \
