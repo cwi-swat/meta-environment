@@ -1,0 +1,7 @@
+%%% $Id$
+                               
+module sdf2/syntax/Labels
+imports sdf2/syntax/Kernel sdf2/syntax/Literals aterm/ATerms
+exports
+  context-free syntax
+    Literal ":" Symbol   -> Symbol

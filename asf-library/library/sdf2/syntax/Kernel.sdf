@@ -1,0 +1,13 @@
+%%% $Id$
+                                                            
+module sdf2/syntax/Kernel
+imports aterm/ATerms sdf2/syntax/Symbols sdf2/syntax/Grammars
+exports
+  sorts Attribute Attributes Production Productions
+  context-free syntax
+   ATerm                           -> Attribute  {avoid}
+    "{" {Attribute ","}* "}"       -> Attributes
+                                   -> Attributes
+    Symbols "->" Symbol Attributes -> Production
+    Production*                    -> Productions
+    "syntax" Productions           -> Grammar  

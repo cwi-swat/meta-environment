@@ -1,0 +1,25 @@
+module sdf2/syntax/Sdf2-Syntax
+imports sdf2/syntax/Kernel
+        sdf2/syntax/Basic
+        sdf2/syntax/Modules
+        sdf2/syntax/Regular
+        sdf2/syntax/Priority
+        sdf2/syntax/CC
+        sdf2/syntax/Sorts
+        sdf2/syntax/Literals
+        sdf2/syntax/Labels
+        sdf2/syntax/Restrictions
+        sdf2/syntax/Aliases
+exports
+  sorts SDF
+  context-free syntax
+    "<START>"                                   -> Symbol
+    "<Start>"                                   -> Symbol
+    "lexical"      "priorities" Priorities      -> Grammar
+    "context-free" "priorities" Priorities      -> Grammar
+    "lexical"      "restrictions" Restrictions  -> Grammar
+    "context-free" "restrictions" Restrictions  -> Grammar
+    "definition" Definition                     -> SDF  
+  context-free priorities
+    Symbol "|" Symbol  -> Symbol >
+    Literal ":" Symbol -> Symbol                  
