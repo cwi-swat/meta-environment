@@ -44,12 +44,10 @@ Tot hier */
     +
       rec-msg(no-table).
       snd-note(ui-status(endstat(Id))).
-      snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
       snd-msg(generate-parsetable(id(Mod))).
       rec-msg(parsetable(Table?)).
       snd-msg(add-table-to-db(id(Mod),Table)).
-      rec-msg(done).
-      snd-note(ui-status(endstat(Id)))
+      rec-msg(done)
     ).
 /*    snd-note(ui-status(stat(Id,"Parsing Term ..."))).*/
     create(Editor(Name,Text,Path,Mod), Tid?).
@@ -89,12 +87,10 @@ Tot hier */
     +
       rec-msg(no-table).
       snd-note(ui-status(endstat(Id))).
-      snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
       snd-msg(generate-parsetable(id(Mod))).
       rec-msg(parsetable(Table?)).
       snd-msg(add-table-to-db(id(Mod),Table)).
-      rec-msg(done).
-      snd-note(ui-status(endstat(Id)))
+      rec-msg(done)
     ).
     snd-note(ui-status(stat(Id,"Creating new term"))).
     create(Editor(id(Str),"",Path,Mod), Tid?). 
