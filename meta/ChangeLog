@@ -1,5 +1,9 @@
 # $Id$
 
+2001/07/03 (markvdb@cwi.nl)
+ * Added parameterization and symbol renaming to the module database.
+   We support now almost full Sdf2.
+
 2001/06/28 (markvdb@cwi.nl)
  * Added code to deal with parametrization and symbol renaming.
  * Print button added, a new file FN.txt is generated which
