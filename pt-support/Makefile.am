@@ -1,6 +1,8 @@
 # $Id$
 
-SUBDIRS		= libmept libptmept utils  test
+SUBDIRS = libmept libptmept utils  test
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 

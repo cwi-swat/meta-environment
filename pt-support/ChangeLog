@@ -1,5 +1,8 @@
 $Id$
 
+Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
 Tue Feb 10 09:26:08 CET 2004 <kooiker@cwi.nl>
  * MEPT-utils.c: corrected nested foldings hiding some functions
  * Makefile.am: removed merged cvs update markers 
