@@ -1,5 +1,8 @@
 # $Id$
 
+Apr 19 10:19:27 CEST 2002
+ * moved source code to src directory
+
 Mon Mar 11 09:43:08 CET 2002 <jong@cwi.nl>
  * version 0.2
  * fix debug prints removed

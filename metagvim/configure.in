@@ -58,4 +58,5 @@ LIBS=$NOSOCKLIBS
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
+  src/Makefile
 )
