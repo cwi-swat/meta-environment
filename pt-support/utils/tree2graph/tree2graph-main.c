@@ -65,7 +65,10 @@ void rec_terminate(int cid, ATerm t)
 
 ATerm tree2graph(int cid, ATerm tree)
 {
-  return ATmake("snd-value(graph(<term>))", NULL);
+  Graph graph = PT_printAnyToGraph(tree, ATfalse, ATfalse,
+			       ATfalse, ATtrue);
+
+  return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
 }
 
 /*}}}  */ 
