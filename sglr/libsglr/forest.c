@@ -10,7 +10,6 @@
 
 #include <aterm2.h>
 
-#include "multisets.h"
 #include "bitmap.h"
 #include "mem-alloc.h"
 #include "forest.h"
@@ -530,49 +529,6 @@ static ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
   return ATfalse;
 }
 
-static int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
-{
-  ATerm        attr;
-  ATermList    attrs;
-  static ATerm reject_attr = NULL;
-  static ATerm eager_attr = NULL;
-  static ATerm avoid_attr = NULL;
-
-  attr = ATgetArgument(SG_LookupProduction(pt, ATgetInt(prodlbl)), 2);
-  if (!ATmatch(attr, "attrs([<list>])", &attrs)) { 
-    return SG_PT_REGULAR;
-  }
-
-  if (!reject_attr) {
-    reject_attr = ATmake("atr(<str>)", SG_REJECT_ATTR);
-    ATprotect(&reject_attr);
-  }
-  if (!eager_attr) {
-    eager_attr = ATmake("atr(<str>)", SG_PREFER_ATTR);
-    ATprotect(&eager_attr);
-  }
-  if (!avoid_attr) {
-    avoid_attr = ATmake("atr(<str>)", SG_AVOID_ATTR);
-    ATprotect(&avoid_attr);
-  }
-
-  for (; !ATisEmpty(attrs); attrs = ATgetNext(attrs)) {
-    attr = ATgetFirst(attrs);
-    if (ATisEqual(attr, reject_attr)) {
-      return SG_PT_REJECT;
-    }
-
-    if (ATisEqual(attr, eager_attr)) {
-      return SG_PT_EAGER;
-    }
-    if (ATisEqual(attr, avoid_attr)) {
-      return SG_PT_UNEAGER;
-    }
-  }
-
-  return SG_PT_REGULAR;
-}
-
 static int SG_ProdType_AFun(AFun f)
 {
   if (f == SG_Regular_AFun) {
@@ -670,161 +626,109 @@ static ATbool SG_ContainsReject(tree t)
   return result;
 }
 
-/* For each production in the tree the number of occurrences is
- * calculated.
- */
-static MultiSet SG_CreateMultiSetRecursive(parse_table *pt, MultiSetTable mst, 
-                                           MultiSet ms, tree t)
+static ATbool SG_ProdIsAvoid(int prodtype)
 {
-  label    l;
-  MultiSet mstree = MultiSetTableGet(mst, (ATerm) t);
+  return prodtype == SG_PT_UNEAGER;
+} 
 
-  if (mstree != NULL) {
-    MultiSetMerge(ms, mstree);
-    return ms;
-  } 
+static ATbool SG_ProdIsPrefer(int prodtype)
+{
+  return prodtype == SG_PT_EAGER;
+} 
+
+static size_t SG_CountAvoidsInTree(tree t)
+{
+  ATermList ambs;
+  size_t avoids = 0;
+  AFun fun;
 
   switch (ATgetType(t)) {
-    case AT_APPL:
-      if (ATgetAFun(t) == SG_Amb_AFun) {
-        ATermList ambs = (ATermList) ATgetArgument((ATerm) t, 0);
-        if (ATgetLength(ambs) > 1) {
-          return NULL;
-        }
-        else {
-          ms = SG_CreateMultiSetRecursive(pt, mst, ms,
-                                          (tree)ATgetFirst(ambs));
-        }
+  case AT_APPL:
+    fun = ATgetAFun((ATerm) t);
+
+    if(fun == SG_Amb_AFun) {
+      ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
+      if (ATgetLength(ambs) > 1) { 
+        return 0;
       }
       else {
-        l = SG_GetApplProdLabel(t); 
-        MultiSetIncrease(ms, SG_PROD_TO_NR(l));
-        ms = SG_CreateMultiSetRecursive(pt, mst, ms,
-                                        (tree) ATgetArgument((ATermAppl) t, 1));
-      }
-      break;
-    case AT_LIST:
-      if (ATisEmpty((ATermList) t)) {
-        break;
-      }
-      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-        ms = SG_CreateMultiSetRecursive(pt, mst, ms,
-                                        (tree) ATgetFirst((ATermList) t));
-        if (!ms) {
-          /* if one of the elements contains an ambiguity, we can stop now */
-          break;
-        }
-      }
-      break;
-    case AT_INT:
-    case AT_REAL:
-    case AT_PLACEHOLDER:
-    case AT_BLOB:
-    default:
-      break;
-  }
-  return ms;
-}
-
-static MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst, 
-                                    tree t)
-{
-  MultiSet ms, ims;
-
-  ims = MultiSetCreate(SG_PT_NUMPRODS(pt));
-
-  ms = SG_CreateMultiSetRecursive(pt, mst, ims, t);
-
-  if (!ms) {
-    MultiSetDestroy(ims);
-  }
-  return ms;
-}
-
-static ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
-{
-  return MultiSetEqual(ms1, ms2);
-}
-
-static int SG_GetNrOfPrefers(parse_table *pt, MultiSet ms)
-{
-  ATermInt ly;
-  int y, My;
-  int prefercount = 0;
-  int size = MultiSetGetSize(ms); /* equal to the other one */
-  
-  for (y = 0; y < size; y++) {
-
-    My = MultiSetGetCount(ms, y);
-    if (My > 0) {
-      ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
-      
-      if (SG_ProdType_Label(pt, ly) == SG_PT_EAGER) {
-        prefercount = prefercount + My;
+        return SG_CountAvoidsInTree((tree) ATgetFirst(ambs));
       }
     }
+    else {
+      if (SG_ProdIsAvoid(SG_ProdType_Tree(t))) {
+        return 1;
+      }
+      else if (SG_ProdIsPrefer(SG_ProdType_Tree(t))) {
+        return 0;
+      }
+
+      return SG_CountAvoidsInTree((tree)ATgetArgument((ATermAppl) t, 1));
+    }
+    break;
+  case AT_LIST:
+    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+      ATerm elem = ATgetFirst((ATermList) t);
+      avoids += SG_CountAvoidsInTree((tree) elem);
+    }
+    break;
+  case AT_INT:
+  case AT_REAL:
+  case AT_PLACEHOLDER:
+  case AT_BLOB:
+  default:
+    break;
   }
-  return prefercount;
-}
 
-static int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
+  return avoids;
+}     
+
+static size_t SG_CountPrefersInTree(tree t)
 {
-  ATermInt ly;
-  int y, My;
-  int avoidcount = 0;
-  int size = MultiSetGetSize(ms); /* equal to the other one */
+  ATermList ambs;
+  size_t prefers = 0;
+  AFun fun;
 
-  for (y = 0; y < size; y++) {
+  switch (ATgetType(t)) {
+  case AT_APPL:
+    fun = ATgetAFun((ATerm) t);
 
-    My = MultiSetGetCount(ms, y);
-    if (My > 0) {
-      ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
-
-      if (SG_ProdType_Label(pt, ly) == SG_PT_UNEAGER) {
-        avoidcount = avoidcount + My;
+    if(fun == SG_Amb_AFun) {
+      ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
+      if (ATgetLength(ambs) > 1) { 
+        return 0;
+      }
+      else {
+        return SG_CountPrefersInTree((tree) ATgetFirst(ambs));
       }
     }
+    else {
+      if (SG_ProdIsPrefer(SG_ProdType_Tree(t))) {
+        return 1;
+      }
+      else if (SG_ProdIsAvoid(SG_ProdType_Tree(t))) {
+        return 0;
+      }
+
+      return SG_CountPrefersInTree((tree)ATgetArgument((ATermAppl) t, 1));
+    }
+    break;
+  case AT_LIST:
+    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+      ATerm elem = ATgetFirst((ATermList) t);
+      prefers += SG_CountPrefersInTree((tree) elem);
+    }
+    break;
+  case AT_INT:
+  case AT_REAL:
+  case AT_PLACEHOLDER:
+  case AT_BLOB:
+  default:
+    break;
   }
-  return avoidcount;
-}
-   
-/*
- * This filter is needed because it can happen that one tree
- * contains "avoid"s and the other tree contains "prefer"s.
- * As soon as this happens the MultiSets of both trees become
- * symmetric. The filter "SG_FilterOnPreferAndAvoid" counts
- * the number of prefers and avoids in both trees and tries
- * to make a comparison between the two.
- * 
- *  t1 is prefer over t2 if 
- *  #prefers in t1 >= #prefers in t2 && #avoids in t1 <= #avoids in t2)      
- */
 
-static ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, 
-                                        MultiSet msM, 
-                                        MultiSet msN)
-{                                                            
-  int pM, pN, aM, aN;
-
-  IF_STATISTICS(SG_PreferAndAvoidCalls(SG_NR_INC));
-
-  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
-    return ATfalse;
-  }                         
-
-  pM = SG_GetNrOfPrefers(pt, msM);
-  pN = SG_GetNrOfPrefers(pt, msN);
-  aM = SG_GetNrOfAvoids(pt, msM);
-  aN = SG_GetNrOfAvoids(pt, msN);
-
-  if (((pM > pN) && (aM <= aN)) ||
-      ((pM == pN) && (aM < aN))) {
-    return ATtrue;
-  }
-  else {
-    return ATfalse;
-  }
-}
+  return prefers;
+}     
 
 /* SG_CountInjectionsInTree counts injections using
  * a parse tree, instead of using the multiset directly.
@@ -1013,45 +917,42 @@ static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return NULL;
 }
 
-static tree SG_Count_Eagerness_Filter(parse_table *pt, MultiSetTable mst,
-                                      tree t0, tree t1)
+/*
+ * This filter is needed because it can happen that one tree
+ * contains "avoid"s and the other tree contains "prefer"s.
+ * As soon as this happens the MultiSets of both trees become
+ * symmetric. The filter "SG_FilterOnPreferAndAvoid" counts
+ * the number of prefers and avoids in both trees and tries
+ * to make a comparison between the two.
+ * 
+ *  t1 is prefer over t2 if 
+ *  #prefers in t1 >= #prefers in t2 && #avoids in t1 <= #avoids in t2)      
+ */
+
+static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
   tree max = NULL;
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
-  MultiSet ms0 = MultiSetTableGet(mst, (ATerm) t0);
-  MultiSet ms1 = MultiSetTableGet(mst, (ATerm) t1);
+  int pT0, pT1, aT0, aT1;
 
   IF_STATISTICS(SG_CountEagernessGtrCalls(SG_NR_INC));
 
-  if (ms0 == NULL) {
-    ms0 = SG_CreateMultiSetUsingTree(pt, mst, t0);
-    if (ms0) {
-      MultiSetTablePut(mst, (ATerm) t0, ms0);
-    } 
-  }
-  if (ms1 == NULL) {
-    ms1 = SG_CreateMultiSetUsingTree(pt, mst, t1);
-    if (ms1) {
-      MultiSetTablePut(mst, (ATerm) t1, ms1);
-    }
-  }
-
-  if(!ms0 || !ms1) {
-    /* at least one of the multisets wasn't calculated.
-     * probably due to an ambiguity node in the tree.
-     */
-    return NULL;
-  }
- 
   if (SG_PT_HAS_PREFERS(pt) || SG_PT_HAS_AVOIDS(pt)) {
-    if (SG_FilterOnPreferAndAvoid(pt, ms0, ms1)) {
+    pT0 = SG_CountPrefersInTree(t0);
+    pT1 = SG_CountPrefersInTree(t1);
+    aT0 = SG_CountAvoidsInTree(t0);
+    aT1 = SG_CountAvoidsInTree(t1);
+    
+    if (((pT0 > pT1) && (aT0 <= aT1)) ||
+        ((pT0 == pT1) && (aT0 < aT1))) { 
       IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t > %t\n", l0, l1))
       max = t0;
     }
   
-    if (SG_FilterOnPreferAndAvoid(pt, ms1, ms0)) {
-      if (max) {
+    if (((pT1 > pT0) && (aT1 <= aT0)) ||
+        ((pT1 == pT0) && (aT1 < aT0))) {
+      if (max != NULL) {
         IF_DEBUG(ATfprintf(SG_log(),
                            "Symmetric eagerness priority relation %t %t\n", 
                            l0, l1))
@@ -1070,7 +971,6 @@ static tree SG_Count_Eagerness_Filter(parse_table *pt, MultiSetTable mst,
 
   return max;
 }
-
 
 static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 {
@@ -1134,7 +1034,7 @@ static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
  Returns:    the preferred term of the two, or NULL if there is no
  filter that prefers either one of them
  */
-static tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
+static tree SG_Filter(parse_table *pt, tree t0, tree t1)
 {
   tree max = NULL;
  
@@ -1162,7 +1062,7 @@ static tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
   if (SG_PT_HAS_PREFERENCES(pt)) {
     /* deep eagerness filter */
     if (SG_FILTER_EAGERNESS) {
-      max = SG_Count_Eagerness_Filter(pt, mst, t0, t1);
+      max = SG_Count_Eagerness_Filter(pt, t0, t1);
       if (max) {
 	return max;
       }
@@ -1180,8 +1080,7 @@ static tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
   return max;
 }
 
-ATermList SG_FilterAmbList(parse_table *pt, MultiSetTable mst, ATermList ambs, 
-                           tree t)
+ATermList SG_FilterAmbList(parse_table *pt, ATermList ambs, tree t)
 {
   ATermList  new = ATempty;
   tree       amb, max;
@@ -1197,7 +1096,7 @@ ATermList SG_FilterAmbList(parse_table *pt, MultiSetTable mst, ATermList ambs,
     amb = (tree) ATgetFirst(ambs);
 
     /* Which of the two has a higher priority? */
-    max = SG_Filter(pt, mst, t, amb);
+    max = SG_Filter(pt, t, amb);
 
     if(max == NULL) {
        /* it's a draw, so amb is added */
@@ -1423,10 +1322,9 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
   return t;
 }
 
-static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
-                            tree t, ATbool inAmbs);
+static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs);
 
-static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
+static tree SG_FilterAmbs(parse_table *pt, ATermList ambs)
 {
   ATermList newambs;
   tree amb, newamb;
@@ -1446,7 +1344,7 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
   newambs = ATempty;
   for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
     amb = (tree) ATgetFirst(ambs);
-    newamb = SG_FilterTreeRecursive(pt, mst, amb, ATtrue);
+    newamb = SG_FilterTreeRecursive(pt, amb, ATtrue);
     if (newamb) {
       newambs = ATinsert(newambs, (ATerm)newamb);
     }
@@ -1469,7 +1367,7 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
         amb = (tree) ATgetFirst(ambscopy);
         ambschanged = ATremoveElement(ambs, (ATerm) amb);
         if (!ATisEqual(ambs, ambschanged)) {
-          ambs = SG_FilterAmbList(pt, mst, ambschanged, amb);
+          ambs = SG_FilterAmbList(pt, ambschanged, amb);
         }
       }
     }       
@@ -1490,8 +1388,7 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
   return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
 }
 
-static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
-                                   tree t, ATbool inAmbs)
+static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
 {
   int type = ATgetType(t);
   ATermList args, ambs;
@@ -1510,7 +1407,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
       if (!newt) {
-        newt = SG_FilterAmbs(pt, mst, ambs);
+        newt = SG_FilterAmbs(pt, ambs);
         if (newt) {
           ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
         }
@@ -1528,8 +1425,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
       }
 
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
-      newargs = (ATermList)SG_FilterTreeRecursive(pt, mst, 
-                                                  (tree) args, ATfalse);
+      newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, ATfalse);
       if (newargs) {
         t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
       }
@@ -1549,14 +1445,13 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
         newtail = ATempty;
       } 
       else {
-        newtail = (ATermList)SG_FilterTreeRecursive(pt, mst, 
-                                                    (tree)tail, ATfalse);
+        newtail = (ATermList)SG_FilterTreeRecursive(pt, (tree)tail, ATfalse);
         if (!newtail) {
           return NULL;
         }
       }
     
-      newarg = (tree) SG_FilterTreeRecursive(pt, mst, arg, ATfalse);
+      newarg = (tree) SG_FilterTreeRecursive(pt, arg, ATfalse);
       if (newarg) {
         if (!ATisEqual((ATerm)newarg, (ATerm)arg) || 
             !ATisEqual(newtail, tail)) {
@@ -1578,7 +1473,6 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
 
 tree SG_FilterTree(parse_table *pt, tree t)
 {
-   MultiSetTable mst = NULL;
    int nrAmbs;
    tree newT;
 
@@ -1591,11 +1485,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
    nrAmbs = SGnrAmb(SG_NR_ASK);
    IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
 
-   if (nrAmbs > 0) {
-     mst = MultiSetTableCreate(nrAmbs);
-   }
-
-   newT = SG_FilterTreeRecursive(pt, mst, t, ATfalse);
+   newT = SG_FilterTreeRecursive(pt, t, ATfalse);
    
    IF_VERBOSE(
       /* print 100% bar, the rest was solved by caching ambclusters */
@@ -1605,9 +1495,6 @@ tree SG_FilterTree(parse_table *pt, tree t)
       )
 
 
-   if (mst) {
-     MultiSetTableDestroy(mst);
-   }
    ATtableDestroy(resolvedtable);
    return newT; 
 }
