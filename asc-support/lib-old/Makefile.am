@@ -23,7 +23,7 @@ include make_rules
 lib_LIBRARIES            = libasc-support.a
 
 include_HEADERS          = asc-support.h
-EXTRA_DIST               = rewriter.tb
+EXTRA_DIST               = rewriter.tb make_rules
 
 SRCS = asc-support.c asc-support.h rewriter.c
 ALLSRCS = asc-support.c asc-support.h rewriter.c rewriter.tif.c
