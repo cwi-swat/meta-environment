@@ -276,7 +276,7 @@ ATerm process_productions(SDF_ProductionList prods)
 
     cnt = idx + MIN_PROD;
     aint = (ATerm)ATmakeInt(cnt);
-    ATtablePut(prod_nr_pairs, SDF_makeTermFromProduction(newProd), aint);
+    ATtablePut(prod_nr_pairs, SDF_ProductionToTerm(newProd), aint);
     nr_prod_table[cnt] = flatprod;
     args = (ATermList)ATgetArgument((ATermAppl)flatprod, 0);
     nr_args = ATgetLength(args)+1;
@@ -338,7 +338,7 @@ ATerm processAssocPriority(SDF_Priority prio)
     SDF_Production leftProd = SDF_getGroupProduction(leftGroup);
     SDF_Production newProd = SDF_removeAttributes(leftProd);
     leftnr = ATtableGet(prod_nr_pairs,
-                        SDF_makeTermFromProduction(newProd));
+                        SDF_ProductionToTerm(newProd));
     if (!leftnr) {
       newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
       if (run_verbose) {
@@ -351,7 +351,7 @@ ATerm processAssocPriority(SDF_Priority prio)
     SDF_Production rightProd = SDF_getGroupProduction(rightGroup);
     SDF_Production newProd = SDF_removeAttributes(rightProd);
     rightnr = ATtableGet(prod_nr_pairs,
-                         SDF_makeTermFromProduction(newProd));
+                         SDF_ProductionToTerm(newProd));
     if (!rightnr) {
       newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
       if (run_verbose) {
@@ -408,7 +408,7 @@ ATerm processChainPriority(SDF_Priority prio)
         SDF_Production leftProd = SDF_getGroupProduction(leftGroup);
         SDF_Production newProd = SDF_removeAttributes(leftProd);
         leftnr = ATtableGet(prod_nr_pairs,
-                            SDF_makeTermFromProduction(newProd));
+                            SDF_ProductionToTerm(newProd));
         if (!leftnr) {
           newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
           if (run_verbose) {
@@ -421,7 +421,7 @@ ATerm processChainPriority(SDF_Priority prio)
         SDF_Production rightProd = SDF_getGroupProduction(rightGroup);
         SDF_Production newProd = SDF_removeAttributes(rightProd);
         rightnr = ATtableGet(prod_nr_pairs,
-                             SDF_makeTermFromProduction(newProd));
+                             SDF_ProductionToTerm(newProd));
         if (!rightnr) {
           newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
           if (run_verbose) {
