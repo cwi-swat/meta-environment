@@ -6,6 +6,7 @@ imports utilities/PosInfo[Symbol]
 imports utilities/PosInfo[Alias]
 
 exports
+
   context-free syntax
     pre-check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
     check-module-sorts(Module, Info-Msg-Tuple)     -> Info-Msg-Tuple
@@ -14,7 +15,7 @@ hiddens
   sorts Symbols-Msg-Tuple
 
   context-free syntax
-    "[" SymbolPairsSet "," {Error ","}* "]" -> Symbols-Msg-Tuple
+    "[" SymbolsSet "," {Error ","}* "]" -> Symbols-Msg-Tuple
 
   context-free syntax
     get-parameter-symbols(Module, 
@@ -65,27 +66,27 @@ hiddens
     get-exported-aliased-symbols(Module, 
                                  Symbols-Msg-Tuple, 
                                  ModuleId, 
-                                 SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-exported-aliased-symbols(Section, 
                                  Symbols-Msg-Tuple, 
                                  ModuleId, 
-                                 SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-hidden-aliased-symbols(Module, 
                                Symbols-Msg-Tuple, 
                                ModuleId, 
-                               SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-hidden-aliased-symbols(Section, 
                                Symbols-Msg-Tuple, 
                                ModuleId, 
-                               SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-aliased-symbols(Grammar, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-aliased-symbols(Alias, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
     get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
@@ -94,6 +95,8 @@ hiddens
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, break, top-down)}
     get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, break, top-down)}
+    get-renamed-symbols(Module, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
+    get-renamed-symbols(Renaming, SymbolsSet)   -> SymbolsSet {traversal(accu, break, top-down)}
 
   context-free syntax
     add-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
@@ -110,7 +113,8 @@ hiddens
 
 exports
   context-free syntax
-    make-symbol-warnings(Symbol*, String) -> {Error ","}*
+    make-symbol-warnings(SymbolsSet, String) -> {Error ","}*
+    make-symbol-errors(SymbolsSet, String)   -> {Error ","}*
 
 hiddens
   variables
@@ -123,19 +127,17 @@ hiddens
 
     "$Sort"[0-9]*           -> Sort
     "$Symbol*"[0-9]*        -> Symbol*
-    "SymbolPair*"[0-9]*     -> SymbolPair*
-    "ParameterSymbolPair*"[0-9]* -> SymbolPair*
-    "ParameterSymbol*"[0-9]*     -> Symbol*
-    "DeclaredSymbolPair*"[0-9]* -> SymbolPair*
-    "DeclaredSymbol*"[0-9]*     -> Symbol*
-    "StartSymbolPairsSet"[0-9]* -> SymbolPairsSet
-    "StartSymbol*"[0-9]*     -> Symbol*
-    "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
-    "AliasedSymbol*"[0-9]*  -> Symbol*
+    "ParameterSymbolPairSet"[0-9]* -> SymbolsSet
+    "DeclaredSymbolPairSet"[0-9]*  -> SymbolsSet
+    "StartSymbolPairsSet"[0-9]*    -> SymbolsSet
+    "AliasedSymbolPairSet"[0-9]*   -> SymbolsSet
+    "RenamedSymbolsSet"[0-9]*      -> SymbolsSet
+    "DefinedSymbolsSet"[0-9]*      -> SymbolsSet
+    "UsedSymbolsSet"[0-9]*         -> SymbolsSet
     "$Symbol,*"[0-9]*       -> {Symbol ","}*
     "$Symbol"[0-9]*         -> Symbol
     "$Symbols"[0-9]*        -> Symbols
-    "SymbolPairsSet"[0-9]*  -> SymbolPairsSet
+    "SymbolPairsSet"[0-9]*  -> SymbolsSet
     "SymbolsSet"[0-9]*      -> SymbolsSet
     "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
     "$Literal"[0-9]*        -> Literal

@@ -7,7 +7,7 @@ imports Sdf-AttributeChecker LabelChecker SortChecker
 imports utilities/PosInfo[Import]
 
 exports
-  context-free start-symbols Summary Info-Msg-Tuple ModuleId ImportsSet
+  context-free start-symbols Summary
 
   context-free syntax
     check-sdf(SDF)           -> Summary
@@ -46,15 +46,14 @@ hiddens
     "Import*"[0-9]*         -> Import*
     "ImportsSet"[0-9]*      -> ImportsSet
 
-    "$Symbol*"[0-9]*            -> Symbol*
+    "$Symbol*"[0-9]*   -> Symbol*
+    "SymbolsSet"[0-9]* -> SymbolsSet
 
-    "DeclaredSymbolPair*"[0-9]* -> SymbolPair*
-    "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
-    "UsedSymbolPair*"[0-9]*     -> SymbolPair*
+    "DeclaredSymbolPairSet"[0-9]* -> SymbolsSet
+    "AliasedSymbolPairSet"[0-9]*  -> SymbolsSet
 
     "$Msgs"[0-9]*           -> {Error ","}*
 
     "$Char*"[0-9]* -> CHAR*
 
     "$Location"[0-9]* -> Location
-    "$String"[0-9]* -> StrCon

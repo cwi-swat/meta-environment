@@ -145,19 +145,17 @@ make-error("module not available", strcon(""" $Char* """), $Location),
            post-check-modules(Module Module*, imports(Import*), InfoMsgTuple) = 
               post-check-modules(Module*, imports($ModuleId Import*), InfoMsgTuple)
 
- [pcm-2'1] symbolpairs(DeclaredSymbolPair*) := 
+ [pcm-2'1] DeclaredSymbolPairSet := 
              get-declared-symbols(Import*, get-module-info(InfoMsgTuple1)),
-           symbolpairs(AliasedSymbolPair*) := 
+           AliasedSymbolPairSet := 
              get-aliased-symbols(Import*, get-module-info(InfoMsgTuple1)),
-           symbols($Symbol*1) := 
+           SymbolsSet1 := 
              get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
-           symbols($Symbol*2) := de-modularize(symbolpairs(DeclaredSymbolPair*)), 
-           symbols($Symbol*3) := de-modularize(symbolpairs(AliasedSymbolPair*)),
            $Msgs1 := get-messages(InfoMsgTuple1),
-           symbols($Symbol*4) := diff(symbols($Symbol*2 $Symbol*3),
-                                      symbols($Symbol*1)),
-           $String := symbols2str($Symbol*4),
-           $Msgs2 := make-symbol-warnings($Symbol*4, "unused sort definitions"),
+           SymbolsSet4 := diff(merge(DeclaredSymbolPairSet, 
+                                     AliasedSymbolPairSet),
+                               SymbolsSet1),
+           $Msgs2 := make-symbol-warnings(SymbolsSet4, "unused sort definitions"),
            InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2

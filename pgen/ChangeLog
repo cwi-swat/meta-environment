@@ -1,7 +1,16 @@
 $Id$
 
+Thu Sep  9 10:27:33 CEST 2004 <markvdb@cwi.nl>
+ * Improved the lowel level handling of symbol sets in order
+   to improve the efficiency.
+
 Fri Aug 27 14:56:50 CEST 2004 <jong@cwi.nl>
  * refactor to use new PT_yield functions in MEPT API
+
+Thu Aug 19 11:37:20 CEST 2004 <markvdb@cwi.nl>
+ * Fixed a bug (366) in the sdf-checker with respect to renaming
+   of sorts, renamed sorts are no longer reported as
+   being non declared.
 
 Fri Jul 16 15:18:45 CEST 2004 <markvdb@cwi.nl>
  * Added a warning on missing exported start symbols.

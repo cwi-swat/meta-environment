@@ -1,42 +1,40 @@
 equations
 
-  [diff1] diff(symbols($Symbol*1 $Symbol $Symbol*2), 
-               symbols($Symbol*3 $Symbol $Symbol*4)) =
-            diff(symbols($Symbol*1 $Symbol*2), 
-                 symbols($Symbol*3 $Symbol $Symbol*4))
+  [diff1] contains($Symbol, SymbolsSet) == false,
+          symbols($Symbol*2) := diff(symbols($Symbol*1), SymbolsSet)
+          ====>
+          diff(symbols($Symbol $Symbol*1), SymbolsSet) =
+               symbols($Symbol $Symbol*2)
 
-  [default-diff] diff(symbols($Symbol*1), symbols($Symbol*2)) = 
-                   symbols($Symbol*1)
+  [diff1] contains($Symbol, SymbolsSet) == true
+          ====>
+          diff(symbols($Symbol $Symbol*1), SymbolsSet) =
+             diff(symbols($Symbol*1), SymbolsSet)  
 
-  [sym1] symbols($Symbol*1 $Symbol $Symbol*2 $Symbol $Symbol*3) =
-           symbols($Symbol*1 $Symbol $Symbol*2 $Symbol*3)
+  [diff1] diff(symbols(), SymbolsSet) = symbols()
+
+  [add-1'1] contains($Symbol, symbols($Symbol*)) == false
+            ====>
+            add($Symbol, symbols($Symbol*)) = symbols($Symbol $Symbol*)
+
+  [default-add-1'2] add($Symbol, SymbolsSet) = SymbolsSet
 
   [c-1'1] contains($Symbol, 
                    symbols($Symbol*1 $Symbol $Symbol*2)) = 
             true
 
-  [default-c-1'1] contains($Symbol, symbols(Symbol*)) = false
+  [default-c-1'1] contains($Symbol, symbols($Symbol*)) = false
 
-  [dm-1'1] de-modularize() = 
+  [merge-1'1] merge(symbols(), SymbolsSet) = SymbolsSet
 
-  [dm-1'2]  de-modularize(($ModuleId, $Symbol) SymbolPair*) = 
-             $Symbol de-modularize(SymbolPair*)
+  [merge-1'1] contains($Symbol, SymbolsSet) == true
+              ===>
+              merge(symbols($Symbol $Symbol*1), SymbolsSet) = 
+                merge(symbols($Symbol*1), SymbolsSet)
 
-
-  [dm-2'1] de-modularize(symbolpairs(SymbolPair*)) = 
-             symbols(de-modularize(SymbolPair*))
-
-  [sym1] symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair SymbolPair*3) =
-           symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair*3)
-
-  [c-1'1] contains($Symbol, 
-                   symbolpairs(SymbolPair*1 ($ModuleId, $Symbol) SymbolPair*2)) = 
-            true
-
-  [default-c-1'1] contains($Symbol, symbolpairs(SymbolPair*)) = false
-
-  [c-2'1] contains($ModuleId, $Symbol, 
-                   symbolpairs(SymbolPair*1 ($ModuleId, $Symbol) SymbolPair*2)) = 
-            true
-
-  [default-c-2'1] contains($ModuleId, $Symbol, symbolpairs(SymbolPair*)) = false
+  [merge-1'1] contains($Symbol, SymbolsSet) == false,
+              symbols($Symbol*3) := 
+                merge(symbols($Symbol*1), SymbolsSet)
+              ===>
+              merge(symbols($Symbol $Symbol*1), SymbolsSet) = 
+                symbols($Symbol $Symbol*3)

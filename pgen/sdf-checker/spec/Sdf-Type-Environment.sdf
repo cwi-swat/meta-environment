@@ -20,8 +20,8 @@ exports
 
   context-free syntax
     "[" ImportsSet ","
-        SymbolPairsSet "," %% declared symbols 
-        SymbolPairsSet "," %% aliased symbols 
+        SymbolsSet "," %% declared symbols 
+        SymbolsSet "," %% aliased symbols 
         SymbolsSet ","     %% defined symbols 
         SymbolsSet ","     %% used symbols 
         ProductionsSet "," 
@@ -37,12 +37,11 @@ exports
     mark-modules-as-unchecked(Module-Info-Table)       -> Module-Info-Table
 
   context-free syntax
-    get-declared-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
+    get-declared-symbols(ModuleId, Module-Info-Table)  -> SymbolsSet
     put-declared-symbols-info(ModuleId,
-                              SymbolPairsSet, 
-                              Module-Info-Table)        -> Module-Info-Table
-    get-declared-symbols(Import*, Module-Info-Table) -> SymbolPair*
-    get-declared-symbols(Import*, Module-Info-Table) -> SymbolPairsSet
+                              SymbolsSet, 
+                              Module-Info-Table)       -> Module-Info-Table
+    get-declared-symbols(Import*, Module-Info-Table)   -> SymbolsSet
 
   context-free syntax
     get-imports(ModuleId, Module-Info-Table)   -> ImportsSet
@@ -51,28 +50,25 @@ exports
                      Module-Info-Table)        -> Module-Info-Table
 
   context-free syntax
-    get-defined-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    get-defined-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
     put-defined-symbols-info(ModuleId,
                              SymbolsSet, 
-                             Module-Info-Table)        -> Module-Info-Table
-    get-defined-symbols(Import*, Module-Info-Table) -> Symbol*
-    get-defined-symbols(Import*, Module-Info-Table) -> SymbolsSet
+                             Module-Info-Table)      -> Module-Info-Table
+    get-defined-symbols(Import*, Module-Info-Table)  -> SymbolsSet
 
   context-free syntax
     get-used-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
     put-used-symbols-info(ModuleId,
                           SymbolsSet, 
                           Module-Info-Table)        -> Module-Info-Table
-    get-used-symbols(Import*, Module-Info-Table) -> Symbol*
     get-used-symbols(Import*, Module-Info-Table) -> SymbolsSet
 
   context-free syntax
-    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
+    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
     put-aliased-symbols-info(ModuleId,
-                             SymbolPairsSet, 
+                             SymbolsSet, 
                              Module-Info-Table)        -> Module-Info-Table
-    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolPair*
-    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolPairsSet
+    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolsSet
 
   context-free syntax
     get-defined-productions(ModuleId, Module-Info-Table)  -> ProductionsSet
@@ -98,8 +94,8 @@ hiddens
     "ModuleInfoEntry*"[0-9]* -> Module-Info-Entry*
     "ModuleInfoTable"[0-9]*  -> Module-Info-Table
     "ModuleInfo"[0-9]*       -> Module-Info
-    "SymbolPair*"[0-9]*      -> SymbolPair*
-    "SymbolPairsSet"[0-9]*   -> SymbolPairsSet
+    "SymbolPair*"[0-9]*      -> Symbol*
+    "SymbolPairsSet"[0-9]*   -> SymbolsSet
     "SymbolsSet"[0-9]*       -> SymbolsSet
     "Symbol*"[0-9]*          -> Symbol*
     "Import"[0-9]*           -> Import

@@ -4,7 +4,7 @@ equations
 
   [cme-1'1] create-module-entry($ModuleId,{ModuleInfoEntry*}) =
               {[$ModuleId, true, 
-                [imports(), symbolpairs(), symbolpairs(), symbols(), symbols(), productions(), constructors()]] 
+                [imports(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
                ModuleInfoEntry*}
 
   [gmi-1'1] get-module-info([ModuleInfoTable, Messages]) = ModuleInfoTable
@@ -39,7 +39,7 @@ equations
                                           {ModuleInfoEntry*}) = 
                       {[$ModuleId, 
                         true, 
-                        [imports(), symbolpairs(), symbolpairs(), symbols(), symbols(), productions(), constructors()]] 
+                        [imports(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
                        ModuleInfoEntry*}
     
   [mic-1'1] module-is-checked($ModuleId,
@@ -68,7 +68,7 @@ equations
                                      ImportsSet,
                                      {ModuleInfoEntry*}) =
                        {[$ModuleId, true, 
-                         [ImportsSet, symbolpairs(), symbolpairs(), 
+                         [ImportsSet, symbols(), symbols(), 
                           symbols(), symbols(), 
                           productions(), constructors()]] 
                          ModuleInfoEntry*}
@@ -99,7 +99,7 @@ equations
                                                SymbolPairsSet,
                                                {ModuleInfoEntry*}) =
                        {[$ModuleId, true, 
-                         [imports(), SymbolPairsSet, symbolpairs(), 
+                         [imports(), SymbolPairsSet, symbols(), 
                           symbols(), symbols(),
                           productions(), constructors()]] 
                          ModuleInfoEntry*}
@@ -112,23 +112,20 @@ equations
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolPairsSet1
 
-  [default-gds-1'2] get-declared-symbols($ModuleId, ModuleInfoTable) = symbolpairs()
+  [default-gds-1'2] get-declared-symbols($ModuleId, ModuleInfoTable) = symbols()
 
-  [gds-2'1] get-declared-symbols(, ModuleInfoTable) = 
+  [gds-2'1] get-declared-symbols(, ModuleInfoTable) = symbols()
 
   [gds-2'2] $ModuleName := get-modulename(Import),
             $ModuleId := get-module-id($ModuleName),
-            symbolpairs(SymbolPair*1) := 
+            SymbolPairsSet1 := 
                get-declared-symbols($ModuleId, ModuleInfoTable),
-            SymbolPair*2 := get-declared-symbols(Import*, ModuleInfoTable)
+            SymbolPairsSet2 := get-declared-symbols(Import*, ModuleInfoTable)
             =============================================================
             get-declared-symbols(Import Import*, 
-                                 ModuleInfoTable) = SymbolPair*1 SymbolPair*2
+                                 ModuleInfoTable) = merge(SymbolPairsSet1, SymbolPairsSet2)
 
-  [gds-3'1] SymbolPair* := get-declared-symbols(Import*, ModuleInfoTable)
-            ============================================================
-            get-declared-symbols(Import*, ModuleInfoTable) = 
-              symbolpairs(SymbolPair*)
+
 
   [pasi-1'1] put-aliased-symbols-info($ModuleId, 
                                       SymbolPairsSet1,
@@ -149,7 +146,7 @@ equations
                                               SymbolPairsSet,
                                               {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
-                        [imports(), symbolpairs(), SymbolPairsSet, 
+                        [imports(), symbols(), SymbolPairsSet, 
                          symbols(), symbols(),
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
@@ -162,23 +159,18 @@ equations
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolPairsSet2
 
-  [default-gas-1'2] get-aliased-symbols($ModuleId, ModuleInfoTable) = symbolpairs()
+  [default-gas-1'2] get-aliased-symbols($ModuleId, ModuleInfoTable) = symbols()
 
-  [gas-2'2] get-aliased-symbols(, ModuleInfoTable) = 
+  [gas-2'2] get-aliased-symbols(, ModuleInfoTable) = symbols()
 
   [gas-2'3] $ModuleName := get-modulename(Import),
             $ModuleId := get-module-id($ModuleName),
-            symbolpairs(SymbolPair*1) := 
+            SymbolPairsSet1 := 
                get-aliased-symbols($ModuleId, ModuleInfoTable),
-            SymbolPair*2 := get-aliased-symbols(Import*, ModuleInfoTable)
+            SymbolPairsSet2 := get-aliased-symbols(Import*, ModuleInfoTable)
             ============================================================
             get-aliased-symbols(Import Import*, ModuleInfoTable) = 
-              SymbolPair*1 SymbolPair*2
-
-  [gas-3'1] SymbolPair* := get-aliased-symbols(Import*, ModuleInfoTable)
-            ===========================================================
-            get-aliased-symbols(Import*, ModuleInfoTable) = 
-              symbolpairs(SymbolPair*)
+              merge(SymbolPairsSet1, SymbolPairsSet2)
 
   [pdsi-1'1] put-defined-symbols-info($ModuleId, 
                                       SymbolsSet1,
@@ -199,7 +191,7 @@ equations
                                               SymbolsSet,
                                               {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
-                        [imports(), symbolpairs(), symbolpairs(), 
+                        [imports(), symbols(), symbols(), 
                          SymbolsSet, symbols(),
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
@@ -214,20 +206,16 @@ equations
 
   [default-gds-1'2] get-defined-symbols($ModuleId, ModuleInfoTable) = symbols()
 
-  [gds-2'1] get-defined-symbols(, ModuleInfoTable) = 
+  [gds-2'1] get-defined-symbols(, ModuleInfoTable) = symbols()
 
   [gds-2'2] $ModuleName := get-modulename(Import),
             $ModuleId := get-module-id($ModuleName),
-            symbols(Symbol*1) := 
+            SymbolsSet1 := 
                get-defined-symbols($ModuleId, ModuleInfoTable),
-            Symbol*2 := get-defined-symbols(Import*, ModuleInfoTable)
+            SymbolsSet2 := get-defined-symbols(Import*, ModuleInfoTable)
             ====>
             get-defined-symbols(Import Import*, ModuleInfoTable) = 
-              Symbol*1 Symbol*2
-
-  [gds-3'1] Symbol* := get-defined-symbols(Import*, ModuleInfoTable)
-            ====>
-            get-defined-symbols(Import*, ModuleInfoTable) = symbols(Symbol*)
+              merge(SymbolsSet1, SymbolsSet2)
 
   [pusi-1'1] put-used-symbols-info($ModuleId, 
                                       SymbolsSet1,
@@ -248,7 +236,7 @@ equations
                                            SymbolsSet,
                                            {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
-                        [imports(), symbolpairs(), symbolpairs(), 
+                        [imports(), symbols(), symbols(), 
                          symbols(), SymbolsSet,
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
@@ -263,21 +251,16 @@ equations
 
   [default-gus-1'2] get-used-symbols($ModuleId, ModuleInfoTable) = symbols()
 
-  [gus-2'1] get-used-symbols(, ModuleInfoTable) = 
+  [gus-2'1] get-used-symbols(, ModuleInfoTable) = symbols() 
 
   [gus-2'2] $ModuleName := get-modulename(Import),
             $ModuleId := get-module-id($ModuleName),
-            symbols(Symbol*1) := 
+            SymbolsSet1 := 
                get-used-symbols($ModuleId, ModuleInfoTable),
-            Symbol*2 := get-used-symbols(Import*, ModuleInfoTable)
+            SymbolsSet2 := get-used-symbols(Import*, ModuleInfoTable)
             ======================================================
             get-used-symbols(Import Import*, ModuleInfoTable) = 
-              Symbol*1 Symbol*2
-
-  [gus-3'1] Symbol* := get-used-symbols(Import*, ModuleInfoTable)
-            =====================================================
-            get-used-symbols(Import*, ModuleInfoTable) = 
-              symbols(Symbol*)
+              merge(SymbolsSet1, SymbolsSet2)
 
   [ppi-1'1] put-production-info($ModuleId, 
                                 ProductionsSet1,
@@ -298,7 +281,7 @@ equations
                                         ProductionsSet,
                                         {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
-                        [imports(), symbolpairs(), symbolpairs(), 
+                        [imports(), symbols(), symbols(), 
                          symbols(), symbols(),
                          ProductionsSet, constructors()]] 
                         ModuleInfoEntry*}
@@ -345,7 +328,7 @@ equations
                                          ConstructorSet,
                                          {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
-                        [imports(), symbolpairs(), symbolpairs(), 
+                        [imports(), symbols(), symbols(), 
                          symbols(), symbols(), 
                          productions(), ConstructorSet]] 
                         ModuleInfoEntry*}
