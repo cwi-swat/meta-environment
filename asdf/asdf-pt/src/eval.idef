@@ -1,0 +1,28 @@
+process Eval is
+let
+  EvalTool : toolEval,
+  Term       : term,
+  Args       : list,
+  Function   : str,
+  Sort       : str
+in
+  (
+    (
+      rec-msg(rewrite("Eval", Term?)) .
+      execute(toolEval, EvalTool?) .
+      snd-eval(EvalTool, rewrite(Term))
+    +
+      rec-msg(apply-rewrite("Eval", Function?, Sort?, Args?)).
+      execute(toolEval, EvalTool?) .
+      snd-eval(EvalTool, apply-rewrite(Function,Sort,Args))
+    ).
+    rec-value(EvalTool, normalform(Term?)) .
+    snd-terminate(EvalTool,"done").
+    snd-msg(normalform("Eval", Term)).
+    Term := null
+  ) *
+  delta
+endlet
+
+tool toolEval is { command = "Eval" }
+toolbus(Eval)
