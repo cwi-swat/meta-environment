@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -264,8 +265,10 @@ ATerm add_sdf2_module(int cid, char* moduleName, char* path, ATerm sdfTree,
                                 ATparse("unavailable"),  /* Eqs Text */
                                 ATmakeInt(0),            /* Time Eqs */
                                 Mtrue,                   /* Eqs changed?: true */
-                                ATparse("unavailable"),  /* Path ParseTable */
-                                ATmakeInt(0)             /* Time of ParseTable */
+                                ATparse("unavailable"),  /* Path EqsParseTable */
+                                ATmakeInt(0),            /* Time of EqsParseTable */
+                                ATparse("unavailable"),  /* Path TrmParseTable */
+                                ATmakeInt(0)             /* Time of TrmParseTable */
                                );
       PutValue(new_modules_db, modname_term, entry);
       imports = get_import_section_sdf2(sdfTree);
@@ -293,9 +296,10 @@ void update_syntax_status_of_modules(ATermList mods)
   while (!ATisEmpty(mods)) {
     modname = ATgetFirst(mods);
     entry = (ATermList)GetValue(new_modules_db, modname);
-    entry = ATreplace(entry,ATparse("unavailable"),EQS_TREE_LOC);
-    entry = ATreplace(entry,Mtrue,EQS_UPDATED_LOC);
-    entry = ATreplace(entry,ATparse("unavailable"),TABLE_LOC);
+    entry = ATreplace(entry, ATparse("unavailable"), EQS_TREE_LOC);
+    entry = ATreplace(entry, Mtrue, EQS_UPDATED_LOC);
+    entry = ATreplace(entry, ATparse("unavailable"), EQS_TABLE_LOC);
+    entry = ATreplace(entry, ATparse("unavailable"), TRM_TABLE_LOC);
     PutValue(new_modules_db, modname, (ATerm)entry);
     mods = ATgetNext(mods);
   }
@@ -330,7 +334,9 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
                                  SYN_UPDATED_LOC);
   
         entry = (ATerm)ATreplace((ATermList)entry,
-                      ATparse("unavailable"),TABLE_LOC);
+                       ATparse("unavailable"), EQS_TABLE_LOC);
+        entry = (ATerm)ATreplace((ATermList)entry,
+                       ATparse("unavailable"), TRM_TABLE_LOC);
         PutValue(new_modules_db, atModuleName, entry);
 
         chg_mods = modules_depend_on(atModuleName,ATempty);
@@ -378,8 +384,10 @@ ATerm add_empty_module(int cid, char *moduleName)
                             ATparse("unavailable"),      /* Eqs Text */
                             ATmakeInt(0),                /* Time Eqs */
                             Mtrue,                       /* Eqs changed?: true */
-                            ATparse("unavailable"),      /* Path ParseTable */ 
-                            ATmakeInt(0)                 /* Time of ParseTable */
+                            ATparse("unavailable"),      /* Path EqsParseTable */ 
+                            ATmakeInt(0),                /* Time of EqsParseTable */
+                            ATparse("unavailable"),      /* Path TrmParseTable */ 
+                            ATmakeInt(0)                 /* Time of TrmParseTable */
                            );
   PutValue(new_modules_db, ATmake("<str>", moduleName), entry);
 
@@ -494,21 +502,31 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
   }
 }
 
-ATerm add_parse_table(int cid, char *module, char *table, int timestamp)
+ATerm add_parse_table(int cid, char *module, char *table, 
+                               ATerm tableType, int timestamp)
 {
   ATerm entry, modname;
 
   modname = ATmake("<str>",module);
 
   entry = GetValue(new_modules_db, modname);
-  entry = (ATerm)ATreplace((ATermList)entry,
-                           ATmake("table(<str>)",table),
-                           TABLE_LOC); 
-  entry = (ATerm)ATreplace((ATermList)entry,
-                           (ATerm)ATmakeInt(timestamp),
-                           TABLE_TIME_LOC);
+  if (ATisEqual(tableType, ATmake("eqs"))) {
+    entry = (ATerm)ATreplace((ATermList)entry,
+                             ATmake("table(<str>)", table),
+                             EQS_TABLE_LOC); 
+    entry = (ATerm)ATreplace((ATermList)entry,
+                             (ATerm)ATmakeInt(timestamp),
+                             EQS_TABLE_TIME_LOC);
+  } else {
+    entry = (ATerm)ATreplace((ATermList)entry,
+                             ATmake("table(<str>)", table),
+                             TRM_TABLE_LOC); 
+    entry = (ATerm)ATreplace((ATermList)entry,
+                             (ATerm)ATmakeInt(timestamp),
+                             TRM_TABLE_TIME_LOC);
+  }
   PutValue(new_modules_db, modname, entry);
-  return ATmake("snd-value(done)");
+  return ATmake("snd-value(parse-table-added)");
 }
 
 /* Get the path to module modulename. type is either eqs or sdf2,
@@ -570,7 +588,7 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   isChanged = ATelementAt((ATermList)entry, updated_location);
   asfix = ATelementAt((ATermList)entry, location);
   if(ATisEqual(isChanged, Mtrue)) {
-    if(ATisEqual(asfix,ATparse("unavailable"))) {
+    if(ATisEqual(asfix, ATparse("unavailable"))) {
 	return ATmake("snd-value(unavailable)");
     } else {
       isChanged = Mfalse;
@@ -588,7 +606,7 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
       /* isChanged = false */
       if (module_type == eqs) {
 	  asfix = ATelementAt((ATermList)entry, location);
-	  if(ATisEqual(asfix,ATparse("unavailable"))) {
+	  if(ATisEqual(asfix, ATparse("unavailable"))) {
 	    return ATmake("snd-value(unavailable)");
 	  } else {
 	      return ATmake("snd-value(tree(<term>))", asfix);
@@ -602,17 +620,24 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   return NULL;
 }
 
-ATbool is_valid_parse_table(ATermList visited, ATerm module, int time);
+ATbool is_valid_parse_table(ATermList visited, ATerm module, 
+                            int timeOfEqsTable, int timeOfTrmTable);
 
-ATerm get_parse_table(int cid, char *modulename)
+ATerm get_parse_table(int cid, char *modulename, ATerm tableType)
 {
   ATermList entry;
   ATerm     table, modname;
   char      *place;
+  int tableLoc;
 
+  if(ATisEqual(tableType, ATmake("eqs"))) {
+    tableLoc = EQS_TABLE_LOC;
+  } else {
+    tableLoc = TRM_TABLE_LOC;
+  }
   modname = ATmake("<str>",modulename);
   if((entry = (ATermList) GetValue(new_modules_db, modname))) {
-    table = ATelementAt((ATermList)entry, TABLE_LOC);
+    table = ATelementAt((ATermList)entry, tableLoc);
     if(ATmatch(table,"table(<str>)",&place))
       return ATmake("snd-value(table(<str>))",place);
   }
@@ -627,7 +652,7 @@ ATerm get_parse_table(int cid, char *modulename)
  */
 void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
 {
-  int time;
+  int timeOfEqsTable, timeOfTrmTable;
   char *imported_modulename;
   ATermList imports;
   ATerm import,modname;
@@ -636,12 +661,17 @@ void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
   modname = ATmake("<str>",modulename);
   entry = (ATermList)GetValue(new_modules_db, modname);
   if(entry) {
-    time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, TABLE_TIME_LOC));
+    timeOfEqsTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+                                                    EQS_TABLE_TIME_LOC));
+    timeOfTrmTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+                                                    TRM_TABLE_TIME_LOC));
 
     if(ATindexOf(visited, modname, 0) < 0) {
-      if(!is_valid_parse_table(ATempty, modname, time)) {
-        entry = ATreplace(entry,ATparse("unavailable"),TABLE_LOC);
-        entry = ATreplace(entry,ATparse("unavailable"),EQS_TREE_LOC);
+      if(!is_valid_parse_table(ATempty, modname, 
+                               timeOfEqsTable, timeOfTrmTable)) {
+        entry = ATreplace(entry,ATparse("unavailable"), EQS_TABLE_LOC);
+        entry = ATreplace(entry,ATparse("unavailable"), TRM_TABLE_LOC);
+        entry = ATreplace(entry,ATparse("unavailable"), EQS_TREE_LOC);
         PutValue(new_modules_db, modname, (ATerm)entry);
       }
       visited = ATinsert(visited, modname);
@@ -774,7 +804,7 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
     entry = GetValue(new_modules_db, module);
     if(entry) {
       asfix = ATelementAt((ATermList)entry, SYN_LOC);
-      if(!ATisEqual(asfix,ATparse("unavailable"))) {
+      if(!ATisEqual(asfix, ATparse("unavailable"))) {
 	ATerm first;
 	ATbool result = ATtrue;
 	ATermList imports = (ATermList) GetValue(import_db,module);
@@ -801,7 +831,8 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
-ATbool is_valid_parse_table(ATermList visited, ATerm module, int timetable)
+ATbool is_valid_parse_table(ATermList visited, ATerm module, 
+                            int timeOfEqsTable, int timeOfTrmTable)
 {
   ATbool result;
   ATermList imports;
@@ -812,16 +843,19 @@ ATbool is_valid_parse_table(ATermList visited, ATerm module, int timetable)
   time = (int)ATelementAt((ATermList)entry, SYN_TIME_LOC);
   time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, SYN_TIME_LOC));
 
-  if(time > timetable) 
+  if(time > timeOfEqsTable || time > timeOfTrmTable) {
     result = ATfalse;
-  else
+  } else {
     result = ATtrue;
+  }
+
   if(ATindexOf(visited, module, 0) < 0) {
     imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
     while(imports && !ATisEmpty(imports)) {
       first = ATgetFirst(imports);
-      result = result && is_valid_parse_table(visited, first, timetable);
+      result = result && is_valid_parse_table(visited, first, 
+                                              timeOfEqsTable, timeOfTrmTable);
       imports = ATgetNext(imports);
     };
     return result;

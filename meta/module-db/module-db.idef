@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,7 +43,8 @@ let
   Status    : str,
   Language  : str,
   ErrorMsg  : str,
-  OutputDir : str
+  OutputDir : str, 
+  TableType : term
 in
 
 /* First, execute the module db */
@@ -200,10 +202,10 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-updated)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(add-table-to-db(Name?,Table?,timestamp(Time?))).
-  snd-eval(Mdb,add-parse-table(Name,Table,Time)).
-  rec-value(Mdb,done).
-  snd-msg(done)
+  rec-msg(add-parse-table-to-db(Name?, Table?, TableType?, timestamp(Time?))).
+  snd-eval(Mdb,add-parse-table(Name, Table, TableType, Time)).
+  rec-value(Mdb,parse-table-added).
+  snd-msg(parse-table-added)
 +
 /* Add parse table to the database for the given module name */
   rec-msg(get-sdf2-path-from-db(Name?)).
@@ -218,12 +220,12 @@ snd-do(Mdb, create-module-db).
   snd-msg(path(Path))
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-table-from-db(Name?)).
-  snd-eval(Mdb,get-parse-table(Name)).
-  ( rec-value(Mdb,table(Table?)).
+  rec-msg(get-table-from-db(Name?, TableType?)).
+  snd-eval(Mdb, get-parse-table(Name, TableType)).
+  ( rec-value(Mdb, table(Table?)).
     snd-msg(table(Table))
   +
-    rec-value(Mdb,no-table).
+    rec-value(Mdb, no-table).
     snd-msg(no-table)
   )
 +

@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,18 +36,23 @@
 #define RemoveKey(db,k) (ATtableRemove(db,k))
 #define CreateValueStore(i1,i2) (ATtableCreate(i1,i2))
 
-#define PATH_SYN_LOC 0     /* Location to store the path to the syntax file. */
-#define SYN_LOC 1          /* Tree of the syntax file. */
-#define SYN_TIME_LOC 2     /* Timestamp of the syntax file. */
-#define SYN_UPDATED_LOC 3  /* Is the syntax changed? */
-#define PATH_EQS_LOC 4     /* Location to store the path to the equations. */
-#define EQS_TREE_LOC 5     /* Tree of the equations. */
-#define EQS_TEXT_LOC 6     /* Text file of the equations. */
-#define EQS_TIME_LOC 7     /* Timestamp of equations file. */
-#define EQS_UPDATED_LOC 8  /* Are the equations changed? */
-#define TABLE_LOC 9        /* Location to store the path to the parse-table. */
-#define TABLE_TIME_LOC 10  /* Location to store the timestamp of the parse-table. */
-#define LOC_CNT 11         /* Number of locations in entry */
+#define PATH_SYN_LOC 0        /* Location to store the path to syntax file. */
+#define SYN_LOC 1             /* Tree of the syntax file. */
+#define SYN_TIME_LOC 2        /* Timestamp of the syntax file. */
+#define SYN_UPDATED_LOC 3     /* Is the syntax changed? */
+#define PATH_EQS_LOC 4        /* Location to store the path to the equations. */
+#define EQS_TREE_LOC 5        /* Tree of the equations. */
+#define EQS_TEXT_LOC 6        /* Text file of the equations. */
+#define EQS_TIME_LOC 7        /* Timestamp of equations file. */
+#define EQS_UPDATED_LOC 8     /* Are the equations changed? */
+#define EQS_TABLE_LOC 9       /* Location to store path to equations
+                               * parse-table. */
+#define EQS_TABLE_TIME_LOC 10 /* Location to store timestamp of equations
+                               * parse-table. */
+#define TRM_TABLE_LOC 11      /* Location to store path to term parse-table. */
+#define TRM_TABLE_TIME_LOC 12 /* Location to store timestamp of term 
+                               * parse-table. */
+#define LOC_CNT 13            /* Number of locations in entry */
 
 #define Mtrue (ATerm)ATmakeInt(1)
 #define Mfalse (ATerm)ATmakeInt(0)
