@@ -80,6 +80,8 @@ char *PT_yieldSymbolVisualVariables(PT_Symbol symbol);
 ATerm PT_reportTreeAmbiguities(PT_Tree tree);
 ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree);
 
+PT_ParseTree flattenPT(PT_ParseTree tree);
+PT_Tree flattenTree(PT_Tree tree);
 
 ATerm PT_implodeParseTree(PT_ParseTree tree,
 			  ATbool _interpret_cons ,

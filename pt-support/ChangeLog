@@ -1,5 +1,11 @@
 $Id$
 
+2003/11/21 (jurgenv@cwi.nl)
+ * Merged libasfix2 and libconversion, then removed library libconversions
+   and put all functionality into libmept/flattenPT.c. Added flattenTree
+   to MEPT-utils.h and removed all dead interface code from the rest of 
+   the conversion library.
+
 2003/11/03 (jurgenv@cwi.nl)
  * Added lowering, the opposite of lifting to ptmept. The liftPT tool supports
    it via the -l flag. Lowering of parsed ATerms and parsed AsFix is supported.
