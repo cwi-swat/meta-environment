@@ -19,6 +19,9 @@
 
 $Id$
 
+2001/02/01 (mdejonge@cwi.nl)
+   * reconf and DEVELOPERS-INFO files are now also distributed
+
 2001/02/01 (jurgenv@cwi.nl)
    * regress-test moved to test directory
 
