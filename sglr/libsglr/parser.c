@@ -46,6 +46,7 @@ typedef struct shift_pair {
 typedef struct path {
   stack             *stack;
   ATermList         args;
+  size_t            length;
   struct path       *next;
 } path;
 
@@ -53,6 +54,7 @@ static path *free_paths = NULL;
 
 #define SG_P_STACK(x)                  (x)->stack
 #define SG_P_ARGS(x)                   (x)->args
+#define SG_P_LENGTH(x)                 (x)->length
 #define SG_P_NEXT(x)                   (x)->next
 
 /*  The state of the parser is stored in the following global variables  */
@@ -74,10 +76,12 @@ void      SG_Actor(stack *);
 ATbool    SG_CheckLookAhead(lookahead la);
 void      SG_DoReductions(stack*, action);
 #ifndef DEBUG
-void    SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
+void    SG_Reducer(stack *st0, state s, label prodl, 
+                   ATermList kids, size_t length,
                    int attr);
 #else
-void    SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
+void    SG_Reducer(stack *st0, state s, label prodl, 
+                   ATermList kids, size_t length,
                    int attr, stack *stpt);
 #endif
 void      SG_DoLimitedReductions(stack*, action, st_link*);
@@ -161,7 +165,7 @@ void  SG_DiscardShiftPairs(void)
   sg_sp_idx = 0;
 }
 
-path *SG_NewPath(stack *st, ATermList sons, path *ps)
+path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
 {
   path *p;
 
@@ -204,7 +208,9 @@ void SG_ClearPath(register path *p)
  |nrArgs|.
  */
 
-static path *SG_FindAllPaths(stack *st, int nrArgs, ATermList sons, path *paths)
+static path *SG_FindAllPaths(stack *st, int nrArgs, 
+                             ATermList sons, size_t length,
+                             path *paths)
 {
   register st_links  *ls = NULL;
   ATermList newsons = NULL;
@@ -214,13 +220,15 @@ static path *SG_FindAllPaths(stack *st, int nrArgs, ATermList sons, path *paths)
   }
 
   if (nrArgs == 0) {
-    paths = SG_NewPath(st, sons, paths);
+    paths = SG_NewPath(st, sons, length, paths);
   }
   else if (nrArgs > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
       st_link *l = SG_HEAD(ls);
       newsons = ATinsert(sons, (ATerm) SG_LK_TREE(l));
-      paths = SG_FindAllPaths(SG_LK_STACK(l), nrArgs - 1, newsons, paths);
+      paths = SG_FindAllPaths(SG_LK_STACK(l), nrArgs - 1, 
+                              newsons, length + SG_LK_LENGTH(l), 
+                              paths);
     }
   }
   return paths;
@@ -241,7 +249,7 @@ static path *SG_FindAllPathsWithoutSons(stack *st, int nrArgs, path *paths)
   }
 
   if (nrArgs == 0) {
-    paths = SG_NewPath(st, ATempty, paths);
+    paths = SG_NewPath(st, ATempty, 0, paths);
   }
   else if (nrArgs > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
@@ -279,7 +287,7 @@ static ATbool SG_FindLink(stack *st, int nrArgs, st_link *l0)
  */
 
 static path *SG_FindPaths(stack *st, int nrArgs, st_link *l0, ATbool link_seen,
-                   ATermList sons, path *paths)
+                          ATermList sons, size_t length, path *paths)
 {
   register st_links  *ls = NULL;
   st_link   *l1 = NULL;
@@ -290,14 +298,16 @@ static path *SG_FindPaths(stack *st, int nrArgs, st_link *l0, ATbool link_seen,
   }
 
   if (nrArgs == 0 && link_seen) {
-    paths = SG_NewPath(st, sons, paths);
+    paths = SG_NewPath(st, sons, length, paths);
   }
   else if (nrArgs > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
       l1 = SG_HEAD(ls);
       newsons = ATinsert(sons, (ATerm) SG_LK_TREE(l1));
       paths = SG_FindPaths(SG_LK_STACK(l1), nrArgs - 1, l0,
-                           link_seen || (l0 == l1), newsons, paths);
+                           link_seen || (l0 == l1), 
+                           newsons, length + SG_LK_LENGTH(l1),
+                           paths);
     }
   }
   return paths;
@@ -321,7 +331,7 @@ static path *SG_FindPathsWithoutSons(stack *st, int nrArgs,
   }
 
   if (nrArgs == 0 && link_seen) {
-    paths = SG_NewPath(st, ATempty, paths);
+    paths = SG_NewPath(st, ATempty, 0, paths);
   }
   else if (nrArgs > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
@@ -342,7 +352,7 @@ path *SG_FindLimitedPaths(stack *st, int nrArgs, st_link *l0)
 {
   if (SG_FindLink(st, nrArgs, l0)) {
     if (SG_OUTPUT) {
-      return SG_FindPaths(st, nrArgs, l0, ATfalse, ATempty, NULL);
+      return SG_FindPaths(st, nrArgs, l0, ATfalse, ATempty, 0, NULL);
     }
     else {
       return SG_FindPathsWithoutSons(st, nrArgs, l0, ATfalse, NULL);
@@ -705,7 +715,7 @@ void SG_DoReductions(stack *st, action a)
   prod = SG_A_PROD(a);
 
   if (SG_OUTPUT) {
-    fps = SG_FindAllPaths(st, SG_A_NR_ARGS(a), ATempty, NULL);
+    fps = SG_FindAllPaths(st, SG_A_NR_ARGS(a), ATempty, 0, NULL);
   }
   else {
     fps = SG_FindAllPathsWithoutSons(st, SG_A_NR_ARGS(a), NULL);
@@ -715,11 +725,11 @@ void SG_DoReductions(stack *st, action a)
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_A_ATTRIBUTE(a));
+               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a));
 #else
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_A_ATTRIBUTE(a), st);
+               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a), st);
 #endif
   }
   SG_ClearPath(fps);
@@ -750,9 +760,12 @@ void SG_DoReductions(stack *st, action a)
  */
 
 #ifndef DEBUG
-void SG_Reducer(stack *st0, state s, label prodl, ATermList kids, int attribute)
+void SG_Reducer(stack *st0, state s, label prodl, 
+                ATermList kids, size_t length,
+                int attribute)
 #else
-void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
+void SG_Reducer(stack *st0, state s, label prodl, 
+                ATermList kids, size_t length,
                 int attribute, stack *stpt)
 #endif
 {
@@ -778,7 +791,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 #else
     st1 = SG_NewStack(s, stpt, ATfalse);
 #endif
-    nl  = SG_AddLink(st1, st0, t);
+    nl  = SG_AddLink(st1, st0, t, length);
     /*
      Add eventual reject stacks to the active stacks too;
      a stack might converge with it, later on
@@ -821,7 +834,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
        */
       register stacks *sts;
 
-      nl = SG_AddLink(st1, st0, t);
+      nl = SG_AddLink(st1, st0, t, length);
       /*  Reject?  */
       if (attribute == SG_PT_REJECT) {
         SG_MarkLinkRejected(nl);
@@ -873,11 +886,11 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_A_ATTRIBUTE(a));
+               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a));
 #else
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_A_ATTRIBUTE(a), st);
+               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a), st);
 #endif
   }
   SG_ClearPath(fps);
@@ -922,7 +935,7 @@ void SG_Shifter(void)
 #endif
         new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
-      l = SG_AddLink(st1, st0, (tree) t);
+      l = SG_AddLink(st1, st0, (tree) t, 1);
 
     } else IF_DEBUG(
       fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
@@ -1086,7 +1099,6 @@ tree SG_ParseResult(char *sort)
      * So, before printing the tree (forest) cycle detection,
      * and filtering is performed. 
      */
-
     if (SG_OUTPUT) {
       t = (tree) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
@@ -1160,7 +1172,6 @@ tree SG_ParseResult(char *sort)
       }
     }
     else {
-      ATwarning("Successful parse yielded no parse tree\n");
       return SG_ParseError(ATempty, 0, NULL);
     }
   }

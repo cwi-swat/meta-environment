@@ -341,7 +341,7 @@ void SG_DeleteStacks(stacks *sts)
 #endif
 }
 
-st_link *SG_NewLink(tree t, stack *st)
+st_link *SG_NewLink(tree t, size_t tl, stack *st)
 {
   st_link *lk;
 
@@ -350,6 +350,7 @@ st_link *SG_NewLink(tree t, stack *st)
     free_links = (st_link *)lk->stack;
 
     lk->tree = t;
+    lk->length = tl;
     lk->stack = st;
     lk->rejected = ATfalse;
 
@@ -359,6 +360,7 @@ st_link *SG_NewLink(tree t, stack *st)
   if((lk = SG_MallocLink())) {
     lk->tree = t;
     ATprotect((ATerm *) &(lk->tree));
+    lk->length = tl;
     lk->stack = st;
     lk->rejected = ATfalse;
 #ifdef  MEMSTATS
@@ -375,6 +377,7 @@ st_link *SG_NewLink(tree t, stack *st)
 void SG_DeleteLink(st_link *lk)
 {
   lk->tree = NULL;
+  lk->length = 0;
   lk->stack = (struct stack *)free_links;
   free_links = lk;
 
@@ -387,11 +390,11 @@ void SG_DeleteLink(st_link *lk)
 #endif
 }
 
-st_link *SG_AddLink(stack *frm, stack *to, tree t)
+st_link *SG_AddLink(stack *frm, stack *to, tree t, size_t tl)
 {
   st_link *link;
 
-  if((link = SG_NewLink(t, to))) {
+  if((link = SG_NewLink(t, tl, to))) {
     frm->links = SG_AddLinks(link, frm->links);
   }
   return link;

@@ -37,6 +37,7 @@ typedef list st_links;
 typedef struct link {
   struct stack   *stack;
   tree           tree;
+  size_t         length;
   ATbool         rejected;
 } st_link;
 
@@ -60,6 +61,7 @@ typedef struct stack {
 #define SG_ST_ISSHIFT(s)        (((stack *)s)->isshift)
 
 #define SG_LK_TREE(l)           (((st_link *)l)->tree)      /* Tree of a link */
+#define SG_LK_LENGTH(l)         (((st_link *)l)->length)    /* Length of tree of a link */
 #define SG_LK_STACK(l)          (((st_link *)l)->stack)     /* Stack of a link */
 #define SG_LK_REJECTED(l)       (((st_link *)l)->rejected)  /* Rejected attr. of link */
 
@@ -77,7 +79,7 @@ stack    *SG_NewStack(state s, stack *st, ATbool isshift);
 #endif
 #define   SG_NewStacks(s)  SG_AddStack(s, NULL)
 stacks   *SG_AddStack(stack *st, stacks *sts);
-st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
+st_link  *SG_AddLink(stack *st0, stack *st1,  tree t, size_t tl);
 st_links *SG_AddLinks(st_link *l, st_links *ls);
 
 stacks   *SG_CollectOldStacks(stacks **old, int nr_old, stacks *new, stack *accept);
