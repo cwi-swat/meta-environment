@@ -112,6 +112,6 @@ public class SdfImportGraph implements SdfImportGraphTif {
 	}
 
 	public void recTerminate(ATerm t0) {
-
+                bridge.stopRunning();
 	}
 }

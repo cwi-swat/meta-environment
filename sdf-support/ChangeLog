@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun 30 09:40:04 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
+ * utils/import-graph/sdf:SdfImportGraph.java
+   - stopRunning bridge on rec-terminate 
+
 Fri Jun 18 14:05:52 CEST 2004 <kooiker@cwi.nl>
  * Also depends on toolbus 
 
