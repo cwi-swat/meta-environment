@@ -28,6 +28,7 @@
 
  [ButtonArgs, click, click],
  [ButtonArgs, menu, menu(<list(MenuTitles)>)],
+ [ButtonArgs, menuwithshortcut, menuwithshortcut(<list(MenuTitles)>, <shortcut(str)>)],
  [ButtonArgs, icon, icon(<title(str)>, <path(str)>)],
 
  [MenuTitles, empty, []],

@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Jul 10 17:59:30 2003
+ * Generated at Fri Oct 17 15:19:14 2003
  */
 
 #ifndef __MetaButtons_dict_H
@@ -23,11 +23,13 @@ extern AFun MB_afun12;
 extern AFun MB_afun13;
 extern AFun MB_afun14;
 extern AFun MB_afun15;
+extern AFun MB_afun16;
 
 extern ATerm MB_patternModuleNameWildcard;
 extern ATerm MB_patternMenuTitlesMany;
 extern ATerm MB_patternMenuTitlesEmpty;
 extern ATerm MB_patternButtonArgsIcon;
+extern ATerm MB_patternButtonArgsMenuwithshortcut;
 extern ATerm MB_patternButtonArgsMenu;
 extern ATerm MB_patternButtonArgsClick;
 extern ATerm MB_patternButtonTypeWildcard;
