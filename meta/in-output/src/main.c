@@ -68,6 +68,39 @@ static size_t getFileSize(const char *s)
 }
 
 /*}}}  */
+/*{{{  static char *readFileContents(const char *fnam, size_t *size) */
+
+static char *readFileContents(const char *fnam, size_t *size)
+{
+  char *buf = NULL;
+  FILE *fd;
+
+  *size = getFileSize(fnam);
+
+  if((fd = fopen(fnam, "rb")) == NULL) {
+    *size = 0;
+    return NULL;
+  }
+
+  if((buf = (char *)malloc(*size + 1)) == NULL ) {
+    fclose(fd);
+    *size = 0;
+    return NULL;
+  }
+
+  if(fread(buf, 1, *size, fd) != *size) {
+    free(buf);
+    fclose(fd);
+    *size = 0;
+    return NULL;
+  }
+
+  fclose(fd);
+  buf[*size] = '\0';
+  return buf ;
+}
+
+/*}}}  */
  /*{{{  static char *expandPath(const char *relative_path) */
 
 /* Expand a relative path to its absolute equivalent
@@ -113,68 +146,6 @@ static char *expandPath(const char *relative_path)
   }
 
   return absolute_path;
-}
-
-/*}}}  */
-/*{{{  static char* normalizeFilename(const char *path) */
-
-static char* normalizeFilename(const char *path)
-{
-  int i;
-  int len = strlen(path);
-  char *prefix;
-  char *newprefix = NULL;
-  char *newpath = NULL;
-
-  for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
-
-  prefix = strdup(path);
-  prefix[i] = '\0';
-
-  newprefix = expandPath(prefix);
-  newpath = (char*) malloc(strlen(newprefix) + (len - i));
-
-  strcpy(newpath,newprefix);
-  newpath[strlen(newpath)] = '/';
-  strcpy(newpath+strlen(newprefix)+1,path+i+1);
-
-  free(prefix);
-  free(newprefix);
-
-  return(newpath);
-}
-
-/*}}}  */
-/*{{{  static char *readFileContents(const char *fnam, size_t *size) */
-
-static char *readFileContents(const char *fname, size_t *size)
-{
-  char *buf = NULL;
-  FILE *fd;
-
-  *size = getFileSize(fname);
-
-  if((fd = fopen(fname, "rb")) == NULL) {
-    *size = 0;
-    return NULL;
-  }
-
-  if((buf = (char *)malloc(*size + 1)) == NULL ) {
-    fclose(fd);
-    *size = 0;
-    return NULL;
-  }
-
-  if(fread(buf, 1, *size, fd) != *size) {
-    free(buf);
-    fclose(fd);
-    *size = 0;
-    return NULL;
-  }
-
-  fclose(fd);
-  buf[*size] = '\0';
-  return buf ;
 }
 
 /*}}}  */
@@ -610,24 +581,24 @@ ATerm decons_filename(int conn, const char *filename, const char *extension)
 
 ATerm get_path_directory(int conn, const char *path)
 {
-  char *directory, *normalized = NULL;
+  char *copy;
+  char *directory;
   ATerm result;
 
   assert(path != NULL);
 
-  /* normalize (Windows) paths to UNIX style paths */
-  normalized = normalizeFilename(path);
+  copy = strdup(path);
+  assert(copy != NULL);
 
-  directory = strrchr(normalized, PATH_SEPARATOR);
+  directory = strrchr(copy, PATH_SEPARATOR);
   if (directory != NULL) {
     *directory = EOS;
-    result = ATmake("directory(<str>)", normalized);
+    result = ATmake("directory(<str>)", copy);
+    free(copy);
   }
   else {
     result = ATmake("directory(<str>)", "");
   }
-
-  free(normalized);
 
   return ATmake("snd-value(<term>)", result);
 }
@@ -637,16 +608,12 @@ ATerm get_path_directory(int conn, const char *path)
 
 ATerm get_path_filename(int conn, const char *path)
 {
-  char *filename = NULL;
+  char *filename;
   ATerm result;
-  int i, len = strlen(path);
 
   assert(path != NULL);
 
-  for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
-
-  filename = (char*) malloc(len - i);
-  strcpy(filename, path + i);
+  filename = strrchr(path, PATH_SEPARATOR);
   if (filename != NULL) {
     char *copy;
     char *extension;
