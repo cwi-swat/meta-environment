@@ -11,21 +11,26 @@ AC_OUTPUT(
    Makefile
    utils/Makefile
    library/Makefile
-   library/asfix/Makefile
-   library/asfix/syntax/Makefile
-   library/asf/Makefile
-   library/asf/syntax/Makefile
-   library/asf/tools/Makefile
    library/basic/Makefile
    library/containers/Makefile
-   library/disambiguation/Makefile
-   library/functions/Makefile
-   library/strategies/Makefile
-   library/aterm/Makefile
-   library/system/Makefile
-   library/sdf2/Makefile
-   library/sdf2/syntax/Makefile
-   library/sdf2/normalization/Makefile
-   library/sdf2/projection/Makefile
-   library/sdf2/renaming/Makefile
+   library/utilities/Makefile
+   library/languages/Makefile
+   library/languages/cpp/Makefile
+   library/languages/cpp/syntax/Makefile
+   library/languages/asfix/Makefile
+   library/languages/asfix/syntax/Makefile
+   library/languages/asf/Makefile
+   library/languages/asf/syntax/Makefile
+   library/languages/aterm/Makefile
+   library/languages/aterm/syntax/Makefile
+   library/languages/sdf2/Makefile
+   library/languages/sdf2/syntax/Makefile
+   library/languages/sdf2/normalization/Makefile
+   library/languages/sdf2/projection/Makefile
+   library/languages/sdf2/renaming/Makefile
+   library/languages/pico/Makefile
+   library/languages/pico/syntax/Makefile
+   library/languages/pico/interpreter/Makefile
+   library/languages/pico/typechecker/Makefile
+   library/languages/pico/compiler/Makefile
 )
