@@ -695,11 +695,11 @@
 
 [Ffst]	evalx($Exp, $Store) = <$Elem1, $Elem2>
 	===================================================
-	evalx(fst($Exp), $Store) = $Elem1
+	evalx(first($Exp), $Store) = $Elem1
 
 [Fsec]	evalx($Exp, $Store) = <$Elem1, $Elem2>
 	===================================================
-	evalx(sec($Exp), $Store) = $Elem2
+	evalx(second($Exp), $Store) = $Elem2
 
 %% ---- FUN ( EXP , EXP )  -> EXP
 
@@ -717,27 +717,27 @@
 
 [RdomR]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	===================================================
-	evalx(domR($Exp1, $Exp2), $Store) = domR($Rel, $Bag)
+	evalx(domainR($Exp1, $Exp2), $Store) = domR($Rel, $Bag)
 
 [FranR]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	===================================================
-	evalx(ranR($Exp1, $Exp2), $Store) = ranR($Rel, $Bag)
+	evalx(rangeR($Exp1, $Exp2), $Store) = ranR($Rel, $Bag)
 
 [FcarR]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	====================================================
-	evalx(carR($Exp1, $Exp2), $Store) = carR($Rel, $Bag)
+	evalx(carrierR($Exp1, $Exp2), $Store) = carR($Rel, $Bag)
 
 [FdomX]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	====================================================
-	evalx(domX($Exp1, $Exp2), $Store) = domX($Rel, $Bag)
+	evalx(domainX($Exp1, $Exp2), $Store) = domX($Rel, $Bag)
 
 [FranX]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	====================================================
-	evalx(ranX($Exp1, $Exp2), $Store) = ranX($Rel, $Bag)
+	evalx(rangeX($Exp1, $Exp2), $Store) = ranX($Rel, $Bag)
 
 [FcarX]	$Rel = evalr($Exp1, $Store), $Bag = evalb($Exp2, $Store)
 	====================================================
-	evalx(carX($Exp1, $Exp2), $Store) = carX($Rel, $Bag)
+	evalx(carrierX($Exp1, $Exp2), $Store) = carX($Rel, $Bag)
 
 %% ---- FUN ( EXP , EXP , EXP)  -> EXP
 

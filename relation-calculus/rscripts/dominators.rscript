@@ -48,7 +48,7 @@ rel[str,bag[str]] DOMINATES =
 bag[str] Empty = {}	%% define as constant to avoid ambiguities when using
 			%% {} in an expression
 
-bool Assert = DOMINATES ==
+assert "DOMINATES": DOMINATES ==
  	{
 	<"R", {"A", "B", "C", "D", "E", "F", "G", "L", "H", "I", "J", "K"}>, 
 	<"A", Empty>, 

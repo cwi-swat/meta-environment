@@ -37,7 +37,7 @@ rel[int,int] post-dominators(
 	bag[int] CONTROL-STATEMENT, 
 	rel[int,int] PRED) 
 
-= domR(DOMINATES, CONTROL-STATEMENT)
+= domainR(DOMINATES, CONTROL-STATEMENT)
 where
   	rel[int,int] DOMINATES =
   	{ S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) : 
@@ -65,7 +65,7 @@ where
 	%% Compute the relation between each use and corresponding definitions: ud
 
 	rel[<str,int>,<str,int>] ud = 
- 	 {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] | V == fst(Pair)}
+ 	 {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] | V == first(Pair)}
 
 	%% Note, it would be more readable (but currently not possible) to write the 
 	%% above expression as:
@@ -80,7 +80,7 @@ where
     		 {<<V,S>, <"eps",S>> : <V, S> in DEF}
     		 union
     		 {<<"tau",S1>,<V,S1>> : S1 in CONTROL-STATEMENT, 
-			    		<V, S2> in ranR(USE, {S1}) | S1 == S2}
+			    		<V, S2> in rangeR(USE, {S1}) | S1 == S2}
 
 	%% Control dependence: cd
 

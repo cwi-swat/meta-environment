@@ -7,7 +7,6 @@ rel[int,int] Rel2 = {<1,10>, <2,20>, <3,30>}
 
 bag[int] EMPTYBAG = {}
 rel[int,int] EMPTYREL = {}
-
 %% --- id
 
 assert "id-1": id(EMPTYBAG) == EMPTYREL
@@ -17,7 +16,7 @@ assert "id-2": id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
 
 assert "domain-1" : domain(EMPTYREL) == EMPTYBAG
 assert "domain-2" : domain(Rel1) == {1}
-assert "domain-3" : domain(Rel2) ==  {1, 2, 3}
+assert "domain-3" : domain(Rel2) == {1, 2, 3}
 
 %% --- range
 
@@ -52,67 +51,67 @@ assert "inv-2": inv(Rel2) == {<10,1>,<20,2>,<30,3>}
 assert "compl-1": compl(EMPTYREL) == EMPTYREL
 assert "compl-2": compl(Rel1) ==  {<1, 1>, <10, 1>, <10, 10>}
 
-%% --- domR
+%% --- domainR
 
-assert "domR-1": domR(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "domR-2": domR(EMPTYREL, {1}) == EMPTYREL
-assert "domR-3": domR(Rel2, EMPTYBAG) == EMPTYREL
-assert "domR-4": domR(Rel2, {1}) == {<1,10>}
-assert "domR-5": domR(Rel2, {3, 1}) == {<1,10>,<3,30>}
-assert "domR-6": domR(Rel2, {7, 17}) == EMPTYREL
+assert "domainR-1": domainR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "domainR-2": domainR(EMPTYREL, {1}) == EMPTYREL
+assert "domainR-3": domainR(Rel2, EMPTYBAG) == EMPTYREL
+assert "domainR-4": domainR(Rel2, {1}) == {<1,10>}
+assert "domainR-5": domainR(Rel2, {3, 1}) == {<1,10>,<3,30>}
+assert "domainR-6": domainR(Rel2, {7, 17}) == EMPTYREL
 
-%% --- ranR
+%% --- rangeR
 
-assert "ranR-1": ranR(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "ranR-2": ranR(EMPTYREL, {10}) == EMPTYREL
-assert "ranR-3": ranR(Rel2, EMPTYBAG) == EMPTYREL
-assert "ranR-4": ranR(Rel2, {10}) == {<1,10>}
-assert "ranR-5": ranR(Rel2, {30, 10}) == {<1,10>,<3,30>}
-assert "ranR-6": ranR(Rel2, {7, 17}) == EMPTYREL
+assert "rangeR-1": rangeR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "rangeR-2": rangeR(EMPTYREL, {10}) == EMPTYREL
+assert "rangeR-3": rangeR(Rel2, EMPTYBAG) == EMPTYREL
+assert "rangeR-4": rangeR(Rel2, {10}) == {<1,10>}
+assert "rangeR-5": rangeR(Rel2, {30, 10}) == {<1,10>,<3,30>}
+assert "rangeR-6": rangeR(Rel2, {7, 17}) == EMPTYREL
 
-%% --- carR
+%% --- carrierR
 
-assert "carR-1": carR(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "carR-2": carR(EMPTYREL, {10}) == EMPTYREL
-assert "carR-3": carR(Rel2, EMPTYBAG) == EMPTYREL
-assert "carR-4": carR(Rel2, {10, 1, 20}) == {<1,10>}
-assert "carR-5": carR(Rel2, {30, 1, 3, 10}) == {<1,10>,<3,30>}
-assert "carR-6": carR(Rel2, {7, 17}) == EMPTYREL
+assert "carrierR-1": carrierR(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "carrierR-2": carrierR(EMPTYREL, {10}) == EMPTYREL
+assert "carrierR-3": carrierR(Rel2, EMPTYBAG) == EMPTYREL
+assert "carrierR-4": carrierR(Rel2, {10, 1, 20}) == {<1,10>}
+assert "carrierR-5": carrierR(Rel2, {30, 1, 3, 10}) == {<1,10>,<3,30>}
+assert "carrierR-6": carrierR(Rel2, {7, 17}) == EMPTYREL
 
-%% --- domX
+%% --- domainX
 
-assert "domX-1": domX(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "domX-2": domX(EMPTYREL, {1}) == EMPTYREL
-assert "domX-3": domX(Rel2, EMPTYBAG) == Rel2
-assert "domX-4": domX(Rel2, {1}) == {<2,20>,<3,30>}
-assert "domX-5": domX(Rel2, {3, 1}) == {<2,20>}
-assert "domX-6": domX(Rel2, {7, 17}) == Rel2
+assert "domainX-1": domainX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "domainX-2": domainX(EMPTYREL, {1}) == EMPTYREL
+assert "domainX-3": domainX(Rel2, EMPTYBAG) == Rel2
+assert "domainX-4": domainX(Rel2, {1}) == {<2,20>,<3,30>}
+assert "domainX-5": domainX(Rel2, {3, 1}) == {<2,20>}
+assert "domainX-6": domainX(Rel2, {7, 17}) == Rel2
 
-%% --- ranX
+%% --- rangeX
 
-assert "ranX-1": ranX(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "ranX-2": ranX(EMPTYREL, {10}) == EMPTYREL
-assert "ranX-3": ranX(Rel2, EMPTYBAG) == Rel2
-assert "ranX-4": ranX(Rel2, {10}) ==  {<2,20>,<3,30>}
-assert "ranX-5": ranX(Rel2, {30, 10}) == {<2,20>}
-assert "ranX-6": ranX(Rel2, {7, 17}) == Rel2
+assert "rangeX-1": rangeX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "rangeX-2": rangeX(EMPTYREL, {10}) == EMPTYREL
+assert "rangeX-3": rangeX(Rel2, EMPTYBAG) == Rel2
+assert "rangeX-4": rangeX(Rel2, {10}) ==  {<2,20>,<3,30>}
+assert "rangeX-5": rangeX(Rel2, {30, 10}) == {<2,20>}
+assert "rangeX-6": rangeX(Rel2, {7, 17}) == Rel2
 
-%% --- carX
+%% --- carrierX
 
-assert "carX-1": carX(EMPTYREL, EMPTYBAG) == EMPTYREL
-assert "carX-2": carX(EMPTYREL, {10}) == EMPTYREL
-assert "carX-3": carX(Rel2, EMPTYBAG) == Rel2
-assert "carX-4": carX(Rel2, {10, 1, 20}) == {<3,30>}
-assert "carX-5": carX(Rel2, {30, 1, 3, 10}) == {<2,20>}
-assert "carX-6": carX(Rel2, {7, 17}) == Rel2
+assert "carrierX-1": carrierX(EMPTYREL, EMPTYBAG) == EMPTYREL
+assert "carrierX-2": carrierX(EMPTYREL, {10}) == EMPTYREL
+assert "carrierX-3": carrierX(Rel2, EMPTYBAG) == Rel2
+assert "carrierX-4": carrierX(Rel2, {10, 1, 20}) == {<3,30>}
+assert "carrierX-5": carrierX(Rel2, {30, 1, 3, 10}) == {<2,20>}
+assert "carrierX-6": carrierX(Rel2, {7, 17}) == Rel2
 
-%% --- fst
+%% --- first
 
-assert "fst-1": fst(<1,2>) == 1
+assert "first-1": first(<1,2>) == 1
 
-%% --- sec
+%% --- second
 
-assert "sec-2": sec(<1,2>) == 2
+assert "second-2": second(<1,2>) == 2
 
 %% --- reachX
 

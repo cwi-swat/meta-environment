@@ -196,16 +196,16 @@ $Error]>
       ============================================
       check(<$Exp1, $Exp2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
-%% --- Check bags
+%% --- Check bags or relations
 
-[check-bag1] 
+[check-br1] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  container-type($Etype),
        check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
        ==========================================
        check({ $Exp, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
 
-[check-bag2] 
+[check-br2] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  container-type($Etype)
        ==========================================
@@ -213,18 +213,18 @@ $Error]>
 
 %% --- Check relations
 
-[check-rel1] 
-       check(<$Exp1,$Exp2>, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' = container-type($Etype),
-       check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
-       ==========================================
-       check({ <$Exp1, $Exp2>, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
-
-[checkrel2] 
-       check(<$Exp1, $Exp2>, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' = container-type($Etype)
-       ==========================================
-       check({ <$Exp1, $Exp2> }, $Tenv) = <$Etype, $Tenv'>
+%%[check-rel1] 
+%%       check(<$Exp1,$Exp2>, $Tenv) = <$Etype, $Tenv'>,
+ %%      $Etype' = container-type($Etype),
+%%       check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
+%%       ==========================================
+%%       check({ <$Exp1, $Exp2>, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
+%%
+%%[checkrel2] 
+%%       check(<$Exp1, $Exp2>, $Tenv) = <$Etype, $Tenv'>,
+%%       $Etype' = container-type($Etype)
+%%       ==========================================
+%%       check({ <$Exp1, $Exp2> }, $Tenv) = <$Etype, $Tenv'>
 
 %%[checkrel3]
 %%        check(EmptyRel, $Tenv) = <empty, $Tenv>
@@ -781,15 +781,15 @@ $Error]>
        		<inv,     fun [ rel[T1,T2] ] 			to rel[T2,T1]>,
 		<compl,   fun [ rel[T1, T2] ] 			to rel[T1,T2]>,
 
-       		<domR,    fun [ rel[T1,T2], bag[T1] ]		to rel[T1,T2]>,
-       		<ranR,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
-       		<carR,    fun [ rel[T,T], bag[T] ] 		to rel[T,T]>,
+       		<domainR, fun [ rel[T1,T2], bag[T1] ]		to rel[T1,T2]>,
+       		<rangeR,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
+       		<carrierR,    fun [ rel[T,T], bag[T] ] 		to rel[T,T]>,
 
-       		<domX,    fun [ rel[T1,T2], bag[T1] ] 		to rel[T1,T2]>,
-       		<ranX,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
-       		<carX,    fun [	rel[T,T], bag[T] ] 		to rel[T,T]>,
-                <fst,     fun [ <T1,T2>] 			to T1>,
-                <sec,     fun [ <T1,T2> ] 			to T2>,
+       		<domainX,    fun [ rel[T1,T2], bag[T1] ] 		to rel[T1,T2]>,
+       		<rangeX,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
+       		<carrierX,    fun [	rel[T,T], bag[T] ] 		to rel[T,T]>,
+                <first,     fun [ <T1,T2>] 			to T1>,
+                <second,     fun [ <T1,T2> ] 			to T2>,
 
                 <reachX,  fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
                 <reachR,  fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >

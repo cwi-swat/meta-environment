@@ -1,5 +1,11 @@
 %% Test suite for built-in operators
 
+int ONE = 1
+int TWO = 2
+int THREE = 3
+
+<int,int> ONE-TWO = <1,2>
+
 bag[int] EMPTYBAG = {}
 
 bag[int] Bag1 = {1,2,3}
@@ -9,6 +15,30 @@ rel[int,int] EMPTYREL = {}
 
 rel[int,int] Rel1 = {<1,10>, <2,20>, <3,30>}
 rel[int,int] Rel2 = {<3,30>, <4,40>, <5,50>}
+
+%% --- Bag and relation expressions
+
+assert "bag 1": {1} == {1}
+assert "bag 2": {1,2} == {1,2}
+assert "bag 3": {1,2,3} == {1,2,3}
+assert "bag 4": {1,2,3} == Bag1
+assert "bag 5": Bag1 == Bag1
+assert "bag 6": {ONE,2,3} == Bag1
+assert "bag 7": {1,TWO,3} == Bag1
+assert "bag 7": {ONE,TWO,THREE} == Bag1
+
+assert "rel 1": {<1,10>} == {<1,10>}
+assert "rel 2": {<1,10>, <2,20>} == {<1,10>, <2,20>}
+assert "rel 3": {<1,10>, <2,20>, <3,30>} == {<1,10>, <2,20>, <3,30>}
+assert "rel 4": {<1,10>, <2,20>, <3,30>} == Rel1
+assert "rel 5": Rel1 == Rel1
+assert "rel 6": {<ONE,2>} == {<1,2>}
+assert "rel 7": {<ONE,TWO>} == {<1,2>}
+assert "rel 8": {ONE-TWO} == {<1,2>}
+assert "rel 9": {ONE-TWO, <3,4>} == {<1,2>,<3,4>}
+assert "rel 10": {<0,1>, ONE-TWO, <3,4>} == {<0,1>, <1,2>,<3,4>}
+
+
 
 %% --- Boolean operators
 
@@ -259,7 +289,7 @@ assert "Bag former 17": { X : X in {{1,2,3},{10,20,30},{100,200,300}} } ==
 %% --- Relation former
 
 assert "Rel former 1":  { EMPTYREL : X in {1,2,3}} == EMPTYREL
-assert "Rel former 2":  { X : X in EMPTYREL} == EMPTYREL
+assert "Rel former 2":  { <X,Y> : <X,Y> in EMPTYREL} == EMPTYREL
 
 assert "Rel former 3":  { Rel1 : X in {1,2,3}} == Rel1
 

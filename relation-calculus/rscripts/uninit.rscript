@@ -5,7 +5,7 @@
         rel[node,str] USES
         rel[node,str] DEFS
 
-        rel[str,node] occurrences(<node,str> S) = sec(S) x USE_OCCURS[S]
+        rel[str,node] occurrences(<node,str> S) = second(S) x USE_OCCURS[S]
 
         rel[str,node] UNDEF = 
         { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
