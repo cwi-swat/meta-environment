@@ -24,6 +24,7 @@
 #include "dialogtool.idef"
 #include "graphnodesizer.idef"
 #include "treebrowser.idef"
+#include "modulebrowser.idef"
 
 /* tide support */
 #define TIDE_PASSIVE
