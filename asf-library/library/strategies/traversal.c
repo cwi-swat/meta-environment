@@ -5,7 +5,6 @@
 #include <aterm2.h>
 
 extern PT_Tree rewrite(PT_Tree trm); 
-extern ATbool runVerbose;
 
 /*{{{  ATerm patterns (should be apified!) */
 
