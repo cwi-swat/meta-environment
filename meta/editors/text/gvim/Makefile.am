@@ -34,6 +34,7 @@ gvim_connector_LDADD = \
 	$(SOCKLIBS)
 
 lib_gvim_la_SOURCES = comm.c startup.c
+lib_gvim_la_LDFLAGS = -module
 
 meta.vim: meta.vim.src
 	sed 's@__LIBDIR__@$(libdir)@g' < $< > $@

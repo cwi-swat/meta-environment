@@ -1,15 +1,13 @@
 package metastudio.components.graphs;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.FontMetrics;
-import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.ImageObserver;
 
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -37,7 +35,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
     private JSlider slider;
     private MetaGraphFactory factory;
     private JViewport view;
-    private JButton zoomToFit;
+    private JLabel zoomToFit;
 
     public ZoomableGraphPanel(
         MetaGraphFactory factory,
@@ -58,7 +56,9 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 
         JScrollPane scrolledPane = new JScrollPane(graphPanel);
         view = scrolledPane.getViewport();
-        view.setBackground(Preferences.getColor("graph.background"));
+        
+        Color bgcolor = Preferences.getColor("graph.background");
+		view.setBackground(bgcolor);
         view.addMouseWheelListener(wheel);
 
         add(scrolledPane, BorderLayout.CENTER);
@@ -66,9 +66,8 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
         JPanel sliderPanel = new JPanel();
         sliderPanel.setLayout(new BorderLayout());
         
-        sliderPanel.add(slider, BorderLayout.CENTER);
-        
-        zoomToFit = new JButton("Z");
+        zoomToFit = new JLabel("Z",JLabel.CENTER);
+        zoomToFit.setBackground(bgcolor);
         zoomToFit.addMouseListener(new MouseInputAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int scale = graphPanel.getZoomToFitFactor(view.getVisibleRect());
@@ -76,10 +75,9 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
             }
         });
         zoomToFit.setToolTipText("Zoom to fit");
-        zoomToFit.setMinimumSize(new Dimension(ImageObserver.HEIGHT,ImageObserver.HEIGHT));
-        zoomToFit.setMaximumSize(new Dimension(ImageObserver.HEIGHT,ImageObserver.HEIGHT));
-        zoomToFit.setMargin(new Insets(0,0,0,0));
-        sliderPanel.add(zoomToFit, BorderLayout.SOUTH);
+        sliderPanel.add(zoomToFit, BorderLayout.NORTH);
+        sliderPanel.add(slider, BorderLayout.CENTER);
+        sliderPanel.setBackground(bgcolor);
         
         add(sliderPanel, BorderLayout.WEST);
         
