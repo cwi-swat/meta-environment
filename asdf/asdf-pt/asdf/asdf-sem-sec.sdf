@@ -24,8 +24,8 @@ exports
 
 
     Literal Constructor 	   -> AS-Eqs-Lhs {cons("eqs-lhs")} 
-    Literal "(" {VarLex ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
-    Literal "(" VarLex* ")"	   -> Constructor {cons("cons-seq")}
+    Literal "(" {VarLex* ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
+%%    Literal "(" VarLex* ")"	   -> Constructor {cons("cons-seq")}
     VarLex			   -> Constructor {cons("cons-symbol")}
     Literal			   -> Constructor {cons("cons-lit")}
     "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
