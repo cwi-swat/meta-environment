@@ -2,7 +2,9 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES	  = -I$(PT_SUPPORT)/include -I$(ATERM)/include
+INCLUDES	  = -I$(PT_SUPPORT)/include \
+                    -I$(ATERM)/include \
+                    -I$(ASF_SUPPORT)/include
 
 bin_PROGRAMS	  = apply-function concat-asf
 
