@@ -148,5 +148,5 @@ init.c: $(SPEC_SRCS)
 clean:
 	$(RM) *.asfix *.o init.c @TARGET@ @TARGET@-db @TARGET@-prof
 
-realclean spotless:	clean
-	$(RM) *.c
+realclean spotless distclean:	clean
+	$(RM) Makefile
