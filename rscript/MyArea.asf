@@ -1,0 +1,12 @@
+equations
+
+[fn1]	get-filename(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4))	= lit2str($Literal)
+
+[bl1] 	get-beginline(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4)) 	= $NatCon1
+[bc1] 	get-begincol(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4)) 	= $NatCon2
+
+[el1] 	get-endline(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4)) 	= $NatCon3
+[ec1] 	get-endcol(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4)) 	= $NatCon4
+
+
+[l2s] 	lit2str(literal(Char*)) 	= strcon(Char*)
