@@ -1,0 +1,4 @@
+#!/bin/sh
+prefix=@prefix@
+libdir=@prefix@/lib
+@TOOLBUS@/bin/toolbus $@ -I${libdir} ${libdir}/meta.tb

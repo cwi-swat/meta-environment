@@ -1,0 +1,74 @@
+# @configure_input@
+# Directory: aterm-lib
+
+# Configure variable substitutions
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+@SET_MAKE@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= ${exec_prefix}/bin
+libdir		= ${exec_prefix}/lib
+includedir	= ${prefix}/include
+
+SHELL		= @SHELL@
+
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROG	= @INSTALL_PROG@
+UNINSTALL	= @UNINSTALL@
+
+# Ordering is important here: the toolbus dir. should come first
+SUBDIRS		= toolbus editor evaluator graph-browser import-db \
+		in-output tree-db
+
+all doc clean:
+	@for DIR in $(SUBDIRS);	\
+	do \
+		echo Make $@ in $$DIR; \
+		cd $$DIR; \
+		$(MAKE) $@; \
+		cd ..; \
+	done
+
+uninstall:
+	$(UNINSTALL) $(bindir) meta
+	@for DIR in $(SUBDIRS);	\
+	do \
+		echo Make $@ in $$DIR; \
+		cd $$DIR; \
+		$(MAKE) $@; \
+		cd ..; \
+	done
+
+install:
+	mkinstalldirs $(bindir) $(libdir) $(includedir)
+	$(INSTALL_PROG) $(INSTALL) $(bindir) meta
+	@for DIR in $(SUBDIRS);	\
+	do \
+		echo Make $@ in $$DIR; \
+		cd $$DIR; \
+		$(MAKE) $@; \
+		cd ..; \
+	done
+
+distclean:
+	rm -f Makefile Makefile.skel config.cache config.log config.status
+	rm -f install-data-sh install-prog-sh meta
+	@for DIR in $(SUBDIRS);	\
+	do \
+		echo Make $@ in $$DIR; \
+		cd $$DIR; \
+		$(MAKE) $@; \
+		cd ..; \
+	done
+
+depend:
+
+
+
