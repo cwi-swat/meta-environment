@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Oct 17 15:19:14 2003
+ * Generated at Tue Dec 23 14:31:53 2003
  */
 
 #ifndef __MetaButtons_dict_H
@@ -24,6 +24,7 @@ extern AFun MB_afun13;
 extern AFun MB_afun14;
 extern AFun MB_afun15;
 extern AFun MB_afun16;
+extern AFun MB_afun17;
 
 extern ATerm MB_patternModuleNameWildcard;
 extern ATerm MB_patternMenuTitlesMany;
@@ -38,6 +39,7 @@ extern ATerm MB_patternButtonTypeStudioMenubar;
 extern ATerm MB_patternButtonTypeNewModulePopup;
 extern ATerm MB_patternButtonTypeModulePopup;
 extern ATerm MB_patternButtonTypeTreePanel;
+extern ATerm MB_patternButtonTypeFeedbackList;
 extern ATerm MB_patternButtonTypeMessageList;
 extern ATerm MB_patternButtonTypeSyntax;
 extern ATerm MB_patternButtonTypeEquations;

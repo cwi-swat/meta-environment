@@ -265,11 +265,19 @@ MB_ButtonType MB_makeButtonTypeMessageList()
 }
 
 /*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeFeedbackList() */
+
+MB_ButtonType MB_makeButtonTypeFeedbackList()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun7);
+}
+
+/*}}}  */
 /*{{{  MB_ButtonType MB_makeButtonTypeTreePanel() */
 
 MB_ButtonType MB_makeButtonTypeTreePanel()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun7);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun8);
 }
 
 /*}}}  */
@@ -277,7 +285,7 @@ MB_ButtonType MB_makeButtonTypeTreePanel()
 
 MB_ButtonType MB_makeButtonTypeModulePopup()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun8);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun9);
 }
 
 /*}}}  */
@@ -285,7 +293,7 @@ MB_ButtonType MB_makeButtonTypeModulePopup()
 
 MB_ButtonType MB_makeButtonTypeNewModulePopup()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun9);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun10);
 }
 
 /*}}}  */
@@ -293,7 +301,7 @@ MB_ButtonType MB_makeButtonTypeNewModulePopup()
 
 MB_ButtonType MB_makeButtonTypeStudioMenubar()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun10);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun11);
 }
 
 /*}}}  */
@@ -301,7 +309,7 @@ MB_ButtonType MB_makeButtonTypeStudioMenubar()
 
 MB_ButtonType MB_makeButtonTypeStudioToolbar()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun11);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun12);
 }
 
 /*}}}  */
@@ -309,7 +317,7 @@ MB_ButtonType MB_makeButtonTypeStudioToolbar()
 
 MB_ButtonType MB_makeButtonTypeWildcard()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun12);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun13);
 }
 
 /*}}}  */
@@ -317,7 +325,7 @@ MB_ButtonType MB_makeButtonTypeWildcard()
 
 MB_ButtonArgs MB_makeButtonArgsClick()
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl0(MB_afun13);
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl0(MB_afun14);
 }
 
 /*}}}  */
@@ -325,7 +333,7 @@ MB_ButtonArgs MB_makeButtonArgsClick()
 
 MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list)
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl1(MB_afun14, (ATerm)list);
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl1(MB_afun15, (ATerm)list);
 }
 
 /*}}}  */
@@ -333,7 +341,7 @@ MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list)
 
 MB_ButtonArgs MB_makeButtonArgsMenuwithshortcut(MB_MenuTitles list, char * shortcut)
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun15, (ATerm)list, (ATerm)ATmakeAppl0(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun16, (ATerm)list, (ATerm)ATmakeAppl0(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -341,7 +349,7 @@ MB_ButtonArgs MB_makeButtonArgsMenuwithshortcut(MB_MenuTitles list, char * short
 
 MB_ButtonArgs MB_makeButtonArgsIcon(char * title, char * path)
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun16, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)));
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun17, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -365,7 +373,7 @@ MB_MenuTitles MB_makeMenuTitlesMany(char * head, MB_MenuTitles tail)
 
 MB_ModuleName MB_makeModuleNameWildcard()
 {
-  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun12);
+  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun13);
 }
 
 /*}}}  */
@@ -944,6 +952,9 @@ ATbool MB_isValidButtonType(MB_ButtonType arg)
   else if (MB_isButtonTypeMessageList(arg)) {
     return ATtrue;
   }
+  else if (MB_isButtonTypeFeedbackList(arg)) {
+    return ATtrue;
+  }
   else if (MB_isButtonTypeTreePanel(arg)) {
     return ATtrue;
   }
@@ -1046,6 +1057,28 @@ inline ATbool MB_isButtonTypeMessageList(MB_ButtonType arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeMessageList);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeFeedbackList(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeFeedbackList(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeFeedbackList);
       last_gc = ATgetGCCount();
     }
 
@@ -1675,6 +1708,9 @@ MB_ButtonType MB_visitButtonType(MB_ButtonType arg)
   }
   if (MB_isButtonTypeMessageList(arg)) {
     return MB_makeButtonTypeMessageList();
+  }
+  if (MB_isButtonTypeFeedbackList(arg)) {
+    return MB_makeButtonTypeFeedbackList();
   }
   if (MB_isButtonTypeTreePanel(arg)) {
     return MB_makeButtonTypeTreePanel();

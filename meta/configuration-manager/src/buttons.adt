@@ -19,6 +19,7 @@
  [ButtonType, equations, equations-editor],
  [ButtonType, syntax, syntax-editor],
  [ButtonType, message-list, message-list],
+ [ButtonType, feedback-list, feedback-list],
  [ButtonType, tree-panel, tree-panel],
  [ButtonType, module-popup, module-popup],
  [ButtonType, new-module-popup, new-module-popup],

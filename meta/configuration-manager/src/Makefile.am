@@ -31,4 +31,4 @@ INCLUDES = \
 	-DSTANDARD_META_BUTTONS=\"$(pkgdatadir)/standard.meta.buttons\"
 
 api:
-	/users/jive/PROGRAMS/apigen-1.5/bin/adt-to-c -i buttons.adt --prefix MB_ -o MetaButtons
+	adt-to-c -i buttons.adt --prefix MB_ -o MetaButtons
