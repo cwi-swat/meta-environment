@@ -11,8 +11,7 @@ in
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
   InitializeTermStore(TERMSTORENAME) .
-  snd-msg(open-modules([MODULENAME], sdf)) .
-  rec-msg(finished-opening-modules) .
+  OpenModules([MODULENAME], sdf) .
   snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(equations-dumped) .
   if equal(SAVING, "true") then

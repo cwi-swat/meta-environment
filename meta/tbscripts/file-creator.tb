@@ -2,102 +2,59 @@
 
 process File-creator is
 let
-  FileName   : str,
-  ModuleName : str,
-  RealModule : str,
-  ErrMsg     : str,
-  Path       : str,
-  Text       : str,
-  Type	     : term,
-  Extension  : str,
-  SearchPaths: list
+  Directory: str,
+  Error: str,
+  Extension: str,
+  Filename: str,
+  ModuleId: str,
+  Path: str,
+  RealModule: str,
+  SearchPaths: list,
+  Text: str,
+  Type: term
 in
   (
-    rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
-    snd-msg(get-search-paths) .
-    rec-msg(search-paths(SearchPaths?)) .
-    snd-msg(sm-get-new-module-name(SearchPaths, Path, ModuleName)) .
+    rec-msg(create-new-equations(ModuleId?)) .
+    snd-msg(is-module-in-db(ModuleId)) .
     (
-      rec-msg(sm-new-module-name(Path?, ModuleName?)) .
-      snd-msg(is-module-in-db(ModuleName)) .
-      (
-        rec-msg(exists-in-module-db(ModuleName)) .
-        snd-note(ui-status(errorf("Module %s already exists", 
-                                  [ModuleName])))
-      +
-        rec-msg(not-exists-in-module-db(ModuleName)) .
-        snd-msg(file-extension-hook(Type)) . 
-        rec-msg(file-extension-hook-result(Extension?)) .
-        snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-        rec-msg(io-filename(FileName?)) .
-        snd-msg(io-exists-file(FileName)) .
-        (
-          rec-msg(io-file-exists) .
-          snd-note(ui-status(
-  	errorf("Module %s already exists on disk", [ModuleName])))
-        +
-          rec-msg(io-file-not-exists) .
-          snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
-          (
-            rec-msg(io-file-written)
-	    . snd-msg(open-modules([ModuleName], Type))
-	    . rec-msg(finished-opening-modules)
-          +
-            rec-msg(io-file-not-written(ErrMsg?)) .
-	    snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
-          )
-        )
-      )
-    + 
-      rec-msg(sm-new-module-name-inconsistent) .
-      snd-note(ui-status(errorf(
-        "Module %s in %s is inconsistent with search paths",
-        [ModuleName,Path])))
-    ) .
-    snd-msg(new-module-created(Path, ModuleName))
+      rec-msg(not-exists-in-module-db(ModuleId)) 
     +
-    %% Handle request to create a new rules section.
-    rec-msg(create-new-equations(ModuleName?)) .
-    snd-msg(is-module-in-db(ModuleName)) .
-    (
-      rec-msg(not-exists-in-module-db(ModuleName)) 
-    +
-      rec-msg(exists-in-module-db(ModuleName)) .
-      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(exists-in-module-db(ModuleId)) .
+      snd-msg(get-path-from-db(ModuleId)) .
       rec-msg(path(Path?)) .
       snd-msg(file-extension-hook(asf)) . 
       rec-msg(file-extension-hook-result(Extension?)) .
-      snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(io-exists-file(FileName)) .
+      snd-msg(io-get-filename(Path, ModuleId, Extension)) .
+      rec-msg(io-filename(Filename?)) .
+      snd-msg(io-exists-file(Filename)) .
       (
-        rec-msg(io-file-exists) .
-	snd-msg(io-read-file(FileName)) .
+	rec-msg(io-file-exists) .
+	snd-msg(io-read-file(Filename)) .
 	rec-msg(io-file-contents(Text?)) .
-	snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+	snd-msg(add-eqs-to-db(ModuleId, text(Text))) .
 	rec-msg(eqs-added) .
 	snd-msg(new-equations-created)
       +
-        rec-msg(io-file-not-exists) .
-	snd-msg(io-write-text-file(FileName, [])) .
-        (
-          rec-msg(io-file-written) .
-	  snd-msg(io-read-file(FileName)) .
+	rec-msg(io-file-not-exists) .
+	snd-msg(io-write-text-file(Filename, [])) .
+	(
+	  rec-msg(io-file-written) .
+	  snd-msg(io-read-file(Filename)) .
 	  (
 	    rec-msg(io-file-contents(Text?)) .
-            snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
-            rec-msg(eqs-added) .
-            snd-msg(new-equations-created)
-          +
-	    rec-msg(io-error-reading(ErrMsg?)) .
-	    snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
-            snd-msg(new-equations-not-created)
-          )
-        +
-          rec-msg(io-file-not-written(ErrMsg?)) . 
-	  snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
-          snd-msg(new-equations-not-created)
-        )
+	    snd-msg(add-eqs-to-db(ModuleId, text(Text))) .
+	    rec-msg(eqs-added) .
+	    snd-msg(new-equations-created)
+	  +
+	    rec-msg(io-error-reading(Error?)) .
+	    snd-note(ui-status(errorf("%s: %s", [Filename,Error]))) .
+	    snd-msg(new-equations-not-created)
+	  )
+	+
+	  rec-msg(io-file-not-written(Error?)) . 
+	  snd-note(ui-status(errorf("%s: %s", [Filename,Error]))) .
+	  snd-msg(new-equations-not-created)
+	)
       )
     )
   ) * delta

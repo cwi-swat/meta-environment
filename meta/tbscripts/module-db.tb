@@ -164,7 +164,6 @@ in
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
     MDB-RenameModule(OldName, NewName, Path, Modules?) .
-    MDB-DisplayGraph .
     snd-msg(renaming-module-done(OldName, Modules))
   +
     rec-msg(add-import-in-db(OldName?, NewName?)) .
@@ -177,7 +176,6 @@ in
   +
     rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
     MDB-CopyModule(OldName, NewName, Path) .
-    MDB-DisplayGraph .
     snd-msg(copy-module-done(OldName))
   +
     rec-msg(get-eqs-text(Name?)).
@@ -462,16 +460,6 @@ in
   )
 endlet
 
-process MDB-DisplayGraph is
-let
-  Pairs : list
-in
-  snd-msg(ts-get-key-value-pairs("import-relations")) .
-  rec-msg(ts-pairs(Pairs?)) .
-  snd-note(display-import-graph(Pairs)) .
-  Pairs := []
-endlet
-
 process MDB-StoreModuleTree(Name : str, Syntax : term) is
 let
   Modules : list,
@@ -523,8 +511,7 @@ in
   *
   if equal(Modules,[]) then
     tau
-  fi .
-  MDB-DisplayGraph
+  fi
 endlet
 
 process MDB-RenameModule(OldName : str, NewName : str, NewPath : str,
@@ -615,8 +602,7 @@ in
   Syntax := no-tree .
   rec-msg(sm-import-added-to-module(Syntax?)) .
   MDB-StoreModuleTree(OldName, Syntax) .
-  Syntax := no-tree .
-  MDB-DisplayGraph
+  Syntax := no-tree
 endlet
 
 process MDB-ContainedIn(Name : str, Modules : list, Status : term?) is

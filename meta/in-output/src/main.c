@@ -253,6 +253,40 @@ ATerm remove_file(int cid, const char *directory, const char *name, const char *
 }
 
 /*}}}  */
+/*{{{  ATerm copy_file(int cid, const char *srcPath, const char *destPath) */
+
+ATerm copy_file(int cid, const char *srcPath, const char *destPath)
+{
+  int size;
+  char *contents;
+  ATerm message;
+
+  contents = readFileContents(srcPath, &size);
+  if (contents == NULL) {
+    message = createErrorMessage(strerror(errno));
+  }
+  else {
+    FILE *f = fopen(destPath, "w");
+    if (f == NULL) {
+      message = createErrorMessage(strerror(errno));
+    }
+    else {
+      if (fputs(contents, f) == EOF) {
+	message = createErrorMessage(strerror(errno));
+      }
+      else {
+	message = createSuccessMessage();
+      }
+      fclose(f);
+    }
+    free(contents);
+  }
+
+  return message;
+}
+
+/*}}}  */
+
 /*{{{  ATerm read_text_file(int cid, const char *fileName) */
 
 ATerm read_text_file(int cid, const char *fileName)
@@ -576,7 +610,6 @@ ATerm get_path_directory(int conn, const char *path)
 
   directory = strrchr(copy, PATH_SEPARATOR);
   if (directory != NULL) {
-    directory++; /* include trailing '/' */
     *directory = EOS;
     result = ATmake("directory(<str>)", copy);
     free(copy);

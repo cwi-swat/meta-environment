@@ -18,7 +18,9 @@ let
   Extension : str,
   ErrorMessage : str,
   Directory : str,
-  Directories : list
+  Directories : list,
+  SourcePath: str,
+  DestinationPath: str
 in
   execute(in-output, IO?).
   (
@@ -45,6 +47,17 @@ in
     +
       rec-value(IO, failure(ErrorMessage?)) .
       snd-msg(io-file-not-removed(Path, Filename, Extension, ErrorMessage))
+    )
+  +
+    rec-msg(io-copy-file(SourcePath?, DestinationPath?))
+    . snd-eval(IO, copy-file(SourcePath, DestinationPath))
+    .
+    (
+      rec-value(IO, success)
+      . snd-msg(io-file-copied(SourcePath, DestinationPath))
+    +
+      rec-value(IO, failure(ErrorMessage?))
+      . snd-msg(io-file-not-copied(SourcePath, DestinationPath, ErrorMessage))
     )
   +
     rec-msg(io-exists-file(Filename?)) .

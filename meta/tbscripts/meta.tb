@@ -95,7 +95,6 @@ in
   . create(ModuleDB, Pid?)
   . create(Notify-about-changed-modules, Pid?)
   . create(Open-Sdf2-Language, Pid?)
-  . create(OpenModules, Pid?)
   . create(PGen, Pid?)
   . create(PrintModule, Pid?)
   . create(RestoreBrackets, Pid?)

@@ -18,10 +18,6 @@ in
     DoRenameModule(ModuleName1, ModuleName2, Path).
     snd-note(ui-status(endstat(Id)))
   +
-    rec-msg(copy-module(ModuleName1?, ModuleName2?, Path?)).
-    DoCopyModule(ModuleName1, ModuleName2, Path).
-    snd-note(ui-status(endstat(Id)))
-  +
     rec-msg(import-module(ModuleName1?, ModuleName2?)).
     snd-note(ui-status(statf(Id, 
              "Adding %s to imports of %s",[ModuleName2,ModuleName1]))).
@@ -66,7 +62,9 @@ in
   fi.
   if not(equal(Status, success)) then
     snd-note(ui-status(errorf("Module %s not closed because other modules depend on it", [ModuleName])))
-  else MDB-DisplayGraph fi
+  else
+    DrawImportGraph()
+  fi
 endlet
 
 
@@ -124,8 +122,7 @@ endlet
 
 process RevertModule(Modulename : str) is
   CloseModuleInDBandInvalidateDependingModules(Modulename)
-  . snd-msg(open-modules([Modulename], sdf))
-  . rec-msg(finished-opening-modules)
+  . OpenModules([Modulename], sdf)
   . DrawImportGraph()
   . snd-msg(module-reverted(Modulename))
 
@@ -152,7 +149,7 @@ in
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
     SaveSdfModules(Changed, Status?) .
-    MDB-DisplayGraph
+    DrawImportGraph()
 endlet
 
 process DoRenameModule(Old : str, New : str, Path : str) is
@@ -192,23 +189,115 @@ in
   HandleRenameModuleErrors(Old, RealNew, Status)
 endlet
 
-process DoCopyModule(Old : str, New : str, Path : str)  is
+process CreateModule(Pid: int, Directory: str, Filename: str, Type: term) is
 let
-  Status : term,
-  Changed : list,
-  RealNew : str,
-  RealPath : str
+  BaseDir: str,
+  Contents: list,
+  Error: term,
+  Extension: str,
+  ModuleId: str,
+  Path: str,
+  SearchPaths: list
 in
-  Status := success.
-  GetRealModuleName(New, Path, Status?, RealNew?, RealPath?).
-  if equal(Status, success) then
-    CheckExistence(RealNew, RealPath, Status?).
-    if equal (Status, success) then
-      CopyModuleInDB(Old, RealNew, RealPath).
-      SaveAsfSdfModule(RealNew, Status?)
-    else tau fi
-  else tau fi.
-  HandleCopyModuleErrors(Old, RealNew, Status) . tau
+  snd-msg(get-search-paths)
+  . rec-msg(search-paths(SearchPaths?))
+  . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
+  .
+  (
+    rec-msg(sm-new-module-name(BaseDir?, ModuleId?))
+    . snd-msg(is-module-in-db(ModuleId))
+    .
+    (
+      rec-msg(exists-in-module-db(ModuleId))
+      . snd-note(ui-status(errorf("Module %s already exists", [ModuleId])))
+    +
+      rec-msg(not-exists-in-module-db(ModuleId))
+      . snd-msg(file-extension-hook(Type))
+      . rec-msg(file-extension-hook-result(Extension?))
+      . BuildPath(BaseDir, ModuleId, Extension, Path?)
+      . snd-msg(io-exists-file(Path))
+      .
+      (
+	rec-msg(io-file-exists)
+	. snd-note(ui-status(errorf("File %s already exists", [Path])))
+      +
+	rec-msg(io-file-not-exists)
+	. snd-msg(get-module-contents(Pid, ModuleId))
+	. rec-msg(module-contents(Pid, Contents?))
+	. snd-msg(io-write-text-file(Path, Contents))
+	.
+	(
+	  rec-msg(io-file-written)
+	  . OpenModule(Path, Type)
+	+
+	  rec-msg(io-file-not-written(Error?))
+	  . snd-note(ui-status(errorf("%s: %s", [Path, Error])))
+	)
+      )
+    )
+  +
+    rec-msg(sm-new-module-name-inconsistent)
+    . snd-note(ui-status(errorf(
+      "Module %s in %s is inconsistent with search paths", [ModuleId, Path])))
+  )
+endlet
+
+process CopySdfModule(SrcModuleId: str, Directory: str, Filename: str) is
+let
+  Id: int,
+  Pid: int
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Copying %s to %s", [SrcModuleId, Filename])))
+  . create(CopySdfContentHandler(SrcModuleId), Pid?)
+  . CreateModule(Pid, Directory, Filename, sdf)
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process CopyAsfModule(SrcModuleId: str, Directory: str, Filename: str) is
+let
+  DestPath: str,
+  Error: str,
+  Extension: str,
+  SrcPath: str
+in
+  LocateFile(SrcModuleId, asf, SrcPath?)
+  . snd-msg(io-exists-file(SrcPath))
+  .
+  (
+    rec-msg(io-file-exists)
+    . snd-msg(file-extension-hook(asf))
+    . rec-msg(file-extension-hook-result(Extension?))
+    . BuildPath(Directory, Filename, Extension, DestPath?)
+    . snd-msg(io-copy-file(SrcPath, DestPath))
+    .
+    (
+      rec-msg(io-file-copied(SrcPath, DestPath))
+    +
+      rec-msg(io-file-copied(SrcPath, DestPath, Error?))
+      . Error("Could not remove file: %s", [Error])
+    )
+  +
+    rec-msg(io-file-not-exists)
+  )
+endlet
+
+process CopySdfContentHandler(SrcModuleId: str) is
+let
+  Contents: str,
+  DestModuleId: str,
+  Pid: int,
+  Syntax: term
+in
+  Pid := process-id
+  . rec-msg(get-module-contents(Pid, DestModuleId?))
+  . snd-msg(ts-get-term-value("sdf-tree", SrcModuleId))
+  . rec-msg(ts-value(Syntax?))
+  . snd-msg(sm-rename-modulename-in-module(Syntax, DestModuleId))
+  . rec-msg(sm-modulename-renamed-in-module(Syntax?))
+  . snd-msg(unparse(Syntax))
+  . rec-msg(unparsed-text(Contents?))
+  . snd-msg(module-contents(Pid, [Contents]))
 endlet
 
 process DoImportModule(Mod : str, RealImport : str)  is
@@ -319,10 +408,7 @@ let
 in
   DeleteSessions(ModuleName).
   snd-msg(close-module-in-db(ModuleName)).
-  rec-msg(changed-modules(Changed?)) /*.
-  snd-msg(notify-about-changed-modules(Changed, sdf)) .
-  rec-msg(notify-about-changed-modules-done)
-*/
+  rec-msg(changed-modules(Changed?))
 endlet
 
 process CloseModuleInDBandInvalidateDependingModules(ModuleName : str) is
@@ -460,9 +546,8 @@ in
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
 	(
           rec-msg(updating-succeeded(Imports?)).
-          snd-msg(open-modules(Imports, Type)) .
-	  DrawImportGraph() .
-          rec-msg(finished-opening-modules)
+          OpenModules(Imports, Type) .
+	  DrawImportGraph()
         +
 	  rec-msg(error-opening(ModuleName, name-inconsistent)) .
           Error("Check consistency: module name %s contains an error", [ModuleName])

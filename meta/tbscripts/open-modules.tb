@@ -12,10 +12,9 @@ process DrawImportGraph is
 let
   ImportRelations : list
 in
-  snd-msg(get-import-relations) .
-  rec-msg(import-relations(ImportRelations?)) .
-  snd-msg(display-import-graph(ImportRelations)) .
-  ImportRelations := []
+  snd-msg(ts-get-key-value-pairs("import-relations"))
+  . rec-msg(ts-pairs(ImportRelations?))
+  . snd-msg(display-import-graph(ImportRelations))
 endlet
 
 process DealWithMultipleOccurrences(Chosen : str, Name : str,
@@ -45,46 +44,60 @@ in
   fi
 endlet
 
-process OpenModules is 
+process OpenModule(Path: str, Type: term) is
 let
-  ModuleId: str,
-  Modules: list,
-  Imports: list,
-  Path: str,
-  FileName: str,
-  Type: term
+  Modulename: str,
+  Imports: list
 in
+  OpenSyntax(Path, Type)
+  . snd-msg(ts-get-str-value("path-modulename", Path))
+  .
   (
-    rec-msg(open-modules(Modules?, Type?))
+    rec-msg(ts-value(Modulename?))
+    . GetModuleImports(Modulename, Imports?)
+    . OpenModules(Imports, Type)
+  +
+    rec-msg(ts-no-value)
+  )
+endlet
+
+process OpenModules(Modules: list, Type: term) is 
+let
+  FileName: str,
+  Imports: list,
+  ModuleId: str,
+  Path: str,
+  Todo: list
+in
+  Todo := Modules
+  .
+  if not-equal(Todo, [])
+  then
+    ModuleId := first(Todo)
+    . Todo := next(Todo)
+    . LocateFile(ModuleId, Type, Path?)
     .
-    if not-equal(Modules, [])
+    if equal(Path, "")
     then
-      ModuleId := first(Modules)
-      . Modules := next(Modules)
-      . LocateFile(ModuleId, Type, Path?)
+      Error("Unable to locate module: %s", [ModuleId])
+    else 
+      snd-msg(ts-contains-key("path-modulename", Path))
       .
-      if not-equal(Path, "")
-      then
-	snd-msg(ts-contains-key("path-modulename", Path))
-	.
-	(
-	  rec-msg(ts-contains-key)
-	+
-	  rec-msg(ts-not-contains-key)
-	  . OpenSyntax(Path, Type)
-	  . GetModuleImports(ModuleId, Imports?)
-	  . Modules := join(Imports, Modules)
-	)
-      else 
-	Error("Opening module %s failed: file not found!", [ModuleId])
-      fi
+      (
+	rec-msg(ts-contains-key)
+      +
+	rec-msg(ts-not-contains-key)
+	. OpenSyntax(Path, Type)
+	. GetModuleImports(ModuleId, Imports?)
+	. Todo := join(Imports, Todo)
+      )
     fi
-    *
-    if equal(Modules, []) then
-      snd-msg(finished-opening-modules)
-    fi
-  ) *
-  delta
+  fi
+  *
+  if equal(Todo, [])
+  then
+    tau
+  fi
 endlet
 
 process Error(Message : str, MessageArgs : list) is
@@ -191,7 +204,7 @@ in
     if equal(Filename, Path)
     then
       snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
-      . MDB-RegisterPath(Path, ModuleId)
+      . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId)) 
       . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
       . snd-msg(sm-get-imported-module-names(ParseResult))
       . rec-msg(sm-imported-module-names(Imports?))

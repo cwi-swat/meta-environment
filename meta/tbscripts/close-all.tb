@@ -23,6 +23,6 @@ in
   fi
   . snd-msg(clear-module-db)
   . rec-msg(module-db-cleared)
-  . MDB-DisplayGraph
+  . DrawImportGraph()
   . snd-note(ui-status(endstat(Id)))
 endlet

@@ -717,35 +717,27 @@ in
        	. StackPopString(Stack, Stack?, Directory?)
        	. StackPopString(Stack, Stack?, Modulename?)
 	. BuildPath(Directory, Modulename, Extension, Path?)
-	. OpenSyntax(Path, sdf)
-	. snd-msg(ts-get-str-value("path-modulename", Path))
-	.
-	(
-	  rec-msg(ts-value(Modulename?))
-	  . GetModuleImports(Modulename, Modulenames?)
-	  . snd-msg(open-modules(Modulenames, sdf))
-	  . rec-msg(finished-opening-modules)
-	  . DrawImportGraph()
-	+
-	  rec-msg(ts-no-value)
-	)
+	. OpenModule(Path, sdf)
+	. DrawImportGraph()
 	. ReturnSuccess(EditorId, Stack)	
       +
-	rec-msg(new-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Extension?) .
-       	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, Modulename?) .
-        snd-msg(create-new-module(Path, Modulename, sdf)) .           
-	rec-msg(new-module-created(Path?, Modulename?)) .
-	ReturnSuccess(EditorId, Stack)	
+	rec-msg(new-module, Stack?, EditorId?)
+       	. StackPopString(Stack, Stack?, Extension?)
+       	. StackPopString(Stack, Stack?, Directory?)
+       	. StackPopString(Stack, Stack?, Filename?)
+	. create(NewModuleContentHandler(), Pid?)
+	. CreateModule(Pid, Directory, Filename, sdf)
+	. DrawImportGraph()
+	. ReturnSuccess(EditorId, Stack)	
       +
-	rec-msg(create-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Modulename?) .
-	snd-msg(io-relative-to-absolute(["."])) .
-	rec-msg(io-absolute-directories([Path?])) .
-        snd-msg(create-new-module(Path, Modulename, sdf)) .           
-	rec-msg(new-module-created(Path?, Modulename?)) .
-	ReturnSuccess(EditorId, Stack)	
+	rec-msg(create-module, Stack?, EditorId?)
+       	. StackPopString(Stack, Stack?, Filename?)
+	. snd-msg(io-relative-to-absolute(["."]))
+	. rec-msg(io-absolute-directories([Directory?]))
+	. create(NewModuleContentHandler(), Pid?)
+	. CreateModule(Pid, Directory, Filename, sdf)
+	. DrawImportGraph()
+	. ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(prompt-for-file(String?, Path?, Extension?), Stack?, EditorId?) .
 	snd-msg(ask-for-file(String, Path, Extension)) .
@@ -807,18 +799,15 @@ in
 	. StackPushString(Stack, Stack?, Extension)
 	. ReturnSuccess(EditorId, Stack)
       +
-        rec-msg(copy-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Extension?) .
-       	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModulename?) .
-	StackIsEmpty(Stack, Empty?) .
-	if equal(Empty, true) then
-	  ReturnSuccess(EditorId, Stack)
-        else
-       	  StackPopString(Stack, Stack?, Modulename?) .
-	  snd-msg(copy-module(Modulename, NewModulename, Path)) .
-	  ReturnSuccess(EditorId, Stack)	
-	fi
+        rec-msg(copy-module, Stack?, EditorId?)
+       	. StackPopString(Stack, Stack?, Extension?)
+       	. StackPopString(Stack, Stack?, Directory?)
+       	. StackPopString(Stack, Stack?, Filename?)
+       	. StackPopString(Stack, Stack?, Modulename?)
+	. CopySdfModule(Modulename, Directory, Filename)
+	. CopyAsfModule(Modulename, Directory, Filename)
+	. DrawImportGraph()
+	. ReturnSuccess(EditorId, Stack)
       +
         rec-msg(rename-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
@@ -1103,8 +1092,7 @@ in
       .
       (
 	rec-msg(updating-succeeded(NewModules?))
-	. snd-msg(open-modules(NewModules, Type))
-	. rec-msg(finished-opening-modules)
+	. OpenModules(NewModules, Type)
 	. DrawImportGraph()
 	. snd-msg(te-clear-focus(Sid))
 	. snd-msg(te-display-message(Sid, "Parse successful"))
@@ -1267,8 +1255,7 @@ let
   Specification: term
 in
   Id := process-id .
-  snd-msg(open-modules([Modulename], sdf)) .
-  rec-msg(finished-opening-modules) .
+  OpenModules([Modulename], sdf) .
   DrawImportGraph() .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
   create(GetSpecification(Modulename), Pid?)
@@ -1441,4 +1428,14 @@ in
     fi
     . BuildPath(Directory, ModuleId, Extension, Path?)
   )
+endlet
+
+process NewModuleContentHandler is
+let
+  ModuleId: str,
+  Pid: int
+in
+  Pid := process-id
+  . rec-msg(get-module-contents(Pid, ModuleId?))
+  . snd-msg(module-contents(Pid,  ["module ", ModuleId, "\n"]))
 endlet

@@ -3,20 +3,21 @@
 
 process MetaGUI is
 let
-  ModuleName : str,
-  Pid : int,
-  TermStoreContents : term,
-  ErrorMessage : str
+  ModuleName: str,
+  Pid: int,
+  TermStoreContents: term,
+  ErrorMessage: str
 in
-  create(Ui, Pid?) .
-  create(MetaCreator, Pid?) .
-  rec-msg(creation-finished) .
-  snd-msg(post-initialization-hook) .
-  rec-msg(post-initialization-hook-finished) .
-  InitializeTermStore(TERMSTORENAME) .
-  if not-equal(MODULENAME, "") then
-    snd-msg(open-modules([MODULENAME], sdf)) .
-    rec-msg(finished-opening-modules)
+  create(Ui, Pid?)
+  . create(MetaCreator, Pid?)
+  . rec-msg(creation-finished)
+  . snd-msg(post-initialization-hook)
+  . rec-msg(post-initialization-hook-finished)
+  . InitializeTermStore(TERMSTORENAME)
+  .
+  if not-equal(MODULENAME, "")
+  then
+    OpenModules([MODULENAME], sdf)
     . DrawImportGraph()
   else
     tau
