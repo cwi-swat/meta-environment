@@ -32,7 +32,8 @@ check_JAVA = ${PeanoAPI} PeanoTest.java
 CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
-			booltest.pt ${PeanoAPI}
+			booltest.pt ${PeanoAPI} libBooleans.a Booleans_bottom.c\
+ 			Peano.adt
 
 EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf
 
