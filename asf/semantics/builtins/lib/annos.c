@@ -58,7 +58,7 @@ PT_Tree get_term_anno(PT_Tree input)
   anno = PT_getTreeAnnotation(term, label);
 
   if (anno != NULL) {
-    value = (PT_Tree) PTPT_explodeATerm(anno);
+    value = (PT_Tree) PTPT_liftATerm(anno);
   }
 
   if (value != NULL) {
