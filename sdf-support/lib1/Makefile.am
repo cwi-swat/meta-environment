@@ -14,6 +14,6 @@ UTILSRCS		= get-imports.c get-module-name.c grammar.c lexprod.c \
 EXTRA_DIST		= SDF.adt
 
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${ATERMINC}
-LDFLAGS			= -L${ATERMLIB}
+INCLUDES		= -I${ATERM}/include
+LDFLAGS			= -L${ATERM}/lib
 LDADD			= -lATerm
