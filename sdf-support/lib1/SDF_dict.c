@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jan 22 16:17:52 2001
+ * Generated at Tue Jan 23 10:06:28 2001
  */
 
 #include "SDF_dict.h"
@@ -150,9 +150,9 @@ ATerm SDF_patternModuleIdWordSlashWord = NULL;
 ATerm SDF_patternModuleIdSlashWord = NULL;
 ATerm SDF_patternModuleIdWord = NULL;
 ATerm SDF_patternModuleWordWord = NULL;
-ATerm SDF_patternProductionProductionsMany = NULL;
-ATerm SDF_patternProductionProductionsSingle = NULL;
-ATerm SDF_patternProductionProductionsEmpty = NULL;
+ATerm SDF_patternProductionListMany = NULL;
+ATerm SDF_patternProductionListSingle = NULL;
+ATerm SDF_patternProductionListEmpty = NULL;
 ATerm SDF_patternProductionsDefault = NULL;
 ATerm SDF_patternProductionProdFun = NULL;
 ATerm SDF_patternProductionProd = NULL;
@@ -352,9 +352,9 @@ ATerm SDF_patternSymbolStart = NULL;
  * SDF_patternModuleIdSlashWord = lex(<term>,sort("ModuleId"))
  * SDF_patternModuleIdWord = lex(<term>,sort("ModuleId"))
  * SDF_patternModuleWordWord = lex(<term>,sort("ModuleWord"))
- * SDF_patternProductionProductionsMany = [<term>,w(<term>),<list>]
- * SDF_patternProductionProductionsSingle = [<term>]
- * SDF_patternProductionProductionsEmpty = []
+ * SDF_patternProductionListMany = [<term>,w(<term>),<list>]
+ * SDF_patternProductionListSingle = [<term>]
+ * SDF_patternProductionListEmpty = []
  * SDF_patternProductionsDefault = appl(prod(id("Kernel-Sdf-Syntax"),w(""),[iter(sort("Production"),w(""),l("*"))],w(""),l("->"),w(""),sort("Productions"),w(""),no-attrs),w(""),[list(iter(sort("Production"),w(""),l("*")),w(""),<term>)])
  * SDF_patternProductionProdFun = appl(prod(id("Literals-Sdf-Syntax"),w(""),[sort("Literal"),w(""),ql("("),w(""),iter-sep(l("{"),w(""),sort("Symbol"),w(""),ql(","),w(""),l("}"),w(""),l("*")),w(""),ql(")"),w(""),ql("->"),w(""),sort("Symbol"),w(""),sort("Attributes")],w(""),l("->"),w(""),sort("Production"),w(""),no-attrs),w(""),[<term>,w(<term>),l("("),w(<term>),list(iter-sep(l("{"),w(""),sort("Symbol"),w(""),ql(","),w(""),l("}"),w(""),l("*")),w(""),<term>),w(<term>),l(")"),w(<term>),l("->"),w(<term>),<term>,w(<term>),<term>])
  * SDF_patternProductionProd = appl(prod(id("Kernel-Sdf-Syntax"),w(""),[sort("Symbols"),w(""),ql("->"),w(""),sort("Symbol"),w(""),sort("Attributes")],w(""),l("->"),w(""),sort("Production"),w(""),no-attrs),w(""),[<term>,w(<term>),l("->"),w(<term>),<term>,w(<term>),<term>])
@@ -1048,11 +1048,11 @@ void init_SDF_dict()
   terms = ATgetNext(terms);
   SDF_patternModuleWordWord = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternProductionProductionsMany = ATgetFirst(terms);
+  SDF_patternProductionListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternProductionProductionsSingle = ATgetFirst(terms);
+  SDF_patternProductionListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternProductionProductionsEmpty = ATgetFirst(terms);
+  SDF_patternProductionListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
   SDF_patternProductionsDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -11,7 +11,7 @@ typedef struct ATerm _SDF_Attributes;
 typedef struct ATerm _SDF_AttributeAttributes;
 typedef struct ATerm _SDF_Production;
 typedef struct ATerm _SDF_Productions;
-typedef struct ATerm _SDF_ProductionProductions;
+typedef struct ATerm _SDF_ProductionList;
 typedef struct ATerm _SDF_ModuleWord;
 typedef struct ATerm _SDF_ModuleId;
 typedef struct ATerm _SDF_Definition;
@@ -198,17 +198,17 @@ ATerm SDF_makeTermFromProductions(SDF_Productions arg)
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_makeProductionProductionsFromTerm(ATerm t) */
+/*{{{  SDF_ProductionList SDF_makeProductionListFromTerm(ATerm t) */
 
-SDF_ProductionProductions SDF_makeProductionProductionsFromTerm(ATerm t)
+SDF_ProductionList SDF_makeProductionListFromTerm(ATerm t)
 {
-  return (SDF_ProductionProductions)t;
+  return (SDF_ProductionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromProductionProductions(SDF_ProductionProductions arg) */
+/*{{{  ATerm SDF_makeTermFromProductionList(SDF_ProductionList arg) */
 
-ATerm SDF_makeTermFromProductionProductions(SDF_ProductionProductions arg)
+ATerm SDF_makeTermFromProductionList(SDF_ProductionList arg)
 {
   return (ATerm)arg;
 }
@@ -1607,35 +1607,35 @@ SDF_Production SDF_makeProductionProdFun(SDF_Literal functionSymbol, SDF_Layout 
 }
 
 /*}}}  */
-/*{{{  SDF_Productions SDF_makeProductionsDefault(SDF_ProductionProductions productions) */
+/*{{{  SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list) */
 
-SDF_Productions SDF_makeProductionsDefault(SDF_ProductionProductions productions)
+SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list)
 {
-  return (SDF_Productions)ATmakeTerm(SDF_patternProductionsDefault, productions);
+  return (SDF_Productions)ATmakeTerm(SDF_patternProductionsDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_makeProductionProductionsEmpty() */
+/*{{{  SDF_ProductionList SDF_makeProductionListEmpty() */
 
-SDF_ProductionProductions SDF_makeProductionProductionsEmpty()
+SDF_ProductionList SDF_makeProductionListEmpty()
 {
-  return (SDF_ProductionProductions)ATmakeTerm(SDF_patternProductionProductionsEmpty);
+  return (SDF_ProductionList)ATmakeTerm(SDF_patternProductionListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_makeProductionProductionsSingle(SDF_Production head) */
+/*{{{  SDF_ProductionList SDF_makeProductionListSingle(SDF_Production head) */
 
-SDF_ProductionProductions SDF_makeProductionProductionsSingle(SDF_Production head)
+SDF_ProductionList SDF_makeProductionListSingle(SDF_Production head)
 {
-  return (SDF_ProductionProductions)ATmakeTerm(SDF_patternProductionProductionsSingle, head);
+  return (SDF_ProductionList)ATmakeTerm(SDF_patternProductionListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_makeProductionProductionsMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionProductions tail) */
+/*{{{  SDF_ProductionList SDF_makeProductionListMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionList tail) */
 
-SDF_ProductionProductions SDF_makeProductionProductionsMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionProductions tail)
+SDF_ProductionList SDF_makeProductionListMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionList tail)
 {
-  return (SDF_ProductionProductions)ATmakeTerm(SDF_patternProductionProductionsMany, head, wsAfterFirst, tail);
+  return (SDF_ProductionList)ATmakeTerm(SDF_patternProductionListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -6997,9 +6997,9 @@ ATbool SDF_isProductionsDefault(SDF_Productions arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasProductionsProductions(SDF_Productions arg) */
+/*{{{  ATbool SDF_hasProductionsList(SDF_Productions arg) */
 
-ATbool SDF_hasProductionsProductions(SDF_Productions arg)
+ATbool SDF_hasProductionsList(SDF_Productions arg)
 {
   if (SDF_isProductionsDefault(arg)) {
     return ATtrue;
@@ -7008,193 +7008,193 @@ ATbool SDF_hasProductionsProductions(SDF_Productions arg)
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_getProductionsProductions(SDF_Productions arg) */
+/*{{{  SDF_ProductionList SDF_getProductionsList(SDF_Productions arg) */
 
-SDF_ProductionProductions SDF_getProductionsProductions(SDF_Productions arg)
+SDF_ProductionList SDF_getProductionsList(SDF_Productions arg)
 {
   if (SDF_isProductionsDefault(arg)) {
-    return (SDF_ProductionProductions)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_ProductionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Productions has no Productions: %t\n", arg);
+  ATabort("Productions has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Productions SDF_setProductionsProductions(SDF_Productions arg, SDF_ProductionProductions productions) */
+/*{{{  SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList list) */
 
-SDF_Productions SDF_setProductionsProductions(SDF_Productions arg, SDF_ProductionProductions productions)
+SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList list)
 {
   if (SDF_isProductionsDefault(arg)) {
-    return (SDF_Productions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)productions, 2), 0), 2);
+    return (SDF_Productions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Productions has no Productions: %t\n", arg);
+  ATabort("Productions has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions accessor implementations */
+/*{{{  SDF_ProductionList accessor implementations */
 
-/*{{{  ATbool SDF_isValidProductionProductions(SDF_ProductionProductions arg) */
+/*{{{  ATbool SDF_isValidProductionList(SDF_ProductionList arg) */
 
-ATbool SDF_isValidProductionProductions(SDF_ProductionProductions arg)
+ATbool SDF_isValidProductionList(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsEmpty(arg)) {
+  if (SDF_isProductionListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isProductionProductionsSingle(arg)) {
+  else if (SDF_isProductionListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isProductionProductionsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isProductionProductionsEmpty(SDF_ProductionProductions arg) */
-
-ATbool SDF_isProductionProductionsEmpty(SDF_ProductionProductions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternProductionProductionsEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isProductionProductionsSingle(SDF_ProductionProductions arg) */
-
-ATbool SDF_isProductionProductionsSingle(SDF_ProductionProductions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternProductionProductionsSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isProductionProductionsMany(SDF_ProductionProductions arg) */
-
-ATbool SDF_isProductionProductionsMany(SDF_ProductionProductions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternProductionProductionsMany, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasProductionProductionsWsAfterFirst(SDF_ProductionProductions arg) */
-
-ATbool SDF_hasProductionProductionsWsAfterFirst(SDF_ProductionProductions arg)
-{
-  if (SDF_isProductionProductionsMany(arg)) {
+  else if (SDF_isProductionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getProductionProductionsWsAfterFirst(SDF_ProductionProductions arg) */
+/*{{{  ATbool SDF_isProductionListEmpty(SDF_ProductionList arg) */
 
-SDF_Layout SDF_getProductionProductionsWsAfterFirst(SDF_ProductionProductions arg)
+ATbool SDF_isProductionListEmpty(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternProductionListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isProductionListSingle(SDF_ProductionList arg) */
+
+ATbool SDF_isProductionListSingle(SDF_ProductionList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternProductionListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isProductionListMany(SDF_ProductionList arg) */
+
+ATbool SDF_isProductionListMany(SDF_ProductionList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternProductionListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasProductionListWsAfterFirst(SDF_ProductionList arg) */
+
+ATbool SDF_hasProductionListWsAfterFirst(SDF_ProductionList arg)
+{
+  if (SDF_isProductionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getProductionListWsAfterFirst(SDF_ProductionList arg) */
+
+SDF_Layout SDF_getProductionListWsAfterFirst(SDF_ProductionList arg)
+{
+  if (SDF_isProductionListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("ProductionProductions has no WsAfterFirst: %t\n", arg);
+  ATabort("ProductionList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_setProductionProductionsWsAfterFirst(SDF_ProductionProductions arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_ProductionList SDF_setProductionListWsAfterFirst(SDF_ProductionList arg, SDF_Layout wsAfterFirst) */
 
-SDF_ProductionProductions SDF_setProductionProductionsWsAfterFirst(SDF_ProductionProductions arg, SDF_Layout wsAfterFirst)
+SDF_ProductionList SDF_setProductionListWsAfterFirst(SDF_ProductionList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isProductionProductionsMany(arg)) {
-    return (SDF_ProductionProductions)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isProductionListMany(arg)) {
+    return (SDF_ProductionList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("ProductionProductions has no WsAfterFirst: %t\n", arg);
+  ATabort("ProductionList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasProductionProductionsTail(SDF_ProductionProductions arg) */
+/*{{{  ATbool SDF_hasProductionListTail(SDF_ProductionList arg) */
 
-ATbool SDF_hasProductionProductionsTail(SDF_ProductionProductions arg)
+ATbool SDF_hasProductionListTail(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsMany(arg)) {
+  if (SDF_isProductionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_getProductionProductionsTail(SDF_ProductionProductions arg) */
+/*{{{  SDF_ProductionList SDF_getProductionListTail(SDF_ProductionList arg) */
 
-SDF_ProductionProductions SDF_getProductionProductionsTail(SDF_ProductionProductions arg)
+SDF_ProductionList SDF_getProductionListTail(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsMany(arg)) {
-    return (SDF_ProductionProductions)ATgetTail((ATermList)arg, 2);
+  if (SDF_isProductionListMany(arg)) {
+    return (SDF_ProductionList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("ProductionProductions has no Tail: %t\n", arg);
+  ATabort("ProductionList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_setProductionProductionsTail(SDF_ProductionProductions arg, SDF_ProductionProductions tail) */
+/*{{{  SDF_ProductionList SDF_setProductionListTail(SDF_ProductionList arg, SDF_ProductionList tail) */
 
-SDF_ProductionProductions SDF_setProductionProductionsTail(SDF_ProductionProductions arg, SDF_ProductionProductions tail)
+SDF_ProductionList SDF_setProductionListTail(SDF_ProductionList arg, SDF_ProductionList tail)
 {
-  if (SDF_isProductionProductionsMany(arg)) {
-    return (SDF_ProductionProductions)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isProductionListMany(arg)) {
+    return (SDF_ProductionList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("ProductionProductions has no Tail: %t\n", arg);
+  ATabort("ProductionList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasProductionProductionsHead(SDF_ProductionProductions arg) */
+/*{{{  ATbool SDF_hasProductionListHead(SDF_ProductionList arg) */
 
-ATbool SDF_hasProductionProductionsHead(SDF_ProductionProductions arg)
+ATbool SDF_hasProductionListHead(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsSingle(arg)) {
+  if (SDF_isProductionListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isProductionProductionsMany(arg)) {
+  else if (SDF_isProductionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Production SDF_getProductionProductionsHead(SDF_ProductionProductions arg) */
+/*{{{  SDF_Production SDF_getProductionListHead(SDF_ProductionList arg) */
 
-SDF_Production SDF_getProductionProductionsHead(SDF_ProductionProductions arg)
+SDF_Production SDF_getProductionListHead(SDF_ProductionList arg)
 {
-  if (SDF_isProductionProductionsSingle(arg)) {
+  if (SDF_isProductionListSingle(arg)) {
     return (SDF_Production)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isProductionProductionsMany(arg)) {
+  else if (SDF_isProductionListMany(arg)) {
     return (SDF_Production)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("ProductionProductions has no Head: %t\n", arg);
+  ATabort("ProductionList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions SDF_setProductionProductionsHead(SDF_ProductionProductions arg, SDF_Production head) */
+/*{{{  SDF_ProductionList SDF_setProductionListHead(SDF_ProductionList arg, SDF_Production head) */
 
-SDF_ProductionProductions SDF_setProductionProductionsHead(SDF_ProductionProductions arg, SDF_Production head)
+SDF_ProductionList SDF_setProductionListHead(SDF_ProductionList arg, SDF_Production head)
 {
-  if (SDF_isProductionProductionsSingle(arg)) {
-    return (SDF_ProductionProductions)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isProductionListSingle(arg)) {
+    return (SDF_ProductionList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isProductionProductionsMany(arg)) {
-    return (SDF_ProductionProductions)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isProductionListMany(arg)) {
+    return (SDF_ProductionList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("ProductionProductions has no Head: %t\n", arg);
+  ATabort("ProductionList has no Head: %t\n", arg);
   return NULL;
 }
 

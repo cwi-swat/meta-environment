@@ -24,7 +24,7 @@ typedef struct _SDF_Attributes *SDF_Attributes;
 typedef struct _SDF_AttributeAttributes *SDF_AttributeAttributes;
 typedef struct _SDF_Production *SDF_Production;
 typedef struct _SDF_Productions *SDF_Productions;
-typedef struct _SDF_ProductionProductions *SDF_ProductionProductions;
+typedef struct _SDF_ProductionList *SDF_ProductionList;
 typedef struct _SDF_ModuleWord *SDF_ModuleWord;
 typedef struct _SDF_ModuleId *SDF_ModuleId;
 typedef struct _SDF_Definition *SDF_Definition;
@@ -106,8 +106,8 @@ SDF_Production SDF_makeProductionFromTerm(ATerm t);
 ATerm SDF_makeTermFromProduction(SDF_Production arg);
 SDF_Productions SDF_makeProductionsFromTerm(ATerm t);
 ATerm SDF_makeTermFromProductions(SDF_Productions arg);
-SDF_ProductionProductions SDF_makeProductionProductionsFromTerm(ATerm t);
-ATerm SDF_makeTermFromProductionProductions(SDF_ProductionProductions arg);
+SDF_ProductionList SDF_makeProductionListFromTerm(ATerm t);
+ATerm SDF_makeTermFromProductionList(SDF_ProductionList arg);
 SDF_ModuleWord SDF_makeModuleWordFromTerm(ATerm t);
 ATerm SDF_makeTermFromModuleWord(SDF_ModuleWord arg);
 SDF_ModuleId SDF_makeModuleIdFromTerm(ATerm t);
@@ -283,10 +283,10 @@ SDF_AttributeAttributes SDF_makeAttributeAttributesSingle(SDF_Attribute head);
 SDF_AttributeAttributes SDF_makeAttributeAttributesMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeAttributes tail);
 SDF_Production SDF_makeProductionProd(SDF_Symbols symbols, SDF_Layout wsAfterSymbols, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
 SDF_Production SDF_makeProductionProdFun(SDF_Literal functionSymbol, SDF_Layout wsAfterFunctionSymbol, SDF_Layout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_Layout wsAfterArguments, SDF_Layout wsAfterParenClose, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
-SDF_Productions SDF_makeProductionsDefault(SDF_ProductionProductions productions);
-SDF_ProductionProductions SDF_makeProductionProductionsEmpty();
-SDF_ProductionProductions SDF_makeProductionProductionsSingle(SDF_Production head);
-SDF_ProductionProductions SDF_makeProductionProductionsMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionProductions tail);
+SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list);
+SDF_ProductionList SDF_makeProductionListEmpty();
+SDF_ProductionList SDF_makeProductionListSingle(SDF_Production head);
+SDF_ProductionList SDF_makeProductionListMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionList tail);
 SDF_ModuleWord SDF_makeModuleWordWord(SDF_Lexical lex);
 SDF_ModuleId SDF_makeModuleIdWord(SDF_Lexical lex);
 SDF_ModuleId SDF_makeModuleIdSlashWord(SDF_Lexical lex);
@@ -757,26 +757,26 @@ SDF_Production SDF_setProductionWsAfterFunctionSymbol(SDF_Production arg, SDF_La
 
 ATbool SDF_isValidProductions(SDF_Productions arg);
 ATbool SDF_isProductionsDefault(SDF_Productions arg);
-ATbool SDF_hasProductionsProductions(SDF_Productions arg);
-SDF_ProductionProductions SDF_getProductionsProductions(SDF_Productions arg);
-SDF_Productions SDF_setProductionsProductions(SDF_Productions arg, SDF_ProductionProductions productions);
+ATbool SDF_hasProductionsList(SDF_Productions arg);
+SDF_ProductionList SDF_getProductionsList(SDF_Productions arg);
+SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList list);
 
 /*}}}  */
-/*{{{  SDF_ProductionProductions accessor prototypes */
+/*{{{  SDF_ProductionList accessor prototypes */
 
-ATbool SDF_isValidProductionProductions(SDF_ProductionProductions arg);
-ATbool SDF_isProductionProductionsEmpty(SDF_ProductionProductions arg);
-ATbool SDF_isProductionProductionsSingle(SDF_ProductionProductions arg);
-ATbool SDF_isProductionProductionsMany(SDF_ProductionProductions arg);
-ATbool SDF_hasProductionProductionsWsAfterFirst(SDF_ProductionProductions arg);
-SDF_Layout SDF_getProductionProductionsWsAfterFirst(SDF_ProductionProductions arg);
-SDF_ProductionProductions SDF_setProductionProductionsWsAfterFirst(SDF_ProductionProductions arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasProductionProductionsTail(SDF_ProductionProductions arg);
-SDF_ProductionProductions SDF_getProductionProductionsTail(SDF_ProductionProductions arg);
-SDF_ProductionProductions SDF_setProductionProductionsTail(SDF_ProductionProductions arg, SDF_ProductionProductions tail);
-ATbool SDF_hasProductionProductionsHead(SDF_ProductionProductions arg);
-SDF_Production SDF_getProductionProductionsHead(SDF_ProductionProductions arg);
-SDF_ProductionProductions SDF_setProductionProductionsHead(SDF_ProductionProductions arg, SDF_Production head);
+ATbool SDF_isValidProductionList(SDF_ProductionList arg);
+ATbool SDF_isProductionListEmpty(SDF_ProductionList arg);
+ATbool SDF_isProductionListSingle(SDF_ProductionList arg);
+ATbool SDF_isProductionListMany(SDF_ProductionList arg);
+ATbool SDF_hasProductionListWsAfterFirst(SDF_ProductionList arg);
+SDF_Layout SDF_getProductionListWsAfterFirst(SDF_ProductionList arg);
+SDF_ProductionList SDF_setProductionListWsAfterFirst(SDF_ProductionList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasProductionListTail(SDF_ProductionList arg);
+SDF_ProductionList SDF_getProductionListTail(SDF_ProductionList arg);
+SDF_ProductionList SDF_setProductionListTail(SDF_ProductionList arg, SDF_ProductionList tail);
+ATbool SDF_hasProductionListHead(SDF_ProductionList arg);
+SDF_Production SDF_getProductionListHead(SDF_ProductionList arg);
+SDF_ProductionList SDF_setProductionListHead(SDF_ProductionList arg, SDF_Production head);
 
 /*}}}  */
 /*{{{  SDF_ModuleWord accessor prototypes */

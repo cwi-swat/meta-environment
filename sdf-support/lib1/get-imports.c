@@ -1,9 +1,11 @@
 #include "SDF-utils.h"
 
+/*{{{  getImpsectionImports(SDF_ImpSection impsection) */
+
 static ATermList
 getImpsectionImports(SDF_ImpSection impsection)
 {
-  ATermList     modules     = ATempty;
+  ATermList      modules     = ATempty;
   SDF_Imports    imports     = SDF_getImpSectionList(impsection);
   SDF_ImportList importslist = SDF_getImportsList(imports);
 
@@ -24,27 +26,26 @@ getImpsectionImports(SDF_ImpSection impsection)
   return modules;
 }
 
-static ATermList
-getGrammarImports(SDF_Grammar grammar)
+/*}}}  */
+/*{{{  collect_imports(SDF_Grammar grammar, ATermList *imports) */
+
+static void
+collect_imports(SDF_Grammar grammar, ATermList *imports)
 {
   if (SDF_hasGrammarImpSection(grammar)) {
     SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
-    return getImpsectionImports(impsection);
+    *imports = ATconcat(*imports, getImpsectionImports(impsection));
   }
-  else if (SDF_isGrammarConcGrammars(grammar)) {
-    ATermList leftImports = getGrammarImports(SDF_getGrammarLeft(grammar));
-    ATermList rightImports = getGrammarImports(SDF_getGrammarRight(grammar));
-    return ATconcat(rightImports, leftImports);
-  }
-
-  return ATempty;
 }
+
+/*}}}  */
+/*{{{  SDFgetImports(SDF_Module module) */
 
 ATermList
 SDFgetImports(SDF_Module module)
 {
   SDF_ImpSectionList imps;
-  SDF_SectionList    sectlist;
+  SDF_Sections       sections;
   ATermList          modules = ATempty;
 
   imps = SDF_getModuleList(module);
@@ -58,17 +59,12 @@ SDFgetImports(SDF_Module module)
     imps = SDF_getImpSectionListTail(imps);
   }
 
-  sectlist = SDF_getSectionsList(SDF_getModuleSections(module));
-  while (!SDF_isSectionListEmpty(sectlist)) {
-    SDF_Section sect = SDF_getSectionListHead(sectlist);
-    SDF_Grammar grammar = SDF_getSectionGrammar(sect);
-    modules = ATconcat(getGrammarImports(grammar), modules);
+  sections = SDF_getModuleSections(module);
+  SDFforeachGrammarInSections(sections,
+			      (SDFGrammarFunc)collect_imports,
+			      &modules);
 
-    if (SDF_isSectionListSingle(sectlist)) {
-      break;
-    }
-    sectlist = SDF_getSectionListTail(sectlist);
-  }
-
-  return ATreverse(modules);
+  return modules;
 }
+
+/*}}}  */
