@@ -3,7 +3,7 @@
 include $(top_srcdir)/make-rules
 
 if BUILD_MANUAL
-noinst_DATA = manual.pdf
+noinst_DATA = asf+sdf-user-manual.pdf
 endif
 
 EXTRA_DIST = $(wildcard *.ltx) \
@@ -11,7 +11,6 @@ EXTRA_DIST = $(wildcard *.ltx) \
              $(wildcard *.pdf) \
              $(wildcard *.sty) \
              $(wildcard *.fig)
-
 
 MANUAL	= manual.ltx
 
@@ -27,7 +26,7 @@ PSJES = Bool-example_asf.ps Bool-example_sdf2.ps Bool-example_trm.ps \
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
 
-CLEANFILES = manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,pdf,toc}
+CLEANFILES = manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,pdf,toc} $(PDFJES)
 
 manual: asf+sdf-user-manual.pdf
 
@@ -43,4 +42,6 @@ asf+sdf-user-manual.ps: manual.dvi $(PSJES)
 
 asf+sdf-user-manual.pdf: $(MANUAL) $(PDFJES)
 	makeindex manual.idx ;\
+	pdflatex manual.ltx ;\
+	bibtex manual ;\
 	pdflatex manual.ltx
