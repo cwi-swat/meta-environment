@@ -1,5 +1,11 @@
 $Id$
 
+2001/07/20 ({markvdb,jong,olivierp}@cwi.nl)
+ * Switched to new parsetable format
+ * Introduced character classes instead of aterm lists in order
+   to enable future optimizations.
+ * regenerated parsetables.
+
 2001/07/18 (markvdb@cwi.nl, jurgenv@cwi.nl)
  * Fixed a bug with respect to the renaming of labelled symbols.
  * Regenerated normalizer with new compiler, the performance gain

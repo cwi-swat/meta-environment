@@ -1,74 +1,76 @@
 #include "ksdf2table.h"
+#include "characters.h"
+#include "goto.h"
+#include "follow.h"
 
-extern ATermList *follow_table;
 extern ATermTable symbol_lookaheads_table;
 extern ATermTable nr_spec_attr_pairs;
 
-extern ATermList action_insert(ATermList actions, ATerm cc2, ATermList elems2);
-
- 
-/*{{{  ATermList restrict(ATermList charrange, ATermList restrictions,
+/*{{{  ATermList restrict(CC_Class charClass, ATermList restrictions,
                          ATermInt len, ATermInt prodnr, ATerm prod,
                          ATermList actionset) */
 
-ATermList charrange_difference(ATermList crl1,ATermList crl2);
-ATermList charrange_intersection(ATermList crl1,ATermList crl2);
-
-ATermList restrict(ATermList charrange1, ATermList restrictions,
-                   ATermInt len, ATermInt prodnr,
-                   ATermList actionset)
+static ATermList restrict(CC_Class charClass1, ATermList restrictions,
+			  ATermInt len, ATermInt prodnr,
+			  ATermList actionset)
 {
-  ATerm reduce, charclass, restriction, cc, las;
-  ATermList reducelist, charrange2, newcharrange, newactionset;
+  ATerm reduce, restriction, cc, las;
+  ATermList reducelist;
   ATermInt special_attr;
+  CC_Class charClass2, newCharClass;
+  int c;
 
-/*
-ATwarning("las are %t\n", restrictions);
-ATwarning("charrange for %t is %t\n", prodnr, charrange1);
-*/
-
-  if(ATisEmpty(restrictions)) {
-    special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs,(ATerm)prodnr);
-    reduce = ATmake("reduce(<term>,<term>,<term>)",len,prodnr,special_attr);
+  if (ATisEmpty(restrictions)) {
+    special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
+    reduce = ATmake("reduce(<term>,<term>,<term>)", len, prodnr, special_attr);
     reducelist = ATmakeList1(reduce);
-    charclass = (ATerm)ATmakeAppl1(afun_char_class, (ATerm)charrange1);
-/*
-ATwarning("action_insert(%t,%t,%t)\n", actionset, charclass, reducelist);
-*/
-    actionset = action_insert(actionset, charclass, reducelist);
-    return actionset;
+    for (c=0; c<CC_BITS; c++) {
+      if (CC_containsChar(charClass1, c)) {
+	actionset = action_insert(actionset, (ATerm)ATmakeInt(c), reducelist);
+      }
+    }
   }
   else {
     restriction = ATgetFirst(restrictions);
     restrictions = ATgetNext(restrictions);
     if(IS_CHARCLASS(restriction)) {
-      charrange2 = GET_LIST_ARG(restriction,0);
-      newcharrange = charrange_difference(charrange1, charrange2);
-      return restrict(newcharrange,restrictions,len,prodnr,actionset);
+      charClass2 = CC_ClassFromTerm(restriction);
+      newCharClass = CC_alloc();
+      CC_copy(newCharClass, charClass1);
+      CC_difference(newCharClass, charClass2);
+      CC_free(charClass2);
+      actionset = restrict(newCharClass, restrictions, len, prodnr, actionset);
+      CC_free(newCharClass);
     }
     else if(ATmatch(restriction, "look(<term>,<term>)", &cc, &las)) {
       if (IS_CHARCLASS(cc)) {
-        charrange2 = GET_LIST_ARG(cc,0);   
-        special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs,(ATerm)prodnr);
+        charClass2 = CC_ClassFromTerm(cc);
+        special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
         reduce = ATmake("reduce(<term>,<term>,<term>,<term>)",
-                        len,prodnr,special_attr,las);
+                        len, prodnr, special_attr, las);
         reducelist = ATmakeList1(reduce);
-        newcharrange = charrange_intersection(charrange1, charrange2);
-        charclass = (ATerm)ATmakeAppl1(afun_char_class, (ATerm)newcharrange);
-/*
-ATwarning("action_insert(%t,%t,%t)\n", actionset, charclass, reducelist);
-*/
 
-        newactionset = action_insert(actionset, charclass, reducelist);
-        newcharrange = charrange_difference(charrange1, charrange2);
-        return restrict(newcharrange,restrictions,len,prodnr,newactionset);
+	newCharClass = CC_alloc();
+	CC_copy(newCharClass, charClass1);
+        CC_intersection(newCharClass, charClass2);
+
+	for (c=0; c<CC_BITS; c++) {
+	  if (CC_containsChar(newCharClass, c)) {
+	    actionset = action_insert(actionset, (ATerm)ATmakeInt(c), reducelist);
+	  }
+	}
+
+	CC_copy(newCharClass, charClass1);
+        CC_difference(newCharClass, charClass2);
+	CC_free(charClass2);
+
+        actionset = restrict(newCharClass, restrictions, len, prodnr, actionset);
+
+	CC_free(newCharClass);
       }
-      else
-        return actionset;
     }
-    else
-      return actionset;
   }
+  return actionset;
 }
 
 /*}}}  */
@@ -79,7 +81,8 @@ ATermList reductions(ATermList vertex, ATermList actionset)
   int len, iptr;
   ATerm item, prod, symbol;
   ATermInt prodnr, ptr;
-  ATermList symbols, charrange, las;
+  ATermList symbols, las;
+  CC_Class charClass;
 
   while(!ATisEmpty(vertex)) {
     item = ATgetFirst(vertex);
@@ -96,15 +99,13 @@ ATermList reductions(ATermList vertex, ATermList actionset)
         iptr = ATgetInt(ptr);
         if(iptr == len) {
           las = (ATermList)ATtableGet(symbol_lookaheads_table,symbol);
-          if(!las)
+          if(!las) {
             las = ATempty;
-          charrange = follow_table[ATgetInt(prodnr)];
-          if(charrange) {
-/*
-ATwarning("charrange for %t is %t\n", prodnr, charrange);
-*/
-            actionset = restrict(charrange,las,ATmakeInt(len),
-                                 prodnr,actionset);
+          }
+
+          charClass = follow_table[ATgetInt(prodnr)];
+          if (charClass) {
+            actionset = restrict(charClass, las, ATmakeInt(len), prodnr, actionset);
           }
         }
       }

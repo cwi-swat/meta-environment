@@ -1,10 +1,27 @@
+/*{{{  includes */
+
 #include <unistd.h>
 #include <assert.h>
+
+#include <aterm2.h>
 
 #include "ksdf2table.h" 
 #include "flatten.h"
 #include "statistics.h"
+#include "characters.h"
+#include "intset.h"
 
+/*}}}  */
+
+/*{{{  types */
+
+typedef struct _GotoBucket
+{
+  int nr_entries;
+  int *entries;
+} GotoBucket;
+
+/*}}}  */
 /*{{{  global variables */
 
 int MAX_PROD;
@@ -19,7 +36,7 @@ extern int nr_of_items;
 extern int max_nr_items;
 ATerm empty_set;
 ATerm eof_token;
-ATerm all_chars;  
+ATerm all_chars;   
 extern ATbool run_verbose;
 extern ATbool statisticsMode;
 
@@ -51,7 +68,6 @@ AFun afun_gtr_prio = 0;
 AFun afun_left_prio = 0;
 AFun afun_right_prio = 0;
 AFun afun_assoc_prio = 0;
-AFun afun_actions = 0;
 AFun afun_state_rec = 0;
 AFun afun_label = 0;
 AFun afun_lit = 0;
@@ -82,6 +98,7 @@ ATermTable state_actions_pairs;
 ATermSOS *state_sos;
 
 /*}}}  */
+
 /*{{{  void init_table_gen() */
 
 void init_table_gen()
@@ -106,7 +123,7 @@ void init_table_gen()
 
   all_chars = ATmake("char-class([range(<term>,<term>)])",
                      (ATerm)ATmakeInt(0),(ATerm)ATmakeInt(255));
-  ATprotect(&all_chars);
+  ATprotect(&all_chars);   
 
   afun_action = ATmakeAFun("action", 2, ATfalse);
   ATprotectAFun(afun_action);
@@ -132,8 +149,6 @@ void init_table_gen()
   ATprotectAFun(afun_non_assoc_prio);
   afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
   ATprotectAFun(afun_gtr_prio);
-  afun_actions = ATmakeAFun("actions", 1, ATfalse);
-  ATprotectAFun(afun_actions);
   afun_state_rec = ATmakeAFun("state-rec", 3, ATfalse);
   ATprotectAFun(afun_state_rec);
   afun_label = ATmakeAFun("label", 2, ATfalse);
@@ -569,12 +584,159 @@ void process_restrictions(SDF_RestrictionList restricts)
 }
 
 /*}}}  */
+
+/*{{{  static ATerm intset_to_term(IS_IntSet set) */
+
+static ATerm intset_to_term(IS_IntSet set)
+{
+  ATermList range_set = ATempty;
+  ATerm elem;
+  int i, start, end;
+
+  assert(afun_range >= 0);
+
+  for (i=MAX_PROD; i>=0; i--) {
+    if (IS_contains(set, i)) {
+      end   = i;
+      start = end-1;
+
+      while (start>=0 && IS_contains(set, start)) {
+	start--;
+      }
+
+      if (start < (end-1)) {
+	/* Add a range */
+	elem = (ATerm)ATmakeAppl2(afun_range, (ATerm)ATmakeInt(start+1),
+				  (ATerm)ATmakeInt(end));
+      } else {
+	elem = (ATerm)ATmakeInt(end);
+      }
+
+      range_set = ATinsert(range_set, elem);
+
+      i = start;
+    }
+  }
+
+  return (ATerm)range_set;
+}
+
+/*}}}  */
+/*{{{  static ATermList compress_gotos(ATermList goto_list) */
+
+static ATermList compress_gotos(ATermList goto_list)
+{
+  static IS_IntSet *prodsets = NULL;
+  static int *occupied_sets = NULL;
+  static int prev_nr_of_states = -1;
+  int nr_occupied_sets = 0, prod, state, idx;
+  ATermAppl gt;
+  ATermList result;
+  IS_IntSet set;
+
+  if (prev_nr_of_states != nr_of_states) {
+    int size = nr_of_states*sizeof(IS_IntSet);
+    prodsets = (IS_IntSet *)realloc(prodsets, size);
+    if (prodsets == NULL) {
+      ATerror("out of memory in compress_gotos(%d)\n", size);
+    }
+    memset(prodsets, 0, size);
+
+    size = nr_of_states*sizeof(int);
+    occupied_sets = (int *)realloc(occupied_sets, size);
+    if (occupied_sets == NULL) {
+      ATerror("out of memory in compress_gotos(%d) 2\n", size);
+    }
+    memset(occupied_sets, 0, size);
+  }
+
+  while (!ATisEmpty(goto_list)) {
+    gt    = (ATermAppl)ATgetFirst(goto_list);
+    prod  = ATgetInt((ATermInt)ATgetArgument(gt, 0));
+    state = ATgetInt((ATermInt)ATgetArgument(gt, 1));
+
+    set = prodsets[state];
+    if (set == NULL) {
+      set = IS_create(MAX_PROD);
+      prodsets[state] = set;
+      occupied_sets[nr_occupied_sets++] = state;
+    }
+    IS_add(set, prod);
+
+    goto_list = ATgetNext(goto_list);
+  }
+
+  result = ATempty;
+  for (idx=0; idx<nr_occupied_sets; idx++) {
+    state = occupied_sets[idx];
+    set   = prodsets[state];
+    assert(set);
+    gt = ATmakeAppl2(afun_goto, intset_to_term(set), (ATerm)ATmakeInt(state));
+    result = ATinsert(result, (ATerm)gt);
+    IS_destroy(prodsets[state]);
+    prodsets[state] = NULL;
+  }
+
+  return result;
+}
+
+/*}}}  */
+/*{{{  static ATermList compress_actions(ATermList action_list) */
+
+static ATermList compress_actions(ATermList action_list)
+{
+  static unsigned long classes[CC_BITS*CC_LONGS];
+  static ATermIndexedSet actions = NULL;
+  long action_index, index, max_index;
+
+  if (actions == NULL) {
+    actions = ATindexedSetCreate(CC_BITS*2, 60);
+  } else {
+    ATindexedSetReset(actions);
+  }
+  memset(classes, 0, CC_BITS*CC_LONGS*sizeof(unsigned long));
+
+  index = -1;
+  max_index = -1;
+  while (!ATisEmpty(action_list)) {
+    ATermAppl action = (ATermAppl)ATgetFirst(action_list);
+    CC_Class cc = CC_ClassFromInt((ATermInt)ATgetArgument(action, 0));
+    index = ATindexedSetPut(actions, ATgetArgument(action, 1), NULL);
+    if (index > max_index) {
+      assert(index < CC_BITS);
+      max_index = index;
+    }
+    CC_union(&classes[index*CC_LONGS], cc);
+    /*
+    ATwarning("cc at %d after adding %t: %t\n", index,
+	      CC_ClassToTerm(cc), CC_ClassToTerm(&classes[index*CC_LONGS]));
+	      */
+    CC_free(cc);
+
+    action_list = ATgetNext(action_list);
+  }
+
+  assert(ATisEmpty(action_list));
+
+  for (action_index=0; action_index<=max_index; action_index++) {
+    ATerm acts = ATindexedSetGetElem(actions, action_index);
+    ATerm char_class = CC_ClassToTerm(&classes[action_index*CC_LONGS]);
+    ATerm action = (ATerm)ATmakeAppl2(afun_action, char_class, acts);
+    /*ATwarning("action = %t\n", action);*/
+    action_list = ATinsert(action_list, action);
+  }
+
+  return action_list;
+}
+
+/*}}}  */
+
 /*{{{  ATerm generate_parse_table(ATerm t) */
 
 ATerm generate_parse_table(PT_ParseTree g)
 {
   int i, nr_actions = 0, nr_gotos = 0;
-  ATerm labelsection, priosection, vnr, vertex, state, newaction;
+  ATerm labelsection, priosection, vnr, vertex, state;
   ATermList statelist = ATempty, gotos, actions;
 
   PT_Tree ptTree = PT_getParseTreeTree(g);
@@ -621,8 +783,11 @@ ATerm generate_parse_table(PT_ParseTree g)
         IF_STATISTICS(if (nr_actions > max_nr_actions) { max_nr_actions = nr_actions;});
       }
 
-      newaction = (ATerm)ATmakeAppl1(afun_actions, (ATerm)actions);
-      state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, newaction);
+      /*ATwarning("actions before compression (vnr=%t) = %t\n", vnr, actions);*/
+      gotos   = compress_gotos(gotos);
+      actions = compress_actions(actions);
+
+      state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, (ATerm)actions);
 
       statelist = ATinsert(statelist,state);
     }

@@ -3,6 +3,7 @@
 #include <SDFME-utils.h>
 #include <asc-support2-me.h>
 #include "ksdf2table.h"
+#include "characters.h"
 
 /*{{{  global variables */
 
@@ -136,14 +137,14 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
   ATerm pt, packed;
 
-  /*
+  
   FILE *f;
     
   f = fopen("definition.baf", "w");
   assert(f);
   ATwriteToBinaryFile(sdf, f);
   fclose(f);
-  */
+  
 
   pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
   packed = ATBpack(pt);
@@ -213,6 +214,8 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottomOfStack); 
+  ATsetChecking(ATtrue);
+  CC_init();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   SDF_initSDFMEApi(); 

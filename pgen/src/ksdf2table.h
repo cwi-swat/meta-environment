@@ -44,7 +44,7 @@ extern AFun afun_lit;
 
 extern ATerm empty_set;
 extern ATerm eof_token;
-extern ATerm all_chars;
+extern ATerm all_chars;  
 
 #define GET_ARG(t,n)      (ATgetArgument((ATermAppl)(t), n))
 #define GET_INT_ARG(t,n)  ((ATermInt)GET_ARG(t,n))

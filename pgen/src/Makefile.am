@@ -1,4 +1,3 @@
-# $Id$
 
 INCLUDES	= -I${ATERM}/include \
 		-I${TOOLBUS}/include \
@@ -6,6 +5,7 @@ INCLUDES	= -I${ATERM}/include \
 		-I${SDF_SUPPORT}/include \
 		-I${ASC_SUPPORT}/include
 
+check_PROGRAMS	= test-chars
 bin_PROGRAMS	= parsetablegen
 bin_SCRIPTS	= sdf2table 
 noinst_SCRIPTS	= sdf2table.test
@@ -17,10 +17,16 @@ EXTRA_DIST	= parsetablegen.idef sdf2table.src sdf2table.pod
 SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		flatten.c characters.c first.c follow.c goto.c parse-table.c \
 		predicted.c priorities.c reductions.c statistics.c \
-		Sdf2-Normalization.c
+		Sdf2-Normalization.c intset.c
 
-HDRS         = atsets.h ksdf2table.h statistics.h flatten.h
+HDRS         = atsets.h ksdf2table.h statistics.h flatten.h predicted.h goto.h \
+		follow.h intset.h
 
+
+test_chars_SOURCES	= test-chars.c characters.c
+test_chars_LDADD	= \
+                        -L$(ATERM)/lib -lATerm \
+                        $(SOCKLIBS)
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
