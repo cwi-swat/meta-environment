@@ -1,3 +1,6 @@
+2002/09/09 (vandenbr@loria.fr)
+ * Added "#!/bin/sh" in order to make test scripts work under CYGWIN.
+
 2002/08/07 (markvdb@cwi.nl)
  * Bumped to pt-support to 0.11beta.
  * Length calculation takes ambiguity cluster into consideration.
