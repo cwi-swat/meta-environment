@@ -19,21 +19,21 @@ INCLUDEFILES=
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
 # DEBUG-LD-FLAGS: optional flags for linking with debugging information
-DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-LIBS     = -L$(ATERM)/lib -L$(top_srcdir)/compiler/support $(LOCALLIBS:=-dbg) $(LIBS)
 DEBUG-CC-FLAGS = -g
 DEBUG-LD-FLAGS = 
 
 # PROFILE-LIBS:     libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-PROFILE-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-LIBS     = -L$(ATERM)/lib -L$(top_srcdir)/compiler/support $(LOCALLIBS:=-prof) $(LIBS)
 PROFILE-CC-FLAGS = -pg
 PROFILE-LD-FLAGS = -pg
 
 # STD-LIBS:     normal libraries
 # STD-CC-FLAGS: normal compiler flags
 # STD-LD-FLAGS: optional flags
-STD-LIBS      = -L$(ATERM)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-LIBS      = -L$(ATERM)/lib -L$(top_srcdir)/compiler/support $(LOCALLIBS:=-$(CC)) $(LIBS)
 STD-CC-FLAGS  = -O
 STD-LD-FLAGS  = 
 
