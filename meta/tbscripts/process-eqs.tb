@@ -25,7 +25,8 @@ let
   Nonterminal : str,
   ParseTree   : term,
   Errors      : term,
-  ModuleId    : term
+  ModuleId    : term,
+  Extension   : str
 in
   snd-msg(get-rules-top-sort) .
   rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
@@ -39,7 +40,9 @@ in
      (
       rec-msg(eqs-text(Module, EqsText?)).
       ParseString(Module, eqs, Nonterminal, EqsText, ParseTree?, Errors?) .
-      ProcessParseError(Module, Errors, "asf") .
+      snd-msg(file-extension-hook(asf)) .
+      rec-msg(file-extension-hook-result(Extension?)) .
+      ProcessParseError(Module, Errors, Extension) .
       ProcessEqsTree(Module, ParseTree) .
       ParseTree := no-tree
     +
