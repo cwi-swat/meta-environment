@@ -1,15 +1,18 @@
+
+2003/02/14 (jurgenv@cwi.nl)
+ * Fixed a minor bug in asf-operations, renaming in modules that have no 
+   "equations" keyword failed and resulted in an abort.
+
 2003/04/01 (markvdb@cwi.nl)
  * Set no longer re-use the List module. 
  * Square brackets are replaced by curly brackets.
 
 2003/03/31 (markvdb@cwi.nl)
- * Specificity ordering on equations introduced in
-   asfe.
- * Added a test to check that asfe and asfc have the
-   same behaviour.
+ * Specificity ordering on equations introduced in asfe.
+ * Added a test to check that asfe and asfc have the same behaviour.
 
 2003/03/24 ({markvdb,iversen}@cwi.nl)
- * Annotations are propagated over injections.
+ * In asfe annotations are propagated over injections during rewriting.
 
 2003/02/14 (jurgenv@cwi.nl)
  * Fixed a minor bug in concat-asf
