@@ -14,267 +14,329 @@
 #include <stdio.h>
 #include <errno.h>
 
-#define MAXARG 20           /* # of args per command */
-#define MAXCMD 1024         /* max length of command */
+void exec_cmd(char *);
+static char *print_term(term *);
 
-char *gnuclient = "gnuclient"; /* The name of the gnuclient executable */
-char *gnuc_flag1 = "-batch";
-char *gnuc_flag2 = "-f";          
-char *gnuc_func; /* command array for exec */
+/** Return the representation of a variable
+    result of this needs to be free'd
+*/
+static char *print_var(term* e) {
+  char *txt1,*txt2,*result;
 
-char **def_cmd = NULL;      /* default command array */
-char **the_cmd;             /* current command array */
-char cmd_buf[MAXCMD];       /* copy of command with ' ' replaced by '\0' */
-char tmp[1024];
-TBbool keepnewline = TBfalse;
-TBbool addnewline = TBfalse;
-TBbool obinary = TBfalse;
-
-void exec_cmd(void);
-static void print_term(term *);
-
-static void print_var(term* e) {
-  char* txt;
-  txt = get_txt(var_sym(e));
-  strcat(cmd_buf,txt);
-  strcat(cmd_buf,":");
-  print_term(var_type(e));
-  if(var_result(e))
-    strcat(cmd_buf,"?");
+  /* Allocate the size of e for the string */
+  result = (char *) malloc(TBsize(e)); 
+  /* Get the name of the variable */
+  txt1 = get_txt(var_sym(e));
+  /* Get the sort of the variable */
+  txt2 = print_term(var_type(e));
+  if(var_result(e)){
+    /* If it is a result variable, add a question mark */
+    sprintf(result,"%s:%s?",txt1,txt2);
+  } else {
+    /* If not, print the regular variable representation */
+    sprintf(result,"%s:%s",txt1,txt2);
+  }
+  /* Free txt2, because it was alloc'd in print_term */
+  free(txt2);
+  /* And return the thing */
+  return result;
 }
 
-static void print_env(env* e) {
+/* Turn an environment into a string. I suspect this is hardly ever
+   used. I haven't tested it, and am not sure if this is the way
+   emacs-lisp likes to see environments. Currently, they are converted
+   to lists. 
+   The result of this needs to be free'd later 
+*/
+static char *print_env(env *e) {
   TBbool first = TBtrue;
-  char* txt;
+  char *result,*tmp;
   
-  strcat(cmd_buf,"\"");
+  /* allocate the size of the environment for the result */
+  result = (char *) malloc(TBsize(e));
+  /* Make result the empty string */
+  result[0] = '\0';
+  /* Set the start of the list */
+  strcat(result,"'(");
+  /* while there is still something in the environment */
   while(e != NULL) {
+    /* Make sure we _are_ dealing with an environment */
     assert(is_env(e));
     if(first)
+      /* we do not print a separator */
       first = TBfalse;
-    else
-      strcat(cmd_buf," ");
-    txt = get_txt(env_sym(e));
-    strcat(cmd_buf,txt);
-    strcat(cmd_buf," ");
-    print_term(env_val(e));
+    else {
+      /* we do print a separator */
+      strcat(result," ");
+    }
+    /* Print the '(symbol value) tuple */
+    strcat(result,"'(");
+    strcat(result,get_txt(env_sym(e)));
+    strcat(result," ");
+    tmp = print_term(env_val(e));
+    strcat(result,tmp);
+    strcat(result,")");
+    /* tmp was malloc'd in print_term */
+    free(tmp);
+    /* And take the next env from the list */
     e = env_next(e);
   }
-  strcat(cmd_buf,"\"");
+  /* Close the whole '(...) tuple list */
+  strcat(result,")");
+  return result;
 }
 
-static void print_list(term_list* l, char* left, char* sep, char* right) {
+/** Generic list printer:
+    l     -- the list itself
+    left  -- the string that starts the list
+    sep   -- separates elements of the list
+    right -- the string that end the list
+
+    The result of this needs to be free'd later.
+*/
+static char *print_list(term_list *l, char *left, char *sep, char *right) {
   int i;
-  strcat(cmd_buf,left);
+  char *result,*tmp;
+
+  /* allocate twice the elements of the list, to allow for the
+     separators and left and right. This is a rough guestimate. If sep
+     is a huge string, then this will fail, otherwise it probably
+     allocates much too much in general. There is room for improvement
+     here. */
+  result = (char *) malloc(TBsize(l)*2); /* To be on the safe side */
+  /*  make result empty */
+  result[0] = '\0';
+  /* And write the left part of the list */
+  strcat(result,left);
+  /* loop over the list */
   for(i=1; i<=list_length(l); i++) {
     if(i>1) {
-      strcat(cmd_buf,sep);
+      /* if we're not on the first element, write the separator */
+      strcat(result,sep);
     }
-    print_term(list_index(l, i));
+    /* print the actual term at this position in the list */
+    tmp = print_term(list_index(l, i));
+    strcat(result, tmp);
+    /* tmp was malloc'd in print_term */
+    free(tmp);
   }
-  strcat(cmd_buf,right);
+  /* And finish with the right side of the list */
+  strcat(result,right);
+  return result;
 }
 
-static void print_term(term* t) {
+/** Print any term 
+    The result of this function needs to be free'd later
+*/
+static char *print_term(term* t) {
+  char *result,*tmp;
+  
+  /* Allocate the size of the term for the string */
+  result = (char *) malloc(TBsize(t));
+  /* make the result empty */
+  result[0] = '\0';
+  /* Switch to the right type of term */
   switch(tkind(t)) {
+    /* It's a string */
   case t_str:
-    strcat(cmd_buf,"\"");
-    strcat(cmd_buf,str_val(t));
-    strcat(cmd_buf,"\"");
+    /* Start the string with a " */
+    strcat(result,"\"");
+    /* get the actual value, and write it to result, with a " */
+    tmp = str_val(t);
+    strcat(result,tmp);
+    strcat(result,"\"");
     break;
   case t_bstr:
-    strcat(cmd_buf,bstr_val(t));
+    /* It's a binary string */
+    tmp = bstr_val(t);
+    strcat(result,tmp);
     break;
   case t_bool:
+    /* it's a bool */
     if(bool_val(t) == TBtrue) {
-      strcat(cmd_buf,"true");
+      strcat(result,"true");
     } else {
-      strcat(cmd_buf,"false");
+      strcat(result,"false");
     }
     break;
   case t_int:
-    sprintf(tmp,"%d", int_val(t));
-    strcat(cmd_buf,tmp);
+    /* It's an integer */
+    sprintf(result,"%d", int_val(t));
     break;
   case t_real:
-    sprintf(tmp,"%f", real_val(t));
-    strcat(cmd_buf,tmp);
+    /* It's a float */
+    sprintf(result,"%f", real_val(t));
     break;
   case t_var:
-    print_var(t);
+    /* It's a variable */
+    tmp = print_var(t);
+    strcat(result,tmp);
+    /* free tmp, it was malloc'd in print_var */
+    free(tmp);
     break;
   case t_placeholder:
-    strcat(cmd_buf,"<");
-    print_term(placeholder_type(t));
-    strcat(cmd_buf,">");
+    /* it's a placeholder */
+    tmp = print_term(placeholder_type(t));
+    sprintf(result,"<%s>", tmp);
+    /* tmp was malloc'd in print_term */
+    free(tmp);
     break;
   case t_appl:
-    strcat(cmd_buf,"(");
-    sprintf(tmp,"%s", get_txt(fun_sym(t)));
-    strcat(cmd_buf,tmp);
-    if(fun_args(t) != NULL)
-      print_list(fun_args(t), "(", " ", ")");
+    /* It's an application */
+    if(fun_args(t) != NULL) {
+      tmp = print_list(fun_args(t), "(", " ", ")");
+      sprintf(result,"(%s %s)", get_txt(fun_sym(t)), tmp);
+      /* tmp was malloc'd in print_list */
+      free(tmp);
+    } else {
+      sprintf(result,"(%s)", get_txt(fun_sym(t)));
+    }
     break;
   case t_list:
-    print_list(t, "(", " ", ")");
+    /* It's a list */
+    tmp = print_list(t, "(", " ", ")");
+    strcat(result, tmp);
+    /* tmp was malloc'd in print_list*/
+    free(tmp);
     break;
   case t_env:
-    print_env(t);
+    /* It's a variable environment */
+    tmp = print_env(t);
+    strcat(result,tmp);
+    /* free tmp, it was malloc'd in print_env */
+    free(tmp);
     break;
   }
+  return result;
 }
 
-void print_args(term_list *args) {
+/** Print the arguments of an application.
+    The result of this function needs to be free'd later
+*/
+char *print_args(term_list *args) {
+  char *result;
+  char *tmp;
+
+  /* Allocate the size of the args for result */
+  result = (char *) malloc(TBsize(args));
+  /* and make it the empty string */
+  result[0] = '\0';
   while(args) {
-    print_term(list_first(args));
-    if (list_next(args))
-      strcat(cmd_buf," ");
+    /* While we still have arguments left */
+    if (list_next(args)){
+      /* If this is not the last argument, we print the separator */
+      tmp = print_term(list_first(args));
+      strcat(result,tmp);
+      /* tmp was malloc'd in print_term */
+      free(tmp);
+      strcat(result," ");
+    } else {
+      /* This is the last argument, no separator after this */
+      tmp = print_term(list_first(args));
+      strcat(result, tmp);
+      /* tmp was malloc'd in print_term */
+      free(tmp);
+    }
+    /* And get the next argument */
     args = list_next(args);
   }
+  return result;
 }
 
+/** This handle incoming terms from the ToolBus */
 term *handle_input_from_toolbus(term *e) {
   term *result;
   term *arg;
   char *fname;
   term_list *fargs;
+  char *string,*tmp;
+
+  /* Allocate the size of the term for the command string */
+  string = (char *) malloc(TBsize(e));
+  /* And make it empty */
+  string[0] = '\0';
   
-  /*  TBprintf(stderr, "Get term from toolbus: %t", e);*/
-  /*    printf("In handle_input\n");*/
-  /* rec-terminate appears to fail sometimes. So far, it only fails when 
-     the ToolBus is run in regular mode. If it runs in -viewer mode 
-     rec-terminate appears to work well. 
-  */
   if(TBmatch(e, "rec-terminate(%t)", &arg)){
-    /*	printf("Matched rec-terminate\nCurrently disabled for debugging purposes\n"); */
-    cmd_buf[0] = '\0';
-    strcat(cmd_buf,"save-buffers-kill-emacs");
-    exec_cmd();
+    /* Tell emacs to terminate */
+    exec_cmd("save-buffers-kill-emacs");
+    /* And follow that example */
     exit(0);
   } else if(TBmatch(e, "rec-ack-event(%t)", &fname)){
+    /* Acknowledgment accepted. we do not pass it to emacs, at the moment */
     result = NULL;
   } else if(TBmatch(e, "rec-do(%f(%l))", &fname, &fargs)){  
-    /* empty commandbuffer */
-    cmd_buf[0] = '\0';
-    /*    printf("Matched rec-do\n");*/
-    strcat(cmd_buf,fname);
-    strcat(cmd_buf," ");
-    print_args(fargs);
-    exec_cmd();
+    /* Tell emacs to do something */
+    /* Build a "function arglist" string for emacs lisp */
+    tmp = TBsprintf("%f", fname);
+    strcat(string,tmp);
+    strcat(string," ");
+    tmp = print_args(fargs);
+    strcat(string,tmp);
+    /* tmp was malloc'd in print_args */
+    free(tmp);
+    /* And exec it */
+    exec_cmd(string);
     result = NULL;
   } else if(TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs)){  
-    /* empty commandbuffer */
-    cmd_buf[0] = '\0';
-    /*    printf("Matched rec-eval\n");*/
-    strcat(cmd_buf,fname);
-    strcat(cmd_buf," ");
-    print_args(fargs);
-    exec_cmd();
+    /* Tell emacs to do something: eval is identical to do. We do not
+       enforce currently that something is indeed being sent
+       back. This is up to the user. */
+    /* Build a "function arglist" string for emacs lisp */
+    tmp = TBsprintf("%f", fname);
+    strcat(string,tmp);
+    strcat(string," ");
+    tmp = print_args(fargs);
+    strcat(string,tmp);
+    /* tmp was malloc'd in print_args */
+    free(tmp);
+    /* And exec it */
+    exec_cmd(string);
     result = NULL;
   }
+  free(string);
   return result;
 }
 
-void exec_cmd(void) {
-  int r;       /* Return value of wait()'ing for child process to terminate */
-  int status;  /* The status of the child process */
-  int cmd_pid; /* The pid of the child process */
-
-  gnuc_func = cmd_buf;
-
-#ifdef 0  
-  if ((cmd_pid = fork())) {
-    /* This is the parent process */
-    if (cmd_pid < 0)
-      err_sys_fatal("Can't fork");
-  } else {
-    /* This is the chid process */
-    if (execlp(gnuclient, gnuclient, gnuc_flag1, gnuc_flag2, gnuc_func, NULL) < 0 ) {
-      err_sys_fatal("Can't execute %s", gnuclient);
-    }
-  }
-
-  /* We need to sleep here for some time, in order to prevent execs
-     following each other too rapidly. This is obviously not the most
-     elegant solution. So far it appears to work. Timing is still
-     experimental, though. */
-  
-  usleep((long)1000);
-
-  /*while ((r = wait(&status)) != cmd_pid && r != 0)
-    fprintf(stderr, "wait = %d\n", r);  
-*/
-#endif
-  fprintf(stdout,"(%s)\n",gnuc_func);
+/** Tell emacs to exec the cmd */
+void exec_cmd(char *cmd) {
+  /* Since emacs listens to stdout, we can just print with brackets */
+  fprintf(stdout,"(%s)\n",cmd);
   fflush(NULL);
 }
 
+/** Handle terms coming from emacs */
 term *handle_input_from_emacs(term *e) {
-  /*  TBprintf(stderr,"term from emacs: %t\n", e);*/
+  /* we have no interest here but to pass it along to the ToolBus */
   return e;
 }
 
-/* #include <signal.h>*/
-/*
-void interrupt_handler(int sig){
-  kill(0, SIGKILL);
-  exit(-1);
-}
-*/
-
-void help(void) {
-  char * str =
-    "\n\
-**** Make sure your .emacs file contains the line\n\
-\n\
-(gnuserv-start)\n\
-\n\
-Synopsis: emacs-adapter [options]\n\
-\n\
-Options are:\n\
--help                 print this message\n\
--gnuclient file       use file as gnuclient. Default is gnuclient\n\
--initfile file        load e-lisp file file before accepting commands\n\
-                      from the ToolBus";
-  fprintf(stderr, str);
-}
-
 int main(int argc, char *argv[]) {
+  char string[80]; /* for the init commands */
   char *name = "text-edit"; /* The name of the adapter told to the ToolBus*/
 /* This name needs to be parameterized, obviously... */
   int new_stdin;        /* The fd into which stdin gets dupped */
   
-  /*  signal(SIGINT, interrupt_handler);
-  signal(SIGKILL, interrupt_handler);
-  signal(SIGTERM, interrupt_handler);
-  */
-
-/* stdin gets closed on the following exec. Therefor we dup() it. The 
-   dupped fd is identical (also stdin), but it is not closed on exec.
+/* If we connect stdin as file descriptor 0 then the ToolBus behaves
+   completely different from when it is another number... :-( Therefore
+   we dup() it into something else.  
 */
   new_stdin = dup(STDIN_FILENO);
-  if ((fcntl(new_stdin, F_SETFD, (long) 0)) != -1) {
-    /*    fprintf(stderr,"**********THE FD COMING FROM EMACS IS: %d *************************************\n",new_stdin);*/
-  } else {
+  if ((fcntl(new_stdin, F_SETFD, (long) 0)) == -1) {
     fprintf(stderr,"Unsetting close-on-exec on stdin failed\n");
   }
 
-  /* fprintf(stderr,"The value of the fcntl flags of stdin: %d\n", fcntl(new_stdin, F_GETFL));*/
- 
- 
- 
-
-  /* Tell emacs about LENSPEC and MIN_MSG_SIZE */
-  sprintf(cmd_buf,"set-lenspec %d", LENSPEC);
-  exec_cmd();
-  sprintf(cmd_buf,"set-minmsgsize %d", MIN_MSG_SIZE);
-  exec_cmd();  
- 
-/* Now init the TB libarary, and add a port that listens to our dupped
-   stdin.
-*/
+  /* Now init the TB libarary, and add a port that listens to our dupped
+     stdin.
+  */
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
   TBaddTermPort(new_stdin, handle_input_from_emacs); 
+
+  /* Tell emacs about LENSPEC and MIN_MSG_SIZE */
+  sprintf(string,"set-lenspec %d",LENSPEC);
+  exec_cmd(string);
+  sprintf(string,"set-minmsgsize %d",MIN_MSG_SIZE);
+  exec_cmd(string);  
+ 
   
 /* And start the main event loop */
   TBeventloop();
