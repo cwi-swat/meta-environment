@@ -74,7 +74,6 @@ static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
 static SE_StructureEditor moveCursorUp(SE_StructureEditor editor)
 {
   PT_ParseTree parseTree;
-  PT_Tree cursor;
   PT_Tree tree;
 
   assert(editor != NULL);
@@ -82,10 +81,12 @@ static SE_StructureEditor moveCursorUp(SE_StructureEditor editor)
   parseTree = SE_getStructureEditorParseTree(editor);
   tree = PT_getParseTreeTop(parseTree);
 
-  cursor = SE_getStructureEditorCursor(editor);
-  if (!PT_isEqualTree(tree, cursor)) {
-    PT_Tree parent = PT_findTreeParent(cursor, tree);
-    editor = SE_setStructureEditorCursor(editor, parent);
+  if (SE_hasStructureEditorCursor(editor)) {
+    PT_Tree cursor = SE_getStructureEditorCursor(editor);
+    if (!PT_isEqualTree(tree, cursor)) {
+      PT_Tree parent = PT_findTreeParent(cursor, tree);
+      editor = SE_setStructureEditorCursor(editor, parent);
+    }
   }
 
   return editor;
@@ -97,19 +98,20 @@ static SE_StructureEditor moveCursorUp(SE_StructureEditor editor)
 static SE_StructureEditor moveCursorDown(SE_StructureEditor editor)
 {
   PT_ParseTree parseTree;
-  PT_Tree cursor;
   PT_Tree tree;
 
   assert(editor != NULL);
 
   parseTree = SE_getStructureEditorParseTree(editor);
   tree = PT_getParseTreeTop(parseTree);
-  cursor = SE_getStructureEditorCursor(editor);
-  if (PT_hasTreeArgs(cursor)) {
-    PT_Args children = PT_findArgsWithLocation(PT_getTreeArgs(cursor));
-    if (!PT_isArgsEmpty(children)) {
-      PT_Tree child = PT_getArgsHead(children);
-      return SE_setStructureEditorCursor(editor, child);
+  if (SE_hasStructureEditorCursor(editor)) {
+    PT_Tree cursor = SE_getStructureEditorCursor(editor);
+    if (PT_hasTreeArgs(cursor)) {
+      PT_Args children = PT_findArgsWithLocation(PT_getTreeArgs(cursor));
+      if (!PT_isArgsEmpty(children)) {
+	PT_Tree child = PT_getArgsHead(children);
+	return SE_setStructureEditorCursor(editor, child);
+      }
     }
   }
 
@@ -122,7 +124,6 @@ static SE_StructureEditor moveCursorDown(SE_StructureEditor editor)
 static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor)
 {
   PT_ParseTree parseTree;
-  PT_Tree cursor;
   PT_Tree tree;
 
   assert(editor != NULL);
@@ -130,21 +131,23 @@ static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor)
   parseTree = SE_getStructureEditorParseTree(editor);
   tree = PT_getParseTreeTop(parseTree);
 
-  cursor = SE_getStructureEditorCursor(editor);
-  if (!PT_isEqualTree(tree, cursor)) {
-    PT_Tree parent = PT_findTreeParent(cursor, tree);
-    PT_Args siblings = PT_findArgsWithLocation(PT_getTreeArgs(parent));
-    PT_Tree prev = PT_getArgsHead(siblings);
-    if (PT_isEqualTree(prev, cursor)) {
-      return moveCursorUp(editor);
-    }
-    while (!PT_isArgsEmpty(siblings)) {
-      PT_Tree sibling = PT_getArgsHead(siblings);
-      if (PT_isEqualTree(sibling, cursor)) {
-	return SE_setStructureEditorCursor(editor, prev);
+  if (SE_hasStructureEditorCursor(editor)) {
+    PT_Tree cursor = SE_getStructureEditorCursor(editor);
+    if (!PT_isEqualTree(tree, cursor)) {
+      PT_Tree parent = PT_findTreeParent(cursor, tree);
+      PT_Args siblings = PT_findArgsWithLocation(PT_getTreeArgs(parent));
+      PT_Tree prev = PT_getArgsHead(siblings);
+      if (PT_isEqualTree(prev, cursor)) {
+	return moveCursorUp(editor);
       }
-      prev = sibling;
-      siblings = PT_findArgsWithLocation(PT_getArgsTail(siblings));
+      while (!PT_isArgsEmpty(siblings)) {
+	PT_Tree sibling = PT_getArgsHead(siblings);
+	if (PT_isEqualTree(sibling, cursor)) {
+	  return SE_setStructureEditorCursor(editor, prev);
+	}
+	prev = sibling;
+	siblings = PT_findArgsWithLocation(PT_getArgsTail(siblings));
+      }
     }
   }
 
@@ -157,7 +160,6 @@ static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor)
 static SE_StructureEditor moveCursorRight(SE_StructureEditor editor)
 {
   PT_ParseTree parseTree;
-  PT_Tree cursor;
   PT_Tree tree;
   PT_Args siblings;
 
@@ -166,17 +168,19 @@ static SE_StructureEditor moveCursorRight(SE_StructureEditor editor)
   parseTree = SE_getStructureEditorParseTree(editor);
   tree = PT_getParseTreeTop(parseTree);
 
-  cursor = SE_getStructureEditorCursor(editor);
-  if (!PT_isEqualTree(tree, cursor)) {
-    PT_Tree parent = PT_findTreeParent(cursor, tree);
-    siblings = PT_findArgsWithLocation(PT_getTreeArgs(parent));
-    
-    while (!PT_isArgsEmpty(siblings)) {
-      PT_Tree sibling = PT_getArgsHead(siblings);
-      siblings = PT_findArgsWithLocation(PT_getArgsTail(siblings));
-      if (PT_isEqualTree(sibling, cursor) && !PT_isArgsEmpty(siblings)) {
-	PT_Tree next = PT_getArgsHead(siblings);
-	return SE_setStructureEditorCursor(editor, next);
+  if (SE_hasStructureEditorCursor(editor)) {
+    PT_Tree cursor = SE_getStructureEditorCursor(editor);
+    if (!PT_isEqualTree(tree, cursor)) {
+      PT_Tree parent = PT_findTreeParent(cursor, tree);
+      siblings = PT_findArgsWithLocation(PT_getTreeArgs(parent));
+      
+      while (!PT_isArgsEmpty(siblings)) {
+	PT_Tree sibling = PT_getArgsHead(siblings);
+	siblings = PT_findArgsWithLocation(PT_getArgsTail(siblings));
+	if (PT_isEqualTree(sibling, cursor) && !PT_isArgsEmpty(siblings)) {
+	  PT_Tree next = PT_getArgsHead(siblings);
+	  return SE_setStructureEditorCursor(editor, next);
+	}
       }
     }
   }
@@ -304,8 +308,7 @@ ATerm get_cursor(int cid, ATerm editorId)
     return ATmake("snd-value(cursor(<term>))", cursor);
   }
 
-  ATwarning("get_cursor: cannot get cursor for: %t\n", editorId);
-  return NULL;
+  return ATparse("snd-value(no-cursor)");
 }
 
 /*}}}  */
@@ -339,8 +342,7 @@ ATerm get_sort_at_cursor(int cid, ATerm editorId)
     return ATmake("snd-value(sort(<str>))", sort);
   }
 
-  ATwarning("get_sort_at_cursor: cannot get sort for: %t\n", editorId);
-  return NULL;
+  return ATparse("snd-value(no-cursor)");
 }
 
 /*}}}  */

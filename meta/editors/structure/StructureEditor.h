@@ -47,10 +47,10 @@ ATerm SE_StructureEditorToTerm(SE_StructureEditor arg);
 /*}}}  */
 /*{{{  constructors */
 
-SE_Direction SE_makeDirectionUp();
-SE_Direction SE_makeDirectionLeft();
-SE_Direction SE_makeDirectionDown();
-SE_Direction SE_makeDirectionRight();
+SE_Direction SE_makeDirectionUp(void);
+SE_Direction SE_makeDirectionLeft(void);
+SE_Direction SE_makeDirectionDown(void);
+SE_Direction SE_makeDirectionRight(void);
 SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor);
 SE_StructureEditor SE_makeStructureEditorUnedited(SE_ParseTree parseTree);
 
@@ -76,10 +76,10 @@ ATbool SE_isValidStructureEditor(SE_StructureEditor arg);
 inline ATbool SE_isStructureEditorDefault(SE_StructureEditor arg);
 inline ATbool SE_isStructureEditorUnedited(SE_StructureEditor arg);
 ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg);
-SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg);
-SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree);
 ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg);
+SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg);
 SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg);
+SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree);
 SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor);
 
 /*}}}  */

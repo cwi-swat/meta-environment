@@ -271,8 +271,7 @@ in
   +
     rec-msg(move-cursor, Stack?, EditorId?)
     . StackPopTerm(Stack, Stack?, Direction?)
-    . snd-msg(se-move-cursor(EditorId, Direction))
-    . SynchronizeFocus(EditorId)
+    . MoveCursor(EditorId, Direction)
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(convert-feedback, Stack?, EditorId?)
@@ -308,9 +307,14 @@ in
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(get-focus, Stack?, EditorId?)
-    . GetFocus(EditorId, RTree?)
-    . StackPushTerm(Stack, Stack?, RTree)
-    . ReturnSuccess(EditorId, Stack)
+    . GetFocus(EditorId, RTree?, Available?)
+    .
+    if equal(Available, true) then
+      StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
+    else
+      ReturnAbort(EditorId, Stack)
+    fi 
   +
     rec-msg(get-root, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
@@ -348,17 +352,23 @@ in
   +
     rec-msg(get-focus-origin, Stack?, EditorId?)
     . snd-msg(se-get-cursor(EditorId))
-    . rec-msg(se-cursor(EditorId, Cursor?))
-    . snd-msg(pa-get-origin(Cursor))
     .
     (
-      rec-msg(pa-origin(Origin?))
-      . StackPushTerm(Stack, Stack?, Origin)
+      rec-msg(se-cursor(EditorId, Cursor?))
+      . snd-msg(pa-get-origin(Cursor))
+      .
+      (
+	rec-msg(pa-origin(Origin?))
+	. StackPushTerm(Stack, Stack?, Origin)
+      +
+	rec-msg(pa-no-origin)
+	. StackPushTerm(Stack, Stack?, no-origin)
+      )
+      . ReturnSuccess(EditorId, Stack)
     +
-      rec-msg(pa-no-origin)
-      . StackPushTerm(Stack, Stack?, no-origin)
+      rec-msg(se-no-cursor(EditorId))
+      . ReturnAbort(EditorId, Stack)
     )
-    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(display-message, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Message?)
@@ -425,6 +435,7 @@ in
       ReturnAbort(EditorId, Stack)
     fi
   +
+#if 0    
     rec-msg(get-other-focus(Modulename?), Stack?, EditorId?)
     . StackPopTerm(Stack, Stack?, STree?)
     . FunSym := fun(STree)
@@ -447,6 +458,7 @@ in
       ReturnFailed(EditorId, Stack)
     fi
   +
+#endif
     rec-msg(push-editor-name, Stack?, EditorId?)
     . snd-msg(get-editor-filename(EditorId))
     . rec-msg(editor-filename(Filename?))
@@ -1156,9 +1168,26 @@ in
   fi
 endlet
 
-process GetFocus(Sid: term, Tree: term?) is
-  snd-msg(se-get-cursor(Sid))
-  . rec-msg(se-cursor(Sid, Tree?))
+process GetFocus(Sid: term, Tree: term?, Available: bool?) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    snd-msg(se-get-cursor(Sid))
+    .
+    (
+      rec-msg(se-cursor(Sid, Tree?))
+      . Available := true
+    +
+      rec-msg(se-no-cursor(Sid))
+      . Available := false
+    )
+  else
+    Available := false
+  fi
+endlet
 
 process GetParsetree(Sid: term, Parsetree: term?) is
   snd-msg(se-get-parse-tree(Sid))
@@ -1407,3 +1436,18 @@ in
   . rec-msg(get-module-contents(Pid, ModuleId?))
   . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
 endlet
+    
+process MoveCursor(Sid: term, Direction: term) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  . 
+  if equal(Registered, true) then
+    snd-msg(se-move-cursor(Sid, Direction))
+    . SynchronizeFocus(Sid)
+  else
+    tau 
+  fi
+endlet
+

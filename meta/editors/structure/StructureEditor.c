@@ -114,33 +114,33 @@ ATerm SE_StructureEditorToTerm(SE_StructureEditor arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  SE_Direction SE_makeDirectionUp() */
+/*{{{  SE_Direction SE_makeDirectionUp(void) */
 
-SE_Direction SE_makeDirectionUp()
+SE_Direction SE_makeDirectionUp(void)
 {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun0);
 }
 
 /*}}}  */
-/*{{{  SE_Direction SE_makeDirectionLeft() */
+/*{{{  SE_Direction SE_makeDirectionLeft(void) */
 
-SE_Direction SE_makeDirectionLeft()
+SE_Direction SE_makeDirectionLeft(void)
 {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun1);
 }
 
 /*}}}  */
-/*{{{  SE_Direction SE_makeDirectionDown() */
+/*{{{  SE_Direction SE_makeDirectionDown(void) */
 
-SE_Direction SE_makeDirectionDown()
+SE_Direction SE_makeDirectionDown(void)
 {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun2);
 }
 
 /*}}}  */
-/*{{{  SE_Direction SE_makeDirectionRight() */
+/*{{{  SE_Direction SE_makeDirectionRight(void) */
 
-SE_Direction SE_makeDirectionRight()
+SE_Direction SE_makeDirectionRight(void)
 {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun3);
 }
@@ -363,6 +363,17 @@ ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg)
 }
 
 /*}}}  */
+/*{{{  ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg) */
+
+ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg)
+{
+  if (SE_isStructureEditorDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg) */
 
 SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg)
@@ -372,6 +383,15 @@ SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg)
   }
   else 
     return (SE_ParseTree)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg) */
+
+SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg)
+{
+  
+    return (SE_Tree)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -388,26 +408,6 @@ SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_Par
 
   ATabort("StructureEditor has no ParseTree: %t\n", arg);
   return (SE_StructureEditor)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg) */
-
-ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg)
-{
-  if (SE_isStructureEditorDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg) */
-
-SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg)
-{
-  
-    return (SE_Tree)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */

@@ -18,7 +18,8 @@ let
   MenuEvent : term,
   Message : str,
   Modified : term,
-  SortName: str
+  SortName: str,
+  Pid: int
 in
 #ifdef ECLIPSE
   rec-connect(Hive?)
@@ -64,30 +65,39 @@ in
     . snd-do(Hive, kill-editor(EditorId))
   +
     rec-event(Hive, is-modified(EditorId?, Modified?))
-    . snd-ack-event(Hive, is-modified(EditorId, Modified))
     . snd-msg(te-is-modified(EditorId, Modified))
+    . snd-ack-event(Hive, is-modified(EditorId, Modified))
   +
     rec-event(Hive, contents-changed(EditorId?))
+    . create(ContentsChanged(EditorId), Pid?)
     . snd-ack-event(Hive, contents-changed(EditorId))
-    . snd-msg(te-contents-changed(EditorId))
   +
     rec-event(Hive, mouse-event(EditorId?, Offset?))
+    . create(MouseEvent(EditorId, Offset), Pid?)
     . snd-ack-event(Hive, mouse-event(EditorId, Offset))
-    . snd-msg(te-mouse-click-at-offset(EditorId, Offset))
   +
     rec-event(Hive, menu-event(EditorId?, MenuEvent?))
+    . create(MenuEvent(EditorId, MenuEvent), Pid?)
     . snd-ack-event(Hive, menu-event(EditorId, MenuEvent))
-    . snd-msg(te-menu-event(EditorId, MenuEvent))
   +
     rec-event(Hive, contents(EditorId, Contents?))
     . snd-msg(te-contents(EditorId, Contents))
     . snd-ack-event(Hive, contents(EditorId, Contents))
   +
     rec-event(Hive, editor-disconnected(EditorId?))
-    . snd-ack-event(Hive, editor-disconnected(EditorId))
     . snd-msg(te-text-editor-disconnected(EditorId))
+    . snd-ack-event(Hive, editor-disconnected(EditorId))
   )
   * delta
 endlet
+
+process ContentsChanged(EditorId: term) is
+  snd-msg(te-contents-changed(EditorId))
+
+process MouseEvent(EditorId: term, Offset: int) is
+  snd-msg(te-mouse-click-at-offset(EditorId, Offset))
+  
+process MenuEvent(EditorId: term, MenuEvent: term) is    
+  snd-msg(te-menu-event(EditorId, MenuEvent))
 
 toolbus(EditorHive)

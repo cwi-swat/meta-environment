@@ -37,8 +37,14 @@ in
   +
     rec-msg(se-get-cursor(EditorId?))
     . snd-eval(SE, get-cursor(EditorId))
-    . rec-value(SE, cursor(Tree?))
-    . snd-msg(se-cursor(EditorId, Tree))
+    .
+    (
+      rec-value(SE, cursor(Tree?))
+      . snd-msg(se-cursor(EditorId, Tree))
+    +
+      rec-value(SE, no-cursor)
+      . snd-msg(se-no-cursor(EditorId))
+    )
   +
     rec-msg(se-get-focus-at-cursor(EditorId?))
     . snd-eval(SE, get-focus-at-cursor(EditorId))
@@ -47,8 +53,14 @@ in
   +
     rec-msg(se-get-sort-at-cursor(EditorId?))
     . snd-eval(SE, get-sort-at-cursor(EditorId))
-    . rec-value(SE, sort(Sort?))
-    . snd-msg(se-sort-at-cursor(EditorId, Sort))
+    .
+    (
+      rec-value(SE, sort(Sort?))
+      . snd-msg(se-sort-at-cursor(EditorId, Sort))
+    +
+      rec-value(SE, no-cursor)
+      . snd-msg(se-no-cursor(EditorId))
+    )
   +
     rec-msg(se-move-cursor(EditorId?, Direction?))
     . snd-do(SE, move-cursor(EditorId, Direction))

@@ -108,11 +108,16 @@ let
   Sortname: str
 in
   snd-msg(se-get-sort-at-cursor(Sid))
-  . rec-msg(se-sort-at-cursor(Sid, Sortname?))
-  . snd-msg(te-display-message(Sid, Sortname))
-  . snd-msg(se-get-focus-at-cursor(Sid))
-  . rec-msg(se-focus-at-cursor(Sid, Focus?))
-  . snd-msg(te-set-focus(Sid, Focus))
+  .
+  (
+    rec-msg(se-sort-at-cursor(Sid, Sortname?))
+    . snd-msg(te-display-message(Sid, Sortname))
+    . snd-msg(se-get-focus-at-cursor(Sid))
+    . rec-msg(se-focus-at-cursor(Sid, Focus?))
+    . snd-msg(te-set-focus(Sid, Focus))
+  +
+    rec-msg(se-no-cursor(Sid))
+  )
 endlet
 
 process MenuSelected(Sid: term, EditorType: term) is
