@@ -24,5 +24,7 @@ install-data-hook:
 
 noinst_DATA=.cvsignore
 
+CLEANFILES = .cvsignore
+
 .cvsignore:
 	(echo "Makefile"; echo "Makefile.in") > $@
