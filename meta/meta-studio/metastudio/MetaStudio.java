@@ -350,6 +350,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         }
         int percentage = Integer.parseInt(value);
         importGraphPanel.setScale(percentage);
+        parseTreePanel.setScale(percentage);
       }
     };
 
