@@ -9,6 +9,7 @@ module languages/c/syntax/ANSI-C
 %% - imported lexical definition of C comments from the CPP grammar
 %% - then added follow restrictions on identifiers and some unary operators
 %% - fixed an ambiguity in the lexical syntax IS*? was produced, changed to IS*
+%% - refactored all right-associative lists using SDF2 list syntax
 %%
 %% The grammar is intentionally left ambiguous and it should stay that way!
 %%
@@ -200,8 +201,7 @@ context-free restrictions
 
 context-free syntax
 
-AssignmentExpression -> ArgumentExpressionList
-ArgumentExpressionList "," AssignmentExpression -> ArgumentExpressionList
+{AssignmentExpression ","}+ -> ArgumentExpressionList
 
 context-free syntax
 
@@ -306,8 +306,8 @@ context-free syntax
 	TypeQualifier DeclarationSpecifiers -> DeclarationSpecifiers
 
 context-free syntax
-	InitDeclarator -> InitDeclaratorList
-	InitDeclaratorList "," InitDeclarator -> InitDeclaratorList
+
+{InitDeclarator ","}+ -> InitDeclaratorList
 
 context-free syntax
 	Declarator -> InitDeclarator
@@ -337,7 +337,7 @@ context-free syntax
 	-> TypeSpecifier
 
 context-free syntax
-	StructOrUnion Identifier ("{"|"<%") StructDeclarationList  ("}"|"%>")	-> StructOrUnionSpecifier
+	StructOrUnion Identifier ("{"|"<%") StructDeclarationList ("}"|"%>")	-> StructOrUnionSpecifier
 	StructOrUnion ("{"|"<%") StructDeclarationList  ("}"|"%>")	-> StructOrUnionSpecifier
 	StructOrUnion Identifier-> StructOrUnionSpecifier
 
@@ -347,21 +347,17 @@ context-free syntax
 	-> StructOrUnion
 
 context-free syntax
-	StructDeclaration -> StructDeclarationList
-	StructDeclarationList StructDeclaration -> StructDeclarationList
+	StructDeclaration+ -> StructDeclarationList
 
 context-free syntax
 	SpecifierQualifierList StructDeclaratorList ";" -> StructDeclaration
 
 context-free syntax
-	TypeSpecifier SpecifierQualifierList -> SpecifierQualifierList
-	TypeSpecifier -> SpecifierQualifierList
-	TypeQualifier SpecifierQualifierList -> SpecifierQualifierList
-	TypeQualifier -> SpecifierQualifierList
+
+(TypeSpecifier | TypeQualifier)+ -> SpecifierQualifierList
 
 context-free syntax
-	StructDeclarator -> StructDeclaratorList
-	StructDeclaratorList "," StructDeclarator -> StructDeclaratorList
+	{StructDeclarator ","}+ -> StructDeclaratorList
 
 context-free syntax
 	Declarator -> StructDeclarator
@@ -374,8 +370,7 @@ context-free syntax
 	"enum" Identifier -> EnumSpecifier
 
 context-free syntax
-	Enumerator -> EnumeratorList
-	EnumeratorList "," Enumerator -> EnumeratorList
+	{Enumerator ","}+ -> EnumeratorList
 
 context-free syntax
 	Identifier -> Enumerator
@@ -405,17 +400,14 @@ context-free syntax
 	"*" TypeQualifierList Pointer -> Pointer
 
 context-free syntax
-	TypeQualifier -> TypeQualifierList
-	TypeQualifierList TypeQualifier -> TypeQualifierList
-
+	TypeQualifier+ -> TypeQualifierList
 
 context-free syntax
 	ParameterList -> ParameterTypeList
 	ParameterList "," "..." -> ParameterTypeList
 
 context-free syntax
-	ParameterDeclaration -> ParameterList
-	ParameterList "," ParameterDeclaration -> ParameterList
+	{ParameterDeclaration ","}+ -> ParameterList
 
 context-free syntax
 	DeclarationSpecifiers Declarator -> ParameterDeclaration
@@ -423,8 +415,7 @@ context-free syntax
 	DeclarationSpecifiers -> ParameterDeclaration
 
 context-free syntax
-	Identifier -> IdentifierList
-	IdentifierList "," Identifier -> IdentifierList
+	{Identifier ","}+ -> IdentifierList
 
 context-free syntax
 	SpecifierQualifierList -> TypeName
@@ -452,8 +443,7 @@ context-free syntax
 	("{"|"<%") InitializerList ","  ("}"|"%>")	 -> Initializer
 
 context-free syntax
-	Initializer -> InitializerList
-	InitializerList "," Initializer -> InitializerList
+	{Initializer ","}+ -> InitializerList
 
 context-free syntax
 	LabeledStatement -> Statement
@@ -475,12 +465,10 @@ context-free syntax
 	("{"|"<%") DeclarationList StatementList  ("}"|"%>")	 -> CompoundStatement
 
 context-free syntax
-	Declaration -> DeclarationList
-	DeclarationList Declaration -> DeclarationList
+	Declaration+ -> DeclarationList
 
 context-free syntax
-	Statement -> StatementList
-	StatementList Statement -> StatementList
+	Statement+ -> StatementList
 
 	";" -> ExpressionStatement
 	Expression ";" -> ExpressionStatement
