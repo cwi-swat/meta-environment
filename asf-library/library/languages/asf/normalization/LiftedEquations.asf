@@ -1,0 +1,17 @@
+equations
+
+[lhs]
+get-lhs(equation(appl(_Prod,[Lhs,_Ws1,_Lit,_Ws2,_Rhs]))) = Lhs
+
+[rhs]
+get-lhs(equation(appl(_Prod,[_Lhs,_Ws1,_Lit,_Ws2,Rhs]))) = Rhs
+
+equations
+
+[lhs]
+set-lhs(equation(appl(Prod,[_Lhs,Ws1,Lit,Ws2,Rhs])),Lhs) =
+	equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))
+
+[rhs]
+set-lhs(equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,_Rhs])),Rhs) =
+	equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))

@@ -1,0 +1,28 @@
+module languages/asf/compiler/muasf2muasf/Optimize-MuASF 
+
+imports languages/asf/compiler/muasf2muasf/Optimize-Recursive-List-Functions
+
+
+exports
+  context-free syntax
+    optimize-muasf(Module, NameTable) -> <Module , NameTable>
+
+hiddens
+  sorts RFN
+  context-free start-symbols
+	<Module, NameTable>
+	Module
+
+  context-free syntax
+    optimize-per-function(RuleList,FuncDefList, NameTable) -> RFN
+    optimize-function(RuleList,FuncDefList, NameTable)     -> RFN
+
+  aliases
+
+    <RuleList , FuncDefList , NameTable> -> RFN
+
+  variables
+    	"RFN" -> RFN
+	"Funid"[0-9]* -> FunId
+	"Nametable"[0-9]* -> NameTable
+	"Modid" 	-> ModId

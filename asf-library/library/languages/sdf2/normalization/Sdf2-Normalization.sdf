@@ -38,7 +38,8 @@ exports
     "<" Symbols "-CFr" ">"  -> Symbols
 hiddens
   variables
-    "L"[0-9\']*         -> Literal
+    "L"[0-9\']*         -> StrCon
+    "I"[0-9\']* 	-> IdCon
     "_G"[0-9\']*        -> Grammar 
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*

@@ -1,20 +1,24 @@
 module languages/asf/normalization/Length
 
 imports basic/Integers
-imports languages/asfix/syntax/Tree
+imports languages/asf/normalization/RenamedTree
 
 exports
 
 context-free syntax
-	length({Symbol ","}*) -> Integer
-	length({Tree ","}*) -> Integer
+	length({P-Symbol ","}*) -> Integer
+	length({P-Tree ","}*) -> Integer
 
 hiddens
 
-variables
-	"_Tree" -> Tree {wild}
-	"_Symbol" -> Symbol {wild}
+context-free syntax
+	"dummy" -> P-Symbols
+	"dummy" -> P-Args
 
 variables
-	"Tree*" -> {Tree ","}* {strict}
-	"Symbol*" -> {Symbol ","}* {strict}
+	"_Tree" -> P-Tree {wild}
+	"_Symbol" -> P-Symbol {wild}
+
+variables
+	"Tree*" -> {P-Tree ","}* {strict}
+	"Symbol*" -> {P-Symbol ","}* {strict}

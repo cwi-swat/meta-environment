@@ -1,0 +1,50 @@
+module languages/asf/compiler/muasf2muasf/Translate-No-Match
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+%% This module translates conditions of the form:
+%% match([DeclaredVariables,Term1,Term2) == matchfailed 
+%% to a call to a specialized function that implements this match
+
+%% the declared variables are the arguments of the new function.
+%% the new function is then implemented using a new rewrite rule for the 
+%% positive match and a new default rule for the negative match
+
+exports
+
+context-free syntax
+
+translate-no-match(Module,NameTable) -> MN-struct
+
+hiddens
+
+context-free start-symbols
+	MN-struct
+
+context-free syntax
+
+collect-and-number({Rule";"}*, <Integer,{Term","}*>) -> <{Rule";"}*,<Integer,{Term","}*>> {traversal(accu,trafo,top-down,break)}
+collect-and-number(Cond, <Integer,{Term","}*>) -> <Cond,<Integer,{Term","}*>> {traversal(accu,trafo,top-down,break)}
+
+make-rules({Term ","}*) -> {Rule ";"}*
+make-funcdefs({Term ","}*) -> {FuncDef";"}*
+extend-nametable(NameTable, {Term ","}*) -> NameTable
+
+
+variables
+
+"Modid" -> ModId
+"Term"[0-9]* -> Term
+"VarEnv"[0-9]* -> IntVarEnv
+"Term*"[0-9]* -> {Term ","}*
+"Term+"[0-9]* -> {Term ","}+
+"Char*"[0-9]* -> CHAR*
+"Char+"[0-9]* -> CHAR+
+"Char"[0-9]* -> CHAR
+"Int"[0-9]*   -> Integer
+"Funid"[0-9]* -> FunId
+"Nametable"[0-9]* -> NameTable
+
+lexical variables
+"c*" -> StrChar*
+

@@ -28,16 +28,16 @@ exports
     String ">=" String  -> Boolean
 
   context-free syntax
-    remove-continuations(String) -> String
-
     length(String)         -> Integer
 
 hiddens
   imports
     basic/Whitespace
 
-  variables
-    "Chars" [0-9]* -> CHAR*
+  lexical variables
+    "n"[0-9]*     -> ~[\0-\31\"\\\n]
+    "o"[0-9]*     -> [0-7]
+    "c*"[0-9]*    -> StrChar* 
 
   variables
     "Str-con" [0-9\']* -> StrCon

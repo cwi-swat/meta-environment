@@ -1,0 +1,50 @@
+module languages/asf/compiler/muasf/RenameVars
+
+imports languages/asf/compiler/utils/VarEnv
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  context-free syntax
+    rename-in-rules({Rule ";"}*)            -> RuleList
+
+hiddens
+  context-free start-symbols
+	RuleList
+	IntVVarEnv
+	<Term, IntVVarEnv>
+
+%%%  context-free syntax
+%%
+%%    rename(Rule, IntVVarEnv) 	-> <Rule, IntVVarEnv>
+%%	{traversal(accu,trafo,top-down,break)}
+%%    rename(Term, IntVVarEnv)		-> <Term, IntVVarEnv>
+%%	{traversal(accu,trafo,top-down,break)}
+
+hiddens
+  sorts TIVE TIVEs CIVE CIVEs
+  context-free syntax
+    "[" Term "," IntVVarEnv "]"        -> TIVE
+    "[" {Term ","}* "," IntVVarEnv "]" -> TIVEs
+    "[" Cond "," IntVVarEnv "]"        -> CIVE
+    "[" {Cond "&"}* "," IntVVarEnv "]" -> CIVEs
+  context-free syntax
+    rename-in-rule(Rule,IntVVarEnv)         -> Rule
+    rename-in-term(Term,IntVVarEnv)         -> TIVE
+    rename-in-terms({Term ","}*,IntVVarEnv) -> TIVEs
+    rename-in-conds({Cond "&"}*,IntVVarEnv) -> CIVEs
+    rename-in-cond(Cond,IntVVarEnv)         -> CIVE
+
+variables
+	"Rule*"[0-9]* -> {Rule ";"}* {strict}
+	"Varid"[0-9]* -> VarId {strict}
+	"VarName"[0-9]* -> FunId {strict}
+	"Ivvarenv"[0-9]* -> IntVVarEnv {strict}
+	"Cond+"[0-9]* -> {Cond "&"}+ {strict}
+	"Term"[0-9]* -> Term {strict}
+	"Cond"[0-9]* -> Cond {strict}
+
+variables	
+	"_Ivvarenv"[0-9]* -> IntVVarEnv {wild}
+
+	

@@ -1,0 +1,36 @@
+module languages/asf/compiler/muasf2c/Transform-Constructors
+
+imports languages/asf/compiler/utils/VarEnv
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  context-free syntax
+    transform-constructor-terms-in-rules({Rule ";"}*,{NamePair ","}*)     -> RuleList
+hiddens
+  context-free start-symbols
+	RuleList
+
+  sorts TCE TsCE
+  context-free syntax
+    "[" Term "," {Cond "&"}* "," Integer "]"                      -> TCE
+    "[" {Term ","}* "," {Cond "&"}* "," Integer "]"               -> TsCE
+    move-cons-terms-in-rule(Rule,{NamePair ","}*)                -> Rule
+    move-cons-terms-in-terms({Term ","}+,{NamePair ","}*,Integer) -> TsCE
+    move-cons-terms-in-term(Term,{NamePair ","}*,Integer)         -> TCE
+    are-constructor-terms({Term ","}+,{NamePair ","}*)           -> Boolean
+    is-constructor-term(Term,{NamePair ","}*)                    -> Boolean
+
+hiddens
+  lexical variables
+	"d+"[0-9]* -> [0-9]+
+    
+variables
+	"Cond"[0-9]* -> Cond
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Aint"[0-9]*  -> Integer
+	"Namepair*"[0-9]*	-> {NamePair ","}* 
+	"Bool"[0-9]* -> Boolean
+	"Varid"[0-9]* -> VarId
+

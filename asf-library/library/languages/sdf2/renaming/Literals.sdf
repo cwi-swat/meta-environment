@@ -3,5 +3,5 @@ module languages/sdf2/renaming/Literals
 imports languages/sdf2/renaming/Kernel languages/sdf2/syntax/Literals
 hiddens
   variables
-    "L"[0-9\']* -> Literal
+    "L"[0-9\']* -> StrCon
    "'r"[0-9\']* -> Renamings   

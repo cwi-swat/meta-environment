@@ -1,0 +1,821 @@
+equations
+
+ [ro2c-1'1] Decl* := locate-constants-in-decls(Modid,)
+             =========================================
+             rulesopt2cfuncs(Modid,Funcdef*,,Nametable) = (Funcdef*,Decl*)
+
+  [ro2c-1'2] Decl* := locate-constants-in-decls(Modid,)
+             =========================================
+             rulesopt2cfuncs(Modid,Funcdef*,rules ,Nametable) = (Funcdef*,Decl*)
+
+  [ro2c-1'3] (Funcdef*2,Decl*1) := asfrules2cfuncs(Funcdef*,Rule+,Namepair*),
+             Decl*2 := locate-constants-in-decls(Modid,Decl*1)
+             ================================================
+             rulesopt2cfuncs(Modid,Funcdef*,rules Rule+,(Namepair*,Funid,Aint1,Aint2)) =
+               (Funcdef*2, Decl*2)
+
+equations
+
+%% If a function occurs as outermost function symbol, it can not
+%% be a constructor function.
+  [ar2c-1'1] Funid := get-funid(Rule),
+             (Rule*2,Rule*3) := select-on-ofs(Funid,Rule;Rule*1),
+             Funcdef*2 := remove-funcdef(Funid,Funcdef*1)
+             ===========================================
+             asfrules2cfuncs(Funcdef*1,Rule;Rule*1,Namepair*) =
+               asfrules2cfuncs(Funcdef*2,Rule*2,Rule*3,Namepair*)
+
+  [ar2c-2'1] Rule+2 := transform-constructor-terms-in-rules(Rule+1,Namepair*),
+             Rule+3 := rename-in-rules(Rule+2),
+             Decl := asfrules2cfunc(Rule+3,Namepair*)
+             =======================================
+             asfrules2cfuncs(Funcdef*,Rule+1,,Namepair*) = (Funcdef*,Decl)
+
+  [ar2c-2'2] Rule+3 := transform-constructor-terms-in-rules(Rule+1,Namepair*),
+             Rule+4 := rename-in-rules(Rule+3),
+             Decl := asfrules2cfunc(Rule+4,Namepair*),
+             (Funcdef*2,Decl*) := asfrules2cfuncs(Funcdef*1,Rule+2,Namepair*)
+             ===============================================================
+             asfrules2cfuncs(Funcdef*1,Rule+1,Rule+2,Namepair*) =
+               (Funcdef*2,Decl* ++ Decl)
+
+equations
+
+  [ar2cf-3'1] Funid := get-funid(Rule),
+              Funid2 := remove-returns-list(Funid),
+              is-list-funid(Funid2) == false,
+              is-memo(Funid2,Namepair*) == false,
+	      Identifier := funid2identifier(Funid2),
+              Sym := Identifier ++ sym,
+              Term+ := get-funargs(Rule),
+              (FormalArgs,$ActualArgs,Aint0) := funargs2cargs(Term+,0),
+              (Rule*2,Rule*3) := select-on-defaults(Rule;Rule*1),
+              %% None default rules:
+              (Stat*1,Aint1) := asfrules2cstats(Rule*3,Namepair*),
+              %% Default rules:
+              (Stat*2,Aint2) := asfrules2cstats(Rule*2,Namepair*),
+              %% Normal form construction
+              (Stat*3,Aint3) := 
+                 funargs2cstats(Funid2,$ActualArgs,Term+,Namepair*,Aint0),
+              Aint4 := max(Aint1,Aint2),
+              Aint5 := max(Aint3,Aint4),
+              Decl* := make-tmp-array(Aint5),
+              Stat*4 := Stat*1 ++ Stat*2,
+              Stat*5 := Stat*4 ++r Stat*3,
+              $ActualArgs2 := Sym ++ $ActualArgs,
+              Stat*7 := remove-tail-rec(Stat*5,Identifier,Aint0),
+              Stat*9 := FUNC_ENTRY(Sym,
+                         ATmakeAppl($ActualArgs2)); ++ Stat*7,
+              Stat*10 := Decl* ++d Stat*9
+              =========================
+              asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(Funid,$ActualArgs,
+                ATerm Identifier(FormalArgs) { Stat*10 }
+                )
+
+  [ar2cf-3'1] {Funid2} := get-funid(Rule),
+              is-memo(Funid2,Namepair*) == false,
+	      Identifier := funid2identifier(Funid2),
+              Sym := Identifier ++ sym,
+              Term+ := get-funargs(Rule),
+              (FormalArgs,$ActualArgs,Aint0) := funargs2cargs(Term+,0),
+              (Rule*2,Rule*3) := select-on-defaults(Rule;Rule*1),
+              %% None default rules:
+              (Stat*1,Aint1) := asflistrules2cstats(Rule*3,Namepair*),
+              %% Default rules:
+              (Stat*2,Aint2) := asflistrules2cstats(Rule*2,Namepair*),
+              %% Normal form construction
+              (Stat*3,Aint3) := 
+                 funargs2cstats(Funid2,$ActualArgs,Term+,Namepair*,Aint0),
+              Aint4 := max(Aint1,Aint2),
+              Aint5 := max(Aint3,Aint4),
+              Decl* := make-tmp-array(Aint5),
+              Stat*4 := Stat*1 ++ Stat*2,
+              Stat*5 := Stat*4 ++r Stat*3,
+              $ActualArgs2 := Sym ++ $ActualArgs,
+              Stat*7 := remove-tail-rec(Stat*5,Identifier,Aint0),
+              Stat*8 := FUNC_ENTRY(Sym,
+                         ATmakeAppl($ActualArgs2)); ++ Stat*7,
+              Stat*9 := Decl* ++d Stat*8
+              =========================
+              asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(get-funid(Rule), $ActualArgs,
+                ATerm Identifier(FormalArgs)
+                { Stat*9 }
+                )
+
+ [ar2cf-3'2]  Funid := get-funid(Rule),
+              Funid2 := remove-returns-list(Funid),
+              is-memo(Funid2,Namepair*) == true,
+	      Identifier := funid2identifier(Funid2),
+              Sym := Identifier ++ sym,
+              Term+ := get-funargs(Rule),
+              (FormalArgs,$ActualArgs,Aint0) := funargs2cargs(Term+,0),
+              (Rule*2,Rule*3) := select-on-defaults(Rule;Rule*1),
+              %% None default rules:
+              (Stat*1,Aint1) := asfrules2cstats(Rule*3,Namepair*),
+              %% Default rules:
+              (Stat*2,Aint2) := asfrules2cstats(Rule*2,Namepair*),
+              %% Normal form construction
+              (Stat*3,Aint3) := 
+                funargs2cstats(Funid2,$ActualArgs,Term+,Namepair*,Aint0),
+              Aint4 := max(Aint1,Aint2),
+              Aint5 := max(Aint3,Aint4),
+              Decl* := make-tmp-array(Aint5),
+              Stat*4 := Stat*1 ++ Stat*2,
+              Stat*5 := Stat*4 ++r Stat*3,
+              Stat*7 := remove-tail-rec(Stat*5,Identifier,Aint0),
+              $ActualArgs2 := Sym ++ $ActualArgs,
+              Stat*8 := Decl* ++d Stat*7
+              =========================
+              asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(Funid, $ActualArgs,
+                ATerm Identifier(FormalArgs)
+                {
+                  ATerm interm = int2identifier(make_tuple,Aint0)($ActualArgs);
+                  ATermTable table = get_table(table_ ++ Identifier);
+                  ATerm result = get_result(table,interm);
+                  if(result)
+                    return result;
+                  else {
+                    Stat*8
+                  }
+                })
+
+
+  [ar2cf-3'3] Funid := get-funid(Rule),
+              Funid2 := remove-returns-list(Funid),
+	      Identifier := funid2identifier(Funid2),
+	      Sym := Identifier ++ sym,
+              get-funargs(Rule) == ,
+              (Stat*1,Aint1) := asfrules2cstats(Rule;Rule*,Namepair*),
+              %% Normal form construction
+              (Stat*2,Aint2) := funargs2cstats(Funid2,,,Namepair*,0),
+              Aint3 := max(Aint1,Aint2),
+              Decl* := make-tmp-array(Aint3),
+              Stat*3 := Stat*1 ++r Stat*2,
+              %%%improve(Stat*3,) = Stat*4,
+              Stat*5 := remove-tail-rec(Stat*3,Identifier,0),
+              Stat*6 := FUNC_ENTRY(Sym, ATmakeAppl0(Sym)); ++ Stat*5,
+              Stat*7 := Decl* ++d Stat*6
+              =========================
+              asfrules2cfunc(Rule;Rule*,Namepair*) =
+                ATerm Identifier() {  Stat*7 }
+
+equations
+
+[single] 
+	Identifier := int2identifier(arg, Aint)
+	===>
+	funargs2cargs(Term, Aint) = (ATerm Identifier,Identifier, Aint + 1)
+            
+
+[fa2ca-1'2]
+	(FormalArg+1,$ActualArg+1,Aint2) := funargs2cargs(Term+1,Aint),
+	(FormalArg+2,$ActualArg+2,Aint3) := funargs2cargs(Term+2,Aint2)
+	===>
+	funargs2cargs(Term+1,Term+2,Aint) =
+	(FormalArg+1, FormalArg+2, $ActualArg+1, $ActualArg+2, Aint3)
+
+equations
+
+[alr2cs] asflistrules2cstats(,Namepair*) = (,0)
+
+[alr2cs]  
+C-rule+ := make-c-rules(Rule+),
+$Expression := make-c-temp(0),
+Stat*1 := $Expression = arg0;,
+(Stat*,Aint) := listpatterns2cstats(C-rule+,$Expression,Namepair*,1)
+===>
+asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
+
+equations
+
+  [ar2cs-1'1] C-rule* := make-c-rules(Rule+),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule*)
+              ======================================================
+              asfrules2cstats(Rule+,Namepair*) =
+                asfrules2cstats(C-rule*1,C-rule*2,Namepair*,0,make-select-stat)
+
+  [ar2cs-1'2] asfrules2cstats(,Namepair*) = (,0)
+
+equations
+
+  [done] asfrules2cstats(,,Namepair*,Aint,MakeSelectStat) = (continue;,Aint)
+
+  [lhs-empty-so-continue-with-conditions] 
+	asfrules2cstats(,[|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint,MakeSelectStat) =
+        	conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
+
+  [lhs-variable-and-continue-with-conditions] 
+	is-var-term(Term) == true,
+	Decl* := make-select-stat(Aint+),
+	(Stat*,Aint2) := conds2cstats([(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                           Namepair*,Aint1)
+        ===>
+	asfrules2cstats(,[(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint1,make-select-stat) =
+                (Decl* ++d Stat*,Aint2)
+
+  %% Apparently we are in the context of an ignored funid, so we do not 
+  %% create a select-stat for this variable. Instead we just create a new
+  %% variable name and pas the term on to the next level:
+  [ignored-lhs-and-continue-with-conditions] 
+	is-var-term(Term) == true,
+              Decl* := make-ignored-select-stat(Aint+),
+              (Stat*,Aint2) := conds2cstats([(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                           Namepair*,Aint1)
+              ===================================================
+              asfrules2cstats(,[(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint1,no-select-stat) =
+                (Decl* ++d Stat*,Aint2)
+
+
+  [variable-term-and-continue-with-rest] 
+	is-var-term(Term) == true,
+              C-rule*2 := remove-ofs-first-arg(C-rule*1),
+              Decl* := make-select-stat(Aint+),
+              (C-rule*3,C-rule*4) :=
+                select-on-ofs-first-arg([Fv-path+|
+                                       Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2),
+              (Stat*,Aint2) := 
+                 asfrules2cstats(C-rule*3,C-rule*4,Namepair*,Aint1,make-select-stat)
+              ==================================================================
+              asfrules2cstats(,[(Term,Aint+),Fv-path+|
+                                Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint1,make-select-stat) =
+                (Decl* ++d Stat*,Aint2)
+
+  %% Apparently we are in the context of an ignored funid, so we do not 
+  %% create a select-stat for this variable. Instead we just create a new
+  %% variable name and pas the term on to the next level:
+  [ignored-match-and-continue-with-rest] 
+ 	      is-var-term(Term) == true,
+              C-rule*2 := remove-ofs-first-arg(C-rule*1),
+              Decl* := make-ignored-select-stat(Aint+),
+              (C-rule*3,C-rule*4) :=
+                select-on-ofs-first-arg([Fv-path+|
+                                       Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2),
+              (Stat*,Aint2) := 
+                 asfrules2cstats(C-rule*3,C-rule*4,Namepair*,Aint1,make-select-stat)
+              ==================================================================
+              asfrules2cstats(,[(Term,Aint+),Fv-path+|
+                                Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint1,no-select-stat) =
+                (Decl* ++d Stat*,Aint2)
+
+  [detect-list-match] 
+	      (Funid,Aint+) := get-first-vf-path(C-rule+),
+              is-list-funid(Funid) == true,
+              is-ignored-funid(Funid) == false,
+              Decl* := make-select-stat(Aint+),
+              (Stat*1,Aint2) := list2cstats(C-rule+,Namepair*,Aint1+1) 
+              =====================================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*1,Aint2)
+
+  [detect-ignored-list-match] 
+              (Funid,Aint+) := get-first-vf-path(C-rule+),
+              is-list-funid(Funid) == true,
+              is-ignored-funid(Funid) == true,
+              Decl* := make-ignored-select-stat(Aint+),
+              (Stat*1,Aint2) := list2cstats(C-rule+,Namepair*,Aint1+1) 
+              =====================================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*1,Aint2)
+
+  [ar2cs-2'6] (Funid,Aint+) := get-first-vf-path(C-rule+),
+              is-list-funid(Funid) == false,
+              is-ignored-funid(Funid) == false, 
+              $Ltest := make-c-expression((Funid,Aint+),Namepair*),
+              Decl* := make-select-stat(Aint+),
+              (Stat*1,Aint2) := asfrules2cstats1(C-rule+,Namepair*,Aint1),
+              Stat*2 := make-cond($Ltest,Stat*1)
+              ================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*2,Aint2)
+
+[ar2cs-2'6'ignored] 
+              (Funid,Aint+) := get-first-vf-path(C-rule+),
+              is-list-funid(Funid) == false,
+              is-ignored-funid(Funid) == true,
+              Decl* := make-ignored-select-stat(Aint+),
+              (Stat*1,Aint2) := asfrules2cstats1(C-rule+,Namepair*,Aint1)
+              ================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*1,Aint2)
+
+  [ar2cs-2'7] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-list-funid(Funid) == true,
+              is-ignored-funid(Funid) == false,
+              Decl* := make-select-stat(Aint+),
+              (Stat*1,Aint2) := list2cstats(C-rule+1,Namepair*,Aint1+1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2),
+              (Stat*2,Aint3) := 
+                asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat),
+              Stat*3 := Decl* ++d Stat*1,
+              Stat*4 := Stat*3 ++ Stat*2,
+              Aint4 := max(Aint2,Aint3)
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Stat*4,Aint4)
+
+ [ar2cs-2'7'ignored] 
+              (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-list-funid(Funid) == true,
+              is-ignored-funid(Funid) == true,
+              Decl* := make-ignored-select-stat(Aint+),
+              (Stat*1,Aint2) := list2cstats(C-rule+1,Namepair*,Aint1+1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2),
+              (Stat*2,Aint3) := 
+                asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,no-select-stat),
+              Stat*3 := Decl* ++d Stat*1,
+              Stat*4 := Stat*3 ++ Stat*2,
+              Aint4 := max(Aint2,Aint3)
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Stat*4,Aint4)
+
+  [ar2cs-2'9] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == false,
+              $Ltest := make-c-expression((Funid,Aint+),Namepair*),
+              Decl* := make-select-stat(Aint+),
+              is-list-funid(Funid) == false,
+              (Stat*1,Aint2) := asfrules2cstats1(C-rule+1,Namepair*,Aint1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2),
+              (Stat*2,Aint3) := 
+                 asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat),
+              Stat*3 := make-cond($Ltest,Stat*1,Stat*2),
+              Aint4 := max(Aint2,Aint3)
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*3,Aint4)
+
+[ar2cs-2'9'ignored]   
+              (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == true,
+              Decl* := make-ignored-select-stat(Aint+),
+              is-list-funid(Funid) == false,
+              (Stat*1,Aint2) := asfrules2cstats1(C-rule+1,Namepair*,Aint1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2),
+              (Stat*2,Aint3) := 
+                 asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat),
+              Stat*3 := Stat*1 ++ Stat*2,
+              Aint4 := max(Aint2,Aint3)
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*3,Aint4)
+
+equations
+
+[ar2cs-3'1] asfrules2cstats1([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
+                conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
+
+[ar2cs-3'2] asfrules2cstats1([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+              Namepair*,Aint) =
+            conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
+
+ %% If this funid is ignored, it's argument should not generate select statements,
+ %% so we call a different asfrules2cstats in that case
+
+  [ar2cs-3'3] is-empty-vf-path(C-rule+1) == false,
+              is-single-vf-path(C-rule+1) == false,
+              (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == false,
+              C-rule+2 := remove-ofs-first-arg(C-rule+1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2)
+              =======================================================
+              asfrules2cstats1(C-rule+1,Namepair*,Aint) =
+                asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint,make-select-stat)
+
+  [ar2cs-3'3] is-empty-vf-path(C-rule+1) == false,
+              is-single-vf-path(C-rule+1) == false,
+              (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == true,
+              C-rule+2 := remove-ofs-first-arg(C-rule+1),
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule+2)
+              =======================================================
+              asfrules2cstats1(C-rule+1,Namepair*,Aint) =
+                asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint,no-select-stat)
+equations
+
+  [ar2cs-4'1] C-rule*2 := remove-ofs-first-arg(C-rule*1)
+              =========================================
+              asfrules2cstats2([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                               Namepair*,Aint) =
+                conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
+                             Namepair*,Aint)
+
+  [ar2cs-4'2] is-var-term(Term1) == false,
+              C-rule*2 := remove-ofs-first-arg(C-rule*1)
+              =========================================
+              asfrules2cstats2([(Term1,Aint+)|
+                                Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                               Namepair*,Aint) =
+                conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
+                             Namepair*,Aint)
+
+  [ar2cs-4'3] is-var-term(Term1) == true,
+              Decl* := make-select-stat(Aint+),
+              C-rule*2 := remove-ofs-first-arg(C-rule*1),
+              (Stat*,Aint2) := conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
+                           Namepair*,Aint1)
+              =============================================
+              asfrules2cstats2([(Term1,Aint+)|
+                                Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+                               Namepair*,Aint1) =
+                (Decl* ++d Stat*,Aint2)
+
+  [ar2cs-4'3] is-empty-vf-path(C-rule1;C-rule*1) == false,
+              is-single-vf-path(C-rule1;C-rule*1) == false,
+              C-rule*2 := remove-first-arg(C-rule*1),
+              (C-rule*3,C-rule*4) := select-on-ofs-first-arg(C-rule1;C-rule*2)
+              ===============================================================
+              asfrules2cstats2(C-rule1;C-rule*1,Namepair*,Aint) =
+                asfrules2cstats(C-rule*3,C-rule*4,Namepair*,Aint,make-select-stat)
+
+equations
+
+[without-arguments] 
+	funargs2cstats(Funid,,,Namepair*,0) =
+	(FUNC_EXIT(make_nf0(funid2identifier(Funid) ++ sym));,0)
+
+[with-arguments] 
+	$ActualArgs' := 
+		restore-ignored-funids-in-nf($ActualArgs, Term+, Namepair*),
+	Sym := funid2identifier(Funid) ++ sym,
+	$ActualArgs'' := Sym ++ $ActualArgs',
+	Identifier := int2identifier(make_nf, Aint),
+	Stat*2 := FUNC_EXIT(Identifier($ActualArgs''));
+	===>
+	funargs2cstats(Funid,$ActualArgs,Term+,Namepair*,Aint) = 
+	 (Stat*2,0)
+
+equations
+
+%% Here we put previously ignored symbols around the normal form.  This is part
+%% of the optimization improves efficiency of recursive functions over lists. Ignored
+%% function symbols occur in generated '<function>_recursive' functions.
+
+  [rifin-3] restore-ignored-funids-in-nf(,,Namepair*) = 
+
+  [rifin-1] $Expression2 := restore-ignored-funids-in-arg($Expression, Term, Namepair*),
+            Expression+2 := restore-ignored-funids-in-nf(Expression+, Term+, Namepair*)
+            =====
+            restore-ignored-funids-in-nf($Expression, Expression+, Term, Term+, 
+              Namepair*) =
+                $Expression2, Expression+2
+
+  [rifin-2] $Expression2 := restore-ignored-funids-in-arg($Expression, Term, Namepair*)
+            =====
+            restore-ignored-funids-in-nf($Expression, Term, Namepair*) = $Expression2
+
+equations
+
+  [rifia-1] is-ignored-funid(Funid) == true,
+            Funid2 := lookup-ignored-funid(Funid,Namepair*),
+            Post := make-call-id(Funid2),
+            $Expression2 := restore-ignored-funids-in-arg($Expression, Term, Namepair*)
+            =====
+            restore-ignored-funids-in-arg($Expression, Funid(Term), Namepair*) =
+              Post($Expression2) 
+
+  [default-rifia] restore-ignored-funids-in-arg($Expression, Term, Namepair*) = 
+                    $Expression
+
+equations
+
+  [lif-0] is-trans-list-funid(Funid) == true,
+          Funid2 := remove-trans-from-list-id(Funid),
+          Funid3 := remove-ignored-from-funid(Funid2),
+          Funid4 := pn-lookup(Funid3, Namepair*)
+          =====
+          lookup-ignored-funid(Funid, Namepair*) = Funid4
+
+ [lif-0]  is-trans-list-funid(Funid) == false,
+          Funid2 := remove-ignored-from-funid(Funid),
+          Funid3 := pn-lookup(Funid2, Namepair*)
+          =====
+          lookup-ignored-funid(Funid, Namepair*) = Funid3
+
+ [default-lif] is-trans-list-funid(Funid) == false,
+               Funid2 := remove-ignored-from-funid(Funid),
+               Funid3 := pn-lookup(Funid2, Namepair*)
+               ====
+               lookup-ignored-funid(Funid, Namepair*) = Funid3
+
+ [default-lif] is-trans-list-funid(Funid) == true,
+               Funid2 := remove-trans-from-list-id(Funid),              
+               Funid3 := remove-ignored-from-funid(Funid2),
+               Funid4 := pn-lookup(Funid3, Namepair*)
+               ====
+               lookup-ignored-funid(Funid, Namepair*) = Funid4
+
+equations
+
+[sa2aa-1] sigargs2actualargs() =
+
+[sa2aa-0] ($ActualArgs,Stat*,Aint) := sigargs2cbuild(Sigarg+,0)
+          ===>
+          sigargs2actualargs(Sigarg+) = $ActualArgs
+
+
+equations
+
+  [sa2cs-1'1] ($ActualArgs,Stat*1,Aint) :=
+                sigargs2cbuild(Sigarg+,0),
+		Sym := funid2identifier(Funid) ++ sym,
+              $ActualArgs' := Sym ++ $ActualArgs,
+		Identifier := int2identifier(make_nf, Aint)
+              ========================================================
+              sigargs2cstats(Funid,Sigarg+) =
+                CONS_ENTRY(Sym,ATmakeAppl($ActualArgs'));
+                CONS_EXIT(Identifier($ActualArgs'));
+
+[sa2cs-1'2]  
+	Identifier := funid2identifier(Funid) ++ sym
+	===>
+	sigargs2cstats(Funid,) =
+                CONS_ENTRY(Identifier, ATmakeAppl0(Identifier));
+                CONS_EXIT(make_nf0(Identifier));
+
+  [fa2cb-1'1] sigargs2cbuild(Sigarg,Aint) =
+                (int2identifier(arg, Aint),,1)
+
+  [fa2cb-1'2] ($ActualArgs,Stat*,Aint2) :=
+                sigargs2cbuild(Sigarg+,Aint1+1),
+	      Identifier := int2identifier(arg, Aint1),
+              $ActualArgs' := Identifier ++ $ActualArgs
+              =======================================================
+              sigargs2cbuild(Sigarg,Sigarg+,Aint1) = ($ActualArgs',,Aint2+1)
+
+equations
+
+  [l2cs-1'1] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+             is-ignored-funid(Funid) == false,
+             $Expression := make-atmp(Aint+),
+             $Expression2 := make-c-temp(Aint1),
+             (Stat*2,Aint2) := 
+                    listpatterns2cstats(C-rule+1,$Expression2,Namepair*,Aint1+1),
+             $Ltest := make-c-expression((Funid,Aint+),Namepair*),
+             Stat*1 := $Expression2 = arg_0($Expression);,
+             Stat*3 := Stat*1 ++ Stat*2,
+             Stat*4 := make-cond($Ltest,Stat*3)
+             ================================
+             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
+
+  [dl2cs-1'1] (Funid,Aint+) := get-first-vf-path(C-rule+1),
+              is-ignored-funid(Funid) == true,
+              $Expression := make-atmp(Aint+),
+              $Expression2 := make-c-temp(Aint1),
+              (Stat*2,Aint2) := 
+                listpatterns2cstats(C-rule+1,$Expression2,Namepair*,Aint1+1),
+              Stat*1 := $Expression2 = $Expression;,
+              Stat*3 := Stat*1 ++ Stat*2
+             ================================
+             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*3,Aint2)
+
+equations
+
+%% When generating subparts of the matching automaton for list patterns it is assumed
+%% that the list patterns in the left hand side of the equations and of the
+%% right hand side of conditions are ``normalized''. This means that complex
+%% nested patterns are moved to conditions, see Section ``Normalize-Conds''.
+
+  [lps2cs-1'1] listpatterns2cstats(,$Expression1,Namepair*,Aint) = (,Aint)
+
+  [lps2cs-1'2] (Decl*,Stat*,Aint2) := 
+                 listpattern2cstats(C-rule,$Expression1,Namepair*,Aint1)
+               ==================================================================
+               listpatterns2cstats(C-rule,$Expression1,Namepair*,Aint1) = 
+                  (Decl* ++d Stat*,Aint2)
+
+  [lps2cs-1'3] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := listpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == false,
+               $Expression1 != make-c-temp(0), %% is the list the outermost function symbol?
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := listpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = arg_0($Expression);,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               listpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+[lps2cs-1'3] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := listpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == false,
+               $Expression1 == make-c-temp(0), %% is the list the outermost function symbol?
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := listpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = $Expression;,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               listpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+ [lps2cs-1'4] (C-rule+2,C-rule*) := select-on-same-list-pat(C-rule;C-rule+1),
+               (Decl*,Stat*1,Aint2) := listpattern2cstats(C-rule+2,$Expression1,Namepair*,Aint1),
+               (Funid,Aint+) := get-first-vf-path(C-rule+2),
+               is-ignored-funid(Funid) == true,
+               $Expression := make-atmp(Aint+),
+               (Stat*2,Aint3) := listpatterns2cstats(C-rule*,$Expression1,Namepair*,Aint2),
+               Stat*3 := $Expression1 = $Expression;,
+               Stat*4 := Stat*3 ++ Stat*2,
+               Stat*5 := Decl* ++d Stat*1
+               =========================
+               listpatterns2cstats(C-rule;C-rule+1,$Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+%% The boolean value indicates whether there is already a conditional with a check
+%% on the emptyness of the list, {\tt false} indicate that the check is
+%% absent, {\tt true} the inverse. Of course initially there is no such check.
+  [lp2cs-1'1] (Decl*,Stat*,Aint2) := listpattern2cstats(false,Fv-path+,
+                                 [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                 $Expression1,Namepair*,Aint1)
+              ===========================================================================
+              listpattern2cstats([((Term,Aint+),Fv-path+),Fv-path*|
+                                  Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                  $Expression1,Namepair*,Aint1) = (Decl*,Stat*,Aint2)
+
+  [lp2cs-1'1] is-cons(Term) == true
+              ====================
+              listpattern2cstats(Bool,((Term,Aint+),Fv-path+),
+                                 [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                 $Expression,Namepair*,Aint) =
+                 listpattern2cstats(Bool,Fv-path+,
+                                    [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
+                                    $Expression,Namepair*,Aint)
+
+%% Although there is a check when dealing with the next argument in
+%% the list the check has to be active again because the ``first'' argument
+%% was not a list variable.
+  [lp2cs-1'2] is-var-term(Term) == true,
+              is-list-var-term(Term) == false,
+              $Expression2 := make-atmp(Aint+),
+              C-rule+2 := add-env(C-rule+1,((Term,$Expression2))),
+              (Decl*1,Stat*1,Aint2) :=
+                listpattern2cstats(false,Fv-path+,C-rule+2,
+                                 $Expression,Namepair*,Aint1),
+              Decl*2 := make-decl(Aint+),
+              Stat*2 := if (not_empty_list($Expression)) {
+                $Expression2 = list_head($Expression);
+                $Expression = list_tail($Expression); ++
+                Stat*1 }
+              ===================
+              listpattern2cstats(false,(Term,Aint+),Fv-path+,
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (Decl*1 ++ Decl*2,Stat*2,Aint2)
+
+%% There is already a check active so no conditional should be introduced,
+%% however at the next level a condition may be necessary, therefore the
+%% function {\tt listpattern2cstats} has a false as argument.
+  [lp2cs-1'3] is-var-term(Term) == true,
+              is-list-var-term(Term) == false,
+              $Expression2 := make-atmp(Aint+),
+              C-rule+2 := add-env(C-rule+1,((Term,$Expression2))),
+              (Decl*1,Stat*1,Aint2) :=
+                listpattern2cstats(false,Fv-path+,C-rule+2,
+                                 $Expression,Namepair*,Aint1),
+              Decl*2 := make-decl(Aint+),
+              Stat*2 := $Expression2 = list_head($Expression);
+              $Expression = list_tail($Expression); ++
+              Stat*1
+              ===============
+              listpattern2cstats(true,(Term,Aint+),Fv-path+,
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (Decl*1 ++ Decl*2,Stat*2,Aint2)
+
+%% There is already a check on the emptyness of the list by means of the
+%% test in the loop. So, at the next level no check is needed.
+  [lp2cs-1'4] is-var-term(Term) == true,
+              is-star-var(Term) == true,
+              CConstant := make-atmp(Aint+),
+              C-rule+2 := add-env(C-rule+1,((Term,slice(CConstant[0],CConstant[1])))),
+              (Decl*1,Stat*1,Aint2) :=
+                listpattern2cstats(true,Fv-path+,C-rule+2,
+                                 $Expression,Namepair*,Aint1),
+              Decl*2 := make-array-decl(Aint+),
+              Stat*3 := CConstant[0] = $Expression;
+              CConstant[1] = $Expression;
+              while (not_empty_list($Expression)) {
+                Stat*1  ++
+                CConstant[1] = list_tail(CConstant[1]);
+                $Expression = CConstant[1]; }
+              =======================================
+              listpattern2cstats(Bool,(Term,Aint+),Fv-path+,
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (Decl*1 ++ Decl*2,Stat*3,Aint2)
+
+%% There is already a check on the emptyness of the list by means of the
+%% test in the loop. So, at the next level no check is needed.
+  [lp2cs-1'5] is-var-term(Term) == true,
+              is-plus-var(Term) == true,
+              CConstant := make-atmp(Aint+),
+              C-rule+2 := add-env(C-rule+1,((Term,slice(CConstant[0],CConstant[1])))),
+              (Decl*1,Stat*1,Aint2) :=
+                listpattern2cstats(true,Fv-path+,C-rule+2,
+                                 $Expression,Namepair*,Aint1),
+              Decl*2 := make-array-decl(Aint+),
+              Stat*2 := CConstant[0] = $Expression;
+              if (not_empty_list($Expression)) {
+                $Expression = list_tail($Expression);
+                CConstant[1] = $Expression;
+                while (not_empty_list($Expression)) {
+                  Stat*1  ++
+                  CConstant[1] = list_tail(CConstant[1]);
+                  $Expression = CConstant[1];}}
+              =========================================
+              listpattern2cstats(Bool,(Term,Aint+),Fv-path+,
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (Decl*1 ++ Decl*2,Stat*2,Aint2)
+
+  [lp2cs-1'6] is-cons(Funid) == false,
+              $Expression2 := make-c-temp(Aint1),
+              $Ltest := make-c-expression(Funid,$Expression2,Namepair*),
+              (Decl*,Stat*1,Aint2) :=
+                listpattern2cstats(false,Fv-path+,C-rule+,
+                                 $Expression,Namepair*,Aint1+1),
+              Stat*2 := if (not_empty_list($Expression)) {
+                 $Expression2 = list_head($Expression);
+                 $Expression = list_tail($Expression); ++
+                 if ($Ltest) {
+                 Stat*1 }}
+              =====================
+              listpattern2cstats(false,(Funid,Aint+),Fv-path+,
+                                 C-rule+,$Expression,Namepair*,Aint1) =
+                (Decl*,Stat*2,Aint2)
+
+  [lp2cs-1'7] is-cons(Funid) == false,
+              $Expression2 := make-c-temp(Aint1),
+              $Ltest := make-c-expression(Funid,$Expression2,Namepair*),
+              (Decl*,Stat*1,Aint2) :=
+                listpattern2cstats(false,Fv-path+,C-rule+,
+                                 $Expression,Namepair*,Aint1+1),
+              Stat*2 := $Expression2 = list_head($Expression);
+              $Expression = list_tail($Expression); ++
+              if ($Ltest) {
+                Stat*1 }
+              =====================
+              listpattern2cstats(true,(Funid,Aint+),Fv-path+,
+                                 C-rule+,$Expression,Namepair*,Aint1) =
+                (Decl*,Stat*2,Aint2)
+
+  [lp2cs-1'8] is-var-term(Term) == true,
+              is-star-var(Term) == true,
+              C-rule+2 := add-env(C-rule+1,((Term,$Expression))),
+              (Stat*1,Aint2)  := asfrules2cstats2(C-rule+2,
+                               Namepair*,Aint1)
+              =========================================================
+              listpattern2cstats(Bool,(Term,Aint+),
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (,Stat*1,Aint2)
+
+  [lp2cs-1'9] is-var-term(Term) == true,
+              is-plus-var(Term) == true,
+              C-rule+2 := add-env(C-rule+1,((Term,$Expression))),
+              (Stat*1,Aint2) := asfrules2cstats2(C-rule+2,
+                               Namepair*,Aint1),
+              Stat*2 := if (not_empty_list($Expression)) { Stat*1 }
+              =====================================================
+              listpattern2cstats(Bool,(Term,Aint+),
+                                 C-rule+1,
+                                 $Expression,Namepair*,Aint1) =
+                (,Stat*2,Aint2)
+
+  [lp2cs-1'10] is-var-term(Term) == true,
+               is-list-var-term(Term) == false,
+               $Expression2 := make-atmp(Aint+),
+               C-rule+2 := add-env(C-rule+1,((Term,$Expression2))),
+               (Stat*1,Aint2) := asfrules2cstats2(C-rule+2,
+                                Namepair*,Aint1),
+               Stat*2 := if (is_single_element($Expression)) {
+                  $Expression2 = list_head($Expression); ++
+                  Stat*1},
+               Decl* := make-decl(Aint+)
+               ========================
+               listpattern2cstats(Bool,(Term,Aint+),
+                                  C-rule+1,
+                                  $Expression,Namepair*,Aint1) =
+                 (Decl*,Stat*2,Aint2)
+
+  [lp2cs-1'11] $Expression2 := make-c-temp(Aint1),
+               $Ltest := make-c-expression(Funid,$Expression2,Namepair*),
+               (Stat*1,Aint2) := asfrules2cstats2(C-rule+,Namepair*,Aint1+1),
+               Stat*2 := if (is_single_element($Expression)) {
+                  $Expression2 = list_head($Expression); ++
+                  if ($Ltest) {
+                  Stat*1}}
+               ====================
+               listpattern2cstats(Bool,(Funid,Aint+),C-rule+,$Expression,Namepair*,Aint1) =
+                 (,Stat*2,Aint2)

@@ -1,7 +1,7 @@
 module languages/asfix/syntax/Symbol
 
-imports languages/aterm/syntax/Literals
-imports languages/aterm/syntax/IntCon
+imports basic/StrCon
+	basic/NatCon
 
 exports
  
@@ -10,14 +10,14 @@ sorts Symbol Symbols CharRange CharRanges
 context-free syntax
 
 "empty"                                                  -> Symbol   {cons("empty")}
-lit(string:QLiteral)                                     -> Symbol   {cons("lit")}
+lit(string:StrCon)                                     -> Symbol   {cons("lit")}
 cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
 opt(symbol:Symbol)                                       -> Symbol   {cons("opt")}
 alt(lhs:Symbol,rhs:Symbol)                               -> Symbol   {cons("alt")}
-seq(lhs:Symbol,rhs:Symbol)                               -> Symbol   {cons("seq")}
+seq(symbols:Symbols)                                     -> Symbol   {cons("seq")}
 tuple(head:Symbol,rest:Symbols)                          -> Symbol   {cons("tuple")}
-sort(string:QLiteral)                                    -> Symbol   {cons("sort")}
+sort(string:StrCon)                                    -> Symbol   {cons("sort")}
 iter(symbol:Symbol)                                      -> Symbol   {cons("iter")}
 iter-star(symbol:Symbol)                                 -> Symbol   {cons("iter-star")}
 iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol   {cons("iter-sep")}
@@ -29,13 +29,13 @@ varsym(symbol:Symbol)                                    -> Symbol  {cons("varsy
 "layout"                                                 -> Symbol  {cons("layout")}
 char-class(CharRanges)                                   -> Symbol  {cons("char-class")}
 strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol  {cons("strategy")}
-parameterized-sort(sort:QLiteral,parameters:Symbols)     -> Symbol  {cons("parameterized-sort")}
+parameterized-sort(sort:StrCon,parameters:Symbols)     -> Symbol  {cons("parameterized-sort")}
 
 "[" {Symbol ","}* "]"          -> Symbols  {cons("list")}
 
 "[" { CharRange ","}* "]"      -> CharRanges {cons("list")}  
 
-integer: NatCon                 -> CharRange  {cons("character")}
+integer:NatCon                 -> CharRange  {cons("character")}
 range(start:NatCon,end:NatCon) -> CharRange {cons("range")}
 
 hiddens

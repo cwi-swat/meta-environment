@@ -14,11 +14,11 @@ exports
         Section Sections Module Definition ImpSection
 
   lexical syntax    
-    [A-Za-z0-9\_\-]+ -> ModuleWord  {cons("word")}
+    letters:[A-Za-z0-9\_\-]+ -> ModuleWord  {cons("word")}
 
-    ModuleWord              -> ModuleId  {cons("word")}
-    "/" ModuleId            -> ModuleId  {cons("slash-word")}
-    ModuleWord "/" ModuleId -> ModuleId  {cons("word-slash-word")}
+    ModuleWord              -> ModuleId  {cons("leaf")}
+    sep:"/" basename:ModuleId            -> ModuleId  {cons("root")}
+    dirname:ModuleWord sep:"/" basename:ModuleId -> ModuleId  {cons("path")}
          
   context-free syntax
     list:Module* -> Definition

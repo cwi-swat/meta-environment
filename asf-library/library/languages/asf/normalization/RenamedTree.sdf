@@ -1,0 +1,17 @@
+module languages/asf/normalization/RenamedTree
+
+%% renaming is important for bootstrapping. Otherwise the
+%% modules above this one will reduce themselves.
+
+%% There is a copy of this renaming in RenamedLifting
+
+imports languages/asfix/syntax/Tree[
+	Tree => P-Tree
+	Args => P-Args
+	Symbol => P-Symbol
+	Symbols => P-Symbols
+	Attributes => P-Attributes
+	Attr => P-Attr
+	Attrs => P-Attrs
+	Production => P-Production
+]

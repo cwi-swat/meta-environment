@@ -1,0 +1,41 @@
+module languages/asf/compiler/muasf2tom/JavaWrapper
+
+imports languages/asf/compiler/tom/TomSyntax
+imports languages/asf/compiler/basic/Whitespace
+imports languages/asf/compiler/utilities/IO[TomSpecification]
+imports languages/asf/compiler/basic/Strings
+
+exports
+
+context-free syntax
+
+wrap-rules(TomSpecification, modulename:String) -> Wrapper
+
+sorts Wrapper
+
+context-free syntax
+
+("import" Bytes ";")*
+"public" "class" Bytes "{"
+  "private" "Factory" "factory"";"
+  "%include" "{" Bytes "}"
+  "public" Bytes "(" "Factory" "factory" ")" "{"
+     "this.factory" "=" "factory" ";"
+  "}"
+  "public" "Factory" Bytes "{"
+    "return" "factory" ";"
+  "}"
+  
+  Bytes
+"}" -> Wrapper
+
+hiddens
+
+variables
+
+"Rules"[0-9]* -> String
+"TomDefinition"[0-9]* -> TomSpecification
+"String"[0-9]* -> String
+"c*"[0-9]* -> CHAR*
+"Name"[0-9]* -> String
+"Wrapper"[0-9]* -> Wrapper

@@ -1,0 +1,366 @@
+equations
+
+%% The extra arguments to each traversal function are passed to the
+%% generic asc-support call_kids... functions. Because their number is
+%% unknown they are wrapped by an ATermList:
+
+[] extra() = ATempty
+[] extra($Expression) = ATmakeList1($Expression)
+[] extra($Expression1, $Expression2) = ATmakeList2($Expression1, $Expression2)
+[] extra(Expr*) = ATmakeList(count-args(Expr*), Expr*)
+
+[] count-args() = 0
+[] count-args($Expression, Expr*) = integer-constant(d+2)
+   when integer-constant(d+) := count-args(Expr*),
+        natcon(d+2) := 1 + natcon(d+)
+
+equations
+
+
+
+%% Some phase in the compiler introduces (sometimes) overly nested blocks which
+%% harm the matches in this module
+[nested-blocks] {{Decls Stat+}} = {Decls Stat+}
+ 
+equations
+
+%% In some cases add-traversal-code duplicates one Declaration into
+%% two Declarations, which is represented by a Declaration tuple. 
+%% This rules flattens the tuples in a normal declaration list ASAP.
+
+[flatten] Declaration*1 <Declaration1, Declaration2> Declaration*2 =
+          Declaration*1 Declaration1 Declaration2 Declaration*2
+
+%% We have one rule for each combination of traversal attributes:
+%% |{bottom-up, top-down} X {accu,trafo,accutrafo} X {break,continue}| = 12
+%%
+%% and for accumulators that directly return lists, there are some special
+%% rules.
+
+equations
+
+[default-do-nothing-for-non-traversals]
+  add-traversal-code(Funid, Extra, Declaration) = Declaration
+
+equations
+
+[returns-list]
+	add-traversal-code([Funid], Extra, Declaration) =
+	add-traversal-code(Funid, Extra, Declaration)
+
+equations
+
+[bottom-up-trafo-continue]
+  add-traversal-code(|Funid trafo bottom-up continue|, arg0, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      arg0 = call_kids_trafo(Id, arg0, extra(Extra));
+      Statement+
+      FUNC_EXIT(arg0);
+    }
+
+[bottom-up-accu-continue]
+
+  add-traversal-code(|Funid accu bottom-up continue|, arg0, arg1, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      arg1 = call_kids_accu(Id, arg0, arg1, extra(Extra));
+      Statement+
+      FUNC_EXIT(arg1);
+    }
+
+[bottom-up-accu-trafo-continue]
+  add-traversal-code(|Funid accutrafo bottom-up continue|, arg0, arg1, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      {
+       ATerm tuple = call_kids_accutrafo(Id, arg0, arg1, extra(Extra));
+       {
+         arg0 = accutrafo_tuple_first(tuple);
+         arg1 = accutrafo_tuple_second(tuple);
+       }
+      }
+      Statement+
+      FUNC_EXIT(make_accutrafo_tuple(arg0, arg1));
+    }
+
+equations 
+
+[bottom-up-trafo-break]
+  add-traversal-code(|Funid trafo bottom-up break|, arg0, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = <
+    static ATerm Id ++ impl (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      { ATerm result = 
+	call_kids_trafo_with_fail((Id ++ impl), arg0, extra(Extra));
+        if (result) {
+          FUNC_EXIT(result);
+        }
+      }
+      Statement+
+      FUNC_EXIT(NULL);
+    },
+    ATerm Id (Arg*) {
+      ATerm result = Id ++ impl(arg0, Extra);
+      if (result) {
+        return result;
+      }
+      return arg0;
+    }
+    >
+
+[bottom-up-accu-break]
+  add-traversal-code(|Funid accu bottom-up break|, arg0, arg1, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = < 
+    static ATerm Id ++ impl (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      { ATerm result = 
+	call_kids_accu_with_fail((Id ++ impl), arg0, arg1, extra(Extra));
+        if (result) {
+          FUNC_EXIT(result);
+        }
+      }
+      Statement+
+      FUNC_EXIT(NULL);
+    },
+    ATerm Id ( Arg* ) {
+      ATerm result = Id ++ impl ( arg0, arg1, Extra);
+      if (result) {
+        return result;
+      }
+      return arg1;
+    }>
+
+[bottom-up-accutrafo-break]
+  add-traversal-code(|Funid accutrafo bottom-up break|, arg0, arg1, Extra,
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = <
+    static ATerm Id ++ impl (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      { ATerm result = 
+        call_kids_accutrafo_with_fail((Id ++ impl), arg0, arg1, extra(Extra));
+        if (result) {
+          FUNC_EXIT(result);
+        }
+      }
+      Statement+
+      FUNC_EXIT(NULL);
+    },
+    ATerm Id (Arg*) {
+      ATerm result = Id ++ impl(arg0, arg1, Extra);
+      if (result) {
+        return result;
+      }
+      return make_accutrafo_tuple(arg0, arg1);
+    }>
+
+equations
+
+[top-down-trafo-break]
+  add-traversal-code(|Funid trafo top-down break|, arg0, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT(call_kids_trafo(Id, arg0, extra(Extra)));
+    }
+
+[top-down-accu-break]
+  add-traversal-code(|Funid accu top-down break|, arg0, arg1, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT(call_kids_accu(Id, arg0, arg1, extra(Extra)));
+    }
+
+[top-down-accutrafo-break]
+  add-traversal-code(|Funid accutrafo top-down break|, arg0, arg1, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      Statement+
+      FUNC_EXIT(call_kids_accutrafo(Id, arg0, arg1, extra(Extra)));
+    }
+
+equations
+
+[top-down-trafo-continue]
+  add-traversal-code(|Funid trafo top-down continue|, arg0, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      {
+        make-tail-calls(Statement+, trafo, Id, arg0, Extra)
+      }
+      FUNC_EXIT(call_kids_trafo(Id, arg0, extra(Extra)));
+    }
+
+[top-down-accu-continue]
+  add-traversal-code(|Funid accu top-down continue|, arg0, arg1, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      {
+        make-tail-calls(Statement+, accu, Id, arg0, arg1, Extra)
+      }
+      FUNC_EXIT(call_kids_accu(Id, arg0, arg1, extra(Extra)));
+    }
+
+[top-down-accutrafo-continue]
+  add-traversal-code(|Funid accutrafo top-down continue|, arg0, arg1, Extra,
+    ATerm Id ( Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs); 
+      Statement+
+      FUNC_EXIT($NormalForm);
+    }) = 
+    ATerm Id (  Arg* ) {
+      Decls
+      FUNC_ENTRY(EntryArgs);
+      {make-tail-calls(Statement+, accutrafo, Id, arg0, arg1, Extra)}
+      FUNC_EXIT(call_kids_accutrafo(Id, arg0, arg1, extra(Extra)));
+    }
+
+equations
+
+[mtt-trafo] 
+  make-tail-calls(Statement*1 FUNC_EXIT($Expression); Statement*2,
+                  trafo, Id, arg0, Extra) =
+  Statement*1
+  FUNC_EXIT(call_kids_trafo(Id, $Expression, extra(Extra)));
+  Statement*2
+
+[mtt-accu]
+  make-tail-calls(Statement*1 FUNC_EXIT($Expression); Statement*2,
+                  accu, Id, arg0, arg1, Extra) =
+  Statement*1
+  FUNC_EXIT(call_kids_accu(Id, arg0, $Expression, extra(Extra)));
+  Statement*2
+
+[mtt-accutrafo]
+  make-tail-calls(Statement*1 FUNC_EXIT($Expression); Statement*2,
+                  accutrafo, Id, arg0, arg1, Extra) =
+  Statement*1
+  {
+    ATerm tuple = $Expression;
+    {
+      ATerm first = accutrafo_tuple_first(tuple);
+      {
+        ATerm second = accutrafo_tuple_second(tuple);
+        {
+          FUNC_EXIT(call_kids_accutrafo(Id, first, second, extra(Extra)));
+        }
+      }
+    }
+  }
+  Statement*2
+
+equations
+
+%% For the traversal functions that have no equations whatsoever,
+%% which is a user error usually, but still valid ASF+SDF which
+%% should behave just as the interpreter behaves. 
+
+equations
+
+[empty-trafo] 
+  add-traversal-code(|Funid trafo Strategy Continuation|, arg0, Extra,
+  ATerm Id ( Arg* ) {
+    CONS_ENTRY ( EntryArgs); 
+    CONS_EXIT ( $NormalForm );
+  }) =
+  ATerm Id ( Arg* ) {
+    FUNC_ENTRY ( EntryArgs); 
+    FUNC_EXIT ( arg0 );
+  } 
+
+[empty-accu] 
+  add-traversal-code(|Funid accu Strategy Continuation|, arg0, arg1, Extra,
+  ATerm Id ( Arg* ) {
+    CONS_ENTRY ( EntryArgs); 
+    CONS_EXIT ( $NormalForm );
+  }) =
+  ATerm Id ( Arg* ) {
+    FUNC_ENTRY ( EntryArgs); 
+    FUNC_EXIT ( arg1 );
+  } 
+
+[empty-accutrafo] 
+  add-traversal-code(|Funid accutrafo Strategy Continuation|, arg0,arg1, Extra,
+  ATerm Id ( Arg* ) {
+    CONS_ENTRY ( EntryArgs); 
+    CONS_EXIT ( $NormalForm );
+  }) =
+  ATerm Id ( Arg* ) {
+    FUNC_ENTRY ( EntryArgs); 
+    FUNC_EXIT ( make_accutrafo_tuple(arg0,arg1) );
+  } 

@@ -1,0 +1,89 @@
+equations
+
+[m2n]
+Nametable := create(Signopt,(, Id,1,1)),
+Module2	:= rename(module Id Signopt Rulesopt, Nametable)
+===>
+muasf2nametable(module Id Signopt Rulesopt) = (Module2, Nametable)
+
+equations
+
+%% Because the rules for a traversal function are merged into one big
+%% function, the function that returns a list does not appear in the nametable.
+%% Therefore we have a special case. The information that it returns a list
+%% sometimes must be retained!
+
+[rename-traversal-that-returns-list]
+|Func trafo Strategy Continuation| := pn-lookup(Prod, Namepair*)
+===>
+rename([Prod],(Namepair*, Id, Aint0, Aint1)) = 
+	[|Func trafo Strategy Continuation|]
+
+[default-rename-normal]
+rename(Prod,(Namepair*, Id,Aint0,Aint1)) = pn-lookup(Prod, Namepair*)
+
+equations
+
+[function]
+Func := construct-funid(Prod, nt-counter(Nametable))
+===>
+create(Prod(Sigarg+),Nametable) = nt-add(Prod, Func, , Nametable)
+
+[function-attrs]
+Func := construct-funid(Prod, nt-counter(Nametable), Term+)
+===>
+create(Prod(Sigarg+){Term+},Nametable) = nt-add(Prod, Func, Term+, Nametable)
+
+[constant]
+Func := construct-funid(Prod, nt-counter(Nametable))
+===>
+create(Prod ,Nametable) = nt-add(Prod, Func, , Nametable)
+
+[constant-attrs]
+Func := construct-funid(Prod, nt-counter(Nametable), Term+)
+===>
+create(Prod {Term+},Nametable) = nt-add(Prod, Func, Term+, Nametable)
+
+equations
+
+[list]
+construct-funid({Funid},Nat) = { nat2id(lf-list-, Nat) }
+
+[returns-list]
+construct-funid([Funid],Nat) = [nat2id(lf-returns-list, Nat)]
+
+[default-normal]
+construct-funid(Funid,Nat) = nat2id(lf-, Nat)
+
+equations
+
+[traversal-returns-list]
+construct-funid([Funid], Nat, Term*1, traversal(Term+), Term*2) =
+[ construct-funid(Funid, Nat, Term*1, traversal(Term+), Term*2) ]
+
+[traversal-normal]
+construct-funid(Funid, Nat, Term*1, traversal(Term+), Term*2) =
+ | nat2id(lt-, Nat) type(Term+) strategy(Term+) continuation(Term+) |
+
+[default-cf-2]
+construct-funid(Funid,Aint0, Term+) = 
+construct-funid(Funid,Aint0)
+
+equations
+
+[si] strategy(Term*1,top-down,Term*2) = top-down
+[default-si] strategy(Term*) = bottom-up
+
+[ti] type(Term*1,trafo,Term*2,accu,Term*3) = accutrafo
+[ti] type(Term*1,accu,Term*2,trafo,Term*3) = accutrafo
+[default-ti] type(Term*1,trafo,Term*2) = trafo
+[default-ti] type(Term*1,accu,Term*2)  = accu
+[] type() = trafo
+
+[ci-cont] continuation(Term*1, continue, Term*2) = continue
+[ci-break] continuation(Term*1, break, Term*2) = break
+[ci-nothing] continuation(trafo) = break
+[ci-nothing] continuation(accu) = continue
+[default-0] continuation(Term*1, bottom-up, Term*2) = continue
+[default-0] continuation(Term*1, top-down, Term*2) = break
+[] continuation() = break

@@ -7,9 +7,5 @@ exports
 
 context-free syntax
 
-Tree Ann -> Tree {cons("annotated")} 
+Tree Annotation -> Tree {cons("annotated")} 
 
-hiddens
-
-context-free start-symbols
-  Tree

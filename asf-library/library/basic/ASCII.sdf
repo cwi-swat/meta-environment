@@ -9,9 +9,6 @@ context-free syntax
 
 ascii-val(String)  -> Integer
 
-str-comp(String,String) -> Integer
-length(String) -> Integer
-
 hiddens
 
 imports basic/Comments

@@ -26,8 +26,7 @@ equations
         _G5 := topsorts[[ _G4 ]](_A),
         _G7 := r[[ _G5 ]],
         _G8 := p[[ _G7 ]],
-        _G9 := q[[ _G8 ]],
-        _G10 := l[[ _G9 ]],
+        _G10 := l[[ _G8 ]],
         _G11 := k[[ _G10 ]]
         ================
         normalize[[definition d]](M, _A) = _G11
@@ -163,10 +162,14 @@ equations
 
 %% \paragraph{Labels}
 
+  [0] r[[ I : _A ]] = r[[ _A ]]
   [0] r[[ L : _A ]] = r[[ _A ]]
   [0] <L : _A -LEX> = <_A -LEX>
   [0] <L : _A -CF>  = <_A -CF>
   [0] <L : _A -VAR> = <_A -VAR>
+  [0] <I : _A -LEX> = <_A -LEX>
+  [0] <I : _A -CF>  = <_A -CF>
+  [0] <I : _A -VAR> = <_A -VAR>
 
 %% \paragraph{Hiding Productions}
 

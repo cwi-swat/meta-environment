@@ -23,6 +23,8 @@ AC_CONFIG_FILES([Makefile
    library/languages/asf/Makefile
    library/languages/asf/syntax/Makefile
    library/languages/asf/pretty/Makefile
+   library/languages/asf/normalization/Makefile
+   library/languages/asf/addeqssyntax/Makefile
    library/languages/aterm/Makefile
    library/languages/aterm/syntax/Makefile
    library/languages/sdf2/Makefile
@@ -38,6 +40,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/pico/interpreter/Makefile
    library/languages/pico/compiler/Makefile
    library/languages/pico/typechecker/Makefile
+   library/languages/pico/debugger/Makefile
    library/languages/pico/examples/Makefile
    library/languages/pico/debugger/Makefile
    library/languages/box/Makefile

@@ -1,0 +1,368 @@
+equations
+
+  [call-and-assign]      
+	     Identifier := int2identifier(arg_, Aint2),
+              $Expression2 := make-c-temp(Aint1),
+              Stat* := $Expression2 = Identifier($Expression1);
+              ======================================================
+              cterms2cstats(Term,$Expression1,Aint1,Aint2) =
+                (Stat*,((Term,$Expression2)), Aint1 + 1)
+
+
+  [ct2cs-1]   Identifier := int2identifier(arg_, Aint2),
+              $Expression2 := make-c-temp(Aint1),
+              (Stat*1,Cenv,Aint3) :=
+                cterms2cstats(Term+,$Expression1,Aint1+1,Aint2+1),
+              Stat*2 := $Expression2 = Identifier($Expression1); ++ Stat*1
+              =================================================================
+              cterms2cstats(Term,Term+,$Expression1,Aint1,Aint2) =
+                (Stat*2,((Term,$Expression2)) ++ Cenv,Aint3)
+
+  [t2cs-1'1] ($ActualArg,Stat*,Aint2) :=
+               term2carg(Bool,Term,Cenv1,Cenv2,Aint1,result,Funid,Namepair*)
+             =========================
+             term2cstats(Bool,Term,Cenv1,Cenv2,Funid,Namepair*,Aint1) = (Stat*,Aint2)
+
+equations
+
+  [ts2ca-1'1] terms2cargs(Bool,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*) =
+                term2carg(Bool,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*)
+
+  [ts2ca-1'2] ($ActualArg+,Stat*1,Aint2) :=
+                terms2cargs(Bool,Term+,Cenv1,Cenv2,Aint1,$Expression1,Funid,Namepair*),
+              $Expression2 := make-c-temp(Aint2),
+              ($ActualArg,Stat*2,Aint3) :=
+                term2carg(Bool,Term,Cenv1,Cenv2,Aint2,$Expression2,Funid,Namepair*)
+              ==========================
+              terms2cargs(Bool,Term+,Term,Cenv1,Cenv2,Aint1,$Expression1,Funid,Namepair*) =
+                ($ActualArg+,$ActualArg,
+
+                 Stat*1 ++ Stat*2,Aint3)
+
+equations
+
+  [t2ca-1'1] $Expression != result,
+             is-list-var-term(Term) == false,
+             cecontains(Term,Cenv2) == true,
+             ($Expression2) := celookup(Term,Cenv2)
+             =================================================================
+             term2carg(true,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*) =
+               (make_list($Expression2),,Aint)
+
+  [t2ca-1'2] $Expression != result,
+             is-list-var-term(Term) == true,
+             cecontains(Term,Cenv2) == true,
+             ($Expression2) := celookup(Term,Cenv2)
+             =================================================================
+             term2carg(true,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*) =
+               ($Expression2,,Aint)
+
+  [t2ca-1'3] $Expression != result,
+             cecontains(Term,Cenv2) == true,
+             ($Expression2) := celookup(Term,Cenv2)
+             =================================================================
+             term2carg(false,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*) =
+               ($Expression2,,Aint)
+
+%% Test to see whether we can even reuse more arguments. 19-2-1998
+  [t2ca-1'4] is-memo(Funid,Namepair*) == false,
+             cecontains(Term,Cenv2) == true,
+             ($Expression2) := celookup(Term,Cenv2)
+             =================================================================
+             term2carg(false,Term,Cenv1,Cenv2,Aint,result,Funid,Namepair*) =
+               ($Expression2,FUNC_EXIT($Expression2);,Aint)
+
+
+  [t2ca-1'5] is-memo(Funid,Namepair*) == true,
+             cecontains(Term,Cenv2) == true,
+             ($Expression2) := celookup(Term,Cenv2)
+             =================================================================
+             term2carg(false,Term,Cenv1,Cenv2,Aint,result,Funid,Namepair*) =
+               ($Expression2,
+                result = $Expression2;
+                put_result(table, interm, result);
+                return result;,Aint)
+
+  [default-t2ca-1'6] term2carg(Bool,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*) =
+                       term2carg2(Bool,Term,Cenv1,Cenv2,Aint,$Expression,Funid,Namepair*)
+
+equations
+
+  [t2ca-2'1] is-memo(Funid,Namepair*) == false,
+             is-var-term(Term) == true,
+             ($Expression1) := celookup(Term,Cenv1)
+             =================================================================
+             term2carg2(Bool,Term,Cenv1,Cenv2,Aint,result,Funid,Namepair*) =
+               ($Expression1,FUNC_EXIT($Expression1);,Aint)
+
+  [t2ca-2'2] is-memo(Funid,Namepair*) == true,
+             is-var-term(Term) == true,
+             ($Expression1) := celookup(Term,Cenv1)
+             =================================================================
+             term2carg2(Bool,Term,Cenv1,Cenv2,Aint,result,Funid,Namepair*) =
+               ($Expression1,
+                result = $Expression1;
+                put_result(table, interm, result);
+                return result;,Aint)
+
+  [t2ca-2'3] $Expression1 != result,
+             is-var-term(Term) == true,
+             is-list-var-term(Term) == false,
+             ($Expression2) := celookup(Term,Cenv1)
+             =================================================================
+             term2carg2(true,Term,Cenv1,Cenv2,Aint,$Expression1,Funid,Namepair*) =
+               (make_list($Expression2),,Aint)
+
+  [t2ca-2'4] $Expression1 != result,
+             is-var-term(Term) == true,
+             is-list-var-term(Term) == true,
+             ($Expression2) := celookup(Term,Cenv1)
+             =================================================================
+             term2carg2(true,Term,Cenv1,Cenv2,Aint,$Expression1,Funid,Namepair*) =
+               ($Expression2,,Aint)
+
+  [t2ca-2'5] $Expression1 != result,
+             is-var-term(Term) == true,
+             ($Expression2) := celookup(Term,Cenv1)
+             =================================================================
+             term2carg2(false,Term,Cenv1,Cenv2,Aint,$Expression1,Funid,Namepair*) =
+               ($Expression2,,Aint)
+
+  [t2ca-2'6] is-memo(Funid1,Namepair*) == false,
+             is-var-term(Term) == false,
+             Funid2 := get-funid(Term,Namepair*),
+             get-funargs(Term) == ,%% is empty argument list
+             Post := make-call-id(Funid2),
+             $Expression2 := transform-call(Post,Funid2,Namepair*,)
+             ====================================================
+             term2carg2(false,Term,Cenv1,Cenv2,Aint,result,Funid1,Namepair*) =
+               (result,FUNC_EXIT($Expression2);,Aint)
+
+  [t2ca-2'7] is-memo(Funid1,Namepair*) == true,
+             is-var-term(Term) == false,
+             Funid2 := get-funid(Term,Namepair*),
+             get-funargs(Term) == ,%% is empty argument list
+             Post := make-call-id(Funid2),
+             $Expression2 := transform-call(Post,Funid2,Namepair*,)
+             ====================================================
+             term2carg2(false,Term,Cenv1,Cenv2,Aint,result,Funid1,Namepair*) =
+               (result,
+                result = $Expression2;
+                put_result(table, interm, result);
+                return result;,Aint)
+
+  [t2ca-2'8] $Expression != result,
+             is-var-term(Term) == false,
+             get-funargs(Term) == , %% is empty argument list
+             Funid2 := get-funid(Term),
+             is-char(Funid2) == true,
+             $ActualArg := translate-char(Funid2)
+             ==================================
+             term2carg2(false,Term,Cenv1,Cenv2,Aint,$Expression,Funid1,Namepair*) =
+               (make_char($ActualArg),,Aint)
+
+  [t2ca-2'9] $Expression != result,
+             is-var-term(Term) == false,
+             get-funargs(Term) == , %% is empty argument list
+             Funid2 := get-funid(Term,Namepair*),
+             is-char(Funid2) == false,
+             Post := make-call-id(Funid2),
+             $Expression2 := transform-call(Post,Funid2,Namepair*,)
+             ====================================================
+             term2carg2(false,Term,Cenv1,Cenv2,Aint,$Expression,Funid1,Namepair*) =
+               ($Expression2,,Aint)
+
+  [t2ca-2'10] is-memo(Funid1,Namepair*) == false,
+              is-var-term(Term) == false,
+              Funid2 := get-funid(Term,Namepair*),
+              Post := make-call-id(Funid2),
+              Term+ := get-funargs(Term),
+              $Expression := make-c-temp(Aint1),
+              Funid3 := get-funid(Term),
+              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3),
+              ($ActualArg+1,Stat*1,Aint2) :=
+                terms2cargs(Bool2,
+                          Term+,Cenv1,Cenv2,Aint1,$Expression,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+1)
+              ===============================================================
+              term2carg2(false,Term,Cenv1,Cenv2,Aint1,result,Funid1,Namepair*) =
+                (result,
+                 Stat*1 ++ FUNC_EXIT($Expression2);,Aint2)
+
+  [t2ca-2'11] is-memo(Funid1,Namepair*) == true,
+              is-var-term(Term) == false,
+              Funid2 := get-funid(Term,Namepair*),
+              Post := make-call-id(Funid2),
+              Term+ := get-funargs(Term),
+              $Expression := make-c-temp(Aint1),
+              Funid3 := get-funid(Term),
+              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3),
+              ($ActualArg+1,Stat*1,Aint2) :=
+                terms2cargs(Bool2,
+                          Term+,Cenv1,Cenv2,Aint1,$Expression,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+1)
+              ===============================================================
+              term2carg2(false,Term,Cenv1,Cenv2,Aint1,result,Funid1,Namepair*) =
+                (result,
+                 Stat*1 ++ result = $Expression2;
+                 put_result(table, interm, result);
+                 return result;,Aint2)
+
+  [t2ca-2'12] $Expression1 != result,
+              is-var-term(Term1) == false,
+              Funid2 := get-funid(Term1),
+              is-cons(Funid2) == false,
+              ($ActualArg+,Stat*,Aint2) :=
+                term2carg2(false,Term1,Cenv1,Cenv2,
+                         Aint1,$Expression1,Funid1,Namepair*),
+              $Expression2 := transform-call(make_list,make-list,Namepair*,$ActualArg+)
+              ======================================================================
+              term2carg2(true,Term1,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
+                ($Expression2,Stat*,Aint2)
+
+
+  [t2ca-2'13] $Expression1 != result,
+              is-var-term(Term1) == false,
+              Funid2 := get-funid(Term1),
+              is-cons(Funid2) == true,
+              Post := make-call-id(Funid2),
+              Term+ := get-funargs(Term1),
+              ($ActualArg+,Stat*,Aint2) :=
+                terms2cargs(true,
+                          Term+,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+)
+              ==============================================================
+              term2carg2(true,Term1,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
+                ($Expression2,Stat*,Aint2)
+
+  [t2ca-2'14] $Expression1 != result,
+              is-var-term(Term) == false,
+              Funid2 := get-funid(Term),
+              Funid3 := get-funid(Term,Namepair*),
+              Post := make-call-id(Funid3),
+              Term+ := get-funargs(Term),
+              Bool2 := is-trans-list-funid(Funid2) | is-cons(Funid2),
+              ($ActualArg+,Stat*,Aint2) :=
+                terms2cargs(Bool2,
+                          Term+,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+)
+              ==============================================================
+              term2carg2(false,Term,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
+                ($Expression2,Stat*,Aint2)
+
+equations
+
+  [fct-1'1] is-var-term(Term1) == true
+            =========================
+            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                  Term4|Cenv1|Cenv2|Funid];C-rule*,
+                              Namepair*,Aint) =
+              second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                  Term4|Cenv1|Cenv2|Funid];C-rule*,
+                                 Namepair*,Aint)
+
+  [fct-1'2] is-var-term(Term1) == false,
+            (,C-rule*2) := select-conds-on-first-term(Term1,C-rule*1)
+            ========================================================
+            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                               Term4|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint) =
+              second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                  Term4|Cenv1|Cenv2|Funid];C-rule*1,
+                                 Namepair*,Aint)
+
+  [fct-1'3] is-var-term(Term1) == false,
+            (C-rule+1,C-rule*2) := select-conds-on-first-term(Term1,C-rule*1),
+            $Expression := make-c-temp(Aint1),
+            %%add-to-set($Expression,Aset1) = Aset2,
+            ($ActualArg,Stat*1,Aint2) :=
+              term2carg(false,Term1,Cenv1,Cenv2,Aint1+1,$Expression,Funid,Namepair*),
+            Term5 := $ int2id(CV, Aint1),
+            C-rule+2 := replace-first-term(Term5,((Term5,$Expression)),
+                               [Fv-path*|
+                                term-equal(Term1,Term2) =: Term3 & Cond*|
+                                Term4|Cenv1|Cenv2|Funid];C-rule+1)
+            =================================================================
+            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                               Term4|Cenv1|Cenv2|Funid];C-rule*1,
+                              Namepair*,Aint1) =
+              (Stat*1 ++ $Expression = $ActualArg;,
+               ,C-rule+2;C-rule*2,Aint2)
+
+equations
+
+  [sct-1'1] is-var-term(Term2) == true
+            =========================
+            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                Term4|Cenv1|Cenv2|Funid];C-rule*,
+                               Namepair*,Aint) =
+               (,,[Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                  Term4|Cenv1|Cenv2|Funid];C-rule*,Aint)
+
+  [sct-1'2] is-var-term(Term2) == false,
+            (,C-rule*2) := select-conds-on-second-term(Term2,C-rule*1)
+            =========================================================
+            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                 Term4|Cenv1|Cenv2|Funid];C-rule*1,
+                                Namepair*,Aint) =
+               (,,[Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                  Term4|Cenv1|Cenv2|Funid];C-rule*1,Aint)
+
+  [sct-1'3] is-var-term(Term2) == false,
+            (C-rule+1,C-rule*2) := select-conds-on-second-term(Term2,C-rule*1),
+            $Expression := make-c-temp(Aint1),
+            ($ActualArg,Stat*1,Aint2) :=
+              term2carg(false,Term2,Cenv1,Cenv2,Aint1+1,$Expression,Funid,Namepair*),
+            Term5 := $ int2id(CV, Aint1),
+            C-rule+2 := replace-second-term(Term5,((Term5,$Expression)),
+                                [Fv-path*|
+                                 term-equal(Term1,Term2) =: Term3 & Cond*|
+                                 Term4|Cenv1|Cenv2|Funid];C-rule+1)
+            ============================================================
+            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+                                Term4|Cenv1|Cenv2|Funid];C-rule*1,
+                               Namepair*,Aint1) =
+              (Stat*1 ++ $Expression = $ActualArg;,
+               ,C-rule+2;C-rule*2,Aint2)
+
+equations
+
+  [mp-1'1] is-constructor(Funid,Namepair*) == true,
+           is-ignored-funid(Funid) == false,
+           Arity := cnt-args($ActualArg*1),
+	   Sym := Func ++ sym,
+           $ActualArg+ := Sym ++ $ActualArg*1
+           ========================================================
+           transform-call(Func,Funid,Namepair*,$ActualArg*1) =
+             int2identifier(make_nf,Arity)($ActualArg+)
+
+  [mp-1'3] is-constructor(Funid,Namepair*) == false,        
+           is-ignored-funid(Funid) == false,
+           is-string-funid(Funid) == false
+           =====================================
+           transform-call(Post,Funid,Namepair*,$ActualArg*) = Post($ActualArg*)
+
+  [mp-1'32] is-list-funid(Funid) == false,
+            is-string-funid(Funid) == true
+            =====================================
+            transform-call(Post,Funid,Namepair*, ) = Post
+
+  %% We assume that only unary function symbols are ignored here:
+  [mp-1'5] is-ignored-funid(Funid) == true
+           =================================
+           transform-call(Post, Funid, Namepair*, $ActualArg) = $ActualArg
+
+equations
+
+  [isn-1'1] is-special-name(identifier(quote T)) = true
+
+  [isn-1'2] is-special-name(identifier(make\_nf T)) = true
+
+  [isn-1'3] is-special-name(null) = true
+
+  [isn-1'3] is-special-name(cons) = true
+
+  [isn-1'4] is-special-name(make-char) = true
+
+  [default-infn-1'5] is-special-name(CConstant) = false
+

@@ -7,8 +7,8 @@ equations
 equations
 
 [remove-brackets-rule]
-	length(_Symbol*1) == length(Tree*1)
+	length(Symbol*1) == length(Tree*1)
 	===>
-	brackets(appl(prod([Symbol*1,Symbol,Symbol*2],Symbol,
+	brackets(appl(prod([Symbol*1,Symbol,_Symbol*2],Symbol,
 			attrs([_Attr*1,bracket,_Attr*2])),
-		[Tree*1,Tree,Tree*2])) = Tree
+		[Tree*1,Tree,_Tree*2])) = Tree

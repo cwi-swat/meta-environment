@@ -1,12 +1,17 @@
-module languages/asf/syntax/Equations
-imports languages/asf/syntax/Conditions
+module languages/asf/syntax/Equations[Tree]
+
+imports languages/asf/syntax/Conditions[Tree]
 imports languages/asf/syntax/Tags
 exports
-  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation ASF-BarEnd
 
 exports
   lexical syntax
-    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
+                                      -> ASF-BarEnd {cons("Absent")}
+    [\>]                              -> ASF-BarEnd {cons("Present")}
+
+    start:"===" bar:[\=]* end:ASF-BarEnd  -> ASF-Implies {cons("default")}
+
   lexical restrictions
     ASF-Implies -/- [\=]
 

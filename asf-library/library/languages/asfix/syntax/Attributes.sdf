@@ -1,7 +1,6 @@
 module languages/asfix/syntax/Attributes
 
-imports languages/aterm/syntax/Literals 
-        languages/aterm/syntax/ATerms
+imports languages/aterm/syntax/ATerms
 
 exports
   sorts Attributes Attrs Attr Associativity
@@ -14,7 +13,7 @@ exports
 
     "assoc" "(" associativity:Associativity ")" -> Attr {cons("assoc")}
     "term" "(" aterm:ATerm ")"                  -> Attr {cons("term")} 
-    "id" "(" module-name:QLiteral ")"            -> Attr {cons("id")}
+    "id" "(" module-name:StrCon ")"             -> Attr {cons("id")}
 
     "bracket" -> Attr {cons("bracket")}
     "reject"  -> Attr {cons("reject")}
@@ -26,17 +25,4 @@ exports
     "assoc"     -> Associativity {cons("assoc")}
     "non-assoc" -> Associativity {cons("non-assoc")}
 
-    "bracket"   -> ATerm {reject}
-    "reject"    -> ATerm {reject}
-    "prefer"    -> ATerm {reject}
-    "avoid"     -> ATerm {reject}
-    "left"      -> ATerm {reject}
-    "right"     -> ATerm {reject}
-    "assoc"     -> ATerm {reject}
-    "non-assoc" -> ATerm {reject}
-    id(QLiteral) -> ATerm {reject}
 
-
-hiddens
-  context-free start-symbols
-    Attributes Attr

@@ -1,0 +1,49 @@
+module languages/asf/compiler/muasf2muasf/ReturnsList
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+exports
+
+context-free syntax
+
+fix-returns-list-functions(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+unwrap-rhs(Module)	-> Module {traversal(trafo,top-down,break)}
+unwrap-rhs(Rule)	-> Rule {traversal(trafo,top-down,break)}
+unwrap-rhs(FuncDef)	-> FuncDef {traversal(trafo,top-down,break)}
+
+context-free syntax
+
+unwrap-accu(Module)	-> Module {traversal(trafo,bottom-up,continue)}
+unwrap-accu(Term)	-> Term {traversal(trafo,bottom-up,continue)}
+
+context-free syntax
+
+fix-trafo(Module)  -> Module {traversal(trafo,top-down,break)}
+fix-trafo(Term)    -> Term {traversal(trafo,top-down,break)}
+fix-trafo(Rule)    -> Rule {traversal(trafo,top-down,break)}
+
+variables
+
+"Module"[0-9]* -> Module {strict}
+"Rule*"[0-9]* -> {Rule ";"}* {strict}
+"Rule"[0-9]* -> Rule {strict}
+"Term"[0-9]* -> Term {strict}
+"Func"[0-9]* -> FunId {strict}
+"Sigarg+"[0-9]* -> {SigArg ","}+
+
+"Term*"[0-9]* -> {Term ","}* {strict}
+"Term+"[0-9]* -> {Term ","}+ {strict}
+"Cond+"[0-9]* -> {Cond "&"}+ {strict}
+
+"Strategy"[0-9]* -> TraversalStrategy {strict}
+"Continuation"[0-9]* -> TraversalContinuation {strict}
+
+"List"[0-9]* -> FunId {strict}
+ 
+variables
+"_List"[0-9]* -> FunId {wild} 

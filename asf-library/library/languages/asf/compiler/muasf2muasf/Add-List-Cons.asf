@@ -1,0 +1,33 @@
+equations
+
+[main]
+add-list-cons(Module) = alc(Module)
+
+[not-empty]
+alc({Funid}(Term+)) = {Funid}(to-cons(Term+))
+
+[empty]
+alc({Funid}) = {Funid}(null)
+
+equations
+
+[many]
+to-cons(Term, Term+) = cons(Term, to-cons(Term+))
+
+[single]
+to-cons(Term) = Term
+
+%% NOTE: an analysis of which constructions need ATinsert, and which
+%% need ATconcat will make the make_list runtime function unnecessary.
+%% make_list uses at test for ATgetType(x) == AT_LIST, an creates a
+%% singleton if it is not a list. The result is that cons() can always
+%% be used to construct a list.
+%%
+%% It would be easy to predict which args are lists, and which not, and
+%% then to generate either concat(_,_) or insert(_,_).
+%%
+%% Also note that cons(make_list(elem), list) is inefficient, first
+%% constructing the singleton [elem], which is then concatenated to list,
+%% instead of just insert(elem, list)! This might be a cause for the huge
+%% amounts of ATinserts when profiling the average ASF specification...
+

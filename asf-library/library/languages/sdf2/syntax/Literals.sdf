@@ -3,11 +3,15 @@
 module languages/sdf2/syntax/Literals
 
 imports languages/sdf2/syntax/Kernel 
-imports languages/aterm/syntax/Literals
+imports basic/StrCon
+imports basic/IdentifierCon
 
 exports
   context-free syntax
-    Literal  -> Symbol  {cons("lit")}
+    string:StrCon       -> Symbol  {cons("lit")}
 
-    function-symbol: Literal "(" arguments:{Symbol ","}* ")"
-      "->" result:Symbol Attributes -> Production  {avoid, cons("prod-fun")}
+    fun:IdCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
+	-> Production  {avoid, cons("unquoted-fun")}
+
+    str:StrCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
+	-> Production  {avoid, cons("quoted-fun")}

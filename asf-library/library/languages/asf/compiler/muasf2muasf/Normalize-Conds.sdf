@@ -1,0 +1,40 @@
+module languages/asf/compiler/muasf2muasf/Normalize-Conds
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  context-free syntax
+    normalize-conditions(Module) -> Module
+    normalize-list-in-rule(Rule)  -> Rule
+
+hiddens
+  context-free syntax
+	normalize(Module) -> Module {traversal(trafo,top-down,break)}
+	normalize(Rule) -> Rule {traversal(trafo,top-down,break)}
+
+hiddens
+  sorts TC-tuple
+  context-free syntax
+    "(" {Term ","}* "," {Cond "&"}* "," Integer")" -> TC-tuple
+  context-free syntax
+    normalize-conds({Cond "&"}+,Integer)          -> TC-tuple
+    normalize-cond(Cond,Integer)                  -> TC-tuple
+    normalize-list-in-conds({Cond "&"}+,Integer)  -> TC-tuple
+    normalize-list-in-cond(Cond,Integer)          -> TC-tuple
+  context-free syntax
+    normalize-terms({Term ","}+,Integer)         -> TC-tuple
+    normalize-term(Term,Integer)                 -> TC-tuple
+    normalize-list-in-term(Term,Integer)         -> TC-tuple
+    normalize-list-in-terms({Term ","}+,Integer) -> TC-tuple
+    normalize-list-arg(Term,Integer)             -> TC-tuple
+    normalize-list-args({Term ","}+,Integer)     -> TC-tuple
+
+hiddens
+variables
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Cond"[0-9]* -> Cond
+	"Funid"[0-9]* -> FunId
+	"Aint"[0-9]* -> Integer
+

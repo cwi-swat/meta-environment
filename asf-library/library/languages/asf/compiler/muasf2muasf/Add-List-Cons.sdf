@@ -1,0 +1,26 @@
+module languages/asf/compiler/muasf2muasf/Add-List-Cons
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+
+context-free syntax
+
+add-list-cons(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+alc(Module) -> Module {traversal(trafo,bottom-up,continue)}
+alc(Term)   -> Term   {traversal(trafo,bottom-up,continue)}
+
+context-free syntax
+
+to-cons(TermList) -> Term
+
+variables
+
+"Term"[0-9]* -> Term
+"Funid"[0-9]* -> FunId

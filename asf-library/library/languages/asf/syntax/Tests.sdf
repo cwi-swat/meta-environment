@@ -1,6 +1,6 @@
-module languages/asf/syntax/Tests
+module languages/asf/syntax/Tests[Tree]
 
-imports languages/asf/syntax/Equations
+imports languages/asf/syntax/Equations[Tree]
 
 exports
 

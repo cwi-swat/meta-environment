@@ -10,5 +10,4 @@ SUBDIRS = \
 	c \
 	pico \
 	sdf2 \
-	sdf-idioms \
-	tex
+	sdf-idioms 

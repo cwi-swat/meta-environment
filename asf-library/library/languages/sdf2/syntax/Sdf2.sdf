@@ -9,25 +9,6 @@ exports
     "LAYOUT"            -> Sort    {reject}
 
   context-free syntax
-    "aliases"           -> UQLiteral {reject}
-    "lexical"           -> UQLiteral {reject}
-    "priorities"        -> UQLiteral {reject}
-    "context-free"      -> UQLiteral {reject}
-    "definition"        -> UQLiteral {reject}
-    "syntax"            -> UQLiteral {reject}
-    "variables"         -> UQLiteral {reject}
-    "module"            -> UQLiteral {reject}
-    "imports"           -> UQLiteral {reject}
-    "exports"           -> UQLiteral {reject}
-    "hiddens"           -> UQLiteral {reject}
-    "left"              -> UQLiteral {reject}
-    "right"             -> UQLiteral {reject}
-    "assoc"             -> UQLiteral {reject}
-    "non-assoc"         -> UQLiteral {reject}
-    "bracket"           -> UQLiteral {reject}
-    "sorts"             -> UQLiteral {reject}
-    "restrictions"      -> UQLiteral {reject}
-
     "aliases"           -> ModuleName {reject}
     "lexical"           -> ModuleName {reject}
     "priorities"        -> ModuleName {reject}
@@ -49,11 +30,18 @@ exports
     "sorts"             -> ModuleName {reject}
     "restrictions"      -> ModuleName {reject}
 
-    Literal "(" {Symbol ","}* ")" -> Symbols {reject}
+     StrCon "(" arguments:{Symbol ","}* ")" -> Symbols {reject}
+
+     Associativity -> Label   {reject}
+     Associativity -> ATermAttribute {reject}
+     "reject"      -> ATermAttribute {reject}
+     "prefer"      -> ATermAttribute {reject}
+     "avoid"       -> ATermAttribute {reject}
+     "bracket"     -> ATermAttribute {reject}
+     "id" "(" ModuleName ")" -> ATermAttribute {reject}
 
   restrictions
     <Sort -CF>
-    <UQLiteral -CF>
     "aliases"
     "lexical"
     "priorities"

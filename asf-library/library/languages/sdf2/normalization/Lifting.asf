@@ -15,11 +15,6 @@ equations
    [0] sym2syntax(_A +) = (sym2syntax(_A) "+")
    [0] sym2syntax({_A _B}+) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "+") 
    [0] sym2syntax({_A _B}*) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "*") 
-%%   [0] sym2syntax(_A n+) = (sym2syntax(_A) literal("""c*""") "+")
-%%          when natcon(c*) := n         
-%%   [0] sym2syntax({_A _B} n+) = 
-%%        ("{" sym2syntax(_A) sym2syntax(_B) "}" literal("""c*""") "+")
-%%          when  natcon(c*) := n
 
    [0] sym2syntax(( => _B))  = ("(" "=>" sym2syntax(_B) ")")
    [0] sym2syntax((_A 'a => _B)) = ( "(" sym2syntax(_A) 'a' "=>" _B' ")" )
@@ -30,8 +25,8 @@ equations
    [0] sym2syntax(<_A , 'a,+>) = 
          ( "<" sym2syntax(_A) "," symbols2syntax('a,+) ">" )
    [0] sym2syntax((_A -> _B)) = ("(" sym2syntax(_A) "->" sym2syntax(_B) ")")
-   [0] sym2syntax(qliteral("""c*""")) = qliteral(""" "\" """ c* "\" """ """)
-   [0] sym2syntax(sort(c*)) = qliteral("""c*""")
+   [0] sym2syntax(strcon(\" C* \")) = strcon(\" strchar(\") C* strchar(\") \")
+   [0] sym2syntax(Sort) = sort2str(Sort)
 
    [0] sym2syntax(Sort [[ 'a,+ ]]) = 
          ( sym2syntax(Sort) "[[" symbols2syntax('a,+) "]]" )
@@ -39,3 +34,18 @@ equations
    [s2s] symbols2syntax('a,+ , 'b,+) = 
            symbols2syntax('a,+) "," symbols2syntax('b,+)
    [default-s2s] symbols2syntax(_A) = sym2syntax(_A)
+
+equations
+
+ [0]
+	sort2str(sort(h)) = strcon(\" strchar(h) \")
+
+ [0]
+	sort2str(sort(h t)) = strcon(\" strchar(h) strchar(t) \")
+
+ [0]
+	sort2str(sort(h m t)) = strcon(\" strchar(h) strchar(m) strchar(t) \")
+
+ [0]
+	sort2str(sort(h1 h2 m* t)) = strcon(\" strchar(h1) C* strchar(t) \")
+		when strcon(\" C* strchar(t) \") := sort2str(sort(h2 m* t))

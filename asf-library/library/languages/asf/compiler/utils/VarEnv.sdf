@@ -1,0 +1,156 @@
+
+%%
+%% The module {\tt VarEnv} defines a number
+%% of datastructures to store variables and
+%% their types. These datastructures are
+%% used during the various translation
+%% processes.  Furthermore a number
+%% access functions are defined to
+%% store and retrieve information from
+%% these datastructures.
+module languages/asf/compiler/utils/VarEnv
+
+imports basic/Integers
+imports languages/asf/compiler/muasf/MuASF
+
+
+exports
+  sorts VarEnv IntVarEnv
+  context-free syntax
+    "[" {Term ","}* "]"            -> VarEnv
+    "[" Integer "," {Term ","}* "]" -> IntVarEnv
+
+exports
+  sorts VV-Pair VV-Struct IntVVarEnv
+  context-free syntax
+    "(" VarId "," VarId ")"           -> VV-Pair
+    "[" Integer "," {VV-Pair ","}* "]" -> IntVVarEnv
+    "[" VarId "," IntVVarEnv "]"      -> VV-Struct
+  context-free syntax
+    newvar(Integer)             -> Term
+    vv-enter(VarId,IntVVarEnv) -> VV-Struct
+
+%% The context-free syntax definitions of
+%% the access functions.
+  context-free syntax
+    enter(Term,VarEnv)       -> VarEnv
+    enter(Term,IntVarEnv)    -> IntVarEnv
+    includes(Term,VarEnv)    -> Boolean
+    includes(Term,IntVarEnv) -> Boolean
+
+  context-free syntax
+    gen-var(Integer)           -> Term
+    newvar(Integer,Term)       -> Term
+    newlistvar(Term)          -> VarId
+    get-int(IntVarEnv)        -> Integer
+    put-int(Integer,IntVarEnv) -> IntVarEnv
+    unique(IntVarEnv)         -> Term
+
+  sorts
+    Term-CList-VarEnv CList-VarEnv
+  context-free syntax
+    "(" {Term ","}* "," {Cond "&"}* ","
+        IntVarEnv ")"                              -> Term-CList-VarEnv
+    "(" {Cond "&"}* "," IntVarEnv ")"              -> CList-VarEnv
+
+exports
+  sorts NameTable NamePair IdTablePair
+  context-free syntax
+    "(" FunId "," FunId "," {Term ","}*")"                  -> NamePair
+    "(" {NamePair ","}* "," FunId "," Integer "," Integer ")" -> NameTable
+    "(" FunId "," NameTable ")"                             -> IdTablePair
+    nt-lookup(FunId,NameTable)                              -> IdTablePair
+    nt-lookup(FunId,TermList,NameTable)                     -> IdTablePair
+    nt-add(FunId,FunId,TermList,NameTable)                  -> NameTable
+    ntl-lookup(FunId,NameTable)                             -> IdTablePair
+    np-lookup(FunId,{NamePair ","}*)                        -> FunId
+    pn-lookup(FunId,{NamePair ","}*)                        -> FunId
+    nt-counter(NameTable) -> Integer
+
+exports
+  context-free syntax
+    nat2id(prefix:FunId,NatCon) -> FunId
+    int2id(prefix:FunId,Integer) -> FunId
+    id2str(FunId) 		-> FunId
+    str2id(FunId) 		-> FunId
+
+exports
+sorts MN-struct
+  context-free syntax
+    "(" Module "," NameTable ")" -> MN-struct
+
+exports
+  context-free syntax
+    is-memo(FunId,{NamePair ","}*)           -> Boolean
+    is-constructor(FunId,{NamePair ","}*)    -> Boolean
+
+hiddens
+  context-free start-symbols
+	FunId
+	NameTable
+	Integer
+	VarId
+	VV-Struct
+	Term
+	Boolean
+
+  variables
+    "Nametable"[0-9]* -> NameTable
+    "Namepair*"[0-9]* -> {NamePair ","}*
+    "Namepair+"[0-9]* -> {NamePair ","}+
+    "Namepair"[0-9]*  -> NamePair
+
+    "Varenv"[0-9]*   -> VarEnv
+    "Ivarenv"[0-9]*  -> IntVarEnv
+    "Ivvarenv"[0-9]* -> IntVVarEnv
+    "VvPair*"[0-9]*  -> {VV-Pair ","}*
+    "Pair*"[0-9]*  -> {Term ","}*
+
+  lexical variables
+	"digit"[0-9]* -> [0-9]
+	"digit*"[0-9]* -> [0-9]*
+	"digit+"[0-9]* -> [0-9]+
+        "v*"[0-9]* -> [a-zA-Z0-9\'\_\-]*
+	"cap"[0-9]*  -> [A-Z]
+	"low"[0-9]*  -> [a-z]
+  
+ 	"head"[0-9]* -> [A-Za-z]
+	"tail"[0-9]* -> [A-Za-z\-0-9]*
+	"tail+"[0-9]* -> [A-Za-z\-0-9]+
+
+	"ch*"[0-9]* -> StrChar*
+	"ch+"[0-9]* -> StrChar+
+	"ch"[0-9]*  -> StrChar
+  
+  variables
+    	"Prefix" -> FunId
+	"Funid"[0-9]* -> FunId
+	"Natcon"[0-9]* -> NatCon
+	"Varid"[0-9]* -> VarId
+	"Aint"[0-9]* -> NatCon
+	"Strcon"[0-9]* -> StrCon
+	"Prod"[0-9\']*     -> FunId
+ 	"Func"[0-9\']*     -> FunId
+	"Counter"[0-9\']*  -> Integer
+	"VarName"[0-9\']*  -> FunId
+
+    "Funcdef"[0-9]*  -> FuncDef
+    "Funcdef*"[0-9]* -> {FuncDef ";"}*
+    "Funcdef+"[0-9]* -> {FuncDef ";"}+
+    "Rule"[0-9]*     -> Rule
+    "Rule*"[0-9]*    -> {Rule ";"}*
+    "Rule+"[0-9]*    -> {Rule ";"}+
+    "Rulesopt"[0-9]* -> RulesOpt
+    "Sigarg"[0-9]*   -> SigArg
+    "Sigarg*"[0-9]*  -> {SigArg ","}*
+    "Sigarg+"[0-9]*  -> {SigArg ","}+
+    "Signopt"[0-9]*  -> SignatureOpt
+    "Term"[0-9]*     -> Term
+    "Term*"[0-9]*    -> {Term ","}*
+    "Term+"[0-9]*    -> {Term ","}+
+    "Module"[0-9]*   -> Module
+    "Attrs"[0-9]*    -> Annotations
+    "Annos"[0-9]*    -> Annotations
+    "Mname"[0-9\']*  -> ModId
+    "ModuleId"	     -> IdCon
+   

@@ -4,3 +4,4 @@ equations
 %% Renaming of aliases.
 
   [0] (L:_A)'r = L:(_A)'r
+  [0] (I:_A)'r = I:(_A)'r

@@ -1,0 +1,28 @@
+%% The definitions of functions that return lists 
+%% (e.g. 'find-decls(Program) -> Decl*') are problematic. The left-hand
+%% sides are always wrapped by a list production
+%% (e.g. list(cf(iter-star(sort("Decl"))))). This is due to a CONSISTENT
+%% and correct mapping from AsFix2 to AsFix2ME. However, these left-hand
+%% side will only match with singleton lists that happen to contain just
+%% an application of such a function.
+%%
+%% The solution is to remove the list wrapper, such that the function will
+%% be reduced anywhere it occurs. Such as in: 'Decl*1, find-decls(P), Decl*2'
+
+equations
+
+[main]
+	list-results(Module) = lists(Module)
+
+equations
+
+[remove-appl-list-wrapper-around-singletons-that-return-lists]
+	Lhs := get-lhs(Equation),
+	appl(list(cf(Symbol)),
+             [appl(prod(Symbols,cf(Symbol),Attrs),Args)]) := Lhs
+	===>
+	lists(Equation)
+	=
+	set-lhs(Equation,appl(prod(Symbols,cf(Symbol),Attrs),Args))
+
+tests

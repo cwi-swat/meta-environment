@@ -2,14 +2,15 @@
                      
 module languages/sdf2/syntax/Character
 
-imports basic/Comments
+
 
 exports
   sorts Character NumChar ShortChar
   lexical syntax
-    [\\] [0-9]+                     -> NumChar   {cons("digits")}
-    [a-zA-Z0-9]                     -> ShortChar {cons("regular")}
-    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+    [\\] number:[0-9]+                     -> NumChar   {cons("digits")}
+    character:[a-zA-Z0-9]                  -> ShortChar {cons("regular")}
+    [\\] escape:~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+
   context-free syntax
     NumChar   -> Character {cons("numeric")}
     ShortChar -> Character {cons("short")}

@@ -1,0 +1,24 @@
+equations
+
+[] Rule*2 := abe(Funcdef*)
+   ===>
+   add-builtin-equations(module Modid signature Funcdef* rules Rule*) =
+     module Modid signature Funcdef* rules Rule*; Rule*2
+
+
+[] abe(Funid { Term*1, type(Type), Term*2, built-in(StrCon), Term*3 }) =
+     Funid = innermost(ASC- ++ str2id(StrCon)(parse-sort(Type)))
+
+[] Term+ := make-arg-list(Sigarg+,0)
+   ===>
+   abe(Funid(Sigarg+){ Term*1, type(Type),Term*2,built-in(StrCon),Term*3}) =
+     Funid(Term+) = innermost (ASC- ++ str2id(StrCon)(parse-sort(Type),Term+))
+
+[] Rule*1 := abe(Funcdef),
+   Rule*2 := abe(Funcdef+)
+   ===>
+   abe(Funcdef; Funcdef+) = Rule*1; Rule*2
+
+[default-abe]
+   abe(Funcdef*) =
+

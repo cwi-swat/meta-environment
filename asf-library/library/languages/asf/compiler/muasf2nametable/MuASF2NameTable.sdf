@@ -1,0 +1,75 @@
+module languages/asf/compiler/muasf2nametable/MuASF2NameTable
+
+imports languages/asf/compiler/utils/VarEnv
+
+
+exports
+
+context-free syntax
+
+muasf2nametable(Module) -> MN-struct
+
+hiddens
+
+context-free start-symbols
+	MN-struct
+	NameTable
+	Module
+	FunId
+	TraversalType
+	TraversalStrategy
+	TraversalContinuation
+	Boolean
+	Integer
+
+context-free syntax
+  rename(Module, NameTable) -> Module {traversal(trafo,top-down,break)}
+  rename(FunId,  NameTable) -> FunId  {traversal(trafo,top-down,break)}
+
+context-free syntax
+
+  create(SignatureOpt,NameTable) -> NameTable {traversal(accu,top-down,break)}
+  create(FuncDef,     NameTable) -> NameTable {traversal(accu,top-down,break)}
+
+context-free syntax
+    construct-funid(FunId, Integer) 		-> FunId
+    construct-funid(FunId, Integer,TermList) 	-> FunId
+
+context-free syntax
+   strategy(TermList) 		-> TraversalStrategy
+   type(TermList)     		-> TraversalType
+   continuation(TermList) 	-> TraversalContinuation
+   cons-id(TermList)     	-> FunId
+
+lexical variables
+  "a" -> [0-2]
+  "b" -> [0-9]
+  "c" -> [0-9]
+  "StrChar+"[0-9]* -> StrChar+
+
+variables
+
+"Id" -> IdCon
+"Condlist"[0-9]* -> CondList
+"Cond*"[0-9]* -> {Cond "&"}*
+"Cond"[0-9]* -> Cond
+"Nat"[0-9]* -> NatCon
+"Strat" -> FunId
+"Type" -> FunId
+"Cont" -> FunId
+"Aint"[0-9]* -> Integer
+"Funid"[0-9]* -> FunId
+"Namepair*"[0-9]* -> {NamePair ","}*
+"Prod" -> FunId
+"Func" -> FunId
+"Nametable"[0-9]* -> NameTable
+"Signopt" -> SignatureOpt
+"Rulesopt" -> RulesOpt
+"Module"[0-9]* -> Module
+"Sigarg+" -> {SigArg ","}+
+"Term+"[0-9]* -> {Term ","}+
+"Term*"[0-9]* -> {Term ","}*
+"Name" -> StrCon
+"Strategy" -> TraversalStrategy
+"Continuation" -> TraversalContinuation
+

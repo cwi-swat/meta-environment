@@ -1,0 +1,33 @@
+module languages/asf/normalization/ListResults
+
+imports languages/asf/normalization/RenamedTree
+imports languages/asf/normalization/RenamedASF
+imports languages/asf/normalization/LiftedEquations
+
+exports
+
+context-free syntax
+
+list-results(Module) -> Module
+
+hiddens
+
+imports basic/Comments
+
+context-free syntax
+
+lists(Module) -> Module {traversal(trafo,top-down,break)}
+lists(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+"equation" -> AFun {reject}
+
+variables
+	"Equation" -> Equation {strict}
+	"Rhs"[0-9]* -> P-Tree {strict}
+	"Symbol"[0-9]* -> P-Symbol {strict}
+	"Module"[0-9]* -> Module {strict}
+	"Symbols"[0-9]* -> P-Symbols {strict}
+	"Args"[0-9]* -> P-Args {strict}
+	"Attrs"[0-9]* -> P-Attributes {strict}
+	"Lit"[0-9]* -> P-Tree {strict}
+	"Lhs"[0-9]* -> P-Tree {strict}

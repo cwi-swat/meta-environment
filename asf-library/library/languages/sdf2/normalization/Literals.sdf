@@ -5,23 +5,27 @@ imports
 exports
   context-free syntax
     "l[[" Grammar "]]"     -> Grammar
-    "q[[" Grammar "]]"     -> Grammar
     literals(SymbolSet)    -> Productions
-    chars(Literal)         -> Symbols
+    chars(StrCon)          -> Symbols
     symbols({Symbol ","}*) -> Symbols
 
 hiddens
   context-free syntax
-    quotes(Grammar) -> Grammar {traversal(trafo,top-down,break)}
-    quotes(Symbol)  -> Symbol  {traversal(trafo,top-down,break)}
+    id2str(IdCon)   -> StrCon
 
 hiddens
+  lexical variables
+    "C*" -> StrChar*
+    "C+" -> StrChar+
+    "C"  -> StrChar
+    "d"[0-9]*  -> [0-9]
+    "d+" -> [0-9]+
+    "h"[0-9]*  -> [A-Za-z] 
+    "t"  -> [A-Za-z\-0-9]*
+
   variables
-    "c"[0-9\']*         -> CHAR
-    "c+"[0-9\']*        -> CHAR+
-    "c*"[0-9\']*        -> CHAR*
-    "L"                 -> Literal
-    "UQL"               -> UQLiteral
+    "$"?"L"             -> StrCon
+    "I"                 -> IdCon
     "'g"[0-9\']*        -> {Symbol ","}*
     "'g+"[0-9\']*       -> {Symbol ","}+
     "_G"[0-9\']*        -> Grammar 
@@ -30,3 +34,5 @@ hiddens
     "'"[abc][0-9\']*    -> Symbol* 
     "!"[0-9\']*         -> Attributes
     "cc"[0-9\']*        -> CharClass 
+
+ 

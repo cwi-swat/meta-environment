@@ -1,0 +1,99 @@
+module languages/asf/compiler/muasf2c/Locate-Constants
+
+imports languages/asf/compiler/muasf2c/MuASF-Conds2C
+
+
+exports
+  context-free syntax
+    locate-constants-in-decls(ModId,Declaration-list-opt) -> Declaration-list-opt
+
+hiddens
+  context-free start-symbols
+	Boolean	
+	Declaration-list-opt
+
+  sorts CE-pair CEEI-tuple CEI-tuple CEELI-tuple
+        CESI-tuple CESLI-tuple CEDI-tuple CEDLI-tuple
+  context-free syntax
+    "(" Expression "," Expression ")"                    -> CE-pair
+    "(" {CE-pair ","}* "," Integer ")"                      -> CEI-tuple
+
+    "(" {CE-pair ","}* "," Declaration "," Integer ")"      -> CEDI-tuple
+    "(" {CE-pair ","}* "," Declaration-list "," Integer ")" -> CEDLI-tuple
+
+    "(" {CE-pair ","}* "," Expression "," Integer ")"       -> CEEI-tuple
+    "(" {CE-pair ","}* "," Argument-expression-list ","
+        Integer ")"                                         -> CEELI-tuple
+
+    "(" {CE-pair ","}* "," Statement "," Integer ")"          -> CESI-tuple
+    "(" {CE-pair ","}* "," Statement-list-opt "," Integer ")" -> CESLI-tuple
+  context-free syntax
+    locate-constants-in-decllist(Declaration-list,CEI-tuple)  -> CEDLI-tuple
+    locate-constants-in-decl(Declaration,CEI-tuple)           -> CEDI-tuple
+  context-free syntax
+    locate-constants-in-stats(Statement-list-opt,CEI-tuple) -> CESLI-tuple
+    locate-constants-in-statlist(Statement-list,CEI-tuple)  -> CESLI-tuple
+    locate-constants-in-stat(Statement,CEI-tuple)           -> CESI-tuple
+  context-free syntax
+    locate-constants-in-expression(Expression,CEI-tuple)         -> CEEI-tuple
+    locate-constants-in-expressions({Expression ","}*,CEI-tuple) -> CEELI-tuple
+  context-free syntax
+    expression-contains-variables(Expression)        -> Boolean
+    expressions-contain-variables({Expression ","}*) -> Boolean
+    is-make-char-function-call(Expression)           -> Boolean
+    is-function-call(Expression)                     -> Boolean
+    is-integer(Expression)                           -> Boolean
+    is-exit-func(Expression)                         -> Boolean
+    is-sym-symbol(Expression)                        -> Boolean
+    is-traversal-function(Expression)		     -> Boolean
+
+    is-not-a-constant(Expression) -> Boolean
+
+  context-free syntax
+    modname2iname(ModId) -> Identifier
+  context-free syntax
+    make-init-function(ModId,{CE-pair ","}*) -> Declaration-list-opt
+    make-statements-function({CE-pair ","}*) -> FTS-tuple
+    make-stats-function({CE-pair ","}+)      -> FTS-tuple
+  context-free syntax
+    add-to-ce-pairs(Expression,{CE-pair ","}*,Integer) -> CEEI-tuple
+  context-free syntax
+    flatten-list-of-chars(Expression)            -> Expression
+    compose-list-of-chars(Expression,Expression) -> Expression
+    flatten-arguments({Expression ","}*)         -> Argument-expression-list
+
+hiddens
+  variables
+    "Ident"[0-9]*      -> Identifier
+    "Prime"[0-9]*      -> Primary-expression
+    "ce-pair*"[0-9]*   -> {CE-pair ","}*
+    "ce-pair+"[0-9]*   -> {CE-pair ","}+
+	"Bool"[0-9]* -> Boolean
+	"Aint"[0-9]* -> Integer
+	"$Expression"[0-9]* -> Expression
+
+  lexical variables
+	"d+"[0-9]* -> [0-9]+
+	"head"[0-9]* -> [A-Za-z]
+	"tail"[0-9]* -> [A-Za-z0-9\_]*
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "$ActualArg"[0-9]* -> Expression
+    "$ActualArg*"[0-9]*   -> {Expression ","}*
+    "$ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "$Exp"[0-9]*          -> Expression
+    "C-rule+"[0-9]* 	-> {C-Rule ";"}+
+    "C-rule*"[0-9]* 	-> {C-Rule ";"}*
+    "C-rule"[0-9]* 	-> C-Rule
+    "Aint+"[0-9]* 	-> {Integer ","}+
+    "Fv-path+"[0-9]* -> {FV-Path ","}+
+    "Fv-path*"[0-9]* -> {FV-Path ","}*
+	"Modid" -> ModId
+	"$Arg"[0-9]* -> Expression
+	"IdCon"[0-9]* -> IdCon

@@ -1,0 +1,44 @@
+module languages/asf/compiler/muasf2c/MuASF2C
+
+imports languages/asf/compiler/muasf2c/Remove-Unused-Variables
+imports languages/asf/compiler/muasf2c/MuASF-Sign2C
+imports languages/asf/compiler/muasf2c/MuASF-Rules2C
+
+
+exports
+  context-free syntax
+     muasf2c(Module,NameTable) -> CProgram
+
+
+hiddens
+  context-free start-symbols
+	CProgram
+	Module
+	Declaration-list-opt
+	FT-tuple
+
+  context-free syntax
+    funcdefs2cfuncs({FuncDef ";"}*) -> Declaration-list-opt
+    funcdef2cfuncs({FuncDef ";"}*)  -> Declaration-list-opt
+
+    "funcdefs2cfuncs" -> Identifier {reject}
+
+variables
+
+	"Funid"[0-9]* -> FunId
+	"Identifier"[0-9]* -> Identifier
+	"Modid"[0-9]* -> ModId
+	"Nametable"[0-9]* -> NameTable
+
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "ActualArg*"[0-9]*   -> {Expression ","}*
+    "ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "Attr*"[0-9]*	 -> {Term ","}*

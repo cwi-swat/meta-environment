@@ -1,0 +1,32 @@
+module languages/asf/compiler/muasf2muasf/Remove-Lists-Aux
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  context-free syntax
+    get-last-element(Term) -> Term
+    get-prefix-list(Term)  -> Term
+  context-free syntax
+    is-list-cons(Term) -> Boolean
+
+  context-free syntax
+    make-new-cond(Term,Term) -> Cond
+
+  context-free syntax
+    remove-list-cons-from-rule(Rule)              -> Rule
+
+hiddens
+  context-free syntax
+    remove-list-cons-from-cond(Cond)              -> Cond
+    remove-list-cons-from-conds({Cond "&"}+)      -> CondList
+    remove-list-cons-from-term(Boolean,Term)         -> Term
+    remove-list-cons-from-terms(Boolean,{Term ","}+) -> TermList
+
+variables
+
+	"Funid"[0-9]* 	-> FunId
+	"Cond+"[0-9]* 	-> {Cond "&"}+
+	"Cond"[0-9]* 	-> Cond
+	"Bool"[0-9]* 	-> Boolean
+ 

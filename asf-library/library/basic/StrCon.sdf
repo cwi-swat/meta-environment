@@ -2,14 +2,14 @@ module basic/StrCon
 
 exports
 
-sorts StrCon Normal Escaped
-
+sorts StrCon StrChar
 
 lexical syntax
-    ~[\0-\31\"\\\n] -> Normal {cons("default")}
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> StrChar {cons("decimal")}
+    ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
 
-    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
-    "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
-
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" 
-       -> StrCon {cons("default")}
+    [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}

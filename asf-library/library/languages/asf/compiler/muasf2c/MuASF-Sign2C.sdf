@@ -1,0 +1,64 @@
+module languages/asf/compiler/muasf2c/MuASF-Sign2C
+
+imports languages/asf/compiler/c/C-Basics
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  context-free syntax
+    signopt2cfuncs(ModId,SignatureOpt,NameTable) -> FT-tuple
+    sigargs2cargs({SigArg ","}+,Integer)            -> Parameter-list
+
+hiddens
+  context-free start-symbols
+	FT-tuple
+	Parameter-list
+	FTS-tuple
+
+  context-free syntax
+    funcdefs2cfuncs({FuncDef ";"}+,{NamePair ","}*) -> FTS-tuple
+    funcdef2cfuncs(FuncDef,{NamePair ","}*)         -> FTS-tuple
+    modname2iname(ModId)                 -> Identifier
+    modname2rname(ModId)                 -> Identifier
+    namepairs2rstats({NamePair ","}*)    -> Statement-list-opt
+    "namepairs2rstats"	-> Identifier {reject}
+    namepair2rstats(NamePair)            -> Statement-list-opt
+    countsigargs({SigArg ","}+)          -> Integer
+    "countsigargs" -> Identifier {reject}
+
+hiddens
+  variables
+    "Aint"[0-9]* -> Integer
+    "Funid"[0-9]* -> FunId
+	"Sym" -> Identifier
+	"Func" -> Identifier
+	"Prod" -> StrCon
+	"Arity" -> Integer
+	"Identifier" -> Identifier
+	"StrCon" -> StrCon
+	"Namepair*"[0-9]* -> {NamePair ","}*
+	"Namepair+"[0-9]* -> {NamePair ","}+
+	"Namepair"[0-9]* -> NamePair
+	"Modid" -> ModId
+	"ModId" -> IdCon
+	"FTS" -> FTS-tuple
+
+ variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "ActualArg*"[0-9]*   -> {Expression ","}*
+    "ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+
+
+  lexical variables
+	"d+"[0-9]* -> [0-9]+
+
+  restrictions
+	"Sym" -/- [b].[o].[l]
+

@@ -1,0 +1,149 @@
+%% Functions that return lists are slightlty problematic. Why?
+%%
+%% * On the grammar level, each production is equal. Production that
+%% produce lists are just productions that have something like X* on the
+%% right-hand side
+%% * A selection of list productions is flattened (exactly the production
+%% that are generated from X* by the normalizer). The other productions that
+%% produce X* remain. That makes them special.
+%% * The flattener takes care that each X* list is wrapped by a list node,
+%% such that functions or variables that produce X*, are SUBLISTS. Which is
+%% their intended ASF meaning, eventhough on the grammar level they initially
+%% had equal status to generated X* productions.
+%%
+%% Ergo, we must convert the functions that return lists from top list status
+%% to sub-list status; if we do not do that, two things go wrong:
+%%
+%% 1. The left-hand sides of functions that return lists never match. The 
+%% reason is that it is wrapped by a list wrapper, so the lhs only matches
+%% with lists that contain only the function, instead of any sublist that
+%% matches the functions lhs.
+%% 2. The right-hand sides of functions that return lists construct a {list}
+%% wrapper, while the call to the function is always already a sublist. The
+%% result is nested list wrappers, which is not correct. 
+%%
+%% Solution: remove the list wrappers from the left-hand and right-hand sides
+%% of functions that return lists.
+%%
+%% The ASF-Normalizer has already removed the list wrapper from the 
+%% left-hand-sides, but the right-hand sides still have the wrapper.
+%% The reason is that the normalizer did not remove them 
+%% in AsFix you can not replace a appl Tree by an argument list: it is not
+%% type correct. 
+%%
+%% In muASF it is type-correct to remove the wrappers on the right-hand sides
+%% of the rules, so that's what this module does. This prevents any
+%% nesting of list wrapper functions.
+%%
+%% Example term: {list}(elem1, [function](x), elem2)
+%% With rule for [function]: [function](x) = {list}(elem3)
+%% should rewrite to: {list}(elem1, elem3, elem2) and not to:
+%% {list}(elem1,{list}(elem3),elem2)!!
+
+equations
+
+[main]  %% The order is important here.
+	Module1 := fix-trafo(Module),
+	Module2 := unwrap-rhs(Module1),
+	Module3 := unwrap-accu(Module2)
+	===>
+	fix-returns-list-functions(Module) = Module3
+	
+
+equations
+
+%% precondition: lists are cons'd, not flat, such that a {list} function
+%% always has exactly 1 argument.
+
+%% NOTE: a refactoring of the muASF grammar could greatly prevent
+%% code duplication here:
+
+[constant]
+	unwrap-rhs([Func] = {_List}(Term)) = 
+	[Func] = make-list(Term)
+
+[func]
+	unwrap-rhs([Func](Term+) = {_List}(Term)) = 
+	[Func](Term+) = make-list(Term)
+
+[constant]
+	unwrap-rhs(default: [Func] = {_List}(Term)) = 
+	default:[Func] = make-list(Term)
+
+[func]
+	unwrap-rhs(default: [Func](Term+) = {_List}(Term)) = 
+	default:[Func](Term+) = make-list(Term)
+
+[constant]
+	unwrap-rhs(Cond+ ==> [Func] = {_List}(Term)) = 
+	Cond+ ==> [Func] = make-list(Term)
+
+[func]
+	unwrap-rhs(Cond+ ==> [Func](Term+) = {_List}(Term)) = 
+	Cond+ ==> [Func](Term+) = make-list(Term)
+
+[constant]
+	unwrap-rhs(default: Cond+ ==> [Func] = {_List}(Term)) = 
+	default:Cond+ ==>  [Func] = make-list(Term)
+
+[func]
+	unwrap-rhs(default: Cond+ ==> [Func](Term+) = {_List}(Term)) = 
+	default:Cond+ ==> [Func](Term+) = make-list(Term)
+
+equations
+
+%% Regrettably, there is a special case for traversal functions that visit
+%% a list. During traversal, call_kids eats up a list wrapper, so unlike
+%% a normal function that returns a list, a traversal function should put
+%% the wrapper back. However, when the traversal function is CALLED directly
+%% on a list (not via call_kids), there is (just like with normal functions
+%% that return a list) an extra list node to be taken care of.
+
+[keep-wrapper-func]
+	fix-trafo([|Func trafo Strategy Continuation|](Term+) = 
+		{List}(Term)) = 
+	fix-trafo(|Func trafo Strategy Continuation|(Term+) 
+		= {List}(Term))
+
+[keep-wrapper-funcdefault]
+	fix-trafo(default: [|Func trafo Strategy Continuation|](Term+) = 
+		{List}(Term)) = 
+	fix-trafo(default:|Func trafo Strategy Continuation|(Term+) = 
+		{List}(Term))
+
+[keep-wrapper-func-cond]
+	fix-trafo(Cond+ ==> [|Func trafo Strategy Continuation|](Term+) = 
+		{List}(Term)) = 
+	fix-trafo(Cond+ ==> |Func trafo Strategy Continuation|(Term+) 
+		= {List}(Term))
+
+[keep-wrapper-func-cond-default]
+	fix-trafo(default:Cond+ ==> 
+		[|Func trafo Strategy Continuation|](Term+) = 
+		{List}(Term)) = 
+	fix-trafo(default:Cond+ ==> 
+		|Func trafo Strategy Continuation|(Term+) 
+		= {List}(Term))
+
+%% NOTE: this assumes that a traversal function is never on the
+%% matching side of a condition. Which wouldn't make any sense anyhow.
+
+[change-callees]
+	fix-trafo([|Func trafo Strategy Continuation|](Term+)) =
+	remove-list(|Func trafo Strategy Continuation|(Term+))
+
+equations
+
+%% Furthermore, there is a special case for traversal accumulators that
+%% return lists. Like normal functions that return lists, the list wrapper
+%% should be removed from the right-hand side. However, with accumulators
+%% this result is alway fed directly as input to the next application
+%% of the accumulator (while traversing). So, the wrapper also must be removed 
+%% at the arguments of accumulators. That means at all CALL sites of 
+%% accumulators, and at the left-hand side.
+
+[unwrap-accumulated]
+
+unwrap-accu([|Func accu Strategy Continuation|](Term, {_List}(Term2), Term*)) =
+	[|Func accu Strategy Continuation|](Term, Term2, Term*)
+

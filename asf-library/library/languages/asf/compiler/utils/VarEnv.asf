@@ -1,0 +1,222 @@
+equations
+
+[] nat2id(idcon(head tail),natcon(digit)) = idcon(head tail digit)
+[] nat2id(idcon(head tail),natcon(digit+1 digit+2)) = 
+	idcon(head tail tail1 tail2)
+        when idcon(head tail1) := nat2id(idcon(head), natcon(digit+1)),
+             idcon(head tail2) := nat2id(idcon(head), natcon(digit+2))
+
+[] int2id(Prefix, Natcon) = nat2id(Prefix, Natcon)
+
+equations
+
+[] id2str(Strcon) 	= Strcon
+[] id2str(idcon(head)) 	= strcon(\" strchar(head) \")
+[] id2str(idcon(head1 head2)) = strcon(\" strchar(head1) strchar(head2) \")
+[] id2str(idcon(head tail+1 tail+2)) = strcon(\" strchar(head) ch*1 ch*2 \")
+	when strcon(\" strchar(head) ch*1 \") := id2str(idcon(head tail+1)),
+	     strcon(\" strchar(head) ch*2 \") := id2str(idcon(head tail+2))
+
+equations
+
+[] str2id(strcon(\" strchar(head) \")) = idcon(head)
+[] str2id(strcon(\" strchar(head1) ch+ \")) = idcon(head1 head2 tail)
+	when idcon(head2 tail) := str2id(strcon(\" ch+ \")) 
+
+equations
+
+  [VE-1'1] enter(Term,[Pair*]) = [Term,Pair*]
+
+  [VE-1'2] enter(Term,[Aint,Pair*]) = [Aint,Term,Pair*]
+
+equations
+
+  [VE-2'1] includes(Term,[Aint,Pair*]) = includes(Term,[Pair*])
+
+  [VE-2'2] includes(Term,[]) = false
+
+  [VE-2'3] includes(Term,[Term,Pair*]) = true
+
+  [VE-2'4] Term1 != Term2
+           ==============
+           includes(Term1,[Term2,Pair*]) =
+             includes(Term1,[Pair*])
+
+equations
+
+  [gv-4'1] gen-var(natcon(digit)) = $ idcon(V digit)
+
+  [gv-4'2] gen-var(natcon(digit+2 digit+1)) = $ idcon(V tail1 tail2)
+   	   when $ idcon(V tail1) := gen-var(natcon(digit+1)),
+                $ idcon(V tail2) := gen-var(natcon(digit+2))
+
+equations
+
+  [nv-1'1] newvar(natcon(digit+)) = gen-var(natcon(digit+))
+
+equations
+
+[strcon-var]
+	newvar(Aint, $ Strcon) = $ int2id(TestEqualVar-, Aint)
+
+  [nv-4'1] newvar(natcon(digit+),$ idcon(head tail1)) = 
+		$ idcon(head tail1 new tail2) 
+	   when $ idcon(V tail2) := gen-var(natcon(digit+))
+
+  [nv-4'2] $VarName' := newvar(Counter,$VarName)
+           ============================
+           newvar(Counter,$*VarName) = $*VarName'
+
+  [nv-4'3] $VarName' := newvar(Counter,$VarName)
+           ============================
+           newvar(Counter,$+VarName) = $+VarName'
+
+equations
+
+  [nlv-1'1] newlistvar(Natcon) =
+              $idcon(Vlist tail) when 
+		$idcon(V tail) := gen-var(Natcon)
+
+  [nlv-2'1] newlistvar($*idcon(head tail)) = $idcon(head tail list)
+
+  [nlv-2'2] newlistvar($+idcon(head tail)) =
+              $idcon(head tail list)
+
+equations
+
+  [gint-1'1] get-int([Aint,Pair*]) = Aint
+
+  [pint-1'1] put-int(Aint1,[Aint2,Pair*]) = [Aint1,Pair*]
+
+
+equations
+
+  [vve-1'1] Varid2 := newvar(Aint)
+            =====================
+            vv-enter(Varid1,[Aint,]) = [Varid2,[Aint + 1,(Varid1,Varid2)]]
+
+  [vve-1'2] vv-enter(Varid1,[Aint,(Varid1,Varid2),VvPair*]) =
+              [Varid2,[Aint,(Varid1,Varid2),VvPair*]]
+
+  [vve-1'3] Varid1 != Varid2,
+            [Varid4,[Aint2,VvPair*2]] := vv-enter(Varid1,[Aint1,VvPair*1])
+            =============================================================
+            vv-enter(Varid1,[Aint1,(Varid2,Varid3),VvPair*1]) =
+              [Varid4,[Aint2,(Varid2,Varid3),VvPair*2]]
+
+equations
+
+  [u-1'1] Varid := gen-var(Aint)
+          =====================
+          unique([Aint,Pair*]) = Varid
+
+equations
+
+[] nt-counter((Namepair*,Funid2,Aint1,Aint2)) = Aint1
+
+
+equations
+
+  [l-1'1] Funid3 := int2id(Funid2, Aint1)
+          ======================
+          nt-lookup(Funid,(,Funid2,Aint1,Aint2)) =
+            (Funid3,((Funid,Funid3,),Funid2,Aint1 + 1,Aint2))
+
+
+  [l-1'2] nt-lookup(Funid1,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2)) =
+            (Funid2,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2))
+
+  [l-1'3] Funid1 != Funid2,
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            nt-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2))
+          ====================================
+          nt-lookup(Funid1,((Funid2,Funid3,Term*),Namepair*1,Funid4,Aint1,Aint2)) =
+            (Funid5,((Funid2,Funid3,Term*),Namepair*2,Funid6,Aint3,Aint4))
+
+[l-2'1]   Funid3 := int2id(Funid2, Aint1)
+          ======================
+          nt-lookup(Funid,Term*,(,Funid2,Aint1,Aint2)) =
+            (Funid3,((Funid,Funid3,Term*),Funid2,Aint1 + 1,Aint2))
+
+
+  [l-1'2] nt-lookup(Funid1,Term*1,((Funid1,Funid2,Term*2),Namepair*1,Funid3,Aint1,Aint2)) =
+            (Funid2,((Funid1,Funid2,Term*2),Namepair*1,Funid3,Aint1,Aint2))
+
+  [l-1'3] Funid1 != Funid2,
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            nt-lookup(Funid1,Term*1,(Namepair*1,Funid4,Aint1,Aint2))
+          ==========================================
+          nt-lookup(Funid1,Term*1,((Funid2,Funid3,Term*2),Namepair*1,Funid4,Aint1,Aint2)) =
+            (Funid5,((Funid2,Funid3,Term*2),Namepair*2,Funid6,Aint3,Aint4))
+
+equations
+
+[stored-before]
+	[Funid] !:= Prod
+	===>
+	nt-add(Prod,Func,Term*,
+	(Namepair*1,(Prod,Func',Term*2),Namepair*2,ModuleId,Aint1,Aint2)) =
+	(Namepair*1,(Prod,Func',Term*2),Namepair*2,ModuleId,Aint1,Aint2)
+
+[default-add]
+	nt-add(Prod,Func,Term*,(Namepair*,ModuleId,Aint1,Aint2)) =
+	((Prod,Func,Term*), Namepair*,ModuleId,Aint1 + 1,Aint2)
+
+
+equations
+
+  [l-2'1] Funid2 := int2id(lf, Aint2)
+          ======================
+          ntl-lookup(Funid1,(,Func,Aint1,Aint2)) =
+            (Funid2,((Funid1,Funid2,),Funid2,Aint1,Aint2 + 1))
+
+  [l-2'2] ntl-lookup(Funid1,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2)) =
+            (Funid2,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2))
+
+  [l-2'3] Funid1 != Funid2,
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            ntl-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2))
+          ==========================================
+          ntl-lookup(Funid1,((Funid2,Funid3,Term*),Namepair*1,Funid4,Aint1,Aint2)) =
+            (Funid5,((Funid2,Funid3,Term*),Namepair*2,Funid6,Aint3,Aint4))
+
+equations
+
+  [l-1'1] np-lookup(idcon(head tail),) = idcon(head tail)
+
+  [l-1'2] np-lookup(Funid1,(Funid2,Funid1,Term*),Namepair*) = Funid2
+
+  [l-1'3] Funid1 != Funid3
+          ================
+          np-lookup(Funid1,(Funid2,Funid3,Term*),Namepair*) =
+            np-lookup(Funid1,Namepair*)
+
+equations
+
+  [l-1'1] pn-lookup(Funid,) = Funid
+
+  [l-1'2] pn-lookup(Funid1,(Funid1,Funid2,Term*),Namepair*) = Funid2
+
+  [l-1'3] Funid1 != Funid2
+          ================
+          pn-lookup(Funid1,(Funid2,Funid3,Term*),Namepair*) =
+            pn-lookup(Funid1,Namepair*)
+
+equations
+
+  [im-1'1] is-memo(Funid, ) = false
+
+  [im-1'2] is-memo(Funid,(Funid1,Funid,Term*1,memo,Term*2),Namepair*) = true
+
+  [default-im-1'4] is-memo(Funid1,(Funid2,Funid3,Term*),Namepair*) =
+                     is-memo(Funid1,Namepair*)
+
+equations
+
+  [ic-1'1] is-constructor(Funid, ) = false
+
+  [ic-1'2] is-constructor(Funid,(Funid1,Funid,Term*1,constructor,Term*2),Namepair*) = true
+
+  [default-ic-1'4] is-constructor(Funid1,(Funid2,Funid3,Term*),Namepair*) =
+                     is-constructor(Funid1,Namepair*)
+

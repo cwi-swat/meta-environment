@@ -1,0 +1,67 @@
+module languages/asf/compiler/muasf2c/Improve-C-code
+
+imports languages/asf/compiler/muasf2c/Rules2C-Aux
+
+
+exports
+  context-free syntax
+    "remove-tail-rec" "(" Statement-list-opt "," Identifier "," Integer ")" -> Statement-list
+      
+hiddens
+  context-free start-symbols
+	Statement-list
+	Statement-list-opt
+	SB-tuple
+	Identifier
+	Boolean
+
+  sorts
+    SB-tuple
+  context-free syntax
+    "<" Statement-list-opt "|" Boolean ">" -> SB-tuple
+  context-free syntax
+    "add-label" "(" Boolean  "," Identifier "," Statement-list-opt "," Integer ")"          -> Statement-list-opt
+    "remove-tail-rec-stats" "(" Statement-list-opt "," Identifier "," Identifier ")" -> SB-tuple
+    "remove-tail-rec-stat" "(" Statement "," Identifier "," Identifier ")"           -> SB-tuple
+    "transform-args" "(" Argument-expression-list "|" Integer ")"                        -> Statement-list-opt
+    "transform-arg" "(" Expression "|" Integer ")"                                       -> Statement-list-opt
+    "transform-arg-in-stats" "(" Statement-list-opt ")"                              -> Statement-list-opt
+    "transform-arg-in-stat" "(" Statement ")"                                        -> Statement
+    "transform-arg-in-exps" "(" Argument-expression-list ")"                         -> Argument-expression-list
+    "transform-arg-in-exp" "(" Expression ")"                                        -> Expression
+    "save-args" "(" Integer ")"                                                          -> Statement-list-opt
+
+
+
+   
+hiddens
+  variables
+    "Expression*"[0-9]* -> {Expression ","}*
+    "Expression+"[0-9]* -> {Expression ","}+
+    "Id"[0-9]*          -> Identifier
+    "Stats*"[0-9\']*    -> Statement*
+    "ICon"[0-9]*        -> Integer-constant
+    "Bool"[0-9]* 	-> Boolean
+    "Aint"[0-9]*	-> Integer
+	"Identifier"[0-9]* -> Identifier
+
+  lexical syntax
+	"Aint"[0-9]* -> Identifier {reject}
+
+  lexical variables
+    "d+"[0-9]* -> [0-9]+
+    "tail"[0-9]* -> [A-Za-z0-9\_]*
+    "head"[0-9]* -> [A-Za-z]
+
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "ActualArg*"[0-9]*   -> {Expression ","}*
+    "ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "$""Expression"[0-9]*   -> Expression

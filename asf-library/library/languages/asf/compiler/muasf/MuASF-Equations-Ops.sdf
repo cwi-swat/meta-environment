@@ -1,0 +1,108 @@
+module  languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+imports languages/asf/compiler/muasf/MuASF-Signature-Ops
+imports languages/asf/compiler/utils/VarEnv
+
+
+exports
+  sorts FuncRuleTuple FuncRulePair
+        RuleListPair FuncTermTableTuple 
+        FuncRuleTableTuple FuncCondTableTuple
+        TraversalType TraversalStrategy TraversalContinuation
+
+
+  context-free syntax
+    "(" {FuncDef ";"}* "," {Rule ";"}* "," Integer ")"    -> FuncRuleTuple
+    "(" {FuncDef ";"}* "," {Rule ";"}* ")"               -> FuncRulePair
+    "(" {FuncDef ";"}* "," TermList "," NameTable ")"    -> FuncTermTableTuple
+    "(" {FuncDef ";"}* "," {Rule ";"}* "," NameTable ")" -> FuncRuleTableTuple
+    "(" {FuncDef ";"}* "," {Cond "&"}* "," NameTable ")" -> FuncCondTableTuple
+    "(" {Rule ";"}* "," {Rule ";"}* ")"                  -> RuleListPair
+
+  context-free syntax
+    create-new-rulesopt({Rule ";"}*)               -> RulesOpt
+    addto-rulesopt(RulesOpt,{Rule ";"}*)           -> RulesOpt
+
+  context-free syntax
+    get-funid(Term)                   -> FunId
+    get-funid({Rule ";"}+)            -> FunId
+    get-funid(Rule)                   -> FunId
+    get-funid(Term,{NamePair ","}*)   -> FunId
+    get-funargs(Term)                 -> TermList
+    get-funargs(Rule)                 -> TermList
+    is-traversal-funid(FunId)         -> Boolean
+
+  context-free syntax
+    get-traversal-strategy(FunId)     -> TraversalStrategy
+    get-traversal-type(FunId)         -> TraversalType
+    get-traversal-continuation(FunId) -> TraversalContinuation
+
+    is-traversal-top-down(FunId) -> Boolean
+    is-traversal-bottom-up(FunId) -> Boolean
+    is-traversal-break(FunId) -> Boolean
+    is-traversal-continue(FunId) -> Boolean
+    is-traversal-trafo(FunId) -> Boolean
+    is-traversal-accu(FunId) -> Boolean
+    is-traversal-accutrafo(FunId) -> Boolean
+
+  context-free syntax
+    is-list-funid(FunId)              -> Boolean
+    is-trans-list-funid(FunId)        -> Boolean
+    is-returns-list-funid(FunId)      -> Boolean {prefer}
+    remove-returns-list(FunId)        -> FunId
+    is-string-funid(FunId)            -> Boolean
+    is-list-var-term(Term)            -> Boolean
+    are-star-vars({Term ","}+)        -> Boolean
+    is-var-term(Term)                 -> Boolean
+    is-boolean-term(Term)             -> Boolean
+    is-default-rule(Rule)             -> Boolean
+    is-cons(Term)                     -> Boolean
+    term-contains-var(Term)           -> Boolean
+    args-contain-var({Term ","}*)     -> Boolean
+    make-trans-list-id(FunId)         -> FunId {prefer}
+    remove-trans-from-list-id(FunId)  -> FunId {prefer}
+    make-ignored-funid(FunId)         -> FunId {prefer}
+    is-ignored-funid(FunId)           -> Boolean  {prefer}
+    remove-ignored-from-funid(FunId)  -> FunId {prefer}
+    make-func(FunId,{Term ","}*)      -> Term
+    make-list-func(FunId,{Term ","}*) -> Term
+    prefix-id(FunId,FunId,Integer)     -> FunId {prefer}
+    is-internal-funid(FunId)          -> Boolean
+    is-quoted-funid(FunId)            -> Boolean
+    is-plus-var(Term)                 -> Boolean
+    is-star-var(Term)                 -> Boolean
+    make-arg-list(SigArgList, NatCon) -> TermList
+
+  context-free syntax
+    make-list-args({Term ","}*)  -> Term
+
+  context-free syntax
+    select-on-ofs(FunId,{Rule ";"}*)                   -> RuleListPair
+    select-on-defaults({Rule ";"}*)                    -> RuleListPair
+
+  context-free syntax
+    make-default-rule(Rule)                 -> Rule
+    make-conditional-rule({Cond "&"}*,Rule) -> Rule
+    make-rule(Boolean,Term,Term)               -> Rule
+    make-rule(Boolean,{Cond "&"}*,Term,Term)   -> Rule
+
+hiddens
+  context-free syntax
+    is-internal-funid-new(FunId)   -> Boolean
+
+variables
+    "Strategy"[0-9]* -> TraversalStrategy
+    "Type"[0-9]*     -> TraversalType
+    "Continuation"[0-9]* -> TraversalContinuation
+    "Natcon"[0-9]*   -> NatCon
+    "Cond"[0-9]* -> Cond
+    "Cond*"[0-9]* -> {Cond "&"}*
+    "Cond+"[0-9]* -> {Cond "&"}+
+    "StrCon" -> StrCon
+    "VarId"[0-9]* -> FunId
+    "Varid"[0-9]* -> FunId
+    "Nat" -> NatCon
+	"Funid"[0-9]* -> FunId
+	"Namepair*"[0-9]* -> {NamePair ","}*
+
+ 

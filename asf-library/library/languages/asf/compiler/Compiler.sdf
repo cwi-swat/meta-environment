@@ -1,0 +1,31 @@
+module languages/asf/compiler/Compiler
+
+imports languages/asf/compiler/muasf2nametable/MuASF2NameTable
+imports languages/asf/compiler/muasf2muasf/MuASF2MuASF
+imports languages/asf/compiler/muasf2c/MuASF2C
+
+
+exports
+
+context-free syntax
+
+  compile-muasf(Module) -> CProgram
+  muasf2muasf(Module)   -> Module
+
+  "compile-muasf" -> FunId {reject}
+  "muasf2muasf" -> FunId {reject}
+
+hiddens
+
+context-free start-symbols 
+	Module
+	CProgram
+	MN-struct
+	Declaration
+
+
+variables
+ "CProgram" -> CProgram
+ "Nametable"[0-9]* -> NameTable
+
+

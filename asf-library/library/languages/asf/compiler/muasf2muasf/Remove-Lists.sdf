@@ -1,0 +1,68 @@
+%%
+%% The module {\tt Remove-Lists} takes care of the
+%% transformation of rewrite rules with list
+%% matching into rewrite rules without
+%% list matching. The current specification only
+%% deals with list constructs in which at most one list
+%% variable occurs.
+
+%% TODO: use traversal functions to simplify this module
+
+module languages/asf/compiler/muasf2muasf/Remove-Lists
+
+imports languages/asf/compiler/muasf/RenameVars
+imports languages/asf/compiler/muasf2muasf/Normalize-Conds
+imports languages/asf/compiler/muasf2muasf/Trans-Set-Pats
+ 
+
+exports
+  context-free syntax
+    remove-list-matching(Module) -> Module
+
+hiddens
+  context-free start-symbols
+	Module
+	Term-CList-VarEnv
+	CList-VarEnv
+	FuncRuleTuple
+	Rule
+	Boolean
+	RuleList
+
+  context-free syntax
+    rem-lists-from-ruleopt(RulesOpt)           -> FuncRulePair
+    rem-lists-from-rules({Rule ";"}*,Integer)     -> FuncRuleTuple
+    rem-lists-from-rule(Rule,Integer)             -> FuncRuleTuple
+    rem-listvars-from-rules({Rule ";"}*,Integer)  -> FuncRuleTuple
+    rem-listvars-from-rule(Rule,Integer)          -> FuncRuleTuple
+    rem-lists-from-simple-rule(Boolean,Rule,Integer) -> FuncRuleTuple
+    rem-lists-from-default-rule(Rule,Integer)     -> FuncRuleTuple
+    remove-simple-lists(Rule)                  -> Rule
+
+  context-free syntax
+    rem-lists-from-lhs-term(Term,IntVarEnv)             -> Term-CList-VarEnv
+    rem-lists-from-lhs-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv
+    rem-lists-from-rhs-term(Term,IntVarEnv)             -> Term-CList-VarEnv
+    rem-lists-from-rhs-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv
+    rem-lists-from-cond(Cond,IntVarEnv)                 -> CList-VarEnv
+    rem-lists-from-conds({Cond "&"}+,IntVarEnv)         -> CList-VarEnv
+    transform-lhs-list-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv
+    transform-rhs-list-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv
+    transform-no-list-terms({Term ","}+,IntVarEnv)      -> Term-CList-VarEnv
+    transform-lhs-list-var(Term,IntVarEnv)              -> Term-CList-VarEnv
+    transform-rhs-list-var(Term,IntVarEnv)              -> Term-CList-VarEnv
+    transform-lhs-single-term({Term ","}+,IntVarEnv)    -> Term-CList-VarEnv
+    transform-lhs-double-terms({Term ","}+,IntVarEnv)   -> Term-CList-VarEnv
+    transform-lhs-multiple-terms({Term ","}+,IntVarEnv) -> Term-CList-VarEnv
+
+variables
+	"Aint"[0-9]* -> Integer
+	"Funid"[0-9]* -> FunId
+	"Cond"[0-9]* -> Cond
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Bool"[0-9]* -> Boolean
+	"Varid"[0-9]* -> FunId
+	"Ivarenv"[0-9]* -> IntVarEnv
+	"Natcon"[0-9]*	-> NatCon
+	"Modid"[0-9]* -> ModId

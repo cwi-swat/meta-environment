@@ -1,0 +1,127 @@
+module languages/asf/compiler/muasf2c/MuASF-Rules2C
+
+imports languages/asf/compiler/muasf2c/Add-Traversal-Code
+imports languages/asf/compiler/muasf/RenameVars
+imports languages/asf/compiler/muasf2c/Locate-Constants
+imports languages/asf/compiler/muasf2c/Improve-C-code
+imports languages/asf/compiler/muasf2c/Transform-Constructors
+
+
+exports
+  context-free syntax
+    rulesopt2cfuncs(ModId,{FuncDef ";"}*,RulesOpt,NameTable)  -> FT-tuple
+    sigargs2cstats(FunId,{SigArg ","}*)                 -> Statement-list-opt
+    funargs2cstats(FunId,Argument-expression-list,TermList,{NamePair ","}*, Integer) -> 
+        SlI-tuple
+    sigargs2actualargs({SigArg ","}*) -> Argument-expression-list
+
+hiddens
+  context-free syntax
+        "sigargs2actualargs"              -> Identifier {reject}
+
+hiddens
+  context-free start-symbols
+	FT-tuple
+	Declaration
+	PA-tuple
+	SlI-tuple
+	ADSI-tuple
+	Argument-expression-list
+	Statement-list-opt
+	Identifier
+	RuleListPair
+	FuncDefList
+	RuleList
+	C-RuleList
+	C-RuleListPair
+	Declaration-list-opt
+	Boolean
+	FV-Path
+	
+  context-free syntax
+    restore-ignored-funids-in-nf(Argument-expression-list, TermList, {NamePair ","}*) -> 
+                                                              Argument-expression-list
+    restore-ignored-funids-in-arg(Expression, Term, {NamePair ","}*) -> Expression 
+    lookup-ignored-funid(FunId, {NamePair ","}*) -> FunId
+
+  context-free syntax
+    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
+                    {NamePair ","}*)                   -> FT-tuple
+    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}*,
+                    {Rule ";"}*,{NamePair ","}*)       -> FT-tuple
+    asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
+    funargs2cargs({Term ","}+,Integer)                    -> PA-tuple
+    "funargs2cargs" -> Identifier {reject}
+
+    asfrules2cstats({Rule   ";"}*,{NamePair ","}*) -> SlI-tuple
+    asflistrules2cstats({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
+
+  sorts MakeSelectStat
+  context-free syntax
+
+    "make-select-stat"    -> MakeSelectStat
+    "no-select-stat"      -> MakeSelectStat
+
+  context-free syntax
+    asfrules2cstats({C-Rule ";"}*,{C-Rule ";"}*,
+                    {NamePair ","}*,Integer, MakeSelectStat) -> SlI-tuple
+
+    asfrules2cstats1({C-Rule ";"}*,
+                     {NamePair ","}*,Integer)             -> SlI-tuple
+    asfrules2cstats2({C-Rule ";"}*,
+                     {NamePair ","}*,Integer)             -> SlI-tuple
+
+  context-free syntax
+    sigargs2cbuild({SigArg ","}+,Integer) -> ADS-tuple
+
+  context-free syntax
+    list2cstats({C-Rule ";"}+,{NamePair ","}*,Integer) -> SlI-tuple
+    listpatterns2cstats({C-Rule ";"}*,Expression,
+                        {NamePair ","}*,Integer)       -> SlI-tuple
+    listpattern2cstats({C-Rule ";"}+,Expression,
+                       {NamePair ","}*,Integer)        -> ADSI-tuple
+    listpattern2cstats(Boolean,{FV-Path ","}+,{C-Rule ";"}+,
+                       Expression,{NamePair ","}*,
+                       Integer)                              -> ADSI-tuple
+
+    
+hiddens
+	context-free start-symbols
+		Declaration
+
+  variables	
+	"Aint"[0-9]* -> Integer
+    "Aexp"[0-9]*     -> Expression
+    "Cint"[0-9]*     -> Integer-constant
+    "Expression+"[0-9]* -> { Expression ","}+
+    "$Expression"[0-9]* -> Expression
+    "MakeSelectStat"[0-9]* -> MakeSelectStat
+    "Identifier"[0-9]* -> Identifier
+	"Cond"[0-9]* -> Cond
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Sym" -> Identifier
+	"Func" -> Identifier
+	"IdCon" -> IdCon
+	"Bool"[0-9]* -> Boolean
+	"Funid"[0-9]* -> FunId
+	"Namepair*"[0-9]* -> {NamePair ","}*
+	"Nametable"[0-9]* -> NameTable
+	"Modid" -> ModId
+	"$Ltest" -> Expression
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "$ActualArg*"[0-9\']*   -> {Expression ","}*
+    "$ActualArgs"[0-9\']*   -> Argument-expression-list
+    "$ActualArg+"[0-9\']*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "C-rule+"[0-9]* 	-> {C-Rule ";"}+
+    "C-rule*"[0-9]* 	-> {C-Rule ";"}*
+    "C-rule"[0-9]* 	-> C-Rule
+    "Aint+"[0-9]* 	-> {Integer ","}+
+    "Fv-path+"[0-9]* -> {FV-Path ","}+
+    "Fv-path*"[0-9]* -> {FV-Path ","}*

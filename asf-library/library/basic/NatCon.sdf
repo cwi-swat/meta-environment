@@ -6,7 +6,7 @@ sorts NatCon
 
 lexical syntax
   
- [0-9]+ -> NatCon {cons("default")}
+ [0-9]+ -> NatCon {cons("digits")}
 
 lexical restrictions
 

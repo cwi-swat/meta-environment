@@ -1,37 +1,21 @@
 equations
      
-[S1]   
-strcon(""" Chars1 """) || strcon(""" Chars2 """) =
-strcon(""" Chars1 Chars2 """)
+[concat]   
+strcon(\" c*1 \") || strcon(\" c*2 \") = strcon(\" c*1 c*2 \")
 
-[] 
-remove-continuations(strcon(""" Chars1 "\""
-" Chars2 """)) =
-remove-continuations(strcon(""" Chars1 Chars2 """))
- 
-[default] 
-remove-continuations(Str) = Str
+equations
 
-[ln]	
-length(Str) = num-of-bytes(string-to-bytes(remove-continuations(Str)))
+[forward-length]	
+length(Str) = num-of-bytes(string-to-bytes(Str))
 
-[cmp]
-Str1 < Str2 =
-string-to-bytes(remove-continuations(Str1)) <
-string-to-bytes(remove-continuations(Str2))
+[forward-less]
+Str1 < Str2 = string-to-bytes(Str1) <string-to-bytes(Str2)
 
-[cmp]
-Str1 <= Str2 =
-string-to-bytes(remove-continuations(Str1)) <=
-string-to-bytes(remove-continuations(Str2))
+[forward-less-equal]
+Str1 <= Str2 = string-to-bytes(Str1) <= string-to-bytes(Str2)
 
+[forward-greater-equal]
+Str1 >= Str2 = string-to-bytes(Str1) >= string-to-bytes(Str2)
 
-[cmp]
-Str1 >= Str2 =
-string-to-bytes(remove-continuations(Str1)) >=
-string-to-bytes(remove-continuations(Str2))
-
-[cmp]
-Str1 > Str2 =
-string-to-bytes(remove-continuations(Str1)) >
-string-to-bytes(remove-continuations(Str2))
+[forward-greater]
+Str1 > Str2 = string-to-bytes(Str1) > string-to-bytes(Str2)

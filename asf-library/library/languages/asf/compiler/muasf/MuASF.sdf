@@ -1,0 +1,128 @@
+module languages/asf/compiler/muasf/MuASF
+
+imports basic/NatCon
+imports basic/Comments
+imports basic/StrCon
+imports basic/IdentifierCon
+imports basic/Whitespace
+
+exports
+  sorts TraversalStrategy TraversalType TraversalContinuation
+
+  context-free syntax
+
+  "bottom-up" -> TraversalStrategy 	{cons("bottom-up")}
+  "top-down"  -> TraversalStrategy 	{cons("top-down")}
+  "trafo"     -> TraversalType   	{cons("trafo")}
+  "accu"      -> TraversalType		{cons("accu")}
+  "accutrafo" -> TraversalType		{cons("accutrafo")}
+  "break"     -> TraversalContinuation	{cons("break")}
+  "continue"  -> TraversalContinuation	{cons("continue")}
+
+  sorts FunId ModId VarId
+  context-free syntax
+    NatCon	-> FunId  {cons("character")}
+    IdCon	-> FunId  {cons("unquoted"),avoid}
+    StrCon	-> FunId  {cons("quoted")}
+
+    "$" FunId	-> VarId  {cons("normal")}
+    "$+" FunId	-> VarId  {cons("plus")}
+    "$*" FunId	-> VarId  {cons("star")}
+
+  context-free syntax
+  %% The following are semantic annotations of functions. Each
+  %% annotation gives a different semantics to a class of function
+  %% symbols that can occur in ASF+SDF:
+
+    "[" FunId "]" 		-> FunId  {cons("returns-list")}
+    "{" FunId "}"		-> FunId  {cons("list")}
+    "IGNORE" "[" FunId "]" 	-> FunId  {cons("ignored")}
+    "TRANSLATE" "[" FunId "]"   -> FunId  {cons("translate")}
+    "|" FunId TraversalType TraversalStrategy TraversalContinuation "|"
+				-> FunId  {cons("traversal")}
+
+  context-free syntax
+    IdCon			      -> ModId
+    
+exports
+  context-free syntax
+    lhs:FunId "++" rhs:FunId -> FunId {left, cons("concat")}
+    lhs:FunId "+-+" rhs:FunId -> FunId {left, cons("concat-dash")}
+    
+
+hiddens
+
+  lexical variables
+    "d+"[0-9]* -> [0-9]+
+    "c*"[0-9]* -> StrChar*
+    "h"[0-9]*  -> [A-Za-z]
+    "t"[0-9]*  -> [A-Za-z\-0-9]*
+
+exports
+
+  sorts Term TermList
+
+  context-free syntax
+
+    VarId                     -> Term  {cons("var")}
+    FunId                     -> Term  {cons("constant")}
+
+    FunId "(" args:{Term ","}+ ")" -> Term  {cons("func")}
+   "[" TermList "]"           -> Term  {cons("list")} 
+
+    elems:{Term ","}*               -> TermList
+
+    Term ":" type:Term        -> Term {assoc,cons("typed")}
+    "default" ":" Term        -> Term {reject}
+
+
+  sorts Annotations FuncDef FuncDefList SigArg SigArgList
+  context-free syntax
+    "_"  	-> SigArg {cons("normal")}
+    "_" "*" 	-> SigArg {cons("star")}
+    "_" "+" 	-> SigArg {cons("plus")}
+
+
+    FunId                           -> FuncDef {cons("constant-no-annos")}
+
+    FunId Annotations               -> FuncDef {cons("constant-with-annos")}
+    FunId "(" args:{SigArg ","}+ ")"     -> FuncDef {cons("func-no-annos")}
+    FunId "(" args:{SigArg ","}+ ")" Annotations -> FuncDef {cons("func-with-annos")}
+
+    "{" attrs:{Term ","}+ "}" -> Annotations
+    args:{SigArg ","}+  	-> SigArgList
+    defs:{FuncDef";"}* 	-> FuncDefList
+
+  sorts Rule RuleList Cond CondList
+  context-free syntax
+
+
+
+exports
+  context-free syntax
+
+    	    lhs:Term is:"=" rhs:Term 		-> Rule {cons("no-conds")}
+"default:"  lhs:Term is:"=" rhs:Term		-> Rule {cons("default-no-conds")}
+
+conds:CondList "==>" lhs:Term is:"=" rhs:Term -> Rule {cons("with-conds")}
+"default:" conds:CondList "==>" lhs:Term is:"=" rhs:Term -> Rule {cons("default-with-conds")}
+
+rules:{Rule";" }*   	-> RuleList
+conds:{Cond "&"}* 	-> CondList 
+
+
+    lhs:Term becomes:"=:" 	rhs:Term 	-> Cond {cons("assign")}
+    lhs:Term not-becomes:"=:!" 	rhs:Term 	-> Cond {cons("no-assign")}
+    lhs:Term equals:"==" 	rhs:Term 	-> Cond {cons("equal")}
+    lhs:Term not-equals:"!=" 	rhs:Term 	-> Cond {cons("unequal")}
+
+  sorts Module RulesOpt SignatureOpt
+  context-free syntax
+                                 -> SignatureOpt {cons("absent")}
+    "signature" FuncDefList      -> SignatureOpt {cons("present")}
+                                 -> RulesOpt {cons("absent")}
+    "rules" RuleList             -> RulesOpt {cons("present")}
+
+    "module" ModId  SignatureOpt RulesOpt -> Module {cons("module")}
+
+ 

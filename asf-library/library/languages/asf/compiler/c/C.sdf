@@ -1,0 +1,144 @@
+module languages/asf/compiler/c/C
+
+%% adds \#include lines to C and defines a CProgram as
+%% INCLUDES followd by Translation-unit (cf. C)
+
+imports basic/Whitespace
+imports basic/StrCon
+
+
+exports
+  sorts Integer-constant Identifier String
+  lexical syntax
+    [0-9]+                   	-> Integer-constant
+    [a-zA-Z][a-zA-Z\_0-9]* 	-> Identifier 
+
+  context-free syntax
+	StrCon 		     -> String
+  lexical restrictions
+    Identifier -/- [a-zA-Z\_0-9]
+  
+  sorts
+    Expression Primary-expression Unary-operator Type-specifier
+    Parameter-list Parameter-declaration Declarator Declaration-specifiers
+    Declaration Declaration-list Declaration-list-opt
+    Argument-expression-list Cast-expression
+    Statement Statement-list Statement-list-opt
+
+  context-free syntax
+    Expression";"                                  -> Statement
+    Identifier ":" Statement                        -> Statement
+
+"{" 
+  Declaration-list-opt 
+  Statement-list-opt 
+"}" -> Statement
+
+"if" "("Expression")" 
+Statement                 -> Statement
+
+"if" "("Expression")" 
+Statement 
+"else" 
+Statement  -> Statement
+
+"while" "("Expression")" 
+Statement              -> Statement
+
+    "return" Expression ";"                           -> Statement
+    "goto" Identifier ";"                             -> Statement
+
+  context-free syntax
+    Statement
++                -> Statement-list
+
+                             -> Statement-list-opt
+    Statement-list           -> Statement-list-opt
+
+  context-free syntax
+    Declaration-specifiers Declarator
+  Statement          -> Declaration
+    Declaration-specifiers Declarator";"                -> Declaration
+    Declaration-specifiers Declarator "=" Expression";" -> Declaration
+
+    Declaration
++                  -> Declaration-list
+
+                     -> Declaration-list-opt
+    Declaration-list -> Declaration-list-opt
+
+  context-free syntax
+    Type-specifier + -> Declaration-specifiers
+
+    "static"     -> Type-specifier
+    "void"       -> Type-specifier
+    Identifier -> Type-specifier
+
+    "*" Declarator                      -> Declarator
+    Identifier                          -> Declarator
+    Identifier"["Integer-constant "]" -> Declarator
+    Identifier"("Parameter-list")"   -> Declarator
+
+    {Parameter-declaration"," }* -> Parameter-list
+
+    Declaration-specifiers Declarator -> Parameter-declaration
+
+  context-free syntax
+    Expression "=" Expression                -> Expression
+    Cast-expression                          -> Expression {prefer}
+    Unary-operator Expression                -> Expression
+    Expression "?" Expression ":" Expression -> Expression
+
+    "&" -> Unary-operator
+    "*" -> Unary-operator
+    "!" -> Unary-operator
+
+  context-free syntax
+    "("Identifier")" Primary-expression -> Cast-expression
+    Primary-expression                    -> Cast-expression
+
+  context-free syntax
+    Primary-expression"["Expression"]"               -> Primary-expression
+    Primary-expression"("Argument-expression-list")" -> Primary-expression
+
+    Identifier         -> Primary-expression
+    Integer-constant   -> Primary-expression
+    String             -> Primary-expression
+    "("Expression")" -> Primary-expression
+
+    {Expression"," }* -> Argument-expression-list
+
+exports
+  sorts CFilename CProgram INCLUDE INCLUDES
+
+  lexical syntax
+    
+    [\"] [a-zA-Z0-9\_\-\.]+ [\"] -> CFilename
+
+
+  context-free syntax
+    INCLUDES Declaration-list-opt -> CProgram
+
+    "#include" CFilename    -> INCLUDE
+
+    INCLUDE -> INCLUDES
+    INCLUDES INCLUDE -> INCLUDES
+
+  variables
+    "FormalArg"[0-9\']*   -> Parameter-declaration
+    "FormalArgs"[0-9\']*  -> Parameter-list
+    "Arg"[0-9\']*         -> Expression
+    "ActualArgs"[0-9\']*  -> Argument-expression-list
+    "ActualArgs+"[0-9\']* -> {Expression ","}+
+    "ActualArgs*"[0-9\']* -> {Expression ","}*
+    "ActualArg"[0-9\']*   -> Expression
+    "Stat"[0-9\']*        -> Statement
+    "Stat*"[0-9\']*       -> Statement-list-opt
+    "Stat+"[0-9\']*       -> Statement+
+    "Stats"[0-9\']*       -> Statement+
+    "Ltest"[0-9\']*       -> Expression
+    "CConstant"[0-9\']*   -> Identifier
+    "Declarator"[0-9\']*  -> Declarator
+    "Post"[\']*           -> Primary-expression
+    "Expr"[0-9\']*        -> Expression
+    "String"[0-9]*        -> String

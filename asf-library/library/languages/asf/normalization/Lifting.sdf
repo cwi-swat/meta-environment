@@ -1,9 +1,11 @@
 module languages/asf/normalization/Lifting
 
-imports languages/asf/normalization/RenamedASF[Tree]
+imports languages/asf/normalization/RenamedASF[P-Tree]
+imports languages/asf/normalization/RenamedTree
 
-imports utilities/Lifting[Equation]
-imports utilities/Lifting[Condition]
+imports languages/asf/normalization/RenamedLifting[Equation]
+imports languages/asf/normalization/RenamedLifting[Condition]
+imports languages/asf/normalization/LiftedEquations
 
 exports
 
@@ -11,9 +13,6 @@ context-free syntax
 
 lift-module(Module) -> Module
 lower-module(Module) -> Module
-
-equation(Tree) -> Equation
-condition(Tree) -> Condition
 
 hiddens
 
@@ -31,4 +30,4 @@ variables
 	"Module" -> Module {strict}
 	"Equation"[0-9]* -> Equation {strict}
 	"Condition" -> Condition {strict}
-	"Tree" -> Tree {strict}
+	"Tree" -> P-Tree {strict}

@@ -1,6 +1,7 @@
 module languages/asf/normalization/Brackets
 
 imports languages/asf/normalization/Length
+imports languages/asf/normalization/RenamedASF
 exports
 
 context-free syntax
@@ -12,18 +13,18 @@ hiddens
 context-free syntax
 
 	brackets(Module) -> Module {traversal(trafo,bottom-up,continue)}
-	brackets(Tree) -> Tree {traversal(trafo,bottom-up,continue)}
+	brackets(P-Tree) -> P-Tree {traversal(trafo,bottom-up,continue)}
 
 variables
 	"Module"[0-9]* -> Module {strict}
-	"Tree"[0-9]* -> Tree {strict}
-	"Tree*"[0-9]* -> {Tree ","}* {strict}
-	"Symbol*"[0-9]* -> {Symbol ","}* {strict}
-	"Symbol"[0-9]* -> Symbol {strict}
+	"Tree"[0-9]* -> P-Tree {strict}
+	"Tree*"[0-9]* -> {P-Tree ","}* {strict}
+	"Symbol*"[0-9]* -> {P-Symbol ","}* {strict}
+	"Symbol"[0-9]* -> P-Symbol {strict}
 
 variables
-	"_Tree*"[0-9]* -> {Tree ","}* {wild}
-	"_Attr*"[0-9]* -> {Attr","}* {wild}
-	"_Symbol*"[0-9]* -> {Symbol ","}* {wild}
-	"_Symbol"[0-9]* -> Symbol {wild}
+	"_Tree*"[0-9]* -> {P-Tree ","}* {wild}
+	"_Attr*"[0-9]* -> {P-Attr","}* {wild}
+	"_Symbol*"[0-9]* -> {P-Symbol ","}* {wild}
+	"_Symbol"[0-9]* -> P-Symbol {wild}
 

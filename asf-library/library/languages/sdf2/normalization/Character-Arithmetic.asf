@@ -2,8 +2,8 @@
 
 equations
 
-  [int-c]  int(numchar("\" c+)) = natcon(c+)
-  [char-i] char(natcon(c+)) = numchar("\" c+)
+  [int-c]  int(numchar(\\ c+)) = natcon(c+)
+  [char-i] char(natcon(c+)) = numchar(\\ c+)
 
   [pred-c] pred(_c) = char(int(_c) - 1)
   [succ-c] succ(_c) = char(int(_c) + 1)

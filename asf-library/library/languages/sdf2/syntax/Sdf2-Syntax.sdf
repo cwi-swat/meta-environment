@@ -30,4 +30,4 @@ exports
 
   context-free priorities
     Symbol "|" Symbol  -> Symbol >
-    Literal ":" Symbol -> Symbol                  
+    Label ":" Symbol -> Symbol                  

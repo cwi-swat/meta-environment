@@ -1,0 +1,115 @@
+module languages/asf/compiler/c/C-Basics
+
+imports basic/Booleans
+imports basic/Integers
+imports languages/asf/compiler/muasf/MuASF
+imports languages/asf/compiler/c/C
+
+
+exports
+  sorts FTS-tuple FT-tuple C-env TE-pair ADS-tuple ADSI-tuple DCAS-tuple
+        E-tuple PA-tuple
+  context-free syntax
+    "(" {FuncDef ";"}* "," Declaration-list-opt ","
+        Statement-list-opt ")"                         -> FTS-tuple
+    "(" {FuncDef ";"}* "," Declaration-list-opt ")"    -> FT-tuple
+    "(" Term "," Expression ")"                        -> TE-pair
+    "(" {TE-pair ","}* ")"                             -> C-env
+    "(" Statement-list-opt "," C-env "," Integer ")"    -> DCAS-tuple
+    "(" Argument-expression-list ","
+        Statement-list-opt "," Integer ")"              -> ADS-tuple
+    "(" Declaration-list-opt ","
+        Statement-list-opt "," Integer ")"              -> ADSI-tuple
+    "(" Expression ")"                                 -> E-tuple
+    "(" Parameter-list ","
+        Argument-expression-list "," Integer ")"        -> PA-tuple
+
+exports  
+
+  context-free syntax
+	funid2identifier(FunId) -> Identifier
+        "funid2identifier" -> Identifier {reject}
+	funid2identifier(FunId) -> Expression {reject}
+       
+
+  context-free syntax
+    Argument-expression-list "++" Argument-expression-list -> Argument-expression-list {left}
+    "(" Argument-expression-list ")"                       -> Argument-expression-list {bracket}
+    Statement-list-opt "++" Statement-list-opt             -> Statement-list-opt {left}
+    "(" Statement-list-opt ")"                             -> Statement-list-opt {bracket}
+    Statement-list-opt "++r" Statement-list-opt            -> Statement-list-opt
+    Declaration-list-opt "++" Declaration-list-opt         -> Declaration-list-opt {left}
+    "(" Declaration-list-opt ")"                           -> Declaration-list-opt {bracket}
+    Declaration-list-opt "++d" Statement-list-opt          -> Statement-list-opt
+    Parameter-declaration "++" Parameter-list              -> Parameter-list
+    C-env "++" C-env                                       -> C-env {left}
+    "(" C-env ")"                                          -> C-env {bracket}
+
+  context-free syntax
+    celookup(Term,C-env)                     -> E-tuple
+    cecontains(Term,C-env)                   -> Boolean
+    make-c-temp(Integer)                      -> Primary-expression
+    make-call-id(FunId)                      -> Primary-expression
+    make-id-name(Identifier)                 -> FunId
+    is-char(Term)                           -> Boolean
+    translate-char(Term)                    -> Expression
+
+    Identifier "+" Identifier -> Identifier {left}
+
+    identifier2nat(Identifier) -> NatCon
+    "identifier2nat" -> Identifier {reject}
+    nat2identifier(Identifier, NatCon) -> Identifier
+    "nat2identifier" -> Identifier {reject}
+    int2identifier(Identifier, Integer) -> Identifier
+    "int2identifier" -> Identifier {reject}
+
+
+    nat2identifiersep(Identifier, NatCon) -> Identifier
+    "nat2identifiersep" -> Identifier {reject}
+    int2identifiersep(Identifier, Integer) -> Identifier
+    "int2identifiersep" -> Identifier {reject}
+    
+    Identifier "++" Identifier -> Identifier {left}
+    Identifier "+_+" Identifier -> Identifier {left}
+
+hiddens
+  context-free start-symbols
+	Identifier
+	NatCon
+	Integer
+	Statement-list-opt
+	Declaration-list-opt
+	Argument-expression-list
+
+  lexical variables
+	"d"[0-9]* -> [0-9]
+	"d+"[0-9]* -> [0-9]+
+	"h"[0-9]* -> [A-Za-z]
+	"t"[0-9]* -> [A-Za-z0-9\_]*
+	"T"[0-9]* -> [A-Za-z0-9\-]*
+	"h"[0-9]* -> [a-zA-Z\_]
+	"t+"[0-9]* -> [a-zA-Z\_0-9]+
+	
+hiddens
+  variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "ActualArg*"[0-9]*   -> {Expression ","}*
+    "ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "$Exp"[0-9]*          -> Expression
+	"Term"[0-9]*	-> Term
+	"Funid"[0-9]* 	-> FunId
+	"Nat"[0-9]*	-> NatCon
+	"Identifier" 	-> Identifier
+	"IdCon"[0-9]*	-> IdCon
+	"TraversalType" -> TraversalType
+	"TraversalStrategy" -> TraversalStrategy
+	"TraversalContinuation" -> TraversalContinuation
+	"Strcon" -> StrCon
+
+

@@ -3,6 +3,7 @@ module languages/sdf2/renaming/Labels
 imports languages/sdf2/syntax/Labels languages/sdf2/renaming/Kernel
 hiddens
   variables
-    "L"[0-9\']*      -> Literal
+    "L"[0-9\']*      -> StrCon
+    "I"[0-9\']*      -> IdCon
     "_"[ABC][0-9\']* -> Symbol 
     "'r"[0-9\']*        -> Renamings                    

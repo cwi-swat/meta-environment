@@ -4,7 +4,8 @@ equations
 	LiftedModule := lift-module(Module),
 	LiftedModule' := constructors(LiftedModule),
 	LiftedModule'' := remove-brackets(LiftedModule'),
-	Module' := lower-module(LiftedModule'')
+	LiftedModule''' := list-results(LiftedModule''),
+	Module' := lower-module(LiftedModule''')
 	===>
 	normalize(Module) = Module'
 

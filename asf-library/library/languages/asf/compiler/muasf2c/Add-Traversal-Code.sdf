@@ -1,0 +1,73 @@
+module languages/asf/compiler/muasf2c/Add-Traversal-Code
+imports languages/asf/compiler/muasf2c/Rules2C-Aux
+
+exports
+
+context-free syntax
+
+add-traversal-code(FunId, Argument-expression-list, Declaration) -> Declaration
+
+hiddens
+
+context-free start-symbols
+  Declaration
+	Boolean
+	Expression
+
+context-free syntax
+
+make-tail-calls(Statement-list-opt, 
+                TraversalType, 
+                Identifier, 
+                Argument-expression-list) -> Statement-list-opt
+                {traversal(trafo, top-down, break)}
+
+context-free syntax
+
+count-args(Argument-expression-list) -> Expression
+extra(Argument-expression-list)      -> Expression
+"extra" -> Identifier {reject}
+
+
+context-free syntax
+
+<Declaration, Declaration> -> Declaration
+
+lexical variables
+	"d+"[0-9]* -> [0-9]+
+	"head"[0-9]* -> [A-Za-z]
+	"tail"[0-9]* -> [A-Za-z0-9\_]*
+
+variables
+
+"Funid"[0-9]* -> FunId
+"Declaration"[0-9]* -> Declaration
+"Arg*"[0-9]* -> {Parameter-declaration ","}*
+"TrafoArg"[0-9]* -> Parameter-declaration
+"AccuArg"[0-9]* -> Parameter-declaration
+"Statement*"[0-9]* -> Statement*
+"Statement+"[0-9]* -> Statement+
+"Declaration*"[0-9]* -> Declaration*
+"Decls" -> Declaration-list-opt
+"Id"[0-9]* -> Identifier
+"Kids"[0-9]* -> {Expression ","}*
+"Expr*"[0-9]* -> {Expression ","}*
+"EntryArgs" -> {Expression ","}*
+"$NormalForm" -> Expression
+"$""Expression"[0-9]* -> Expression
+"Traversed" -> Expression
+"Accumulated" -> Expression
+"Extra" -> {Expression ","}*
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "ActualArg*"[0-9]*   -> {Expression ","}*
+    "ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+    "Strategy" -> TraversalStrategy
+    "Continuation" -> TraversalContinuation

@@ -6,7 +6,7 @@ imports
 
 hiddens
    context-free start-symbols 
-     Natural Integer
+     Natural Integer Boolean
 
 exports
   sorts Natural Integer
@@ -21,25 +21,16 @@ exports
      Integer "+" Integer       	-> Integer {left}
      Integer "-" Integer       	-> Integer {left}
      Integer "*" Integer       	-> Integer {left}
-     Integer "/" Integer        -> Integer {left}
-     Integer "mod" Integer        -> Integer {left}
      Integer ">" Integer       	-> Boolean
      Integer ">=" Integer      	-> Boolean
      Integer "<" Integer       	-> Boolean
      Integer "<=" Integer      	-> Boolean
-     even(Integer)              -> Boolean
-     odd(Integer)               -> Boolean
-
      max(Integer, Integer)      -> Integer
-     quotrem(Integer,Integer)   -> (Integer "rem" Integer)
 
      "(" Integer ")"       	-> Integer {bracket}
 
   context-free priorities
-    {left: Integer "*" Integer -> Integer
-           Integer "/" Integer -> Integer 
-           Integer "mod" Integer -> Integer 
-    } >
+    Integer "*" Integer -> Integer >
     {left: Integer "+" Integer -> Integer
            Integer "-" Integer -> Integer}
 
@@ -48,9 +39,6 @@ exports
 hiddens
   imports basic/Comments
    
-  context-free start-symbols
-    Integer (Integer "rem" Integer) Boolean
-
   context-free syntax
     "gt" "(" Natural "," Natural ")" -> Boolean
     Natural "-//" Natural          -> Natural
@@ -61,8 +49,8 @@ hiddens
     "Nat-con" [0-9\']*  -> NatCon
     "Int" [0-9\']*      -> Integer
 
-  variables 
+  lexical variables 
     "n" [0-9]* -> NatCon
-    "c" [0-9]* -> CHAR
-    "x" [0-9]* -> CHAR*
-    "y" [0-9]* -> CHAR+
+    "c" [0-9]* -> [0-9]
+    "x" [0-9]* -> [0-9]*
+    "y" [0-9]* -> [0-9]+

@@ -1,0 +1,36 @@
+module  languages/asf/compiler/muasf2muasf/MuASF2MuASF
+
+imports languages/asf/compiler/muasf2muasf/Translate-No-Match
+imports languages/asf/compiler/muasf2muasf/Add-Builtin-Equations
+imports languages/asf/compiler/muasf2muasf/Optimize-MuASF
+imports languages/asf/compiler/muasf2muasf/Make-Left-Linear
+imports languages/asf/compiler/muasf2muasf/Make-Assign-Conds
+imports languages/asf/compiler/muasf2muasf/Find-Constructors
+imports languages/asf/compiler/muasf2muasf/Add-List-Cons
+imports languages/asf/compiler/muasf2muasf/Remove-Lists
+imports languages/asf/compiler/muasf2muasf/Fix-Tupled-Traversals
+imports languages/asf/compiler/muasf2muasf/Add-Type-Checks
+imports languages/asf/compiler/muasf2muasf/Remove-Types
+imports languages/asf/compiler/muasf2muasf/ReturnsList
+
+
+        
+
+exports
+  context-free syntax
+    muasf2muasf(Module, NameTable) -> MN-struct
+
+
+hiddens
+
+
+
+context-free start-symbols
+	Module
+	NameTable
+	MN-struct
+
+variables
+	"Module"[0-9]* -> Module
+	"Nametable"[0-9]* -> NameTable
+	"Modid"	-> ModId

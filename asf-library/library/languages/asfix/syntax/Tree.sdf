@@ -3,7 +3,6 @@ module languages/asfix/syntax/Tree
 imports languages/asfix/syntax/Annotations
 imports languages/asfix/syntax/Symbol
 imports languages/asfix/syntax/Attributes
-imports languages/aterm/syntax/Literals
 
 exports
 
@@ -13,7 +12,6 @@ context-free syntax
 
 appl(prod:Production,args:Args) -> Tree {cons("appl")}
 character:NatCon                -> Tree {cons("char")}
-lit(string:QLiteral)            -> Tree {cons("lit")}
 amb(args:Args)                  -> Tree {cons("amb")}
 "[" {Tree ","}* "]"             -> Args {cons("list")}
 
@@ -24,3 +22,4 @@ hiddens
 
 context-free start-symbols
   Tree
+

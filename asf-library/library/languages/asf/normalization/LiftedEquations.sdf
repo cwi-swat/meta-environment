@@ -1,0 +1,35 @@
+module languages/asf/normalization/LiftedEquations
+
+imports languages/asf/normalization/RenamedTree
+imports languages/asf/normalization/RenamedASF[P-Tree]
+
+exports
+
+context-free syntax
+
+equation(P-Tree) -> Equation
+condition(P-Tree) -> Condition
+
+get-lhs(Equation) -> P-Tree
+get-rhs(Equation) -> P-Tree
+set-lhs(Equation,P-Tree) -> Equation
+set-rhs(Equation,P-Tree) -> Equation
+
+hiddens
+
+variables
+
+"Prod"[\']* -> P-Production {strict}
+"Lhs"[\']* -> P-Tree {strict}
+"Rhs"[\']* -> P-Tree {strict}
+"Symbol"[\']* -> P-Symbol {strict}
+"Lit"[\']* -> P-Tree {strict}
+"Ws"[0-9]* -> P-Tree {strict}
+
+variables
+
+"_Ws"[0-9]* -> P-Tree {wild}
+"_Prod"[\']* -> P-Production {wild}
+"_Lhs"[\']* -> P-Tree {wild}
+"_Rhs"[\']* -> P-Tree {wild}
+"_Lit"[\']* -> P-Tree {wild}

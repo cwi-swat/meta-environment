@@ -8,8 +8,7 @@ exports sorts Bytes
 
 exports
   context-free syntax
-    string-to-bytes(String) -> Bytes 
-
+     string-to-bytes(String) -> Bytes 
      bytes-to-string(Bytes) -> String 
 
      num-of-bytes(Bytes)        -> Integer 
@@ -25,20 +24,24 @@ hiddens
   imports basic/Comments
 
   context-free syntax
-    chars-to-bytes(String) -> Bytes 
+    strchar-to-byte(StrChar) -> Byte
+    byte-to-strchar(Byte) -> StrChar
 
-    octal-to-byte(Integer) -> Byte {memo}
+    decimal-to-byte(Integer) -> Byte {memo}
+    byte-to-decimal(Byte) -> Integer {memo}
 
-    bytes-to-chars(Bytes)    -> String  
-    octal-to-string(Integer) -> String 
-
-    byte-to-octal(Byte) -> Integer {memo}
-
+  lexical variables
+    "n"[0-9]*  -> ~[\0-\31\"\\\n]
+    "a"[0-9]*  -> [0-9]
+    "c*"[0-9]* -> StrChar* 
+    "b*"[0-9]* -> Byte*
+    "b"[0-9]* -> ~[]
+    "c"[0-9]* -> StrChar
+    "byte"[0-9\']* -> Byte
+    "d"[0-9]* -> [0-9]+
+    
   variables
     "string"[0-9\']* -> String
     "bytes"[0-9\']* -> Bytes
-    "char*"[0-9\']* -> CHAR*
-    "char+"[0-9\']* -> CHAR+
-    "char"[0-9\']* -> CHAR
     "n"[0-9\']* -> Integer
 	

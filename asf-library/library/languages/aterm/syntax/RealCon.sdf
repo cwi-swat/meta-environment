@@ -13,4 +13,4 @@ exports
     "e" IntCon -> OptExp {cons("present")}
                -> OptExp {cons("absent")}
 
-    IntCon "." NatCon OptExp  -> RealCon {cons("real-con")}
+    base:IntCon "." decimal:NatCon exp:OptExp  -> RealCon {cons("real-con")}

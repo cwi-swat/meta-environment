@@ -1,103 +1,136 @@
 equations
 
+[bootstrap-convenience]
+	constructors(Tree) = deconstruct(Tree)
+
 [main]	
-	Module2 := translate(Module),
-	Module3 := fix-list-types(Module2)
-	===>
-	constructors(Module) = Module3
+	constructors(Module) = deconstruct(Module)
 
 equations
 
 %% This function maps lexical constructor syntax back to normal syntax.
 %% The resulting tree are ``as if the parser produced them''.
 
-[translate-lexical]
-	<CCs,Attributes2> := extract-cc(Attributes),
-	Attributes3 := remove-tag(Attributes2),
-	Production2 := prod([Symbol*],lex(Symbol),Attributes3),
-	<Production3, []> := char-classes(Production2, CCs),
-	Args := remove-layout([Tree*])
-	===>
-	translate(appl(prod([lit(_QLit),cf(opt(layout)),lit("("),cf(opt(layout)),Symbol*,cf(opt(layout)),lit(")")],
-		cf(parameterized-sort("CHARS",[Symbol])),Attributes),
-		[_Name,_L1,_BO,_L2,Tree*,_L3,_BC]))
-	=
-	appl(Production3, Args)
+[deconstruct-lexical]
+       attrs([_Attr*1, term(lexical-constructor), _Attr*2]) := Attributes,
+         Symbols2      := get-cons-args(Symbols),
+       Symbols3        := unwrap(Symbols2),
+       Symbol2         := unwrap(Symbol),
+       Attributes2     := remove-tag(Attributes),
 
-[translate-injection]
-	translate(
+       Args2           := get-cons-args(Args),
+       Args3           := reconstruct(Args2)
+       ===>
+       deconstruct(
+       appl(prod(Symbols,cf(parameterized-sort("CHARS",[Symbol])),Attributes),
+               Args)) =
+       appl(prod(Symbols3,lex(Symbol2),Attributes2), Args3)
+
+[deconstruct-injection]
+	deconstruct(
 	appl(prod([cf(parameterized-sort("CHARS",[Symbol]))],cf(Symbol),
 		no-attrs),
 	[Tree])) = 
 	appl(prod([lex(Symbol)],cf(Symbol),no-attrs),[Tree])
 
-[translate-character-escapes-to-real-chars]
-	translate(appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits)])])]))
-= translate-digits(Digits)
+ %% The following is a parse tree of the character notation. There are
+ %% two notations, NumChar and ShortChar. All ShortChars have been normalized
+ %% to NumChars at this point (using the table in the Characters module).
+ %% NumChars look like this for example: \34  for a quote. 
+ %%
+ %% The goal of this equation is to translate the parse tree of \34 to the
+ %% parse tree '34', an actual AsFix representation of the quote. This works
+ %% for all 256 ASCII values.
+ 
+ [deconstruct-character-escapes-to-real-chars]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits)])])])]))
+= 
+	digits(Digits)
 
-[translate-char-lists]
-	Args2 := remove-layout(Args)
-	===>
-	translate(appl(list(cf(iter(sort("CHAR")))),Args)) =
-		appl(list(cf(iter(sort("CHAR")))), Args2)
+[deconstruct-CHAR-variable-to-lexical-variable]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),no-attrs),[appl(prod([varsym(cf(sort("CHAR")))],cf(sort("CHAR")),no-attrs),[appl(prod(Symbols,varsym(cf(sort("CHAR"))),Attributes),Args)])]))
+=
+	appl(prod([varsym(lex(Symbol))],lex(Symbol),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol)),Attributes),Args)])
 
 equations
 
-[top]
-	length(Symbol*1) == length(Tree*1)
-	===>
-	fix-list-types(appl(
-		prod([Symbol*1,lex(iter(PCC)),Symbol*2],Symbol,Attributes),
-		[Tree*1,appl(list(cf(iter(sort("CHAR")))),Args),Tree*2])) =
-	appl(prod([Symbol*1,lex(iter(PCC)),Symbol*2],Symbol,Attributes),
-		[Tree*1,appl(list(lex(iter(PCC))),Args),Tree*2])
+[list-reconstruction]
+       Symbol2 := unwrap(Symbol),
+       Args2 := remove-layout(Args)
+       ===>
+       reconstruct(appl(list(Symbol),Args)) = appl(list(Symbol2),Args2)
+
+[prod-reconstruction]
+       Symbols2 := remove-layout(Symbols),
+       Symbols3 := unwrap(Symbols2),
+       Symbol2 := unwrap(Symbol),
+       Args2 := remove-layout(Args)
+       ===>
+       reconstruct(appl(prod(Symbols,Symbol,Attributes),Args)) =
+       appl(prod(Symbols3,Symbol2,Attributes), Args2)
+
+equations
+
+%% here we mimick some of the sdf2-normalizers funny behaviour. Due to
+%% deconstruct() and reconstruct the following illegal combinations can
+%% be introduced, so we remove them again; similar equations, but on the
+%% SDF2 Symbol level exist in the SDF2 normalizer.
+
+[lex-cc]
+        lex(char-class(CRs)) = char-class(CRs)
+
+[cf-cc]
+        cf(char-class(CRs)) = char-class(CRs)
+
+[lex-lit]
+        lex(lit(QLit)) = lit(QLit)
+
+[cf-lit]
+        cf(lit(QLit)) = lit(QLit)
+
+
+equations
+
+%% These functions are used to remove the prefix function notation of 
+%% lexical constructor functions from the production and the arguments.
+
+[symbols]
+       get-cons-args([lit(_QLit),cf(opt(layout)),lit("("),cf(opt(layout)),
+                       Symbol*,cf(opt(layout)),lit(")")])
+       = remove-layout([Symbol*])
+
+[trees]
+       get-cons-args([_Name,_L1,_BO,_L2,Tree*,_L3,_BC])
+       = remove-layout([Tree*])
+
+equations
+
+%% The essential work is done here, where the CHARS wrapper symbols are
+%% remove to obtain an original AsFix lexical parse tree. We also translate
+%% all cf symbols to lex.
+
+[remove-chars-wrapper]
+      unwrap(parameterized-sort("CHARS",[Symbol])) = Symbol
+
+[put-cf-back-to-lex]
+      unwrap(cf(Symbol)) = lex(Symbol)
 
 equations
 
 %% The digits after the \ in an ASF-NumChar are taken, and an ascii value
-%% is computed from them. Remember the NumChar notation in ASF and SDF2
-%% uses *octal* notation for ASCII values.
+%% is computed from them. 
 
 [one]
 	NatCon2 := NatCon - 48
 	===>
-	translate-digits([NatCon]) = NatCon2
+	digits([NatCon]) = NatCon2
 
 [more]	
-	NatCon2 := translate-digits([Tree*]),
+	NatCon2 := digits([Tree*]),
 	NatCon3 := NatCon - 48,
-	NatCon4 := 8*NatCon2 + NatCon3
+	NatCon4 := 10*NatCon2 + NatCon3
 	===>
-	translate-digits([Tree*, NatCon]) = NatCon4
-
-equations
-
-%% Here we depend on the order of the classes, the tool AddEqsSyntax
-%% is responsible for putting them there in order:
-
-[replace-CHAR-sort-in-order-by-corresponding-classes]
-	char-classes(cf(sort("CHAR")),[CC,CC*]) = <convert-cc(CC),[CC*]>
-
-[replace-iter-char]
-	char-classes(cf(iter(sort("CHAR"))),[CC,CC*]) =
-	  <lex(iter(convert-cc(CC))),[CC*]>
-
-[replace-iter-star-char]
-	char-classes(cf(iter-star(sort("CHAR"))),[CC,CC*]) =
-	  <lex(iter-star(convert-cc(CC))),[CC*]>
-
-equations
-
-[empty-after]
-	extract-cc(attrs([term(char-classes(CCs))])) = <CCs,no-attrs>
-
-[non-empty-after-left]
-	extract-cc(attrs([Attr+,term(char-classes(CCs)),Attr*])) =
-	<CCs,attrs([Attr+,Attr*])>
-
-[non-empty-after-right]
-	extract-cc(attrs([Attr*,term(char-classes(CCs)),Attr+])) =
-	<CCs,attrs([Attr*,Attr+])>
+	digits([Tree*, NatCon]) = NatCon4
 
 equations
 
@@ -114,33 +147,36 @@ equations
 
 equations
 
-[divide]
+%% Lexical constructor functions contain superfluous layout in both
+%% productions and arguments. The following functions remove it.
+
+[divide-cf]
 	remove-layout([
 		Tree*1,
 		appl(prod(_Symbols,cf(opt(layout)),_Attributes),_Args),
 		Tree*2]) =
 	remove-layout([Tree*1, Tree*2])
 
+[divide-lex]
+       remove-layout([
+               Tree*1,
+               appl(prod(_Symbols,lex(opt(layout)),_Attributes),_Args),
+               Tree*2]) =
+       remove-layout([Tree*1, Tree*2])
+
+
 [default]
 	remove-layout([Tree*]) = [Tree*]
-		
+
 equations
 
-[id-cc]
-	convert-cc(char-class([ATerm*])) = char-class(convert-crs([ATerm*]))
+[divide-cf]
+	remove-layout([Symbol*1,cf(opt(layout)),Symbol*2]) =
+	remove-layout([Symbol*1, Symbol*2])
 
-[id-done]
-	convert-crs([]) = []
+[divide-lex]
+	remove-layout([Symbol*1,lex(opt(layout)),Symbol*2]) =
+	remove-layout([Symbol*1, Symbol*2])
 
-[id-crs]
-	CR := convert-cr(ATerm),
-	[CR*] := convert-crs([ATerm*])
-	===>
-	convert-crs([ATerm,ATerm*]) = [CR,CR*]
-
-[single-conversion]
-	convert-cr(NatCon) = NatCon
-
-[range-conversion]
-	convert-cr(range(NatCon1,NatCon2)) = range(NatCon1,NatCon2)
-
+[default]
+	remove-layout(Symbols) = Symbols

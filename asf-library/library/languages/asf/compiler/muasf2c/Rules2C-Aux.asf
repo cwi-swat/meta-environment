@@ -1,0 +1,651 @@
+equations
+
+  [mcr-1'1] make-c-rules() =
+
+  [mcr-1'2] C-rule := make-c-rule(Rule),
+            C-rule* := make-c-rules(Rule*)
+            =============================
+            make-c-rules(Rule;Rule*) = C-rule;C-rule*
+
+equations
+
+  [mcr-2'1] Funid := get-funid(Term1),
+            Term+ := get-funargs(Term1),
+            (Fv-path*,Cenv1) := code-args(Term+,0),
+            Cenv2 := funargs2cexp(Term+,0)
+            =============================
+            make-c-rule(Term1 = Term2) = [Fv-path*||Term2|Cenv1|Cenv2|Funid]
+
+  [mcr-2'2] Funid := get-funid(Term1),
+            get-funargs(Term1) ==
+            ====================
+            make-c-rule(Term1 = Term2) = [||Term2|()|()|Funid]
+
+  [mcr-2'3] Funid := get-funid(Term1),
+            Term+ := get-funargs(Term1),
+            (Fv-path*,Cenv1) := code-args(Term+,0),
+            Cenv2 := funargs2cexp(Term+,0)
+            =============================
+            make-c-rule(Cond* ==> Term1 = Term2) = [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]
+
+  [mcr-2'4] Funid := get-funid(Term1),
+            get-funargs(Term1) ==
+            ====================
+            make-c-rule(Cond* ==> Term1 = Term2) = [|Cond*|Term2|()|()|Funid]
+
+  [mcr-2'5] Funid := get-funid(Term1),
+            Term+ := get-funargs(Term1),
+            (Fv-path*,Cenv1) := code-args(Term+,0),
+            Cenv2 := funargs2cexp(Term+,0)
+            =============================
+            make-c-rule(default:Term1 = Term2) = [Fv-path*||Term2|Cenv1|Cenv2|Funid]
+
+  [mcr-2'6] Funid := get-funid(Term1),
+            get-funargs(Term1) ==
+            ====================
+            make-c-rule(default:Term1 = Term2) = [||Term2|()|()|Funid]
+
+  [mcr-2'7] Funid := get-funid(Term1),
+            Term+ := get-funargs(Term1),
+            (Fv-path*,Cenv1) := code-args(Term+,0),
+            Cenv2 := funargs2cexp(Term+,0)
+            =============================
+            make-c-rule(default:Cond* ==> Term1 = Term2) = [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]
+
+  [mcr-2'8] Funid := get-funid(Term1),
+            get-funargs(Term1) ==
+            ====================
+            make-c-rule(default:Cond* ==> Term1 = Term2) = [|Cond*|Term2|()|()|Funid]
+
+equations
+
+  [ca-1'1] code-args(,Aint*) = (,())
+
+  [ca-1'2] is-var-term(Term) == true,
+           (Fv-path*,Cenv1) := code-args(Term*,Aint*,Aint + 1),
+           $Constant := make-atmp(Aint*,Aint),
+           Cenv2 := Cenv1 ++ ((Term,$Constant))
+           ===================================
+           code-args(Term,Term*,Aint*,Aint) = ((Term,Aint*,Aint),Fv-path*,Cenv2)
+
+  [ca-1'3] is-var-term(Term) == false,
+           get-funargs(Term) == ,
+           (Fv-path*,Cenv) := code-args(Term*,Aint*,Aint + 1)
+           ===================================================
+           code-args(Term,Term*,Aint*,Aint) = ((Term,Aint*,Aint),Fv-path*,Cenv)
+
+  [ca-1'4] is-var-term(Term) == false,
+           Term+ := get-funargs(Term),
+           Funid := get-funid(Term),
+           (Fv-path*1,Cenv1) := code-args(Term+,Aint*,Aint,0),
+           (Fv-path*2,Cenv2) := code-args(Term*,Aint*,Aint + 1)
+           =====================================================
+           code-args(Term,Term*,Aint*,Aint) =
+             (((Funid,Aint*,Aint),Fv-path*1),Fv-path*2,Cenv1++Cenv2)
+
+equations
+
+  [fa2ce-1'1] funargs2cexp(Term,Aint) = 
+	((Term,int2identifier(arg,Aint)))
+
+  [fa2ce-1'2] 
+              Cenv4 := funargs2cexp(Term+,(1+Aint))
+              ======================================
+              funargs2cexp(Term,Term+,Aint) = 
+		((Term,int2identifier(arg,Aint))) ++ Cenv4
+
+equations
+
+  [mce-1'1] is-char(Funid) == true,
+            $ActualArg1 := make-atmp(Aint+),
+            $ActualArg2 := translate-char(Funid)
+            ==================================
+            make-c-expression((Funid,Aint+),Namepair*) =
+              is_char($ActualArg1,$ActualArg2)
+
+  [mce-1'2] $Constant := make-atmp(Aint+),
+            is-char(Funid) == false,
+            Funid2 := get-funid(Funid,Namepair*),
+            Funid3 := remove-returns-list(Funid2)
+            =========================================
+            make-c-expression((Funid,Aint+),Namepair*) =
+              check_sym($Constant,funid2identifier(Funid3) ++ sym)
+
+  [mce-2'1] is-char(Funid) == true,
+            $ActualArg2 := translate-char(Funid)
+            ==================================
+            make-c-expression(Funid,$Expression,Namepair*) =
+              is_char($Expression,$ActualArg2)
+
+  [mce-2'2] is-char(Funid) == false,
+            Funid2 := get-funid(Funid,Namepair*),
+            Funid3 := remove-returns-list(Funid2)
+            =========================================
+            make-c-expression(Funid,$Expression,Namepair*) =
+              check_sym($Expression,funid2identifier(Funid3) ++ sym)
+
+equations
+
+  [go-1'1] get-ofs([Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) = Funid
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [soofa-1'1] select-on-ofs-first-arg() = (,)
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [soofa-1'2] (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule*)
+              ======================================================
+              select-on-ofs-first-arg([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,[|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2)
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [soofa-1'3] is-var-term(Term1) == true,
+              (C-rule*1,C-rule*2) := select-on-ofs-first-arg(C-rule*)
+              ==========================================================
+              select-on-ofs-first-arg([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2)
+
+%% If a rule has not a variable as first argument, its ofs is used to select
+%% the other rules of the set.
+  [soofa-1'4] is-var-term(Term1) == false,
+              Funid2 := get-funid(Term1),
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid2,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg([(Term1,Aint+),Fv-path*|
+                                       Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                 C-rule*2)
+
+  [soofa-1'5] Funid2 := get-funid(Term1),
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid2,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg([((Term1,Aint+),Fv-path+),Fv-path*|
+                                       Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([((Term1,Aint+),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                 C-rule*2)
+
+%% If there are no rewrite rules we are finished.
+  [soofa-2'1] select-on-ofs-first-arg(Funid,) = (,,)
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [soofa-2'2] is-var-term(Term1) == true,
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid1,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg(Funid1,
+                                      [(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,
+                 C-rule*2;[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid],
+                 C-rule*3)
+
+%% If a rule has not a variable as first argument, but the ofs of the first
+%% argument equal the funid looked for this rule is added to the first set.
+  [soofa-2'3] is-var-term(Term1) == false,
+              get-funid(Term1) == Funid1,
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid1,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg(Funid1,[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,C-rule*2,C-rule*3)
+
+%% Otherwise, it is added to the second set.
+  [soofa-2'4] is-var-term(Term1) == false,
+              Funid3 := get-funid(Term1),
+              Funid1 != Funid3,
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid1,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg(Funid1,[(Term1,Aint+),Fv-path*|
+                                              Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,[(Term1,Aint+),Fv-path*|
+                           Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,C-rule*3)
+
+  [soofa-2'5] get-funid(Term1) == Funid1,
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid1,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg(Funid1,[((Term1,Aint+),Fv-path+),Fv-path*|
+                                              Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([((Term1,Aint+),Fv-path+),Fv-path*|
+                  Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                 C-rule*2,C-rule*3)
+
+%% Otherwise, it is added to the second set.
+  [soofa-2'6] Funid3 := get-funid(Term1),
+              Funid1 != Funid3,
+              (C-rule*1,C-rule*2,C-rule*3) := select-on-ofs-first-arg(Funid1,C-rule*)
+              ======================================================================
+              select-on-ofs-first-arg(Funid1,[((Term1,Aint+),Fv-path+),Fv-path*|
+                                              Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,
+                 [((Term1,Aint+),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
+                 C-rule*3)
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [soslp-1'1] select-on-same-list-pat() = (,)
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [soslp-1'2] (C-rule*1,C-rule*2) := select-on-same-list-pat(Fv-path,C-rule*)
+              ==============================================================
+              select-on-same-list-pat([Fv-path,Fv-path*|
+                                       Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([Fv-path,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                 C-rule*2)
+
+%% If there are no rewrite rules we are finished.
+  [soslp-2'1] select-on-same-list-pat(Fv-path,) = (,)
+
+  [soslp-2'2] (C-rule*1,C-rule*2) := select-on-same-list-pat(Fv-path,C-rule*)
+              ==============================================================
+              select-on-same-list-pat(Fv-path,[Fv-path,Fv-path*|
+                                      Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([Fv-path,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                 C-rule*2)
+
+%% Otherwise, it is added to the second set.
+  [soslp-2'3] Fv-path1 != Fv-path2,
+              (C-rule*1,C-rule*2) := select-on-same-list-pat(Fv-path1,C-rule*)
+              ===============================================================
+              select-on-same-list-pat(Fv-path1,[Fv-path2,Fv-path*|
+                                      Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,
+                 [Fv-path2,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2)
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [rofa-1'1] remove-ofs-first-arg() =
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [rofa-1'2] C-rule*2 := remove-ofs-first-arg(C-rule*1)
+             =========================================
+             remove-ofs-first-arg([(Term1,Aint+),Fv-path+|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
+               [Fv-path+|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
+
+  [rofa-1'3] C-rule*2 := remove-ofs-first-arg(C-rule*1)
+             =========================================
+             remove-ofs-first-arg([((Term1,Aint+),Fv-path+),Fv-path*|
+                                   Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
+               [Fv-path+,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [rfa-1'1] remove-first-arg() =
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [rfa-1'2] C-rule*2 := remove-first-arg(C-rule*1)
+            ====================================
+            remove-first-arg([Fv-path,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
+               [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
+
+equations
+
+  [gfvp-1'1] get-first-vf-path([(Term1,Aint+),Fv-path*|
+                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint+)
+
+  [gfvp-1'2] get-first-vf-path([((Term1,Aint+),Fv-path+),Fv-path*|
+                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint+)
+
+equations
+
+  [isvp-1'1] is-single-vf-path([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = true
+
+  [default-isvp-1'2] is-single-vf-path(C-rule+) = false
+
+equations
+
+  [isvp-1'1] is-empty-vf-path([|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = true
+
+  [default-isvp-1'2] is-empty-vf-path(C-rule+) = false
+
+equations
+
+  [ma-1'1] make-atmp(Int) = int2identifier(arg,Int)
+
+  [ma-1'2] Identifier := make-atmp2(Aint+)
+           ======================================
+           make-atmp(Aint+,Int) = int2identifiersep(Identifier, Int)
+
+equations
+
+  [ma-2'1] make-atmp2(Int) = int2identifiersep(atmp,Int)
+
+  [ma-2'1] Identifier := make-atmp2(Aint+)
+           ======================================
+           make-atmp2(Aint+,Int) = 
+		int2identifiersep(Identifier, Int)
+
+equations
+
+  [mss-1'1] make-select-stat(Aint) =
+
+  [mss-1'2] 
+            $Constant' := make-atmp2(Aint+,Aint),
+            $Constant'' := make-atmp(Aint+)
+            =============================
+            make-select-stat(Aint+,Aint) =
+              ATerm $Constant' = int2identifiersep(arg,Aint)($Constant'');
+
+equations
+
+  %% we make different select stats for ignored function symbols. Their
+  %% arguments are selected already, we only need the correct variables to be
+  %% declared. 
+
+  [miss-1'1] make-ignored-select-stat(Aint) =
+
+  [miss-1'2] $Constant' := make-atmp2(Aint+,Aint),
+            $Constant'' := make-atmp(Aint+)
+            =============================
+            make-ignored-select-stat(Aint+,Aint) =
+              ATerm $Constant' = $Constant'';
+
+equations
+
+  [mad-1'1] $Constant := make-atmp2(Aint+,Aint)
+            ==================================
+            make-array-decl(Aint+,Aint) =
+              ATerm $Constant[2];
+
+equations
+
+  [md-1'1] $Constant := make-atmp2(Aint+,Aint)
+           ===================================
+           make-decl(Aint+,Aint) =
+              ATerm $Constant;
+
+equations
+
+  [soc-1'1] select-on-conds() = (,)
+
+  [soc-1'2] (C-rule*1,C-rule*2) := select-on-conds(C-rule*)
+            ==============================================
+            select-on-conds([Fv-path*||Term2|Cenv1|Cenv2|Funid]; C-rule*) =
+              (C-rule*1,[Fv-path*||Term2|Cenv1|Cenv2|Funid]; C-rule*2)
+
+  [soc-1'3] (C-rule*1,C-rule*2) := select-on-conds(C-rule*)
+            ==============================================
+            select-on-conds([Fv-path*|Cond+|Term2|Cenv1|Cenv2|Funid]; C-rule*) =
+              ([Fv-path*|Cond+|Term2|Cenv1|Cenv2|Funid]; C-rule*1,C-rule*2)
+
+equations
+
+%% Selecting all conditional rewrite rules with the same left-hand side
+%% in the first condition.
+%% The first element of the {\tt RuleTuple} contains in this
+%% case all conditional rewrite rules which have the same left-hand side
+%% in its first condition,
+%% the second argument contains all other conditional rewrite rules.
+  [sslc-1'1] select-same-lhs-cond(C-rule,) = (C-rule,)
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] (C-rule*1,C-rule*2) := select-same-lhs-cond(C-rule,
+                                  C-rule*)
+             ===================================================
+             select-same-lhs-cond(C-rule,C-rule; C-rule*) =
+               (C-rule*1,C-rule*2)
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'3] C-rule1 != C-rule2,
+             [Fv-path*1|Ct-lhs1 =: Ct-rhs1 & Cond*1|Term1|Cenv1|Cenv2|Funid1] := C-rule1,
+             [Fv-path*2|Ct-lhs2 =: Ct-rhs2 & Cond*2|Term2|Cenv3|Cenv4|Funid2] := C-rule2,
+             Ct-lhs1 == Ct-lhs2,
+             (C-rule*1,C-rule*2) := select-same-lhs-cond(C-rule1,
+                                  C-rule*)
+             ===================================================
+             select-same-lhs-cond(C-rule1,C-rule2; C-rule*) =
+               (C-rule2; C-rule*1,C-rule*2)
+
+  [sslc-1'4] C-rule1 != C-rule2,
+             [Fv-path*1|Ct-lhs1 =: Ct-rhs1 & Cond*1|Term1|Cenv1|Cenv2|Funid1] := C-rule1,
+             [Fv-path*2| |Term2|Cenv3|Cenv4|Funid2] := C-rule2,
+             (C-rule*1,C-rule*2) := select-same-lhs-cond(C-rule1,
+                                  C-rule*)
+             ===================================================
+             select-same-lhs-cond(C-rule1,C-rule2; C-rule*) =
+               (C-rule*1,C-rule2; C-rule*2)
+
+%% The left-hand side differ, so it is added to the second list
+%% in the tuple.
+  [sslc-1'5] Ct-lhs1 != Ct-lhs2,
+             (C-rule*1,C-rule*2) := select-same-lhs-cond([Fv-path*1|Ct-lhs1 =: Ct-rhs1 & Cond*1|
+                                  Term1|Cenv1|Cenv2|Funid1],
+                                  C-rule*)
+             ===================================================
+             select-same-lhs-cond([Fv-path*1|Ct-lhs1 =: Ct-rhs1 & Cond*1|
+                                   Term1|Cenv1|Cenv2|Funid1],
+                                  [Fv-path*2|Ct-lhs2 =: Ct-rhs2 & Cond*2|
+                                   Term2|Cenv3|Cenv4|Funid2]; C-rule*) =
+               (C-rule*1,[Fv-path*2|Ct-lhs2 =: Ct-rhs2 & Cond*2|
+                          Term2|Cenv3|Cenv4|Funid2]; C-rule*2)
+
+equations
+
+%% Selecting all conditional rewrite rules with the same left-hand side
+%% in the first condition.
+%% The first element of the {\tt RuleTuple} contains in this
+%% case all conditional rewrite rules which have the same left-hand side
+%% in its first condition,
+%% the second argument contains all other conditional rewrite rules.
+  [sslc-1'1] select-same-rhs-cond(C-rule,) = (C-rule,)
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] (C-rule*1,C-rule*2) := select-same-rhs-cond(C-rule,
+                                  C-rule*)
+             ===================================================
+             select-same-rhs-cond(C-rule,C-rule; C-rule*) =
+               (C-rule*1,C-rule*2)
+
+  [sslc-1'3] C-rule1 != C-rule2,
+             [Fv-path*1|Ct-lhs1 =: Ct-rhs1 & Cond*1|Term1|Cenv1|Cenv2|Funid1] := C-rule1,
+             [Fv-path*2|Ct-lhs2 =: Ct-rhs2 & Cond*2|Term2|Cenv3|Cenv4|Funid2] := C-rule2,
+             Ct-lhs1 == Ct-lhs2,
+             Ct-rhs1 == Ct-rhs2,
+             (C-rule*1,C-rule*2) := select-same-rhs-cond(C-rule1,
+                                  C-rule*)
+             ===================================================
+             select-same-rhs-cond(C-rule1,
+                                  C-rule2; C-rule*) =
+               (C-rule2; C-rule*1,C-rule*2)
+
+%% The left-hand side differ, so it is added to the second list
+%% in the tuple.
+  [sslc-1'4] Ct-rhs1 != Ct-rhs2,
+             (C-rule*1,C-rule*2) := select-same-rhs-cond([Fv-path*1|Ct-lhs =: Ct-rhs1 & Cond*1|
+                                  Term1|Cenv1|Cenv2|Funid1],
+                                  C-rule*)
+             ===================================================
+             select-same-rhs-cond([Fv-path*1|Ct-lhs =: Ct-rhs1 & Cond*1|
+                                   Term1|Cenv1|Cenv2|Funid1],
+                                  [Fv-path*2|Ct-lhs =: Ct-rhs2 & Cond*2|
+                                   Term2|Cenv3|Cenv4|Funid2]; C-rule*) =
+               (C-rule*1,[Fv-path*2|Ct-lhs =: Ct-rhs2 & Cond*2|
+                          Term2|Cenv3|Cenv4|Funid2]; C-rule*2)
+
+equations
+
+  [sslc-1'1] select-conds-on-first-term(Term,) = (,)
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] (C-rule*1,C-rule*2) := select-conds-on-first-term(Term,
+                                       C-rule*)
+             ========================================================
+             select-conds-on-first-term(Term,
+                                       [Fv-path*2|term-equal(Term,Term2) =: Ct-rhs2 & Cond*2|
+                                        Term4|Cenv3|Cenv4|Funid]; C-rule*) =
+               ([Fv-path*2|term-equal(Term,Term2) =: Ct-rhs2 & Cond*2|
+                 Term4|Cenv3|Cenv4|Funid]; C-rule*1,C-rule*2)
+
+%% The left-hand side differ, so it is added to the second list
+%% in the tuple.
+  [default-sslc-1'3] (C-rule*1,C-rule*2) := select-conds-on-first-term(Term1,
+                                                C-rule*)
+                     ========================================================
+                     select-conds-on-first-term(Term1,
+                                                [Fv-path*|Cond*|
+                                                 Term4|Cenv3|Cenv4|Funid]; C-rule*) =
+                       (C-rule*1,[Fv-path*|Cond*|Term4|Cenv3|Cenv4|Funid]; C-rule*2)
+
+equations
+
+  [sslc-1'1] select-conds-on-second-term(Term,) = (,)
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] (C-rule*1,C-rule*2) := select-conds-on-second-term(Term,
+                                         C-rule*)
+             ==========================================================
+             select-conds-on-second-term(Term,
+                                       [Fv-path*2|term-equal(Term1,Term) =: Ct-rhs2 & Cond*2|
+                                        Term4|Cenv3|Cenv4|Funid]; C-rule*) =
+               ([Fv-path*2|term-equal(Term1,Term) =: Ct-rhs2 & Cond*2|
+                 Term4|Cenv3|Cenv4|Funid]; C-rule*1,C-rule*2)
+
+%% The left-hand side differ, so it is added to the second list
+%% in the tuple.
+  [default-sslc-1'3] (C-rule*1,C-rule*2) := select-conds-on-second-term(Term1,
+                                                 C-rule*)
+                     ==========================================================
+                     select-conds-on-second-term(Term1,
+                                                 [Fv-path*|Cond*|
+                                                  Term4|Cenv3|Cenv4|Funid]; C-rule*) =
+                       (C-rule*1,[Fv-path*|Cond*|Term4|Cenv3|Cenv4|Funid]; C-rule*2)
+
+equations
+
+  [sslc-1'1] replace-first-term(Term,Cenv,) =
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] C-rule*2 := replace-first-term(Term1,Cenv1,C-rule*1)
+             ===================================================
+             replace-first-term(Term1,Cenv1,
+                                [Fv-path*2|term-equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
+                                       Term4|Cenv2|Cenv3|Funid]; C-rule*1) =
+               [Fv-path*2|term-equal(Term1,Term3) =: Ct-rhs2 & Cond*2|
+                Term4|Cenv2++Cenv1|Cenv3++Cenv1|Funid]; C-rule*2
+
+equations
+
+  [sslc-1'1] replace-second-term(Term,Cenv,) =
+
+%% The left-hand side matches so the rule is added to the
+%% first list in the tuple.
+  [sslc-1'2] C-rule*2 := replace-second-term(Term1,Cenv1,C-rule*1)
+             ====================================================
+             replace-second-term(Term1,Cenv1,
+                                 [Fv-path*2|term-equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
+                                  Term4|Cenv2|Cenv3|Funid]; C-rule*1) =
+               [Fv-path*2|term-equal(Term2,Term1) =: Ct-rhs2 & Cond*2|
+                Term4|Cenv2++Cenv1|Cenv3++Cenv1|Funid]; C-rule*2
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [rfc-1'1] remove-first-cond() =
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [rfc-1'2] C-rule*2 := remove-first-cond(C-rule*1)
+            ======================================
+            remove-first-cond([Fv-path*|Cond & Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
+               [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [rfc-2'1] remove-first-cond-and-add-env(,Cenv) =
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [rfc-2'2] C-rule*2 := remove-first-cond-and-add-env(C-rule*1,Cenv)
+            =======================================================
+            remove-first-cond-and-add-env([Fv-path*|Cond & Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,Cenv) =
+               [Fv-path*|Cond*|Term2|Cenv1++Cenv|Cenv2++Cenv|Funid];C-rule*2
+
+equations
+
+%% If there are no rewrite rules we are finished.
+  [ae-2'1] add-env(,Cenv) =
+
+%% If a rule has a variable as first argument it is appended to the second set.
+  [ae-2'2] C-rule*2 := add-env(C-rule*1,Cenv)
+           =================================
+           add-env([Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,Cenv) =
+               [Fv-path*|Cond*|Term2|Cenv1++Cenv|Cenv2++Cenv|Funid];C-rule*2
+
+equations
+
+  [mc-1'1] Stat*2 := remove-c-brackets(Stat*1)
+           ==================================
+           make-cond($Ltest,Stat*1) = if($Ltest) {Stat*2}
+
+  [mc-1'2] make-cond($Ltest,Stat*,) = make-cond($Ltest,Stat*)
+
+  [mc-1'3] Stat*3 := remove-c-brackets(Stat*1),
+           Stat*4 := remove-c-brackets(Stat*2),
+           Stat*5 := if($Ltest) {Stat*3} ++ Stat*4
+           =====================================
+           make-cond($Ltest,Stat*1,Stat*2) = Stat*5
+
+  [mc-2'1] make-cond(Stat+0 if($Ltest) {Stat*1},) = Stat+0 if($Ltest) {Stat*1}
+
+  [mc-2'2] Stat*3 := remove-c-brackets(Stat*2),
+           Stat*4 := Stat+0 if($Ltest) {Stat*1} ++ Stat*3
+           ============================================
+           make-cond(Stat+0 if($Ltest) {Stat*1},Stat*2) = Stat*4
+
+  [default-mc-2'3] make-cond(Stat+1,Stat*2) = {Stat+1 ++ Stat*2}
+
+equations
+
+  [rb-1'1] remove-c-brackets({Stat*}) = Stat*
+
+  [rb-1'2] Stat := Decl* ++d Stat*
+           ======================
+           remove-c-brackets({Decl* Stat*}) = Stat
+
+  [default-rb-1'3] remove-c-brackets(Stat*) = Stat*
+
+equations
+
+  [mta-1'1] make-tmp-array(0) =
+
+  [default-mta-1'2] make-tmp-array(natcon(d+)) =
+                      ATerm tmp[integer-constant(d+)];
+
+  [mta-1'1] make-ltmp-array(0) =
+
+  [default-mta-1'2] make-ltmp-array(natcon(d+)) =
+                      ATerm ltmp[integer-constant(d+)];
+
+equations
+
+  [mc-1'1] Stat*2 := remove-c-brackets(Stat*1)
+           ==================================
+           make-if-then-else($Ltest,Stat*1) = if($Ltest) {Stat*2}
+
+  [mc-3'1] make-if-then-else(t,$Ltest,Stat*1,) = make-if-then-else($Ltest,Stat*1)
+
+  [mc-3'2] make-if-then-else(f,$Ltest,Stat*1,) = make-if-then-else(!$Ltest,Stat*1)
+
+  [mc-3'3] Stat*3 := remove-c-brackets(Stat*1),
+           Stat*2 != ,
+           Stat*4 := remove-c-brackets(Stat*2)
+           ==================================
+           make-if-then-else(t,$Ltest,Stat*1,Stat*2) = if($Ltest) {Stat*3} else {Stat*4}
+
+  [mc-3'4] Stat*3 := remove-c-brackets(Stat*1),
+           Stat*2 != ,
+           Stat*4 := remove-c-brackets(Stat*2)
+           ==================================
+           make-if-then-else(f,$Ltest,Stat*1,Stat*2) = if(!$Ltest) {Stat*3} else {Stat*4}
+
+equations
+
+  [ca-1'1] cnt-args() = 0
+
+  [ca-1'2] cnt-args($ActualArg,$ActualArg*) = 1 + cnt-args($ActualArg*)
+

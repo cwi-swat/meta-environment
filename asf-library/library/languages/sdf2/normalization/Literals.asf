@@ -2,16 +2,6 @@
 
 equations
 
-%% \smallskip\noindent
-%% Unquoted literals are translated to quoted literals.
-
-%% This rule also quoted ATerms in the attributes, which is not wanted!
-%%  [0] uqliteral(c+) = qliteral(""" c+ """)
-
-%% So, we introduce a new function for symbols that quots unquoted literal symbols
-[0] q[[_G]] = quotes(_G)
-[0] quotes(uqliteral(c+)) = qliteral(""" c+ """)
-
 %% The function $\mfun{l}\sem{\_}$ generates a production for each literal symbol
 %% in the grammar.
 %% The production generated for a literal $L$ has the form $\alpha\to{}L$, where
@@ -34,26 +24,61 @@ equations
 %% to an escaped short-character, which succeeds for all other characters.
 %% Characters that are already escaped are handled by the second equation.
 
-  [0]
-        chars( "" )  =
-  [0]
-        cc := [shortchar("\" c)]
-        =======================================================================
-        chars( qliteral(""" "\" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
-  [0]
-        cc := [shortchar(c)], [numchar(c+)] := cc
+  [empty]
+        chars("")  =
+
+  [newline]
+        cc := [shortchar(\\ n)]
+        ===========================================
+        chars(strcon(\" strchar(\n) C* \")) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [tab]
+        cc := [shortchar(\\ t)]
+        ===========================================
+        chars(strcon(\" strchar(\t) C* \")) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [quote]
+        cc := [shortchar(\\ \")]
+        ===========================================
+        chars(strcon(\" strchar(\") C* \")) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [backslash]
+        cc := [shortchar(\\ \\)]
+        ===========================================
+        chars(strcon(\" strchar(\\) C* \")) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [normal]
+        cc := [shortchar(h)], [numchar(\\ d+)] := cc
         ====================================================================
-         chars( qliteral(""" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
-  [default-0]
-        cc := [shortchar("\" c )],
-        'a := chars( qliteral(""" c* """) )
+        chars(strcon(\" strchar(h) C* \") ) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [default-special]
+        cc := [shortchar(\\ h)], [numchar(\\ d+)] := cc
+        ====================================================================
+        chars(strcon(\" strchar(h) C* \") ) = 
+	cc ++ chars( strcon(\" C* \") )
+
+  [octal]
+        cc := [numchar(\\ d1 d2 d3 )]
         =========================================
-        chars( qliteral(""" c c* """) ) = cc ++ 'a
+        chars( strcon(\" strchar(\ d1 d2 d3) C* \") ) = 
+	cc ++ chars(strcon(\" C* \"))
 
-%% Prefix function productions are translated to normal productions by enclosing
-%% the parentheses and commas in double quotes.
+%% Prefix function productions are translated to normal productions by 
+%% enclosing the parentheses and commas in double quotes.
 
-  [0] L ('g) -> _A!       = L "(" ++ symbols('g) ++ ")" -> _A!
+  [0] I ('g) -> _A!       = id2str(I) "(" ++ symbols('g) ++ ")" -> _A!
+  [0] $L ('g) -> _A! 	  = $L "(" ++ symbols('g) ++ ")" -> _A!
+
   [0] symbols()           =
   [0] symbols(_A)         = _A
   [0] symbols('g+1, 'g+2) = symbols('g+1) ++ "," ++ symbols('g+2)
+
+  [0] id2str(idcon(h)) = strcon(\" strchar(h) \")
+  [0] id2str(idcon(h1 h2 t)) = strcon(\" strchar(h1) C* \")
+	when strcon(\" C* \") := id2str(idcon(h2 t))

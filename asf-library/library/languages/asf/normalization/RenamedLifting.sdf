@@ -1,0 +1,14 @@
+module languages/asf/normalization/RenamedLifting[X]
+
+%% There is a copy of this renaming in RenamedTree
+
+imports utilities/Lifting[X][
+	Tree => P-Tree
+	Args => P-Args
+	Symbol => P-Symbol
+	Symbols => P-Symbols
+	Attributes => P-Attributes
+	Attr => P-Attr
+	Attrs => P-Attrs
+	Production => P-Production
+]

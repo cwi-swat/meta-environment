@@ -4,7 +4,7 @@ imports basic/BoolCon
 exports
   sorts Boolean
 
-  context-free syntax
+   context-free syntax
     BoolCon                     -> Boolean {cons("constant")}
     lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
     lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
@@ -21,6 +21,7 @@ hiddens
   imports
     basic/Comments
   variables
-    "Bool"[0-9]* 	-> Boolean
-    "Bool-con"[0-9]* 	-> BoolCon
+    "Bool" -> Boolean
+
+ 
 

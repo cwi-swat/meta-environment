@@ -1,0 +1,25 @@
+equations
+
+[m2m-1'1]
+module Modid signature Funcdef+ rules Rule+ := Module1,
+Module111 := add-builtin-equations(Module1),
+Module11 := fix-tupled-traversals(Module111),
+(Module2, Nametable2) := find-constructors(Module11,Nametable),
+Module3 := add-list-cons(Module2),
+Module31 := add-type-checks(Module3,Nametable),
+Module32 := remove-types(Module31),
+%% optimization disabled for bootstrapping and debugging purposes
+%%<Module4, Nametable3> := optimize-muasf(Module32,Nametable2),
+<Module4, Nametable3> := <Module32, Nametable2>,
+Module5 := make-matching-conds(Module4),
+(Module55,Nametable33) := translate-no-match(Module5,Nametable3),
+Module6 := make-left-linear(Module55),
+Module7 := remove-list-matching(Module6),
+Module71 := fix-returns-list-functions(Module7),
+Module8 := normalize-conditions(Module71)
+===>
+muasf2muasf(Module1, Nametable) =  (Module8, Nametable33)
+
+[default-0]
+muasf2muasf(Module, Nametable) = (Module,Nametable)
+

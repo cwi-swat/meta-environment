@@ -1,6 +1,8 @@
 equations
 
-  [1] natcon("0" y) = natcon(y)
+%% Removing extra 0's on Integers:
+
+  [1]   natcon(0y) = Nat when Nat := natcon(y)
 
 %% -- addition --
    [2]    0 + Nat = Nat
@@ -34,17 +36,17 @@ equations
    [82]   9 + 7 = 16    [83]   9 + 8 = 17    [84]   9 + 9 = 18
 
    [85a]  natcon(x c) := natcon(c1) + natcon(c2),
-          natcon(y) := natcon (y1) + natcon(y2) + natcon("0" x)
+          natcon(y) := natcon (y1) + natcon(y2) + natcon(0 x)
           ========================================================
           natcon(y1 c1) + natcon(y2 c2) = natcon(y c)
 
    [85b]  natcon(x c) := natcon(c1) + natcon(c2),
-          natcon(y) := natcon(y2) + natcon("0" x)
+          natcon(y) := natcon(y2) + natcon(0 x)
           ======================================
           natcon(c1) + natcon(y2 c2) = natcon(y c)
 
    [85c]  natcon(x c) := natcon(c1) + natcon(c2),
-          natcon(y) := natcon(y1) + natcon("0" x)
+          natcon(y) := natcon(y1) + natcon(0 x)
           ======================================
           natcon(y1 c1) + natcon(c2) = natcon(y c)
 
@@ -89,13 +91,13 @@ equations
    [138]  natcon(c1) >- natcon(c2) = natcon(c1) -// natcon(c2)
 
    [139a] natcon(c3)    := natcon(c1)  -// natcon(c2),
-          natcon(y) := natcon (y1) >- natcon("0" x2)
+          natcon(y) := natcon (y1) >- natcon(0 x2)
           ==================================================
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c3)
 
    [139b] natcon(c3) := natcon(c2)  -// natcon(c1),
           natcon(c) := 10 -// natcon(c3),
-          Nat := natcon ("0" x2) + 1,
+          Nat := natcon (0 x2) + 1,
           natcon(y) := natcon(y1) >- Nat
           ==================================================
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c)
@@ -121,7 +123,7 @@ equations
    [147] natcon(y) := natcon(y1) * natcon(y2)
          ========================================================
          natcon(y1) * natcon(y2 c) =
-                        natcon(y "0") + natcon(y1) * natcon(c)
+                        natcon(y 0) + natcon(y1) * natcon(c)
 
 %% -- addition,  subtraction, and multiplication of integers
    [148]  +Nat = Nat
@@ -157,58 +159,10 @@ equations
    [168] max(Int1, Int2) = Int1 when Int1 > Int2 == true
    [default] max(Int1, Int2) = Int2
 
-%% Division, remainder
-
-   [qr-0] 
-   n3 rem n4 := quotrem(n1,n2)
-   ===>
-   quotrem(-n1,n2) = -n3 rem -n4 
-
-   [qr-1] 
-   n3 rem n4 := quotrem(n1,n2)
-   ===>
-   quotrem(-n1,-n2)  = n3 rem -n4
-
-   [qr-2] 
-   n3 rem n4 := quotrem(n1,n2)
-   ===>
-   quotrem(n1,-n2)   = -n3 rem n4 
-
-   [default] 
-   n2 > 0 == true,
-   n2 > n1 == true
-   ===>
-   quotrem(n1,n2) = 0 rem n1 
-
-   [default] 
-   n2 > 0 == true, 
-   n2 > n1 == false,
-   n3 rem n4 := quotrem(n1-n2,n2)
-   ===>
-   quotrem(n1,n2) = n3+1 rem n4
- 
-   [div-0] Int1 / Int2 = Int3 when Int3 rem Int4 := quotrem(Int1,Int2) 
-   [mod-0] Int1 mod Int2 = Int4 when Int3 rem Int4 := quotrem(Int1,Int2)
-
-%% even, odd
- 
-   [even-minus] even(-n) = even(n)
-   [even-0] even(natcon(x "0")) = true
-   [even-1] even(natcon(x "1")) = false
-   [even-2] even(natcon(x "2")) = true
-   [even-3] even(natcon(x "3")) = false
-   [even-4] even(natcon(x "4")) = true
-   [even-5] even(natcon(x "5")) = false
-   [even-6] even(natcon(x "6")) = true
-   [even-7] even(natcon(x "7")) = false
-   [even-8] even(natcon(x "8")) = true
-   [even-9] even(natcon(x "9")) = false
-   [odd-0] odd(Int) = not(even(Int))
-
 tests
 
 [sanity] 0 != 1
-[leading-zeroes] 007 == 7
+[leading-zeroes] 7 == Nat when Nat := 007
 [addition-with-carry] 189 + 13 == 202
 [subtraction-below-zero] 13 - 189 == -176
 [multiplication] 13 * 17 == 221

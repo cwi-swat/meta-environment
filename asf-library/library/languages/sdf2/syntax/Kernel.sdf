@@ -7,9 +7,10 @@ imports languages/aterm/syntax/ATerms
         languages/sdf2/syntax/Grammars
 
 exports
-  sorts Attribute Attributes Production Productions
+  sorts Attribute ATermAttribute Attributes Production Productions
   context-free syntax
-    aterm:ATerm -> Attribute  {cons("term"),avoid}
+    aterm:ATerm    -> ATermAttribute  {cons("default")}
+    ATermAttribute -> Attribute       {cons("term")}
 
     "{" list:{Attribute ","}* "}" -> Attributes  {cons("attrs")}
                                   -> Attributes  {cons("no-attrs")}

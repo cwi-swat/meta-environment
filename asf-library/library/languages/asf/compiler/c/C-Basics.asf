@@ -1,0 +1,190 @@
+equations
+
+[fwd]	int2identifier(Identifier, Nat) = nat2identifier(Identifier, Nat)
+
+[one]
+	nat2identifier(identifier(h t),natcon(d)) = identifier(h t d)
+
+[split]
+	nat2identifier(identifier(h t),natcon(d+1 d+2)) = 
+	identifier(h t t2 t3)
+	when identifier(h t2) := nat2identifier(identifier(h),natcon(d+1)),
+	     identifier(h t3) := nat2identifier(identifier(h),natcon(d+2))
+
+equations
+
+[fwd]   int2identifiersep(Identifier, Nat) = nat2identifiersep(Identifier, Nat)
+
+[fwd]	
+	identifier(X h t) := nat2identifier(X, Nat)
+	===>
+	nat2identifiersep(Identifier, Nat) = Identifier +_+ identifier(h t)
+
+equations
+
+%% NB. This convenience function only accepts identifiers that happen to
+%% start with an I, and end with a list of digits...	
+
+[] identifier2nat(identifier(I 0)) = 0
+[] identifier2nat(identifier(I 1)) = 1
+[] identifier2nat(identifier(I 2)) = 2
+[] identifier2nat(identifier(I 3)) = 3
+[] identifier2nat(identifier(I 4)) = 4
+[] identifier2nat(identifier(I 5)) = 5
+[] identifier2nat(identifier(I 6)) = 6
+[] identifier2nat(identifier(I 7)) = 7
+[] identifier2nat(identifier(I 8)) = 8
+[] identifier2nat(identifier(I 9)) = 9
+[] identifier2nat(identifier(I t+1 t+2)) = natcon(d+1 d+2)
+	when natcon(d+1) := identifier2nat(identifier(I t+1)),
+	     natcon(d+2) := identifier2nat(identifier(I t+2))
+	
+equations
+
+[concat]
+	identifier(h1 t1) ++ identifier(h2 t2) = identifier(h1 t1 h2 t2)
+
+
+[concat-underscore]
+	identifier(h1 t1) +_+ identifier(h2 t2) = identifier(h1 t1 \_ h2 t2)
+
+equations
+
+[done]
+	funid2identifier(idcon(h)) = identifier(h)
+
+[dash]
+	funid2identifier(idcon(h \- T)) = identifier(h \_ t)
+		when identifier(h t) := funid2identifier(idcon(h T))
+
+[default-normal]
+	funid2identifier(idcon(h h2 T)) = identifier(h h2 t)
+		when identifier(h t) := funid2identifier(idcon(h T))
+ 
+
+[traversal]
+	funid2identifier(| Funid TraversalType TraversalStrategy TraversalContinuation|) = funid2identifier(Funid)
+
+[returns-list]
+	funid2identifier([Funid]) = funid2identifier(Funid)
+
+[list]
+	funid2identifier({Funid}) = funid2identifier(Funid)
+
+equations
+
+[concat]
+	identifier(h1 t1) + identifier(h2 t2) = identifier(h1 t1 h2 t2)
+
+equations
+
+  [ctu-1'1] ++ Decl* = Decl*
+
+  [ctu-1'2] Decl* ++ = Decl*
+
+  [ctu-1'4] Decl+1 ++ Decl+2 = Decl+1 Decl+2
+
+equations
+
+  [cslo-1'1] ++ Stat* = Stat*
+
+  [cslo-1'2] Stat* ++ = Stat*
+
+  [cslo-1'4] Stat+1 ++ Stat+2  = Stat+1 Stat+2
+
+equations
+
+  [cslr-1'1] ++r Stat* = Stat*
+
+
+  [cslr-1'2] return $Exp; ++r Stat* = return $Exp;
+
+  [cslr-1'3] Stat+ return $Exp; ++r Stat* = Stat+ return $Exp;
+
+  [cslr-1'4] {return $Exp;} ++r Stat* = {return $Exp;}
+
+  [cslr-1'5] {Stat+ return $Exp;} ++r Stat* = {Stat+ return $Exp;}
+
+  [cslr-1'6] Stat+ {return $Exp;} ++r Stat* = Stat+ {return $Exp;}
+
+  [cslr-1'7] Stat+1 {Stat+2 return $Exp;} ++r Stat* = Stat+1 {Stat+2 return $Exp;}
+
+  [default-cslr-1'8] Stat+ ++r Stat* = Stat+ ++ Stat*
+
+equations
+
+
+  [caelo-1'1] ActualArg*1 ++ ActualArg*2 = ActualArg*1, ActualArg*2
+
+
+equations
+
+  [cdlo-1'1] ++d {Stat+} = Stat+
+
+  [default-cdlo-1'2] ++d Stat+ = Stat+
+
+  [cdlo-1'3] Decl+ ++d {Stat+} = {Decl+ Stat+}
+
+  [default-cdlo-1'4] Decl+ ++d Stat+ = {Decl+ Stat+}
+
+equations
+
+  [fac-1'1] FormalArg ++ FormalArg+ = FormalArg , FormalArg+
+
+  [cec-1'1] (Tepair*1) ++ (Tepair*2) = (Tepair*1,Tepair*2)
+
+equations
+
+  [cel-1'1] celookup(Term,((Term,$Exp),Tepair*)) = ($Exp)
+
+  [cel-1'1] Term1 != Term2
+            ==============
+            celookup(Term1,((Term2,$Exp),Tepair*)) =
+              celookup(Term1,(Tepair*))
+
+equations
+
+  [cel-1'1] cecontains(Term,()) = false
+
+  [cel-1'1] cecontains(Term,((Term,$Exp),Tepair*)) = true
+
+  [cel-1'2] Term1 != Term2
+            ==============
+            cecontains(Term1,((Term2,$Exp),Tepair*)) =
+              cecontains(Term1,(Tepair*))
+
+equations
+
+  [mct-1'1] make-c-temp(natcon(d+)) = tmp[integer-constant(d+)]
+
+  [mci-1'1] make-call-id({Funid}) = make-call-id(Funid)
+
+  [mci-1'2] make-call-id([Funid]) = make-call-id(Funid)
+
+  [mci-1'3] make-call-id(Strcon) = Strcon
+
+   [default-mci] make-call-id(Funid) = funid2identifier(Funid)
+
+equations
+
+  [done]
+	make-id-name(identifier(h)) = idcon(h)
+
+  [underscore]
+	make-id-name(identifier(h \_ t)) = idcon(h \- T)
+	when idcon(h T) := make-id-name(identifier(h t))
+
+  [default-normal]
+	make-id-name(identifier(h1 h2 t)) = idcon(h1 \- T)
+	when idcon(h2 T) := make-id-name(identifier(h2 t))
+
+
+equations
+  [ic-1'2] is-char(Nat) = true
+
+  [default-ic-1'3] is-char(Term) = false
+
+equations
+
+  [default-tc] translate-char(natcon(d+)) = integer-constant(d+) 
+

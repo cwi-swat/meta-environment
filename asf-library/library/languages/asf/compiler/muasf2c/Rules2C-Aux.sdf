@@ -1,0 +1,145 @@
+module languages/asf/compiler/muasf2c/Rules2C-Aux
+
+imports basic/Integers
+imports languages/asf/compiler/c/C-Basics
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+
+exports
+  sorts C-Rule C-RuleList C-RuleListPair FV-Path FV-PathList PathList-Cenv
+        SlI-tuple SRI-tuple C-RuleListTriple
+  context-free syntax
+    "(" Term "," {Integer ","}+ ")"                              -> FV-Path
+    {FV-Path ","}*                                            -> FV-PathList
+    "(" {FV-Path ","}+ ")"                                    -> FV-Path
+    "[" {FV-Path ","}* "|" {Cond "&"}* "|"
+        Term "|" C-env "|" C-env "|" FunId "]"                -> C-Rule
+    {C-Rule ";"}*                                             -> C-RuleList
+    "(" {C-Rule ";"}* "," {C-Rule ";"}* ")"                   -> C-RuleListPair
+    "(" {C-Rule ";"}* "," {C-Rule ";"}* "," {C-Rule ";"}* ")" -> C-RuleListTriple
+    "(" FV-PathList "," C-env ")"                             -> PathList-Cenv
+    "(" Statement-list-opt "," Statement-list-opt ","
+        {C-Rule ";"}* "," Integer ")"                          -> SRI-tuple
+    "(" Statement-list-opt "," Integer ")"                     -> SlI-tuple
+
+exports
+  context-free syntax
+    make-c-rules({Rule ";"}*)                           -> C-RuleList
+    make-c-rule(Rule)                                   -> C-Rule
+    code-args({Term ","}*,{Integer ","}*)                -> PathList-Cenv
+    funargs2cexp({Term ","}+,Integer)                    -> C-env
+    make-c-expression(FunId,Expression,{NamePair ","}*) -> Expression
+    make-c-expression(FV-Path,{NamePair ","}*)          -> Expression
+    get-ofs({C-Rule ";"}+)                              -> FunId
+
+exports
+  context-free syntax
+
+    select-on-ofs-first-arg({C-Rule ";"}*)             -> C-RuleListPair
+    select-on-ofs-first-arg(FunId,{C-Rule ";"}*)       -> C-RuleListTriple
+    select-on-same-list-pat({C-Rule ";"}*)             -> C-RuleListPair
+    select-on-same-list-pat(FV-Path,{C-Rule ";"}*)     -> C-RuleListPair
+    select-on-conds({C-Rule ";"}*)                     -> C-RuleListPair
+    select-same-lhs-cond(C-Rule,{C-Rule ";"}*)         -> C-RuleListPair
+    select-same-rhs-cond(C-Rule,{C-Rule ";"}*)         -> C-RuleListPair
+    select-conds-on-first-term(Term,{C-Rule ";"}*)     -> C-RuleListPair
+    select-conds-on-second-term(Term,{C-Rule ";"}*)    -> C-RuleListPair
+    replace-first-term(Term,C-env,{C-Rule ";"}*)       -> C-RuleList
+    replace-second-term(Term,C-env,{C-Rule ";"}*)      -> C-RuleList
+    remove-ofs-first-arg({C-Rule ";"}*)                -> C-RuleList
+    remove-first-arg({C-Rule ";"}*)                    -> C-RuleList
+    remove-first-cond({C-Rule ";"}*)                   -> C-RuleList
+    remove-first-cond-and-add-env({C-Rule ";"}*,C-env) -> C-RuleList
+    add-env({C-Rule ";"}*,C-env)                       -> C-RuleList
+
+exports
+  context-free syntax
+    get-first-vf-path({C-Rule ";"}+)     -> FV-Path
+    is-empty-vf-path({C-Rule ";"}*)      -> Boolean
+    is-single-vf-path({C-Rule ";"}*)     -> Boolean
+    make-atmp({Integer ","}*)             -> Identifier
+    make-atmp2({Integer ","}+)            -> Identifier
+    make-select-stat({Integer ","}*)      -> Declaration-list-opt
+    make-ignored-select-stat({Integer ","}*) -> Declaration-list-opt
+
+    make-array-decl({Integer ","}+)       -> Declaration-list
+    make-decl({Integer ","}+)             -> Declaration-list
+    make-tmp-array(Integer)               -> Declaration-list-opt
+    make-ltmp-array(Integer)              -> Declaration-list-opt
+    cnt-args({Expression ","}*)          -> Integer
+
+exports
+  context-free syntax
+    make-cond(Expression,
+              Statement-list-opt,Statement-list-opt)       -> Statement-list-opt
+    make-cond(Expression,Statement-list-opt)               -> Statement-list-opt
+    make-cond(Statement-list-opt,Statement-list-opt)       -> Statement-list-opt
+    make-if-then-else(Term,Expression, Statement-list-opt,
+                      Statement-list-opt)                  -> Statement-list-opt
+    make-if-then-else(Expression, Statement-list-opt)      -> Statement-list-opt
+exports
+  context-free syntax
+    remove-c-brackets(Statement-list-opt) -> Statement-list-opt
+
+   
+   
+
+hiddens
+  context-free start-symbols
+	PathList-Cenv
+	Boolean
+	Identifier
+
+  variables
+    "C-rule"[0-9]*     -> C-Rule
+    "C-rule*"[0-9]*    -> {C-Rule ";"}*
+    "C-rule+"[0-9]*    -> {C-Rule ";"}+
+    "Fv-path"[0-9]*    -> FV-Path
+    "Fv-path*"[0-9]*   -> {FV-Path ","}*
+    "Fv-path+"[0-9]*   -> {FV-Path ","}+
+    "Aint*"[0-9]*      -> {Integer ","}*
+    "Aint+"[0-9]*      -> {Integer ","}+
+    "Int"[0-9]*        -> Integer
+    "Aexp"[0-9]*       -> Expression
+    "Expr"[0-9]*       -> Expression
+    "$Expression"[0-9]* -> Expression
+    "Cint"[0-9]*       -> Integer-constant
+    "Nat"[0-9]*		-> Natural
+    "$Ltest"[0-9]* -> Expression
+
+hiddens
+  variables
+    "Ct-lhs"[0-9]*  -> Term
+    "Ct-rhs"[0-9]*  -> Term
+    "Arg*"[0-9]* -> {Expression ","}*
+    "Identifier"[0-9]* -> Identifier
+    	"Cond"[0-9]* -> Cond
+	"Cond+"[0-9]* -> {Cond "&"}+
+	"Cond*"[0-9]* -> {Cond "&"}*
+	"Aint"[0-9]* -> Integer
+	"Funid"[0-9]* -> FunId
+	"Namepair*"[0-9]* -> {NamePair ","}*
+	"$Constant"[\']* -> Identifier
+
+variables
+    "Decls"[0-9]*        -> Declaration-list
+    "Decl"[0-9]*         -> Declaration
+    "Decl*"[0-9]*        -> Declaration-list-opt
+    "Decl+"[0-9]*        -> Declaration+
+    "$ActualArg"[0-9]*   -> Expression
+    "$ActualArg*"[0-9]*   -> {Expression ","}*
+    "$ActualArg+"[0-9]*   -> {Expression ","}+
+    "FormalArg+"[0-9\']* -> {Parameter-declaration ","}+
+    "Tepair*"[0-9]*      -> {TE-pair ","}*
+    "Cenv"[0-9]*         -> C-env
+    "Exp"[0-9]*          -> Expression
+
+  lexical variables
+	"d+"[0-9]* -> [0-9]+
+	"d"[0-9]*  -> [0-9]
+	"h"[0-9]* -> [a-zA-Z\_]
+	"t"[0-9]* -> [a-zA-Z\_0-9]*
+	"t+"[0-9]* -> [a-zA-Z\_0-9]+
+	"H"[0-9]* -> [a-zA-Z\-]
+	"T"[0-9]* -> [a-zA-Z\-0-9]*
+	

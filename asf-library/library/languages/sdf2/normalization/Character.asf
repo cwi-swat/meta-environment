@@ -1,11 +1,8 @@
-%%%% $Id$
-
 equations
 
-%% \noindent
 %% Leading zeros are redundant.
 
-  [zeros] numchar("\" "0" c+) = numchar("\" c+)
+  [zeros] numchar(\\ 0 c+) = numchar(\\ c+)
 
 %% The constant $\topchar$ denotes the highest character. In this
 %% setting we define top to be \Char{255} such that all byte represented

@@ -1,5 +1,19 @@
 $Id$
 
+Wed Jan 26 10:13:00 CET 2005 <jurgenv@cwi.nl>
+ * Added specifications: languages/asf/compiler and
+   languages/asf/normalization. The compiler moved from the ASF package.
+   The normalizer is a new tool.
+ * TODO: reimplement muasf2tom.
+ * Reimplemented Bytes, Strings, Integers with structured lexicals
+ * CHANGED escaping notation for StrCon to decimal notation and 
+   simplified the syntax.
+ * Added cons attributes to lexical syntax where needed.
+ * Several big changes in SDF specifications, explained in pgen package.
+ * ASCII module fixed
+ * Pico-syntax imports basic/NatCon and basic/StrCon instead of Strings
+   and Integers such that the syntax does not import equations!
+
 Mon Nov 15 12:47:00 CET 2004 <markvdb@cwi.nl>
  * Merged 1.5 and trunk.
 	
@@ -43,6 +57,7 @@ Mon Sep 20 15:11:34 CEST 2004 <kooiker@cwi.nl>
 
 Thu Sep 16 11:47:47 CEST 2004 <jurgenv@cwi.nl>
  * Added division to basic/Integers
+
 
 Wed Sep  8 16:29:10 CEST 2004 <jurgenv@cwi.nl>
  * added quotrem, /, mod, odd and even to basic/Integers

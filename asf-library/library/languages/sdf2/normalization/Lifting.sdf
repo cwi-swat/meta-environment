@@ -22,6 +22,9 @@ context-free syntax
     symbols2syntax({Symbol ","}+) -> Symbol* 
 
 hiddens
+context-free syntax
+   sort2str(Sort) -> StrCon
+
   variables 
     "_G"[0-9\']*        -> Grammar  
     "_"[ABC][0-9\']*    -> Symbol
@@ -30,5 +33,12 @@ hiddens
     "'"[abc]",+"[0-9]*  -> {Symbol ","}+
     [p][0-9\']*         -> Production 
     [n][0-9\']*         -> NatCon 
-    "c*"[0-9\']*        -> CHAR*
     "Sort"[0-9\']*      -> Sort
+
+  lexical variables
+    "C*"[0-9\']* -> StrChar*
+    "C"[0-9\']* -> StrChar*
+    "h"[0-9]* -> [A-Z]
+    "m*"[0-9]* -> [A-Za-z0-9\-]*
+    "m"[0-9]* -> [A-Za-z0-9\-]
+    "l"[0-9]* -> [A-Za-z0-9]

@@ -2,8 +2,8 @@ module languages/pico/syntax/Pico-Syntax
 
 imports languages/pico/syntax/Pico-Identifiers 
 imports languages/pico/syntax/Pico-Types
-imports basic/Integers 
-imports basic/Strings 
+imports basic/NatCon 
+imports basic/StrCon 
 
 hiddens
   context-free start-symbols 

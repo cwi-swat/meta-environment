@@ -1,0 +1,197 @@
+equations
+
+  [so2c-1'1] CConstant := modname2iname(Modid),
+	     CConstant2 := modname2rname(Modid),
+             Stat*1 := namepairs2rstats(Namepair*)
+             ====================================
+             signopt2cfuncs(Modid,,(Namepair*,Funid,Aint1,Aint2)) =
+               (,void CConstant()
+                 {
+                   Stat*1
+                 }
+                 void CConstant2() { }
+               )
+
+  [so2c-1'2] CConstant := modname2iname(Modid),
+ 	     CConstant2 := modname2rname(Modid),
+             Stat*1 := namepairs2rstats(Namepair*)
+             ====================================
+             signopt2cfuncs(Modid,signature ,(Namepair*,Funid,Aint1,Aint2)) =
+               (,void CConstant()
+                 {
+                   Stat*1
+                 } 
+                 void CConstant2() { }
+                 )
+
+  [so2c-1'3] CConstant := modname2iname(Modid),
+             CConstant2 := modname2rname(Modid),
+             Stat*1 := namepairs2rstats(Namepair*),
+            
+             (Funcdef*,Decl*,Stat*3) := funcdefs2cfuncs(Funcdef+,Namepair*)
+             =============================================================
+             signopt2cfuncs(Modid,signature Funcdef+,(Namepair*,Funid,Aint1,Aint2)) =
+               (Funcdef*,Decl* ++
+                void CConstant()
+                {
+                  Stat*3 ++ Stat*1
+                }
+                void CConstant2() { }
+                )
+
+equations
+
+  [fd2c-1'1] funcdefs2cfuncs(Funcdef,Namepair*) = funcdef2cfuncs(Funcdef,Namepair*)
+
+  [fd2c-1'2] (Funcdef*1,Decl*1,Stat*1) := funcdef2cfuncs(Funcdef,Namepair*),
+             (Funcdef*2,Decl*2,Stat*2) := funcdefs2cfuncs(Funcdef+,Namepair*)
+             ===============================================================
+             funcdefs2cfuncs(Funcdef;Funcdef+,Namepair*) =
+               (Funcdef*1;Funcdef*2,
+                Decl*1 ++ Decl*2,
+                Stat*1 ++ Stat*2)
+
+equations
+
+[list] 
+{Prod} := np-lookup({Funid},Namepair*),
+Func := funid2identifier(Funid),
+Sym := Func ++ sym
+===>
+funcdef2cfuncs({Funid}(_),Namepair*) =
+({Funid}(_),
+  static Symbol Sym;
+  static ATerm Func();,
+  Sym = ATmakeSymbol(Prod,1,ATtrue);
+  ATprotectSymbol(Sym);
+)
+
+[annos-constant]
+(Funid2, Decl*, Stat*) := funcdef2cfuncs(Funid, Namepair*)
+===>
+funcdef2cfuncs(Funid Annos ,Namepair*) = (Funid2 Annos, Decl*, Stat*)
+
+
+[annos-func]
+(Funid2 (Sigarg+), Decl*, Stat*) := funcdef2cfuncs(Funid(Sigarg+), Namepair*)
+===>
+funcdef2cfuncs(Funid(Sigarg+) Annos ,Namepair*) = (Funid2(Sigarg+),Decl*,Stat*)
+
+[default-constant]
+Prod := np-lookup(Funid,Namepair*),
+Func := funid2identifier(Funid),
+Sym := Func ++ sym
+======================================
+funcdef2cfuncs(Funid,Namepair*) =
+               (Funid,
+                static Symbol Sym;
+                static ATerm Func();,
+		Sym = ATmakeSymbol(Prod, 0, ATtrue);
+                ATprotectSymbol(Sym);)
+
+%%TODO: get rid of code dups
+
+[returns-list]
+[Prod] := np-lookup([Funid],Namepair*),
+Func := funid2identifier(Funid),
+Sym := Func ++ sym,
+FormalArgs := sigargs2cargs(Sigarg+,1),
+natcon(d+) := countsigargs(Sigarg+)
+======================================
+funcdef2cfuncs([Funid](Sigarg+),Namepair*) =
+               ([Funid](Sigarg+),
+                static Symbol Sym;
+                static ATerm Func(FormalArgs);,
+		Sym = ATmakeSymbol(Prod, integer-constant(d+), ATtrue);
+                ATprotectSymbol(Sym);)
+
+[returns-list-constant]
+[Prod] := np-lookup([Funid],Namepair*),
+Func := funid2identifier(Funid),
+Sym := Func ++ sym
+======================================
+funcdef2cfuncs([Funid],Namepair*) =
+               ([Funid],
+                static Symbol Sym;
+                static ATerm Func();,
+		Sym = ATmakeSymbol(Prod, 0, ATtrue);
+                ATprotectSymbol(Sym);)
+
+[default-func]
+Prod := np-lookup(Funid,Namepair*),
+Func := funid2identifier(Funid),
+Sym := Func ++ sym,
+FormalArgs := sigargs2cargs(Sigarg+,1),
+natcon(d+) := countsigargs(Sigarg+)
+======================================
+funcdef2cfuncs(Funid(Sigarg+),Namepair*) =
+               (Funid(Sigarg+),
+                static Symbol Sym;
+                static ATerm Func(FormalArgs);,
+		Sym = ATmakeSymbol(Prod, integer-constant(d+), ATtrue);
+                ATprotectSymbol(Sym);)
+
+equations
+
+  [fa2ca-1'1] Identifier := int2identifier(arg, Aint)
+		===>
+		sigargs2cargs(Sigarg,Aint) = 
+		ATerm Identifier
+
+  [fa2ca-1'2] FormalArgs := sigargs2cargs(Sigarg+,Aint + 1),
+	      Identifier := int2identifier(arg, Aint)
+	      ===>
+              sigargs2cargs(Sigarg,Sigarg+,Aint) =
+                ATerm Identifier ++ FormalArgs
+
+equations
+
+  [fa2ca-2'1] countsigargs(Sigarg) = 1
+
+  [fa2ca-2'2] Aint := countsigargs(Sigarg+)
+              ============================
+              countsigargs(Sigarg,Sigarg+) = Aint + 1
+
+equations
+
+  [mn2cn-1'1] Identifier := make-call-id(ModId)
+		===>
+              modname2iname(ModId) = 
+		register_ + Identifier
+
+  [mn2cn-1'1] Identifier := make-call-id(ModId)
+		===>
+              modname2rname(ModId) = resolve_ + Identifier
+		
+equations
+
+  [np2cs-1'1] namepairs2rstats() =
+
+  [np2cs-1'2] namepairs2rstats(Namepair) = namepair2rstats(Namepair)
+
+  [np2cs-1'3] namepairs2rstats(Namepair+,Namepair) =
+                namepairs2rstats(Namepair+) ++ namepair2rstats(Namepair)
+
+equations
+
+  [list] 
+	      Func := funid2identifier(Funid),
+	      Sym := Func ++ sym
+	      ===>
+	      namepair2rstats(({StrCon},{Funid},Term*)) =
+                register_prod(ATparse(StrCon), Func,Sym);
+
+  [returns-list] 
+	      Func := funid2identifier(Funid),
+	      Sym := Func ++ sym
+	      ===>
+	      namepair2rstats(([StrCon],[Funid],Term*)) =
+                register_prod(ATparse(StrCon), Func,Sym);
+
+
+  [default-normal] 
+	      Func := funid2identifier(Funid),
+	      Sym := Func ++ sym
+	      ===>
+	      namepair2rstats((StrCon,Funid,Term*)) =
+                register_prod(ATparse(StrCon),Func,Sym);
