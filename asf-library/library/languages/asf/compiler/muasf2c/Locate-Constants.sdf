@@ -46,6 +46,7 @@ hiddens
     is-exit-func(Expression)                         -> Boolean
     is-sym-symbol(Expression)                        -> Boolean
     is-traversal-function(Expression)		     -> Boolean
+    is-side-effect-function(Expression)              -> Boolean
 
     is-not-a-constant(Expression) -> Boolean
 

@@ -65,6 +65,10 @@ construct-funid([Funid], Nat, Term*1, traversal(Term+), Term*2) =
 construct-funid(Funid, Nat, Term*1, traversal(Term+), Term*2) =
  | nat2id(lt-, Nat) type(Term+) strategy(Term+) continuation(Term+) |
 
+[side-effect]
+construct-funid(Funid, Nat, Term*, side-effect, Term*2) =
+ nat2id(lf-side-effect-, Nat)
+
 [default-cf-2]
 construct-funid(Funid,Aint0, Term+) = 
 construct-funid(Funid,Aint0)

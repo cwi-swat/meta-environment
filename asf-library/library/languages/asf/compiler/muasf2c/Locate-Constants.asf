@@ -251,6 +251,15 @@ equations
 
 equations
 
+[side-effect]
+	is-side-effect-function(identifier(lf\_side\_effect tail)(ActualArgs)) 
+	= true
+
+[default-no-se]
+	is-side-effect-function($Expression) = false
+
+equations
+
   [ii-1'1] is-integer(integer-constant(d+)) = true
 
   [default-ii-1'1] is-integer($Expression) = false
