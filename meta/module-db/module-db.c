@@ -216,12 +216,14 @@ ATermList get_imported_modules(char *name)
   value = GetValue(trans_db, atName);
   if (!value) {
     result = calc_trans(SDF_makeImportListSingle(SDFmakeImport(name)));
+    result = ATsort(result, ATcompare);
     PutValue(trans_db, atName, (ATerm)result);
-    return result;
   }
   else {
-    return (ATermList)value;
+    result = (ATermList)value;
   }
+
+  return result;
 }
 
 /*}}}  */
@@ -230,7 +232,6 @@ ATermList get_imported_modules(char *name)
 ATerm get_all_equations(int cid, char *moduleName)
 {
   ATerm name;
-  ATermList mods;
   ATerm result;
 
 /* calculate the transitive closure of the imported modules. */
@@ -238,7 +239,6 @@ ATerm get_all_equations(int cid, char *moduleName)
   name = ATmake("<str>", moduleName);
 
   if (complete_asf_specification(ATempty, name)) {
-    mods = get_imported_modules(moduleName);
     result = ASF_makeTermFromCondEquationList(
                getEquations(SDFmakeImport(moduleName)));
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
@@ -1227,6 +1227,7 @@ ATerm eqs_available_for_modules(int cid, char *moduleName)
     /* Get all imported modules (including the module itself) */
     modules = get_imported_modules(moduleName);
 
+    modules = ATreverse(modules);
     while (!ATisEmpty(modules)) {
       module = SDF_getModuleNamePlain(
                  SDF_getImportModuleName(
