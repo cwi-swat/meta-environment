@@ -196,7 +196,7 @@ static ATermList addTextCategory(ATermList categories, MC_Property property)
 static void addSystemProperty(MC_Property property)
 {
   if (MC_isPropertyExtension(property)) {
-    addExtension(systemExtensions, property);
+    systemExtensions = addExtension(systemExtensions, property);
   }
   else if (MC_isPropertyModulePath(property)) {
     const char *path = MC_getPropertyPath(property);
@@ -251,7 +251,7 @@ void add_system_properties(int cid, const char *contents)
 static void addUserProperty(MC_Property property)
 {
   if (MC_isPropertyExtension(property)) {
-    addExtension(userExtensions, property);
+    userExtensions = addExtension(userExtensions, property);
   }
   else if (MC_isPropertyAction(property)) {
     ATermList actions = (ATermList) MC_getPropertyActions(property);
@@ -320,6 +320,32 @@ ATerm get_events(int cid, ATerm actionType)
 {
   ATermList result = ATempty;
   MC_ActionType type = MC_ActionTypeFromTerm(actionType);
+  MC_ActionDescriptionList list = getDescriptions(type);
+
+  if (list != NULL) {
+    while (!MC_isActionDescriptionListEmpty(list)) {
+      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+      MC_Event event = MC_getActionDescriptionEvent(cur);
+      result = ATinsert(result, MC_EventToTerm(event));
+      list = MC_getActionDescriptionListTail(list);
+    }
+  }
+
+  return ATmake("snd-value(events(<term>))", result);
+}
+
+/*}}}  */
+/*{{{  ATerm get_events_for_module(int cid, ATerm type, const char *name) */
+
+ATerm get_events_for_module(int cid, ATerm actionType, const char *name)
+{
+  char *fun = ATgetName(ATgetAFun((ATermAppl)actionType));
+  ATerm newActionType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
+                                           ATmake("<str>", name));
+  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
+
+  ATermList result = ATempty;
+  MC_ActionType type = MC_ActionTypeFromTerm(newActionType);
   MC_ActionDescriptionList list = getDescriptions(type);
 
   if (list != NULL) {
