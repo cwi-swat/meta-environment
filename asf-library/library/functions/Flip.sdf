@@ -4,7 +4,7 @@ exports
 
 context-free syntax
 
-flip((A B => C)) -> (B A => C)
+flip -> ((A B => C) => (B A => C))
 
 hiddens
 
