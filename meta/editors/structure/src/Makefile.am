@@ -4,8 +4,6 @@ include $(top_srcdir)/make_rules
 
 EXTRA_DIST		= se.idef
 
-CFLAGS			= -Wall -Werror -g -O2
-
 bin_PROGRAMS		= se
 data_DATA		= se.idef
 
