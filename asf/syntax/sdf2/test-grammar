@@ -1,0 +1,28 @@
+#! /bin/sh
+#
+# $Id$)
+#
+# test generatedsdf2  parse-tabel
+#
+# test succeeds when
+#    unparse(parse(G)) = G
+#
+# Where G is ../Sdf2.sdf2
+#
+
+SGLR=../../../sglr/sglr/sglr
+ASOURCE=../../../asource/asource
+
+mkdir ./test 
+cd test && \
+${SGLR} -p ../Sdf2.baf -1 -i ../Sdf2.sdf2 -o Sdf2.asfix && \
+${ASOURCE} < Sdf2.asfix > Sdf2.sdf2 && \
+cmp ../Sdf2.sdf2 ./Sdf2.sdf2 && \
+(
+cd .. 
+rm -fr test
+true
+)
+
+
+
