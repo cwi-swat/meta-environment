@@ -11,7 +11,7 @@ public class PeanoTest {
 
   public PeanoTest(PeanoFactory factory) {
     this.factory = factory;
-    this.e = factory.makeOptLayout_Absent();
+    this.e = factory.makeOptLayout_Present(factory.makeCHARLIST_String(" "));
   }
 
   public Nat make(int n) {
