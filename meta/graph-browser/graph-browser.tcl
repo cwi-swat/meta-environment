@@ -644,18 +644,6 @@ proc ParseEquations { modlist } {
 
 
 #--
-# SaveModules(ML)
-#-
-# generates the toolbus event to request saving of modules ML
-#--
-proc SaveModules { modlist } {
-    foreach mod $modlist {
-        GBpost [format "save-module(%s)" [ToId $mod]] 
-    }
-}
-
-
-#--
 # OpenModule(M)
 #-
 # generates the toolbus event to request addition of a module 
@@ -722,16 +710,6 @@ proc RevertAll {} {
 #--
 proc CompileAll {} {
     GBevent "compile-all"
-}
-
-
-#--
-# SaveAll
-#-
-# generates the toolbus event to request saving of all modules
-#--
-proc SaveAll {} {
-    GBevent "save-all"
 }
 
 
@@ -1001,7 +979,6 @@ proc define-menu-bar {} {
     $m add command -label "Save All" -underline 0 -command {SaveAll}
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add command -label "Revert All" -underline 0 -command {RevertAll}
-    $m add command -label "Save All" -underline 0 -command {SaveAll}
 
 
 # Adapted by Mark
