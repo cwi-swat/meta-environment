@@ -503,6 +503,14 @@ PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
 
 /*}}}  */
 /*}}}  */
+/*{{{  PT_Symbols PT_reverseSymbols(PT_Symbols symbols) */
+
+PT_Symbols PT_reverseSymbols(PT_Symbols symbols)
+{
+  return (PT_Symbols) ATreverse((ATermList) symbols);
+}
+
+/*}}}  */
 
 /*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
 

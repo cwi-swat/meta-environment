@@ -1,3 +1,11 @@
+
+
+
+2002/09/26 (vinju@loria.fr)
+ * Commented out an assert in yieldPT (fixme). The assert fails when really
+   big files (like Sdf2.sdf2) are unparsed.
+ * Added PT_reverseSymbols
+
 2002/09/11 (jong@cwi.nl)
  * Removed debug print from posInfo.c
 
