@@ -11,10 +11,12 @@ all doc install:	libs
 all libs doc clean install uninstall distclean:
 	@for DIR in $(SUBDIRS);	\
 	do \
-		echo Make $@ in $$DIR; \
-		cd $$DIR; \
-		$(MAKE) -${MAKEFLAGS} $@; \
-		cd ..; \
+		if [ -d $$DIR ]; then \
+			echo Make $@ in $$DIR; \
+			cd $$DIR; \
+			$(MAKE) -${MAKEFLAGS} $@; \
+			cd ..; \
+		fi \
 	done
 
 
