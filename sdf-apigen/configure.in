@@ -4,7 +4,7 @@ dnl
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(apigen, 1.3beta)
+AM_INIT_AUTOMAKE(sdf-apigen, 1.3beta)
 
 dnl Add current dir to searchpath
 ACLOCAL="${ACLOCAL} -I ."
@@ -107,6 +107,13 @@ ASFBIN=${ASFE}/bin
 AC_SUBST(ASFBIN)
 
 dnl }}}
+dnl {{{ Handle --with-apigen
+
+AC_PACKAGE_REQUIRE(apigen, adt-to-c,
+	[  --with-apigen=DIR         apigen is in DIR])
+AC_SUBST(APIGEN)
+
+dnl }}}
 dnl {{{ Handle --with-cflags
 
 AC_ARG_WITH(cflags,
@@ -128,20 +135,9 @@ AC_OUTPUT(
 Makefile
 spec/Makefile
 utils/Makefile
-utils/sdf2-to-adt
-utils/adt-to-c
-utils/adt-to-java
-apigen/Makefile
-apigen/adt/Makefile
-apigen/gen/Makefile
-apigen/gen/c/Makefile
-apigen/gen/java/Makefile
 test/Makefile
-doc/Makefile
-doc/paper/Makefile
 spec/add-labels/Makefile
 ,
-chmod +x utils/sdf2-to-adt utils/sdf2-to-adt utils/adt-to-c utils/adt-to-java
 )
 
 dnl }}}
