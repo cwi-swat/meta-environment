@@ -4,7 +4,7 @@ begin
 declare x : natural;
 
 [1] x := 3;
-if [2] y then [3] y := 3; [4] y := 4 else [5] y := 5 fi;
+if [2] y then [3] y := 3 + x; [4] y := 4 else [5] y := z - 5 fi;
 [6] y := 6
 end
 ,

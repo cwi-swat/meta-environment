@@ -2,6 +2,10 @@ equations
 
 %% -- label the program
 
+[0]  label(Program, 1) = <Program', Int>
+     ============================
+     label(Program) = Program'
+
 [1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
 
 [2] label(if Exp then Stat*1 else Stat*2 fi, Int) =
@@ -10,15 +14,29 @@ equations
 [3] label(while Exp do Stat* od, Int) =
     < while [Int] Exp do Stat* od, Int + 1>
 
+[cf1] Rstore1 = add(SUCC, <Int0, Int>, Rstore),
+      Rstore2 = add(SUCC, <Int, get-first(Stat*1)>, Rstore1),
+      Rstore3 = add(SUCC, <get-last(Stat*1), Int1>, Rstore2),
+      Rstore4 = add(SUCC, <Int, get-first(Stat*2)>, Rstore3),
+      Rstore5 = add(SUCC, <get-last(Stat*2), Int1>, Rstore2),
+      
+
+     controlflow(if [Int] Exp then Stat*1 else Stat*2 fi, Rstore, Int0, Int1)
+
+[gf-1] get-first([Int] Stat; Stat*) = Int
+
+[gl-1] get-last(Stat*; [Int] Stat) = Int
+
+
 %% -- collect basic relations
 
 %% -- collect defines
 
-[4] Rstore' = collect-uses(Exp, Rstore, Int)
+[4] Rstore' = uses(Exp, Rstore, Int)
     ==========================================================
-    collect([Int] Id := Exp, Rstore) = add(DEFS, <Int, Id>, Rstore')
+    use-defs([Int] Id := Exp, Rstore) = add(DEFS, <Int, Id>, Rstore')
 
-[5] collect-uses(Id, Rstore, Int) = add(USES, <Int, Id> , Rstore)
+[5] uses(Id, Rstore, Int) = add(USES, <Int, Id> , Rstore)
          
 
 

@@ -11,7 +11,10 @@ context-free syntax
 
  context-free syntax
 
-   "EmptyBag"                         -> Bag[[Elem]]
+   "EmptyBag"                       -> Bag[[Elem]]
+
+   add(Elem, Bag[[Elem]])           -> Bag[[Elem]]
+   del(Elem, Bag[[Elem]])           -> Bag[[Elem]]
 
    Bag[[Elem]] "==" Bag[[Elem]]     -> Boolean
    Bag[[Elem]] "<=" Bag[[Elem]]     -> Boolean
@@ -19,19 +22,25 @@ context-free syntax
    Bag[[Elem]] ">=" Bag[[Elem]]     -> Boolean
    Bag[[Elem]] ">"  Bag[[Elem]]     -> Boolean
 
-   Bag[[Elem]] "union" Bag[[Elem]]  -> Bag[[Elem]]
-   Bag[[Elem]] "inter" Bag[[Elem]]  -> Bag[[Elem]]
-   Bag[[Elem]] "\\" Bag[[Elem]]     -> Bag[[Elem]]
+   Bag[[Elem]] "union" Bag[[Elem]]  -> Bag[[Elem]] {left}
+   Bag[[Elem]] "inter" Bag[[Elem]]  -> Bag[[Elem]] {left}
+   Bag[[Elem]] "\\" Bag[[Elem]]     -> Bag[[Elem]] {left}
 
    "(" Bag[[Elem]] ")"              -> Bag[[Elem]] {bracket}
 
    "#" Bag[[Elem]]                  -> Integer
    Elem in Bag[[Elem]]              -> Boolean
 
-   "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" -> Bag[[Elem]]
+   "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
+                                    -> Bag[[Elem]]
 
  variables
    "Bag[[Elem]]" [0-9\']*           -> Bag[[Elem]]
+
+ context-free priorities
+   Bag[[Elem]] "\\" Bag[[Elem]]     -> Bag[[Elem]] >
+   Bag[[Elem]] "inter" Bag[[Elem]]  -> Bag[[Elem]] >
+   Bag[[Elem]] "union" Bag[[Elem]]  -> Bag[[Elem]]
 
 hiddens
   imports asf/syntax/Comments

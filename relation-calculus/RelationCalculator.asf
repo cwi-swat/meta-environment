@@ -217,11 +217,11 @@
 [PJ4]  apply(E . Rel)   = E . Rel
 [PJ5]  apply(Bag . Rel) = Bag . Rel
 
-[UN1]  Bag1 = evalb(Exp1, Store),  
-       Bag2 = evalb(Exp2, Store), 
-       Rel = evalr(Exp3, Store)
-       ===================================================
-       evalx(Exp1 until(Exp2, Exp3), Store) = Bag1 until(Bag2, Rel)
+%%[UN1]  Bag1 = evalb(Exp1, Store),  
+%%       Bag2 = evalb(Exp2, Store), 
+%%       Rel = evalr(Exp3, Store)
+%%       ===================================================
+%%       evalx(Exp1 until(Exp2, Exp3), Store) = Bag1 until(Bag2, Rel)
        
 
 [TC1] Rel = evalr(Exp, Store)

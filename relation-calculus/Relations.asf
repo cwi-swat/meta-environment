@@ -143,16 +143,6 @@ equations
 
 [icl-1]  Bag .+ Rel = closure(Rel, {}, Rel domR Bag)
 
-[clx-1]  Bag2 . Rel = {}
-         =========================================
-    	 closurex(Rel, Bag1, Bag2, Bag3) = Bag1 union Bag2
-
-[clx-2]  Bag2 . Rel = Bag', Bag' != {}
-         =========================================
-	 closurex(Rel, Bag1, Bag2, Bag3) = closurex(Rel, Bag1 union (Bag' inter Bag3), Bag' \ Bag3, Bag3)
-
-[un-1]   Bag1 until(Bag2, Rel) = closurex(Rel, {}, Bag1, Bag2)
-
 
 [dm1-1]  Rel4 o Rel3 = Rel', Rel' != {}, Rel'' = Rel' \ Rel2
         ==========================================
@@ -163,7 +153,6 @@ equations
         dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
 
 [dm-1]  dominators(Rel1, Rel2, Rel3) = dominators1(Rel1, Rel2, Rel3, Rel1)
-
 
 [if-1]   if true then Rel1 else Rel2 fi = Rel1
 [if-2]   if false then Rel1 else Rel2 fi = Rel2
