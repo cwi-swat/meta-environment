@@ -14,25 +14,37 @@ abstract class MsgAtom extends Atom {
 
   private State partners = new State(); // communication partners in other processes
   private Ref msg;
+  private Ref var;
 
   public MsgAtom(ATerm msg) {
     super();
     this.msg = new Ref(msg);
-    setAtomArgs(this.msg);
+    this.var = new Ref(TBTerm.TermPlaceholder);
+    setAtomArgs(this.msg, this.var);
+  }
+
+  public MsgAtom(ATerm msg, ATerm var) {
+    super();
+    this.msg = new Ref(msg);
+    this.var = new Ref(var);
+    setAtomArgs(this.msg, this.var);
   }
 
   public ATerm getMsg() {
     return msg.value;
   }
 
- public boolean canCommunicate(MsgAtom a) {
-    return ((this instanceof SndMsg && a instanceof RecMsg) ||
-              (this instanceof RecMsg && a instanceof SndMsg)) &&  
-             TBTerm.mightMatch(getMsg(), a.getMsg());
+  public ATerm getVar() {
+    return var.value;
   }
-  
+
+  public boolean canCommunicate(MsgAtom a) {
+    return ((this instanceof SndMsg && a instanceof RecMsg) || (this instanceof RecMsg && a instanceof SndMsg))
+      && TBTerm.mightMatch(getMsg(), a.getMsg());
+  }
+
   public void addMsgPartner(StateElement a) {
-    System.out.println(this + " addMsgPartner " +  a);
+    System.out.println(this +" addMsgPartner " + a);
     partners.add(a);
   }
 
