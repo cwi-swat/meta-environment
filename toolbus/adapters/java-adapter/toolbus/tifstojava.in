@@ -1,8 +1,8 @@
 #! /bin/sh
 
 prefix=@prefix@
-aterm=@JAVA_ATERM@/classes
-shared_objects=@SHARED_OBJECTS@/classes
+aterm=@JAVA_ATERM@
+shared_objects=@SHARED_OBJECTS@
 javadir=${prefix}/classes
 
 java -classpath ${javadir}:${shared_objects}:${aterm}:${CLASSPATH} toolbus.JavaTif $@
