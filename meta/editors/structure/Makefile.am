@@ -32,7 +32,7 @@ structure_editor_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm-dbg \
+	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
 libStructureEditor_a_SOURCES = \
