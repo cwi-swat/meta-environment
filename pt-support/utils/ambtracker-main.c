@@ -82,33 +82,38 @@ static void prettyPrint(ATerm t, FILE *fp)
   int i;
 
   if (ATmatch(t, "ambiguities(<int>,[<list>])",&count,&ambs)) {
-    ATfprintf(fp, "%d ambiguity cluster%s:\n\n",count,count > 1 ? "s" : "");
-    
-    for(i = 1;!ATisEmpty(ambs); ambs = ATgetNext(ambs), i++) {
-      ATerm amb = ATgetFirst(ambs);
-      ATermList productions;
-      ATerm line, col, offset;
+    if (count == 0) {
+      ATfprintf(fp,"No ambiguities\n");
+    }
+    else {
+      ATfprintf(fp, "%d ambiguity cluster%s:\n\n",count,count > 1 ? "s" : "");
+      
+      for(i = 1;!ATisEmpty(ambs); ambs = ATgetNext(ambs), i++) {
+	ATerm amb = ATgetFirst(ambs);
+	ATermList productions;
+	ATerm line, col, offset;
 
-      if(ATmatch(amb,"ambiguity("
-		     "  position(character(0),"
-                     "           line(<term>),"
-		     "           col(<term>),"
-		     "           char(<term>)),"
-		     "  productions([<list>]))",
-		 &line, 
-		 &col, 
-		 &offset, 
-		 &productions)) {
-	ATfprintf(fp,"[%d/%d] at (%t:%t):\n", i, count, line, col);
-	for(;!ATisEmpty(productions); productions = ATgetNext(productions)) {
-	  char *str = deslash(ATgetFirst(productions));
-	  ATfprintf(fp,"  %s\n", str);
-	  free(str);
+	if(ATmatch(amb,"ambiguity("
+		       "  position(character(0),"
+		       "           line(<term>),"
+		       "           col(<term>),"
+		       "           char(<term>)),"
+		       "  productions([<list>]))",
+		   &line, 
+		   &col, 
+		   &offset, 
+		   &productions)) {
+	  ATfprintf(fp,"[%d/%d] at (%t:%t):\n", i, count, line, col);
+	  for(;!ATisEmpty(productions); productions = ATgetNext(productions)) {
+	    char *str = deslash(ATgetFirst(productions));
+	    ATfprintf(fp,"  %s\n", str);
+	    free(str);
+	  }
+
+	  ATfprintf(fp,"\n");
+	} else {
+	  ATerror("%s: Unexpected term: %t\n",myname,t);
 	}
-
-	ATfprintf(fp,"\n");
-      } else {
-	ATerror("%s: Unexpected term: %t\n",myname,t);
       }
     }
   } else {
