@@ -122,7 +122,7 @@ public class MetaStudio extends JFrame  {
             getBridge().addToolComponent(historyPanel);
         }
 
-        StatusBar bar = new StatusBar(factory, getBridge(), historyPanel);
+        StatusBar bar = new StatusBar(factory, getBridge());
         getBridge().addToolComponent(bar);
         container.add(bar, BorderLayout.SOUTH);
 

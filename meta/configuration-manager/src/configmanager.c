@@ -85,6 +85,14 @@ void register_user_directories(int cid, ATerm paths)
 }
 
 /*}}}  */
+/*{{{  void register_library(int cid, char *path) */
+
+void register_library(int cid, char *path)
+{
+  librarySearchPath = ATmake("<str>", path);
+}
+
+/*}}}  */
 /*{{{  void set_actions(int cid, char *contents) */
 
 void set_actions(int cid, char *contents)
