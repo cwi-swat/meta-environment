@@ -10,17 +10,16 @@
 
 #define PUF_START	1
 
-#line 185 "dap-admin.c.nw"
+#line 192 "dap-admin.c.nw"
 #define ES_UNKNOWN		0
 #define ES_STOP			0x0001
 #define ES_RUN			0x0002
 #define ES_SINGLE_STEP		0x0004
 #define ES_STEP_OVER		0x0008
 #define ES_RUN_UNTIL_PARENT	0x0010
-#define ES_HIGH_WATER		0x0020
 
-#define ES_ALL			0x003F
-#line 157 "dap-admin.c.nw"
+#define ES_ALL			0x001F
+#line 164 "dap-admin.c.nw"
 #define PORT_EXEC_STATE		0
 #define PORT_ALWAYS		1
 #define PORT_LOCATION		2
@@ -43,7 +42,7 @@
 #define ONE_SHOT	0
 #define PERSISTENT	1
 
-#line 122 "dap-admin.c.nw"
+#line 129 "dap-admin.c.nw"
 typedef struct location
 {
   char *module;
@@ -53,7 +52,7 @@ typedef struct location
   int end_col;
   int when;
 } location;
-#line 137 "dap-admin.c.nw"
+#line 144 "dap-admin.c.nw"
 typedef struct port
 {
   int type;
@@ -67,7 +66,7 @@ typedef struct port
     term *msg;
   } u;
 } port;
-#line 105 "dap-admin.c.nw"
+#line 112 "dap-admin.c.nw"
 typedef struct event_rule
 { 
   struct event_rule *next;
@@ -78,22 +77,25 @@ typedef struct event_rule
   term_list *acts;
   int lifetime;
 } event_rule;
-#line 85 "dap-admin.c.nw"
+#line 89 "dap-admin.c.nw"
 typedef struct process
 {
   int pid;			/* process id of this process */
   char *name;			/* name of this process */
   location cpe;			/* current point of execution */
   int exec_state;		/* execution state */
-  int hw_exec_state;		/* execution state when high water reached */
+  int new_es;			/* new execution state */
+  TBbool hw_reached;		/* high water reached */
   int stop_level;		/* stop level for ES_STEP_OVER and RUN_UNTIL_PARENT */
   int ruleid;			/* current event rule id */
   term *last_port;		/* The last port passed. */
+  term *last_msg;		/* The last message send. */
+  term *last_peer;		/* callsign of the last sender/receiver */
   term_list *subterms;		/* subterms that matched with placeholders */
   unsigned uflags;		/* user flags */
   void *udata;			/* user data */
 } process;
-#line 71 "dap-admin.c.nw"
+#line 75 "dap-admin.c.nw"
 typedef struct dap
 {
   int id;
@@ -140,6 +142,10 @@ void  dap_clear_process_flags(int dapid, int pid, int uflags);
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags);
 term *dap_get_last_port(int dapid, int pid);
 void  dap_set_last_port(int dapid, int pid, term *port);
+term *dap_get_last_msg(int dapid, int pid);
+void  dap_set_last_msg(int dapid, int pid, term *msg);
+term *dap_get_last_peer(int dapid, int pid);
+void  dap_set_last_peer(int dapid, int pid, term *peer);
 /* External callbacks, must be provided by the user */
 extern void cbdap_process_created(int dapid, int pid);
 extern void cbdap_process_destroyed(int dapid, int pid);

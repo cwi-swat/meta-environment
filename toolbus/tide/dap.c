@@ -1,8 +1,8 @@
-#line 167 "dap.c.nw"
+#line 171 "dap.c.nw"
 #include "dap-admin.h"
 #include "dap.h"
 #include <procs.h>
-#line 176 "dap.c.nw"
+#line 180 "dap.c.nw"
 static int tide_cid;
 static char **inf_table;
 static function_table func_table;
@@ -12,22 +12,28 @@ static int RID = 0;
 /* Some event queues */
 #define EVQ_WATCHPOINT          0
 #define EVQ_RULE_DESTROYED	1
-#define EVQ_LAST                EVQ_RULE_DESTROYED
+#define EVQ_CONNECTED		2
+#define EVQ_DISCONNECTED	3
+#define EVQ_LAST                EVQ_DISCONNECTED
 
 /* Queue limits */
 #define MAX_QUEUE_SIZE          512
-#define HIGH_WATER_MARK         128     /* Must be <<< MAX_QUEUE_SIZE */
-#define LOW_WATER_MARK          8       /* Not all events have to be ack'd */
+#define HIGH_WATER_MARK         12     /* Must be <<< MAX_QUEUE_SIZE */
+#define LOW_WATER_MARK          4       /* Not all events have to be ack'd */
 
 static event_queue *evq[EVQ_LAST+1] = { NULL };
 static int outstanding_events = 0;
 static TBbool high_water_reached = TBfalse;
+static TBbool synchronize_wait = TBfalse;
 
 TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg);
 TBbool eval_cpe_1(term_list *args, int pid, term **result, char **msg);
 TBbool eval_always(term_list *args, int pid, term **result, char **msg);
 TBbool eval_exec_state(term_list *args, int pid, term **result, char **msg);
 TBbool eval_process_name(term_list *args, int pid, term **result, char **msg);
+TBbool eval_quote(term_list *args, int pid, term **result, char **msg);
+TBbool eval_msg(term_list *args, int pid, term **result, char **msg);
+TBbool eval_peer(term_list *args, int pid, term **result, char **msg);
 TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg);
 TBbool exec_halt_0(term_list *args, int pid, term **result, char **msg);
 TBbool exec_single_step_0(term_list *args, int pid, term **result, char **msg);
@@ -38,16 +44,20 @@ TBbool exec_run_until_parent_0(term_list *args, int pid, term **result, char **m
 /* Default function/action tables */
 func_entry default_func_table[] =
 {
+  { "always", 0, eval_always, NULL, "returns 1." },
   { "cpe", 0, eval_cpe_0, NULL, 
 	"returns the current point of execution in the current process." },
   { "cpe", 1, eval_cpe_1, NULL, 
 	"returns the current point of execution in a specific process" },
-  { "always", 0, eval_always, NULL, "returns 1." },
-  { "true",   0, eval_always, NULL, "returns 1." },
   { "exec-state", 0, eval_exec_state, NULL, 
 	"returns the execution state of the current process." },
+  { "msg", 0, eval_msg, NULL, "returns the last message send." },
+  { "peer", 0, eval_peer, NULL, 
+	"returns the source/destination of the last send/receive port." },
   { "process-name", 0, eval_process_name, NULL,
 	"returns the name of the current process." },
+  { "quote", 1, eval_quote, NULL,"returns its argument without evaluting it."},
+  { "true",   0, eval_always, NULL, "returns 1." },
   { NULL, 0, NULL, NULL, NULL }
 };
 
@@ -65,7 +75,7 @@ act_entry default_act_table[] =
   { NULL,    0, NULL,         NULL, NULL }
 };
 
-#line 1259 "dap.c.nw"
+#line 1328 "dap.c.nw"
 static void post_event(int queue, term *event)
 {
   int i;
@@ -73,18 +83,17 @@ static void post_event(int queue, term *event)
   /*TBprintf(stderr, "posting event %t in queue %d\n", event, queue);*/
   TBevq_post(evq[queue], event);
   outstanding_events++;
-  if(outstanding_events >= HIGH_WATER_MARK) {
+  if(!high_water_reached && outstanding_events >= HIGH_WATER_MARK) {
     high_water_reached = TBtrue;
+    TBprintf(stderr, "high water mark reached!");
     for(i=0; i<MAX_PROCESSES; i++) {
       process *p = dap_get_process(0, i);
-      if(p) {
-        p->hw_exec_state = ES_HIGH_WATER;
-        cbdap_change_exec_state(i, ES_HIGH_WATER);
-      }
+      if(p)
+        p->hw_reached = TBtrue;
     }
   }
 }
-#line 261 "dap.c.nw"
+#line 278 "dap.c.nw"
 TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg)
 {
   process *p = dap_get_process(0, pid); 
@@ -99,7 +108,7 @@ TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg)
 
   return TBtrue;  
 }
-#line 281 "dap.c.nw"
+#line 298 "dap.c.nw"
 TBbool eval_cpe_1(term_list *args, int pid, term **result, char **msg)
 {
   if(TBmatch(args, "[<int>]", &pid)) {
@@ -113,59 +122,83 @@ TBbool eval_cpe_1(term_list *args, int pid, term **result, char **msg)
 
   return TBfalse;
 }
-#line 300 "dap.c.nw"
+#line 317 "dap.c.nw"
 TBbool eval_always(term_list *args, int pid, term **result, char **msg)
 {
   *result = TB_make("1");
 
   return TBtrue;  
 }
-#line 312 "dap.c.nw"
+#line 329 "dap.c.nw"
 TBbool eval_exec_state(term_list *args, int pid, term **result, char **msg)
 {
   *result = dap_es2term(dap_get_exec_state(0, pid));
 
   return TBtrue;  
 }
-#line 324 "dap.c.nw"
+#line 341 "dap.c.nw"
 TBbool eval_process_name(term_list *args, int pid, term **result, char **msg)
 {
   *result = TB_make("<str>", dap_get_process_name(0, pid));
 
   return TBtrue;  
 }
+#line 353 "dap.c.nw"
+TBbool eval_quote(term_list *args, int pid, term **result, char **msg)
+{
+  assert(list_length(args) == 1);
+  *result = list_first(args);
 
-#line 337 "dap.c.nw"
+  return TBtrue;  
+}
+#line 366 "dap.c.nw"
+TBbool eval_msg(term_list *args, int pid, term **result, char **msg)
+{
+  assert(!args);
+  *result = dap_get_last_msg(0, pid);
+
+  return TBtrue;  
+}
+#line 379 "dap.c.nw"
+TBbool eval_peer(term_list *args, int pid, term **result, char **msg)
+{
+  assert(!args);
+  *result = dap_get_last_peer(0, pid);
+
+  return TBtrue;  
+}
+
+#line 393 "dap.c.nw"
 TBbool exec_halt_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_STOP);
   return TBtrue;
 }
-#line 348 "dap.c.nw"
+#line 404 "dap.c.nw"
 TBbool exec_single_step_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_SINGLE_STEP);
   return TBtrue;
 }
-#line 359 "dap.c.nw"
+#line 415 "dap.c.nw"
 TBbool exec_step_over_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_STEP_OVER);
   return TBtrue;
 }
-#line 370 "dap.c.nw"
+#line 426 "dap.c.nw"
 TBbool exec_run_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_RUN);
   return TBtrue;
 }
-#line 381 "dap.c.nw"
+#line 437 "dap.c.nw"
 TBbool exec_run_until_parent_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_RUN_UNTIL_PARENT);
   return TBtrue;
 }
-#line 392 "dap.c.nw"
+#line 448 "dap.c.nw"
 TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
 {
   process *p = dap_get_process(0, pid);
@@ -178,20 +211,20 @@ TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
   
   return TBtrue;
 }
-#line 1288 "dap.c.nw"
+#line 1356 "dap.c.nw"
 TBbool typecheck_expr(term *expr, int pid, term **at, char **msg)
 {
   /* This function is not implemented yet */
   return TBtrue;
 }
-#line 1304 "dap.c.nw"
+#line 1372 "dap.c.nw"
 TBbool typecheck_action(term *action, int pid, term **at, char **msg)
 {
   /* This function is not implemented yet */
   return TBtrue;
 }
 
-#line 415 "dap.c.nw"
+#line 471 "dap.c.nw"
 void dap_init(int cid, char **itable, function_table ftable, action_table atable)
 {
   int i;
@@ -212,7 +245,17 @@ void dap_init(int cid, char **itable, function_table ftable, action_table atable
     }
   }  
 }
-#line 465 "dap.c.nw"
+#line 1253 "dap.c.nw"
+void dap_connected(term *callsign)
+{
+  post_event(EVQ_CONNECTED, TB_make("connected(<term>)", callsign));
+}
+#line 1263 "dap.c.nw"
+void dap_disconnected(term *callsign)
+{
+  post_event(EVQ_CONNECTED, TB_make("disconnected(<term>)", callsign));
+}
+#line 521 "dap.c.nw"
 TBbool dap_evaluate(term *expr, int pid, term **result, char **msg);
 
 TBbool dap_evaluate_list(term_list *exprs, int pid, term **result, char **msg)
@@ -230,7 +273,7 @@ TBbool dap_evaluate_list(term_list *exprs, int pid, term **result, char **msg)
   *result = l;
   return TBtrue;
 }
-#line 490 "dap.c.nw"
+#line 546 "dap.c.nw"
 TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
 {
   int i, arity;
@@ -240,42 +283,34 @@ TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
   TB_match(appl, "<appl>", &func, &args);
   arity = list_length(args);
   
+  if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
+    /* An error occured while evaluating the arguments */
+     *result = args_eval;
+     return TBfalse;
+  }
 
   /* Search for the appropriate function in the function table */
   for(i=0; func_table[i].name; i++) {
     if(streq(func_table[i].name, func) && 
        (func_table[i].arity == -1 || func_table[i].arity == arity)) {
-      /* Firste evaluate the arguments */
-      if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
-        /* An error occured while evaluating the arguments */
-        *result = args_eval;
-        return TBfalse;
-      }
-      return (func_table[i].eval)(args, pid, result, msg);
+      return (func_table[i].eval)(args_eval, pid, result, msg);
     }
   }
 
-  /* Search for the appropriate function in the function table */
+  /* Search for the appropriate function in the default function table */
   for(i=0; default_func_table[i].name; i++) {
     if(streq(default_func_table[i].name, func) && 
        (default_func_table[i].arity == -1 || 
-        default_func_table[i].arity == arity)) {
-      /* Firste evaluate the arguments */
-      if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
-        /* An error occured while evaluating the arguments */
-        *result = args_eval;
-        return TBfalse;
-      }
-      return (default_func_table[i].eval)(args, pid, result, msg);
+		default_func_table[i].arity == arity)) {
+      return (default_func_table[i].eval)(args_eval, pid, result, msg);
     }
   }
 
   /* The function does not exist */
-  *msg = "no such function";
-  *result = appl;
-  return TBfalse;
+  *result = TB_make("<appl>", func, args_eval);
+  return TBtrue;
 }
-#line 449 "dap.c.nw"
+#line 505 "dap.c.nw"
 TBbool dap_evaluate(term *expr, int pid, term **result, char **msg)
 {
   switch(tkind(expr)) {
@@ -285,7 +320,7 @@ TBbool dap_evaluate(term *expr, int pid, term **result, char **msg)
   *result = expr;
   return TBtrue;
 }
-#line 567 "dap.c.nw"
+#line 615 "dap.c.nw"
 static TBbool dap_execute_list(term_list *actions, int pid, term **result, char **msg)
 {
   term_list *el, *l = NULL;
@@ -303,7 +338,7 @@ static TBbool dap_execute_list(term_list *actions, int pid, term **result, char 
   *result = l;
   return TBtrue;
 }
-#line 592 "dap.c.nw"
+#line 640 "dap.c.nw"
 static TBbool dap_execute_appl(term *appl, int pid, term **result, char **msg)
 {
   int i, arity;
@@ -341,7 +376,7 @@ static TBbool dap_execute_appl(term *appl, int pid, term **result, char **msg)
   *result = appl;
   return TBfalse;
 }
-#line 550 "dap.c.nw"
+#line 598 "dap.c.nw"
 TBbool dap_execute(term *action, int pid, term **result, char **msg)
 {
   switch(tkind(action)) {
@@ -352,7 +387,7 @@ TBbool dap_execute(term *action, int pid, term **result, char **msg)
   *msg = "illegal action";
   return TBfalse;
 }
-#line 688 "dap.c.nw"
+#line 736 "dap.c.nw"
 TBbool dap_exec(term *procs, term *acts, term **result, char **msg)
 {
   int i, pid;
@@ -372,7 +407,7 @@ TBbool dap_exec(term *procs, term *acts, term **result, char **msg)
     }
   }
 }
-#line 639 "dap.c.nw"
+#line 687 "dap.c.nw"
 term *dap_get_info(int cid)
 {
   int i,j;
@@ -414,52 +449,47 @@ term *dap_get_info(int cid)
   }
   return info;
 }
-#line 1184 "dap.c.nw"
-TBbool dap_change_exec_state(int pid, int new_state)
+#line 1237 "dap.c.nw"
+void dap_change_exec_state(int pid, int new_state)
 {
-  int old_state;
-  process *p = dap_get_process(0, pid);
-
-  if(p->exec_state == ES_HIGH_WATER) {
-    old_state = p->hw_exec_state;
-    p->hw_exec_state = new_state;
-  } else {
-    old_state = p->exec_state;
-    p->exec_state = new_state;
-  }
-  if(new_state != old_state) {
+  dap_get_process(0, pid)->new_es = new_state;
+  if(dap_get_process(0, pid)->exec_state == ES_STOP) {
+    dap_get_process(0, pid)->exec_state = new_state;
     cbdap_change_exec_state(pid, new_state);
     dap_activate_rules(pid, TB_make("[exec-state,at,<term>]", 
-						dap_es2term(new_state)));
-    return TBtrue;
-  }
-  return TBfalse;
+				dap_es2term(new_state)));
+  }  
 }
-#line 1214 "dap.c.nw"
+#line 1278 "dap.c.nw"
 void dap_rec_ack_event(int cid, term *event)
 {
   int i;
 
-  /*TBprintf(stderr, "Received acknowledment: %t", ev);*/
-  for(i=0; i<=EVQ_LAST; i++) {
+  /*TBprintf(stderr, "Received acknowledment: %t\n", event);*/
+  if(synchronize_wait && TBmatch(event, "synchronize")) {
+    high_water_reached = TBfalse;
+    synchronize_wait = TBfalse;
+    for(i=0; i<MAX_PROCESSES; i++) {
+      process *p = dap_get_process(0, i);
+      if(p && p->hw_reached) {
+        p->hw_reached = TBfalse;
+        cbdap_change_exec_state(i, p->exec_state);
+      }
+    }
+  } else for(i=0; i<=EVQ_LAST; i++) {
     if(TBevq_ack_event(evq[i], event)) {
       outstanding_events--;
-      if(high_water_reached && outstanding_events <= LOW_WATER_MARK) {
-        int i;
-        high_water_reached = TBfalse;
-        for(i=0; i<MAX_PROCESSES; i++) {
-          process *p = dap_get_process(0, i);
-          if(p && p->exec_state == ES_HIGH_WATER) {
-            p->exec_state = p->hw_exec_state;
-	    cbdap_change_exec_state(i, p->exec_state);
-          }
-        }
+      if(high_water_reached && !synchronize_wait &&
+			outstanding_events <= LOW_WATER_MARK) {
+	TBprintf(stderr, "low water mark reached.");
+	TB_send(tide_cid, TBmake("snd-event(synchronize)"));
+	synchronize_wait = TBtrue;
       }
       return;
     }
   }
 }
-#line 1243 "dap.c.nw"
+#line 1312 "dap.c.nw"
 void dap_rec_terminate(int cid, term *arg)
 {
   if(cid != tide_cid) {
@@ -467,7 +497,7 @@ void dap_rec_terminate(int cid, term *arg)
   }
 }
 
-#line 911 "dap.c.nw"
+#line 964 "dap.c.nw"
 TBbool check_function(char *pattern, term *tdata)
 {
   char *function;
@@ -483,7 +513,7 @@ TBbool check_function(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 932 "dap.c.nw"
+#line 985 "dap.c.nw"
 TBbool check_exception(char *pattern, term *tdata)
 {
   char *exception;
@@ -499,7 +529,7 @@ TBbool check_exception(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 953 "dap.c.nw"
+#line 1006 "dap.c.nw"
 TBbool check_variable(char *pattern, term *tdata)
 {
   char *var;
@@ -515,7 +545,7 @@ TBbool check_variable(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 974 "dap.c.nw"
+#line 1027 "dap.c.nw"
 TBbool check_location(struct location *loc, term *loc_data)
 {
   struct location loc2;
@@ -545,7 +575,7 @@ TBbool check_location(struct location *loc, term *loc_data)
 
   return TBfalse;
 }
-#line 1011 "dap.c.nw"
+#line 1064 "dap.c.nw"
 TBbool check_pid(term *pids, int pid)
 {
   if(TBmatch(pids, "all"))
@@ -558,12 +588,12 @@ TBbool check_pid(term *pids, int pid)
   }
   return TBfalse;
 }
-#line 1029 "dap.c.nw"
+#line 1082 "dap.c.nw"
 TBbool check_exec_state(int exec_state, term *tdata)
 {
   return (dap_term2es(list_first(tdata)) & exec_state);
 }
-#line 1043 "dap.c.nw"
+#line 1096 "dap.c.nw"
 static int term_match(term *trm, term *template, term_list **args);
 
 static int list_match(term_list *l1, term_list *l2, term_list **args)
@@ -578,7 +608,7 @@ static int list_match(term_list *l1, term_list *l2, term_list **args)
   }
   return 1;
 }
-#line 1063 "dap.c.nw"
+#line 1116 "dap.c.nw"
 static int term_match(term *trm, term *template, term_list **args)
 {
   /* Here, we only perform a preorder search for placeholders */
@@ -588,50 +618,50 @@ static int term_match(term *trm, term *template, term_list **args)
     sym = fun_sym(placeholder_type(template));
     switch(sym) {
       
-#line 1103 "dap.c.nw"
+#line 1156 "dap.c.nw"
 case type_list:	if(!is_list(trm))
 		  return 0;
 case type_term:	*args = list_concat_term(*args, trm);
                 return 1;
-#line 1072 "dap.c.nw"
+#line 1125 "dap.c.nw"
       
-#line 1113 "dap.c.nw"
+#line 1166 "dap.c.nw"
 case type_bool:	if(!is_bool(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
                 return 1;
-#line 1073 "dap.c.nw"
+#line 1126 "dap.c.nw"
       
-#line 1123 "dap.c.nw"
+#line 1176 "dap.c.nw"
 case type_int:	if(!is_int(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1074 "dap.c.nw"
+#line 1127 "dap.c.nw"
       
-#line 1133 "dap.c.nw"
+#line 1186 "dap.c.nw"
 case type_real: if(!is_real(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1075 "dap.c.nw"
+#line 1128 "dap.c.nw"
       
-#line 1143 "dap.c.nw"
+#line 1196 "dap.c.nw"
 case type_str:	if(!is_str(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		break;
 		return 1;
-#line 1076 "dap.c.nw"
+#line 1129 "dap.c.nw"
       
-#line 1154 "dap.c.nw"
+#line 1207 "dap.c.nw"
 case type_bstr:	if(!is_bstr(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1077 "dap.c.nw"
+#line 1130 "dap.c.nw"
       
-#line 1164 "dap.c.nw"
+#line 1217 "dap.c.nw"
 default:	if(streq(get_txt(sym), "appl")) {
 		  if(!is_appl(trm))
 		    return 0;
@@ -639,7 +669,7 @@ default:	if(streq(get_txt(sym), "appl")) {
 		  return 1;
 		}
 		return 0;
-#line 1078 "dap.c.nw"
+#line 1131 "dap.c.nw"
     }
     return 0;
   } else if(is_appl(template)) {
@@ -659,7 +689,7 @@ default:	if(streq(get_txt(sym), "appl")) {
   }
 }
 
-#line 869 "dap.c.nw"
+#line 922 "dap.c.nw"
 static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
 {
   term *res;
@@ -695,7 +725,7 @@ static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
 	pid, p->ruleid, res));
   }
 }
-#line 815 "dap.c.nw"
+#line 868 "dap.c.nw"
 void dap_activate_rule(int pid, term *port, event_rule *rule)
 {
   int   type  = dap_eventport(list_index(port, 1));
@@ -742,7 +772,7 @@ void dap_activate_rule(int pid, term *port, event_rule *rule)
     }
   }
 }
-#line 783 "dap.c.nw"
+#line 831 "dap.c.nw"
 void dap_activate_rules(int pid, term *port)
 {
   static TBbool firstloc = TBtrue;
@@ -763,11 +793,16 @@ void dap_activate_rules(int pid, term *port)
 
   if(type == PORT_EXEC_STATE)
     dap_set_last_port(0, pid, port);
+
+  if(type == PORT_SEND || type == PORT_RECEIVE) {
+    dap_set_last_msg(0, pid, list_first(tdata));
+    dap_set_last_peer(0, pid, list_first(list_next(tdata)));
+  }
  
   for(cur = mydap->ports[type]; cur; cur = cur->next)
     dap_activate_rule(pid, port, cur);
 }
-#line 713 "dap.c.nw"
+#line 761 "dap.c.nw"
 static void cond_trigger_rule(int pid, int rid, term *cond, term *acts);
 
 int dap_create_rule(term *procs, term *port, term *cond, 
@@ -802,7 +837,7 @@ int dap_create_rule(term *procs, term *port, term *cond,
   }
   return rid;
 }
-#line 753 "dap.c.nw"
+#line 801 "dap.c.nw"
 void dap_destroy_rule(int rid)
 {
   dap_rule_destroyed(0, rid);

@@ -35,6 +35,20 @@ public class DebugRule
   }
 
   //}
+  //{ static public ATermRef lifeInt2Term(int lifetime)
+
+  /**
+    * Translate a lifetime integer into a term.
+    */
+
+  static public ATermRef lifeInt2Term(int lifetime)
+  {
+    if(lifetime == ONE_SHOT)
+      return new ATermApplRef("one-shot", null);
+    return new ATermApplRef("persistent", null);
+  }
+
+  //}
 
   //{ public DebugRule(DebugProcess[] procs, DebugPort p, ATermRef cond, ATermsRef acts, int lifetime)
 

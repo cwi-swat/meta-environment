@@ -10,6 +10,7 @@ import toolbus.aterm.*;
 public class ExceptionPort extends DebugPort
 {
   private String exception;
+  private ATermPattern patternPort;
 
   //{ public ExceptionPort(String excep, int when)
 
@@ -21,6 +22,7 @@ public class ExceptionPort extends DebugPort
   {
     super(EXCEPTION, when);
     exception = excep;
+    init();
   }
 
   //}
@@ -34,6 +36,23 @@ public class ExceptionPort extends DebugPort
   {
     super(EXCEPTION, when);
     exception = ((ATermApplRef)excep).getFun();
+    init();
+  }
+
+  //}
+  //{ private void init()
+
+  /**
+    * Build any patterns needed.
+    */
+
+  private void init()
+  {
+    try {
+      patternPort = new ATermPattern("[exception,<term>,<str>]");
+    } catch (ParseError e) {
+      throw new IllegalArgumentException("internal parse error");
+    }
   }
 
   //}
@@ -46,6 +65,19 @@ public class ExceptionPort extends DebugPort
   public String getException()
   {
     return exception;
+  }
+
+  //}
+  //{ public ATermRef onthewire()
+
+  /**
+    * Build a term representing this debug port that can be send 
+    * over the ToolBus.
+    */
+
+  public ATermRef onthewire()
+  {
+    return patternPort.make(getWhenTerm(), exception);
   }
 
   //}

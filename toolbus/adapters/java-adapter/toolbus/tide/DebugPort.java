@@ -28,14 +28,16 @@ abstract public class DebugPort
   //}
   //{ When constants
 
-  public static int WHEN_AT     = 0;
-  public static int WHEN_BEFORE = 1;
-  public static int WHEN_AFTER  = 2;
+  public static final int WHEN_AT     = 0;
+  public static final int WHEN_BEFORE = 1;
+  public static final int WHEN_AFTER  = 2;
 
   //}
 
   private int type;
   private int when;
+
+  abstract public ATermRef onthewire();
 
   //{ static public int typeTerm2Int(ATermRef port)
 
@@ -166,6 +168,40 @@ abstract public class DebugPort
   int getWhen()
   {
     return when;
+  }
+
+  //}
+  //{ int getWhenString()
+  
+  /**
+   * Retrieve the activation moment of this port as a string.
+   */
+
+  String getWhenString()
+  {
+    switch(when) {
+      case WHEN_BEFORE:  return "before";
+      case WHEN_AFTER:   return "after";
+      case WHEN_AT:      return "at";
+    }
+    throw new IllegalArgumentException("illegal activation moment: " + when);
+  }
+
+  //}
+  //{ int getWhenTerm()
+
+  /**
+   * Retrieve the activation moment of this port.
+   */
+
+  ATermRef getWhenTerm()
+  {
+    switch(when) {
+      case WHEN_BEFORE: return new ATermApplRef("before", null);
+      case WHEN_AFTER:  return new ATermApplRef("after", null);
+      case WHEN_AT:     return new ATermApplRef("at", null);
+    }
+    throw new IllegalArgumentException("illegal when type: " + when);
   }
 
   //}

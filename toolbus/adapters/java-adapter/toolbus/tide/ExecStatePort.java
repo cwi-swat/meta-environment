@@ -10,6 +10,7 @@ import toolbus.aterm.*;
 public class ExecStatePort extends DebugPort
 {
   private int exec_state;
+  private ATermPattern patternPort;
 
   //{ public ExecStatePort(int es, int when)
 
@@ -21,6 +22,7 @@ public class ExecStatePort extends DebugPort
   {
     super(EXEC_STATE, when);
     exec_state = es;
+    init();
   }
 
   //}
@@ -34,6 +36,23 @@ public class ExecStatePort extends DebugPort
   {
     super(EXEC_STATE, when);
     exec_state = DebugProcess.execStateTerm2Int(es);
+    init();
+  }
+
+  //}
+  //{ private void init()
+
+  /**
+    * Build needed patterns.
+    */
+
+  private void init()
+  {
+    try {
+      patternPort = new ATermPattern("[exec-state,<term>,<term>]");
+    } catch (ParseError e) {
+      throw new IllegalArgumentException("internal parse error");
+    }
   }
 
   //}
@@ -46,6 +65,31 @@ public class ExecStatePort extends DebugPort
   public int getExecState()
   {
     return exec_state;
+  }
+
+  //}
+  //{ public ATermRef getExecStateTerm()
+
+  /**
+   * Retrieve the exec state of this port.
+   */
+
+  public ATermRef getExecStateTerm()
+  {
+    return DebugProcess.execStateInt2Term(exec_state);
+  }
+
+  //}
+  //{ public ATermRef onthewire()
+
+  /**
+    * Build a term representing this debug port that can be send 
+    * over the ToolBus.
+    */
+
+  public ATermRef onthewire()
+  {
+    return patternPort.make(getWhenTerm(), getExecStateTerm());
   }
 
   //}

@@ -792,6 +792,7 @@ int main(int argc, char *argv[])
 
 \LA{}get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}\RA{}
 \LA{}get_processes~{\nwtagstyle{}\subpageref{NWtclI-getD-1}}\RA{}
+\LA{}exec_actions~{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}\RA{}
 \LA{}create_rule~{\nwtagstyle{}\subpageref{NWtclI-creB-1}}\RA{}
 \LA{}modify_rule~{\nwtagstyle{}\subpageref{NWtclI-modB-1}}\RA{}
 \LA{}destroy_rule~{\nwtagstyle{}\subpageref{NWtclI-desC-1}}\RA{}
@@ -827,17 +828,28 @@ Tcl_File tide_file = NULL;
 The following functions are implemented by the tcltk-adapter.
 
 \nwenddocs{}\nwbegincode{69}\sublabel{NWtclI-funE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\moddef{function table~{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\endmoddef
+\LA{}eval_call_signs~{\nwtagstyle{}\subpageref{NWtclI-evaF-1}}\RA{}
 \LA{}eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}\RA{}
 \LA{}eval_var_1~{\nwtagstyle{}\subpageref{NWtclI-evaA-1}}\RA{}
 
 func_entry func_table[] =
-\{ \{ "eval", 1, eval_eval_1, NULL, "evaluate an expression" \},
+\{ \{ "call-signs", 0, eval_call_signs, NULL, "retrieve the call-signs of a process" \},
+  \{ "eval", 1, eval_eval_1, NULL, "evaluate an expression" \},
   \{ "var", 1, eval_var_1, NULL, "return the value of a variable" \},
   \{ NULL, 0, NULL, NULL, NULL \}
 \};
 \nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{70}\nwdocspar
 
-\nwenddocs{}\nwbegincode{71}\sublabel{NWtclI-evaB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\moddef{eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{71}\sublabel{NWtclI-evaF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaF-1}}}\moddef{eval_call_signs~{\nwtagstyle{}\subpageref{NWtclI-evaF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+TBbool eval_call_signs(term_list *args, int pid, term **result, char **msg)
+\{
+  *result = TB_make("[call-sign(toolbus(<int>),<appl>)]", TB_getPort(cid),
+                TB_getTool(cid), mk_list1(mk_int(TB_getTid(cid))));
+  return TBtrue;  
+\}
+\nwused{\\{NWtclI-funE-1}}\nwendcode{}\nwbegindocs{72}\nwdocspar
+
+\nwenddocs{}\nwbegincode{73}\sublabel{NWtclI-evaB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\moddef{eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 \{
   char *expr;
@@ -853,9 +865,9 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
   Tcl_ResetResult(tide_interp);
   return TBtrue;
 \}
-\nwused{\\{NWtclI-funE-1}}\nwendcode{}\nwbegindocs{72}\nwdocspar
+\nwused{\\{NWtclI-funE-1}}\nwendcode{}\nwbegindocs{74}\nwdocspar
 
-\nwenddocs{}\nwbegincode{73}\sublabel{NWtclI-evaA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaA-1}}}\moddef{eval_var_1~{\nwtagstyle{}\subpageref{NWtclI-evaA-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{75}\sublabel{NWtclI-evaA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaA-1}}}\moddef{eval_var_1~{\nwtagstyle{}\subpageref{NWtclI-evaA-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 TBbool eval_var_1(term_list *args, int pid, term **result, char **msg)
 \{
   char *var;
@@ -875,21 +887,21 @@ TBbool eval_var_1(term_list *args, int pid, term **result, char **msg)
   Tcl_ResetResult(tide_interp);
   return TBtrue;
 \}
-\nwused{\\{NWtclI-funE-1}}\nwendcode{}\nwbegindocs{74}\nwdocspar
+\nwused{\\{NWtclI-funE-1}}\nwendcode{}\nwbegindocs{76}\nwdocspar
 
 %}}}
 %{{{ action table
 
-\nwenddocs{}\nwbegincode{75}\sublabel{NWtclI-actC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\moddef{action table~{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\endmoddef
+\nwenddocs{}\nwbegincode{77}\sublabel{NWtclI-actC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\moddef{action table~{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\endmoddef
 act_entry act_table[] =
 \{ \{ NULL, 0, NULL, NULL, NULL \}
 \};
-\nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{76}\nwdocspar
+\nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{78}\nwdocspar
 
 %}}}
 %{{{ information table
 
-\nwenddocs{}\nwbegincode{77}\sublabel{NWtclI-infH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\moddef{information table~{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\endmoddef
+\nwenddocs{}\nwbegincode{79}\sublabel{NWtclI-infH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\moddef{information table~{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\endmoddef
 char *information_table[] =
 \{ "name",               NULL,
   "type",               "\\"Tcl/Tk\\"",
@@ -903,7 +915,7 @@ char *information_table[] =
   "connections",        NULL,
   NULL,                 NULL
 \};
-\nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{78}\nwdocspar
+\nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{80}\nwdocspar
 
 %}}}
 
@@ -911,7 +923,7 @@ char *information_table[] =
 
 %{{{ int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 
-\nwenddocs{}\nwbegincode{79}\sublabel{NWtclI-hanH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\moddef{handle_tide_error~{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{81}\sublabel{NWtclI-hanH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\moddef{handle_tide_error~{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 \{
   if(use_tide) \{
@@ -920,14 +932,14 @@ int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
   \}
   return 0;
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{80}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{82}\nwdocspar
 
 %}}}
 %{{{ void handle_tide_args(int argc, char *argv[])
 
 Handle any Tide-related arguments.
 
-\nwenddocs{}\nwbegincode{81}\sublabel{NWtclI-hanG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\moddef{handle_tide_args~{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{83}\sublabel{NWtclI-hanG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\moddef{handle_tide_args~{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void handle_tide_args(int argc, char *argv[])
 \{
   int i, port = 9500;
@@ -953,25 +965,25 @@ void handle_tide_args(int argc, char *argv[])
                         debug_adapter_handler, debug_adapter_check_in_sign);
   \}
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{82}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{84}\nwdocspar
 
 %}}}
 %{{{ tcl_tide_handler(ClientData data, int mask)
 
 Tcl informs us that a ToolBus message comes in over the Tide channel.
 
-\nwenddocs{}\nwbegincode{83}\sublabel{NWtclI-tclG.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\moddef{tcl_tide_handler~{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{85}\sublabel{NWtclI-tclG.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\moddef{tcl_tide_handler~{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tcl_tide_handler(ClientData data, int mask)
 \{
   if(TB_peek(tide_cid))
     TB_handle_one(tide_cid);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{84}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{86}\nwdocspar
 
 %}}}
 %{{{ void tide_event_loop()
 
-\nwenddocs{}\nwbegincode{85}\sublabel{NWtclI-tidF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\moddef{tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{87}\sublabel{NWtclI-tidF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\moddef{tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tide_event_loop()
 \{
   while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
@@ -979,14 +991,14 @@ void tide_event_loop()
     TB_handle_one(tide_cid);
   \}
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{86}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
 
 %}}}
 %{{{ int Tide_Init(Tcl_Interp *interp)
 
 Initialize Tide.
 
-\nwenddocs{}\nwbegincode{87}\sublabel{NWtclI-Tid9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\moddef{Tide_Init~{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{89}\sublabel{NWtclI-Tid9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\moddef{Tide_Init~{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tide_Init(Tcl_Interp *interp)
 \{
   tide_interp = interp;
@@ -1020,7 +1032,7 @@ int Tide_Init(Tcl_Interp *interp)
 
   return TCL_OK;
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{90}\nwdocspar
 
 %}}}
 
@@ -1028,22 +1040,22 @@ int Tide_Init(Tcl_Interp *interp)
 
 This callback function is called when a new process was created.
 
-\nwenddocs{}\nwbegincode{89}\sublabel{NWtclI-cbdL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\moddef{cbdap_process_created~{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{91}\sublabel{NWtclI-cbdL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\moddef{cbdap_process_created~{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void cbdap_process_created(int dapid, int pid)
 \{
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{90}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{92}\nwdocspar
 
 %}}}
 %{{{ void cbdap_process_destroyed(int dapid, int pid)
 
 This callback function is called when a new process was created.
 
-\nwenddocs{}\nwbegincode{91}\sublabel{NWtclI-cbdN-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\moddef{cbdap_process_destroyed~{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{93}\sublabel{NWtclI-cbdN-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\moddef{cbdap_process_destroyed~{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void cbdap_process_destroyed(int dapid, int pid)
 \{
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{92}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{94}\nwdocspar
 
 %}}}
 %{{{ void cbdap_change_exec_state(int pid, int exec_state)
@@ -1052,18 +1064,18 @@ This function is used as a callback to physically change
 the execution state of a process.
 In the tcltk-adapter this is handled at a higher level.
 
-\nwenddocs{}\nwbegincode{93}\sublabel{NWtclI-cbdN.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\moddef{cbdap_change_exec_state~{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{95}\sublabel{NWtclI-cbdN.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\moddef{cbdap_change_exec_state~{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void cbdap_change_exec_state(int pid, int exec_state)
 \{
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{94}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{96}\nwdocspar
 
 %}}}
 %{{{ term *cbdap_supply_info(int cid, char *key)
 
 This function supplies dynamic info.
 
-\nwenddocs{}\nwbegincode{95}\sublabel{NWtclI-cbdH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\moddef{cbdap_supply_info~{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{97}\sublabel{NWtclI-cbdH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\moddef{cbdap_supply_info~{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 term *cbdap_supply_info(char *key)
 \{
   static char buf[_POSIX_PATH_MAX];
@@ -1074,13 +1086,13 @@ term *cbdap_supply_info(char *key)
 
   return NULL;
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{96}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{98}\nwdocspar
 
 If we can take the ToolBus tool as the name, we do so.
 Otherwise, we take the name of the script, or just "wish".
 In all cases we make the name unique by prepending the
 Tid from the debug ToolBus.
-\nwenddocs{}\nwbegincode{97}\sublabel{NWtclI-nam9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-nam9-1}}}\moddef{name info~{\nwtagstyle{}\subpageref{NWtclI-nam9-1}}}\endmoddef
+\nwenddocs{}\nwbegincode{99}\sublabel{NWtclI-nam9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-nam9-1}}}\moddef{name info~{\nwtagstyle{}\subpageref{NWtclI-nam9-1}}}\endmoddef
   if(streq(key, "name")) \{
     int tid = TB_getTid(tide_cid);
     if(use_toolbus)
@@ -1089,19 +1101,19 @@ Tid from the debug ToolBus.
       sprintf(buf, "%s-%d", script ? script : "wish", tide_cid);
     return TB_make("<str>", buf);
   \}
-\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{98}\nwdocspar
+\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{100}\nwdocspar
 
 Only look for search paths in the current directory. Later, we
 might want to look in the file {\tt "./.tide/toolbusrc"}.
-\nwenddocs{}\nwbegincode{99}\sublabel{NWtclI-seaH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-seaH-1}}}\moddef{search-paths info~{\nwtagstyle{}\subpageref{NWtclI-seaH-1}}}\endmoddef
+\nwenddocs{}\nwbegincode{101}\sublabel{NWtclI-seaH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-seaH-1}}}\moddef{search-paths info~{\nwtagstyle{}\subpageref{NWtclI-seaH-1}}}\endmoddef
   if(streq(key, "search-paths")) \{
     getcwd(buf, _POSIX_PATH_MAX);
 
     return TB_make("[[config, [<str>]], [source, [<str>]]]", buf, buf);
   \}
-\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{100}\nwdocspar
+\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{102}\nwdocspar
 
-\nwenddocs{}\nwbegincode{101}\sublabel{NWtclI-conG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\moddef{connections info~{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\endmoddef
+\nwenddocs{}\nwbegincode{103}\sublabel{NWtclI-conG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\moddef{connections info~{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\endmoddef
   if(streq(key, "connections")) \{
     if(use_toolbus) \{
       sprintf(buf, "toolbus-%d", TB_getPort(cid));
@@ -1110,7 +1122,7 @@ might want to look in the file {\tt "./.tide/toolbusrc"}.
     /* No connections, return the empty list. */
     return NULL;
   \}
-\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{102}\nwdocspar
+\nwused{\\{NWtclI-cbdH-1}}\nwendcode{}\nwbegindocs{104}\nwdocspar
 
 %}}}
 
@@ -1118,7 +1130,7 @@ might want to look in the file {\tt "./.tide/toolbusrc"}.
 
 The executing program just past an observation port.
 
-\nwenddocs{}\nwbegincode{103}\sublabel{NWtclI-TclA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\moddef{Tcl_TBtide~{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{105}\sublabel{NWtclI-TclA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\moddef{Tcl_TBtide~{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 \{
   term *port;
@@ -1155,45 +1167,72 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
     return Tcl_Eval(interp, argv[2]);
   \}
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{104}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{106}\nwdocspar
 
 %}}}
 
 %{{{ term *get_info(int cid)
 
-\nwenddocs{}\nwbegincode{105}\sublabel{NWtclI-get8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\moddef{get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{107}\sublabel{NWtclI-get8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\moddef{get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 term *get_info(int cid)
 \{
   return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{106}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{108}\nwdocspar
 
 %}}}
 %{{{ term *get_processes(int cid)
 
 ToolBus callback. Returns a list of process identifier/name pairs.
 
-\nwenddocs{}\nwbegincode{107}\sublabel{NWtclI-getD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\moddef{get_processes~{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
-term *get_processes(int cid)
+\nwenddocs{}\nwbegincode{109}\sublabel{NWtclI-getD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\moddef{get_processes~{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+term *get_processes(int mycid)
 \{
   int i;
   term_list *procs = NULL;
 
   for(i=0; i<MAX_PROCESSES; i++) \{
     process *p = dap_get_process(0, i);
-    if(p)
-      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+    if(p) \{
+      term_list *callsigns = NULL;
+
+      if(use_toolbus) \{
+        callsigns=TB_make("[callsign(toolbus(<int>),<appl>)]",TB_getPort(cid),
+                 TB_getTool(cid), mk_list1(mk_int(TB_getTid(cid))));
+      \}
+      procs = list_concat_term(procs, TB_make("[<int>,<str>,<list>]", 
+                                                i, p->name, callsigns));
+    \}
   \}
   return TB_make("snd-value(processes(<term>))", procs);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{108}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{110}\nwdocspar
+
+%}}}
+%{{{ term *exec_actions(int cid, term *procs, term *acts)
+
+This ToolBus callback function is called to execute a list of actions. 
+
+\nwenddocs{}\nwbegincode{111}\sublabel{NWtclI-exeC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}}\moddef{exec_actions~{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+term *exec_actions(int cid, term *procs, term *acts)
+\{
+  char *msg;
+  term *result;
+
+  TBbool ok = dap_exec(procs, acts, &result, &msg);
+  if(ok)
+    return TB_make("snd-value(exec-result(ok(<term>)))", result);
+
+  return TB_make("snd-value(exec-result(error(<str>)))", msg);
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{112}\nwdocspar
 
 %}}}
 %{{{ term *create_rule(int cid, term *procs, port, cond, acts, life)
 
 This ToolBus callback function is called to create a new rule. 
 
-\nwenddocs{}\nwbegincode{109}\sublabel{NWtclI-creB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\moddef{create_rule~{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{113}\sublabel{NWtclI-creB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\moddef{create_rule~{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 \{
   int rid = dap_create_rule(procs, port, cond, acts, life);
@@ -1201,32 +1240,32 @@ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term
         "snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
         procs, port, cond, acts, life, rid);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{110}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{114}\nwdocspar
 
 %}}}
 %{{{ void modify_rule(int cid, rid, term *procs, port, cond, acts, life)
 
 This ToolBus callback function is called to modify an existing rule. 
 
-\nwenddocs{}\nwbegincode{111}\sublabel{NWtclI-modB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\moddef{modify_rule~{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{115}\sublabel{NWtclI-modB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\moddef{modify_rule~{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void modify_rule(int cid, int rid, term *procs, term *port, 
                                 term *cond, term *acts, term *life)
 \{
   dap_rule_modified(0, rid, procs, port, cond, acts, life);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{112}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{116}\nwdocspar
 
 %}}}
 %{{{ void destroy_rule(int cid, term *procs, int rid)
 
 This ToolBus callback function is called to destroy an existing rule.
 
-\nwenddocs{}\nwbegincode{113}\sublabel{NWtclI-desC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\moddef{destroy_rule~{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{117}\sublabel{NWtclI-desC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\moddef{destroy_rule~{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void destroy_rule(int cid, term *procs, int rid)
 \{
   dap_destroy_rule(rid);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{114}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{118}\nwdocspar
 
 %}}}
 
@@ -1234,19 +1273,19 @@ void destroy_rule(int cid, term *procs, int rid)
 
 Propagate event acknowledgements to the tide library.
 
-\nwenddocs{}\nwbegincode{115}\sublabel{NWtclI-recD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\moddef{rec_ack_event~{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{119}\sublabel{NWtclI-recD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\moddef{rec_ack_event~{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void rec_ack_event(int cid, term *event)
 \{
   dap_rec_ack_event(cid, event);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{116}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{120}\nwdocspar
 
 %}}}
 %{{{ void rec_terminate(int cid, term *arg)
 
 Propagate termination requests to the tide library.
 
-\nwenddocs{}\nwbegincode{117}\sublabel{NWtclI-recD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\moddef{rec_terminate~{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\nwenddocs{}\nwbegincode{121}\sublabel{NWtclI-recD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\moddef{rec_terminate~{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void rec_terminate(int cid, term *arg)
 \{
   dap_rec_terminate(cid, arg);
@@ -1272,8 +1311,10 @@ void rec_terminate(int cid, term *arg)
 \nwixlogsorted{c}{{create_rule}{NWtclI-creB-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-creB-1}}}%
 \nwixlogsorted{c}{{destroy_rule}{NWtclI-desC-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-desC-1}}}%
 \nwixlogsorted{c}{{error}{NWtclI-err5-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-err5-1}}}%
+\nwixlogsorted{c}{{eval_call_signs}{NWtclI-evaF-1}{\nwixu{NWtclI-funE-1}\nwixd{NWtclI-evaF-1}}}%
 \nwixlogsorted{c}{{eval_eval_1}{NWtclI-evaB-1}{\nwixu{NWtclI-funE-1}\nwixd{NWtclI-evaB-1}}}%
 \nwixlogsorted{c}{{eval_var_1}{NWtclI-evaA-1}{\nwixu{NWtclI-funE-1}\nwixd{NWtclI-evaA-1}}}%
+\nwixlogsorted{c}{{exec_actions}{NWtclI-exeC-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-exeC-1}}}%
 \nwixlogsorted{c}{{from_toolbus}{NWtclI-froC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-froC-1}}}%
 \nwixlogsorted{c}{{function table}{NWtclI-funE-1}{\nwixu{NWtclI-tidE-1}\nwixd{NWtclI-funE-1}}}%
 \nwixlogsorted{c}{{functions}{NWtclI-fun9-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-fun9-1}}}%
@@ -1313,7 +1354,7 @@ void rec_terminate(int cid, term *arg)
 \nwixlogsorted{c}{{wish_type_string}{NWtclI-wisG-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wisG-1}}}%
 \nwixlogsorted{c}{{wprintf}{NWtclI-wpr7-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wpr7-1}}}%
 \nwixlogsorted{c}{{wputc}{NWtclI-wpu5-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wpu5-1}}}%
-\nwbegindocs{118}\nwdocspar
+\nwbegindocs{122}\nwdocspar
 
 %}}}
 

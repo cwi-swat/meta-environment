@@ -22,8 +22,11 @@ view, it is a \emph{debug-nub}.
 
 <<get_var_value>>
 <<set_var_value>>
+<<clean_variables>>
 <<update_process>>
 <<create_process>>
+<<tool_connected>>
+<<tool_disconnected>>
 
 <<get_info>>
 <<get_processes>>
@@ -73,8 +76,16 @@ int control_bus;
 int viewer;
 int RID = 0;
 
+TBbool eval_aliases(term_list *args, int pid, term **result, char **msg)
+{
+  *result = TB_make("[alias(toolbus(<int>),<appl>)]", TB_getPort(viewer),
+		dap_get_process_name(0, pid), mk_list1(mk_int(pid)));
+  return TBtrue;  
+}
+
 static func_entry func_table[] =
 { 
+  { "aliases", 0, eval_aliases, NULL, "retrieve the aliases of a process" },
   { NULL, 0, NULL, NULL, NULL }
 };
 
@@ -180,8 +191,9 @@ the execution state of a process.
 void cbdap_change_exec_state(int pid, int exec_state)
 {
   switch(exec_state) {
-    case ES_RUN:
     case ES_SINGLE_STEP:
+	dap_get_process(0, pid)->new_es = ES_STOP;
+    case ES_RUN:
 	if(dap_check_process_flags(0, pid, PUF_WAITING))
 	  continue_process(pid);
 	break;
@@ -258,8 +270,8 @@ void set_var_value(int pid, term *var, term *val)
 
   vars = get_process_vars(pid);
   p = dap_get_process(0, pid);
-  TBprintf(stderr, "set_var_value in %s: %t vars: %t\n", p->name,
-	var, vars);
+  /*TBprintf(stderr, "set_var_value in %s: %t vars: %t\n", p->name,
+	var, vars);*/
 
   while(vars) {
     cur_var = list_first(vars);
@@ -274,6 +286,52 @@ void set_var_value(int pid, term *var, term *val)
   /*TBprintf(stderr, "\tnot found, adding var %t (%t)!\n", var, val);*/
   set_process_vars(pid, 
 	list_concat_term(get_process_vars(pid),mk_list2(var,val)));
+}
+@
+
+%}}}
+%{{{ clean_variables
+
+Replace any variables in a term with their typeless, resultless counterparts.
+
+<<clean_variables>>=
+term_list *clean_vars_list(term_list *l);
+
+term *clean_variables(term *t)
+{
+  term *r;
+
+  switch(tkind(t)) {
+    case t_bool:
+    case t_int:
+    case t_real:
+    case t_str:
+    case t_bstr:  return t;
+
+    case t_var:	  r = mk_appl(var_sym(t), NULL);
+		  fun_str_sym(r) = TBtrue;
+		  return r;
+
+    case t_appl:  r = mk_appl(fun_sym(t), clean_vars_list(fun_args(t)));
+		  fun_str_sym(r) = fun_str_sym(t);
+		  return r;
+
+    case t_list:  return clean_vars_list(t);
+  }
+  return NULL;
+}
+
+term_list *clean_vars_list(term_list *l)
+{
+  term_list *r = NULL;
+  term_list *el;
+  int idx;
+
+  for(idx = list_length(l); idx > 0; idx--) {
+    el = clean_variables(list_index(l, idx));
+    r = mk_list(el, r);
+  }
+  return r;
 }
 @
 
@@ -333,14 +391,37 @@ void create_process(int pid, term *args)
   if(pid_trm) {
     TB_match(pid_trm, "<int>", &new_pid);
     TB_match(first(args), "<appl>", &name, &dummy);
-    dap_process_created(0, new_pid, name, ES_STOP);
- 
-    /*TBprintf(stderr, "create_process: %t (%d, %s)\n", 
-		args, new_pid, proc_db[new_pid]->name);*/
+    dap_process_created(0, new_pid, name, dap_get_new_exec_state(0, pid));
     dap_activate_rules(new_pid, TB_make("[process-creation,at]"));
   } else {
     TBprintf(stderr, "cannot find pid of created process: %t", args);
   }  
+}
+@
+
+%}}}
+%{{{ void tool_connected(int pid, term *args)
+
+<<tool_connected>>=
+void tool_connected(int pid, term *args)
+{
+  term *toolid = NULL;
+  get_var_value(pid, list_first(args), &toolid);
+  TBprintf(stderr, "tool_connected: %t\n", toolid);
+  dap_connected(TB_make("callsign(toolbus(<int>),<term>)", TB_getPort(viewer),toolid));
+}
+@
+
+%}}}
+%{{{ void tool_disconnected(int pid, term *args)
+
+<<tool_disconnected>>=
+void tool_disconnected(int pid, term *args)
+{
+  term *toolid = NULL;
+  get_var_value(pid, list_first(args), &toolid);
+  TBprintf(stderr, "tool_disconnected: %t\n", toolid);
+  dap_disconnected(TB_make("callsign(toolbus(<int>),<term>)", TB_getPort(viewer),toolid));
 }
 @
 
@@ -369,8 +450,12 @@ term *get_processes(int cid)
 
   for(i=0; i<MAX_PROCESSES; i++) {
     process *p = dap_get_process(0, i);
-    if(p)
-      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+    if(p) {
+      term *callsigns = TB_make("[callsign(<int>,<appl>)]", TB_getPort(viewer),
+		dap_get_process_name(0, i), mk_list1(mk_int(i)));
+      procs = list_concat_term(procs, TB_make("[<int>,<str>,<list>]", 
+						i, p->name, callsigns));
+    }
   }
   return TB_make("snd-value(processes(<term>))", procs);
 }
@@ -449,14 +534,15 @@ bus.
 term *rec_monitor(int cid, term *T)
 {
   char *mon_point, *at_fun;
-  int pid1, pid2;
+  int pid1, pid2, old_state, new_state;
   term *at_args, *at_coords, *env, *subs, *notes, *pe;
 
   /*TBprintf(stderr, "monitor command received: %t\n", T);*/
   if(TBmatch(T, "%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)",
 	     &mon_point, &pid1, &at_fun, &at_args, &at_coords,
 	     &env, &subs, &notes, &pid2, &pe)) {
-    /* Any common code prefix goes here */
+
+    /* Update process variables */
     update_process(pid1, env);
     if(!dap_get_process(0, pid1)) {
       /* Steps executed when the process is not officially created yet
@@ -467,48 +553,68 @@ term *rec_monitor(int cid, term *T)
       
     dap_set_process_flags(0, pid1, PUF_WAITING);
 
-    if(streq(at_fun, "create")) {
-      /* Process creation monitoring */
-      create_process(pid1, at_args); 
-    } else if(streq(at_fun, "rec-connect")) {
-      /* Tool connection monitoring */
-    } else if(is_to_tool_comm(at_fun)) {
-      /* Process -> Tool communication monitoring */
-    } else if(is_from_tool_comm(at_fun)) {
-      /* Tool -> Process communication monitoring */
-    } else if(streq(at_fun, "endlet")) {
-      /* Endlet monitoring */
-    } else if(pid2 >= 0) {
-      /* Process <-> process communication */
-    } else {
-      /* Other atoms (assignment, printf, tau, etc.) */
-    }
+    <<atom dependend processing>>
 
     /* Now we can activate all location rules */
     if(at_coords)
       dap_activate_rules(pid1, 
 	list_concat(TB_make("[location,after]"), at_coords));
 
-    /* Any common code postfix goes here */
-    switch(dap_get_exec_state(0, pid1)) {
-	case ES_STOP:
-	case ES_SINGLE_STEP:	/* Later, we need to do something more
-				   sophisticated here later. */
-				dap_change_exec_state(pid1, ES_STOP);
-				break;
-	case ES_RUN:		continue_process(pid1);
-				break;
-        case ES_HIGH_WATER:	break;
-	default:	/* An illegal exec state? better crash and burn! */
-			TBmsg("process %d, exec_state = %d\n",
-				pid1, dap_get_exec_state(0, pid1));
-			assert(0);
+    old_state = dap_get_exec_state(0, pid1);
+    new_state = dap_get_new_exec_state(0, pid1);
+    TBprintf(stderr, "es of %d=%d, new_es=%d\n", 
+		pid1, old_state, dap_get_new_exec_state(0, pid1));
+
+    if(dap_get_new_exec_state(0,pid1) != dap_get_exec_state(0,pid1)) {
+      int new_state = dap_get_new_exec_state(0, pid1);
+      dap_get_process(0, pid1)->exec_state = new_state;
+      cbdap_change_exec_state(pid1, new_state);
+    }
+    if(new_state == ES_SINGLE_STEP)
+      dap_get_process(0, pid1)->new_es = ES_STOP;
+
+    if(dap_get_exec_state(0, pid1) != old_state)
+      dap_activate_rules(pid1, TB_make("[exec-state,at,<term>]", 
+				dap_es2term(dap_get_exec_state(0, pid1))));
+    if(dap_get_exec_state(0, pid1) != ES_STOP) {
+      if(!dap_is_high_water(0, pid1))
+        continue_process(pid1);
     }
   } else {
     err_fatal("badly formed monitor function: %t\n", T);
   }
+
   return NULL;
 }
+@
+
+<<atom dependend processing>>=
+  if(streq(at_fun, "create"))
+    create_process(pid1, at_args);	/* Process creation monitoring */
+  else if(streq(at_fun, "rec-connect"))
+    tool_connected(pid1, at_args);	/* Tool connection monitoring */
+  else if(streq(at_fun, "rec-disconnect"))
+    tool_disconnected(pid1, at_args);	/* Tool disconnection monitoring */
+  else if(is_to_tool_comm(at_fun)) {
+    /* Process -> Tool communication monitoring */
+  } else if(is_from_tool_comm(at_fun)) {
+    /* Tool -> Process communication monitoring */
+  } else if(streq(at_fun, "endlet")) {
+    /* Endlet monitoring */
+  } else if(pid2 >= 0 && strncmp(at_fun, "snd", 3) == 0) {
+    dap_activate_rules(pid1, 
+    TB_make("[send,after,<appl>,alias(toolbus(<int>),<appl>)]", 
+		at_fun, clean_variables(at_args), TB_getPort(viewer), 
+		dap_get_process_name(0, pid2), mk_list1(mk_int(pid2))));
+  } else if(pid2 >= 0 && strncmp(at_fun, "rec", 3) == 0) {
+    dap_activate_rules(pid1,
+    TB_make("[receive,after,<appl>,alias(toolbus(<int>),<appl>)]",
+		at_fun, clean_variables(at_args), TB_getPort(viewer), 
+		dap_get_process_name(0, pid2), mk_list1(mk_int(pid2))));
+  } else {
+    /* Other atoms (assignment, printf, tau, etc.) */
+    TBprintf(stderr, "unrecognized atom executed: %s(%l)\n", at_fun, at_args);
+  }
 @
 
 %{{{ is_to_tool_comm
@@ -516,7 +622,7 @@ term *rec_monitor(int cid, term *T)
 <<is_to_tool_comm>>=
 TBbool is_to_tool_comm(char *s)
 {
-  return streq(s, "snd-eval") 
+   return streq(s, "snd-eval") 
          || streq(s, "snd-cancel") 
          || streq(s, "snd-do") 
          || streq(s, "snd-ack-event") 
@@ -531,7 +637,7 @@ TBbool is_to_tool_comm(char *s)
 TBbool is_from_tool_comm(char *s)
 {
   return streq(s, "rec-value") 
-         ||  streq(s, "rec-event") 
+         || streq(s, "rec-event") 
          || streq(s, "rec-disconnect");
 }
 @
@@ -558,7 +664,6 @@ Handle a termination request.
 <<rec_terminate>>=
 void rec_terminate(int cid, term *arg)
 {
-  TBprintf(stderr, "Received termination request: %t\n", arg);
   dap_rec_terminate(cid, arg);
   exit(0);
 }

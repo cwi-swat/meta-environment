@@ -41,13 +41,15 @@ void   dap_destroy_rule(int rid);
 void   dap_activate_rules(int pid, term *port);
 TBbool dap_evaluate(term *t, int pid, term **result, char **msg); 
 TBbool dap_execute(term *t, int pid, term **result, char **msg);
+void dap_disconnected(term *callsign);
+void dap_connected(term *callsign);
 
-TBbool dap_change_exec_state(int pid, int new_state);
+void   dap_change_exec_state(int pid, int new_state);
 
 /*TBbool dap_typecheck_expr(term *t, int pid, term **result, char **msg);
 TBbool dap_typecheck_action(term *t, int pid, term **result, char **msg);
 */
-#line 127 "dap.c.nw"
+#line 129 "dap.c.nw"
 term *cbdap_supply_info(char *key);
 void cbdap_change_exec_state(int pid, int exec_state);
 #line 18 "dap.c.nw"

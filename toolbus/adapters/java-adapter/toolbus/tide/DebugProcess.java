@@ -23,12 +23,14 @@ class DebugProcess
   //}
 
   private int pid;
+  private int dap;
   private String name = null;
   private int exec_state = ES_NONE;
   boolean high_water = false;
   private SourceArea location = null;
   int rule_id = -1;
   DebugPort port = null;
+  private Hashtable aliases = new Hashtable(5);
   
   //{ static public int execStateTerm2Int(ATermRef es)
 
@@ -47,6 +49,8 @@ class DebugProcess
       return ES_SINGLE_STEP;
     if(fun.equals("step-over"))
       return ES_STEP_OVER;
+    if(fun.equals("run-until-parent"))
+      return ES_RUN_UNTIL_PARENT;
     if(fun.equals("all"))
       return ES_ALL;
 
@@ -54,16 +58,37 @@ class DebugProcess
   }
 
   //}
+  //{ static public ATermRef execStateInt2Term(int es)
 
-  //{ public DebugProcess(int pid)
+  /**
+    * Transform a term representing an exec-state into an integer.
+    */
+
+  static public ATermRef execStateInt2Term(int es)
+  {
+    switch(es) {
+      case ES_STOP:             return new ATermApplRef("stop", null);
+      case ES_RUN:              return new ATermApplRef("run", null);
+      case ES_SINGLE_STEP:      return new ATermApplRef("single-step", null);
+      case ES_STEP_OVER:        return new ATermApplRef("step-over", null);
+      case ES_RUN_UNTIL_PARENT: return new ATermApplRef("run-until-parent", null);
+      case ES_ALL:              return new ATermApplRef("all", null);
+    }
+    throw new IllegalArgumentException("illegal exec-state: " + es);
+  }
+
+  //}
+
+  //{ public DebugProcess(int dapid, int pid)
 
   /**
    * Construct a new process. Initially, it has no name.
    */
 
-  public DebugProcess(int procid)
+  public DebugProcess(int dapid, int procid)
   {
     pid = procid;
+    dap = dapid;
   }
 
   //}
@@ -73,9 +98,10 @@ class DebugProcess
    * Construct a new process.
    */
 
-  public DebugProcess(int procid, String name)
+  public DebugProcess(int dapid, int procid, String name)
   {
     pid = procid;
+    dap = dapid;
     this.name = name;
   }
 
@@ -89,6 +115,18 @@ class DebugProcess
   public int getPid()
   {
     return pid;
+  }
+
+  //}
+  //{ public int getDap()
+
+  /**
+    * Retrieve the debug-adapter id of this process.
+    */
+
+  public int getDap()
+  {
+    return dap;
   }
 
   //}
@@ -243,6 +281,42 @@ class DebugProcess
   public DebugPort getPort()
   {
     return port;
+  }
+
+  //}
+  //{ public void addAlias(ATermRef alias)
+
+  /**
+    * Add an alias to this process.
+    */
+
+  public void addAlias(ATermRef alias)
+  {
+    aliases.put(alias,alias);
+  }
+
+  //}
+  //{ public Enumeration getAliases()
+
+  /**
+    * Return a list of aliases.
+    */
+
+  public Enumeration getAliases()
+  {
+    return aliases.keys();
+  }
+
+  //}
+  //{ public boolean isAlias(ATermRef alias)
+
+  /**
+    * Check if a term is an alias of this process.
+    */
+
+  public boolean isAlias(ATermRef alias)
+  {
+    return aliases.containsKey(alias);
   }
 
   //}

@@ -792,6 +792,7 @@ int main(int argc, char *argv[])
 
 <<get_info>>
 <<get_processes>>
+<<exec_actions>>
 <<create_rule>>
 <<modify_rule>>
 <<destroy_rule>>
@@ -827,14 +828,25 @@ Tcl_File tide_file = NULL;
 The following functions are implemented by the tcltk-adapter.
 
 <<function table>>=
+<<eval_call_signs>>
 <<eval_eval_1>>
 <<eval_var_1>>
 
 func_entry func_table[] =
-{ { "eval", 1, eval_eval_1, NULL, "evaluate an expression" },
+{ { "call-signs", 0, eval_call_signs, NULL, "retrieve the call-signs of a process" },
+  { "eval", 1, eval_eval_1, NULL, "evaluate an expression" },
   { "var", 1, eval_var_1, NULL, "return the value of a variable" },
   { NULL, 0, NULL, NULL, NULL }
 };
+@
+
+<<eval_call_signs>>=
+TBbool eval_call_signs(term_list *args, int pid, term **result, char **msg)
+{
+  *result = TB_make("[call-sign(toolbus(<int>),<appl>)]", TB_getPort(cid),
+		TB_getTool(cid), mk_list1(mk_int(TB_getTid(cid))));
+  return TBtrue;  
+}
 @
 
 <<eval_eval_1>>=
@@ -1174,17 +1186,44 @@ term *get_info(int cid)
 ToolBus callback. Returns a list of process identifier/name pairs.
 
 <<get_processes>>=
-term *get_processes(int cid)
+term *get_processes(int mycid)
 {
   int i;
   term_list *procs = NULL;
 
   for(i=0; i<MAX_PROCESSES; i++) {
     process *p = dap_get_process(0, i);
-    if(p)
-      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+    if(p) {
+      term_list *callsigns = NULL;
+
+      if(use_toolbus) {
+        callsigns=TB_make("[callsign(toolbus(<int>),<appl>)]",TB_getPort(cid),
+		 TB_getTool(cid), mk_list1(mk_int(TB_getTid(cid))));
+      }
+      procs = list_concat_term(procs, TB_make("[<int>,<str>,<list>]", 
+						i, p->name, callsigns));
+    }
   }
   return TB_make("snd-value(processes(<term>))", procs);
+}
+@
+
+%}}}
+%{{{ term *exec_actions(int cid, term *procs, term *acts)
+
+This ToolBus callback function is called to execute a list of actions. 
+
+<<exec_actions>>=
+term *exec_actions(int cid, term *procs, term *acts)
+{
+  char *msg;
+  term *result;
+
+  TBbool ok = dap_exec(procs, acts, &result, &msg);
+  if(ok)
+    return TB_make("snd-value(exec-result(ok(<term>)))", result);
+
+  return TB_make("snd-value(exec-result(error(<str>)))", msg);
 }
 @
 

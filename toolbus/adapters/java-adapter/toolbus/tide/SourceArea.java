@@ -56,4 +56,64 @@ public class SourceArea
   }
 
   //}
+  //{ public String getModule()
+
+  /**
+    * Retrieve the module of this area.
+    */
+
+  public String getModule()
+  {
+    return module;
+  }
+
+  //}
+  //{ public int getStartLine()
+
+  /**
+    * Retrieve the start line of the area.
+    */
+
+  public int getStartLine()
+  {
+    return start_line;
+  }
+
+  //}
+  //{ public int getStartColumn()
+
+  /**
+    * Retrieve the start column of the area.
+    */
+
+  public int getStartColumn()
+  {
+    return start_col;
+  }
+
+  //}
+  //{ public int getEndLine()
+
+  /**
+    * Retrieve the end line of the area.
+    */
+
+  public int getEndLine()
+  {
+    return end_line;
+  }
+
+  //}
+  //{ public int getEndColumn()
+
+  /**
+    * Retrieve the end column of the area.
+    */
+
+  public int getEndColumn()
+  {
+    return end_col;
+  }
+
+  //}
 }

@@ -13,14 +13,14 @@ in
     rec-value(D, processes(P?)) .
     %% printf("%t info: %t, procs: %t\n", D, Info, P) .
     snd-note(event(proc(D,all), dap-connected(Info,P))) .
-    create(EVENT-RULES(D), Pid?)
+    create(DEBUG-ADAPTER(D), Pid?)
     +
     rec-disconnect(D?) .
     snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
-#line 102 "tide.tb.nw"
-process EVENT-RULES(D:debug-adapter) is
+#line 103 "tide.tb.nw"
+process DEBUG-ADAPTER(D:debug-adapter) is
 let
   P     : term,   %% list of process-id's, or `all' indicating all
                   %% processes controlled by the debug adapter.
@@ -31,7 +31,8 @@ let
   Rid   : int,    %% event rule identifier
   Expr  : term,   %% Watchpoint expression
   Exprs : term,   %% List of expression/value pairs.
-  Result: term    %% ok or error(<str>)
+  Result: term,   %% ok or error(<str>)
+  Callsign : term %% Name of an external process
 in
   ( rec-msg(proc(D,P?), create-rule(Port?,Cond?,Acts?,Life?)) .
     snd-eval(D, create-rule(P, Port,Cond,Acts,Life)) .
@@ -47,7 +48,6 @@ in
     snd-do(D, destroy-rule(P,Rid))
     +
     rec-msg(proc(D,P?), exec-actions(Acts?)) .
-	printf("exec-actions(%t) to debug-adapter %t\n", Acts, D) .
     snd-eval(D, exec-actions(P, Acts)) .
     rec-value(D, exec-result(Result?)) .
     snd-msg(proc(D,P), exec-result(Result))
@@ -59,9 +59,23 @@ in
     rec-event(D, rule-destroyed(Rid?)) .
     snd-note(event(proc(D,P), rule-destroyed(Rid))) .
     snd-ack-event(D, rule-destroyed(Rid))
+    +
+    rec-event(D, synchronize) .
+    snd-note(synchronize(D)) .
+    rec-msg(synchronize(D)) .
+    snd-ack-event(D, synchronize)
+    +
+    rec-event(D, connected(Callsign?)) .
+    printf("TB connected: %t\n", Callsign) .
+    snd-note(event(proc(D,all), connected(Callsign))) .
+    snd-ack-event(D, connected(Callsign))
+    +
+    rec-event(D, disconnected(Callsign?)) .
+    snd-note(event(proc(D,all),disconnected(Callsign))) .
+    snd-ack-event(D, disconnected(Callsign))
    ) * delta
 endlet
-#line 153 "tide.tb.nw"
+#line 168 "tide.tb.nw"
 process BROADCAST is
 let
   From : term,
@@ -71,7 +85,7 @@ in
     snd-note(event(From, Ev))
   ) * delta
 endlet
-#line 169 "tide.tb.nw"
+#line 184 "tide.tb.nw"
 process SOURCE-VIEWER is
 let
   S : source-viewer,
@@ -97,8 +111,11 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
   snd-note(new-tool("View source", S, view-source)) .
-  snd-note(new-tool("View source", S, view-source, [adapter])) .
+  snd-note(new-tool("View source", S, [["Current process", "process"]])) .
   ( rec-msg(S, view-source, D?) .
+    snd-do(S, view-source(D))
+    +
+    rec-msg(tool-cmd(S, "Current process", [proc(D?, P?)])) .
     snd-do(S, view-source(D))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
@@ -136,7 +153,7 @@ in
     snd-ack-event(S, current-port(D,P,Port))
   ) * delta
 endlet
-#line 239 "tide.tb.nw"
+#line 257 "tide.tb.nw"
 process RULE-VIEWER is
 let
   R : rule-viewer,
@@ -160,9 +177,8 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
-  snd-note(new-tool("View rules", R, view-rules)) .
-  snd-note(new-tool("View rules", R, view-rules, [adapter])) .
-  ( rec-msg(R, view-rules, D?) .
+  snd-note(new-tool("Rule viewer", R, [["Current adapter", "adapter"]])) .
+  ( rec-msg(tool-cmd(R, "Current adapter", [D?])) .
     snd-do(R, view-rules(D))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
@@ -200,14 +216,13 @@ in
     snd-ack-event(R, destroy-rule(D,P,Rid))    
   ) * delta
 endlet
-#line 377 "tide.tb.nw"
+#line 394 "tide.tb.nw"
 process PROCESS-VIEWER is
 let
   V : process-viewer,
   D : debug-adapter,	%% Which debug adapter
   Name : str,		%% The name of a tool
   Tool : term,		%% The tool-id of a tool
-  Event : term,		%% The event needed to activate a tool
   Args  : list,		%% A list describing arguments needed for activation
   P : term,		%% List of processes (or in some cases 'all')
   Info : list,		%% Information about a debug adapter
@@ -218,16 +233,24 @@ let
   Life : term,		%% Event rule lifetime
   Rid : int,		%% Event rule identifier
   Type : term,		%% The type of rule
-  Result : term		%% ok(<term>) or error(<str>)
+  Result : term,	%% ok(<term>) or error(<str>)
+  Callsign : term       %% Callsign of an external process
 in
-  subscribe(new-tool(<str>,<term>,<term>,<list>)) .
+  subscribe(new-tool(<str>,<term>,<list>)) .
+  subscribe(synchronize(<term>)) .
   execute(process-viewer, V?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
   subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,connected(<term>))) .
+  subscribe(event(<term>,disconnected(<term>))) .
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
-  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
-  ( rec-note(new-tool(Name?, Tool?, Event?, Args?)) .
-    snd-do(V, new-tool(Name, Tool, Event, Args))
+  subscribe(event(<term>,watchpoint(<int>,
+		[[process-creation(process-name,aliases),<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[process-destruction,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[send(msg,peer),<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[receive(msg,peer),<term>]]))) .
+  ( rec-note(new-tool(Name?, Tool?, Args?)) .
+    snd-do(V, new-tool(Name, Tool, Args))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
     snd-do(V, dap-connected(D, Info, P))
@@ -236,7 +259,17 @@ in
     snd-do(V, dap-disconnected(D))
     +
     rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
-    snd-do(V, watchpoint(D, P, Rid, Exprs))
+    snd-do(V, watchpoint(D, P, Rid, Exprs)) .
+    snd-msg(event(proc(D,P), continue))
+    +
+    rec-note(event(proc(D?,all), connected(Callsign?))) .
+    snd-do(V, connected(Callsign))
+    +
+    rec-note(event(proc(D?,all), disconnected(Callsign?))) .
+    snd-do(V, disconnected(Callsign))
+    +
+    rec-note(synchronize(D?)) .
+    snd-msg(synchronize(D))
     +
     rec-event(V, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
     snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
@@ -244,20 +277,19 @@ in
     snd-ack-event(V, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
     +
     rec-event(V, exec-actions(D?, P?, Acts?)) .
-	printf("rec-event exec-actions.\n") .
     snd-msg(proc(D,P), exec-actions(Acts)) .
     rec-msg(proc(D,P), exec-result(Result?)) .
-	printf("exec-result = %t\n", Result) .
     snd-ack-event(V, exec-actions(D, P, Acts, Result))
     +
-    rec-event(V, button(Tool?, Event?, D?)) .
-    snd-msg(Tool, Event, D) .
-    snd-ack-event(V, button(Tool, Event, D))
+    rec-event(V, tool-cmd(Tool?, Name?, Args?)) .
+	printf("snd-msg(tool-cmd(%t, %t, %t))", Tool, Name, Args) .
+    snd-msg(tool-cmd(Tool, Name, Args)) .
+    snd-ack-event(V, tool-cmd(Tool, Name, Args))
   ) * rec-event(V, tide-shutdown) .
   snd-ack-event(V, tide-shutdown) .
   shutdown("Thank you for using tide!\n")
 endlet
-#line 308 "tide.tb.nw"
+#line 325 "tide.tb.nw"
 process WATCHPOINT-VIEWER is
 let
   V    : watchpoint-viewer,

@@ -36,41 +36,44 @@ void TBevq_post(event_queue *q, term *event)
   else {
     /* If an event was already pending, put the event at the end
        of the event list. */
-    if(q->pending)
+    if(q->pending) {
       q->events = list_concat_term(q->events, event);
-    else {
+      /*TBprintf(stderr, "%t is pending, queueing %t\n", q->pending, event);*/
+    } else {
       /* No events where pending. Send this one immediately. */
       if(q->cid >= 0)
         TB_send(q->cid, TB_make("snd-event(<term>)", event));
       else
         TBsend(TB_make("snd-event(<term>)", event));
       q->pending = event;
+      /*TBprintf(stderr, "no events pending, sending %t\n", event);*/
     }
   }
 }
-#line 143 "evq.c.nw"
+#line 145 "evq.c.nw"
 TBbool TBevq_is_full(event_queue *q)
 {
   return TBevq_length(q) >= q->max_size;
 }
-#line 155 "evq.c.nw"
+#line 157 "evq.c.nw"
 TBbool TBevq_is_empty(event_queue *q)
 {
   return !q->pending;
 }
-#line 167 "evq.c.nw"
+#line 169 "evq.c.nw"
 int TBevq_length(event_queue *q)
 {
   return list_length(q->events);
 }
-#line 181 "evq.c.nw"
+#line 183 "evq.c.nw"
 TBbool TBevq_ack_event(event_queue *q, term *ev)
 {
   term *event;
 
-  if(q->pending && term_equal(q->pending, ev)) {
+  if(q->pending && fun_sym(q->pending) == fun_sym(ev)) {
     /* Send the next event */
     if(q->events == NULL) {
+      /*TBprintf(stderr, "ack of last pending event: %t\n", ev);*/
       q->pending = NULL;
     } else {
       event = first(q->events);
@@ -80,8 +83,12 @@ TBbool TBevq_ack_event(event_queue *q, term *ev)
         TBsend(TB_make("snd-event(<term>)", event));
       q->pending = event;
       q->events  = next(q->events);
+      /*TBprintf(stderr, "sending next event from queue: %t\n", event);*/
     }
     return TBtrue;
   }
+  /*if(q->pending)
+    TBprintf(stderr, "pending term:\n  %t\n  !=\n  %t\n", q->pending, ev);
+  */
   return TBfalse;
 }

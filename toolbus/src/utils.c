@@ -109,7 +109,7 @@ static void parse_error(char *s)
   }
 }
 
-va_list mk_term_args = NULL;
+va_list mk_term_args;
 
 static term *parse_term0(void);
 static term *parse_anno(term *t);
@@ -513,7 +513,6 @@ term *parse_term(void)
 {
   term *res,*t;
 
-  mk_term_args = NULL;
   parse_error_msg = NULL;
   get_char();
   res = parse_anno(parse_term0());
@@ -549,7 +548,6 @@ term *TBmake(char * fmt, ...)
   get_char();
   res = parse_anno(parse_term0());
   va_end(mk_term_args);
-  mk_term_args = NULL;
   skip_layout();
   /* return res; */
   if(lastc) {

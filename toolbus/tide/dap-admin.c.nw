@@ -58,6 +58,10 @@ void  dap_clear_process_flags(int dapid, int pid, int uflags);
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags);
 term *dap_get_last_port(int dapid, int pid);
 void  dap_set_last_port(int dapid, int pid, term *port);
+term *dap_get_last_msg(int dapid, int pid);
+void  dap_set_last_msg(int dapid, int pid, term *msg);
+term *dap_get_last_peer(int dapid, int pid);
+void  dap_set_last_peer(int dapid, int pid, term *peer);
 /* External callbacks, must be provided by the user */
 extern void cbdap_process_created(int dapid, int pid);
 extern void cbdap_process_destroyed(int dapid, int pid);
@@ -88,10 +92,13 @@ typedef struct process
   char *name;			/* name of this process */
   location cpe;			/* current point of execution */
   int exec_state;		/* execution state */
-  int hw_exec_state;		/* execution state when high water reached */
+  int new_es;			/* new execution state */
+  TBbool hw_reached;		/* high water reached */
   int stop_level;		/* stop level for ES_STEP_OVER and RUN_UNTIL_PARENT */
   int ruleid;			/* current event rule id */
   term *last_port;		/* The last port passed. */
+  term *last_msg;		/* The last message send. */
+  term *last_peer;		/* callsign of the last sender/receiver */
   term_list *subterms;		/* subterms that matched with placeholders */
   unsigned uflags;		/* user flags */
   void *udata;			/* user data */
@@ -188,9 +195,8 @@ typedef struct port
 #define ES_SINGLE_STEP		0x0004
 #define ES_STEP_OVER		0x0008
 #define ES_RUN_UNTIL_PARENT	0x0010
-#define ES_HIGH_WATER		0x0020
 
-#define ES_ALL			0x003F
+#define ES_ALL			0x001F
 @
 
 %}}}
@@ -226,6 +232,8 @@ dap *daps[MAX_DAPS];
 <<dap_es2term>>
 <<dap_get_stop_level>>
 <<dap_get_exec_state>>
+<<dap_is_high_water>>
+<<dap_set_high_water>>
 <<dap_get_process_name>>
 
 <<dap_get_process_data>>
@@ -235,6 +243,10 @@ dap *daps[MAX_DAPS];
 <<dap_check_process_flags>>
 <<dap_set_last_port>>
 <<dap_get_last_port>>
+<<dap_set_last_msg>>
+<<dap_get_last_msg>>
+<<dap_set_last_peer>>
+<<dap_get_last_peer>>
 @
 
 %}}}
@@ -754,11 +766,17 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   p->cpe.end_col    = -1;
   p->cpe.when	    = WHEN_AT;
   p->exec_state = exec_state;
+  p->new_es = exec_state;
+  p->hw_reached = TBfalse;
   p->ruleid = -1;
   p->last_port = NULL;
+  p->last_msg = NULL;
+  p->last_peer = NULL;
   p->subterms = NULL;
 
   TBprotect(&p->last_port);
+  TBprotect(&p->last_msg);
+  TBprotect(&p->last_peer);
   TBprotect(&p->subterms);
 
   p->uflags = 0;
@@ -781,6 +799,9 @@ void dap_process_destroyed(int dapid, int pid)
   assert(daps[dapid]);
   assert(daps[dapid]->procs[pid]);
   cbdap_process_destroyed(dapid, pid);
+  TBunprotect(&daps[dapid]->procs[pid]->last_port);
+  TBunprotect(&daps[dapid]->procs[pid]->last_msg);
+  TBunprotect(&daps[dapid]->procs[pid]->last_peer);
   TBunprotect(&daps[dapid]->procs[pid]->subterms);
   if(daps[dapid]->procs[pid]->udata)
     free(daps[dapid]->procs[pid]->udata);
@@ -864,6 +885,36 @@ int dap_get_stop_level(int dapid, int pid)
 int dap_get_exec_state(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->exec_state;
+}
+@
+
+%}}}
+%{{{ int dap_get_new_exec_state(int dapid, int pid)
+
+<<dap_get_exec_state>>=
+int dap_get_new_exec_state(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->new_es;
+}
+@
+
+%}}}
+%{{{ TBbool dap_is_high_water(int dapid, int pid)
+
+<<dap_is_high_water>>=
+TBbool dap_is_high_water(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->hw_reached;
+}
+@
+
+%}}}
+%{{{ void dap_set_high_water(int dapid, int pid, TBbool hw)
+
+<<dap_set_high_water>>=
+void dap_set_high_water(int dapid, int pid, TBbool hw)
+{
+  dap_get_process(dapid, pid)->hw_reached = hw;
 }
 @
 
@@ -959,6 +1010,46 @@ void  dap_set_last_port(int dapid, int pid, term *port)
 term *dap_get_last_port(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->last_port;
+}
+@
+
+%}}}
+%{{{ void  dap_set_last_msg(int dapid, int pid, term *msg)
+
+<<dap_set_last_msg>>=
+void dap_set_last_msg(int dapid, int pid, term *msg)
+{
+  dap_get_process(dapid, pid)->last_msg = msg;
+}
+@
+
+%}}}
+%{{{ term *dap_get_last_port(int dapid, int pid)
+
+<<dap_get_last_msg>>=
+term *dap_get_last_msg(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->last_msg;
+}
+@
+
+%}}}
+%{{{ void  dap_set_last_peer(int dapid, int pid, term *peer)
+
+<<dap_set_last_peer>>=
+void dap_set_last_peer(int dapid, int pid, term *peer)
+{
+  dap_get_process(dapid, pid)->last_peer = peer;
+}
+@
+
+%}}}
+%{{{ term *dap_get_last_port(int dapid, int pid)
+
+<<dap_get_last_peer>>=
+term *dap_get_last_peer(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->last_peer;
 }
 @
 

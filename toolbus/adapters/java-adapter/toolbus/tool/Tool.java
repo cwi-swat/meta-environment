@@ -50,7 +50,7 @@ abstract public class Tool implements Runnable
   private ATermPattern patternRecDo;
   private ATermPattern patternRecTerminate;
   private ATermPattern patternRecAckEvent;
-  private ATermPattern patternEvent;
+  private ATermPattern patternSndEvent;
 
   //{ public Tool(String name)
 
@@ -110,7 +110,7 @@ abstract public class Tool implements Runnable
       patternRecDo = new ATermPattern("rec-do(<term>)");
       patternRecTerminate = new ATermPattern("rec-terminate(<term>)");
       patternRecAckEvent = new ATermPattern("rec-ack-event(<term>)");
-      patternEvent = new ATermPattern("event(<term>)");
+      patternSndEvent = new ATermPattern("snd-event(<term>)");
     } catch (ParseError e) {
       System.err.println("internal error in Tool.init()");
     }
@@ -417,7 +417,7 @@ abstract public class Tool implements Runnable
   public void event(ATermApplRef appl)
      throws ToolException
   {
-    send(patternEvent.make(appl));
+    send(patternSndEvent.make(appl));
   }
 
   //}
@@ -441,7 +441,7 @@ abstract public class Tool implements Runnable
     if(Queue.ackWaiting())
       Queue.addEvent(appl);
     else {
-      send(patternEvent.make(appl));
+      send(patternSndEvent.make(appl));
       Queue.setAckWaiting();
     }
   }
@@ -463,7 +463,7 @@ abstract public class Tool implements Runnable
     if(queue != null && queue.ackWaiting()) {
       appl = queue.nextEvent();
       if(appl != null) {
-	send(patternEvent.make(appl));
+	send(patternSndEvent.make(appl));
       }
     }
   }

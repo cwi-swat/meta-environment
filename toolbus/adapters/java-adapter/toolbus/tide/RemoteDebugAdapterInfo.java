@@ -72,8 +72,8 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
 
   public void sendExecuteActions(ATermRef procs, ATermRef actions)
   {
+    System.out.println("sendExecuteActions: " + actions + " to:" + procs);
     try {
-      System.out.println("send actions " + actions.toString() + " to " + procs.toString());
       tool.post((ATermApplRef)patternExecActions.make(new Integer(getId()), 
 						      procs, actions));
     } catch (ToolException e) {
@@ -92,6 +92,17 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   public void sendCreateRule(String type, ATermRef procs, DebugPort port, 
 			     ATermRef cond, ATermRef acts, int lifetime)
   {
+    try {
+      ATermRef term = patternCreateRule.make(type, new Integer(getId()), 
+					  procs, port.onthewire(),cond,acts, 
+					  DebugRule.lifeInt2Term(lifetime));
+      System.out.println("send create rule " + term.toString());
+      tool.post((ATermApplRef)term);
+    } catch (ToolException e) {
+      System.err.println("ToolBus connection failure, giving up!");
+      System.exit(1);
+    }
+    
   }
 
   //}

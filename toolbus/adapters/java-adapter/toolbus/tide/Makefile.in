@@ -27,7 +27,9 @@ INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/tide
 
 SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
-		ExceptionPort.java DebugRule.java \
+		ExceptionPort.java ProcessCreationPort.java \
+		ProcessDestructionPort.java SendPort.java ReceivePort.java \
+		DebugRule.java \
 		DebugAdapterInfo.java SourceArea.java DebugProcess.java \
 		RemoteDebugAdapterInfo.java \
 		$(TOOLSOURCE)
@@ -36,12 +38,15 @@ TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 		DebugAdapterTif.java DebugAdapterTool.java \
 		JavaDebugger.java
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
-		ExceptionPort.class DebugRule.class \
+		ExceptionPort.class ProcessCreationPort.class \
+		ProcessDestructionPort.class SendPort.class ReceivePort.class\
+		DebugRule.class \
 		DebugAdapterInfo.class SourceArea.class DebugProcess.class \
 		RemoteDebugAdapterInfo.class \
 		$(TOOLCLASSES)
 TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
 		ProcessViewer.class ProcessCanvas.class DapPicture.class \
+		MsgPicture.class \
 		ProcessPicture.class FancyPanel.class ProcessPanel.class \
 		AdapterPanel.class SelectionPanel.class \
 		ProcessViewerMenuBar.class ToolMenuItem.class \
