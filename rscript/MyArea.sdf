@@ -1,6 +1,6 @@
 module MyArea
 
-imports aterm/Literals aterm/IntCon 
+imports languages/aterm/syntax/Literals languages/aterm/syntax/IntCon 
     basic/Strings basic/Integers
 
 exports

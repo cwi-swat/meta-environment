@@ -75,6 +75,7 @@ exports
 
 hiddens
 %%  imports asf/syntax/Comments
+   imports basic/Comments
 
    variables
         "$Rstore" [0-9\']*             -> RSTORE
