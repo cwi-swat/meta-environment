@@ -21,16 +21,9 @@ static PT_Tree makeMeasureFromInt(int result)
 
 /*{{{  PT_Tree ASFE_term_compare(PT_Tree input) */
 
-PT_Tree ASFE_term_compare(PT_Tree input)
+PT_Tree ASFE_term_compare(PT_Symbol type, PT_Tree left, PT_Tree right)
 {
-  PT_Tree left;
-  PT_Tree right;
-  int result;
-
-  left = CO_getFunctionArgument(input,0);
-  right = CO_getFunctionArgument(input,1);
-
-  result = PT_compareTree(left, right);
+  int result = PT_compareTree(left, right);
 
   return makeMeasureFromInt(result);
 }

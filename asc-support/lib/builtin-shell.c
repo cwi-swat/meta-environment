@@ -13,10 +13,8 @@ static CO_Boolean shell(PT_Tree cmd_arg)
 /*}}}  */
 /*{{{  PT_Tree ASFE_shell(PT_Tree input) */
 
-PT_Tree ASFE_shell(PT_Tree input)
+PT_Tree ASFE_shell(PT_Symbol type, PT_Tree cmd_arg)
 {
-  PT_Tree cmd_arg = CO_getFunctionArgument(input,0);
-
   return (PT_Tree) shell(cmd_arg);
 }
 

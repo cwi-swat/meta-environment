@@ -5,6 +5,28 @@
  * of ATerm annotations depends on whitespace!
  */
 
+/*{{{  static ATerm unquoteAppl(ATerm appl)  */
+
+static ATerm unquoteAppl(ATerm appl) 
+{
+  AFun fun;
+  int arity;
+  char *name = NULL;
+  ATermList args = NULL;
+
+  assert(ATgetType(appl) == AT_APPL);
+
+  fun = ATgetAFun((ATermAppl) appl);
+  arity = ATgetArity(fun);
+  name = ATgetName(fun);
+  args = ATgetArguments((ATermAppl) appl);
+  fun = ATmakeAFun(name, arity, ATfalse);
+
+  return (ATerm) ATmakeApplList(fun, args);
+}
+
+/*}}}  */
+
 /*{{{  static PT_Tree set_anno(PT_Tree term, PT_Tree key, PT_Tree value) */
 
 static PT_Tree set_anno(PT_Tree term, PT_Tree key, PT_Tree value)
@@ -17,12 +39,8 @@ static PT_Tree set_anno(PT_Tree term, PT_Tree key, PT_Tree value)
 /*}}}  */
 /*{{{  PT_Tree ASFE_set_anno(PT_Tree input) */
 
-PT_Tree ASFE_set_anno(PT_Tree input)
+PT_Tree ASFE_set_anno(PT_Symbol type, PT_Tree term, PT_Tree key, PT_Tree value)
 {
-  PT_Tree term = CO_getFunctionArgument(input,0);
-  PT_Tree key = CO_getFunctionArgument(input,1);
-  PT_Tree value = CO_getFunctionArgument(input,2);
-
   return set_anno(term, key, value);
 }
 
@@ -50,12 +68,9 @@ static PT_Tree get_anno(PT_Tree term, PT_Tree key)
 /*}}}  */
 /*{{{  PT_Tree ASFE_get_anno(PT_Tree input) */
 
-PT_Tree ASFE_get_anno(PT_Tree input)
+PT_Tree ASFE_get_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 {
-  PT_Tree term = CO_getFunctionArgument(input,0);
-  PT_Tree key = CO_getFunctionArgument(input,1);
   PT_Tree value = NULL;
-
 
   value = get_anno(term, key);
 
@@ -63,7 +78,7 @@ PT_Tree ASFE_get_anno(PT_Tree input)
     return value;
   }
 
-  return input;
+  return NULL;
 }
 
 /*}}}  */
@@ -90,7 +105,7 @@ static PT_Tree get_term_anno(PT_Tree term, PT_Tree key)
   ATerm label;
   ATerm anno;
 
-  label = CO_unquoteAppl(ATparse(PT_yieldTree(key)));
+  label = unquoteAppl(ATparse(PT_yieldTree(key)));
 
   if (label == NULL) {
     return NULL;
@@ -108,10 +123,8 @@ static PT_Tree get_term_anno(PT_Tree term, PT_Tree key)
 /*}}}  */
 /*{{{  PT_Tree ASFE_get_term_anno(PT_Tree input)  */
 
-PT_Tree ASFE_get_term_anno(PT_Tree input) 
+PT_Tree ASFE_get_term_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 {
-  PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
-  PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
   PT_Tree value = NULL;
 
   value = get_term_anno(term, key);
@@ -120,7 +133,7 @@ PT_Tree ASFE_get_term_anno(PT_Tree input)
     return value;
   }
 
-  return input;
+  return NULL;
 }
 
 /*}}}  */

@@ -14,31 +14,34 @@ getArity() {
 }
 
 getFormals() {
-  ar=$1
-  ty=$2
+  arity=$1
+  type=$2
+  index=0
 
-  while [ ${ar} != 1 ]; do
-    printf "${ty} arg${ar}, "
-    ar=`expr ${ar} - 1`
+  while test ${index} -lt ${arity}; do
+    printf "${type} arg${index}"
+    index=`expr ${index} + 1`
+    if test ${index} -lt ${arity}; then
+      printf ", "
+    fi
   done
 
-  if [ $ar = 1 ]; then
-    printf "${ty} arg${ar}"
-  fi
 }
 
 getActuals() {
-  ar=$1
+  arity=$1
+  index=0
 
-  while [ ${ar} != 1 ]; do
-    printf "NULL, "
-    ar=`expr ${ar} - 1`
+  while test ${index} -lt ${arity}; do
+    printf "NULL"
+    index=`expr ${index} + 1`
+    if test ${index} -lt ${arity}; then
+      printf ", "
+    fi
   done
 
-  if [ $ar = 1 ]; then
-    printf "NULL"
-  fi
 }
+
 
 cat  << END_CAT
 #include <stdio.h>
@@ -55,8 +58,9 @@ END_CAT
 for b in ${BUILTIN_NAMES}; do 
 name=`getName ${b}`
 arity=`getArity ${b}`
+forms=`getFormals ${arity} PT_Tree`
+echo "PT_Tree  ASFE_${name}(PT_Symbol type, ${forms});" | sed 's@-@_@g'
 forms=`getFormals ${arity} ATerm`
-echo "PT_Tree  ASFE_${name}(PT_Tree input);" | sed 's@-@_@g'
 echo "PT_Tree  ASC_${name}(${forms});" | sed 's@-@_@g'
 echo
 done
@@ -74,7 +78,7 @@ for b in ${BUILTIN_NAMES}; do
 name=`getName ${b}`
 arity=`getArity ${b}`
 acts=`getActuals ${arity} ATerm`
-echo "    ASFE_${name}(NULL);" | sed 's@-@_@g'
+echo "    ASFE_${name}(NULL, ${acts});" | sed 's@-@_@g'
 echo "    ASC_${name}(${acts});" | sed 's@-@_@g'
 echo
 done

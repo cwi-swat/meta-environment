@@ -30,7 +30,7 @@ static char* getFilename(PT_Tree str)
 
 /*}}}  */
 
-/*{{{  static PERR_Feedback makeGeneralError(char *producer, char *msg) */
+/*{{{  static CO_Feedback makeGeneralError(char *producer, char *msg) */
 
 static CO_Feedback makeGeneralError(char *producer, char *msg)
 {
@@ -196,10 +196,8 @@ static PT_Tree parse_file(PT_Tree file)
 /*}}}  */
 /*{{{  PT_Tree ASFE_parse_file(PT_Tree input) */
 
-PT_Tree ASFE_parse_file(PT_Tree input)
+PT_Tree ASFE_parse_file(PT_Symbol type, PT_Tree file)
 {
-  PT_Tree file = CO_getFunctionArgument(input,0);
-
   return parse_file(file);
 }
 
@@ -236,10 +234,8 @@ static PT_Tree parse_bytes(PT_Tree bytes)
 /*}}}  */
 /*{{{  PT_Tree ASFE_parse_bytes(PT_Tree input) */
 
-PT_Tree ASFE_parse_bytes(PT_Tree input)
+PT_Tree ASFE_parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
-  PT_Tree bytes = CO_getFunctionArgument(input,0);
-
   return parse_bytes(bytes);
 }
 
@@ -265,9 +261,8 @@ static PT_Tree unparse_to_bytes(PT_Tree tree)
 /*}}}  */
 /*{{{  PT_Tree ASFE_unparse_to_bytes(PT_Tree input) */
 
-PT_Tree ASFE_unparse_to_bytes(PT_Tree input)
+PT_Tree ASFE_unparse_to_bytes(PT_Symbol type, PT_Tree tree)
 {
-  PT_Tree tree = CO_getFunctionArgument(input,0);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   return (PT_Tree)
@@ -299,11 +294,8 @@ static PT_Tree unparse_to_file(PT_Tree file, PT_Tree tree)
 /*}}}  */
 /*{{{  PT_Tree ASFE_unparse_to_file(PT_Tree input) */
 
-PT_Tree ASFE_unparse_to_file(PT_Tree input)
+PT_Tree ASFE_unparse_to_file(PT_Symbol type, PT_Tree file, PT_Tree tree)
 {
-  PT_Tree file = CO_getFunctionArgument(input,0);
-  PT_Tree tree = CO_getFunctionArgument(input,1);
-
   return unparse_to_file(file, tree);
 }
 
@@ -336,16 +328,11 @@ static PT_Tree read_term_from_file(PT_Tree file_arg)
 }
 
 /*}}}  */
-/*{{{  PT_Tree ASF_read_term_from_file(PT_Tree input) */
+/*{{{  PT_Tree ASFE_read_term_from_file(PT_Tree input) */
 
-PT_Tree ASFE_read_term_from_file(PT_Tree input)
+PT_Tree ASFE_read_term_from_file(PT_Symbol symbol, PT_Tree file_arg)
 {
-  PT_Tree file_arg = CO_getFunctionArgument(input, 0);/*{{{*//*}}}*/
-  PT_Tree result = NULL;
-
-  result = read_term_from_file(file_arg); 
-
-  return result ? result : input;
+  return read_term_from_file(file_arg); 
 }
 
 /*}}}  */
@@ -388,11 +375,8 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
 /*}}}  */
 /*{{{  PT_Tree ASFE_write_term_to_file(PT_Tree input) */
 
-PT_Tree ASFE_write_term_to_file(PT_Tree input)
+PT_Tree ASFE_write_term_to_file(PT_Symbol type, PT_Tree file_arg, PT_Tree tree_arg)
 {
-  PT_Tree file_arg = CO_getFunctionArgument(input, 0);
-  PT_Tree tree_arg = CO_getFunctionArgument(input, 1);
-
   return write_term_to_file(file_arg, tree_arg);
 }
 
@@ -475,10 +459,8 @@ static PT_Tree read_bytes_from_file(PT_Tree input)
 /*}}}  */
 /*{{{  PT_Tree ASFE_read_bytes_from_file(PT_Tree input) */
 
-PT_Tree ASFE_read_bytes_from_file(PT_Tree input)
+PT_Tree ASFE_read_bytes_from_file(PT_Symbol type, PT_Tree file_arg)
 {
-  PT_Tree file_arg = CO_getFunctionArgument(input, 0);
-
   return read_bytes_from_file(file_arg);
 }
 
@@ -522,11 +504,8 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
 /*}}}  */
 /*{{{  PT_Tree ASFE_write_bytes_to_file(PT_Tree input) */
 
-PT_Tree ASFE_write_bytes_to_file(PT_Tree input)
+PT_Tree ASFE_write_bytes_to_file(PT_Symbol type, PT_Tree file_arg, PT_Tree bytes)
 {
-  PT_Tree file_arg = CO_getFunctionArgument(input, 0);
-  PT_Tree bytes = CO_getFunctionArgument(input, 1);
-
   return write_bytes_to_file(file_arg, bytes);
 }
 
