@@ -12,7 +12,7 @@ static void initImportsTable(ATermList pairs)
   for( ; !ATisEmpty(pairs); pairs = ATgetNext(pairs)) {
     ATermList pair = (ATermList) ATgetFirst(pairs);
     ATerm key = ATgetFirst(pair);
-    ATerm value = ATelementAt(pair, 1);
+    ATerm value = ATgetFirst(ATgetNext(pair));
     ATtablePut(importsTable, key, value);
   }
 }
@@ -23,11 +23,17 @@ static void destroyImportsTable()
   importsTable = NULL;
 }
 
+static ATbool isElem(ATerm e, ATermList l)
+{
+  return (ATindexOf(l, e, 0) != -1);
+}
+
 static ATermList merge(ATermList l1, ATermList l2)
 {
   for (; !ATisEmpty(l1); l1 = ATgetNext(l1)) {
     ATerm elem = ATgetFirst(l1);
-    if (ATindexOf(l1, elem, 0) < 0) {
+
+    if (!isElem(elem, l2)) {
       l2 = ATinsert(l2, elem);
     }
   }
@@ -39,13 +45,16 @@ ATermList PI_getTransitiveImports(ATermList idImportPairs, ATerm id)
 {
   ATermList todo = ATmakeList1(id);
   ATermList result = ATempty;
+
   initImportsTable(idImportPairs);
 
   while (!ATisEmpty(todo)) {
     ATerm module = ATgetFirst(todo);
     ATermList imports = (ATermList) ATtableGet(importsTable, module);
 
-    todo = merge(imports, ATgetNext(todo));
+    if (imports != NULL) {
+      todo = merge(imports, ATgetNext(todo));
+    }
     result = merge(ATmakeList1(module), result);
   }
 

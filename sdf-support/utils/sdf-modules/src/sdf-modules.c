@@ -78,9 +78,8 @@ static ATermList importsToModuleList(SDF_ImportList imports)
 ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name) 
 {
   ATerm id = ATmake("<str>", name);
-
-  return ATmake("snd-value(all-needed-module-names(<term>))", 
-                PI_getTransitiveImports((ATermList) pairs, id));
+  ATermList imports = PI_getTransitiveImports((ATermList) ATBunpack(pairs), id);
+  return ATmake("snd-value(all-needed-module-names(<term>))", imports);
 }
 
 /*}}}  */
@@ -206,7 +205,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
   SDF_Start start;
   ATerm result;
 
-  list = SI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
+  list = ATBunpack(atModules);
 
   modules = SDF_makeModuleListEmpty();
   space = SDF_makeLayoutSpace();
