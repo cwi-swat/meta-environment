@@ -183,6 +183,26 @@ void set_multiple_focus(int cid, ATerm editorId, ATerm f)
 
 /*}}}  */
 
+/*{{{  ATerm move_focus_to_root(int cid, ATerm editorId) */
+
+ATerm move_focus_to_root(int cid, ATerm editorId)
+{
+  SE_Editor editor = getEditor(editorId);
+  SE_Editor new_editor;
+  SE_Focus focus;
+
+  assert(editor);
+
+  new_editor = moveFocusToTop(editor);
+
+  putEditor(editorId, new_editor);
+
+  focus = SE_getEditorFocus(new_editor);
+
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
+}
+
+/*}}}  */
 /*{{{  ATerm move_focus(int cid, ATerm editorId, ATerm direction) */
 
 ATerm move_focus(int cid, ATerm editorId, ATerm direction)
