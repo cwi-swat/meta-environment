@@ -29,8 +29,8 @@ let
 in
   Id := process-id.
   subscribe(disconnected(<term>)) .
-  snd-msg(set-parsetable(Mod)).
-  rec-msg(parsetable-set(Mod)).
+  /*snd-msg(set-parsetable(Mod)).
+  rec-msg(parsetable-set(Mod)).*/
   snd-msg(Id,open-trm-file(Term)) .
   (
     rec-msg(Id,opened-file(raw,Name?,Text?,Path?,Time?)) .

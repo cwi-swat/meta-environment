@@ -37,8 +37,6 @@ in
     )
   ).
   create(Editor("Sdf2",Src,Path,"Sdf2","sdf"), Tid?). 
-  snd-msg(open-language("Sdf2", 
-                        "__datadir__/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet
 
@@ -56,8 +54,10 @@ let
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening module editor..."))).
+  /*
   snd-msg(set-parsetable(Module)).
   rec-msg(parsetable-set(Module)).
+  */
   snd-msg(get-eqs-path-from-db(Module)).
   rec-msg(path(Path?)).
   snd-msg(get-eqs-asfix(Module)).

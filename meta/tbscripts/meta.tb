@@ -32,5 +32,6 @@
 #include "anno.tb"
 #include "se.tb"
 #include "set-parsetable.tb"
+#include "sdf2-language.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,New-module,SE,Anno,Set-parsetable) 
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,New-module,SE,Anno,Set-parsetable,Open-Sdf2-Language) 

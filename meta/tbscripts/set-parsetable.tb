@@ -7,23 +7,29 @@ let
   Module: str, Table: str, Time: term, Id: term
 in
 Id := process-id.
-( rec-msg(set-parsetable(Module?)).
-  snd-note(ui-status(stat(Id,"Generating parse table"))).
+( rec-msg(set-parsetable(Module?)) .
   snd-msg(get-table-from-db(Module)) .
   (
     rec-msg(table(Table?))
   +
     rec-msg(no-table) .
+    snd-note(ui-status(stat(Id,"Generating parse table"))) .
     snd-msg(generate-parsetable(Module)) .
     rec-msg(parsetable(Table?)) .
-    snd-msg(get-table-timestamp(Module)).
-    rec-msg(table-timestamp(Time?)).
+    snd-msg(get-table-timestamp(Module)) .
+    rec-msg(table-timestamp(Time?)) .
     snd-msg(add-table-to-db(Module,Table,Time)) .
-    rec-msg(done)
+    rec-msg(done) .
+    snd-note(ui-status(endstat(Id)))
   ).
   snd-msg(reopen-language(Module,Table)) .
-  snd-msg(parsetable-set(Module)).
-  snd-note(ui-status(endstat(Id)))
+  (
+    rec-msg(language-opened(Module)) .
+    snd-msg(parsetable-set(Module))
+  +
+    rec-msg(language-not-opened(Module)) .
+    snd-msg(parsetable-not-set(Module))
+  )
 ) *
 delta
 endlet

@@ -10,10 +10,12 @@ let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
   Char: term, G: str, ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list, Anno: anno, Modules: list
+  Fun: str, Args: list, Anno: anno, Modules: list,
+  LangOK: term
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
+  subscribe(language-changed(Language)).
 /* We're not selective about start symbols yet */
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
@@ -40,64 +42,96 @@ in
     snd-msg(TE,set-focus(Fid, Foc))
     +
     rec-event(TE,menu-event("Meta-Environment","Parse",Fid)).
-    snd-note(ui-status(stat(Id,"Parsing..."))).
-    FF := []. (
-      if not-equal(Fl,[]) then
-        Foc:= first(Fl).
-        snd-eval(Anno,get-anno("focusstatus",Foc)).
-	rec-value(Anno,annotation(T?)).
-        if equal(dirty,T) then
-          snd-msg(TE,get-focus-text(Fid, Foc)).
-          rec-msg(TE,focus-text(Fid, Str?)).
-          snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
-            rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
-            snd-eval(SE,replaceFocus(Fid, T)).
-            rec-value(SE,Fl?)
-          + (rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))) +
-	    rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))).
-            snd-msg(set-error-focus(Fid,Foc,ErrList)).
-            FF := join(FF,Foc)
-	  + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
-                                                       ambiguities(I?)))).
-            printf("Parse of %s returned %d ambiguities",Str,I).
-            printf("Term is: %t\n",T).
-            FF :=join(FF,Foc)
-          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
-            printf("Parse of %s returned a cycle\n",Str).
-            printf("Cycle is: %t\n",Cycle).
-            FF :=join(FF,Foc)
-         
-          )
-        else 
-          tau
-        fi.
-        snd-eval(SE,nextFocus(Fid)).
-        rec-value(SE,Fl?)
-      fi
-    ) *
-    if equal(Fl,[]) then
-      if equal(FF,[]) then
-        /* All parses succeeded */
-        if equal(IsTerm,"sdf") then
-          snd-eval(SE,getTree(Fid)).
-          rec-value(SE,T1?).
-          snd-msg(update-module-in-db(T1,Language)).
-          rec-msg(extra-modules(Modules?)).
-          snd-msg(open-modules(Modules)).
-          rec-msg(finished-opening-modules).
-          snd-msg(TE,clear-focus(Fid))
-        else
-          snd-msg(TE,clear-focus(Fid))
-        fi
-      else
-        /* Some parses were ambiguous */
-        snd-eval(SE,setFocus(Fid, FF)).
-        rec-value(SE,Fl?)
-      fi
+    /* If the language is Sdf2 then NO new parse table may be 
+     * generated!
+     * If the parse table can not be opened for some reason
+     * we are unable to parse the text.
+     * This code needs restructuring.
+     */
+    if equal(IsTerm,"sdf") then
+      snd-msg(open-sdf2-language).
+      (
+        rec-msg(sdf2-language-opened).
+	LangOK := true
+      +
+        rec-msg(sdf2-language-not-opened).
+	LangOK := false
+      )
+    else
+      snd-msg(set-parsetable(Language)).
+      (
+        rec-msg(parsetable-set(Language)).
+	LangOK := true
+      +
+        rec-msg(parsetable-not-set(Language)).
+	LangOK := false
+      )
     fi.
-    /* Finished parsing operations */
-    snd-note(ui-status(endstat(Id))).
-    snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
+    if equal(LangOK, true) then
+	snd-note(ui-status(stat(Id,"Parsing..."))).
+	FF := []. (
+	  if not-equal(Fl,[]) then
+	    Foc:= first(Fl).
+	    snd-eval(Anno,get-anno("focusstatus",Foc)).
+	    rec-value(Anno,annotation(T?)).
+	    if equal(dirty,T) then
+	      snd-msg(TE,get-focus-text(Fid, Foc)).
+	      rec-msg(TE,focus-text(Fid, Str?)).
+	      snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
+		rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
+		snd-eval(SE,replaceFocus(Fid, T)).
+		rec-value(SE,Fl?)
+	      + (rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))) +
+		rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))).
+		snd-msg(set-error-focus(Fid,Foc,ErrList)).
+		FF := join(FF,Foc)
+	      + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
+							   ambiguities(I?)))).
+		printf("Parse of %s returned %d ambiguities",Str,I).
+		printf("Term is: %t\n",T).
+		FF :=join(FF,Foc)
+	      + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
+		printf("Parse of %s returned a cycle\n",Str).
+		printf("Cycle is: %t\n",Cycle).
+		FF :=join(FF,Foc)
+	      )
+	    else 
+	      tau
+	    fi.
+	    snd-eval(SE,nextFocus(Fid)).
+	    rec-value(SE,Fl?)
+	  fi
+	) *
+	if equal(Fl,[]) then
+	  if equal(FF,[]) then
+	    /* All parses succeeded */
+	    if equal(IsTerm,"sdf") then
+	      snd-eval(SE,getTree(Fid)).
+	      rec-value(SE,T1?).
+	      snd-msg(update-module-in-db(T1,Language)).
+	      rec-msg(extra-modules(Modules?)).
+	      snd-msg(open-modules(Modules)).
+	      rec-msg(finished-opening-modules).
+	      snd-msg(TE,clear-focus(Fid))
+	    else
+	      snd-msg(TE,clear-focus(Fid))
+	    fi
+	  else
+	    /* Some parses were ambiguous */
+	    snd-eval(SE,setFocus(Fid, FF)).
+	    rec-value(SE,Fl?)
+	  fi
+	fi.
+	/* Finished parsing operations */
+	snd-note(ui-status(endstat(Id)))
+      else
+        /* If parse table could not be opened, an error message is 
+	 * generated.
+	 */
+        snd-note(ui-status(errorf("Unable to open parse table for \"%s\"",
+				  [Language])))
+      fi.
+      snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
     if equal(FF,[]) then
@@ -138,6 +172,9 @@ in
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,menu-event("Move",Str,Fid))
+    +
+    rec-note(language-changed(Language)).
+    printf("Editor received language changed note\n")
   ) *
   rec-note(disconnected(TE))
 /*.

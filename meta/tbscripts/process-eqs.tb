@@ -33,41 +33,47 @@ in
        snd-msg(Id,open-eqs-text-file(Module)).
        ( rec-msg(Id, opened-file(raw,Mname?,FT?,Path?,Time1?)).
          snd-msg(set-parsetable(Mname)).
-         rec-msg(parsetable-set(Mname)).
-         snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
-         snd-msg(Id,parse-string-as-asfix1(Mname,"Equations",FT)).
-         ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
-           snd-note(ui-status(endstat(Id))). 
-           snd-msg(add-eqs-to-db(Mname,Path,T1,Time1,"changed")).
-           rec-msg(done) 
-         + 
-           rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                       ambiguities(I?)))).
-           printf("Parse of %s returned %d ambiguities",Mname,I). 
-           snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
-           rec-msg(done)  
-         + 
-           rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                       cycle(Cycle?)))).
-           printf("Parse returned a cycle\n").
-           printf("Cycle is: %t\n",Cycle).
-           rec-msg(done)  
+         (
+	   rec-msg(parsetable-set(Mname)).
+           snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
+           snd-msg(Id,parse-string-as-asfix1(Mname,"Equations",FT)).
+           ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
+             snd-note(ui-status(endstat(Id))). 
+             snd-msg(add-eqs-to-db(Mname,Path,T1,Time1,"changed")).
+             rec-msg(done) 
+           + 
+             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+                                                         ambiguities(I?)))).
+             printf("Parse of %s returned %d ambiguities",Mname,I). 
+             snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
+             rec-msg(done)  
+           + 
+             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+                                                         cycle(Cycle?)))).
+             printf("Parse returned a cycle\n").
+             printf("Cycle is: %t\n",Cycle).
+             rec-msg(done)  
+           +
+             rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
+             printf("EOF unexpected while parsing %s\n",Mname).
+             snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
+             rec-msg(done) 
+           +
+             rec-msg(parse-result-asfix1(Id?,
+                                         parse-error([character(Ch?),
+                                                      line(Li?),
+                                                      col(Co?),
+                                                      char(Char?)],plain))).
+             printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
+             snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
+             rec-msg(done) 
+           ).
+           snd-note(ui-status(endstat(Id)))
          +
-           rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
-           printf("EOF unexpected while parsing %s\n",Mname).
-           snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
-           rec-msg(done) 
-         +
-           rec-msg(parse-result-asfix1(Id?,
-                                       parse-error([character(Ch?),
-                                                    line(Li?),
-                                                    col(Co?),
-                                                    char(Char?)],plain))).
-           printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
-           snd-msg(add-eqs-to-db(Mname,Path,error,Time1,"unchanged")).
-           rec-msg(done) 
-         ).
-         snd-note(ui-status(endstat(Id)))
+	   rec-msg(parsetable-not-set(Mname)).
+	   snd-note(ui-status(errorf("Unable to open parse table for \"%s\"",
+				     [Mname])))
+         )
        +
        rec-msg(Id, error-opening(Mod?)).
        snd-msg(add-eqs-to-db(Module,"",no-equations,timestamp(0),"unchanged")).

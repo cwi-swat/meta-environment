@@ -68,11 +68,11 @@ DATAFILES	= meta.tb editor.tb clear-all.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb compiler.tb pgen.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
-	          evaluator.tb \
+	          evaluator.tb open-modules.tb edit-module.tb \
+		  revert-module.tb \
 	          anno.tb se.tb set-parsetable.tb ${DATAGEN}
 
-DATASRC		= help.tb.in revert-module.tb.in edit-module.tb.in \
-		open-modules.tb.in
+DATASRC		= help.tb.in sdf2-language.tb.in
 
 DATAGEN		= ${DATASRC:.in=}
 
@@ -145,4 +145,4 @@ depend: $(CSRC) $(CHDR)
 	$(MAKEDEPEND) $(INCLUDES) $(CSRC) > .depend
 
 %.tb : %.tb.in
-	sed 's#__prefix__#${prefix}#g;s#__datadir__#${datadir}#g' <$< >$@
+	@sed 's#__prefix__#${prefix}#g;s#__datadir__#${datadir}#g' <$< >$@

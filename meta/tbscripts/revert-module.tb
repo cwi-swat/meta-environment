@@ -36,8 +36,8 @@ in
       rec-msg(need-modules(M1s?))
     +
       rec-msg(Id, opened-file(raw,Name2?,FT?,Path?,Time?)). 
-      snd-msg(open-language("Sdf2", 
-                            "__datadir__/Sdf2.baf")).
+      snd-msg(open-sdf2-language).
+      rec-msg(sdf2-language-opened). /* Beware here may occur a bug, brrr */
       snd-msg(Id,parse-string-as-asfix1("Sdf2","Module",FT)).
       ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
         snd-msg(ui,open-module(Name2)).
