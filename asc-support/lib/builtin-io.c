@@ -180,6 +180,7 @@ static PT_Tree parse_file(PT_Tree file)
 {
   char  toolname[] = "parse-file";
   ATerm language = ATmake("<str>", toolname);
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   if (initParser(toolname, language)) {
     char *filename = getFilename(file);
@@ -187,7 +188,9 @@ static PT_Tree parse_file(PT_Tree file)
     return parse_result(toolname, filename, result);
   }
 
-  return (PT_Tree) makeGeneralError(toolname, "no parsetable available");
+  return (PT_Tree) CO_makeParseResultFailure(l,l,
+					     makeGeneralError(toolname, "no parsetable available"),
+					     l);
 }
 
 /*}}}  */
@@ -218,13 +221,16 @@ static PT_Tree parse_bytes(PT_Tree bytes)
 {
   char  toolname[] = "parse-bytes";
   ATerm language = ATparse(toolname);
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   if (initParser(toolname, language)) {
     ATerm result = SGparseString(language, NULL, PT_yieldTree(bytes)); 
     return parse_result(toolname, "anonymous", result);
   }
 
-  return (PT_Tree) makeGeneralError(toolname, "no parsetable available");
+  return (PT_Tree) CO_makeParseResultFailure(l,l,
+					     makeGeneralError(toolname, "no parsetable available"),
+					     l);
 }
 
 /*}}}  */
