@@ -99,7 +99,7 @@ called_from_toolbus(int argc, char **argv)
 void
 batch (int argc, char **argv)
 {
-  term *parse_tree = NULL;
+  term *parse_tree = NULL, *tree;
   int c, line, col, length;
 
   handle_options(argc, argv);
@@ -124,12 +124,18 @@ batch (int argc, char **argv)
 	      "(%s) %s: error at line %d, col %d : character `%c' unexpected\n",
 	      parse_table_name, input_file_name, line, col, c);
     exit(1);
-    }
+  } else if (! TBmatch(parse_tree, "parsetree(%t, %d)", &tree, &c)) {
+      fprintf(stderr,
+	      "%s: error: result of successful parse is not a parse tree\n"
+              "\t(this should never happen)\n", input_file_name);
+      exit(1);
+  }
 
   if (generate_dot)
     tree_to_dotfile(dotoutput, parse_tree, suppress_lexicals);
 
-  fprintf(stderr, "%s:  parsing succeeded\n", input_file_name);
+  fprintf(stderr, "%s: parsing succeeded (%i ambiguit%s)\n",
+    input_file_name, c, c==1?"y":"ies");
 
   exit(0);
 }
