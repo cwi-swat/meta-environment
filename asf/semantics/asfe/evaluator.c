@@ -764,9 +764,15 @@ aterm *rewrite(aterm *trm,aterm_list *env)
   if(asfix_is_appl(trm)) {
     args = asfix_get_appl_args(trm);
     newargs = rewrite_args(args,env);
-    newtrm = asfix_put_appl_args(&Ar,trm,newargs);
-    rewtrm = select_and_rewrite(newtrm);
-    return rewtrm;
+    if(asfix_is_bracket_func(trm)) {
+      newtrm = t_list_first(t_list_next(newargs));
+      return newtrm;
+    }
+    else {
+      newtrm = asfix_put_appl_args(&Ar,trm,newargs);
+      rewtrm = select_and_rewrite(newtrm);
+      return rewtrm;
+    }
   }
   else if(asfix_is_var(trm)) {
     if(TdictGet(env,trm))
