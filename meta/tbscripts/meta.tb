@@ -26,4 +26,4 @@
 #include "process-eqs.tb"
 #include "save-module.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules)
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules)
