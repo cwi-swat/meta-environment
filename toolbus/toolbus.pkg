@@ -1,7 +1,7 @@
 package 
 identification
-   name=toolbus
-   version=0.26beta
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/toolbus
    description='The ToolBus is a software architecture intended for
