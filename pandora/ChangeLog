@@ -3,6 +3,10 @@
 Mon Dec 13 15:59:29 CET 2004 <kooiker@cwi.nl>
  * formatter/text/Frame.{asf,sdf},Basic-to-Text.{asf,sdf}:
    - add support for ts space-option
+ * formatter/text/Alignments-to-Text.asf:
+   - fixed stack overflow when prettyprinting alignments with missing R box
+ * generator/Box-to-Text.c:
+   - regenerated
 
 Fri Nov 19 14:29:07 CET 2004 <jurgenv@cwi.nl>
  * Replaced dependency on Tide to dependency on small package tide-support

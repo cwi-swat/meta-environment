@@ -11,7 +11,7 @@
 %%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
 %%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
 %%%%
-
+ 
 equations
 
 [ABtI1'1] 
@@ -188,8 +188,8 @@ equations
               align R [B B*] given (c,ao*) so* with Frame1 and Struct1 and (Int1,Int1) Point* =
                 align R [B*] given (ao*) so* with Frame4 and Text2 && Point2 and Point*
 
-[default-ABtI10'5] align B given (ao*) so* with Frame and Struct and Align-info =
-                       align R [B] given (ao*) so* with Frame and Struct and Align-info
+%%[default-ABtI10'5] align B given (ao*) so* with Frame and Struct and Align-info =
+%%                       align R [B] given (ao*) so* with Frame and Struct and Align-info
 
   [ABtI11'1]  get column A (ao*) [] =
 
