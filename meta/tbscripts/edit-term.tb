@@ -42,7 +42,7 @@ in
     snd-note(ui-status(stat(Id,"Opening existing term..."))) .
     create(Editor(Name, Text, Path, Mod, "term"), Tid?)
     +
-    rec-msg(error-opening(Name)) .
+    rec-msg(error-opening(Name?)) .
     snd-note(ui-status(stat(Id,"Creating new term..."))) .
     create(Editor(Name, "", Name, Mod, "term"), Tid?)
   ) .
