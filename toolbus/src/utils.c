@@ -174,24 +174,24 @@ static term *parse_anno(term *t)
     
     while(lastc != close_char){
       if(lastc == '%') {
-	if(get_char() == 'l'){
-	  next(&args) = 
-	    list_concat(next(&args),
-			     va_arg(mk_term_args, term_list *));
-	  get_char(); skip_layout();
-	  goto list_args_seen_anno;
-	} else {
-	  unget_char();
-	}
+				if(get_char() == 'l'){
+					next(&args) = 
+						list_concat(next(&args),
+												va_arg(mk_term_args, term_list *));
+					get_char(); skip_layout();
+					goto list_args_seen_anno;
+				} else {
+					unget_char();
+				}
       }
       arg = parse_anno(parse_term0());
-
+			
       next(&args) = list_concat_term(next(&args), arg);
       skip_layout();
       if(lastc == ','){
-	get_char(); skip_layout(); continue;
+				get_char(); skip_layout(); continue;
       } else
-	break;
+				break;
     }
     list_args_seen_anno:
     if(lastc != close_char){

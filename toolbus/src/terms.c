@@ -256,40 +256,45 @@ static void mark_terms(void)
     /* TBprintf(stderr, "Marking: %t\n", t); */
 
     switch(tkind(t)){  
-    case t_bool:
-    case t_int:
-    case t_real:
-    case t_str:
-    case t_bstr:
-      break;
+			case t_bool:
+			case t_int:
+			case t_real:
+			case t_str:
+			case t_bstr:
+				break;
+				
+			case t_var:
+				t = var_type(t);  push_term(t); break;
+			case t_placeholder:
+				t = placeholder_type(t); push_term(t); break;
+			case t_appl:
+				for(ts = fun_args(t); ts; ts = next(ts)){
+					mark(ts) = TBtrue;
+					t = first(ts);
+					push_term(t);
+				}
+				break;
+			case t_list:
+				for(ts = t; ts; ts = next(ts)){
+					mark(ts) = TBtrue;
+					t = first(ts);
+					push_term(t);
+				}
+				break;
+				
+			case t_env:
+				t1 = env_var(t); push_term(t1);
+				t1 = env_val(t); push_term(t1);
+				t1 = env_next(t); push_term(t1);
+				break;
 
-    case t_var:
-      t = var_type(t);  push_term(t); break;
-    case t_placeholder:
-     t = placeholder_type(t); push_term(t); break;
-    case t_appl:
-      for(ts = fun_args(t); ts; ts = next(ts)){
-	mark(ts) = TBtrue;
-	t = first(ts);
-	push_term(t);
-      }
-      break;
-    case t_list:
-      for(ts = t; ts; ts = next(ts)){
-	mark(ts) = TBtrue;
-	t = first(ts);
-	push_term(t);
-      }
-      break;
-
-    case t_env:
-      t1 = env_var(t); push_term(t1);
-      t1 = env_val(t); push_term(t1);
-      t1 = env_next(t); push_term(t1);
-      break;
-
-    default: err_fatal("mark_terms: illegal term encountered. check if all " \
-		       "of your protected terms are legal or NULL!");
+			case t_anno:
+				t1 = anno_val(t); push_term(t1);
+				t1 = anno_term(t); push_term(t1);
+				break;
+				
+			default: err_fatal("mark_terms: illegal term encountered. check if " \
+												 " all of your protected terms are legal or NULL!");
     }
   }
 }
