@@ -8,6 +8,7 @@ sorts
 
 Infix Prefix CharConst AnyChar BoolConst ScaleFactor Digit Real Numeral Constant String Formal 
 NameList Name Struct Rhs Clause Expr Defs Simple Comb OpExp ListExp CondExp
+Where
 
 lexical syntax
 
@@ -18,7 +19,10 @@ lexical syntax
 
 context-free syntax
 
-Expr "WHERE" Defs -> Expr
+
+
+"WHERE"           -> Where
+Expr Where Defs   -> Expr
 CondExp           -> Expr
 
 OpExp "->" CondExp ";" CondExp -> CondExp

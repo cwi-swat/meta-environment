@@ -2,6 +2,7 @@ module sasl/tools/Disambiguate
 
 imports sasl/syntax/Sasl
 imports asf/tools/PosInfo[Expr]
+imports asf/tools/PosInfo[Where]
 imports basic/Integers
 
 exports
@@ -17,6 +18,7 @@ context-free syntax
 
 
 check(Expr, "ok" | "not-ok", IntCon) -> "ok" | "not-ok" {traversal(accu,bottom-up,continue)}
+check(Where, "ok" | "not-ok", IntCon) -> "ok" | "not-ok" {traversal(accu,bottom-up,continue)}
 
 variables
 
@@ -26,5 +28,4 @@ variables
 "NameList"[0-9]*     -> NameList
 "NatCon"[0-9]*      -> NatCon
 "Defs"[0-9]* -> Defs
-"L" -> LAYOUT
-
+"Where"  -> Where
