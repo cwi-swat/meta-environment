@@ -25,6 +25,7 @@ xemacs_connector_LDADD = \
 	-L$(top_builddir)/editors/text/common -lTextEditor \
 	-L$(top_builddir)/editors/structure/src -lStructure \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm
+	-L$(ATERM)/lib -lATerm \
+	$(SOCKLIBS)
 
 lib_xemacs_la_SOURCES = startup.c

@@ -30,7 +30,8 @@ gvim_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(top_builddir)/editors/structure/src -lStructure \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm
+	-L$(ATERM)/lib -lATerm \
+	$(SOCKLIBS)
 
 lib_gvim_la_SOURCES = comm.c startup.c
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug 19 09:42:51 CEST 2003 <jong@cwi.nl>
+ * editors/text/{vim,emacs,xemacs}/Makefile.am:
+   add $(SOCKLIBS) during linking (needed on SunOS)
+
 Thu Aug 14 08:45:06 CEST 2003 <jong@cwi.nl>
  * editors/text/*/Makefile.am:
    - add $(TOOLBUSLIB)/INCLUDE to includes
