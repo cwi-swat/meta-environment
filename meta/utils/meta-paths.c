@@ -42,7 +42,7 @@ static char myversion[] = "0.1";
 static void usage()
 {
   fprintf(stderr, USAGE_MSG);
-  exit(1);
+  exit(0);
 }
 
 static void version(const char *prg)

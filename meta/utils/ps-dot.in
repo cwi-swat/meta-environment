@@ -41,7 +41,6 @@ Options:
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
-	exit 1
 }
 
 Version() {
