@@ -4,13 +4,12 @@ LIBROOT=${top_srcdir}/lib
 
 # What gets installed, distributed, cleaned
 MODULES=$(wildcard *.asf *.sdf) 
-PREPARED=$(wildcard *.tbl)
-EXTRA_DIST = $(MODULES) $(PREPARED) 
+EXTRA_DIST = $(MODULES)
 
 # Determine installation directory
 libpackagedir=${pkgdatadir}/library$(subst library,,$(subdir))
 
-install-data-hook: make-dir install-modules install-prepared 
+install-data-hook: make-dir install-modules
 
 make-dir:
 	@if test -d $(DESTDIR)$(libpackagedir); then \
@@ -29,16 +28,3 @@ install-modules:
             $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p; \
           fi; fi; \
         done; 
-
-install-prepared:
-	@list='$(PREPARED)'; for p in $$list; do \
-          if test -f $(srcdir)/$$p; then \
-            echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
-            $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
-          else if test -f $$p; then \
-            echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
-            $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p; \
-          fi; fi; \
-        done;
-
-
