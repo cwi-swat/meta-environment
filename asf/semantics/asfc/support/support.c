@@ -222,7 +222,7 @@ aterm_list *string2list(arena *ar,char *s)
 
   for(i=strlen(s)-1; i>=0; i--) {
     old = result;
-    tmp = TbuildInt(w,s[i]);
+    tmp = make_char(s[i]);
     result = TbuildList(w,tmp, result);
     t_unprotect(tmp);
     t_unprotect(old);
