@@ -75,7 +75,7 @@ AC_SUBST(GRAPHVIZ)
 dnl }}}
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes
+EXTERNAL_JARS=${JAVA_ATERM}
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Need lex and yacc support
