@@ -38,7 +38,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:I:de:g:hi:m:o:p:qr:sS:t:T:vV"
+myarguments="C:I:de:hi:m:o:p:qr:sS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -49,7 +49,6 @@ Options:
     -I dir          location of extra toolbus scripts
     -d              run in debug mode (with viewer)
     -e <editor>     select one of gnu-emacs, or gvim
-    -g <gui>        select one of swing or eclipse
     -h              display help information (usage)
     -i <file>       input file works only for the term-editor
     -m modulename   specifies the name of the top module to start with
@@ -105,10 +104,6 @@ do
 	-e)
 		shift
 		editor=$1
-		;;
-	-g)
-		shift
-		gui=$1
 		;;
         -h)
 		Usage ; exit 0 
@@ -170,13 +165,7 @@ done
 ###
 #  Get to the real work now...
 ###
-if [ "x$gui" = "xeclipse" ] ; then
-  gui="-DECLIPSE"
-else
-  gui=""
-fi
-
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" ${gui} -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DTERMSTORENAME=\\\"${termstorename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DTERMSTORENAME=\\\"${termstorename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x

@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Dec  7 09:57:30 CET 2004 <kooiker@cwi.nl>
+ * meta/src/generic-meta.sh.src:
+   - Removed Eclipse gui option  
+
 Tue Nov 30 14:39:34 CET 2004 <kooiker@cwi.nl>
  * tbscripts/{meta,start-meta-studio}.tb:
    - Moved GUI specific process creates from meta.tb to start-meta-studio.tb.
