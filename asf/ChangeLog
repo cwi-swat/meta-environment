@@ -2,6 +2,7 @@
  * Bumped to 1.3beta
  * Fixed a (part of a) serious bug in the list matching code of asfe concerning 
    list separators.
+ * Bumped version of asfe to 0.4
 
 2001/11/20 ({olivierp,jurgenv}@cwi.nl)
  * Fixed wrong tag reporting in error messages and TIDE stack trace.
