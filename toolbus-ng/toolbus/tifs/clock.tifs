@@ -1,14 +1,17 @@
 tifs(
   version(1),
   package("nl.cwi.toolbus"),
+  tool("clock"),
   [
     process(
-      name("CLOCK"),
+      name("Clock"),
       [
         eval("timeofday", Time),
         eval("start-timing", int),
         eval("elapsed(<int>)", Time),
-        eval("stop-timing(<int>), Time)
+        eval("stop-timing(<int>), Time),
+        do("set-alarm(<Time>,<String>)"),
+        event("alarm(<String>)")
       ]
     )
   ]

@@ -1,10 +1,10 @@
 package toolbus.parser;
 
-import aterm.*;
-import aterm.pure.*;
 import java.io.*;
 
 import toolbus.TBTerm;
+
+import aterm.ATerm;
 
 /**
  * Provide access to an external parser. Used to call sglr and implode-asfix.
