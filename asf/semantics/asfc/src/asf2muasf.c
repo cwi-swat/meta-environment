@@ -581,7 +581,12 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions,
     ASF_Condition condition = ASF_getConditionListHead(list);
     MA_Cond cond = conditionToCond(condition, funcdefs);
 
-    elems = MA_makeCondElemsMany(cond,em,"&",sp,elems);
+    if (MA_isCondElemsEmpty(elems)) {
+      elems = MA_makeCondElemsSingle(cond);
+    }
+    else {
+      elems = MA_makeCondElemsMany(cond,em,"&",sp,elems);
+    }
 
     if (!ASF_hasConditionListTail(list)) {
       break;
