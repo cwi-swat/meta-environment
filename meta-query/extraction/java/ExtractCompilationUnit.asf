@@ -1,9 +1,9 @@
 equations
 
 [extractCompilationUnit-start]
-  &Area = get-area(&CompilationUnit),
-  &FileName = get-filename(&Area),
-  &Tuple = <&Area, &FileName>,
-  &Rstore2 = add-tuple(FILES, &Tuple, &Rstore1)
+  &Area := get-area(&CompilationUnit),
+  &FileName := get-filename(&Area),
+  &Tuple := <&Area, &FileName>,
+  &Rstore2 := add-tuple(FILES, &Tuple, &Rstore1)
   ===>
   extractCompilationUnit(&CompilationUnit, &Rstore1) = &Rstore2

@@ -56,4 +56,4 @@ hiddens
     "&Rstore"[0-9]* -> RSTORE
     "&Super" -> Super?
     "&Throws" -> Throws?
-    "&Tuple"[0-9]* -> Elem # Elem
+    "&Tuple"[0-9]* -> <Elem, Elem>

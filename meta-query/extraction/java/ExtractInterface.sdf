@@ -23,4 +23,4 @@ hiddens
     "&InterfaceDeclaration" -> InterfaceDeclaration
     "&Modifiers" -> Modifier*
     "&Rstore"[0-9]* -> RSTORE
-    "&Tuple" -> Elem # Elem
+    "&Tuple" -> <Elem, Elem>

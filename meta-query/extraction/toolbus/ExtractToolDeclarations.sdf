@@ -7,11 +7,11 @@ imports MyPosInfo[ToolName]
 
 exports
   context-free syntax
-    extractToolDeclarations(Tscript, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractToolDeclarations(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractToolDeclarations(ToolDef, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractToolDeclarations(ToolDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
@@ -23,5 +23,5 @@ hiddens
     "$ToolDef" -> ToolDef
     "$ToolName" -> ToolName
     "$ToolNameId" -> Area
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>
     "$VarDecls" -> VarDecls

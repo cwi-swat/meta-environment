@@ -19,4 +19,4 @@ hiddens
     "&PackageDeclaration" -> PackageDeclaration
     "&PackageId" -> Area
     "&Rstore"[0-9]* -> RSTORE
-    "&Tuple" -> Elem # Elem
+    "&Tuple" -> <Elem, Elem>

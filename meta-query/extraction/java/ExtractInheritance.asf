@@ -1,54 +1,54 @@
 equations
 
 [extractInheritance-start]
-  &Area = get-area(&CompilationUnit),
-  &Rstore2 = extractInheritance(&CompilationUnit, &Rstore1, &Area)
+  &Area := get-area(&CompilationUnit),
+  &Rstore2 := extractInheritance(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractInheritance(&CompilationUnit, &Rstore1) = &Rstore2
 
 [extractInheritance-0]
-  &ClassDeclaration = &Modifiers class &Identifier &SuperOpt &Interfaces &ClassBody,
-  &ClassId = get-area(&Identifier),
-  &Rstore2 = extractExtendsClass(&SuperOpt, &Rstore1, &ClassId), 
-  &Rstore3 = extractImplements(&Interfaces, &Rstore2, &ClassId), 
-  &Rstore4 = extractInheritance(&ClassBody, &Rstore3, &ClassId)
+  &Modifiers class &Identifier &SuperOpt &Interfaces &ClassBody := &ClassDeclaration,
+  &ClassId := get-area(&Identifier),
+  &Rstore2 := extractExtendsClass(&SuperOpt, &Rstore1, &ClassId), 
+  &Rstore3 := extractImplements(&Interfaces, &Rstore2, &ClassId), 
+  &Rstore4 := extractInheritance(&ClassBody, &Rstore3, &ClassId)
   ===>
   extractInheritance(&ClassDeclaration, &Rstore1, &Area) = &Rstore4
 
 [extractInheritance-1]
-  &InterfaceDeclaration = &Modifiers interface &Identifier &ExtendsInterfacesOpt &InterfaceBody,
-  &InterfaceId = get-area(&Identifier),
-  &Rstore2 = extractExtendsInterface(&ExtendsInterfacesOpt, &Rstore1, &InterfaceId)
+  &Modifiers interface &Identifier &ExtendsInterfacesOpt &InterfaceBody := &InterfaceDeclaration,
+  &InterfaceId := get-area(&Identifier),
+  &Rstore2 := extractExtendsInterface(&ExtendsInterfacesOpt, &Rstore1, &InterfaceId)
   ===>
   extractInheritance(&InterfaceDeclaration, &Rstore1, &Area) = &Rstore2
 
 [extractExtendsInterface-0]
-  &ExtendsInterfaces = extends &InterfaceTypes,
-  &Rstore2 = extractExtendsInterface(&InterfaceTypes, &Rstore1, &Area)
+  extends &InterfaceTypes := &ExtendsInterfaces,
+  &Rstore2 := extractExtendsInterface(&InterfaceTypes, &Rstore1, &Area)
   ===>
   extractExtendsInterface(&ExtendsInterfaces, &Rstore1, &Area) = &Rstore2 
 
 [extractExtendsInterface-1]
-  &InterfaceType = &Name,
-  &InterfaceName = name2str(&Name),
-  &Tuple = <&Area, &InterfaceName>,
-  &Rstore2 = add-tuple(EXTENDS_INTERFACE, &Tuple, &Rstore1)
+  &Name := &InterfaceType,
+  &InterfaceName := name2str(&Name),
+  &Tuple := <&Area, &InterfaceName>,
+  &Rstore2 := add-tuple(EXTENDS_INTERFACE, &Tuple, &Rstore1)
   ===>
   extractExtendsInterface(&InterfaceType, &Rstore1, &Area) = &Rstore2
 
 [extractExtendsClass-0]
-  &Super = extends &ClassType,
-  &Name = &ClassType,
-  &SuperName = name2str(&Name),  
-  &Tuple = <&Area, &SuperName>,
-  &Rstore2 = add-tuple(EXTENDS_CLASS, &Tuple, &Rstore1)
+  extends &ClassType := &Super,
+  &Name := &ClassType,
+  &SuperName := name2str(&Name),  
+  &Tuple := <&Area, &SuperName>,
+  &Rstore2 := add-tuple(EXTENDS_CLASS, &Tuple, &Rstore1)
   ===>
   extractExtendsClass(&Super, &Rstore1, &Area) = &Rstore2
 
 [extractImplements-0]
-  &InterfaceType = &Name,
-  &InterfaceName = name2str(&Name),
-  &Tuple = <&Area, &InterfaceName>,
-  &Rstore2 = add-tuple(IMPLEMENTS, &Tuple, &Rstore1)
+  &Name := &InterfaceType,
+  &InterfaceName := name2str(&Name),
+  &Tuple := <&Area, &InterfaceName>,
+  &Rstore2 := add-tuple(IMPLEMENTS, &Tuple, &Rstore1)
   ===>
   extractImplements(&InterfaceType, &Rstore1, &Area) = &Rstore2

@@ -72,4 +72,4 @@ hiddens
     "&Super" -> Super
     "&SuperName" -> String
     "&SuperOpt" -> Super?
-    "&Tuple"[0-9]* -> Elem # Elem
+    "&Tuple"[0-9]* -> <Elem, Elem>

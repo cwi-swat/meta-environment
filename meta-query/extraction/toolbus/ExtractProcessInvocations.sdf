@@ -7,16 +7,16 @@ imports MyPosInfo[ProcessName]
 
 exports
   context-free syntax
-    extractProcessInvocations(Tscript, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessInvocations(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
-    extractProcessInvocations(TscriptDef, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessInvocations(TscriptDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
-    extractProcessInvocations(ProcessInvocation, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessInvocations(ProcessInvocation, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
@@ -29,4 +29,4 @@ hiddens
     "$Rstore"[0-9]* -> RSTORE
     "$Terms" -> {Term ","}*
     "$TscriptDef" -> TscriptDef
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>

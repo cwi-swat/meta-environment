@@ -8,30 +8,30 @@ imports MyPosInfo[Var]
 
 exports
   context-free syntax
-    extractVariableDefinitions(Tscript, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDefinitions(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDefinitions(ProcessDef, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractVariableDefinitionsInScope({FormalParam ","}*, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractVariableDefinitionsInScope(FormalParam, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDefinitions(ProcessDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractVariableDefinitionsInScope(ProcessBody, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDefinitionsInScope({FormalParam ","}*, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDefinitionsInScope(GenVar, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDefinitionsInScope(FormalParam, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDefinitionsInScope(Atom, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+hiddens
+  context-free syntax
+    extractVariableDefinitionsInScope(ProcessBody, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDefinitionsInScope(GenVar, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDefinitionsInScope(Atom, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
@@ -49,7 +49,7 @@ hiddens
     "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
     "$Term" -> Term
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>
     "$GenVar" -> GenVar
     "$Var" -> Var
     "$VarId" -> Area

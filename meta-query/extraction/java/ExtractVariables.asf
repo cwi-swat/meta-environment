@@ -1,91 +1,91 @@
 equations
 
 [extract-variables-start]
-  &Area = get-area(&CompilationUnit),
-  &Rstore2 = extractVariables(&CompilationUnit, &Rstore1, &Area)
+  &Area := get-area(&CompilationUnit),
+  &Rstore2 := extractVariables(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractVariables(&CompilationUnit, &Rstore1) = &Rstore2
 
 
 
 [extract-variables-0]
-  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
-  &ClassId = get-area(&Identifier),
-  &Rstore2 = extractVariables(&ClassBody, &Rstore1, &ClassId)
+  &Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
+  &ClassId := get-area(&Identifier),
+  &Rstore2 := extractVariables(&ClassBody, &Rstore1, &ClassId)
   ===>
   extractVariables(&ClassDeclaration, &Rstore1, &Area) = &Rstore2
 
 [extract-variables-1]
-  &FieldDeclaration = &Modifiers &Type &VariableDeclarators ;,
-  &Rstore2 = extractFields(&VariableDeclarators, &Rstore1, &Area, &Type)
+  &Modifiers &Type &VariableDeclarators ; := &FieldDeclaration,
+  &Rstore2 := extractFields(&VariableDeclarators, &Rstore1, &Area, &Type)
   ===>
   extractVariables(&FieldDeclaration, &Rstore1, &Area) = &Rstore2
 
 
 
 [extract-variables-2]
-  &MethodDeclaration = &MethodHeader &MethodBody,
-  &MethodHeader = &Modifiers &MethodRes &MethodDeclarator &Throws,
-  &MethodDeclarator = &Identifier ( &FormalParameters ),
-  &MethodId = get-area(&Identifier),
-  &Rstore2 = extractVariables(&MethodBody, &Rstore1, &MethodId)
+  &MethodHeader &MethodBody := &MethodDeclaration,
+  &Modifiers &MethodRes &MethodDeclarator &Throws := &MethodHeader,
+  &Identifier ( &FormalParameters ) := &MethodDeclarator,
+  &MethodId := get-area(&Identifier),
+  &Rstore2 := extractVariables(&MethodBody, &Rstore1, &MethodId)
   ===>
   extractVariables(&MethodDeclaration, &Rstore1, &Area) = &Rstore2
 
 [extract-variables-3]
-  &LocalVariableDeclaration = &Type &VariableDeclarators,
-  &Rstore2 = extractLocalVariables(&VariableDeclarators, &Rstore1, &Area, &Type)
+  &Type &VariableDeclarators := &LocalVariableDeclaration,
+  &Rstore2 := extractLocalVariables(&VariableDeclarators, &Rstore1, &Area, &Type)
   ===>
   extractVariables(&LocalVariableDeclaration, &Rstore1, &Area) = &Rstore2
 
 
 
 [extract-field-0]
-  &VariableDeclarator = &VariableDeclaratorId,
-  &Rstore2 = addField(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  &VariableDeclaratorId := &VariableDeclarator,
+  &Rstore2 := addField(&VariableDeclaratorId, &Rstore1, &Area, &Type)
   ===>
   extractFields(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
 
 [extract-field-1]
-  &VariableDeclarator = &VariableDeclaratorId = &VariableInitializer,
-  &Rstore2 = addField(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  &VariableDeclaratorId = &VariableInitializer := &VariableDeclarator,
+  &Rstore2 := addField(&VariableDeclaratorId, &Rstore1, &Area, &Type)
   ===>
   extractFields(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
 
 
 
 [extract-local-variables-0]
-  &VariableDeclarator = &VariableDeclaratorId = &VariableInitializer,
-  &Rstore2 = addLocalVariable(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  &VariableDeclaratorId = &VariableInitializer := &VariableDeclarator,
+  &Rstore2 := addLocalVariable(&VariableDeclaratorId, &Rstore1, &Area, &Type)
   ===>
   extractLocalVariables(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
 
 [extract-local-variables-1]
-  &VariableDeclarator = &VariableDeclaratorId,
-  &Rstore2 = addLocalVariable(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  &VariableDeclaratorId := &VariableDeclarator,
+  &Rstore2 := addLocalVariable(&VariableDeclaratorId, &Rstore1, &Area, &Type)
   ===>
   extractLocalVariables(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
 
 
 
 [add-field-0]
-  &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
-  &Tuple1 = <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
-  &Rstore2 = add-tuple(FIELD_DECL_NAME, &Tuple1, &Rstore1),
-  &Tuple2 = <&VariableDeclaratorIdId, &Area>,
-  &Rstore3 = add-tuple(FIELD_DECL_SCOPE, &Tuple2, &Rstore2),
-  &Tuple3 = <&VariableDeclaratorIdId, type2str(&Type)>,
-  &Rstore4 = add-tuple(FIELD_DECL_TYPE, &Tuple3, &Rstore3)
+  &VariableDeclaratorIdId := get-area(&VariableDeclaratorId),
+  &Tuple1 := <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
+  &Rstore2 := add-tuple(FIELD_DECL_NAME, &Tuple1, &Rstore1),
+  &Tuple2 := <&VariableDeclaratorIdId, &Area>,
+  &Rstore3 := add-tuple(FIELD_DECL_SCOPE, &Tuple2, &Rstore2),
+  &Tuple3 := <&VariableDeclaratorIdId, type2str(&Type)>,
+  &Rstore4 := add-tuple(FIELD_DECL_TYPE, &Tuple3, &Rstore3)
   ===>
   addField(&VariableDeclaratorId, &Rstore1, &Area, &Type) = &Rstore4 
 
 [add-local-varialbe-0]
-  &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
-  &Tuple1 = <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
-  &Rstore2 = add-tuple(LOCAL_VARIABLE_DECL_NAME, &Tuple1, &Rstore1),
-  &Tuple2 = <&VariableDeclaratorIdId, &Area>,
-  &Rstore3 = add-tuple(LOCAL_VARIABLE_DECL_SCOPE, &Tuple2, &Rstore2),
-  &Tuple3 = <&VariableDeclaratorIdId, type2str(&Type)>,
-  &Rstore4 = add-tuple(LOCAL_VARIABLE_DECL_TYPE, &Tuple3, &Rstore3)
+  &VariableDeclaratorIdId := get-area(&VariableDeclaratorId),
+  &Tuple1 := <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
+  &Rstore2 := add-tuple(LOCAL_VARIABLE_DECL_NAME, &Tuple1, &Rstore1),
+  &Tuple2 := <&VariableDeclaratorIdId, &Area>,
+  &Rstore3 := add-tuple(LOCAL_VARIABLE_DECL_SCOPE, &Tuple2, &Rstore2),
+  &Tuple3 := <&VariableDeclaratorIdId, type2str(&Type)>,
+  &Rstore4 := add-tuple(LOCAL_VARIABLE_DECL_TYPE, &Tuple3, &Rstore3)
   ===>
   addLocalVariable(&VariableDeclaratorId, &Rstore1, &Area, &Type) = &Rstore4 

@@ -7,11 +7,11 @@ imports MyPosInfo[ProcessName]
 
 exports
   context-free syntax
-    extractProcessDeclarations(Tscript, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessDeclarations(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractProcessDeclarations(ProcessSignature, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessDeclarations(ProcessSignature, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
@@ -23,4 +23,4 @@ hiddens
     "$ProcessNameId" -> Area
     "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>

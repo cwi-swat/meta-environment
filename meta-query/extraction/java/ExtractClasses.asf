@@ -1,47 +1,47 @@
 equations
 
 [extract-classes-start]
-  &Area = get-area(&CompilationUnit),
-  &Rstore2 = extractClasses(&CompilationUnit, &Rstore1, &Area)
+  &Area := get-area(&CompilationUnit),
+  &Rstore2 := extractClasses(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractClasses(&CompilationUnit, &Rstore1) = &Rstore2
 
 [extract-classes-0]
-  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
-  &ClassId = get-area(&Identifier),
-  &Tuple1 = <&ClassId, id2str(&Identifier)>,
-  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
-  &Tuple2 = <&ClassId, &Area>,
-  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
-  &Tuple3 = <&ClassId, get-area(&ClassDeclaration)>,
-  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
-  &Rstore5 = extractClasses(&ClassBody, &Rstore4, &ClassId)
+  &Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
+  &ClassId := get-area(&Identifier),
+  &Tuple1 := <&ClassId, id2str(&Identifier)>,
+  &Rstore2 := add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 := <&ClassId, &Area>,
+  &Rstore3 := add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Tuple3 := <&ClassId, get-area(&ClassDeclaration)>,
+  &Rstore4 := add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 := extractClasses(&ClassBody, &Rstore4, &ClassId)
   ===>
   extractClasses(&ClassDeclaration, &Rstore1, &Area) = &Rstore5
 
 [extract-classes-1]
-  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ) &ClassBody,
-  &ClassId = get-area(&ClassType),
-  &Name = &ClassType,
-  &Tuple1 = <&ClassId, "anonymous " || name2str(&Name)>,
-  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
-  &Tuple2 = <&ClassId, &Area>,
-  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
-  &Tuple3 = <&ClassId, get-area(&ClassInstanceCreationExpression)>,
-  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
-  &Rstore5 = extractClasses(&ClassBody, &Rstore4, &ClassId)
+  new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
+  &ClassId := get-area(&ClassType),
+  &Name := &ClassType,
+  &Tuple1 := <&ClassId, "anonymous " || name2str(&Name)>,
+  &Rstore2 := add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 := <&ClassId, &Area>,
+  &Rstore3 := add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Tuple3 := <&ClassId, get-area(&ClassInstanceCreationExpression)>,
+  &Rstore4 := add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 := extractClasses(&ClassBody, &Rstore4, &ClassId)
   ===>
   extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore5
 
 [extract-classes-2]
-  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ),
-  &ClassId = get-area(&ClassType),
-  &Name = &ClassType,
-  &Tuple1 = <&ClassId, "anonymous " || name2str(&Name)>,
-  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
-  &Tuple2 = <&ClassId, &Area>,
-  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
-  &Tuple3 = <&ClassId, get-area(&ClassInstanceCreationExpression)>,
-  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3)
+  new &ClassType ( &Expressions ) := &ClassInstanceCreationExpression,
+  &ClassId := get-area(&ClassType),
+  &Name := &ClassType,
+  &Tuple1 := <&ClassId, "anonymous " || name2str(&Name)>,
+  &Rstore2 := add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 := <&ClassId, &Area>,
+  &Rstore3 := add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Tuple3 := <&ClassId, get-area(&ClassInstanceCreationExpression)>,
+  &Rstore4 := add-tuple(CLASS_SIZE, &Tuple3, &Rstore3)
   ===>
   extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore4

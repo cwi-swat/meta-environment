@@ -1,20 +1,20 @@
 equations
 
 [extract-process-declarations-0]
-  $ProcessSignature = $ProcessName,
-  addProcessDeclaration($Rstore1, $ProcessName) = $Rstore2
+  $ProcessName := $ProcessSignature,
+  $Rstore2 := addProcessDeclaration($Rstore1, $ProcessName)
   ===>
   extractProcessDeclarations($ProcessSignature, $Rstore1) = $Rstore2
 
 [extract-process-declarations-1]
-  $ProcessSignature = $ProcessName ( $FormalParams ),
-  addProcessDeclaration($Rstore1, $ProcessName) = $Rstore2
+  $ProcessName ( $FormalParams ) := $ProcessSignature,
+  $Rstore2 := addProcessDeclaration($Rstore1, $ProcessName)
   ===>
   extractProcessDeclarations($ProcessSignature, $Rstore1) = $Rstore2
 
 [add-process-declaration-0]
-  $ProcessNameId = get-area($ProcessName),
-  $Tuple1 = <$ProcessNameId, processname2str($ProcessName)>,
-  add-tuple(PROCESS_DECLARATION, $Tuple1, $Rstore1) = $Rstore2
+  $ProcessNameId := get-area($ProcessName),
+  $Tuple1 := <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 := add-tuple(PROCESS_DECLARATION, $Tuple1, $Rstore1)
   ===>
   addProcessDeclaration($Rstore1, $ProcessName) = $Rstore2

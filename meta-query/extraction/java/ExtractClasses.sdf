@@ -42,4 +42,4 @@ hiddens
     "&Name" -> Name
     "&Rstore"[0-9]* -> RSTORE
     "&Super" -> Super?
-    "&Tuple"[0-9]* -> Elem # Elem
+    "&Tuple"[0-9]* -> <Elem, Elem>

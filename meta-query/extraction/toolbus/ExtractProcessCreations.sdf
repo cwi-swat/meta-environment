@@ -25,4 +25,4 @@ hiddens
     "$ProcessNameId" -> Area
     "$Rstore"[0-9]* -> RSTORE
     "$Terms" -> {Term ","}*
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>

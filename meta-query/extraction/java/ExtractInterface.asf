@@ -1,9 +1,9 @@
 equations
 
 [extractInterface-0]
-  &InterfaceDeclaration = &Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody,
-  &Area = get-area(&InterfaceDeclaration),
-  &Tuple = <&Area, id2str(&Identifier)>,
-  &Rstore2 = add-tuple(INTERFACES, &Tuple, &Rstore1)
+  &Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody := &InterfaceDeclaration,
+  &Area := get-area(&InterfaceDeclaration),
+  &Tuple := <&Area, id2str(&Identifier)>,
+  &Rstore2 := add-tuple(INTERFACES, &Tuple, &Rstore1)
   ===>
   extractInterface(&InterfaceDeclaration, &Rstore1) = &Rstore2

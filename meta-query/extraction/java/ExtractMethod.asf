@@ -1,36 +1,36 @@
 equations
 
 [extractMethod-start]
-  &Area = get-area(&CompilationUnit),
-  &Rstore2 = extractMethod(&CompilationUnit, &Rstore1, &Area)
+  &Area := get-area(&CompilationUnit),
+  &Rstore2 := extractMethod(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractMethod(&CompilationUnit, &Rstore1) = &Rstore2
 
 [extractMethod-0]
-  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
-  &ClassId = get-area(&Identifier),
-  &Rstore2 = extractMethod(&ClassBody, &Rstore1, &ClassId)
+  &Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
+  &ClassId := get-area(&Identifier),
+  &Rstore2 := extractMethod(&ClassBody, &Rstore1, &ClassId)
   ===>
   extractMethod(&ClassDeclaration, &Rstore1, &Area) = &Rstore2
 
 [extractMethod-1]
-  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ) &ClassBody,
-  &ClassId = get-area(&ClassType),
-  &Rstore2 = extractMethod(&ClassBody, &Rstore1, &ClassId)
+  new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
+  &ClassId := get-area(&ClassType),
+  &Rstore2 := extractMethod(&ClassBody, &Rstore1, &ClassId)
   ===>
   extractMethod(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore2
 
 [extractMethod-2]
-  &MethodDeclaration = &MethodHeader &MethodBody,
-  &MethodHeader = &Modifiers &MethodRes &MethodDeclarator &Throws,
-  &MethodDeclarator = &Identifier ( &FormalParameters ),
-  &MethodId = get-area(&Identifier),
-  &Tuple1 = <&MethodId, id2str(&Identifier)>,
-  &Rstore2 = add-tuple(METHOD_DECL, &Tuple1, &Rstore1),
-  &Tuple2 = <&MethodId, &Area>,
-  &Rstore3 = add-tuple(METHOD_DECL_OCCURS, &Tuple2, &Rstore2),
-  &Tuple3 = <&MethodId, get-area(&MethodDeclaration)>,
-  &Rstore4 = add-tuple(METHOD_SIZE, &Tuple3, &Rstore3),
-  &Rstore5 = extractMethod(&MethodBody, &Rstore4, &Area)
+  &MethodHeader &MethodBody := &MethodDeclaration,
+  &Modifiers &MethodRes &MethodDeclarator &Throws := &MethodHeader,
+  &Identifier ( &FormalParameters ) := &MethodDeclarator,
+  &MethodId := get-area(&Identifier),
+  &Tuple1 := <&MethodId, id2str(&Identifier)>,
+  &Rstore2 := add-tuple(METHOD_DECL, &Tuple1, &Rstore1),
+  &Tuple2 := <&MethodId, &Area>,
+  &Rstore3 := add-tuple(METHOD_DECL_OCCURS, &Tuple2, &Rstore2),
+  &Tuple3 := <&MethodId, get-area(&MethodDeclaration)>,
+  &Rstore4 := add-tuple(METHOD_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 := extractMethod(&MethodBody, &Rstore4, &Area)
   ===>
   extractMethod(&MethodDeclaration, &Rstore1, &Area) = &Rstore5

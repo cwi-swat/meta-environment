@@ -14,4 +14,4 @@ hiddens
     "&CompilationUnit" -> CompilationUnit
     "&FileName" -> String
     "&Rstore"[0-9]* -> RSTORE
-    "&Tuple" -> Elem # Elem
+    "&Tuple" -> <Elem, Elem>

@@ -1,0 +1,162 @@
+equations
+
+  [variable2string] 
+    var2str(vname(Char*)) = strcon(""" Char* """)
+
+  [processname2string]
+    processname2str(processname(Char*)) = strcon(""" Char* """)
+
+  [toolname2string-0]
+    toolname2str(toolname(Char*)) = strcon(""" Char* """)
+
+  [atom2string]
+    sign2str($Term) = term2str($Term)
+
+  [term2string]
+    term2str(id(Char*)) = strcon(""" Char* """)
+
+  [term2string]
+    term2str(id(Char*)($TermPlus)) = 
+      strcon(""" Char* """) 
+      || strcon(""" "(" """) 
+      || terms2str($TermPlus) 
+      || strcon(""" ")" """)
+
+  [term2string]
+    term2str(*undefined*)
+    = strcon(""" "*" "u" "n" "d" "e" "f" "i" "n" "e" "d" "*" """)
+
+  [term2string-chars]
+    term2str($String) = strcon(""" "s" "t" "r" """)
+
+  [term2string-int]
+    term2str($Int) = strcon(""" "i" "n" "t" """)
+
+  [term2string-real]
+    term2str($Real) = strcon(""" "r" "e" "a" "l" """)
+
+  [term2string-bool]
+    term2str($Bool) = strcon(""" "b" "o" "o" "l" """)
+
+  [term2string-ph]
+    term2str(<$Term>)
+    = strcon(""" "<" """) || terms2str($Term) || strcon(""" ">" """)
+
+  [term2string-list]
+    term2str([$Terms])
+    = strcon(""" "[" """) || terms2str($Terms) || strcon(""" "]" """)
+
+  [terms2string-empty]
+   terms2str() = strcon(""" """)
+
+
+  [terms2string-term]
+    terms2str($Term) = term2str($Term) 
+
+  [terms2string-terms]
+    terms2str($Term, $TermPlus) = 
+      term2str($Term) || strcon(""" "," """) || terms2str($TermPlus)
+
+  [get-formal-parameters-1]
+    get-formal-parameters($ProcessName) =
+
+  [get-formal-parameters-2]
+    get-formal-parameters($ProcessName($FormalParams)) = $FormalParams
+
+  [get-local-variables-1]
+    get-local-variables($ProcessExpr) =
+
+  [get-local-variables-2]
+    get-local-variables(let $VarDecls in $ProcessExpr endlet) = $VarDecls
+
+  [make-signature-send]
+    $TermPlus2 := make-simple-signature($TermPlus1)
+    ===>
+    make-signature(snd-msg($TermPlus1), $FormalParams, $VarDecls) = 
+      msg($TermPlus2)
+
+  [make-signature-receive]
+    $TermPlus2 := make-simple-signature($TermPlus1)
+    ===>
+    make-signature(rec-msg($TermPlus1), $FormalParams, $VarDecls) = 
+      msg($TermPlus2)
+
+  [getType-var-formal]
+    getType($Var, 
+            $FormalParams1, $Var : $Term, $FormalParams2, 
+            $VarDecls) = $Term
+
+  [getType-vary-formal]
+    getType($Var,
+            $FormalParams1, $Var : $Term?, $FormalParams2,
+            $VarDecls) = $Term
+
+  [getType-varq-formal]
+    getType($Var?,  
+            $FormalParams1, $Var : $Term?, $FormalParams2,  
+            $VarDecls) = $Term
+
+  [getType-var-decl]
+    getType($Var,  
+            $FormalParams,  
+            $VarDecls1, $Var : $Term, $VarDecls2) = $Term
+
+  [getType-varq-decl]
+    getType($Var?,  
+            $FormalParams,  
+            $VarDecls1, $Var : $Term, $VarDecls2) = $Term
+
+  [default-getType]
+    getType($GenVar, $FormalParams, $VarDecls) = *undefined*
+
+  [getType-id]
+    getType($Id, $FormalParams, $VarDecls) = term
+
+  [getType-compound]
+    getType($Id($TermPlus), $FormalParams, $VarDecls) = term
+
+  [getType-str]
+    getType($String, $FormalParams, $VarDecls) = str
+
+  [getType-int]
+    getType($Int, $FormalParams, $VarDecls) = int
+
+  [getType-real]
+    getType($Real, $FormalParams, $VarDecls) = real
+
+  [getType-bool]
+    getType($Bool, $FormalParams, $VarDecls) = bool
+
+  [getType-list]
+    getType([$Terms], $FormalParams, $VarDecls) = list
+
+  [getType-list]
+    getType(<$Term>, $FormalParams, $VarDecls) = <getType($Term)>
+
+  [make-simple-signature-var]
+    make-simple-signature($Var) = term
+
+  [make-simple-signature-varq]
+    make-simple-signature($Var?) = term
+
+  [make-simple-signature-id]
+    make-simple-signature($Id) = term
+
+  [make-simple-signature-str]
+    make-simple-signature($String) = term
+
+  [make-simple-signature-int]
+    make-simple-signature($Int) = term
+
+  [make-simple-signature-real]
+    make-simple-signature($Real) = term
+
+  [make-simple-signature-bool]
+    make-simple-signature($Bool) = term
+
+  [make-simple-signature-list]
+    make-simple-signature([$Terms]) = term
+
+  [make-simple-signature-ph]
+    make-simple-signature(<$Term>) = term
+  

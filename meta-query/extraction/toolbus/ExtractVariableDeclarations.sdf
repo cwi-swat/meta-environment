@@ -8,27 +8,27 @@ imports MyPosInfo[Var]
 
 exports
   context-free syntax
-    extractVariableDeclarations(Tscript, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDeclarations(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDeclarations(ProcessDef, RSTORE)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractVariableDeclarationsInScope(VarDecls, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractVariableDeclarationsInScope(VarDecl, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDeclarations(ProcessDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractVariableDeclarationsInScope({FormalParam ","}*, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDeclarationsInScope(VarDecls, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDeclarationsInScope(FormalParam, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
+    extractVariableDeclarationsInScope(VarDecl, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariableDeclarationsInScope({FormalParam ","}*, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDeclarationsInScope(FormalParam, RSTORE, Area) ->
+      RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
@@ -46,7 +46,7 @@ hiddens
     "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
     "$Term" -> Term
-    "$Tuple"[0-9]* -> Elem # Elem
+    "$Tuple"[0-9]* -> <Elem, Elem>
     "$Var" -> Var
     "$VarDecl" -> VarDecl
     "$VarDecls" -> {VarDecl ","}*

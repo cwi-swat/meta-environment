@@ -1,60 +1,60 @@
 equations
 
 [extract-method-calls-start]
-  &Area = get-area(&CompilationUnit),
-  &Rstore2 = extractMethodCalls(&CompilationUnit, &Rstore1, &Area)
+  &Area := get-area(&CompilationUnit),
+  &Rstore2 := extractMethodCalls(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractMethodCalls(&CompilationUnit, &Rstore1) = &Rstore2
 
 
 
 [extract-method-calls-0]
-  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
-  &ClassId = get-area(&Identifier),
-  &Rstore2 = extractMethodCalls(&ClassBody, &Rstore1, &ClassId)
+  &Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
+  &ClassId := get-area(&Identifier),
+  &Rstore2 := extractMethodCalls(&ClassBody, &Rstore1, &ClassId)
   ===>
   extractMethodCalls(&ClassDeclaration, &Rstore1, &Area) = &Rstore2
 
 [extract-method-calls-1]
-  &MethodDeclaration = &MethodHeader &MethodBody,
-  &MethodHeader = &Modifiers &MethodRes &MethodDeclarator &Throws,
-  &MethodDeclarator = &Identifier ( &FormalParameters ),
-  &MethodId = get-area(&Identifier),
-  &Rstore2 = extractMethodCalls(&MethodBody, &Rstore1, &MethodId)
+  &MethodHeader &MethodBody := &MethodDeclaration,
+  &Modifiers &MethodRes &MethodDeclarator &Throws := &MethodHeader,
+  &Identifier ( &FormalParameters ) := &MethodDeclarator,
+  &MethodId := get-area(&Identifier),
+  &Rstore2 := extractMethodCalls(&MethodBody, &Rstore1, &MethodId)
   ===>
   extractMethodCalls(&MethodDeclaration, &Rstore1, &Area) = &Rstore2
 
 
 
 [extract-method-calls-2]
-  &MethodInvocation = &Name ( &Expressions ),
-  &Name = &Var . &MethodCall,
-  &Rstore2 = addMethodCall(&Var, &MethodCall, &Area, &Rstore1)
+  &Name ( &Expressions ) := &MethodInvocation,
+  &Var . &MethodCall := &Name,
+  &Rstore2 := addMethodCall(&Var, &MethodCall, &Area, &Rstore1)
   ===>
   extractMethodCalls(&MethodInvocation, &Rstore1, &Area) = &Rstore2
 
 [extract-method-calls-3]
-  &ExplicitConstructorInvocation = super ( &Expressions ) ;,
-  &ExplicitConstructorInvocationId = get-area(&ExplicitConstructorInvocation),
-  &Rstore2 = addSuperCall(&ExplicitConstructorInvocationId, &Area, &Rstore1)
+  super ( &Expressions ) ; := &ExplicitConstructorInvocation,
+  &ExplicitConstructorInvocationId := get-area(&ExplicitConstructorInvocation),
+  &Rstore2 := addSuperCall(&ExplicitConstructorInvocationId, &Area, &Rstore1)
   ===>
   extractMethodCalls(&ExplicitConstructorInvocation, &Rstore1, &Area) = &Rstore2
 
 
 
 [add-method-call-0]
-  &VarId = get-area(&Var),
-  &Tuple1 = <&VarId, id2str(&Var)>,
-  &Rstore2 = add-tuple(VARIABLE_USE, &Tuple1, &Rstore1),
-  &Tuple2 = <&VarId, &Area>,
-  &Rstore3 = add-tuple(VARIABLE_USE_SCOPE, &Tuple2, &Rstore2),
-  &Tuple3 = <&VarId, ids2str(&MethodCall)>,
-  &Rstore4 = add-tuple(VARIABLE_USE_CALL, &Tuple3, &Rstore3)
+  &VarId := get-area(&Var),
+  &Tuple1 := <&VarId, id2str(&Var)>,
+  &Rstore2 := add-tuple(VARIABLE_USE, &Tuple1, &Rstore1),
+  &Tuple2 := <&VarId, &Area>,
+  &Rstore3 := add-tuple(VARIABLE_USE_SCOPE, &Tuple2, &Rstore2),
+  &Tuple3 := <&VarId, ids2str(&MethodCall)>,
+  &Rstore4 := add-tuple(VARIABLE_USE_CALL, &Tuple3, &Rstore3)
   ===>
   addMethodCall(&Var, &MethodCall, &Area, &Rstore1) = &Rstore4
 
 [add-super-call-0]
-  &Tuple = <&ExplicitConstructorInvocationId, &Area>,
-  &Rstore2 = add-tuple(SUPER_CALL, &Tuple, &Rstore1)
+  &Tuple := <&ExplicitConstructorInvocationId, &Area>,
+  &Rstore2 := add-tuple(SUPER_CALL, &Tuple, &Rstore1)
   ===>
   addSuperCall(&ExplicitConstructorInvocationId, &Area, &Rstore1) = &Rstore2
