@@ -1,6 +1,6 @@
 buttons([
 
-   button("Pico-syntax",
+   button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","TypeCheck"]))],
           [push-active-module,
 	   get-root,
@@ -15,7 +15,7 @@ buttons([
            push-modulename("Pico-typecheck"),
            activate-editor]),
 
-   button("Pico-syntax",
+   button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","Evaluate"]))],
           [push-active-module,
 	   get-root,
@@ -38,7 +38,7 @@ buttons([
                      activate-editor],
 		    [message("Program contains type error")])]),
 
-   button("Pico-syntax",
+   button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","Compile"]))],
           [push-active-module,
 	   get-root,
@@ -61,7 +61,7 @@ buttons([
                      activate-editor],
 		    [message("Program contains type error")])]),
 
-   button("Pico-syntax",
+   button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor,menu(["Pico","SimplifyExpression"]))],
           [get-focus,
            check-sort("EXP"),

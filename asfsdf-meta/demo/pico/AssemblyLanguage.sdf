@@ -1,6 +1,8 @@
 module AssemblyLanguage
 
-imports basic/Integers basic/Strings Pico-Identifiers
+imports basic/Integers basic/Strings 
+imports languages/pico/syntax/Pico-Identifiers
+
 exports 
   sorts Label Instr
   lexical syntax

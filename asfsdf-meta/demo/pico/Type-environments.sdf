@@ -1,6 +1,8 @@
 module Type-environments
 
-imports Check-types Pico-Identifiers containers/Table[PICO-ID TYPE]
+imports Check-types 
+imports languages/pico/syntax/Pico-Identifiers 
+imports containers/Table[PICO-ID TYPE]
 
 exports 
   sorts TENV

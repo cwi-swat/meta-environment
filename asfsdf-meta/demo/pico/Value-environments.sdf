@@ -1,6 +1,8 @@
 module Value-environments
 
-imports Pico-Identifiers Pico-Values containers/Table[PICO-ID VALUE]
+imports languages/pico/syntax/Pico-Identifiers 
+imports Pico-Values 
+imports containers/Table[PICO-ID VALUE]
     
 exports
   sorts VENV 

@@ -1,6 +1,7 @@
 module Check-types
 
-imports Pico-Types basic/Booleans basic/Comments
+imports languages/pico/syntax/Pico-Types 
+imports basic/Booleans basic/Comments
 
 exports
   context-free syntax

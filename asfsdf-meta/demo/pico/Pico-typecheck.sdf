@@ -2,6 +2,7 @@ module Pico-typecheck
 
 imports basic/Booleans 
 imports languages/pico/syntax/Pico-Syntax 
+imports Type-environments
 
 exports
   context-free syntax

@@ -1,6 +1,6 @@
 module SimplifyExpr
 
-imports Pico-syntax
+imports languages/pico/syntax/Pico-Syntax
 
 exports
   context-free syntax
