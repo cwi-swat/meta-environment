@@ -35,13 +35,12 @@ ATERM       = @NEWATERM@/aterm
 
 include Make.modules
 
-CC	= cc
+XCFLAGS = ${INCLUDE}
 INCLUDE = -I../support -I$(includedir) -I$(ATERM)/../include
-CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
-	-L../support -L$(libdir) -lsupport-cc -lATerm-cc -lAsFix-cc -lATB-cc \
+	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
+	-lAsFix-${CC} -lATB-${CC} \
 	$(SOCKLIBS) 
-LFLAGS	=  
 AR	= ar
 
 BASE	= ..

@@ -17,7 +17,7 @@ includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
-CC		= cc
+CC		= @CC@
 MAKE		= gmake
 CFLAGS		= -O ${XCFLAGS}
 CPP		= @CPP@
@@ -48,8 +48,8 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		=  -Lsupport -lsupport-cc -Lc-source -lasfix2c \
-		-L$(ATERM)/lib -lATerm-cc -lAsFix-cc -lATB-cc \
+XLIBS		=  -Lsupport -lsupport-${CC} -Lc-source -lasfix2c \
+		-L$(ATERM)/lib -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
 		$(SOCKLIBS)
 
 # Other variables
