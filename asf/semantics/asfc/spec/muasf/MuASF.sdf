@@ -30,6 +30,7 @@ exports
     FunId                     -> Term
     Int                       -> Term
     FunId "(" {Term ","}+ ")" -> Term
+   "[" TermList "]"           -> Term 
 
     {Term ","}*               -> TermList
 
