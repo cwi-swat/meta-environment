@@ -962,6 +962,8 @@ $Error]>
 		<power0,	fun[ bag[T] ]				to bag[bag[T]]>,
 		<power1,	fun[ bag[T] ]				to bag[bag[T]]>,
 
+		<all-paths-from,fun[ rel[T,T] ]				to bag[rel[T,T]]>,
+
                 <reachX,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
                 <reachR,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
 
