@@ -12,7 +12,6 @@ in
   .
   (
       rec-msg(ask-for-file(Title?, Path?, Extension?))
-      . printf("asked for file!\n")
       . snd-eval(T, show-file-dialog(Title, Path, Extension))
       . rec-value(T, file-name(FileName?))
       . snd-msg(ask-for-file-result(FileName))
