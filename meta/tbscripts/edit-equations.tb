@@ -28,9 +28,13 @@ in
     snd-msg(pp(Eqs)) .
     rec-msg(source(Src?))
   +
-    rec-msg(no-eqs)
-  +
-    rec-msg(unavailable) .
+    %% If there are no equations in the module-db, assume we
+    %% want to create a new equations section.
+    (
+      rec-msg(no-eqs)
+    +
+      rec-msg(unavailable)
+    ) .
     snd-msg(open-eqs-text-file(Module)) .
     (
       rec-msg(opened-file(raw, Module, Src?, Path?, Time?))
