@@ -470,7 +470,7 @@ proc mk_process {c name index} {
 		       -tags "proc$index proc"
         $c bind proc$index <Button-1> "gotoAtom $c $index"
         $c bind proc$index <Button-3> "addProcBreak $c $index"
-        $c bind proc$index <Double-Button> "addProcVars $name $index"
+        $c bind proc$index <Double-Button-1> "addProcVars $name $index"
         
         set bname [string range $name 0 4]
         $c create text $x [expr $y - $rp - 10] -text $bname -tags "pname$index"

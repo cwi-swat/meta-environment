@@ -2,6 +2,11 @@ $Id$
 
 2003-07-13 <kooiker@cwi.nl>
 
+  * fix toolbus/viewer.tcl.src: for some reason double click to show the
+    process variables didn't work anymore
+
+2003-07-13 <kooiker@cwi.nl>
+
   * toolbus/viewer.tcl.src:
     - Tool and process breakpoints do work now
     - Right click (re-)sets breakpoint at line or on process/tool
