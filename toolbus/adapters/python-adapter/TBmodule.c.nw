@@ -2,42 +2,16 @@
 %{{{ TBmodule.c
 
 <<TBmodule.c*>>=
-#include <stdio.h>
-#include <TB.h>
-#include <procs.h>
-#include <tool2.h>
-#include "Python.h"
-#include "allobjects.h"
-#include "sysmodule.h"
-#include "compile.h"
-#include "frameobject.h"
-#include <tcl.h>
-#include <tk.h>
-
-#define MAX_FUN_LEN 128
-
-static PyMethodDef TermMethods[];
-static PyMethodDef TBMethods[];
-
-static PyObject *TBError;
-static PyObject *Dict;
-static PyObject *Modules[MAX_CONNECTIONS] = { NULL };
-static TBbool simplify_all = TBtrue;
-#ifndef NO_TK
-static TBbool enableTk = TBfalse;
-#endif
-static PyObject *LocalTraceFunc;
-static TBbool Debugging = TBfalse;
-
-/* Print traces on stderr */
-#define TRACE_CALLS 1
-static int trace_mode = 0;
+<<includes>>
+<<defines>>
+<<declarations>>
+<<global variables>>
 
 <<class term>>
 
 <<toolbus_handler>>
 <<toolbus_sigchk>>
-<<tk_handler>>
+<<tcl_handler>>
 
 <<TBP_parseArgs>>
 <<TBP_newConnection>>
@@ -49,12 +23,88 @@ static int trace_mode = 0;
 <<TBP_eventloop>>
 <<TBP_enableTk>>
 <<TBP_enableDebugging>>
+
+#ifdef USE_TIDE
+<<line_trace>>
 <<TBP_traceFunction>>
 <<TBP_localTraceFunction>>
+#endif
 
 <<TermMethods>>
 <<TBMethods>>
 <<initTB>>
+
+<<debug functions>>
+@
+
+%}}}
+
+%{{{ includes
+
+<<includes>>=
+#include <stdio.h>
+#include <TB.h>
+#include <procs.h>
+#include <tool2.h>
+#include "Python.h"
+#include "allobjects.h"
+#include "sysmodule.h"
+#include "compile.h"
+#include "frameobject.h"
+#include <tcl.h>
+#include <tk.h>
+#ifdef USE_TIDE
+#include "debug-nub.tif.c"
+#endif
+@
+
+%}}}
+%{{{ defines
+
+<<defines>>=
+#define MAX_FUN_LEN 128
+@
+
+%}}}
+%{{{ declarations
+
+We need to declare some functions, because they are used before
+their definition.
+
+<<declarations>>=
+void stopped_eventloop();
+@
+
+%}}}
+%{{{ global variables
+
+<<global variables>>=
+static PyMethodDef TermMethods[];
+static PyMethodDef TBMethods[];
+
+static PyObject *TBError;
+static PyObject *Dict;
+static PyObject *Modules[MAX_CONNECTIONS] = { NULL };
+static TBbool simplify_all = TBtrue;
+#ifndef NO_TK
+static TBbool enableTk = TBfalse;
+#endif
+
+#ifdef USE_TIDE
+#define ES_STOPPED	0
+#define ES_SINGLE_STEP	1
+#define ES_RUNNING	2
+
+static PyObject *LocalTraceFunc;
+static int debugCid = -1;
+static int lastCid = -1;
+static term *CPE = NULL;
+static int exec_state = ES_STOPPED;
+#endif
+
+/* Print traces on stderr */
+#define TRACE_CALLS 1
+static int trace_mode = 0;
 @
 
 %}}}
@@ -909,7 +959,8 @@ term *call_python(int cid, char *func, term_list *args)
 
   hyphens2underscores(func, fbuf);
 
-  if(Debugging) {
+/*
+  if(debugCid >= 0) {
     LocalTraceFunc = PyDict_GetItemString(Dict, "_local_trace_func");
     Frame = (PyFrameObject *)PyEval_GetFrame();
     while(Frame) {
@@ -918,6 +969,7 @@ term *call_python(int cid, char *func, term_list *args)
       Frame = Frame->f_back;
     }
   }
+*/
 
   dict = PyModule_GetDict(Modules[cid]);
   py_func = PyDict_GetItemString(dict, fbuf);
@@ -1066,18 +1118,50 @@ TBbool check_python_func(int cid, char *func)
 @
 
 %}}}
-%{{{ void tk_handler(ClientData CID, int mask)
+%{{{ void tcl_handler(ClientData CID, int mask)
 
-<<tk_handler>>=
+<<tcl_handler>>=
 #ifndef NO_TK
-void tk_handler(ClientData CID, int mask)
+void tcl_handler(ClientData CID, int mask)
 {
   int cid = (int)CID;
 
-  /*fprintf(stderr, "tk_handler called: %d\n", cid);*/
+  /*fprintf(stderr, "tcl_handler called: %d\n", cid);*/
   TB_handle_one(cid);
 }
 #endif
+@
+
+%}}}
+
+%{{{ line_trace
+
+This function is called when a line is traced.
+If the {\tt exec\_state} is {\tt ES_SINGLE_STEP}
+or when a breakpoint is reached, the slave ToolBus
+connection is disabled, the {\tt exec\_state} is 
+set to {\tt ES_STOPPED}, and master ToolBus events
+are handled. Execution is stopped until the {\tt
+exec\_state} changes into {\tt ES_SINGLE_STEP} or
+{\tt ES_RUNNING}.
+
+<<line_trace>>=
+void line_trace(char *file, int line)
+{
+  switch(exec_state) {
+    case ES_SINGLE_STEP:
+			exec_state = ES_STOPPED;
+    case ES_STOPPED:	CPE = TB_make("cpe([[\"*\",\"line\",<str>,<int>]])", file,line);
+			TB_send(debugCid, TB_make("snd-event(<term>)", CPE));
+			stopped_eventloop();
+			break;
+
+    case ES_RUNNING:	/* Check for breakpoints comes here */
+			break;
+    default:		assert(0);
+  }
+  TBprintf(stdout, "continuing execution from %t\n", CPE);
+}
 @
 
 %}}}
@@ -1248,10 +1332,13 @@ static PyObject *TBP_connect(PyObject *self, PyObject *args)
     return NULL;
   }
 
+
+  lastCid = cid;
+
 #ifndef NO_TK
   if(enableTk)
-    Tk_CreateFileHandler(TB_getSocket(cid), TK_READABLE,
-					tk_handler,(ClientData)cid);
+    Tcl_CreateFileHandler(TB_getSocket(cid), TK_READABLE,
+					tcl_handler,(ClientData)cid);
 #endif
 
   Py_INCREF(Py_None);
@@ -1599,8 +1686,8 @@ PyObject *TBP_enableTk(PyObject *self, PyObject *args)
   enableTk = TBtrue;
   for(i=0; i<MAX_CONNECTIONS; i++) {
     if(TB_validConnection(i)) {
-      Tk_CreateFileHandler(TB_getSocket(i), TK_READABLE, 
-					tk_handler, (ClientData)i);
+      Tcl_CreateFileHandler(TB_getSocket(i), TK_READABLE, 
+					tcl_handler, (ClientData)i);
     }
   }
 
@@ -1619,16 +1706,33 @@ connection id of the connection with a debugger ToolBus.
 <<TBP_enableDebugging>>=
 PyObject *TBP_enableDebugging(PyObject *self, PyObject *args)
 {
-  int cid;
+#ifdef USE_TIDE
   PyObject *GlobalTraceFunc;
   PyFrameObject *Frame;
 
-  if(!PyArg_ParseTuple(args, "i", &cid))
+  if(!PyArg_ParseTuple(args, "i", &debugCid))
     return NULL;
 
-  fprintf(stderr, "starting debuggin via connection %d\n", cid);
-  if(!TB_validConnection(cid)) {
+  if(lastCid < 0) {
+    PyErr_SetString(TBError, "not connected to any ToolBus");
+    return NULL;
+  }
+
+  fprintf(stderr, "starting debuggin via connection %d\n", debugCid);
+  if(!TB_validConnection(debugCid)) {
     PyErr_SetString(TBError, "invalid debugging connection");
+    return NULL;
+  }
+
+  if(TB_getSocket(debugCid) >= 0) {
+    PyErr_SetString(TBError, "debbugger connection already occupied");
+    return NULL;
+  }
+
+  TB_setHandler(debugCid, debug_nub_handler);
+  TB_setSigChecker(debugCid, debug_nub_check_in_sign);
+  if(TB_connect(debugCid) < 0) {
+    PyErr_SetString(TBError, "debug connection attempt failed");
     return NULL;
   }
 
@@ -1639,8 +1743,14 @@ PyObject *TBP_enableDebugging(PyObject *self, PyObject *args)
   Py_INCREF(GlobalTraceFunc);
   _PySys_TraceFunc = GlobalTraceFunc;
 
+  fprintf(stderr, "debugging enabled!\n");
+
   Py_INCREF(Py_None);
   return Py_None; 
+#else
+  PyErr_SetString(TBError, "TIDE support not enabled");
+  return NULL;
+#endif
 }
 @
 
@@ -1651,19 +1761,27 @@ PyObject *TBP_enableDebugging(PyObject *self, PyObject *args)
 PyObject *TBP_traceFunction(PyObject *self, PyObject *args)
 {
   PyFrameObject *Frame;
-  int i;
+  char *event;
+  PyObject *Arg;
+  int lineno;
+  char *filename = NULL;
 
-  if(PyTuple_Size(args) != 3) {
-    PyErr_SetString(TBError, 
-	"tracefunction called with an invalid number of arguments");
+  if(!PyArg_ParseTuple(args, "OsO", &Frame, &event, &Arg))
     return NULL;
-  }
-  fprintf(stdout, "- TBP_traceFunction called:\n");
-  for(i=0; i<3; i++) {
-    PyObject_Print(PyTuple_GetItem(args, i), stdout, 0);
-    fprintf(stdout, ", ");
-  }
-  fprintf(stdout, "\n");
+
+  fprintf(stderr, "- TBP_traceFunction called:\n");
+  fprintf(stderr, "frame: ");
+  PyObject_Print((PyObject *)Frame, stderr, 0);
+  fprintf(stderr, "\nevent: %s\narg: ", event);
+  PyObject_Print(Arg, stderr, 0);
+  fprintf(stderr, "\n");
+
+  if(Frame->f_code)
+    filename = PyString_AsString(Frame->f_code->co_filename);
+  lineno = Frame->f_lineno;
+
+  if(streq(event, "line"))
+    line_trace(filename, lineno);
 
   Py_INCREF(LocalTraceFunc);
   return LocalTraceFunc;
@@ -1676,19 +1794,28 @@ PyObject *TBP_traceFunction(PyObject *self, PyObject *args)
 <<TBP_localTraceFunction>>=
 PyObject *TBP_localTraceFunction(PyObject *self, PyObject *args)
 {
-  int i;
+  PyFrameObject *Frame;
+  char *event;
+  PyObject *Arg;
+  int lineno;
+  char *filename = NULL;
 
-  if(PyTuple_Size(args) != 3) {
-    PyErr_SetString(TBError, 
-	"local tracefunction called with an invalid number of arguments");
+  if(!PyArg_ParseTuple(args, "OsO", &Frame, &event, &Arg))
     return NULL;
-  }
+
   fprintf(stdout, "- TBP_localTraceFunction called:\n");
-  for(i=0; i<3; i++) {
-    PyObject_Print(PyTuple_GetItem(args, i), stdout, 0);
-    fprintf(stdout, ", ");
-  }
+  fprintf(stdout, "frame: ");
+  PyObject_Print((PyObject *)Frame, stdout, 0);
+  fprintf(stdout, "\nevent: %s\narg: ", event);
+  PyObject_Print(Arg, stdout, 0);
   fprintf(stdout, "\n");
+
+  if(Frame->f_code)
+    filename = PyString_AsString(Frame->f_code->co_filename);
+  lineno = Frame->f_lineno;
+
+  if(streq(event, "line"))
+    line_trace(filename, lineno);
 
   Py_INCREF(LocalTraceFunc);
   return LocalTraceFunc;
@@ -1696,7 +1823,6 @@ PyObject *TBP_localTraceFunction(PyObject *self, PyObject *args)
 @
 
 %}}}
-
 
 %{{{ PyMethodDef TermMethods
 
@@ -1723,8 +1849,10 @@ static PyMethodDef TBMethods[] = {
   { "eventloop",	TBP_eventloop,		1},
   { "enableTk",		TBP_enableTk,		1},
   { "enableDebugging",	TBP_enableDebugging,	1},
+#ifdef USE_TIDE
   { "_trace_func",	TBP_traceFunction,	1},
   { "_local_trace_func",TBP_localTraceFunction,	1},
+#endif
   { NULL,   NULL} /* Sentinel */
 };
 @
@@ -1744,13 +1872,198 @@ void initTB()
   TBError = PyString_FromString("TB.error");
   PyDict_SetItemString(Dict, "error", TBError);
 
+  TB_init();
+
+#ifdef USE_TIDE
   LocalTraceFunc = PyDict_GetItemString(Dict, "_local_trace_func");
   assert(LocalTraceFunc);
-  
-  TB_init();
+  TBprotect(&CPE);
+#endif
 }
 @
 
 %}}}
+
+%{{{ debug functions
+
+<<debug functions>>=
+<<stopped_eventloop>>
+
+<<get_info>>
+<<get_cpe>>
+<<stop>>
+<<start>>
+
+<<watch_vars>>
+<<get_var_list>>
+<<change_var>>
+<<get_scopes>>
+
+<<rec_terminate>>
+<<rec_ack_event>>
+@
+
+%{{{ stopped_eventloop
+
+<<stopped_eventloop>>=
+void stopped_eventloop()
+{
+  exec_state = ES_STOPPED;
+  while(exec_state == ES_STOPPED) {
+    TB_handle_one(debugCid);
+  }
+}
+@
+
+%}}}
+
+%{{{ get_info
+
+<<get_info>>=
+term *get_info(int cid)
+{
+  term_list *info, *tb_list;
+  term *id;
+  static char path[_POSIX_PATH_MAX];
+
+  fprintf(stderr, "get_info(%d)\n", cid);
+
+  getcwd(path, _POSIX_PATH_MAX);
+  id = TB_make("tb(<str>,<int>,<str>)", 
+		TB_getHost(lastCid), TB_getPort(lastCid), path); 
+  info = TB_make("[[\"type\",\"nub\"]," \
+                 "[\"language\",\"Python\"]," \
+		 "[\"toolbus\",<term>]," \
+		 "[\"tid\",<int>]," \
+		 "[\"name\",<str>]]" , 
+		 id, TB_getTid(lastCid), TB_getTool(lastCid));
+  tb_list = TB_getConnections();
+
+  while(tb_list) {
+    int cid, port, tid, sock;
+    char *host;
+    int r = TB_match(first(tb_list), "[<int>,<str>,<int>,<int>,<int>]",
+	&cid, &host, &port, &tid, &sock);
+    assert(r);
+    host = host ? host : "";
+    info = list_concat_term(info, TB_make("[\"toolbus\",tb(<str>,<int>)]",
+					host, port));
+    tb_list = next(tb_list);
+  }
+  TBprintf(stderr, "end of get_info: %t\n", info);
+  return TB_make("snd-value(info(<term>))", info);
+}
+@
+
+%}}}
+%{{{ get_cpe
+
+<<get_cpe>>=
+term *get_cpe(int cid)
+{
+  TBprintf(stderr, "get_cpe, returning: cpe(%t)\n", CPE);
+  return TB_make("snd-value(cpe(<term>))", CPE);
+}
+@
+
+%}}}
+
+%{{{ stop
+
+<<stop>>=
+void stop(int cid, term *who, term *when)
+{
+  /* Not implemented yet */
+  TBprintf(stderr, "stop: %t,%t\n", who, when);
+}
+@
+
+%}}}
+%{{{ start
+
+<<start>>=
+void start(int cid, term *who, term *mode)
+{
+  TBprintf(stderr, "start: %t,%t\n", who, mode);
+  if(TB_match(mode, "step"))
+    exec_state = ES_SINGLE_STEP;
+  else if(TB_match(mode, "run"))
+    exec_state = ES_RUNNING;
+  else {
+    TBprintf(stderr, "Python nub: unknown exec-mode %t,%t\n", who, mode);
+  }
+}
+@
+
+%}}}
+
+%{{{ watch_vars
+
+<<watch_vars>>=
+term *watch_vars(int cid, term_list *scope, term_list *names)
+{
+  return TB_make("cannot-watch(\"not implemented\")");
+}
+@
+
+%}}}
+%{{{ get_var_list
+
+<<get_var_list>>=
+term *get_var_list(int cid, term *scope_id)
+{
+  return TB_make("snd-value(no-var-list(\"not implemented\"))");
+}
+@
+
+%}}}
+%{{{ change_var
+
+<<change_var>>=
+term *change_var(int cid, term_list *scope, char *name, term *val)
+{
+  return TB_make("cannot-change(\"change-var not implemented yet!\")");
+}
+@
+
+%}}}
+%{{{ get_scopes
+
+<<get_scopes>>=
+term *get_scopes(int cid, term *constraints)
+{
+  return TB_make("snd-value(scopes(<term>,[]))", constraints);
+}
+@
+
+%}}}
+
+%{{{ rec_terminate
+
+<<rec_terminate>>=
+void rec_terminate(int cid, term *arg)
+{
+  exit(1);
+}
+@
+
+%}}}
+%{{{ rec_ack_event
+
+<<rec_ack_event>>=
+void rec_ack_event(int cid, term *ev)
+{
+}
+@
+
+%}}}
+
+%}}}
+
+
+
+
+
+
 
 

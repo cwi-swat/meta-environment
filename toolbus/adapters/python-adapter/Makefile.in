@@ -15,12 +15,15 @@ libdir          = $(exec_prefix)/lib
 docdir		= $(top_srcdir)/doc
 includedir      = $(prefix)/include
 
+TIDE		= @TIDE@
+TIDEDEF		= @TIDEDEF@
+
 SHELL		= /bin/sh
 
 CC		= @CC@
 CFLAGS		=
-INCLUDES	= @INCLUDES@ -I$(top_srcdir)/src $(EXTRA_INCLUDES)
-DEFS		= @DEFS@ $(EXTRA_DEFS)
+INCLUDES	= @INCLUDES@ -I$(TIDE) -I$(top_srcdir)/src $(EXTRA_INCLUDES)
+DEFS		= @DEFS@ $(EXTRA_DEFS) $(TIDEDEF)
 
 INSTALL		= @INSTALL@
 
