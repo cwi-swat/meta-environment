@@ -152,11 +152,6 @@ cat ${PROTO} |
 		$INCLUDES = q{@INCLUDES@};
 		$LIBS     = q{@LIBS@};
 		$SOCKLIBS = q{@SOCKLIBS@};
-		$INSTALL  = q{@INSTALL@};
-		$INSTDATA = q{@INSTALL_DATA@};
-		$INSTPROG = q{@INSTALL_PROG@};
-		$UNINSTALL= q{@UNINSTALL@};
-		$ATERM    = q{@ATERM@};
 
 		s|\@srcdir\@|$srcdir|g;
 		s|\@top_srcdir\@|$topsrc|g;
@@ -170,11 +165,8 @@ cat ${PROTO} |
 		s|\@INCLUDES\@|$INCLUDES|g;
 		s|\@LIBS\@|$LIBS|g;
 		s|\@SOCKLIBS\@|$SOCKLIBS|g;
-		s|\@INSTALL\@|$INSTALL|g;
-		s|\@INSTALL_DATA\@|$INSTDATA|g;
-		s|\@INSTALL_PROG\@|$INSTPROG|g;
-		s|\@UNINSTALL\@|$UNINSTALL|g;
-		s|\@ATERM\@|$ATERM|g;'
+		s|\@ATERM\@|$ATERM|g;
+		s|\@NEW-META\@|$NEW-META|g;'
 ) |\
 # When the '-m' command line option was specified we write the generated
 # Makefile.in to standard output, otherwise we write to Makefile
