@@ -33,7 +33,7 @@ SRCS         = parsetablegen.c ksdf2table.c atsets.c flatten.c \
                characters.c first.c follow.c goto.c parse-table.c \
                predicted.c priorities.c reductions.c sdf-help.c statistics.c
 
-HDRS         = atsets.h ksdf2table.h statistics.h
+HDRS         = atsets.h ksdf2table.h statistics.h flatten.h
 
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
