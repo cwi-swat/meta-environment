@@ -36,11 +36,13 @@ LDADD           = -L$(TOOLBUSLIB)/lib -ltb
 INCLUDES        = -I$(TOOLBUSLIB)/include
 
 %-ok : %.tb
-	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>/dev/null >/dev/null'  > $@
+	echo '#!/bin/sh'  > $@
+	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>/dev/null >/dev/null'  >> $@
 	chmod +x $@
 
 %-fail : %.tb
-	echo 'trap "rm -f tmp" 0' > $@
+	echo '#!/bin/sh'  > $@
+	echo 'trap "rm -f tmp" 0' >> $@
 	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>&1 >/dev/null \' >> $@
 	echo "| sed 's/^[^,]*, //' > tmp" >> $@
 	echo 'diff $<.out tmp' >> $@
