@@ -146,6 +146,9 @@ in
      snd-note(ui-status(endstat(Id))).
      snd-ack-event(UI, compile-module(Str, OutputDir))
    ) +
+   ( rec-event(UI, dump-equations(Str?)).
+     snd-msg(dump-equations(Str))
+   )+
    ( rec-event(UI,parse-equations(Str?)).
      snd-msg(process-eqs(Str)).
      rec-msg(eqs-processed(Str1?)).

@@ -1,0 +1,56 @@
+/*
+
+    Meta-Environment - An environment for language prototyping.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+*/
+/*
+  $Id$
+ */
+
+process DumpEquations is
+let
+  Id : term,
+  ModuleName : str,
+  Equations : term,
+  Text : str
+in
+  Id := process-id.
+
+  (
+    rec-msg(dump-equations(ModuleName?)).
+    snd-note(ui-status(stat(Id, "Dumping equations"))).
+    snd-msg(get-all-equations(ModuleName)).
+    (
+      rec-msg(all-equations(Equations?)).
+      snd-msg(create-equations-dump-file(ModuleName, Equations)).
+      (
+        rec-msg(create-equations-dump-file-done(ModuleName))
+        +
+        rec-msg(create-equations-dump-file-failed(ModuleName, Text?)).
+        snd-note(ui-status(errorf("Dumping of equations for %s failed: %s", 
+                 ModuleName, Text)))
+      )
+      +
+      rec-msg(equations-incomplete) .
+      snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+    ) .
+    snd-note(ui-status(endstat(Id)))
+
+  ) * delta
+
+endlet
