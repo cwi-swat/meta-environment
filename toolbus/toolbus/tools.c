@@ -63,7 +63,12 @@ void chld_handler(int sig)
 
 /*--- tool definitions ------------------------------------*/
 
-tool_def_list *tool_defs = NULL;   /* PROTECTED */
+static tool_def_list *tool_defs = NULL;   /* PROTECTED */
+
+tool_def *get_tool_defs()
+{
+  return tool_defs;
+}
 
 tool_def *find_tool_def(sym_idx tname)
 {
@@ -108,7 +113,7 @@ void add_tool_def(char *id, term_list *formals,
  * and writes to the tool interfaces file, if needed.
  */
 
-void complete_tool_sigs(int tifs)
+void complete_tool_sigs()
 {
   tool_def_list *tds;
   term *placeT = mk_placeholder(Term);
@@ -125,10 +130,6 @@ void complete_tool_sigs(int tifs)
  
     td_in_sign(td) = mk_list(trm, td_in_sign(td));
     td_out_sign(td) = mk_list(con, td_out_sign(td));
-    if(tifs >= 0){
-      TBwrite(tifs, trm);
-      TBwrite(tifs, con);
-    }
   }  
 }
 

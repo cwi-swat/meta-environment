@@ -220,8 +220,12 @@ TBbool tc_tool_atom2(atom *a)
     case a_rec_value:
     case a_rec_event:
       if(req_arg1_tool_id(a, TBtrue)){
-	warn_res_vars(a, TBtrue);
-	return TBtrue;
+	if (req_arg2_appl(a)) {
+	  warn_res_vars(a, TBtrue);
+	  return TBtrue;
+	} else {
+	  return TBfalse;
+	}
       } else
 	return TBfalse;
 
@@ -609,6 +613,38 @@ char *add_suffix(char *name, char *suf)
   return filename;
 }
 
+static TBbool occurs(term *t, term_list *ts)
+{
+  for( ; ts; ts = next(ts))
+    if(cmatchp(t, first(ts))){
+      TCDB(TBmsg("occurs -- %t\n", t);)
+      return TBtrue;
+    }
+  return TBfalse;
+}
+
+term_list *replace_more_specific(term *t, term_list *sig_list)
+{
+  term_list *cur, *prev;
+
+  prev = NULL;
+  for (cur = sig_list; cur; cur = next(cur)) {
+    if (cmatchp(t, first(cur))) {
+      if (prev != NULL) {
+	next(prev) = next(cur);
+      } else {
+	sig_list = next(cur);
+      }
+    } else if (cmatchp(first(cur), t)) {
+      return sig_list;
+    } else {
+      prev = cur;
+    }
+  }
+
+  return mk_list(t, sig_list);
+}
+
 /* The actual typecheck function:
    - check that used process names are defined
    - check formal/actual correspondence
@@ -700,26 +736,26 @@ int typecheck(char *script, TBbool gen_tifs)
 	       - stripp of coords
 	     */
 	    if(at_fun(at) == a_snd_ack_event){
-	      at1 = mk_appl2(a_rec_ack_event, first(at_args(at)), mk_placeholder(Term));
+	      at1 = mk_appl2(a_rec_ack_event, first(at_args(at)),
+			     mk_placeholder(Term));
 	    } else
 	       at1 = mk_appl(reverse_role(fun_sym(at)), at_args(at));
 
 	    at1 = convert_to_sign(at1);
 	    td = find_tool_def(fun_sym(type_of(first(at_args(at)))));
-	    if(td && ((fun_sym(at1) != a_snd_connect) && (fun_sym(at1) != a_rec_terminate))){
+	    if(td && ((fun_sym(at1) != a_snd_connect)
+		      && (fun_sym(at1) != a_rec_terminate))){
 	    
 	      if(is_to_tool_atom(at1)){
-		if(!occurs(at1, td_in_sign(td))){
+		td_in_sign(td) = replace_more_specific(at1, td_in_sign(td));
+		/*if(!occurs(at1, td_in_sign(td))){
 		  td_in_sign(td) = mk_list(at1, td_in_sign(td));
-		  if(gen_tifs)
-		    TBwrite(tifs, at1);
-		}
+		}*/
 	      } else {	
-		if(!occurs(at1, td_out_sign(td))){
+		td_out_sign(td) = replace_more_specific(at1, td_out_sign(td));
+		/*if(!occurs(at1, td_out_sign(td))){
 		  td_out_sign(td) = mk_list(at1, td_out_sign(td));
-		  if(gen_tifs)
-		    TBwrite(tifs, at1);
-		}
+		}*/
 	      }
 	    }
 	  }
@@ -727,21 +763,22 @@ int typecheck(char *script, TBbool gen_tifs)
   }
   complete_tool_sigs(tifs);
   if(gen_tifs) {
+    term_list *td_list;
+    for (td_list = get_tool_defs(); td_list; td_list = next(td_list)) {
+      term *td = first(td_list);
+      term_list *sign;
+      for (sign = td_in_sign(td); sign; sign = next(sign)) {
+	TBwrite(tifs, first(sign));
+      }
+      for (sign = td_out_sign(td); sign; sign = next(sign)) {
+	TBwrite(tifs, first(sign));
+      }
+    }
     TBwrite(tifs, TBmake("end-of-tifs"));
     if(close(tifs) < 0)
       err_sys_fatal("Can't close `%s'", tifs_name);
     TBprintf(stdout, "Tool interfaces written to `%s'\n", tifs_name);
   }
   return nerror == 0;
-}
-
-TBbool occurs(term *t, term_list *ts)
-{
-  for( ; ts; ts = next(ts))
-    if(cmatchp(t, first(ts))){
-      TCDB(TBmsg("occurs -- %t\n", t);)
-      return TBtrue;
-    }
-  return TBfalse;
 }
 

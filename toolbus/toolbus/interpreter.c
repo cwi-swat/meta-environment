@@ -1671,8 +1671,10 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
       } 
       if(TBverbose)TBmsg("QUEUED EVENT: %t FROM TOOL %t\n", Inp, ti);
       Pending = list_append(Pending, mk_list(mk_list2(ti, Inp), NULL));
-    } else 
-      TBmsg("UNEXPECTED INPUT %t FROM TOOL %t IGNORED\n", Inp, ti);
+    } else  {
+      TBmsg("UNEXPECTED INPUT %t FROM TOOL %t IGNORED (sig=%t)\n",
+	    Inp, ti, td_out_sign(td));
+    }
   } else {
     if(TBverbose)TBmsg("new ti = %t\n", ti);
     pending_events();

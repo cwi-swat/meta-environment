@@ -41,6 +41,7 @@ typedef term tool_def_list;
 
 void add_tool_def(char *, term_list *, char *, char *, char *, term *, int);
 tool_def *find_tool_def(sym_idx);
+tool_def *get_tool_defs();
 
 /*--- tool instances --------------------------------------*/
 
@@ -76,7 +77,7 @@ void destroy_ports_for_tool(tool_inst *);
 TBbool write_to_tool(sym_idx, term_list *);
 int add_tool(char *id, char *host);
 
-void complete_tool_sigs(int);
+void complete_tool_sigs();
 
 void  init_tools(void);
 
