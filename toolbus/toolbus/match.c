@@ -1,24 +1,3 @@
-/*
-
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
@@ -46,12 +25,13 @@ term *substitute(term *t, env *loc_env)
   case t_placeholder:
     return t;
   case t_appl:
-    if(!fun_args(t))
+    if(!fun_args(t)) {
       return t;
-    else
+    } else {
       t2 = mk_appl(fun_sym(t), substitute_list(fun_args(t), loc_env));
       fun_str_sym(t2) = fun_str_sym(t);
       return t2;
+    }
   case t_anno:
     return mk_anno(anno_val(t), substitute(anno_term(t), loc_env));
   case t_list:
@@ -113,6 +93,7 @@ TBbool match(term *t1,                 /* pattern */
   b = match1(substitute(t1, l1), substitute(t2, l2));
 
   MATCHDB(TBmsg(" ... %s\n", (b) ? "true" : "false"));
+
   return b;
 }
 
@@ -121,8 +102,22 @@ static TBbool match1(term *t1, term *t2)
   term *v1, *v2;
   
   MATCHDB(TBmsg("match1(%t, %t)\n", t1, t2));
+
   if(t1 == t2)
     return TBtrue;
+
+  
+  if(is_result_var(t1)){
+    v1 = value(t1, Bindings1);
+    if(v1 != t1) {
+      return match1(v1,t2);
+    }
+    if(require_type(var_type(v1), t2)) {
+      Bindings1 = mk_env(v1, t2, Bindings1);
+      return TBtrue;
+    } else
+      return TBfalse;
+  }
 
   if(is_anno(t2))
     return match1(t1, anno_term(t2));
@@ -154,19 +149,11 @@ static TBbool match1(term *t1, term *t2)
     else goto t2_is_result_var;
       
   case t_var:
-    if(is_result_var(t1)){
-      v1 = value(t1, Bindings1);
-      if(v1 != t1)
-	return match1(v1,t2);
-      if(require_type(var_type(v1), t2)){
-	Bindings1 = mk_env(v1, t2, Bindings1);
-	return TBtrue;
-      } else
-	return TBfalse;
-    } else if(is_var(t2)) {
+    if(is_var(t2)) {
       return var_type(t1) == var_type(t2);
-    } else
+    } else {
       return TBfalse;
+    }
   case t_placeholder:                     /* !!! case t2 is placeholder not treated */
     return require_type(placeholder_type(t1), t2);
   case t_appl:
