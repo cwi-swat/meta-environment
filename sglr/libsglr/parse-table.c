@@ -168,14 +168,19 @@ ATbool SG_RejectAction(action a)
   return (SG_A_ATTRIBUTE(a) == SG_PT_REJECT);
 }
 
-ATbool SG_EagerAction(action a);
+ATbool SG_EagerAction(action a)
 {
   return (SG_A_ATTRIBUTE(a) == SG_PT_EAGER);
 }
 
-ATbool SG_UneagerAction(action a);
+ATbool SG_UneagerAction(action a)
 {
   return (SG_A_ATTRIBUTE(a) == SG_PT_UNEAGER);
+}
+
+ATbool SG_PreferenceAction(action a)
+{
+  return (SG_A_ATTRIBUTE(a)==SG_PT_EAGER || SG_A_ATTRIBUTE(a)==SG_PT_UNEAGER);
 }
 #endif
 
@@ -371,6 +376,7 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
                                 actions acts)
 {
   ATerm     firstTerm;
+  action    act;
 
   for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
     firstTerm = ATgetFirst(classes);
@@ -381,13 +387,27 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
         int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
         int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-        for(; first <= last; first++)
+        for(; first <= last; first++) {
           SG_AddToActionTable(pt, s, first, acts);
+        }
       } else {
         ATerror("SG_AddClassesToActionTable: bad char-class %t\n", firstTerm);
       }
     }
   }
+#ifndef NO_EAGERNESS
+  /*  Check if there is preference information in this parse table  */
+  for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
+    act = ATgetFirst(acts);
+    if(SG_ActionKind(act) == REDUCE) {
+      if(SG_EagerAction(act)) {
+        pt->has_prefers = ATtrue;
+      } else if(SG_UneagerAction(act)) {
+        pt->has_avoids = ATtrue;
+      }
+    }
+  }
+#endif
 }
 
 size_t SG_CountClassesInActionTable(ATermList classes)
@@ -690,6 +710,7 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
     if(ptype != P_IGNORE) {
       ATermList prev;
 
+      pt->has_priorities = ATtrue;
       args = ATgetArguments((ATermAppl) prio);
       pr_num1 = (ATermInt) ATelementAt(args, 0);
       pr_num2 = (ATermInt) ATelementAt(args, 1);
@@ -768,6 +789,13 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   }
   pt->priorities   = ATtableCreate(numprods, 75);
 
+  pt->has_priorities  = ATfalse;
+#ifndef NO_EAGERNESS
+  pt->has_prefers = pt->has_avoids = ATfalse;
+#endif
+
+
+  /*  Prefetch a sensible number in the ATerm<->integer conversion cache  */
   SG_GetATint(0, numprods+SG_CHAR_CLASS_EOF+1);
 
   return pt;
@@ -949,6 +977,12 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   }
 
   IF_STATISTICS(
+    fprintf(SGlog(), "%scludes priorities\n",
+      SG_PT_HAS_PRIORITIES(pt)?"In":"Ex");
+    fprintf(SGlog(), "%scludes prefer actions\n",
+      SG_PT_HAS_PREFERS(pt)   ?"In":"Ex");
+    fprintf(SGlog(), "%scludes avoid actions\n",
+      SG_PT_HAS_AVOIDS(pt)    ?"In":"Ex");
     allocated = SG_Allocated();
     if(allocated > 0)
     fprintf(SGlog(), "[mem] extra ATerm memory allocated while filling table: %ld\n",

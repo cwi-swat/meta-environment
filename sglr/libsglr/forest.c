@@ -757,6 +757,10 @@ ATbool SG_EagerPriority_Tree(tree t0, tree t1)
 
 ATbool SG_EagerPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
 {
+  /*  Don't even bother comparing if there are no preferences anyway  */
+  if(!SG_PT_HAS_PREFERENCES(pt))
+    return ATfalse;
+
   return SG_MoreEager(SG_ProdType_Label(pt, lt0), SG_ProdType_Label(pt, lt1));
 }
 #endif  /*  EAGERNESS  */
@@ -1005,9 +1009,9 @@ size_t SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
 tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 {
   ATermInt   l0, l1;
-  multiset   m1;
+  multiset   m1  = NULL;
   tree       max = NULL;
-  ATermList  k1;
+  ATermList  k1  = NULL;
   ATbool     m0made = ATfalse;
 
   /*  Always apply direct priority filtering first  */
@@ -1025,24 +1029,32 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 
   /*  Next, inspect eager/avoid status  */
 #ifndef NO_EAGERNESS
-  if(SG_EagerPriority_Tree(t0, t1)) {
-    IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
-    return t0;
-  }
-  if(SG_EagerPriority_Tree(t1, t0)) {
-    IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
-    return t1;
+  /*  Don't even bother unless there are preferred actions  */
+  if(SG_PT_HAS_PREFERS(pt)) {
+    if(SG_EagerPriority_Tree(t0, t1)) {
+      IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
+      return t0;
+    }
+    if(SG_EagerPriority_Tree(t1, t0)) {
+      IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
+      return t1;
+    }
   }
 #endif
-  /*  Don't even bother filtering any further if filtering is disabled  */
+
+  /*
+     Don't even bother filtering any further if filtering is disabled
+     or there's nothing to filter with (no prios, no preferences)
+   */
   if(!SG_FILTER)
     return NULL;
 
-  {
-    /*
-       One of the trees might have been constructed by a preferred
-       bit of the syntax...
+  /*
+      One of the trees might have been constructed by a preferred
+      bit of the syntax...
    */
+  /*  Don't even bother unless there are preferred actions  */
+  if(SG_PT_HAS_PREFERS(pt)) {
 #ifdef DOPREFCOUNT
     size_t num_prefs0 = 0, num_prefs1 = 0;
 
@@ -1071,53 +1083,74 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   if(SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0)))
     return (tree) NULL;
 
-  /*  No direct priority relation?  Apply multiset ordering.  */
-  if(!m0) {
-    m0made = ATtrue;
-    m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
-  }
-  m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
-
-  if(!k0)
-    k0 = SG_GetMultiSetKeys(m0);
-  k1 = SG_GetMultiSetKeys(m1);
-
-  if(!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
-    /*  multi-prio is irreflexive  */
-    if(SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
-      IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t > %t\n", l0, l1))
-      max = t0;
+  /*
+      No direct priority relation?  Apply multiset ordering,
+      if there is anything to filter on
+   */
+  if(SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
+    if(!m0) {
+      m0made = ATtrue;
+      m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
     }
-    if(SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
-      if(max) {                             /*  shouldn't happen, really  */
-        IF_DEBUG(fprintf(SGlog(),
-                         "Ignoring symmetric multiset priority relation\n"))
-        ATwarning("Ignoring symmetric multiset priority relation\n");
-        max = NULL;
-      } else {
-        IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t < %t\n", l0, l1))
-        max = t1;
+    m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+
+    if(!k0)
+      k0 = SG_GetMultiSetKeys(m0);
+    k1 = SG_GetMultiSetKeys(m1);
+
+    if(!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
+      /*  multi-prio is irreflexive  */
+      if(SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
+        IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t > %t\n", l0, l1))
+        max = t0;
+      }
+      if(SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
+        if(max) {                             /*  shouldn't happen, really  */
+          IF_DEBUG(fprintf(SGlog(),
+                           "Symmetric multiset priority relation ignored\n"))
+          ATwarning("Ignoring symmetric multiset priority relation\n");
+          max = NULL;
+        } else {
+          IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t < %t\n", l0, l1))
+          max = t1;
+        }
       }
     }
   }
 
-  /*  No multiset ordering either?  Count injections.  */
+  /*  Did we find a multiset ordering?  */
   if(max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
   } else {
+  /*  No multiset ordering either?  Count injections.  */
     size_t in0 = 0, in1 = 0;
 
 #ifdef KEEPINJECTCOUNT
     in0 = SG_GetInjections(t0);
     in1 = SG_GetInjections(t1);
 #else
+    /*
+       In extreme cases (no priorities, no preferences) the multisets
+       are not yet constructed at this point
+     */
+    if(!m0) {
+      m0made = ATtrue;
+      m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+    }
+    if(!m1)
+      m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+    if(!k0)
+      k0 = SG_GetMultiSetKeys(m0);
+    if(!k1)
+      k1 = SG_GetMultiSetKeys(m1);
+
     in0 = SG_CountInjections(pt, m0, k0);
     in1 = SG_CountInjections(pt, m1, k1);
 #endif
     IF_STATISTICS(
-                  if(in0 != in1)
-                  SG_InjectionFilterSucceeded(SG_NR_INC)
-                  );
+      if(in0 != in1)
+        SG_InjectionFilterSucceeded(SG_NR_INC)
+    );
     if(in0 > in1) {
       IF_DEBUG(ATfprintf(SGlog(), "Injection Priority: %t < %t (%d > %d)\n",
                          l0, l1, in0, in1))
@@ -1131,7 +1164,8 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 
   if(m0made)
     ATtableDestroy(m0);
-  ATtableDestroy(m1);
+  if(m1)
+    ATtableDestroy(m1);
 
   return max;
 }

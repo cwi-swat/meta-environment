@@ -74,6 +74,11 @@ typedef struct _parse_table  {
   productiontable  productions;
   injectiontable   injections;
   prioritytable    priorities;
+  ATbool           has_priorities;
+#ifndef NO_EAGERNESS
+  ATbool           has_prefers;
+  ATbool           has_avoids;
+#endif
 } parse_table;
 
 typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
@@ -124,6 +129,7 @@ ATbool        SG_RejectAction(action a);
 #ifndef NO_EAGERNESS
 ATbool        SG_EagerAction(action a);
 ATbool        SG_UneagerAction(action a);
+ATbool        SG_PreferenceAction(action a);
 #endif
 #endif
 
@@ -142,14 +148,20 @@ parse_table  *SG_LookupParseTable(char *L);
 #define       SG_PT_UNEAGER         4    /*  Emergency-only reduction  */
 #endif
 
-#define       SG_PT_INITIAL(pt)     ((pt)->initial)
-#define       SG_PT_NUMSTATES(pt)   ((pt)->numstates)
-#define       SG_PT_NUMPRODS(pt)    ((pt)->numprods)
-#define       SG_PT_ACTIONS(pt)     ((pt)->actions)
-#define       SG_PT_GOTOS(pt)       ((pt)->gotos)
-#define       SG_PT_PRODUCTIONS(pt) ((pt)->productions)
-#define       SG_PT_INJECTIONS(pt)  ((pt)->injections)
-#define       SG_PT_PRIORITIES(pt)  ((pt)->priorities)
+#define       SG_PT_INITIAL(pt)         ((pt)->initial)
+#define       SG_PT_NUMSTATES(pt)       ((pt)->numstates)
+#define       SG_PT_NUMPRODS(pt)        ((pt)->numprods)
+#define       SG_PT_ACTIONS(pt)         ((pt)->actions)
+#define       SG_PT_GOTOS(pt)           ((pt)->gotos)
+#define       SG_PT_PRODUCTIONS(pt)     ((pt)->productions)
+#define       SG_PT_INJECTIONS(pt)      ((pt)->injections)
+#define       SG_PT_PRIORITIES(pt)      ((pt)->priorities)
+#define       SG_PT_HAS_PRIORITIES(pt)  ((pt)->has_priorities)
+#ifndef NO_EAGERNESS
+#define       SG_PT_HAS_PREFERS(pt)     ((pt)->has_prefers)
+#define       SG_PT_HAS_AVOIDS(pt)      ((pt)->has_avoids)
+#define       SG_PT_HAS_PREFERENCES(pt) (SG_PT_HAS_PREFERS(pt)||SG_PT_HAS_AVOIDS(pt))
+#endif
 
 #define       SG_A_STATE(a)         ATgetInt((ATermInt) ATgetArgument(a, 0))
 #define       SG_A_NR_ARGS(a)       ATgetInt((ATermInt) ATgetArgument(a, 0))
@@ -163,5 +175,6 @@ parse_table  *SG_LookupParseTable(char *L);
 #ifndef NO_EAGERNESS
 #define       SG_EagerAction(a)     (SG_A_ATTRIBUTE(a) == SG_PT_EAGER)
 #define       SG_UneagerAction(a)   (SG_A_ATTRIBUTE(a) == SG_PT_UNEAGER)
+#define       SG_PreferenceAction(a)(SG_EagerAction(a) || SG_UneagerAction(a))
 #endif
 #endif /*  _PARSE_TABLE_  */
