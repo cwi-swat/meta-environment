@@ -20,6 +20,9 @@
 $Id$
 
 2001/04/23 (mdejonge@cwi.nl)
+  * Increased version number to 3.2.1
+
+2001/04/23 (mdejonge@cwi.nl)
   * Fixed library search-paths in ./dump, ./client, and ./ambtracker
 
 2001/03/27 (jurgenv@cwi.nl)
@@ -233,4 +236,4 @@ $Id$
    * Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
      ambiguities, number of lines, characters per second
    * Characters per second is the main metric we want to improve
-v
+
