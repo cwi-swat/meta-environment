@@ -6,7 +6,13 @@
 # distribution that is controlled by automake, run "reconf" for
 # that package prior to "configure".
 
-aclocal -I ./config
+# Tell aclocal where it can find libtool.m4
+LIBTOOL=`which libtool`
+LIBTOOL=`dirname ${LIBTOOL}`
+LIBTOOL=`dirname ${LIBTOOL}`
+LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
+
+aclocal -I ${LIBTOOL_INCLUDE} -I .
 autoconf
 autoheader
 automake -a
