@@ -149,13 +149,15 @@ static long makeNodeId(PT_Tree tree)
 
 /*{{{  static char* printNode(char *dot, int parent, int node, char *contents) */
 
-static char* printNode(char *dot, int parent, int node, char *contents)
+static char* printNode(char *dot, int parent, int node, char *contents, 
+		       char *attr)
 {
    char *escaped = escape(contents);
 
-   dot = append(dot,"\tN%d [label=\"%s\" shape=%s] \n", 
+   dot = append(dot,"\tN%d [label=\"%s\" shape=%s attr=\"%s\"] \n", 
                      node, escaped,
-                     productions_on ? "box" : "ellipse" );
+                     productions_on ? "box" : "ellipse",
+	             escape(attr) );
 
    if (parent != 0) {
      dot = append(dot,"\tN%d -> N%d\n",parent,node);
@@ -222,7 +224,7 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
       ch[0] = PT_getTreeCharacter(tree);
 
       if (characters_sharing_on) {
-        dot = printNode(dot,parent,key,ch);
+        dot = printNode(dot,parent,key,ch,"character");
       }
       else {
 	dot = printCharNode(dot,parent,key,ch);
@@ -235,7 +237,7 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
     /*{{{  handle literal */
 
     if (literals_on) {
-      dot = printNode(dot,parent,key,PT_getTreeString(tree));
+      dot = printNode(dot,parent,key,PT_getTreeString(tree),"literal");
     }
 
     /*}}}  */
@@ -253,10 +255,12 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
     if (!layout && (literals_on || !literal)) {
       dot = printNode(dot,parent,key,productions_on ?
 				PT_yieldProduction(PT_getTreeProd(tree)) :
-				PT_yieldSymbol(rhs));
+				PT_yieldSymbol(rhs),
+				productions_on ? "" :
+				PT_yieldProduction(PT_getTreeProd(tree)));
     } 
     else if (layout_on && layout) {
-      dot = printNode(dot,parent,key, "LAYOUT?");
+      dot = printNode(dot,parent,key, "LAYOUT?","layout");
     }
 
     if (!characters_on && PT_isLexicalInjectionProd(prod)) {
