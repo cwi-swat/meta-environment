@@ -5,7 +5,7 @@ INSTALL
 Makefile
 Makefile.in
 aclocal.m4
-autom4te.*
+autom4te*
 bin
 config.cache
 config.guess
