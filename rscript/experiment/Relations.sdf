@@ -1,10 +1,30 @@
 
-module Relations[Elem]
+module Relations[RElem]
 
 exports
 
-%% imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]]  ]
+imports Bags[RElem | RElem # RElem]
+imports Bags[RElem]
+imports Bags[RElem # RElem]
 
-imports Bags[Elem # Elem]
 
-imports Bags[Elem]
+ sorts Bag[[RElem]] Bag[[RElem # RElem]]
+
+exports
+	context-free syntax
+%%	  "{" {RElem ","}* "}"			-> Bag[[RElem]]
+%%	   "{" {RElem # RElem ","}* "}"		-> Bag[[RElem # RElem]]
+	"EmptyRel"				-> Bag[[RElem # RElem]]
+
+%%	Bag[[RElem]]				-> Bag[[RElem | RElem # RElem]]
+%%	Bag[[RElem # RElem]]			-> Bag[[RElem | RElem # RElem]]
+
+	carrier(Bag[[RElem # RElem]])		-> Bag[[RElem]]
+ imports asf/syntax/Comments
+
+hiddens
+variables
+	
+	"E" [0-9\']*	-> RElem
+	"Tuple"		-> RElem # RElem
+	"Tuple*"	-> {RElem # RElem ","}*

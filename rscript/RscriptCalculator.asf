@@ -561,23 +561,23 @@
 
 [AP3]	is-tuple($Elem1) = false, is-tuple($Elem2) = false
 	==================================================
-	append($Elem1, $Elem2)		= {$Elem1, $Elem2}
+	append($Elem1, $Elem2)		= union1($Elem1, {$Elem2})
 
 [AP4]	is-tuple($Elem) = false
 	=================================================
-	append($Elem, {$Elem*})		= {$Elem, $Elem*}
+	append($Elem, {$Elem*})		= union1($Elem, {$Elem*})
 
 [AP5]		is-tuple($Elem) = false
 	=================================================
-	append({$Elem*}, $Elem)		= {$Elem*, $Elem}
+	append({$Elem*}, $Elem)		= union2({$Elem*}, $Elem)
 
-[AP6]	append({$Elem*1}, {$Elem*2}) 	= {$Elem*1, $Elem*2}
+[AP6]	append({$Elem*1}, {$Elem*2}) 	= union({$Elem*1}, {$Elem*2})
 [AP7]	append(*empty*, $Tuple) 	= $Tuple
 
-[AP8]	append($Tuple1, $Tuple2)	= {$Tuple1, $Tuple2}
-[AP9]	append($Tuple, {$Tuple*})	= {$Tuple, $Tuple*}
-[AP10]	append({$Tuple*}, $Tuple)	= {$Tuple*, $Tuple}
-[AP11]	append({$Tuple*1}, {$Tuple*2}) 	= {$Tuple*1, $Tuple*2}
+[AP8]	append($Tuple1, $Tuple2)	= union1($Tuple1, {$Tuple2})
+[AP9]	append($Tuple, {$Tuple*})	= union1($Tuple, {$Tuple*})
+[AP10]	append({$Tuple*}, $Tuple)	= union2({$Tuple*}, $Tuple)
+[AP11]	append({$Tuple*1}, {$Tuple*2}) 	= union({$Tuple*1}, {$Tuple*2})
 [AP12]	append({$Tuple*}, *empty*)	= {$Tuple*}
 [AP12]	append(*empty*, {$Tuple*})	= {$Tuple*}
 

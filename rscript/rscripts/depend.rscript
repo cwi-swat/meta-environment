@@ -1,29 +1,3 @@
-%% Example from Aho, Sethi, Ullman, p619
-
-%%	1: i := m-2				i := m-2
-%%        |
-%%      2: j := n				j := n
-%%        |
-%%      3: a := u1				a := u1
-%%	  |					do
-%%	  V
-%%	4: i :=i+1  <--------------			i := i+1
-%%        |                        |
-%%      5: j :=j-1                 |			j := j-1
-%% 	 /          \              |			if e1 then
-%%	/            \             |			   a := u2
-%%     V              V            |			else
-%%   6: a := u2 ---> 7: i := u3 ---			   i := u3
-%%						while e2
-
-%%int ROOT = 1
-
-%%rel[int,int] PRED= { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>,<5,7>,<6,7>,<7,4>}
-
-%%rel[str,int] DEF= { <"i",1>,<"j",2>,<"a",3>,<"i",4>,<"j",5>,<"a",6>,<"i",7>}
-
-%%rel[str,int] USE= {<"m",1>,<"n",2>,<"u1",3>,<"i",4>,<"j",5>,<"u2",6>,<"u3",7>}
-
 %% Example from Frank Tip's slicing survey
 
 %%       1: read(n)
@@ -52,6 +26,8 @@ rel[str,int] USE	= {<"i", 5>, <"n", 5>, <"sum", 6>, <"i", 6>,
 			   <"product", 10>}
 
 
+bag[int] CONTROL-STATEMENT = { 5 }
+
 %% Here ends the program specific information.
 %%
 %% Given values for ROOT, PRED, DEF and USE, we can compute the following
@@ -65,7 +41,7 @@ rel[str,int] USE	= {<"i", 5>, <"n", 5>, <"sum", 6>, <"i", 6>,
 rel[int,int] PRED-OF 	= inv(PRED)
 bag[int] STATEMENT 	= carrier(PRED)
 
-bag[int] CONTROL-STATEMENT = { S : S in STATEMENT | #PRED[S] > 1 }
+
 
 %% Compute the reaching definitions for each statement.
 %% First introduce the GEN and KILL relations.
@@ -94,20 +70,18 @@ solve {
         RDOUT = {S x (GEN[S] union (RDIN[S] \ KILL[S])) : S in STATEMENT }
 }
 
-assert "RDIN": RDIN ==  {<2, <"n", 1>>, <3, <"i", 2>>, <3, <"n", 1>>, 
-<4, <"sum", 3>>, <4, <"i", 2>>, <4, <"n", 1>>, <5, <"product", 4>>, 
-<5, <"sum", 3>>, <5, <"i", 2>>, <5, <"n", 1>>, <5, <"i", 8>>,
- <5, <"product", 7>>, <5, <"sum", 6>>, <5, <"n", 1>>, <6, <"product", 4>>,
- <6, <"sum", 3>>, <6, <"i", 2>>,  <6, <"n", 1>>, <6, <"i", 8>>,
- <6, <"product", 7>>, <6, <"sum", 6>>, <9, <"product", 4>>, <9, <"sum", 3>>,
- <9, <"i", 2>>, <9, <"n", 1>>, <9, <"i", 8>>, <9, <"product", 7>>,
- <9, <"sum", 6>>, <9, <"i", 8>>, <9, <"product", 7>>, <9, <"sum", 6>>,
- <9, <"n", 1>>, <7, <"sum", 6>>, <7, <"product", 4>>, <7, <"i", 2>>,
- <7, <"n", 1>>, <7, <"i", 8>>, <7, <"product", 7>>, <8, <"product", 7>>,
- <8, <"sum", 6>>, <8, <"i", 2>>, <8, <"n", 1>>, <8, <"i", 8>>,
- <10, <"product", 4>>, <10, <"sum", 3>>, <10, <"i", 2>>, <10, <"n", 1>>,
- <10, <"i", 8>>, <10, <"product", 7>>, <10, <"sum", 6>>}
-
+assert "RDIN": RDIN ==  {<2, <"n", 1>>, <3, <"i", 2>>, <3, <"n", 1>>,
+ <4, <"sum", 3>>, <4, <"i", 2>>, <4, <"n", 1>>, <5, <"product", 4>>, 
+ <5, <"sum", 3>>, <5, <"i", 2>>, <5, <"n", 1>>, <5, <"i", 8>>, 
+ <5, <"product", 7>>, <5, <"sum", 6>>, <6, <"product", 4>>, <6, <"sum", 3>>, 
+ <6, <"i", 2>>, <6, <"n", 1>>, <6, <"i", 8>>, <6, <"product", 7>>, 
+ <6, <"sum", 6>>, <9, <"product", 4>>, <9, <"sum", 3>>, <9, <"i", 2>>,
+ <9, <"n", 1>>, <9, <"i", 8>>, <9, <"product", 7>>, <9, <"sum", 6>>,
+ <7, <"sum", 6>>, <7, <"product", 4>>, <7, <"i", 2>>, <7, <"n", 1>>,
+ <7, <"i", 8>>, <7, <"product", 7>>, <8, <"product", 7>>, <8, <"sum", 6>>,
+ <8, <"i", 2>>, <8, <"n", 1>>, <8, <"i", 8>>, <10, <"product", 4>>,
+ <10, <"sum", 3>>, <10, <"i", 2>>, <10, <"n", 1>>, <10, <"i", 8>>,
+ <10, <"product", 7>>, <10, <"sum", 6>>}
 
 assert "RDOUT": RDOUT == {<1, <"n", 1>>, <2, <"i", 2>>, <2, <"n", 1>>, 
  <3, <"sum", 3>>, <3, <"i", 2>>, <3, <"n", 1>>, <4, <"product", 4>>, 
@@ -125,36 +99,38 @@ assert "RDOUT": RDOUT == {<1, <"n", 1>>, <2, <"i", 2>>, <2, <"n", 1>>,
 %% Compute the relation between each use and corresponding definitions: ud
 
 rel[<str,int>,<str,int>] ud = 
-  {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] |  
-                  V == fst(Pair) and S != sec(Pair)}
+  {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] | V == fst(Pair)}
 
 %% Note, it would be more readable (but currently not possible) to write the 
 %% above expressions as:
 %%	rel[<str,int>,<str,int>] ud = 
-%%	  {<<V1,S1>,<V2,S2>  : <V1,S1> in USE, <V2,S2> in RDIN[S] |
-%%	   S1 != S2 and V1 == V2}
+%%	  {<<V1,S1>,<V2,S2>  : <V1,S1> in USE, <V2,S2> in RDIN[S] | V1 == V2}
 
-assert "ud": ud == {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"i", 8>>,
- <<"n", 5>, <"n", 1>>, <<"n", 5>, <"n", 1>>, <<"sum", 6>, <"sum", 3>>,
- <<"i", 6>, <"i", 2>>, <<"i", 6>, <"i", 8>>, <<"product", 7>, <"product", 4>>,
- <<"i", 7>, <"i", 2>>, <<"i", 7>, <"i", 8>>, <<"i", 8>, <"i", 2>>,
- <<"sum", 9>, <"sum", 3>>, <<"sum", 9>, <"sum", 6>>, <<"sum", 9>, <"sum", 6>>,
- <<"product", 10>, <"product", 4>>, <<"product", 10>, <"product", 7>>}
+assert "ud": ud == {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"i", 8>>, <<"n", 5>, <"n", 1>>,
+ <<"sum", 6>, <"sum", 3>>, <<"sum", 6>, <"sum", 6>>, <<"i", 6>, <"i", 2>>,
+ <<"i", 6>, <"i", 8>>, <<"product", 7>, <"product", 4>>, 
+ <<"product", 7>, <"product", 7>>, <<"i", 7>, <"i", 2>>, <<"i", 7>, <"i", 8>>,
+ <<"i", 8>, <"i", 2>>, <<"i", 8>, <"i", 8>>, <<"sum", 9>, <"sum", 3>>,
+ <<"sum", 9>, <"sum", 6>>, <<"product", 10>, <"product", 4>>, 
+ <<"product", 10>, <"product", 7>>}
 
 
 %% Internal use in definition: du
 
 rel[<str,int>,<str,int>] du  = 
-     {<<V1,S1>,<V2,S2>> : <V1, S1> in DEF, <V2, S2> in USE | S1 == S2 }
+     {<<V1,S1>, <V2,S2>> : <V1, S1> in DEF, <V2, S2> in USE | S1 == S2 }
      union
-     {<<V,S>,<"eps",S>> : <V, S> in DEF}
+     {<<V,S>, <"eps",S>> : <V, S> in DEF}
+     union
+     {<<"tau",S1>,<V,S1>> : S1 in CONTROL-STATEMENT, 
+			    <V, S2> in ranR(USE, {S1}) | S1 == S2}
 
 assert "du": du == {<<"sum", 6>, <"sum", 6>>, <<"sum", 6>, <"i", 6>>,
- <<"product", 7>, <"product", 7>>, <<"product", 7>, <"i", 7>>, 
+ <<"product", 7>, <"product", 7>>, <<"product", 7>, <"i", 7>>,
  <<"i", 8>, <"i", 8>>, <<"n", 1>, <"eps", 1>>, <<"i", 2>, <"eps", 2>>,
  <<"sum", 3>, <"eps", 3>>, <<"product", 4>, <"eps", 4>>,
- <<"sum", 6>, <"eps", 6>>, <<"product", 7>, <"eps", 7>>, <<"i", 8>, 
- <"eps", 8>>}
+ <<"sum", 6>, <"eps", 6>>, <<"product", 7>, <"eps", 7>>,
+ <<"i", 8>, <"eps", 8>>, <<"tau", 5>, <"i", 5>>, <<"tau", 5>, <"n", 5>>}
 
 
 %% Find all the statements that are dominated by each statement
@@ -189,18 +165,15 @@ assert "cd": cd == {<<"eps", 6>, <"tau", 5>>, <<"eps", 9>, <"tau", 5>>,
 
 rel[<str,int>,<str,int>] ucd = ud union cd
 
-
-assert "ucd": ucd == {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"i", 8>>, 
-  <<"n", 5>, <"n", 1>>, <<"n", 5>, <"n", 1>>, <<"sum", 6>, <"sum", 3>>,
-  <<"i", 6>, <"i", 2>>, <<"i", 6>, <"i", 8>>, 
-  <<"product", 7>, <"product", 4>>, <<"i", 7>, <"i", 2>>, 
-  <<"i", 7>, <"i", 8>>, <<"i", 8>, <"i", 2>>, <<"sum", 9>, <"sum", 3>>, 
-  <<"sum", 9>, <"sum", 6>>, <<"sum", 9>, <"sum", 6>>, 
-  <<"product", 10>, <"product", 4>>, <<"product", 10>, <"product", 7>>,
-  <<"eps", 6>, <"tau", 5>>, <<"eps", 9>, <"tau", 5>>, 
-  <<"eps", 7>, <"tau", 5>>, <<"eps", 8>, <"tau", 5>>, 
-  <<"eps", 10>, <"tau", 5>>}
-
+assert "ucd": ucd ==  {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"i", 8>>,
+ <<"n", 5>, <"n", 1>>, <<"sum", 6>, <"sum", 3>>, <<"sum", 6>, <"sum", 6>>, 
+ <<"i", 6>, <"i", 2>>, <<"i", 6>, <"i", 8>>, <<"product", 7>, <"product", 4>>,
+ <<"product", 7>, <"product", 7>>, <<"i", 7>, <"i", 2>>, <<"i", 7>, <"i", 8>>,
+ <<"i", 8>, <"i", 2>>, <<"i", 8>, <"i", 8>>, <<"sum", 9>, <"sum", 3>>,
+ <<"sum", 9>, <"sum", 6>>, <<"product", 10>, <"product", 4>>,
+ <<"product", 10>, <"product", 7>>, <<"eps", 6>, <"tau", 5>>,
+ <<"eps", 9>, <"tau", 5>>, <<"eps", 7>, <"tau", 5>>, <<"eps", 8>, <"tau", 5>>,
+ <<"eps", 10>, <"tau", 5>>}
 
 rel[<str,int>,<str,int>] UU = (ucd o du)*
 rel[<str,int>,<str,int>] DD = (du o ucd)*
@@ -210,141 +183,111 @@ rel[<str,int>,<str,int>] DU = du o (ucd o du)*
 
 assert "UU": UU  == {<<"i", 5>, <"eps", 2>>, <<"i", 5>, <"i", 8>>, 
  <<"i", 5>, <"eps", 8>>, <<"n", 5>, <"eps", 1>>, <<"sum", 6>, <"eps", 3>>,
- <<"i", 6>, <"eps", 2>>, <<"i", 6>, <"i", 8>>, <<"i", 6>, <"eps", 8>>,
- <<"product", 7>, <"eps", 4>>, <<"i", 7>, <"eps", 2>>,
- <<"i", 7>, <"i", 8>>, <<"i", 7>, <"eps", 8>>, <<"i", 8>, <"eps", 2>>,
- <<"sum", 9>, <"eps", 3>>, <<"sum", 9>, <"sum", 6>>, 
- <<"sum", 9>, <"i", 6>>, <<"sum", 9>, <"eps", 6>>, 
- <<"product", 10>, <"eps", 4>>, <<"product", 10>, <"product", 7>>,
- <<"product", 10>, <"i", 7>>, <<"product", 10>, <"eps", 7>>,
- <<"sum", 9>, <"eps", 2>>, <<"sum", 9>, <"i", 8>>, 
- <<"sum", 9>, <"eps", 8>>, <<"product", 10>, <"eps", 2>>, 
- <<"product", 10>, <"i", 8>>, <<"product", 10>, <"eps", 8>>, 
- <<"i", 5>, <"i", 5>>, <<"eps", 2>, <"eps", 2>>, <<"i", 8>, <"i", 8>>,
- <<"eps", 8>, <"eps", 8>>, <<"n", 5>, <"n", 5>>, <<"eps", 1>, <"eps", 1>>,
- <<"sum", 6>, <"sum", 6>>, <<"eps", 3>, <"eps", 3>>, <<"i", 6>, <"i", 6>>,
- <<"product", 7>, <"product", 7>>, <<"eps", 4>, <"eps", 4>>, 
- <<"i", 7>, <"i", 7>>, <<"sum", 9>, <"sum", 9>>, <<"eps", 6>, <"eps", 6>>,
- <<"product", 10>, <"product", 10>>, <<"eps", 7>, <"eps", 7>>}
+ <<"sum", 6>, <"sum", 6>>, <<"sum", 6>, <"i", 6>>, <<"sum", 6>, <"eps", 6>>,
+ <<"i", 6>, <"eps", 2>>, <<"i", 6>, <"i", 8>>, <<"i", 6>, <"eps", 8>>, 
+ <<"product", 7>, <"eps", 4>>, <<"product", 7>, <"product", 7>>, 
+ <<"product", 7>, <"i", 7>>, <<"product", 7>, <"eps", 7>>, 
+ <<"i", 7>, <"eps", 2>>, <<"i", 7>, <"i", 8>>, <<"i", 7>, <"eps", 8>>,
+  <<"i", 8>, <"eps", 2>>, <<"i", 8>, <"i", 8>>, <<"i", 8>, <"eps", 8>>,
+  <<"sum", 9>, <"eps", 3>>, <<"sum", 9>, <"sum", 6>>, <<"sum", 9>, <"i", 6>>,
+  <<"sum", 9>, <"eps", 6>>, <<"product", 10>, <"eps", 4>>, 
+ <<"product", 10>, <"product", 7>>, <<"product", 10>, <"i", 7>>, 
+ <<"product", 10>, <"eps", 7>>, <<"eps", 6>, <"i", 5>>, <<"eps", 6>, <"n", 5>>,
+  <<"eps", 9>, <"i", 5>>, <<"eps", 9>, <"n", 5>>, <<"eps", 7>, <"i", 5>>,
+  <<"eps", 7>, <"n", 5>>, <<"eps", 8>, <"i", 5>>, <<"eps", 8>, <"n", 5>>,
+  <<"eps", 10>, <"i", 5>>, <<"eps", 10>, <"n", 5>>, <<"i", 5>, <"i", 5>>,
+  <<"i", 5>, <"n", 5>>, <<"sum", 6>, <"eps", 2>>, <<"sum", 6>, <"i", 8>>,
+  <<"sum", 6>, <"eps", 8>>, <<"sum", 6>, <"i", 5>>, <<"sum", 6>, <"n", 5>>,
+  <<"i", 6>, <"i", 5>>, <<"i", 6>, <"n", 5>>, <<"product", 7>, <"eps", 2>>,
+  <<"product", 7>, <"i", 8>>, <<"product", 7>, <"eps", 8>>, 
+  <<"product", 7>, <"i", 5>>, <<"product", 7>, <"n", 5>>, <<"i", 7>, <"i", 5>>,
+   <<"i", 7>, <"n", 5>>, <<"i", 8>, <"i", 5>>, <<"i", 8>, <"n", 5>>, 
+  <<"sum", 9>, <"eps", 2>>, <<"sum", 9>, <"i", 8>>, <<"sum", 9>, <"eps", 8>>,
+  <<"sum", 9>, <"i", 5>>, <<"sum", 9>, <"n", 5>>, <<"product", 10>, <"eps", 2>>,
+  <<"product", 10>, <"i", 8>>, <<"product", 10>, <"eps", 8>>, 
+  <<"product", 10>, <"i", 5>>, <<"product", 10>, <"n", 5>>, 
+  <<"eps", 6>, <"eps", 2>>, <<"eps", 6>, <"i", 8>>, <<"eps", 6>, <"eps", 8>>,
+  <<"eps", 6>, <"eps", 1>>, <<"eps", 9>, <"eps", 2>>, <<"eps", 9>, <"i", 8>>,
+  <<"eps", 9>, <"eps", 8>>, <<"eps", 9>, <"eps", 1>>, <<"eps", 7>, <"eps", 2>>,
+   <<"eps", 7>, <"i", 8>>, <<"eps", 7>, <"eps", 8>>, <<"eps", 7>, <"eps", 1>>,
+  <<"eps", 8>, <"eps", 2>>, <<"eps", 8>, <"i", 8>>, <<"eps", 8>, <"eps", 8>>,
+  <<"eps", 8>, <"eps", 1>>, <<"eps", 10>, <"eps", 2>>, <<"eps", 10>, <"i", 8>>,
+  <<"eps", 10>, <"eps", 8>>, <<"eps", 10>, <"eps", 1>>, <<"i", 5>, <"eps", 1>>,
+  <<"sum", 6>, <"eps", 1>>, <<"i", 6>, <"eps", 1>>, <<"product", 7>, <"eps", 1>>,
+  <<"i", 7>, <"eps", 1>>, <<"i", 8>, <"eps", 1>>, <<"sum", 9>, <"eps", 1>>,
+  <<"product", 10>, <"eps", 1>>, <<"eps", 2>, <"eps", 2>>, <<"n", 5>, <"n", 5>>,
+  <<"eps", 1>, <"eps", 1>>, <<"eps", 3>, <"eps", 3>>, <<"i", 6>, <"i", 6>>,
+  <<"eps", 6>, <"eps", 6>>, <<"eps", 4>, <"eps", 4>>, <<"i", 7>, <"i", 7>>,
+  <<"eps", 7>, <"eps", 7>>, <<"sum", 9>, <"sum", 9>>, 
+  <<"product", 10>, <"product", 10>>, <<"eps", 9>, <"eps", 9>>,
+  <<"eps", 10>, <"eps", 10>>}
 
 
-assert "DD": DD == {<<"sum", 6>, <"sum", 3>>, <<"sum", 6>, <"i", 2>>,
- <<"sum", 6>, <"i", 8>>, <<"product", 7>, <"product", 4>>, 
- <<"product", 7>, <"i", 2>>, <<"product", 7>, <"i", 8>>, 
- <<"i", 8>, <"i", 2>>, <<"sum", 6>, <"tau", 5>>, 
- <<"product", 7>, <"tau", 5>>, <<"i", 8>, <"tau", 5>>, 
- <<"sum", 6>, <"sum", 6>>, <<"sum", 3>, <"sum", 3>>, <<"i", 2>, <"i", 2>>,
- <<"i", 8>, <"i", 8>>, <<"product", 7>, <"product", 7>>,
-  <<"product", 4>, <"product", 4>>, <<"tau", 5>, <"tau", 5>>}
+assert "DD": DD == {<<"sum", 6>, <"sum", 3>>, <<"sum", 6>, <"sum", 6>>,
+ <<"sum", 6>, <"i", 2>>, <<"sum", 6>, <"i", 8>>,
+ <<"product", 7>, <"product", 4>>, <<"product", 7>, <"product", 7>>,
+ <<"product", 7>, <"i", 2>>, <<"product", 7>, <"i", 8>>, <<"i", 8>, <"i", 2>>,
+ <<"i", 8>, <"i", 8>>, <<"sum", 6>, <"tau", 5>>,
+ <<"product", 7>, <"tau", 5>>, <<"i", 8>, <"tau", 5>>,
+ <<"tau", 5>, <"i", 2>>, <<"tau", 5>, <"i", 8>>, <<"tau", 5>, <"n", 1>>,
+ <<"sum", 6>, <"n", 1>>, <<"product", 7>, <"n", 1>>, <<"i", 8>, <"n", 1>>,
+ <<"tau", 5>, <"tau", 5>>, <<"sum", 3>, <"sum", 3>>, <<"i", 2>, <"i", 2>>,
+ <<"product", 4>, <"product", 4>>, <<"n", 1>, <"n", 1>>}
 
 
-assert "UD": UD == {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"tau", 5>>,
- <<"i", 5>, <"i", 8>>, <<"sum", 6>, <"sum", 3>>, <<"i", 6>, <"i", 2>>,
- <<"i", 6>, <"tau", 5>>, <<"i", 6>, <"i", 8>>, 
- <<"product", 7>, <"product", 4>>, <<"i", 7>, <"i", 2>>, 
- <<"i", 7>, <"tau", 5>>, <<"i", 7>, <"i", 8>>, <<"i", 8>, <"i", 2>>, 
- <<"sum", 9>, <"sum", 3>>, <<"sum", 9>, <"i", 2>>, <<"sum", 9>, <"i", 8>>,
- <<"sum", 9>, <"tau", 5>>, <<"sum", 9>, <"sum", 6>>, 
- <<"product", 10>, <"product", 4>>, <<"product", 10>, <"i", 2>>, 
- <<"product", 10>, <"i", 8>>, <<"product", 10>, <"tau", 5>>, 
- <<"product", 10>, <"product", 7>>, <<"eps", 6>, <"tau", 5>>, 
- <<"eps", 9>, <"tau", 5>>, <<"eps", 7>, <"tau", 5>>, 
- <<"eps", 8>, <"tau", 5>>, <<"eps", 10>, <"tau", 5>>}
+assert "UD": UD ==  {<<"i", 5>, <"i", 2>>, <<"i", 5>, <"i", 8>>, 
+ <<"i", 5>, <"tau", 5>>, <<"i", 5>, <"n", 1>>, <<"n", 5>, <"n", 1>>, 
+ <<"sum", 6>, <"sum", 3>>, <<"sum", 6>, <"sum", 6>>, <<"sum", 6>, <"i", 2>>,
+  <<"sum", 6>, <"i", 8>>, <<"sum", 6>, <"tau", 5>>, <<"sum", 6>, <"n", 1>>, 
+ <<"i", 6>, <"i", 2>>, <<"i", 6>, <"i", 8>>, <<"i", 6>, <"tau", 5>>, 
+ <<"i", 6>, <"n", 1>>, <<"product", 7>, <"product", 4>>, 
+ <<"product", 7>, <"product", 7>>, <<"product", 7>, <"i", 2>>, 
+ <<"product", 7>, <"i", 8>>, <<"product", 7>, <"tau", 5>>, 
+ <<"product", 7>, <"n", 1>>, <<"i", 7>, <"i", 2>>, <<"i", 7>, <"i", 8>>, 
+ <<"i", 7>, <"tau", 5>>, <<"i", 7>, <"n", 1>>, <<"i", 8>, <"i", 2>>, 
+ <<"i", 8>, <"i", 8>>, <<"i", 8>, <"tau", 5>>, <<"i", 8>, <"n", 1>>, 
+ <<"sum", 9>, <"sum", 3>>, <<"sum", 9>, <"sum", 6>>, <<"sum", 9>, <"i", 2>>, 
+ <<"sum", 9>, <"i", 8>>, <<"sum", 9>, <"tau", 5>>, <<"sum", 9>, <"n", 1>>, 
+ <<"product", 10>, <"product", 4>>, <<"product", 10>, <"product", 7>>, 
+ <<"product", 10>, <"i", 2>>, <<"product", 10>, <"i", 8>>, 
+ <<"product", 10>, <"tau", 5>>, <<"product", 10>, <"n", 1>>, 
+ <<"eps", 6>, <"i", 2>>, <<"eps", 6>, <"i", 8>>, <<"eps", 6>, <"n", 1>>,
+  <<"eps", 6>, <"tau", 5>>, <<"eps", 9>, <"i", 2>>, <<"eps", 9>, <"i", 8>>, 
+ <<"eps", 9>, <"n", 1>>, <<"eps", 9>, <"tau", 5>>, <<"eps", 7>, <"i", 2>>,
+  <<"eps", 7>, <"i", 8>>, <<"eps", 7>, <"n", 1>>, <<"eps", 7>, <"tau", 5>>,
+  <<"eps", 8>, <"i", 2>>, <<"eps", 8>, <"i", 8>>, <<"eps", 8>, <"n", 1>>,
+  <<"eps", 8>, <"tau", 5>>, <<"eps", 10>, <"i", 2>>, <<"eps", 10>, <"i", 8>>,
+  <<"eps", 10>, <"n", 1>>, <<"eps", 10>, <"tau", 5>>}
 
 
 assert "DU": DU == {<<"sum", 6>, <"eps", 3>>, <<"sum", 6>, <"sum", 6>>,
- <<"sum", 6>, <"eps", 2>>, <<"sum", 6>, <"i", 8>>,
- <<"sum", 6>, <"eps", 8>>, <<"sum", 6>, <"i", 6>>,
+ <<"sum", 6>, <"i", 6>>, <<"sum", 6>, <"eps", 6>>, <<"sum", 6>, <"eps", 2>>,
+ <<"sum", 6>, <"i", 8>>, <<"sum", 6>, <"eps", 8>>, <<"sum", 6>, <"i", 5>>,
+ <<"sum", 6>, <"n", 5>>, <<"sum", 6>, <"eps", 1>>,
  <<"product", 7>, <"eps", 4>>, <<"product", 7>, <"product", 7>>,
- <<"product", 7>, <"eps", 2>>, <<"product", 7>, <"i", 8>>,
- <<"product", 7>, <"eps", 8>>, <<"product", 7>, <"i", 7>>, 
- <<"i", 8>, <"eps", 2>>, <<"i", 8>, <"i", 8>>, <<"n", 1>, <"eps", 1>>,
- <<"i", 2>, <"eps", 2>>, <<"sum", 3>, <"eps", 3>>,
- <<"product", 4>, <"eps", 4>>, <<"sum", 6>, <"eps", 6>>,
- <<"product", 7>, <"eps", 7>>, <<"i", 8>, <"eps", 8>>}
+ <<"product", 7>, <"i", 7>>, <<"product", 7>, <"eps", 7>>,
+ <<"product", 7>, <"eps", 2>>, <<"product", 7>, <"i", 8>>, 
+ <<"product", 7>, <"eps", 8>>, <<"product", 7>, <"i", 5>>,
+ <<"product", 7>, <"n", 5>>, <<"product", 7>, <"eps", 1>>,
+ <<"i", 8>, <"eps", 2>>, <<"i", 8>, <"i", 8>>, <<"i", 8>, <"eps", 8>>,
+ <<"i", 8>, <"i", 5>>, <<"i", 8>, <"n", 5>>, <<"i", 8>, <"eps", 1>>,
+ <<"n", 1>, <"eps", 1>>, <<"i", 2>, <"eps", 2>>, <<"sum", 3>, <"eps", 3>>,
+ <<"product", 4>, <"eps", 4>>, <<"tau", 5>, <"eps", 2>>,
+ <<"tau", 5>, <"i", 8>>, <<"tau", 5>, <"eps", 8>>, <<"tau", 5>, <"i", 5>>,
+ <<"tau", 5>, <"n", 5>>, <<"tau", 5>, <"eps", 1>>}
 
 bag[<str,int>] BackwardSlice(<str,int> Criterion) =
 	       UU[Criterion]
 
-rel[str,int] Example1 = BackwardSlice(<"product",10>)
+bag[<str,int>] Example1 = BackwardSlice(<"sum",9>)
 
-assert "Example1": Example1 ==  {<"eps", 4>, <"product", 7>, <"i", 7>, <"eps", 7>, <"eps", 2>, <"i", 8>, <"eps", 8>, <"product", 10>}
+bag[<str,int>] Example2 = BackwardSlice(<"product",10>)
+
+assert "Example1": Example1 ==  {<"eps", 3>, <"sum", 6>, <"i", 6>, 
+  <"eps", 6>, <"eps", 2>, <"i", 8>, <"eps", 8>, <"i", 5>, <"n", 5>, 
+  <"eps", 1>, <"sum", 9>}
+
+assert "Example2": Example2 == {<"eps", 4>, <"product", 7>, <"i", 7>, 
+   <"eps", 7>, <"eps", 2>, <"i", 8>, <"eps", 8>, <"product", 10>}
 
 
-
-
-%%       1: read(n)		RDIN:
-%%				RDOUT:	<1, <"n", 1>>
-%%
-%%	 2: i := 1		RDIN:	<2, <"n", 1>
-%%
-%%				RDOUT:	<2, <"i", 2>>, <2, <"n", 1>>	
-%%
-%%	 3: sum := 0		RDIN:	<3, <"i", 2>>, <3, <"n", 1>>
-%%
-%%				RDOUT:	<3, <"sum", 3>>, <3, <"i", 2>>, 
-%%					<3, <"n", 1>>
-%%
-%%	 4: product := 1	RDIN: 	<4, <"sum", 3>>, <4, <"i", 2>>, 
-%%					<4, <"n", 1>>
-%%
-%%				RDOUT:	<4, <"sum", 3>>, <4, <"i", 2>>,
-%%					<4, <"n", 1>>,
-%%	
-%%	 5: while i<= n do	RDIN:	<5, <"product", 4>>, <5,<"sum", 3>>,
-%%					<5, <"i", 2>>, <5, <"n", 1>>, 
-%%					<5, <"i", 8>>,<5, <"product", 7>>,
-%%					 <5, <"sum", 6>>, <5, <"n", 1>>
-%%
-%%				RDOUT:	<5, <"product",4>>, <5,<"sum", 3>>, 
-%%					<5, <"i", 2>>, <5, <"n", 1>>, 
-%%					<5, <"i", 8>>, <5, <"product", 7>>,
-%%					<5, <"sum", 6>>,
-%%	    begin
-%%	 6:	sum := sum + i 	RDIN:	<6, <"product", 4>>, <6,<"sum",3>>, 
-%%					<6, <"i", 2>>,  <6, <"n", 1>>, 
-%%					<6, <"i", 8>>, <6, <"product", 7>>,
-%%					 <6, <"sum", 6>>
-%%
-%%				RDOUT:	<6, <"sum", 6>>, <6, <"product",4>>,
-%% 					<6, <"i", 2>>, <6, <"n", 1>>, 
-%%					<6, <"i", 8>>, 	<6, <"product", 7>>
-%%
-%%	 7:	product := product * i; 
-%%				RDIN: 	<7, <"sum", 6>>, <7,<"product", 4>>,
-%%					<7, <"i", 2>>, <7, <"n", 1>>, 
-%%					<7, <"i", 8>>, <7, <"product", 7>>
-%%
-%% 				RDOUT:	<7, <"product", 7>>, <7,<"sum",6>>,
-%%					<7, <"i", 2>>,<7, <"n", 1>>, 
-%%					<7, <"i", 8>>,
-%%
-%%
-%%	 8:	i := i + 1	RDIN:	<8, <"product", 7>>, <8,<"sum",6>>,
-%%					<8, <"i", 2>>, <8, <"n", 1>>, 
-%%					<8, <"i", 8>>
-%%
-%%				RDOUT:	<8, <"i", 8>>, <8, <"product",7>>,
-%%					<8, <"sum", 6>>, <8, <"n", 1>>, 
-%%	    end
-%%       9: write(sum)		RDIN:	<9, <"product", 4>>, <9,<"sum", 3>>,
-%% 					<9, <"i", 2>>, <9, <"n", 1>>, 
-%%					<9, <"i", 8>>, <9, <"product", 7>>,
-%%					<9, <"sum", 6>>, <9, <"i", 8>>, 
-%%					<9, <"product", 7>>, <9,<"sum",6>>
-%% 					<9, <"n", 1>>
-%%
-%%				RDOUT:	<9, <"product", 4>>, <9,<"sum",3>>,
-%%					<9, <"i", 2>>, <9, <"n", 1>>,  
-%%					<9, <"i", 8>>, <9, <"product", 7>>,
-%%					<9, <"sum", 6>>
-%%
-%%	 10: write(product)	RDIN:	<10, <"i", 2>>, <10, <"n", 1>>, 
-%%					<10, <"i", 8>>, <10,<"product",7>>,
-%%					<10, <"sum", 6>> 
-%%
-%%				RDOUT:	<10, <"product", 4>>, 
-%%					<10, <"sum", 3>>, <10, <"i", 2>>, 
-%%					<10, <"n", 1>>, <10, <"i", 8>>, 
-%%					<10, <"product", 7>>, 
-%%					<10, <"sum", 6>>

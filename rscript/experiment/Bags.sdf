@@ -9,10 +9,13 @@ imports EmptyBag
 
 context-free syntax
     EmptyBag				-> Bag[[Elem]]
-   "{" {Elem ","}* "}"	        	-> Bag[[Elem]] {constructor}
+   "{" {Elem ","}* "}"	        	-> Bag[[Elem]] {constructor,avoid}
+   "{" {Elem # Elem ","}* "}"		-> Bag[[Elem # Elem]]
+   "{" {Elem | Elem # Elem ","}* "}"	-> Bag[[Elem | Elem # Elem]]
 
     add(Elem, Bag[[Elem]])              -> Bag[[Elem]]
-    union(Bag[[Elem]], Bag[[Elem]])     -> Bag[[Elem]]
+    union(Bag[[Elem]], Bag[[Elem]])     
+					-> Bag[[Elem]]
 
 hiddens
   imports asf/syntax/Comments
