@@ -24,7 +24,7 @@ TESTS = test-grammar
 EXTRA_DIST = Sdf2-bootstrap.tbl test-grammar.src Sdf2.sdf2
 CLEANFILES = Sdf2.baf Sdf2.tbl.asfix test-grammar
 
-TABLEGEN=../pgen/parsetablegen
+TABLEGEN=../src/parsetablegen
 
 %.baf : %.tbl.asfix
 	$(TABLEGEN) < $< > $@
