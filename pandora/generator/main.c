@@ -19,7 +19,7 @@
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
-static char* myarguments = "i:o:tvVh";
+static char* myarguments = "bi:o:tvVh";
 
 static ATbool run_verbose = ATfalse;
 
@@ -49,6 +49,7 @@ static void usage(void)
   ATwarning(
 	    "Usage: %s [options]\n"
 	    "Options:\n"
+	    "\t-b              output box format\n"
 	    "\t-h              display help information\n"
 	    "\t-i filename     input (parsed) file                [stdin]\n"
 	    "\t-o filename     output (parsed) file               [stdout]\n"
@@ -149,10 +150,12 @@ int main(int argc, char *argv[])
   ATbool textmode = ATfalse;
   char *input = "-";
   char *output = "-";
+  ATbool boxOutput = ATfalse;
   int c;
   int i;
   ATbool useToolbus = ATfalse;
 
+  ATsetChecking(ATtrue);
   ATinit(3, ATlibArgv, &bottomOfStack); 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initMEPTApi(); 
@@ -177,6 +180,7 @@ int main(int argc, char *argv[])
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+	case 'b':  boxOutput=ATtrue; break;
 	case 'i':  input=optarg; break;
 	case 'o':  output=optarg; break;
 	case 't':  textmode=ATtrue; break;
@@ -192,8 +196,13 @@ int main(int argc, char *argv[])
     if (at_tree != NULL) {
       tree = PT_ParseTreeFromTerm(at_tree);
       box = pandora(tree);
-      
-      ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+
+      if (!boxOutput) {      
+	ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+      }
+      else {
+	ptText = box;
+      }
 
       if (textmode) {
 	ATwriteToNamedTextFile(PT_ParseTreeToTerm(ptText), output);
