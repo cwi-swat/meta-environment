@@ -118,19 +118,19 @@ AC_ARG_WITH(graphviz,
    GRAPHVIZ=${withval})
 AC_SUBST(GRAPHVIZ)
 
-dnl Handle --with-layout 
-AC_ARG_WITH(layout,
-   [  --with-layout           evaluator keeps layout while rewriting],
-   LAYOUTDEF=-DKEEP_LAYOUT
-)
-AC_SUBST(LAYOUTDEF)
+dnl dnl Handle --with-layout 
+dnl AC_ARG_WITH(layout,
+dnl    [  --with-layout           evaluator keeps layout while rewriting],
+dnl    LAYOUTDEF=-DKEEP_LAYOUT
+dnl )
+dnl AC_SUBST(LAYOUTDEF)
 
-dnl Handle --with-traversals
-AC_ARG_WITH(traversals,
-   [  --with-traversals       evaluator implements traveral functions],
-   TRAVERSALSDEF=-DTRAVERSALS
-)
-AC_SUBST(TRAVERSALSDEF)
+dnl dnl Handle --with-traversals
+dnl AC_ARG_WITH(traversals,
+dnl    [  --with-traversals       evaluator implements traveral functions],
+dnl    TRAVERSALSDEF=-DTRAVERSALS
+dnl )
+dnl AC_SUBST(TRAVERSALSDEF)
 
 dnl Handle --with-debug-c-code to activate c debug info 
 dnl and shut off optimizations
@@ -203,13 +203,6 @@ compiler/c-source/Makefile
 compiler/regress-test/Makefile
 compiler/regress-test/terms/Makefile
 asfix2c-compiler/Makefile
-evaluator/Makefile
-evaluator/src/Makefile
-evaluator/test/Makefile 
-evaluator/test/terms/Makefile
-evaluator/test/eqs/Makefile
-evaluator/test/fail/Makefile
-evaluator/test/ref/Makefile
 graph-browser/Makefile
 graph-browser/graph-browser.tcl
 in-output/Makefile
@@ -268,3 +261,7 @@ AC_CONFIG_PKG(pgen,        --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
                            --with-asc-lib='\${top_builddir}/../asc-support'
                            --with-sglr='\${top_builddir}/../sglr/sglr')
 
+AC_CONFIG_PKG(evaluator,   --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix'
+                           --with-asc-inc='\${top_builddir}/../asc-support'
+                           --with-asc-lib='\${top_builddir}/../asc-support' )
