@@ -10,3 +10,8 @@ exports
     Bool "/\\" Bool -> Bool {left}
     "<" Bool* ">" -> BoolList
     "[" {Bool ","}* "]" -> BoolSepList
+
+exports
+  sorts Id
+  lexical syntax
+    [a-z]+ -> Id

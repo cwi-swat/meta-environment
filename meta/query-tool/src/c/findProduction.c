@@ -72,9 +72,23 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
   if (!SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs1), rhs2)) {
     return ATfalse;
   }
-
   return symbolListsMatch(SDF_getSymbolsList(SDF_getProductionSymbols(p1)),
-			  SDF_getSymbolsList(SDF_getProductionSymbols(p2)));
+                          SDF_getSymbolsList(SDF_getProductionSymbols(p2)));
+}
+
+static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2)
+{
+  SDF_Symbol rhs1, rhs2;
+
+  rhs1 = SDF_getProductionResult(p1);
+  rhs2 = SDF_getProductionResult(p2);
+
+  if (SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs1), rhs2)) {
+    return ATtrue;
+  }
+  else {
+    return ATfalse;
+  }
 }
 
 /*}}}  */
@@ -107,6 +121,33 @@ static ATerm findProductionInModule(SDF_Production needle, SDF_Module haystack)
   return posInfo;
 }
 
+static ATerm findLexicalProductionInModule(SDF_Production needle, 
+                                           SDF_Module haystack)
+{
+  ATbool found = ATfalse;
+  ATerm posInfo = NULL;
+  SDF_ProductionList productionList = SDF_getModuleLexicalProductions(haystack);
+
+  while (!SDF_isProductionListEmpty(productionList) && !found) {
+    SDF_Production suspect = SDF_getProductionListHead(productionList);
+
+    found = lexicalProductionsMatch(suspect, needle);
+
+    if (found) {
+      posInfo = ATgetAnnotation(SDF_ProductionToTerm(suspect), 
+                                ATmake("pos-info"));
+    }
+
+    if (SDF_hasProductionListTail(productionList)) {
+      productionList = SDF_getProductionListTail(productionList);
+    }
+    else {
+      break;
+    }
+  }
+
+  return posInfo;
+}
 /*}}}  */
 /*{{{  ATbool queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree) */
 
@@ -123,10 +164,20 @@ ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
   ptTree = PT_getParseTreeTree(parseTree);
   ptProduction = PT_getTreeProd(ptTree);
 
-  sdfProduction = PTProductionToSDFProduction(ptProduction);
-  assert(SDF_isValidProduction(sdfProduction));
+  if (PT_isProductionDefault(ptProduction)) {
+    sdfProduction = PTProductionToSDFProduction(ptProduction);
+    assert(SDF_isValidProduction(sdfProduction));
 
-  return findProductionInModule(sdfProduction, sdfModule);
+    if (PT_isLexicalInjectionProd(ptProduction)) {
+      return findLexicalProductionInModule(sdfProduction, sdfModule);
+    }
+    else {
+      return findProductionInModule(sdfProduction, sdfModule);
+    }
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */

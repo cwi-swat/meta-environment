@@ -1,4 +1,4 @@
-term: Bool.sdf.pt boollist.pt boolseplist.pt booland.pt boolor.pt
+term: Bool.sdf.pt boollist.pt boolseplist.pt booland.pt boolor.pt id.pt
 
 TERM_FILES = $(wildcard *.pt *.trm.tbl)
 
@@ -23,3 +23,6 @@ booland.pt: Bool.trm.tbl booland.trm
 
 boolor.pt: Bool.trm.tbl boolor.trm
 	sglr -p Bool.trm.tbl -i boolor.trm -o boolor.pt
+
+id.pt: Bool.trm.tbl id.trm
+	sglr -p Bool.trm.tbl -i id.trm -o id.pt

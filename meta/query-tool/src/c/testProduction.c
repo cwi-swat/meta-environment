@@ -7,6 +7,7 @@
 #define SEP_LIST_TREE (SRC_DIR "/terms/boolseplist.pt")
 #define AND_TREE (SRC_DIR "/terms/booland.pt")
 #define OR_TREE (SRC_DIR "/terms/boolor.pt")
+#define ID_TREE (SRC_DIR "/terms/id.pt")
 
 static void testFrame(const char *termName, ATerm expectedArea)
 {
@@ -33,16 +34,19 @@ static void testFrame(const char *termName, ATerm expectedArea)
  
   resultArea = queryProductionInModule(sdfModule, parseTree);
   assert(resultArea != NULL);
-/*ATwarning("area = %t\n", resultArea);*/
+/*
+ATwarning("area = %t\n", resultArea);
+*/
   assert(ATisEqual(resultArea, expectedArea));
 }
 
 static void testProduction()
 {
   testFrame(LIST_TREE, ATparse("area(\"Test\",11,4,12,4)"));
-  testFrame(SEP_LIST_TREE, ATparse("area(\"Test\",12,4,13,0)"));
+  testFrame(SEP_LIST_TREE, ATparse("area(\"Test\",12,4,14,0)"));
   testFrame(OR_TREE, ATparse("area(\"Test\",9,4,9,34)"));
   testFrame(AND_TREE, ATparse("area(\"Test\",10,4,10,34)"));
+  testFrame(ID_TREE, ATparse("area(\"Test\",17,4,18,0)"));
 }
 
 int main(int argc, char *argv[])
