@@ -36,3 +36,7 @@ exports
     {Term ","}*             -> TermList {cons("termStar")}
     "[" TermList "]"        -> Term {cons("termList")}
 
+  context-free syntax
+    "true" -> Id {reject}
+    "false" -> Id {reject}
+
