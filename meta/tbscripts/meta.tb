@@ -12,7 +12,7 @@
 #include "edit-equations.tb"
 #include "edit-term.tb"
 #include "asfe.idef"
-#include "asource.idef"
+#include "unparsePT.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
