@@ -793,12 +793,12 @@ large values and does not allow the called procedure to make changes to
 the parameter value in the calling procedure.
 
 These considerations also apply to value transmissions in a
-distributed setting, with the added complication that values can be
-accessed or modified by more than one party.  Call by reference
-(Figure~\ref{Fig:reference}) is efficient for infrequent access or
-update.  It is the prevalent mechanism in, for instance, CORBA~\cite{XXX}.
-However, uncontrolled modifications by different parties can
-lead to disaster.
+distributed setting, with the added complication that values can
+be accessed or modified by more than one party.  Call by reference
+(Figure~\ref{Fig:reference}) is efficient for infrequent access or update.
+It is the prevalent mechanism in, for instance, CORBA~\cite{corba}.
+However, uncontrolled modifications by different parties can lead to
+disaster.
 
 Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values
 and any sharing between calls is lost.\footnote{This is of particular
