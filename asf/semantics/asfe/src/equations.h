@@ -60,7 +60,7 @@ equation_entry *find_equation(equation_entry *prev, PT_Production top_ofs,
 void enter_equations(char *module, ASF_CondEquationList eqs);
 void delete_equations(char *module);
 void select_equations(char *module);
-void print_short_equation(const char *msg, equation_entry *entry);
+void print_short_equation(int stack, const char *msg, equation_entry *entry);
 
 extern equation_table *equations;
 

@@ -19,7 +19,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var)
 {
   PT_Production prod = PT_getTreeProd(var);
   PT_Symbol symbol = PT_getProductionRhs(prod);
-
+  
   if (PT_isIterSepSymbol(symbol) || 
       PT_isIterSymbol(symbol)) {
     Slice slice = getListVariableValue(env, var);

@@ -65,11 +65,15 @@ ATerm posinfo;
 
 /*}}}  */
 
-/*{{{  static void printShortRule(const char *msg, equation_entry *entry) */
+/*{{{  static void printShortRule(int stack, const char *msg, equation_entry *entry) */
 
-void print_short_equation(const char *msg, equation_entry *entry)
+void print_short_equation(int stack, const char *msg, equation_entry *entry)
 {
   if (runVerbose) {
+    int i;
+    for (i = 0; i < stack % 20; i++) {
+      ATwarning(" ");
+    }
     ATwarning("%s\t: %s ", msg, PT_yieldTree((PT_Tree)entry->tag));
     ATwarning("%s = ...\n", PT_yieldTree((PT_Tree)entry->lhs));
   }
@@ -356,7 +360,7 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
     table->table[hnr] = entry;
   }
 
-  print_short_equation("registered", entry);
+  print_short_equation(0, "registered", entry);
 }
 
 /*}}}  */

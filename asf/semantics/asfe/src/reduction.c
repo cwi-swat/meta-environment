@@ -65,7 +65,7 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   tagCurrentRule = entry->tag;
   currentRule = entry;
 
-  print_short_equation("try", entry);
+  print_short_equation(depth, "try", entry);
 
   env = matchEquation(entry, trm, depth);
 
@@ -73,13 +73,13 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   currentRule = entry;
 
   if (!is_fail_env(env)) {
-    print_short_equation("success", entry);
+    print_short_equation(depth, "success", entry);
 
     TIDE_STEP(entry->rhs, env, depth);
     rewrite_steps++;
   }
   else {
-    print_short_equation("fail", entry);
+    print_short_equation(depth, "fail", entry);
   }
 
   return env;
