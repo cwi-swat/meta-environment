@@ -54,11 +54,16 @@ tree2dot_SOURCES        = tree2dot-main.c
 tree2dot_LDADD          = -L../libmept -lmept \
                           -L${ATERM}/lib -lATerm
 
-%.tif.c %.tif.h: %.tifs
-	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
+IDEF=${TOOLBUS}/bin/idef2tif
+TIFS=${TOOLBUS}/bin/tifstoc
 
-%.tifs: %.idef
-	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
-		mv ${srcdir}/$@ $@ ;\
-	fi
+tif:
+	${IDEF} unparsePT.idef
+	${TIFS} -tool unparsePT unparsePT.tifs
+	${IDEF} addPosInfo.idef
+	${TIFS} -tool addPosInfo addPosInfo.tifs 
+	${IDEF} apply-function.idef
+	${TIFS} -tool apply-function apply-function.tifs
+
+tif-clean:
+	rm -f *.tifs *.tif.[ch]
