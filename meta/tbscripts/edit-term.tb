@@ -61,7 +61,6 @@ in
     rec-msg(rewrite-result(NormalForm?)) .
     snd-msg(unparse(NormalForm)) .
     rec-msg(unparsed-text(Text?)) .
-    printf("\nNormal form is:\n%s\n", Text) .
     snd-msg(edit-term-text(ModuleName, Text))
   +
     rec-msg(rewrite-errors(ErrList?)) .
