@@ -7,7 +7,7 @@ include_HEADERS = \
 	PTMEPT_dict.h 
 
 libPTMEPT_a_SOURCES = PTMEPT.c PTMEPT_dict.c ${UTILSRCS}
-UTILSRCS = lift.c utils.c lower.c
+UTILSRCS = lift.c lower.c
 
 EXTRA_DIST = AsFix.def
 
