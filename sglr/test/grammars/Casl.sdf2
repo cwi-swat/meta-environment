@@ -461,7 +461,7 @@ exports
     COMMENT          -> LAYOUT
 
     [\.] Word                                          -> Token
-    [A-Za-z0-9\']+                                     -> Word {uneager}
+    [A-Za-z0-9\']+                                     -> Word {avoid}
     [\+\-\*\&\^\#\$\47\~\>\=\<\@\?\!\|\\\:\.\{\}\[\]]+ -> Signs
 
  context-free syntax
