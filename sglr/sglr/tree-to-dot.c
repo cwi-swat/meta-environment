@@ -56,9 +56,6 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
     ATfprintf(dot, "%s", name);
   else if (ATmatch(t, "lit(<str>)", &name)) {
     int n;
-
-ATfprintf(stderr, "lit: %s\n", name);
-
     ATfprintf(dot, "\\\"");
     for(n = 0; name[n] != '\0'; n++)
       switch (name[n]) {
@@ -187,7 +184,7 @@ void SG_AmbNode(FILE *dot, ATerm t, ATerm arg)
     SG_PrintSymbol(dot, res);
     ATfprintf(dot, " (amb)\"]\n");
   } else
-    ATerror("SG_AmbNode: warning strange node %d\n", t);
+    ATerror("SG_AmbNode: warning strange node %t\n", arg);
 }
 
 

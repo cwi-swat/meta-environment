@@ -31,7 +31,7 @@ enum ActionKind {ERROR, SHIFT, REDUCE, ACCEPT, REDUCE_CONST};
 state      SG_LookupGoto(parse_table *pt, state s, int c);
 actions    SG_LookupAction(parse_table *pt, state s, int c);
 production SG_LookupProduction(parse_table *pt, int token);
-
+ATermList  SG_LookupPriority(parse_table *pt, ATermInt prodlabel);
 
 #define    SG_INIT(ptable)    ((ptable)->init)
 
@@ -58,9 +58,10 @@ parse_table   *SG_LookupParseTable(char *L, ATbool may_fail);
 
 struct _parse_table  {
   state      init;
-  ATermTable action_table;
-  ATermTable goto_table;
+  ATermTable actions;
+  ATermTable gotos;
   ATermTable productions;
+  ATermTable priorities;
 };
 
 #endif	/*  _PARSE_TABLE_  */

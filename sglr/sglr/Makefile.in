@@ -213,6 +213,6 @@ depend: ${CSRC} ${GETOPTSRC} ${LIBSRC} sglr.tif.c
 	sed -e 's/^\([^ :]*\).o:/\1-a2toa1-gc.o:/'	$@.tmp	>>	$@
 	sed -e 's/^\([^ :]*\).o:/\1-prof.o:/'	$@.tmp		>>	$@
 	@rm -f $@.tmp
-	@echo "Dependencies updated: you may have to ${MAKE} again."
+#	@echo "Dependencies updated: you may have to ${MAKE} again."
 
 -include depend

@@ -79,9 +79,8 @@ state SG_LookupGoto(parse_table *pt, state s, int token)
   state retstate;
   ATerm val;
 
-  val = ATtableGet(pt->goto_table,
-                  (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
-                                      (ATerm) ATmakeInt(token)));
+  val = ATtableGet(pt->gotos, (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
+                                                  (ATerm) ATmakeInt(token)));
   retstate = (val == NULL)?-1:ATgetInt((ATermInt) val);
 
   if (SG_DEBUG) ATfprintf(SGlog(), "Goto(%d,%d) == %d\n", s, token, retstate);
@@ -93,14 +92,19 @@ actions SG_LookupAction(parse_table *pt, state s, int token)
 {
   actions as;
 
-  as = (actions) ATtableGet(pt->action_table,
-                 (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
-                                     (ATerm) ATmakeInt(token)));
+  as = (actions) ATtableGet(pt->actions,
+                            (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
+                                                (ATerm) ATmakeInt(token)));
   as = as ? as : ATempty;
 
   if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, token, as);
 
   return as;
+}
+
+ATermList SG_LookupPriority(parse_table *pt, ATermInt prodlabel)
+{
+  return (ATermList) ATtableGet(pt->priorities, (ATerm) prodlabel);
 }
 
 /*
@@ -113,9 +117,10 @@ parse_table *SG_NewParseTable(int states, int productions)
 
   pt               = SG_Malloc(sizeof(struct _parse_table));
   pt->init         = -1;
-  pt->action_table = ATtableCreate(states*1.4,    75);
-  pt->goto_table   = ATtableCreate(states*1.4,  75);
+  pt->actions      = ATtableCreate(states*1.4, 75);
+  pt->gotos        = ATtableCreate(states*1.4, 75);
   pt->productions  = ATtableCreate((productions + 256)*1.4, 75);
+  pt->priorities   = ATtableCreate( productions >> 2, 75);
 
   return pt;
 }
@@ -223,23 +228,23 @@ void SG_AddPTActions(ATermList acts, parse_table *pt, state s)
     action = ATgetFirst(acts);
     if (ATmatch(action, "action(char-class(<list>),<term>)",
                 &classes, &actions))
-      SG_AddClassesToTable(pt->action_table, s, classes, actions, ATtrue);
+      SG_AddClassesToTable(pt->actions, s, classes, actions, ATtrue);
     else
       ATerror("SG_AddPTActions: cannot match action %t\n", action);
   }
 }
 
-void SG_AddPTGotos(ATermList goto_table, parse_table *pt, state s)
+void SG_AddPTGotos(ATermList goto_lst, parse_table *pt, state s)
 {
   ATermList classes;
   ATerm     curTerm;
   state     s2;
 
-  for (; !ATisEmpty(goto_table); goto_table = ATgetNext(goto_table)) {
-    curTerm = ATgetFirst(goto_table);
-    if (ATmatch(curTerm, "goto(char-class(<list>),<int>)",
-                &classes, &s2))
-      SG_AddClassesToTable(pt->goto_table, s, classes, (ATermList)ATmakeInt(s2), ATfalse);
+  for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
+    curTerm = ATgetFirst(goto_lst);
+    if (ATmatch(curTerm, "goto(char-class(<list>),<int>)", &classes, &s2))
+      SG_AddClassesToTable(pt->gotos, s, classes,
+                           (ATermList)ATmakeInt(s2), ATfalse);
     else
       ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", curTerm);
   }
@@ -317,7 +322,87 @@ void SG_AddPTGrammar(ATermList grammar, parse_table *pt)
   }
 }
 
-void dump_ATtable(ATermTable t, char *s)
+AFun  SG_GtrPrioAFun(void)
+{
+  static AFun fun = (AFun) NULL;
+
+  if(fun == (AFun) NULL) {
+    fun = ATmakeAFun("gtr-prio", 2, ATfalse);
+    ATprotectAFun(fun);
+  }
+  return fun;
+}
+
+AFun  SG_LeftPrioAFun(void)
+{
+  static AFun fun = (AFun) NULL;
+
+  if(fun == (AFun) NULL) {
+    fun = ATmakeAFun("left-prio", 2, ATfalse);
+    ATprotectAFun(fun);
+  }
+  return fun;
+}
+
+AFun  SG_RightPrioAFun(void)
+{
+  static AFun fun = (AFun) NULL;
+
+  if(fun == (AFun) NULL) {
+    fun = ATmakeAFun("right-prio", 2, ATfalse);
+    ATprotectAFun(fun);
+  }
+  return fun;
+}
+
+enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT };
+
+void SG_AddPTPriorities(ATermList prios, parse_table *pt)
+{
+  ATerm prio;
+  AFun  fun;
+  ATermList args;
+  ATermInt  pr_num1, pr_num2;
+  int   ptype = P_IGNORE;
+
+  for (; !ATisEmpty(prios); prios = ATgetNext(prios)) {
+    prio = ATgetFirst(prios);
+    fun = ATgetAFun(prio);
+    if(fun == SG_GtrPrioAFun()) {
+      ptype = P_GTR;
+    } else if(fun == SG_LeftPrioAFun()) {
+      ptype = P_LEFT;
+    } else if(fun == SG_RightPrioAFun()) {
+      ptype = P_RIGHT;
+    } else {
+      ptype = P_IGNORE;
+    }
+    if(ptype != P_IGNORE) {
+      ATermList prev;
+
+      args = ATgetArguments((ATermAppl) prio);
+      pr_num1 = (ATermInt) ATelementAt(args, 0);
+      pr_num2 = (ATermInt) ATelementAt(args, 1);
+      switch(ptype) {
+        case P_GTR:
+          if(pr_num1 == pr_num2)
+            break;
+          if(!(prev = (ATermList)ATtableGet(pt->priorities, (ATerm)pr_num1))) {
+            ATtablePut(pt->priorities, (ATerm) pr_num1,
+                       (ATerm) ATmakeList1((ATerm) pr_num2));
+          } else {
+            ATtablePut(pt->priorities, (ATerm) pr_num1,
+                       (ATerm) ATinsert(prev, (ATerm) pr_num2));
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+}
+
+void SG_Dump_ATtable(ATermTable t, char *s)
 {
   ATermList keys;
 
@@ -339,18 +424,25 @@ void dump_ATtable(ATermTable t, char *s)
 */
 parse_table *SG_BuildParseTable(ATerm t)
 {
-  ATermList   prods, sts;
+#define SG_OLDPTFORMAT	"<int>,[<list>],states([<list>])"
+#define	SG_PTFORMAT	SG_OLDPTFORMAT",priorities([<list>])"
+
+  ATermList   prods, prios, sts;
   parse_table *pt;
 
-/*
-  pt = SG_NewParseTable(16384, 4096);
-*/
   pt = SG_NewParseTable(8192, 2048);
 
-  if(!ATmatch(t, "parse-table(<int>,[<list>],states([<list>]))",
-              &(pt->init), &prods, &sts)) {
-    ATfprintf(stderr, "error: Cannot parse parse table\n");
-    return NULL;
+  if(!ATmatch(t, "parse-table("SG_PTFORMAT")",
+              &(pt->init), &prods, &sts, &prios)) {
+    if(!ATmatch(t, "parse-table("SG_OLDPTFORMAT")",
+                &(pt->init), &prods, &sts)) {
+      ATfprintf(stderr, "error: Cannot parse parse table\n");
+      return NULL;
+    }
+    if(SG_VERBOSE)
+      ATfprintf(stderr, "warning: no priority information in parse table\n");
+  } else {	/*  Successful match, priorities included  */
+    SG_AddPTPriorities(prios, pt);
   }
   SG_AddPTStates(sts, pt);
   SG_AddPTGrammar(prods, pt);

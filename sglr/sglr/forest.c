@@ -92,21 +92,24 @@ ATerm SG_RejectLabel(void)
   return label;
 }
 
-
-/* The next bit will have to do while waiting for this to be implemented */
-#if 0
-#define AFun                Symbol
-#define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f)
-#define ATprotectAFun(t)    ATprotectSymbol(t)
-#define ATgetAFun(t)        ATgetSymbol(t)
-#endif
-
 AFun  SG_ApplAFun(void)
 {
   static AFun fun = (AFun) NULL;
 
   if(fun == (AFun) NULL) {
     fun = ATmakeAFun("appl", 2, ATfalse);
+    ATprotectAFun(fun);
+  }
+  return fun;
+}
+
+
+AFun  SG_AprodAFun(void)
+{
+  static AFun fun = (AFun) NULL;
+
+  if(fun == (AFun) NULL) {
+    fun = ATmakeAFun("aprod", 1, ATfalse);
     ATprotectAFun(fun);
   }
   return fun;
@@ -133,8 +136,13 @@ AFun  SG_AmbAFun(void)
 ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
 {
   ATerm t;
-  if(SG_ABBREV)
-    t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
+
+/*
+  if(1 || SG_ABBREV)
+    t = (ATerm) ATmakeAppl2(SG_ApplAFun(),
+                            (ATerm) ATmakeAppl1(SG_AprodAFun(),
+                                                (ATerm) ATmakeInt(l)),
+                            (ATerm) ts);
   else
     t = (ATerm) ATmakeAppl2(SG_ApplAFun(), SG_LookupProduction(pt,l),
                             (ATerm) ts);
@@ -142,67 +150,88 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
   if(reject)
     t = ATsetAnnotation(t, SG_RejectLabel(), (ATerm) ATmakeInt(1));
 #endif
+ */
+  t = (ATerm) ATmakeAppl2(SG_ApplAFun(),
+                          (ATerm) ATmakeAppl1(SG_AprodAFun(),
+                                              (ATerm) ATmakeInt(l)),
+                          (ATerm) ts);
   return ATsetAnnotation(t, SG_ApplLabel(),
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
-ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
+ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
 {
   ATermList ambs, trms;
   ATermInt  idx;
   AFun      fun  = ATgetAFun(t);
   ATermList args = ATgetArguments((ATermAppl) t);
 
-  if(fun != SG_ApplAFun())
-    return (ATerm) ATmakeApplList(fun, (ATermList) SG_YieldPT((ATerm)args));
+  if(fun == SG_AprodAFun()) {
+    return SG_ABBREV ? t :
+          (ATermAppl) SG_LookupProduction(pt, ATgetInt(SG_GetProdLabel(t)));
+  }
 
-  idx  = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
+  if(fun != SG_ApplAFun())
+    return ATmakeApplList(fun, (ATermList) SG_YieldPT(pt, (ATerm)args));
+
+  idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
   /*  Are we indeed encountering an ambiguity cluster?  */
   if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+    if(SG_ABBREV && !recurse)
+      return t;
+    t = (ATermAppl) ATgetFirst(args);
+    if(!SG_ABBREV)
+      t = SG_ExpandApplNode(pt, t, ATfalse);
     /*  No ambiguity  */
     if(recurse)
-      return (ATerm)ATmakeAppl2(SG_ApplAFun(),
-                                SG_YieldPT(ATgetFirst(args)),
-                                SG_YieldPT(ATelementAt(args, 1)));
-    return t;
+      return ATmakeAppl2(SG_ApplAFun(), (ATerm) t,
+                         SG_YieldPT(pt, ATelementAt(args, 1)));
+    return ATmakeAppl2(SG_ApplAFun(), (ATerm) t, ATelementAt(args, 1));
   }
   /*  Encountered an ambiguity cluster  */
   SG_MaxNrAmb(SG_NRAMB_DEC);
   /*  Singular?  */
   trms = (ATermList) ATgetFirst(ambs);
   if (ATgetLength(trms) == 1) {
-    t = ATgetFirst(trms);
+    t = (ATermAppl) ATgetFirst(trms);
     if(recurse)
-      return SG_YieldPT(t);
+      return (ATermAppl) SG_YieldPT(pt, (ATerm) t);
     else
       return t;
   }
   /*  Multiple: this is truly an ambiguous node  */
   SGnrAmb(SG_NRAMB_INC);
   if(recurse)
-    return (ATerm)ATmake("amb(<list>)", (ATermList)SG_YieldPT((ATerm) trms));
-  else
-    return (ATerm)ATmake("amb(<list>)", trms);
+    trms = (ATermList) SG_YieldPT(pt, (ATerm) trms);
+  else if(!SG_ABBREV)  /*  The abbreviations must still be expanded  */
+    for(ambs=trms, trms=ATempty; !ATisEmpty(ambs); ambs=ATgetPrefix(ambs))
+      trms = ATinsert(trms,
+                      (ATerm) SG_ExpandApplNode(pt, (ATermAppl) ATgetLast(ambs),
+                                                ATfalse));
+
+  return ATmakeAppl1(SG_AmbAFun(), (ATerm) trms);
 }
 
-ATerm SG_YieldPT(ATerm t)
+ATerm SG_YieldPT(parse_table *pt, ATerm t)
 {
   ATerm     elt;
   ATermList args, l;
+/*
   int       maxambs;
 
   if((maxambs  = SG_MaxNrAmb(SG_NRAMB_ASK)) == 0)
     return t;
+ */
 
   switch(ATgetType(t)) {
     case AT_APPL:
-      return SG_ExpandApplNode(t, ATtrue);
+      return (ATerm) SG_ExpandApplNode(pt, (ATermAppl) t, ATtrue);
     case AT_LIST:
       if(ATisEmpty((ATermList) t)) return (ATerm) ATempty;
       for(l = ATempty, args = (ATermList) t;
           !ATisEmpty(args); args = ATgetPrefix(args)) {
         elt = ATgetLast(args);
-        l = ATinsert(l, SG_YieldPT(elt));
+        l = ATinsert(l, SG_YieldPT(pt, elt));
       }
       return (ATerm) l;
 /*
@@ -254,6 +283,42 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
 }
 
 
+ATermInt SG_GetProdLabel(ATermAppl aprod)
+{
+  return (ATermInt) ATgetArgument(aprod, 0);
+}
+
+ATermInt SG_GetApplProdLabel(ATermAppl appl)
+{
+  return SG_GetProdLabel((ATermAppl) ATgetArgument(appl, 0));
+}
+
+/*
+  SG_MaxPriority returns
+    * lbl0,  if priority(lbl0) > priority(lbl1)
+    * lbl1,  if priority(lbl1) > priority(lbl0)
+    * NULL,  if there is no priority relation between lbl0 and lbl1
+ */
+
+ATbool SG_GtrPriority(parse_table *pt, ATermInt l0, ATermInt l1)
+{
+  ATermList prios;
+
+  if((prios = SG_LookupPriority(pt, l0))
+  && (ATindexOf(prios, (ATerm) l1, 0) != -1))
+    return ATtrue;
+  return ATfalse;
+}
+
+ATermInt SG_MaxPriority(parse_table *pt, ATermInt l0, ATermInt l1)
+{
+  if(SG_GtrPriority(pt, l0, l1))
+    return l0;
+  if(SG_GtrPriority(pt, l1, l0))
+    return l1;
+  return NULL;
+}
+
 /*
   The function |amb| creates a term of the form |amb([t1,...,tn])|,
   where the |ti| are the alternatives of the ambiguous node. If
@@ -264,30 +329,72 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
   term |t2| is simply added to the list of its arguments.
 */
 
-void SG_Amb(ATerm existing, ATerm new) {
-  ATermList   ambs, newtrms, newidxs, lst;
-  ATerm       ex_annot, nw_annot;
-  ATerm       ex_cln, nw_cln;
-  ATermInt    index;
+void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
+  ATermList ambs, newtrms, newidxs, lst;
+  ATerm     ex_annot, nw_annot;
+  ATerm     ex_cln, nw_cln;
+  ATermInt  index;
+  ATermInt  nw_prd, ex_prd, max_prd;
 
-  ex_annot = ATgetAnnotation(existing, SG_ApplLabel());
-  nw_annot = ATgetAnnotation(new,      SG_ApplLabel());
+  ex_annot = ATgetAnnotation((ATerm) existing, SG_ApplLabel());
+  nw_annot = ATgetAnnotation((ATerm) new,      SG_ApplLabel());
+
+  nw_prd = SG_GetApplProdLabel(new);
 
   ambs   = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ex_annot, NULL);
-  nw_cln = ATremoveAnnotation(new, SG_ApplLabel());
+  nw_cln = ATremoveAnnotation((ATerm) new, SG_ApplLabel());
   if(ATisEmpty(ambs)) {
     /* New ambiguity */
     SG_MaxNrAmb(SG_NRAMB_INC);
-    ex_cln = ATremoveAnnotation(existing, SG_ApplLabel());
-    newtrms = ATmakeList2(ex_cln, nw_cln);
     newidxs = ATmakeList2(ex_annot, nw_annot);
+
+    /*  Enforce prioritization, if any, upon these two lovebirds  */
+    ex_prd = SG_GetApplProdLabel(existing);
+    max_prd = SG_MaxPriority(pt, ex_prd, nw_prd);
+    if(max_prd != nw_prd) {
+      ex_cln = ATremoveAnnotation((ATerm) existing, SG_ApplLabel());
+      if(max_prd == ex_prd) {
+        newtrms = ATmakeList1(ex_cln);
+	if(SG_DEBUG)
+          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n", ex_prd, nw_prd);
+      } else {
+        newtrms = ATmakeList2(ex_cln, nw_cln);
+      }
+    } else {
+        newtrms = ATmakeList1(nw_cln);
+	if(SG_DEBUG)
+          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n", nw_prd, ex_prd);
+    }
   } else {
-    /* Expand existing ambiguity */
-    newtrms = (ATermList) ATgetFirst(ambs);
-    if(ATgetLength(newtrms) == 1)
-      SG_MaxNrAmb(SG_NRAMB_INC);
-    newtrms = ATinsert(newtrms, nw_cln);
+    /* Expand (or update) existing ambiguity */
+    ATermList oldtrms;
+    ATermAppl prev;
+    ATermInt  prev_prd;
+    ATbool    nw_has_lower_priority = ATfalse;
+
     newidxs = ATinsert((ATermList) ATgetLast(ambs), nw_annot);
+    /*  Refilter existing ambiguities to enforce priorities  */
+    newtrms = ATempty;
+    for(oldtrms = (ATermList) ATgetFirst(ambs); !ATisEmpty(oldtrms);
+        oldtrms = ATgetNext(oldtrms)) {
+      prev = (ATermAppl) ATgetFirst(oldtrms);
+      prev_prd = SG_GetApplProdLabel(prev);
+      max_prd = SG_MaxPriority(pt, prev_prd, nw_prd);
+
+      if(max_prd != nw_prd) {
+        newtrms = ATinsert(newtrms, (ATerm) prev);
+        if(max_prd == prev_prd) {
+          nw_has_lower_priority = ATtrue;
+	  if(SG_DEBUG)
+            ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n", prev_prd, nw_prd);
+        }
+      } else {
+	if(SG_DEBUG)
+          ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n", nw_prd, prev_prd);
+      }
+    }
+    if(!nw_has_lower_priority)
+      newtrms = ATinsert(newtrms, nw_cln);
   }
   ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);
 
@@ -312,7 +419,7 @@ ATerm SG_TreeType(ATerm t)
     return type;
   if (ATmatch(t, "amb([<list>])", &args))
     return SG_TreeType(ATgetFirst(args));
- 
+
   ATerror("SG_TreeType: tree not well-formed\n%t\n", t);
   return NULL;   /* Silence the compiler */
 }

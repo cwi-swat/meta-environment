@@ -330,15 +330,18 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
   ATermList trees, bonsai = ATempty;
   ATerm     tree;
   char      *sort;
-  ATbool    AmbStart;
+  ATbool    AmbStart, was_abbrev;
 
-  /*  First expand the top node, it might be an ambiguity node  */
-  if (SG_MaxNrAmb(SG_NRAMB_ASK) != 0)
-    forest = SG_ExpandApplNode(forest, ATfalse);
+  /*  We _must_ expand the top node, if we're going to select  */
+  was_abbrev = SG_ABBREV;
+  SG_ABBREV_OFF();
+  forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest, ATfalse);
+  if(was_abbrev) SG_ABBREV_ON();
 
   /*  Is in in fact an ambiguity node?  If so, all trees in it must be done.  */
-  if(!(AmbStart = ATmatch(forest, "amb(<list>)", &trees)))
+  if(!(AmbStart = ATmatch(forest, "amb([<list>])", &trees))) {
     trees = ATmakeList1(forest);
+  }
 
   for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
     tree = ATgetFirst(trees);
@@ -346,8 +349,9 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
     if(ATmatch(tree, "appl(prod([<term>,cf(sort(<str>)),<term>],<term>,<term>),"
                           "<list>)",
                NULL, &sort, NULL, NULL, NULL, NULL)) {
-      if(!strcmp(desiredsort, sort))
+      if(!strcmp(desiredsort, sort)) {
         bonsai = ATinsert(bonsai, tree);
+      }
     }
   }
   if(!ATisEmpty(bonsai)) {
@@ -382,7 +386,7 @@ ATerm SG_Result(char *sort)
     if(!SG_OUTPUT)  /*  Ambiguity count > 0 is an upper limit in this case  */
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
     else {          /*  An exact ambiguity count can be given  */
-      forest = SG_YieldPT(forest);
+      forest = SG_YieldPT(table, forest);
       forest = ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
 #ifdef HAVE_A2TOA1
       if(SG_ASFIX1) {
@@ -595,7 +599,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       return;
     }
     /* No reject, and not sharing ambiguity with a reject  */
-    SG_Amb(SG_LK_TREE(nl), t);
+    SG_Amb(table, (ATermAppl) SG_LK_TREE(nl), (ATermAppl) t);
 #ifdef DEBUG
     SG_ShowStackOffspring(st1);
 #endif
