@@ -2066,7 +2066,7 @@ are six valid instantiations for this permutation.
 \index{{\tt Set[...]}@{\tt Set[...]}}
 The set operator {\tt Set[...]} is an abbreviation for defining a set of
 elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
-definition {\tt "\{" \{Int ","\}* "\}"}. As a consequnce, {\tt \{1, 2, 3\}} is
+definition {\tt "\{" \{Int ","\}* "\}"}. As a consequence, {\tt \{1, 2, 3\}} is
 a valid instantiation for the given definition.
 
 \subsubsection{Function}
@@ -2138,28 +2138,33 @@ Sorts are declared by listing their name in a sorts section of the form:
 
 \begin{verbatim}
 sorts
-  (<SortName>|<Symbol>)*
+  <Symbol>*
 \end{verbatim}
 
-The keyword {\tt sorts} is a bit misleading, since not only {\tt SortName}s
-can be declared, but in fact {\tt Symbol}s can be declare in the sorts section as well.
+The keyword {\tt sorts} is in fact misleading, since not only plain {\tt Sort}s
+can be declared, but more complex {\tt Symbol}s can be declare in the 
+sorts section as well.
 
-\noindent Recall that a sort name should start with a capital letter and may be followed by 
-letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
+The definition of symbols in the sorts section is two-fold. 
+First of all, it is required that all sorts that occur in some symbol 
+in the specification are declared. 
+Secondly, symbols declared in the sorts section act as start symbol
+for the underlying grammar.
+This has the effect that input sentences corresponding to
+these symbols can be parsed. 
+
+Sorts sections can either be hidden or exported. The effect of defined
+symbols as start symbols for the grammar may lead to an explosion
+of start states for the parser and thus lead to performance loss.
+To prevent this it can be advisable to hide sort sections. The
+symbols defined are only visible in the module containing this
+hidden sorts section, but not in modules importing this module.
+
+\noindent Recall that a sort name should start with a capital letter and 
+may be followed by letters and/or digits. 
+Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
 \link{Lexical Syntax}[ Section~\Ref]{LexicalSyntax}.
-
-XXX Sort declarations have a more liberal form and may contain
-arbitrary symbols rather than just sort names. XXX
-
-It is required that all sorts that occur in some symbol in the specification
-are declared. This has also the effect that input sentences corresponding to
-these sorts can be parsed. Technically speaking each sort can act as start
-symbol for the underlying grammar.
-Declaring an arbitrary symbol has the effect that that symbol can
-act as start symbol.
-
-Sorts sections can either be hidden or exported. XXXXXXX
 
 \subsection{Lexical Syntax}
 \label{LexicalSyntax}
@@ -2942,7 +2947,10 @@ exports
 sorts}
 
 The combination of lists and optionals or empty producing sorts leads to
-cycles in the parse tree. 
+cycles in the parse tree. Currently cycles are considered as parse errors.
+The parser will be produce an error message whenever during parsing
+a cycle is detected. No parse tree is constructed in such a case.
+Cycles will not lead to non-termination during parsing.
 See \link*{below}[ Figure~\Ref]{CODE:listcycle}
 for an example of such a specification.
 
@@ -3142,7 +3150,7 @@ functions immediately lead to ambiguities, as is shown by the
 sentence `{\tt S-string op S-string op S-string}' where 
 `{\tt S-string}' is a string produced by symbol $S$. 
 The particular associativity 
-associated with $op$ determines the indented interpretation of such sentences.
+associated with $op$ determines the intended interpretation of such sentences.
   
 We call two occurrences of functions $F$ and $G$ \emph{related}, when the node
 corresponding to $F$ has a node corresponding to $G$ as first or last child.
@@ -3431,9 +3439,12 @@ because these keywords do not "live" at the context-free level.
 Is it possible to put a lexical restriction on {\tt Var}?
 Yes, but it will have no effect, because internally the
 lexical {\tt Var} is injected in the context-free {\tt Var}.
-XXX verbeter XXX
+The general rule is to define the restrictions always on the
+context-free level and not on the lexical level unless a situation 
+as will be discussed in the next paragraph occurs.
 
-The specification \link*{below}[in Figure~\Ref]{CODE:restrictedexpressions} is an example of
+The specification 
+\link*{below}[in Figure~\Ref]{CODE:restrictedexpressions} is an example of
 an erroneous use of
 context-free expressions, because it prevents the recognition of
 {\tt (abc)def}. If we want to enforce the correct restriction, it
@@ -3477,7 +3488,11 @@ listed explicitly in the priority declaration. In certain cases, however, it
 is desirable to define that a single rule has higher or lower priority than
 all other functions or to explicitly reject certain syntactic constructs.
 The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
-latter by the attribute {\tt reject}.
+latter by the attribute {\tt reject}. 
+
+The use of the {\tt reject} attribute leads also to improvements in the 
+performance of the parser, see \cite{BSVV02} for more implementation
+details.
 
 If a function $F$ is attributed with {\tt prefer} and there is a syntactic
 ambiguity in which it is involved, only the parse using $F$ will remain.
@@ -4321,6 +4336,12 @@ zeros from a number.
 The argument of a lexical constructor may be an
 arbitrary list of characters and there is \emph{no check that they match
 the lexical definition of the corresponding sort}.
+This means that when writing a specification one should be aware that
+it is possible to construct illegal lexical entities, for instance,
+by inserting letters in an integer.
+In the example \link*{below}[in Figure~\Ref]{CODE:illegallcfs} 
+via the lexical constructor function {\tt nat-con} a natural
+number containing the letter {\tt a} is constructed.
 
 
 \begin{figure}[tb]
@@ -4346,6 +4367,32 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Use of lexical constructor functions}
+\end{Label}
+\end{figure}    
+
+\begin{figure}[tb]
+\begin{Label}{CODE:illegallcfs}
+\begin{IncCode}
+\begin{verbatim}
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -> NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+
+
+equations
+
+  [1] nat-con(Char+) = nat-con(Char+ "a")  
+\end{verbatim}
+\end{IncCode}
+\caption{Illegal use of lexical constructor functions}
 \end{Label}
 \end{figure}    
 
@@ -5344,6 +5391,38 @@ modules, parse tables, user-defined terms, etc.
 \section{Well-formedness checks on \sdf}
 \label{SEC:SDF-checker}
 
+In order to improve the quality of the written specifications, a number
+of checks are performed before an \sdf\ specification is transformed
+into a parse table. The checks are performed on two levels: the first
+level are \sdf\ specific check, the second level are the \asfsdf\ specific
+check.
+
+\subsection{\sdf\ specific well-formedness checks}
+
+\paragraph{Undeclared sorts} If a sort is used in some lexical or
+context-free syntax rule and it is not defined in some visible 
+sorts section this will be reported. This is in fact no error,
+but may be caused due to a typo.
+
+\paragraph{Double declared symbols} If a symbol occur in more than
+one visible sorts section this will be reported. This is again not
+an error.
+
+\paragraph{Defined symbols without corresponding productions} If a sort
+is defined but no corresponding production with this symbol as right
+hand side is can be found. Such a symbol can not be used as a start
+symbol by the parser, because it produces in fact empty.
+
+\paragraph{Redefinition of aliased symbols} This is a real error, because
+a redefinition of an aliased symbol, means that this symbol can be
+replaced in two different ways.
+
+\paragraph{Illegal attributes} Certain attributes are only useful in
+combination with production rules of a specific form.
+
+
+\subsection{\asfsdf\ specific well-formedness checks}
+
 \section{Selected Components of the \ASmetaenv}
 \label{SEC:Components}
 
@@ -5383,6 +5462,10 @@ For further information use {\tt sdf2table -h}.
 
 \end{itemize}
 
+Before a parse table is generated the \sdf\ definition is checked with
+respect to well-formedness. When using the {\tt sdf2table} only the 
+checks on \sdf\ are performed, in the other two cases the checks
+on \sdf\ and on \asfsdf\ specific features are performed as well.
 \subsection{Parsing}
 \label{SEC:parsingofterms}
 
@@ -5421,28 +5504,48 @@ In order to \link{rewrite a term}[, see Section~\Ref,]{SEC:interpretationgofterm
 or \link{compile a specification}[,
 see Section~\Ref,]{SEC:compilingaspecification} it is necessary
 to obtain the equations.
+The generation of equations given an \asfsdf\ specification can be
+performed in two different ways:
+\begin{itemize}
+\item Interactively using the \ASmetaenv\
+by selecting module {\tt M} and pushing the {\tt Dump Equations...} button in 
+the \link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu}.
+
+\item From the command line using the command {\tt eqs-dump}.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated.
+For further information use {\tt eqs-dump -h}.
+\end{itemize}
+The result is a file named {\tt M.eqs}.
 
 \subsection{Rewriting a Term using the Evaluator}
 \label{SEC:interpretationgofterms}
 
-In order to rewrite a term {\tt term.txt} using the \asfsdf\ evaluator {\tt asfe}
-two inputs are required:
+In order to rewrite a term {\tt term.txt} using the \asfsdf\ evaluator 
+{\tt asfe} two inputs are required:
 
 \begin{itemize}
 
-\item The parse tree of {\tt term.txt}. See the previous paragraph how to do
-this. The result is {\tt term.tree}.
+\item The parse tree of {\tt term.txt}. See \link{parsing of
+terms}[Section~\Ref]{SEC:parsingofterms} how to do this.
+The result is {\tt term.tree}.
 
-\item The equations to be used for rewriting.  Select the desired
-module and push the  {\tt Dump Equations...} button in the 
-\link{pop-up menu}[ (see Section~\Ref)]{FIG:module-menu}
-to dump the equations of the selected module and all its imports.
-The result is a file named {\tt M.eqs}.
+\item The equations to be used for rewriting.  See 
+\link{obtaing of equations}[ Section\~Ref]{SEC:obtainingequations} for
+obtaining the equations given an \asfsdf\ specification.
 
 \end{itemize}
 
+Given this two inputs it is possible to call the interpreter and
+reduce terms via the command line. This can be performed in two
+different manners:
+The first is:
 \begin{verbatim}
    asfe -e M.eqs < term.tree > reduct.tree 
+\end{verbatim}  
+The second is:
+\begin{verbatim}
+   asfe -e M.eqs -i term.tree -o reduct.tree 
 \end{verbatim}  
 
 \link*{Unparsing}[Section~\Ref]{SEC:unparsing}
