@@ -1,5 +1,9 @@
 # $Id$
 
+2003/08/01 (markvdb@cwi.nl)
+  * Fixed the unnecessary collecting on RealModules in 
+    Open-Modules.
+
 Fri Aug  1 10:04:35 CEST 2003 <jong@cwi.nl>
  * configmanager.{c,idef}:
    - changed process-standard-buttons into add-predefined-actions
