@@ -82,6 +82,7 @@ extern ATbool silent;
 static void usage()
 {
    fprintf( stderr, USAGE_MSG );
+	 exit(1);
 }
 
 static char* basename( const char* s )

@@ -33,22 +33,10 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # explanation.
 myarguments="12bdDi:hlno:tvVx"
 
-if [ $myarguments ] ; then
-    myargsexplained=$myarguments
-    # Add ' -' before, and add ' ' after, all options that have an argument
-    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
-    # Add '-' where necessary
-    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
-    # Replace argument position indicator ':' by ' arg'
-    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
-
-    myargsexplained=" -$myargsexplained"
-fi
-
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
-Usage: $myname$myargsexplained . . .
+Usage: $myname [options]
 Options:
         -1       : use AsFix1 output format             [off]
         -2       : use AsFix2 output format             [on]
@@ -65,6 +53,7 @@ Options:
         -V       : reveal program version (i.e. $myversion)
         -x       : suppress lexicals in dot output      [off]
 E_O_USAGE
+	exit 1
 }
 
 Version() {

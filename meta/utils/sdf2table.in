@@ -28,22 +28,10 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # explanation.
 myarguments="bfhi:o:stvV"
 
-if [ $myarguments ] ; then
-    myargsexplained=$myarguments
-    # Add ' -' before, and add ' ' after, all options that have an argument
-    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
-    # Add '-' where necessary
-    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
-    # Replace argument position indicator ':' by ' arg'
-    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
-
-    myargsexplained=" -$myargsexplained"
-fi
-
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
-Usage: $myname$myargsexplained . . .
+Usage: $myname [options]
 Options:
     -b              write output in Binary AsFix (BAF) format
     -f              use handcrafted normalizer ('fast')
@@ -55,6 +43,7 @@ Options:
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
+	exit 1
 }
 
 Version() {

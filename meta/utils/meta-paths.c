@@ -40,6 +40,7 @@
 static void usage()
 {
    fprintf( stderr, USAGE_MSG );
+	 exit(1);
 }
 
 int main( int argc, char*argv[])
