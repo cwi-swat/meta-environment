@@ -554,8 +554,7 @@ proc EditEquationsModules { modlist } {
 # 
 #--
 proc EditTerm {mod file} {
-    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId [GetBasename $file ""]]]
-
+    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId $file ]]
 }
 
 
