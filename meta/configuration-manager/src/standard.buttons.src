@@ -203,5 +203,10 @@ buttons([
    button("*",
 	  ["studio-menubar"],
 	  ["Exit"],
-	  [exit])
+	  [ask-question("Do you want to save the term store (to disk)?"),
+	   dup,
+	   push-term(yes),
+	   if-equal([save-all,
+		     exit], 
+		    [exit])])
 ])
