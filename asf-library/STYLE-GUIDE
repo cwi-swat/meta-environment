@@ -1,6 +1,9 @@
 To ensure maximal reusability of ASF+SDF modules, it is useful to
 abide by a number of guidelines.
 
+Modular structure
+-----------------
+
 * hidden import of Layout
     The layout to be used in the equations should be imported in hidden
     fashion. This prevents conflicts with the layout of the user of
@@ -11,3 +14,19 @@ abide by a number of guidelines.
 * module name prefixes
     Module names in the library should be prefixed with "ASFLib_". This
     prevents name clashes with module names of the user of the library.
+
+
+Formatting
+----------
+
+* sort names
+     Sort names with all capitals are discouraged.
+
+Miscelanous
+-----------
+
+* constructor annotations
+    The "constructor" annotation should be added to productions that
+    represent constructors (as opposed to functions). This makes the
+    module easier to understand, and it may be used by the ASF interpreter
+    or compiler.
