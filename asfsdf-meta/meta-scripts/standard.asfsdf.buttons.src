@@ -37,8 +37,6 @@ configuration([
           reduce,
           push-filename("reduct.out"),
           push-active-module,
-          push-filename("reduct.out"),
-          push-active-module,
           close-editor,
           activate-editor
          ]),

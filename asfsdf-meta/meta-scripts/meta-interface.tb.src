@@ -1,6 +1,5 @@
-/*
- * $Id$
- */
+/* $Id$ */
+
 #include "asfc.idef"
 #include "asfoperations.idef"
 #include "asfchecker.idef"
