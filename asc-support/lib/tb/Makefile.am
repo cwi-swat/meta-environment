@@ -6,7 +6,6 @@ include_HEADERS = tb-asc-client.h
 
 libtb_asc_support_me_a_SOURCES = tb-asc-support.c \
                               tb-nametable.c \
-                              tb-muasf2pt.c \
                               tb-asc-traversals.c \
                               tb-prod2str.c \
                               tb-main.c \

@@ -2,7 +2,7 @@
 
 #include <aterm1.h>
 
-#include "prod2str.h"
+#include "asc-prod2str.h"
 
 /* Warning this piece of code was copied from the asfc compiler source 
  * FIX THIS DUPLICATION

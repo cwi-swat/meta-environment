@@ -22,8 +22,8 @@
 
 #include "asc-support-me.h"
 #include "asc-traversals.h"
-#include "muasf2pt.h"
-#include "prod2str.h"
+#include "asc-muasf2pt.h"
+#include "asc-prod2str.h"
 
 /*}}}  */
 
