@@ -30,9 +30,6 @@ endlet
 process Ui is
 let
   SD      : int,
-  Om      : int,
-  EM      : int,
-  ET      : int,
   UI      : user-interface,
   Id      : term,
   Name    : term,
@@ -43,11 +40,7 @@ let
   Mods    : list,
   ModName : str,
   FileName : str,
-  OutputFile : str,
-  T       : str,
-  FT      : str,
   Path    : str,
-  PathWithExt    : str,
   Extension : str,
   ErrMsg  : str,
   On      : term,
@@ -55,7 +48,6 @@ let
   Info	  : list,
   LayoutedGraph : term,
   ModuleName : str,
-  RealModuleName : str,
   LibraryPath : str,
   SyntaxExt : str,
   SemanticsExt : str,
@@ -85,90 +77,88 @@ in
   Mods := [] .
   Pairs := [] .
   ( 
-    rec-event(UI, new-module(Path?,Name?, Str?)).
-    snd-msg(create-new-module(Path, Name, Str)).
-    snd-ack-event(UI, new-module(Path,Name, Str))
+    rec-event(UI, new-module(Path?,Name?, Extension?)).
+    snd-msg(create-new-module(Path, Name, Extension)).
+    snd-ack-event(UI, new-module(Path,Name, Extension))
   +
-    ( rec-event(UI, open-module(Path?, Name?, Str?)).
-      snd-msg(open-initial-module(Path, Name, Str)). 
-      snd-ack-event(UI, open-module(Path, Name, Str))
-    )
-    +
-    ( rec-msg(display-graph(GraphId?, Graph?)) .
-      snd-do(UI, display-graph(GraphId, Graph))
-    )
-    +
-    ( rec-event(UI, delete-module(ModName?)) .
-      snd-msg(delete-module(ModName)) .
-      snd-ack-event(UI, delete-module(ModName))
-    ) +
-    ( rec-msg(ui-delete-modules(Mods?)).
-      snd-do(UI, delete-modules(Mods))
-    ) +
-    ( rec-event(UI, close-module(ModName?,Recursive?)).
-      snd-msg(close-module(ModName, Recursive)).
-      snd-ack-event(UI, close-module(ModName, Recursive))
-    ) +
-    ( rec-event(UI,save-module(Str?)).
-      snd-msg(save-module(Str)).
-      rec-msg(saved-module(Str)).
-      snd-ack-event(UI,save-module(Str))
-    ) +
-    ( rec-event(UI, edit-module(ModName?)) .
-      snd-msg(edit-syntax(ModName)) .
-      rec-msg(editor-opened(ModName,EditorId?)) .
-      snd-ack-event(UI, edit-module(ModName))
-    ) +
-    ( rec-event(UI, edit-eqs-module(ModName?)).
-      snd-msg(edit-equations(ModName)) .
-      rec-msg(editor-opened(ModName,EditorId?)) .
-      snd-ack-event(UI, edit-eqs-module(ModName))
-    ) +
-   ( rec-event(UI, edit-term(ModName?, FileName?)).
-     snd-msg(edit-term-file(ModName, FileName)) .
-     rec-msg(editor-opened(ModName,EditorId?)) .
-     snd-ack-event(UI, edit-term(ModName, FileName))
-   ) +
-    ( rec-event(UI, revert-module(ModName?)) .
-      snd-msg(revert-module(ModName)) .           
-      rec-msg(module-reverted(ModName?)) .
-      snd-ack-event(UI, revert-module(ModName))
-    ) +
-    ( rec-event(UI, print-module(ModName?)) .
-      snd-msg(print-module(ModName)) .           
-      rec-msg(module-printed(ModName?)) .
-      snd-ack-event(UI, print-module(ModName))
-    ) +
-    ( rec-event(UI,get-module-info(ModName?)).
-      snd-msg(get-module-info(ModName)) .           
-      rec-msg(module-info(ModName, Info?)) .
-      snd-do(UI,module-info(ModName,Info)) .
-      snd-ack-event(UI,get-module-info(ModName))
-    ) +
-    ( rec-event(UI,save-all).                 
-      snd-msg(save-all).
-      rec-msg(saved).
-      snd-ack-event(UI,save-all)
-    ) +
-    ( rec-event(UI,clear-all).
-      snd-msg(clear-all).
-      rec-msg(cleared-all).
-      snd-ack-event(UI,clear-all)
-    ) +
-    ( rec-event(UI, refresh-buttons) .
-      snd-msg(refresh-buttons) .
-      rec-msg(buttons-refreshed) .
-      snd-ack-event(UI, refresh-buttons)
-    ) +
-   ( rec-event(UI, compile-module(Str?)).
-     snd-msg(compile-module(Str)).
-     rec-msg(compilation-ready(Str)).
-     snd-ack-event(UI, compile-module(Str))
-   ) +
-   ( rec-event(UI, import-module(Str?, Str1?, Path?, Extension?)) .
-     snd-msg(import-module(Str, Str1, Path)) .
-     snd-ack-event(UI, import-module(Str, Str1, Path, Extension))
-   ) +
+    rec-event(UI, open-module(Path?, Name?, Extension?)).
+    snd-msg(open-initial-module(Path, Name, Extension)). 
+    snd-ack-event(UI, open-module(Path, Name, Extension))
+  +
+    rec-msg(display-graph(GraphId?, Graph?)) .
+    snd-do(UI, display-graph(GraphId, Graph))
+  +
+    rec-event(UI, delete-module(ModName?)) .
+    snd-msg(delete-module(ModName)) .
+    snd-ack-event(UI, delete-module(ModName))
+  +
+    rec-msg(ui-delete-modules(Mods?)).
+    snd-do(UI, delete-modules(Mods))
+  +
+    rec-event(UI, close-module(ModName?,Recursive?)).
+    snd-msg(close-module(ModName, Recursive)).
+    snd-ack-event(UI, close-module(ModName, Recursive))
+  +
+    rec-event(UI,save-module(Name?)).
+    snd-msg(save-module(Name)).
+    rec-msg(saved-module(Name)).
+    snd-ack-event(UI,save-module(Name))
+  +
+    rec-event(UI, edit-module(ModName?)) .
+    snd-msg(edit-syntax(ModName)) .
+    rec-msg(editor-opened(ModName,EditorId?)) .
+    snd-ack-event(UI, edit-module(ModName))
+  +
+    rec-event(UI, edit-eqs-module(ModName?)).
+    snd-msg(edit-equations(ModName)) .
+    rec-msg(editor-opened(ModName,EditorId?)) .
+    snd-ack-event(UI, edit-eqs-module(ModName))
+  +
+    rec-event(UI, edit-term(ModName?, FileName?)).
+    snd-msg(edit-term-file(ModName, FileName)) .
+    rec-msg(editor-opened(ModName,EditorId?)) .
+    snd-ack-event(UI, edit-term(ModName, FileName))
+  +
+    rec-event(UI, revert-module(ModName?)) .
+    snd-msg(revert-module(ModName)) .           
+    rec-msg(module-reverted(ModName?)) .
+    snd-ack-event(UI, revert-module(ModName))
+  +
+    rec-event(UI, print-module(ModName?)) .
+    snd-msg(print-module(ModName)) .           
+    rec-msg(module-printed(ModName?)) .
+    snd-ack-event(UI, print-module(ModName))
+  +
+    rec-event(UI,get-module-info(ModName?)).
+    snd-msg(get-module-info(ModName)) .           
+    rec-msg(module-info(ModName, Info?)) .
+    snd-do(UI,module-info(ModName,Info)) .
+    snd-ack-event(UI,get-module-info(ModName))
+  +
+    rec-event(UI,save-all).                 
+    snd-msg(save-all).
+    rec-msg(saved).
+    snd-ack-event(UI,save-all)
+  +
+    rec-event(UI,clear-all).
+    snd-msg(clear-all).
+    rec-msg(cleared-all).
+    snd-ack-event(UI,clear-all)
+  +
+    rec-event(UI, refresh-buttons) .
+    snd-msg(refresh-buttons) .
+    rec-msg(buttons-refreshed) .
+    snd-ack-event(UI, refresh-buttons)
+  +
+    rec-event(UI, compile-module(Name?)).
+    snd-msg(compile-module(Name)).
+    rec-msg(compilation-ready(Name)).
+    snd-ack-event(UI, compile-module(Name))
+  +
+    rec-event(UI, import-module(Str?, Name?, Path?, Extension?)) .
+    snd-msg(import-module(Str, Name, Path)) .
+    snd-ack-event(UI, import-module(Str, Name, Path, Extension))
+  +
    ( rec-event(UI, unimport-module(Str?, Str1?,Path?, Extension?)) .
      snd-msg(unimport-module(Str, Str1,Path)) .
      snd-ack-event(UI, unimport-module(Str, Str1,Path, Extension))

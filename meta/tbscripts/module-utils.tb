@@ -5,6 +5,7 @@ let
   Id : int,
   ModuleName1 : str,
   ModuleName2 : str,
+  Extension : str,
   Path : str,
   Option1 : term
 in
@@ -202,17 +203,25 @@ let
   Changed : list,
   RealImport : str
 in
-  Status := success.
-  GetRealModuleName(Import, Path, Status?, RealImport?).
-  if equal(Status, success) then
+  snd-msg(is-module-in-db(Import)) .
+  (
+    rec-msg(exists-in-module-db(Import)) .
     Status := success.
-    DeleteEditors(Mod). 
-    AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
-    if equal (Status, success) then
-      SaveSdfModules(Changed).
+    GetRealModuleName(Import, Path, Status?, RealImport?).
+    if equal(Status, success) then
+      Status := success.
+      DeleteEditors(Mod). 
+      AddImportInDB(Mod, Import).
       SaveAsfSdfModule(Mod)
-    else tau fi
-  else tau fi
+    else 
+      tau 
+    fi
+  +
+    rec-msg(not-exists-in-module-db(Import)) .
+    snd-note(ui-status(
+      errorf("Error during adding import %s to %s: module not open", 
+             [Import, Mod])))
+  )
 endlet
 
 process DoUnimportModule(Mod : str, Import : str, Path : str) is
@@ -240,13 +249,9 @@ is
 let
   ErrMsg : str
 in
-  snd-msg(compute-module-name(Path, Name)).
-  (
-    rec-msg(module-name-not-computed(ErrMsg?)).
-    Status := module-name-not-computed
-  + 
-    rec-msg(computed-module-name(RealName?))
-  )
+  Status := success .
+  snd-msg(io-get-filename(Path, Name, ".sdf")) .
+  rec-msg(io-filename(RealName?)) 
 endlet
 
 process SaveSdfModules(Modules : list) is
@@ -329,16 +334,10 @@ is
     Status := module-not-copied
   )
 
-process AddImportInDB(Mod : str, Import : str, Path : str, Status : term?, 
-                       Changed : list?)
+process AddImportInDB(Mod : str, Import : str)
 is
-  snd-msg(add-import-in-db(Mod, Import, Path)) .
-  (
-    rec-msg(add-import-done(Mod, Changed?))
-  +
-    rec-msg(add-import-not-done(Mod)).
-    Status := import-not-done
-  )
+  snd-msg(add-import-in-db(Mod, Import)) .
+  rec-msg(add-import-done(Mod))
 
 process RemoveImportInDB(Mod : str, Import : str, Path : str, Status :term?,
                          Changed : list?)

@@ -115,9 +115,9 @@ in
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(renaming-not-done(OldName))
   +
-    rec-msg(add-import-in-db(OldName?, NewName?, Path?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(add-import-not-done(OldName))
+    rec-msg(add-import-in-db(OldName?, NewName?)) .
+    MDB-AddImportToModule(OldName, NewName) .
+    snd-msg(add-import-done(OldName))
   +
     rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
@@ -365,21 +365,47 @@ let
   Syntax : term
 in
   Modules := ActualModules .
-    if not(equal(Modules,[])) then
-      Module := first(Modules) .
-      Modules := next(Modules) .
-      snd-msg(ts-get-term-value("sdf-tree", Module)) .
-      rec-msg(ts-value(Syntax?)) .
-      snd-msg(sm-remove-import-from-module(Syntax, Name)) .
-      Syntax := no-tree .
-      rec-msg(sm-import-removed-from-module(Syntax?)) .
-      snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) .
-      Syntax := no-tree
-    fi
-    *
-    if equal(Modules,[]) then
-      tau
-    fi 
+  if not(equal(Modules,[])) then
+    Module := first(Modules) .
+    Modules := next(Modules) .
+    snd-msg(ts-get-term-value("sdf-tree", Module)) .
+    rec-msg(ts-value(Syntax?)) .
+    snd-msg(sm-remove-import-from-module(Syntax, Name)) .
+    Syntax := no-tree .
+    rec-msg(sm-import-removed-from-module(Syntax?)) .
+    snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) .
+    Syntax := no-tree
+  fi
+  *
+  if equal(Modules,[]) then
+    tau
+  fi 
+endlet
+
+process MDB-AddImportToModule(OldName : str, NewName : str) is
+let
+  Pairs : list,
+  Syntax : term,
+  Modules : list,
+  Text : str
+in
+  snd-msg(ts-get-term-value("sdf-tree", OldName)) .
+  rec-msg(ts-value(Syntax?)) .
+  snd-msg(sm-add-import-to-module(Syntax, NewName)) .
+  Syntax := no-tree .
+  rec-msg(sm-import-added-to-module(Syntax?)) .
+  snd-msg(ts-put-term-value("sdf-tree", OldName, Syntax)) .
+  snd-msg(unparse(Syntax)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(ts-put-str-value("sdf-text", OldName, Text)) .
+  snd-msg(sm-get-imported-module-names(Syntax)) .
+  rec-msg(sm-imported-module-names(Modules?)) .
+  Syntax := no-tree .
+  snd-msg(ts-put-term-value("import-relations", OldName, Modules)) .
+  snd-msg(ts-get-key-value-pairs("import-relations")) .
+  rec-msg(ts-pairs(Pairs?)) .
+  snd-note(display-import-graph(Pairs)) .
+  Pairs := []
 endlet
 
 process MDB-AllEquationsAvailable(Name : str, Missing : list?) is

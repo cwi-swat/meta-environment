@@ -81,7 +81,7 @@ in
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-file(FileName, Text)) .
+      snd-msg(io-write-text-file(FileName, [Text])) .
       (
         rec-msg(io-file-written)
       +
@@ -103,7 +103,7 @@ in
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-file(FileName, Text)) .
+      snd-msg(io-write-text-file(FileName, [Text])) .
       (
         rec-msg(io-file-written)
       +
@@ -116,7 +116,7 @@ in
       rec-msg(eqs-text(Module, Text?)) .
       snd-msg(io-get-filename(Path, Module, ".asf")) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(io-write-text-file(FileName, Text)) .
+      snd-msg(io-write-text-file(FileName, [Text])) .
       (
         rec-msg(io-file-written)
       +

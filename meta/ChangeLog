@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/03 (markvdb@cwi.nl)
+ * First refactoring operation (add-import) enabled.
+
 Tue Jun  3 10:38:53 CEST 2003 <jong@cwi.nl>
  * editors/manager/src/editor-manager.idef:
    - fix mismatch in # of params in result of get-editor-id()
