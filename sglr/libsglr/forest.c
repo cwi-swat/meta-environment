@@ -482,7 +482,10 @@ forest     SG_YieldForest(parse_table *pt, forest t,
 #ifndef NO_EAGERNESS
      && fun != SG_Eager_AFun &&  fun != SG_Uneager_AFun
 #endif
-     ) {
+     ) { 
+		/* node is already converted to AsFix, now proceed to convert the 
+		 * children to AsFix
+		 */
     if(!(res = SG_YieldForest(pt, (forest) args, recurse, doambs)))
       return NULL;
 
@@ -492,16 +495,17 @@ forest     SG_YieldForest(parse_table *pt, forest t,
 
   /*  Expand {regular|eager|avoid}(prod())s, handling ambiguity resolution  */
   /*  Are we encountering an ambiguity cluster?  */
-  if(!doambs
-     /*
-      Are we even interested?  If not, we were invoked to expand
-      terms that are part of an ambiguity cluster, for which the
-      ambiguity-lookup would simply recurse infinitely
-      */
-     || ATisEmpty(ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET,
-                                                 (ATerm) t, NULL))) {
-    /*  Is this one mapped to an ambiguity cluster?  */
+	ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
 
+	/*
+		Are we even interested?  If not, we were invoked to expand
+		terms that are part of an ambiguity cluster, for which the
+		ambiguity-lookup would simply recurse infinitely
+	*/
+	if(!doambs 
+		 /*  Is this one mapped to an ambiguity cluster?  */
+		 || ATisEmpty(ambs)) {
+   
     /*  No ambiguity, or we're doing one that's part of an ambiguity cluster */
     /*  First argument is an `aprod(X'), to be expanded  */
 
@@ -1399,7 +1403,9 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
   }
 
   ambidx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, (ATerm) existing, NULL);
-  if(!ambidx || ATisEmpty((ATermList) ambidx)) {
+	/* What the hAck is going on here? What does ATisEmpty((ATermList) ambidx) mean? */
+	/* Maybe it has something to do with cycle detection ???? Or whatever. */
+  if(!ambidx  || ATisEmpty((ATermList) ambidx) ) { 
     /* New ambiguity */
     ambidx = (ATerm) ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
     /* Add mapping for existing term also */
