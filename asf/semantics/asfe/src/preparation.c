@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -111,9 +112,10 @@ void destroy_equation_table(equation_table *table)
 /*}}}  */
 /*{{{  unsigned hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs) */
 
-static unsigned hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs)
+static unsigned 
+hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs)
 {
-	return (((int)top_ofs >> 2) * 3007 + ((int)first_ofs >> 2)) % table->size;
+  return (((int)top_ofs >> 2) * 3007 + ((int)first_ofs >> 2)) % table->size;
 }
 
 /*}}}  */
@@ -220,16 +222,6 @@ void enter_equation(equation_table *table, ATerm equation)
     entry->hnext = table->table[hnr];
     table->table[hnr] = entry;
   }
-
-/*
-  {
-    ATerm anno = ATgetAnnotation(equation, ATparse("pos-info"));
-    if(anno)
-      ATfprintf(stderr, "annotations of %t: %t\n", entry->tag, anno);
-    else
-      ATfprintf(stderr, "no annotations.\n");
-  }
-*/
 }
 
 /*}}}  */
@@ -921,8 +913,4 @@ ATerm RWrestoreTerm(ATerm t)
 }
 
 /*}}}  */
-/*}}}  */
-/*{{{  lexicals*/
-
-
 /*}}}  */
