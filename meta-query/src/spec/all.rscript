@@ -1,0 +1,8 @@
+rel[node,str] PRODUCTIONS
+rel[node,str] PREFIXPRODUCTIONS
+
+rel[str,<node,str>] ORDINARY_PRODUCTIONS = {<"Production ",<N,V>> | <N,V> : PRODUCTIONS}
+rel[str,<node,str>] PREFIX_PRODUCTIONS = {<"Prefix Production ",<N,V>> | <N,V> : PREFIXPRODUCTIONS}
+
+rel[str,<node,str>] ALL_PRODUCTIONS = ORDINARY_PRODUCTIONS union PREFIX_PRODUCTIONS
+

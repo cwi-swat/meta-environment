@@ -1,0 +1,55 @@
+buttons([
+  button("Rscript",
+         ["term"],
+         ["Rscript", "Check Rscript"],
+         [push-active-module,
+          get-root,
+          check-sort("RSCRIPT"),
+          apply("check-rscript", "List", 1),
+          push-modulename("RscriptChecker"),
+          reduce,
+          execute-action("unparsePT"),
+          show-list
+         ]),
+  button("*",
+         ["message-list"],
+         ["ShowSource"],
+         [show-area("Rscript")]),
+  button("*",
+         ["message-list"],
+         ["ShowSource"],
+         [show-area("Sdf")]),
+
+  button("Sdf",
+         ["term"],
+         ["Sdf", "All"],
+         [push-filename("all.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"ALL_PRODUCTIONS\""),
+          parse("basic/Strings", "String"),
+
+          push-filename("extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("display-query", "List", 3),
+          rewrite("DisplayQuery"),
+          execute-action("unparsePT"),
+          show-list
+        ]),
+
+  button("Sdf",
+         ["term"],
+         ["Sdf", "Extract Relations"],
+         [push-active-module,
+          get-root,
+          check-sort("Module"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("SdfExtraction"),
+          reduce,
+          push-filename("extracted-relations.trm"),
+          save-tree,
+          message("Saving done")
+         ])
+])

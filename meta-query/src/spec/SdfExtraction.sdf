@@ -1,0 +1,30 @@
+module SdfExtraction
+
+imports Sdf
+imports RscriptCalculator
+imports MyPosInfo[Production]
+
+exports
+  context-free syntax
+    extractRelations(Module) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractRelations(Module, RSTORE) -> RSTORE {traversal(accu,break,top-down)}
+
+    extractRelations(Production, RSTORE) -> RSTORE {traversal(accu,break,top-down)}
+
+hiddens
+  variables
+    "$Area"[0-9]*		-> Area      
+    "$Rstore"[0-9]*		-> RSTORE
+    "$Tuple"[0-9]*		-> Elem # Elem
+    "$ProductionId"[0-9]*	-> Area
+
+    "$Module"[0-9]*		-> Module
+    "$Production"[0-9]*		-> Production
+    "$Sort"[0-9]*		-> Sort
+    "$Symbols"[0-9]*		-> Symbols
+    "$Attributes"[0-9]* 	-> Attributes
+    "$Literal"[0-9]*		-> Literal
+    "$Symbol*"[0-9]*		-> {Symbol ","}*
