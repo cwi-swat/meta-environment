@@ -1,5 +1,13 @@
 # $Id$
 
+2003/10/03 (jurgenv@cwi.nl)
+ * Fixed some tests by retrieving the original specification and regenerating
+   the .eqs files and sometimes the input and output term files. The reasons
+   for failing were:
+     - the AsFix representation of the terms was out-of-date
+     - the eqs file were regenerated from the specification, but the 
+       specification was changed by accident somehow somewhere in the past
+
 2003/10/02 (markvdb@cwi.nl)
  * Added ASF prefix to all sorts in the equations syntax.
  * Constructor information is no longer suppressed.
