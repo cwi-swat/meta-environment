@@ -29,8 +29,6 @@ in
   subscribe(event(<term>,<int>,<term>)) .
   subscribe(process-created(<term>,<str>)) .
   subscribe(process-destroyed(<term>)) .
-  subscribe(adapter-connected(<term>)) .
-  subscribe(adapter-disconnected(<term>)) .
   (
     rec-event(T, evaluate(Process?, Expr?, Tag?)) .
     snd-msg(evaluate(Process, Expr)) .
@@ -65,10 +63,10 @@ in
     rec-event(T, quit-tide) .
     shutdown("Thank you for using tide.")
     +
-    rec-note(adapter-connected(Dap?)) .
+    rec-msg(adapter-connected(Dap?)) .
     snd-do(T, adapter-connected(Dap))
     +
-    rec-note(adapter-disconnected(Dap?)) .
+    rec-msg(adapter-disconnected(Dap?)) .
     snd-do(T, adapter-disconnected(Dap))
     +
     rec-note(process-created(Process?, Name?)) .
@@ -99,7 +97,7 @@ let
   Pid     : int,
   Name    : term
 in
-  snd-note(adapter-connected(A)) .
+  snd-msg(adapter-connected(A)) .
   (
     rec-msg(evaluate(proc(A, Pid?), Expr?)) .
     snd-eval(A, evaluate(Pid, Expr)) .
@@ -149,8 +147,7 @@ in
     snd-note(process-destroyed(proc(A, Pid))) .
     snd-ack-event(A, process-destroyed(Pid))
   ) *  rec-disconnect(A) .
-  printf("rec-disconnect received: %t\n", A) .
-  snd-note(adapter-disconnected(A))
+  snd-msg(adapter-disconnected(A))
 endlet 
 
 
