@@ -154,7 +154,7 @@ public class InternalJavaTool implements ToolInstance {
    * tool and a list of function signatures.
    */
 
-  public InternalJavaTool(ToolDescriptor toolDef) throws ToolBusException {
+  public InternalJavaTool(ToolDefinition toolDef) throws ToolBusException {
     System.err.println("JavaTool");
     this.className = toolDef.getToolName();
     try {

@@ -37,7 +37,8 @@ tool user-interface is
    process QUIT-BUTTON is
         @snd-msg quit                          %% event: void quit()
 
-   kind = external/tcl
+   where = external
+   kind = tcl
    command="wish-adapter -script ui-calc.tcl"
 
 end
@@ -52,7 +53,8 @@ tool clock is
      * delta
   endlet
 
-  kind = external/c
+  where = external
+  kind = c
   command = "./clock"
 end
 
@@ -67,7 +69,8 @@ tool calc is
      * delta
   endlet
 
-  kind = external/c
+  where = external
+  kind = c
   command = "./calc"
 end
 
@@ -82,7 +85,8 @@ tool batch is
      ) * delta
   endlet
 
-  kind = external/c
+  where = external
+  kind = c
   command = "./batch"
 end
 
@@ -98,7 +102,8 @@ tool log is
      ) * delta
   endlet
 
-  kind = external/c
+  where = external
+  kind = c
   command = "./log"
 end
   
