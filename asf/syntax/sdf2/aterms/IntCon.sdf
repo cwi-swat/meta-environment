@@ -29,3 +29,7 @@ exports
     NatCon     -> IntCon
     "+" NatCon -> IntCon
     "-" NatCon -> IntCon       
+
+hiddens
+  variables
+    "c+"[0-9]*            -> CHAR+
