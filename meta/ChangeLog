@@ -1,5 +1,8 @@
 # $Id$
 
+2004/01/28 (markvdb@cwi.nl)
+ * renamed display-feedback-summary to show-feedback-summary.
+
 Tue Jan 27 16:17:47 CET 2004 <jong@cwi.nl>
  * text/editor-hive.c:
    invoke "write-contents" before all "get-focus-text" calls, so buffer
