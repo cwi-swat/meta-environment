@@ -2,6 +2,10 @@
 
 2003/07/02 (jurgenv@cwi.nl)
  * Bumped to version 0.2 and release
+ * "Save Module" is now "Dump Module". It writes the .sdf and .asf
+   file by retrieving them from the store and overwriting the files on
+   disk. It does not automagically also write the .trm.tbl file anymore,
+   you can use the "Dump Parsetable" menu option for that.
 
 2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
