@@ -1,1 +1,1 @@
-error("error-id","producer-id","producer-type","description",[subject("subject-id",location("filename",area(0,0,0,0,0,0)))])
+info("producer","description",[subject("subject-id",location("filename",area(0,0,0,0,0,0)))])
