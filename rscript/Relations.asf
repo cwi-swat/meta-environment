@@ -1,135 +1,127 @@
 equations
 
-[empty]  EmptyRel = {}
+%%[emp-1]	EmptyRel = {}
 
-[comp-1] compose({<E, E'>, Tuple*1}, {Tuple*2}) = 
-         union(product(E, E' . {Tuple*2}), compose({Tuple*1}, {Tuple*2}))
-[comp-2] compose({}, {Tuple*}) = {}
+[comp-1] compose({<$Elem, $Elem'>, $Tuple*1}, {$Tuple*2}) = 
+         union(product($Elem, $Elem' . {$Tuple*2}), compose({$Tuple*1}, {$Tuple*2}))
+[comp-2] compose({}, {$Tuple*}) = {}
 
-[x-1]    product(E, {E', E*}) = union( {<E, E'>}, product(E, {E*}))
-[x-2]    product(E, {}) = {}
+[x-1]    product($Elem, {$Elem', $Elem*}) = union( {<$Elem, $Elem'>}, product($Elem, {$Elem*}))
+[x-2]    product($Elem, {}) = {}
 
-[bx-1]   product({E, E*1}, {E*2}) = union(product(E, {E*2}), product({E*1}, {E*2}))
-[bx-2]   product({}, {E*2}) = {}
+[bx-1]   product({$Elem, $Elem*1}, {$Elem*2}) = union(product($Elem, {$Elem*2}), product({$Elem*1}, {$Elem*2}))
+[bx-2]   product({}, {$Elem*2}) = {}
 
-[dom-1]  domain({<E,E'>, Tuple*}) = union({E}, domain({Tuple*}))
+[dom-1]  domain({<$Elem,$Elem'>, $Tuple*}) = union({$Elem}, domain({$Tuple*}))
 [dom-2]  domain({}) = {}
 
-[ran-1]  range({<E,E'>, Tuple*}) = union({E'}, range({Tuple*}))
+[ran-1]  range({<$Elem,$Elem'>, $Tuple*}) = union({$Elem'}, range({$Tuple*}))
 [ran-2]  range({}) = {}
 
-[car-1]  carrier({<E,E'>, Tuple*}) = union(union({E},{E'}), carrier({Tuple*}))
+[car-1]  carrier({<$Elem,$Elem'>, $Tuple*}) = union(union({$Elem},{$Elem'}), carrier({$Tuple*}))
 [car-2]  carrier({}) = {}
 
-[domR-1] in(E, {E*}) = false
+[domR-1] in($Elem, {$Elem*}) = false
          ==================================================
-         domR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domR({Tuple*1, Tuple*2}, {E*})
+         domR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = domR({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-domR]
-	 domR({Tuple*}, {E*}) = {Tuple*}
+	 domR({$Tuple*}, {$Elem*}) = {$Tuple*}
 
-[domX-1] in(E, {E*}) = true
+[domX-1] in($Elem, {$Elem*}) = true
          ==================================================
-         domX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domX({Tuple*1, Tuple*2}, {E*})
+         domX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = domX({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-domX]
-	 domX({Tuple*}, {E*}) = {Tuple*}
+	 domX({$Tuple*}, {$Elem*}) = {$Tuple*}
 
-[ranR-1] in(E', {E*}) = false
+[ranR-1] in($Elem', {$Elem*}) = false
          ==================================================
-         ranR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
+         ranR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = ranR({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-ranR]
-	 ranR({Tuple*}, {E*}) = {Tuple*}
+	 ranR({$Tuple*}, {$Elem*}) = {$Tuple*}
 
-[ranX-1] in(E', {E*}) = true
+[ranX-1] in($Elem', {$Elem*}) = true
          ==================================================
-         ranX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranX({Tuple*1, Tuple*2}, {E*})
+         ranX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = ranX({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-ranX]
-	 ranX({Tuple*}, {E*}) = {Tuple*}
+	 ranX({$Tuple*}, {$Elem*}) = {$Tuple*}
 
 
-[carR-1] in(E, {E*}) & in(E', {E*}) = false
+[carR-1] in($Elem, {$Elem*}) & in($Elem', {$Elem*}) = false
          ==================================================
-         carR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carR({Tuple*1, Tuple*2}, {E*})
+         carR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = carR({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-carR]
-	 carR({Tuple*}, {E*}) = {Tuple*}
+	 carR({$Tuple*}, {$Elem*}) = {$Tuple*}
 
-[carX-1] in(E, {E*}) |  in(E', {E*}) = true
+[carX-1] in($Elem, {$Elem*}) |  in($Elem', {$Elem*}) = true
          ==================================================
-         carX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carX({Tuple*1, Tuple*2}, {E*})
+         carX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, {$Elem*}) = carX({$Tuple*1, $Tuple*2}, {$Elem*})
 
 [default-carX]
-	 carX({Tuple*}, {E*}) = {Tuple*}
+	 carX({$Tuple*}, {$Elem*}) = {$Tuple*}
 
 
-[top-1]  top(Rel) = diff(domain(Rel), range(Rel))
+[top-1]  top($Rel) = diff(domain($Rel), range($Rel))
 
-[bot-1]  bottom(Rel) = diff(range(Rel), domain(Rel))
+[bot-1]  bottom($Rel) = diff(range($Rel), domain($Rel))
 
-[rim-1]  E . {Tuple*1, Tuple*2} = {E*}
+[rim-1]  $Elem . {$Tuple*1, $Tuple*2} = {$Elem*}
          =====================================
-         E . {Tuple*1, <E, E'>, Tuple*2} = {E', E*}
+         $Elem . {$Tuple*1, <$Elem, $Elem'>, $Tuple*2} = {$Elem', $Elem*}
 
 [default-rim-2]
-         E . {Tuple*} = {}
+         $Elem . {$Tuple*} = {}
 
-[brim-1] {E, E*} . Rel  = union(E . Rel,  {E*} . Rel)
-[brim-2] {} . Rel = {}
+[brim-1] {$Elem, $Elem*} . $Rel  = union($Elem . $Rel,  {$Elem*} . $Rel)
+[brim-2] {} . $Rel = {}
 
 
-[lim-1]  {Tuple*1, Tuple*2} . E'  = {E*}
+[lim-1]  {$Tuple*1, $Tuple*2} . $Elem'  = {$Elem*}
          =====================================
-         {Tuple*1, <E, E'>, Tuple*2} . E' = {E, E*}
+         {$Tuple*1, <$Elem, $Elem'>, $Tuple*2} . $Elem' = {$Elem, $Elem*}
 
 [default-lim-2]
-         {Tuple*} . E' = {}
+         {$Tuple*} . $Elem' = {}
  
-[slim-1] Rel . {E, E*} = union(Rel . E, Rel . {E*})
-[slim-2] Rel . {} = {}
+[slim-1] $Rel . {$Elem, $Elem*} = union($Rel . $Elem, $Rel . {$Elem*})
+[slim-2] $Rel . {} = {}
 
-[size-1] Rel = {Tuple*}
-         ====================================
-         size(Rel) = size({Tuple*})
-
-[inv-1]  inv({<E,E'>, Tuple*}) = union({<E',E>}, inv({Tuple*}))
+[inv-1]  inv({<$Elem,$Elem'>, $Tuple*}) = union({<$Elem',$Elem>}, inv({$Tuple*}))
 [inv-2]  inv({}) = {}
 
-[cmp-1]  Bag = carrier(Rel)
+[cmp-1]  $Bag = carrier($Rel)
          =====================================
-         compl(Rel) = diff(product(Bag, Bag), Rel)
+         compl($Rel) = diff(product($Bag, $Bag), $Rel)
 
 
-[id-1]   id({E, E*}) = union({<E, E>}, id({E*}))
+[id-1]   id({$Elem, $Elem*}) = union({<$Elem, $Elem>}, id({$Elem*}))
 [id-2]   id({}) ={}
 
-[cl-1] 	closure(Rel, Rel1, Rel1) = Rel1
+[cl-1] 	closure($Rel, $Rel1, $Rel1) = $Rel1
 
-[cl-2] 	Rel1 != Rel2
+[cl-2] 	$Rel1 != $Rel2
        	=========================================
-       	closure(Rel, Rel1, Rel2) = closure(Rel, Rel2, union(Rel2, compose(Rel2, Rel)))
+       	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, union($Rel2, compose($Rel2, $Rel)))
 
-[tcl-1]  trans-closure(Rel) = closure(Rel, {}, Rel)
+[tcl-1]  trans-closure($Rel) = closure($Rel, {}, $Rel)
 
-[rtcl-1] rtrans-closure(Rel) = union(trans-closure(Rel), id(carrier(Rel)))
+[rtcl-1] rtrans-closure($Rel) = union(trans-closure($Rel), id(carrier($Rel)))
 
 %% --- reachX
 
-[rX-3] Rel' = carX(Rel, Bag2),
-       Rel''= domR(Rel', Bag1)
+[rX-3] $Rel' = carX($Rel, $Bag2),
+       $Rel''= domR($Rel', $Bag1)
        =========================================
-       reachX(Bag1, Bag2, Rel) = closure(Rel', {}, Rel'')
+       reachX($Bag1, $Bag2, $Rel) = closure($Rel', {}, $Rel'')
 
 %% --- reachR
 
-[rX-3] Rel' = carR(Rel, Bag2),
-       Rel''= domR(Rel', Bag1)
+[rX-3] $Rel' = carR($Rel, $Bag2),
+       $Rel''= domR($Rel', $Bag1)
        =========================================
-       reachR(Bag1, Bag2, Rel) = closure(Rel', {}, Rel'')
+       reachR($Bag1, $Bag2, $Rel) = closure($Rel', {}, $Rel'')
 
-%% --- if on Rel
-
-[if-1]   if true then Rel1 else Rel2 fi  = Rel1
-[if-2]   if false then Rel1 else Rel2 fi = Rel2

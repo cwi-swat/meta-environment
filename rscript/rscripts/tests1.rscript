@@ -1,3 +1,4 @@
+check-rscript(
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -262,46 +263,47 @@ assert "size 4": (# Rel1) == 3
 
 %% --- Bag former
 
-assert "Bag former 1": { X : X in EMPTYBAG }		== EMPTYBAG
-assert "Bag former 2": { X : X in {1}} 			== {1}
-assert "Bag former 3": { X : X in {1, 2}} 		== {1,2}
-assert "Bag former 4": { X : X in {1, 1, 1}} 		== {1}
+assert "Bag former 1": { X | X : EMPTYBAG }		== EMPTYBAG
+assert "Bag former 2": { X | X : {1}} 			== {1}
+assert "Bag former 3": { X | X : {1, 2}} 		== {1,2}
+assert "Bag former 4": { X | X : {1, 1, 1}} 		== {1}
 
-assert "Bag former 5": {  1 : X in {1,2,3}} 		== {1}
-assert "Bag former 6": {  1 : X in {1,2,3} | true} 	== {1}
-assert "Bag former 7": {  1 : X in {1,2,3} | false} 	== EMPTYBAG
+%%assert "Bag former 5": {  1 | X : {1,2,3}} 		== {1}
+%%assert "Bag former 6": {  1 | X : {1,2,3} | true} 	== {1}
+%%assert "Bag former 7": {  1 | X : {1,2,3} | false} 	== EMPTYBAG
 
-assert "Bag former 8": {  X : X in {1,2,3}} 		== {1,2,3}
-assert "Bag former 9": {  X : X in {1,2,3} | true} 	== {1,2,3}
-assert "Bag former 10": {  X : X in {1,2,3} | false} 	== EMPTYBAG
+assert "Bag former 8": {  X | X : {1,2,3}} 		== {1,2,3}
+assert "Bag former 9": {  X | X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 10": {  X | X : {1,2,3}, false} 	== EMPTYBAG
 
-assert "Bag former 11": {  EMPTYBAG : X in {1,2,3}} 	== EMPTYBAG
-assert "Bag former 12": {  EMPTYBAG : X in {1,2,3} | true} == EMPTYBAG
-assert "Bag former 13": {  EMPTYBAG : X in {1,2,3} | false} == EMPTYBAG
+assert "Bag former 11": {  EMPTYBAG | X : {1,2,3}} 	== EMPTYBAG
+assert "Bag former 12": {  EMPTYBAG | X : {1,2,3}, true} == EMPTYBAG
+assert "Bag former 13": {  EMPTYBAG | X : {1,2,3}, false} == EMPTYBAG
 
-assert "Bag former 14": {  Bag1 : X in {1,2,3}} 	== {1,2,3}
-assert "Bag former 15": {  Bag1 : X in {1,2,3} | true} 	== {1,2,3}
-assert "Bag former 16": {  Bag1 : X in {1,2,3} | false}	== EMPTYBAG 
+assert "Bag former 14": {  Bag1 | X : {1,2,3}} 	== {1,2,3}
+assert "Bag former 15": {  Bag1 | X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 16": {  Bag1 | X : {1,2,3}, false}	== EMPTYBAG 
 
-assert "Bag former 17": { X : X in {{1,2,3},{10,20,30},{100,200,300}} } ==
+assert "Bag former 17": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
 	{ 1,2,3,10,20,30,100,200,300}
 
 %% --- Relation former
 
-assert "Rel former 1":  { EMPTYREL : X in {1,2,3}} == EMPTYREL
-assert "Rel former 2":  { <X,Y> : <X,Y> in EMPTYREL} == EMPTYREL
+assert "Rel former 1":  { EMPTYREL | X : {1,2,3}} == EMPTYREL
+assert "Rel former 2":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
 
-assert "Rel former 3":  { Rel1 : X in {1,2,3}} == Rel1
+assert "Rel former 3":  { Rel1 | X : {1,2,3}} == Rel1
 
-assert "Rel former 4": 	{<X,Y> : X in {1,1,1}, Y in {2,2,2}} == {<1,2>}
+assert "Rel former 4": 	{<X,Y> | X : {1,1,1}, Y : {2,2,2}} == {<1,2>}
 
-assert "Rel former 5": 	{<1,2> : X in {1,2,3}} == 
-			{<1,2>}
-assert "Rel former 6": 	{<X,Y> : X in {1,2,3}, Y in {2,3,4}} == 
+%%assert "Rel former 5": 	{<1,2> | X : {1,2,3}} == 
+%%			{<1,2>}
+assert "Rel former 6": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}} == 
 			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-assert "Rel former 7": 	{<X,Y> : X in {1,2,3}, Y in {2,3,4} | true} ==
+assert "Rel former 7": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, true} ==
 			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-assert "Rel former 8": 	{<X,Y> : X in {1,2,3}, Y in {2,3,4} | false} ==
+assert "Rel former 8": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, false} ==
 			EMPTYREL
-assert "Rel former 9": 	{<X,Y> : X in {1,2,3}, Y in {2,3,4} | X >= Y} ==
+assert "Rel former 9": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, X >= Y} ==
 			{<2, 2>, <3, 2>, <3, 3>}
+)

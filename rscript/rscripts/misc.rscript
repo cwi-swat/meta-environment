@@ -1,5 +1,5 @@
-
-int ROOT = 0
+check-rscript(
+int ROOT = 0 
 
 rel[str,int] DEFS  = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
 
@@ -14,11 +14,11 @@ rel[int,int] D4 = reachX({3}, "y" . DEFS, PRED)
 
 bool  reaches_root(rel[str,int] R) = 0 in range(R)
 
-rel[str,int]  UN = { <V, N> : <V, N> in USES | <ROOT, N> in reachX({0}, V . DEFS, PRED) }
+rel[str,int]  UN = { <V, N> | <V, N> : USES, <ROOT, N> in reachX({0}, V . DEFS, PRED) }
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> : <V, N> in USES |  <ROOT, N> in carrierX(PRED, V .  DEFS)+ }
+rel[str,int]  UN1 = { <V, N> | <V, N> : USES,  <ROOT, N> in carrierX(PRED, V .  DEFS)+ }
 
 <T1,T2> swap(<T2,T1> P) = <second(P), first(P)>
 
@@ -29,23 +29,22 @@ rel[int,int] Rel2     = {<1, 10>, <3, 30>}
 
 <str,int> P1 = swap(<0,"a">)
 
-rel[int,str] SRel1 = {swap(<V,N>) : <V,N> in Rel1  }
-
-rel[int,bag[int]] VERT = { <V, {1,2,3}> :  V in {1,2,3} }
-
+rel[int,str] SRel1 = {<V1,N1> | <V,N> : Rel1, <V1, N1> <- swap(<V, N>)  }
+ 
+rel[int,bag[int]] VERT = { <V, Z> |  V : {1,2,3}, Z <- {10,20,30}}
 
 bag[int] BBB = 2 . {<1,10>, <2, 20>, <3,30>}
 
-bag[str] Tst      = {X :  X in Bag1  }
-rel[str,str] REL   = {<X, Y> : X in Bag1, Y in Bag2}
+bag[str] Tst      = {X |  X : Bag1  }
+rel[str,str] REL   = {<X, Y> | X : Bag1, Y : Bag2}
 
-rel[X,Y] finv(rel[Y,X] REL) = {<Y, X> : <X, Y> in REL }
-bag[X] fdom(rel[X,Y] REL) = {X : <X, Y> in REL }
+rel[X,Y] finv(rel[Y,X] REL) = {<Y, X> | <X, Y> : REL }
+bag[X] fdom(rel[X,Y] REL) = {X | <X, Y> : REL }
 
-rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { <X, Y> : X in R1, Y in R2 }
+rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { <X, Y> | X : R1, Y : R2 }
 
 rel[A,C] comp(rel[A,B] R1, rel[B,C] R2) =
-    { <X, T> : <X, Y> in R1, <S, T> in R2 | Y == S }
+    { <X, T> | <X, Y> : R1, <S, T> : R2, Y == S }
 
 rel[int,str] bag5     = inv(DEFS)
 bag[str] bag6     = fdom(DEFS)
@@ -69,3 +68,6 @@ rel[str,str] C2 = (Bag1 x Bag2)+
 %%rel[int,int] C3 = SUCC *
 
 int mysize(bag[int] B) = # B
+
+
+)

@@ -1,5 +1,4 @@
 module Test
 imports basic/Whitespace
 
-imports Bags[Integer]
 imports Relations[Integer]

@@ -3,17 +3,16 @@ module Bags[Elem]
 exports 
 imports basic/Booleans
 imports basic/Integers
-imports EmptyBag
 
-  sorts Bag[[Elem]]  
+%%imports EmptyBag
+
+  sorts Bag[[Elem]]
 
 context-free syntax
-   EmptyBag				     	-> Bag[[Elem]]
-   "{" {Elem ","}* "}"                       	-> Bag[[Elem]] {constructor}
+%%   EmptyBag					-> Bag[[Elem]]
+%%   Bag[[Elem]]					-> Bags
+   "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
 
- context-free syntax
-
-%%   "EmptyBag"                                	-> Bag[[Elem]]
 
    add(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
    del(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
@@ -27,7 +26,7 @@ context-free syntax
    union1(Elem, Bag[[Elem]])			-> Bag[[Elem]]
    union2(Bag[[Elem]], Elem)			-> Bag[[Elem]]
    union(Bag[[Elem]], Bag[[Elem]])           	-> Bag[[Elem]]
-   inter(Bag[[Elem]],  Bag[[Elem]])          	-> Bag[[Elem]]
+   inter(Bag[[Elem]], Bag[[Elem]])          	-> Bag[[Elem]]
    diff(Bag[[Elem]], Bag[[Elem]])            	-> Bag[[Elem]]
 
    size(Bag[[Elem]])                         	-> Integer
@@ -40,7 +39,7 @@ hiddens
   imports asf/syntax/Comments
 
   variables
-    "Bag" [0-9\']*           -> Bag[[Elem]]
-    "E" [0-9\']*             -> Elem
-    "E*" [0-9\']*            -> { Elem ","}*
-    "E+" [0-9\']*            -> { Elem ","}+
+    "$Bag" [0-9\']*           -> Bag[[Elem]]
+    "$Elem" [0-9\']*          -> Elem
+    "$Elem*" [0-9\']*         -> { Elem ","}*
+    "$Elem+" [0-9\']*         -> { Elem ","}+
