@@ -1,5 +1,9 @@
 $Id$
 
+2003/05/27 (jurgenv@cwi.nl)
+ * renamed addPosInfo message to add-posinfo
+ * extended addPosInfo tool with add-posinfo-to-depth
+
 2003/05/26 (jurgenv@cwi.nl)
  * idefs spawn there own processes now
 
