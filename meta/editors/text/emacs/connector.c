@@ -354,15 +354,19 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
     MC_Property category = MC_PropertyFromTerm(ATgetFirst(categories));
     MC_TextCategoryName name = MC_getPropertyCategory(category);
     MC_TextAttributes attributes = MC_getPropertyAttributes(category);
+    char buf[BUFSIZ];
+    const char *str;
+    char *attribs = attributesToProperties(attributes);
 
     if (MC_isTextCategoryNameExtern(name)) {
-      char buf[BUFSIZ];
-      const char* str = MC_getTextCategoryNameName(name);
-      char *attribs = attributesToProperties(attributes);
-
+      str = MC_getTextCategoryNameName(name);
       sprintf(buf, "(register-category '%s (list %s))", str, attribs);
-      sendToEmacs(write_to_editor_fd, buf);
     }
+    else if (MC_isTextCategoryNameFocus(name)) {
+      sprintf(buf, "(register-focus '(list %s))", attribs);
+    }
+
+    sendToEmacs(write_to_editor_fd, buf);
   }
 }
 

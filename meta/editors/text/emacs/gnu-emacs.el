@@ -47,11 +47,28 @@
   (setq must-send-modified t)
 )
 
+(defun clear-overlays (category)
+(let ((overlays (overlays-in 1 (point-max)))
+        found)
+    (while overlays
+      (let* ((overlay (car overlays))
+	    (thecat (overlay-get overlay 'category)))
+	(if (equal thecat category)
+          (delete-overlay overlay)
+        )
+      )
+      (setq overlays (cdr overlays)))
+    ))
+
 (defun set-focus (start end)
   (setq must-send-modified ())
   (let ((modified (buffer-modified-p)))
-    (remove-text-properties 1 (point-max) '(face))
-    (put-text-property start end 'face 'region)
+    (clear-overlays 'FOCUS)
+    (let ((overlay (make-overlay start end nil nil)))
+      (overlay-put overlay 'face (get-category 'FOCUS))
+      (overlay-put overlay 'category 'FOCUS)
+      (overlay-put overlay 'priority 2)
+    )
     (set-buffer-modified-p modified)
   )
   (setq must-send-modified t)
@@ -73,19 +90,22 @@
   (puthash category properties categories)
 )
 
+(defun register-focus (properties)
+  (puthash 'FOCUS properties categories)
+)
+
 (defun get-category (category)
   (gethash category categories '(foreground-color . "black"))
 )
 
-; a partial implementation for the syntax highlighting interface
-; the idea is that we will implement the full configurability later.
-; At least the following code exhibits the functionality needed to set text
-; properties:
 (defun set-highlight (start end category)
   (setq must-send-modified ())
   (let ((modified (buffer-modified-p)))
-    (overlay-put (make-overlay start end nil nil) 
-		 'face (get-category category))
+    (let ((overlay (make-overlay start end nil nil)))
+      (overlay-put overlay 'face (get-category category))
+      (overlay-put overlay 'category category)
+      (overlay-put overlay 'priority 1)
+    )
     (set-buffer-modified-p modified)
   )
   (setq must-send-modified t)
