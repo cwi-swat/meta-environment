@@ -37,11 +37,14 @@ import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 public class MetaStudio extends JFrame implements UserInterfaceTif {
-    private static PureFactory factory;
+	private static final String PARSE_TREE = "Parse tree";
+	private static final String MODULES = "Modules";
+	private static final String DEBUGGING = "Debugging";
+	
+    private  PureFactory factory;
+    private  MetaGraphFactory graphFactory;
     private UserInterfaceBridge bridge;
-    private static final String PARSE_TREE = "Parse tree";
-    private static final String MODULES = "Modules";
-    private static final String DEBUGGING = "Debugging";
+    
     private JTabbedPane tabs;
     private Thread tideControlThread;
     private JTabbedPane messageTabs;
@@ -50,21 +53,17 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         new MetaStudio(args);
     }
 
-    private MenuBar createMenuBar(String []args) {
-        MenuBar menuBar = new MenuBar(factory, args, this);
-        spawn(menuBar, "menu-bar");
-
-        return menuBar;
-    }
-
     public MetaStudio(String[] args) throws IOException {
         factory = new PureFactory();
+        graphFactory = new MetaGraphFactory(factory);
         
         initializeProperties();
         handleCloseRequests();
 
         createContentPane(args);
-        createPopupHandlers(args);
+        
+        DialogTool dialogTool = new DialogTool(this.getRootPane(), factory, args);
+		spawn(dialogTool, "dialogtool");
 
         makeStudioVisible();
         
@@ -96,20 +95,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	thread.start();
     }
     
-    private void createPopupHandlers(String []args) {
-        DialogTool dialogTool = new DialogTool(this.getRootPane(), factory, args);
-        spawn(dialogTool, "dialogtool");
-        
-        
-    }
-    
     private void createContentPane(String[] args) {
-        createMenuBar(args);
-
-        Container content = getContentPane();
+        MenuBar menuBar = new MenuBar(factory, args, this);
+		spawn(menuBar, "menu-bar");
+		
+		Container content = getContentPane();
         content.setLayout(new BorderLayout());
         
-        GraphNodeSizer sizer = new GraphNodeSizer(new MetaGraphFactory(factory), args);
+        GraphNodeSizer sizer = new GraphNodeSizer(graphFactory, args);
         spawn(sizer, "graph-node-sizer");
 
         ToolBar toolbar = new ToolBar(factory, args);
@@ -176,11 +169,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
 
     private JTabbedPane createMainTabs(String[] args) {
     	tabs = new JTabbedPane();
-    	ModuleBrowser moduleBrowser = new ModuleBrowser(factory, args);
+    	ModuleBrowser moduleBrowser = new ModuleBrowser(factory, graphFactory, args);
     	spawn(moduleBrowser, "module-browser");
     	addTab(tabs, MODULES, moduleBrowser);
     	
-    	TreeBrowser parseTreeBrowser = new TreeBrowser(new MetaGraphFactory((PureFactory) factory), args);
+    	TreeBrowser parseTreeBrowser = new TreeBrowser(graphFactory, args);
     	spawn(parseTreeBrowser, "tree-browser");
     	addTab(tabs, PARSE_TREE, parseTreeBrowser);
     	
