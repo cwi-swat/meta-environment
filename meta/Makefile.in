@@ -74,7 +74,7 @@ uninstall:
 
 licensed:
 	@clear; echo "Please read the following license carefully."; \
-		sleep 2; sed -e 's/^/    /' LICENSE |more; echo ""; \
+		sleep 2; sed -e 's/^/    /' COPYING |more; echo ""; \
 		echo "Do you accept this license? [no] "; read accept; \
 		case "$$accept" in	\
 			[yY]*)	echo License accepted by `whoami`@`hostname` on `date` > $@ ;; \
