@@ -1,5 +1,7 @@
-2003/02/13 (markvdb@cs.vu.nl)
+2003/02/13 (jurgenv@cwi.nl)
  * Added ModuleName to postprocess-collected-semantics-hook
+ * Added catching of events from the rewriter. They are just printed
+   to stdout for now.
 
 2003/02/12 (markvdb@cs.vu.nl)
  * Added support to deal with the ambiguity error messages
