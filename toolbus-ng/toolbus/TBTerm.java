@@ -3,112 +3,35 @@
  */
 
 package toolbus;
-import java.util.Hashtable;
-
-import toolbus.process.ProcessInstance;
 
 import aterm.*;
 import aterm.pure.PureFactory;
 
-class FunctionDescriptor {
-  private String name;
-  private int index;
-  private int nargs;
-  private ATerm argtypes[];
-  private ATerm resultType;
-
-  public FunctionDescriptor(String name, int index, ATerm resultType) {
-    this.name = name;
-    this.index = index;
-    this.resultType = resultType;
-    nargs = 0;
-    argtypes = new ATerm[0];
-  }
-
-  public FunctionDescriptor(String name, int index, ATerm arg0, ATerm resultType) {
-    this.name = name;
-    this.index = index;
-    this.resultType = resultType;
-    nargs = 1;
-    argtypes = new ATerm[1];
-    argtypes[0] = arg0;
-  }
-
-  public FunctionDescriptor(String name, int index, ATerm arg0, ATerm arg1, ATerm resultType) {
-    this.name = name;
-    this.index = index;
-    this.resultType = resultType;
-    nargs = 2;
-    argtypes = new ATerm[2];
-    argtypes[0] = arg0;
-    argtypes[1] = arg1;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public ATerm getResultType() {
-    return resultType;
-  }
-
-  public boolean checkStatic(ATerm actual[]) throws ToolBusException {
-    //          System.err.println("checkStatic: " + name);
-    //           for(int i = 0; i < actual.length; i++){
-    //               System.err.println("actual[" + i + "] = " + actual[i]);
-    //               System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
-    //           }
-    if (argtypes.length != actual.length)
-      throw new ToolBusException(name + " has wrong number of arguments");
-    for (int i = 0; i < argtypes.length; i++) {
-      if (actual[i] == TBTerm.TermType) {
-        System.err.println("arg # " + i + " of " + name + " is term (requires dynamic check)");
-      } else {
-        if (argtypes[i] == TBTerm.BoolType) {
-          if (actual[i] != TBTerm.BoolType)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be boolean");
-        } else if (argtypes[i] == TBTerm.IntType) {
-          if (actual[i] != TBTerm.IntType)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be integer");
-        } else if (argtypes[i] == TBTerm.TermType) {
-        } else if (argtypes[i] == TBTerm.ListType) {
-          if (actual[i] != TBTerm.ListType)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be list");
-        } else
-          throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
-      }
-    }
-    return true;
-  }
-
-  public boolean checkRunTime(ATerm actual[]) throws ToolBusException {
-    if (argtypes.length != actual.length)
-      throw new ToolBusException(name + " has wrong number of arguments");
-    for (int i = 0; i < argtypes.length; i++) {
-      if (argtypes[i] == TBTerm.BoolType) {
-        if (!TBTerm.isBoolean(actual[i]))
-          throw new ToolBusException("arg #" + i + " of " + name + " should be boolean");
-      } else if (argtypes[i] == TBTerm.IntType) {
-        if (!(actual[i] instanceof ATermInt))
-          throw new ToolBusException("arg #" + i + " of " + name + " should be integer");
-      } else if (argtypes[i] == TBTerm.TermType) {
-      } else if (argtypes[i] == TBTerm.ListType) {
-        if (!(actual[i] instanceof ATermList))
-          throw new ToolBusException("arg #" + i + " of " + name + " should be list");
-      } else
-        throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
-    }
-    return true;
-  }
-}
-
+/**
+ * @author paulk
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
+/**
+ * TBTerm extends ATerms in several ways. This is achieved by staying with the ATerm representation
+ * but giving a special meaning to some symbols. The extensions are:
+ * - a number of standard terms and placeholders
+ * - the notion of variable (var) and result variable (rvar)
+ * - special functions (add, greater, ...) that can be typechecked and evaluated
+ *    (see FunctionDescriptors)
+ * - matching and substitution
+ */
 public class TBTerm {
 
   public static ATermFactory factory;
-  private static Hashtable Funs;
+
   private static boolean initDone = false;
 
   public static ATerm True;
+
   public static ATerm False;
   public static ATerm BoolType;
   public static ATerm IntType;
@@ -126,27 +49,6 @@ public class TBTerm {
   public static ATerm TermPlaceholder;
   public static ATerm ListPlaceholder;
 
-  public static final int Not = 0;
-  public static final int And = 1;
-  public static final int Or = 2;
-  public static final int Equal = 3;
-  public static final int NotEqual = 4;
-  public static final int Greater = 5;
-  public static final int GreaterEqual = 6;
-  public static final int Less = 7;
-  public static final int LessEqual = 8;
-  public static final int Abs = 9;
-  public static final int Add = 10;
-  public static final int Sub = 11;
-  public static final int Mul = 13;
-  public static final int Div = 14;
-  public static final int Mod = 15;
-
-  public static final int processId = 16;
-
-  public static final int trueFun = 17;
-  public static final int falseFun = 18;
-
   public static void init() {
     if (!initDone) {
       init(new PureFactory());
@@ -156,7 +58,6 @@ public class TBTerm {
 
   private static void init(ATermFactory fact) {
     factory = fact;
-    Funs = new Hashtable();
     True = factory.make("true");
     False = factory.make("false");
     BoolType = factory.make("bool");
@@ -176,26 +77,7 @@ public class TBTerm {
     TermPlaceholder = factory.makePlaceholder(TermType);
     ListPlaceholder = factory.makePlaceholder(ListType);
 
-    Funs.put("not", new FunctionDescriptor("not", Not, BoolType, BoolType));
-    Funs.put("and", new FunctionDescriptor("and", And, BoolType, BoolType, BoolType));
-    Funs.put("or", new FunctionDescriptor("or", Or, BoolType, BoolType, BoolType));
-    Funs.put("equal", new FunctionDescriptor("equal", Equal, TermType, TermType, BoolType));
-    Funs.put("not-equal", new FunctionDescriptor("not-equal", NotEqual, TermType, TermType, BoolType));
-    Funs.put("greater", new FunctionDescriptor("greater", Greater, IntType, IntType, BoolType));
-    Funs.put("greater-equal", new FunctionDescriptor("greater-equal", GreaterEqual, IntType, IntType, BoolType));
-    Funs.put("less", new FunctionDescriptor("less", Less, IntType, IntType, BoolType));
-    Funs.put("less-equal", new FunctionDescriptor("less-equal", LessEqual, IntType, IntType, BoolType));
-
-    Funs.put("abs", new FunctionDescriptor("abs", Abs, IntType, IntType));
-    Funs.put("add", new FunctionDescriptor("add", Add, IntType, IntType, IntType));
-    Funs.put("sub", new FunctionDescriptor("sub", Sub, IntType, IntType, IntType));
-    Funs.put("mul", new FunctionDescriptor("mul", Mul, IntType, IntType, IntType));
-    Funs.put("div", new FunctionDescriptor("div", Div, IntType, IntType, IntType));
-    Funs.put("mod", new FunctionDescriptor("mod", Mod, IntType, IntType, IntType));
-
-    Funs.put("processId", new FunctionDescriptor("processId", processId, TermType));
-    Funs.put("true", new FunctionDescriptor("true", trueFun, BoolType));
-    Funs.put("false", new FunctionDescriptor("false", falseFun, BoolType));
+    FunctionDescriptors.init(factory);
   }
 
   public static boolean isTrue(ATerm t) {
@@ -229,7 +111,7 @@ public class TBTerm {
   }
 
   public static int getVarIndex(ATerm t) {
-    return ((ATermInt) getVarArgs(t).getFirst()).getInt();
+    return ((ATermInt) getVarArgs(t).elementAt(0)).getInt();
   }
 
   public static ATerm getVarType(ATerm t) {
@@ -259,10 +141,16 @@ public class TBTerm {
     }
     ATermList args = ((ATermAppl) t).getArguments();
     AFun afun = t.getFactory().makeAFun("var", args.getLength(), false);
-    return t.getFactory().makeAppl(afun, args);
+    return TBTerm.factory.makeAppl(afun, args);
   }
 
-  public static ATerm compileVars(ATerm t, Environment env) throws ToolBusException {
+  /**
+   * Resolve the variables in ATerm t using Environment env.
+   * The declaration information in env is used to replace the index and type
+   * field in every variable occurrence.
+   */
+
+  public static ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
     switch (t.getType()) {
       case ATerm.BLOB :
       case ATerm.INT :
@@ -280,111 +168,98 @@ public class TBTerm {
         if (args.length == 0)
           return t;
         for (int i = 0; i < args.length; i++) {
-          cargs[i] = compileVars(args[i], env);
+          cargs[i] = resolveVars(args[i], env);
         }
-        return t.getFactory().makeAppl(afun, cargs);
+        return TBTerm.factory.makeAppl(afun, cargs);
 
       case ATerm.LIST :
-        ATermList lst = t.getFactory().makeList();
+        ATermList lst = TBTerm.factory.makeList();
         for (int i = 0; i < ((ATermList) t).getLength(); i++) {
-          lst = lst.append(compileVars(((ATermList) t).elementAt(i), env));
+          lst = lst.append(resolveVars(((ATermList) t).elementAt(i), env));
         }
         return lst;
     }
     throw new ToolBusInternalError("illegal ATerm in compileVars: " + t);
   }
 
-  public static ATerm checkType(ATerm t, Environment env) throws ToolBusException {
-    //System.err.println("checkType(" + t + ")");
-    switch (t.getType()) {
+  /**
+   * Check that the two sides of an assignment are "compatibele", i.e. they must be equal
+   * or the the type of the lsh may be more general than that of the rhs.
+   */
+
+  public static boolean assignCompatible(ATerm lhsType, ATerm rhsType) throws ToolBusException {
+
+    if (isVar(lhsType) || isResVar(lhsType)) {
+      throw new ToolBusException("variable not allowd in a type: " + lhsType);
+    } else if (isVar(rhsType) || isResVar(rhsType)) {
+      throw new ToolBusException("variable not allowd in a type: " + rhsType);
+    }
+    if (lhsType == TermType || lhsType == rhsType) {
+      return true;
+    }
+
+    switch (lhsType.getType()) {
       case ATerm.BLOB :
-        throw new ToolBusInternalError("checkType: BLOB");
-
       case ATerm.INT :
-        return IntType;
-
-      case ATerm.PLACEHOLDER : // ??
-        throw new ToolBusInternalError("checkType: PLACEHOLDER");
-
       case ATerm.REAL :
-        return RealType;
-
-      case ATerm.APPL :
-        if (TBTerm.isVar(t)) {
-          ATerm res = TBTerm.getVarType(t);
-          //System.out.println("getType(" + t + ") => " + res);
-          return res;
-        }
-        if (TBTerm.isBoolean(t)) {
-          return BoolType;
-        }
-        if (((ATermAppl) t).isQuoted() && ((ATermAppl) t).getArity() == 0) {
-          return StrType;
-        }
-        String fun = ((ATermAppl) t).getName();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        //        if (args.length == 0)
-        //          return t;
-        ATerm vargs[] = new ATerm[args.length];
-        for (int i = 0; i < args.length; i++) {
-          vargs[i] = checkType(args[i], env);
-        }
-
-        FunctionDescriptor fd = (FunctionDescriptor) Funs.get(fun);
-        if (fd == null)
-          throw new ToolBusException("unknown function " + fun);
-
-        if (fd.checkStatic(vargs))
-          return fd.getResultType();
-
-      case ATerm.LIST :
-        ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(checkType(((ATermList) t).elementAt(i), env), lst);
-        }
-        return lst;
-    }
-    throw new ToolBusInternalError("illegal ATerm in getType: " + t);
-  }
-
-  public static boolean checkCompatible(ATerm req, ATerm given) {
-    //System.out.println("checkCompatible(" + req + ", " + given + ")");
-    if (req.getType() != given.getType()) {
-      return false;
-    }
-    switch (req.getType()) {
-      case ATerm.BLOB :
-      case ATerm.INT :
+        throw new ToolBusInternalError("assignCompatible: illegal lhsType: " + lhsType);
       case ATerm.PLACEHOLDER :
-      case ATerm.REAL :
-        return true;
-
-      case ATerm.APPL :
-        if (given == TermType) {
+        if (lhsType == IntPlaceholder && rhsType == IntType)
           return true;
-        }
-        if (!((ATermAppl) req).getName().equals(((ATermAppl) given).getName())) {
+        else if (lhsType == RealPlaceholder && rhsType == RealType)
+          return true;
+        else if (lhsType == StrPlaceholder && rhsType == StrType)
+          return true;
+        else if (lhsType == ListPlaceholder && (rhsType == ListType || rhsType.getType() == ATerm.LIST))
+          return true;
+        else if (lhsType == TBTerm.TermPlaceholder)
+          return true;
+        else
+          return false;
+      case ATerm.APPL :
+        if (rhsType == TermType) {
+          return true;
+        } else if (lhsType == ListType && rhsType.getType() == ATerm.LIST) {
+          return true;
+        } else if (((ATermAppl) lhsType).getName().equals("list")) {
+          if (rhsType.getType() != ATerm.LIST) {
+            return false;
+          }
+          ATerm lhsargs[] = ((ATermAppl) lhsType).getArgumentArray();
+          if (lhsargs.length != 1) {
+            throw new ToolBusException("illegal list type: " + lhsType);
+          }
+          for (int i = 0; i < ((ATermList) rhsType).getLength(); i++) {
+            if (!assignCompatible(lhsargs[0], ((ATermList) rhsType).elementAt(i))) {
+              return false;
+            }
+          }
+          return true;
+        } else if (
+          rhsType.getType() != ATerm.APPL
+            || !((ATermAppl) lhsType).getName().equals(((ATermAppl) rhsType).getName())) {
           return false;
         }
-        ATerm reqargs[] = ((ATermAppl) req).getArgumentArray();
-        ATerm givenargs[] = ((ATermAppl) given).getArgumentArray();
 
-        if (reqargs.length != givenargs.length) {
+        ATerm lhsargs[] = ((ATermAppl) lhsType).getArgumentArray();
+        ATerm rhsargs[] = ((ATermAppl) rhsType).getArgumentArray();
+        if (lhsargs.length == 0) {
+          return true;
+        } else if (lhsargs.length != rhsargs.length) {
           return false;
         }
-        for (int i = 0; i < reqargs.length; i++) {
-          if (!checkCompatible(reqargs[i], givenargs[i])) {
+        for (int i = 0; i < lhsargs.length; i++) {
+          if (!assignCompatible(lhsargs[i], rhsargs[i])) {
             return false;
           }
         }
         return true;
-
       case ATerm.LIST :
-        if (((ATermList) req).getLength() != ((ATermList) given).getLength()) {
+        if (((ATermList) lhsType).getLength() != ((ATermList) rhsType).getLength()) {
           return false;
         }
-        for (int i = 0; i < ((ATermList) req).getLength(); i++) {
-          if (!checkCompatible(((ATermList) req).elementAt(i), ((ATermList) given).elementAt(i))) {
+        for (int i = 0; i < ((ATermList) lhsType).getLength(); i++) {
+          if (!assignCompatible(((ATermList) lhsType).elementAt(i), ((ATermList) rhsType).elementAt(i))) {
             return false;
           }
         }
@@ -393,9 +268,9 @@ public class TBTerm {
     return false;
   }
 
-  private static ATerm makePlaceholder(ATerm t) {
-    return factory.makePlaceholder(t);
-  }
+  /**
+   * Transform a term into a pattern that can be used by tool interfaces.
+   */
 
   public static ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
     switch (t.getType()) {
@@ -406,15 +281,13 @@ public class TBTerm {
         return t;
       case ATerm.REAL :
         return RealPlaceholder;
-
       case ATerm.APPL :
         if (TBTerm.isVar(t)) {
           ATerm type = TBTerm.getVarType(t);
-          return makePlaceholder(type);
+          return factory.makePlaceholder(type);
         }
         if (TBTerm.isBoolean(t))
           return BoolPlaceholder;
-
         AFun fun = ((ATermAppl) t).getAFun();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
         if (args.length == 0) {
@@ -424,13 +297,12 @@ public class TBTerm {
             return t;
         }
         if (!recurring)
-          return makePlaceholder(t);
+          return factory.makePlaceholder(t);
         ATerm vargs[] = new ATerm[args.length];
         for (int i = 0; i < args.length; i++) {
           vargs[i] = makePattern(args[i], env, false);
         }
         return factory.makeAppl(fun, vargs);
-
       case ATerm.LIST :
         ATermList lst = factory.makeList();
         for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
@@ -441,37 +313,10 @@ public class TBTerm {
     throw new ToolBusInternalError("illegal ATerm in getType: " + t);
   }
 
-  public static ATerm eval(ATerm t, ProcessInstance process) throws ToolBusException {
-    Environment env = process.getEnv();
-    switch (t.getType()) {
-      case ATerm.BLOB :
-      case ATerm.INT :
-      case ATerm.PLACEHOLDER :
-      case ATerm.REAL :
-        return t;
-
-      case ATerm.APPL :
-        if (TBTerm.isVar(t))
-          return env.getVar(t);
-        if (TBTerm.isBoolean(t))
-          return t;
-        String fun = ((ATermAppl) t).getName();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        ATerm vargs[] = new ATerm[args.length];
-        for (int i = 0; i < args.length; i++) {
-          vargs[i] = eval(args[i], process);
-        }
-        return apply(fun, vargs, process);
-
-      case ATerm.LIST :
-        ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(eval(((ATermList) t).elementAt(i), process), lst);
-        }
-        return lst;
-    }
-    throw new ToolBusInternalError("illegal ATerm in eval: " + t);
-  }
+  /**
+   * Replace all variables in an ATerm by their value.
+   * 
+   */
 
   public static ATerm substitute(ATerm t, Environment env) throws ToolBusException {
     switch (t.getType()) {
@@ -480,7 +325,6 @@ public class TBTerm {
       case ATerm.PLACEHOLDER :
       case ATerm.REAL :
         return t;
-
       case ATerm.APPL :
         if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
           return env.getVar(t);
@@ -497,7 +341,6 @@ public class TBTerm {
           vargs[i] = substitute(args[i], env);
         }
         return factory.makeAppl(afun, vargs);
-
       case ATerm.LIST :
         ATermList lst = factory.makeList();
         for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
@@ -507,68 +350,22 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
   }
-
-  private static ATerm apply(String fun, ATerm args[], ProcessInstance process) {
-    FunctionDescriptor fd = (FunctionDescriptor) Funs.get(fun);
-
-    if (fd == null) {
-      throw new ToolBusInternalError("apply: unknown function: " + fun);
-    }
-
-    try {
-      fd.checkRunTime(args); // redundant after typecheck!
-    } catch (ToolBusException e) {
-    }
-
-    switch (fd.getIndex()) {
-
-      case Not :
-        return args[0] == True ? False : True;
-      case And :
-        return (args[0] == True) && (args[1] == True) ? True : False;
-      case Or :
-        return (args[0] == True) || (args[1] == True) ? True : False;
-      case Equal :
-        return (args[0] == args[1]) ? True : False;
-      case NotEqual :
-        return (args[0] != args[1]) ? True : False;
-      case Greater :
-        return ((ATermInt) args[0]).getInt() > ((ATermInt) args[1]).getInt() ? True : False;
-      case GreaterEqual :
-        return ((ATermInt) args[0]).getInt() >= ((ATermInt) args[1]).getInt() ? True : False;
-      case Less :
-        return ((ATermInt) args[0]).getInt() < ((ATermInt) args[1]).getInt() ? True : False;
-      case LessEqual :
-        return ((ATermInt) args[0]).getInt() > ((ATermInt) args[1]).getInt() ? True : False;
-      case Add :
-        return factory.makeInt(((ATermInt) args[0]).getInt() + ((ATermInt) args[1]).getInt());
-      case Sub :
-        return factory.makeInt(((ATermInt) args[0]).getInt() - ((ATermInt) args[1]).getInt());
-      case Mul :
-        return factory.makeInt(((ATermInt) args[0]).getInt() * ((ATermInt) args[1]).getInt());
-      case Div :
-        return factory.makeInt(((ATermInt) args[0]).getInt() / ((ATermInt) args[1]).getInt());
-      case Mod :
-        return factory.makeInt(((ATermInt) args[0]).getInt() % ((ATermInt) args[1]).getInt());
-      case Abs :
-        return factory.makeInt(Math.abs(((ATermInt) args[0]).getInt()));
-
-      case processId :
-        return process.getProcessId();
-      case trueFun :
-        return True;
-      case falseFun :
-        return False;
-    }
-    throw new ToolBusInternalError("unknown function : " + fun);
-  }
-
+  
+  
+  /**
+   * Matching of two terms. Both terms use a different environment. There are two flavours of matching:
+   * match      -- complete match with full treatment of variabeles
+   * mightMatch -- a partial match that ignores variables.
+   * 
+   */
+  
   private static Environment enva;
   private static Environment envb;
   private static MatchEnvironment menva;
   private static MatchEnvironment menvb;
   private static boolean fullMatch = true;
-
+  
+  
   public static MatchResult match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
     TBTerm.enva = enva;
     TBTerm.envb = envb;
@@ -579,8 +376,7 @@ public class TBTerm {
     return new MatchResult(res, menva, menvb);
   }
 
-  public static boolean mightMatch(ATerm ta, ATerm tb) {
-    //System.out.println("mightMatch(" + ta +", " + tb + ")");
+  public static boolean mightMatch(ATerm ta, ATerm tb) { //System.out.println("mightMatch(" + ta +", " + tb + ")");
     fullMatch = false;
     try {
       return performMatch(ta, tb);
@@ -621,13 +417,10 @@ public class TBTerm {
     switch (ta.getType()) {
       case ATerm.BLOB :
         return ta.equals(tb); // || (tb == TBTerm.BlobPlaceholder);
-
       case ATerm.INT :
         return ta.equals(tb) || (tb == TBTerm.IntPlaceholder);
-
       case ATerm.REAL :
         return ta.equals(tb) || (tb == TBTerm.RealPlaceholder);
-
       case ATerm.PLACEHOLDER :
         if (ta.equals(IntPlaceholder) && tb.getType() == ATerm.INT)
           return true;
@@ -641,7 +434,6 @@ public class TBTerm {
           return true;
         else
           return false;
-
       case ATerm.APPL :
         if (tb.getType() == ATerm.PLACEHOLDER) {
           if (tb == StrPlaceholder && ((ATermAppl) ta).getArity() == 0)

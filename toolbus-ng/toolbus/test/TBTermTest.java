@@ -117,7 +117,7 @@ public class TBTermTest extends TestCase {
 
   public ATerm check(String s) throws ToolBusException {
     Environment e = new Environment();
-    return TBTerm.checkType(factory.make(s), e);
+    return FunctionDescriptors.checkType(factory.make(s), e);
   }
 
   public void testStaticCheck() throws ToolBusException {
@@ -130,14 +130,35 @@ public class TBTermTest extends TestCase {
     assertEquals(check("add(1,2)"), TBTerm.IntType);
     assertEquals(check("greater(1,2)"), TBTerm.BoolType);
   }
-  
+
   public boolean compatible(String s1, String s2) throws ToolBusException {
-    return TBTerm.checkCompatible(factory.make(s1), factory.make(s2));
+    return TBTerm.assignCompatible(factory.make(s1), factory.make(s2));
   }
-  
+
   public void testCompatible() throws ToolBusException {
-    assertTrue(compatible("1", "1"));
-    assertTrue(compatible("<term>", "1"));
+    assertTrue(compatible("int", "int"));
+    assertTrue(!compatible("int", "real"));
+
+    assertTrue(compatible("term", "int"));
+    assertTrue(compatible("int", "term"));
+
+    assertTrue(compatible("f", "f"));
+    assertTrue(!compatible("f", "g"));
+    assertTrue(compatible("f(int)", "f(int)"));
+    assertTrue(compatible("f", "f(int)"));
+    assertTrue(!compatible("f(int)", "f()"));
+
+    assertTrue(compatible("[]", "[]"));
+    assertTrue(compatible("[int]", "[int]"));
+    assertTrue(!compatible("[int]", "[]"));
+    assertTrue(!compatible("[int,int]", "[int]"));
+    assertTrue(!compatible("[int]", "[int,int]"));
+
+    assertTrue(compatible("list", "[int,int]"));
+    assertTrue(!compatible("list", "int"));
+
+    assertTrue(compatible("list(int)", "[int, int, int]"));
+    assertTrue(!compatible("list(int)", "[int, real, int]"));
   }
 
   public static Test suite() {
