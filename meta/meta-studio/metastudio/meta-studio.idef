@@ -82,6 +82,9 @@ in
       rec-event(UI, new-module(Path?, Str?)).
       snd-msg(create-new-module(Path, Str)).
       (
+        rec-msg(module-not-created(ErrMsg?)).
+	snd-note(ui-status(errorf("%s",[ErrMsg])))
+      +
         rec-msg(new-module-not-created(ErrMsg?)).
 	snd-note(ui-status(errorf("%s",[ErrMsg])))
       +

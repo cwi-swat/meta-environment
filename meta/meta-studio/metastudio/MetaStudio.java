@@ -400,9 +400,8 @@ public class MetaStudio
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
-                    System.out.println("yes!\n");      
           bridge.postEvent(
-            factory.make("create-new-module(<str>,<str>)", (String) values[i],
+            factory.make("new-module(<str>,<str>)", (String) values[i],
             (String) values[i]));
         }
       }
@@ -998,7 +997,7 @@ public class MetaStudio
 	//{{{ public void moduleSelected(Module module)
 
 	public void moduleSelected(Module module) {
-		if (module == null || module.getState() == Module.STATE_NEW) {
+		if (module == null) {
 			moduleList.clearSelection();
 		}
 		else {
