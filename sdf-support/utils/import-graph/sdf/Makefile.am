@@ -26,8 +26,8 @@ JAVAROOT = ${top_builddir}/utils/import-graph
 javadir = ${prefix}/classes/sdf
 
 jtif:
-	${TOOLBUS}/bin/idef2tif sdf-import-graph.idef
-	${TOOLBUS}/bin/tifstojava \
+	idef2tif sdf-import-graph.idef
+	tifstojava \
 		-tool sdf-import-graph \
 		-tifs sdf-import-graph.tifs \
 		-package sdf
