@@ -3,7 +3,7 @@
  */
 
 tool gentable is {
-  command = "ksdf2table"
+  command = "parsetablegen"
 }
 
 
