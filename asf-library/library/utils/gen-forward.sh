@@ -47,11 +47,6 @@ for b in \${BUILTIN_NAMES}; do
 done
 `
 
-  if (result == NULL) {
-    ATwarning("WARNING: builtin %s failed to return a valid term\n", name);
-    return input;
-  }
-
   return result; 
 }
 END_OF_FILE
