@@ -1,5 +1,5 @@
 EXTRA_DIST = Sdf2.sdf2 Sdf2-bootstrap.tbl
-CLEANFILES = Sdf2.baf
+CLEANFILES = Sdf2.baf Sdf2.asfix
 
 pkgdata_DATA = Sdf2.baf
 

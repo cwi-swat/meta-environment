@@ -164,15 +164,10 @@ equations
 
 %% \paragraph{Hiding Productions}
 
-%%%  [0] hide(M, context-free syntax p*)    = context-free syntax hide(M, p*)
-%%%  [0] hide(M, lexical syntax p*)         = lexical syntax hide(M, p*)
-%%%  [0] hide(M, variables p*)              = variables hide(M, p*)
-%%%  [0] hide(M, lexical variables p*)      = lexical variables hide(M, p*)
-
-  [annA] annotate(M, context-free syntax p*)  = context-free syntax annotateprods(M, p*)
-  [annB] annotate(M, lexical syntax p*)       = lexical syntax annotateprods(M, p*)
-  [annC] annotate(M, variables p*)            = variables annotateprods(M, p*)
-  [annD] annotate(M, lexical variables p*)    = lexical variables annotateprods(M, p*)
+  [0] hide(M, context-free syntax p*)    = context-free syntax hide(M, p*)
+  [0] hide(M, lexical syntax p*)         = lexical syntax hide(M, p*)
+  [0] hide(M, variables p*)              = variables hide(M, p*)
+  [0] hide(M, lexical variables p*)      = lexical variables hide(M, p*)
 
 %% \paragraph{Aliases}
 

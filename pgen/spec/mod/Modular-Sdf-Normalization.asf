@@ -10,14 +10,8 @@ equations
   [default-0] _G           <> imports _i*  = <imports _i*, _G>
 
 %% Normalization of module sections. Exports and hiddens sections can
-%% be merged; also, productions are annotated (with a attribute identifying
-%% the module name the production was defined in).
+%% be merged.
 
-%%  [0] module M is* is s*              = module M is* exports is s*
-  [0] module M s* = module M s*' 
-        when annotate(M, s*) = s*', s* != s*'
-%%  [0] module M is* is s* = module M is* exports is s*' 
-%%        when annotate(M, s*) = s*'
   [0] module M is* is s* = module M is* exports is s*
   [0] s*1 exports _G1 exports _G2 s*2 = s*1 exports _G1 _G2 s*2
   [0] s*1 hiddens _G1 hiddens _G2 s*2 = s*1 hiddens _G1 _G2 s*2
@@ -36,46 +30,19 @@ equations
   [0]
         proj_M(d) = s*, gra[[d]]( , Hid(s*)) = <_i*1, _G1>, gra[[d]](_i*1, Exp(s*)) = <_i*2, _G2>
         =========================================================================================
-%%%     m[[d]]( M ) = _G2 hide(M, _G1)
-        m[[d]]( M ) = _G2 _G1
+        m[[d]]( M ) = _G2 hide(M, _G1)
 
 %% The function \fun{hide} marks all productions in the hiddens part of
 %% a module with the module name by attaching the attribute $\mfun{id}(M)$
 %% to it.
 
-%%%  [] hide(M, (/))        = (/)
-%%%  [] hide(M, _G1 _G2)    = hide(M, _G1) hide(M, _G2)
-%%%  [] hide(M, syntax p*)  = syntax hide(M, p*)
-%%%  [default-] hide(M, _G) = _G
-%%%  [] hide(M, 'a -> _A!)  = 'a -> _A ! ++ {id(M)}
-%%%  [] hide(M, )           =
-%%%  [] hide(M, p+1 p+2)    = hide(M, p+1) ++ hide(M, p+2)
-
-%% The function \fun{annotate} marks all production in a module named $M$ by
-%% attaching the attribute $\mfun{id}(M)$ to it. For disambiguation
-%% purposes, it uses a separate \fun{annotateprods} function for the
-%% actual work, while \fun{annotate} itself just traverses the syntax tree.
-
-  [annss]        annotate(M, ) =
-  [annss]        annotate(M, s) = s', annotate(M, s*) = s*'
-                 ===========================================
-                 annotate(M,s s*) = s' s*'
-  [anns]         annotate(M, exports _G) = exports annotate(M, _G)
-  [anns]         annotate(M, hiddens _G) = hiddens annotate(M, _G)
-
-  [anng]         annotate(M, (/))        = (/)
-  [anng]         annotate(M, _G1 _G2)    = annotate(M, _G1) annotate(M, _G2)
-  [anng]         annotate(M, syntax p*)  = syntax annotateprods(M, p*)
-  [default-anng] annotate(M, _G)         = _G
-
-  [annp]         annotateprods(M, 'a -> _A!)  = 'a -> _A ! ++ {id(M)}
-                    when annotated(!) = false
-  [annp]         annotateprods(M, )           =
-  [annp]         annotateprods(M, p+1 p+2)    = annotateprods(M, p+1) ++ annotateprods(M, p+2)
-  [default-annp] annotateprods(M, p) = p
-
-  [isann]         annotated({attr*1, id(M), attr*2}) = true
-  [default-isann] annotated(!) = false
+  [0] hide(M, (/))        = (/)
+  [0] hide(M, _G1 _G2)    = hide(M, _G1) hide(M, _G2)
+  [0] hide(M, syntax p*)  = syntax hide(M, p*)
+  [default-0] hide(M, _G) = _G
+  [0] hide(M, 'a -> _A!)  = 'a -> _A ! ++ {id(M)}
+  [0] hide(M, )           =
+  [0] hide(M, p+1 p+2)    = hide(M, p+1) ++ hide(M, p+2)
 
 %% The function \fun{gra} expands all the imports in a grammar.
 %% It returns a structure $\langle{\sf i}^*,\Grammar\rangle$, which
@@ -124,9 +91,3 @@ equations
 %% is also applied to the imports of that module and hence is applied recursively
 %% to all modules imported via $M$.
 %%%
-
-%% Calculating the transitive closure of the import relation.
-
-  [tcl-1'1] proj_M(d) = s*
-            ===============
-            tcl[[d]](M) = <M,>

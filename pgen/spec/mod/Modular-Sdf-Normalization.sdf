@@ -6,21 +6,8 @@ imports
 exports
   context-free syntax
     "m[[" Definition "]]" "(" ModuleName ")" -> Grammar
-
-
-    annotate(ModuleName, Sections)              -> Sections
-    annotate(ModuleName, Section)               -> Section
-    annotate(ModuleName, Grammar)               -> Grammar
-    annotateprods(ModuleName, Productions)      -> Productions
-
-    annotated(Attributes)                       -> Bool
-
-  sorts ICL Ipair
-  context-free syntax
-    "<" ModuleName "," Imports ">" -> Ipair
-    Ipair*                         -> ICL
-
-    "tcl[[" Definition "]]" "(" ModuleName ")" -> ICL
+    hide(ModuleName, Grammar)                -> Grammar
+    hide(ModuleName, Productions)            -> Productions
 
 hiddens
   sorts IG

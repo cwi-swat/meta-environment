@@ -1,5 +1,11 @@
 $Id$
 
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions:
+   - adapted the normalization specification.
+   - regenerated the regression grammars. 
+   - regenerated the bootstrap table.
+
 2001/10/11 (mdejonge@cwi.nl)
  * Added (generated) manual pages to EXTRA_DIST variable because not
    everybody has pod2man available
