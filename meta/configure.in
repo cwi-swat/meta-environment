@@ -155,9 +155,7 @@ AC_OUTPUT(
    graph-browser/Makefile
    graph-browser/graph-browser.tcl
    in-output/Makefile
-   in-output/test/Makefile
    module-db/Makefile
-   module-db/test/Makefile
    editors/Makefile
    editors/manager/Makefile
    editors/manager/src/Makefile
@@ -165,15 +163,10 @@ AC_OUTPUT(
    editors/structure/Makefile
    editors/structure/src/Makefile
    tbscripts/Makefile
-   tbscripts/test/Makefile
    utils/Makefile
    demo/Makefile
    demo/pico/Makefile
    demo/user-manual-examples/Makefile
-   doc/Makefile
-   doc/exercises/Makefile
-   doc/html/Makefile
-   doc/user-manual/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
 )

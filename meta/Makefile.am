@@ -3,7 +3,7 @@
 include ${top_srcdir}/make_rules
 
 SUBDIRS     = config editors graph-browser \
-              in-output module-db utils tbscripts demo doc  \
+              in-output module-db utils tbscripts demo \
               configuration-manager
 
 EXTRA_DIST  = make_rules meta.sh.src meta.pod reconf
