@@ -3,11 +3,17 @@ package toolbus.process;
 import java.util.Iterator;
 import java.util.Vector;
 
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermList;
+
 import toolbus.Environment;
+import toolbus.TBTerm;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.atom.Atom;
 import toolbus.atom.AtomSet;
+import toolbus.tool.ToolInstance;
 
 /**
  * @author paulk, Jul 23, 2002
@@ -15,29 +21,40 @@ import toolbus.atom.AtomSet;
 public class ProcessInstance {
   static int processCount = 0;
   static AtomSet empty = new AtomSet();
-  private int processId;
+  private ATerm processId;
   private AtomSet atoms;
   private AtomSet prefix;
   private Environment env;
   private ToolBus toolbus;
+  private ToolInstance toolinstance;
 
-  public ProcessInstance(ToolBus TB, ProcessExpression PE) throws ToolBusException {
+  public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
+  	
+  	ProcessDefinition def = TB.getProcessDefinition(name);
+  	
+  	env = new Environment();
+  	ProcessExpression PE = def.compile(this, empty, actuals);
+  	
     Vector procs = TB.getProcesses();
-    processId = processCount++;
-    env = new Environment();
+    
+    AFun afun = TBTerm.factory.makeAFun(name, 1, false);
+	processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
+		
     toolbus = TB;
-    PE.compile(this, empty);
+
     atoms = PE.getAtoms();
     for (int i = 0; i < procs.size(); i++) {
       ((ProcessInstance) procs.elementAt(i)).findPartners(atoms);
     }
     prefix = PE.getFirst();
     env.setExecuting();
+    
+    toolinstance = def.createToolInstance();
 
     System.out.println(processId + ": " + PE);
     System.out.println(processId + ": atoms: =" + atoms);
     System.out.println(processId + ": prefix = " + prefix);
-    for (Iterator it = atoms.getAtoms().iterator(); it.hasNext();) {
+    for (Iterator it = atoms.getAtomsAsVector().iterator(); it.hasNext();) {
       Atom a = (Atom) it.next();
       System.out.println(processId + ": " + a + " --> " + a.getFollow());
     }
@@ -51,8 +68,18 @@ public class ProcessInstance {
     return toolbus;
   }
 
-  public int getProcessId() {
+  public ATerm getProcessId() {
     return processId;
+  }
+  
+  public ToolInstance getToolInstance(){
+  	return toolinstance;
+  }
+  
+  public void terminate(String msg){
+  	if(toolinstance != null){
+  		toolinstance.terminate(msg);
+  	}
   }
 
   public void findPartners(AtomSet a) {

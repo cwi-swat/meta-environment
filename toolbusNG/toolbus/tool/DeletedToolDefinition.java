@@ -13,13 +13,13 @@ import aterm.ATermList;
 /**
  * @author paulk
  */
-public class ToolDefinition{
+public class DeletedToolDefinition{
 	private static int ninstances = 0;
 	private String name;
 	private String cmd;
 	private Vector occurrences;
 	
-	public ToolDefinition(String name, String cmd){
+	public DeletedToolDefinition(String name, String cmd){
 		this.name = name;
 		this.cmd = cmd;
 		occurrences = new Vector();

@@ -1,0 +1,43 @@
+process PRODUCER(Start : int, Max : int) is
+  let N : int
+  in
+     N := Start .
+     ( if less(N, Max)
+       then snd-msg(p(N)) .
+            N := add(N, 1)
+       fi
+     ) * if equal(N, Max) then shutdown("done") fi
+  endlet
+
+process CONSUMER is
+  let Z : int
+  in
+     ( rec-msg(q(Z?)) .
+       if equal(mod(Z, 2), 0)
+       then
+          printf("%t\n", Z)
+       else
+          tau
+       fi
+     ) * delta
+  endlet
+
+process TRAFO is
+  let Z : int
+  in
+     ( rec-msg(p(Z?)) . snd-msg(q(Z)) ) * delta
+  endlet
+
+toolbus(
+
+CONSUMER(),
+PRODUCER(100,999),
+PRODUCER(1000,1999),
+PRODUCER(2000,2999),
+TRAFO(),
+TRAFO(),
+TRAFO()
+
+)
+
+

@@ -12,5 +12,7 @@ public interface ToolBridge {
 	public void sndValueToToolBus(ATerm trm);
 	
 	public void sndEventToToolBus(ATerm trm);
+	
+	public void terminate(String msg);
 
 }

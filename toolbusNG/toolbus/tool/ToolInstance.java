@@ -15,6 +15,8 @@ public interface  ToolInstance {
   	public void sndEvalToTool(ATermAppl call);
   	
   	public void sndDoToTool(ATermAppl call);
+  	
+  	public void terminate(String msg);
  	
  	public MatchResult getValueFromTool(ATerm trm, Environment env);
 

@@ -5,7 +5,7 @@
 package toolbus;
 import toolbus.atom.*;
 import toolbus.process.*;
-import toolbus.tool.ToolDefinition;
+import toolbus.tool.DeletedToolDefinition;
 
 import aterm.*;
 import aterm.pure.PureFactory;
@@ -23,10 +23,10 @@ public class Main {
     //IfTest(); 
     //CreateTest();
     //NestedIterTest();
-//    MergeTest();
-    SieveTest();
+	// MergeTest();
+    //SieveTest();
     //producerTest();
-    //ToolTest();
+    ToolTest();
   }
   
   static void atomTest(){
@@ -47,23 +47,30 @@ public class Main {
     //ATermList dl = aterms.makeList(aterms.make("d"));
     ATermList el = aterms.makeList(aterms.make("e"));
 
-    try {
-      ToolBus T =
-        new ToolBus(
-          new ProcessExpression[] {
+   ProcessDefinition P1 = new ProcessDefinition("P1",
             new Iteration(
               new Alternative(new Print(al), new Print(bl)),
-              new Print(cl)),
-              
-            new SndMsg((ATermList) aterms.make("[z]")),
-            
+              new Print(cl))
+             );
+             
+    ProcessDefinition P2 = new ProcessDefinition("P2",
+            new SndMsg((ATermList) aterms.make("[z]"))
+    );
+    
+    ProcessDefinition P3 = new ProcessDefinition("P3",
             new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
               new Sequence(
                 new Print(el), 
                   new RecMsg((ATermList) aterms.make("[rvar(-1,int,Z)]")),
                     new Print((ATermList) aterms.make("[var(-1,int,Z)]"))
                     ))           
-            });
+    );
+        
+    try {    
+      ToolBus T = new ToolBus();
+      T.addProcessDefinition(P1);
+      T.addProcessDefinition(P2);
+      T.addProcessDefinition(P3); 
       T.execute();
     }
     catch (ToolBusException e) {
@@ -72,17 +79,23 @@ public class Main {
   }
 
   static void LetTest(){
-    try {
-      ToolBus T = new ToolBus(new ProcessExpression[] {
+    
+     ProcessDefinition P = new ProcessDefinition("P",
         new LetDefinition((ATermList) aterms.make("[var(-1,int,x), var(-1,int,y)]"),
                           new Sequence(
                             new Assign(aterms.make("var(-1,qqq,x)"), aterms.make("1")),
                             new Assign(aterms.make("var(-1,qqq,y)"), aterms.make("add(var(-1,qqq,x),2)")),
                             new Print((ATermList) aterms.make("[\"Value of y: \", var(-1,qqq,y)]"))
                           )
-        )       
-      });
-      T.execute();
+        )  
+      ); 
+      
+      try {
+      	ToolBus T = new ToolBus();
+      	T.addProcessDefinition(P); 
+      	T.addProcess("P");
+   
+        T.execute();
     }
     catch (ToolBusException e) {
       System.out.println(e.getMessage());
@@ -116,20 +129,23 @@ public class Main {
         new Sequence(new Print((ATermList) aterms.make("[\"P2: \", var(-1,int,x), \" \", var(-1,int,y)]")),
           new Assign(vary, int21)));
                                                                   
-    ProcessExpression P =
+    ProcessDefinition PD3 =
+     new ProcessDefinition("P3", 
       new LetDefinition((ATermList) aterms.make("[var(-1,int,x), var(-1,int,y)]"),
         new Sequence(new Assign(varx, int3),
           new Assign(vary, int8),
           new Print((ATermList) aterms.make("[\"P: \", var(-1,int,x), \" \", var(-1,int,y)]")),
           new ProcessCall("P1", (ATermList) aterms.make("[var(-1,int,x), 2]")),
           new ProcessCall("P1", (ATermList) aterms.make("[var(-1,int,x), var(-1,int,y)]")),
-          new Print((ATermList) aterms.make("[\"P: \", var(-1,int,x), \"  \", var(-1,int,y)]"))));
+          new Print((ATermList) aterms.make("[\"P: \", var(-1,int,x), \"  \", var(-1,int,y)]"))))
+          );
       
     try {
       ToolBus T = new ToolBus();
       T.addProcessDefinition(PD1);
       T.addProcessDefinition(PD2);
-      T.addProcess(P);
+      T.addProcessDefinition(PD3);
+      T.addProcess("P3");
       T.execute();
     }
     catch (ToolBusException e) { System.out.println(e.getMessage()); }
@@ -143,8 +159,7 @@ public class Main {
     ATerm int5 = aterms.make("5");
     ATerm varx = aterms.make("var(-1,int,x)");
     
-    try {
-         ToolBus T = new ToolBus(new ProcessExpression[] {
+     ProcessDefinition P = new ProcessDefinition("P",
           
           new LetDefinition((ATermList) aterms.make("[var(-1,int,x)]"),
             new Sequence(
@@ -162,9 +177,14 @@ public class Main {
                     new Delta()
                 )
             ) )) 
-          });
+      );
+      
+      try {
+      	ToolBus T = new ToolBus();
+      		T.addProcessDefinition(P);
+      		T.addProcess("P");
          
-      T.execute();
+      		T.execute();
     }
     catch (ToolBusException e) { System.out.println(e.getMessage()); }
     }
@@ -178,8 +198,7 @@ public class Main {
                )
                );
                
-    try {
-    ToolBus T = new ToolBus(new ProcessExpression[] {
+    ProcessDefinition P2 = new ProcessDefinition("P2",
         new LetDefinition((ATermList) aterms.make("[var(-1,int,pid)]"),
           new Sequence(
            new Print((ATermList) aterms.make("[before]")),
@@ -187,9 +206,12 @@ public class Main {
            new Print((ATermList) aterms.make("[after, \" \", var(-1,int,pid)]"))
           )
           )
-      });
+    );
+    try {
+      ToolBus T = new ToolBus();
       
       T.addProcessDefinition(P1);
+      T.addProcessDefinition(P2);
       T.execute();
     }
     catch (ToolBusException e) { System.out.println(e.getMessage()); }
@@ -249,7 +271,7 @@ public class Main {
       ToolBus T = new ToolBus();
       T.addProcessDefinition(P);
       //T.addProcessDefinition(Q);
-      T.addProcess(new ProcessCall("P", (ATermList) aterms.make("[]")));
+      T.addProcess("P");
       
       T.execute();  
     
@@ -265,7 +287,7 @@ public class Main {
     ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
     
     ProcessDefinition MERGE =
-      new ProcessDefinition("MERGE", (ATermList) aterms.make("[]"),
+      new ProcessDefinition("MERGE",
         new Merge(
           new Sequence(Pa,Pb),
           new Sequence(Pc,Pd)
@@ -275,7 +297,7 @@ public class Main {
     try { 
       ToolBus T = new ToolBus();
       T.addProcessDefinition(MERGE);
-      T.addProcess(new ProcessCall("MERGE", (ATermList) aterms.make("[]")));
+      T.addProcess("MERGE");
       T.execute();
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }      
   }
@@ -356,8 +378,8 @@ public class Main {
       
       T.addProcessDefinition(SIEVE);
       T.addProcessDefinition(FILTER);
-      T.addProcess(new ProcessCall("SIEVE", (ATermList) aterms.make("[11]")));
-      //T.addProcess(new ProcessCall("FILTER", (ATermList) aterms.make("[2]")));
+      T.addProcess("SIEVE", (ATermList) aterms.make("[11]"));
+      //T.addProcess("FILTER", (ATermList) aterms.make("[2]"));
       
       T.execute();
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }
@@ -404,7 +426,7 @@ static void producerTest(){
   
   
   ProcessDefinition CONSUMER =
-  new ProcessDefinition("CONSUMER", (ATermList) aterms.make("[]"),
+  new ProcessDefinition("CONSUMER",
     new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
         new Iteration(
           new Sequence(
@@ -421,7 +443,7 @@ static void producerTest(){
   ); //procdef
   
   ProcessDefinition TRAFO =
-  new ProcessDefinition("TRAFO", (ATermList) aterms.make("[]"),
+  new ProcessDefinition("TRAFO",
     new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
         new Iteration(
           new Sequence(
@@ -439,13 +461,13 @@ static void producerTest(){
     T.addProcessDefinition(CONSUMER);
     T.addProcessDefinition(TRAFO);
     
-    T.addProcess(new ProcessCall("CONSUMER", (ATermList) aterms.make("[]")));
-    T.addProcess(new ProcessCall("PRODUCER", (ATermList) aterms.make("[100, 999]")));
-    T.addProcess(new ProcessCall("PRODUCER", (ATermList) aterms.make("[1000, 1999]")));
-    T.addProcess(new ProcessCall("PRODUCER", (ATermList) aterms.make("[2000, 2999]")));
-    T.addProcess(new ProcessCall("TRAFO", (ATermList) aterms.make("[]")));
-    T.addProcess(new ProcessCall("TRAFO", (ATermList) aterms.make("[]")));
-    T.addProcess(new ProcessCall("TRAFO", (ATermList) aterms.make("[]")));
+    T.addProcess("CONSUMER");
+    T.addProcess("PRODUCER", (ATermList) aterms.make("[100, 999]"));
+    T.addProcess("PRODUCER", (ATermList) aterms.make("[1000, 1999]"));
+    T.addProcess("PRODUCER", (ATermList) aterms.make("[2000, 2999]"));
+    T.addProcess("TRAFO");
+    T.addProcess("TRAFO");
+    T.addProcess("TRAFO");
     
     T.execute();
   } catch (ToolBusException e) { System.out.println(e.getMessage()); }
@@ -454,29 +476,27 @@ static void producerTest(){
   
   static void ToolTest(){
     
-    ToolDefinition Tool1 = new ToolDefinition("t1", "toolbus.tool.Example");
-    
     ProcessDefinition P1 =
       new ProcessDefinition("P1", (ATermList) aterms.make("[]"),
-        new LetDefinition((ATermList) aterms.make("[var(-1,t1,tool), var(-1,int,R), var(-1,str,Name)]"),
+        new LetDefinition((ATermList) aterms.make("[var(-1,int,R), var(-1,str,Name)]"),
           new Sequence(
-            new Execute(aterms.make("t1"), aterms.make("rvar(-1,qqq,tool)")),
-            new SndEval(aterms.make("var(-1,qqq,tool)"), aterms.make("msg(\"hello\")")),
-            new RecVal(aterms.make("var(-1,qqq,tool)"), aterms.make("count(rvar(-1,qqq,R))")),
+            new Eval(aterms.make("msg(\"hello\")")),
+            new RecVal(aterms.make("count(rvar(-1,qqq,R))")),
             new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
             new Sequence(
-              new RecEvent(aterms.make("var(-1,qqq,tool)"), aterms.make("button(rvar(-1,qqq,Name))")),
+              new Event(aterms.make("button(rvar(-1,qqq,Name))")),
               new Print((ATermList) aterms.make("[var(-1,qqq,Name)]")),
-              new SndAckEvent(aterms.make("var(-1,qqq,tool)"),aterms.make("button(var(-1,qqq,Name))"))
-            )
-          )
-        )
+              new AckEvent(aterms.make("button(var(-1,qqq,Name))"))
+            ) //seq
+          ) //seq
+        ), //let
+        "toolbus.tool.Example"
       );
       
     ATerm varN = aterms.make("var(-1,int,N)");
       
     ProcessDefinition P2 =
-      new ProcessDefinition("P2", (ATermList) aterms.make("[]"),
+      new ProcessDefinition("P2",
         new LetDefinition((ATermList) aterms.make("[var(-1,int, N)]"),
           new Sequence(
             new Assign(aterms.make("var(-1,int, N)"), aterms.make("0")),
@@ -488,7 +508,7 @@ static void producerTest(){
               )
             ),
             new IfThen(aterms.make("equal(<term>,15)", varN),
-              new ShutDown()
+              new ShutDown(aterms.make("end-of-ToolTest"))
             )
           )
         )
@@ -497,15 +517,14 @@ static void producerTest(){
     
     try {
       ToolBus T = new ToolBus();
-      T.addTooldefinition(Tool1);
       T.addProcessDefinition(P1);
       T.addProcessDefinition(P2);
       
-      T.addProcess(new ProcessCall("P1", (ATermList) aterms.make("[]")));
-      T.addProcess(new ProcessCall("P2", (ATermList) aterms.make("[]")));
+      T.addProcess("P1");
+      T.addProcess("P2");
       T.execute();
     }
-    catch (Exception e) {System.out.println(e.getMessage()); }
+    catch (Exception e) {System.out.println(e.getMessage());  e.printStackTrace(); }
   }
   
 }

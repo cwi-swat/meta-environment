@@ -28,8 +28,7 @@ public class ProcessCall implements ProcessExpression {
     ToolBus TB = P.getToolBus();
     ProcessDefinition PD = TB.getProcessDefinition(name);
     //System.out.println("formals = " + PD.getFormals());
-    PD.setActuals(args);
-    PE = PD.compile(P, follows);
+    PE = PD.compile(P, follows, args);
     //System.out.println(PE);
   }
 

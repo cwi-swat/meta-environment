@@ -30,14 +30,14 @@ public class AtomSet {
     for (Iterator it = atoms.iterator(); it.hasNext();)
       c.add((Atom) it.next());
 
-    for (Iterator it = b.getAtoms().iterator(); it.hasNext();)
+    for (Iterator it = b.getAtomsAsVector().iterator(); it.hasNext();)
       c.add((Atom) it.next());
 
     //System.out.println("union(" + this + ", " + b + ") => " + c);
     return c;
   }
 
-  public Vector getAtoms() {
+  public Vector getAtomsAsVector() {
     return atoms;
   }
 
@@ -53,7 +53,7 @@ public class AtomSet {
     for (Iterator ita = atoms.iterator(); ita.hasNext();) {
       Atom a = (Atom) ita.next();
 
-      for (Iterator itb = set.getAtoms().iterator(); itb.hasNext();) {
+      for (Iterator itb = set.getAtomsAsVector().iterator(); itb.hasNext();) {
         Atom b = (Atom) itb.next();
         if (a.canCommunicate(b)) {
           a.addPartner(b);
