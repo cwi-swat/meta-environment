@@ -4,9 +4,9 @@ module Traversals-Utils
 imports Sdf2
 
 exports
-	
+  
   variables
-	
+  
   "ModuleName" [0-9]* -> ModuleName
   "ImpSection" [0-9]* -> ImpSection
   "ImpSection*" [0-9]* -> ImpSection*
@@ -14,8 +14,8 @@ exports
   "Module*" [0-9]* -> Module*
 
   "Import" [0-9]* -> Import
-  "Import*" [0-9]* -> Import*	
-  "Import+" [0-9]* -> Import+	
+  "Import*" [0-9]* -> Import*  
+  "Import+" [0-9]* -> Import+  
   "Imports" [0-9]* -> Imports
 
   "Section" [0-9]* -> Section
@@ -32,7 +32,7 @@ exports
   "NormalProduction" [0-9]* -> Production
 
   "$Symbol" [0-9]* -> Symbol
-  "*Symbol" [0-9]* -> Symbol*
+  "$Symbol*" [0-9]+ -> Symbol*
   "$Symbols" [0-9]* -> Symbols
 
   "Grammar" [0-9]* -> Grammar

@@ -3,14 +3,14 @@ module Traversals-Make
 imports Traversals-Closure
 
 exports
-	context-free syntax
-	"make_productions" "(" Productions "," Productions ")" -> Productions
-	
+  context-free syntax
+  "make_productions" "(" Productions "," Productions ")" -> Productions
+  
 hiddens
-	context-free syntax
-	"make_traversals" "(" Productions "," Productions ")" -> Productions
-	"make_traversal" "(" Productions "," Production ")" -> Productions
+  context-free syntax
+  "make_traversals" "(" Productions "," Productions ")" -> Productions
+  "make_traversal" "(" Productions "," Production ")" -> Productions
 
-	context-free syntax
-	"create_productions" "(" Production "," SymbolSet ")" -> Productions
-	"create_production" "(" Production "," Symbol ")" -> Productions
+  context-free syntax
+  "create_productions" "(" Production "," SymbolSet ")" -> Productions
+  "create_production" "(" Production "," Symbol ")" -> Productions

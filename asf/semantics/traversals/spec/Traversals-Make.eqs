@@ -5,7 +5,7 @@ equations
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 [mps-0] make_productions(NormalProductions, TraversalProductions) = 
-					make_traversals(NormalProductions, TraversalProductions)
+          make_traversals(NormalProductions, TraversalProductions)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Making productions for each traversal production
@@ -14,10 +14,10 @@ equations
 [mts-0] make_traversals(NormalProductions, ) = 
 
 [mts-1] make_traversal(NormalProductions, TraversalProduction) = Production*1,
-				make_traversals(NormalProductions, TraversalProduction*) = Production*2
-				========================================================================
-				make_traversals(NormalProductions, TraversalProduction TraversalProduction*) =
-					Production*1 
+        make_traversals(NormalProductions, TraversalProduction*) = Production*2
+        ========================================================================
+        make_traversals(NormalProductions, TraversalProduction TraversalProduction*) =
+          Production*1 
           Production*2 
 
 %% We create productions by calculating the set of reachable sorts starting with
@@ -29,19 +29,19 @@ equations
 
 %% Sort preserving traversals first:
 
-[mt-0]  TraversalProduction = *Symbol1 $Sort *Symbol2 -> $Sort Attributes,
-				close_sorts_set(NormalProductions,[$Sort]) = $SymbolSet,
-				create_productions(TraversalProduction, $SymbolSet) = Productions
-				============================================================================
-				make_traversal(NormalProductions, TraversalProduction) = Productions
+[mt-0]  TraversalProduction = $Symbol*1 $Sort $Symbol*2 -> $Sort Attributes,
+        close_sorts_set(NormalProductions,[$Sort]) = $SymbolSet,
+        create_productions(TraversalProduction, $SymbolSet) = Productions
+        ============================================================================
+        make_traversal(NormalProductions, TraversalProduction) = Productions
 
 %% Analyzer transformations 
 
-[mt-1]	TraversalProduction = *Symbol1 $Sort1 *Symbol2 $Sort2 *Symbol3 -> $Sort2 Attributes,
-				close_sorts_set(NormalProductions, [$Sort1]) = $SymbolSet,
-				create_productions(TraversalProduction, $SymbolSet) = Productions
-				====================================================================================
-				make_traversal(NormalProductions, TraversalProduction) = Productions
+[mt-1]  TraversalProduction = $Symbol*1 $Sort1 $Symbol*2 $Sort2 $Symbol*3 -> $Sort2 Attributes,
+        close_sorts_set(NormalProductions, [$Sort1]) = $SymbolSet,
+        create_productions(TraversalProduction, $SymbolSet) = Productions
+        ====================================================================================
+        make_traversal(NormalProductions, TraversalProduction) = Productions
 
 %% default to prevent divergence in case of a typo
 [default-mt] make_traversal(NormalProductions, TraversalProduction) = 
@@ -53,27 +53,27 @@ equations
 [cps-0] create_productions(TraversalProduction, []) =
 
 [cps-1] create_production(TraversalProduction, $Symbol) = Production*1,
-				create_productions(TraversalProduction, [*Symbol]) = Production*2
-				===============================================================
-				create_productions(TraversalProduction, [ $Symbol *Symbol ]) = 
-				Production*1
+        create_productions(TraversalProduction, [$Symbol*0]) = Production*2
+        ===============================================================
+        create_productions(TraversalProduction, [ $Symbol $Symbol*0 ]) = 
+        Production*1
         Production*2
 
 %% Create a sort preserving transformation:
 
-[cp-0] create_production(Literal "(" $Symbol1 "," *Symbol ")" -> $Symbol1 Attributes, $Sort) = 
-					Literal "(" $Sort "," *Symbol ")" -> $Sort Attributes
+[cp-0] create_production(Literal "(" $Symbol1 "," $Symbol*0 ")" -> $Symbol1 Attributes, $Sort) = 
+          Literal "(" $Sort "," $Symbol*0 ")" -> $Sort Attributes
 
 [cp-1] create_production(Literal "(" $Symbol1 ")" -> $Symbol1 Attributes, $Sort) =
           Literal "(" $Sort ")" -> $Sort Attributes
 
 %% Create an analyze 
 
-[cp-2] create_production( Literal "(" $Symbol1 "," $Symbol2 "," *Symbol ")" -> $Symbol2 Attributes, $Sort) = 
-					Literal "(" $Sort "," $Symbol2 "," *Symbol ")" -> $Symbol2 Attributes								 
+[cp-2] create_production( Literal "(" $Symbol1 "," $Symbol2 "," $Symbol*0 ")" -> $Symbol2 Attributes, $Sort) = 
+          Literal "(" $Sort "," $Symbol2 "," $Symbol*0 ")" -> $Symbol2 Attributes                 
 
 [cp-3] create_production( Literal "(" $Symbol1 "," $Symbol2 ")" -> $Symbol2 Attributes, $Sort) = 
-					Literal "(" $Sort "," $Symbol2 ")" -> $Symbol2 Attributes	
+          Literal "(" $Sort "," $Symbol2 ")" -> $Symbol2 Attributes  
 
 %% Only prefix format traversals are allowed currently
 [defaukt-cp] create_production( Production, $Symbol ) = 

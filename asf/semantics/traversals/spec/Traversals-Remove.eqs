@@ -4,7 +4,7 @@ equations
 [c-0] remove_in_sections(Section*) = Section*2
       =====================================================
       remove_traversal_productions(module ModuleName ImpSection* Section*) =
-				module ModuleName ImpSection* Section*2
+        module ModuleName ImpSection* Section*2
 
 %% Hiddens
 [riss-0] remove_in_sections( ) = 
@@ -19,18 +19,18 @@ equations
 [ris-1] remove_in_section(hiddens Grammar) = hiddens remove_in_grammar(Grammar)
 
 [rig-0] remove_in_grammar(context-free syntax Production*) = 
-					context-free syntax remove_in_productions(Production*)
+          context-free syntax remove_in_productions(Production*)
 
 [rig-1] remove_in_grammar(Grammar1) = Grammar12,
-				remove_in_grammar(Grammar2) = Grammar22
-				==========================================================
-				remove_in_grammar(Grammar1 Grammar2) = Grammar12 Grammar22
+        remove_in_grammar(Grammar2) = Grammar22
+        ==========================================================
+        remove_in_grammar(Grammar1 Grammar2) = Grammar12 Grammar22
 
 [default-rig] remove_in_grammar(Grammar) = Grammar 
 
-[rips] remove_in_productions(	Production*1 
-															$Symbols -> $Symbol {Attribute*1, traverse, Attribute*2} 
-														 	Production*2 ) = remove_in_productions(Production*1 Production*2)
+[rips] remove_in_productions(  Production*1 
+                              $Symbols -> $Symbol {Attribute*1, traverse, Attribute*2} 
+                               Production*2 ) = remove_in_productions(Production*1 Production*2)
 
 [default-rips] remove_in_productions(Production*) = Production*
 

@@ -1,10 +1,10 @@
 module Traversals-Syntax
-	imports Sdf2
+  imports Sdf2
 
 exports
-	context-free syntax
+  context-free syntax
 
-	"traverse"  -> Attribute
+  "traverse"  -> Attribute
   "traverse"  -> UQLiteral {reject}
-	"traverse"  -> ModuleName {reject}
+  "traverse"  -> ModuleName {reject}
 

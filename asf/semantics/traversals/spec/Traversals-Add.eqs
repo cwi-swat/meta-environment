@@ -12,12 +12,12 @@ equations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%
 
 [atm-0] Productions != 
-        =====================================================================	
+        =====================================================================  
         add_to_module(module ModuleName ImpSection* Section*, Productions) = 
 module ModuleName 
   ImpSection* 
   Section*
-	hiddens 
+  hiddens 
     context-free syntax 
       Productions
 

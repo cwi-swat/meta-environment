@@ -5,13 +5,13 @@ equations
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 [a-0] all_productions(module ModuleName ImpSection* Section*) =
-				all_in_sections(Section*)
+        all_in_sections(Section*)
 
 [t-0] traversal_productions(module ModuleName ImpSection* Section*) = 
-				traversals_in_sections(Section*)
+        traversals_in_sections(Section*)
 
-[neps-0]	normal_exported_productions(Definition,Imports) = 
-						normal_exported_in_definition(Definition,Imports)
+[neps-0]  normal_exported_productions(Definition,Imports) = 
+            normal_exported_in_definition(Definition,Imports)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Collecting all productions
@@ -31,9 +31,9 @@ equations
 [aig-0] all_in_grammar(context-free syntax Production*) = Production*
 
 [aig-1]  all_in_grammar(Grammar1) = Production*1,
-				all_in_grammar(Grammar2) = Production*2
-				=============================================================
-				all_in_grammar(Grammar1 Grammar2) = Production*1 Production*2
+        all_in_grammar(Grammar2) = Production*2
+        =============================================================
+        all_in_grammar(Grammar1 Grammar2) = Production*1 Production*2
 
 [default-aig] all_in_grammar(Grammar) = 
 
@@ -43,10 +43,10 @@ equations
 
 [tiss-0] traversals_in_sections ( ) = 
 
-[tiss-0]	traversals_in_section(Section) = Production*1,
-        	traversals_in_sections(Section*) = Production*2
-        	============================================
-        	traversals_in_sections(Section Section*) = Production*1 Production*2
+[tiss-0]  traversals_in_section(Section) = Production*1,
+          traversals_in_sections(Section*) = Production*2
+          ============================================
+          traversals_in_sections(Section Section*) = Production*1 Production*2
 
 [tis-0] traversals_in_section(exports Grammar) = traversals_in_grammar(Grammar)
 
@@ -55,9 +55,9 @@ equations
 [tig-0] traversals_in_grammar(context-free syntax Production*) = traversals_in_productions(Production*)
 
 [tig-1] traversals_in_grammar(Grammar1) = Production*1,
-				traversals_in_grammar(Grammar2) = Production*2
-				==============================================================
-				traversals_in_grammar(Grammar1 Grammar2) = Production*1 Production*2
+        traversals_in_grammar(Grammar2) = Production*2
+        ==============================================================
+        traversals_in_grammar(Grammar1 Grammar2) = Production*1 Production*2
 
 [default-tig] traversals_in_grammar(Grammar) =  
 
@@ -69,7 +69,7 @@ equations
 [tips-1] traversals_in_productions() = 
 
 [tip-0] traversals_in_production($Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}) = 
-					$Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}
+          $Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}
 
 [default-tip] traversals_in_production(Production) =  
 
@@ -77,32 +77,32 @@ equations
 %% Collecting all exported context-free productions that are not traversal productions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[nems-0]	normal_exported_in_definition(,Imports) =
+[nems-0]  normal_exported_in_definition(,Imports) =
 
-[nems-1]	normal_exported_in_module(Module, Imports) = Production*1,
-					normal_exported_in_definition(Module*, Imports) = Production*2
-					=====================================================================
-					normal_exported_in_definition(Module Module*, Imports) = Production*1 Production*2
+[nems-1]  normal_exported_in_module(Module, Imports) = Production*1,
+          normal_exported_in_definition(Module*, Imports) = Production*2
+          =====================================================================
+          normal_exported_in_definition(Module Module*, Imports) = Production*1 Production*2
 
-[nem-0]	  Import*1 ModuleName Import*2 = Imports
-					===========================================================================
-					normal_exported_in_module(module ModuleName ImpSection* Section*, Imports) =
-						normal_exported_in_sections(Section*)
+[nem-0]    Import*1 ModuleName Import*2 = Imports
+          ===========================================================================
+          normal_exported_in_module(module ModuleName ImpSection* Section*, Imports) =
+            normal_exported_in_sections(Section*)
 
 [default-nem] normal_exported_in_module(Module, Imports) = 
 
-[ness-0]	normal_exported_in_sections() =
+[ness-0]  normal_exported_in_sections() =
 
-[ness-1]	normal_exported_in_section(Section) = Production*1,
-					normal_exported_in_sections(Section*) = Production*2
-					===================================================
-					normal_exported_in_sections(Section Section*) = Production*1 Production*2
+[ness-1]  normal_exported_in_section(Section) = Production*1,
+          normal_exported_in_sections(Section*) = Production*2
+          ===================================================
+          normal_exported_in_sections(Section Section*) = Production*1 Production*2
 
-[nes-0]		normal_exported_in_section(exports Grammar) = normal_exported_in_grammar(Grammar)
+[nes-0]    normal_exported_in_section(exports Grammar) = normal_exported_in_grammar(Grammar)
 
 [default-nes] normal_exported_in_section(Section) =
 
-[neg-0]	normal_exported_in_grammar(context-free syntax Production*) = Production*
+[neg-0]  normal_exported_in_grammar(context-free syntax Production*) = Production*
 
 [neg-1] normal_exported_in_grammar(Grammar1) = Production*1,
         normal_exported_in_grammar(Grammar2) = Production*2
@@ -110,5 +110,5 @@ equations
         normal_exported_in_grammar(Grammar1 Grammar2) = Production*1 Production*2
 
 [default-neg] normal_exported_in_grammar(Grammar) = 
-				
+        
 
