@@ -215,7 +215,7 @@ process KillEditor(EditorId : term, Type : str, ModuleName : str) is
   snd-note(delete-editor(EditorId)) .
   if or(equal(Type, "syntax"), 
         equal(Type, "equations")) then
-    KillModuleEditor(EditorId, ModuleName) 
+    KillModuleEditor(EditorId, ModuleName, Type) 
   else	
     if not(equal(Type, "term")) then
       snd-msg(kill-editor-unknown-type-hook(EditorId, Type, ModuleName)) .
@@ -226,14 +226,14 @@ process KillEditor(EditorId : term, Type : str, ModuleName : str) is
   fi.
   snd-msg(delete-structure-editor(EditorId)) 
 
-process KillModuleEditor(EditorId : term, ModuleName : str) is
+process KillModuleEditor(EditorId : term, ModuleName : str, Type : str) is
 let
   ModifiedStatus : term
 in
   snd-msg(get-modified-status(EditorId)) .
   rec-msg(modified-status(EditorId, ModifiedStatus?)) .
   if equal(ModifiedStatus, modified) then
-    snd-msg(revert-module(ModuleName)).
+    snd-msg(revert-module(ModuleName, Type)).
     rec-msg(module-reverted(ModuleName)).
     snd-note(ui-status(errorf("Dirty module %s is reread from disk",
                        [ModuleName])))

@@ -521,7 +521,7 @@ in
       + 
 	rec-msg(revert-module, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
-        snd-msg(revert-module(ModuleName)) .           
+        snd-msg(revert-module(ModuleName, "syntax")) .           
         rec-msg(module-reverted(ModuleName)) .
 	ReturnSuccess(EditorId, Stack)	
       + 
