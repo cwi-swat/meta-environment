@@ -22,21 +22,21 @@
 
 include $(top_srcdir)/make_rules
 
-SUBDIRS           = test
+SUBDIRS			= test
 
-bin_PROGRAMS      = module-db
-data_DATA         = module-db.idef
+bin_PROGRAMS		= module-db
+data_DATA		= module-db.idef
 
-EXTRA_DIST        = module-db.idef
+EXTRA_DIST		= module-db.idef
 
-CLEANFILES        = module-db.tifs module-db.tif.c module-db.tif.h
+CLEANFILES		= module-db.tifs module-db.tif.c module-db.tif.h
 
-module_db_SOURCES = module-db.c module-db.h aft-reshuffle.c
-module_db_LDADD   = module-db.tif.o \
-                    -L$(PT_SUPPORT)/lib -lAsFix \
-                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+module_db_SOURCES	= module-db.c module-db.h aft-reshuffle.c
+module_db_LDADD		= module-db.tif.o \
+			-L$(PT_SUPPORT)/lib -lAsFix -lPT \
+			-L$(SDF_SUPPORT)/lib -lSDF \
+			-L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include \
-                    -DBINDIR=\"$(bindir)\"
+INCLUDES		= -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
 module-db.o : module-db.tif.h

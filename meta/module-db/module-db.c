@@ -26,48 +26,12 @@
  */
 
 /*}}}  */
-/*{{{  Interface description? */
-
-/* The module-database is written by Mark van den Brand.
-
-The following functions are available.
-General ToolBus functions:
-   void rec_terminate(ATerm t)
-
-Creation and clearing of the module database:
-   void create_module_db()
-   void clear_module_db()
-
-Manipulation of modules in database:
-   ATerm exists(char *modulename)
-   ATerm delete_module(char *modulename)
-   ATerm add_module(ATerm asfix)
-   ATerm add_empty_module(char* modulename)
-   ATerm add_sdf2_module(char* path, ATerm asfix, 
-                         int timestamp, char* changed)
-   void add_tree_eqs_section(char* modulename, char* path,
-                             ATerm eqsTree, char *eqsText, int timestamp)
-   void add_text_eqs_section(char* modulename, char* path, 
-                             char *eqsText, int timestamp)
-   ATerm update_sdf2_module(ATerm asfix)
-   ATerm update_eqs_tree(char* modulename, ATerm eqsTree)
-   ATerm eqs_available_for_modules(char *modulename)
-   ATerm get_path(char *modulename, ATerm type)
-   ATerm get_asfix(char *modulename, ATerm type)
-   ATerm get_all_sdf2_definitions(char *modulename)
-   ATerm get_all_equations(char *modulename)
-   ATerm get_parse_table(char *modulename)
-   ATerm add_parse_table(char *modulename, char *table, int timestamp)
-   void invalidate_parse_tables(char *modulename)
-   ATerm get_all_modules()
-   void process_next_module()
-*/
-
-/*}}}  */
 /*{{{  includes */
 
-
 #include <stdlib.h>
+#include <PT.h>
+#include <SDF-utils.h>
+#include <assert.h>
 
 #include "module-db.h"
 
@@ -86,8 +50,6 @@ ATermTable trans_db;
 
 static ATbool complete_asf_specification(ATermList visited, ATerm module);
 static ATermList add_imports(ATerm name, ATermList mods);
-static char *get_module_name(ATerm module);
-static ATermList get_import_section_sdf2(ATerm module);
 static ATermList replace_imports(ATerm name, ATermList mods);
 static ATermList modules_depend_on(ATerm name, ATermList mods);
 static ATbool is_valid_parse_table(ATermList visited, ATerm module, 
@@ -201,15 +163,17 @@ calc_import_graph(void)
  */
 
 ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
-                      int timestamp, char *changed)
+		      int timestamp, char *changed)
 {
-  char eqsPath[BUFSIZ];
-  int len;
-  ATerm t[8];
-  char *modname;
-  ATerm modname_term,appl, entry, import_graph;
-  ATermList imports, unknowns;
-  ATerm isChanged;
+  char          eqsPath[BUFSIZ];
+  ATerm         modName;
+  int           len;
+  ATerm         entry, import_graph;
+  ATermList     imports, unknowns;
+  ATerm         isChanged;
+  PT_Tree       tree;
+  PT_ParseTree  parseTree;
+  SDF_Module    sdfModule;
 
   if(!strcmp(changed, "changed")) {
     isChanged = Mtrue;
@@ -222,40 +186,43 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   strncpy(eqsPath, path, len);
   strcpy(eqsPath+len, "eqs");
 
-  if(ATmatchTerm(sdfTree,pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) {
-    modname = get_module_name(appl);
-    if(strcmp(moduleName, modname) == 0) {
-      modname_term = ATmake("<str>", modname);
-      entry = (ATerm)ATmakeList(LOC_CNT,
-                                ATmake("<str>", path),   /* Path Sdf */
-                                sdfTree,                
-                                ATmakeInt(timestamp),    /* Time Sdf */
-                                isChanged,               /* Sdf changed? */
-                                ATmake("<str>", eqsPath),/* Path Eqs */
-                                ATparse("unavailable"),  /* Eqs Tree */
-                                ATparse("unavailable"),  /* Eqs Text */
-                                ATmakeInt(0),            /* Time Eqs */
-                                Mtrue,                   /* Eqs changed?: true */
-                                ATparse("unavailable"),  /* Path EqsParseTable */
-                                ATmakeInt(0),            /* Time of EqsParseTable */
-                                ATparse("unavailable"),  /* Path TrmParseTable */
-                                ATmakeInt(0)             /* Time of TrmParseTable */
-                               );
-      PutValue(modules_db, modname_term, entry);
-      imports = get_import_section_sdf2(sdfTree);
-      unknowns = add_imports(modname_term,imports);
-      import_graph = calc_import_graph();
-      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
-                    unknowns, import_graph);
-    }
-    else {
-      return ATmake("snd-value(name-consistency-error(<str>))", modname);
-    }
-  } else {
+  parseTree = PT_makeParseTreeFromTerm(sdfTree);
+  if (!PT_isValidParseTree(parseTree)) {
     return ATmake("snd-value(illegal-module-error(<str>))", moduleName);
   }
+
+  tree      = PT_getParseTreeTree(parseTree);
+  sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+
+  /* Sanity check: modulename inside module must equal name passed as str */
+  if (strcmp(moduleName, SDFgetModuleName(sdfModule)) != 0) {
+    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+  }
+
+  modName = ATmake("<str>", moduleName);
+  entry = (ATerm)ATmakeList(LOC_CNT,
+			    ATmake("<str>", path),   /* Path Sdf */
+			    sdfTree,                
+			    ATmakeInt(timestamp),    /* Time Sdf */
+			    isChanged,               /* Sdf changed? */
+			    ATmake("<str>", eqsPath),/* Path Eqs */
+			    ATparse("unavailable"),  /* Eqs Tree */
+			    ATparse("unavailable"),  /* Eqs Text */
+			    ATmakeInt(0),            /* Time Eqs */
+			    Mtrue,                   /* Eqs changed?: true */
+			    ATparse("unavailable"),  /* Path EqsParseTable */
+			    ATmakeInt(0),            /* Time of EqsParseTable */
+			    ATparse("unavailable"),  /* Path TrmParseTable */
+			    ATmakeInt(0)             /* Time of TrmParseTable */
+			   );
+
+  PutValue(modules_db, modName, entry);
+  imports = SDFgetImports(sdfModule);
+  unknowns = add_imports(modName, imports);
+  import_graph = calc_import_graph();
+
+  return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
+		unknowns, import_graph);
 }
 
 /*}}}  */
@@ -289,57 +256,57 @@ update_syntax_status_of_modules(ATermList mods)
 
 ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 {
-  ATerm t[8];
-  char *moduleName;
-  ATerm curSdfTree, appl, entry, import_graph;
-  ATerm atModuleName;
-  ATermList imports, unknowns, chg_mods;
+  ATerm        curSdfTree, entry, import_graph;
+  ATermList    imports, unknowns, chg_mods;
+  PT_ParseTree parseTree;
+  PT_Tree      tree;
+  SDF_Module   sdfModule;
+  ATerm        modName;
 
-  if(ATmatchTerm(newSdfTree,pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) {
-    moduleName = get_module_name(appl);
-    atModuleName = ATmake("<str>",  moduleName);
-    entry = GetValue(modules_db, atModuleName);
-  
-    if(entry) {
-      curSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
-      if(!ATisEqual(curSdfTree, newSdfTree)) {
-        entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
-                                 SYN_LOC);
-        entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
-                                 SYN_UPDATED_LOC);
-  
-        entry = (ATerm)ATreplace((ATermList)entry,
-                       ATparse("unavailable"), EQS_TABLE_LOC);
-        entry = (ATerm)ATreplace((ATermList)entry,
-                       ATparse("unavailable"), TRM_TABLE_LOC);
-        PutValue(modules_db, atModuleName, entry);
-
-        chg_mods = modules_depend_on(atModuleName,ATempty);
-        update_syntax_status_of_modules(chg_mods); 
-        imports = get_import_section_sdf2(newSdfTree);
-        unknowns = replace_imports(atModuleName,imports);
-        import_graph = calc_import_graph();
-
-        return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
-		      "need-modules([<list>]),<term>))",
-		      atModuleName, chg_mods, unknowns, import_graph);
-      } else {
-        import_graph = calc_import_graph();
-  
-        return ATmake("snd-value(imports(changed-modules([<list>]),"
-                      "need-modules([<list>]),<term>))",
-                      ATempty, ATempty, import_graph);
-      }
-    }
-    else {
-      return ATmake("snd-value(name-consistency-error(<str>))", 
-                    moduleName);
-    }
-  } else {
+  parseTree = PT_makeParseTreeFromTerm(newSdfTree);
+  if (!PT_isValidParseTree(parseTree)) {
     ATerror("not an asfix module: %t\n", newSdfTree);
-    return NULL; 
+    return NULL;
+  }
+
+  tree      = PT_getParseTreeTree(parseTree);
+  sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+  modName   = ATmake("<str>", SDFgetModuleName(sdfModule));
+  entry     = GetValue(modules_db, modName);
+
+  if (entry) {
+    curSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
+    if (!ATisEqual(curSdfTree, newSdfTree)) {
+      entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
+			       SYN_LOC);
+      entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
+			       SYN_UPDATED_LOC);
+
+      entry = (ATerm)ATreplace((ATermList)entry,
+			       ATparse("unavailable"), EQS_TABLE_LOC);
+      entry = (ATerm)ATreplace((ATermList)entry,
+			       ATparse("unavailable"), TRM_TABLE_LOC);
+      PutValue(modules_db, modName, entry);
+
+      chg_mods = modules_depend_on(modName, ATempty);
+      update_syntax_status_of_modules(chg_mods); 
+      imports = SDFgetImports(sdfModule);
+      unknowns = replace_imports(modName, imports);
+      import_graph = calc_import_graph();
+
+      return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
+		    "need-modules([<list>]),<term>))",
+		    modName, chg_mods, unknowns, import_graph);
+    } else {
+      import_graph = calc_import_graph();
+
+      return ATmake("snd-value(imports(changed-modules([<list>]),"
+		    "need-modules([<list>]),<term>))",
+		    ATempty, ATempty, import_graph);
+    }
+  }
+  else {
+    return ATmake("snd-value(name-consistency-error(<str>))", modName);
   }
 }
 
@@ -844,7 +811,7 @@ complete_sdf2_specification(ATermList visited, ATerm module)
 }
 
 /*}}}  */
-/*{{{  ATbool is_valid_parse_table(ATermList visited, ATerm module,  */
+/*{{{  ATbool is_valid_parse_table(ATermList visited, ATerm module,...)  */
 
 static ATbool 
 is_valid_parse_table(ATermList visited, ATerm module, 
@@ -1073,182 +1040,46 @@ modules_depend_on(ATerm name, ATermList dependent)
 }
 
 /*}}}  */
-/*{{{  char *get_module_name(ATerm module) */
-
-static char 
-*get_module_name(ATerm module)
-{
-  ATerm t[2], elem;
-  ATermList args;
-  char *text;
-
-  if(ATmatchTerm(module,pattern_asfix_appl,
-                 &t[0], &t[1], &args)) {
-    elem = ATelementAt(args,2);
-    if(ATmatchTerm(elem,pattern_asfix_appl,
-                   &t[0], &t[1], &args)) {
-      elem = ATelementAt(args,0);
-      if(ATmatchTerm(elem,pattern_asfix_lex, &text, &t[0])) {
-        return text;
-      }
-      else {
-        ATerror("Not a correct Sdf2 module: %t\n", module);
-        return NULL;
-      }
-    }
-    else {
-      ATerror("Not a correct Sdf2 module: %t\n", module);
-      return NULL;
-    }
-  }
-  else {
-    ATerror("Not a correct Sdf2 module: %t\n", module);
-    return NULL;
-  }
-}
-
-/*}}}  */
-/*{{{  ATermList filter_import_names(ATermList imps) */
-
-static ATermList 
-filter_import_names(ATermList imps)
-{
-  ATerm t[2], elem, arg;
-  ATermList args, imports = ATempty;
-  char *text;
-
-  while(!ATisEmpty(imps)) {
-    elem = ATgetFirst(imps);
-    if(ATmatchTerm(elem,pattern_asfix_appl,
-                   &t[0], &t[1], &args)) {
-      arg = ATelementAt(args,0);
-      if(ATmatchTerm(arg,pattern_asfix_appl,
-                     &t[0], &t[1], &args)) {
-        elem = ATelementAt(args,0);
-        if(ATmatchTerm(elem,pattern_asfix_lex,
-                       &text, &t[0])) {
-          imports = ATinsert(imports,ATmake("<str>",text));
-        }
-      }
-    }
-    imps = ATgetNext(imps);
-  }
-  return imports;
-}
-
-/*}}}  */
-/*{{{  ATermList filter_import_list(ATermList imps) */
-
-static ATermList 
-filter_import_list(ATermList imps)
-{
-  ATerm t[2], elem, arg;
-  ATermList args, elems, imports = ATempty;
-
-  while(!ATisEmpty(imps)) {
-    elem = ATgetFirst(imps);
-    if(ATmatchTerm(elem,pattern_asfix_appl,
-                   &t[0], &t[1], &args)) {
-      arg = ATelementAt(args,2);
-      if(ATmatchTerm(elem,pattern_asfix_appl,
-                     &t[0], &t[1], &args)) {
-        elem = ATelementAt(args,2);
-        if(ATmatchTerm(elem,pattern_asfix_appl,
-                       &t[0], &t[1], &args)) {
-          elem = ATelementAt(args,0);
-          if(ATmatchTerm(elem,pattern_asfix_list,
-                         &t[0], &t[1], &elems)) {
-            imports = ATconcat(imports,filter_import_names(elems));
-          }
-        }
-      }
-    }
-    imps = ATgetNext(imps);
-  }
-  return imports;
-}
-
-/*}}}  */
-/*{{{  ATermList get_import_section_sdf2(ATerm module) */
-
-static ATermList get_import_section_sdf2(ATerm module)
-{
-  return filter_import_list(AFTgetImports(module));
-}
-
-/*}}}  */
-/*{{{  ATerm make_name_term(ATerm name) */
-
-static ATerm 
-make_name_term(ATerm name)
-{
-  ATerm result = NULL;
-  char *text;
-
-  if(ATmatch(name,"<str>",&text)) {
-    result = ATmakeTerm(pattern_asfix_lex,
-                        text,
-                        ATparse("sort(\"ModuleId\")"));
-    result = ATmakeTerm(pattern_asfix_appl,
-                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
-                         pattern_asfix_nlws,
-                         ATmakeList1(result));
-  }
-  return result;
-}
-
-/*}}}  */
 /*{{{  ATerm get_syntax(ATerm name, ATermList modules) */
 
 static ATerm 
 get_syntax(ATerm name, ATermList modules)
 {
-  ATermList syntaxes = ATempty;
-  ATerm t[8], nameterm, appl, elem, module, result, term, entry;
+  SDF_ModuleList sdfModules = NULL;
+  SDF_Layout emptyWs = ATparse("w(\"\")");
+  PT_Layout layout = PT_makeLayoutFromTerm(emptyWs);
+  SDF_Definition sdfDefinition;
+  SDF_SDF sdfSDF;
+  PT_ParseTree parseTree;
+  PT_Tree tree;
 
+  if (ATisEmpty(modules)) {
+    sdfModules = SDF_makeModuleListEmpty();
+  } else {
+    while (!ATisEmpty(modules)) {
+      ATerm head = ATgetFirst(modules); 
+      ATerm entry = GetValue(modules_db, head);
+      ATerm module = ATelementAt((ATermList)entry, SYN_LOC);
+      PT_ParseTree parseTree = PT_makeParseTreeFromTerm(module);
+      PT_Tree tree = PT_getParseTreeTree(parseTree);
+      SDF_Module sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
 
-  nameterm = make_name_term(name);
-  while(!ATisEmpty(modules)) {
-    elem = ATgetFirst(modules); 
-    entry = GetValue(modules_db,elem);
-    module = ATelementAt((ATermList)entry, SYN_LOC);
-    if(ATmatchTerm(module,pattern_asfix_term,
-                   &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                   &appl, &t[6], &t[7])) { 
-      if(ATisEmpty(syntaxes))
-        syntaxes = ATinsert(syntaxes,appl);
-      else {
-        syntaxes = ATinsert(syntaxes,pattern_asfix_ews);
-        syntaxes = ATinsert(syntaxes,appl);
+      if (sdfModules == NULL) {
+	sdfModules = SDF_makeModuleListSingle(sdfModule);
+      } else {
+	sdfModules = SDF_makeModuleListMany(sdfModule, emptyWs, sdfModules);
       }
+
+      modules = ATgetNext(modules);
     }
-    modules = ATgetNext(modules);
   }
-  result = ATmakeTerm(pattern_asfix_list,
-                      ATparse("iter(sort(\"Module\"),w(\"\"),l(\"*\"))"),
-                      pattern_asfix_ews,
-                      syntaxes);
-  result = ATmakeTerm(pattern_asfix_appl,
-                      ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Definition\"),w(\"\"),no-attrs)"),
-                      pattern_asfix_ews,
-                      ATmakeList1(result));
-  result = ATmakeTerm(pattern_asfix_appl,
-                      ATparse("prod(id(\"Sdf2-Syntax\"),w(\"\"),[ql(\"definition\"),w(\"\"),sort(\"Definition\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
-                      pattern_asfix_ews,
-                      ATmakeList3(ATparse("l(\"definition\")"),
-                                  pattern_asfix_ws,
-                                  result));
-  term = ATmakeTerm(pattern_asfix_term,
-                    ATparse("l(\"term\")"),
-                    pattern_asfix_ews,
-                    ATparse("l(\"X\")"),
-                    pattern_asfix_ews,
-                    ATparse("id(\"X\")"),
-                    pattern_asfix_ews,
-                    result,
-                    pattern_asfix_ews,
-                    ATparse("no-abbreviations"));
-  return term;
+  sdfDefinition = SDF_makeDefinitionDefault(sdfModules);
+  sdfSDF = SDF_makeSDFDefinition(emptyWs, sdfDefinition);
+
+  tree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(sdfSDF));
+  parseTree = PT_makeParseTreeTree(layout, tree, layout);
+
+  return PT_makeTermFromParseTree(parseTree);
 }
 
 /*}}}  */
@@ -1259,10 +1090,10 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
   ATerm result, name;
   ATermList imports;
 
-  name = ATmake("<str>",moduleName);
-  if(complete_sdf2_specification(ATempty,name)) {
+  name = ATmake("<str>", moduleName);
+  if (complete_sdf2_specification(ATempty, name)) {
     imports = get_imported_modules(name);
-    result = get_syntax(name,imports);
+    result = get_syntax(name, imports);
     return ATmake("snd-value(syntax(<term>))", ATBpack(result));
   }
   else {
@@ -1310,6 +1141,8 @@ int main(int argc, char *argv[])
   }
 
   ATBinit(argc, argv,&bottomOfStack);
+  PT_initPTApi();
+  SDF_initSDFApi();
   AFinit(argc, argv, &bottomOfStack);
 
 
