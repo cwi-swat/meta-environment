@@ -167,7 +167,7 @@ static ATbool isIndentedType(PT_Production production)
     productionLhs = PT_getSymbolsTail(productionLhs);
   }
 
-  return ATfalse;
+  return ATtrue;
 }
 
 /*}}}  */
