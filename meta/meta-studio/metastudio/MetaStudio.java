@@ -1216,11 +1216,8 @@ public class MetaStudio
 
   void toggleTide()
   {
-    warning("Tide is not yet supported in this release of MetaStudio");
-    /*
     bridge.postEvent(factory.make("debugging(<id>)",
 				  tideBox.isSelected() ? "on" : "off"));
-				  */
   }
 
   //}}}
