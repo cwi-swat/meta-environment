@@ -24,7 +24,7 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports remove-annotation apply-function
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header genamakefile change-sdf2-ext
+                     insert-header genamakefile change-sdf2-ext sdf2stats
 
 man_MANS           = parse-sdf2.1
 
@@ -38,10 +38,12 @@ EXTRA_DIST         = genmakefile.in parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src test-help test-version \
                      genmakefile.proto lang.types perform-test.sh.src \
-                     parse-sdf2.pod genamakefile.sh.src change-sdf2-ext
+                     parse-sdf2.pod genamakefile.sh.src change-sdf2-ext \
+                     sdf2stats
 
 CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
-                     insert-license perform-test parse-sdf2.1 genamakefile
+                     insert-license perform-test parse-sdf2.1 genamakefile \
+                     sdf2stats
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \

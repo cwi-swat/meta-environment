@@ -1,0 +1,49 @@
+#! /bin/sh
+#
+#   Meta-Environment - An environment for language prototyping.
+#   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+#                       The Netherlands.
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+#   $Id$    
+
+Revision='$Revision$'
+
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PATH="$bindir:$PATH"
+
+TABLE="${datadir}/Sdf2.baf"
+EQS="${datadir}/CountProds.asf.baf"
+PARSE="sglr -p $TABLE -s SDF -1"
+APPLYFUNC="apply-function -f count-prods -s IntPair -m CountProds"
+EVALUATOR="evaluator -e $EQS"
+ASOURCE="asource"
+RM="rm"
+
+if $PARSE -i $1 -o $1.af1
+then
+	$APPLYFUNC -i $1.af1 -o $1.af1.fnc
+	$RM $1.af1
+	$EVALUATOR -i $1.af1.fnc -o $1.af1.red
+	$RM $1.af1.fnc
+	$ASOURCE -i $1.af1.red -o sdf2-stats.txt
+	$RM $1.af1.red
+else
+	echo "Parse error!"             >&2
+	exit 1
+fi 
