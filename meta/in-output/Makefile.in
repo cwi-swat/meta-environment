@@ -93,7 +93,7 @@ test:	all
 	$(ATERMBIN)/tifstoc -tool $* $<
 
 %.tifs: %.idef
-	${top_srcdir}/utils/idef2tif $<
+	$(TOOLBUSBIN)/idef2tif $<
 
 in-output: ${OBJ} ${LIBFILES} 
 	$(CC) -o $@ ${OBJ} $(LIBS)

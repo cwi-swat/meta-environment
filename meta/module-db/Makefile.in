@@ -89,7 +89,7 @@ test:	all
 	$(ATERMBIN)/tifstoc -tool $* $<
 
 %.tifs: %.idef
-	${top_srcdir}/utils/idef2tif $<
+	$(TOOBUSBIN)/idef2tif $<
 
 module-db: depend ${OBJ}
 	$(CC) -o $@ $(OBJ) $(LIBS)
