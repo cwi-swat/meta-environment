@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = syntax semantics library
+SUBDIRS = syntax semantics 
 
 EXTRA_DIST = reconf make_rules $(wildcard *.pkg)
 

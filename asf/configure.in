@@ -164,25 +164,6 @@ AC_OUTPUT(
    semantics/test/input/Makefile
    semantics/test/output/Makefile
    semantics/test/c-code/Makefile
-   library/Makefile
-   library/asfix/Makefile
-   library/asfix/syntax/Makefile
-   library/asf/Makefile
-   library/asf/syntax/Makefile
-   library/asf/tools/Makefile
-   library/basic/Makefile
-   library/containers/Makefile
-   library/disambiguation/Makefile
-   library/functions/Makefile
-   library/strategies/Makefile
-   library/aterm/Makefile
-   library/system/Makefile
-   library/sdf2/Makefile
-   library/sdf2/syntax/Makefile
-   library/sdf2/normalization/Makefile
-   library/sdf2/projection/Makefile
-   library/sdf2/renaming/Makefile
-
 )
 
 dnl }}}
