@@ -131,14 +131,11 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
   if (!PT_getTreePosInfo(tree, &path, &start_line,
 			 &start_col, &end_line, &end_col)) {
     ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
-      PT_yieldTree(
-        PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), tree);
+	      ASF_getCHARLISTString(
+	        ASF_getTagIdChars(
+		  ASF_getTagTagId(ASF_getCondEquationTag(equ)))), tree);
     return equ;
   }
-
-  /*fprintf(stderr, "pos-info to start equ %s: %s,%d,%d,%d,%d\n",
-	  PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), path, start_line, start_col, end_line, end_col);
-	  */
 
   /* Annotate to a depth so that the list of conditions is annotated */
   tree = PT_addTreePosInfoSome(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,

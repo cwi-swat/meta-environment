@@ -69,7 +69,7 @@ void printErrors(void)
   subject = ATgetFirst(ATgetNext(ATgetNext(error)));
 
   if (tag) {
-    tagText = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
+    tagText = ASF_getCHARLISTString(ASF_getTagIdChars(ASF_TagIdFromTerm(tag)));
   }
   else {
     tagText = strdup("");
