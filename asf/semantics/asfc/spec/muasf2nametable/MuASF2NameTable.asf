@@ -201,22 +201,18 @@ funid(""""{" "l""f""_""l""i""s""t""_" Char+ "}"""")
 construct-funid(funid(""""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) = 
 funid("l""f""_" Char+)
 
-%% Overlaps with traversal functions, FIX ME
-%%[cf-2]
-%%construct-funid(funid(""""p""r""o""d""(" Char+3 ")""""),
-%%                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
-%%funid("l""f""_" Char+2 "_" Char+)
-
 %% Function that return lists are prefixed with LIST by the frontend
 [cf-3]
 construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) =
 funid(""""[" "l""f""_" Char+ "]"""")
 
-%% Overlaps with traversal functions, FIX ME
-%%[cf-4]
-%%construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")""""),
-%%                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
-%%funid(""""[""l""f""_" Char+2 "_" Char+ "]"""")
+[cf-3]
+strategy-id(Term+) = funid(Char*1),
+type-id(Term+)  = funid(Char*2)
+====>
+construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+),
+                Term*1,traversal(Term+),Term*2) =
+funid(""""[" "l""f""_" Char*2 "_" Char*1 "_" Char+ "]"""")
 
 [cf-5]
 strategy-id(Term+) = funid(Char*1),
