@@ -179,6 +179,10 @@ in
      snd-msg(rename-module(Str, Str1, Path)) .
      snd-ack-event(UI, rename-module(Str, Str1, Path))
    ) +
+   ( rec-event(UI, copy-module(Str?, Str1?, Path?)) .
+     snd-msg(copy-module(Str, Str1, Path)) .
+     snd-ack-event(UI, copy-module(Str, Str1, Path))
+   ) +
    ( rec-event(UI, dump-equations(Str?)).
      snd-msg(dump-equations(Str)).
      rec-msg(equations-dumped).
