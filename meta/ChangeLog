@@ -1,5 +1,14 @@
 # $Id$
 
+Fri Feb 13 15:20:49 CET 2004 <{kooiker,jurgenv}@cwi.nl>
+ * Replaced ptpretty by pandora functionality
+ * Warning: pandora is out of the box!
+ * The pretty-print button now replaces the current text instead
+   of spawning a new editor.
+ * Warning: pretty-printing can not be 'undone' using the editors
+   undo buffer.
+ * Replaced ptpretty dependency by pandora package dependency
+
 Thu Feb 12 13:38:55 CET 2004 <{jong,jurgenv}@cwi.nl>
  * prefixed all in/outgoing structure editor messages with "se-"
  * prefixed all in/outgoing text editor messages with "te-"

@@ -10,7 +10,7 @@ sdf_support=__SDF_SUPPORT__
 error_support=__ERROR_SUPPORT__
 graph_support=__GRAPH_SUPPORT__
 sglr=__SGLR__
-ptpretty=__PTPRETTY__
+pandora=__PANDORA__
 pgen=__PGEN__
 toolbus=__TOOLBUS__
 prefix=__PREFIX__
@@ -19,7 +19,7 @@ myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${error_support}/bin:${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:\
-${sdf_support}/bin:${ptpretty}/bin:${PATH}"; 
+${sdf_support}/bin:${pandora}/bin:${PATH}"; 
 export PATH
 
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${prefix}/lib
@@ -195,7 +195,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${sdf_support}/share/sdf-support \
    -I${graph_support}/share/graph-support \
    -I${sglr}/share/sglr \
-   -I${ptpretty}/share/ptpretty \
+   -I${pandora}/share/pandora \
    -I${pgen}/share/pgen \
    ${extra_scripts} \
    ${meta_script}

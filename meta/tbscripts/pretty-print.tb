@@ -1,27 +1,19 @@
-#include <ptpretty.idef>
+#include <pandora.idef>
 
 process PrettyPrintTerm(ModuleName : str, Tree : term, Result : term?) is
 let
   Syntax : term,
-  ErrorMessage : str,
+  Feedback : term,
   Id : int
 in
   Id := process-id .
   Result := error-tree .
-  snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
+  snd-note(ui-status(stat(Id, "Pretty printing..."))) .
+  snd-msg(pretty-print(Tree)) .
   (
-    rec-msg(syntax(Syntax?)) .
-    snd-note(ui-status(stat(Id, "Pretty printing..."))) .
-    snd-msg(ptpretty(Syntax, Tree)) .
-    (
-      rec-msg(ptpretty-result(Result?))
-    +
-      rec-msg(ptpretty-error(ErrorMessage?)) .
-      snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
-    ).
-    snd-note(ui-status(endstat(Id)))
+    rec-msg(pretty-print-result(Result?))
   +
-    rec-msg(no-syntax(ErrorMessage?)) .
-    snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
-  ) 
+    rec-msg(pretty-print-error(Feedback?)) 
+  ) . 
+  snd-note(ui-status(endstat(Id)))
 endlet
