@@ -24,8 +24,8 @@ lib_LIBRARIES    = libASF.a
 include_HEADERS  = ASF.h ASF_dict.h ASF-utils.h
 libASF_a_SOURCES = ASF.c ASF_dict.c ASF-utils.c
 
-INCLUDES = -I${ATERM}/include
-LDFLAGS  = -L${ATERM}/lib
-LDADD    = -lATerm
+INCLUDES = -I${ATERM}/include -I{PT_SUPPORT}/include
+LDFLAGS  = -L${ATERM}/lib -L{PT_SUPPORT}/lib
+LDADD    = -lATerm -lmept
 
 EXTRA_DIST = Developer.make

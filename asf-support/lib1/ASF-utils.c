@@ -1,5 +1,6 @@
 
 #include <string.h>
+#include <MEPT-utils.h>
 #include "ASF-utils.h"
 
 #define DEFAULT_TAG_PREFIX "default-"
@@ -12,7 +13,8 @@ ASF_isTagDefault(ASF_Tag tag)
     ASF_TagId tagId = ASF_getTagTagId(tag);
 
     if (ASF_isTagIdManyChars(tagId)) {
-      char* lex = ASF_getTagIdLex(tagId);
+      char* lex = PT_yieldTree(PT_makeTreeFromTerm(
+                               (ATerm) ASF_getTagIdLex(tagId)));
       return !strncmp(lex, DEFAULT_TAG_PREFIX, strlen(DEFAULT_TAG_PREFIX)) 
                ||
                !strcmp(lex, DEFAULT_TAG);

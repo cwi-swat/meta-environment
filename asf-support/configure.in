@@ -46,6 +46,11 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)   
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
