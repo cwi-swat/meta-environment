@@ -30,7 +30,7 @@ implodePT_LDADD		= -L../libmept -lmept \
 			  -L${ATERM}/lib -lATerm
 
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${ATERM}/include \
-                          -I${top_srcdir}/libmept \
+INCLUDES		= -I${top_srcdir}/libmept \
                           -I${top_srcdir}/libasfix2 \
-                          -I${top_srcdir}/libconversion
+                          -I${top_srcdir}/libconversion \
+			  -I${ATERM}/include
