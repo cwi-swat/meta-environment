@@ -233,7 +233,7 @@ reused in other projects~\cite{XXX}.
 \epsfig{figure=figs/toolbus-scenario.eps,height=14cm}
 \end{center}
 \vspace*{-8cm}
-\caption{\label{toolbus-scenario}A typical cooperation scenario}
+\caption{\label{Fig:toolbus-scenario}A typical cooperation scenario}
 \end{figure}
 
 \begin{table}
@@ -293,7 +293,7 @@ each other and with the tools. Tools can be written in any language and
 can run on different machines. They exchange data by way of ATerms.
 
 A typical cooperation scenario is illustrated in
-Figure~\ref{toolbus-scenario}.  A user-interface (UI) and a database
+Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
 (DB) are combined in an application. Pushing a button in the
 user-interface leads to a database action and the result is displayed
 in the user-interface. In a traditional approach, the database action
@@ -313,12 +313,12 @@ Table~\ref{Tab:Tscript-features}.
 
 \section{An example: the Address Book Service}
 
-To make the scenario from Figure~\ref{Fig:toolbus-scenario}
-more concrete,  we describe the construction of an
-\emph{Address Book Service}.
-First we consider some aspects of the User Interface. An instance
-of the UI connects to the ToolBus and during the subsequent session,
-the user can:
+To make the scenario from Figure~\ref{Fig:toolbus-scenario} more concrete,
+we describe the construction of an address book holding (name, address)
+pairs. Typical uses include creating a new address, finding an address
+based on the name, etc. First we consider some aspects of the User
+Interface. An instance of the UI connects to the ToolBus and during the
+subsequent session, the user can:
 
 \begin{description}
   \item[create] a new entry in the address book database;
@@ -333,14 +333,13 @@ form the ToolBus script describing our Address Book Service.
 
 \subsection{ToolBus processes for the Address Book Service}
 
-\paragraph{The \texttt{ADDRESSBOOK} process}
-tells the ToolBus that an instance of our
-\texttt{address-book} tool is to be executed, followed by a loop
-which invokes \emph{one of} the processes \texttt{CREATE}, \texttt{UPDATE} or
-\texttt{DELETE} in each iteration. This construction, using the
-\texttt{+} operator ensures that at this level, the sub-processes can
-be regarded atomically: e.g. no \texttt{DELETE} will happen during an
-\texttt{UPDATE}.
+\paragraph{The \texttt{ADDRESSBOOK} process} tells the ToolBus that an
+instance of our \texttt{address-book} tool is to be executed, followed
+by a loop which invokes \emph{one of} the processes \texttt{CREATE},
+\texttt{UPDATE} or \texttt{DELETE} in each iteration. This construction,
+using the \texttt{+} operator ensures that at this level, the
+sub-processes can be regarded atomically: this means that for example
+no \texttt{DELETE} will happen during an \texttt{UPDATE}.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -407,9 +406,9 @@ process in that it does not need a return value:
 \end{verbatim}
 \end{footnotesize}
 
-\paragraph{The \texttt{SEARCH} process} \label{tb:search} in our
-example, implements but a single query: finding an address book entry by
-name. It shows how different results from a tool-evaluation request can be
+\paragraph{The \texttt{SEARCH} process} \label{tb:search} in our example
+implements but a single query: finding an address book entry by name. It
+shows how different results from a tool-evaluation request can be
 processed in much the same way that different messages are handled. Upon
 receiving a \texttt{find-by-name} message from another process, this
 request is delegated to the tool. Depending on whether or not the entry
@@ -499,7 +498,7 @@ in
     snd-msg(update-entry(AID)) .
     snd-msg(set-name(Name)) .
     snd-msg(update-entry-done(AID)) .
-    snd-ack-event(UITool, new-name(AID, Name))
+    snd-ack-event(UITool, update-name(AID, Name))
   +
     ... /* more UI requests */
   )
