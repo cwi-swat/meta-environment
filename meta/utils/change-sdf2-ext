@@ -1,5 +1,35 @@
 #!/bin/sh
 
+VERSION=0.1.1
+
+usage() {
+   cat <<ENDCAT
+usage: $0 <module>
+ENDCAT
+}
+
+version() {
+   cat <<ENDCAT
+$0 version $VERSION
+ENDCAT
+}
+
+
+while getopts hV c
+do
+   case $c in
+      h) usage; exit 0 ;;
+      V) version; exit 0 ;;
+      *) usage ; exit 1;;
+   esac
+done
+
+if [ "$#" -ne 1 ]
+then
+   usage
+   exit 1
+fi
+
 for i in *.sdf2; do
   mv $i `basename $i .sdf2`.sdf
 done
