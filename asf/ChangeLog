@@ -1,3 +1,6 @@
+2002/02/13 (jurgenv@cwi.nl)
+ * Released 1.3
+
 2002/02/12 (jurgenv@cwi.nl)
  * Fixed a serious bug in the asf compiler. It couldn't handle lists
    at the top of matching conditions.
