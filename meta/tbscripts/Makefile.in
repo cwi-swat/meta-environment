@@ -58,6 +58,11 @@ ATERM		= @ATERM@
 ATERMBIN	= @ATERMBIN@
 ATERMLIB	= @ATERMLIB@
 ATERMINC	= @ATERMINC@
+ASFIX           = @ASFIX@
+ASFIXBIN        = @ASFIXBIN@
+ASFIXLIB        = @ASFIXLIB@
+ASFIXINC        = @ASFIXINC@
+
 TOOLBUS		= @TOOLBUS@
 TOOLBUSBIN	= @TOOLBUSBIN@
 TOOLBUSLIB	= @TOOLBUSLIB@
@@ -121,7 +126,7 @@ module-test: all
 meta.tifs: $(DATAFILES)
 	$(TOOLBUSBIN)/toolbus	    \
 	-I$(top_srcdir)/in-output   \
-	-I$(top_srcdir)/asource	    \
+	-I$(ASFIX)/asfix-tools	    \
 	-I$(top_srcdir)/module-db   \
 	-I$(top_srcdir)/sglr/sglr   \
 	-I$(top_srcdir)/evaluator   \
