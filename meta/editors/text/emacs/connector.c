@@ -342,11 +342,13 @@ static void rereadContents(int write_to_editor_fd)
 }
 
 /*}}}  */
+
 /*{{{  static void writeContents(int write_to_editor_fd) */
 
 static void writeContents(int write_to_editor_fd)
 {
-  sendToEmacs(write_to_editor_fd, "(save-buffer)");
+  sendToEmacs(write_to_editor_fd, "(write-contents)");
+  protocolExpect(fileno(stdin), "handshake");
 }
 
 /*}}}  */

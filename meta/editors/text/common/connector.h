@@ -6,6 +6,8 @@
 void setFileName(const char *);
 const char *getFileName();
 
+void protocolExpect(int fd, const char *expected);
+
 typedef struct _TextEditor *TextEditor;
 
 typedef void (*move_to_front_t)(int write_to_editor_fd);

@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,6 +66,24 @@ void setFileName(const char *name)
 const char *getFileName()
 {
   return filename;
+}
+
+/*}}}  */
+
+/*{{{  void protocolExpect(int fd, const char *expected) */
+
+void protocolExpect(int fd, const char *expected)
+{
+  char buf[BUFSIZ];
+  int len = strlen(expected);
+
+  if (read(fd, buf, len) != len) {
+    perror("protocol_expect:read");
+    exit(errno);
+  }
+  else if (strncmp(buf, expected, len)) {
+    ATabort("protocol error: expecting %s, got: %s\n", expected, buf);
+  }
 }
 
 /*}}}  */

@@ -10,7 +10,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
-#include <errno.h>
 #include <assert.h>
 
 #include <aterm2.h>
@@ -118,24 +117,6 @@ static char *menuToString(TE_Menu menu)
 
 /*}}}  */
 
-/*{{{  static void protocol_expect(int fd, const char *expected) */
-
-static void protocol_expect(int fd, const char *expected)
-{
-  char buf[BUFSIZ];
-  int len = strlen(expected);
-
-  if (read(fd, buf, len) != len) {
-    perror("protocol_expect:read");
-    exit(errno);
-  }
-  else if (strncmp(buf, expected, len)) {
-    ATabort("protocol error: expecting %s, got: %s\n", expected, buf);
-  }
-}
-
-/*}}}  */
-
 /*{{{  static void sendToVimVerbatim(const char *cmd) */
 
 static void sendToVimVerbatim(const char *cmd)
@@ -175,7 +156,7 @@ static void makeVimMenuItem(char *menu, char *item)
   strcat(buf, "\")");
 
   sendToVim(buf);
-  protocol_expect(read_from_editor_fd, HANDSHAKE);
+  protocolExpect(read_from_editor_fd, HANDSHAKE);
 }
 
 /*}}}  */
@@ -219,7 +200,7 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
 static void writeContents(int write_to_editor_fd)
 {
   sendToVim(":call WriteContents()");
-  protocol_expect(read_from_editor_fd, HANDSHAKE);
+  protocolExpect(read_from_editor_fd, HANDSHAKE);
 }
 
 /*}}}  */
@@ -407,11 +388,11 @@ int main(int argc, char *argv[])
     close(from_vim[PIPE_WRITE]);
     read_from_editor_fd = from_vim[PIPE_READ];
 
-    protocol_expect(read_from_editor_fd, CONNECTED);
+    protocolExpect(read_from_editor_fd, CONNECTED);
 
     sprintf(buf, ":source %s", path_vim);
     sendToVim(buf);
-    protocol_expect(read_from_editor_fd, HANDSHAKE);
+    protocolExpect(read_from_editor_fd, HANDSHAKE);
 
     hiveToEditor = TE_makePipeDefault(read_from_hive_fd, -1);
     editorToHive = TE_makePipeDefault(read_from_editor_fd, write_to_hive_fd);

@@ -88,3 +88,8 @@
     (send-to-hive "modified")
   )
 )
+
+(defun write-contents ()
+  (save-buffer)
+  (send-to-hive "handshake")
+)
