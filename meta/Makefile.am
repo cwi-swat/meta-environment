@@ -41,7 +41,8 @@ TOOLBUSDEFS = $(TRAVERSALSDEF)
 	     s@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
-	     s@__TOOLBUS_DEFS__@$(TOOLBUSDEFS)@g;' < $< > $@ && \
+	     s@__TOOLBUS_DEFS__@$(TOOLBUSDEFS)@g;\
+             s@__WISH__@$(WISH)@g;' < $< > $@ && \
 	chmod +x $@
 
 

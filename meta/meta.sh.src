@@ -27,6 +27,7 @@ datadir=__DATADIR__
 classdir=${prefix}/classes
 toolbus=__TOOLBUS__
 toolbusdefs=__TOOLBUS_DEFS__
+wish=__WISH__
 
 PATH="${bindir}:${PATH}"; export PATH
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
@@ -76,6 +77,7 @@ Version() {
     sglr -V
     toolbus -version
     xemacs -V
+    echo -n "wish" ; (echo 'puts $tk_version ; exit' | $wish )
 }
 
 # getopt handles command line...
