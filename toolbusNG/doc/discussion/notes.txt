@@ -79,6 +79,11 @@ Alternatives:
     in state changes.
   This seems to suggest you want complete control over the moment your subsription starts,
   and thus that you need an explicit subscribe (and unsubscribe) mechanism.
+
+  Pieter: It also seems imperative that either the subscribe or the unsubscribe actually
+  clear the note queue in order to circumvent problems with 'old' notes wrecking havoc.
+  My preference goes to the subscribe, making it possible to actually process all queued
+  notes after doing an unsubscribe.
   
 - Combining the previous two alternatives we should do the following:
 
