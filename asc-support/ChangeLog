@@ -1,5 +1,8 @@
 $Id$
 
+2003/12/03 ({storm,jurgenv}@cwi.nl)
+ * fixed a bug (old unquoting was still done in write-term builtin
+
 2003/11/21 (jurgenv@cwi.nl)
  * Added a number of builtins concerning parsing
  * Reading in parse trees from files uses the same API as parsing builtins
