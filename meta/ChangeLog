@@ -1,5 +1,8 @@
 # $Id$
 
+2001/07/17 (markvdb@cwi.nl)
+ * version 0.4 released, bumped to 0.5
+
 2001/07/11 (markvdb@cwi.nl)
  * Fixed bug in set and get-parsetable scripts.
 
