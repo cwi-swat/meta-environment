@@ -1,5 +1,9 @@
 # $Id$
 
+2003/01/08 (markvdb@cs.vu.nl)
+ * Return full imports when asking for the equations when dealing
+   with renamings.
+
 2002/12/09 (jurgenv@cwi.nl)
  * Changed version of aterm-java and shared-objects jarfiles
 
