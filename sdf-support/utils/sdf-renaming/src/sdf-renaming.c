@@ -121,6 +121,9 @@ static ATermList applyImports(SDF_ImportList imports, PT_ParseTree pt)
       result = ATinsert(result, 
 			PT_ParseTreeToTerm(applyRenamings(renamings, pt)));
     }
+    else {
+      result = ATinsert(result, PT_ParseTreeToTerm(pt));
+    }
 
     if (SDF_hasImportListTail(imports)) {
       imports = SDF_getImportListTail(imports);
