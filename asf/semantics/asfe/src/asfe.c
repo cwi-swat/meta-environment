@@ -1286,7 +1286,6 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 }
 /*}}}  */
 
-
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
@@ -1352,7 +1351,7 @@ static PT_Tree reduce(PT_Tree trm, int depth)
   /* We try to find equations, first with a (guarded) first argument,
    * then once more without a guarded first argument.
    */
-  for(i = 0; i <= tries; i++) {
+  for(i = 0; i < tries; i++) {
     while ((entry = find_equation(entry, top_ofs, first_ofs))) {
       env = try(trm, entry, depth);
 
@@ -1365,7 +1364,7 @@ static PT_Tree reduce(PT_Tree trm, int depth)
       }
     }
 
-    first_ofs = NULL;
+    first_ofs = NULL; /* next loop without the first argument */
   }
 
   /* this should be 'return FAIL' */
@@ -1427,6 +1426,7 @@ static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
     reduct = rewriteVariableAppl(trm, env, depth, extra);
   }
   else if (PT_hasTreeArgs(trm)) {
+
     /* first the kids */    
     reduct = rewriteArgs(trm, env, depth, extra);
 
