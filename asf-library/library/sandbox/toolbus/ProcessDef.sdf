@@ -13,6 +13,9 @@ exports
     ProcessExpr                                    -> ProcessBody {cons("plainBody")}
     "let" {VarDecl ","}* "in" ProcessExpr "endlet" -> ProcessBody {cons("letBody")}
 
+hiddens
   sorts ProcessDef
+
+exports
   context-free syntax
     "process" ProcessSignature "is" ProcessBody -> ProcessDef {cons("procDef")}
