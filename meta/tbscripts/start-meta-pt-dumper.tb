@@ -19,8 +19,12 @@ in
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME, trm)) .
   rec-msg(parse-table-dumped) .
   if equal(SAVING, "true") then
-    snd-msg(save-all) .
-    rec-msg(saved) 
+    snd-msg(save-termstore) .
+    (
+      rec-msg(saved)
+    +
+      rec-msg(not-saved(ErrorMessage?))
+    )
   else 
     tau
   fi .

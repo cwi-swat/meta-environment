@@ -3,7 +3,8 @@
 
 process StandaloneEqsDumper is
 let
-  Equations  : term,
+  Equations : term,
+  ErrorMessage : str,
   Pid : int
 in
   create(StatusDisplay, Pid?) .
@@ -19,8 +20,12 @@ in
   snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(equations-dumped) .
   if equal(SAVING, "true") then
-    snd-msg(save-all) .
-    rec-msg(saved) 
+    snd-msg(save-termstore) .
+    (
+      rec-msg(saved) 
+    +
+      rec-msg(not-saved(ErrorMessage?))
+    )
   else 
     tau
   fi .
