@@ -140,6 +140,7 @@ ATerm af_prod_charranges_optcharranges = NULL;
 ATerm af_prod_optcharranges = NULL;
 ATerm af_prod_charclass_symbol = NULL;
 ATerm af_prod_var_symbol = NULL;
+ATerm af_prod_labeled_symbol = NULL;
 ATerm af_prod_opt_symbol = NULL;
 ATerm af_prod_alt_symbol = NULL;
 ATerm af_prod_tuple_symbol = NULL;
@@ -406,6 +407,7 @@ void AFinitAsFixPatterns()
     ATprotect(&af_prod_optcharranges); 
     ATprotect(&af_prod_charclass_symbol); 
     ATprotect(&af_prod_var_symbol); 
+    ATprotect(&af_prod_labeled_symbol); 
     ATprotect(&af_prod_opt_symbol); 
     ATprotect(&af_prod_alt_symbol); 
     ATprotect(&af_prod_tuple_symbol); 
@@ -640,6 +642,11 @@ void AFinitAsFixPatterns()
               "w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-VAR\"),"
               "w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),"
               "w(\"\"),no-attrs)");
+
+    af_prod_labeled_symbol = 
+      ATparse("prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),"
+              "w(\"\"),ql(\":\"),w(\"\"),sort(\"Symbol\")],w(\"\"),"
+              "l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)");
 
     af_prod_opt_symbol =
       ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),"

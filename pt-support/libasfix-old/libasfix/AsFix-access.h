@@ -89,6 +89,8 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
                                        af_prod_charclass_symbol))
 #define AFTisVarSymbol(grammar) (AFTcheckAppl(grammar, \
                                        af_prod_var_symbol))
+#define AFTisLabeledSymbol(grammar) (AFTcheckAppl(grammar, \
+                                       af_prod_labeled_symbol))
 #define AFTisRegularOptSymbol(grammar) (AFTcheckAppl(grammar, \
                                         af_prod_opt_symbol))
 #define AFTisRegularAltSymbol(grammar) (AFTcheckAppl(grammar, \
@@ -378,6 +380,7 @@ extern ATerm AFTgetEquLhs(ATerm equ);
 #define AFTgetOptCharRanges(p) (AFTarg((p), 2))
 #define AFTgetCharClassSymbol(p) (AFTarg((p), 0))
 #define AFTgetVarSymbol(p) (AFTarg((p), 2))
+#define AFTgetLabeledSymbol(p) (AFTarg((p),4))
 #define AFTgetRegularOptSymbol(p) (AFTarg((p), 0))
 #define AFTgetBasicLEXSymbol(p) (AFTarg((p), 2))
 #define AFTgetBasicCFSymbol(p) (AFTarg((p), 2))
@@ -558,6 +561,7 @@ extern ATerm af_prod_charranges_optcharranges;
 extern ATerm af_prod_optcharranges;
 extern ATerm af_prod_charclass_symbol;
 extern ATerm af_prod_var_symbol;
+extern ATerm af_prod_labeled_symbol;
 extern ATerm af_prod_opt_symbol;
 extern ATerm af_prod_alt_symbol;
 extern ATerm af_prod_tuple_symbol;
