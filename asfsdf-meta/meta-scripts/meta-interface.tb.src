@@ -115,8 +115,8 @@ in
     snd-msg(rename-semantics-hook-result(Semantics))
   +
     rec-msg(postprocess-collected-semantics-hook(Modules?)).
-    snd-msg(flatten-equations(Modules)).
-    rec-msg(flatten-equations-result(Semantics?)).
+    snd-msg(extract-equations(Modules)).
+    rec-msg(extract-equations-result(Semantics?)).
     snd-msg(postprocess-collected-semantics-hook-result(Semantics))
 
   ) * delta
