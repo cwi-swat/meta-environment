@@ -1,8 +1,8 @@
 module languages/aterm/syntax/Literals
+
 imports basic/Whitespace
 
 hiddens
-  context-free start-symbols AlphaNumericalEscChar DecimalEscChar EscChar L-Char
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
 
 exports

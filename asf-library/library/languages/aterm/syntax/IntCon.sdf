@@ -3,11 +3,11 @@ module languages/aterm/syntax/IntCon
 imports basic/Whitespace
 
 exports
-  context-free start-symbols NatCon IntCon
+  context-free start-symbols IntCon
   sorts NatCon IntCon
   lexical syntax   
     [0-9]+ -> NatCon  {cons("digits")}
   context-free syntax
-    NatCon     -> IntCon {cons("natural")}
+    NatCon         -> IntCon {cons("natural")}
     pos:"+" NatCon -> IntCon {cons("positive")}
     neg:"-" NatCon -> IntCon {cons("negative")}
