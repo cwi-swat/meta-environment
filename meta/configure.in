@@ -100,10 +100,8 @@ AC_SUBST(TOOLBUSINC)
 
 dnl Handle --with-tcldot=... argument to configure
 AC_ARG_WITH(tcldot,
-[  --with-tcldot=DIR       TclDot library is in DIR],
-TCLDOT=${withval},
-AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~gipe/petr/lib/Tcldot)
-)
+   [  --with-tcldot=DIR       TclDot library is in DIR],
+   TCLDOT=${withval})
 AC_SUBST(TCLDOT)
 
 dnl Of course, the latest version of wish is not always called "wish". :-(
