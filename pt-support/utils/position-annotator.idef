@@ -6,35 +6,50 @@ tool position-annotator is {
 
 process PositionAnnotator is
 let
-  API : position-annotator,
-  Tree : term,
-  Path : str,
-  Depth : int
+  Depth: int,
+  Location: term,
+  PA: position-annotator,
+  Path: str,
+  Tree: term
 in
   ( 
     rec-msg(add-posinfo(Path?, Tree?)).
-    execute(position-annotator, API?) .
-    snd-eval(API, add-posinfo(Path, Tree)) .
-    rec-value(API, tree-with-pos-info(Tree?)) .
+    execute(position-annotator, PA?) .
+    snd-eval(PA, add-posinfo(Path, Tree)) .
+    rec-value(PA, tree-with-pos-info(Tree?)) .
     snd-msg(tree-with-pos-info(Tree)) .
-    Tree := no-tree .
-    snd-terminate(API,"") 
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"") 
   +
     rec-msg(add-posinfo-packed(Path?, Tree?)).
-    execute(position-annotator, API?) .
-    snd-eval(API, add-posinfo-packed(Path, Tree)) .
-    rec-value(API, tree-with-pos-info(Tree?)) .
+    execute(position-annotator, PA?) .
+    snd-eval(PA, add-posinfo-packed(Path, Tree)) .
+    rec-value(PA, tree-with-pos-info(Tree?)) .
     snd-msg(tree-with-pos-info(Tree)) .
-    Tree := no-tree .
-    snd-terminate(API,"") 
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"") 
   +
     rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
-    execute(position-annotator, API?).
-    snd-eval(API, add-posinfo-to-depth(Path, Tree, Depth)).
-    rec-value(API, tree-with-pos-info(Tree?)).
+    execute(position-annotator, PA?).
+    snd-eval(PA, add-posinfo-to-depth(Path, Tree, Depth)).
+    rec-value(PA, tree-with-pos-info(Tree?)).
     snd-msg(tree-with-pos-info(Tree)).
-    Tree := no-tree .
-    snd-terminate(API,"")
+    Tree := help-the-garbage-collector .
+    snd-terminate(PA,"")
+  +
+    rec-msg(promote-posinfo-to-origin(Tree?))
+    . execute(position-annotator, PA?)
+    . snd-eval(PA, promote-posinfo-to-origin(Tree))
+    . rec-value(PA, tree(Tree?))
+    . snd-msg(promoted-posinfo-to-origin(Tree))
+    . Tree := help-the-garbage-collector
+    . snd-terminate(PA, "")
+  +
+    rec-msg(pa-get-origin(Tree?))
+    . execute(position-annotator, PA?)
+    . snd-eval(PA, get-origin(Tree))
+    . rec-value(PA, origin(Location?))
+    . snd-msg(pa-origin(Location))
   ) *
   delta
 endlet

@@ -8,20 +8,21 @@ include_HEADERS = \
 	MEPT_dict.h
 
 libmept_a_SOURCES = \
+	MEPT-utils.c  \
 	MEPT.c \
 	MEPT_dict.c \
-	MEPT-utils.c  \
+	apply.c \
 	flattenPT.c \
 	implodePT.c \
-	yieldPT.c \
-	yieldProd.c \
+	ordering.c \
+	origin.c \
 	posInfo.c \
 	reportAmbs.c \
-	apply.c \
 	symbol-renaming.c \
-	ordering.c
+	yieldPT.c \
+	yieldProd.c
 
-AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -Wall -Werror -g -O2 #-DDISABLE_DYNAMIC_CHECKING
 
 INCLUDES = \
 	-I${ATERM}/include \

@@ -1,5 +1,11 @@
 $Id$
 
+Fri Apr 16 13:43:14 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * libmept: add origin.c
+ * libmept/origin.c: add PT_promotePosInfoToOrigin so we can have
+   both origintracking and pos-info in the same term.
+ * utils/ add calls to promote and get-origin
+
 Wed Apr 14 13:00:25 CEST 2004 <jurgenv@cwi.nl>
  * Fixed core dump for optional literals in implodePT
 

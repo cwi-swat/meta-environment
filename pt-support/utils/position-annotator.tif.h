@@ -9,9 +9,11 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm add_posinfo_packed(int conn, const char *, ATerm);
-ATerm add_posinfo(int conn, const char *, ATerm);
 ATerm add_posinfo_to_depth(int conn, const char *, ATerm, int);
+ATerm add_posinfo_packed(int conn, const char *, ATerm);
+ATerm promote_posinfo_to_origin(int conn, ATerm);
+ATerm add_posinfo(int conn, const char *, ATerm);
+ATerm get_origin(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm position_annotator_handler(int conn, ATerm term);
 extern ATerm position_annotator_checker(int conn, ATerm sigs);

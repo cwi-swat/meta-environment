@@ -116,6 +116,7 @@ PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree, int depth,
 			      int start_col);
 ATbool PT_hasTreeLocation(PT_Tree tree);
 LOC_Location PT_getTreeLocation(PT_Tree tree);
+PT_Tree PT_removeTreeLocation(PT_Tree tree);
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path, int *start_line,
 			 int *start_col, int *end_line, int *end_col);
 
@@ -184,5 +185,8 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset);
 
 PT_Args PT_findArgsWithLocation(PT_Args args);
 PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack);
+
+PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree);
+LOC_Location PT_getTreeOrigin(PT_Tree tree);
 
 #endif /* _ME_PT_H */

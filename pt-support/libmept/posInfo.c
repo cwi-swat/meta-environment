@@ -54,6 +54,14 @@ LOC_Location PT_getTreeLocation(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  PT_Tree PT_removeTreeLocation(PT_Tree tree) */
+
+PT_Tree PT_removeTreeLocation(PT_Tree tree)
+{
+  return PT_TreeFromTerm(ATremoveAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)));
+}
+
+/*}}}  */
 
 /*{{{  ATbool PT_getTreePosInfo(tree,path,start_line,start_col,end_line,end_col) */
 

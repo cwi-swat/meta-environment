@@ -20,7 +20,7 @@ static char version[] = "1.3";
 #define streq(str1, str2) (!strcmp(str1, str2))
 #endif
 
-/*{{{  ATerm addPosInfo(int cid, char* path, ATerm t) */
+/*{{{  ATerm add_posinfo(int cid, const char* path, ATerm t) */
 
 ATerm add_posinfo(int cid, const char* path, ATerm t)
 {
@@ -32,7 +32,7 @@ ATerm add_posinfo(int cid, const char* path, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm add_posinfo_packed(int cid, char* path, ATerm t) */
+/*{{{  ATerm add_posinfo_packed(int cid, const char* path, ATerm t) */
 
 ATerm add_posinfo_packed(int cid, const char* path, ATerm t)
 {
@@ -45,7 +45,7 @@ ATerm add_posinfo_packed(int cid, const char* path, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm add_posinfo_to_depth(int cid, char* path, ATerm t, int depth) */
+/*{{{  ATerm add_posinfo_to_depth(int cid, const char* path, ATerm t, int depth) */
 
 ATerm add_posinfo_to_depth(int cid, const char* path, ATerm t, int depth)
 {
@@ -54,6 +54,30 @@ ATerm add_posinfo_to_depth(int cid, const char* path, ATerm t, int depth)
 						   depth, ATfalse, ATfalse);
 
   return ATmake("snd-value(tree-with-pos-info(<term>))", ATBpack((ATerm) result));
+}
+
+/*}}}  */
+/*{{{  ATerm promote_posinfo_to_origin(int cid, ATerm t) */
+
+ATerm promote_posinfo_to_origin(int cid, ATerm t)
+{
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(ATBunpack(t));
+  PT_Tree tree = PT_getParseTreeTop(parseTree);
+  tree = PT_promotePosInfoToOrigin(tree);
+  parseTree = PT_setParseTreeTop(parseTree, tree);
+
+  return ATmake("snd-value(tree(<term>))", ATBpack((ATerm)parseTree));
+}
+
+/*}}}  */
+/*{{{  ATerm get_origin(int cid, ATerm t) */
+
+ATerm get_origin(int cid, ATerm t)
+{
+  PT_Tree tree = PT_TreeFromTerm(ATBunpack(t));
+  LOC_Location origin = PT_getTreeOrigin(tree);
+
+  return ATmake("snd-value(origin(<term>))", LOC_LocationToTerm(origin));
 }
 
 /*}}}  */
