@@ -175,7 +175,7 @@ term *satisfy()
   for(i = 0; i <= nball; i++)
     if(balls[i].changed){
       balls[i].changed = TBfalse;
-      moves = TBmake("[move(%s,%d,%d),%l])",  balls[i].name, balls[i].x, balls[i].y, moves);
+      moves = TBmake("[move(%s,%d,%d),%l]",  balls[i].name, balls[i].x, balls[i].y, moves);
     }
 /*  TBmsg("moves = %t\n", moves); */
   return TBmake("snd-value(%t)", moves);
