@@ -4,7 +4,7 @@ KEWLTEWL - the Kewlest Tewl ever
 
 =head1 SYNOPSIS
 
-B<kewltewl> [-B<bht>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>]
+B<kewltewl> [-B<bh>] [-B<i> I<file>] [-B<o> I<file>] [-B<tvV>] 
 
 =head1 DESCRIPTION
 
@@ -16,7 +16,7 @@ A number of options can be supplied; these are as follows:
 
 =item B<-b>
 
-Write term output in BAF (Binary AsFix) format. (default)
+Write term output in BAF (Binary AsFix) format. This is the default.
 
 =item -B<h>
 
@@ -34,6 +34,13 @@ Write output to F<file>.  By default, output goes to stdout.
 
 Write term output in plain text format.
 
+=item B<-v>
+
+Operate in verbose mode.
+
+=item B<-V>
+
+Show program version.
 
 =back
 =head1 USAGE
