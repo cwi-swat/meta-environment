@@ -127,11 +127,13 @@ int main(int argc, char *argv[])
   term *monitor;
   TBbool fixed_seed = TBfalse;
   struct sigaction act;
+  struct sigaction act_ignore;
 
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
   extern int mk_server_ports(TBbool);
   extern void chld_handler(int);
+
 
   act.sa_handler = interrupt_handler;
   sigemptyset(&act.sa_mask);
@@ -142,6 +144,11 @@ int main(int argc, char *argv[])
   sigaction(SIGQUIT, &act, NULL);
   act.sa_handler = chld_handler;
   sigaction(SIGCHLD, &act, NULL);
+
+  act_ignore.sa_handler = SIG_IGN;
+  act_ignore.sa_flags = SA_RESTART;
+  sigemptyset(&act.sa_mask);
+  sigaction(SIGPIPE, &act_ignore, NULL);
   
   if(time(&startup_time) == -1)
     err_sys_fatal("Cannot read current time");
