@@ -3,21 +3,21 @@ package org.autocode.generator.repository;
 import java.util.*;
 import java.io.*;
 
-public class MethodBody
+public class CodeBlock
 {
   private List _lineList;
 
-  //{{{ public MethodBody()
+  //{{{ public CodeBlock()
 
-  public MethodBody()
+  public CodeBlock()
   {
     _lineList = new LinkedList();
   }
 
   //}}}
-  //{{{ public MethodBody(String line)
+  //{{{ public CodeBlock(String line)
 
-  public MethodBody(String line)
+  public CodeBlock(String line)
   {
     this();
     addLine(line);
