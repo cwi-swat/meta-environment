@@ -50,7 +50,8 @@ exports
     "{" {Term ","}+ "}" -> Annotations
 
     {SigArg ","}+  -> SigArgList
-    {FuncDef ";"}* -> FuncDefList
+    {FuncDef";"
+}* -> FuncDefList
 
 %% \vspace{\baselineskip}
 %% \noindent The definition of the rules in \ssasf.
@@ -58,12 +59,23 @@ exports
   context-free syntax
     Term "=" Term -> Rule
 
-    {Rule ";"}*   -> RuleList
+    {Rule";"
+
+
+}*   -> RuleList
 
 exports
   context-free syntax
-    "default:" Term "=" Term                -> Rule
-    "default:" CondList "==>" Term "=" Term -> Rule
+"default:" 
+Term 
+"="
+Term                -> Rule
+"default:" 
+CondList 
+"==>" 
+Term 
+"=" 
+Term -> Rule
 
 exports
   context-free syntax
@@ -76,8 +88,14 @@ exports
 
 exports
   context-free syntax
-    CondList "==>" Term "=" Term -> Rule
-    {Cond "&"}*                  -> CondList
+    
+CondList 
+"==>" 
+Term 
+"=" 
+Term -> Rule
+{Cond "&"
+}*                  -> CondList
 
   variables
     "Cond"[0-9]*    -> Cond
@@ -99,11 +117,16 @@ exports
   sorts Module RulesOpt SignatureOpt
   context-free syntax
                                                  -> SignatureOpt
-    "signature" FuncDefList                      -> SignatureOpt
+    "signature" 
+  FuncDefList                      -> SignatureOpt
                                                  -> RulesOpt
-    "rules" RuleList                             -> RulesOpt
+    "rules" 
+  RuleList                             -> RulesOpt
 
-    "module" ModId SignatureOpt RulesOpt         -> Module
+    "module" ModId 
+SignatureOpt 
+
+RulesOpt         -> Module
 
   variables
     "Funcdef"[0-9]*  -> FuncDef
