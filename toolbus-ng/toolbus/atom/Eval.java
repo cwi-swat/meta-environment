@@ -9,8 +9,8 @@ import aterm.ATerm;
  */
 public class Eval extends ToolAtom {
 
-  public Eval(ATerm toolarg) {
-    super(toolarg);
+  public Eval(ATerm toolTerm) {
+    super(toolTerm);
   }
   
   public ProcessExpression copy(){

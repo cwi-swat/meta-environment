@@ -23,7 +23,7 @@ import aterm.*;
 class ToolShield extends Thread implements ToolBridge {
 
   private Object toolinstance;
-  private JavaTool javatool;
+  private InternalJavaTool javatool;
   private LinkedList requests;
 
   /**
@@ -31,7 +31,7 @@ class ToolShield extends Thread implements ToolBridge {
    * Arguments: the name of the tool class and the JavaTool that creates us.
    */
 
-  public ToolShield(Constructor cons, JavaTool javatool) {
+  public ToolShield(Constructor cons, InternalJavaTool javatool) {
     try {
       Object actuals[] = new Object[] { this };
       toolinstance = cons.newInstance(actuals);
@@ -70,9 +70,9 @@ class ToolShield extends Thread implements ToolBridge {
       System.err.println("ToolShield.handleRequest: " + e);
       e.printStackTrace();
     }
-    if (operation == JavaTool.EVAL) {
+    if (operation == InternalJavaTool.EVAL) {
       javatool.addValue(id, res);
-    } else if (operation == JavaTool.TERMINATE) {
+    } else if (operation == InternalJavaTool.TERMINATE) {
       terminate("tool terminated by ToolShield");
     }
   }
@@ -126,12 +126,12 @@ class ToolShield extends Thread implements ToolBridge {
 /**
  * @author paulk, Jul 29, 2002
  * 
- * JavaTool creates the environment for running a JavaTool.
+ * InternalJavaTool creates the environment for running a JavaTool.
  * On creation it builds a table of all methods that are expected by the ToolBus.
  * Next a ToolShield is created to run the actual tool class.
  */
 
-public class JavaTool implements ToolInstance {
+public class InternalJavaTool implements ToolInstance {
   private String className;
   private Class toolClass;
   private Constructor toolConstructor;
@@ -154,9 +154,9 @@ public class JavaTool implements ToolInstance {
    * tool and a list of function signatures.
    */
 
-  public JavaTool(String className, ATermList functionSignatures) throws ToolBusException {
+  public InternalJavaTool(ToolDescriptor toolDef) throws ToolBusException {
     System.err.println("JavaTool");
-    this.className = className;
+    this.className = toolDef.getToolName();
     try {
       toolClass = Class.forName(className);
     } catch (ClassNotFoundException e) {
@@ -167,7 +167,7 @@ public class JavaTool implements ToolInstance {
     eventsFromTool = new LinkedList();
     pendingEvents = new Hashtable();
     toolConstructor = findConstructor();
-    checkToolSignature(functionSignatures);
+    checkToolSignature(toolDef.getFunctionSignatures());
     toolShield = new ToolShield(toolConstructor, this);
     toolShield.start();
   }
