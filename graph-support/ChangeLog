@@ -1,5 +1,8 @@
 $Id$
 
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
 Mon Jan 26 11:55:29 CET 2004 <{jong,jurgenv}@cwi.nl>
  * bump version to 0.2
 

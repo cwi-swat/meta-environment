@@ -2,6 +2,8 @@
 
 SUBDIRS = lib utils
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST=make_rules $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
