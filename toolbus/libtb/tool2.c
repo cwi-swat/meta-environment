@@ -459,11 +459,11 @@ static term *term_make(term *template, va_list *args);
 
 TBbool valid_id(char *id)
 {
-  if(!islower(id[0]))
+  if(!islower((int)id[0]))
     return TBfalse;
 
   while(*(++id)) {
-    if(!isalpha(*id) && !isdigit(*id) && *id !=  '-' && *id != '_')
+    if(!isalpha((int)*id) && !isdigit((int)*id) && *id !=  '-' && *id != '_')
       return TBfalse;
   }
   return TBtrue;
