@@ -506,6 +506,10 @@ ATbool SG_CharInCharClass(int c, register ATermList cc)
     ccitem = ATgetFirst(cc);
 
     switch(ATgetType(ccitem)) {
+      case AT_INT:
+        if(c == ATgetInt((ATermInt) ccitem))
+          return ATtrue;
+        break;
       case AT_APPL:
         if(c >= ATgetInt((ATermInt) ATgetArgument((ATermAppl) ccitem, 0))
            && c <= ATgetInt((ATermInt) ATgetArgument((ATermAppl) ccitem, 1)))
@@ -530,16 +534,20 @@ ATbool SG_CheckLookAhead(lookahead las)
   int       c;
   ATbool    permitted = ATtrue;
 
-  /*  without further input no lookahead restrictions apply  */
-  if((c = SG_GetChar()) == EOF)
+  /*  Without further input no lookahead restrictions apply  */
+  if((c = SG_GetChar()) == EOF) {
+    SG_UnGetChar();
     return ATtrue;
+  }
 
   for(; permitted && !ATisEmpty(las); las = ATgetNext(las)) {
     ATermList cc;
     lookahead morelooks;
     ATerm la = ATgetFirst(las);
 
-    if(ATmatch(la, "look(char-class(<list>),[<list>])", &cc, &morelooks)) {
+    if(ATmatch(la, "look(char-class(<term>),[<list>])", &cc, &morelooks)) {
+
+      IF_DEBUG(ATfprintf(SG_log(), "Lookahead: character %d in %t\n", c, cc));
       /*  is the current lookahead token in this char class?  */
       if(SG_CharInCharClass(c, cc)) {
         permitted = ATisEmpty(morelooks)

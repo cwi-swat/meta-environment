@@ -120,15 +120,15 @@ actionkind SG_ActionKind(action a)
 {
   AFun fun = ATgetAFun(a);
 
-  if(ATisEqual(fun, SG_Reduce_AFun))
+  if(ATisEqual(fun, SG_Reduce_AFun)) {
     return REDUCE;
-  if(ATisEqual(fun, SG_ReduceLA_AFun))
+  } else if(ATisEqual(fun, SG_ReduceLA_AFun)) {
     return REDUCE_LA;
-  if(ATisEqual(fun, SG_Shift_AFun))
+  } else if(ATisEqual(fun, SG_Shift_AFun)) {
     return SHIFT;
-  if(ATisEqual(fun, SG_Accept_AFun))
+  } else if(ATisEqual(fun, SG_Accept_AFun)) {
     return ACCEPT;
-
+  }
   return ERROR;
 }
 
@@ -456,7 +456,7 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
       SG_AddClassesToActionTable(pt, s, classes, (actions) t);
       for(; !pt->has_rejects && !ATisEmpty(t); t = ATgetNext(t)) {
         action thisact = ATgetFirst(t);
-        
+
         if(SG_RejectAction(thisact)) {
           pt->has_rejects = ATtrue;
         }

@@ -170,7 +170,7 @@ parse_table  *SG_LookupParseTable(char *L);
 #define       SG_A_NR_ARGS(a)       ATgetInt((ATermInt) ATgetArgument(a, 0))
 #define       SG_A_PROD(a)          ATgetInt((ATermInt) ATgetArgument(a, 1))
 #define       SG_A_ATTRIBUTE(a)     ATgetInt((ATermInt) ATgetArgument(a, 2))
-#define       SG_A_LOOKAHEAD(a)     (lookahead) ATgetInt((ATermInt) ATgetArgument(a, 3))
+#define       SG_A_LOOKAHEAD(a)     (lookahead) ATgetArgument(a, 3)
 
 #define       SG_RegularAction(a)   (SG_A_ATTRIBUTE(a) == SG_PT_REGULAR)
 #define       SG_RejectAction(a)    (SG_ReduceAction(a) && SG_A_ATTRIBUTE(a) == SG_PT_REJECT)
