@@ -1,9 +1,11 @@
-module RScripts[Elem]
+module RScripts[Elem ElemType]
 
 imports Relations[Elem]
 
+imports basic/Booleans basic/Integers
+
 exports
-  sorts SCRIPT STAT VAR FROM TEXP REXP
+  sorts SCRIPT STAT VAR DCLVAR FROM TEXP REXP REXPTYPE
 
   lexical syntax
      [\$]?[A-Za-z][A-Za-z0-9\_]*             -> VAR {avoid}
@@ -13,21 +15,13 @@ exports
 
   context-free syntax
 
-     "true"                                  -> REXP
-     "false"                                 -> REXP
-     REXP "and" REXP                         -> REXP {left}
-     REXP "or" REXP                          -> REXP {left}
-     "not" REXP                              -> REXP
-
-     REXP "==" REXP                          -> REXP {left}
-     REXP "<=" REXP                          -> REXP {non-assoc}
-     REXP "<" REXP                           -> REXP {non-assoc}
-     REXP ">=" REXP                          -> REXP {non-assoc}
-     REXP ">" REXP                           -> REXP {non-assoc}
-
 %% Elementary values
+     Boolean                                -> Elem
+     Integer                                 -> Elem
 
 %%     Elem                                  -> REXP
+     Boolean                                 -> REXP
+     Integer				     -> REXP
      "'" Elem                                -> REXP
      "'" Bag[[Elem]]                         -> REXP
      "'" Rel[[Elem]]                         -> REXP
@@ -36,39 +30,63 @@ exports
      "<" REXP "," REXP ">"                   -> TEXP
      "{" {TEXP ","}* "}"                     -> REXP
      TEXP                                    -> REXP
+%%     "true"                                  -> REXP {prefer}
+%%     "false"                                 -> REXP {prefer}
 
 %% Operators
+     REXP "and" REXP                         -> REXP {left}
+     REXP "or" REXP                          -> REXP {left}
+     "not" REXP                              -> REXP
+     REXP "elem" REXP			     -> REXP
 
-     REXP "union" REXP                         -> REXP {left}
-     REXP "inter" REXP                         -> REXP {left}
-     REXP "\\" REXP                            -> REXP {left}
-     REXP "o" REXP                             -> REXP {left}
-     REXP "x" REXP                             -> REXP {left}
-     REXP "." REXP                             -> REXP {left}
-     REXP "+"                                 -> REXP
-     REXP "*"                                 -> REXP
+     REXP "==" REXP                          -> REXP {left}
+     REXP "<=" REXP                          -> REXP {non-assoc}
+     REXP "<" REXP                           -> REXP {non-assoc}
+     REXP ">=" REXP                          -> REXP {non-assoc}
+     REXP ">" REXP                           -> REXP {non-assoc}
+
+     REXP "union" REXP                       -> REXP {left}
+     REXP "inter" REXP                       -> REXP {left}
+     REXP "\\" REXP                          -> REXP {left}
+     REXP "o" REXP                           -> REXP {left}
+     REXP "x" REXP                           -> REXP {left}
+     REXP "." REXP                           -> REXP {left}
+     REXP "+"                                -> REXP
+     REXP "*"                                -> REXP
+
+%% Types
+
+     "bool" 				     -> ElemType
+     "int"		     		     -> ElemType
+
+     ElemType                                -> REXPTYPE
+     "<" REXPTYPE "," REXPTYPE ">"           -> REXPTYPE
+     "bag" "[" REXPTYPE "]"       	     -> REXPTYPE
+     "rel" "[" REXPTYPE "," REXPTYPE "]"     -> REXPTYPE
 
 %% value formers
 
      "{" FROM "|" REXP "}"                    -> REXP
-     "{" {FROM ","}+ "|" REXP "|" REXP "}"     -> REXP
+     "{" {FROM ","}+ "|" REXP "|" REXP "}"    -> REXP
 
      VAR "in" REXP                            -> FROM
      "<" VAR "," VAR ">" in REXP              -> FROM
 
 %% functions
 
-     VAR "(" REXP ")"                         -> REXP {avoid}
-     VAR "(" REXP "," REXP ")"                -> REXP {avoid}
-     VAR "(" REXP "," REXP "," REXP")"        -> REXP {avoid}
+     VAR "(" {REXP ","}* ")"                  -> REXP {avoid}
      "(" REXP ")"                             -> REXP {bracket}
 
-     "def" VAR "=" REXP                       -> STAT
+%% Statements and script
 
-     "fun" VAR "(" VAR ")" "=" REXP           -> STAT
-     "fun" VAR "(" VAR "," VAR ")" "="  REXP  -> STAT
-     "fun" VAR "(" VAR "," VAR "," VAR ")" "="  REXP  -> STAT
+     REXPTYPE VAR			      -> DCLVAR
 
+     DCLVAR				      -> STAT
+
+     DCLVAR "=" REXP                          -> STAT
+
+     DCLVAR  "(" { DCLVAR ","}* ")" "=" REXP  -> STAT
+ 
      STAT*                                   -> SCRIPT
 
   context-free priorities
@@ -77,14 +95,16 @@ exports
      REXP "x" REXP -> REXP >
      REXP "." REXP -> REXP >
      REXP "inter" REXP -> REXP >
-     REXP "union" REXP -> REXP
+     REXP "union" REXP -> REXP >
+     { REXP "+" -> REXP
+       REXP "*" -> REXP} >
 
-%%     { REXP "<=" REXP -> REXP, 
-%%       REXP "<" REXP -> REXP, 
-%%       REXP ">=" REXP -> REXP, 
-%%       REXP ">" REXP -> REXP
-%%     } >
-%%       REXP "==" REXP -> REXP     
+     { REXP "<=" REXP -> REXP 
+       REXP "<" REXP -> REXP
+       REXP ">=" REXP -> REXP
+       REXP ">" REXP -> REXP
+       REXP "==" REXP -> REXP  
+     }   
 
      
 

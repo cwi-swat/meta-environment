@@ -1,6 +1,6 @@
-module RelationCalculator[Elem]
+module RelationCalculator[Elem ElemType]
 
-imports RScripts[Elem]
+imports RScripts[Elem ElemType]
 imports Relations[Elem]
 
 exports
@@ -59,6 +59,7 @@ exports
 
         "dominators"                   -> VAR {prefer}
 
+        "elem"			       -> OP
         "=="                           -> OP
         "<="                           -> OP
         "<"                            -> OP
@@ -97,8 +98,8 @@ hiddens
         "Exp*"  [0-9\']*              -> { REXP ","}*
         "Exp+"  [0-9\']*              -> { REXP ","}+
 
-        [\#]? "Rel" [0-9\']*                -> Rel[[Elem]]
-        [\#]? "Bag" [0-9\']*                -> Bag[[Elem]]
+        "#Rel" [0-9\']*                -> Rel[[Elem]]
+        "#Bag" [0-9\']*                -> Bag[[Elem]]
         "E"   [0-9\']*                -> Elem
         "E*"  [0-9\']*                -> {Elem ","}*
         "E+"  [0-9\']*                -> {Elem ","}+
@@ -124,6 +125,7 @@ hiddens
         "Stat*" [0-9\']*              -> STAT*
 
         "Bool" [0-9\']*               -> Boolean
+	"Etype" [0-9\']*              -> REXPTYPE
 
      
 

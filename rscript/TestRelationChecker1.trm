@@ -1,0 +1,68 @@
+eval-rscript(
+
+rel[id,int] D = dominators('{<y, 3>}, '{<y, 5>}, '{<3, 2>, <2, 1>, <1, 0>})
+
+rel[id,int] DEFS    = '{<x, 1>, <z, 3>, <x, 4>, <y, 5>}
+
+rel[id,int] USES    = '{<y, 3>, <x, 3>, <z, 5>}
+
+rel[int,int]  SUCC    = '{<0, 1>,<1, 2>, <2, 3>, <2, 4>, <3, 5>, <4, 5>}
+rel[int,int]  PRED   = inv(SUCC)
+
+rel[id,int] D0 = '{<y,3>}
+rel[id,int] D1 = (D0 o PRED) \ DEFS
+
+rel[id,int] D4 = dominators('{<y, 3>}, DEFS, PRED)
+bool DD = '0 elem range(dominators('{<y, 3>}, DEFS, PRED))
+
+bool  reaches_root(rel[id,int] R) = '0 elem range(R)
+
+rel[id,int]  UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) }
+
+bool tst(int N) = true
+
+rel[id,int]  UN1 = { <V, N> in USES | tst(0) }
+
+
+bag[id] Bag1     = '{a, b, c}
+bag[id] Bag2     = '{d, e, f}
+rel[id,int] Rel1     = '{<a, 1>, <b, 2>, <c, 3>}
+rel[int,int] Rel2     = '{<1, 10>, <3, 30>}
+
+bag[id] Tst      = {$x in Bag1 | true }
+rel[id,id] REL      = {$x in Bag1, $y in Bag2 | true | <$x, $y>}
+
+rel[X,Y] finv(rel[Y,X] REL) = {<$x, $y> in REL | true | <$y, $x>}
+bag[X] fdom(rel[X,Y] REL) = {<$x, $y> in REL | true | $x}
+
+rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { X in R1, Y in R2 | true | <X, Y>}
+
+rel[A,C] comp(rel[A,B] R1, rel[B,C] R2) =
+    { <X, Y> in R1, <S, T> in R2
+    | Y == S
+   | <X, T>}
+
+rel[int,id] bag5     = inv(DEFS)
+bag[id] bag6     = fdom(DEFS)
+
+bag[int] bag10 = closure('{5}, PRED)
+
+bool B1 = Bag1 < Bag2
+bool B2 = Bag1 <= Bag2
+bool B3 = Bag1 == Bag2
+bool B4 = Bag1 >= Bag2
+bool B5 = Bag1 > Bag2
+
+bool BB1 = Rel1 < Rel1
+bool B2B = Rel1 <= Rel1
+bool BB3 = Rel1 == Rel1
+bool BB4 = Rel1 >= Rel1
+bool BB5 = Rel1 > Rel1
+
+bool C = Bag1 x Bag2 <= Bag2 x Bag1
+
+rel[id,id] C2 = (Bag1 x Bag2)+
+
+rel[int,int] C3 = SUCC *
+
+)

@@ -1,10 +1,10 @@
 begin declare x : natural, y : natural, 
-              z : natural;
-  x := 3; 
+              z : natural, p : natural;
+  x := 3; p := 4;
   if q then 
         z := y + x
   else
         x := 4
   fi;
-  y := z
+  y := z; x := p
 end

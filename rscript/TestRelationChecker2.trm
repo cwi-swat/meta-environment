@@ -1,0 +1,6 @@
+check(
+
+{ <V, N> in USES | tst(0) | <V, N>}
+, <[<tst,fun int to bool>], []>
+
+)
