@@ -301,6 +301,10 @@ int main(int argc, char *argv[])
       proceed = 0;
     }
 
+    if (nr_inputs == 0) {
+      nr_inputs = 1; /* Use stdin */
+    }
+
     if(proceed) {
       for (i=0; i<nr_inputs; i++) {
 	if (!strcmp(input[i], "") || !strcmp(input[i], "-")) {
