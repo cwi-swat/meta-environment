@@ -2,17 +2,15 @@ module Relations[Elem]
 
 exports
 
+%%imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]]  ]
 imports Bags[Elem # Elem]
-%%imports Bags[Elem # Elem] [ Bags[[Elem#Elem]] => Rel[[Elem]] ]
-
-%%imports Bags[ Bags[[Elem#Elem]] => Rel[[Elem]] ]
 imports Bags[Elem]
 
   sorts Rel[[Elem]]
 
-%%     alias Bag[[Elem # Elem]]         -> Rel[[Elem]]
-
   context-free syntax
+
+     Bag[[Elem # Elem]]               ->  Rel[[Elem]]
 
      "EmptyRel"                       -> Rel[[Elem]]
 
