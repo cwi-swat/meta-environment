@@ -52,7 +52,6 @@ static MA_OptLayout em  = NULL; /* empty */
 
 static MA_OptLayout stringToLayout(const char *str);
 static MA_FunId stringToFunId(const char *str);
-static MA_FunId intToFunId(int ch);
 static void initLayoutAbbreviations(void);
 static int getProdArity(PT_Production prod, LayoutOption layout);
 static MA_Term attrToTerm(PT_Attr attr);

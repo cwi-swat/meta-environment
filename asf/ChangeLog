@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Jun 10 09:41:41 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * semantics/asfc/src/lex-cons.c: explicit cast to (int) in PT_makeTreeChar
+
 Wed Jun  9 15:38:01 CEST 2004 <jong@cwi.nl>
  * semantics: regenerate APIs, fix resulting errors
 
