@@ -94,6 +94,8 @@ char* dashesToUnderscores(const char *str)
   for (i = 0; i < strlen(tmp); i++) {
     if (tmp[i] == '-') {
       tmp[i] = '_';
+    } else if (tmp[i] == '/') {
+      tmp[i] = '_';
     }
   }
 
