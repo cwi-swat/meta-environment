@@ -31,12 +31,12 @@ INSTALL_DATA    = @INSTALL_DATA@
 INSTALL_PROG    = @INSTALL_PROG@
 UNINSTALL   = @UNINSTALL@
 
-ATERM       = @NEWATERM@/aterm
+ATERM       = @ATERM@
 
 include Make.modules
 
 XCFLAGS = -O2 ${INCLUDE}
-INCLUDE = -I../support -I$(includedir) -I$(ATERM)/../include
+INCLUDE = -I../support -I$(includedir) -I$(ATERM)/include
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
 	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
 	-lAsFix-${CC} -lATB-${CC} \
