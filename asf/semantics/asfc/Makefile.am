@@ -20,4 +20,4 @@
 #
 # $Id$
 
-SUBDIRS          = c-source src test
+SUBDIRS          = src test
