@@ -28,6 +28,7 @@ typedef struct bucket
   asymbol *sym;
 } bucket;
 
+#define MIN(a,b) ((a) > (b) ? (b) : (a))
 #define MAX_STORE 1024
 static aterm *term_store[MAX_STORE];
 
