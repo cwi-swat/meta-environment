@@ -2,6 +2,8 @@
  * Fixed a bug in the is-<cons> builtin. If it returned false it would
    match correclty in the conditions.
  * Bumped to 1.4beta
+ * Removed automatic predicate generation for prefix functions without
+   a cons annotation.
 
 2002/02/13 ({jurgenv,markvdb}@cwi.nl)
  * Released 1.3
