@@ -24,9 +24,55 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <assert.h>
 
 #include "MEPT-utils.h"
+
+static int lengthOfInteger(int ch)
+{
+  if (isalnum((char) ch)) {
+    return 1;
+  }
+  else if (isprint((char) ch) ||
+           ch == '\n' ||
+           ch == '\t' ||
+           ch == ' ') {
+    return 2;
+  }
+ 
+  return 4;
+}
+
+static int lengthOfCharRange(PT_CharRange charRange)
+{
+  if (PT_isCharRangeCharacter(charRange)) {
+    int ch = PT_getCharRangeInteger(charRange);
+    return lengthOfInteger(ch);  
+  }
+  else if (PT_isCharRangeRange(charRange)) {
+    int ch1 = PT_getCharRangeStart(charRange);
+    int ch2 = PT_getCharRangeEnd(charRange);
+    
+    return lengthOfInteger(ch1) + lengthOfInteger(ch2) + 1;
+  }
+   
+  ATwarning("lengthOfCharRange: unknown charRange: %t\n", charRange);
+  return 0; 
+}
+
+static int lengthOfCharRanges(PT_CharRanges charRanges)
+{
+  int length = 0;
+
+  while (PT_hasCharRangesHead(charRanges)) {
+    PT_CharRange charRange = PT_getCharRangesHead(charRanges);
+    length += lengthOfCharRange(charRange);
+    charRanges = PT_getCharRangesTail(charRanges);
+  }
+
+  return length;
+}
 
 static int
 lengthOfSymbol(PT_Symbol symbol)
@@ -74,6 +120,10 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol separator = PT_getSymbolSeparator(symbol);
     return lengthOfSymbol(newSymbol) + lengthOfSymbol(separator) + 4;
   }
+  if (PT_isSymbolCharClass(symbol)) {
+    return lengthOfCharRanges(PT_getSymbolRanges(symbol)) + 2;
+  }
+
   ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
   return 0;
 }
@@ -108,6 +158,79 @@ lengthOfProd(PT_Production prod)
   return lengthOfSymbols(lhs) + 4 +
          lengthOfSymbol(rhs) +
          lengthOfAttributes(attrs);
+}
+
+static int yieldInteger(int ch, int idx, char *buf, int bufSize)
+{
+  assert(idx <= bufSize);
+
+  if (isalnum(ch)) {
+    buf[idx++] = (char) ch;
+    return idx;
+  }
+  else if (isprint(ch)) {
+    buf[idx++] = '\\';
+    buf[idx++] = (char) ch;
+    return idx;
+  } 
+  else if (ch == '\n') {
+    buf[idx++] = '\\';
+    buf[idx++] = 'n';
+    return idx;
+  }
+  else if (ch == '\t') {
+    buf[idx++] = '\\';
+    buf[idx++] = 't';
+    return idx;
+  }
+  else if (ch == ' ') {
+    buf[idx++] = '\\';
+    buf[idx++] = ' ';
+    return idx;
+  }
+  
+  /* create escaped octal number */
+  buf[idx++] = '\\';
+  sprintf(buf+idx,"%0o",ch);
+  idx += 3;
+
+  return idx;
+}
+
+static int yieldCharRange(PT_CharRange charRange, int idx, char *buf, int bufSize)
+{
+  assert(idx <= bufSize);
+
+  if (PT_isCharRangeCharacter(charRange)) {
+    int ch = PT_getCharRangeInteger(charRange);
+    idx = yieldInteger(ch, idx, buf, bufSize);
+    return idx;
+  }
+  else if (PT_isCharRangeRange(charRange)) {
+    int ch1 = PT_getCharRangeStart(charRange);
+    int ch2 = PT_getCharRangeEnd(charRange);
+    idx = yieldInteger(ch1, idx, buf, bufSize);
+    buf[idx++] = (char) '-';
+    idx = yieldInteger(ch2, idx, buf, bufSize);
+
+    return idx;
+  }
+
+  ATwarning("yieldCharRange: unknown charRange: %t\n", charRange);
+  return idx;
+}
+
+static int yieldCharRanges(PT_CharRanges charRanges, int idx, char *buf, int bufSize)
+{
+  assert(idx <= bufSize);
+
+  while (PT_hasCharRangesHead(charRanges)) {
+    PT_CharRange charRange = PT_getCharRangesHead(charRanges);
+    idx = yieldCharRange(charRange, idx, buf, bufSize);
+    charRanges = PT_getCharRangesTail(charRanges);
+  }
+
+  return idx;
 }
 
 static int 
@@ -212,6 +335,15 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
     return idx;
   }
+  if (PT_isSymbolCharClass(symbol)) {
+    PT_CharRanges charRanges = PT_getSymbolRanges(symbol);
+    buf[idx++] = '[';
+    idx = yieldCharRanges(charRanges,idx,buf,bufSize);
+    buf[idx++] = ']';
+
+    return idx;
+  }
+
   ATwarning("yieldSymbol: unknown symbol: %t\n", symbol);
   return idx;
 }
