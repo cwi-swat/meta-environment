@@ -1,0 +1,24 @@
+module TreeYield
+imports basic/Strings
+imports basic/NatCon
+imports languages/asfix/syntax/Tree
+
+exports
+
+context-free syntax
+
+tree-to-string(Tree) -> String
+
+hiddens
+
+context-free syntax
+
+yield(Tree, String)     -> String {traversal(accu,bottom-up,continue)}
+decimal-to-char(NatCon) -> String {memo}
+
+variables
+
+"N"[0-9\']* -> NatCon
+"String"[0-9\']* -> String
+"Char*"[0-9\']* -> CHAR*
+"Tree"[0-9\']* -> Tree
