@@ -14,34 +14,34 @@ Warning -> Feedback {cons("warning")}
 Error -> Feedback {cons("error")}
 FatalError -> Feedback {cons("fatal-error")}
 
-"information" "(" id:String         c1:"," 
-                  producer:Producer c2:"," 
-                  description:Description c3:","
+"information" "(" id:String         "," 
+                  producer:Producer "," 
+                  description:Description ","
                   subjects:Subjects
               ")"  -> Information {cons("information")}
 
-"warning"     "(" id:String         c1:"," 
-                  producer:Producer c2:"," 
-                  description:Description c3:","
+"warning"     "(" id:String         "," 
+                  producer:Producer "," 
+                  description:Description ","
                   subjects:Subjects
               ")"  -> Warning {cons("warning")}
 
-"error"       "(" id:String         c1:"," 
-                  producer:Producer c2:"," 
-                  description:Description c3:","
+"error"       "(" id:String         "," 
+                  producer:Producer "," 
+                  description:Description ","
                   subjects:Subjects
               ")"  -> Error {cons("error")}
 
-"fatal-error" "(" id:String         c1:"," 
-                  producer:Producer c2:"," 
-                  description:Description c3:","
+"fatal-error" "(" id:String         "," 
+                  producer:Producer "," 
+                  description:Description ","
                   subjects:Subjects
               ")"  -> FatalError {cons("fatal-error")}
 
-producer(id:String,type:String) -> Producer {cons("producer")}
-description(String)             -> Description {cons("description")}
+"producer" "(" id:String "," type:String ")" -> Producer {cons("producer")}
+"description" "(" String ")"              -> Description {cons("description")}
 
 "[" subject-list:{Subject ","}* "]" -> Subjects {cons("subjects")}
 
-subject(id:String, location:Location) -> Subject {cons("without-location")}
-subject(id:String)                    -> Subject {cons("with-location")}
+"subject""("id:String "," location:Location ")" -> Subject {cons("without-location")}
+"subject""("id:String ")"              -> Subject {cons("with-location")}

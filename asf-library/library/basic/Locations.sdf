@@ -9,12 +9,12 @@ sorts Location Area
  
 context-free syntax
 
-location(file:String, area:Area) -> Location {cons("location")}
+"location" "(" file:String "," area:Area ")" -> Location {cons("location")}
 
-"area" "(" start-line:NatCon    c1:"," 
-           start-column:NatCon  c2:","
-           end-line:NatCon      c3:","
-           end-column:NatCon    c4:","
-           start-offset:NatCon  c5:"," 
+"area" "(" start-line:NatCon    "," 
+           start-column:NatCon  ","
+           end-line:NatCon      ","
+           end-column:NatCon    ","
+           start-offset:NatCon  "," 
            end-offset:NatCon
        ")" -> Area {cons("area")}
