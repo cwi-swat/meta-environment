@@ -25,7 +25,7 @@
    * Status display shows more detailed information
    * Saved parsed equations are reused from now on
    * Changed modules that are saved to disk but not parsed (dirty)
-     close automatically to prevent inconsistencies.
+     are reread from disk automatically to prevent inconsistencies.
 
 2000/8/23 ({jong,olivierp}@cwi.nl)
    * Fixed genamakefile.sh.src to also generate executable 
