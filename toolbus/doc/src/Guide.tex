@@ -162,7 +162,14 @@ explicitly controlled. It is also possible to connect or disconnect
 tools that have been executing independently of the \TB.
 
 \subsection{Purpose of this guide}
-This guide is a companion to the ``\TB\ reports''\footnote{ J.A. Bergstra and
+This guide is a companion to the various \TB\ papers\footnote{The most comprehensive
+publication is J.A. Bergstra and P.~Klint,
+``The discrete time {T}ool{B}us -- a software coordination
+  architecture'', {\em Science of Computer Programming}, 31(2-3):205--229, July 1998.  
+
+Technical reports giving detailed descriptions of the semantics (using ASF+SDF specifications)
+and implementation of the \TB\ are:
+J.A. Bergstra and
 P. Klint, ``The ToolBus---a component interconnection architecture'',
 Report P9408, Programming Research Group, University of Amsterdam,
 1994, and J.A. Bergstra and P. Klint, ``The Discrete Time ToolBus'',
@@ -302,11 +309,6 @@ automatically from the \T\ script ({\tt hello.tif.c}).
 \item Execute the \TB\ interpreter with the script as input.
 \end{itemize}
 
-\paragraph{Notes:}
-
-In the current version, the \TB\ does not yet support a ``stop'' action
-to terminate execution. As a result you will have to kill the interpreter yourself.
-
 \subsection{Further reading}
 If you have come this far, you may be interested to learn more about the details
 of \TB\ programming.
@@ -324,6 +326,308 @@ and arbitrary Unix commands (Section~\ref{ToolsFromUnix}).
 Four appendices with summaries conclude this guide.
 
 \section{\label{ToolsInC}Writing tools in C}
+
+(******** intro *******)
+
+\subsection{\label{Compose}ATerms: Composing and decomposing terms}
+
+We use a datatype called ATerms for creating, matching, reading and
+writing terms. ATerms are fully described elsewhere.\footnote{H. A. de
+Jong and P. A. Olivier, ``ATerm Library User Manual'' and M.G.J. van
+den Brand, H.A. de Jong, P. Klint and P.A. Olivier, ``Efficient
+Annotated Terms'', \emph{Software Practice and Experience},
+30:259--291, 2000.}  Here we only give a brief overview.
+
+
+\subsubsection{\label{Patterns}Term patterns}
+Composition and decomposition of terms is {\em not} based on the
+direct manipulation of the underlying representation of terms.
+Instead, {\em term patterns} are used to guide composition and
+decomposition.  Such term patterns play the same role as format
+strings in the printf/scanf paradigm in C.  In first approximation, a
+term pattern is a literal string that would be obtained by a preorder
+traversal of a term.  For instance, the term pattern {\tt "or(true,
+false)"}, corresponds to a term whose root is labeled with the symbol
+{\tt or}, and whose children are labeled with, respectively, {\tt
+true} and {\tt false}. In this way, term patterns can be used to
+construct and to match terms.
+
+Term patterns become, however, much more useful if they can be parameterized
+with subterms that have been computed separately.
+To this end, we introduce the notion of {\em directives} as follows:
+
+\begin{description}
+\item[{\tt <int>}]: corresponds to an integer (in C: {\tt int});
+\item[{\tt <str>}]: corresponds to a string (in C: {\tt char *});
+\item[{\tt <blob>}]: corresponds to a binary string (in C: a (length, pointer) pair 
+represented by two values of types, respectively, {\tt int} and {\tt void *});
+\item[{\tt <term>}]: corresponds to an aterm (in C: {\tt ATerm });
+\item[{\tt <appl>}]: corresponds to one function application(in C: {\tt char *pattern}, followed by arguments);
+\item[{\tt <list>}]: corresponds to a list of terms (in C: {\tt ATerm}).
+\end{description}
+
+The precise interpretation of these directives depends on the context
+in which they are used.  When constructing a term, directives indicate
+that a subterm should be obtained from some given variable.  When
+matching a term, directives indicate the assignment of subterms to
+given variables.
+For the implications of these directives for memory management,
+see Section~\ref{Memory}.
+
+\subsubsection{\label{ATmake}{\tt ATmake}}
+The function
+\begin{verbatim}
+      term *ATmake(char *Pattern, ...)
+\end{verbatim}
+constructs a term according to {\tt Pattern}, where occurrences of
+directives are replaced by the values of the variables
+occurring in {\tt ...}.
+
+For instance, assuming the declarations
+\begin{verbatim}
+      int n = 10;
+      char *fun = "pair", name = "any";
+      ATerm yellow = ATmake("yellow"), t;
+\end{verbatim}
+the call
+\begin{verbatim}
+      t = ATmake("exam(<appl(<term>,9)>,<int>,<str>)", fun, yellow, n, 10, name)
+\end{verbatim}
+will construct the term {\tt t} with value
+\begin{verbatim}
+      exam(pair(yellow,9),10,10,"any")
+\end{verbatim}
+
+Binary strings (\emph{Binary Large OBjects} or \emph{blob\/}s) are used to represent arbitrary length, binary data
+that cannot be represented by ordinary C strings because they may
+contain ``null'' characters. A binary string is represented by
+a character pointer and a length. For instance, given
+\begin{verbatim}
+      char buf[12];
+      ATerm bstr;
+      buf[0] = 0; buf[1] = 1; buf[2] = 2;
+\end{verbatim}
+the call
+\begin{verbatim}
+      bstr = ATmake("exam(<blob>)", 3, buf);
+\end{verbatim}
+will construct a term with function symbol ``{\tt exam}'' and as single
+argument a binary string of length {\tt 3} consisting of the three
+values {\tt 0}, {\tt 1}, and {\tt 2}.
+
+\subsubsection{\label{ATmatch}{\tt ATmatch}}
+Matching terms amounts to
+\begin{itemize}
+\item determining whether there is a match or not,
+\item selectively assigning matched subterms to given variables.
+\end{itemize}
+
+\noindent This is precisely what the function
+\begin{verbatim}
+      ATbool ATmatch(ATerm Trm, const char *Pattern, ...)
+\end{verbatim}
+does. It matches {\tt Trm} against {\tt Pattern} and, when a submatch
+is found that corresponds to a directive, it makes assignments to
+variables whose addresses appear in {\tt ...}.
+For most directives, the values assigned to these variables are pointers to
+subterms of {\tt Trm}.
+{\tt Pattern} should
+be a well-formed, textual representation of a term which may contain
+any of the directives described earlier.  For instance, in the context
+\begin{verbatim}
+      ATerm t = ATmake("exam(pair(yellow,9),10, \"any\")");
+      ATerm t1;
+      int n;
+      char *ex, *s;
+\end{verbatim}
+the call 
+\begin{verbatim}
+      ATmatch(t, "appl(<term>,<int>,<str>)", &ex, &t1, &n, &s);
+\end{verbatim}
+yields true and is equivalent to the following assignments:
+\begin{verbatim}
+      ex = "exam";
+      t1 = ATmake("pair(yellow,9)");
+      n = 10;
+      s = "any";
+\end{verbatim}
+As explained in full detail in Section~\ref{Memory}, memory is managed
+automatically by the ATerm library.  As a general rule, the values for {\tt ex},
+{\tt t1}, and {\tt s} are pointers into the original term {\tt t}
+rather than newly created values. As a result, they have a life time
+that is equal to that of {\tt t}.
+
+Matching binary strings is the inverse of constructing them. Given
+the term {\tt bstr} constructed at the end of the previous paragraph,
+its size and contents can be extracted as follows:
+\begin{verbatim}
+      int n;
+      char *p;
+
+      ATmatch(bstr, "exam(<blob>)", &n, &p);
+\end{verbatim}
+{\tt ATmatch} will succeed and will assign {\tt 3} to the variable
+{\tt n} and will assign a pointer to the character data in the binary
+string to the variable {\tt p}.
+
+Here, again, the value of {\tt p} is a pointer into the term {\tt bstr}
+rather than a newly allocated string.
+
+\paragraph{Notes}
+\begin{itemize}
+\item Double quotes (``{\tt "}'') appearing {\em inside} the pattern argument
+of both {\tt ATmake} and {\tt ATmatch} have to be escaped using ``\verb-\"-''.
+\item The number and type of the variables whose addresses appear
+as arguments of {\tt ATmatch} should correspond, otherwise disaster
+will strike (as usual when using C).
+\item Assignments are being made during matching. As a result, some assignments
+may be performed, even if the match as a whole fails.
+
+\end{itemize}
+
+\subsection{\label{ATermIO}Input and output of ATerms}
+We make a distinction between the ``raw'' input and output of terms
+as they are, for instance, being sent through communication
+channels between \TB\ and tools, versus formatted input and output
+of terms. Raw term i/o is provided by {\tt TBwrite} and {\tt TBread}.
+Formatted term output is provided by {\tt TBprintf} and {\tt TBsprintf}.
+There are currently no primitives for formatted term input.
+
+\subsubsection{\label{ATread/write}Reading and writing ATerms}
+
+ATerms can be read from and written to strings and files.
+Two formats are supported: a human-readable but verbose textual format
+and a very concise binarry format. Here we only discuss the textual
+variant.
+
+The function
+\begin{verbatim}
+      void ATwriteToTextFile(ATerm Trm, FILE *File)
+\end{verbatim}
+writes ATerm {\tt Trm} to the file {\tt File}.
+For instance, in the context:
+\begin{verbatim}
+      FILE *f = fopen("foo", "w");
+      ATerm Trm1 = ATmake("<appl(red,<int>)>", "freq", 17);
+\end{verbatim}
+the statement
+\begin{verbatim}
+      ATwriteToTextFile(Trm1, f);
+\end{verbatim}
+will write the value of {\tt Trm1} (i.e., {\tt freq(red,17)})
+to file ``{\tt foo}''.
+
+The function
+\begin{verbatim}
+      ATerm ATreadFromFile(FILE *File)
+\end{verbatim}
+is the inverse of {\tt ATwriteToFile}: it reads a term (either in textual format or in internal format)
+from a file and returns it as value. When end of file is encountered
+or the term could not be read, the operation is aborted.\footnote{The user can redefine this behaviour
+using {\tt ATsetAbortHandler}, which allows the definition of a user-defined abort handler.
+See the \emph{ATerm Library User Manual} for further details.}
+
+\subsubsection{\label{ATprintf}{\tt ATfprintf}}
+The function
+\begin{verbatim}
+      int ATfprintf(FILE *File, const char *Pattern, ...)
+\end{verbatim}
+writes formatted output to {\tt File}.
+{\tt Pattern} is printed literally except for occurrences
+of directives which are replaced by the textual representation
+of the values appearing in {\tt ...}. For instance,
+\begin{verbatim}
+      ATfprintf(stderr, "Wrong event \"%t\" ignored\n", ATmake("failure(<int>)", 13));
+\end{verbatim}
+will print:
+\begin{verbatim}
+Wrong event "failure(13)" ignored
+\end{verbatim}
+
+Note that {\tt ATprintf} uses the normal {\tt printf} conversion
+specifiers extended with aterm-specific specifiers. The most
+frequently used specifier is {\tt \%t} which stands for an aterm
+argument whose textual representation is to be inserted in the output
+stream.
+
+
+\subsection{\label{ATermManipulation}Further ATerm manipulation functions}
+
+The ATerm library acutally provides two interfaces:
+
+\begin{itemize}
+
+\item The level 1 interface: a simple but expressive interface as just sketched.
+
+\item The level 2 interface: a more detailed interface that allows the
+very efficient coding of operations on ATerms. We will not further
+discuss here the level 2 interface.
+
+\end{itemize}
+
+\subsection{\label{Memory}Memory Management of ATerms}
+The functions in the ATerm library provide automatic memory management
+of terms.  Terms that have been created but are no longer referenced
+are removed by a method called {\em garbage collection}.  The global
+model is that there is a set of {\em protected} terms that are
+guaranteed to survive a garbage collection.  Effectively, all
+protected terms (and their subterms) are conserved and all other terms
+are considered as garbage and can be collected.
+
+It is guaranteed that no garbage collection takes place during
+the execution of an event handler, hence it is not necessary to
+protect temporary terms that are constructed during the execution
+of an event handler.
+However, terms that should have a longer life time must be protected
+in order to survive.
+
+In order to protect terms from being collected, the function
+\begin{verbatim}
+      void ATprotect(ATerm *TrmPtr)
+\end{verbatim}
+can be used that has as single argument {\em a pointer to a variable
+with an ATerm  as value}. The protection can be undone
+by the function
+\begin{verbatim}
+      void ATunprotect(ATerm *TrmPtr)
+\end{verbatim}
+
+The interplay between garbage collection and program variables
+is subtle. The following points are therefore worth  mentioning:
+
+\begin{itemize}
+
+\item Functions that return a term as value (e.g., {\tt TBreadTermfromFile}) 
+do not explicitly protect it but the result may, of course, be
+protected because it is a subterm of an already protected term.
+
+\item The function {\tt ATmake} uses strings and terms and includes
+them into a new term $T$. The implications for memory management are:
+\begin{itemize}
+\item All string arguments (using {\tt <str>}, {\tt <blob>} or {\tt <appl>})
+are copied before they are included into $T$.
+They can thus safely be deallocated (e.g., using {\tt free}) by the C program.
+
+\item All term arguments (using {\tt <term>}) are included
+into $T$ by means of a pointer.
+They thus become reachable from $T$ and
+their life time becomes at least as large as that of $T$;
+it is unnecessary to explicitly protect them.
+\end{itemize}
+
+\item The function {\tt ATmatch} assigns strings and terms to program variables
+by extracting them from an existing term $T$. The general rule here is that
+extracted values have a life time that is equal to that of $T$.
+The implications for memory management are:
+\begin{itemize}
+\item All string values (obtained using {\tt <str>}, {\tt <blob>} or {\tt <appl>})
+should be copied if they should survive $T$.
+\item All term values (obtained using {\tt <term>}) should
+be explicitly protected if they should survive $T$.
+\end{itemize}
+
+\end{itemize}
+
 
 \subsection{Overview}
 
@@ -431,17 +735,6 @@ in order to make the tool library available. It provides the following functions
 \item {\tt TBpeek}: check for input events on a port (Section~\ref{TBpeek}).
 \item {\tt TBeventloop}: a standard event loop for a tool (Section~\ref{TBeventloop}).
 \item {\tt TBsend}: send a term to the \TB\ (Section~\ref{TBsend}).
-\item {\tt TBmake}: construct a term (Section~\ref{TBmake}).
-\item {\tt TBmatch}: match and decompose a term (Section~\ref{TBmatch}).
-\item {\tt TBwrite}: write a term (in internal format) to a file (Section~\ref{TBread/write}).
-\item {\tt TBread}: read a term (in internal format) from a file (Section~\ref{TBread/write}).
-\item {\tt TBreadTerm}: read a term from a file (Section~\ref{TBread/write}).
-\item {\tt TBprintf}: formatted output to a file (Section~\ref{TBprintf}).
-\item {\tt TBsprintf}: formatted output to a string (Section~\ref{TBprintf}).
-\item {\tt TBprotect}: protect a term against garbage collection (Section~\ref{Memory}).
-\item {\tt TBunprotect}: undo the protection of a term (Section~\ref{Memory}).
-\item {\tt TBcollect}: perform a garbage collection of the term memory (Section~\ref{Memory}).
-
 
 \end{itemize}
 
@@ -653,383 +946,6 @@ coming from some port (using {\tt TBreceive}).  The \T\ script being used
 should, of course, be able to receive such events.
 
 
-\subsection{\label{Compose}Composing and decomposing terms}
-
-\subsubsection{\label{Patterns}Term patterns}
-Composition and decomposition of terms is {\em not} based on the
-direct manipulation of the underlying representation of terms.
-Instead, {\em term patterns} are used to guide composition and
-decomposition.  Such term patterns play the same role as format
-strings in the printf/scanf paradigm in C.  In first approximation, a
-term pattern is a literal string that would be obtained by a preorder
-traversal of a term.  For instance, the term pattern {\tt "or(true,
-false)"}, corresponds to a term whose root is labeled with the symbol
-{\tt or}, and whose children are labeled with, respectively, {\tt
-true} and {\tt false}. In this way, term patterns can be used to
-construct and to match terms.
-
-Term patterns become, however, much more useful if they can be parameterized
-with subterms that have been computed separately.
-To this end, we introduce the notion of {\em directives} as follows:
-
-\begin{description}
-\item[{\tt \%d}]: corresponds to an integer (in C: {\tt int});
-\item[{\tt \%s}]: corresponds to a string (in C: {\tt char *});
-\item[{\tt \%b}]: corresponds to a binary string (in C: a (pointer, length) pair 
-represented by two values of types, respectively, {\tt char *} and {\tt int});
-\item[{\tt \%t}]: corresponds to a term (in C: {\tt term *});
-\item[{\tt \%f}]: corresponds to one function symbol (in C: {\tt char *});
-\item[{\tt \%l}]: corresponds to a list of terms (in C: {\tt term *}).
-\end{description}
-
-The precise interpretation of these directives depends on the context
-in which they are used.  When constructing a term, directives indicate
-that a subterm should be obtained from some given variable.  When
-matching a term, directives indicate the assignment of subterms to
-given variables.
-For the implications of these directives for memory management,
-see Section~\ref{Memory}.
-
-\subsubsection{\label{TBmake}{\tt TBmake}}
-The function
-\begin{verbatim}
-      term *TBmake(char *Pattern, ...)
-\end{verbatim}
-constructs a term according to {\tt Pattern}, where occurrences of
-directives are replaced by the values of the variables
-occurring in {\tt ...}.
-
-For instance, assuming the declarations
-\begin{verbatim}
-      int n = 10;
-      char *fun = "pair", name = "any";
-      term *yellow = TBmake("yellow"), *t;
-\end{verbatim}
-the call
-\begin{verbatim}
-      t = TBmake("exam(%f(%t,9),%d,%d%s)", fun, yellow, n, 10, name)
-\end{verbatim}
-will construct the term {\tt t} with value
-\begin{verbatim}
-      exam(pair(yellow,9),10,10,"any")
-\end{verbatim}
-
-Binary strings are used to represent arbitrary length, binary data
-that cannot be represented by ordinary C strings because they may
-contain ``null'' characters. A binary string is represented by
-a character pointer and a length. For instance, given
-\begin{verbatim}
-      char buf[12];
-      term *bstr;
-      buf[0] = 0; buf[1] = 1; buf[2] = 2;
-\end{verbatim}
-the call
-\begin{verbatim}
-      bstr = TBmake("exam(%b)", buf, 3);
-\end{verbatim}
-will construct a term with function symbol ``{\tt exam}'' and as single
-argument a binary string of length {\tt 3} consisting of the three
-values {\tt 0}, {\tt 1}, and {\tt 2}.
-
-\subsubsection{\label{TBmatch}{\tt TBmatch}}
-Matching terms amounts to
-\begin{itemize}
-\item determining whether there is a match or not,
-\item selectively assigning matched subterms to given variables.
-\end{itemize}
-
-\noindent This is precisely what the function
-\begin{verbatim}
-      TBbool TBmatch(term *Trm, char *Pattern, ...)
-\end{verbatim}
-does. It matches {\tt Trm} against {\tt Pattern} and, when a submatch
-is found that corresponds to a directive, it makes assignments to
-variables whose addresses appear in {\tt ...}.
-For most directives, the values assigned to these variables are pointers to
-subterms of {\tt Trm}.
-{\tt Pattern} should
-be a well-formed, textual representation of a term which may contain
-any of the directives described earlier.  For instance, in the context
-\begin{verbatim}
-      term *t = TBmake("exam(pair(yellow,9),10, \"any\")");
-      term *t1;
-      int n;
-      char *s;
-\end{verbatim}
-the call 
-\begin{verbatim}
-      TBmatch(t, "%f(%t,%d,%s)", &ex, &t1, &n, &s);
-\end{verbatim}
-yields true and is equivalent to the following assignments:
-\begin{verbatim}
-      ex = "exam";
-      t1 = TBmake("pair(yellow,9)");
-      n = 10;
-      s = "any";
-\end{verbatim}
-As explained in full detail in Section~\ref{Memory}, memory is managed
-automatically by the \TB.  As a general rule, the values for {\tt ex},
-{\tt t1}, and {\tt s} are pointers into the original term {\tt t}
-rather that newly created values. As a result, they have a life time
-that is equal to that of {\tt t}.
-
-Matching binary strings is the inverse of constructing them. Given
-the term {\tt bstr} constructed at the end of the previous paragraph,
-its size and contents can be extracted as follows:
-\begin{verbatim}
-      char *p;
-      int n;
-
-      TBmatch(bstr, "exam(%b)", &p, &n);
-\end{verbatim}
-{\tt TBmatch} will succeed and assign a pointer to the character data
-in the binary string to the variable 
-{\tt p} and it will assign {\tt 3} to the variable {\tt n}.
-Here, again, the value of {\tt p} is a pointer into the term {\tt bstr}
-rather than a newly allocated string.
-
-\paragraph{Notes}
-\begin{itemize}
-\item Double quotes (``{\tt "}'') appearing {\em inside} the pattern argument
-of both {\tt TBmake} and {\tt TBmatch} have to be escaped using ``\verb-\"-''.
-\item The number and type of the variables whose addresses appear
-as arguments of {\tt TBmatch} should correspond, otherwise disaster
-will strike (as usual when using C).
-\item Assignments are being made during matching. As a result, some assignments
-may be performed, even if the match as a whole fails.
-\item Note that {\em receiving} a term from the \TB\ and {\em matching} it are distinct
-activities: a term is received once but can be used more than once
-as an argument of {\tt TBmatch}.
-\end{itemize}
-
-\subsection{\label{TermIO}Input and output of terms}
-We make a distinction between the ``raw'' input and output of terms
-as they are, for instance, being sent through communication
-channels between \TB\ and tools, versus formatted input and output
-of terms. Raw term i/o is provided by {\tt TBwrite} and {\tt TBread}.
-Formatted term output is provided by {\tt TBprintf} and {\tt TBsprintf}.
-There are currently no primitives for formatted term input.
-
-\subsubsection{\label{TBread/write}{\tt TBread}, {\tt TBwrite} and {\tt TBreadTerm}}
-The function
-\begin{verbatim}
-      void TBwrite(FILE *File, term *Trm)
-\end{verbatim}
-writes term {\tt Trm} to the file {\tt File}. The representation is
-{\em in an internal format}. One should use {\tt TBreadTerm} (see below)
-for reading terms in pure textual format.
-For instance, in the context:
-\begin{verbatim}
-      FILE *f = fopen("foo", "w");
-      term *Trm1 = TBmake("%f(red,%d)", "freq", 17);
-\end{verbatim}
-the statement
-\begin{verbatim}
-      TBwrite(f, Trm1);
-\end{verbatim}
-will write the value of {\tt Trm1} (i.e., {\tt freq(red,17)})
-to file ``{\tt foo}''.
-
-The function
-\begin{verbatim}
-      term *TBread(FILE *File)
-\end{verbatim}
-is the inverse of {\tt TBwrite}: it reads a term (in internal format)
-from a file and returns it as value. When end of file is encountered
-or the term could not be read, the value {\tt NULL} is
-returned.\footnote{Since {\tt NULL} is also used as the representation
-of the empty list ``{\tt []}'', this implies that it is not possible
-to distinguish between an empty list and an error being returned.}
-
-The function
-\begin{verbatim}
-      term *TBreadTerm(FILE *File)
-\end{verbatim}
-complete reads the text in the given file, parses it as a term, and returns that term.
-As opposed to {\tt TBread}, this functions reads a term in pure textual
-format. When the text cannot be parsed, {\tt NULL} is returned.
-
-\subsubsection{\label{TBprintf}{\tt TBprintf} and {\tt TBsprintf}}
-The function
-\begin{verbatim}
-      void TBprintf(FILE *File, char *Pattern, ...)
-\end{verbatim}
-writes formatted output to {\tt File}.
-{\tt Pattern} is printed literally except for occurrences
-of directives which are replaced by the textual representation
-of the values appearing in {\tt ...}. For instance,
-\begin{verbatim}
-      TBprintf(stderr, "Wrong event \"%t\" ignored\n", TBmake("failure(%d)", 13));
-\end{verbatim}
-will print:
-\begin{verbatim}
-Wrong event "failure(13)" ignored
-\end{verbatim}
-
-\noindent The function
-\begin{verbatim}
-      char * TBsprintf(char *Pattern, ...)
-\end{verbatim}
-resembles {\tt TBprintf} but it returns the formatted value as a string
-rather then writing it to file. {\bf The string returned by {\tt TBsprintf}
-is volatile and may be overwritten by any other call to the
-\TB\ library. It is therefore good practice to duplicate or
-copy it immediately.}
-
-\subsection{\label{TermManipulation}Further term manipulation functions}
-
-In Figure~\ref{fig:TermMan}, we summarize the remaining term manipulation functions.
-All function arguments marked with $\dag$ may be modified by the function in question.
-
-{\tt list\_first} and {\tt list\_next} are actually implemented as macro's and 
-return an {\em lvalue} that can be used
-at the left-hand side of an assignment.
-For instance,
-\begin{verbatim}
-   term_list *tl; term *t;
-   ...
-   first(tl) = t;
-\end{verbatim}
-will set the first element of the list {\tt tl} to the value of {\tt t}.
-
-\begin{figure}[tb]
-\begin{center}
-\begin{tabular}{|l|p{5cm}|}
-\hline Function		& Description				\\ \hline \hline
-{\tt term *list\_first(term\_list *$L$)}					& Address of first element of $L$\\
-{\tt term *list\_next(term\_list *$L$)}					& Address of remainder of $L$\\ \hline
-{\tt TBbool     list\_equal(term\_list *$L_1$, term\_list *$L_2$);}	& $L_1 = L_2$\\
-{\tt term\_list *list\_copy(term\_list *$L$);}					& Toplevel (shallow) copy of $L$\\
-{\tt term\_list *list\_reverse(term\_list *$L^{\dag}$);}			& Reverses the elements of $L$\\
-{\tt int        list\_length(term\_list *$L$);}					& Number of elements in $L$\\ \hline
-{\tt term      *list\_index(term\_list *$L$, int $N$);}				& $N$-th element of $L$\\
-{\tt term\_list *list\_replace(term\_list *$L^{\dag}$, int $N$, term *$T$);}	&  Replace $N$-the element of $L$ by $T$\\
-{\tt term      *list\_delete(term\_list *$L^{\dag}$, term *$T$);}		& Delete $T$ from $L$\\ \hline
-
-{\tt term\_list *list\_concat\_term(term\_list *$L^{\dag}$, term *$T$);}	& Concatenate $T$ at the end of $L$ \\
-{\tt term\_list *list\_concat(term\_list *$L_1^{\dag}$, term\_list *$L_2$);}	& Concatenate $L_2$ at the end of $L_1$\\
-{\tt term\_list *list\_append(term\_list *$L_1$, term\_list *$L_2$);}		& Append $L_1$ and $L_2$\\
-
-{\tt term\_list *list\_join(term *$T_1$, term *$T_2$);}				& First any non-list argument is converted
-										  to a list; then both lists are append\\
-{\tt TBbool     list\_elem(term *$T$, term\_list *$L$);}				& Is $T$ an element of $L$?\\
-
-{\tt TBbool     list\_subset(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \subseteq L_2$\\
-{\tt term\_list *list\_diff(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 - L_2$ (difference on multi-set)\\
-{\tt term\_list *list\_inter(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \cap L_2$ (intersection on multi-set)\\
-{\tt term\_list *list\_union(term\_list *$L_1$, term\_list *$L_2$);}		& $L_1 \cup L_2$ (union on set)\\ \hline
-{\tt term      *list\_get(term\_list $L$*, term * $T$);}		& If $L$ contains a pair {\tt [$T$, $T'$]}, then
-									  $T'$, otherwise {\tt []}\\
-{\tt term\_list *list\_put(term\_list *$L^{\dag}$, term *$T_1$, term *$T_2$);}
-									& If $L$ contains a pair {\tt [$T_1$, $T$]}, then
-									  replace it by  {\tt [$T_1$, $T_2$]}. Otherwise,
-									  add {\tt [$T_1$, $T_2$]} to $L$\\ \hline
-{\tt term  *first\_function(char *$S$, term *$T$);}		& First subterm of $T$ with function symbol $S$\\
-{\tt term\_list  *all\_functions(char *$S$, term *$T$);}		& List of all subterms of $T$ with function symbol $S$\\
-\hline
-\end{tabular}
-\caption{Term manipulation functions}
-\label{fig:TermMan}
-\end{center}
-\end{figure}
-
-\subsection{\label{Memory}Memory management}
-The functions in the \TB\ library provide automatic memory management
-of terms.  Terms that have been created but are no longer referenced
-are removed by a method called {\em garbage collection}.  The global
-model is that there is a set of {\em protected} terms that are
-guaranteed to survive a garbage collection.  Effectively, all
-protected terms (and their subterms) are conserved and all other terms
-are considered as garbage and can be collected.
-
-It is guaranteed that no garbage collection takes place during
-the execution of an event handler, hence it is not necessary to
-protect temporary terms that are constructed during the execution
-of an event handler.
-However, terms that should have a longer life time must be protected
-in order to survive.
-
-In order to protect terms from being collected, the function
-\begin{verbatim}
-      void TBprotect(term **TrmPtr)
-\end{verbatim}
-can be used that has as single argument {\em a pointer to a variable
-with a pointer to a term as value}. The protection can be undone
-by the function
-\begin{verbatim}
-      void TBunprotect(term **TrmPtr)
-\end{verbatim}
-
-Consider, for example, an event handler that maintains a list
-of all requests received from the \TB\ during the execution
-of the tool. Clearly, this list has a longer life-time than
-a single call of the handler, hence it has to be protected.
-This will have the following form:
-\begin{verbatim}
-term *event_list = NULL;    /* global declaration of the list */
-
-term *handler(term *inp)    /* event handler */
-{ ...
-  event_list = TBmake("[%l,%t"], event_list, inp);
-  ...
-}
-
-main()                      /* main program for tool */
-{ ...
-  TBprotect(&event_list);   /* protect the variable holding the
-                               list value */
-  ...
-}
-\end{verbatim}
-
-Under certain circumstances it may be necessary to explicitly force
-a garbage collection. This is done by the following function:
-\begin{verbatim}
-      void TBcollect(void);
-\end{verbatim}
-
-Usually, this function is called automatically after each invocation
-of an event handler. However, when large computations on terms are done---as
-may occur in stand-alone utilities that are not connected to
-the \TB---the above function must be called regularly.
-Be aware, that only protected term pointers can be trusted
-after a garbage collection.
-
-The interplay between garbage collection and program variables
-is subtle. The following points are therefore worth  mentioning:
-
-\begin{itemize}
-
-\item Functions that return a term as value (e.g., {\tt TBreadTerm}) 
-do not explicitly protect it but the result may, of course, be
-protected because it is a subterm of an already protected term.
-
-\item The function {\tt TBmake} uses strings and terms and includes
-them into a new term $T$. The implications for memory management are:
-\begin{itemize}
-\item All string arguments (using {\tt \%s}, {\tt \%b} or {\tt \%f})
-are copied before they are included into $T$.
-They can thus safely be deallocated (e.g., using {\tt free}) by the C program.
-
-\item All term arguments (using {\tt \%t} or {\tt \%l}) are included
-into $T$ by means of a pointer.
-They thus become reachable from $T$ and
-their life time becomes at least as large as that of $T$;
-it is unnecessary to explicitly protect them.
-\end{itemize}
-
-\item The function {\tt TBmatch} assigns strings and terms to program variables
-by extracting them from an existing term $T$. The general rule here is that
-extracted values have a life time that is equal to that of $T$.
-The implications for memory management are:
-\begin{itemize}
-\item All string values (obtained using {\tt \%s}, {\tt \%b} or {\tt \%f})
-should be copied if they should survive $T$.
-\item All term values (obtained using {\tt \%t} or {\tt \%l}) should
-be explicitly protected if they should survive $T$.
-\end{itemize}
-
-\end{itemize}
 
 \subsection{Compiling tools written in C}
 When compiling a tool written in C the following questions
@@ -1461,7 +1377,7 @@ Tool definitions may now have formal parameters.
 	{\tt TBprotect}\\
 	{\tt TBunprotect}
 \end{tabular}
-\item The format ``\verb+%b+'' (for binary strings) has been added to term patterns 
+\item The format ``\verb+<blob>+'' (for binary strings) has been added to term patterns 
   used by, for instance, {\tt TBmatch}.
 
 \end{itemize}
