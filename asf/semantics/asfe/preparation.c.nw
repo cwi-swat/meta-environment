@@ -4,10 +4,216 @@
 #include <asfix.h>
 #include "preparation.h"
 
+static equation_table *tables = NULL;
+static equation_table *equations = NULL;
+
+<<create_equation_table>>
+<<flush_equations>>
+<<destroy_equation_table>>
+<<hash_function>>
+<<enter_equation>>
+<<find_equation>>
+<<select_equations>>
+<<enter_equations>>
+
 <<lexicals>>
 <<preparation>>
 <<restoration>>
 @
+
+%{{{ equation_table *create_equation_table(int size)
+
+Allocate memory for an equation table.
+<<create_equation_table>>=
+equation_table *create_equation_table(int size)
+{
+  int i;
+  equation_table *table = (equation_table *)malloc(sizeof(equation_table));
+
+  if(!table)
+    fatal_error("out of memory in create_equation_table\n");
+  table->next = NULL;
+  table->module = NULL;
+  table->size = size;
+  table->table = (equation_entry **)malloc(sizeof(equation_entry *)*size);
+  for(i=0; i<size; i++)
+    table->table[i] = NULL;
+  if(!table->table)
+    fatal_error("out of memory in create_equation_table\n");
+
+  return table;
+}
+@
+
+%}}}
+%{{{ void destroy_equation_table(equation_table *table)
+
+Free all memory associated with an equation table.
+
+<<destroy_equation_table>>=
+void destroy_equation_table(equation_table *table)
+{
+  flush_equations(table);
+  free(table->table);
+  free(table);
+}
+@
+
+%}}}
+%{{{ void flush_equations(equation_table *table)
+
+<<flush_equations>>=
+void flush_equations(equation_table *table)
+{
+  int i;
+  equation_entry *old, *entry;
+
+  for(i=0; i<table->size; i++) {
+    entry = table->table[i];
+    while(entry) {
+      old = entry;
+      entry = entry->hnext;
+      t_unprotect(old->equation);
+      free(old);
+    }
+    table->table[i] = NULL;
+  }
+}
+@
+
+%}}}
+%{{{ unsigned hash_function(equation_table *table, aterm *top_ofs, aterm *first_ofs)
+
+<<hash_function>>=
+static unsigned hash_function(equation_table *table, aterm *top_ofs, aterm *first_ofs)
+{
+  return (top_ofs->hnr ^ first_ofs->hnr) % table->size;
+}
+@
+
+%}}}
+%{{{ void enter_equation(equation_table *table, aterm *equation)
+
+Enter an equation in an equation table.
+
+<<enter_equation>>=
+void enter_equation(equation_table *table, aterm *equation)
+{
+  aterm *lhs = asfix_get_equ_lhs(equation);
+  aterm_list *lhsargs = asfix_get_appl_args(lhs);
+  aterm *top_ofs = asfix_get_appl_ofs(lhs);
+  aterm *first_ofs;
+  equation_entry *entry = (equation_entry *)malloc(sizeof(equation_entry));
+  unsigned hnr;
+
+  if(!entry)
+    fatal_error("out of memory in enter_equation");
+
+  while(!t_is_empty(lhsargs) && !asfix_is_appl(t_list_first(lhsargs)) 
+				&& !asfix_is_var(t_list_first(lhsargs))) {
+    lhsargs = t_list_next(lhsargs);
+  }
+
+  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs)))
+    first_ofs = t_empty(t_world(equation));
+  else
+    first_ofs = asfix_get_appl_ofs(t_list_first(lhsargs));
+
+  hnr = hash_function(table, top_ofs, first_ofs);
+/*  Tprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
+  Tprintf(stderr, "\t hash-nr=%d\n", hnr); 
+*/
+  entry->hnext = table->table[hnr];
+  table->table[hnr] = entry;
+  entry->hashnr = hnr;
+  entry->top_ofs = top_ofs;
+  entry->first_ofs = first_ofs;
+  entry->equation = equation;
+  t_protect(equation);  
+}
+@
+
+
+%}}}
+
+%{{{ equation_entry *find_equation(equation_entry *prev, aterm *top_ofs, aterm *first)
+
+<<find_equation>>=
+equation_entry *find_equation(equation_entry *from, aterm *top_ofs, 
+							aterm *first_ofs)
+{
+  if(from) {
+    from = from->hnext;
+  } else {
+    int hnr = hash_function(equations, top_ofs, first_ofs);
+/*    Tprintf(stderr, "first try, finding top_ofs=%t, first_ofs=%t\n", top_ofs,first_ofs);
+    Tprintf(stderr, "\t hnr = %d\n", hnr);
+*/
+    from = equations->table[hnr];
+  }
+  while(from && (!t_equal(from->top_ofs,top_ofs) || 
+		 !t_equal(from->first_ofs,first_ofs)))
+    from = from->hnext;
+/*  if(from)
+    Tprintf(stderr, "found: %t\n", from->equation);
+  else
+    Tprintf(stderr, "no luck!\n");
+*/
+  return from;
+}
+@
+
+%}}}
+%{{{ void select_equations(aterm *module)
+
+<<select_equations>>=
+void select_equations(aterm *module)
+{
+  equation_table *cur = tables;
+
+  while(cur && !t_equal(cur->module, module))
+    cur = cur->next;
+
+  if(!cur)
+    fatal_error("equations of module %t have not been registered.");
+
+  equations = cur;
+}
+@
+
+%}}}
+%{{{ void enter_equations(aterm *module, aterm_list *eqs)
+
+<<enter_equations>>=
+void enter_equations(aterm *module, aterm_list *eqs)
+{
+  equation_table *cur = tables;
+
+  while(cur && !t_equal(cur->module, module))
+    cur = cur->next;
+
+  if(!cur) {
+    cur = create_equation_table(TlistSize(eqs)*2);
+    cur->module = module;
+    Tprotect(cur->module);
+    cur->next = tables;
+    tables = cur;
+  }
+
+  equations = cur;
+  flush_equations(equations);
+
+  while(!t_is_empty(eqs)) {
+    enter_equation(equations, t_list_first(eqs));
+    do {
+      eqs = t_list_next(eqs);
+    } while(!t_is_empty(eqs) && asfix_is_layout(t_list_first(eqs)));
+  }
+}
+@
+
+%}}}
+
 
 %{{{ Preparation
 
