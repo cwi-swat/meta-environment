@@ -1143,7 +1143,7 @@ void init_patterns()
      "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
   pattern_term_lexical_constructor = ATparse(
      "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<str>),w(\"\"),ql(\"(\")," \
-     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
+     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")]," \
      "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
   pattern_caller_id   = ATparse("id(\"caller\")");
 
