@@ -178,8 +178,7 @@ static Graph printNode(const char *name,
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
   if (posInfo) {
-    ATerm messageInfo = ATmake("node-info(<str>,<term>)", name, posInfo);
-    messageAttr = makeAttributeInfo("message", messageInfo);
+    messageAttr = makeAttributeInfo("origin", posInfo);
     attrList = makeAttributeListMulti(messageAttr, attrList);
   }
   node = makeNodeDefault(nodeId, attrList);

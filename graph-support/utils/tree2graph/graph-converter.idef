@@ -6,21 +6,34 @@ tool graph-converter is {
 
 process GraphConverter is
 let
-  GC : graph-converter,
-  Name : str,
-  Tree : term,
-  Graph : term,
-  LeafsOn : term
+  GC: graph-converter,
+  Graph: term,
+  LeafsOn: term,
+  Location: term,
+  Name: str,
+  Node: term,
+  Tree: term
 in
+  execute(graph-converter, GC?)
+  .
   (
     rec-msg(gc-tree-to-graph(Name?, Tree?, LeafsOn?))
-    . execute(graph-converter, GC?)
     . snd-eval(GC, tree2graph(Name, Tree, LeafsOn))
     . rec-value(GC, graph(Graph?))
-    . snd-terminate(GC, "done")
     . snd-msg(gc-graph(Graph))
-  ) *
-  delta
+  +
+    rec-msg(gc-get-node-origin(Node?))
+    . snd-eval(GC, get-node-origin(Node))
+    .
+    (
+      rec-value(GC, origin(Location?))
+      . snd-msg(gc-origin(Location))
+    +
+      rec-value(GC, no-origin)
+      . snd-msg(gc-no-origin)
+    )
+  )
+  * delta
 endlet
 
 toolbus(GraphConverter)

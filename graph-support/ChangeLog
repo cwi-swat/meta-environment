@@ -1,7 +1,9 @@
 $Id$
 
-Mon Jun 14 09:32:01 CEST 2004 <jong@cwi.nl>
+Mon Jun 14 09:32:01 CEST 2004 <{jong,kooiker}@cwi.nl>
  * prepend gc to graph-converter messages
+ * implement "get-node-origin" in tree2graph for now.
+   To be moved when we generate graph.idef from graph.adt
 
 Thu Jun 10 10:12:28 CEST 2004 <jong@cwi.nl>
  * lib/Makefile.am: explicitly refer to graph*jar in top_srcdir/lib

@@ -69,6 +69,30 @@ ATerm tree2graph(int cid, const char *name, ATerm tree, ATerm leafs_on)
 }
 
 /*}}}  */ 
+/*{{{  ATerm get_node_origin(int cid, ATerm t) */
+
+ATerm get_node_origin(int cid, ATerm t)
+{
+  Node node = NodeFromTerm(t);
+  AttributeList attrs = getNodeAttributes(node);
+
+  while (!isAttributeListEmpty(attrs)) {
+    Attribute attr = getAttributeListHead(attrs);
+    if (isAttributeInfo(attr)) {
+      const char *key = getAttributeKey(attr);
+      ATerm value = getAttributeValue(attr);
+      if (strcmp(key, "origin") == 0) {
+	return ATmake("snd-value(origin(<term>))", value);
+      }
+    }
+    attrs = getAttributeListTail(attrs);
+  }
+
+  return ATmake("snd-value(no-origin)");
+}
+
+/*}}}  */
+
 /*{{{  int main (int argc, char *argv[]) */
 
 int main (int argc, char *argv[])
