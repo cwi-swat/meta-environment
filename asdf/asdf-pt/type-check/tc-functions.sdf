@@ -42,6 +42,7 @@ variables
   "$TI"[0-9]?		-> TypeInfo
   "$STS"[0-9]?		-> SubTypes
   "$DOS"[0-9]?		-> DataOpSigs
+  "$DCS"[0-9]?		-> DataConstants
   "$LDF"[0-9]?		-> List[[<DataOp, FunResult>]]
 
   "$SE"[1-9]?	-> SignatureEnv

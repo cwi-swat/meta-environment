@@ -4,7 +4,7 @@ equations
 	=====================================================
 	typecheck($AM, $TI) = gen-summary(yes)
 
-[tcm-1] <sigs($AFS1*), $STS, $DOS1> := $TI,	
+[tcm-1] <sigs($AFS1*), $STS, $DOS1, $DCS> := $TI,	
 	defs($FD+) := get-function-defs($AM),
 	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*), $STS),
 	$ENV1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),

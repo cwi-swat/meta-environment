@@ -1,31 +1,37 @@
 equations
 
 [empty-1] empty-env = 
-	  <sigs(), [], initial-dataop-sigs, action[]>
+	  <sigs(), [], initial-dataop-sigs, [], action[]>
 
 [type-info-1] 
 
-   type-info-to-env(<$SIGS, $STS, $DOS>) = <$SIGS, $STS, $DOS, action[]>
+   type-info-to-env(<$SIGS, $STS, $DOS, $DCS>) = 
+				  <$SIGS, $STS, $DOS, $DCS, action[]>
 
-[get-1] get-signatures(<$SIGS, $STS, $DOS, $AT>) = $SIGS
+[get-1] get-signatures(<$SIGS, $STS, $DOS, $DCS, $AT>) = $SIGS
 
-[get-2] get-subtypes(<$SIGS, $STS, $DOS, $AT>) = $STS
+[get-2] get-subtypes(<$SIGS, $STS, $DOS, $DCS, $AT>) = $STS
 
-[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $AT>) = $DOS
+[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $DCS, $AT>) = $DOS
 
-[get-4] get-unfold-type(<$SIGS, $STS, $DOS, $AT>) = $AT
+[get-4] get-data-constants(<$SIGS, $STS, $DOS, $DCS, $AT>) = $DCS
 
-[set-1] set-signatures(<$SIGS1, $STS, $DOS, $AT>, $SIGS2) = 
-				      <$SIGS2, $STS, $DOS, $AT>
+[get-5] get-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT>) = $AT
 
-[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $AT>, $STS2) = 
-				      <$SIGS, $STS2, $DOS, $AT>
+[set-1] set-signatures(<$SIGS1, $STS, $DOS, $DCS, $AT>, $SIGS2) = 
+				      <$SIGS2, $STS, $DOS, $DCS, $AT>
 
-[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $AT>, $DOS2) = 
-				      <$SIGS, $STS, $DOS2, $AT>
+[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $DCS, $AT>, $STS2) = 
+				      <$SIGS, $STS2, $DOS, $DCS, $AT>
 
-[set-4] set-unfold-type(<$SIGS, $STS, $DOS, $AT1>, $AT2) = 
-				      <$SIGS, $STS, $DOS, $AT2>
+[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $DCS, $AT>, $DOS2) = 
+				      <$SIGS, $STS, $DOS2, $DCS, $AT>
+
+[set-4] set-data-constants(<$SIGS, $STS, $DOS, $DCS1, $AT>, $DCS2) = 
+				      <$SIGS, $STS, $DOS, $DCS2, $AT>
+
+[set-5] set-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT1>, $AT2) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT2>
 
 [get-fun-name-1] get-fun-name($LT : $SO -> $FR) = $LT
 

@@ -72,8 +72,10 @@ equations
 
 [join-sigs-1] 
 
-   join-type-info(<sigs($FS*1), $STS1, $DOS1>, <sigs($FS*2), $STS2, $DOS2>) = 
-   	<sigs($FS*1, $FS*2), concat($STS1, $STS2), concat($DOS1, $DOS2)>
+   join-type-info(<sigs($FS*1), $STS1, $DOS1, $DCS1>, 
+		  <sigs($FS*2), $STS2, $DOS2, $DCS2>) = 
+				<sigs($FS*1, $FS*2), concat($STS1, $STS2), 
+				 concat($DOS1, $DOS2), concat($DCS1, $DCS2)>
 
 [get-fun-0] get-function-defs($ASM) = get-fun-defs($ASM, defs())
 

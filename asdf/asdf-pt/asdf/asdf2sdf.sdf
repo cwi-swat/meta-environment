@@ -57,6 +57,8 @@ exports
 					{traversal(top-down,accu,break)}
     "$extract-imports"(AS-Variable, Import*) -> Import* 
 					{traversal(top-down,accu,break)}
+    "$extract-imports"(AS-Constant, Import*) -> Import* 
+					{traversal(top-down,accu,break)}
     "$extract-imports"(Symbol, Import*)        -> Import* 
 					{traversal(top-down,accu,break)}
     "$extract-imports"(Sort, Import*)        -> Import* 

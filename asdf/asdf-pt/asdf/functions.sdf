@@ -5,6 +5,7 @@ imports
   type-check/subtype
   asdf/asdf-sem-sec
   asdf/lower-case
+  asdf/an-supplement
   containers/List[<DataOp, FunResult>]
   containers/List[<Data, Type>]
 
@@ -26,9 +27,12 @@ context-free syntax
 
   get-signatures(AS-Module)	-> Signatures
 
-  get-sigs(AS-Module, Signatures)	-> Signatures {traversal(accu, break, top-down)}
-  get-sigs(AS-Section*, Signatures)	-> Signatures {traversal(accu, break, top-down)}
-  get-sigs(AS-FunctionSig, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-Module, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-Section*, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-FunctionSig, Signatures)	
+			-> Signatures {traversal(accu, break, top-down)}
 
   get-subtypes(AS-Module, SubTypes)	
 			  -> SubTypes {traversal(accu, break, top-down)}
@@ -62,14 +66,12 @@ context-free syntax
 
   get-function-defs(AS-Module)	     -> FunctionDefs
 
-  get-fun-defs(AS-Module, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
-  get-fun-defs(AS-Section*, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
-  get-fun-defs(AS-FunctionDef, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
-
-  lookup-signature(SignatureEnv, ActionType, Literal) 
-		-> ActionType {traversal(accu, break, bottom-up)}
-  lookup-signature(FunctionSignature, ActionType, Literal) 
-		-> ActionType {traversal(accu, break, bottom-up)}
+  get-fun-defs(AS-Module, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-Section*, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-FunctionDef, FunctionDefs)	
+			  -> FunctionDefs {traversal(accu, break, top-down)}
 
   {AS-FunctionDef ","}* 	-> SortWithPosition
 

@@ -201,6 +201,8 @@ context-free syntax
          $add-to(moduleid($CH+), Import*)
 
   [ei-2] $extract-imports(Sort ::= AS-Requires-Rhs, Import*) = $extract-req-imports(AS-Requires-Rhs, Import*)
+
+  [ei-2] $extract-imports(Literal : Sort, Import*) = $extract-req-imports(Sort, Import*)
    
   [ei-2] $extract-imports(semantics AS-Semantics*,Import*) = Import*
 
@@ -223,3 +225,4 @@ context-free syntax
   [remove-duplets-1] $remove-duplets(Import*1 Import Import*2 Import Import*3) = $remove-duplets(Import*1 Import Import*2 Import*3)
 
   [default-remove-duplets-2] $remove-duplets(Import*) = Import*
+ 

@@ -44,6 +44,10 @@ equations
 
 [tcd-10] typecheck-data($VR, $EN) = data
 
+[tcd-10] [$DT1*, <$D, $TY>, $DT2*] := get-data-constants($EN)
+	 ==============================================================
+	 typecheck-data($D, $EN) = $TY
+
 [tcdo-1] 
 	 [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN),
 	 $TY2 := get-using(test : Test -> $FR),
