@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS		= lib dot utils
+SUBDIRS		= lib utils

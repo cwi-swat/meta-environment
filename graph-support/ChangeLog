@@ -1,6 +1,9 @@
 $Id$
 
 
+2003/03/31 (jurgenv@cwi.nl)
+ * Renamed dot-adapter to layoutgraph
+
 2003/03/30 (jurgenv@cwi.nl)
  * Fixed SOCKLIBS configuration for SunOs.
 

@@ -1,0 +1,9 @@
+Makefile.in
+Makefile
+*.o
+.deps
+y.tab.[ch]
+y.output
+lex.yy.c
+layoutgraph
+*.tifs

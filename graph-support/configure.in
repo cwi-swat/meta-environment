@@ -102,8 +102,8 @@ dnl }}}
 AC_OUTPUT(
   Makefile
   lib/Makefile
-  dot/Makefile
   utils/Makefile
   utils/tree2graph/Makefile
   utils/tree2dot/Makefile
+  utils/layoutgraph/Makefile
 )

@@ -1,0 +1,18 @@
+
+process LAYOUT-GRAPH is
+let
+  D : layout-graph,
+  Graph : term
+in
+  (
+    rec-msg(layout-graph(Graph?)) .
+    execute(layout-graph, D?) .
+    snd-eval(D, layout-graph(Graph)) .
+    rec-value(D, graph-layouted(Graph?)) .
+    snd-terminate(D,"done").
+    snd-msg(graph-layouted(Graph))
+  ) * delta
+endlet
+
+tool layout-graph is { command = "layoutgraph" }
+
