@@ -42,7 +42,7 @@ static void usage()
    fprintf( stderr, USAGE_MSG );
 }
 
-void main( int argc, char*argv[])
+int main( int argc, char*argv[])
 {
    char* p;
    char* meta_paths_file;
@@ -55,13 +55,13 @@ void main( int argc, char*argv[])
         strcmp( argv[1], "-help" ) == 0 ) )
    {
       usage();
-      exit( 0 );
+      return 0;
    }
 
    if( argc != 3 )
    {
       usage();     
-      exit( 1 );
+      return 1;
    }
  
    meta_paths_file = argv[1];
@@ -70,7 +70,7 @@ void main( int argc, char*argv[])
    if( metaPathsOpen( &mp, meta_paths_file ) == - 1)
    {
       FAIL1( "metaPathsOpen", meta_paths_file );
-      exit( 1 );
+      return 1;
    }
 
    p = metaPathsLocate( &mp, file );
@@ -78,7 +78,7 @@ void main( int argc, char*argv[])
    {
       fprintf( stderr, "%s not found.\n", file );
       metaPathsClose( &mp );
-      exit( 1 );
+      return 1;
    }
 
    /* File found, print full path */
@@ -87,7 +87,6 @@ void main( int argc, char*argv[])
    /* Clean up allocated space */
    metaPathsClose( &mp );
  
-   /* terminate */
-   exit( 0 );
+   return 0;
 }
 

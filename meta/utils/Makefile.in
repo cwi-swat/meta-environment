@@ -46,7 +46,7 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS         =
 XCPPFLAGS       =
 XINCLUDES       = -I$(ATERM)/include -I.
-XLIBS           = -L$(ATERM)/lib -lATerm-cc -lAsFix-cc
+XLIBS           = -L$(ATERM)/lib -lATerm-${CC} -lAsFix-${CC}
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -95,11 +95,11 @@ libutils-dbg.a: meta-utils-dbg.o module-utils-dbg.o
 libutils-prof.a: meta-utils-prof.o module-utils-prof.o
 	$(AR) cr $@ meta-utils-prof.o module-utils-prof.o
 
-meta-paths: meta-paths-cc.o libutils-cc.a
-	cc -o $@ meta-paths-cc.o libutils-cc.a
+meta-paths: meta-paths-${CC}.o libutils-${CC}.a
+	${CC} -o $@ meta-paths-${CC}.o libutils-${CC}.a
 
-imports: imports-cc.o libutils-cc.a
-	cc -o $@ imports-cc.o libutils-cc.a $(LIBS)
+imports: imports-${CC}.o libutils-${CC}.a
+	${CC} -o $@ imports-${CC}.o libutils-${CC}.a $(LIBS)
 
 
 uninstall:

@@ -90,12 +90,12 @@ int metaPathsOpen( meta_paths* mp, char* path )
       ptr1 = buffer;
 
       /* skip initial layout */
-      while( isspace( *ptr1 ) )
+      while( isspace((int) *ptr1 ) )
 	         ptr1++;
       ptr2 = buffer + strlen( buffer ) - 1;
 
       /* skip trailing layout */
-      while( isspace( *ptr2 ) && ptr2 > ptr1 )
+      while( isspace((int) *ptr2 ) && ptr2 > ptr1 )
          ptr2--;
       ptr2++;
       *ptr2 = '\0';
