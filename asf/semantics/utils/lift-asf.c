@@ -72,9 +72,11 @@ int main (int argc, char **argv)
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
 
+  ATsetChecking(ATtrue);
+
   in = ATreadFromNamedFile(input);
 
-  {
+  if (ATgetType(in) == AT_APPL) {
     ASF_Start start = ASF_StartFromTerm(in);
     ASF_ASFModule module = ASF_getStartTopASFModule(start);
 
@@ -88,6 +90,22 @@ int main (int argc, char **argv)
     start = ASF_setStartTopASFModule(start, module);
 
     out = ASF_StartToTerm(start);
+  }
+  else if (ATgetType(in) == AT_LIST) {
+    ASF_ASFConditionalEquationList list = ASF_ASFConditionalEquationListFromTerm(in);
+
+    if (lower) {
+      list = ASF_lowerEquations(list);
+    }
+    else {
+      list = ASF_liftEquations(list);
+    }
+
+    out = ASF_ASFConditionalEquationListToTerm(list);
+  }
+  else {
+    out = in;
+    ATwarning("lift-asf: unexpected input\n");
   }
 
   ATwriteToNamedBinaryFile(out, output);
