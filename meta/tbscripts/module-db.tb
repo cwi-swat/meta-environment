@@ -33,7 +33,7 @@ in
   (
     rec-msg(get-import-relations) .
     snd-msg(ts-get-key-value-pairs("import-relations")) .
-    rec-msg(ts-pairs(Pairs?))
+    rec-msg(ts-pairs(Pairs?)) .
     snd-msg(import-relations(Pairs)) .
     Pairs := []
   +
