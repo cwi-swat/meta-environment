@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Nov 19 17:44:53 CET 2004 <jurgenv@cwi.nl>
+ * Made tide working in 1.6 branch
+ * Added two new ugly primitive actions in buttons.tb that need to
+   be factored out.
+
 Fri Nov 12 11:42:00 CET 2004 <{jong,kooiker}@cwi.nl>
  * tbscripts/module-db.tb:
    - fix remove redundant module database updates 

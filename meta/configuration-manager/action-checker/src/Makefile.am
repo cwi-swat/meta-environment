@@ -5,7 +5,7 @@ include ${top_srcdir}/make_rules
 INCLUDES = \
 	-I$(ASC_SUPPORT)/include \
 	-I$(SGLR)/include \
-	-I$(TIDE)/include \
+	-I$(TIDE_SUPPORT)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
@@ -25,7 +25,7 @@ CLEANFILES = actionchecker ActionScriptChecker
 ActionScriptChecker_SOURCES = ActionScriptChecker.c
 ActionScriptChecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 			-L$(SGLR)/lib -lsglr \
-			-L$(TIDE)/lib -ltide-adapter \
+			-L$(TIDE_SUPPORT)/lib -ltide-adapter \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \

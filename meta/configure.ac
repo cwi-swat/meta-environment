@@ -74,6 +74,11 @@ AC_PACKAGE_REQUIRE(tide, tide,
    [  --with-tide=DIR      Tide distribution is in DIR])
 AC_SUBST(TIDE)
 
+dnl Require Tide-support package
+AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
+   [  --with-tide-support=DIR      Tide-support distribution is in DIR])
+AC_SUBST(TIDE_SUPPORT)
+
 dnl This variable holds all external jarfiles
 EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar
 AC_SUBST(EXTERNAL_JARS)
