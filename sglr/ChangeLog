@@ -2,6 +2,7 @@ $Id$
 
 2004/01/12 (jurgenv@cwi.nl)
  * Added dependency on error-support
+ * Bumped version to 3.11
  
 2004/01/06 (markvdb@cwi.nl)
  * Simplified the TB interface of SGLR. A parse request contains
