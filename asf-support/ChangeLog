@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jun  9 11:53:18 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * configure.in: bumped to version 1.3
+ * lib: regenerated API using APIGen 2.1 and fix resulting errors
+
 Tue Mar 23 09:59:48 CET 2004 <{kooiker,jong}@cwi.nl>
  * lib/lex-cons.c: update wrt new MEPT API
 

@@ -99,18 +99,21 @@ substituteAsfPatterns(ATerm pat)
 
 /*}}}  */
 
-/*{{{  substituteEntry(ADTEntry entry, void *user_data) */
+/*{{{  static ADT_Entry substituteEntry(ADT_Entry entry, void *user_data) */
 
-static ADTEntry
-substituteEntry(ADTEntry entry, void *user_data)
+static ADT_Entry substituteEntry(ADT_Entry entry, void *user_data)
 {
-  ADTPattern before;
-  ADTPattern after;
+  if (ADT_hasEntryTermPattern(entry)) {
+    ATerm before;
+    ATerm after;
 
-  before = ADTgetEntryPat(entry);
-  after  = substituteAsfPatterns(before);
+    before = ADT_getEntryTermPattern(entry);
+    after  = substituteAsfPatterns(before);
 
-  return ADTsetEntryPat(entry, after);
+    entry = ADT_setEntryTermPattern(entry, after);
+  }
+
+  return entry;
 }
 
 /*}}}  */
@@ -122,12 +125,12 @@ main(int argc, char *argv[])
 {
   ATerm      bottomOfStack;
   ATerm      contents;
-  ADTEntry   lexicalConsEntry;
-  ADTEntries beforeSubst;
-  ADTEntries afterSubst;
+  ADT_Entry   lexicalConsEntry;
+  ADT_Entries beforeSubst;
+  ADT_Entries afterSubst;
 
   ATinit(argc, argv, &bottomOfStack);
-  ADTinitADTApi();
+  ADT_initADTApi();
 
   substitutions = ATtableCreate(100, 75);
 
@@ -166,17 +169,17 @@ main(int argc, char *argv[])
     ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(cons(\"lexical-constructor\"))]))"),
     ATparse("prod([lit(<formal-name(str)>),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],<symbol(Symbol)>,attrs([term(cons(\"lexical-constructor\"))]))"));
 
-  beforeSubst = ADTEntriesFromTerm(contents);
-  afterSubst  = ADTsubstitute(beforeSubst, substituteEntry, NULL);
+  beforeSubst = ADT_EntriesFromTerm(contents);
+  afterSubst  = ADT_substitute(beforeSubst, substituteEntry, NULL);
 
-  lexicalConsEntry = ADTmakeEntryDefault(
-                       (ADTSort)ATparse("Production"),
-                       (ADTAlternative)ATparse("lexical-constructor"),
-                       (ADTPattern)ATparse("prod([lit(<formal-name(str)>),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],<symbol(Symbol)>,attrs([term(cons(\"lexical-constructor\"))]))"));
+  lexicalConsEntry = ADT_makeEntryConstructor(
+                       ATparse("Production"),
+                       ATparse("lexical-constructor"),
+                       ATparse("prod([lit(<formal-name(str)>),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],<symbol(Symbol)>,attrs([term(cons(\"lexical-constructor\"))]))"));
 
-  afterSubst = ADTmakeEntriesList(lexicalConsEntry, afterSubst);
+  afterSubst = ADT_makeEntriesMany(lexicalConsEntry, afterSubst);
 
-  ATprintf("%t\n", ADTEntriesToTerm(afterSubst));
+  ATprintf("%t\n", ADT_EntriesToTerm(afterSubst));
 
   return 0;
 }

@@ -1,10 +1,1 @@
-typedef struct _ASF_CHARLIST *ASF_CHARLIST;
-
-ATbool ASF_isValidCHARLIST(ASF_CHARLIST arg);
-ATbool ASF_isCHARLISTString(ASF_CHARLIST arg);
-char*  ASF_getCHARLISTString(ASF_CHARLIST arg);
-ASF_CHARLIST  ASF_setCHARLISTString(ASF_CHARLIST arg, char *str);
-ATerm  ASF_CHARLISTToTerm(ASF_CHARLIST arg);
-ASF_CHARLIST ASF_CHARLISTFromTerm(ATerm trm);
-ASF_CHARLIST ASF_makeCHARLISTString(char *str);
 typedef ATerm ASF_Symbol;
