@@ -47,7 +47,6 @@ size_t SG_FileSize(char *prg, char *FN);
 void   SG_PrintToken(FILE *out, token c);
 void   SG_Validate(char *caller);
 char  *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize);
-int    SG_GetCharFromString(void);
 
 
 /*
@@ -61,9 +60,7 @@ int  _SG_Mode = 0;
 
 static char *SG_theText;
 static int   SG_textIndex;
-static char *the_in_buf_start;
-static char *the_in_buf_cur;
-static char *the_in_buf_end;
+static int   SG_textEnd;
 
 /*
     |SGinitParser| initializes the parser's operating mode to a
@@ -239,7 +236,7 @@ ATerm SGreOpenLanguage(char *prgname, language L, char *FN)
  The function |SGparseString| parses the text in string |S| with the
  parse table for language |L|.  The string is saved in the global
  variable |SG_theText|, which is accessed through the function
- |SG_GetCharFromString|.  This the function that is passed to the
+ |SG_GetChar|.  This the function that is passed to the
  parser.  The end of string character |'\0'| is converted into the end
  of file value |SG_EOF|.
 
@@ -259,7 +256,8 @@ ATerm SGparseString(language L, char *G, char *S)
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetCharFromString);
+  SG_textEnd   = strlen(SG_theText);
+  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetChar);
   free(SG_theText);
   return t;
 }
@@ -325,15 +323,17 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
     return NULL;
   }
 
-  if((the_in_buf_start = SG_ReadFile(prgname, NULL, FN, &ntok)) == NULL) {
+  if((SG_theText = SG_ReadFile(prgname, NULL, FN, &ntok)) == NULL) {
     return NULL;
   }
-  the_in_buf_end = the_in_buf_cur = the_in_buf_start;
-  the_in_buf_end += ntok;
+
+  /* make sure the string is terminated */
+  SG_textEnd = ntok;
+  SG_theText[SG_textEnd] = '\0';
 
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
   ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar);
-  SG_Free(the_in_buf_start);
+  SG_Free(SG_theText);
   return (ATerm) ret;
 }
 
@@ -416,12 +416,18 @@ ATbool SGisParseError(ATerm t)
  */
 
 
-int SG_GetCharFromString(void)
+int SG_GetChar(void)
 {
-  if (SG_theText[SG_textIndex] == '\0')
+  if (SG_textIndex >= SG_textEnd)
     return SG_EOF;
 
   return (unsigned char) SG_theText[SG_textIndex++];
+}
+
+void SG_UnGetChar(void)
+{
+  assert(SG_textIndex > 0);
+  SG_textIndex--;
 }
 
 /*
@@ -571,7 +577,8 @@ char *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize)
   }
   if(in != stdin) {
     *fsize = SG_FileSize(prg, fnam);
-    buf = SG_Malloc(1, *fsize);
+    /* we allocate one char extra for EOS */
+    buf = SG_Malloc(1, *fsize+1);
     if(*fsize != fread(buf, 1, *fsize, in)) {
       ATerror("%s: error reading %s\n", prg, fnam);
     }
@@ -624,23 +631,9 @@ void SG_Dump_ATtable(ATermTable t, char *s)
   }
 }
 
-int SG_GetChar(void)
-{
-  if(the_in_buf_cur >= the_in_buf_end)
-    return SG_EOF;
-
-  return (unsigned char) *the_in_buf_cur++;
-}
-
-void SG_UnGetChar(void)
-{
-  assert(the_in_buf_cur > the_in_buf_start);
-  the_in_buf_cur--;
-}
-
 void SG_ReportErrLine(int line, int col)
 {
-  char *errmsg = the_in_buf_cur, linestr[16];
+  char *errmsg = SG_theText+SG_textIndex, linestr[16];
   int  currlen=0, maxlen, prefixlen;
 
   snprintf(linestr, 16, "%d", line);
@@ -650,12 +643,12 @@ void SG_ReportErrLine(int line, int col)
   if(*errmsg == '\n') {
     errmsg--;
   }
-  while(currlen<maxlen && errmsg>the_in_buf_start && *errmsg!='\n') {
+  while(currlen<maxlen && errmsg>SG_theText && *errmsg!='\n') {
     currlen++; errmsg--;
   }
 
   fprintf(stderr, "%d: ", line);
-  while(errmsg <= the_in_buf_end && *errmsg != '\n' && maxlen--)
+  while(errmsg <= SG_theText+SG_textEnd && *errmsg != '\n' && maxlen--)
     fprintf(stderr, "%c", *errmsg++);
   fprintf(stderr, "\n%*.*s%*s\n", prefixlen, prefixlen, "", col, "^");
 }

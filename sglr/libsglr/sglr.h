@@ -35,6 +35,7 @@ void SG_Dump_ATtable(ATermTable t, char *s);
 
 #include <AsFix.h>
 #include <aterm1.h>
+#include <aterm2.h>
 
 
 /*  Data structures: states, actions, character ranges and parse tables  */

@@ -571,6 +571,7 @@ ATbool SG_CheckLookAhead(lookahead las)
       }
     }
   }
+
   SG_UnGetChar();
 
   return permitted;

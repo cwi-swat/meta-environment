@@ -1,6 +1,7 @@
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 $Id$
+
+2000/9/27 (markvdb@cwi.nl)
+  * Fixed a bug in the lookahead when operating in ToolBus mode.
+  * In case of ToolBus mode or stand-alone mode the same buffer
+    is being used. Some code has become obsolete and is removed.
 
 2000/9/18 (mdejonge@cwi.nl)
   * All file references in sglr-stats.txt are now quoted
