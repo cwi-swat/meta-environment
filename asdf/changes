@@ -55,8 +55,11 @@ still working although start would be set to zero!?!
   included modules gets opened. - Pending on bugfix in the meta env.
 - ASDF term editor: Dump parsetable. - Pending on bugfix in the meta
   env.
-- Popup: Reopen module
-- Popup: Close module
+- Popup: Reopen module, nothing seems to be going on  - Pending on
+  bugfix in the meta env.
+- Popup: Close module, import graph is not updated  - Pending on
+  bugfix in the meta env.
+
 
 - Popup: Export Eqs
 - Popup: Export Term parsetable
@@ -69,8 +72,28 @@ still working although start would be set to zero!?!
 - Description of concrete syntax in the Action env.
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
-
+- modulo and division for integers is not supported by asf, maybe it
+  should be implemented in the evaluator.
 --------------------- Changes: --------------------
+
+Thu, Oct 07
+Note:
+- Demo day
+
+
+Wed, Oct 06
+Note:
+- Commiting changes to cvs.
+- Moved initial bindings from the evaluator to the asdf
+- A problem with the way fun is translated has been identified.
+
+
+Tue, Oct 05
+Note:
+- Fixed the data constructor issue.
+- The fac function ran for the first time!!! COOL!
+- Working the ref, !, := operators, the instroduced null-val seems to
+be buggy.
 
 
 Thu, Sep 30

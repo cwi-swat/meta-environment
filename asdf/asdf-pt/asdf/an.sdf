@@ -318,6 +318,12 @@ context-free syntax
 
   Integer	-> Data
 
+lexical syntax
+  "+" | "*" | "<" | ">" | "-"	-> InfixDataOp
+
+%% % modulo
+%% / integer division
+
 
 %% basic/boolean
 
