@@ -97,7 +97,7 @@ exports
 
 
         equal(Elem, Elem)              -> Boolean
-	equal(RVALUE, RVALUE)		-> Boolean
+	equal-rval(RVALUE, RVALUE)		-> Boolean
 
         eval-iter(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, RSTORE)		-> RVALUE
         eval-citer(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, REXP, RSTORE)	-> RVALUE

@@ -22,17 +22,26 @@ bag[str] BLOCKS = carrier(PRED)
 rel[str,str] IN
 rel[str,str] OUT
 
-solve (1) {
+rel[str,str]	IN1 =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]}
+rel[str,str]	OUT1 = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
+
+rel[str,str] OUT1x = {<"B1", "d1">, <"B1", "d2">, <"B1", "d3">, <"B2", "d4">, <"B2", "d5">, <"B3", "d6">, <"B4", "d7">}
+
+rel[str,str] T = "B1" x OUT1x["B1"]
+
+rel[str,str] IN2x = {B x OUT1x[P] : B in BLOCKS, P in PRED-OF[B]}
+
+rel[str,str]	IN2 =  {B x OUT1[P] : B in BLOCKS, P in PRED-OF[B]}
+rel[str,str]	OUT2 = {B x (GEN[B] union (IN1[B] \ KILL[B])) : B in BLOCKS }
+
+
+%%solve (2) {
 %%	IN  = { B x { OUT[P] | P : PRED-OF[B] } | B : BLOCKS },
 %%	OUT = { B x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
 
-	IN =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]},
-	OUT = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
-}
+%%	IN =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]},
+%%	OUT = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
+%%}
 
-bag[str] BE
 
-rel[str,str] B1 = "B1" x BE
-
-rel[str,str] T = {B x BE : B in BLOCKS}
 

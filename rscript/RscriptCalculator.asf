@@ -45,15 +45,20 @@
 
 %%---- Equality on elements
 
-[e1]	equal($Elem, $Elem)  = true
-[default-e2] 
+[e1]	equal($Bag1, $Bag2) = equal($Bag1, $Bag2)
+[e2]	equal($Rel1, $Rel2) = equal($Rel1, $Rel2)
+[e3]	equal($Elem, $Elem)  = true
+[default-e4] 
 	equal($Elem, $Elem') = false
 
 %% --- Equality on RVALUEs
 
-[ev1]	equal($Val, $Val) = true
-[default-ev2]
-	equal($Val, $Val') = false
+[e1]	equal-rval($Bag1, $Bag2) = equal($Bag1, $Bag2)
+[e2]	equal-rval($Rel1, $Rel2) = equal($Rel1, $Rel2)
+[e3]	equal-rval($Val, $Val)  = true
+[default-e4] 
+	equal-rval($Val1, $Val2) = false
+
 
 [v2b]	rval2bag($Bag) = $Bag
 [v2r]	rval2rel($Rel) = $Rel
@@ -119,7 +124,7 @@
 	$Val1 = value($Var1, $Store),
 	$Val1' = evalx($Exp1, $Store),
 	$Store' = assign($Var1, $Val1', $Store),
-	equal($Val1, $Val1') = false
+	equal-rval($Val1, $Val1') = false
 	===========================================
 	solve1($Integer, $Var1, $Exp1, $Store) =
 	solve1($Integer - 1, $Var1, $Exp1, $Store')
@@ -135,7 +140,7 @@
 	$Val2' = evalx($Exp2, $Store),
 	$Store' = assign($Var1, $Val1', $Store),
 	$Store'' = assign($Var2, $Val2', $Store'),
-	equal($Val1, $Val1') & equal($Val2, $Val2') = false
+	equal-rval($Val1, $Val1') & equal-rval($Val2, $Val2') = false
 	===========================================
 	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Store) =
 	solve2($Integer - 1, $Var1, $Exp1, $Var2, $Exp2, $Store'')
@@ -215,9 +220,7 @@
 	evalx($Exp1 notin $Exp2, $Store)= not($Bool)
 
 [EQ1]	evalx($Exp1 == $Exp2, $Store) 	= apply(evalx($Exp1, $Store) == evalx($Exp2, $Store))
-[EQ2]	apply($Val == $Val)		= true
-[default-EQ3]
-	apply($Val1 == $Val2)		= false
+[EQ2]	apply($Elem1 == $Elem2)		= equal($Elem1, $Elem2)
 
 [NE1]	$Bool = apply(evalx($Exp1, $Store) == evalx($Exp2, $Store))
 	===========================================================
@@ -274,7 +277,11 @@
 
 [IN1]	evalx($Exp1 inter $Exp2, $Store)= apply(evalx($Exp1, $Store) inter evalx($Exp2, $Store))
 
+[IN1]	apply($Elem1 inter $Bag2) 	= inter({$Elem1}, $Bag2)
+[IN2]	apply($Bag1 inter $Elem2) 	= inter($Bag1, {$Elem2})
 [IN2]	apply($Bag1 inter $Bag2) 	= inter($Bag1, $Bag2)
+[IN3]	apply($Tuple1 inter $Rel2) 	= inter({$Tuple1},  $Rel2)
+[IN3]	apply($Rel1 inter $Tuple2) 	= inter($Rel1,  {$Tuple2})
 [IN3]	apply($Rel1 inter $Rel2) 	= inter($Rel1,  $Rel2)
 
 [DF1]	evalx($Exp1 \ $Exp2, $Store)	= apply(evalx($Exp1, $Store) \ evalx($Exp2, $Store))
@@ -291,6 +298,9 @@
 [CP5]	apply($Elem1 x $Elem2)  	= product({$Elem1}, {$Elem2})
 
 [PJ1]	evalx($Exp1 . $Exp2, $Store)	= apply(evalx($Exp1, $Store) . evalx($Exp2, $Store))
+
+[PJ2]	apply($Bag . $Elem)   		= $Bag . $Elem
+[PJ2]	apply($Elem . $Bag)   		= $Elem . $Bag
 [PJ2]	apply($Rel . $Elem)   		= $Rel . $Elem
 [PJ3]	apply($Rel . $Bag) 		= $Rel . $Bag
 [PJ4]	apply($Elem . $Rel)   		= $Elem . $Rel
@@ -400,17 +410,17 @@
 
 %% ---- Auxiliary functions for bag and relation formers
 
-[AP1]	$Rel = {}, $Elem != $Rel, $Elem != {$Tuple+}, 
-        $Bag = {}, $Elem != $Bag, $Elem != {$Elem+}
-	=========================================
-	append({$Elem*}, $Elem) 	= {$Elem*, $Elem}
+%%[AP1]	$Rel = {}, $Elem != $Rel, $Elem != {$Tuple+}, 
+%%        $Bag = {}, $Elem != $Bag, $Elem != {$Elem+}
+%%	=========================================
+%%	append({$Elem*}, $Elem) 	= {$Elem*, $Elem}
 
 [AP2]	append({$Elem*1}, {$Elem*2}) 	= {$Elem*1, $Elem*2}
 [AP3]	r2b({$Tuple*2}) = {$Elem*2}
 	=========================================
 	append({$Elem*1},{$Tuple*2})	= {$Elem*1, $Elem*2}
-[default-AP]
-	append({$Elem*}, $Val)		= {$Elem*}
+%%[default-AP]
+%%	append({$Elem*}, $Val)		= {$Elem*}
 
 
 %% ---
