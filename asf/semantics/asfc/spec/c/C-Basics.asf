@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -303,5 +304,25 @@ equations
   [tc-1'2] translate-char(funid("'" "}")) = 125
 
   [tc-1'2] translate-char(funid("'" "~")) = 126
+
+  [tc-1'161] translate-char(funid("'" "¡")) = 161
+
+  [tc-1'162] translate-char(funid("'" "¢")) = 162
+
+  [tc-1'163] translate-char(funid("'" "£")) = 163
+
+  [tc-1'164] translate-char(funid("'" "¤")) = 164
+
+  [tc-1'165] translate-char(funid("'" "¥")) = 165
+
+  [tc-1'166] translate-char(funid("'" "¦")) = 166
+
+  [tc-1'167] translate-char(funid("'" "§")) = 167
+
+  [tc-1'168] translate-char(funid("'" "¨")) = 168
+
+  [tc-1'169] translate-char(funid("'" "©")) = 169
+
+  [tc-1'170] translate-char(funid("'" "ª")) = 170
 
   [default-tc-1'3] translate-char(funid("'" Char)) = 777
