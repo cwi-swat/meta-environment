@@ -192,6 +192,44 @@ int TBinit(char *tname, int argc, char *argv[],
   return TB_OK;
 }
 
+int TBconnect(char *tname, char *host, int inport, int outport,
+	      TBcallbackTerm fun, term *(*check_in_sign)(term *), int *tid)
+{
+  int to_tb, from_tb;
+  int old_inport, old_outport;
+
+  term *tool_in_sign, *too_out_sign, *trm;
+
+  /* Fool mkports into assuming different WellKnown ports */
+  old_inport = WellKnownSocketInPort;
+  old_outport = WellKnownSocketOutPort;
+  WellKnownSocketInPort = inport;
+  WellKnownSocketOutPort = outport;
+
+  if(mkports(TBfalse, tname, host, tid, &from_tb, &to_tb) == TB_ERROR)
+    err_fatal("TBconnect -- can't connect to ToolBus");
+
+  /* Restore the old WellKnown ports */
+  WellKnownSocketInPort = old_inport;
+  WellKnownSocketOutPort = old_outport;
+
+  TBaddTermPort(from_tb, fun);
+  trm = TBread(from_tb); /* obtain the tool signature from the ToolBus */
+
+  if(TBmatch(trm, "rec-do(signature(%t,%t))", &tool_in_sign, &tool_out_sign)){
+    TBwrite(to_tb, Snd_Void);
+    if(check_in_sign){
+      trm = (*check_in_sign)(tool_in_sign);
+      if(trm)
+	err_fatal("TBconnect -- NOT IN INPUT SIGNATURE: %t", trm);
+    }
+  } else
+    err_fatal("signature information garbled: %t", trm);
+
+
+  return TB_OK;
+}      
+
 static int read_from_any_channel(inport **inp)
 {
   int i, nelem, error;
