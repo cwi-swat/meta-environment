@@ -35,7 +35,7 @@ POD2HTML=pod2html
 # the location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.idef
-	@PATH=$(TOOLBUS)/bin:${PATH} idef2tif $<
+	@PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
