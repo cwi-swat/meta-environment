@@ -1,5 +1,8 @@
 # $Id$
 
+2001/12/04  (vandenbr@loria.fr)
+ * Fixed the deadlock in both stand-alone scripts.
+
 2001/11/30 (vandenbr@loria.fr)
  * Removed start symbols functionality from structure editor.
  * Added functionality to obtain the start sort for rules explicitly.
