@@ -1,24 +1,29 @@
 %{{{ LaTeX configuration
 
 % vim:ts=4:sw=4:tw=75
-\documentclass[a4paper,twoside]{article}
-
-%\usepackage{fullpage}
+%% \documentclass[a4paper,twoside]{article}
+\documentclass{article}
+\usepackage{hyperlatex} 
+\usepackage{xspace}
+\usepackage{verbatim}
 \usepackage[english]{babel}
 \usepackage{times}
 \usepackage{a4wide}
-\usepackage{verbatim}
 \usepackage{alltt}
 \usepackage{moreverb}  
 
-\usepackage{hyperlatex} 
-\usepackage{xspace}
 \W\usepackage{longtable}
 \W\usepackage{makeidx}
 \W\usepackage{frames}
+\W\usepackage{sequential}
 \T\usepackage{epsfig}
 
 \makeindex
+
+\xmlattributes{body}{bgcolor= "#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+
+\htmltopname{ASF+SDF Meta-Environment User Manual}
 
 \newcommand{\printindex}{%
   \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
@@ -44,8 +49,8 @@
         {\end{center}\end{small}}
 
 \newenvironment{IncCode}
-        {\begin{Code}\begin{small}}
-        {\end{small}\end{Code}}      
+        {\begin{small}}
+        {\end{small}}      
 
 \newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
 \newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
@@ -70,6 +75,7 @@
 
 \htmltitle{ASF+SDF Meta-Environment\ User Manual \\ $Revision$}
 \htmldirectory{html} 
+\htmlname{user-manual}
 \htmladdress{M.G.J. van den Brand and P. Klint}
 
 \newcommand{\homepage}{http://www.cwi.nl/\~{}markvdb/}
@@ -87,7 +93,9 @@ This is a preliminary user manual for the \ASmetaenv\ Release 1.
 This is work under construction.
 \end{abstract}
 
-\tableofcontents
+\T\tableofcontents
+
+\htmlmenu{0}
 
 %}}}
 
@@ -2284,7 +2292,9 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
+\htmlrule
 \T\begin{center}
+\begin{IncCode}
 \begin{verbatim}
 module LeesPlank
 
@@ -2298,8 +2308,10 @@ exports
     "mies"        -> Mies
     Aap Noot Mies -> LeesPlank  
 \end{verbatim}
+\end{IncCode}
 \T\end{center}
 \caption{Simple lexical functions}\label{CODE:simplelex}
+\htmlrule
 \end{figure}   
       
 
@@ -2351,6 +2363,7 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
 \begin{figure}
+\T\begin{center}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits1
@@ -2367,13 +2380,14 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
+\T\end{center}
 \end{figure}   
 
 \begin{figure}
+\T\begin{center}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
-
 imports Layout
 
 exports
@@ -2385,6 +2399,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit}\label{CODE:LettersDigits2}
+\T\end{center}
 \end{figure}   
 
 \paragraph{Escape Conventions}
@@ -5747,6 +5762,10 @@ application areas. Emphasis will be on:
 \end{itemize}
 
 \bibliographystyle{plain}
-\bibliography{manual} 
+\bibliography{manual}
+ 
+\printindex
+
+\tableofcontents
 
 \end{document}
