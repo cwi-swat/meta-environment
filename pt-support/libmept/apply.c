@@ -38,6 +38,7 @@ PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args)
   PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort(sort));
   PT_Production prod;
   PT_Attributes attributes = PT_makeAttributesNoAttrs();
+  int arity = PT_getArgsLength(args);
 
   /* initialize with empty symbols and trees */
   PT_Args argList = PT_makeArgsEmpty();
@@ -64,21 +65,23 @@ PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args)
     args = PT_getArgsTail(args);
   }
 
-  /* append closing bracket to symbols and trees */
-  argList = PT_appendArgs(argList, layoutTree);
-  symbolList = PT_appendSymbols(symbolList, layoutSymbol);
-  argList = PT_appendArgs(argList, bcTree);
-  symbolList = PT_appendSymbols(symbolList, bcSymbol);
+  if (arity > 0) {
+    /* append closing bracket to symbols and trees */
+    argList = PT_appendArgs(argList, layoutTree);
+    symbolList = PT_appendSymbols(symbolList, layoutSymbol);
+    argList = PT_appendArgs(argList, bcTree);
+    symbolList = PT_appendSymbols(symbolList, bcSymbol);
 
-  /* insert opening bracket before symbols and trees */
-  argList = PT_makeArgsList(layoutTree, argList);
-  symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+    /* insert opening bracket before symbols and trees */
+    argList = PT_makeArgsList(layoutTree, argList);
+    symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
 
-  argList = PT_makeArgsList(boTree, argList);
-  symbolList = PT_makeSymbolsList(boSymbol, symbolList);
+    argList = PT_makeArgsList(boTree, argList);
+    symbolList = PT_makeSymbolsList(boSymbol, symbolList);
 
-  argList = PT_makeArgsList(layoutTree, argList);
-  symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+    argList = PT_makeArgsList(layoutTree, argList);
+    symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+  }
 
   /* insert function literal before symbols and trees */
   argList = PT_makeArgsList(functionTree, argList);
