@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar 11 14:40:46 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Bumped into version 0.2
+ * Regenerated api's 
+
 Thu Mar 11 10:45:01 CET 2004 <{jong,kooiker}@cwi.nl>
  * Finished transition to new error api names
 

@@ -1,12 +1,8 @@
-/*{{{  includes */
-
 #include <assert.h>
 
 #include <aterm2.h>
 #include <deprecated.h>
 #include "ParsedError.h"
-
-/*}}}  */
 
 /*{{{  conversion functions */
 
