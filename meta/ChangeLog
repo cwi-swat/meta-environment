@@ -1,5 +1,11 @@
 # $Id$
 
+2003/07/03 (markvdb@cwi.nl)
+ * Reorganized the show-list and show-area in such a way that
+   the show-area does no longer be parameterized with a module name.
+ * The "ShowSource" button is added to the standard buttons.
+ * Renamed and removed some variables.
+
 2003/07/02 (markvdb@cs.vu.nl)
  * The type (trm/eqs) is now made explicit.
  * Introduced a new button to dump the parse table of the equations.

@@ -688,8 +688,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		}
 	}
 
-	public void updateList(String str) {
-		ATerm data = factory.parse(str);
+	public void updateList(String moduleName, String actions) {
+		ATerm data = factory.parse(actions);
 
 		messageWindow.setVisible(true);
 
@@ -700,7 +700,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		}
 
 		if (data instanceof ATermList) {
-			messageList.setContent((ATermList) data);
+			messageList.setContent(moduleName, (ATermList) data);
 		} else {
 			System.out.println(data.toString());
 			messageList.errMessage("Can't show something in list view which is not a ATermList");

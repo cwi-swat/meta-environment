@@ -118,7 +118,7 @@ let
   ButtonName : str,
   SortName   : str,
   FilePath   : str,
-  NewModName : str,
+  NewModuleName : str,
   FileName   : str,
   EditorName : str,
   FuncName   : str,
@@ -226,18 +226,18 @@ in
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-action, Stack?, EditorId?) .
-    StackPopString(Stack,Stack?,NewModName?) .
-    ParseTerm(EditorId, NewModName) .
+    StackPopString(Stack,Stack?,ModuleName?) .
+    ParseTerm(EditorId, ModuleName) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-syntax-action, Stack?, EditorId?).
-    StackPopString(Stack,Stack?,NewModName?) .
-    ParseSyntax(EditorId,NewModName,sdf).
+    StackPopString(Stack,Stack?,ModuleName?) .
+    ParseSyntax(EditorId,ModuleName,sdf).
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-equations-action, Stack?, EditorId?).
-    StackPopString(Stack,Stack?,NewModName?) .
-    ParseEquations(EditorId,NewModName).
+    StackPopString(Stack,Stack?,ModuleName?) .
+    ParseEquations(EditorId,ModuleName).
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(unparse, Stack?, EditorId?) .
@@ -286,9 +286,9 @@ in
         fi
       +
         rec-msg(reduce, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
         StackPopTerm(Stack,Stack?,STree?) .
-        ReduceTerm(STree, NewModName, RTree?) .
+        ReduceTerm(STree, ModuleName, RTree?) .
         if not-equal(RTree, error-tree) then
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
@@ -296,12 +296,12 @@ in
           ReturnAbort(EditorId,Stack)
         fi
       +
-        rec-msg(get-other-focus(NewModName?), Stack?, EditorId?) .
+        rec-msg(get-other-focus(ModuleName?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         FunSym := fun(STree) .
         if equal(FunSym, "path") then
           FilePath := first(args(STree)) .
-          snd-msg(check-editor-id(FilePath, NewModName)) .
+          snd-msg(check-editor-id(FilePath, ModuleName)) .
           (
             rec-msg(existing-editor(EditorId2?)).
             GetFocus(EditorId2, RTree?) .
@@ -330,22 +330,22 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(activate-editor, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
         StackPopString(Stack,Stack?,FileName?) .
         StackPopTerm(Stack,Stack?,STree?) .
         FunSym := fun(STree) .
         if equal(FunSym, "str") then
           String := first(args(STree)) .
-          ActivateEditorWithString(String, NewModName, FileName)
+          ActivateEditorWithString(String, ModuleName, FileName)
         else
-          ActivateEditorWithTree(STree, NewModName, FileName) 
+          ActivateEditorWithTree(STree, ModuleName, FileName) 
         fi .    
         ReturnSuccess(EditorId,Stack)
       +
 	rec-msg(close-editor, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
         StackPopString(Stack,Stack?,FileName?) .
-	CloseEditor(NewModName, FileName) .
+	CloseEditor(ModuleName, FileName) .
 	ReturnSuccess(EditorId, Stack)
       + 
         rec-msg(send, Stack?, EditorId?) .
@@ -358,18 +358,18 @@ in
         StackPushTerm(Stack,Stack?,RTree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(parse(NewModName?, SortName?), Stack?, EditorId?) .
+        rec-msg(parse(ModuleName?, SortName?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
           FunSym := fun(STree) .
           if or(equal(FunSym, "file"), equal(FunSym, "path")) then
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
-            ParseText(String, NewModName, SortName, RTree?, Error?) .
+            ParseText(String, ModuleName, SortName, RTree?, Error?) .
             ProcessParseError(FilePath, Error, "")
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
-              ParseText(String, NewModName, SortName, RTree?, Error?) .
+              ParseText(String, ModuleName, SortName, RTree?, Error?) .
               ProcessParseError(String, Error, "")
             else
               RTree := error-tree
@@ -457,15 +457,17 @@ in
       +
         rec-msg(show-tree, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
-        ShowTree(STree) .
+        StackPopString(Stack,Stack?, ModuleName?) .
+        ShowTree(ModuleName, STree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(show-area(NewModName?), Stack?, EditorId?) .
+        rec-msg(show-area, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
+        StackPopString(Stack,Stack?, ModuleName?) .
         FileName := first(args(STree)) .
-        snd-msg(edit-term-file(NewModName, FileName)) .
-        rec-msg(editor-opened(NewModName, EditorId2?)).
-        GetTree(EditorId2, NewModName, Tree?) .
+        snd-msg(edit-term-file(ModuleName, FileName)) .
+        rec-msg(editor-opened(ModuleName, EditorId2?)).
+        GetTree(EditorId2, ModuleName, Tree?) .
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
         ReturnSuccess(EditorId,Stack)        
       +
@@ -579,9 +581,9 @@ in
       +
 	rec-msg(edit-term, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?) .
-        StackPopString(Stack,Stack?,NewModName?) .
-        snd-msg(edit-term-file(NewModName, FileName)) .
-        rec-msg(editor-opened(NewModName, EditorId2?)).
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(edit-term-file(ModuleName, FileName)) .
+        rec-msg(editor-opened(ModuleName, EditorId2?)).
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(ask-question(String?), Stack?, EditorId?) .
@@ -602,33 +604,33 @@ in
         rec-msg(copy-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, NewModuleName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(copy-module(ModuleName, NewModName, Path)) .
+	snd-msg(copy-module(ModuleName, NewModuleName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(rename-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, NewModuleName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(rename-module(ModuleName, NewModName, Path)) .
+	snd-msg(rename-module(ModuleName, NewModuleName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(import-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, NewModuleName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(import-module(ModuleName, NewModName, Path)) .
+	snd-msg(import-module(ModuleName, NewModuleName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(unimport-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModName?) .
+       	StackPopString(Stack, Stack?, NewModuleName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(unimport-module(ModuleName, NewModName, Path)) .
+	snd-msg(unimport-module(ModuleName, NewModuleName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(compile-module, Stack?, EditorId?) .
@@ -730,14 +732,14 @@ endlet
 /* below here are implementations of button actions */
 /****************************************************/
 
-process ShowTree(Tree: term) is
+process ShowTree(ModuleName: str, Tree: term) is
 let
   Graph : term,
   Id : int
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Computing graph layout..."))) .
-  snd-msg(tree2graph(Tree)) .
+  snd-msg(tree2graph(ModuleName, Tree)) .
   rec-msg(graph(Graph?)) .
   snd-msg(display-graph("parsetree", Graph)).
   snd-note(ui-status(endstat(Id)))

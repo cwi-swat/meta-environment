@@ -142,15 +142,15 @@ in
    )
    + /*  Message list */
    (
-     rec-event(UI, element-selected(ButtonName?, Tree?)).
-     snd-msg(extra-button-action(ButtonName, [Tree], 
+     rec-event(UI, element-selected(ButtonName?, ModuleName?, Tree?)).
+     snd-msg(extra-button-action(ButtonName, [Tree, str(ModuleName)], 
                                  "message-list", "*", message-id)).
-     snd-ack-event(UI, element-selected(ButtonName, Tree)) 
+     snd-ack-event(UI, element-selected(ButtonName, ModuleName, Tree)) 
    )
    +
    (  
      rec-msg(update-list-view(ModuleName?, Actions?)).
-     snd-do(UI, update-list(Actions))
+     snd-do(UI, update-list(ModuleName, Actions))
    ) 
   ) *
   (

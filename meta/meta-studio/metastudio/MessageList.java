@@ -8,6 +8,7 @@ import javax.swing.event.*;
 
 public class MessageList extends JScrollPane 
 {
+    String name;
     public ATermList items;
     String[] items_strings;
     JList view = new JList();
@@ -51,8 +52,9 @@ public class MessageList extends JScrollPane
 		    }
 		    else {
 			System.out.println(matching);
-			bridge.postEvent(factory.make("element-selected(<list>, <term>)", 
+			bridge.postEvent(factory.make("element-selected(<list>,<str>,<term>)", 
 						      matching.get(1), 
+                                                      name,
 						      matching.get(2)));
 		    }
 		}
@@ -71,9 +73,10 @@ public class MessageList extends JScrollPane
 
     }
 
-    public void setContent(ATermList data)
+    public void setContent(String moduleName, ATermList data)
     {
-	items = data;
+	name = moduleName;
+        items = data;
 
 	int length = items.getLength();
 	items_strings = new String[length];
