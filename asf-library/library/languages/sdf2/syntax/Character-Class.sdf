@@ -22,7 +22,7 @@ exports
     "left":CharClass "/" "right":CharClass   -> CharClass       {cons("diff"),left,memo}
     "left":CharClass "/\\" "right":CharClass -> CharClass       {cons("isect"),left,memo}
     "left":CharClass "\\/" "right":CharClass -> CharClass       {cons("union"),left}
-    "(" CharClass ")"          -> CharClass {bracket}
+    "(" CharClass ")"          -> CharClass {bracket, avoid}
 
   context-free priorities
     "~" CharClass             -> CharClass >
