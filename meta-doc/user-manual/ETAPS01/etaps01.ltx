@@ -5,7 +5,7 @@
 \usepackage{a4wide}
 \usepackage{verbatim}
 \usepackage{makeidx}
-\usepackage{epsfig}
+\usepackage{psfig}
 \usepackage{alltt}
 \usepackage{moreverb}
 \usepackage{url}          
@@ -153,17 +153,14 @@ languages.
 \paragraph{Term rewriting}
 
 \asfsdf\ specifications are executed as rewrite rules. Both an
-interpreter and a compiler (ASF2C, see~\cite{}) are supported.  The
+interpreter and a compiler (ASF2C, see~\cite{BKO99}) are supported.  The
 latter generates very efficient C code that implements pattern
 matching and term traversal.
 
 
 \begin{figure}
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\\
-Architecture of the \ASmetaenv\\
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\\
-\label{FIG:architecture}Architecture of the \ASmetaenv\\
+\centerline{\psfig{file=newarch.eps,width=12cm}}
+\caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
 \end{figure}
 
 \section{Architecture}
@@ -182,23 +179,21 @@ user-defined terms, etc.
 \end{itemize}
 
 \begin{figure}
+\centerline{\psfig{file=../meta-pico.ps,width=12cm}}
+\caption{\label{FIG:meta-pico}A small typechecking example}
+\end{figure} 
 
-  \centerline{\epsfig{file=../meta-pico.ps,width=12cm}}
-  %%%%\caption{\label{FIG:meta-pico} A small typechecking example}
+\begin{figure}
+
+\centerline{\psfig{file=CobolEditor.ps,width=12cm}}
+\caption{\label{FIG:edit-cobol} Editing a COBOL program}
 
 \end{figure} 
 
 \begin{figure}
 
-  %%%%\centerline{\epsfig{file=../Cobol-editor.ps,width=12cm}}
-  %%%%\caption{\label{FIG:edit-cobol} Editing a COBOL program}
-
-\end{figure} 
-
-\begin{figure}
-
-  \centerline{\epsfig{file=../viewer.ps,width=12cm}}
-  %%%%\caption{\label{FIG:viewer}ToolBus viewer applied to the \ASmetaenv}
+  \centerline{\psfig{file=../viewer.ps,width=12cm}}
+  \caption{\label{FIG:viewer}ToolBus viewer applied to the \ASmetaenv}
 
 \end{figure} 
         
