@@ -822,7 +822,7 @@ proc OnlineHelp {on} {
 }
 
 proc Help {msg just class} {
-    global toolname
+    global metaname
     set w ".help$class"
     catch {destroy $w}
     toplevel $w
@@ -1010,7 +1010,7 @@ proc define-menu-bar {} {
     menu $m -tearoff 0
     $m add command -label "About $metaname" -underline 0 \
         -command {Help $help_meta center a}
-    $m add command -label "About $toolname" -underline 9 \
+    $m add command -label "About $toolname" -underline 6 \
         -command {Help $help_about center b}
     $m add command -label "Mouse Operations" -underline 0 \
         -command {Help $help_mouse left c}
