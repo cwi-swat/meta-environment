@@ -1,15 +1,10 @@
 package toolbus.atom;
 
-import toolbus.TBTerm;
-import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.*;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
-import aterm.AFun;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
+import aterm.*;
 
 /**
  * @author paulk, Aug 7, 2002

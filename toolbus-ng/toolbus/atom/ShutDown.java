@@ -1,6 +1,5 @@
 package toolbus.atom;
 
-import toolbus.ToolBusDeathException;
 import toolbus.ToolBusException;
 
 import aterm.ATerm;

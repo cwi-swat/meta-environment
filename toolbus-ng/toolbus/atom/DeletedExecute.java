@@ -1,15 +1,9 @@
 package toolbus.atom;
 
-import toolbus.TBTerm;
-import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.*;
 import toolbus.process.ProcessInstance;
-import toolbus.tool.DeletedToolDefinition;
-import toolbus.tool.ToolInstance;
 
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
+import aterm.*;
 
 /**
  * @author paulk, Jul 29, 2002
@@ -44,11 +38,11 @@ public class DeletedExecute extends Atom {
 	throws ToolBusException
 	{
       if (super.execute()) {
-		String toolname = ((ATermAppl) toolcall).getName();
-		ATermList cargs = ((ATermAppl) toolcall).getArguments();
-		ATermList evargs = (ATermList) TBTerm.eval(cargs, getEnv());
+		//String toolname = ((ATermAppl) toolcall).getName();
+		//ATermList cargs = ((ATermAppl) toolcall).getArguments();
+		//ATermList evargs = (ATermList) TBTerm.eval(cargs, getEnv());
 
-		ToolBus TB = getProcess().getToolBus();
+		//ToolBus TB = getProcess().getToolBus();
 				
 //>>		ToolDefinition TD = TB.getToolDefinition(toolname);
 		
