@@ -8,21 +8,26 @@
 #include <Error-utils.h>
 #include <errno.h>
 
+#define INIT_BUF_SIZE 12000
+#define INCR_BUF_SIZE 24000
+#define READ_BLOCK_SIZE 512
+#define BUFFER_COLLECT_SIZE 1256000
+
 static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes);
 static PT_Tree unparse_to_bytes(PT_Tree tree);
-
-/*{{{ until parse errors have an ADT, this is the parse error API  */
-
-#define LINE 1
-#define COLUMN 2
-#define OFFSET 3
-#define getErrorInfo(error, info) (ATgetInt((ATermInt) ATgetArgument((ATermAppl) ATelementAt((ATermList) ATgetArgument((ATermAppl) (error),0),info),0))) 
-
-/*}}}  */
 
 /*{{{  static char* getFilename(PT_Tree str)  */
 
 static char* getFilename(PT_Tree str) 
+{
+  ATerm aterm = ATparse(PT_yieldTree(str));
+  return ATgetName(ATgetAFun((ATermAppl) aterm));
+}
+
+/*}}}  */
+/*{{{  static char* getCommand(PT_Tree str)  */
+
+static char* getCommand(PT_Tree str) 
 {
   ATerm aterm = ATparse(PT_yieldTree(str));
   return ATgetName(ATgetAFun((ATermAppl) aterm));
@@ -105,9 +110,9 @@ static char* getSort(PT_Symbol type)
 
 /*}}}  */
 
-/*{{{  static void initParser(void) */
+/*{{{  static void initParser(ATerm language, char *filename) */
 
-static void initParser(const char *toolname, ATerm language)
+static void initParser(ATerm language, const char *filename)
 {
   static ATbool initialized = ATfalse;
 
@@ -122,7 +127,8 @@ static void initParser(const char *toolname, ATerm language)
     SG_FILTER_INJECTIONCOUNT_OFF(); 
     SG_FILTER_EAGERNESS_OFF();
 
-    SGopenLanguageFromTerm(toolname, language, getParseTable());
+    SGopenLanguageFromTerm(language, getParseTable(), filename);
+
   }
 }
 
@@ -191,6 +197,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
   ATerm parseTable;
+  char *filename = getFilename(file);
 
   if (sort == NULL) {
     return  (PT_Tree) CO_makeParsetreeFailure(sort,
@@ -199,11 +206,10 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
 	       	l);
   }
 
-  initParser(toolname, language);
+  initParser(language, filename);
   parseTable = getParseTable();
 
   if (parseTable != NULL) {
-    char *filename = getFilename(file);
     ATerm result = SGparseFile(toolname, language, sort, filename);
     return parse_result(sort, filename, result);
   }
@@ -250,7 +256,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 	       	l);
   }
 
-  initParser(toolname, language);
+  initParser(language, NULL);
   parseTable = getParseTable();
   if (parseTable != NULL) {
     ATerm result = SGparseString(PT_yieldTree(bytes), 
@@ -551,3 +557,144 @@ PT_Tree ASC_write_bytes_to_file(ATerm type, ATerm afile_arg, ATerm abytes_arg)
 }
 
 /*}}}  */
+
+/*{{{  static CO_Boolean execute_command(PT_Tree cmd_arg) */
+
+static CO_NatCon execute_command(PT_Tree cmd_arg)
+{
+  int result = system(getCommand(cmd_arg));
+  char nat[142];
+
+  sprintf(nat, "%d", result);
+
+  return CO_makeNatConDefault(nat);
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASFE_execute_command(PT_Symbol type, PT_Tree cmd_arg) */
+
+PT_Tree ASFE_execute_command(PT_Symbol type, PT_Tree cmd_arg)
+{
+  return (PT_Tree) execute_command(cmd_arg);
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_execute_command(ATerm type, ATerm input) */
+
+PT_Tree ASC_execute_command(ATerm type, ATerm input)
+{
+  PT_Tree cmd_arg = muASFToTree(input);
+
+  return (PT_Tree) execute_command(cmd_arg);
+}
+
+/*}}}  */
+
+/* This buffer is for read_from_command,
+ * for efficiency we have a static buffer that can be reused between
+ * calls to read_from_command, but when the size gets to big,
+ * we garbage collect it to save space.
+ */
+/*{{{  static char *checkBuffer(int minSize)  */
+
+static char *checkBuffer(int minSize) 
+{
+  static char *buffer = NULL;
+  static int bufSize = -1;
+
+  if (minSize == 0) {
+    if (bufSize > BUFFER_COLLECT_SIZE) {
+      free(buffer);
+      buffer = NULL;
+    }
+
+    return NULL;
+  }
+
+  if (bufSize == -1) {
+    bufSize = INIT_BUF_SIZE;
+  }
+
+  while (bufSize < minSize) {
+    bufSize += INCR_BUF_SIZE;
+  }
+    
+  if (buffer == NULL) {
+    buffer = (char*) calloc(bufSize, sizeof(char));
+  }
+  else {
+    buffer = (char*) realloc(buffer, bufSize * sizeof(char));
+  }
+
+  if (buffer == NULL) {
+    ATerror("buffer: out of memory\n");
+    return NULL;
+  }
+
+  return buffer;
+}
+
+/*}}}  */
+
+/*{{{  static CO_Bytes read_from_command(PT_Tree command) */
+
+static CO_Read read_from_command(PT_Tree command)
+{
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
+  CO_Read result;
+  FILE *fp = popen(getCommand(command), "r");
+  int bytesRead = 0;
+  size_t blockRead = 0;
+  char *buffer = NULL;
+
+  if (fp != NULL) {
+    do { 
+      buffer = checkBuffer(bytesRead + READ_BLOCK_SIZE);
+      if (buffer == NULL) {
+	return CO_makeReadFailure(l,l,makeGeneralError("out of memory"),l);
+      }
+
+      blockRead = fread(buffer+bytesRead, sizeof(char), READ_BLOCK_SIZE, fp);
+      bytesRead += blockRead;
+
+    } while (blockRead == READ_BLOCK_SIZE); 
+
+    if (!feof(fp) || ferror(fp)) {
+      result = CO_makeReadFailure(l,l,makeGeneralError(strerror(errno)), l);
+    }
+    else {
+      buffer[bytesRead] = '\0';
+      result = CO_makeReadSuccess(l, l, make_bytes(buffer), l);
+    }
+
+    buffer = checkBuffer(0);
+    fclose(fp);
+    fp = NULL;
+  }
+  else {
+    result = CO_makeReadFailure(l,l,makeGeneralError(strerror(errno)), l);
+  }
+
+  return result;
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASFE_read_from_command(PT_Symbol type, PT_Tree command) */
+
+PT_Tree ASFE_read_from_command(PT_Symbol type, PT_Tree command)
+{
+  return (PT_Tree) read_from_command(command);
+} 
+
+/*}}}  */
+/*{{{  PT_Tree ASC_read_from_command(ATerm type, ATerm command) */
+
+PT_Tree ASC_read_from_command(ATerm type, ATerm command)
+{
+  PT_Tree cmd_arg = muASFToTree(command);
+
+  return (PT_Tree) read_from_command(cmd_arg);
+}
+
+/*}}}  */
+

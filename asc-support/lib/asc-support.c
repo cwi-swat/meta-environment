@@ -664,7 +664,7 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
 						  extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_trafo\n");
+	  ATerror("Unexpected term type %d in call_kids_trafo\n", ATgetType(arg[idx]));
 	  return NULL;
       }
     }
@@ -718,7 +718,7 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 	  arg1 = call_kids_accu_list(trav, (ATermList) head, arg1, extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_accu\n");
+	  ATerror("Unexpected term type %d in call_kids_accu\n", ATgetType(head));
 	  return NULL;
       }
     }
@@ -765,7 +765,7 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
 					   extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_accutrafo\n");
+	  ATerror("Unexpected term type %d in call_kids_accutrafo\n", ATgetType(arg[idx]));
 	  return NULL;
       }
 
@@ -934,7 +934,7 @@ ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
 							    extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_trafo\n");
+	  ATerror("Unexpected term type %d in call_kids_trafo\n", ATgetType(arg[idx]));
 	  return NULL;
       }
 
@@ -1012,7 +1012,7 @@ ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
 					       arg1, extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_accu\n");
+	  ATerror("Unexpected term type %d in call_kids_accu\n", ATgetType(head));
 	  return NULL;
       }
 
@@ -1076,7 +1076,7 @@ ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
 						     extra_args);
 	  break;
 	default:
-	  ATerror("Unexpected term type %d in call_kids_accutrafo\n");
+	  ATerror("Unexpected term type %d in call_kids_accutrafo\n", ATgetType(arg[idx]));
 	  return NULL;
       }
 

@@ -15,6 +15,6 @@ requires
   aterm		2.2
   error-support 0.1.1
   toolbuslib    0.6
-  pt-support	1.1
-  asf-support	1.3
-  sglr		3.11
+  pt-support	1.2
+  asf-support	1.4
+  sglr		3.12

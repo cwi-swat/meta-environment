@@ -4,7 +4,9 @@ BUILTIN_NAMES_ARITY=\
         set-anno_3\
 	get-anno_2\
 	get-term-anno_2 \
-	shell_1 \
+	set-term-anno_3 \
+	execute-command_1 \
+	read-from-command_1 \
 	term-less_2 \
 	lift-to-tree_1 \
 	lower-from-tree_1 \
@@ -23,7 +25,6 @@ BUILTIN_SOURCEFILES=\
 	builtin-common.c \
 	builtin-common.h \
 	builtin-annos.c \
-	builtin-shell.c \
 	builtin-term-compare.c \
 	builtin-lifting.c\
 	builtin-implode.c \

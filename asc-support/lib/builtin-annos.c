@@ -165,3 +165,62 @@ PT_Tree ASC_get_term_anno(ATerm type, ATerm aterm, ATerm akey)
 }
 
 /*}}}  */
+
+/*{{{  static PT_Tree set_term_anno(PT_Tree term, PT_Tree key, PT_Tree anno) */
+
+static PT_Tree set_term_anno(PT_Tree term, PT_Tree key, PT_Tree anno)
+{
+  ATerm label;
+  ATerm loweredAnno = NULL;
+
+  label = unquoteAppl(ATparse(PT_yieldTree(key)));
+
+  if (label == NULL) {
+    return NULL;
+  }
+
+  loweredAnno = PTPT_lowerATerm((PTPT_ATerm) anno);
+
+  if (loweredAnno != NULL) {
+    return PT_setTreeAnnotation(term, label, loweredAnno);
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASFE_get_term_anno(PT_Tree input)  */
+
+PT_Tree ASFE_set_term_anno(PT_Symbol type, PT_Tree term, PT_Tree key, PT_Tree anno)
+{
+  PT_Tree value = NULL;
+
+  value = set_term_anno(term, key, anno);
+
+  if (value != NULL) {
+    return value;
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_set_term_anno(ATerm type, ATerm aTerm, ATerm aKey, ATerm aAnno) */
+
+PT_Tree ASC_set_term_anno(ATerm type, ATerm aTerm, ATerm aKey, ATerm aAnno)
+{
+  PT_Tree term = muASFToTree(aTerm);
+  PT_Tree key = muASFToTree(aKey);
+  PT_Tree anno = muASFToTree(aAnno);
+  PT_Tree value = NULL;
+  
+  value = set_term_anno(term, key, anno);
+  
+  if (value != NULL) {
+    return value;
+  }
+
+  return term;
+}
+
+/*}}}  */
