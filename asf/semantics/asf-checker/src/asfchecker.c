@@ -22,7 +22,7 @@ static char *name;
 ATbool run_verbose;
 
 static char myname[] = "asfchecker";
-static char myversion[] = "0.0";
+static char myversion[] = "0.1";
 static char myarguments[] = "hi:vV";
 
 /*}}}  */
@@ -37,10 +37,19 @@ static ATermList checkAsf(ATerm term)
   }
   else {
     PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
-    PT_Tree ptRules        = PT_getParseTreeTree(parseTree);
-    ASF_Equations rules    = ASF_EquationsFromTerm(
-                               PT_makeTermFromTree(ptRules));
-    return checkEquations(rules);
+    int ambs = PT_getParseTreeAmbCnt(parseTree);
+    if (ambs == 0) {
+      PT_Tree ptRules        = PT_getParseTreeTree(parseTree);
+      ASF_Equations rules    = ASF_EquationsFromTerm(
+                                 PT_makeTermFromTree(ptRules));
+      return checkEquations(rules);
+    }
+    else if (ambs == 1) {
+      return ATmakeList1(ATmake("[<str>]","Equations contain one ambiguity!"));
+    }
+    else {
+      return ATmakeList1(ATmake("[<str>]","Equations contain ambiguities!"));
+    }
   }
 }
 
@@ -60,6 +69,10 @@ static void displayMessages(ATermList errorList)
       textTree = strdup(PT_yieldTree(PT_makeTreeFromTerm(tree)));
       ATwarning("Equation %s %s: %s\n", textTag, errorStr, textTree);
     }
+    else if (ATmatch(error, "[<str>]", &errorStr)) {
+      ATwarning("%s\n", errorStr);
+    }
+
     errorList = ATgetNext(errorList);
   }
 }
@@ -163,7 +176,6 @@ int main(int argc, char *argv[])
       return 1;
     }
   }
-
 
   return 0;
 }
