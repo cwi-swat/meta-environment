@@ -3,10 +3,13 @@ module ExportGraph
 
 exports
    context-free syntax
-	export-graph(Elem)				-> Graph
+	export-graph-bool(BoolCon)				-> Graph
+	export-graph-int(NatCon)				-> Graph
+	export-graph-str(String)				-> Graph
+	export-graph-bag(Bag[[Elem]])				-> Graph
 
 hiddens
-   imports asf/syntax/Comments
+   imports basic/Comments
 
    sorts Instr Integer # Integer # Instr
          Integer # Integer # Instr # Bag[[Elem]]
@@ -18,6 +21,8 @@ hiddens
 	Attribute					-> Instr
 
 	Instr "++" Instr				-> Instr {left}
+
+	export-graph(Elem)				-> Graph
 
 	mkGraph(Instr)					-> Graph
 	mkNodeId(Integer)				-> NodeId
