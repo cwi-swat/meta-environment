@@ -1,4 +1,3 @@
-
 The include file {\tt common.h} contains some constants and
 macros common to most of the C tools in the system. It is
 also a convenient way to find the limits of this implementation.
@@ -13,6 +12,14 @@ also a convenient way to find the limits of this implementation.
 The type {\tt card} holds one card. There are 13 cards in a suit,
 and 4 suits in a deck. The access macros make it easy to get at the
 suit and face of a card.
+
+Examples:
+\begin{itemize}
+\item Three of hearts: $(1@<<4) | 3 = 16 | 3 = 19$
+\item Queen of spades: $(0@<<4) | 12 = 0 | 12 = 12$
+\item Five of clubs: $(3@<<4) | 5 = 48 |  5 = 53$
+\end{itemize}
+
 <<common.h*>>=
 typedef int card;
 

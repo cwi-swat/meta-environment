@@ -60,6 +60,7 @@ typedef struct player
   int score;
   card cards[CARDS_DEALT];
   TBbool ready_for_next_trick;
+  TBbool scored;
   int next_game;
 } player;
 
@@ -287,6 +288,9 @@ term_list *get_legal_cards(match *g, int player)
   } else {
     <<followers choice>>
   }
+  if(!cards) {
+    cards = get_cards(g, player);
+  }
   return cards;
 }
 @
@@ -390,8 +394,9 @@ initialize its fields to some sensible starting values.
   new_match->current = -1;
   new_match->highest = -1;
   new_match->hearts_broken = TBfalse;
-  for(i=0; i<MAX_PLAYERS; i++)
+  for(i=0; i<MAX_PLAYERS; i++) {
     new_match->played[i] = NO_CARD;
+  }
   new_match->card_nr = 0;
 @
 
@@ -410,6 +415,7 @@ Now we initialize these players.
       TBmsg("malformed term <pid> in start_match: %t\n", p);
       exit(1);
     }
+    new_match->players[i].scored = TBfalse;
   }
 @
 
@@ -528,7 +534,10 @@ next trick. Scoring is as follows:
       score += 13;
     g->played[i] = NO_CARD;
   }
-  g->players[g->new_leader].score += score;
+  if(score) {
+    g->players[g->new_leader].score += score;
+    g->players[g->new_leader].scored = TBtrue;
+  }
 @
 Make sure we are ready for the next trick.
 <<trick done>>=
@@ -556,9 +565,25 @@ Let the outside world know the trick is ready.
 <<game done>>=
   int i;
   term_list *scores = NULL;
-
+  int pit_player, nr_players_scored = 0;
+  
   g->game_done = TBtrue;
   for(i=0; i<g->nr_players; i++) {
+    if(g->players[i].scored) {
+      nr_players_scored++;
+      pit_player = i;
+    }
+  }
+  assert(nr_players_scored > 0 && nr_players_scored <= g->nr_players);
+
+  for(i=0; i<g->nr_players; i++) {
+    if(nr_players_scored == 1) {
+      /* Somebody scored all the points! (a `pit') */
+      if(i == pit_player)
+        g->players[i].score -= 26;
+      else
+        g->players[i].score += 26;
+    } 
     scores = list_concat_term(scores, 
 	TB_make("[<int>,<int>]", g->players[i].pid, g->players[i].score));
     g->players[i].next_game = STILL_THINKING;
@@ -567,8 +592,8 @@ Let the outside world know the trick is ready.
 @
 
 %}}}
-
 %}}}
+
 %{{{ void next_trick(int cid, int pid, int mid)
 
 A player indicates he is ready for the next round. If all players are
@@ -663,8 +688,10 @@ We start by dealing a new hand.
   g->current = -1;
   g->highest = -1;
   g->hearts_broken = TBfalse;
-  for(i=0; i<MAX_PLAYERS; i++)
+  for(i=0; i<MAX_PLAYERS; i++) {
     g->played[i] = NO_CARD;
+    g->players[i].scored = TBfalse;
+  }
   g->card_nr = 0;
   deal(g);
 @
@@ -736,6 +763,9 @@ void rec_ack_event(int cid, term *ev)
 int main(int argc, char *argv[])
 {
   int cid;
+
+  /* randomize seed */
+  srand(time(NULL));
 
   /* Initialize ToolBus library */
   TB_init();

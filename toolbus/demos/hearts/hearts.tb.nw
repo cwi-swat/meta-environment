@@ -40,7 +40,8 @@ Normally, {\tt player} tools only connect to the ToolBus and are
 never executed, but during debugging we use the command {\tt ./robot}
 to start some robot players automatically.
 <<tool definitions>>=
-tool player is { command = "swipl-adapter -program braindead -goal toolbus" }
+/*tool player is { command = "swipl-adapter -program braindead -goal toolbus" }*/
+tool player is { command = "./randi" }
 @
 
 \item The {\tt umpire} tool sets the rules for the game and

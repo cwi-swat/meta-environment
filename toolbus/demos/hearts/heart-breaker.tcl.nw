@@ -1378,7 +1378,7 @@ continue.
 
 <<proc DoNextTrick>>=
 proc DoNextTrick { Mid } {
-  global matches myPid
+  global matches myPid Msg
 
   if { $matches($Mid,next-trick) } {
     foreach side {north east south west} {
@@ -1390,6 +1390,7 @@ proc DoNextTrick { Mid } {
 
     TBsend "snd-event(next-trick($myPid,$Mid))"
     set matches($Mid,next-trick) 0
+    set Msg($Mid) "Waiting for other players before continuing..."
   }
 }
 @

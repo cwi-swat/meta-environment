@@ -176,6 +176,19 @@ A new match has started. {\tt randi} is not interested.
 <<deal>>=
 void deal(int pid, int gid, term_list *cards)
 {
+/*  term *card;
+  int nr,face,suit;
+
+  fprintf(stderr, "Printing cards in deal:\n");
+  while(cards) {
+    card = list_first(cards);
+    cards = list_next(cards);
+    assert(TBmatch(card, "%d", &nr));
+    face = FACE(nr);
+    suit = SUIT(nr);
+    TBprintf(stderr, "**** deal: %d = %d,%d\n", nr, face, suit);
+  }
+*/
 }
 @
 
