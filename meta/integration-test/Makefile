@@ -14,3 +14,5 @@ all test clean:
 		$(MAKE) -${MAKEFLAGS} $@; \
 		cd ..; \
 	done
+
+install:
