@@ -86,9 +86,20 @@ equations
         p4 := _A* _A* -> _A* {left},
         p5 :=         -> _A*,
         p6 := _A+     -> _A*
-        =============================================================
+        ====>
         r[[_A*]] = syntax p0 p1 p2 p3 p4 p5 p6
-                   priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A ]]
+                  priorities {left: p1 p2 p3 p4} > {p5 p6}
+                  priorities {right: p3 p4}
+%%                   priorities {p1 p2 p3 p4} > {p5 p6}
+%%                   priorities p2 <1>> p1
+%%                   priorities p3 <1>> p1
+%%                   priorities p4 <1>> p1
+%%                   priorities p3 <1>> p2
+%%                   priorities p4 <1>> p2
+%%                   priorities p4 <1>> p3                 
+%%                   priorities p3 <0>> p4               
+%%                   priorities p2 <0>> p1
+                              r[[ _A ]]
    [0]
         r[[ _A+ ]] = r[[ _A* ]]
 
@@ -107,9 +118,11 @@ equations
         p4 := {_A _B}* _B {_A _B}* -> {_A _B}* {left},
         p5 :=                      -> {_A _B}*,
         p6 := {_A _B}+             -> {_A _B}*
-        ================================================================
+        ====>
         r[[{_A _B}*]] = syntax p0 p1 p2 p3 p4 p5 p6
-                        priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A _B ]]
+                        priorities {left: p1 p2 p3 p4} > {p5 p6}
+                        priorities {right: p3 p4}
+                                   r[[ _A _B ]]
    [0]
         r[[ {_A _B}+ ]] = r[[ {_A _B}* ]]
 

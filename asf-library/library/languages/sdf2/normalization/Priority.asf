@@ -106,8 +106,15 @@ equations
   [tr2-1] priorities pr*1, p1 > p2, pr*2 := priorities pr*,
           priorities pr*3, p2 > p3, pr*4 := priorities pr*,
           p1 > p3 (- pr* != true
-          ======================
+          ====>
           trans2[[pr*]] = trans2[[p1 > p3, pr*]]
+
+  [tr2-2] priorities pr*1, p1 <n>> p2, pr*2 := priorities pr*,
+          priorities pr*3, p2 > p3, pr*4 := priorities pr*,
+          p1 <n>> p3 (- pr* != true
+          ====>
+          trans2[[pr*]] = trans2[[p1 <n>> p3, pr*]]
+
   [default-tr2-2]  trans2[[pr*]] = pr*
 
 %%%  []
