@@ -116,6 +116,11 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
   return newSymbols;
 }
 
+int PT_getSymbolsLength(PT_Symbols symbols)
+{
+  return ATgetLength((ATermList)PT_makeTermFromSymbols(symbols));
+}
+
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
                                PT_AttrVisitorData data)
 {
