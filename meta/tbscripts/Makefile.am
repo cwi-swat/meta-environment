@@ -22,13 +22,13 @@
 
 SUBDIRS       = test
 
-TBSCRIPTS     = clear-all.tb close-modules.tb \
-                edit-equations.tb edit-master.tb edit-module.tb edit-term.tb \
-                editor.tb file-creator.tb focus.tb meta.tb notification.tb \
-                open-modules.tb process-eqs.tb \
+TBSCRIPTS     = clear-all.tb close-modules.tb editor-creator.tb \
+                edit-equations.tb edit-syntax.tb edit-term.tb \
+                file-creator.tb meta.tb notification.tb \
+                open-modules.tb process-eqs.tb parse-focusses.tb \
                 revert-module.tb rewrite-errors.tb save-module.tb \
-                set-parsetable.tb status-display.tb structure-editor.tb \
-                ui.tb asf-syntax.tb
+                set-parsetable.tb status-display.tb \
+                ui.tb asf-syntax.tb text-editor.tb
 
 GEN_TBSCRIPTS = sdf2-language.tb help.tb
 

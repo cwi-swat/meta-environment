@@ -24,11 +24,13 @@
  */
 
 #include "sglr.idef"
-#include "editor.tb"
-#include "structure-editor.tb"
+#include "text-editor.tb"
+#include "editor-creator.tb"
+#include "edit-syntax.tb"
+#include "edit-equations.tb"
+#include "edit-term.tb"
 #include "evaluator.idef"
 #include "focus.tb"
-#include "edit-term.tb"
 #include "asource.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
@@ -37,8 +39,6 @@
 #include "revert-module.tb"
 #include "ui.tb"
 #include "status-display.tb"
-#include "edit-module.tb"
-#include "edit-equations.tb"
 #include "clear-all.tb"
 #include "compiler.idef"
 #include "edit-master.tb"
@@ -49,6 +49,7 @@
 #include "se.idef"
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
+#include "parse-focusses.tb"
 #include "notification.tb"
 #include "rewrite-errors.tb"
 #include "parsetablegen.idef"
@@ -57,9 +58,9 @@
 #include "addeqssyntax.idef"
 #include "removevarsyntax.idef"
 
-toolbus(Parser, Unparser, Io, Ui, Edit-master, ModuleDB, 
+toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
   Notify-about-changed-modules, Rewrite-Errors, Traversals,
   Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
-  Help, Clear-all, Close-modules) 
+  Help, Clear-all, Close-modules, ParseFocusses) 

@@ -18,78 +18,41 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-*/
-/*
   $Id$
- */
+
+*/
 
 
 
-process Structure-editor(TE: text-edit, Fid: str, Text: str, 
-                         Language: str, IsTerm: str) is
+process StructureEditor(EditorId: str, ModuleName: str) is
 let
-  Id             : term, 
-  Fl             : list, 
-  Foc            : term, 
-  Loc            : int, 
-  Str            : str,
-  Count          : int, 
-  ErrorFocuses   : list,
-  DirtyFocuses   : list,
-  I              : int, 
-  T              : term, 
-  Ch             : int, 
-  Li             : int, 
-  Co             : int,
-  SdfTree        : term,
-  EqsTree        : term,
-  TrmTree        : term,
-  NormalFormTree : term,
-  Char           : term, 
-  Nonterminal    : str, 
-  ErrList        : list, 
-  Cycle          : list, 
-  Src            : str,
-  Fun            : str, 
-  Args           : list, 
-  Modules        : list,
-  LangOK         : term,
-  StartSymbols   : list
+  Id : int,
+  Focus : term,
+  Text : str,
+  Location : int
 in
   Id := process-id.
-  subscribe(disconnected(<term>)).
-  subscribe(syntax-changed(Language)).
-  snd-note(ui-status(stat(Id,"Starting structure editor..."))).
-  snd-msg(start-se) .
-  snd-msg(new-editor(Fid, Text)) .
-  rec-msg(initial-focus(Foc?)) .
-  snd-msg(TE, set-focus(Fid, Foc)) .
-  snd-note(ui-status(endstat(Id))). 
+  subscribe(syntax-changed(ModuleName)) .
+  snd-msg(initialize-structure-editor(EditorId)) .
+  rec-msg(initial-focus(Focus?)) .
+  snd-msg(set-focus(EditorId, Focus)) .
   (
-    ( 
-      rec-event(TE,insert(Fid, Loc?, Str?)) .
-      snd-msg(insert-chars(Fid, Loc, Str)) .
-      snd-ack-event(TE,insert(Fid, Loc, Str))
-      +
-      rec-event(TE,delete(Fid, Loc?)) .
-      snd-msg(delete-chars(Fid, Loc)) .
-      snd-ack-event(TE,delete(Fid,Loc))
-      +
-      rec-event(TE,delete(Fid, Loc?, Count?)) .
-      snd-msg(delete-chars(Fid, Loc, Count)).
-      snd-ack-event(TE, delete(Fid, Loc, Count))
-    ) .
-    rec-msg(current-focus(Foc?)) .
-    snd-msg(TE,set-focus(Fid, Foc))
-    +
-    rec-event(TE,menu-event("Meta-Environment", "Parse", Fid)) .
+  +
+  )
+
+  (
+    rec-event(TE,menu-event("Meta-Environment", "Parse Focus", Fid)) .
     /* If the language is Sdf2 then NO new parse table may be 
      * generated!
      * If the parse table can not be opened for some reason
      * we are unable to parse the text.
      * This code needs restructuring.
      */
-    if equal(IsTerm,"sdf") then
+    if equal(IsTerm,"sdf") then                   /* Determine the type of "term" 
+                                                   * being edited. This is necessary
+                                                   * to initialize the parser with
+                                                   * a correct start nonterminal
+                                                   */
       snd-msg(open-sdf2-language).
       (
         rec-msg(sdf2-language-opened).
@@ -119,7 +82,6 @@ in
       )
     fi.
     if equal(LangOK, true) then
-	snd-note(ui-status(stat(Id,"Parsing..."))).
 	snd-msg(get-top-symbols(Language)) .
         (
           rec-msg(startsymbols(Language, StartSymbols?))
@@ -150,7 +112,9 @@ in
               +
 		rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))
               ) .
-              snd-msg(set-error-focus(Fid, Foc, ErrList)) .
+              snd-msg(get-error-position(Fid, Foc, ErrList)) .
+              rec-msg(error-position(Pos?)) .
+              snd-msg(display-error(Fid, Pos)) .
               ErrorFocuses := join(ErrorFocuses,Foc)
 	    + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
 						   ambiguities(I?)))).
@@ -201,9 +165,12 @@ in
         snd-note(ui-status(errorf("Unable to open parse table for \"%s\"",
 				  [Language])))
       fi.
-      snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
+    snd-ack-event(TE,menu-event("Meta-Environment","Parse Focus",Fid))
     +
-
+    rec-event(TE,menu-event("Meta-Environment", "Parse Buffer", Fid)) .
+    printf("Parse Buffer not yet implemented\n").
+    snd-ack-event(TE,menu-event("Meta-Environment","Parse Focus",Fid))
+    +
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)) .
     if equal(IsTerm, "term") then
       if equal(ErrorFocuses,[]) then
@@ -229,34 +196,11 @@ in
     fi .
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
     +
-    rec-event(TE,get-focus(Fid,I?)).
-    snd-msg(get-focus(Fid, I)) .
-    rec-msg(focus(Foc?)) .
-    snd-msg(TE,set-focus(Fid, Foc)) .
-    snd-ack-event(TE,get-focus(Fid,I))
-    +
-    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
-    printf("Tree display not yet implemented\n").
-    snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
-    +
-    /*
-    rec-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid)).
-    snd-msg(set-parsetable(Language)).
-    rec-msg(parsetable-set(Language)).
-    snd-ack-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid))
-    +
-    */
-    rec-event(TE,menu-event("Move", Str?, Fid)).
-    snd-msg(move-focus(Fid, Str)) .
-    rec-msg(focus(Foc?)) .
-    snd-msg(TE,set-focus(Fid,Foc)).
-    snd-ack-event(TE,menu-event("Move",Str,Fid))
-    +
     rec-note(syntax-changed(Language)).
     snd-msg(invalidate-tree(Fid)) .
     rec-msg(focus(Foc?)) .
     snd-msg(TE,clear-focus(Fid)).
     snd-msg(TE,set-focus(Fid,Foc))
   ) *
-  rec-note(disconnected(TE))
+  delta
 endlet

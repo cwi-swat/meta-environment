@@ -1,0 +1,117 @@
+/*
+
+    Meta-Environment - An environment for language prototyping.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+  $Id$
+
+*/
+
+tool text-editor is {
+  command = "editor"
+}
+
+process TextEditor(EditorType: str) is
+let
+  TE        : text-editor,
+  Fid       : str,
+  Path      : term,
+  Sort      : term,
+  Count     : int,
+  Text      : str,
+  FileName  : str,
+  Location  : int,
+  SortName  : str,
+  Direction : str,
+  StartPos  : int,
+  Length    : int,
+  OurId     : int,
+  FocusText : str
+in
+(
+  OurId := process-id .
+  execute(text-editor, TE?) .
+  (
+    rec-msg(set-filename(OurId, FileName?)) .
+    snd-eval(TE, edit-file(FileName))
+  +
+    rec-msg(set-text(OurId, Text?)) .
+    %%snd-eval(TE, edit-text("reduce.out", Text)) .
+    snd-eval(TE, edit-text("reduce.out", "Not yet implemented"))
+  ) .
+  rec-value(TE, file-id(Fid?)) .
+  snd-msg(text-editor-id(OurId, Fid)) .
+  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Buffer")) .
+  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Focus")) .
+  if equal(EditorType, "term") then
+    snd-do(TE, tb-add-menu-item("Meta-Environment", "Reduce"))
+  else
+    tau
+  fi .
+  snd-do(TE, tb-add-menu-item("Move", "Left")) .
+  snd-do(TE, tb-add-menu-item("Move", "Right")) .
+  snd-do(TE, tb-add-menu-item("Move", "Up")) .
+  snd-do(TE, tb-add-menu-item("Move", "Down")) .
+  (
+    rec-msg(set-focus(Fid,
+      focus(Path?, sort(SortName?), area(start(StartPos?), length(Length?))))) .
+    snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
+  +
+    rec-msg(clear-focus(Fid)) .
+    snd-do(TE, tb-unset-focus(Fid))
+  +
+    rec-msg(get-focus-text(Fid,
+      focus(Path?, Sort?, area(start(StartPos?),length(Length?))))) .
+    snd-eval(TE, tb-get-focus-text(Fid, StartPos, Length)) .
+    rec-value(TE, focus-text(Fid, FocusText?)) .
+    snd-msg(focus-text(Fid, FocusText))
+  +
+    rec-msg(display-error(Fid, StartPos?)) .
+    snd-do(TE, tb-set-char-pos(Fid, StartPos)).
+    snd-do(TE, tb-set-msg("Parse error near cursor"))
+  +
+    rec-event(TE, set-current-location(Fid, Location?)) .
+    snd-msg(set-current-location(Fid, Location)) .
+    snd-ack-event(TE, set-current-location(Fid, Location))
+  +
+    rec-event(TE, insert(Fid, Location?, Text?)) .
+    snd-msg(insert-chars(Fid, Location, Text)) .
+    snd-ack-event(TE, insert(Fid, Location, Text))
+  +
+    rec-event(TE, delete(Fid, Location?, Count?)) .
+    snd-msg(delete-chars(Fid, Location, Count)).
+    snd-ack-event(TE, delete(Fid, Location, Count))
+  +
+    rec-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid)) .
+    snd-msg(parse-focus(Fid)) .
+    snd-ack-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid))
+  +
+    rec-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid)) .
+    snd-msg(parse-buffer(Fid)) .
+    snd-ack-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid))
+  +
+    rec-event(TE, menu-event("Meta-Environment", "Reduce", Fid)) .
+    snd-msg(reduce(Fid)) .
+    snd-ack-event(TE, menu-event("Meta-Environment", "Reduce", Fid))
+  +
+    rec-event(TE, menu-event("Move", Direction?, Fid)) .
+    snd-msg(move-focus(Fid, Direction)) .
+    snd-ack-event(TE, menu-event("Move", Direction, Fid))
+  ) *
+  rec-disconnect(TE)
+)
+endlet

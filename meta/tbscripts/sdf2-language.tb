@@ -18,42 +18,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-/*
-  $Id$
- */
+/* 
+   $Id$
+*/
 
-process Focus(TE: text-edit, Fid: str) is
-let
-  T  : term,
-  T1 : term,
-  T2 : term,
-  T3 : term,
-  T4 : term,
-  T5 : term,
-  T6 : term,
-  Str: str,
-  St : int,
-  Ln : int,
-  I  : int,
-  Pos: int
-in  
-(
-  rec-msg(TE, set-focus(Fid,focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
-  snd-do(TE,tb-set-focus(Fid,Str,St,Ln))
-  +
-  rec-msg(TE, clear-focus(Fid)).
-  snd-do(TE,tb-unset-focus(Fid))
-  +
-  rec-msg(TE,get-focus-text(Fid,focus(T1?,T2?,area(start(St?),length(Ln?))))).
-  snd-eval(TE,tb-get-focus-text(Fid,St,Ln)).
-  rec-value(TE,focus-text(Fid,Str?)).
-  snd-msg(TE,focus-text(Fid,Str))
-  + 
-  rec-msg(set-error-focus(Fid,focus(T1?,T2?,area(start(St?),T3?)),[T4?,T5?,T6?,char(I?)])).
-  Pos := add(St,I).
-  snd-do(TE,tb-set-char-pos(Fid,Pos)).
-  snd-do(TE,tb-set-msg("Parse error near cursor"))
-)
- *
-delta
-endlet
+process Open-Sdf2-Language is
+  (
+    rec-msg(open-sdf2-language) .
+    snd-msg(open-language("Sdf2", "/ufs/markvdb/Research/share/Sdf2.baf")) .
+    (
+      rec-msg(language-opened("Sdf2")) .
+      snd-msg(sdf2-language-opened)
+    +
+      rec-msg(language-not-opened("Sdf2")) .
+      snd-msg(sdf2-language-not-opened)
+    )
+  ) *
+    delta

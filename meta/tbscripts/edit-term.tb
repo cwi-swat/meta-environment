@@ -18,35 +18,92 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-*/
-/*
   $Id$
- */
-process Edit-term(Mod: str, Term: term) is
+
+*/
+
+process ParseTerm(EditorId: str, ModuleName: str) is
 let
-  Tid   : int,
-  Id    : term,
-  Str   : str,
-  Name  : str,
-  T     : term,
-  Time  : term,
-  Text  : str,
-  Path  : str,
-  Fid   : str,
-  TE    : text-edit
+  ErrorFoci  : term
 in
-  Id := process-id.
-  subscribe(disconnected(<term>)) .
-  snd-msg(open-trm-file(Term)) .
+  snd-msg(set-parsetable(ModuleName, trm)) .
   (
-    rec-msg(opened-file(Name?, text(Text?), Path?, Time?)) .
-    snd-note(ui-status(stat(Id,"Opening existing term..."))) .
-    create(Editor(Name, Text, Path, Mod, "term"), Tid?)
+    rec-msg(parsetable-not-set(ModuleName)) .
+    snd-note(ui-status(errorf(
+      "Unable to open parse table for %s", [ModuleName])))
+  +
+    rec-msg(parsetable-set(ModuleName)) .
+    snd-msg(parse-focusses(EditorId, ModuleName, "")) .
+    (
+      rec-msg(parse-ok(ModuleName)) .
+      snd-msg(clear-focus(EditorId))
     +
-    rec-msg(error-opening(Name?)) .
-    snd-note(ui-status(stat(Id,"Creating new term..."))) .
-    create(Editor(Name, "", Name, Mod, "term"), Tid?)
+      rec-msg(parse-failed(ModuleName, ErrorFoci?)) .
+      snd-msg(set-focus(EditorId, ErrorFoci))
+    )
+  )  
+endlet
+
+process ReduceTerm(EditorId: str, ModuleName: str) is
+let
+  Id         : int,
+  Text       : str,
+  Tree       : term,
+  NormalForm : term,
+  ErrList    : list
+in
+  Id := process-id .
+  snd-note(ui-status(stat(Id, "Rewriting..."))) .
+  snd-msg(get-tree(EditorId)) . 
+  rec-msg(tree(Tree?)) .
+  snd-msg(rewrite(ModuleName, Tree)).
+  (
+    rec-msg(rewrite-result(NormalForm?)) .
+    snd-msg(unparse(NormalForm)) .
+    rec-msg(unparsed-text(Text?)) .
+    printf("\nNormal form is:\n%s\n", Text) .
+    snd-msg(edit-term-text(ModuleName, Text))
+  +
+    rec-msg(rewrite-errors(ErrList?)) .
+    snd-msg(display-rewrite-errors(ErrList))
   ) .
-  snd-note(ui-status(endstat(Id))) .
-  rec-note(disconnected(TE))
+  snd-note(ui-status(endstat(process-id)))
+endlet
+
+process EditTerm(EditorId: str, ModuleName: str, Text: str) is
+let
+  NormalForm : term,
+  Focus      : term,
+  DirtyFoci  : term,
+  ErrList    : list
+in 
+  snd-msg(initialize-structure-editor(EditorId, Text)) .
+  rec-msg(initial-focus(Focus?)) .
+  snd-msg(set-focus(EditorId, Focus)) .
+  (
+    rec-msg(parse-focus(EditorId)) .
+    ParseTerm(EditorId, ModuleName)
+  +
+    rec-msg(parse-buffer(EditorId)) .
+    snd-msg(invalidate-tree(EditorId)) .
+    ParseTerm(EditorId, ModuleName)
+  +
+    rec-msg(reduce(EditorId)) .
+    snd-msg(get-dirty-focuses(EditorId)) .
+    rec-msg(dirty-focuses(DirtyFoci?)) .
+    if equal(DirtyFoci, []) then
+      ReduceTerm(EditorId, ModuleName)
+    else
+      ParseTerm(EditorId, ModuleName) .
+      snd-msg(get-dirty-focuses(EditorId)) .
+      rec-msg(dirty-focuses(DirtyFoci?)) . 
+      if equal(DirtyFoci, []) then
+        ReduceTerm(EditorId, ModuleName)
+      else 
+        tau
+      fi
+    fi
+  )
+  *
+  delta
 endlet

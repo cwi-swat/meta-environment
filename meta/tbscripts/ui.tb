@@ -42,6 +42,7 @@ let
   Pairs   : list,
   Mods    : list,
   ModName : str,
+  FileName : str,
   OutputDir : str,
   T       : str,
   FT      : str,
@@ -102,14 +103,18 @@ in
       rec-msg(saved-module(Str)).
       snd-ack-event(UI,save-module(Str))
     ) +
-    ( rec-event(UI,edit-module(ModName?)).
-      create(Edit-module(ModName),EM?).
+    ( rec-event(UI,edit-module(ModName?)) .
+      snd-msg(edit-syntax(ModName)) .
       snd-ack-event(UI,edit-module(ModName))
     ) +
     ( rec-event(UI,edit-eqs-module(ModName?)).
-      create(Edit-equations(ModName),EM?).
+      snd-msg(edit-equations(ModName)) .
       snd-ack-event(UI,edit-eqs-module(ModName))
     ) +
+   ( rec-event(UI,edit-term(ModName?, FileName?)).
+     snd-msg(edit-term-file(ModName, FileName)) .
+     snd-ack-event(UI,edit-term(ModName, FileName))
+   ) +
     ( rec-event(UI,revert-module(ModName?)).
       snd-msg(revert-module(ModName)).           
       rec-msg(reverted-module(ModName?)).
@@ -145,10 +150,6 @@ in
      snd-msg(process-eqs(Str)).
      rec-msg(eqs-processed(Str1?)).
      snd-ack-event(UI,parse-equations(Str))
-   ) +
-   ( rec-event(UI,edit-term(ModName?,Str?)).
-     create(Edit-term(ModName,Str),ET?).
-     snd-ack-event(UI,edit-term(ModName,Str))
    ) +
    ( rec-event(UI,jitterbug-wanted).
      snd-msg(jitterbug-wanted).

@@ -1,0 +1,72 @@
+/*
+
+    Meta-Environment - An environment for language prototyping.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+  $Id$
+
+*/
+
+process EditorCreator is
+let
+  Id         : int,
+  Path       : term,
+  Time       : term,
+  Text       : str,
+  EditorId   : str,
+  ModuleName : str,
+  FileName   : str
+in
+  (
+    rec-msg(edit-syntax(ModuleName?)) .
+    snd-msg(get-sdf2-path-from-db(ModuleName)) .
+    rec-msg(path(FileName?)) .
+    create(TextEditor("syntax"), Id?) .
+    snd-msg(set-filename(Id, FileName)) .
+    rec-msg(text-editor-id(Id, EditorId?)) .
+    create(EditSyntax(EditorId, ModuleName), Id?)
+  +
+    rec-msg(edit-equations(ModuleName?)) .
+    snd-msg(get-eqs-path-from-db(ModuleName)) .
+    rec-msg(path(FileName?)) .
+    create(TextEditor("equations"), Id?) .
+    snd-msg(set-filename(Id, FileName)) .
+    rec-msg(text-editor-id(Id, EditorId?)) .
+    create(EditEquations(EditorId, ModuleName), Id?)
+  +
+    rec-msg(edit-term-file(ModuleName?, FileName?)) .
+    create(TextEditor("term"), Id?) .
+    snd-msg(set-filename(Id, FileName)) .
+    rec-msg(text-editor-id(Id, EditorId?)) .
+    snd-msg(open-trm-file(FileName)) .
+    (
+      rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) .
+      create(EditTerm(EditorId, ModuleName, Text), Id?)
+      +
+      rec-msg(error-opening(FileName)) .
+      create(EditTerm(EditorId, ModuleName, ""), Id?)
+    )
+  +
+    rec-msg(edit-term-text(ModuleName?, Text?)) .
+    create(TextEditor("term"), Id?) .
+    snd-msg(set-text(Id, Text)) .
+    rec-msg(text-editor-id(Id, EditorId?)) .
+    create(EditTerm(EditorId, ModuleName, Text), Id?)
+  )
+  * delta
+endlet

@@ -1,0 +1,88 @@
+/*
+
+    Meta-Environment - An environment for language prototyping.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+  $Id$
+
+*/
+
+process EditSyntax(EditorId: str, ModuleName: str) is
+let
+  Path      : str,
+  Focus     : term,
+  Tree      : term,
+  Time      : term,
+  Modules   : term,
+  ErrorFoci : term,
+  Text      : str
+in
+  Text := "" .
+  snd-msg(get-sdf2-asfix(ModuleName)).
+  (
+    rec-msg(syntax(Tree?)) .
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(Text?))
+  +
+    rec-msg(syntax-unchanged(Tree?)).
+    snd-msg(unparse(Tree)).
+    rec-msg(unparsed-text(Text?))
+  +
+    rec-msg(unavailable).
+    snd-msg(open-file(ModuleName)) .
+    (
+      rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
+    +
+      rec-msg(error-opening(ModuleName))
+    )
+  ) .
+  snd-msg(initialize-structure-editor(EditorId, Text)) .
+  rec-msg(initial-focus(Focus?)) .
+  snd-msg(set-focus(EditorId, Focus)) .
+  (  
+    ( 
+      rec-msg(parse-focus(EditorId)) 
+    +
+      rec-msg(parse-buffer(EditorId)) .
+      snd-msg(invalidate-tree(EditorId))
+    ) . 
+    snd-msg(open-sdf2-language) .
+    (
+      rec-msg(sdf2-language-not-opened) .
+      snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
+    +
+      rec-msg(sdf2-language-opened) .
+      snd-msg(parse-focusses(EditorId, "Sdf2", "Module")) .
+      (
+        rec-msg(parse-ok("Sdf2")) .
+        snd-msg(get-tree(EditorId)) .
+        rec-msg(tree(Tree?)) .
+        snd-msg(update-module-in-db(Tree, ModuleName)).
+        rec-msg(extra-modules(Modules?)).
+        snd-msg(open-modules(Modules)).
+        rec-msg(finished-opening-modules) .
+        snd-msg(clear-focus(EditorId))
+      +
+        rec-msg(parse-failed("Sdf2", ErrorFoci?)) .
+        snd-msg(set-focus(EditorId, ErrorFoci))
+      )
+    )
+  )
+  *
+  delta
+endlet

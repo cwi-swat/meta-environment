@@ -1,0 +1,107 @@
+/*
+
+    Meta-Environment - An environment for language prototyping.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+                        The Netherlands.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+  $Id$
+
+*/       
+
+process ParseFocusses is
+let
+  Id           : term,
+  Path         : str,
+  Focus        : term,
+  SyntaxTree   : term,
+  DirtyFoci    : list,
+  ErrorFoci    : list,
+  Text         : str,
+  EditorId     : str,
+  ModuleName   : str,
+  StartSymbols : term,
+  Pos          : int,
+  Nonterminal  : str,
+  Tree         : term,
+  ErrList      : list,
+  Cycle        : term,
+  Amount       : int
+in                     
+  Id := process-id . 
+  (
+    rec-msg(parse-focusses(EditorId?, ModuleName?, Nonterminal?)) .
+    snd-msg(get-top-symbols(ModuleName)) .
+    (
+      rec-msg(startsymbols(ModuleName, StartSymbols?))
+    +
+      rec-msg(language-not-open(ModuleName)).
+      StartSymbols := []
+    ) .
+    snd-msg(register-startsymbols(EditorId, StartSymbols)) .
+    rec-msg(startsymbols-registered) .
+    ErrorFoci := [] .
+    snd-msg(get-dirty-focuses(EditorId)) .
+    rec-msg(dirty-focuses(DirtyFoci?)) . 
+    (
+      if not-equal(DirtyFoci, []) then
+        Focus := first(DirtyFoci).
+        DirtyFoci := next(DirtyFoci).
+        snd-msg(get-focus-text(EditorId, Focus)).
+        rec-msg(focus-text(EditorId, Text?)).
+        snd-msg(get-focus-sort(Nonterminal, Focus)) .
+        rec-msg(focus-sort(Nonterminal?)) .
+        snd-msg(Id, parse-string-as-asfix1(ModuleName, Nonterminal, Text)).
+        (
+          rec-msg(parse-result-asfix1(Id, parse-tree(Tree?))) .
+          snd-msg(replace-focus(EditorId, Focus, Tree))
+        +
+          (
+            rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, plain)))
+          +
+            rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, eof)))
+          ) .
+          /* This should be improved. */ 
+          snd-msg(get-error-position(Focus, ErrList)) .
+          rec-msg(error-position(Pos?)) .
+          snd-msg(display-error(EditorId, Pos)) .
+          ErrorFoci := join(ErrorFoci, Focus)
+        +
+          rec-msg(parse-result-asfix1(Id,
+            parse-error(ErrList?, ambiguities(Amount?)))) .
+          printf("Parse of %s returned %d ambiguities", Text, Amount) .
+          ErrorFoci := join(ErrorFoci, Focus)
+        +
+          rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, cycle(Cycle?)))) .
+          printf("Parse of %s returned a cycle\n", Text) .
+          printf("Cycle is: %t\n", Cycle) .
+          ErrorFoci := join(ErrorFoci, Focus)
+        )
+      else
+        tau
+      fi
+    ) *
+    if equal(DirtyFoci, []) then
+      if equal(ErrorFoci, []) then
+        snd-msg(parse-ok(ModuleName))
+      else
+        snd-msg(parse-failed(ModuleName, ErrorFoci))
+      fi
+    fi
+  )
+  *
+  delta
+endlet

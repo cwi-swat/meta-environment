@@ -19,53 +19,71 @@
 
    $Id$
 */
-process Edit-equations(Module: str) is
+process EditEquations(EditorId: str, ModuleName: str) is
 let
-  Id          : term,
-  T           : term,
-  Tid         : int,
-  Fn          : str,
-  TE          : text-edit,
-  Path        : str,
-  Eqs         : term,
-  Time        : term,
-  ErrMsg      : str,
-  EqsText     : str,
-  StartEditor : term
+  Path      : str,
+  Focus     : term,
+  Tree      : term,
+  ErrMsg    : str,
+  ErrorFoci : term,
+  Text      : str
 in
-  EqsText := "" .
-  StartEditor := true .
-  Id := process-id .
-  snd-note(ui-status(stat(Id,"Opening equations editor..."))) .
-  snd-msg(get-eqs-path-from-db(Module)) .
-  rec-msg(path(Path?)) .
-  snd-msg(get-eqs-tree(Module)) .
+  Text := "" .
+  snd-msg(get-eqs-tree(ModuleName)) .
   (
-    rec-msg(tree(Eqs?)) .
-    snd-msg(unparse(Eqs)) .
-    rec-msg(unparsed-text(EqsText?))
+    rec-msg(tree(Tree?)) .
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(Text?))
   +
-    %% If there are no equations in the module-db, assume we
-    %% want to create a new equations section.
     rec-msg(unavailable) .
-    snd-msg(get-eqs-text(Module)) .
+    snd-msg(get-eqs-text(ModuleName)) .
     (
-      rec-msg(eqs-text(Module, EqsText?))
+      rec-msg(eqs-text(ModuleName, Text?))
     +
-      rec-msg(no-eqs-text(Module)) .
-      snd-msg(create-new-equations(Module)) .
+      %% If there are no equations in the module-db, assume we
+      %% want to create a new equations section.
+      rec-msg(no-eqs-text(ModuleName)) .
+      snd-msg(create-new-equations(ModuleName)) .
       (
-        rec-msg(new-equations-created(Module, Path?))
+        rec-msg(new-equations-created(ModuleName, Path?))
       +
         rec-msg(new-equations-not-created(ErrMsg?)) .
-	StartEditor := false .
-	snd-note(ui-status(errorf("Could not create empty equations: %s",
-				  [ErrMsg])))
+	snd-note(ui-status(errorf(
+	  "Could not create empty equations: %s", [ErrMsg])))
       )
     )
-  ).
-  if equal(StartEditor, true) then
-    create(Editor(Module, EqsText, Path, Module, "eqs"), Tid?)
-  fi .
-  snd-note(ui-status(endstat(Id)))
+  ) .
+  snd-msg(initialize-structure-editor(EditorId, Text)) .
+  rec-msg(initial-focus(Focus?)) .
+  snd-msg(set-focus(EditorId, Focus)) .
+  (
+    (
+      rec-msg(parse-focus(EditorId))
+    +
+      rec-msg(parse-buffer(EditorId)) .
+      snd-msg(invalidate-tree(EditorId))
+    ) . 
+    snd-msg(set-parsetable(ModuleName, eqs)) .
+    (
+      rec-msg(parsetable-not-set(ModuleName)) .
+      snd-note(ui-status(errorf(
+        "Unable to open parse table for %s", [ModuleName])))
+    +
+      rec-msg(parsetable-set(ModuleName)) .
+      snd-msg(parse-focusses(EditorId, ModuleName, "Equations")) .
+      (
+        rec-msg(parse-ok(ModuleName)) .
+        snd-msg(get-tree(EditorId)) .
+	rec-msg(tree(Tree?)) .
+	snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
+	rec-msg(eqs-updated) .
+	snd-msg(clear-focus(EditorId))
+      +
+        rec-msg(parse-failed(ModuleName, ErrorFoci?)) .
+        snd-msg(set-focus(EditorId, ErrorFoci))
+      )
+    )
+  )
+  *
+  delta
 endlet
