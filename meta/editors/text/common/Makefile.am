@@ -4,7 +4,7 @@ CFLAGS += -Werror
 
 INCLUDES = \
 	-I$(ATERM)/include \
-	-I$(TOOLBUS)/include
+	-I$(TOOLBUSLIB)/include
 
 EXTRA_DIST = \
 	TextEditor.c \
