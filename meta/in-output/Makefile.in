@@ -87,6 +87,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Unit test target
 test:	all
 	${top_srcdir}/utils/test-help ./in-output
+	${top_srcdir}/utils/test-version ./in-output
 	@cd test; make test
 
 # Explicit rules
