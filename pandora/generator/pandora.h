@@ -6,6 +6,6 @@
 #include <MEPT.h>
 #include "Box.h"
 
-BOX_BoxList pandora(PT_ParseTree parsetree);
+BOX_Box pandora(PT_ParseTree parsetree);
 
 #endif

@@ -48,14 +48,14 @@ static void version(void)
 int main(int argc, char *argv[]) 
 {
   ATerm bottomOfStack;
-  char *input = "-";
-  char *output = "-";
+  char *input = "";
+  char *output = "";
   int c;
 
   ATerm at_tree;
   PT_ParseTree tree;
 
-  BOX_BoxList boxlist;
+  BOX_Box box;
 
   ATinit(argc, argv, &bottomOfStack); 
   PT_initMEPTApi(); 
@@ -72,15 +72,21 @@ int main(int argc, char *argv[])
     }
   }
 
-  at_tree = ATreadFromNamedFile(input);
+  printf("Reading file %s...\n", input);
 
+  at_tree = ATreadFromNamedFile(input);
+ 
+  printf("Parsetree read...\n");
+  
   if (at_tree != NULL) {
 
     tree = PT_ParseTreeFromTerm(at_tree);
+    
+    printf("Opening Box of Pandora!!!\n");
+    box = pandora(tree);
+    printf("Box of Pandora opened!!!\n");
 
-    boxlist = pandora(tree);
-
-    ATwriteToNamedBinaryFile(BOX_BoxListToTerm(boxlist), output);
+    ATwriteToNamedBinaryFile(BOX_BoxToTerm(box), output);
 
     return 0;
   }
