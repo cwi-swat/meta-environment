@@ -1,0 +1,23 @@
+%%% $Id$
+               
+module aterm/ATerms
+imports aterm/Literals aterm/IntCon aterm/RealCon
+exports
+  sorts ATermList ACon AFun ATerm Ann
+  context-free syntax
+    "[" {ATerm ","}* "]"          -> ATermList
+    IntCon                        -> ACon
+    RealCon                       -> ACon
+    QuotedLiteral                 -> AFun
+    UnquotedLiteral               -> AFun
+    ACon                          -> ATerm
+    ATermList                     -> ATerm
+    AFun                          -> ATerm
+    AFun "(" {ATerm ","}+ ")"     -> ATerm 
+    "<" ATerm ">"                 -> ATerm
+    "{" {ATerm ","}+ "}"          -> Ann
+    ACon Ann                      -> ATerm
+    ATermList Ann                 -> ATerm
+    AFun Ann                      -> ATerm
+    AFun "(" {ATerm ","}+ ")" Ann -> ATerm 
+    "<" ATerm ">"             Ann -> ATerm

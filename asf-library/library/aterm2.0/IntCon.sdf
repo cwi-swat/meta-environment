@@ -1,0 +1,16 @@
+%%% $Id$
+                                  
+module aterm/IntCon
+imports basic/Whitespace
+exports
+  sorts NatCon IntCon
+  lexical syntax
+    [0-9]+ -> NatCon
+  context-free syntax
+    NatCon     -> IntCon
+    "+" NatCon -> IntCon
+    "-" NatCon -> IntCon       
+
+hiddens
+  variables
+    "c+"[0-9]*            -> CHAR+
