@@ -61,6 +61,7 @@ extern ATerm all_chars;
 /*{{{  variables */
 
 extern ATermSOS *state_sos;
+extern ATermIndexedSet priority_table;
 
 /*}}}  */
 ATerm generate_parse_table(PT_ParseTree g);

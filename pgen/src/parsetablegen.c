@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include <SDFME-utils.h>
 #include <asc-support2-me.h>
 #include "ksdf2table.h"
@@ -34,9 +36,9 @@ static char myarguments[] = "bchi:lm:no:tvV";
 /*}}}  */
 /*{{{  external functions */
 
-extern void register_Sdf050045Normalization();
-extern void resolve_Sdf050045Normalization();
-extern void init_Sdf050045Normalization();
+extern void register_Sdf050_Normalization();
+extern void resolve_Sdf050_Normalization();
+extern void init_Sdf050_Normalization();
  
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -133,7 +135,16 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
   ATerm pt, packed;
-/*ATwarning("sdf = %t\n", sdf);*/
+
+  /*
+  FILE *f;
+    
+  f = fopen("definition.baf", "w");
+  assert(f);
+  ATwriteToBinaryFile(sdf, f);
+  fclose(f);
+  */
+
   pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
   packed = ATBpack(pt);
 
@@ -189,6 +200,7 @@ int main(int argc, char *argv[])
   char *moduleName = "-";
   int bafMode = 1;
   int proceed = 1;
+  int i;
   
   extern char *optarg;
   extern int   optind;
@@ -205,11 +217,16 @@ int main(int argc, char *argv[])
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   SDF_initSDFMEApi(); 
 
-  register_Sdf050045Normalization();
-  resolve_Sdf050045Normalization();
-  init_Sdf050045Normalization();
+  register_Sdf050_Normalization();
+  resolve_Sdf050_Normalization();
+  init_Sdf050_Normalization();
 
   if(toolbus_mode) {
+    for (i=1; i<argc; i++) {
+      if (strcmp(argv[i], "-l") == 0) {
+	statisticsMode = ATtrue;
+      }
+    }
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
       ATBinit(argc, argv, &bottomOfStack);  
       cid = ATBconnect(NULL, NULL, -1, parsetablegen_handler);

@@ -13,7 +13,9 @@ equations
         %% ~Pr(_G) syntax[[ pr*2 ]] = _G'
         ~Pr(_G) = _G'
         =============
-        p[[ _G ]] = _G' priorities trans[[ pr*2 ++ assoc[[_G']] ]]
+        p[[ _G ]] = _G' priorities pr*2 ++ assoc[[_G']]
+
+%% <PO> was: p[[ _G ]] = _G' priorities trans[[ pr*2 ++ assoc[[_G']] ]]
 
 %% The function $\mfun{norm}\sem{\_}$ normalizes a priority declaration to a list
 %% of pairs of the form $p>p'$ or $p\;as\;p'$ by eliminating $>$-chains and

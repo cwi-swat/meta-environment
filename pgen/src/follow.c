@@ -35,12 +35,12 @@ ATermList charclass_filtering(ATermList followset)
   while(!ATisEmpty(followset)) {
     felem = ATgetFirst(followset);
     followset = ATgetNext(followset);
-   
+
     if(IS_CHARCLASS(felem)) {
       charrange = GET_LIST_ARG(felem, 0);
-/*
-      charrangelist = charrange_union(charrangelist, charrange);
-*/
+      /*
+	 charrangelist = charrange_union(charrangelist, charrange);
+	 */
       charrangelist = charrange_union(charrange, charrangelist);
     }
   }
@@ -59,7 +59,7 @@ ATermList followset_filtering(ATermList followset)
   while(!ATisEmpty(followset)) {
     felem = ATgetFirst(followset);
     followset = ATgetNext(followset);
-   
+
     if(IS_CHARCLASS(felem))
       newfollowset = ATinsert(newfollowset, felem);
   }
@@ -82,23 +82,23 @@ void sons1(ATerm prod1, ATermInt prodnr1, ATerm item, ATermList labelset)
       ptr = GET_INT_ARG(item, 2); 
 
       if(IS_PROD(prod2)) {
-        symbols2 = GET_LIST_ARG(prod2, 0);
-        symbol2 = GET_ARG(prod2, 1);
-        iptr = ATgetInt(ptr);
-        if(!pgen_cnf(prodnr2, iptr, ATgetLength(symbols2), prodnr1)) {
-          orgset = local_follow_table[ATgetInt(prodnr1)];
+	symbols2 = GET_LIST_ARG(prod2, 0);
+	symbol2 = GET_ARG(prod2, 1);
+	iptr = ATgetInt(ptr);
+	if(!pgen_cnf(prodnr2, iptr, ATgetLength(symbols2), prodnr1)) {
+	  orgset = local_follow_table[ATgetInt(prodnr1)];
 
-          if(orgset) {
-            newset = ATunion(orgset,labelset);
-            if(!ATsetEqual(orgset,newset))
-              changed = ATtrue;
-            local_follow_table[ATgetInt(prodnr1)] = newset;
-          }
-          else {
-            changed = ATtrue;
-            local_follow_table[ATgetInt(prodnr1)] = labelset;
-          }
-        }
+	  if(orgset) {
+	    newset = ATunion(orgset,labelset);
+	    if(!ATsetEqual(orgset,newset))
+	      changed = ATtrue;
+	    local_follow_table[ATgetInt(prodnr1)] = newset;
+	  }
+	  else {
+	    changed = ATtrue;
+	    local_follow_table[ATgetInt(prodnr1)] = labelset;
+	  }
+	}
       }
     }
   }
@@ -140,11 +140,11 @@ ATermList calc_first(ATermList symbols, int prodnr)
 
       set = (ATermList)ATtableGet(first_table,symbol);
       if(contains_epsilon(set)) {
-        lset = remove_epsilon(set);
-        newset = ATunion(newset, lset);
+	lset = remove_epsilon(set);
+	newset = ATunion(newset, lset);
       }
       else {
-        return ATunion(newset, set);
+	return ATunion(newset, set);
       }
     }
     return ATunion(newset,followset);
@@ -170,15 +170,15 @@ void follow(ATerm prod, ATermInt prodnr, int iptr)
       firstset = calc_first(restsymbols,ATgetInt(prodnr));
       symbol2 = ATelementAt(symbols,i);
       if(!symbol2)
-        symbol2 = empty_set;
+	symbol2 = empty_set;
       newitem = (ATerm)ATmakeAppl4(afun_item,
-                                   (ATerm)prod,
-                                   (ATerm)prodnr,
-                                   (ATerm)ATmakeInt(i),
-                                   (ATerm)symbol2);
+				   (ATerm)prod,
+				   (ATerm)prodnr,
+				   (ATerm)ATmakeInt(i),
+				   (ATerm)symbol2);
       prods = (ATermList)ATtableGet(rhs_prods_pairs,symbol2);
       if(prods) {
-        sons(newitem,firstset,prods);
+	sons(newitem,firstset,prods);
       }
     }
   }
@@ -188,8 +188,8 @@ void follow(ATerm prod, ATermInt prodnr, int iptr)
 /*{{{  void calc_follow_table2() */
 
 /**
-  * Calculation of the first set of the grammar
-  **/
+ * Calculation of the first set of the grammar
+ **/
 
 void calc_follow_table2()
 {
@@ -219,7 +219,7 @@ void calc_follow_table2()
       prod = nr_prod_table[ip];
 
       if(IS_PROD(prod))
-        follow(prod, ATmakeInt(ip), 0);
+	follow(prod, ATmakeInt(ip), 0);
     }
   }
 
@@ -229,13 +229,13 @@ void calc_follow_table2()
     followset = local_follow_table[ip];
     if(followset) {
 
-/*ATwarning("Follow set for %d is %t\n", ip, followset);*/
+      /*ATwarning("Follow set for %d is %t\n", ip, followset);*/
 
       charrange = charclass_filtering(followset);
       follow_table2[ip] = charrange;
-/*
-ATwarning("New follow set is %t\n", charrange);
-*/
+      /*
+	 ATwarning("New follow set is %t\n", charrange);
+	 */
     }
   }
   ATwarning("Closure achieved in %i steps\n", cnt);
@@ -247,72 +247,72 @@ ATwarning("New follow set is %t\n", charrange);
 /*{{{  static ATermList init_dependency(int prod) */
 
 /**
-	* Initialize the dependency of a single production.
-	*/
+ * Initialize the dependency of a single production.
+ */
 
 static ATermList init_dependency(int prodid)
 {
-	static ATerm *elems = NULL;
-	static int max_elems = 0;
+  static ATerm *elems = NULL;
+  static int max_elems = 0;
 
-	ATerm prodnr, prod, dep;
-	ATermList depends, symbols, orgdep;
-	int idx, nr_elems;
+  ATerm prodnr, prod, dep;
+  ATermList depends, symbols, orgdep;
+  int idx, nr_elems;
 
-	prodnr = (ATerm)ATmakeInt(prodid);
-	prod = nr_prod_table[prodid];
-	assert(prod);
-	symbols = GET_LIST_ARG(prod, 0);
+  prodnr = (ATerm)ATmakeInt(prodid);
+  prod = nr_prod_table[prodid];
+  assert(prod);
+  symbols = GET_LIST_ARG(prod, 0);
 
-	nr_elems = ATgetLength(symbols);
-	if(nr_elems > max_elems) {
-		elems = (ATerm *)realloc(elems, sizeof(ATerm)*nr_elems);
-		if(!elems)
-			ATerror("out of memory!\n");
-		max_elems = nr_elems;
-	}
+  nr_elems = ATgetLength(symbols);
+  if(nr_elems > max_elems) {
+    elems = (ATerm *)realloc(elems, sizeof(ATerm)*nr_elems);
+    if(!elems)
+      ATerror("out of memory!\n");
+    max_elems = nr_elems;
+  }
 
-	idx = 0;
-	while(!ATisEmpty(symbols)) {
-		elems[idx++] = ATgetFirst(symbols);
-		symbols = ATgetNext(symbols);
-	}
+  idx = 0;
+  while(!ATisEmpty(symbols)) {
+    elems[idx++] = ATgetFirst(symbols);
+    symbols = ATgetNext(symbols);
+  }
 
-	depends = ATempty;
-	for(--idx; idx>=0; idx--) {
-		ATerm elem = elems[idx];
-		if(IS_CHARCLASS(elem))
-			break;
-		
-		orgdep = (ATermList)ATtableGet(rhs_prods_pairs, elem);
-		if(!orgdep)
-			break; /* Declared sort with no RHS, this should not happen! */
+  depends = ATempty;
+  for(--idx; idx>=0; idx--) {
+    ATerm elem = elems[idx];
+    if(IS_CHARCLASS(elem))
+      break;
 
-		while(!ATisEmpty(orgdep)) {
-			dep = ATgetFirst(orgdep);
-			orgdep = ATgetNext(orgdep);
-			if(!pgen_cnf((ATermInt)prodnr, idx, nr_elems, (ATermInt)dep))
-				depends = ATaddElement(depends, dep);
-		}
-		
-		if(!contains_epsilon((ATermList)ATtableGet(first_table, elem)))
-			break;
-	}
+    orgdep = (ATermList)ATtableGet(rhs_prods_pairs, elem);
+    if(!orgdep)
+      break; /* Declared sort with no RHS, this should not happen! */
 
-	/* Remove yourself if present */
-	depends = ATremoveElement(depends, prodnr);
+    while(!ATisEmpty(orgdep)) {
+      dep = ATgetFirst(orgdep);
+      orgdep = ATgetNext(orgdep);
+      if(!pgen_cnf((ATermInt)prodnr, idx, nr_elems, (ATermInt)dep))
+	depends = ATaddElement(depends, dep);
+    }
 
-	/*ATwarning("dependencies for %d = %t\n", prodid, depends);*/
+    if(!contains_epsilon((ATermList)ATtableGet(first_table, elem)))
+      break;
+  }
 
-	return depends;
+  /* Remove yourself if present */
+  depends = ATremoveElement(depends, prodnr);
+
+  /*ATwarning("dependencies for %d = %t\n", prodid, depends);*/
+
+  return depends;
 }
 
 /*}}}  */
 /*{{{  static void init_dependencies() */
 
 /**
-	* Calculate dependencies (which prods followset depends on which prods followset)
-	*/
+ * Calculate dependencies (which prods followset depends on which prods followset)
+ */
 
 static void init_dependencies()
 {
@@ -324,7 +324,7 @@ static void init_dependencies()
   ATprotectArray((ATerm *)(dependencies+MIN_PROD), MAX_PROD-MIN_PROD);
 
   for(i=MIN_PROD; i<MAX_PROD; i++) {
-  	dependencies[i] = init_dependency(i);
+    dependencies[i] = init_dependency(i);
   }
 }
 
@@ -333,72 +333,72 @@ static void init_dependencies()
 /*{{{  static void closure_dependencies() */
 
 /**
-	* Calculate the closure of all the dependencies
-	*/
+ * Calculate the closure of all the dependencies
+ */
 
 static void closure_dependencies()
 {
-	int *queue;
-	int prodid, start, end;
-	ATbool *in_queue;
-	ATermList depends, closure;
+  int *queue;
+  int prodid, start, end;
+  ATbool *in_queue;
+  ATermList depends, closure;
 
-	/*{{{  Initialize depend_closure elements */
+  /*{{{  Initialize depend_closure elements */
 
-	depend_closure = (ATermList *)calloc(MAX_PROD, sizeof(ATermList));
-	if(!depend_closure)
-		ATerror("out of memory!\n");
-	ATprotectArray((ATerm *)(depend_closure+MIN_PROD), MAX_PROD-MIN_PROD);
-
-  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-		depend_closure[prodid] = ATmakeList1((ATerm)ATmakeInt(prodid));
-	}
-
-	/*}}}  */
-	/*{{{  Initialize queue and in_queue */
-
-	queue = (int *)malloc(sizeof(int)*MAX_PROD);
-	if(!queue)
-		ATerror("out of memory!\n");
-
-	start = 0;
-	end   = 0;
-
-	in_queue = (ATbool *)calloc(MAX_PROD, sizeof(int));
-	if(!in_queue)
-		ATerror("out of memory!\n");
-
-	/*}}}  */
-	/*{{{  Initially, put all prods in the queue */
+  depend_closure = (ATermList *)calloc(MAX_PROD, sizeof(ATermList));
+  if(!depend_closure)
+    ATerror("out of memory!\n");
+  ATprotectArray((ATerm *)(depend_closure+MIN_PROD), MAX_PROD-MIN_PROD);
 
   for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-  	queue[end++] = prodid;
-  	in_queue[prodid] = ATtrue;
+    depend_closure[prodid] = ATmakeList1((ATerm)ATmakeInt(prodid));
   }
 
   /*}}}  */
-	
-  while(start != end) {
-  	prodid = queue[start];
-  	in_queue[prodid] = ATfalse;
-  	start = (start+1)%MAX_PROD;
+  /*{{{  Initialize queue and in_queue */
 
-  	depends = dependencies[prodid];
-  	while(!ATisEmpty(depends)) {
-  		int child = ATgetInt((ATermInt)ATgetFirst(depends));
-  		depends = ATgetNext(depends);
-			
-  		closure = ATunion(depend_closure[child], depend_closure[prodid]);
-  		if(ATgetLength(closure) > ATgetLength(depend_closure[child])) {
-  			depend_closure[child] = closure;
-  			if(!in_queue[child]) {
-  				in_queue[child] = ATtrue;
-  				queue[end] = child;
-  				end = (end+1)%MAX_PROD;
-  				assert(end != start);
-  			}
-  		}
-  	}
+  queue = (int *)malloc(sizeof(int)*MAX_PROD);
+  if(!queue)
+    ATerror("out of memory!\n");
+
+  start = 0;
+  end   = 0;
+
+  in_queue = (ATbool *)calloc(MAX_PROD, sizeof(int));
+  if(!in_queue)
+    ATerror("out of memory!\n");
+
+  /*}}}  */
+  /*{{{  Initially, put all prods in the queue */
+
+  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+    queue[end++] = prodid;
+    in_queue[prodid] = ATtrue;
+  }
+
+  /*}}}  */
+
+  while(start != end) {
+    prodid = queue[start];
+    in_queue[prodid] = ATfalse;
+    start = (start+1)%MAX_PROD;
+
+    depends = dependencies[prodid];
+    while(!ATisEmpty(depends)) {
+      int child = ATgetInt((ATermInt)ATgetFirst(depends));
+      depends = ATgetNext(depends);
+
+      closure = ATunion(depend_closure[child], depend_closure[prodid]);
+      if(ATgetLength(closure) > ATgetLength(depend_closure[child])) {
+	depend_closure[child] = closure;
+	if(!in_queue[child]) {
+	  in_queue[child] = ATtrue;
+	  queue[end] = child;
+	  end = (end+1)%MAX_PROD;
+	  assert(end != start);
+	}
+      }
+    }
   }
   free(queue);
   free(in_queue);   
@@ -424,11 +424,11 @@ ATermList calculate_first(ATermList symbols)
 
       set = (ATermList)ATtableGet(first_table,symbol);
       if(contains_epsilon(set)) {
-        lset = remove_epsilon(set);
-        newset = ATunion(newset, lset);
+	lset = remove_epsilon(set);
+	newset = ATunion(newset, lset);
       }
       else {
-        return ATunion(newset, set);
+	return ATunion(newset, set);
       }
     }
     return ATunion(newset,followset);
@@ -456,20 +456,20 @@ static void init_follow_set(int prodid)
     symbols = ATgetNext(symbols);
     if(!IS_CHARCLASS(symbol)) {
       if(!ATisEmpty(symbols)) {
-      	prods = (ATermList)ATtableGet(rhs_prods_pairs, symbol);
-      	if(prods) {
-          follow = calculate_first(symbols);
-      	  while(!ATisEmpty(prods)) {
-      	    prod = ATgetFirst(prods);
-      	    prods = ATgetNext(prods);
-      	    if(!pgen_cnf((ATermInt)prodnr, iptr, len, (ATermInt)prod)) {
-      	      prodid = ATgetInt((ATermInt)prod);
-      	      sets = initial_follow_sets[prodid];
-      	      sets = ATinsert(sets, (ATerm)follow);
-      	      initial_follow_sets[prodid] = sets;
-      	    }
-      	  }
-      	}
+	prods = (ATermList)ATtableGet(rhs_prods_pairs, symbol);
+	if(prods) {
+	  follow = calculate_first(symbols);
+	  while(!ATisEmpty(prods)) {
+	    prod = ATgetFirst(prods);
+	    prods = ATgetNext(prods);
+	    if(!pgen_cnf((ATermInt)prodnr, iptr, len, (ATermInt)prod)) {
+	      prodid = ATgetInt((ATermInt)prod);
+	      sets = initial_follow_sets[prodid];
+	      sets = ATinsert(sets, (ATerm)follow);
+	      initial_follow_sets[prodid] = sets;
+	    }
+	  }
+	}
       }
     }
     iptr++;
@@ -480,8 +480,8 @@ static void init_follow_set(int prodid)
 /*{{{  static void init_follow_sets() */
 
 /**
-	* Initialize all the follow sets
-	*/
+ * Initialize all the follow sets
+ */
 
 static void init_follow_sets()
 {
@@ -514,36 +514,36 @@ static void init_follow_sets()
 /*{{{  static void union_follow_sets() */
 
 /**
-	* Union all follow sets found in the dependency closure
-	*/
+ * Union all follow sets found in the dependency closure
+ */
 
 static void union_follow_sets()
 {
-	ATermList result, follows, deps;
-	int prodid;
+  ATermList result, follows, deps;
+  int prodid;
 
   follow_table = (ATermList *)malloc(MAX_PROD*sizeof(ATermList));
   if(!follow_table)
     ATerror("out of memory!\n");
 
-	for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-		follow_table[prodid] = ATempty;
-	}
-	ATprotectArray((ATerm *)(follow_table+MIN_PROD), MAX_PROD-MIN_PROD);
+  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+    follow_table[prodid] = ATempty;
+  }
+  ATprotectArray((ATerm *)(follow_table+MIN_PROD), MAX_PROD-MIN_PROD);
 
-	for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-		result = ATmakeList1((ATerm)initial_follow_sets[prodid]);
-		deps = depend_closure[prodid];
-		while(!ATisEmpty(deps)) {
-			int depid = ATgetInt((ATermInt)ATgetFirst(deps));
-			deps = ATgetNext(deps);
-			follows = initial_follow_sets[depid];
-			result = ATinsert(result, (ATerm)follows);
-		}
-		result = ATunionSetList(result);
-		result = charclass_filtering(result);
-		follow_table[prodid] = result;
-	}
+  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+    result = ATmakeList1((ATerm)initial_follow_sets[prodid]);
+    deps = depend_closure[prodid];
+    while(!ATisEmpty(deps)) {
+      int depid = ATgetInt((ATermInt)ATgetFirst(deps));
+      deps = ATgetNext(deps);
+      follows = initial_follow_sets[depid];
+      result = ATinsert(result, (ATerm)follows);
+    }
+    result = ATunionSetList(result);
+    result = charclass_filtering(result);
+    follow_table[prodid] = result;
+  }
 }
 
 /*}}}  */
@@ -552,42 +552,42 @@ static void union_follow_sets()
 
 void calc_follow_table()
 {
-/*
-  int i;
-*/
+  /*
+     int i;
+     */
 
   init_dependencies();	
 
-/*
-	for(i=MIN_PROD; i<MAX_PROD; i++) {
-		ATwarning("initial depends %d = %t\n", i, dependencies[i]);
-	}
-*/
+  /*
+     for(i=MIN_PROD; i<MAX_PROD; i++) {
+     ATwarning("initial depends %d = %t\n", i, dependencies[i]);
+     }
+     */
 
   closure_dependencies();
 
-/*
-	for(i=MIN_PROD; i<MAX_PROD; i++) {
-		ATwarning("depend closure %d = %t\n", i, depend_closure[i]);
-	}
-*/
-	
+  /*
+     for(i=MIN_PROD; i<MAX_PROD; i++) {
+     ATwarning("depend closure %d = %t\n", i, depend_closure[i]);
+     }
+     */
+
   init_follow_sets();
 
-/*
-for(i=MIN_PROD; i<MAX_PROD; i++)
-	ATwarning("initial follow set %d = %t\n", i, initial_follow_sets[i]);
-*/
+  /*
+     for(i=MIN_PROD; i<MAX_PROD; i++)
+     ATwarning("initial follow set %d = %t\n", i, initial_follow_sets[i]);
+     */
 
   union_follow_sets();
 
-/*
-	calc_follow_table2();
-	for(i=MIN_PROD; i<MAX_PROD; i++) {
-		ATwarning("table1[%d] = %t\n", i, follow_table[i]);
-		ATwarning("table2[%d] = %t\n", i, follow_table2[i]);
-	}
-*/
+  /*
+     calc_follow_table2();
+     for(i=MIN_PROD; i<MAX_PROD; i++) {
+     ATwarning("table1[%d] = %t\n", i, follow_table[i]);
+     ATwarning("table2[%d] = %t\n", i, follow_table2[i]);
+     }
+     */
 
   ATunprotectArray((ATerm *)(dependencies+MIN_PROD));
   free(dependencies);

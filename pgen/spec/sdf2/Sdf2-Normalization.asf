@@ -28,7 +28,9 @@ equations
         l[[ _G6 ]] = _G7,
         k[[ _G7 ]] = _G8
         ================
-        normalize[[definition d]](M, _A) = reachable({<Start>}, _G8)
+        normalize[[definition d]](M, _A) = _G8
+
+%% <PO> rhs was: reachable({<Start>}, _G8)
 
 %% The function \fun{topsorts} adds a special production for the symbol $\Start{}$,
 %% which declares that a text over the grammar is a string of sort $\SymA$ followed

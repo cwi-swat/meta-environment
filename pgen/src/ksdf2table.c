@@ -1,4 +1,6 @@
 #include <unistd.h>
+#include <assert.h>
+
 #include "ksdf2table.h" 
 #include "flatten.h"
 #include "statistics.h"
@@ -61,7 +63,7 @@ static ATermTable prod_nr_pairs;
 ATermTable nr_flatprod_pairs;
 ATermTable nr_spec_attr_pairs;
 ATermTable symbol_lookaheads_table;
-ATermTable priority_table;
+ATermIndexedSet priority_table;
 ATermTable rhs_prods_pairs;
 ATermTable first_table;
 ATerm *nr_prod_table;
@@ -86,7 +88,7 @@ void init_table_gen()
 {
   prod_nr_pairs = ATtableCreate(1024,75);
   nr_spec_attr_pairs = ATtableCreate(1024,75);
-  priority_table = ATtableCreate(1024,75);
+  priority_table = ATindexedSetCreate(1024,75);
   symbol_lookaheads_table = ATtableCreate(1024,75);
   rhs_prods_pairs = ATtableCreate(1024,75);
   first_table = ATtableCreate(1024,75);
@@ -147,7 +149,7 @@ void destroy_table_gen()
 {
   ATtableDestroy(prod_nr_pairs);
   ATtableDestroy(nr_spec_attr_pairs);
-  ATtableDestroy(priority_table);
+  ATindexedSetDestroy(priority_table);
   ATtableDestroy(symbol_lookaheads_table);
   ATtableDestroy(rhs_prods_pairs);
   ATtableDestroy(first_table);
@@ -191,21 +193,37 @@ ATerm process_productions(SDF_ProductionList prods)
 {
   ATerm flatprod, aint, labelentry;
   ATermList labelentries = ATempty;
-  int ip, cnt = MIN_PROD, nr_of_members, nr_of_kernel_prods;
+  int ip, cnt, nr_of_members, nr_of_kernel_prods;
   SDF_Production prod, newProd;
   PT_Production ptProd;
+  ATbool isnew;
+  int idx, max_idx;
+  ATermIndexedSet unique_prods;
 
   SDF_ProductionList localProds = prods;
+  unique_prods = ATindexedSetCreate(1024, 75);
+  cnt = 0;
+  max_idx = 0;
   while (SDF_hasProductionListHead(localProds)) {
     prod = SDF_getProductionListHead(localProds);
-    cnt++;
+    flatprod = SDF_ProductionToTerm(prod);
+    idx = ATindexedSetPut(unique_prods, flatprod, &isnew);
+    if (isnew) {
+      if (idx > max_idx) {
+	max_idx = idx;
+      }
+      assert(cnt == max_idx);
+      cnt++;
+    }
 
     if (SDF_isProductionListSingle(localProds)) {
       break;
     }
     localProds = SDF_getProductionListTail(localProds);
   }
+  cnt += MIN_PROD;
   MAX_PROD = cnt;
+  assert(cnt-MIN_PROD == (max_idx+1));
 
   nr_prod_table = (ATerm *)malloc(sizeof(ATerm)*MAX_PROD);
 
@@ -219,10 +237,10 @@ ATerm process_productions(SDF_ProductionList prods)
 
   ATprotectArray((ATerm *)nr_prod_table+MIN_PROD, MAX_PROD-MIN_PROD);
 
-  cnt = MIN_PROD;
-  while (SDF_hasProductionListHead(prods)) {
-    prod = SDF_getProductionListHead(prods);
-
+  for (idx=0; idx<=max_idx; idx++) {
+    ATerm sdfflatprod = ATindexedSetGetElem(unique_prods, idx);
+    assert(sdfflatprod);
+    prod   = SDF_ProductionFromTerm(sdfflatprod);
     ptProd = SDFProductionToPtProduction(prod);
     flatprod = PT_makeTermFromProduction(ptProd);
                  
@@ -235,6 +253,7 @@ ATerm process_productions(SDF_ProductionList prods)
     }
     newProd = SDF_removeAttributes(prod);
 
+    cnt = idx + MIN_PROD;
     aint = (ATerm)ATmakeInt(cnt);
     ATtablePut(prod_nr_pairs, SDF_makeTermFromProduction(newProd), aint);
     nr_prod_table[cnt] = flatprod;
@@ -257,16 +276,10 @@ ATerm process_productions(SDF_ProductionList prods)
 
     labelentry = (ATerm)ATmakeAppl2(afun_label, flatprod, aint);
     labelentries = ATinsert(labelentries,labelentry);
-    cnt++;
-
-    if (SDF_isProductionListSingle(prods)) {
-      break;
-    }                                             
-    prods = SDF_getProductionListTail(prods);
   }
-  nr_of_kernel_prods = cnt - MIN_PROD;
+  nr_of_kernel_prods = max_idx;
 
-  IF_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", cnt - MIN_PROD));
+  IF_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", max_idx));
   IF_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
   IF_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
 
@@ -407,11 +420,11 @@ ATerm process_priorities(SDF_PriorityList prios)
   ATerm prioentry = NULL;
   ATermList prioentries = ATempty;
   int cnt = 0;
+  ATbool isnew;
 
   while (SDF_hasPriorityListHead(prios)) {
     SDF_Priority prio = SDF_getPriorityListHead(prios);
     
-    cnt++;
     if (SDF_isPriorityAssoc(prio)) {
       prioentry = processAssocPriority(prio);
     }
@@ -423,8 +436,11 @@ ATerm process_priorities(SDF_PriorityList prios)
     }
 
     if (prioentry) {
-      ATtablePut(priority_table, prioentry, (ATerm)ATmakeInt(cnt));
-      prioentries = ATinsert(prioentries, prioentry);
+      ATindexedSetPut(priority_table, prioentry, &isnew);
+      if (isnew) {
+	prioentries = ATinsert(prioentries, prioentry);
+	cnt++;
+      }
     }
   
     if (SDF_isPriorityListSingle(prios)) {

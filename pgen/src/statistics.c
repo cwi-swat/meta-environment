@@ -41,6 +41,9 @@ FILE  *PT_OpenLog(char *prg, char *fnam)
 
 FILE  *PT_log(void)
 {
+  if (PT_Log == NULL) {
+    return stderr;
+  }
   return PT_Log;
 }
 
