@@ -2,6 +2,7 @@ SUBDIRS=eqs input output c-code
 EXTRA_DIST=README
 
 TEST_MODULES=\
+	NoMatch \
 	Builtins\
 	Bracket \
 	Collect \
