@@ -17,7 +17,7 @@ asfc_SOURCES = asfc.tif.c \
                lex-cons.c \
                muasf2c.c \
                c-compiler.c \
-               Compiler2.c
+               Compiler.c
 
 noinst_HEADERS = chars.h \
                  c-code.h \
