@@ -1,9 +1,13 @@
+/*{{{  includes */
+
 #include <malloc.h>
 #include <string.h>
 #include <ctype.h>
 #include "chars.h"
 #include <aterm1.h>
 
+
+/*}}}  */
 
 /*{{{  char* escape(const char* str, const char* escaped_chars, QuotedOption quoted) */
 

@@ -1,26 +1,49 @@
+/*{{{  standard includes */
+
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
 #include <assert.h>
-#include <aterm2.h>
 
+
+/*}}}  */
+/*{{{  meta includes */
+
+#include <aterm2.h>
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
 #include <MuASF.h>
+
+
+/*}}}  */
+/*{{{  local includes */
 
 #include "asf2muasf.h"
 #include "chars.h"
 #include "lex-cons.h"
 
+
+/*}}}  */
+
+/*{{{  local typedefs */
+
 typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
-/* abbreviations for arbitrary layout (should be ATprotected) */
+/*}}}  */
+
+
+/*{{{  abbreviations for arbitrary layout (should be ATprotected) */
+
 static MA_Layout sp  = NULL; /* space */
 static MA_Layout nl  = NULL; /* newline */
 static MA_Layout nl2 = NULL; /* 2 newlines */
 static MA_Layout em  = NULL; /* empty */
 
-/* local functions */
+
+/*}}}  */
+
+/*{{{  static function decls */
+
 static MA_Lexical stringToLexical(const char* str);
 static MA_Layout stringToLayout(const char *str);
 static MA_FunId stringToFunId(const char *str);
@@ -53,10 +76,16 @@ static MA_ModId makeModId(const char *str);
 static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs);
 
 
+/*}}}  */
+/*{{{  static MA_Lexical stringToLexical(const char* str) */
+
 static MA_Lexical stringToLexical(const char* str)
 {
   return (MA_Lexical) PT_makeTreeFlatLexicalFromString(str);
 }
+
+/*}}}  */
+/*{{{  static MA_Layout stringToLayout(const char *str) */
 
 static MA_Layout stringToLayout(const char *str)
 {
@@ -67,10 +96,16 @@ static MA_Layout stringToLayout(const char *str)
   return (MA_Layout) PT_makeTreeLayoutFromString(str);
 }
 
+/*}}}  */
+/*{{{  static MA_FunId stringToFunId(const char *str) */
+
 static MA_FunId stringToFunId(const char *str)
 {
   return MA_makeFunIdLexToCf(stringToLexical(str));
 }
+
+/*}}}  */
+/*{{{  static MA_VarId stringToVarId(const char *str) */
 
 static MA_VarId stringToVarId(const char *str)
 {
@@ -94,6 +129,9 @@ static MA_VarId stringToVarId(const char *str)
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_FunId intToFunId(int ch) */
+
 static MA_FunId intToFunId(int ch)
 {
   char num[5] = "\\";
@@ -108,6 +146,9 @@ static MA_FunId intToFunId(int ch)
   return MA_makeFunIdLexToCf(stringToLexical(num));
 }
 
+/*}}}  */
+/*{{{  static void initLayoutAbbreviations(void) */
+
 static void initLayoutAbbreviations(void)
 {
   ATprotect(&em);
@@ -121,11 +162,17 @@ static void initLayoutAbbreviations(void)
   nl2 = stringToLayout("\n\n");
 }
 
+/*}}}  */
+/*{{{  static char* prodToEscapedString(PT_Production prod) */
+
 static char* prodToEscapedString(PT_Production prod)
 {
   char *strProd = ATwriteToString((ATerm) prod);
   return escape(strProd,"\"", QUOTED);
 }
+
+/*}}}  */
+/*{{{  static int getProdArity(PT_Production prod, LayoutOption layout) */
 
 static int getProdArity(PT_Production prod, LayoutOption layout)
 {
@@ -151,6 +198,9 @@ static int getProdArity(PT_Production prod, LayoutOption layout)
   return arity;  
 }
 
+/*}}}  */
+/*{{{  static MA_TermArgs atArgsToTermArgs(ATermList args) */
+
 static MA_TermArgs atArgsToTermArgs(ATermList args)
 {
   MA_TermArgs list = NULL;
@@ -166,6 +216,9 @@ static MA_TermArgs atArgsToTermArgs(ATermList args)
 
   return (MA_TermArgs) ATreverse((ATermList) list);
 }
+
+/*}}}  */
+/*{{{  static MA_Term atermToTerm(ATerm aterm) */
 
 static MA_Term atermToTerm(ATerm aterm)
 {
@@ -193,6 +246,9 @@ static MA_Term atermToTerm(ATerm aterm)
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_Term attrToTerm(PT_Attr attr) */
+
 static MA_Term attrToTerm(PT_Attr attr)
 {
   char *str = NULL;
@@ -219,6 +275,9 @@ static MA_Term attrToTerm(PT_Attr attr)
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_TermTerms attrsToTermList(PT_Attrs attrs) */
+
 static MA_TermTerms attrsToTermList(PT_Attrs attrs)
 {
   MA_TermTerms terms;
@@ -238,6 +297,9 @@ static MA_TermTerms attrsToTermList(PT_Attrs attrs)
   return terms;
 }
 
+/*}}}  */
+/*{{{  static MA_Annotations attributesToAnnotations(PT_Attributes attributes) */
+
 static MA_Annotations attributesToAnnotations(PT_Attributes attributes)
 {
   if (PT_isAttributesNoAttrs(attributes)) {
@@ -248,6 +310,9 @@ static MA_Annotations attributesToAnnotations(PT_Attributes attributes)
 	   attrsToTermList(PT_getAttributesAttrs(attributes)),em);
 }
 
+/*}}}  */
+/*{{{  static MA_FunId prodToFunId(PT_Production prod) */
+
 static MA_FunId prodToFunId(PT_Production prod)
 {
   char *strProd = prodToEscapedString(prod);
@@ -256,6 +321,9 @@ static MA_FunId prodToFunId(PT_Production prod)
   
   return result;
 }
+
+/*}}}  */
+/*{{{  static MA_SigArgElems makeSigArgElems(int arity) */
 
 static MA_SigArgElems makeSigArgElems(int arity)
 {
@@ -270,6 +338,9 @@ static MA_SigArgElems makeSigArgElems(int arity)
 
   return list;
 }
+
+/*}}}  */
+/*{{{  static MA_FuncDef prodToFuncDef(PT_Production ptProd)  */
 
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
 {
@@ -315,6 +386,9 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
 	 
 }
 
+/*}}}  */
+/*{{{  static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs) */
+
 static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
 {
   MA_TermArgs termArgs = NULL;
@@ -355,6 +429,9 @@ static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
   return (MA_TermArgs) ATreverse((ATermList) termArgs);
 }
 
+/*}}}  */
+/*{{{  static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs) */
+
 static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs)
 {
   if (MA_isFuncDefElemsEmpty(*funcdefs)) {
@@ -364,6 +441,9 @@ static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs)
     *funcdefs = MA_makeFuncDefElemsMany(funcdef,em,";",nl, *funcdefs);
   }
 }
+
+/*}}}  */
+/*{{{  static MA_Term variableToTerm(PT_Tree var) */
 
 static MA_Term variableToTerm(PT_Tree var)
 {
@@ -387,6 +467,9 @@ static MA_Term variableToTerm(PT_Tree var)
 
   return MA_makeTermVar(maVar);
 }
+
+/*}}}  */
+/*{{{  static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,  */
 
 static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
 			  LayoutOption layout)
@@ -435,6 +518,9 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_Cond conditionToCond(ASF_Condition condition, */
+
 static MA_Cond conditionToCond(ASF_Condition condition,
 			       MA_FuncDefElems *funcdefs)
 {
@@ -461,6 +547,9 @@ static MA_Cond conditionToCond(ASF_Condition condition,
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_CondList conditionsToCondList(ASF_Conditions conditions, */
+
 static MA_CondList conditionsToCondList(ASF_Conditions conditions,
 					MA_FuncDefElems *funcdefs)
 {
@@ -481,6 +570,9 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions,
   elems = (MA_CondElems) ATreverse((ATermList) elems);
   return MA_makeCondListDefault(elems);
 }
+
+/*}}}  */
+/*{{{  static MA_Rule condEquationToRule(ASF_CondEquation condEquation, */
 
 static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
 				  MA_FuncDefElems *funcdefs)
@@ -521,6 +613,9 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
   return result;
 }
 
+/*}}}  */
+/*{{{  static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list, */
+
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 					       MA_FuncDefElems *funcdefs)
 {
@@ -546,6 +641,9 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
   return MA_makeRulesOptPresent(nl,MA_makeRuleListDefault(rules));
 }
 
+/*}}}  */
+/*{{{  static MA_ModId makeModId(const char *str) */
+
 static MA_ModId makeModId(const char *str)
 {
   char *alnum = toalfanum(str);
@@ -553,6 +651,10 @@ static MA_ModId makeModId(const char *str)
   free(alnum);
   return result;
 }
+
+/*}}}  */
+
+/*{{{  asfToMuASF(char *name, ASF_CondEquationList equations) */
 
 MA_Module 
 asfToMuASF(char *name, ASF_CondEquationList equations)
@@ -571,3 +673,5 @@ asfToMuASF(char *name, ASF_CondEquationList equations)
 
   return MA_makeModuleModule(sp,maName,nl,maSignature,nl,maRules);
 }
+
+/*}}}  */
