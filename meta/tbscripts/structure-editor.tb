@@ -56,7 +56,7 @@ printf("newEditor is started\n").
           printf("Parse of %s returned a cycle\n",Str).
           printf("Cycle is: %t\n",Cycle).
           FF :=join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error([ErrList?]))).
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
           printf("Error parsing %s\n",Str).
           printf("Error: %l\n", ErrList).
           FF := join(FF,Foc)
