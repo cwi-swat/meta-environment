@@ -1,0 +1,39 @@
+module asfix/syntax/Symbol
+
+imports asfix/syntax/Literals
+
+exports
+
+sorts Symbol Symbols CharRange CharRanges
+
+context-free syntax
+
+empty                                                    -> Symbol {cons("empty")}
+lit(string:Literal)                                      -> Symbol {cons("lit")}
+cf(symbol:Symbol)                                        -> Symbol {cons("cf")}
+lex(symbol:Symbol)                                       -> Symbol {cons("lex")}
+opt(symbol:Symbol)                                       -> Symbol {cons("opt")}
+alt(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("alt")}
+pair(lhs:Symbol,rhs:Symbol)                              -> Symbol {cons("pair")}
+sort(string:Literal)                                     -> Symbol {cons("sort")}
+iter(symbol:Symbol)                                      -> Symbol {cons("iter")}
+iter-star(symbol:Symbol)                                 -> Symbol {cons("iter-star")}
+iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol {cons("iter-sep")}
+iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol {cons("iter-star-sep")}
+iter-n(symbol:Symbol,number:NatCon)                      -> Symbol {cons("iter-n")}
+iter-sep-n(symbol:Symbol,separator:Symbol,number:Integer)-> Symbol {cons("iter-sep-n")}
+perm(symbols:Symbols)                                    -> Symbol {cons("perm")}
+set(symbol:Symbol)                                       -> Symbol {cons("set")}
+func(symbols:Symbols,symbol:Symbol)                      -> Symbol {cons("func")}
+varsym(symbol:Symbol)                                    -> Symbol {cons("varsym")}
+layout                                                   -> Symbol {cons("layout")}
+char-class(CharRanges)                                   -> Symbol {cons("char-class")}
+strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol {cons("strategy")}
+parametrized-sort(sort:Literal,parameters:Symbols)       -> Symbol {cons("parametrized-sort")}
+
+"[" {Symbol ","}* "]"          -> Symbols {cons("list")}
+
+"[" { CharRange ","}* "]"      -> CharRanges  {cons("list")}
+
+integer: Integer                 -> CharRange {cons("character")}
+range(start:Integer,end:Integer) -> CharRange {cons("range")}

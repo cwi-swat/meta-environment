@@ -1,0 +1,19 @@
+module asfix/syntax/Tree
+
+imports asfix/syntax/Annotations
+imports asfix/syntax/Literals
+
+exports
+
+sorts Tree Args Production
+
+context-free syntax
+
+appl(prod:Production,args:Args) -> Tree  {cons("appl")}
+character:Integer               -> Tree  {cons("char")}
+lit(string:Literal)             -> Tree  {cons("lit")}
+amb(args:Args)                  -> Tree  {cons("amb")}
+"[" {Tree ","}* "]"             -> Args  {cons("list")}
+
+prod(lhs:Symbols,rhs:Symbol,attributes:Attributes) -> Production {cons("default")}
+list(rhs:Symbol)                                   -> Production {cons("list")}

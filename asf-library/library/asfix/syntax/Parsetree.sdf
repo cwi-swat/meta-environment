@@ -1,0 +1,13 @@
+module asfix/syntax/Parsetree
+ 
+imports asfix/syntax/Attributes
+imports asfix/syntax/Symbol
+imports asfix/syntax/Tree 
+imports aterm/IntCon
+
+exports
+sorts ParseTree 
+
+context-free syntax
+
+parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree {cons("top")}

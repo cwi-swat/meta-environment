@@ -1,0 +1,22 @@
+module asfix/syntax/Literals
+
+imports basic/Whitespace
+
+exports
+
+sorts Literal Integer L-Char EscChar DecimalEscChar AlphaNumericalEscChar
+lexical syntax
+"\\" ~ []                   -> AlphaNumericalEscChar     {cons("default")}
+"\\" [01] [0-9] [0-9]       -> DecimalEscChar {cons("dec0_199")}
+"\\" "2" [0-4] [0-9]        -> DecimalEscChar {cons("dec200_249")}
+"\\" "2" "5" [0-5]          -> DecimalEscChar {cons("dec250_255")}
+alpha:AlphaNumericalEscChar -> EscChar {cons("alpha-numeric")}
+decimal:DecimalEscChar      -> EscChar   {cons("decimal")}
+~ [\0-\31\"\\] \/ [\t\n]    -> L-Char    {cons("normal")}
+EscChar                     -> L-Char    {cons("escaped")}
+"\"" chars:L-Char* "\""     -> Literal    {cons("quoted")}
+
+[A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal
+[A-Za-z]   -> Literal
+
+[0-9]+                      -> Integer

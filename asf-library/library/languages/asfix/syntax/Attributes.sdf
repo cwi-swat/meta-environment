@@ -1,0 +1,26 @@
+module asfix/syntax/Attributes
+imports asfix/syntax/Literals aterm/ATerms
+
+exports
+
+sorts Attributes Attrs Attr Associativity
+
+context-free syntax
+
+"no-attrs"                -> Attributes  {cons("no-attrs")}
+attrs(attrs:Attrs)        -> Attributes  {cons("attrs")}
+
+"[" {Attr ","}+ "]"       -> Attrs {cons("many")}
+
+"assoc"("assoc":Associativity)  -> Attr {cons("assoc")}
+term(term:ATerm)                -> Attr {cons("term")}
+id(module-name:Literal)         -> Attr {cons("id")}
+
+"bracket" -> Attr {cons("bracket")}
+"reject"  -> Attr {cons("reject")}
+"prefer"  -> Attr {cons("prefer")}
+"avoid"   -> Attr {cons("avoid")}
+
+"bracket" | "reject" | "prefer" | "avoid" -> ATerm {reject}
+id(Literal)                               -> ATerm {reject}
+
