@@ -1,0 +1,17 @@
+#! /bin/sh
+$ $Id$
+
+new=/tmp/$$.new
+old=/tmp/$$.old
+
+trap 'rm -f $new $old' 0 1
+
+for f in $@
+do
+	if [ -f $f -a -f $f.org ] ; then
+		trmcat $f | perl -pe 's|\{\["injection",1\]\}||g;'	> $new;
+		trmcat $f.org						> $old;
+		echo "Diffin' for $f..."
+		diff $new $old
+	fi
+done
