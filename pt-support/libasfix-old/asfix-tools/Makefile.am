@@ -19,7 +19,12 @@
 #
 # $Id$
 #
-include ../make_rules
+include $(top_srcdir)/make_rules
+
+INCLUDES+= -I$(TREE)/libasfix-old/libasfix
+
+GENERIC_LD_ADD =  -L$(TREE)/libasfix-old/libasfix -lAsFix \
+              -L$(ATERM)/lib -lATB -lATerm
 
 bin_PROGRAMS     = afexpand asource a2toa1
 
@@ -34,22 +39,15 @@ EXTRA_DIST       = asource.idef asource.tif.c asource.tif.h \
 CLEANFILES       = a2toa1.1
 
 afexpand_SOURCES = afexpand.c
-afexpand_LDADD   = -L../libasfix -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm
+afexpand_LDADD   = $(GENERIC_LD_ADD)
 
 asource_SOURCES  = asource.c 
-asource_LDADD    = asource.tif.o \
-                   -L../libasfix -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm
+asource_LDADD    = asource.tif.o $(GENERIC_LD_ADD)
 
 a2toa1_SOURCES   = a2toa1-main.c
 
-a2toa1_LDADD     = a2toa1.tif.o \
-                   -L../libasfix -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm
+a2toa1_LDADD     = a2toa1.tif.o $(GENERIC_LD_ADD)
 
-
-INCLUDES         = -I../libasfix -I$(ATERMINC)
 
 asource.o : asource.tif.h
 

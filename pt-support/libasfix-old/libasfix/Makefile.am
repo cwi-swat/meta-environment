@@ -20,48 +20,19 @@
 # $Id$
 #
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
-INCLUDES                 = -I$(ATERMINC)
+INCLUDES                 = -I$(ATERM)/include
 
 # The following libraries are compiled to static libraries.
-lib_LIBRARIES            = libAsFix.a @ASFIX_LIB_GCC@ @ASFIX_LIB_CC@ @ASFIX_LIB_DBG@ \
-			   @ASFIX_LIB_PROF@ @ASFIX_LIB_CC64@ @ASFIX_LIB_SHARED@
+lib_LIBRARIES            = libAsFix.a 
 
-EXTRA_LIBRARIES		= libAsFix-gcc.a libAsFix-cc.a libAsFix-dbg.a libAsFix-prof.a \
-			libAsFix-cc64.a
-
-ALLSRCS                  = abbrevs.c asfix.c asfix2src.c expand2asfix.c \
+SRCS                     = abbrevs.c asfix.c asfix2src.c expand2asfix.c \
                            init-patterns.c posinfo.c AsFix-access.c a2toa1.c \
                            buffer.c
 
-PUBLIC_INCL              = AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
+HDRS                     = AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
 		           AsFix-expand.h AsFix.h aterm-macs.h AsFix-fun.h \
 		           AsFix2src.h AsFix-access.h a2toa1.h buffer.h
 
-PRIVATE_INCL	         = 
-
-ALLINCLUDES	         = ${PUBLIC_INCL} ${PRIVATE_INCL}
-
-include_HEADERS          = $(PUBLIC_INCL)
-
-EXTRA_DIST               = $(ALLSRCS)
-
-# static only libraries
-libAsFix_a_SOURCES	  =
-libAsFix_cc_a_SOURCES     =
-libAsFix_cc64_a_SOURCES   =
-libAsFix_gcc_a_SOURCES    = 
-libAsFix_dbg_a_SOURCES    =
-libAsFix_prof_a_SOURCES   =
-
-libAsFix_a_LIBADD	  = $(ALLSRCS:.c=.o)
-libAsFix_cc_a_LIBADD      = $(ALLSRCS:.c=-cc.o)
-libAsFix_cc64_a_LIBADD    = $(ALLSRCS:.c=-64.o)
-libAsFix_gcc_a_LIBADD     = $(ALLSRCS:.c=-gcc.o)
-libAsFix_dbg_a_LIBADD     = $(ALLSRCS:.c=-dbg.o)
-libAsFix_prof_a_LIBADD    = $(ALLSRCS:.c=-prof.o)
-
-
-
-
+libAsFix_a_SOURCES        = $(SRCS) $(HDRS)

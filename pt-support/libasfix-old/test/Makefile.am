@@ -20,7 +20,9 @@
 # $Id$
 #
 # vim:ts=8:sw=8
-include ../make_rules
+include $(top_srcdir)/make_rules
+
+INCLUDES          += -I${TREE}/libasfix-old/libasfix
 
 TESTS	          = asfixtest-stub asource-test-1 asource-test-2
 
@@ -29,10 +31,9 @@ EXTRA_DIST        = Test.asfix asource-test-1.src asource-test-2.src \
 
 CLEANFILES        = asource-test-1 asource-test-2 asfixtest-stub
 
-INCLUDES          = -I../libasfix -I$(ATERMINC) 
 
-LDLIBS 		  = -L../libasfix -lAsFix \
-		    -L$(ATERMLIB) -lATB -lATerm 
+LDLIBS 		  = -L$(TREE)/libasfix-old/libasfix -lAsFix \
+		    -L$(ATERM)/lib -lATB -lATerm 
 
 noinst_PROGRAMS	  = asfixtest
 
