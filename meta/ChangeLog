@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Mar 26 16:31:12 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lotsa work done in refactoring the editing scripts
+   update only if you want a broken MetaEnv.
+
 Thu Mar 25 13:27:35 CET 2004 <{jong,kooiker}@cwi.nl>
  * editors/manager: new editor-manager + API
  * editors/text: implement get-focus-sort
