@@ -1,5 +1,6 @@
 /*  hello-gen.c  -- hello tool in C using generated interface hello.tif.c */
 
+#include <stdlib.h>
 #include "hello.tif.h"                   /* Include generated tool interface */
 
 ATerm get_text(int conn)                 /* Generate a hello text */

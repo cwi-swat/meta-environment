@@ -21,6 +21,7 @@
 */
 
 
+#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include "clock.tif.h"

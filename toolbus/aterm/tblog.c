@@ -1,6 +1,7 @@
 /*{{{  includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "atb-tool.h"
 #include "logger.tif.h"

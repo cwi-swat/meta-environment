@@ -1,5 +1,8 @@
 
+/*{{{  includes */
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
@@ -11,15 +14,24 @@
 
 #include "toolbus-adapter.tif.h"
 
+/*}}}  */
+/*{{{  defines */
+
 #define TB_ERROR -1
 #define TB_PORT  8999
 
 #define MAX_ARGS        256
 #define MAX_ATTEMPTS	100
 
+/*}}}  */
+
+/*{{{  variables */
+
 static char localhost[BUFSIZ];
 static int master_cid = -1;
 static int max_cid;
+
+/*}}}  */
 
 /*{{{  void toolbus_stop(int conn, int id) */
 

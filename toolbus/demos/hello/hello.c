@@ -1,6 +1,7 @@
 /*  hello.c -- hello tool in C */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <aterm1.h>                       /* ATerms, level 1 interface */
 #include <atb-tool.h>                     /* ToolBus tool interface */
 
