@@ -118,28 +118,30 @@ int main (int argc, char **argv)
 
   parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
 
-  if(parsetree == NULL) {
+  if (parsetree == NULL) {
     ATerror("%s: could not read term from input file %s\n", 
 	    myname, input_file_name);
   }
 
   ambiguities = PT_reportParseTreeAmbiguities("Unknown", parsetree);
 
-  if(!atermformat) {
-    FILE *fp = NULL;
+  if (ambiguities) {
+    if (!atermformat) {
+      FILE *fp = NULL;
 
-    if(!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
-      fp = stdout;
-    } else if(!(fp = fopen(output_file_name, "wb"))) {
-      ATerror("%s: could not open %s for output.\n", myname, output_file_name);
-      return 1;
+      if (!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
+        fp = stdout;
+      } else if (!(fp = fopen(output_file_name, "wb"))) {
+        ATerror("%s: could not open %s for output.\n", myname, output_file_name);
+        return 1;
+      }
+
+      prettyPrint(ambiguities,fp);
+
+      fclose(fp);
+    } else {
+      ATwriteToNamedTextFile(ambiguities, output_file_name);
     }
-
-    prettyPrint(ambiguities,fp);
-
-    fclose(fp);
-  } else {
-    ATwriteToNamedTextFile(ambiguities, output_file_name);
   }
 
   return 0;

@@ -42,7 +42,6 @@ ATbool PT_isProductionInjection(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
 
-ATbool PT_isTreeListInjection(PT_Tree tree);
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isTreeAlt(PT_Tree tree);
 ATbool PT_isTreeSeq(PT_Tree tree);
