@@ -169,8 +169,7 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
   }
   else {
     PT_Tree firstArg = PT_getArgsHead(lhsargs);
-    if (PT_isTreeVar(firstArg) ||
-        PT_isTreeList(firstArg)) {
+    if (PT_isTreeVar(firstArg)) {
       first_ofs = (PT_Production) NULL;
     }
     else {
@@ -521,7 +520,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   else if (PT_isTreeLexical(tree)) {
     result = lexicalToList(tree);
   }
-  else if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
+  else if (PT_isTreeAppl(tree)) {
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
     result = PT_setTreeArgs(tree, newargs);
@@ -634,7 +633,7 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Args args;
 
-  if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
+  if (PT_isTreeAppl(tree)) {
     if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
       return listToLexical(tree);
     }
