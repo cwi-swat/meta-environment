@@ -21,7 +21,7 @@ the "imploded" AsFix2 which will be the common format for all
 Meta-Environment components.
 
 The actual conversion from "old" AsFix to AsFix2ME will take place
-in 3 major steps. 
+in several major steps. 
 In the first step the components: module-db, structure editor and 
 evaluator are rewritten such that the use only functionality provided
 by asfix1.

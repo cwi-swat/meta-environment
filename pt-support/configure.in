@@ -90,4 +90,6 @@ AC_OUTPUT(
   libasfix-old/asfix-tools/Makefile
   libasfix-old/test/Makefile
   libasfix1/Makefile
+  libconversion/Makefile
+  libmept/Makefile
 )
