@@ -1,9 +1,15 @@
 $Id$
 
+2002/07/02 (jurgenv@cwi.nl)
+ * Added a lifting operator to SDF2. Example: `A` is replaced by "A" by
+   the normalizer, or `A?` is replaced by ("A" "?") etc. This is a nice
+   feature for languages with user-defined syntax.
+
 2002/06/24 (vandenbr@loria.fr)
  * Fixed some bugs in the Sdf-Checker with respect to handling
    of circular import relations.
  * Removed an inefficiency bug revealed by Action Semantic specification.
+
 
 2002/05/22 (vandenbr@loria.fr)
  * Bumped into version 1.5beta.
