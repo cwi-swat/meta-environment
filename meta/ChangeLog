@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Apr  6 16:08:30 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * removed "add-module-to-db" as it is now (almost) properly
+   implemented in open-modules
+
 Mon Apr  5 16:31:20 CEST 2004 <{jong,kooiker}@cwi.nl>
  * implemented parsing syntax scenario with parse errors
  * removed 'decons-filename' kludge; replaced it with three getters:
