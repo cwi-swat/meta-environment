@@ -3,32 +3,30 @@ module containers/Table[Key Value]
 imports basic/Booleans
 imports containers/List[Key]
 imports containers/List[Value]
-imports containers/List[Key # Value]
+imports containers/List[<Key, Value>]
+
 exports
+  context-free syntax
+    List[[<Key, Value>]] -> Table[[Key,Value]]
 
 context-free syntax
- List[[Key # Value]] -> Table[[Key,Value]]
-
-context-free syntax
-
- "not-in-table"                    -> Value   {constructor}
- "new-table"                       -> Table[[Key,Value]]
- lookup(Table[[Key,Value]],Key)                 -> Value   
- store(Table[[Key,Value]],Key,Value)            -> Table[[Key,Value]]
- delete(Table[[Key,Value]],Key)                 -> Table[[Key,Value]]
- element(Table[[Key,Value]],Key)                -> Boolean
- keys(Table[[Key,Value]])                       -> List[[Key]]
- values(Table[[Key,Value]])                     -> List[[Value]]
+  "not-in-table"                      -> Value   {constructor}
+  "new-table"                         -> Table[[Key,Value]]
+  lookup(Table[[Key,Value]],Key)      -> Value   
+  store(Table[[Key,Value]],Key,Value) -> Table[[Key,Value]]
+  delete(Table[[Key,Value]],Key)      -> Table[[Key,Value]]
+  element(Table[[Key,Value]],Key)     -> Boolean
+  keys(Table[[Key,Value]])            -> List[[Key]]
+  values(Table[[Key,Value]])          -> List[[Value]]
 
 
 hiddens
   imports basic/Comments
   
-variables
-
-  "Table"[0-9]* -> Table[[Key,Value]]
-  "Key"[0-9]* -> Key
-  "Value"[0-9]* -> Value
-  "Pair*"[0-9]* -> {Key # Value ","}*
-  "Key*"[0-9]*  -> {Key ","}*
-  "Value*"[0-9]*  -> {Value ","}*
+  variables
+    "Table"[0-9]*  -> Table[[Key,Value]]
+    "Key"[0-9]*    -> Key
+    "Value"[0-9]*  -> Value
+    "Pair*"[0-9]*  -> {<Key, Value> ","}*
+    "Key*"[0-9]*   -> {Key ","}*
+    "Value*"[0-9]* -> {Value ","}*

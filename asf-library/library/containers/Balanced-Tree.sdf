@@ -5,45 +5,43 @@ imports basic/Integers
 	containers/List[Elt]
 
 exports 
+  sorts Balanced-Tree[[Elt]]
 
-sorts Balanced-Tree[[Elt]]
-
-context-free syntax
-
+  context-free syntax
 %% To be implemented using builtin
-elt-lt(Elt, Elt) -> Boolean
-elt-gt(Elt, Elt) -> Boolean
+    elt-lt(Elt, Elt) -> Boolean
+    elt-gt(Elt, Elt) -> Boolean
 
-empty() -> Balanced-Tree[[Elt]]
+    empty() -> Balanced-Tree[[Elt]]
 
-insert(Balanced-Tree[[Elt]], Elt) -> Balanced-Tree[[Elt]]
-delete(Balanced-Tree[[Elt]], Elt) -> Balanced-Tree[[Elt]]
+    insert(Balanced-Tree[[Elt]], Elt) -> Balanced-Tree[[Elt]]
+    delete(Balanced-Tree[[Elt]], Elt) -> Balanced-Tree[[Elt]]
 
-union(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
-disjoint-union(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
-difference(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
-intersection(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    union(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    disjoint-union(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    difference(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    intersection(Balanced-Tree[[Elt]],Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
 
-member(Elt, Balanced-Tree[[Elt]]) -> Boolean
-find(Elt, Balanced-Tree[[Elt]]) -> Elt
+    member(Elt, Balanced-Tree[[Elt]]) -> Boolean
+    find(Elt, Balanced-Tree[[Elt]]) -> Elt
 
 
-enumerate(Balanced-Tree[[Elt]]) -> List[[Elt]]
-cardinality(Balanced-Tree[[Elt]]) -> Integer
+    enumerate(Balanced-Tree[[Elt]]) -> List[[Elt]]
+    cardinality(Balanced-Tree[[Elt]]) -> Integer
 
 %%hiddens
 
-context-free syntax
-size(Balanced-Tree[[Elt]]) -> Integer
+  context-free syntax
+    size(Balanced-Tree[[Elt]]) -> Integer
 
-empty -> Balanced-Tree[[Elt]] {cons("empty"),constructor}
-tree(elt:Elt, count:Integer, lhs:Balanced-Tree[[Elt]], rhs:Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]] {cons("tree"),constructor}
+    empty -> Balanced-Tree[[Elt]] {cons("empty"),constructor}
+    tree(elt:Elt, count:Integer, lhs:Balanced-Tree[[Elt]], rhs:Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]] {cons("tree"),constructor}
 
-new(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
-min(Balanced-Tree[[Elt]]) -> Elt
-weight -> Integer
-b-new(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
-concat3(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    new(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    min(Balanced-Tree[[Elt]]) -> Elt
+    weight -> Integer
+    b-new(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
+    concat3(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
 
 single-l(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]
 double-l(Elt, Balanced-Tree[[Elt]], Balanced-Tree[[Elt]]) -> Balanced-Tree[[Elt]]

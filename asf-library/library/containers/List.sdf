@@ -1,5 +1,9 @@
 module containers/List[X]
 
+imports 
+  basic/Booleans
+  basic/Integers
+
 exports
   context-free syntax
     "[" {X ","}* "]"	-> List[[X]]  {constructor}
@@ -18,17 +22,8 @@ exports
 
     concat(List[[X]], List[[X]]) 	-> List[[X]]
 
-%% Two special variables for head/tail construction/deconstruction
-  variables
-   "H"[A-Z0-9\']* -> X
-   "T"[A-Z0-9\']* -> {X ","}*
-
-imports 
-  basic/Booleans
-
 hiddens
   imports
-    basic/Integers
     basic/Comments
     basic/Whitespace
   variables
