@@ -27,6 +27,8 @@ equations
 [give-5] check $Y1 $DOI $Y2  = copy and ((give $Y1 and give $Y2) then 
 				       check $DOI then skip)
 
+[maybe-1] maybe $A = $A catch fail
+
 [bound-to-1] bound-to $Y = bound (current-bindings, $Y)
 
 [bind-1] bind = give binding

@@ -17,8 +17,8 @@ equations
 
 [subtype-5] 
 	    subtype-of($TY1, $TY4, $STS) == yes, 
-	    subtype-of($TY5, $TY2, $STS) == yes, 
-	    subtype-of($TY6, $TY3, $STS) == yes 
+	    subtype-of($TY2, $TY5, $STS) == yes, 
+	    subtype-of($TY3, $TY6, $STS) == yes 
 	    ================================================
 	    subtype-of(action[using $TY1 giving $TY2 raising $TY3],
 	               action[using $TY4 giving $TY5 raising $TY6], $STS) = yes 

@@ -8,8 +8,8 @@ exports
 
 context-free syntax
 
-  fix(Integer, Action, Type, Environment)	-> Type
-  iter(Integer, Action, Type, Environment)	-> Type
+  fix(Integer, Action, Type, Environment)	-> ActionResult
+  iter(Integer, Action, Type, Environment)	-> ActionResult
 
 hiddens variables
 

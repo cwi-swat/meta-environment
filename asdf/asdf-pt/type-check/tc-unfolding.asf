@@ -2,12 +2,17 @@ equations
 
 [fix-1] fix(0, $A, $TY, $EN) = AR[nor=empty, exc=empty, no]
 
-[fix-2] fix($N, $A, $TY, $EN) = 
+[fix-2] AR[nor=$TY1, exc=$TY2, $ANS] := 
 	lub(fix($N-1, $A, $TY, $EN), iter($N, $A, $TY, $EN), get-subtypes($EN))
+	====================================
+	fix($N, $A, $TY, $EN) = AR[nor=$TY1, exc=$TY2, $ANS]
 
-[iter-1] iter(0, $A, $TY, $EN) = AR[nor=empty, exc=empty, no]
 
-[iter-2] 
+[iter-1] $N == 0
+	 =====================================================
+	 iter($N, $A, $TY, $EN) = AR[nor=empty, exc=empty, no] 
+
+[default-iter-2] 
 
   AR[nor=$TY1, exc=$TY2, $ANS1] := iter($N-1, $A, $TY, $EN1),
   $EN2 := set-unfold-type($EN1, action[using $TY giving $TY1 raising $TY2])

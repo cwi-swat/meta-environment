@@ -198,9 +198,14 @@ equations
 
 [tca-unfold] 
 
-    action[using $TY1 giving $TY2 raising $TY3] := get-unfold-type($EN)
+    action[using $TY1 giving $TY2 raising $TY3] := get-unfold-type($EN),
+    subtype-of($TY, $TY2, get-subtypes($EN)) == yes
     ===================================================================
     typecheck-action(unfold, $TY, $EN) = AR[nor=$TY2, exc=$TY3, no]
+
+[default-tca-unfold] 
+
+    typecheck-action(unfold, $TY, $EN) = AR[nor=empty, exc=empty, no]
 
 [tca-recursively] 
 
@@ -248,14 +253,12 @@ equations
     $ER+ := typecheck-action($A1, $TY1, $EN)
     ===========================================
     typecheck-action($A1 scope $A2, $TY1, $EN) = $ER+
-	    
-
+	   
 [tca-enact] 	  
 
-    subtype-of($TY, action, get-subtypes($EN))  == yes
+    action[using () giving $TY2 raising $TY3] := $TY
     ================================================================
-    typecheck-action(enact, $TY, $EN) = AR[nor=data, exc=data, yes] 
-
+    typecheck-action(enact, $TY, $EN) = AR[nor=$TY2, exc=$TY3, yes] 
 
 [default-enact] 
 
@@ -266,9 +269,10 @@ equations
 
 [tca-apply] 	  
 
-    subtype-of($TY1, action, get-subtypes($EN))  == yes
+    action[using $TY2 giving $TY3 raising $TY4] := $TY1,
+    subtype-of(($TY*), $TY2, get-subtypes($EN)) == yes
     =================================================================
-    typecheck-action(apply, ($TY1, $TY*), $EN) = AR[nor=data, exc=data, yes] 
+    typecheck-action(apply, ($TY1, $TY*), $EN) = AR[nor=$TY3, exc=$TY4, yes] 
 
 [default-tca-apply] 	  
 

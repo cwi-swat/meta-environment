@@ -1928,7 +1928,7 @@ FUNC_EXIT ( make_nf1 ( lf_232sym , arg0 ) ) ;
 }
 ATerm lf_247 ( ATerm arg0 ) {
 {
-ATerm tmp [ 9 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_247sym , ATmakeAppl ( lf_247sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_list_171sym ) ) {
 {
@@ -1947,15 +1947,9 @@ if ( check_sym ( tmp [ 3 ] , lf_7sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_list_1sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_165sym ) ) {
-( tmp [ 6 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_164sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 8 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_103 ( cons ( make_list ( make_nf3 ( lf_102sym , make_nf1 ( lf_100sym , make_nf1 ( lf_list_99sym , make_list ( make_nf1 ( lf_124sym , make_nf1 ( lf_123sym , make_nf1 ( lf_122sym , make_nf1 ( lf_list_1sym , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_120sym , make_nf1 ( lf_119sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 12 , char_table [ 80 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] , char_table [ 68 ] , char_table [ 97 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 79 ] , char_table [ 112 ] ) ) ) ) , make_nf0 ( lf_101sym ) ) ) , remove_list ( lf_247_recursive ( make_list ( tmp [ 8 ] ) ) ) ) ) ) ;
-}
-}
+( tmp [ 6 ] = list_tail ( atmp00 ) ) ;
+FUNC_EXIT ( lf_list_103 ( cons ( make_list ( make_nf3 ( lf_102sym , make_nf1 ( lf_100sym , make_nf1 ( lf_list_99sym , make_list ( make_nf1 ( lf_124sym , make_nf1 ( lf_123sym , make_nf1 ( lf_122sym , make_nf1 ( lf_list_1sym , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_120sym , make_nf1 ( lf_119sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 12 , char_table [ 80 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] , char_table [ 68 ] , char_table [ 97 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 79 ] , char_table [ 112 ] ) ) ) ) , make_nf0 ( lf_101sym ) ) ) , remove_list ( lf_247_recursive ( make_list ( tmp [ 6 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -1969,7 +1963,7 @@ FUNC_EXIT ( make_nf1 ( lf_247sym , arg0 ) ) ;
 }
 ATerm lf_247_recursive ( ATerm arg0 ) {
 {
-ATerm tmp [ 9 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_247_recursivesym , ATmakeAppl ( lf_247_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
@@ -1987,15 +1981,9 @@ if ( check_sym ( tmp [ 3 ] , lf_7sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_list_1sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_165sym ) ) {
-( tmp [ 6 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_164sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 8 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_103 ( cons ( make_list ( make_nf3 ( lf_102sym , make_nf1 ( lf_100sym , make_nf1 ( lf_list_99sym , make_list ( make_nf1 ( lf_124sym , make_nf1 ( lf_123sym , make_nf1 ( lf_122sym , make_nf1 ( lf_list_1sym , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_120sym , make_nf1 ( lf_119sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 12 , char_table [ 80 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] , char_table [ 68 ] , char_table [ 97 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 79 ] , char_table [ 112 ] ) ) ) ) , make_nf0 ( lf_101sym ) ) ) , remove_list ( lf_247_recursive ( make_list ( tmp [ 8 ] ) ) ) ) ) ) ;
-}
-}
+( tmp [ 6 ] = list_tail ( atmp00 ) ) ;
+FUNC_EXIT ( lf_list_103 ( cons ( make_list ( make_nf3 ( lf_102sym , make_nf1 ( lf_100sym , make_nf1 ( lf_list_99sym , make_list ( make_nf1 ( lf_124sym , make_nf1 ( lf_123sym , make_nf1 ( lf_122sym , make_nf1 ( lf_list_1sym , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_120sym , make_nf1 ( lf_119sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 12 , char_table [ 80 ] , char_table [ 114 ] , char_table [ 101 ] , char_table [ 102 ] , char_table [ 105 ] , char_table [ 120 ] , char_table [ 68 ] , char_table [ 97 ] , char_table [ 116 ] , char_table [ 97 ] , char_table [ 79 ] , char_table [ 112 ] ) ) ) ) , make_nf0 ( lf_101sym ) ) ) , remove_list ( lf_247_recursive ( make_list ( tmp [ 6 ] ) ) ) ) ) ) ;
 }
 }
 }

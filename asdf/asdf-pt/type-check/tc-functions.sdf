@@ -9,7 +9,7 @@ exports
 
 sorts 
 
-  Function Functions SignatureEnv Answers TypeInfo
+  Function Functions SignatureEnv Answers TypeInfo ActionResult
 
 context-free syntax
 
