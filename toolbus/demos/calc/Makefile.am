@@ -19,7 +19,9 @@
 EXTRA_DIST      	= calc.tb ui-calc.tcl
 CLEANFILES      	= *.tif.[ch] calc.tifs
 
-INCLUDES		= -I$(ATERM)/include
+INCLUDES		= -I${top_srcdir}/aterm \
+			-I$(ATERM)/include
+
 noinst_PROGRAMS		= clock log calc batch
 
 clock_SOURCES		= clock.tif.c clock.tif.h clock.c
