@@ -1,5 +1,5 @@
 2002/10/31 (vandenbr@loria.fr)
- * implified the code with respect to storing equations. In fact, this
+ * simplified the code with respect to storing equations. In fact, this
    functionality has been complete removed.
 
 2002/10/29 (vinju@loria.fr)
