@@ -54,6 +54,7 @@ in
    * dissappear during anything due to user interaction.
    */
   subscribe(set-focus(<term>,<term>)).
+  subscribe(goto-focus(<term>,<term>)).
   subscribe(clear-focus(<term>)).
   subscribe(get-focus-text(<term>,<term>)).
   subscribe(display-error(<term>,<int>)) .
@@ -83,6 +84,10 @@ in
     rec-note(display-error(EditorId, StartPos?)) .
     snd-do(TE, tb-set-char-pos(Fid, StartPos)).
     snd-do(TE, tb-set-msg("Parse error near cursor"))
+  +
+    rec-note(goto-focus(EditorId, 
+      focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
+    snd-do(TE, tb-set-char-pos(Fid, StartPos))
   +
     rec-note(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
