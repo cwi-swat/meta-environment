@@ -1,13 +1,13 @@
 equations
 
-[pp-program-1]
+[program2box-0]
   begin Decls Statement* end = 
     box2program(V ["begin" 
-                      I [decls2box(Decls)]
-                      I [statementlist2box(Statement*)]
+                      V vs=2 [I [decls2box(Decls)]
+                              I [statementlist2box(Statement*)]]
                    "end"])
 
-[pp-decls] 
+[decls2box-0] 
   declare IdType* ; = 
     box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
 
@@ -18,10 +18,39 @@ equations
 
 [idtypelist2box-1]
   Box1 := idtype2box(IdType),
-  Box2 := H hs=0 [Box1","],
+  Box2 := H hs=0 [Box1 ","],
   V [Box*] := idtypelist2box(IdType*)
   ===>
   idtypelist2box(IdType, IdType*) = V [Box2 Box*]
+
+[idtype2box-0]
+  idtype2box(PicoId : Type) = H [H hs=0 [picoid2box(PicoId) ":"] type2box(Type)]
+
+[statementlist2box-0]
+  Box := statement2box(Statement)
+  ===>
+  statementlist2box(Statement) = V [Box]
+
+[statementlist2box-1]
+  Box1 := statement2box(Statement),
+  Box2 := H hs=0 [Box1 ";"],
+  V [Box*] := statementlist2box(Statement*)
+  ===>
+  statementlist2box(Statement; Statement*) = V [Box2 Box*]
+
+[if2box-0]
+  if Exp then Statement*1 else Statement*2 fi =
+    box2statement(V [HV ["if" exp2box(Exp) "then"] 
+                    I [statementlist2box(Statement*1)] 
+                  "else" 
+                    I [statementlist2box(Statement*2)] 
+                  "fi"])
+
+[while2box-0]
+  while Exp do Statement* od = 
+    box2statement(V [HV ["while" exp2box(Exp) "do"] 
+                    I [statementlist2box(Statement*)] 
+                  "od"])
 
 %% [list]
 %% IdType , IdType+ = 
