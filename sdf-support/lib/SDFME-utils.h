@@ -62,7 +62,7 @@ SDF_OptLayout SDF_makeLayoutEmpty();
 SDF_OptLayout SDF_makeLayoutSpace();
 SDF_OptLayout SDF_makeLayoutNewline();
 
-SDF_Import SDFmakeImport(char *moduleName);
+SDF_Import SDF_makeImport(char *moduleName);
 SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
 
 
