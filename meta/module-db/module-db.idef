@@ -37,6 +37,7 @@ execute(module-db, Mdb?).
 /* And initialize it */
 snd-do(Mdb, create-module-db).
 (
+
 /* If we get the request to empty the db, we'll do it. */
   rec-msg(clear-module-db).
   snd-do(Mdb, clear-module-db)
@@ -88,7 +89,7 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(Name?, AsFixModule?,Language?)).
+  rec-msg(update-module-in-db(AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
     snd-eval(Mdb,update-sdf2-module(AsFixModule)) .
     (

@@ -1217,7 +1217,7 @@ is_valid_parse_table(ATermList visited, ATerm module,
 
   if((timeOfEqsTable > 0 && time > timeOfEqsTable) ||
      (timeOfTrmTable > 0 && time > timeOfTrmTable)) {
-    result = ATfalse;
+    return ATfalse;
   } else {
     result = ATtrue;
   }
