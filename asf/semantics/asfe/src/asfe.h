@@ -74,7 +74,7 @@ extern ATerm posinfo;
 extern ATerm rewrite_error;
 extern ATerm tagCurrentRule;
 extern AFun list_var, plain_var;
-
+extern AFun traversal_afun, analyzer_afun, combination_afun, index_afun, tuple_afun;
 
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 /*#define v_lookup(env,var)	(ATdictGet(env,var))*/

@@ -140,6 +140,21 @@ int main(int argc, char *argv[])
   plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
   ATprotectAFun(plain_var);
 
+	traversal_afun = ATmakeAFun("traversal", 1, ATfalse);
+	ATprotectAFun(traversal_afun);
+	
+	analyzer_afun = ATmakeAFun("analyzer", 1, ATfalse);
+	ATprotectAFun(analyzer_afun);
+
+	combination_afun = ATmakeAFun("combination", 2, ATfalse);
+	ATprotectAFun(combination_afun);
+
+  index_afun = ATmakeAFun("index", 2, ATfalse);
+	ATprotectAFun(index_afun);
+
+	tuple_afun = ATmakeAFun("tuple", 2, ATfalse);
+	ATprotectAFun(tuple_afun);
+
   RWclearError();
 
   ATprotect(&tagCurrentRule);

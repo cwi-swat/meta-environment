@@ -156,37 +156,32 @@ ATerm make_traversal_appl(ATerm appl, ATerm traversal)
 	ATerm sort; 
 	ATerm newappl;
 	ATerm travprod;
-	ATerm tuple = NULL;
-
-	if(run_verbose) ATwarning("Generating traversal appl.\n");
-
-	sort = AFgetProdSort(asfix_get_appl_prod(appl)); 
+  static ATermTable SaveAppls = NULL;
+	ATerm appltrav = (ATerm) ATmakeAppl2(index_afun, appl, traversal);
+	AFun traversal_type;
 	
-	if(ATmatch(traversal,"traversal(<term>)", &travprod)) {
-		prod = asfix_get_appl_prod(travprod);
-		prod = ATmakeTerm(prod, sort, sort);
-		
-		args = asfix_get_appl_args(travprod);
-		args = (ATermList) ATmakeTerm((ATerm) args, appl);
-		
-		newappl = AFmakeAppl(prod,args);
-		
-		return newappl;
-		
-	} else if(ATmatch(traversal,"analyzer(<term>)",&travprod) || 
-		        ATmatch(traversal,"combination(<term>,tuple(<term>))",&travprod, &tuple)) {
-		prod = asfix_get_appl_prod(travprod);
-		prod = ATmakeTerm(prod, sort);
-		
-		args = asfix_get_appl_args(travprod);
-		args = (ATermList) ATmakeTerm((ATerm) args, appl);
-		newappl = AFmakeAppl(prod,args);
-	
-		return newappl;
+	if(SaveAppls == NULL) {
+		SaveAppls = ATtableCreate(1024, 75);
 	}
 	
-	ATerror("Unknown traversal function type\n");
-	return NULL;
+	if(run_verbose) ATwarning("Generating traversal appl.\n");
+
+	if((newappl = ATtableGet(SaveAppls, appltrav))) {
+		return newappl;
+	}
+
+	travprod = ATgetArgument(traversal, 0);
+	prod = asfix_get_appl_prod(travprod);
+	sort = AFgetProdSort(asfix_get_appl_prod(appl)); 
+	prod = ATmakeTerm(prod, sort, sort);
+	
+	args = asfix_get_appl_args(travprod);
+	args = (ATermList) ATmakeTerm((ATerm) args, appl);
+	
+	newappl = AFmakeAppl(prod,args);
+	ATtablePut(SaveAppls, appltrav, newappl);
+
+	return newappl;
 }
 
 /* change_traversal_appl
@@ -208,7 +203,8 @@ ATerm change_traversal_appl(ATerm traversal, ATerm newarg)
 	if(ATmatch(traversal,"combination(<term>,tuple(<term>))",&appl,&tuple)) {
 		args = asfix_get_appl_args(appl);
 		args = ATreplace(args, newarg, keep_layout ? 8 : 4);
-		traversal = ATmake("combination(<term>,tuple(<term>))",asfix_put_appl_args(appl,args),tuple);
+		traversal = ATmake("combination(<term>,tuple(<term>))",
+											 asfix_put_appl_args(appl,args),tuple);
 	}
 	
 	return traversal;
@@ -268,7 +264,8 @@ ATerm get_first(ATerm tuple, ATerm combination)
 	 */
 
 	if(ATmatch(combination,"combination(<term>,tuple(<term>))",&prod, &ctuple)) {
-		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,&second,NULL,NULL)) ||
+		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,
+																		&second,NULL,NULL)) ||
 			 (!keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,&first,&second))) {
 			return first;
 		}
@@ -292,7 +289,8 @@ ATerm get_second(ATerm tuple, ATerm combination)
 	 */
 	
 	if(ATmatch(combination,"combination(<term>,tuple(<term>))",&prod,&ctuple)) {
- 		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,&second,NULL)) ||
+ 		if(( keep_layout && ATmatchTerm(tuple,ctuple,NULL,NULL,NULL,&first,NULL,NULL,
+																		&second,NULL)) ||
 			 (!keep_layout &&	ATmatchTerm(tuple,ctuple,NULL,NULL,&first,&second))) {
 			return second;
 		}
@@ -325,7 +323,7 @@ ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
 				args = (ATermList) asfix_get_appl_args(trm);
 				newargs = rewrite_args_traversal(args,env,depth,traversal);
         /* on the way back, we check for new redices */
-				rewtrm =  rewrite((ATerm) asfix_put_appl_args(trm,newargs), env, depth);
+				rewtrm = select_and_rewrite(asfix_put_appl_args(trm,newargs), depth);
 
 			}  else { /* reduction occurred, we need postprocessing */
 				if(is_analyzer(*traversal)) {
