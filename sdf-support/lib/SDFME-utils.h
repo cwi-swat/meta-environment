@@ -69,7 +69,8 @@ SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
 
 
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
-SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s);
+SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId m);
+SDF_Import SDF_removeImportAnnotations(SDF_Import i);
 
 SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l);
 SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l);

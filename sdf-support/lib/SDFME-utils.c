@@ -301,6 +301,14 @@ SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s)
 }
 
 /*}}}  */
+/*{{{  SDF_Import SDF_removeImportAnnotations(SDF_Import s) */
+
+SDF_Import SDF_removeImportAnnotations(SDF_Import s)
+{
+  return SDF_ImportFromTerm(ATremoveAllAnnotations(SDF_ImportToTerm(s)));
+}
+
+/*}}}  */
 
 
 /*{{{  SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l)  */
