@@ -92,7 +92,6 @@ ATerm add_module(int cid, ATerm asfix)
                  &t[0], &t[1], &modname, &t[2], 
                  &sections, &t[3], &t[4], &t[5], &t[6])) {
     if(GetValue(modules_db,modname) == ATfalse) {
-ATfprintf(stderr,"AFexpandModule called for %t\n", modname);
       newasfix = AFexpandModule(asfix);
       PutValue(modules_db,modname,newasfix);
     };
