@@ -19,6 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+#include <fcntl.h>
 #include "toolbus.h"
 #include "terms.h"
 #include "tools.h"
@@ -616,36 +617,42 @@ term *TBreadTerm(FILE *f)
   return NULL;
 }
 
-int read_from_stdin()
+long read_from_stdin()
 {
   int c;
   char *ptr;
+  int n = 10;
+  int Flags = 0;
 
   ptr = &buffer[LENSPEC];
+ 
+  /* This call to clearerr solves a problem on NETBSD. It's a hack,
+   * because we don't know why it solves the problem
+   */ 
+  clearerr(stdin); 
 
-  while((c = fgetc(stdin)) != '\n'){
+  while((c = fgetc(stdin)) != '\n' && n-- > 0 ){
     if(c > 0){
       *ptr++ = c;
     }
   }
   *ptr++ = '\0';
-  return ptr - &buffer[LENSPEC] - 1;
 
+  return (ptr - &buffer[LENSPEC]) - 1;
 }
 
 term *read_and_parse_from_stdin(term *prompt, term *pat)
-{ int n;
+{ int n; 
   term *trm;
 
   while(TBtrue){
-    TBprintf(stderr, "%t %t: ", prompt, pat);
+    TBprintf(stderr, "%t %t: ", prompt, pat); 
 /*
     pr_term_unquoted(prompt);
     printn(" ", 1);
     pr_term_unquoted(pat);
     printn(": ", 2);
 */
-    
     n = read_from_stdin();
     if(n > 0){
       trm = parse_buffer();
