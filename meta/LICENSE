@@ -3,19 +3,21 @@ All rights reserved.
 
 
   Permission is hereby granted, free of charge, to any person obtaining
-  a copy of this software and associated documentation files (the
-  "Software"), to deal in the Software without restriction, including
-  without limitation the rights to use, copy, modify, merge, publish,
-  distribute, sublicense, and/or sell copies of the Software, and to
-  permit persons to whom the Software is furnished to do so, subject to
-  the following conditions:
+  a copy of this software in source code or binary form and associated
+  files (the "Distribution"), to deal in the Distribution without
+  restriction, including without limitation the rights to use, copy,
+  modify, merge, publish, distribute, sublicense, and/or sell copies of
+  the Distribution, and to permit persons to whom the Distribution is
+  furnished to do so, subject to the following conditions:
 
-  - Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
+  - Redistributions containing source code from Distribution must retain
+    the above copyright notice, this list of conditions and the
+    following disclaimer.
 
-  - Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
+  - Redistributions containing parts of Distribution in binary form must
+    reproduce the above copyright notice, this list of conditions and
+    the following disclaimer in the documentation and/or other materials
+    provided with the distribution.
 
   - Neither name of the Stichting Mathematisch Centrum its institute
     Centrum voor Wiskunde en Informatica (CWI) nor the names of its
