@@ -1,5 +1,14 @@
 # $Id$
 
+2003/12/08 (jurgenv@cwi.nl)
+ * Removed generation of mapping from strings to CHARLIST pending a new
+   solution.
+ * Added generation of list(CHARLIST, int) as the new bottom sort of
+   AsFix2ME ADTs.
+ * All specifications build on to of SDF2 syntax from asf-library.
+ * Removed inclusion of Character-Class normalization in Sdf2-To-AsFix2ME
+   because I could not figure out why it was necessary.
+
 2003/12/04 (jurgenv@cwi.nl)
  * Sdf2-To-Imploded-ADT adapted such that fields of the type "NatCon"
    and "String" (from asf-library/basic) are translated to holes of

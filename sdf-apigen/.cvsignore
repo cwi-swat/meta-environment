@@ -11,3 +11,6 @@ INSTALL
 install-sh
 missing
 mkinstalldirs
+sdf-apigen-*.tar.gz
+sdf-apigen-*.pkg
+autom*.cache
