@@ -1,9 +1,71 @@
-module Relation[From, To]
+module Relation[Elem]
 
 exports
-  imports containers/List[From # To]
+
+imports Bag[Elem # Elem]
+imports Bag[Elem]
+
+  sorts Rel[[Elem]]
 
   context-free syntax
-      
+
+     Bag[[Elem # Elem]]               -> Rel[[Elem]]
+
+     Rel[[Elem]] "==" Rel[[Elem]]     -> Boolean
+     Rel[[Elem]] "<=" Rel[[Elem]]     -> Boolean
+     Rel[[Elem]] "<" Rel[[Elem]]      -> Boolean
+     Rel[[Elem]] ">=" Rel[[Elem]]     -> Boolean
+     Rel[[Elem]] ">" Rel[[Elem]]      -> Boolean
+
+     Rel[[Elem]] "union" Rel[[Elem]]  -> Rel[[Elem]]
+     Rel[[Elem]] "inter" Rel[[Elem]]  -> Rel[[Elem]]
+     Rel[[Elem]] "\\" Rel[[Elem]]     -> Rel[[Elem]]
+     Rel[[Elem]] "o" Rel[[Elem]]      -> Rel[[Elem]]
+    
+     Elem "x" Bag[[Elem]]             -> Rel[[Elem]]
+
+     Bag[[Elem]] "x" Bag[[Elem]]      -> Rel[[Elem]]
+     
+     dom Rel[[Elem]]                  -> Bag[[Elem]]
+     ran Rel[[Elem]]                  -> Bag[[Elem]]
+     car Rel[[Elem]]                  -> Bag[[Elem]]
+
+     Rel[[Elem]] "^dom" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "^ran" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "^car" Bag[[Elem]]   -> Rel[[Elem]]
+
+     Rel[[Elem]] "\\dom" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "\\ran" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "\\car" Bag[[Elem]]   -> Rel[[Elem]]
+
+     inv Rel[[Elem]]                  -> Rel[[Elem]]
+
+     id Bag[[Elem]]                   -> Rel[[Elem]]
+
+     Rel[[Elem]] "." Elem             -> Bag[[Elem]]
+     Elem "." Rel[[Elem]]             -> Bag[[Elem]]
+
+     "#" Rel[[Elem]]                  -> Integer
+
+     closure(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) -> Rel[[Elem]]
+
+     Rel[[Elem]] "+"                  -> Rel[[Elem]]
+     Rel[[Elem]] "*"                  -> Rel[[Elem]]
+
+     "(" Rel[[Elem]] ")"              -> Rel[[Elem]] {bracket}
+
+hiddens
+  imports asf/Comments
+
+  variables
+     "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]
+     "Rel" [0-9\']*              -> Rel[[Elem]]
+     "E" [0-9\']*                -> Elem
+     "E*" [0-9\']*               -> { Elem ","}*
+     "E+" [0-9\']*               -> { Elem ","}+
+     "Tuple" [0-9\']*            -> Elem # Elem
+     "Tuple*" [0-9\']*           -> {Elem # Elem ","}*
+
+
 
 
