@@ -44,7 +44,11 @@ void usage(void)
           "\t-L              remove literals\n"
           "\t-V              reveal program version (i.e. %s)\n"
           "\t-q              interpret sequences\n"
-          "\t-X              implode lexicals\n",
+          "\t-X              implode lexicals\n"
+	  "\n"
+	  "Note that if none of the [AclopILqX] switches are given, they are "
+          "all activated by default. If you give any of them, the others are "
+	  "off by default until you switch them on.\n" ,
           myname, myarguments, myversion);
 }
 
