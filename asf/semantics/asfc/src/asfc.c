@@ -52,6 +52,8 @@ ATbool run_verbose;
 static char myname[] = "compiler";
 static char myversion[] = "0.1";
 
+static char *outputDirName = NULL;
+
 /*
     The argument vector: list of option letters, colons denote option
     arguments.  See Usage function, immediately below, for option
@@ -85,6 +87,32 @@ void rec_terminate(int cid, ATerm t)
   cpusecs = (float) ((float) cputime / (float) CLOCKS_PER_SEC);
   ATfprintf(stderr, "Compiler used %f seconds cpu time\n", cpusecs);
   exit(0);
+}
+
+void
+set_output_dir(int cid, char *dirName)
+{
+		int len = strlen(dirName) + 1;
+
+		outputDirName = (char *) realloc(outputDirName, len);
+
+		if (outputDirName == NULL) {
+				ATerror("compiler: unable to allocate %d bytes\n", len);
+		} else {
+				strcpy(outputDirName, dirName);
+		}
+}
+
+char *
+get_output_dir(void)
+{
+		if (outputDirName != NULL) {
+				return outputDirName;
+		} else if (getenv("COMPILER_OUTPUT") != NULL) {
+				return getenv("COMPILER_OUTPUT");
+		} else {
+				return ".";
+		}
 }
 
 
@@ -232,24 +260,13 @@ ATerm generate_code(int cid, char *modname, ATerm module)
   ATerm aname, idname, file, mname, trm;
   int len;
   FILE *output;
-
-  /* Temporary solution to obtain path where generated C files should be
-   * stored. We now use the environment variable "COMPILER_OUTPUT" to obtain
-   * the directory. When this variable is not defined we use the original
-   * value (so the compiler does not depend on this change).
-   *
-   * Merijn.
-   */
-  
-  char *path = ".";
-  if (getenv( "COMPILER_OUTPUT" ) != NULL) {
-     path = getenv( "COMPILER_OUTPUT" );
-	}
-
+  char *path;
+	
 	if (run_verbose) {
 			ATwarning("generating code for %s\n", modname);
 	}
   
+	path = get_output_dir();
   len = strlen(path) + 1 + strlen(modname) + strlen(".asfix");
   fname = malloc(len + 1);
   if (!fname) {
@@ -286,9 +303,7 @@ ATerm generate_code(int cid, char *modname, ATerm module)
     fclose(output);
   }
 
-	if (run_verbose) {
-			ATwarning("Writing: %s\n", fname);
-	}
+	ATwarning("Writing: %s\n", fname);
 
   free(fname);
 
