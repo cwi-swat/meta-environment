@@ -1,17 +1,3 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
-
 %%  \module{\TeX}
 %%
 %% Since we only want to generate code, we use a simple syntax for \TeX\
@@ -19,10 +5,12 @@
 %% numbers, command sequences and braces {\tt \{} and {\tt \}}.  To be
 %% able to translate a nested box, a token can also be a list of tokens.
 %%\smallskip
+
 module languages/tex/syntax/TeX
 
 imports basic/Integers
 imports basic/Strings
+imports basic/Comments
 
 exports
   sorts CS TEX
@@ -30,17 +18,20 @@ exports
     "\\" [A-Za-z]+  -> CS
   context-free syntax
     "(" TEX* ")"    -> TEX %% token list
-    String      -> TEX
+    StrCon          -> TEX
     Integer         -> TEX
     CS              -> TEX
     "{"             -> TEX
     "}"             -> TEX
-  variables
+
+hiddens 
+ variables
     [t][0-9\']*    -> TEX
     [t]"*"[0-9\']* -> TEX*
 
 %% \smallskip
 
+exports
   sorts TEX-LIST
   context-free syntax
     TEX*            -> TEX-LIST
@@ -59,7 +50,7 @@ exports
 
 hiddens
   variables
-    [ab][0-9]* -> String 
-    "chr""+"   -> CHAR+
-    "chr""*"   -> CHAR*
+    [ab][0-9]* -> StrCon 
+    "chr+"     -> CHAR+
+    "chr*"     -> CHAR*
 %%%
