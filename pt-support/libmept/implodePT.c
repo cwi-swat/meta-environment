@@ -292,14 +292,12 @@ void init_asfix2_patterns()
 
 void init_a2toa1_patterns(void)
 {
-  static ATbool patterns_initialized = ATfalse;
+  static int patterns_initialized = 0;
 
-  if (patterns_initialized) {
-    return;
+  if (!patterns_initialized) {
+    init_asfix2_patterns();
+    patterns_initialized = 1;
   }
-  patterns_initialized = ATtrue;
-
-  init_asfix2_patterns();
 }
 
 static ATermList implodeArgs(ATermList tl)
