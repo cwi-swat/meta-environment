@@ -176,17 +176,17 @@ void register_user_directories(int cid, ATerm paths)
 
 /*{{{  static void addExtension(ATermList extensions, MC_Property property) */
 
-static void addExtension(ATermList extensions, MC_Property property)
+static ATermList addExtension(ATermList extensions, MC_Property property)
 {
-  extensions = ATinsert(extensions, MC_PropertyToTerm(property));
+  return ATinsert(extensions, MC_PropertyToTerm(property));
 }
 
 /*}}}  */
 /*{{{  static void addTextCategory(ATermList categories, MC_Property property) */
 
-static void addTextCategory(ATermList categories, MC_Property property)
+static ATermList addTextCategory(ATermList categories, MC_Property property)
 {
-  categories = ATinsert(categories, MC_PropertyToTerm(property));
+  return ATinsert(categories, MC_PropertyToTerm(property));
 }
 
 /*}}}  */
@@ -213,7 +213,7 @@ static void addSystemProperty(MC_Property property)
     }
   }
   else if (MC_isPropertyTextCategory(property)) {
-    addTextCategory(systemTextCategories, property);
+    systemTextCategories = addTextCategory(systemTextCategories, property);
   }
   else {
     ATabort(__FILE__ ":addSystemProperty: unhandled property: %t\n", property);
@@ -263,7 +263,7 @@ static void addUserProperty(MC_Property property)
     }
   }
   else if (MC_isPropertyTextCategory(property)) {
-    addTextCategory(userTextCategories, property);
+    userTextCategories = addTextCategory(userTextCategories, property);
   }
   else {
     ATabort(__FILE__ ":addUserProperty: unhandled property: %t\n", property);
