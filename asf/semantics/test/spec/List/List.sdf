@@ -1,0 +1,19 @@
+module List
+
+exports
+
+sorts ("a" | "b" | "c")*
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+context-free restrictions
+
+LAYOUT? -/- [\ \t\n]
+
+context-free syntax
+
+variables
+
+"abc*"[0-9]* ->  ("a" | "b" | "c")*

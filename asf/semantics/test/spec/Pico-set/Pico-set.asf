@@ -1,0 +1,5 @@
+equations
+
+[0] {Id*1,Id,Id*2,Id,Id*3} = {Id*1,Id,Id*2,Id*3}
+
+

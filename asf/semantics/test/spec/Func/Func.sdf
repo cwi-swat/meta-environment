@@ -1,0 +1,18 @@
+module Func
+
+imports Layout Pico-Integers Pico-Identifiers
+
+exports
+  sorts Pico-Func
+  context-free syntax
+
+    "f" -> Pico-Func
+
+    "apply" "(" PICO-BOOL "," PICO-INT "," Pico-Func ")" -> PICO-INT
+
+  aliases
+    (PICO-BOOL PICO-INT => PICO-INT) -> Pico-Func
+
+  variables
+    "vf"[0-9]* -> Pico-Func
+ 

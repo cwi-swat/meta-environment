@@ -1,0 +1,6 @@
+equations
+
+[] abc*1 b a abc*2 = abc*1 a b abc*2
+[] abc*1 c b abc*2 = abc*1 b c abc*2
+[] abc*1 c a abc*2 = abc*1 a c abc*2
+

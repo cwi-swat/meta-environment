@@ -1,0 +1,20 @@
+module ReturnsList
+
+imports Layout
+
+exports
+
+sorts B {B ";"}*
+
+context-free syntax
+
+"true" -> B
+"false" -> B
+
+f({B ";"}*) -> {B ";"}*
+
+variables
+
+"B"[0-9]* -> B
+"B*"[0-9]* -> {B ";"}*
+
