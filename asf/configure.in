@@ -145,6 +145,9 @@ AC_OUTPUT(
    addeqssyntax/Makefile
    addeqssyntax/spec/Makefile
    addeqssyntax/src/Makefile
+   addapisyntax/Makefile
+   addapisyntax/spec/Makefile
+   addapisyntax/src/Makefile
    removevarsyntax/Makefile
    removevarsyntax/spec/Makefile
    removevarsyntax/src/Makefile
@@ -153,6 +156,7 @@ AC_OUTPUT(
    asfc/src/muasf/Makefile
    asfe/Makefile
    asfe/src/Makefile
+   asfe/src/api/Makefile
    utils/Makefile
    restorebrackets/Makefile
    test/Makefile

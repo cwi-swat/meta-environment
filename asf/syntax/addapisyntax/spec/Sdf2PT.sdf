@@ -1,0 +1,40 @@
+module Sdf2PT
+
+imports Sdf2
+
+exports
+
+context-free syntax
+
+sdf2pt(Production, "lex" | "cf") -> ATerm
+
+hiddens
+
+context-free syntax
+
+asyms(Symbol*, "lex" | "cf")  -> {ATerm ","}*
+asym(Symbol)                  -> ATerm
+aattributes(Attributes)       -> ATermList
+aattrs({Attribute ","}+)      -> {ATerm ","}+
+aattr(Attribute)              -> ATerm {prefer}
+
+hiddens
+
+variables 
+
+"Attributes"[0-9]*   -> Attributes
+"Attribute"[0-9]*    -> Attribute
+"Attribute+"[0-9]*   -> { Attribute ","}+
+"Production"[0-9]*   -> Production
+"Lhs"                -> Symbol*
+"Rhs"                -> Symbol
+"c*"[0-9]*           -> CHAR*
+"c+"[0-9]*           -> CHAR+
+"c"[0-9]*            -> CHAR
+"Term"[0-9]*         -> ATerm
+"Intcon"[0-9]*       -> IntCon
+"lex|cf"[0-9]*       -> "lex" | "cf"
+"$"? "Symbol+"[0-9]* -> Symbol+
+"$"? "Symbol"[0-9]*  -> Symbol
+"$"? "Literal"[0-9]* -> Literal
+"ATerm"[0-9]*        -> ATerm
