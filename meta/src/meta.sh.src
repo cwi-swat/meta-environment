@@ -137,7 +137,7 @@ if [ $verbose -gt 0 ] ; then
 fi
 
 toolbus $xargs ${toolbusdefs} \
-   -I${toolbus}/share \
+   -I${toolbus}/share/toolbus \
    -I${prefix}/share/meta \
    -I${aterm}/share \
    -I${pt_support}/share/pt-support \
