@@ -32,8 +32,17 @@ do
 				;;
 		-script-args)	shift; SCRIPTARGS="-script-args $@" ;shift
 				;;
-		-*)		$echo "unknown option: $1"
-				$echo "$usage" >&2
+		-h|-help)       echo "usage: $0 [toolbus-options] [options]"
+				echo "options:"
+				echo "  -script <python script>"
+				echo "  -program <python interpreter>"
+				echo "  -trace-calls"
+				echo "  -arg <python interpreter args>"
+				echo "  -script-args <python program args>"
+				exit 0
+				;;
+		-*)		echo "unknown option: $1"
+				echo "$usage" >&2
 				exit 1
 				;;
 		*) break

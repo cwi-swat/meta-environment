@@ -251,6 +251,8 @@ Options are:\n\
 -help                 print this message\n\
 -script Name          use Name as Perl script\n";
   fprintf(stderr, str);
+
+  exit(0);
 }
 
 int main(int argc, char *argv[])
@@ -261,7 +263,7 @@ int main(int argc, char *argv[])
   FILE *f;
 
   while(i < argc){    
-    if(streq(argv[i], "-help")){
+    if(streq(argv[i], "-help") || streq(argv[i], "-h")){
       help();
     } else if(streq(argv[i], "-script")){
       script = argv[i+1];

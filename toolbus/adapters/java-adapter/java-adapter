@@ -33,8 +33,16 @@ do
 				;;
 		-java-args)	shift; SCRIPTARGS="-args $@" ;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift
 				;;
-		-*)		$echo "unknown option: $1"
-				$echo "$usage" >&2
+		-h|-help)	echo "usage: $0 [toolbus-options] [options]"
+				echo "options:"
+				echo "  -program <java-vm>"
+				echo "  -class <class-to-start>"
+				echo "  -arg <java VM args>"
+				echo "  -java-args <Java program args>"
+				exit 0
+				;;
+		-*)		echo "unknown option: $1"
+				echo "$usage" >&2
 				exit 1
 				;;
 		*) break
