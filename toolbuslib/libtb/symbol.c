@@ -90,6 +90,7 @@ static name_bucket *lookup_bucket(char *name, sym_idx module)
   cur->name = strdup(name);
   idx_table[ID] = cur;
   cur->id = ID++;
+  cur->type = IDT_ALL; 
   /* Module type defaults to system_module */
   if(module == IDM_ALL)
     cur->module = system_module;
