@@ -37,10 +37,13 @@ Installation Instructions
    -The asf-support library, available from:
        www.cwi.nl/projects/MetaEnv/
 
+   -The ASF rewriting engines, available from:
+       www.cwi.nl/projects/MetaEnv/   
+
    -The Scannerless Generalized LR Parser (sglr), available from:
        www.cwi.nl/projects/MetaEnv/
 
-   -The SDF2 parser generator, , available from:
+   -The SDF2 parser generator, available from:
        www.cwi.nl/projects/MetaEnv/              
    
    -The ASF+SDF compiler runtime library, available from:
@@ -52,12 +55,12 @@ Installation Instructions
 2) Configuring the ASF+SDF Meta-Environment.
 
    Assuming that the third party tools, aterm library, the toolbus, the support 
-   libraries, the runtime library, the parser generator, and sglr are 
-   installed in <xemacs>, <graphviz>, <tk>, <aterm>, <toolbus>, <pt-support>, 
-   <sdf-support>, <asf-support>, <asc-support>, <pgen>, and <sglr> 
-   respectively and that the ASF+SDF Meta-Environment should be installed in 
-   <meta> then the following command will configure the Meta-Environment 
-   accordingly:
+   libraries, the runtime library, the rewrite engines, the parser generator, 
+   and sglr are installed in <xemacs>, <graphviz>, <tk>, <aterm>, <toolbus>, 
+   <pt-support>, <sdf-support>, <asf-support>, <asc-support>, <asf>, <pgen>, 
+   and <sglr> respectively and that the ASF+SDF Meta-Environment should be 
+   installed in <meta> then the following command will configure the 
+   Meta-Environment accordingly:
 
    ./configure --prefix=<meta> \
                --with-xemacs=<xemacs> \
@@ -69,6 +72,7 @@ Installation Instructions
                --with-sdf-support=<sdf-support> \
                --with-asf-support=<asf-support> \
                --with-asc-support=<asc-support> \
+               --with-asf=<asf> \
                --with-sglr=<sglr> \
                --with-pgen=<pgen>
 

@@ -67,7 +67,7 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
 AC_SUBST(TOOLBUS)
 
 dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, tifstoc,
+AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
@@ -87,7 +87,7 @@ AC_PACKAGE_REQUIRE(asf, addeqssyntax,
 AC_SUBST(ASF)
 
 dnl Require pt-support package
-AC_PACKAGE_REQUIRE(pt-support, asource,
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
 
@@ -96,15 +96,21 @@ dnl Handle --with-sdf-support=... argument to configure
 AC_ARG_WITH(sdf-support,
    [  --with-sdf-support=DIR  sdf-support is in DIR],
    SDF_SUPPORT=${withval},)
-
 AC_SUBST(SDF_SUPPORT)
+
+ASF_SUPPORT='${prefix}'
+dnl Handle --with-asf-support=... argument to configure
+AC_ARG_WITH(asf-support,
+   [  --with-asf-support=DIR  asf-support is in DIR],
+   ASF_SUPPORT=${withval},)
+AC_SUBST(ASF_SUPPORT)
+
 
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,
    [  --with-asc-support=DIR  asc-support is in DIR],
    ASC_SUPPORT=${withval},)
-
 AC_SUBST(ASC_SUPPORT)
 
 dnl Our own version of libdir iwhose value is set dynamically
