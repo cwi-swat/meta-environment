@@ -446,12 +446,13 @@ int main(int argc, char *argv[])
       ATerror("%s: cannot open %s\n", myname, output);
     }
 
-    ToC_code(c_code, iofile);
-    ATfprintf(iofile, "\n");
-    fclose(iofile);
     if (run_verbose) {
       ATwarning("Writing: %s\n", output);
     }
+
+    ToC_code(c_code, iofile);
+    ATfprintf(iofile, "\n");
+    fclose(iofile);
   }
 
   return 0;
