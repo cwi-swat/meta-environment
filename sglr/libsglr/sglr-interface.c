@@ -446,7 +446,7 @@ void SG_PrintToken(FILE *out, token c)
 {
   int i = SG_GETTOKEN(c);
 
-  if(isgraph(i)) {
+  if(i != SG_EOF &&isgraph(i)) {
     fprintf(out, "%c", i);
   } else {
     switch(i) {

@@ -60,7 +60,8 @@ double SG_Timer(void)
   cur  =  (double) (rsrc_usage.ru_utime.tv_sec) +
     (double) ((rsrc_usage.ru_utime.tv_usec) * 1.0e-06);
 
-  return cur - prev;
+  prev = cur - prev;
+  return prev > 0 ? prev: 0;
 }
 
 struct rusage flt_rsrc_usage;

@@ -75,6 +75,7 @@ typedef struct _parse_table  {
   injectiontable   injections;
   prioritytable    priorities;
   ATbool           has_priorities;
+  ATbool           has_rejects;
 #ifndef NO_EAGERNESS
   ATbool           has_prefers;
   ATbool           has_avoids;
@@ -86,8 +87,6 @@ typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
 
 /*  Some global variables/macros  */
 
-#define SG_APPLLABEL    "#"
-#define SG_REJECTLABEL  "X"
 extern  token SG_EOF_Token;
 extern  token SG_Zero_Token;
 
@@ -117,6 +116,7 @@ ATbool SG_Rejectable(state s);
 
 
 actionkind    SG_ActionKind(action a);
+ATbool        SG_ReduceAction(action a);
 
 #if 0
 state         SG_A_STATE(action a);
@@ -158,10 +158,12 @@ parse_table  *SG_LookupParseTable(char *L);
 #define       SG_PT_INJECTIONS(pt)      ((pt)->injections)
 #define       SG_PT_PRIORITIES(pt)      ((pt)->priorities)
 #define       SG_PT_HAS_PRIORITIES(pt)  ((pt)->has_priorities)
+#define       SG_PT_HAS_REJECTS(pt)     ((pt)->has_rejects)
+
 #ifndef NO_EAGERNESS
 #define       SG_PT_HAS_PREFERS(pt)     ((pt)->has_prefers)
 #define       SG_PT_HAS_AVOIDS(pt)      ((pt)->has_avoids)
-#define       SG_PT_HAS_PREFERENCES(pt) (SG_PT_HAS_PREFERS(pt)||SG_PT_HAS_AVOIDS(pt))
+#define       SG_PT_HAS_PREFERENCES(pt) (SG_PT_HAS_REJECTS(pt)||SG_PT_HAS_PREFERS(pt)||SG_PT_HAS_AVOIDS(pt))
 #endif
 
 #define       SG_A_STATE(a)         ATgetInt((ATermInt) ATgetArgument(a, 0))
@@ -171,7 +173,7 @@ parse_table  *SG_LookupParseTable(char *L);
 #define       SG_A_LOOKAHEAD(a)     (lookahead) ATgetInt((ATermInt) ATgetArgument(a, 3))
 
 #define       SG_RegularAction(a)   (SG_A_ATTRIBUTE(a) == SG_PT_REGULAR)
-#define       SG_RejectAction(a)    (SG_A_ATTRIBUTE(a) == SG_PT_REJECT)
+#define       SG_RejectAction(a)    (SG_ReduceAction(a) && SG_A_ATTRIBUTE(a) == SG_PT_REJECT)
 
 #ifndef NO_EAGERNESS
 #define       SG_EagerAction(a)     (SG_A_ATTRIBUTE(a) == SG_PT_EAGER)

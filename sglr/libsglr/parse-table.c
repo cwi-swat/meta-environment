@@ -132,6 +132,7 @@ actionkind SG_ActionKind(action a)
   return ERROR;
 }
 
+
 #if 0
 state SG_A_STATE(action a)
 {
@@ -165,7 +166,7 @@ ATbool SG_RegularAction(action a)
 
 ATbool SG_RejectAction(action a)
 {
-  return (SG_A_ATTRIBUTE(a) == SG_PT_REJECT);
+  return SG_ReduceAction(a) && (SG_A_ATTRIBUTE(a) == SG_PT_REJECT);
 }
 
 ATbool SG_EagerAction(action a)
@@ -184,6 +185,13 @@ ATbool SG_PreferenceAction(action a)
 }
 #endif
 
+
+ATbool SG_ReduceAction(action a)
+{
+  int kind = SG_ActionKind(a);
+
+  return (kind == REDUCE) || (kind == REDUCE_LA);
+}
 
 /*  Hash function for the Action and Goto Table  */
 
@@ -400,7 +408,7 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
  if(!pt->has_prefers || !pt->has_avoids) {
     for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
       act = ATgetFirst(acts);
-      if(SG_ActionKind(act) == REDUCE) {
+      if(SG_ReduceAction(act)) {
         if(SG_EagerAction(act)) {
           pt->has_prefers = ATtrue;
         } else if(SG_UneagerAction(act)) {
@@ -443,9 +451,16 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
     act = ATgetFirst(acts);
     if(ATgetAFun(act) == SG_Action_AFun) {
       ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);
-      ATerm     t       = ATgetArgument(act, 1);
+      actions   t       = (actions) ATgetArgument(act, 1);
 
       SG_AddClassesToActionTable(pt, s, classes, (actions) t);
+      for(; !pt->has_rejects && !ATisEmpty(t); t = ATgetNext(t)) {
+        action thisact = ATgetFirst(t);
+        
+        if(SG_RejectAction(thisact)) {
+          pt->has_rejects = ATtrue;
+        }
+      }
     } else {
       ATerror("SG_AddPTActions: bad action %t\n", act);
     }
@@ -791,7 +806,7 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   }
   pt->priorities   = ATtableCreate(numprods, 75);
 
-  pt->has_priorities  = ATfalse;
+  pt->has_priorities = pt->has_rejects  = ATfalse;
 #ifndef NO_EAGERNESS
   pt->has_prefers = pt->has_avoids = ATfalse;
 #endif

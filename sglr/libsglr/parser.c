@@ -701,10 +701,15 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
         for(as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
             as && !ATisEmpty(as); as = ATgetNext(as)) {
-          action  a;
+          action  a = ATgetFirst(as);
 
-          if(SG_ActionKind(a = ATgetFirst(as)) == REDUCE)
+        
+          if(SG_ActionKind(a) == REDUCE
+          || (  SG_ActionKind(a) == REDUCE_LA
+             && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
+
             SG_DoLimitedReductions(st2, a, nl);
+          }
         }
       }
     }
