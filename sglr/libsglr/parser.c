@@ -1039,19 +1039,17 @@ forest SG_ParseResult(char *sort)
 #endif
 
 
-#ifdef WEWANTAMBIGUITYLISTSINSTEADOFAMBIGUOUSASFIX2WHENRUNNINGONTOOLBUS
   /*
       If you'd want return ambiguity tracks instead of ambiguous
       AsFix2, that could be taken care of here...
    */
   if(SG_TOOLBUS) {
-    ATermList ambtrak = SG_AmbTracker(woods);
+    ATerm ambtrak = SG_AmbTracker(woods);
 
-    if(!ATisEmpty(ambtrak)) {
-      return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak));
+    if(ambtrak) {
+      return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
     }
   }
-#endif
 
     woods = (forest) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) woods,
                                  (ATerm) SG_GetATint(
