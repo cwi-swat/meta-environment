@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/16 (jong@cwi.nl)
+ * documented mysterious bump from version 0.8 to 1.0.
+
 2001/07/06 (markvdb@cwi.nl, jurgenv@cwi.nl)
  * Removed AsFix1 depending functionality.
  * Inserted a missing layout before the separator of a list.
