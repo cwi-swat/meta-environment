@@ -21,7 +21,7 @@ typedef struct PT_Amb_Position_Tag {
 
 /*{{{  static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current) */
 
-static ERR_SubjectList getAmbiguities(char *path,
+static ERR_SubjectList getAmbiguities(const char *path,
                                       PT_Tree tree, 
                                       PT_Amb_Position *current)
 {
@@ -122,7 +122,7 @@ static ERR_SubjectList getAmbiguities(char *path,
     ambArea = ERR_makeAreaArea(here.line, here.col,
 			       current->line, current->col,
                                here.offset, (current->offset - here.offset));
-    ambLocation = ERR_makeLocationLocation(path, ambArea);
+    ambLocation = ERR_makeLocationLocation((char*) path, ambArea);
     ambSubject = ERR_makeSubjectSubject(ambString, ambLocation);
 
     ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
@@ -139,7 +139,7 @@ static ERR_SubjectList getAmbiguities(char *path,
 
 /*{{{  ATerm PT_reportTreeAmbiguities(PT_Tree tree) */
 
-ATerm PT_reportTreeAmbiguities(char *path, PT_Tree tree)
+ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
 {
   PT_Amb_Position pos = {1,0,0}; 
   ERR_SubjectList ambs = getAmbiguities(path, tree, &pos);
@@ -156,7 +156,7 @@ ATerm PT_reportTreeAmbiguities(char *path, PT_Tree tree)
 /*}}}  */
 /*{{{  ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree) */
 
-ATerm PT_reportParseTreeAmbiguities(char *path, PT_ParseTree parsetree)
+ATerm PT_reportParseTreeAmbiguities(const char *path, PT_ParseTree parsetree)
 {
   return PT_reportTreeAmbiguities(path, PT_getParseTreeTop(parsetree));
 }
