@@ -366,11 +366,11 @@ ASF_Tag ASF_makeTagNotEmpty(ASF_Layout wsAfterBracketOpen, ASF_TagId TagId, ASF_
 }
 
 /*}}}  */
-/*{{{  ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList) */
+/*{{{  ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol, ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList) */
 
-ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList)
+ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol, ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList)
 {
-  return (ASF_Tree)ATmakeTerm(ASF_patternTreeLexicalConstructor, name, wsAfterName, wsAfterParenOpen, list, wsAfterList);
+  return (ASF_Tree)ATmakeTerm(ASF_patternTreeLexicalConstructor, symbolName, symbol, name, wsAfterName, wsAfterParenOpen, list, wsAfterList);
 }
 
 /*}}}  */
@@ -398,27 +398,27 @@ ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_Layout wsAfterFirst, ASF_CH
 }
 
 /*}}}  */
-/*{{{  ASF_Equation ASF_makeEquationDefault(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs) */
+/*{{{  ASF_Equation ASF_makeEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs) */
 
-ASF_Equation ASF_makeEquationDefault(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs)
+ASF_Equation ASF_makeEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs)
 {
-  return (ASF_Equation)ATmakeTerm(ASF_patternEquationDefault, lhs, wsAfterLhs, wsAfterEquals, rhs);
+  return (ASF_Equation)ATmakeTerm(ASF_patternEquationDefault, lhsSymbol, rhsSymbol, lhs, wsAfterLhs, wsAfterEquals, rhs);
 }
 
 /*}}}  */
-/*{{{  ASF_Condition ASF_makeConditionPositive(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs) */
+/*{{{  ASF_Condition ASF_makeConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs) */
 
-ASF_Condition ASF_makeConditionPositive(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs)
+ASF_Condition ASF_makeConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs)
 {
-  return (ASF_Condition)ATmakeTerm(ASF_patternConditionPositive, lhs, wsAfterLhs, wsAfterEquals, rhs);
+  return (ASF_Condition)ATmakeTerm(ASF_patternConditionPositive, lhsSymbol, rhsSymbol, lhs, wsAfterLhs, wsAfterEquals, rhs);
 }
 
 /*}}}  */
-/*{{{  ASF_Condition ASF_makeConditionNegative(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs) */
+/*{{{  ASF_Condition ASF_makeConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs) */
 
-ASF_Condition ASF_makeConditionNegative(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs)
+ASF_Condition ASF_makeConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs)
 {
-  return (ASF_Condition)ATmakeTerm(ASF_patternConditionNegative, lhs, wsAfterLhs, wsAfterUnequal, rhs);
+  return (ASF_Condition)ATmakeTerm(ASF_patternConditionNegative, lhsSymbol, rhsSymbol, lhs, wsAfterLhs, wsAfterUnequal, rhs);
 }
 
 /*}}}  */
@@ -1812,7 +1812,7 @@ ATbool ASF_isValidTree(ASF_Tree arg)
 
 ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternTreeLexicalConstructor, NULL, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, ASF_patternTreeLexicalConstructor, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -1927,6 +1927,43 @@ ASF_Tree ASF_setTreeWsAfterName(ASF_Tree arg, ASF_Layout wsAfterName)
 }
 
 /*}}}  */
+/*{{{  ATbool ASF_hasTreeSymbol(ASF_Tree arg) */
+
+ATbool ASF_hasTreeSymbol(ASF_Tree arg)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getTreeSymbol(ASF_Tree arg) */
+
+ASF_Symbol ASF_getTreeSymbol(ASF_Tree arg)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return (ASF_Symbol)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 6);
+  }
+
+  ATabort("Tree has no Symbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Tree ASF_setTreeSymbol(ASF_Tree arg, ASF_Symbol symbol) */
+
+ASF_Tree ASF_setTreeSymbol(ASF_Tree arg, ASF_Symbol symbol)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)symbol, 6), 0);
+  }
+
+  ATabort("Tree has no Symbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool ASF_hasTreeList(ASF_Tree arg) */
 
 ATbool ASF_hasTreeList(ASF_Tree arg)
@@ -1997,6 +2034,43 @@ ASF_Tree ASF_setTreeName(ASF_Tree arg, ASF_Tree name)
   }
 
   ATabort("Tree has no Name: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasTreeSymbolName(ASF_Tree arg) */
+
+ATbool ASF_hasTreeSymbolName(ASF_Tree arg)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getTreeSymbolName(ASF_Tree arg) */
+
+ASF_Symbol ASF_getTreeSymbolName(ASF_Tree arg)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0);
+  }
+
+  ATabort("Tree has no SymbolName: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Tree ASF_setTreeSymbolName(ASF_Tree arg, ASF_Symbol symbolName) */
+
+ASF_Tree ASF_setTreeSymbolName(ASF_Tree arg, ASF_Symbol symbolName)
+{
+  if (ASF_isTreeLexicalConstructor(arg)) {
+    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)symbolName, 0), 2), 0);
+  }
+
+  ATabort("Tree has no SymbolName: %t\n", arg);
   return NULL;
 }
 
@@ -2185,7 +2259,7 @@ ATbool ASF_isValidEquation(ASF_Equation arg)
 
 ATbool ASF_isEquationDefault(ASF_Equation arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternEquationDefault, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, ASF_patternEquationDefault, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -2226,6 +2300,43 @@ ASF_Equation ASF_setEquationRhs(ASF_Equation arg, ASF_Tree rhs)
 }
 
 /*}}}  */
+/*{{{  ATbool ASF_hasEquationLhsSymbol(ASF_Equation arg) */
+
+ATbool ASF_hasEquationLhsSymbol(ASF_Equation arg)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getEquationLhsSymbol(ASF_Equation arg) */
+
+ASF_Symbol ASF_getEquationLhsSymbol(ASF_Equation arg)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0);
+  }
+
+  ATabort("Equation has no LhsSymbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Equation ASF_setEquationLhsSymbol(ASF_Equation arg, ASF_Symbol lhsSymbol) */
+
+ASF_Equation ASF_setEquationLhsSymbol(ASF_Equation arg, ASF_Symbol lhsSymbol)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return (ASF_Equation)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)lhsSymbol, 0), 2), 0);
+  }
+
+  ATabort("Equation has no LhsSymbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool ASF_hasEquationLhs(ASF_Equation arg) */
 
 ATbool ASF_hasEquationLhs(ASF_Equation arg)
@@ -2259,6 +2370,43 @@ ASF_Equation ASF_setEquationLhs(ASF_Equation arg, ASF_Tree lhs)
   }
 
   ATabort("Equation has no Lhs: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasEquationRhsSymbol(ASF_Equation arg) */
+
+ATbool ASF_hasEquationRhsSymbol(ASF_Equation arg)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getEquationRhsSymbol(ASF_Equation arg) */
+
+ASF_Symbol ASF_getEquationRhsSymbol(ASF_Equation arg)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 4);
+  }
+
+  ATabort("Equation has no RhsSymbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Equation ASF_setEquationRhsSymbol(ASF_Equation arg, ASF_Symbol rhsSymbol) */
+
+ASF_Equation ASF_setEquationRhsSymbol(ASF_Equation arg, ASF_Symbol rhsSymbol)
+{
+  if (ASF_isEquationDefault(arg)) {
+    return (ASF_Equation)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)rhsSymbol, 4), 2), 0);
+  }
+
+  ATabort("Equation has no RhsSymbol: %t\n", arg);
   return NULL;
 }
 
@@ -2359,7 +2507,7 @@ ATbool ASF_isValidCondition(ASF_Condition arg)
 
 ATbool ASF_isConditionPositive(ASF_Condition arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternConditionPositive, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, ASF_patternConditionPositive, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -2367,7 +2515,7 @@ ATbool ASF_isConditionPositive(ASF_Condition arg)
 
 ATbool ASF_isConditionNegative(ASF_Condition arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternConditionNegative, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, ASF_patternConditionNegative, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -2413,6 +2561,52 @@ ASF_Condition ASF_setConditionRhs(ASF_Condition arg, ASF_Tree rhs)
   }
 
   ATabort("Condition has no Rhs: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasConditionLhsSymbol(ASF_Condition arg) */
+
+ATbool ASF_hasConditionLhsSymbol(ASF_Condition arg)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getConditionLhsSymbol(ASF_Condition arg) */
+
+ASF_Symbol ASF_getConditionLhsSymbol(ASF_Condition arg)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0);
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0);
+  }
+
+  ATabort("Condition has no LhsSymbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Condition ASF_setConditionLhsSymbol(ASF_Condition arg, ASF_Symbol lhsSymbol) */
+
+ASF_Condition ASF_setConditionLhsSymbol(ASF_Condition arg, ASF_Symbol lhsSymbol)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return (ASF_Condition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)lhsSymbol, 0), 2), 0);
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return (ASF_Condition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)lhsSymbol, 0), 2), 0);
+  }
+
+  ATabort("Condition has no LhsSymbol: %t\n", arg);
   return NULL;
 }
 
@@ -2496,6 +2690,52 @@ ASF_Condition ASF_setConditionWsAfterUnequal(ASF_Condition arg, ASF_Layout wsAft
   }
 
   ATabort("Condition has no WsAfterUnequal: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasConditionRhsSymbol(ASF_Condition arg) */
+
+ATbool ASF_hasConditionRhsSymbol(ASF_Condition arg)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getConditionRhsSymbol(ASF_Condition arg) */
+
+ASF_Symbol ASF_getConditionRhsSymbol(ASF_Condition arg)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 4);
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 4);
+  }
+
+  ATabort("Condition has no RhsSymbol: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Condition ASF_setConditionRhsSymbol(ASF_Condition arg, ASF_Symbol rhsSymbol) */
+
+ASF_Condition ASF_setConditionRhsSymbol(ASF_Condition arg, ASF_Symbol rhsSymbol)
+{
+  if (ASF_isConditionPositive(arg)) {
+    return (ASF_Condition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)rhsSymbol, 4), 2), 0);
+  }
+  else if (ASF_isConditionNegative(arg)) {
+    return (ASF_Condition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)rhsSymbol, 4), 2), 0);
+  }
+
+  ATabort("Condition has no RhsSymbol: %t\n", arg);
   return NULL;
 }
 
