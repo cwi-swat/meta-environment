@@ -1,0 +1,103 @@
+%%% $Id$
+
+%% This file is part of the document 
+%% Design and implementation of a new ASF+SDF Meta-Environment
+
+\newcommand{\gse}{\textsc{gse}}
+%%\newenvironment{codebox}{\vspace{-.3cm}\begin{alltt}\begin{boxedminipage}[t]{6cm}}{\end{boxedminipage}\end{alltt}}
+\newenvironment{codebox}{\begin{center}\begin{minipage}[t]{6cm}\begin{alltt}}{\end{alltt}\end{minipage}\end{center}}
+
+
+The structure editor in the new implementation provides roughly the
+same functionality to the user as the Generic Structure Editor (\gse
+\cite{Koo94.thesis}). There are, however a number of differences, both
+in the external and the internal behaviour. 
+
+\subsection{Internal behaviour}
+
+The structure editing system consists of two parts. One is a
+\emph{structure} editor, the other is a \emph{text} editor. The
+structure editor operates on parse trees (encoded as AsFix terms). It
+only manipulates (sub)trees, i.e.\ it does not manipulate individual
+nodes in a parse tree. The text editor operates on a character level,
+it \emph{does} manipulate individual nodes in a parse tree.
+
+Both the text editor and the structure editor have a well defined
+external behaviour (a ToolBus interface) \cite{Kui96}. This 
+makes it possible to use any (existing) text editor as long as it
+adheres to the interface. One of the main weaknesses of \gse\ has
+always been its limited text editing capabilities. By separating text
+and structure editing functionality we hope to address this problem. 
+
+The text and structure editors are tied together by means of a ToolBus
+script. This script provides us with a tight coupling between the
+two. This coupling makes sure that at any given time the data
+structure in the text editor (the text) can be translated to the data
+structure in the structure editor (the parse tree), and vice
+versa. If a string $\alpha$ is a syntactically correct string in the
+language $L$, and we have a parser $\Pi_L$ over this language and a pretty printer $pp$
+then $pp(\Pi_L(\alpha)) = \alpha$. If $t$ the parse tree that results
+from $\Pi_L(\alpha)$ then also $\Pi_L(pp(t)) = t$.
+
+\subsection{External behaviour}
+
+If the edited text is not syntactically correct (which is inevitable
+during editing) then the smallest subtree that contains an incorrect
+program fragment will be held in a focus. In \gse\ a similar approach
+is used. The main difference between \gse\ and the new structure
+editor is that \gse\ has 2 specific modes, one for text editing and one
+for structure editing. The new editor does not need this
+distinction. The difference between these approaches is perhaps best
+illustrated with an example.
+
+Consider the following program in the language While (\cite{Vis97.spl}).
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do x := x - 1 \end{codebox}
+Now suppose we want to decrease x with 2 during each iteration. We
+replace the character \texttt{1} with the character \texttt{2}. After
+this replacement the focus will be on the integer 2 (The underlined
+character).
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do x := x - \underline{2} \end{codebox}
+Now suppose we want to edit the stop condition of the while loop, such
+that the loop terminates when x is greater than 2. In \gse the focus
+would then look like this:
+\begin{codebox}
+ x := 10 ;
+ \underline{while x > 2 do x := x - 2} \end{codebox}
+In the new editor, instead of increasing the focus, a new focus will
+be created, which looks like this:
+\begin{codebox}
+ x := 10 ;
+ while x > \underline{2} do x := x - \underline{2} \end{codebox}
+Obviously, this results in less parsing than in \gse. Of course, this
+is a very benign example. If we take the original program again, and
+decide to put the body of the while loop between brackets, we get the
+following focus positions.
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do \underline{\{x} := x - \underline{1\}} \end{codebox}
+where in \gse\ we would have had
+\begin{codebox}
+ x := 10 ;
+ while x > 0 do \underline{\{x := x - 1\}} \end{codebox}
+In this case, the last solution is better, because the first solution
+leaves us with two syntactically incorrect focuses. However, there are
+a number of strategies that could help us here. In this case, the
+solution would be to create a new focus that exactly contains all the
+old focuses, effectively giving the same functionality as \gse.
+
+\subsection{The Prototype}
+
+We are currently working on a prototype that lets us experiment with
+these different (parsing) strategies. Because all these strategies are
+implemented outside the structure editor (but in a ToolBus-script), it
+is relatively easy to change them. 
+
+The prototype currently consists of the aforementioned ToolBus script,
+an \asdf\ specification of the structure editor, a Java implementation
+of the structure editor, and a Tcl/Tk implementation of a text
+editor.
+

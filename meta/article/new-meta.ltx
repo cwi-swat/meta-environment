@@ -1,10 +1,11 @@
 \documentclass{article}
+\usepackage{amsmath}
 \usepackage{latexsym}
 \usepackage{ASF+SDF,ASF+SDF-options}
 \usepackage{epsfig}
-%%\usepackage{cmbcsc}
+\usepackage{cmbcsc,alltt}
 
-\title{Design and Implementation a New {\sc Asf+Sdf} Meta-Environment}
+\title{Design and Implementation of a New {\textsc Asf+Sdf} Meta-Environment}
 
 \author{Mark van den Brand$^{^1}$, Tobias Kuipers$^{^2}$, \\
         Leon Moonen$^{^1}$, Pieter Olivier$^{^1}$\\
@@ -21,25 +22,25 @@
 }
 
 \def\aterms{\mbox{ATerms}}
-\def\asfix{\mbox{\sc AsFix}}
-\def\sdf{{\sc Sdf}}
-\def\asf{{\sc Asf}}
-\def\asdf{{\sc Asf+Sdf}}
-\def\metaenv{{\sc Asf+Sdf} Meta-En\-vir\-on\-ment}
+\def\asfix{\mbox{\textsc AsFix}}
+\def\sdf{\textsc{Sdf}}
+\def\asf{\textsc{Asf}}
+\def\asdf{\textsc{Asf+Sdf}}
+\def\metaenv{\asdf\ Meta-En\-vir\-on\-ment}
 
-\def\TB{{\sc ToolBus}}
-\def\centaur{{\sc centaur}}
-\def\seal{{\sc seal}}
-\def\epic{{\sc Epic}}
-\def\lelisp{{\sc LeLisp}}
-\def\T{{\bf T}}
+\def\TB{\textsc{ToolBus}}
+\def\centaur{\textsc{centaur}}
+\def\seal{\textsc{seal}}
+\def\epic{\textsc{Epic}}
+\def\lelisp{\textsc{LeLisp}}
+\def\T{\textbf{T}}
 
-\def\tcl{{\sf Tcl}}
-\def\tk{{\sf Tk}}
-\def\dot{{\sf Dot}}
-\def\tcltk{{\sf Tcl/Tk}}
-\def\tcldot{{\sf TclDot}}
-\def\tcldg{{\sf TclDG}}
+\def\tcl{\textsf{Tcl}}
+\def\tk{\textsf{Tk}}
+\def\dot{\textsf{Dot}}
+\def\tcltk{\textsf{Tcl/Tk}}
+\def\tcldot{\textsf{TclDot}}
+\def\tcldg{\textsf{TclDG}}
 \def\ui{user interface}
 
 \makeatletter
@@ -90,7 +91,7 @@ the replacement of the text editing facilities of GSE
 \cite{Koo94.thesis} by Emacs and Epoch in 1992 \cite{KB93}.  However,
 it turned out that the resulting implementation was not deadlock free.
 This initiated the development of the \TB, a software interconnection
-architecture \cite{BK96a,BK96b} which takes care of the communication
+architecture \cite{BK96a,TB-AMAST96} which takes care of the communication
 of software components.
 
 \begin{table}
@@ -404,6 +405,8 @@ any information from this repository for other tools than the
 interpreter itself.
 
 \section{Editors}
+
+\input{editors.ltx}
 
 \section{Interpreter}
 \label{interpreter}

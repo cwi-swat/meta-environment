@@ -6,9 +6,9 @@ all: ps
 ps: new-meta.ps 
 
 new-meta.ps: new-meta.dvi newmeta.ps toolbus.ps
-	dvips new-meta.dvi
+	dvips -o new-meta.ps new-meta.dvi
 
-new-meta.dvi: new-meta.ltx newarch.tex newmeta.ps toolbus.ps
+new-meta.dvi: new-meta.ltx newarch.tex toolbus.ltx editors.ltx newmeta.ps toolbus.ps
 
 prev: new-meta.dvi
 	xdvi new-meta.dvi &
