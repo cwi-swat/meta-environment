@@ -12,7 +12,7 @@ let
   Time    : term,
   EqsText : str
 in
-  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  snd-msg(process-search-paths("meta.conf", ["__SRCDIR__","__BUILDDIR__"])) .
   rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("Test")) .
   (
@@ -22,7 +22,7 @@ in
   +
     shutdown("module-db-test-2a FAILED! (timeout)\n") delay(sec(5))
   ).
-  snd-msg(open-asf-file("Test", "./Test.sdf")) .
+  snd-msg(open-asf-file("Test", "__SRCDIR__/Test.sdf")) .
   (
     rec-msg(opened-file("Test", text(EqsText?), Path?, Time?)) .
     snd-msg(add-eqs-to-db("Test", Path, text(EqsText), Time)) .

@@ -8,7 +8,7 @@ let
   Path     : str,
   Time     : term
 in
-  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  snd-msg(process-search-paths("meta.conf", ["__SRCDIR__","__BUILDDIR__"])) .
   rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("Test")) .
   (
