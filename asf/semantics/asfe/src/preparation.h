@@ -48,6 +48,7 @@ typedef struct equation_table
 
 ATerm RWprepareTerm(ATerm t);
 ATermList RWprepareEqs(ATermList eqs);
+ATerm RWgetEqsList(ATerm t);
 ATerm RWrestoreTerm(ATerm t);
 void RWflushEquations();
 ATermList AFfilterLayout(ATermList elems);

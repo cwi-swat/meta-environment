@@ -681,6 +681,27 @@ ATerm RWprepareTerm(ATerm t)
 
 /*}}}  */
 
+/* RWgetEqsList: this function is used in the standalone version
+ * of the evaluator to retrieve the list of equations from a parsed
+ * equations module
+ */
+ATerm RWgetEqsList(ATerm t)
+{
+  /* If the input is already a list, we assume it is a list
+	 * of equations and return it immediately. This is for backward
+	 * compatibility.
+	 */
+	if(ATgetType(t) == AT_LIST) {
+		return t;
+	}
+
+	/* Otherwise we assume the input is the asfix representation of
+	 * an eqs file and we retrieve the list of equations from it:
+	 */
+
+	return (ATerm) AFTgetEqs(t);
+}
+
 /*{{{  ATermList RWprepareEqs(ATermList eqs)*/
 
 /*
@@ -691,6 +712,8 @@ ATermList RWprepareEqs(ATermList eqs)
 {
   ATerm el;
   ATermList result = ATempty;
+
+	eqs = (ATermList) RWgetEqsList((ATerm) eqs);
 
   while(!ATisEmpty(eqs)) {
     do {

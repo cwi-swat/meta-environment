@@ -22,6 +22,10 @@
   $Id$
  */
 
+#include <time.h>
+
+#define TICK2SEC(t)             (((double)(t))/CLK_TCK)
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -88,7 +92,10 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   FILE *iofile;
-
+#ifdef PROFILING
+  struct tms start, rewriting;
+  clock_t user, system;
+#endif
   int cid;
   int c, toolbus_mode = 0;
   char *input = "-";
@@ -184,10 +191,20 @@ int main(int argc, char *argv[])
 
     if(run_verbose) 
 			ATwarning("rewriting...\n");
-    
-		/*times(&start);*/
+   
+#ifdef PROFILING 
+    times(&start);
     newterm = rewrite(realterm,(ATerm) ATempty);
-    /*times(&rewriting);*/
+    times(&rewriting);
+
+    user = rewriting.tms_utime - start.tms_utime;
+    system = rewriting.tms_stime - start.tms_stime;
+   
+    ATwarning("rewriting: %f user, %f system\n", TICK2SEC(user), TICK2SEC(system)); 
+#else
+    newterm = rewrite(realterm,(ATerm) ATempty);
+#endif
+
 
 		/* Postprocessing of reduct */
 		newaterm = RWrestoreTerm(newterm);
