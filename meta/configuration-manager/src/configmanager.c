@@ -117,10 +117,11 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
     }
     localButtons = ATgetNext(localButtons);
   }
+
   if (ATisEmpty(buttonActions)) {
     if (strcmp(buttonName, "Parse") == 0 &&
         (strcmp(moduleName, "Equations") == 0 ||
-         strcmp(moduleName, "Syntax"))) {
+         strcmp(moduleName, "Syntax") == 0)) {
       buttonActions = ATinsert(buttonActions, ATmake("parse-buffer"));
     }
     else if (strcmp(buttonName, "Parse") == 0) {
