@@ -73,8 +73,6 @@ still working although start would be set to zero!?!
 - Description of concrete syntax in the Action env.
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
-- ASDFEditor: TypeCheck
-
 - modulo and division for integers is not supported by asf, maybe it
   should be implemented in the evaluator.
 
@@ -100,27 +98,57 @@ still working although start would be set to zero!?!
 >
 > * "Export equations" virker ikke.
 >
-> * Foretages der consistency check af termstore der loades af brugeren?
->
 > * Grafen opdateres ikke når et modul lukkes.
->
-> * Det virker som om at linien i bunden af vinduet ikke opdaters ofte
->   nok. Fx. Står der stadigvæk "Parse succesful of Dec" selvom jeg har
->   lukket editoren med Dec i.
 >
 > * Undersøg hvilken functionalitet fra ASF+SDF MetaEnv der kan
 >   genbruges (fx. delete module, add import etc.)
->
-> * "Reduce and evaluate" virker ikke.
+
+Fortolkeren kan ikke haandtere = korrekt.
 
 --------------------- Changes: --------------------
+
+Thu, Oct 14
+Note:
+- asdf-modules.tb.src: ASDFButtons, reduce and evaluate is know working.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, some more comments.
+
+
+Wed, Oct 13
+Note:
+- asdf-modules.tb.src: TypeCheckModule, now working.
+
+- asdf-modules.tb.src: GetInfos, parameterised with respect to
+  ToolName, GetFunctionName, JoinFunctionName, InfoTermStoreLocation
+  and ResultSort.
+  Using the new paramerterised versions of GetInfo and JoinInfo.
+
+- asdf-modules.tb.src: GetInfo, parameterised with respect to
+  ToolName, FunctionName and ResultSort.
+
+- asdf-modules.tb.src: JoinInfo, parameterised with respect to
+  ToolName, FunctionName and ResultSort.
+
+- asdf-modules.tb.src: It is now possible to parse and open modules,
+  containing implecit refernces to non-exsisting modules. The
+  non-exsisting module will become visible in the graph. It is not
+  possible to do anything with the new module dough!
+
+Tue, Oct 12
+Note:
+- asdf-modules.tb.src: ASDF-ModuleDB, the update-module-in-db is not
+  called from CheckSyntaxConsistency process in module-utils.tb
+  anymore(but is still used in ParseASDFSecond).
+
+- module-utils.tb: CheckSyntaxConsistency, added a call to OpenModule,
+  this might only be temporary until the process gets fixed.
+  
 
 Mon, Oct 11
 Note:
 - asdf-modules.tb.src: Parse*, The second parse is now done before the
   editor shows up. Not tested if reduce and evaluate works, put the
   seems to do all right.
-
 
 
 Thu, Oct 07

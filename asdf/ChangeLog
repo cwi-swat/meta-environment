@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Thu Oct 14 08:47:06 CET 2004 (fagidiot@daimi.au.dk)
+* The TypeChecker is back online.
+* It is possible to reduce and evaluate in one click.
+* Some stability issues solved.
+* See the file changes.
+	
 Tue Sep 28 13:04:37 CET 2004 (fagidiot@daimi.au.dk)
 * General update of the Action environment package.
   Furthermore support for an action evaluator has been added.

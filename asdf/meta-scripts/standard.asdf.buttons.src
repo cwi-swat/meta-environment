@@ -32,7 +32,7 @@ configuration([
           get-root,
 	  push-active-module,
           asdf-reduce-and-evaluate,
-          push-filename("my.module"),
+          push-filename("eval.out"),
           push-active-module,
           activate-editor]),
   action([description(term-editor, menu(["Actions","Evaluate"]))],
