@@ -1,5 +1,12 @@
 # $Id$
 
+2003/10/06 <markvdb@cwi.nl>
+ * check-sort("SORTNAME") changed into
+   push-string("SORTNAME"),check-sort
+   Furthermore, check-sort leaves a true or false on the stack
+   depending on whether it was successful or not.
+ * Adapted the actionchecker accordingly.
+
 Tue Sep 30 10:18:45 CEST 2003 <{jong,kooiker}@cwi.nl>
  * editors/text/emacs/connector.c: change function escapeQuotes to also
    escape escape-characters. Closes: #48
