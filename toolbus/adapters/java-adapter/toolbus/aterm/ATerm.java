@@ -5,7 +5,7 @@ import toolbus.util.PrintWriter;
 import toolbus.util.*;
 import java.io.*;
 
-abstract public class ATerm implements Cloneable
+abstract public class ATerm implements Cloneable, Serializable
 {
   abstract protected ATermImpl getATermImpl();
   public abstract void setAnno(ATerm anno);
