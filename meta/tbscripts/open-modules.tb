@@ -134,9 +134,7 @@ in
             +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(error-opening(Str?)).
-              snd-msg(cannot-open-module(Str)) .
-              snd-msg(add-empty-module-to-db(Str)).
-              rec-msg(empty-module-added)
+              snd-msg(cannot-open-module(Str))
             )
           )
         ).
