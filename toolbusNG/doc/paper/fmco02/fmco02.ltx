@@ -570,7 +570,7 @@ the column \emph{language} the various language are listed.  In column
 \emph{KLOC} the size (in Kilo Lines Of Code) is given for each
 language. The result is 107 KLOC for the whole system of which 4.6\%
 are \Tscript{}s.  If we consider the fact that \asdf\ specification are
-compiled to C code, another view is possible as well: 12 KLOC of \asdf
+compiled to C code, another view is possible as well: 12 KLOC of \asdf\
 generates 170 KLOC of C code (!). Taking this generated code into
 account, the total size of the whole system amounts to 277 KLOC of
 which 1.8\% are \Tscript{}s. This is compatible with the expectation that
@@ -593,8 +593,8 @@ sequential composition (\spec{.}) is the dominant operator and
 sending/receiving (\spec{snd-msg}, \spec{rec-msg}) messages is the
 dominant communication mechanism, followed by communication with tools
 (\spec{snd-do},\spec{snd-eval}).  It may be surprising that parallel
-composition (\spec{||}) is used so infrequently. However, one used be
-aware that at the top level all process run concurrently and that
+composition (\spec{||}) is used so infrequently. However, one should
+be aware that at the top level all process run concurrently and that
 \spec{||} is only used for explicit concurrency inside a process. The
 level of concurrence is therefore circa 100.
 
@@ -615,7 +615,7 @@ posed by our users and ourselves are:
   See \S\ref{Sec:exceptions}.
 
 \item I have huge data values that are exchanged between tools and the
-  \TB becomes a data bottleneck; can you improve this?
+  \TB\ becomes a data bottleneck; can you improve this?
   See \S\ref{Sec:value-ref}.
 
 \item The \TB\ and tools are running as separate tasks of the operating
@@ -989,7 +989,7 @@ differences in ToolBus, RMI, RMI-IIOP and Java IDL.
 Architecture  & Component    & Client & Client & Client \\
               & coordination  & Server & Client & Server \\ \hline
 Interface     & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
-GC            & yes & yes & yes & no \\ \hline
+GC            & yes & yes & no & no \\ \hline
 parameters /  & by-value & local: by-value & local: by-value & "in" and "out" \\
 return values &          & remote: by-ref & remote: by-ref & params \\ \hline
 language      & any via    & only Java & CORBA objects if &  any via \\
