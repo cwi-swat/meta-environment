@@ -334,6 +334,9 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
     else if (SDF_isAssociativityAssoc(sdfAssoc)) { 
       ptAttr = PT_makeAttrAssoc();
     }
+  }
+  else if (SDF_isAttributeTraverse(sdfAttribute)) {
+    ptAttr = PT_makeAttrTraverse();
   } 
   else {
      ATerror("SDFAttributeToPtAttr: unable to flatten %s\n", 
