@@ -1,7 +1,20 @@
 # $Id$
 
-EXTRA_DIST    = meta.sh.src pt-dump.sh.src eqs-dump.sh.src \
-		sdf-editor.sh.src asf-editor.sh.src term-editor.sh.src
+EXTRA_DIST = \
+	meta.sh.src \
+	pt-dump.sh.src \
+	eqs-dump.sh.src \
+	sdf-editor.sh.src \
+	asf-editor.sh.src \
+	term-editor.sh.src
+
+CLEANFILES = \
+	meta \
+	sdf-editor \
+	asf-editor \
+	term-editor \
+	pt-dump \
+	eqs-dump
 
 bin_SCRIPTS = meta pt-dump eqs-dump sdf-editor asf-editor term-editor
 

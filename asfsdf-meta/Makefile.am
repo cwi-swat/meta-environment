@@ -1,5 +1,7 @@
 SUBDIRS= meta-scripts src demo test
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 EXTRA_DIST=$(wildcard *.pkg)

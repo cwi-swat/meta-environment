@@ -1,9 +1,18 @@
 # $Id$
 
-TBSCRIPTS     = meta-interface.tb error-display.tb
+TBSCRIPTS = \
+	meta-interface.tb \
+	error-display.tb
 
-EXTRA_DIST    = meta-interface.tb.src error-display.tb \
-		standard.asfsdf.buttons standard.asfsdf.buttons.src
+EXTRA_DIST = \
+	meta-interface.tb.src \
+	error-display.tb \
+	standard.asfsdf.buttons \
+	standard.asfsdf.buttons.src
+
+CLEANFILES = \
+	meta-interface.tb \
+	standard.asfsdf.buttons
 
 pkgdata_DATA     = $(TBSCRIPTS) standard.asfsdf.buttons
 
