@@ -157,24 +157,30 @@ PT_Tree PT_renameInTree(PT_Tree tree,
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     PT_Symbol     rhs = PT_getProductionRhs(prod);
-    PT_Args       args = PT_getTreeArgs(tree);
-
-  
-    PT_Production newProd = renameInProduction(prod, formalParam, actualParam);
-    PT_Symbol newRhs  = PT_getProductionRhs(newProd);
-    PT_Args       newArgs = renameInArgs(args, formalParam, actualParam);
     PT_Tree       newTree;
 
-    newTree = PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
+    if (PT_isEqualSymbol(rhs, formalParam) && PT_isSymbolLit(actualParam)) {
+      newTree = PT_makeTreeLit(PT_getSymbolString(actualParam));
+    }
+    else {
+      PT_Args       args = PT_getTreeArgs(tree);
+      PT_Production newProd = renameInProduction(prod, formalParam, 
+						 actualParam);
+      PT_Args newArgs = renameInArgs(args, formalParam, actualParam);
+      PT_Symbol newRhs  = PT_getProductionRhs(newProd);
 
-    /* Wrap new variable lists in a proper list production */
-    if (PT_isTreeVar(newTree) &&
-	(PT_isIterSymbol(newRhs) || PT_isIterSepSymbol(newRhs)) && 
-	!(PT_isIterSymbol(rhs) || PT_isIterSepSymbol(rhs))) {
-      PT_Production listProd = PT_makeProductionList(newRhs);
-      PT_Tree listTree = PT_makeTreeAppl(listProd,
-					 PT_makeArgsSingle(newTree));
-      newTree = listTree;
+      newTree = PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
+    
+      /* Wrap new variable lists in a proper list production */
+
+      if (PT_isTreeVar(newTree) &&
+	  (PT_isIterSymbol(newRhs) || PT_isIterSepSymbol(newRhs)) && 
+	  !(PT_isIterSymbol(rhs) || PT_isIterSepSymbol(rhs))) {
+	PT_Production listProd = PT_makeProductionList(newRhs);
+	PT_Tree listTree = PT_makeTreeAppl(listProd,
+					   PT_makeArgsSingle(newTree));
+	newTree = listTree;
+      }
     }
 
     return newTree;
