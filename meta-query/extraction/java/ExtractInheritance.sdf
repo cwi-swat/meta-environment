@@ -1,4 +1,4 @@
-module ExtInheritance
+module ExtractInheritance
 
 imports Rstore
 imports JavaOperations

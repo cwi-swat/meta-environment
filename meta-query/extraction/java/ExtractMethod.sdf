@@ -1,4 +1,4 @@
-module ExtMethod
+module ExtractMethod
 
 imports Rstore
 imports JavaOperations

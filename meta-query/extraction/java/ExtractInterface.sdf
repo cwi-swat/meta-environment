@@ -1,4 +1,4 @@
-module ExtInterface
+module ExtractInterface
 
 imports Rstore
 imports JavaOperations

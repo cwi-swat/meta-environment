@@ -1,4 +1,4 @@
-module ExtCompilationUnit
+module ExtractCompilationUnit
 
 imports Rstore
 imports JavaOperations
