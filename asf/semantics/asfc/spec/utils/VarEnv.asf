@@ -1,21 +1,3 @@
-%%
-%%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
 equations
 
   [VE-1'1] enter(Term,[Pair*]) = [Term,Pair*]
@@ -32,13 +14,6 @@ equations
            ==============
            includes(Term1,[Term2,Pair*]) =
              includes(Term1,[Pair*])
-
-%%%  [VE-3'1] ve-lookup(Term,[Term,Pair*]) = Mssort
-
-%%%  [VE-3'2] Term1 != Term2
-%%%           ==============
-%%%           ve-lookup(Term1,[(Term2,Mssort),Pair*]) =
-%%%             ve-lookup(Term1,[Pair*])
 
   [gv-4'1] gen-var(natcon(Char+)) = varid("V" Char+)
 
@@ -178,10 +153,6 @@ equations
             pn-lookup(Funid1,Namepair*)
 
   [il-1'1] is-delaying(Funid, ) = false
-
-%%%  [il-1'2] is-protected(Funid,(Funid1,Funid,Term*1,lazy,Term*2),Namepair*) = true
-
-%%%  [il-1'3] is-protected(Funid,(Funid1,Funid,Term*1,outermost,Term*2),Namepair*) = true
 
   [il-1'3] is-delaying(Funid,(Funid1,Funid,Term*1,delaying(Term+),Term*2),Namepair*) = true
 
