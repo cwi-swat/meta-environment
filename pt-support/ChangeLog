@@ -1,3 +1,7 @@
+2001/11/23 (jurgenv@cwi.nl)
+  * Fixed a bug in the flattener from AsFix2 to AsFix2ME. Nested lists 
+    like {{A ";"}* ","}* were flattened to {A ","}* lists by mistake. 
+
 2001/11/22 (vandenbr@loria.fr)
   * Bumped into version 8beta.
   * Fixed a bug when dealing with ambiguities in lists.
