@@ -1,3 +1,7 @@
+2002/07/25 (jurgenv@cwi.nl)
+  * Removed libraries put back.
+  * Bumped to version 0.3beta
+
 2002/07/24 (jurgenv@cwi.nl)
   * Temporarily removed functions, strategies, containers, disambiguation
     and asf/tools from library in order to make a stable 0.2 release.
