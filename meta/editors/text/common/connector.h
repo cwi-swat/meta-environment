@@ -10,6 +10,9 @@ void protocolExpect(int fd, const char *expected);
 
 typedef struct _TextEditor *TextEditor;
 
+typedef int (*handle_editor_input_t)(int read_from_editor_fd,
+				     int write_to_hive_fd);
+
 typedef void (*move_to_front_t)(int write_to_editor_fd);
 typedef void (*clear_focus_t)(int write_to_editor_fd);
 typedef void (*write_contents_t)(int write_to_editor_fd);
@@ -31,6 +34,8 @@ TextEditor initTextEditor(hive_closed_t,
 			  set_focus_t,
 			  set_cursor_at_offset_t,
 			  is_modified_t);
+
+void setEditorInputHandler(TextEditor te, handle_editor_input_t handler);
 
 int eventloop(TextEditor editor, TE_Pipe hiveToEditor, TE_Pipe editorToHive);
 

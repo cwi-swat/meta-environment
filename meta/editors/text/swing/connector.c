@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /*{{{  includes */
 
 #include <stdio.h>
@@ -11,6 +13,9 @@
 
 #include <aterm2.h>
 #include <atb-tool.h>
+
+#include <connector.h>
+#include <TextEditor.h>
 
 /*}}}  */
 
@@ -60,7 +65,6 @@ static int allocate_inet_socket()
   int sock;
 
   for (try_port = 10000; try_port < 15000; try_port++) {
-    ATwarning("try_port: %d\n", try_port);
     sock = create_inet_socket(try_port);
     if (sock >= 0) {
       return sock;
@@ -72,42 +76,99 @@ static int allocate_inet_socket()
 
 /*}}}  */
 
-/*{{{  static int editor_eventloop(int editor_socket, int read_from_hive_fd, int write_to_hive_fd) */
+/*{{{  static void hiveClosed(int write_to_editor_fd) */
 
-static int editor_eventloop(int editor_socket, int read_from_hive_fd, int write_to_hive_fd)
+static void hiveClosed(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-terminate(\"hive closed\")"));
+}
+
+/*}}}  */
+/*{{{  static void clearFocus(int write_to_editor_fd) */
+
+static void clearFocus(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("clear-focus"));
+}
+
+/*}}}  */
+/*{{{  static void moveToFront(int write_to_editor_fd) */
+
+static void moveToFront(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("editor-to-front"));
+}
+
+/*}}}  */
+/*{{{  static void writeContents(int write_to_editor_fd) */
+
+static void writeContents(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("write-contents"));
+}
+
+/*}}}  */
+/*{{{  static void rereadContents(int write_to_editor_fd) */
+
+static void rereadContents(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("reread-contents"));
+}
+
+/*}}}  */
+/*{{{  static void isModified(int write_to_editor_fd) */
+
+static void isModified(int write_to_editor_fd)
+{
+  ATBwriteTerm(write_to_editor_fd, ATparse("is-modified"));
+}
+
+/*}}}  */
+/*{{{  static void testSwingAction(int write_to_editor_fd, TE_Action action) */
+
+static void addActions(int write_to_editor_fd, TE_Action action)
 {
   ATerm t;
-  fd_set set;
-  int max_fd;
-  int retval;
 
-  while (ATtrue) {
-    FD_ZERO(&set);
+  t = ATmake("snd-do(add-actions(<term>))", TE_getActionActions(action));
 
-    FD_SET(editor_socket, &set);
-    max_fd = editor_socket;
+  ATBwriteTerm(write_to_editor_fd, t);
+}
 
-    FD_SET(read_from_hive_fd, &set);
-    if (read_from_hive_fd > max_fd) {
-      max_fd = read_from_hive_fd;
-    }
+/*}}}  */
+/*{{{  static void displayMessage(int write_to_editor_fd, TE_Action action) */
 
-    retval = select(max_fd+1, &set, NULL, NULL, NULL);
-    if (retval == -1) {
-      perror("select");
-    }
+static void displayMessage(int write_to_editor_fd, TE_Action action)
+{
+  ATerm t;
 
-    if (FD_ISSET(editor_socket, &set)) {
-      t = ATBreadTerm(editor_socket);
-      ATwarning("editor_eventloop: %t\n", t);
-      ATBwriteTerm(write_to_hive_fd, t);
-    }
+  t = ATmake("snd-do(display-message(<str>))", TE_getActionMessage(action));
 
-    if (FD_ISSET(read_from_hive_fd, &set)) {
-      t = ATBreadTerm(read_from_hive_fd);
-      ATBwriteTerm(editor_socket, t);
-    }
-  }
+  ATBwriteTerm(write_to_editor_fd, t);
+}
+
+/*}}}  */
+/*{{{  static void setFocus(int write_to_editor_fd, TE_Action action) */
+
+static void setFocus(int write_to_editor_fd, TE_Action action)
+{
+  ATerm t;
+
+  t = ATmake("snd-do(set-focus(<term>))", TE_getActionFocus(action));
+
+  ATBwriteTerm(write_to_editor_fd, t);
+}
+
+/*}}}  */
+/*{{{  static void displayMessage(int write_to_editor_fd, TE_Action action) */
+
+static void setCursorAtOffset(int write_to_editor_fd, TE_Action action)
+{
+  ATerm t;
+
+  t = ATmake("snd-do(set-cursor-at-offset(<int>))", TE_getActionOffset(action));
+
+  ATBwriteTerm(write_to_editor_fd, t);
 }
 
 /*}}}  */
@@ -116,6 +177,7 @@ static int editor_eventloop(int editor_socket, int read_from_hive_fd, int write_
 
 int main(int argc, char *argv[])
 {
+  ATerm bottomOfStack;
   int i;
   int editor_socket;
   int server_socket;
@@ -123,6 +185,12 @@ int main(int argc, char *argv[])
   int read_from_hive_fd = -1;
   int write_to_hive_fd = -1;
   const char *filename;
+  TextEditor swingEditor;
+  TE_Pipe hiveToEditor;
+  TE_Pipe editorToHive;
+
+  ATBinit(argc, argv, &bottomOfStack);
+  TE_initTextEditorApi();
 
   for (i=1; i<argc; i++) {
     const char *cur = argv[i];
@@ -164,8 +232,21 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  retval = editor_eventloop(editor_socket, read_from_hive_fd, write_to_hive_fd);
-  return retval;
+  swingEditor = initTextEditor(hiveClosed,
+			       clearFocus,
+			       moveToFront,
+			       writeContents,
+			       rereadContents,
+			       displayMessage,
+			       addActions,
+			       setFocus,
+			       setCursorAtOffset,
+			       isModified);
+
+  hiveToEditor = TE_makePipeDefault(read_from_hive_fd, editor_socket);
+  editorToHive = TE_makePipeDefault(editor_socket, write_to_hive_fd);
+
+  return eventloop(swingEditor, hiveToEditor, editorToHive);
 }
 
 /*}}}  */

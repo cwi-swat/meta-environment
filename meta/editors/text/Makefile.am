@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-SUBDIRS = common . gvim emacs
+SUBDIRS = common . gvim emacs swing
 
 CLEANFILES = \
 	editor-hive.tifs
