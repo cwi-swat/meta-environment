@@ -36,50 +36,56 @@
 #include <PT.h>
 #include <ASF.h>
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
-	ATbool usage = ATfalse;
-	ATerm bottomOfStack;
-	ATerm in, out;
-        PT_Tree term, prepared, restored;
-	
-	if(argc == 2) {
-		if(!strcmp(argv[1],"--no-whitespace") || !strcmp(argv[1],"-n")) {
-			keep_layout = ATfalse;
-		} else {
-			usage = ATtrue;
-		}
-	} else if (argc == 1) {
-		keep_layout = ATtrue;
-	} else {
-		usage = ATtrue;
-	}
+  ATbool usage = ATfalse;
+  ATerm bottomOfStack;
+  ATerm in, out;
+  PT_Tree term, prepared, restored;
 
-	if(usage)
-		ATerror("Usage: prepare-restore [--no-whitespace] [-n]\nThis test reads an asfix term from stdin, prepares it for rewriting, restores it again and tests the input with the output for equality.\n");
-				
+  if (argc == 2) {
+    if (!strcmp(argv[1], "--no-whitespace") || !strcmp(argv[1], "-n")) {
+      keep_layout = ATfalse;
+    }
+    else {
+      usage = ATtrue;
+    }
+  }
+  else if (argc == 1) {
+    keep_layout = ATtrue;
+  }
+  else {
+    usage = ATtrue;
+  }
 
-	ATinit(argc,argv,&bottomOfStack);
-        PT_initPTApi();
-        ASF_initASFApi();
+  if (usage)
+    ATerror
+      ("Usage: prepare-restore [--no-whitespace] [-n]\nThis test reads an asfix term from stdin, prepares it for rewriting, restores it again and tests the input with the output for equality.\n");
 
-	in = ATreadFromFile(stdin);
-	
-	in = ATremoveAllAnnotations(in); 
 
-	term = PT_getParseTreeTree(PT_makeParseTreeFromTerm(in));
+  ATinit(argc, argv, &bottomOfStack);
+  PT_initPTApi();
+  ASF_initASFApi();
 
-	prepared = RWprepareTerm(term);
+  in = ATreadFromFile(stdin);
 
-	restored = RWrestoreTerm(prepared);
+  in = ATremoveAllAnnotations(in);
 
-	out = PT_makeTermFromParseTree(PT_setParseTreeTree(in, restored));
+  term = PT_getParseTreeTree(PT_makeParseTreeFromTerm(in));
 
-	ATprintf("%t", out);
+  prepared = RWprepareTerm(term);
 
-	if(!ATisEqual(in, out)) {
-		ATerror("Error: Output term is different from input term.\n");
-        }
-	
-	return 0;
+  restored = RWrestoreTerm(prepared);
+
+  out = PT_makeTermFromParseTree(PT_setParseTreeTree(
+          PT_makeParseTreeFromTerm(in), restored));
+
+  ATprintf("%t", out);
+
+  if (!ATisEqual(in, out)) {
+    ATerror("Error: Output term is different from input term.\n");
+  }
+
+  return 0;
 }
