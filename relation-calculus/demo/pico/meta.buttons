@@ -21,7 +21,7 @@ button("Pico-syntax",
            )
            ]),
 
-   button("Pico-syntax",
+   button("---disabled--Pico-syntax",
 	  [description(term-editor, menu(["Pico", "Show Relations"]))],
           [ 
             push-filename("extracted-relations.trm"),
