@@ -44,13 +44,14 @@ ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
 ATbool keep_annos;
+ATbool parse_io;
 
 int toolbus_id;
 
 char myname[] = "asfc";
 char myversion[] = "2.5";
 
-static char myarguments[] = "achi:lmn:o:p:tvV";
+static char myarguments[] = "achi:lmn:o:p:stvV";
 
 
 /*}}}  */
@@ -76,16 +77,17 @@ static void usage(void)
   ATwarning(
 	    "Usage: %s [options]\n"
 	    "Options:\n"
-	    "\t-a              rewriting with annotations    (default: %s)\n"
-	    "\t-c              toggle compilation to a binary(default: %s)   \n"
+	    "\t-a              rewriting with annotations    (%s)\n"
+	    "\t-c              toggle compilation to a binary(%s)   \n"
 	    "\t-h              display this message                           \n"
 	    "\t-i filename     input equations from file     (default stdin) \n"
-	    "\t-l              input muasf code              (default %s)    \n"
-	    "\t-m              output muasf code             (default %s)    \n"
+	    "\t-l              input muasf code              (%s)    \n"
+	    "\t-m              output muasf code             (%s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
 	    "\t-o filename     output c code to file         (default stdout)\n"
 	    "\t-p filename     include parse table           (default none)\n"
-	    "\t-t              make toolbus tool             (default %s)\n"
+	    "\t-s              parse input and output, requires -p option (%s)\n"
+	    "\t-t              make toolbus tool             (%s)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
@@ -93,6 +95,7 @@ static void usage(void)
 	    use_c_compiler ? "on" : "off",
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
+	    parse_io ? "on" : "off",
 	    make_toolbus_tool ? "on" : "off",
 	    myversion);
   exit(0);
@@ -204,7 +207,8 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
     }
 
     VERBOSE("pretty printing C code");
-    ToC_code(keep_annos, saveName, c_code, parseTable, fp , myversion);
+    ToC_code(parse_io, keep_annos, saveName, c_code, parseTable, fp , 
+	     myversion);
     fclose(fp);
 
     if (make_toolbus_tool) {
@@ -288,6 +292,7 @@ int main(int argc, char *argv[])
   use_c_compiler = ATfalse;
   toolbus_mode = ATfalse;
   make_toolbus_tool = ATfalse;
+  parse_io = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -322,6 +327,7 @@ int main(int argc, char *argv[])
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
       case 'p':  table=optarg;          break;
+      case 's':  parse_io=ATtrue;       break;
       case 't':  make_toolbus_tool=ATtrue; break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
@@ -345,6 +351,10 @@ int main(int argc, char *argv[])
       if (parseTable == NULL) {
 	ATerror("Unable to read table from %s\n", table);
       }
+    }
+
+    if (parse_io && table == NULL) {
+      ATerror("-p option with parse table required\n");
     }
 
     if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
