@@ -51,44 +51,47 @@ button("Rscript",
           [push-active-module,
            get-root,
            check-sort("RSCRIPT"),
-           apply("check-rscript", "List", 1),
-           push-modulename("RscriptChecker"),
-           reduce,
+	   push-filename("RSTORE.rstore"),
 	   dup,
-           push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
-           parse("RscriptChecker", "List"),
-           if-equal([push-active-module,
-                     get-root,
-		     check-sort("RSCRIPT"),  
+	   push-string(""),
+	   if-equal([	message("Rstore does not exist")
+                    ],
+		    [
+			message("Using fixed Rstore file RSTORE.rscript"),
+			parse("Rstore", "RSTORE"),
+			apply("check-rscript-with-rstore", "List", 2),
+			push-modulename("RscriptChecker"),
+			reduce,
+			dup,
+			push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
+			parse("RscriptChecker", "List"),
+			if-equal([		
+					push-active-module,
+					get-root, 
+					push-filename("RSTORE.rstore"),
+					parse("RscriptCalculator", "RSTORE"),
+					apply("eval-rscript-with-rstore", "RSTORE", 2),
+					exists("RscriptCalculator"),
+					unpack-tree,
+					message("Executing Rscript ..."),
+					execute-action("RscriptCalculator -t"),
+					message("Execution of Rscript completed"),
+					push-filename("RscriptCalculator.results"),
+					push-modulename("RscriptCalculator"),
+					close-editor,
+					push-filename("RscriptCalculator.results"),
+					push-modulename("RscriptCalculator"),
+					activate-editor
 
-		     prompt-for-file("Open Rstore", "", ".rstore"),
-		     dup,
-		     push-string(""),
-		     if-equal([
-				message("Rstore does not exist")
-                              ],
-			      [
-				parse("RscriptCalculator", "RSTORE"),
-				apply("eval-rscript-with-rstore", "RSTORE", 2),
-				exists("RscriptCalculator"),
-				unpack-tree,
-				execute-action("RscriptCalculator -t"),
-				push-filename("RscriptCalculator.results"),
-				push-modulename("RscriptCalculator"),
-				close-editor,
-				push-filename("RscriptCalculator.results"),
-				push-modulename("RscriptCalculator"),
-				activate-editor
-			      ])
-		    ],
-
-                    [message("Rscript contains type error(s)"),
-		     unparse,
-		     push-active-module,
-		     show-list
-                    ]
+				],
+				[	message("Rscript contains type error(s)"),
+					unparse,
+					push-active-module,
+					show-list
+				])
+		    ]
            )
-           ]
+	   ]
        ),
 
  button("Rscript",

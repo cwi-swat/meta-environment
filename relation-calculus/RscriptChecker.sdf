@@ -8,7 +8,8 @@ imports MyPosInfo[RSTAT]
 imports MyPosInfo[REXP]
 imports MyPosInfo[GENERATOR]
 imports MyPosInfo[Bag[[Elem]]]
-%%imports MyPosInfo[Rel[[Elem]]]
+
+imports Rstore
 
 
 exports
@@ -34,6 +35,10 @@ exports
 	Bag[[Elem]] cannot be typed 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
+	RVAR not initialized in "Rstore"			-> ERROR
+	RVAR conflicting initialization in "Rscript" and in "Rstore"		
+								-> ERROR
+
         "Incompatible" argument types REXPTYPE in REXP        	-> ERROR
         REXP should have type REXPTYPE          		-> ERROR
         REXP should be of type bag         			-> ERROR
@@ -66,8 +71,9 @@ exports
 	built-ins						-> Table[[RVAR,REXPTYPE]]
 
 	check-rscript(RSCRIPT)					-> List
-%%	check-rscript(RSTAT*)          				-> TENV
+	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> List
         check-rscript(RSTAT*, TENV)				-> TENV
+	check-rstore(RSTAT*, RSTORE, TENV)			-> TENV
 	check(REXP, TENV) 					-> REXPTYPE # TENV
 
 	check-const(Elem, TENV) 				-> REXPTYPE # TENV
@@ -121,10 +127,6 @@ exports
         substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
 
 
-%%        compat "(" REXP "," REXPTYPE OP REXPTYPE "," TENV ")" 	-> REXPTYPE # TENV
-%%        compat "(" REXP "," REXPTYPE OP "," TENV ")" 		-> REXPTYPE #TENV
-%%        compat "(" REXP "," OP REXPTYPE  "," TENV ")" 		-> REXPTYPE #TENV
-
 hiddens
 %%    imports asf/syntax/Comments
     variables
@@ -140,8 +142,6 @@ hiddens
      "$Exp*" [0-9\']*    	-> {REXP ","}*
      "$Exp+" [0-9\']*    	-> {REXP ","}+
      "$Exps" [0-9\']*    	-> {REXP ","}+
-
-%%     "$Op"               	-> OP
 
      "$Etype" [0-9\']*    	-> REXPTYPE
      "$Etype*" [0-9\']*    	-> {REXPTYPE ","}*
@@ -196,5 +196,5 @@ hiddens
       "$Eq*" [0-9\']*		-> EQU*
       "$Eq+" [0-9\']*		-> EQU+
 
-  
+      "$Rstore" [0-9\']*             -> RSTORE
 	

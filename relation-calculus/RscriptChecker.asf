@@ -93,13 +93,20 @@ $Error]>
 [e2i-5] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", get-area($Rel))
 [e2i-6] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), get-area($Var))
 [e2i-7] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), get-area($Var))
-[e2i-8] e2i(Incompatible argument types $Etype in $Exp) = 
+
+[e2i-8]	e2i($Var not initialized in Rstore)
+					= listitem("Not initialized in Rstore: " || rvar2str($Var), get-area($Var))
+
+[e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore)
+					= listitem("Conflicting initialization in Rscript and in Rstore: " || rvar2str($Var), get-area($Var))
+
+[e2i-10] e2i(Incompatible argument types $Etype in $Exp) = 
 		listitem("Incompatible arguments of type " || t2s($Etype), get-area($Exp))
-[e2i-9] e2i($Exp should have type $Etype)= 
+[e2i-11] e2i($Exp should have type $Etype)= 
 	listitem("Expression should have type " || t2s($Etype), get-area($Exp))
-[e2i-10] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", get-area($Exp))
-[e2i-11] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", get-area($Exp))
-[e2i-12] e2i(No definition for $Var with argument $Etype) = 
+[e2i-12] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", get-area($Exp))
+[e2i-13] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", get-area($Exp))
+[e2i-14] e2i(No definition for $Var with argument $Etype) = 
         listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), get-area($Var))
 
 [t2s-1]	t2s(int) 			= "int"
@@ -749,7 +756,7 @@ $Error]>
 
 [CEQS2]	check-eqs( , , $Tenv) = $Tenv
 
-%% ---- Default case for chack-stat
+%% ---- Default case for check-stat
 
 [default-check-stat]
 	 check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
@@ -759,31 +766,7 @@ $Error]>
 [default-check]
       check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
 
-%% --- Default case for compat
 
-%%[xxx]  compat($Exp, undefined $Op $Etype2, $Tenv) = <undefined, $Tenv>
-%%[xxx]  compat($Exp, $Etype1 $Op undefined, $Tenv) = <undefined, $Tenv>
-%%[default-xxx]
- %%    compat($Exp, $Etype1 $Op $Etype2, $Tenv) = <undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>
-
-%%[xxx]  compat($Exp, undefined $Op, $Tenv) = <undefined, $Tenv>
-%%[default-xxx]
-%%      compat($Exp, $Etype $Op, $Tenv) = <undefined, $Tenv + Incompatible argument types [$Etype] in $Exp>
-
-%%[xxx]  compat($Exp, $Op undefined, $Tenv) = <undefined, $Tenv>
-%%[default-xxx]
-%%      compat($Exp, $Op $Etype, $Tenv) = <undefined, $Tenv + Incompatible argument types [$Etype] in $Exp>
-
-%% --- Check script
-
-[xxx] $Rscript = $Stat*,
-       check-rscript($Stat*,  <built-ins, errors[]>) = <$Table, $Errors>
-      ===============================================
-      check-rscript($Rscript) = convert-errors($Errors)
-
-%% [xxx] check-rscript($Stat*) = check-rscript($Stat*, <built-ins, []>)
-[xxx] check-rscript($Stat $Stat*, $Tenv) = check-rscript($Stat*, check-stat($Stat, $Tenv))
-[xxx] check-rscript( , $Tenv) = $Tenv
 
 %% Find result type of a function, given list of argument types
 
@@ -925,5 +908,58 @@ $Error]>
 	check($Exp, $Tenv') = <$Etype, <$Table', $Errors'>>
 	===================================================
 	check($Exp where $Stat+ endwhere, $Tenv) = <$Etype, <$Table, $Errors'>>
+
+
+%% --- Check script
+
+[crs] $Rscript = $Stat*,
+       check-rscript($Stat*,  <built-ins, errors[]>) = <$Table, $Errors>
+      ===============================================
+      check-rscript($Rscript) = convert-errors($Errors)
+
+
+[crs2] check-rscript($Stat $Stat*, $Tenv) = check-rscript($Stat*, check-stat($Stat, $Tenv))
+[crs3] check-rscript( , $Tenv) = $Tenv
+
+
+%% -- Check script with rstore
+ 
+[cwr1]	$Rscript = $Stat*,
+       	check-rscript($Stat*,  <built-ins, errors[]>) = $Tenv,
+	check-rstore($Stat*, $Rstore, $Tenv) = <$Table, $Errors>
+	=====================================================================
+     	check-rscript-with-rstore($Rscript, $Rstore) = convert-errors($Errors)
+
+%% ---- Check Rstore
+
+[check-rstore1]
+      	value($Var, $Rstore) = $Elem,
+      	require-type($Elem, $Etype, $Tenv) = $Tenv'
+	=====================================================================
+      	check-rstore($Etype $Var $Stat*, $Rstore, $Tenv) = check-rstore($Stat*, $Rstore, $Tenv')
+
+[check-rstore2]
+      	value($Var, $Rstore) = *undefined*
+	=====================================================================
+      	check-rstore($Etype $Var $Stat*, $Rstore, $Tenv) = 
+	check-rstore($Stat*, $Rstore, $Tenv + $Var not initialized in Rstore)
+
+[check-rstore3]
+	value($Var, $Rstore) = *undefined*
+	===================================================================== 
+      	check-rstore($Etype $Var = $Exp, $Rstore, $Tenv) = $Tenv
+
+[check-rstore4]
+	value($Var, $Rstore) != *undefined*
+	===================================================================== 
+      	check-rstore($Etype $Var = $Exp $Stat*, $Rstore, $Tenv) = 
+	check-rstore($Stat*, $Rstore,$Tenv + $Var conflicting initialization in Rscript and in Rstore)
+
+[check-rstore7]
+	check-rstore( , $Rstore, $Tenv) = $Tenv
+
+[default-check-rstore]
+	check-rstore($Stat $Stat*, $Rstore, $Tenv) = check-rstore($Stat*, $Rstore, $Tenv)
+
 
 
