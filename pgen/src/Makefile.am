@@ -12,7 +12,9 @@ noinst_SCRIPTS	= sdf2table.test
 data_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
-EXTRA_DIST	= parsetablegen.idef sdf2table.src sdf2table.pod
+EXTRA_DIST	= parsetablegen.idef \
+                  sdf2table.src \
+                  sdf2table.pod
 
 SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		flatten.c characters.c first.c follow.c goto.c parse-table.c \
@@ -23,11 +25,8 @@ HDRS         = atsets.h ksdf2table.h statistics.h flatten.h predicted.h goto.h \
 		follow.h intset.h characters.h item.h first.h priorities.h \
 		itemset.h
 
-#CFLAGS = -pg
-
 test_chars_SOURCES	= test-chars.c characters.c
-test_chars_LDADD	= \
-                        -L$(ATERM)/lib -lATerm \
+test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
@@ -38,8 +37,9 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
-CLEANFILES		= parsetablegen.tifs sdf2table sdf2table.1 \
-			sdf2table.test parsetablegen.tif.h parsetablegen.tif.c 
+CLEANFILES	= parsetablegen.tifs \
+                  sdf2table sdf2table.1 \
+		  sdf2table.test 
 
 %.tif.c %.tif.h: %.tifs
 	${TOOLBUS}/bin/tifstoc -tool $* $<
