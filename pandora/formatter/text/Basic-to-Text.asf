@@ -69,13 +69,26 @@ equations
 
   [BtT2'5]   place H so* [] with Frame and Struct and 'C = Struct
 
-  [BtT2'6]   place H so* [B] with Frame and Struct and 'C =
-               place B with Frame and Struct and H
+  [BtT2'6]   Frame2 := setTs(Frame1, so*)
+             ===>
+             place H so* [B] with Frame1 and Struct and 'C =
+               place B with Frame2 and Struct and H
 
-  [BtT2'7]   Hs := set hs value given so* and Frame
+  [BtT2'7]   Hs := set hs value given so* and Frame1,
+             Frame2 := setTs(Frame1, so*)
              =====================================
-             place H so* [B+ B] with Frame and Struct and 'C =
-               hplace B+ B h Hs with Frame and Struct
+             place H so* [B+ B] with Frame1 and Struct and 'C =
+               hplace B+ B h Hs with Frame2 and Struct
+
+  [setTabstop]   
+             Ts := set ts value given so* and Frame1,
+             Ts > 0 == true,
+             Frame2 := set lmargin Ts in Frame1
+             ===>
+             setTs(Frame1, so*) = Frame2
+
+  [default-setTabstop] 
+             setTs(Frame, so*) = Frame
 
 %% The equations \ref{Eq:BtT2'8} through \ref{Eq:BtT2'10} deal with the box operator {\sf V}.
 %% The number of new lines to be inserted between two boxes is calculated only once.

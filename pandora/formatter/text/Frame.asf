@@ -23,6 +23,8 @@ equations
 
    [Frm4'3]   value is in Point1 & Lm, Rm, Vs, Hs, Is = Is
 
+   [Frm4'4]   value ts in Point1 & Lm, Rm, Vs, Hs, Is = 0
+
 %% The equations \ref{Eq:Frm5'1} through \ref{Eq:Frm5'6} are access
 %% routines as well, however before the frame data structure is
 %% used, the option list associated with each operator is inspected
@@ -74,6 +76,9 @@ equations
 
    [Frm6'1]   set lmargin in (X,Y) & Lm, Rm, Vs, Hs, Is =
                 (X,Y) & X, Rm, Vs, Hs, Is
+
+   [Frm6'2]   set lmargin Lm2 in (X,Y) & Lm1, Rm, Vs, Hs, Is =
+                (Lm2,Y) & Lm2, Rm, Vs, Hs, Is
 
    [Frm7'1]   set rmargin Rm2 in Point & Lm, Rm1, Vs, Hs, Is =
                 Point & Lm, Rm2, Vs, Hs, Is

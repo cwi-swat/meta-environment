@@ -25,15 +25,15 @@ hiddens
 
   hiddens
     context-free syntax
-      "hplace" Box* "h" Integer "with" Frame "and" TextStruct                         -> TextStruct
-      "vplace" Box* "v" Integer "with" Frame "and" TextStruct                         -> TextStruct
-      "hvplace" Box* "h" Integer "v" Integer "i" Integer "with" Frame "and" TextStruct    -> TextStruct
-      "hovplace" Box* "with" Frame "and" TextStruct                                 -> TextStruct
+      "hplace" Box* "h" Integer "with" Frame "and" TextStruct -> TextStruct
+      "vplace" Box* "v" Integer "with" Frame "and" TextStruct -> TextStruct
+      "hvplace" Box* "h" Integer "v" Integer "i" Integer "with" Frame "and" TextStruct -> TextStruct
+      "hovplace" Box* "with" Frame "and" TextStruct -> TextStruct
       "reshuffle" Box* "given" Frame "and" TextStruct "h" Integer "v" Integer "i" Integer -> TextStruct
-      "dplace" Box* "with" Frame "and" TextStruct "and" Context                       -> TextStruct
-      "startNewLine"(Text)                                 -> Text
-%%      lengthTextBlock(TextBlock) -> Integer
-      "add" "to" "last" "line" "(" Text "," String ")"                                 -> Text
+      "dplace" Box* "with" Frame "and" TextStruct "and" Context -> TextStruct
+      "startNewLine"(Text) -> Text
+      "add" "to" "last" "line" "(" Text "," String ")" -> Text
+      "setTs" "(" Frame "," SpaceOption* ")" -> Frame
 
 hiddens
   variables
@@ -51,3 +51,4 @@ hiddens
     "Hs"[0-9]*     -> Integer
     "Vs"[0-9]*     -> Integer
     "Is"[0-9]*     -> Integer
+    "Ts"[0-9]*     -> Integer

@@ -16,9 +16,10 @@ imports Points
       "make" "frame"                                       -> Frame
       "leftm" "of" Frame                                   -> Integer
       "rightm" "of" Frame                                  -> Integer
-      "set" "lmargin" "in" Frame                             -> Frame
-      "set" "rmargin" Integer "in" Frame                     -> Frame
-      "value" SpaceSymbol "in" Frame                      -> Integer
+      "set" "lmargin" "in" Frame                           -> Frame
+      "set" "lmargin" Integer "in" Frame                   -> Frame
+      "set" "rmargin" Integer "in" Frame                   -> Frame
+      "value" SpaceSymbol "in" Frame                       -> Integer
       "set" SpaceSymbol "value" "given" SpaceOption* "and" Frame -> Integer
 
     context-free syntax
