@@ -258,7 +258,7 @@ term *handle_input_from_toolbus(term *e) {
   
   if(TBmatch(e, "rec-terminate(%t)", &arg)){
     /* Tell emacs to terminate */
-    exec_cmd("save-buffers-kill-emacs");
+    exec_cmd("TBrecTerminate");
     /* And follow that example */
     exit(0);
   } else if(TBmatch(e, "rec-ack-event(%t)", &fname)){

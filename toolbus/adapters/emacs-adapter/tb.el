@@ -38,9 +38,18 @@ for the rest of the msg"
   (process-kill-without-query adapter-process)
   ;; Do not require a confirmation to kill the adapter process when
   ;; killing xemacs. (I was hoping they had something like this :-)
+  (setq TBterminating nil)
   (add-hook 'kill-emacs-hook 'TBkillemacs)
   ;; Call TBkillemacs just before killing emacs
   )
+
+(defun TBrecTerminate ()
+  "Terminate emacs after saving the buffers"
+  (setq TBterminating t)
+  (save-buffers-kill-emacs)
+)
+
+
 
 (defun handle-term-from-toolbus (proc string)
   "This is the filter function that processes input from the toolbus. PROC 
@@ -85,10 +94,14 @@ is the adapter process, STRING is the string to be processed"
       )
     )
   )
+
 (defun TBkillemacs () 
   "This function is called when emacs is killed. It tells the ToolBus to disconnect emacs"
-  (TBsend "snd-disconnect")
+  (if TBterminating 
+    (debug-out "already terminating.")
+    (TBsend "snd-disconnect")
   )
+)
   
 (defun TBevent (event)
   "Send EVENT to the ToolBus as a snd-event(EVENT)"
