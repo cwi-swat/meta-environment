@@ -17,7 +17,7 @@ in
     rec-msg(restore-brackets(Term?, Table?)) .
     snd-eval(RESTORE, restore-brackets(Term, Table)) .
     (
-      rec-value(RESTORE, restore-brackets(Term, Table)) .
+      rec-value(RESTORE, brackets-restored(NewTerm?)) .
       snd-msg(brackets-restored(NewTerm))
     )
   ) * delta
