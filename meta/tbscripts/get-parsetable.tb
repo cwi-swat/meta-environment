@@ -11,10 +11,8 @@ let
   TableType  : term,
   Table      : term,
   Syntax     : term,
-  Path       : str,
   ErrorMsg   : str,
   Id         : int,
-  Msgs       : list,
   Str        : str
 in
 Id := process-id.
@@ -22,8 +20,8 @@ Id := process-id.
   rec-msg(get-parsetable(ModuleId?)) .
   snd-msg(get-table-from-db(ModuleId)) .
   (
-    rec-msg(table(Table?, Path?)).
-    snd-msg(parse-table(Table, Path))
+    rec-msg(table(Table?)).
+    snd-msg(parse-table(Table))
   +
     rec-msg(no-table) .
     Str := first(args(ModuleId)).
@@ -34,16 +32,13 @@ Id := process-id.
 
       snd-msg(preprocess-syntax-hook(ModuleId, Syntax)).
       rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
-
       snd-msg(generate-parsetable(Syntax, ModuleId)).
       (
         rec-msg(parsetable(Table?)).
         snd-msg(add-parse-table-to-db(ModuleId, Table)) .
         rec-msg(parse-table-added).
-        snd-msg(get-table-from-db(ModuleId)) .
-        rec-msg(table(Table?, Path?)) .
         snd-note(ui-status(endstat(Id))) .
-        snd-msg(parse-table(Table, Path))
+        snd-msg(parse-table(Table))
       +
         rec-msg(no-parsetable).
         snd-note(ui-status(endstat(Id))) .

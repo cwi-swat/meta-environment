@@ -7,10 +7,9 @@ let
   Id         : term,
   ModuleName : str,
   FileName   : str,
-  Equations  : term,
   Table      : term,
   Path       : str,
-  Text       : str
+  ErrorMessage : str
 in
   Id := process-id.
 
@@ -21,16 +20,24 @@ in
     +
       rec-msg(dump-parse-table-given-file(ModuleName?, FileName?)) 
     ) .
-    snd-note(ui-status(statf(Id, "Dumping parse table for %s",[ModuleName]))) .
+    snd-note(ui-status(statf(Id, 
+                             "Dumping parse table for %s",
+			     [ModuleName]))) .
     snd-msg(get-parsetable(trm(ModuleName))) .
     (
-      rec-msg(parse-table(Table?, Path?)) .
+      rec-msg(parse-table(Table?)) .
+      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(path(Path?)) .
       if equal(FileName, "") then
-        snd-msg(save-table(ModuleName, Path, Table))
+        snd-msg(write-term-file(Path, ".trm.tbl", Table))
       else
-        snd-msg(save-table(ModuleName, FileName, Table))
+        snd-msg(write-term-file(FileName, ".trm.tbl", Table))
       fi .
-      rec-msg(save-done)
+      (
+        rec-msg(file-written)
+      +
+        rec-msg(file-not-written(ErrorMessage?))
+      )
     +
       rec-msg(no-parse-table(trm(ModuleName)))
     ) .

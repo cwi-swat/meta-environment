@@ -10,7 +10,6 @@ let
   ModuleId   : term, 
   TableType  : term,
   Table      : term,
-  Path       : str,
   Id         : int
 in
 Id := process-id.
@@ -18,7 +17,7 @@ Id := process-id.
   rec-msg(set-parsetable(ModuleId?)) .
   snd-msg(get-parsetable(ModuleId)) .
   (
-    rec-msg(parse-table(Table?, Path?)) .
+    rec-msg(parse-table(Table?)) .
     ReopenLanguage(ModuleId, Table)
   +
     rec-msg(no-parse-table(ModuleId)) .
