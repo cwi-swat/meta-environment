@@ -1,6 +1,6 @@
 #include "pico-support.h"
 
-PICOPROGRAM("fac.pico");
+PICOPROGRAM(__SRCDIR__ "/fac.pico");
 
 void
 picomain ()

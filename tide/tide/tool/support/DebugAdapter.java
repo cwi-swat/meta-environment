@@ -42,6 +42,19 @@ public class DebugAdapter
 
   //}}}
 
+  //{{{ public void removeAllProcesses()
+
+  public void removeAllProcesses()
+  {
+    Iterator iter = processes.values().iterator();
+    while (iter.hasNext()) {
+      DebugProcess process = (DebugProcess)iter.next();
+      fireProcessDestroyed(process);
+    }
+    processes.clear();
+  }
+
+  //}}}
   //{{{ public void addDebugAdapterListener(DebugAdapterListener listener)
 
   public void addDebugAdapterListener(DebugAdapterListener listener)
@@ -147,6 +160,17 @@ public class DebugAdapter
 
   //}}}
 
+  //{{{ public void evaluationResult(pid, expr, value, tag)
+
+  public void evaluationResult(int pid, Expr expr, Expr value,
+			       String tag)
+  {
+    DebugProcess process = findProcess(pid);
+    process.evaluationResult(expr, value, tag);
+  }
+
+  //}}}
+
   //{{{ public void requestRuleCreation(pid, port, cond, act, tag)
 
   public void requestRuleCreation(int pid, Port port,
@@ -186,7 +210,17 @@ public class DebugAdapter
 
   public void requestResume(int pid)
   {
+    info.info("requestResume: " + pid);
     tool.requestResume(dap, pid);
+  }
+
+  //}}}
+  //{{{ public void requestEvaluation(int pid, Expr expr, String tag)
+
+  public void requestEvaluation(int pid, Expr expr, String tag)
+  {
+    info.info("requestEvaluation: " + pid + "," + expr + "," + tag);
+    tool.requestEvaluation(dap, pid, expr, tag);
   }
 
   //}}}

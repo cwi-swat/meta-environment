@@ -9,12 +9,13 @@ import javax.swing.*;
 import tide.tool.support.*;
 import tide.tool.proclist.*;
 import tide.tool.ruleinspector.*;
+import tide.tool.srcviewer.*;
 
 public class TideControl
   extends JFrame
   implements TideControlTif
 {
-  private static ATermFactory factory;
+  public static ATermFactory factory;
 
   private TideControlBridge bridge;
   private DebugTool    tool;
@@ -31,6 +32,8 @@ public class TideControl
   {
     ATermFactory factory = new aterm.pure.PureFactory();
 
+    Port.initialize(factory);
+    Expr.initialize(factory);
     TideControl control = new TideControl(factory, args);
   }
 
@@ -57,9 +60,11 @@ public class TideControl
     desktop.setPreferredSize(new Dimension(1000, 700));
 
     manager = new ToolManager(desktop);
+
     //{{{ Register debug tools
 
-    manager.registerProcessTool(new RuleInspectorFactory());
+    manager.registerProcessTool(new RuleInspectorFactory(manager));
+    manager.registerProcessTool(new SourceViewerFactory(manager));
 
     //}}}
 

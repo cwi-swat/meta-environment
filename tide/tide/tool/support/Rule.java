@@ -1,5 +1,7 @@
 package tide.tool.support;
 
+import java.util.*;
+
 public class Rule
 {
   private int  rid;
@@ -78,6 +80,41 @@ public class Rule
   public boolean isEnabled()
   {
     return enabled;
+  }
+
+  //}}}
+
+  //{{{ public Expr getLocation()
+
+  public Expr getLocation()
+  {
+    Iterator iter = cond.iterator();
+
+    while (iter.hasNext()) {
+      Expr expr = (Expr)iter.next();
+      if (expr.isLocation()) {
+	return expr;
+      }
+    }
+
+    return null;
+  }
+
+  //}}}
+  //{{{ public boolean isBreakpoint()
+
+  public boolean isBreakpoint()
+  {
+    Iterator iter = act.iterator();
+
+    while (iter.hasNext()) {
+      Expr expr = (Expr)iter.next();
+      if (expr.isBreak()) {
+	return true;
+      }
+    }
+
+    return false;
   }
 
   //}}}

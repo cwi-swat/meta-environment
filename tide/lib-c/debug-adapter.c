@@ -8,8 +8,8 @@ ATerm ta_create_rule(int conn, int pid, ATerm port, ATerm cond,
 		     ATerm act, ATerm tag, ATerm enabled)
 {
   TA_Port the_port = TA_makePortFromTerm(port);
-  TA_Expr the_cond = TA_makeExprFromTerm(cond);
-  TA_Expr the_act  = TA_makeExprFromTerm(act);
+  TA_Expr the_cond = cond;
+  TA_Expr the_act  = act;
   
   int rid = TA_createRule(pid, the_port, the_cond, the_act, tag,
 			  ATisEqual(enabled, ATparse("true")));
@@ -42,8 +42,8 @@ ATerm ta_modify_rule(int conn, int pid, int rid, ATerm port, ATerm cond,
 		     ATerm act, ATerm enabled)
 {
   TA_Port the_port = TA_makePortFromTerm(port);
-  TA_Expr the_cond = TA_makeExprFromTerm(cond);
-  TA_Expr the_act  = TA_makeExprFromTerm(act);
+  TA_Expr the_cond = cond;
+  TA_Expr the_act  = act;
 
   TA_modifyRule(pid, rid, the_port, the_cond, the_act,
 		ATisEqual(enabled, ATparse("true")));
@@ -82,11 +82,7 @@ void ta_rec_terminate(int conn, ATerm event)
 
 ATerm ta_evaluate(int conn, int pid, ATerm expr)
 {
-  TA_Value result;
-
-  result = TA_evaluate(pid, TA_makeExprFromTerm(expr));
-
-  return ATmake("snd-value(evaluated(<term>))", TA_makeTermFromValue(result));
+  return ATmake("snd-value(evaluated(<term>))", TA_evaluate(pid, expr));
 }
 
 /*}}}  */

@@ -42,6 +42,7 @@ public class DebugTool
   {
     info.info("adapterDisconnected: " + dap);
     DebugAdapter adapter = findAdapter(dap);
+    adapter.removeAllProcesses();
     fireAdapterDisconnected(adapter);
     adapters.remove(dap);
   }
@@ -93,7 +94,27 @@ public class DebugTool
   {
     List result;
 
-    info.info("recAckEvent: " + event);
+    info.info("recAckEvent: " + event
+	      + " in thread " + Thread.currentThread());
+
+    result =
+      event.match("evaluate(proc(<term>,<int>),<term>,<term>,<term>))");
+    if (result != null) {
+      //{{{ Handle evaluation results
+
+      int index = 0;
+
+      DebugAdapter adapter = findAdapter((ATerm)result.get(index++));
+      int  pid   = ((Integer)result.get(index++)).intValue();
+      Expr expr  = Expr.fromTerm((ATerm)result.get(index++));
+      String tag = result.get(index++).toString();
+      Expr value = Expr.fromTerm((ATerm)result.get(index++));
+      adapter.evaluationResult(pid, expr, value, tag);
+
+      //}}}
+      return;
+    }
+
     result = event.match("create-rule(proc(<term>,<int>),<term>,<term>," +
 			 "<term>,<term>,<term>,<int>)");
     if (result != null) {
@@ -219,8 +240,8 @@ public class DebugTool
     String pat =
       "create-rule(proc(<term>,<int>),<term>,<term>,<term>,<term>,<term>)";
     ATerm event = factory.make(pat, dap, new Integer(pid),
-			       port.toTerm(factory), cond.toTerm(factory),
-			       act.toTerm(factory), factory.parse(tag),
+			       port.toTerm(), cond.toTerm(),
+			       act.toTerm(), factory.parse(tag),
 			       factory.parse(enabled ? "true" : "false"));
 
     info.info("requesting rule creation: " + event);
@@ -248,9 +269,7 @@ public class DebugTool
       "modify-rule(proc(<term>,<int>),<int>,<term>,<term>,<term>,<term>)";
     ATerm event = factory.make(pat, dap, new Integer(pid),
 			       new Integer(rule.getRid()),
-			       port.toTerm(factory),
-			       cond.toTerm(factory),
-			       act.toTerm(factory), 
+			       port.toTerm(), cond.toTerm(), act.toTerm(), 
 			       factory.parse(enabled ? "true" : "false"));
 
     info.info("requesting rule modification: " + event);
@@ -263,8 +282,9 @@ public class DebugTool
 
   public void requestBreak(ATerm dap, int pid)
   {
-    ATerm event = factory.make("evaluate(proc(<term>,<int>),break)",
-			       dap, new Integer(pid));
+    ATerm event =
+      factory.make("evaluate(proc(<term>,<int>),break,tag-break)",
+		   dap, new Integer(pid));
     info.info("request break: " + event);
     postEvent(event);
   }
@@ -274,9 +294,24 @@ public class DebugTool
 
   public void requestResume(ATerm dap, int pid)
   {
-    ATerm event = factory.make("evaluate(proc(<term>,<int>),resume)",
-			       dap, new Integer(pid));
+    ATerm event =
+      factory.make("evaluate(proc(<term>,<int>),resume,tag-resume)",
+		   dap, new Integer(pid));
     info.info("request resume: " + event);
+    postEvent(event);
+  }
+
+  //}}}
+  //{{{ public void requestEvaluation(dap, pid, expr, tag)
+
+  public void requestEvaluation(ATerm dap, int pid, Expr expr,
+				String tag)
+  {
+    ATerm event =
+      factory.make("evaluate(proc(<term>,<int>),<term>,<term>)",
+		   dap, new Integer(pid), expr.toTerm(),
+		   factory.parse(tag));
+    info.info("request evaluation: " + event);
     postEvent(event);
   }
 

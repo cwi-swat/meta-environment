@@ -4,12 +4,11 @@ JAVAROOT	= ${top_builddir}/..
 
 TOOL_GEN	= DebugToolTif.java DebugToolTool.java DebugToolBridge.java
 
-GEN			= Location.java Port.java Expr.java Value.java
-
-JAVA		= ${GEN} DebugTool.java DebugToolListener.java \
-			DebugAdapter.java DebugAdapterListener.java \
-			DebugProcess.java Info.java ProcessStatusChangeListener.java \
-			Rule.java ProcessStatus.java DebugProcessListener.java
+JAVA		= Port.java Expr.java DebugTool.java DebugToolListener.java \
+		DebugAdapter.java DebugAdapterListener.java \
+		DebugProcess.java Info.java ProcessStatusChangeListener.java \
+		Rule.java ProcessStatus.java DebugProcessListener.java \
+		ExprFormat.java VarFormat.java
 
 # This is some kind of hack to make sure that generated Java files are
 # generated before compiling all other java files but that it will
@@ -22,7 +21,6 @@ java_JAVA	= ${TOOL_GEN} ${JAVA}
 ${TOOL_GEN}: ../../tide.tifs
 	tifstojava -tifs ../../tide.tifs -tool debug-tool -package tide.tool.support
 
-ADT	= ${top_srcdir}/lib-c/TA.adt
-
-regen:
-	adt-to-java -i ${ADT} -o ${JAVAROOT} -p tide.tool.support -v
+#ADT	= ${top_srcdir}/lib-c/TA.adt
+#regen:
+#	adt-to-java -i ${ADT} -o ${JAVAROOT} -p tide.tool.support -v

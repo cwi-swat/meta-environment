@@ -2,7 +2,7 @@
 tool debug-adapter is { /* All kinds of adapters */ }
 tool debug-tool    is { /* All kinds of tools */    }
 tool tide-control  is { 
-    command="java-adapter -class tide.tool.TideControl"
+    command="java-adapter -class tide.tool.TideControl -java-args -verbose:class"
 }
 
 
@@ -28,7 +28,7 @@ in
   subscribe(adapter-connected(<term>)) .
   subscribe(adapter-disconnected(<term>)) .
   (
-    rec-event(T, evaluate(Process?, Expr?)) .
+    rec-event(T, evaluate(Process?, Expr?, Tag?)) .
     snd-msg(evaluate(Process, Expr)) .
     rec-msg(evaluated(Process, Result?)) .
     snd-ack-event(T, evaluate(Process, Expr, Tag, Result))

@@ -64,6 +64,7 @@ AC_OUTPUT( \
 	tool/support/Makefile \
 	tool/proclist/Makefile \
 	tool/ruleinspector/Makefile \
+	tool/srcviewer/Makefile \
         examples/Makefile \
 	examples/pico/Makefile \
 	, )

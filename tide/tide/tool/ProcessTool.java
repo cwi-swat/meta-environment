@@ -5,24 +5,16 @@ import javax.swing.*;
 import tide.tool.support.*;
 
 abstract public class ProcessTool
-  extends JInternalFrame
+  extends TideTool
 {
   protected DebugProcess process;
 
-  //{{{ protected ProcessTool()
+  //{{{ protected ProcessTool(ToolManager manager, DebugProcess process)
 
-  protected ProcessTool()
+  protected ProcessTool(ToolManager manager, DebugProcess process)
   {
-    super("", true, true, true, true);
-  }
+    super(manager);
 
-  //}}}
-  //{{{ protected ProcessTool(DebugProcess process)
-  
-
-  protected ProcessTool(DebugProcess process)
-  {
-    this();
     this.process = process;
   }
 

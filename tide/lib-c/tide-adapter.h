@@ -1,15 +1,19 @@
 #ifndef TIDE_ADAPTER_H
 #define TIDE_ADAPTER_H
 
-#include "TA.h"
 #include "tide-common.h"
 #include <aterm1.h>
+
+#include "TA.h"
+
+typedef ATerm TA_Expr;
+typedef ATermList TA_ExprList;
 
 /* debug_adapter_handler is needed as an argument to TBconnect */
 ATerm debug_adapter_handler(int conn, ATerm term);
 
 /* tide functions */
-typedef TA_Value (*TA_Function)(int pid, AFun fun, TA_Values args);
+typedef TA_Expr (*TA_Function)(int pid, AFun fun, TA_ExprList args);
 
 void TA_connect();
 ATbool TA_isConnected();
@@ -31,6 +35,6 @@ void TA_activateRules(int pid, TA_Port port);
 int TA_getProcessState(int pid);
 void TA_setProcessState(int pid, int state);
 
-TA_Value TA_evaluate(int pid, TA_Expr expr);
+TA_Expr TA_evaluate(int pid, TA_Expr expr);
 
 #endif

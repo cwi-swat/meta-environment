@@ -1,6 +1,7 @@
 package tide.tool;
 
 import java.util.*;
+import java.beans.*;
 import javax.swing.*;
 
 import tide.tool.support.*;
@@ -17,6 +18,8 @@ public class ToolManager
   private List adapterActionList;
   private Map adapterTools;
 
+  private Map toolInstances;
+
   //{{{ public ToolManager(JDesktopPane desktop)
 
   public ToolManager(JDesktopPane desktop)
@@ -30,6 +33,36 @@ public class ToolManager
     adapterToolList = new LinkedList();
     adapterActionList = new LinkedList();
     adapterTools = new HashMap();
+
+    toolInstances = new HashMap();
+  }
+
+  //}}}
+
+  //{{{ public TideTool getTool(String toolName, Object target)
+
+  public TideTool getTool(String toolName, Object target)
+  {
+    Map tools = (Map)toolInstances.get(toolName);
+    if (tools != null) {
+      return (TideTool)tools.get(target);
+    }
+
+    return null;
+  }
+
+  //}}}
+  //{{{ public void putTool(String toolName, Object target, TideTool tool)
+
+  public void putTool(String toolName, Object target, TideTool tool)
+  {
+    Map tools = (Map)toolInstances.get(toolName);
+    if (tools == null) {
+      tools = new HashMap();
+      toolInstances.put(toolName, tools);
+    }
+
+    tools.put(target, tool);
   }
 
   //}}}
@@ -95,11 +128,22 @@ public class ToolManager
 
   public ProcessTool launchProcessTool(String toolName, DebugProcess process)
   {
-    ProcessToolFactory factory = (ProcessToolFactory)processTools.get(toolName);
-    ProcessTool tool = factory.createTool(process);
+    ProcessTool tool = (ProcessTool)getTool(toolName, process);
+    if (tool == null) {
+      ProcessToolFactory factory =
+	(ProcessToolFactory)processTools.get(toolName);
+      tool = factory.createTool(process);
+      putTool(toolName, process, tool);
 
-    desktop.add(tool, 1);
-    tool.show();
+      desktop.add(tool, 1);
+      tool.show();
+    }
+    try {
+      tool.setIcon(false);
+    } catch (PropertyVetoException e) {
+      System.err.println("Warning: cannot deiconify process tool: " +
+			 toolName);
+    }
     desktop.moveToFront(tool);
 
     return tool;
@@ -110,9 +154,22 @@ public class ToolManager
 
   public AdapterTool launchAdapterTool(String toolName, DebugAdapter adapter)
   {
-    AdapterToolFactory factory = (AdapterToolFactory)adapterTools.get(toolName);
-    AdapterTool tool = factory.createTool(adapter);
-    desktop.add(tool);
+    AdapterTool tool = (AdapterTool)getTool(toolName, adapter);
+    if (tool == null) {
+      AdapterToolFactory factory =
+	(AdapterToolFactory)adapterTools.get(toolName);
+      tool = factory.createTool(adapter);
+      putTool(toolName, adapter, tool);
+      desktop.add(tool);
+      tool.show();
+    }
+    try {
+      tool.setIcon(false);
+    } catch (PropertyVetoException e) {
+      System.err.println("Warning: cannot deiconify adapter tool: " +
+			 toolName);
+    }
+    desktop.moveToFront(tool);
 
     return tool;
   }

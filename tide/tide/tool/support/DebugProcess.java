@@ -13,6 +13,13 @@ public class DebugProcess
 
   private static final String TAG_STARTED = "process-started";
   private static final String TAG_STOPPED = "process-stopped";
+  private static final String TAG_INITIAL_CPE = "initial-cpe";
+
+  private static int next_id;
+  private int id;
+  private String tag_started;
+  private String tag_stopped;
+  private String tag_initial_cpe;
 
   private DebugAdapter adapter;
   private int pid;
@@ -24,19 +31,26 @@ public class DebugProcess
   private Map  ruleTable;
 
   private int running;
+  private Expr lastLocation;
 
   private List statusChangeListeners;
   private List processListeners;
 
   private Info info;
 
+
   //{{{ public DebugProcess(DebugAdapter adapter, int pid)
 
   public DebugProcess(DebugAdapter adapter, int pid, String name)
   {
+    this.id      = next_id++;
     this.adapter = adapter;
     this.pid     = pid;
     this.name    = name;
+
+    tag_started = TAG_STARTED + "-" + id;
+    tag_stopped = TAG_STOPPED + "-" + id;
+    tag_initial_cpe = TAG_INITIAL_CPE + "-" + id;
 
     info = new Info("DebugProcess");
 
@@ -44,12 +58,22 @@ public class DebugProcess
     processListeners      = new LinkedList();
 
     requestRuleCreation(Port.makeStarted(), Expr.makeTrue(),
-			Expr.makeTrue(), TAG_STARTED);
+			Expr.makeTrue(), tag_started);
     requestRuleCreation(Port.makeStopped(), Expr.makeTrue(),
-			Expr.makeTrue(), TAG_STOPPED);
+			Expr.makeCpe(), tag_stopped);
+    requestEvaluation(Expr.makeCpe(), tag_initial_cpe);
 
     rules = new LinkedList();
     ruleTable = new HashMap();
+  }
+
+  //}}}
+
+  //{{{ public DebugAdapter getAdapter()
+
+  public DebugAdapter getAdapter()
+  {
+    return adapter;
   }
 
   //}}}
@@ -104,7 +128,8 @@ public class DebugProcess
 
   public void fireRuleCreated(Rule rule)
   {
-    Iterator iter = processListeners.iterator();
+    Iterator iter =
+      ((List)((LinkedList)processListeners).clone()).iterator();
 
     while (iter.hasNext()) {
       DebugProcessListener listener = (DebugProcessListener)iter.next();
@@ -117,7 +142,8 @@ public class DebugProcess
 
   public void fireRuleDeleted(Rule rule)
   {
-    Iterator iter = processListeners.iterator();
+    Iterator iter =
+      ((List)((LinkedList)processListeners).clone()).iterator();
 
     while (iter.hasNext()) {
       DebugProcessListener listener = (DebugProcessListener)iter.next();
@@ -130,11 +156,40 @@ public class DebugProcess
 
   public void fireRuleModified(Rule rule)
   {
-    Iterator iter = processListeners.iterator();
+    Iterator iter =
+      ((List)((LinkedList)processListeners).clone()).iterator();
 
     while (iter.hasNext()) {
       DebugProcessListener listener = (DebugProcessListener)iter.next();
       listener.ruleModified(this, rule);
+    }
+  }
+
+  //}}}
+  //{{{ public void fireRuleTriggered(Rule rule, Expr value)
+
+  public void fireRuleTriggered(Rule rule, Expr value)
+  {
+    Iterator iter =
+      ((List)((LinkedList)processListeners).clone()).iterator();
+
+    while (iter.hasNext()) {
+      DebugProcessListener listener = (DebugProcessListener)iter.next();
+      listener.ruleTriggered(this, rule, value);
+    }
+  }
+
+  //}}}
+  //{{{ public void fireEvaluationResult(Expr expr, Expr value, String tag)
+
+  public void fireEvaluationResult(Expr expr, Expr value, String tag)
+  {
+    Iterator iter =
+      ((List)((LinkedList)processListeners).clone()).iterator();
+
+    while (iter.hasNext()) {
+      DebugProcessListener listener = (DebugProcessListener)iter.next();
+      listener.evaluationResult(this, expr, value, tag);
     }
   }
 
@@ -164,18 +219,34 @@ public class DebugProcess
   }
 
   //}}}
+  //{{{ public boolean isStopped()
+
+  public boolean isStopped()
+  {
+    return running <= 0;
+  }
+
+  //}}}
+  //{{{ public Expr getLastLocation()
+
+  public Expr getLastLocation()
+  {
+    return lastLocation;
+  }
+
+  //}}}
 
   //{{{ public void ruleCreated(Rule rule)
 
-  public void ruleCreated(Rule rule)
+  synchronized public void ruleCreated(Rule rule)
   {
     info.info("ruleCreated: " + rule);
 
-    if (rule.getTag().equals(TAG_STARTED)) {
+    if (rule.getTag().equals(tag_started)) {
       started = rule;
     }
 
-    if (rule.getTag().equals(TAG_STOPPED)) {
+    if (rule.getTag().equals(tag_stopped)) {
       stopped = rule;
     }
 
@@ -188,7 +259,7 @@ public class DebugProcess
   //}}}
   //{{{ public void ruleDeleted(int rid)
 
-  public void ruleDeleted(int rid)
+  synchronized public void ruleDeleted(int rid)
   {
     Integer ridKey = new Integer(rid);
 
@@ -217,6 +288,22 @@ public class DebugProcess
     rule.modify(port, cond, action, enabled);
 
     fireRuleModified(rule);
+  }
+
+  //}}}
+
+  //{{{ public void evaluationResult(Expr expr, Expr value, String tag)
+
+  public void evaluationResult(Expr expr, Expr value, String tag)
+  {
+    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ rule created: " + tag);
+    if (tag.equals(tag_initial_cpe)) {
+      System.out.println("lastLocation = " + value);
+      lastLocation = value;
+    } else {
+      System.out.println("not equal: " + tag + "," + tag_initial_cpe);
+    }
+    fireEvaluationResult(expr, value, tag);
   }
 
   //}}}
@@ -258,14 +345,19 @@ public class DebugProcess
 
   public void event(int rid, ATerm result)
   {
-    if (rid == started.getRid()) {
+    Rule rule = (Rule)ruleTable.get(new Integer(rid));
+    Expr value = Expr.fromTerm(result);
+
+    fireRuleTriggered(rule, value);
+    if (rule == started) {
       running++;
       if (running == 1) {
 	fireProcessStatusChanged();
       }
-    } else if (rid == stopped.getRid()) {
+    } else if (rule == stopped) {
       running--;
       if (running == 0) {
+	lastLocation = value;
 	fireProcessStatusChanged();
       }
     }
@@ -308,6 +400,15 @@ public class DebugProcess
   }
 
   //}}}
+  //{{{ public void requestRuleEnabling(Rule rule, boolean enabled)
+
+  public void requestRuleEnabling(Rule rule, boolean enabled)
+  {
+    requestRuleModification(rule, rule.getPort(), rule.getCondition(),
+			    rule.getAction(), enabled);
+  }
+
+  //}}}
   //{{{ public void requestBreak()
 
   public void requestBreak()
@@ -321,6 +422,14 @@ public class DebugProcess
   public void requestResume()
   {
     adapter.requestResume(pid);
+  }
+
+  //}}}
+  //{{{ public void requestEvaluation(Expr expr, String tag)
+
+  public void requestEvaluation(Expr expr, String tag)
+  {
+    adapter.requestEvaluation(pid, expr, tag);
   }
 
   //}}}

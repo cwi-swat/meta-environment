@@ -1,19 +1,18 @@
-package tide.tool.ruleinspector;
+package tide.tool.srcviewer;
 
 import javax.swing.Icon;
 
 import tide.tool.*;
 import tide.tool.support.*;
 
-public class RuleInspectorFactory
+public class SourceViewerFactory
   implements ProcessToolFactory
 {
-  public static String NAME = "RuleInspector";
   private ToolManager manager;
 
-  //{{{ public RuleInspectorFactory(ToolManager manager)
+  //{{{ public SourceViewerFactory(ToolManager manager)
 
-  public RuleInspectorFactory(ToolManager manager)
+  public SourceViewerFactory(ToolManager manager)
   {
     this.manager = manager;
   }
@@ -23,7 +22,7 @@ public class RuleInspectorFactory
 
   public ProcessTool createTool(DebugProcess process)
   {
-    ProcessTool tool = new RuleInspector(manager, process);
+    ProcessTool tool = new SourceViewer(manager, process);
     return tool;
   }
 
@@ -32,7 +31,7 @@ public class RuleInspectorFactory
 
   public String getName()
   {
-    return "RuleInspector";
+    return "SourceViewer";
   }
 
   //}}}

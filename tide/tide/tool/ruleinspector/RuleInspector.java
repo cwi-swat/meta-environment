@@ -21,11 +21,11 @@ public class RuleInspector
   private RuleSelector selector;
   private RuleEditor   editor;
 
-  //{{{ public RuleInspector(DebugProcess process)
+  //{{{ public RuleInspector(ToolManager manager, final DebugProcess process)
 
-  public RuleInspector(DebugProcess process)
+  public RuleInspector(ToolManager manager, final DebugProcess process)
   {
-    super(process);
+    super(manager, process);
 
     setSize(360, 350);
 
@@ -52,6 +52,28 @@ public class RuleInspector
 	}
       }
     );
+
+    DebugAdapter adapter = process.getAdapter();
+    adapter.addDebugAdapterListener(new DebugAdapterListener()
+      {
+        public void processDestroyed(DebugAdapter adapter,
+				     DebugProcess proc) {
+	  if (proc == process) {
+	    dispose();
+	  }
+	}
+
+	public void processCreated(DebugAdapter adapter,
+				   DebugProcess proc) { }
+      });
+  }
+
+  //}}}
+  //{{{ public void editRule(Rule rule)
+
+  public void editRule(Rule rule)
+  {
+    selector.selectRule(rule);
   }
 
   //}}}
@@ -156,6 +178,33 @@ class RuleSelector
   }
 
   //}}}
+  //{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
+
+  public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
+  {
+  }
+
+  //}}}
+  //{{{ public void evaluationResult(process, expr, value, tag)
+
+  public void evaluationResult(DebugProcess process, Expr expr,
+			       Expr value, String tag)
+  {
+  }
+
+  //}}}
+
+  //{{{ void selectRule(Rule rule)
+
+  void selectRule(Rule rule)
+  {
+    int index = process.getRuleIndex(rule);
+    table.changeSelection(index, 0, false, false);
+    fireRuleSelected(rule);
+  }
+
+  //}}}
+
   //{{{ public void valueChanged(ListSelectionEvent event)
 
   public void valueChanged(ListSelectionEvent event)
@@ -482,6 +531,21 @@ class RuleEditor
     if (rule == this.rule) {
       ruleSelected(rule);
     }
+  }
+
+  //}}}
+  //{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
+
+  public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
+  {
+  }
+
+  //}}}
+  //{{{ public void evaluationResult(process, expr, value, tag)
+
+  public void evaluationResult(DebugProcess process, Expr expr,
+			       Expr value, String tag)
+  {
   }
 
   //}}}

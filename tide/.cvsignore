@@ -7,4 +7,5 @@ config.log
 config.cache
 config.status
 tide.tifs
+tide
 doc

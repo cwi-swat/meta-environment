@@ -5,14 +5,15 @@ import javax.swing.*;
 import tide.tool.support.*;
 
 abstract public class AdapterTool
-  extends JInternalFrame
+  extends TideTool
 {
   protected DebugAdapter adapter;
 
-  //{{{ protected AdapterTool(DebugAdapter adapter)
+  //{{{ protected AdapterTool(ToolManager manager, DebugAdapter adapter)
 
-  protected AdapterTool(DebugAdapter adapter)
+  protected AdapterTool(ToolManager manager, DebugAdapter adapter)
   {
+    super(manager);
     this.adapter = adapter;
   }
 

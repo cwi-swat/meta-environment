@@ -113,36 +113,71 @@ int TA_getPortType(TA_Port port)
 
 /*}}}  */
 
-/*{{{  TA_Value eval_unknown(int pid, AFun fun, TA_Values args) */
+/*{{{  TA_Expr eval_true(int pid, AFun fun, TA_ExprList args) */
 
-TA_Value eval_unknown(int pid, AFun fun, TA_Values args)
+TA_Expr eval_true(int pid, AFun fun, TA_ExprList args)
 {
-  return TA_makeValueError("unknown function", TA_makeValueStrConst(ATgetName(fun)));
+  return ATparse("true");
 }
 
 /*}}}  */
-/*{{{  TA_Value eval_true(int pid, AFun fun, TA_Values args) */
+/*{{{  TA_Expr eval_false(int pid, AFun fun, TA_ExprList args) */
 
-TA_Value eval_true(int pid, AFun fun, TA_Values args)
+TA_Expr eval_false(int pid, AFun fun, TA_ExprList args)
 {
-  return TA_makeValueTrue();
+  return ATparse("false");
 }
 
 /*}}}  */
-/*{{{  TA_Value eval_false(int pid, AFun fun, TA_Values args) */
+/*{{{  TA_Expr eval_cpe(int pid, AFun fun, TA_ExprList args) */
 
-TA_Value eval_false(int pid, AFun fun, TA_Values args)
-{
-  return TA_makeValueFalse();
-}
-
-/*}}}  */
-/*{{{  TA_Value eval_cpe(int pid, AFun fun, TA_Values args) */
-
-TA_Value eval_cpe(int pid, AFun fun, TA_Values args)
+TA_Expr eval_cpe(int pid, AFun fun, TA_ExprList args)
 {
   ASSERT_VALID_PID(pid);
-  return TA_makeValueLocation(processes[pid].cpe);
+  return ATmake("location(<term>)", processes[pid].cpe);
+}
+
+/*}}}  */
+/*{{{  TA_Expr eval_location(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_location(int pid, AFun fun, TA_ExprList args)
+{
+  TA_Expr arg = ATgetFirst(args);
+  TA_Location location = TA_makeLocationFromTerm(arg);
+  TA_Location cpe = processes[pid].cpe;
+
+  if (cpe == NULL) {
+    return ATparse("false");
+  }
+
+  if (TA_isLocationLineCol(location)) {
+    char *file = TA_getLocationFile(location);
+    int   line = TA_getLocationLine(location);
+    int   col  = TA_getLocationCol(location);
+
+    char *cpe_file = TA_getLocationFile(cpe);
+    if (strcmp(file, cpe_file) == 0) {
+      if (TA_isLocationLine(cpe)) {
+	if (line == TA_getLocationLine(cpe)) {
+	  return ATparse("true");
+	}
+      } else if (TA_isLocationArea(cpe)) {
+	int start_line = TA_getLocationStartLine(cpe);
+	int start_col  = TA_getLocationStartCol(cpe);
+	int end_line   = TA_getLocationEndLine(cpe);
+	int end_col    = TA_getLocationEndCol(cpe);
+
+	if (start_line < line || (start_line == line && start_col <= col)) {
+	  if (end_line > line || (end_line == line && end_col >= col)) {
+	    return ATparse("true");
+	  }
+	}
+      }
+    }
+    return ATparse("false");
+  } else {
+    return ATmake("error(\"unsupported location\",<term>)", arg);
+  }
 }
 
 /*}}}  */
@@ -165,9 +200,10 @@ void TA_connect()
     processes[pid].id = PID_FREE;
   }
 
-  TA_registerFunction(ATmakeAFun("true",  0, ATfalse), eval_true);
-  TA_registerFunction(ATmakeAFun("false", 0, ATfalse), eval_false);
-  TA_registerFunction(ATmakeAFun("cpe",   0, ATfalse), eval_cpe);
+  TA_registerFunction(ATmakeAFun("true",     0, ATfalse), eval_true);
+  TA_registerFunction(ATmakeAFun("false",    0, ATfalse), eval_false);
+  TA_registerFunction(ATmakeAFun("cpe",      0, ATfalse), eval_cpe);
+  TA_registerFunction(ATmakeAFun("location", 1, ATfalse), eval_location);
 
   connected = ATtrue;
 }
@@ -336,15 +372,25 @@ void TA_enableRule(int pid, int rid)
 {
   TA_Process *process = findProcess(pid);
   TA_Rule *rule       = findRule(pid, rid);
+  TA_Rule *last;
 
   assert(rule);
   assert(rule->enabled == ATfalse);
 
   rule->enabled = ATtrue;
 
-  rule->next = process->enabled_rules[rule->port_type];
-  rule->prev = NULL;
-  process->enabled_rules[rule->port_type] = rule;
+  last = process->enabled_rules[rule->port_type];
+  if (last == NULL) {
+    process->enabled_rules[rule->port_type] = rule;
+    rule->prev = NULL;
+  } else {
+    while (last->next) {
+      last = last->next;
+    }
+    last->next = rule;
+    rule->next = NULL;
+    rule->prev = last;
+  }
 }
 
 /*}}}  */
@@ -396,7 +442,6 @@ void TA_deleteRule(int pid, int rid)
 
 /*}}}  */
 
-
 /*{{{  void TA_atCPE(int pid, TA_Location cpe) */
 
 void TA_atCPE(int pid, TA_Location cpe)
@@ -410,13 +455,13 @@ void TA_atCPE(int pid, TA_Location cpe)
 
 static void triggerRule(int pid, TA_Rule *rule)
 {
-  TA_Value value = TA_evaluate(pid, rule->action);
+  TA_Expr value = TA_evaluate(pid, rule->action);
 
   ATfprintf(stderr, "actions of rule %d (%t) evaluate to %t\n",
 	    rule->id, rule->action, value);
 
   ATBpostEvent(tide_cid, ATmake("event(<int>,<int>,<term>)",
-				pid, rule->id, TA_makeTermFromValue(value)));
+				pid, rule->id, value));
 }
 
 /*}}}  */
@@ -424,12 +469,12 @@ static void triggerRule(int pid, TA_Rule *rule)
 
 static void activateRule(int pid, TA_Rule *rule)
 {
-  TA_Value value = TA_evaluate(pid, rule->condition);
+  TA_Expr value = TA_evaluate(pid, rule->condition);
 
   ATfprintf(stderr, "condition of rule %d (%t,%t) evaluates to %t\n",
 	    rule->id, rule->port, rule->condition, value);
 
-  if (TA_isValueTrue(value)) {
+  if (ATisEqual(value, ATparse("true"))) {
     triggerRule(pid, rule);
   }
 }
@@ -488,51 +533,52 @@ TA_Function findFunction(AFun name)
     }
   }
 
-  return eval_unknown;
+  return NULL;
 }
 
 /*}}}  */
 
-/*{{{  TA_Values evaluateList(int pid, ATermList elems) */
+/*{{{  TA_ExprList evaluateList(int pid, TA_ExprList elems) */
 
-TA_Values evaluateList(int pid, ATermList elems)
+TA_ExprList evaluateList(int pid, TA_ExprList elems)
 {
   if (ATisEmpty(elems)) {
-    return TA_makeValuesEmpty();
+    return elems;
   }
 
-  return TA_makeValuesList(TA_evaluate(pid, TA_makeExprFromTerm(ATgetFirst(elems))), 
-			   evaluateList(pid, ATgetNext(elems)));
+  return ATinsert(evaluateList(pid, ATgetNext(elems)),
+		  TA_evaluate(pid, ATgetFirst(elems)));
 }
 
 /*}}}  */
-/*{{{  TA_Value TA_evaluate(int pid, TA_Expr expr) */
+/*{{{  TA_Expr TA_evaluate(int pid, TA_Expr expr) */
 
-TA_Value TA_evaluate(int pid, TA_Expr expr)
+TA_Expr TA_evaluate(int pid, TA_Expr expr)
 {
-  ATerm term = TA_makeTermFromExpr(expr);
-
-  switch (ATgetType(term)) {
+  switch (ATgetType(expr)) {
     case AT_APPL:
       {
-	ATermAppl appl  = (ATermAppl)term;
-	AFun afun       = ATgetAFun(appl);
-	TA_Function fun = findFunction(afun);
-	TA_Values args  = evaluateList(pid, ATgetArguments(appl));
-	return (*fun)(pid, afun, args);
+	ATermAppl appl   = (ATermAppl)expr;
+	AFun afun        = ATgetAFun(appl);
+	TA_Function fun  = findFunction(afun);
+	TA_ExprList args = evaluateList(pid, ATgetArguments(appl));
+	if (fun == NULL) {
+	  return (TA_Expr)ATmakeApplList(afun, args);
+	} else {
+	  return (*fun)(pid, afun, args);
+	}
       }
       break;
 
     case AT_LIST:
       {
-	ATermList list = (ATermList)term;
-	TA_Values vals = evaluateList(pid, list);
-	return TA_makeValueList(vals);
+	TA_ExprList list = (TA_ExprList)expr;
+	return (TA_Expr)evaluateList(pid, list);
       }
       break;
 
     default:
-      return TA_makeValueFromTerm(term);
+      return expr;
   }
 }
 
