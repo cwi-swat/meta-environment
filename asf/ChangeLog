@@ -1,5 +1,14 @@
 # $Id$
 
+2003/11/09 (jurgenv@cwi.nl)
+ * Added implementation of "!:=" to the asfc compiler. For each negative
+   match a new function is generated. The arguments of the function are
+   the current variables in the context of the condition. The function
+   returns either matchfailed or matchsucceeded. The original condition 
+   is then replaced by an equality condition between matchfailed and a call
+   to the newly generated function.
+ * Upgraded condition syntax in the compiler specification
+
 2003/11/06 (jurgenv@cwi.nl)
  * Added "!:=" the condition operator that fails if a match succeeds and
    succeeds when a match fails.

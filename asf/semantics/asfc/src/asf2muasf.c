@@ -705,7 +705,8 @@ static MA_Cond conditionToCond(ASF_ASFCondition condition,
     result = MA_makeCondUnequal(maLhs,sp,sp,maRhs);
   }
   else if (ASF_isASFConditionNoMatch(condition)) {
-    ATerror("conditionToCond: the compiler does not support !:= conditions yet\n");
+    /* assignment is directed the other way in muASF, why?? */
+    result = MA_makeCondNoAssign(maRhs,sp,sp,maLhs);
   }
   else {
     ATerror("conditionToCond: unable to process %s\n",

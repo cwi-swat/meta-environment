@@ -96,6 +96,7 @@
   exports
     context-free syntax
       lhs:Term assign:"=:" rhs:Term  -> Cond {cons("assign")}
+      lhs:Term no-assign:"=:!" rhs:Term  -> Cond {cons("no-assign")}
 
   exports
     context-free syntax
