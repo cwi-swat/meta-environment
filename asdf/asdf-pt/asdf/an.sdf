@@ -1,5 +1,7 @@
 module asdf/an
 
+%% an/full
+
 exports
 
 sorts
@@ -118,6 +120,8 @@ variables
   "A"[0-9]?		-> Action
   "TK"[0-9]?		-> Token
 
+%% an/syntax
+
 exports
 
 context-free syntax
@@ -182,6 +186,8 @@ context-free priorities
   >
   { Action InfixAction Action	-> Action}
 
+%% an/actions
+
 exports
 
 context-free start-symbols
@@ -206,6 +212,7 @@ context-free priorities
   { Action InfixAction Action   -> Action }
 
 
+%% data/Data.sdf
 
 exports
 
@@ -236,3 +243,27 @@ variables
 
   "D"[0-9]?	-> Data
   "DO"[0-9]?	-> DataOp
+
+%% data/Action
+
+exports
+
+context-free syntax
+
+  Action        -> Data {avoid}
+
+%% data/Bindings
+
+exports
+
+context-free syntax
+
+  "no-bindings"         -> Data
+
+lexical syntax
+
+  "disj-union"          -> PrefixDataOp
+  "binding"             -> PrefixDataOp
+  "bound"               -> PrefixDataOp {avoid}
+  "overriding"          -> PrefixDataOp
+ 
