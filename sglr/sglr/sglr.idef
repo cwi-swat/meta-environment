@@ -113,7 +113,7 @@ process Parser is
 	snd-msg(startsymbols(L, Start))
       +
         rec-value(P, language-not-available(L)) .
-	snd-msg(anguage-not-open(L))
+	snd-msg(language-not-open(L))
       )
     )
     * rec-disconnect(P)
