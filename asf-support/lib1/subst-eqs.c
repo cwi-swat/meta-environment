@@ -122,6 +122,7 @@ main(int argc, char *argv[])
 {
   ATerm      bottomOfStack;
   ATerm      contents;
+  ADTEntry   lexicalConsEntry;
   ADTEntries beforeSubst;
   ADTEntries afterSubst;
 
@@ -154,6 +155,13 @@ main(int argc, char *argv[])
 
   beforeSubst = ADTmakeEntriesFromTerm(contents);
   afterSubst  = ADTsubstitute(beforeSubst, substituteEntry, NULL);
+
+  lexicalConsEntry = ADTmakeEntryDefault(
+                       (ADTSort)ATparse("Production"),
+                       (ADTAlternative)ATparse("lexical-constructor"),
+                       (ADTPattern)ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[<symbol-name(Symbol)>,w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),<symbol(Symbol)>,w(\"\"),no-attrs)"));
+
+  afterSubst = ADTmakeEntriesList(lexicalConsEntry, afterSubst);
 
   ATprintf("%t\n", ADTmakeTermFromEntries(afterSubst));
 

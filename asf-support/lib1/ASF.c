@@ -4,6 +4,7 @@
 
 /*{{{  typedefs */
 
+typedef struct ATerm _ASF_Production;
 typedef struct ATerm _ASF_Implies;
 typedef struct ATerm _ASF_TagId;
 typedef struct ATerm _ASF_Conditions;
@@ -31,6 +32,22 @@ void ASF_initASFApi(void)
 
 /*{{{  term conversion functions */
 
+/*{{{  ASF_Production ASF_makeProductionFromTerm(ATerm t) */
+
+ASF_Production ASF_makeProductionFromTerm(ATerm t)
+{
+  return (ASF_Production)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ASF_makeTermFromProduction(ASF_Production arg) */
+
+ATerm ASF_makeTermFromProduction(ASF_Production arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  ASF_Implies ASF_makeImpliesFromTerm(ATerm t) */
 
 ASF_Implies ASF_makeImpliesFromTerm(ATerm t)
@@ -243,6 +260,14 @@ ATerm ASF_makeTermFromCHAR(ASF_CHAR arg)
 /*}}}  */
 /*{{{  constructors */
 
+/*{{{  ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol) */
+
+ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol)
+{
+  return (ASF_Production)ATmakeTerm(ASF_patternProductionLexicalConstructor, symbolName, symbol);
+}
+
+/*}}}  */
 /*{{{  ASF_Implies ASF_makeImpliesDefault(char * lex) */
 
 ASF_Implies ASF_makeImpliesDefault(char * lex)
@@ -439,6 +464,11 @@ ASF_CHAR ASF_makeCHARDefault(char * lex)
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool ASF_isEqualProduction(ASF_Production arg0, ASF_Production arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
 ATbool ASF_isEqualImplies(ASF_Implies arg0, ASF_Implies arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
@@ -503,6 +533,103 @@ ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
+
+/*}}}  */
+/*{{{  ASF_Production accessors */
+
+/*{{{  ATbool ASF_isValidProduction(ASF_Production arg) */
+
+ATbool ASF_isValidProduction(ASF_Production arg)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_isProductionLexicalConstructor(ASF_Production arg) */
+
+ATbool ASF_isProductionLexicalConstructor(ASF_Production arg)
+{
+  return ATmatchTerm((ATerm)arg, ASF_patternProductionLexicalConstructor, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasProductionSymbolName(ASF_Production arg) */
+
+ATbool ASF_hasProductionSymbolName(ASF_Production arg)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg) */
+
+ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0);
+  }
+
+  ATabort("Production has no SymbolName: %t\n", arg);
+  return (ASF_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName) */
+
+ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return (ASF_Production)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)symbolName, 0), 2);
+  }
+
+  ATabort("Production has no SymbolName: %t\n", arg);
+  return (ASF_Production)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasProductionSymbol(ASF_Production arg) */
+
+ATbool ASF_hasProductionSymbol(ASF_Production arg)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_Symbol ASF_getProductionSymbol(ASF_Production arg) */
+
+ASF_Symbol ASF_getProductionSymbol(ASF_Production arg)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return (ASF_Symbol)ATgetArgument((ATermAppl)arg, 6);
+  }
+
+  ATabort("Production has no Symbol: %t\n", arg);
+  return (ASF_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ASF_Production ASF_setProductionSymbol(ASF_Production arg, ASF_Symbol symbol) */
+
+ASF_Production ASF_setProductionSymbol(ASF_Production arg, ASF_Symbol symbol)
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return (ASF_Production)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 6);
+  }
+
+  ATabort("Production has no Symbol: %t\n", arg);
+  return (ASF_Production)NULL;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  ASF_Implies accessors */
@@ -2893,6 +3020,20 @@ ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, char * lex)
 /*}}}  */
 /*{{{  sort visitors */
 
+/*{{{  ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol)) */
+
+ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol))
+{
+  if (ASF_isProductionLexicalConstructor(arg)) {
+    return ASF_makeProductionLexicalConstructor(
+        acceptSymbolName ? acceptSymbolName(ASF_getProductionSymbolName(arg)) : ASF_getProductionSymbolName(arg),
+        acceptSymbol ? acceptSymbol(ASF_getProductionSymbol(arg)) : ASF_getProductionSymbol(arg));
+  }
+  ATabort("not a Production: %t\n", arg);
+  return (ASF_Production)NULL;
+}
+
+/*}}}  */
 /*{{{  ASF_Implies ASF_visitImplies(ASF_Implies arg, char * (*acceptLex)(char *)) */
 
 ASF_Implies ASF_visitImplies(ASF_Implies arg, char * (*acceptLex)(char *))

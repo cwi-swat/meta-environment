@@ -15,7 +15,7 @@ ASF.raw: Asf.label.def
 	sdf2-to-adt -r -i $< -o ASF.raw
 
 ASF.adt: ASF.raw subst-eqs
-	subst-eqs ASF.raw > ASF.adt
+	./subst-eqs ASF.raw > ASF.adt
 
 ASF.c: ASF.adt ASF.pro
 	adt-to-c -i ASF.adt --prologue ASF.pro --prefix ASF_ -o ASF

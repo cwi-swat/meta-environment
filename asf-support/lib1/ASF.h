@@ -18,6 +18,7 @@ typedef ATerm ASF_Symbol;
 /*}}}  */
 /*{{{  typedefs */
 
+typedef struct _ASF_Production *ASF_Production;
 typedef struct _ASF_Implies *ASF_Implies;
 typedef struct _ASF_TagId *ASF_TagId;
 typedef struct _ASF_Conditions *ASF_Conditions;
@@ -38,6 +39,8 @@ void ASF_initASFApi(void);
 
 /*{{{  term conversion functions */
 
+ASF_Production ASF_makeProductionFromTerm(ATerm t);
+ATerm ASF_makeTermFromProduction(ASF_Production arg);
 ASF_Implies ASF_makeImpliesFromTerm(ATerm t);
 ATerm ASF_makeTermFromImplies(ASF_Implies arg);
 ASF_TagId ASF_makeTagIdFromTerm(ATerm t);
@@ -68,6 +71,7 @@ ATerm ASF_makeTermFromCHAR(ASF_CHAR arg);
 /*}}}  */
 /*{{{  constructors */
 
+ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol);
 ASF_Implies ASF_makeImpliesDefault(char * lex);
 ASF_TagId ASF_makeTagIdOneChar(char * lex);
 ASF_TagId ASF_makeTagIdManyChars(char * lex);
@@ -96,6 +100,7 @@ ASF_CHAR ASF_makeCHARDefault(char * lex);
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool ASF_isEqualProduction(ASF_Production arg0, ASF_Production arg1);
 ATbool ASF_isEqualImplies(ASF_Implies arg0, ASF_Implies arg1);
 ATbool ASF_isEqualTagId(ASF_TagId arg0, ASF_TagId arg1);
 ATbool ASF_isEqualConditions(ASF_Conditions arg0, ASF_Conditions arg1);
@@ -109,6 +114,18 @@ ATbool ASF_isEqualCHARList(ASF_CHARList arg0, ASF_CHARList arg1);
 ATbool ASF_isEqualEquation(ASF_Equation arg0, ASF_Equation arg1);
 ATbool ASF_isEqualCondition(ASF_Condition arg0, ASF_Condition arg1);
 ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
+
+/*}}}  */
+/*{{{  ASF_Production accessors */
+
+ATbool ASF_isValidProduction(ASF_Production arg);
+ATbool ASF_isProductionLexicalConstructor(ASF_Production arg);
+ATbool ASF_hasProductionSymbolName(ASF_Production arg);
+ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg);
+ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName);
+ATbool ASF_hasProductionSymbol(ASF_Production arg);
+ASF_Symbol ASF_getProductionSymbol(ASF_Production arg);
+ASF_Production ASF_setProductionSymbol(ASF_Production arg, ASF_Symbol symbol);
 
 /*}}}  */
 /*{{{  ASF_Implies accessors */
@@ -349,6 +366,7 @@ ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, char * lex);
 /*}}}  */
 /*{{{  sort visitors */
 
+ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol));
 ASF_Implies ASF_visitImplies(ASF_Implies arg, char * (*acceptLex)(char *));
 ASF_TagId ASF_visitTagId(ASF_TagId arg, char * (*acceptLex)(char *));
 ASF_Conditions ASF_visitConditions(ASF_Conditions arg, ASF_ConditionList (*acceptList)(ASF_ConditionList));

@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Feb 26 13:42:28 2001
+ * Generated at Tue Mar  6 16:10:14 2001
  */
 
 #ifndef __ASF_dict_H
@@ -32,6 +32,7 @@ extern ATerm ASF_patternConditionsDefault;
 extern ATerm ASF_patternTagIdManyChars;
 extern ATerm ASF_patternTagIdOneChar;
 extern ATerm ASF_patternImpliesDefault;
+extern ATerm ASF_patternProductionLexicalConstructor;
 
 extern void init_ASF_dict();
 
