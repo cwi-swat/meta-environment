@@ -1,3 +1,11 @@
+2002/05/31 (jurgenv@cwi.nl)
+ * Added the notion of failure to the rewriting process in asfe. 
+   Every rewrite step/traversal/built-in can return FAIL instead of a reduct. 
+   Depending on the context different actions can now be activated for FAIL 
+   and success. This can be used for experimenting with different traversal
+   strategies.
+ * Bumped version of asfe to 0.6
+
 2002/05/22 (jurgenv@cwi.nl)
  * Fixed dependency bug on asf-library in configure.in
 
