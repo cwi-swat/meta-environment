@@ -1,3 +1,6 @@
+2003/10/09 (markvdb@cwi.nl)
+  * Added the strategy symbol again, was removed by accident.
+
 2003/10/09 ({jurgenv,markvdb}@cwi.nl)
   * Reorganized the literal syntax.
   * Added constructor information to Parsetree specification.
