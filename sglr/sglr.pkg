@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/sglr
    info=http://www.cwi.nl/projects/MetaEnv/sglr
    description='The Scannerless Generalized LR parser, a GLR parser without
                 a separate scanning phase.'
