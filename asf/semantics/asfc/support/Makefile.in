@@ -61,16 +61,16 @@ CHDR		= rewriter.tif.c rewriter.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= support.o rewriter.o rewriter.tif.o
+LIBFILES	= libsupport.a
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	= support.h rewriter.tif.h
+INCLUDEFILES	= support.h libsupport.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= rewriter.tif.c rewriter.tif.h
+CLEANFILES	= rewriter.tif.c rewriter.tif.h libsupport.a
 # DISTCLEANFILES are removed by 'make distclean'
-DISTCLEANFILES	=
+DISTCLEANFILES	= 
 
 # The all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
@@ -85,6 +85,9 @@ rewriter.tif.c: rewriter.tif.h
 
 rewriter.tifs: rewriter.tb
 	$(TOOLBUS)/bin/toolbus -gentifs rewriter.tb
+
+libsupport.a: support.o rewriter.tif.o rewriter.o
+	$(AR) cr $@ support.o rewriter.tif.o rewriter.o
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
