@@ -195,6 +195,7 @@ dnl Which files need updating?
 AC_OUTPUT(
 	Makefile Makefile.skel meta \
 	compiler/Makefile compiler/c-source/Makefile \
+        asfix2c-compiler/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
 	graph-browser/Makefile graph-browser/graph-browser \
