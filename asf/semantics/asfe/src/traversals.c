@@ -295,7 +295,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
   /* default strategy behaviour */
   if (trav.strategy == UNDEFINED_STRATEGY) {
     RWsetError("top-down or bottom-up missing in traversal strategy.", 
-	       (ATerm) PT_yieldProduction(trav.prod));
+	       (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
     if (trav.type == UNDEFINED_TYPE) { /* old style traversals */
       trav.strategy = TOPDOWN;
     }
