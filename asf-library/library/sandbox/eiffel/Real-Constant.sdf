@@ -1,0 +1,12 @@
+module Real-Constant
+
+imports Real
+
+exports
+
+context-free syntax
+	Sign? Real -> Real-Constant
+
+
+%% Note: Same ambiguity as for Integer_constant above.
+

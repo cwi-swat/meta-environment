@@ -1,0 +1,24 @@
+module Manifest-String
+
+imports Special-Character
+
+exports
+
+lexical syntax
+	[\040-\176] /\ ~[\%\"\n] -> Manifest-String-Char
+	Special-Character -> Manifest-String-Char
+	"%"[\n] -> Manifest-String-Char
+	"\"" Manifest-String-Char* "\"" -> Manifest-String    
+
+%% A manifest string is an arbitrary sequence of:
+
+%%        1. printable characters except percent (%) and double quote (")
+%%        2. Special_characters
+
+%% enclosed in double quotes (").An extended form allows one to write a
+%% manifest string on two or more lines. Every line but the last must end
+%% with a percent (%) and every line but the first must begin with a
+%% percent (%) possibly preceded by blanks ( ) and tab characters.
+
+%% Note: Printable characters include, in this case, blanks and tab
+%% characters, but not new lines. Compare that to Free_operator.

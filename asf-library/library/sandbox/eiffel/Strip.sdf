@@ -1,0 +1,9 @@
+module Strip
+
+exports
+
+context-free syntax
+
+"Strip" "(" Attribute-List ")" -> Strip
+
+{Attribute ","}+ -> Attribute-List

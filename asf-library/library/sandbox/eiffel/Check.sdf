@@ -1,0 +1,9 @@
+module Check
+
+%% imports Assertion
+
+exports
+
+context-free syntax
+
+"check" Assertion "end" -> Check

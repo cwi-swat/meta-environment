@@ -1,0 +1,46 @@
+module Integer
+
+imports Break
+
+exports
+
+sorts Integer
+
+lexical syntax
+	[0-9]+ -> Basic-Integer
+	[0-9][0-9][0-9] -> Three-Digits
+
+context-free syntax
+	Basic-Integer -> Integer
+	Integer -> Integer-Prefix
+	Integer-Prefix "_" -> Start-Of-Integer
+	Start-Of-Integer Three-Digits -> Integer
+
+context-free restrictions
+	Start-Of-Integer -/- [\t\n\ ]
+	Integer-Prefix -/- [\t\n\ ]
+
+%%  An integer is a sequence of characters, each of which must be either:
+
+%%        1. a decimal digit (0 to 9)
+%%        2. an underscore (_), which may not be the first character.
+
+%% If any underscore is present, then there must be three digits to the
+%% right of every underscore, and there must not be any consecutive group
+%% of four digits.
+
+%% Note: The last two constraints concerning underscores might be removed
+%% in the future, allowing groups of any number of digits.
+
+%% Note: Contrary to Integer_constant, Integer has no sign.
+
+%% Note: Be aware of the minimum integer value problem! For example, on
+%% platforms where integers are stored on 32 bits, the following Eiffel
+%% code is valid:
+
+%% Minimum_integer: INTEGER is - 2_147_483_648 -- Smallest supported
+%% value of type INTEGER
+
+%% but the parser should be smart enough otherwise it will read an unary
+%% minus followed by the integer 2147483648, which does not fit in 32
+%% bits and hence triggers an overflow.

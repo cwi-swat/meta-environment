@@ -1,0 +1,11 @@
+module Bit-Constant
+
+exports
+
+lexical syntax
+
+	[01][bB] -> Bit-Constant
+
+
+
+%% Note: The recommended style is to use B rather than b.

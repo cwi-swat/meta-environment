@@ -1,0 +1,14 @@
+module Class-Declaration
+
+exports
+
+context-free syntax
+
+Indexing? Class-Header 
+	Formal-Generics?
+	Obsolete?
+	Inheritance?
+	Creators?
+	Features?
+	Invariant?
+	"end" -> Class-Declaration

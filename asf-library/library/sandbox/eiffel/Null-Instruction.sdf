@@ -1,0 +1,16 @@
+module Null-Instruction
+
+exports
+
+context-free syntax
+	-> Null-Instruction
+
+
+%% Note: This instruction has a purely syntactical role: making sure that
+%% extra semicolons added by oversight to a Compound are harmless, as in
+
+%% if c then ; i1;;; i2; else ;; end
+
+%% TowerEiffel does not support extra semicolons other than
+%% terminators. All other compilers work as expected. SmallEiffel emits a
+%% warning when parsing extra semicolons.

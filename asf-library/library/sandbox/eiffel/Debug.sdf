@@ -1,0 +1,12 @@
+module Debug
+
+imports Manifest-String
+	%% Compound
+
+exports
+
+context-free syntax
+	"debug" Debug-Keys? Compound "end" -> Debug
+	"(" Debug-Key-List ")" -> Debug-Keys
+	{Debug-Key ","}* -> Debug-Key-List
+	Manifest-String -> Debug-Key

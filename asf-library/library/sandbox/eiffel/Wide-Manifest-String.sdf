@@ -1,0 +1,16 @@
+module Wide-Manifest-String
+
+imports Manifest-String
+
+exports
+
+lexical syntax
+"$" Manifest-String -> Wide-Manifest-String
+
+
+%% Note: Wide_manifest_string is not part of the standard. It has been
+%% introduced in TowerEiffel to support wide character in strings.
+
+%% Note: No intervening character is allowed between the dollar sign and
+%% the Manifest_string.
+

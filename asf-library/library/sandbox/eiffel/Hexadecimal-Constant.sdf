@@ -1,0 +1,20 @@
+module Hexadecimal-Constant
+
+%% NON STANDARD
+
+exports
+
+lexical syntax
+	[0-9][0-9a-fA-F]*[xX] -> Hexadecimal-Constant
+
+
+%% An hexadecimal constant is a sequence of two or more characters, whose
+%% first character is a decimal digit (0 to 9), whose subsequent
+%% characters but the last are decimal digits or letters a to f or A to
+%% F, and followed by x or X, with no other intervening characters.
+
+%% Note: Hexadecimal_constant is not part of the standard. It has been
+%% introduced in TowerEiffel to support hexadecimal integers.
+
+%% Note: It is not clear whether underscores are allowed in hexadecimal
+%% constants.

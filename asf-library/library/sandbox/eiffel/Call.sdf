@@ -1,0 +1,44 @@
+module Call
+
+imports Precursor 
+
+exports
+
+context-free syntax
+	Precursor | Qualified-Call -> Call
+	Call-Qualifier? Call-Chaing -> Qualified-Call
+	Call-Target "." -> Call-Qualifiers
+	Parenthesized | "Result" | "Current" | Precursor -> Call-Target
+	{Unqualified-Call "."}+ -> Call-Chain
+	Identifier Actuals? -> Unqualified-Call
+
+
+%% Note: This specification of Call is slightly different from the
+%% version supplied in the standard. However the standard syntax accepts
+%% constructs which are not correct Eiffel such as:
+
+%% foo.Result
+%% Current (5)
+
+%% whereas the specification given above does not.
+
+%% Note: In TowerEiffel, features may be called directly on a
+%% Manifest_constant without placing parentheses around the constant,
+%% such as in:
+
+%% str := 'a'.out
+
+%% which should be, using the standard syntax:
+
+%% str := ('a').out
+
+%% There is a slight lexical problem with Integer_constant though, since
+
+%% 123.out
+
+%% is recognized as
+
+%% 123. out
+
+%% '123.' being a Real_constant. The programmer has to add an extra Break
+%% between the integer constant and the dot to work around this problem.

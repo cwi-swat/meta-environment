@@ -1,0 +1,57 @@
+module Real
+
+imports Integer Sign
+
+exports
+
+sorts Real
+
+lexical syntax
+	[0-9][0-9][0-9] -> Three-Backward-Digits
+	"_" -> Backward-Underscore
+	[eE]Sign? -> Exponent-E
+
+context-free syntax
+	Integer? -> Integral-Part
+	Integral-Part "." -> Integral-Dot
+	Integral-Dot Backward-Integer -> Simple-Real
+	Simple-Real -> Real-Prefix
+	Simple-Real -> Real
+	Real-Prefix Exponent -> Real
+	Exponent-E Integer -> Exponent
+	
+
+	Basic-Integer -> Backward-Integer
+	Backward-Underscore Backward-Integer -> Backward-Integer-Suffix
+	Three-Backward-Digits Backward-Integer-Suffix -> Backward-Integer
+
+context-free restrictions
+	Integral-Part -/- [\t\n\ ]
+	Integral-Dot -/- [\t\n\ ]
+	Underscore -/- [\t\n\ ]
+	Three-Backward-Digits -/- [\t\n\ ]
+	Exponent-E -/- [\t\n\ ]
+	Real-Prefix -/- [\t\n\ ]
+
+
+
+%% Note: The recommended style is to use E rather than e.
+
+%% Note: Contrary to Real_constant, Real has no sign.
+
+%% Note: The constraint stating that the integral and fractional parts
+%% may not both be absent is lexically important. Otherwise the following
+%% piece of code
+
+%% a.e1
+
+%% could be scanned as
+
+%% a .e1
+
+%% instead of
+
+%% a . e1
+
+%% '.e1' being recognized as a real.
+

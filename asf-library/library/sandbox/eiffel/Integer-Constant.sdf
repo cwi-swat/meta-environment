@@ -1,0 +1,21 @@
+module Integer-Constant
+
+imports Sign Integer
+
+exports
+
+context-free syntax
+	Sign? Integer -> Integer-Constant
+
+
+%% Note: There is an ambiguity in the standard syntax here. In the
+%% following piece of code:
+
+%% foo := - 2
+
+%% should the Expression on the right hand side of the assignment be
+%% recognized as an Integer_constant or as an Unary_expression whose
+%% Prefix_operator is '-' and whose Expression is an (unsigned) Integer? 
+%% This has been resolved in the current syntax description by rewriting
+%% the specification for Expression.
+

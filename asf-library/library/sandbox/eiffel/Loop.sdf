@@ -1,0 +1,23 @@
+module Loop
+
+imports Boolean-Expression
+	%% Compound 
+
+exports
+
+context-free syntax
+
+Initialization Invariant? Variant? Loop-Body "end" -> Loop
+"from" Compound -> Initialization
+"variant" Tag-Mark? Expression -> Variant
+
+
+%% Note: The validity rule VAVE states that Expression must be of type
+%% INTEGER. This could eventually be partially enforced in the syntax by
+%% discarding Equality, Manifest_array, Strip and all non-integer
+%% Manifest_constants.
+
+
+Exit "loop" Compound -> Loop-Body
+"until" Boolean-Expression -> Exit
+

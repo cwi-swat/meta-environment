@@ -1,0 +1,23 @@
+module Choice-Constant
+
+imports Integer-Constant Character-Constant Attribute
+
+exports
+
+context-free syntax
+Integer-Constant | Character-Constant | Attribute -> Choice-Constant
+
+
+
+
+%% Note: TowerEiffel accepts "remote constant" in Choice and Interval,
+%% such as in:
+
+%% foo: FOO
+%% inspect i
+%% when foo.const then
+%% do_something
+%% end
+
+%% where const is declared as constant in class FOO. This is not standard
+%% Eiffel syntax.

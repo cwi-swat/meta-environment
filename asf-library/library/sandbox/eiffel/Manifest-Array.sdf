@@ -1,0 +1,9 @@
+module Manifest-Array
+
+exports
+
+context-free syntax
+
+"<<" Expression-List ">>" -> Manifest-Array
+
+{Expression ","}+ -> Expression-List

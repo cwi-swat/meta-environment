@@ -1,0 +1,58 @@
+module Expression
+
+
+imports Call Operator-Expression Equality Manifest-Array
+	Old Strip Boolean-Constant Bit-Constant Integer
+	Real Wide-Character-Constant Wide-Manifest-String
+	Hexadecimal-Constant
+	%% Manifest-String Character-Constant
+
+
+exports
+
+context-free syntax
+	"Current" -> Expression
+	"Result" -> Expression
+
+	Call -> Expression
+
+	Operator-Expression  -> Expression
+	Equality  -> Expression
+
+	Old -> Expression
+	Strip -> Expression
+
+%% Why not Manifest-Constant?
+	Manifest-Array-> Expression
+	Boolean-Constant -> Expression
+	Bit-Constant -> Expression
+	Integer -> Expression
+	Real -> Expression
+	Wide-Character-Constant -> Expression
+	Wide-Manifest-String -> Expression
+	Hexadecimal-Constant -> Expression
+	Manifest-String -> Expression
+	Character-Constant -> Expression
+
+
+
+%% Note: This specification of Expression is slightly different from the
+%% version supplied in the standard. First, Current and Result have been
+%% added as a consequence of new specification for Call. Then,
+%% Manifest_constant has been replaced with the list of its
+%% alternatives. This is to resolve an ambiguity in the standard
+%% syntax. In the following piece of code:
+
+%% foo := - 2
+
+%% should the Expression on the right hand side of the assignment be
+%% recognized as an Integer_constant or as an Unary_expression whose
+%% Prefix_operator is '-' and whose Expression is an (unsigned) Integer? 
+%% Replacing Integer_constant and Real_constant by Integer and Real
+%% solves the problem.
+
+%% Note: Wide_character_constant, Wide_manifest_string and
+%% Hexadecimal_constant are not part of the standard. They have been
+%% introduced in TowerEiffel to support wide characters and string, and
+%% hexadecimal integers.
+

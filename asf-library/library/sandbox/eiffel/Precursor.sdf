@@ -1,0 +1,24 @@
+module Precursor
+
+imports Actuals
+
+exports
+
+context-free syntax
+
+Parent-Qualification? "Precursor" Actuals? -> Precursor
+"{" Class-Name "}" -> Parent-Qualification
+
+
+
+
+%% Note: The Precursor construct is not part of the standard Eiffel
+%% syntax. It has been introduced in Object-Oriented Software
+%% Construction, second edition, and a proposal for its standardization
+%% has been submitted to NICE. ISE Eiffel and Halstenbach will most
+%% likely support this construct in their next release.
+
+%% Note: In Object-Oriented Software Construction, second edition, the
+%% class name in Parent_qualification is enclosed between double braces:
+%% {{Class_name}}. However the proposal submitted to NICE uses the syntax
+%% specified above.

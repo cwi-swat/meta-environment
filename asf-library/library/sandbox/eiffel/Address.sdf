@@ -1,0 +1,7 @@
+module Address
+
+exports
+
+context-free syntax
+	"$" Address-Mark -> Address
+	Feature-Name | "Current" | "Result" -> Address-Mark
