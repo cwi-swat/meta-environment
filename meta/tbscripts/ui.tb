@@ -46,7 +46,8 @@ let
   T       : str,
   FT      : str,
   Path    : str,
-  ErrMsg  : str
+  ErrMsg  : str,
+  On      : term
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -163,6 +164,10 @@ in
      snd-msg(no-online-help-wanted).
      rec-msg(done).
      snd-ack-event(UI,no-online-help)
+   ) +
+   ( rec-event(UI,debugging(On?)) .
+     snd-msg(debugging(On)) .
+     snd-ack-event(UI,debugging(On))
    ) +
    ( rec-note(import-graph(Mods?,Pairs?)).
      snd-do(UI,new-graph(Mods,Pairs))

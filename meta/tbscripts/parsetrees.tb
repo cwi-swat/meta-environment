@@ -33,10 +33,6 @@ tool removevarsyntax is {
 
 process Parsetrees is 
 let
-  Com    : compiler,
-  Eval   : evaluator,
-  Pgen   : pgen,
-  Help   : gen,
   Addsyn : addeqssyntax,
   Remvar : removevarsyntax,
   Id     : term,
