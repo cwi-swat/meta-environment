@@ -12,7 +12,7 @@ public class TBAddressBookService implements AddressBookTif
 
   private Map addressMap;
 
-  public AddressBookService() {
+  public TBAddressBookService() {
     addressMap = new HashMap();
   }
 
@@ -20,7 +20,7 @@ public class TBAddressBookService implements AddressBookTif
     return (AddressBookEntry) addressMap.get(new Integer(id));
   }
 
-  public void deleteAddress(int id) {
+  public void deleteEntry(int id) {
     addressMap.remove(new Integer(id));
   }
 
@@ -33,21 +33,17 @@ public class TBAddressBookService implements AddressBookTif
     getEntry(id).setAddress(address);
   }
 
-  public void setZip(int id, String zip) {
-    getEntry(id).setZip(zip);
-  }
-
-  public ATerm createAddress() {
+  public ATerm createEntry() {
     Integer id = new Integer(createUniqueID());
     AddressBookEntry entry = new AddressBookEntry();
     addressMap.put(id, entry);
-    return factory.make("snd-value(new-address(<int>))", id);
+    return factory.make("snd-value(new-entry(<int>))", id);
   }
 
   public void recTerminate(ATerm t0) {}
 
   public static final void main(String[] args) throws Exception {
-    AddressBookService service = new AddressBookService();
+    TBAddressBookService service = new TBAddressBookService();
     AddressBookBridge bridge = new AddressBookBridge(factory, service);
     bridge.init(args);
     bridge.connect();
