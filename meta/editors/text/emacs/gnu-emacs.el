@@ -57,6 +57,26 @@
   (setq must-send-modified t)
 )
 
+(defun clear-highlights ()
+(let ((overlays (overlays-in 1 (point-max)))
+        found)
+    (while overlays
+      (let ((overlay (car overlays)))
+        (delete-overlay overlay)
+      )
+      (setq overlays (cdr overlays)))
+    ))
+
+(defun set-highlight (start end)
+  (setq must-send-modified ())
+  (let ((modified (buffer-modified-p)))
+    (overlay-put (make-overlay start end nil nil) 'face 'bold)
+;   (put-text-property start end 'face 'bold)
+    (set-buffer-modified-p modified)
+  )
+  (setq must-send-modified t)
+)
+
 (defun reread-contents ()
   (setq must-send-modified ())
   (revert-buffer nil t)

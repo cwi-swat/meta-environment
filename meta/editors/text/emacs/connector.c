@@ -296,7 +296,28 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 
 static void highlightSlices(int write_to_editor_fd, TE_Action action)
 {
-  /* no implementation */
+  ATermList slices = (ATermList) TE_getActionSlices(action);
+
+  sendToEmacs(write_to_editor_fd, "(clear-highlights)");
+
+  for (; !ATisEmpty(slices); slices = ATgetNext(slices)) {
+    LOC_Slice slice = LOC_SliceFromTerm(ATgetFirst(slices));
+    LOC_AreaAreas areas = LOC_getSliceAreas(slice);
+
+    if (strcmp(LOC_getSliceId(slice), "AlphanumericLiterals")) {
+      continue;
+    }
+
+    for (; !LOC_isAreaAreasEmpty(areas); areas = LOC_getAreaAreasTail(areas)) {
+      LOC_Area area = LOC_getAreaAreasHead(areas);
+      int start = LOC_getAreaOffset(area) + 1;
+      int length = LOC_getAreaLength(area);
+      char buf[BUFSIZ];
+
+      sprintf(buf, "(set-highlight %d %d)", start, start+length);
+      sendToEmacs(write_to_editor_fd, buf);
+    }
+  }
 }
 
 /*}}}  */
