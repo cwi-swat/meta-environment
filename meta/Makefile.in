@@ -34,7 +34,7 @@ all doc clean:
 	do \
 		echo Make $@ in $$DIR; \
 		cd $$DIR; \
-		$(MAKE) $@; \
+		$(MAKE) -${MAKEFLAGS} $@; \
 		cd ..; \
 	done
 
