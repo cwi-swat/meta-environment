@@ -180,15 +180,11 @@ in
         snd-eval(SE, getTree(Fid)).
         rec-value(SE, TrmTree?).
         snd-msg(rewrite(Language, TrmTree)).
-				(
-        	rec-msg(result(NormalFormTree?)).
-        	snd-msg(unparse(NormalFormTree)).
-        	rec-msg(unparsed-text(Src?)).
-        	printf("\nNormal form is:\n%s\n", Src)
-				+
-					rec-msg(errors(ErrList?)).
-					snd-msg(display-rewrite-errors(ErrList))
-				)
+				rec-msg(result(tree(NormalFormTree?),errors(ErrList?))).
+			  snd-msg(display-rewrite-errors(ErrList)).
+        snd-msg(unparse(NormalFormTree)).
+        rec-msg(unparsed-text(Src?)).
+        printf("\nNormal form is:\n%s\n", Src)
       else
         snd-note(ui-status(error("Please parse term before reducing")))
       fi .

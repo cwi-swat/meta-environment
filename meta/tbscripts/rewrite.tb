@@ -33,19 +33,13 @@ in
     rec-msg(rewrite(ModName?, Term?)). 
     snd-msg(retrieve-eqs(ModName)).
     (
-      rec-msg(retrieval-successful(ModName)) .
-      snd-eval(Eval, interpret(ModName, Term)) .
-  		(
-      	rec-value(Eval, result(NormalForm?)) .
-				snd-msg(result(NormalForm))
-				+
-				rec-value(Eval, errors(ErrorList?)).
-				snd-msg(errors(ErrorList))
-			)
-     
+			rec-msg(retrieval-successful(ModName)) .
+    	snd-eval(Eval, interpret(ModName, Term)) .
+    	rec-value(Eval, result(tree(NormalForm?),errors(ErrorList?))).
+			snd-msg(result(tree(NormalForm),errors(ErrorList)))
     +
-      rec-msg(retrieval-aborted(ModName)) .
-      snd-msg(result(Term))
+    	rec-msg(retrieval-aborted(ModName)) .
+    	snd-msg(result(Term))
     )
   ) * 
   delta
