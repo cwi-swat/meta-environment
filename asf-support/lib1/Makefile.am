@@ -26,7 +26,6 @@ libASF_a_SOURCES = ASF.c ASF_dict.c ASF-utils.c
 
 bin_PROGRAMS = subst-eqs
 
-CFLAGS   = -g -Wall -O2
 INCLUDES = -I${ATERM}/include
 LDFLAGS  = -L${ATERM}/lib
 LDADD    = -lATerm
