@@ -2822,6 +2822,11 @@ are used whenever appropriate.
 When developing a new specification make sure that you check the libraries
 in order to reduce the amount of work.
 
+\subsubsection{Position Information}
+In a number of cases, for instance when producing error messages, it can
+be very useful to retrieve the position information of subterms.
+\subsubsection{Error messages}
+
 \subsection{Equations}
 \label{Equations}
 
@@ -3063,9 +3068,11 @@ as result.
 \begin{Label}{CODE:split}
 \begin{IncCode}
 \begin{verbatim}
+%% Split.sdf
 module Split
 
 imports basic/Integers
+imports basic/Whitespace
 
 exports
   context-free start-symbols List
@@ -3083,18 +3090,19 @@ hiddens
     "El"[0-9]*  -> El
     "El*"[0-9]* -> {El ","}* 
 
+%% Split.asf
 equations
 
   [l-1] length() = 0
 
   [l-2] length(El, El*) = 1 + length(El*)
 
-  [s-1] length(El*1) = length(El*2)
-        ===========================
+  [s-1] length(El*1) == length(El*2)
+        ====>
         split-in-two(El*1, El*2) = El*1
 
-  [s-1] length(El*1) = length(El*2)
-        ===========================
+  [s-1] length(El*1) == length(El*2)
+        ====>
         split-in-two(El*1, El, El*2) = El*1 
 \end{verbatim}
 \end{IncCode}
@@ -3499,14 +3507,15 @@ Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 \begin{verbatim}
 module Tree-syntax
 
-imports basic/NatCon
+imports basic/Integer
+imports basic/Whitespace
 
 exports
   context-free start-symbols Tree
   sorts Tree
 
   context-free syntax
-    NatCon        -> Tree
+    Integer       -> Tree
     f(Tree, Tree) -> Tree
     g(Tree, Tree) -> Tree
     h(Tree, Tree) -> Tree
@@ -3525,13 +3534,21 @@ all numbers have been incremented.
 \begin{Label}{FIG:inc}
 \begin{IncCode}
 \begin{verbatim}
+%% Tree-inc.sdf
 module Tree-inc
 imports Tree-syntax
-  exports
-    context-free syntax
-      inc(Tree) -> Tree {traversal(trafo, top-down, continue)}
+
+exports
+  context-free syntax
+    inc(Tree) -> Tree {traversal(trafo, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -> Integer
+
+%% Tree-inc.asf
 equations
-[1] inc(N) = N + 1  
+  [1] inc(N) = N + 1  
 \end{verbatim}
 \end{IncCode}
 \caption{The transformer {\tt inc} increments all numbers in a tree}
@@ -3547,13 +3564,20 @@ see~\cite{BKV01}.
 \begin{Label}{FIG:sum} 
 \begin{IncCode}
 \begin{verbatim}
+%% Tree-sum.sdf
 module Tree-sum
 imports Tree-syntax
 exports
   context-free syntax
-    sum(Tree, Nat) -> Nat {traversal(accu, top-down, continue)}
+    sum(Tree, Integer) -> Integer {traversal(accu, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -> Integer
+
+%% Tree-inc.asf
 equations
-[1] sum(N1, N2) = N1 + N2
+  [1] sum(N1, N2) = N1 + N2
 \end{verbatim}
 \end{IncCode}
 \caption{The accumulator {\tt sum} that sums all numbers in a tree.}
