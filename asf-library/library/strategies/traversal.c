@@ -14,15 +14,21 @@ static ATerm appl_pattern = NULL;
 static const char fail_pattern_str[] = "appl(prod([lit(\"fail\")],<term>,attrs([term(cons(\"fail\"))])),[lit(\"fail\")])";
 static ATerm fail_pattern = NULL;
 
+static const char fail_list_pattern_str[] = "appl(list(<term>),[appl(prod([lit(\"fail\")],<term>,attrs([term(cons(\"fail\"))])),[lit(\"fail\")])])";
+static ATerm fail_list_pattern = NULL;
+
 /*}}}  */
 
 /*{{{  static void initPatterns(void) */
 
 static void initPatterns(void)
 {
-  if (appl_pattern == NULL || fail_pattern == NULL) {
+  if (appl_pattern == NULL || 
+      fail_pattern == NULL || 
+      fail_list_pattern == NULL) {
     appl_pattern = ATparse(appl_pattern_str);
     fail_pattern = ATparse(fail_pattern_str);
+    fail_list_pattern = ATparse(fail_list_pattern_str);
   }
 }
 
@@ -36,9 +42,9 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
   PT_Tree term;
 
   initPatterns();
-
   strategy = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
   term = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+ATwarning("all: %s\n", PT_yieldTree(term));
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -61,11 +67,15 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
-	PT_Tree newkid;
-	newkid = rewrite(kidappl);
+	PT_Tree  newkid = rewrite(kidappl);
 
-	if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL) ||
-	    PT_isEqualTree(kidappl, newkid)) {
+	if (PT_isEqualTree(newkid, kidappl)) {
+	  ATwarning("Equations incomplete - please import strategies/Operators"
+		    " for sort %s\n", PT_yieldSymbol(kidtype));
+	  ATwarning("kidappl: %t\n", kidappl);
+	  return term;
+	}
+	else if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
 	   return (PT_Tree) ATmakeTerm(fail_pattern, type);
 	}
 
@@ -120,8 +130,12 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 
 	PT_Tree newkid = rewrite(kidappl);
 
-	if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL) ||
-	    PT_isEqualTree(kidappl, newkid)) {
+	if (PT_isEqualTree(newkid, kidappl)) {
+	  ATwarning("Equations incomplete - please import strategies/Operators"
+		    " for sort %s\n", PT_yieldSymbol(kidtype));
+	  return term;
+	}
+	if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
 	   newkid = kid;
 	}
 
@@ -176,9 +190,12 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 
 	PT_Tree newkid = rewrite(kidappl);
 
-	if (!ATmatchTerm((ATerm) newkid, fail_pattern, NULL) ||
-	    PT_isEqualTree(newkid, kidappl)) {
-	  
+	if (PT_isEqualTree(newkid, kidappl)) {
+	  ATwarning("Equations incomplete - please import strategies/Operators"
+		    " for sort %s\n", PT_yieldSymbol(kidtype));
+	  return term;
+	}
+	if (!ATmatchTerm((ATerm) newkid, fail_pattern, NULL)) {
 	  return (PT_Tree) PT_makeTreeAppl(func, 
 					   PT_setArgsArgumentAt(newkids, 
 								newkid, i));
