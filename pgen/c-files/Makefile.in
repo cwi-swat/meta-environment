@@ -55,19 +55,17 @@ XLIBS		= -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} $(SOCKLIBS)
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
 PCSRC		= add-pt-func.c add-pt-func.tif.c
-NCSRC		= add-norm-func.c add-norm-func.tif.c
-CSRC            = ${PCSRC} ${NCSRC}
-CHDR		= add-pt-func.tif.h add-norm-func.tif.h
+CSRC            = ${PCSRC} 
+CHDR		= add-pt-func.tif.h
 POBJ             = $(subst .c,.o,$(PCSRC))
-NOBJ             = $(subst .c,.o,$(NCSRC))
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= add-pt-func add-norm-func
+BINFILES	= add-pt-func
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=  
 # Local includes
-LOCALINCLUDES	= add-pt-func.tif.h add-norm-func.tif.h
+LOCALINCLUDES	= add-pt-func.tif.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
@@ -85,9 +83,6 @@ all: $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
 add-pt-func.tif.h: add-pt-func.tifs
 	$(ATERMBIN)/tifstoc -tool add-pt-func add-pt-func.tifs
 
-add-norm-func.tif.h: add-norm-func.tifs
-	$(ATERMBIN)/tifstoc -tool add-norm-func add-norm-func.tifs
-
 %.tif.c:	%.tif.h
 
 %.tifs: %.tb
@@ -95,9 +90,6 @@ add-norm-func.tif.h: add-norm-func.tifs
 
 add-pt-func:		$(POBJ)
 	$(CC) -o $@ $(POBJ) $(LIBS)
-
-add-norm-func:		$(NOBJ)
-	$(CC) -o $@ $(NOBJ) $(LIBS)
 
 %.o:	%.c ${LOCALINCLUDES} $(INCLUDEFILES)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
