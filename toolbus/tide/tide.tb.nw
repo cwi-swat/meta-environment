@@ -27,12 +27,11 @@ In this section, we define the tools used in this ToolBus script.
 tool debug-adapter is { }
 tool source-viewer  is 
 	{ command = "java-adapter -class toolbus.tide.SourceViewerTool" }
-#tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+%%tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is 
 	{ command = "java-adapter -class toolbus.tide.WatchpointViewerTool" }
 tool process-viewer is
 	{ command = "java-adapter -class toolbus.tide.ProcessViewerTool" }
-%%tool viewer is { command = "./buscontrol" }
 @
 
 %}}}

@@ -31,6 +31,7 @@ SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
 		ProcessDestructionPort.java SendPort.java ReceivePort.java \
 		DebugRule.java \
 		DebugAdapterInfo.java SourceArea.java DebugProcess.java \
+		DebuggerProcess.java \
 		RemoteDebugAdapterInfo.java \
 		$(TOOLSOURCE)
 TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
@@ -42,7 +43,7 @@ TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 		ExceptionPort.class ProcessCreationPort.class \
 		ProcessDestructionPort.class SendPort.class ReceivePort.class\
-		DebugRule.class \
+		DebugRule.class DebuggerProcess.class \
 		DebugAdapterInfo.class SourceArea.class DebugProcess.class \
 		RemoteDebugAdapterInfo.class \
 		$(TOOLCLASSES)

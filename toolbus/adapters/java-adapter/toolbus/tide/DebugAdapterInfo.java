@@ -96,51 +96,6 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ DebugProcess[] getProcessArray(ATerm procs)
-
-  /**
-    * Build an array of processes consisting of the process-id's
-    * found in procs.
-    */
-
-  DebugProcess[] getProcessArray(ATerm procs)
-  {
-    DebugProcess[] result;
-
-    switch(procs.getType()) {
-      case ATerm.APPL:
-	// must be 'all'
-	result = null;
-	//result = new DebugProcess[processes.size()];
-	//Enumeration e = processes.elements();
-	//for(int i=0; e.hasMoreElements(); i++)
-	//result[i] = (DebugProcess)e.nextElement();
-	break;
-
-      case ATerm.LIST:
-	// A list of process-ids
-	ATerms cur = ((ATermList)procs).getATerms();
-	result = new DebugProcess[cur.length()];
-	try {
-	  ATermPattern pat = world.makePattern("<int>");
-	  for(int i=0; !cur.isEmpty(); i++) {
-	    pat.match(cur.getFirst());
-	    result[i] = (DebugProcess)processes.get(pat.elementAt(0));
-	    cur = cur.getNext();
-	  }
-	  break;
-	} catch (ParseError except) {
-	  System.err.println("internal parse error in getProcessArray");
-	  System.exit(1);
-	}
-
-      default: throw new IllegalArgumentException("illegal process list: " +
-						  procs.toString());
-    }
-    return result;
-  }
-
-  //}
   //{ public int getId()
 
   /**
@@ -329,6 +284,51 @@ public class DebugAdapterInfo
   public Enumeration getProcesses()
   {
     return processes.elements();
+  }
+
+  //}
+  //{ DebugProcess[] getProcessArray(ATerm procs)
+
+  /**
+    * Build an array of processes consisting of the process-id's
+    * found in procs.
+    */
+
+  DebugProcess[] getProcessArray(ATerm procs)
+  {
+    DebugProcess[] result;
+
+    switch(procs.getType()) {
+      case ATerm.APPL:
+	// must be 'all'
+	result = null;
+	//result = new DebugProcess[processes.size()];
+	//Enumeration e = processes.elements();
+	//for(int i=0; e.hasMoreElements(); i++)
+	//result[i] = (DebugProcess)e.nextElement();
+	break;
+
+      case ATerm.LIST:
+	// A list of process-ids
+	ATerms cur = ((ATermList)procs).getATerms();
+	result = new DebugProcess[cur.length()];
+	try {
+	  ATermPattern pat = world.makePattern("<int>");
+	  for(int i=0; !cur.isEmpty(); i++) {
+	    pat.match(cur.getFirst());
+	    result[i] = (DebugProcess)processes.get(pat.elementAt(0));
+	    cur = cur.getNext();
+	  }
+	  break;
+	} catch (ParseError except) {
+	  System.err.println("internal parse error in getProcessArray");
+	  System.exit(1);
+	}
+
+      default: throw new IllegalArgumentException("illegal process list: " +
+						  procs.toString());
+    }
+    return result;
   }
 
   //}

@@ -10,6 +10,8 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
 {
   private Tool tool;
   private RemoteDebugger debugger;
+  private Hashtable threadTable;
+  private int curpid = 0;
 
   //{ public JavaDebugger(String args, Tool tool)
 
@@ -24,6 +26,7 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
     super(tool.getTid(), null);
     this.tool = tool;
     debugger = new RemoteDebugger(args, this, false);
+    initDebugger();
   }
 
   //}
@@ -37,9 +40,41 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
   public JavaDebugger(String host, String passwd, Tool tool)
     throws Exception
   {
-    super(tool.getTid(), null);
+    super(tool.getTid(), ATerm.the_world.empty);
     this.tool = tool;
     debugger = new RemoteDebugger(host, passwd, this, false);
+    initDebugger();
+  }
+
+  //}
+  //{ private void initDebugger()
+
+  /**
+    * Initialize debugger
+    */
+
+  private void initDebugger()
+  {
+    try {
+      threadTable = new Hashtable();
+      RemoteThreadGroup[] groups = debugger.listThreadGroups(null);
+      for(int i=0; i<groups.length; i++) {
+	RemoteThread[] threads = groups[i].listThreads(true);
+	for(int j=0; j<threads.length; j++) {
+	  // We are only interested in threads with the name "main",
+	  // Because other threads are system threads!
+	  if(threads[j].getName().equals("main")) {
+	    int pid = curpid++;
+	    DebuggerProcess process = new DebuggerProcess(pid, threads[j].getName());
+	    threadTable.put(new Integer(pid), threads[j]);
+	    addProcess(process);
+	  }
+	}
+      }
+    } catch (Exception e) {
+      System.err.println("couldn't find current threads: " + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   //}
@@ -59,7 +94,7 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
     p.put("ports", "[[exec-state,at],[always,after],[location,after]," +
 	  "process-creation,at],[process-destruction,at]]");
     p.put("exec-control", "[single-step, step-over, run, stop]");
-    p.put("actions", "[[halt,0,\"suspend a thread\"]" +
+    p.put("actions", "[[halt,0,\"suspend a thread\"]," +
 	  "[single-step,0,\"execute one statement of a thread\"]," +
 	  "[step-over,0,\"execute one statement, step over functions\"]," +
 	  "[run,0,\"continue execution\"]," +
@@ -75,17 +110,19 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
   }
 
   //}
-  //{ public void executeActions(DebugProcess[] procs, ATerm acts)
+  //{ public void executeActions(Enumeration procs, ATerm acts)
 
   /**
     * Execute a list of actions.
     */
 
-  public void executeActions(DebugProcess[] procs, ATerm acts)
+  public void executeActions(Enumeration procs, ATerms acts)
   {
     System.err.println("execute actions " + acts.toString() + "in processes:");
-    for(int i=0; i<procs.length; i++)
-      System.err.print(procs[i].getPid() + " = " + procs[i].getName());
+    while(procs.hasMoreElements()) {
+      DebuggerProcess proc = (DebuggerProcess)procs.nextElement();
+      System.err.print(proc.getPid() + " = " + proc.getName());
+    }
     System.err.println("");
   }
 
@@ -128,6 +165,7 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
     throws Exception
   {
     System.err.println("breakpoint event received.");
+    
   }
 
   //}
@@ -183,4 +221,69 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
   }
 
   //}
+
+  //{ public void addRule(DebugRule rule)
+
+  /**
+    * Add a debug rule
+    */
+
+  public void addRule(DebugRule rule)
+  {
+    super.addRule(rule);
+    switch(rule.getPort().getType()) {
+      case DebugPort.LOCATION:
+	// We need to set a breakpoint!
+	setBreakpoint(rule);
+	break;
+
+      case DebugPort.ALWAYS:
+	// Some processes might not be allowed to run at full speed anymore
+	addAlwaysRules(rule);
+	break;
+    }
+  }
+
+  //}
+  //{ public void setBreakpoint(DebugRule rule)
+
+  /**
+    * Set breakpoints according to a debug rule
+    */
+
+  public void setBreakpoint(DebugRule rule)
+  {
+    DebugProcess[] procs = rule.getProcesses();
+    LocationPort port = (LocationPort)rule.getPort();
+    SourceArea area = port.getLocation();
+    String file = area.getModule();
+    String className = file.substring(0, file.length()-5);
+    System.out.println("locating class: " + className);
+    try {
+      RemoteClass cls = debugger.findClass(className);
+      for(int i=area.getStartLine(); i<= area.getEndLine(); i++)
+	cls.setBreakpointLine(i);
+    } catch (Exception e) {
+      System.err.println("Unable to set breakpoint");
+    }
+  }
+
+  //}
+  //{ public void setAlwaysRules(DebugRule rule)
+
+  /**
+    * Add always rules to a number of processes
+    */
+
+  public void addAlwaysRules(DebugRule rule)
+  {
+    DebugProcess[] procs = rule.getProcesses();
+    for(int i=0; i<procs.length; i++) {
+      DebuggerProcess p = (DebuggerProcess)procs[i];
+      p.addAlwaysRule(rule);
+    }
+  }
+
+  //}
+
 }

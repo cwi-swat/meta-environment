@@ -36,7 +36,7 @@ public class ParseError extends Exception
         str.append(lst);
       try {
         while((ch = c.read()) != -1 && i-- > 0) {
-          str.append((int)ch);
+          str.append((char)ch);
         }
       } catch (IOException e) {
         str.append("*read error*");

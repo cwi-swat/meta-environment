@@ -12,6 +12,12 @@ class DebugAdapterTool extends DebugAdapterTif
   private String name;
   private World world;
 
+  //{ Patterns
+
+  private ATermPattern patternAll;
+
+  //}
+
   //{ static public void main(String[] args)
 
   /**
@@ -144,7 +150,9 @@ class DebugAdapterTool extends DebugAdapterTif
       }
       result = returnPattern.make(info);
     } catch (ParseError e) {
-      throw new IllegalArgumentException("internal parse error in getInfo()");
+      e.printStackTrace();
+      throw new IllegalArgumentException("internal parse error in getInfo(): "
+					 + e.getMessage());
     }
     return result;
   }
@@ -163,15 +171,15 @@ class DebugAdapterTool extends DebugAdapterTif
 
     try {
       ATerms procs = world.empty;
-      ATermPattern add = world.makePattern("[<term>,<terms>]");
-      ATermPattern pair = world.makePattern("[<int>,<str>]");
+      ATermPattern pair = world.makePattern("[<int>,<str>,[]]");
       Enumeration e = debugger.getProcesses();
       while(e.hasMoreElements()) {
 	DebugProcess process = (DebugProcess)e.nextElement();
-	procs = world.makeATerms(add.make(pair.make(new Integer(process.getPid())), process.getName()), procs);
+	procs = world.makeATerms(pair.make(new Integer(process.getPid()),
+					   process.getName()), procs);
       }
       ATermPattern value = world.makePattern("snd-value(processes(<term>))");
-      result = value.make(procs);
+      result = value.make(world.makeList(procs));
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -183,12 +191,22 @@ class DebugAdapterTool extends DebugAdapterTif
   //{ ATerm execActions(ATerm procs, ATermList acts)
 
   /**
-    * Execute a list of actions.
+    * Execute a list of actions just as if a rule containing the
+    * actions was triggered.
+    * example:
+    *   procs = all
+    *   acts  = [single-step]
+    *
     */
 
   ATerm execActions(ATerm procs, ATermList acts)
   {
-    return world.empty;
+    System.out.println("execActions, procs = " + procs);
+    System.out.println("             acts  = " + acts);
+    
+    Enumeration processes = new ProcessFilter(debugger.getProcesses(), procs);
+    debugger.executeActions(processes, acts.getATerms());
+    return null;
   }
 
   //}
@@ -212,7 +230,7 @@ class DebugAdapterTool extends DebugAdapterTif
       int life = DebugRule.lifeTerm2Int(Life);
       if(port.getType() == DebugPort.ALWAYS && life == DebugRule.ONE_SHOT) {
 	// Execute immediately, no need to create a rule
-	executeActions(Procs, Acts);
+	execActions(Procs, Acts);
 	return value.make(Procs, Port, Cond, Acts, Life, new Integer(-1));
       }
 
@@ -226,20 +244,6 @@ class DebugAdapterTool extends DebugAdapterTif
       throw new IllegalArgumentException("internal parse error");
     }
     return result;
-  }
-
-  //}
-  //{ void executeActions(ATerm procs, ATerm acts)
-
-  /**
-    * Execute a list of actions just as if a rule containing the
-    * actions was triggered.
-    */
-
-  void executeActions(ATerm procs, ATerm acts)
-  {
-    DebugProcess[] processes = debugger.getProcessArray(procs);
-    debugger.executeActions(processes, acts);
   }
 
   //}
