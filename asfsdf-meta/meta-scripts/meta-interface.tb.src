@@ -41,6 +41,7 @@ let
   Tags : list,
   Errors : list
 in
+  Id := process-id .
   (
     rec-msg(run-asf-tests(ModuleName?)) .
     snd-note(ui-status(stat(Id, "Retrieving equations and tests"))) .
