@@ -5,9 +5,6 @@
 tool evaluator is {
   command = "evaluator"
 }
-tool import-db is {
-  command = "import-db"
-}
 tool compiler is {
   command = "compiler -print-gc-info -termtable 20"
 }
