@@ -32,23 +32,27 @@ if ($#ARGV < 0) {
 
 # Get filename form commandline
 $fullname = $ARGV[0];
-# get basename
+# Get basename
 @dirarray = split(/\//,$fullname);
 $basename = pop(@dirarray);
 $dir = join(/\//,@dirarray);
 if ($dir ne "") {
   $dir .= "/";
 }
-#Check for right suffix
+# Where to put temporary files?
+$tmpdir=$ENV{'TMPDIR'}?$ENV{'TMPDIR'}:'/tmp';
+# Check for right suffix
 if ($basename =~ /(.+)\Q$idefsuf\E$/) {
-  $stem = $1;
+  $base = $1;
+  $stmp = "$tmpdir/$1.tmp.$$";
+  $serr = "$tmpdir/$1.err.$$";
 } else {
   print STDERR "$basename has unknown suffix\n";
   &usage;
 }
 
-open(IDEF,"$fullname") || die("Can't open $fullname\n");
-open(TB,">/tmp/$stem.tmp.$$") || die("Can't open /tmp/$stem.tmp.$$\n");
+open(IDEF,"$fullname") || die("can't open $fullname");
+open(TB,">$stmp") || die("can't create $stmp ($!)");
 
 $pc = 0;
 while(<IDEF>) {
@@ -76,8 +80,17 @@ if ($pc != 1) {
 print TB "toolbus(",$process,")\n";
 close(TB);
 
-system("toolbus -gentifs /tmp/$stem.tmp.$$ > /dev/null 2>&1 ");
-system("mv /tmp/$stem.tmp.$$.tifs $dir$stem.tifs");
-print STDOUT "Tool interfaces written to \`$dir$stem.tifs\'\n";
+system("toolbus -gentifs $stmp 2> $serr > /dev/null");
+$err=-s $serr;
+if($err) {
+  open(ERR,"<$serr") || die "error opening $serr ($!)";
+  print STDERR while(<ERR>);
+  close ERR;
+} else {
+  system("mv $stmp.tifs $dir$base.tifs");
+  print STDOUT "Tool interfaces written to \`$dir$base.tifs\'\n";
+}
 
-unlink("/tmp/$stem.tmp.$$");
+unlink($serr,$stmp);
+
+exit $err;
