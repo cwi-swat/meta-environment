@@ -51,9 +51,9 @@ public class Example extends Frame implements ActionListener {
     return factory.make("count(<int>))", new Integer(count++));
   }
 
-  public void ackEvent(ATerm event, ATerm result) {
+  public void ackEvent(ATerm id, ATerm event, ATerm result) {
     // This simple tool ignores event acknowledgements
-    System.err.println("ackEvent(" + event + ", " + result);
+    System.err.println("Example.ackEvent(" + id + ", " + event + ", " + result);
   }
 
   public void terminate(String msg) {
