@@ -83,6 +83,10 @@ DISTCLEANFILES	=
 # The all target must be defined:
 all: meta.tifs $(BINFILES) $(LIBFILES) $(DATAFILES) $(INCLUDEFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 

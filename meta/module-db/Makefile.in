@@ -78,6 +78,10 @@ DISTCLEANFILES	= depend Makefile module-db.tif.c module-db.tif.h
 # The all target must be defined:
 all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 

@@ -9,6 +9,10 @@ PICTURES = newmeta.ps toolbus.ps
 
 all: ps
 
+# Unit test target
+test:	all
+	@true
+
 ps: new-meta.ps 
 
 new-meta.ps: new-meta.dvi 

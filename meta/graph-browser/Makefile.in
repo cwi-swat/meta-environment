@@ -76,6 +76,10 @@ DISTCLEANFILES	= graph-browser
 # The all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 

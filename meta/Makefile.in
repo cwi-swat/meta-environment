@@ -32,7 +32,7 @@ SUBDIRS		= toolbus editor evaluator graph-browser \
 
 # .SILENT:
 
-all doc clean:	configure
+all doc clean test:	configure
 	@for DIR in $(SUBDIRS);	\
 	do \
 		echo Make $@ in $$DIR; \

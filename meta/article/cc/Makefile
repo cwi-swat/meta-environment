@@ -9,6 +9,10 @@ include general-make
 
 all: format.ps
 
+# Unit test target
+test:	all
+	@true
+
 %.eps: %.fig
 	fig2dev -Lps $< $@
 

@@ -8,6 +8,10 @@ files=meta-skel ${target}.7 ${target}.txt ${target}.html ${target}.bok
 
 all:	${files}
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 %.7:	%.pod
 	-pod2man --center=${CENTER} --release=${RELEASE} --section=7 $< > $@
 		

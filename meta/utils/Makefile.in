@@ -77,6 +77,10 @@ DISTCLEANFILES  =
 
 all:	${BINFILES} ${LIBFILES}
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
 
