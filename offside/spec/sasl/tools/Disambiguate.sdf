@@ -16,9 +16,8 @@ context-free syntax
 "offside!" -> Expr
 "offside!" -> Clause
 
-
-check(Expr, "ok" | "not-ok", IntCon) -> "ok" | "not-ok" {traversal(accu,bottom-up,continue)}
-check(Where, "ok" | "not-ok", IntCon) -> "ok" | "not-ok" {traversal(accu,bottom-up,continue)}
+minimal(Expr, NatCon) -> NatCon {traversal(accu,bottom-up,continue)}
+minimal(Where, NatCon) -> NatCon{traversal(accu,bottom-up,continue)}
 
 variables
 
@@ -26,6 +25,7 @@ variables
 "Expr*"[0-9]* -> { Expr ","}*
 "Clause"[0-9]* -> Clause
 "NameList"[0-9]*     -> NameList
-"NatCon"[0-9]*      -> NatCon
+"Col"[0-9]*      -> NatCon
+"Min"[0-9]* -> NatCon
 "Defs"[0-9]* -> Defs
-"Where"  -> Where
+"WHERE"  -> Where

@@ -2,7 +2,7 @@ equations
 
 %% How to disambiguate:
 %%   * Remove all trees that have offside subtrees
-%%   * choose the deepest derivation if ambiguities remain
+%%   * choose the right associative derivation if ambiguities remain
 
 [] amb(Expr*1, offside!, Expr*2) = amb(Expr*1,Expr*2)
 [] amb(Expr*1, Expr WHERE Defs1 WHERE Defs2, Expr*2) = amb(Expr*1, Expr*2)
@@ -16,19 +16,14 @@ equations
 [] offside! WHERE Defs = offside!
 
 %% Detect trees that have offside subtrees
-[] NameList = Expr = offside! when check(Expr,ok,get-start-column(Expr)) = not-ok
+[] NameList = Expr = offside! when 
+     Col = get-start-column(Expr),
+     minimal(Expr,Col) < Col = true
 
-[] check(Expr,ok,NatCon1) = not-ok
-     when get-start-column(Expr) = NatCon2,
-          NatCon1 > NatCon2 = true
+[] minimal(Expr,Min) = Col
+     when get-start-column(Expr) = Col,
+          Col < Min = true
 
-
-[] check(Where,ok,NatCon1) = not-ok
-    when get-start-column(Where) = NatCon2,
-          NatCon1 > NatCon2 = true
-
-
-%%
-%%[] check(Layout,ok,NatCon1) = not-ok
-%%     when get-end-column(Layout) = NatCon2,
-%%          NatCon1 > NatCon2 + 1 = true
+[] minimal(WHERE,Min) = Col
+     when get-start-column(WHERE) = Col,
+          Col < Min = true
