@@ -10,11 +10,15 @@ failed=0
 
 call_toolbus () {
   script=$1
-	tests=$(($tests+1))
+  tests=`expr $tests + 1`
   result=`${toolbus} -I${datadir} ${script} 2>&1`
-  if echo $result | grep -iq failed; then
+  toolbus_exit=$?
+  if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
-    failed=$(($failed+1))
+    failed=`expr $failed + 1`
+  elif echo $result | grep -iq failed; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
   else
     echo -n .
   fi
@@ -35,6 +39,8 @@ rm -f Empty.eqs
 call_toolbus new-eqs-test.tb
 rm -f Empty.eqs
 
+# Test whether ambiguities for asfix1 are corrected
+call_toolbus ambi-test.tb
 echo ""
 
 if [ $failed != 0 ]; then
