@@ -182,7 +182,7 @@ ATbool PT_isIterSepSymbol(PT_Symbol symbol)
    * "cf(iter-star-sep(<term>,lit(<str>)))" and
    * "cf(iter-sep(<term>,lit(<str>)))" 
    */
-  if (PT_isSymbolCf(symbol)) {
+  if (PT_isSymbolCf(symbol) || PT_isSymbolLex(symbol)) {
     PT_Symbol listsym = PT_getSymbolSymbol(symbol);
     return PT_isSymbolIterPlusSep(listsym) || PT_isSymbolIterStarSep(listsym);
   }
@@ -208,7 +208,7 @@ ATbool PT_isIterSymbol(PT_Symbol symbol)
    * "cf(iter-star(<term>,lit(<str>)))"
    * "cf(iter(<term>,lit(<str>)))"
    */
-  if (PT_isSymbolCf(symbol)) {
+  if (PT_isSymbolCf(symbol) || PT_isSymbolLex(symbol)) {
     PT_Symbol listsym = PT_getSymbolSymbol(symbol);
     return PT_isSymbolIterPlus(listsym) || PT_isSymbolIterStar(listsym);
   }
