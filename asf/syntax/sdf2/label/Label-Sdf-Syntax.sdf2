@@ -27,3 +27,4 @@ exports
     "cons" "(" ATerm ")" -> Attribute
     "constructor"        -> Attribute
     "memo"               -> Attribute  
+    "traverse"           -> Attribute
