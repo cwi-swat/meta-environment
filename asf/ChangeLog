@@ -1,5 +1,8 @@
 2001/11/20 ({olivierp,jurgenv}@cwi.nl)
  * Fixed wrong tag reporting in error messages and TIDE stack trace.
+ * Fixed a bug in the interpreter concerning uninitialized list variables
+   in the right-hand side of an equation.
+ * Fixed stack frame identification for TIDE in asfe.
 
 2001/11/13 (jurgenv@cwi.nl)
  * Fixed bash compatibility bug in system call in asfc for SunOs.
