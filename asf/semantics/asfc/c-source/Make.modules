@@ -1,4 +1,4 @@
-ASFIX :=\
+ASFIX := \
 AUX-ANumerals1.asfix\
 AUX-ANumerals2.asfix\
 AUX-ANumerals3.asfix\
@@ -355,6 +355,10 @@ AUX-MuASF2C1.asfix\
 AUX-MuASF2C2.asfix\
 AUX-MuASF2C3.asfix\
 AUX-MuASF2C4.asfix\
+AUX-MuASF2C5.asfix\
+AUX-MuASF2C6.asfix\
+AUX-MuASF2C7.asfix\
+AUX-MuASF2C8.asfix\
 AUX-MuLiterals1.asfix\
 AUX-MuLiterals2.asfix\
 AUX-Normalize-Conds1.asfix\
@@ -504,6 +508,7 @@ AUX-VarEnv15.asfix\
 AUX-VarEnv16.asfix\
 AUX-VarEnv17.asfix\
 AUX-VarEnv18.asfix\
+AUX-VarEnv19.asfix\
 AUX-VarEnv2.asfix\
 AUX-VarEnv3.asfix\
 AUX-VarEnv4.asfix\

@@ -1,36 +1,36 @@
 #include "support.h"
 static Symbol lf_AUX_MuASF_SingleSorted1_1sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_1( );
+static ATerm lf_AUX_MuASF_SingleSorted1_1( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_2sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_2( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_3sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_3( ATerm arg1 , ATerm arg2);
+static ATerm lf_AUX_MuASF_SingleSorted1_3( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_5sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_5( ATerm arg1 , ATerm arg2);
 static Symbol lf_AUX_MuASF_SingleSorted1_6sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_6( ATerm arg1 , ATerm arg2 , ATerm arg3);
+static ATerm lf_AUX_MuASF_SingleSorted1_6( ATerm arg1);
+static Symbol lf_AUX_MuASF_SingleSorted1_7sym;
+static ATerm lf_AUX_MuASF_SingleSorted1_7( );
 static Symbol lf_AUX_MuASF_SingleSorted1_8sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_8( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_9sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_9( ATerm arg1);
-static Symbol lf_AUX_MuASF_SingleSorted1_4sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_4( ATerm arg1);
+static ATerm lf_AUX_MuASF_SingleSorted1_9( ATerm arg1 , ATerm arg2);
 static Symbol lf_AUX_MuASF_SingleSorted1_11sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_11( ATerm arg1);
-static Symbol lf_AUX_MuASF_SingleSorted1_10sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_10( ATerm arg1);
+static ATerm lf_AUX_MuASF_SingleSorted1_11( ATerm arg1 , ATerm arg2);
 static Symbol lf_AUX_MuASF_SingleSorted1_12sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_12( ATerm arg1);
+static ATerm lf_AUX_MuASF_SingleSorted1_12( ATerm arg1 , ATerm arg2 , ATerm arg3);
 static Symbol lf_AUX_MuASF_SingleSorted1_13sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_13( ATerm arg1);
+static Symbol lf_AUX_MuASF_SingleSorted1_4sym;
+static ATerm lf_AUX_MuASF_SingleSorted1_4( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_14sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_14( ATerm arg1);
-static Symbol lf_AUX_MuASF_SingleSorted1_15sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_15( ATerm arg1 , ATerm arg2);
+static Symbol lf_AUX_MuASF_SingleSorted1_10sym;
+static ATerm lf_AUX_MuASF_SingleSorted1_10( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_16sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_16( ATerm arg1);
-static Symbol lf_AUX_MuASF_SingleSorted1_7sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_7( ATerm arg1);
+static Symbol lf_AUX_MuASF_SingleSorted1_15sym;
+static ATerm lf_AUX_MuASF_SingleSorted1_15( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_17sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_17( ATerm arg1 , ATerm arg2);
 static Symbol lf_AUX_MuASF_SingleSorted1_19sym;
@@ -71,44 +71,40 @@ static Symbol lf_AUX_MuASF_SingleSorted1_35sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_35( ATerm arg1);
 static Symbol lf_AUX_MuASF_SingleSorted1_36sym;
 static ATerm lf_AUX_MuASF_SingleSorted1_36( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_MuASF_SingleSorted1_38sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_38( ATerm arg1);
-static Symbol lf_AUX_MuASF_SingleSorted1_37sym;
-static ATerm lf_AUX_MuASF_SingleSorted1_37( ATerm arg1);
 void register_AUX_MuASF_SingleSorted1( ) {
-lf_AUX_MuASF_SingleSorted1_1sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"_\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArg\"),w(\"\"),no-attrs)"
- , 0 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_1sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_1sym);
-lf_AUX_MuASF_SingleSorted1_2sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 1 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_2sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_2sym);
-lf_AUX_MuASF_SingleSorted1_3sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 2 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_3sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_3sym);
-lf_AUX_MuASF_SingleSorted1_5sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 2 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_5sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_5sym);
-lf_AUX_MuASF_SingleSorted1_6sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 3 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_6sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_6sym);
-lf_AUX_MuASF_SingleSorted1_8sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Props\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_8sym);
-lf_AUX_MuASF_SingleSorted1_9sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArgList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_9sym);
-lf_AUX_MuASF_SingleSorted1_4sym= ATmakeSymbol( "listtype(sort(\"SigArg\"),ql(\",\"))" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_4sym);
-lf_AUX_MuASF_SingleSorted1_11sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_11sym);
-lf_AUX_MuASF_SingleSorted1_10sym= ATmakeSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_10sym);
-lf_AUX_MuASF_SingleSorted1_12sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_12sym);
-lf_AUX_MuASF_SingleSorted1_13sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_13sym);
-lf_AUX_MuASF_SingleSorted1_14sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_14sym);
-lf_AUX_MuASF_SingleSorted1_15sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 2 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_15sym);
-lf_AUX_MuASF_SingleSorted1_16sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_16sym);
-lf_AUX_MuASF_SingleSorted1_7sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
+lf_AUX_MuASF_SingleSorted1_7sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"_\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArg\"),w(\"\"),no-attrs)" , 0 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_7sym);
+lf_AUX_MuASF_SingleSorted1_8sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_8sym);
+lf_AUX_MuASF_SingleSorted1_9sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 2 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_9sym);
+lf_AUX_MuASF_SingleSorted1_11sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 2 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_11sym);
+lf_AUX_MuASF_SingleSorted1_12sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" , 3 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_12sym);
+lf_AUX_MuASF_SingleSorted1_13sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Props\"),w(\"\"),no-attrs)" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_13sym);
+lf_AUX_MuASF_SingleSorted1_4sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_4sym);
+lf_AUX_MuASF_SingleSorted1_14sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArgList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_14sym);
+lf_AUX_MuASF_SingleSorted1_10sym= ATmakeSymbol( "listtype(sort(\"SigArg\"),ql(\",\"))" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_10sym);
+lf_AUX_MuASF_SingleSorted1_16sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_16sym);
+lf_AUX_MuASF_SingleSorted1_15sym= ATmakeSymbol( "listtype(sort(\"FuncDef\"),ql(\";\"))" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_15sym);
 lf_AUX_MuASF_SingleSorted1_17sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Rule\"),w(\"\"),no-attrs)" , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_17sym);
 lf_AUX_MuASF_SingleSorted1_19sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
@@ -149,26 +145,22 @@ lf_AUX_MuASF_SingleSorted1_35sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\")
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_35sym);
 lf_AUX_MuASF_SingleSorted1_36sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"module\"),w(\"\"),sort(\"ModId\"),w(\"\"),sort(\"SignatureOpt\"),w(\"\"),sort(\"RulesOpt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" , 3 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_36sym);
-lf_AUX_MuASF_SingleSorted1_38sym= ATmakeSymbol( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleList\"),w(\"\"),no-attrs)" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_38sym);
-lf_AUX_MuASF_SingleSorted1_37sym= ATmakeSymbol( "listtype(sort(\"Module\"))" , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_SingleSorted1_37sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"_\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArg\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_1 , lf_AUX_MuASF_SingleSorted1_1sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_2 , lf_AUX_MuASF_SingleSorted1_2sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_3 , lf_AUX_MuASF_SingleSorted1_3sym);
-register_prod( ATparse( "listtype(sort(\"SigArg\"),ql(\",\"))") , lf_AUX_MuASF_SingleSorted1_4 , lf_AUX_MuASF_SingleSorted1_4sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_5 , lf_AUX_MuASF_SingleSorted1_5sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_6 , lf_AUX_MuASF_SingleSorted1_6sym);
-register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf_AUX_MuASF_SingleSorted1_7 , lf_AUX_MuASF_SingleSorted1_7sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Props\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_8 , lf_AUX_MuASF_SingleSorted1_8sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArgList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_9 , lf_AUX_MuASF_SingleSorted1_9sym);
-register_prod( ATparse( "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf_AUX_MuASF_SingleSorted1_10 , lf_AUX_MuASF_SingleSorted1_10sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_11 , lf_AUX_MuASF_SingleSorted1_11sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_12 , lf_AUX_MuASF_SingleSorted1_12sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_13 , lf_AUX_MuASF_SingleSorted1_13sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_14 , lf_AUX_MuASF_SingleSorted1_14sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_15 , lf_AUX_MuASF_SingleSorted1_15sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_16 , lf_AUX_MuASF_SingleSorted1_16sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"VarId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Var\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_1 , lf_AUX_MuASF_SingleSorted1_1sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_2 , lf_AUX_MuASF_SingleSorted1_2sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_3 , lf_AUX_MuASF_SingleSorted1_3sym);
+register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf_AUX_MuASF_SingleSorted1_4 , lf_AUX_MuASF_SingleSorted1_4sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_5 , lf_AUX_MuASF_SingleSorted1_5sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_6 , lf_AUX_MuASF_SingleSorted1_6sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"_\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArg\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_7 , lf_AUX_MuASF_SingleSorted1_7sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_8 , lf_AUX_MuASF_SingleSorted1_8sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_9 , lf_AUX_MuASF_SingleSorted1_9sym);
+register_prod( ATparse( "listtype(sort(\"SigArg\"),ql(\",\"))") , lf_AUX_MuASF_SingleSorted1_10 , lf_AUX_MuASF_SingleSorted1_10sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_11 , lf_AUX_MuASF_SingleSorted1_11sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_12 , lf_AUX_MuASF_SingleSorted1_12sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Props\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_13 , lf_AUX_MuASF_SingleSorted1_13sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"SigArgList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_14 , lf_AUX_MuASF_SingleSorted1_14sym);
+register_prod( ATparse( "listtype(sort(\"FuncDef\"),ql(\";\"))") , lf_AUX_MuASF_SingleSorted1_15 , lf_AUX_MuASF_SingleSorted1_15sym);
+register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_16 , lf_AUX_MuASF_SingleSorted1_16sym);
 register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Rule\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_17 , lf_AUX_MuASF_SingleSorted1_17sym);
 register_prod( ATparse( "listtype(sort(\"Rule\"),ql(\";\"))") , lf_AUX_MuASF_SingleSorted1_18 , lf_AUX_MuASF_SingleSorted1_18sym);
 register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_19 , lf_AUX_MuASF_SingleSorted1_19sym);
@@ -189,20 +181,10 @@ register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"signature
 register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_34 , lf_AUX_MuASF_SingleSorted1_34sym);
 register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_35 , lf_AUX_MuASF_SingleSorted1_35sym);
 register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"module\"),w(\"\"),sort(\"ModId\"),w(\"\"),sort(\"SignatureOpt\"),w(\"\"),sort(\"RulesOpt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_36 , lf_AUX_MuASF_SingleSorted1_36sym);
-register_prod( ATparse( "listtype(sort(\"Module\"))") , lf_AUX_MuASF_SingleSorted1_37 , lf_AUX_MuASF_SingleSorted1_37sym);
-register_prod( ATparse( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleList\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_SingleSorted1_38 , lf_AUX_MuASF_SingleSorted1_38sym);
 }
 void resolve_AUX_MuASF_SingleSorted1( ) {
 }
 void init_AUX_MuASF_SingleSorted1( ) {
-}
-ATerm lf_AUX_MuASF_SingleSorted1_37( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_37);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_37sym , arg0);
-}
-ATerm lf_AUX_MuASF_SingleSorted1_38( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_38);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_38sym , arg0);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_36( ATerm arg0 , ATerm arg1 , ATerm arg2) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_36);
@@ -284,68 +266,68 @@ ATerm lf_AUX_MuASF_SingleSorted1_17( ATerm arg0 , ATerm arg1) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_17);
 return make_nf2( lf_AUX_MuASF_SingleSorted1_17sym , arg0 , arg1);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_7( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_7);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_7sym , arg0);
+ATerm lf_AUX_MuASF_SingleSorted1_15( ATerm arg0) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_15);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_15sym , arg0);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_16( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_16);
 return make_nf1( lf_AUX_MuASF_SingleSorted1_16sym , arg0);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_15( ATerm arg0 , ATerm arg1) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_15);
-return make_nf2( lf_AUX_MuASF_SingleSorted1_15sym , arg0 , arg1);
+ATerm lf_AUX_MuASF_SingleSorted1_10( ATerm arg0) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_10);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_10sym , arg0);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_14( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_14);
 return make_nf1( lf_AUX_MuASF_SingleSorted1_14sym , arg0);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_13( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_13);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_13sym , arg0);
-}
-ATerm lf_AUX_MuASF_SingleSorted1_12( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_12);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_12sym , arg0);
-}
-ATerm lf_AUX_MuASF_SingleSorted1_10( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_10);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_10sym , arg0);
-}
-ATerm lf_AUX_MuASF_SingleSorted1_11( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_SingleSorted1_11);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_11sym , arg0);
-}
 ATerm lf_AUX_MuASF_SingleSorted1_4( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_4);
 return make_nf1( lf_AUX_MuASF_SingleSorted1_4sym , arg0);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_9( ATerm arg0) {
+ATerm lf_AUX_MuASF_SingleSorted1_13( ATerm arg0) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_13);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_13sym , arg0);
+}
+ATerm lf_AUX_MuASF_SingleSorted1_12( ATerm arg0 , ATerm arg1 , ATerm arg2) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_12);
+return make_nf3( lf_AUX_MuASF_SingleSorted1_12sym , arg0 , arg1 , arg2);
+}
+ATerm lf_AUX_MuASF_SingleSorted1_11( ATerm arg0 , ATerm arg1) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_11);
+return make_nf2( lf_AUX_MuASF_SingleSorted1_11sym , arg0 , arg1);
+}
+ATerm lf_AUX_MuASF_SingleSorted1_9( ATerm arg0 , ATerm arg1) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_9);
-return make_nf1( lf_AUX_MuASF_SingleSorted1_9sym , arg0);
+return make_nf2( lf_AUX_MuASF_SingleSorted1_9sym , arg0 , arg1);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_8( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_8);
 return make_nf1( lf_AUX_MuASF_SingleSorted1_8sym , arg0);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_6( ATerm arg0 , ATerm arg1 , ATerm arg2) {
+ATerm lf_AUX_MuASF_SingleSorted1_7( ) {
+PROF( prof_lf_AUX_MuASF_SingleSorted1_7);
+return make_nf0( lf_AUX_MuASF_SingleSorted1_7sym);
+}
+ATerm lf_AUX_MuASF_SingleSorted1_6( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_6);
-return make_nf3( lf_AUX_MuASF_SingleSorted1_6sym , arg0 , arg1 , arg2);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_6sym , arg0);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_5( ATerm arg0 , ATerm arg1) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_5);
 return make_nf2( lf_AUX_MuASF_SingleSorted1_5sym , arg0 , arg1);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_3( ATerm arg0 , ATerm arg1) {
+ATerm lf_AUX_MuASF_SingleSorted1_3( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_3);
-return make_nf2( lf_AUX_MuASF_SingleSorted1_3sym , arg0 , arg1);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_3sym , arg0);
 }
 ATerm lf_AUX_MuASF_SingleSorted1_2( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_2);
 return make_nf1( lf_AUX_MuASF_SingleSorted1_2sym , arg0);
 }
-ATerm lf_AUX_MuASF_SingleSorted1_1( ) {
+ATerm lf_AUX_MuASF_SingleSorted1_1( ATerm arg0) {
 PROF( prof_lf_AUX_MuASF_SingleSorted1_1);
-return make_nf0( lf_AUX_MuASF_SingleSorted1_1sym);
+return make_nf1( lf_AUX_MuASF_SingleSorted1_1sym , arg0);
 }
 

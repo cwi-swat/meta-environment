@@ -1,6 +1,10 @@
 #include "support.h"
 static Symbol lf_AUX_MuASF_Sign2C9_1sym;
 static ATerm lf_AUX_MuASF_Sign2C9_1( ATerm arg1);
+static Symbol ef12sym;
+static funcptr ef12;
+static Symbol ef13sym;
+static funcptr ef13;
 static Symbol ef3sym;
 static funcptr ef3;
 static Symbol ef4sym;
@@ -21,10 +25,6 @@ static Symbol ef9sym;
 static funcptr ef9;
 static Symbol ef10sym;
 static funcptr ef10;
-static Symbol ef12sym;
-static funcptr ef12;
-static Symbol ef13sym;
-static funcptr ef13;
 static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef2sym;
@@ -157,15 +157,19 @@ return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? 
 {
 if( not_empty_list( atmp0100)) {
 tmp[ 0]= list_head( atmp0100);
+if( term_equal( tmp[ 0] , make_char( 101))) {
+tmp[ 1]= list_tail( atmp0100);
+return ( constant13? constant13: ( constant13= ( * ef14)( )));
+}
 if( term_equal( tmp[ 0] , make_char( 108))) {
 tmp[ 1]= list_tail( atmp0100);
-if( term_equal( ( * ef12)( ( * ef2)( lf2( make_list( atmp0000)))) , ( constant13? constant13: ( constant13= ( * ef13)( ))))) {
+if( term_equal( ( * ef12)( ( * ef2)( lf2( make_list( atmp0000)))) , ( constant14? constant14: ( constant14= ( * ef13)( ))))) {
 return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( atmp0000))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( ( constant3? constant3: ( constant3= make_list_char( 108))) , make_list( tmp[ 1])))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( ( constant3? constant3: ( constant3= make_list_char( 108))) , cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109])))))))))))))))))))));
 }
 }
-if( term_equal( tmp[ 0] , make_char( 101))) {
+if( term_equal( tmp[ 0] , make_char( 95))) {
 tmp[ 1]= list_tail( atmp0100);
-return ( constant14? constant14: ( constant14= ( * ef14)( )));
+return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( atmp0000))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( tmp[ 1]))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))))))))))))));
 }
 }
 }
