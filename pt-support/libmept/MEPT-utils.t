@@ -20,11 +20,8 @@ ATbool PT_prodHasLitAsRhs(PT_Production prod)
 {
     /* This implements: "prod([<list>],lit(<str>),no-attrs)" */
   %match(Production prod) {
-    ProductionDefault(_,SymbolLit(_),_) -> { return ATtrue; }
-      //ProductionDefault[rhs=SymbolLit(_)] -> { return ATtrue; }
-      //ProductionDefault[rhs=SymbolLit[]] -> { return ATtrue; }
+    ProductionDefault[rhs=SymbolLit(_)] -> { return ATtrue; }
   }
-
   return ATfalse; 
 }
 
@@ -46,29 +43,12 @@ ATbool PT_isLexicalProd(PT_Production prod)
 
 ATbool PT_isProductionInjection(PT_Production prod)
 {
-
+  /* This implements: "prod([!=lit(<term>)],<term>,<term>)" */
   %match(Production prod) {
-    ProductionDefault[lhs=lhs] -> {
-      if (PT_getSymbolsLength(lhs) == 1) {
-        %match(Symbols lhs) {
-          SymbolHead(SymboLit(_)) -> { return ATfalse; }
-          _ -> { ATtrue; }
-        }
-      }
+    ProductionDefault[lhs=SymbolsList(symbol,SymbolsEmpty())] -> {
+      return !PT_isSymbolLit(symbol);
     }
   }
-  return ATfalse;
-
-    /*
-  PT_Symbols lhs = PT_getProductionLhs(prod);
-  if (PT_getSymbolsLength(lhs) == 1) {
-    PT_Symbol symbol = PT_getSymbolsHead(lhs);
-
-    if (!PT_isSymbolLit(symbol)) {
-      return ATtrue;
-    }
-  }
-    */
   return ATfalse;
 }
 
@@ -81,19 +61,6 @@ ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
   %match(Production  prod) {
     ProductionDefault[rhs=SymbolLex(SymbolLayout())] -> { return ATtrue; }
   }
-    /*
-  
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-
-    if (PT_isSymbolLex(rhs)) {
-      PT_Symbol symbol = PT_getSymbolSymbol(rhs);
-      return PT_isSymbolLayout(symbol);
-    }
-    return ATfalse;
-  }
-    */
-
   return ATfalse;
 }
 
@@ -103,16 +70,9 @@ ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
 ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod)
 {
   /* This implements: "prod([<list>],cf(layout),<term>)" */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-
-    if (PT_isSymbolCf(rhs)) {
-      PT_Symbol symbol = PT_getSymbolSymbol(rhs);
-      return PT_isSymbolLayout(symbol);
-    }
-    return ATfalse;
+  %match(Production  prod) {
+    ProductionDefault[rhs=SymbolCf(SymbolLayout())] -> { return ATtrue; }
   }
-
   return ATfalse;
 }
 
@@ -122,11 +82,9 @@ ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod)
 ATbool PT_isOptLayoutProd(PT_Production  prod)
 {
   /* This implements: "prod([<list>],cf(opt(layout)),<term>)" */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    return PT_isOptLayoutSymbol(rhs);
+  %match(Production  prod) {
+    ProductionDefault[rhs=SymbolCf(SymbolOpt(SymbolLayout()))] -> { return ATtrue; }
   }
-
   return ATfalse;
 }
 
@@ -136,11 +94,9 @@ ATbool PT_isOptLayoutProd(PT_Production  prod)
 ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 {
   /* This implements: "prod([<list>],varsym(<str>),no-attrs)" */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    return PT_isSymbolVarSym(rhs);
+  %match(Production  prod) {
+    ProductionDefault[rhs=SymbolCf(SymbolVarSym(_))] -> { return ATtrue; }
   }
-
   return ATfalse;
 }
 
@@ -150,18 +106,14 @@ ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 ATbool PT_isProductionVariable(PT_Production prod)
 {
   /* This implements: "prod([varsym(<term>)],cf(<term>),<term>)" */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbols lhs = PT_getProductionLhs(prod);
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-
-    if ((PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) && PT_hasSymbolsHead(lhs)) {
-      PT_Symbol lhssym = PT_getSymbolsHead(lhs);
-      PT_Symbols tail = PT_getSymbolsTail(lhs);
-      return PT_isSymbolsEmpty(tail) && PT_isSymbolVarSym(lhssym);
-    }
-    return ATfalse;
+  %match(Production prod) {
+    ProductionDefault[
+      lhs=SymbolsList(SymbolVarSym[],SymbolsEmpty()),
+      rhs=SymbolCf[]] -> { return ATtrue; }
+    ProductionDefault[
+      lhs=SymbolsList(SymbolVarSym[],SymbolsEmpty()),
+      rhs=SymbolLex[]] -> { return ATtrue; }
   }
-
   return ATfalse;
 }
 
@@ -171,22 +123,11 @@ ATbool PT_isProductionVariable(PT_Production prod)
 ATbool PT_isLexicalInjectionProd(PT_Production prod)
 {
   /* This implements: "prod([lex(<term>)],cf(<term>),<term>)" */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbols lhs = PT_getProductionLhs(prod);
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-
-    if (PT_isSymbolCf(rhs) && PT_hasSymbolsHead(lhs)) {
-      PT_Symbol rhsNestedSymbol = PT_getSymbolSymbol(rhs);
-      PT_Symbol lhssym = PT_getSymbolsHead(lhs);
-      PT_Symbols tail = PT_getSymbolsTail(lhs);
-      if (PT_isSymbolsEmpty(tail) && PT_isSymbolLex(lhssym)) {
-        PT_Symbol lhsNestedSymbol = PT_getSymbolSymbol(lhssym);
-        return PT_isEqualSymbol(rhsNestedSymbol, lhsNestedSymbol);
-      }
-    }
-    return ATfalse;
+  %match(Production prod) {
+    ProductionDefault[
+      lhs=SymbolsList(SymbolLex(sort),SymbolsEmpty()),
+      rhs=SymbolCf(sort)] -> { return ATtrue; }
   }
-
   return ATfalse;
 }
 
@@ -199,11 +140,9 @@ ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
    * "prod([<list>],cf(iter-star-sep(<term>,lit(<str>))),<term>)" and
    * "prod([<list>],cf(iter-sep(<term>,lit(<str>))),<term>)" 
    */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    return PT_isIterSepSymbol(rhs);
+  %match(Production prod) {
+    ProductionDefault[rhs=symbol] -> { return PT_isIterSepSymbol(symbol); }
   }
-
   return ATfalse;
 }
 
@@ -294,13 +233,8 @@ ATbool PT_isIterSymbol(PT_Symbol symbol)
 ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
 {
   /* This implements: "cf(opt(layout))" */
-  if (PT_isSymbolCf(symbol)) {
-    PT_Symbol cfsym = PT_getSymbolSymbol(symbol);
-    if (PT_isSymbolOpt(cfsym)) {
-      PT_Symbol optsym = PT_getSymbolSymbol(cfsym);
-      return PT_isSymbolLayout(optsym);
-    }
-    return ATfalse;
+  %match(Symbol symbol) {
+    SymbolCf(SymbolOpt(SymbolLayout())) -> { return ATtrue; }
   }
   return ATfalse;
 }
@@ -682,7 +616,7 @@ PT_Args PT_reverseArgs(PT_Args args)
 
 PT_Args PT_makeArgsSingle(PT_Tree arg)
 {
-  return PT_makeArgsList(arg, PT_makeArgsEmpty());
+  return `ArgsList(arg, ArgsEmpty());
 }
 
 /*}}}  */
@@ -792,11 +726,9 @@ PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
 
 ATbool PT_isTreeLayout(PT_Tree tree)
 {
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    return PT_isOptLayoutProd(prod);
+  %match(Tree tree) {
+    TreeAppl[prod=prod] -> { return PT_isOptLayoutProd(prod); }
   }
-
   return ATfalse;
 }
 
@@ -1187,23 +1119,21 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 {
   PT_Tree origTree = tree;
-  PT_Production prod;
-  PT_Symbol rhs;
+  PT_Symbol rhs = NULL;
   PT_Symbols lhs;
 
-  if (PT_isTreeAmb(tree)) {
-    PT_Args ambs = PT_getTreeArgs(tree);
-    tree = PT_getArgsHead(ambs);
+  %match(Tree origTree) {
+    TreeAmb[args=ArgsList(head,_)] -> { tree = head; }
   }
 
-  prod = PT_getTreeProd(tree);
-  rhs = PT_getProductionRhs(prod);
-  lhs = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-		  PT_makeSymbolsList(
-			  rhs,
-			  PT_makeSymbolsList(
-				  PT_makeOptLayoutSymbol(),
-				  PT_makeSymbolsEmpty())));
+  %match(Tree tree) {
+    TreeAppl[prod=ProductionDefault[rhs=symbol]] -> { rhs = symbol; }
+    TreeAppl[prod=ProductionList[rhs=symbol]]    -> { rhs = symbol; }
+  }
+
+  lhs = `SymbolsList(PT_makeOptLayoutSymbol(),
+                     SymbolsList(rhs,
+                                 SymbolsList(PT_makeOptLayoutSymbol(),SymbolsEmpty())));
 
   return PT_makeParseTreeTree(lhs,
                               PT_makeTreeLayoutEmpty(),
@@ -1220,19 +1150,11 @@ PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,
   PT_Production prod;
   PT_Symbol rhs;
   PT_Args args;
-  PT_Tree top;
 
   rhs = PT_makeSymbolSort("<START>");
-  prod = PT_makeProductionDefault(lhs, rhs, PT_makeAttributesNoAttrs());
-
-  args = PT_makeArgsList(wsBefore, 
-			 PT_makeArgsList(tree,
-					 PT_makeArgsList(wsAfter,
-							 PT_makeArgsEmpty())));
-
-  top = PT_makeTreeAppl(prod, args);
-
-  return PT_makeParseTreeTop(top, ambs);
+  prod = `ProductionDefault(lhs, rhs, AttributesNoAttrs());
+  args = `ArgsList(wsBefore, ArgsList(tree, ArgsList(wsAfter, ArgsEmpty())));
+  return `ParseTreeTop(TreeAppl(prod, args), ambs);
 }
 
 /*}}}  */
