@@ -114,7 +114,8 @@
 \maketitle    
 
 \begin{abstract}
-This is a very preliminary user manual for the \ASmetaenv\ Release 1.
+This is a preliminary user manual for the \ASmetaenv\ Release 1.
+This is work under construction.
 \end{abstract}
 
 \tableofcontents
@@ -564,18 +565,22 @@ You will then find the files needed for this Guided Tour in the directory {\tt
 directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
 copy of the directory.
 
-For each module in a specification two files exist: `{\tt $module$.syn}'
-contains the syntax of $module$ and  `{\tt $module$.eqs}' contains the semantics
-(equations) of $module$. The directory pico contains:
+For each module in a specification two files exist: `{\tt $module$.sdf2}'
+\footnote{In the current version the extension is `{\tt sdf2}' ; should this
+  not be changed to `{\tt .syn}'?}  contains the syntax of $module$ and `{\tt
+  $module$.eqs}' contains the semantics (equations) of $module$. The directory
+pico contains:
 
 \begin{itemize}
 
 \item two files for the module {\tt Bool-example}.
 
-\item 24 files for the Pico-specification.
+\item files for the Pico-specification.
 
-\item three examples of Pico-programs: `{\tt bin.pico}', `{\tt fac.pico}',
+\item three examples of Pico-programs: `{\tt big.pico}', `{\tt fac.pico}',
   `{\tt small.pico}'.
+
+\item terms for typechecking and evaluating these Pico-programs.
 
 \end{itemize}
 
@@ -588,12 +593,16 @@ contains the syntax of $module$ and  `{\tt $module$.eqs}' contains the semantics
   will appear.
   
 \item Add the module {\tt Bool-example} by selecting the File menu, and
-  choosing the Open button. In a dialog window, the systems asks you to give
-  the name of the module to be opened.  The directory has already been filled
-  in (but you could modify it), and enter `{\tt Bool-example}' as module name.
+  choosing the Open button. In a dialog window, the system asks you to give
+  the name of the module to be opened. It presents a list of all files with
+  extension `{\tt sdf2}'. Click once on `{\tt Bool-example.sdf2}' and then
+  push the {\tt Open} button. This will load the module {\tt Module-example}
+  (both its syntax and equations!) into the system
+\footnote{*** Strictly speaking this is strange; it would be better to only
+display module names without any extension.}
   
-\item Verify that {\tt Bool-example} appears in the import pane as well as in
-  the module pane of the main window.
+\item Verify that module {\tt Bool-example} appears as a rectangle in the import pane
+  as well as in the module pane of the main window.
 
 \end{itemize}
 
@@ -613,8 +622,7 @@ module Bool-example
   exports
     sorts BOOL 
     lexical syntax
-      "%%" ~[\n]* [\n]  -> LAYOUT 
-      [\ \t\n]          -> LAYOUT 
+      [\ \t\n]           -> LAYOUT
 
     context-free syntax
       "true"             -> BOOL
@@ -632,15 +640,13 @@ module Bool-example
       BOOL "|" BOOL -> BOOL
 
     equations
-    %% disjunction
+
     [B1] true | Bool = true 
     [B2] false | Bool = Bool
 
-    %% conjunction
     [B3] true & Bool = Bool 
     [B4] false & Bool = false
 
-    %% negation
     [B5] not(false) = true 
     [B6] not(true) = false
 
@@ -649,36 +655,45 @@ module Bool-example
 \subsubsection{The module editor for {\tt Bool-example}}
 
 \begin{itemize}
-
-\item Select {\tt Bool-example} from the module pane.
   
-\item Push the button {\tt Edit Sdf2}. An editor will appear containing the
-  syntax part of the {\tt Bool-example} specification: the SDF section.
-
-\item Push the button {\tt Edit Eqs}. An editor will appear containing the
-  semantic part of the {\tt Bool-example} specification: a list of conditional
-  equations. Note that the syntax of the equations is determined by the syntax
-  defined in the SDF section.
+\item Select module {\tt Bool-example} from the module pane (the vertical list
+  of module names that now only contains {\tt Bool-example}) by clicking on it
+  once.
+  
+\item Push the button {\tt Edit Sdf2} in the button pane at the right-hand
+  side of the main window.  An editor will appear containing the syntax part
+  of the {\tt Bool-example} specification: the SDF section.  This editor is a
+  version of the standard text editor Emacs extended with the menu {\tt
+    Meta-Environment}.
+  
+\item Push the button {\tt Edit Eqs}.  This will reuse the already created
+  instance of Emacs by adding a new buffer to it containing the semantic part
+  of the {\tt Bool-example} specification: a list of conditional equations.
+  Note that the syntax of the equations is determined by the syntax defined in
+  the SDF section. Use the {\tt Buffers} menu of Emacs to see which buffers
+  are open and to switch between buffers.
 
 \end{itemize}
-
 
 \subsubsection{A Term Editor for {\tt Bool-example}}
 
 \begin{itemize}
-\item Open a term-editor over module {\tt Bool-example}
- by first selecting module  {\tt Bool-example} in the module pane,
-and then pushing the {\tt term} button.
-A dialog window pops up. Choose `.' (dot) for directory, choose any new filename. See, for instance, Figure ***.
+\item Open a term-editor over module {\tt Bool-example} by first selecting
+  module {\tt Bool-example} in the module pane, and then pushing the {\tt
+    Term} button.  A dialog window pops up\footnote{Why is this note a
+    standard file dialog?}
+    Enter any new filename, for instance, `{\tt my-term}'.
 
-\item Notice there is a little blob in the top left corner of the window.
-  Type the term `{\tt true \& false}' in this editor and notice how the blob
-  becomes a block around the term when double click in the text (see below).
-  This block is called a focus.
+\item 
+  Type the term `{\tt true \& false}' in this editor. Observe how the text
+  that you type gets a light blue background.
+  This is called a \emph{focus}.
 
-\item Click in the focus, this will move the cursor. 
+\item Click in the focus, this will move the cursor (a single character-sized
+  red rectangle) 
   
-\item When you double click in the focus, the text in the focus is parsed.
+\item From menu {\tt Meta-Envrionment} click the {\tt Parse} button.  The text
+  in the focus is now parsed and the blue background has disappeared.
 
 \end{itemize}
 
@@ -688,8 +703,24 @@ errors.
 
 \begin{itemize}
 
-\item Reduce the term in the term-editor by clicking the reduce button. The
-  result will appear in ***
+\item Click on one of the characters of the word `{\tt false}'.
+You have selected `{\tt false}' as new focus and 
+the blue background reappears.
+
+\item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
+  now selected as focus.
+
+\end{itemize}
+
+The movements of the focus are \emph{syntax-directed}: when you click on any
+character in the text, the smallest syntactic unit enclosing that character
+will be selected and becomes the focus.
+
+\begin{itemize}
+  
+\item Reduce the term in the term-editor by clicking the {\tt Reduce} button
+  in the {\tt Meta-Environment} menu of the editor.  The result will appear in
+  the terminal window from which the Meta-Environment was started.
 
 \end{itemize}
 
@@ -699,95 +730,98 @@ errors.
   
 \item Edit the term `{\tt true \& false}' such that the new term will be
   syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
-  parse of the term by clicking in the term. An error window pops up with
-  message `{\tt Lexical syntax error near 'w'}'
-
-\item Select the help button in the term-editor and choose cursor to error.
-
-\end{itemize}
-
-\paragraph{The expand menu}
-
-Instead of \emph{typing} a term you can construct a term using the {\tt expand} menu.
-
-\begin{itemize}
+  parse of the term by selecting the {\tt Parse } button of the {\tt
+    Meta-Envrionment} menu.
   
-\item Type the string `{\tt <BOOL>}' in the term-editor. This is a
-  \emph{meta-variable}. Click \emph{inside} this string.
-You can then use the {\tt expand} menu to construct a Boolean term.
+  In the status line at the bottom of the edit window a message will appear
+  message `{\tt Parse error near cursor}' and the cursor will be positioned in
+  the word `{\tt wrong}'
 
 \end{itemize}
-
-Note that you can only make syntactically correct terms when using the {\tt
-  expand} menu.
 
 \paragraph{Associativity, Priorities and Brackets}
 
 \begin{itemize}
   
 \item Erase the term in your term-editor and type a new term `{\tt true \&
-    false \& true}'. Try to find out how this term has been parsed by clicking
+    false \& true}'. 
+
+\item Parse the term using the {\tt Parse} button.
+
+\item  Try to find out how this term has been parsed by clicking
   on different parts of the term and studying the resulting focus.
 
 \end{itemize}
 
 The {\tt left} attribute in the SDF definition indicates that the `{\tt \&}'
-operator is left associative. 
+operator is left associative. The term will thus be parsed as `{\tt (true \&
+  false) \& true}'. Clicking on the left or right {\tt \&} yields a focus that
+corresponds with this parse.
 
 \begin{itemize}
   
 \item Erase the term in your term-window and type a new term `{\tt true |
-    false \& true}'. Try to find out how this term has been parsed by clicking
-  and studying the resulting focus.
+    false \& true}'. 
+\item Parse the term using the {\tt Parse} button.
+  
+\item Try to find out how this term has been parsed by clicking on various
+  parts of the term and studying the resulting focus.
 
 \end{itemize}
 
-The {\tt priorities} definitions in the SDF definition state that the `{\tt
+The {\tt context-free priorities} definitions in the SDF definition state that the `{\tt
   \&}' operator binds stronger than the `{\tt |}' operator.
-
 
 \begin{itemize}
   
 \item Erase the term in the term-editor and type a new term `{\tt true \&
     false}'.  Click on `false', so that the focus is around `false' only. Then
   add `{\tt | true}' after `{\tt false}', so that the resulting term is `{\tt
-    true \& false | true}'.  Click on the `{\tt \&}' symbol.
+    true \& false | true}'.  
+
+\item Parse the term.
+
+\item Click on the `{\tt \&}' symbol. Is this what you wanted? Probably not.
 \end{itemize}
   
-  To resolve a priority conflict `{\tt (}' and `{\tt )}' which are defined as
-  brackets in the SDF definition are put around the term `{\tt false | true}'.
+To resolve a priority conflict `{\tt (}' and `{\tt )}' which are defined as
+brackets in the SDF definition are put around the term `{\tt false | true}'.
+Thus `{\tt true \& (false | true})' is more likely to express what you
+intended.
 
 \subsubsection{Modifying {\tt Bool-example}}
 
-The ASF+SDF Meta-Environment is an incremental environment generator. After
-each edit operation on a module, its implementation (i.e., scanner, parser and
+The ASF+SDF Meta-Environment is an \emph{incremental environment generator}. After
+each edit operation on a module, its \emph{implementation} (i.e., scanner, parser and
 term rewriting system) is updated immediately.
 
-The editing of both the equations and the syntax part of a module is
+The editing of both the syntax section and the equations secion of a module is
 syntax-directed like the editing of terms in a term editor.
 
 \paragraph{Modifying the Equations}
 
-The equation section of a module appears in the bottom part of the module and
-begins with the keyword equations.
+The equation section of a module begins with the keyword {\tt equations}
+and is saved in files ending on `{\tt .eqs}'.
 
 \begin{itemize}
 
 \item  Click in the equation section to investigate the focus behavior.
   
 \item Change the equations, for instance replace in equation {\tt [B1]} the
-  last part `{\tt = true}' by `{\tt = false}'. Study the effect on the
-  reduction of terms in the term-editor.
+  last part `{\tt = true}' by `{\tt = false}'. 
+  
+\item Study the effect on the reduction of terms in the term-editor.
 
 \end{itemize}
 
 \paragraph{Modifying the Syntax}
 
+The syntax part of a module starts with the keyword {\tt module}
+and  is saved in files ending on `{\tt .sdf2}'.
 Modifying the syntax causes the generated scanner and parser to be adapted.
 After each edit operation in the SDF section that is followed by a parse of
 the SDF section, the focus in both the equations section and the term editor
 is extended to completely contain the text in these editors.
-
 
 Modifying the context-free syntax:
 
@@ -798,8 +832,8 @@ Modifying the context-free syntax:
 
 \item Try to re-parse the equations. 
   
-\item Investigate the expand menu in the term-editor. (type `{\tt <BOOL>}' and
-  select {\tt expand}.)
+%%\item Investigate the expand menu in the term-editor. (type `{\tt <BOOL>}' and
+%%  select {\tt expand}.)
 
 \end{itemize}
 
@@ -811,6 +845,7 @@ Modifying the priorities:
   
 \item Type the term `{\tt true \& false | true}' in the term-editor (or
   anything similar according to your current syntax). Try to parse this term.
+\footnote{PROBLEM: there is no feed back here that there is an ambiguity!}
 
 \item Add the priority declarations again.
 
@@ -830,53 +865,58 @@ Modifying layout in the lexical section:
 made when writing a new specification; always make sure your syntax
 definitions define at least spaces and newlines to be {\tt LAYOUT}.
 
-
 \begin{itemize}
   
-\item Close the term-editor and module-editor. By clicking the little button
-  in the left corner of the menu bar. You may or may not save the changes to
-  module Bool-example.
+\item End the editing of your term and the module {\tt Bool-example} by
+  selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  You
+  may or may not save the changes to module Bool-example.
 
 \end{itemize}
 
-If you save the changes the files `{\tt Bool-example.syn}' and `{\tt
+If you save the changes the files `{\tt Bool-example.sdf2}' and `{\tt
   Bool-example.eqs}' will be modified.
 
 
 \begin{itemize}
-
- \item Delete the module Bool-example from the specification. Select the
-   delete button.
+  
+\item Delete the module {\tt Bool-example} from the specification.  Click on
+  {\tt Bool-example} in the module pane and push the {\tt Delete} button. The
+  module remains known to the system and its graphical representation is
+  changed form a rectangle to an ellipse. It can be re-opened later on.
+  
+\item Leave the system by pushing the {\tt Quit} entry in the {\tt File} menu
+  of the main window of the \ASmetaenv.
 
 \end{itemize}
 
 \subsection{The Pico Specification}
 
-More features of the ASF+SDF Meta-environment can be studied by looking at the
+More features of the  \ASmetaenv\  can be studied by looking at the
 Pico specification.
 
 \begin{itemize}
   
-\item If necessary, start the ASF+SDF Meta-environment. (Go to directory {\tt
-    pico}, and type `{\tt meta}').
+\item Start the Meta-Environment: go to directory {\tt
+    pico}, and type `{\tt meta}'.
   
-\item Add the module {\tt Pico-syntax} by selecting the Specification menu,
-  and choosing the add button. The system will ask you for a directory(path)
-  and a module name. Answer with `.' for directory. Answer with Pico-syntax
-  for module name.
-
-\item Check the Edit-Module menu. Not only {\tt Pico-syntax} has been added, also all modules that
-are directly or transitively imported by {\tt Pico-syntax}.
+\item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
+  choosing the {\tt Open...} button.  In the dialog window that appears, click
+  on {\tt Pico-syntax.sdf2} and push the {\tt Open} button.
+  
+\item As you can see in both the import pane and the module pane, not only
+  {\tt Pico-syntax} has been added, but also all modules that are directly or
+  transitively imported by {\tt Pico-syntax}.
 
 \end{itemize}
-
-Possible Error: `sort ``BOOL'' double declared'. Both the modules Booleans and Boolexample declare the sort BOOL. Delete module Bool-example.
 
 \subsubsection{The Module Editor for Pico-syntax}
 
 \begin{itemize}
+  
+\item Open an editor for the syntax of {\tt Pico-syntax} (using the {\tt Edit
+    Sdf2} button.
 
-\item Open the module-editor for {\tt Pico-syntax}.
+\end{itemize}
   
   A Pico program consist of the word `{\tt begin}', a declaration section, a
   series of zero or more statements, and the word `{\tt end}'. The declaration
@@ -886,13 +926,11 @@ Possible Error: `sort ``BOOL'' double declared'. Both the modules Booleans and B
   assignments, if-then-else statements and while-loops. And there are
   expressions.
 
-\end{itemize}
-
 \paragraph{Notes:}
 
 \begin{itemize}
   
-\item A module{\tt Layout} is imported, in which {\tt LAYOUT} has been
+\item A module{\tt Layout} is imported, in which the sort {\tt LAYOUT} has been
   specified.
   
 \item The use of list constructs in the context-free section: `{\tt {-ID-TYPE
@@ -913,12 +951,16 @@ Possible Error: `sort ``BOOL'' double declared'. Both the modules Booleans and B
 
 \begin{itemize}
   
-\item Open a term-editor for Pico-syntax, containing the program `{\tt
-    small.pico}' This term-editor not only has a reduce button but also the
-  buttons {\tt typecheck} and {\tt evaluate}. These latter buttons have been
-  defined in the configuration file `ctasdf.conf').
+\item Open a term-editor for the Pico-program `{\tt small.pico}': select {\tt
+    Pico-syntax} in the module pane and push the {\tt term} button in the
+  button pane. A dialog window pops up and type `{\tt small.pico}' as name of
+  the term.
 
-\item Press the reduce button.
+\item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+  editor. As a result, {\tt small.pico} is parsed.
+
+\item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
+  editor.
 
 \end{itemize}
 
@@ -930,8 +972,8 @@ This has the following effects:
   
 \item All the equations that are valid for this editor are parsed and compiled
   into a rewrite system.  In this case that means the equations of the
-  imported modules {\tt Booleans}, {\tt Integers}, {\tt Strings} and {\tt
-    Types}. This takes some time.
+  imported modules {\tt Pico-Booleans}, {\tt Pico-Integers}, {\tt Pico-Strings} and {\tt
+    Pico-Types}. This takes some time.
   
 \item The term in the editor is reduced. As no equation can be applied to
   reduce this term, the term itself is returned in the shell window from which
@@ -940,11 +982,21 @@ This has the following effects:
 
   
 Reducing a term for the second time is notably faster: the equations have been
-compiled already.
+compiled already. If you are curious what is going, have a look at the
+status field at the bottom of the main window. It reveals the steps that
+are necessary to arrive at an executable specification.
+
+\begin{itemize}
+\item Verify this by pushing the {\tt Reduce} button once more.
+\end{itemize}
 
 \begin{itemize}
 
-\item Press the typecheck (evaluate) button.
+\item Load the module {\tt Pico-typecheck} in the Meta-Environment.
+
+\item Open a term editor for the term {\tt smalltc.pico}.
+
+\item Reduce this term.
 
 \end{itemize}
 
@@ -952,30 +1004,48 @@ This has the following effects:
 
 \begin{itemize}
 
-\item  The module {\tt Pico-typecheck} ({\tt Pico-eval}) is added to the specification. 
-
-\item  The term `{\tt tc[Program-in-editor]}' (`{\tt
-    eval[Program-in-editor]}') is constructed. 
+\item  The module {\tt Pico-typecheck} is added to the specification. 
   
-\item All equations of {\tt Pico-typecheck} ({\tt Pico-eval}) and its imported
+\item The term in {\tt smalltc.pico} is identical to the one in {\tt
+    small.pico}, except that the program has been surrounded by `{\tt tcp(}
+  and `{\tt )}'.  The function {\tt tcp} (for type check program), applies the
+  typing rules for the Pico language to its single argument: a complete Pico
+  program. The result is {\tt true} or {\tt false}.
+  
+\item All equations of {\tt Pico-typecheck} and its imported
   modules are being compiled.
   
-\item The term `{\tt tc[Program-in-editor]}' (`{\tt eval[Program-in-editor]}')
-  is reduced using the equations of {\tt Pico-typecheck} ({\tt Pico-eval}).
+\item The term {\tt smalltc.pico} is reduced using the equations of {\tt
+    Pico-typecheck}.
 
 \end{itemize}
   
-Typechecking (evaluating) a term for the second time is notably faster, the
+Typechecking a term for the second time is notably faster, the
 modules have been added already and the equations have been compiled.
 
 \begin{itemize}
+
+\item Verify this, by pushing {\tt Reduce} once more.
   
-\item Make some modifications to `{\tt small.pico}' in the term-editor.
-  Typecheck and evaluate the modified program.
+\item Make some modifications to `{\tt smalltc.pico}' in the term-editor.
+  Typecheck the modified program.
   
 \item Open term-editors with other pico programs (`{\tt fac.pico}', `{\tt
-    bin.pico}') or create your own program. Typecheck and evaluate these
-  programs.
+    big.pico}') or create your own program. The corresponding applications of
+  the type check function are in `{\tt factc.pico}', respectively, `{\tt
+    bigtc.pico}'.  Typecheck these programs.
+
+\end{itemize}
+
+The evaluation (execution) of programs is achieved in a similar fashion as
+typechecking. The evaluation rules are defined in the module `{\tt
+  Pico-eval}'. Applications of the evaluation function `{\tt evp}' can be
+found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
+
+\begin{itemize}
+  
+\item Repeat the steps described above for typechecking, now for the
+  evaluation of Pico programs.
 
 \end{itemize}
 
@@ -984,7 +1054,7 @@ modules have been added already and the equations have been compiled.
 \begin{itemize}
 
 \item Study other modules in the specification. The modules {\tt
-    Pico-typecheck} and{\tt  Pico-eval} are explained in ***
+    Pico-typecheck} and {\tt  Pico-eval} are explained in the next sections.
   
 \item Add a repeat statement `{\tt repeat SERIES until EXP}' to {\tt
     Pico-syntax}, add typecheck equations to {\tt Pico-typecheck}, and
@@ -1001,60 +1071,58 @@ modules have been added already and the equations have been compiled.
 
 \begin{itemize}
 
-\item Open the module editor for Pico-typecheck.
+\item Open an editor for the syntax and equations of {\tt Pico-typecheck}.
 
 \end{itemize}
 
-Functions `{\tt tcp}' are defined for typechecking Pico-programs. The
+The function `{\tt tcp}' is defined for typechecking Pico-programs.
+Variants of this function exist for typechecking various parts of a Pico program. 
+The
 typechecking of the declarations yields a type-environment: a table of
-identifiers and their types. This type-environment, and the `{\tt look-up}'
+identifiers and their types. This type-environment, and the `{\tt lookup}'
 function is specified in the module {\tt Type-environments}. The typechecking
 of statements uses a type-environment and yields a Boolean value.
 
 In the equations is defined how a Pico-program is typechecked. Equation {\tt
-  [Tc1a]} says that the typechecking of a program is `{\tt true}' if the
-typechecking of the Series in the type-environments, `{\tt tc[Decls]}', is
+  [Tc1]} says that the typechecking of a program is `{\tt true}' if the
+typechecking of the Series in the type-environments, `{\tt tcd(Decls)}', is
 `{\tt true}'.
-
-Equation {\tt [Tc1b]} says that the typechecking of a program is `{\tt false}'
-if the typechecking of the Series in the type-environments, `{\tt tc[Decls]}',
-is \emph{not} `{\tt true}'.
 
 Equations {\tt [Tc2]} and {\tt [Tc3]} specify how a type-environment is
 constructed, when the declarations are typechecked.
 
-Equations {\tt [Tc4]} and {\tt [Tc5]} specify the typechecking of a, possibly
-empty, list of statements. Equations [Tc6], [Tc7], and [Tc8] specify how the
-three kinds of Statements are typechecked using the information from the
-type-environment.
+Equations {\tt [Tc3a]} and {\tt [Tc3b]} specify the typechecking of a,
+possibly empty, list of statements. Equations {\tt [Tc4a]} through {\tt
+  [default-Tc6} specify how the three kinds of Statements are typechecked
+using the information from the type-environment.
 
-The rest of the equations deal with the typechecking of the expressions.
+The rest of the equations deal with the typechecking of expressions.
 
 \subsubsection{Module Pico-eval}
 
 \begin{itemize}
 
-\item Open the module editor for Pico-eval.
+\item Open an editor for the syntax and equations of {\tt Pico-eval}.
 
 \end{itemize}
 
-Functions `{\tt eval}' are defined for describing the dynamic semantics of
+The functions `{\tt evp}' and variants are defined for describing the dynamic semantics of
 Pico. The result of evaluation is a value-environment: a table of identifiers
 and values with the final values of the declared identifiers. (Note that Pico
 does not have an output-statement.)
 
 In the equations is defined how a program is evaluated. Equation {\tt [Ev1]}
 says that the evaluation of a program is the evaluation of the Series in the
-value-environments, `{\tt eval [Decls]}'.
+value-environments, `{\tt evs(Decls)}'.
 
-Equations {\tt [Ev2a]}, {\tt [Ev2b]}, and {\tt [Ev3]} specify how a
+Equations {\tt [Ev2]} thorugh {\tt [Ev3c]}  specify how a
 value-environment is constructed, when the declarations are evaluated.
 Identifiers of type `{\tt natural}' get value `{\tt 0}', Identifiers of type
-`{\tt string}' get value `{\tt ""}' (empty-string)
+`{\tt string}' get value `{\tt ""}' (the empty-string).
 
-Equations {\tt [Ev4]} and {\tt [Ev5]} specify the evaluation of a, possibly
-empty, list of statements. Equations {\tt [Ev6]}, {\tt [Ev7a]}, {\tt [Ev7b]},
-{\tt [Ev8a]}, and {\tt [Ev8b]} specify how the three kinds of statements are
+Equations {\tt [Ev4a]} and {\tt [Ev4b]} specify the evaluation of a, possibly
+empty, list of statements. Equations {\tt [Ev5a]} through {\tt [Ev5e]}
+specify how the three kinds of statements are
 evaluated using the information from the type-environment. Evaluating
 statements means updating the value-environment.
 
