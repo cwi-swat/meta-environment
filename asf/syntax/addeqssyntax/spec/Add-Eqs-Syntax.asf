@@ -16,20 +16,25 @@ equations
               exports
                 sorts CHAR
                 lexical syntax
-                  [\"] ~[\257] [\"] -> CHAR
+                  [\"] ~[\257] [\"] -> CHAR {cons("default")}
 
               module Equations
               imports Characters
               exports
-                sorts Tag TagId CondEquation Equation Implies
-                      Condition Equations
+                sorts ASF-Tag 
+                      ASF-TagId 
+                      ASF-ConditionalEquation 
+                      ASF-Equation 
+                      ASF-Implies
+                      ASF-Condition 
+                      ASF-Equations
                 lexical syntax
-                  "===" [\=]* [\>]?   -> Implies
+                  "===" [\=]* [\>]?   -> ASF-Implies {cons("default")}
                   [shortchar("A")-shortchar("Z")
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
-                   shortchar("\""'")]                   -> TagId {avoid}
-                  [shortchar("A")-shortchar("Z")
+                   shortchar("\""'")]                   -> ASF-TagId {avoid,cons("one-char")}
+                 [shortchar("A")-shortchar("Z")
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
                    shortchar("\""'")]
@@ -40,21 +45,21 @@ equations
                   [shortchar("A")-shortchar("Z")
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
-                   shortchar("\""'")]                   -> TagId {avoid}
+                   shortchar("\""'")]                   -> ASF-TagId {avoid,cons("many-chars")}
 
                 lexical restrictions
-                  Implies -/- [\=]
+                  ASF-Implies -/- [\=]
 
                 context-free syntax
-                  {Condition ","}+          -> Conditions
-                                            -> Equations
-                  "equations" CondEquation* -> Equations
+                  {ASF-Condition ","}+          -> ASF-Conditions
+                                                -> ASF-Equations {cons("absent")}
+                  "equations" ASF-ConditionalEquation* -> ASF-Equations {cons("present")}
 
-                  Tag Equation                    -> CondEquation
-                  Tag Conditions Implies Equation -> CondEquation
-                  Tag Equation "when" Conditions  -> CondEquation
-                  "[" "]"                         -> Tag
-                  "[" TagId "]"                   -> Tag
+                  ASF-Tag ASF-Equation                    -> ASF-ConditionalEquation {cons("simple")}
+                  ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+                  ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
+                  "[" "]"                         -> ASF-Tag {cons("empty")}
+                  "[" ASF-TagId "]"               -> ASF-Tag {cons("not-empty")}
                   Prod*3
 
 

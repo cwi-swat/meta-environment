@@ -45,9 +45,9 @@ equations
               =======================================================
               eqs-and-conds-for-grammar(sorts Symbol Symbol*, SymbolsSet) = 
                (SymbolsSet3,  
-                 Symbol "=" Symbol  -> Equation
-                 Symbol "=" Symbol  -> Condition
-                 Symbol "!=" Symbol -> Condition
+                 Symbol "=" Symbol  -> ASF-Equation
+                 Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
+                 Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")}
                  Prod*)
 
@@ -74,10 +74,10 @@ equations
               ======================================
               eqs-and-conds-for-production(Symbol* -> Symbol Attrs, SymbolsSet1) =
                 (SymbolsSet2,
-                 Symbol "=" Symbol  -> Equation
-                 Symbol "=" Symbol  -> Condition
-                 Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}* ")" -> Symbol)
+                 Symbol "=" Symbol  -> ASF-Equation
+                 Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
+                 Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
+                 "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
   [eacfp-2'2] includes(Symbol, SymbolsSet1) = false,
               add(Symbol, SymbolsSet1) = SymbolsSet2
@@ -85,10 +85,10 @@ equations
               eqs-and-conds-for-production(Literal(SymbolSep*) -> Symbol Attrs, 
                                            SymbolsSet1) =
                 (SymbolsSet2,
-                 Symbol "=" Symbol  -> Equation
-                 Symbol "=" Symbol  -> Condition
-                 Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}* ")" -> Symbol)
+                 Symbol "=" Symbol  -> ASF-Equation
+                 Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
+                 Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
+                 "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
   [eacfp-2'2] includes(Symbol, SymbolsSet) = true
               ===================================
