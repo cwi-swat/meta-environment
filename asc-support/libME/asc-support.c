@@ -128,7 +128,13 @@ ATerm innermost(PT_Tree tree)
 {
   ATerm result = NULL;
 
-  if (PT_isTreeAppl(tree)) {
+  if (PT_isTreeLayout(tree)) {
+    result = NULL;
+  }
+  else if (PT_isTreeLit(tree)) {
+    result = NULL;
+  }
+  else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     PT_Args args = PT_getTreeArgs(tree);
 
@@ -212,6 +218,43 @@ static ATermList innermost_list(PT_Args args)
  * ATermList form to a c function call and to lookup the actual funcptr.
  */
 
+static char* escape(const char* str, const char* escaped_chars)
+{
+  int i,j,e;
+  int len = strlen(str);
+  char *escaped = (char*) malloc(2 * len * sizeof(char) + 3);
+
+  if (escaped == NULL) {
+    ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
+    return NULL;
+  }
+
+  i = 0;
+  j = 0;
+
+  escaped[j++] = '\"';
+
+  for (; i < len; i++, j++) {
+    for (e = 0; escaped_chars[e]; e++) {
+      if (str[i] == escaped_chars[e]) {
+        escaped[j++] = '\\';
+      }
+    }
+    escaped[j] = str[i];
+  }
+  
+  escaped[j++] = '\"';
+ 
+  escaped[j] = '\0';
+
+  return escaped;
+}
+
+static char* prodToEscapedString(PT_Production prod)
+{
+    char *strProd = ATwriteToString((ATerm) prod);
+      return escape(strProd,"\"");
+}
 
 static ATerm call(PT_Production prod, ATermList args)
 {
@@ -221,9 +264,22 @@ static ATerm call(PT_Production prod, ATermList args)
   funcptr func = basic_lookup_func(PT_makeTermFromProduction(prod));
 
   if (func == NULL) {
-    ATabort("unknown function: %t\n", prod);
-    return (ATerm) NULL; 
+    /* a constructor that was not used in the specification */
+    int arity = ATgetLength(args);
+    char *escaped = prodToEscapedString(prod);
+    Symbol sym = ATmakeSymbol(escaped, arity, ATfalse);
+    register_prod(prod, NULL, sym);
+    return (ATerm) ATmakeAppl(sym, args); 
   }
+
+  if (PT_isProductionList(prod)) {
+    /* a list has a variable list of arguments, which we encode
+     * as an ATermList
+     */
+    return (*func)((ATerm) args);
+  }
+
+  /* otherwise we have a normal function application */
 
   list = args;
   while(!ATisEmpty(list)) {

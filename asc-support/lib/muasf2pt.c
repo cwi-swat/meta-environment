@@ -1,47 +1,53 @@
 /* $Id$ */
 
+/*{{{  standard includes */
+
 #include <stdio.h>
+#include <assert.h>
+
+/*}}}  */
+/*{{{  meta includes */
 
 #include <MEPT-utils.h>
+
+/*}}}  */
+/*{{{  local includes */
+
 #include "asc-support-me.h"
+#include "muasf2pt.h"
 
-static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl);
+/*}}}  */
 
-/*{{{  PT_Tree termToTree(ATerm tree) */
+/*{{{  static PT_Tree listToTree(PT_Production prod, ATermList elems) */
 
-PT_Tree termToTree(ATerm tree)
+static PT_Tree listToTree(PT_Production prod, ATermList elems)
 {
-  PT_Tree result = NULL;
-  ATerm prod = NULL;
-  PT_Production ptProd = NULL;
-  PT_Symbols formalargs = NULL;
-  PT_Args actualargs = NULL;
+  PT_Tree layout = PT_makeTreeLayoutFromString(" ");
+  PT_Symbol sepSym = NULL;
+  PT_Tree sepTree = NULL;
+  PT_Symbol rhs;
+  PT_Args args = PT_makeArgsEmpty();
 
-  if(ATgetType(tree) == AT_APPL) {
-    prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
-    if(!prod) {
-      ATabort("unknown production symbol: %s\n",
-              ATgetName(ATgetSymbol((ATermAppl) tree)));
-    }
+  rhs = PT_getProductionRhs(prod);
 
-    ptProd = PT_makeProductionFromTerm(prod);
-   
-    if (PT_isProductionDefault(ptProd)) { 
-      formalargs = PT_getProductionLhs(ptProd);
-      actualargs = termsToArgs(formalargs, (ATermAppl)tree);
-    }
-    else { /* a list */
-      ATerror("lists not supported yet\n");
-      return NULL;
-    }
-
-    result = PT_makeTreeAppl(ptProd,actualargs);
-  }
-  else {
-    ATabort("cannot handle term type: %d\n", ATgetType(tree));
+  if (PT_hasSymbolSeparator(rhs)) {
+    sepSym = PT_getSymbolSeparator(rhs);
+    assert(PT_isSymbolLit(sepSym));
+    sepTree = PT_makeTreeLit(PT_getSymbolString(sepSym));
   }
 
-  return result;
+  for (;!ATisEmpty(elems); elems = ATgetNext(elems)) {
+    if (!PT_isArgsEmpty(args)) {
+      args = PT_makeArgsList(layout,args);
+    }
+    args = PT_makeArgsList(termToTree(ATgetFirst(elems)), args); 
+    if (sepTree != NULL && !ATisEmpty(ATgetNext(elems))) {
+      args = PT_makeArgsList(sepTree, args);
+      args = PT_makeArgsList(layout, args);
+    }
+  } 
+
+  return PT_makeTreeAppl(prod, args);
 }
 
 /*}}}  */
@@ -72,6 +78,43 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     }
 
     result = PT_makeArgsList(tree ,result);
+  }
+
+  return result;
+}
+
+/*}}}  */
+/*{{{  PT_Tree termToTree(ATerm tree) */
+
+PT_Tree termToTree(ATerm tree)
+{
+  PT_Tree result = NULL;
+  ATerm prod = NULL;
+  PT_Production ptProd = NULL;
+  PT_Symbols formalargs = NULL;
+  PT_Args actualargs = NULL;
+  
+  if(ATgetType(tree) == AT_APPL) {
+    prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
+    if(!prod) {
+      ATabort("unknown production symbol: %s\n",
+              ATgetName(ATgetSymbol((ATermAppl) tree)));
+    }
+
+    ptProd = PT_makeProductionFromTerm(prod);
+   
+    if (PT_isProductionDefault(ptProd)) { 
+      formalargs = PT_getProductionLhs(ptProd);
+      actualargs = termsToArgs(formalargs, (ATermAppl)tree);
+    }
+    else { /* a list */
+      return listToTree(ptProd,ATgetArguments((ATermAppl)tree));
+    }
+
+    result = PT_makeTreeAppl(ptProd,actualargs);
+  }
+  else {
+    ATabort("cannot handle term type: %d\n", ATgetType(tree));
   }
 
   return result;
