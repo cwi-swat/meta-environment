@@ -200,21 +200,27 @@ ATerm calc_import_graph(void)
 
 /* Creation of a new entry in the database of a new Sdf2 definition. 
  */
-ATerm add_sdf2_module(int cid, char* moduleName, char* path, ATerm sdfTree, 
-                      int timestamp, char* changed)
+ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
+                      int timestamp, char *changed)
 {
+  char eqsPath[BUFSIZ];
+  int len;
   ATerm t[8];
   char *modname;
   ATerm modname_term,appl, entry, import_graph;
   ATermList imports, unknowns;
   ATerm isChanged;
 
-  if(!strcmp(changed,"changed")) {
+  if(!strcmp(changed, "changed")) {
     isChanged = Mtrue;
   }
   else {
     isChanged = Mfalse;
   }
+
+  len = strlen(path) - strlen("sdf2");
+  strncpy(eqsPath, path, len);
+  strcat(eqsPath, "eqs");
 
   if(ATmatchTerm(sdfTree,pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
@@ -227,7 +233,7 @@ ATerm add_sdf2_module(int cid, char* moduleName, char* path, ATerm sdfTree,
                                 sdfTree,                
                                 ATmakeInt(timestamp),    /* Time Sdf */
                                 isChanged,               /* Sdf changed? */
-                                ATparse("unavailable"),  /* Path Eqs */
+                                ATmake("<str>", eqsPath),/* Path Eqs */
                                 ATparse("unavailable"),  /* Eqs Tree */
                                 ATparse("unavailable"),  /* Eqs Text */
                                 ATmakeInt(0),            /* Time Eqs */
@@ -496,37 +502,38 @@ ATerm add_parse_table(int cid, char *module, char *table,
   return ATmake("snd-value(parse-table-added)");
 }
 
-/* Get the path to module modulename. type is either eqs or sdf2,
-   because eqs path can be empty, and sdf2 path cannot be empty... It
-   would probably be better to add an empty eqs module to the db
-   whenever a sdf2 module is entered, but that requires thought, and
-   right now it's too warm for thinking :-) */
-
 ATerm get_path(int cid, char *modulename, ATerm type)
 {
   ATerm entry, place, modname;
   char *path;
-  int location = 0; /* to keep compiler happy */
+  int location = 0;
 
-  if (ATmatch(type,"eqs")) {
+  if (ATmatch(type, "eqs")) {
       location = PATH_EQS_LOC;
-  } else if (ATmatch(type,"sdf2")) {
+  } else if (ATmatch(type, "sdf2")) {
       location = PATH_SYN_LOC;
   } else {
       ATerror("Unsupported database type: %t", type);
-  }
-  modname = ATmake("<str>",modulename);
-  entry = GetValue(new_modules_db, modname);
-  place = ATelementAt((ATermList)entry, location);
-  if(ATmatch(place,"<str>",&path)) {
-      return ATmake("snd-value(path(<str>))",path);
-  } else if (location == PATH_EQS_LOC) {
-      /* found an empty equation section. Return empty path */
-      return ATmake("snd-value(path(<str>))","");
-  } else {
-      ATerror("Module not in database!!!");
       return NULL;
   }
+
+  modname = ATmake("<str>", modulename);
+  entry = GetValue(new_modules_db, modname);
+  if (!entry) {
+    ATerror("Module %s not in database!", modulename);
+    return NULL;
+  }
+
+  place = ATelementAt((ATermList)entry, location);
+  if(ATmatch(place, "<str>", &path)) {
+    return ATmake("snd-value(path(<str>))", path);
+  } else if (location == PATH_EQS_LOC) {
+    /* found an empty equation section. Return empty path */
+    return ATmake("snd-value(path(<str>))", "");
+  }
+  /* we never get here */
+  ATerror("Error in get_path");
+  return NULL;
 }
 
 /* As above, type is either sdf2 or eqs, because slightly different
@@ -552,6 +559,11 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   }
   modname = ATmake("<str>",modulename);
   entry = GetValue(new_modules_db, modname);
+  if (!entry) {
+    ATerror("Module %s not in database!", modulename);
+    return NULL;
+  }
+
   isChanged = ATelementAt((ATermList)entry, updated_location);
   asfix = ATelementAt((ATermList)entry, location);
   if(ATisEqual(isChanged, Mtrue)) {
