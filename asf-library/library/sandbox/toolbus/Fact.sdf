@@ -5,10 +5,10 @@ imports
   containers/Set[Fact]
 
 exports
-  sorts Fact Facts
+  sorts Fact Facts %% "true"|"false"
   context-free syntax
-    process-declaration ProcessName               -> Fact
-    process-invocation ProcessName                -> Fact
+    process-declaration process-name:ProcessName  -> Fact
+    process-invocation process-name:ProcessName   -> Fact
     send-atom Term                                -> Fact
     recv-atom Term                                -> Fact
     Set[[Fact]]                                   -> Facts
