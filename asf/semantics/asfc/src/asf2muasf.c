@@ -675,9 +675,7 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 
 static MA_ModId makeModId(const char *str)
 {
-  char *alnum = toalfanum(str);
-  MA_ModId result = MA_makeModIdLexToCf(stringToLexical(alnum));
-  free(alnum);
+  MA_ModId result = MA_makeModIdLexToCf(stringToLexical(str));
   return result;
 }
 
