@@ -23,6 +23,8 @@ exports
      Integer ">=" Integer      	-> Boolean
      Integer "<" Integer       	-> Boolean
      Integer "<=" Integer      	-> Boolean
+     max(Integer, Integer)      -> Integer
+
      "(" Integer ")"       	-> Integer {bracket}
 
   context-free priorities
