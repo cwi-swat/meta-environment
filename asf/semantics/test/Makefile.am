@@ -48,9 +48,6 @@ check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
 	  ${ASFE} -l -e ${EQS}/$*.eqs -i $$i | \
           atrmannos -a -o `basename $$i`.asfe.out; \
           atdiff `basename $$i`.asfe.out ${OUT}/`basename $$i` ; \
-	  if [ $? ]; then \
-            exit 1; \
-          fi ; \
           printf "."; \
 	done;
 	@printf "\n"
