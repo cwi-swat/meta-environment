@@ -303,7 +303,7 @@ system.  Topics that will be addressed include:
 \item The formalism \asfsdf. We do, however, provide a quick introduction
 to \asfsdf\ in Section~\ref{ASF+SDF}.
 \item The architectural and implementational aspects of the system.
-\item The stand alone usage of various parts of he system.
+\item The stand alone usage of various parts of the system.
 \end{itemize}
 
 \subsection{Further Reading}
@@ -1726,7 +1726,7 @@ needed as ordinary characters in the lexical syntax. The backslash character
 the quoting of special characters. You
 should use `{\tt \verb+\+$c$}' whenever you need special 
 character $c$ as ordinary character in a definition.
-All individual characters, except digits and letters,
+All individual characters in character classes, except digits and letters,
 are {\em always} escaped with a backslash.
 
 In literal strings, the following characters are special and should be
@@ -1781,7 +1781,8 @@ exports
 
 Figure~\ref{CODE:LettersDigits3} shows the definion of a single letter or digit
 using the alternative operator {\tt  \verb+\+/}.
-This definition is equivalent to the one given earlier in ~\ref{CODE:LettersDigits2}.
+This definition is equivalent to the one given earlier in 
+Figure~\ref{CODE:LettersDigits2}.
 Another example is shown in Figure \ref{CODE:charclasses}.
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
@@ -2199,8 +2200,7 @@ If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
 tree a tree of sort {\tt SORT-A} can be put wherever a tree of
 sort {\tt SORT-B} is required.
 
-(* EXAMPLE should be added *)
-
+%%(* EXAMPLE should be added *)
 
 \subsection{Attributes of Lexical and Context-free Functions}
 
@@ -2322,8 +2322,10 @@ exports
 
 \subsubsection{Relative Priorities}
 
-The relative priority of two functions is defined by including {\tt $F$ > $G$}
-in the `{\tt context-free priorities}' section, where $F$ and $G$ are 
+The relative priority of two functions is defined 
+in the `{\tt context-free priorities}' section 
+by including {\tt $F$ > $G$},
+where $F$ and $G$ are 
 as written in the context-free grammar. Functions with a higher 
 priority bind more strongly than functions with lower priorities and 
 the nodes corresponding to them should
@@ -2557,8 +2559,9 @@ exports
 
 The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
 use of restrictions to extend the previous layout definition with C-style
-comments. {\bf MARK: ik heb hier ook de eerdere restrictie uit Figure
-  \ref{CODE:safe-layout} toegevoegd.}
+comments. The context-free restriction defined in Figure~\ref{CODE:safe-layout}
+is here repeated. This repetition is redundant but it makes the example
+more self contained.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2584,7 +2587,8 @@ exports
 \caption{Definition of C comments}\label{CODE:c-comment}
 \end{figure}
 
-\subsubsection{Preferring, avoiding or rejecting parses} \label{PreferAvoidReject}
+\subsubsection{Preferring, avoiding or rejecting parses} 
+\label{PreferAvoidReject}
 
 Priorities can be used to define a priority between two functions or between
 two groups of functions. In both cases the functions involved have to be
@@ -2607,7 +2611,7 @@ restrictions (Section~\ref{Restrictions}) only impose restrictions on the
 immediate look ahead that follows a symbol, the reject mechanism can be used
 to eliminate complicated syntactic structures.
 
-Examples of {\tt prefer}, {\tt avoid} and {\tt reject} will be given in
+Examples of {\tt prefer}, {\tt avoid} and {\tt reject} will be discussed in
 Section~\ref{Disambiguation}.
 
 \subsection{Variables} \label{Variables}
