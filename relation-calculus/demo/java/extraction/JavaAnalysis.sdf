@@ -13,11 +13,13 @@ imports RscriptCalculator
 
 exports
   context-free syntax
-    extractRelations(CompilationUnit) -> RSTORE
+    extractRelations(CompilationUnit) 		-> RSTORE
+    extractRelations(CompilationUnit, RSTORE) 	-> RSTORE
 
 hiddens
   variables
-    "$CompilationUnit" -> CompilationUnit
+    "&CompilationUnit" 	-> CompilationUnit
+    "&Rstore"		-> RSTORE
 
  
     

@@ -1,19 +1,25 @@
 equations
 
 [extractRelations-1]
-  extractRelations($CompilationUnit) = 
-  [| rel[File, loc] FILES               = extractCompilationUnit($CompilationUnit, {})
-     rel[Interface,loc] INTERFACES      = extractInterface($CompilationUnit, {})
-     rel[Package,loc] PACKAGES          = extractPackage($CompilationUnit, {})
-     rel[Method, loc] METHODS           = extractMethod($CompilationUnit,{})
-     rel[Class,loc] CLASSES             = extractClasses($CompilationUnit, {})
-     rel[ClassUse,loc] CLASSES_USES     = extractClassUses($CompilationUnit, {})
-     rel[Var, loc, Type] VARIABLE_DECLS = extractVariables($CompilationUnit,  {})
-     rel[Field, loc, Type] FIELD_DECLS  = extractFields($CompilationUnit, {})
+  extractRelations(&CompilationUnit) = 
+  extractRelations(&CompilationUnit, empty-rstore) 
 
-     rel[Class,Class] EXTENDS_CLASS     = extractExtendsClass($CompilationUnit, {})
-     rel[Class,Interface] IMPLEMENTS    = extractImplements($CompilationUnit, {})
+[extractRelations-2]
+  extractRelations(&CompilationUnit, &Rstore) = 
+  &Rstore
+  [| rel[File, loc] FILES               += extractCompilationUnit(&CompilationUnit, {})
+     rel[Interface,loc] INTERFACES      += extractInterface(&CompilationUnit, {})
+     rel[Package,loc] PACKAGES          += extractPackage(&CompilationUnit, {})
+     rel[Method, loc] METHODS           += extractMethod(&CompilationUnit,{})
+     rel[Class,loc] CLASSES             += extractClasses(&CompilationUnit, {})
+     rel[ClassUse,loc] CLASSES_USES     += extractClassUses(&CompilationUnit, {})
+     rel[Var, loc, Type] VARIABLE_DECLS += extractVariables(&CompilationUnit,  {})
+     rel[Field, loc, Type] FIELD_DECLS  += extractFields(&CompilationUnit, {})
+
+     rel[Class,Class] EXTENDS_CLASS     += extractExtendsClass(&CompilationUnit, {})
+     rel[Class,Interface] IMPLEMENTS    += extractImplements(&CompilationUnit, {})
      rel[Interface,Interface] EXTENDS_INTERFACE     
-					= extractExtendsInterface($CompilationUnit, {})
-     rel[Var, loc, Id] METHOD_CALLS     = extractMethodCalls($CompilationUnit, {})
+					+= extractExtendsInterface(&CompilationUnit, {})
+     rel[Var, loc, Id] METHOD_CALLS     += extractMethodCalls(&CompilationUnit, {})
+     str DUMMY
   |]

@@ -1,5 +1,9 @@
 equations
 
+%% ---- Create empty rstore
+
+[ER1] empty-rstore = rstore()
+
 %% ---- Get value of a variable
 
 [VL1]	value($Var, rstore(<$Var, $Type, $Val>, $VPair*)) = $Val
@@ -43,26 +47,26 @@ equations
 
 %% ---- Add tuple to a relation
 
-[AT1]	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var, $Type, $Val>, $VPair*)) = 
-	rstore(<$Var, $Type, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
+[AT1]	add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore(<$Var, $Type2, $Val>, $VPair*)) = 
+	rstore(<$Var, $Type2, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
 
 [AT2]	$Var != $Var', 
-	rstore($VPair*') := add-tuple($Var, <$Elem1, $Elem2>, rstore($VPair*))
+	rstore($VPair*') := add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore($VPair*))
 	===============================================================
-	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var', $Type, $Val>, $VPair*)) = rstore(<$Var', $Type, $Val>, $VPair*')
+	add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore(<$Var', $Type2, $Val>, $VPair*)) = rstore(<$Var', $Type2, $Val>, $VPair*')
 
-[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, undefined, insert(<$Elem1, $Elem2>, empty-bag) >)
+[AT3]	add-tuple($Var, $Type, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, $Type, insert(<$Elem1, $Elem2>, empty-bag) >)
 
 %% ---- Add tuples to a relation
 
-[ATS1]	add-tuples($Var, $Rel, rstore(<$Var, $Type, $Val>, $VPair*)) = rstore(<$Var, $Type, xunion($Rel, $Val)>, $VPair*)
+[ATS1]	add-tuples($Var, $Type1, $Rel, rstore(<$Var, $Type2, $Val>, $VPair*)) = rstore(<$Var, $Type2, xunion($Rel, $Val)>, $VPair*)
 
 [ATS2]	$Var != $Var', 
-	rstore($VPair*') := add-tuples($Var, $Rel, rstore($VPair*))
+	rstore($VPair*') := add-tuples($Var, $Type1, $Rel, rstore($VPair*))
 	===============================================================
-	add-tuples($Var, $Rel, rstore(<$Var', $Type, $Val>, $VPair*)) = rstore(<$Var', $Type, $Val>, $VPair*')
+	add-tuples($Var, $Type1, $Rel, rstore(<$Var', $Type2, $Val>, $VPair*)) = rstore(<$Var', $Type2, $Val>, $VPair*')
 
-[ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, undefined, $Rel >)
+[ATS33]	add-tuples($Var, $Type, $Rel, rstore()) = rstore(< $Var, $Type, $Rel >)
 
 %%----
 
@@ -96,31 +100,31 @@ equations
 
 %% ---- Import an RSF file
 
-[r2s] 	rsfname2str(rsfname($Char*)) = strcon(""" $Char* """)
+%%[r2s] 	rsfname2str(rsfname($Char*)) = strcon(""" $Char* """)
 
-[r2rv] 	rsfname2rvar(rsfname($Char*)) = rvar($Char*)
+%%[r2rv] 	rsfname2rvar(rsfname($Char*)) = rvar($Char*)
 
-[imp1]	import($RsfTuple*) = import1($RsfTuple*, rstore())
+%%[imp1]	import($RsfTuple*) = import1($RsfTuple*, rstore())
 
-[imp11]	$Var := rsfname2rvar($RsfName1),
-	$Elem1 :=  rsfname2str($RsfName2),
-	$Elem2 :=  rsfname2str($RsfName3),
-	$Rstore' := add-tuple($Var, <$Elem1, $Elem2>, $Rstore)
-	=============================================================
-	import1($RsfName1 $RsfName2 $RsfName3; $RsfTuple*, $Rstore) =
-	import1($RsfTuple*, $Rstore')
+%%[imp11]	$Var := rsfname2rvar($RsfName1),
+%%	$Elem1 :=  rsfname2str($RsfName2),
+%%	$Elem2 :=  rsfname2str($RsfName3),
+%%	$Rstore' := add-tuple($Var, <$Elem1, $Elem2>, $Rstore)
+%%	=============================================================
+%%	import1($RsfName1 $RsfName2 $RsfName3; $RsfTuple*, $Rstore) =
+%%	import1($RsfTuple*, $Rstore')
 
-[imp12]	import1( , $Rstore) = $Rstore
+%%[imp12]	import1( , $Rstore) = $Rstore
 
 %% ---- Export an RVIZ file
 
-[erv1]	export-rviz($Rstore) = export($Rstore)
+%%[erv1]	export-rviz($Rstore) = export($Rstore)
 
-[exp1]	export(rstore(<$Var, $Type, $Val>, $VPair*)) = 
-export-pair($Var, $Type, $Val) 
-export(rstore($VPair*))
+%%[exp1]	export(rstore(<$Var, $Type, $Val>, $VPair*)) = 
+%%export-pair($Var, $Type, $Val) 
+%%export(rstore($VPair*))
 
-[exp1]	export(rstore()) =
+%%[exp1]	export(rstore()) =
 
 [expp1]	$Area := get-area($Loc)
 	==============================================================

@@ -103,13 +103,14 @@
 
 [S8a]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, $Etype,evalx($Exp, $Rstore), $Rstore)
 
-[S8b]	eval-rstat(rel[$Etype1, $Etype2] $Var += $Exp, $Rstore)  
-						= add-tuples($Var, evalr($Exp, $Rstore), $Rstore)
+[S8b]	eval-rstat(rel[$Etype+] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, rel[$Etype+], evalr($Exp, $Rstore), $Rstore)
 
 [S8c]	eval-rstat(bag[$Etype] $Var += $Exp, $Rstore)  
-						= add-tuples($Var, evalb($Exp, $Rstore), $Rstore)
+						= add-tuples($Var, bag[$Etype], evalb($Exp, $Rstore), $Rstore)
 
-[S8b]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+[S8d]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+
 [S9]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
 
 [S10]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 

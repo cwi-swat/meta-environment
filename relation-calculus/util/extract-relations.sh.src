@@ -21,6 +21,7 @@ OUTPUT_DIR=./extracted-rstores
 TOP_SORT=
 INPUT_FILES=
 EXTRACTION_FUNCTION=extractRelations
+RESULTING_RSTORE=result.rstore.pt
 
 # }}}
 
@@ -57,35 +58,22 @@ add_input_file() {
 # {{{  parse
 
 parse() {
-#  echo -n "Parsing $1 .."
   sglr -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
-#  echo " done."
 }
 
 # }}}
 # {{{  addposinfo
 
 addposinfo() {
-#  echo -n "AddPosInfo $1 .."
   addPosInfo -i $1.pt -o $1.pos -p $1
-#  echo " done."
 }
 
 # }}}
 # {{{  extract
 
 extract() {
-#  echo -n "Rewriting $1 .."
-   $EXECUTABLE -f  $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
-#  echo " done."
+   ${EXECUTABLE} -f  ${EXTRACTION_FUNCTION} -r "RSTORE" -i $1.pos -i ${RESULTING_RSTORE} -o ${RESULTING_RSTORE}
 }
-
-#extract() {
-#  echo -n "Rewriting $1 .."
-#  apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
-#    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
-#  echo " done."
-#}
 
 # }}}
 # {{{  cleanup
@@ -136,6 +124,8 @@ do
 done
 
 mkdir -p ${OUTPUT_DIR}
+
+$EVALUATOR -f empty-rstore -r RSTORE -o $RESULTING_RSTORE
 
 for f in $INPUT_FILES; do
   echo $f
