@@ -180,7 +180,9 @@ static ATermList checkPositiveCondition(ASF_Tag tag,
                                         PT_Args *variables) 
 {
   ATermList messages = ATempty;
+/*
   PT_Args condVariables;
+*/
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
     return makeAmbiguityMessage();
@@ -189,6 +191,7 @@ static ATermList checkPositiveCondition(ASF_Tag tag,
     return makeAmbiguityMessage();
   }
 
+/*
   condVariables = collectVariables((PT_Tree)rhsCond, PT_makeArgsEmpty());
   if (noNewVariables((PT_Tree) lhsCond, condVariables)) {
     return ATmakeList1(
@@ -205,6 +208,7 @@ static ATermList checkPositiveCondition(ASF_Tag tag,
 		   tag,
 		   ASF_makeTermFromCondition(condition)));
   }
+*/
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
     return messages;
