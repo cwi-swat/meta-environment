@@ -182,13 +182,14 @@ let
   Id         : int,
   Semantics  : term,
   ModuleName : str,
-  Progress   : str
+  Progress   : str,
+  OutputFileName : str
 in
   Id := process-id .
   subscribe(asfc-progress(<term>)) .
   (
-    rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
-    snd-msg(compile-module(ModuleName, Semantics)) .
+    rec-msg(compile-semantics-hook(ModuleName?, OutputFileName?, Semantics?)).
+    snd-msg(compile-module(ModuleName, OutputFileName, Semantics)) .
     (
       rec-note(asfc-progress(Progress?)).
       snd-note(ui-status(endstat(Id))).
