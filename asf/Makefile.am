@@ -2,7 +2,7 @@
 
 SUBDIRS = syntax semantics library
 
-EXTRA_DIST = reconf make_rules
+EXTRA_DIST = reconf make_rules $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
