@@ -4,7 +4,7 @@ equations
 add-list-cons(Module) = alc-module(Module)
 
 [alc-0]
-alc-rules(Rulesopt) = Rulesopt2
+alc-rulesopt(Rulesopt) = Rulesopt2
 ===>
 alc-module(module Modid Signopt Rulesopt) = module Modid Signopt Rulesopt2
 
@@ -66,7 +66,14 @@ alc-termlist(Term+) = Term+2
 ===>
 alc-term(Funid(Term+)) = Funid(Term+2)
 
+[alc-11'2]
+is-list-funid(Funid) = true
+===>
+alc-term(Funid) = Funid(null)
+
 [alc-12]
+is-list-funid(Funid) = false
+===>
 alc-term(Funid) = Funid
 
 [alc-13]
@@ -75,20 +82,17 @@ alc-term(Var) = Var
 [alc-13]
 alc-termlist(Term) = alc-term(Term)
 
-
 [alc-14]
 alc-term(Term) = Term2,
 alc-termlist(Term+) = Term+2
 ===>
 alc-termlist(Term, Term+) = Term2, Term+2
 
-[l2cl-0]
-list-to-conslist() = null
-
 [l2cl-1]
 list-to-conslist(Term+) = Term2
-===>
+======>
 list-to-conslist(Term, Term+) = cons(Term, Term2)
 
 [l2cl-2]
-list-to-conslist(Term) = cons(Term2, null)
+list-to-conslist(Term) = Term
+
