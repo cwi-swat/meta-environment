@@ -1,3 +1,6 @@
+/*
+  $Id$
+ */
 process ProcessEqs is
 let
   Id      : term,
@@ -15,7 +18,8 @@ let
   Li      : int,
   Co      : int,
   Char    : term,
-ErrList: list, Cycle: list
+  ErrList : list,
+  Cycle   : list
 in
   Id := process-id.
 printf("ProcessEqs started\n").

@@ -1,9 +1,9 @@
-/* $Id$
+/*
+  $Id$
  */
-
 process Clear-all(Eval: evaluator) is
 let
-Id: term
+  Id: term
 in
   Id := process-id. (
     rec-msg(clear-all).

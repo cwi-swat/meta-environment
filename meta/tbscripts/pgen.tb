@@ -1,3 +1,7 @@
+/*
+  $Id$
+ */
+
 tool pgen is {
   command = "pgen -termtable 20"
 }
@@ -12,7 +16,10 @@ let
   Syntax    : term,
   NewSyntax : term,
   Str       : str,
-  Table     : str,
+  Table     : str/*
+  $Id$
+ */
+,
   Mods      : list,
   Id        : int
 in

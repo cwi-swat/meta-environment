@@ -1,16 +1,19 @@
+/*
+  $Id$
+ */
 process Edit-module(Module: str) is
 let
-Id    : term,
-T     : term,
-Tid   : int,
-Fn    : str,
-TE    : text-edit,
-  Path    : str,
-  Syntax  : term,
-  Src     : str
+  Id     : term,
+  T      : term,
+  Tid    : int,
+  Fn     : str,
+  TE     : text-edit,
+  Path   : str,
+  Syntax : term,
+  Src    : str
 in
   Id := process-id.
-  snd-note(ui-status(stat(Id,"Opening module editor"))). 
+  snd-note(ui-status(stat(Id,"Opening module editor..."))). 
   snd-msg(get-sdf2-path-from-db(id(Module))).
   rec-msg(path(Path?)).
   snd-msg(get-sdf2-asfix(id(Module))).
@@ -18,6 +21,6 @@ in
   snd-msg(pp(Syntax)).
   rec-msg(source(Src?)).
   create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
-  snd-msg(open-language("Sdf2", "/opt/petr/lib/Sdf2.baf")).
+  snd-msg(open-language("Sdf2", "@prefix@/lib/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet

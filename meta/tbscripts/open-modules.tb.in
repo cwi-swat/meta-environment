@@ -1,4 +1,5 @@
-/* $Id$
+/*
+   $Id$
  */
 
 process Open-modules(Eval: evaluator) is
@@ -71,7 +72,7 @@ in
               )
               +
               rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)). 
-              snd-msg(open-language("Sdf2", "/opt/petr/lib/Sdf2.baf")).
+              snd-msg(open-language("Sdf2", "@prefix@/lib/Sdf2.baf")).
               snd-msg(Id,parse-string-as-asfix1("Sdf2","",FT)).
               ( rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
                 snd-msg(ui,open-module(Name2)). 

@@ -1,4 +1,5 @@
-/* $Id$
+/*
+  $Id$
  */
 
 tool evaluator is {
@@ -19,14 +20,14 @@ tool add-eqs-syntax is {
 
 process Parsetrees is 
 let
-Com :   compiler,
-Eval:   evaluator,
-Pgen:   pgen,
-Addsyn: add-eqs-syntax,
-Id :    term,
-Tid:    int,
-Mod:    term,
-Tmp:    term
+  Com   :   compiler,
+  Eval  :   evaluator,
+  Pgen  :   pgen,
+  Addsyn: add-eqs-syntax,
+  Id    :    term,
+  Tid   :    int,
+  Mod   :    term,
+  Tmp   :    term
 in
   /* Start up tools and initialize */
   execute(evaluator, Eval?).

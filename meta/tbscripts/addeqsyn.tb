@@ -1,8 +1,11 @@
+/*
+  $Id$
+ */
 process AddEqSyn(AES: add-eqs-syntax) is
 let
-Name      : term,
-NewSyntax : term,
-Syntax    : term
+  Name      : term,
+  NewSyntax : term,
+  Syntax    : term
 in  
   ( rec-msg(add-eqs-syntax(Name?)).
     snd-msg(retrieve-syntax(Name)).

@@ -1,5 +1,6 @@
-/* $Id$
-*/
+/*
+  $Id$
+ */
 
 process Focus(TE: text-edit, Fid: str) is
 let

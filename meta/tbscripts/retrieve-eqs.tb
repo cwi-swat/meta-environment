@@ -1,12 +1,13 @@
-/* $Id$
+/*
+  $Id$
  */
 
 process Retrieve-eqs(Eval: evaluator) is
 let
-Id    : term,
-Mod: term,
-Mods: list,
-Eqs: list
+  Id   : term,
+  Mod  : term,
+  Mods : list,
+  Eqs  : list
 in
   Id := process-id.
   (

@@ -1,8 +1,11 @@
+/*
+  $Id$
+ */
 process Status-display(UI: user-interface)  is
 let
-Lst: list,
-Str: str,
-Id: term
+  Lst : list,
+  Str : str,
+  Id  : term
 in
   subscribe(ui-status(<term>)).
   ( rec-note(ui-status(stat(Id?,Str?))).

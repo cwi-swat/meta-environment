@@ -1,4 +1,6 @@
-/* $Id$ */
+/*
+  $Id$
+ */
 
 tool se is {
   command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool"

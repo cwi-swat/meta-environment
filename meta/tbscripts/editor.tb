@@ -1,4 +1,6 @@
-/* $Id$ */
+/*
+  $Id$
+ */
 
 /** Name -- The name of the module over which we edit as a term: id(RealName)
     Text -- The string we are editing

@@ -1,3 +1,6 @@
+/*
+  $Id$
+ */
 process Edit-term(Mod: str, Term: term) is
 let
   Tid   : int,

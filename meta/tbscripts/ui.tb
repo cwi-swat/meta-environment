@@ -1,4 +1,5 @@
-/* $Id$
+/*
+  $Id$
  */
 
 tool user-interface is {
@@ -7,22 +8,22 @@ tool user-interface is {
 
 process Ui is
 let
-SD    : int,
-Om    : int,
-EM    : int,
-ET    : int,
-UI    : user-interface,
-Id    : term,
-Name  : term,
-Str   : term,
-Str1  : term,
-Graph : term,
-Mod   : term,
-Pairs : list,
-ModName : str,
-T       : str,
-FT      : str,
-Path    : str
+  SD      : int,
+  Om      : int,
+  EM      : int,
+  ET      : int,
+  UI      : user-interface,
+  Id      : term,
+  Name    : term,
+  Str     : term,
+  Str1    : term,
+  Graph   : term,
+  Mod     : term,
+  Pairs   : list,
+  ModName : str,
+  T       : str,
+  FT      : str,
+  Path    : str
 in
   Id := process-id.
   subscribe(import-relations(<term>)).

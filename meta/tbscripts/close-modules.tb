@@ -1,6 +1,6 @@
-/* $Id$
+/*
+  $Id$
  */
-
 process Close-modules(Eval: evaluator) is
 let
   Str : term,

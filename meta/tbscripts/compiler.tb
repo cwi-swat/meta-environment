@@ -1,13 +1,16 @@
+/*
+  $Id$
+ */
 process Compiler is
 let
-COM  : compiler,
-Id   : term,
-T    : term,
-T1   : term,
-Name : term,
-M    : term,
-Mod : term,
-Mods : list
+  COM  : compiler,
+  Id   : term,
+  T    : term,
+  T1   : term,
+  Name : term,
+  M    : term,
+  Mod  : term,
+  Mods : list
 in
 /* The compiler gets its first compile request*/
 rec-msg(compile-module(Name?)).

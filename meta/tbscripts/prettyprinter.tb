@@ -1,4 +1,6 @@
-/* $Id$ */
+/*
+  $Id$
+ */
 
 tool asource is {
   command = "asource"

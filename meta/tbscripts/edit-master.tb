@@ -1,4 +1,6 @@
-/* $Id$ */
+/*
+  $Id$
+ */
 
 /* This process executes an editor, and tells everyone who wants to 
    know about its tool-id
@@ -10,7 +12,7 @@ tool text-edit is {
 
 process Edit-master is
 let
-TE:text-edit 
+  TE :text-edit 
 in
 ( rec-msg(get-editor-tool-id).
   execute(text-edit, TE?) . 

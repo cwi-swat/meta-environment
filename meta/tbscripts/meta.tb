@@ -1,4 +1,6 @@
-/* $Id$ */
+/*
+  $Id$
+ */
 
 #include "sglr.idef"
 #include "editor.tb"
