@@ -48,12 +48,12 @@ in
   +
     rec-msg(invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .
-    ( rec-value(SE, focus(Focus?)) .
-      snd-msg(set-focus(EditorId, Focus))
+    ( rec-value(SE, focus(Focus?)) 
       +
-      rec-value(SE, no-such-editor(editorId))
+      rec-value(SE, no-such-editor(editorId)).
+      Focus := empty
     ).
-    snd-msg(invalidation-done(EditorId))
+    snd-msg(invalidation-done(EditorId, Focus))
   +
     rec-msg(set-current-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
