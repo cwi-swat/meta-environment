@@ -18,30 +18,34 @@ public class RMIAddressBookService
     addressByName = new HashMap();
   }
 
-  private AddressBookEntry getEntry(int id) {
-    return (AddressBookEntry) addressById.get(new Integer(id));
+  private IAddressBookEntry getEntry(int id) {
+    return (IAddressBookEntry) addressById.get(new Integer(id));
   }
 
   public int createEntry() {
-    Integer id = new Integer(createUniqueID());
-    AddressBookEntry entry = new AddressBookEntry();
-    addressById.put(id, entry);
-    return id.intValue();
+    int id = createUniqueID();
+    IAddressBookEntry entry = new AddressBookEntry();
+    addressById.put(new Integer(id), entry);
+    return id;
   }
 
-  public void deleteEntry(int id) {
+  public void deleteEntry(int id) throws RemoteException {
+    System.out.println("delete: " + getEntry(id));
     addressById.remove(new Integer(id));
   }
 
-  public void setName(int id, String name) {
-    AddressBookEntry entry = getEntry(id);
+  public void setName(int id, String name) throws RemoteException {
+    IAddressBookEntry entry = getEntry(id);
     addressByName.remove(name);
     addressByName.put(name, new Integer(id));
     entry.setName(name);
+    System.out.println("setName -> entry: " + entry);
   }
 
-  public void setAddress(int id, String address) {
-    getEntry(id).setAddress(address);
+  public void setAddress(int id, String address) throws RemoteException {
+    IAddressBookEntry entry = getEntry(id);
+    entry.setAddress(address);
+    System.out.println("setAddress -> entry: " + entry);
   }
 
   public int findByName(String name) {
