@@ -137,11 +137,11 @@ static ATbool isIndentedType(PT_Production production)
   
   productionLhs = PT_getProductionLhs(production);
 
-  if (!PT_getSymbolsLength(productionLhs) >= 3)
+  if (PT_getSymbolsLength(productionLhs) < 3)
   {
     return ATfalse;
   }
-  
+
   while (!PT_isSymbolsEmpty(productionLhs)) 
   {
     symbol = PT_getSymbolsHead(productionLhs);
