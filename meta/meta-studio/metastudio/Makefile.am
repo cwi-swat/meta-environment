@@ -20,7 +20,7 @@ GENSOURCES	= UserInterfaceTif.java UserInterfaceTool.java \
 data_DATA	= meta-studio.idef
 EXTRA_DIST	= meta-studio.idef
 
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes:${TOOLBUS}/classes
 
 
 JAVAROOT	= ${top_builddir}/meta-studio
