@@ -110,7 +110,7 @@ viewer.tif.c: stub.tifs
 debug-nub.tif.c: tide.tifs
 	ctif -newstyle -tool debug-nub -tifs tide.tifs
 
-buscontrol.o: buscontrol.c viewer.tif.c debug-nub.tif.c
+buscontrol.o: buscontrol.c viewer.tif.c debug-nub.tif.c evq.h
 	$(COMPILE)
 
 buscontrol: buscontrol.o evq.o

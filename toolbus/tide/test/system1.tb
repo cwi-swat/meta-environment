@@ -13,7 +13,7 @@ in
   ) * delta
 endlet
 
-tool python1 is { command = "python-adapter -program /usr/src/python/beta2/python -script python1.py" }
+tool python1 is { command = "python-adapter -program python -script python1.py" }
 tool viewer is { command = "../buscontrol" }
 
 toolbus(Python)
