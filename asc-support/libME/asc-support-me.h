@@ -71,7 +71,7 @@ extern Symbol record_sym;
 #define make_list_char(c) ((ATerm)(ATmakeList1(char_table[c])))
 #define singleton(t) (ATerm)(ATmakeList1((t)))
 #define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
-
+#define remove_list(t) (ATgetArgument((ATermAppl) t,0))
 
 /*}}}  */
 
