@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2001/01/08 (jurgenv@cwi.nl)
+   * added printing of versions of wish and tcldot to meta -V
+
 2000/12/19 (mdejonge@cwi.nl)
    * Added TOOLBUSDEFS to configure.in
 
