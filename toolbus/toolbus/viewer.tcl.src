@@ -18,6 +18,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
+# $Id$
 
 # User interface for ToolBus viewer
 #
@@ -149,17 +150,18 @@ set tb_glob(xp0)    20;   # x coordinate of process 0
 set tb_glob(rp)     15;   # radius of a process
 set tb_glob(dx)     60;   # horizontal distance between columns
 set tb_glob(dy)     60;   # vertical distance between rows
-set tb_glob(maxcol) 10;   # max number of processes per row
+set tb_glob(maxcol) 12;   # max number of processes per row
 set tb_glob(nrow)    1;   # current number of rows
 set tb_glob(ybase) 160;
 set tb_glob(tbase) 230;   # y coordinate of connection line for tool communication
 set tb_glob(ntool)   0;   # current number of tools connected
 set tb_glob(trunc_value) 64; # maximum length of value in display
+set tb_glob(toolspace) 120; # space reserved for tools
 
 proc drawBus {c} {
      global tb_glob
      set tb_glob(busbase) [expr (1 + $tb_glob(nrow)) * $tb_glob(dy)]
-     $c create rectangle 10 10 \
+     $c create rectangle 4 4 \
                       [expr $tb_glob(xp0) + (1 + $tb_glob(maxcol))*$tb_glob(dx)] \
                       $tb_glob(busbase) \
                        -width 4 -tags rect
@@ -179,6 +181,16 @@ proc extend_bus {c} {
        mk_tool $c $tool_name($i) $i
        incr i
     }
+
+    # rescale the canvas
+    $c configure -height [canvas_height $c]
+
+}
+
+proc canvas_height {c} {
+  global tb_glob
+
+  return [expr (1 + $tb_glob(nrow)) * $tb_glob(dy) + $tb_glob(toolspace)]
 }
 
 proc set_name {name} {
@@ -200,13 +212,12 @@ proc mkViewer {} {
    label $w.help -text "Short Help Info" -relief raised -width 50
    defHelp $w.help "Help info"
 
-   canvas $w.canvas -relief raised \
-                    -width [expr (1 + $tb_glob(maxcol)) * $tb_glob(dx)] \
-                    -height [expr ($tb_glob(maxcol)/2)*$tb_glob(dy)]
+   canvas $w.canvas -relief raised -width [expr $tb_glob(xp0) + (1 + $tb_glob(maxcol)) * $tb_glob(dx)] -height [canvas_height $w.canvas]
+
    defHelp $w.canvas \
    "Click on process to view its text ; Double click on process to view its variables"
    pack $w.help -side bottom -fill both
-   pack $w.canvas -side bottom -expand 1 -fill both
+   pack $w.canvas -side bottom -expand 1 -fill y
    drawBus $w.canvas   
 
    frame $w.buttons
@@ -215,7 +226,7 @@ proc mkViewer {} {
    button $w.buttons.go -text "Go" -command "do_go"
    button $w.buttons.stop -text "Stop" -command "do_stop" -state disabled
    button $w.buttons.step -text "Step" -command "do_step"
-   pack $w.buttons -side bottom -expand 1 -fill both
+   pack $w.buttons -side bottom -fill x
    pack $w.buttons.txt $w.buttons.name -side left 
    pack $w.buttons.step $w.buttons.go $w.buttons.stop -side right -padx 10m
    defHelp $w.buttons.txt "Move cursor to process or tool to display its full name here"
@@ -226,11 +237,11 @@ proc mkViewer {} {
    defHelp $w.buttons.step "Execute one step in script"
 
    frame $w.menu -relief raised -bd 2
-   pack $w.menu -side top -expand 1 -fill x
-   text $w.text -relief raised -bd 2 -yscrollcommand "$w.scroll set" -setgrid 1 \
-            -width 80 -height 14 -font "-Adobe-Helvetica-Medium-R-Normal-*-120-*"
+   pack $w.menu -side top -fill x
+   text $w.text -relief raised -bd 2 -yscrollcommand "$w.scroll set" -setgrid 1 -height 18 -font "-Adobe-Helvetica-Medium-R-Normal-*-120-*"
    scrollbar $w.scroll -relief flat -command "$w.text yview"
-   pack $w.scroll -side right -expand 1 -fill y
+
+   pack $w.scroll -side right -fill y
    pack $w.text -side left -expand 1 -fill x
 
    bind $w.text <Double-Button-1> "addBreak $w.text"

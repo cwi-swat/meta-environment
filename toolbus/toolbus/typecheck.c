@@ -18,6 +18,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
+   $Id$
 */
 #include "toolbus.h"
 #include "terms.h"
@@ -186,9 +187,13 @@ void warn_res_vars(atom *a, TBbool want_res_vars)
   }
   if(want_res_vars){
     if(nresvars == 0 && has_vars){
-      pr_coords(c);
-      TBprintf(stderr, "warning: arguments of %s do not contain result variables\n",
-	       get_txt(at_fun(a)));
+      /* This warning is not valid. Often we only need confirmation
+       * from a tool without any obtained information.
+       *
+       * pr_coords(c);
+       * TBprintf(stderr, "warning: arguments of %s do not contain result variables\n",
+       *       get_txt(at_fun(a)));
+       */
     }
   } else {    
     if(nresvars > 0){
