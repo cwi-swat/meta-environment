@@ -9,7 +9,7 @@
 #include "pretty.h"
 
 static char* myname = "ptpretty";
-static char* myversion = "0.1";
+static char* myversion = VERSION;
 static char* myarguments = "i:o:vVhs:";
 static ATbool run_verbose = ATfalse;
 

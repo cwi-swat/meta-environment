@@ -1,7 +1,7 @@
 
 SUBDIRS = src
 
-EXTRA_DIST = recond $(wildcard *.pkg)
+EXTRA_DIST = reconf $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
