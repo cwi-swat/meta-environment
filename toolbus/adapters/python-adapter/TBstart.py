@@ -62,7 +62,7 @@ def getint(sock, tool):
         if not data:
                 TB.msg("getint failed")
                 raise TB.connect
-        r = regex.compile("\([a-zA-Z\-_]+\) \([0-9]+\)")
+        r = regex.compile("\([a-zA-Z_-]+\) \([0-9]+\)")
         if r.match(data) <= 0:
                 TB.msg("getint got garbled data: %s" % data)
                 raise TB.connect
@@ -136,11 +136,16 @@ def eventloop():
 		tkinter.createfilehandler(TB.input,
 		tkinter.__dict__["READABLE"], tkhandle_term)
 		try:
-			Tkinter.Tk().mainloop()
+			if TB.root == None:
+				Tkinter.Tk().mainloop()
+			else:
+				TB.root.mainloop()
 			TB.send("snd-disconnect")
 			TB.connected = 0
 		except KeyboardInterrupt:
-			pass
+			sys.exit(0)
+		except SystemExit:
+			sys.exit(0)
 		except:
 			if TB.connected:
 				TB.msg("Something went wrong in Tk mainloop.")
@@ -194,7 +199,7 @@ def dispatch_term(T):
                         return
                 elif T[1] == 'rec-terminate':
                         result = dispatch_user(T)
-                        sys.exit(0)
+			return
 
         print "python-adapter: Illegal term received", T
         TB.send("snd-void()")
@@ -290,6 +295,8 @@ try:
         exec cmd
 except:
         TB.msg("Could not import module %s" % TB.module)
+	traceback.print_exc()
+	sys.exit(1)
 
 eventloop()
 

@@ -57,6 +57,9 @@ def event(msg):
 def enable_tk():
         global use_tk
         use_tk = 1
+def set_root(win):
+        global root
+        root = win
 
 
 def read_term(sock):
@@ -134,10 +137,11 @@ def init(argvec):
         global TOOL_NAME, TOOL_ID, HOST, INPORT, OUTPORT
         global LOCAL_HOST, LIB, parser, module, argv
         global use_tk, in_shutdown, connected, functions
-        global files
+        global root, files
 
         # Fill in some default values
         use_tk = 0
+	root = None
         in_shutdown = 0
         functions = { }
         files = [ ]
@@ -202,6 +206,9 @@ def init(argvec):
         # print "INPORT         = ", INPORT
         # print "OUTPORT                = ", OUTPORT
         # print "argv           = ", argv 
+
+def exit():
+	sys.exit(0)
 
 tool_name = sys.argv[0]
  

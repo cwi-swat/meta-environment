@@ -101,7 +101,7 @@ process BKE is
     )*delta
   endlet
 
-tool swipl is { command = "./swipl-adapter -binary ttt.pl.o"}
+tool swipl is { command = "swipl-adapter -binary ttt.pl.o"}
 
 %% 
 %%%% Process creation for the user process.

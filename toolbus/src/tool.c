@@ -227,7 +227,7 @@ int TBconnect(char *tname, char *host, int inport, int outport,
     err_fatal("signature information garbled: %t", trm);
 
 
-  return TB_OK;
+  return to_tb;
 }      
 
 static int read_from_any_channel(inport **inp)
