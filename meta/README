@@ -37,18 +37,20 @@ Installation instructions:
     enable alternative builds.
 
     -- for the parser (sglr): the Boehm Garbage Collector, available
-       from <http://reality.sgi.com/employees/boehm_mti/gc.html>.
+       at <http://reality.sgi.com/employees/boehm_mti/gc.html>.
        Make as appropriate for your system; install the resulting
        `gc.a' as libgc.a in an appropriate place, typically the
        Meta-Environment's lib directory and install `gc.h' in an
        appropriate include directory (e.g. the Meta-Environment's
        include directory).
-       With Boehm GC installed, sglr's `..-gc' compilation targets
-       can be used (read sglr/src/Makefile.in if interested).
-       It should be noted that it is somewhat eufemistic to refer
-       to BoehmGC versions of the sglr parser as `experimental'.
-       Usual disclaimers about operating heavy machinery and
-       controlling nuclear facilities severely apply.
+       With Boehm GC installed, sglr's `..-gc' compilation targets can
+       be used (read sglr/parser/Makefile.in if interested).  It should
+       be noted that even the term `experimental' is a euphemism at
+       best, when using it in reference to to BoehmGC versions of the
+       sglr parser.
+       Hence, strict disclaimers about operating heavy machinery and
+       controlling thermonuclear facilities and devices most certainly
+       apply here.
 
 
 * Platform support
@@ -71,8 +73,8 @@ Installation instructions:
   * Dependencies
 
     The Meta-Environment distribution depends on four other
-    distributions.  Using CVS, you can get these distributions as
-    follows (assuming you have accounts at both UvA and CWI.  External
+    distributions.  Using CVS, you can get these distributions
+    as follows (assuming you have an accounts at CWI.  External
     distribution will be available at a later stage):
 
     -- cd to the directory just above new-meta (new-meta/..)
@@ -106,13 +108,14 @@ Installation instructions:
     directory, for instance by typing:
 
       $ PATH=/path/to/meta/bin:${PATH}; export PATH
-    for the sh family of shells, or alternatively (for csh-ish shells):
-      % setenv PATH /path/to/meta/bin:${PATH}
-      (in shells of the csh-family)
 
-    If there are no configure files in the sub-directories: toolbus, aterm,
-    and new-met, please run autoconf to generate the configure file in each
-    of these sub-directories.
+    for the sh family of shells, or alternatively (for csh-ish shells):
+
+      % setenv PATH /path/to/meta/bin:${PATH}
+
+    If there are no configure files in the sub-directories: toolbus,
+    aterm, and new-meta, please run autoconf to generate the configure
+    file in each of these sub-directories.
 
     Then proceed as follows:
 
