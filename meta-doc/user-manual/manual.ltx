@@ -775,11 +775,10 @@ You will then find the files needed for this Guided Tour in the directory {\tt
 directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
 copy of the directory.
 
-For each module in a specification two files exist: `{\tt $module$.sdf2}'
-\footnote{In the current version the extension is `{\tt sdf2}' ; should this
-  not be changed to `{\tt .syn}'?}  contains the syntax of $module$ and `{\tt
-  $module$.eqs}' contains the semantics (equations) of $module$. The directory
-pico contains:
+For each module in a specification two files exist: `{\tt
+  $module$.sdf2}' contains the syntax of $module$ and `{\tt
+  $module$.eqs}' contains the semantics (equations) of $module$. The
+  directory pico contains:
 
 \begin{itemize}
 
@@ -807,9 +806,7 @@ pico contains:
   the name of the module to be opened. It presents a list of all files with
   extension `{\tt sdf2}'. Click once on `{\tt Bool-example.sdf2}' and then
   push the {\tt Open} button. This will load the module {\tt Module-example}
-  (both its syntax and equations!) into the system
-\footnote{*** Strictly speaking this is strange; it would be better to only
-display module names without any extension.}
+  (both its syntax and equations!) into the system.
   
 \item Verify that module {\tt Bool-example} appears as a rectangle in
 the import pane as well as in the module pane of the main window as
@@ -923,8 +920,8 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 \begin{itemize}
 \item Open a term-editor over module {\tt Bool-example} by first selecting
   module {\tt Bool-example} in the module pane, and then pushing the {\tt
-    Term} button.  A dialog window pops up\footnote{Why is this note a
-    standard file dialog?}
+    Term} button.  A dialog window pops up\footnote{
+    In following releases this will be changed into a standard file dialog}
     Enter any new filename, for instance, `{\tt my-term}'.
 
 \item 
@@ -1090,7 +1087,6 @@ Modifying the priorities:
   
 \item Type the term `{\tt true \& false | true}' in the term-editor (or
   anything similar according to your current syntax). Try to parse this term.
-\footnote{PROBLEM: there is no feed back here that there is an ambiguity!}
 
 \item Add the priority declarations again.
 
@@ -1521,19 +1517,19 @@ can be a definition of one of the following:
 %\item aliases;
 \end{itemize}
 
-\noindent Each of these entities will be now be described and illustrated by examples.
+\noindent Each of these entities will now be described and illustrated by examples.
 
 \subsection{Imports} \label{Imports}
 
 Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
-by a possibly empty\footnote{Klopt {\tt <ModuleName>*}?} list of module names.
+by one or more module names.
 %module name should be imports where, an import is either a module name
 %or a module name followed by renamings.
 An {\tt <ImportSection>} has the form:
 
 \begin{verbatim}
 imports
-  <ModuleName>*
+  <ModuleName>+
 \end{verbatim}
 
 \begin{sloppypar}
@@ -1553,11 +1549,11 @@ importing module but they are not exported by the importing module.
 \subsection{Sorts} \label{Sorts}
 
 Sorts are declared by listing their name in a sorts section of a
-module.\footnote{Klopt {\tt <SortName>*}?}
+module.
 
 \begin{verbatim}
 sorts
-  <SortName>*
+  <SortName>+
 \end{verbatim}
 
 \noindent A sort name should start with a capital letter and may be followed by 
@@ -1588,25 +1584,26 @@ known as \emph{white space}) between lexical tokens and are to be skipped
 during lexical analysis. It may only be used as result sort of lexical
 functions (Section~\ref{LexicalFunctions}). When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation as
-layout symbol is ignored. {\tt LAYPOUT} is typically used for defining layout
+layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
 and comment conventions.
 
-Traditionally, lexical syntax and context-free syntax are treated differently.
-They are defined by different notations and implemented by means of different
-techniques. \sdf\ provides a much more uniform treatment.
+Traditionally, lexical syntax and context-free syntax are treated
+differently.  They are defined by different notations and implemented
+by means of different techniques. \sdf\ provides a much more uniform
+treatment.  In \sdf, the only significant difference between the two
+is that no layout will be accepted while recognizing the members of
+the left-hand side of a lexical function, whereas layout \emph{will}
+be accepted between the members of the left-hand side of a
+context-free function. At the implementation level, both are
+implemented using a single parsing technique.
 
-In \sdf, the only significant difference between the two is that no layout will be
-accepted while recognizing the members of the left-hand side of a lexical
-function, whereas layout \emph{will} be accepted between the members of the
-left-hand side of a context-free function. At the implementation level,
-both are implemented using a single parsing technique.
-
-{\bf UITLEG
-\sdf2 offers a third mechanism
-to define syntax rules via a so-called {\tt syntax} section.
-The specification writer has to take care of the recognition of layout
-explicitly. This mechanism is beyond the scope of this manual
-and will not be discussed here, for more details see \cite{Vis9?.thesis}.}
+Technically, there exist only \emph{syntax} sections. Both lexical
+syntax sections and context-free syntax sections are transformed into
+such syntax sections after appropriate insertion of option layout
+between the elements of context-free functions. In rare cases,
+the specification writer may want to control this process explicitly
+and write syntax sections directly. This will not be discussed
+in this manual, but further details can be found in \cite{Vis9?.thesis}.
 
 \subsubsection{Lexical Functions} \label{LexicalFunctions}
 
@@ -2143,7 +2140,74 @@ sort {\tt SORT-B} is required.
 
 (* EXAMPLE should be added *)
 
-\subsubsection{Bracket Functions}
+
+\subsection{Attributes of Lexical and Context-free Functions}
+
+The definition of a lexical or context-free functions may be followed by
+\emph{attibutes} that define additional properties of that function.
+The following attributes exist:
+
+\begin{itemize}
+
+\item {\tt bracket} allows the definitions of parenthesis and other
+kinds of brackets that are mostly used for overruling the priorities
+of operators in expressions (Section~\ref{BracketFunctions}).
+
+\item {\tt left}, {\tt right}, {\tt non-assoc}, {\tt assoc}
+are used for defining the associativity of functions (Section~\ref{Priorities}).
+
+\item  and 
+
+{\tt prefer} and {\tt avoid} are used to define that a function should
+be preferred or only be used as last resort in certain cases of
+syntactic ambiguity (Section~\ref{XXX}).
+
+\iten {\tt reject} can be used to explicitly forbid certain syntactic constructs (Section~\ref{XXX}).
+
+\item {\tt delay} is used to influence the evaluation order of the
+arguments of a function (Section~\ref{Delay}).
+
+\item {\tt memo} declares a function to be a \emph{memo function} for
+which all calls and results will be cached during evaluation
+(Section~\ref{MemoFunctions}).
+
+\end{itemize}
+
+
+%\subsection{Optional Operator}
+
+%\subsection{Alternative Operator}
+
+%\subsection{Tupling Operator}
+
+%\subsection{Tupling Operator}
+
+\subsection{Priorities} \label{ContextFreePriorities} \label{Priorities}
+
+The context-free syntax defined in an \asfsdf\ specification may be 
+ambiguous: there are sentences which have more than one associated tree. 
+The common example are the arithmetic expressions in which definitions 
+of the priority or associativity of operators are missing. There are 
+three mechanisms for defining associativity and priority:
+
+\begin{itemize}
+
+\item relative priorities of functions (defined in 
+the `{\tt context-free priorities}' section); 
+
+\item associativity of functions (defined as attribute following the function
+  declaration); 
+
+\item associativity of groups of functions (defined in 
+the `{\tt context-free priorities}' section).
+
+\end{itemize}
+
+Closely related with priorities are brackets that can be used to
+overrule priorities.  We will now first describe bracket functions,
+and then the various forms of defining priorities.
+
+\subsubsection{Bracket Functions} \label{BracketFunctions}
 
 A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
 and $close$ are literals acting as opening and closing parenthesis for sort
@@ -2188,35 +2252,6 @@ exports
 \caption{Syntax definition with a bracket function}\label{CODE:bracket-expr}
 \end{figure}
 
-%\subsection{Optional Operator}
-
-%\subsection{Alternative Operator}
-
-%\subsection{Tupling Operator}
-
-%\subsection{Tupling Operator}
-
-\subsection{Priorities} \label{ContextFreePriorities} \label{Priorities}
-
-The context-free syntax defined in an \asfsdf\ specification may be 
-ambiguous: there are sentences which have more than one associated tree. 
-The common example are the arithmetic expressions in which definitions 
-of the priority or associativity of operators are missing. There are 
-three mechanisms for defining associativity and priority:
-
-\begin{itemize}
-
-\item relative priorities of functions (defined in 
-the `{\tt context-free priorities}' section); 
-
-\item associativity of functions (defined as attribute following the function
-  declaration); 
-
-\item associativity of groups of functions (defined in 
-the `{\tt context-free priorities}' section).
-
-\end{itemize}
-
 \subsubsection{Relative Priorities}
 
 The relative priority of two functions is defined by including {\tt $F$ > $G$}
@@ -2246,13 +2281,13 @@ related occurrences of the same function, $F$:
 
 \begin{itemize}
 
-\item {\tt left}: related occurrences of F associate from left to right. 
+\item {\tt left}: related occurrences of $F$ associate from left to right. 
 
-\item {\tt right}: related occurrences of F associate from right to left. 
+\item {\tt right}: related occurrences of $F$ associate from right to left. 
 
-\item{\tt  assoc}: related occurrences of F associate from left to right.
+\item{\tt  assoc}: related occurrences of $F$ associate from left to right.
 
-\item {\tt non-assoc}: related occurrences of F are not allowed.
+\item {\tt non-assoc}: related occurrences of $F$ are not allowed.
 
 \end{itemize}
 
@@ -2298,13 +2333,13 @@ declaration with one of the following attributes:
 
 \begin{itemize}
 
-\item left: related occurrences of F and G associate from left to right. 
-\item right: related occurrences of F and G associate from right to left.
-\item non-assoc: related occurrences of F and G are not allowed.
+\item {\tt left}: related occurrences of $F$ and $G$ associate from left to right. 
+\item {\tt right}: related occurrences of $F$ and $G$ associate from right to left.
+\item {\tt non-assoc}: related occurrences of $F$ and $G$ are not allowed.
 
 \end{itemize}
 
-where F and G are functions appearing in the list.
+\noindent where $F$ and $G$ are functions appearing in the list.
 See Figure \ref{CODE:complex-prio} for an example of the use of grouped
 associativity.
 
@@ -2847,9 +2882,9 @@ equations
 \caption{Use of a default equation}\label{CODE:types}
 \end{figure}   
 
-\subsubsection{Memo Functions}
+\subsubsection{Memo Functions} \label{MemoFunctions}
 
-\subsubsection{Delaying}
+\subsubsection{Delaying} \label{Delay}
 
 \section{Executing Specifications} 
 \label{ExecutingSpecifications}
