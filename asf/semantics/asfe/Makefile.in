@@ -76,6 +76,10 @@ DISTCLEANFILES	=
 # all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 MODULES	= evaluator.o preparation.o
 
 # Explicit rules

@@ -80,6 +80,10 @@ SUBDIRS		= c-source support-muasf
 # The all target must be defined:
 all: depend subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 subdirs:
 	@for dir in $(SUBDIRS); \
 	do \
