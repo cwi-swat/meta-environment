@@ -59,6 +59,16 @@ in
       snd-msg(io-file-not-written(ErrorMessage))
     )
   +
+    rec-msg(io-pack-term(Term?)) .
+    snd-eval(IO, pack-term(Term)) .
+    rec-value(IO, term(Term?)) .
+    snd-msg(io-term(Term))
+  +
+    rec-msg(io-unpack-term(Term?)) .
+    snd-eval(IO, unpack-term(Term)) .
+    rec-value(IO, term(Term?)) .
+    snd-msg(io-term(Term))
+  +
     rec-msg(io-write-term-file(FileName?, Term?)) .
     snd-eval(IO, write-term-file(FileName, Term)) .
     ( 

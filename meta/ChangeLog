@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/09 (markvdb@cs.vu.nl)
+ * Introduced the button actions "pack-tree" and "unpack-tree".
+ * Made the saving and reading of the term store a bit more verbose.
+
 2003/07/07 (jurgenv@cwi.nl)
  * Bugfix: deleting an import that does not exist was lead to a deadlock
    because the io-tool returned an error that was not handled.

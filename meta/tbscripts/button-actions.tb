@@ -455,6 +455,20 @@ in
         snd-note(ui-status(errorf("%s", [String]))) .
         ReturnSuccess(EditorId,Stack)
       +
+        rec-msg(unpack-tree, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,STree?).
+        snd-msg(io-unpack-term(STree)) .
+	rec-msg(io-term(RTree?)) .
+        StackPushTerm(Stack, Stack?, RTree) .
+        ReturnSuccess(EditorId,Stack)
+      +
+        rec-msg(pack-tree, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,STree?).
+        snd-msg(io-pack-term(STree)) .
+	rec-msg(io-term(RTree?)) .
+        StackPushTerm(Stack, Stack?, RTree) .
+        ReturnSuccess(EditorId,Stack)
+      +
         rec-msg(show-tree, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         StackPopString(Stack,Stack?, ModuleName?) .

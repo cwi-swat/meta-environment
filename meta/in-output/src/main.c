@@ -286,6 +286,18 @@ ATerm read_term_file(int cid, char *fileName)
 }
 
 /*}}}  */
+
+ATerm pack_term(int cid, ATerm term)
+{
+  return ATmake("snd-value(term(<term>))", ATBpack(term));
+}
+
+ATerm unpack_term(int cid, ATerm term)
+{
+  return ATmake("snd-value(term(<term>))", ATBunpack(term));
+}
+
+
 /*{{{  ATerm read_packed_term_file(int cid, char *fileName) */
  
 ATerm read_packed_term_file(int cid, char *fileName)
