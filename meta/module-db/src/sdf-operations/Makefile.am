@@ -11,4 +11,5 @@ libsdf_operations_a_SOURCES	= module-refactorings.c \
                                   module-operations.c
 
 INCLUDES	        = -I$(ATERM)/include \
+			-I$(PT_SUPPORT)/include 
 			-I$(SDF_SUPPORT)/include 
