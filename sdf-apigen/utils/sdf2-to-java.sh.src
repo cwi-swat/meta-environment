@@ -2,12 +2,12 @@
 
 # {{{ variables
 
-     prefix=__PREFIX__
-     bindir=__BINDIR__
-    PKGDATA=__PKGDATA__
-        PRG=`basename $0`
-     APIGEN=__APIGEN__
-    SDF2ADT="__SDF2ADT__"
+prefix=__PREFIX__
+bindir=__BINDIR__
+PKGDATA=__PKGDATA__
+PRG=`basename $0`
+APIGEN=__APIGEN__
+SDF2ADT="__SDF2ADT__"
 
 # }}}
 
@@ -63,6 +63,13 @@ require() {
 }
 
 # }}}
+# {{{  bail_out()
+
+bail_out() {
+  error "Bailing out!"
+}
+
+# }}}
 
 # {{{  default settings
 
@@ -85,6 +92,8 @@ NAME=""
 SDF2TOADT=${SDF2ADT}
 ADTTOJAVA=${APIGEN}/bin/adt-to-java
 CONCATADT=${APIGEN}/bin/concat-adt
+UPGRADEADT=${APIGEN}/bin/upgrade-adt
+
 # }}}
 
 # {{{  handle command line options
@@ -146,7 +155,6 @@ do
 done
 
 # }}}
-
 # {{{ sanity checks and variable setup
 
 if [ "a${INPUT}" = "a" ]; then
@@ -169,34 +177,27 @@ else
 fi
 
 # }}}
-
-# {{{  err()
-
-err() {
-  error "Bailing out!"
-}
-
-# }}}
 # {{{  generate Java from SDF
 info "Generating Java code in ${OUTPUT}/${PACKAGE} from ${INPUT}:"
 
 if [ ${ONLYBOTTOM} -eq 0 ]; then
-info " generating ADT "
+info "Generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
-             -i ${INPUT} -o ${BASE}.adt || err
+             -i ${INPUT} -o ${BASE}.adt || bail_out
+
+info "Adding string support (?)"
 ${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
-fi
 
+info "Upgrading ADT"
+${UPGRADEADT} -i ${BASE}.adt -o ${BASE}-upgraded.adt
 
-if [ ${ONLYBOTTOM} -eq 0 ]; then
-info " generating java from ADT "
+info "Generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
-             -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
+             -i ${BASE}-upgraded.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
 fi
 
-info " overwriting CHARLIST_StringImpl.java"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info " generating API for bottom sorts"
+  info "Overwriting CHARLIST_StringImpl.java"
   sed "s@__PACKAGE__@${PACKAGE}@g;\
        s@__NAME__@${NAME}@g;\
        s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
