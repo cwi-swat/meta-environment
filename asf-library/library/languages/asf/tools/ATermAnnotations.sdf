@@ -9,6 +9,13 @@ context-free syntax
 
 get-term-anno(X,String)  -> ATerm {built-in("get-term-anno")}
 
-%% the $ is needed to disambiguate from a normal ATerm application
+%% Extend quoted literals of ATerms with unquoted literals (copied from Sdf2)
+lexical syntax
+  [a-z]                          -> UQLiteral
+  [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral
+context-free syntax
+  UQLiteral                                            -> Literal
+
+
 
 
