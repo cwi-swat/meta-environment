@@ -1,0 +1,340 @@
+
+equations
+
+[w]	weight = 4
+
+[s]	size(empty) = 0
+
+[s]	size(tree(x, n, l, r)) = n
+
+[n]	new(x, l, r) = tree(x, 1+size(l)+size(r), l, r)
+
+[m]	member(x, empty) = false
+
+[m]	elt-gt(x1,x2) = false,
+	elt-lt(x1,x2) = false
+	===
+	member(x1, tree(x2, n, l, r)) = true
+
+[m]	elt-lt(x, v) = true
+	===
+	member(x, tree(v, n, l, r)) = member(x, l)
+
+[m]	elt-gt(x, v) = true
+	===
+	member(x, tree(v, n, l, r)) = member(x, r)
+
+
+[f]	elt-gt(x1,x2) = false,
+	elt-lt(x1,x2) = false
+	===
+	find(x1, tree(x2, n, l, r)) = x2
+
+[f]	elt-lt(x, v) = true
+	===
+	find(x, tree(v, n, l, r)) = find(x, l)
+
+[f]	elt-gt(x, v) = true
+	===
+	find(x, tree(v, n, l, r)) = find(x, r)
+
+
+[mn]	min(tree(v, n, empty, r)) = v
+
+[default-mn]
+	min(tree(v, n, l, r)) = min(l)
+
+[sl]	single-l(a, s, tree(b, n, t, u)) = new(b, new(a, s, t), u)
+
+[dl]	double-l(a, s, tree(c, n1, tree(b, n2, t1, t2), u)) =
+		new(b, new(a, s, t1), new(c, t2, u))
+
+[sr]	single-r(b, tree(a, n, s, t), u) = new(a, s, new(b, t, u))
+
+[dr]	double-r(c, tree(a, n1, s, tree(b, n2, t1, t2)), u) =
+		new(b, new(a, s, t1), new(c, t2, u))
+
+[bn]	size(l) + size(r) < 2 = true
+	===
+	b-new(v, l, r) = new(v, l, r)
+
+[bn]	size(l) + size(r) < 2 = false,
+	size(r) > weight * size(l) = true,
+	r = tree(a, n, rl, rr),
+	size(rl) < size(rr) = true
+	===
+	b-new(v, l, r) = single-l(v, l, r)
+
+[bn]	size(l) + size(r) < 2 = false,
+	size(r) > weight * size(l) = true,
+	r = tree(a, n, rl, rr),
+	size(rl) < size(rr) = false
+	===
+	b-new(v, l, r) = double-l(v, l, r)
+
+[bn]	size(l) + size(r) < 2 = false,
+	size(l) > weight * size(r) = true,
+	l = tree(a, n, ll, lr),
+	size(lr) < size(ll) = true
+	===
+	b-new(v, l, r) = single-r(v, l, r)
+
+[bn]	size(l) + size(r) < 2 = false,
+	size(l) > weight * size(r) = true,
+	l = tree(a, n, ll, lr),
+	size(lr) < size(ll) = false
+	===
+	b-new(v, l, r) = double-r(v, l, r)
+
+[default-bn]
+	b-new(v, l, r) = new(v, l, r)
+
+
+[ad]	add(empty, x) = tree(x, 1, empty, empty)
+
+[ad]	elt-lt(x, v) = true
+	===
+	add(tree(v, n, l, r), x) = b-new(v, add(l, x), r)
+
+[ad]	elt-gt(x, v) = true
+	===
+	add(tree(v, n, l, r), x) = b-new(v, l, add(r, x))
+
+[default-ad]	
+	add(tree(v, n, l, r), x) = new(x, l, r)
+
+[del]	delete(empty, x) = empty
+
+[del]	elt-lt(x, v) = true
+	===
+	delete(tree(v, n, l, r), x) = b-new(v, delete(l, x), r)
+
+[del]	elt-gt(x, v) = true
+	===
+	delete(tree(v, n, l, r), x) = b-new(v, l, delete(r, x))
+
+[default-del]	
+	delete(tree(v, n, l, r), x) = del-aux(l, r)
+
+
+[da]	del-aux(empty, r) = r
+
+[da]	del-aux(l, empty) = l
+
+[default-da]	
+	del-aux(l, r) = b-new(min(r), l, del-min(r))
+
+[dem]	del-min(tree(v, n, empty, r)) = r
+
+[default-dem]	
+	del-min(tree(v, n, l, r)) = b-new(v, del-min(l), r)
+
+
+[un]	union(empty, t) = t
+
+[un]	union(t, empty) = t
+
+[un]	l' = split-lt(t, v),
+	r' = split-gt(t, v)
+	===
+	union(t, tree(v, n, l, r)) =
+		concat3(v, union(l', l), union(r', r))
+
+
+[cat]	concat3(v, empty, r) = add(r, v)
+
+[cat]	concat3(v, l, empty) = add(l, v)
+
+[cat]	l = tree(v1, n1, l1, r1),
+	r = tree(v2, n2, l2, r2),
+	weight * n1 < n2 = true
+	===
+	concat3(v, l, r) = b-new(v2, concat3(v, l, l2), r2)
+
+[cat]	l = tree(v1, n1, l1, r1),
+	r = tree(v2, n2, l2, r2),
+	weight * n2 < n1 = true
+	===
+	concat3(v, l, r) = b-new(v1, l1, concat3(v, r1, r))
+
+[default-cat]
+	concat3(v, l, r) = new(v, l, r)
+
+[sl]	split-lt(empty, x) = empty
+
+[sl]	elt-lt(x, v) = true
+	===
+	split-lt(tree(v, n, l, r), x) = split-lt(l, x)
+
+[sl]	elt-gt(x, v) = true
+	===
+	split-lt(tree(v, n, l, r), x) = concat3(v, l, split-lt(r, x))
+
+[default-sl]
+	split-lt(tree(v, n, l, r), x) = l
+
+[sl]	split-gt(empty, x) = empty
+
+[sl]	elt-gt(x, v) = true
+	===
+	split-gt(tree(v, n, l, r), x) = split-gt(r, x)
+
+[sl]	elt-lt(x, v) = true
+	===
+	split-gt(tree(v, n, l, r), x) = concat3(v, split-gt(l, x), r)
+
+[default-sl]
+	split-gt(tree(v, n, l, r), x) = r
+
+[dif]	difference(empty, s) = empty
+
+[dif]	difference(s, empty) = s
+
+[default-dif]
+	l' = split-lt(s, v),
+	r' = split-gt(s, v)
+	===
+	difference(s, tree(v, n, l, r)) =
+		concat(difference(l',l), difference(r', r))
+
+
+%% This can be improved a la concat3 (see p. 19)
+
+%%[con]	concat(t1, empty) = t1
+
+%%[default-con]
+%%	concat(t1, t2) = concat3(min(t2), t1, del-min(t2))
+
+%% Like this.
+[con]	concat(empty, t2) = t2
+
+[con]	concat(t1, empty) = t1
+
+[con]	t1 = tree(v1, n1, l1, r1),
+	t2 = tree(v2, n2, l2, r2),
+	weight * n1 < n2 = true
+	===
+	concat(t1, t2) = b-new(v2, concat(t1, l2), r2)
+
+[con]	t1 = tree(v1, n1, l1, r1),
+	t2 = tree(v2, n2, l2, r2),
+	weight * n2 < n1 = true
+	===
+	concat(t1, t2) = b-new(v1, l1, concat(r1, t2))
+
+[default-con]
+	concat(t1, t2) = b-new(min(t2), t1, del-min(t2))
+
+
+[is]	intersection(empty, s) = empty
+
+[is]	intersection(s, empty) = empty
+
+[is]
+	l' = split-lt(s, v),
+	r' = split-gt(s, v),
+	member(v, s) = true
+	===
+	intersection(s, tree(v, n, l, r)) =
+		concat3(v, intersection(l', l), intersection(r', r))
+
+[is]	l' = split-lt(s, v),
+	r' = split-gt(s, v),
+	member(v, s) = false
+	===
+	intersection(s, tree(v, n, l, r)) =
+		concat(intersection(l', l), intersection(r', r))
+
+[tr]	trim(lo, hi, empty) = empty
+
+[tr]	tree(v, n, l, r) = s,
+	elt-lt(lo, v) = true,
+	elt-lt(v, hi) = true
+	===
+	trim(lo, hi, s) = s
+
+[tr]	elt-lt(lo, v) = true,
+	elt-lt(v, hi) = false
+	===
+	trim(lo, hi, tree(v, n, l, r)) = trim(lo, hi, l)
+
+[default-tr]
+	trim(lo, hi, tree(v, n, l, r)) = trim(lo, hi, r)
+
+[ubd]	uni-bd(s, empty, lo, hi) = s
+
+[ubd]	uni-bd(empty, tree(v, n, l, r), lo, hi) =
+		concat3(v, split-gt(l, lo), split-lt(r, hi))
+
+[default-ubd]
+	s2 = tree(v2, n2, l2, r2)
+	===
+	uni-bd(tree(v1, n1, l1, r1), s2 , lo, hi) =
+		concat3(v1,
+			uni-bd(l1, trim(lo, v1, s2), lo, v1),
+			uni-bd(r1, trim(v1, hi, s2), v1, hi))
+
+[trl]	trim-lo(lo, empty) = empty
+
+[trl]	tree(v, n, l, r) = s,
+	elt-lt(lo, v) = true
+	===
+	trim-lo(lo, s) = s
+
+[default-trl]
+	trim-lo(lo, tree(v, n, l, r)) = trim-lo(lo, r)
+
+[trh]	trim-hi(hi, empty) = empty
+
+[trh]	tree(v, n, l, r) = s,
+	elt-lt(v, hi) = true
+	===
+	trim-hi(hi, s) = s
+
+[default-trh]
+	trim-hi(hi, tree(v, n, l, r)) = trim-hi(hi, l)
+
+[unh]	uni-hi(s, empty, hi) = s
+
+[unh]	uni-hi(empty, tree(v, n, l, r), hi) =
+		concat3(v, l, split-lt(r, hi))
+
+[unh]	s2 = tree(v2,n2,l2,r2)
+	===
+	uni-hi(tree(v1,n1,l1,r1), s2, hi) =
+		concat3(v1,
+			uni-hi(l1, trim-hi(v1, s2), v1),	
+			uni-bd(r1, trim(v1, hi, s2), v1, hi))
+
+
+[unl]	uni-lo(s, empty, lo) = s
+
+[unl]	uni-lo(empty, tree(v, n, l, r), lo) =
+		concat3(v, split-gt(l, lo), r)
+
+[unl]	s2 = tree(v2,n2,l2,r2)
+	===
+	uni-lo(tree(v1,n1,l1,r1), s2, lo) =
+		concat3(v1,
+			uni-bd(l1, trim(lo, v1, s2), lo, v1),	
+			uni-lo(r1, trim-lo(v1, s2), v1))
+
+
+[hun]	hedge-union(s, empty) = s
+
+[hun]	hedge-union(empty, s) = s
+
+[hun]	s2 = tree(v2,n2,l2,r2)
+	===
+	hedge-union(tree(v1,n1,l1,r1), s2) =
+		concat3(v1,
+			uni-hi(l1, trim-hi(v1,s2), v1),
+			uni-lo(r1, trim-lo(v1,s2), v1))
+
+[dju]	disjoint-union(t1, t2) = 
+		difference(hedge-union(t1,t2), intersection(t1,t2))
+
+
+[dom]	elt-list(empty) =
+
+[dom]	elt-list(tree(v,n,l,r)) = v elt-list(l) elt-list(r)
