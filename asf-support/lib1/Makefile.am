@@ -38,7 +38,7 @@ ADT      = ${ATERM}
 subst_eqs_SOURCES = subst-eqs.c
 subst_eqs_LDADD   = -L${ATERM}/lib -lATerm -L${ADT}/lib -lADT
 
-ASF.c: ASF.raw
+api: ASF.raw
 
 ASF.raw: Asf.label.def 
 	sdf2-to-adt -r -i $< -o ASF.raw
