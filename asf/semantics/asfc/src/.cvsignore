@@ -2,5 +2,4 @@ Makefile
 Makefile.in
 *.deps
 asfc
-asfc.tif.h 
-asfc.tif.c
+*.tifs

@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 SUBDIRS = muasf
 
 bin_PROGRAMS     = asfc
-pkgdata_DATA        = asfc.idef
+pkgdata_DATA     = asfc.idef
 
 EXTRA_DIST       = asfc.idef
 
@@ -21,7 +21,8 @@ asfc_SOURCES = asfc.tif.c \
                c-compiler.c \
                Compiler.c
 
-noinst_HEADERS = chars.h \
+noinst_HEADERS = asfc.tif.h \
+		 chars.h \
                  c-code.h \
                  asf2muasf.h \
                  lex-cons.h \
