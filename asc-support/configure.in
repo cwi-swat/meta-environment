@@ -20,7 +20,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(Makefile.in)
-AM_INIT_AUTOMAKE(asc-support, 0.3)
+AM_INIT_AUTOMAKE(asc-support, 0.4)
 
 
 AC_PATH_PROG(ATERM, baffle, no)
