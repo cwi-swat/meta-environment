@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/09 (markvdb@cwi.nl)
+ * By accident the strategy symbol was removed, added again.
+
 2003/10/08 (markvdb@cwi.nl)
  * Bumped into version 2.0
  * Adapted package dependency.
