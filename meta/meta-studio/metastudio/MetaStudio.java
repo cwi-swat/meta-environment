@@ -1057,13 +1057,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		return factory.make("snd-value(answer(cancel))");
 	}
 
-	void doClearAll() {
-		bridge.sendEvent(factory.parse("clear-all"));
-		resetGraph();
-		importGraphPanel.setGraph(graph);
-		moduleManager.clearModules();
-	}
-
 	public void clearHistory() {
 		try {
 			historyDoc.remove(0, historyDoc.getLength());
