@@ -29,12 +29,15 @@ let
   RVS       : removevarsyntax,
   ModuleName : str
 in  
-  execute(removevarsyntax, RVS?) .
   (
     rec-msg(remove-var-syntax(ModuleName?, Syntax?)) .
+    execute(removevarsyntax, RVS?) .
     snd-eval(RVS, remove-var-syntax(ModuleName, Syntax)).
     rec-value(RVS, changed-syntax(NewSyntax?)). 
-    snd-msg(changed-syntax(NewSyntax))
+    snd-msg(changed-syntax(NewSyntax)).
+    snd-terminate(RVS,"done").
+    Syntax := none.
+    NewSyntax := none
   )*
   delta
 endlet
