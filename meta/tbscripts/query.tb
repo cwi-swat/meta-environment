@@ -12,17 +12,7 @@ let
   FunSym : str
 in
   (
-    rec-msg(get-query-actions) .
-    snd-msg(get-application-status) .
-    (
-      rec-msg(status(interactive)) .
-      snd-msg(action-list(["findProduction", "findProdUse"])) 
-    +
-      rec-msg(status(standalone)) .
-      snd-msg(action-list([])) 
-    )
-    +
-    rec-msg(execute-query(EditorId?, "findProdUse")) .
+    rec-msg(execute-query(EditorId?, "find-production-use")) .
     snd-msg(get-focussed-tree(EditorId)) .
     (
       rec-msg(tree(Focus?)) .
@@ -43,7 +33,7 @@ in
 	    if equal(FunSym, "found") then
 	      /*printf("Spawning editor for module %s\n", ModuleName) .*/
 	      snd-msg(edit-equations(ModuleName)) .
-	      rec-msg(edit-equations(ModuleName, EditorId?)) .
+	      rec-msg(editor-opened(ModuleName, EditorId?)) .
 	      PosInfo := first(args(Term)) .
 	      snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
 	      ModuleNames := [] /* stop searching after 1st hit, for now */
@@ -61,7 +51,7 @@ in
       fi
     )
     +
-    rec-msg(execute-query(EditorId?, "findProduction")) .
+    rec-msg(execute-query(EditorId?, "find-production")) .
     snd-msg(get-focussed-tree(EditorId)) .
     (
       rec-msg(tree(Focus?)) .
@@ -79,7 +69,7 @@ in
 	    if equal(FunSym, "found") then
 	      /*printf("Spawning editor for module %s\n", ModuleName) .*/
 	      snd-msg(edit-syntax(ModuleName)) .
-	      rec-msg(edit-syntax(ModuleName, EditorId?)) .
+	      rec-msg(editor-opened(ModuleName, EditorId?)) .
 	      PosInfo := first(args(Term)) .
 	      snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
 	      ModuleNames := [] /* stop searching after 1st hit, for now */
