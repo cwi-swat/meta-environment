@@ -72,7 +72,7 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
   return PT_makeProductionDefault(ptSymbols, ptResult, ptAttributes);
 }
 
-PT_Symbols SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols)
+static PT_Symbols SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols)
 {
   SDF_SymbolList sdfSymbolList = SDF_getSymbolsList(sdfSymbols);
   PT_Symbols ptSymbols = PT_makeSymbolsEmpty();
@@ -91,6 +91,32 @@ PT_Symbols SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols)
   }
 
   return ptSymbols;
+}
+
+static PT_Symbols SDFSymbolParametersToPtSymbols(SDF_SymbolParameters sdfSymbols)
+{
+  PT_Symbols ptSymbols = PT_makeSymbolsEmpty();
+
+  while (SDF_hasSymbolParametersHead(sdfSymbols)) {
+    SDF_Symbol sdfSymbol = SDF_getSymbolParametersHead(sdfSymbols);
+    PT_Symbol ptSymbol = SDFSymbolToPtSymbol(sdfSymbol);
+
+    ptSymbols = PT_appendSymbols(ptSymbols, ptSymbol);
+
+
+    if (SDF_isSymbolParametersSingle(sdfSymbols)) {
+      break;
+    }
+    sdfSymbols = SDF_getSymbolParametersTail(sdfSymbols);
+  }
+
+  return ptSymbols;
+}
+
+static PT_Symbol     SDFSortToPtSymbol(SDF_Sort sdfSort)
+{
+  char *str = PT_yieldTree((PT_Tree) sdfSort);
+  return PT_makeSymbolSort(str); 
 }
 
 PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
@@ -206,6 +232,13 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_Symbol ptResult = SDFSymbolToPtSymbol(sdfResult);
     result = PT_makeSymbolFunc(ptArguments,ptResult);
   }
+  else if (SDF_isSymbolParameterizedSort(sdfSymbol)) {
+    SDF_Sort sdfSort = SDF_getSymbolSort(sdfSymbol);
+    SDF_SymbolParameters sdfParameters = SDF_getSymbolParameters(sdfSymbol);
+    PT_Symbols ptParameters = SDFSymbolParametersToPtSymbols(sdfParameters);
+    PT_Symbol ptSort = SDFSortToPtSymbol(sdfSort);
+    result = PT_makeSymbolParameter(ptSort, ptParameters);
+  }
   else if (SDF_isSymbolAlt(sdfSymbol)) {
     SDF_Symbol sdfLeft = SDF_getSymbolLeft(sdfSymbol);
     SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
@@ -229,7 +262,6 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     result = NULL;
   }
 	    
-
   return result;
 }
 

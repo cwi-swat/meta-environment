@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Nov 29 14:40:43 2001
+ * Generated at Sun Mar  3 18:33:48 2002
  */
 
 #ifndef __SDFME_dict_H
@@ -237,6 +237,8 @@ extern ATerm SDF_patternSymbolArgumentsEmpty;
 extern ATerm SDF_patternLiteralLexToCf;
 extern ATerm SDF_patternLiteralUqlit;
 extern ATerm SDF_patternUQLiteralLexToCf;
+extern ATerm SDF_patternSymbolParametersMany;
+extern ATerm SDF_patternSymbolParametersSingle;
 extern ATerm SDF_patternSortLexToCf;
 extern ATerm SDF_patternPriorityListMany;
 extern ATerm SDF_patternPriorityListSingle;
@@ -320,6 +322,7 @@ extern ATerm SDF_patternGrammarLexicalPriorities;
 extern ATerm SDF_patternSymbolBracket;
 extern ATerm SDF_patternSymbolLabel;
 extern ATerm SDF_patternSymbolLit;
+extern ATerm SDF_patternSymbolParameterizedSort;
 extern ATerm SDF_patternSymbolSort;
 extern ATerm SDF_patternSymbolCharClass;
 extern ATerm SDF_patternSymbolPerm;
