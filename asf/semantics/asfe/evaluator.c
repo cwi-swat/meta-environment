@@ -116,8 +116,6 @@ void rec_terminate(int cid, ATerm t)
 
 void create_equations_db(int cid)
 {
-	equations_db = ATdictCreate();
-	ATprotect(&equations_db);
 }
 
 /*}}}  */
@@ -265,7 +263,7 @@ ATermList sort_and_filter_on_ofs(ATerm name,
         sameofs = ATinsert(sameofs, eq);
     }
     else
-      neweqs = ATappend(neweqs, eq);
+      neweqs = ATinsert(neweqs, eq);
     eqs = ATgetNext(eqs);
   };
 
@@ -281,7 +279,7 @@ ATermList sort_and_filter_on_ofs(ATerm name,
 }
 
 /*}}}  */
-/*{{{  Tbool no_new_vars(ATerm trm,ATermList env) */
+/*{{{  ATbool no_new_vars(ATerm trm,ATermList env) */
 
 /* A predicate which checks whether a term introduces new
    variables. This functions is used when dealing with the
@@ -333,15 +331,11 @@ ATbool no_new_vars(ATerm trm, ATerm env)
    take care of the backtracking needed when dealing with
    list matching. */
 ATerm elems_matching(ATerm sym, ATerm env,
-                         ATermList elems1, ATermList elems2,
-                         ATermList conds,
-                         ATermList args1, ATermList args2)
+                     ATermList elems1, ATermList elems2,
+                     ATermList conds,
+                     ATermList args1, ATermList args2)
 {
-  /*if(AFcontainsVars(elems2))
-    assert(0);
-    return list_matching(sym,env,elems1,elems2,conds,args1,args2);
-  else */
-    return list_matching(sym,env,elems1,elems2,conds,args1,args2);
+  return list_matching(sym,env,elems1,elems2,conds,args1,args2);
 }
 
 
@@ -389,33 +383,18 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
     else
       newenv = fail_env;
   } 
-	/*else if(asfix_is_var(arg1) && !asfix_is_var(arg2)) {
-    if(ATdictGet(newenv,arg1)) {
-      trm = v_lookup(arg1,newenv);
-      if(ATequal(arg2,trm))
-        newenv = (ATerm) args_matching(ar,newenv,conds,orgargs1,orgargs2);
-      else
-        newenv = fail_env;
-    }
-    else {
-      newenv = TdictPut(ar,newenv,arg1,arg2);
-      newenv = args_matching(ar,newenv,conds,orgargs1,orgargs2);
-    }
-  } */
-	else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
+  else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
     sym1 = asfix_get_list_sym(arg1);
     sym2 = asfix_get_list_sym(arg2);
     if(ATisEqual(sym1,sym2)) {
       elems1 = (ATermList) asfix_get_list_elems(arg1);
-      elems2 = (ATermList) asfix_get_list_elems(arg2);
-      /*newenv = elems_matching(sym1,newenv,elems1,elems2,
-                              conds,orgargs1,orgargs2);*/
+      elems2 = (ATermList) asfix_get_list_elems(arg2); 
       newenv = list_matching(sym1,newenv,elems1,elems2,
                              conds,orgargs1,orgargs2);
     }
     else
       newenv = fail_env;
-  } /*else if(!asfix_is_var(arg1) && asfix_is_var(arg2)) {*/
+  } 
   else if(asfix_is_var(arg1)) {
     if(ATdictGet(newenv,arg1)) {
       trm = v_lookup(arg1,newenv);
@@ -430,10 +409,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
     }
   }
   else {
-    /*if(ATisEqual(arg1,arg2))
-      newenv = args_matching(newenv,conds,orgargs1,orgargs2);
-    else*/
-      newenv = fail_env;
+    newenv = fail_env;
   }
   return newenv;
 }
@@ -626,7 +602,7 @@ ATerm list_matching(ATerm sym,
 
 
 /*}}}  */
-/*{{{  ATermList conds_satisfied(arena *ar, ATermList conds, ATermList env) */
+/*{{{  ATermList conds_satisfied(ATermList conds, ATermList env) */
 
 /* Function ``conds_satisfied'' check whether the conditions
    of an equation can be satisfied. 
@@ -648,7 +624,6 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
         lhstrm = rewrite(lhs,newenv);
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(rhs,newenv);
-          /*newenv = arg_matching(newenv,lhstrm,rhstrm,conds,ATempty,ATempty);*/
           if(ATisEqual(lhstrm,rhstrm)) 
             newenv = conds_satisfied(conds,newenv);
           else
@@ -926,6 +901,9 @@ int main(int argc, char **argv)
   ATBinit(argc, argv, &bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
   cid = ATBconnect(NULL, NULL, -1,evaluator_handler);  
+
+  equations_db = ATdictCreate();
+  ATprotect(&equations_db);
 
   fail_env = ATparse("[fail]"); 
   ATBeventloop();
