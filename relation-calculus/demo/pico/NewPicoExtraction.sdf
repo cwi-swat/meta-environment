@@ -3,6 +3,7 @@ module NewPicoExtraction
 imports Pico-syntax
 imports basic/Integers
 imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
 imports utilities/PosInfo[PICO-ID]
 
 imports basic/Errors
@@ -11,18 +12,19 @@ exports
    imports Rstore
 
  context-free syntax
-
       extractRelations(PROGRAM)         -> RSTORE
       convert2summary(Elem)	        -> Summary
 
 hiddens
   context-free syntax
-      cflow({ STATEMENT ";"}*)	        -> Rel[[Elem]]
-      use(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
-      use(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+      cflown({ STATEMENT ";"}*)	        -> Rel[[Elem]]
+      cflow(STATEMENT)	        	-> Rel[[Elem]]
+
+      uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
+      uses(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
  
-      def(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,break)}
-      def(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,break)}
+      defs(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
+      defs(STATEMENT, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
 
 
       convert2errorlist(Elem)		-> {Error ","}*
@@ -45,3 +47,12 @@ hiddens
       "$Char*" [0-9]*   	-> CHAR*
       "$String" [0-9\']*	-> String
       "$StrCon" [0-9\']*	-> StrCon
+
+	
+      "$Decls" [0-9\']*         -> DECLS
+      "$Stat" [0-9\']*          -> STATEMENT
+      "$Stat*"[0-9\']*          -> {STATEMENT ";"}*
+      "$Stat+"[0-9\']*          -> {STATEMENT ";"}+
+      "$Exp" [0-9\']*           -> EXP
+      "$Id" [0-9\']*            -> PICO-ID
+      "$Program" [0-9\']*       -> PROGRAM
