@@ -9,13 +9,14 @@ INCLUDES		= -I${ATERM}/include -I${PT_SUPPORT}/include
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 #CFLAGS			+= -pg -DDISABLE_DYNAMIC_CHECKING
 
+ADT=/ufs/sen1/software/installed/apigen-bundle-1.5/linux/i386
 
 api: subst-eqs
-	sdf2-to-adt -i Asf.label.def -o ASFME.raw
-	sdf2-to-c -b -o ASFME --prefix ASF_
+	${ADT}/bin/sdf2-to-adt -i Asf.label.def -o ASFME.raw
+	${ADT}/bin/sdf2-to-c -b -o ASFME --prefix ASF_
 	./subst-eqs ASFME.raw > ASFME.adt
 	echo "typedef ATerm ASF_Symbol;" >> ASFME.pro
-	adt-to-c --compat-term -i ASFME.adt --prologue ASFME.pro \
+	${ADT}/bin/adt-to-c --compat-term -i ASFME.adt --prologue ASFME.pro \
 		--prefix ASF_ -o ASFME
 
 subst-eqs: subst-eqs.c

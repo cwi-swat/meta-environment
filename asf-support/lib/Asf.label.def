@@ -83,6 +83,9 @@ exports
        lhs:Tree          "=" rhs:Tree -> ASF-Equation
        lhs:Tree          "=" rhs:Tree -> ASF-Condition {cons("positive")}
        lhs:Tree unequal:"!=" rhs:Tree -> ASF-Condition {cons("negative")}
+       lhs:Tree equal:"==" rhs:Tree -> ASF-Condition {cons("equality")}
+       lhs:Tree match:":=" rhs:Tree -> ASF-Condition {cons("match")}
+       lhs:Tree match:":#" rhs:Tree -> ASF-Condition {cons("no-match")}
        "amb" "(" ambs:{Tree ","}* ")" -> Tree      {cons("ambiguity-constructor")}
 %%   }
 %% NEXT Sort

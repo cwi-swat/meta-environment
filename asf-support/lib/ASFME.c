@@ -603,6 +603,30 @@ ASF_ASFCondition ASF_makeASFConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol r
 }
 
 /*}}}  */
+/*{{{  ASF_ASFCondition ASF_makeASFConditionEquality(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEqual, ASF_Tree rhs) */
+
+ASF_ASFCondition ASF_makeASFConditionEquality(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEqual, ASF_Tree rhs)
+{
+  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun50))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun51)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEqual), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun50))), (ATerm)wsAfterLhs), (ATerm)lhs));
+}
+
+/*}}}  */
+/*{{{  ASF_ASFCondition ASF_makeASFConditionMatch(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterMatch, ASF_Tree rhs) */
+
+ASF_ASFCondition ASF_makeASFConditionMatch(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterMatch, ASF_Tree rhs)
+{
+  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun52))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun53)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterMatch), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun52))), (ATerm)wsAfterLhs), (ATerm)lhs));
+}
+
+/*}}}  */
+/*{{{  ASF_ASFCondition ASF_makeASFConditionNoMatch(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterMatch, ASF_Tree rhs) */
+
+ASF_ASFCondition ASF_makeASFConditionNoMatch(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterMatch, ASF_Tree rhs)
+{
+  return (ASF_ASFCondition)(ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun54))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)lhsSymbol), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun23))), (ATerm)ATmakeAppl1(ASF_afun10, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(ASF_afun11, (ATerm)ATmakeAppl1(ASF_afun12, (ATerm)ATmakeAppl0(ASF_afun55)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterMatch), (ATerm)ATmakeAppl1(ASF_afun1, (ATerm)ATmakeAppl0(ASF_afun54))), (ATerm)wsAfterLhs), (ATerm)lhs));
+}
+
+/*}}}  */
 /*{{{  ASF_TreeAmbs ASF_makeTreeAmbsEmpty() */
 
 ASF_TreeAmbs ASF_makeTreeAmbsEmpty()
@@ -655,7 +679,7 @@ ASF_OptLayout ASF_makeOptLayoutPresent(ASF_CHARLIST chars)
 
 ASF_Start ASF_makeStartASFEquations(ASF_OptLayout wsBefore, ASF_ASFEquations topASFEquations, ASF_OptLayout wsAfter, int ambCnt)
 {
-  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun50, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun26)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun51)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topASFEquations), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun56, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun26)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun57)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topASFEquations), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -3947,6 +3971,15 @@ ATbool ASF_isValidASFCondition(ASF_ASFCondition arg)
   else if (ASF_isASFConditionNegative(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -3995,6 +4028,72 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg) */
+
+inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFConditionEquality, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg) */
+
+inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFConditionMatch, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg) */
+
+inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternASFConditionNoMatch, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool ASF_hasASFConditionLhsSymbol(ASF_ASFCondition arg) */
 
 ATbool ASF_hasASFConditionLhsSymbol(ASF_ASFCondition arg)
@@ -4003,6 +4102,15 @@ ATbool ASF_hasASFConditionLhsSymbol(ASF_ASFCondition arg)
     return ATtrue;
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4014,6 +4122,15 @@ ATbool ASF_hasASFConditionLhsSymbol(ASF_ASFCondition arg)
 ASF_Symbol ASF_getASFConditionLhsSymbol(ASF_ASFCondition arg)
 {
   if (ASF_isASFConditionPositive(arg)) {
+    return (ASF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
+  }
+  else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
     return (ASF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
   }
   else 
@@ -4029,6 +4146,15 @@ ASF_ASFCondition ASF_setASFConditionLhsSymbol(ASF_ASFCondition arg, ASF_Symbol l
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhsSymbol, 0), 0), 0);
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhsSymbol, 0), 0), 0);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhsSymbol, 0), 0), 0);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhsSymbol, 0), 0), 0);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhsSymbol, 0), 0), 0);
   }
 
@@ -4047,6 +4173,15 @@ ATbool ASF_hasASFConditionRhsSymbol(ASF_ASFCondition arg)
   else if (ASF_isASFConditionNegative(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -4056,6 +4191,15 @@ ATbool ASF_hasASFConditionRhsSymbol(ASF_ASFCondition arg)
 ASF_Symbol ASF_getASFConditionRhsSymbol(ASF_ASFCondition arg)
 {
   if (ASF_isASFConditionPositive(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 4);
+  }
+  else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 4);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 4);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
     return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 4);
   }
   else 
@@ -4071,6 +4215,15 @@ ASF_ASFCondition ASF_setASFConditionRhsSymbol(ASF_ASFCondition arg, ASF_Symbol r
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)rhsSymbol, 4), 0), 0);
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)rhsSymbol, 4), 0), 0);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)rhsSymbol, 4), 0), 0);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)rhsSymbol, 4), 0), 0);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)rhsSymbol, 4), 0), 0);
   }
 
@@ -4089,6 +4242,15 @@ ATbool ASF_hasASFConditionLhs(ASF_ASFCondition arg)
   else if (ASF_isASFConditionNegative(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -4098,6 +4260,15 @@ ATbool ASF_hasASFConditionLhs(ASF_ASFCondition arg)
 ASF_Tree ASF_getASFConditionLhs(ASF_ASFCondition arg)
 {
   if (ASF_isASFConditionPositive(arg)) {
+    return (ASF_Tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_Tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_Tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
     return (ASF_Tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
   }
   else 
@@ -4113,6 +4284,15 @@ ASF_ASFCondition ASF_setASFConditionLhs(ASF_ASFCondition arg, ASF_Tree lhs)
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 0), 1);
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 0), 1);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 0), 1);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 0), 1);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 0), 1);
   }
 
@@ -4131,6 +4311,15 @@ ATbool ASF_hasASFConditionWsAfterLhs(ASF_ASFCondition arg)
   else if (ASF_isASFConditionNegative(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -4140,6 +4329,15 @@ ATbool ASF_hasASFConditionWsAfterLhs(ASF_ASFCondition arg)
 ASF_OptLayout ASF_getASFConditionWsAfterLhs(ASF_ASFCondition arg)
 {
   if (ASF_isASFConditionPositive(arg)) {
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  }
+  else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
     return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
   }
   else 
@@ -4155,6 +4353,15 @@ ASF_ASFCondition ASF_setASFConditionWsAfterLhs(ASF_ASFCondition arg, ASF_OptLayo
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 1), 1);
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 1), 1);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 1), 1);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 1), 1);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 1), 1);
   }
 
@@ -4206,6 +4413,15 @@ ATbool ASF_hasASFConditionRhs(ASF_ASFCondition arg)
   else if (ASF_isASFConditionNegative(arg)) {
     return ATtrue;
   }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -4215,6 +4431,15 @@ ATbool ASF_hasASFConditionRhs(ASF_ASFCondition arg)
 ASF_Tree ASF_getASFConditionRhs(ASF_ASFCondition arg)
 {
   if (ASF_isASFConditionPositive(arg)) {
+    return (ASF_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
     return (ASF_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
   }
   else 
@@ -4230,6 +4455,15 @@ ASF_ASFCondition ASF_setASFConditionRhs(ASF_ASFCondition arg, ASF_Tree rhs)
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 4), 1);
   }
   else if (ASF_isASFConditionNegative(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 4), 1);
+  }
+  else if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 4), 1);
+  }
+  else if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 4), 1);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
     return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 4), 1);
   }
 
@@ -4267,6 +4501,81 @@ ASF_ASFCondition ASF_setASFConditionWsAfterUnequal(ASF_ASFCondition arg, ASF_Opt
   }
 
   ATabort("ASFCondition has no WsAfterUnequal: %t\n", arg);
+  return (ASF_ASFCondition)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFConditionWsAfterEqual(ASF_ASFCondition arg) */
+
+ATbool ASF_hasASFConditionWsAfterEqual(ASF_ASFCondition arg)
+{
+  if (ASF_isASFConditionEquality(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFConditionWsAfterEqual(ASF_ASFCondition arg) */
+
+ASF_OptLayout ASF_getASFConditionWsAfterEqual(ASF_ASFCondition arg)
+{
+  
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFCondition ASF_setASFConditionWsAfterEqual(ASF_ASFCondition arg, ASF_OptLayout wsAfterEqual) */
+
+ASF_ASFCondition ASF_setASFConditionWsAfterEqual(ASF_ASFCondition arg, ASF_OptLayout wsAfterEqual)
+{
+  if (ASF_isASFConditionEquality(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterEqual, 3), 1);
+  }
+
+  ATabort("ASFCondition has no WsAfterEqual: %t\n", arg);
+  return (ASF_ASFCondition)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ASF_hasASFConditionWsAfterMatch(ASF_ASFCondition arg) */
+
+ATbool ASF_hasASFConditionWsAfterMatch(ASF_ASFCondition arg)
+{
+  if (ASF_isASFConditionMatch(arg)) {
+    return ATtrue;
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_getASFConditionWsAfterMatch(ASF_ASFCondition arg) */
+
+ASF_OptLayout ASF_getASFConditionWsAfterMatch(ASF_ASFCondition arg)
+{
+  if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+  }
+  else 
+    return (ASF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  ASF_ASFCondition ASF_setASFConditionWsAfterMatch(ASF_ASFCondition arg, ASF_OptLayout wsAfterMatch) */
+
+ASF_ASFCondition ASF_setASFConditionWsAfterMatch(ASF_ASFCondition arg, ASF_OptLayout wsAfterMatch)
+{
+  if (ASF_isASFConditionMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterMatch, 3), 1);
+  }
+  else if (ASF_isASFConditionNoMatch(arg)) {
+    return (ASF_ASFCondition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterMatch, 3), 1);
+  }
+
+  ATabort("ASFCondition has no WsAfterMatch: %t\n", arg);
   return (ASF_ASFCondition)NULL;
 }
 
@@ -5152,9 +5461,9 @@ ASF_ASFEquation ASF_visitASFEquation(ASF_ASFEquation arg, ASF_Symbol (*acceptLhs
 }
 
 /*}}}  */
-/*{{{  ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterUnequal)(ASF_OptLayout)) */
+/*{{{  ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterUnequal)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEqual)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterMatch)(ASF_OptLayout)) */
 
-ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterUnequal)(ASF_OptLayout))
+ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEquals)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterUnequal)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterEqual)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterMatch)(ASF_OptLayout))
 {
   if (ASF_isASFConditionPositive(arg)) {
     return ASF_makeASFConditionPositive(
@@ -5172,6 +5481,33 @@ ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ASF_Symbol (*accept
         acceptLhs ? acceptLhs(ASF_getASFConditionLhs(arg)) : ASF_getASFConditionLhs(arg),
         acceptWsAfterLhs ? acceptWsAfterLhs(ASF_getASFConditionWsAfterLhs(arg)) : ASF_getASFConditionWsAfterLhs(arg),
         acceptWsAfterUnequal ? acceptWsAfterUnequal(ASF_getASFConditionWsAfterUnequal(arg)) : ASF_getASFConditionWsAfterUnequal(arg),
+        acceptRhs ? acceptRhs(ASF_getASFConditionRhs(arg)) : ASF_getASFConditionRhs(arg));
+  }
+  if (ASF_isASFConditionEquality(arg)) {
+    return ASF_makeASFConditionEquality(
+        acceptLhsSymbol ? acceptLhsSymbol(ASF_getASFConditionLhsSymbol(arg)) : ASF_getASFConditionLhsSymbol(arg),
+        acceptRhsSymbol ? acceptRhsSymbol(ASF_getASFConditionRhsSymbol(arg)) : ASF_getASFConditionRhsSymbol(arg),
+        acceptLhs ? acceptLhs(ASF_getASFConditionLhs(arg)) : ASF_getASFConditionLhs(arg),
+        acceptWsAfterLhs ? acceptWsAfterLhs(ASF_getASFConditionWsAfterLhs(arg)) : ASF_getASFConditionWsAfterLhs(arg),
+        acceptWsAfterEqual ? acceptWsAfterEqual(ASF_getASFConditionWsAfterEqual(arg)) : ASF_getASFConditionWsAfterEqual(arg),
+        acceptRhs ? acceptRhs(ASF_getASFConditionRhs(arg)) : ASF_getASFConditionRhs(arg));
+  }
+  if (ASF_isASFConditionMatch(arg)) {
+    return ASF_makeASFConditionMatch(
+        acceptLhsSymbol ? acceptLhsSymbol(ASF_getASFConditionLhsSymbol(arg)) : ASF_getASFConditionLhsSymbol(arg),
+        acceptRhsSymbol ? acceptRhsSymbol(ASF_getASFConditionRhsSymbol(arg)) : ASF_getASFConditionRhsSymbol(arg),
+        acceptLhs ? acceptLhs(ASF_getASFConditionLhs(arg)) : ASF_getASFConditionLhs(arg),
+        acceptWsAfterLhs ? acceptWsAfterLhs(ASF_getASFConditionWsAfterLhs(arg)) : ASF_getASFConditionWsAfterLhs(arg),
+        acceptWsAfterMatch ? acceptWsAfterMatch(ASF_getASFConditionWsAfterMatch(arg)) : ASF_getASFConditionWsAfterMatch(arg),
+        acceptRhs ? acceptRhs(ASF_getASFConditionRhs(arg)) : ASF_getASFConditionRhs(arg));
+  }
+  if (ASF_isASFConditionNoMatch(arg)) {
+    return ASF_makeASFConditionNoMatch(
+        acceptLhsSymbol ? acceptLhsSymbol(ASF_getASFConditionLhsSymbol(arg)) : ASF_getASFConditionLhsSymbol(arg),
+        acceptRhsSymbol ? acceptRhsSymbol(ASF_getASFConditionRhsSymbol(arg)) : ASF_getASFConditionRhsSymbol(arg),
+        acceptLhs ? acceptLhs(ASF_getASFConditionLhs(arg)) : ASF_getASFConditionLhs(arg),
+        acceptWsAfterLhs ? acceptWsAfterLhs(ASF_getASFConditionWsAfterLhs(arg)) : ASF_getASFConditionWsAfterLhs(arg),
+        acceptWsAfterMatch ? acceptWsAfterMatch(ASF_getASFConditionWsAfterMatch(arg)) : ASF_getASFConditionWsAfterMatch(arg),
         acceptRhs ? acceptRhs(ASF_getASFConditionRhs(arg)) : ASF_getASFConditionRhs(arg));
   }
   ATabort("not a ASFCondition: %t\n", arg);

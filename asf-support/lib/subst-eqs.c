@@ -145,6 +145,15 @@ main(int argc, char *argv[])
     ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"positive\"))]))"),
     ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\"=\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"positive\"))]))"));
 
+ addSubstitution(
+    ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"==\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"equality\"))]))"),
+    ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\"==\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"equality\"))]))"));
+ addSubstitution(
+    ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\":=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"match\"))]))"),
+    ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\":=\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"match\"))]))"));
+ addSubstitution(
+    ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\":#\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"no-match\"))]))"),
+    ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\":#\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"no-match\"))]))"));
   addSubstitution(
     ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"negative\"))]))"),
     ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"negative\"))]))"));
