@@ -1,0 +1,18 @@
+/*
+ * $Id$
+ */
+
+process New-module is
+let
+  ModuleName: str
+in
+  rec-msg(create-new-module(ModuleName?)) .
+  snd-msg(is-module-in-db(ModuleName)) .
+  (
+    rec-msg(exists-in-module-db(ModuleName)) .
+    snd-msg(module-exists)
+  +
+    rec-msg(not-exists-in-module-db(ModuleName)) .
+    snd-msg(module-created)
+  )
+endlet
