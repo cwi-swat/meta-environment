@@ -192,13 +192,12 @@ proc extend_bus {c} {
     global tb_glob tool_name
     $c delete tag rect
     drawBus $c
-    set i 1
-    while { $i <= $tb_glob(ntool) } {
-       $c delete tag tool$i
-       $c delete tag tool_txt$i
-       $c delete tag tool_line$i
-       mk_tool $c $tool_name($i) $i
-       incr i
+    foreach i [array names tool_name] {
+      $c delete tag tool$i
+      $c delete tag tool_txt$i
+      $c delete tag tool_line$i
+
+      mk_tool $c $tool_name($i) $i
     }
 
     # rescale the canvas
@@ -286,7 +285,7 @@ proc mkViewer {} {
 }
 
 # delay time between two succeeding communications
-set tracer_state(delay) 50
+set tracer_state(delay) 0
 
 # initial trace mode
 set tracer_state(mode) step_mode
