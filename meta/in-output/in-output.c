@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +47,8 @@
 #define EQS_BAF_EXT	".eqs.baf"
 
 /* Macro for parse table extension */
-#define TBL_EXT		".tbl"
+#define EQS_TBL_EXT		".eqs.tbl"
+#define TRM_TBL_EXT		".trm.tbl"
 
 /* This is a hack, due to JS */
 #include <sys/stat.h>
@@ -429,11 +431,15 @@ ATerm open_eqs_text_file(int cid, char *name)
   return t;
 }
 
-ATerm read_parse_table(int cid, char *name)
+ATerm read_parse_table(int cid, char *name, ATerm tableType)
 {
   char *full, fullname[PATH_LEN];
 
-  sprintf(fullname, "%s%s", name, TBL_EXT);
+  if(ATisEqual(tableType, ATmake("eqs"))) {
+    sprintf(fullname, "%s%s", name, EQS_TBL_EXT);
+  } else {
+    sprintf(fullname, "%s%s", name, TRM_TBL_EXT);
+  }
 
   if((full = find_newest_in_path(fullname)))
      return ATmake("snd-value(table-on-disk(<str>,timestamp(<int>)))",
