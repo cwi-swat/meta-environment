@@ -1,5 +1,7 @@
 # Extensions mapping
 # Ext	Lang
+sdf	Sdf2
+sdf2	Sdf2
 amb	Ambi
 casl	Casl
 cycle	Cyclops

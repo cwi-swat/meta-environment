@@ -12,6 +12,7 @@ cd `dirname $0`;
 mydir=`pwd`
 languages=$mydir/lang-types
 tables=$mydir/tables
+first=$mydir/first
 terms=$mydir/terms
 errterms=$mydir/erroneous
 
@@ -26,7 +27,7 @@ Notify () {
 
 for ext in $extensions
 do
-	files=`ls $terms/*.$ext 2>/dev/null`
+	files=`ls $first/*.$ext $terms/*.$ext 2>/dev/null`
 	errfiles=`ls $errterms/*.$ext 2>/dev/null`
 	lang=`egrep "^$ext" $languages | cut -f2`
 	ptbl=$tables/$lang.tbl
@@ -36,6 +37,7 @@ do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
+		if [ ! -f $out.org ] ; then continue; fi
 		if $SGLR -p $ptbl -i $file -o $out
 		then
 			diffs=1
