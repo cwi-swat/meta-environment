@@ -1,6 +1,8 @@
 # $Id$
 
 Tue Jan  6 13:08:00 CET 2004 <jong@cwi.nl>
+ * Bag[[Elem]] and BagIterator[[Elem]] are now context-free start-symbols
+   (fixes another warning)
  * export sort <Elem, Elem> which is needed for exported add-tuple production
  * retracted exporting of sort <Elem, Elem>: I didn't realize this was renamed
    to Tuple (and Tuple is now an Elem-list) and Tuple is already exported by
