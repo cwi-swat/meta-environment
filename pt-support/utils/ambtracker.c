@@ -30,7 +30,7 @@ static char myarguments[] = "ahi:o:V";
 void usage(void)
 {
     fprintf(stderr,
-        "Usage: %s -bh -i arg -o arg -tvVp . . .\n"
+        "Usage: %s -ah -i arg -o arg -V . . .\n"
         "Options:\n"
         "\t-a              output in ATerm format\n"
         "\t-h              display help information (usage)\n"
