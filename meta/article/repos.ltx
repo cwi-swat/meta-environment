@@ -24,7 +24,7 @@ offered by \centaur~\cite{BCDIKLP89}.
 There are two problems connected to VTP: it is
 hard to learn programming in VTP, furthermore VTP does not offer enough
 facilities to prevent illegal access to constructed trees. The latter
-drawback causes a number of the maintenance problems in the \metaenv.
+drawback causes a number of the maintenance problems in the old \metaenv.
 
 These ``VTP-problems'' led to the development of an alternative
 formalism to represent syntax trees called \asfix.  The \asfix\ formalism
@@ -61,8 +61,8 @@ optional annotations) for programs or specifications in any language.
 parse trees} of \asdf\ specifications.  Parse trees mean that all
 keywords, whitespace, comments, etc.\ are preserved in the tree
 representation.  A self descriptive representation is used, i.e., each
-application of a context-free syntax rule contains a copy of that rule
-(in the implementation these are all shared).
+application of a context-free syntax rule contains a copy of that rule.
+%%(in the implementation these are all shared).
 The \aterms\ contain a lot of redundant information.
 Because of an efficient term sharing mechanism,
 provided by the C implementation of the \aterms\ library,

@@ -2,12 +2,12 @@
 \label{garch}
 
 The architecture of the new \metaenv\ is depicted in
-Figure~\ref{picarch}.  In fact this figure does not depict the current
-state of the prototype or the future architecture of the system.
-There are a number of components enlisted which are not yet integrated
-in the prototype, see Table~\ref{components} for a more detailed list
-of integrated components.  It is not the future architecture because
-important components like unparsers and debuggers are missing.
+Figure~\ref{picarch}.  This figure is a snapshot of the current
+state of the prototype, see Table~\ref{components} for a more detailed list
+of integrated components and their implementation languages.
+The future architecture of the new \metaenv\ will contain more
+components, such as, parsers, unparsers, debuggers, a parser
+generator, unparser generator, and evaluator generator.
 
 \input{newarch}
 \begin{figure}[tb]
@@ -92,7 +92,7 @@ to the \TB. A \TB\ process receives this event using
 the {\tt rec-event} primitive and must acknowledge the event using 
 the {\tt snd-ack-event} primitive.
 
-Furhtermore, the execution and termination of the tools attached to the \TB\, 
+Furthermore, the execution and termination of the tools attached to the \TB\, 
 as well
 as their connection/disconnection can be controlled explicitly by appropriate
 primitives.
@@ -126,18 +126,21 @@ declare variables.
 \subsection{Implementation}
 
 The new \metaenv\ is based on the \TB. This means that the \TB\ is used as
-a communication mehanism for the various components available in the
-environment. A \TB\ script describes the communication between the
-components. This \TB\ script should allow a maximal freedom in order
-to facilitate fututure experiments, for instance the addition of new
+a communication mechanism for the various components available in the
+environment. 
+The components of the new \metaenv\ can not communicate directly
+with each other.
+The \TB\ script takes care of {\em all} communication between the
+components. This script should allow a maximal freedom in order
+to facilitate future experiments, for instance adding of new
 components.
 
-The information exchange between tools is done using the ATerm format,
+The information exchange between components is done using the ATerm format,
 see Section~\ref{treerepr}. The \TB\ already provides a debugging
-facility for \TB\ scripts. Currently we are working on the
+facility for \TB\ scripts. Currently, we are working on the
 implementation of a sophisticated debugging technique which allows the
-debugging of tools as wel. We plan to extend this technique to also
-support the debugging of specifications.
+debugging of components as well. We plan to extend this technique to 
+support the debugging of specifications as well.
 
 %%Debugging in the context of the new \metaenv\ has three dimensions:
 %%\begin{enumerate}

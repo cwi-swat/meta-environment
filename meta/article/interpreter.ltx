@@ -20,22 +20,22 @@ each term editor is extended with a {\tt Reduce}-button.  When pushing
 this button it is first checked whether the interpreter has the
 appropriate set of rewrite rules available. If not, the equations are
 retrieved from the tree repository.  This is done by retrieving the
-transitive closure of the import graph from the import manager and
+transitive closure of the import graph from the import repository and
 sending this set of modules to the tree repository which then returns
 the set of equations.  Finally, the \asfix\ representation of the term
 is sent to the interpreter.
 This is all coded in the \TB-script.
 
 When the interpreter receives a set of equations it performs some
-simple transformations on it, for instance, layout is removed,
+simple transformations on it, for instance, layout is removed and
 lexicals are transformed into lists of characters.  The
 interpreter stores the equations in a hash table to have fast access to them
 during rewriting.
 
-The term to be rewritten is also slightly modified.
-Layout is removed and the lexicals are transformed to lists of characters.
+The term to be rewritten is also slightly modified,
+layout is removed and the lexicals are transformed to lists of characters.
 After rewriting, the result term is again modified: layout is inserted
-and the lists of characters are translated into lexicals.  This term
+and the lists of characters are translated back into lexicals.  This term
 is sent to the \TB\ to be displayed in an editor.
 
 The interpreter does not throw away the equations after rewriting.  The
@@ -65,7 +65,7 @@ is organised as a table, the keys in this table are module names and
 the values are sets of equations corresponding to the transitive
 closure of the import graph of the corresponding module.  
 The C implementation of the shared term library takes care of
-unnecessary duplication of of the rewrite rules. In the C
+unnecessary duplication of the rewrite rules. In the C
 implementation of the interpreter the set of equations is stored in a
 hash-table and the hash key is calculated using the outermost function
 symbol of the left hand side of an equation and the outermost function
@@ -92,7 +92,7 @@ Recursion is used to implement the backtracking behaviour of list
 matching in \asf.  The instantiation of list variables is done by
 assigning an ``arbitrary'' sublist to a list variable.  If this does
 not lead to a successful matching of all variables in the equation or
-one of the conditions can not be satisfied, another sublist should be
+one of the conditions can not be satisfied, another sublist is
 tried.  This process is repeated until either a successful match is
 found, or all sublists are tried.
 

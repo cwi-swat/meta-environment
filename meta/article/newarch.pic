@@ -3,40 +3,28 @@ define ast X
 right
 [down
 R0:[right
-B1:box wid 0.2i ht 0.3i "\small UI"
+B1:box wid 0.6i ht 0.3i "\small User" "interface"
 move 0.1i
 B2:box wid 0.4i ht 0.3i "\small Text" "\small editor"
 move 0.1i
 B3:box wid 0.6i ht 0.3i "\small Structure" "\small editor"
-move 0.1i
-B4:box wid 0.6i ht 0.3i "\small $\mbox{Parser}_{L_1}$"
-B5:box invis wid 0.4i ht 0.3i "$\dots$"
-B6:box wid 0.6i ht 0.3i "\small $\mbox{Parser}_{L_n}$"
 ]
 move 0.3i
-B0:box wid 3.0i ht 0.4i "\small TOOLBUS"
+B0:box wid 2.2i ht 0.4i "\small TOOLBUS"
 move 0.3i
 R1:[right
-B1:box wid 0.6i ht 0.3i "\small Parser" "\small generator"
+B2:box wid 0.6i ht 0.3i "\small Import" "\small repository"
 move 0.1i
-B2:box wid 0.5i ht 0.3i "\small Import" "\small manager"
-move 0.1i
-B3:box wid 0.6i ht 0.3i "\small Evaluator"
+B3:box wid 0.7i ht 0.3i "\small Interpreter"
 move 0.1i
 B4:box wid 0.6i ht 0.3i "\small Tree" "\small repository"
-move 0.1i
-B5:box wid 0.6i ht 0.3i "\small Evaluator" "\small generator"
 ]
-line from B0+(-0.8i,0.2i) to R0.B1+(0i,-0.15i)
-line from B0+(-0.4i,0.2i) to R0.B2+(0i,-0.15i)
-line from B0+(0.0i,0.2i) to R0.B3+(0i,-0.15i)
-line from B0+(0.4i,0.2i) to R0.B4+(0i,-0.15i)
-line from B0+(0.8i,0.2i) to R0.B6+(0i,-0.15i)
-line from R1.B1+(0i,0.15i) to B0+(-0.8i,-0.2i)
-line from R1.B2+(0i,0.15i) to B0+(-0.4i,-0.2i)
+line from B0+(-0.6i,0.2i) to R0.B1+(0i,-0.15i)
+line from B0+(0.0i,0.2i) to R0.B2+(0i,-0.15i)
+line from B0+(0.6i,0.2i) to R0.B3+(0i,-0.15i)
+line from R1.B2+(0i,0.15i) to B0+(-0.75i,-0.2i)
 line from R1.B3+(0i,0.15i) to B0+(0.0i,-0.2i)
-line from R1.B4+(0i,0.15i) to B0+(0.4i,-0.2i)
-line from R1.B5+(0i,0.15i) to B0+(0.8i,-0.2i)
+line from R1.B4+(0i,0.15i) to B0+(0.75i,-0.2i)
 ]
 X
 ast
