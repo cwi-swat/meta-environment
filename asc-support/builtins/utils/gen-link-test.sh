@@ -64,6 +64,8 @@ done
 int main(void)
 {
 
+  ASC_initRunTime(10);
+
   if (fprintf(stderr, "This program does nothing\n") == 0) {
 `
 for b in \${BUILTIN_NAMES}; do
@@ -80,13 +82,4 @@ done
   return 1; 
 }
 
-/* interface to term rewriter stub (to prevent circular dependency) */
-PT_Tree rewrite(PT_Tree trm)
-{
-  ATwarning("Hey dummy! Don't call this dummy function!\n");
-  return trm;
-}
-
-int toolbus_id;
-ATerm acknowledgement;
 END_OF_FILE

@@ -2,6 +2,8 @@
 EXTRA_DIST = asc-support-config.src
 
 bin_SCRIPTS = asc-support-config
+noinst_SCRIPTS = gen-forward.sh gen-protos.sh gen-link-test.sh
+
 
 CLEANFILES = asc-support-config
 

@@ -85,7 +85,4 @@ AC_OUTPUT(
   lib/Makefile
   lib/tb/Makefile
   utils/Makefile
-  builtins/Makefile
-  builtins/utils/Makefile
-  builtins/lib/Makefile
 )

@@ -4,6 +4,7 @@ $Id$
 2003/10/09 (jurgenv@cwi.nl)
  * Added generation of prototypes for ASC builtin functions
  * Each builtin now has a declared arity in builtins/Makefile.am
+ * Merged asc-support-me and asf-builtins library
 
 2003/10/08 (jurgenv@cwi.nl)
  * Adapted package dependencies.

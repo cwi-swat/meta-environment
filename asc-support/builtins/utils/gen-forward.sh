@@ -17,7 +17,7 @@ cat  << END_OF_FILE
 #include <MEPT-utils.h>
 #include <PTMEPT.h>
 #include <aterm2.h>
-#include "asf-builtins.h"
+#include "asc-builtins.h"
 #include "Library.h"
 
 /* DO NOT EDIT: This file is generated */

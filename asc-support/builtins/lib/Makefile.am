@@ -25,11 +25,12 @@ LIBRARY_MODULES=basic/Booleans utilities/Measure
 
 EXTRA_DIST = Library.def
 
-lib_LIBRARIES=libasf-builtins.a
+noinst_LIBRARIES=libasf-builtins.a
 include_HEADERS=asf-builtins.h
 noinst_HEADERS=common.h Library.h Library_dict.h
 
 libasf_builtins_a_SOURCES=\
+	muasf2pt.c\
 	forward.c\
 	Library.c\
 	Library_dict.c\
@@ -42,7 +43,6 @@ libasf_builtins_a_SOURCES=\
 check_PROGRAMS=link-test
 link_test_SOURCES=link-test.c
 link_test_LDADD=\
-	-L. -lasf-builtins\
 	-L${top_builddir}/lib -lasc-support-me\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
