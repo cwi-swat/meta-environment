@@ -21,7 +21,7 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES         = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
 
 bin_PROGRAMS = removevarsyntax
 man_MANS     = removevarsyntax.1
@@ -34,9 +34,9 @@ EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h 
 removevarsyntax_SOURCES = removevarsyntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
                        -L$(top_builddir)/asf-syntax/removevars/c-source -lRemove-Var-Syntax \
-                       -L$(ASCLIB) -lasc-support \
-                       -L$(ASFIXLIB) -lAsFix \
-                       -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                       -L$(ASC_SUPPORT)/lib -lasc-support \
+                       -L$(ASFIX)/lib -lAsFix \
+                       -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 
 CLEANFILES = removevarsyntax.tifs removevarsyntax.1

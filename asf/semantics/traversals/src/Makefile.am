@@ -21,7 +21,7 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES     = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
 
 bin_PROGRAMS = traversals
 man_MANS     = traversals.1
@@ -33,9 +33,9 @@ EXTRA_DIST   = traversals.idef traversals.tif.c traversals.tif.h \
 traversals_SOURCES = traversals.c
 traversals_LDADD   = traversals.tif.o \
                        -L$(top_builddir)/asf-syntax/traversals/c-source -lTraversals \
-                       -L$(ASCLIB) -lasc-support \
-                       -L$(ASFIXLIB) -lAsFix \
-                       -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                       -L$(ASC_SUPPORT)/lib -lasc-support \
+                       -L$(ASFIX)/lib -lAsFix \
+                       -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 
 CLEANFILES = traversals.tifs traversals.1

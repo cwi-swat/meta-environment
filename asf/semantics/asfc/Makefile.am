@@ -34,10 +34,10 @@ CLEANFILES       = compiler.tif.h compiler.tif.c compiler.tifs
 compiler_SOURCES = compiler.c
 compiler_LDADD   = compiler.tif.o \
                    -L./c-source  -lAsFix2C \
-                   -L$(ASCLIB) -lasc-support \
-                   -L$(ASFIXLIB) -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                   -L$(ASC_SUPPORT)/lib -lasc-support \
+                   -L$(ASFIX)/lib -lAsFix \
+                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES         = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
 
 compiler.o : compiler.tif.h c-source/libAsFix2C.a

@@ -31,9 +31,9 @@ CLEANFILES      = asfix2c.1
 
 asfix2c_SOURCES = asfix2c.c asfix-db.c asfix-db.h asfix-io.c asfix-reshuffle.c
 asfix2c_LDADD   = -L$(top_builddir)/compiler/c-source -lAsFix2C \
-                  -L$(ASCLIB) -lasc-support \
-                  -L$(ASFIXLIB) -lAsFix \
-                  -L$(ATERMLIB) -lATerm
+                  -L$(ASC)/lib -lasc-support \
+                  -L$(ASFIX)/lib -lAsFix \
+                  -L$(ATERM)/lib -lATerm
 
-INCLUDES        = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) \
+INCLUDES        = -I$(ASC)/include -I$(ASFIX)/include -I$(ATERM)/include \
                   -DBINDIR=\"$(bindir)\"
