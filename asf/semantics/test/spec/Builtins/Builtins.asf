@@ -12,7 +12,7 @@ equations
 
 [] appl(prod([],cf(opt(layout)),no-attrs),ATermList) =
     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32]) 
-     when ATermList = []
+     when ATermList == []
 
 [] AFun ( ATerm+ ) Ann = AFun ( ATerm+ )
   
@@ -22,7 +22,7 @@ equations
 
 [] appl(prod([],cf(opt(layout)),no-attrs),Args) =
     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
-    when Args = []
+    when Args == []
 
 [] Tree Ann = Tree
 

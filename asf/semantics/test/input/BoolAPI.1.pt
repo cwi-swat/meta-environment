@@ -1,1 +1,0 @@
-parsetree(appl(prod([cf(opt(layout)),cf(sort("PICO-BOOL")),cf(opt(layout))],sort("<START>"),no-attrs),[appl(prod([],cf(opt(layout)),no-attrs),[]),appl(prod([lit("complex-term")],cf(sort("PICO-BOOL")),no-attrs),[lit("complex-term")]),appl(prod([],cf(opt(layout)),no-attrs),[])]),0)
