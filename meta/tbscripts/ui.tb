@@ -8,6 +8,6 @@
 
 #else
 
-#include "graph-browser.tb"
+#include "graph-browser.idef"
 
 #endif
