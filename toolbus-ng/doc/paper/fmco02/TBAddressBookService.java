@@ -12,7 +12,7 @@ public class TBAddressBookService implements AddressBookTif
 
   private Map addressMap;
 
-  public TBAddressBookService() {
+  public AddressBookService() {
     addressMap = new HashMap();
   }
 
@@ -47,7 +47,7 @@ public class TBAddressBookService implements AddressBookTif
   public void recTerminate(ATerm t0) {}
 
   public static final void main(String[] args) throws Exception {
-    IAddressBookService service = new TBAddressBookService();
+    AddressBookService service = new AddressBookService();
     AddressBookBridge bridge = new AddressBookBridge(factory, service);
     bridge.init(args);
     bridge.connect();
