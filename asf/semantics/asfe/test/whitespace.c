@@ -120,22 +120,5 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
   preparedeqs =  RWprepareEqs((ATermList) eqs);
   enter_equations(name, preparedeqs);
 
-  /* prepare term */
-  term = ATremoveAllAnnotations(term);
-  oldterm = term;
-  term = asfix_get_term(term);
-  term = RWprepareTerm(term);
-
-  /* rewrite */
-  select_equations(name);
-  RWclearError();
-	
-  term = rewrite(term,(ATerm) ATempty, 0);
-  term = RWrestoreTerm(term);
-
-  if (RWgetError()) {
-    ATerror("error during rewriting: %l", RWgetError());
-  }
-
-  return term;
+	return evaluator(name, term);
 }
