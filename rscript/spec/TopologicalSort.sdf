@@ -1,0 +1,39 @@
+module TopologicalSort
+
+imports Relations
+        Rstore
+	containers/List[Elem]
+	containers/Set[Elem]
+
+exports
+
+context-free syntax
+	topological-sort(Bag[[Elem]]) -> List[[Elem]]
+
+hiddens
+
+imports basic/Whitespace
+
+context-free start-symbols 
+	List[[Elem]] Bag[[Elem]]
+
+context-free syntax
+	sort(Bag[[Elem]]) -> List[[Elem]]
+	contains-cycle(Bag[[Elem]]) -> Boolean
+	bag-to-list(Bag[[Elem]]) -> List[[Elem]]
+
+sorts Set[[Elem]]
+
+variables
+	"$relation"[0-9\']* -> Bag[[Elem]]
+	"$bag"[0-9\']* -> Bag[[Elem]]
+	"$list"[0-9\']* -> List[[Elem]]
+	"$elem"[0-9\']* -> Elem
+	"$elem*"[0-9\']* -> {Elem ","}*
+	"$set"[0-9\']* -> Set[[Elem]]
+	"$rootset"[0-9\']* -> Bag[[Elem]]
+	"$root" -> Elem
+	"$bottom" -> Bag[[Elem]]
+	"$bottomList" -> List[[Elem]]
+		
+
