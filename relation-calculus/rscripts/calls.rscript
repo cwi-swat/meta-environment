@@ -1,3 +1,5 @@
+check-rscript(
+
 	type proc = str
 
 	rel[proc, proc] Calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
@@ -49,3 +51,4 @@
 		     { <C1, C2> | <proc P1, proc P2> : aCalls, <comp C1, comp C2> : aPartOf[P1] x aPartOf[P2]}
 
 	rel[comp,comp] ComponentCalls = lift(Calls2, PartOf)
+)
