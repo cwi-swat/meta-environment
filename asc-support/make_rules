@@ -1,0 +1,29 @@
+#
+# $Id$
+#
+# Common make rules for compiling the ASF+SDF compiler support library.
+#
+
+# Common defines for all libraries
+DEFS += -DVERSION="\"$(VERSION)\"" -DCURDATE="\"`date`\""
+DEFS += $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS)
+
+## Library specific compiler flags
+CC_COMPILE     = $(CC_CC)   $(CFLAGS_CC)   $(DEFS_CC) $(DEFS)
+GCC_COMPILE    = $(CC_GCC)  $(CFLAGS_GCC)  $(DEFS_GCC) $(DEFS)
+DBG_COMPILE    = $(CC_DBG)  $(CFLAGS_DBG)  $(DEFS_DBG) $(DEFS)
+PROF_COMPILE   = $(CC_PROF) $(CFLAGS_PROF) $(DEFS_PROF) $(DEFS)
+
+## Rules for compiling C files to include in static libraries
+%-cc.o   : %.c $(ALLINCLUDES)
+	$(CC_COMPILE) $(INCLUDE) -c $< -o $@
+
+%-gcc.o  : %.c $(ALLINCLUDES)
+	$(GCC_COMPILE) $(INCLUDES) -c $< -o $@
+
+%-dbg.o  : %.c $(ALLINCLUDES)
+	$(DBG_COMPILE) $(INCLUDES) -c $< -o $@
+
+%-prof.o : %.c $(ALLINCLUDES)
+	$(PROF_COMPILE) $(INCLUDES) -c $< -o $@
+
