@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jul 30 11:52:46 CEST 2003 <jong@cwi.nl>
+ * toolbuslib/aterm/Makefile.am
+   -DTERM_SIZE_WARNING_THRESHOLD=512 removed
+
 2003/07/02 (jurgenv@cwi.nl)
  * Release 0.5
 
