@@ -278,3 +278,11 @@ char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs)
 
 /*}}}  */
 
+/*{{{  int PT_getTreeLength(PT_Tree tree) */
+
+int PT_getTreeLength(PT_Tree tree)
+{
+  return lengthOfTree(tree, ATfalse);
+}
+
+/*}}}  */

@@ -3,7 +3,7 @@
 EXTRA_DIST		= unparsePT.idef
 
 bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
-                          addPosInfo ambtracker tree2dot
+                          addPosInfo ambtracker tree2dot apply-function
 
 INCLUDES		= -I${top_srcdir}/libmept \
                         -I${top_srcdir}/libasfix2 \
@@ -16,6 +16,10 @@ data_DATA		= unparsePT.idef
 CLEANFILES		= unparsePT.tifs unparsePT.tif.[ch]
 
 noinst_HEADERS		= unparsePT.tif.h
+
+apply_function_SOURCES  = apply-function.c
+apply_function_LDADD    = -L../libmept -lmept \
+                        -L${ATERM}/lib -lATerm
 
 addPosInfo_SOURCES      = addPosInfo.c
 addPosInfo_LDADD        = -L../libmept -lmept \

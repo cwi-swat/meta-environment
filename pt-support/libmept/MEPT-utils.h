@@ -9,6 +9,12 @@
 #include <deprecated.h>
 #include "MEPT.h" 
 
+PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args);
+PT_ParseTree PT_applyFunctionToArgsParseTree(char *function, char *sort, 
+					     PT_Args args);
+PT_Tree PT_applyFunctionToTree(char *function, char* module, char* sort, 
+			       int nArgs, ...);
+
 ATbool PT_prodHasLitAsRhs(PT_Production arg);
 ATbool PT_isLexicalProd(PT_Production arg);
 ATbool PT_prodHasLexLayoutAsRhs(PT_Production arg);
@@ -41,6 +47,7 @@ char *PT_yieldAny(ATerm t);
 char *PT_yieldParseTree(PT_ParseTree tree);
 char *PT_yieldTree(PT_Tree tree);
 char *PT_yieldArgs(PT_Args tree);
+int   PT_getTreeLength(PT_Tree tree);
 
 char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs);
 char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs);
