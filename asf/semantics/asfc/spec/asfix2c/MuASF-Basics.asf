@@ -204,11 +204,15 @@ equations
             =============================
             make-list-args(Term1,Term+) = cons(Term1,Term2)
 
-  [pi-1'1] prefix-id(funid(""" Char*1 """), funid(""" Char*2 """),natcon(Char*3)) =
-              funid(""" Char*1 Char*3 "_" "_" Char*2 """)
+  [pi-1'1] funid(Char*1 Char*3) = funid(Char*4)
+           ====================================
+           prefix-id(funid(""" Char*1 """), funid(""" Char*2 """),natcon(Char*3)) =
+              funid(""" Char*4 "_" "_" Char*2 """)
 
-  [default-pi-1'2] prefix-id(funid(""" Char*1 """), funid(Char*2),natcon(Char*3)) =
-                     funid(Char*1 Char*3 "_" "_" Char*2)
+  [default-pi-1'2] funid(Char*1 Char*3) = funid(Char*4)
+                    ====================================
+                    prefix-id(funid(""" Char*1 """), funid(Char*2),natcon(Char*3)) =
+                     funid(Char*4 "_" "_" Char*2)
 
   [iif-1'1] is-internal-funid(funid(""" "n""e""w""_""_" Char* """)) =
               is-internal-funid-new(funid(Char*))

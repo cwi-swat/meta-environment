@@ -44,3 +44,8 @@ hiddens
     "Char*"[0-9]*      -> CHAR*
     "Char+"[0-9]*      -> CHAR+
     "Char"[0-9]*       -> CHAR
+
+hiddens
+  priorities
+    <<ATerm -CF> -VAR> -> <ATerm -CF> >
+    "Symbol" -> <AFun -CF>

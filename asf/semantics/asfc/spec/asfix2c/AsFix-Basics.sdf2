@@ -49,3 +49,8 @@ exports
     "Attribs"[0-9\']* -> ATermList
     "Aname"[0-9\']*   -> ATerm
     "Amodule"[0-9\']* -> ATerm
+
+hiddens
+  priorities
+    <<ATerm -CF> -VAR> -> <ATerm -CF> >
+    "Symbol" -> <AFun -CF>
