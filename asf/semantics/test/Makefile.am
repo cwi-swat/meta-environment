@@ -24,8 +24,8 @@ TEST_MODULES=Bracket \
 
 TEST_MODULES_ASFE_ONLY=BoolAPI Tree
 
-ASFC=${top_builddir}/asfc/src/asfc
-ASFE=${top_builddir}/asfe/src/asfe
+ASFC=${top_builddir}/semantics/asfc/src/asfc
+ASFE=${top_builddir}/semantics/asfe/src/asfe
 ATRMANNOS=${ATERM}/bin/atrmannos
 ATDIFF=${ATERM}/bin/atdiff
 EQS=${srcdir}/eqs
