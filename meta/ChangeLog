@@ -6,9 +6,11 @@ Fri Jan 28 13:22:29 CET 2005 <kooiker@cwi.nl>
  * action-interpreter:
    - Use - as word separator according to naming convention
  * action-interpreter/action-interprecter.c:
-   - Fixed incorrect folding
+   - Fix incorrect folding
  * meta-studio/metastudio/components/errorlist/ErrorList.java:
    - Fix exception when parent is null in scrollToLast
+ * editors/text/gvim/connector.c:
+   - Fix create selfdestructing syntax files with unique name for gvim on /tmp
    
 Wed Jan 26 13:19:42 CET 2005 <kooiker@cwi.nl>
  * editors/text/swing/metaedit/EditorModel.java:

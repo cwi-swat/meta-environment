@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -307,8 +308,23 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 
 static void highlightSlices(int write_to_editor_fd, TE_Action action)
 {
-  FILE *f = fopen("syntax.vim", "w");
+  char filename[] = "/tmp/syntax-vim-XXXXXX";
+  char source[BUFSIZ];
+  int fd;
+  FILE *f;
   ATermList slices = (ATermList) TE_getActionSlices(action);
+
+  fd = mkstemp(filename);
+  if (fd < 0) {
+    perror("mkstemp");
+    exit(errno);
+  }
+
+  f = fdopen(fd, "w");
+  if (f == NULL) {
+    perror("fdopen");
+    exit(errno);
+  }
 
   /* Reset syntax rules */
   fprintf(f, ":syntax off\n");
@@ -332,13 +348,18 @@ static void highlightSlices(int write_to_editor_fd, TE_Action action)
 	      LOC_getAreaBeginColumn(area) + 1,
 	      LOC_getAreaEndLine(area),
 	      LOC_getAreaEndColumn(area) + 1
-	      );
+	     );
     }
 
     slices = ATgetNext(slices);
   }
+
+  fprintf(f, "\"The next line will delete this file upon sourcing\n");
+  fprintf(f, ":silent !rm %s\n",filename);
   fclose(f);
-  sendToVim(":source syntax.vim");
+
+  sprintf(source, ":source %s", filename);
+  sendToVim(source);
 }
 
 /*}}}  */
