@@ -11,10 +11,10 @@ INCLUDES         = -I$(ASC_SUPPORT)/include \
 
 bin_PROGRAMS = addapisyntax
 
-pkgdata_DATA    = addapisyntax.idef
-EXTRA_DIST   = addapisyntax.idef addapisyntax.tif.c 
+pkgdata_DATA = addapisyntax.idef
+EXTRA_DIST   = addapisyntax.idef
 
-include_HEADERS = addapisyntax.tif.h
+noinst_HEADERS = addapisyntax.tif.h
 addapisyntax_SOURCES = addapisyntax.tif.c addapisyntax.c Add-API-Syntax.c
 addapisyntax_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
@@ -23,6 +23,3 @@ addapisyntax_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
-
-
-CLEANFILES = addapisyntax.tifs 

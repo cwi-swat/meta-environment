@@ -1,7 +1,5 @@
 Makefile.in
 Makefile
 .deps
-addapisyntax.tif.h
-addapisyntax.tif.c
 addapisyntax
-addapisyntax.1
+*.tifs

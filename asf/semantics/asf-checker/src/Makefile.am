@@ -13,17 +13,12 @@ pkgdata_DATA    = asfchecker.idef
 
 EXTRA_DIST   = asfchecker.idef asfchecker.tif.c asfchecker.tif.h
 
-noinst_HEADERS 	= equationChecker.h
+noinst_HEADERS 	= equationChecker.h asfchecker.tif.h
 
-asfchecker_SOURCES = asfchecker.c equationChecker.c
-asfchecker_LDADD   = asfchecker.tif.o \
-                       -L$(ASF_SUPPORT)/lib -lASFME \
-                       -L$(PT_SUPPORT)/lib -lmept \
-                       -L$(TOOLBUSLIB)/lib -lATB \
-                       -L$(ATERM)/lib -lATerm \
-			$(SOCKLIBS)
+asfchecker_SOURCES = asfchecker.c equationChecker.c asfchecker.tif.c
+asfchecker_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME \
+                     -L$(PT_SUPPORT)/lib -lmept \
+                     -L$(TOOLBUSLIB)/lib -lATB \
+                     -L$(ATERM)/lib -lATerm \
+		     $(SOCKLIBS)
 
-
-CLEANFILES = asfchecker.tifs
-
-asfchecker.o : asfchecker.tif.h

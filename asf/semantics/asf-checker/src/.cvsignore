@@ -1,7 +1,6 @@
 Makefile.in
 Makefile
 .deps
-asfchecker.tif.h
-asfchecker.tif.c
 asfchecker
 .libs
+*.tifs
