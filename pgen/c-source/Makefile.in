@@ -2,7 +2,7 @@
 # Makefile for target "ParseTable-Generator" generated automagically on Fri Jun 11 12:21:08 MET DST 1999
 #
 
-LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
+LOCALLIBS=-lasc-support -lATB -lAsFix -lATerm
 
 srcdir          = @srcdir@
 top_srcdir      = @top_srcdir@
@@ -58,8 +58,8 @@ ATERMBIN	= @ATERMBIN@
 ATERMLIB	= @ATERMLIB@
 ATERMINC	= @ATERMINC@
 
-XINCLUDES       = -I$(ATERMINC) -I$(includedir) -I$(top_srcdir)/compiler/support
-XLIBS           = -L$(top_srcdir)/compiler/support -L$(ATERMLIB) $(SOCKLIBS)
+XINCLUDES       = -I$(ATERMINC) -I$(includedir) -I$(top_srcdir)/asc-support
+XLIBS           = -L$(top_srcdir)/asc-support -L$(ATERMLIB) $(SOCKLIBS)
 
 SPEC_SRCS=\
           AUX-ATerm-Lists9.c\
