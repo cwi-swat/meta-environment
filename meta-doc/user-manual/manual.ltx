@@ -4437,38 +4437,42 @@ The name of this directory can be communicated via
 \item The dialog box presented in Figure \ref{FIG:compiler-dir}.
 \end{itemize}
 
-\item The specification should be complete, no missing modules and
-the equations sections should be error free.
+\item The specification should be complete, i.e. no missing modules are
+allowed, and the equations sections should be error free.
 
-\item Not all \sdf\ syntax features are supported by the compiler,
-in the result symbol in the lexical syntax rules are restricted to
-plain basic sorts. In the context-free syntax rules only literals,
-basic sorts, and lists (without the minimal repetition) are allowed.
-Aliases are also not supported by the compiler.
+\item Not all \sdf\ syntax features are yet supported by the compiler.
+This poses several extra restrictions:
+
+\begin{itemize}
+\item the result symbols in the lexical syntax rules are restricted to
+      plain basic sorts.
+\item In the context-free syntax rules only literals, basic sorts, and
+      lists (without the minimal repetition) are allowed. Furthermore
+      lists are not allowed as result symbol.
+\item Aliases are not supported by the compiler.
 \end{itemize}
 
-If these requirements are fulfilled the C code can be generated.
-This process C code generation is described in \cite{BKO99} in
-detail.
+\end{itemize}
+
+If these requirements are satisfied, C code can be generated.
+This process of C code generation is described in detail in \cite{BKO99}.
 We shall give a brief description of the main steps performed by the
 \asfsdf2C compiler.
 
 In \asfsdf\ there is {\em no} restriction in which module an equation
 is defined, except that all applied syntax rules should be defined.
-This freedom asks for a `reshuffling' of the equations given the
-set of defined syntax rules. This reshuffling is needed because for
-each syntax rule a separate C function is generated. This C function
-must contain the C code for {\em all} equations with the C function
-as outermost function symbol in the left-hand side.
-By having all equations with the same outermost function
-symbol in the left-hand side together an optimal matching automaton
-can be generated.
-Equations with the same outermost function symbol are moved to the 
-corresponding syntax rule.
-This syntax rule together with the equations is `stored' in an
-intermediate module `$\mbox{\tt AUX-M}_{ij}$' where $\mbox{\tt M}_i$
-is the module which contained the definition of the syntax rule
-and the corresponding equations, see Figure~\ref{CODE:reshuffled-module}.
+This freedom asks for a `reshuffling' of the equations given the set of
+defined syntax rules. This reshuffling is needed because for each syntax
+rule a separate C function is generated. This C function must contain
+the C code for {\em all} equations with the C function as outermost
+function symbol in the left-hand side.  By having all equations with the
+same outermost function symbol in the left-hand side together an optimal
+matching automaton can be generated.  Equations with the same outermost
+function symbol are moved to the corresponding syntax rule.  This syntax
+rule together with the equations is `stored' in an intermediate module
+`$\mbox{\tt AUX-M}_{ij}$' where $\mbox{\tt M}_i$ is the module which
+contained the definition of the syntax rule and the corresponding
+equations, see Figure~\ref{CODE:reshuffled-module}.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -4509,15 +4513,6 @@ FUNC_EXIT ( make_nf2 ( lf_AUX_Booleans2_1sym , arg0 , arg1 ) ) ;
 \caption{Generated C code for the reshuffled module of
 Figure~\ref{CODE:reshuffled-module}}\label{CODE:generated-c-code}
 \end{figure}
-
-The \asfsdf2C compiler has some notion of incremental compilation.
-The intermediate $\mbox{\tt AUX-M}_{ij}$ modules are stored
-in the {\tt COMPILER\_OUTPUT} directory together with the generated
-C files. If when recompiling the specification after modifications
-the compiler first checks whether for each
-new generated intermediate $\mbox{\tt AUX-M}_{ij}$ module
-differs from the stored one. If so, new C code is generated, but
-if they are equal {\em no} new C code will be generated.
 
 \newpage
 \section{Technology and Architecture of the \ASmetaenv}\label{SEC:TechnologyandArchitecture}
@@ -4577,10 +4572,10 @@ languages.
 
 \paragraph{Term rewriting}
 
-\asfsdf\ specifications are executed as (conditional) rewrite rules. Both interpretation
-and compilation (using the ASF2C compiler~\cite{BKO99}) of these
-rewrite rules are supported. The compiler generates very efficient C
-code that implements pattern matching and term traversal. The generated
+\asfsdf\ specifications are executed as (conditional) rewrite rules. Both
+interpretation and compilation (using the ASF2C compiler~\cite{BKO99}) of
+these rewrite rules are supported. The compiler generates very efficient
+C code that implements pattern matching and term traversal. The generated
 code uses ATerms as its main data representation, and ensures a minimal
 use of memory during normalization of terms.
 
@@ -4654,14 +4649,13 @@ the same directory as {\tt M.sdf}.
 
 \end{itemize}
 
-\item From the command line using the command {\tt sdf2table}.  You
-should be aware that {\tt sdf2table} needs as input the
-\emph{complete} grammar of {\tt M}. This means in particular that all
-imports of {\tt M} should be expanded before {\tt sdf2table} can be
-used. Command line tools are available to do this, but we will not
-describe them here.
+\item From the command line using the command {\tt sdf2table}.  You should
+be aware that {\tt sdf2table} needs as input the \emph{complete} grammar
+of {\tt M}. This means in particular that all imports of {\tt M} should
+be expanded before {\tt sdf2table} can be used. Command line tools are
+available to do this, but we will not describe them here.
 
-For further information see the manual page for{\tt  sdf2table}.
+For further information see the manual page for {\tt sdf2table}.
 
 \end{itemize}
 
@@ -4733,7 +4727,7 @@ converted to a textual representation.
 \label{SEC:reducingofterms}
 
 In Section~\ref{compiling-specs} we explained how a given module {\tt M}
-can be compiled into C code. Here we describe howto compile and
+can be compiled into C code. Here we describe how to compile and
 use this generated C code. The steps are as follows:
 
 \begin{itemize}
@@ -4888,7 +4882,7 @@ The \ASmetaenv\ is a system that is continuously evolving.  In this
 section, we give a brief sketch of the developments that we expect in
 the near future. Don't hesitate to give us feedback on these plans!
 
-\subsection{Near Future (within 6 month)}
+\subsection{Near Future (within 6 months)}
 
 \begin{itemize}
 
@@ -4911,7 +4905,7 @@ the near future. Don't hesitate to give us feedback on these plans!
 
 \end{itemize}
 
-\subsection{Medium Term (within 1.5 year)}
+\subsection{Medium Term (within 1.5 years)}
 
 \begin{itemize}
 
@@ -4933,7 +4927,7 @@ the near future. Don't hesitate to give us feedback on these plans!
 
 \end{itemize}
 
-\subsection{Long Term (more than 1.5 year)}
+\subsection{Long Term (more than 1.5 years)}
 
 The long term ambition is to build a very flexible tool kit that can
 be used to build many kinds of interactive systems for program
