@@ -20,3 +20,6 @@ exports
     [\ \t\n]         -> LAYOUT
     "%%" ~[\n]* "\n" -> LAYOUT
     "%" ~[\%\n]+ "%" -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
