@@ -46,7 +46,6 @@ lexical syntax
   "copy-bindings"	-> Action
   "scope"		-> InfixAction
 
-
   "create"		-> Action
   "inspect"		-> Action
   "update"		-> Action
@@ -54,6 +53,13 @@ lexical syntax
   "enact"		-> Action
   "close"		-> Action
   "recursively"		-> PrefixAction
+
+  "activate"		-> Action
+  "deactivate"		-> Action
+  "give-current-agent"	-> Action
+  "send"		-> Action
+  "receive"		-> Action
+  "give-current-time"	-> Action
 
   "disj-union"		-> PrefixDataOp {prefer}
   "binding"		-> PrefixDataOp {prefer}
