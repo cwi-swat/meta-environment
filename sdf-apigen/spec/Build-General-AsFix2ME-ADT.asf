@@ -4,33 +4,33 @@ equations
   sort-to-lit(sort($Char*)) = at-literal(""" $Char* """)
 
 [equ-build-asfix-attrs-empty]
-  $AFModName = modname-to-lit($ModName)
+  $AFModName := modname-to-lit($ModName)
   ===>
   build-asfix-attrs($ModName, , $ConsOption) = 
     attrs([id($AFModName)])
 
 [equ-build-asfix-attrs-empty]
-  $AFModName = modname-to-lit($ModName)
+  $AFModName := modname-to-lit($ModName)
   ===>
   build-asfix-attrs($ModName, {}, $ConsOption) = 
     attrs([id($AFModName)])
 
 [equ-build-asfix-attrs-not-empty-no-attrs]
-  $AFModName = modname-to-lit($ModName),
-  build-asfix-attr-list($Attr+, $ConsOption) = 
+  $AFModName := modname-to-lit($ModName),
+  build-asfix-attr-list($Attr+, $ConsOption) == 
   ===>
   build-asfix-attrs($ModName, {$Attr+}, $ConsOption) = 
     attrs([id($AFModName)])
 
 [equ-build-asfix-attrs-not-empty]
-  $AFModName = modname-to-lit($ModName),
-  build-asfix-attr-list($Attr+, $ConsOption) = $AFAttr+
+  $AFModName := modname-to-lit($ModName),
+  $AFAttr+ := build-asfix-attr-list($Attr+, $ConsOption)
   ===>
   build-asfix-attrs($ModName, {$Attr+}, $ConsOption) = 
     attrs([$AFAttr+,id($AFModName)])
 
 [equ-build-asfix-attrs-not-empty]
-  build-asfix-attr-list($Attr+, $ConsOption) = $AFAttr+
+  $AFAttr+ := build-asfix-attr-list($Attr+, $ConsOption)
   ===>
   build-asfix-attrs({$Attr+}, $ConsOption) = 
     attrs([$AFAttr+])
@@ -46,15 +46,15 @@ equations
     build-asfix-attr($Attr, $ConsOption)
 
 [equ-build-asfix-attr-list-divide]
-  build-asfix-attr($Attr, $ConsOption) = $AFAttr+1,
-  build-asfix-attr-list($Attr+, $ConsOption) = $AFAttr+2
+  $AFAttr+1 := build-asfix-attr($Attr, $ConsOption),
+  $AFAttr+2 := build-asfix-attr-list($Attr+, $ConsOption)
   ===>
   build-asfix-attr-list($Attr, $Attr+, $ConsOption) =
      $AFAttr+1,$AFAttr+2
 
 [default-build-asfix-attr-list-divide]
-  build-asfix-attr($Attr, $ConsOption) = $AFAttr*1,
-  build-asfix-attr-list($Attr+, $ConsOption) = $AFAttr*2
+  $AFAttr*1 := build-asfix-attr($Attr, $ConsOption),
+  $AFAttr*2 := build-asfix-attr-list($Attr+, $ConsOption)
   ===>
   build-asfix-attr-list($Attr, $Attr+, $ConsOption) = $AFAttr*1,$AFAttr*2
 

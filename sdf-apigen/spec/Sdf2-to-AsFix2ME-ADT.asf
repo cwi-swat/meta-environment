@@ -12,22 +12,20 @@ equations
   sdf-to-asfix2me-adt(definition ,$ConsOption) = [ ]
 
 [equ-sdf-to-adt-defintion-divide]
-  sdf-module-to-asfix2me-adt($Module, $ConsOption) = $ADT1,
-  merge-adts([], $ADT1) = $ADT2,
-  sdf-to-asfix2me-adt(definition $Module*, $ConsOption) = $ADT3,
-  merge-adts($ADT2, $ADT3) = $ADT4,
-  start-sorts-to-asfix2me-adt($Module) = $ADT5,
-  merge-adts($ADT4, $ADT5) = $ADT6,
-  merge-adts($ADT6, layout-adt) = $ADT7
+  $ADT1 := sdf-module-to-asfix2me-adt($Module, $ConsOption),
+  $ADT2 := merge-adts([], $ADT1),
+  $ADT3 := sdf-to-asfix2me-adt(definition $Module*, $ConsOption),
+  $ADT4 := merge-adts($ADT2, $ADT3),
+  $ADT5 := start-sorts-to-asfix2me-adt($Module),
+  $ADT6 := merge-adts($ADT4, $ADT5),
+  $ADT7 := merge-adts($ADT6, [ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
+     constructor(OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),
+                          <chars(CHARLIST)>))
+   ])
   ===>
   sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
 
-[make-layout-adt]
-  layout-adt = 
-   [ [OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])],
-     [OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),
-                          <chars(CHARLIST)>)]
-   ]
+
 
 
 [equ-sdf-to-adt-module]
@@ -38,9 +36,9 @@ equations
   sdf-module-to-asfix2me-adt(module $ModName $ImpSection*, $ConsOption) = [ ]
 
 [equ-sdf-module-to-adt-divide]
-  section-to-adt($ModName, $Section, $ConsOption) = $Entries1,
-  sdf-module-to-asfix2me-adt(module $ModName $ImpSection* $Section*, 
-                             $ConsOption) = [ $Entries2 ]
+  $Entries1 := section-to-adt($ModName, $Section, $ConsOption),
+  [ $Entries2 ] := sdf-module-to-asfix2me-adt(module $ModName $ImpSection* $Section*, 
+                             $ConsOption)
   ===>
   sdf-module-to-asfix2me-adt(module $ModName $ImpSection* $Section $Section*, 
                              $ConsOption) = 
@@ -58,8 +56,8 @@ equations
   grammar-to-adt($ModName, $Grammar, $ConsOption) =
 
 [equ-grammar-to-adt-divide]
-  grammar-to-adt($ModName, $Grammar1, $ConsOption) = $Entries1,
-  grammar-to-adt($ModName, $Grammar2, $ConsOption) = $Entries2
+  $Entries1 := grammar-to-adt($ModName, $Grammar1, $ConsOption),
+  $Entries2 := grammar-to-adt($ModName, $Grammar2, $ConsOption)
   ===>
   grammar-to-adt($ModName, $Grammar1 $Grammar2, $ConsOption) =
     $Entries1, $Entries2
@@ -76,34 +74,34 @@ equations
   productions-to-adt($ModName,  , $ConsOption) =
 
 [equ-productions-to-adt-divide]
-  production-to-adt($ModName, $Production, $ConsOption) = $Entries1,
-  productions-to-adt($ModName, $Production*, $ConsOption) = $Entries2
+  $Entries1 := production-to-adt($ModName, $Production, $ConsOption),
+  $Entries2 := productions-to-adt($ModName, $Production*, $ConsOption)
   ===>
   productions-to-adt($ModName, $Production $Production*, $ConsOption) =
     $Entries1, $Entries2
 
 [equ-production-to-adt-cons]
-  $Attributes = { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 },
-  $AltId   = afun($Char*),
-  $TypeId  = sort-to-afun($Sort),
-  $AFProd  = 
+  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId   := afun($Char*),
+  $TypeId  := sort-to-afun($Sort),
+  $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  = build-asfix-appl-args($Symbol*),
-  $Entry   = [ $TypeId, $AltId, appl($AFProd,[$AFArgs]) ],
-  $Entries = build-list-entries($Symbol*)
+  $AFArgs  := build-asfix-appl-args($Symbol*),
+  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
+  $Entries := build-list-entries($Symbol*)
   ===>
   production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
     $Entry, $Entries
 
 [equ-production-to-adt-bracket]
-  $Attributes = { bracket },
-  $AltId   = afun("B" "r" "a" "c" "k" "e" "t"),
-  $TypeId  = sort-to-afun($Sort),
-  $AFProd  = 
+  $Attributes == { bracket },
+  $AltId   := afun("B" "r" "a" "c" "k" "e" "t"),
+  $TypeId  := sort-to-afun($Sort),
+  $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  = build-asfix-appl-args($Symbol*),
-  $Entry   = [ $TypeId, $AltId, appl($AFProd,[$AFArgs]) ],
-  $Entries = build-list-entries($Symbol*)
+  $AFArgs  := build-asfix-appl-args($Symbol*),
+  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
+  $Entries := build-list-entries($Symbol*)
   ===>
   production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) =
     $Entry, $Entries
@@ -113,13 +111,13 @@ equations
     $ConsOption) =
 
 [default-production-to-adt]
-  $AltId   = afun("D" "e" "f" "a" "u" "l" "t"),
-  $TypeId  = sort-to-afun($Sort),
-  $AFProd  = 
+  $AltId   := afun("D" "e" "f" "a" "u" "l" "t"),
+  $TypeId  := sort-to-afun($Sort),
+  $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  = build-asfix-appl-args($Symbol*),
-  $Entry   = [ $TypeId, $AltId, appl($AFProd,[$AFArgs]) ],
-  $Entries = build-list-entries($Symbol*)
+  $AFArgs  := build-asfix-appl-args($Symbol*),
+  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
+  $Entries := build-list-entries($Symbol*)
   ===>
   production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) =
     $Entry, $Entries
@@ -128,8 +126,8 @@ equations
   lexicals-to-adt($ModName, , $ConsOption) =
 
 [equ-lexicals-to-adt-divide]
-  lexical-to-adt($ModName, $Production, $ConsOption) = $Entries1,
-  lexicals-to-adt($ModName, $Production*, $ConsOption) = $Entries2
+  $Entries1 := lexical-to-adt($ModName, $Production, $ConsOption),
+  $Entries2 := lexicals-to-adt($ModName, $Production*, $ConsOption)
   ===>
   lexicals-to-adt($ModName, $Production $Production*, $ConsOption) =
     $Entries1, $Entries2
@@ -142,76 +140,58 @@ equations
     $ConsOption) =
 
 [default-lexical-to-adt]
-  $Attributes = { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 },
-  $AltId = afun($Char*),
-  $TypeId  = sort-to-afun($Sort),
-  $AFSort    = sort-to-lit($Sort),
-  $FieldType = sort-to-afun($Sort),
-  $AFAttrs   = build-asfix-attrs($Attributes, $ConsOption)
+  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId := afun($Char*),
+  $TypeId  := sort-to-afun($Sort),
+  $AFSort    := sort-to-lit($Sort),
+  $FieldType := sort-to-afun($Sort),
+  $AFAttrs   := build-asfix-attrs($Attributes, $ConsOption)
   ===>
   lexical-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
-    [ $TypeId, $AltId, 
+    constructor( $TypeId, $AltId, 
       appl(prod([lex(sort($AFSort))],cf(sort($AFSort)),no-attrs),
-       [appl(list(iter-star(char-class([range(0,255)]))),<chars(CHARLIST)>)]) ]
+       [appl(list(iter-star(char-class([range(0,255)]))),<chars(CHARLIST)>)]) )
 
 [equ-build-list-entries-empty]
   build-list-entries() =
 
 [equ-build-list-entries-divide]
-  build-list-entries($Symbol) = $Entries1,
-  build-list-entries($Symbol+) = $Entries2
+  $Entries1 := build-list-entries($Symbol),
+  $Entries2 := build-list-entries($Symbol+)
   ===>
   build-list-entries($Symbol $Symbol+) = $Entries1, $Entries2
 
 [equ-build-list-entries-iter-star]
-  $FieldId = sdflit-to-afun($Label),
-  $ElemType = sort-to-afun($Sort),
-  $ListType = afun-concat($ElemType $FieldId)
+  $FieldId := sdflit-to-afun($Label),
+  $ElemType := sort-to-afun($Sort),
+  $ListType := afun-concat($ElemType $FieldId)
   ===>
-  build-list-entries($Label : $Sort *) = 
-     [$ListType, empty,  []],
-     [$ListType, single, [<head($ElemType)>]],
-     [$ListType, many,   [<head($ElemType)>,
-                          <ws-after-first(OptLayout)>,
-                          <[tail($ListType)]>]]
+  build-list-entries($Label : $Sort *) = [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])]
 
 [equ-build-list-entries-iter-plus]
-  $FieldId = sdflit-to-afun($Label),
-  $ElemType = sort-to-afun($Sort),
-  $ListType = afun-concat($ElemType $FieldId)
+  $FieldId := sdflit-to-afun($Label),
+  $ElemType := sort-to-afun($Sort),
+  $ListType := afun-concat($ElemType $FieldId)
   ===>
-  build-list-entries($Label : $Sort +) = 
-     [$ListType, single, [<head($ElemType)>]],
-     [$ListType, many,   [<head($ElemType)>,
-                          <ws-after-first(OptLayout)>,
-                          <[tail($ListType)]>]]
+  build-list-entries($Label : $Sort +) = [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])]
+    
 
 [equ-build-list-entries-iter-sep-star]
-  $FieldId = sdflit-to-afun($Label),
-  $ElemType = sort-to-afun($Sort),
-  $ListType = afun-concat($ElemType $FieldId)
+  $FieldId := sdflit-to-afun($Label),
+  $ElemType := sort-to-afun($Sort),
+  $ListType := afun-concat($ElemType $FieldId)
   ===>
   build-list-entries($Label : { $Sort $Sep } *) = 
-     [$ListType, empty,[]],
-     [$ListType, single, [<head($ElemType)>]],
-     [$ListType, many,[<head($ElemType)>,
-                       <ws-after-first(OptLayout)>,
-                       lit(<sep(str)>),
-                       <ws-after-sep(OptLayout)>,
-                       <[tail($ListType)]>]]
+    [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])]
 
+  
 [equ-build-list-entries-iter-sep-plus]
-  $FieldId = sdflit-to-afun($Label),
-  $ElemType = sort-to-afun($Sort),
-  $ListType = afun-concat($ElemType $FieldId)
+  $FieldId := sdflit-to-afun($Label),
+  $ElemType := sort-to-afun($Sort),
+  $ListType := afun-concat($ElemType $FieldId)
   ===>
   build-list-entries($Label : { $Sort $Sep } +) = 
-     [$ListType, single, [<head($ElemType)>]],     
-     [$ListType, many,[<head($ElemType)>,
-                       <ws-after-first(OptLayout)>,
-                       lit(<sep(str)>),
-                       <ws-after-sep(OptLayout)>,
-                       <[tail($ListType)]>]]
+    [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])]
 
 [default-equ-build-list-entries]
   build-list-entries($Symbol) =
@@ -220,32 +200,32 @@ equations
 [css-2] collect-start-sorts(sorts $Symbol*1,$Symbol*2) = $Symbol*1 $Symbol*2
 [css-3] collect-start-sorts(hiddens $Grammar, $Symbol*) = $Symbol*
 
-[0] $Symbol* = collect-start-sorts($Module),
-   $ADT = start-sorts-to-adt($Symbol*)
+[0] $Symbol* := collect-start-sorts($Module),
+   $ADT := start-sorts-to-adt($Symbol*)
    ===>
    start-sorts-to-asfix2me-adt($Module) = $ADT
 
 [0] start-sorts-to-adt($Symbol*) = start-sorts-to-adt($Symbol*, [])
 
 [0] start-sorts-to-adt(,$ADT) = $ADT
-[0] start-sort-to-adt($Symbol, $ADT) = $ADT2,
-   start-sorts-to-adt($Symbol*, $ADT2) = $ADT3
+[0] $ADT2 := start-sort-to-adt($Symbol, $ADT),
+   $ADT3 := start-sorts-to-adt($Symbol*, $ADT2)
    ===>
    start-sorts-to-adt($Symbol $Symbol*, $ADT) = $ADT3
 
-[0] $FieldType = sort-to-afun($Sort),
-   $AFSort = sort-to-lit($Sort),   
-   $Sort = sort($Char* ),
-   $AltId = afun($Char*),
-   $FieldId = afun("t" "o" "p" "-" $Char*)
+[0] $FieldType := sort-to-afun($Sort),
+   $AFSort := sort-to-lit($Sort),   
+   sort($Char* ) := $Sort,
+   $AltId := afun($Char*),
+   $FieldId := afun("t" "o" "p" "-" $Char*)
    ===>
    start-sort-to-adt($Sort, [ $Entries ]) = 
-    [ [Start, $AltId,
+    [ constructor(Start, $AltId,
       parsetree(appl(prod(
                      [cf(opt(layout)),cf(sort($AFSort)),cf(opt(layout))],
                        sort("<START>"), no-attrs),
              [<ws-before(OptLayout)>,<$FieldId($FieldType)>,<ws-after(OptLayout)>]),
-                              <amb-cnt(int)>)], $Entries]
+                              <amb-cnt(int)>)), $Entries]
 
 
-%% [default] start-sort-to-adt($Symbol, $ADT) = $ADT
+
