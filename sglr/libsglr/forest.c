@@ -236,7 +236,6 @@ ATbool SG_TermIsCyclicAmbs(tree t, size_t *pos, ATermList ambs, Bitmap visited)
   size_t saved_pos = *pos;       
 
   for (; !hasCycle && !ATisEmpty(ambs); ambs = ATgetNext(ambs)) { 
-    SGnrAmb(SG_NR_INC);            /* Increase for each node in cluster */
     amb = (tree) ATgetFirst(ambs);
     if (!ATisEqual((ATerm) t, (ATerm) amb)) {
       *pos = saved_pos;
@@ -277,6 +276,7 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
     case AT_APPL:
       /*  Ambiguity cluster?  */
       if (SG_InputAmbiMapIsSet(*pos) > 0) {
+	SGnrAmb(SG_NR_INC);       
         cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
         ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
       }
@@ -303,8 +303,6 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
 
         if (!BitmapIsSet(visited, idx)) {
           SG_Mark((ATerm) t);
-
-          SGnrAmb(SG_NR_INC); /* new ambcluster */
 
           /*  First check whether or not t itself is cyclic...  */
 
