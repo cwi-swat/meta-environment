@@ -1,7 +1,7 @@
 buttons([
    button("Pico-syntax",
           "term",
-          "FastEvaluate",
+          ["Pico","FastEvaluate"],
           [get-root,
            check-sort("PROGRAM"),
 	   apply("tcp", "Boolean", 1),
@@ -19,7 +19,7 @@ buttons([
 
    button("Pico-syntax",
           "term",
-          "FastTypeCheck",
+          ["Pico","FastTypeCheck"],
           [get-root,
            check-sort("PROGRAM"),
            apply("tcp", "Boolean", 1),
@@ -30,7 +30,7 @@ buttons([
 
    button("Pico-syntax",
           "term",
-          "Evaluate",
+          ["Pico","Evaluate"],
           [get-root,
            check-sort("PROGRAM"),
            apply("tcp", "Boolean", 1),
@@ -46,7 +46,7 @@ buttons([
 
    button("Pico-syntax",
           "term",
-          "TypeCheck",
+          ["Pico","TypeCheck"],
           [get-root,
            check-sort("PROGRAM"),
            apply("tcp", "Boolean", 1),
@@ -56,7 +56,7 @@ buttons([
 
    button("Pico-syntax",
           "term",
-          "SimplifyExpression",
+          ["Pico","SimplifyExpression"],
           [get-focus,
            check-sort("EXP"),
            apply("simplify", "EXP", 1),
