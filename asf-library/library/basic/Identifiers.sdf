@@ -1,0 +1,21 @@
+module basic/Identifiers
+
+imports basic/IdentifierCon
+imports basic/StrCon
+
+exports
+
+context-free syntax
+	idcon2strcon(IdCon) -> StrCon
+	strcon2idcon(StrCon) -> IdCon
+
+hiddens
+
+imports basic/Whitespace
+
+lexical variables
+
+"head"[0-9]* -> [A-Za-z]
+"tail"[0-9]* -> [A-Za-z0-9\-]*
+"char*"[0-9]* -> StrChar*
+"char"[0-9]* -> StrChar
