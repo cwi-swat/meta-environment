@@ -10,6 +10,7 @@ static char version[] = "1.0";
 
 static void usage(const char *prg)
 {
+  fprintf(stderr, "Compares to parse trees modulo layout.\n\n");
   fprintf(stderr, "Usage: %s -[hV] <file1> <file2>\n", prg);
   fprintf(stderr, "Options:\n");
   exit(1);
