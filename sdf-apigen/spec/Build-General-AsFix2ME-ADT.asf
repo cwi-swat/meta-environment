@@ -1,7 +1,7 @@
 equations
 
 [equ-sort-to-lit]
-  sort-to-lit(sort($Char*)) = at-literal(""" $Char* """)
+  sort-to-lit(sort($Char*)) = qliteral(""" $Char* """)
 
 [equ-build-asfix-attrs-empty]
   $AFModName := modname-to-lit($ModName)
@@ -12,8 +12,7 @@ equations
 [equ-build-asfix-attrs-empty]
   $AFModName := modname-to-lit($ModName)
   ===>
-  build-asfix-attrs($ModName, {}, $ConsOption) = 
-    attrs([id($AFModName)])
+  build-asfix-attrs($ModName, {}, $ConsOption) = attrs([id($AFModName)])
 
 [equ-build-asfix-attrs-not-empty-no-attrs]
   $AFModName := modname-to-lit($ModName),
@@ -39,7 +38,7 @@ equations
   build-asfix-attrs($Attributes, $ConsOption) = no-attrs 
 
 [equ-modname-to-lit]
-  modname-to-lit(moduleid($Char*)) = at-literal(""" $Char* """)
+  modname-to-lit(moduleid($Char*)) = qliteral(""" $Char* """)
 
 [equ-build-asfix-attr-list-single]
   build-asfix-attr-list($Attr, $ConsOption) = 
@@ -58,27 +57,33 @@ equations
   ===>
   build-asfix-attr-list($Attr, $Attr+, $ConsOption) = $AFAttr*1,$AFAttr*2
 
-[equ-build-asfix-attr-left]        build-asfix-attr(left, $ConsOption)        =
-                                     assoc(left)
-[equ-build-asfix-attr-right]       build-asfix-attr(right, $ConsOption)       =
-                                     assoc(right)
-[equ-build-asfix-attr-nonassoc]       build-asfix-attr(non-assoc, $ConsOption)       =
-                                     assoc(non-assoc)
-[equ-build-asfix-attr-assoc]       build-asfix-attr(assoc, $ConsOption)       =
-                                     assoc(assoc)
-[equ-build-asfix-attr-bracket]     build-asfix-attr(bracket, $ConsOption)     =
-                                     bracket
-[equ-build-asfix-attr-avoid]       build-asfix-attr(avoid, $ConsOption)       =
-                                     avoid
-[equ-build-asfix-attr-prefer]      build-asfix-attr(prefer, $ConsOption)      =
-                                     prefer
+[equ-build-asfix-attr-left]        
+build-asfix-attr(left, $ConsOption)        = uqliteral("a""s""s""o""c")(uqliteral("l""e""f""t"))
+
+[equ-build-asfix-attr-right]       
+build-asfix-attr(right, $ConsOption)       = uqliteral("a""s""s""o""c")(uqliteral("r""i""g""h""t"))
+
+[equ-build-asfix-attr-nonassoc]       
+build-asfix-attr(non-assoc, $ConsOption)       =  uqliteral("a""s""s""o""c")(uqliteral("n""o""n""-""a""s""s""o""c"))
+
+[equ-build-asfix-attr-assoc]       
+build-asfix-attr(assoc, $ConsOption)       =   uqliteral("a""s""s""o""c")(uqliteral("a""s""s""o""c"))
+
+[equ-build-asfix-attr-bracket]     
+build-asfix-attr(bracket, $ConsOption)     =  uqliteral("b""r""a""c""k""e""t")
+
+[equ-build-asfix-attr-avoid]       
+build-asfix-attr(avoid, $ConsOption)       =   uqliteral("a""v""o""i""d")
+
+[equ-build-asfix-attr-prefer]      
+build-asfix-attr(prefer, $ConsOption)      =  uqliteral("p""r""e""f""e""r")
 
 [equ-build-asfix-attr-cons-remove]
-  build-asfix-attr(cons($ATerm), cons-remove) =
+build-asfix-attr(cons($ATerm), cons-remove) =
 
 [equ-build-asfix-attr-cons-expand]
-  build-asfix-attr(cons($ATerm), cons-expand) = term(cons($ATerm))
+build-asfix-attr(cons($ATerm), cons-expand) = uqliteral("t""e""r""m")(cons($ATerm))
 
 [default-build-asfix-attr] 
-  build-asfix-attr($ATerm, $ConsOption) = term($ATerm)
+build-asfix-attr($ATerm, $ConsOption) = uqliteral("t""e""r""m")($ATerm)
 

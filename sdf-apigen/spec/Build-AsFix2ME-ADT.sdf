@@ -1,19 +1,20 @@
 module Build-AsFix2ME-ADT
 
 imports Build-General-AsFix2ME-ADT
+imports languages/sdf2/syntax/Character-Class
 
 exports
   context-free syntax
     build-asfix-prod ( AFun, ModuleName, Symbol* , Symbol ,
                        Attributes, ConsOption)			-> ATerm
-    build-asfix-prod-args ( AFun, Symbol* )			-> ATerms
+    build-asfix-prod-args ( AFun, Symbol* )			-> {ATerm ","}*
     build-asfix-prod-arg ( AFun, Symbol )			-> ATerm
 
-    sdflit-to-lit ( Literal )				-> AT-Literal
+    sdflit-to-lit ( Literal )				-> Literal
     sort-to-afun ( Sort )				-> AFun
     sdflit-to-afun ( Literal )				-> AFun
 
-    build-asfix-appl-args (  Symbol* )			-> ATerms
+    build-asfix-appl-args (  Symbol* )			-> {ATerm ","}*
     build-asfix-appl-arg (   Symbol )			-> ATerm
     
     build-asfix-iter-star(AFun, Symbol)			-> ATerm
@@ -23,6 +24,10 @@ exports
 
     build-asfix-charclass(CharClass)                    -> ATerm
     build-asfix-charranges(CharRanges)                  -> ATermList
+
+  lexical syntax
+
+    [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral 
 
   context-free syntax
     "no-module-name" -> ModuleId
@@ -37,10 +42,10 @@ hiddens
     "$AFAttr*"[0-9]*	-> { ATerm "," }*
     "$AFAttrs"		-> ATerm
     "$AFIter"		-> ATerm
-    "$AFModName"	-> AT-Literal
+    "$AFModName"	-> Literal
     "$AFProd"		-> ATerm
     "$AFSep"		-> ATerm
-    "$AFSort"		-> AT-Literal
+    "$AFSort"		-> Literal
     "$AltId"		-> AFun
     "$ATerm"		-> ATerm
     "$Attr"		-> Attribute
@@ -56,7 +61,7 @@ hiddens
     "$ElemType"		-> AFun
     "$Entries"[0-9]*	-> { ATerm "," }*
     "$Entry"		-> ATerm
-    "$FieldName"	-> AT-Literal
+    "$FieldName"	-> Literal
     "$FieldId"		-> AFun
     "$FieldType"	-> AFun
     "$FieldWs"		-> ATerm

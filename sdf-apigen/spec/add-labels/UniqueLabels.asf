@@ -1,0 +1,24 @@
+equations
+
+[unique-labels]
+$Symbol*0 $Label:$Lit $Symbol*1 $Label:$Lit $Symbol*2 -> $Symbol $Attributes =
+$Symbol*0 $Label:$Lit $Symbol*1 $Label + 1:$Lit $Symbol*2 -> $Symbol $Attributes
+[label-add]
+$Natcon3 := $Natcon1 + $Natcon2
+===>
+$Label0 + $Natcon1 + $Natcon2 = $Label0 + $Natcon3
+
+[default-incorporate-nat]
+qliteral(""" $Char+1 """) + natcon($Char+2) : $Symbol1 := $Symbol3,
+$NormalizedSymbol := qliteral(""" $Char+1 "-" $Char+2 """) : $Symbol1
+====>
+$Symbol*1 $Symbol3 $Symbol*2 -> $Symbol $Attributes  = 
+$Symbol*1 $NormalizedSymbol $Symbol*2 -> $Symbol $Attributes
+
+
+tests
+
+[unique-labels]
+
+A  "comma":"," B  "comma":"," C  "comma":"," -> D =
+A  "comma":"," B  "comma-1":"," C  "comma-2":"," -> D 

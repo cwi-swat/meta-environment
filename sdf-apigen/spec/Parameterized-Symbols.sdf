@@ -1,6 +1,6 @@
 module Parameterized-Symbols
 
-imports Sdf2
+imports languages/sdf2/syntax/Sdf2
 
 exports
 

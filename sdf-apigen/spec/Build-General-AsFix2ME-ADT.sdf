@@ -1,17 +1,20 @@
 module Build-General-AsFix2ME-ADT
 
-imports ATerm-Utils Sdf2 Cons-Options Parameterized-Symbols
+imports ATerm-Utils 
+imports languages/sdf2/syntax/Sdf2 
+imports Cons-Options Parameterized-Symbols
 
 exports
   context-free syntax
-    sort-to-lit ( Sort )				-> AT-Literal
+    sort-to-lit ( Sort )				-> Literal
 
     build-asfix-attrs ( Attributes, ConsOption )	-> ATerm
     build-asfix-attrs ( ModuleName, Attributes, ConsOption )	-> ATerm
-    build-asfix-attr-list ( { Attribute "," }+, ConsOption )	-> ATerms
-    build-asfix-attr ( Attribute, ConsOption )			-> ATerms
+    build-asfix-attr-list ( { Attribute "," }+, ConsOption )	-> {ATerm ","}*
+    build-asfix-attr ( Attribute, ConsOption )			-> {ATerm ","}*
+    "build-asfix-attr" -> AFun {reject}
 
-    modname-to-lit ( ModuleName )			-> AT-Literal
+    modname-to-lit ( ModuleName )			-> Literal
 
 hiddens
   variables
@@ -23,10 +26,10 @@ hiddens
     "$AFAttr*"[0-9]*	-> { ATerm "," }*
     "$AFAttrs"		-> ATerm
     "$AFIter"		-> ATerm
-    "$AFModName"	-> AT-Literal
+    "$AFModName"	-> Literal
     "$AFProd"		-> ATerm
     "$AFSep"		-> ATerm
-    "$AFSort"		-> AT-Literal
+    "$AFSort"		-> Literal
     "$AltId"		-> AFun
     "$ATerm"		-> ATerm
     "$Attr"		-> Attribute
@@ -39,7 +42,7 @@ hiddens
     "$ElemType"		-> AFun
     "$Entries"[0-9]*	-> { ATerm "," }*
     "$Entry"		-> ATerm
-    "$FieldName"	-> AT-Literal
+    "$FieldName"	-> Literal
     "$FieldId"		-> AFun
     "$FieldType"	-> AFun
     "$FieldWs"		-> ATerm

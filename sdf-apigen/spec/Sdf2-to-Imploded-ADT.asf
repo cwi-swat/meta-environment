@@ -66,8 +66,8 @@ equations
     $Entries1, $Entries2
 
 [equ-production-to-adt-args]
-  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId   := afun($Char*),
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId   := uqliteral($Char*),
   $TypeId  := sort-to-afun($Sort),
   $Args  := build-imploded-args($Symbol*),
   $Args+  := $Args,
@@ -78,8 +78,8 @@ equations
     $Entry, $Entries
 
 [equ-production-to-adt-constant]
-  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId   := afun($Char*),
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId   := uqliteral($Char*),
   $TypeId  := sort-to-afun($Sort),
   $Args  := build-imploded-args($Symbol*),
   $Args  == ,
@@ -123,7 +123,7 @@ equations
   lexical-to-adt($ModName, $Symbol* -> LAYOUT $Attributes) =
 
 [default-lexical-to-adt]
-  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
   $TypeId    := sort-to-afun($Sort)
   ===>
   lexical-to-adt($ModName, $Symbol* -> $Sort $Attributes) = 

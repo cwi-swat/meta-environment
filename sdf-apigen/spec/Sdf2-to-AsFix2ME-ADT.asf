@@ -12,15 +12,15 @@ equations
   sdf-to-asfix2me-adt(definition ,$ConsOption) = [ ]
 
 [equ-sdf-to-adt-defintion-divide]
-  $ADT1 := sdf-module-to-asfix2me-adt($Module, $ConsOption),
+  $LabeledModule := add-labels($Module),
+  $ADT1 := sdf-module-to-asfix2me-adt($LabeledModule, $ConsOption),
   $ADT2 := merge-adts([], $ADT1),
   $ADT3 := sdf-to-asfix2me-adt(definition $Module*, $ConsOption),
   $ADT4 := merge-adts($ADT2, $ADT3),
   $ADT5 := start-sorts-to-asfix2me-adt($Module),
   $ADT6 := merge-adts($ADT4, $ADT5),
   $ADT7 := merge-adts($ADT6, [ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
-     constructor(OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),
-                          <chars(CHARLIST)>))
+     constructor(OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<chars(CHARLIST)>))
    ])
   ===>
   sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
@@ -90,8 +90,8 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
     $Entries1, $Entries2
 
 [equ-production-to-adt-cons]
-  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId   := afun($Char*),
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId   := uqliteral($Char*),
   $TypeId  := sort-to-afun($Sort),
   $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
@@ -104,7 +104,7 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
 
 [equ-production-to-adt-bracket]
   $Attributes == { bracket },
-  $AltId   := afun("B" "r" "a" "c" "k" "e" "t"),
+  $AltId   := uqliteral("B" "r" "a" "c" "k" "e" "t"),
   $TypeId  := sort-to-afun($Sort),
   $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
@@ -120,7 +120,7 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
     $ConsOption) =
 
 [default-production-to-adt]
-  $AltId   := afun("D" "e" "f" "a" "u" "l" "t"),
+  $AltId   := uqliteral("D" "e" "f" "a" "u" "l" "t"),
   $TypeId  := sort-to-afun($Sort),
   $AFProd  := 
     build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
@@ -149,8 +149,8 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
     $ConsOption) =
 
 [default-lexical-to-adt]
-  { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId := afun($Char*),
+  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
+  $AltId := uqliteral($Char*),
   $TypeId  := sort-to-afun($Sort),
   $AFSort    := sort-to-lit($Sort),
   $FieldType := sort-to-afun($Sort),
@@ -225,8 +225,8 @@ sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
 [0] $FieldType := sort-to-afun($Sort),
    $AFSort := sort-to-lit($Sort),   
    sort($Char* ) := $Sort,
-   $AltId := afun($Char*),
-   $FieldId := afun("t" "o" "p" "-" $Char*)
+   $AltId := uqliteral($Char*),
+   $FieldId := uqliteral("t" "o" "p" "-" $Char*)
    ===>
    start-sort-to-adt($Sort, [ $Entries ]) = 
     [ constructor(Start, $AltId,

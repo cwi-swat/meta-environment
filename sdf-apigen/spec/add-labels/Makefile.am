@@ -4,6 +4,3 @@
 # $Id$
 #
 
-pkgdata_DATA	= AddLabels.eqs
-
-EXTRA_DIST	= AddLabels.eqs

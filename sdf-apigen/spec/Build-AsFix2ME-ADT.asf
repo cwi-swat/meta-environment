@@ -20,7 +20,7 @@ equations
     prod([$AFArgs],$SymbolType(sort($AFSort)),$AFAttrs)
 
 [equ-sort-to-afun]
-  sort-to-afun(sort($Char*)) = afun($Char*)
+  sort-to-afun(sort($Char*)) = uqliteral($Char*)
 
 [equ-build-asfix-prod-args-empty]
   build-asfix-prod-args($SymbolType, ) =
@@ -48,8 +48,8 @@ equations
     build-asfix-prod-arg($SymbolType, $Symbol)
 
 [default-equ-build-asfix-prod-arg-strip-param]
-  afun($c*) := sdflit-to-afun($Label),
-  $FieldId := afun($c* "-" "s""o""r""t")
+  uqliteral($c*) := sdflit-to-afun($Label),
+  $FieldId := uqliteral($c* "-" "s""o""r""t")
   ===>
   build-asfix-prod-arg($SymbolType, $Label : <$Symbol-PARAM>) = 
   cf(sort(<$FieldId(str)>))
@@ -111,18 +111,8 @@ equations
   ===>
   build-asfix-charranges($CharRanges1 $CharRanges2) = [$AFArgs1,$AFArgs2]
 
-% Unify unquoted and quoted literals, note that this is a bug in AsFix1/pgen! %
-[equ-sdflit-to-lit-quoted]
-  sdflit-to-lit(literal($Char*)) = at-literal($Char*)
-
-[equ-sdflit-to-lit-unquoted]
-  sdflit-to-lit(uqliteral($Char*)) = at-literal(""" $Char* """)
-
-[equ-sdflit-to-afun-quoted]
-  sdflit-to-afun(literal(""" $Char* """)) = afun($Char*)
-
-[equ-sdflit-to-afun-unquoted]
-  sdflit-to-afun(uqliteral($Char*)) = afun($Char*)
+[equ-sdflit-to-lit]
+  sdflit-to-lit($Literal) = $Literal
 
 [equ-build-asfix-appl-args-empty]
   build-asfix-appl-args() =
@@ -218,7 +208,7 @@ equations
 
 [equ-build-asfix-iter-sep]
   sort($Char*) := $Sort,
-  $ElemSortName := at-literal(""" $Char* """),
+  $ElemSortName := qliteral(""" $Char* """),
   $AFSep := sdflit-to-lit($Sep)
   ===>  
   build-asfix-iter-star-sep($Sort, $Sep) = 
@@ -226,8 +216,12 @@ equations
 
 [equ-build-asfix-iter-sep]
   sort($Char*) := $Sort,
-  $ElemSortName := at-literal(""" $Char* """),
+  $ElemSortName := qliteral(""" $Char* """),
   $AFSep := sdflit-to-lit($Sep)
   ===>  
   build-asfix-iter-plus-sep($Sort, $Sep) = 
 	cf(iter-sep(sort($ElemSortName),lit($AFSep)))
+
+equations
+
+[identity]  sdflit-to-afun($Literal) = $Literal

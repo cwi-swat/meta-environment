@@ -1,0 +1,42 @@
+module UniqueLabels
+
+imports languages/sdf2/syntax/Sdf2
+imports basic/Integers
+
+exports
+  context-free syntax
+  
+  make-labels-unique(SDF) -> SDF
+  make-labels-unique(Module) -> Module
+
+hiddens
+
+  context-free syntax
+
+  Literal "+" NatCon -> Literal
+
+  variables
+    "$Attributes"[0-9]*  -> Attributes
+    "$Definition"[0-9]*  -> Definition
+    "$Label"[0-9]*       -> Literal
+    "$Module"[0-9]*      -> Module
+    "$Module*"[0-9]*      -> Module*
+    "$Production"[0-9]* -> Production
+    "$Productions"[0-9]* -> Productions
+    "$Sort"[0-9]*        -> Sort
+    "$Symbol"[0-9]*      -> Symbol
+    "$NormalizedSymbol"[0-9]* -> Symbol
+    "$Separator"[0-9]*   -> Symbol
+    "$Symbols"[0-9]*     -> Symbols
+    "$Char"[0-9]*              -> CHAR
+    "$Char+"[0-9]*              -> CHAR+
+    "$Char*"[0-9]*              -> CHAR*
+    "$Symbol*"[0-9]*     -> Symbol*
+    "$FuncArg*"[0-9]*    -> { Symbol ","}*
+    "$FuncArg+"[0-9]*    -> { Symbol ","}+
+    "$Lit"               -> Literal
+    "$ImpSection*" -> ImpSection*
+    "$Section*" -> Section*
+    "$ModuleName" -> ModuleName
+    "$Natcon"[0-9]* -> NatCon
+
