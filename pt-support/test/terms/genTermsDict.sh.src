@@ -1,7 +1,7 @@
 #! /bin/sh
 
-echo '[afuns([[dummy,dummy]]),'
-echo ' terms('
+echo '[afuns([]),'
+echo ' terms(['
 
 for i in $*; do 
   echo "["
@@ -13,4 +13,4 @@ for i in $*; do
 done
   echo "[dummy,dummy]"
 
-echo ')]'
+echo '])]'

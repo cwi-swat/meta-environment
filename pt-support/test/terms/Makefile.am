@@ -10,7 +10,7 @@ libtestTerms_a_SOURCES=terms_dict.c
 
 INCLUDES=-I$(ATERM)/include
 
-testTerms.c: terms.dict
+terms_dict.c: terms.dict
 	$(ATERM)/bin/dicttoc -dict $< 
 
 terms.dict: genTermsDict.sh ${srcdir}/*.pt
@@ -18,3 +18,5 @@ terms.dict: genTermsDict.sh ${srcdir}/*.pt
 
 %.sh: %.sh.src Makefile
 	sed 's@__ATERM__@$(ATERM)@g' < $< > $@ && chmod +x $@	
+
+CLEANFILES=*.[ch] *.dict
