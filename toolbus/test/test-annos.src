@@ -19,8 +19,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 
-top_builddir=..
-srcdir=.
+top_builddir=__TOP_BUILDDIR__
+srcdir=__SRCDIR__
 
 TERM="f(a{[b,c]})"
 (echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/anno.tb) > test.out 2>&1
