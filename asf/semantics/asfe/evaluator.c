@@ -722,7 +722,7 @@ ATerm apply_rule(ATerm trm)
       conds = (ATermList) asfix_get_equ_conds(equ);
       equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
       env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));
+/*ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));*/
       if(!is_fail_env(env)) {
         rewrite_steps++;
         return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
@@ -735,7 +735,7 @@ ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));
     conds = (ATermList) asfix_get_equ_conds(equ);
     equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
     env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));
+/*ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));*/
     if(!is_fail_env(env)) {
       rewrite_steps++;
       return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
@@ -881,7 +881,7 @@ ATerm rewrite(ATerm trm, ATerm env)
   ATermList args, newargs;
   ATermList elems, newelems; 
 
-	ATfprintf(stderr, "rewriting: %t\n", trm);
+	/*ATfprintf(stderr, "rewriting: %t\n", trm);*/
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
     /*if(!args)
