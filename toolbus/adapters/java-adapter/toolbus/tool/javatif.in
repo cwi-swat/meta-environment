@@ -1,0 +1,4 @@
+#!/bin/sh
+prefix=@prefix@
+classdir=$prefix/classes
+java -classpath $classdir:$CLASSPATH toolbus.tool.JavaTif $@
