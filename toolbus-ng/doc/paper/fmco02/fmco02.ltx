@@ -1089,21 +1089,24 @@ API. In RMI-IIOP and Java IDL however, this is not possible, because
 the underlying CORBA architecture is used, which does not support
 (distributed) GC, but places this burden entirely on the developer.
 
-\item In the \TB\, all data is sent by-value. RMI and RMI-IIOP
-use both pass-by-value and pass-by-reference, depending on whether
-the relevant data is serializable (it is a primitive type, or it
-implements \texttt{Serializable}) or is a remote object. In Java IDL
-the components abide by IDL prescribed interfaces which have ``in''
-and ``out'' parameters.  There are no return values, but parameters are
-marked as incoming, outgoing, or both (``in/out'' parameters).
+\item In the \TB\, all data is sent by-value. RMI and RMI-IIOP use
+both pass-by-value and pass-by-reference, depending on whether the
+relevant data is serializable (it is a primitive type, or it implements
+\texttt{Serializable}) or is a remote object. In Java IDL the components
+abide by IDL prescribed interfaces. Determination of whether a parameter
+is to be passed by-value or by-reference is made by examination of the
+parameter's formal type (in the IDL definition of the method signature).
+If it is a CORBA \emph{value type}, it is passed by-value. If it is an
+ordinary CORBA \emph{interface type} (the ``normal'' case for all CORBA
+objects), it is passed by-reference.
 
 \item The \TB\ allows components in any language for which a \TB\
 adapter exists. Programming languages such as C and Java are supported,
-but adapters also exist for a wide range of languages and applications, including
-e.g., Perl, Prolog, MySQL, Tcl and \asdf. In RMI, only Java components can
-be connected; in RMI-IIOP the service is implemented in Java, its
-functionality (client-side) is available to CORBA clients. The Java IDL
-framework is fully CORBA compliant.
+but adapters also exist for a wide range of languages and applications,
+including e.g., Perl, Prolog, MySQL, Tcl and \asdf. In RMI, only Java
+components can be connected; in RMI-IIOP the service is implemented in
+Java, its functionality (client-side) is available to CORBA clients. The
+Java IDL framework is fully CORBA compliant.
 
 \item Only the \TB\ has coordination support for component interaction.
 In the three other cases any undesired sequence of incoming and
