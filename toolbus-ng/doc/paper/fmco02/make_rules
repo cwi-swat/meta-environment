@@ -20,5 +20,5 @@ SUFFIXES = .pic .ltx .dvi .bbl .ind .idx .xwd .ps .ltx .fig
 %.ps: %.fig
 	fig2dev -Lps $< $@
 
-%.pdf: %.ps
-	ps2pdf $<
+%.pdf: %.dvi
+	dvipdf $<
