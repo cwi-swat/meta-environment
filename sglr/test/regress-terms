@@ -162,7 +162,7 @@ do
         do
 		base=`basename $file`
 		dir=`dirname $file`
-		asfile=`basename $base .$ext`.asfix2
+		asfile=`basename $base .$ext`.$$.asfix2
 		org=$dir/$asfile.org
 		out=${TMPDIR:-/var/tmp}/$asfile
 		if [ ! -f $org ] ; then
@@ -194,7 +194,7 @@ do
         do
 		base=`basename $file`
 		dir=`dirname $file`
-		asfile=`basename $base .$ext`.asfix2
+		asfile=`basename $base .$ext`.$$.asfix2
 		org=$dir/$asfile.org
 		out=${TMPDIR:-/var/tmp}/$asfile
 		$SGLR $VERBOSE --cycle -p $ptbl -i $file -o $out	2>/dev/null
