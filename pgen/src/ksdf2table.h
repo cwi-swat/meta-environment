@@ -2,11 +2,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <aterm2.h>
-#include <AsFix.h>
-#include <AsFix2src.h>
-#include <AsFix-access.h>
-#include <AsFix-expand.h>
-#include <AsFix-init-patterns.h> 
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
 
@@ -26,16 +21,6 @@
 #define SDF_EOF  256
 #define MIN_PROD (SDF_EOF+1)
 
-/*{{{  external patterns */
-
-extern ATerm pattern_asfix_lex;
-extern ATerm pattern_asfix_lit;
-extern ATerm pattern_asfix_l;
-extern ATerm pattern_asfix_appl;
-extern ATerm pattern_asfix_str;
-extern ATerm pattern_asfix_id;
-
-/*}}}  */
 /*{{{  external functions */
 
 extern char *unquote_str(char *s);
