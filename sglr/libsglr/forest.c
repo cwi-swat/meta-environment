@@ -877,7 +877,7 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
        * equal due to earlier filtering, so we just take the first.
        */
       first = (tree) ATgetFirst(ambs);
-      injections += SG_CountInjectionsInTree(pt, first);
+      injections += SG_CountAllInjectionsInTree(pt, first);
 
     } else {
       kids = ATgetArgument((ATermAppl) t, 1);
@@ -886,13 +886,13 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
         injections++;
       }
 
-      injections += SG_CountInjectionsInTree(pt, (tree) kids);
+      injections += SG_CountAllInjectionsInTree(pt, (tree) kids);
     }
     break;
   case AT_LIST:
     for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
       ATerm elem = ATgetFirst((ATermList) t);
-      injections += SG_CountInjectionsInTree(pt, (tree) elem);
+      injections += SG_CountAllInjectionsInTree(pt, (tree) elem);
     }
     break;
   case AT_INT:
