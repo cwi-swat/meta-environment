@@ -51,7 +51,7 @@ XDEFS		= -DPROFILING
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm \
+XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 		-L$(GEL)/lib -lgel $(SOCKLIBS)
 
 # Other variables
