@@ -981,42 +981,57 @@ $Error]>
 	================================================
 	match-types($Etype, $Etype', $Table, $Tenv) = <true, $Table>
 
-[mt2]	lookup($Table, $Var) = not-in-table
+[mt2]	lookup($Tenv, $Var) = $Etype'
+	================================================
+	match-types($Var, $Etype, $Table, $Tenv) = match-types($Etype', $Etype, $Table, $Tenv)
+
+[mt3]	lookup($Tenv, $Var) = $Etype'
+	================================================
+	match-types($Etype, $Var, $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
+
+[mt4]	lookup($Table, $Var) = not-in-table
 	================================================
 	match-types(& $Var, $Etype, $Table, $Tenv) = <true, store($Table, $Var, $Etype)>
 
-[mt3]	equal-type(lookup($Table, $Var), $Etype, $Tenv) = true
+[mt5]	equal-type(lookup($Table, $Var), $Etype, $Tenv) = true
 	================================================
 	match-types(& $Var, $Etype, $Table, $Tenv) = <true, $Table>
 
-[mt4]	match-types($Etype1, $Etype2, $Table, $Tenv) = <true, $Table'>
+[mt6]	match-types($Etype1, $Etype2, $Table, $Tenv) = <true, $Table'>
 	===================================================
 	match-types(bag[$Etype1], bag[$Etype2], $Table, $Tenv) =  <true, $Table'>
 
-[mt5]	match-types(rel[$Etype+], $Etype, $Table, $Tenv) = match-types(bag[<$Etype+>], $Etype, $Table, $Tenv)
+[mt7]	match-types(rel[$Etype+], $Etype, $Table, $Tenv) = match-types(bag[<$Etype+>], $Etype, $Table, $Tenv)
 
-[mt6]	match-types($Etype, rel[$Etype+], $Table, $Tenv) = match-types($Etype, bag[<$Etype+>], $Table, $Tenv)
+[mt8]	match-types($Etype, rel[$Etype+], $Table, $Tenv) = match-types($Etype, bag[<$Etype+>], $Table, $Tenv)
 
-[mt7]	match-types(<$Etype+>, <$Etype+'>, $Table, $Tenv) = <true, $Table'>
+[mt9]	match-types(<$Etype+>, <$Etype+'>, $Table, $Tenv) = <true, $Table'>
 	===================================================
 	match-types(bag[<$Etype+>], bag[<$Etype+'>], $Table, $Tenv) =  <true, $Table'>
 
-[mt8]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+[mt10]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
 	match-types(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Table', $Tenv) = <true, $Table''>
 	=========================================================
 	match-types(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Table, $Tenv) = <true, $Table''>
 
-[mt9]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+[mt11]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
 	match-types($Etype2, $Etype2', $Table', $Tenv) = <true, $Table''>
 	===================================================
 	match-types(<$Etype1, $Etype2>, <$Etype1', $Etype2'>, $Table, $Tenv) =  <true, $Table''>
 
-[mt10]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+[mt12]	match-types(<$DclVar+>, $Etype, $Table, $Tenv) = 
+	match-types(get-tuple-type(<$DclVar+>), $Etype, $Table, $Tenv)
+
+[mt13]	match-types($Etype, <$DclVar+>, $Table, $Tenv) = 
+	match-types($Etype, get-tuple-type(<$DclVar+>), $Table, $Tenv)
+
+
+[mt14]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
 	match-types([$Etype*], [$Etype*'], $Table', $Tenv) = <true, $Table''>
 	===================================================
 	match-types([$Etype1, $Etype*], [$Etype1', $Etype*'], $Table, $Tenv) = <true, $Table''>
 
-[mt11]  match-types([], [], $Table, $Tenv) = <true, $Table>
+[mt15]  match-types([], [], $Table, $Tenv) = <true, $Table>
 
 [default-mt]
 	match-types($Etype1, $Etype2, $Table, $Tenv) = <false, $Table>
