@@ -80,15 +80,15 @@ cat <<ENDCAT
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES         = -I$(ASCINC) \
-                   -I$(ASFIXINC) \
-                   -I$(ATERMINC)
+INCLUDES         = -I\$(ASCINC) \
+                   -I\$(ASFIXINC) \
+                   -I\$(ATERMINC)
 
 noinst_LIBRARIES = lib$1.a
 
 BUILT_SOURCES    = init.c
 
-lib${MOD}_a_SOURCES  = $(SPEC_SRCS)
+lib${MOD}_a_SOURCES  = \$(SPEC_SRCS)
 
 lib${MOD}_a_LIBADD   = init.o
 
@@ -96,8 +96,8 @@ lib${MOD}_a_LIBADD   = init.o
 # causes several tools to crash (sed for instance) because of line length
 # limitations. We therefore split all dependencies and define them among
 # several SPEC_SRCSx variables. These are all combined in SPEC_SRCS which
-# forms the concatenation of all sub varibales ( SPEC_SRCS = $(SPEC_SRCS1)
-# ... $(SPEC_SRCSn)
+# forms the concatenation of all sub varibales ( SPEC_SRCS = \$(SPEC_SRCS1)
+# ... \$(SPEC_SRCSn)
 #
 `(cat $1.module-list |\
   grep -v '^\#' |\
@@ -135,9 +135,9 @@ END{
    print "SPEC_SRCS =" spec_srcs
 }'`
 
-init.c: $(SPEC_SRCS)
+init.c: \$(SPEC_SRCS)
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\
-	SPEC_SRCS="$(SPEC_SRCS)" ;\\
+	SPEC_SRCS="\$(SPEC_SRCS)" ;\\
 	for file in \$\$SPEC_SRCS; do \\
 		echo "extern void register_\$\$file();" ;\\
 		echo "extern void resolve_\$\$file();" ;\\
