@@ -1,0 +1,6 @@
+Version 0.2:
+
+Added Set, Empty, Sequence, Function, Perm, Pair, Iter-(sep-)-n symbols.
+
+Changed flattening of cons attributes in conversion from asfix2me to asfix1.
+It used to be "cons(name)", and now it is cons("name").    
