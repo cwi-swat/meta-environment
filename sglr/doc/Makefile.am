@@ -20,7 +20,7 @@
 
 include ../make_rules
 
-POD_SRCS   = a2toa1.pod sglr.pod tree2dot.pod
+POD_SRCS   = sglr.pod tree2dot.pod
 
 man_MANS   = sglr.1 tree2dot.1
 
