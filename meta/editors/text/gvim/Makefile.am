@@ -6,6 +6,7 @@ INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
 	-I$(top_srcdir)/editors/structure/src \
 	-I$(ATERM)/include \
+	-I$(TOOLBUSLIB)/include \
 	-DLIBDIR="\"$(libdir)\"" \
 	-DDATADIR="\"$(datadir)\""
 
