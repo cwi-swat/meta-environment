@@ -289,7 +289,7 @@ funcdef2cfuncs(funid(Char*1)(Sigarg+) Annos,Namepair*) =
                          register_prod(ATparse(identifier(""" Char*1 """)),
                          identifier(Char*2),identifier(Char*2 "s""y""m"));
 
-  [np2ls-2'5] namepair2rstats((funid(Char*1),funid("e" Char*2),Term*)) =
+  [default-np2cs-2'5] namepair2rstats((funid(Char*1),funid(Char*2),Term*)) =
 
   [np2ls-1'1] namepairs2lstats() =
 
@@ -304,11 +304,4 @@ funcdef2cfuncs(funid(Char*1)(Sigarg+) Annos,Namepair*) =
                 identifier("e" Char*2 "s""y""m") =
                          lookup_sym(ATreadFromString(identifier(Char*1)));
 
-  [np2ls-2'2] namepair2lstats((funid(Char*1),funid("l" Char*2),Term*)) =
-
-  [np2ls-2'2] namepair2lstats((funid(Char*1),funid(""""{""l" Char*2 "}""""),Term*)) =
-
-  [np2ls-2'2] namepair2lstats((funid(Char*1),funid(""""[""l" Char*2 "]"""" Char*),Term*)) =
-
-
-  [np2ls-2'3] namepair2lstats((funid(Char*1),funid("_" Char*2),Term*)) =
+  [default-np2ls-2'2] namepair2lstats((funid(Char*1),funid(Char*2),Term*)) =

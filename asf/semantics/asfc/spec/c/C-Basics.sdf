@@ -23,12 +23,16 @@ exports
 exports
   context-free syntax
     Argument-expression-list "++" Argument-expression-list -> Argument-expression-list {left}
+    "(" Argument-expression-list ")"                       -> Argument-expression-list {bracket}
     Statement-list-opt "++" Statement-list-opt             -> Statement-list-opt {left}
+    "(" Statement-list-opt ")"                             -> Statement-list-opt {bracket}
     Statement-list-opt "++r" Statement-list-opt            -> Statement-list-opt
     Declaration-list-opt "++" Declaration-list-opt         -> Declaration-list-opt {left}
+    "(" Declaration-list-opt ")"                           -> Declaration-list-opt {bracket}
     Declaration-list-opt "++d" Statement-list-opt          -> Statement-list-opt
     Parameter-declaration "++" Parameter-list              -> Parameter-list
     C-env "++" C-env                                       -> C-env {left}
+    "(" C-env ")"                                          -> C-env {bracket}
 
   context-free syntax
     celookup(Term,C-env)                     -> E-tuple

@@ -1,3 +1,8 @@
+2002/06/10 (markvdb@cs.vu.nl)
+ * Fixed the "restore-brackets bug" reported on 27-03-2002.
+ * Improved the compiler specification with respect to processing
+   names.
+
 2002/06/05 (jurgenv@cwi.nl)
  * Made concat-asf robust against empty input files
 

@@ -79,19 +79,25 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
 {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Production bracketProd = PT_ProductionFromTerm(
-                               (ATerm)SG_LookupBracketProd(pt, rhs));
-  PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
-  PT_Symbol openBracketSym = PT_getSymbolsHead(bracketSymbols);
-  PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
-  PT_Tree openBracket = PT_TreeFromTerm(PT_SymbolToTerm(openBracketSym));
-  PT_Tree closeBracket = PT_TreeFromTerm(PT_SymbolToTerm(closeBracketSym));
-  PT_Args newArgs = PT_makeArgsList(closeBracket,PT_makeArgsEmpty());
-  newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
-  newArgs = PT_makeArgsList(tree, newArgs);
-  newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
-  newArgs = PT_makeArgsList(openBracket, newArgs);
-  return PT_makeTreeAppl(bracketProd, newArgs);
+  ATerm atBracketProd = (ATerm)SG_LookupBracketProd(pt, rhs);
+  if (atBracketProd) {
+    PT_Production bracketProd = PT_ProductionFromTerm(atBracketProd);
+    PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
+    PT_Symbol openBracketSym = PT_getSymbolsHead(bracketSymbols);
+    PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
+    PT_Tree openBracket = PT_TreeFromTerm(PT_SymbolToTerm(openBracketSym));
+    PT_Tree closeBracket = PT_TreeFromTerm(PT_SymbolToTerm(closeBracketSym));
+    PT_Args newArgs = PT_makeArgsList(closeBracket,PT_makeArgsEmpty());
+    newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
+    newArgs = PT_makeArgsList(tree, newArgs);
+    newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
+    newArgs = PT_makeArgsList(openBracket, newArgs);
+    return PT_makeTreeAppl(bracketProd, newArgs);
+  }
+  else {
+    ATwarning("No brackets defined for symbol %t\n", PT_yieldSymbol(rhs));
+    return tree;
+  }
 }
 
 static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel, 
