@@ -171,25 +171,6 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
 }
 
 /*}}}  */
-/*{{{  void set_multiple_focus(int cid, ATerm editorId, ATerm f) */
-
-void set_multiple_focus(int cid, ATerm editorId, ATerm f)
-{
-  SE_Editor editor = getEditor(editorId);
-  SE_FocusList foci;
-
-  if (editor) {
-    foci = SE_makeFocusListFromTerm(f);
-    assert(SE_isValidFocusList(foci));
-
-    editor = SE_setEditorUnparsedFoci(editor, foci);
-
-    putEditor(editorId, editor);
-  }
-}
-
-/*}}}  */
-
 /*{{{  ATerm move_focus_to_root(int cid, ATerm editorId) */
 
 ATerm move_focus_to_root(int cid, ATerm editorId)
