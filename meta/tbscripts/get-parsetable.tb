@@ -36,15 +36,20 @@ Id := process-id.
       rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
 
       snd-msg(generate-parsetable(Syntax, ModuleId)).
-      rec-msg(parsetable(Table?)).
-
-      snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
-      rec-msg(parse-table-added).
-
-      snd-msg(get-table-from-db(ModuleId)) .
-      rec-msg(table(Table?, Path?)) .
-      snd-note(ui-status(endstat(Id))) .
-      snd-msg(parse-table(Table, Path))
+      (
+        rec-msg(parsetable(Table?)).
+        snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
+        rec-msg(parse-table-added).
+        snd-msg(get-table-from-db(ModuleId)) .
+        rec-msg(table(Table?, Path?)) .
+        snd-note(ui-status(endstat(Id))) .
+        snd-msg(parse-table(Table, Path))
+      +
+        rec-msg(no-parsetable).
+        snd-note(ui-status(endstat(Id))) .
+        snd-note(ui-status(error("Unexpected error in definition"))).
+	snd-msg(no-parse-table(ModuleId))
+      )
     +
       rec-msg(no-syntax(ErrorMsg?)) .
       snd-note(ui-status(endstat(Id))) .

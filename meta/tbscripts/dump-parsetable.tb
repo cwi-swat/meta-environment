@@ -32,7 +32,7 @@ in
       fi .
       rec-msg(save-done)
     +
-      rec-msg(no-parse-table)
+      rec-msg(no-parse-table(trm(ModuleName)))
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(parse-table-dumped)
