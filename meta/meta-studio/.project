@@ -3,6 +3,10 @@
 	<name>meta-studio</name>
 	<comment></comment>
 	<projects>
+		<project>JJTraveler</project>
+		<project>aterm-java</project>
+		<project>java-adapter</project>
+		<project>shared-objects</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

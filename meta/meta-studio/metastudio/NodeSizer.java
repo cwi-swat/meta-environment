@@ -1,11 +1,12 @@
 package metastudio;
 
+import metastudio.graph.Graph;
 import metastudio.graph.Node;
 import metastudio.graph.Shape;
 
 public abstract class NodeSizer {
 	public Node sizeNode(Node node) {
-		double factor = shapeFactor(GraphWrapper.getNodeShape(node));
+		double factor = shapeFactor(Graph.getNodeShape(node));
 		int width = (int) (((double) getWidth(node)) * factor);
 		int height = (int) (((double) getHeight(node)) * factor);
 

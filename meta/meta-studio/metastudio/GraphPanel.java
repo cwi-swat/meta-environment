@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import metastudio.graph.Attribute;
 import metastudio.graph.Edge;
 import metastudio.graph.EdgeList;
+import metastudio.graph.Graph;
 import metastudio.graph.Node;
 import metastudio.graph.NodeList;
 import metastudio.graph.Point;
@@ -47,7 +48,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 	private String id;
 	private int index;
 
-	private GraphWrapper graph;
+	private Graph graph;
 
 	private int max_x;
 	private int max_y;
@@ -138,7 +139,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 	}
 
-	public void setGraph(GraphWrapper graph) {
+	public void setGraph(Graph graph) {
 		this.graph = graph;
 		updateGeometry();
 	}
@@ -273,7 +274,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 			node_border = nodeBorder;
 		}
 
-		Shape shape = GraphWrapper.getNodeShape(node);
+		Shape shape = Graph.getNodeShape(node);
 
 		if (shape.isBox()) {
 			paintBox(g, x, y, w, h, node_bg, node_border);

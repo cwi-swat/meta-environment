@@ -54,7 +54,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   private JTabbedPane graphPane;
 
-  private GraphWrapper graph;
+  private Graph graph;
   private ImportGraphPanel importGraphPanel;
   private ParseTreePanel parseTreePanel;
 
@@ -74,6 +74,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private MessageWindow messageWindow;
 
   public static final void main(String[] args) throws IOException {
+	args = new String[6];
+	args[0] = "-TB_HOST_NAME";
+	args[1] = "localhost";
+	args[2] = "-TB_PORT";
+	args[3] = "8999";
+	args[4] = "-TB_TOOL_NAME";
+	args[5] = "user-interface";
+
     MetaStudio studio = new MetaStudio(args);
     studio.bridge.run();
   }
@@ -295,7 +303,12 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   private void createModuleGraph() {
     Color color;
-    graph = GraphWrapper.emptyGraph(factory);
+
+	NodeList nodes = factory.makeNodeList_Empty();
+	EdgeList edges = factory.makeEdgeList_Empty();
+	AttributeList attrs = factory.makeAttributeList_Empty();
+
+	graph = factory.makeGraph_Default(nodes, edges, attrs);
 
     importGraphPanel = new ImportGraphPanel(moduleManager);
 
@@ -436,7 +449,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   private void resetGraph() {
-    graph.reset();
+	NodeList nodes = factory.makeNodeList_Empty();
+	EdgeList edges = factory.makeEdgeList_Empty();
+	AttributeList attrs = factory.makeAttributeList_Empty();
+
+	graph = factory.makeGraph_Default(nodes, edges, attrs);
   }
 
   public void run() {
@@ -657,11 +674,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     setModules((ATermList) importRelations);
     setImports((ATermList) importRelations);
 
-    graph = GraphWrapper.fromImportList(factory, (ATermList) importRelations);
+    graph = Graph.fromImportList(factory, (ATermList) importRelations);
     layoutGraph(importGraphPanel, graph);
   }
 
-  public void layoutGraph(GraphPanel graphPanel, GraphWrapper graph) {
+  public void layoutGraph(GraphPanel graphPanel, Graph graph) {
     final FontMetrics metrics = graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT));
 
     NodeSizer sizer = new NodeSizer() {
@@ -680,13 +697,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   public void displayGraph(String id, ATerm graphTerm) {
-    GraphWrapper graph = GraphWrapper.fromTerm(factory, graphTerm);
+    Graph graph = factory.GraphFromTerm(graphTerm);
     GraphPanel panel = getGraphPanel(id);
     layoutGraph(panel, graph);
   }
 
   public void graphLayouted(String id, ATerm graphTerm) {
-    GraphWrapper graph = GraphWrapper.fromTerm(factory, graphTerm);
+    Graph graph = factory.GraphFromTerm(graphTerm); 
     if (id.equals(importGraphPanel.getId())) {
       this.graph = graph;
     }
