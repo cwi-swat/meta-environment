@@ -1,3 +1,5 @@
+/*{{{  header */
+
 /*
 
     ToolBus -- The ToolBus Application Architecture
@@ -19,6 +21,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+
+/*{{{  schematic overview */
+
 /*
  * perl-adapter -- Generic adapter for ToolBus <-> perl connection
  *
@@ -31,7 +38,7 @@
  *
  * Purpose: pass term coming from ToolBus to perl, i.e.
  *
- *    do(xx,print-text(3))  ==> do print_text(3)
+*    do(xx,print-text(3))  ==> do print_text(3)
  *
  * where receiveTB is a function defined in the Perl script
  * capable of interpreting its argument and executing
@@ -40,73 +47,52 @@
  *
  * Architecture:
  *
- *         ================== ToolBus
- *           |           ^
- *           v           |    (sockets)
- *         +---------------+
- *         | perl-adapter  |
- *         +---------------+
- *           |           ^
- *           |           |
- *           |  +------+ |
- *           +->| perl |-+    (standard input/output)
- *              +------+
+*         ================== ToolBus
+*           |           ^
+*           v           |    (sockets)
+*         +---------------+
+*         | perl-adapter  |
+*         +---------------+
+*           |           ^
+*           |           |
+*           |  +------+ |
+*           +->| perl |-+    (standard input/output)
+*              +------+
  * 
  * Wed May 17 13:12:05 MDT 1995: paulk
  * - Added -help
  */
 
+/*}}}  */
+
+/*{{{  includes */
+
 #include "TB.h"
 #include <unistd.h>
 #include <signal.h>
 
+/*}}}  */
+
+/*{{{  variables */
+
 FILE *to_perl;  /* file descriptor connected to std input of perl */
-
 term *tname = NULL;
-
 char tmpname[512];
+
+/*}}}  */
+
+/*{{{  void unlink_tmp(void) */
 
 void unlink_tmp(void)
 { 
   remove(tmpname);
 }
 
-require_fun(FILE *ftmp, char *fname, term_list *fargs)
-{
-  TBprintf(ftmp, "if(! defined &");
-  print_fun_name(ftmp, fname);
-  TBprintf(ftmp, "){print STDERR \"%s: *** WARNING: subroutine ", tool_name);
-  print_fun_name(ftmp, fname);
-  TBprintf(ftmp, " (with %d arguments) is missing\\n\";}\n", list_length(fargs));
-}
+/*}}}  */
 
-check_in_sign(FILE *ftmp)
-{ char *atf, *tn;
-  term *tid;
-  term_list *arg;
-  extern term_list *tool_in_sign;
-  term_list *reqs = tool_in_sign;
-  char pat[128];
+/*{{{  void print_escaped(term *t) */
 
-  /* construct match pattern, e.g. ``%f(<calc>,%l)'' */
-  sprintf(pat, "%%f(<%s>, %%l)", tool_name); 
-
-  for(; reqs; reqs = next(reqs)){
-    if(TBmatch(first(reqs), pat, &atf, &arg)){
-	if(streq(atf, "rec-do") || streq(atf, "rec-eval"))
-	  require_fun(ftmp, get_txt(fun_sym(first(arg))), fun_args(first(arg)));
-	else if(streq(atf, "rec-ack-event"))
-	  require_fun(ftmp, "rec-ack-event", arg);
-	else if(streq(atf, "rec-terminate"))
-	  require_fun(ftmp, "rec-terminate", arg);
-	else
-	  TBmsg("check_in_sign: skipped %t\n", first(reqs));
-  } else
-	TBmsg("check_in_sign: skipped %t\n", first(reqs));	
-  }
-}
-
-print_escaped(term *t)
+void print_escaped(term *t)
 {
   char *s = TBsprintf("%t", t);
   int c;
@@ -116,21 +102,21 @@ print_escaped(term *t)
   while(*s){
     c = *s++;
     switch(c){
-    case '"':      
-      if(instring)
-	instring = TBfalse;
-      else
-	instring = TBtrue;
-      break;
-    case '\n':
-      fputc('\\', to_perl); fputc('n', to_perl);
-      continue;
-    case '\\':
-      fputc('\\', to_perl);
-      if(*s)
-	fputc(*s++, to_perl);
-      continue;
-    default:;
+      case '"':      
+	if(instring)
+	  instring = TBfalse;
+	else
+	  instring = TBtrue;
+	break;
+      case '\n':
+	fputc('\\', to_perl); fputc('n', to_perl);
+	continue;
+      case '\\':
+	fputc('\\', to_perl);
+	if(*s)
+	  fputc(*s++, to_perl);
+	continue;
+      default:;
     }
     fputc(c, to_perl);
   }
@@ -138,7 +124,10 @@ print_escaped(term *t)
   fputc(' ', to_perl);
 }
 
-print_fun_name(FILE *fout, char *s)
+/*}}}  */
+/*{{{  void print_fun_name(FILE *fout, char *s) */
+
+void print_fun_name(FILE *fout, char *s)
 {
   while(*s){
     if(*s == '-')
@@ -149,9 +138,55 @@ print_fun_name(FILE *fout, char *s)
   }
 }
 
+/*}}}  */
+
+/*{{{  void require_fun(FILE *ftmp, char *fname, term_list *fargs) */
+
+void require_fun(FILE *ftmp, char *fname, term_list *fargs)
+{
+  TBprintf(ftmp, "if(! defined &");
+  print_fun_name(ftmp, fname);
+  TBprintf(ftmp, "){print STDERR \"%s: *** WARNING: subroutine ", tool_name);
+  print_fun_name(ftmp, fname);
+  TBprintf(ftmp, " (with %d arguments) is missing\\n\";}\n",
+	   list_length(fargs));
+}
+
+/*}}}  */
+/*{{{  void check_in_sign(FILE *ftmp) */
+
+void check_in_sign(FILE *ftmp)
+{
+  char *atf;
+  term_list *arg;
+  extern term_list *tool_in_sign;
+  term_list *reqs = tool_in_sign;
+  char pat[128];
+
+  /* construct match pattern, e.g. ``%f(<calc>,%l)'' */
+  sprintf(pat, "%%f(<%s>, %%l)", tool_name); 
+
+  for(; reqs; reqs = next(reqs)){
+    if(TBmatch(first(reqs), pat, &atf, &arg)){
+      if(streq(atf, "rec-do") || streq(atf, "rec-eval"))
+	require_fun(ftmp, get_txt(fun_sym(first(arg))), fun_args(first(arg)));
+      else if(streq(atf, "rec-ack-event"))
+	require_fun(ftmp, "rec-ack-event", arg);
+      else if(streq(atf, "rec-terminate"))
+	require_fun(ftmp, "rec-terminate", arg);
+      else
+	TBmsg("check_in_sign: skipped %t\n", first(reqs));
+    } else
+      TBmsg("check_in_sign: skipped %t\n", first(reqs));	
+  }
+}
+
+/*}}}  */
+
+/*{{{  term *handle_input_from_toolbus(term *e) */
+
 term *handle_input_from_toolbus(term *e)
 {
-  term *tn, *arg;
   term *fargs, *farg;
   char *fname, *sep = "";
 
@@ -168,26 +203,29 @@ term *handle_input_from_toolbus(term *e)
     }
     TBprintf(to_perl, ");\n");
     return NULL;
-    } else if(TBmatch(e, "rec-ack-event(%t)", &farg)){
-      TBprintf(to_perl, "do rec_ack_event(");
-      print_escaped(farg);
-      TBprintf(to_perl, ");\n");
-      return NULL;
-    } else if(TBmatch(e, "rec-terminate(%t)", &farg)){
-      TBprintf(to_perl, "do rec_terminate(");
-      if(farg)
-	print_escaped(farg);
-      else
-	TBprintf(to_perl, "\"\"");
-      TBprintf(to_perl, ");\n");
-      sleep(1);
-      unlink_tmp();
-      kill(0, SIGKILL);
-      exit(0);
-    }
-    TBmsg("IGNORED: %t\n", e);
+  } else if(TBmatch(e, "rec-ack-event(%t)", &farg)){
+    TBprintf(to_perl, "do rec_ack_event(");
+    print_escaped(farg);
+    TBprintf(to_perl, ");\n");
     return NULL;
+  } else if(TBmatch(e, "rec-terminate(%t)", &farg)){
+    TBprintf(to_perl, "do rec_terminate(");
+    if(farg)
+      print_escaped(farg);
+    else
+      TBprintf(to_perl, "\"\"");
+    TBprintf(to_perl, ");\n");
+    sleep(1);
+    unlink_tmp();
+    kill(0, SIGKILL);
+    exit(0);
+  }
+  TBmsg("IGNORED: %t\n", e);
+  return NULL;
 }
+
+/*}}}  */
+/*{{{  term *handle_input_from_perl(term *e) */
 
 term *handle_input_from_perl(term *e)
 {
@@ -200,19 +238,27 @@ term *handle_input_from_perl(term *e)
   return e;
 }
 
-copy_file(FILE *fout, char *name)
-{  FILE *f;
-   char line[512];
-     
-  if((f = fopen(name, "r")) == NULL)
-      err_sys_fatal("Can't open `%s'", name);
+/*}}}  */
 
-    while(fgets(line, 512, f) != NULL){
-      /* fputs(line, stderr); */
-      fputs(line, fout);
-    }
-    fclose(f);
+/*{{{  void copy_file(FILE *fout, char *name) */
+
+void copy_file(FILE *fout, char *name)
+{
+  FILE *f;
+  char line[512];
+
+  if((f = fopen(name, "r")) == NULL)
+    err_sys_fatal("Can't open `%s'", name);
+
+  while(fgets(line, 512, f) != NULL){
+    /* fputs(line, stderr); */
+    fputs(line, fout);
+  }
+  fclose(f);
 }
+
+/*}}}  */
+/*{{{  void connect_to_perl(char *script, TBcallbackTerm handler) */
 
 void connect_to_perl(char *script, TBcallbackTerm handler)
 {
@@ -232,7 +278,7 @@ void connect_to_perl(char *script, TBcallbackTerm handler)
   check_in_sign(ftmp);
   fprintf(ftmp, "do TBcomm();\n");
   fclose(ftmp);
- 
+
   if(pipe(ui2perl) < 0 || pipe(perl2ui) < 0)
     err_sys_fatal("Can't create pipes");
   old_stdin = dup(0);
@@ -262,19 +308,26 @@ void connect_to_perl(char *script, TBcallbackTerm handler)
   }
 }
 
+/*}}}  */
+/*{{{  void help(void) */
+
 void help(void)
 {
   char * str =
-"\n\
-Synopsis: perl-adapter [options]\n\
-\n\
-Options are:\n\
--help                 print this message\n\
--script Name          use Name as Perl script\n";
+    "\n\
+    Synopsis: perl-adapter [options]\n\
+    \n\
+    Options are:\n\
+    -help                 print this message\n\
+    -script Name          use Name as Perl script\n";
   fprintf(stderr, str);
 
   exit(0);
 }
+
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
@@ -293,15 +346,17 @@ int main(int argc, char *argv[])
     i++;
   }
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
-  
+
   if((f = fopen(script, "r")))
     fclose(f);
   else
     err_sys_fatal("Can't open perl script `%s'", script);
-    
+
   tname = TBmake(name);
   connect_to_perl(script, handle_input_from_perl);
   TBeventloop();
   unlink_tmp();
   return 0;
 }
+
+/*}}}  */
