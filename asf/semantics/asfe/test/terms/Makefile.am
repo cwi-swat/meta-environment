@@ -20,18 +20,21 @@
 #
 # $Id$
 
-EXTRA_DIST = Pico-Booleans.1.trm.asfix1 \
-             Pico-Booleans.2.trm.asfix1 \
-             Pico-Integers.1.trm.asfix1 \
-             Pico-Integers.2.trm.asfix1 \
-             Pico-Integers.3.trm.asfix1 \
-             Pico-eval.1.trm.asfix1 \
-             Pico-syntax.1.trm.asfix1 \
-             Pico-syntax.2.trm.asfix1 \
-             Pico-typecheck.1.trm.asfix1 \
-             Pico-typecheck.2.trm.asfix1 \
-             Set.1.trm.asfix1 \
-             Set.2.trm.asfix1 \
-             Set.3.trm.asfix1 \
-             Traversal-Typecheck.1.trm.asfix1 \
-             Type-environment.1.trm.asfix1 
+EXTRA_DIST = Pico-Booleans.1.trm.afme \
+             Pico-Booleans.2.trm.afme \
+             Pico-Integers.1.trm.afme \
+             Pico-Integers.2.trm.afme \
+             Pico-Integers.3.trm.afme \
+             Pico-eval.1.trm.afme \
+             Pico-syntax.1.trm.afme \
+             Pico-syntax.2.trm.afme \
+             Pico-typecheck.1.trm.afme \
+             Pico-typecheck.2.trm.afme \
+             Pico-set.1.trm.afme \
+             Pico-set.2.trm.afme \
+             Pico-set.3.trm.afme \
+             Traversal-Typecheck.1.trm.afme \
+             Type-environment.1.trm.afme \
+             Collect.1.trm.afme \
+             Bracket.1.trm.afme \
+             Memo-Pico-typecheck.1.trm.afme
