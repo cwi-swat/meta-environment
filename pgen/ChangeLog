@@ -1,5 +1,8 @@
 $Id$
 
+Fri Mar 19 15:17:59 CET 2004 <j{ong,urgenv}@cwi.nl>
+ * updated wrt changes in SDFME API
+
 Thu Mar 11 16:54:31 CET 2004 <markvdb@cwi.nl>
  * Improved an error message with respect of the definedness of a start
    symbol.
