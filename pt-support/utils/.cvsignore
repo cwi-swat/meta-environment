@@ -4,3 +4,6 @@ Makefile.in
 *.o
 flattenPT
 a2metoa1
+unparsePT
+implodePT
+unparseProd
