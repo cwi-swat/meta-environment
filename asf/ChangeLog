@@ -1,5 +1,11 @@
 
 
+Thu Feb 17 16:08:51 CET 2005 <jurgenv@cwi.nl>
+ * Added commandline option to asfc that activates parsing of
+   input file with an available parsetable before rewriting. Now
+   we don't need sglr or unparsePT anymore for a deployed ASF+SDF 
+   specification.
+
 Tue Feb  8 08:39:23 CET 2005 <jurgenv@cwi.nl>
  * Factored out lifting and lowering from ASF-Normalization spec into
    surrounding C code in asf-operations.
