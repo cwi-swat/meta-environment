@@ -22,34 +22,48 @@
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
 
-tests=0
-failed=0
+# HOW TO ADD A REGRESSION TEST:
+#
+# 1. add <modulename>.eqs.asfix1 to ./eqs. This file should contain a 
+#    dump of the needed equations
+# 2. add terms to ./terms of the form <modulename>.[0-9]+.trm.asfix1.
+#    These files will be used in conjunction with the eqs file you provided
+# 3. add normal forms to ./ref of the form <modulename>.[0-9]+.ref.asfix1
+#    that correspond with the terms in ./terms
 
-regress_test () {
-  eqs=$1
-  trm=$2
-  ref=$3 
-  res=$trm.res 
-  tests=`expr $tests + 1`
-  rm -f /tmp/$trm.res
-  ../src/evaluator -e $eqs -i $trm -o $res
-  ./equalModuloWhitespace $ref $res 
-  if [ $? != 0 ]; then
-    echo "Failed regression test: $eqs" 
-    failed=`expr $failed + 1`
-  else
-    printf .
-  fi
-}
+# HOW TO ADD TESTS THAT SHOULD FAIL
+#
+# 1. Steps 1 and 2 from above.
+# 2. You don't need a reference term of course
 
-# Test whether equations are available that *should* be available.
-regress_test terms/Traversal-Typecheck.asf.baf terms/Traversal-Typecheck.trm.asfix1  terms/Traversal-Typecheck.ref.asfix1 
+set -e
 
-echo ""
+# first we do all equations that should succeed, and check if the normal
+# forms are what we expected.
 
-if [ $failed != 0 ]; then
-        echo "FAILED:" $failed "out of" $tests "tests"
-        exit 1
-else
-  echo "All" $tests "tests succeeded"
-fi
+for e in eqs/*.eqs.asfix1; do
+  for t in terms/`basename $e .eqs.asfix1`*; do
+    res=`basename $t .trm.asfix1`.res.asfix1
+    rm -f $res
+    ref=ref/`basename $t .trm.asfix1`.ref.asfix1
+    ../src/evaluator -e $e -i $t -o $res
+    ./equalModuloWhitespace $ref $res
+    rm -f $res
+    printf "."
+  done
+done
+
+# now we do all equations that should generate error messages from
+# the evaluator
+for e in fail/*.eqs.asfix1; do
+  for t in terms/`basename $e .eqs.asfix1`*; do
+    res=`basename $t .trm.asfix1`.res.asfix1
+    rm -f $res
+    ref=ref/`basename $t .trm.asfix1`.ref.asfix1
+    ! ../src/evaluator -e $e -i $t -o $res > /dev/null 2>&1
+    rm -f $res
+    printf "."
+  done
+done
+
+printf "\n"

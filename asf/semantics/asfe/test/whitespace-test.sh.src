@@ -24,19 +24,11 @@ datadir=__DATADIR__
 
 set -e
 
-./whitespace terms/Set.eqs.asfix1 terms/Set2.trm.asfix1 
-printf "." 
-./whitespace terms/Type-environment.eqs.asfix1 terms/Type-environment.trm.asfix1
-printf "."
-./whitespace terms/Set.eqs.asfix1 terms/Set.trm.asfix1
-printf "."
-./whitespace terms/Set.eqs.asfix1 terms/Set3.trm.asfix1
-printf "."
-./whitespace terms/Pico-typecheck.eqs.asfix1 terms/fac.trm.asfix1
-printf "."
-./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
-printf "."
-./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm2.asfix1
-printf "."
-./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm3.asfix1
-printf ".\n"
+for e in eqs/*.eqs.asfix1; do
+  for t in terms/`basename $e .eqs.asfix1`*; do
+    ./whitespace $e $t
+    printf "."
+  done
+done
+
+printf "\n"

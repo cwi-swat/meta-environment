@@ -22,8 +22,7 @@
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
 
-
-./equalModuloWhitespace terms/fac.trm.asfix1 terms/fac_no_comments.trm.asfix1
+./equalModuloWhitespace terms/Pico-syntax.1.trm.asfix1 terms/Pico-syntax.2.trm.asfix1
 printf "."
-./equalModuloWhitespace terms/bool_no_comments.trm.asfix1 terms/bool.trm.asfix1
+./equalModuloWhitespace terms/Pico-Booleans.1.trm.asfix1 terms/Pico-Booleans.2.trm.asfix1
 printf ".\n"
