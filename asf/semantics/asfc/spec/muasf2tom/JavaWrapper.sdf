@@ -3,6 +3,7 @@ module muasf2tom/JavaWrapper
 imports tom/TomSyntax
 imports basic/Whitespace
 imports utilities/IO[TomSpecification]
+imports basic/Strings
 
 exports
 

@@ -1,23 +1,23 @@
 equations
 
 [] wrap-rules(TomDefinition,Name) =
-import aterm.*;
-import aterm.pure.*;
-import string2bytes(Name || ".*");
-import string2bytes(Name || ".types.*);
+import string-to-bytes("aterm.*");
+import string-to-bytes("aterm.pure.*");
+import string-to-bytes(Name || ".*");
+import string-to-bytes(Name || ".types.*");
 
-public class string2bytes(Name) {
+public class string-to-bytes(Name) {
   private Factory factory;
 
-  %include { string2bytes(Name || ".tom") }
+  %include { string-to-bytes(Name || ".tom") }
 
-  public string2bytes(Name)(Factory factory) {
+  public string-to-bytes(Name)(Factory factory) {
     this.factory = factory;
   }
 
-  public Factory string2bytes("get" || Name "Factory")() {
+  public Factory string-to-bytes("get" || Name || "Factory()") {
     return factory;
   }
 
-  unparse-to-bytes(TomDefinition)
+  string-to-bytes(unparse-to-string(TomDefinition))
 }
