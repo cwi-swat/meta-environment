@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 
 #include "in-output.tif.h"
+char *expand_path(const char *relative_path);
 
 /*}}}  */
 /*{{{  defines */
@@ -578,16 +579,46 @@ ATerm create_empty_rules_section(int cid, char *name, char *syntaxPath)
 
 /*}}}  */
 
+char* normalize_filename(const char *path)
+{
+  int i;
+  int len = strlen(path);
+  char *prefix;
+  char *newprefix = NULL;
+  char *newpath = NULL;
+
+  for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
+
+  prefix = strdup(path);
+  prefix[i] = '\0';
+
+  newprefix = expand_path(prefix);
+  newpath = (char*) malloc(strlen(newprefix) + (len - i));
+
+  strcpy(newpath,newprefix);
+  newpath[strlen(newpath)] = '/';
+  strcpy(newpath+strlen(newprefix)+1,path+i+1);
+
+  free(prefix);
+  free(newprefix);
+
+  return(newpath);
+}
+
 /*{{{  ATerm open_file(int cid, char *path) */
 
 ATerm open_file(int cid, char *path)
 {
+  char   *normalized = NULL;
   char   newestbaf[PATH_LEN] = {'\0'};
   char   newestraw[PATH_LEN] = {'\0'};
   ATbool newest_is_binary = ATfalse;
   ATerm  t;
 
-  strcpy(newestraw, path);
+  normalized = normalize_filename(path);
+  strcpy(newestraw, normalized);
+  free(normalized);
+
   sprintf(newestbaf, "%s%s", newestraw, BAF_EXT);
   
   if (fileexists(newestbaf)) {
