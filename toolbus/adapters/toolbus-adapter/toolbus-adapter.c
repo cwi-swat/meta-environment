@@ -41,9 +41,9 @@ void toolbus_stop(int conn, int id)
 }
 
 /*}}}  */
-/*{{{  ATerm toolbus_start(int conn, char *script, ATerm args) */
+/*{{{  ATerm toolbus_start(int conn, const char *script, ATerm args) */
 
-ATerm toolbus_start(int conn, char *script, ATerm args)
+ATerm toolbus_start(int conn, const char *script, ATerm args)
 {
   int i, pid, cid;
   char *argv[MAX_ARGS];
