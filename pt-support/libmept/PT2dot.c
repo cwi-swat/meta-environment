@@ -27,7 +27,7 @@ static size_t size;
 
 /*}}}  */
 
-/*{{{  static void vappend(char *str, const char* format, va_list ap) */
+/*{{{  static char* vappend(char *str, const char* format, va_list ap) */
 
 static char* vappend(char *str, const char* format, va_list ap)
 {
@@ -60,7 +60,7 @@ static char* vappend(char *str, const char* format, va_list ap)
 }
 
 /*}}}  */
-/*{{{  static void append(char *str, const char* format, ...) */
+/*{{{  static char* append(char *str, const char* format, ...) */
 
 static char* append(char *str, const char* format, ...)
 {
@@ -75,7 +75,7 @@ static char* append(char *str, const char* format, ...)
 
 /*}}}  */
 
-/*{{{  char* escape(const char* str) */
+/*{{{  static char* escape(const char* str) */
 
 static char* escape(const char* str)
 {
@@ -147,7 +147,7 @@ static long makeNodeId(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  static void printNode(char *dot, int parent, int node, char *contents) */
+/*{{{  static char* printNode(char *dot, int parent, int node, char *contents) */
 
 static char* printNode(char *dot, int parent, int node, char *contents)
 {
@@ -167,7 +167,7 @@ static char* printNode(char *dot, int parent, int node, char *contents)
 }
 
 /*}}}  */
-/*{{{  static void printAmbNode(char *dot, int parent, int node, char *contents) */
+/*{{{  static char* printAmbNode(char *dot, int parent, int node, char *contents) */
 
 static char* printAmbNode(char *dot, int parent, int node, char *contents)
 {
@@ -208,7 +208,7 @@ static char* printCharNode(char *dot, int parent, int node, char *contents)
 
 /*}}}  */
 
-/*{{{  static void treeToDot(char *dot, int *len, PT_Tree tree, int parent) */
+/*{{{  static char* treeToDot(char *dot, PT_Tree tree, int parent) */
 
 static char* treeToDot(char *dot, PT_Tree tree, int parent)
 {
