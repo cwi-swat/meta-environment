@@ -111,13 +111,6 @@ ATerm c_false = NULL;
  */
 ATerm char_table[256] = {NULL};
 
-/* This is a temporary hack and should be improved in the
- * near future. This table is used to store the priority
- * relations of context-free functions in order to restore
- * brackets after reducing.
- */
-ATermTable priority_table;
-
 /* These quoted symbols are used in combination with
  * outermost evaluation! So, to enlighten Jurgen
  * "if" Bool "then" S "else" S "fi" -> S {delay2, delay3}
@@ -1651,8 +1644,6 @@ void init_patterns()
   ATprotectAFun(afun_non_assoc_prio);
   afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
   ATprotectAFun(afun_gtr_prio);
-
-  priority_table = ATtableCreate(100,75);
 
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
