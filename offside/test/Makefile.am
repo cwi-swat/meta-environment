@@ -6,7 +6,7 @@ TESTS=$(foreach f, ${DEFS}, $f.sh)
 
 %.sh: Makefile
 	@(echo "set -e" ; \
-	echo "${META}/bin/pt-dump -m $* -o $*.trm.tbl" ;\
+	echo "${ASF}/bin/pt-dump -m $* -o $*.trm.tbl" ;\
 	echo "${SGLR}/bin/sglr -p $*.trm.tbl -i $*.trm | \
               ../src/offside.test | ${ATERM}/bin/atrmannos -a -o $*.tst" ;\
         echo "${ATERM}/bin/atdiff $*.tst $*.out" ) > $@ && chmod +x $@
