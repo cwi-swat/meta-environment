@@ -756,8 +756,8 @@ aterm_list *list_tail(aterm_list *l)
 
 aterm_list *cons(aterm_list *l1, aterm_list *l2)
 {
-  aterm_list *old, *result;
-  int i;
+  aterm_list *old, *oldl1 = l1, *result;
+  int i, len;
 
   if(t_is_empty(l2)) {
     /* For efficiency reasons, no need to traverse l1 when l2 is empty */
@@ -765,13 +765,26 @@ aterm_list *cons(aterm_list *l1, aterm_list *l2)
     return l1;
   }
 
-  result = l2;
+  result = l2;  
+  len = MIN(MAX_STORE, TlistSize(l1));
+  for(int i=0; i<len; i++) {
+    term_store[i] = t_list_first(l1);
+    l1 = t_list_next(l1);
+  }
+
   for(i=TlistSize(l1)-1; i>=0; i--) {
     old = result;
     result = TbuildList(w, TlistIndex(l1, i), result);
     t_unprotect(old);
   }
-  t_unprotect(l1);
+
+  for(i=len-1; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, term_store[i], result);
+    t_unprotect(old);
+  }
+
+  t_unprotect(oldl1);
   return result;
 }
 
