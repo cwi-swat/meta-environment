@@ -285,7 +285,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
     for(;!ATisEmpty(args);args = ATgetNext(args)) {
       ATerm arg = ATgetFirst(args);
 
-      if (ATisEqual(ATparse("\"trafo\""),arg)) {
+      if (ATisEqual(ATparse("trafo"),arg)) {
 	if (trav.type == ACCUMULATOR || trav.type == COMBINATION) {
 	  trav.type = COMBINATION;
 	}
@@ -293,7 +293,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 	  trav.type = TRANSFORMER;
 	}
       }
-      else if (ATisEqual(ATparse("\"accu\""), arg)) {
+      else if (ATisEqual(ATparse("accu"), arg)) {
 	if (trav.type == TRANSFORMER || trav.type == COMBINATION) {
 	  trav.type = COMBINATION;
 	}
@@ -301,7 +301,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 	  trav.type = ACCUMULATOR;
 	}
       }
-      else if (ATisEqual(ATparse("\"bottom-up\""), arg)) {
+      else if (ATisEqual(ATparse("bottom-up"), arg)) {
 	if (trav.strategy == TOPDOWN) {
 	  RWsetError("Ambiguous traversal attribute in production.",
 		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
@@ -310,7 +310,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 	  trav.strategy = BOTTOMUP;
 	}
       }
-      else if (ATisEqual(ATparse("\"top-down\""), arg)) {
+      else if (ATisEqual(ATparse("top-down"), arg)) {
 	if (trav.strategy == BOTTOMUP) {
 	  RWsetError("Ambiguous traversal attribute in production.",
 		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
@@ -319,7 +319,7 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 	  trav.strategy = TOPDOWN;
 	}
       }
-      else if (ATisEqual(ATparse("\"generate-syntax\""), arg)) {
+      else if (ATisEqual(ATparse("generate-syntax"), arg)) {
 	; /* do nothing */
       }
       else {

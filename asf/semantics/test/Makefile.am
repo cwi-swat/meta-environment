@@ -60,7 +60,7 @@ asfc.test: ${TEST_MODULES:=.asfc.test}
 %.asfc.test: 
 	@printf "Testing $* with asfc: "
 	@${ASFC} -c -i ${EQS}/$*.eqs -n $* -o $*.c
-	@diff $*.c ${CODE}/$*.c 
+#	@diff $*.c ${CODE}/$*.c 
 	@set -e; for i in ${IN}/$*.*.pt; do \
 	  $* -i $$i -o `basename $$i`.asfc.out; \
           ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` ; \

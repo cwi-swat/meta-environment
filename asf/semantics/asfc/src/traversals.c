@@ -109,7 +109,7 @@ static TraversalType computeType(PT_Production prod)
     for(;!ATisEmpty(args);args = ATgetNext(args)) {
       ATerm arg = ATgetFirst(args);
 
-      if (ATisEqual(ATparse("\"trafo\""),arg)) {
+      if (ATisEqual(ATparse("trafo"),arg)) {
 	if (type == ACCUMULATOR || type == COMBINATION) {
 	  type = COMBINATION;
 	}
@@ -117,7 +117,7 @@ static TraversalType computeType(PT_Production prod)
 	  type = TRANSFORMER;
 	}
       }
-      else if (ATisEqual(ATparse("\"accu\""), arg)) {
+      else if (ATisEqual(ATparse("accu"), arg)) {
 	if (type == TRANSFORMER || type == COMBINATION) {
 	  type = COMBINATION;
 	}

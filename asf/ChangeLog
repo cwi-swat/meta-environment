@@ -1,3 +1,7 @@
+2001/11/29 (jurgenv@cwi.nl)
+ * Adapted all components to cope with new production attributes (no 
+   automatic quoting anymore).
+ * Adapted regression tests by hand to check the changes.
 
 2001/11/25 (mdejonge@cwi.nl)
  * package now uses toolbuslib package

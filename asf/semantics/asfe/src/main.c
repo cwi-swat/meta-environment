@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
   ASF_initASFMEApi();
-
+ATsetChecking(ATtrue);
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
 
