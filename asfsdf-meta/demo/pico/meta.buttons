@@ -1,4 +1,5 @@
-buttons([
+configuration([
+   extension("languages/pico/syntax/Pico-Syntax", ".pico"),
 
    button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","TypeCheck"]))],
