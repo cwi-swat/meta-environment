@@ -31,6 +31,21 @@ typedef struct _PERR_Start *PERR_Start;
 
 /*}}}  */
 
+/*{{{  protect macros */
+
+#define PERR_protectSummary(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectFeedbackList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectFeedback(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSubject(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
+
+/*}}}  */
 void PERR_initParsedErrorAPIApi(void);
 
 /*{{{  term conversion functions */
@@ -244,13 +259,7 @@ PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea,
 			    PERR_OptLayout wsAfterEndLine,
 			    PERR_OptLayout wsAfterComma2,
 			    PERR_NatCon endColumn,
-			    PERR_OptLayout wsAfterEndColumn,
-			    PERR_OptLayout wsAfterComma3,
-			    PERR_NatCon beginOffset,
-			    PERR_OptLayout wsAfterBeginOffset,
-			    PERR_OptLayout wsAfterComma4,
-			    PERR_NatCon endOffset,
-			    PERR_OptLayout wsAfterEndOffset);
+			    PERR_OptLayout wsAfterEndColumn);
 PERR_Area PERR_makeAreaNoArea();
 PERR_NatCon PERR_makeNatConString(char *string);
 PERR_StrCon PERR_makeStrConString(char *string);
@@ -562,28 +571,6 @@ ATbool PERR_hasAreaWsAfterEndColumn(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterEndColumn(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterEndColumn(PERR_Area arg,
 				       PERR_OptLayout wsAfterEndColumn);
-ATbool PERR_hasAreaWsAfterComma3(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterComma3(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterComma3(PERR_Area arg,
-				    PERR_OptLayout wsAfterComma3);
-ATbool PERR_hasAreaBeginOffset(PERR_Area arg);
-PERR_NatCon PERR_getAreaBeginOffset(PERR_Area arg);
-PERR_Area PERR_setAreaBeginOffset(PERR_Area arg, PERR_NatCon beginOffset);
-ATbool PERR_hasAreaWsAfterBeginOffset(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterBeginOffset(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterBeginOffset(PERR_Area arg,
-					 PERR_OptLayout wsAfterBeginOffset);
-ATbool PERR_hasAreaWsAfterComma4(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterComma4(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterComma4(PERR_Area arg,
-				    PERR_OptLayout wsAfterComma4);
-ATbool PERR_hasAreaEndOffset(PERR_Area arg);
-PERR_NatCon PERR_getAreaEndOffset(PERR_Area arg);
-PERR_Area PERR_setAreaEndOffset(PERR_Area arg, PERR_NatCon endOffset);
-ATbool PERR_hasAreaWsAfterEndOffset(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterEndOffset(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterEndOffset(PERR_Area arg,
-				       PERR_OptLayout wsAfterEndOffset);
 
 /*}}}  */
 /*{{{  PERR_NatCon accessors */
@@ -755,16 +742,6 @@ PERR_Area PERR_visitArea(PERR_Area arg,
 			 (PERR_OptLayout),
 			 PERR_NatCon(*acceptEndColumn) (PERR_NatCon),
 			 PERR_OptLayout(*acceptWsAfterEndColumn)
-			 (PERR_OptLayout),
-			 PERR_OptLayout(*acceptWsAfterComma3)
-			 (PERR_OptLayout),
-			 PERR_NatCon(*acceptBeginOffset) (PERR_NatCon),
-			 PERR_OptLayout(*acceptWsAfterBeginOffset)
-			 (PERR_OptLayout),
-			 PERR_OptLayout(*acceptWsAfterComma4)
-			 (PERR_OptLayout),
-			 PERR_NatCon(*acceptEndOffset) (PERR_NatCon),
-			 PERR_OptLayout(*acceptWsAfterEndOffset)
 			 (PERR_OptLayout));
 PERR_NatCon PERR_visitNatCon(PERR_NatCon arg, char *(*acceptString) (char *));
 PERR_StrCon PERR_visitStrCon(PERR_StrCon arg, char *(*acceptString) (char *));

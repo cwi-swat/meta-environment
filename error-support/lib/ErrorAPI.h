@@ -27,6 +27,17 @@ typedef struct _ERR_Area *ERR_Area;
 
 /*}}}  */
 
+/*{{{  protect macros */
+
+#define ERR_protectSummary(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectFeedbackList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectFeedback(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectSubject(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ERR_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
+
+/*}}}  */
 void ERR_initErrorAPIApi(void);
 
 /*{{{  term conversion functions */

@@ -62,10 +62,6 @@ PERR_Area ERR_liftArea(ERR_Area area)
 			    pEndLine,
 			    e,e,
 			    pEndColumn,
-			    e,e,
-			    pBeginOffset,
-			    e,e,
-			    pEndOffset,
 			    e);
   }
   else {
