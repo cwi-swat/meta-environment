@@ -14,6 +14,8 @@ int     PT_getArgsLength(PT_Args args);
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 
+PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
+
 ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);
 PT_Tree	PT_annotateTreeWithLength(PT_Tree tree);
