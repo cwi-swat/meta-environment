@@ -1,0 +1,53 @@
+module type-check/action-typeops
+
+imports
+
+  type-check/Layout
+  type-check/subtype
+  type-check/types/asdf-types
+  type-check/environment
+  type-check/maps
+  type-check/constraints
+
+exports
+
+sorts
+
+  ActionType Environment
+
+context-free syntax
+
+  action-type-and(ActionType, ActionType, Environment)	
+					  -> <ActionType, Environment>
+
+  infallible(ActionType, ActionType, Environment)	-> Environment
+
+  closed(ActionType, ActionType, Environment)		-> Environment
+
+  not-in(SingleActionType, ActionType, Environment)	-> Environment
+
+  at-and(ActionType, ActionType, ActionType)		-> VariableMap
+
+  at-has-property(ActionType, SingleActionType)		-> VariableMap
+
+  at-no-variables(ActionType)				-> Answer
+
+  at-not-in(SingleActionType, ActionType)		-> Answer
+
+  at-contains(SingleActionType, ActionType)		-> Answer
+
+  get-variable(ActionType)				-> ActionType
+
+hiddens variables
+
+  "$ATY"[0-9]?		-> AtomicType
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> { Type "," }*
+  "$TV"[0-9]?		-> TypeVariable
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$EN"[0-9]?		-> Environment
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*

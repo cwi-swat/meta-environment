@@ -1,0 +1,122 @@
+equations
+
+[subtype-1] 
+
+   $EN2 := add-constraint(subtype-con($TY1, $TY2), $EN1)
+   =================================================
+   subtype-of($TY1, $TY2, $EN1) = $EN2
+
+[lub-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := subtype-of($TV, $TY1, $EN2), 
+   $EN4 := subtype-of($TV, $TY2, $EN3)
+   =================================
+   lub($TY1, $TY2, $EN1) = <$TV, $EN4>
+
+[glb-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := subtype-of($TY1, $TV, $EN2), 
+   $EN4 := subtype-of($TY2, $TV, $EN3)
+   =================================
+   glb($TY1, $TY2, $EN1) = <$TV, $EN4>
+
+[concat-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := add-constraint(concat-con($TY1, $TY2, $TV), $EN2)
+   =========================================================
+   concat($TY1, $TY2, $EN1) = <$TV, $EN3>
+
+[st-1] st($TY, $TY, $EN) = empty-map
+
+[st-2] $STS := get-subtypes($EN),
+	    [$AA1*, <$ATY2, $ATY1>, $AA2*] := $STS
+	    =======================================
+	    st($ATY1, $ATY2, $EN) = empty-map
+
+[st-3] $STS := get-subtypes($EN),
+	    [$AA1*, <$ATY3, $ATY1>, $AA2*] := $STS,
+	    st($ATY3, $ATY2, $EN) == empty-map
+	    =======================================
+	    st($ATY1, $ATY2, $EN) = empty-map
+
+[st-4] st(empty, $TY, $EN) = empty-map
+
+[st-5] $TY1 := get-using($AT1),
+	    $TY2 := get-giving($AT1),
+	    $TY3 := get-raising($AT1),
+	    $TY4 := get-using($AT1),
+	    $TY5 := get-giving($AT1),
+	    $TY6 := get-raising($AT1),
+	    st($TY1, $TY4, $EN) == empty-map, 
+	    st($TY5, $TY2, $EN) == empty-map, 
+	    st($TY6, $TY3, $EN) == empty-map 
+	    ================================================
+	    st(($AT1), ($AT2), $EN) = empty-map 
+
+[st-6] st($TY1, $TY2, $EN) == empty-map
+	    ================================
+	    st(($TY1), ($TY2), $EN) = empty-map
+
+[st-7] st($TY1, $TY2, $EN) == empty-map
+	    ====================================
+	    st($TY1, ($TY2), $EN) = empty-map
+
+[st-8] st($TY1, $TY2, $EN) == empty-map
+	    ====================================
+	    st(($TY1), $TY2, $EN) = empty-map
+
+[st-9] st($TY1, $TY2, $EN) == empty-map, 
+	    st(($TY1*), ($TY2*), $EN) == empty-map
+	    ====================================================
+	    st(($TY1, $TY1*), ($TY2, $TY2*), $EN) = empty-map 
+	     
+[st-12] $TY != data
+	=================================
+	st($TY, datum, $EN) = empty-map
+
+[st-13] st($TY, data, $EN) = empty-map
+
+
+[lowest-1] 
+
+   st($TY1, $TY2, $EN) == empty-map
+   ===================================
+   lowest-type($TY1, $TY2, $EN) = $TY1
+
+[lowest-2] 
+
+   lowest-type((using $TY1 & giving $TY2 & raising $TY3), 
+	        (using $TY4 & giving $TY5 & raising $TY6), $EN) = 
+		  (using lowest-type($TY1, $TY4, $EN) & 
+		         giving lowest-type($TY2, $TY5, $EN) &
+			 raising lowest-type($TY3, $TY6, $EN)) 
+
+[default-lowest-1] lowest-type($TY1, $TY2, $EN) = $TY2
+
+[highest-1] 
+
+   st($TY1, $TY2, $EN) == empty-map
+   ===================================
+   highest-type($TY1, $TY2, $EN) = $TY2
+
+[highest-2] 
+
+   highest-type((using $TY1 & giving $TY2 & raising $TY3), 
+	        (using $TY4 & giving $TY5 & raising $TY6), $EN) = 
+		  (using highest-type($TY1, $TY4, $EN) &
+		  giving highest-type($TY2, $TY5, $EN) &
+		  raising highest-type($TY3, $TY6, $EN))
+
+[default-highest-1] highest-type($TY1, $TY2, $EN) = $TY1
+
+[plus-1] ($TY1*) + ($TY2*) = ($TY1*, $TY2*)
+
+[plus-2] $TY1 + ($TY2*) = ($TY1, $TY2*)
+
+[plus-3] ($TY1*) + $TY2 = ($TY1*, $TY2)
+
+[plus-4] $TY1 + $TY2 = ($TY1, $TY2)
+

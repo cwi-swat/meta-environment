@@ -1,0 +1,48 @@
+module type-check/maps
+
+imports
+
+  type-check/typeops
+
+exports
+
+sorts
+
+  Variable ErrorMap VariableMap
+
+context-free syntax
+
+  vmap({<Variable, Type, Type> ","}*)	-> VariableMap
+
+  ActionTypeVariable | TypeVariable	-> Variable
+
+  "empty-map"			-> VariableMap
+
+  single(Variable, Type, Type)	-> VariableMap
+
+  lookup(Variable, VariableMap)	-> <Type, Type>   {memo}
+  "not-in-map"			-> <Type, Type>
+  "TOP"				-> Type
+  "BOT"				-> Type
+
+  update-bottom(Variable, Type, VariableMap)	-> VariableMap
+  update-top(Variable, Type, VariableMap)	-> VariableMap
+
+  rem-dubs(VariableMap, Environment)    -> VariableMap
+
+  insert(VariableMap, VariableMap)	-> VariableMap
+
+  ErrorMap				-> VariableMap
+
+  error(Type, Type)		-> ErrorMap
+  
+variables
+
+  "$M"[0-9]?	-> VariableMap
+  "$EM"[0-9]?	-> ErrorMap
+  "$VR"[0-9]?	-> Variable
+  "$TY"[0-9]?	-> Type
+  "$ATV"[0-9]?	-> ActionTypeVariable
+  "$TV"[0-9]?	-> TypeVariable
+  "$VT"[0-9]?"*" -> {<Variable, Type, Type> ","}*
+  "$EN"[0-9]?	-> Environment

@@ -1,0 +1,51 @@
+module type-check/solve
+
+imports
+
+  type-check/constraints
+  type-check/typeops
+
+exports
+
+context-free start-symbols
+
+  <VariableMap, Integer> 
+
+sorts
+
+  VariableMap Constraint Type TypedAction Variable
+
+context-free syntax
+
+  solve(VariableMap, List[[Constraint]], Environment)   
+				-> <VariableMap, List[[Constraint]]>
+
+  solve-constraints(List[[Constraint]], Environment)	
+				-> <VariableMap, List[[Constraint]]>
+  solve-constraint(Constraint, Environment)    -> VariableMap {memo}
+
+  replace-vars(List[[Constraint]], VariableMap)	   
+	      -> List[[Constraint]] {traversal(trafo, top-down, break), memo}
+  replace-vars(Constraint, VariableMap)	   
+	      -> Constraint {traversal(trafo, top-down, break), memo}
+  replace-vars(Type, VariableMap)   
+			    -> Type {traversal(trafo, top-down, break), memo}
+  replace-vars(<Variable, Type>, VariableMap)   
+		-> <Variable, Type> {traversal(trafo, top-down, break), memo}
+  replace-vars(VariableMap, VariableMap)   
+		     -> VariableMap {traversal(trafo, top-down, break), memo}
+  replace-vars(ActionType, VariableMap)	   
+                      -> ActionType {traversal(trafo, top-down, break), memo}
+  replace-vars(<Variable, Type, Type>, VariableMap)	   
+          -> <Variable, Type, Type> {traversal(trafo, top-down, break), memo}
+
+  handle-error(VariableMap, VariableMap, Constraint, 
+	       List[[Constraint]])
+			    -> <VariableMap, List[[Constraint]]>
+
+hiddens variables
+
+  "$LC"[0-9]?	-> List[[Constraint]]
+  "$N"[0-9]?	-> Integer
+  "$AT"[0-9]?	-> ActionType
+  "$SAT"[0-9]?	-> SingleActionType

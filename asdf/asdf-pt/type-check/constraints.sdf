@@ -1,0 +1,24 @@
+module type-check/constraints
+
+imports
+
+  containers/List[Constraint]
+
+exports
+
+sorts
+
+  Type RecordType Constraint
+
+context-free syntax
+
+  subtype-con(Type, Type)			-> Constraint
+  action-type-and-con(ActionType, ActionType, ActionType)	-> Constraint
+  concat-con(Type, Type, Type)			-> Constraint
+  infallible-con(ActionType, ActionType)	-> Constraint
+  closed-con(ActionType, ActionType)		-> Constraint
+  not-in-con(ActionType, ActionType)		-> Constraint
+
+variables
+
+  "$CO"[0-9]?		-> Constraint

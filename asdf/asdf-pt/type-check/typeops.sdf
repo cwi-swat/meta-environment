@@ -1,0 +1,44 @@
+module type-check/typeops
+
+imports
+
+  type-check/action-typeops
+
+exports
+
+sorts
+
+  Type Environment ActionType VariableMap
+
+context-free syntax
+
+%% Type operators
+
+  subtype-of(Type, Type, Environment)	-> Environment
+
+
+  lub(Type, Type, Environment)		-> <Type, Environment>
+
+  glb(Type, Type, Environment)		-> <Type, Environment>
+
+  concat(Type, Type, Environment)	-> <Type, Environment>
+
+  st(Type, Type, Environment)		-> VariableMap
+
+  highest-type(Type, Type, Environment)	-> Type
+  lowest-type(Type, Type, Environment)	-> Type
+
+  Type "+" Type				-> Type
+
+hiddens variables
+
+  "$ATY"[0-9]?		-> AtomicType
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> { Type "," }*
+  "$TV"[0-9]?		-> TypeVariable
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$EN"[0-9]?		-> Environment
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*

@@ -1,0 +1,49 @@
+equations
+
+[empty-map-1] empty-map = vmap()
+
+[single-1] single($VR, $TY1, $TY2) = vmap(<$VR, $TY1, $TY2>)
+
+[lookup-1] lookup($VR, vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*)) = <$TY1, $TY2>
+
+[default-lookup-1] lookup($VR, $M) = not-in-map
+
+[update-bot-1] update-bottom($VR, $TY1, 
+				  vmap($VT1*, <$VR, $TY2, $TY3>, $VT2*)) =
+				      vmap($VT1*, <$VR, $TY1, $TY3>, $VT2*)
+
+[default-update-bot-1] update-bottom($VR, $TY, vmap($VT1*)) = 
+				      vmap($VT1*, <$VR, $TY, TOP>)
+
+[update-top-1] update-top($VR, $TY1, vmap($VT1*, <$VR, $TY2, $TY3>, $VT2*)) = 
+				      vmap($VT1*, <$VR, $TY2, $TY1>, $VT2*)
+
+[default-update-top-1] update-top($VR, $TY, vmap($VT1*)) = 
+				      vmap($VT1*, <$VR, BOT, $TY>)
+
+[rem-dubs-1] 
+
+  $TY5 := highest-type($TY1, $TY3, $EN),
+  $TY6 := lowest-type($TY2, $TY4, $EN),
+  $M := insert(single($VR, $TY5, $TY6), vmap($VT1*, $VT2*, $VT3*))
+  ====================================================================
+  rem-dubs(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*, 
+		       <$VR, $TY3, $TY4>, $VT3*), $EN) = rem-dubs($M, $EN)
+
+[rem-dubs-2] rem-dubs(vmap($VT1*, <$ATV, ($ATV), ($ATV)>, $VT2*), $EN) = 
+				 rem-dubs(vmap($VT1*, $VT2*), $EN)
+
+[rem-dubs-3] rem-dubs(vmap($VT1*, <$TV, $TV, $TV>, $VT2*), $EN) = 
+				 rem-dubs(vmap($VT1*, $VT2*), $EN)
+
+[default-rem-dubs-1] rem-dubs($M, $EN) = $M
+
+[insert-1] insert(vmap(), $M) = $M
+
+[insert-2] insert($M, vmap()) = $M
+
+[insert-3] insert($EM, $M) = $EM
+
+[insert-4] insert($M, $EM) = $EM
+
+[insert-5] insert(vmap($VT1*), vmap($VT2*)) = vmap($VT1*, $VT2*)

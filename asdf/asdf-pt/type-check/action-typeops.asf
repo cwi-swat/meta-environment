@@ -1,0 +1,84 @@
+equations
+
+[action-type-and-1] 
+
+   <$ATV, $EN2> := new-action-type-var($EN1),
+   $EN3 := add-constraint(action-type-and-con($AT1, $AT2, $ATV), $EN2)
+   ===================================================================
+   action-type-and($AT1, $AT2, $EN1) = <$ATV, $EN3>
+
+[infallible-1] 
+
+   $EN2 := add-constraint(infallible-con($AT1, $AT2), $EN1)
+   ========================================================
+   infallible($AT1, $AT2, $EN1) = $EN2
+
+[closed-1] 
+
+   $EN2 := add-constraint(closed-con($AT1, $AT2), $EN1)
+   ====================================================
+   closed($AT1, $AT2, $EN1) = $EN2
+
+[not-in-1]
+
+   $EN2 := add-constraint(not-in-con($SAT, $AT), $EN1)
+   ===================================================
+   not-in($SAT, $AT, $EN1) = $EN2
+
+[at-and-1] 
+
+   $ATV !:= $SAT,
+   $M1 := at-and($SAT1* & $SAT2*, $SAT3* & $SAT4*, $AT),
+   $M2 := at-has-property($AT, $SAT),
+   $M3 := insert($M1, $M2)
+   =================================================================
+   at-and($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $AT) = $M3
+
+[at-and-2] 
+
+   $ATV !:= $SAT,
+   $M1 := at-and($SAT1* & $SAT2*, $AT, $SAT3* & $SAT4*),
+   $M2 := at-has-property($AT, $SAT),
+   $M3 := insert($M1, $M2)
+   =================================================================
+   at-and($SAT1* & $SAT & $SAT2*, $AT, $SAT3* & $SAT & $SAT4*) = $M3
+
+[at-and-3] 
+
+   $ATV !:= $SAT,
+   $M1 := at-and($AT, $SAT1* & $SAT2*, $SAT3* & $SAT4*),
+   $M2 := at-has-property($AT, $SAT),
+   $M3 := insert($M1, $M2)
+   =================================================================
+   at-and($AT, $SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*) = $M3
+
+[default-at-and-4]
+
+   $ATV1 := get-variable($AT1),
+   $ATV2 := get-variable($AT2),
+   $M1 := single($ATV1, BOT, ($ATV3)),
+   $M2 := single($ATV2, BOT, ($ATV3)),
+   $M3 := insert($M1, $M2)
+   ===================================
+   at-and($AT1, $AT2, $ATV3) = $M3
+
+[default-at-and-5] 
+
+   at-and($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, ) = 
+		 error(nothing, nothing)
+
+
+
+[at-has-propety-1]
+
+   at-has-property($SAT1* & $SAT & $SAT2*, $SAT) = empty-map
+
+[default-at-has-propety-1] 
+
+   at-has-property($SAT1* & $ATV & $SAT2*, $SAT) = single($ATV, BOT, ($SAT))
+
+[at-contains-1] at-contains($SAT, $SAT1* & $SAT & $SAT2*) = yes
+
+[default-at-contains-1] at-contains($SAT, $AT) = no
+
+[get-variable-1] get-variable($SAT1* & $ATV & $SAT2*) = $ATV

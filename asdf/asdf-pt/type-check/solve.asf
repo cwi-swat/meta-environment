@@ -1,0 +1,96 @@
+equations
+
+[solve-1] $M2 := rem-dubs($M1, $EN),
+	  $M3 := replace-vars($M2, $M2),
+	  $LC2 := replace-vars($LC1, $M3),
+	  <$M4, $LC3> := solve-constraints($LC2, $EN),
+	  $M5 := insert($M3, $M4),
+	  <$M1, $LC1> != <$M5, $LC3>
+	  ===============================
+	  solve($M1, $LC1, $EN) = solve($M5, $LC3, $EN)
+
+[default-solve-1] solve($M1, $LC1, $EN) = <$M1, $LC1>
+
+[solve-con-1] 
+
+	  $LC1 != [],
+	  <$M1, $LC2> := solve-constraints(tail($LC1), $EN),
+	  $CO1 := head($LC1),
+	  $M2 := rem-dubs($M1, $EN),
+	  $CO2 := replace-vars($CO1, $M2),
+	  $M3 := solve-constraint($CO2, $EN),
+	  <$M4, $LC3> := handle-error($M3, $M2, $CO2, $LC2)
+	  =======================================================
+	  solve-constraints($LC1, $EN) = <$M4, $LC3>
+
+[default-solve-con-2] solve-constraints([], $EN) = <empty-map, []>
+
+[handle-error-1] handle-error($EM, $M, $CO, $LC) = <$M, $CO:$LC>
+
+[handle-error-1] handle-error(vmap($VT*), $M, $CO, $LC) = 
+					 <insert(vmap($VT*), $M), $LC>
+
+[default-solve-con-1] solve-constraint($CO, $EN) = error(nothing, nothing)
+
+[subtype-con-1] 
+
+        $M1 := st($TY1, $TY2, $EN)
+	====================================================
+	solve-constraint(subtype-con($TY1, $TY2), $EN) = $M1
+
+[action-type-and-con-1] 
+
+	$M := at-and($AT1, $AT2, $AT3)
+	=================================================================
+	solve-constraint(action-type-and-con($AT1, $AT2, $AT3), $EN) = $M
+
+[concat-con-1]         
+
+	$M := st($TY1+$TY2, $TY3, $EN)
+	========================================================
+	solve-constraint(concat-con($TY1, $TY2, $TY3), $EN) = $M
+
+[infallible-con-1]         
+
+	$M := at-has-property($AT1, infallible)
+	============================================================
+	solve-constraint(infallible-con($AT1, infallible), $EN) = $M
+
+[default-infallible-con-1]         
+
+	empty-map == at-has-property($AT, infallible),
+	$M := single($ATV, infallible, infallible)
+	=====================================================
+	solve-constraint(infallible-con($AT, $ATV), $EN) = $M
+
+[closed-con-1]         
+
+	$M := at-has-property($AT1, closed)
+	============================================================
+	solve-constraint(closed-con($AT1, closed), $EN) = $M
+
+[default-closed-con-1]         
+
+	empty-map == at-has-property($AT, closed),
+	$M := single($ATV, closed, closed)
+	=================================================
+	solve-constraint(closed-con($AT, $ATV), $EN) = $M
+
+[not-in-con-1]         
+
+	at-no-variables($AT) == yes,
+	at-not-in($SAT, $AT) == yes
+	=========================================================
+	solve-constraint(not-in-con($SAT, $AT), $EN) = empty-map
+
+[rep-var-1] <($AT), ($AT)> := lookup($ATV, $M)
+	    =======================================================
+	    replace-vars($ATV, $M) = replace-vars($AT, $M)
+
+[rep-var-2] <$TY, $TY> := lookup($TV, $M)
+	    =========================================
+	    replace-vars($TV, $M) = replace-vars($TY, $M)
+
+[rep-var-3] replace-vars(<$VR, $TY1, $TY2>, $M) = 
+			<$VR, replace-vars($TY1, $M), replace-vars($TY1, $M)>
+

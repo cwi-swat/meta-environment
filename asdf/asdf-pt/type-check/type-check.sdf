@@ -1,0 +1,6 @@
+module type-check/type-check
+
+imports
+
+  type-check/tc-functions
+  type-check/solve
