@@ -19,7 +19,7 @@
 
    $Id$
 */
-process EditEquations(EditorId: str, ModuleName: str) is
+process EditEquations(EditorId: term, ModuleName: str) is
 let
   Path      : str,
   Focus     : term,

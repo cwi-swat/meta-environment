@@ -110,7 +110,7 @@ in
     rec-value(SE, Location?) .
     snd-msg(error-position(Location))
   +
-    rec-msg(remove-tree(EditorId?)).
+    rec-msg(delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId))
   ) *
   delta

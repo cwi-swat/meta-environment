@@ -200,6 +200,8 @@ in-output/test/Makefile
 module-db/Makefile
 module-db/test/Makefile
 editors/Makefile
+editors/manager/Makefile
+editors/manager/src/Makefile
 editors/text/Makefile
 editors/structure/Makefile
 editors/structure/src/Makefile

@@ -31,7 +31,7 @@ let
   DirtyFoci    : list,
   ErrorFoci    : list,
   Text         : str,
-  EditorId     : str,
+  EditorId     : term,
   ModuleName   : str,
   StartSymbols : term,
   Pos          : int,

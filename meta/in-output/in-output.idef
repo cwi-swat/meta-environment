@@ -143,16 +143,16 @@ in
       snd-msg(error-opening(Name))
     )
   +
-    rec-msg(save-sdf2-asfix(Name?,Path?,Asfix?)).
-    snd-eval(IO,save-sdf2-asfix(Name,Path,Asfix)).
-    rec-value(IO,save-done(Name?)).
+    rec-msg(save-asfix(Name?, Path?, Asfix?)) .
+    snd-eval(IO, save-asfix(Name, Path, Asfix)) .
+    rec-value(IO, save-done(Name?)) .
     snd-msg(save-done)
   +
-    rec-msg(save-eqs-asfix(Name?,Path?,Asfix?)).
-    snd-eval(IO,save-eqs-asfix(Name,Path,Asfix)).
-    rec-value(IO,save-done(Name?)).
-    snd-msg(save-done)
-  )*
+    rec-msg(save-text-file(Path?, Text?)) .
+    snd-eval(IO, save-text-file(Path, Text)) .
+    rec-value(IO, save-done(Path)) .
+    snd-msg(save-done(Path))
+  ) *
   delta
 endlet
 

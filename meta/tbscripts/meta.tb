@@ -26,6 +26,7 @@
 #include "sglr.idef"
 #include "text-editor.tb"
 #include "editor-creator.tb"
+#include "editor-manager.idef"
 #include "edit-syntax.tb"
 #include "edit-equations.tb"
 #include "edit-term.tb"
@@ -59,6 +60,6 @@
 toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
-  Notify-about-changed-modules, Rewrite-Errors, Traversals,
-  Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
-  Help, Clear-all, Close-modules, ParseFocusses) 
+	Notify-about-changed-modules, Rewrite-Errors, Traversals,
+	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
+	Help, Clear-all, Close-modules, ParseFocusses) 

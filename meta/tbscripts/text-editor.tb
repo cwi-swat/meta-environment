@@ -25,12 +25,12 @@ tool text-editor is {
   command = "editor"
 }
 
-process TextEditor(EditorType: str) is
+process TextEditor(EditorType: term, EditorId: term) is
 let
   TE        : text-editor,
-  Fid       : str,
   Path      : term,
   Sort      : term,
+  Fid       : str,
   Count     : int,
   Text      : str,
   FileName  : str,
@@ -39,21 +39,18 @@ let
   Direction : str,
   StartPos  : int,
   Length    : int,
-  OurId     : int,
   FocusText : str
 in
 (
-  OurId := process-id .
   execute(text-editor, TE?) .
   (
-    rec-msg(set-filename(OurId, FileName?)) .
+    rec-msg(set-filename(EditorId, FileName?)) .
     snd-eval(TE, edit-file(FileName))
   +
-    rec-msg(set-text(OurId, Text?)) .
+    rec-msg(set-text(EditorId, Text?)) .
     snd-eval(TE, edit-text("*reduct*", Text))
   ) .
   rec-value(TE, file-id(Fid?)) .
-  snd-msg(text-editor-id(OurId, Fid)) .
   snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Buffer")) .
   snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Focus")) .
   if equal(EditorType, "term") then
@@ -66,54 +63,62 @@ in
   snd-do(TE, tb-add-menu-item("Move", "Up")) .
   snd-do(TE, tb-add-menu-item("Move", "Down")) .
   (
-    rec-msg(set-focus(Fid,
+    rec-msg(set-focus(EditorId,
       focus(Path?, sort(SortName?), area(start(StartPos?), length(Length?))))) .
     snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
   +
-    rec-msg(clear-focus(Fid)) .
+    rec-msg(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +
-    rec-msg(get-focus-text(Fid,
+    rec-msg(get-focus-text(EditorId,
       focus(Path?, Sort?, area(start(StartPos?),length(Length?))))) .
     snd-eval(TE, tb-get-focus-text(Fid, StartPos, Length)) .
     rec-value(TE, focus-text(Fid, FocusText?)) .
-    snd-msg(focus-text(Fid, FocusText))
+    snd-msg(focus-text(EditorId, FocusText))
   +
-    rec-msg(display-error(Fid, StartPos?)) .
+    rec-msg(display-error(EditorId, StartPos?)) .
     snd-do(TE, tb-set-char-pos(Fid, StartPos)).
     snd-do(TE, tb-set-msg("Parse error near cursor"))
   +
+    rec-msg(move-editor-to-front(EditorId)) .
+    printf("move-editor-to-front(%t): not yet implemented!\n", EditorId)
+  +
     rec-event(TE, set-current-location(Fid, Location?)) .
-    snd-msg(set-current-location(Fid, Location)) .
+    snd-msg(set-current-location(EditorId, Location)) .
     snd-ack-event(TE, set-current-location(Fid, Location))
   +
     rec-event(TE, insert(Fid, Location?, Text?)) .
-    snd-msg(insert-chars(Fid, Location, Text)) .
-    rec-msg(ack-insert-chars(Fid)).
+    snd-msg(insert-chars(EditorId, Location, Text)) .
+    rec-msg(ack-insert-chars(EditorId)).
     snd-ack-event(TE, insert(Fid, Location, Text))
   +
     rec-event(TE, delete(Fid, Location?, Count?)) .
-    snd-msg(delete-chars(Fid, Location, Count)).
-    rec-msg(ack-delete-chars(Fid)).
+    snd-msg(delete-chars(EditorId, Location, Count)).
+    rec-msg(ack-delete-chars(EditorId)).
     snd-ack-event(TE, delete(Fid, Location, Count))
   +
     rec-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid)) .
-    snd-msg(parse-focus(Fid)) .
+    snd-msg(parse-focus(EditorId)) .
     snd-ack-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid))
   +
     rec-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid)) .
-    snd-msg(parse-buffer(Fid)) .
+    snd-msg(parse-buffer(EditorId)) .
     snd-ack-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid))
   +
     rec-event(TE, menu-event("Meta-Environment", "Reduce", Fid)) .
-    snd-msg(reduce(Fid)) .
+    snd-msg(reduce(EditorId)) .
     snd-ack-event(TE, menu-event("Meta-Environment", "Reduce", Fid))
   +
     rec-event(TE, menu-event("Move", Direction?, Fid)) .
-    snd-msg(move-focus(Fid, Direction)) .
+    snd-msg(move-focus(EditorId, Direction)) .
     snd-ack-event(TE, menu-event("Move", Direction, Fid))
   ) *
-  rec-disconnect(TE).
-  snd-msg(text-editor-disconnected(Fid))
+  (
+    rec-disconnect(TE).
+    snd-msg(text-editor-disconnected(EditorId))
+  +
+    rec-msg(delete-text-editor(EditorId)) .
+    snd-terminate(TE, "You have been killed!")
+  )
 )
 endlet

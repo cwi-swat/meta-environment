@@ -28,32 +28,55 @@ let
   Path       : term,
   Time       : term,
   Tree       : term,
+  EditorId   : term,
   Text       : str,
-  EditorId   : str,
   ModuleName : str,
   FileName   : str
 in
+  create(EditorManager, Id?) .
   (
+    %% Edit a Syntax file
     rec-msg(edit-syntax(ModuleName?)) .
     snd-msg(get-sdf2-path-from-db(ModuleName)) .
     rec-msg(path(FileName?)) .
-    create(TextEditor("syntax"), Id?) .
-    snd-msg(set-filename(Id, FileName)) .
-    rec-msg(text-editor-id(Id, EditorId?)) .
-    create(EditSyntax(EditorId, ModuleName), Id?)
+    snd-msg(get-editor-id(FileName)) .
+    (
+      rec-msg(new-editor(FileName, EditorId?)) .
+      create(TextEditor("syntax", EditorId), Id?) .
+      snd-msg(set-filename(EditorId, FileName)) .
+      create(EditSyntax(EditorId, ModuleName), Id?)
+    +
+      rec-msg(existing-editor(FileName, EditorId?)) .
+      snd-msg(move-editor-to-front(EditorId))
+    )
   +
+    %% Edit an Equations file
     rec-msg(edit-equations(ModuleName?)) .
     snd-msg(get-eqs-path-from-db(ModuleName)) .
     rec-msg(path(FileName?)) .
-    create(TextEditor("equations"), Id?) .
-    snd-msg(set-filename(Id, FileName)) .
-    rec-msg(text-editor-id(Id, EditorId?)) .
-    create(EditEquations(EditorId, ModuleName), Id?)
+    snd-msg(get-editor-id(FileName)) .
+    (
+      rec-msg(new-editor(FileName, EditorId?)) .
+      create(TextEditor("equations", EditorId), Id?) .
+      snd-msg(set-filename(EditorId, FileName)) .
+      create(EditEquations(EditorId, ModuleName), Id?)
+    +
+      rec-msg(existing-editor(FileName, EditorId?)) .
+      snd-msg(move-editor-to-front(EditorId))
+    )
   +
+    %% Edit a Term from file
     rec-msg(edit-term-file(ModuleName?, FileName?)) .
-    create(TextEditor("term"), Id?) .
-    snd-msg(set-filename(Id, FileName)) .
-    rec-msg(text-editor-id(Id, EditorId?)) .
+    snd-msg(get-editor-id(FileName)) .
+    (
+      rec-msg(new-editor(FileName, EditorId?))
+    +
+      rec-msg(existing-editor(FileName, EditorId?)) .
+      snd-msg(delete-text-editor(EditorId)) .
+      snd-msg(delete-structure-editor(EditorId))
+    ) .
+    create(TextEditor("term", EditorId), Id?) .
+    snd-msg(set-filename(EditorId, FileName)) .
     snd-msg(open-trm-file(FileName)) .
     (
       rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) .
@@ -63,14 +86,10 @@ in
       create(EditTerm(EditorId, ModuleName, ""), Id?)
     )
   +
-    rec-msg(edit-term(ModuleName?, Tree?, Text?)) .
-    create(TextEditor("term"), Id?) .
-    snd-msg(set-text(Id, Text)) .
-    rec-msg(text-editor-id(Id, EditorId?)) .
-    create(EditTermTree(EditorId, ModuleName, Tree), Id?)
-  +
-    rec-msg(text-editor-disconnected(EditorId?)).
-    snd-msg(remove-tree(EditorId))
+    rec-msg(text-editor-disconnected(EditorId?)) .
+    snd-msg(delete-structure-editor(EditorId)) .
+    snd-msg(delete-editor(EditorId)) .
+    snd-msg(kill-term-editor(EditorId))
   )
   * delta
 endlet

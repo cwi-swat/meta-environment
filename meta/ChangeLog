@@ -20,6 +20,14 @@
 #
 # $Id$
 
+2000/7/5 (jong@cwi.nl)
+   * Revamped editors' directory structure.
+   * An editor-manager now dispenses editor-ids. This implies you
+     cannot get multiple instances of editors editing the same file
+     anymore
+   * Closing a text-editor causes the corresponding structure-editor
+     to be killed as well.
+
 2000/6/27 (js@cwi.nl)
    * Modified a few ToolBus scripts to reflect sglr v2.35's
      strengthened ambiguity report, that includes a set of

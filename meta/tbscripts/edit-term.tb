@@ -22,7 +22,7 @@
 
 */
 
-process ParseTerm(EditorId: str, ModuleName: str) is
+process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term
 in
@@ -44,12 +44,13 @@ in
   )  
 endlet
 
-process ReduceTerm(EditorId: str, ModuleName: str) is
+process ReduceTerm(EditorId: term, ModuleName: str) is
 let
   Id         : int,
   Text       : str,
   Tree       : term,
   NormalForm : term,
+  FileName   : term,
   ErrList    : list
 in
   Id := process-id .
@@ -61,7 +62,13 @@ in
     rec-msg(rewrite-result(NormalForm?)) .
     snd-msg(unparse(NormalForm)) .
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(edit-term(ModuleName, NormalForm, Text))
+
+    %% FIXME: improve using user-configuration.
+    FileName := "reduct.out" .
+
+    snd-msg(save-text-file(FileName, Text)) .
+    rec-msg(save-done(FileName)) .
+    snd-msg(edit-term-file(ModuleName, FileName))
   +
     rec-msg(rewrite-errors(ErrList?)) .
     snd-msg(display-rewrite-errors(ErrList))
@@ -69,7 +76,7 @@ in
   snd-note(ui-status(endstat(Id)))
 endlet
 
-process EditTerm(EditorId: str, ModuleName: str, Text: str) is
+process EditTerm(EditorId: term, ModuleName: str, Text: str) is
 let
   NormalForm : term,
   Focus      : term,
@@ -108,47 +115,5 @@ in
     fi
   )
   *
-  delta
+  rec-msg(kill-term-editor(EditorId))
 endlet
-
-process EditTermTree(EditorId: str, ModuleName: str, Tree: term) is
-let
-  NormalForm : term,
-  Focus      : term,
-  DirtyFoci  : term,
-  ErrList    : list
-in
-  subscribe(syntax-changed(ModuleName)) .
-  snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
-  rec-msg(initial-focus(Focus?)) .
-  snd-msg(set-focus(EditorId, Focus)) .
-  (
-    rec-note(syntax-changed(ModuleName)) .
-    snd-msg(invalidate-tree(EditorId))
-  +
-    rec-msg(parse-focus(EditorId)) .
-    ParseTerm(EditorId, ModuleName)
-  +
-    rec-msg(parse-buffer(EditorId)) .
-    snd-msg(invalidate-tree(EditorId)) .
-    ParseTerm(EditorId, ModuleName)
-  +
-    rec-msg(reduce(EditorId)) .
-    snd-msg(get-dirty-focuses(EditorId)) .
-    rec-msg(dirty-focuses(DirtyFoci?)) .
-    if equal(DirtyFoci, []) then
-      ReduceTerm(EditorId, ModuleName)
-    else
-      ParseTerm(EditorId, ModuleName) .
-      snd-msg(get-dirty-focuses(EditorId)) .
-      rec-msg(dirty-focuses(DirtyFoci?)) .
-      if equal(DirtyFoci, []) then
-        ReduceTerm(EditorId, ModuleName)
-      else
-        tau
-      fi
-    fi
-  )
-  *
-  delta
-endlet 

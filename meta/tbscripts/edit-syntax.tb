@@ -22,7 +22,7 @@
 
 */
 
-process EditSyntax(EditorId: str, ModuleName: str) is
+process EditSyntax(EditorId: term, ModuleName: str) is
 let
   Path      : str,
   Focus     : term,

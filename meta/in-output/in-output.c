@@ -250,9 +250,8 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
 
     sprintf(pn, "%s%s",fn, ".baf");
     if(!(fd = fopen(pn, "w"))) {
-	ATfprintf(stderr,"%s: cannot create\n", pn);
+	ATwarning("%s: cannot create\n", pn);
     } else {
-	ATfprintf(stderr, "writing file %s\n", pn);
 	ATwriteToBinaryFile(t,fd);
 	fclose(fd);
     }
@@ -466,14 +465,22 @@ ATerm open_trm_file(int cid, char *name)
     return t;
 }
 
-ATerm save_sdf2_asfix(int cid, char *name, char *fn, ATerm syntax)
+ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
 { 
-    return write_term_to_named_file(syntax, fn, name);
+    return write_term_to_named_file(tree, fn, name);
 }
 
-ATerm save_eqs_asfix(int cid, char *name, char *fn, ATerm eqs)
-{ 
-    return write_term_to_named_file(eqs, fn, name);
+ATerm save_text_file(int cid, char *filename, char *text)
+{
+    FILE *fd;
+
+    if(!(fd = fopen(filename, "w"))) {
+	ATwarning("%s: cannot create\n", filename);
+    } else {
+	fprintf(fd, text);
+	fclose(fd);
+    }
+    return ATmake("snd-value(save-done(<str>))", filename);
 }
 
 void rec_terminate(int cid, ATerm arg)
