@@ -255,15 +255,19 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
 
 ATbool PT_isTreeAlt(PT_Tree tree)
 {
-  PT_Production prod = PT_getTreeProd(tree);
-  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Production prod;
+  PT_Symbol rhs;
 
-  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
-    rhs = PT_getSymbolSymbol(rhs);
-  }
+  if (PT_hasTreeProd(tree)) {
+    prod = PT_getTreeProd(tree);
+    rhs = PT_getProductionRhs(prod);
+    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+    }
 
-  if (PT_isSymbolAlt(rhs)) {
-    return ATtrue;
+    if (PT_isSymbolAlt(rhs)) {
+      return ATtrue;
+    }
   }
 
   return ATfalse;
@@ -274,15 +278,20 @@ ATbool PT_isTreeAlt(PT_Tree tree)
 
 ATbool PT_isTreeSeq(PT_Tree tree)
 {
-  PT_Production prod = PT_getTreeProd(tree);
-  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Production prod;
+  PT_Symbol rhs;
 
-  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
-    rhs = PT_getSymbolSymbol(rhs);
-  }
+  if (PT_hasTreeProd(tree)) {
+    prod = PT_getTreeProd(tree);
+    rhs = PT_getProductionRhs(prod);
 
-  if (PT_isSymbolSeq(rhs)) {
-    return ATtrue;
+    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+    }
+
+    if (PT_isSymbolSeq(rhs)) {
+      return ATtrue;
+    }
   }
 
   return ATfalse;
@@ -293,15 +302,20 @@ ATbool PT_isTreeSeq(PT_Tree tree)
 
 ATbool PT_isTreeOpt(PT_Tree tree)
 {
-  PT_Production prod = PT_getTreeProd(tree);
-  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Production prod;
+  PT_Symbol rhs;
 
-  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
-    rhs = PT_getSymbolSymbol(rhs);
-  }
+  if (PT_hasTreeProd(tree)) {
+    prod = PT_getTreeProd(tree);
+    rhs = PT_getProductionRhs(prod);
 
-  if (PT_isSymbolOpt(rhs)) {
-    return ATtrue;
+    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+    }
+
+    if (PT_isSymbolOpt(rhs)) {
+      return ATtrue;
+    }
   }
 
   return ATfalse;

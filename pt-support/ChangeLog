@@ -1,3 +1,6 @@
+2001/12/18 (jurgenv@cwi.nl)
+ * Fixed several bugs in MEPT-utils. These bugs affected implodePT.
+
 2001/12/05 (vandenbr@cwi.nl)
  * Fixed typo in usage info.
  * Adapted implodeVar.
