@@ -1,26 +1,52 @@
 equations
 
+%% --- EmptyBag
+
 [empty] EmptyBag = {}
+
+%% --- add(E, Bag)
+
+[a1] add(E, {E*}) = {E, E*}
+
+
+%% --- del(E, Bag)
+
+[r1]         del(E, {E*1, E, E*2}) = {E*1, E*2}
+[default-r2]
+             del(E, Bag) = Bag
+
+%% --- Bag1 == Bag2
 
 [eq-1]       {E, E*} == {E*1, E, E*2} = {E*} == {E*1, E*2}
 
 [eq-2]       {E+} == {}               = false
 [eq-3]       {} == {E+}               = false
 [eq-4]       {} == {}                 = true
-[default-eq] {E+1} == {E+2}           = false
+[default-eq] 
+             {E+1} == {E+2}           = false
 
+%% --- Bag1 <= Bag2
 
-[sub-1]       {E, E*} <= {E*1, E, E*2} = {E*} <= {E*1, E*2}
-[sub-2]       {E+} <= {}               = false
-[sub-3]       {} <= {E+}               = true
-[sub-4]       {} <= {}                 = true
-[default-sub] {E+1} <= {E+2}           = false
+[sub-1]      {E, E*} <= {E*1, E, E*2} = {E*} <= {E*1, E*2}
+[sub-2]      {E+} <= {}               = false
+[sub-3]      {} <= {E+}               = true
+[sub-4]      {} <= {}                 = true
+[default-sub]
+             {E+1} <= {E+2}           = false
+
+%% --- Bag1 < Bag2
 
 [ssub-1] Bag1 < Bag2 = (Bag1 <= Bag2) & not(Bag1 == Bag2)
 
+%% --- Bag1 >= Bag2
+
 [sup-1] Bag1 >= Bag2 = Bag2 <= Bag1
 
+%% --- Bag1 > Bag2
+
 [ssup-1] Bag1 > Bag2 = Bag2 < Bag1
+
+%% --- Bag1 union Bag2
 
 [un-2] {} union {E*} = {E*}
 [un-3] {E*} union {} = {E*}
@@ -34,15 +60,13 @@ equations
        ==============================
        {E, E*1} union {E*2} = {E, E*3}
 
-%%[add-unique-1]
-%%	E in {E*} = true   ===> E add-unique {E*} = {E*}
-
-%%[add-unique-2]
-%%	E in {E*} = false  ===> E add-unique {E*} = {E, E*}
+%% --- Bag1 \ Bag2
 
 [df-1] {E*1, E, E*2} \ {E*3, E, E*4} = {E*1, E*2} \ {E*3, E*4}
 
 [default-df-2] {E*1} \ {E*2} = {E*1}
+
+%% --- Bag1 inter Bag2
 
 [in-1] {E*1, E*2} inter {E*3, E*4} = {E*'}
        ==================================
@@ -51,12 +75,18 @@ equations
 [default-in2] 
        {E*1} inter {E*2} = {}
 
+%% --- # Bag
+
 [len-1] # {} = 0
 [len-2] # {E, E*} = 1 + #{E*}
+
+%% --- Elen in Bag
 
 [in-1]  E in {E*1, E, E*2} = true
 [default-in-2]
 	E in {E*} = false
+
+%% if
 
 [if-1] if true then Bag1 else Bag2 fi = Bag1
 [if-2] if false then Bag1 else Bag2 fi = Bag2

@@ -52,18 +52,17 @@ exports
 
         equal(Elem, Elem)            -> Boolean
 
-        gen(VAR, Bag[[Elem]], Bag[[Elem]], Boolean)        -> GEN
+        gen(VAR, Bag[[Elem]], Bag[[Elem]], Boolean)       -> GEN
         gen(VAR, VAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
 
-        "[" {GEN ","}* "]"                                  -> GENS
+        "[" {GEN ","}* "]"                                -> GENS
+        "get_from" "(" {FROM ","}* "," RSTORE ")"         -> GENS
+        "has_more" "(" GENS ")"                           -> Boolean
+        "get_next" "(" GENS ")"                           -> GENS
+        "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
 
-        "get_from" "(" {FROM ","}* "," RSTORE ")"           -> GENS
-        "has_more" "(" GENS ")"                             -> Boolean
-        "get_next" "(" GENS ")"                             -> GENS
-        "get_cur" "(" GENS "," RSTORE ")"                   -> RSTORE
-
-        valformer(GENS, VALUE, EXP, RSTORE, EXP)           -> VALUE
-        "if" Boolean "then" VALUE "else" VALUE "fi"         -> VALUE
+        valformer(GENS, VALUE, EXP, RSTORE, EXP)          -> VALUE
+        "if" Boolean "then" VALUE "else" VALUE "fi"       -> VALUE
 
 hiddens
   imports asf/syntax/Comments

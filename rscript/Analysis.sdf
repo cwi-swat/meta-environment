@@ -20,14 +20,22 @@ exports
  
   context-free syntax
 
-      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
-      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
+      label(PROGRAM)                  -> PROGRAM
 
-      collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,top-down,break)}            
-      collect(STATEMENT, RSTORE)  -> RSTORE  {traversal(accu,top-down,break)} 
+      label(PROGRAM, Integer)         -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
+      label(STATEMENT, Integer)       -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
 
-      collect-uses(EXP, RSTORE, Integer)	  -> RSTORE  {traversal(accu,bottom-up,continue)} 
-      collect-uses(PICO-ID, RSTORE, Integer)	  -> RSTORE  {traversal(accu,bottom-up,continue)} 
+      get-first({STATEMENT ";"}*)    -> Integer
+      get-last({STATEMENT ";"}*)     -> Integer
+
+      controlflow(PROGRAM, RSTORE, Integer, Integer)   -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow(STATEMENT, RSTORE, Integer, Integer) -> RSTORE {traversal(accu, bottom-up, continue)}
+
+      use-defs(PROGRAM,   RSTORE)     -> RSTORE  {traversal(accu,top-down,break)}            
+      use-defs(STATEMENT, RSTORE)     -> RSTORE  {traversal(accu,top-down,break)} 
+
+      uses(EXP, RSTORE, Integer)      -> RSTORE  {traversal(accu,bottom-up,continue)} 
+      uses(PICO-ID, RSTORE, Integer)  -> RSTORE  {traversal(accu,bottom-up,continue)}
 
 
   imports asf/syntax/Comments
@@ -35,3 +43,4 @@ exports
   variables
       "Int" [0-9\']*     -> Integer
       "Rstore" [0-9\']*  -> RSTORE
+      "Prg"              -> PROGRAM
