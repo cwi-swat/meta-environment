@@ -40,20 +40,23 @@ static ATbool isSubFocus(SE_Focus child, SE_Focus parent)
 SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status)
 {
   int length;
+  SE_Focus focus;
 
   if (SE_isPathRoot(path)) {
     length = PT_getParseTreeLengthAnno(parse_tree);
     SE_makeAreaDefault(0, length);
-    return SE_makeFocusNotEmpty(path, SORT_TERM, 
-				createArea(parse_tree, path), focus_status);
-  } else {
-    PT_Tree tree = getTreeAt(PT_getParseTreeTree(parse_tree), SE_getPathSteps(path));
-    length = PT_getTreeLengthAnno(tree);
-    SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
-    return SE_makeFocusNotEmpty(path, PT_yieldSymbol(getTreeSort(tree)),
+    focus = SE_makeFocusNotEmpty(path, SORT_TERM, 
 				createArea(parse_tree, path), focus_status);
   }
-
+  else {
+    PT_Tree tree = getTreeAt(PT_getParseTreeTree(parse_tree), 
+                             SE_getPathSteps(path));
+    length = PT_getTreeLengthAnno(tree);
+    SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
+    focus = SE_makeFocusNotEmpty(path, PT_yieldSymbol(getTreeSort(tree)),
+				createArea(parse_tree, path), focus_status);
+  }
+  return focus;
 }
 
 /*}}}  */
@@ -89,6 +92,15 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
 
   steps = SE_getPathSteps(path);
   tree  = PT_getParseTreeTree(parse_tree);
+
+  if (SE_isStepsEmpty(steps)) {
+    PT_Tree sub_tree = getTreeAt(tree, steps);
+    char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
+    if (isStartSymbol(sort_name, startSymbols) ||
+        PT_isTreeFlatLayout(sub_tree)) {
+      return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
+    }
+  }
   while (!SE_isStepsEmpty(steps)) {
     PT_Tree sub_tree = getTreeAt(tree, steps);
     char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
@@ -123,6 +135,7 @@ ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus)
 
 SE_Focus updateFocus(SE_Focus focus, int location, int length)
 {
+  SE_Focus newFocus;
   SE_Area area = SE_getFocusArea(focus);
 
   /* Let's find out if insertions outside current focus are possible
@@ -132,7 +145,9 @@ SE_Focus updateFocus(SE_Focus focus, int location, int length)
 
   area = SE_setAreaLength(area, SE_getAreaLength(area) + length);
 
-  return SE_setFocusArea(focus, area);
+  newFocus = SE_setFocusArea(focus, area);
+
+  return newFocus;
 }
 
 /*}}}  */

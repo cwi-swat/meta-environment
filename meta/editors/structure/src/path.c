@@ -156,10 +156,11 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
     for (step = 0; step < nr_args; step++) {
       PT_Tree arg = PT_getArgsArgumentAt(args, step);
       int arg_len = PT_getTreeLengthAnno(arg);
+
       if (location <= arg_len) {
-	if (location+length > arg_len
+	if (location > arg_len
             ||
-            PT_isTreeLexical(arg)
+            PT_isTreeFlatLexical(arg)
             ||
             PT_isTreeLayout(arg)) {
 	  return steps;
@@ -200,11 +201,12 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
     tree = PT_getParseTreeTree(parse_tree);
     treeLength = PT_getTreeLengthAnno(tree);
 
-    if (location > treeLength || location+length > treeLength) {
+    if (location > treeLength) {
       path = SE_makePathRoot();
     }
     else {
-      path = SE_makePathTerm(getStepsInTree(tree, location, length));
+      SE_Steps steps = getStepsInTree(tree, location, length);
+      path = SE_makePathTerm(steps);
     }
   }
 

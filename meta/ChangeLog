@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2001/05/04 (markvdb@cwi.nl)
+  * Various bug fixes in structure editor.
+
 2001/04/23 (markvdb@cwi.nl)
   * Modified module-db in order to support AsFix2ME.
   * Bumped version number of module-db to 2.0 in order to indicate

@@ -257,8 +257,8 @@ static SE_Editor moveFocusToStartSymbol(SE_Editor editor, int location, int leng
 
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars)
 {
-  editor = moveFocusToStartSymbol(editor, location, nr_chars);
 
+  editor = moveFocusToStartSymbol(editor, location, nr_chars);
   editor = updateEditor(editor, location, nr_chars);
 
   return editor;
@@ -271,12 +271,6 @@ SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars)
 {
   assert(location > 0);
   location--;
-
-  /* <PO> was: 
-  if (location > 0) {
-    location--;
-  }
-  */
 
   return insertChars(editor, location, -nr_chars);
 }
