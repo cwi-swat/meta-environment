@@ -18,6 +18,11 @@
 
 $Id$
 
+2000/4/05 (mdejonge @cwi.nl)
+   * Version is now 2.29
+   * The asfix2 to asfix1 conversion stuff has been removed because it is
+     now part of the asfix distribution.
+
 2000/3/31 (mdejonge @cwi.nl)
    * The toolbus is no longer required during the build process of sglr
 

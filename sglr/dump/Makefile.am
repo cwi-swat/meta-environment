@@ -32,13 +32,13 @@ dump_priorities_SOURCES  = dump-priorities.c dump-skel.c dump-skel.h
 dump_productions_SOURCES = dump-productions.c dump-skel.c dump-skel.h
 
 
-LDADD     = -L${top_builddir}/libsglr -lsglr \
-            -L${top_builddir}/libtree2dot -ltree2dot \
-            -L${top_builddir}/liba2toa1 -la2toa1 \
-            -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
+LDADD     = -L$(top_builddir)/libsglr -lsglr \
+            -L$(top_builddir)/libtree2dot -ltree2dot \
+            -L$(ASFIXLIB) -lAsFix\
+            -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
 
 test: all
-	@for prg in ${bin_PROGRAMS}; \
+	@for prg in $(bin_PROGRAMS); \
 	do \
-		${top_srcdir}/test-help ./$$prg; \
+		$(top_srcdir)/test-help ./$$prg; \
 	done

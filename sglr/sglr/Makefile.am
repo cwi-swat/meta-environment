@@ -29,17 +29,17 @@ SRCS              = sglr-main.c  getopt.c getopt1.c
 HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)
-sglr_LDADD        = -L${top_builddir}/libsglr -lsglr \
-                    -L${top_builddir}/libtree2dot -ltree2dot \
-                    -L${top_builddir}/liba2toa1 -la2toa1 \
-                    -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
+sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
+                    -L$(top_builddir)/libtree2dot -ltree2dot \
+                    -L$(ASFIXLIB) -lAsFix \
+                    -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
 
 # sglr_prof_SOURCES = $(HDRS)
 # sglr_prof_LDFLAGS = -pg
 # sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
-#                     -L${top_builddir}/libsglr -lsglr-prof \
-#                     -L${top_builddir}/libtree2dot -ltree2dot-prof \
-#                     -L${top_builddir}/liba2toa1 -la2toa1-prof \
+#                     -L$(top_builddir)/libsglr -lsglr-prof \
+#                     -L$(top_builddir)/libtree2dot -ltree2dot-prof \
+#                     -L$(top_builddir)/liba2toa1 -la2toa1-prof \
 #                     -L$(ATERMLIB) -lATerm-prof -lAsFix-prof -lATB-prof \
 #                     $(SOCKLIBS)
 
