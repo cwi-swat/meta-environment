@@ -108,7 +108,6 @@ dnl Which files need updating?
 AC_OUTPUT(
    Makefile
    src/Makefile 
-   pretty/Makefile 
    grammar/Makefile 
    sdf2stats/Makefile 
    sdf-checker/Makefile
