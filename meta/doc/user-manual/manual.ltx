@@ -2388,6 +2388,75 @@ exports
 \caption{Syntax definition in which injections are used}\label{CODE:inj-exp}
 \end{figure}
 
+\subsubsection{Miscellaneous Operators}
+
+In Section~\ref{Symbols} a number of sophisticated operators, like
+alternative, option, set, function, sequence, tuple, and permutation.
+are discussed. These operators allow a concise manner of defining
+grammars. There are a number of issues to take in consideration
+when using this operators. 
+
+\paragraph{Definition of lists}
+In Figure~\ref{CODE:lists-usage} two different
+lists are defined, {\tt LIST1} represents a list of naturals separated
+by commas whereas {\tt LIST2} represents a list of naturals terminated
+by commas.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Lists
+
+imports Layout
+
+exports
+  sorts NAT LIST1 LIST2
+
+  lexical syntax
+    [0-9]+   -> NAT
+
+  context-free syntax
+    {NAT ","}+   -> LIST1
+    (LIST ",")+  -> LIST2
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Syntax definition in which two variants of lists are
+defined}\label{CODE:lists-usage}
+\end{figure}
+
+\paragraph{Alternative alternatives}
+The alternatives of symbols can be defined in two different ways, 
+see Figure~\ref{CODE:alternative-alternatives} for an example.
+
+The definition of the binary operators {\tt "|"} and {\tt "\&"} can
+be made more concise as shown by {\tt Bool2}, however, it is now
+impossible to express that {\tt "\&"} has a higher priority
+than {\tt "|"}, see Section~\ref{Priorities} for more details on
+priority definitions.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Bool
+
+imports Layout
+
+exports
+  sorts Bool1 Bool2
+
+  context-free syntax
+    true            -> Bool1
+    false           -> Bool1
+    Bool1 "|" Bool1 -> Bool1 {left}
+    Bool1 "&" Bool1 -> Bool1 {left}
+
+    true | false            -> Bool2
+    Bool2 ("|" | "&") Bool2 -> Bool2 {left}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Syntax definition in which two ways of alternatives are 
+shown}\label{CODE:alternative-alternatives}
+\end{figure}
 
 \subsection{Attributes of Lexical and Context-free Functions} \label{Attributes}
 
@@ -2845,8 +2914,8 @@ to eliminate complicated syntactic structures.
 
 Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} in order
 to solve lexical ambiguities will be discussed in
-Section~\ref{lex-disambiguity}.
-In Section~\ref{cf-disambiguity} we will give examples of how to use
+Section~\ref{lex-ambiguity}.
+In Section~\ref{cf-ambiguity} we will give examples of how to use
 these attributes to solve context-free ambiguities, such as the
 famous dangling else problem.
 
@@ -2977,7 +3046,7 @@ token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
 extending each variable declaration with the attribute {\tt prefer}
 (Section~\ref{PreferAvoidReject}).
 
-\subsubsection{Context-free Ambiguities}
+\subsubsection{Context-free Ambiguities} \label{cf-ambiguity}
 
 Context-free grammars may be ambiguous and, as a result, the parser may yield
 different parses of a text. More precisely, the result of a parse is a single
@@ -3123,8 +3192,7 @@ names followed by their sort. In fact, a variable declaration can define an
 infinite collection of variables by using a \emph{naming scheme} instead of a
 simple variable name.  A naming scheme is a regular expression like the ones
 allowed in the lexical syntax (Section \ref{lexical-syntax}) except that sorts
-are not allowed. The sort of a variable may be a simple sort, or a list with
-or without separators.
+are not allowed. A variable may represent any symbol. 
 
 In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
 are examples of variables declared by the naming schemes in the {\tt
@@ -3164,7 +3232,39 @@ Declared variables can only be used when defining equations. It is not
 allowed to use them in terms.
 
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
-strategy that is further discussed in Section \ref{lex-ambiguity}.
+strategy that was discussed in Section \ref{lex-ambiguity}.
+
+\subsubsection{Set Operator}
+
+The set operator (see Section~\ref{SetOperator}) is an abbrevation for
+representing sets. However, to obtain access to the elements of such
+a set an auxilary variable has to be defined, see
+Figure~\ref{CODE:set-variable} for an example.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Set
+
+imports Layout
+
+exports
+  sorts Id IdSet
+
+  lexical syntax
+    [a-z]+ -> Id
+ 
+  context-free syntax
+    Set[ID] -> IdSet 
+
+  variables
+    "Id"[0-9]*     -> Id
+    "Id*"[0-9]*    -> {Id ","}* 
+    "IdSet"[0-9]*  -> IdSet
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Variable declarations for Set}\label{CODE:set-variable}
+\end{figure}         
 
 \subsection{Equations} \label{Equations}
 
