@@ -157,7 +157,9 @@ void destroy_table_gen()
 {
   int i;
 
+  ATunprotectArray((ATerm *)nr_prod_table+MIN_PROD);
   free(nr_prod_table);
+
   for (i=0; i<MAX_PROD; i++) {
     if (symbol_table[i]) {
       free(symbol_table[i]);

@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/27 ({markvdb,jong}@cwi.nl)
+ * Fixed a free/unprotect bug.
+ * Fixed an initialization/protect bug.
+
 2001/07/2{4-6} ({markvdb,jong,olivierp}@cwi.nl)
  * Improved pgen efficiency and regenerated parsetables
 

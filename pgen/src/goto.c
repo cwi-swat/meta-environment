@@ -254,8 +254,11 @@ static void free_goto()
   nr_char_classes = 0;
 
   ATunprotectArray((ATerm *)action_actions);
+  memset(action_actions, 0, MAX_STATES*sizeof(ATerm));
   ATunprotectArray(goto_classes);
+  memset(goto_classes, 0, MAX_STATES*sizeof(ATerm));
   ATunprotectArray(goto_states);
+  memset(goto_states, 0, MAX_STATES*sizeof(ATerm));
 }
 
 /*}}}  */
