@@ -137,10 +137,11 @@ static char *attributesToProperties(MC_TextAttributes attributes)
       snprintf(end, spaceLeft, " :height %d", 
 	       10*MC_getTextAttributePoints(attr));
     }
+    /* does not work:
     else if (MC_isTextAttributeFont(attr)) {
       snprintf(end, spaceLeft, 
-	       " :family \"%s\"", MC_getTextAttributeName(attr));
-    }
+	       " :font \"%s\"", MC_getTextAttributeName(attr));
+    } */
   }
 
   return buffer;
@@ -367,6 +368,9 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
     }
     else if (MC_isTextCategoryNameSelection(name)) {
       sprintf(buf, "(set-face-attribute 'region nil %s)", attribs);
+    }
+    else if (MC_isTextCategoryNameNormal(name)) {
+      sprintf(buf, "(set-face-attribute 'default nil %s)", attribs);
     }
 
     sendToEmacs(write_to_editor_fd, buf);
