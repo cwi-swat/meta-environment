@@ -26,6 +26,7 @@ AC_OUTPUT(
   Makefile
   meta-scripts/Makefile
   src/Makefile
+  test/Makefile
   demo/Makefile
   demo/pico/Makefile
   demo/new-pico/Makefile
