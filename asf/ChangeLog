@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Apr 14 11:30:56 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed bugs in ASFSDF Api generator: variables names now contain
+   underscores between type and postfix, labels are not used for
+   variable names anymore.
+
 Wed Apr 14 10:54:18 CEST 2004 <m336@cwi.nl>
  * Call asc-support functions with an SGLR_ParseTable, not ATerm
 
