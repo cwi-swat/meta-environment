@@ -198,9 +198,12 @@ public class GraphPanel
     while (!nodes.isEmpty()) {
       Node node = nodes.getHead();
       nodes = nodes.getTail();
+      double growFactor = shapeBoundingBoxGrowFactor(getNodeShape(node));
+      int width = (int) (((double) node.getWidth()) * growFactor);
+      int height = (int) (((double) node.getHeight()) * growFactor);
 
-      int right_x = node.getX()+node.getWidth()/2;
-      int bottom_y = node.getY()+node.getHeight()/2;
+      int right_x = node.getX()+width/2;
+      int bottom_y = node.getY()+height/2;
 
       max_x = Math.max(right_x, max_x);
       max_y = Math.max(bottom_y, max_y);
@@ -215,6 +218,22 @@ public class GraphPanel
   }
 
   //}}}
+  
+  private double shapeBoundingBoxGrowFactor(Shape shape) 
+  {
+      if (shape.isBox()) {
+          return 1;
+      }
+      if (shape.isDiamond()) {
+          return 1.5;
+      }
+      if (shape.isEllipse()) { 
+         return 1.2;
+      }
+      else {
+          return 1;
+      }
+   }
 
   //{{{ public void paint(Graphics g)
 
