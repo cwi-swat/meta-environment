@@ -19,5 +19,5 @@
 #
 # $Id$
 
-SUBDIRS = addeqs removevars traversals configmanager
+SUBDIRS = addeqs removevars traversals
 
