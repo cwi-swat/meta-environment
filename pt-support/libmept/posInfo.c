@@ -18,6 +18,7 @@
 static ATbool label_layout = ATfalse;
 static ATbool label_literals = ATfalse;
 static ATbool in_layout = ATfalse;
+
 /*}}}  */
 
 /*{{{  typedef struct PT_Position_Tag */
@@ -118,6 +119,8 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   int start_col  = current->col;
   int len;
 
+  /*ATwarning("adding pos-info at depth %d to %t\n", current->curDepth, tree);*/
+
   if (current->maxDepth == current->curDepth) {
     PT_calcTreePosInfo(tree, &current->line, &current->col);
     return tree;
@@ -213,7 +216,12 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
   current.maxDepth = maxDepth;
   current.curDepth = 0;
 
-  return PT_setParseTreeTop(parsetree, PT_addTreePosInfo(tree, &current));
+  parsetree = PT_setParseTreeTop(parsetree, PT_addTreePosInfo(tree, &current));
+
+  ATwarning("result of PT_addParseTreePosInfoToDepth (depth=%d) = %t\n",
+	    maxDepth, parsetree);
+
+  return parsetree;
 }
 
 /*}}}  */
@@ -233,6 +241,25 @@ PT_Tree PT_addTreePosInfoToDepth(char* path, PT_Tree tree,
   current.curDepth = 0;
 
   return PT_addTreePosInfo(tree, &current);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_addTreePosInfoSome(path, tree, dep, lay, lit, sl, sc) */
+
+PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
+			      int depth, ATbool layout, ATbool literals,
+			      int start_line, int start_col)
+{
+  PT_Tree result = NULL;
+  label_layout = layout;
+  label_literals = literals;
+
+  result = PT_addTreePosInfoToDepth(path, tree, depth, start_line, start_col);
+  
+  label_layout = ATfalse;
+  label_literals = ATfalse;
+
+  return result;
 }
 
 /*}}}  */
