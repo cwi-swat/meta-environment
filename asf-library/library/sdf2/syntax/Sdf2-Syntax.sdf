@@ -3,6 +3,7 @@ imports sdf2/syntax/Kernel
         sdf2/syntax/Basic
         sdf2/syntax/Modules
         sdf2/syntax/Regular
+        sdf2/syntax/Lifting
         sdf2/syntax/Priority
         sdf2/syntax/CC
         sdf2/syntax/Sorts
