@@ -42,12 +42,18 @@ hiddens
                     {Rule ";"}*,{NamePair ","}*)       -> FT-tuple
     asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
     funargs2cargs({Term ","}+,IntCon)                    -> PA-tuple
-    asfrules2cstats({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
-    asfrules2cstats-ignored({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
+    asfrules2cstats({Rule   ";"}*,{NamePair ","}*) -> SlI-tuple
+
+  sorts MakeSelectStat
+  context-free syntax
+
+    "make-select-stat"    -> MakeSelectStat
+    "no-select-stat"      -> MakeSelectStat
 
   context-free syntax
     asfrules2cstats({C-Rule ";"}*,{C-Rule ";"}*,
-                    {NamePair ","}*,IntCon)              -> SlI-tuple
+                    {NamePair ","}*,IntCon, MakeSelectStat) -> SlI-tuple
+
     asfrules2cstats1({C-Rule ";"}*,
                      {NamePair ","}*,IntCon)             -> SlI-tuple
     asfrules2cstats2({C-Rule ";"}*,
@@ -79,3 +85,4 @@ hiddens
     "Cint"[0-9]*     -> Integer-constant
     "Expression+"[0-9]* -> { Expression ","}+
     "Expression"[0-9]* -> Expression
+    "MakeSelectStat"[0-9]* -> MakeSelectStat

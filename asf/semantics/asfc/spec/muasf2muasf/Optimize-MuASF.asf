@@ -416,7 +416,10 @@ equations
          ====
          remove-emb-arg(FunId(Term), [ FunId ], remove) = Term
 
-[default-rea] remove-emb-arg(Term, Embedding, IgnoreOrRemove) = Term
+%% We do accept any matching variable for the embedding off course
+[default-rea] is-var-term(Term)
+              ====
+              remove-emb-arg(Term, Embedding, IgnoreOrRemove) = Term
 
 %%
 %% call-helper-rules
