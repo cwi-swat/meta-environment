@@ -84,7 +84,7 @@ let
 in
   (
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
-    snd-msg(check-asfsdf(Syntax)) .
+    snd-msg(check-asfsdf(Syntax, ModuleName)) .
     rec-msg(feedback(Feedback?)) .
     snd-msg(display-sdf-errors(Feedback)) .
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
@@ -93,7 +93,7 @@ in
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
-    snd-msg(check-asfsdf(Syntax)) .
+    snd-msg(check-asfsdf(Syntax, ModuleName)) .
     rec-msg(feedback(Feedback?)) .
     snd-msg(display-sdf-errors(Feedback)) .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
