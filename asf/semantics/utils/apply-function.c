@@ -35,13 +35,65 @@
 
 static char myname[]    = "apply-function";
 static char myversion[] = "1.1";
-static char myarguments[] = "qf:s:m:bhi:o:tV";
+static char myarguments[] = "qf:s:m:bhi:o:tVd";
+static ATbool debug = ATfalse;
 
+
+#define asfix_get_prod_sort(p) AFgetProdSymbol(p)
 
 ATerm ApplyFunction(ATerm term, char *function, char *module, char *sort, 
 		    ATbool quoted)
 {
-   return term;
+   ATerm real;
+   ATerm real_prod;
+   ATerm real_sort;
+   ATerm new_prod;
+   ATerm new_module;
+   ATermList new_prod_symbols; 
+   ATerm ws, open, close, noattrs, arrow;
+   ATerm openlit, closelit;
+   ATerm new_function_symbol;
+   ATerm new_function_term;
+   ATermList new_appl_args;
+   ATerm new_term;
+   ATerm new_sort;
+   ATerm new_appl;
+
+   /* destructing the input term */
+   real = asfix_get_term(term);
+   real_prod = asfix_get_appl_prod(real);
+   real_sort = asfix_get_prod_sort(real_prod);
+   
+   /* standard terms */
+   ws = ATparse("w(\"\")");
+   open = ATparse("ql(\"(\")");
+   openlit = ATparse("l(\"(\")");
+   close = ATparse("ql(\")\")");
+   closelit = ATparse("l(\")\")");
+   noattrs = ATparse("no-attrs");
+   arrow  = ATparse("l(\"->\")");
+
+   /* creating the new outermost prod */
+   new_module = ATmake("id(<str>)", module);
+   new_sort   = ATmake("sort(<str>)", sort);
+   new_function_symbol = ATmake("ql(<str>)", function);
+   new_prod_symbols = ATmakeList(7, new_function_symbol, ws, open, ws,
+                                    real_sort, ws, close);
+   new_prod = ATmake("prod(<term>,<term>,[<list>],<term>,<term>,<term>,"
+		     "<term>,<term>,<term>)", new_module, ws, new_prod_symbols,
+		     ws, arrow, ws, new_sort, ws, noattrs); 
+   
+   /* creating the new outermost term */
+   new_function_term = ATmake("l(<str>)", function);
+   new_appl_args = ATmakeList(7, new_function_term, ws, openlit, ws, real, ws,
+                                 closelit);
+   new_appl = ATmake("appl(<term>, <term>, [<list>])", 
+		     new_prod, ws, new_appl_args);
+
+   /* put the new appl in the old term wrapper */
+   new_term = asfix_put_term(term, new_appl);
+
+   return new_term;
 }
 
 /*
@@ -51,7 +103,7 @@ void usage(void)
 {
     fprintf(stderr,
 	"\nApply-function encapsulates AsFix1 terms with a quoted or unquoted prefix function.\n\n"
-        "Usage: apply-function -qbh -f <name> -s <sort> -i <file> -o <file> -tV . . .\n"
+        "Usage: apply-function -qdbh -f <name> -s <sort> -i <file> -o <file> -tV . . .\n"
         "Options:\n"
         "\t-q              quoted prefix notation\n"
         "\t-b              binary output mode (default)\n"
@@ -62,6 +114,7 @@ void usage(void)
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              text output mode\n"
+	"\t-d              debug mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myversion);
 }
@@ -96,6 +149,7 @@ int main (int argc, char **argv)
     case 'm':  module = optarg;              break;
     case 'b':  txtout = ATfalse;             break;
     case 't':  txtout = ATtrue;              break;
+    case 'd':  debug = ATtrue;               break;
     case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
       exit(0);
     default :  usage();                      exit(1);
