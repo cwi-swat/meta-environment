@@ -467,7 +467,7 @@ in
         FileName := first(args(STree)) .
         snd-msg(edit-term-file(NewModName, FileName)) .
         rec-msg(editor-opened(NewModName, EditorId2?)).
-        ParseTerm(EditorId2, NewModName) .
+        GetTree(EditorId2, NewModName, Tree?) .
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
         ReturnSuccess(EditorId,Stack)        
       +
@@ -490,6 +490,21 @@ in
 	  ReturnAbort(EditorId, Stack)
         )
       +
+        rec-msg(save-text, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,FileName?) .
+        StackPopTerm(Stack,Stack?,String?) .
+        snd-msg(io-write-text-file(FileName,[String])) .
+	(
+          rec-msg(io-file-written) .
+          ReturnSuccess(EditorId, Stack)
+        +
+          rec-msg(io-file-not-written(ErrorMessage?)) .
+          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+	  ReturnAbort(EditorId, Stack)
+        )
+      +
+        rec-msg(read-tree, Stack?, EditorId?) . 
+        StackPopString(Stack,Stack?,FileName?) .
         rec-msg(read-tree, Stack?, EditorId?) . 
         StackPopString(Stack,Stack?,FileName?) .
         snd-msg(io-read-term-file(FileName)) .
