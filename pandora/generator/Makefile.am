@@ -25,8 +25,7 @@ pandora_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm-dbg \
-	-lefence
+	-L$(ATERM)/lib -lATerm
 
 api:
 	unparsePT < Box.def.pt > Box.def
