@@ -275,8 +275,9 @@ ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
     ERR_Subject subject = ERR_getSubjectListHead(subjects);
     ERR_Location location;
     if (ERR_isSubjectLocalized(subject)) {
+      ERR_Area area;
       location = ERR_getSubjectLocation(subject);
-      ERR_Area area = ERR_getLocationArea(location);
+      area = ERR_getLocationArea(location);
       location = ERR_makeLocationAreaInFile(filename, area);
       subject = ERR_setSubjectLocation(subject, location);
     }

@@ -1,5 +1,9 @@
 $Id$
 
+Mon Dec  6 13:32:03 CET 2004 <kooiker@cwi.nl>
+ * utils/error-support.c:
+   - Fixed declaration after statement in add_filename_in_error 
+
 Wed Dec  1 13:24:18 CET 2004 <kooiker@cwi.nl, markvdb@cwi.nl>
  * Transformed non-localized subjects to localized subjects.
 
