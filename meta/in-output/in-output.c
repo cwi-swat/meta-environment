@@ -19,6 +19,17 @@ size_t  FileSize(char *fnam)
         return(statbuf.st_size);
 }
 /* This too :-) */
+/*
+ * JS
+ * Initially, this was designed to read arbitraty buffers
+ * So it returned an allocated, filled buffer as well
+ * as a size_t indication of its length
+ * The fragment below assumes is modified to read an
+ * arbitraty file with no NULL characters in it into
+ * a buffer, which is then NULL-terminated
+ * The resulting output is a properly terminated C string
+ */
+
 char *SlurpFile(char *fnam, size_t *size)
 {
         char *buf;
@@ -30,8 +41,8 @@ char *SlurpFile(char *fnam, size_t *size)
                 *size = 0;
                 return(NULL);
         }
-        if((buf = (char *)malloc(*size)) == NULL ) {
-                fprintf(stderr, "could not allocate %i bytes for %s\n", *size, fnam);
+        if((buf = (char *)malloc(*size + 1)) == NULL ) {
+                fprintf(stderr, "could not allocate %i bytes for %s\n", *size + 1, fnam);
                 fclose(fd);
                 *size = 0;
                 return(buf);
@@ -43,6 +54,8 @@ char *SlurpFile(char *fnam, size_t *size)
                 buf = NULL;
         }
         fclose(fd);
+	buf[*size] = '\0';	/* Terminate the string :-( */
+/*	fprintf(stderr, "file: %s, Size: %i\n", fnam, *size);	*/
         return(buf);
 }
 
@@ -96,12 +109,10 @@ aterm *open_file(int cid, char *name)
     fprintf(stderr, "trying file %s\n", full);
     buf = SlurpFile(full, &size);
     if (buf != NULL) {
-      fprintf(stderr, "ok!\n");
-      t = Tmake(ar,"<str>", buf);
-      fprintf(stderr,"Making string term succeeded\n");
-      free(buf);
-      fprintf(stderr,"Freed buffer\n");
-      return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "raw",name, t,full);
+	t = Tmake(ar,"<str>", buf);
+ 	free(buf);
+	fprintf(stderr, "ok!\n");
+	return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "raw",name, t,full);
     }
   }
   fprintf(stderr,"We kunnen de file helaas niet vinden\n");
