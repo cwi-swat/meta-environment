@@ -10,6 +10,7 @@ extends Graph
   }
   private static int index_nodes = 0;
   private static int index_edges = 1;
+  private static int index_attributes = 2;
   public shared.SharedObject duplicate() {
     Graph_Default clone = new Graph_Default();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -21,7 +22,7 @@ extends Graph
   }
   static public void initializePattern()
   {
-    pattern = getStaticFactory().parse("graph(<term>,<term>)");
+    pattern = getStaticFactory().parse("graph(<term>,<term>,<term>)");
   }
 
   static public Graph fromTerm(aterm.ATerm trm)
@@ -29,7 +30,7 @@ extends Graph
     java.util.List children = trm.match(pattern);
 
     if (children != null) {
-      Graph tmp = getStaticMetaGraphFactory().makeGraph_Default(NodeList.fromTerm( (aterm.ATerm) children.get(0)), EdgeList.fromTerm( (aterm.ATerm) children.get(1)));
+      Graph tmp = getStaticMetaGraphFactory().makeGraph_Default(NodeList.fromTerm( (aterm.ATerm) children.get(0)), EdgeList.fromTerm( (aterm.ATerm) children.get(1)), AttributeList.fromTerm( (aterm.ATerm) children.get(2)));
       tmp.setTerm(trm);
       return tmp;
     }
@@ -48,6 +49,11 @@ extends Graph
   }
 
   public boolean hasEdges()
+  {
+    return true;
+  }
+
+  public boolean hasAttributes()
   {
     return true;
   }
@@ -72,6 +78,16 @@ extends Graph
     return (Graph) super.setArgument(_edges, index_edges);
   }
 
+  public AttributeList getAttributes()
+  {
+    return (AttributeList) this.getArgument(index_attributes) ;
+  }
+
+  public Graph setAttributes(AttributeList _attributes)
+  {
+    return (Graph) super.setArgument(_attributes, index_attributes);
+  }
+
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {
     switch(i) {
       case 0:
@@ -84,6 +100,11 @@ extends Graph
           throw new RuntimeException("Argument 1 of a Graph_Default should have type EdgeList");
         }
         break;
+      case 2:
+        if (! (arg instanceof AttributeList)) { 
+          throw new RuntimeException("Argument 2 of a Graph_Default should have type AttributeList");
+        }
+        break;
       default: throw new RuntimeException("Graph_Default does not have an argument at " + i );
     }
     return super.setArgument(arg, i);
@@ -91,7 +112,8 @@ extends Graph
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;
-    int b = (getAFun().hashCode()<<8);
+    int b = 0x9e3779b9;
+    a += (getArgument(2).hashCode() << 16);
     a += (getArgument(1).hashCode() << 8);
     a += (getArgument(0).hashCode() << 0);
 

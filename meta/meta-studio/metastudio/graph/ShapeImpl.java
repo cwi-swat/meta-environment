@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class ShapeImpl extends MetaGraphConstructor
 {
-  public static Shape fromString(String str)
+  static Shape fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Shape fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Shape fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class PolygonImpl extends MetaGraphConstructor
 {
-  public static Polygon fromString(String str)
+  static Polygon fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Polygon fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Polygon fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

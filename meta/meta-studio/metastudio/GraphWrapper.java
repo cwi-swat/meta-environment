@@ -228,7 +228,8 @@ public class GraphWrapper {
 			nodes = factory.makeNodeList_Multi(node, nodes);
 		}
 
-		return new GraphWrapper(factory.makeGraph_Default(nodes, edges));
+		return new GraphWrapper(factory.makeGraph_Default(nodes, edges,
+					  factory.makeAttributeList_Empty()));
 	}
 
 	public static GraphWrapper fromTerm(ATerm term) {
@@ -239,7 +240,8 @@ public class GraphWrapper {
 	public static GraphWrapper emptyGraph(MetaGraphFactory factory) {
 		NodeList nodes = factory.makeNodeList_Empty();
 		EdgeList edges = factory.makeEdgeList_Empty();
-		return new GraphWrapper(factory.makeGraph_Default(nodes, edges));
+		return new GraphWrapper(factory.makeGraph_Default(nodes, edges,
+					factory.makeAttributeList_Empty()));
 	}
 
 	public ATerm toTerm() {
@@ -257,6 +259,8 @@ public class GraphWrapper {
 	public void reset() {
 		NodeList nodes = factory.makeNodeList_Empty();
 		EdgeList edges = factory.makeEdgeList_Empty();
-		graph = factory.makeGraph_Default(nodes, edges);
+		AttributeList attrs = factory.makeAttributeList_Empty();
+
+		graph = factory.makeGraph_Default(nodes, edges, attrs);
 	}
 }

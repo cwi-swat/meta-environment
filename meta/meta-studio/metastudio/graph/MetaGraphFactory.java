@@ -28,6 +28,8 @@ public class MetaGraphFactory extends PureFactory
   private Attribute protoAttribute_Size;
   private aterm.AFun funAttribute_CurvePoints;
   private Attribute protoAttribute_CurvePoints;
+  private aterm.AFun funAttribute_BoundingBox;
+  private Attribute protoAttribute_BoundingBox;
   private aterm.AFun funAttribute_Direction;
   private Attribute protoAttribute_Direction;
   private aterm.AFun funAttribute_Info;
@@ -93,7 +95,7 @@ public class MetaGraphFactory extends PureFactory
     Graph.initialize(this);
 
     Graph_Default.initializePattern();
-    funGraph_Default = makeAFun("_Graph_default", 2, false);
+    funGraph_Default = makeAFun("_Graph_default", 3, false);
     protoGraph_Default = new Graph_Default();
 
     NodeList.initialize(this);
@@ -149,6 +151,10 @@ public class MetaGraphFactory extends PureFactory
     Attribute_CurvePoints.initializePattern();
     funAttribute_CurvePoints = makeAFun("_Attribute_curve-points", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints();
+
+    Attribute_BoundingBox.initializePattern();
+    funAttribute_BoundingBox = makeAFun("_Attribute_bounding-box", 2, false);
+    protoAttribute_BoundingBox = new Attribute_BoundingBox();
 
     Attribute_Direction.initializePattern();
     funAttribute_Direction = makeAFun("_Attribute_direction", 1, false);
@@ -267,8 +273,8 @@ public class MetaGraphFactory extends PureFactory
     }
   }
 
-  public Graph_Default makeGraph_Default(NodeList _nodes, EdgeList _edges) {
-    aterm.ATerm[] args = new aterm.ATerm[] {_nodes, _edges};
+  public Graph_Default makeGraph_Default(NodeList _nodes, EdgeList _edges, AttributeList _attributes) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_nodes, _edges, _attributes};
     return makeGraph_Default( funGraph_Default, args, empty);
   }
 
@@ -404,6 +410,18 @@ public class MetaGraphFactory extends PureFactory
     return makeAttribute_CurvePoints( funAttribute_CurvePoints, args, empty);
   }
 
+  protected Attribute_BoundingBox makeAttribute_BoundingBox(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_BoundingBox) {
+      protoAttribute_BoundingBox.initHashCode(annos,fun,args);
+      return (Attribute_BoundingBox) build(protoAttribute_BoundingBox);
+    }
+  }
+
+  public Attribute_BoundingBox makeAttribute_BoundingBox(Point _first, Point _second) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_first, _second};
+    return makeAttribute_BoundingBox( funAttribute_BoundingBox, args, empty);
+  }
+
   protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Direction) {
       protoAttribute_Direction.initHashCode(annos,fun,args);
@@ -423,7 +441,7 @@ public class MetaGraphFactory extends PureFactory
     }
   }
 
-  public Attribute_Info makeAttribute_Info(String _key, aterm.ATerm _value) {
+  public Attribute_Info makeAttribute_Info(String _key, ATerm _value) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_key, 0, true)), _value};
     return makeAttribute_Info( funAttribute_Info, args, empty);
   }

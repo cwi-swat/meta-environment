@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class EdgeImpl extends MetaGraphConstructor
 {
-  public static Edge fromString(String str)
+  static Edge fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Edge fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Edge fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

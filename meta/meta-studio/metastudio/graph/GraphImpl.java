@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class GraphImpl extends MetaGraphConstructor
 {
-  public static Graph fromString(String str)
+  static Graph fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Graph fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Graph fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
@@ -46,6 +46,11 @@ abstract public class GraphImpl extends MetaGraphConstructor
     return false;
   }
 
+  public boolean hasAttributes()
+  {
+    return false;
+  }
+
   public NodeList getNodes()
   {
      throw new RuntimeException("This Graph has no Nodes");
@@ -64,6 +69,16 @@ abstract public class GraphImpl extends MetaGraphConstructor
   public Graph setEdges(EdgeList _edges)
   {
      throw new RuntimeException("This Graph has no Edges");
+  }
+
+  public AttributeList getAttributes()
+  {
+     throw new RuntimeException("This Graph has no Attributes");
+  }
+
+  public Graph setAttributes(AttributeList _attributes)
+  {
+     throw new RuntimeException("This Graph has no Attributes");
   }
 
 

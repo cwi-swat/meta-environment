@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class EdgeListImpl extends MetaGraphConstructor
 {
-  public static EdgeList fromString(String str)
+  static EdgeList fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static EdgeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static EdgeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class NodeImpl extends MetaGraphConstructor
 {
-  public static Node fromString(String str)
+  static Node fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Node fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Node fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

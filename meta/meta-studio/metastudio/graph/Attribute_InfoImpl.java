@@ -1,4 +1,5 @@
 package metastudio.graph;
+
 import aterm.*;
 
 abstract public class Attribute_InfoImpl
@@ -73,12 +74,12 @@ extends Attribute
     return (Attribute) super.setArgument(getFactory().makeAppl(getFactory().makeAFun(_key, 0, true)), index_key);
   }
 
-  public aterm.ATerm getValue()
+  public ATerm getValue()
   {
    return this.getArgument(index_value);
   }
 
-  public Attribute setValue(aterm.ATerm _value)
+  public Attribute setValue(ATerm _value)
   {
     return (Attribute) super.setArgument(_value, index_value);
   }

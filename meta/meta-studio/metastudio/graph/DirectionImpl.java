@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class DirectionImpl extends MetaGraphConstructor
 {
-  public static Direction fromString(String str)
+  static Direction fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Direction fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Direction fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

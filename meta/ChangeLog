@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/14 ({jurgenv,markvdb}@cwi.nl)
+ * Added graph attributes to the graph format (updated MetaStudio)
+
 2003/07/14 (markvdb@cwi.nl)
  * Added a declaration in a TB script.
 

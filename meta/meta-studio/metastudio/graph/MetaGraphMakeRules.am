@@ -19,6 +19,7 @@ Attribute_ShapeImpl.java Attribute_Shape.java\
 Attribute_LocationImpl.java Attribute_Location.java\
 Attribute_SizeImpl.java Attribute_Size.java\
 Attribute_CurvePointsImpl.java Attribute_CurvePoints.java\
+Attribute_BoundingBoxImpl.java Attribute_BoundingBox.java\
 Attribute_DirectionImpl.java Attribute_Direction.java\
 Attribute_InfoImpl.java Attribute_Info.java\
 Shape.java ShapeImpl.java\

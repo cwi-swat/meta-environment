@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class AttributeImpl extends MetaGraphConstructor
 {
-  public static Attribute fromString(String str)
+  static Attribute fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Attribute fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Attribute fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
@@ -40,6 +40,10 @@ abstract public class AttributeImpl extends MetaGraphConstructor
     }
 
     if ((tmp = Attribute_CurvePoints.fromTerm(trm)) != null) {
+      return tmp;
+    }
+
+    if ((tmp = Attribute_BoundingBox.fromTerm(trm)) != null) {
       return tmp;
     }
 
@@ -76,6 +80,11 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
 
   public boolean isCurvePoints()
+  {
+    return false;
+  }
+
+  public boolean isBoundingBox()
   {
     return false;
   }
@@ -121,6 +130,16 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
 
   public boolean hasPoints()
+  {
+    return false;
+  }
+
+  public boolean hasFirst()
+  {
+    return false;
+  }
+
+  public boolean hasSecond()
   {
     return false;
   }
@@ -210,6 +229,26 @@ abstract public class AttributeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Attribute has no Points");
   }
 
+  public Point getFirst()
+  {
+     throw new RuntimeException("This Attribute has no First");
+  }
+
+  public Attribute setFirst(Point _first)
+  {
+     throw new RuntimeException("This Attribute has no First");
+  }
+
+  public Point getSecond()
+  {
+     throw new RuntimeException("This Attribute has no Second");
+  }
+
+  public Attribute setSecond(Point _second)
+  {
+     throw new RuntimeException("This Attribute has no Second");
+  }
+
   public Direction getDirection()
   {
      throw new RuntimeException("This Attribute has no Direction");
@@ -230,12 +269,12 @@ abstract public class AttributeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Attribute has no Key");
   }
 
-  public aterm.ATerm getValue()
+  public ATerm getValue()
   {
      throw new RuntimeException("This Attribute has no Value");
   }
 
-  public Attribute setValue(aterm.ATerm _value)
+  public Attribute setValue(ATerm _value)
   {
      throw new RuntimeException("This Attribute has no Value");
   }

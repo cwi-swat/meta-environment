@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class AttributeListImpl extends MetaGraphConstructor
 {
-  public static AttributeList fromString(String str)
+  static AttributeList fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static AttributeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static AttributeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);

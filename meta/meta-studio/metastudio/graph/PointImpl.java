@@ -6,12 +6,12 @@ import java.io.IOException;
 
 abstract public class PointImpl extends MetaGraphConstructor
 {
-  public static Point fromString(String str)
+  static Point fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  public static Point fromTextFile(InputStream stream) throws aterm.ParseError, IOException
+  static Point fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
