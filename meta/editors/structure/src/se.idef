@@ -122,6 +122,9 @@ in
     rec-msg(delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId))
   +
+    rec-msg(set-modified(EditorId?)) .
+    snd-do(SE, modify(EditorId))
+  +
     rec-msg(get-modified-status(EditorId?)).
     snd-eval(SE, get-modification-status(EditorId)).
     rec-value(SE, modification-status(ModifiedStatus?)).

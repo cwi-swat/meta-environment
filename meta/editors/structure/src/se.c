@@ -378,6 +378,18 @@ ATerm get_modification_status(int cid, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  void modify(int cid, ATerm editorId) */
+
+void modify(int cid, ATerm editorId)
+{
+  SE_Editor editor = getEditor(editorId);
+  
+  if (editor) {
+    putEditor(editorId, SE_setEditorModified(editor, 1));
+  }
+}
+
+/*}}}  */
 
 /*{{{  void usage(char *prg, ATbool is_err) */
 
