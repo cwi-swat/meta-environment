@@ -35,13 +35,13 @@ noinst_HEADERS		= getopt.h
 EXTRA_DIST		= sglr.idef sglr.tif.c sglr.tif.h
 CLEANFILES		= sglr.tifs
 
-sglr_LDADD		= -L$(top_srcdir)/libsglr -lsglr \
-			-L$(top_srcdir)/libtree2dot -ltree2dot \
+sglr_LDADD		= -L$(top_builddir)/libsglr -lsglr \
+			-L$(top_builddir)/libtree2dot -ltree2dot \
 			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
 			-L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 sglr_INCLUDE            = $(INCLUDES)
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/libsglr/libsglr.a \
-              $(top_srcdir)/libtree2dot/libtree2dot.a
+sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a \
+              $(top_builbuilddir)/libtree2dot/libtree2dot.a
