@@ -19,6 +19,11 @@
 
 $Id$
 
+2000/12/14 (markvdb@cwi.nl, olivierp@cwi.nl, jong@cwi.nl)
+  * Simplified actiontable implementation
+  * Counting avoids and prefers filter improved.
+  * New version (3.1) of SGLR.
+
 2000/11/17 (markvdb@cwi.nl)
   * Several (serious) memory leaks fixed.
 
