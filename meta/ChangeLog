@@ -1,5 +1,9 @@
 # $Id$
 
+2002/18/04 (vandenbr@loria.fr)
+ * Variables are visualized with "*variable*" again, this bug
+    was the result of the bug fix on 2002/03/26.
+
 2002/17/04 <olivierp@cwi.nl>
  * Fixed 'animation problem', greatly improving module open time
  * Improved paint/scroll speed of graph window
