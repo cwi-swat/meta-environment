@@ -28,15 +28,20 @@ This is all coded in the \TB-script.
 
 When the interpreter receives a set of equations it performs some
 simple transformations on it, for instance, layout is removed and
-lexicals are transformed into lists of characters.  The
-interpreter stores the equations in a hash table to have fast access to them
-during rewriting.
+lexicals are transformed into lists of characters. 
+The transformation is performed in order to use the standard list
+matching mechanism to deal with lexicals.
+The interpreter stores the equations in a hash table to have fast
+access to them during rewriting.
 
 The term to be rewritten is also slightly modified,
 layout is removed and the lexicals are transformed to lists of characters.
 After rewriting, the result term is again modified: layout is inserted
-and the lists of characters are translated back into lexicals.  This term
-is sent to the \TB\ to be displayed in an editor.
+and the lists of characters are translated back into lexicals.  
+The inserted layout is rather arbitrary, to get a better layout of
+the reduced term it is necessary to adapted this standard unparsing
+mechanism, see \cite{BV96} for more details.
+This term is sent to the \TB\ to be displayed in an editor.
 
 The interpreter does not throw away the equations after rewriting.  The
 equations are only thrown away when one of the modules in the

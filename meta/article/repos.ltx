@@ -62,22 +62,57 @@ parse trees} of \asdf\ specifications.  Parse trees mean that all
 keywords, whitespace, comments, etc.\ are preserved in the tree
 representation.  A self descriptive representation is used, i.e., each
 application of a context-free syntax rule contains a copy of that rule.
+Consider the following set of function symbols:
+\begin{itemize}
+\item {\tt prod(}$L${\tt )} represents the production rule $L$.
+\item {\tt appl(}$T_1${\tt ,}$T_2${\tt )} represents the application of
+production rule $T_1$ to the arguments $T_2$.
+\item {\tt l}$L${\tt )} represents literal $L$.
+\item {\tt w(}$L${\tt )} represents whitespace $L$.
+\end{itemize}
+With these function symbols we can use \aterms\ to represent parse trees.
+Consider the following context-free syntax rules of the language defining
+Boolean expressions.
+
+\begin{small}
+\begin{verbatim}
+   sort Bool
+   context-free syntax
+     true          -> Bool
+     false         -> Bool
+     Bool and Bool -> Bool {left}
+\end{verbatim}
+\end{small}
+The sentence ``{\tt true}'' can be represented by the following parse tree:
+
+\begin{small}
+\begin{verbatim}
+   appl(prod("true -> Bool"), [l("true")])
+\end{verbatim}
+\end{small}
+The parse tree for the sentence ``{\tt true and true}'' is:
+
+\begin{small}
+\begin{verbatim}
+   appl(prod("Bool and Bool -> Bool"),
+        [appl(prod("true -> Bool"), [l("true")]),
+         w(" "), l("and"), w(" "),
+         appl(prod("true -> Bool"), [l("true")])
+        ])
+\end{verbatim}
+\end{small}
+Not that this parse tree is completely self-contained and does not depend
+on a separate grammar definition. The ``prod''s are extremely simplified.
 %%(in the implementation these are all shared).
-The \aterms\ contain a lot of redundant information.
+The \asfix\ representation of parse trees contains a lot of redundant
+information, such as the ``prod''s.
 Because of an efficient term sharing mechanism,
 provided by the C implementation of the \aterms\ library,
 this causes no problems.
+The term sharing mechanism takes care of all duplicate terms in the
+\asfix\ representation of a parse tree by replacing these terms
+by a single address representing this term.
 
-
-%%\subsection{Implementation}
-%%
-%%One of the strong points of \aterms\ are the powerful access functions
-%%to retrieve information from the terms and the construction functions
-%%to build terms. 
-%%
-%%These functions are formally specified in \asdf~\cite{BKOV97} and
-%%this formal specification is used to make a library of C functions
-%%to manipulate terms.
 
 \subsection{Implementation}
 The ``tree-repository'' contains the \asfix\ representation of all
