@@ -2,6 +2,7 @@ $Id$
 
 2001/03/06 (jong@cwi.nl)
  * Added make_rules to toplevel EXTRA_DIST
+ * Cleaned up .cvsignore files
 
 2001/02/01 (mdejonge@cwi.nl)
  * Fixed tifstoc path problem
