@@ -96,8 +96,6 @@ in
   if equal(ModifiedStatus, modified) then
     snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
                               [ModuleName]))).
-    snd-msg(close-module(ModuleName)).
-    rec-msg(module-closed(ModuleName)).
     snd-msg(delete-module(ModuleName)).
     snd-msg(open-modules([ModuleName])).
     rec-msg(finished-opening-modules)
