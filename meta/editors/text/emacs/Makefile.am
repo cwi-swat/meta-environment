@@ -28,6 +28,7 @@ emacs_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(top_builddir)/editors/structure/src -lStructure \
 	-L$(TOOLBUSLIB)/lib -lATB \
+        -L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 

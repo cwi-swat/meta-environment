@@ -37,6 +37,8 @@ struct _TextEditor
   set_cursor_at_focus_t setCursorAtFocus;
   set_actions_t setActions;
   set_focus_t setFocus;
+  set_cursor_at_error_location_t setCursorAtErrorLocation;
+  set_focus_at_error_location_t setFocusAtErrorLocation;
   get_contents getContents;
 };
 
@@ -105,6 +107,12 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetFocus(action)) {
     editor->setFocus(write_to_editor_fd, action);
   }
+  else if (TE_isActionSetCursorAtErrorLocation(action)) {
+    editor->setCursorAtErrorLocation(write_to_editor_fd, action);
+  }
+  else if (TE_isActionSetFocusAtErrorLocation(action)) {
+    editor->setFocusAtErrorLocation(write_to_editor_fd, action);
+  }
   else if (TE_isActionGetContents(action)) {
     editor->getContents(write_to_hive_fd, action);
   }
@@ -123,6 +131,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  set_cursor_at_focus_t setCursorAtFocus,
 			  set_actions_t setActions,
 			  set_focus_t setFocus,
+                          set_cursor_at_error_location_t setCursorAtErrorLocation,
+                          set_focus_at_error_location_t setFocusAtErrorLocation,
 			  get_contents getContents)
 {
   TextEditor textEditorImpl = (TextEditor) calloc(1, sizeof(struct _TextEditor));
@@ -136,6 +146,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   assert(setCursorAtFocus != NULL);
   assert(setActions != NULL);
   assert(setFocus != NULL);
+  assert(setCursorAtErrorLocation != NULL);
+  assert(setFocusAtErrorLocation != NULL);
   assert(getContents != NULL);
 
   textEditorImpl->hiveClosed = hiveClosed;
@@ -147,6 +159,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   textEditorImpl->setCursorAtFocus = setCursorAtFocus;
   textEditorImpl->setActions = setActions;
   textEditorImpl->setFocus = setFocus;
+  textEditorImpl->setCursorAtErrorLocation = setCursorAtErrorLocation;
+  textEditorImpl->setFocusAtErrorLocation = setFocusAtErrorLocation;
   textEditorImpl->getContents = getContents;
 
   return textEditorImpl;

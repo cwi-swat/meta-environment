@@ -1,6 +1,6 @@
 # $Id$
 
-CFLAGS += -Werror
+#CFLAGS += -Werror
 
 INCLUDES = \
 	-I$(ATERM)/include \
@@ -26,4 +26,4 @@ libTextEditor_a_SOURCES = \
 	TextEditor_dict.c
 
 api: TextEditor.adt
-	/users/jive/PROGRAMS/apigen-1.5/bin/adt-to-c --prefix TE_ --input $<
+	/home/markvdb/sdf-apigen/bin/adt-to-c --prefix TE_ --input $<

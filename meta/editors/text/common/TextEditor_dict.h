@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Oct 17 15:21:43 2003
+ * Generated at Mon Jan 12 10:58:16 2004
  */
 
 #ifndef __TextEditor_dict_H
@@ -25,6 +25,8 @@ extern AFun TE_afun14;
 extern AFun TE_afun15;
 extern AFun TE_afun16;
 extern AFun TE_afun17;
+extern AFun TE_afun18;
+extern AFun TE_afun19;
 
 extern ATerm TE_patternPipeDefault;
 extern ATerm TE_patternProcessDefault;
@@ -40,6 +42,8 @@ extern ATerm TE_patternActionSetActions;
 extern ATerm TE_patternActionGetContents;
 extern ATerm TE_patternActionSetFocus;
 extern ATerm TE_patternActionClearFocus;
+extern ATerm TE_patternActionSetFocusAtErrorLocation;
+extern ATerm TE_patternActionSetCursorAtErrorLocation;
 extern ATerm TE_patternActionSetCursorAtFocus;
 extern ATerm TE_patternActionSetCursorAtLocation;
 extern ATerm TE_patternActionDisplayMessage;

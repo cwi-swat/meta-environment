@@ -14,6 +14,8 @@ typedef void (*set_cursor_at_location_t)(int write_to_editor_fd, TE_Action);
 typedef void (*set_cursor_at_focus_t)(int write_to_editor_fd, TE_Action);
 typedef void (*set_actions_t)(int write_to_editor_fd, TE_Action);
 typedef void (*set_focus_t)(int write_to_editor_fd, TE_Action);
+typedef void (*set_cursor_at_error_location_t)(int write_to_editor_fd, TE_Action);
+typedef void (*set_focus_at_error_location_t)(int write_to_editor_fd, TE_Action);
 typedef void (*get_contents)(int write_to_hive_fd, TE_Action);
 
 TextEditor initTextEditor(hive_closed_t,
@@ -25,6 +27,8 @@ TextEditor initTextEditor(hive_closed_t,
 			  set_cursor_at_focus_t,
 			  set_actions_t,
 			  set_focus_t,
+			  set_cursor_at_error_location_t,
+			  set_focus_at_error_location_t,
 			  get_contents);
 
 int eventloop(TextEditor editor, TE_Pipe hiveToEditor, TE_Pipe editorToHive);

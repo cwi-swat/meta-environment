@@ -15,9 +15,11 @@
 
 #include <aterm2.h>
 #include <atb-tool.h>
+
 #include <connector.h>
 #include <TextEditor.h>
 #include <EditorData.h>
+#include <ErrorAPI-utils.h>
 
 #include "protocol.h"
 
@@ -320,6 +322,30 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
+/*{{{  static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+
+static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+{
+  ATerm locationTerm = TE_getActionFocus(edAction);
+  ERR_Location location = ERR_LocationFromTerm(locationTerm);
+  ERR_Area area = ERR_getLocationArea(location);
+
+  int start = ERR_getAreaOffset(area);
+  int length = ERR_getAreaLength(area);
+  char buf[BUFSIZ];
+
+  sprintf(buf, ":goto %d", start);
+  sendToVim(buf);
+
+  sendToVimVerbatim("v");
+
+  if (length > 1) {
+    sprintf(buf, "%d ", length-1);
+    sendToVimVerbatim(buf);
+  }
+}
+
+/*}}}  */
 /*{{{  static void displayMessage(int write_to_editor_fd, TE_Action edAction) */
 
 static void displayMessage(int write_to_editor_fd, TE_Action edAction)
@@ -361,6 +387,18 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
+/*{{{  static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+
+static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+{
+  ATerm locationTerm = TE_getActionFocus(edAction);
+  ERR_Location location = ERR_LocationFromTerm(locationTerm);
+  ERR_Area area = ERR_getLocationArea(location);
+
+  gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area));
+}
+
+/*}}}  */
 
 
 /*{{{  int main(int argc, char *argv[]) */
@@ -379,6 +417,7 @@ int main(int argc, char *argv[])
   TextEditor gvimEditor;
 
   ATBinit(argc, argv, &bottomOfStack);
+  ERR_initErrorApi();
   TE_initTextEditorApi();
   SE_initEditorDataApi();
 
@@ -404,6 +443,8 @@ int main(int argc, char *argv[])
 			      setCursorAtFocus,
 			      setActions,
 			      setFocus,
+			      setCursorAtErrorLocation,
+			      setFocusAtErrorLocation,
 			      getContents);
 
   pwent = getpwuid(getuid());

@@ -44,6 +44,8 @@ TE_Action TE_makeActionRereadContents();
 TE_Action TE_makeActionDisplayMessage(char * message);
 TE_Action TE_makeActionSetCursorAtLocation(int location);
 TE_Action TE_makeActionSetCursorAtFocus(ATerm focus);
+TE_Action TE_makeActionSetCursorAtErrorLocation(ATerm errorLocation);
+TE_Action TE_makeActionSetFocusAtErrorLocation(ATerm errorLocation);
 TE_Action TE_makeActionClearFocus();
 TE_Action TE_makeActionSetFocus(ATerm focus);
 TE_Action TE_makeActionGetContents(ATerm focus);
@@ -78,6 +80,8 @@ inline ATbool TE_isActionRereadContents(TE_Action arg);
 inline ATbool TE_isActionDisplayMessage(TE_Action arg);
 inline ATbool TE_isActionSetCursorAtLocation(TE_Action arg);
 inline ATbool TE_isActionSetCursorAtFocus(TE_Action arg);
+inline ATbool TE_isActionSetCursorAtErrorLocation(TE_Action arg);
+inline ATbool TE_isActionSetFocusAtErrorLocation(TE_Action arg);
 inline ATbool TE_isActionClearFocus(TE_Action arg);
 inline ATbool TE_isActionSetFocus(TE_Action arg);
 inline ATbool TE_isActionGetContents(TE_Action arg);
@@ -91,6 +95,9 @@ TE_Action TE_setActionLocation(TE_Action arg, int location);
 ATbool TE_hasActionFocus(TE_Action arg);
 ATerm TE_getActionFocus(TE_Action arg);
 TE_Action TE_setActionFocus(TE_Action arg, ATerm focus);
+ATbool TE_hasActionErrorLocation(TE_Action arg);
+ATerm TE_getActionErrorLocation(TE_Action arg);
+TE_Action TE_setActionErrorLocation(TE_Action arg, ATerm errorLocation);
 ATbool TE_hasActionActions(TE_Action arg);
 TE_ActionList TE_getActionActions(TE_Action arg);
 TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions);
@@ -169,7 +176,7 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write);
 /*}}}  */
 /*{{{  sort visitors */
 
-TE_Action TE_visitAction(TE_Action arg, char * (*acceptMessage)(char *), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
+TE_Action TE_visitAction(TE_Action arg, char * (*acceptMessage)(char *), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), ATerm (*acceptErrorLocation)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu));
 TE_Menu TE_visitMenu(TE_Menu arg, char * (*acceptMain)(char *), char * (*acceptSub)(char *), char * (*acceptShortcut)(char *));
 TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char * (*acceptText)(char *));

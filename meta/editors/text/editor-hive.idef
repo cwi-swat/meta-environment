@@ -14,6 +14,7 @@ let
   FocusText : str,
   Hive : editor-hive,
   Location : int,
+  ErrorLocation : term,
   MenuEvent : term,
   Message : str,
   MouseEvent : int
@@ -49,6 +50,12 @@ in
   +
     rec-msg(set-cursor-at-focus(EditorId?, Focus?))
     . snd-do(Hive, set-cursor-at-focus(EditorId, Focus))
+  +
+    rec-msg(set-cursor-at-error-location(EditorId?, ErrorLocation?))
+    . snd-do(Hive, set-cursor-at-error-location(EditorId, ErrorLocation))
+  +
+    rec-msg(set-focus-at-error-location(EditorId?, ErrorLocation?))
+    . snd-do(Hive, set-focus-at-error-location(EditorId, ErrorLocation))
   +
     rec-msg(editor-to-front(EditorId?))
     . snd-do(Hive, editor-to-front(EditorId))

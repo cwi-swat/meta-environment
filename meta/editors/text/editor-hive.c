@@ -260,6 +260,30 @@ void set_cursor_at_focus(int c, ATerm editorId, ATerm focus)
 }
 
 /*}}}  */
+/*{{{  void set_cursor_at_error_location(int c, ATerm editorId, ATerm location) */
+
+void set_cursor_at_error_location(int c, ATerm editorId, ATerm location)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionSetCursorAtErrorLocation(location));
+  }
+}
+
+/*}}}  */
+/*{{{  void set_focus_at_error_location(int c, ATerm editorId, ATerm location) */
+
+void set_focus_at_error_location(int c, ATerm editorId, ATerm location)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionSetFocusAtErrorLocation(location));
+  }
+}
+
+/*}}}  */
 /*{{{  void reread_contents(int c, ATerm editorId) */
 
 void reread_contents(int c, ATerm editorId)
