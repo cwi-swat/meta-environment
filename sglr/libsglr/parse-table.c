@@ -1103,7 +1103,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
   version_nr = ATgetInt((ATermInt) ATgetArgument(t, 0));
 
-  if (version_nr != 4) {
+  if (version_nr != 4 && version_nr != 5) {
     ATwarning("versions of SGLR and parse table generator do not match\n");
     t = NULL;
     return NULL;
