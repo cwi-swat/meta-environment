@@ -1,0 +1,31 @@
+module Pico-pretty
+
+imports languages/box/syntax/Box
+imports languages/pico/syntax/Pico-Syntax
+
+exports
+  context-free syntax
+    pp(PROGRAM)                         -> PROGRAM
+    statementlist2box({STATEMENT ";"}*) -> Box {to-box}
+    idtype2box(ID-TYPE)                 -> Box {to-box}
+    idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
+    decls2box(DECLS)                    -> Box {to-box}
+    box2decls(Box)                      -> DECLS {from-box}
+    box2idtype(Box)                     -> ID-TYPE {from-box}
+    box2idtypelist(Box)                 -> {ID-TYPE ","}* {from-box}
+    box2program(Box)                    -> PROGRAM {from-box}
+
+hiddens
+  context-free syntax
+    pp-trafo(PROGRAM)        -> PROGRAM {traversal(trafo, continue, bottom-up)}
+    pp-trafo(DECLS)          -> DECLS {traversal(trafo, continue, bottom-up)}
+    pp-trafo({ID-TYPE ","}*) -> {ID-TYPE ","}* {traversal(trafo, continue, bottom-up)}
+
+  variables
+    "Program"[0-9]*    -> PROGRAM
+    "IdType"[0-9]*     -> ID-TYPE
+    "IdType*"[0-9]*    -> {ID-TYPE ","}*
+    "IdType+"[0-9]*    -> {ID-TYPE ","}+
+    "Decls"[0-9]*      -> DECLS
+    "Statement*"[0-9]* -> {STATEMENT ";"}*
+    "Box"[0-9]*        -> Box

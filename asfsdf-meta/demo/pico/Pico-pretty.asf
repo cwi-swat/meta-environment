@@ -1,0 +1,29 @@
+equations
+
+  [pp-program]
+    pp(Program) = pp-trafo(Program)
+
+  [pp-program-1]
+    pp-trafo(begin Decls Statement* end) =
+      box2program(V ["begin" 
+                     I [decls2box(Decls)]
+                     I [statementlist2box(Statement*)]
+                     "end"])
+
+  [pp-decls] 
+    pp-trafo(declare IdType* ;) = 
+      box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
+
+  [pp-idtype]
+    pp-trafo(IdType) = IdType
+
+  [pp-idtype]
+    IdType* := pp-trafo(IdType+)
+    ====>
+    pp-trafo(IdType , IdType+) = box2idtypelist(V [H hs=0 [idtype2box(IdType) ","] 
+%%                                                   idtypelist2box(pp-trafo(IdType+))])
+                                                   idtypelist2box(IdType*)])
+
+  [] %%a:natural, box2idtypelist(Box) := a:natural, IdType* 
+     %%====>
+     idtypelist2box(box2idtypelist(Box)) = Box
