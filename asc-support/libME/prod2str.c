@@ -48,7 +48,7 @@ static char* escape(const char* str, const char* escaped_chars)
 char* prodToEscapedString(PT_Production prod)
 {
     char *strProd = ATwriteToString((ATerm) prod);
-      return escape(strProd,"\"");
+      return escape(strProd,"\"\\");
 }
 
 /*}}}  */
