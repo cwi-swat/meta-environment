@@ -33,7 +33,7 @@ echo $mydir
 MV=mv
 RM=rm
 COMPARE="$mydir/trmdiff"
-SDF2TABLE="$mydir/../../pgen/src/sdf2table"
+SDF2TABLE=sdf2table
 
 reference=$mydir/tables
 dirs="first grammars"
