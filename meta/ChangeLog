@@ -5,6 +5,9 @@ Wed Mar 17 14:36:14 CET 2004 <{jong,kooiker}@cwi.nl>
    - started work on structure-editorNG that: uses Location API, and
      does not include legacy code to compute length annotations.
 
+Wed Mar 17 17:22:06 CET 2004 <markvdb@cwi.nl>
+ * Moved sdf specific buttons to the asfsdf-meta package.
+
 Wed Mar 17 CET 2004 <iversen@cwi.nl>
  * Added hook call to process-eqs.tb
  * Made Syntaxchecking in ParseFocusses dependent on Type
