@@ -116,7 +116,6 @@ ATfprintf(stderr,"Registering and resolving finished\n");
 ATfprintf(stderr,"Term read\n");
     t2 = expand_to_asfix(t,"T.asfix");
 
-ATfprintf(stderr,"Expanded term %t\n",t2);
 ATfprintf(stderr,"Reducing ...\n");
     if(ATmatchTerm(t2, pattern_asfix_term, NULL, NULL,
                    &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
@@ -125,7 +124,7 @@ ATfprintf(stderr,"Reducing ...\n");
 ATfprintf(stderr,"Reducing finished.\n");
 
       asfix = toasfix(reduct, file, modname);
-
+ATfprintf(stderr,"Reducing %t\n", asfix);
       ToC_code(asfix,stdout);
     }
     else {

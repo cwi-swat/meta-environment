@@ -47,12 +47,7 @@ ATerm reduce(int cid, ATerm t)
   t = AFexpandTerm(t);
   if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    ATfprintf(stderr,"Reducing ... \n");
     reduct = innermost(trm);
-/*
-    ATfprintf(stderr, "%t\n", reduct);
-*/
-    ATfprintf(stderr,"Reducing finished.\n");
     asfix = toasfix(reduct, file, modname);
   } else
     ATerror("not an asfix term: %t\n", t);
@@ -77,10 +72,8 @@ int main(int argc, char *argv[])
   int i, cid;
   ATerm bottomOfStack;
 
-ATfprintf(stderr,"Main entered\n");
   name = argv[0];
   for(i=1; i<argc; i++) {
-ATfprintf(stderr,"arg is %s\n", argv[i]);
     if(streq(argv[i], "-stats"))
       printstats = ATtrue;
     else if(streq(argv[i], "-TB_TOOL_NAME"))
@@ -88,7 +81,6 @@ ATfprintf(stderr,"arg is %s\n", argv[i]);
     else if(streq(argv[i], "-name"))
       name = argv[++i];
   }
-ATfprintf(stderr,"use_toolbus is %d\n",use_toolbus);
  
   if(use_toolbus) {
     ATBinit(argc, argv, &bottomOfStack);
@@ -104,28 +96,21 @@ ATfprintf(stderr,"use_toolbus is %d\n",use_toolbus);
   resolve_all();
   init_all();
 
-ATfprintf(stderr,"Registering and resolving finished\n");
   if(use_toolbus) {
     ATBeventloop();
   } 
   else {
     t = ATreadFromFile(stdin);
-ATfprintf(stderr,"Term read\n");
     t = AFexpandTerm(t);
-/*
-ATfprintf(stdout, "%t\n", t);
-*/
 
     if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                   &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
 ATfprintf(stderr,"Reducing ...\n");
       reduct = innermost(trm);
-/*
-ATfprintf(stderr, "%t\n", reduct);
-*/
 ATfprintf(stderr,"Reducing finished.\n");
       asfix = toasfix(reduct, file, modname);
       ATwriteToBinaryFile(asfix,stdout);
+      /*ATwriteToTextFile(asfix,stdout);*/
     }
     else
       ATfprintf(stderr, "not an asfix term: %t\n", t);

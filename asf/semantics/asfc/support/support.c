@@ -160,6 +160,53 @@ void c_rehash(int newsize)
   table_size = newsize;
 }
 /*}}}  */
+/*{{{  unsigned in calc_hash(ATerm prod) */
+
+/**
+	* Calculate hash function of a term.
+	*/
+
+#ifdef NO_SHARING
+unsigned int calc_hash(ATerm t)
+{
+	unsigned int hnr = 0;
+
+	switch(ATgetType(t)) {
+		case AT_APPL:
+			{
+				ATermAppl appl = (ATermAppl)t;
+				AFun sym = ATgetAFun(appl);
+				int i, arity = ATgetArity(sym);
+				hnr = AT_hashSymbol(ATgetName(sym), arity);
+
+				for(i=0; i<arity; i++) {
+					hnr = hnr * 3001 + calc_hash(ATgetArgument(appl, i));
+				}
+			}
+			break;
+
+		case AT_INT:
+			hnr = ATgetInt((ATermInt)t);
+			break;
+
+		case AT_LIST:
+			{
+				ATermList list = (ATermList)t;
+				hnr = 123;
+				while(!ATisEmpty(list)) {
+					hnr = hnr * 4507 + calc_hash(ATgetFirst(list));
+					list = ATgetNext(list);
+				}
+			}
+			break;
+	}
+
+	return hnr;
+}
+#endif
+
+/*}}}  */
+
 /*{{{  void register_prod(ATerm prod, funcptr func, Symbol sym) */
 
 void register_prod(ATerm prod, funcptr func, Symbol sym)
@@ -171,7 +218,11 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
     c_rehash(table_size*2);
 
   /*hnr = prod->hnr % table_size;*/
+#ifdef NO_SHARING
+	hnr = calc_hash(prod);
+#else
   hnr = (((int) prod)>>2);
+#endif
   hnr %= table_size;
 
   /* Find out if this function has already been registered */
@@ -228,7 +279,11 @@ funcptr lookup_func(ATerm prod)
 {
   bucket *b;
   /* int hnr = prod->hnr % table_size;*/
+#ifdef NO_SHARING
+	unsigned int hnr = calc_hash(prod);
+#else
   unsigned int hnr = (((int) prod)>>2);
+#endif
   hnr %= table_size;
   b = prod_table[hnr];
 
@@ -247,7 +302,11 @@ Symbol lookup_sym(ATerm prod)
 {
   bucket *b;
   /* int hnr = prod->hnr % table_size;*/
+#ifdef NO_SHARING
+	unsigned int hnr = calc_hash(prod);
+#else
   unsigned int hnr = (((int) prod)>>2);
+#endif
   hnr %= table_size;
 
   b = prod_table[hnr];
