@@ -546,7 +546,8 @@ that is part of the main window.
 the available mouse operations.
 
 
-{\tt Online Help} (***)
+{\tt Online Help} displays online help files in a {\tt Netscape
+Navigator} window.
 
 {\tt JitterBug Activated} opens in an active {\tt Netscape} window a page
 to enter a bug report. This offers the users of the \ASmetaenv\ an online
@@ -687,8 +688,11 @@ There are two additions to the standard user-interface of \xemacs:
 
 \begin{itemize}
 \item The {\tt Meta-Environment} pull-down menu
-(Figure~\ref{FIG:meta-env-menu}) for applying the \asfsdf\ parser ({\tt
-Parse}) or evaluator ({\tt Reduce}) on the text in the editor.
+(Figure~\ref{FIG:meta-env-menu1}) for applying the \asfsdf\ parser to
+the complete text buffer ({\tt Parse Buffer}) or only to the current
+focus ({\tt Parse Focus}). For term editors this menu also contains a
+({\tt Reduce}) entry, that applies the evaluator to the text in
+the editor (Figure~\ref{FIG:meta-env-menu2}).
 
 \item The {\tt Move} pull-down menu (Figure~\ref{FIG:move-menu}) for
 structured traversal of the syntax tree of the text in the editor.
@@ -709,7 +713,7 @@ Figure~\ref{FIG:Bool-example.sdf2}.  Initially the entire text is
 highlighted and the message ``{\tt Focus sort is invalid}'' appears
 in the status line at the bottom of the main window.
 
-Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
+Via the entry {\tt Parse Buffer} in the {\tt Meta-Environment} menu of the
 editor, the parser can be activated.  The parser is finished when the
 status line in the main window displays ``{\tt Idle}'' again.
 
@@ -724,12 +728,14 @@ Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=meta-env-menu.ps,width=1.5cm}}
-  \caption{\label{FIG:meta-env-menu} {\tt Meta-Environment} menu (editor)}
+  \centerline{\epsfig{file=meta-env-menu1.ps,width=2.4cm}}
+  \caption{\label{FIG:meta-env-menu1} {\tt Meta-Environment} menu (editor)}
 \end{figure}
 
-The entry {\tt Reduce} of the {\tt Meta-Environment} menu of the
-editor has no effect when editing a syntax definition.
+\begin{figure}[t]
+  \centerline{\epsfig{file=meta-env-menu2.ps,width=2.4cm}}
+  \caption{\label{FIG:meta-env-menu2} {\tt Meta-Environment} menu (term editor)}
+\end{figure}
 
 \subsection{Editing the Equations Section of a Module}
 
@@ -737,12 +743,11 @@ An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}.  An example is shown in Figure
 \ref{FIG:Bool-example.eqs}.  
 
-The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor
-activates the parser for the equations. It is possible that in order
-to parse the equations, a parse table must be generated. This is
-visible through the status message {\tt Generating Parse Table}.  The
-entry {\tt Reduce} in the {\tt Meta-Environment} menu of the editor
-has no effect when editing equations.
+The entries {\tt Parse Buffer} and {\tt Parse Focus} in the {\tt
+Meta-Environment} menu of the editor activate the parser for the
+equations. It is possible that in order to parse the equations, a
+parse table must be generated. This is visible through the status
+message {\tt Generating Parse Table}.
 
 \subsection{Editing Terms} \label{EditingTerms}
 
@@ -750,11 +755,11 @@ An editor for editing a term over a module is activated via the button
 {\tt Edit Term}.  An example is shown in Figure
 \ref{FIG:Bool-example.trm},
 
-The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor
-activates the
-parser for this term. It is possible that in order to parse
-the term, a parse table must be generated. This is visible
-through the status message {\tt Generating Parse Table}.
+The entries {\tt Parse Buffer} and {\tt Parse Focus} in the {\tt
+Meta-Environment} menu of the editor activate the parser for this
+term. It is possible that in order to parse the term, a parse table
+must be generated. This is visible through the status message {\tt
+Generating Parse Table}.
 
 The entry {\tt Reduce} in the {\tt Meta-Environment} menu of the
 editor activates the evaluator\footnote{We will also use interpreter,
@@ -772,12 +777,14 @@ Some (but not all!) \asfsdf\ specifications can be executed by interpreting
 each equation as a (conditional) rewrite rule from left to right.
 
 When you have created a term (using a term editor, see
-Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt Reduce}
-entry from the {\tt Meta-Environment} menu of the term editor).  As a result,
-rewrite rules will be applied until a normal form is reached (a term for which
-no applicable rule can be found). This normal form is the result of the
-execution and is displayed in the window from which the \ASmetaenv\ was
-started. The rewriting process is further described in Section~\ref{Equations}.
+Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt
+Reduce} entry from the {\tt Meta-Environment} menu of the term
+editor).  As a result, rewrite rules will be applied until a normal
+form is reached (a term for which no applicable rule can be
+found). This normal form is the result of the execution and is
+displayed in a new term window.
+
+The rewriting process is further described in Section~\ref{Equations}.
 
 \newpage
 \section{Guided Tour} \label{GuidedTour}
@@ -950,13 +957,17 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
   \caption{\label{FIG:Bool-example.trm3}Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 \end{figure}
 
+\begin{figure}[t]
+  \centerline{\epsfig{file=reduct.out.ps,width=12cm}}
+  \caption{\label{FIG:reduct.out}New term editor with normal form of `{\tt true \& false}'}
+\end{figure}
+
 \subsubsection{A Term Editor for {\tt Bool-example}}
 
 \begin{itemize}
 \item Open a term-editor over module {\tt Bool-example} by first selecting
   module {\tt Bool-example} in the module pane, and then pushing the {\tt
-    Term} button.  A dialog window pops up.\footnote{
-    In following releases this will be changed into a standard file dialog}
+    New Term} button.  A standard dialog window pops up.
     Enter any new filename, for instance, `{\tt my-term}'.
 
 \item 
@@ -967,14 +978,14 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 \item Click in the focus, this will move the cursor (a single character-sized
   rectangle) 
   
-\item From menu {\tt Meta-Environment} click the {\tt Parse} button.  The text
+\item From menu {\tt Meta-Environment} click the {\tt Parse Buffer} button.  The text
   in the focus is now parsed and the different background color has 
   disappeared.
   The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
 
 \end{itemize}
 
-All the text\emph{ outside} the focus is (by definition) always syntactically
+All the text\emph{outside} the focus is (by definition) always syntactically
 correct. The text \emph{inside} the focus is fresh text which may contain syntax
 errors.
 
@@ -993,11 +1004,12 @@ The movements of the focus are \emph{syntax-directed}: when you click on any
 character in the text, the smallest syntactic unit enclosing that character
 will be selected and becomes the focus.
 
+
 \begin{itemize}
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
   in the {\tt Meta-Environment} menu of the editor.  The result will appear in
-  the terminal window from which the Meta-Environment was started.
+  a new term editor window (Figure~\ref{FIG:reduct.out}).
 
 \end{itemize}
 
@@ -1007,7 +1019,7 @@ will be selected and becomes the focus.
   
 \item Edit the term `{\tt true \& false}' such that the new term will be
   syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
-  parse of the term by selecting the {\tt Parse} button of the 
+  parse of the term by selecting the {\tt Parse Buffer} button of the 
   {\tt Meta-Environment} menu.
   
   In the status line at the bottom of the edit window a message appears
@@ -1023,7 +1035,7 @@ will be selected and becomes the focus.
 \item Erase the term in your term-editor and type a new term `{\tt true \&
     false \& true}'. 
 
-\item Parse the term using the {\tt Parse} button.
+\item Parse the term using the {\tt Parse Buffer} button.
 
 \item  Try to find out how this term has been parsed by clicking
   on different parts of the term and studying the resulting focus.
@@ -1039,7 +1051,7 @@ corresponds with this parse.
   
 \item Erase the term in your term-window and type a new term `{\tt true |
     false \& true}'. 
-\item Parse the term using the {\tt Parse} button.
+\item Parse the term using the {\tt Parse Buffer} button.
   
 \item Try to find out how this term has been parsed by clicking on various
   parts of the term and studying the resulting focus.
@@ -1269,7 +1281,7 @@ In fact, the sort {\tt SERIES}
   button pane. A dialog window pops up and type `{\tt small.pico}' as name of
   the term.
 
-\item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+\item Press the {\tt Parse Buffer} button in the {\tt Meta-Environment} menu of the
   editor. As a result, {\tt small.pico} is parsed.
 
 \item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
