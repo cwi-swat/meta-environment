@@ -1,4 +1,3 @@
-tcp(
 begin
   declare
     input : natural,
@@ -19,4 +18,4 @@ begin
     input := input - 1
   od
 end
-)
+
