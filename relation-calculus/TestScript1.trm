@@ -1,32 +1,61 @@
 %% begin declare x : natural, y : natural, natural z;
-%%      [s1] x := 3;
-%%      if [s2] 3 then
-%%         [s3] z := y + x
+%%      [n1] x := 3;
+%%      if [n2] 3 then
+%%         [n3] z := y + x
 %%      else
-%%         [s4] x := 4
+%%         [n4] x := 4
 %%      fi
-%%      [s5] y := z
+%%      [n5] y := z
 %%
 %% end
 
-{<a,b>} union {<c,d>}
 
-%%eval(
 
-%%def DEFS    = '{<s1, x>, <s3, z>, <s4, x>, <s5, y>}
-%%def ISCON   = '{<s1, x>}
-%%def USES    = '{<s3, y>, <s3, x>, <s5, z>}
-%%def PRED    = '{<s0, s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>}
 
-%%def  REL1    = {<$u, $x> in USES | $x == 'x }
+eval(
 
-%%def  Bag1    =  {$u in '{a, b, c} | true | {$u}}
+%%def D = dominators('{<y, n3>}, '{<y, n5>}, '{<n3, n2>, <n2, n1>, <n1, n0>})
 
-%%def UNINITIALIZED = {<U, X> in USES | elem('s0, {U} until(DEFS.X union '{s0}, inv(PRED)))}
+%%def DEFS    = '{<n1, x>, <n3, z>, <n4, x>, <n5, y>}
+def DEFS    = '{<x, n1>, <z, n3>, <x, n4>, <y, n5>}
+
+%%def USES    = '{<n3, y>, <n3, x>, <n5, z>}
+def USES    = '{<y, n3>, <x, n3>, <z, n5>}
+
+def SUCC    = '{<n0, n1>,<n1, n2>, <n2, n3>, <n2, n4>, <n3, n5>, <n4, n5>}
+def PRED   = inv(SUCC)
+
+%%def D0 = '{<y,n3>}
+%%def D1 = (D0 o PRED) \ DEFS
+%%def D2 = (D1 o PRED) \ DEFS
+%%def D3 = (D2 o PRED) \ DEFS
+
+def D = elem('n0, ran(dominators('{<y, n3>}, DEFS, PRED)))
+
+fun reaches_root(R) = elem('n0, ran(R))
+
+def UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) }
+
+%%fun left(R, Y) = 
+%%    {<X, V> in R | V == Y | X }
+
+%%def UNINITIALIZED = {<U, X> in USES | elem('n0, {U} until(DEFS.X union '{n0}, inv(SUCC)))}
+
+
+%%fun DEF_OR_START(X) = left(DEFS,X) union '{n0}
+
+%%fun BACK(U, X) = {U} until(DEF_OR_START(X), PRED)
+
+%%fun DEFORSTART(X) = elem
+%%fun BACK(U, X) = {U} until(DEFORSTART(X), PRED)
+
+%%def UNINIT = {<U, X> in USES | elem('n0, BACK(U, X)) }
+
 
 %%def Bag1     = '{a, b, c}
 %%def Bag2     = '{d, e, f}
-%%def Bag3     = id(Bag1)
+%%def Rel1     = '{<a, n1>, <b, n2>, <c, n3>}
+%%def Rel2     = '{<n1, n10>, <n3, n30>}
 
 %%def Tst      = {$x in Bag1 | true }
 %%def REL      = {$x in Bag1, $y in Bag2 | true | {<$x, $y>}}
@@ -34,5 +63,26 @@
 %%fun f(Bag)   = id(Bag)
 
 %%def Bag4      = f(Bag1)
-%%)
+
+%%fun finv(REL) = {<$x, $y> in REL | true | <$y, $x>}
+%%fun fdom(REL) = {<$x, $y> in REL | true | $x}
+
+%%fun inv(R) =  { <X, Y> in R | true | <Y,X> }
+
+%%fun X(R1, R2) = { X in R1, Y in R2 | true | <X, Y>}
+
+%%fun o(R1, R2) = 
+%%    { <X, Y> in R1, <S, T> in R2 
+%%    | Y == S 
+%%    | <X, T>}
+
+%%def bag5     = inv(DEFS)
+%%def bag6     = fdom(DEFS)
+
+%%def bag7     = X(Bag1, Bag2)
+%%def bag8     = o(Rel1, Rel2)
+
+%%def bag9 =  left(DEFS, 'x)
+
+)
 
