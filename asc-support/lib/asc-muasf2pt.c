@@ -140,7 +140,7 @@ static void destroyTermStore(void)
 
 static PT_Tree listToTree(PT_Production prod, ATermList elems)
 {
-  PT_Tree layout = PT_makeTreeLayoutFromString(" ");
+  PT_Tree layout = defaultLayout;
   PT_Tree sepTree = NULL;
   PT_Symbol rhs;
   PT_Args args = PT_makeArgsEmpty();
@@ -216,7 +216,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     PT_Tree tree = NULL;
 
     if (PT_isOptLayoutSymbol(symbol)) {
-      tree = PT_makeTreeLayoutFromString(" ");
+      tree = defaultLayout;
     }
     else if(PT_isSymbolLit(symbol)) {
       char *str = PT_getSymbolString(symbol);
