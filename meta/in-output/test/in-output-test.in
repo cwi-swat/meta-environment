@@ -99,3 +99,8 @@ ${toolbus} -I${datadir} in-output-test-2.tb
 
 # Test 3. Check whether an existing sdf2 module (in baf) exists.
 ${toolbus} -I${datadir} in-output-test-3.tb
+
+# Test 4. Attempt to create an empty sdf2 module.
+rm -f EmptySdf2Module.sdf2
+${toolbus} -I${datadir} in-output-test-4.tb
+rm -f EmptySdf2Module.sdf2
