@@ -3,6 +3,8 @@ module basic/Bytes
 imports basic/Strings
 	basic/Integers	
 
+exports sorts Bytes
+
 exports
   context-free syntax
     string-to-bytes(String) -> Bytes 
@@ -15,7 +17,7 @@ exports
 hiddens
   imports basic/Comments
 
-  sorts Bytes Byte
+  sorts Byte
 
   lexical syntax
     %% ~[] -> Byte is changed to "dummy" -> Byte
