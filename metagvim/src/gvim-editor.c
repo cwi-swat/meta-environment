@@ -37,6 +37,29 @@ static char parseMenuName[BUFSIZ] = { 0 };
 
 /*}}}  */
 
+/*{{{  static char *escapeSpaces(const char *s) */
+
+static char *escapeSpaces(const char *s)
+{
+  static char buf[BUFSIZ];
+  int i, len, pos;
+
+  len = strlen(s);
+  for (i=0, pos=0; i<len; i++) {
+    char c = s[i];
+    if (c == ' ') {
+      buf[pos++] = '\\';
+      buf[pos++] = '\\';
+    }
+    buf[pos++] = c;
+  }
+  buf[pos++] = '\0';
+
+  return buf;
+}
+
+/*}}}  */
+
 /*{{{  static void sendToVimVerbatim(const char *cmd) */
 
 static void sendToVimVerbatim(const char *cmd)
@@ -64,7 +87,8 @@ static void makeVimMenuItem(const char *menu, const char *item)
 {
   char buf[BUFSIZ];
 
-  sprintf(buf, ":call AddMetaMenu(tb_pipe, \"%s\", \"%s\")", menu, item);
+  sprintf(buf, ":call AddMetaMenu(tb_pipe, \"%s\", \"%s\")",
+	  menu, escapeSpaces(item));
   sendToVim(buf);
 }
 
