@@ -20,6 +20,9 @@
 # $Id$
 #
 
+2001-16-02 <jurgenv@cwi.nl>
+   * changed layout of term representation as printed by a2toa1 to ""
+
 2000-11-08 <mdejonge@cwi.nl>
    * Bug fix: cc was used for compiling libAsFix.a not $(CC) which might be
      gcc depending on local configuration.
