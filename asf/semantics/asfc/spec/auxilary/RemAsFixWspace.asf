@@ -32,7 +32,7 @@ equations
              ==========================
              remove-ws-trms([T, Ts]) = Tl1 ++ Tl2
 
-  [rws-1'1] remove-ws(L) = [L]
+  [rws-1'1] remove-ws($L) = [$L]
 
   [rws-1'2] remove-ws(w(Ts)) = []
 
@@ -61,7 +61,7 @@ equations
              ==========================
              change-ws-trms([T, Ts]) = Tl1 ++ Tl2
 
-  [cws-1'1] change-ws(L) = [L]
+  [cws-1'1] change-ws($L) = [$L]
 
   [cws-1'2] change-ws(w(Ts)) = [w("")]
 

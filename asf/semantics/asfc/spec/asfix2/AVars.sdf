@@ -37,4 +37,6 @@ exports
     avar-name(ATerm)                  -> AName
 
   variables
-    "AVar"[0-9\']* -> AVar
+    "AVar"[0-9\']*  -> AVar
+    "AName"[0-9\']* -> AName
+    "AInt"[0-9\']*  -> IntCon

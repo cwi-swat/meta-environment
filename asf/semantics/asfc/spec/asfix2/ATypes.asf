@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                         The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@
 equations
 
  [type-of-1]  type-of(AInt) = int
- [type-of-2]  type-of(L) = str
+ [type-of-2]  type-of($L) = str
  [type-of-3]  type-of(AName) = term
  [type-of-4]  type-of(AName?) = term
  [type-of-5]  type-of(AName : T) = T
@@ -35,7 +36,7 @@ equations
  [type-of-12] type-of(Tl {Ts2}) = type-of(Tl)
 
  [require-type-1]  require-type(int, AInt) = true
- [require-type-2]  require-type(str, L) = true
+ [require-type-2]  require-type(str, $L) = true
  [require-type-3]  require-type(list, []) = true
  [require-type-4]  require-type(list, [Ts]) = true
  [require-type-5]  require-type(list(T), []) = true

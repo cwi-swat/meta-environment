@@ -68,6 +68,7 @@ exports
     "Attribs"[0-9\']* -> ATermList
     "Aname"[0-9\']*   -> ATerm
     "Amodule"[0-9\']* -> ATerm
+    "L"[0-9\']*       -> Literal
 
 hiddens
   variables

@@ -56,10 +56,12 @@ exports
       ATerm "[" {AFun "."}+ "*="  ATerm "]"      -> ATerm
       pp( ATerm )                                -> Literal
 
+variables
+      "Tvar" [0-9\']*   -> ATerm
+
 hiddens
    variables
       [ABC][0-9\']*     -> Symbol
-      "Tvar" [0-9\']*   -> ATerm
       "Lvar" [0-9\']*   -> Literal
       "Svar" [0-9\']*   -> AFun
       "Avar" [0-9\']*   -> ATerm

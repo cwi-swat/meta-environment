@@ -80,6 +80,7 @@ hiddens
     "CfFunc"[0-9\']*       -> ATerm
     "LexFunc"[0-9\']*      -> ATerm
     "Ws"[0-9\']*           -> ATerm
+    "Sep"[0-9\']*          -> ATerm
     "Prod"[0-9\']*         -> ATerm
     "Iter"[0-9\']*         -> ATerm
     "$Sort"[0-9\']*        -> ATerm

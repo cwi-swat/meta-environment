@@ -281,9 +281,9 @@ equations
 %% a list.
   [rlrt-1'3] is-list-var-term(Term1) = true,
              includes(Term1,Ivarenv) = true,
-             newlistvar(Term1) = Term2
+             newlistvar(Term1) = Varid
              =========================
-             rem-lists-from-rhs-term(Term1,Ivarenv) = (Term2,,Ivarenv)
+             rem-lists-from-rhs-term(Term1,Ivarenv) = (Varid,,Ivarenv)
 
 %% The ``default'' case the original term is returned.
   [default-rlrt-1'4] rem-lists-from-rhs-term(Term,Ivarenv) =
