@@ -1,5 +1,8 @@
 # $Id$
 
+2002/06/24 (vandenbr@loria.fr)
+ * asf-checker activated.
+
 2002/06/06 (vandenbr@loria.fr)
  * Replaced replace-text by replace-file.
 
