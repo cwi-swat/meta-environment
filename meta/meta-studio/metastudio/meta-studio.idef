@@ -117,12 +117,13 @@ in
    )
    +
    ( rec-event(UI, button-selected(T?, ModuleName?, ButtonName?)) .
-     snd-msg(extra-button-action(ButtonName, str(ModuleName), T, ModuleName, ui-id)) .
+     snd-msg(extra-button-action(ButtonName, [str(ModuleName)], T, 
+                                 ModuleName, ui-id)) .
      snd-ack-event(UI, button-selected(T, ModuleName, ButtonName))
    )
    +
    ( rec-event(UI, button-selected(T?, ButtonName?)) .
-     snd-msg(extra-button-action(ButtonName, T, "*", ui-id)) .
+     snd-msg(extra-button-action(ButtonName, [], T, "*", ui-id)) .
      snd-ack-event(UI, button-selected(T, ButtonName))
    )
    +
@@ -150,7 +151,8 @@ in
    + /*  Message list */
    (
      rec-event(UI, element-selected(ButtonName?, Tree?)).
-     snd-msg(extra-button-action(ButtonName, Tree, "message-list", "*", message-id)).
+     snd-msg(extra-button-action(ButtonName, [Tree], 
+                                 "message-list", "*", message-id)).
      snd-ack-event(UI, element-selected(ButtonName, Tree)) 
    )
    +
