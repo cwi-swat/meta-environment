@@ -40,6 +40,9 @@ public class ATermAppl extends ATerm
     this(world, fun, new ATerms(world));
   }
   //}  
+    public ATermAppl(String fun) {
+	this(the_world,fun);
+    }
 
   /** Construct a function symbol without arguments. The symbol is quoted.
     */
@@ -85,6 +88,10 @@ public class ATermAppl extends ATerm
     {
 	super(world);
 	intern(new ATermApplImpl(world, fun, args.getATermsImpl()));
+    }
+    
+    public ATermAppl(String fun, ATerms args) {
+	this(the_world, fun, args);
     }
 
   //}

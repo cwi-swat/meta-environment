@@ -44,6 +44,10 @@ public class ATermList extends ATerm
     intern(new ATermListImpl(world, terms.getATermsImpl()));
   }
 
+    public ATermList(ATerms ts) {
+	this(the_world,ts);
+    }
+
   //}
   //{ public ATermList(World world, ATerms terms, ATerm anno)
 

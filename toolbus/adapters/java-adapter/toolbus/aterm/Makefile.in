@@ -46,7 +46,7 @@ PROGRAMS	= aterm-size
 all:	${CLASSES}
 
 %.class: %.java
-	javac -O -classpath ../..:$$CLASSPATH $<
+	javac -classpath ../..:$$CLASSPATH $<
 
 test:	${CLASSES}
 	java -classpath ../..:$$CLASSPATH toolbus.aterm.ATest

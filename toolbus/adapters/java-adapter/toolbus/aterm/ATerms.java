@@ -39,6 +39,9 @@ public class ATerms extends ATerm
     intern(new ATermsImpl(world));
   }
   //}  
+    public ATerms() {
+	this(the_world);
+    }
   //{ public ATerms(World world, ATerm f, ATerms n)
 
   public ATerms(World world, ATerm f, ATerms n)
@@ -46,6 +49,10 @@ public class ATerms extends ATerm
     super(world);
     intern(new ATermsImpl(world, f.getATermImpl(), (ATermsImpl)n.getATermImpl()));
   }
+
+    public ATerms(ATerm f, ATerms n) {
+	this(the_world,f,n);
+    }
 
   //}
   //{ public ATerms(World world, ATerm f, ATerms n, ATerm anno)
@@ -63,6 +70,9 @@ public class ATerms extends ATerm
   public ATerms(World world, ATerm f)
   {
     this(world, f, new ATerms(world));
+  }
+  public ATerms(ATerm f) {
+    this(the_world,f);
   }
 
   //}
