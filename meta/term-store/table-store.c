@@ -355,19 +355,16 @@ void loadTable(SS_Table table)
   char *valueType = SS_getTableValueType(table);
   SS_Rows rows = SS_getTableRows(table);
 
-  if (TS_tableExists(name)) {
+  if (!TS_tableExists(name)) {
     addTable(name, valueType);
-
-    for (; !SS_isRowsEmpty(rows); rows = SS_getRowsTail(rows)) {
-      SS_Row row = SS_getRowsHead(rows);
-      ATerm key = SS_getRowKey(row);
-      ATerm value = SS_getRowValue(row);
-
-      TS_putValue(name, key, value);
-    }
   }
-  else {
-    ATwarning("Table %s does not exist, contents not loaded!\n", name);
+
+  for (; !SS_isRowsEmpty(rows); rows = SS_getRowsTail(rows)) {
+    SS_Row row = SS_getRowsHead(rows);
+    ATerm key = SS_getRowKey(row);
+    ATerm value = SS_getRowValue(row);
+
+    TS_putValue(name, key, value);
   }
 }
 
