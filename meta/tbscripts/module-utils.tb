@@ -294,7 +294,7 @@ let
   Changed : list
 in
   DeleteEditors(ModuleName).
-  snd-msg(delete-module-from-db(ModuleName)).
+  snd-msg(close-module-in-db(ModuleName)).
   rec-msg(changed-modules(Changed?)).
   snd-msg(notify-about-changed-modules(Changed, "sdf")) .
   rec-msg(notify-about-changed-modules-done)
