@@ -116,11 +116,11 @@ aliased-symbol-already-declared($ModuleId, $Symbol2)]
 	
   [cm1] get-module-name($Module) = $ModuleId,
 
-        get-all-imports($Module) = ImportsSet,
-        get-declared-symbols(ImportsSet, 
+        get-all-imports($Module) = imports(Import*),
+        get-declared-symbols(Import*, 
                              get-module-info(InfoMsgTuple1)) = 
           symbolpairs(DeclaredSymbolPair*1),
-        get-aliased-symbols(ImportsSet, 
+        get-aliased-symbols(Import*, 
                             get-module-info(InfoMsgTuple1)) = 
           symbolpairs(AliasedSymbolPair*1),
 

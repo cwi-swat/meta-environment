@@ -10,17 +10,23 @@ exports
     symbolpairs(SymbolPair*)                   -> SymbolPairsSet
     contains(Symbol, SymbolPairsSet)           -> Boolean
     contains(ModuleId, Symbol, SymbolPairsSet) -> Boolean
-  
+
+exports
   context-free syntax
     de-modularize(SymbolPairsSet) -> SymbolsSet
     symbols(Symbol*)              -> SymbolsSet
     diff(SymbolsSet, SymbolsSet)  -> SymbolsSet
     contains(Symbol, SymbolsSet)  -> Boolean
+ 
+hiddens 
+  context-free syntax
+    de-modularize(SymbolPair*) -> Symbol*
 
 hiddens
   variables
-    "SymbolPair"[0-9]*  -> SymbolPair
-    "$Symbol*"[0-9]*    -> Symbol*
-    "SymbolPair*"[0-9]* -> SymbolPair*
-    "$Symbol"[0-9]*     -> Symbol
-    "$ModuleId"[0-9]*   -> ModuleId
+    "SymbolPair"[0-9]*      -> SymbolPair
+    "SymbolPairsSet"[0-9]*  -> SymbolPairsSet
+    "$Symbol*"[0-9]*        -> Symbol*
+    "SymbolPair*"[0-9]*     -> SymbolPair*
+    "$Symbol"[0-9]*         -> Symbol
+    "$ModuleId"[0-9]*       -> ModuleId

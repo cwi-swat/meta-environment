@@ -64,7 +64,7 @@ hiddens
     "Msg*"[0-9]*            -> Message*
     "Msgs"[0-9]*            -> Messages
 
-    "ImportsSet"[0-9]*      -> ImportsSet
+    "Import*"[0-9]*         -> Import*
     
     "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
     "ModuleInfoTable"[0-9]* -> Module-Info-Table

@@ -15,7 +15,7 @@ hiddens
   context-free syntax
     conc(Production*, Production*)                  -> Production*
     includes(Production, Production*)               -> Boolean
-    if Boolean then Production* else Production* fi -> Production*  
+    "if" Boolean "then" Production* "else" Production* "fi" -> Production*  
 
 hiddens
   variables

@@ -53,7 +53,7 @@ hiddens
     "Module"[0-9]*          -> Module
     "$ModuleId"[0-9]*       -> ModuleId
 
-    "ImportsSet"[0-9]*      -> ImportsSet
+    "Import*"[0-9]*         -> Import*
     
     "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
     "ModuleInfoTable"[0-9]* -> Module-Info-Table

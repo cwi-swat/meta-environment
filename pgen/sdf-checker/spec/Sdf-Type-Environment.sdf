@@ -36,28 +36,30 @@ exports
     put-declared-symbols-info(ModuleId,
                               SymbolPairsSet, 
                               Module-Info-Table)        -> Module-Info-Table
-    get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolPairsSet
+    get-declared-symbols(Import*, Module-Info-Table) -> SymbolPair*
+    get-declared-symbols(Import*, Module-Info-Table) -> SymbolPairsSet
 
   context-free syntax
     get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
     put-aliased-symbols-info(ModuleId,
                              SymbolPairsSet, 
                              Module-Info-Table)        -> Module-Info-Table
-    get-aliased-symbols(ImportsSet, Module-Info-Table) -> SymbolPairsSet
+    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolPair*
+    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolPairsSet
 
   context-free syntax
     get-defined-productions(ModuleId, Module-Info-Table)  -> ProductionsSet
     put-production-info(ModuleId,
                         ProductionsSet, 
                         Module-Info-Table)                 -> Module-Info-Table
-    get-defined-productions(ImportsSet, Module-Info-Table) -> ProductionsSet
+    get-defined-productions(Import*, Module-Info-Table) -> ProductionsSet
 
   context-free syntax
     get-constructors(ModuleId, Module-Info-Table)   -> ConstructorSet
     put-constructor-info(ModuleId,
                          ConstructorSet, 
                          Module-Info-Table)         -> Module-Info-Table
-    get-constructors(ImportsSet, Module-Info-Table) -> ConstructorSet
+    get-constructors(Import*, Module-Info-Table) -> ConstructorSet
 
 hiddens
   variables

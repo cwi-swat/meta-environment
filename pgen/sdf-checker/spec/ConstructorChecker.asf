@@ -2,8 +2,8 @@ equations
 	
   [cmc-1'1] get-module-name(Module) = $ModuleId,
        
-            get-all-imports(Module) = ImportsSet,
-            get-constructors(ImportsSet, 
+            get-all-imports(Module) = imports(Import*),
+            get-constructors(Import*, 
                              get-module-info(InfoMsgTuple1)) = 
               constructors(SymbolCons*1),
 

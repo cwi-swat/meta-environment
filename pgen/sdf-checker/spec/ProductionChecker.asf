@@ -44,9 +44,9 @@ equations
         get-hidden-cf-prods(Module, productions()) =  productions(Prod*2),
         get-prods-in-prios(Module, productions()) = productions(Prod*3),
        
-        get-all-imports(Module) = ImportsSet,
+        get-all-imports(Module) = imports(Import*),
 
-        get-defined-productions(ImportsSet, get-module-info(InfoMsgTuple1)) = 
+        get-defined-productions(Import*, get-module-info(InfoMsgTuple1)) = 
           productions(Prod*4),
 
         productions(Prod*1) ++ productions(Prod*4) = productions(Prod*5),

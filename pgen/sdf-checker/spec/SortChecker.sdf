@@ -121,7 +121,6 @@ hiddens
     "$Literal"[0-9]*        -> Literal
 
     "Import*"[0-9]*         -> Import*
-    "ImportsSet"[0-9]*      -> ImportsSet
   
     "Prod*"[0-9]*           -> Production*
 

@@ -17,12 +17,14 @@ equations
 
   [default-c-1'1] contains($Symbol, symbols(Symbol*)) = false
 
-  [dm-1'1] de-modularize(symbolpairs()) = symbols()
+  [dm-1'1] de-modularize() = 
 
-  [dm-1'2] de-modularize(symbolpairs(SymbolPair*)) = symbols($Symbol*)
-           ===========================================================
-           de-modularize(symbolpairs(($ModuleId, $Symbol) SymbolPair*)) = 
-             symbols($Symbol $Symbol*)
+  [dm-1'2]  de-modularize(($ModuleId, $Symbol) SymbolPair*) = 
+             $Symbol de-modularize(SymbolPair*)
+
+
+  [dm-2'1] de-modularize(symbolpairs(SymbolPair*)) = 
+             symbols(de-modularize(SymbolPair*))
 
   [sym1] symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair SymbolPair*3) =
            symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair*3)
