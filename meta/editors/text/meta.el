@@ -6,6 +6,7 @@
 ; we keep a list of the buffers for the structure editor
 (setq bufferlist ())
 (setq sendmessage ())
+(setq debug ())
 
 (defun tb-init (filename)
   "Load the file filename, and return a unique buffer name to the ToolBus"
@@ -99,6 +100,16 @@ characters long. "
   ()
 )
 
+(defun move-cursor-into-focus (start length)
+  "Moves the cursor to the start of the focus if the cursor is not already 
+   contained in the focus"
+
+   (if (or (> (point) (+ start length))
+           (< (point) start))
+       (goto-char start)
+   )
+)
+
 (defun tb-set-focus (filename str start length)
   "Set the focus:
    FILENAME is the file where the focus should be set.
@@ -116,7 +127,7 @@ characters long. "
     (select-window (get-buffer-window filename t))
 
     (display-message 'focus (concat "Focus symbol: " str))
-    (goto-char start)
+    (move-cursor-into-focus start length)
     ; first clear ALL colorings (including the previous focus)
     (remove-text-properties 1 (point-max buf) '(face nil) buf)
     ; then set the new focus
