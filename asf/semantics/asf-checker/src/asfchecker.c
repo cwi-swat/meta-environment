@@ -40,9 +40,11 @@ static ATermList checkAsf(ATerm term)
     int ambs = PT_getParseTreeAmbCnt(parseTree);
     if (ambs == 0) {
       PT_Tree ptRules        = PT_getParseTreeTree(parseTree);
-      ASF_ASFEquations rules    = ASF_ASFEquationsFromTerm(
-                                 PT_makeTermFromTree(ptRules));
-      return checkEquations(rules);
+      ASF_ASFModule module = ASF_getStartTopASFModule((ASF_Start) ptRules);
+      ASF_ASFConditionalEquationList rules = ASF_getASFModuleEquationList(module);
+      ASF_ASFTestEquationTestList tests = ASF_getASFModuleTestList(module);
+
+      return ATconcat(checkEquations(rules), checkTests(tests));
     }
     else if (ambs == 1) {
       return ATmakeList1(ATmake("[<str>]","Equations contain one ambiguity!"));

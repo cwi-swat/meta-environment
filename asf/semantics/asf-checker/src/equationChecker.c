@@ -537,27 +537,25 @@ ATermList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList)
 
 /*{{{  ATermList checkEquations(ASF_ASFEquations equations)  */
 
-ATermList checkEquations(ASF_ASFEquations equations) 
+ATermList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
-  if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFEquationsToTerm(equations)))) {
+  if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
     return makeAmbiguityMessage();
   }
-  if (ASF_isASFEquationsPresent(equations)) {
-    ASF_ASFConditionalEquationList condEquationList = 
-      ASF_getASFEquationsList(equations);
-  
-    return checkASFConditionalEquationList(condEquationList);
+
+  return checkASFConditionalEquationList(equations);
+}
+
+/*}}}  */
+/*{{{  ATermList checkTests(ASF_ASFTestEquationTestList tests)  */
+
+ATermList checkTests(ASF_ASFTestEquationTestList tests) 
+{
+  if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) tests))) {
+    return makeAmbiguityMessage();
   }
-  else if (ASF_isASFEquationsPresentWithTests(equations)) {
-    ASF_ASFConditionalEquationList condEquationList = 
-      ASF_getASFEquationsList(equations);
-    ASF_ASFTestEquationTestList testEquationList = 
-      ASF_getASFEquationsTestList(equations);
-  
-    return ATconcat(checkASFConditionalEquationList(condEquationList),
-                    checkASFTestEquationList(testEquationList));
-  }
-  return ATempty;
+
+  return checkASFTestEquationList(tests);
 }
 
 /*}}}  */

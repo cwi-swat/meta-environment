@@ -318,18 +318,45 @@ ASF_ASFConditionalEquationList upgradeASFConditionalEquationList(ASF_ASFConditio
 
 /*}}}  */
 
-/*{{{  ASF_ASFEquations upgradeEquations(ASF_ASFEquations equations)  */
+/*{{{  ASF_ASFModule upgradeModule(ASF_ASFModule module) */
 
-ASF_ASFEquations upgradeEquations(ASF_ASFEquations equations) 
+ASF_ASFModule upgradeModule(ASF_ASFModule module)
 {
-  if (ASF_hasASFEquationsList(equations)) {
-    ASF_ASFConditionalEquationList condEquationList = ASF_getASFEquationsList(equations);
-  
-    equations = ASF_setASFEquationsList(equations,
-					upgradeASFConditionalEquationList(condEquationList));
+  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
+  ASF_ASFSectionList new = NULL;
+  ASF_OptLayout l = NULL;
+
+  for ( ; !ASF_isASFSectionListEmpty(sections);
+	sections = ASF_getASFSectionListTail(sections)) {
+    ASF_ASFSection section = ASF_getASFSectionListHead(sections);
+
+    if (ASF_isASFSectionEquations(section)) {
+      ASF_ASFConditionalEquationList eqs = ASF_getASFSectionList(section);
+
+      eqs = upgradeASFConditionalEquationList(eqs);
+
+      section = ASF_setASFSectionList(section, eqs);
+    }
+    else if (ASF_isASFSectionTests(section)) {
+      ATwarning("Tests are not upgraded by this tool!\n");
+    }
+
+    if (new == NULL) {
+      new = ASF_makeASFSectionListSingle(section);
+    }
+    else {
+      new = ASF_makeASFSectionListMany(section, l, new);
+    }
+
+    if (!ASF_hasASFSectionListTail(sections)) {
+      break;
+    }
+    else {
+      l = ASF_getASFSectionListWsAfterFirst(sections);
+    }
   }
 
-   return equations;
+  return ASF_setASFModuleList(module, (ASF_ASFSectionList) ATreverse((ATermList) new));
 }
 
 /*}}}  */

@@ -100,8 +100,16 @@ main (int argc, char **argv)
     free(inputs[nInputs]);
   }
 
-  alleqs = ASF_makeASFConditionalEquationListFromParseTrees(list);
- 
+  alleqs = ASF_makeASFConditionalEquationListEmpty();
+
+  for(;!ATisEmpty(list); list = ATgetNext(list)) {
+    ATerm head = ATgetFirst(list);
+    ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
+
+    alleqs = ASF_unionASFConditionalEquationList(alleqs,
+		  ASF_getASFModuleEquationList(module));
+  }
+
   ATwriteToNamedBinaryFile(ASF_makeTermFromASFConditionalEquationList(alleqs), output);
  
   return 0;
