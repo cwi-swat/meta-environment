@@ -29,6 +29,7 @@
 #include <aterm2.h>
 #include <deprecated.h>
 
+#include <mept.h>
 #include "conversion.h"
 
 /* Function prototypes (only the badly needed ones) */
@@ -39,31 +40,18 @@ static ATerm termToAsFix1(ATerm);
 
 /* Definition of AsFix2 patterns and their initialization */
 
-static ATerm asfix2_cf_pattern = NULL;
-static ATerm asfix2_lex_pattern = NULL;
 static ATerm asfix2_opt_layout_pattern = NULL;
-static ATerm asfix2_iter_star_sep_pattern = NULL;
-static ATerm asfix2_iter_sep_pattern = NULL;
-static ATerm asfix2_iter_star_pattern = NULL;
-static ATerm asfix2_iter_pattern = NULL;
-static ATerm asfix2_lit_pattern = NULL;
 static ATerm asfix2_prod_pattern = NULL;
 static ATerm asfix2_attrs_pattern = NULL;
 static ATerm asfix2_cons_pattern = NULL;
 static ATerm asfix2_aterm_cons_pattern = NULL;
 static ATerm asfix2_atr_pattern = NULL;
 static ATerm asfix2_id_pattern = NULL;
-static ATerm asfix2_appl_pattern = NULL;
-static ATerm asfix2_parsetree_pattern = NULL;
-static ATerm asfix2_amb_pattern = NULL;
-static ATerm asfix2_appl_lexical_pattern = NULL;
-static ATerm asfix2_appl_var_pattern = NULL;
 static ATerm asfix2_appl_starlist_sep_pattern = NULL;
 static ATerm asfix2_appl_pluslist_sep_pattern = NULL;
 static ATerm asfix2_appl_starlist_pattern = NULL;
 static ATerm asfix2_appl_pluslist_pattern = NULL;
 static ATerm asfix2_START_pattern = NULL;
-static ATerm asfix2_layout_pattern = NULL;
 static ATerm asfix1_iter_pattern = NULL;
 static ATerm asfix1_itersep_pattern = NULL;
 static ATerm asfix1_iter_star_pattern = NULL;
@@ -100,31 +88,18 @@ static void init_patterns(void)
 
 static void init_asfix_patterns()
 {
-  ATprotect(&asfix2_cf_pattern);
-  ATprotect(&asfix2_lex_pattern);
   ATprotect(&asfix2_opt_layout_pattern);
-  ATprotect(&asfix2_iter_star_sep_pattern);
-  ATprotect(&asfix2_iter_sep_pattern);
-  ATprotect(&asfix2_iter_star_pattern);
-  ATprotect(&asfix2_iter_pattern);
-  ATprotect(&asfix2_lit_pattern);
   ATprotect(&asfix2_prod_pattern);
   ATprotect(&asfix2_attrs_pattern);
   ATprotect(&asfix2_cons_pattern);
   ATprotect(&asfix2_aterm_cons_pattern);
   ATprotect(&asfix2_atr_pattern);
   ATprotect(&asfix2_id_pattern);
-  ATprotect(&asfix2_appl_pattern);
-  ATprotect(&asfix2_parsetree_pattern);
-  ATprotect(&asfix2_amb_pattern);
-  ATprotect(&asfix2_appl_lexical_pattern);
-  ATprotect(&asfix2_appl_var_pattern);
   ATprotect(&asfix2_appl_starlist_sep_pattern);
   ATprotect(&asfix2_appl_pluslist_sep_pattern);
   ATprotect(&asfix2_appl_starlist_pattern);
   ATprotect(&asfix2_appl_pluslist_pattern);
   ATprotect(&asfix2_START_pattern);
-  ATprotect(&asfix2_layout_pattern);
   ATprotect(&asfix1_iter_pattern);
   ATprotect(&asfix1_itersep_pattern);
   ATprotect(&asfix1_iter_star_pattern);
@@ -142,19 +117,7 @@ static void init_asfix_patterns()
   ATprotect(&pattern_asfix_ql);
   ATprotect(&pattern_asfix_list);
 
-  asfix2_cf_pattern = ATparse("cf(<term>)");
-  asfix2_lex_pattern = ATparse("lex(<term>)");
   asfix2_opt_layout_pattern = ATparse("opt(layout)");
-  asfix2_iter_star_sep_pattern =
-    ATparse("iter-star-sep(sort(<str>),lit(<str>))");
-  asfix2_iter_sep_pattern =
-    ATparse("iter-sep(sort(<str>),lit(<str>))");
-  asfix2_iter_star_pattern =
-    ATparse("iter-star(sort(<str>)))");
-  asfix2_iter_pattern =
-    ATparse("iter(sort(<str>))");
-  asfix2_lit_pattern =
-    ATparse("lit(<str>)");
   asfix2_prod_pattern =
     ATparse("prod(<term>,<term>,<term>)");
   asfix2_attrs_pattern =
@@ -167,16 +130,6 @@ static void init_asfix_patterns()
     ATparse("atr(<str>)");
   asfix2_id_pattern =
     ATparse("id(<str>)");
-  asfix2_appl_pattern =
-    ATparse("appl(<term>,[<list>])");
-  asfix2_parsetree_pattern =
-    ATparse("parsetree(<term>,<term>)");
-  asfix2_amb_pattern =
-    ATparse("amb([<list>])");
-  asfix2_appl_lexical_pattern =
-    ATparse("appl(prod([lex(<term>)],cf(<term>),<term>),[<list>])");
-  asfix2_appl_var_pattern =
-    ATparse("appl(prod([varsym(<term>)],cf(<term>),<term>),[<list>])");
   asfix2_appl_starlist_sep_pattern =
     ATparse("appl(prod([<list>],cf(iter-star-sep(<term>,lit(<str>)))," \
             "<term>),[<list>])");
@@ -190,22 +143,20 @@ static void init_asfix_patterns()
   asfix2_START_pattern =
     ATparse("appl(prod([cf(opt(layout)),<term>,cf(opt(layout))]," \
              "sort(\"<START>\"),no-attrs),[<list>])");  
-  asfix2_layout_pattern =
-    ATparse("layout([<list>])");
   asfix1_iter_pattern =
     ATparse("iter(<term>,w(\"\"),l(\"*\"))");
   asfix1_itersep_pattern =
     ATparse("iter-sep(l(\"{\"),w(\"\"),<term>,w(\"\"),ql(<str>)," \
             "w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))");
   asfix1_iter_star_pattern =
-    ATparse("iter(sort(<str>),w(\"\"),l(\"*\"))");
+    ATparse("iter(<term>,w(\"\"),l(\"*\"))");
   asfix1_iter_plus_pattern =
-    ATparse("iter(sort(<str>),w(\"\"),l(\"+\"))");
+    ATparse("iter(<term>,w(\"\"),l(\"+\"))");
   asfix1_itersep_star_pattern =
-    ATparse("iter-sep(l(\"{\"),w(\"\"),sort(<str>),w(\"\"),ql(<str>)," \
+    ATparse("iter-sep(l(\"{\"),w(\"\"),<term>,w(\"\"),ql(<str>)," \
             "w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))");
   asfix1_itersep_plus_pattern =
-    ATparse("iter-sep(l(\"{\"),w(\"\"),sort(<str>),w(\"\"),ql(<str>)," \
+    ATparse("iter-sep(l(\"{\"),w(\"\"),<term>,w(\"\"),ql(<str>)," \
             "w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))");
   asfix1_ws_pattern = ATparse("w(<term>)");
   pattern_asfix_l = ATparse("l(<str>)");
@@ -231,10 +182,8 @@ static ATermList argsToAsFix1(ATermList tl)
 }
 static ATerm separatorToAsFix1(ATerm t)
 {
-  char *lit;
-
-  if (ATmatchTerm(t, asfix2_lit_pattern, &lit)) {
-    return  ATmakeTerm(asfix1_sep_pattern, lit);
+  if (PT_isSymbolLit(t)) {
+    return  ATmakeTerm(asfix1_sep_pattern, PT_getLitString(t));
   }
 
   ATerror("separatorToAsFix1: not a literal pattern: %t\n", t);
@@ -250,7 +199,7 @@ static ATermList listToAsFix1(ATermList list)
 
   while (!ATisEmpty(argList)) {
     ATerm elem = ATgetFirst(argList);
-    if (ATmatchTerm(elem, asfix2_lit_pattern, NULL)) {
+    if (PT_isSymbolLit(elem)) {
       newTerm = separatorToAsFix1(elem);
     }
     else {
@@ -262,12 +211,17 @@ static ATermList listToAsFix1(ATermList list)
   return newList;
 }
 
-static ATerm removeCfLex(ATerm t)
+static ATerm removeCfLexSymbol(ATerm t)
 {
-  if (!ATmatchTerm(t,asfix2_cf_pattern,&t)) { /* If either of these match... */
-    ATmatchTerm(t,asfix2_lex_pattern,&t); /* ...the match is returned    */
+  if (PT_isSymbolCf(t)) {        
+    return PT_getCfSymbol(t);
   }
-  return t;                                /* Otherwise: the original     */
+
+  if (PT_isSymbolLex(t)) {
+    return PT_getLexSymbol(t);
+  }
+
+  return t; 
 }
 
 static char *escape_str(char *s)
@@ -333,33 +287,50 @@ static char *escape_str(char *s)
 
 static ATermList prodArgsToAsFix1(ATermList args)
 {
-  ATerm t;
+  ATerm t, sort;
   ATermList res = ATempty;
-  char *sortname, *sepname, *litname;
+  char *sepname, *litname;
 
   while (!ATisEmpty(args)) {
     t = ATgetFirst(args);
     args = ATgetNext(args);
 
-    t = removeCfLex(t);
+    t = removeCfLexSymbol(t);
     if (ATmatchTerm(t, asfix2_opt_layout_pattern)) {
       t = pattern_asfix_ews;
     }
-    else if (ATmatchTerm(t,asfix2_iter_star_sep_pattern,&sortname,&sepname)) {
-      t = ATmakeTerm(asfix1_itersep_star_pattern, sortname,
-                     escape_str(sepname));
+    else if (PT_isSymbolIterPlus(t)) {
+      sort = PT_getIterPlusSymbol(t);
+      if (PT_isSymbolSort(sort)) {
+        t = ATmakeTerm(asfix1_iter_plus_pattern, sort);
+      }
+      ATerror("prodArgsToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(t,asfix2_iter_sep_pattern,&sortname,&sepname)) {
-      t = ATmakeTerm(asfix1_itersep_plus_pattern, sortname,
-                     escape_str(sepname));
+    else if (PT_isSymbolIterStar(t)) {
+      sort = PT_getIterStarSymbol(t);
+      if (PT_isSymbolSort(sort)) {
+        t = ATmakeTerm(asfix1_iter_star_pattern,sort);
+      }
+      ATerror("prodArgsToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(t,asfix2_iter_star_pattern,&sortname)) {
-      t = ATmakeTerm(asfix1_iter_star_pattern, sortname);
+    else if (PT_isSymbolIterPlusSep(t)) {
+      sort = PT_getIterPlusSepSymbol(t);
+      sepname = PT_getLitString(PT_getIterPlusSepSeparator(t));
+      if (PT_isSymbolSort(sort)) {
+        t = ATmakeTerm(asfix1_itersep_plus_pattern, sort, sepname);
+      }
+      ATerror("prodArgsToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(t,asfix2_iter_pattern,&sortname)) {
-      t = ATmakeTerm(asfix1_iter_plus_pattern, sortname);
+    else if (PT_isSymbolIterStarSep(t)) {
+      sort = PT_getIterStarSepSymbol(t);
+      sepname = PT_getLitString(PT_getIterStarSepSeparator(t));
+      if (PT_isSymbolSort(sort)) {
+        t = ATmakeTerm(asfix1_itersep_star_pattern,sort,sepname);
+      }
+      ATerror("prodArgsToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(t,asfix2_lit_pattern, &litname)) {
+    else if (PT_isSymbolLit(t)) {
+      litname = PT_getLitString(t);
       t = ATmakeTerm(pattern_asfix_ql, escape_str(litname));
     }
     res = ATappend(res,t);
@@ -469,7 +440,7 @@ static ATerm prodToAsFix1(ATerm t)
   }
   result = ATmake("prod(<term>,w(\"\"),<term>,w(\"\"),"
                   "l(\"->\"),w(\"\"),<term>,w(\"\"),<term>)",
-                  id, prodArgsToAsFix1(args), removeCfLex(res), res_attr);
+                  id, prodArgsToAsFix1(args), removeCfLexSymbol(res), res_attr);
 
   return result;
 }
@@ -477,7 +448,6 @@ static ATerm prodToAsFix1(ATerm t)
 static int lengthOfLexicals(ATermList lexicals)
 {
   ATermList  args;
-  char      *lit;
   int        length = 0;
 
   if (ATisEmpty(lexicals)) {
@@ -494,11 +464,13 @@ static int lengthOfLexicals(ATermList lexicals)
     else if (ATgetType(lex) == AT_LIST) {
       length = length + lengthOfLexicals((ATermList)lex);
     }
-    else if (ATmatchTerm(lex, asfix2_appl_pattern, NULL, &args)) {
+    /*else if (ATmatchTerm(lex, asfix2_appl_pattern, NULL, &args)) {*/
+    else if (PT_isTreeAppl(lex)) {
+      args = PT_getTreeArgs(lex);
       length = length + lengthOfLexicals(args);
     }
-    else if (ATmatchTerm(lex, asfix2_lit_pattern, &lit)) {
-      length = length + strlen(lit);
+    else if (PT_isSymbolLit(lex)) {
+      length = length + strlen(PT_getLitString(lex));
     }
     else {
       ATerror("lengthOfLexicals: unknown term %t\n", lex);
@@ -526,11 +498,15 @@ static int lexicalsToStringRecursive(ATermList lexicals,
     else if (ATgetType(lex) == AT_LIST) {
       idx = lexicalsToStringRecursive((ATermList)lex, idx, buf, bufSize);
     }
-    else if (ATmatchTerm(lex, asfix2_appl_pattern, NULL, &args)) {
+    /*else if (ATmatchTerm(lex, asfix2_appl_pattern, NULL, &args)) {*/
+    else if (PT_isTreeAppl(lex)) {                                       
+      args = PT_getTreeArgs(lex);
       idx = lexicalsToStringRecursive(args, idx, buf, bufSize);
     }
-    else if (ATmatchTerm(lex, asfix2_lit_pattern, &lit)) {
-      int i, len = strlen(lit);
+    else if (PT_isSymbolLit(lex)) {
+      int i, len;
+      lit = PT_getLitString(lex);
+      len = strlen(lit);
 
       for (i = 0; i < len; i++) {
         buf[idx++] = lit[i];
@@ -575,9 +551,8 @@ static ATerm lexicalsToString(ATermList lexicals)
 
 static ATerm layoutToAsFix1(ATerm t)
 {
-  ATermList args;
-
-  if (ATmatchTerm(t, asfix2_layout_pattern, &args)) {
+  if (PT_isLayout(t)) {
+    ATermList args = PT_getLayoutElems(t);
     ATerm lexTree = lexicalsToString(args);
     return ATmakeTerm(asfix1_ws_pattern, lexTree);
   }
@@ -591,8 +566,9 @@ static ATerm parseTreeToAsFix1(ATerm t)
   ATermList args;
 
   /* Parse tree */
-  if (ATmatchTerm(t, asfix2_parsetree_pattern, &t, NULL)) {
-  
+  if (PT_isParseTreeTree(t)) {
+    t = PT_getParseTreeTree(t);
+
     if (ATmatchTerm(t, asfix2_START_pattern, NULL, &args)) {
       arg[0] = ATgetFirst(args);
       arg[1] = ATelementAt(args,1);
@@ -615,66 +591,67 @@ static ATerm parseTreeToAsFix1(ATerm t)
 
 static ATerm literalToAsFix1(ATerm t)
 {
-  char *lit;
-
-  if (ATmatchTerm(t, asfix2_lit_pattern, &lit)) {
-    return  ATmakeTerm(pattern_asfix_l, lit);
+  if (PT_isSymbolLit(t)) {
+    return  ATmakeTerm(pattern_asfix_l, PT_getLitString(t));
   }
 
   ATerror("literalToAsFix1: not a literal pattern: %t\n", t);
   return NULL;
 }
 
-static ATerm termToAsFix1(ATerm t)
+static ATerm applicationToAsFix1(ATerm t)
 {
-  ATerm fun, sort, sort_or_iter, sep;
-  ATermList args;
-  char *lit;
+  ATerm sort;
+  char *sep, *lit;
 
-  if (ATmatchTerm(t, asfix2_amb_pattern, &args)) {
-    return ATmakeTerm(asfix2_amb_pattern, argsToAsFix1(args));
-  }
+  ATerm prod = PT_getTreeProd(t);
+  ATermList args = PT_getTreeArgs(t);
 
-  /* Literal */
-  else if (ATmatchTerm(t, asfix2_lit_pattern, NULL)) {
-    return literalToAsFix1(t);
-  }
-
-  /* Layout */
-  else if (ATmatchTerm(t, asfix2_layout_pattern, NULL)) {
-    return layoutToAsFix1(t);
-  }
-
-  /* Lexical */
-  else if (ATmatchTerm(t, asfix2_appl_lexical_pattern,
-                       NULL, &sort, NULL, &args)) {
+  if (PT_prodHasLexAsLhs(prod)) {
+    sort = PT_getCfSymbol(PT_getProductionRhs(prod));
     return ATmakeTerm(pattern_asfix_lexterm, lexicalsToString(args), sort);
   }
 
-  /* Variable */
-  else if (ATmatchTerm(t, asfix2_appl_var_pattern,
-                       NULL, &sort_or_iter, NULL, &args)) {
+  if (PT_prodHasVarSymAsLhs(prod)) {
     ATerm varTerm = lexicalsToString(args);
+    ATerm sort_or_iter = PT_getCfSymbol(PT_getProductionRhs(prod));
 
-    if (ATmatchTerm(sort_or_iter, asfix2_iter_pattern, &sort)) {
-      sort_or_iter = ATmakeTerm(asfix1_iter_plus_pattern,sort);
+    if (PT_isSymbolIterPlus(sort_or_iter)) {
+      sort = PT_getIterPlusSymbol(sort_or_iter);
+      if (PT_isSymbolSort(sort)) {
+        sort_or_iter = ATmakeTerm(asfix1_iter_plus_pattern,sort);
+      }
+      ATerror("applicationToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(sort_or_iter, asfix2_iter_star_pattern, &sort)) {
-      sort_or_iter = ATmakeTerm(asfix1_iter_star_pattern,sort);
+    else if (PT_isSymbolIterStar(sort_or_iter)) {
+      sort = PT_getIterStarSymbol(sort_or_iter);
+      if (PT_isSymbolSort(sort)) {
+        sort_or_iter = ATmakeTerm(asfix1_iter_star_pattern,sort);
+      }
+      ATerror("applicationToAsFix1: not a sort %t\n", sort);
     }
-    else if(ATmatchTerm(sort_or_iter, asfix2_iter_sep_pattern, &sort, &sep)) {
-      sort_or_iter = ATmakeTerm(asfix1_itersep_plus_pattern,sort,sep);
+    else if (PT_isSymbolIterPlusSep(sort_or_iter)) {
+      sort = PT_getIterPlusSepSymbol(sort_or_iter);
+      sep = PT_getLitString(PT_getIterPlusSepSeparator(sort_or_iter));
+      if (PT_isSymbolSort(sort)) {
+        sort_or_iter = ATmakeTerm(asfix1_itersep_plus_pattern,sort,sep);
+      }
+      ATerror("applicationToAsFix1: not a sort %t\n", sort);
     }
-    else if (ATmatchTerm(sort_or_iter, asfix2_iter_star_sep_pattern,
-                         &sort, &sep)) {
-      sort_or_iter = ATmakeTerm(asfix1_itersep_star_pattern,sort,sep);
+    else if (PT_isSymbolIterStarSep(sort_or_iter)) {
+      sort = PT_getIterStarSepSymbol(sort_or_iter);
+      sep = PT_getLitString(PT_getIterStarSepSeparator(sort_or_iter));
+      if (PT_isSymbolSort(sort)) {
+        sort_or_iter = ATmakeTerm(asfix1_itersep_star_pattern,sort,sep);
+      }
+      ATerror("applicationToAsFix1: not a sort %t\n", sort);
     }
 
     return ATmakeTerm(pattern_asfix_varterm, varTerm, sort_or_iter);
   }
 
   /* Star list with separator */
-  else if (ATmatchTerm(t, asfix2_appl_starlist_sep_pattern,
+  if (ATmatchTerm(t, asfix2_appl_starlist_sep_pattern,
                        NULL, &sort, &lit, NULL, &args)
            ||
            ATmatchTerm(t, asfix2_appl_pluslist_sep_pattern,
@@ -686,7 +663,7 @@ static ATerm termToAsFix1(ATerm t)
   }
 
   /* Star list without separator */
-  else if (ATmatchTerm(t, asfix2_appl_starlist_pattern,
+  if (ATmatchTerm(t, asfix2_appl_starlist_pattern,
                        NULL, &sort, NULL, &args)
            ||
            ATmatchTerm(t, asfix2_appl_pluslist_pattern,
@@ -698,15 +675,34 @@ static ATerm termToAsFix1(ATerm t)
   }
 
   /* Default: application */
-  else if (ATmatchTerm(t, asfix2_appl_pattern, &fun, &args)) {
-    return  ATmakeTerm(pattern_asfix_appl,
-                       prodToAsFix1(fun),
-                       pattern_asfix_ews, argsToAsFix1(args));
+  return  ATmakeTerm(pattern_asfix_appl,
+                     prodToAsFix1(prod),
+                     pattern_asfix_ews, argsToAsFix1(args));
+}
+
+static ATerm termToAsFix1(ATerm t)
+{
+  ATermList args;
+
+  if (PT_isTreeAmb(t)) {
+    args = PT_getAmbArgs(t);
+    return PT_makeTreeAmb(argsToAsFix1(args));
   }
-  else {
-    ATerror("termToAsFix1: strange term: %t\n", t);
-    return  t;
+
+  if (PT_isSymbolLit(t)) {
+    return literalToAsFix1(t);
   }
+
+  if (PT_isLayout(t)) {
+    return layoutToAsFix1(t);
+  }
+
+  if (!PT_isTreeAppl(t)) {
+    ATerror("termToAsFix1: not an application term: %t\n", t);
+    return  NULL;
+  }
+
+  return applicationToAsFix1(t);
 }
 
 ATerm a2metoa1(ATerm t)

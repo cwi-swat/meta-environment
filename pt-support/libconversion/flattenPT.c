@@ -27,6 +27,7 @@
 #include <assert.h>
 
 #include <mept.h>
+#include <asfix2.h>
 #include "conversion.h"
 
 ATbool char_to_string = ATfalse;
@@ -36,212 +37,6 @@ static ATerm flattenLayout(ATerm t);
 static ATerm flattenLexical(ATerm t);
 static ATerm flattenVar(ATerm t);
 static ATerm flattenProd(ATerm prod);
-
-/*  patterns  */
-
-/* Patterns to deal with unflattened lists for charclasses */
-static ATerm asfix2_empty_to_star_lex_charclass = NULL;
-static ATerm asfix2_single_to_plus_lex_charclass = NULL;
-static ATerm asfix2_plus_to_star_lex_charclass = NULL;
-static ATerm asfix2_plus_plus_to_plus_lex_charclass = NULL;
-static ATerm asfix2_star_star_to_star_lex_charclass = NULL;
-static ATerm asfix2_star_plus_to_plus_lex_charclass = NULL;
-static ATerm asfix2_plus_star_to_plus_lex_charclass = NULL;
-
-/* Patterns to deal with unflattened lists for lexicals */
-static ATerm asfix2_empty_to_star_lex_sort = NULL;
-static ATerm asfix2_single_to_plus_lex_sort = NULL;
-static ATerm asfix2_plus_to_star_lex_sort = NULL;
-static ATerm asfix2_plus_plus_to_plus_lex_sort = NULL;
-static ATerm asfix2_star_star_to_star_lex_sort = NULL;
-static ATerm asfix2_star_plus_to_plus_lex_sort = NULL;
-static ATerm asfix2_plus_star_to_plus_lex_sort = NULL;
-
-/* Patterns to deal with unflattened lists without separators */
-static ATerm asfix2_empty_to_star = NULL;
-static ATerm asfix2_single_to_plus = NULL;
-static ATerm asfix2_plus_to_star = NULL;
-static ATerm asfix2_plus_plus_to_plus = NULL;
-static ATerm asfix2_star_star_to_star = NULL;
-static ATerm asfix2_star_plus_to_plus = NULL;
-static ATerm asfix2_plus_star_to_plus = NULL;
-
-/* Patterns to deal with unflattened lists with separators */
-static ATerm asfix2_empty_to_star_sep = NULL;
-static ATerm asfix2_single_to_plus_sep = NULL;
-static ATerm asfix2_plus_sep_to_star_sep = NULL;
-static ATerm asfix2_plus_sep_plus_sep_to_plus_sep = NULL;
-static ATerm asfix2_star_sep_star_sep_to_star_sep = NULL;
-static ATerm asfix2_star_sep_plus_sep_to_plus_sep = NULL;
-static ATerm asfix2_plus_sep_star_sep_to_plus_sep = NULL;
-
-static ATerm asfix2_amb_pattern = NULL;
-static ATerm asfix2_prod_lex_layout_pattern = NULL;
-static ATerm asfix2_prod_cf_layout_pattern = NULL;
-static ATerm asfix2_prod_optlayout_pattern = NULL;
-static ATerm asfix2_prod_var_pattern = NULL;
-static ATerm asfix2_prod_varsym_pattern = NULL;
-static ATerm asfix2_START_pattern = NULL;
-static ATerm asfix1_layout_pattern = NULL;
-
-/*  pattern initializations  */
-
-void init_asfix2_patterns()
-{
-  ATprotect(&asfix2_empty_to_star_lex_sort);
-  ATprotect(&asfix2_single_to_plus_lex_sort);
-  ATprotect(&asfix2_plus_to_star_lex_sort);
-  ATprotect(&asfix2_plus_plus_to_plus_lex_sort);
-  ATprotect(&asfix2_star_star_to_star_lex_sort);
-  ATprotect(&asfix2_star_plus_to_plus_lex_sort);
-  ATprotect(&asfix2_plus_star_to_plus_lex_sort);
-  ATprotect(&asfix2_empty_to_star_lex_charclass);
-  ATprotect(&asfix2_single_to_plus_lex_charclass);
-  ATprotect(&asfix2_plus_to_star_lex_charclass);
-  ATprotect(&asfix2_plus_plus_to_plus_lex_charclass);
-  ATprotect(&asfix2_star_star_to_star_lex_charclass);
-  ATprotect(&asfix2_star_plus_to_plus_lex_charclass);
-  ATprotect(&asfix2_plus_star_to_plus_lex_charclass);
-  ATprotect(&asfix2_empty_to_star);
-  ATprotect(&asfix2_single_to_plus);
-  ATprotect(&asfix2_plus_to_star);
-  ATprotect(&asfix2_plus_plus_to_plus);
-  ATprotect(&asfix2_star_star_to_star);
-  ATprotect(&asfix2_star_plus_to_plus);
-  ATprotect(&asfix2_plus_star_to_plus);
-  ATprotect(&asfix2_empty_to_star_sep);
-  ATprotect(&asfix2_single_to_plus_sep);
-  ATprotect(&asfix2_plus_sep_to_star_sep);
-  ATprotect(&asfix2_plus_sep_plus_sep_to_plus_sep);
-  ATprotect(&asfix2_star_sep_star_sep_to_star_sep);
-  ATprotect(&asfix2_star_sep_plus_sep_to_plus_sep);
-  ATprotect(&asfix2_plus_sep_star_sep_to_plus_sep);
-  ATprotect(&asfix2_amb_pattern);
-  ATprotect(&asfix2_prod_lex_layout_pattern);
-  ATprotect(&asfix2_prod_cf_layout_pattern);
-  ATprotect(&asfix2_prod_optlayout_pattern);
-  ATprotect(&asfix2_prod_var_pattern);
-  ATprotect(&asfix2_prod_varsym_pattern);
-  ATprotect(&asfix2_START_pattern);
-  ATprotect(&asfix1_layout_pattern);
-
-  asfix2_empty_to_star_lex_sort  =
-    ATparse("prod([],lex(iter-star(sort(<term>))),no-attrs)");
-  asfix2_single_to_plus_lex_sort =
-    ATparse("prod([lex(sort(<term>))],lex(iter(sort(<term>))),no-attrs)");
-  asfix2_plus_to_star_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>)))],lex(iter-star(sort(<term>))),no-attrs)");
-  asfix2_plus_plus_to_plus_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>))),lex(iter(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)");
-  asfix2_star_star_to_star_lex_sort =
-    ATparse("prod([lex(sort(iter-star(<term>)))," \
-            "lex(iter-star(sort(<term>)))]," \
-            "lex(iter-star(sort(<term>))),<term>)");
-  asfix2_star_plus_to_plus_lex_sort =
-    ATparse("prod([lex(iter-star(sort(<term>))),lex(iter(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)");
-  asfix2_plus_star_to_plus_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>))),lex(iter-star(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)");
-
-  asfix2_empty_to_star_lex_charclass  =
-    ATparse("prod([],lex(iter-star(char-class(<term>))),no-attrs)");
-  asfix2_single_to_plus_lex_charclass =
-    ATparse("prod([char-class(<term>)]," \
-            "lex(iter(char-class(<term>))),no-attrs)");
-  asfix2_plus_to_star_lex_charclass =
-    ATparse("prod([lex(iter(char-class(<term>)))]," \
-            "lex(iter-star(char-class(<term>))),no-attrs)");
-  asfix2_plus_plus_to_plus_lex_charclass =
-    ATparse("prod([lex(iter(char-class(<term>)))," \
-            "lex(iter(char-class(<term>)))]," \
-            "lex(iter(char-class(<term>))),<term>)");
-  asfix2_star_star_to_star_lex_charclass =
-    ATparse("prod([lex(iter-star(char-class(<term>)))," \
-            "lex(iter-star(char-class(<term>)))]," \
-            "lex(iter-star(char-class(<term>))),<term>)");
-  asfix2_star_plus_to_plus_lex_charclass =
-    ATparse("prod([lex(iter-star(char-class(<term>)))," \
-            "lex(iter(char-class(<term>)))]," \
-            "lex(iter(char-class(<term>))),<term>)");
-  asfix2_plus_star_to_plus_lex_charclass =
-    ATparse("prod([lex(iter(char-class(<term>)))," \
-            "lex(iter-star(char-class(<term>)))]," \
-            "lex(iter(char-class(<term>))),<term>)");
-
-  asfix2_empty_to_star  =
-    ATparse("prod([],cf(iter-star(<term>)),no-attrs)");
-  asfix2_single_to_plus =
-    ATparse("prod([cf(<term>)],cf(iter(<term>)),no-attrs)");
-  asfix2_plus_to_star =
-    ATparse("prod([cf(iter(<term>))],cf(iter-star(<term>)),no-attrs)");
-  asfix2_plus_plus_to_plus =
-    ATparse("prod([cf(iter(<term>)),cf(opt(layout)),cf(iter(<term>))]," \
-            "cf(iter(<term>)),<term>)");
-  asfix2_star_star_to_star =
-    ATparse("prod([cf(iter-star(<term>)),cf(opt(layout))," \
-            "cf(iter-star(<term>))],cf(iter-star(<term>)),<term>)");
-  asfix2_star_plus_to_plus =
-    ATparse("prod([cf(iter-star(<term>)),cf(opt(layout)),cf(iter(<term>))]," \
-            "cf(iter(<term>)),<term>)");
-  asfix2_plus_star_to_plus =
-    ATparse("prod([cf(iter(<term>)),cf(opt(layout)),cf(iter-star(<term>))]," \
-            "cf(iter(<term>)),<term>)");
-
-  asfix2_empty_to_star_sep =
-    ATparse("prod([],cf(iter-star-sep(<term>,<term>)),no-attrs)");
-  asfix2_single_to_plus_sep =
-    ATparse("prod([cf(<term>)],cf(iter-sep(<term>,<term>)),no-attrs)");
-  asfix2_plus_sep_to_star_sep =
-    ATparse("prod([cf(iter-sep(<list>))],cf(iter-star-sep(<list>)),no-attrs)");
-  asfix2_plus_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)");
-  asfix2_star_sep_star_sep_to_star_sep =
-    ATparse("prod([cf(iter-star-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<list>))]," \
-            "cf(iter-star-sep(<list>)),<term>)");
-  asfix2_star_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-star-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)");
-  asfix2_plus_sep_star_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)");
-  
-  asfix2_amb_pattern =
-    ATparse("amb([<list>])");
-  asfix2_prod_lex_layout_pattern =
-    ATparse("prod([<list>],lex(layout),<term>)");
-  asfix2_prod_cf_layout_pattern =
-    ATparse("prod([<list>],cf(layout),<term>)");
-  asfix2_prod_optlayout_pattern =
-    ATparse("prod([<list>],cf(opt(layout)),no-attrs)");
-  asfix2_prod_var_pattern =
-    ATparse("prod([varsym(<term>)],cf(<term>),<term>)");
-  asfix2_prod_varsym_pattern =
-    ATparse("prod([<list>],varsym(<term>),<term>)");
-  asfix2_START_pattern =
-    ATparse("appl(prod([cf(opt(layout)),<term>,cf(opt(layout))]," \
-             "sort(\"<START>\"),no-attrs),[<list>])");
-  asfix1_layout_pattern =
-    ATparse("layout([<list>])");
-}
-
-void init_a2toa1_patterns(void)
-{
-  static ATbool patterns_initialized = ATfalse;
-
-  if (patterns_initialized) {
-    return;
-  }
-  patterns_initialized = ATtrue;
-
-  init_asfix2_patterns();
-}
 
 static ATermList flattenArgs(ATermList tl)
 {
@@ -258,37 +53,6 @@ static ATermList flattenArgs(ATermList tl)
   else {
     return flattenArgs(ATgetNext(tl));
   }
-}
-
-static ATbool isLexicalListProd(ATerm prod) 
-{
-  ATerm sort1, sort2, sort3;
-
-  if (ATmatchTerm(prod, asfix2_empty_to_star_lex_sort, NULL)) {
-    return ATtrue;
-  }
- 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_lex_sort, &sort1, &sort2)
-      ||
-      ATmatchTerm(prod, asfix2_plus_to_star_lex_sort, &sort1, &sort2)) {
-    return ATisEqual(sort1, sort2);
-  } 
- 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_star_to_star_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)) {
-    return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
-  }
-  
-  return ATfalse; 
 }
 
 static ATerm makeCharFromInt(ATermInt i)
@@ -311,8 +75,7 @@ static ATermList flattenLexicalList(ATerm t, ATermList tail)
   ATermList list;
 
   if (!PT_isTreeAppl(t)) {
-    ATerror("flattenLexicalList: not an appl pattern: %t\n", t);
-    return NULL;
+    ATerror("flattenLexicalList: not an application: %t\n", t);
   } 
   
   prod = PT_getTreeProd(t);
@@ -351,37 +114,6 @@ static ATermList flattenLexicalList(ATerm t, ATermList tail)
   return NULL;
 }
 
-static ATbool isCharClassListProd(ATerm prod) 
-{
-  ATerm cc1, cc2, cc3;
-
-  if (ATmatchTerm(prod, asfix2_empty_to_star_lex_charclass, NULL)) {
-    return ATtrue;
-  }
- 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_lex_charclass, &cc1, &cc2)
-      ||
-      ATmatchTerm(prod, asfix2_plus_to_star_lex_charclass, &cc1, &cc2)) {
-    return ATisEqual(cc1, cc2);
-  } 
- 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_star_to_star_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)) {
-    return ATisEqual(cc1, cc2) && ATisEqual(cc1, cc3);
-  }
-  
-  return ATfalse; 
-}
-
 static ATermList flattenCharClassList(ATerm t, ATermList tail)
 {
   ATerm     prod;
@@ -392,7 +124,7 @@ static ATermList flattenCharClassList(ATerm t, ATermList tail)
   }
 
   if (!PT_isTreeAppl(t)) { 
-    ATerror("flattenCharClassList: not an appl pattern: %t\n", t);
+    ATerror("flattenCharClassList: not an application: %t\n", t);
   }
   
   prod = PT_getTreeProd(t);
@@ -431,45 +163,13 @@ static ATermList flattenCharClassList(ATerm t, ATermList tail)
   return NULL;
 }
 
-static ATbool isListProd(ATerm prod) 
-{
-  ATerm sort1, sort2, sort3;
-
-  if (ATmatchTerm(prod, asfix2_empty_to_star, NULL)) {
-    return ATtrue;
-  }
- 
-  if (ATmatchTerm(prod, asfix2_single_to_plus, &sort1, &sort2)
-      ||
-      ATmatchTerm(prod, asfix2_plus_to_star, &sort1, &sort2)) {
-    return ATisEqual(sort1, sort2);
-  } 
- 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_star_to_star,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus,
-                  &sort1, &sort2, &sort3, NULL)) {
-    return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
-  }
-  
-  return ATfalse; 
-}
-
 static ATermList flattenList(ATerm t, ATermList tail)
 {
   ATerm     prod;
   ATermList list;
 
   if (!PT_isTreeAppl(t)) {
-    ATerror("flattenList: not an appl pattern: %t\n", t);
-    return NULL;
+    ATerror("flattenList: not an application: %t\n", t);
   }
 
   prod = PT_getTreeProd(t);
@@ -509,48 +209,13 @@ static ATermList flattenList(ATerm t, ATermList tail)
   return NULL;
 }
 
-static ATbool isSepListProd(ATerm prod) 
-{
-  ATerm sort1, sort2;
-  ATermList sortSep1, sortSep2, sortSep3;
-
-  if (ATmatchTerm(prod, asfix2_empty_to_star_sep, NULL, NULL)) {
-    return ATtrue;
-  }
- 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
-    return ATisEqual(sort1, sort2);
-  } 
- 
-  if (ATmatchTerm(prod, asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
-    return ATisEqual(sortSep1, sortSep2);
-  } 
- 
-  if (ATmatchTerm(prod, asfix2_plus_sep_plus_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_sep_star_sep_to_star_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_star_sep_plus_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
-      ||
-      ATmatchTerm(prod, asfix2_plus_sep_star_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)) {
-    return ATisEqual(sortSep1, sortSep2) && ATisEqual(sortSep1, sortSep3);
-  }
-  
-  return ATfalse; 
-}
-
 static ATermList flattenSepList(ATerm t, ATermList tail)
 {
   ATerm     prod;
   ATermList list;
 
   if (!PT_isTreeAppl(t)) {
-    ATerror("flattenSepList: not an appl pattern: %t\n", t);
-    return NULL;
+    ATerror("flattenSepList: not an application: %t\n", t);
   }
 
   prod = PT_getTreeProd(t);
@@ -670,9 +335,9 @@ static ATerm flattenLayout(ATerm t)
     args = PT_getTreeArgs(t);
     newArgs = flattenLayoutList(args, ATempty);
 
-    return ATmakeTerm(asfix1_layout_pattern, newArgs);
+    return PT_makeLayout(newArgs);
   }
-  ATerror("flattenLayout: not an appl pattern: %t\n\n", t);
+  ATerror("flattenLayout: not an application: %t\n", t);
   return NULL;
 }
 
@@ -688,40 +353,42 @@ static ATerm flattenVar(ATerm t)
 {
   ATerm prodVarsymOuter, prodVarsymInner;
   ATermList argsOuter, argsInner;
+  ATerm outerArg;
 
-  if (PT_isTreeAppl(t)) {
-    prodVarsymOuter = PT_getTreeProd(t);
-    argsOuter       = PT_getTreeArgs(t);
+  if (!PT_isTreeAppl(t)) {
+    ATerror("flattenVar: not an application: %t\n", t);
+  }
 
-    if (ATmatchTerm(prodVarsymOuter, asfix2_prod_var_pattern,
-                    NULL, NULL, NULL)) {
-      ATerm arg = ATgetFirst(argsOuter);
+  prodVarsymOuter = PT_getTreeProd(t);
+  argsOuter       = PT_getTreeArgs(t);
 
-      if (PT_isTreeAppl(arg)) {
-        prodVarsymInner = PT_getTreeProd(arg);
-        argsInner       = PT_getTreeArgs(arg);
+  if (!PT_prodHasVarSymAsLhs(prodVarsymOuter)) {
+    ATerror("flattenVar: illegal var symbol: %t\n", t);
+  }
 
-        if (ATmatchTerm(prodVarsymInner, asfix2_prod_varsym_pattern,
-                        NULL, NULL, NULL)) {
-          ATermList newVarArg;
-          ATermList newVarArgs = ATempty;
+  outerArg = ATgetFirst(argsOuter);
 
-          while (!ATisEmpty(argsInner)) {
-            ATerm arg = ATgetFirst(argsInner);
-            ATerm newArg = flattenTerm(arg);
-            if (newArg) {
-              newVarArgs = ATappend(newVarArgs, newArg);
-            }
-            argsInner = ATgetNext(argsInner);
-          }
-          newVarArg = ATmakeList1(PT_makeTreeAppl(flattenProd(prodVarsymInner),
-                                                  newVarArgs));
-          return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
+  if (PT_isTreeAppl(outerArg)) {
+    prodVarsymInner = PT_getTreeProd(outerArg);
+    argsInner       = PT_getTreeArgs(outerArg);
+
+    if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
+      ATermList newVarArg;
+      ATermList newVarArgs = ATempty;
+
+      while (!ATisEmpty(argsInner)) {
+        ATerm arg = ATgetFirst(argsInner);
+        ATerm newArg = flattenTerm(arg);
+        if (newArg) {
+          newVarArgs = ATappend(newVarArgs, newArg);
         }
+        argsInner = ATgetNext(argsInner);
       }
+      newVarArg = ATmakeList1(PT_makeTreeAppl(flattenProd(prodVarsymInner),
+                                              newVarArgs));
+      return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }
   }
-  ATerror("flattenVar: not an appl pattern: %t\n\n", t);
   return NULL;
 }
 
@@ -734,8 +401,9 @@ static ATerm flattenTerm(ATerm t)
     return makeCharFromInt((ATermInt) t);
   }
 
-  if (ATmatchTerm(t, asfix2_amb_pattern, &args)) {
-    return ATmakeTerm(asfix2_amb_pattern, flattenArgs(args));
+  if (PT_isTreeAmb(t)) {
+    args = PT_getAmbArgs(t);
+    return PT_makeTreeAmb(flattenArgs(args));
   }
 
   if (!PT_isTreeAppl(t)) {
@@ -750,7 +418,7 @@ static ATerm flattenTerm(ATerm t)
   }
 
   /* Layout */
-  if (ATmatchTerm(prod, asfix2_prod_optlayout_pattern, NULL)) {
+  if (PT_prodHasCfOptLayoutAsRhs(prod)) {
     return flattenLayout(t);
   }
 
@@ -760,7 +428,7 @@ static ATerm flattenTerm(ATerm t)
   }
 
   /* Variable */
-  if (ATmatchTerm(prod, asfix2_prod_var_pattern, NULL, NULL, NULL)) {
+  if (PT_prodHasVarSymAsLhs(prod)) {
     return flattenVar(t);
   }
 
@@ -787,7 +455,7 @@ static ATerm flattenTerm(ATerm t)
   return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 }
 
-static ATerm flattenParseTree(ATerm tree)
+ATerm flattenPT(ATerm tree)
 {
   if (PT_isParseTreeTree(tree)) {
     ATerm newTree = PT_getParseTreeTree(tree);
@@ -798,13 +466,4 @@ static ATerm flattenParseTree(ATerm tree)
 
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);
   return NULL;
-}
-
-ATerm flattenPT(ATerm t)
-{
-  ATerm newTree;
-
-  init_a2toa1_patterns();
-  newTree = flattenParseTree(t);
-  return newTree;
 }
