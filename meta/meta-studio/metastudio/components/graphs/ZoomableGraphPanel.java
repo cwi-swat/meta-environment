@@ -104,11 +104,11 @@ public class ZoomableGraphPanel extends ToolComponent {
         NodeSizer sizer = new NodeSizer() {
             public int getWidth(Node node) {
                 return metrics.stringWidth(node.getLabel())
-                    + Preferences.getInteger("node.border.width") * 2;
+                    + Preferences.getInteger("graph.node.border.width") * 2;
             }
             public int getHeight(Node node) {
                 return metrics.getHeight()
-                    + Preferences.getInteger("node.border.height") * 2;
+                    + Preferences.getInteger("graph.node.border.height") * 2;
             }
         };
 

@@ -35,16 +35,16 @@ import metastudio.utils.Preferences;
 public class GraphPanel extends JComponent implements Scrollable {
     private static final int ARROWHEAD_LENGTH = 15;
     private static final int ARROWHEAD_SHARPNESS = 15;
-    public static final String PREF_NODE_FONT = "node.font";
-    public static final String PREF_NODE_BG = "node.background";
-    public static final String PREF_NODE_FG = "node.foreground";
-    public static final String PREF_NODE_BORDER = "node.border";
-    public static final String PREF_NODE_HOVERED_BG = "node.hovered.background";
-    public static final String PREF_NODE_HOVERED_FG = "node.hovered.foreground";
-    public static final String PREF_NODE_HOVERED_BORDER = "node.hovered.border";
-    public static final String PREF_NODE_SELECTED_BG = "node.selected.background";
-    public static final String PREF_NODE_SELECTED_FG = "node.selected.foreground";
-    public static final String PREF_NODE_SELECTED_BORDER = "node.selected.border";
+    public static final String PREF_NODE_FONT = "graph.node.font";
+    public static final String PREF_NODE_BG = "graph.node.background";
+    public static final String PREF_NODE_FG = "graph.node.foreground";
+    public static final String PREF_NODE_BORDER = "graph.node.border";
+    public static final String PREF_NODE_HOVERED_BG = "graph.node.hovered.background";
+    public static final String PREF_NODE_HOVERED_FG = "graph.node.hovered.foreground";
+    public static final String PREF_NODE_HOVERED_BORDER = "graph.node.hovered.border";
+    public static final String PREF_NODE_SELECTED_BG = "graph.node.selected.background";
+    public static final String PREF_NODE_SELECTED_FG = "graph.node.selected.foreground";
+    public static final String PREF_NODE_SELECTED_BORDER = "graph.node.selected.border";
 
     private String id;
     private int index;

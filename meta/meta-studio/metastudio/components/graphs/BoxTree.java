@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -35,7 +34,7 @@ public class BoxTree extends ToolComponent {
         rootPanel.setBackground(Color.white);
         JScrollPane scrolledPane = new JScrollPane(rootPanel);
         JViewport view = scrolledPane.getViewport();
-        view.setBackground(Preferences.getColor("treepane.message.background"));
+        view.setBackground(Preferences.getColor("box.background"));
         add(scrolledPane);
     }
 
@@ -67,11 +66,9 @@ public class BoxTree extends ToolComponent {
         List children = Graph.getChildren(graph, node);
 
         if (children.size() == 0) {
-            return new JLabel(" " + node.getLabel() + " ");
-        } else if (children.size() == 1) {
-            return buildHierarchy(graph, (Node) children.get(0));
+            return new NodeBox(getBridge(), node, true);
         } else {
-            NodeBox box = new NodeBox(getBridge(), node);
+            NodeBox box = new NodeBox(getBridge(), node, false);
             Iterator iter = children.iterator();
 
             while (iter.hasNext()) {
