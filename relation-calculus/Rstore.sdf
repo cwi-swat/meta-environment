@@ -36,6 +36,10 @@ exports
 	rsfname2rvar(RSFNAME)				-> RVAR
 	rsfname2str(RSFNAME)				-> String
 
+exports
+  context-free syntax
+    merge-rstores(RSTORE, RSTORE) -> RSTORE
+
 hiddens
 
   context-free syntax
