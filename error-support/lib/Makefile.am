@@ -12,7 +12,8 @@ libmerrors_a_SOURCES = \
 	Errors.c \
 	Errors_dict.c\
 	ParsedErrors.c \
-	ParsedErrors_dict.c 
+	ParsedErrors_dict.c \
+	lift.c
 
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
@@ -27,7 +28,7 @@ MetaErrors.def: Makefile
 	
 MetaErrors.impl.def: Makefile
 	@(echo "definition"; \
-	  cat ${ABSOLUTE_SOURCE_MODULES} ${top_srcdir}/lib/Lexicals.sdf) > $@
+	  cat ${ABSOLUTE_SOURCE_MODULES}) > $@
 
 api: parsed-api imploded-api 
 
