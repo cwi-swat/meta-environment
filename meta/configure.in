@@ -184,7 +184,7 @@ AC_OUTPUT(
 	toolbus/open-modules.tb toolbus/revert-module.tb \
 	toolbus/help.tb \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/idef2tif utils/normalize-sdf utils/parse-sdf2 \
+        utils/idef2tif utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
   , chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
