@@ -52,7 +52,7 @@ void rec_terminate(int cid, ATerm t)
   exit(0);
 }
 
-ATerm generate_code(int cid, ATerm modname, ATerm module)
+ATerm generate_code(int cid, char *modname, ATerm module)
 {
   char *text, *fname;
   ATerm expmod, reduct, cmod;
@@ -72,13 +72,13 @@ ATerm generate_code(int cid, ATerm modname, ATerm module)
   if( getenv( "COMPILER_OUTPUT" ) != NULL )
      path = getenv( "COMPILER_OUTPUT" );
 
-ATfprintf(stderr,"generating code for %t\n", modname);
-  assert(ATmatchTerm(modname,pattern_asfix_id,&text));
-  len = strlen(path) + 1 + strlen(text) + strlen(".asfix");
+ATfprintf(stderr,"generating code for %s\n", modname);
+  
+  len = strlen(path) + 1 + strlen(modname) + strlen(".asfix");
   fname = malloc(len + 1);
   if(!fname)
     ATerror("Not enough memory\n");
-  sprintf(fname, "%s/%s.asfix", path, text);
+  sprintf(fname, "%s/%s.asfix", path, modname);
 
   expmod = expand_to_asfix(module,fname);
   assert(ATmatchTerm(expmod, pattern_asfix_term, NULL, NULL,
@@ -92,11 +92,11 @@ ATfprintf(stderr,"Reducing finished.\n");
   idname = ATreadFromString("id(\"AsFix2C\")");
   cmod = toasfix(reduct, aname, idname);
   free(fname);
-  len = strlen(path) + 1 + strlen(text) + strlen(".c");
+  len = strlen(path) + 1 + strlen(modname) + strlen(".c");
   fname = malloc(len + 1);
   if(!fname)
     ATerror("Not enough memory\n");
-  sprintf(fname, "%s/%s.c", path, text );
+  sprintf(fname, "%s/%s.c", path, modname );
 
   output = fopen(fname,"w");
   if(!output) 
