@@ -33,7 +33,7 @@ EXTRA_DIST  = toolbus-test.sh.src module-test.sh.src parser-test.sh.src \
 CLEANFILES  = $(TESTS)
 
 % : %.sh.src
-	sed 's@__TOOLBUSBIN__@$(TOOLBUSBIN)@g;\
+	sed 's@__TOOLBUSBIN__@$(TOOLBUS)/bin@g;\
 	     s@__DATADIR__@$(datadir)@g;' < $< > $@ && \
 	chmod +x $@
 

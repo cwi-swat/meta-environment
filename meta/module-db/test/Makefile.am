@@ -29,7 +29,7 @@ EXTRA_DIST = Pico-Booleans.eqs.baf Pico-Booleans.sdf.baf Test.sdf.baf \
 CLEANFILES = module-db-test
 
 % : %.sh.src Makefile
-	sed 's@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
+	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< >$@ && \
 	chmod +x $@
 

@@ -32,11 +32,11 @@ CLEANFILES        = se.tifs se.tif.c se.tif.h
 se_SOURCES = area.c editor.c focus.c path.c posinfo.c se.c sort.c tree.c \
 	     area.h editor.h focus.h path.h posinfo.h se.h sort.h tree.h
 se_LDADD   = se.tif.o \
-                    -L$(ASCLIB) -lasc-support \
-                    -L$(ASFIXLIB) -lAsFix \
-                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                    -L$(ASC_SUPPORT)/lib -lasc-support \
+                    -L$(ASFIX)/lib -lAsFix \
+                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) \
+INCLUDES          = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include \
                     -DBINDIR=\"$(bindir)\"
 
 area.o : se.tif.h

@@ -21,16 +21,21 @@
 # $Id$
 Revision='$Revision$'
 
-prefix=__PREFIX__
-bindir=__BINDIR__
-datadir=__DATADIR__
-classdir=${prefix}/classes
+aterm=__ATERM__
+asfix=__ASFIX__
+sglr=__SGLR__
+pgen=__PGEN__
+evaluator=__EVALUATOR__
 toolbus=__TOOLBUS__
+prefix=__PREFIX__
+
 wish=__WISH__
 graphviz=__GRAPHVIZ__
 
-PATH="${bindir}:${PATH}"; export PATH
-CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
+PATH="${prefix}/bin:${aterm}/bin:${asfix}/bin:${sglr}/bin:${pgen}/bin:\
+      ${evaluator}/bin:${toolbus}/bin}:${PATH}"; 
+export PATH
+
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
 ###
@@ -148,9 +153,11 @@ done
 toolbusdefs="-DCONFIG_FILE=\\\"${configfile}\\\""
 
 if [ $verbose -gt 0 ] ; then
-	echo CLASSPATH: $CLASSPATH
-	echo COMPILER_OUTPUT: $COMPILER_OUTPUT
-	echo "Running \`$toolbus $xargs ${toolbusdefs} -I${datadir} ${datadir}/meta.tb'"
+   set -x
 fi
 
-$toolbus $xargs ${toolbusdefs} -I${datadir} ${datadir}/meta.tb
+toolbus $xargs ${toolbusdefs} \
+   -I${prefix}/share -I${aterm}/share -I${asfix}/share \
+   -I${sglr}/share -I${pgen}/share\
+   -I${evaluator}/share \
+   ${prefix}/share/meta.tb

@@ -19,6 +19,8 @@
 #
 #
 # $Id$
+2001/01/30 (mdejonge@cwi.nl)
+   * Factored out stand-alone components from meta repository
 
 2001/01/09 (jurgenv@cwi.nl)
    * removed generation of syntax for traversal functions. From now

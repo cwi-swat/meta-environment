@@ -31,9 +31,9 @@ CLEANFILES        = editor-manager.tifs editor-manager.tif.[ch]
 
 editor_manager_SOURCES = editor-manager.c
 editor_manager_LDADD   = editor-manager.tif.o \
-                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) \
+INCLUDES          = -I$(ASFIX)/include -I$(ATERM)/include \
                     -DBINDIR=\"$(bindir)\"
 
 editor-manager.o: editor-manager.tif.h

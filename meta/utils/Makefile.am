@@ -47,24 +47,24 @@ CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
-                     -L$(ASFIXLIB) -lAsFix \
-                     -L$(ATERMLIB) -lATerm
+                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(ATERM)/lib -lATerm
 
 imports_SOURCES    = imports.c
 imports_LDADD      = libutils.a \
-                     -L$(ASFIXLIB) -lAsFix \
-                     -L$(ATERMLIB) -lATerm
+                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(ATERM)/lib -lATerm
 
 remove_annotation_SOURCES = remove-annotation.c
-remove_annotation_LDADD = -L$(ATERMLIB) -lATerm
+remove_annotation_LDADD = -L$(ATERM)/lib -lATerm
 
 apply_function_SOURCES = apply-function.c
-apply_function_LDADD = -L$(ATERMLIB) -lATerm -L$(ASFIXLIB) -lAsFix
+apply_function_LDADD = -L$(ATERM)/lib -lATerm -L$(ASFIX)/lib -lAsFix
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
 
-INCLUDES           = -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES           = -I$(ASFIX)/include -I$(ATERM)/include
 
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\

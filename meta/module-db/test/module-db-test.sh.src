@@ -23,13 +23,15 @@
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
 
+PATH=${toolbus}/bin:$PATH; export PATH
+
 tests=0
 failed=0
 
 call_toolbus () {
   script=$1
   tests=`expr $tests + 1`
-  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  result=`toolbus -I${datadir} ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}

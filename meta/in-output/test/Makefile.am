@@ -31,6 +31,6 @@ EXTRA_DIST = in-output-test.sh.src Empty1.sdf Empty2.sdf.baf \
 CLEANFILES = in-output-test
 
 % : %.sh.src Makefile
-	sed 's@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
+	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@

@@ -32,8 +32,8 @@ EXTRA_DIST        = in-output.idef
 CLEANFILES        = in-output.tifs in-output.tif.c in-output.tif.h
 
 in_output_SOURCES = in-output.c
-in_output_LDADD   = in-output.tif.o -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+in_output_LDADD   = in-output.tif.o -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ATERMINC)
+INCLUDES          = -I$(ATERM)/include
 
 in-output.o: in-output.tif.h
