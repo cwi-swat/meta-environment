@@ -1,5 +1,9 @@
 # $Id$
 
+2003/02/05 (markvdb@cs.vu.nl)
+ * New message/function "close-module" which deals with "deleting"
+   a module without removing from the imports in depending modules.
+
 Wed Jan 29 10:15:44 CET 2003 <{jong,markvdb}@cwi.nl>
  * First "meta-query" experiment:
    given a focus in text-editor, find the "first" Module that has
