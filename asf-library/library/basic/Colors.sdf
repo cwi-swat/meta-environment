@@ -771,3 +771,7 @@ context-free syntax
 "light" "green" -> Color
 "LightGreen" -> Color
 
+hiddens
+
+context-free start-symbols
+  Color
