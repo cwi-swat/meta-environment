@@ -1,7 +1,8 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(pandora, 1.0)
 
 ACLOCAL="${ACLOCAL} -I ."
@@ -42,7 +43,7 @@ AC_PACKAGE_REQUIRE(error-support, error-support-config,
 AC_SUBST(ERROR_SUPPORT)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl {{{  Require socket/gethostname
 
@@ -71,7 +72,7 @@ LIBS=$NOSOCKLIBS
 dnl }}}
 
 dnl Which files need updating?
-AC_OUTPUT(
-   Makefile
+AC_CONFIG_FILES([Makefile
    generator/Makefile 
-)
+])
+AC_OUTPUT
