@@ -1,9 +1,9 @@
 package 
 identification
-   name=__PACKAGE__
-   version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
-   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   name=asfsdf-meta
+   version=1.5.1
+   location=http://www.cwi.nl/projects/MetaEnv/asfsdf-meta
+   info=http://www.cwi.nl/projects/MetaEnv/asfsdf-meta
    description='The ASF+SDF Meta-Environment is an interactive tool suite
                 for building language-oriented tools for program
                 development, domain-specific languages, program analysis and
