@@ -1,5 +1,9 @@
 Makefile
+diff.out
+configure
+aclocal.m4
+config.h.in
 Makefile.in
-.deps
-*.o
-libSDF.a
+config.log
+config.cache
+config.status
