@@ -6,22 +6,6 @@ let AID : int in
   snd-msg(address-created(AID))
 endlet
 
-process UPDATE(AB : address-book) is
-let
-  AID : int,
-  Name : str,
-  Address : str,
-  Zip : str
-in
-  rec-msg(update-address(AID?)) .
-  ( rec-msg(set-name(AID, Name?)) .
-    snd-do(AB, set-name(AID, Name))
-  + rec-msg(set-address(AID, Address?)) .
-    snd-do(AB, set-address(AID, Address))
-  ) *
-  rec-msg(update-address-done(AID))
-endlet
-
 process DELETE(AB : address-book) is
 let
   AID : int
@@ -31,11 +15,46 @@ in
   snd-msg(address-deleted(AID))
 endlet
 
-process ADDRESS-BOOK is
-let AB : address-book
+process SEARCH(AB : address-book) is
+let
+in
+  rec-msg(find-by-name(Name?)) .
+  snd-eval(AB, find-by-name(Name)) .
+  (
+    rec-value(AB, found(Aid?)) .
+    snd-msg(found(Name, Aid))
+  +
+    rec-value(not-found) .
+    snd-msg(not-found(Name))
+  )
+endlet
+
+process UPDATE(AB : address-book) is
+let
+  AID : int,
+  Name : str,
+  Address : str,
+  Zip : str
+in
+  rec-msg(update-address(AID?)) .
+  ( rec-msg(set-name(Name?)) .
+    snd-do(AB, set-name(AID, Name))
+  + rec-msg(set-address(Address?)) .
+    snd-do(AB, set-address(AID, Address))
+  ) *
+  rec-msg(update-address-done)
+endlet
+
+process MAIN is
+let ABTool : address-book
 in
   execute(address-book, AB?) .
-  ( CREATE(AB) + UPDATE(AB) + DELETE(AB) ) * delta
+  (
+    CREATE(ABTool)
+  + DELETE(ABTool)
+  + SEARCH(ABTool)
+  + UPDATE(ABTool)
+  ) * delta
 endlet
 
 tool address-book is { command = "java-adapter -class TBAddressBookService" }
@@ -46,10 +65,12 @@ let
 in
   snd-msg(create-address) .
   rec-msg(address-created(AID?)) .
+  printf("new entry created, id=%d\n", AID) .
+
   snd-msg(update-address(AID)) .
-  snd-msg(set-name(AID, "John Doe")) .
-  snd-msg(set-address(AID, "1342 Elm Street")) .
-  snd-msg(update-address-done(AID))
+  snd-msg(set-name("John Doe")) .
+  snd-msg(set-address("1342 Elm Street")) .
+  snd-msg(update-address-done)
 endlet
 
-toolbus(ADDRESS-BOOK, CLIENT)
+toolbus(MAIN, CLIENT)
