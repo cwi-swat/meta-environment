@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr  6 16:02:42 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * remove sm-module-path-inconsistent from sdf-modules.idef
+   as the C implementation never sends this value.
+
 Tue Mar 23 09:19:55 CET 2004 <{jong,kooiker}@cwi.nl>
  * lib/sdf2pt.c: update wrt new MEPT api.
 

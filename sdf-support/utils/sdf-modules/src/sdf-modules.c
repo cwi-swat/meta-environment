@@ -152,11 +152,13 @@ ATerm get_module_path(int cid, const char *path, const char *id)
    * then we should return "/bla/basic"
    */
   
-  for(p = strlen(pathBuf) - 1; p >= 0 && pathBuf[p] == SEP; p--) {
+  for (p = strlen(pathBuf) - 1; p >= 0 && pathBuf[p] == SEP; p--) {
     pathBuf[p] = '\0';
   }
   
-  for(i = strlen(idBuf) - 1; i >= 0 && idBuf[i] != SEP; i--);
+  for (i = strlen(idBuf) - 1; i >= 0 && idBuf[i] != SEP; i--) {
+    /* skip */
+  }
 
   /* if i < 0, then the module name is not compound */
   if (i >= 0) {

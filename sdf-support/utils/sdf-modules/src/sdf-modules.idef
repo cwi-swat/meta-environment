@@ -32,13 +32,8 @@ in
   +
     rec-msg(sm-get-module-path(Path?, ModuleId?)) .
     snd-eval(SM, get-module-path(Path, ModuleId)) .
-    (
-      rec-value(SM, module-path(Path?)) .
-      snd-msg(sm-module-path(Path))
-    +
-      rec-value(SM, module-path-inconsistent) .
-      snd-msg(sm-module-path-inconsistent)
-    )
+    rec-value(SM, module-path(Path?)) .
+    snd-msg(sm-module-path(Path))
   +
     rec-msg(sm-get-new-module-name(Paths?, Path?, ModuleId?)) .
     snd-eval(SM, get-new-module-name(Paths, Path, ModuleId)) .
