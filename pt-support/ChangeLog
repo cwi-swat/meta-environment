@@ -1,5 +1,8 @@
 $Id$
 
+2003/09/18 (jurgenv@cwi.nl)
+ * Renamed parsePT to liftPT
+
 Thu Sep 11 13:00:15 CEST 2003 <jong@cwi.nl>
  * unparsePT.idef -> unparser.idef
  * addPosInfo.idef -> position-annotator.idef
