@@ -9,7 +9,7 @@ CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output
 YFLAGS = -d
 
 INCLUDES = \
-	-DDOT_COMMAND=\"${DOT}/bin/dot\" \
+	-DDOT_COMMAND=\"${GRAPHVIZ}/bin/dot\" \
 	-I${ATERM}/include \
         -I${top_srcdir}/lib \
 	-I${TOOLBUSLIB}/include
