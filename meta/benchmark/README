@@ -1,0 +1,16 @@
+This directory contains some simple benchmark specifications:
+=============================================================
+
+Nat benchmarks
+--------------
+
+These benchmarks use the Nat specification of successor naturals.
+The following operations are defined:
++,-,*,/,^,!!,==
+
+(!! is the faculty operation, ^ is the power-of operation)
+
+benchmarks:
+Nat.bench1 (data in Nat.bench1.data)
+Nat.bench2 (data in Nat.bench2.data)
+

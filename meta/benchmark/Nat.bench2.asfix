@@ -1,0 +1,32 @@
+term(l("term"),w(" "),l("/home/olivierp/Research/new-meta/benchmark/Nat.bench2"),
+w(" "),id("Nat"),w("\n"),
+appl(aprod("63"),w(""),
+[appl(aprod("60"),w(""),
+[appl(aprod("62"),w(""),
+[appl(aprod("68"),w(""),
+[l("5")])
+,w(""),l("!!")]),w(""),
+l("/"),w(""),appl(aprod("62"),w(""),
+[appl(aprod("67"),w(""),
+[l("4")])
+,w(""),l("!!")])
+]),w(" "),
+l("=="),w(" "),appl(aprod("68"),w(""),
+[l("5")])
+]),w("\n"),
+abbreviations([
+[aprod("68"),prod(id("Nat"),w(""),
+[ql("5")],w(""),l("->"),w(""),sort("Nat"),w(""),no-attrs)],
+[aprod("67"),prod(id("Nat"),w(""),
+[ql("4")],w(""),l("->"),w(""),sort("Nat"),w(""),no-attrs)],
+[aprod("63"),prod(id("Nat"),w(""),
+[sort("Nat"),w(""),ql("=="),w(""),sort("Nat")],w(""),l("->"),w(""),sort("BOOL"),w(""),
+no-attrs)],
+[aprod("62"),prod(id("Nat"),w(""),
+[sort("Nat"),w(""),ql("!!")],w(""),l("->"),w(""),sort("Nat"),w(""),no-attrs)],
+[aprod("60"),prod(id("Nat"),w(""),
+[sort("Nat"),w(""),ql("/"),w(""),sort("Nat")],w(""),l("->"),w(""),sort("Nat"),w(""),
+no-attrs)]
+])
+
+)
