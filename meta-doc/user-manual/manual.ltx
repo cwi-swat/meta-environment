@@ -264,12 +264,14 @@ system.  Topics that will be addressed include:
 \noindent We do \emph{not} explain:
 
 \begin{itemize}
-\item The formalism \asfsdf.
+\item The formalism \asfsdf. We do, however, provide a quick introduction
+to \asfsdf\ in Section~\ref{ASF+SDF}.
 \item The architectural and implementational aspects of the system.
-\item The stand alone usage of various parts fot he system.
+\item The stand alone usage of various parts of he system.
 \end{itemize}
 
 \subsection{Further Reading}
+(** To be done **)
 
 \section{Starting the System}
 
@@ -313,14 +315,17 @@ file in the demo directory for an example. (**)
 
 \begin{figure}[tb]
 
-  \centerline{\epsfig{file=meta-start.ps,width=10cm}}
-  \caption{\label{FIG:meta1} Main window of \ASmetaenv}
+  \centerline{\epsfig{file=meta-start.ps,width=12cm}}
+  \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
 
 \end{figure}
 
-\section{The Main Window}
+\section{The Main Window} \label{MainWindow}
 
-The main window of the  \ASmetaenv\ consists of the following parts:
+The main window of \ASmetaenv\ immediately after starting of the
+system was already shown in Figure~\ref{FIG:meta-start}.  After
+loading a specification it may look like Figure~\ref{FIG:meta-pico}.
+The main window of the consists of the following parts:
 
 \begin{itemize}
 \item At the top of the window is a menu bar that contains the following menus:
@@ -328,40 +333,46 @@ The main window of the  \ASmetaenv\ consists of the following parts:
 
    \item {\tt File}: for creating, opening, saving and printing
     specifications as well as for leaving the \ASmetaenv.
+    The {\tt File} menu is described in Section~\ref{FileMenu}.
 
    \item {\tt Edit}: for cut, copy, paste style editing and for setting user
       preferences.
+      The {\tt Edit} menu is described in Section~\ref{EditMenu}.
 
    \item {\tt Graph}: for setting options for the display of 
         the graph in the import pane (see below).
+       The {\tt Graph} menu is described in Section~\ref{GraphMenu}.
 
    \item {\tt Debug}: for turning on/off the display of diagnostic messages.
+    The {\tt Debug} menu is described in Section~\ref{DebugMenu}.
 
    \item {\tt Help} for various forms of information and online help.
+    The {\tt Help} menu is described in Section~\ref{HelpMenu}.
 
   \end{itemize}
 
 \item The \emph{import pane}: A graphical canvas (empty in
-Figure~\ref{FIG:meta-start}) at the left
-hand side of the window that shows the import graph of the
-specification you are editing.
+Figure~\ref{FIG:meta-start}) at the left hand side of the window that
+shows the import graph of the specification you are editing.  The
+import pane is described in Section~\ref{ImportPane}.
 
-\item The \emph{module list}: a vertical list (empty in
-Figure~\ref{FIG:meta-start}) at
-the right/middle part of the window that shows the names of
-all modules in the current specification.
+\item The \emph{module pane}: a vertical list (empty in
+Figure~\ref{FIG:meta-start}) at the right/middle part of the window
+that shows the names of all modules in the current specification.  The
+module pane is described in Section~\ref{ModulePane}.
 
-\item A vertical row of buttons at the right hand side of the window:
-they are used for common operations on the current specification like
-editing, saving or deleting a module, or compiling the complete
-specification.
+\item The \emph{button pane}: vertical row of buttons at the right
+hand side of the window: they are used for common operations on the
+current specification like editing, saving or deleting a module, or
+compiling the complete specification. The button pane is described
+in Section~\ref{ButtonPane}.
 
 \item A status bar at the bottom of the window that shows the current
-activity of the system. 
+activity of the system.
 
 \end{itemize}
 
-\begin{figure}[tb]
+\begin{figure}[t]
   \centerline{\epsfig{file=meta-pico.ps,width=10cm,angle=-90}}
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
@@ -370,38 +381,49 @@ activity of the system.
  
 \subsection{The File menu} \label{FileMenu}
 
-\begin{figure}[tb]
+\begin{figure}[t]
   \centerline{\epsfig{file=file-menu.ps,width=3cm}}
   \caption{\label{FIG:file-menu} File pull-down menu of \ASmetaenv}
 \end{figure}
 
 The {\tt File} menu is used for creating, opening, saving and printing
-specifications as well as for leaving the \ASmetaenv.  It is shown in Figure
-\ref{FIG:file-menu} and contains the following entries:
+specifications as well as for leaving the \ASmetaenv.  It is shown in
+Figure \ref{FIG:file-menu}.
 
-\begin{itemize}
+{\tt New}, {\tt Open} and {\tt Save} are used for creating
+a new module, opening an existing one, respectively, saving a module.
+In all three cases a dialog window appears as shown in
+Figure~\ref{FIG:open-file}.
 
-\item {\tt New}
-\item {\tt Open}
-\item {\tt Save}
+{\tt Clear} removes all modules that have been opened so far from the
+Meta-Environment. If modules have been modified, you are expicitly
+asked to save them. he same effect can be achieved by leaving the
+Meta-Environment (using {\tt Quit}, see below) and starting a new
+version of the Meta-Environment using the {\tt meta} command.
 
-\item {\tt Clear }
-\item {\tt Revert}
+{\tt Revert} (**)
 
-\item {\tt Export}
+{\tt Export} allows the export of the import pane in various graphical
+formats.  {\tt Print Setup} allows the customization of the command
+used for printing.  Its dialog window is shown in
+Figure~\ref{FIG:printer-setup}.  {\tt Print} print the current import
+pane.
 
-\item {\tt Print Setup}
-\item {\tt Print}
-\item {\tt Quit}
+The entry {\tt Quit} ends the execution of the \ASmetaenv.
 
-\end{itemize} 
+\begin{figure}[t]
+  \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
+  \caption{\label{FIG:printer-setup} Dialog for printer setup}
+\end{figure}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=open-file.ps,width=3cm}}
+
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=open-file.ps,width=8cm}}
   \caption{\label{FIG:open-file} Open module dialog}
 \end{figure}
 
-\subsection{The Edit menu}
+\subsection{The Edit menu} \label{EditMenu}
 
 \begin{itemize}
 \item {\tt Undo}
@@ -410,10 +432,10 @@ specifications as well as for leaving the \ASmetaenv.  It is shown in Figure
 \item {\tt Preferences}
 \end{itemize}
 
-\subsection{The Graph Menu}
+\subsection{The Graph Menu} \label{GraphMenu}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=graph-menu.ps,width=5cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=graph-menu.ps,width=4cm}}
   \caption{\label{FIG:graph-menu} Graph pull-down menu of \ASmetaenv}
 \end{figure}
 
@@ -428,10 +450,10 @@ the entries:
 \item {\tt Animate while loading}
 \end{itemize}
 
-\subsection{The Debug Menu}
+\subsection{The Debug Menu} \label{DebugMenu}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=debug-menu.ps,width=6cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=debug-menu.ps,width=4cm}}
   \caption{\label{FIG:debug-menu}The Debug  Menu}
 \end{figure}
 
@@ -439,10 +461,10 @@ The {\tt Debug} menu is shown in Figure~\ref{FIG:debug-menu} and contains the
 single check box {\tt Diagnostic messages}.  When turned on, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
 
-\subsection{The Help Menu}
+\subsection{The Help Menu} \label{HelpMenu}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=help-menu.ps,width=6cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=help-menu.ps,width=5cm}}
   \caption{\label{FIG:help-menu}The Help  Menu}
 \end{figure}
 
@@ -464,7 +486,7 @@ been loaded into the Meta-Environment.  Using one of these views, the
 same set of operations is available either via a pop menu or via the
 buttons in the pane at the right-hand side of the main window.
 
-\subsection{The Import Pane}
+\subsection{The Import Pane} \label{ImportPane}
 
 The \emph{import pane} gives a graphical view of the specification by
 displaying the \emph{import} relation between modules in the form of a
@@ -479,36 +501,50 @@ The import pane has the following interaction facilities:
 
 \begin{itemize}
 
-\item Clicking \emph{on} a module yields a pop up menu
-with the same entries as the button pane of the main window
-(see Section \ref{ButtonPane})
-\item Clicking \emph{outside} any module yields a pop up menu
-with the entries {\tt New} and {\tt Open} for creating a new,
-respectively, opening an existing module. These two operations
-are also part of the file menu (see Section~\ref{FileMenu}).
+\item Clicking \emph{on} a module yields a pop up menu as shown in
+Figure~ref{FIG:module-menu}.  It contains the same entries as the
+button pane of the main window (see Section \ref{ButtonPane}).
+
+\item Clicking \emph{outside} any module yields a pop up menu as shown
+in Figure~\ref{FIG:new-open}.  It contains the entries {\tt New} and
+{\tt Open} for creating a new, respectively, opening an existing
+module. These two operations are also available from the {\tt File}
+menu (see Section~\ref{FileMenu}).
 
 \end{itemize}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=module-menu.ps,width=6cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=module-menu.ps,width=3cm}}
   \caption{\label{FIG:module-menu}Pop up menu for module operations}
 \end{figure}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=new-open.ps,width=6cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=new-open.ps,width=2cm}}
   \caption{\label{FIG:new-open}Pop up menu for adding a module}
 \end{figure}
 
 
-\subsection{The Module Pane}
+\subsection{The Module Pane} \label{ModulePane}
 
 The import pane is particularly usefull when you want to understand the
 overall structure of a specification but it may become unwieldy for
 very large specifications. For large specifications the module pane
 may give you quicker access to the modules in the specification.
-
 It presents a vertical, scrollable, list of the names of all the modules in
 the specification.
+
+The main purpose of the module pane is to select one or modeles from
+the specification on which an operation from the button pane is to be
+performed.  One module is selected by clicking on the corresponding
+module name in the module pane.  More than one module can be selected
+by clicking on a module name, keeping the mouse button down and and
+then dragging the mouse to the last desired module name.
+Note that only consecutive modules can be selected.
+
+After making the selection, an operation can be performed on all the
+selected modules by pushing a button from the button pane.  For
+instance, pushing the {\tt Edit Sdf2} button will create editors for
+the syntax of all the selected modules.
 
 \subsection{The Button Pane of the Main Window} \label{ButtonPane}
 
@@ -539,8 +575,8 @@ the specification.
 
 \section{Guided Tour}
 
-\begin{figure}[tb]
-  \centerline{\epsfig{file=meta-booleans.ps,width=6cm}}
+\begin{figure}[t]
+  \centerline{\epsfig{file=meta-booleans.ps,width=12cm}}
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
 \end{figure}
 
@@ -588,7 +624,7 @@ pico contains:
 
 \item Go to directory pico. 
 \item Type the command {\tt meta}. The main window of the Meta-environment
-  will appear.
+  will appear as shown in Figure~\ref{FIG:meta-start}.
   
 \item Add the module {\tt Bool-example} by selecting the File menu, and
   choosing the Open button. In a dialog window, the system asks you to give
@@ -599,10 +635,16 @@ pico contains:
 \footnote{*** Strictly speaking this is strange; it would be better to only
 display module names without any extension.}
   
-\item Verify that module {\tt Bool-example} appears as a rectangle in the import pane
-  as well as in the module pane of the main window.
+\item Verify that module {\tt Bool-example} appears as a rectangle in
+the import pane as well as in the module pane of the main window as
+shown in Figure~\ref{FIG:meta-Bool-example}.
 
 \end{itemize}
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=meta-Bool-example.ps,width=12cm}}
+  \caption{\label{FIG:meta-Bool-example}Main window after opening {\tt Bool-example}}
+\end{figure}
 
 \subsection{The Module Bool-example}
 
@@ -650,6 +692,16 @@ module Bool-example
 
 \end{verbatim}
 
+\begin{figure}[t]
+  \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.sdf2}Editor for the syntax of {\tt Bool-example}}
+\end{figure}
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=Bool-example.eqs.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.eqs}Editor for the equations of {\tt Bool-example}}
+\end{figure}
+
 \subsubsection{The module editor for {\tt Bool-example}}
 
 \begin{itemize}
@@ -662,7 +714,7 @@ module Bool-example
   side of the main window.  An editor will appear containing the syntax part
   of the {\tt Bool-example} specification: the SDF section.  This editor is a
   version of the standard text editor Emacs extended with the menu {\tt
-    Meta-Environment}.
+    Meta-Environment}. The result is shown in Figure~\ref{FIG:Bool-example.sdf2}.
   
 \item Push the button {\tt Edit Eqs}.  This will reuse the already created
   instance of Emacs by adding a new buffer to it containing the semantic part
@@ -670,8 +722,25 @@ module Bool-example
   Note that the syntax of the equations is determined by the syntax defined in
   the SDF section. Use the {\tt Buffers} menu of Emacs to see which buffers
   are open and to switch between buffers.
+The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 
 \end{itemize}
+
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=Bool-example.trm.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.trm}Term editor for {\tt Bool-example} after entering `{\tt true \& false}'}
+\end{figure}
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=Bool-example.trm2.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.trm2} Same term editor after parse}
+\end{figure}
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=Bool-example.trm3.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.trm3}Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
+\end{figure}
 
 \subsubsection{A Term Editor for {\tt Bool-example}}
 
@@ -685,13 +754,14 @@ module Bool-example
 \item 
   Type the term `{\tt true \& false}' in this editor. Observe how the text
   that you type gets a light blue background.
-  This is called a \emph{focus}.
+  This is called a \emph{focus}. The result is shown in Figure~\ref{FIG:Bool-example.trm}.
 
 \item Click in the focus, this will move the cursor (a single character-sized
   red rectangle) 
   
 \item From menu {\tt Meta-Envrionment} click the {\tt Parse} button.  The text
   in the focus is now parsed and the blue background has disappeared.
+  The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
 
 \end{itemize}
 
@@ -701,9 +771,9 @@ errors.
 
 \begin{itemize}
 
-\item Click on one of the characters of the word `{\tt false}'.
-You have selected `{\tt false}' as new focus and 
-the blue background reappears.
+\item Click on one of the characters of the word `{\tt false}'.  You
+have selected `{\tt false}' as new focus and the blue background
+reappears. This is shown in Figure~\ref{FIG:Bool-example.trm3}.
 
 \item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
   now selected as focus.
@@ -887,10 +957,45 @@ If you save the changes the files `{\tt Bool-example.sdf2}' and `{\tt
 
 \end{itemize}
 
+\begin{figure}[t]
+
+  \centerline{\epsfig{file=meta-Pico-syntax.ps,width=12cm}}
+  \caption{\label{FIG:Pico-syntax} Main window after opening {\tt Pico-syntax}}
+
+\end{figure}
+
 \subsection{The Pico Specification}
 
 More features of the  \ASmetaenv\  can be studied by looking at the
 Pico specification.
+
+
+\begin{figure}[t]
+
+  \centerline{\epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}}
+  \caption{\label{FIG:Pico-Booleans-sdf2}Editor for syntax of {\tt Pico-Booleans}}
+
+\end{figure}
+
+
+\begin{figure}[t]
+
+  \centerline{\epsfig{file=Pico-Booleans.eqs.ps,width=12cm}}
+  \caption{\label{FIG:Pico-Booleans-eqs}Editor for equations of {\tt Pico-Booleans}}
+
+\end{figure}
+
+
+\begin{itemize}
+
+\item Open the module {\tt Pico-Booleans} and study the differences in
+syntax and equations with {\tt Bool-example}. 
+
+\end{itemize}
+
+Editors for syntax and equations of {\tt Pico-Booleans} are show in
+Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
+
 
 \begin{itemize}
   
@@ -903,7 +1008,7 @@ Pico specification.
   
 \item As you can see in both the import pane and the module pane, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
-  transitively imported by {\tt Pico-syntax}.
+  transitively imported by {\tt Pico-syntax}. See Figure~\ref{FIG:Pico-syntax}.
 
 \end{itemize}
 
@@ -1127,7 +1232,7 @@ statements means updating the value-environment.
 The rest of the equations deal with the evaluation of expressions. Evaluating
 expressions results in a value.
 
-\section{The ASF+SDF Specification Formalism}
+\section{A quick introduction to ASF+SDF} \label{ASF+SDF}
 
 \paragraph{This whole section is just a conversion
   of text from the old manual; it has to be checked for SDF2 compatibility!}
