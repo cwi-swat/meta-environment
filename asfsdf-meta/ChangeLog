@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Wed Mar 17 CET 2004 <iversen@cwi.nl>
+
+ * Added obtain-parse-table-hook in new process in 
+   meta-interface.tb.src
+
 Tue Mar 16  CET 2004 <iversen@cwi.nl>
 
  * Added and modified several hooks to facilitate implementation of 
