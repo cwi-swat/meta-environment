@@ -16,6 +16,7 @@ includedir	= @includedir@
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
+MAKEDEPEND	= @MAKEDEPEND@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
@@ -51,7 +52,7 @@ CLEANFILES	=
 DISTCLEANFILES	= Makefile ${BINFILES} ${LIBFILES}
 
 # The all target must be defined:
-all: depend $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
+all: $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
 
 libs:	${LIBFILES}
 
@@ -86,7 +87,7 @@ spotless distclean: clean
 	rm -f $(DISTCLEANFILES)
 
 # Updating of included dependencies
-depend: $(CSRC) $(CHDR)
-	@makedepend ${INCLUDES} $(CSRC) -f - > $@
-
--include depend
+#depend: $(CSRC) $(CHDR)
+#	@${MAKEDEPEND} ${INCLUDES} $(CSRC) > $@
+#
+#-include depend

@@ -20,6 +20,7 @@ SHELL		= @SHELL@
 AR              = @AR@
 AR_FLAGS        = cr
 
+MAKEDEPEND	= @MAKEDEPEND@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CFLAGSPROF	= -pg ${CFLAGS}
@@ -107,7 +108,6 @@ love:
 
 # Handle dependencies
 depend: ${SRC} ${TIFS}
-	makedepend ${INCLUDES} ${SRC}	 -f- | 	\
-		sed -e "s/^${patsubst %.c,%.o,${SRC}}:/${PROG}:/"	> $@
+	@${MAKEDEPEND} ${INCLUDES} ${SRC} > $@
 
 -include depend
