@@ -110,10 +110,9 @@ public class SdfImportGraph implements SdfImportGraphTif {
 		Graph importGraph = fromImportList((ATermList) importRelation);
 		System.out.println("importRelation: " + importRelation);
 		System.out.println("importGraph: " + importGraph);
-		return factory.make("snd-value(graph(<term>))",
-				importGraph);
+		return factory.make("snd-value(graph(<term>))", importGraph.toTerm());
 	}
-	
+
 	public void recTerminate(ATerm t0) {
 
 	}
