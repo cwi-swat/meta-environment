@@ -1,5 +1,9 @@
 $Id$
 
+2001/12/14 (jurgenv@cwi.nl)
+ * Added experimental support for accumulating transformers in the runtime 
+   library.
+
 2001/12/13 (jurgenv@cwi.nl)
  * Added support for traversal functions in input terms of specifications.
  * Asc-support library now needs asf-support
