@@ -1,4 +1,3 @@
-
 %%
 %%    Meta-Environment - An environment for language prototyping.
 %%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
@@ -638,7 +637,12 @@ the syntax of all the selected modules.
 The entries in the button pane (at the right-hand side of the main
 window, see Figure~\ref{FIG:meta-start}) and in the module pop-up menu
 (see Figure \ref{FIG:module-menu} and Section~\ref{ImportPane}) are
-identical in function. We describe them here together.
+mostly identical in function, except that the latter may operate on
+more than one module while the former operate on a single module only.
+
+We describe them here together. The names of the entries in the
+pop-up menu are given in parentheses when they differ from the corresponding button
+in the button pane.
 
 First, one or more modules are selected via the import pane or the
 module pane. Next, one of the following operations can be applied to
@@ -647,14 +651,15 @@ them.
 {\tt Edit Syntax}, {\tt Edit Equations},
 and {\tt Edit Term} activate (structure) editors for
 editing syntax, equations, or terms, respectively, for the selected module(s).
+{\tt New Term} allows the creation of a new term (pop-up menu only).
 
-{\tt Save} saves the tree representation of the syntax definition
+{\tt Save} ({\tt Save Module}) saves the tree representation of the syntax definition
 and the equations section of the selected module(s).
-{\tt Revert} removes modules and re-opens the removed modules, 
+{\tt Revert} {\tt Revert Module}) removes modules and re-opens the removed modules, 
 the effect is that modifications made to these modules are discarded.
-{\tt Delete} removes modules.
+{\tt Delete} ({\tt Delete Module}) removes modules.
 
-{\tt Compile} invokes the \asfsdf-compiler to generate C code.  If no module
+{\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  If no module
 or more than one module has been selected, a warning appears 
 (Figure~\ref{FIG:compiler-warning}).  Otherwise, a dialog window appears 
 (Figure~\ref{FIG:compiler-dir}) containing the current directory path 
@@ -664,7 +669,7 @@ Pushing the {\tt Cancel} button aborts the compilation.
 Section~\ref{compiling-specs}
 gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Info} gives detailed information for the selected modules (not yet implemented).
+{\tt Info} {{\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
 \begin{figure}[t]
   \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
