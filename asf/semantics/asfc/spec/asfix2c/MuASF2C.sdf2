@@ -1,11 +1,11 @@
 %%  MuASF2C
 module MuASF2C
 
-imports MuASF-Sign2C Locate-Constants Make-Left-Linear %%VarEnv
+imports MuASF-Sign2C Locate-Constants
 
 exports
   context-free syntax
-    muASF2C(Module)                    -> CProgram
+%%%    muASF2C(Module)                    -> CProgram
     muASF2C-internal(Module,NameTable) -> CProgram
 
 hiddens

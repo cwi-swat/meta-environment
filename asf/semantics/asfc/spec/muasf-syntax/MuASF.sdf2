@@ -2,7 +2,7 @@
 %% consisting of a lists of imported modules, a signature,
 %% and a collection of rewrite
 %% rules.
-module MuASF-SingleSorted
+module MuASF
 
 imports MuLiterals Basic-Integers
 %%
