@@ -29,11 +29,13 @@ AC_OUTPUT(
 	Makefile 
         ac-macros/Makefile
         templates/Makefile
+        utils/Makefile
 	lib/Makefile 
 	lib/asf/Makefile 
 	lib/sdf/Makefile 
 	lib/basic/Makefile 
 	lib/containers/Makefile 
 	lib/aterm/Makefile 
+        lib/system/Makefile
         src/Makefile
 )

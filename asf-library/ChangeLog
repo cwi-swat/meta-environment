@@ -4,6 +4,7 @@
   * Directories are made read-only after installation
   * Added saved baf and tables for all modules so far
   * Added builtin architecture (see STYLE-GUIDE)
+  * Added part of ATerm level 1 interface
 
 2001/05/14 (jurgenv@cwi.nl)
   * Added automatic installation of the library modules
