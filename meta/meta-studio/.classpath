@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
-	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
-	<classpathentry kind="src" path="/aterm-java"/>
-	<classpathentry kind="src" path="/java-adapter"/>
-	<classpathentry kind="src" path="/JJTraveler"/>
-	<classpathentry kind="src" path="/shared-objects"/>
-	<classpathentry kind="lib" path="/error-support/lib/errorapi-0.2.1.jar"/>
+	<classpathentry kind="src" path="">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/error-support/lib/errorapi-0.2.1.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/error-support">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/toolbus-java-adapter">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/tide">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path=""/>
 </classpath>

@@ -1,4 +1,6 @@
-Makefile.in
+.classpath
+.project
 Makefile
-meta-studio.jar
+Makefile.in
 doc
+meta-studio.jar
