@@ -345,7 +345,6 @@ proc rec-ack-event { arg } {
 #---
 proc rec-terminate { arg } {
     GBin "rec-ack-event($arg)"
-    puts stderr $arg
     exit
 }
 
