@@ -78,8 +78,6 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
 
         imports.clear();
         importedBy.clear();
-
-        repaint();
     }
 
     private void updateInfo(Module module) {
@@ -98,7 +96,5 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
             importedBy.addAll(parents);
         }
         importedByBox.setSelectedItem(null);
-
-        repaint();
     }
 }
