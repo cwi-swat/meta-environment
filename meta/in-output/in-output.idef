@@ -47,6 +47,7 @@ in
       snd-msg(Id, error-opening(Name))
     )
   +
+    %% Name represents the module-name (without extension)
     rec-msg(Id?,open-file(Name?)).
     snd-eval(IO, open-old-asfix-file(Name)).
     (
