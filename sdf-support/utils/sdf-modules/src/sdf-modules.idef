@@ -1,6 +1,8 @@
 
 tool sdf-modules is { command = "sdf-modules" }
 
+toolbus(SdfModules)
+
 process SdfModules is
 let
  SM : sdf-modules,
