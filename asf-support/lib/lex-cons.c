@@ -108,6 +108,7 @@ ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree tree)
   lexicalTree = PT_makeTreeFlatLexical(lexicalArgs);
 
   result = PT_makeTreeLexToCf(rhs, lexicalTree);
+
   return (ASF_Tree) result;
 }
 

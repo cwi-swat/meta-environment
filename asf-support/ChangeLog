@@ -1,3 +1,6 @@
+2001/10/10 (jurgenv@cwi.nl)
+ * Bumped to version 0.6beta
+
 2001/10/01 (jurgenv@cwi.nl)
  * Regenerated library for changes in parse tree format. (See apigen and
    pt-support ChangeLogs)
