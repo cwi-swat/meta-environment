@@ -1,5 +1,5 @@
 %% 19.8.2 Productions from paragraph 8.3: Field Declarations
-%%
+
 module FieldDecl
 imports Modifiers Expressions Layout
 exports
@@ -20,7 +20,7 @@ exports
     ArrayInitializer                    -> VariableInitializer
 
 %% 19.10 Productions from chapter 10: Arrays
-%%
+
     "{" {VariableInitializer ","}* CommaOpt "}"    -> ArrayInitializer
     "," -> CommaOpt
         -> CommaOpt

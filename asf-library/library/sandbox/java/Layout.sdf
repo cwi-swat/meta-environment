@@ -5,7 +5,7 @@ hiddens
 
 exports
   %% Copied from C.sdf
-  %%
+
   lexical syntax
     [\ \t\n]			  -> LAYOUT
     "/*" (~[\*] | Asterisk)* "*/" -> Comment

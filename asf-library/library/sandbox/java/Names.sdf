@@ -1,5 +1,5 @@
 %% 19.5 Productions from paragraph 6: Names
-%%
+
 module Names
 imports Lexical
 exports

@@ -1,5 +1,5 @@
 %% 19.9 Productions from paragraph 9: Interfaces
-%%
+
 module Interfaces
 
 imports Statements

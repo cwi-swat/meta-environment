@@ -1,5 +1,5 @@
 %% 19.4 Productions from paragraph 4: Types, Values, and Variables
-%%
+
 module Types
 
 imports Names

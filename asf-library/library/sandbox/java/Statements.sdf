@@ -1,5 +1,5 @@
 %% 19.11 Productions from paragraph 14: Blocks and Statements
-%%
+
 module Statements
 
 imports MethodDecl

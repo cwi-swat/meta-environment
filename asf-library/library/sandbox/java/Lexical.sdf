@@ -101,8 +101,6 @@ exports
     HexIntegerLiteral                   -> IntegerLiteral
     OctalIntegerLiteral                 -> IntegerLiteral
 
-
-
     IntegerLiteral                      -> Literal
     FloatingPointLiteral                -> Literal
     BooleanLiteral                      -> Literal

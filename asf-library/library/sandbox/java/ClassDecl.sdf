@@ -1,5 +1,5 @@
 %% 19.8.1 Productions from paragraph 8.1: Class Declaration
-%%
+
 module ClassDecl
 
 imports ConstructorDecl FieldDecl Modifiers Types

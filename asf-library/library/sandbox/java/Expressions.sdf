@@ -1,7 +1,9 @@
 %% 19.12 Productions from paragraph 15: Expressions
+
 %%
 %% TODO: Convert old style expression grammar to priority based one.
 %%
+
 module Expressions
 
 imports Types ClassDecl MethodDecl

@@ -1,5 +1,5 @@
 %% 19.8.5 Productions from paragraph 8.6: Constructor Declarations
-%%
+
 module ConstructorDecl
 
 imports Statements Expressions MethodDecl Modifiers Names
