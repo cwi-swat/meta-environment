@@ -18,7 +18,6 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 noinst_PROGRAMS = clock log calc batch
-noinst_DATA     = calc.tb.tex
 EXTRA_DIST      = calc.tb delay.h ui-calc.tcl
 
 clock_SOURCES   = clock.c
@@ -35,8 +34,7 @@ batch_LDADD     = -L$(top_builddir)/libtb -ltb
 
 INCLUDES        = -I$(top_srcdir)/libtb -I.
 
-CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs \
-                  c.tb.tex
+CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs
 
 $(srcdir)/clock.c: clock.tif.c
 clock.tif.c: calc.tifs
@@ -60,5 +58,3 @@ batch.tif.c: calc.tifs
 	   mv $(srcdir)/$@ $@ ;\
 	fi
 
-%.tb.tex: %.tb
-	$(top_builddir)/toolbus/script2latex < $< > $@

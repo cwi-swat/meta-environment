@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-DOCS       = Guide.ps.gz Intro.ps.gz pamflet.ps.gz
+DOCS       = Guide.ps Intro.ps pamflet.ps
 
 EXTRA_DIST = $(DOCS) \
              Adapter.pic Arch.pic Tifs.pic Tool.pic \
@@ -25,21 +25,27 @@ EXTRA_DIST = $(DOCS) \
              arch-simpel.fig auction.fig calc.fig zeeslag.fig \
              auction-bidder.eps auction-master.eps battleships.eps calc-ui.eps
 
+EXAMPLES   = hello1.tb.tex hello2.tb.tex hello3.tb.tex hello.c.tex \
+             hello-gen.c.tex hello.tif.c.tex pipe.tb.tex \
+             hello.tcl.tex hello.perl.tex Hello.java.tex \
+             HelloTool.java.tex hello.py.tex calc.tb.tex \
+             auction.tb.tex
 
 CLEANFILES = $(DOCS) *.dvi *.aux *.log *.toc \
              adapters.tex Adapter.tex Arch.tex Tifs.tex Tool.tex \
-             arch-simpel.ps auction.ps calc.ps zeeslag.ps
+             arch-simpel.ps auction.ps calc.ps zeeslag.ps \
+             $(EXAMPLES)
 
 doc: $(DOCS)
 
-Guide.dvi: Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
+Guide.dvi: $(EXAMPLES) Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
 	export TEXINPUTS; \
 	latex Guide.tex; \
 	latex Guide.tex; \
 	latex Guide.tex
 
-Intro.dvi: Intro.tex calc.ps auction.ps
+Intro.dvi: $(EXAMPLES) Intro.tex calc.ps auction.ps
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
 	export TEXINPUTS; \
 	latex Intro.tex; \
@@ -54,10 +60,6 @@ pamflet.dvi: pamflet.tex arch-simpel.ps battleships.eps zeeslag.ps
 %.ps : %.dvi
 	dvips -o $@ $<
 
-%.ps.gz : %.ps
-	$(RM) $@
-	gzip $<
-
 %.tex : %.pic
 	gpic -t $< > $@
 
@@ -71,4 +73,16 @@ adapters.tex:
 		echo \\input{$(top_srcdir)/adapters/$${adapter}/$${adapter}.guide.tex} ;\
 	   fi\
 	done ) > $@
-	
+
+%.tb.tex : ${top_srcdir}/demos/hello/%.tb
+	$(top_builddir)/toolbus/script2latex <$< >$@
+
+%.tex : ${top_srcdir}/demos/hello/%
+	$(top_builddir)/toolbus/verbatim < $< >  $@
+
+
+auction.tb.tex : ${top_srcdir}/demos/auction/auction.tb
+	$(top_builddir)/toolbus/script2latex < $< >  $@
+
+calc.tb.tex : ${top_srcdir}/demos/calc/calc.tb
+	$(top_builddir)/toolbus/script2latex < $< >  $@

@@ -18,10 +18,3 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 EXTRA_DIST = master.tcl bidder.tcl auction.tb bidder
-
-CLEANFILES = auction.tb.tex
-
-all: auction.tb.tex
-
-%.tb.tex: %.tb
-	$(top_builddir)/toolbus/script2latex < $< > $@

@@ -26,6 +26,7 @@ Author:  Merijn de Jonge
 -GPL copyright added
 -Made documentation (in README) more up-to-date
 -LaTeX documentation now works with LaTeX2e
+-Generate LaTeX demo files in directory ./doc not in ./demos/*/
 ------------------------------------------------------------------------------
 
 Date:   Tue Mar  7 18:08:23 MET 2000
