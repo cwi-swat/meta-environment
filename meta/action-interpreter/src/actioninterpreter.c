@@ -282,7 +282,7 @@ void perform_actions(int cid, ATerm aScript, ATerm aStack)
 /*{{{{ void perform_actions(int cid, ATerm aScript, ATerm aStack) */
 void process_result(int cid, ATerm aResult)
 {
-  ATbool ready;
+  ATbool ready = ATfalse;
   ATerm result, result1, result2, result3;
 
   if (ATmatch(aResult, "done")) {
