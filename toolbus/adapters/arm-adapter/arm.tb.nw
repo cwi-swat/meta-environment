@@ -1,0 +1,291 @@
+
+%{{{ uarm.tb
+
+<<arm.tb*>>=
+<<tools>>
+<<process CONNECT>>
+<<process REGISTER>>
+<<process ARM>>
+<<process ARMCMD>>
+
+toolbus(CONNECT, REGISTER)
+@
+
+%}}}
+
+%{{{ tools
+
+We need two tool types in this script:
+\begin{itemize}
+\item {\tt arm(H:str)}: The actual ARM interpreter. The argument {\tt H} is
+      the host on which to run the interpreter.
+\item {\tt armcmd}: \emph{volatile} clients that make requests for 
+      services provided by interpreters.
+\end{itemize}
+
+<<tools>>=
+tool arm(H:str) is { 
+	host = "H"
+	command = "/home/olivierp/epic/toolbus/arm-adapter"
+}
+
+tool armcmd is { }
+@
+
+%}}}
+
+%{{{ process REGISTER
+
+<<process REGISTER>>=
+process REGISTER is
+let
+  Arms : list, Tmp : list,
+  Name : str,
+  Host : term
+in
+  Arms := [] .
+  ( rec-msg(new-interpreter(Name?, Host?)) .
+    Arms := join(Arms, [[Name, Host]])
+    +
+    rec-msg(get-interpreters) .
+    snd-msg(interpreters(Arms))
+    +
+    rec-msg(is-present(Name?)) .
+    Host := get(Arms, Name) .
+    if equal(Host, []) then
+      snd-msg(not-present(Name))
+    else
+      snd-msg(present(Name))
+    fi
+  ) * delta
+endlet
+@
+
+%}}}
+%{{{ process CONNECT
+
+The {\tt CONNECT} process waits for connecting clients and creates
+a {\tt ARMCMD} process for the newcomers.
+
+<<process CONNECT>>=
+process CONNECT is
+let
+  D            : armcmd,
+  Pid          : int
+in
+  ( rec-connect(D?) .
+    create(ARMCMD(D), Pid?)
+  ) * delta
+endlet
+@
+
+%}}}
+%{{{ process ARM
+
+The {\tt ARM} process controls a single {\tt ARM} interpreter.
+This process takes requests from other processes and relays them
+to the interpreter.
+
+<<process ARM>>=
+process ARM(A:arm, Name:str) is
+let
+  Files  : list, Dirs : list,
+  T      : term, Success : term,
+  T2     : term
+in
+  subscribe(query) .
+  ( rec-msg(Name, clear-arm) .
+    snd-do(A, clear-arm)
+    +
+    rec-msg(Name, load-arm-files(Files?, Dirs?)) .
+    snd-eval(A, load-arm(Files, Dirs)) .
+    rec-value(A, load-arm(Files, Dirs, Success?)) .
+    snd-msg(Name, Success)
+    +
+    rec-msg(Name, link-arm) .
+    snd-do(A, link-arm)
+    +
+    rec-msg(Name, reduce(T?)) .
+    snd-eval(A, reduce(T)) .
+    rec-value(A, reduct(T?)) .
+    snd-msg(Name, reduct(T))
+    +
+    rec-msg(Name, match(T?, T2?)) .
+    snd-eval(A, match(T, T2)) .
+    rec-value(A, match(Success?)) .
+    snd-msg(Name, match(Success))
+    +
+    rec-msg(Name, get-value(T?)) .
+    snd-eval(A, get-value(T)) .
+    rec-value(A, value(T2?)) .
+    snd-msg(Name, value(T2))
+    +
+    rec-note(query) .
+    printf("Arm interpreter %s (%t)\n", Name, A)
+  ) * rec-disconnect(A)
+endlet
+@
+
+%}}}
+%{{{ process ARMCMD
+
+The {\tt ARMCMD} process handles client requests by turning them into
+appropriate messages for a {\tt INTERPRETER} process.
+
+<<process ARMCMD>>=
+process ARMCMD(Do:armcmd) is
+let
+  Name	: str,  Host   : str,  Msg   : str,
+  A	: arm,
+  Files : list, Dirs   : list,
+  Term  : term, Reduct : term,
+  P	: int,
+  T     : term, T1     : term, T2 : term,
+  Interpreters : list,
+  Success : term
+in
+  ( <<clear-arm>>
+    +
+    <<create-interpreter>>
+    +
+    <<load-arm-files>>
+    +
+    <<link-arm>>
+    +
+    <<reduce-term>>
+    +
+    <<is-present>>
+    +
+    <<query>>
+    +
+    <<match>>
+    +
+    <<get-value>>
+    +
+    <<do-shutdown>>
+  ) *
+  rec-disconnect(Do)
+endlet
+@
+
+%{{{ clear-arm
+
+<<clear-arm>>=
+  rec-event(Do, clear-arm(Name?)) .
+  snd-msg(Name, clear-arm) .
+  snd-ack-event(Do, clear-arm(Name))
+@
+
+%}}}
+%{{{ create-interpreter
+
+Clients can create interpreters.
+
+<<create-interpreter>>=
+  rec-event(Do, create-interpreter(Name?, Host?)) .
+  execute(arm(Host), A?) .
+  create(ARM(A, Name), P?) .
+  snd-msg(new-interpreter(Name, Host)) .
+  snd-ack-event(Do, create-interpreter(Name, Host))
+@
+
+%}}}
+%{{{ load-arm-files
+
+Load a list of arm files.
+
+<<load-arm-files>>=
+  rec-event(Do, load-arm-files(Name?, Files?, Dirs?)) .
+  snd-msg(Name, load-arm-files(Files, Dirs)) .
+  ( rec-msg(Name, ok)
+    +
+    rec-msg(Name, failure(Msg?)) .
+    snd-do(Do, error(Msg))
+  ) .
+  snd-ack-event(Do, load-arm-files(Name, Files, Dirs))
+@
+
+%}}}
+%{{{ link-arm
+
+<<link-arm>>=
+  rec-event(Do, link-arm(Name?)) .
+  snd-msg(Name, link-arm) .
+  snd-ack-event(Do, link-arm(Name))
+@
+
+%}}}
+%{{{ reduce-term
+
+Reduce a term using a certain interpreter.
+
+<<reduce-term>>=
+  rec-event(Do, reduce(Name?, Term?)) .
+  snd-msg(Name, reduce(Term)) .
+  rec-msg(Name, reduct(Reduct?)) .
+  snd-do(Do, reduction-result(Reduct)) .
+  snd-ack-event(Do, reduce(Name, Term))
+@
+
+%}}}
+%{{{ is-present
+
+<<is-present>>=
+  rec-event(Do, is-present(Name?)) .
+  snd-msg(is-present(Name)) .
+  ( rec-msg(present(Name)) .
+    snd-ack-event(Do, is-present(Name, present))
+    +
+    rec-msg(not-present(Name)) .
+    snd-ack-event(Do, is-present(Name, not-present))
+  )
+@
+
+%}}}
+%{{{ query
+
+Query existing interpreters.
+
+<<query>>=
+  rec-event(Do, query) .
+  snd-msg(get-interpreters) .
+  rec-msg(interpreters(Interpreters?)) .
+  snd-ack-event(Do, query(Interpreters))
+@
+
+%}}}
+%{{{ do-shutdown
+
+Shutdown the system.
+
+<<do-shutdown>>=
+  rec-event(Do, do-shutdown) .
+  snd-ack-event(Do, do-shutdown) .
+  shutdown("bye!")
+@
+
+%}}}
+
+%{{{ match
+
+<<match>>=
+  rec-event(Do, match(Name?, T1?, T2?)) .
+  snd-msg(Name, match(T1, T2)) .
+  rec-msg(Name, match(Success?)) .
+  snd-ack-event(Do, match(Name, T1, T2, Success))
+@
+
+%}}}
+%{{{ get-value
+
+<<get-value>>=
+  rec-event(Do, get-value(Name?, T?)) .
+  snd-msg(Name, get-value(T)) .
+  rec-msg(Name, value(T2?)) .
+  snd-ack-event(Do, get-value(Name, T, T2))
+@
+
+%}}}
+
+%}}}
+
