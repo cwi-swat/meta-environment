@@ -34,6 +34,7 @@ hiddens
   variables
     "Import*"[0-9]*      -> Import*
     "Grammar"[0-9]*      -> Grammar
+    "ModuleId"[0-9]*     -> ModuleId
     "ModName"[0-9]*      -> ModuleName
     "Module"[0-9]*       -> Module
     "Module*"[0-9]*      -> Module*
@@ -43,3 +44,4 @@ hiddens
     "Sdf"[0-9]*          -> SDF
     "Section"[0-9]*      -> Section
     "Section*"[0-9]*     -> Section*
+    "$Symbols"[0-9]*     -> Symbols
