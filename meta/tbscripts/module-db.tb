@@ -372,7 +372,9 @@ in
     snd-msg(ts-get-str-value("module-paths", Name)) .
     (
       rec-msg(ts-value(Path?)) .
-      snd-msg(module-info(Name, [[path, Path]]))
+      MDB-GetImportedModules(Name, Modules?) .
+      MDB-GetDependingModules(Name, DependingModules?) .
+      snd-msg(module-info(Name, [[path, Path], [imports, Modules], [depending, DependingModules]]))
     +
       rec-msg(ts-no-value) .
       snd-msg(module-info(Name, [[path,"not-available"]]))
@@ -429,6 +431,17 @@ in
     snd-msg(sm-get-all-depending-module-names(Pairs, Name)) .
     Pairs := [] .
     rec-msg(sm-all-depending-module-names(DependingModules?)) 
+endlet
+
+process MDB-GetDependingModules(Name : str, DependingModules : list?) is
+let
+  Pairs : list
+in
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?)) .
+    snd-msg(sm-get-depending-module-names(Pairs, Name)) .
+    Pairs := [] .
+    rec-msg(sm-depending-module-names(DependingModules?)) 
 endlet
 
 process MDB-GetAllImportedModuleNames(Name : str, Imported : list?) is
