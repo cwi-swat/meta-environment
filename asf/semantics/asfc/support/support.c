@@ -265,7 +265,7 @@ static ATerm call(ATerm prod, ATermList args)
 {
   funcptr func = lookup_func(prod);
   ATerm result = NULL;
-  ATerm arg[16];
+  ATerm arg[32];
 
   assert(func);
   switch(ATgetLength(args)) {
