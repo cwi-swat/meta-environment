@@ -97,12 +97,14 @@ in
     snd-msg(open-file(Path))
   fi.
   (
-    rec-msg(opened-file(Module,tree(Tree?), RealPath?, Time?))
+    rec-msg(opened-file(Path,tree(Tree?), RealPath?, Time?))
+  +
+    rec-msg(opened-file(Module, tree(Tree?), RealPath?, Time?))
   +
     (
-      rec-msg(opened-file(Module,text(Text?), RealPath?, Time?))
-    +
       rec-msg(opened-file(Path,text(Text?), RealPath?,Time?))
+    +
+      rec-msg(opened-file(Module,text(Text?), RealPath?,Time?))
     ).
     Parse-Syntax(Module,Text, Status?, Tree?)
   +
