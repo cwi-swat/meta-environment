@@ -1,0 +1,26 @@
+module Combination-Typecheck
+
+
+imports Pico-syntax Type-environments
+
+exports
+sorts PROGRAM # TENV
+context-free syntax
+
+ "type" "(" TYPE ")"  -> PICO-ID
+
+ do-typecheck(PROGRAM)   -> PROGRAM
+ typecheck(PROGRAM,TENV) -> PROGRAM # TENV {traversal(accu,trafo,top-down)}
+ typecheck(ID-TYPE,TENV) -> ID-TYPE # TENV {traversal(accu,trafo,top-down)}
+ typecheck(PICO-ID,TENV) -> PICO-ID # TENV {traversal(accu,trafo,top-down)}
+ typecheck(EXP,TENV) -> EXP # TENV         {traversal(accu,trafo,top-down)}
+ "dummy" -> {STATEMENT ";"}*
+variables
+
+"Decl*"[0-9]* -> {ID-TYPE ","}*
+"Type"[0-9]*  -> TYPE
+"Id-type"[0-9]* -> ID-TYPE
+"CHAR+"[0-9]*   -> CHAR+
+"Str-Con" -> PICO-STR-CON
+"Nat-Con" -> PICO-NAT-CON
+%% "Program"[0-9]* -> PROGRAM

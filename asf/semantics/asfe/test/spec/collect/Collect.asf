@@ -1,0 +1,7 @@
+equations
+
+[col-1] collect(Str-con, [Str-con*1 Str-con Str-con*2]) = [Str-con*1 Str-con Str-con*2]
+
+[default-col-0] collect(Str-con,[Str-con*]) = [Str-con Str-con*]
+
+[col-2] collect(Program) = collect(Program, [])

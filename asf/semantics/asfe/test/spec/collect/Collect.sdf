@@ -1,0 +1,21 @@
+module Collect
+
+imports Pico-syntax
+
+exports
+sorts COLLECTION
+
+context-free syntax
+
+"[" PICO-STR-CON* "]" -> COLLECTION
+
+"collect" "(" PROGRAM ")" -> COLLECTION
+
+hiddens
+
+context-free syntax
+"collect" "(" PROGRAM "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up)}
+"collect" "(" PICO-STR-CON "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up)}
+
+variables
+  "Str-con*"[0-9]* -> PICO-STR-CON*
