@@ -511,11 +511,13 @@ ATermAppl SG_MaxPriority(parse_table *pt, ATermAppl t0, ATermAppl t1)
   l1 = SG_GetApplProdLabel((ATermAppl) t1);
 
   if(SG_GtrPriority(pt, l0, l1)) {
-    ATfprintf(stderr, "Direct priorityY: %t > %t (bad parse table?)\n", l0, l1);
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "Direct priority: %t > %t (bad parse table?)\n", l0, l1);
     return t0;
   }
   if(SG_GtrPriority(pt, l1, l0)) {
-    ATfprintf(stderr, "Direct priority: %t > %t (bad parse table?)\n", l1, l0);
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "Direct priority: %t > %t (bad parse table?)\n", l1, l0);
     return t1;
   }
 
