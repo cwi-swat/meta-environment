@@ -850,6 +850,16 @@ The example is quite small, and as such it is not intended to be a real
 world production version of an address book. It does, however, highlight
 the differences between ToolBus and RMI.
 
+An immediate difference between the ToolBus and RMI is the fact that
+where in a ToolBus setting components can be written in any language,
+RMI can \emph{only} be used to connect Java components.
+
+Because in RMI every component is a Java component, a Java interface
+is used to describe the external functionality of these components.
+This inherently means that it can only describe the signature of the
+methods, but nothing about the way method calls should interact.
+
+
 \section{Concluding Remarks}
 
 \section*{Acknowledgments}
