@@ -19,7 +19,7 @@ in
   Id := process-id .     
   (
     rec-msg(parse-focusses(EditorId?, ModuleId?)) .
-    subscribe(delete-editor(EditorId))
+    subscribe(delete-editor(EditorId)) .
     Type := fun(ModuleId) .
     ModuleName := first(args(ModuleId)).
     if equal(Type, "eqs") then
@@ -47,7 +47,8 @@ in
       )
     else
       snd-msg(parse-ok(ModuleId))
-    fi 
+    fi .
+    unsubscribe(delete-editor(EditorId))
   )
   *
   delta
