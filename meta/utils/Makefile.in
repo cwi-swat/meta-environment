@@ -58,7 +58,7 @@ CHDR            = msm-utils.h module-utils.h libutil.h
 #All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
 BINFILES	= gen-table parse-sdf2 sdf2table idef2tif msm-paths imports
-LIBFILES	= 
+LIBFILES	= Sdf2.baf 
 INCLUDEFILES	=
 
 OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
