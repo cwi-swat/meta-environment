@@ -525,6 +525,16 @@ static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
 }
 
 /*}}}  */
+/*{{{  static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args)  */
+
+static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, 
+			      PT_Args args) 
+{
+  PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
+  return PT_makeArgsList(listArg, args);
+}
+
+/*}}}  */
 
 /* Other utilities */
 /*{{{  static ATbool no_new_vars(PT_Tree trm, ATerm env) */
@@ -950,16 +960,6 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
   return newenv;
 }
 
-
-/*}}}  */
-/*{{{  static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args)  */
-
-static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, 
-			      PT_Args args) 
-{
-  PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
-  return PT_makeArgsList(listArg, args);
-}
 
 /*}}}  */
 /*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
