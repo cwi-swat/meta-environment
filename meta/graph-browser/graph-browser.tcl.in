@@ -636,9 +636,8 @@ proc DumpEquations { module } {
 #-
 # generates the toolbus event to request renaming of a module M
 #--
-proc RenameModule { mod } {
-    global newname
-    GBevent "rename-module([ToId $mod],[ToId $newname])"
+proc RenameModule { mod newmod newpath} {
+    GBevent "rename-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
 }
 
 #--
@@ -646,35 +645,20 @@ proc RenameModule { mod } {
 #-
 # generates a widget to enter the new name for the selected module.
 #--
-proc RenameModuleWidget { mods } {
-    global g
+proc RenameModuleWidget {module} {
 
-    set nrModules [llength $mods]
+  set types {
+      {{SDF}   {.sdf}        }
+      {{Any}    *              }
+  }
+  set file [tk_getSaveFile -initialfile [lindex [split $module "/"] end]  \
+            -filetypes $types -title "Rename Module..."]
 
-    # Bail out if no modules were selected
-    if { $nrModules != 1 } {
-	Warning "Please select a single module to rename"
-	return
-    }
-
-    set w .renamemodule
-    catch {destroy $w}
-    toplevel $w
-    wm title $w "Rename Module"
-    wm iconname $w "Rename Module"
-    label $w.message -text "New module name:"
-    entry $w.renameOutput -textvariable newname
-    bind $w.renameOutput <Return> "RenameModule $mods ; destroy $w"
-    frame $w.buttons
-    button $w.buttons.confirm \
-	-text OK \
-	-command "RenameModule $mods ; destroy $w"
-    button $w.buttons.cancel -text Cancel -command "destroy $w"
-    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-    pack $w.message $w.renameOutput -side top -anchor w
-    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+  if [ expr [ string length $file ] > 0 ] {
+    set newmodule [lindex [split $file "/"] end]
+    RenameModule $module $newmodule $file 
+  }
 }
-
 
 #--
 # NewModule(M)
@@ -1246,6 +1230,8 @@ proc define-module-popup {} {
         -command {RevertModules [GetObjectName $c]}
     $m add command -label "Delete Module" \
         -command {DeleteModules [GetObjectName $c]}
+    $m add command -label "Rename Module" \
+        -command {RenameModuleWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [GetObjectName $c]}
@@ -1254,8 +1240,6 @@ proc define-module-popup {} {
     $m add command -label "Dump Parse Table..." \
         -command {DumpParseTable [GetObjectName $c]}
     $m add separator
-    $m add command -label "Rename Module..." \
-        -command {RenameModuleWidget [GetObjectName $c]}
     $m add command -label "Print Module" \
         -command {PrintModules [GetObjectName $c]}
     $m add command -label "Module Info" \
@@ -1288,6 +1272,8 @@ proc define-modlist-popup {} {
         -command {RevertModules [SelectedModules]}
     $m add command -label "Delete Module" \
         -command {DeleteModules [SelectedModules]}
+    $m add command -label "Rename Module..." \
+        -command {RenameModuleWidget [SelectedModules]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [SelectedModules]}
@@ -1296,8 +1282,6 @@ proc define-modlist-popup {} {
     $m add command -label "Dump Parse Table..." \
         -command {DumpParseTable [SelectedModules]}  
     $m add separator
-    $m add command -label "Rename Module..." \
-        -command {RenameModuleWidget [SelectedModules]}
     $m add command -label "Print Module" \
         -command {PrintModules [SelectedModules]}
     $m add command -label "Module Info" \
