@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(meta, 0.9beta)
+AM_INIT_AUTOMAKE(meta, 0.9)
 
 dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ./config"
@@ -21,36 +21,6 @@ AC_SUBST(CFLAGS)
 
 dnl Check for required packages and perform version checks when needed.
 
-dnl Check for wish program
-AC_PACKAGE_REQUIRE(tk, 
-                   wish8.3 wish8.2 wish8.1 wish8.0 wish,
-                   [  --with-tk=DIR           Tk package is in DIR],)
-META_WISH_VERSION_CHECK($TK)
-AC_SUBST(WISH)
-
-dnl Check for graphviz package
-dnl Only check version if location of graphviz is determined automagically
-AC_ARG_WITH(graphviz,
-   [  --with-graphviz=DIR     graphviz package is in DIR],
-   GRAPHVIZ=${withval},
-   GRAPHVIZ=""
-)
-   
-if test x${GRAPHVIZ} = "x"; then
-  AC_PATH_PROGS(GRAPHVIZ, dot)
-  GRAPHVIZ=`dirname ${GRAPHVIZ}`
-  GRAPHVIZ=`dirname ${GRAPHVIZ}`
-  META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
-  META_TCLDOT_CHECK($GRAPHVIZ)
-fi
-
-AC_SUBST(GRAPHVIZ)
-
-AC_PACKAGE_REQUIRE(java, java,
-   [  --with-java=DIR          Java JDK location (jdk-1.3 and up).],
-      JAVADIR=,)
-AC_SUBST(JAVA)
-
 dnl Try to find xemacs
 AC_PACKAGE_REQUIRE(xemacs, xemacs,
    [  --with-xemacs=DIR       Xemacs is in DIR])
@@ -63,7 +33,7 @@ AC_SUBST(ATERM)
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR      ToolBus library is in DIR])
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
 dnl Require toolbus package
@@ -107,6 +77,55 @@ AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
 
+dnl Handle --enable-metastudio argument to configure
+AC_ARG_ENABLE(metastudio,
+   [  --enable-metastudio     Use Swing GUI instead of Tk GUI],
+   METASTUDIO_DEF=-DMETASTUDIO
+   UI_PACKAGE=meta-studio,
+   UI_PACKAGE=graph-browser
+)
+AC_SUBST(METASTUDIO_DEF)
+AC_SUBST(UI_PACKAGE)
+
+AC_PACKAGE_REQUIRE(java, java,
+   [  --with-java=DIR         Java (and Swing) are in DIR (jdk-1.4 and up).],
+      JAVADIR=,)
+AC_SUBST(JAVA)
+
+dnl Check for wish program
+AC_PACKAGE_REQUIRE(tk, wish8.3 wish8.2 wish8.1 wish8.0 wish,
+   [  --with-tk=DIR           Tk package is in DIR],)
+META_WISH_VERSION_CHECK($TK)
+AC_SUBST(WISH)
+
+dnl Check for graphviz package
+AC_ARG_WITH(graphviz,
+   [  --with-graphviz=DIR     graphviz package is in DIR],
+   GRAPHVIZ=${withval},
+   GRAPHVIZ=""
+)
+  
+dnl Only check version if location of graphviz is determined automagically
+if test x${GRAPHVIZ} = "x"; then
+  AC_PATH_PROGS(GRAPHVIZ, dot)
+  GRAPHVIZ=`dirname ${GRAPHVIZ}`
+  GRAPHVIZ=`dirname ${GRAPHVIZ}`
+  META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
+  META_TCLDOT_CHECK($GRAPHVIZ)
+fi
+
+AC_SUBST(GRAPHVIZ)
+
+dnl Handle --with-tide=... argument to configure
+AC_ARG_WITH(tide,
+   [  --with-tide             TIDE is in DIR],
+   TIDEDEF=-Dtide.enabled=true
+   USE_TIDE=1,
+   USE_TIDE=0
+)
+AC_SUBST(TIDEDEF)
+AC_SUBST(USE_TIDE)
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -125,26 +144,6 @@ AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
-
-dnl Handle --with-metastudio argument to configure
-AC_ARG_WITH(metastudio,
-   [  --with-metastudio       Enable MetaStudio],
-   METASTUDIO_DEF=-DMETASTUDIO
-   UI_PACKAGE=meta-studio,
-   UI_PACKAGE=graph-browser
-)
-AC_SUBST(METASTUDIO_DEF)
-AC_SUBST(UI_PACKAGE)
-
-dnl Handle --with-tide=... argument to configure
-AC_ARG_WITH(tide,
-   [  --with-tide             TIDE is in DIR],
-   TIDEDEF=-Dtide.enabled=true
-   USE_TIDE=1,
-   USE_TIDE=0
-)
-AC_SUBST(TIDEDEF)
-AC_SUBST(USE_TIDE)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
