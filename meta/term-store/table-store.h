@@ -8,4 +8,6 @@ void  addTable(char *name);
 void  removeTable(char *name);
 Table getTable(char *name);
 
+void  removeFromAllTables(ATerm key);
+
 #endif

@@ -19,14 +19,15 @@ static TableEntry* tableStore = NULL;
 
 void initTableStore() 
 {
-  tableStore = (TableEntry*) calloc(MAX_NR_OF_TABLES,
-                                    sizeof(TableEntry));
-
   if (tableStore == NULL) {
-    ATabort("initTableStore: out of memory\n");
+    tableStore = (TableEntry*) calloc(MAX_NR_OF_TABLES,
+                                      sizeof(TableEntry));
+
+    if (tableStore == NULL) {
+      ATabort("initTableStore: out of memory\n");
+    }
   }
 }
-
 
 static int findTable(char *name)
 {
@@ -96,5 +97,16 @@ Table getTable(char *name)
   else {
     ATwarning("getTable: table %s does not exist.\n", name);
     return NULL;
+  }
+}
+
+void removeFromAllTables(ATerm key)
+{
+  int i;
+
+  for(i = 0; i < MAX_NR_OF_TABLES; i++) {
+    if (tableStore[i].name != NULL) {
+      removeValue(tableStore[i].table, key);
+    }
   }
 }    
