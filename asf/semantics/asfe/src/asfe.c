@@ -1198,9 +1198,17 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
       if (no_new_vars(lhs, newenv)) {
 	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
 	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
+	if (!lhstrm) {
+	  return fail_env;
+	}
+
 	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
 	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
+	  if (!rhstrm) {
+	    return fail_env;
+	  }
+
 	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
 		    newenv, depth);
 	  if (isAsFixEqual(lhstrm, rhstrm)) {
@@ -1227,6 +1235,10 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
 	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
+	  if (!rhstrm) {
+	    return fail_env;
+	  }
+
 	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
 		    newenv, depth);
 	  newenv =
@@ -1257,8 +1269,16 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
       else {
 	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
 	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
+	if (!lhstrm) {
+	  return fail_env;
+	}
+
 	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
+	if (!rhstrm) {
+	  return fail_env;
+	}
+
 	TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
 		  newenv, depth);
 	if (isAsFixEqual(lhstrm, rhstrm)) {
@@ -1469,8 +1489,6 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
 
   currentRule = entry;
 
-  assert(reduct);
-
   return reduct;
 }
 
@@ -1482,18 +1500,19 @@ static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = trm;
 
-  if (PT_isTreeVar(trm)) {
+  if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
     reduct = rewriteVariableAppl(trm, env, depth, extra);
   }
   else if (PT_hasTreeArgs(trm)) {
     /* first the kids */    
     trm = rewriteArgs(trm, env, depth, extra);
 
-    /* Then the parent */
-    reduct = rewriteTop(trm, env, depth, extra);
+    if (trm) {
+      /* Then the parent */
+      reduct = rewriteTop(trm, env, depth, extra);
+    }
   }
 
-  assert(reduct);
   return reduct;
 }
 
@@ -1629,6 +1648,9 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
       newarg = rewriteRecursive(arg, env, depth + 1, extra);
+      if (!newarg) {
+	return NULL;
+      }
       newargs = PT_appendArgs(newargs, newarg);
       args = PT_getArgsTail(args);
     }
@@ -1639,6 +1661,10 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
       newarg_table[i] = rewriteRecursive(arg, env, depth + 1, extra);
+      if (!newarg_table[i]) {
+	return NULL;
+      }
+
       args = PT_getArgsTail(args);
       ++i;
     }
@@ -1700,7 +1726,7 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
 
   if (!value) {
     RWsetError("Uninitialized variable.",(ATerm) var);
-    return var;
+    return NULL;
   }
 
   return value;
