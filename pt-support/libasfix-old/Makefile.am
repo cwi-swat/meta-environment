@@ -20,5 +20,3 @@
 #   $Id$
 
 SUBDIRS=libasfix asfix-tools test
-
-EXTRA_DIST=make_rules
