@@ -50,11 +50,17 @@ func! IsModified()
   call libcallnr(g:meta_dlso, "send", desc)
 endfunc
 
+func! ContentsWritten()
+  let desc=g:tb_pipe . '#contents-written'
+  call libcallnr(g:meta_dlso, "send", desc)
+endfun
+
 func! WriteContents()
   call DisableModificationDetection()
   call WritePendingChanges()
   call Handshake()
   call EnableModificationDetection()
+  call ContentsWritten()
 endfunc
 
 func! RereadContents()
