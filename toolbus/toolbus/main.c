@@ -250,7 +250,9 @@ int main(int argc, char *argv[])
 
   if(parse_script(sname, argc, argv)){
     if (TBverbose) TBmsg("parsing completed\n");
-    monitor = init_monitoring();
+    /* HDJ: Don't init_monitoring() until WellKnownPort has been established!
+     * monitor = init_monitoring();
+     */
     if(typecheck(sname, gen_tifs)){
  
       if (TBverbose) TBmsg("typechecking completed\n");
@@ -263,6 +265,7 @@ int main(int argc, char *argv[])
 	}
       }
 
+      monitor = init_monitoring();
       create_toolbus(monitor);
       if (TBverbose) TBmsg("ToolBus created\n");
       interpreter();

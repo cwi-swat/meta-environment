@@ -1,5 +1,9 @@
 $Id$
 
+2002/05/01 (jong@cwi.nl)
+ * start 0.24beta
+ * fix postpone init_monitoring() until WellKnownSocket has been established.
+
 2002/04/19 (jurgenv@cwi.nl)
  * Release 0.23
  * removed --with-dot (was redundant, use --with-graphviz)
