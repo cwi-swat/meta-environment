@@ -302,6 +302,12 @@ in
           ReturnAbort(EditorId,Stack)
         fi
       +
+        rec-msg(run-asf-tests, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        StackPopTerm(Stack,Stack?,STree?) .
+        snd-msg(run-asf-tests(ModuleName)) .
+        ReturnSuccess(EditorId,Stack)
+      +
         rec-msg(pretty-print, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
         StackPopTerm(Stack,Stack?,STree?) .
