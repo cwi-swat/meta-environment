@@ -178,6 +178,7 @@ AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([Makefile
+  libtb/Makefile
   toolbus/Makefile
   aterm/Makefile
   adapters/Makefile

@@ -1,5 +1,10 @@
 $Id$
 
+Thu Mar 11 18:37:51 CET 2004 <jurgenv@cwi.nl>
+ * -ltb library from the toolbuslib package is deprecated and was only used 
+   inside of the toolbus package. So I moved it into the toolbus package
+   as a library that is NOT installed only used here.
+
 Fri Feb 27 11:54:54 CET 2004 <{jong,kooiker}@cwi.nl>
  * toolbus/script.y: increase CMD_MAX tenfold to 10240 to accomodate
    long '-I' paths

@@ -1,4 +1,4 @@
-SUBDIRS = toolbus aterm adapters tbviz doc demos test
+SUBDIRS = libtb toolbus aterm adapters tbviz doc demos test
 
 ACLOCAL_FLAGS = -I .
 
