@@ -47,7 +47,7 @@ NOTANGLE	= @NOTANGLE@
 include ${top_srcdir}/implicit-rules
 
 # The eXtra parts of some variables
-XCFLAGS		=
+XCFLAGS		= -DBINDIR=\"$(bindir)\"
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
 XLIBS		= -L$(ATERM)/lib -lATerm-cc -lAsFix-cc -lATB-cc $(SOCKLIBS)
