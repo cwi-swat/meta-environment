@@ -1,5 +1,11 @@
 $Id$
 
+Fri Nov 12 13:10:01 CET 2004 <kooiker@cwi.nl>
+ * library/languages/tex:
+   - Added TeX grammar
+ * configure.in:
+   - Updated for TeX
+
 Thu Nov 11 09:37:18 CET 2004 <kooiker@cwi.nl>
  * languages/box/syntax/Basic.sdf:
    - Added tabstop spaceoption 

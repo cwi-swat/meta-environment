@@ -1,0 +1,32 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%%\smallskip\noindent
+%% Nested lists are flattened by
+
+  [TeX'flat] (t*1 (t*2) t*3) = (t*1 t*2 t*3)
+
+%% This implies that any nested list we generate
+%% is reduced to a flat list.
+
+  [0] clean( (t*0) ) = t* when (documentation t*0) = (t*)
+
+  [0]         rmq("")                    = ()
+  [0]         rmq(box-str-con(""" chr+ """)) = box-str-con(chr+)
+  [default-0] rmq(a)                     = ()
+
+  [0] str2cs(a) = cs("\" chr*) when rmq(a) = box-str-con(chr*)
+

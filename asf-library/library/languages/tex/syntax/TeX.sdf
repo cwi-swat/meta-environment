@@ -1,0 +1,65 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+%%  \module{\TeX}
+%%
+%% Since we only want to generate code, we use a simple syntax for \TeX\
+%% code. The \TeX\ code we generate consists of a list of strings,
+%% numbers, command sequences and braces {\tt \{} and {\tt \}}.  To be
+%% able to translate a nested box, a token can also be a list of tokens.
+%%\smallskip
+module languages/tex/syntax/TeX
+
+imports basic/Integers
+imports basic/Strings
+
+exports
+  sorts CS TEX
+  lexical syntax
+    "\\" [A-Za-z]+  -> CS
+  context-free syntax
+    "(" TEX* ")"    -> TEX %% token list
+    String      -> TEX
+    Integer         -> TEX
+    CS              -> TEX
+    "{"             -> TEX
+    "}"             -> TEX
+  variables
+    [t][0-9\']*    -> TEX
+    [t]"*"[0-9\']* -> TEX*
+
+%% \smallskip
+
+  sorts TEX-LIST
+  context-free syntax
+    TEX*            -> TEX-LIST
+    clean( TEX )    -> TEX-LIST
+
+%% \smallskip
+
+  context-free syntax
+    rmq(String) -> TEX  %% remove quotes
+    str2cs(String) -> CS
+
+%% \smallskip
+
+  context-free syntax
+    "documentation" -> TEX
+
+hiddens
+  variables
+    [ab][0-9]* -> String 
+    "chr""+"   -> CHAR+
+    "chr""*"   -> CHAR*
+%%%

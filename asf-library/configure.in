@@ -45,5 +45,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/casl/Makefile
    library/languages/casl/syntax/Makefile
    library/languages/casl/tocasfix/Makefile
+   library/languages/tex/Makefile
+   library/languages/tex/syntax/Makefile
 ])
 AC_OUTPUT
