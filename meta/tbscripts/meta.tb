@@ -55,7 +55,6 @@
 #include "rewrite-errors.tb"
 #include "parsetablegen.idef"
 #include "asf-syntax.tb"
-#include "traversals.idef"
 #include "addeqssyntax.idef"
 #include "removevarsyntax.idef"
 #include "dump-equations.tb"
