@@ -24,6 +24,7 @@
  */
 
 #include <stdlib.h>
+#include <assert.h>
 
 #include <aterm2.h>
 #include <a2toa1.h>
@@ -421,6 +422,65 @@ ATermList SG_CyclicTerm(parse_table *pt, forest t)
   return ATempty;
 }
 
+void SG_PrintTree(tree t, ATbool inAmbs);
+void SG_PrintAmbs(ATermList ambs)
+{
+  tree amb;
+
+  ATfprintf(SG_log(), "AMB%d(", ATgetLength(ambs));
+  for (; !ATisEmpty(ambs); ambs=ATgetNext(ambs)) {
+    amb = (tree) ATgetFirst(ambs);
+    SG_PrintTree(amb, ATtrue);
+    if (!ATisEmpty(ATgetNext(ambs))) {
+      ATfprintf(SG_log(), ",\n");
+    }
+  }
+  ATfprintf(SG_log(), ")");
+}
+
+void SG_PrintTree(tree t, ATbool inAmbs)
+{
+  tree elt;
+  ATermList args, ambs;
+  AFun      fun;
+  int       treetype;
+
+  treetype = ATgetType(t);
+
+  /*  AT_LIST  */
+
+  if (treetype == AT_LIST) {
+    ATfprintf(SG_log(), "[");
+    for (args = (ATermList) t;
+        !ATisEmpty(args); args = ATgetNext(args)) {
+      elt = (tree) ATgetFirst(args);
+      SG_PrintTree(elt, ATfalse);
+      if (!ATisEmpty(ATgetNext(args))) {
+	ATfprintf(SG_log(), ",");
+      }
+    }
+    ATfprintf(SG_log(), "]");
+  } else if (treetype != AT_APPL) {
+    ATfprintf(SG_log(), "%t", (ATerm) t);
+  } else {
+    /*  AT_APPL  */
+
+    fun      = ATgetAFun(t);
+
+    if (!inAmbs) {
+      ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+      assert(ambs);
+      if (!ATisEmpty(ambs)) {
+	SG_PrintAmbs(ambs);
+	return;
+      }
+    }
+
+    ATfprintf(SG_log(), "%y(%t,", fun, ATgetArgument(t, 0));
+    SG_PrintTree((tree)ATgetArgument(t, 1), ATfalse);
+    ATfprintf(SG_log(), ")");
+  }
+}
 
 forest     SG_YieldForest(parse_table *pt, forest t,
                           ATbool recurse, ATbool doambs)
@@ -463,14 +523,15 @@ forest     SG_YieldForest(parse_table *pt, forest t,
   pos_info = SG_GetPosInfoLabel(t);
 
   /*  A small sanity check  */
-  if(fun == SG_Reject_AFun) {
+  if (fun == SG_Reject_AFun) {
     IF_DEBUG(ATfprintf(SG_log(), "Reject seeped through:\n\t%t\n",
-                       SG_LookupProduction(pt,SG_GetRejectProdLabel((tree) t))))
+                       SG_LookupProduction(pt,
+                                           SG_GetRejectProdLabel((tree) t))))
     return NULL;
   }
 
   /*  Expand aprod  */
-  if(ATisEqual(fun, SG_Aprod_AFun)) {
+  if (ATisEqual(fun, SG_Aprod_AFun)) {
     res = (forest) SG_LookupProduction(pt, SG_GetProdLabel((tree) t));
     return res;
   }
@@ -479,14 +540,14 @@ forest     SG_YieldForest(parse_table *pt, forest t,
       Expand appl(prod())-argument list, and other possibly partially
       expanded bits (including, possibly, a top-level amb() node)
    */
-  if(fun != SG_Regular_AFun
+  if (fun != SG_Regular_AFun
 #ifndef NO_EAGERNESS
      && fun != SG_Eager_AFun &&  fun != SG_Uneager_AFun
 #endif
-     ) { 
-		/* node is already converted to AsFix, now proceed to convert the 
-		 * children to AsFix
-		 */
+      ) { 
+/* node is already converted to AsFix, now proceed to convert the 
+ * children to AsFix
+ */
     if(!(res = SG_YieldForest(pt, (forest) args, recurse, doambs)))
       return NULL;
 
@@ -498,11 +559,10 @@ forest     SG_YieldForest(parse_table *pt, forest t,
   /*  Are we encountering an ambiguity cluster?  */
 	ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
 
-	/*
-		Are we even interested?  If not, we were invoked to expand
-		terms that are part of an ambiguity cluster, for which the
-		ambiguity-lookup would simply recurse infinitely
-	*/
+  /* Are we even interested?  If not, we were invoked to expand
+   * terms that are part of an ambiguity cluster, for which the
+   * ambiguity-lookup would simply recurse infinitely
+   */
 	if(!doambs 
 		 /*  Is this one mapped to an ambiguity cluster?  */
 		 || ATisEmpty(ambs)) {
@@ -784,12 +844,11 @@ ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
 {
   ATermList prios;
 
-  if((prios = SG_LookupPriority(pt, ATgetInt(lt0)))
+  if((prios = SG_LookupGtrPriority(pt, ATgetInt(lt0)))
      && (ATindexOf(prios, (ATerm) lt1, 0) != -1))
     return ATtrue;
   return ATfalse;
 }
-
 
 int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
 {
@@ -1027,32 +1086,35 @@ ATbool SG_MultiSetGtr(parse_table *pt, multiset msM, ATermList kM,
   IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
 
   /*  Initialize key lists if we have to  */
-  if(!kM)
+  if (!kM) {
     kM = SG_GetMultiSetKeys (msM);
-  if(!kN)
+  }
+  if (!kN) {
     kN = SG_GetMultiSetKeys (msN);
+  }
 
   /*  multi-prio is irreflexive  */
   /*
-   if(SG_MultiSetEqual(multiset1, multiset2, NULL, NULL))
+   if (SG_MultiSetEqual(multiset1, multiset2, NULL, NULL)) {
      return ATfalse;
+   }
    */
 
 
   /*  For all y in M such thatN(y) < M(y) ...  */
 
-  for(M = kM, somethingtocheck = ATfalse; !ATisEmpty(M); M = ATgetNext(M)) {
+  for (M = kM, somethingtocheck = ATfalse; !ATisEmpty(M); M = ATgetNext(M)) {
     ATbool    foundone;
 
     y = (ATermInt) ATgetFirst(M);
 
-    if(SG_GetMultiSetEntry(msN, y) < SG_GetMultiSetEntry(msM, y)) {
+    if (SG_GetMultiSetEntry(msN, y) < SG_GetMultiSetEntry(msM, y)) {
       somethingtocheck = ATtrue;
       foundone         = ATfalse;
 
       /*  ... there exists an x in N such that ( y >> x and M(x) < N(x) )  */
 
-      for(N = kN; !(foundone||ATisEmpty(N)); N = ATgetNext(N)) {
+      for (N = kN; !(foundone||ATisEmpty(N)); N = ATgetNext(N)) {
         x = (ATermInt) ATgetFirst(N);
 
         foundone =
@@ -1282,8 +1344,6 @@ ATbool SG_HasAvoidedProds(tree t)
   }
 }
 
-
-
 size_t SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
 {
   size_t ret = 0;
@@ -1448,6 +1508,9 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
         }
       }
     }
+    else {          
+       IF_DEBUG(fprintf(SG_log(), "Multisets were equal\n"))
+    }
   }
 
   /*  Did we find a multiset ordering?  */
@@ -1481,7 +1544,6 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 
     in0 = SG_CountInjections(pt, m0, k0);
     in1 = SG_CountInjections(pt, m1, k1);
-    IF_DEBUG(ATfprintf(SG_log(), "%t: in0 = %d\n%t: in1 = %d\n", t0, in0, t1, in1)); 
 #endif
     IF_STATISTICS(
       if (in0 != in1) {
@@ -1506,6 +1568,7 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     ATtableDestroy(m1);
   }
 
+  IF_DEBUG(ATfprintf(SG_log(), "max = %p returned \n"));
   return max;
 }
 
@@ -1530,8 +1593,15 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
   }
 
   /*  Filter term against existing terms in ambiguity cluster  */
+IF_DEBUG(fprintf(SG_log(), "original tree:"));
+IF_DEBUG(SG_PrintTree(t, ATfalse));
+IF_DEBUG(fprintf(SG_log(), "\n"));
+
   for (; !ATisEmpty(old); old = ATgetNext(old)) {
     prev = (tree) ATgetFirst(old);
+IF_DEBUG(fprintf(SG_log(), "previous tree:"));
+IF_DEBUG(SG_PrintTree(prev, ATfalse));
+IF_DEBUG(fprintf(SG_log(), "\n"));
 
     /* Add prev to new, unless t has a higher priority  */
     max = SG_Filter(pt, t, prev, m, k);
@@ -1539,6 +1609,11 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
       new = ATinsert(new, (ATerm) prev);
     }
     if (max) {
+        if (SG_GetApplProdLabel(prev) == SG_GetApplProdLabel(t)) {
+          IF_DEBUG(fprintf(SG_log(), "\nmax:"));
+          IF_DEBUG(SG_PrintTree(max, ATfalse));
+          IF_DEBUG(fprintf(SG_log(), "\n"));
+        }
       IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
                        SG_GetApplProdLabel(prev),
                        ATisEqual(max, prev)?'>':'<',
@@ -1592,7 +1667,16 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
     } else {
       /*  new and existing are in a priority relation, max is top  */
       newambs = ATmakeList1((ATerm) max);
-      if(max) {
+      if (max) {
+        if (SG_GetApplProdLabel(existing) == SG_GetApplProdLabel(new)) {
+          IF_DEBUG(fprintf(SG_log(), "existing:"));
+          IF_DEBUG(SG_PrintTree(existing, ATfalse));
+          IF_DEBUG(fprintf(SG_log(), "\nnew:"));
+          IF_DEBUG(SG_PrintTree(new, ATfalse));
+          IF_DEBUG(fprintf(SG_log(), "\nmax"));
+          IF_DEBUG(SG_PrintTree(max, ATfalse));
+          IF_DEBUG(fprintf(SG_log(), "\n"));
+        }
         IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (new amb)\n",
                          SG_GetApplProdLabel(existing),
                          ATisEqual(max, existing)?'>':'<',

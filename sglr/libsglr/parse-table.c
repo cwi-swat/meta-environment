@@ -310,10 +310,16 @@ production SG_LookupProduction(parse_table *pt, label l)
     SG_PT_PRODUCTIONS(pt)[i-SG_PROD_START];
 }
 
-ATermList SG_LookupPriority(parse_table *pt, label l)
+ATermList SG_LookupGtrPriority(parse_table *pt, label l)
 {
-  return (ATermList) ATtableGet(SG_PT_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
+  return (ATermList) ATtableGet(SG_PT_GTR_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
 }
+
+ATermList SG_LookupLeftPriority(parse_table *pt, label l)
+{
+  return (ATermList) ATtableGet(SG_PT_LFT_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
+}
+
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
 ATbool SG_Rejectable(state s)
@@ -749,15 +755,25 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
         case P_GTR:
           if(ATisEqual(pr_num1, pr_num2))
             break;
-          if(!(prev = (ATermList) ATtableGet(SG_PT_PRIORITIES(pt),
+          if(!(prev = (ATermList) ATtableGet(SG_PT_GTR_PRIORITIES(pt),
                                              (ATerm) pr_num1))) {
-            ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
+            ATtablePut(SG_PT_GTR_PRIORITIES(pt), (ATerm) pr_num1,
                        (ATerm) ATmakeList1((ATerm) pr_num2));
           } else {
-            ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
+            ATtablePut(SG_PT_GTR_PRIORITIES(pt), (ATerm) pr_num1,
                        (ATerm) ATinsert(prev, (ATerm) pr_num2));
           }
-            break;
+          break;
+        case P_LEFT:
+          if(!(prev = (ATermList) ATtableGet(SG_PT_LFT_PRIORITIES(pt),
+                                             (ATerm) pr_num1))) {
+            ATtablePut(SG_PT_LFT_PRIORITIES(pt), (ATerm) pr_num1,
+                       (ATerm) ATmakeList1((ATerm) pr_num2));
+          } else {
+            ATtablePut(SG_PT_LFT_PRIORITIES(pt), (ATerm) pr_num1,
+                       (ATerm) ATinsert(prev, (ATerm) pr_num2));
+          }
+          break;
         default:
           break;
       }
@@ -818,7 +834,8 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   if(!pt->injections) {
     ATerror("could not allocate %d booleans\n", numprods);
   }
-  pt->priorities   = ATtableCreate(numprods, 75);
+  pt->gtr_priorities   = ATtableCreate(numprods, 75);
+  pt->lft_priorities   = ATtableCreate(numprods, 75);
 
   pt->has_priorities = pt->has_rejects  = ATfalse;
 #ifndef NO_EAGERNESS
@@ -884,7 +901,8 @@ void SG_DiscardInjections(parse_table *pt)
 
 void SG_DiscardPriorities(parse_table *pt)
 {
-  ATtableDestroy(pt->priorities);
+  ATtableDestroy(pt->gtr_priorities);
+  ATtableDestroy(pt->lft_priorities);
 }
 
 void SG_DiscardParseTable(parse_table *pt)

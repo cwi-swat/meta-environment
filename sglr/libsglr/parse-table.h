@@ -74,7 +74,8 @@ typedef struct _parse_table  {
   gototable        gotos;
   productiontable  productions;
   injectiontable   injections;
-  prioritytable    priorities;
+  prioritytable    gtr_priorities;
+  prioritytable    lft_priorities;
   ATbool           has_priorities;
   ATbool           has_rejects;
 #ifndef NO_EAGERNESS
@@ -106,7 +107,8 @@ state         SG_LookupGoto(parse_table *pt, state s, label l);
 actions       SG_LookupAction(parse_table *pt, state s, token c);
 production    SG_LookupProduction(parse_table *pt, label c);
 ATbool        SG_ProdIsInjection(parse_table *pt, label l);
-ATermList     SG_LookupPriority(parse_table *pt, label l);
+ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
+ATermList     SG_LookupLeftPriority(parse_table *pt, label l);
 ATermInt      SG_GetATint(int l, size_t numprods);
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
@@ -157,7 +159,8 @@ parse_table  *SG_LookupParseTable(language L);
 #define       SG_PT_GOTOS(pt)           ((pt)->gotos)
 #define       SG_PT_PRODUCTIONS(pt)     ((pt)->productions)
 #define       SG_PT_INJECTIONS(pt)      ((pt)->injections)
-#define       SG_PT_PRIORITIES(pt)      ((pt)->priorities)
+#define       SG_PT_GTR_PRIORITIES(pt)  ((pt)->gtr_priorities)
+#define       SG_PT_LFT_PRIORITIES(pt)  ((pt)->lft_priorities)
 #define       SG_PT_HAS_PRIORITIES(pt)  ((pt)->has_priorities)
 #define       SG_PT_HAS_REJECTS(pt)     ((pt)->has_rejects)
 
