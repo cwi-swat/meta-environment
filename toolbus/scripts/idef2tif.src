@@ -28,7 +28,7 @@ $idefsuf = '.idef';
 
 sub usage {
   print "Usage: idef2tif file$idefsuf\n";
-  exit 1;
+  exit 0;
 }
 
 if ($#ARGV < 0) {
