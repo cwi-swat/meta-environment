@@ -3,7 +3,11 @@
 
 /*
     This is a sample C module, implementing a skeletal main
-    routine conforming to Meta-Env argument conventions
+    routine conforming to Meta-Env argument conventions.
+
+    Note: historic commandline requirements exist for ToolBus
+          processes; ToolBus "mode" is detected, and treated
+          distinctly.
  */
 
 static char myname[] = "skel";
@@ -79,28 +83,38 @@ int main(int argc, char **argv)
 
     extern char *optarg;
     extern int   optind;
-    int ch;
+    int c, toolbus_mode = 0;
 
-/*
-    Argument interpretation is rather tool-specific, tune as required...
- */
-    while ((ch = getopt(argc, argv, myarguments)) != -1) {
-        switch (ch) {
-            case 'b':  bafmode = 1;                                break;
-            case 't':  bafmode = 0;                                break;
-            case 'v':  verbose = 1;                                break;
-            case 'i':  input=optarg;                               break;
-            case 'o':  output=optarg;                              break;
-            case 'V':  version();                                  break;
+    /*  Check whether we're a ToolBus process  */
+    for(c=1; !toolbus_mode && c<argc; c++)
+      toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
 
-            case 'h':
-            default:   usage();                                    break;
+    if(toolbus_mode) {
+
+        /*  . . .  */
+
+    } else {
+    /*
+        Option handling can be rather tool-specific, extend/adapt as needed...
+     */
+        while ((c = getopt(argc, argv, myarguments)) != -1) {
+            switch (c) {
+                case 'b':  bafmode = 1;                            break;
+                case 't':  bafmode = 0;                            break;
+                case 'v':  verbose = 1;                            break;
+                case 'i':  input=optarg;                           break;
+                case 'o':  output=optarg;                          break;
+                case 'V':  version();                              break;
+
+                case 'h':
+                default:   usage();                                break;
+            }
         }
-    }
-    argc -= optind;
-    argv += optind;
+        argc -= optind;
+        argv += optind;
 
-    /*  . . .  */
+        /*  . . .  */
+    }
 
     return 0;
 }
