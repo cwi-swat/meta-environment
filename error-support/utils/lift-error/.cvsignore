@@ -2,3 +2,5 @@ Makefile
 Makefile.in
 lift-error
 .deps
+*.tree
+*.sh

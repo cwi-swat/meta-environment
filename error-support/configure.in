@@ -6,6 +6,13 @@ AM_INIT_AUTOMAKE(meta-errors, 0.1)
 
 ACLOCAL="${ACLOCAL} -I ."
 
+dnl NOTA BENE: This package is not used in all meta-environment packages
+dnl            YET. But the plan is to use it as widely as possible.
+dnl            Do not add any dependencies on other packages here! 
+dnl            That would exclude such a package from using the ErrorAPI,
+dnl            because it would introduce a circular dependency.
+
+
 dnl {{{  Which compiler to use?
 AC_PROG_CC
 
