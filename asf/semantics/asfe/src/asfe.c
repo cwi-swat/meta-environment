@@ -169,10 +169,6 @@ int main(int argc, char *argv[])
   ASF_initASFMEApi();
   AA_initASFAPIApi();
 
-  RWclearError();
-
-  ATprotect((ATerm*)&tagCurrentRule);
-
   if (toolbus_mode) {
 #ifndef WIN32			/* Code with Toolbus calls, non Windows */
     ATBinit(argc, argv, &bottomOfStack);
