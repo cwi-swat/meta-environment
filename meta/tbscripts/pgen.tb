@@ -2,14 +2,14 @@
   $Id$
  */
 
-tool gentable is {
+tool parsetablegen is {
   command = "parsetablegen"
 }
 
 
 process PGen is
 let
-  GENTABLE  : gentable,
+  GENTABLE  : parsetablegen,
   T         : term,
   T1        : term,
   Name      : term,
@@ -25,7 +25,7 @@ in
     Id := process-id .
     rec-msg(generate-parsetable(Str?)) .
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
-    execute(gentable,GENTABLE?) .
+    execute(parsetablegen,GENTABLE?) .
     snd-msg(add-eqs-syntax(Str)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-eval(GENTABLE,generate-table(Syntax,Str,"tbl")) .
