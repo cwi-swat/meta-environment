@@ -6,12 +6,7 @@ imports languages/sdf2/syntax/Kernel
 imports languages/aterm/syntax/Literals
 
 exports
-  sorts UQLiteral
-  lexical syntax
-    [a-z]                          -> UQLiteral {cons("one-char")}
-    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
   context-free syntax
-    UQLiteral                                            -> Literal     {cons("uqlit")}
     Literal                                              -> Symbol      {cons("lit")}
     function-symbol: Literal "(" arguments:{Symbol ","}* ")"
       "->" result:Symbol Attributes                      -> Production  {avoid, cons("prod-fun")}

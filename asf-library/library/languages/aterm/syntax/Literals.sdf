@@ -7,7 +7,7 @@ hiddens
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
 
 exports
-  sorts Literal
+  sorts QLiteral
   lexical syntax
     "\\" ~[012]                    -> AlphaNumericalEscChar {cons("default")}
 
@@ -21,4 +21,14 @@ exports
     ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char {cons("normal")}
     EscChar                      -> L-Char {cons("escaped")}
 
-    "\"" chars:L-Char* "\""              -> Literal {cons("quoted")}
+    "\"" chars:L-Char* "\""        -> QLiteral {cons("quoted")}
+
+  sorts UQLiteral
+  lexical syntax
+    [a-z]                          -> UQLiteral {cons("one-char")}
+    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
+
+  sorts Literal
+  context-free syntax
+    QLiteral  -> Literal {cons("qlit")}
+    UQLiteral -> Literal {cons("uqlit")}

@@ -1,7 +1,7 @@
 module languages/asfix/syntax/Tree
 
 imports languages/asfix/syntax/Annotations
-imports languages/asfix/syntax/Literals
+imports languages/aterm/syntax/Literals
 
 exports
 
@@ -9,11 +9,11 @@ sorts Tree Args Production
 
 context-free syntax
 
-appl(prod:Production,args:Args) -> Tree  
-character:NatCon                -> Tree  
-lit(string:Literal)             -> Tree  
-amb(args:Args)                  -> Tree  
-"[" {Tree ","}* "]"             -> Args  
+appl(prod:Production,args:Args) -> Tree {cons("appl")}
+character:NatCon                -> Tree {cons("char")}
+lit(string:QLiteral)            -> Tree {cons("lit")}
+amb(args:Args)                  -> Tree {cons("amb")}
+"[" {Tree ","}* "]"             -> Args {cons("list")}
 
-prod(lhs:Symbols,rhs:Symbol,attributes:Attributes) -> Production 
-list(rhs:Symbol)                                   -> Production 
+"prod" "(" lhs:Symbols comma1:"," rhs:Symbol comma2:"," attributes:Attributes ")" -> Production {cons("default")}
+list(rhs:Symbol)                                   -> Production {cons("list")}

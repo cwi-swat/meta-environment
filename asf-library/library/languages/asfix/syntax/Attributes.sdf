@@ -1,28 +1,30 @@
 module languages/asfix/syntax/Attributes
-imports languages/asfix/syntax/Literals languages/aterm/syntax/ATerms
+
+imports languages/aterm/syntax/Literals 
+        languages/aterm/syntax/ATerms
 
 exports
   sorts Attributes Attrs Attr Associativity
 
   context-free syntax
-    "no-attrs"                       -> Attributes  
-    "attrs" "(" attributes:Attrs ")" -> Attributes  
+    "no-attrs"                       -> Attributes  {cons("no-attrs")}
+    "attrs" "(" attributes:Attrs ")" -> Attributes  {cons("attrs")}
 
-    "[" {Attr ","}+ "]" -> Attrs 
+    "[" {Attr ","}+ "]" -> Attrs {cons("many")}
 
-    "assoc" "(" associativity:Associativity ")" -> Attr 
-    "term" "(" aterm:ATerm ")"                  -> Attr 
-    "id" "(" module-name:Literal ")"            -> Attr 
+    "assoc" "(" associativity:Associativity ")" -> Attr {cons("assoc")}
+    "term" "(" aterm:ATerm ")"                  -> Attr {cons("term")} 
+    "id" "(" module-name:QLiteral ")"            -> Attr {cons("id")}
 
-    "bracket" -> Attr 
-    "reject"  -> Attr 
-    "prefer"  -> Attr
-    "avoid"   -> Attr
+    "bracket" -> Attr {cons("bracket")}
+    "reject"  -> Attr {cons("reject")}
+    "prefer"  -> Attr {cons("prefer")}
+    "avoid"   -> Attr {cons("avoid")}
 
-    "left"      -> Associativity
-    "right"     -> Associativity
-    "assoc"     -> Associativity
-    "non-assoc" -> Associativity
+    "left"      -> Associativity {cons("left")}
+    "right"     -> Associativity {cons("right")}
+    "assoc"     -> Associativity {cons("assoc")}
+    "non-assoc" -> Associativity {cons("non-assoc")}
 
     "bracket"   -> ATerm {reject}
     "reject"    -> ATerm {reject}
@@ -32,5 +34,5 @@ exports
     "right"     -> ATerm {reject}
     "assoc"     -> ATerm {reject}
     "non-assoc" -> ATerm {reject}
-    id(Literal) -> ATerm {reject}
+    id(QLiteral) -> ATerm {reject}
 

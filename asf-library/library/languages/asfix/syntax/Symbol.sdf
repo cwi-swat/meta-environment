@@ -1,39 +1,38 @@
 module languages/asfix/syntax/Symbol
 
-imports languages/asfix/syntax/Literals
+imports languages/aterm/syntax/Literals
 
 exports
-
+ 
 sorts Symbol Symbols CharRange CharRanges
 
 context-free syntax
 
-empty                                                    -> Symbol 
-lit(string:Literal)                                      -> Symbol 
-cf(symbol:Symbol)                                        -> Symbol 
-lex(symbol:Symbol)                                       -> Symbol 
-opt(symbol:Symbol)                                       -> Symbol 
-alt(lhs:Symbol,rhs:Symbol)                               -> Symbol 
-pair(lhs:Symbol,rhs:Symbol)                              -> Symbol 
-sort(string:Literal)                                     -> Symbol 
-iter(symbol:Symbol)                                      -> Symbol 
-iter-star(symbol:Symbol)                                 -> Symbol 
-iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol 
-iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol 
-iter-n(symbol:Symbol,number:NatCon)                      -> Symbol 
-"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:NatCon ")" -> Symbol 
-perm(symbols:Symbols)                                    -> Symbol 
-set(symbol:Symbol)                                       -> Symbol 
-func(symbols:Symbols,symbol:Symbol)                      -> Symbol 
-varsym(symbol:Symbol)                                    -> Symbol 
-layout                                                   -> Symbol 
-char-class(CharRanges)                                   -> Symbol 
-strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol 
-parametrized-sort(sort:Literal,parameters:Symbols)       -> Symbol 
+empty                                                    -> Symbol  {cons("empty")}
+lit(string:QLiteral)                                     -> Symbol  {cons("lit")}
+cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
+lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
+opt(symbol:Symbol)                                       -> Symbol   {cons("opt")}
+alt(lhs:Symbol,rhs:Symbol)                               -> Symbol   {cons("alt")}
+seq(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("seq")}
+tuple(head:Symbol,rest:Symbols)                          -> Symbol   {cons("tuple")}
+sort(string:QLiteral)                                    -> Symbol   {cons("sort")}
+iter(symbol:Symbol)                                      -> Symbol   {cons("iter")}
+iter-star(symbol:Symbol)                                 -> Symbol   {cons("iter-star")}
+iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol   {cons("iter-sep")}
+iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol   {cons("iter-star-sep")}
+iter-n(symbol:Symbol,number:NatCon)                      -> Symbol   {cons("iter-n")}
+"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:NatCon ")" -> Symbol  {cons("iter-sep-n")}
+func(symbols:Symbols,symbol:Symbol)                      -> Symbol  {cons("func")}
+varsym(symbol:Symbol)                                    -> Symbol  {cons("varsym")}
+layout                                                   -> Symbol  {cons("layout")}
+char-class(CharRanges)                                   -> Symbol  {cons("char-class")}
+strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol {cons("strategy")}
+parametrized-sort(sort:QLiteral,parameters:Symbols)       -> Symbol  {cons("parametrized-sort")}
 
-"[" {Symbol ","}* "]"          -> Symbols 
+"[" {Symbol ","}* "]"          -> Symbols  {cons("list")}
 
-"[" { CharRange ","}* "]"      -> CharRanges  
+"[" { CharRange ","}* "]"      -> CharRanges {cons("list")}  
 
-integer: NatCon                 -> CharRange 
-range(start:NatCon,end:NatCon) -> CharRange 
+integer: NatCon                 -> CharRange  {cons("character")}
+range(start:NatCon,end:NatCon) -> CharRange {cons("range")}

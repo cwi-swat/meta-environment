@@ -6,11 +6,11 @@ equations
 %% Unquoted literals are translated to quoted literals.
 
 %% This rule also quoted ATerms in the attributes, which is not wanted!
-%%  [0] uqliteral(c+) = literal(""" c+ """)
+%%  [0] uqliteral(c+) = qliteral(""" c+ """)
 
 %% So, we introduce a new function for symbols that quots unquoted literal symbols
 [0] q[[_G]] = quotes(_G)
-[0] quotes(uqliteral(c+)) = literal(""" c+ """)
+[0] quotes(uqliteral(c+)) = qliteral(""" c+ """)
 
 %% The function $\mfun{l}\sem{\_}$ generates a production for each literal symbol
 %% in the grammar.
@@ -37,23 +37,18 @@ equations
   [0]
         chars( "" )  =
   [0]
-        [shortchar("\" c)] = cc%%%,
-        %%%literal(c) != literal("\")
+        [shortchar("\" c)] = cc
         =======================================================================
-        chars( literal(""" "\" c c* """) ) = cc ++ chars( literal(""" c* """) )
-%%%  []
-%%%        [shortchar("\" "\")] = cc
-%%%        =======================================================================
-%%%        chars( literal(""" "\" "\" c* """) ) = cc ++ cc ++ chars( literal(""" c* """) )
+        chars( qliteral(""" "\" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
   [0]
         [shortchar(c)] = cc, cc = [numchar(c+)]
         ====================================================================
-         chars( literal(""" c c* """) ) = cc ++ chars( literal(""" c* """) )
+         chars( qliteral(""" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
   [default-0]
         [shortchar("\" c )] = cc,
-        'a = chars( literal(""" c* """) )
+        'a = chars( qliteral(""" c* """) )
         =========================================
-        chars( literal(""" c c* """) ) = cc ++ 'a
+        chars( qliteral(""" c c* """) ) = cc ++ 'a
 
 %% Prefix function productions are translated to normal productions by enclosing
 %% the parentheses and commas in double quotes.

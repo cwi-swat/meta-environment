@@ -3,11 +3,11 @@ module languages/asfix/syntax/Parsetree
 imports languages/asfix/syntax/Attributes
 imports languages/asfix/syntax/Symbol
 imports languages/asfix/syntax/Tree 
-imports languages/aterm/IntCon
+imports languages/aterm/syntax/IntCon
 
 exports
 sorts ParseTree 
 
 context-free syntax
 
-parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree 
+parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree  {cons("top")}
