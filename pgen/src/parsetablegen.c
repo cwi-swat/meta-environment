@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
 	  need_closing = ATfalse;
 	}
 	else {
-	  iofile = fopen(output, "w");
+	  iofile = fopen(output, "wb");
 	  if (iofile == NULL) {
 	    ATerror("%s: cannot open %s\n", myname, output);
 	  }
