@@ -11,7 +11,7 @@
 #    WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 #    General Public License for more details.
-#
+# 
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -20,8 +20,11 @@
 #
 # $Id$
 
-EXTRA_DIST = Pico-Integers.eqs.asfix1 \
-             Pico-typecheck.eqs.asfix1 \
-             Set.eqs.asfix1 \
-             Traversal-Typecheck.eqs.asfix1 \
-             Type-environment.eqs.asfix1
+EXTRA_DIST = Pico-Integers.eqs.afme \
+             Pico-typecheck.eqs.afme \
+             Pico-set.eqs.afme \
+             Traversal-Typecheck.eqs.afme \
+             Type-environment.eqs.afme \
+             Collect.eqs.afme \
+             Bracket.eqs.afme \
+             Memo-Pico-typecheck.eqs.afme
