@@ -168,13 +168,15 @@ ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
   entry = GetValue(new_modules_db, modname);
   if(!ATisEqual(eqs,ATparse("error")) &
      !ATisEqual(eqs,ATparse("no-equations"))) {
-		char *basename, *abspath;
-		ATerm path = ATelementAt((ATermList)entry, path_loc);
-		if(!ATmatch(path, "<str>", &abspath))
-			ATerror("not a string: %t\n", path);
-		if(!ATmatch(modname, "id(<str>)", &basename))
-			ATerror("not an id(<path>): %t\n", modname);
+    char *basename, *abspath;
+    ATerm path = ATelementAt((ATermList)entry, path_loc);
+    if(!ATmatch(path, "<str>", &abspath))
+	ATerror("not a string: %t\n", path);
+    if(!ATmatch(modname, "id(<str>)", &basename))
+	ATerror("not an id(<path>): %t\n", modname);
+
     eqs = AFaddPosInfoToModule(abspath, basename, eqs);
+ 
   }
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
@@ -193,17 +195,57 @@ ATerm add_parse_table(int cid, ATerm modname, char *table)
   return ATmake("snd-value(done)");
 }
 
-ATerm get_path(int cid, ATerm modname)
+ATerm get_sdf2_path(int cid, ATerm modname)
 {
   ATerm entry, place;
-  char *path;
+  char *path, *mod;
+  char full[1024];
 
-  entry = GetValue(new_modules_db, modname);
-  place = ATelementAt((ATermList)entry, path_loc);
-  if(ATmatch(place,"<str>",&path))
-    return ATmake("snd-value(path(<str>))",path);
+  if(ATmatch(modname,"id(<str>)",&mod)) {
+    entry = GetValue(new_modules_db, modname);
+    place = ATelementAt((ATermList)entry, path_loc);
+    if(ATmatch(place,"<str>",&path)) {
+      strcpy(full,path);
+      strcat(full, "/");
+      strcat(full, mod);
+      strcat(full, ".sdf2");
+      return ATmake("snd-value(path(<str>))",full);
+    }
+    else {
+      ATerror("Module not in database!!!");
+      return NULL;
+    }
+  }
   else {
-    ATerror("Module not in database!!!");
+    ATerror("Illegal module name: %t", modname);
+    return NULL;
+  }
+}
+
+
+ATerm get_eqs2_path(int cid, ATerm modname)
+{
+  ATerm entry, place;
+  char *path, *mod;
+  char full[1024];
+
+  if(ATmatch(modname,"id(<str>)",&mod)) {
+    entry = GetValue(new_modules_db, modname);
+    place = ATelementAt((ATermList)entry, path_loc);
+    if(ATmatch(place,"<str>",&path)) {
+      strcpy(full,path);
+      strcat(full, "/");
+      strcat(full, mod);
+      strcat(full, ".eqs2");
+      return ATmake("snd-value(path(<str>))",full);
+    }
+    else {
+      ATerror("Module not in database!!!");
+      return NULL;
+    }
+  }
+  else {
+    ATerror("Illegal module name: %t", modname);
     return NULL;
   }
 }
@@ -266,13 +308,14 @@ ATfprintf(stderr, "gives: %t\n", imports);
   return imports;
 }
 
-void delete_module(int cid, ATerm name)
+ATerm delete_module(int cid, ATerm name)
 {
 ATfprintf(stderr, "Deleting: %t\n", name);
   RemoveKey(modules_db,name);
   RemoveKey(new_modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
+  return ATmake("snd-value(done)");
 }
 
 void save_module(int cid, ATerm name)

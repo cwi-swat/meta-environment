@@ -361,9 +361,12 @@ ATerm save_sdf2_asfix(int cid, char *name, char *path, ATerm syntax)
   FILE *output;
 
   strcpy(full, path);
+  /*
   strcat(full, "/");
   strcat(full, name);
   strcat(full, ".sdf2.baf");
+  */
+  strcat(full, ".baf");
   ATfprintf(stderr, "writing file %s\n", full);
   output = fopen(full,"w");
   if(!output)
@@ -381,9 +384,12 @@ ATerm save_eqs2_asfix(int cid, char *name, char *path, ATerm eqs)
   FILE *output;
 
   strcpy(full, path);
+  /*
   strcat(full, "/");
   strcat(full, name);
   strcat(full, ".eqs2.baf");
+  */
+  strcat(full, ".baf"); 
   ATfprintf(stderr, "writing file %s\n", full);
   output = fopen(full,"w");
   if(!output)

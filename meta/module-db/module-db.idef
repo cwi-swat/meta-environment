@@ -46,7 +46,15 @@ snd-do(Mdb, create-module-db).
 +
 /* Delete one module from the db */
   rec-msg(delete-module(Name?)).
-  snd-do(Mdb, delete-module(Name))
+  snd-eval(Mdb, delete-module(Name)).
+  rec-value(Mdb, done).
+  snd-msg(done)
++
+/* Revert one module from the db */
+  rec-msg(revert-module-in-db(Name?)).
+  snd-eval(Mdb, delete-module(Name)).
+  rec-value(Mdb, done).
+  snd-msg(done)
 +
 /* See if a module is in the db */
   rec-msg(is-module-in-db(Name?)).
@@ -99,8 +107,14 @@ snd-do(Mdb, create-module-db).
   snd-msg(done)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-path-from-db(Module?)).
-  snd-eval(Mdb,get-path(Module)).
+  rec-msg(get-sdf2-path-from-db(Module?)).
+  snd-eval(Mdb,get-sdf2-path(Module)).
+  rec-value(Mdb,path(Path?)).
+  snd-msg(path(Path))
++
+/* Add parse table to the database for the given module name */
+  rec-msg(get-eqs2-path-from-db(Module?)).
+  snd-eval(Mdb,get-eqs2-path(Module)).
   rec-value(Mdb,path(Path?)).
   snd-msg(path(Path))
 +
