@@ -616,34 +616,19 @@ void SG_DoReductions(stack *st, action a)
   SG_ClearPath(fps);
 }
 
-static ATbool SG_FilterAmbCluster(label prodl, tree t)
+static ATbool SG_AmbClusterContainsProd(label prodl, tree t)
 {
 	ATermList ambs;
-	ATermList newambs;
 	tree amb; 
 
 	ambs =  (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
 
-	if(ambs && !ATisEmpty(ambs)) {
-		for(newambs = ATempty; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-			amb = (tree) ATgetFirst(ambs);
-			
-			if(prodl != SG_GetApplProdLabel(amb)) {
-				newambs = ATinsert(newambs, (ATerm) amb);
-			}
-		}
-		/* We would like to update the cluster, but because of sharing
-		 * this may have unexpected effects. We could remove a legal parse
-		 * in this way.
-     * So now we only return if the cluster is completely empty. 		 
-		 *
-		 *
-		 * SG_AmbTable(SG_AMBTBL_UPDATE_CLUSTER, (ATerm) t, (ATerm) newambs); 
-		 *
-		 * 
-		 */
+	for(; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+		amb = (tree) ATgetFirst(ambs);
 		
-		return ATisEmpty(newambs);
+		if(prodl == SG_GetApplProdLabel(amb)) {
+			return ATtrue;
+		}
 	}
 
 	return ATfalse;
@@ -663,9 +648,9 @@ static ATbool SG_CheckValidAssociativity(parse_table *pt, label prodl, ATermList
 	if(SG_IsLeftAssociative(table, prodl)) {
 	  tree lastkid = (tree) ATgetLast(kids);
 
-		if(SG_FilterAmbCluster(prodl, lastkid)) {
-			/* removed all possibilities for this cluster */
-			IF_DEBUG(fprintf(SG_log(),"Illegal trees for left associative node %d removed\n", 
+		if(SG_AmbClusterContainsProd(prodl, lastkid)) {
+			/* illegal tree in ambcluster lastkid */
+			IF_DEBUG(fprintf(SG_log(),"Illegal tree for left associative node %d detected\n", 
 											 prodl));
 			return ATfalse;
 		}	
@@ -676,9 +661,9 @@ static ATbool SG_CheckValidAssociativity(parse_table *pt, label prodl, ATermList
 	if(SG_IsRightAssociative(table, prodl)) {
 	  tree firstkid = (tree) ATgetFirst(kids);
 
-		if(SG_FilterAmbCluster(prodl, firstkid)) {
+		if(SG_AmbClusterContainsProd(prodl, firstkid)) {
 			/* removed all possibilities for this cluster */
-			IF_DEBUG(fprintf(SG_log(),"Illegal trees for right associative node %d removed\n", 
+			IF_DEBUG(fprintf(SG_log(),"Illegal tree for right associative node %d detected\n", 
 											 prodl));
 			return ATfalse;
 		}	
