@@ -20,12 +20,13 @@
 
 /*{{{  globals */
 
-#define TREE_TABLE_INITIAL_SIZE        5000
+#define TREE_TABLE_INITIAL_SIZE        4096
 #define TREE_TABLE_MAX_LOAD_PERCENTAGE 75
 static ATermTable treeTable = NULL;
 
-#define TERM_STORE_INITIAL_SIZE    500
+#define TERM_STORE_INITIAL_SIZE    512
 #define TERM_STORE (term_store+term_store_begin)
+#define ASSERT_VALID_INDEX(i) assert(term_store_begin + (i) <= term_store_end)
 
 static size_t term_store_begin; 
 static size_t term_store_end;   
@@ -46,18 +47,18 @@ static void destroyTermStore(void);
 
 /*}}}  */
 
-/* This term_store is build to cope with a recursive function. Each
+/* This term_store is built to cope with a recursive function. Each
  * of its calls needs its own term_store, but we want to reuse allocated
  * memory. It works somewhat like a stack using getTermStore as a push and
- * resetTermStore as a pop. Term_store_end holds to top of the stack.
+ * resetTermStore as a pop. Term_store_end holds the top of the stack.
  */
 /*{{{  static void createTermStore(void) */
 
 static void createTermStore(void)
 {
   term_store_size = TERM_STORE_INITIAL_SIZE;
-  term_store_begin = 0;
-  term_store_end = 0;
+  term_store_begin = -1;
+  term_store_end = -1;
 
   term_store = (PT_Tree*) calloc(term_store_size, sizeof(PT_Tree));
 
@@ -76,18 +77,19 @@ static size_t getTermStore(size_t size)
 {
   size_t old_begin;
 
-  if (term_store_size < size + term_store_end + 1) {
+  if (term_store_size <= size + term_store_end) {
     size_t old_size = term_store_size;
     ATunprotectArray((ATerm*) term_store);
 
     /* Allocate at least enough memory for the request, and then
-     * some more to prevent this from happening to often.
+     * some more to prevent this from happening too often.
      */
     term_store_size = size + term_store_end + 1 + TERM_STORE_INITIAL_SIZE;
-    term_store = realloc(term_store, term_store_size * sizeof(PT_Tree));
+    term_store = (PT_Tree *) realloc(term_store,
+				     term_store_size * sizeof(PT_Tree));
 
     if (term_store == NULL) {
-      ATerror("resizeTermStore: unable to allocate memory for %d ATerms",
+      ATerror("resizeTermStore: unable to allocate memory for %d PT_Trees",
 	      term_store_size);
       return -1;
     }
@@ -102,7 +104,7 @@ static size_t getTermStore(size_t size)
   /* begin and end are both inclusive boundaries */
   old_begin        = term_store_begin;
   term_store_begin = term_store_end + 1;
-  term_store_end   = term_store_end + size + 1;
+  term_store_end   = term_store_begin + size - 1;
   return old_begin;
 }
 
@@ -163,6 +165,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
   index = getTermStore(ATgetLength(elems));
 
   for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
+    ASSERT_VALID_INDEX(i);
     TERM_STORE[i++] = termToTree(ATgetFirst(elems));
   } 
 
@@ -293,4 +296,3 @@ PT_Tree yieldTree(ATerm tree)
 }
 
 /*}}}  */
-
