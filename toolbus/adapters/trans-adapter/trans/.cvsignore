@@ -1,0 +1,4 @@
+Makefile
+Makefile.in
+*.class
+classjava.stamp

@@ -1,6 +1,10 @@
 $Id$
 
-2003/06/26 <jurgenv@cwi.nl>
+2003-06-27 <{jong,kooiker}@cwi.nl>
+ * toolbus/trans:
+   - Added first version of transparent toolbus-to-toolbus adapter
+ 
+2003-06-26 <jurgenv@cwi.nl>
  * Added package definition file
 
 2003-06-17 <jurgenv@cwi.nl>
@@ -10,23 +14,27 @@ $Id$
     that was written in Windows.
 
 2003-06-17 <kooiker@cwi.nl>
-  * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
-    time dynamically
+ * toolbus/viewer.tcl.src:
+   - Fixed variable viewer displaying quotes and own processname
+
+2003-06-17 <kooiker@cwi.nl>
+ * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
+   time dynamically
 
 2003-06-13 <kooiker@cwi.nl>
-  * fix toolbus/viewer.tcl.src: for some reason double click to show the
-    process variables didn't work anymore
+ * fix toolbus/viewer.tcl.src: for some reason double click to show the
+   process variables didn't work anymore
 
 2003-06-13 <kooiker@cwi.nl>
-  * toolbus/viewer.tcl.src:
-    - Tool and process breakpoints do work now
-    - Right click (re-)sets breakpoint at line or on process/tool
-    - After extending the toolbus view with a new line of processes, tool 
-      breakpoints stay visible
-    - After changing scriptview, breakpoints are colored again
-    - Reaching a linebreak causes the scriptview to switch to the breaking 
-      script
-    - By resizing the viewer window, hidden tools will be displayed 
+ * toolbus/viewer.tcl.src:
+   - Tool and process breakpoints do work now
+   - Right click (re-)sets breakpoint at line or on process/tool
+   - After extending the toolbus view with a new line of processes, tool 
+     breakpoints stay visible
+   - After changing scriptview, breakpoints are colored again
+   - Reaching a linebreak causes the scriptview to switch to the breaking 
+     script
+   - By resizing the viewer window, hidden tools will be displayed 
 
 2003-06-11 <kooiker@cwi.nl>
  * fix toolbus/viewer.tcl.src: bug introduced in previous version prevented 

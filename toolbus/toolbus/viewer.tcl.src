@@ -244,20 +244,21 @@ proc mkViewer {} {
    frame $w.buttons
    label $w.buttons.txt -text "Name:"
    label $w.buttons.name -text "" -width 25 -anchor w
-   scale $w.buttons.scale -from 5 -to 200 -length 200 -variable tracer_state(delay) \
-      -orient horizontal -tickinterval 0 -showvalue true -label "Delay time"
+   scale $w.buttons.scale -from 0 -to 200 -length 200 -variable tracer_state(delay) \
+      -orient horizontal -tickinterval 0 -showvalue true 
    button $w.buttons.go -text "Go" -command "do_go"
    button $w.buttons.stop -text "Stop" -command "do_stop" -state disabled
    button $w.buttons.step -text "Step" -command "do_step"
    pack $w.buttons -side bottom -fill x
    pack $w.buttons.txt $w.buttons.name -side left 
-   pack $w.buttons.step $w.buttons.go $w.buttons.stop $w.buttons.scale -side right -padx 10m
+   pack $w.buttons.step $w.buttons.go $w.buttons.stop $w.buttons.scale -side right -padx 5m
    defHelp $w.buttons.txt "Move cursor to process or tool to display its full name here"
    defHelp $w.buttons.name "Move cursor to process or tool to display its full name here"
  
    defHelp $w.buttons.go "Leave step mode and continue execution until next breakpoint"
    defHelp $w.buttons.stop "Stop current execution and enter step mode"
    defHelp $w.buttons.step "Execute one step in script"
+   defHelp $w.buttons.scale "Set delay in milliseconds ; WARNING: Setting delay too short may cause errors!"
 
    frame $w.menu -relief raised -bd 2
    pack $w.menu -side top -fill x
@@ -282,11 +283,6 @@ proc mkViewer {} {
    tk_menuBar $w.menu.options
 
 #     puts stderr "mkViewer ... done\n"
-}
-
-
-proc newDelay {sc value} {
-   set tracer_state(delay) $value
 }
 
 # delay time between two succeeding communications
@@ -403,7 +399,7 @@ proc gotoAtom {w pid} {
            [string compare $src "INIT"] != 0} {
            load_text $src
         }
-        .tbviewer.text yview -pickplace [.tbviewer.text index atom$pid.first]
+        .tbviewer.text see [.tbviewer.text index atom$pid.first]
      }
    }
 
@@ -514,31 +510,31 @@ proc addProcVars {name index} {
      wm title $w "$name"
      wm minsize $w 10 10
      button $w.quit -text "close" -command "destroy $w"
-     pack $w.quit -side top
-     defHelp $w.quit "Close view on variables op process $name"
+     pack $w.quit -side top 
+     defHelp $w.quit "Close view on variables of process $name"
      defHelp $w "View on variables of process $name"
      foreach var $proc_vars($index) {
        addVar $index $var
      }
-   }
+  }
 }
 
-# Given a variable name of the form ``var$proc:type'' return ``var''
+# Given a variable name of the form "var$proc:type" return "var:type"
 # if proc is equal to the current process name,
-# otherwise return var$proc
+# otherwise return var$proc:type
 
 proc stripVar {var pname} {
-   if { [regexp {([^$]+)\$([a-zA-Z0-9\-]+):([a-zA-Z0-9\-]+)\??} $var varn pre post type] } {
-      if { $post == $pname } {return $pre} else {return "$pre ($post)"}
-    } else {
+   if { [regexp {\"([^$]+)\\\$([a-zA-Z0-9\-]+)\":([a-zA-Z0-9\-]+)\??} $var varn pre post type] } {
+     if { $post == $pname } {return "$pre:$type"} else {return "$pre\$\\$post:$type"}
+   } else {
       return $var
-    }
+   }
  }
 
 proc unquestVar {var} {
    return [string trim $var "?"]
 }
-   
+
 proc addVar {index var} {
    global proc_vals proc_names
 
@@ -549,8 +545,8 @@ proc addVar {index var} {
         set svar [stripVar $var $proc_names($index)]
         label $f.name -text $svar
         label $f.val -textvariable proc_vals($index,$var) -relief sunken -anchor w 
-      }
-     pack  $f.name $f.val -side left -anchor w
+     }
+     pack $f.name $f.val -side left -anchor w
      pack $f -side top -anchor w
    }
 }

@@ -186,6 +186,8 @@ AC_OUTPUT(
   adapters/java-adapter/toolbus/tifstojava
   adapters/gen-adapter/Makefile
   adapters/toolbus-adapter/Makefile
+  adapters/trans-adapter/Makefile
+  adapters/trans-adapter/trans/Makefile
   adapters/emacs-adapter/Makefile
   adapters/python-adapter/Makefile
   tbviz/Makefile
