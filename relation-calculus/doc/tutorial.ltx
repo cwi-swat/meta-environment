@@ -529,16 +529,37 @@ and {\tt false} otherwise\\ \hline
 \subsubsection{Construction} \label{BO:bag-cons}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{bag}$_1$ {\tt union} \emph{bag}$_2$ & yields the bag resulting from the union of the two arguments
+\emph{bag}$_1$ {\tt union} \emph{bag}$_2$ & yields the bag resulting from the union of the two arguments.
+The number of occurrences of each element in the result is the {\bf maximum} of the number of occurrences of that element
+in \emph{bag}$_1$  and \emph{bag}$_2$.
  \\ \hline
 
-\emph{bag}$_1$ {\tt inter} \emph{bag}$_2$ & yields the bag resulting from the intersection of the two arguments
+\emph{bag}$_1$ {\tt inter} \emph{bag}$_2$ & yields the bag resulting from the intersection of the two arguments.
+The number of occurrences of each element in the result is the {\bf minimum} of the number of occurrences of that element
+in \emph{bag}$_1$  and \emph{bag}$_2$.
  \\ \hline
 
-\emph{bag}$_1$ \verb+\+ \emph{bag}$_2$ & yields the bag resulting from the difference of the two arguments
+\emph{bag}$_1$ \verb+\+ \emph{bag}$_2$ & yields the bag resulting from the difference of the two arguments.
+The number of occurrences of each element in the result is the {\bf difference} of the number of occurrences of that element
+in \emph{bag}$_1$  and \emph{bag}$_2$.
  \\ \hline \hline
 
 \end{tabular}
+
+\paragraph{Examples}
+
+\begin{itemize}
+\item {\tt \{1, 2, 3\} union \{4, 5, 6\}} yields {\tt \{1, 2, 3, 4, 5, 6\}}.
+\item  {\tt \{1, 2, 3\} union \{1, 2, 3\}} yields  {\tt \{1, 2, 3\}}.
+\item {\tt \{1, 1, 2, 3\} union \{4, 4, 5, 6\}} yields {\tt \{1, 1, 2, 3, 4, 4, 5, 6\}}.
+
+\item \item {\tt \{1, 2, 3\} inter \{4, 5, 6\}} yields {\tt \{ \}}.
+\item  {\tt \{1, 1, 2, 3\} inter \{1, 2, 3\}} yields  {\tt \{1, 2, 3\}}.
+
+\item  {\tt \{1, 1, 2, 3\}  \verb+\+ \{1, 2, 3\}} yields  {\tt \{1\}}.
+\item {\tt \{1, 1, 2, 3\}  \verb+\+ \{4, 4, 5, 6\}} yields {\tt \{1, 1, 2, 3\}}.
+
+\end{itemize}
 
 \subsection{Operations on Relations} \label{BO:relations}
 
@@ -931,7 +952,7 @@ bag {\tt Excl} are used.
 }
 
 \function{Average of a bag of integers}{average}
-{\tt int average(bag[int] B) = sum(B)/(#B)}
+{\tt int average(bag[int] B) = sum(B)/(\#B)}
 {Yields the average of the integers in bag {\tt B}.}
 {
 \item {\tt average(\{1, 2, 3\})} yields {\tt 3}.
@@ -1001,7 +1022,7 @@ would be to combine both steps:
 
 The next step in the analysis is to determine which \emph{entry points} this
 application has, i.e., procedures which call others but are not called
-themselves. Entry points are usefull since they define the external interface
+themselves. Entry points are useful since they define the external interface
 of a components and may also be used as guidance to split a component in
 parts.
 
@@ -1499,8 +1520,9 @@ they are killed by the definition of {\tt i} in statement {\tt 4} itself. Defini
 
 \section{Running a \rscript}
 Currently, the definition of \rscript resides in the CWI cvs repository {\tt /ufs/glt/CVS}.
- You can checkout your own copy by means of
-{\tt cvs -d ssh.cwi.nl:/ufs/glt/CVS co relation-calculus}.
+You can checkout your own copy by means of
+{\tt cvs -d ssh.cwi.nl:/ufs/glt/CVS co relation-calculus} (provided that you have an account at CWI).
+Otherwise you have to obtain a {\tt tar.gz} file of the relation calculus.
 
 \paragraph{Running a script}
 \begin{itemize}
@@ -1508,7 +1530,7 @@ Currently, the definition of \rscript resides in the CWI cvs repository {\tt /uf
 \item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
 \item Open your own term, using the Rscript module.
-\item Observe that a new menu call {\tt Rscript} appears in the menu bar.
+\item Observe that a new menu with the name {\tt Rscript} appears in the menu bar.
 \item Click the parse button in the {\tt Actions} menu of the editor:
 now we know whether there are syntax errors. If so, correct them.
 
@@ -1517,6 +1539,7 @@ now we know whether there are syntax errors. If so, correct them.
 
 \item Click the {\tt Run} button in the {\tt Rscript} menu to execute your script: a new
 editor pops up which shows all the variables at the end of the execution.
+{\tt Run} also performs a type of your script so you may skip the previous step.
 
 \item Click the {\tt Run with Rstore} button if you want to execute your
   \rscript with an existing ``Rstore'': a collection of relations that are the
@@ -1556,6 +1579,9 @@ New:
 \item The type {\tt node} has been renamed into {\tt area}
 
 \end{itemize}
+
+\section*{Acknowledgements}
+Taeke Kooiker
 
 \appendix
 
@@ -1603,7 +1629,8 @@ New:
 
 {\tt +}  & Addition of integers & \ref{BO:int}\\
 {\tt -}  & Subtraction of integers & \ref{BO:int}\\
-{\tt /}  & Multiplication of integers & \ref{BO:int}\\
+{\tt *}  & Multiplication of integers & \ref{BO:int}\\
+{\tt /}  & Division of integers & \ref{BO:int}\\
 
 \verb+\+   & Difference of bags/relations & \ref{BO:bag-or-rel}\\
 
