@@ -723,7 +723,6 @@ PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isTreeVar(PT_Tree tree) */
 
 ATbool PT_isTreeVar(PT_Tree tree) 
 {
@@ -752,6 +751,8 @@ ATbool PT_isTreeVarList(PT_Tree tree)
   return ATfalse;
 }
 
+/*{{{  ATbool PT_isTreeVarListStar(PT_Tree tree) */
+
 ATbool PT_isTreeVarListStar(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
@@ -767,6 +768,9 @@ ATbool PT_isTreeVarListStar(PT_Tree tree)
   }
   return ATfalse;
 }              
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeVarListPlus(PT_Tree tree) */
 
 ATbool PT_isTreeVarListPlus(PT_Tree tree)
 {
@@ -784,6 +788,7 @@ ATbool PT_isTreeVarListPlus(PT_Tree tree)
   return ATfalse;
 }
 
+/*}}}  */
 
 /*{{{  PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor, */
 
@@ -911,6 +916,7 @@ PT_Symbol makeSymbolAllChars()
 }  
 
 /*}}}  */
+
 /*{{{  PT_Tree PT_makeTreeFlatLexical(PT_Args charList) */
 
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
@@ -920,6 +926,7 @@ PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 }
 
 /*}}}  */
+/*{{{  PT_Tree PT_makeTreeFlatLexicalFromString(const char *str) */
 
 PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
 {
@@ -933,6 +940,7 @@ PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
   return PT_makeTreeFlatLexical(args);
 }
 
+/*}}}  */
 /*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
 
 ATbool PT_isTreeFlatLexical(PT_Tree tree)
@@ -950,12 +958,17 @@ ATbool PT_isTreeFlatLexical(PT_Tree tree)
 
 /*}}}  */
 
+/*{{{  PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree) */
+
 PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
 {
   ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
   
   return PT_TreeFromTerm(ATgetArgument(ATparseTree,0));
 }
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top) */
 
 PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
 {
@@ -965,6 +978,10 @@ PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
            (ATerm) ATsetArgument((ATermAppl) ATparseTree,
               PT_TreeToTerm(top),0));
 }
+
+/*}}}  */
+
+/*{{{  ATbool PT_isTreeBracket(PT_Tree tree) */
 
 ATbool PT_isTreeBracket(PT_Tree tree)
 {
@@ -977,6 +994,9 @@ ATbool PT_isTreeBracket(PT_Tree tree)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  PT_Tree PT_getTreeBracketTree(PT_Tree tree) */
+
 PT_Tree PT_getTreeBracketTree(PT_Tree tree)
 {
   if (PT_isTreeBracket(tree)) {
@@ -985,62 +1005,99 @@ PT_Tree PT_getTreeBracketTree(PT_Tree tree)
   return NULL;
 }
 
+/*}}}  */
+
+/*{{{  PT_Attr PT_makeAttrBracket(void) */
+
 PT_Attr PT_makeAttrBracket(void)
 {
   return PT_makeAttrAterm(PT_makeATermBracket());
 }
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrLeft(void) */
 
 PT_Attr PT_makeAttrLeft(void)
 {
   return PT_makeAttrAterm(PT_makeATermLeft());
 }
 
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrRight(void) */
+
 PT_Attr PT_makeAttrRight(void)
 {
   return PT_makeAttrAterm(PT_makeATermRight());
 }
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrAssoc(void) */
 
 PT_Attr PT_makeAttrAssoc(void)
 {
   return PT_makeAttrAterm(PT_makeATermAssoc());
 }
 
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrNonAssoc(void) */
+
 PT_Attr PT_makeAttrNonAssoc(void)
 {
   return PT_makeAttrAterm(PT_makeATermNonAssoc());
 }
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrMemo(void) */
 
 PT_Attr PT_makeAttrMemo(void)
 {
   return PT_makeAttrAterm(PT_makeATermMemo());
 }
 
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrReject(void) */
+
 PT_Attr PT_makeAttrReject(void)
 {
   return PT_makeAttrAterm(PT_makeATermReject());
 }
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrPrefer(void) */
 
 PT_Attr PT_makeAttrPrefer(void)
 {
   return PT_makeAttrAterm(PT_makeATermPrefer());
 }
 
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrAvoid(void) */
+
 PT_Attr PT_makeAttrAvoid(void)
 {
   return PT_makeAttrAterm(PT_makeATermAvoid());
 }
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrConstructor(void) */
 
 PT_Attr PT_makeAttrConstructor(void)
 {
   return PT_makeAttrAterm(PT_makeATermConstructor());
 }
 
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrTraverse(void) */
+
 PT_Attr PT_makeAttrTraverse(void)
 {
   return PT_makeAttrAterm(PT_makeATermTraverse());
 }
 
+/*}}}  */
+
 /*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
+
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 {
   return PT_makeAttrsFromTerm(
@@ -1050,8 +1107,12 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 
 /*}}}  */
 
+/*{{{  PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2) */
+
 PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
 {
   return PT_CharRangesFromTerm((ATerm)ATconcat((ATermList) ranges1,
                                                (ATermList) ranges2));
 }
+
+/*}}}  */
