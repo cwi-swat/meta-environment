@@ -59,16 +59,6 @@ in
     rec-value(IO, search-paths-processed(Name)) .
     snd-msg(search-paths-processed(Name))
     +
-    (
-      rec-msg(get-table-timestamp(eqs(Name?))).
-      snd-eval(IO,get-timestamp(Name,".eqs.tbl"))
-    +
-      rec-msg(get-table-timestamp(trm(Name?))).
-      snd-eval(IO,get-timestamp(Name,".trm.tbl"))
-    ) .
-    rec-value(IO, timestamp(Name,Time?)) .
-    snd-msg(table-timestamp(timestamp(Time)))
-    +
     rec-msg(read-parse-table(Name?, TableType?)) .
     snd-eval(IO,read-parse-table(Name, TableType)) .
     (
@@ -176,13 +166,8 @@ in
     rec-value(IO, save-done(Path)) .
     snd-msg(save-done(Path))
   +
-    rec-msg(save-term-table(Name?, Asfix?)) .
-    snd-eval(IO, save-parsetable(Name, Asfix, trm)) .
-    rec-value(IO, save-done(Name)).
-    snd-msg(save-done)
-  +
-    rec-msg(save-eqs-table(Name?, Asfix?)) .
-    snd-eval(IO, save-parsetable(Name, Asfix, eqs)) .
+    rec-msg(save-table(Name?, Path?, Asfix?)) .
+    snd-eval(IO, save-parsetable(Name, Path, Asfix)) .
     rec-value(IO, save-done(Name)).
     snd-msg(save-done)
   +

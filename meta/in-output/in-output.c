@@ -390,18 +390,6 @@ ATerm read_file(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm get_timestamp(int cid, char *name, char *ext)  */
-
-ATerm get_timestamp(int cid, char *name, char *ext) 
-{
-  char file[PATH_LEN];
-
-  sprintf(file, "%s%s", name, ext);
-  return ATmake("snd-value(timestamp(<str>,<int>))", 
-                name, filetime(find_in_path(file)));
-}
-
-/*}}}  */
 /*{{{  ATerm exists_sdf2_module(int cid, char *moduleName) */
 /*
  * Checks whether the sdf2 module exists, either in
@@ -621,21 +609,14 @@ ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
 }
 
 /*}}}  */
-/*{{{  ATerm save_parsetable(int cid, char *name, ATerm table, ATerm tableType) */
+/*{{{  ATerm save_parsetable(int cid, char *name, char *fn, ATerm table) */
 
-ATerm save_parsetable(int cid, char *name, ATerm table, ATerm tableType)
+ATerm save_parsetable(int cid, char *name, char *fn, ATerm table)
 {
-  char filename[PATH_LEN];
   FILE *fd = NULL;
 
-  if(ATisEqual(tableType, ATmake("eqs"))) {
-    sprintf(filename, "%s%s", name, EQS_TBL_EXT);
-  } else {
-    sprintf(filename, "%s%s", name, TRM_TBL_EXT);
-  }
-
-  if(!(fd = fopen(filename, "w"))) {
-    ATwarning("%s: cannot create\n", filename);
+  if(!(fd = fopen(fn, "w"))) {
+    ATwarning("%s: cannot create\n", fn);
   } else {
     ATwriteToBinaryFile(table,fd);
     fclose(fd);
