@@ -14,7 +14,7 @@ exports
 hiddens
   imports basic/Booleans
 
-  sorts X Set[[X]]
+  sorts Set[[X]]
 
   variables
     "X"[0-9]*  -> X
