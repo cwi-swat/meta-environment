@@ -352,6 +352,9 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
     return idx;
   }
+  if (PT_isSymbolLayout(symbol)) {
+    return idx;
+  }
 
   ATwarning("yieldSymbol: unknown symbol: %t\n", symbol);
   return idx;
