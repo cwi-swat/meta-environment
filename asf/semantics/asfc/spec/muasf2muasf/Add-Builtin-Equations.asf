@@ -6,13 +6,13 @@ equations
      module Modid signature Funcdef* rules Rule*; Rule*2
 
 
-[] abe(Funid { Term*1, built-in(funid("""Char*""")), Term*2 }) =
-     Funid = innermost(remove-dashes(funid("A""S""C""_"Char*)))
+[] abe(Funid { Term*1, type(Type), Term*2, built-in(funid("""Char*""")), Term*3 }) =
+     Funid = innermost(remove-dashes(funid("A""S""C""_"Char*)(parse_sort(Type))))
 
 [] Term+ := make-arg-list(Sigarg+,0)
    ===>
-   abe(Funid ( Sigarg+ ) { Term*1, built-in(funid(""" Char* """)), Term*2}) =
-     Funid ( Term+ ) = innermost (remove-dashes(funid("A""S""C""_"Char*)) ( Term+ ))
+   abe(Funid ( Sigarg+ ) { Term*1, type(Type), Term*2,  built-in(funid(""" Char* """)), Term*3}) =
+     Funid ( Term+ ) = innermost (remove-dashes(funid("A""S""C""_"Char*))(parse_sort(Type), Term+ ))
 
 [] Rule*1 := abe(Funcdef),
    Rule*2 := abe(Funcdef+)

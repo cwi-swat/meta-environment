@@ -18,4 +18,5 @@ hiddens
   variables
     "Char"[0-9]*    -> CHAR
     "Char*"[0-9]*   -> CHAR*
-    "Char+"[0-9]*   -> CHAR+
+    "Char+"[0-9]*   -> CHAR+ 
+    "Type" -> Term
