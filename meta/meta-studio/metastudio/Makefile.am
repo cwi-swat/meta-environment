@@ -3,7 +3,7 @@ include ${top_srcdir}/make_rules
 SUBDIRS = utils data components .
 
 pkgdata_DATA = meta-studio.idef
-EXTRA_DIST = meta-studio.idef
+EXTRA_DIST = ${java_JAVA} meta-studio.idef
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 

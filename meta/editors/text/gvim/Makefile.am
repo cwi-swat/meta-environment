@@ -15,7 +15,7 @@ INCLUDES = \
 EXTRA_DIST = \
 	meta.vim.src
 
-CLEANFILES = $(data_DATA)
+CLEANFILES = meta.vim $(data_DATA)
 
 COMMONLIB = $(top_builddir)/editors/text/common/libTextEditor.a
 

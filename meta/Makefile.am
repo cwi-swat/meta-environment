@@ -4,6 +4,7 @@ include ${top_srcdir}/make_rules
 
 EXTRA_DIST = make_rules $(wildcard *.pkg)
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
 SUBDIRS = \
 	config \

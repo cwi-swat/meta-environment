@@ -2,7 +2,7 @@
 
 include MetaGraphMakeRules.am
 
-EXTRA_DIST = MetaGraphMakeRules.am
+EXTRA_DIST = ${java_JAVA} MetaGraphMakeRules.am
 
 JAVAROOT = ${top_builddir}/meta-studio
 javadir = ${prefix}/classes/metastudio/graph

@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
+ * fix Makefile.am to get "distcheck" working
+
 2004/01/30 <jurgenv@cwi.nl>
  * Compliant with automake-1.6
  * Using libtoolize instead of our own fixes to get libtool working

@@ -7,23 +7,24 @@ CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 JAVAROOT = ${top_builddir}/meta-studio
 javadir = ${prefix}/classes/metastudio
 
-java_JAVA = \
-FeedbackList.java \
-FeedbackListCellRenderer.java \
-HistoryPanel.java \
-MessageList.java \
-ModuleSelectionListener.java \
-ModuleInfoPanel.java \
-StatusBar.java\
-QuestionDialog.java\
-FileDialog.java\
-ToolBar.java\
-MenuBar.java\
-ModulePopupMenu.java\
-ModuleTree.java\
-ModuleBrowser.java\
-ParseTreeBrowser.java\
-ChoiceDialog.java\
-MessageTabs.java\
-MainTabs.java
+EXTRA_DIST = ${java_JAVA}
 
+java_JAVA = \
+	ChoiceDialog.java \
+	FeedbackList.java \
+	FeedbackListCellRenderer.java \
+	FileDialog.java \
+	HistoryPanel.java \
+	MainTabs.java \
+	MenuBar.java \
+	MessageList.java \
+	MessageTabs.java \
+	ModuleBrowser.java \
+	ModuleInfoPanel.java \
+	ModulePopupMenu.java \
+	ModuleSelectionListener.java \
+	ModuleTree.java \
+	ParseTreeBrowser.java \
+	QuestionDialog.java \
+	StatusBar.java \
+	ToolBar.java

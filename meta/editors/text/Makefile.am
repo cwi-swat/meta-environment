@@ -2,7 +2,12 @@
 
 SUBDIRS = common . gvim emacs xemacs
 
-# CFLAGS += -Werror
+#AM_CFLAGS = -Werror
+
+CLEANFILES = \
+	editor-hive.tif.c \
+	editor-hive.tif.h \
+	editor-hive.tifs
 
 IDEF2TIF = $(TOOLBUS)/bin/idef2tif
 TIFSTOC = $(TOOLBUS)/bin/tifstoc
