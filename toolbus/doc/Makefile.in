@@ -75,6 +75,6 @@ dist: $(DISTFILES)
 	done
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/adapters
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src
-	cp $(srcdir)/src/README \
-		$(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src/README
+#	cp $(srcdir)/src/README \
+# 		$(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src/README
 
