@@ -903,7 +903,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 
   // TODO: change algorithm, do it in two parts: first find tree structure, then
-  // build the menu
+  // build the menus
   
   // The next two methods (addPopupMenuItems, addMenuItems) are exactly the
   // same. The reason is that JPopupMenu and JMenu have the same methods,
