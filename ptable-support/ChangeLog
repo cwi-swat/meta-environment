@@ -1,4 +1,6 @@
-
+2002-06-28 (vandenbr@loria.fr)
+ * non-assoc added.
+ * lookahead-reduce added.
 
 2002/04/09 (jurgenv@cwi.nl)
  * Set version of package to 4.0 according to current version of parse tables.
