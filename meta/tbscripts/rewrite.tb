@@ -26,7 +26,8 @@ process Rewrite(Eval: evaluator) is
 let
   NormalForm : term,
   ModName    : str,
-  Term       : term 
+  Term       : term,
+	ErrorList  : list
 in
   ( 
     rec-msg(rewrite(ModName?, Term?)). 
@@ -34,8 +35,14 @@ in
     (
       rec-msg(retrieval-successful(ModName)) .
       snd-eval(Eval, interpret(ModName, Term)) .
-      rec-value(Eval, result(NormalForm?)) .
-      snd-msg(result(NormalForm))
+  		(
+      	rec-value(Eval, result(NormalForm?)) .
+				snd-msg(result(NormalForm))
+				+
+				rec-value(Eval, errors(ErrorList?)).
+				snd-msg(errors(ErrorList))
+			)
+     
     +
       rec-msg(retrieval-aborted(ModName)) .
       snd-msg(result(Term))
