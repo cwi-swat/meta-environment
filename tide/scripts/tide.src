@@ -1,4 +1,4 @@
 #!/bin/sh
-CLASSPATH=__JARDIR__/tide.jar:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH
+CLASSPATH=__JARDIR__/tide.jar:__EXTERNALS__:$CLASSPATH
 export CLASSPATH
 toolbus -I__TBDIR__ $@ -TB_PORT 9500 __TBDIR__/tide.tb

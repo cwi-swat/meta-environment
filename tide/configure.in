@@ -37,8 +37,13 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      Specify location of the ToolBus])
 AC_SUBST(TOOLBUS)
 
+dnl Require ToolBus Java Adapter
+AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
+   [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
+AC_SUBST(TOOLBUS_JAVA_ADAPTER)
+
 dnl Form CLASSPATH for external jars and classes
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_CONFIG_FILES([\
