@@ -29,30 +29,30 @@ void PT_initMEPTApi(void);
 
 /*{{{  term conversion functions */
 
-PT_ParseTree PT_makeParseTreeFromTerm(ATerm t);
-ATerm PT_makeTermFromParseTree(PT_ParseTree arg);
-PT_Tree PT_makeTreeFromTerm(ATerm t);
-ATerm PT_makeTermFromTree(PT_Tree arg);
-PT_Production PT_makeProductionFromTerm(ATerm t);
-ATerm PT_makeTermFromProduction(PT_Production arg);
-PT_Attributes PT_makeAttributesFromTerm(ATerm t);
-ATerm PT_makeTermFromAttributes(PT_Attributes arg);
-PT_Attrs PT_makeAttrsFromTerm(ATerm t);
-ATerm PT_makeTermFromAttrs(PT_Attrs arg);
-PT_Attr PT_makeAttrFromTerm(ATerm t);
-ATerm PT_makeTermFromAttr(PT_Attr arg);
-PT_ATerm PT_makeATermFromTerm(ATerm t);
-ATerm PT_makeTermFromATerm(PT_ATerm arg);
-PT_Args PT_makeArgsFromTerm(ATerm t);
-ATerm PT_makeTermFromArgs(PT_Args arg);
-PT_Symbol PT_makeSymbolFromTerm(ATerm t);
-ATerm PT_makeTermFromSymbol(PT_Symbol arg);
-PT_Symbols PT_makeSymbolsFromTerm(ATerm t);
-ATerm PT_makeTermFromSymbols(PT_Symbols arg);
-PT_CharRange PT_makeCharRangeFromTerm(ATerm t);
-ATerm PT_makeTermFromCharRange(PT_CharRange arg);
-PT_CharRanges PT_makeCharRangesFromTerm(ATerm t);
-ATerm PT_makeTermFromCharRanges(PT_CharRanges arg);
+PT_ParseTree PT_ParseTreeFromTerm(ATerm t);
+ATerm PT_ParseTreeToTerm(PT_ParseTree arg);
+PT_Tree PT_TreeFromTerm(ATerm t);
+ATerm PT_TreeToTerm(PT_Tree arg);
+PT_Production PT_ProductionFromTerm(ATerm t);
+ATerm PT_ProductionToTerm(PT_Production arg);
+PT_Attributes PT_AttributesFromTerm(ATerm t);
+ATerm PT_AttributesToTerm(PT_Attributes arg);
+PT_Attrs PT_AttrsFromTerm(ATerm t);
+ATerm PT_AttrsToTerm(PT_Attrs arg);
+PT_Attr PT_AttrFromTerm(ATerm t);
+ATerm PT_AttrToTerm(PT_Attr arg);
+PT_ATerm PT_ATermFromTerm(ATerm t);
+ATerm PT_ATermToTerm(PT_ATerm arg);
+PT_Args PT_ArgsFromTerm(ATerm t);
+ATerm PT_ArgsToTerm(PT_Args arg);
+PT_Symbol PT_SymbolFromTerm(ATerm t);
+ATerm PT_SymbolToTerm(PT_Symbol arg);
+PT_Symbols PT_SymbolsFromTerm(ATerm t);
+ATerm PT_SymbolsToTerm(PT_Symbols arg);
+PT_CharRange PT_CharRangeFromTerm(ATerm t);
+ATerm PT_CharRangeToTerm(PT_CharRange arg);
+PT_CharRanges PT_CharRangesFromTerm(ATerm t);
+ATerm PT_CharRangesToTerm(PT_CharRanges arg);
 
 /*}}}  */
 /*{{{  constructors */

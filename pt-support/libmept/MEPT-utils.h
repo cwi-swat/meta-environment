@@ -59,6 +59,14 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
 PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
 PT_ParseTree PT_addParseTreePosInfoToDepth(char *pathInfo, PT_ParseTree tree,
                                            int maxDepth);
+PT_Tree PT_addTreePosInfoToDepth(char *pathInfo, PT_Tree tree, int maxDepth,
+				 int start_line, int start_col);
+PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
+			  int from_line, int from_col, int to_line, int to_col);
+void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols);
+ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
+		       int *end_line, int *end_col);
+
 
 ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);

@@ -169,10 +169,10 @@ static int lengthOfAttr(PT_Attr attr)
 
 
   if (PT_isAttrAterm(attr)) {
-    attribute = PT_makeTermFromATerm(PT_getAttrTerm(attr));
+    attribute = PT_ATermToTerm(PT_getAttrTerm(attr));
   }
   else {
-    attribute = PT_makeTermFromAttr(attr);
+    attribute = PT_AttrToTerm(attr);
   }
 
   return strlen(ATwriteToString(attribute));
@@ -511,10 +511,10 @@ yieldAttr(PT_Attr attr, int idx, char *buf, int bufSize)
   ATerm attribute;
 
   if (PT_isAttrAterm(attr)) {
-    attribute = PT_makeTermFromATerm(PT_getAttrTerm(attr));
+    attribute = PT_ATermToTerm(PT_getAttrTerm(attr));
   }
   else {
-    attribute = PT_makeTermFromAttr(attr);
+    attribute = PT_AttrToTerm(attr);
   }
 
   str = ATwriteToString(attribute);

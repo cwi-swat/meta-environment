@@ -293,9 +293,8 @@ PT_Symbol PT_makeOptLayoutSymbol()
 
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
 {
-  return PT_makeArgsFromTerm((ATerm)ATconcat(
-                                      (ATermList)PT_makeTermFromArgs(args1),
-                                      (ATermList)PT_makeTermFromArgs(args2)));
+  return PT_ArgsFromTerm((ATerm)ATconcat((ATermList)PT_ArgsToTerm(args1),
+					 (ATermList)PT_ArgsToTerm(args2)));
 }
 
 /*}}}  */
@@ -303,9 +302,9 @@ PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
 
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
 {
-  return PT_makeSymbolsFromTerm(
-           (ATerm)ATconcat((ATermList)PT_makeTermFromSymbols(symbols1),
-                           (ATermList)PT_makeTermFromSymbols(symbols2)));
+  return PT_SymbolsFromTerm(
+           (ATerm)ATconcat((ATermList)PT_SymbolsToTerm(symbols1),
+                           (ATermList)PT_SymbolsToTerm(symbols2)));
 }
 
 /*}}}  */
@@ -313,9 +312,8 @@ PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
 
 PT_Args PT_sliceArgs(PT_Args args, int start, int end)
 {
-  return PT_makeArgsFromTerm(
-           (ATerm)ATgetSlice((ATermList)PT_makeTermFromArgs(args),
-                              start, end));
+  return PT_ArgsFromTerm((ATerm)ATgetSlice((ATermList)PT_ArgsToTerm(args),
+					   start, end));
 }
 
 /*}}}  */
@@ -323,9 +321,9 @@ PT_Args PT_sliceArgs(PT_Args args, int start, int end)
 
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
 {
-  return PT_makeArgsFromTerm((ATerm)ATappend(
-                                      (ATermList)PT_makeTermFromArgs(args),
-                                      (ATerm)PT_makeTermFromTree(arg)));
+  return PT_ArgsFromTerm((ATerm)ATappend(
+                                      (ATermList)PT_ArgsToTerm(args),
+                                      (ATerm)PT_TreeToTerm(arg)));
 }
 
 /*}}}  */
@@ -333,9 +331,9 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
 
 PT_Args PT_reverseArgs(PT_Args args)
 {
-  return PT_makeArgsFromTerm(
+  return PT_ArgsFromTerm(
            (ATerm)ATreverse(
-                    (ATermList)PT_makeTermFromArgs(args)));
+                    (ATermList)PT_ArgsToTerm(args)));
 }
 
 /*}}}  */
@@ -353,13 +351,13 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
       PT_hasArgsHead(args);
       args = PT_getArgsTail(args)) {
     store = ATinsert(store,
-                     PT_makeTermFromTree(
+                     PT_TreeToTerm(
                      visitor(PT_getArgsHead(args),data)));
   }
 
   /* create new list */
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
-    PT_Tree newTree = PT_makeTreeFromTerm(ATgetFirst(store));
+    PT_Tree newTree = PT_TreeFromTerm(ATgetFirst(store));
     newArgs = PT_makeArgsList(newTree,newArgs);
   }
 
@@ -371,9 +369,9 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
 
 PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
 {
-  return PT_makeSymbolsFromTerm(
-           (ATerm)ATappend((ATermList)PT_makeTermFromSymbols(symbols),
-                           PT_makeTermFromSymbol(symbol)));
+  return PT_SymbolsFromTerm(
+           (ATerm)ATappend((ATermList)PT_SymbolsToTerm(symbols),
+                           PT_SymbolToTerm(symbol)));
 
 }   
 /*}}}  */   
@@ -389,7 +387,7 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
   store = ATempty;
   while (PT_hasSymbolsHead(symbols)) {
     store = ATinsert(store,
-                     PT_makeTermFromSymbol(
+                     PT_SymbolToTerm(
                      visitor(PT_getSymbolsHead(symbols), data)));
     if (PT_hasSymbolsTail(symbols)) {
       symbols = PT_getSymbolsTail(symbols);
@@ -401,7 +399,7 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
 
   /* create new list */
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
-    PT_Symbol newSymbol = PT_makeSymbolFromTerm(ATgetFirst(store));
+    PT_Symbol newSymbol = PT_SymbolFromTerm(ATgetFirst(store));
     newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
   }
 
@@ -413,7 +411,7 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
 
 ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key)
 {
-  ATerm atTree = PT_makeTermFromTree(tree);
+  ATerm atTree = PT_TreeToTerm(tree);
 
   return ATgetAnnotation(atTree, key);
 }
@@ -422,11 +420,11 @@ ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key)
 
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value)
 {
-  ATerm t = PT_makeTermFromTree(tree);
+  ATerm t = PT_TreeToTerm(tree);
 
   t = ATsetAnnotation(t, key, value);
 
-  return PT_makeTreeFromTerm(t);
+  return PT_TreeFromTerm(t);
 }
 
 /*}}}  */
@@ -434,7 +432,7 @@ PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value)
 
 ATerm PT_getParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key)
 {
-  ATerm atParseTree = PT_makeTermFromParseTree(parse_tree);
+  ATerm atParseTree = PT_ParseTreeToTerm(parse_tree);
 
   return ATgetAnnotation(atParseTree, key);
 }
@@ -444,11 +442,11 @@ ATerm PT_getParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key)
 
 PT_ParseTree PT_setParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key, ATerm value)
 {
-  ATerm t = PT_makeTermFromParseTree(parse_tree);
+  ATerm t = PT_ParseTreeToTerm(parse_tree);
 
   t = ATsetAnnotation(t, key, value);
 
-  return PT_makeParseTreeFromTerm(t);
+  return PT_ParseTreeFromTerm(t);
 }
 
 /*}}}  */
@@ -456,7 +454,7 @@ PT_ParseTree PT_setParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key, ATerm
 
 int PT_getArgsLength(PT_Args args)
 {
-   return ATgetLength((ATermList)PT_makeTermFromArgs(args));
+   return ATgetLength((ATermList)PT_ArgsToTerm(args));
 }
 
 /*}}}  */ 
@@ -508,7 +506,7 @@ static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length)
   }
   else {
     ATabort("annotateTreeWithLength: unknown tree type: %t\n", 
-            PT_makeTermFromTree(tree));
+            PT_TreeToTerm(tree));
   }
   return tree;
 }
@@ -591,9 +589,9 @@ PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length)
 
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr)
 {
-  ATermList arg_list = (ATermList)PT_makeTermFromArgs(args);
+  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
   ATerm arg = ATelementAt(arg_list, arg_nr);
-  return PT_makeTreeFromTerm(arg);
+  return PT_TreeFromTerm(arg);
 }
 
 /*}}}  */
@@ -601,9 +599,9 @@ PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr)
 
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
 {
-  ATermList arg_list = (ATermList)PT_makeTermFromArgs(args);
-  arg_list = ATreplace(arg_list, PT_makeTermFromTree(arg), arg_nr);
-  return PT_makeArgsFromTerm((ATerm)arg_list);
+  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
+  arg_list = ATreplace(arg_list, PT_TreeToTerm(arg), arg_nr);
+  return PT_ArgsFromTerm((ATerm)arg_list);
 }
 
 PT_Tree PT_makeTreeLayoutEmpty()
@@ -654,13 +652,13 @@ ATbool PT_isTreeLexical(PT_Tree tree)
 
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
-  ATerm atArg = PT_makeTermFromTree(arg);
+  ATerm atArg = PT_TreeToTerm(arg);
 
   if (AT_getAnnotations(atArg) != NULL) {
     atArg = AT_removeAnnotations(atArg);
   }
 
-  return PT_makeTreeFromTerm(atArg);
+  return PT_TreeFromTerm(atArg);
 }
 
 /*}}}  */
@@ -738,7 +736,7 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
   store = ATempty;
   while (PT_hasAttrsHead(attrs)) {
     store = ATinsert(store,
-                     PT_makeTermFromAttr(
+                     PT_AttrToTerm(
                      visitor(PT_getAttrsHead(attrs), data)));
     if (PT_hasAttrsTail(attrs)) {
       attrs = PT_getAttrsTail(attrs);
@@ -753,12 +751,12 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
     return (PT_Attrs) NULL;
   }
 
-  newAttrs = PT_makeAttrsSingle(PT_makeAttrFromTerm(ATgetFirst(store)));
+  newAttrs = PT_makeAttrsSingle(PT_AttrFromTerm(ATgetFirst(store)));
   store = ATgetNext(store);
 
   /* create new list */
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
-    PT_Attr newAttr = PT_makeAttrFromTerm(ATgetFirst(store));
+    PT_Attr newAttr = PT_AttrFromTerm(ATgetFirst(store));
     newAttrs = PT_makeAttrsMany(newAttr,newAttrs);
   }
 
@@ -876,18 +874,18 @@ ATbool PT_isTreeFlatLexical(PT_Tree tree)
 
 PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
 {
-  ATerm ATparseTree = PT_makeTermFromParseTree(parseTree);
+  ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
   
-  return PT_makeTreeFromTerm(ATgetArgument(ATparseTree,0));
+  return PT_TreeFromTerm(ATgetArgument(ATparseTree,0));
 }
 
 PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
 {
-  ATerm ATparseTree = PT_makeTermFromParseTree(parseTree);
+  ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
   
-  return PT_makeParseTreeFromTerm(
+  return PT_ParseTreeFromTerm(
            (ATerm) ATsetArgument((ATermAppl) ATparseTree,
-              PT_makeTermFromTree(top),0));
+              PT_TreeToTerm(top),0));
 }
 
 ATbool PT_isTreeBracket(PT_Tree tree)
