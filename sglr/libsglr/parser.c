@@ -304,6 +304,8 @@ void SG_PostParse(void)
     fprintf(SGlog(), "Number of reductions: %ld\n", (long) num_reductions);
     fprintf(SGlog(), "Number of reductions/sec: %.0f\n",
             (double) num_reductions/ptm);
+    fprintf(SGlog(), "Number of reductions/token: %.0f\n",
+            (double) num_reductions/sg_tokens_read);
     fprintf(SGlog(), "Number of ambiguities: %d\n",
             SG_MaxNrAmb(SG_NR_ASK));
     fprintf(SGlog(), "Number of calls to Amb: %d\n",
