@@ -56,7 +56,7 @@ lexical syntax
   "unfold"		-> Data {reject}
   "unfolding"		-> Data {reject}
   "throw"		-> Data {reject}
-  "catch"		-> Data {reject}
+%%  "catch"		-> Data {reject}
   "err"			-> Data {reject}
   "and-catch"		-> Data {reject}
   "fail"		-> Data {reject}
@@ -156,42 +156,6 @@ lexical syntax
   "apply"		-> Type {reject}
 
   "n"			-> AtomicType {reject}
-
-  "copy"		-> UQLiteral {reject}
-  "skip"		-> UQLiteral {reject}
-  "then"		-> UQLiteral {reject}
-  "and-then"		-> UQLiteral {reject}
-  "and"			-> UQLiteral {reject}
-  "indivisibly"		-> UQLiteral {reject}
-  "unfold"		-> UQLiteral {reject}
-  "unfolding"		-> UQLiteral {reject}
-  "throw"		-> UQLiteral {reject}
-  "catch"		-> UQLiteral {reject}
-  "err"			-> UQLiteral {reject}
-  "and-catch"		-> UQLiteral {reject}
-  "fail"		-> UQLiteral {reject}
-  "maybe"		-> UQLiteral {reject}
-  "else"		-> UQLiteral {reject}
-  "choose-nat"		-> UQLiteral {reject}
-
-  "copy-bindings"	-> UQLiteral {reject}
-  "scope"		-> UQLiteral {reject}
-
-
-  "create"		-> UQLiteral {reject}
-  "inspect"		-> UQLiteral {reject}
-  "update"		-> UQLiteral {reject}
-
-  "enact"		-> UQLiteral {reject}
-  "close"		-> UQLiteral {reject}
-  "recursively"		-> UQLiteral {reject}
-
-  "give"		-> UQLiteral {reject}
-  "check"		-> UQLiteral {reject}
-  "bind"		-> UQLiteral {reject}
-  "furthermore"		-> UQLiteral {reject}
-  "before"		-> UQLiteral {reject}
-  "apply"		-> UQLiteral {reject}
 
   "the"			-> UQLiteral {reject}
   

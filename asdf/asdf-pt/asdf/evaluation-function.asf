@@ -1,11 +1,25 @@
 equations
 
+[get-eval-env-1]
+
+   get-eval-env(<$STS, $DCS, $DOS>) = 
+            <new-table,
+	     0,
+	     fail,
+	     0,
+	     $STS,
+	     $DCS,
+	     $DOS>
+
+[get-constants-1] get-constants(uqliteral($CH+) : $SO, $DCS) = 
+		  <data($CH+), sort-to-type($SO)>:$DCS
+
 [get-eval-info-1]
 
     get-eval-info($ASM) = 
 	   <get-subtypes($ASM, []), 
-	    get-eval-dataop($ASM, []),
-	    get-data-constants($ASM, [])>
+	    get-constants($ASM, []),
+	    get-eval-dataop($ASM, [])>
 
 [get-eval-use-1]
     get-eval-use($LT : $ASA, $LS*) = use-to-type($ASA)
@@ -39,10 +53,10 @@ equations
    get-eval-dataop(sort-to-type($SO), $ARR, $DOS)
 
 [get-eval-dataop-2]
-   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(prefixdataop($CH+),give the get-eval-use($LS*))>], $DOS1)
+   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(type($CH+),give the get-eval-use($LS*))>], $DOS1)
    =======================================================================
    get-eval-dataop($ATY, uqliteral($CH+)($LS*), $DOS1) = 
-      <prefixdataop($CH+),datacon(prefixdataop($CH+),get-eval-use($LS*))>:$DOS2
+      <prefixdataop($CH+),datacon(type($CH+),get-eval-use($LS*))>:$DOS2
 
 [get-eval-dataop-3]
    get-eval-dataop($ATY, $ARR1 | $ARR2, $DOS) = 
@@ -51,10 +65,10 @@ equations
 [default-get-eval-dataop-1]
    get-eval-dataop($ATY, $ARR, $DOS) = $DOS
 
-[join-sigs-1] 
+[join-eval-info-1] 
 
-   join-eval-info(<$STS1,$DOS1,$DCS1>, 
-		  <$STS2,$DOS2,$DCS2>) = 
+   join-eval-info(<$STS1,$DCS1,$DOS1>, 
+		  <$STS2,$DCS2,$DOS2>) = 
 			<concat-unique($STS1, $STS2),
-			 concat-unique($DOS1, $DOS2),
-			 concat-unique($DCS1, $DCS2)>
+			 concat-unique($DCS1, $DCS2),
+			 concat-unique($DOS1, $DOS2)>

@@ -35,6 +35,7 @@ in
   . snd-msg(ts-add-table("asdf-pt-tree","term"))
   . snd-msg(ts-add-table("asdf-parse-table","term"))
   . snd-msg(ts-add-table("asdf-initialmodules-table","term"))
+  . snd-msg(ts-add-table("asdf-eval-info","term"))
 
   /* Create ASDF processes */
   . create(Open-ActionSdf-Language, Pid?)
@@ -86,7 +87,7 @@ in
  
 #ifdef USEINITTERMSTORE
   printf("initial termstore... ") .
-  InitializeTermStore("/users/fagidiot/asenv/examples/initial.termstore") .
+  InitializeTermStore("__ASDF_PT__/asdf/initial.termstore") .
 #endif
   printf("done. \n").
 
@@ -138,9 +139,10 @@ in
     Status := success .
     (
       if not-equal(Modules, []) then
-         Module := first(Modules) .
-         Modules := next(Modules) .
-         GenerateASFSDF(Module, Status?)
+        Module := first(Modules) .
+        Modules := next(Modules) .
+	snd-note(ui-status(statf(Id, "Generating asf+sdf for %s",[Module]))) .
+        GenerateASFSDF(Module, Status?)
       fi
     )*
     if or(equal(Modules, []), not-equal(Status, success))  then
@@ -152,6 +154,7 @@ in
       ErrorMsg := first(args(Status)) .
       snd-msg(asfsdf-not-generated(ErrorMsg)) 
     fi
+    . snd-note(ui-status(endstat(Id)))
   +
    /* Generates SDF for parsing ASDF module */
    rec-msg(generate-asdf-pt-for-modules(Modules?)) .
@@ -223,28 +226,49 @@ endlet
 
 
 
+process IsTextChanged(SyntaxText : str, Name : str, Changed : term?) is
+let
+  LocalText : str
+in
+  snd-msg(ts-get-str-value("asdf-text", Name))
+  .
+  (
+    rec-msg(ts-value(LocalText?))
+  +
+    rec-msg(ts-no-value)
+    . LocalText := ""
+  )
+  .
+  if equal(SyntaxText, LocalText) then
+    Changed := false
+  else
+    Changed := true
+  fi
+endlet
+
 /* Implements ASDF specific calls to the module database 
    (see meta/tbscripts/module-db.tb) */
 process ASDF-ModuleDB is
 let
-  Path      : str,
-  Table     : term,
-  ModuleId  : str,
-  Syntax    : term,
-  OldSyntaxTree : term,
-  SyntaxTree: term,
-  SyntaxText: str,
-  LocalText : str,
-  EqsTree   : term,
-  EqsText   : str,
-  Name      : str,
-  OldName   : str,
-  NewName   : str,
-  Modules   : list,
+  Changed   : term,
   DependingModules : list,
-  ModuleNames : list,
+  EqsText   : str,
+  EqsTree   : term,
   FileName : str,
-  Pairs    : list
+  Name      : str,
+  NewName   : str,
+  ModuleId  : str,
+  ModuleNames : list,
+  Modules   : list,
+  OldName   : str,
+  OldSyntaxTree : term,
+  Pairs    : list,
+  Path      : str,
+  Syntax    : term,
+  SyntaxText: str,
+  SyntaxTree: term,
+  Table     : term
+
 in
 (
     /* Update relevant tables in module database when adding a new
@@ -257,7 +281,7 @@ in
       rec-msg(asdf-module-id(ModuleId?)) .
       snd-msg(sm-get-module-path(Path, ModuleId)) .
       rec-msg(sm-module-path(Path?)) .
-      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+      snd-msg(ts-put-str-value("module-path", ModuleId, Path)) .
       snd-msg(ts-put-term-value("asdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(asdf-get-imported-module-names(SyntaxTree)) .
       rec-msg(asdf-imported-module-names(Modules?)) .
@@ -265,14 +289,14 @@ in
       SyntaxTree := no-tree 
     else 
       ModuleId := Name .
-      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+      snd-msg(ts-put-str-value("module-path", ModuleId, Path)) .
       Modules := []
     fi .
     snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-    snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+    snd-msg(ts-put-str-value("module-path", ModuleId, Path)) .
     snd-msg(ts-put-str-value("asdf-text", ModuleId, SyntaxText)) .
     SyntaxText := "" .
-    snd-msg(ts-filter-keys("active-modules", Modules)) .
+    snd-msg(ts-filter-keys("module-path", Modules)) .
     rec-msg(ts-keys(Modules?)) .
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
   +
@@ -289,7 +313,7 @@ in
       SyntaxTree := no-tree .
       rec-msg(asdf-imported-module-names(Modules?)) .
       snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-      snd-msg(ts-filter-keys("active-modules", Modules)) .
+      snd-msg(ts-filter-keys("module-path", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       snd-msg(updating-succeeded(Modules))
     else
@@ -297,18 +321,19 @@ in
     fi
   +
     /* Update text of changed ASDF module.
-       Called from ParseActionSDF */
+       Called from ParseASDF */
     rec-msg(update-module-text-in-db(Name?, SyntaxText?, SyntaxTree?, asdf)).
     if equal(SyntaxTree, no-tree) then
       ModuleId := Name
     else
-      snd-msg(asdf-get-module-id(SyntaxTree)) .
-      rec-msg(asdf-module-id(ModuleId?))
-    fi .    
+      snd-msg(asdf-get-module-id(SyntaxTree))
+      . rec-msg(asdf-module-id(ModuleId?))
+    fi
+    .
     if equal(Name, ModuleId) then
-      snd-msg(ts-get-str-value("asdf-text", Name)) .
-      rec-msg(ts-value(LocalText?)) .
-      if equal(SyntaxText, LocalText) then
+      IsTextChanged(SyntaxText, Name, Changed?)
+      .
+      if equal(Changed, false) then
         SyntaxText := "" .
         snd-msg(no-updating-needed)
       else
@@ -327,15 +352,15 @@ in
   +
     /* Remove generated values for ASDF module from 
        database when module text changes */
-    rec-msg(invalidate-asdf-in-db(Name)).
+    rec-msg(invalidate-asdf-in-db(Name?)).
+    snd-msg(ts-remove-value("asdf-text", Name)) .
     snd-msg(ts-remove-value("asdf-tree", Name)) .
-    snd-msg(ts-remove-value("asdf-parse-table", Name)) .
     snd-msg(ts-remove-value("asdf-pt-text", Name)) .
-    snd-msg(ts-remove-value("asdf-pt-tree", Name)) 
+    snd-msg(ts-remove-value("asdf-pt-tree", Name)) .
+    snd-msg(ts-remove-value("asdf-parse-table", Name)) .
+    snd-msg(ts-remove-value("asdf-eval-info", Name))
   + 
     /* Called from SecondParse => GetParseTable */
-    /* PROBLEM: Will apperantly always return no-table since 
-       table is never updated only cleared */
     rec-msg(get-table-from-db(Name?, asdf)) .
     snd-msg(ts-get-term-value("asdf-parse-table", Name)).
     (
@@ -347,9 +372,9 @@ in
     )
   +
     /* Called from GetParseTable */
-    rec-msg(add-parse-table-to-db(Name?, asdf, Table?)) .
-    /* Do nothing because this is second parse of ActionSdf module */
-    snd-msg(parse-table-added)
+    rec-msg(add-parse-table-to-db(Name?, asdf, Table?))
+    . snd-msg(ts-put-term-value("asdf-parse-table", Name, Table))
+    . snd-msg(parse-table-added)
   +
     /* Clear ASDF tables. Called when closing all modules */
     rec-msg(clear-module-db-hook) .
@@ -358,6 +383,7 @@ in
     snd-msg(ts-clear-table("asdf-pt-text")) .
     snd-msg(ts-clear-table("asdf-pt-tree")) .
     snd-msg(ts-clear-table("asdf-parse-table")) .
+    snd-msg(ts-clear-table("asdf-eval-info")) .
     snd-msg(module-db-hook-done) 
 ) * delta
 endlet
@@ -404,7 +430,7 @@ let
   Path : str,
   FileName : str
 in
-  snd-msg(ts-get-str-value("module-paths", Module)) .
+  snd-msg(ts-get-str-value("module-path", Module)) .
   rec-msg(ts-value(Path?)) .
   snd-msg(io-get-filename(Path, Module, ".asdf")) .
   rec-msg(io-filename(FileName?)) .
@@ -576,10 +602,10 @@ endlet
    parse table. */
 process GenerateASDF-PT(Module : str, Result : term?) is
 let
-   ModuleText : str,
-   GenModuleText : str,
-   GenModuleTree : term,
-   ModuleTree : term
+  GenModuleText : str,
+  GenModuleTree : term,
+  ModuleText : str,
+  ModuleTree : term
 in
   snd-msg(ts-get-str-value("asdf-pt-text", Module)) .
   (  /* ASDF parsetable already generated, don't regenerate */
@@ -588,6 +614,8 @@ in
    +
      /* ASDF parse table doesn't exist */
      rec-msg(ts-no-value) .
+
+     /*  GetASDFTree */
      snd-msg(ts-get-term-value("asdf-tree", Module)) .
      (
        /* Parse tree of module exists, now call external tool
@@ -604,7 +632,7 @@ in
        Result := success
      +
        rec-msg(ts-no-value) .
-       Result := quote(failed("No ActionSDF tree"))
+       Result := quote(errorf("No ASDF-PT tree"))
      )
   )
 endlet
@@ -764,7 +792,7 @@ in
     rec-msg(get-parse-equation-checking-hook) .
     snd-msg(get-parse-equation-checking-hook-result(false))
   +
-    /* Send from ParseEquation in process.tb to obtain the text of asf
+    /* Send from GetAsfModule in process.tb to obtain the text of asf
     equations before parsing */
     rec-msg(get-asf-equations-text-hook(ModuleId?)) .
     snd-msg(ts-get-str-value("asf-text", ModuleId)) .
@@ -819,13 +847,13 @@ in
   +
     /* Generate ASDF parse table and return table name where parse
        table can be found */
-     rec-msg(pre-get-all-syntax-hook(ModuleNames?, asdf)) .
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, asdf)) .
     snd-msg(generate-asdf-pt-for-modules(ModuleNames)) .
     (
-       rec-msg(asdf-pt-generated) .
-       snd-msg(pre-get-all-syntax-hook-result(tablename("asdf-pt-tree")))
+      rec-msg(asdf-pt-generated) .
+      snd-msg(pre-get-all-syntax-hook-result(tablename("asdf-pt-tree")))
     +
-       rec-msg(asdf-pt-not-generated(ErrorMsg?)) .
+      rec-msg(asdf-pt-not-generated(ErrorMsg?)) .
        snd-msg(pre-get-all-syntax-hook-result(failure(ErrorMsg)))       
     )
   +
@@ -1062,7 +1090,9 @@ endlet
 /* Evaluates ASDF specific button actions */
 process ASDFButtons is
 let
+  Registered : bool,
   ConstraintMod : str,
+  Id : int,
   InStr : str,
   ModuleName : str,
   EditorId : term,
@@ -1074,9 +1104,12 @@ let
   Pid: int,
   RTree : term,
   Stack : list,
-  STree : term
+  STree : term,
+  Table : term,
+  Nonterminal : term
 
 in
+  Id := process-id .
 (
   /* (Not used) */
   rec-msg(revert-asdf-module, Stack?, EditorId?) .
@@ -1142,6 +1175,7 @@ in
   /* Term editor, parse term. */
   rec-msg(asdf-parse-action, Stack?, EditorId?) .
   StackPopString(Stack,Stack?,ModuleName?) .
+  snd-note(ui-status(statf(Id , "Parsing term over %s", [ModuleName]))) .
   RecursiveGenASFSDF(ModuleName) .
   (
     rec-msg(asfsdf-generated) .
@@ -1157,37 +1191,64 @@ in
   StackPopString(Stack, Stack?, ModuleName?) .
   StackPopTerm(Stack, Stack?, STree?) .
   ReduceASDFTerm(STree, ModuleName, RTree?)
-    .
-    if not-equal(RTree, error-tree) then
-      snd-msg(promote-posinfo-to-origin(RTree))
-      . rec-msg(promoted-posinfo-to-origin(RTree?))
-      . AnnotateTree(RTree, "reduct.out", RTree?)
-      . snd-msg(put-term-tree("reduct.out", RTree))
-      . StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
+  .
+  if not-equal(RTree, error-tree) then
+    snd-msg(promote-posinfo-to-origin(RTree))
+    . rec-msg(promoted-posinfo-to-origin(RTree?))
+    . AnnotateTree(RTree, "reduct.out", RTree?)
+    . snd-msg(put-term-tree("reduct.out", RTree))
+    . StackPushTerm(Stack, Stack?, RTree)
+    . ReturnSuccess(EditorId, Stack)
+  else
+    ReturnAbort(EditorId, Stack)
+  fi
++
+  rec-msg(asdf-reduce-and-evaluate, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . StackPopTerm(Stack, Stack?, STree?)
+  . printf("Evaluating... %t\n", ModuleName)
+  . ReduceASDFTerm(STree, ModuleName, RTree?)
+  .
+  if not-equal(RTree, error-tree) then
+    snd-msg(promote-posinfo-to-origin(RTree))
+    . rec-msg(promoted-posinfo-to-origin(RTree?))
+    . AnnotateTree(RTree, "my.module", RTree?)
+    . snd-msg(put-term-tree("my.module", RTree))
+
+    . snd-msg(unparse(RTree))
+    . rec-msg(unparsed-text(InStr?))
+    . snd-msg(io-write-text-list("my.module", [InStr]))
+    . rec-msg(io-file-written)
+
+    . snd-msg(io-write-term-in-baf("ny.module", RTree))
+    . rec-msg(io-file-written)
+
+    . StackPushTerm(Stack, Stack?, RTree)
+    . ReturnSuccess(EditorId, Stack)
+  else
+    ReturnAbort(EditorId, Stack)
+  fi
 +
   /* Term editor, evaluate term. */
   rec-msg(asdf-evaluate, Stack?, EditorId?)
-  . StackPopString(Stack, Stack?, ModuleName?) .
-  StackPopTerm(Stack, Stack?, STree?) .
-  printf("Evaluating...%t\n", ModuleName) .
-  EvalutateASDFTerm(STree, ModuleName, RTree?).
-  RTree := error-tree
-/* ReduceASDFTerm(STree, ModuleName, RTree?) */
+  . printf("Evaluating... %t\n", ModuleName)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . IsStructureEditorRegistered(EditorId, Registered?)
+  .
+  if equal(Registered, true) then
+    GetParsetree(EditorId, STree?)
+    /* RTree is actually not a tree */
+    . EvalutateASDFTerm(STree, ModuleName, RTree?)
     .
     if not-equal(RTree, error-tree) then
-      snd-msg(promote-posinfo-to-origin(RTree))
-      . rec-msg(promoted-posinfo-to-origin(RTree?))
-      . AnnotateTree(RTree, "eval.out", RTree?)
-      . snd-msg(put-term-tree("eval.out", RTree))
-      . StackPushTerm(Stack, Stack?, RTree)
+      StackPushTerm(Stack, Stack?, RTree)
       . ReturnSuccess(EditorId, Stack)
-    else
+    else 
       ReturnAbort(EditorId, Stack)
     fi
+  else
+    ReturnAbort(EditorId, Stack)
+  fi
 +
   /* , type check of ASDF */
   rec-msg(type-check-asdf, Stack?, EditorId?) .
@@ -1202,6 +1263,7 @@ printf("Stack = %t\n", Stack) .
 endlet
 
 
+/* Parse the asdf */
 process ParseASDF(Sid: term, ParseSucceeded: bool?) is
 let
   DependingModules: list,
@@ -1226,7 +1288,7 @@ in
   . snd-msg(get-module-id-hook(Type))
   . rec-msg(get-module-id-hook-result(ModuleId?))
 
-     /* The type parameter 'asdf1' is important */
+  /* The type parameter 'asdf1' is important */
   . GetParseTable(ModuleId, asdf1, true, Table?)
   . snd-msg(syntax-top-sort-hook(asdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
@@ -1246,10 +1308,9 @@ in
     .
     (
       rec-msg(no-updating-needed)
-      . SecondParse(Sid, Modulename,ParseSucceeded?)
       . snd-msg(te-clear-focus(Sid))
-      . snd-msg(te-display-message(Sid, "Parse successful"))
-    +
+      . SecondParse(Sid, Modulename, ParseSucceeded?)
+      +
       rec-msg(updating-succeeded(DependingModules?))
       . snd-msg(update-module-in-db(Modulename, Tree, Type))
       .
@@ -1259,24 +1320,25 @@ in
         . snd-msg(te-clear-focus(Sid))
 	/* First parse went okay, and now we do the second... */
  	. SecondParse(Sid, Modulename, ParseSucceeded?)
-        . snd-msg(te-display-message(Sid, "Parse successful"))
       +
         rec-msg(error-opening(Modulename, name-inconsistent))
-        . snd-msg(invalidate-sdf-in-db(Modulename))
-        . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
-                                    [Modulename])))
+        . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [Modulename])))
       )
     +
       rec-msg(error-opening(Modulename, name-inconsistent))
-      . snd-msg(invalidate-sdf-in-db(Modulename))
-      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
-                                  [Modulename])))
+      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [Modulename])))
     )
   +
     rec-msg(parse-editor-failed(Sid))
     . ParseSucceeded := false
-    . snd-msg(invalidate-sdf-in-db(Modulename))
   )
+  .
+  if equal(ParseSucceeded, true) then
+    snd-msg(te-display-message(Sid, "Second parse successful"))
+  else
+    snd-msg(invalidate-sdf-in-db(Modulename))
+    . snd-msg(invalidate-asdf-in-db(Modulename))
+  fi
   . snd-note(ui-status(endstat(Id)))
 endlet
 
@@ -1295,22 +1357,28 @@ in
   . ParseSucceeded := true
      /* The type parameter 'asdf' is important */
   . GetParseTable(ModuleName, asdf, true, Table?)
-  . snd-msg(other-top-sort-hook(asdf))
-  . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
-  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
-  (
-    rec-msg(parse-editor-ok(Sid))
-    . snd-msg(se-get-parse-tree(Sid))
-    . rec-msg(se-parse-tree(Sid, Tree?))
-    . snd-note(te-clear-focus(Sid))
-    . snd-msg(te-display-message(Sid, "Second parse successful"))
-  +
-    rec-msg(parse-editor-failed(Sid))
-    . ParseSucceeded := false
-    . snd-msg(invalidate-sdf-in-db(ModuleName))
-    . snd-msg(invalidate-asdf-in-db(ModuleName))
-  )
+  if not-equal(Table, no-table) then
+    snd-msg(other-top-sort-hook(asdf))
+    . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+    . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+    .
+    (
+      rec-msg(parse-editor-ok(Sid))
+      . snd-msg(se-get-parse-tree(Sid))
+      . rec-msg(se-parse-tree(Sid, Tree?))
+      . snd-note(te-clear-focus(Sid))
+      . snd-msg(te-display-message(Sid, "Second parse successful"))
+    +
+      rec-msg(parse-editor-failed(Sid))
+      . ParseSucceeded := false
+      . snd-msg(invalidate-sdf-in-db(ModuleName))
+      . snd-msg(invalidate-asdf-in-db(ModuleName))
+    )
+  else
+    ParseSucceeded := false
+    . snd-note(ui-status(errorf("Could not generate parse table for %s", [ModuleName])))
+  fi
 endlet
 
 process ReduceASDFTerm(Tree: term, Modulename: str, NormalForm: term?) is
@@ -1430,36 +1498,84 @@ printf("ErrorTree = %t\n", ErrorTree).
    snd-note(show-feedback-summary(ErrorTree))
 endlet
 
-process GetEvalInfo(InfoModules: list, EvalInfo: term?) is
+
+process JoinEvalInfo(EvalInfo1 : term, EvalInfo2 : term?) is
+  /* and concat it with already collected info */
+  snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo1, EvalInfo2]))
+  . rec-msg(normalform("Asdfsupport", EvalInfo2?)) 
+
+
+process GetEvalInfo(ModuleName : str, EvalInfo : term?) is
 let
-  ModuleTree: term,
-  ModuleTrees: list,
+  Id : int,
+  ModuleTree: term
+in
+  Id := process-id
+  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(statf(Id, "Collecting information for evaluation from %s",[ModuleName])))
+  . snd-msg(ts-get-term-value("asdf-tree", ModuleName))
+  .
+  (
+    rec-msg(ts-value(ModuleTree?))
+    /* Collect info from one module */
+    . snd-msg(apply-rewrite("Asdfsupport", "get-eval-info", "EvalInfo", [ModuleTree]))
+    . rec-msg(normalform("Asdfsupport", EvalInfo?)) 
+  + 
+    rec-msg(ts-no-value)
+    . ModuleTree := help-the-garbage-collector
+    . EvalInfo := error-info
+  )
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process GetEvalInfos(InfoModuleNames: list, EvalInfo: term?) is
+let
+  Id: int,
+  ModuleName: str,
+  ModuleNames: list,
   TempInfo: term
 in
-   ModuleTree := first(InfoModules)
-   . ModuleTrees := next(InfoModules)
-   /* Collect info from one module */
-   . snd-msg(apply-rewrite("Asdfsupport", "get-eval-info", "EvalInfo", [ModuleTree]))
-   . rec-msg(normalform("Asdfsupport", EvalInfo?))
-   .
-   (
-     if not-equal(ModuleTrees, []) then
-       ModuleTree := first(ModuleTrees)
-       . ModuleTrees := next(ModuleTrees)
-       /* Collect info from one module */
-       . snd-msg(apply-rewrite("Asdfsupport", "get-eval-info", "EvalInfo", [ModuleTree]))
-       . rec-msg(normalform("Asdfsupport", TempInfo?)) 
-       . printf("Got the info from one module...\n")
-        /* and concat it with already collected info */
-       . snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo, TempInfo]))
-       . rec-msg(normalform("Asdfsupport", EvalInfo?)) 
-       . printf("Joined the info\n")
-     fi
-   )
-   *
-   if equal(ModuleTrees, []) then
-     tau
-   fi
+  Id := process-id
+  . ModuleName := first(InfoModuleNames)
+  . ModuleNames := next(InfoModuleNames)
+  . GetEvalInfo(ModuleName, EvalInfo?)
+  .
+  if not-equal(EvalInfo, error-info) then
+    (
+      if not-equal(ModuleNames, []) then
+	ModuleName := first(ModuleNames)
+	. ModuleNames := next(ModuleNames)
+	. snd-msg(ts-get-term-value("asdf-eval-info", ModuleName))
+	.
+	(
+	  rec-msg(ts-value(TempInfo?))
+	  . JoinEvalInfo(TempInfo, EvalInfo?)
+	+
+	  rec-msg(ts-no-value)
+	  . GetEvalInfo(ModuleName, TempInfo?)
+	  .
+	  if not-equal(TempInfo, error-info) then
+	    JoinEvalInfo(TempInfo, EvalInfo?)
+	    . snd-msg(ts-put-term-value("asdf-eval-info", ModuleName, TempInfo))
+	  else
+	    ModuleNames := []
+	    . snd-note(ui-status(endstat(Id)))
+	    . snd-note(ui-status(statf(Id, "No asdf-tree for %s",[ModuleName])))
+	    . EvalInfo := error-info
+	  fi
+	)
+      fi
+    )
+    *
+    if equal(ModuleNames, []) then
+      tau
+    fi
+  else
+    ModuleNames := []
+    . snd-note(ui-status(endstat(Id)))
+    . snd-note(ui-status(statf(Id, "No asdf-tree for %s",[ModuleName])))
+    . EvalInfo := error-info
+  fi
 endlet
 
 process EvalutateASDFTerm(STree : term, ModuleName : str, RTree : term?) is
@@ -1467,6 +1583,7 @@ let
    AllInfo : term, 
    ErrorText : str,
    ErrorTree : term,
+   Id : int,
    ImModuleTree : term,
    ImModuleTrees : list,
    ModuleNames : list,
@@ -1474,34 +1591,34 @@ let
    ModuleTree : term,
    TypeInfo : term
 in
-   printf("EvalutateASDFTerm, ModuleName = %t\n", ModuleName) .
-   snd-msg(get-all-imported-module-names(ModuleName)) .
-   rec-msg(all-imported-module-names(ModuleNames?)) .
-   PrintList(ModuleNames) .
-   snd-msg(ts-get-values("asdf-tree", ModuleNames)) .
-   (
-     rec-msg(ts-values(ImModuleTrees?)) 
-   + 
-     rec-msg(ts-no-values) .
-     ImModuleTrees := []    
-   )
-   . GetEvalInfo(ImModuleTrees, AllInfo?)
-   . snd-msg(io-unpack-term(AllInfo))
-   . rec-msg(io-term(AllInfo?))
-   . snd-msg(io-write-term-in-baf(".module", STree))
-   . rec-msg(io-file-written)
-   . printf("module written \n")
-   . snd-msg(io-write-term-in-baf(".info", AllInfo))
-   . rec-msg(io-file-written)
-   . printf("info written \n")
-
-/*
-   . snd-msg(gen-adapter-term-evaluate(asdf-eval-id,"__ASDF_BIN__/evaluation", hest))
-   . rec-msg(gen-adapter-term-result(asdf-eval-id, ErrorTree?))
-
-   . printf("ErrorTree = %t\n", ErrorTree)
-   . snd-note(show-feedback-summary(ErrorTree))
-*/
+  Id := process-id
+  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(statf(Id, "Evaluating program description over %s",[ModuleName])))
+  . snd-msg(get-all-imported-module-names(ModuleName))
+  . rec-msg(all-imported-module-names(ModuleNames?))
+  . GetEvalInfos(ModuleNames, AllInfo?)
+  
+  /* and wrap it into an environment */
+  . snd-msg(apply-rewrite("Asdfsupport", "get-eval-env", "Environment", [AllInfo]))
+  . rec-msg(normalform("Asdfsupport", AllInfo?)) 
+  . snd-msg(io-unpack-term(AllInfo))
+  . rec-msg(io-term(AllInfo?))
+  . snd-msg(io-write-term-in-baf(".module", STree))
+  . rec-msg(io-file-written)
+  . snd-msg(io-write-term-in-baf(".info", AllInfo))
+  . rec-msg(io-file-written)
+  . snd-msg(gen-adapter-string-to-string-evaluate(asdf-eval-id,"__ASDF_BIN__/evaluation", "hest"))
+  . rec-msg(gen-adapter-string-to-string-result(asdf-eval-id, ErrorText?))
+  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(statf(Id, "Evaluation done, starting editor.")))
+  .
+  if equal(ErrorText, "") then
+    RTree := error-tree
+    . snd-note(ui-status(endstat(Id)))
+    . snd-note(ui-status(statf(Id, "Evaluation error caused by  Action Env. when evaluating term over %s",[ModuleName])))
+  else
+    RTree := quote(str(ErrorText))
+  fi
 endlet
 
 /* Prints the contents of the given list */

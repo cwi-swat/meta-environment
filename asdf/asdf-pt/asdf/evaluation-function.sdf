@@ -2,13 +2,15 @@ module asdf/evaluation-function
 
 imports
   asdf/functions
+  containers/Table[Cell Data]
   containers/List[EvalData]
+  containers/List[<Data, Type>] 
   asdf/concat[EvalData]
-  asdf/concat[<DataOp, Type>]
+  asdf/concat[<Data, Type>]
   asdf/concat[<AtomicType, AtomicType>]
 
 exports
-  context-free start-symbols  EvalInfo EvalDataOpSigs
+  context-free start-symbols  EvalInfo EvalDataOpSigs Environment
 
 sorts
   EvalDataOpSigs Datacon Datasel DataOp EvalData
@@ -19,9 +21,18 @@ aliases
 context-free syntax
 
 %% Equations:
+
+  get-eval-env(EvalInfo) -> Environment
+
   get-eval-info(AS-Module)	-> EvalInfo
 
   join-eval-info(EvalInfo, EvalInfo) -> EvalInfo
+
+  get-constants(AS-Module, Constants)  
+			-> Constants {traversal(accu, break, top-down)}
+
+  get-constants(AS-Constant, Constants)  
+			-> Constants {traversal(accu, break, top-down)}
 
   get-eval-dataop(AS-Module, EvalDataOpSigs)  
 			     -> EvalDataOpSigs {traversal(accu, break, top-down)}
@@ -42,14 +53,23 @@ context-free syntax
 
 %% Sorts
 
-  <SubTypes, EvalDataOpSigs, DataConstants>	-> EvalInfo
+  <Table[[Cell, Data]], Integer, Action, Integer, 
+   SubTypes, Constants, EvalDataOpSigs>	-> Environment
+
+  <SubTypes, Constants, EvalDataOpSigs>	-> EvalInfo
 
   (<DataOp, Datacon> | <DataOp, Datasel>) -> EvalData
 
-  "datacon" "(" DataOp "," Type ")" -> Datacon
+  List[[<Data, Type>]] -> Constants
 
-  "datasel" "(" DataOp "," Action ")" -> Datasel
+  "datacon" "(" Type "," Type ")" -> Datacon
 
+  "datasel" "(" Type "," Action ")" -> Datasel
+
+  Cell                                  -> Data
+
+lexical syntax
+  "c"[0-9]+             -> Cell
 
 hiddens variables
 
@@ -65,7 +85,7 @@ hiddens variables
   "$DOS"[0-9]?		-> EvalDataOpSigs
   "$EDOS"		-> EvalData
 %%  "$EDOS"[0-9]?		-> EvalDataOpSigs
-  "$DCS"[0-9]?		-> List[[<DataOp, Type>]]
+  "$DCS"[0-9]?		-> List[[<Data, Type>]]
 
   "$ARR"[0-9]?		-> AS-Requires-Rhs
   "$CH"[0-9]?		-> CHAR
@@ -75,5 +95,6 @@ hiddens variables
 
   "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
   "$ASA"[0-9]?		-> AS-Argument
+
 
 

@@ -65,6 +65,8 @@ context-free priorities
 
   { Action AtmYielder              -> Action }
   >
+  { Action DataOp               -> Action }
+  >
   { "give" DataOp		-> Action }
   >
   { "check" DataOp		-> Action }
@@ -79,9 +81,9 @@ context-free priorities
 
 context-free priorities
 
-  {PrefixDataOp Yielder         -> AtmYielder}
+  {PrefixDataOp Yielder         -> Yielder}
   >
-  {Yielder InfixDataOp Yielder  -> AtmYielder}
+  {Yielder InfixDataOp Yielder  -> Yielder}
 
 context-free priorities
 
@@ -93,7 +95,7 @@ context-free priorities
   >
   { "check" AtmYielder		-> Action } 
   >
-  {Yielder InfixDataOp Yielder  -> AtmYielder}
+  {Yielder InfixDataOp Yielder  -> Yielder}
 
 
 context-free priorities
@@ -293,3 +295,43 @@ lexical syntax
   "cell"	-> AtomicType {prefer}
   "bindings"	-> AtomicType {prefer}
   "token"	-> AtomicType {prefer}
+
+%% module data/Boolean
+exports
+
+context-free syntax
+
+  Boolean	-> Data
+
+lexical syntax
+
+  "not"		-> PrefixDataOp
+
+
+%% basic/boolean
+
+exports
+  sorts Boolean
+
+  context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
+    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
+    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
+
+  context-free priorities
+    Boolean "&" Boolean -> Boolean >
+    Boolean "|" Boolean -> Boolean
+
+
+%% basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}
+

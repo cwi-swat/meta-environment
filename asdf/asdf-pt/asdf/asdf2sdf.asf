@@ -145,24 +145,31 @@ ASFequation*2)
 
 
   [default-tp-2] $transform-production(Sort ::= AS-Requires-Rhs) = 
-context-free syntax
+lexical syntax
   $transform-requires-rhs(Sort, AS-Requires-Rhs) 
 
   [trhs-1] Production+1 := $transform-requires-rhs(Sort, AS-Requires-Rhs1),
             Production+2 := $transform-requires-rhs(Sort, AS-Requires-Rhs2)
             =========================================================
             $transform-requires-rhs(Sort, AS-Requires-Rhs1 | AS-Requires-Rhs2) = 
-Production+1
-  Production+2
+	    Production+1
+	    Production+2
 
-  [trhs-2] $transform-requires-rhs(Sort1, Sort2) = Sort2 -> Sort1
+  [trhs-2] 
+	   bytes($CH2) := lower-case(bytes($CH1)),
+	   bytes($CH4) := lower-case(bytes($CH3))
+	   =================================================
+	   $transform-requires-rhs(sort($CH1$CH1*), sort($CH3$CH3*)) =
+	   sort($CH3$CH3*) -> sort($CH1$CH1*)
+	   qliteral("""$CH2$CH1*""") -> sort("A""t""o""m""i""c""T""y""p""e")
+	   qliteral("""$CH4$CH3*""") -> sort("A""t""o""m""i""c""T""y""p""e")
 
   [trhs-2] $transform-requires-rhs(Sort, Literal) = Literal -> Sort
 
   [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(Symbol,*) ) = qliteral("""$CH+""") -> PrefixDataOp
 
   [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(LCS*) ) = 
-qliteral("""$CH+""")	-> sort("T""y""p""e")
+qliteral("""$CH+""")	-> sort("A""t""o""m""i""c""T""y""p""e")
 qliteral("""$CH+""") -> PrefixDataOp
 $transform-decons(LCS*)
 
@@ -197,6 +204,8 @@ variables qliteral("""$CH+""")[0-9\']* 		-> Sort
   [tc-1] $transform-constant(Literal : Sort) = 
 context-free syntax
   Literal -> Sort
+lexical syntax
+  Literal -> Data
 
   [ei-1] $extract-imports(sort($CH+),Import*) = 
          $add-to(moduleid($CH+), Import*)

@@ -4,6 +4,7 @@ imports
 	
   asdf/asdf-sem-sec
   asdf/an-supplement
+  asdf/lower-case
   languages/sdf2/syntax/Sdf2 
   basic/Booleans
 
@@ -139,6 +140,8 @@ exports
     "Production"[0-9]*     -> Production
     "Production*"[0-9]*    -> Production*
     "Production+"[0-9]*    -> Production+
+    "$CH"[0-9]?		-> CHAR
+    "$CH"[0-9]?"*"	-> CHAR*
     "$CH+"[0-9]*          -> CHAR+
     "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag

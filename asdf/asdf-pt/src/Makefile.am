@@ -5,10 +5,12 @@ pkgdata_DATA = $(wildcard *.idef)
 EXTRA_DIST = $(wildcard *.idef)
 
 noinst_HEADERS = toolAsdfsupport.tif.h\
-	toolTypecheck.tif.h
+	toolTypecheck.tif.h\
+	toolEval.tif.h
 
 bin_PROGRAMS=Asdfsupport\
-	Typecheck
+	Typecheck\
+	Eval
 
 Asdfsupport_SOURCES = \
 	asdfsupport.c \
@@ -17,6 +19,10 @@ Asdfsupport_SOURCES = \
 Typecheck_SOURCES = \
 	typecheck.c \
 	toolTypecheck.tif.c
+
+Eval_SOURCES = \
+	eval.c \
+	toolEval.tif.c
 
 Asdfsupport_LDADD =\
 	-L${ASC_SUPPORT}/lib -lasc-support-me \
@@ -29,6 +35,16 @@ Asdfsupport_LDADD =\
 	${SOCKLIBS}
 
 Typecheck_LDADD =\
+	-L${ASC_SUPPORT}/lib -lasc-support-me \
+	-L${SGLR}/lib -lsglr \
+	-L${ASF_SUPPORT}/lib -lASFME \
+	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
+	-L${ERROR_SUPPORT}/lib -lErrorAPI \
+	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ATERM}/lib -lATerm \
+	${SOCKLIBS}
+
+Eval_LDADD =\
 	-L${ASC_SUPPORT}/lib -lasc-support-me \
 	-L${SGLR}/lib -lsglr \
 	-L${ASF_SUPPORT}/lib -lASFME \
@@ -54,3 +70,6 @@ support: ${top_builddir}/asdf-pt/asdf/Asdfsupport.eqs
 
 typecheck: ${top_builddir}/asdf-pt/type-check/typecheck.eqs
 	asfc -i $< -o typecheck.c -t -v -c
+
+eval: ${top_builddir}/asdf-pt/asdf/Eval.eqs
+	${prefix}/bin/asfc -i $< -o eval.c -t -v -c

@@ -43,7 +43,6 @@ context-free syntax
 
 lexical syntax
 
-%%  [a-z\-]+	-> AtomicType
   "notpresent"   -> Type
 
 context-free restrictions
