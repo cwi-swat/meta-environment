@@ -20,12 +20,14 @@ PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example-trm.ps \
 	open-library.ps open-file.ps file-menu.ps export-menu.ps \
 	refactor-menu.ps select-window.ps \
 	meta-Bool-example.ps meta-Pico-syntax.ps \
-	meta-env-menu1.ps meta-env-menu2.ps meta-pico.ps \
+	meta-pico.ps \
 	meta-parsetree.ps meta-start.ps module-menu.ps move-menu.ps \
 	reduct-out.ps viewer.ps newarch.eps new-file.ps \
 	cache-menu.ps open-termstore.ps save-termstore.ps \
 	tools-menu.ps imports-panel.ps ruler.ps \
-	edit-menu.ps check-menu.ps tools2-menu.ps
+	edit-menu.ps check-menu.ps tools2-menu.ps \
+	meta-env-menu-syntax.ps meta-env-menu-equation.ps \
+	meta-env-menu-term.ps meta-full-parsetree.ps
 
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}

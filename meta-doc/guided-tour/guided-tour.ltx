@@ -122,7 +122,7 @@ documents.
 \end{ifhtml}
 
 \begin{abstract}
-This is the guided tour for the \ASmetaenv\ Release 1.4.
+This is the guided tour for the \ASmetaenv\ Release 1.5.
 
 The purpose of this document is to give a brief introduction in using the 
 \ASmetaenv. Details on writing \asfsdf\ specifications are not discussed
@@ -146,7 +146,7 @@ section*{Update with respect to previous version}
 \begin{itemize}
 \item Separated the guided tour and the \asfsdf\ user manual.
 \item Synchronized the screen dumps with the newest version of the
-\ASmetaenv\ (version 1.4).
+\ASmetaenv\ (version 1.5).
 \end{itemize}
 
 %}}}
@@ -784,7 +784,7 @@ The functionality of the various entries is discussed in the
 \begin{center}
 \begin{Label}{FIG:module-menu}
 
-\T \includegraphics[width=3cm]{module-menu}
+\T \includegraphics[width=2cm]{module-menu}
 \W \htmlimage{module-menu.gif}
 \caption{Pop up menu for module operations (import pane)}
 
@@ -847,7 +847,7 @@ Figure~\Ref]{FIG:edit-menu}.
 \begin{center}
 \begin{Label}{FIG:edit-menu}
 
-\T \includegraphics[width=3cm]{edit-menu}
+\T \includegraphics[width=2cm]{edit-menu}
 \W \htmlimage{edit-menu.gif}
 \caption{Pop up menu for invoking various editors for a module}
 \end{Label}
@@ -1022,19 +1022,61 @@ and {\tt Upgrade} have been added to the standard user-interface
 of \emacs, depending on the editor type:
 
 \begin{itemize}
-\item The {\tt Action} menu, for syntax and equation editors, contains two 
-\link{buttons}[ (Figure~\Ref)]{FIG:meta-env-menu1} 
-{\tt Parse} for applying the \asfsdf\ parser to the complete text buffer
-and {\tt ViewTree} for displaying the parse tree of the focus in the
-\link{parse tree panel}[ (Figure~\Ref)]{FIG:parsetree-panel}.
+\item The {\tt Action} menu, for syntax and equation editors, contains
+\link{syntax specific buttons}[ (Figure~\Ref)]{FIG:meta-env-menu-syntax} and
+\link{equation specific buttons}[
+(Figure~\Ref)]{FIG:meta-env-menu-equation}, respectively.
+
+The syntax editor specific buttons are:
+\begin{itemize}
+\item {\tt Parse} for applying the SDF parser to the complete text buffer.
+\item {\tt Check} for activating the sdf-checker in order to check the
+well-formedness of the SDF specification.
+\item {\tt Edit Equations} to invoke the corresponding equation editor.
+\item {\tt Edit Term} to invoke a term editor.
+\item {\tt Run Tests} to run the corresponding unit tests defined for
+this module.
+\end{itemize}
+
+The equation editor specific buttons are:
+\begin{itemize}
+\item {\tt Parse} for parsing the complete text buffer using the
+underlying SDF definition.
+\item {\tt Check} for activating the asf-checker in order to check the
+well-formedness of the ASF specification, for instance, it is checked
+whether there are any uninstantiated variables in the right-hand side
+of an equation.
+\item {\tt View Tree} for displaying the parse tree of the focus in the
+\link{parse tree panel}[ (Figure~\Ref)]{FIG:parsetree-panel}. 
+\item {\tt View Full Tree} for displaying the parse tree of the focus in the
+\link{parse tree panel}[ (Figure~\Ref)]{FIG:full-parsetree-panel}. In this
+case all individual characters are also shown. This feature is extremely
+useful when trying to find an ambiguity on the lexical level.
+\item {\tt Edit Syntax} to invoke the corresponding syntax editor.
+\item {\tt Edit Term} to invoke a term editor.
+\item {\tt Run Tests} to run the corresponding unit tests defined for
+this module.
+\end{itemize}
 
 \begin{figure}
 \begin{center}
-\begin{Label}{FIG:meta-env-menu1}
+\begin{Label}{FIG:meta-env-menu-syntax}
 
-\T \includegraphics[width=2.4cm]{meta-env-menu1}
-\W \htmlimage{meta-env-menu1.gif}
-\caption{{\tt Actions} menu (editor)}
+\T \includegraphics[width=2.4cm]{meta-env-menu-syntax}
+\W \htmlimage{meta-env-menu-syntax.gif}
+\caption{{\tt Actions} menu (syntax editor)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-env-menu-equation}
+
+\T \includegraphics[width=2.4cm]{meta-env-menu-equation}
+\W \htmlimage{meta-env-menu-equation.gif}
+\caption{{\tt Actions} menu (equations editor)}
 
 \end{Label}
 \end{center}
@@ -1043,7 +1085,7 @@ and {\tt ViewTree} for displaying the parse tree of the focus in the
 \item The {\tt Move} pull-down menu
 contains \link{four buttons}[ (Figure~\Ref)]{FIG:move-menu}
 for structured traversal of the syntax tree of the text in the editor.
-Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
+Using the entries {\tt Left}, {\tt Right}, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
 
 \begin{figure}
@@ -1058,24 +1100,41 @@ user can navigate in the tree.
 \end{center}
 \end{figure}
 
-\item The term editors have the {\tt Actions} menu which contains
-at least \link{three buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: 
-{\tt Parse}, {\tt Reduce}, and {\tt ViewTree}. 
+\item Both the syntax and equation editor have an extra pull-down
+menu {\tt Upgrade}. The {\tt Upgrade} menu for the syntax editor
+invokes a tool which transforms the SDF module. This transformation
+involves changing the tuple syntax, (see User Manual), quoting of
+unquoted literals, and changing symbol declarations into context-free
+start-symbols. The {\tt Upgrade} menu fo the equation editor involves
+the introduction of the new operators  {\tt ==}, {\tt !=}, 
+{\tt :=}, and {\tt :!=}, in the conditions of the equations, see
+the User Manual for more details.
 
-\begin{description}
-\item[{\tt Parse}] parses the term in the editor.
-\item[{\tt Reduce}] that applies the evaluator to the text in the editor.
-\item[{\tt ViewTree}] displays the parse tree structure of the focus in
+\item The term editors have the {\tt Actions} menu which contains
+\link{buttons}[ (Figure~\Ref)]{FIG:meta-env-menu-term}.
+
+\begin{itemize}
+\item {\tt Parse} parses the term in the editor given the corresponding
+SDF definition.
+\item {\tt Reduce} that applies the evaluator to the text in the editor
+given the corresponding equations.
+\item {\tt View Tree} displays the parse tree structure of the focus in
 the {\tt parsetree} pane.
-\end{description}
+\item {\tt View Full Tree} displays the parse tree structure with more
+details of the focus in the {\tt parsetree} pane.
+\item {\tt ShowOrigin}
+\item {\tt Dump ParseTable}
+\item {\tt Edit Syntax} to invoke the corresponding syntax editor.
+	\item {\tt Edit Equations} to invoke the corresponding equation editor.
+\end{itemize}
 These 3 buttons are the standard buttons in the {\tt Actions} menu.
 
 \begin{figure}
 \begin{center}
-\begin{Label}{FIG:meta-env-menu2}
+\begin{Label}{FIG:meta-env-menu-term}
 
-\T \includegraphics[width=2.4cm]{meta-env-menu2}
-\W \htmlimage{meta-env-menu2.gif}
+\T \includegraphics[width=2.4cm]{meta-env-menu-term}
+\W \htmlimage{meta-env-menu-term.gif}
 \caption{{\tt Actions} menu (term editor)}
 
 \end{Label}
@@ -1171,6 +1230,18 @@ in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}.
 \W \htmlimage{meta-parsetree.gif}
 
 \caption{Main window of \ASmetaenv\ with the parsetree panel activated}
+\end{Label}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:full-parsetree-panel}
+\T \includegraphics[width=12cm]{meta-full-parsetree}
+\W \htmlimage{meta-full-parsetree.gif}
+
+\caption{Main window of \ASmetaenv\ with the parsetree panel activated
+showing a more detailed version of the parsetree}
 \end{Label}
 \end{center}
 \end{figure}
