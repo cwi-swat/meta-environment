@@ -15,7 +15,7 @@ extern ATermTable prof_table;
 
 #define FUNC_ENTRY(sym,appl) \
   unsigned int steps, count, start = ++rewrite_steps; \
-  ATerm result, record, term_steps;
+  ATerm result, record, term_steps; \
   ATermAppl term = appl;
 
 #define FUNC_EXIT(rhs) \
@@ -24,8 +24,8 @@ extern ATermTable prof_table;
                                          \
   record = get_result(prof_table, term); \
   if(record) {                           \
-		count = ATgetInt((ATermInt)ATgetArgument(appl, 1))+1; \
-		term_steps = ATgetArgument(appl, 2); \
+		count = ATgetInt((ATermInt)ATgetArgument(term, 1))+1; \
+		term_steps = ATgetArgument(term, 2); \
   } else {                               \
 		count = 1;                           \
 		term_steps = ATmakeInt(steps);       \

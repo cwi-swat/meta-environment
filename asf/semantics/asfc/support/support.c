@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 /*#include <atb-tool.h>*/
 #include <AsFix.h>
@@ -965,7 +966,7 @@ void init_patterns()
 #ifdef MEMO_PROFILING
 	prof_table = ATtableCreate(2048, 80);
 
-	at_exit(write_memo_profile);
+	atexit(write_memo_profile);
 #endif
 }
 /*}}}  */
