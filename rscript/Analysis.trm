@@ -1,15 +1,15 @@
 
-collect(
+
+analyze(
+
 begin
-declare x : natural;
+declare x : natural, y : natural, z : natural;
 
-[1] x := 3;
-if [2] y then [3] y := 3 + x; [4] y := 4 else [5] y := z - 5 fi;
-[6] y := 6
+x := 3;
+if 3 then z := y + 3 else x := 4 fi;
+y := z
 end
-,
 
-[]
 )
 
 
