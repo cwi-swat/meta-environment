@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <strings.h>
+#include <string.h>
 
 #include <AsFix.h>
 #include <aterm2.h>
