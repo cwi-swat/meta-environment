@@ -1,0 +1,101 @@
+module Lexical
+
+imports basic/Whitespace
+
+exports
+  sorts Identifier Literal NullLiteral StringLiteral CharacterLiteral BooleanLiteral FloatingPointLiteral IntegerLiteral OctalIntegerLiteral HexIntegerLiteral DecimalIntegerLiteral StringCharacter EscapeSequence UnicodeEscape SingleCharacter
+
+  lexical syntax
+    "\\" [u]+ [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] -> UnicodeEscape
+    "0" [lL]? -> DecimalIntegerLiteral
+    [1-9] [0-9]* [lL]? -> DecimalIntegerLiteral
+    [0] [xX] [0-9a-fA-F]+ [lL]? -> HexIntegerLiteral
+    [0] [0-7]+ [lL]? -> OctalIntegerLiteral
+    [0-9]+ "." [0-9]* ( [eE] [\+\-]? [0-9]+ )? [fFdD]? -> FloatingPointLiteral
+    "." [0-9]+ ( [eE] [\+\-]? [0-9]+ )? [fFdD]? -> FloatingPointLiteral
+    [0-9]+ [eE] [\+\-]? [0-9]+ [fFdD]? -> FloatingPointLiteral
+    [0-9]+ ( [eE] [\+\-]? [0-9]+ )? [fFdD] -> FloatingPointLiteral
+    "true" -> BooleanLiteral
+    "false" -> BooleanLiteral
+    "null" -> NullLiteral
+    UnicodeEscape -> SingleCharacter
+    ~[\'\\] -> SingleCharacter
+    "'" SingleCharacter "'" -> CharacterLiteral
+    "\\" [btnfr\"\'\\] -> EscapeSequence
+    "\\" [0-7] -> EscapeSequence
+    "\\" [0-7] [0-7] -> EscapeSequence
+    "\\" [0-3] [0-7] [0-7] -> EscapeSequence
+    "'" EscapeSequence "'" -> CharacterLiteral
+    UnicodeEscape -> StringCharacter
+    ~[\"\\] -> StringCharacter
+    EscapeSequence -> StringCharacter
+    [A-Za-z\_\$] [A-Za-z0-9\_\$]* -> Identifier
+    "void" -> Identifier {reject}
+    "class" -> Identifier {reject}
+    "extends" -> Identifier {reject}
+    "implements" -> Identifier {reject}
+    "static" -> Identifier {reject}
+    "this" -> Identifier {reject}
+    "super" -> Identifier {reject}
+    "new" -> Identifier {reject}
+    "instanceof" -> Identifier {reject}
+    "interface" -> Identifier {reject}
+    "true" -> Identifier {reject}
+    "false" -> Identifier {reject}
+    "null" -> Identifier {reject}
+    "throws" -> Identifier {reject}
+    "public" -> Identifier {reject}
+    "protected" -> Identifier {reject}
+    "private" -> Identifier {reject}
+    "abstract" -> Identifier {reject}
+    "final" -> Identifier {reject}
+    "native" -> Identifier {reject}
+    "synchronized" -> Identifier {reject}
+    "transient" -> Identifier {reject}
+    "volatile" -> Identifier {reject}
+    "package" -> Identifier {reject}
+    "import" -> Identifier {reject}
+    "if" -> Identifier {reject}
+    "else" -> Identifier {reject}
+    "switch" -> Identifier {reject}
+    "case" -> Identifier {reject}
+    "default" -> Identifier {reject}
+    "while" -> Identifier {reject}
+    "do" -> Identifier {reject}
+    "for" -> Identifier {reject}
+    "break" -> Identifier {reject}
+    "continue" -> Identifier {reject}
+    "return" -> Identifier {reject}
+    "throw" -> Identifier {reject}
+    "try" -> Identifier {reject}
+    "catch" -> Identifier {reject}
+    "finally" -> Identifier {reject}
+    "boolean" -> Identifier {reject}
+    "byte" -> Identifier {reject}
+    "short" -> Identifier {reject}
+    "int" -> Identifier {reject}
+    "long" -> Identifier {reject}
+    "char" -> Identifier {reject}
+    "float" -> Identifier {reject}
+    "double" -> Identifier {reject}
+    "\"" StringCharacter* "\"" -> StringLiteral {cons("StringCharacter-s")}
+
+  lexical restrictions
+    "void" "class" "extends" "implements" "static" "this" "super" "new" "instanceof" "interface" "true" "false" "null" "throws" "public" "protected" "private" "abstract" "final" "native" "synchronized" "transient" "volatile" "package" "import" "if" "else" "switch" "case" "default" "while" "do" "for" "break" "continue" "return" "throw" "try" "catch" "finally" "boolean" "byte" "short" "int" "long" "char" "float" "double" -/- [a-zA-Z0-9\_]
+    Identifier -/- [a-zA-Z0-9\_\$]
+    DecimalIntegerLiteral -/- [a-zA-Z0-9\_\.]
+    HexIntegerLiteral -/- [a-zA-Z0-9\_\.]
+    OctalIntegerLiteral -/- [a-zA-Z0-9\_\.]
+    FloatingPointLiteral -/- [a-zA-Z0-9\_\.]
+
+  context-free syntax
+    DecimalIntegerLiteral -> IntegerLiteral {cons("DecimalIntegerLiteral")}
+    HexIntegerLiteral -> IntegerLiteral {cons("HexIntegerLiteral")}
+    OctalIntegerLiteral -> IntegerLiteral {cons("OctalIntegerLiteral")}
+    IntegerLiteral -> Literal {cons("IntegerLiteral")}
+    FloatingPointLiteral -> Literal {cons("FloatingPointLiteral")}
+    BooleanLiteral -> Literal {cons("BooleanLiteral")}
+    CharacterLiteral -> Literal {cons("CharacterLiteral")}
+    StringLiteral -> Literal {cons("StringLiteral")}
+    NullLiteral -> Literal {cons("NullLiteral")}
+
