@@ -62,4 +62,4 @@ toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
 	Notify-about-changed-modules, Rewrite-Errors, Traversals,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
-	Help, Clear-all, CloseModule, ParseFocusses) 
+	Help, ClearAll, CloseModule, ParseFocusses) 

@@ -22,15 +22,29 @@
 /*
   $Id$
  */
-process Clear-all is
+process ClearAll is
 let
-  Id: term
+  Id     : term,
+  Module : str,
+  Modules: list
 in
-  Id := process-id. (
-    rec-msg(clear-all).
-    snd-note(ui-status(stat(Id,"Clearing ..."))).
-    snd-msg(clear-module-db).
-    snd-note(ui-status(endstat(Id))).
+  Id := process-id.
+  (
+    rec-msg(clear-all) .
+    snd-note(ui-status(stat(Id,"Clearing ..."))) .
+    snd-msg(get-all-modules) .
+    rec-msg(all-modules(Modules?)) .
+    (
+      if not-equal(Modules, []) then
+        Module := first(Modules) .
+	snd-msg(delete-editors-for-module(Module)) .
+	Modules := next(Modules)
+      fi
+    ) * if equal(Modules, []) then
+      tau
+    fi .
+    snd-msg(clear-module-db) .
+    snd-note(ui-status(endstat(Id))) .
     snd-msg(cleared-all)
   ) *
   delta
