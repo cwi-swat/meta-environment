@@ -106,10 +106,12 @@ void rec_terminate(int cid, ATerm arg)
 int main(int argc, char *argv[])
 {
 	ATerm t, trm, reduct, asfix, file, modname;
-	ATbool printstats = ATfalse, use_toolbus = ATfalse;
+	ATbool printstats = ATfalse, use_toolbus = ATfalse,
+	       run_verbose = ATfalse;
 	int i, cid;
 	ATerm bottomOfStack;
 	name = argv[0];
+
 	for(i=1; i<argc; i++) {
 		if(streq(argv[i], "-stats"))
 			printstats = ATtrue;
@@ -117,6 +119,8 @@ int main(int argc, char *argv[])
 			use_toolbus = ATtrue;
 		else if(streq(argv[i], "-name"))
 			name = argv[++i];
+		else if(streq(argv[i], "-v"))
+			run_verbose = ATtrue;
 	}
  
 	if(use_toolbus) {
@@ -149,9 +153,9 @@ int main(int argc, char *argv[])
 
 		if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                   &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-			ATfprintf(stderr,"Reducing ...\n");
+			if(run_verbose) ATfprintf(stderr,"Reducing ...\n");
 			reduct = innermost(trm);
-			ATfprintf(stderr,"Reducing finished.\n");
+			if(run_verbose) ATfprintf(stderr,"Reducing finished.\n");
 			/*
 			{
 			FILE *f = fopen("/tmp/pgen.out", "w");
