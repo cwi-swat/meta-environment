@@ -9,21 +9,62 @@
 static ATermTable slices;
 
 static void treeToSlices(PT_Tree tree);
+static ATerm category = NULL;
+static ATerm categoryPattern = NULL;
 
-/*{{{  static ATbool allAlphaNumeric(const char* str)  */
+/*{{{  static ATbool hasAlphanumericChars(PT_Args chars) */
 
-static ATbool allAlphaNumeric(PT_Args chars)
+static ATbool hasAlphanumericChars(PT_Args chars)
 {
   for ( ; !PT_isArgsEmpty(chars) ; chars = PT_getArgsTail(chars)) {
     int val = PT_getTreeCharacter(PT_getArgsHead(chars));
-    if (!isalnum((unsigned int) val)
-	&& val != '-' 
-	&& val != '_') {
-      return ATfalse;
+    if (isalnum((unsigned int) val)) {
+      return ATtrue;
     }
   }
 
-  return ATtrue;
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  static char* getProductionCategory(PT_Tree tree) */
+
+static ATerm getProductionCategory(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+
+    if (PT_isProductionDefault(prod)) {
+      PT_Attributes attributes = PT_getProductionAttributes(prod);
+
+      if (PT_isAttributesAttrs(attributes)) {
+	PT_Attrs attrs = PT_getAttributesAttrs(attributes);
+
+	for ( ; !PT_isAttrsEmpty(attrs); attrs = PT_getAttrsTail(attrs)) {
+	  PT_Attr head = PT_getAttrsHead(attrs);
+
+	  if (PT_isAttrTerm(head)) {
+	    ATerm cat = NULL;
+
+	    if (ATmatchTerm(PT_getAttrTerm(head), categoryPattern,&cat)) {
+	      return cat;
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  return NULL;
+}
+
+
+/*}}}  */
+/*{{{  static ATerm getAnnotationCategory(PT_Tree tree) */
+
+static ATerm getAnnotationCategory(PT_Tree tree)
+{
+  return PT_getTreeAnnotation(tree, category);
 }
 
 /*}}}  */
@@ -36,7 +77,13 @@ static void storeTree(PT_Tree tree, const char *category)
   LOC_AreaAreas slice;
   LOC_Location location;
 
-  key = ATmake("<str>",category);
+  if (category[0] == '\"') {
+    key = ATparse(category);
+  }
+  else {
+    key = ATmake("<str>",category);
+  }
+
   slice = LOC_AreaAreasFromTerm(ATtableGet(slices, key));
 
   if (slice == NULL) {
@@ -71,41 +118,38 @@ static void treeToSlices(PT_Tree tree)
 {
   ATerm categoryAnno = NULL;
 
-
   if (PT_isTreeAmb(tree)) {
-    storeTree(tree, "Ambiguous");
+    storeTree(tree, "MetaAmbiguity");
     return;
   }
 
-  categoryAnno = PT_getTreeAnnotation(tree, ATparse("category"));
- 
-  if (categoryAnno != NULL) { /* we have a user defined category */
+  /* We have three levels: default, production attribute, term annotation.
+   * Annotations have preference, then production attributes, then the
+   * default highlighting kicks in.
+   */
+  if ((categoryAnno = getAnnotationCategory(tree)) != NULL) {
     storeTree(tree, ATwriteToString(categoryAnno)); 
+    return;
+  }
+  else if ((categoryAnno = getProductionCategory(tree)) != NULL) {
+    storeTree(tree, ATwriteToString(categoryAnno)); 
+    return;
   }
   else {
     if (PT_isTreeLit(tree)) {
       PT_Args chars = PT_getTreeArgs(tree);
 
-      if (allAlphaNumeric(chars)) {
-	storeTree(tree, "AlphanumericLiterals"); 
+      if (hasAlphanumericChars(chars)) {
+	storeTree(tree, "MetaKeyword"); 
       }
       else {
-	storeTree(tree, "NonAlphanumericLiterals");
+	storeTree(tree, "MetaOperator");
       }
 
       return;
     }
     else if (PT_isTreeVar(tree)) {
-      storeTree(tree, "Variables");
-      return;
-    }
-    /*else if (PT_isTreeLayout(tree)) {*/
-/* TODO: too much slices here! */
-      /*storeTree(tree, "Comments"); */
-      /*return;*/
-    /*}*/
-    else if (PT_isTreeLexical(tree)) {
-      storeTree(tree, "Lexicals");
+      storeTree(tree, "MetaVariable");
       return;
     }
   }
@@ -125,6 +169,12 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
   ATermList keys;
 
   slices = ATtableCreate(1024, 75);
+  
+  ATprotect(&category);
+  category = ATparse("category");
+
+  ATprotect(&categoryPattern);
+  categoryPattern = ATparse("category(<term>)");
 
   treeToSlices(tree);
 
