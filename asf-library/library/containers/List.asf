@@ -6,65 +6,24 @@ equations
 [default-emp]
   empty([X,*]) = false
 
-[emp]
-  X,* = 
-  ===>
-  empty(X,*) = true
-
-[default-emp]
-  empty(X,*) = false
-
-[emp]
-  X* =
-  ===>
-  empty(X*) = true
-
-[default-emp]
-  empty(X*) = false
-
 [list-head]
   head([X, X,*]) = X
-
-[list-head]
-  head( X, X,* ) = X
-
-[list-head]
-  head ( X X* ) = X
 
 [list-tail]
   tail([X, X,*]) = [X,*]
 
-[list-tail]
-  tail(X, X,*) = X,*
-
-[list-tail]
-  tail(X X*) = X*
+[list-length]
+  length ( [] ) = 0
 
 [list-length]
-  X* =
-  ===>
-  length ( X* )	= 0
-[list-length]
-  length ( X X* ) = 1 + length ( X* )
+  length([X,X,*]) = 1 + length([X,*])
 
-[list-length]
-  X,* = 
-  ===>
-  length ( X,* ) = 0
-[list-length]
-  length ( X , X,* ) = 1 + length ( X,* )
+[list-elem]		
+  elem (X, [ X,*1, X, X,*2 ]) = true
 
-[list-length]
-  length ( [X,*] ) = length( X,* )
+[default-list-elem]
+  elem (X, [X,*]) = false
 
-[list-elem]		elem (X , X*1 X X*2 ) = true
-[default-list-elem]	elem (X, X*) = false
+[list-cons] cons(X, [ X,* ]) = [ X, X,* ]
 
-[list-elem]		elem (X, X,*1 , X , X,*2) = true
-[default-list-elem]	elem (X, X,*) = false
-
-[list-elem]		elem (X, [ X,* ]) = elem (X, X,*)
-
-[list-cons]		cons(X, X*) = X X*
-[list-cons]		cons(X, X,*) = X , X,*
-[list-cons]		cons(X, [ X,* ]) = [ X, X,* ]
+[list-cons] X : [X,*] = [X , X,*]

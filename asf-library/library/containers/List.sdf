@@ -5,29 +5,21 @@ exports
     "[" {X ","}* "]"	-> List[[X]]  {constructor}
 
   context-free syntax
-    length( X* )	-> Integer
-    length( {X ","}* )	-> Integer
-    length( List[[X]] )	-> Integer
+    length( List[[X]] )	 -> Integer
 
-    head( List[[X]] ) -> X
-    head( X* ) -> X
-    head( {X ","}*) -> X
+    head( List[[X]] )    -> X
+    tail( List[[X]] )    -> List[[X]]
+    elem( X, List[[X]] ) -> Boolean
 
-    tail( List[[X]] ) -> List[[X]]
-    tail( X* )        -> X
-    tail( {X ","}*) -> X
-    
-    elem( X , X* )		      -> Boolean
-    elem( X , {X ","}* )	  -> Boolean
-    elem( X, List[[X]] )		-> Boolean
+    empty(List[[X]])     -> Boolean
 
-    empty(List[[X]]) -> Boolean
-    empty( {X ","}*) -> Boolean
-    empty( X* ) -> Boolean
+    cons( X, List[[X]] ) -> List[[X]]
+    X ":" List[[X]]      -> List[[X]]
 
-    cons( X , X* )		-> X*
-    cons( X , {X ","}* )	-> {X ","}*
-    cons( X, List[[X]] )		-> List[[X]]
+%% Two special variables for head/tail construction/deconstruction
+  variables
+   "H"[0-9\']* -> X
+   "T"[0-9\']* -> {X ","}*
 
 imports 
   basic/Booleans
