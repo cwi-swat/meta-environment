@@ -126,9 +126,7 @@ ATfprintf(stderr, "%t\n", reduct);
 */
 ATfprintf(stderr,"Reducing finished.\n");
       asfix = toasfix(reduct, file, modname);
-/*
       ATwriteToTextFile(asfix,stdout);
-*/
     }
     else
       ATfprintf(stderr, "not an asfix term: %t\n", t);
