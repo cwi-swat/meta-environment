@@ -10353,6 +10353,6 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_ASFSDFApigen,                   
                           resolve_ASFSDFApigen,                    
-                          init_ASFSDFApigen, NULL, -1, toolASFSDFApigen_handler);
+                          init_ASFSDFApigen, NULL, -1, ATfalse, toolASFSDFApigen_handler);
 }
 #endif
