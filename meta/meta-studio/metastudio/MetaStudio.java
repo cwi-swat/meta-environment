@@ -21,7 +21,7 @@ import javax.swing.JTabbedPane;
 import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
-import metastudio.components.ListChoicePopup;
+import metastudio.components.ChoiceDialog;
 import metastudio.components.MenuBar;
 import metastudio.components.MessageList;
 import metastudio.components.ModuleBrowser;
@@ -84,7 +84,7 @@ public class MetaStudio extends JFrame  {
         new QuestionDialog(factory, getBridge(), this.getRootPane());
         new FileDialog(factory, getBridge());
         new ModulePopupMenu(factory, getBridge());
-        new ListChoicePopup(factory, getBridge(), this.getRootPane());
+        new ChoiceDialog(factory, getBridge(), this.getRootPane());
     }
     
     private void createContentPane() {
