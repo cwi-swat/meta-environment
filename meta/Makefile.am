@@ -23,7 +23,7 @@
 include ${top_srcdir}/make_rules
 
 SUBDIRS     = compiler asfix2c-compiler editors graph-browser in-output \
-              module-db utils tbscripts grammars demo doc asf \
+              module-db utils tbscripts demo doc \
               configuration-manager
 
 EXTRA_DIST  = make_rules meta.sh.src meta.pod

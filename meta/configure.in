@@ -268,22 +268,11 @@ AC_OUTPUT(
    tbscripts/test/Makefile
    utils/Makefile
    utils/genmakefile
-   grammars/Makefile
-   grammars/sdf2/Makefile
    demo/Makefile
    demo/pico/Makefile
    demo/user-manual-examples/Makefile
    doc/Makefile
    doc/html/Makefile
-   asf/Makefile
-   asf/addeqs/Makefile
-   asf/addeqs/src/Makefile
-   asf/addeqs/c-source/Makefile
-   asf/addeqs/spec/Makefile
-   asf/removevars/Makefile
-   asf/removevars/src/Makefile
-   asf/removevars/c-source/Makefile
-   asf/removevars/spec/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
 , chmod +x utils/genmakefile
