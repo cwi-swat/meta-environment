@@ -20,6 +20,6 @@
 #
 # $Id$
 
-SUBDIRS		= libasfix1 libmept libasfix2 libconversion utils
+SUBDIRS		= libasfix-old libasfix1 libmept libasfix2 libconversion utils
 
 EXTRA_DIST	= make_rules
