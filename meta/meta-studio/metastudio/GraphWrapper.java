@@ -18,6 +18,7 @@ import metastudio.graph.Node;
 import metastudio.graph.NodeId;
 import metastudio.graph.NodeList;
 import metastudio.graph.Shape;
+import metastudio.graph.Attribute_Info;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -51,6 +52,25 @@ public class GraphWrapper
   
       return null;
     }
+
+  public static ATerm getNodeInfo(String key, Node n) {
+      AttributeList list = n.getAttributes();
+
+      while (!list.isEmpty()) {
+        Attribute head = list.getHead();
+     
+        if (head.isInfo()) {
+          if (head.getKey().equals(key)) {
+            return head.getValue();
+          }
+        }
+
+        list = list.getTail();
+      }
+  
+      return null;
+    }
+    
     
   //{{{ public Node getNode(String id)
 

@@ -77,13 +77,15 @@ extends NodeImpl
 
   //}}}
 
-  private Attribute_Info getInfoAttribute()
+  private Attribute_Info getInfoAttribute(String s)
   {
     AttributeList attrs = getAttributes();
     while (!attrs.isEmpty()) {
       Attribute attr = attrs.getHead();
       if (attr.isInfo()) {
-	return (Attribute_Info)attr;
+        if (attr.getKey().equals(s)) {
+	  return (Attribute_Info)attr;
+        }
       }
       attrs = attrs.getTail();
     }
@@ -178,14 +180,15 @@ extends NodeImpl
 
   //}}}
 
-  public boolean hasInfo()
+  public boolean hasInfo(String s)
   {
-    return getInfoAttribute() != null;
+    Attribute_Info attr = getInfoAttribute(s);
+    return attr != null;
   }
 
-  public ATerm getInfo() 
+  public ATerm getInfo(String s) 
   {
-    Attribute_Info attr = getInfoAttribute();
+    Attribute_Info attr = getInfoAttribute(s);
     if (attr != null) {
       return attr.getValue();
     }

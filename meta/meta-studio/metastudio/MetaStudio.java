@@ -385,7 +385,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     //}}}
     
-    parseTreePanel = new ParseTreePanel();
+    parseTreePanel = new ParseTreePanel(bridge, factory);
     addGraphPanel(parseTreePanel, "Parsetree graph");
     
     //{{{ Create message history
