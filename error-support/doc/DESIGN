@@ -1,0 +1,29 @@
+
+Note to developers of the ErrorAPI:
+
+The error API has been designed with two things in mind:
+  - the concrete syntax must be equal to the abstract syntax 
+  - there must be a parsed API and an abstract API, both with similar
+    interfaces and generated from the same SDF2 definition.
+
+These two features put some constraints on the SDF2 definition. For
+example, care must be taken when dealing with lists (add "[" "]" around
+them!). Also, the cons name must be chosen equal to the literal function
+name on the left-hand side of each production in the SDF2 definition.
+
+E.g:
+
+"info" "(" id:StrCon ","
+ ^^^^      producer-id:StrCon ","
+  |        producer-type:StrCon ","
+  |        description:StrCon ","
+  |        "[" {Subject ","}* "]" ")" -> Feedback {cons("info")}
+  |        ^^^                ^^^                        ^^^^
+  |         `------------------'                           |
+  `--------------------------------------------------------'
+
+Note that we use the feature of SDF2-to-Imploded-ADT that converts fields
+of type NatCon to <int> and fields of type StrCon to <str>.
+
+BY THE WAY: the SDF2 definition of the ErrorAPI is obtained from the
+            asf-library package implicitly (see lib/Makefile.am)

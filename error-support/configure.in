@@ -56,6 +56,7 @@ dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
   lib/Makefile
+  doc/Makefile
   utils/Makefile
   utils/lift-error/Makefile
 )
