@@ -14,9 +14,17 @@ dnl AC_ARG_WITH(aterm,
 dnl    [  --with-aterm            Specify location of aterm library, default: ${prefix}], ATERM=$withval, ATERM=${prefix})
 dnl AC_SUBST(ATERM)
 
-AC_PACKAGE_REQUIRE(meta,meta,
-                   [  --with-meta=path       Location of the ASF+SDF Meta-Environment])
+AC_PACKAGE_REQUIRE(meta,meta,              [  --with-meta=path       Location of the ASF+SDF Meta-Environment])
 AC_SUBST(META)
+
+AC_PACKAGE_REQUIRE(sglr,sglr,              [  --with-sglr=path       Location of sglr (Scannerless Generalized LR Parser)])
+AC_SUBST(SGLR)
+
+AC_PACKAGE_REQUIRE(asf,asfe,               [  --with-asf=path        Location of the ASF evaluator])
+AC_SUBST(ASF)
+
+AC_PACKAGE_REQUIRE(pt-support,unparsePT,   [  --with-pt-support=path Location of the Parse Tree support])
+AC_SUBST(PT_SUPPORT)
 
 
 
