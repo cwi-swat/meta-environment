@@ -1,0 +1,20 @@
+module Find-Constructors 
+
+imports MuASF-Equations-Ops
+exports
+
+context-free syntax
+
+find-constructors(Module,NameTable) -> MN-struct
+
+hiddens
+
+context-free syntax
+
+fc-funcdeflist(FuncDefList,RuleList,NameTable) -> FuncDefList # NameTable
+fc-funcdef(FuncDef,RuleList,NameTable)         -> FuncDef # NameTable
+
+has-rule(FuncDef,RuleList)            -> Bool
+
+add-attr(FuncDef,Term)                -> FuncDef
+add-attr(FunId,NameTable,Term)        -> NameTable
