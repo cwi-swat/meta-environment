@@ -45,6 +45,9 @@ ATbool PT_isOptLayoutSymbol(PT_Symbol arg);
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
 PT_Args PT_reverseArgs(PT_Args args);
+int PT_getArgsLength(PT_Args args);
+PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
+PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 
 char *PT_yieldParseTree(PT_ParseTree tree);
 char *PT_yieldTree(PT_Tree tree);
@@ -52,5 +55,29 @@ char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
 
 PT_ParseTree implodeParseTree(PT_ParseTree tree);
+
+typedef void* PT_TreeVisitorData;
+typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);
+PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,                                           PT_TreeVisitorData data);
+
+typedef void* PT_SymbolVisitorData;
+typedef PT_Symbol (*PT_SymbolVisitor)(PT_Symbol symbol,
+                                      PT_SymbolVisitorData data);
+PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
+                                     PT_SymbolVisitor visitor,
+                                     PT_SymbolVisitorData data); 
+
+PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
+
+ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
+PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);
+PT_Tree PT_annotateTreeWithLength(PT_Tree tree);
+PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree);
+int     PT_getParseTreeLengthAnno(PT_ParseTree parse_tree);
+int     PT_getTreeLengthAnno(PT_Tree tree);
+PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length);
+PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length);  
+
+PT_Tree PT_makeLayoutEmpty();
 
 #endif /* _ME_PT_H */ 

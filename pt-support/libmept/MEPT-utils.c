@@ -27,6 +27,8 @@
 
 #include "MEPT-utils.h"
 
+#define ANNO_LENGTH "length"  
+
 ATbool PT_prodHasLitAsRhs(PT_Production prod)
 {
   /* This implements: "prod([<list>],lit(<str>),no-attrs)" */
@@ -240,3 +242,276 @@ PT_Args PT_reverseArgs(PT_Args args)
            (ATerm)ATreverse(
                     (ATermList)PT_makeTermFromArgs(args)));
 }
+
+/*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
+
+PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
+                             PT_TreeVisitorData data)
+{
+  ATermList store;
+  PT_Args newArgs = PT_makeArgsEmpty();
+
+  /* apply func to each element */
+  for (store = ATempty;
+      PT_hasArgsHead(args);
+      args = PT_getArgsTail(args)) {
+    store = ATinsert(store,
+                     PT_makeTermFromTree(
+                     visitor(PT_getArgsHead(args),data)));
+  }
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Tree newTree = PT_makeTreeFromTerm(ATgetFirst(store));
+    newArgs = PT_makeArgsList(newTree,newArgs);
+  }
+
+  return newArgs;
+}
+
+/*}}}  */   
+/*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
+
+PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visitor,
+                                     PT_SymbolVisitorData data)
+{
+  ATermList store;
+  PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+
+  /* apply func to each element */
+  store = ATempty;
+  while (PT_hasSymbolsHead(symbols)) {
+    store = ATinsert(store,
+                     PT_makeTermFromSymbol(
+                     visitor(PT_getSymbolsHead(symbols), data)));
+    if (PT_hasSymbolsTail(symbols)) {
+      symbols = PT_getSymbolsTail(symbols);
+    }
+    else {
+      break;
+    }
+  }
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Symbol newSymbol = PT_makeSymbolFromTerm(ATgetFirst(store));
+    newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
+  }
+
+  return newSymbols;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_removeTreeAnnotations(PT_Tree arg) */
+
+PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
+{
+  ATerm atArg = PT_makeTermFromTree(arg);
+
+  if (AT_getAnnotations(atArg) != NULL) {
+    atArg = AT_removeAnnotations(atArg);
+  }
+
+  return PT_makeTreeFromTerm(atArg);
+}
+
+/*}}}  */
+/*{{{  ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key) */
+
+ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key)
+{
+  ATerm atTree = PT_makeTermFromTree(tree);
+
+  return ATgetAnnotation(atTree, key);
+}
+                                                                                /*}}}  */  
+/*{{{  PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value) */
+
+PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value)
+{
+  ATerm t = PT_makeTermFromTree(tree);
+
+  t = ATsetAnnotation(t, key, value);
+
+  return PT_makeTreeFromTerm(t);
+}
+
+/*}}}  */
+/*{{{  ATerm PT_getParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key) */
+
+ATerm PT_getParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key)
+{
+  ATerm atParseTree = PT_makeTermFromParseTree(parse_tree);
+
+  return ATgetAnnotation(atParseTree, key);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeAnnotation(parse_tree, ATerm key, ATerm value) */
+
+PT_ParseTree PT_setParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key, ATerm value)
+{
+  ATerm t = PT_makeTermFromParseTree(parse_tree);
+
+  t = ATsetAnnotation(t, key, value);
+
+  return PT_makeParseTreeFromTerm(t);
+}
+
+/*}}}  */
+/*{{{  int PT_getArgsLength(PT_Args args) */
+
+int PT_getArgsLength(PT_Args args)
+{
+   return ATgetLength((ATermList)PT_makeTermFromArgs(args));
+}
+
+/*}}}  */ 
+/*{{{  static PT_Args annotateArgsWithLength(PT_Args args, int *length) */
+
+static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length);
+
+static PT_Args annotateArgsWithLength(PT_Args args, int *length)
+{
+  PT_Tree head;
+  PT_Args tail;
+  int head_length, tail_length;
+
+  if (PT_isArgsEmpty(args)) {
+    *length = 0;
+    return args;
+  }
+
+  head = PT_getArgsHead(args);
+  tail = PT_getArgsTail(args);
+
+  head = annotateTreeWithLength(head, &head_length);
+  tail = annotateArgsWithLength(tail, &tail_length);
+
+  *length = head_length + tail_length;
+
+  return PT_makeArgsList(head, tail);
+}
+
+/*}}}  */
+/*{{{  static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length) */
+
+static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length)
+{
+  if (PT_hasTreeString(tree)) {
+    *length = strlen(PT_getTreeString(tree));
+  }
+  else if (PT_hasTreeArgs(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    args = annotateArgsWithLength(args, length);
+    tree = PT_setTreeArgs(tree, args);
+  }
+  else {
+    ATerror("unknown tree type: %t\n", PT_makeTermFromTree(tree));
+  }
+
+  return PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
+                              ATmake("<int>", *length));
+
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_annotateTreeWithLength(PT_Tree tree) */
+
+PT_Tree PT_annotateTreeWithLength(PT_Tree tree)
+{
+  int length;
+
+  return annotateTreeWithLength(tree, &length);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree) */
+
+PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree)
+{
+  int length;
+
+  PT_Tree tree = PT_getParseTreeTree(parse_tree);
+  tree = PT_annotateTreeWithLength(tree);
+
+  length = PT_getTreeLengthAnno(tree);
+
+  parse_tree = PT_setParseTreeTree(parse_tree, tree);
+  parse_tree = PT_setParseTreeLengthAnno(parse_tree, length);
+
+  return parse_tree;
+}
+
+/*}}}  */
+/*{{{  int PT_getParseTreeLengthAnno(PT_ParseTree parse_tree) */
+
+int PT_getParseTreeLengthAnno(PT_ParseTree parse_tree)
+{
+  ATerm anno = PT_getParseTreeAnnotation(parse_tree, ATparse(ANNO_LENGTH));
+
+  assert(anno && ATgetType(anno) == AT_INT);
+
+  return ATgetInt((ATermInt)anno);
+}
+
+/*}}}  */ 
+/*{{{  PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length) */
+
+PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length)
+{
+  return PT_setParseTreeAnnotation(parse_tree, ATparse(ANNO_LENGTH),
+                                   (ATerm)ATmakeInt(length));
+}
+
+/*}}}  */
+/*{{{  int PT_getTreeLengthAnno(PT_Tree tree) */
+
+int PT_getTreeLengthAnno(PT_Tree tree)
+{
+  ATerm anno = PT_getTreeAnnotation(tree, ATparse(ANNO_LENGTH));
+  assert(anno);
+  return ATgetInt((ATermInt)anno);
+}
+
+/*}}}  */ 
+/*{{{  PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length) */
+
+PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length)
+{
+  return PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
+                             (ATerm)ATmakeInt(length));
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr) */
+
+PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr)
+{
+  ATermList arg_list = (ATermList)PT_makeTermFromArgs(args);
+  ATerm arg = ATelementAt(arg_list, arg_nr);
+  return PT_makeTreeFromTerm(arg);
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr) */
+
+PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
+{
+  ATermList arg_list = (ATermList)PT_makeTermFromArgs(args);
+  arg_list = ATreplace(arg_list, PT_makeTermFromTree(arg), arg_nr);
+  return PT_makeArgsFromTerm((ATerm)arg_list);
+}
+
+PT_Tree PT_makeLayoutEmpty()
+{
+  PT_Symbol layoutSymbol = PT_makeSymbolCf(
+                             PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Production optLayoutProd = PT_makeProductionDefault(
+                                  PT_makeSymbolsEmpty(),
+                                  layoutSymbol,
+                                  PT_makeAttributesNoAttrs());
+  return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
+}
+
+/*}}}  */ 

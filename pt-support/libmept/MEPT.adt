@@ -1,5 +1,10 @@
 [
-  [ParseTree, Tree, parsetree(<tree(Tree)>,
+  [ParseTree, Tree, parsetree(appl(prod(<lhs(Symbols)>,
+                                        sort("<START>"),
+                                        no-attrs),
+                                   [<layout-before-tree(Tree)>,
+                                    <tree(Tree)>,
+                                    <layout-after-tree(Tree)>]),
                               <amb-cnt(int)>)],
 
   [Tree, appl, appl(<prod(Production)>,

@@ -175,11 +175,11 @@ ATerm PT_makeTermFromSymbols(PT_Symbols arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Tree tree, int ambCnt) */
+/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree layoutBeforeTree, PT_Tree tree, PT_Tree layoutAfterTree, int ambCnt) */
 
-PT_ParseTree PT_makeParseTreeTree(PT_Tree tree, int ambCnt)
+PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree layoutBeforeTree, PT_Tree tree, PT_Tree layoutAfterTree, int ambCnt)
 {
-  return (PT_ParseTree)ATmakeTerm(PT_patternParseTreeTree, tree, ambCnt);
+  return (PT_ParseTree)ATmakeTerm(PT_patternParseTreeTree, lhs, layoutBeforeTree, tree, layoutAfterTree, ambCnt);
 }
 
 /*}}}  */
@@ -490,7 +490,81 @@ ATbool PT_isValidParseTree(PT_ParseTree arg)
 
 ATbool PT_isParseTreeTree(PT_ParseTree arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternParseTreeTree, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternParseTreeTree, NULL, NULL, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasParseTreeLhs(PT_ParseTree arg) */
+
+ATbool PT_hasParseTreeLhs(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Symbols PT_getParseTreeLhs(PT_ParseTree arg) */
+
+PT_Symbols PT_getParseTreeLhs(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_Symbols)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 0);
+  }
+
+  ATabort("ParseTree has no Lhs: %t\n", arg);
+  return (PT_Symbols)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeLhs(PT_ParseTree arg, PT_Symbols lhs) */
+
+PT_ParseTree PT_setParseTreeLhs(PT_ParseTree arg, PT_Symbols lhs)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhs, 0), 0), 0);
+  }
+
+  ATabort("ParseTree has no Lhs: %t\n", arg);
+  return (PT_ParseTree)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg) */
+
+ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg) */
+
+PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 0);
+  }
+
+  ATabort("ParseTree has no LayoutBeforeTree: %t\n", arg);
+  return (PT_Tree)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Tree layoutBeforeTree) */
+
+PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Tree layoutBeforeTree)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)layoutBeforeTree, 0), 1), 0);
+  }
+
+  ATabort("ParseTree has no LayoutBeforeTree: %t\n", arg);
+  return (PT_ParseTree)NULL;
 }
 
 /*}}}  */
@@ -510,7 +584,7 @@ ATbool PT_hasParseTreeTree(PT_ParseTree arg)
 PT_Tree PT_getParseTreeTree(PT_ParseTree arg)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_Tree)ATgetArgument((ATermAppl)arg, 0);
+    return (PT_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
   }
 
   ATabort("ParseTree has no Tree: %t\n", arg);
@@ -523,10 +597,47 @@ PT_Tree PT_getParseTreeTree(PT_ParseTree arg)
 PT_ParseTree PT_setParseTreeTree(PT_ParseTree arg, PT_Tree tree)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)tree, 0);
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)tree, 1), 1), 0);
   }
 
   ATabort("ParseTree has no Tree: %t\n", arg);
+  return (PT_ParseTree)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg) */
+
+ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree arg) */
+
+PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree arg)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+
+  ATabort("ParseTree has no LayoutAfterTree: %t\n", arg);
+  return (PT_Tree)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Tree layoutAfterTree) */
+
+PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Tree layoutAfterTree)
+{
+  if (PT_isParseTreeTree(arg)) {
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)layoutAfterTree, 2), 1), 0);
+  }
+
+  ATabort("ParseTree has no LayoutAfterTree: %t\n", arg);
   return (PT_ParseTree)NULL;
 }
 
@@ -1864,13 +1975,16 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTree)(PT_Tree), int (*acceptAmbCnt)(int)) */
+/*{{{  PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int)) */
 
-PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTree)(PT_Tree), int (*acceptAmbCnt)(int))
+PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int))
 {
   if (PT_isParseTreeTree(arg)) {
     return PT_makeParseTreeTree(
+        acceptLhs ? acceptLhs(PT_getParseTreeLhs(arg)) : PT_getParseTreeLhs(arg),
+        acceptLayoutBeforeTree ? acceptLayoutBeforeTree(PT_getParseTreeLayoutBeforeTree(arg)) : PT_getParseTreeLayoutBeforeTree(arg),
         acceptTree ? acceptTree(PT_getParseTreeTree(arg)) : PT_getParseTreeTree(arg),
+        acceptLayoutAfterTree ? acceptLayoutAfterTree(PT_getParseTreeLayoutAfterTree(arg)) : PT_getParseTreeLayoutAfterTree(arg),
         acceptAmbCnt ? acceptAmbCnt(PT_getParseTreeAmbCnt(arg)) : PT_getParseTreeAmbCnt(arg));
   }
   ATabort("not a ParseTree: %t\n", arg);
