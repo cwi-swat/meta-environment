@@ -1,5 +1,3 @@
-Makefile
-Makefile.in
 manual.aux
 manual.bbl
 manual.blg
@@ -10,3 +8,4 @@ manual.ind
 manual.log
 manual.ps
 manual.toc
+texput.log

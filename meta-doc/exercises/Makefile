@@ -1,6 +1,4 @@
-include ${top_srcdir}/doc/general-make
-
-INPUTS = ${srcdir}
+include ../general-make
 
 EXERCISES	= exercises.ltx pico.ltx
 
@@ -15,5 +13,3 @@ doc: exercises.ps
 exercises.ps: exercises.dvi
 exercises.dvi: $(EXERCISES)
 
-dist: exercises.ps
-	cp exercises.ps ${DISTDIR}
