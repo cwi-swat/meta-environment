@@ -18,12 +18,17 @@ call_toolbus () {
 
 # Test 1. Try to open eqs file that doesn't exist
 rm -f Aap.eqs
-call_toolbus new-eqs-test.tb
+call_toolbus open-eqs-test.tb
 rm -f Aap.eqs
 
 # Test 2. Try to open a eqs file that _does_ exist
 echo "equations" > Aap.eqs
-call_toolbus new-eqs-test.tb
+call_toolbus open-eqs-test.tb
 rm -f Aap.eqs
+
+# Test 3. Try to create a new equations section.
+rm -f Empty.eqs
+call_toolbus new-eqs-test.tb
+rm -f Empty.eqs
 
 echo ""

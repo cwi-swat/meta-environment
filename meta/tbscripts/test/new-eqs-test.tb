@@ -1,25 +1,39 @@
 #include "in-output.idef"
 #include "module-db.idef"
-
-#include "../new-module.tb"
+#include "file-creator.tb"
 
 process Test is
 let
-  Id: int,
-  Src: str,
-  Path: str,
-  Time: int
+  Module: term,
+  Path : str,
+  Time : term,
+  ErrMsg: str
 in
-  Id := process-id.
-  snd-msg(Id, open-eqs-text-file("Aap")) .
+  snd-msg(id("Test"), open-file("Empty")) .
   (
-    rec-msg(Id, opened-file(raw,"Aap",Src?,Path?,timestamp(Time?)))
-   + 
-    rec-msg(Id, error-opening("Aap"))
-   +
-    shutdown("open-eqs-text-file FAILED! (timeout)\n")  delay(sec(5))
+    rec-msg(id("Test"), opened-file(baf, "Empty", Module?, Path?, Time?))
+  +
+    shutdown("new-eqs-test FAILED! (timeout in read)\n") delay(sec(5))
+  ) .
+
+  %% Update the module-db.
+  snd-msg(add-sdf2-module-to-db(Path, Module, Time, "unchanged")) .
+  (
+    rec-msg(need-modules([]))
+  +
+    shutdown("new-eqs-test FAILED! (timeout in update-db)\n") delay(sec(5))
+  ) .
+
+  snd-msg(create-new-equations("Empty")) .
+  (
+    rec-msg(new-equations-created("Empty", "Empty.eqs"))
+  +
+    rec-msg(new-equations-not-created(ErrMsg?)) .
+    printf("new-eqs-test FAILED! (%s)\n", ErrMsg)
+  +
+    shutdown("new-eqs-test FAILED! (timeout)\n") delay(sec(5))
   ) .
   shutdown("") delay(sec(2))
 endlet
 
-toolbus(Test, Io)
+toolbus(Test, Io, ModuleDB, File-creator)
