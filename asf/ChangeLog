@@ -1,3 +1,6 @@
+2001/12/17 (vandenbr@loria.fr)
+ * Add a bracket restoration tool.
+
 2001/12/14 (jurgenv@cwi.nl)
  * Added experimental support for accumulating transformers to the compiler.
  * Added tests for top-down and bottom-up accumulating transformers
@@ -8,7 +11,6 @@
  * Moved traversal function handling functionality from asfc to asc-support.
  * Bumped asfc version to 2.3
  * Bumped package version to 1.2.2beta
-
 
 2001/12/06 (jurgenv@cwi.nl)
  * Fixed a bug in accumulating transformers. Results of such traversal
