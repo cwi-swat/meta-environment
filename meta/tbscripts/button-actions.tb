@@ -479,7 +479,7 @@ in
         StackPopTerm(Stack,Stack?,STree?) .
         StackPopString(Stack,Stack?, ModuleName?) .
         FileName := first(args(STree)) .
-        snd-msg(edit-term-file(ModuleName, FileName)) .
+        snd-msg(edit-general(ModuleName, FileName)) .
         rec-msg(editor-opened(ModuleName, EditorId2?)).
         GetTree(EditorId2, ModuleName, Tree?) .
         snd-msg(goto-focus-at-posinfo(EditorId2, STree)) .    

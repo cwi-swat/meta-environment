@@ -17,6 +17,9 @@ let
   Tree       : term
 in
   (
+    rec-msg(edit-general(ModuleName?, FileName?)) .
+    GeneralEditorCreator(ModuleName, FileName)
+  +
     rec-msg(edit-syntax(ModuleName?)) .
     SyntaxEditorCreator(ModuleName)
   +
@@ -33,6 +36,27 @@ in
     KillEditorsForModule(ModuleName)
   )
   * delta
+endlet
+
+process GeneralEditorCreator (ModuleName : str, FullFileName : str) is
+let
+  Path : str,
+  FileName : str,
+  Extension : str
+in
+  snd-msg(decons-file-name(FullFileName, ".sdf")) .
+  rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
+  if equal(Extension, ".sdf") then
+    SyntaxEditorCreator(ModuleName)
+  else
+    snd-msg(decons-file-name(FullFileName, ".asf")) .
+    rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
+    if equal(Extension, ".asf") then
+      EquationsEditorCreator(ModuleName)
+    else
+      TermEditorCreator(ModuleName, FullFileName, none)
+    fi
+  fi
 endlet
 
 process SyntaxEditorCreator (ModuleName : str) is
