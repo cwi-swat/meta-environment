@@ -488,4 +488,7 @@ assert "type, 17": MS == "abc"
 assert "type, 18": MP.theInt == P.theInt
 assert "type, 19": MP.theStr == P.theStr
 
+assert "type, 20": first(P) == 1
+assert "type, 21": second(P) == "a"
+
 
