@@ -1,3 +1,8 @@
+# $Id$
+
+2003/08/31 ({jong,jurgenv}@cwi.nl)
+ * Set version to 1.7.1
+
 2003/07/29 ({jurgenv,markvdb}@cwi.nl)
  * made RWsetError type-safe (it called PT_yieldTree on an ATerm, now
    it is always a PT_Tree)
