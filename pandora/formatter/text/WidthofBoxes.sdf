@@ -7,7 +7,7 @@ imports LengthofBoxes
 
 exports
   context-free syntax
-    width of Box* with Frame -> Integer
+    "width" "of" Box* "with" Frame -> Integer
 
 hiddens
   variables

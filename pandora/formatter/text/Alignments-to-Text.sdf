@@ -26,7 +26,7 @@ hiddens
     "minimal" "width" AlignInfo "with" Integer     -> Integer
     "maximal" "width" AlignInfo "with" Integer     -> Integer
     "fixed" "width" AlignInfo "with" Integer       -> Integer
-    "variable" "column"s AlignInfo               -> Integer
+    "variable" "columns" AlignInfo               -> Integer
     "fix" "column" "widths" AlignInfo "with" "minimal" -> AlignInfo
     "fix" "column" "widths" AlignInfo "with" "maximal" -> AlignInfo
     "fix" "column" "widths" AlignInfo "with"
