@@ -2,7 +2,8 @@ $Id$
 
 2002/03/27 (jurgenv@cwi.nl)
  * Made toolbus take CPPFLAGS into account when calling the C preprocessor.
-   This should fix some portability issue for MacOS X.
+   This should partly fix some portability issue for MacOS X.
+ * Added substitution of CPP and CPPFLAGS to configure.in.
 
 2002/03/05 (jong@cwi.nl)
  * Several adapters 'omgeSPECt' from 8 to 12 bytes

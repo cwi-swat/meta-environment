@@ -17,6 +17,11 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
+dnl CPP and FlAGS are needed by toolbus for calling preprocessor as 
+dnl configured correctly:
+AC_SUBST(CPP)
+AC_SUBST(CPPFLAGS)
+
 AC_PROG_RANLIB
 AR=ar
 AC_SUBST(AR)
