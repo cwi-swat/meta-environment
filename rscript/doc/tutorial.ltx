@@ -7,6 +7,8 @@
 \usepackage{supertabular}
 
 \newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
+\newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
+
 \title{A Tutorial Introduction to \rscript}
 \author{Paul Klint}
 
@@ -16,29 +18,58 @@
 \maketitle
 
 \begin{abstract}
-This short note documents the current state of the \rscript language.  It has
-been hastily written, and is incomplete. Apologies for that. Better something
-than nothing.
+This short note documents the current state of the \rscript language.
+Be aware, this work in progress.
 \end{abstract}
 
 \section{Introduction}
 
-\rscript is a small scripting language based on the relational calculus that
-is intended for writing queries about software: from individual programs to
-complete software systems.
+\rscript is a small scripting language based on the relational
+calculus.  It is intended for analyzing and querying the source code
+of software systems: from finding uninitialized variables in a single
+program to formulating queries about the architecture of a complete
+software system. \rscript fits well in the extract-enrich-view paradigm:
+
+\begin{description}
+\item[Extract:] Given the source text, extract relevant information
+from it in the form of relations. Examples are the CALLS relation that
+describes direct calls between procedures, the USE relation that
+relates statements with the variables that are used in the statements,
+and the PRED relation that relates a statement with its predecessors
+in the control flow graph.  The extraction phase is outside the scope
+of \rscript, may be implemented using \asfsdf.
+
+\item[Enrich:] Derive additional information from the relations
+extracted from the source text. For instance, use CALLS to compute
+procedures that can also call each other indirectly (using transitive
+closure).  Here is where \rscript shines.
+
+\item[View:] The result of the enrichment phase are again bags and
+relations.  These can be displayed with various tools like, Dot, Rigi
+and others. \rscript is not concerned with viewing.
+
+\end{description}
 
 \section{The \rscript language}
+
+\rscript is based on \emph{binary relations} only and has no direct support
+for n-ary relations with labelled columns as usual in a general
+database language. However, some syntactic support for n-ary relations
+exists that translates them internally to binary relations. We will
+explain this further below.
+
 An \rscript consists of a sequence of declarations for variables and/or
 functions. Usually, the value of one of these variables is what the writer of the
 script is interested in.
 
-The language has scalar types (Boolean, integer, string, node) and composite
-types (bag and relation). Expressions are constructed from bag formers, set
-formers, function invocations and operators. These are all described below.
+The language has scalar types (Boolean, integer, string, area) and
+composite types (bag and relation). Expressions are constructed from
+comprehensions, function invocations and operators. These are all
+described below.
 
 \section{Types and values}
 
-\subsection{Elementary types and values}
+\subsection{Elementary Types and Values}
 
 \paragraph{Booleans}
 The Booleans are represented by the type {\tt bool} and have two values:
@@ -53,82 +84,121 @@ The string values are represented by the type {\tt str} and consist
 of character sequences surrounded by double quotes. e.g., {\tt "a"} or
 {\tt "a\ long\ string"}.
 
-\paragraph{Nodes}
-Node values are represented by the type {\tt node} and serve as source text
+\paragraph{Areas}
+Area values are represented by the type {\tt area} and serve as source text
 coordinates, they are written as in: {\tt area("/usr/paulk/myfile.c", 2, 3, 7,
-55)}.\footnote{Probably the name ``node'' is wrong and should be replaced by
-something like ``area'', ``text-area'', ``coordinates'', etc.}
+55)}.
 
 \subsection{Composite Types and Values}
 
+\paragraph{Tuples}
+
+Tuples are represented by the type {\tt <T1, T2>}, where {\tt T1} and
+{\tt T2} are arbitrary types. An example is {\tt <int, str>}.
+
+\rscript directly supports tuples consisting of two elements (also
+know as \emph{pairs}).  For convenience, n-ary tuples are allowed, but
+they are translated to a nested pair.  For instance, the type {\tt
+<int, int, int, int>} corresponds to {\tt <int, <int, <int, int>>>}
+and the value {\tt <1, 2, 3, 4>} corresponds to {\tt <1, <2, <3, 4>>>}.
+
 \paragraph{Bags}
-Bags are represented by the type {\tt bag[T]}, where {\tt T} is an arbitrary
-type. Examples are {\tt bag[int]} and {\tt bag[bag[str]]}.  Bags are denoted
-by {\tt \{ E1, E2, ..., En \}}, where the {\tt E}s are expressions that yield
-the desired element type. For example, {\tt \{1, 2, 3\}}, {\tt \{1, 2+3,
-5*9\}}, {\tt \{\{1, 2\}, \{3, 4\}\}}.
+Bags are represented by the type {\tt bag[T]}, where {\tt T} is an
+arbitrary type. Examples are {\tt bag[int]}, {{\tt bag[<int,int>]} and
+{\tt bag[bag[str]]}.  Bags are denoted by {\tt \{ E1, E2, ..., En \}},
+where the {\tt E}s are expressions that yield the desired element
+type. For example, {\tt \{1, 2, 3\}}, {\tt \{<1,10>, <2,20>,
+<3,30>\}}, and {\tt \{\{"a", "b"\}, \{"c", "d"\}\}}.
 
-\paragraph{Note} It is not at all clear that it is a good idea to allow these
-nested types. There are two reasons for this:
-\begin{itemize}
-\item When using a non-nested type, all built-in primitives are directly
-  usable; this may not be the case for a nested type. This is most important
-  for relations.
-
-\item Implementation considerations may dictate that we abstain from nested types.
-\end{itemize}
-\textbf{Advice: be reluctant with the use of nested types.}
-
-\begin{sloppypar}
 \paragraph{Relations}
-Relations are represented by the type {\tt rel[T1, T2]}, where {\tt T1} and
-{\tt T2} are arbitrary
-types. Examples are {\tt rel[int,str]} and {\tt rel[int,bag[str]]}.  Relations are denoted
-by {\tt \{<E11, E12>, <E21, E22>, ..., <En1, En2>\}}, where the {\tt E}$_ij$ are expressions that yield
-the desired element type. For example, {\tt \{<1, "a">, <2, "b",
-  <3,"c">\}}.
-\end{sloppypar}
+Bags are nothing more than bags of tuples, but since they are used so often
+we provide some shorthand notation for them.
 
-\section{Bag and relation formers}
+Relations are represented by the type {\tt rel[T1, T2]}, where {\tt
+T1} and {\tt T2} are arbitrary types; it is a shorthand for {\tt
+bag[<T1, T2>]}.  Examples are {\tt rel[int,str]} and {\tt
+rel[int,bag[str]]}.  Relations are denoted by {\tt \{<E11, E12>, <E21,
+E22>, ..., <En1, En2>\}}, where the {\tt E}$_ij$ are expressions that
+yield the desired element type. For example, {\tt \{<1, "a">, <2, "b",
+<3,"c">\}}.
 
-\paragraph{Generators}
-We will use the notion of a generator that enumerates all the values in a
-given bag or relation. A \emph{bag generator} has the form {\tt V in E}, where
-{\tt V} is a variable and {\tt E} is a bag-valued expression.  A
-\emph{relation generator} has the form {\tt <V1, V2> in E}, where {\tt V1} and
-{\tt V2} are variables and {\tt E} is a relation-valued expression.
-Generators introduce variables that may be used in the expression in which
-they occur.
+N-ary relations are represented by the type  {\tt rel[T1, T2, ..., Tn]}
+which is, not surprisingly, a shorthand for  {\tt bag[<T1, T2, ..., Tn>]}
 
-\paragraph{Bag formers}
+\section{Comprehensions}
 
-A bag former is an expression that yields a bag as value and has the form
+We will use the familiar notation
 \begin{verbatim}
-{ E : G1, ..., Gn | P }
+  { Exp | Gen1, ..., Genn }
 \end{verbatim}
-where the {\tt G}$_i$ are generators. {\tt P} is a predicate.  Note that
-generators may use variables introduced by preceeding generators.  The
-predicate {\tt P} and the expression {\tt E} can use all the values introduced
-by the generators. The meaning of this construct is that the predicate is
-applied for all combinations of generated values and the value of {\tt E} is
-added to the bag when the predicate is true. Note that the value of {\tt E}
-may be a single value or a bag of values. In the former case the single value
-is added to the resulting bag. In the latter case, all the elements of the
-bag value are added to the resulting bag.
+to denote the construction of a bag consisting of the union of
+successive values of the expression {\tt Exp}.  The values and the
+generated bag are determined by {\tt Exp} and the \emph{generators}
+{\tt Gen1, ..., Genn}.  {\tt Exp} is computed for all possible
+combinations of values produced by the generators.
 
-\paragraph{Example}
+Each generator may introduce new variables
+that can be used in subsequent generators as well as in the expression
+{\tt Exp}.  A generator can use the variables introduced by preceeding
+generators.  Generators may enumerate all the values in a bag or
+relation, they may perform a test, or they may assign a value to
+variables.
 
-{\tt \{X : X in \{1, 2, 3, 4, 5\} | X >= 3\}} yields the bag {\tt \{3,4,5\}}.
+\subsection{Generators}
 
-\paragraph{Relation formers}
-A relation former has the same syntax as a bag former with the additional
-constraint that the expression {\tt E} must either yield a tuple or a
-relation.
+\paragraph{Enumerator}
+Enumerators generate all the values in a given bag or relation.
+They come in two flavours: 
 
-\paragraph{Example}
+\begin{itemize}
+\item {\tt V : Exp}: the elements of the bag or relation that results from the evaluation
+of {\tt Exp} are enumerated and subsequently assigned to the new variable {\tt V}.
 
-{\tt \{X : X in \{1, 2, 3\}, Y in \{2, 3, 4\} | X >= Y\}} yields the relation
+
+\item {\tt <V1, ..., Vn> : Exp}: the elements of the bag or relation
+that results from the evaluation of {\tt Exp} are enumerated. The
+elements of the resulting n-tuple are subsequently assigned to the
+new variables {\tt V1, ..., Vn}.
+
+\end{itemize}
+
+\paragraph{Test}
+A test is a boolean-valued expression. If the evaluation yields {\tt
+true} this indicates that the current combination of generated values is
+still as desired and execution continues with subsequent generators.
+otherwise.
+If the evaluation yields {\tt false} this indicates that the current
+combination of values is undesired, and that another combination
+should be tried.
+
+\paragraph{Assignment}
+Assignment assigns a value to one or more variables and comes in two forms:
+
+\begin{itemize}
+
+\item \item {\tt V : Exp}: assigns the value of {\tt Exp} to the new variable {\tt V}.
+
+\item {\tt <V1, ..., Vn> : Exp}: assigns the elements of the n-tuple
+resulting from the evaluation of {\tt Exp} to the new variables {\tt
+V1, ..., Vn}.
+
+\end{itemize}
+
+
+\subsection{Examples of Comprehensions}
+
+\paragraph{Example 1}
+
+{\tt \{X | X : \{1, 2, 3, 4, 5\},  X >= 3\}} yields the bag {\tt \{3,4,5\}}.
+
+\paragraph{Example 2}
+
+{\tt \{X | X :\{1, 2, 3\}, Y :\{2, 3, 4\} | X >= Y\}} yields the relation
 {\tt \{<2, 2>, <3, 2>, <3, 3>\}}.
+
+\paragraph{Example 3}
+{\tt \{<Y, X> | X, Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
+the given relation: {\tt \{<10,1>, <20,2>\}}.
 
 \section{Declarations}
 
@@ -199,6 +269,10 @@ false otherwise\\ \hline
 
 bool \texttt{or} bool & yields true if either argument has the value true and
                          false otherwise\\ \hline
+
+bool \texttt{implies} bool & yields false if the first argument has the value true and
+                             the second argument has value false, and
+                         true otherwise\\ \hline
 
 {\tt not} bool & yields true if its argument is false and true otherwise \\
 \hline
@@ -367,9 +441,9 @@ argument, using the carrier set of that argument oas universe \\ \hline
 
 {\tt reachR(} bag1, bag2, rel {\tt )} & yields the relation that describes
 which nodes can be reached from bag1 using the relation rel, such that only nodes in
-bag2 are used.
+bag2 are used. \\ \hline
 
-\\ \hline
+{\tt power(} bag {\tt )} & yields the powerset of the value of its argument \\ \hline
 
 {\tt reachX(} bag, bag, rel {\tt )} &  yields the relation that describes
 which nodes can be reached from bag1 using the relation rel, such that no nodes in
