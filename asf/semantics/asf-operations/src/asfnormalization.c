@@ -16,7 +16,7 @@ static void initialize() {
     ASF_initASFMEApi();
     ASC_initRunTime(INITIAL_TABLE_SIZE);
     PT_initAsFix2Api();
-    setKeepAnnotations(ATtrue);
+    setKeepAnnotations(ATfalse);
 
     register_ASF_Normalization();
     resolve_ASF_Normalization();
