@@ -3,6 +3,8 @@
 2002/05/17 (vandenbr@loria.fr)
  * Restructured the ToolBus code a bit, introduced a separate 
    process errors process.
+ * Both pt-dump and eqs-dump have to be aware of the asf-libraries as
+   well.
 
 2002/05/16 (vandenbr@loria.fr)
  * Added a message action to buttons.

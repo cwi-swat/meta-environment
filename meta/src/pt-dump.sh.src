@@ -11,6 +11,7 @@ pgen=__PGEN__
 asf=__ASF__
 toolbus=__TOOLBUS__
 prefix=__PREFIX__
+asf_library_path=__ASF_LIBRARY__/share/asf-library
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
       ${asf}/bin:${asf}/bin:${toolbus}/bin:${PATH}"; 
@@ -99,7 +100,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
+toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\"" 
 
 toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share \
