@@ -2,7 +2,7 @@
 
 include ../Metarules.include
 
-all test: $(PICO).tbl
+test: $(PICO).tbl
 
 clean:
 	rm -f $(PICO).tbl
