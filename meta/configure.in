@@ -1,7 +1,7 @@
 dptprettynl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(meta, 1.4)
+AM_INIT_AUTOMAKE(meta, 1.5)
 AC_PREREQ(2.59)
 
 AC_PROG_CC
@@ -47,13 +47,18 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl Require ToolBus Java library
+AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
+   [  --with-toolbus-java-adapter=DIR   ToolBus Java library is in DIR])
+AC_SUBST(TOOLBUS_JAVA_ADAPTER)
+
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/error-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
