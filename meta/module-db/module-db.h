@@ -23,9 +23,9 @@
 #include <atb-tool.h>
 #include <string.h>
 
-#include <PT-utils.h>
-#include <SDF-utils.h>
-#include <ASF-utils.h>   
+#include <MEPT-utils.h>
+#include <SDFME-utils.h>
+#include <ASFME-utils.h>   
 #include <aterm2.h>
 #include <stdlib.h>
 #include <limits.h>
