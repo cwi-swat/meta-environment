@@ -264,8 +264,8 @@ AC_OUTPUT(
    editors/text/Makefile
    editors/structure/Makefile
    editors/structure/src/Makefile
-   toolbus/Makefile
-   toolbus/test/Makefile
+   tbscripts/Makefile
+   tbscripts/test/Makefile
    utils/Makefile
    utils/genmakefile
    grammars/Makefile
