@@ -58,7 +58,6 @@ in
           rec-msg(error-position(Pos?)).
           snd-msg(display-error(EditorId, Pos)).
           snd-note(ui-status(errorf("Ambiguities detected (%d)",[Amount]))).
-          printf("Ambiguities(%d):\n%t\n",Amount, Ambs).
           snd-msg(replace-focus(EditorId, Focus, Tree))
         +
           (
@@ -78,7 +77,6 @@ in
           rec-msg(error-position(Pos?)).
           snd-msg(display-error(EditorId, Pos)).
           snd-note(ui-status(errorf("Ambiguities detected (%d)",[Amount]))).
-          printf("Ambiguities(%d):\n%t\n",Amount, Ambs).
           ErrorFoci := join(ErrorFoci, Focus)
         +
           rec-msg(parse-result-asfix2me(Id, 
