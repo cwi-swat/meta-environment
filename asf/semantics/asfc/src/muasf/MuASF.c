@@ -663,6 +663,14 @@ MA_Term MA_makeTermFunc(MA_FunId FunId, MA_Layout wsAfterFunId, MA_Layout wsAfte
 }
 
 /*}}}  */
+/*{{{  MA_Term MA_makeTermTyped(MA_Term term, MA_Layout wsAfterTerm, MA_Layout wsAfterColon, MA_Term type) */
+
+MA_Term MA_makeTermTyped(MA_Term term, MA_Layout wsAfterTerm, MA_Layout wsAfterColon, MA_Term type)
+{
+  return (MA_Term)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun28))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23))), (ATerm)ATmakeAppl1(MA_afun11, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun12, (ATerm)ATmakeAppl0(MA_afun29))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)type), (ATerm)wsAfterColon), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun28))), (ATerm)wsAfterTerm), (ATerm)term));
+}
+
+/*}}}  */
 /*{{{  MA_TermArgs MA_makeTermArgsSingle(MA_Term head) */
 
 MA_TermArgs MA_makeTermArgsSingle(MA_Term head)
@@ -683,7 +691,7 @@ MA_TermArgs MA_makeTermArgsMany(MA_Term head, MA_Layout wsAfterFirst, char * sep
 
 MA_TermList MA_makeTermListDefault(MA_TermElems elems)
 {
-  return (MA_TermList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun29))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)));
+  return (MA_TermList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)));
 }
 
 /*}}}  */
@@ -715,7 +723,7 @@ MA_TermElems MA_makeTermElemsMany(MA_Term head, MA_Layout wsAfterFirst, char * s
 
 MA_SigArg MA_makeSigArgNormal()
 {
-  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))));
+  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))));
 }
 
 /*}}}  */
@@ -723,7 +731,7 @@ MA_SigArg MA_makeSigArgNormal()
 
 MA_SigArg MA_makeSigArgStar(MA_Layout wsAfterUnderscore)
 {
-  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun22))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun22))), (ATerm)wsAfterUnderscore), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))));
+  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun22))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun22))), (ATerm)wsAfterUnderscore), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))));
 }
 
 /*}}}  */
@@ -731,7 +739,7 @@ MA_SigArg MA_makeSigArgStar(MA_Layout wsAfterUnderscore)
 
 MA_SigArg MA_makeSigArgPlus(MA_Layout wsAfterUnderscore)
 {
-  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun10))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun10))), (ATerm)wsAfterUnderscore), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun30))));
+  return (MA_SigArg)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun10))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun10))), (ATerm)wsAfterUnderscore), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun32))));
 }
 
 /*}}}  */
@@ -739,7 +747,7 @@ MA_SigArg MA_makeSigArgPlus(MA_Layout wsAfterUnderscore)
 
 MA_FuncDef MA_makeFuncDefConstantNoAnnos(MA_FunId FunId)
 {
-  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)FunId));
+  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)FunId));
 }
 
 /*}}}  */
@@ -747,7 +755,7 @@ MA_FuncDef MA_makeFuncDefConstantNoAnnos(MA_FunId FunId)
 
 MA_FuncDef MA_makeFuncDefConstantWithAnnos(MA_FunId FunId, MA_Layout wsAfterFunId, MA_Annotations annos)
 {
-  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)annos), (ATerm)wsAfterFunId), (ATerm)FunId));
+  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun35)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)annos), (ATerm)wsAfterFunId), (ATerm)FunId));
 }
 
 /*}}}  */
@@ -755,7 +763,7 @@ MA_FuncDef MA_makeFuncDefConstantWithAnnos(MA_FunId FunId, MA_Layout wsAfterFunI
 
 MA_FuncDef MA_makeFuncDefFuncNoAnnos(MA_FunId FunId, MA_Layout wsAfterFunId, MA_Layout wsAfterParenOpen, MA_SigArgElems elems, MA_Layout wsAfterElems)
 {
-  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)wsAfterElems), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)wsAfterFunId), (ATerm)FunId));
+  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)wsAfterElems), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)wsAfterFunId), (ATerm)FunId));
 }
 
 /*}}}  */
@@ -763,7 +771,7 @@ MA_FuncDef MA_makeFuncDefFuncNoAnnos(MA_FunId FunId, MA_Layout wsAfterFunId, MA_
 
 MA_FuncDef MA_makeFuncDefFuncWithAnnos(MA_FunId FunId, MA_Layout wsAfterFunId, MA_Layout wsAfterParenOpen, MA_SigArgElems elems, MA_Layout wsAfterElems, MA_Layout wsAfterParenClose, MA_Annotations annos)
 {
-  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)annos), (ATerm)wsAfterParenClose), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)wsAfterElems), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)wsAfterFunId), (ATerm)FunId));
+  return (MA_FuncDef)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun35)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)annos), (ATerm)wsAfterParenClose), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun14))), (ATerm)wsAfterElems), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun15))), (ATerm)wsAfterFunId), (ATerm)FunId));
 }
 
 /*}}}  */
@@ -787,7 +795,7 @@ MA_SigArgElems MA_makeSigArgElemsMany(MA_SigArg head, MA_Layout wsAfterFirst, ch
 
 MA_Annotations MA_makeAnnotationsDefault(MA_Layout wsAfterBraceOpen, MA_TermTerms terms, MA_Layout wsAfterTerms)
 {
-  return (MA_Annotations)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun35))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun34))), (ATerm)wsAfterTerms), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)terms)), (ATerm)wsAfterBraceOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun35))));
+  return (MA_Annotations)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun36))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun35))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun36))), (ATerm)wsAfterTerms), (ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)terms)), (ATerm)wsAfterBraceOpen), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))));
 }
 
 /*}}}  */
@@ -811,7 +819,7 @@ MA_TermTerms MA_makeTermTermsMany(MA_Term head, MA_Layout wsAfterFirst, char * s
 
 MA_SigArgList MA_makeSigArgListDefault(MA_SigArgElems elems)
 {
-  return (MA_SigArgList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun36))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun31)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)));
+  return (MA_SigArgList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun38))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun25, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun33)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun26))))), (ATerm)elems)));
 }
 
 /*}}}  */
@@ -819,7 +827,7 @@ MA_SigArgList MA_makeSigArgListDefault(MA_SigArgElems elems)
 
 MA_FuncDefList MA_makeFuncDefListDefault(MA_FuncDefElems elems)
 {
-  return (MA_FuncDefList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun38))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun32)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))))), (ATerm)elems)));
+  return (MA_FuncDefList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun34)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))))), (ATerm)elems)));
 }
 
 /*}}}  */
@@ -851,7 +859,7 @@ MA_FuncDefElems MA_makeFuncDefElemsMany(MA_FuncDef head, MA_Layout wsAfterFirst,
 
 MA_Rule MA_makeRuleNoConds(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEquals, MA_Term rhs)
 {
-  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -859,7 +867,7 @@ MA_Rule MA_makeRuleNoConds(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterE
 
 MA_Rule MA_makeRuleDefaultNoConds(MA_Layout wsAfterDefaultColon, MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEquals, MA_Term rhs)
 {
-  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterDefaultColon), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))));
+  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun43))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterDefaultColon), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun43))));
 }
 
 /*}}}  */
@@ -867,7 +875,7 @@ MA_Rule MA_makeRuleDefaultNoConds(MA_Layout wsAfterDefaultColon, MA_Term lhs, MA
 
 MA_Rule MA_makeRuleDefaultWithConds(MA_Layout wsAfterDefaultColon, MA_CondList conds, MA_Layout wsAfterConds, MA_Layout wsAfterImplies, MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEquals, MA_Term rhs)
 {
-  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun43)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterImplies), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)wsAfterConds), (ATerm)conds), (ATerm)wsAfterDefaultColon), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))));
+  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun44))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun43))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterImplies), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun44))), (ATerm)wsAfterConds), (ATerm)conds), (ATerm)wsAfterDefaultColon), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun43))));
 }
 
 /*}}}  */
@@ -875,7 +883,7 @@ MA_Rule MA_makeRuleDefaultWithConds(MA_Layout wsAfterDefaultColon, MA_CondList c
 
 MA_Rule MA_makeRuleWithConds(MA_CondList conds, MA_Layout wsAfterConds, MA_Layout wsAfterImplies, MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEquals, MA_Term rhs)
 {
-  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun43)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterImplies), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)wsAfterConds), (ATerm)conds));
+  return (MA_Rule)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun44))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEquals), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun41))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterImplies), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun44))), (ATerm)wsAfterConds), (ATerm)conds));
 }
 
 /*}}}  */
@@ -883,7 +891,7 @@ MA_Rule MA_makeRuleWithConds(MA_CondList conds, MA_Layout wsAfterConds, MA_Layou
 
 MA_RuleList MA_makeRuleListDefault(MA_RuleElems elems)
 {
-  return (MA_RuleList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun44))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun37))))), (ATerm)elems)));
+  return (MA_RuleList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun46))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun42)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun39))))), (ATerm)elems)));
 }
 
 /*}}}  */
@@ -915,7 +923,7 @@ MA_RuleElems MA_makeRuleElemsMany(MA_Rule head, MA_Layout wsAfterFirst, char * s
 
 MA_CondList MA_makeCondListDefault(MA_CondElems elems)
 {
-  return (MA_CondList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun46))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun43))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun28, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun46))))), (ATerm)elems)));
+  return (MA_CondList)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun47)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun48))))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl1(MA_afun27, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl2(MA_afun30, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun47)), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun48))))), (ATerm)elems)));
 }
 
 /*}}}  */
@@ -947,7 +955,7 @@ MA_CondElems MA_makeCondElemsMany(MA_Cond head, MA_Layout wsAfterFirst, char * s
 
 MA_Cond MA_makeCondAssign(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterAssign, MA_Term rhs)
 {
-  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun47))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterAssign), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun47))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun49))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun47))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterAssign), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun49))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -955,7 +963,7 @@ MA_Cond MA_makeCondAssign(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterAs
 
 MA_Cond MA_makeCondEqual(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEqual, MA_Term rhs)
 {
-  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun48))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEqual), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun48))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun50))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun47))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterEqual), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun50))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -963,7 +971,7 @@ MA_Cond MA_makeCondEqual(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterEqu
 
 MA_Cond MA_makeCondUnequal(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterUnequal, MA_Term rhs)
 {
-  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun49))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun45))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterUnequal), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun49))), (ATerm)wsAfterLhs), (ATerm)lhs));
+  return (MA_Cond)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun51))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun23)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun47))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rhs), (ATerm)wsAfterUnequal), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun51))), (ATerm)wsAfterLhs), (ATerm)lhs));
 }
 
 /*}}}  */
@@ -971,7 +979,7 @@ MA_Cond MA_makeCondUnequal(MA_Term lhs, MA_Layout wsAfterLhs, MA_Layout wsAfterU
 
 MA_SignatureOpt MA_makeSignatureOptAbsent()
 {
-  return (MA_SignatureOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun50))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATempty);
+  return (MA_SignatureOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATempty);
 }
 
 /*}}}  */
@@ -979,7 +987,7 @@ MA_SignatureOpt MA_makeSignatureOptAbsent()
 
 MA_SignatureOpt MA_makeSignatureOptPresent(MA_Layout wsAfterSignature, MA_FuncDefList funcdefs)
 {
-  return (MA_SignatureOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun38)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun51))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun50))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)funcdefs), (ATerm)wsAfterSignature), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun51))));
+  return (MA_SignatureOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun40)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun53))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)funcdefs), (ATerm)wsAfterSignature), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun53))));
 }
 
 /*}}}  */
@@ -987,7 +995,7 @@ MA_SignatureOpt MA_makeSignatureOptPresent(MA_Layout wsAfterSignature, MA_FuncDe
 
 MA_RulesOpt MA_makeRulesOptAbsent()
 {
-  return (MA_RulesOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATempty);
+  return (MA_RulesOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATempty);
 }
 
 /*}}}  */
@@ -995,7 +1003,7 @@ MA_RulesOpt MA_makeRulesOptAbsent()
 
 MA_RulesOpt MA_makeRulesOptPresent(MA_Layout wsAfterRules, MA_RuleList rules)
 {
-  return (MA_RulesOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun44)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun53))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)rules), (ATerm)wsAfterRules), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun53))));
+  return (MA_RulesOpt)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun46)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun55))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)rules), (ATerm)wsAfterRules), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun55))));
 }
 
 /*}}}  */
@@ -1003,7 +1011,7 @@ MA_RulesOpt MA_makeRulesOptPresent(MA_Layout wsAfterRules, MA_RuleList rules)
 
 MA_Module MA_makeModuleModule(MA_Layout wsAfterModule, MA_ModId id, MA_Layout wsAfterId, MA_SignatureOpt signature, MA_Layout wsAfterSignature, MA_RulesOpt rules)
 {
-  return (MA_Module)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun50)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun55))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rules), (ATerm)wsAfterSignature), (ATerm)signature), (ATerm)wsAfterId), (ATerm)id), (ATerm)wsAfterModule), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun55))));
+  return (MA_Module)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun52)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun7, (ATerm)ATmakeAppl0(MA_afun8)))), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun57))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun58))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)rules), (ATerm)wsAfterSignature), (ATerm)signature), (ATerm)wsAfterId), (ATerm)id), (ATerm)wsAfterModule), (ATerm)ATmakeAppl1(MA_afun9, (ATerm)ATmakeAppl0(MA_afun57))));
 }
 
 /*}}}  */
@@ -1011,7 +1019,7 @@ MA_Module MA_makeModuleModule(MA_Layout wsAfterModule, MA_ModId id, MA_Layout ws
 
 MA_EscChar MA_makeEscCharLexToCf(MA_Lexical lex)
 {
-  return (MA_EscChar)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun58)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun58))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_EscChar)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun60)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun60))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1019,7 +1027,7 @@ MA_EscChar MA_makeEscCharLexToCf(MA_Lexical lex)
 
 MA_QChar MA_makeQCharLexToCf(MA_Lexical lex)
 {
-  return (MA_QChar)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun59)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun59))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_QChar)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun61)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun61))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1027,7 +1035,7 @@ MA_QChar MA_makeQCharLexToCf(MA_Lexical lex)
 
 MA_FunId MA_makeFunIdLexToCf(MA_Lexical lex)
 {
-  return (MA_FunId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_FunId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun24))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1035,7 +1043,7 @@ MA_FunId MA_makeFunIdLexToCf(MA_Lexical lex)
 
 MA_VarId MA_makeVarIdLexToCf(MA_Lexical lex)
 {
-  return (MA_VarId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun20)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun20))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_VarId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun20)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun20))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1043,7 +1051,7 @@ MA_VarId MA_makeVarIdLexToCf(MA_Lexical lex)
 
 MA_ModId MA_makeModIdLexToCf(MA_Lexical lex)
 {
-  return (MA_ModId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun54))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_ModId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1051,7 +1059,7 @@ MA_ModId MA_makeModIdLexToCf(MA_Lexical lex)
 
 MA_PropId MA_makePropIdLexToCf(MA_Lexical lex)
 {
-  return (MA_PropId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun57, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun60)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun60))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_PropId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun62)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun62))), (ATerm)ATmakeAppl0(MA_afun6)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -2208,6 +2216,9 @@ ATbool MA_isValidTerm(MA_Term arg)
   else if (MA_isTermFunc(arg)) {
     return ATtrue;
   }
+  else if (MA_isTermTyped(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2292,6 +2303,28 @@ inline ATbool MA_isTermFunc(MA_Term arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, MA_patternTermFunc, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MA_isTermTyped(MA_Term arg) */
+
+inline ATbool MA_isTermTyped(MA_Term arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MA_patternTermTyped, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2536,6 +2569,138 @@ MA_Term MA_setTermWsAfterArgs(MA_Term arg, MA_Layout wsAfterArgs)
   }
 
   ATabort("Term has no WsAfterArgs: %t\n", arg);
+  return (MA_Term)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MA_hasTermTerm(MA_Term arg) */
+
+ATbool MA_hasTermTerm(MA_Term arg)
+{
+  if (MA_isTermTyped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_getTermTerm(MA_Term arg) */
+
+MA_Term MA_getTermTerm(MA_Term arg)
+{
+  
+    return (MA_Term)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_setTermTerm(MA_Term arg, MA_Term term) */
+
+MA_Term MA_setTermTerm(MA_Term arg, MA_Term term)
+{
+  if (MA_isTermTyped(arg)) {
+    return (MA_Term)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)term, 0), 1);
+  }
+
+  ATabort("Term has no Term: %t\n", arg);
+  return (MA_Term)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MA_hasTermWsAfterTerm(MA_Term arg) */
+
+ATbool MA_hasTermWsAfterTerm(MA_Term arg)
+{
+  if (MA_isTermTyped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MA_Layout MA_getTermWsAfterTerm(MA_Term arg) */
+
+MA_Layout MA_getTermWsAfterTerm(MA_Term arg)
+{
+  
+    return (MA_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_setTermWsAfterTerm(MA_Term arg, MA_Layout wsAfterTerm) */
+
+MA_Term MA_setTermWsAfterTerm(MA_Term arg, MA_Layout wsAfterTerm)
+{
+  if (MA_isTermTyped(arg)) {
+    return (MA_Term)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterTerm, 1), 1);
+  }
+
+  ATabort("Term has no WsAfterTerm: %t\n", arg);
+  return (MA_Term)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MA_hasTermWsAfterColon(MA_Term arg) */
+
+ATbool MA_hasTermWsAfterColon(MA_Term arg)
+{
+  if (MA_isTermTyped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MA_Layout MA_getTermWsAfterColon(MA_Term arg) */
+
+MA_Layout MA_getTermWsAfterColon(MA_Term arg)
+{
+  
+    return (MA_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_setTermWsAfterColon(MA_Term arg, MA_Layout wsAfterColon) */
+
+MA_Term MA_setTermWsAfterColon(MA_Term arg, MA_Layout wsAfterColon)
+{
+  if (MA_isTermTyped(arg)) {
+    return (MA_Term)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterColon, 3), 1);
+  }
+
+  ATabort("Term has no WsAfterColon: %t\n", arg);
+  return (MA_Term)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MA_hasTermType(MA_Term arg) */
+
+ATbool MA_hasTermType(MA_Term arg)
+{
+  if (MA_isTermTyped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_getTermType(MA_Term arg) */
+
+MA_Term MA_getTermType(MA_Term arg)
+{
+  
+    return (MA_Term)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  MA_Term MA_setTermType(MA_Term arg, MA_Term type) */
+
+MA_Term MA_setTermType(MA_Term arg, MA_Term type)
+{
+  if (MA_isTermTyped(arg)) {
+    return (MA_Term)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)type, 4), 1);
+  }
+
+  ATabort("Term has no Type: %t\n", arg);
   return (MA_Term)NULL;
 }
 
@@ -7078,9 +7243,9 @@ MA_Var MA_visitVar(MA_Var arg, MA_VarId (*acceptVarId)(MA_VarId), MA_Layout (*ac
 }
 
 /*}}}  */
-/*{{{  MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout)) */
+/*{{{  MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout), MA_Layout (*acceptWsAfterTerm)(MA_Layout), MA_Layout (*acceptWsAfterColon)(MA_Layout)) */
 
-MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout))
+MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout), MA_Layout (*acceptWsAfterTerm)(MA_Layout), MA_Layout (*acceptWsAfterColon)(MA_Layout))
 {
   if (MA_isTermVar(arg)) {
     return MA_makeTermVar(
@@ -7101,6 +7266,13 @@ MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*accept
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(MA_getTermWsAfterParenOpen(arg)) : MA_getTermWsAfterParenOpen(arg),
         acceptArgs ? acceptArgs(MA_getTermArgs(arg)) : MA_getTermArgs(arg),
         acceptWsAfterArgs ? acceptWsAfterArgs(MA_getTermWsAfterArgs(arg)) : MA_getTermWsAfterArgs(arg));
+  }
+  if (MA_isTermTyped(arg)) {
+    return MA_makeTermTyped(
+        MA_visitTerm(MA_getTermTerm(arg), acceptVar, acceptFunId, acceptInt, acceptWsAfterFunId, acceptWsAfterParenOpen, acceptArgs, acceptWsAfterArgs, acceptWsAfterTerm, acceptWsAfterColon),
+        acceptWsAfterTerm ? acceptWsAfterTerm(MA_getTermWsAfterTerm(arg)) : MA_getTermWsAfterTerm(arg),
+        acceptWsAfterColon ? acceptWsAfterColon(MA_getTermWsAfterColon(arg)) : MA_getTermWsAfterColon(arg),
+        MA_visitTerm(MA_getTermType(arg), acceptVar, acceptFunId, acceptInt, acceptWsAfterFunId, acceptWsAfterParenOpen, acceptArgs, acceptWsAfterArgs, acceptWsAfterTerm, acceptWsAfterColon));
   }
   ATabort("not a Term: %t\n", arg);
   return (MA_Term)NULL;

@@ -49,6 +49,9 @@
 
       elems:{Term ","}*               -> TermList 
 
+    context-free syntax
+      "term":Term ":" "type":Term     -> Term {assoc,cons("typed")}
+
     sorts Annotations FuncDef FuncDefList SigArg SigArgList
     context-free syntax
       "_"                               -> SigArg {cons("normal")}

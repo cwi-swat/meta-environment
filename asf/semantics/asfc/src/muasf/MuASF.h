@@ -136,6 +136,7 @@ MA_Term MA_makeTermVar(MA_Var Var);
 MA_Term MA_makeTermConstant(MA_FunId FunId);
 MA_Term MA_makeTermInt(MA_Int Int);
 MA_Term MA_makeTermFunc(MA_FunId FunId, MA_Layout wsAfterFunId, MA_Layout wsAfterParenOpen, MA_TermArgs args, MA_Layout wsAfterArgs);
+MA_Term MA_makeTermTyped(MA_Term term, MA_Layout wsAfterTerm, MA_Layout wsAfterColon, MA_Term type);
 MA_TermArgs MA_makeTermArgsSingle(MA_Term head);
 MA_TermArgs MA_makeTermArgsMany(MA_Term head, MA_Layout wsAfterFirst, char * sep, MA_Layout wsAfterSep, MA_TermArgs tail);
 MA_TermList MA_makeTermListDefault(MA_TermElems elems);
@@ -319,6 +320,7 @@ inline ATbool MA_isTermVar(MA_Term arg);
 inline ATbool MA_isTermConstant(MA_Term arg);
 inline ATbool MA_isTermInt(MA_Term arg);
 inline ATbool MA_isTermFunc(MA_Term arg);
+inline ATbool MA_isTermTyped(MA_Term arg);
 ATbool MA_hasTermVar(MA_Term arg);
 MA_Var MA_getTermVar(MA_Term arg);
 MA_Term MA_setTermVar(MA_Term arg, MA_Var Var);
@@ -340,6 +342,18 @@ MA_Term MA_setTermArgs(MA_Term arg, MA_TermArgs args);
 ATbool MA_hasTermWsAfterArgs(MA_Term arg);
 MA_Layout MA_getTermWsAfterArgs(MA_Term arg);
 MA_Term MA_setTermWsAfterArgs(MA_Term arg, MA_Layout wsAfterArgs);
+ATbool MA_hasTermTerm(MA_Term arg);
+MA_Term MA_getTermTerm(MA_Term arg);
+MA_Term MA_setTermTerm(MA_Term arg, MA_Term term);
+ATbool MA_hasTermWsAfterTerm(MA_Term arg);
+MA_Layout MA_getTermWsAfterTerm(MA_Term arg);
+MA_Term MA_setTermWsAfterTerm(MA_Term arg, MA_Layout wsAfterTerm);
+ATbool MA_hasTermWsAfterColon(MA_Term arg);
+MA_Layout MA_getTermWsAfterColon(MA_Term arg);
+MA_Term MA_setTermWsAfterColon(MA_Term arg, MA_Layout wsAfterColon);
+ATbool MA_hasTermType(MA_Term arg);
+MA_Term MA_getTermType(MA_Term arg);
+MA_Term MA_setTermType(MA_Term arg, MA_Term type);
 
 /*}}}  */
 /*{{{  MA_TermArgs accessors */
@@ -770,7 +784,7 @@ MA_Int MA_visitInt(MA_Int arg, MA_IntCon (*acceptIntCon)(MA_IntCon), MA_Layout (
 MA_IntCon MA_visitIntCon(MA_IntCon arg, MA_Layout (*acceptWsAfterCon)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_Int (*acceptIntArg)(MA_Int), MA_Layout (*acceptWsAfterIntArg)(MA_Layout), MA_NatCon (*acceptNatCon)(MA_NatCon), MA_Layout (*acceptWsAfterPlus)(MA_Layout), MA_NatCon (*acceptNatArg)(MA_NatCon), MA_Layout (*acceptWsAfter)(MA_Layout));
 MA_NatCon MA_visitNatCon(MA_NatCon arg, MA_Layout (*acceptWsAfterAbs)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_Int (*acceptIntArg)(MA_Int), MA_Layout (*acceptWsAfterIntArg)(MA_Layout));
 MA_Var MA_visitVar(MA_Var arg, MA_VarId (*acceptVarId)(MA_VarId), MA_Layout (*acceptWsAfterStar)(MA_Layout), MA_Layout (*acceptWsAfterPlus)(MA_Layout));
-MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout));
+MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_Layout (*acceptWsAfterFunId)(MA_Layout), MA_Layout (*acceptWsAfterParenOpen)(MA_Layout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_Layout (*acceptWsAfterArgs)(MA_Layout), MA_Layout (*acceptWsAfterTerm)(MA_Layout), MA_Layout (*acceptWsAfterColon)(MA_Layout));
 MA_TermArgs MA_visitTermArgs(MA_TermArgs arg, MA_Term (*acceptHead)(MA_Term), MA_Layout (*acceptWsAfterFirst)(MA_Layout), char * (*acceptSep)(char *), MA_Layout (*acceptWsAfterSep)(MA_Layout));
 MA_TermList MA_visitTermList(MA_TermList arg, MA_TermElems (*acceptElems)(MA_TermElems));
 MA_TermElems MA_visitTermElems(MA_TermElems arg, MA_Term (*acceptHead)(MA_Term), MA_Layout (*acceptWsAfterFirst)(MA_Layout), char * (*acceptSep)(char *), MA_Layout (*acceptWsAfterSep)(MA_Layout));

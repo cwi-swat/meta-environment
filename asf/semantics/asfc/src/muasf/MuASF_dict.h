@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Nov  6 12:50:07 2001
+ * Generated at Wed Nov  7 16:25:59 2001
  */
 
 #ifndef __MuASF_dict_H
@@ -68,6 +68,8 @@ extern AFun MA_afun57;
 extern AFun MA_afun58;
 extern AFun MA_afun59;
 extern AFun MA_afun60;
+extern AFun MA_afun61;
+extern AFun MA_afun62;
 
 extern ATerm MA_patternPropIdLexToCf;
 extern ATerm MA_patternModIdLexToCf;
@@ -118,6 +120,7 @@ extern ATerm MA_patternTermElemsEmpty;
 extern ATerm MA_patternTermListDefault;
 extern ATerm MA_patternTermArgsMany;
 extern ATerm MA_patternTermArgsSingle;
+extern ATerm MA_patternTermTyped;
 extern ATerm MA_patternTermFunc;
 extern ATerm MA_patternTermInt;
 extern ATerm MA_patternTermConstant;
