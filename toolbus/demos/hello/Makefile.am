@@ -18,6 +18,9 @@
 
 noinst_PROGRAMS		= hello hello-gen printer producer store
 
+INCLUDES		= -I${top_srcdir}/aterm \
+			-I$(ATERM)/include
+
 EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
 			hello.pl hello.pl.tb pipe.tb PC.tb producer.c store.c \
 			hello.py hello2py.tb no-pl.sh hello2java.tb \
@@ -42,8 +45,6 @@ producer_LDADD		= -L${top_builddir}/aterm -lATB \
 store_SOURCES		= store.c
 store_LDADD		= -L${top_builddir}/aterm -lATB \
 			-L$(ATERM)/lib -lATerm
-
-INCLUDES		= -I$(ATERM)/include
 
 %.tif.c %.tif.h: hello2.tifs
 	${top_builddir}/aterm/tifstoc -tool $* $<
