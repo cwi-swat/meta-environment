@@ -1,6 +1,9 @@
 module Compiler
 
-imports  MuASF2NameTable MuASF2MuASF MuASF2C
+imports muasf2nametable/MuASF2NameTable
+imports muasf2muasf/MuASF2MuASF
+imports muasf2c/MuASF2C
+
 
 exports
 

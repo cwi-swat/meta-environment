@@ -1,9 +1,10 @@
 %% The module {\tt Trans-Lookup-Pats} takes care of transforming
 %% rewrite rules with lookup-like list matching patterns into
 %% rewrite rules which traverse recursively through the lists.
-module Trans-Set-Pats
+module muasf2muasf/Trans-Set-Pats
 
-imports Check-List-Pats
+imports muasf2muasf/Check-List-Pats
+
 
 exports
   context-free syntax

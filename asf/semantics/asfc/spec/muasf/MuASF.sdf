@@ -1,6 +1,8 @@
-module MuASF
+module muasf/MuASF
 
-imports MuLiterals Basic-Integers
+imports utils/Basic-Integers
+imports muasf/MuLiterals
+
 %%
 %% \ssasf\ can be characterized by:
 %% \begin{itemize}

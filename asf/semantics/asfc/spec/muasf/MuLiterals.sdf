@@ -1,6 +1,7 @@
-module MuLiterals
+module muasf/MuLiterals
 
-imports Layout
+imports utils/Layout
+
 
 hiddens
   sorts EscChar QChar

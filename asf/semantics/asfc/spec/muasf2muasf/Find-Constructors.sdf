@@ -1,6 +1,7 @@
-module Find-Constructors 
+module muasf2muasf/Find-Constructors 
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 exports
 
 context-free syntax

@@ -1,6 +1,7 @@
-module Check-List-Pats
+module muasf2muasf/Check-List-Pats
 
-imports Remove-Lists-Aux
+imports muasf2muasf/Remove-Lists-Aux
+
 
 exports
   context-free syntax

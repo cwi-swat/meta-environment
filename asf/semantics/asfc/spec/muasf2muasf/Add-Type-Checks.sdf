@@ -1,6 +1,7 @@
-module Add-Type-Checks
+module muasf2muasf/Add-Type-Checks
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
 

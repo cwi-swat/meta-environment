@@ -1,6 +1,7 @@
-module Remove-Lists-Aux
+module muasf2muasf/Remove-Lists-Aux
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

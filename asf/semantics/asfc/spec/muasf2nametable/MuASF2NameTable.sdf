@@ -1,6 +1,7 @@
-module MuASF2NameTable
+module muasf2nametable/MuASF2NameTable
 
-imports VarEnv
+imports utils/VarEnv
+
 
 exports
 

@@ -1,6 +1,7 @@
-module Make-Left-Linear
+module muasf2muasf/Make-Left-Linear
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

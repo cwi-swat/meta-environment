@@ -1,14 +1,15 @@
-module  MuASF2MuASF
+module  muasf2muasf/MuASF2MuASF
 
-imports Find-Constructors
-        Add-List-Cons 
-        Optimize-MuASF 
-        Remove-Lists 
-        Make-Left-Linear 
-        Make-Assign-Conds
-        Add-Type-Checks
-        Fix-Tupled-Traversals
-        Remove-Types
+imports muasf2muasf/Optimize-MuASF
+imports muasf2muasf/Make-Left-Linear
+imports muasf2muasf/Make-Assign-Conds
+imports muasf2muasf/Find-Constructors
+imports muasf2muasf/Add-List-Cons
+imports muasf2muasf/Remove-Lists
+imports muasf2muasf/Fix-Tupled-Traversals
+imports muasf2muasf/Add-Type-Checks
+imports muasf2muasf/Remove-Types
+
 
         
 

@@ -1,6 +1,8 @@
-module  MuASF-Equations-Ops
+module  muasf/MuASF-Equations-Ops
 
-imports MuASF-Signature-Ops VarEnv
+imports muasf/MuASF-Signature-Ops
+imports utils/VarEnv
+
 
 exports
   sorts FuncRuleTuple FuncRulePair

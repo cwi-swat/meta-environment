@@ -6,9 +6,12 @@
 %% deals with list constructs in which at most one list
 %% variable occurs.
 
-module Remove-Lists
+module muasf2muasf/Remove-Lists
 
-imports RenameVars Normalize-Conds Trans-Set-Pats 
+imports muasf/RenameVars
+imports muasf2muasf/Normalize-Conds
+imports muasf2muasf/Trans-Set-Pats
+ 
 
 exports
   context-free syntax

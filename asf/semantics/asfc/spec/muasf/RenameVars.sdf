@@ -1,6 +1,8 @@
-module RenameVars
+module muasf/RenameVars
 
-imports VarEnv MuASF-Equations-Ops
+imports utils/VarEnv
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

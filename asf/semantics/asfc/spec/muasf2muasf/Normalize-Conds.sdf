@@ -1,6 +1,7 @@
-module Normalize-Conds
+module muasf2muasf/Normalize-Conds
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

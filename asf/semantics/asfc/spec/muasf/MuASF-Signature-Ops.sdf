@@ -1,6 +1,8 @@
-module MuASF-Signature-Ops
+module muasf/MuASF-Signature-Ops
 
-imports Booleans MuASF
+imports utils/Booleans
+imports muasf/MuASF
+
 
 exports
   context-free syntax

@@ -1,6 +1,7 @@
-module Fix-Tupled-Traversals
+module muasf2muasf/Fix-Tupled-Traversals
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
 

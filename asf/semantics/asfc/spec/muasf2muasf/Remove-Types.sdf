@@ -1,6 +1,7 @@
-module Remove-Types
+module muasf2muasf/Remove-Types
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
 

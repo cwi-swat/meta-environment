@@ -1,6 +1,9 @@
-module C-Basics
+module c/C-Basics
 
-imports  Booleans C MuASF
+imports utils/Booleans
+imports muasf/MuASF
+imports c/C
+
 
 exports
   sorts FTS-tuple FT-tuple C-env TE-pair ADS-tuple ADSI-tuple DCAS-tuple

@@ -1,6 +1,7 @@
-module Make-Assign-Conds
+module muasf2muasf/Make-Assign-Conds
 
-imports MuASF-Equations-Ops
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax
