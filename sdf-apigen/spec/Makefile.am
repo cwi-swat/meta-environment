@@ -8,7 +8,7 @@ SUBDIRS		= add-labels
 
 bin_PROGRAMS	= Sdf2-to-ADT Sdf2-to-Imploded-ADT
 
-CFLAGS		= -g -Wall -Wno-unused -O2 -DASF_MAIN
+AM_CFLAGS = -g -Wall -Wno-unused -O2 -DASF_MAIN
 
 INCLUDES	= -I$(ASCINC) \
 		-I$(PT_SUPPORT)/include \
