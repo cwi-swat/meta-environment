@@ -642,8 +642,7 @@ void pr_term(const term *t)
     }
     break;
   case t_anno:
-    printn("{", 1);pr_term(anno_val(t)); printn(":", 1); 
-    pr_term(anno_term(t)); printn("}", 1);
+    pr_term(anno_term(t));printn("{", 1);pr_term(anno_val(t)); printn("}", 1);
     break;
   case t_list:
     printn("[", 1); pr_term_list(t); printn("]", 1);

@@ -192,20 +192,27 @@ void main(int argc, char *argv[])
   TST_P(140, "<int>", "<int>"); NL;
 
 
-  TST_OK(150, "{attr(1) : b}");
-  TST_OK(151, "f({1 : a}, b)");
-  TST_OK(152, "[a, {2 : b}, c]");
+  TST_OK(150, "b{attr(1)}");
+  TST_OK(151, "f(a{1}, b)");
+  TST_OK(152, "[a, b{2 }, c]");
+  TST_OK(153, "f(a{1}{2}{3},b)");
+  TST_OK(154, "f(a{1{2}{3}},b)");
 
-  TST_P(160, "{attr(1) : b}", "b");NL;
-  TST_P(161, "f({1 : a}, b)", "f(a,b)");NL;
-  TST_P(162, "[a, {2 : b}, c]", "[a,b,c]");NL;
+  TST_P(160, "b{attr(1) }", "b");NL;
+  TST_P(161, "f(a{1 }, b)", "f(a,b)");NL;
+  TST_P(162, "[a, b{2 }, c]", "[a,b,c]");NL;
+  TST_P(163, "f(a{1}{2}{3},b)","f(a,b)");NL;
+  TST_P(164, "f(a{1{2}{3}},b)", "f(a,b)");NL;
+  TST_P(165, "f(a,b){aap}{noot}","f(a,b){aap}");NL; 
 
-  TST_T(170, "{attr(x) : b}", "{attr(%t):b}", "x");
-  TST_S(171, "{attr(x) : b}", "{%f(x):b}", "attr");
-  TST_T(172, "{attr(x) : b}", "{attr(x):%t}", "b");
-  TST_T(173, "f({attr(x) : b})", "f({attr(%t):b})", "x");
-  TST_S(174, "f({attr(x) : b})", "f({%f(x):b})", "attr");
-  TST_T(175, "f({attr(x) : b})", "f({attr(x):%t})", "b");
+  TST_T(170, "b{attr(x) }", "b{attr(%t)}", "x");
+  TST_S(171, "b{attr(x)}", "b{%f(x)}", "attr");
+  TST_T(172, "b{attr(x)}", "%t{attr(x)}", "b");
+  TST_T(173, "f(b{attr(x)})", "f(b{attr(%t)})", "x");
+  TST_S(174, "f(b{attr(x) })", "f(b{%f(x)})", "attr");
+  TST_T(175, "f(b{attr(x) })", "f(%t{attr(x)})", "b");
+  TST_T(176, "f(b,a{aap{noot}{mies}}{wim})", "f(b,a{aap{%t}{mies}}{wim})","noot");
+  TST_S(177, "f(b,a){attr(x)}{noot}", "f(b,a){%f(x)}{noot}","attr");
 
   TST_OK(180, "\"abc\"(1)");
   TST_OK(181, "\"a\\\\bc\"(2)");

@@ -112,6 +112,7 @@ static void parse_error(char *s)
 va_list mk_term_args = NULL;
 
 static term *parse_term0(void);
+static term *parse_anno(term *t);
 
 static TBbool is_std_fsym(char *s)
 {
@@ -141,6 +142,50 @@ static type *parse_type(void)
   }
 }
 
+/* This function should really be rolled into parse_term0. An annotation
+is an integral part of a term, parse_term0 should return exactly one parsed
+term, including an (optional) annotation. However, since parse_term0 has 27 
+return statements, I thought it a bit dangerous to mess around there. 
+parse_term0 needs probably to be rewritten completely for this to be included.
+Since parse_term0 is only called \emph{nine} times, I thought it easiest to
+add to every call to parse_term0 a call to parse_anno.
+So instead of calling 
+             return parse_term0();
+you should now call 
+             return parse_anno(parse_term0());
+--Tobias
+*/
+
+ 
+static term *parse_anno(term *t)
+{
+  term *anno,*t2,*res;
+  if(lastc && lastc == '{') {
+    get_char();
+    skip_layout();
+    /* Take a deep breath... */
+    /* This is the actual annotation (which can or cannot itself be annotated).
+       As in term{anno{anno'}}, since an annotation is a term. */
+    anno = parse_anno(parse_term0());
+    skip_layout();
+    if(lastc && lastc == '}')  {
+      t2 = mk_anno(anno,t);
+      get_char();
+      skip_layout();
+      /* Now, we can have _another_ annotation:
+              term{anno}{anno'} */
+      res = parse_anno(t2);
+    } else {
+      parse_error("Unexpected character");
+      res = NULL;
+    }
+  } else {
+    res = t;
+  }
+  return res;
+}
+
+		
 static term *parse_term0(void)
 {
   char *begin;
@@ -344,7 +389,7 @@ static term *parse_term0(void)
 	  unget_char();
 	}
       }
-      arg = parse_term0();
+      arg = parse_anno(parse_term0());
 
       next(&args) = list_concat_term(next(&args), arg);
       skip_layout();
@@ -421,7 +466,7 @@ static term *parse_term0(void)
   } else if(lastc == '<'){
     type *tp;
     get_char();
-    tp = parse_term0();
+    tp = parse_anno(parse_term0());
     if(!tp)
       return NULL;
     skip_layout();
@@ -432,23 +477,6 @@ static term *parse_term0(void)
       parse_error("Placeholder does not end with `>'");
       return NULL;
     }
-  } else if(lastc == '{'){   /* annotated term */ 
-    term *t1, *t2;
-
-    get_char();
-    t1 = parse_term0();
-    skip_layout();
-    if(t1 && (lastc == ':')){
-      get_char();
-      t2 = parse_term0();
-      skip_layout();
-      if(t2 && (lastc == '}')){
-	get_char();
-	return mk_anno(t1, t2);
-      } else
-	return NULL;
-    } else
-      return NULL;
   } else {
     parse_error("Unexpected character");
     return NULL;
@@ -457,19 +485,20 @@ static term *parse_term0(void)
 
 term *parse_term(void)
 {
-  term *res;
+  term *res,*t;
 
   mk_term_args = NULL;
   parse_error_msg = NULL;
   get_char();
-  res = parse_term0();
+  res = parse_anno(parse_term0());
   skip_layout();
   /* return res; */
   if(lastc){
-    parse_error("Syntax error");
+  	parse_error("Syntax error");
     return NULL;
-  } 
-  return res;
+  } else {
+ 	 return res;
+  }
 }
 
 static void extend_buffer();
@@ -492,7 +521,7 @@ term *TBmake(char * fmt, ...)
   /* fprintf(stderr, "TBmake %s\n", fmt); */
   parse_error_msg = NULL;
   get_char();
-  res = parse_term0();
+  res = parse_anno(parse_term0());
   va_end(mk_term_args);
   mk_term_args = NULL;
   skip_layout();
@@ -973,17 +1002,49 @@ void TBmsg(char *fmt, ...)
 /*--- TBmatch ----------------------------------*/
 
 va_list match_args;
+term *anno=NULL;
 
 TBbool TBmatch1(term *);
 
+/* match_anno(term *) matches 0 or more annotations to a term. It should be called after TBmatch1, usually in the form: 
+result = TBmatch1(t) && match_anno(t)
+
+The structure of match_anno() is very similar to that of parse_anno().
+
+ --Tobias */
+
+TBbool match_anno(term *t)
+{
+  TBbool res=TBtrue;
+
+  skip_layout();
+  if (lastc && is_anno(t) ) {
+    /* We might have a nested annotation */
+    res = match_anno(anno_term(t));
+    if (lastc=='{') {
+      get_char();
+      /* Proceed with the actual annotation (a term). The annotation could
+	 also be annotated */
+      res = res && TBmatch1(anno_val(t)) && match_anno(anno_val(t));
+      skip_layout();
+      if (res == TBtrue && lastc=='}') {
+	get_char();
+      } else {
+	res = TBfalse;
+      }
+    }
+  }
+  return res;
+}
+
 TBbool TBmatch(term *t, char *fmt, ...)
 {
-  TBbool res;
+  TBbool res,res2;
 
   va_start(match_args, fmt);
   start_buf_ptr = buf_ptr = fmt;
   get_char();
-  res = TBmatch1(t);
+  res = TBmatch1(t) && match_anno(t);
   skip_layout();
   if(lastc){
     /* TBmsg("TBmatch: unread chars ``%s''\n", buf_ptr-1); */
@@ -1011,9 +1072,9 @@ TBbool TBmatch1(term *t)
 
   skip_layout();
 
-  if(is_anno(t) && (lastc != '{')){
-      t = anno_term(t);
-  }
+  while (is_anno(t) ) {
+    t = anno_term(t);
+   }
 
   switch(lastc){
   case '%':
@@ -1164,33 +1225,14 @@ TBbool TBmatch1(term *t)
 
       get_char();
       skip_layout();
-      rt = parse_term0();
+      rt = parse_anno(parse_term0());
       if(lastc != '>' || !rt)
 	return TBfalse;
       get_char();
       return require_type(rt, t) ? TBtrue : TBfalse;
     }
 
-  case '{':
-
-    if(!is_anno(t))
-      return TBfalse;
-    else {
-      get_char();
-      if(!TBmatch1(anno_val(t)))
-	return TBfalse;
-	skip_layout();
-	if(lastc != ':')
-	  return TBfalse;
-	get_char();
-	if(TBmatch1(anno_term(t)) && (lastc == '}')){
-	  get_char();
-	  return TBtrue;
-	} else
-	  return TBfalse;
-    }
-      
-  case '[':
+   case '[':
     if(!is_list(t))
       return TBfalse;
     close_char = ']';
@@ -1208,7 +1250,7 @@ TBbool TBmatch1(term *t)
 	break;
       }
       if(tl){
-	if(!TBmatch1(first(tl)))
+       	if(!(TBmatch1(first(tl))&& match_anno(first(tl))))
 	  return TBfalse;
 	else {
 	  skip_layout();
