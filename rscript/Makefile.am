@@ -16,7 +16,7 @@ WWWDIR 		= /hosts/www/projects/MetaEnv/relation-calculus
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
-VERSION		= 0.2
+VERSION		= 0.3
 
 
 

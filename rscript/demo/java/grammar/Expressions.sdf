@@ -46,7 +46,7 @@ exports sorts Expression MethodInvocation StatementExpression Assignment Dim
     "~" Expression						    -> Expression {cons("tilde")}
     "!" Expression						    -> Expression {cons("not")}
     "(" PrimitiveType Dim* ")" Expression			    -> Expression {cons("PrimitiveType-Dim-s-Expression")}
-    "(" Name ")" Expression					    -> Expression {cons("Cast-Expression")}
+    "(" Type ")" Expression					    -> Expression {cons("Cast-Expression")}
     "(" Name Dim+ ")" Expression				    -> Expression {cons("Name-Dim-p-Expression")}
     Expression "*" Expression					    -> Expression {left, cons("times1")}
     Expression "/" Expression					    -> Expression {left, cons("div1")}
@@ -89,7 +89,7 @@ exports sorts Expression MethodInvocation StatementExpression Assignment Dim
     Assignment							    -> Expression {cons("Assignment1")}
 
   context-free priorities
-    "(" Name ")" Expression -> Expression {cons("Cast-Expression")} >
+    "(" Type ")" Expression -> Expression {cons("Cast-Expression")} >
     { Expression "++" -> StatementExpression {cons("incr21")}
       Expression "--" -> StatementExpression {cons("decr21")} } >
     { "++" Expression -> StatementExpression {cons("incr31")}
