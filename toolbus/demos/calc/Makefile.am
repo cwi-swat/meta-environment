@@ -36,11 +36,10 @@ INCLUDES        = -I$(ATERM)/include -I.
 
 CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs
 
-BUILT_SOURCES	= clock.tif.c calc.tif.c log.tif.c batch.tif.c
-#${srcdir}/clock.o: clock.tif.c
-#${srcdir}/calc.o: calc.tif.c
-#${srcdir}/log.o: log.tif.c
-#${srcdir}/batch.o: batch.tif.c
+clock.o : clock.tif.c
+log.o   : log.tif.c
+calc.o  : calc.tif.c
+batch.o : batch.tif.c 
 
 %.tif.c: calc.tifs
 	${ATERM}/bin/tifstoc -tool $* $<

@@ -22,6 +22,9 @@
 Date:   Wed May 23 13:35:52 CEST 2001
 Released Verion 0.16
 Increased version number to 0.17
+removed BUILT_SOURCES in demos/*/Makefile.am because it yields an undesired
+toolbus dependency at distribution time.
+ 
 
 Date:	Tue Apr 24 11:19:23 CEST 2001
 Version 0.16
