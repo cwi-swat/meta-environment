@@ -16,6 +16,7 @@
 #include "parse-table.h"
 #include "sglr.h"
 #include "sglr-strings.h"
+#include "marking.h"
 
 extern long sg_nr_rejects;
 
@@ -273,15 +274,14 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
     return ATtrue;
   }
 
-  if (SG_IS_MARKED(t)) {
+  if (SG_IsMarked((ATerm) t)) {
     /*  Cycle detected  */
     Cycle = ATempty;
     return ATtrue;
   }
 
-/*
-  SG_MARK(t);
-*/
+  SG_Mark((ATerm) t);
+
   switch (ATgetType(t)) {
     case AT_APPL:
       /*  Ambiguity cluster?  */
@@ -325,9 +325,9 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
   }
 
   /*  Out of recursion here: restore term state  */
-/*
-  SG_UNMARK(t);
-*/
+
+  SG_UnMark((ATerm) t);
+
 
   /*  Remember labels of productions in cycle */
   if (Cycle && ATgetType(t) == AT_APPL) {
@@ -346,10 +346,12 @@ ATbool SG_TermIsCyclic(tree t)
   size_t pos = 0;
 
   SGnrAmb(SG_NR_ZERO);
+  SG_initMarks();
 
   cyclic = SG_TermIsCyclicRecursive(t, &pos, ATfalse, visited);
 
   BitmapDestroy(visited);
+  SG_cleanupMarks();
 
   /*  
   AT_assertUnmarked(t);
