@@ -125,6 +125,10 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
     muasf = asfToMuASF(saveName, ASF_CondEquationListFromTerm(eqs));
   }
 
+  if (muasf == NULL) {
+    return NULL;
+  }
+
   if (output_muasf) {
     PT_ParseTree pt =
       PT_makeParseTreeTree(

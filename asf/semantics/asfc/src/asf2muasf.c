@@ -660,6 +660,10 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
   else if (PT_isTreeLit(tree)) {
     result = NULL; /* ignore literals */
   }
+  else if (PT_isTreeAmb(tree)) {
+    ATwarning("asfc: ambiguities are not allowed by the compiler.\n");
+    result = NULL;
+  }
   else {
     ATerror("treeToTerm: unable to process %t\n", tree);
     result = NULL;
@@ -741,7 +745,10 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
   MA_CondList conds = NULL;
   MA_Rule result = NULL;
 
-  assert(lhs != NULL && rhs != NULL);
+
+  if (lhs == NULL || rhs == NULL) {
+    return NULL;
+  }
 
   if (ASF_hasCondEquationConditions(condEquation)) {
     conds = conditionsToCondList(ASF_getCondEquationConditions(condEquation),
@@ -779,13 +786,17 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
   for(;ASF_hasCondEquationListHead(list);
        list = ASF_getCondEquationListTail(list)) {
     ASF_CondEquation eq = ASF_getCondEquationListHead(list);
+    MA_Rule rule = condEquationToRule(eq,funcdefs);
+
+    if (rule == NULL) {
+      return NULL;
+    }
 
     if (!MA_isRuleElemsEmpty(rules)) {
-      rules = MA_makeRuleElemsMany(condEquationToRule(eq,funcdefs),
-				   em,";",nl2,rules);
+      rules = MA_makeRuleElemsMany(rule,em,";",nl2,rules);
     }
     else {
-      rules = MA_makeRuleElemsSingle(condEquationToRule(eq,funcdefs));
+      rules = MA_makeRuleElemsSingle(rule);
     }
 
     if (ASF_isCondEquationListSingle(list)) {
@@ -856,6 +867,9 @@ MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
   } 
   else {
     maRules = condEquationListToRulesOpt(equations, funcdefs); 
+    if (maRules == NULL) {
+      return NULL;
+    }
   }
 
   maSignature = indexedSetToSignatureOpt(funcdefs);
