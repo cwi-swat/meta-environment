@@ -13,9 +13,9 @@ exports
 
 hiddens
   context-free syntax
-    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, topdown)}
-    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, topdown)}
-    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, topdown)}
+    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, top-down)}
+    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, top-down)}
+    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, top-down)}
                 
 hiddens
   context-free syntax
@@ -25,9 +25,9 @@ hiddens
 
 exports
   context-free syntax
-    get-imports(Grammar, ImportsSet)         -> ImportsSet {traversal(accu, topdown)} 
+    get-imports(Grammar, ImportsSet)         -> ImportsSet {traversal(accu, top-down)} 
     get-imports(ModuleName, ImportRelations) -> ImportsSet
-    get-imports(ModuleName, ImportsSet)      -> ImportsSet {traversal(accu, topown)}
+    get-imports(ModuleName, ImportsSet)      -> ImportsSet {traversal(accu, top-down)}
 
 exports
   context-free syntax

@@ -1,0 +1,50 @@
+module SortChecker
+
+
+imports Sdf-Type-Environment
+exports
+  context-free syntax
+    check-sorts(Definition) -> Messages
+hiddens
+  context-free syntax
+    get-exported-declared-symbols(Module, SymbolsSet)  -> SymbolsSet {traversal(accu, top-down)}
+    get-exported-declared-symbols(Section, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)}
+    get-hidden-declared-symbols(Module, SymbolsSet)    -> SymbolsSet {traversal(accu, top-down)}
+    get-hidden-declared-symbols(Section, SymbolsSet)   -> SymbolsSet {traversal(accu, top-down)}
+    get-declared-symbols(Section, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
+    get-declared-symbols(Grammar, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
+    get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
+    get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
+    get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
+    get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)}
+
+    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  variables
+    "$Attributes"[0-9]* -> Attributes
+    "$Definition"[0-9]*	-> Definition
+
+    "$Module"[0-9]*     -> Module
+    "$Module*"[0-9]*    -> Module*
+    "$ModuleName"[0-9]* -> ModuleName
+
+    "$Sort"[0-9]*      	-> Sort
+    "$Symbol*"[0-9]*    -> Symbol*
+    "$Symbol"[0-9]*     -> Symbol
+    "$Symbols"[0-9]*    -> Symbols
+    "SymbolsSet"[0-9]*  -> SymbolsSet
+
+    "Import*"[0-9]*         -> Import*
+    "ImportsSet"[0-9]*      -> ImportsSet
+
+    "$Grammar"[0-9]*        -> Grammar
+
+    "$Msg"[0-9]*            -> Message
+    "$Msg*"[0-9]*           -> Message*
+    "$Msgs"[0-9]*           -> Messages
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table

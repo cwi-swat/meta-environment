@@ -8,10 +8,10 @@ exports
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)             -> Messages {traversal(accu)}
-    check-attributes(Module, Messages)                 -> Messages {traversal(accu)}
-    check-attributes(Module, Messages, ModuleName)     -> Messages {traversal(accu)}
-    check-attributes(Production, Messages, ModuleName) -> Messages {traversal(accu)}
+    check-attributes(Definition, Messages)             -> Messages {traversal(accu, top-down)}
+    check-attributes(Module, Messages)                 -> Messages {traversal(accu, top-down)}
+    check-attributes(Module, Messages, ModuleName)     -> Messages {traversal(accu, top-down)}
+    check-attributes(Production, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
 
   context-free syntax
     contains-accu({ATerm ","}*)  -> Bool
@@ -26,16 +26,16 @@ hiddens
 
 hiddens
   variables
-    "Module"[0-9]*          -> Module
-    "Aterm*"[0-9]*               -> {ATerm ","}*
-    "ModuleName"[0-9]*          -> ModuleName
-    "Attributes"[0-9]*          -> Attributes
-    "Attr*"[0-9]*               -> {Attribute ","}*
-    "Definition"[0-9]*		-> Definition
-    "Production"[0-9]*		-> Production
-    "$Sort"  [0-9]*      	-> Sort
-    "$Symbol*"[0-9]*      	-> Symbol*
-    "$Symbol,*"[0-9]*      	-> {Symbol ","}*
-    "$Symbol"[0-9]*      	-> Symbol
-    "Msgs"[0-9]*                -> Messages
-    "$Literal"[0-9]* -> Literal
+    "Module"[0-9]*     -> Module
+    "Aterm*"[0-9]*     -> {ATerm ","}*
+    "ModuleName"[0-9]* -> ModuleName
+    "Attributes"[0-9]* -> Attributes
+    "Attr*"[0-9]*      -> {Attribute ","}*
+    "Definition"[0-9]* -> Definition
+    "Production"[0-9]* -> Production
+    "$Sort"  [0-9]*    -> Sort
+    "$Symbol*"[0-9]*   -> Symbol*
+    "$Symbol,*"[0-9]*  -> {Symbol ","}*
+    "$Symbol"[0-9]*    -> Symbol
+    "Msgs"[0-9]*       -> Messages
+    "$Literal"[0-9]*   -> Literal

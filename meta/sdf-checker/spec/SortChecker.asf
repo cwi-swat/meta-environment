@@ -1,0 +1,88 @@
+equations
+
+%% Type checking rules for an (expanded) SDF module
+
+  [tc1] get-exported-declared-symbols(exports $Grammar, SymbolsSet) =
+       	  get-declared-symbols($Grammar, SymbolsSet)
+
+  [tc2] get-hidden-declared-symbols(hiddens $Grammar, SymbolsSet) =
+       	  get-declared-symbols($Grammar, SymbolsSet)
+
+  [tc3] get-declared-symbols(sorts $Symbol*1, symbols($Symbol*2)) =
+       	  symbols($Symbol*1 $Symbol*2)
+  
+  [tc2] get-used-symbols($Sort, symbols($Symbol*)) = symbols($Sort $Symbol*)
+
+  [tc3] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+                            symbols($Symbol*)) =
+	  symbols( $Symbol $Symbol*)
+
+%% Check one module
+	
+  [cm1] get-module-name($Module) = $ModuleName,
+        module-is-checked($ModuleName, 
+                          get-module-info(InfoMsgTuple)) = true
+        =======================================================
+        check-module($Module, $Definition, InfoMsgTuple) = InfoMsgTuple
+	
+  [cm1] get-module-name($Module) = $ModuleName,
+        module-is-checked($ModuleName, 
+                          get-module-info(InfoMsgTuple1)) = false,
+
+        get-exported-declared-symbols($Module, symbols()) = 
+          symbols($Symbol*1),
+        get-hidden-declared-symbols($Module, symbols()) = 
+          symbols($Symbol*2),
+        get-used-symbols($Module, symbols()) = symbols($Symbol*3),
+        get-defined-symbols($Module, symbols()) = symbols($Symbol*4),
+       
+        get-all-imports($Module) = ImportsSet,
+
+        check-imports(ImportsSet, $Definition, InfoMsgTuple1) = InfoMsgTuple2,
+        get-declared-symbols(ImportsSet, 
+                             get-module-info(InfoMsgTuple2)) = 
+          symbols($Symbol*5),
+
+        $Msgs1 = get-messages(InfoMsgTuple2),
+        $Msgs2 = $Msgs1 + 
+                 undeclared($ModuleName, 
+                            diff(symbols($Symbol*3), 
+                                         symbols($Symbol*1 $Symbol*2 $Symbol*5))) +
+	         declared-but-undefined($ModuleName, 
+                            diff(symbols($Symbol*1 $Symbol*2), 
+                                 symbols($Symbol*4))),
+        InfoMsgTuple3 = put-messages($Msgs2, InfoMsgTuple2),
+
+        get-module-info(InfoMsgTuple3) = ModuleInfoTable1,
+        put-symbol-info($ModuleName, 
+                        symbols($Symbol*1 $Symbol*5), 
+                        symbols($Symbol*4), 
+                        ModuleInfoTable1) = ModuleInfoTable2,
+        put-module-info(ModuleInfoTable2, InfoMsgTuple3) =  InfoMsgTuple4
+        =================================================================
+        check-module($Module, $Definition, InfoMsgTuple1) = InfoMsgTuple4
+ 
+%% Check a list of modules
+ 
+ [cms1] check-module($Module, $Definition, InfoMsgTuple1) = 
+          InfoMsgTuple2
+        ======================================================
+        check-modules($Module $Module*, $Definition,  InfoMsgTuple1) =
+          check-modules($Module*, $Definition, InfoMsgTuple2)
+
+ [cms2] check-modules( , $Definition, InfoMsgTuple) = InfoMsgTuple
+ 
+ [cms1] get-module($ModuleName, $Definition) = $Module,
+        check-module($Module, $Definition, InfoMsgTuple1) = 
+          InfoMsgTuple2
+        ===================================================
+        check-imports(imports($ModuleName Import*), $Definition,  InfoMsgTuple1) =
+          check-imports(imports(Import*), $Definition, InfoMsgTuple2)
+
+ [cms2] check-imports(imports(), $Definition, InfoMsgTuple) = InfoMsgTuple
+
+
+ [cs-1'1] check-modules($Definition, $Definition, 
+                        create-info-msg-tuple()) = InfoMsgTuple
+          =====================================================
+          check-sorts($Definition) = get-messages(InfoMsgTuple)

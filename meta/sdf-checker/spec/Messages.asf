@@ -6,6 +6,8 @@ equations
   [msg-2] {$Msg*} + none = {$Msg*}
   [msg-3] {$Msg*1 none $Msg*2} = {$Msg*1 $Msg*2}
 
+  [cm-1'1] {$Msg*1} ++ {$Msg*2} = {$Msg*1 $Msg*2}
+
   [msg-3] undeclared($ModuleName, symbols()) = none
   [msg-4] not-implemented($ModuleName, symbols()) = none
   [msg-5] declared-but-undefined($ModuleName, symbols()) = none

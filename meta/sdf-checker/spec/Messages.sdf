@@ -13,6 +13,7 @@ exports
     illegal-attribute(ModuleName, Production)      -> Message
     "{" Message* "}"                               -> Messages
     Messages "+" Message			   -> Messages
+    Messages "++" Messages			   -> Messages {left}
 
 hiddens
   variables
