@@ -25,6 +25,14 @@ context-free syntax
   get-using(AS-FunctionSig)	-> Type
   get-giving(AS-FunctionSig)	-> Type
   get-raising(AS-FunctionSig)	-> Type
+  remove-using(FunResult)	-> { SingleFunResult "&" }*
+  remove-giving(FunResult)	-> { SingleFunResult "&" }*
+  remove-raising(FunResult)	-> { SingleFunResult "&" }*
+  remove-failing(FunResult)	-> { SingleFunResult "&" }*
+  remove-action(FunResult)	-> { SingleFunResult "&" }*
+  remove-dobble-sigs(Signatures)	-> Signatures
+  join-results({ SingleFunResult "&" }*, FunResult)	-> { SingleFunResult "&" }+
+
 
 hiddens variables
 
@@ -33,5 +41,8 @@ hiddens variables
   "$LT"[0-9]?		-> Literal
   "$SO"[0-9]?		-> Sort
   "$FR"[0-9]?		-> FunResult
+  "$SFR"[0-9]?"+"	-> { SingleFunResult "&" }+
   "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
   "$TY"[0-9]?		-> Type
+  "$FS"[0-9]?		-> AS-FunctionSig
+  "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*

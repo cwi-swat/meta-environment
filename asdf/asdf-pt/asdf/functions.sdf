@@ -40,7 +40,13 @@ hiddens variables
   "$IS*"		-> ImpSection*
   "$AS*"		-> AS-Section*
   "$FS*"[0-9]?		-> {AS-FunctionSig ","}*
-  "$FS"			-> AS-FunctionSig
+  "$FS"[0-9]?		-> AS-FunctionSig
   "$FD*"		-> {AS-FunctionDef ","}*
   "$FD"			-> AS-FunctionDef
+  "$LT"[0-9]?		-> Literal
+  "$FR"[0-9]?		-> FunResult
+  "$SO"[0-9]?		-> Sort
+  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$FR"[0-9]?		-> FunResult
+  "$TY"[0-9]?		-> Type
 

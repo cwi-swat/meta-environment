@@ -8,7 +8,7 @@ exports
 
   sorts
 
-    VarLex
+    VarLex Signatures
 
   context-free syntax
 

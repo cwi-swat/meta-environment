@@ -45,6 +45,9 @@ exports
     "$transform-syntax-rhs"(Symbol, AS-Syntax-Rhs)	-> Production* {prefer}
     "$transform-requires-rhs"(Symbol, AS-Requires-Rhs)	-> Production* {prefer}
 
+    "$transform-decons"({(Literal ":" Sort) ","}*)	
+							-> Production* {prefer}
+
   context-free syntax
     "$extract-imports"(AS-Section*, Import*) -> Import* 
 					{traversal(top-down,accu,break)}
@@ -133,3 +136,4 @@ exports
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
     "A"[0-9]?		   -> Action
     "FNR"[0-9]?		   -> FunResult
+    "LCS"[0-9]?"*"	   -> {(Literal ":" Sort) ","}*

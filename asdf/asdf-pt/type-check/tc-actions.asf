@@ -237,7 +237,7 @@ equations
       result D := A
       =====================================================
       typecheck-action(A, TY1, EN) = error("Type error", 
-		   [localized("Type error at provide", get-location(A))])
+		   [localized("Type error at result", get-location(A))])
 		
 
 [tca-give] typecheck-action(give DO, TY, EN) = typecheck-dataop(DO, TY) 

@@ -5,11 +5,12 @@ equations
 	typecheck($AM, sigs($AFS*)) = gen-summary(yes)
 
 [tcm-1] defs($FD+) := get-function-defs($AM),
-	$ENV := set-signatures(empty-env, sigs($AFS*)),
+	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*)),
+	$ENV := set-signatures(empty-env, sigs($AFS2*)),
 	$ANS := typecheck-definitions(defs($FD+), $ENV),
 	$SUM := gen-summary($ANS)
 	=====================================================
-	typecheck($AM, sigs($AFS*)) = $SUM
+	typecheck($AM, sigs($AFS1*)) = $SUM
 
 [tcd-1] $ANS1 := typecheck-definitions(defs($FD), $ENV),
 	$ANS2 := typecheck-definitions(defs($FD+), $ENV)

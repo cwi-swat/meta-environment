@@ -64,6 +64,8 @@ exports
     Literal Sort                    -> AS-Requires-Rhs {cons("req-rhs-prefix")}
     Sort Literal Sort               -> AS-Requires-Rhs {cons("req-rhs-infix")}
     Literal "(" {Symbol ","}* ")"   -> AS-Requires-Rhs {cons("req-rhs-app")}
+    Literal "(" {(Literal ":" Sort) ","}* ")"
+		    -> AS-Requires-Rhs {cons("req-rhs-cons")}
     AS-Requires-Rhs "|" AS-Requires-Rhs	
 		    -> AS-Requires-Rhs {right,prefer, cons("req-rhs-union")}
 

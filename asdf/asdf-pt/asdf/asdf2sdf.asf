@@ -143,15 +143,6 @@ ASFequation*2)
   [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = A)
 
 
-  [tp-1] Sort1 == sort("D""a""t""u""m"), 
-	 Sort2 := AS-Requires-Rhs, sort($CH+) := Sort2
-	 ===============================
-         $transform-production(Sort1 ::= AS-Requires-Rhs) = 
-sorts Sort2
-context-free syntax
-  Sort2 -> Sort1
-  qliteral("""$CH+""") -> DataSet %% MAKE LOWERCASE!
-
   [default-tp-2] $transform-production(Sort ::= AS-Requires-Rhs) = 
 context-free syntax
   $transform-requires-rhs(Sort, AS-Requires-Rhs) 
@@ -167,23 +158,34 @@ Production+1
 
   [trhs-2] $transform-requires-rhs(Sort, Literal) = Literal -> Sort
 
-  [trhs-3] $transform-requires-rhs(Sort, Literal(Symbol,*) ) = Literal -> PrefixDataOp
+  [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(Symbol,*) ) = qliteral("""$CH+""") -> PrefixDataOp
 
-  [trhs-4] Sort == sort($CH+)
+  [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(LCS*) ) = 
+qliteral("""$CH+""")	-> sort("S""o""r""t")
+qliteral("""$CH+""") -> PrefixDataOp
+$transform-decons(LCS*)
+
+  [trhs-4] Sort == sort($CH+1)
 	   ========================
-	   $transform-requires-rhs(sort($CH+), Literal Sort ) = qliteral(""")Literalqliteral(""") -> sort("P""r""e""f""i""x"$CH+)
-sort("P""r""e""f""i""x"$CH+) Sort -> sort($CH+)
+	   $transform-requires-rhs(sort($CH+1), uqliteral($CH+2) Sort ) = qliteral("""$CH+2""") -> sort("P""r""e""f""i""x"$CH+1)
+sort("P""r""e""f""i""x"$CH+1) Sort -> sort($CH+1)
 
-  [default-trhs-4] $transform-requires-rhs(Sort, Literal Sort1 ) = 
-qliteral(""")Literalqliteral(""") Sort1 -> Sort
+  [default-trhs-4] $transform-requires-rhs(Sort, uqliteral($CH+) Sort1 ) = 
+qliteral("""$CH+""") Sort1 -> Sort
 
-  [trhs-5] Sort == sort($CH+)
+  [trhs-5] Sort == sort($CH+1)
 	   ========================
-	   $transform-requires-rhs(sort($CH+), Sort Literal Sort) = qliteral(""")Literalqliteral(""") -> sort("I""n""f""i""x"$CH+)
-Sort sort("I""n""f""i""x"$CH+) Sort -> sort($CH+)
+	   $transform-requires-rhs(sort($CH+1), Sort uqliteral($CH+2) Sort) = qliteral("""$CH+2""") -> sort("I""n""f""i""x"$CH+1)
+Sort sort("I""n""f""i""x"$CH+1) Sort -> sort($CH+1)
 
-  [default-trhs-5] $transform-requires-rhs(Sort, Sort1 Literal Sort2) = 
-Sort1 qliteral(""")Literalqliteral(""") Sort2	-> Sort
+  [default-trhs-5] $transform-requires-rhs(Sort, Sort1 uqliteral($CH+) Sort2) = 
+Sort1 qliteral("""$CH+""") Sort2	-> Sort
+
+  [td-1] $transform-decons(uqliteral($CH+) : Sort, LCS*) = 
+qliteral("""$CH+""")	-> PrefixDataOp
+$transform-decons(LCS*)
+
+  [td-2] $transform-decons() = 
 
   [tv-1] $transform-variable(varlexprefix($CH+) : Sort) = 
 sorts Sort
@@ -206,8 +208,11 @@ context-free syntax
 
   [ei-4] $extract-imports(VarLexPrefix : Sort, Import*) = $extract-imports(Sort, Import*)
 
-  [ei-4] $extract-req-imports(sort($CH+),Import*) = 
+  [ei-5] $extract-req-imports(sort($CH+),Import*) = 
          $add-to(moduleid("D""a""t""a""/"$CH+), Import*)
+
+  [ei-6] $extract-req-imports(Literal(LCS*),Import*) = Import*
+
    
   [at-1] $add-to(Import, Import*) = Import Import*
 

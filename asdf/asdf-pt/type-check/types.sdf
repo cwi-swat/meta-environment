@@ -41,6 +41,9 @@ context-free syntax
   Type subtype-of Type 			-> Answer
   ExcepNoData answerOr ExcepNoData 	-> ExcepNoData
 
+  highest-type(Type, Type)	-> Type
+  lowest-type(Type, Type)	-> Type
+
 %% Error messages
 
   Error+ 			-> ActionResult

@@ -14,12 +14,86 @@ equations
 
 [get-using-1] get-using($LT : $SO -> $SFR1* & using $TY & $SFR2*) = $TY
 
-[default-get-using-1] get-using($LT : $SO -> $FR) = data
+[default-get-using-1] get-using($FS) = data
 
 [get-giving-1] get-giving($LT : $SO -> $SFR1* & giving $TY & $SFR2*) = $TY
 
-[default-get-giving-1] get-giving($LT : $SO -> $FR) = empty
+[default-get-giving-1] get-giving($FS) = empty
 
 [get-raising-1] get-raising($LT : $SO -> $SFR1* & raising $TY & $SFR2*) = $TY
 
-[default-get-raising-1] get-raising($LT : $SO -> $FR) = empty
+[default-get-raising-1] get-raising($FS) = empty
+
+[remove-using-1] remove-using($SFR1* & using $TY & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-using-1] remove-using($SFR+) = $SFR+
+
+[remove-giving-1] remove-giving($SFR1* & giving $TY & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-giving-1] remove-giving($SFR+) = $SFR+
+
+[rm-raising-1] remove-raising($SFR1* & raising $TY & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-raising-1] remove-raising($SFR+) = $SFR+
+
+[rm-failing-1] remove-failing($SFR1* & failing & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-failing-1] remove-failing($SFR+) = $SFR+
+
+[rm-action-1] remove-action($SFR1* & Action & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-action-1] remove-action($SFR+) = $SFR+
+
+[rm-dobble-sigs-1] 
+
+    $LT : $SO -> $FR1 := $FS1,
+    $LT : $SO -> $FR2 := $FS2,
+    $SFR1+ := $FR1,
+    $FR3 := join-results($SFR1+, $FR2),
+    $FS3 := $LT : $SO -> $FR3
+    =======================================================================
+    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*)) = 
+                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*))
+
+[default-rm-dobble-sigs-2] 
+
+    remove-dobble-sigs(sigs($FS1*)) = sigs($FS1*)
+
+[join-res-1] 
+	     
+    $TY2 := get-using(test : Test -> $FR),
+    $TY3 := lowest-type($TY1, $TY2)
+    ==================================================================
+    join-results($SFR1* & using $TY1 & $SFR2*, $FR) = 
+	using $TY3 & join-results($SFR1* & $SFR2*, Action & remove-using($FR))
+
+[join-res-2] 
+	     
+    $TY2 := get-giving(test : Test -> $FR),
+    $TY3 := highest-type($TY1, $TY2)
+    ==================================================================
+    join-results($SFR1* & giving $TY1 & $SFR2*, $FR) = 
+       giving $TY3 & join-results($SFR1* & $SFR2*, Action & remove-giving($FR))
+
+[join-res-3] 
+	     
+    $TY2 := get-raising(test : Test -> $FR),
+    $TY3 := highest-type($TY1, $TY2)
+    ==================================================================
+    join-results($SFR1* & raising $TY1 & $SFR2*, $FR) = 
+     raising $TY3 & join-results($SFR1* & $SFR2*, Action & remove-raising($FR))
+
+[join-res-3] 
+	     
+    join-results($SFR1* & failing & $SFR2*, $FR) = 
+      failing & join-results($SFR1* & $SFR2*, Action & remove-failing($FR))
+
+[join-res-4] 
+	     
+    join-results(Action & $SFR1*, $FR) = 
+            Action & join-results($SFR1*, Action & remove-action($FR))
+
+[join-res-5]
+
+    join-results(, $SFR+) = $SFR+
+

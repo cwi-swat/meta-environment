@@ -89,3 +89,18 @@ equations
 
 [or-2] no answerOr no = no
 
+[lowest-1] 
+
+   TY1 subtype-of TY2 == yes
+   ===========================
+   lowest-type(TY1, TY2) = TY1
+
+[default-lowest-1] lowest-type(TY1, TY2) = TY2
+
+[highest-1] 
+
+   TY1 subtype-of TY2 == yes
+   ===========================
+   highest-type(TY1, TY2) = TY2
+
+[default-highest-1] highest-type(TY1, TY2) = TY1
