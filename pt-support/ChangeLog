@@ -1,5 +1,6 @@
 2001/07/17 (jong@cwi.nl)
  * version 0.4 released, bumped to 0.5
+ * unparsePT transformed into a hybrid commandline/TB-tool
 
 2001/07/16 (jong@cwi.nl)
  * version bumped to 0.4 in preparation of meta-release

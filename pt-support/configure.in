@@ -6,11 +6,13 @@ AM_INIT_AUTOMAKE(pt-support, 0.5)
 
 ACLOCAL="${ACLOCAL} -I ."
 
-dnl Which compiler to use?
+dnl {{{  Which compiler to use?
 AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
-dnl Handle --with-cflags option
+dnl }}}
+
+dnl {{{  Handle --with-cflags option
 AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
    CFLAGS=${withval},
@@ -20,25 +22,62 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl Check for required packages and perform version check when needed.
+dnl }}}
 
-dnl Require ATerm library
+dnl {{{  Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Our own version of libdir whose value is set dynamically
+dnl }}}
+dnl {{{  Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus-library is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl }}}
+dnl {{{  Require socket/gethostname
+
+NOSOCKLIBS=$LIBS
+dnl {{{  check for socket in -lsun and -lsocket
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+
+dnl }}}
+dnl {{{  check for gethostname in -lsun and -lsocket
+
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+dnl }}}
+AC_SUBST(SOCKLIBS)
+LIBS=$NOSOCKLIBS
+
+dnl }}}
+
+dnl {{{  Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
 
-dnl Is ranlib needed on this system?
+dnl }}}
+dnl {{{  Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
-dnl What commands are needed to set the variable MAKE in Makefiles?
+dnl }}}
+dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
-dnl Which files need updating?
+dnl }}}
+
+dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
   libconversion/Makefile
@@ -46,3 +85,5 @@ AC_OUTPUT(
   libasfix2/Makefile
   utils/Makefile
 )
+
+dnl }}}
