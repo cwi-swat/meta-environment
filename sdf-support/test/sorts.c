@@ -1,12 +1,15 @@
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
+
 #include <SDFME-utils.h>
 #include <MEPT-utils.h>
 
 #define TEST_GRAMMAR_FILE SRC_DIR "/Booleans.pt"
 
-int
-testSorts(void)
+/*{{{  int testSorts(void) */
+
+int testSorts(void)
 {
   ATerm       contents;
   SDF_SymbolList   sorts;
@@ -35,6 +38,10 @@ testSorts(void)
   return 0;
 }
 
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
@@ -45,3 +52,5 @@ int main(int argc, char *argv[])
 
   return testSorts();
 }
+
+/*}}}  */

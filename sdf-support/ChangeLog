@@ -1,3 +1,6 @@
+2001/08/28 (jong@cwi.nl)
+ * Added #include directives to satisfy gcc-3.0.1
+
 2001/08/21 (markvdb@cwi.nl)
  * Bugfix: yielding of Sdf Alt returned PT Pair!
 
