@@ -1,23 +1,23 @@
 /*
- * Generated at Mon Jan 22 17:20:25 2001
+ * Generated at Wed Jan 24 09:42:07 2001
  */
 
 #include "PT_dict.h"
 
 
-ATerm patternLayoutSpace = NULL;
-ATerm patternLayoutNewline = NULL;
-ATerm patternLayoutEmpty = NULL;
-ATerm patternModuleNameDefault = NULL;
-ATerm patternAsFixTree = NULL;
+ATerm PT_patternLayoutSpace = NULL;
+ATerm PT_patternLayoutNewline = NULL;
+ATerm PT_patternLayoutEmpty = NULL;
+ATerm PT_patternModuleNameDefault = NULL;
+ATerm PT_patternAsFixTree = NULL;
 
 /*
  *
- * patternLayoutSpace = w(" ")
- * patternLayoutNewline = w("\n")
- * patternLayoutEmpty = w("")
- * patternModuleNameDefault = id(<term>)
- * patternAsFixTree = term(l("term"),w(" "),l("X"),w(" "),<term>,<term>,<term>,<term>,no-abbreviations)
+ * PT_patternLayoutSpace = w(" ")
+ * PT_patternLayoutNewline = w("\n")
+ * PT_patternLayoutEmpty = w("")
+ * PT_patternModuleNameDefault = id(<term>)
+ * PT_patternAsFixTree = term(l("term"),w(" "),l("X"),w(" "),<term>,<term>,<term>,<term>,no-abbreviations)
  *
  */
 
@@ -51,14 +51,14 @@ void init_PT_dict()
 
   terms = (ATermList)ATelementAt(_PT_dict, 1);
 
-  patternLayoutSpace = ATgetFirst(terms);
+  PT_patternLayoutSpace = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  patternLayoutNewline = ATgetFirst(terms);
+  PT_patternLayoutNewline = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  patternLayoutEmpty = ATgetFirst(terms);
+  PT_patternLayoutEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  patternModuleNameDefault = ATgetFirst(terms);
+  PT_patternModuleNameDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  patternAsFixTree = ATgetFirst(terms);
+  PT_patternAsFixTree = ATgetFirst(terms);
   terms = ATgetNext(terms);
 }

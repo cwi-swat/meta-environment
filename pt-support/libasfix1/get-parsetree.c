@@ -8,12 +8,12 @@ int main(int argc, char *argv[])
   ATerm     contents;
 
   ATinit(argc, argv, &bottomOfStack);
-  initPTApi();
+  PT_initPTApi();
 
   contents = ATreadFromNamedFile(argv[1]);
   assert(contents != NULL);
 
-  ATprintf("%t\n", getAsFixTree(makeAsFixFromTerm(contents)));
+  ATprintf("%t\n", PT_getAsFixTree(PT_makeAsFixFromTerm(contents)));
 
   return 0;
 }

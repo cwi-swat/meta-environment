@@ -1,2 +1,2 @@
-typedef ATerm String;
-typedef ATerm Tree;
+typedef ATerm PT_String;
+typedef ATerm PT_Tree;

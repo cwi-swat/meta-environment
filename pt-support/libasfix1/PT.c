@@ -4,149 +4,149 @@
 
 /*{{{  typedefs */
 
-typedef struct ATerm _AsFix;
-typedef struct ATerm _ModuleName;
-typedef struct ATerm _Layout;
+typedef struct ATerm _PT_AsFix;
+typedef struct ATerm _PT_ModuleName;
+typedef struct ATerm _PT_Layout;
 
 /*}}}  */
 
-/*{{{  void initPTApi(void) */
+/*{{{  void PT_initPTApi(void) */
 
-void initPTApi(void)
+void PT_initPTApi(void)
 {
   init_PT_dict();
 }
 
 /*}}}  */
 
-/*{{{  AsFix makeAsFixFromTerm(ATerm t) */
+/*{{{  PT_AsFix PT_makeAsFixFromTerm(ATerm t) */
 
-AsFix makeAsFixFromTerm(ATerm t)
+PT_AsFix PT_makeAsFixFromTerm(ATerm t)
 {
-  return (AsFix)t;
+  return (PT_AsFix)t;
 }
 
 /*}}}  */
-/*{{{  ATerm makeTermFromAsFix(AsFix arg) */
+/*{{{  ATerm PT_makeTermFromAsFix(PT_AsFix arg) */
 
-ATerm makeTermFromAsFix(AsFix arg)
+ATerm PT_makeTermFromAsFix(PT_AsFix arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ModuleName makeModuleNameFromTerm(ATerm t) */
+/*{{{  PT_ModuleName PT_makeModuleNameFromTerm(ATerm t) */
 
-ModuleName makeModuleNameFromTerm(ATerm t)
+PT_ModuleName PT_makeModuleNameFromTerm(ATerm t)
 {
-  return (ModuleName)t;
+  return (PT_ModuleName)t;
 }
 
 /*}}}  */
-/*{{{  ATerm makeTermFromModuleName(ModuleName arg) */
+/*{{{  ATerm PT_makeTermFromModuleName(PT_ModuleName arg) */
 
-ATerm makeTermFromModuleName(ModuleName arg)
+ATerm PT_makeTermFromModuleName(PT_ModuleName arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  Layout makeLayoutFromTerm(ATerm t) */
+/*{{{  PT_Layout PT_makeLayoutFromTerm(ATerm t) */
 
-Layout makeLayoutFromTerm(ATerm t)
+PT_Layout PT_makeLayoutFromTerm(ATerm t)
 {
-  return (Layout)t;
+  return (PT_Layout)t;
 }
 
 /*}}}  */
-/*{{{  ATerm makeTermFromLayout(Layout arg) */
+/*{{{  ATerm PT_makeTermFromLayout(PT_Layout arg) */
 
-ATerm makeTermFromLayout(Layout arg)
+ATerm PT_makeTermFromLayout(PT_Layout arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
 
-/*{{{  AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree) */
+/*{{{  PT_AsFix PT_makeAsFixTree(PT_ModuleName moduleName, PT_Layout wsBeforeTree, PT_Tree tree, PT_Layout wsAfterTree) */
 
-AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree)
+PT_AsFix PT_makeAsFixTree(PT_ModuleName moduleName, PT_Layout wsBeforeTree, PT_Tree tree, PT_Layout wsAfterTree)
 {
-  return (AsFix)ATmakeTerm(patternAsFixTree, moduleName, wsBeforeTree, tree, wsAfterTree);
+  return (PT_AsFix)ATmakeTerm(PT_patternAsFixTree, moduleName, wsBeforeTree, tree, wsAfterTree);
 }
 
 /*}}}  */
-/*{{{  ModuleName makeModuleNameDefault(String id) */
+/*{{{  PT_ModuleName PT_makeModuleNameDefault(PT_String id) */
 
-ModuleName makeModuleNameDefault(String id)
+PT_ModuleName PT_makeModuleNameDefault(PT_String id)
 {
-  return (ModuleName)ATmakeTerm(patternModuleNameDefault, id);
+  return (PT_ModuleName)ATmakeTerm(PT_patternModuleNameDefault, id);
 }
 
 /*}}}  */
-/*{{{  Layout makeLayoutEmpty() */
+/*{{{  PT_Layout PT_makeLayoutEmpty() */
 
-Layout makeLayoutEmpty()
+PT_Layout PT_makeLayoutEmpty()
 {
-  return (Layout)ATmakeTerm(patternLayoutEmpty);
+  return (PT_Layout)ATmakeTerm(PT_patternLayoutEmpty);
 }
 
 /*}}}  */
-/*{{{  Layout makeLayoutNewline() */
+/*{{{  PT_Layout PT_makeLayoutNewline() */
 
-Layout makeLayoutNewline()
+PT_Layout PT_makeLayoutNewline()
 {
-  return (Layout)ATmakeTerm(patternLayoutNewline);
+  return (PT_Layout)ATmakeTerm(PT_patternLayoutNewline);
 }
 
 /*}}}  */
-/*{{{  Layout makeLayoutSpace() */
+/*{{{  PT_Layout PT_makeLayoutSpace() */
 
-Layout makeLayoutSpace()
+PT_Layout PT_makeLayoutSpace()
 {
-  return (Layout)ATmakeTerm(patternLayoutSpace);
+  return (PT_Layout)ATmakeTerm(PT_patternLayoutSpace);
 }
 
 /*}}}  */
 
-/*{{{  AsFix accessor implementations */
+/*{{{  PT_AsFix accessor implementations */
 
-/*{{{  ATbool isValidAsFix(AsFix arg) */
+/*{{{  ATbool PT_isValidAsFix(PT_AsFix arg) */
 
-ATbool isValidAsFix(AsFix arg)
+ATbool PT_isValidAsFix(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
+  if (PT_isAsFixTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool isAsFixTree(AsFix arg) */
+/*{{{  ATbool PT_isAsFixTree(PT_AsFix arg) */
 
-ATbool isAsFixTree(AsFix arg)
+ATbool PT_isAsFixTree(PT_AsFix arg)
 {
-  return ATmatchTerm((ATerm)arg, patternAsFixTree, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternAsFixTree, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool hasAsFixWsAfterTree(AsFix arg) */
+/*{{{  ATbool PT_hasAsFixWsAfterTree(PT_AsFix arg) */
 
-ATbool hasAsFixWsAfterTree(AsFix arg)
+ATbool PT_hasAsFixWsAfterTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
+  if (PT_isAsFixTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  Layout getAsFixWsAfterTree(AsFix arg) */
+/*{{{  PT_Layout PT_getAsFixWsAfterTree(PT_AsFix arg) */
 
-Layout getAsFixWsAfterTree(AsFix arg)
+PT_Layout PT_getAsFixWsAfterTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
-    return (Layout)ATgetArgument((ATermAppl)arg, 7);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_Layout)ATgetArgument((ATermAppl)arg, 7);
   }
 
   ATabort("AsFix has no WsAfterTree: %t\n", arg);
@@ -154,12 +154,12 @@ Layout getAsFixWsAfterTree(AsFix arg)
 }
 
 /*}}}  */
-/*{{{  AsFix setAsFixWsAfterTree(AsFix arg, Layout wsAfterTree) */
+/*{{{  PT_AsFix PT_setAsFixWsAfterTree(PT_AsFix arg, PT_Layout wsAfterTree) */
 
-AsFix setAsFixWsAfterTree(AsFix arg, Layout wsAfterTree)
+PT_AsFix PT_setAsFixWsAfterTree(PT_AsFix arg, PT_Layout wsAfterTree)
 {
-  if (isAsFixTree(arg)) {
-    return (AsFix)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterTree, 7);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_AsFix)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterTree, 7);
   }
 
   ATabort("AsFix has no WsAfterTree: %t\n", arg);
@@ -167,23 +167,23 @@ AsFix setAsFixWsAfterTree(AsFix arg, Layout wsAfterTree)
 }
 
 /*}}}  */
-/*{{{  ATbool hasAsFixWsBeforeTree(AsFix arg) */
+/*{{{  ATbool PT_hasAsFixWsBeforeTree(PT_AsFix arg) */
 
-ATbool hasAsFixWsBeforeTree(AsFix arg)
+ATbool PT_hasAsFixWsBeforeTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
+  if (PT_isAsFixTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  Layout getAsFixWsBeforeTree(AsFix arg) */
+/*{{{  PT_Layout PT_getAsFixWsBeforeTree(PT_AsFix arg) */
 
-Layout getAsFixWsBeforeTree(AsFix arg)
+PT_Layout PT_getAsFixWsBeforeTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
-    return (Layout)ATgetArgument((ATermAppl)arg, 5);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_Layout)ATgetArgument((ATermAppl)arg, 5);
   }
 
   ATabort("AsFix has no WsBeforeTree: %t\n", arg);
@@ -191,12 +191,12 @@ Layout getAsFixWsBeforeTree(AsFix arg)
 }
 
 /*}}}  */
-/*{{{  AsFix setAsFixWsBeforeTree(AsFix arg, Layout wsBeforeTree) */
+/*{{{  PT_AsFix PT_setAsFixWsBeforeTree(PT_AsFix arg, PT_Layout wsBeforeTree) */
 
-AsFix setAsFixWsBeforeTree(AsFix arg, Layout wsBeforeTree)
+PT_AsFix PT_setAsFixWsBeforeTree(PT_AsFix arg, PT_Layout wsBeforeTree)
 {
-  if (isAsFixTree(arg)) {
-    return (AsFix)ATsetArgument((ATermAppl)arg, (ATerm)wsBeforeTree, 5);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_AsFix)ATsetArgument((ATermAppl)arg, (ATerm)wsBeforeTree, 5);
   }
 
   ATabort("AsFix has no WsBeforeTree: %t\n", arg);
@@ -204,23 +204,23 @@ AsFix setAsFixWsBeforeTree(AsFix arg, Layout wsBeforeTree)
 }
 
 /*}}}  */
-/*{{{  ATbool hasAsFixModuleName(AsFix arg) */
+/*{{{  ATbool PT_hasAsFixModuleName(PT_AsFix arg) */
 
-ATbool hasAsFixModuleName(AsFix arg)
+ATbool PT_hasAsFixModuleName(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
+  if (PT_isAsFixTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ModuleName getAsFixModuleName(AsFix arg) */
+/*{{{  PT_ModuleName PT_getAsFixModuleName(PT_AsFix arg) */
 
-ModuleName getAsFixModuleName(AsFix arg)
+PT_ModuleName PT_getAsFixModuleName(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
-    return (ModuleName)ATgetArgument((ATermAppl)arg, 4);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_ModuleName)ATgetArgument((ATermAppl)arg, 4);
   }
 
   ATabort("AsFix has no ModuleName: %t\n", arg);
@@ -228,12 +228,12 @@ ModuleName getAsFixModuleName(AsFix arg)
 }
 
 /*}}}  */
-/*{{{  AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName) */
+/*{{{  PT_AsFix PT_setAsFixModuleName(PT_AsFix arg, PT_ModuleName moduleName) */
 
-AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName)
+PT_AsFix PT_setAsFixModuleName(PT_AsFix arg, PT_ModuleName moduleName)
 {
-  if (isAsFixTree(arg)) {
-    return (AsFix)ATsetArgument((ATermAppl)arg, (ATerm)moduleName, 4);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_AsFix)ATsetArgument((ATermAppl)arg, (ATerm)moduleName, 4);
   }
 
   ATabort("AsFix has no ModuleName: %t\n", arg);
@@ -241,23 +241,23 @@ AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName)
 }
 
 /*}}}  */
-/*{{{  ATbool hasAsFixTree(AsFix arg) */
+/*{{{  ATbool PT_hasAsFixTree(PT_AsFix arg) */
 
-ATbool hasAsFixTree(AsFix arg)
+ATbool PT_hasAsFixTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
+  if (PT_isAsFixTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  Tree getAsFixTree(AsFix arg) */
+/*{{{  PT_Tree PT_getAsFixTree(PT_AsFix arg) */
 
-Tree getAsFixTree(AsFix arg)
+PT_Tree PT_getAsFixTree(PT_AsFix arg)
 {
-  if (isAsFixTree(arg)) {
-    return (Tree)ATgetArgument((ATermAppl)arg, 6);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_Tree)ATgetArgument((ATermAppl)arg, 6);
   }
 
   ATabort("AsFix has no Tree: %t\n", arg);
@@ -265,12 +265,12 @@ Tree getAsFixTree(AsFix arg)
 }
 
 /*}}}  */
-/*{{{  AsFix setAsFixTree(AsFix arg, Tree tree) */
+/*{{{  PT_AsFix PT_setAsFixTree(PT_AsFix arg, PT_Tree tree) */
 
-AsFix setAsFixTree(AsFix arg, Tree tree)
+PT_AsFix PT_setAsFixTree(PT_AsFix arg, PT_Tree tree)
 {
-  if (isAsFixTree(arg)) {
-    return (AsFix)ATsetArgument((ATermAppl)arg, (ATerm)tree, 6);
+  if (PT_isAsFixTree(arg)) {
+    return (PT_AsFix)ATsetArgument((ATermAppl)arg, (ATerm)tree, 6);
   }
 
   ATabort("AsFix has no Tree: %t\n", arg);
@@ -280,44 +280,44 @@ AsFix setAsFixTree(AsFix arg, Tree tree)
 /*}}}  */
 
 /*}}}  */
-/*{{{  ModuleName accessor implementations */
+/*{{{  PT_ModuleName accessor implementations */
 
-/*{{{  ATbool isValidModuleName(ModuleName arg) */
+/*{{{  ATbool PT_isValidModuleName(PT_ModuleName arg) */
 
-ATbool isValidModuleName(ModuleName arg)
+ATbool PT_isValidModuleName(PT_ModuleName arg)
 {
-  if (isModuleNameDefault(arg)) {
+  if (PT_isModuleNameDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool isModuleNameDefault(ModuleName arg) */
+/*{{{  ATbool PT_isModuleNameDefault(PT_ModuleName arg) */
 
-ATbool isModuleNameDefault(ModuleName arg)
+ATbool PT_isModuleNameDefault(PT_ModuleName arg)
 {
-  return ATmatchTerm((ATerm)arg, patternModuleNameDefault, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternModuleNameDefault, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool hasModuleNameId(ModuleName arg) */
+/*{{{  ATbool PT_hasModuleNameId(PT_ModuleName arg) */
 
-ATbool hasModuleNameId(ModuleName arg)
+ATbool PT_hasModuleNameId(PT_ModuleName arg)
 {
-  if (isModuleNameDefault(arg)) {
+  if (PT_isModuleNameDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  String getModuleNameId(ModuleName arg) */
+/*{{{  PT_String PT_getModuleNameId(PT_ModuleName arg) */
 
-String getModuleNameId(ModuleName arg)
+PT_String PT_getModuleNameId(PT_ModuleName arg)
 {
-  if (isModuleNameDefault(arg)) {
-    return (String)ATgetArgument((ATermAppl)arg, 0);
+  if (PT_isModuleNameDefault(arg)) {
+    return (PT_String)ATgetArgument((ATermAppl)arg, 0);
   }
 
   ATabort("ModuleName has no Id: %t\n", arg);
@@ -325,12 +325,12 @@ String getModuleNameId(ModuleName arg)
 }
 
 /*}}}  */
-/*{{{  ModuleName setModuleNameId(ModuleName arg, String id) */
+/*{{{  PT_ModuleName PT_setModuleNameId(PT_ModuleName arg, PT_String id) */
 
-ModuleName setModuleNameId(ModuleName arg, String id)
+PT_ModuleName PT_setModuleNameId(PT_ModuleName arg, PT_String id)
 {
-  if (isModuleNameDefault(arg)) {
-    return (ModuleName)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+  if (PT_isModuleNameDefault(arg)) {
+    return (PT_ModuleName)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
   }
 
   ATabort("ModuleName has no Id: %t\n", arg);
@@ -340,46 +340,46 @@ ModuleName setModuleNameId(ModuleName arg, String id)
 /*}}}  */
 
 /*}}}  */
-/*{{{  Layout accessor implementations */
+/*{{{  PT_Layout accessor implementations */
 
-/*{{{  ATbool isValidLayout(Layout arg) */
+/*{{{  ATbool PT_isValidLayout(PT_Layout arg) */
 
-ATbool isValidLayout(Layout arg)
+ATbool PT_isValidLayout(PT_Layout arg)
 {
-  if (isLayoutEmpty(arg)) {
+  if (PT_isLayoutEmpty(arg)) {
     return ATtrue;
   }
-  else if (isLayoutNewline(arg)) {
+  else if (PT_isLayoutNewline(arg)) {
     return ATtrue;
   }
-  else if (isLayoutSpace(arg)) {
+  else if (PT_isLayoutSpace(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool isLayoutEmpty(Layout arg) */
+/*{{{  ATbool PT_isLayoutEmpty(PT_Layout arg) */
 
-ATbool isLayoutEmpty(Layout arg)
+ATbool PT_isLayoutEmpty(PT_Layout arg)
 {
-  return ATmatchTerm((ATerm)arg, patternLayoutEmpty);
+  return ATmatchTerm((ATerm)arg, PT_patternLayoutEmpty);
 }
 
 /*}}}  */
-/*{{{  ATbool isLayoutNewline(Layout arg) */
+/*{{{  ATbool PT_isLayoutNewline(PT_Layout arg) */
 
-ATbool isLayoutNewline(Layout arg)
+ATbool PT_isLayoutNewline(PT_Layout arg)
 {
-  return ATmatchTerm((ATerm)arg, patternLayoutNewline);
+  return ATmatchTerm((ATerm)arg, PT_patternLayoutNewline);
 }
 
 /*}}}  */
-/*{{{  ATbool isLayoutSpace(Layout arg) */
+/*{{{  ATbool PT_isLayoutSpace(PT_Layout arg) */
 
-ATbool isLayoutSpace(Layout arg)
+ATbool PT_isLayoutSpace(PT_Layout arg)
 {
-  return ATmatchTerm((ATerm)arg, patternLayoutSpace);
+  return ATmatchTerm((ATerm)arg, PT_patternLayoutSpace);
 }
 
 /*}}}  */

@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jan 22 17:20:25 2001
+ * Generated at Wed Jan 24 09:42:07 2001
  */
 
 #ifndef __PT_dict_H
@@ -8,11 +8,11 @@
 #include <aterm2.h>
 
 
-extern ATerm patternLayoutSpace;
-extern ATerm patternLayoutNewline;
-extern ATerm patternLayoutEmpty;
-extern ATerm patternModuleNameDefault;
-extern ATerm patternAsFixTree;
+extern ATerm PT_patternLayoutSpace;
+extern ATerm PT_patternLayoutNewline;
+extern ATerm PT_patternLayoutEmpty;
+extern ATerm PT_patternModuleNameDefault;
+extern ATerm PT_patternAsFixTree;
 
 extern void init_PT_dict();
 

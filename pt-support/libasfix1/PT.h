@@ -10,66 +10,66 @@
 
 /*{{{  prologue */
 
-typedef ATerm String;
-typedef ATerm Tree;
+typedef ATerm PT_String;
+typedef ATerm PT_Tree;
 
 /*}}}  */
 /*{{{  typedefs */
 
-typedef struct _AsFix *AsFix;
-typedef struct _ModuleName *ModuleName;
-typedef struct _Layout *Layout;
+typedef struct _PT_AsFix *PT_AsFix;
+typedef struct _PT_ModuleName *PT_ModuleName;
+typedef struct _PT_Layout *PT_Layout;
 
 /*}}}  */
 
-void initPTApi(void);
+void PT_initPTApi(void);
 
-AsFix makeAsFixFromTerm(ATerm t);
-ATerm makeTermFromAsFix(AsFix arg);
-ModuleName makeModuleNameFromTerm(ATerm t);
-ATerm makeTermFromModuleName(ModuleName arg);
-Layout makeLayoutFromTerm(ATerm t);
-ATerm makeTermFromLayout(Layout arg);
+PT_AsFix PT_makeAsFixFromTerm(ATerm t);
+ATerm PT_makeTermFromAsFix(PT_AsFix arg);
+PT_ModuleName PT_makeModuleNameFromTerm(ATerm t);
+ATerm PT_makeTermFromModuleName(PT_ModuleName arg);
+PT_Layout PT_makeLayoutFromTerm(ATerm t);
+ATerm PT_makeTermFromLayout(PT_Layout arg);
 
-AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree);
-ModuleName makeModuleNameDefault(String id);
-Layout makeLayoutEmpty();
-Layout makeLayoutNewline();
-Layout makeLayoutSpace();
+PT_AsFix PT_makeAsFixTree(PT_ModuleName moduleName, PT_Layout wsBeforeTree, PT_Tree tree, PT_Layout wsAfterTree);
+PT_ModuleName PT_makeModuleNameDefault(PT_String id);
+PT_Layout PT_makeLayoutEmpty();
+PT_Layout PT_makeLayoutNewline();
+PT_Layout PT_makeLayoutSpace();
 
-/*{{{  AsFix accessor prototypes */
+/*{{{  PT_AsFix accessor prototypes */
 
-ATbool isValidAsFix(AsFix arg);
-ATbool isAsFixTree(AsFix arg);
-ATbool hasAsFixWsAfterTree(AsFix arg);
-Layout getAsFixWsAfterTree(AsFix arg);
-AsFix setAsFixWsAfterTree(AsFix arg, Layout wsAfterTree);
-ATbool hasAsFixWsBeforeTree(AsFix arg);
-Layout getAsFixWsBeforeTree(AsFix arg);
-AsFix setAsFixWsBeforeTree(AsFix arg, Layout wsBeforeTree);
-ATbool hasAsFixModuleName(AsFix arg);
-ModuleName getAsFixModuleName(AsFix arg);
-AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName);
-ATbool hasAsFixTree(AsFix arg);
-Tree getAsFixTree(AsFix arg);
-AsFix setAsFixTree(AsFix arg, Tree tree);
-
-/*}}}  */
-/*{{{  ModuleName accessor prototypes */
-
-ATbool isValidModuleName(ModuleName arg);
-ATbool isModuleNameDefault(ModuleName arg);
-ATbool hasModuleNameId(ModuleName arg);
-String getModuleNameId(ModuleName arg);
-ModuleName setModuleNameId(ModuleName arg, String id);
+ATbool PT_isValidAsFix(PT_AsFix arg);
+ATbool PT_isAsFixTree(PT_AsFix arg);
+ATbool PT_hasAsFixWsAfterTree(PT_AsFix arg);
+PT_Layout PT_getAsFixWsAfterTree(PT_AsFix arg);
+PT_AsFix PT_setAsFixWsAfterTree(PT_AsFix arg, PT_Layout wsAfterTree);
+ATbool PT_hasAsFixWsBeforeTree(PT_AsFix arg);
+PT_Layout PT_getAsFixWsBeforeTree(PT_AsFix arg);
+PT_AsFix PT_setAsFixWsBeforeTree(PT_AsFix arg, PT_Layout wsBeforeTree);
+ATbool PT_hasAsFixModuleName(PT_AsFix arg);
+PT_ModuleName PT_getAsFixModuleName(PT_AsFix arg);
+PT_AsFix PT_setAsFixModuleName(PT_AsFix arg, PT_ModuleName moduleName);
+ATbool PT_hasAsFixTree(PT_AsFix arg);
+PT_Tree PT_getAsFixTree(PT_AsFix arg);
+PT_AsFix PT_setAsFixTree(PT_AsFix arg, PT_Tree tree);
 
 /*}}}  */
-/*{{{  Layout accessor prototypes */
+/*{{{  PT_ModuleName accessor prototypes */
 
-ATbool isValidLayout(Layout arg);
-ATbool isLayoutEmpty(Layout arg);
-ATbool isLayoutNewline(Layout arg);
-ATbool isLayoutSpace(Layout arg);
+ATbool PT_isValidModuleName(PT_ModuleName arg);
+ATbool PT_isModuleNameDefault(PT_ModuleName arg);
+ATbool PT_hasModuleNameId(PT_ModuleName arg);
+PT_String PT_getModuleNameId(PT_ModuleName arg);
+PT_ModuleName PT_setModuleNameId(PT_ModuleName arg, PT_String id);
+
+/*}}}  */
+/*{{{  PT_Layout accessor prototypes */
+
+ATbool PT_isValidLayout(PT_Layout arg);
+ATbool PT_isLayoutEmpty(PT_Layout arg);
+ATbool PT_isLayoutNewline(PT_Layout arg);
+ATbool PT_isLayoutSpace(PT_Layout arg);
 
 /*}}}  */
 
