@@ -78,6 +78,7 @@ imports Kernel-Sdf-Syntax
         Basic-Sdf-Syntax
         Modular-Sdf-Syntax
         Regular-Sdf-Syntax
+        Lifting-Sdf-Syntax
         Priority-Sdf-Syntax
         CC-Sdf-Syntax
         Sorts-Sdf-Syntax
@@ -401,4 +402,12 @@ exports
                               -> OptExp
     IntCon "." NatCon OptExp  -> RealCon
 
+module Lifting-Sdf-Syntax
 
+imports Kernel-Sdf-Syntax
+
+exports
+
+context-free syntax
+
+"\`" Symbol "\`"                 -> Symbol
