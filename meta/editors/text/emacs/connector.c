@@ -365,6 +365,9 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
     else if (MC_isTextCategoryNameFocus(name)) {
       sprintf(buf, "(register-focus '(list %s))", attribs);
     }
+    else if (MC_isTextCategoryNameSelection(name)) {
+      sprintf(buf, "(set-face-attribute 'region nil %s)", attribs);
+    }
 
     sendToEmacs(write_to_editor_fd, buf);
   }

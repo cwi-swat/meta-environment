@@ -33,6 +33,10 @@
   (put-category 'INTERNAL 'FOCUS properties)
 )
 
+(defun register-selection (properties)
+  (set-face-attributes 'region nil properties)
+)
+
 (defun get-focus-properties ()
   (get-category-properties 'INTERNAL 'FOCUS)
 )
