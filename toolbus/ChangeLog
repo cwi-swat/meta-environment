@@ -23,6 +23,7 @@ Version 0.14
 Author:  Merijn de Jonge
 -Because building the documentation requires the toolbus and other programs, 
  all programs are now build automatically prior to making the documentation. 
+-Also build everything before making a distribution.
 
 Date:   Tue Apr 11 20:03:33 MET DST 2000
 Version 0.14
