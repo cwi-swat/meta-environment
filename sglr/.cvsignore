@@ -1,4 +1,4 @@
-*.pkg
+*-*.pkg
 *.tar.gz
 Makefile
 Makefile.in
