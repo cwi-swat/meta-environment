@@ -20,6 +20,6 @@
 #
 # $Id$
 
-SUBDIRS = utils
+SUBDIRS = lib utils
 
 EXTRA_DIST = reconf make_rules
