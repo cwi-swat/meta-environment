@@ -5,9 +5,9 @@
  * of ATerm annotations depends on whitespace!
  */
 
-/*{{{  PT_Tree set_anno(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree set_anno(PT_Tree input) */
 
-PT_Tree set_anno(ATerm builtin, PT_Tree input)
+PT_Tree set_anno(PT_Tree input)
 {
   PT_Tree term = CO_getFunctionArgument(input,0);
   PT_Tree key = CO_getFunctionArgument(input,1);
@@ -19,9 +19,9 @@ PT_Tree set_anno(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree get_anno(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree get_anno(PT_Tree input) */
 
-PT_Tree get_anno(ATerm builtin, PT_Tree input)
+PT_Tree get_anno(PT_Tree input)
 {
   PT_Tree term = CO_getFunctionArgument(input,0);
   PT_Tree key = CO_getFunctionArgument(input,1);
@@ -39,9 +39,9 @@ PT_Tree get_anno(ATerm builtin, PT_Tree input)
 
 /*}}}  */
 
-/*{{{  PT_Tree get_term_anno(ATerm builtin, PT_Tree input)  */
+/*{{{  PT_Tree get_term_anno(PT_Tree input)  */
 
-PT_Tree get_term_anno(ATerm builtin, PT_Tree input) 
+PT_Tree get_term_anno(PT_Tree input) 
 {
   PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
   PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);

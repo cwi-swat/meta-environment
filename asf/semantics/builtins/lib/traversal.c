@@ -26,9 +26,9 @@ static void initPatterns(void)
 
 /*}}}  */
 
-/*{{{  PT_Tree strategy_all(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree strategy_all(PT_Tree input) */
 
-PT_Tree strategy_all(ATerm builtin, PT_Tree input)
+PT_Tree strategy_all(PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
@@ -84,9 +84,9 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree strategy_some(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree strategy_some(PT_Tree input) */
 
-PT_Tree strategy_some(ATerm builtin, PT_Tree input)
+PT_Tree strategy_some(PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
@@ -142,9 +142,9 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree strategy_one(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree strategy_one(PT_Tree input) */
 
-PT_Tree strategy_one(ATerm builtin, PT_Tree input)
+PT_Tree strategy_one(PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;

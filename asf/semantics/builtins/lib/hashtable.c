@@ -24,9 +24,9 @@ static ATerm makeKey(PT_Tree name, PT_Tree key)
 
 /*}}}  */
   
-/*{{{  PT_Tree hashtable_lookup(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree hashtable_lookup(PT_Tree input) */
 
-PT_Tree hashtable_lookup(ATerm builtin, PT_Tree input)
+PT_Tree hashtable_lookup(PT_Tree input)
 {
   PT_Tree name_arg = CO_getFunctionArgument(input,0);
   PT_Tree key_arg  = CO_getFunctionArgument(input,1);
@@ -46,9 +46,9 @@ PT_Tree hashtable_lookup(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree hashtable_store(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree hashtable_store(PT_Tree input) */
 
-PT_Tree hashtable_store(ATerm builtin, PT_Tree input)
+PT_Tree hashtable_store(PT_Tree input)
 {
   PT_Tree name_arg = CO_getFunctionArgument(input,0);
   PT_Tree key_arg  = CO_getFunctionArgument(input,1);
@@ -64,9 +64,9 @@ PT_Tree hashtable_store(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree hashtable_delete(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree hashtable_delete(PT_Tree input) */
 
-PT_Tree hashtable_delete(ATerm builtin, PT_Tree input)
+PT_Tree hashtable_delete(PT_Tree input)
 {
   PT_Tree name_arg = CO_getFunctionArgument(input,0);
   PT_Tree key_arg  = CO_getFunctionArgument(input,1);
