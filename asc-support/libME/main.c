@@ -9,7 +9,6 @@
 
 #include "asc-support2-me.h"
 
-
 /*}}}  */
 /*{{{  globals */
 
@@ -37,7 +36,10 @@ void usage(char *prg)
 
 /*{{{  int main(int argc, char *argv[]) */
 
-int main(int argc, char *argv[])
+int asc_support_main(int argc, char *argv[], 
+		     void (*register_all)(), 
+		     void (*resolve_all)(),
+		     void (*init_all)())
 {
   ATerm bottomOfStack;
   PT_ParseTree pt;
