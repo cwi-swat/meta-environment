@@ -251,6 +251,80 @@ static SDF_Import makeRenamedImport(SDF_ModuleName moduleName,
 
 /*}}}  */
 
+static SDF_Symbol renameSymbol(SDF_Symbol from, SDF_Symbol into, SDF_Symbol symbol);
+/*{{{  static SDF_SymbolParameters renameSymbolParameters(SDF_Symbol from,  */
+
+static SDF_SymbolParameters renameSymbolParameters(SDF_Symbol from, 
+					 	   SDF_Symbol into,
+                                                   SDF_SymbolParameters symbols)
+{
+  if (SDF_hasSymbolParametersHead(symbols)) {
+    SDF_Symbol head = SDF_getSymbolParametersHead(symbols);
+    SDF_Symbol newHead = renameSymbol(from, into, head);
+    symbols = SDF_setSymbolParametersHead(symbols, newHead);
+  }
+  if (SDF_hasSymbolParametersTail(symbols)) {
+    SDF_SymbolParameters tail = SDF_getSymbolParametersTail(symbols);
+    SDF_SymbolParameters newTail = renameSymbolParameters(from, into, tail);
+    symbols = SDF_setSymbolParametersTail(symbols, newTail);
+  }
+  return symbols;
+}
+
+/*}}}  */
+/*{{{  static SDF_SymbolTail renameSymbolTail(SDF_Symbol from,  */
+
+static SDF_SymbolTail renameSymbolTail(SDF_Symbol from, 
+				       SDF_Symbol into,
+                                       SDF_SymbolTail symbols)
+{
+  if (SDF_hasSymbolTailHead(symbols)) {
+    SDF_Symbol head = SDF_getSymbolTailHead(symbols);
+    SDF_Symbol newHead = renameSymbol(from, into, head);
+    symbols = SDF_setSymbolTailHead(symbols, newHead);
+  }
+  if (SDF_hasSymbolTailTail(symbols)) {
+    SDF_SymbolTail tail = SDF_getSymbolTailTail(symbols);
+    SDF_SymbolTail newTail = renameSymbolTail(from, into, tail);
+    symbols = SDF_setSymbolTailTail(symbols, newTail);
+  }
+  return symbols;
+}
+
+/*}}}  */
+/*{{{  static SDF_SymbolList renameSymbolList(SDF_Symbol from, */
+
+static SDF_SymbolList renameSymbolList(SDF_Symbol from,
+				       SDF_Symbol into,
+                                       SDF_SymbolList symbols)
+{
+  if (SDF_hasSymbolListHead(symbols)) {
+    SDF_Symbol head = SDF_getSymbolListHead(symbols);
+    SDF_Symbol newHead = renameSymbol(from, into, head);
+    symbols = SDF_setSymbolListHead(symbols, newHead);
+  }
+  if (SDF_hasSymbolListTail(symbols)) {
+    SDF_SymbolList tail = SDF_getSymbolListTail(symbols);
+    SDF_SymbolList newTail = renameSymbolList(from, into, tail);
+    symbols = SDF_setSymbolListTail(symbols, newTail);
+  }
+  return symbols;
+}
+
+/*}}}  */
+/*{{{  static SDF_Symbols renameSymbols(SDF_Symbol from,  */
+
+static SDF_Symbols renameSymbols(SDF_Symbol from, 
+				 SDF_Symbol into,
+                                 SDF_Symbols symbols)
+{
+  SDF_SymbolList list = SDF_getSymbolsList(symbols);
+  SDF_SymbolList newList = renameSymbolList(from, into, list);
+  return SDF_setSymbolsList(symbols, newList);
+}
+
+/*}}}  */
+
 /*{{{  static SDF_Symbol renameSymbol(SDF_Symbol from, Symbol into, */
 
 static SDF_Symbol renameSymbol(SDF_Symbol from, SDF_Symbol into,
@@ -279,6 +353,37 @@ static SDF_Symbol renameSymbol(SDF_Symbol from, SDF_Symbol into,
     argSymbol = SDF_getSymbolRight(symbol);
     newArgSymbol = renameSymbol(from, into, argSymbol);
     symbol = SDF_setSymbolRight(symbol, newArgSymbol);
+  }
+  if (SDF_hasSymbolSep(symbol)) {
+    argSymbol = SDF_getSymbolSep(symbol);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
+    symbol = SDF_setSymbolSep(symbol, newArgSymbol);
+  }
+  if (SDF_hasSymbolHead(symbol)) {
+    argSymbol = SDF_getSymbolHead(symbol);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
+    symbol = SDF_setSymbolHead(symbol, newArgSymbol);
+  }
+  if (SDF_hasSymbolTail(symbol)) {
+    SDF_SymbolTail argSymbols = SDF_getSymbolTail(symbol);
+    SDF_SymbolTail newArgSymbols = renameSymbolTail(from, into, argSymbols); 
+    symbol = SDF_setSymbolTail(symbol, newArgSymbols);
+  }
+  if (SDF_hasSymbolArguments(symbol)) {
+    SDF_Symbols argSymbols = SDF_getSymbolArguments(symbol);
+    SDF_Symbols newArgSymbols = renameSymbols(from, into, argSymbols); 
+    symbol = SDF_setSymbolArguments(symbol, newArgSymbols);
+  }
+  if (SDF_hasSymbolResults(symbol)) {
+    argSymbol = SDF_getSymbolResults(symbol);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
+    symbol = SDF_setSymbolResults(symbol, newArgSymbol);
+  }
+  if (SDF_hasSymbolParameters(symbol)) {
+    SDF_SymbolParameters argSymbols = SDF_getSymbolParameters(symbol);
+    SDF_SymbolParameters newArgSymbols = 
+                           renameSymbolParameters(from, into, argSymbols);
+    symbol = SDF_setSymbolParameters(symbol, newArgSymbols);
   }
 
   return symbol;
@@ -329,8 +434,7 @@ static SDF_Renamings applyRenamingToRenamings(SDF_Renaming renaming,
 
   while (!SDF_isRenamingListEmpty(list)) {
     SDF_Renaming toBeRenamed = SDF_getRenamingListHead(list);
-    SDF_Renaming renamed = applyRenamingToRenaming(renaming,
-						   toBeRenamed);
+    SDF_Renaming renamed = applyRenamingToRenaming(renaming, toBeRenamed);
 
     result = SDF_insertRenaming(renamed, result);
 

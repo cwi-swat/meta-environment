@@ -145,6 +145,7 @@ ATerm rename_module(int cid, ATerm atImports, char *moduleName, ATerm term)
 {
   SDF_ImportList imports = SDF_ImportListFromTerm(atImports);
   SDF_ImportList relevant = getRelevantImports(moduleName, imports);
+
   ATermList newModules = applyImports(relevant, 
 				      PT_ParseTreeFromTerm(ATBunpack(term)));
   
