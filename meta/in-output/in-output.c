@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <limits.h>
-#include <tool.h>
+#include <tb-tool.h>
 #include "in-output.tif.c"
 
 #define PATH_LEN _POSIX_PATH_MAX
