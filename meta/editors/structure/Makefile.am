@@ -29,6 +29,8 @@ structure_editor_SOURCES = \
 
 structure_editor_LDADD = \
 	-L$(top_builddir)/editors/structure -lStructureEditor \
+	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
@@ -46,11 +48,17 @@ EXTRA_DIST = \
 
 # Developers
 api: StructureEditor.sdf
-	(echo definition; cat $(LOCATION_API) $<) \
+	(echo definition; cat $<) \
 	> `basename $< .sdf`.def
-	sdf2-to-c --imploded --prefix SE_  \
+	sdf2-to-adt \
+		--imploded \
 		--input `basename $< .sdf`.def \
-		--output `basename $< .sdf`
+		--output `basename $< .sdf`.adt
+	adt-to-c \
+		--input `basename $< .sdf`.adt \
+		--prefix SE_ \
+		--prologue StructureEditor.pro \
+		--name StructureEditor
 
 api-clean:
 	rm -f StructureEditor.{adt,c,dict,h} StructureEditor_dict.*

@@ -4,22 +4,82 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <aterm2.h>
+
+#include <MEPT-utils.h>
+#include <Location.h>
+
+#include "StructureEditor.h"
 
 #include "structure-editor.tif.h"
 
 /*}}}  */
 
-/*{{{  void create_editor(int cid, ATerm editorId, ATerm parseTree) */
+/*{{{  variables */
 
-void create_editor(int cid, ATerm editorId, ATerm parseTree)
+static ATermTable editors = NULL;
+
+/*}}}  */
+
+/*{{{  static void assertParseTreeHasPosInfo(PT_ParseTree parseTree) */
+
+static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
 {
+  PT_Tree tree = PT_getParseTreeTop(parseTree);
+  if (PT_getTreeLocation(tree) == NULL) {
+    ATerror("structure-editor.c: cannot edit parsetree without posinfo!\n");
+  }
 }
 
 /*}}}  */
-/*{{{  void update_editor(int cid, ATerm editorId, ATerm parseTree) */
+/*{{{  static LOC_Area getAreaAtOffset(PT_Tree tree, int offset) */
 
-void update_editor(int cid, ATerm editorId, ATerm parseTree)
+static LOC_Area getAreaAtOffset(PT_Tree tree, int offset)
 {
+  LOC_Location location;
+
+  assert(tree != NULL);
+  assert(offset >= 0);
+
+  location = PT_findLocationAtOffset(tree, offset);
+  if (location != NULL) {
+    return LOC_getLocationArea(location);
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
+/*{{{  void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
+
+void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
+{
+  PT_ParseTree parseTree;
+  SE_StructureEditor editor;
+
+  parseTree = PT_ParseTreeFromTerm(parseTreeTerm);
+  assertParseTreeHasPosInfo(parseTree);
+
+  editor = SE_makeStructureEditorUnedited(parseTree);
+  ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
+}
+
+/*}}}  */
+/*{{{  void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
+
+void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
+{
+  SE_StructureEditor editor;
+
+  editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
+  if (editor != NULL) {
+    PT_ParseTree parseTree = PT_ParseTreeFromTerm(parseTreeTerm);
+    assertParseTreeHasPosInfo(parseTree);
+    editor = SE_setStructureEditorParseTree(editor, parseTree);
+    ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
+  }
 }
 
 /*}}}  */
@@ -27,6 +87,12 @@ void update_editor(int cid, ATerm editorId, ATerm parseTree)
 
 void delete_editor(int cid, ATerm editorId)
 {
+  ATerm editor;
+
+  editor = ATtableGet(editors, editorId);
+  if (editor != NULL) {
+    ATtableRemove(editors, editor);
+  }
 }
 
 /*}}}  */
@@ -34,6 +100,16 @@ void delete_editor(int cid, ATerm editorId)
 
 void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 {
+  SE_StructureEditor editor;
+
+  editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
+  if (editor != NULL) {
+    editor = SE_setStructureEditorCursor(editor, offset);
+    ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
+  }
+  else {
+    ATwarning("set_cursor_at_offset: no such editor: %t\n", editorId);
+  }
 }
 
 /*}}}  */
@@ -41,7 +117,23 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 
 ATerm get_focus_at_cursor(int cid, ATerm editorId)
 {
-  return ATmake("snd-value(focus(fix-me))");
+  SE_StructureEditor editor;
+
+  editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
+  if (editor != NULL) {
+    if (SE_hasStructureEditorCursor(editor)) {
+      int cursor = SE_getStructureEditorCursor(editor);
+      PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
+      PT_Tree tree = PT_getParseTreeTop(parseTree);
+      LOC_Area area = getAreaAtOffset(tree, cursor);
+      return ATmake("snd-value(focus(<term>))", area);
+    }
+
+    ATwarning("get_focus_at_cursor: no cursor yet in %t\n", editorId);
+  }
+
+  ATwarning("get_focus_at_cursor: no such editor: %t\n", editorId);
+  return NULL;
 }
 
 /*}}}  */
@@ -69,6 +161,8 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   ATBinit(argc, argv, &bottomOfStack);
+
+  editors = ATtableCreate(100, 75);
 
   return 0;
 }

@@ -1,5 +1,6 @@
 module StructureEditor
 
+imports basic/NatCon
 imports basic/Whitespace
 
 exports
@@ -9,3 +10,11 @@ exports
     "Left" -> Direction {cons("left")}
     "Down" -> Direction {cons("down")}
     "Right" -> Direction {cons("right")}
+
+  sorts StructureEditor
+  context-free syntax
+    "structure-editor" "(" parse-tree: ParseTree "," cursor: NatCon ")"
+      -> StructureEditor
+
+    "structure-editor" "(" parse-tree: ParseTree ")"
+      -> StructureEditor {cons("unedited")}
