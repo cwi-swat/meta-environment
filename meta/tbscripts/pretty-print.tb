@@ -8,20 +8,20 @@ let
 in
   Id := process-id .
   Result := error-tree .
-  snd-note(ui-status(stat(Id, "Pretty printing..."))) .
   snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
   (
     rec-msg(syntax(Syntax?)) .
+    snd-note(ui-status(stat(Id, "Pretty printing..."))) .
     snd-msg(ptpretty(Syntax, Tree)) .
     (
       rec-msg(ptpretty-result(Result?))
     +
       rec-msg(ptpretty-error(ErrorMessage?)) .
       snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
-    )
+    ).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(no-syntax(ErrorMessage?)) .
     snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
-  ) .
-  snd-note(endstat(Id))
+  ) 
 endlet
