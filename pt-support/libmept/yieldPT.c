@@ -135,6 +135,14 @@ char *PT_yieldTree(PT_Tree tree)
   return buffer;
 }
 
+char *PT_yieldArgs(PT_Args args)
+{
+  return PT_yieldTree(
+           PT_makeTreeAppl(
+             PT_makeProductionList(
+               PT_makeSymbolSort("")), args));  
+}
+
 char *PT_yieldParseTree(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
