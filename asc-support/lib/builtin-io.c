@@ -117,29 +117,6 @@ static char* getSort(PT_Symbol type)
 
 /*}}}  */
 
-/*{{{  static void initParser(ATerm language, char *filename) */
-
-static void initParser(ATerm language, const char *filename)
-{
-  static ATbool initialized = ATfalse;
-
-  if (!initialized) {
-    SGinitParser(ATfalse);
-    SG_ASFIX2ME_ON();
-    SG_OUTPUT_ON();
-    SG_TOOLBUS_OFF();
-
-    initialized = ATtrue;
-    
-    SG_FILTER_INJECTIONCOUNT_OFF(); 
-    SG_FILTER_EAGERNESS_OFF();
-
-    SGopenLanguageFromTerm(language, getParseTable(), filename);
-
-  }
-}
-
-/*}}}  */
 /*{{{  static PT_Tree parse_result(const char *sort, const char *file, ATerm result) */
 
 static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
@@ -201,7 +178,6 @@ static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
 static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
 {
   char  toolname[] = "parse-file";
-  ATerm language = ATmake("<str>", toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
   ATerm parseTable;
@@ -214,11 +190,11 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
 	       	l);
   }
 
-  initParser(language, filename);
+  initParser(toolname, filename);
   parseTable = getParseTable();
 
   if (parseTable != NULL) {
-    ATerm result = SGparseFile(toolname, language, sort, filename);
+    ATerm result = SGparseFile(toolname, ATparse(toolname), sort, filename);
     return parse_result(sort, filename, result);
   }
 
@@ -253,7 +229,6 @@ PT_Tree ASC_parse_file(ATerm type, ATerm aterm)
 static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
   const char toolname[] = "parse-bytes";
-  ATerm language = ATparse(toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   const char *sort = getSort(type);
   ATerm parseTable;
@@ -264,7 +239,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 	       	l);
   }
 
-  initParser(language, NULL);
+  initParser(toolname, NULL);
   parseTable = getParseTable();
   if (parseTable != NULL) {
     ATerm result = SGparseString(PT_yieldTreeToString(bytes, ATfalse), 

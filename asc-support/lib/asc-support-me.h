@@ -354,6 +354,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
                      void (*init_all)(void),
 		     char *tableBaf,
 		     size_t tableSize, 
+		     ATbool parseInput,
 		     ATBhandler handler
 		     );
 
@@ -364,6 +365,7 @@ ATerm callLiteralConstructor(PT_Symbol symbol);
 ATerm innermost(PT_Tree tree);
 ATerm getParseTable();
 void setParseTable(ATerm tbl);
+void initParser(const char *toolname, const char *filename);
 void setKeepAnnotations(ATbool on);
 void setCid(int cur_cid);
 int getCid();

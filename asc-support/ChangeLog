@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb 17 16:06:56 CET 2005 <jurgenv@cwi.nl>
+ * Added possibility for parsing the input and output before
+   rewriting.
+
 Fri Jan 21 11:22:04 CET 2005 <jurgenv@cwi.nl>
  * Compiled specifications DO NOT REWRITE TRAVERSAL FUNCTIONS when
    they occur in an input term. The reason is for bootstrapping, 
