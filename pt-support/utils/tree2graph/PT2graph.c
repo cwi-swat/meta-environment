@@ -102,7 +102,6 @@ static Graph printNode(Graph graph,
                        char *contents, 
 		       char *attr)
 {
-  char *escaped;
   char str[BUFSIZ];
   Attribute nameAttr;
   AttributeList attrList = makeAttributeListEmpty();
@@ -121,8 +120,7 @@ static Graph printNode(Graph graph,
   sprintf(str, "N%d", parentNr);
   parentId = makeNodeIdDefault(str);
    
-  escaped = escape(contents);
-  nameAttr = makeAttributeLabel(escaped);
+  nameAttr = makeAttributeLabel(contents);
   attrList = makeAttributeListMulti(nameAttr, attrList);
   
   if (productions_on) {
@@ -148,8 +146,6 @@ static Graph printNode(Graph graph,
     graph = setGraphEdges(graph, edges);
   }
 
-  free(escaped);
-
   return graph;
 }
 
@@ -158,7 +154,6 @@ static Graph printNode(Graph graph,
 
 static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 {
-  char *escaped;
   char str[BUFSIZ];
   Attribute nameAttr;
   AttributeList attrList = makeAttributeListEmpty();
@@ -177,8 +172,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   sprintf(str, "N%d", parentNr);
   parentId = makeNodeIdDefault(str);
  
-  escaped = escape(contents);
-  nameAttr = makeAttributeLabel(escaped);
+  nameAttr = makeAttributeLabel(contents);
   attrList = makeAttributeListMulti(nameAttr, attrList);
    
   shape = makeShapeDiamond(); 
@@ -198,8 +192,6 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
     edges = makeEdgeListMulti(edge, edges);
     graph = setGraphEdges(graph, edges);
   }
-
-  free(escaped);
 
   return graph;
 }
