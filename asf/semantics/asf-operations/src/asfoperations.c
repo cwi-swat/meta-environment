@@ -12,9 +12,6 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
-#include <SDFME-utils.h>
-
-#include "renaming-symbols.h"
 
 /*{{{  globals */
 
@@ -98,7 +95,6 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
-  SDF_initSDFMEApi();
   ASF_initASFMEApi();
 
   if (toolbus_mode) {
