@@ -111,11 +111,33 @@ terms and equations.
 
 The parser generator should provide the following functionality:
 <UL>
-<LI> Given a list of Sdf definitions a parse table must be generated.
+<LI> Given a list of Sdf modules a parse table must be generated.
+<LI> The generated parse tables are not stored by the parser generator.
 </UL>
 
-<H2>Parser</H2>
+<H3>Extensibility</H3>
+The parse table should contain information indicating which transitions
+in the table are valid for a specific module. So, for an entire
+specification only one parse table is needed, the modular structure of
+the specification is coded in the parse table.
 
+<H2>Parser</H2>
+The parser must provide the following basic functionality:
+<UL>
+<LI> Parsing of a text given a parse table and a module name.
+This module name can be:
+<UL>
+<LI> Sdf(2) if the Sdf part of a module must be parsed. 
+<LI> a user defined module name extended with syntax rules for
+equations if the Asf part of a module must be parsed.
+<LI> a user defined module name if the text of an ordinary term must be
+parsed.
+</UL>
+<LI> Construction of a parse tree in AsFix format if the parse was successful.
+<LI> Generation of error messages if the text contains some syntax error.
+<LI> A mechanism to store parse tables, so that a parse table need not
+be regenerated for every text that must be parsed.
+</UL>
 <H2>Evaluator</H2>
 
 <H2>Module and Term Databases</H2>
