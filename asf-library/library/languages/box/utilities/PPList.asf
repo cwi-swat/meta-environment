@@ -15,6 +15,22 @@ equations
     H hs=HSvalue [H hs=0 [sort2box(X)] Box*]
 
 
+[HOVlist2box-empty]
+  HOVlist2box() = HOV hs=get-hs(ListName) vs=get-vs(ListName) []
+
+[HOVlist2box-single]
+  HOVlist2box(X) = HOV hs=get-hs(ListName) vs=get-vs(ListName) [sort2box(X)]
+
+[HOVlist2box-many]
+  Box := HOVlist2box(X+),
+  HSvalue := get-hs(ListName),
+  VSvalue := get-vs(ListName),
+  HOV hs=HSvalue vs=VSvalue [Box*] := Box
+  ===>
+  HOVlist2box(X X+) = 
+    HOV hs=HSvalue vs=VSvalue [H hs=0 [sort2box(X)] Box*]
+
+
 [HVlist2box-empty]
   HVlist2box() = HV hs=get-hs(ListName) vs=get-vs(ListName) []
 

@@ -5,6 +5,7 @@ imports languages/box/syntax/Box
 exports
   context-free syntax
     "Hlist2box"({X ";"}*) -> Box {to-box}
+    "HOVlist2box"({X ";"}*) -> Box {to-box}
     "HVlist2box"({X ";"}*) -> Box {to-box}
     "Vlist2box"({X ";"}*) -> Box {to-box}    
 
