@@ -1881,7 +1881,7 @@ cat >> $CONFIG_STATUS <<EOF
 
 EOF
 cat >> $CONFIG_STATUS <<\EOF
-chmod +x regress-test/trmdiff install-prog-sh install-data-sh
+chmod +x regress-test/trmdiff regress-test/regress-terms regress-test/regress-lang install-prog-sh install-data-sh
 
 exit 0
 EOF
