@@ -831,9 +831,9 @@ int slice_length(aterm_list *l1, aterm_list *l2)
   int size = 0;
   aterm *old = l1;
   while(l1 != l2) {
-    /*assert(l1);
+    assert(l1);
     if(t_is_empty(l1))
-      Tprintf(stderr, "sorry, %t not in %t\n", l2, old);*/
+      Tprintf(stderr, "sorry, %t not in %t\n", l2, old);
     size++;
     l1 = t_list_next(l1);
   }
@@ -854,11 +854,11 @@ aterm_list *append(aterm_list *l, aterm *t)
 
 aterm_list *slice(aterm_list *l1, aterm_list *l2)
 {
-  aterm_list *result, *old;
+  aterm_list *result, *old, *oldl1 = l1;
   int i, len;
 
   if(t_is_empty(l2)) {
-    t_protect(l1);
+    t_unprotect(l2);
     return l1;
   }
 
@@ -883,7 +883,9 @@ aterm_list *slice(aterm_list *l1, aterm_list *l2)
     result = TbuildList(w, term_store[i], result);
     t_unprotect(old);
   }
-
+ 
+  t_unprotect(oldl1);
+  t_unprotect(l2);
   return result;
 }
 
