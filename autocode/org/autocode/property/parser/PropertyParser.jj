@@ -254,6 +254,7 @@ PropertyForest PropertyTrees() :
   PropertyForest forest = new PropertyForest();
   PropertyForest children;
   String value;
+  Token superType = null;
 }
 {
   "@import" file=<STRING_LITERAL>
@@ -295,11 +296,22 @@ PropertyForest PropertyTrees() :
   key=Name()
   (
     LOOKAHEAD(2)
-    value=PropertyValue() "{" children=PropertyForest() "}"
+    value=PropertyValue() ("::" superType=<IDENTIFIER>)?
+      "{" children=PropertyForest() "}"
     {
       PropertyTree tree = new PropertyTree(key, value, children);
-      if (value.equals("*")) {
-        tree.setType(PropertyTree.OPT);
+      if (superType != null) {
+        if (value.equals("*") || !key.equals("type")) {
+	  throw new ParseException("not a valid type definition");
+	}
+	PropertyTree superTree = new PropertyTree("super", superType.image,
+						  new PropertyForest());
+	superTree.setType(PropertyTree.SET);
+	children.addTree(superTree);
+      } else {
+	if (value.equals("*")) {
+	  tree.setType(PropertyTree.OPT);
+	}
       }
       forest.addTree(tree);
       return forest;

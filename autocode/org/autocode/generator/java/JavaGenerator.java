@@ -50,7 +50,7 @@ public class JavaGenerator
     String typeName = typeContext.getName();
     String pkg = typeContext.getString("package");
     String className = javaTypeName(typeName);
-    String superClass = "";
+    String superClass = typeContext.getString("super");
     String access = typeContext.getString("access");
     JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
     boolean isstatic = typeContext.getBoolean("static");

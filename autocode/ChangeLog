@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb 22 14:52:29 CET 2002 <olivierp>
+ * Added support for super-types, syntax: 'type Client :: Object { ... }'
+   this construct is normalized to: 'type Client { super := Object ... }'
+
 Mon Feb 18 20:40:11 MET 2002 <olivierp>
  * Property{Forest,Tree}.toString no pretty-print their trees
  * generator is now a subtree from application: type's are
