@@ -3,3 +3,5 @@ Makefile
 Makefile.in
 pandora
 *.trm.tbl
+*.tifs
+*.adt

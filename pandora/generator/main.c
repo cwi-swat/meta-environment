@@ -8,6 +8,7 @@
 #include <asc-support2-me.h>
 
 #include "pandora.h"
+#include "pandora.tif.h"
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
@@ -92,6 +93,42 @@ static PT_ParseTree toText(PT_ParseTree parseTree)
 
 /*}}}  */
 
+/*{{{  ATerm pretty_print(int cid, ATerm input)  */
+
+ATerm pretty_print(int cid, ATerm input) 
+{
+  PT_ParseTree parsetree;
+  BOX_Start box;
+  PT_ParseTree result = NULL;
+
+  parsetree = PT_ParseTreeFromTerm(ATBunpack(input));
+  box = pandora(parsetree);
+
+  if (box != NULL) {
+    result = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+  }
+
+  if (result != NULL) {
+    return ATmake("snd-value(pretty-printed(<term>))", 
+		  PT_ParseTreeToTerm(result));
+  }
+  else {
+    ERR_Summary summary = ERR_makeSummaryFeedback("pandora","all", 
+						  ERR_makeFeedbackListEmpty());
+    return ATmake("snd-value(pretty-print-error(<term>))", summary);
+  }
+}
+
+/*}}}  */
+/*{{{  void rec_terminate(int cid, ATerm msg) */
+
+void rec_terminate(int cid, ATerm msg)
+{
+  exit(0);
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[]) 
@@ -103,6 +140,8 @@ int main(int argc, char *argv[])
   char *input = "";
   char *output = "";
   int c;
+  int i;
+  ATbool useToolbus = ATfalse;
 
   ATinit(argc, argv, &bottomOfStack); 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
@@ -113,41 +152,46 @@ int main(int argc, char *argv[])
   resolve_Box_to_Text();
   init_Box_to_Text();
 
-  while ((c = getopt(argc, argv, myarguments)) != -1) {
-    switch (c) {
-      case 'i':  input=optarg; break;
-      case 'o':  output=optarg; break;
-      case 'v':  run_verbose = ATtrue; break;
-      case 'V':  version(); exit(0);
-      case 'h':  usage(); exit(0);
-      default:   usage(); exit(1); 
+
+  for (i=1; !useToolbus && i < argc; i++) {
+    useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
+  }
+
+  if (useToolbus) {
+    int cid;
+    ATBinit(argc, argv, &bottomOfStack);
+    cid = ATBconnect(NULL, NULL, -1, pandora_handler);
+    ATBeventloop();
+  }
+  else {
+    while ((c = getopt(argc, argv, myarguments)) != -1) {
+      switch (c) {
+	case 'i':  input=optarg; break;
+	case 'o':  output=optarg; break;
+	case 'v':  run_verbose = ATtrue; break;
+	case 'V':  version(); exit(0);
+	case 'h':  usage(); exit(0);
+	default:   usage(); exit(1); 
+      }
+    }
+
+    at_tree = ATreadFromNamedFile(input);
+
+    if (at_tree != NULL) {
+
+      tree = PT_ParseTreeFromTerm(at_tree);
+      box = pandora(tree);
+
+      ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+      ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
+    }
+    else {
+      ATwarning("No such file: %s\n", input); 
+      return 1; 
     }
   }
 
-  ATsetChecking(ATtrue);
-
-  at_tree = ATreadFromNamedFile(input);
- 
-  if (at_tree != NULL) {
-
-    tree = PT_ParseTreeFromTerm(at_tree);
-    
-    /*printf("Opening Box of Pandora!!!\n");*/
-    box = pandora(tree);
-    /*printf("Box of Pandora opened!!!\n");*/
-
-    ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
-
-/*
-    ATwriteToNamedBinaryFile(BOX_StartToTerm(box), output);
-*/
-    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
-
-    return 0;
-  }
-
-  ATwarning("No such file: %s\n", input); 
-  return 1; 
+  return 0;
 }
 
 /*}}}  */
