@@ -77,7 +77,6 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 }
 
 /*}}}  */
-
 /*{{{  static void normalizeSortname(char *name) */
 
 static void normalizeSortname(char *name)

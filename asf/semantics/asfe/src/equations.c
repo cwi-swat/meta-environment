@@ -196,6 +196,8 @@ ATerm getPosInfoEquals(ASF_ASFEquation equ)
 /*{{{  static int moreSpecificArg(PT_Tree tree1, PT_Tree tree2) */
 
 static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args);
+static int compareSpecificityListArgs(PT_Args lhs1args, 
+				      PT_Args lhs2args);
 
 /* The specificity is expressed in an integer value:
  * -1: tree1 is less specific than tree2
@@ -217,9 +219,16 @@ static int compareSpecificityArg(PT_Tree tree1, PT_Tree tree2)
   else if (PT_isTreeAppl(tree1) && PT_isTreeAppl(tree2)) {
     PT_Production prod1 = PT_getTreeProd(tree1);
     PT_Production prod2 = PT_getTreeProd(tree2);
+
     if (PT_isEqualProduction(prod1, prod2)) {
-      return compareSpecificityArgs(PT_getTreeArgs(tree1),
-                                    PT_getTreeArgs(tree2));
+      if (PT_isProductionDefault(prod1)) {
+        return compareSpecificityArgs(PT_getTreeArgs(tree1),
+                                      PT_getTreeArgs(tree2));
+      }
+      else {
+        return compareSpecificityListArgs(PT_getTreeArgs(tree1),
+                                          PT_getTreeArgs(tree2));
+      }
     }
     else {
       return 0;
@@ -249,6 +258,70 @@ static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args)
     else {
       return compareSpecificityArgs(PT_getArgsTail(lhs1args),
                                     PT_getArgsTail(lhs2args));
+    }
+  }
+  else if (!PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {
+    PT_Tree head2 = PT_getArgsHead(lhs2args);
+    if (PT_isTreeVarList(head2)) {
+      return 1;
+    } 
+    else {
+      return 0;
+    }
+  }
+  else if (PT_hasArgsHead(lhs1args) && !PT_hasArgsHead(lhs2args)) {
+    PT_Tree head1 = PT_getArgsHead(lhs1args);
+    if (PT_isTreeVarList(head1)) {
+      return -1;
+    } 
+    else {
+      return 0;
+    }
+  }
+  return 0;
+}
+
+/*}}}  */
+/*{{{  static int compareSpecificityListArgs(PT_Args lhs1args, ...) */
+
+static int compareSpecificityListArgs(PT_Args lhs1args, 
+				      PT_Args lhs2args)
+{
+  int specificity;
+
+  if (PT_getArgsLength(lhs1args) == 1 &&
+      PT_getArgsLength(lhs2args) > 1) {
+    PT_Tree head1 = PT_getArgsHead(lhs1args);
+    if (PT_isTreeVarList(head1)) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  }
+  if (PT_getArgsLength(lhs1args) > 1 &&
+      PT_getArgsLength(lhs2args) == 1) {
+    PT_Tree head2 = PT_getArgsHead(lhs2args);
+    if (PT_isTreeVarList(head2)) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  if (PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {
+    PT_Tree head1 = PT_getArgsHead(lhs1args);
+    PT_Tree head2 = PT_getArgsHead(lhs2args);
+
+    specificity = compareSpecificityArg(head1, head2);
+  
+    if (specificity != 0) {
+      return specificity;
+    }
+    else {
+      return compareSpecificityListArgs(PT_getArgsTail(lhs1args),
+                                        PT_getArgsTail(lhs2args));
     }
   }
   else if (!PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {

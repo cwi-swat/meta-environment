@@ -147,6 +147,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    ASF_protectASFTag(&tagCurrentRule);
+
    useTide = ATfalse;
 
    eqs = RWprepareEquations(eqs, ATfalse);
