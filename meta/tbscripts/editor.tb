@@ -1,6 +1,12 @@
 /* $Id$ */
 
-process Editor(Name: term, Text: str, Filename: str, Id: term) is
+/** Name -- The name of the module over which we edit as a term: id(RealName)
+    Text -- The string we are editing
+    Filename -- The filename where the string lives
+    Module -- Same as Name above, but as a string (without id(..))
+              These obviously need to be integrated
+*/
+process Editor(Name: term, Text: str, Filename: str, Module: str) is
 let
 TE  : text-edit,
 Tid : int,
@@ -16,8 +22,7 @@ in
   rec-msg(editor-tool-id(TE?)).
   snd-eval(TE,tb-init(Filename)).
   rec-value(TE,file-id(Fid?)).
-/*  snd-msg(Id,editortool(TE, Fid)).*/
-  create(Structure-editor(TE, Fid, Text), Tid?).
+  create(Structure-editor(TE, Fid, Text, Module), Tid?).
   create(Focus(TE, Fid), Tid?). (
     rec-note(language-available(L?)).
     snd-do(TE,registerlang(L))
