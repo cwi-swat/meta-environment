@@ -1,117 +1,151 @@
 module ActionScript
 
-imports basic/Integers
-imports basic/Strings
+imports basic/NatCon
+imports basic/StrCon
 imports basic/Whitespace
 
 exports
-  sorts ActionScript
-  context-free syntax
-"buttons""("ActionItemList")" -> ActionScript {constructor}
 
-  sorts ActionItemList
-  context-free syntax
-"[" 
-{ActionItem","
-}* 
-"]" -> ActionItemList {constructor}
+sorts ActionScript
+context-free syntax
+  "configuration" "("
+    "[" {ActionItem ","}* "]"
+  ")" -> ActionScript {cons("configuration")}
 
-  sorts ActionItem
-  context-free syntax
-"button""("String"," 
-DescriptionList"," 
-ActionList")" -> ActionItem {constructor}
 
-  sorts DescriptionList
-  context-free syntax
-"["{Description ","
-}+"]" -> DescriptionList {constructor}
+sorts ActionItem
+context-free syntax
+  "button" "("
+    StrCon
+  "," 
+    "[" description-list:{Description ","}+ "]"
+  "," 
+    "[" action-list:{Action ","}+ "]"
+  ")" -> ActionItem {cons("button")}
 
-  sorts Description
-  context-free syntax
-"description""("UI-Item"," 
-             ActionDescription")" -> Description {constructor}
 
-  sorts UI-Item
-  context-free syntax
-    "term-editor"       -> UI-Item {constructor}
-    "tree-panel"        -> UI-Item {constructor}
-    "message-list"      -> UI-Item {constructor}
-    "module-popup"      -> UI-Item {constructor}
-    "new-module-popup"  -> UI-Item {constructor}
-    "studio-menubar"    -> UI-Item {constructor}
-    "studio-toolbar"    -> UI-Item {constructor}
+sorts Description
+context-free syntax
+  "description" "("
+    UI-Item
+  "," 
+    ActionDescription
+  ")" -> Description {cons("description")}
 
-  sorts ActionDescription
-  context-free syntax
-    "click"                     -> ActionDescription {constructor}
-    "menu""("MenuItemList")" -> ActionDescription {constructor}
 
-  sorts MenuItemList
-  context-free syntax
-"["{MenuItem"," }+"]" -> MenuItemList {constructor}
+sorts UI-Item
+context-free syntax
+  "term-editor" -> UI-Item {cons("term-editor")}
+  "tree-panel" -> UI-Item {cons("tree-panel")}
+  "message-list" -> UI-Item {cons("message-list")}
+  "module-popup" -> UI-Item {cons("module-popup")}
+  "new-module-popup" -> UI-Item {cons("new-module-popup")}
+  "studio-menubar" -> UI-Item {cons("studio-menubar")}
+  "studio-toolbar" -> UI-Item {cons("studio-toolbar")}
+  "syntax-editor" -> UI-Item {cons("syntax-editor")}
+  "equations-editor" -> UI-Item {cons("equations-editor")}
+  "term-editor" -> UI-Item {cons("term-editor")}
 
-  sorts MenuItem
-  context-free syntax
-    String -> MenuItem {constructor}
 
-  sorts ActionList
-  context-free syntax
-"["
-  {Action","
-}*"]" -> ActionList
+sorts ActionDescription
+context-free syntax
+  "click" -> ActionDescription {cons("click")}
 
-  sorts Action
-  context-free syntax
-    "activate" "(" String ")"                     -> Action {constructor}
-    "activate-editor"                             -> Action {constructor}
-    "activate-given-tree" "(" String ")"          -> Action {constructor}
-    "apply" "(" String "," String "," Integer ")" -> Action {constructor}
-    "ask-question" "(" String ")"                 -> Action {constructor}
-    "check-sort"                                  -> Action {constructor}
-    "close-editor"                                -> Action {constructor}
-    "dup"                                         -> Action {constructor}
-    "execute-action" "(" String ")"               -> Action {constructor}
-    "exists" "(" String ")"                       -> Action {constructor}
-    "get-argument" "(" Integer ")"                -> Action {constructor}
-    "get-focus"                                   -> Action {constructor}
-    "get-other-focus" "(" String ")"              -> Action {constructor}
-    "get-root"                                    -> Action {constructor}
-    "locate" "(" String ")"                       -> Action {constructor}
-    "message" "(" String ")"                      -> Action {constructor}
-    "pack-tree"                                   -> Action {constructor}
-    "parse" "(" String "," String ")"             -> Action {constructor}
-    "pop"                                         -> Action {constructor}
-    "prompt-for-file" "(" String "," String "," 
-                          String ")"              -> Action {constructor}
-    "push-active-module"                          -> Action {constructor}
-    "push-editor-name"                            -> Action {constructor}
-    "push-filename" "(" String ")"                -> Action {constructor}
-    "push-integer" "(" Integer ")"                -> Action {constructor}
-    "push-modulename" "(" String ")"              -> Action {constructor}
-    "push-string" "(" String ")"                  -> Action {constructor}
-    "push-term" "(" Term ")"                      -> Action {constructor}
-    "read-tree"                                   -> Action {constructor}
-    "receive"                                     -> Action {constructor}
-    "reduce"                                      -> Action {constructor}
-    "rewrite" "(" String ")"                      -> Action {constructor}
-    "save-tree"                                   -> Action {constructor}
-    "send"                                        -> Action {constructor}
-    "set-focus"                                   -> Action {constructor}
-    "set-root"                                    -> Action {constructor}
-    "show-area"                                   -> Action {constructor}
-    "show-list"                                   -> Action {constructor}
-    "show-tree"                                   -> Action {constructor}
-    "split-file-name" "(" String ")"              -> Action {constructor}
-    "unpack-tree"                                 -> Action {constructor}
-    "unparse"                                     -> Action {constructor}
+  "icon" "("
+    name:StrCon
+  ","
+    path:StrCon
+  ")" -> ActionDescription {cons("icon")}
 
-  context-free syntax
-    "if-equal" "(" ActionList "," ActionList ")"  -> Action {constructor}
+  "menu" "("
+    "[" {StrCon ","}+ "]"
+  ")" -> ActionDescription {cons("menu")}
 
-  sorts Term
-  context-free syntax
-    "yes"   -> Term
-    "no"    -> Term
-    "true"  -> Term
-    "false" -> Term
+
+sorts Action
+context-free syntax
+  "activate" "(" StrCon ")" -> Action {cons("activate")}
+  "activate-editor" -> Action {cons("activate-editor")}
+  "activate-given-tree" "(" StrCon ")" -> Action {cons("activate-given-tree")}
+  "apply" "(" function:StrCon "," sort:StrCon "," NatCon ")" -> Action {cons("apply")}
+  "ask-question" "(" StrCon ")" -> Action {cons("ask-question")}
+  "asfsdfapigen" -> Action {cons("asfsdfapigen")}
+  "check-sort" -> Action {cons("check-sort")}
+  "close-editor" -> Action {cons("close-editor")}
+  "copy-module" -> Action {cons("copy-module")}
+  "compile-module" -> Action {cons("compile-module")}
+  "create-module" -> Action {cons("create-module")}
+  "delete-module" -> Action {cons("delete-module")}
+  "display-message" -> Action {cons("display-message")}
+  "dup" -> Action {cons("dup")}
+  "dump-equations" -> Action {cons("dump-equations")}
+  "dump-eqs-parse-table" -> Action {cons("dump-eqs-parse-table")}
+  "dump-parse-table" -> Action {cons("dump-parse-table")}
+  "dump-sdf-definition" -> Action {cons("dump-sdf-definition")}
+  "edit-syntax" -> Action {cons("edit-syntax")}
+  "edit-equations" -> Action {cons("edit-equations")}
+  "edit-term" -> Action {cons("edit-term")}
+  "execute-action" "(" StrCon ")" -> Action {cons("execute-action")}
+  "exists" "(" StrCon ")" -> Action {cons("exists")}
+  "get-argument" "(" NatCon ")" -> Action {cons("get-argument")}
+  "get-focus" -> Action {cons("get-focus")}
+  "get-focus-origin" -> Action {cons("get-focus-origin")}
+  "get-root" -> Action {cons("get-root")}
+  "import-module" -> Action {cons("import-module")}
+  "locate" "(" StrCon ")" -> Action {cons("locate")}
+  "move-cursor" -> Action {cons("move-cursor")}
+  "message" "(" StrCon ")" -> Action {cons("message")}
+  "new-module" -> Action {cons("new-module")}
+  "open-module" -> Action {cons("open-module")}
+  "pack-tree" -> Action {cons("pack-tree")}
+  "parse-action" -> Action {cons("parse-action")}
+  "parse-equations-action" -> Action {cons("parse-equations-action")}
+  "parse-syntax-action" -> Action {cons("parse-syntax-action")}
+  "pop" -> Action {cons("pop")}
+  "pretty-print" -> Action {cons("pretty-print")}
+  "print-module" -> Action {cons("print-module")}
+  "prompt-for-file" "(" prompt:StrCon "," extension:StrCon ")" -> Action {cons("prompt-for-file")}
+  "prompt-for-file-with-path" "(" prompt:StrCon "," path:StrCon "," extension:StrCon ")" -> Action {cons("prompt-for-file-with-path")}
+  "push-active-module" -> Action {cons("push-active-module")}
+  "push-editor-name" -> Action {cons("push-editor-name")}
+  "push-filename" "(" StrCon ")" -> Action {cons("push-filename")}
+  "push-integer" "(" NatCon ")" -> Action {cons("push-integer")}
+  "push-modulename" "(" StrCon ")" -> Action {cons("push-modulename")}
+  "push-string" "(" StrCon ")" -> Action {cons("push-string")}
+  "push-term" "(" Term ")" -> Action {cons("push-term")}
+  "rename-module" -> Action {cons("rename-module")}
+  "read-tree" -> Action {cons("read-tree")}
+  "receive" -> Action {cons("receive")}
+  "reduce" -> Action {cons("reduce")}
+  "run-asf-tests" -> Action {cons("run-asf-tests")}
+  "rewrite" "(" StrCon ")" -> Action {cons("rewrite")}
+  "save-tree" -> Action {cons("save-tree")}
+  "send" -> Action {cons("send")}
+  "set-focus" -> Action {cons("set-focus")}
+  "set-root" -> Action {cons("set-root")}
+  "show-area" -> Action {cons("show-area")}
+  "show-list" -> Action {cons("show-list")}
+  "show-tree" -> Action {cons("show-tree")}
+  "split-file-name" -> Action {cons("split-file-name")}
+  "unimport-module" -> Action {cons("unimport-module")}
+  "unpack-tree" -> Action {cons("unpack-tree")}
+  "unparse" -> Action {cons("unparse")}
+
+context-free syntax
+  "if-equal" "("
+    "[" then:{Action ","}* "]"
+  ","
+    "[" else:{Action ","}* "]"
+  ")" -> Action {cons("if-equal")}
+
+sorts Term
+context-free syntax
+  "yes" -> Term {cons("yes")}
+  "no" -> Term {cons("no")}
+  "true" -> Term {cons("true")}
+  "false" -> Term {cons("false")}
+  "left" -> Term {cons("left")}
+  "right" -> Term {cons("right")}
+  "up" -> Term {cons("up")}
+  "down" -> Term {cons("down")}
+  "no-origin" -> Term {cons("no-origin")}
