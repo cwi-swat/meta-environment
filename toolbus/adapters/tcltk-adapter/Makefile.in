@@ -10,8 +10,8 @@ top_srcdir      = @top_srcdir@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
-bindir          = $(exec_prefix)/bin
-libdir          = $(exec_prefix)/lib
+bindir		= @bindir@
+libdir		= @libdir@
 docdir		= $(top_srcdir)/doc
 includedir      = $(prefix)/include
 x_includes	= @x_includes@

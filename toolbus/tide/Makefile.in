@@ -34,8 +34,8 @@ TIDEDEF		= @TIDEDEF@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
-bindir          = $(exec_prefix)/bin
-libdir          = $(exec_prefix)/lib
+bindir		= @bindir@
+libdir		= @libdir@
 tidedir		= $(libdir)/tide
 bitmapdir	= $(libdir)/bitmaps
 includedir      = $(prefix)/include

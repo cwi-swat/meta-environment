@@ -10,8 +10,8 @@ VPATH		= @srcdir@
 @SET_MAKE@
 prefix 		= @prefix@
 exec_prefix 	= @exec_prefix@
-bindir 		= $(exec_prefix)/bin
-libdir		= $(exec_prefix)/lib
+bindir		= @bindir@
+libdir		= @libdir@
 bitmapdir	= $(libdir)/bitmaps
 tidedir		= $(libdir)/tide
 includedir	= $(prefix)/include
