@@ -36,7 +36,6 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace);
 
 int main(int argc, char *argv[])
 {
-  ATbool usage = ATfalse;
   FILE *eqsfile, *termfile;
   ATerm eqs = NULL, term = NULL, result[2] = {NULL};
   ATerm bottomOfStack;
@@ -110,7 +109,6 @@ int main(int argc, char *argv[])
 ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
 {
   ATermList preparedeqs;
-  ATerm oldterm;
   char name[] = "Reduce_test";
 
   /* set the global */
