@@ -19,6 +19,9 @@
 
 $Id$
 
+2001/02/27 (jurgenv@cwi.nl)
+  * Fixed location of parsetree libraries 
+
 2001/02/22 (markvdb@cwi.nl)
   * Introduced the "-m" option to generate AsFix2ME.
   * SGLR is no longer dependent on the "old" asfix library.

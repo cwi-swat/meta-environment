@@ -34,11 +34,8 @@ HDRS              = getopt.h
 sglr_SOURCES      = $(SRCS) $(HDRS)
 sglr_LDADD        = -L$(top_srcdir)/libsglr -lsglr \
                     -L$(top_srcdir)/libtree2dot -ltree2dot \
-                    -L$(PT_SUPPORT)/libconversion -lconversion \
-                    -L$(PT_SUPPORT)/libmept -lmept \
-                    -L$(PT_SUPPORT)/libasfix2 -lasfix2 \
+                    -L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
-#                    -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix
 
 # remove built files during "make clean"
 CLEANFILES = sglr.tifs
