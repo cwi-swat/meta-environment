@@ -27,7 +27,8 @@ PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example-trm.ps \
 	tools-menu.ps imports-panel.ps ruler.ps \
 	edit-menu.ps check-menu.ps tools2-menu.ps \
 	meta-env-menu-syntax.ps meta-env-menu-equation.ps \
-	meta-env-menu-term.ps meta-full-parsetree.ps
+	meta-env-menu-term.ps meta-full-parsetree.ps \
+	log-message-tab.ps info-message-tab.ps error-message-tab.ps
 
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
