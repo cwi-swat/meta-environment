@@ -1622,7 +1622,7 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
 	Tools = list_delete(Tools, ti);
       } 
       if(verbose)TBmsg("QUEUED EVENT: %t FROM TOOL %t\n", Inp, ti);
-      Pending = list_append(Pending, mk_list2(ti, Inp));
+      Pending = list_append(Pending, mk_list(mk_list2(ti, Inp), NULL));
     } else 
       TBmsg("UNEXPECTED INPUT %t FROM TOOL %t IGNORED\n", Inp, ti);
   } else {
