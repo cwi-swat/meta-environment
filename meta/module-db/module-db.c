@@ -334,6 +334,12 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   }
 
   modName = ATmake("<str>",  SDFgetModuleName(sdfModule));
+
+  sdfTree = PT_makeTermFromParseTree(
+              PT_addParseTreePosInfo(
+                path, 
+                PT_makeParseTreeFromTerm(sdfTree)));
+
   entry = MDB_makeEntryDefault(path,
                                sdfTree,
                                timestamp,
