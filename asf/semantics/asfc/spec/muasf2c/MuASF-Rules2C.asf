@@ -322,7 +322,7 @@ equations
               listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = 
                 (Stat*2,Aint2)
              ================================
-             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
+             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*2,Aint2)
 
 %% When generating subparts of the matching automaton for list patterns it is assumed
 %% that the list patterns in the left hand side of the equations and of the
