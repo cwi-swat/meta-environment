@@ -14,6 +14,7 @@ libErrorAPI_a_SOURCES = \
 	ErrorAPI_dict.c\
 	ParsedErrorAPI.c \
 	ParsedErrorAPI_dict.c \
+	init.c\
 	lift.c
 
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
