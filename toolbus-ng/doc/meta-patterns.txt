@@ -1,30 +1,57 @@
 Inventory of atom sequences in the meta scripts
 ===============================================
 
+Old													New
 
-rec-event . snd-msg . rec-msg . snd-ack-event
+rec-event . snd-msg . rec-msg . snd-ack-event		@snd-msg { } @rec-msg
 
-rec-event . snd-note . snd-ack-event
+rec-event . snd-note . snd-ack-event				@snd-note { }	
 
-rec-event . shutdown
+rec-event . snd-msg - sbd-ack-event					@snd-msg			
 
-rec-note . snd-do
+rec-event . shutdown								@snd-msg							
 
-rec-msg . snd-do
+rec-note . snd-do									@rec-note
 
-rec.msg . snd-msg
+rec-msg												rec-msg
 
-rec-msg . snd-note . snd-msg
+rec-msg . snd-do									@rec-msg
 
-rec-msg . snd-eval . rec-value . snd-msg
+rec.msg . snd-msg									rec-msg { } snd-msg
+
+rec-msg . snd-note . snd-msg						rec-msg { snd-note } snd-msg
+
+rec-msg . snd-eval . rec-value . snd-msg			@rec-msg { } @snd-msg
 
 rec-msg . snd-eval . rec-value . snd-note . snd-msg
+													@rec-msg { } @snd-msg snd-note
 
 rec-msg . execute . snd-eval . rec-value . terminate . snd-msg
+													@rec-msg { } @snd-msg		
+													NB restart behaviour becomes property of tool
 
 rec-msg . execute . snd-eval . rec-value . snd-note . terminate . snd-msg
-
+													@rec-msg { } @snd-msg . snd-note
+													NB restart behaviour becomes property of tool
 
 snd-msg . rec-msg . snd-eval . rec-value . snd-note
 
-execute . P* . terminate
+rec-msg . snd-eval . (rec-event . snd-note. snd-ack-event) * rec-value snd-msg
+													@rec-msg { @snd-note } * @snd-msg
+
+
+rec-msg . snd-eval . ( rec-value . snd-msg + rec-value . snd-msg)
+													@rec-msg { } (@snd-msg + @snd-msg)
+
+snd-msg												snd-msg
+
+snd-msg . rec-msg									snd-msg { } rec-msg
+
+snd-msg . rec-msg . snd-eval . rec-value			??			
+
+snd-msg . (rec-msg . snd-eval + rec-msg . snd-eval) . rec-value
+													??
+
+
+execute . P* . terminate							P*
+													NB execution behaviour becomes property of tool
