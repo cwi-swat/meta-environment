@@ -1,6 +1,6 @@
 package toolbus.tifs;
 
-import java.util.*;
+import java.util.Iterator;
 
 import aterm.*;
 

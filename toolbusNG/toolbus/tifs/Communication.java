@@ -26,6 +26,10 @@ abstract public class Communication {
     return resultTerm.getAFun().getName();
   }
 
+  public String getResultType() {
+    return "void";
+  }
+
   public Iterator fetchArgumentIterator() {
     return argumentList.iterator();
   }
