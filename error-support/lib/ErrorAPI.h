@@ -131,7 +131,7 @@ ERR_Subject ERR_makeSubjectSubject(char *description, ERR_Location Location);
 ERR_Location ERR_makeLocationLocation(char *filename, ERR_Area Area);
 ERR_Location ERR_makeLocationNoLocation();
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine,
-			  int endColumn, int beginOffset, int endOffset);
+			  int endColumn);
 ERR_Area ERR_makeAreaNoArea();
 
 /*}}}  */
@@ -246,12 +246,6 @@ ERR_Area ERR_setAreaEndLine(ERR_Area arg, int endLine);
 ATbool ERR_hasAreaEndColumn(ERR_Area arg);
 int ERR_getAreaEndColumn(ERR_Area arg);
 ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn);
-ATbool ERR_hasAreaBeginOffset(ERR_Area arg);
-int ERR_getAreaBeginOffset(ERR_Area arg);
-ERR_Area ERR_setAreaBeginOffset(ERR_Area arg, int beginOffset);
-ATbool ERR_hasAreaEndOffset(ERR_Area arg);
-int ERR_getAreaEndOffset(ERR_Area arg);
-ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset);
 
 /*}}}  */
 /*{{{  sort visitors */
@@ -278,9 +272,7 @@ ERR_Location ERR_visitLocation(ERR_Location arg,
 ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine) (int),
 		       int (*acceptBeginColumn) (int),
 		       int (*acceptEndLine) (int),
-		       int (*acceptEndColumn) (int),
-		       int (*acceptBeginOffset) (int),
-		       int (*acceptEndOffset) (int));
+		       int (*acceptEndColumn) (int));
 
 /*}}}  */
 

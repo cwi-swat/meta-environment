@@ -369,11 +369,11 @@ ERR_Location ERR_makeLocationNoLocation()
 }
 
 /*}}}  */
-/*{{{  ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int beginOffset, int endOffset) */
+/*{{{  ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn) */
 
-ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int beginOffset, int endOffset)
+ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun8, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(beginOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
+  return (ERR_Area)(ATerm)ATmakeAppl4(ERR_afun8, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn));
 }
 
 /*}}}  */
@@ -1349,7 +1349,7 @@ inline ATbool ERR_isAreaArea(ERR_Area arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaArea, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaArea, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1512,72 +1512,6 @@ ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasAreaBeginOffset(ERR_Area arg) */
-
-ATbool ERR_hasAreaBeginOffset(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaBeginOffset(ERR_Area arg) */
-
-int ERR_getAreaBeginOffset(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 4));
-}
-
-/*}}}  */
-/*{{{  ERR_Area ERR_setAreaBeginOffset(ERR_Area arg, int beginOffset) */
-
-ERR_Area ERR_setAreaBeginOffset(ERR_Area arg, int beginOffset)
-{
-  if (ERR_isAreaArea(arg)) {
-    return (ERR_Area)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(beginOffset)), 4);
-  }
-
-  ATabort("Area has no BeginOffset: %t\n", arg);
-  return (ERR_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasAreaEndOffset(ERR_Area arg) */
-
-ATbool ERR_hasAreaEndOffset(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaEndOffset(ERR_Area arg) */
-
-int ERR_getAreaEndOffset(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 5));
-}
-
-/*}}}  */
-/*{{{  ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset) */
-
-ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset)
-{
-  if (ERR_isAreaArea(arg)) {
-    return (ERR_Area)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(endOffset)), 5);
-  }
-
-  ATabort("Area has no EndOffset: %t\n", arg);
-  return (ERR_Area)NULL;
-}
-
-/*}}}  */
 
 /*}}}  */
 /*{{{  sort visitors */
@@ -1701,18 +1635,16 @@ ERR_Location ERR_visitLocation(ERR_Location arg, char* (*acceptFilename)(char*),
 }
 
 /*}}}  */
-/*{{{  ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBeginColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptBeginOffset)(int), int (*acceptEndOffset)(int)) */
+/*{{{  ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBeginColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int)) */
 
-ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBeginColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptBeginOffset)(int), int (*acceptEndOffset)(int))
+ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBeginColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int))
 {
   if (ERR_isAreaArea(arg)) {
     return ERR_makeAreaArea(
         acceptBeginLine ? acceptBeginLine(ERR_getAreaBeginLine(arg)) : ERR_getAreaBeginLine(arg),
         acceptBeginColumn ? acceptBeginColumn(ERR_getAreaBeginColumn(arg)) : ERR_getAreaBeginColumn(arg),
         acceptEndLine ? acceptEndLine(ERR_getAreaEndLine(arg)) : ERR_getAreaEndLine(arg),
-        acceptEndColumn ? acceptEndColumn(ERR_getAreaEndColumn(arg)) : ERR_getAreaEndColumn(arg),
-        acceptBeginOffset ? acceptBeginOffset(ERR_getAreaBeginOffset(arg)) : ERR_getAreaBeginOffset(arg),
-        acceptEndOffset ? acceptEndOffset(ERR_getAreaEndOffset(arg)) : ERR_getAreaEndOffset(arg));
+        acceptEndColumn ? acceptEndColumn(ERR_getAreaEndColumn(arg)) : ERR_getAreaEndColumn(arg));
   }
   if (ERR_isAreaNoArea(arg)) {
     return ERR_makeAreaNoArea();
