@@ -112,4 +112,4 @@ if [ $verbose -gt 0 ] ; then
 	echo COMPILER_OUTPUT: $COMPILER_OUTPUT
 fi
 
-$toolbus $@ -I${datadir} ${datadir}/meta.tb
+$toolbus $xargs -I${datadir} ${datadir}/meta.tb
