@@ -124,7 +124,7 @@ let
   Error : term,
   Trees : list,
   ActionEvent : term,
-  PosInfo : term,
+  Area : term,
   SortName : str,
   FilePath : str,
   NewModuleName : str,
@@ -512,16 +512,13 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area, Stack?, EditorId?) .
-        StackPopTerm(Stack, Stack?, PosInfo?) .
+        StackPopTerm(Stack, Stack?, Area?) .
         StackPopString(Stack,Stack?, ModuleName?) .
-        FileName := first(args(PosInfo)) .
+        FileName := first(args(Area)) .
         snd-msg(edit-general(FileName)) .
-        rec-msg(editor-opened(ModuleName, EditorId2?)).
-        GetTree(EditorId2, ModuleName, Tree?) .
-        snd-msg(get-focus-at-posinfo(EditorId2, PosInfo)) .
-        rec-msg(focus-at-posinfo(EditorId2, PosInfo, Focus?)) .
-	snd-msg(set-cursor-at-focus(EditorId2, Focus)) .
-	snd-msg(set-focus(EditorId2, Focus)) .
+        rec-msg(editor-opened(ModuleName, EditorId2?)) .
+	snd-msg(set-cursor-at-error-location(EditorId2, Area)) .
+	snd-msg(set-focus-at-error-location(EditorId2, Area)) .
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-feedback-location, Stack?, EditorId?) .

@@ -418,37 +418,6 @@ SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location)
 }
 
 /*}}}  */
-/*{{{  SE_Focus getFocusAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo) */
-
-SE_Focus getFocusAtPosInfo(SE_Editor editor, 
-                           PT_ParseTree parse_tree, 
-                           ATerm posInfo)
-{
-  SE_Focus focus;
-  SE_Path path = getPathInParseTreeAtPosInfo(parse_tree, posInfo);
-
-  if (SE_isPathTree(path)) {
-    PT_Tree tree = PT_getParseTreeTree(parse_tree);
-
-    if (SE_hasPathSteps(path)) {
-      SE_Steps steps = SE_getPathSteps(path);
-      PT_Tree sub_tree;
-
-      sub_tree = getTreeAt (tree, steps);
-
-      if (isBasicLeafNode(sub_tree)) {
-        steps = stepUp(steps);
-      }
-      path = SE_makePathTree(steps);
-    }
-  }
-
-  focus = createEditorFocus(editor, parse_tree, path);
-
-  return focus;
-}
-
-/*}}}  */
 /*{{{  ATerm replaceEditorTreeAtFocus(editor, focus, tree, left_layout,right_layout)*/
 
 SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, 

@@ -184,40 +184,6 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
 }
 
 /*}}}  */
-/*{{{  static SE_Steps getStepsInTreeAtPosInfo(PT_Tree tree, ATerm posInfo) */
-
-static SE_Steps getStepsInTreeAtPosInfo(PT_Tree tree, ATerm posInfo)
-{
-  SE_Steps steps = SE_makeStepsEmpty();
-  ERR_Location localPosInfo;
-
-  localPosInfo = PT_getTreeLocation(tree);
-
-  if (localPosInfo != NULL) {
-    if (ATisEqual((ATerm) localPosInfo, posInfo)) {
-      return steps;
-    }
-  }
-  
-  if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-    int nr_args = PT_getArgsLength(args);
-    int step;
-
-    for (step = 0; step < nr_args; step++) {
-      PT_Tree arg = PT_getArgsArgumentAt(args, step);
-      SE_Steps localSteps = getStepsInTreeAtPosInfo(arg, posInfo);
- 
-      if (localSteps) {
-        return SE_makeStepsMulti(step, localSteps);
-      }
-    }
-  }
-
-  return NULL;
-}
-
-/*}}}  */
 /*{{{  SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length) */
 
 SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
@@ -251,27 +217,6 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
   }
 
   return path;
-}
-
-/*}}}  */
-
-
-/*{{{  SE_Path getPathInParseTreeAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo) */
-
-SE_Path getPathInParseTreeAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo)
-{
-  PT_Tree tree;
-  SE_Steps steps;
-
-  tree = PT_getParseTreeTree(parse_tree);
-  steps = getStepsInTreeAtPosInfo(tree, posInfo);
-
-  if (steps != NULL) {
-    return SE_makePathTree(steps);
-  }
-  else {
-    return SE_makePathRoot();
-  }
 }
 
 /*}}}  */
