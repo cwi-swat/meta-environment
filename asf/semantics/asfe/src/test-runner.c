@@ -2,8 +2,11 @@
 #include "reduction.h"
 #include "errors.h"
 #include "pre-post.h"
+#include "traversalfunctions.h"
+#include "environment.h"
+#include "matching.h"
 #include <asc-builtins.h>
-#include <ASFME.h>
+#include <ASFME-utils.h>
 #include <MEPT-utils.h>
 #include "equations.h"
 #include "values.h"
@@ -27,15 +30,27 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
   ASF_ASFCondition condition = ASF_getASFTestEquationASFCondition(test);
   ATbool equals = ATfalse;
-   
+  ATerm environment = (ATerm) ATempty;
+
   PT_Tree lhs = (PT_Tree) ASF_getASFConditionLhs(condition);
   PT_Tree rhs = (PT_Tree) ASF_getASFConditionRhs(condition);
 
   lhs = RWprepareTerm(lhs, ATfalse);
   rhs = RWprepareTerm(rhs, ATfalse);
  
-  lhs = rewrite(lhs);
-  rhs = rewrite(rhs);
+  lhs = rewriteInnermost(lhs, environment, 0, NO_TRAVERSAL);
+
+  if (ASF_hasASFTestEquationASFConditions(test)) {
+    ASF_ASFConditionList conds = ASF_getASFConditionsList(
+      ASF_getASFTestEquationASFConditions(test));
+    environment = matchConditions(conds, environment, 0);
+
+    if (is_fail_env(environment)) {
+      return tag;
+    }
+  }
+
+  rhs = rewriteInnermost(rhs, environment, 0, NO_TRAVERSAL);
 
   if (isAsFixEqual(lhs, rhs)) {
     equals = ATtrue;
@@ -84,7 +99,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 	       ASF_ASFTestEquationTestList tests)
 {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
-   int numberOfTests = ATgetLength((ATermList)tests);
+   int numberOfTests = ASF_getTestEquationListLength(tests);
    ATermList failed = NULL;
 
    if (runVerbose) {

@@ -29,7 +29,6 @@
 
 /*{{{  local function declarations */
 
-static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth);
 static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
 			    ATerm env, int depth);
 static ATerm matchNegativeCondition(ASF_ASFCondition cond,
@@ -185,8 +184,8 @@ static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
 }
 
 /*}}}  */
-/*{{{  static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth) */
-static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth)
+/*{{{  ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth) */
+ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth)
 {
   ASF_ASFCondition cond;
   ATerm newenv = env;
