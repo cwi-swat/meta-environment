@@ -1047,7 +1047,14 @@ public class MetaStudio
 			}
 			else if (e.getSource() == graphPanel) {
 				component = graphPanel;
-				currentModule = graphPanel.getNodeAt(x, y).getName();
+        Node node = graphPanel.getNodeAt(x,y);
+        
+        if (node != null) {
+  		    currentModule = node.getName();
+        }
+        else {
+          currentModule = null;
+        }
 			}
 			else {
 				component = null;
