@@ -112,7 +112,7 @@ public class ATermList extends ATerm
   //}
   //{ public void write(OutputStream o)
   
-  public void print(OutputStream o)
+  public void write(OutputStream o)
     throws java.io.IOException
   {
     o.write('[');

@@ -23,6 +23,27 @@ public class ATermRealRef extends ATermRef
   }
 
   //}
+  //{ public ATermRealRef(double r, ATermRef anno)
+
+  public ATermRealRef(double r, ATermRef anno)
+  {
+    update(new ATermReal(r, anno == null ? null : anno.getATerm()));
+  }
+
+  //}
+  //{ public void setAnno(ATerm a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATermReal val = new ATermReal(value.getReal(), a == null ? null : a.getATerm());
+    update(val);
+  }
+
+  //}
   //{ protected void finalize()
 
   protected void finalize() throws Throwable

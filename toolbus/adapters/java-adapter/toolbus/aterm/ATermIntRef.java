@@ -15,11 +15,32 @@ public class ATermIntRef extends ATermRef
   }
 
   //}
+  //{ public ATermIntRef(int i, ATermRef anno)
+
+  public ATermIntRef(int i, ATermRef anno)
+  {
+    update(new ATermInt(i, anno == null ? null : anno.getATerm()));
+  }
+
+  //}
   //{ public ATermIntRef(int i)
 
   public ATermIntRef(int i)
   {
     update(new ATermInt(i));
+  }
+
+  //}
+  //{ public void setAnno(ATerm a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATermInt val = new ATermInt(value.getInt(), a == null ? null:a.getATerm());
+    update(val);
   }
 
   //}

@@ -19,7 +19,7 @@ public class ATermListRef extends ATermRef
   }
 
   //}
-  //{ public ATermListRef(ATermRef first, ATermListRef next)
+  //{ public ATermListRef(ATermsRef terms)
 
   /**
     * Create a list reference from an ATerms reference.
@@ -28,6 +28,32 @@ public class ATermListRef extends ATermRef
   public ATermListRef(ATermsRef terms)
   {
     update(new ATermList(terms == null ? null : terms.getATerms()));
+  }
+
+  //}
+  //{ public ATermListRef(ATermsRef terms, ATermRef anno)
+
+  /**
+    * Create a list reference from an ATerms reference.
+    */
+
+  public ATermListRef(ATermsRef terms, ATermRef anno)
+  {
+    update(new ATermList(terms == null ? null : terms.getATerms(), 
+			 anno == null ? null : anno.getATerm()));
+  }
+
+  //}
+  //{ public void setAnno(ATermRef a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATermList val = new ATermList(list.getATerms(), a == null ? null : a.getATerm());
+    update(val);
   }
 
   //}

@@ -8,6 +8,7 @@ import java.io.*;
 abstract public class ATermRef implements Cloneable
 {
   abstract protected ATerm getATerm();
+  abstract protected void setAnno(ATermRef anno);
 
   //{ public synchronized Object clone()
 
@@ -57,21 +58,18 @@ abstract public class ATermRef implements Cloneable
     * Retrieve the annotation of a term.
     */
 
-  public ATerm getAnno()
+  public ATermRef getAnno()
   {
-    return getATerm().getAnno();
-  }
-
-  //}
-  //{ public void setAnno(ATerm a)
-
-  /**
-    * Change the annotation of a term.
-    */
-
-  public void setAnno(ATerm a)
-  {
-    getATerm().setAnno(a);
+    switch(getATerm().getType()) {
+      case ATerm.APPL:   return new ATermApplRef((ATermAppl)getATerm());
+      case ATerm.ATERMS: return new ATermsRef((ATerms)getATerm());
+      case ATerm.LIST:   return new ATermListRef((ATermList)getATerm());
+      case ATerm.INT:    return new ATermIntRef((ATermInt)getATerm());
+      case ATerm.REAL:   return new ATermRealRef((ATermReal)getATerm());
+      case ATerm.PLACEHOLDER: 
+	return new ATermPlaceholderRef((ATermPlaceholder)getATerm());
+    }
+    throw new IllegalArgumentException("illegal term type: " + getType());
   }
 
   //}

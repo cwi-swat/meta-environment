@@ -47,7 +47,7 @@ public class ATermApplRef extends ATermRef
   }
 
   //}
-  //{ public ATermApplRef(String fun, ATerms args)
+  //{ public ATermApplRef(String fun, ATermsRef args)
 
   public ATermApplRef(String fun, ATermsRef args)
   {
@@ -55,11 +55,47 @@ public class ATermApplRef extends ATermRef
   }
 
   //}
-  //{ public ATermApplRef(String fun, ATerms args, boolean isquoted)
+  //{ public ATermApplRef(String fun, ATermsRef args, boolean isquoted)
 
   public ATermApplRef(String fun, ATermsRef args, boolean isquoted)
   {
     update(new ATermAppl(fun, args == null ? null : args.getATerms(), isquoted));
+  }
+
+  //}
+  //{ public ATermApplRef(String fun, ATermsRef args, ATermRef anno)
+
+  /**
+    * Construct a new ATermApplRef object which is annotated.
+    */
+
+  public ATermApplRef(String fun, ATermsRef args, ATermRef anno)
+  {
+    update(new ATermAppl(fun, args == null ? null : args.getATerms(),
+			 anno == null ? null : anno.getATerm()));
+  }
+
+  //}
+  //{ public ATermApplRef(String fun, ATermsRef args, boolean isquoted, ATermRef anno)
+
+  public ATermApplRef(String fun, ATermsRef args, boolean isquoted, ATermRef anno)
+  {
+    update(new ATermAppl(fun, args == null ? null : args.getATerms(),
+			 isquoted, anno == null ? null : anno.getATerm()));
+  }
+
+  //}
+  //{ public void setAnno(ATermRef a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATermAppl val = (ATermAppl)appl.clone();
+    val.setAnno(a == null ? null : a.getATerm());
+    update(val);
   }
 
   //}

@@ -55,6 +55,28 @@ private void update(ATermPlaceholder ph)
   }
 
   //}
+  //{ public ATermPlaceholderRef(ATermRef type, ATermRef anno)
+
+  public ATermPlaceholderRef(ATermRef type, ATermRef anno)
+  {
+    update(new ATermPlaceholder(type.getATerm(), anno == null ? null : anno.getATerm()));
+  }
+
+  //}
+  //{ public void setAnno(ATerm a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATermPlaceholder val = (ATermPlaceholder)placeholder.clone();
+    val.setAnno(a == null ? null : a.getATerm());
+    update(val);
+  }
+
+  //}
   //{ protected void finalize()
 
   protected void finalize()

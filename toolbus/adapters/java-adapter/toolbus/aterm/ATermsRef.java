@@ -7,23 +7,29 @@ public class ATermsRef extends ATermRef
 {
   ATerms t;
 
-  //{ public ATermsRef(ATermRef f, ATermsRef n)
-
-  public ATermsRef(ATermRef first, ATermsRef next)
-  {
-    if(first == null)
-      throw new NullPointerException();
-
-    update(first.getATerm(), next == null ? null : next.getATerms());
-  }
-
-  //}
   //{ public ATermsRef(ATerms term)
 
   public ATermsRef(ATerms term)
   {
-    t = term;
-    t.increaseRef();
+    update(term);
+  }
+
+  //}
+  //{ public ATermsRef(ATermRef f, ATermsRef n)
+
+  public ATermsRef(ATermRef f, ATermsRef n)
+  {
+    update(new ATerms(f.getATerm(), n == null ? null : (ATerms)n.getATerm()));
+  }
+
+  //}
+  //{ public ATermsRef(ATermRef f, ATermsRef n, ATermRef anno)
+
+  public ATermsRef(ATermRef first, ATermsRef next, ATermRef anno)
+  {
+    update(new ATerms(first.getATerm(), 
+		      next == null ? null : (ATerms)next.getATerm(),
+		      anno == null ? null : anno.getATerm()));
   }
 
   //}
@@ -32,6 +38,19 @@ public class ATermsRef extends ATermRef
   public ATermsRef(ATermRef f)
   {
     this(f, null);
+  }
+
+  //}
+  //{ public void setAnno(ATermRef a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATermRef a)
+  {
+    ATerms val = new ATerms(t.getFirst(), t.getNext(), a == null ? null : a.getATerm());
+    update(val);
   }
 
   //}
@@ -46,12 +65,11 @@ public class ATermsRef extends ATermRef
 
   //{ private void update(ATerm first, ATerms next)
 
-  private void update(ATerm first, ATerms next)
+  private void update(ATerms val)
   {
     if(t != null)
       t.decreaseRef();
-    ATerms newT = new ATerms(first, next);
-    t = (ATerms)newT.unique();
+    t = (ATerms)val.unique();
     t.increaseRef();
   }
 
@@ -106,7 +124,7 @@ public class ATermsRef extends ATermRef
 
   public void setFirst(ATermRef first)
   {
-    update(first.getATerm(), t.getNext());
+    update(new ATerms(first.getATerm(), t.getNext()));
   }
 
   //}
@@ -114,7 +132,7 @@ public class ATermsRef extends ATermRef
 
   public void setNext(ATermsRef next)
   {
-    update(t.getFirst(), next == null ? null : next.getATerms());
+    update(new ATerms(t.getFirst(), next == null ? null : next.getATerms()));
   }
 
   //}

@@ -230,9 +230,9 @@ public class ATest
     test(P[5].elementAt(2).equals(((ATermListRef)
           ATermParser.makeSimple("[2,3]")).getATerms()), "match-7d");
     test(P[6].match(T[0]) && P[6].size()==1, "match-8a");
-    test(P[6].elementAt(0).equals("f"), "match-8b");
+    test(P[6].elementAt(0).equals(T[0]), "match-8b");
     test(P[7].match(T[0]) && P[7].size() == 2, "match-9a");
-    test(P[7].elementAt(0).equals("f") && P[7].elementAt(1).equals(new Integer(3)), "match-9b");
+    test(P[7].elementAt(0).equals(T[0]) && P[7].elementAt(1).equals(new Integer(3)), "match-9b");
   }
 
   //}
