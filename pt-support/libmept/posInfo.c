@@ -25,7 +25,7 @@ static ATbool in_layout = ATfalse;
 /*{{{  typedef struct PT_Position_Tag */
 
 typedef struct PT_Position_Tag {
-  char* path;
+  const char* path;
   int line;
   int col;
   int offset;
@@ -235,7 +235,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 /*}}}  */
 /*{{{  PT_ParseTree PT_addParseTreePosInfoToDepth(path, parsetree, maxDepth)  */
 
-PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
+PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path, PT_ParseTree parsetree,
 					   int maxDepth) 
 {
   PT_Tree tree = PT_getParseTreeTop(parsetree);
@@ -260,7 +260,7 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
 /*}}}  */
 /*{{{  PT_ParseTree PT_addTreePosInfoToDepth(path, tree, maxDepth, start_l, start_c) */
 
-PT_Tree PT_addTreePosInfoToDepth(char* path, PT_Tree tree,
+PT_Tree PT_addTreePosInfoToDepth(const char* path, PT_Tree tree,
 				 int maxDepth, int start_line, int start_col) 
 {
   PT_Position current;
@@ -280,7 +280,7 @@ PT_Tree PT_addTreePosInfoToDepth(char* path, PT_Tree tree,
 /*}}}  */
 /*{{{  PT_Tree PT_addTreePosInfoSome(path, tree, dep, lay, lit, sl, sc) */
 
-PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
+PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree,
 			      int depth, ATbool layout, ATbool literals,
 			      int start_line, int start_col)
 {
@@ -299,7 +299,7 @@ PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
 /*}}}  */
 /*{{{  PT_ParseTree PT_addParseTreePosInfo(char* path, PT_ParseTree parsetree) */
 
-PT_ParseTree PT_addParseTreePosInfo(char* path, PT_ParseTree parsetree)
+PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree)
 {
   return  PT_addParseTreePosInfoToDepth(path, parsetree, UNLIMITED_DEPTH);
 }
@@ -307,7 +307,7 @@ PT_ParseTree PT_addParseTreePosInfo(char* path, PT_ParseTree parsetree)
 /*}}}  */
 /*{{{  PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree, */
 
-PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree,
+PT_ParseTree PT_addParseTreePosInfoSome(const char *path, PT_ParseTree parsetree,
 					int depth, 
 					ATbool layout, 
 					ATbool literals)

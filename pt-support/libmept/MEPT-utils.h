@@ -114,16 +114,16 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
                                      PT_SymbolVisitor visitor,
                                      PT_SymbolVisitorData data); 
 
-PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree,
+PT_ParseTree PT_addParseTreePosInfoSome(const char *path, PT_ParseTree parsetree,
 					int depth, 
 					ATbool layout, 
 					ATbool literals);
-PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
-PT_ParseTree PT_addParseTreePosInfoToDepth(char *pathInfo, PT_ParseTree tree,
+PT_ParseTree PT_addParseTreePosInfo(const char *pathInfo, PT_ParseTree tree);
+PT_ParseTree PT_addParseTreePosInfoToDepth(const char *pathInfo, PT_ParseTree tree,
                                            int maxDepth);
-PT_Tree PT_addTreePosInfoToDepth(char *pathInfo, PT_Tree tree, int maxDepth,
+PT_Tree PT_addTreePosInfoToDepth(const char *pathInfo, PT_Tree tree, int maxDepth,
 				 int start_line, int start_col);
-PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
+PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree,
 			      int depth, ATbool layout, ATbool literals,
 			      int start_line, int start_col);
 /*
