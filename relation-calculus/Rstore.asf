@@ -83,3 +83,21 @@ equations
 
 [if1]	if true then $Val1 else $Val2 fi  = $Val1
 [if2]	if false then $Val1 else $Val2 fi = $Val2
+
+%% ---- Import an RSF file
+
+[r2s] 	rsfname2str(rsfname($Char*)) = strcon(""" $Char* """)
+
+[r2rv] 	rsfname2rvar(rsfname($Char*)) = rvar($Char*)
+
+[imp1]	import($RsfTuple*) = import1($RsfTuple*, rstore())
+
+[imp11]	$Var = rsfname2rvar($RsfName1),
+	$Elem1 =  rsfname2str($RsfName2),
+	$Elem2 =  rsfname2str($RsfName3),
+	$Rstore' = add-tuple($Var, <$Elem1, $Elem2>, $Rstore)
+	=============================================================
+	import1($RsfName1 $RsfName2 $RsfName3; $RsfTuple*, $Rstore) =
+	import1($RsfTuple*, $Rstore')
+
+[imp12]	import1( , $Rstore) = $Rstore
