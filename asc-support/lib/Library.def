@@ -1,12 +1,8 @@
 definition
 module basic/Booleans
 
+imports basic/BoolCon
 exports
-  sorts BoolCon
-  context-free syntax
-    "true"  -> BoolCon {constructor, cons("true")}
-    "false" -> BoolCon {constructor, cons("false")}
-
   sorts Boolean
 
   context-free syntax
@@ -21,13 +17,37 @@ exports
     Boolean "|" Boolean -> Boolean
 
 hiddens
+  context-free start-symbols Boolean
+
   imports
     basic/Comments
   variables
     "Bool"[0-9]* 	-> Boolean
     "Bool-con"[0-9]* 	-> BoolCon
 
-module utilities/Measure
+module basic/StrCon
+
+exports
+
+sorts StrCon Normal Escaped
+
+
+lexical syntax
+    ~[\0-\31\"\\\n] -> Normal {cons("default")}
+
+    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
+    "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
+
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")}
+module basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}module utilities/Measure
 
 exports
 

@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS=. tb
-
 BUILTIN_NAMES_ARITY=\
         set-anno_3\
 	get-anno_2\
@@ -32,7 +30,12 @@ BUILTIN_SOURCEFILES=\
 	builtin-io.c
 
 #The names of the modules that need to be included in a generated lib
-LIBRARY_MODULES=basic/Booleans utilities/Measure utilities/IOResults
+LIBRARY_MODULES=\
+	basic/Booleans \
+	basic/StrCon \
+        basic/BoolCon \
+	utilities/Measure \
+	utilities/IOResults
 
 lib_LIBRARIES = libasc-support-me.a 
 
@@ -40,7 +43,8 @@ include_HEADERS = \
 	asc-support-me.h \
 	asc-support2-me.h  \
 	asc-traversals.h \
-	asc-builtins.h
+	asc-builtins.h \
+	asc-client.h
 
 libasc_support_me_a_SOURCES = \
 	asc-builtins.h \
@@ -53,6 +57,7 @@ libasc_support_me_a_SOURCES = \
 	asc-muasf2pt.c \
 	asc-muasf2pt.h \
 	asc-parsetable.c\
+	asc-client.c\
 	builtin-forward.c\
 	Library.c\
 	Library.h\

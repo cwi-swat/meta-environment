@@ -2,6 +2,7 @@
 
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
+#include "Library.h"
 
 ATerm rec_terminate(int cid, char* message)
 {
@@ -20,7 +21,16 @@ ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
 {
   PT_Args ptargs = PT_makeArgsEmpty();
   for(;!ATisEmpty(args);args = ATgetNext(args)) {
-    PT_Tree arg = PT_getParseTreeTree((PT_ParseTree)ATgetFirst(args));
+    ATerm head = ATgetFirst(args);
+    PT_Tree arg;
+
+    if (ATisQuoted(ATgetAFun((ATermAppl) head))) {
+      arg = (PT_Tree) CO_makeStrConDefault(ATwriteToString(head));
+    }
+    else {
+      arg = PT_getParseTreeTree((PT_ParseTree) head);
+    }
+
     ptargs = PT_makeArgsList(arg, ptargs);
   }
 

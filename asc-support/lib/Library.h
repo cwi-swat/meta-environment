@@ -12,8 +12,11 @@
 
 /*{{{  typedefs */
 
-typedef struct _CO_BoolCon *CO_BoolCon;
 typedef struct _CO_Boolean *CO_Boolean;
+typedef struct _CO_Normal *CO_Normal;
+typedef struct _CO_Escaped *CO_Escaped;
+typedef struct _CO_StrCon *CO_StrCon;
+typedef struct _CO_BoolCon *CO_BoolCon;
 typedef struct _CO_Measure *CO_Measure;
 typedef struct _CO_ParseResult *CO_ParseResult;
 typedef struct _CO_BytesResult *CO_BytesResult;
@@ -33,8 +36,11 @@ typedef ATerm CO_Feedback;
 
 /*{{{  protect macros */
 
-#define CO_protectBoolCon(arg) (ATprotect((ATerm*)((void*) arg)))
 #define CO_protectBoolean(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectNormal(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectEscaped(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectBoolCon(arg) (ATprotect((ATerm*)((void*) arg)))
 #define CO_protectMeasure(arg) (ATprotect((ATerm*)((void*) arg)))
 #define CO_protectParseResult(arg) (ATprotect((ATerm*)((void*) arg)))
 #define CO_protectBytesResult(arg) (ATprotect((ATerm*)((void*) arg)))
@@ -47,10 +53,16 @@ void CO_initLibraryApi(void);
 
 /*{{{  term conversion functions */
 
-CO_BoolCon CO_BoolConFromTerm(ATerm t);
-ATerm CO_BoolConToTerm(CO_BoolCon arg);
 CO_Boolean CO_BooleanFromTerm(ATerm t);
 ATerm CO_BooleanToTerm(CO_Boolean arg);
+CO_Normal CO_NormalFromTerm(ATerm t);
+ATerm CO_NormalToTerm(CO_Normal arg);
+CO_Escaped CO_EscapedFromTerm(ATerm t);
+ATerm CO_EscapedToTerm(CO_Escaped arg);
+CO_StrCon CO_StrConFromTerm(ATerm t);
+ATerm CO_StrConToTerm(CO_StrCon arg);
+CO_BoolCon CO_BoolConFromTerm(ATerm t);
+ATerm CO_BoolConToTerm(CO_BoolCon arg);
 CO_Measure CO_MeasureFromTerm(ATerm t);
 ATerm CO_MeasureToTerm(CO_Measure arg);
 CO_ParseResult CO_ParseResultFromTerm(ATerm t);
@@ -71,13 +83,17 @@ ATerm CO_OptLayoutToTerm(CO_OptLayout arg);
 /*}}}  */
 /*{{{  constructors */
 
-CO_BoolCon CO_makeBoolConTrue();
-CO_BoolCon CO_makeBoolConFalse();
 CO_Boolean CO_makeBooleanConstant(CO_BoolCon BoolCon);
 CO_Boolean CO_makeBooleanOr(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterBar, CO_Boolean rhs);
 CO_Boolean CO_makeBooleanAnd(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterAmp, CO_Boolean rhs);
 CO_Boolean CO_makeBooleanNot(CO_OptLayout wsAfterNot, CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
 CO_Boolean CO_makeBooleanBracket(CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
+CO_Normal CO_makeNormalDefault(char* string);
+CO_Escaped CO_makeEscapedSpecialCharacter(char* string);
+CO_Escaped CO_makeEscapedOctal(char* string);
+CO_StrCon CO_makeStrConDefault(char* string);
+CO_BoolCon CO_makeBoolConTrue();
+CO_BoolCon CO_makeBoolConFalse();
 CO_Measure CO_makeMeasureLess();
 CO_Measure CO_makeMeasureGreater();
 CO_Measure CO_makeMeasureEqual();
@@ -92,6 +108,9 @@ CO_Start CO_makeStartBytesResult(CO_OptLayout wsBefore, CO_BytesResult topBytesR
 CO_Start CO_makeStartWriteResult(CO_OptLayout wsBefore, CO_WriteResult topWriteResult, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartMeasure(CO_OptLayout wsBefore, CO_Measure topMeasure, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartBoolCon(CO_OptLayout wsBefore, CO_BoolCon topBoolCon, CO_OptLayout wsAfter, int ambCnt);
+CO_Start CO_makeStartEscaped(CO_OptLayout wsBefore, CO_Escaped topEscaped, CO_OptLayout wsAfter, int ambCnt);
+CO_Start CO_makeStartNormal(CO_OptLayout wsBefore, CO_Normal topNormal, CO_OptLayout wsAfter, int ambCnt);
+CO_Start CO_makeStartStrCon(CO_OptLayout wsBefore, CO_StrCon topStrCon, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartBoolean(CO_OptLayout wsBefore, CO_Boolean topBoolean, CO_OptLayout wsAfter, int ambCnt);
 CO_OptLayout CO_makeOptLayoutAbsent();
 CO_OptLayout CO_makeOptLayoutPresent(char* string);
@@ -99,21 +118,17 @@ CO_OptLayout CO_makeOptLayoutPresent(char* string);
 /*}}}  */
 /*{{{  equality functions */
 
-ATbool CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1);
 ATbool CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1);
+ATbool CO_isEqualNormal(CO_Normal arg0, CO_Normal arg1);
+ATbool CO_isEqualEscaped(CO_Escaped arg0, CO_Escaped arg1);
+ATbool CO_isEqualStrCon(CO_StrCon arg0, CO_StrCon arg1);
+ATbool CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1);
 ATbool CO_isEqualMeasure(CO_Measure arg0, CO_Measure arg1);
 ATbool CO_isEqualParseResult(CO_ParseResult arg0, CO_ParseResult arg1);
 ATbool CO_isEqualBytesResult(CO_BytesResult arg0, CO_BytesResult arg1);
 ATbool CO_isEqualWriteResult(CO_WriteResult arg0, CO_WriteResult arg1);
 ATbool CO_isEqualStart(CO_Start arg0, CO_Start arg1);
 ATbool CO_isEqualOptLayout(CO_OptLayout arg0, CO_OptLayout arg1);
-
-/*}}}  */
-/*{{{  CO_BoolCon accessors */
-
-ATbool CO_isValidBoolCon(CO_BoolCon arg);
-inline ATbool CO_isBoolConTrue(CO_BoolCon arg);
-inline ATbool CO_isBoolConFalse(CO_BoolCon arg);
 
 /*}}}  */
 /*{{{  CO_Boolean accessors */
@@ -154,6 +169,41 @@ CO_Boolean CO_setBooleanBoolean(CO_Boolean arg, CO_Boolean Boolean);
 ATbool CO_hasBooleanWsAfterBoolean(CO_Boolean arg);
 CO_OptLayout CO_getBooleanWsAfterBoolean(CO_Boolean arg);
 CO_Boolean CO_setBooleanWsAfterBoolean(CO_Boolean arg, CO_OptLayout wsAfterBoolean);
+
+/*}}}  */
+/*{{{  CO_Normal accessors */
+
+ATbool CO_isValidNormal(CO_Normal arg);
+inline ATbool CO_isNormalDefault(CO_Normal arg);
+ATbool CO_hasNormalString(CO_Normal arg);
+char* CO_getNormalString(CO_Normal arg);
+CO_Normal CO_setNormalString(CO_Normal arg, char* string);
+
+/*}}}  */
+/*{{{  CO_Escaped accessors */
+
+ATbool CO_isValidEscaped(CO_Escaped arg);
+inline ATbool CO_isEscapedSpecialCharacter(CO_Escaped arg);
+inline ATbool CO_isEscapedOctal(CO_Escaped arg);
+ATbool CO_hasEscapedString(CO_Escaped arg);
+char* CO_getEscapedString(CO_Escaped arg);
+CO_Escaped CO_setEscapedString(CO_Escaped arg, char* string);
+
+/*}}}  */
+/*{{{  CO_StrCon accessors */
+
+ATbool CO_isValidStrCon(CO_StrCon arg);
+inline ATbool CO_isStrConDefault(CO_StrCon arg);
+ATbool CO_hasStrConString(CO_StrCon arg);
+char* CO_getStrConString(CO_StrCon arg);
+CO_StrCon CO_setStrConString(CO_StrCon arg, char* string);
+
+/*}}}  */
+/*{{{  CO_BoolCon accessors */
+
+ATbool CO_isValidBoolCon(CO_BoolCon arg);
+inline ATbool CO_isBoolConTrue(CO_BoolCon arg);
+inline ATbool CO_isBoolConFalse(CO_BoolCon arg);
 
 /*}}}  */
 /*{{{  CO_Measure accessors */
@@ -277,6 +327,9 @@ inline ATbool CO_isStartBytesResult(CO_Start arg);
 inline ATbool CO_isStartWriteResult(CO_Start arg);
 inline ATbool CO_isStartMeasure(CO_Start arg);
 inline ATbool CO_isStartBoolCon(CO_Start arg);
+inline ATbool CO_isStartEscaped(CO_Start arg);
+inline ATbool CO_isStartNormal(CO_Start arg);
+inline ATbool CO_isStartStrCon(CO_Start arg);
 inline ATbool CO_isStartBoolean(CO_Start arg);
 ATbool CO_hasStartWsBefore(CO_Start arg);
 CO_OptLayout CO_getStartWsBefore(CO_Start arg);
@@ -302,6 +355,15 @@ CO_Start CO_setStartTopMeasure(CO_Start arg, CO_Measure topMeasure);
 ATbool CO_hasStartTopBoolCon(CO_Start arg);
 CO_BoolCon CO_getStartTopBoolCon(CO_Start arg);
 CO_Start CO_setStartTopBoolCon(CO_Start arg, CO_BoolCon topBoolCon);
+ATbool CO_hasStartTopEscaped(CO_Start arg);
+CO_Escaped CO_getStartTopEscaped(CO_Start arg);
+CO_Start CO_setStartTopEscaped(CO_Start arg, CO_Escaped topEscaped);
+ATbool CO_hasStartTopNormal(CO_Start arg);
+CO_Normal CO_getStartTopNormal(CO_Start arg);
+CO_Start CO_setStartTopNormal(CO_Start arg, CO_Normal topNormal);
+ATbool CO_hasStartTopStrCon(CO_Start arg);
+CO_StrCon CO_getStartTopStrCon(CO_Start arg);
+CO_Start CO_setStartTopStrCon(CO_Start arg, CO_StrCon topStrCon);
 ATbool CO_hasStartTopBoolean(CO_Start arg);
 CO_Boolean CO_getStartTopBoolean(CO_Start arg);
 CO_Start CO_setStartTopBoolean(CO_Start arg, CO_Boolean topBoolean);
@@ -319,13 +381,16 @@ CO_OptLayout CO_setOptLayoutString(CO_OptLayout arg, char* string);
 /*}}}  */
 /*{{{  sort visitors */
 
-CO_BoolCon CO_visitBoolCon(CO_BoolCon arg);
 CO_Boolean CO_visitBoolean(CO_Boolean arg, CO_BoolCon (*acceptBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfterLhs)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBar)(CO_OptLayout), CO_OptLayout (*acceptWsAfterAmp)(CO_OptLayout), CO_OptLayout (*acceptWsAfterNot)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBoolean)(CO_OptLayout));
+CO_Normal CO_visitNormal(CO_Normal arg, char* (*acceptString)(char*));
+CO_Escaped CO_visitEscaped(CO_Escaped arg, char* (*acceptString)(char*));
+CO_StrCon CO_visitStrCon(CO_StrCon arg, char* (*acceptString)(char*));
+CO_BoolCon CO_visitBoolCon(CO_BoolCon arg);
 CO_Measure CO_visitMeasure(CO_Measure arg);
 CO_ParseResult CO_visitParseResult(CO_ParseResult arg, char* (*acceptTreeSort)(char*), CO_OptLayout (*acceptWsAfterParseTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptLeftLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterLeftLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma)(CO_OptLayout), ATerm (*acceptTree)(ATerm), CO_OptLayout (*acceptWsAfterTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma1)(CO_OptLayout), CO_Bytes (*acceptRightLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterRightLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma2)(CO_OptLayout), CO_NatCon (*acceptAmbCnt)(CO_NatCon), CO_OptLayout (*acceptWsAfterAmbCnt)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParseError)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
 CO_BytesResult CO_visitBytesResult(CO_BytesResult arg, CO_OptLayout (*acceptWsAfterBytes)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptValue)(CO_Bytes), CO_OptLayout (*acceptWsAfterValue)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBytesError)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
 CO_WriteResult CO_visitWriteResult(CO_WriteResult arg, CO_OptLayout (*acceptWsAfterWriteError)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
-CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_ParseResult (*acceptTopParseResult)(CO_ParseResult), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BytesResult (*acceptTopBytesResult)(CO_BytesResult), CO_WriteResult (*acceptTopWriteResult)(CO_WriteResult), CO_Measure (*acceptTopMeasure)(CO_Measure), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Boolean (*acceptTopBoolean)(CO_Boolean));
+CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_ParseResult (*acceptTopParseResult)(CO_ParseResult), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BytesResult (*acceptTopBytesResult)(CO_BytesResult), CO_WriteResult (*acceptTopWriteResult)(CO_WriteResult), CO_Measure (*acceptTopMeasure)(CO_Measure), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Escaped (*acceptTopEscaped)(CO_Escaped), CO_Normal (*acceptTopNormal)(CO_Normal), CO_StrCon (*acceptTopStrCon)(CO_StrCon), CO_Boolean (*acceptTopBoolean)(CO_Boolean));
 CO_OptLayout CO_visitOptLayout(CO_OptLayout arg, char* (*acceptString)(char*));
 
 /*}}}  */

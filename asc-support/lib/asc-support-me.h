@@ -4,9 +4,7 @@
 #include <aterm2.h> 
 #include <asc-builtins.h>
 
-#ifdef TOOLBUS
 #include <atb-tool.h>
-#endif
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
@@ -289,10 +287,8 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
                      void (*resolve_all)(void),
                      void (*init_all)(void),
 		     char *tableBaf,
-		     size_t tableSize
-#ifdef TOOLBUS
-		     , ATBhandler handler
-#endif
+		     size_t tableSize, 
+		     ATBhandler handler
 		     );
 
 /*}}}  */

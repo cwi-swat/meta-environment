@@ -3,6 +3,17 @@ $Id$
 Wed Feb 11 15:27:49 CET 2004 <jurgenv@cwi.nl>
  * Reactivated memoization. It seems that this feature was #ifndeffed out
    a long time ago!
+ * Every compiled specification now has the new commandline option 
+   '-s <string>' a -s replaces a -i instead of a parse tree, a string is
+   used as input to the rewriter. This string is lifted to a StrCon 
+   before rewriting. Typical usage of this functionality include extra
+   arguments to a function:
+     ./MyCompiledSpec -f myfunction -i myinput.trm -s "hello" -s "optimize!"
+ * Removed ToolBus version of asc-support. Every compiled specification
+   now depends on ToolBus lib. 
+ * NOTE: a different way of dealing with dependencies of compiled
+   specification needs to be invented, now every compiled specification
+   depends on all dependencies of all builtins....
 
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
