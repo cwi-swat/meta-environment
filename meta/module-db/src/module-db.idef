@@ -219,11 +219,10 @@ in
   rec-value(Mdb,path(Path?)).
   snd-msg(path(Path))
 +
-/* Add parse table to the database for the given module name */
   rec-msg(get-table-from-db(ModuleId?)) .
   snd-eval(Mdb, get-parse-table(ModuleId)) .
-  ( rec-value(Mdb, table(Table?, Path?)) .
-    snd-msg(table(Table, Path))
+  ( rec-value(Mdb, table(Table?)) .
+    snd-msg(table(Table))
   +
     rec-value(Mdb, no-table) .
     snd-msg(no-table)

@@ -79,7 +79,7 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
 {
   ATerm atModuleName;
   ATermList unknowns;
-
+  
   SDF_Module sdfModule = SDF_getStartTopModule(
                            SDF_StartFromTerm(sdfTree));
 
@@ -160,7 +160,7 @@ ATerm get_sdf_tree(int cid, char *moduleName)
   ATerm atModuleName = makeString(moduleName);
   if (MS_existsModule(atModuleName)) {
     ATerm tree = MS_getSdfTree(atModuleName);
-    return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(tree)); 
+    return ATmake("snd-value(asfix(syntax(<term>)))", tree); 
   }
   else {
     ATwarning("get_sdf_tree: Module %t not in database!\n", 
@@ -222,7 +222,6 @@ void add_empty_eqs_section(int cid, char *moduleName)
 
 void update_eqs_tree(int cid, char *moduleName, ATerm tree)
 {
-ATwarning("update_eqs_tree entered with %s\n", moduleName);
   MDB_updateEqsTree(makeString(moduleName), tree);
 }
 
@@ -232,7 +231,7 @@ ATerm get_asf_tree(int cid, char *moduleName)
   ATerm asfTree = MDB_getEqsTree(makeString(moduleName));
 
   if (asfTree) {
-    return ATmake("snd-value(asfix(tree(<term>)))", ATBpack(asfTree));
+    return ATmake("snd-value(asfix(tree(<term>)))", asfTree);
   }
   else {
     return ATmake("snd-value(asfix(unavailable))");
@@ -350,50 +349,27 @@ ATerm get_eqs_text(int cid, char *moduleName)
   }
 }
 
-
 ATerm get_parse_table(int cid, ATerm moduleId)
 {
   char *moduleName;
-  ATerm table, contents, result, atModuleName;
-  char pathExt[9];
-  int lenType;   
-
+  ATerm table = NULL;
+  ATerm atModuleName = NULL;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
-    strcpy(pathExt, ES_getExtension("equations"));
-    lenType = strlen(ES_getExtension("equations"));
-    strcpy(pathExt+lenType, ES_getExtension("table"));
-  }
-  else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
-    strcpy(pathExt, ES_getExtension("term"));
-    lenType = strlen(ES_getExtension("term"));
-    strcpy(pathExt+lenType, ES_getExtension("table"));
-  }
-  else {
-    ATwarning("Illegal moduleId: %t\n", moduleId);
-    return ATmake("snd-value(no-table)");
-  }
-
-  atModuleName = makeString(moduleName);
-
-  if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
+    atModuleName = makeString(moduleName);
     table = MS_getAsfParseTable(atModuleName);
   }
-  else {
+  else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
+    atModuleName = makeString(moduleName);
     table = MS_getTermParseTable(atModuleName);
   }
-  if (table) {
-    ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
-    char *path = MS_getModulePath(atModuleName);
-
-    contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
-    contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
-    result = ATmake("snd-value(table(<term>,<str>))", 
-                    contents, path);
-  
-    return result;
+  else {
+    ATerror("Illegal moduleId: %t\n", moduleId);
   }
 
+  if (table) {
+    return ATmake("snd-value(table(<term>))", table);
+  }
   return ATmake("snd-value(no-table)");
 }
 
