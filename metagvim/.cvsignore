@@ -1,8 +1,15 @@
+.deps
+.libs
 Makefile
 Makefile.in
 aclocal.m4
 config.cache
+config.h.in
 config.log
 config.status
 configure
+gvim-editor
+libmeta_gvim.la
 libtool
+meta.vim
+meta_gvim.lo
