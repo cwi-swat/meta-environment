@@ -484,8 +484,9 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   } 
   else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
     sym1 = asfix_get_list_sym(arg1);
-    sym2 = asfix_get_list_sym(arg2);
-    if(ATisEqual(sym1,sym2)) {
+    sym2 = asfix_get_list_sym(arg2); 
+    if(ATisEqual(asfix_get_sort_of_list_sym(sym1),
+                 asfix_get_sort_of_list_sym(sym2))) {
       elems1 = (ATermList) asfix_get_list_elems(arg1);
       elems2 = (ATermList) asfix_get_list_elems(arg2); 
       newenv = list_matching(sym1,newenv,elems1,elems2,
@@ -524,7 +525,7 @@ ATerm args_matching(ATerm env, ATermList conds,
 {
   ATerm arg1, arg2; 
   ATerm newenv = env;
-
+ 
   if(!ATisEmpty(args1)) {
     arg1 = ATgetFirst(args1);
     args1 = ATgetNext(args1);
@@ -650,7 +651,7 @@ ATerm list_matching(ATerm sym,
   ATerm rlist;
   ATerm newenv;
   ATerm newarg1, newarg2;
-  ATermList newargs1, newargs2;
+  ATermList newargs1, newargs2; 
 
   if(!ATisEmpty(elems1)) {
     elem1 = ATgetFirst(elems1);
@@ -684,7 +685,7 @@ ATerm list_matching(ATerm sym,
     else { /* TlistSize(elems1) != 1 */
       elems1 = ATgetNext(elems1);
       if(asfix_is_list_var(elem1)) {
-				ATermAppl trms = v_lookup_list(env, elem1);
+	ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
           elems2 = compare_sub_lists(trms,elems2);
           if(elems2) 
@@ -692,7 +693,7 @@ ATerm list_matching(ATerm sym,
           else
             newenv = fail_env;
         } 
-        else /* TdictGet(env,elem1) == Tfalse */
+        else /* TdictGet(env,elem1) == Tfalse */ 
           newenv = sub_list_matching(sym,env,elem1,elems1,elems2,
                                      conds,args1,args2);
       } 
@@ -824,7 +825,7 @@ ATerm apply_rule(ATerm trm)
       conds = (ATermList) asfix_get_equ_conds(equ);
       equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
       env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-/*ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));*/
+ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));
       if(!is_fail_env(env)) {
         rewrite_steps++;
         return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
@@ -837,7 +838,7 @@ ATerm apply_rule(ATerm trm)
     conds = (ATermList) asfix_get_equ_conds(equ);
     equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
     env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-/*ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));*/
+ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));
     if(!is_fail_env(env)) {
       rewrite_steps++;
       return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
