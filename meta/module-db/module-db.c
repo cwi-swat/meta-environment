@@ -1210,12 +1210,12 @@ void reshuffle_modules_from(int cid, char *modulename)
   } 
 }
 
-void usage(char *prg)
+void usage(char *prg, ATbool is_err)
 {
     ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
     ATwarning("use '%s -at-help' to get more options.\n", prg);
     ATwarning("This program can only be used as a ToolBus tool!\n");
-    exit(1);
+    exit(is_err ? 1 : 0);
 }
 
 void version(const char *msg)
@@ -1233,7 +1233,7 @@ int main(int argc, char *argv[])
 
   for (i=1; i<argc; i++) {
       if (strcmp(argv[i], "-h") == 0) {
-	  usage(argv[0]);
+	  usage(argv[0], ATfalse);
       } else if (strcmp(argv[i], "-V") == 0) {
 	  version(argv[0]);
       }

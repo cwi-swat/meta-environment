@@ -477,7 +477,7 @@ void read_conf(char *cfg)
   fclose(fd);
 }
 
-void usage(char *prg)
+void usage(char *prg, ATbool is_err)
 {
   ATwarning(
         "Usage: %s [options]\n"
@@ -486,7 +486,7 @@ void usage(char *prg)
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
         prg, myversion);
-  exit(1);
+  exit(is_err ? 1 : 0);
 }
 
 void version(char *prg)
@@ -523,8 +523,8 @@ int main(int argc, char *argv[])
         case 'v':  run_verbose = ATtrue;                   break;
         case 'V':  version(argv[0]);                       break;
 
-        case 'h':
-        default:   usage(argv[0]);                         break;
+        case 'h':  usage(argv[0], ATfalse);                break;
+        default:   usage(argv[0], ATtrue);                 break;
       }
     }
   }

@@ -4,7 +4,7 @@
 usage () {
   echo "usage: $1 [toolbus-options]"
   echo "note that this program can ONLY be used as a ToolBus tool!"
-  exit 1
+  exit 0
 }
 
 version () {
