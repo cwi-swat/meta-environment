@@ -87,7 +87,7 @@ static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
 }
 
 /*}}}  */
-/*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
+/*{{{  static PT_ParseTree toText(PT_ParseTree parseTree) */
 
 static PT_ParseTree toText(PT_ParseTree parseTree)
 {
@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
   ATerm at_tree;
+  char *ATlibArgv[] = {"pandora", "-at-termtable", "21"};
   PT_ParseTree tree, ptText;
   BOX_Start box;
   char *input = "-";
@@ -149,7 +150,7 @@ int main(int argc, char *argv[])
   int i;
   ATbool useToolbus = ATfalse;
 
-  ATinit(argc, argv, &bottomOfStack); 
+  ATinit(3, ATlibArgv, &bottomOfStack); 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initMEPTApi(); 
   BOX_initBoxApi();
@@ -187,9 +188,10 @@ int main(int argc, char *argv[])
 
       tree = PT_ParseTreeFromTerm(at_tree);
       box = pandora(tree);
-
+      ATwriteToNamedBinaryFile(BOX_StartToTerm(box), "box.pt");
       ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
       ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
+
     }
     else {
       ATwarning("No such file: %s\n", input); 
