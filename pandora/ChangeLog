@@ -1,8 +1,11 @@
 # $Id$
 
 Fri Feb 13 10:34:32 CET 2004 <kooiker@cwi.nl>
+ * generator/Box-utils.{c,h}:
+   - Added functions for creation of Box(lists) without layout and spaceoptions
  * generator/pandora.c:
    - lists (with elements) can be pretty printed 
+   - some refactorings
 
 Thu Feb 12 11:15:37 CET 2004 <jong@cwi.nl>
  * pandora.pkg: list explicit version dependencies

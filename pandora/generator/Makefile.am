@@ -15,9 +15,9 @@ EXTRA_DIST = \
 
 bin_PROGRAMS = pandora 
 
-noinst_HEADERS = pandora.h Box.h
+noinst_HEADERS = pandora.h Box.h Box-utils.h
 
-pandora_SOURCES = main.c pandora.c Box.c Box_dict.c Box-to-Text.c
+pandora_SOURCES = main.c pandora.c Box.c Box-utils.c Box_dict.c Box-to-Text.c
 pandora_LDADD = \
 	-L$(ASC_SUPPORT)/lib -lasc-support-me \
 	-L$(SGLR)/lib -lsglr \
