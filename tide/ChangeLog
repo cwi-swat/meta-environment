@@ -2,6 +2,7 @@
 
 Fri Nov 19 15:43:44 CET 2004 <jurgenv@cwi.nl>
  * Another merge
+ * Bumped to 1.1
 
 Fri Nov 19 13:47:00 CET 2004 <jurgenv@cwi.nl>
  * Moved lib-c directory to separate package (tide-support)
