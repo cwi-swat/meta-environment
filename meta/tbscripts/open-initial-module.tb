@@ -135,7 +135,7 @@ in
     snd-note(ui-status(endstat(Id))) .
     snd-msg(open-modules(Ms)) .
     rec-msg(finished-opening-modules) .
-    snd-msg(finished-opening-initial-module)
+    snd-note(finished-opening-initial-module)
   ) *
   delta
 endlet

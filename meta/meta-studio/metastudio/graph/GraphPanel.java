@@ -11,6 +11,7 @@ import metastudio.Preferences;
 
 public class GraphPanel
   extends JComponent
+  implements Scrollable
 {
   //{{{ Preference names
 
@@ -39,6 +40,18 @@ public class GraphPanel
   private Node hoveredNode;
   private Node selectedNode;
 
+  private Color nodeBG;
+  private Color nodeFG;
+  private Color nodeBorder;
+
+  private Color nodeBGHovered;
+  private Color nodeFGHovered;
+  private Color nodeBorderHovered;
+
+  private Color nodeBorderSelected;
+  private Color nodeBGSelected;
+  private Color nodeFGSelected;
+
   //{{{ public GraphPanel()
 
   public GraphPanel()
@@ -48,8 +61,13 @@ public class GraphPanel
 
     MouseMotionListener mouseMotionListener
       = new MouseMotionAdapter() {
+	boolean dragging;
+	int lastX;
+	int lastY;
+
 	public void mouseMoved(MouseEvent event)
 	{
+	  dragging = false;
 	  Node node = getNodeAt(event.getX(), event.getY());
 	  if ((node == null && hoveredNode != null)
 	      || (node != null
@@ -59,14 +77,46 @@ public class GraphPanel
 	    repaint();
 	  }
 	}
-	public void mouseDragged(MouseEvent e) {
-	  Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
-	  ((JComponent)e.getSource()).scrollRectToVisible(r);
-	}
 	public void mouseExited(MouseEvent event)
 	{
 	  hoveredNode = null;
 	  repaint();
+	}
+	public void mouseDragged(MouseEvent e) {
+	  Component parent = getParent();
+	  while (parent != null && !(parent instanceof JViewport)) {
+	    parent = parent.getParent();
+	  }
+	  JViewport port = (JViewport)parent;
+	  java.awt.Point pos = port.getViewPosition();
+	  int absX = e.getX()-(int)pos.getX();
+	  int absY = e.getY()-(int)pos.getY();
+	  if (!dragging) {
+	    dragging = true;
+	  } else {
+	    int x = (int)pos.getX() + (lastX-absX);
+	    int y = (int)pos.getY() + (lastY-absY);
+	    if (x < 0) {
+	      x = 0;
+	    }
+	    if (y < 0) {
+	      y = 0;
+	    }
+	    Dimension portSize = port.getSize();
+	    Dimension size = getSize();
+	    if (x + portSize.width > size.width) {
+	      x = size.width-portSize.width;
+	    }
+	    if (y + portSize.height > size.height) {
+	      y = size.height-portSize.height;
+	    }
+	    /* Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
+	       ((JComponent)e.getSource()).scrollRectToVisible(r);
+	     */
+	    port.setViewPosition(new java.awt.Point(x, y));
+	  }
+	  lastX = absX;
+	  lastY = absY;
 	}
       };
     addMouseMotionListener(mouseMotionListener);
@@ -139,18 +189,45 @@ public class GraphPanel
   public void paint(Graphics g)
   {
     g.setColor(getBackground());
-    g.fillRect(0, 0, getSize().width, getSize().height);
-
+    System.out.println("size = " + getSize());
     if (graph != null) {
       Graphics2D g2d = (Graphics2D)g;
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			   RenderingHints.VALUE_ANTIALIAS_ON);
       g2d.transform(transform);
+
+      // Hack around 32k limit bug:
+      // Originally, this fillrect came before the transform (in screen coordinates),
+      // but calling fillRect with arguments above 32k triggers a bug.
+      // by calling fillRect after transform we can use user coordinates.
+      // As we don't have a suitable limit handy, we just use an arbitrary
+      // large number below 32k so the whole background will be filled.
+      g.fillRect(0, 0, 32000, 32000);
+
       Stroke stroke = g2d.getStroke();
       //g2d.setStroke(new BasicStroke((float)1.5));
+      setupColors();
       paintNodes(g2d);
       paintEdges(g2d);
     }
+  }
+
+  //}}}
+  //{{{ private void setupColors()
+
+  private void setupColors()
+  {
+    nodeBG = Preferences.getColor(PREF_NODE_BG);
+    nodeFG = Preferences.getColor(PREF_NODE_FG);
+    nodeBorder = Preferences.getColor(PREF_NODE_BORDER);
+
+    nodeBGHovered = Preferences.getColor(PREF_NODE_HOVERED_BG);
+    nodeFGHovered = Preferences.getColor(PREF_NODE_HOVERED_FG);
+    nodeBorderHovered = Preferences.getColor(PREF_NODE_HOVERED_BORDER);
+
+    nodeBGSelected = Preferences.getColor(PREF_NODE_SELECTED_BG);
+    nodeFGSelected = Preferences.getColor(PREF_NODE_SELECTED_FG);
+    nodeBorderSelected = Preferences.getColor(PREF_NODE_SELECTED_BORDER);
   }
 
   //}}}
@@ -205,19 +282,26 @@ public class GraphPanel
     x -= w/2;
     y -= h/2;
 
-    Color node_bg = Preferences.getColor(PREF_NODE_BG);
-    Color node_fg = Preferences.getColor(PREF_NODE_FG);
-    Color node_border = Preferences.getColor(PREF_NODE_BORDER);
+    if (!g.hitClip(x, y, w, h)) {
+      return;
+    }
+
+    Color node_bg, node_fg, node_border;
+
     if (selectedNode != null
 	&& selectedNode.getName().equals(node.getName())) {
-      node_bg = Preferences.getColor(PREF_NODE_SELECTED_BG);
-      node_fg = Preferences.getColor(PREF_NODE_SELECTED_FG);
-      node_border = Preferences.getColor(PREF_NODE_SELECTED_BORDER);
+      node_bg = nodeBGSelected;
+      node_fg = nodeFGSelected;
+      node_border = nodeBorderSelected;
     } else if (hoveredNode != null
 	&& hoveredNode.getName().equals(node.getName())) {
-      node_bg = Preferences.getColor(PREF_NODE_HOVERED_BG);
-      node_fg = Preferences.getColor(PREF_NODE_HOVERED_FG);
-      node_border = Preferences.getColor(PREF_NODE_HOVERED_BORDER);
+      node_bg = nodeBGHovered;
+      node_fg = nodeFGHovered;
+      node_border = nodeBorderHovered;
+    } else {
+      node_bg = nodeBG;
+      node_fg = nodeFG;
+      node_border = nodeBorder;
     }
     g.setColor(node_bg);
     g.fillRect(x, y, w, h);
@@ -291,11 +375,11 @@ public class GraphPanel
 
     Graphics2D g2d = (Graphics2D)g;
     if (edge.connectedTo(hoveredNode)) {
-      g2d.setColor(Preferences.getColor(PREF_NODE_HOVERED_BORDER));
+      g2d.setColor(nodeBorderHovered);
     } else if (edge.connectedTo(selectedNode)) {
-      g2d.setColor(Preferences.getColor(PREF_NODE_SELECTED_BORDER));
+      g2d.setColor(nodeBorderSelected);
     } else {
-      g2d.setColor(Preferences.getColor(PREF_NODE_BORDER));
+      g2d.setColor(nodeBorder);
     }
     g2d.draw(gp);
   }
@@ -410,6 +494,63 @@ public class GraphPanel
     transform.scale(rscale, rscale);
 
     updateGeometry();
+  }
+
+  //}}}
+
+  //{{{ public Dimension getPreferredScrollableViewportSize()
+
+  public Dimension getPreferredScrollableViewportSize()
+  {
+    return getPreferredSize();
+  }
+
+  //}}}
+  //{{{ public int getScrollableBlockIncrement(visibleRect, orientation, direction)
+
+  public int getScrollableBlockIncrement(Rectangle visibleRect,
+					 int orientation, int direction)
+  {
+    switch (orientation) {
+      case SwingConstants.VERTICAL:
+	return visibleRect.width/2;
+      case SwingConstants.HORIZONTAL:
+	return visibleRect.height/2;
+    }
+
+    throw new RuntimeException("illegal orientation: " + orientation);
+  }
+
+  //}}}
+  //{{{ public int getScrollableUnitIncrement(visibleRect, orientation, direction)
+
+  public int getScrollableUnitIncrement(Rectangle visibleRect,
+					int orientation, int direction)
+  {
+    switch (orientation) {
+      case SwingConstants.VERTICAL:
+	return visibleRect.width/8;
+      case SwingConstants.HORIZONTAL:
+	return visibleRect.height/16;
+    }
+
+    throw new RuntimeException("illegal orientation: " + orientation);
+  }
+
+  //}}}
+  //{{{ public boolean getScrollableTracksViewportWidth()
+
+  public boolean getScrollableTracksViewportWidth()
+  {
+    return false;
+  }
+
+  //}}}
+  //{{{ public boolean getScrollableTracksViewportHeight()
+
+  public boolean getScrollableTracksViewportHeight()
+  {
+    return false;
   }
 
   //}}}

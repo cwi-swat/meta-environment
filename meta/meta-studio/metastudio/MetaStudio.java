@@ -49,13 +49,6 @@ public class MetaStudio
     Color.red
   };
 
-  private static final String[] SCALE =
-  {
-    "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%",
-    "110%", "120%", "150%", "180%", "200%", "250%", "300%",
-    "400%", "500%", "600%", "700%", "800%", "900%", "1000%"
-  };
-
   //}}}
 
   public static ATermFactory factory;
@@ -438,6 +431,7 @@ public class MetaStudio
     //{{{ Create module list
 
     moduleList = new JList();
+    moduleList.setModel(moduleManager.getListModel());
     ListSelectionListener moduleListListener
       = new ListSelectionListener()
       {
@@ -842,6 +836,7 @@ public class MetaStudio
       moduleManager.removeModule(name);
       graph.deleteNode(name);
       layoutGraph();
+      moduleManager.selectModule(currentModule);
     }
   }
 
@@ -855,15 +850,7 @@ public class MetaStudio
 
     graph = Graph.fromImportList((ATermList)moduleList,
 				 (ATermList)importRelations);
-    NodeList nodes = graph.getNodes();
-    Vector elements = new Vector();
-    while (!nodes.isEmpty()) {
-      Node node = nodes.getHead();
-      nodes = nodes.getTail();
-      elements.add(node.getName());
-    }
-    this.moduleList.setListData(elements);
-    /*EventQueue.invokeLater(this);*/
+    layoutGraph();
   }
 
   //}}}

@@ -55,6 +55,7 @@ let
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
+  subscribe(finished-opening-initial-module) .
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
   ( 
@@ -68,34 +69,30 @@ in
       +
         rec-msg(module-created).
 	snd-msg(open-modules([Str])). 
-	( rec-note(import-graph(Mods?,Pairs?)).
+        ( rec-note(import-graph(Mods?, Pairs?)) .
           snd-do(UI,new-graph(Mods,Pairs))
-        +
-          rec-msg(cannot-open-module(ModName?)).
+	  +
+	  rec-msg(cannot-open-module(ModName?)).
 	  snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-        )*
-        rec-msg(finished-opening-modules).
+        ) .
 	snd-do(UI,finished-opening-modules(Str))
       ).
-      snd-ack-event(UI, new-module(Path, Str)) .
-      snd-do(UI,layout-graph)
+      snd-ack-event(UI, new-module(Path, Str))
     )
     +
     /* Add a new module by a user */
     ( rec-event(UI, open-module(Path?, Str?)).
       snd-note(online-help(open-module)).
       snd-msg(open-initial-module(Path, Str)). 
-      ( rec-note(import-graph(Mods?,Pairs?)).
-        snd-do(UI,new-graph(Mods,Pairs))
-      +
+      ( rec-note(import-graph(Mods?,Pairs?))
+        +
         rec-msg(cannot-open-module(ModName?)).
 	snd-note(ui-status(errorf("cannot open module %s",[ModName])))
       )*
-      no-note(import-graph(<term>,<term>)) .
-      rec-msg(finished-opening-initial-module) .
+      rec-note(finished-opening-initial-module) .
       snd-do(UI,finished-opening-modules(Str)) .
       snd-ack-event(UI, open-module(Path, Str)) .
-      snd-do(UI,layout-graph)
+      snd-do(UI,new-graph(Mods,Pairs))
     ) +
     ( rec-msg(cannot-open-module(ModName?)).
       snd-note(ui-status(errorf("cannot open module %s",[ModName])))
@@ -196,8 +193,7 @@ in
      snd-ack-event(UI,debugging(On))
    ) +
    ( rec-note(import-graph(Mods?,Pairs?)).
-     snd-do(UI,new-graph(Mods,Pairs)) .
-     snd-do(UI,layout-graph)
+     snd-do(UI,new-graph(Mods,Pairs))
    )
    +
    ( rec-event(UI, layout-graph(Graph?)) .

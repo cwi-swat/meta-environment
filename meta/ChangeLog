@@ -1,5 +1,13 @@
 # $Id$
 
+2002/17/04 <olivierp@cwi.nl>
+ * Fixed 'animation problem', greatly improving module open time
+ * Improved paint/scroll speed of graph window
+ * Fixed bugs in module list
+ * Import/imported by windows now scroll when they contain too many modules
+ * You can now use mouse dragging in the graph window to scroll the whole graph
+ * Added workaround for swing bug (fillRect cannot handle coordinates > 32k)
+
 2002/16/04 <olivierp@cwi.nl>
  * Introduced flexible scaling (graphpane.scales[.default] properties)
 

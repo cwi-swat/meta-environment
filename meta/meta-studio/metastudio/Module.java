@@ -11,6 +11,7 @@ import javax.swing.*;
 //}}}
 
 public class Module
+  implements Comparable
 {
   //{{{ attributes
 
@@ -21,7 +22,6 @@ public class Module
   private List _child;
   private ListListModel childListModel;
   private ListListModel parentListModel;
-
 
   //}}}
 
@@ -35,6 +35,15 @@ public class Module
     childListModel = new ListListModel(_child);
     parentListModel = new ListListModel(_parent);
     initChildList();
+  }
+
+  //}}}
+
+  //{{{ public int compareTo(Object o)
+
+  public int compareTo(Object o)
+  {
+    return _name.compareTo(o);
   }
 
   //}}}

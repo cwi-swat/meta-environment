@@ -14,14 +14,55 @@ public class Node
     "node(<str>,<fun>)";
   private ATerm term;
 
+  String name;
+  String shape;
+  int x;
+  int y;
+  int width;
+  int height;
+
   //{{{ public Node(ATerm term)
 
   public Node(ATerm term)
   {
     this.term = term;
+    init();
   }
 
   //}}}
+  private void init()
+  {
+    List result;
+
+    result = term.match(PATTERN_POSITIONED);
+    if (result != null) {
+      name = (String)result.get(0);
+      shape = (String)result.get(1);
+      x = ((Integer)result.get(2)).intValue();
+      y = ((Integer)result.get(3)).intValue();
+      width = ((Integer)result.get(4)).intValue();
+      height = ((Integer)result.get(5)).intValue();
+      return;
+    }
+
+    result = term.match(PATTERN_UNPOSITIONED);
+    if (result != null) {
+      name = (String)result.get(0);
+      shape = (String)result.get(1);
+      width = ((Integer)result.get(2)).intValue();
+      height = ((Integer)result.get(3)).intValue();
+      return;
+    }
+
+    result = term.match(PATTERN_UNSIZED);
+    if (result != null) {
+      name = (String)result.get(0);
+      shape = (String)result.get(1);
+      return;
+    }
+
+    throw new RuntimeException("not a node: " + term);
+  }
   //{{{ public static Node createUnsized(ATerm name)
 
   public static Node createUnsized(ATerm name)
@@ -66,7 +107,7 @@ public class Node
 
   public String getName()
   {
-    return ((ATermAppl)((ATermAppl)term).getArgument(0)).getName();
+    return name;
   }
 
   //}}}
@@ -74,7 +115,7 @@ public class Node
 
   public String getShape()
   {
-    return ((ATermAppl)((ATermAppl)term).getArgument(1)).getName();
+    return shape;
   }
 
   //}}}
@@ -82,19 +123,7 @@ public class Node
 
   public int getWidth()
   {
-    List result;
-
-    result = term.match(PATTERN_POSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(4)).intValue();
-    }
-
-    result = term.match(PATTERN_UNPOSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(2)).intValue();
-    }
-
-    throw new RuntimeException("not a node: " + term);
+    return width;
   }
 
   //}}}
@@ -102,19 +131,7 @@ public class Node
 
   public int getHeight()
   {
-    List result;
-
-    result = term.match(PATTERN_POSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(5)).intValue();
-    }
-
-    result = term.match(PATTERN_UNPOSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(3)).intValue();
-    }
-
-    throw new RuntimeException("not a node: " + term);
+    return height;
   }
 
   //}}}
@@ -122,14 +139,7 @@ public class Node
 
   public int getX()
   {
-    List result;
-
-    result = term.match(PATTERN_POSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(2)).intValue();
-    }
-
-    throw new RuntimeException("not a positioned node: " + term);
+    return x;
   }
 
   //}}}
@@ -137,14 +147,7 @@ public class Node
 
   public int getY()
   {
-    List result;
-
-    result = term.match(PATTERN_POSITIONED);
-    if (result != null) {
-      return ((Integer)result.get(3)).intValue();
-    }
-
-    throw new RuntimeException("not a positioned node: " + term);
+    return y;
   }
 
   //}}}

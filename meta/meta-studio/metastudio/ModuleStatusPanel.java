@@ -3,6 +3,7 @@ package metastudio;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
@@ -32,7 +33,7 @@ public class ModuleStatusPanel
 
   //{{{ public ModuleStatusPanel(ModuleManager moduleManager)
 
-  public ModuleStatusPanel(ModuleManager moduleManager)
+  public ModuleStatusPanel(final ModuleManager moduleManager)
   {
     this.moduleManager = moduleManager;
     moduleManager.addModuleSelectionListener(this);
@@ -53,24 +54,32 @@ public class ModuleStatusPanel
     info.setLayout(new BoxLayout(info, BoxLayout.X_AXIS));
     info.add(infoKeys);
     info.add(infoValues);
-    /*
-    //info.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    info.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-    //info.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-    */
     infoPanel.setLayout(new BorderLayout());
     infoPane = new JScrollPane(info);
     infoPanel.add(infoPane, BorderLayout.CENTER);
 
     importPanel = new JPanel();
     imports = new JList();
+    MouseListener mouseListener =
+      new MouseAdapter() {
+	public void mouseClicked(MouseEvent event) {
+	  String selected = (String)(((JList)event.getSource()).getSelectedValue());
+	  if (selected != null) {
+	    moduleManager.selectModule(selected);
+	  }
+	}
+      };
+    imports.addMouseListener(mouseListener);
+    imports.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     importPanel.setLayout(new BorderLayout());
-    importPanel.add(imports, BorderLayout.CENTER);
+    importPanel.add(new JScrollPane(imports), BorderLayout.CENTER);
 
     parentPanel = new JPanel();
     parents = new JList();
+    parents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    parents.addMouseListener(mouseListener);
     parentPanel.setLayout(new BorderLayout());
-    parentPanel.add(parents, BorderLayout.CENTER);
+    parentPanel.add(new JScrollPane(parents), BorderLayout.CENTER);
 
     tabbedPane.add("Info", infoPanel);
     tabbedPane.add("Imports", importPanel);
