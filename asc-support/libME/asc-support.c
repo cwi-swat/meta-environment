@@ -536,53 +536,44 @@ ATerm make_list(ATerm t)
 
 /*}}}  */
 
-/*{{{  static ATermList call_kids_list(funcptr trav, ATermList args) */
+/*{{{  static ATermList call_kids_trafo_list(funcptr trav, ATermList args) */
 
-static ATermList call_kids_list(funcptr trav, ATermList args, 
+static ATermList call_kids_trafo_list(funcptr trav, ATermList args, 
 				 ATermList extra_args)
 {
   ATermList result = ATempty;
-  int length = ATgetLength(args);
   ATerm el;
 
-  if(length < 16) {
-    while(!ATisEmpty(args)) {
-      el = call_using_list(trav,ATinsert(extra_args,ATgetFirst(args)));
-      if(el)
-        result = ATinsert(result, el);
-      args = ATgetNext(args);
+  for(;!ATisEmpty(args);args = ATgetNext(args)) {
+    el = call_using_list(trav,ATinsert(extra_args,ATgetFirst(args)));
+    
+    if(el) {
+      result = ATinsert(result, el);
     }
-    return ATreverse(result);
   }
-  else {
-    int idx = 0;
-    ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
-    if(!elems) {
-      ATabort("innermost_list: no room for %d elements.\n", length);
-    }
 
-    while(!ATisEmpty(args)) {
-      elems[idx++] = ATgetFirst(args);
-      args = ATgetNext(args);
-    }
-    assert(idx == length);
-
-    for(--idx; idx>=0; idx--) {
-      el = trav(elems[idx]);
-      if(el) {
-        result = ATinsert(result, el);
-      }
-    }
-
-    free(elems);
-    return result;
-  }
+  return ATreverse(result);
 }
 /*}}}  */
+/*{{{  static ATermList call_kids_accu_list(funcptr trav, ATermList args,  */
 
-/*{{{  ATerm call_kids(funcptr trav, ATerm arg0) */
+static ATerm call_kids_accu_list(funcptr trav, ATermList args, 
+	  	                 ATerm accu, ATermList extra_args)
+{
+  for(;!ATisEmpty(args); args = ATgetNext(args)) {
+    accu = call_using_list(trav,ATinsert(
+				  ATinsert(extra_args, accu),
+				    ATgetFirst(args)));
+  }
 
-ATerm call_kids(funcptr trav, ATerm arg0, ATermList extra_args)
+  return accu;
+}
+
+/*}}}  */
+
+/*{{{  ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args) */
+
+ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
 {
   int type = ATgetType(arg0);
 
@@ -612,11 +603,39 @@ ATerm call_kids(funcptr trav, ATerm arg0, ATermList extra_args)
     }
   }
   else if (type == AT_LIST) {
-    arg0 = (ATerm) call_kids_list(trav, (ATermList) arg0, extra_args);
+    arg0 = (ATerm) call_kids_trafo_list(trav, (ATermList) arg0, extra_args);
   }
 
 
   return arg0;
+}
+
+/*}}}  */
+/*{{{  ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args) */
+
+ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
+{
+  int type = ATgetType(arg0);
+
+  if (type == AT_APPL) {
+    int idx;
+    ATermList args;
+    ATermList list;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
+      arg1 = call_using_list(trav, 
+			     ATinsert(
+			       ATinsert(extra_args, arg1),ATgetFirst(list)));
+    }
+  }
+  else if (type == AT_LIST) {
+    arg1 = call_kids_accu_list(trav, (ATermList) arg0, arg1, extra_args);
+  }
+
+  return arg1;
 }
 
 /*}}}  */

@@ -1,5 +1,8 @@
 $Id$
 
+2001/11/02 (jurgenv@cwi.nl)
+ * Added support for transformers and accumulators 
+
 2001/08/28 (jong@cwi.nl)
  * Added #include directives to satisfy gcc-3.0.1
 
