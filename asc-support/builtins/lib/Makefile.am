@@ -28,8 +28,9 @@ LIBRARY_MODULES=basic/Booleans utilities/Measure
 
 EXTRA_DIST = Library.def
 
-noinst_LIBRARIES=libasf-builtins.a
-noinst_HEADERS=asf-builtins.h common.h Library.h Library_dict.h
+lib_LIBRARIES=libasf-builtins.a
+include_HEADERS=asf-builtins.h
+noinst_HEADERS=common.h Library.h Library_dict.h
 
 libasf_builtins_a_SOURCES=\
 	forward.c\
