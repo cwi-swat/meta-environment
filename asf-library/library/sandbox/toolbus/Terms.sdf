@@ -1,12 +1,14 @@
 module Terms
 
-imports Integers Booleans
+imports asf/syntax/Comments
+imports basic/Booleans
+imports basic/Integers
 
 hiddens
   sorts EscChar L-Char
 
 exports
-  sorts Id Vname String Term TermList Var GenVar
+  sorts Real Id Vname String Term TermList Var GenVar
 
   lexical syntax
     [a-z] [A-Za-z0-9\-]*    -> Id
@@ -17,8 +19,11 @@ exports
     [A-Z] [a-zA-Z0-9]*      -> Vname
 
   context-free syntax
-    Bool                    -> Term {cons("boolTerm")}
-    Int                     -> Term {cons("intTerm")}
+    Integer "." NatCon -> Real {cons("real")}
+
+  context-free syntax
+    Boolean                 -> Term {cons("boolTerm")}
+    Integer                 -> Term {cons("intTerm")}
     Real                    -> Term {cons("realTerm")}
     String                  -> Term {cons("stringTerm")}
     Vname                   -> Var {cons("vnameVar")}
