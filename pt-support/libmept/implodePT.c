@@ -15,7 +15,8 @@ ATbool remove_literals = ATfalse;
 ATbool remove_injections = ATfalse;
 ATbool remove_parsetree = ATfalse;
 ATbool implode_lexicals = ATfalse;
- 
+ATbool keep_annotations = ATtrue;
+
 static ATerm implodeTerm(PT_Tree t);
 static ATerm implodeLayout(PT_Tree t);
 static ATerm implodeVar(PT_Tree t);
@@ -204,29 +205,36 @@ static ATerm implodeApplication(PT_Tree tree)
 static ATerm implodeTerm(PT_Tree tree)
 {
   PT_Args args;
+  ATerm result = NULL;
+  ATerm annos = ATgetAnnotations((ATerm)tree);
+  tree = (PT_Tree) ATremoveAnnotations((ATerm) tree);
 
   if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
-    return ATmake("amb(<list>)", implodeArgs(args));
+    result = ATmake("amb(<list>)", implodeArgs(args));
   }
-
-  if (PT_isTreeLexical(tree)) {
-    return implodeLexical(tree);
+  else if (PT_isTreeLexical(tree)) {
+    result = implodeLexical(tree);
   }
-
-  if (PT_isTreeLit(tree)) { 
-    return implodeLiteral(tree);
+  else if (PT_isTreeLit(tree)) { 
+    result = implodeLiteral(tree);
   }                        
-
-  if (PT_isTreeListInjection(tree)) {
-    return implodeListInjection(tree);
+  else if (PT_isTreeListInjection(tree)) {
+    result = implodeListInjection(tree);
   }
-
-  if (!PT_isTreeAppl(tree)) {
+  else if (PT_isTreeAppl(tree)) {
+    result = implodeApplication(tree);
+  }
+  else {
     ATerror("implodeTerm: not an application term: %t\n", tree);
+    return NULL;
   }
 
-  return implodeApplication(tree);
+  if (keep_annotations && result && annos) {
+    result = ATsetAnnotations(result, annos);
+  }
+
+  return result;
 }
 
 ATerm implodeParseTree(PT_ParseTree tree)
