@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include <AsFix.h>
+#include <AsFix2src.h>
 #include <aterm2.h>
 #include "AsFix-access.h"
 #include <deprecated.h>
@@ -32,6 +33,25 @@
 
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
+
+extern ATbool keep_whitespace;
+
+/* temp debug function */
+ATerm text(ATerm asfix)
+{
+	char *temp = (char*) malloc(AFsourceSize(asfix)+1);
+	ATerm term; 
+
+	if(!temp) {
+		ATerror("MRF in text");
+	}
+	AFsource(asfix,temp);
+
+	term = ATmake("<str>",temp);
+	free(temp);
+
+	return term;
+}
 
 /*{{{  equation_table *create_equation_table(int size) */
 
@@ -54,6 +74,7 @@ equation_table *create_equation_table(int size)
   if(!table->table) {
     ATerror("out of memory in create_equation_table\n");
   }
+
   for(i=0; i<size; i++) {
     table->table[i] = NULL;
   }
@@ -275,13 +296,11 @@ void select_equations(char *module)
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
 
-  while (cur && !ATisEqual(cur->module, t_module)) {
+  while(cur && !ATisEqual(cur->module, t_module))
     cur = cur->next;
-  }
 
-  if (!cur) {
+  if(!cur)
     ATerror("equations of module %s have not been registered.\n", module);
-  }
 
   equations = cur;
 }
@@ -336,7 +355,7 @@ void enter_equations(char *modname, ATermList eqs)
 
   table = find_equation_table(modname);
 
-  if (!table) {
+  if(!table) {
     table = create_equation_table(ATgetLength(eqs)*2);
     table->module = ATmake("<str>", modname);
     table->next = tables;
@@ -360,8 +379,8 @@ void delete_equations(char *modname)
 {
   equation_table *cur = tables, *prev = NULL;
   ATerm t_module = ATmake("<str>", modname);
-
-  while (cur && !ATisEqual(cur->module, t_module)) {
+ 
+  while(cur && !ATisEqual(cur->module, t_module)) {
     prev = cur;
     cur = cur->next;
   }
@@ -399,7 +418,8 @@ ATermList prepare_list(ATermList l, ATbool lexcons)
     do {
       el = ATgetFirst(l);
       l = ATgetNext(l);
-    } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
+		} while((asfix_is_whitespace(el) || asfix_is_list_sep(el)) && !keep_whitespace); 
+
     result = ATappend(result, prepare_term(el, lexcons)); 
   }
   return result;
@@ -455,7 +475,7 @@ ATerm prepare_condlist(ATerm conds)
     do {
       cond = ATgetFirst(list);
       list = ATgetNext(list);
-    } while(asfix_is_whitespace(cond) || asfix_is_list_sep(cond));
+    } while((asfix_is_whitespace(cond)|| asfix_is_list_sep(cond)));
     newcond = prepare_cond(cond);
     newconds = ATappend(newconds, newcond);
   }
@@ -701,7 +721,7 @@ ATermList RWprepareEqs(ATermList eqs)
 void RWflushEquations()
 {
   equation_table *table;
-  while (tables) {
+  while(tables) {
     table = tables;
     tables = tables->next;
     destroy_equation_table(table);
@@ -738,15 +758,16 @@ ATermList restore_list(ATerm sym, ATermList l)
       el = ATgetFirst(l);
       newl  = ATappend(newl, RWrestoreTerm(el));
       l = ATgetNext(l);
-      if(!ATisEmpty(l))
+      if(!ATisEmpty(l) && !keep_whitespace) {
 				newl = ATconcat(newl, ATmakeList3(ws[0], newsep, ws[1]));
-    }
+			}
+		}
   } else {
     while(!ATisEmpty(l)) {
       el = ATgetFirst(l);
       newl  = ATappend(newl, RWrestoreTerm(el));
       l = ATgetNext(l);
-      if(!ATisEmpty(l))
+      if(!ATisEmpty(l) && !keep_whitespace)
         newl = ATappend(newl, ws[0]);
     }
   }
@@ -767,15 +788,16 @@ ATermList restore_args(ATermList l)
   ATerm arg, ws;
   ATermList newl = ATempty;
 
-  ws = ATmake("w(\" \")");
-  while(!ATisEmpty(l)) {
-    arg = ATgetFirst(l);
-    newl = ATappend(newl, RWrestoreTerm(arg));
-    l = ATgetNext(l);
-    if(!ATisEmpty(l))
-      newl = ATappend(newl, ws);
-  }
-  return newl;
+	ws = ATmake("w(\" \")");
+	while(!ATisEmpty(l)) {
+		arg = ATgetFirst(l);
+		newl = ATappend(newl, RWrestoreTerm(arg));
+		l = ATgetNext(l);
+		if(!ATisEmpty(l) && !keep_whitespace)
+			newl = ATappend(newl, ws);
+	}
+	return newl;
+	
 }
 
 

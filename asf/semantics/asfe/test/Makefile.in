@@ -25,16 +25,40 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
 
-TESTCASES	= reduce-test
+ATERMLIB    = @ATERMLIB@
+ATERMINC    = @ATERMINC@
+
+INCLUDES   = -I$(ATERMINC)
+LIBS       = -L$(ATERMLIB) -lAsFix -lATerm -lATB
+
+TESTCASES	= reduce-test prepare-restore-test equalModuloWhitespace-test
+BINS            = prepare-restore equalModuloWhitespace
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= ${TESTCASES}
+CLEANFILES	=  ${BINS} *.o
 
-test: ${TESTCASES}
+test: ${TESTCASES} ${BINS}
 	@for testcase in ${TESTCASES}; do \
 		printf "Running $${testcase}"; \
 		sh ./$${testcase}; \
-	done
+	done 
+
+prepare-restore: prepare-restore.c preparation.o evaluator.o evaluator.tif.o
+	$(CC) -o prepare-restore prepare-restore.c preparation.o evaluator.o evaluator.tif.o $(INCLUDES) $(LIBS) 
+
+equalModuloWhitespace: equalModuloWhitespace.c preparation.o evaluator.o evaluator.tif.o
+	$(CC) -o equalModuloWhitespace equalModuloWhitespace.c preparation.o evaluator.o evaluator.tif.o $(INCLUDES) $(LIBS)
+
+# Notice that we use a commandline macro to remove the main function
+# from evaluator.c
+evaluator.o: ../evaluator.c
+	$(CC) -c -Dmain=move_main_away $< $(INCLUDES) 
+
+preparation.o: ../preparation.c
+	$(CC) -c $< $(INCLUDES)
+
+evaluator.tif.o: ../evaluator.tif.c
+	$(CC) -c $< $(INCLUDES)
 
 clean:
 	@rm -f *.o *~ $(CLEANFILES)

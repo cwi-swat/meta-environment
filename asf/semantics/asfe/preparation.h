@@ -60,4 +60,7 @@ void enter_equations(char *module, ATermList eqs);
 ATbool find_module(char *module);
 void delete_equations(char *module);
 
+/* temp debug function */
+ATerm text(ATerm asfix);
+
 #endif
