@@ -342,7 +342,7 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
     if (!strcmp(FN, "") || !strcmp(FN, "-")) {
       output_file = stdout;
     }
-    else if (!(output_file = fopen(FN, "w"))) {
+    else if (!(output_file = fopen(FN, "wb"))) {
       ATerror("%s: cannot create %s\n", prgname, FN);
     }
     IF_VERBOSE(ATwarning("%s: writing %s to %s\n", prgname,
@@ -444,7 +444,7 @@ FILE  *SG_OpenLog(char *prg, char *fnam)
 
   if (!fnam || !strcmp(fnam, ""))
     fnam = ".sglr-log";
-  if (!(SG_Log = fopen(fnam, "w"))) {
+  if (!(SG_Log = fopen(fnam, "wb"))) {
     ATerror("%s%sCannot create logfile %s\n",  SG_COND_STRING(prg), prg?": ":"", fnam);
   }
   IF_VERBOSE(ATwarning("%s%slogging to %s\n",  SG_COND_STRING(prg), prg?": ":"", fnam));
@@ -537,7 +537,7 @@ FILE *SG_OpenFile(char *prgname, char *std_error, char *FN)
     return NULL;
   }
 
-  if (!(file = fopen(FN, "r"))) {
+  if (!(file = fopen(FN, "rb"))) {
     return NULL;
   }
   return file;
