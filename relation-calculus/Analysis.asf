@@ -1,0 +1,32 @@
+equations
+
+[1] get_succ([N] Id := Exp; [M] Stat, Rels) = Rels.add(succ(N, M))
+
+[2] get_succ(Stat1 ; Stat2, Rels) = Rels.add(succ(Stat1, Stat2))
+
+[3] get_succ([N] if Exp then [N1] Stat1 else [N2] Stat2 fi; [M] Stat, Rels) =
+    Rels.add(succ(N, M)).add(succ(N1, M)).add(succ(N2, M))
+
+[4] get_succ([N] while Exp do [[N1] Stat1 od;[M] Stat, Rels) =
+    Rels.add(succ(N, M)).add(succ(N1, N)).add(succ(N1,M))
+
+%%-----
+
+[1] get_def([N] Id := Exp, Rels) = Rels.add(def(N, Id))
+
+%%-----
+
+[1] get_use()
+
+%%----
+
+[1] succ = get_succ(Program, empty_rel),
+    pred = inv(succ),
+    def  = get_def(Program, R1),
+    use  = get_use(Program, R2)
+    range(use)
+    ====================================
+    unitializedVars(Program) = R.def
+
+
+

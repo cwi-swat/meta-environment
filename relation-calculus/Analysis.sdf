@@ -1,0 +1,9 @@
+module Analysis
+
+imports Pico-syntax
+
+exports
+  context-free syntax
+
+     extract(STATEMENT, RELS) -> RELS {traversal(accu)}
+     extract(EXP, RELS)       -> RELS {traversal(accu)}
