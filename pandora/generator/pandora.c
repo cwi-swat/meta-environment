@@ -470,24 +470,17 @@ static PT_Tree transformBox(PT_Tree tree)
 static BOX_Box processBox(PT_Tree tree)
 {
   PT_Args args = PT_getTreeArgs(tree);
-  PT_Tree boxTree = NULL;
 
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
 
-    if (!PT_isTreeLayout(arg) &&
-	!PT_isTreeLit(arg)) {
-      boxTree = arg;
+    if (!PT_isTreeLayout(arg) && !PT_isTreeLit(arg)) {
+      return BOX_BoxFromTerm(PT_TreeToTerm(transformBox(arg)));
     }
     args = PT_getArgsTail(args);
   }
 
-  if (boxTree) {
-    return BOX_BoxFromTerm(PT_TreeToTerm(transformBox(boxTree)));
-  }
-  else {
-    return NULL;
-  }
+  return NULL;
 }
 
 /*}}}  */

@@ -6372,11 +6372,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf_list_4sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp000 ) ) {
-if ( not_empty_list ( atmp100 ) ) {
 FUNC_EXIT ( make_nf1 ( lf_96sym , make_nf1 ( lf_list_4sym , cons ( make_list ( atmp000 ) , make_list ( atmp100 ) ) ) ) ) ;
-}
-}
 }
 }
 }

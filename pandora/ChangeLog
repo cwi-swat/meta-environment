@@ -1,5 +1,13 @@
 # $Id$
 
+Fri Mar  5 10:08:44 CET 2004 <kooiker@cwi.nl>
+ * generator/Box-to-Text.c:
+   - Regenerated: concatenates bytes with newlines correct now
+ * generator/pandora.c:
+   - Return Box term on first match in processBox(tree)
+ * generator/Makefile.am:
+   - added target asfc 
+
 Wed Mar  3 10:20:15 CET 2004 <kooiker@cwi.nl>
  * Bumped to version 1.1 
 

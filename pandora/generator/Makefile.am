@@ -39,6 +39,10 @@ pandora_LDADD = \
 	-L$(ATERM)/lib -lATerm \
 	${SOCKLIBS}
 
+asfc:
+	asfc \
+		-i ${top_builddir}/formatter/text/Box-to-Text.eqs \
+		-o Box-to-Text.c -v
 api:
 	unparsePT < Box.def.pt > Box.def
 	sdf2-to-c -i Box.def --prefix BOX_ -v
