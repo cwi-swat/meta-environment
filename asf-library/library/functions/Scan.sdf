@@ -1,0 +1,28 @@
+module functions/Scan[A B]
+
+imports containers/List[A]
+imports containers/List[B]
+
+exports
+
+context-free syntax
+
+scan -> ((A B => A) A List[[B]] => List[[A]])
+scanl -> ((B A => A) A List[[B]] => List[[A]])
+scanr -> ((A B => A) A List[[B]] => List[[A]])
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A B List[[A]] List[[B]]
+variables
+
+"A""\'"? -> A
+"B""\'"? -> B
+"f" -> (A B => A)
+"f" -> (B A => A)
+"LB" -> List[[B]]
+"LA" -> List[[A]]
+"B*" -> {B ","}*
+"A*" -> {A ","}*

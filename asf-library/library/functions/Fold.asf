@@ -1,6 +1,6 @@
 equations
 
-[] fold(f B LA) = foldr(f B LA)
+[] fold = foldr
 
 [] foldr(f B []) = B
 [] foldr(f B LA) = f(head(LA) foldr(f B tail(LA)))

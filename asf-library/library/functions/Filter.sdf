@@ -1,6 +1,7 @@
 module functions/Filter[A]
 
-imports basic/Booleans containers/List[[A]]
+imports basic/Booleans 
+imports containers/List[A]
 
 exports
 

@@ -1,0 +1,11 @@
+equations
+
+[] scan = scanr
+
+[] scanl ( f A [] ) = [A]
+[] scanl ( f A [B,B*]) = cons(A, [A*])
+    when [A',A*] = scanl ( f f( A B ) [B*]) 
+
+[] scanr (f A []) = [A]
+[] scanr (f A [B,B*]) = cons(f( A B ), [A*])
+    when [A',A*] = scanr(f A [B*])
