@@ -1,7 +1,16 @@
 # $Id$
 
+Thu Feb 12 14:24:05 CET 2004 <jurgenv@cwi.nl>
+ * Sets are completely functional (finally). The syntax is:
+  - union = \/
+  - intersection = /\
+  - difference = \
+  - element test = in
+  - for every infix, there is the corresponding prefix notation
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
 
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
  * fix Makefile.am to get "distcheck" working
