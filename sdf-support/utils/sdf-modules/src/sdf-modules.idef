@@ -1,9 +1,9 @@
 
-tool sdf-imports is { command = "sdf-imports" }
+tool sdf-modules is { command = "sdf-modules" }
 
-process SdfImports is
+process SdfModules is
 let
- SI : sdf-imports,
+ SI : sdf-modules,
  Modules : list,
  ModuleId : str,
  Imports : list,
@@ -12,7 +12,7 @@ let
  Module : term,
  Id : str
 in
-  execute(sdf-imports, SI?) .
+  execute(sdf-modules, SI?) .
   (
     rec-msg(si-get-module-id(Module?)) .
     snd-eval(SI, get-module-id(Module)) .

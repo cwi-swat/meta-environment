@@ -7,7 +7,7 @@
 #include <atb-tool.h>
 
 #include <SDFME-utils.h>
-#include "sdf-imports.tif.h"
+#include "sdf-modules.tif.h"
 
 static char myversion[] = "1.0";
 
@@ -23,7 +23,7 @@ void rec_terminate(int cid, ATerm t)
 
 static void usage(char *prg, ATbool is_err)
 {
-    ATwarning("sdf-imports: an interface to the sdf-support library.\n"
+    ATwarning("sdf-modules: an interface to the sdf-support library.\n"
 	      "This tool can only be executed on the ToolBus platform.\n");
     exit(is_err ? 1 : 0);
 }
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
   SDF_initSDFMEApi();
 
 
-  cid = ATBconnect(NULL, NULL, -1, sdf_imports_handler);
+  cid = ATBconnect(NULL, NULL, -1, sdf_modules_handler);
 
   ATBeventloop();
 
