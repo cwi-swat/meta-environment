@@ -1,6 +1,6 @@
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(tide, 0.3alfa)
+AM_INIT_AUTOMAKE(tide, 0.3a)
 
 ACLOCAL="${ACLOCAL} -I ."
 
