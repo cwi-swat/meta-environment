@@ -25,3 +25,4 @@ hiddens
     "Section"[0-9]*      -> Section
     "Section*"[0-9]*     -> Section*
     "$Symbols"[0-9]*     -> Symbols
+    "ImpSection*"[0-9]*  -> ImpSection*

@@ -72,12 +72,12 @@ equations
 
   [aetm-1'1] add-eqs-to-module(ModuleId, Module*1
                                          module ModuleId
-                                         imports Import*
+                                         ImpSection* imports Import*
                                          Section*
                                          Module*2) =
                Module*1
                module ModuleId
-               imports Import* GEN-Equations
+               ImpSection* imports Import* GEN-Equations
                Section*
                Module*2
 
@@ -93,12 +93,12 @@ equations
 
   [aetm-1'3] add-eqs-to-module(ModuleId, Module*1
                                          module ModuleId[$Symbols]
-                                         imports Import*
+                                         ImpSection* imports Import* 
                                          Section*
                                          Module*2) =
                Module*1
                module ModuleId[$Symbols]
-               imports Import* GEN-Equations
+               ImpSection* imports Import* GEN-Equations
                Section*
                Module*2
 
@@ -111,3 +111,6 @@ equations
                imports GEN-Equations
                Section*
                Module*2
+
+  [aetm-1'4] add-eqs-to-module(ModuleId [ $Symbols ], Module*) =
+              add-eqs-to-module(ModuleId,Module*)
