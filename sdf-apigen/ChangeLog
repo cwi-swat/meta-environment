@@ -1,4 +1,7 @@
 
+2002/12/19 (jurgenv@cwi.nl)
+ * Set version numbers of shared-objects and aterm-java to 1.1beta
+
 2002/11/14 (vinju@loria.fr)
  * CHARLIST implementation brought up-to-date with latest changes in
    adt-to-java
