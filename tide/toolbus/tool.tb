@@ -1,9 +1,6 @@
 
 tool debug-tool    is { /* All kinds of tools */    }
 
-
-/*{{{  process TOOL(T : debug-tool) */
-
 process TOOL(T : debug-tool) is
 let
   Process : proc(<debug-adapter>, <int>),
@@ -69,10 +66,6 @@ in
   ) * rec-disconnect(T)
 endlet
 
-/*}}}  */
-
-/*{{{  process TOOL-CONNECT */
-
 process TOOL-CONNECT is
 let
   T : debug-tool,
@@ -82,6 +75,3 @@ in
     create(TOOL(T), P?)
   ) * delta
 endlet
-
-
-/*}}}  */

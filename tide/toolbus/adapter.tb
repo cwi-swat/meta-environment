@@ -1,8 +1,6 @@
 
 tool debug-adapter is { /* All kinds of adapters */ }
 
-/*{{{  process TIDE-ADAPTER(A : debug-adapter) */
-
 process TIDE-ADAPTER(A : debug-adapter) is
 let
   Process : proc(<debug-adapter>, <int>),
@@ -64,11 +62,6 @@ in
   snd-msg(adapter-disconnected(A)) 
 endlet 
 
-
-/*}}}  */
-
-/*{{{  process TIDE-ADAPTER-CONNECT */
-
 process TIDE-ADAPTER-CONNECT is
 let
   A : debug-adapter,
@@ -78,5 +71,3 @@ in
     create(TIDE-ADAPTER(A), P?)
   ) * delta
 endlet
-    
-/*}}}  */
