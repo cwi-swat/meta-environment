@@ -1,7 +1,8 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(pt-support, 1.1)
 
 ACLOCAL="${ACLOCAL} -I ."
@@ -81,13 +82,12 @@ INSTLIBDIR="$libdir"
 
 dnl }}}
 dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl }}}
 
 dnl {{{  Which files need updating?
-AC_OUTPUT(
-  Makefile
+AC_CONFIG_FILES([Makefile
   libmept/Makefile
   libptmept/Makefile
   test/Makefile
@@ -99,6 +99,7 @@ AC_OUTPUT(
   utils/implodePT/test/out/Makefile
   utils/implodePT/test/terms/Makefile
   utils/implodePT/test/grammar/Makefile
-)
+])
+AC_OUTPUT
 
 dnl }}}
