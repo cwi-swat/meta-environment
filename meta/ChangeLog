@@ -1,5 +1,9 @@
 # $Id$
 
+
+2002/02/07 (jurgenv@cwi.nl)
+ * Release 0.8
+
 2002/01/24 (vandenbr@cwi.nl)
  * Improved the sdf-checker:
    - can deal with circular imports.
