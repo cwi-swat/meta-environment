@@ -488,7 +488,7 @@ in
     .
     (
       rec-msg(io-file-written)
-      . create(EditTermTyped(Filename, Modulename, EditorType), Pid?)
+      . create(EditTerm(Filename, Modulename, EditorType), Pid?)
       . rec-msg(term-editor-started(Filename, Modulename, Sid?))
     +
       rec-msg(io-file-not-written(Error?))
@@ -507,58 +507,12 @@ in
   .
   (
     rec-msg(io-file-written)
-    . create(EditTermTyped(Filename, Modulename, EditorType), Pid?)
+    . create(EditTerm(Filename, Modulename, EditorType), Pid?)
     . rec-msg(term-editor-started(Filename, Modulename, Sid?))
   +
     rec-msg(io-file-not-written(Error?))
     . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
   )
-endlet
-
-process EditTermTyped(Path: str, ModuleId: str, EditorType: term) is
-let
-  AlreadyExists: bool,
-  Available: bool,
-  Error: str,
-  Sid: term,
-  Tree: term,
-  Valid: bool
-in
-  CheckSanity(Path, ModuleId, Valid?)
-  .
-  if equal(Valid, true) then
-    Edit(Path, Sid?)
-    . EditText(Sid, EditorType, AlreadyExists?)
-    . snd-msg(term-editor-started(Path, ModuleId, Sid))
-    .
-    if equal(AlreadyExists, false) then
-      snd-msg(em-bind-session(Sid, ModuleId))
-      . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetTermTree(Path, Tree?, Available?)
-      .
-      if equal(Available, true) then
-        EditStructure(Sid, Tree)
-      else
-        tau
-      fi
-      .
-      (
-        MenuSelected(Sid, EditorType)
-      +
-        MouseClicked(Sid)
-      +
-        TextChanged(Sid)
-      )
-      *
-      EditorDisconnected(Sid)
-      . DeleteSession(Sid)
-    else
-      tau
-    fi
-  else
-    Error := "Term is already being edited over a different module."
-    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
-  fi
 endlet
 
 
@@ -930,6 +884,7 @@ in
       . snd-msg(get-asf-equations-text-hook-result(Text))
     +
       rec-msg(ts-no-value)
+      . Text := ""
       . snd-msg(get-asf-equations-text-hook-result(Text))
     )
   +
@@ -1250,27 +1205,28 @@ endlet
 /* Evaluates ASDF specific button actions */
 process ASDFButtons is
 let
-  Registered : bool,
   ConstraintMod : str,
+  Directory : str,
+  EditorId : term,
+  EditorId2 : term,
   EditorType : term,
+  ErrorMessage : str,
+  Ext : str,
   FileName : str,
   FunSym : term,
   Id : int,
   InStr : str,
   ModuleName : str,
-  EditorId : term,
-  EditorId2 : term,
-  Ext : str,
+  Nonterminal : term,
   ParseSucceeded: bool,
   Path : str,
-  Directory : str,
   Pid: int,
+  Registered : bool,
   RTree : term,
   Stack : list,
   STree : term,
   String : str,
-  Table : term,
-  Nonterminal : term
+  Table : term
 
 in
   Id := process-id .
@@ -1302,12 +1258,14 @@ in
   snd-note(ui-status(errorf("Saving ASF+SDF done"))) .        
   ReturnSuccess(EditorId, Stack)			
 +
-  /* Studio, edit ASDF. */
-  rec-msg(edit-asdf, Stack?, EditorId?) .
-  StackPopString(Stack,Stack?,ModuleName?) .
-  snd-msg(edit-asdf(ModuleName)) .
-  rec-msg(editor-opened(ModuleName,EditorId2?)) .
-  ReturnSuccess(EditorId, Stack)
+  /* Studio, open existing SDF module from disk */
+  rec-msg(open-sdf-module, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, Ext?)
+  . StackPopString(Stack, Stack?, Directory?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . BuildPath(Directory, ModuleName, Ext, Path?)
+  . OpenModule(Path, [sdf, asdf], ModuleName)
+  . ReturnSuccess(EditorId, Stack)
 +
   /* Studio, open existing ASDF module from disk */
   rec-msg(open-asdf-module, Stack?, EditorId?)
@@ -1315,7 +1273,7 @@ in
   . StackPopString(Stack, Stack?, Directory?)
   . StackPopString(Stack, Stack?, ModuleName?)
   . BuildPath(Directory, ModuleName, Ext, Path?)
-  . OpenModule(Path, asdf, ModuleName)
+  . OpenModule(Path, [asdf], ModuleName)
   . ReturnSuccess(EditorId, Stack)
 +
   /* Studio, create new ASDF module on disk */
@@ -1336,11 +1294,31 @@ in
   . CreateModule(Pid, Directory, ModuleName, asdf)
   . ReturnSuccess(EditorId, Stack)	
 +
+  /* Studio, edit ASDF. */
+  rec-msg(edit-asdf, Stack?, EditorId?) .
+  StackPopString(Stack,Stack?,ModuleName?) .
+  snd-msg(edit-asdf(ModuleName)) .
+  rec-msg(editor-opened(ModuleName,EditorId2?)) .
+  ReturnSuccess(EditorId, Stack)
++
   rec-msg(delete-asdf-module, Stack?, EditorId?)
   . StackPopString(Stack, Stack?, ModuleName?)
 /*  . DeleteModule(ModuleName, asdf) */
   . ReturnSuccess(EditorId, Stack) 
 +
+  rec-msg(edit-asdf-term, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, FileName?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . create(EditTerm(FileName, ModuleName, asdf-term-editor), Pid?)
+  .
+  (
+    rec-msg(term-editor-started(FileName, ModuleName, RTree?))
+  +
+    rec-msg(term-editor-not-started(FileName, ModuleName, ErrorMessage?))
+    . Error(ErrorMessage, [])
+  )
+    . ReturnSuccess(EditorId, Stack)
+ +
   /* ASDF editor, Parse ASDF */
   rec-msg(parse-asdf-action, Stack?, EditorId?)
   . StackPopString(Stack,Stack?,ModuleName?)
@@ -1598,6 +1576,7 @@ in
       . snd-msg(invalidate-asdf-in-db(ModuleName))
       . snd-msg(parse-error(Pid, info("No ASDF tree.", [])))
     fi
+    . snd-note(ui-status(endstat(APid)))
 endlet
 
 
