@@ -535,6 +535,11 @@ in
 	snd-msg(update-list-view(ModuleName, Text)) .
         ReturnSuccess(EditorId,Stack)        
       +
+        rec-msg(display-feedback, Stack?, EditorId?) .
+	StackPopTerm(Stack, Stack?, Feedback?) .
+	snd-note(display-feedback-summary(Feedback)) .
+	ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(save-tree, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?) .
         StackPopTerm(Stack,Stack?,Tree?) .

@@ -51,7 +51,7 @@ in
       MDB-GetModuleName(Path, FileName, ModuleName?) .
       EquationsEditorCreator(ModuleName)
     else
-      TermEditorCreator(ModuleName, FullFileName, none)
+      SmartTermEditorCreator(FullFileName)
     fi
   fi
 endlet
@@ -144,6 +144,29 @@ in
     snd-note(ui-status(errorf("Internal error, could not open editor for %s",
                        [ModuleName]))) .
     snd-msg(editor-opened(ModuleName, no-editor))
+  )
+endlet
+
+process SmartTermEditorCreator (FileName : str) is
+let
+  Path : str,
+  Extension : str,
+  ModuleName : str,
+  Name : str,
+  Extensions : list,
+  Tuple : list,
+  StoredExtension : str
+in
+  snd-msg(decons-file-name(FileName, "")) .
+  rec-msg(decons-file-name-result(Path?, Name?, Extension?)) .
+  snd-msg(get-extension-modulename(Extension)) .
+  (
+    rec-msg(extension-modulename(Extension, ModuleName?)) .
+    TermEditorCreator(ModuleName, FileName, none)
+  +
+    rec-msg(no-extension-modulename(Extension)) .
+    snd-note(ui-status(errorf("Extension %s is not registered",
+                       [Extension])))
   )
 endlet
 
