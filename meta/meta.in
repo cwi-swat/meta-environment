@@ -2,6 +2,7 @@
 # $Id$
 
 prefix=@prefix@
+exec_prefix=@exec_prefix@
 libdir=@libdir@
 classdir=@prefix@/classes
 toolbus=@TOOLBUSBIN@/toolbus
