@@ -72,12 +72,6 @@ attr_stmt:
   | NODE attr_list { }
   | EDGE attr_list { };
 
-graph_or_node_or_edge:
-	GRAPH { }
-	| NODE { }
-	| EDGE { }
-	;
-
 opt_attr_list:
 	{ $$.attributes = ATempty; }
 	| attr_list { $$.attributes = $1.attributes; }
@@ -122,7 +116,7 @@ node_stmt:
 
 edge_stmt:
 	node_id edge_rhs opt_attr_list {
-		mergeEdgeAttributes($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
+		addEdge($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
 	}
 	;
 

@@ -16,10 +16,10 @@
 /*}}}  */
 
 static ATermList termStore = NULL;
-static ATermList nodeList;
-static AttributeList graphAttributeList;
-static ATermTable nodeTable;
-static ATermTable edgeTable;
+static ATermList nodeList = NULL;
+static AttributeList graphAttributeList = NULL;
+static ATermTable nodeTable = NULL;
+static EdgeList edgeList = NULL;
 
 
 /*{{{  static void initTermStore() */
@@ -27,8 +27,25 @@ static ATermTable edgeTable;
 static void initTermStore()
 {
   termStore = ATempty;
+  ATprotect((ATerm *)&termStore);
+
   nodeList = ATempty;
+  ATprotect((ATerm*) &nodeList);
+
+  edgeList = makeEdgeListEmpty();
+  ATprotect((ATerm*) &edgeList);
+  
   graphAttributeList = makeAttributeListEmpty();
+  ATprotect((ATerm*) &graphAttributeList);
+}
+
+/*}}}  */
+
+/*{{{  AFun getAttributeType(Attribute attr) */
+
+AFun getAttributeType(Attribute attr)
+{
+  return ATgetAFun((ATermAppl)AttributeToTerm(attr));
 }
 
 /*}}}  */
@@ -103,7 +120,7 @@ static Graph buildGraph()
   }
   nodes = ATreverse(nodes);
 
-  edges = EdgeListFromTerm((ATerm)ATtableValues(edgeTable));
+  edges = edgeList;
 
   return makeGraphDefault(NodeListFromTerm((ATerm)nodes), edges, 
 			  graphAttributeList);
@@ -111,14 +128,6 @@ static Graph buildGraph()
 
 /*}}}  */
 
-/*{{{  AFun getAttributeType(Attribute attr) */
-
-AFun getAttributeType(Attribute attr)
-{
-  return ATgetAFun((ATermAppl)AttributeToTerm(attr));
-}
-
-/*}}}  */
 /*{{{  void protectTerm(ATerm term) */
 
 void protectTerm(ATerm term)
@@ -141,22 +150,6 @@ void storeNodes(NodeList nodes)
 }
 
 /*}}}  */
-/*{{{  void storeEdges(EdgeList edges) */
-
-void storeEdges(EdgeList edges)
-{
-  edgeTable = ATtableCreate(11024, 75);
-  while (!isEdgeListEmpty(edges)) {
-    Edge edge = getEdgeListHead(edges);
-    NodeId from = getEdgeFrom(edge);
-    NodeId to = getEdgeTo(edge);
-    ATerm key = (ATerm)ATmakeList2(NodeIdToTerm(from), NodeIdToTerm(to));
-    ATtablePut(edgeTable, key, EdgeToTerm(edge));
-    edges = getEdgeListTail(edges);
-  }
-}
-
-/*}}}  */
 /*{{{  void mergeNodeAttributes(NodeId nodeId, AttributeList attrs) */
 
 void mergeNodeAttributes(NodeId nodeId, AttributeList attrs)
@@ -172,14 +165,9 @@ void mergeNodeAttributes(NodeId nodeId, AttributeList attrs)
 /*}}}  */
 /*{{{  void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs) */
 
-void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs)
+void addEdge(NodeId from, NodeId to, AttributeList attrs)
 {
-  // Edges are reversed to get the graph in the Meta-Environt to look 'right'
-  ATerm key = (ATerm)ATmakeList2(NodeIdToTerm(to), NodeIdToTerm(from));
-  Edge edge = EdgeFromTerm(ATtableGet(edgeTable, key));
-
-  edge = setEdgeAttributes(edge, mergeAttributes(getEdgeAttributes(edge), attrs));
-  ATtablePut(edgeTable, key, EdgeToTerm(edge));
+  edgeList = makeEdgeListMulti(makeEdgeDefault(from, to, attrs), edgeList);
 }
 
 /*}}}  */
@@ -203,10 +191,8 @@ Graph layoutGraph(Graph graph)
   FILE *f_to_dot;
 
   initTermStore();
-  ATprotect((ATerm *)&termStore);
 
   storeNodes(getGraphNodes(graph));
-  storeEdges(getGraphEdges(graph));
 
   old_stdin = dup(0);
 
@@ -284,7 +270,8 @@ Graph layoutGraph(Graph graph)
 
   initTermStore();
   ATtableReset(nodeTable);
-  ATtableReset(edgeTable);
+  /*ATtableReset(edgeTable);*/
+  edgeList = makeEdgeListEmpty();
 
   return graph;
 }

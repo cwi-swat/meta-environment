@@ -6,6 +6,9 @@ $Id$
  * Fixed a major (but subtle) bug in the conversion from dot to graph. If
    and edge is an 'e' edge, the nodes must be reversed in order for the
    Bezier algorithm to be able to work correctly.
+ * Fixed another bug in layoutgraph, multiple edges with the same beginning
+   and end node were lost due to the merging. We have removed the merging,
+   edge attributes of the incoming graph are lost from now on!
 
 2003/07/09 (markvdb@cwi.nl)
  * Removed explicit ShowSource information.
