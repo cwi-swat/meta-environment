@@ -81,7 +81,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-%.tif.c: %.tifs
+%.tif.c %.tif.h: %.tifs
 	$(ATERMBIN)/tifstoc -tool $* $<
 
 %.tifs: %.idef
