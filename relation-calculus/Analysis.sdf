@@ -3,31 +3,31 @@ module Analysis
 imports Pico-syntax
 imports basic/Integers
 
-
 exports
-
-  sorts RelItem
+  sorts LABEL Item
 
   context-free syntax
-        PICO-ID           -> RelItem
-        PICO-ID # PICO-ID -> RelItem
+     PICO-ID | Integer   ->Item
 
-imports Relations[RelItem]
+imports RelationCalculator[Item]
+
+exports
+  context-free syntax
+     "[" Integer "]"                                                    -> LABEL
+     LABEL STATEMENT                                                    -> STATEMENT
+    "if" LABEL EXP "then" {STATEMENT ";"}* "else" {STATEMENT ";"}* "fi" -> STATEMENT
+    "while" LABEL EXP "do" {STATEMENT ";"}* "od"                        -> STATEMENT
  
   context-free syntax
 
-   uninitialized(Rel[[RelItem]], 
-                 Rel[[RelItem]],
-                 Rel[[RelItem]] )  -> Rel[[RelItem]]               
+      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)}            
+      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
+
+      collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
+      collect(STATEMENT, RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
 
   imports asf/syntax/Comments
 
   variables
-      "Int" [0-9\']*  -> Integer
-      "Defines"       -> Rel[[RelItem]]
-      "Uses"          -> Rel[[RelItem]]
-      "Pred"          -> Rel[[RelItem]]
-      "Succ"          -> Rel[[RelItem]]
-
-
-      "Bag" [0-9\']*  -> Bag[[RelItem]]
+      "Int" [0-9\']*     -> Integer
+      "Rstore" [0-9\']*  -> RSTORE

@@ -6,7 +6,7 @@ exports
   sorts SCRIPT STAT VAR FROM TEXP EXP
 
   lexical syntax
-     [\$]?[A-Za-z][A-Za-z0-9]*                -> VAR
+     [\$]?[A-Za-z][A-Za-z0-9]*               -> VAR
 
   context-free syntax
 
