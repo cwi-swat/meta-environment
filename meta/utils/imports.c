@@ -24,8 +24,10 @@
 #include <errno.h>
 #include <limits.h>
 
-#ifdef HAS_GETOPT_H
+#ifdef HAVE_GETOPT_H
 #include <getopt.h>
+#else
+#include <unistd.h>
 #endif
 extern char* optarg;
 
