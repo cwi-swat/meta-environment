@@ -103,14 +103,15 @@ endlet
 
 process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
 let
-  Text : str
+  Text : str,
+  ErrorMessage : str
 in
   Text := "".
-  snd-msg(open-trm-file(FileName)) .
+  snd-msg(open-file(FileName,"")) .
   (
     rec-msg(opened-file(text(Text?)))
     +
-    rec-msg(error-opening(FileName)) 
+    rec-msg(error-opening(ErrorMessage?)) 
   ).
   CreateEditor("term",ModuleName,FileName,"",Text,Tree)
 endlet
