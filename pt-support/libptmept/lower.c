@@ -525,6 +525,7 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
 
   if (PTPT_isTreeAnnotated(pt)) {
     annos = PTPT_getTreeAnn(pt);
+    pt = PTPT_getTreeTree(pt);
   }
 
   if (PTPT_isTreeAmb(pt)) {
