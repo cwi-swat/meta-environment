@@ -48,14 +48,19 @@ exports
 
   context-free syntax
    "is-production-prod" "(" ATerm ")"         -> Bool
+   "is-prefix-production-prod" "(" ATerm ")"  -> Bool 
    "is-symbols-prod" "(" ATerm ")"            -> Bool
    "is-symbol-iter" "(" ATerm ")"             -> Bool
+   "is-symbol-itersep" "(" ATerm ")"          -> Bool 
    "is-literal-symbol-prod" "(" ATerm ")"     -> Bool
    "is-uqliteral-prod" "(" ATerm ")"          -> Bool
    "is-sort-symbol-prod" "(" ATerm ")"        -> Bool
    "is-no-attr-prod" "(" ATerm ")"            -> Bool
    "is-attr-prod" "(" ATerm ")"               -> Bool
    "is-attr-iter" "(" ATerm ")"               -> Bool
+   "is-traverse-attr-prod" "(" ATerm ")"      -> Bool   
+   "is-prefer-attr-prod" "(" ATerm ")"        -> Bool
+   "is-avoid-attr-prod" "(" ATerm ")"         -> Bool      
    "is-bracket-attr-prod" "(" ATerm ")"       -> Bool
    "is-constructor-attr-prod" "(" ATerm ")"   -> Bool
    "is-memo-attr-prod" "(" ATerm ")"          -> Bool

@@ -86,7 +86,6 @@ exports
   context-free syntax
     "term-get-symbol-prod" "(" ATerm ")"        -> ATerm
     "term-get-args-prod" "(" ATerm ")"          -> ATermList
-    "term-get-args-prefix-prod" "(" ATerm ")"   -> ATermList
     "term-get-attrs-prod" "(" ATerm ")"         -> ATerm
 
 hiddens
