@@ -6,23 +6,14 @@ package toolbus.atom;
 
 import java.util.Random;
 
-import toolbus.Environment;
-import toolbus.MatchResult;
-import toolbus.TBTerm;
-import toolbus.ToolBusException;
-import toolbus.ToolBusInternalError;
-import toolbus.process.ProcessExpression;
-import toolbus.process.ProcessInstance;
+import toolbus.*;
+import toolbus.process.*;
 
-import aterm.ATerm;
-import aterm.ATermList;
+import aterm.*;
 
-public class Atom implements ProcessExpression {
+abstract public class Atom extends AbstractProcessExpression {
   private ATermList args; // arguments of this atom (modified by compile)
-  private AtomSet first; // first set, equals {this}
-  private AtomSet follow; // follow set
-  //private AtomSet partners;	// communication partners in other processes
-  private ProcessInstance process; // process instance to which the atom belongs
+  private ProcessInstance processInstance; // process instance to which the atom belongs
   private Environment env; // the environment of that process instance
   private ATerm test; // optional test that guards this atom
 
@@ -30,10 +21,7 @@ public class Atom implements ProcessExpression {
 
   public Atom() {
     this.args = null;
-    first = new AtomSet();
-    first.add(this);
-    follow = new AtomSet();
-    //partners = new AtomSet();
+    addToFirst(this);
     test = null;
   }
 
@@ -80,19 +68,11 @@ public class Atom implements ProcessExpression {
     return newAtom;
   }
 
-  public AtomSet getFirst() {
-    return first;
-  }
-
-  public AtomSet getFollow() {
-    return follow;
-  }
-
   public void extendFollow(AtomSet f) {
     //System.out.println(this + ": extendFollow(" + f + ")");
     //System.out.println("follow was: " + follow);	
     //if(follow.size() == 0)
-    follow = follow.union(f);
+    addToFollow(f);
 
     //System.out.println("follow becomes: " + follow);
   }
@@ -102,13 +82,13 @@ public class Atom implements ProcessExpression {
   }
 
   public String toString() {
-    int pid = (process == null) ? -1 : process.getProcessId();
+    int pid = (processInstance == null) ? -1 : processInstance.getProcessId();
     String strtest = (test == null) ? "" : " if " + test;
     return this.getClass().getName() + "[" + pid + "]( " + args + ")" + strtest;
   }
 
   public AtomSet getAtoms() {
-    return first;
+    return getFirst();
   }
 
   public boolean canCommunicate(Atom a) {
@@ -130,12 +110,13 @@ public class Atom implements ProcessExpression {
   }
 
   public void compile(ProcessInstance processInstance, AtomSet follow) throws ToolBusException {
-    process = processInstance;
+    this.processInstance = processInstance;
     env = processInstance.getEnv();
-    this.follow = follow;
+    setFollow(follow);
     //System.out.println(this.getClass().getName() + ": compiling " + args);
-    if (args != null)
+    if (args != null) {
       args = (ATermList) TBTerm.compileVars(args, env);
+    }
   }
 
   public boolean execute() throws ToolBusException {
@@ -165,7 +146,7 @@ public class Atom implements ProcessExpression {
   }
 
   public ProcessInstance getProcess() {
-    return process;
+    return processInstance;
   }
 
   public MatchResult matchArgs(Atom b) throws ToolBusException {
