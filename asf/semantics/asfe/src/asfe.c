@@ -4,8 +4,6 @@
 
 #include <time.h>
 
-#define TICK2SEC(t)             (((double)(t))/CLK_TCK)
-
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,16 +15,21 @@
 #include <PTMEPT.h>
 #include <ASFME.h>
 #include <Error.h>
+#include <asc-support-me.h>
 
 #include "asfe.tif.h"
 #include "evaluator.h"
 #include "errors.h"
 #include "test-runner.h"
-#include "asc-support-me.h"
 
 #ifdef USE_TIDE
 #include "debug.h"
 #endif
+
+/*}}}  */
+/*{{{  defines */
+
+#define TICK2SEC(t)             (((double)(t))/CLK_TCK)
 
 /*}}}  */
 /*{{{  variables */
@@ -127,7 +130,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
   ATbool debug;
 
   if (!ATmatch(parseTable, "none")) {
-    setParseTable(parseTable); 
+    setParseTable((SGLR_ParseTable) parseTable); 
   }
 
   if (ATmatch(tide, "on")) {
@@ -261,7 +264,7 @@ int main(int argc, char *argv[])
     if (parsetable != NULL) {
       ATerm pt = ATreadFromNamedFile(parsetable);
       if (pt != NULL) {
-	setParseTable(pt);
+	setParseTable((SGLR_ParseTable) pt);
       }
       else {
 	ATerror("%s: cannot open %s\n", myname, parsetable);

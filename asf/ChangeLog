@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Apr 14 10:54:18 CEST 2004 <m336@cwi.nl>
+ * Call asc-support functions with an SGLR_ParseTable, not ATerm
+
 Tue Mar 23 11:03:14 CET 2004 <{jong,kooiker}@cwi.nl>
  * upgrade wrt to new MEPT API
 
