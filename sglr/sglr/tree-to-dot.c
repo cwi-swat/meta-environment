@@ -200,7 +200,10 @@ appl_node(FILE *dot, term* t, term *fun, int n)
   int c = 0;
   if (TBmatch(fun, "prod([%l], %t, %t)", &args, &res, &attrs))
     {
+/*
       TBprintf(dot, "\tN%d [shape = plaintext label = \"", (int)t);
+*/
+      TBprintf(dot, "\tN%d [label = \"", (int)t);
       print_symbol(dot, res);
       TBprintf(dot, "\"]\n", n);
     }
@@ -237,24 +240,18 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
   PRINTED(t) = FALSE;
   if (TBmatch(t, "%d", &c))
     {
-      /* if ((65 <= c && c <= 90) || (97 <= c && c <= 122))
-	fprintf(dot, "\tN%d%d [shape = plaintext "
-		"label = \"%c\"]\n",
-		parent, c, c);
-	else
-      */
-
-/* JS/tmp
-      TBprintf(dot, "t_t_d TBprintf \tN%d%d%d [shape = plaintext label = \"", parent, child, c);
+      TBprintf(dot, "\tN%d%d%d [label = \"", parent, child, c);
       print_character(dot, c);
       TBprintf(dot, "\"]\n", 0);
-*/
-      fprintf(dot, "\tN%d%d%d [shape = plaintext " 
+      TBprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);      
+/*
+      fprintf(dot, "\tN%d%d%d ["
 	      "label = \"",
 	      parent, child, c);
       print_character(dot, c);
       fprintf(dot, "\"]\n");
       fprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);      
+*/
       prev_char_parent = parent;
       prev_char = c;
     }
@@ -314,9 +311,10 @@ tree_to_dotfile(char *file, term *t)
   prev_char_parent = NULL;
 
   fprintf(dot, "strict digraph ParseTree { \n"
-	  /* "\tranksep = .2; \n" */
-	  "ordering = out; \n"
-	  /* "\tnode [ fontname = Helvetica fontsize = 10 height = .05];\n" */
+	       "\tcenter=true;\n"
+	       "\tordering=out;\n"
+	       "\tranksep=.44;\n"
+	       "\tnode[shape=plaintext fontname=\"Helvetica-Bold\" fontsize=12 height=.32];\n\n"
 	  );
   tree_to_dot(dot, t, 0, NULL);
   fprintf(dot, "}\n");
