@@ -4,10 +4,12 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include "MEPT-utils.h"
-#include <Error-utils.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <MEPT-utils.h>
+#include <Error-utils.h>
+
 #include "position-annotator.tif.h"
 
 /*}}}  */
