@@ -36,7 +36,7 @@ all:    ${PROGRAMS}
 	@for TST in ${PROGRAMS} ; \
 	do \
 		echo "Running test program $${TST}"; \
-		$${TST};  \
+		./$${TST};  \
 		if $? ; then \
 		echo "test program $${TST} OK" ; \
 		else \
