@@ -414,8 +414,8 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
           cur = cur->hnext;
         }
         if (!entered) {
-/* We are still at the first entry!*/
-          if (table->table[hnr] == cur) {
+/* We are still at the first entry and the first entry is a default rule!*/
+          if (table->table[hnr] == cur && ASF_isTagDefault(cur->tag)) {
             table->table[hnr] = entry;
             entry->hnext = cur;
           }
