@@ -1,0 +1,29 @@
+definition
+
+module Main
+imports Trav
+
+module Trav
+imports Layout
+
+exports
+  sorts Symbol
+  lexical syntax
+    [a-z][A-Za-z0-9]* -> Literal
+    
+    [A-Z][A-Za-z0-9]* -> Sort
+
+  context-free syntax
+    Literal          -> Symbol  
+    Sort             -> Symbol                  
+
+  variables
+    "Literal"[0-9]* -> Literal {prefer}
+
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
