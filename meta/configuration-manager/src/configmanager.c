@@ -1,6 +1,6 @@
 /*
-  $Id$
- */   
+   $Id$
+   */   
 
 #include "configmanager.h"
 #include <unistd.h> 
@@ -12,29 +12,29 @@ void rec_terminate(int cid, ATerm t)
 {
   exit(0);
 }
- 
+
 ATerm process_config_file(int cid, char *filename, char *contents)
 {
-  int i,
-      j = 0,
-      line_number = 0,
-      len = strlen(contents);
+  int i;
+  int j = 0;
+  int line_number = 0;
+  int len = strlen(contents);
   char pathline[len];
   ATermList paths = ATempty;
- 
+
   for (i = 0; i < len; i++) {
     if (contents[i] == '\n') {
       if (j != 0 && pathline[0] != '#') {
-        pathline[j] = '\0';
-        while (j > 0 && isspace((int)pathline[j-1])) {
-          pathline[--j] = '\0';
-        }
-        line_number++;
-        j = 0;
-        paths = ATinsert(paths, ATmake("<str>", pathline));
+	pathline[j] = '\0';
+	while (j > 0 && isspace((int)pathline[j-1])) {
+	  pathline[--j] = '\0';
+	}
+	line_number++;
+	j = 0;
+	paths = ATinsert(paths, ATmake("<str>", pathline));
       } 
       else {
-        j = 0;
+	j = 0;
       }
     }
     else {
@@ -50,7 +50,7 @@ ATerm process_config_file(int cid, char *filename, char *contents)
     j = 0;
     paths = ATinsert(paths, ATmake("<str>", pathline));
   }
- 
+
   return ATmake("snd-value(search-paths(<term>))", ATreverse(paths));
 }
 
@@ -78,8 +78,8 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
     if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",modulename))) {
       buttonArgs = ATgetNext(buttonArgs);
       if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",editortype))) {
-        buttonArgs = ATgetNext(buttonArgs);
-        buttonNames = ATinsert(buttonNames,ATgetFirst(buttonArgs));
+	buttonArgs = ATgetNext(buttonArgs);
+	buttonNames = ATinsert(buttonNames,ATgetFirst(buttonArgs));
       }
     }
     localButtons = ATgetNext(localButtons);
@@ -106,8 +106,8 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
       buttonArgs = ATgetNext(buttonArgs);
       buttonArgs = ATgetNext(buttonArgs);
       if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", buttonName))) {
-        buttonArgs = ATgetNext(buttonArgs);
-        buttonActions = (ATermList)ATgetFirst(buttonArgs);
+	buttonArgs = ATgetNext(buttonArgs);
+	buttonActions = (ATermList)ATgetFirst(buttonArgs);
       }
     }
     localButtons = ATgetNext(localButtons);
@@ -115,41 +115,43 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
   if (ATisEmpty(buttonActions)) {
     if (strcmp(buttonName, "Parse") == 0) {
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("parse-action(<str>)", moduleName));
+			       ATmake("parse-action(<str>)", moduleName));
     }
     if (strcmp(buttonName, "Reduce") == 0) {
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("edit(<str>,\"reduct.out\")",
-                                      moduleName));
+			       ATmake("edit(<str>,\"reduct.out\")",
+				      moduleName));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("reduce(<str>)", moduleName));
+			       ATmake("reduce(<str>)", moduleName));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("get-root"));
+			       ATmake("get-root"));
     }
+#if 0
     if (strcmp(buttonName, "ViewTree") == 0) {
       buttonActions = ATinsert(buttonActions,
-                               ATmake("activate-given-tree(\"showdot\")"));
+			       ATmake("activate-given-tree(\"showdot\")"));
       buttonActions = ATinsert(buttonActions,
-                               ATmake("activate-given-tree(\"tree2dot\")"));
+			       ATmake("activate-given-tree(\"tree2dot\")"));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("get-focus"));
+			       ATmake("get-focus"));
     }
+#endif
   }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
 }
 
 void usage(char *prg, ATbool is_err)
 {
-    ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
-    ATwarning("use '%s -at-help' to get more options.\n", prg);
-    ATwarning("This program can only be used as a ToolBus tool!\n");
-    exit(is_err ? 1 : 0);
+  ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
+  ATwarning("use '%s -at-help' to get more options.\n", prg);
+  ATwarning("This program can only be used as a ToolBus tool!\n");
+  exit(is_err ? 1 : 0);
 }
 
 void version(const char *msg)
 {
-    ATwarning("%s v%s\n", msg, myversion);
-    exit(1);
+  ATwarning("%s v%s\n", msg, myversion);
+  exit(1);
 }    
 
 /* Main program */
@@ -159,11 +161,11 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   for (i=1; i<argc; i++) {
-      if (strcmp(argv[i], "-h") == 0) {
-          usage(argv[0], ATfalse);
-      } else if (strcmp(argv[i], "-V") == 0) {
-          version(argv[0]);
-      }
+    if (strcmp(argv[i], "-h") == 0) {
+      usage(argv[0], ATfalse);
+    } else if (strcmp(argv[i], "-V") == 0) {
+      version(argv[0]);
+    }
   }
 
   ATBinit(argc, argv,&bottomOfStack);

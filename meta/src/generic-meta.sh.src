@@ -10,16 +10,12 @@ sglr=__SGLR__
 pgen=__PGEN__
 toolbus=__TOOLBUS__
 xemacs=__XEMACS__
-graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
 metastudio_def=__METASTUDIO_DEF__
-wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${toolbus}/bin:${xemacs}/bin:${PATH}"; 
 export PATH
-
-TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
 # use xemacs by default
 editor="emacs-editor"
@@ -64,13 +60,9 @@ E_O_USAGE
 
 Version() {
     echo "$myname v$myversion" >&2
-    asfchecker -V
-    asfsdfchecker -V
-    asfoperations -V
     baffle -v
     configmanager -V
     editor-manager -V
-    graph-browser -V
     in-output -V
     module-db -V
     parsetablegen -V
@@ -79,10 +71,6 @@ Version() {
     sglr -V
     toolbus -version
     unparsePT -V
-    echo 'puts "wish v$tk_version" ;\
-          package require Tcldot;\
-          puts "tcldot v[package versions Tcldot]";\
-          exit;' | $wish
     xemacs -V
 }
 

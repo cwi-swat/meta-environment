@@ -75,48 +75,22 @@ AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
    [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
 
-dnl Handle --enable-metastudio argument to configure
-AC_ARG_ENABLE(metastudio,
-[  --enable-metastudio     Use Swing GUI instead of Tk GUI],
-METASTUDIO_DEF=-DMETASTUDIO
-UI_PACKAGE=meta-studio,
-UI_PACKAGE=graph-browser
-)
-
-AC_SUBST(METASTUDIO_DEF)
+dnl By default, select meta-studio as the GUI
+UI_PACKAGE=meta-studio
 AC_SUBST(UI_PACKAGE)
 
-AC_PACKAGE_REQUIRE(java, java,
-   [  --with-java=DIR         Java (and Swing) are in DIR (jdk-1.4 and up).],
-      JAVADIR=,)
-AC_SUBST(JAVA)
+METASTUDIO_DEF=-DMETASTUDIO
+AC_SUBST(METASTUDIO_DEF)
 
-dnl Check for wish program
-AC_PACKAGE_REQUIRE(tk, wish8.3 wish8.2 wish8.1 wish8.0 wish,
-   [  --with-tk=DIR           Tk package is in DIR],)
-META_WISH_VERSION_CHECK($TK)
-AC_SUBST(WISH)
-
-dnl Check for graphviz package
-AC_ARG_WITH(graphviz,
-   [  --with-graphviz=DIR     graphviz package is in DIR],
-   GRAPHVIZ=${withval},
-   GRAPHVIZ=""
-)
-  
-dnl Only check version if location of graphviz is determined automagically
-if test x${GRAPHVIZ} = "x"; then
-  AC_PATH_PROGS(GRAPHVIZ, dot)
-  if test x${GRAPHVIZ} = "x"; then
-     AC_ERROR( [ Required package \"graphviz\" not found and not specified with --with-graphviz configuration switch. ])
-  fi     
-  GRAPHVIZ=`dirname ${GRAPHVIZ}`
-  GRAPHVIZ=`dirname ${GRAPHVIZ}`
-  META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
-  META_TCLDOT_CHECK($GRAPHVIZ)
-fi
-
-AC_SUBST(GRAPHVIZ)
+dnl Enable these and comment the meta-studio defs to enable graph-browser
+dnl WISH=wish
+dnl AC_SUBST(WISH)
+dnl 
+dnl GRAPHVIZ=/path/to/graphviz
+dnl AC_SUBST(GRAPHVIZ)
+dnl 
+dnl UI_PACKAGE=graph-browser
+dnl AC_SUBST(UI_PACKAGE)
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
@@ -135,11 +109,6 @@ INSTLIBDIR="$libdir"
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
-
-dnl If anyone knows why this is used...
-AC_AIX
-
-dnl Where to locate a bourne-compatible shell?
 
 dnl Where is perl5?
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
@@ -187,7 +156,6 @@ AC_OUTPUT(
    meta-studio/metastudio/Makefile
    meta-studio/metastudio/graph/Makefile
    graph-browser/Makefile
-   showdot/Makefile
    in-output/Makefile
    module-db/Makefile
    editors/Makefile

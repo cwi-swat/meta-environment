@@ -16,7 +16,6 @@ CLEANFILES  = generic-meta meta.1
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
-	     s@__WISH__@$(WISH)@g;\
 	     s@__XEMACS__@$(XEMACS)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
 	chmod +x $@
