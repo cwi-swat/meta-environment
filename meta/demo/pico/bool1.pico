@@ -1,0 +1,5 @@
+%% $Id$
+
+true & not(false) | true
+
+
