@@ -354,7 +354,6 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
 
   for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
     tree = ATgetFirst(trees);
-
     sort = SG_ApplSort(tree);
     if(sort != NULL) {
       if(!strcmp(desiredsort, sort)) {

@@ -166,6 +166,7 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
   AFun      fun  = ATgetAFun(t);
   ATermList args = ATgetArguments((ATermAppl) t);
 
+
   if(fun == SG_AprodAFun()) {
     return SG_ABBREV ? t :
           (ATermAppl) SG_LookupProduction(pt, ATgetInt(SG_GetProdLabel(t)));
@@ -176,7 +177,7 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
 
   idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
   /*  Are we indeed encountering an ambiguity cluster?  */
-  if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+  if(!(idx && !ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))) {
     if(SG_ABBREV && !recurse)
       return t;
     t = (ATermAppl) ATgetFirst(args);
@@ -190,14 +191,14 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
   }
   /*  Encountered an ambiguity cluster  */
   SG_MaxNrAmb(SG_NRAMB_DEC);
-  /*  Singular?  */
   trms = (ATermList) ATgetFirst(ambs);
+  /*  Singular?  */
   if (ATgetLength(trms) == 1) {
     t = (ATermAppl) ATgetFirst(trms);
     if(recurse)
       return (ATermAppl) SG_YieldPT(pt, (ATerm) t);
     else
-      return t;
+      return SG_ABBREV ? t : SG_ExpandApplNode(pt, t, ATfalse);
   }
   /*  Multiple: this is truly an ambiguous node  */
   SGnrAmb(SG_NRAMB_INC);
@@ -275,7 +276,7 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
       break;
 /*
     case SG_AMBTBL_DUMP:
-      if(ambtbl) dump_ATtable(ambtbl, "AmbTable");
+      if(ambtbl) SG_Dump_ATtable(ambtbl, "AmbTable");
       break;
 */
   }
@@ -310,14 +311,157 @@ ATbool SG_GtrPriority(parse_table *pt, ATermInt l0, ATermInt l1)
   return ATfalse;
 }
 
-ATermInt SG_MaxPriority(parse_table *pt, ATermInt l0, ATermInt l1)
+void SG_MakeMultiSet(ATerm t, ATermTable ms)
 {
-  if(SG_GtrPriority(pt, l0, l1))
-    return l0;
-  if(SG_GtrPriority(pt, l1, l0))
-    return l1;
-  return NULL;
+  ATermInt prodlabel, prevcount;
+  int      count;
+
+  switch(ATgetType(t)) {
+    case AT_APPL:
+      prodlabel = SG_GetApplProdLabel((ATermAppl) t);
+      if((prevcount = (ATermInt) ATtableGet(ms, (ATerm) prodlabel)))
+        count = ATgetInt(prevcount) + 1;
+      else
+        count = 1;
+      ATtablePut(ms, (ATerm) prodlabel, (ATerm) ATmakeInt(count));
+      SG_MakeMultiSet(ATgetArgument((ATermAppl) t, 1), ms);
+      return;
+    case AT_LIST:
+      if(ATisEmpty((ATermList) t))
+        return;
+      for(; !ATisEmpty((ATermList) t); t = (ATerm) ATgetNext((ATermList) t))
+        SG_MakeMultiSet(ATgetFirst((ATermList) t), ms);
+      return;
+/*
+    case AT_INT:
+    case AT_REAL:
+    case AT_PLACEHOLDER:
+    case AT_BLOB:
+*/
+    default:
+      return;
+  }
+  return;  /*  for the compiler's sake  */
 }
+
+int SG_GetMultiSet(ATermTable ms, ATermInt prodlabel)
+{
+  ATermInt val;
+
+  if((val = (ATermInt) ATtableGet(ms, (ATerm) prodlabel)))
+    return ATgetInt(val);
+  return 0;
+}
+
+ATbool SG_MultiSetGtr(parse_table *pt, ATermTable msM, ATermTable msN)
+{
+  ATermInt  x, y;
+  ATermList M, N;
+  ATbool    foundone;
+
+  for(M = ATtableKeys(msM); M && !ATisEmpty(M); M = ATgetNext(M)) {
+    y = (ATermInt) ATgetFirst(M);
+    if(SG_GetMultiSet(msM, y) > SG_GetMultiSet(msN, y)) {
+      foundone = ATfalse;
+      for(N = ATtableKeys(msN); N && !(foundone||ATisEmpty(N));
+          N = ATgetNext(N)) {
+        x = (ATermInt) ATgetFirst(N);
+        if (SG_GetMultiSet(msM, x) < SG_GetMultiSet(msN, x)
+#ifdef ORIGINAL_RULE_FOR_MULTISET_PRIORISATION
+        &&  SG_GtrPriority(pt, y, x)) {
+#else  /*  Alert!  Danger!  Weird things may happen!  */
+        &&  !SG_GtrPriority(pt, x, y)) {
+#endif
+#ifdef DEBUG
+ATfprintf(stderr, "witness -- y: %d, %d == %t > x: %d, %d == %t\n",
+  SG_GetMultiSet(msM, y), SG_GetMultiSet(msN, y), y,
+  SG_GetMultiSet(msM, x), SG_GetMultiSet(msN, x), x);
+#endif  /*  DEBUG  */
+          foundone = ATtrue;
+        }
+      }
+      if(!foundone) {
+#ifndef DEBUG
+        return ATfalse;
+#else
+ATfprintf(stderr, "No witness for y: %d, %d == %t in N\n",
+  SG_GetMultiSet(msM, y), SG_GetMultiSet(msN, y),y);
+ATfprintf(stderr, "Prods x in N such that M(x) < N(x):\n");
+for(N = ATtableKeys(msN); M && !ATisEmpty(N); N = ATgetNext(N)) {
+  x = (ATermInt) ATgetFirst(N);
+  if(SG_GetMultiSet(msM, x) < SG_GetMultiSet(msN, x))
+    ATfprintf(stderr, "  %t: %d, %d\n", x,
+            SG_GetMultiSet(msM, x), SG_GetMultiSet(msN, x));
+}
+ATfprintf(stderr, "Prods x in N such that Gtr-Prio(y, x):\n");
+for(N = ATtableKeys(msN); M && !ATisEmpty(N); N = ATgetNext(N)) {
+  x = (ATermInt) ATgetFirst(N);
+  if(SG_GtrPriority(pt, y, x))
+    ATfprintf(stderr, "  %t > %t: %d, %d\n", y, x,
+              SG_GetMultiSet(msM, x), SG_GetMultiSet(msN, x));
+}
+ATfprintf(stderr, "\n");
+        return ATfalse;
+#endif  /*  DEBUG  */
+      }
+    }
+  }
+
+  return ATtrue;
+}
+
+ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
+{
+  ATermTable multiset1, multiset2;
+  ATermAppl  max = NULL;
+
+  if(ATisEqual(tree1, tree2))
+    return NULL;	/*  multi-prio is irreflexive  */
+
+  multiset1 = ATtableCreate(256, 75);
+  multiset2 = ATtableCreate(256, 75);
+
+  SG_MakeMultiSet((ATerm) tree1, multiset1);
+  SG_MakeMultiSet((ATerm) tree2, multiset2);
+
+  if(SG_MultiSetGtr(pt, multiset1, multiset2)) {
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "MultiSet Priority: %t > %t\n",
+                SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
+    max = tree1;
+  } else if(SG_MultiSetGtr(pt, multiset2, multiset1)) {
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "MultiSet Priority: %t < %t\n",
+                SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
+    max = tree2;
+  } else {
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "MultiSet Priority: %t <> %t\n",
+                SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
+  }
+
+  ATtableDestroy(multiset1);
+  ATtableDestroy(multiset2);
+
+  return max;
+}
+
+ATermAppl SG_MaxPriority(parse_table *pt, ATermAppl t0, ATermAppl t1)
+{
+  ATermInt l0, l1;
+
+  l0 = SG_GetApplProdLabel((ATermAppl) t0);
+  l1 = SG_GetApplProdLabel((ATermAppl) t1);
+
+  if(SG_GtrPriority(pt, l0, l1))
+    return t0;
+  if(SG_GtrPriority(pt, l1, l0))
+    return t1;
+
+  /*  No direct priority relation -- compare using multiset ordering  */
+  return SG_MultiSetPriority(pt, t0, t1);
+}
+
 
 /*
   The function |amb| creates a term of the form |amb([t1,...,tn])|,
@@ -334,12 +478,10 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
   ATerm     ex_annot, nw_annot;
   ATerm     ex_cln, nw_cln;
   ATermInt  index;
-  ATermInt  nw_prd, ex_prd, max_prd;
+  ATermAppl max;
 
   ex_annot = ATgetAnnotation((ATerm) existing, SG_ApplLabel());
   nw_annot = ATgetAnnotation((ATerm) new,      SG_ApplLabel());
-
-  nw_prd = SG_GetApplProdLabel(new);
 
   ambs   = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ex_annot, NULL);
   nw_cln = ATremoveAnnotation((ATerm) new, SG_ApplLabel());
@@ -349,27 +491,27 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
     newidxs = ATmakeList2(ex_annot, nw_annot);
 
     /*  Enforce prioritization, if any, upon these two lovebirds  */
-    ex_prd = SG_GetApplProdLabel(existing);
-    max_prd = SG_MaxPriority(pt, ex_prd, nw_prd);
-    if(max_prd != nw_prd) {
+    max = SG_MaxPriority(pt, existing, new);
+    if(!ATisEqual(max, new)) {
       ex_cln = ATremoveAnnotation((ATerm) existing, SG_ApplLabel());
-      if(max_prd == ex_prd) {
+      if(ATisEqual(max, existing)) {
         newtrms = ATmakeList1(ex_cln);
 	if(SG_DEBUG)
-          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n", ex_prd, nw_prd);
+          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n",
+                    SG_GetApplProdLabel(existing), SG_GetApplProdLabel(new));
       } else {
         newtrms = ATmakeList2(ex_cln, nw_cln);
       }
     } else {
         newtrms = ATmakeList1(nw_cln);
 	if(SG_DEBUG)
-          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n", nw_prd, ex_prd);
+          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n",
+                    SG_GetApplProdLabel(new), SG_GetApplProdLabel(existing));
     }
   } else {
     /* Expand (or update) existing ambiguity */
     ATermList oldtrms;
     ATermAppl prev;
-    ATermInt  prev_prd;
     ATbool    nw_has_lower_priority = ATfalse;
 
     newidxs = ATinsert((ATermList) ATgetLast(ambs), nw_annot);
@@ -378,19 +520,19 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
     for(oldtrms = (ATermList) ATgetFirst(ambs); !ATisEmpty(oldtrms);
         oldtrms = ATgetNext(oldtrms)) {
       prev = (ATermAppl) ATgetFirst(oldtrms);
-      prev_prd = SG_GetApplProdLabel(prev);
-      max_prd = SG_MaxPriority(pt, prev_prd, nw_prd);
-
-      if(max_prd != nw_prd) {
+      max = SG_MaxPriority(pt, prev, new);
+      if(!ATisEqual(max, new)) {
         newtrms = ATinsert(newtrms, (ATerm) prev);
-        if(max_prd == prev_prd) {
+        if(ATisEqual(max, prev)) {
           nw_has_lower_priority = ATtrue;
 	  if(SG_DEBUG)
-            ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n", prev_prd, nw_prd);
+            ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n",
+                      SG_GetApplProdLabel(prev), SG_GetApplProdLabel(new));
         }
       } else {
 	if(SG_DEBUG)
-          ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n", nw_prd, prev_prd);
+          ATfprintf(SGlog(), "Priority: %t > %t (old amb)\n",
+                    SG_GetApplProdLabel(prev), SG_GetApplProdLabel(new));
       }
     }
     if(!nw_has_lower_priority)
