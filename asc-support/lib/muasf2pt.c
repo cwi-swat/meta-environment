@@ -53,6 +53,9 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     }
     args = PT_makeArgsList(termToTree(ATgetFirst(elems)), args); 
     if (sepTree != NULL && !ATisEmpty(ATgetNext(elems))) {
+      if (contextfree) {
+        args = PT_makeArgsList(layout,args);
+      }
       args = PT_makeArgsList(sepTree, args);
     }
   } 
