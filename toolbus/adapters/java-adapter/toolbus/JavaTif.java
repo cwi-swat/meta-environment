@@ -576,15 +576,14 @@ public class JavaTif
   private ATermAppl normalize(ATermAppl appl)
   {
     ATermList args = appl.getArguments();
-    if (!args.isEmpty()) {
-      int len = args.getLength();
-      ATerm[] newargs = new ATerm[len];
-      String type = null;
-
-      for (int i=0; i<len; i++) {
-	ATerm arg = args.getFirst();
-	args = args.getNext();
-	switch (arg.getType()) {
+    int len = args.getLength();
+    ATerm[] newargs = new ATerm[len];
+    String type = null;
+    
+    for (int i=0; i<len; i++) {
+      ATerm arg = args.getFirst();
+      args = args.getNext();
+      switch (arg.getType()) {
 	  case ATerm.APPL:
 	    type = "<term>";
 	    break;
@@ -600,22 +599,17 @@ public class JavaTif
 		&& !type.equals("<real>")) {
 	      type = "<term>";
 	    }
-	    //newargs[i] = arg;
+              //newargs[i] = arg;
 	    break;
 	  case ATerm.LIST:
 	    type = "<term>";
 	    break;
-	}
-	if (newargs[i] == null) {
-	  newargs[i] = factory.parse(type);
-	}
       }
-      args = factory.makeList();
-      for (int i = len-1; i >= 0; i--) {
-	args = factory.makeList(newargs[i], args);
+      if (newargs[i] == null) {
+        newargs[i] = factory.parse(type);
       }
     }
-    return factory.makeApplList(appl.getAFun(), args);    
+    return factory.makeAppl(appl.getAFun(), newargs);    
   }
 
   //}}}
