@@ -1,25 +1,4 @@
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-    The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
   $Id$
  */
 
@@ -123,19 +102,26 @@ in
       rec-msg(module-reverted(ModName?)) .
       snd-ack-event(UI, revert-module(ModName))
     ) +
-    ( rec-event(UI,get-module-info(Str?)).          /* Not yet implemented */ 
-      snd-do(UI,module-info(Str,[["sorry","not implemented"],
-          ["example",""],["dir","/home/leon/asf+sdf/spec/"],["size","10kb"]])).
-      snd-ack-event(UI,get-module-info(Str))
+    ( rec-event(UI, print-module(ModName?)) .
+      snd-msg(print-module(ModName)) .           
+      rec-msg(module-printed(ModName?)) .
+      snd-ack-event(UI, print-module(ModName))
+    ) +
+    ( rec-event(UI,get-module-info(ModName?)).
+      snd-msg(get-module-info(ModName)) .           
+      (
+        rec-msg(module-info(ModName, path(Path?))) .
+        snd-do(UI,module-info(ModName,[["sorry","not implemented"],
+            ["example",""],["dir","%s"],["size","10kb"]]))
+      +
+        rec-msg(no-module-ingo(ModName))
+      ) .
+      snd-ack-event(UI,get-module-info(ModName))
     ) +
     ( rec-event(UI,save-all).                 
       snd-msg(save-all).
       rec-msg(saved).
       snd-ack-event(UI,save-all)
-    ) +
-    ( rec-event(UI,revert-all).                     /* Not yet implemented */
-      snd-note(ui-status(error("TB: not implemented: revert-all"))).
-      snd-ack-event(UI,revert-all)
     ) +
     ( rec-event(UI,clear-all).
       snd-msg(clear-all).
@@ -146,6 +132,10 @@ in
      snd-msg(compile-module(Str, OutputDir)).
      rec-msg(compilation-ready(Str)).
      snd-ack-event(UI, compile-module(Str, OutputDir))
+   ) +
+   ( rec-event(UI, rename-module(Str?, Str1?)) .
+     snd-msg(rename-module(Str, Str1)) .
+     snd-ack-event(UI, rename-module(Str, Str1))
    ) +
    ( rec-event(UI, dump-equations(Str?)).
      snd-msg(dump-equations(Str)).

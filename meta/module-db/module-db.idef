@@ -1,23 +1,4 @@
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
     $Id$
 */
 process ModuleDB is
@@ -34,6 +15,8 @@ let
   EqsTree   : term,
   EqsText   : str,
   Name      : str,
+  OldName   : str,
+  NewName   : str,
   ErrorName : str,
   Time      : int,
   Mdb       : module-db,
@@ -127,6 +110,12 @@ snd-do(Mdb, create-module-db).
   else
     snd-msg(extra-modules([]))
   fi
++
+  rec-msg(rename-module-in-db(OldName?, NewName?)) .
+  snd-eval(Mdb, rename-module(OldName, NewName)) .
+  rec-value(Mdb, import-graph(ActualMods?, Pairs?)) .
+  snd-note(import-graph(ActualMods, Pairs)) .
+  snd-msg(renaming-done(OldName))
 +
   /* Get the list of modules for which the equations are not yet
      available in the database */
@@ -273,6 +262,16 @@ snd-do(Mdb, create-module-db).
 /* Validate the parse table */
   rec-msg(invalidate-parse-tables(Name?)).
   snd-do(Mdb, invalidate-parse-tables(Name))
++
+  rec-msg(get-module-info(Name?)) .
+  snd-eval(Mdb, get-module-info(Name)) .
+  ( 
+    rec-value(Mdb, module-info(Name, path(Path?))) .
+    snd-msg(module-info(Name, path(Path?)))
+  +
+    rec-value(Mdb, no-module-info(Name)) .
+    snd-msg(no-module-info(Name))
+  )
 ) *
 delta
 endlet

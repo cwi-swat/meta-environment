@@ -27,6 +27,7 @@
 #define BAF_EXT	".baf"
 #define TBL_EXT ".tbl"
 #define TRM_EXT ".trm"
+#define TXT_EXT ".txt"
 
 /* Macro for extension of dump of all equations for a module */
 #define EQSDUMP_BAF_EXT ".eqs"
@@ -638,6 +639,39 @@ ATerm save_text_file(int cid, char *filename, char *text)
 }
 
 /*}}}  */
+/*{{{  ATerm print_module_text(int cid, char *modname, char *filename, char *sdftext, char *asftext) */
+
+ATerm print_module_text(int cid, char *modname, char *sdfPath, 
+                        char *sdftext, char *asftext)
+{
+  FILE *file;
+
+  char filename[PATH_LEN] = {'\0'};
+  char  *p;
+
+  strcpy(filename, sdfPath);
+  p = strrchr(filename, '.');
+  if (p != NULL) {
+    strcpy(p, TXT_EXT);
+  }
+
+  if (!(file = fopen(filename, "w"))) {
+    ATwarning("%s: cannot create\n", filename);
+  } 
+  else {
+    fputs(sdftext, file);
+    if (strlen(asftext) > 0) {
+      fputc('\n', file);
+      fputs(asftext, file);
+    }
+    fclose(file);
+  }
+
+  return ATmake("snd-value(module-text-printed(<str>))", modname);
+}
+
+/*}}}  */
+
 
 /*{{{  void rec_terminate(int cid, ATerm arg) */
 

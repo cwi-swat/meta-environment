@@ -1,0 +1,40 @@
+/*
+  $Id$
+ */
+process PrintModule is
+let 
+  Id         : term,
+  SdfTree    : term,
+  SdfText    : str,
+  AsfText    : str,
+  ModuleName : str,
+  Path       : str
+in 
+  Id := process-id. 
+  (
+    rec-msg(print-module(ModuleName?)) .
+    snd-note(ui-status(statf(Id,"Printing %s",[ModuleName]))) .
+    snd-msg(get-sdf2-path-from-db(ModuleName)) .
+    rec-msg(path(Path?)) .
+    snd-msg(get-sdf2-asfix(ModuleName)) .
+    (
+      rec-msg(syntax(SdfTree?))
+    +
+      rec-msg(syntax-unchanged(SdfTree?))
+    ) . 
+    snd-msg(unparse(SdfTree)) .
+    rec-msg(unparsed-text(SdfText?)) .
+    snd-msg(get-eqs-text(ModuleName)) .
+    (
+      rec-msg(eqs-text(ModuleName, AsfText?)) .
+      snd-msg(print-module-text(ModuleName, Path, SdfText, AsfText))
+    +
+      rec-msg(no-eqs-text(ModuleName)) .
+      snd-msg(print-module-text(ModuleName, Path, SdfText))
+    ) . 
+    rec-msg(module-text-printed(ModuleName)) .
+    snd-note(ui-status(endstat(Id))) .  
+    snd-msg(module-printed(ModuleName))
+  ) *
+  delta
+endlet

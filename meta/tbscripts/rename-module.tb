@@ -1,0 +1,20 @@
+/*
+  $Id$
+ */
+process RenameModule is
+let 
+  Id            : term,
+  OldModuleName : str,
+  NewModuleName : str
+in 
+  Id := process-id. 
+  (
+    rec-msg(rename-module(OldModuleName?, NewModuleName?)) .
+    snd-note(ui-status(statf(Id, "Renaming %s",[OldModuleName]))) .
+    snd-msg(delete-editors-for-module(OldModuleName)) .
+    snd-msg(rename-module-in-db(OldModuleName, NewModuleName)) .
+    rec-msg(renaming-done(OldModuleName)) .
+    snd-note(ui-status(endstat(Id)))
+  ) *
+  delta
+endlet

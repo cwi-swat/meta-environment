@@ -1,21 +1,4 @@
 #
-#    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-#    The Netherlands. 
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 # $Id$
 
@@ -601,6 +584,18 @@ proc RevertModules { modlist } {
 
 
 #--
+# PrintModules(ML)
+#-
+# generates the toolbus event to request print the ascii text of modules ML
+#--
+proc PrintModules { modlist } {
+    foreach mod $modlist {
+        GBpost [format "print-module(%s)" [ToId $mod]]
+    }
+}
+
+
+#--
 # DeleteModules(ML)
 #-
 # generates the toolbus event to delete modules ML.
@@ -661,6 +656,50 @@ proc CompileModuleWidget { mods } {
     button $w.buttons.cancel -text Cancel -command "destroy $w"
     pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
     pack $w.message $w.compilerOutput -side top -anchor w
+    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+}
+
+#--
+# RenameModule(M)
+#-
+# generates the toolbus event to request renaming of a module M
+#--
+proc RenameModule { mod } {
+    global newname
+    GBevent "rename-module([ToId $mod],[ToId $newname])"
+}
+
+#--
+# RenameModuleWidget(M)
+#-
+# generates a widget to enter the new name for the selected module.
+#--
+proc RenameModuleWidget { mods } {
+    global g
+
+    set nrModules [llength $mods]
+
+    # Bail out if no modules were selected
+    if { $nrModules != 1 } {
+	Warning "Please select a single module to rename"
+	return
+    }
+
+    set w .renamemodule
+    catch {destroy $w}
+    toplevel $w
+    wm title $w "Rename Module"
+    wm iconname $w "Rename Module"
+    label $w.message -text "New module name:"
+    entry $w.renameOutput -textvariable newname
+    bind $w.renameOutput <Return> "RenameModule $mods ; destroy $w"
+    frame $w.buttons
+    button $w.buttons.confirm \
+	-text OK \
+	-command "RenameModule $mods ; destroy $w"
+    button $w.buttons.cancel -text Cancel -command "destroy $w"
+    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
+    pack $w.message $w.renameOutput -side top -anchor w
     pack $w.buttons -side bottom -expand y -fill x -pady 2m
 }
 
@@ -1037,9 +1076,9 @@ proc define-menu-bar {} {
     menu $m -tearoff 0
     $m add command -label "New"  -underline 0 -command {NewModuleWidget}
     $m add command -label "Open..." -underline 0 -command {OpenModuleWidget}
-    $m add command -label "Save" -underline 0 -command {SaveAll}
     $m add separator
-    $m add command -label "Clear" -underline 0 -command {ClearAll $c $g}
+    $m add command -label "Save All" -underline 0 -command {SaveAll}
+    $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add separator
     $m add cascade -label "Export" -underline 1 -menu $m.export
 
@@ -1140,17 +1179,23 @@ proc define-modules-frame {} {
 	-command {DeleteModules [SelectedModules]}
     button .modules.buttons.compile -text "Compile..." \
 	-command {CompileModuleWidget [SelectedModules]}
+    button .modules.buttons.printmod -text "Print" \
+	-command {PrintModules [SelectedModules]}
     button .modules.buttons.modinfo -text "Info" \
 	-command {GetModuleInfo [SelectedModules]}
+    button .modules.buttons.saveall -text "Save All" \
+        -command {SaveAll}
 
     pack append .modules.buttons \
         .modules.buttons.editsdfmod {top fillx} \
         .modules.buttons.editeqsmod {top fillx} \
 	.modules.buttons.editterm {top fillx} \
         .modules.buttons.savemod {top fillx} \
+        .modules.buttons.saveall {top fillx} \
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
         .modules.buttons.compile {top fillx} \
+        .modules.buttons.printmod {top fillx} \
         .modules.buttons.modinfo {top fillx}
 
     grid .modules.list    -row 0 -column 0 -rowspan 1 \
@@ -1235,9 +1280,13 @@ proc define-module-popup {} {
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModuleWidget [GetObjectName $c]}
-		$m add command -label "Dump Equations..." \
+    $m add command -label "Dump Equations..." \
         -command {DumpEquations [GetObjectName $c]}
     $m add separator
+    $m add command -label "Rename Module..." \
+        -command {RenameModuleWidget [GetObjectName $c]}
+    $m add command -label "Print Module" \
+        -command {PrintModules [GetObjectName $c]}
     $m add command -label "Module Info" \
         -command {GetModuleInfo [GetObjectName $c]}
 }
@@ -1273,9 +1322,13 @@ proc define-modlist-popup {} {
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModuleWidget [SelectedModules]}
-		$m add command -label "Dump Equations..." \
+    $m add command -label "Dump Equations..." \
         -command {DumpEquations [SelectedModules]}
     $m add separator
+    $m add command -label "Rename Module..." \
+        -command {RenameModuleWidget [SelectedModules]}
+    $m add command -label "Print Module" \
+        -command {PrintModules [SelectedModules]}
     $m add command -label "Module Info" \
         -command {GetModuleInfo [SelectedModules]}
 }

@@ -1,27 +1,6 @@
 /*{{{  Copyright notice */
 
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
   $Id$
  */
 
@@ -42,6 +21,7 @@ static char myversion[] = "2.0";
 ATermTable modules_db;
 ATermTable import_db;
 ATermTable trans_db;
+ATermTable eqs_db;
 
 /* adding position info can stop at the condition level */
 #define DEPTH_OF_EQUATIONS   4
@@ -120,18 +100,25 @@ ATerm get_all_equations(int cid, char *moduleName)
 {
   ATerm name;
   ATermList mods;
-  ATerm result;
+  ATerm result, eqs;
 
 /* calculate the transitive closure of the imported modules. */
   
-  name = ATmake("<str>",moduleName);
-  if (complete_asf_specification(ATempty, name)) {
-    mods = get_imported_modules(name);
-    result = ASF_makeTermFromCondEquationList(getEquations(mods)); 
-    return ATmake("snd-value(equations(<term>))", ATBpack(result));
+  name = ATmake("<str>", moduleName);
+  eqs = GetValue(eqs_db, name);
+  if (!eqs) {
+    if (complete_asf_specification(ATempty, name)) {
+      mods = get_imported_modules(name);
+      result = ASF_makeTermFromCondEquationList(getEquations(mods)); 
+      PutValue(eqs_db, name, result);
+      return ATmake("snd-value(equations(<term>))", ATBpack(result));
+    }
+    else {
+      return ATmake("snd-value(equations-incomplete)");
+    }
   }
   else {
-    return ATmake("snd-value(equations-incomplete)");
+    return ATmake("snd-value(equations(<term>))", ATBpack(eqs));
   }
 }
 
@@ -178,7 +165,6 @@ ATerm get_all_equations_for_compiler(int cid, char *moduleName)
 }
 
 /*}}}  */
-
 /*{{{  static void reset_trans_db(void) */
 
 static void reset_trans_db(void)
@@ -190,6 +176,17 @@ static void reset_trans_db(void)
 }
 
 /*}}}  */
+/*{{{  static void reset_eqs_db(void) */
+
+static void reset_eqs_db(void)
+{
+  if (eqs_db != NULL) {
+    ATtableDestroy(eqs_db);
+    eqs_db = CreateValueStore(100,75);
+  }
+}
+
+/*}}}  */
 /*{{{  void create_module_db(int cid) */
 
 void create_module_db(int cid)
@@ -197,6 +194,7 @@ void create_module_db(int cid)
   modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
+  eqs_db = CreateValueStore(100,75);
 }
 
 /*}}}  */
@@ -216,6 +214,7 @@ void clear_module_db(int cid)
   }
 
   reset_trans_db();
+  reset_eqs_db();
 }
 
 /*}}}  */
@@ -866,8 +865,61 @@ ATerm delete_module(int cid, char *moduleName)
   RemoveKey(modules_db,name);
   RemoveKey(import_db,name);
   reset_trans_db();
+  reset_eqs_db();
   return ATmake("snd-value(changed-modules([<term>,<list>]))",
                 name, changedMods);
+}
+
+/*}}}  */
+/*{{{  ATerm rename_module(int cid, char *oldModuleName, char *newModuleName) */
+/* If a module is renamed a new import graph should be returned.
+ */
+
+ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
+{
+  ATerm oldSdfTree, newSdfTree, import_graph;
+  ATerm oldName = ATmake("<str>", oldModuleName);
+  ATerm newName = ATmake("<str>", newModuleName);
+  ATermList changedMods;
+  ATerm entry;
+  PT_ParseTree oldParseTree, newParseTree;
+  PT_Tree oldTree, newTree;
+  SDF_Module oldSdfModule, newSdfModule;
+
+  changedMods = modules_depend_on(oldName, ATempty);
+  update_syntax_status_of_modules(changedMods); 
+  entry     = GetValue(modules_db, oldName);
+
+  if (entry) {
+    oldSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
+    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
+    oldTree      = PT_getParseTreeTree(oldParseTree);
+    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    newSdfModule = SDFsetModuleName(oldSdfModule, newModuleName);
+    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
+    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
+    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
+			     SYN_LOC);
+    entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
+			       SYN_UPDATED_LOC);
+
+    entry = (ATerm)ATreplace((ATermList)entry,
+			       ATparse("unavailable"), EQS_TABLE_LOC);
+    entry = (ATerm)ATreplace((ATermList)entry,
+			       ATparse("unavailable"), TRM_TABLE_LOC);
+    entry = (ATerm)ATreplace((ATermList)entry, 
+                               ATparse("unavailable"), EQS_TREE_LOC); 
+    entry = (ATerm)ATreplace((ATermList)entry, Mtrue, EQS_UPDATED_LOC);
+    PutValue(modules_db, newName, entry);
+
+    RemoveKey(modules_db,oldName);
+    RemoveKey(import_db,oldName);
+    reset_trans_db();
+    reset_eqs_db();
+  }
+  import_graph = calc_import_graph();
+  return ATmake("snd-value(<term>)", import_graph);
 }
 
 /*}}}  */
@@ -880,7 +932,7 @@ select_unknowns(ATermList mods)
 
   while(!ATisEmpty(mods)) {
     ATerm mod = ATgetFirst(mods);
-    if(!GetValue(import_db,mod)) {
+    if(!GetValue(import_db, mod)) {
       if (ATindexOf(result, mod, 0) < 0)
         result = ATappend(result,mod);
     }
@@ -898,6 +950,7 @@ add_imports(ATerm name, ATermList mods)
   ATermList unknowns = ATempty;
 
   reset_trans_db();
+  reset_eqs_db();
   if(!GetValue(import_db,name)) {
     PutValue(import_db, name, (ATerm) mods);
     unknowns = select_unknowns(mods);
@@ -912,6 +965,7 @@ static ATermList
 replace_imports(ATerm name, ATermList mods)
 {
   reset_trans_db();
+  reset_eqs_db();
   ATtableRemove(import_db, name);
   PutValue(import_db, name, (ATerm) mods);
   return select_unknowns(mods);
@@ -1097,8 +1151,9 @@ ATermList get_imported_modules(ATerm name)
     PutValue(trans_db, name, (ATerm) result);
     return result;
   }
-  else
+  else {
     return (ATermList) value;
+  }
 }
 
 /*}}}  */
@@ -1270,6 +1325,27 @@ ATwarning("syntax = %t\n", result);
   }
   else {
     return ATmake("snd-value(sdf2-definition-error(\"Specification is incomplete, can not generate parse table\"))");
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm get_module_info(int cid, char *moduleName) */
+
+ATerm get_module_info(int cid, char *moduleName)
+{
+  ATerm atName, entry, place;
+  char *path;
+
+  atName = ATmake("<str>",moduleName);
+  
+  entry = GetValue(modules_db, atName);
+  place = ATelementAt((ATermList)entry, PATH_SYN_LOC);
+  if (ATmatch(place, "<str>", &path)) {
+    return ATmake("snd-value(module-info(<str>, path(<str>)))", 
+                  moduleName,path);
+  }
+  else {
+    return ATmake("snd-value(no-module-info(<str>))", moduleName);
   }
 }
 

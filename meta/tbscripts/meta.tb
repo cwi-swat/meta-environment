@@ -1,25 +1,4 @@
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
   $Id$
  */
 
@@ -39,6 +18,8 @@
 #include "file-creator.tb"
 #include "close-module.tb"
 #include "revert-module.tb"
+#include "rename-module.tb"
+#include "print-module.tb"
 #include "ui.tb"
 #include "status-display.tb"
 #include "clear-all.tb"
@@ -62,10 +43,10 @@
 #include "configmanager.idef"
 
 toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB, 
-	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
+	ProcessEqs, Save-modules, RevertModule, PrintModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Asfe, 
 	Notify-about-changed-modules, Rewrite-Errors,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Asfc, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
-        Compile-module) 
+        Compile-module, RenameModule) 
 
