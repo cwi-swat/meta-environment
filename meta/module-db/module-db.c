@@ -1221,7 +1221,7 @@ ATerm add_import(int cid, char *modName, char *importedModName,
 
     oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = SDF_addModuleImport(oldSdfModule, sdfImport);
-    ATwarning("%t\n%t\n",SDF_patternStartModule, oldSdfTree);
+
     newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
                      SDF_StartFromTerm(oldSdfTree), newSdfModule));
 

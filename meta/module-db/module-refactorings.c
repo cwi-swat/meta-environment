@@ -238,7 +238,6 @@ static SDF_Grammar delete_modulename_from_grammar(
       orgGrammar = SDF_setGrammarImpSection(orgGrammar, newImpSection);
     }
     else {
-      ATwarning("voila!\n");
       return NULL;
     }
   }
