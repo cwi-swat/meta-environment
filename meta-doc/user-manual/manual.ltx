@@ -1,0 +1,172 @@
+%{{{ LaTeX configuration
+
+% vim:ts=4:sw=4:tw=75
+\documentclass[a4paper,twoside]{article}
+
+%\usepackage{fullpage}
+\usepackage{a4wide}
+\usepackage{verbatim}
+\usepackage{makeidx}
+\usepackage{epsfig}
+
+\makeindex
+
+\newcommand{\ASmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\ATerm}{ATerm}
+\newcommand{\ATerms}{ATerms}
+
+%% notion of Symbol was changed to AFun, which matches specification.
+\newcommand{\Symbol}{AFun}
+
+\newcommand{\ATtrue}{\mbox{\tt ATtrue}}
+\newcommand{\ATfalse}{\mbox{\tt ATfalse}}
+\newcommand{\main}{\mbox{\tt main}}
+\newcommand{\ATinit}{\mbox{\tt ATinit}}
+\newcommand{\ATprotect}{\mbox{\tt ATprotect}}
+\newcommand{\ATprotectArray}{\mbox{\tt ATprotectArray}}
+
+\newcommand{\toolbus}{\mbox{\tt ToolBus}}
+
+% \example{init.c} will input file "examples/init.c" in verbatim mode.
+\newcommand{\example}[1]{
+    \noindent
+    \hrulefill
+    \begin{small}
+    \verbatiminput{examples/#1}
+    \end{small}
+    \hrulefill
+}
+
+% NULL
+\newcommand{\NULL}{{\tt NULL}}               
+
+% Function definition
+\newcommand{\Function}[4]{
+    \vspace{0.3cm}
+    \noindent
+    \framebox[12.6cm][l]{{\bf function:} {\tt #1}} \vspace{0.1cm}\newline
+    \label{#1}
+    \noindent
+    {\bf Summary:\hspace{0.2cm}} #4\newline
+    {\bf Declaration:}
+        {\tt #2} {\tt #1}({\tt #3});
+    \index{#1@{\tt #1}}
+}
+                                        
+
+% Macro definition
+\newcommand{\Macro}[4]{
+    \vspace{0.3cm}
+    \noindent
+    \framebox[12.6cm][l]{{\bf macro:} {\tt #1}} \vspace{0.1cm}\newline
+    \label{#1}
+    \noindent
+    {\bf Summary:\hspace{0.2cm}} #4\newline
+    {\bf Declaration:}
+        {\tt #2} {\tt #1}({\tt #3})
+    \index{#1@{\tt #1}}
+}
+                        
+
+% Method definition
+\newcommand{\Method}[4]{
+    \vspace{0.3cm}
+    \noindent
+    \framebox[12.6cm][l]{{\bf method:} {\tt #1}} \vspace{0.1cm}\newline
+    \label{#1}
+    \noindent
+    {\bf Summary:\hspace{0.2cm}} #4\newline
+    {\bf Declaration:}
+        {\tt #2} {\tt #1}({\tt #3});
+    \index{#1@{\tt #1}}
+}
+
+% Throws exception (optional)
+\newcommand{\Throws}[2]{
+
+\noindent{\bf Throws:} {\tt #1} #2
+}                  
+
+% Function/Macro/Method description (optional)
+\newcommand{\Describe}[1]{
+
+    \noindent{\bf Description:} #1
+}
+
+\def\aterms{\mbox{ATerms}}
+\def\aterm{\mbox{ATerm}}
+\def\asfix{\mbox{\sc AsFix}}
+
+%}}}
+%{{{ Title page and table of contents
+
+%----[ TITLE PAGE ]----           
+\title{\ASmetaenv\ User Manual}
+\author{All\\
+        {\small\sl Centrum voor Wiskunde en Informatica (CWI),}\\
+{\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
+
+\date{}
+\begin{document}
+\maketitle    
+
+\begin{abstract}
+A first version of the \ASmetaenv\ for Release 1.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%}}}
+%{{{ Introduction
+
+%----[ INTRODUCTION ]----  
+\section{Introduction}\label{intro}   
+
+This manual is intended for the first generation user of the new
+\ASmetaenv. In the sequel we will use \ASmetaenv\ to address the new
+system and old \ASmetaenv\ when addressing the old system.
+
+The focus in this manual will be on using the system to write a specification
+like a type checker or evaluator for the PICO language.
+Topics that will be addressed are:
+\begin{itemize}
+\item How to start the system.
+\item How to open a specification.
+\item How to save a specification.
+\item How to edit the syntax and/or equations part of a module.
+\item How to edit a term.
+\item How to evaluate a term.
+\item How to compile a specification.
+\item How to shutdown the system.
+\item How to parse a term outside the \ASmetaenv.
+\item How to rewrite a term using a compiled specification outside the
+\ASmetaenv.
+\item How to unparse parse and/or normalized terms.
+\end{itemize}
+
+\section{Starting the system}
+
+\section{Opening a specification}
+
+\section{Saving a specification}
+
+\section{Editing the syntax part of a module}
+
+\section{Editing the equations of a module}
+
+\section{Editing terms}
+
+\section{Evaluating terms}
+
+\section{Compiling a specification}
+
+\section{Shutting down the system}
+
+\section{Parsing a term outside the \ASmetaenv}
+
+\section{Rewriting a term using a compiled specification}
+
+\section{Unparsing a (parsed/normalized) term}
+
+\end{document}
