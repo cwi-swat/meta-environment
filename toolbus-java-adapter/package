@@ -11,4 +11,6 @@ identification
 configuration interface
 
 requires
-   aterm-java	1.6
+   aterm-java 1.6
+
+
