@@ -133,24 +133,24 @@ if test "a${TOOLBUS}" = "a"; then
 fi
 
 AC_ARG_WITH(gcc,
-   [  --with-gcc          create gcc version of the library (libAsFix-gcc.a)],
+   [  --with-gcc              create gcc version of the library (libAsFix-gcc.a)],
       ASFIX_LIB_GCC=libAsFix-gcc.a)
 
 AC_ARG_WITH(cc,
-   [  --with-cc           create cc version of the library (libAsFix-cc.a)],
+   [  --with-cc               create cc version of the library (libAsFix-cc.a)],
       ASFIX_LIB_CC=libAsFix-cc.a)
 
 AC_ARG_WITH(dbg,
-   [  --with-dbg          create debug version of the library (libAsFix-dbg.a)],
+   [  --with-dbg              create debug version of the library (libAsFix-dbg.a)],
       ASFIX_LIB_DBG=libAsFix-dbg.a)
 
 AC_ARG_WITH(prof,
-   [  --with-prof         create debug version of the library (libAsFix-prof.a)],
+   [  --with-prof             create debug version of the library (libAsFix-prof.a)],
       ASFIX_LIB_PROF=libAsFix-prof.a)
 
 
 AC_ARG_WITH(all,
-   [  --with-all          create all libraries (--with-{gcc,cc,dbg,prof})],
+   [  --with-all              create all libraries (--with-{gcc,cc,dbg,prof})],
       ASFIX_LIB_GCC=libAsFix-gcc.a
       ASFIX_LIB_CC=libAsFix-cc.a
       ASFIX_LIB_DBG=libAsFix-dbg.a
