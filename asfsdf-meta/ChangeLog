@@ -1,5 +1,9 @@
 /* $Id$ */
 
+2003/09/25 (jurgenv@cwi.nl)
+ * Added Format menu option to term editor that pops up a new
+   editor with the same term formatted by ptpretty
+
 2003/09/25 (markvdb@cwi.nl)
  * Added "Edit Equations" to syntax editor and
    added "Edit Syntax" to equation editor.
