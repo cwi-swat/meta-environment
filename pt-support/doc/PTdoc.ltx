@@ -1,7 +1,7 @@
 %%
 %%    MEPT -- The Meta-Environment Parse Tree library 
 %%
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+%%    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
 %%    The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,24 @@
 
 \documentclass[a4paper,twoside]{article}
 
+\usepackage{verbatim}
+\usepackage{makeidx}
+\usepackage{epsfig}
+\usepackage{alltt}
+
+\makeindex
+
+\newcommand{\asmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\sc Sdf}}
+\newcommand{\kernelsdf}{{\sc Kernel-Sdf}}
+\newcommand{\asf}{{\sc Asf}}
+\newcommand{\asfix}{{\sc AsFix2}}
+\newcommand{\asfixme}{{\sc AsFix2ME}}
+\newcommand{\asfsdf}{{\sc Asf}+{\sc Sdf}}
+\newcommand{\aterm}{ATerm}
+\newcommand{\aterms}{ATerms}
+\newcommand{\toolbus}{\mbox{\tt ToolBus}}
+
 \title{The Meta-Environment Parse Tree Library \\
        User Manual \\ 
        $Revision$}
@@ -30,5 +48,193 @@
 
 \date{}
 \begin{document}
-\maketitle    
+\maketitle
+
+\section{Introduction}
+
+The Parse Tree (PT) library of the \asmetaenv\ \cite{BKMO97} defines 
+the format and provides the basic functionality to access parse trees 
+exchanged between and manipulated by the individual components of 
+the environment. 
+The parse tree format is based on \aterms\ \cite{BJKO00} and closely
+related to the \asfix\ parse tree format proposed in \cite{Vis97}.
+The exact characteristics of the Meta-Environment specific parse
+tree format is described in Section \ref{asfix2me}.
+The Meta-Environment Parse Tree library consists of three sub libraries.
+
+The first sub library provides functionality to the parse trees in general. 
+It has no knowledge of what is represented in the parse trees and 
+typical functionality is retrieving the production rule and the
+arguments of the application nodes.
+
+The second sub library provides functionality to \sdf\ parse trees,
+thus parse trees representing parsed \sdf\ specifications.
+Typical functionality is to retrieve the imported modules of
+an \sdf\ module, or to get all context-free functions defined in
+a module.
+
+The third sub library provides functionality to \asf\ parse trees,
+thus parse trees representing parse \asf\ specifications (thus equations).
+
+The core of the second and third sub library are generated via
+the API-GEN tooling \cite{JO01} given the annotated \sdf\
+definitions of \sdf\ and \asf. They provided type-safe manipulation
+of parse trees. On top of this core functionality more sophisticated
+functionality has been implemented, e.g. retrieval of imported modules,
+etc.
+The parse tree library is discussed in more detail in Section \ref{ptlib}.
+
+\section{\asfixme}
+\label{asfix2me}
+
+We will describe the \asmetaenv\ variant of \asfix\ in more detail.
+We will motivate why we want this ``diversion'' and at which points
+the \asmetaenv\ variant differs from plain \asfix.
+
+\subsection{Motivation}
+
+Why has the \asmetaenv\ its own variant of \asfix?
+Over the last 4 years we have been experimenting with various versions
+of parse tree representations, ``AsFix''.
+The first version was very \asfsdf\ specific, the module structure
+was hard-coded in the parse tree, it was an ackward combination
+of an abstract syntax tree with parse tree characteristics,
+all layout was maintained.
+With the development of \sdf2 and SGLR \cite{Vis97} a new version
+of ``AsFix'' was developed, \asfix, it was more regular, it consisted
+only of the application of production rules to arguments.
+However, everything was expressed in these terms, lists, lexicals,
+literals, and layout. This made the resulting terms huge, there
+is a lot of redundancy in these terms.
+The underlying \aterms\ library provides maximal sharing and
+binary encoded terms, so the issue of size and redundancy are
+solved by the underlying library.
+
+The syntax definition formalism \sdf2 supports lists to describe
+the repetition of language constructs, e.g. {\tt A+} (non-empty lists without
+separators) or {\tt \{A ","\}*} (lists with separators).
+In the mapping from \sdf2 to \kernelsdf\ this list constructs
+are transformed into ordinary production rules of
+the form, e.g., {\tt A+ A+ -> A+ \{left\}} and {\tt A -> A+}.
+The \asfix\ term respect the underlying structure as defined by
+the \kernelsdf\ rules.
+So, {\em all} tools that manipulate \asfix\ terms which contain 
+lists have to traverse recusively over these lists.
+It would be more convenient to flatten these lists in advance.
+The same holds for the definition of lexical syntax and layout,
+both are also represented as unflattened tree structures.
+
+The main reason for diversion is not the size or redundancy but
+the ease for developing tools.
+The nested unflattened tree structures are transformed into
+flat lists. In the next section we will describe the differences
+in more detail.
+
+\subsection{Differences in representation}
+
+\paragraph{Implosion of literals}
+The literals in \asfix\ are represented as a tree consisting of
+a production rule and a list of characters representing the lexical,
+e.g., 
+\begin{verbatim}
+appl(prod([char-class([102]),char-class([105]),char-class([120])],
+          lit("fix"),no-attrs),
+     [102,105,120])
+\end{verbatim}
+In \asfixme\ these literal trees are ``imploded'' to {\tt lit("fix")},
+this tree contains the same amount of information but in a more concise
+way.
+
+\paragraph{Flattening of lists}
+The issue of lists has been already briefly discussed above.
+We will now reveal some more details and discuss a few design(?)
+details.
+We will use the \sdf\ of a set as running example and show the
+intermediate \kernelsdf\ and the corresponding tree structures.
+
+\begin{verbatim}
+  context-free syntax
+    "{" {Elem ","}* "}" -> Set
+\end{verbatim}
+The rules generated for {\tt \{Elem ","\}*} are\footnote{We will
+not present the context-free priority rules in order to disambiguate
+lists of elements.}:
+
+\begin{verbatim}
+                              -> {Elem ","}*
+  {Elem ","}+                 -> {Elem ","}*
+  {Elem ","}* "," {Elem ","}* -> {Elem ","}* {left}
+  Elem                        -> {Elem ","}+
+  {Elem ","}+ "," {Elem ","}+ -> {Elem ","}+ {left}
+  {Elem ","}* "," {Elem ","}+ -> {Elem ","}+
+  {Elem ","}+ "," {Elem ","}+ -> {Elem ","}*
+\end{verbatim}
+We have presented these rules as ordinary \sdf\ rules in order to abstract
+from the \kernelsdf\ syntax.
+
+The \asfix\ tree constructed for the term {\tt <Elem>,<Elem>,Elem>}
+looks as follows (we have abstracted from the actual contents of
+the elements, {\tt <Elem>} and layout {\tt <layout>}):
+
+\begin{verbatim}
+appl(
+ prod([cf(iter-sep(sort("Elem"),lit(",")))],
+      cf(iter-star-sep(sort("Elem"),lit(","))),no-attrs),
+ [appl(
+   prod([cf(iter-sep(sort("Elem"),lit(","))),
+         cf(opt(layout)),lit(","),cf(opt(layout)),
+         cf(iter-sep(sort("Elem"),lit(",")))],
+        cf(iter-sep(sort("Elem"),lit(","))),attrs([atr("left")])),
+   [appl(
+     prod([cf(iter-sep(sort("Elem"),lit(","))),
+           cf(opt(layout)),lit(","),cf(opt(layout)),
+           cf(iter-sep(sort("Elem"),lit(",")))],
+          cf(iter-sep(sort("Elem"),lit(","))),attrs([atr("left")])),
+     [appl(prod([cf(sort("Elem"))],
+                 cf(iter-sep(sort("Elem"),lit(","))),no-attrs),
+           [<Elem>]),
+      <layout>, lit(",") <layout>,
+      appl(prod([cf(sort("Elem"))],
+                 cf(iter-sep(sort("Elem"),lit(","))),no-attrs),
+           [<Elem>])]),
+    <layout>, lit(",") <layout>,
+    appl(prod([cf(sort("Elem"))],
+              cf(iter-sep(sort("Elem"),lit(","))),no-attrs),
+         [<Elem>])])])
+\end{verbatim}
+The \asfixme\ tree for the same term looks like:
+
+\begin{verbatim}
+appl(
+ prod([cf(iter-sep(sort("Elem"),lit(",")))],
+      cf(iter-star-sep(sort("Elem"),lit(","))),no-attrs),
+ [[<Elem>,
+   <layout>, lit(",") <layout>,
+   <Elem>,
+   <layout>, lit(",") <layout>,
+   <Elem>]])
+\end{verbatim}
+
+\paragraph{Flattening of lexicals}
+\paragraph{Flattening of layout}
+
+\subsection{Conversion Tooling}
+
+\begin{description}
+\item[{\tt flattenPT}] takes an \asfix\ term and produces an \asfixme\ term.
+\item[{\tt inflatePT}] takes an \asfixme\ term and produces an \asfix\ term.
+\item[{\tt implodePT}] takes an \asfixme\ term and produces an \aterm\ 
+representing an abstract syntax tree in various forms depending on
+the options, e.g., with/without layout, with/without literals, with/without
+constructors, with/without flattened lexicals, etc.
+\item[{\tt a2metoa1}] takes an \asfixme\ term and produces an {\sc AsFix}1
+term, this function is only available for migration purposes and
+will certainly disappear in the (near) future.
+\end{description}
+\section{Library interface}
+\label{ptlib}
+
+\bibliographystyle{alpha}
+\bibliography{PTdoc}
+
 \end{document}
