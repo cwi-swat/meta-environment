@@ -271,7 +271,8 @@ SPEC_SRCS8=\
    AUX-ATerm-Operations5.c AUX-Remove-Lists2.c AUX-ATypes3.c\
    AUX-MuASF-Conds2C3.c AUX-AsFix2muASFnames5.c AUX-Check-List-Pats26.c\
    AUX-Check-List-Pats28.c AUX-ATerm-Operations17.c\
-   AUX-Check-List-Pats22.c AUX-Locate-Constants24.c AUX-Integers4.c
+   AUX-Check-List-Pats22.c AUX-Locate-Constants24.c AUX-Integers4.c\
+   AUX-AsFix2C3.c
 
 SPEC_SRCS = $(SPEC_SRCS1) $(SPEC_SRCS2) $(SPEC_SRCS3) $(SPEC_SRCS4) $(SPEC_SRCS5) $(SPEC_SRCS6) $(SPEC_SRCS7) $(SPEC_SRCS8)
 

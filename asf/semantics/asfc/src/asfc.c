@@ -259,7 +259,7 @@ static ATerm expand_to_asfix(ATerm mod, char *name)
 
 ATerm generate_code(int cid, char *modname, ATerm module)
 {
-  char *text, *fname;
+  char *fname;
   ATerm expmod, reduct, cmod;
   ATerm aname, idname, file, mname, trm;
   int len;

@@ -1,6 +1,6 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -201,12 +201,13 @@ equations
 
   [default-isr-1'3] is-special-rule(Rule) = false
 
-  [islr-1'1] get-funid(Term1) = Funid2,
+  [islr-1'1] Cond = term_equal(Term3,Term4) =: t,
+             get-funid(Term1) = Funid2,
              get-funid(Term2) = Funid2,
              is-lhs(Funid1,Term1) = true,
              is-rhs(Funid1,Term2) = true
              ===========================
-             is-like-rule(Funid1,Cond* ==> Term1 = Term2) = true
+             is-like-rule(Funid1,Cond ==> Term1 = Term2) = true
 
   [default-islr-1'4] is-like-rule(Funid,Rule) = false
 
