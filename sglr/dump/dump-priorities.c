@@ -28,7 +28,7 @@ void DumpOnePriority(FILE *out, parse_table *pt, int l)
 {
   ATermList pr;
 
-  if((pr = SG_LookupPriority(pt, SG_SETLABEL(l))))
+  if((pr = SG_LookupGtrPriority(pt, SG_SETLABEL(l))))
     ATfprintf(out,"%d\t%t\n", l, pr);
 }
 
