@@ -1,5 +1,7 @@
 # $Id$
 
+SUBDIRS=snapshot
+
 include $(top_srcdir)/make_rules
 
 EXTRA_DIST = term-store.idef
