@@ -28,3 +28,7 @@ exports
     "default-"         -> TagId
   context-free syntax
                        -> TagId  
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
