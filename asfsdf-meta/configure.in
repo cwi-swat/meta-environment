@@ -27,7 +27,7 @@ AC_OUTPUT(
   src/Makefile
   test/Makefile
   demo/Makefile
+  demo/old-pico/Makefile
   demo/pico/Makefile
-  demo/new-pico/Makefile
   demo/user-manual-examples/Makefile
 )
