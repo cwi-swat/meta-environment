@@ -1,15 +1,15 @@
 # $Id$
 
-2002/18/04 (jurgenv@cwi.nl)
+2002/04/18 (jurgenv@cwi.nl)
  * Added a tool called 'metascript' that generates scripts with a common
    commandline interface to call the parser with a fixed parsetable and
    to run a fixed compiled specification. 
 
-2002/18/04 (vandenbr@loria.fr)
+2002/04/18 (vandenbr@loria.fr)
  * Variables are visualized with "*variable*" again, this bug
     was the result of the bug fix on 2002/03/26.
 
-2002/17/04 <olivierp@cwi.nl>
+2002/04/17 (olivierp@cwi.nl)
  * Fixed 'animation problem', greatly improving module open time
  * Improved paint/scroll speed of graph window
  * Fixed bugs in module list
@@ -17,30 +17,30 @@
  * You can now use mouse dragging in the graph window to scroll the whole graph
  * Added workaround for swing bug (fillRect cannot handle coordinates > 32k)
 
-2002/16/04 <olivierp@cwi.nl>
+2002/04/16 (olivierp@cwi.nl)
  * Introduced flexible scaling (graphpane.scales[.default] properties)
 
-2002/03/04 <olivierp@cwi.nl>
+2002/04/03 (olivierp@cwi.nl)
  * Added new user interface (MetaStudio), add --with-metastudio to activate
 
-2002/22/03 (jurgenv@cwi.nl)
+2002/03/22 (jurgenv@cwi.nl)
  * Removed superfluous tool 'parse-sdf2'; a simpler sglr wrapper with
    the same name is located in the sglr package.
 
-2002/22/03 (vandenbr@loria.fr)
+2002/03/22 (vandenbr@loria.fr)
   * Restructured the Sdf-Checker and moved to pgen and asf.
 
-Fri Mar  8 15:07:32 CET 2002 <jong@cwi.nl>
+2002/03/08 (jong@cwi.nl)
  * in editors/structure, renamed Editor.[ch] to EditorData.[ch] to
    avoid conflicts on filename-case-insensitive platforms.
 
-Tue Mar  5 23:27:25 CET 2002 <jong@cwi.nl>
+2002/03/05 (jong@cwi.nl)
  * Refactored gvim-support. That is, I removed it alltogether from
    the meta package, and put it in its own package. This should
    fix the libtool problems until the next person decides to use
    a dynamic library :)
 
-2002/04/03 (jurgenv@cwi.nl)
+2002/03/04 (jurgenv@cwi.nl)
  * Added support for lexical variables in sdf-checker
 
 2002/01/03 ({jong,jurgenv}@cwi.nl)
