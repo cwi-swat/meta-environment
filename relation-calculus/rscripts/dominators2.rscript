@@ -16,7 +16,7 @@ rel[int,int] PRED = {
 <10,7>
 }
 
-bag[int] VERTICES = unique(carrier(PRED))
+bag[int] VERTICES = carrier(PRED)
 
 bag[int] R1 =  range(reachX({ROOT}, {1}, PRED))
 bag[int] R2 =  range(reachX({ROOT}, {2}, PRED))
