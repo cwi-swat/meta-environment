@@ -39,14 +39,14 @@ in
   else
     ModuleId := quote(trm(ModuleName))
   fi .
-  if not-equal(Table, no-table) then 
+  if equal(Table, no-table) then 
+    Tree := error-tree .
+    ParseError := no-parse-table
+  else
     snd-note(ui-status(statf(Id,"Parsing %s", [ModuleId]))).
     snd-msg(Id, parse-string-given-table(ModuleId, Table, Nonterminal, Text, Path)).
     rec-msg(parse-result-asfix2me(Id, Tree?, ParseError?)) .
     snd-note(ui-status(endstat(Id)))
-  else
-    Tree := error-tree .
-    ParseError := no-parse-table
   fi
 endlet
 
@@ -74,54 +74,28 @@ in
   fi
 endlet
 
-process ProcessParseError(Path : str, ParseError: term) is
-let
-  FunSym : str
-in
-  FunSym := fun(ParseError) .
-  snd-note(remove-feedback-summary("sglr", Path)) .
-  if not-equal(FunSym, "no-errors") then
-    snd-note(show-feedback-summary(ParseError)) 
-  else
+process ProcessParseError(ParseError: term) is
+  if equal(fun(ParseError), "no-errors") then
     tau
-  fi
-endlet
-
-process PrepareParseErrorForEditor(ModuleName : str, EditorId : term,
-			           Focus : term, ParseError : term) is
-let
-  Location : term,
-  FunSym : str,
-  Offset : int,
-  Feedback : term,
-  FileName : str
-in
-  FunSym := fun(ParseError) .
-  if equal(FunSym, "no-parse-table") then
-    snd-msg(te-display-message(EditorId, "No parse table available")) .
-    snd-msg(parse-failed(ModuleName, Focus))
   else
-    snd-msg(get-editor-filename(EditorId)) .
-    rec-msg(editor-filename(FileName?)) .
-    snd-note(remove-feedback-summary("sglr", FileName)) .
-    if not-equal(FunSym, "no-errors") then
-      snd-msg(get-summary-first-feedback(ParseError)) .
-      rec-msg(summary-first-feedback(Feedback?)) .
-      snd-msg(get-feedback-first-location(Feedback)) .
-      rec-msg(feedback-first-location(Location?)) .
-      snd-msg(get-location-offset(Location)) .
-      (
-	rec-msg(location-offset(Offset?)) .
-	snd-msg(te-set-cursor-at-offset(EditorId, Offset)) .
-	snd-msg(te-display-message(EditorId, "Parse error near cursor"))
-      +
-	rec-msg(no-location-offset) .
-	snd-msg(te-display-message(EditorId, "Parse error at unknown location"))
-      ) .
-      snd-note(show-feedback-summary(ParseError)) .
-      snd-msg(parse-failed(ModuleName, Focus))
-    else
-      tau
-    fi
+    snd-note(remove-feedback-summary(ParseError)) .
+    snd-note(show-feedback-summary(ParseError)) 
   fi
-endlet
+
+process HandleParseErrors(ModuleName: str, EditorId: term,
+			  Focus: term, ErrorSummary: term) is
+  if equal(fun(ErrorSummary), "no-errors") then
+    tau
+  else
+    /* For now, set the error message right here. Change when
+     * parse table retrieval uses the error API at which time
+     * we don't have to construct an ad-hoc error message here.
+     */
+    if equal(fun(ErrorSummary), "no-parse-table") then
+      snd-msg(te-display-message(EditorId, "No parse table available"))
+    else
+      printf("HandleParseErrors: ErrorSummary = %t\n\n", ErrorSummary) .
+      ShowSummary(ErrorSummary)
+    fi .
+    snd-msg(parse-failed(ModuleName, Focus))
+  fi

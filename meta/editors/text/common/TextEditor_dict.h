@@ -37,7 +37,7 @@ extern ATerm TE_patternActionSetActions;
 extern ATerm TE_patternActionGetContents;
 extern ATerm TE_patternActionSetFocus;
 extern ATerm TE_patternActionClearFocus;
-extern ATerm TE_patternActionSetFocusAtLocation;
+extern ATerm TE_patternActionSetFocusAtArea;
 extern ATerm TE_patternActionSetCursorAtOffset;
 extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionRereadContents;

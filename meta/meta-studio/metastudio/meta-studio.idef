@@ -4,42 +4,40 @@ tool user-interface is {
 
 process Ui is
 let
-  UI      : user-interface,
-  Id      : term,
-  Str     : str,
-  Pairs   : list,
-  Mods    : list,
-  FileName : str,
-  Path    : str,
-  Extension : str,
-  On      : term,
-  Graph   : term,
-  LayoutedGraph : term,
-  ModuleName : str,
-  EnvironmentName : str,
-  GraphId : str,
   ActionEvent : term,
-  Tree : term,
-  ButtonNames : str,
-  ButtonList : list,
-  Title : str,
   Answer : term,
-  Type : term,
   Arguments : list,
-  ModuleList : term,
-  EditorId : term,
-  Error : term,
-  Summary : term,
-  Choices : list,
+  ButtonList : list,
+  ButtonNames : str,
   Choice : str,
+  Choices : list,
+  EditorId : term,
+  EnvironmentName : str,
+  Error : term,
+  Extension : str,
+  FileName : str,
+  Graph : term,
+  GraphId : str,
+  Id : term,
+  LayoutedGraph : term,
+  Mods : list,
+  ModuleList : term,
+  ModuleName : str,
+  On : term,
+  Pairs : list,
+  Path : str,
   Question : str,
-  Producer : str,
-  SummaryId : str
+  Str : str,
+  Summary : term,
+  Title : str,
+  Tree : term,
+  Type : term,
+  UI : user-interface
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
   subscribe(show-feedback-summary(<term>)) .
-  subscribe(remove-feedback-summary(<str>,<str>)) .
+  subscribe(remove-feedback-summary(<term>)) .
   Id := process-id.
 #ifdef ECLIPSE
   rec-connect(UI?) . 
@@ -81,8 +79,8 @@ in
       rec-note(show-feedback-summary(Summary?)) .
       snd-do(UI, show-feedback-summary(Summary))
     +
-      rec-note(remove-feedback-summary(Producer?, SummaryId?)) .
-      snd-do(UI, remove-feedback-summary(Producer, SummaryId))
+      rec-note(remove-feedback-summary(Summary?)) .
+      snd-do(UI, remove-feedback-summary(Summary))
     ) * delta 
   ||
     ( 

@@ -275,18 +275,14 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 
 static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
 {
-  ATerm locationTerm = TE_getActionErrorLocation(edAction);
-  LOC_Location location = LOC_LocationFromTerm(locationTerm);
-  LOC_Area area = LOC_getLocationArea(location);
+  ATerm areaTerm = TE_getActionArea(edAction);
+  LOC_Area area = LOC_AreaFromTerm(areaTerm);
+  int start = LOC_getAreaOffset(area);
+  int length = LOC_getAreaLength(area);
+  char buf[BUFSIZ];
 
-  if (LOC_isAreaArea(area)) {
-    int start = LOC_getAreaOffset(area);
-    int length = LOC_getAreaLength(area);
-    char buf[BUFSIZ];
-
-    sprintf(buf, "(set-focus %d %d)", start, start+length);
-    sendToEmacs(write_to_editor_fd, buf);
-  }
+  sprintf(buf, "(set-focus %d %d)", start, start+length);
+  sendToEmacs(write_to_editor_fd, buf);
 }
 
 /*}}}  */

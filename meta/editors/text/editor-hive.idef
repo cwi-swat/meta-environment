@@ -7,13 +7,13 @@ tool editor-hive is {
 process EditorHive is
 let
   ActionList : list,
+  Area : term,
   EditorId : term,
   Editor : str,
   FileName : str,
   Focus : term,
   FocusText : str,
   Hive : editor-hive,
-  Location : term,
   Offset : int,
   MenuEvent : term,
   Message : str
@@ -52,8 +52,8 @@ in
     rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
   +
-    rec-msg(te-set-focus-at-location(EditorId?, Location?))
-    . snd-do(Hive, set-focus-at-location(EditorId, Location))
+    rec-msg(te-set-focus-at-area(EditorId?, Area?))
+    . snd-do(Hive, set-focus-at-area(EditorId, Area))
   +
     rec-msg(te-editor-to-front(EditorId?))
     . snd-do(Hive, editor-to-front(EditorId))

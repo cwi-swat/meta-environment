@@ -226,9 +226,9 @@ TE_Action TE_makeActionRereadContents()
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionDisplayMessage(char* message) */
+/*{{{  TE_Action TE_makeActionDisplayMessage(const char* message) */
 
-TE_Action TE_makeActionDisplayMessage(char* message)
+TE_Action TE_makeActionDisplayMessage(const char* message)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
 }
@@ -242,11 +242,11 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionSetFocusAtLocation(ATerm errorLocation) */
+/*{{{  TE_Action TE_makeActionSetFocusAtArea(ATerm area) */
 
-TE_Action TE_makeActionSetFocusAtLocation(ATerm errorLocation)
+TE_Action TE_makeActionSetFocusAtArea(ATerm area)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) errorLocation));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) area));
 }
 
 /*}}}  */
@@ -298,17 +298,17 @@ TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_makeMenuDefault(char* main, char* sub) */
+/*{{{  TE_Menu TE_makeMenuDefault(const char* main, const char* sub) */
 
-TE_Menu TE_makeMenuDefault(char* main, char* sub)
+TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
 {
   return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_makeMenuShortcut(char* main, char* sub, char* shortcut) */
+/*{{{  TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut) */
 
-TE_Menu TE_makeMenuShortcut(char* main, char* sub, char* shortcut)
+TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut)
 {
   return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
@@ -330,9 +330,9 @@ TE_Event TE_makeEventMouse(int location)
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_makeEventContents(char* text) */
+/*{{{  TE_Event TE_makeEventContents(const char* text) */
 
-TE_Event TE_makeEventContents(char* text)
+TE_Event TE_makeEventContents(const char* text)
 {
   return (TE_Event)(ATerm)ATmakeAppl1(TE_afun15, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
 }
@@ -418,7 +418,7 @@ ATbool TE_isValidAction(TE_Action arg)
   else if (TE_isActionSetCursorAtOffset(arg)) {
     return ATtrue;
   }
-  else if (TE_isActionSetFocusAtLocation(arg)) {
+  else if (TE_isActionSetFocusAtArea(arg)) {
     return ATtrue;
   }
   else if (TE_isActionClearFocus(arg)) {
@@ -547,9 +547,9 @@ inline ATbool TE_isActionSetCursorAtOffset(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool TE_isActionSetFocusAtLocation(TE_Action arg) */
+/*{{{  inline ATbool TE_isActionSetFocusAtArea(TE_Action arg) */
 
-inline ATbool TE_isActionSetFocusAtLocation(TE_Action arg)
+inline ATbool TE_isActionSetFocusAtArea(TE_Action arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -560,7 +560,7 @@ inline ATbool TE_isActionSetFocusAtLocation(TE_Action arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocusAtLocation, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocusAtArea, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -677,9 +677,9 @@ char* TE_getActionMessage(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_setActionMessage(TE_Action arg, char* message) */
+/*{{{  TE_Action TE_setActionMessage(TE_Action arg, const char* message) */
 
-TE_Action TE_setActionMessage(TE_Action arg, char* message)
+TE_Action TE_setActionMessage(TE_Action arg, const char* message)
 {
   if (TE_isActionDisplayMessage(arg)) {
     return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))), 0), 0);
@@ -723,35 +723,35 @@ TE_Action TE_setActionOffset(TE_Action arg, int offset)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasActionErrorLocation(TE_Action arg) */
+/*{{{  ATbool TE_hasActionArea(TE_Action arg) */
 
-ATbool TE_hasActionErrorLocation(TE_Action arg)
+ATbool TE_hasActionArea(TE_Action arg)
 {
-  if (TE_isActionSetFocusAtLocation(arg)) {
+  if (TE_isActionSetFocusAtArea(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATerm TE_getActionErrorLocation(TE_Action arg) */
+/*{{{  ATerm TE_getActionArea(TE_Action arg) */
 
-ATerm TE_getActionErrorLocation(TE_Action arg)
+ATerm TE_getActionArea(TE_Action arg)
 {
   
     return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_setActionErrorLocation(TE_Action arg, ATerm errorLocation) */
+/*{{{  TE_Action TE_setActionArea(TE_Action arg, ATerm area) */
 
-TE_Action TE_setActionErrorLocation(TE_Action arg, ATerm errorLocation)
+TE_Action TE_setActionArea(TE_Action arg, ATerm area)
 {
-  if (TE_isActionSetFocusAtLocation(arg)) {
-    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) errorLocation), 0), 0);
+  if (TE_isActionSetFocusAtArea(arg)) {
+    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) area), 0), 0);
   }
 
-  ATabort("Action has no ErrorLocation: %t\n", arg);
+  ATabort("Action has no Area: %t\n", arg);
   return (TE_Action)NULL;
 }
 
@@ -1033,9 +1033,9 @@ char* TE_getMenuMain(TE_Menu arg)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuMain(TE_Menu arg, char* main) */
+/*{{{  TE_Menu TE_setMenuMain(TE_Menu arg, const char* main) */
 
-TE_Menu TE_setMenuMain(TE_Menu arg, char* main)
+TE_Menu TE_setMenuMain(TE_Menu arg, const char* main)
 {
   if (TE_isMenuDefault(arg)) {
     return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), 0), 0);
@@ -1075,9 +1075,9 @@ char* TE_getMenuSub(TE_Menu arg)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuSub(TE_Menu arg, char* sub) */
+/*{{{  TE_Menu TE_setMenuSub(TE_Menu arg, const char* sub) */
 
-TE_Menu TE_setMenuSub(TE_Menu arg, char* sub)
+TE_Menu TE_setMenuSub(TE_Menu arg, const char* sub)
 {
   if (TE_isMenuDefault(arg)) {
     return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), 1), 0);
@@ -1111,9 +1111,9 @@ char* TE_getMenuShortcut(TE_Menu arg)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuShortcut(TE_Menu arg, char* shortcut) */
+/*{{{  TE_Menu TE_setMenuShortcut(TE_Menu arg, const char* shortcut) */
 
-TE_Menu TE_setMenuShortcut(TE_Menu arg, char* shortcut)
+TE_Menu TE_setMenuShortcut(TE_Menu arg, const char* shortcut)
 {
   if (TE_isMenuShortcut(arg)) {
     return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue))), 1);
@@ -1322,9 +1322,9 @@ char* TE_getEventText(TE_Event arg)
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_setEventText(TE_Event arg, char* text) */
+/*{{{  TE_Event TE_setEventText(TE_Event arg, const char* text) */
 
-TE_Event TE_setEventText(TE_Event arg, char* text)
+TE_Event TE_setEventText(TE_Event arg, const char* text)
 {
   if (TE_isEventContents(arg)) {
     return (TE_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue))), 0);
@@ -1525,9 +1525,9 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptErrorLocation)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
+/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptErrorLocation)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
@@ -1546,9 +1546,9 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
     return TE_makeActionSetCursorAtOffset(
         acceptOffset ? acceptOffset(TE_getActionOffset(arg)) : TE_getActionOffset(arg));
   }
-  if (TE_isActionSetFocusAtLocation(arg)) {
-    return TE_makeActionSetFocusAtLocation(
-        acceptErrorLocation ? acceptErrorLocation(TE_getActionErrorLocation(arg)) : TE_getActionErrorLocation(arg));
+  if (TE_isActionSetFocusAtArea(arg)) {
+    return TE_makeActionSetFocusAtArea(
+        acceptArea ? acceptArea(TE_getActionArea(arg)) : TE_getActionArea(arg));
   }
   if (TE_isActionClearFocus(arg)) {
     return TE_makeActionClearFocus();

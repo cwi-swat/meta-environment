@@ -4,7 +4,7 @@
   [Action, reread-contents, action(reread-contents)],
   [Action, display-message, action(display-message(<message(str)>))],
   [Action, set-cursor-at-offset, action(set-cursor-at-offset(<offset(int)>))],
-  [Action, set-focus-at-location, action(set-focus-at-location(<error-location(term)>))],
+  [Action, set-focus-at-area, action(set-focus-at-area(<area(term)>))],
   [Action, clear-focus, action(clear-focus)],
   [Action, set-focus, action(set-focus(<focus(term)>))],
   [Action, get-contents, action(get-contents(<focus(term)>))],

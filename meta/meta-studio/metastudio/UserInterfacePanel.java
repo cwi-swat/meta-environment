@@ -123,11 +123,11 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         return null;
     }
     
-    public void showListChoice(String s0, String s1, ATerm t1) {
+    public void showListChoice(String s0, String s1, ATerm t2) {
         // intentionally left empty
     }
 
-    public void removeFeedbackSummary(String s0, String s1) {
+    public void removeFeedbackSummary(ATerm t0) {
         // intentionally left empty
     }
     

@@ -16,7 +16,7 @@ void display_message(int conn, ATerm, const char *);
 void set_focus(int conn, ATerm, ATerm);
 void set_cursor_at_offset(int conn, ATerm, int);
 void reread_contents(int conn, ATerm);
-void set_focus_at_location(int conn, ATerm, ATerm);
+void set_focus_at_area(int conn, ATerm, ATerm);
 void set_actions(int conn, ATerm, ATerm);
 void editor_to_front(int conn, ATerm);
 void edit_file(int conn, ATerm, const char *, const char *);

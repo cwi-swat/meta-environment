@@ -34,6 +34,11 @@
 #define PIPE_READ 0
 #define PIPE_WRITE 1
 
+#define ESCAPE_CHAR '\\'
+#define SPACE_CHAR ' '
+#define QUOTE_CHAR '"'
+#define EOS '\0'
+
 /*}}}  */
 /*{{{  variables */
 
@@ -45,54 +50,27 @@ static int read_from_editor_fd = -1;
 
 /*}}}  */
 
-/*{{{  static char *escapeSpaces(const char *input) */
+/*{{{  static char *escape(const char *input, char toBeEscaped) */
 
-static char *escapeSpaces(const char *input)
-{
-  static char buf[BUFSIZ*3];
-  const char *p;
-  char *s;
-
-  assert(strlen(input) < BUFSIZ);
-
-  p = input;
-  s = buf;
-  while (p && *p) {
-    if (*p == ' ') {
-      *s++ = '\\';
-      *s++ = '\\';
-    }
-    *s++ = *p++;
-  }
-  *s++ = '\0';
-
-  return buf;
-}
-
-/*}}}  */
-/*{{{  static char *escapeQuotes(const char *input) */
-
-static char *escapeQuotes(const char *input)
+static char *escape(const char *input, char toBeEscaped)
 {
   static char *buf = NULL;
   const char *p;
-  int len;
   char *s;
+  int len;
 
   len = strlen(input);
-  buf = realloc(buf, len*4 + 1);
+  buf = realloc(buf, len*2 + 1);
 
   p = input;
   s = buf;
   while (p && *p) {
-    if (*p == '"') {
-      *s++ = '\\';
-      *s++ = '\\';
-      *s++ = '\\';
+    if (*p == toBeEscaped || *p == ESCAPE_CHAR) {
+      *s++ = ESCAPE_CHAR;
     }
     *s++ = *p++;
   }
-  *s++ = '\0';
+  *s++ = EOS;
 
   return buf;
 }
@@ -110,7 +88,7 @@ static char *menuToString(TE_Menu menu)
   len = ATcalcTextSize(t);
   assert(len < BUFSIZ);
   AT_writeToStringBuffer(t, buf);
-  buf[len] ='\0';
+  buf[len] = EOS;
 
   return buf;
 }
@@ -122,7 +100,8 @@ static char *menuToString(TE_Menu menu)
 static void sendToVimVerbatim(const char *cmd)
 {
   char buf[BUFSIZ];
-  sprintf(buf, "gvim --servername %s --remote-send '%s'", id, cmd);
+  sprintf(buf, "gvim --servername %s --remote-send \"%s\"", id, cmd);
+/*fprintf(stderr, "buf: [%s]\n", buf);*/
   system(buf);
 }
 
@@ -132,7 +111,7 @@ static void sendToVimVerbatim(const char *cmd)
 static void sendToVim(const char *cmd)
 {
   char buf[BUFSIZ];
-  sprintf(buf, "%s<Cr>", cmd);
+  sprintf(buf, "%s<Cr>", escape(cmd, QUOTE_CHAR));
   sendToVimVerbatim(buf);
 }
 
@@ -143,16 +122,25 @@ static void sendToVim(const char *cmd)
 static void makeVimMenuItem(char *menu, char *item)
 {
   char buf[BUFSIZ];
+  char escapedBuf[BUFSIZ];
   TE_Menu menuAction;
 
-  menuAction = TE_makeMenuDefault(menu, item);
+  strcpy(buf, ":call AddMenu(tb_pipe, \"");
 
-  sprintf(buf, ":call AddMenu(tb_pipe, \"");
-  strcat(buf, escapeSpaces(menu));
+  strcpy(escapedBuf, escape(menu, SPACE_CHAR));
+  strcat(buf, escape(escapedBuf, SPACE_CHAR));
+
   strcat(buf, "\", \"");
-  strcat(buf, escapeSpaces(item));
+
+  strcpy(escapedBuf, escape(item, SPACE_CHAR));
+  strcat(buf, escape(escapedBuf, SPACE_CHAR));
+
   strcat(buf, "\", \"");
-  strcat(buf, escapeQuotes(menuToString(menuAction)));
+
+  menuAction = TE_makeMenuDefault(menu, item);
+  strcpy(escapedBuf, escape(menuToString(menuAction), QUOTE_CHAR));
+  strcat(buf, escape(escapedBuf, QUOTE_CHAR));
+
   strcat(buf, "\")");
 
   sendToVim(buf);
@@ -241,7 +229,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
     }
     sort[i++] = *p;
   }
-  sort[i++] = '\0';
+  sort[i++] = EOS;
 
   sprintf(buf, ":goto %d", start);
   sendToVim(buf);
@@ -264,24 +252,20 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 
 static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
 {
-  ATerm locationTerm = TE_getActionFocus(edAction);
-  LOC_Location location = LOC_LocationFromTerm(locationTerm);
-  LOC_Area area = LOC_getLocationArea(location);
+  ATerm areaTerm = TE_getActionFocus(edAction);
+  LOC_Area area = LOC_AreaFromTerm(areaTerm);
+  int start = LOC_getAreaOffset(area);
+  int length = LOC_getAreaLength(area);
+  char buf[BUFSIZ];
 
-  if (LOC_isAreaArea(area)) {
-    int start = LOC_getAreaOffset(area);
-    int length = LOC_getAreaLength(area);
-    char buf[BUFSIZ];
+  sprintf(buf, ":goto %d", start);
+  sendToVim(buf);
 
-    sprintf(buf, ":goto %d", start);
-    sendToVim(buf);
+  sendToVimVerbatim("v");
 
-    sendToVimVerbatim("v");
-
-    if (length > 1) {
-      sprintf(buf, "%d ", length-1);
-      sendToVimVerbatim(buf);
-    }
+  if (length > 1) {
+    sprintf(buf, "%d ", length-1);
+    sendToVimVerbatim(buf);
   }
 }
 

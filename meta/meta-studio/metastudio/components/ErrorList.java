@@ -63,12 +63,7 @@ public class ErrorList extends UserInterfacePanel {
     }
 
     public void clearHistory() {
-        removeFeedbackSummary(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN);
-    }
-
-    public void showFeedbackSummary(ATerm t0) {
-        Summary summary = factory.SummaryFromTerm(t0);
-        setFeedbackList(summary);
+        removeFeedbackList(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN);
     }
 
     private void setFeedbackList(Summary summary) {
@@ -84,6 +79,17 @@ public class ErrorList extends UserInterfacePanel {
         
           scrollToLast();
         }
+    }
+
+    private void removeFeedbackList(Summary summary) {
+	String producer = summary.getProducer();
+	String id = summary.getId();
+	removeFeedbackList(producer, id);
+    }
+
+    private void removeFeedbackList(String producer, String id) {
+        data.removeAll(producer, id);
+        repaint();
     }
 
     private void scrollToLast() {
@@ -147,9 +153,13 @@ public class ErrorList extends UserInterfacePanel {
         addAnonymousErrorItem(makeWarning(message));
     }
 
-    public void removeFeedbackSummary(String producer, String summaryId) {
-        data.removeAll(producer, summaryId);
+    public void showFeedbackSummary(ATerm t0) {
+        Summary summary = factory.SummaryFromTerm(t0);
+        setFeedbackList(summary);
+    }
 
-        repaint();
+    public void removeFeedbackSummary(ATerm t0) {
+        Summary summary = factory.SummaryFromTerm(t0);
+	removeFeedbackList(summary);
     }
 }

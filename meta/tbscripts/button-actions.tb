@@ -120,45 +120,46 @@ process ReturnAbort(EditorId : term, Stack : list) is
 
 process ButtonActionExecutor is
 let
-  ModuleName : str,
+  Action : str,
+  ActionEvent : term,
   ArgList : list,
-  Stack : list,
   EditorId : term,
   EditorId2 : term,
-  STree : term,
-  Focus : term,
-  SList	: list,
-  RTree : term,
-  Error : term,
-  Trees : list,
-  ActionEvent : term,
-  PosInfo : term,
-  SortName : str,
-  FilePath : str,
-  NewModuleName : str,
-  FileName : str,
   EditorName : str,
-  FuncName : str,
-  FunSym : str,
-  String : str,
-  NrOfArgs : int,
-  Location : int,
-  Integer : int,
-  Query : str,
-  Action : str,
-  OutStr : str,
-  InStr : str,
-  Name : str,
+  Empty : term,
+  Error : term,
+  ErrorMessage : str,
   ExecName : str,
+  Ext : str,
+  Feedback : term,
+  FileName : str,
+  FilePath : str,
+  Focus : term,
+  FunSym : str,
+  FuncName : str,
+  InStr : str,
+  Integer : int,
+  Location : term,
+  Message : str,
+  Mode : term,
+  ModuleName : str,
+  Name : str,
+  NewModuleName : str,
+  NrOfArgs : int,
+  OutStr : str,
   Path : str,
-  Tree : term,
+  PosInfo : term,
+  Query : str,
+  RTree : term,
+  SList	: list,
+  STree : term,
+  SortName : str,
+  Stack : list,
+  String : str,
   Text : str,
   TimeStamp : int,
-  ErrorMessage : str,
-  Mode : term,
-  Empty : term,
-  Ext : str,
-  Feedback : term
+  Tree : term,
+  Trees : list
 in
    (
       rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?) .
@@ -455,12 +456,12 @@ in
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
             ParseText(String, FilePath, ModuleName, SortName, RTree?, Error?) .
-            ProcessParseError(FilePath, Error)
+            ProcessParseError(Error)
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
               ParseText(String, "Unknown", ModuleName, SortName, RTree?, Error?) .
-              ProcessParseError("Unknown", Error)
+              ProcessParseError(Error)
             else
               RTree := error-tree
             fi
@@ -566,13 +567,14 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area, Stack?, EditorId?) .
-        StackPopTerm(Stack, Stack?, PosInfo?) .
-	ShowLocation(PosInfo) .
-        ReturnSuccess(EditorId,Stack)        
+        StackPopString(Stack, Stack?, Message?) .
+        StackPopTerm(Stack, Stack?, Location?) .
+	ShowLocation(Location, Message) .
+        ReturnSuccess(EditorId, Stack)
       +
         rec-msg(show-feedback-location, Stack?, EditorId?) .
-	StackPopTerm(Stack, Stack?, STree?) .
-	ShowFeedbackLocation(STree) .
+	StackPopTerm(Stack, Stack?, Error?) .
+	ShowError(Error) .
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(show-list, Stack?, EditorId?) .

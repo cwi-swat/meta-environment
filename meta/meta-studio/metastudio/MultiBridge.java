@@ -88,15 +88,6 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
 
-    public void showFeedbackSummary(ATerm t0) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.showFeedbackSummary(t0);
-        }
-    }
-
     public void updateList(String moduleName, String actions) {
         Iterator iter = getToolComponents().iterator();
 
@@ -219,14 +210,25 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
     
-    public void removeFeedbackSummary(String s0, String s1) {
+
+    public void showFeedbackSummary(ATerm t0) {
         Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.removeFeedbackSummary(s0, s1);
+            tif.showFeedbackSummary(t0);
         }
     }
+
+    public void removeFeedbackSummary(ATerm t0) {
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.removeFeedbackSummary(t0);
+        }
+    }
+
     
     public void recAckEvent(ATerm event) {
     }
@@ -234,12 +236,4 @@ public class MultiBridge extends UserInterfaceTool {
     public void recTerminate(ATerm t0) {
         System.exit(0);
     }
-
-  
-
-    
-
-   
-
-   
 }

@@ -20,18 +20,18 @@ endlet
 
 process ParseAllEquations(ModName : str) is
 let
-  ModuleName  : str,
-  Module      : str,
-  Modules     : list,
-  EqsText     : str,
-  EqsTree     : term,
-  Nonterminal : str,
-  ParseTree   : term,
-  Errors      : term,
-  ModuleId    : term,
-  Extension   : str,
-  Path        : str,
-  FileName    : str
+  ModuleName: str,
+  Module: str,
+  Modules: list,
+  EqsText: str,
+  EqsTree: term,
+  Nonterminal: str,
+  ParseTree: term,
+  Error: term,
+  ModuleId: term,
+  Extension: str,
+  Path: str,
+  FileName: str
 in
   snd-msg(get-rules-top-sort) .
   rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
@@ -51,8 +51,8 @@ in
       snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
       ParseString(Module, FileName, eqs, false, Nonterminal, EqsText, 
-                  ParseTree?, Errors?) .
-      ProcessParseError(FileName, Errors) .
+                  ParseTree?, Error?) .
+      ProcessParseError(Error) .
       ProcessEqsTree(Module, ParseTree) .
       ParseTree := no-tree
     +

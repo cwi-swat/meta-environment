@@ -61,7 +61,7 @@ process ParseFocusses is
         rec-msg(editor-filename(FileName?)) .
         ParseString(ModuleName, FileName, Type, true, Nonterminal, Text, 
                     Tree?, Errors?) .
-        PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
+        HandleParseErrors(ModuleName, EditorId, Focus, Errors) .
         ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
         Tree := no-tree
       else

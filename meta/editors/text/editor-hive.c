@@ -248,14 +248,14 @@ void set_cursor_at_offset(int c, ATerm editorId, int offset)
 }
 
 /*}}}  */
-/*{{{  void set_focus_at_location(int c, ATerm editorId, ATerm location) */
+/*{{{  void set_focus_at_area(int c, ATerm editorId, ATerm area) */
 
-void set_focus_at_location(int c, ATerm editorId, ATerm location)
+void set_focus_at_area(int c, ATerm editorId, ATerm area)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetFocusAtLocation(location));
+    sendToEditor(process, TE_makeActionSetFocusAtArea(area));
   }
 }
 
