@@ -231,7 +231,7 @@ class RuleSelector
   	int row = table.getSelectedRow();
   	
   	if (row != -1) {
-      Rule rule = process.getRuleAt(table.getSelectedRow());
+      Rule rule = process.getRuleAt(row);
       fireRuleSelected(rule);
   	}
   }
