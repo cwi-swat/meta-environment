@@ -10,9 +10,9 @@ srcdir		= @srcdir@
 top_srcdir	= @top_srcdir@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
-bindir		= ${exec_prefix}/bin
-libdir		= ${exec_prefix}/lib
-includedir	= ${prefix}/include
+bindir		= @bindir@
+libdir		= @libdir@
+includedir	= @includedir@
 docdir		= ${top_srcdir}/docs
 
 SHELL		= @SHELL@
