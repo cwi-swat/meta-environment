@@ -44,6 +44,18 @@ static ATbool checkModuleNameWithPath(const char *moduleName, const char *path);
 static ATbool checkModuleName(const char *moduleName); 
 /*}}}  */
 
+/*{{{  static void strip_syntax_ext(char *name) */
+
+static void strip_syntax_ext(char *name)
+{
+  if (!strcmp(name+strlen(name)-strlen(syntax_ext),
+	      syntax_ext)) {
+    name[strlen(name)-strlen(syntax_ext)] = '\0';
+  }
+}
+
+/*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
 void rec_terminate(int cid, ATerm t)
@@ -1009,7 +1021,7 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName,
   char path[BUFSIZ]; 
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm oldName = ATmake("<str>", oldModuleName);
-  ATerm newName = ATmake("<str>", newModuleName);
+  ATerm newName;
   ATermList changedMods;
   MDB_Entry entry;
   PT_ParseTree oldParseTree, newParseTree;
@@ -1017,6 +1029,9 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName,
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
+
+  strip_syntax_ext(newModuleName);
+  newName = ATmake("<str>", newModuleName);
 
   if (!checkModuleName(newModuleName)) {
     return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
@@ -1073,7 +1088,7 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
   char path[BUFSIZ]; 
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm oldName = ATmake("<str>", oldModuleName);
-  ATerm newName = ATmake("<str>", newModuleName);
+  ATerm newName;
   ATermList changedMods;
   MDB_Entry entry;
   PT_ParseTree oldParseTree, newParseTree;
@@ -1081,6 +1096,9 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
+
+  strip_syntax_ext(newModuleName);
+  newName = ATmake("<str>", newModuleName);
 
   if (!checkModuleName(newModuleName)) {
     return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
@@ -1111,11 +1129,13 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
     PutValue(modules_db, newName, MDB_EntryToTerm(entry));
 
     imports = SDF_getImports(newSdfModule);
+
     fullImports = SDF_getModuleImportsList(newSdfModule);
     unknowns = add_imports(newName, imports, fullImports);
 
     reset_trans_db();
   }
+
   import_graph = calc_import_graph();
   return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
                 changedMods, import_graph);
@@ -1129,7 +1149,8 @@ ATerm add_import(int cid, char *modName, char *importedModName,
 {
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm moduleName = ATmake("<str>", modName);
-  SDF_Import sdfImport = SDFmakeImport(importedModName);
+  ATerm importedModuleName;
+  SDF_Import sdfImport;
   ATermList changedMods;
   MDB_Entry entry;
   PT_ParseTree oldParseTree, newParseTree;
@@ -1138,11 +1159,14 @@ ATerm add_import(int cid, char *modName, char *importedModName,
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
 
+  strip_syntax_ext(importedModName);
+
+  importedModuleName = ATmake("<str>", importedModName);
+  sdfImport = SDFmakeImport(importedModName);
+
   if (!checkModuleName(importedModName)) {
     return ATmake("snd-value(illegal-module-name(<str>))", importedModName);
   }
-
-  changedMods = ATinsert(modules_depend_on(moduleName,ATempty), moduleName);
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, moduleName));
   if (entry) {
@@ -1156,7 +1180,6 @@ ATerm add_import(int cid, char *modName, char *importedModName,
     newSdfTree   = PT_makeTermFromParseTree(newParseTree);
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
-
     entry = MDB_setEntryAsfTable(entry, MDB_NONE);
     entry = MDB_setEntryTrmTable(entry, MDB_NONE);
     entry = MDB_setEntryAsfTree(entry, MDB_NONE);
@@ -1165,10 +1188,14 @@ ATerm add_import(int cid, char *modName, char *importedModName,
 
     imports = SDF_getImports(newSdfModule);
     fullImports = SDF_getModuleImportsList(newSdfModule);
-    unknowns = add_imports(moduleName, imports, fullImports);
+    unknowns = replace_imports(moduleName, imports, fullImports);
 
     reset_trans_db();
   }
+
+  changedMods = ATinsert(modules_depend_on(moduleName,ATempty), 
+			 moduleName);
+
   import_graph = calc_import_graph();
   return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
                 changedMods, import_graph);
