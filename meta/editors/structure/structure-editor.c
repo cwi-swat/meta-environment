@@ -254,6 +254,22 @@ void delete_editor(int cid, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  ATerm get_parse_tree(int cid, ATerm editorId) */
+
+ATerm get_parse_tree(int cid, ATerm editorId)
+{
+  SE_StructureEditor editor = getEditor(editorId);
+
+  if (editor != NULL) {
+    SE_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
+    return ATmake("snd-value(parse-tree(<term>))", parseTree);
+  }
+
+  ATwarning("get_parse_tree: cannot get parse tree for: %t\n", editorId);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  void set_cursor_at_offset(int cid, ATerm editorId, int offset) */
 
 void set_cursor_at_offset(int cid, ATerm editorId, int offset)

@@ -9,13 +9,14 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-void register_editor(int conn, ATerm, ATerm);
 ATerm is_editor_registered(int conn, ATerm, ATerm);
-ATerm get_modulename(int conn, ATerm);
+void register_editor(int conn, ATerm, ATerm);
 void unregister_editor(int conn, ATerm, ATerm);
+ATerm get_modulename(int conn, ATerm);
+ATerm get_sessions_by_modulename(int conn, const char *);
 ATerm get_filename(int conn, ATerm);
-ATerm get_session_ids(int conn, const char *);
-ATerm get_session(int conn, const char *, const char *);
+ATerm get_session_by_filename(int conn, const char *);
+ATerm create_session(int conn, const char *, const char *);
 void delete_session(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm editor_manager_handler(int conn, ATerm term);

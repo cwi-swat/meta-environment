@@ -5,12 +5,13 @@
 
 #include "structure-editor.tif.h"
 
-#define NR_SIG_ENTRIES	9
+#define NR_SIG_ENTRIES	10
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<structure-editor>,create-editor(<term>,<term>))",
   "rec-do(<structure-editor>,update-editor(<term>,<term>))",
   "rec-do(<structure-editor>,delete-editor(<term>))",
+  "rec-eval(<structure-editor>,get-parse-tree(<term>))",
   "rec-do(<structure-editor>,set-cursor-at-offset(<term>,<int>))",
   "rec-eval(<structure-editor>,get-cursor(<term>))",
   "rec-eval(<structure-editor>,get-focus-at-cursor(<term>))",
@@ -30,6 +31,9 @@ ATerm structure_editor_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
     set_cursor_at_offset(conn, t0, i0);
     return NULL;
+  }
+  if(ATmatch(term, "rec-eval(get-parse-tree(<term>))", &t0)) {
+    return get_parse_tree(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-cursor(<term>))", &t0)) {
     return get_cursor(conn, t0);

@@ -52,7 +52,7 @@ static EM_Session getSession(ATerm sid)
 }
 
 /*}}}  */
-/*{{{  static void putSession(ATerm sid, EM_Session session) */
+/*{{{  static void putSession(EM_Session session) */
 
 static void putSession(EM_Session session)
 {
@@ -65,23 +65,19 @@ static void putSession(EM_Session session)
 }
 
 /*}}}  */
-/*{{{  static EM_Session findSession(const char *filename, const char *modulename) */
+/*{{{  static EM_Session findSession(const char *filename) */
 
-static EM_Session findSession(const char *filename, const char *modulename)
+static EM_Session findSession(const char *filename)
 {
   ATermList sessionList;
 
   assert(filename != NULL);
-  assert(modulename != NULL);
 
   sessionList = ATtableValues(sessions);
   while (!ATisEmpty(sessionList)) {
     EM_Session session = EM_SessionFromTerm(ATgetFirst(sessionList));
     const char *peerFilename = EM_getSessionFilename(session);
-    const char *peerModulename = EM_getSessionModulename(session);
-    if (strcmp(peerFilename, filename) == 0
-	&& strcmp(peerModulename, modulename) == 0)
-    {
+    if (strcmp(peerFilename, filename) == 0) {
       return session;
     }
     sessionList = ATgetNext(sessionList);
@@ -91,10 +87,35 @@ static EM_Session findSession(const char *filename, const char *modulename)
 }
 
 /*}}}  */
+/*{{{  static ATermList findSessions(const char *modulename) */
 
-/*{{{  ATerm get_session(int cid, const char *filename, const char *modulename) */
+static ATermList findSessions(const char *modulename)
+{
+  ATermList result;
+  ATermList sessionList;
 
-ATerm get_session(int cid, const char *filename, const char *modulename)
+  assert(modulename != NULL);
+
+  result = ATempty;
+  sessionList = ATtableValues(sessions);
+  while (!ATisEmpty(sessionList)) {
+    EM_Session session = EM_SessionFromTerm(ATgetFirst(sessionList));
+    const char *peerModulename = EM_getSessionModulename(session);
+    if (strcmp(peerModulename, modulename) == 0) {
+      EM_Sid sid = EM_getSessionId(session);
+      result = ATinsert(result, EM_SidToTerm(sid));
+    }
+    sessionList = ATgetNext(sessionList);
+  }
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  ATerm create_session(int cid, const char *filename, const char *modulename) */
+
+ATerm create_session(int cid, const char *filename, const char *modulename)
 {
   EM_Session session;
   EM_Sid sid;
@@ -102,13 +123,20 @@ ATerm get_session(int cid, const char *filename, const char *modulename)
   assert(filename != NULL);
   assert(modulename != NULL);
 
-  session = findSession(filename, modulename);
+  session = findSession(filename);
   if (session == NULL) {
     session = EM_makeSessionDefault(makeUniqueSessionId(),
 				    filename,
 				    modulename,
 				    EM_makeEditorTypeListEmpty());
     putSession(session);
+  }
+  else {
+    const char *peerModulename = EM_getSessionModulename(session);
+    if (strcmp(peerModulename, modulename) != 0) {
+      ATabort("Attempt to re-create session with different module: %s vs %s\n",
+	      peerModulename, modulename);
+    }
   }
 
   sid = EM_getSessionId(session);
@@ -117,6 +145,52 @@ ATerm get_session(int cid, const char *filename, const char *modulename)
 }
 
 /*}}}  */
+/*{{{  ATerm get_session_by_filename(int cid, const char *filename) */
+
+ATerm get_session_by_filename(int cid, const char *filename)
+{
+  EM_Session session;
+  EM_Sid sid;
+
+  assert(filename != NULL);
+
+  session = findSession(filename);
+  if (session == NULL) {
+    return sndValue(ATmake("no-such-session"));
+  }
+
+  sid = EM_getSessionId(session);
+  return sndValue(ATmake("session(<term>)", EM_SidToTerm(sid)));
+}
+
+/*}}}  */
+/*{{{  ATerm get_sessions_by_modulename(int cid, const char *modulename) */
+
+ATerm get_sessions_by_modulename(int cid, const char *modulename)
+{
+  ATermList sessions = findSessions(modulename);
+  return sndValue(ATmake("sessions(<term>)", sessions));
+}
+
+/*}}}  */
+/*{{{  void delete_session(int cid, ATerm sid) */
+
+void delete_session(int cid, ATerm sid)
+{
+  EM_Session session;
+
+  assert(sid != NULL);
+
+  session = getSession(sid);
+  if (session == NULL) {
+    ATabort("delete_session: no such session: %t\n", sid);
+  }
+
+  ATtableRemove(sessions, sid);
+}
+
+/*}}}  */
+
 /*{{{  ATerm get_filename(int cid, ATerm sid) */
 
 ATerm get_filename(int cid, ATerm sid)
@@ -230,48 +304,6 @@ void unregister_editor(int cid, ATerm sid, ATerm editorType)
     }
     putSession(EM_setSessionList(session, stripped));
   }
-}
-
-/*}}}  */
-/*{{{  ATerm get_session_ids(int cid, const char *modulename) */
-
-ATerm get_session_ids(int cid, const char *modulename)
-{
-  ATermList result;
-  ATermList sessionList;
-
-  assert(modulename != NULL);
-
-  result = ATempty;
-  sessionList = ATtableValues(sessions);
-  while (!ATisEmpty(sessionList)) {
-    EM_Session session = EM_SessionFromTerm(ATgetFirst(sessionList));
-    const char *peerModulename = EM_getSessionModulename(session);
-    if (strcmp(peerModulename, modulename) == 0) {
-      EM_Sid sid = EM_getSessionId(session);
-      result = ATinsert(result, EM_SidToTerm(sid));
-    }
-    sessionList = ATgetNext(sessionList);
-  }
-
-  return sndValue(ATmake("session-ids(<term>)", result));
-}
-
-/*}}}  */
-/*{{{  void delete_session(int cid, ATerm sid) */
-
-void delete_session(int cid, ATerm sid)
-{
-  EM_Session session;
-
-  assert(sid != NULL);
-
-  session = getSession(sid);
-  if (session == NULL) {
-    ATabort("delete_session: no such session: %t\n", sid);
-  }
-
-  ATtableRemove(sessions, sid);
 }
 
 /*}}}  */

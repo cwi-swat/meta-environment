@@ -8,7 +8,7 @@ process EditorManager is
 let
   EditorType: term,
   EM : editor-manager,
-  FileName : str,
+  Filename : str,
   Modulename: str,
   Sid : term,
   Sids: list
@@ -16,17 +16,17 @@ in
   execute(editor-manager, EM?)
   .
   (
-    rec-msg(em-get-session(FileName?, Modulename?))
-    . snd-eval(EM, get-session(FileName,  Modulename))
+    rec-msg(em-create-session(Filename?, Modulename?))
+    . snd-eval(EM, create-session(Filename,  Modulename))
     . rec-value(EM, session(Sid?))
-    . snd-msg(em-session(FileName, Modulename, Sid))
+    . snd-msg(em-session(Filename, Modulename, Sid))
   +
     rec-msg(em-get-filename(Sid?))
     . snd-eval(EM, get-filename(Sid))
     .
     (
-      rec-value(EM, filename(FileName?))
-      . snd-msg(em-filename(Sid, FileName))
+      rec-value(EM, filename(Filename?))
+      . snd-msg(em-filename(Sid, Filename))
     +
       rec-value(EM, no-such-session)
       . snd-msg(em-no-such-session(Sid))
@@ -63,10 +63,21 @@ in
     rec-msg(em-unregister-editor(Sid?, EditorType?))
     . snd-do(EM, unregister-editor(Sid, EditorType))
   +
-    rec-msg(em-get-session-ids(Modulename?))
-    . snd-eval(EM, get-session-ids(Modulename))
-    . rec-value(EM, session-ids(Sids?))
-    . snd-msg(em-session-ids(Modulename, Sids))
+    rec-msg(em-get-sessions-by-modulename(Modulename?))
+    . snd-eval(EM, get-sessions-by-modulename(Modulename))
+    . rec-value(EM, sessions(Sids?))
+    . snd-msg(em-sessions(Modulename, Sids))
+  +
+    rec-msg(em-get-session-by-filename(Filename?))
+    . snd-eval(EM, get-session-by-filename(Filename))
+    .
+    (
+      rec-value(EM, session(Sid?))
+      . snd-msg(em-session(Filename, Sid))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Filename))
+    )
   +
     rec-msg(em-delete-session(Sid?))
     . snd-do(EM, delete-session(Sid))

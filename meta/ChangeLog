@@ -1,7 +1,9 @@
 # $Id$
 
 Mon Mar 29 11:09:10 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * reminder: still lots of things broken!
  * tbscripts/editing.tb:
+   - Added EditTerm scenario
    - Added EditEquations scenario
    - Improved EditSyntax scenario
    - Some refactoring in editing scenarios to improve re-use.
