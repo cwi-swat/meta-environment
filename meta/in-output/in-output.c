@@ -587,7 +587,6 @@ ATerm read_parse_table(int cid, char *name, ATerm tableType)
 
     packed = ATBpack(t);
     packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
-    ATwarning("packed term (io): %t\n", packed);
     return ATmake("snd-value(table-on-disk(<term>,timestamp(<int>)))",
 		  packed, filetime(full));
   }
