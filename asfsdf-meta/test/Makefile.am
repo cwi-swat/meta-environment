@@ -1,4 +1,4 @@
-EXTRA_DIST = $(wildcard *.sdf *.asf)
+EXTRA_DIST = $(wildcard *.sdf *.asf) meta.conf
 
 TEST_SPECS=Basic Demo
 
