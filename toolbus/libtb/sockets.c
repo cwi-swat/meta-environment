@@ -1,3 +1,6 @@
+
+/*{{{  includes */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -20,11 +23,17 @@
 #include "utils.h"
 #include "sockets.h"
 
+/*}}}  */
+
 int WellKnownLocalSocket = TB_ERROR;
 int WellKnownGlobalSocket = TB_ERROR;
 int WellKnownSocketPort;
 
+static char * SOCKETFILE = NULL;
+
 #define TB_SOCKET_CONNECT_DELAY 200
+
+/*{{{  void tb_sleep(int sec, int usec)  */
 
 void tb_sleep(int sec, int usec) 
 {
@@ -38,6 +47,8 @@ void tb_sleep(int sec, int usec)
 
   return;
 }
+
+/*}}}  */
 
 /*{{{  int getInt(int port, const char *tname) */
 
@@ -80,21 +91,25 @@ int putInt(int port, const char *tname, int n)
 static void set_connect_options(int sock)
 {
   if((setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&sock, sizeof sock) < 0) && TBverbose)
-	err_sys_warn("setsockopt TCP_NODELAY");
+    err_sys_warn("setsockopt TCP_NODELAY");
 
   if((setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char *)&buf_size, sizeof(int)) < 0) && TBverbose)
-	err_sys_warn("setsockopt SO_SNDBUF");
+    err_sys_warn("setsockopt SO_SNDBUF");
 }
 
 /*}}}  */
 
-static char * SOCKETFILE;
+/*{{{  void remove_socketfile() */
 
-/* This gets calls upon termination of the ToolBus from bus_shutdown in main.c
+/* This gets called on termination of the ToolBus from bus_shutdown in main.c
 */
-void remove_socketfile() {
-	unlink(SOCKETFILE);
+
+void remove_socketfile()
+{
+  unlink(SOCKETFILE);
 }
+
+/*}}}  */
 
 /*{{{  static int connect_unix_socket(int port) */
 
@@ -109,7 +124,7 @@ static int connect_unix_socket(int port)
     int result;
 
     sprintf (name, "/var/tmp/%d", port);
-   if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
+    if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
 
     if(TBverbose)
@@ -131,7 +146,7 @@ static int connect_unix_socket(int port)
        */
       tb_sleep(0, TB_SOCKET_CONNECT_DELAY);
       if(attempts > 1000)
-				err_sys_fatal("cannot connect, giving up");
+	err_sys_fatal("cannot connect, giving up");
 
       attempts++;
     } else { /* Connection established */
@@ -150,7 +165,6 @@ static int connect_inet_socket(const char *host, int port)
   int sock;
   struct sockaddr_in isin;
   struct hostent *hp;
-  int isConnected = 0;
   int attempts = 0;
 
   while(1) {
@@ -178,7 +192,7 @@ static int connect_inet_socket(const char *host, int port)
     if(connect(sock, (struct sockaddr *)&isin, sizeof(isin)) < 0){
       close(sock);
       if(attempts > 1000)
-			  err_sys_fatal("cannot connect, giving up");
+	err_sys_fatal("cannot connect, giving up");
       attempts++;
     } else {
       set_connect_options(sock);
@@ -192,14 +206,11 @@ static int connect_inet_socket(const char *host, int port)
 
 static int connect_socket (const char *host, int port)
 {    
-  int sock;
-  char name[128];    
-  struct sockaddr_un usin;
-
-  if(host == NULL)
+  if(host == NULL) {
     return connect_unix_socket(port);
-  else
+  } else {
     return connect_inet_socket(host, port);
+  }
 }
 
 /*}}}  */
@@ -218,7 +229,7 @@ static void set_create_options(int  sock)
   if((setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof opt) < 0) && TBverbose)
     err_sys_warn("setsockopt SO_REUSEADDR");
   if((setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char *)&buf_size, sizeof(int)) < 0) && TBverbose)
-     err_sys_warn("setsockopt SO_RCVBUF");
+    err_sys_warn("setsockopt SO_RCVBUF");
 }
 
 /*}}}  */
@@ -229,17 +240,17 @@ static int create_unix_socket(int port)
   struct sockaddr_un usin;
   char name[128] = "";
   int attempts = 0;
-  int sock, length;
+  int sock;
 
   sprintf (name, "/var/tmp/%d", port);
   unlink (name);
-	SOCKETFILE = strdup(name);
- 
+  SOCKETFILE = strdup(name);
+
   if((sock=socket(AF_UNIX,SOCK_STREAM,0)) < 0)
     err_sys_fatal("cannot open AF_UNIX stream socket");
 
   set_create_options(sock);
-    
+
   /* Initialize socket's address structure */
   memset((char *) &usin, 0, sizeof(usin));
   usin.sun_family = AF_UNIX;
@@ -249,12 +260,12 @@ static int create_unix_socket(int port)
   /* Assign an address to this socket */
   if(TBverbose)
     TBmsg("Binding %s\n", name);
-	
+
   while(bind(sock,(struct sockaddr *)&usin,
-						     strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
+	     strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
     if(attempts > 1000) {
-			return TB_ERROR;
-		}
+      return TB_ERROR;
+    }
     attempts++;
     chmod (name, 0777);
   }
@@ -269,13 +280,13 @@ static int create_inet_socket(const char *host, int port)
 {
   struct sockaddr_in isin;
   int attempts = 0;
-  int sock, length;
- 
+  int sock;
+
   if((sock=socket(AF_INET,SOCK_STREAM,0)) < 0)
     err_sys_fatal("cannot open stream socket");
 
   set_create_options(sock);
- 
+
   /* Initialize socket's address structure */
   memset((char *) &isin, 0, sizeof(isin));
   isin.sin_family = AF_INET;
@@ -284,11 +295,11 @@ static int create_inet_socket(const char *host, int port)
 
   while (bind (sock,(struct sockaddr *)&isin,sizeof(isin)) < 0){
     if (attempts > 1000) {
-			return TB_ERROR;
-		}
+      return TB_ERROR;
+    }
     attempts++;
   }
- 
+
   return sock;
 }
 
@@ -307,8 +318,8 @@ static int create_socket (const char *host, int port)
 
   /* Prepare socket queue for connect requests */
   if(sock < 0) {
-		return TB_ERROR;
-	}
+    return TB_ERROR;
+  }
 
   listen(sock,5);
 
@@ -365,6 +376,50 @@ int accept_in_interval (int s, struct sockaddr *addr, int *addrlen)
       return sock;
   }
   return -1;
+}
+
+/*}}}  */
+
+/*{{{  int mk_server_ports(int local_port_only) */
+
+int mk_server_ports(int local_port_only)
+{
+  int lsock = -1, gsock = -1;
+  int attempts = 1000;
+  int initialWellKnownSocketPort = WellKnownSocketPort;
+
+  /* We try to create a socket, incrementing the port number if we fail. */
+  do {
+
+    if(!local_port_only) 
+      gsock = createWellKnownSocket(this_host, WellKnownSocketPort);
+
+    /* Only try to create the local port if the inet socket succeeded. 
+     * The inet socket fails more frequently due some TCP bogy: some ports
+     * stay unavailable for a long while after they are closed.
+     */
+    if(gsock >= 0 || local_port_only)
+      lsock = createWellKnownSocket(NULL, WellKnownSocketPort);
+
+    WellKnownSocketPort++;
+
+  } while((lsock < 0 || (!local_port_only && gsock < 0)) && attempts--);
+
+  if(!attempts)
+    return TB_ERROR;
+
+  /* Fix that the loop increments the port number in case of success */ 
+  WellKnownSocketPort--;
+
+  /* Commit the sockets */
+  WellKnownLocalSocket = lsock;
+  WellKnownGlobalSocket = gsock;
+
+  if(initialWellKnownSocketPort != WellKnownSocketPort) {
+    fprintf(stderr, "The toolbus server allocated port %d\n", WellKnownSocketPort);
+  }
+
+  return TB_OK;
 }
 
 /*}}}  */

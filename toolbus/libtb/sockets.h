@@ -30,6 +30,8 @@ int  getInt(int, const char *);
 int  createWellKnownSocket(char *, int);
 int  connectWellKnownSocket(char *, int);
 int  accept_in_interval(int, struct sockaddr *, int *);
+int  mk_server_ports(int local_port_only);
+void tb_sleep(int sec, int usec);
 
 extern int buf_size;
 extern int WellKnownSocketPort;
