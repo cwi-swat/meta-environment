@@ -203,8 +203,10 @@ static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
 
     if (ATgetType(term) == AT_APPL) {
       char *fun = ATgetName(ATgetSymbol(term));
-      
 
+      if (!strcmp(fun,"traverse") ||
+          !strcmp(fun,"traversal")) {
+        *bool = ATtrue;
       } 
     }
   }     
