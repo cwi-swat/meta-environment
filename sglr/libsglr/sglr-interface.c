@@ -220,7 +220,7 @@ ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
     tree = ATgetArgument(t, 0);
     amb  = ATgetArgument(t, 1); 
 
-    return (ATerm) ATmakeAppl1(SG_ParseTree_AFun, t);
+    return (ATerm) ATmakeAppl2(SG_ParseTree_AFun, tree, amb);
   }
 
   return SG_TermToToolbus(t);
