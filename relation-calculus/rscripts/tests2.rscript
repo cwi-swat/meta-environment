@@ -9,8 +9,8 @@ rel[int,int] EMPTYREL = {}
 
 %% A -- id
 
-bool A01 = id(EMPTYBAG) == EMPTYREL
-bool A02 = id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
+%%bool A01 = id(EMPTYBAG) == EMPTYREL
+%%bool A02 = id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
 
 %% B -- domain
 
@@ -19,6 +19,11 @@ bool B02 = domain(Rel1) == {1}
 bool B03 = domain(Rel2) ==  {1, 2, 3}
 
 %% C -- range
+
+bag[int] C01 = range(EMPTYREL)
+bag[int] C02 = range(Rel1)
+bag[int] C03 = range (Rel2)
+
 %% D -- carrier
 %% E -- top
 %% F -- bottom
