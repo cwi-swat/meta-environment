@@ -51,6 +51,7 @@ static void printAttribute(Attribute attr, FILE *file)
     printPolygon(getAttributePoints(attr), file);
   } else if (isAttributeDirection(attr)) {
     ATfprintf(file, "dir=%t", DirectionToTerm(getAttributeDirection(attr)));   
+  } else if (isAttributeInfo(attr)) {
   } else {
     ATwarning("unknown attribute type: %t\n", attr);
   }
