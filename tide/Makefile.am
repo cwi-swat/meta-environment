@@ -1,30 +1,19 @@
 
-SUBDIRS		= toolbus lib-c tide META-INF images examples .
-
-EXTRA_DIST	= tide.sh.src
-
-bin_SCRIPTS	= tide.sh
+SUBDIRS		= toolbus lib-c tide META-INF images examples scripts .
 
 data_DATA	= tide.jar
 
 JARCLASSDIRS	= tide tide/tool tide/tool/support \
 		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer \
-		tide/tool/prefeditor
+		tide/tool/prefeditor tide/tool/stackviewer
 
 JARCLASSES	= ${JARCLASSDIRS:%=%/*.class}
 JARIMAGES	= ${srcdir}/images/*.gif
-JARFILES	= META-INF/MANIFEST.MF META-INF/tide-defaults.properties \
+JARFILES	= ${srcdir}/META-INF/MANIFEST.MF \
+		${srcdir}/META-INF/tide-defaults.properties \
 		${JARIMAGES}  ${JARCLASSES}
 
 tide.jar: ${JARFILES}
 	FILES="${JARFILES}"; \
 	jar cf tide.jar $$FILES
-
-%.sh: %.sh.src Makefile
-	sed 's@__JARDIR__@${datadir}@g;\
-	     s@__TBDIR__@${datadir}@g;\
-	     s@__ATERM__@${ATERM}@g;\
-	     s@__TOOLBUS__@${TOOLBUS}@g;\
-	' < $< > $@ && chmod +x $@
-
 
