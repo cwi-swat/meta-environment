@@ -1,5 +1,9 @@
 $Id$
 
+2003/04/24 (jurgenv@cwi.nl)
+ * In ToolBus mode layoutgraph will produce a graph with productions
+   as nodes (it used to be just the symbols)
+
 Fri Apr 11 13:37:01 CEST 2003 <jong@cwi.nl>
  * fix #include problems
 
