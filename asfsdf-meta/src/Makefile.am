@@ -1,6 +1,6 @@
 # $Id$
 
-EXTRA_DIST    = meta.sh.src pt-dump.sh.src eqs-dump.sh.src new-editor.sh.src \
+EXTRA_DIST    = meta.sh.src pt-dump.sh.src eqs-dump.sh.src \
 		sdf-editor.sh.src asf-editor.sh.src term-editor.sh.src
 
 bin_SCRIPTS = meta pt-dump eqs-dump sdf-editor asf-editor term-editor
