@@ -157,7 +157,8 @@ in
     rec-msg(changed-modules(Changed?)) .
     SaveSdfModules(Changed).
     snd-msg(notify-about-changed-modules(Changed, sdf)) .
-    rec-msg(notify-about-changed-modules-done)
+    rec-msg(notify-about-changed-modules-done) .
+    MDB-DisplayGraph
 endlet
 
 process DoRenameModule(Old : str, New : str, Path : str) is
