@@ -81,7 +81,7 @@ do
         -d)
 		xargs="$xargs -viewer" ;;
         -h)
-		Usage ;;
+		Usage ; exit 0 ;;
         -i)
 		shift ;;
         -o)
