@@ -36,8 +36,6 @@ datadir=__DATADIR__
 # 1. Steps 1 and 2 from above.
 # 2. You don't need a reference term of course
 
-set -e
-
 # first we do all equations that should succeed, and check if the normal
 # forms are what we expected.
 
@@ -48,6 +46,9 @@ for e in eqs/*.eqs.asfix1; do
     ref=ref/`basename $t .trm.asfix1`.ref.asfix1
     ../src/evaluator -w on -e $e -i $t -o $res
     ./equalModuloWhitespace $ref $res
+    if [ $? -ne 0 ]; then
+       exit 1
+    fi
     rm -f $res
     printf "."
   done
@@ -60,7 +61,10 @@ for e in fail/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=ref/`basename $t .trm.asfix1`.ref.asfix1
-    ! ../src/evaluator -w on -e $e -i $t -o $res > /dev/null 2>&1
+    ../src/evaluator -w on -e $e -i $t -o $res > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+       exit 1
+    fi
     rm -f $res
     printf "."
   done
