@@ -483,7 +483,8 @@ ATerm AF2ProdToText(ATerm t)
 	ATerm attrs = NULL;
 	ATerm str;
 
-	ATwarning("PPing: %t\n", t);
+	init_a2toa1_patterns();
+
 	text = CreateBuffer(AF2PRODTOTEXT_BUFFER_SIZE, /* initial buffer size       */ 
 											AF2PRODTOTEXT_BUFFER_SIZE, /* step size when reallocing */
 											sizeof(char));             /* size of atomic elements   */
@@ -499,7 +500,6 @@ ATerm AF2ProdToText(ATerm t)
 	str = ATmake("<str>", GetBufferContent(text));
 	DeleteBuffer(text);
 
-	ATwarning("STr: %t\n", str);
 	return str;
 }
 

@@ -37,9 +37,9 @@ ALLSRCS                  = abbrevs.c asfix.c asfix2src.c expand2asfix.c \
 
 PUBLIC_INCL              = AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
 		           AsFix-expand.h AsFix.h aterm-macs.h AsFix-fun.h \
-		           AsFix2src.h AsFix-access.h a2toa1.h
+		           AsFix2src.h AsFix-access.h a2toa1.h buffer.h
 
-PRIVATE_INCL	         = buffer.h
+PRIVATE_INCL	         = 
 
 ALLINCLUDES	         = ${PUBLIC_INCL} ${PRIVATE_INCL}
 
