@@ -1,6 +1,6 @@
 equations
 
-[as-1] add-pred($Rel, $Rstore) = extend-rel(PRED, $Rel, $Rstore)
+[as-1] add-pred($Rel, $Rstore) = add-tuples(PRED, $Rel, $Rstore)
  
 [ex1] Stat = while Exp do Stat* od,
       $Area = get-area(Stat),

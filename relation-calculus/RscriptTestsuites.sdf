@@ -1,0 +1,26 @@
+module RscriptTestsuites
+
+imports RscriptCalculator
+
+exports
+   sorts TESTREPORT
+
+  context-free syntax
+
+	"All" Integer "tests" "passed"				-> TESTREPORT
+	Integer "of" Integer "tests" "failed:" RVALUE 		-> TESTREPORT
+
+	testsuite-report(Integer, Integer, RVALUE) 		-> TESTREPORT
+	eval-rscript-testsuite(RSCRIPT)				-> TESTREPORT
+	increment(RVAR, RSTORE)					-> RSTORE
+
+hiddens
+   variables
+
+       "$Rstore" [0-9\']*             -> RSTORE
+       "$Integer" [0-9\']*            -> Integer
+       "$Val" [0-9\']*                -> RVALUE
+       "$Var" [0-9\']*                -> RVAR
+       "$Exp"  [0-9\']*               -> REXP
+       "$String" [0-9\']*             -> String
+       "$Stat*" [0-9\']*              -> RSTAT*

@@ -31,7 +31,7 @@ buttons([
            get-root,
            check-sort("RSCRIPT"),
            apply("eval-rscript-testsuite", "TESTREPORT", 1),
-           push-modulename("RscriptCalculator"),
+           push-modulename("RscriptTestsuites"),
            reduce,
            push-filename("RscriptCalculator.results"),
            push-active-module,

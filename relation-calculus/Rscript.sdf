@@ -37,10 +37,11 @@ exports
      "<" REXP "," REXP "," {REXP ","}+ ">"	-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
 
-%% Binary Operators
+
      REXP "and" REXP                         	-> REXP {left}
      REXP "or" REXP                          	-> REXP {left}
      REXP "implies" REXP			-> REXP {left}
+     "not" REXP                              	-> REXP
 
      REXP "in" REXP			     	-> REXP {non-assoc}
      REXP "notin" REXP			     	-> REXP {non-assoc}
@@ -58,29 +59,13 @@ exports
      REXP "o" REXP                           	-> REXP {left}
      REXP "x" REXP                           	-> REXP {left}
      REXP "." REXP                           	-> REXP {left}
-
-%% Unary Operators
+     REXP "[" REXP "]"				-> REXP
 
      REXP "+"                                	-> REXP
      REXP "*"                                	-> REXP
-     "not" REXP                              	-> REXP
      "#" REXP			    	     	-> REXP
 
-%% Image operator
-     REXP "[" REXP "]"				-> REXP
-
-%% Types
-
-     "bool" | "int" | "str" | "area"	     	-> ElemType
-     ElemType                                	-> REXPTYPE
-     "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
-     "<" REXPTYPE "," REXPTYPE "," {REXPTYPE ","}+">" 
-				          	-> REXPTYPE
-     "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
-     "rel" "[" REXPTYPE "," {REXPTYPE ","}+ "]" -> REXPTYPE
-     RVAR				     	-> REXPTYPE
-
-%% Bag and relation formers
+%% Comprehensions
 
      "{" REXP "|" {GENERATOR ","}+ "}"		-> REXP
 
@@ -98,21 +83,29 @@ exports
      "exists" "(" SIMPLE-GENERATOR "|" REXP ")" -> REXP
      "forall" "(" SIMPLE-GENERATOR "|" REXP ")"	-> REXP
 
+%% Let expressions
+
+     REXP "where" RSTAT+ "endwhere"		-> REXP
+
 %% Functions
 
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
      "(" REXP ")"                             	-> REXP {bracket}
 
-%% Let expressions
 
-     REXP "where" RSTAT+ "endwhere"		-> REXP
 
-%% Highly experimental sets of equations
-     RVAR "=" REXP				-> EQU
+%% Types
 
-     "solve" ("(" Integer ")")? "{" { EQU  "," }+ "}" -> RSTAT
+     "bool" | "int" | "str" | "area"	     	-> ElemType
+     ElemType                                	-> REXPTYPE
+     "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
+     "<" REXPTYPE "," REXPTYPE "," {REXPTYPE ","}+">" 
+				          	-> REXPTYPE
+     "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
+     "rel" "[" REXPTYPE "," {REXPTYPE ","}+ "]" -> REXPTYPE
+     RVAR				     	-> REXPTYPE
 
-%% Statements and script
+%% Declarations and Statements
 
      REXPTYPE RVAR			      	-> DCLRVAR
 
@@ -123,7 +116,14 @@ exports
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
 
      "assert" String ":"  REXP			-> RSTAT
- 
+
+%% Highly experimental sets of equations
+     RVAR "=" REXP				-> EQU
+
+     "solve" ("(" Integer ")")? "{" { EQU  "," }+ "}" -> RSTAT
+
+%% Complete Rscript
+
      RSTAT*                                     -> RSCRIPT
 
   context-free priorities

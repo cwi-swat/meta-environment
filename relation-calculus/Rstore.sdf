@@ -21,13 +21,11 @@ exports
 	assign-when-undef(RVAR, RVALUE, RSTORE)		-> RSTORE
         value(RVAR, RSTORE)                   		-> RVALUE
 
-%%        rval2rel(RVALUE)	 	      		-> Bag[[Elem]]
-%%        rval2bag(RVALUE)		      		-> Bag[[Elem]]
+%% Extension functions on RSTOREs intended for fact extraction tools
 
-%% Extension functions on RSTORE
 	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
 	add-tuple(RVAR, Elem # Elem, RSTORE)  		-> RSTORE
-	extend-rel(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
+	add-tuples(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
 
 hiddens
 
