@@ -112,7 +112,7 @@ in
     rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
     snd-msg(rename(Renamings, Semantics)).
     rec-msg(equations(Semantics?)).
-    snd-msg(rename-semantics-hook(Semantics))
+    snd-msg(rename-semantics-hook-result(Semantics))
   +
     rec-msg(postprocess-collected-semantics-hook(Modules?)).
     snd-msg(flatten-equations(Modules)).
