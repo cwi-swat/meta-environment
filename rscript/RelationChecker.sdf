@@ -40,10 +40,10 @@ exports
 
         "[" {ERROR ";"} * "]"                			-> ERRORS
 
-	t2s(ElemType)						-> StrCon
-         convertl(ERRORS)                   			-> List
+	t2s(REXPTYPE)						-> String
+	tl2sl({REXPTYPE ","}*)					-> String
 	e2i(ERROR)						-> ListItem
-	 convert(String # Area)                    		-> ListItem
+	 convert-errors(ERRORS)                    		-> List
          rvar2str(RVAR)		 	        		-> String
  
 	Table[[RVAR,REXPTYPE]] # ERRORS  			-> TENV
@@ -59,7 +59,7 @@ exports
 
 	built-ins						-> Table[[RVAR,REXPTYPE]]
 
-	check-rscript(RSCRIPT)					-> ERRORS
+	check-rscript(RSCRIPT)					-> List
 %%	check-rscript(RSTAT*)          				-> TENV
         check-rscript(RSTAT*, TENV)				-> TENV
 	check(REXP, TENV) 					-> REXPTYPE # TENV
@@ -170,4 +170,6 @@ hiddens
      "$From" [0-9\']*   	-> FROM
      "$From*" [0-9\']*   	-> {FROM ","}*
      "$From+" [0-9\']*   	-> {FROM ","}+
+
+      "$ListItem*" [0-9\']*	-> {ListItem ","}*
 	

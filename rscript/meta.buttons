@@ -6,13 +6,25 @@ buttons([
           [push-active-module,
 	   get-root,
            check-sort("RSCRIPT"),
-           apply("check-rscript", "ERRORS", 1),
+           apply("check-rscript", "List", 1),
            push-modulename("RelationChecker"),
            reduce,
-	   push-filename("RelationChecker.results"),
-	   push-active-module,
-	   activate-editor
+	   execute-action("unparsePT"),
+	   show-list
            ]),
+
+  button("*",
+           ["term"],
+           ["Actions", "Show List"],
+           [get-root,
+            execute-action("unparsePT"),
+            show-list]),
+
+    button("*",
+          ["message-list"],
+          ["ShowSource"],
+          [show-area("RScripts")]),
+
 
   button("RScripts",
           ["term"],
@@ -76,5 +88,9 @@ buttons([
            push-modulename("PicoQuery"),
 	   activate-editor
            ])
+
+
+
+
 
 ])
