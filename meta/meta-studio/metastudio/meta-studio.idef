@@ -216,7 +216,9 @@ in
      snd-ack-event(UI,debugging(On))
    ) +
    ( rec-note(display-import-graph(Mods?,Pairs?)).
-     snd-do(UI,new-graph(Mods,Pairs))
+     snd-do(UI,new-graph(Mods,Pairs)) .
+     Mods := [] .
+     Pairs := []
    )
    +
    ( rec-event(UI, layout-graph(GraphId?, Graph?)) .

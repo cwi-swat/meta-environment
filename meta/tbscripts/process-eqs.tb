@@ -59,6 +59,7 @@ in
   snd-msg(get-all-modules) .
   rec-msg(all-modules(Modules?)) .
   snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
+  Modules := [] .
   rec-msg(sm-all-needed-imports(Imports?))  
 endlet
 

@@ -27,16 +27,19 @@ in
     snd-do(TS,clear-table(TableName))
   +
     rec-msg(ts-put-term-value(TableName?,Key?,TermValue?)).
-    snd-do(TS,put-term-value(TableName,Key,TermValue))
+    snd-do(TS,put-term-value(TableName,Key,TermValue)) .
+    TermValue := no-tree
   +
     rec-msg(ts-put-str-value(TableName?,Key?,StrValue?)).
-    snd-do(TS,put-str-value(TableName,Key,StrValue))
+    snd-do(TS,put-str-value(TableName,Key,StrValue)) .
+    StrValue := ""
   +
     rec-msg(ts-get-str-value(TableName?,Key?)).
     snd-eval(TS,get-str-value(TableName,Key)) .
     (
       rec-value(TS,result(StrValue?)).
-      snd-msg(ts-value(StrValue))
+      snd-msg(ts-value(StrValue)) .
+      StrValue := ""
     +
       rec-value(TS,no-result) .
       snd-msg(ts-no-value)
@@ -46,7 +49,8 @@ in
     snd-eval(TS,get-term-value(TableName,Key)) .
     (
       rec-value(TS,result(TermValue?)).
-      snd-msg(ts-value(TermValue))
+      snd-msg(ts-value(TermValue)) .
+      TermValue := no-tree
     +
       rec-value(TS,no-result) .
       snd-msg(ts-no-value)
@@ -68,17 +72,20 @@ in
     rec-msg(ts-get-all-keys(TableName?)).
     snd-eval(TS,get-all-keys(TableName)).
     rec-value(TS,result(Keys?)).
-    snd-msg(ts-all-keys(Keys))
+    snd-msg(ts-all-keys(Keys)) .
+    Keys := []
   +  
     rec-msg(ts-filter-keys(TableName?, Keys?)) .
     snd-eval(TS, filter-keys(TableName, Keys)) .
     rec-value(TS,result(Keys?)).
-    snd-msg(ts-keys(Keys))
+    snd-msg(ts-keys(Keys)) .
+    Keys := []
   +
     rec-msg(ts-get-all-values(TableName?)) .
     snd-eval(TS, get-all-values(TableName)) .
     rec-value(TS,result(Values?)) .
-    snd-msg(ts-all-values(Values))
+    snd-msg(ts-all-values(Values)) .
+    Values := []
   +
     rec-msg(ts-remove-value-from-all-tables(Key?)).
     snd-do(TS,remove-value-from-all-tables(Key))

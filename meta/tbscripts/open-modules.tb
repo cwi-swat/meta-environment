@@ -33,7 +33,9 @@ let
 in
   snd-msg(get-import-graph) .
   rec-msg(import-graph(Nodes?, Vertices?)) .
-  snd-note(display-import-graph(Nodes,Vertices))
+  snd-note(display-import-graph(Nodes,Vertices)) .
+  Nodes := [] .
+  Vertices := []
 endlet
 
 process LocateFile(Name : str, Extension : str, Path : str?) is
@@ -99,11 +101,13 @@ let
   Imports : list,
   Status : term,
   Path : str,
-  FileName : str
+  FileName : str,
+  Changed : term
 in
   Id := process-id.
   (
     rec-msg(open-modules(Modules?)).
+    Changed := true .
     snd-note(ui-status(stat(Id,"Opening Modules"))). 
     RealModules := [].
     if not-equal(Modules, []) then
@@ -115,18 +119,22 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-	LocateFile(Module, ".sdf", Path?) .
+        LocateFile(Module, ".sdf", Path?) .
         Open-Module(Path, Module, Status?, RealModule?, Imports?).
         Modules := join(Imports, Modules).
         RealModules := join(RealModules, RealModule)
       )
     fi *
     if equal(Modules, []) then
-      Invalidate-Dirty-ParseTables(RealModules) .
-      DrawImportGraph() .
+      if equal(Changed, true) then
+        Invalidate-Dirty-ParseTables(RealModules) .
+        DrawImportGraph()
+      else
+        tau
+      fi .
+      snd-note(ui-status(endstat(Id))) .
       snd-msg(finished-opening-modules)
-    fi.
-    snd-note(ui-status(endstat(Id)))
+    fi
   ) *
   delta
 endlet

@@ -29,16 +29,17 @@ Id := process-id.
     snd-msg(get-all-sdf2-definitions(Str)).
     (
       rec-msg(syntax(Syntax?)).
-
       snd-msg(preprocess-syntax-hook(ModuleId, Syntax)).
       rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
       snd-msg(generate-parsetable(Syntax, ModuleId)).
+      Syntax := no-tree .
       (
         rec-msg(parsetable(Table?)).
         snd-msg(add-parse-table-to-db(ModuleId, Table)) .
         rec-msg(parse-table-added).
         snd-note(ui-status(endstat(Id))) .
-        snd-msg(parse-table(Table))
+        snd-msg(parse-table(Table)) .
+        Table := no-table 
       +
         rec-msg(no-parsetable).
         snd-note(ui-status(endstat(Id))) .

@@ -11,7 +11,8 @@
 
 2003/05/27 (markvdb@cwi.nl)
  * Imports are filtered against the contents of the term-store.
- * meta.tb now has an explicit starting order of initial processes
+ * meta.tb now has an explicit starting order of initial processes.
+ * Some variables set to dummy values.
 
 2003/05/27 ({jong,jurgenv}@cwi.nl)
  * fixed a lot of stupid bugs in in-output (unneeded free calls for example)
