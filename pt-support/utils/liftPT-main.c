@@ -32,7 +32,7 @@ void usage(void)
     fprintf(stderr,
         "Usage: %s -h -i arg -o arg -V . . .\n"
         "Options:\n"
-	"\t-a              explode to parsed ATerm always, not AsFix (default off)\n"
+	"\t-a              lift to parsed ATerm always, not AsFix (default off)\n"
         "\t-h              display help information (usage)\n"
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
@@ -81,16 +81,16 @@ int main (int argc, char **argv)
   }
 
   if (!aterms && ATmatch(input, "parsetree(<term>,<term>)",NULL,NULL)) {
-    output = (ATerm) PTPT_explodeParseTree((PT_ParseTree) input);
+    output = (ATerm) PTPT_liftParseTree((PT_ParseTree) input);
   }
   else if (!aterms && ATmatch(input, "appl(<term>,<term>)", NULL, NULL)) {
-    output = (ATerm) PTPT_explodeTree((PT_Tree) input);
+    output = (ATerm) PTPT_liftTree((PT_Tree) input);
   }
   else if (!aterms && ATmatch(input, "amb(<term>)", NULL)) {
-    output = (ATerm) PTPT_explodeTree((PT_Tree) input);
+    output = (ATerm) PTPT_liftTree((PT_Tree) input);
   }
   else {
-    output = (ATerm) PTPT_explodeATerm(input);
+    output = (ATerm) PTPT_liftATerm(input);
   }
 
   if(output != NULL) {
@@ -104,7 +104,7 @@ int main (int argc, char **argv)
     }
   }
   else {
-    ATwarning("explode: something went wrong\n");
+    ATwarning("lift: something went wrong\n");
     return 1;
   }
 

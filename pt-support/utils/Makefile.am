@@ -14,7 +14,7 @@ bin_PROGRAMS = \
 	addPosInfo \
 	ambtracker \
 	apply-function \
-	parsePT
+	liftPT
 
 INCLUDES = \
 	-I${top_srcdir}/libmept \
@@ -62,9 +62,9 @@ flattenPT_LDADD	= \
 	-L../libasfix2 -lasfix2 \
 	-L${ATERM}/lib -lATerm
 
-parsePT_SOURCES	= parsePT-main.c
+liftPT_SOURCES	= liftPT-main.c
 
-parsePT_LDADD = \
+liftPT_LDADD = \
 	-L../libmept -lmept \
 	-L../libptmept -lPTMEPT \
 	-L${ATERM}/lib -lATerm
