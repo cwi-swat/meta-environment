@@ -325,6 +325,17 @@ public class MetaStudio
 	  }
         }
       });
+    
+    modulePopup.add(new AbstractAction("Rename Module")
+      {
+        public void actionPerformed(ActionEvent event)
+        {
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    doRenameModule((String)values[i]);
+	  }
+        }
+      });
 
     modulePopup.addSeparator();
 
@@ -363,16 +374,6 @@ public class MetaStudio
 
     modulePopup.addSeparator();
 
-    modulePopup.add(new AbstractAction("Rename Module")
-      {
-        public void actionPerformed(ActionEvent event)
-        {
-	  Object[] values = moduleList.getSelectedValues();
-	  for (int i=0; i<values.length; i++) {
-	    doRenameModule((String)values[i]);
-	  }
-        }
-      });
 
     modulePopup.add(new AbstractAction("Print Module")
       {
@@ -1129,12 +1130,32 @@ public class MetaStudio
   //}}}
 
   //{{{ void doRenameModule(String module)
-
-  void doRenameModule(String module)
+void doRenameModule(String old)
   {
-    String newname = (String)JOptionPane.showInputDialog(this, "New module name:");
-    if (newname != null) {
-      bridge.postEvent(factory.make("rename-module(<str>,<str>)", module, newname));
+    String extension = Preferences.getString("module.extension");
+    String[] exts = { extension };
+    String description = Preferences.getString("module.extension.description");
+    JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+    chooser.setFileFilter(new ExtensionFilter(exts, description));
+    String label = Preferences.getString("text.rename-module");
+    int option = chooser.showDialog(this, label);
+    if (option == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      if (file != null) {
+	String path = file.getPath();
+	String module = file.getName();
+	if (module.endsWith(extension)) {
+	  module = module.substring(0, module.length()-extension.length());
+	}
+	if (path.endsWith(extension)) {
+	  path = path.substring(0, path.length()-extension.length());
+	}
+
+	ATerm event = factory.make("rename-module(<str>,<str>,<str>)", old,
+				   module, path);
+
+	bridge.postEvent(event);
+      }
     }
   }
 

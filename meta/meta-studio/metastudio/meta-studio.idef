@@ -47,11 +47,14 @@ let
   T       : str,
   FT      : str,
   Path    : str,
+  PathWithExt    : str,
   ErrMsg  : str,
   On      : term,
   Graph   : term,
   Info	  : list,
-  LayoutedGraph : term
+  LayoutedGraph : term,
+   ModuleName : str,
+  RealModuleName : str
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -67,14 +70,12 @@ in
         rec-msg(module-not-created(ErrMsg?)).
 	snd-note(ui-status(errorf("%s",[ErrMsg])))
       +
-        rec-msg(module-created).
-	snd-msg(open-modules([Str])). 
+        rec-msg(new-module-created(PathWithExt?, RealModuleName?)).
+	snd-msg(open-initial-module(PathWithExt, RealModuleName)).
         ( rec-note(import-graph(Mods?, Pairs?)) .
           snd-do(UI,new-graph(Mods,Pairs))
-	  +
-	  rec-msg(cannot-open-module(ModName?)).
-	  snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-        ) .
+        ) *
+        rec-msg(finished-opening-initial-module).
 	snd-do(UI,finished-opening-modules(Str))
       ).
       snd-ack-event(UI, new-module(Path, Str))
@@ -89,7 +90,7 @@ in
         rec-msg(cannot-open-module(ModName?)).
 	snd-note(ui-status(errorf("cannot open module %s",[ModName])))
       )*
-      rec-note(finished-opening-initial-module) .
+      rec-msg(finished-opening-initial-module) .
       snd-do(UI,finished-opening-modules(Str)) .
       snd-ack-event(UI, open-module(Path, Str)) .
       snd-do(UI,new-graph(Mods,Pairs))
@@ -154,9 +155,9 @@ in
      rec-msg(compilation-ready(Str)).
      snd-ack-event(UI, compile-module(Str))
    ) +
-   ( rec-event(UI, rename-module(Str?, Str1?)) .
-     snd-msg(rename-module(Str, Str1)) .
-     snd-ack-event(UI, rename-module(Str, Str1))
+   ( rec-event(UI, rename-module(Str?, Str1?, Path?)) .
+     snd-msg(rename-module(Str, Str1, Path)) .
+     snd-ack-event(UI, rename-module(Str, Str1, Path))
    ) +
    ( rec-event(UI, dump-equations(Str?)).
      snd-msg(dump-equations(Str)).
