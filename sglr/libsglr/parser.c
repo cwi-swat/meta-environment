@@ -824,7 +824,7 @@ char *SG_ProdSort(production t)
 
 			if(!ATmatch(elt, "cf(opt(layout))",elt)
 		  &&  ATmatch(elt, "cf(<term>)", &symbol)) {
-				SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol));
+				SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol, ATfalse));
 			}
 		}
 
