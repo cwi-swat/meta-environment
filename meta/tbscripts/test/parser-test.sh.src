@@ -22,7 +22,7 @@
 # $Id$
 
 toolbus=__TOOLBUSBIN__/toolbus
-datadir=__DAtADIR__
+datadir=__DATADIR__
 
 tests=0
 failed=0    
