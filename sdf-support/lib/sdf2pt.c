@@ -211,7 +211,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
     PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
     PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
-    result = PT_makeSymbolPair(ptLeft, ptRight);
+    result = PT_makeSymbolAlt(ptLeft, ptRight);
   }
   else if (SDF_isSymbolPerm(sdfSymbol)) {
     SDF_Symbols sdfSyms = SDF_getSymbolSymbols(sdfSymbol);
