@@ -179,21 +179,30 @@ endlet
 
 process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
 let
-  Text        : str
+  Text        : str,
+  EditorId    : term,
+  NewModuleName : str
 in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
-    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
+    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
+    rec-msg(edit-term-file(NewModuleName?, EditorId?))
   fi
 endlet
 
 process ActivateEditorWithString(Text: str, ModuleName: str, FileName: str) is
+let
+  EditorId    : term,
+  NewModuleName : str
+in
   snd-msg(save-text-file(FileName, Text)) .
   rec-msg(save-done(FileName)) .
-  snd-msg(edit-term-file(ModuleName, FileName))
+  snd-msg(edit-term-file(ModuleName, FileName)) .
+  rec-msg(edit-term-file(NewModuleName?, EditorId?))
+endlet
 
 process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
 let

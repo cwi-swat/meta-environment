@@ -10,6 +10,8 @@ let
 in
   Id := process-id.
   subscribe(search-paths-processed) .
+  subscribe(delete-editor(<term>)) .
+
 
   rec-note(search-paths-processed) .
   snd-msg(open-modules([MODULENAME])) .
@@ -19,8 +21,8 @@ in
   )*
   rec-msg(finished-opening-modules) .
   snd-msg(edit-term-file(MODULENAME,INFILENAME)) .
-printf("Input file is %s\n", INFILENAME).
-  rec-msg(delete-editor(EditorId?)) .
+  rec-msg(edit-term-file(ModuleName?, EditorId?)) .
+  rec-note(delete-editor(EditorId)) .
   shutdown("")
 
 endlet   

@@ -16,7 +16,7 @@ in
       EditorId := first(EditorList) .
       snd-msg(delete-text-editor(EditorId)) .
       snd-msg(delete-structure-editor(EditorId)) .
-      snd-msg(delete-editor(EditorId)) .
+      snd-note(delete-editor(EditorId)) .
       snd-msg(kill-editor(EditorId)) .
       EditorList := next(EditorList)
     fi
@@ -99,13 +99,14 @@ in
       rec-msg(error-opening(FileName)) .
       snd-msg(set-filename(EditorId, FileName)) .
       create(EditTerm(EditorId, ModuleName, "", Tree), Pid2?)
-    )
+    ) .
+    snd-msg(edit-term-file(ModuleName, EditorId))
   +
     rec-msg(text-editor-disconnected(EditorId?)) .
 	  snd-msg(kill-editor(EditorId)) .
     rec-msg(kill-editor-done(EditorId)).
     snd-msg(delete-structure-editor(EditorId)) .
-    snd-msg(delete-editor(EditorId))
+    snd-note(delete-editor(EditorId))
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
     DeleteEditorsForModule(ModuleName)
