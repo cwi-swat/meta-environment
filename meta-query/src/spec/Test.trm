@@ -16,6 +16,7 @@ exports
     "exports" Grammar            -> Section
     "hiddens" Grammar            -> Section
     Section*                     -> Sections
+    {Section ";"}+                     -> Sections
     ModuleId                     -> ModuleName
     ModuleId "[" Symbols "]"     -> ModuleName
     "imports" Imports            -> ImpSection
@@ -23,6 +24,7 @@ exports
     Import*                      -> Imports
     ModuleName                   -> Import
     ModuleName Renamings         -> Import
+    ModuleName[[Renamings,Imports]]         -> Import
     "(" Import ")"               -> Import {bracket}   
 
     "id" "(" ModuleName ")"      -> Attribute 

@@ -11,8 +11,22 @@ exports
 hiddens
   context-free syntax
     extractRelations(Module, RSTORE) -> RSTORE {traversal(accu,break,top-down)}
+    extractRelations(Grammar, RSTORE) -> RSTORE {traversal(accu,break,top-down)}
 
-    extractRelations(Production, RSTORE) -> RSTORE {traversal(accu,break,top-down)}
+    extractRelationsContextFree(Productions, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
+    extractRelationsContextFree(Production, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
+
+    extractRelationsLexical(Productions, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
+    extractRelationsLexical(Production, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
+
+    extractRelationsVariables(Productions, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
+    extractRelationsVariables(Production, RSTORE) 
+      -> RSTORE {traversal(accu,break,top-down)}
 
 hiddens
   variables
@@ -23,7 +37,9 @@ hiddens
 
     "$Module"[0-9]*		-> Module
     "$Production"[0-9]*		-> Production
+    "$Productions"[0-9]*	-> Productions
     "$Sort"[0-9]*		-> Sort
+    "$Symbol"[0-9]*		-> Symbol
     "$Symbols"[0-9]*		-> Symbols
     "$Attributes"[0-9]* 	-> Attributes
     "$Literal"[0-9]*		-> Literal

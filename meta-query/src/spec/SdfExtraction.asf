@@ -3,18 +3,46 @@ equations
   [extractRelations-module]
     extractRelations($Module) = extractRelations($Module, [])
 
+  [extractRelations-lexical]
+    extractRelations(lexical syntax $Productions, $Rstore) = 
+      extractRelationsLexical($Productions, $Rstore)
+
+  [extractRelations-context-free]
+    extractRelations(context-free syntax $Productions, $Rstore) = 
+      extractRelationsContextFree($Productions, $Rstore)
+
+  [extractRelations-variables]
+    extractRelations(variables $Productions, $Rstore) = 
+      extractRelationsVariables($Productions, $Rstore)
+
   [extractRelations-production]
-    $Production = $Symbols -> $Sort $Attributes,
+    $Production = $Symbols -> $Symbol $Attributes,
+    $ProductionId = get-area($Production),
+    $Tuple = <$ProductionId, symbol2str($Symbol)>,
+    $Rstore2 = add-tuple(LEXICALPRODUCTIONS, $Tuple, $Rstore1)
+    ===>
+    extractRelationsLexical($Production, $Rstore1) = $Rstore2
+
+  [extractRelations-production]
+    $Production = $Symbols -> $Symbol $Attributes,
     $ProductionId = get-area($Production),
     $Tuple = <$ProductionId, production2str($Production)>,
     $Rstore2 = add-tuple(PRODUCTIONS, $Tuple, $Rstore1)
     ===>
-    extractRelations($Production, $Rstore1) = $Rstore2
+    extractRelationsContextFree($Production, $Rstore1) = $Rstore2
 
   [extractRelations-prefixproduction]
-    $Production = $Literal($Symbol*) -> $Sort $Attributes,
+    $Production = $Literal($Symbol*) -> $Symbol $Attributes,
     $ProductionId = get-area($Production),
     $Tuple = <$ProductionId, production2str($Production)>,
     $Rstore2 = add-tuple(PREFIXPRODUCTIONS, $Tuple, $Rstore1)
     ===>
-    extractRelations($Production, $Rstore1) = $Rstore2
+    extractRelationsContextFree($Production, $Rstore1) = $Rstore2
+
+  [extractRelations-production]
+    $Production = $Symbols -> $Symbol $Attributes,
+    $ProductionId = get-area($Production),
+    $Tuple = <$ProductionId, symbol2str($Symbol)>,
+    $Rstore2 = add-tuple(VARIABLEPRODUCTIONS, $Tuple, $Rstore1)
+    ===>
+    extractRelationsVariables($Production, $Rstore1) = $Rstore2
