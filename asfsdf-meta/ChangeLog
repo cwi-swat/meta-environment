@@ -1,3 +1,6 @@
+2003/03/13 (vandenbr@loria.fr)
+ * Introduced scripts for the various standalone editors.
+
 2003/02/13 (jurgenv@cwi.nl)
  * Added ModuleName to postprocess-collected-semantics-hook
  * Added catching of events from the rewriter. They are just printed
