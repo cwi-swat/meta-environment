@@ -3,6 +3,8 @@
    like: a parsetree, an appl, a lit, a character an amb or a list of 
    trees.
  * Adapted unparsePT to handle any part of a parse tree.
+ * Bumped version of unparsePT to 1.3
+ * Bumped to version 0.6
 
 2001/07/25 (jurgenv@cwi.nl)
  * PT2dot functionality added to the library. This is a highly refactored
