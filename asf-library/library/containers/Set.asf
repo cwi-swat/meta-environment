@@ -2,15 +2,30 @@ equations
 
   [dup] {X*1, X, X*2, X, X*3} = {X*1, X, X*2, X*3}
 
-  [concat] {X*1} + {X*2} = {X*1,X*2}
+  [un] Set1 \/ Set2 = union(Set1, Set2)
+  [un-0] union({X*1}, {X*2}) = {X*1,X*2}
 
-  [el] elem(X, {X*1, X, X*2}) = true
-  [default-el] elem(X, Set) = false
+  [el] X in Set = elem(X, Set)
+ 
+  [el-0] in(X, {X*1, X, X*2}) = true
+  [default-el-1] in(X, Set) = false
 
-  [com-1] elem(X, Set) == true
+  
+  [is] Set1 /\ Set2 = intersection(Set1, Set2)
+ 
+  [is-1] elem(X, Set) == true
           ====>
-          common({X,X*1},Set) = {X} + common({X*1},Set)
-  [com-2] elem(X, Set) == false
+          intersection({X,X*1},Set) = {X} + intersection({X*1},Set)
+
+  [is-2] elem(X, Set) == false
           ====>
-          common({X,X*1},Set) = common({X*1},Set)
-  [com-3] common({},Set) = {}
+          intersection({X,X*1},Set) = intersection({X*1},Set)
+
+  [is-3] intersection({},Set) = {}
+
+  [df] Set1 \ Set2 = difference(Set1, Set2)
+
+  [df-0] difference({X*1, X, X*2}, {X*3, X, X*4}) =
+         difference({X*1, X*2}, {X*3, X*4}
+  
+  [default-df-1] difference(Set1, Set2) = Set1 

@@ -5,14 +5,20 @@ imports basic/Booleans
 
 exports
   context-free syntax
-    "{" { X ","}* "}"      -> Set[[X]]
-    Set[[X]] "+" Set[[X]]  -> Set[[X]] {left}
 
-    elem(X, Set[[X]])      -> Boolean
+    "{" { X ","}* "}" -> Set[[X]]
+    Set[[X]] "\\/" Set[[X]]  -> Set[[X]] {left}
 
-    common(Set[[X]], Set[[X]])	-> Set[[X]]
+    X "in" Set[[X]] -> Boolean
+    in(X, Set[[X]])      -> Boolean
 
+    intersection(Set[[X]], Set[[X]])	-> Set[[X]]
+    Set[[X]] "/\\" Set[[X]]) -> Set[[X]] {left}
 
+    Set[[X]] "\\" Set[[X]] -> Set[[X]] {non-assoc}
+    difference(Set[[X]], Set[[X]]) -> Set[[X]]
+
+    "(" Set[[X]] ")" -> Set[[X]] {bracket}
 
 hiddens
   sorts Set[[X]]
