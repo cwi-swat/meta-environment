@@ -1,5 +1,5 @@
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, 
 #                        Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -20,24 +20,8 @@
 #
 # $Id$
 
-SUBDIRS       = test
+HELP_FILES   = meta.html open-module.html sdf1-to-sdf2-conversion.html
 
-TBSCRIPTS     = addeqsyn.tb clear-all.tb close-modules.tb \
-                edit-equations.tb edit-master.tb edit-module.tb edit-term.tb \
-                editor.tb file-creator.tb focus.tb meta.tb notification.tb \
-                open-modules.tb parsetrees.tb process-eqs.tb removevarsyn.tb \
-                revert-module.tb rewrite-errors.tb save-module.tb \
-                set-parsetable.tb status-display.tb structure-editor.tb \
-                ui.tb
+pkgdata_DATA = $(HELP_FILES)
 
-GEN_TBSCRIPTS = sdf2-language.tb help.tb
-
-EXTRA_DIST    = $(TBSCRIPTS) $(GEN_TBSCRIPTS:.tb=.tb.src)
-
-CLEANFILES    = sdf2-language.tb help.tb
-
-data_DATA     = $(TBSCRIPTS) $(GEN_TBSCRIPTS)
-
-%.tb : %.tb.src Makefile
-	sed 's@__DATADIR__@$(datadir)@g;\
-	     s@__PKGDATA__@$(pkgdatadir)@g' < $< > $@ 
+EXTRA_DIST   = $(HELP_FILES)

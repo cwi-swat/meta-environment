@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2000/4/16 (mdejonge@cwi.nl)
+   * Online help files are now installed in <prefix>/share/meta
+
 2000/4/15 (mdejonge@cwi.nl)
    * ASF+SDF Meta-Environment is now configured/build using automake
 

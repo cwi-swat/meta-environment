@@ -181,6 +181,8 @@ grammars/sdf2/Makefile
 demo/Makefile
 demo/pico/Makefile
 demo/user-manual-examples/Makefile
+doc/Makefile
+doc/html/Makefile
 , chmod +x utils/genmakefile
 )
 

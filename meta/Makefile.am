@@ -22,7 +22,7 @@
 
 SUBDIRS     = asfix asc-support sglr pgen compiler asfix2c-compiler editor \
               evaluator graph-browser in-output module-db utils toolbus \
-              stred grammars demo
+              stred grammars demo doc
 
 EXTRA_DIST  = make_rules meta.sh.src
 
