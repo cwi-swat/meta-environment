@@ -37,3 +37,12 @@ config.status:	configure
 configure:	configure.in
 	@echo "Warning: configure script is out of date"
 	@echo "Please consider (re)running autoconf"
+
+distclean:	clean
+
+dist:   distclean
+	( dir=`basename \`pwd\`` ; cd .. ;			\
+	  files=`find $$dir -type f -print  |  grep -v CVS` ;	\
+	  tar cf $$dir.tar $$files ;				\
+	  rm -f $$dir.tar.gz ;					\
+	  gzip $$dir.tar )
