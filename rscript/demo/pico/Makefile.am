@@ -1,12 +1,14 @@
-picodir=$(pkgdatadir)/demo/pico
+include $(top_srcdir)/make_rules
 
-FILES=	$(wildcard *.asf) \
-	$(wildcard *.sdf) \
-	$(wildcard *.pico) \
-	uninit.rscript \
-	meta.buttons \
-	meta.conf
+picodir		= $(pkgdatadir)/demo/pico
 
-SOURCES=$(FILES)
+FILES		= $(wildcard *.asf) 
+		  $(wildcard *.sdf) \
+		  $(wildcard *.pico) \
+		  uninit.rscript \
+		  meta.buttons \
+		  meta.conf
 
-pico_DATA=$(FILES)
+SOURCES		= $(FILES)
+
+pico_DATA	= $(FILES)

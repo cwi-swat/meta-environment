@@ -1,20 +1,21 @@
 # ---- General Make rules
 
+SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src
+
 # ---- Generate term parse table from SDF module
 
-%.trm.tbl:: %.sdf
+.sdf.tbl:
 	pt-dump -m $(*F) -o $@
 
 # ---- Convert from .asf to .eqs
 
-%.eqs :: %.asf Makefile
+.asf.eqs:
 	eqs-dump -m $(*F) -o $@
 
 # ---- Convert from .eqs to .c
 
-CFLAGS       = -g -Wall -Wno-unused -O2 -DASF_MAIN
-
-INCLUDES     = -I$(ASCINC) \
+CPPFLAGS       = -g -Wall -Wno-unused -O2 -DASF_MAIN \
+		  -I$(ASCINC) \
 		-I$(PT_SUPPORT)/include \
 		-I$(ERROR_SUPPORT)/include \
 		-I$(ASF_SUPPORT)/include \
@@ -26,9 +27,26 @@ LDADD = -L$(ASCLIB) -lasc-support-me \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(ATERM)/lib -lATerm
-#%.c:: %.eqs
-#	 asfc -i $< -o $@ -v
+.eqs.c:
+	 asfc -i $< -o $@ -v
 
-% %.c:: %.asf Makefile
-	asfc -i $< -o $@ -v
-	$(CC) $(CFLAGS) $(INCLUDES) $<.c -o $(LDADD)
+# ---- Substitute in shell source
+
+% : %.sh.src Makefile
+	sed 's@__PREFIX__@$(prefix)@g;\
+	     s@__BINDIR__@$(bindir)@g;\
+	     s@__DATADIR__@$(pkgdatadir)@g;\
+	     s@__VERSION__@$(VERSION)@g;' < $< > $@ && \
+	chmod +x $@
+
+# ---- Substitute in tcl source
+
+% : %.tcl.src
+	sed 's#__WISH__#$(WISH)#g;' < $< > $@
+
+# ---- Instantiate .pkg file
+
+${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
+	sed 's#__VERSION__#${VERSION}#g;\
+	     s#__PACKAGE__#${PACKAGE}#g' < $< > $@
+

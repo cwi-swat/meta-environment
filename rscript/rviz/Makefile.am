@@ -1,7 +1,7 @@
+include $(top_srcdir)/make_rules
 
-bin_SCRIPTS=rviz
+bin_SCRIPTS	= rviz
 
-SOURCES==rviz.tcl.src
+SOURCES		= rviz.tcl.src
 
-% : %.tcl.src
-	sed 's#__WISH__#$(WISH)#g;' < $< > $@
+CLEANFILES	= rviz
