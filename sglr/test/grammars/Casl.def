@@ -93,6 +93,7 @@ module ZCasl-Struct
 imports ZCasl-BasicItems
 
 exports
+  context-free start-symbols Spec-Defn
   sorts
     Spec-Name Spec-Defn Spec-1 Spec-2
     View-Name View-Defn View-Type Some-Generics

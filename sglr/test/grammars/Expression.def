@@ -8,6 +8,7 @@ imports Log-Arg
 imports Layout
 
 exports
+  context-free start-symbols EXPRESSION 
   sorts EXPRESSION LOG-MACRO
   context-free syntax
 

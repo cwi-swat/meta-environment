@@ -7,7 +7,11 @@ module AN-Full
 
 imports Layout
 
-exports sorts
+exports 
+
+context-free start-symbols Action
+
+sorts
 
   Action	Yielder		DataOp
 

@@ -8,6 +8,7 @@ module AmbiRules
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Eq
   sorts Eq
   lexical syntax
     [A-Z]+ -> Symbol

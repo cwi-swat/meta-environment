@@ -7,9 +7,10 @@ module Actions
 
 imports Layout
 
-exports sorts
+exports 
 
-        Action
+context-free start-symbols Action
+sorts Action
 
 context-free syntax
 

@@ -8,6 +8,8 @@ imports
   basic/Whitespace
 
 exports
+    context-free start-symbols
+	Chi-expression
     sorts
 	Chi-expression
         Chi-number Chi-identifier
@@ -24,7 +26,7 @@ exports
 	Chi-identifier					-> Chi-expression
 	"[" {Chi-expression ","}* "]"			-> Chi-expression
 	"{" {Chi-expression ","}* "}"			-> Chi-expression
-	"<" {Chi-expression ","}2+ ">"			-> Chi-expression
+	"<" {Chi-expression ","}+ ">"			-> Chi-expression
 	"<|" {Chi-expression ","}+ "|>"			-> Chi-expression
 	"(" Chi-expression ")"				-> Chi-expression {bracket}
 

@@ -43,6 +43,8 @@ lexical syntax
              "else" {STATEMENT ";"}* "fi"  -> STATEMENT
     "while" EXP "do" {STATEMENT ";"}* "od" -> STATEMENT
 
+  context-free start-symbols PROGRAM
+
   sorts PROGRAM DECLS IDTYPE
   context-free syntax
     "begin" DECLS {STATEMENT ";"}* "end" -> PROGRAM

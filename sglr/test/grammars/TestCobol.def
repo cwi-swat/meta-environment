@@ -7,6 +7,7 @@ module TestCobol
 imports Layout
 
 exports
+  context-free start-symbols Paragraph
   sorts Paragraph
   lexical syntax
     [0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word 

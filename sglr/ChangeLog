@@ -1,5 +1,13 @@
 $Id$
 
+Fri Jul  9 15:12:11 CEST 2004 <markvdb@cwi.nl>
+ * Removed every left-/right-/assoc-/non-assoc-prio.
+ * Increased the parse table version number to 6.
+ * Regenerated all tests and adapted the corresponding
+   grammars, because start-symbols were missing. 
+   Regenerated some tests because attributes are no longer 
+   quoted.
+
 Mon May 17 15:07:52 CEST 2004 <{markvdb,jurgenv}@cwi.nl>
  * Introduced priorities on specific arguments as a filter.
 

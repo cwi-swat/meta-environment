@@ -16,6 +16,7 @@ exports
 module CIG-If 
 imports CIG-Drop CIG-Layout
 exports
+ context-free start-symbols CIG-If
  sorts
 	CIG-OpenIf CIG-ClosedIf CIG-SubIf CIG-If
 	CIG-ClosedIfNesting CIG-ClosedIfNestings

@@ -6,6 +6,7 @@ imports Risla-modular Comp-library-syntax Risla-disambi
 module Risla-modular
 imports Risla-syntax
 exports
+  context-free start-symbols MOD-PRODUCT-DEF
   sorts
     MOD-PRODUCT-DEF COMPONENT
     MOD-USES-ONE-BLOCK MOD-USES-MANY-BLOCK MOD-USES-BLOCK-BODY

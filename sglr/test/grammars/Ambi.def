@@ -1,7 +1,8 @@
 definition
 module Main
 exports
-  sorts   A B
+  context-free start-symbols A B
+  sorts A B
   lexical syntax
     ~[]* -> A
     ~[]* -> B

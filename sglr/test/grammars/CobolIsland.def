@@ -6,7 +6,8 @@ imports CobolOpen
 module CobolOpen
 imports Layout
 exports
-  sorts Program Open 
+  context-free start-symbols Program
+  sorts Program Open Token Id Water
   lexical syntax
     ~[ ]                       -> Water {avoid}
     [a-z A-Z][a-z A-Z 0-9]+    -> Id    {prefer}

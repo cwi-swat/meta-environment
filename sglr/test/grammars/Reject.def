@@ -8,6 +8,7 @@ module Reject
 imports Layout
 
 exports 
+  context-free start-symbols R
   sorts R
   context-free syntax
     "r" -> R {reject}

@@ -31,7 +31,6 @@
 int     outputflag                       = ATtrue;
 int     binaryflag                       = ATtrue;
 int     filterflag                       = ATtrue;
-int     filter_associativityflag         = ATtrue;
 int     filter_directeagernessflag       = ATtrue;
 int     filter_eagernessflag             = ATtrue;
 int     filter_injectioncountflag        = ATtrue;
@@ -104,7 +103,7 @@ void term_to_file(ATerm t, char *FN)
 void SG_Usage(FILE *stream, ATbool long_message)
 {
   const char usage[] = "Usage:\n\t%s\t-p file [-2?bcdhlmnPtvV] "
-  "[-f[adeirp]] [-i file] [-o file] \\"
+  "[-f[deirp]] [-i file] [-o file] \\"
   "\n\t\t[-s sort]\n";
 
   ATfprintf(stream, usage, program_name);
@@ -116,8 +115,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-b         : output AsFix in binary format (BAF)  [%s]\n"
               "\t-c         : toggle cycle detection               [%s]\n"
               "\t-d         : toggle debug mode                    [%s]\n"
-              "\t-f[adeipr] : toggle filtering, or specific filter [%s]\n"
-              "\t  a : associativity                               [%s]\n"
+              "\t-f[deipr] : toggle filtering, or specific filter [%s]\n"
               "\t  d : direct eagerness                            [%s]\n"
               "\t  e : eagerness                                   [%s]\n"
               "\t  i : injection count                             [%s]\n"
@@ -140,7 +138,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
               DEFAULTMODE(filterflag),
-              DEFAULTMODE(filter_associativityflag),
               DEFAULTMODE(filter_directeagernessflag),
               DEFAULTMODE(filter_eagernessflag),
               DEFAULTMODE(filter_injectioncountflag),
@@ -200,9 +197,6 @@ void handle_filter_options(void)
   else {
     if (strlen(optarg) == 1) {
       switch(optarg[0]) {
-	case 'a':
-          filter_associativityflag = !filter_associativityflag;
-          break; 
         case 'd':
           filter_directeagernessflag = !filter_directeagernessflag;
           break;
@@ -284,7 +278,6 @@ ATbool set_global_options(void)
   if(debugflag)                    SG_DEBUG_ON();
   if(verboseflag)                  SG_VERBOSE_ON();
   if(filterflag)                   SG_FILTER_ON();
-  if(filter_associativityflag)     SG_FILTER_ASSOCIATIVITY_ON();
   if(filter_directeagernessflag)   SG_FILTER_DIRECTEAGERNESS_ON();
   if(filter_eagernessflag)         SG_FILTER_EAGERNESS_ON();
   if(filter_injectioncountflag)    SG_FILTER_INJECTIONCOUNT_ON();

@@ -1172,100 +1172,6 @@ ATermList SG_FilterAmbList(parse_table *pt, ATermList ambs, tree t)
   return new;
 }
 
-static tree SG_Left_Associativity_Filter(tree t, label prodl) 
-{
-  ATermList newambs = ATempty;
-  ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
-  tree lastson      = (tree)ATgetLast(sons);
-  
-  if (ATgetType(lastson) == AT_APPL &&
-      ATgetAFun(lastson) == SG_Amb_AFun) {
-    ATermList restSons = ATgetPrefix(sons);
-    ATermList ambs = (ATermList)ATgetArgument((ATerm)lastson, 0);
-        
-    for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-      tree amb = (tree) ATgetFirst(ambs);
-      if (prodl != SG_GetApplProdLabel(amb)) {
-        newambs = ATinsert(newambs, (ATerm) amb);
-      }
-      else {
-        IF_DEBUG(ATfprintf(SG_log(),
-                           "Left associative node %d removed.\n",
-                           prodl));
-      }
-    }
-    if (!ATisEmpty(newambs)) {
-      if (ATgetLength(newambs) > 1) {
-        lastson = ATsetArgument((ATermAppl)lastson, (ATerm)newambs, 0);
-      }
-      else {
-        lastson = (tree)ATgetFirst(newambs);
-      }
-      sons = ATappend(restSons, (ATerm)lastson);
-      t = ATsetArgument((ATermAppl)t, (ATerm)sons, 1);
-    }
-    else {
-      return NULL;
-    }
-  }
-  else if (ATgetType(lastson) == AT_APPL) {
-    if (prodl == SG_GetApplProdLabel(lastson)) {
-      IF_DEBUG(ATfprintf(SG_log(),
-                         "Left associative node %d removed.\n",
-                         prodl));
-      return NULL;
-    }
-  }
-  return t;
-}
-
-static tree SG_Right_Associativity_Filter(tree t, label prodl) 
-{
-  ATermList newambs = ATempty;
-  ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
-  tree firstson     = (tree) ATgetFirst(sons);
-
-  if (ATgetType(firstson) == AT_APPL &&
-      ATgetAFun(firstson) == SG_Amb_AFun) {
-    ATermList restSons = ATgetNext(sons);
-    ATermList ambs = (ATermList)ATgetArgument((ATerm)firstson, 0);
-    
-    for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-      tree amb = (tree) ATgetFirst(ambs);
-      if (prodl != SG_GetApplProdLabel(amb)) {
-        newambs = ATinsert(newambs, (ATerm) amb);
-      }
-      else {
-        IF_DEBUG(ATfprintf(SG_log(),
-                           "Right associative node %d removed.\n",
-                           prodl));
-      }
-    }
-    if (!ATisEmpty(newambs)) {
-      if (ATgetLength(newambs) > 1) {
-        firstson = ATsetArgument((ATermAppl) firstson, (ATerm)newambs, 0);
-      }
-      else {
-        firstson = (tree) ATgetFirst(newambs);
-      }
-      sons = ATinsert(restSons, (ATerm)firstson);
-      t = ATsetArgument((ATermAppl)t, (ATerm)sons, 1);
-    }
-    else {
-      return NULL;
-    }
-  }
-  else if (ATgetType(firstson) == AT_APPL) {
-    if (prodl == SG_GetApplProdLabel(firstson)) {
-      IF_DEBUG(ATfprintf(SG_log(),
-                         "Right associative node %d removed.\n",
-                         prodl));
-      return NULL;
-    }
-  }
-  return t;
-}
-
 static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree)
 {
   if (ATisEqual(t, injT)) {
@@ -1354,16 +1260,7 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
   if (ATgetType(t) == AT_APPL && ATgetAFun(t) != SG_Amb_AFun) {
     label     prodl   = SG_GetApplProdLabel(t);
 
-    if (SG_FILTER_ASSOCIATIVITY) {
-      if (SG_IsLeftAssociative(pt, prodl)) {
-	t = SG_Left_Associativity_Filter(t, prodl);
-      }
-      else if (SG_IsRightAssociative(pt, prodl)) {
-	t = SG_Right_Associativity_Filter(t, prodl);
-      }
-    }
-
-    if (t && SG_FILTER_PRIORITY) {
+    if (SG_FILTER_PRIORITY) {
       if (SG_hasProductionPriority(pt, ATmakeInt(prodl))) {
         return SG_Priority_Filter(pt, t, prodl);
       }
