@@ -45,17 +45,28 @@
       d. All rules are applied in arbitrary order.
       e. Defaults are always applied as last rules.
       f. General list matching mechanism.
-   3. No hashing, sharing, or cashing.
+   3. No hashing, sharing, or caching.
 */
 
 #include <aterm.h>
 #include <asfix.h>
 #include <tool.h>
 #include <string.h>
+#include <sys/times.h>
+#include <limits.h>
 #include "preparation.h"
 #include "evaluator.tif.c"
 
+#ifdef PROFILING
+#define PROF_REWRITE		rewrite_steps++
+#define TICK2SEC(t)		(((double)(t))/CLK_TCK)
+#else
+#define PROF_REWRITE
+#endif
+static unsigned rewrite_steps = 0;
+
 FATAL_ERROR
+
 
 aterm_list *equations_db;
 aterm_list *active_rules;
@@ -227,15 +238,38 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
 {
   aterm *newtrm,*newatrm,*result;
   aterm *atrm,*exptrm,*realtrm;
+
+  struct tms start, rule_selection, rewriting, restoration;
+  clock_t user, system;
  
   exptrm = AFexpandTerm(&Ar, trm);
   atrm = asfix_get_term(exptrm);
   realtrm = RWprepareTerm(&Ar, atrm);
 
+  rewrite_steps = 0;
+  times(&start);
   change_active_rules(TdictGet(equations_db,modname));
+  times(&rule_selection);
   newtrm = rewrite(realtrm,t_empty(NULL));
+  times(&rewriting);
   newatrm = RWrestoreTerm(&Ar, newtrm);
   result = asfix_put_term(&Ar,exptrm,newatrm);
+  times(&restoration);
+
+#ifdef PROFILING
+  fprintf(stdout, "rewriting took %d rewrite steps.\n", rewrite_steps);
+  user = rule_selection.tms_utime - start.tms_utime;
+  system = rule_selection.tms_stime - start.tms_stime;
+  fprintf(stdout, "rule selection: %f user, %f system.\n", TICK2SEC(user), TICK2SEC(system));
+  user = rewriting.tms_utime - rule_selection.tms_utime;
+  system = rewriting.tms_stime - rule_selection.tms_stime;
+  fprintf(stdout, "rewriting: %f user, %f system (%f steps/sec)\n", 
+	TICK2SEC(user), TICK2SEC(system), 
+	((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
+  user = restoration.tms_utime - rewriting.tms_utime;
+  system = restoration.tms_stime - rewriting.tms_stime;
+  fprintf(stdout, "restoration: %f user, %f system.\n", TICK2SEC(user), TICK2SEC(system));
+#endif
 
   return Tmake(&Ar,"snd-value(result(<term>))",result);
 }
@@ -676,6 +710,7 @@ aterm *apply_rule(aterm_list *rules,aterm *trm)
   }; 
   if(match) {
     newenv = Tmake(&Ar,"[<term>,<list>]",newtrm,env);
+    PROF_REWRITE;
   }
   else {
     env = fail_env;
