@@ -1,4 +1,0 @@
-equations
-
-  [0] if true  then _G1 else _G2 fi = _G1
-  [0] if false then _G1 else _G2 fi = _G2

@@ -1,8 +1,0 @@
-module CC-Sdf-Renaming
-imports Kernel-Sdf-Renaming sdf2/syntax/CC
-
-hiddens
-  variables
-    "'r"[0-9\']* -> Renamings
-    "cc"[0-9\']* -> CharClass
-

@@ -1,9 +1,0 @@
-module Sdf2-Projection
-
-imports Kernel-Sdf-Projection
-        Sorts-Sdf-Projection
-        Priority-Sdf-Projection
-        Renaming-Sdf-Projection
-        Modular-Sdf-Projection
-        Alias-Sdf-Projection
-        Restrictions-Sdf-Projection

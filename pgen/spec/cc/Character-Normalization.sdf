@@ -1,6 +1,0 @@
-module Character-Normalization
-imports sdf2/syntax/Character
-
-hiddens
-  variables
-    "c+"[0-9\']* -> CHAR+

@@ -1,8 +1,0 @@
-%%%% $Id$
-
-equations
-
-%% \noindent
-%% Renaming literals.
-
-  [0] [L]'r = L

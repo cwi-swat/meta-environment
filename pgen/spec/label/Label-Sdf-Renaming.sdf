@@ -1,8 +1,0 @@
-module Label-Sdf-Renaming
-
-imports sdf2/syntax/Labels Kernel-Sdf-Renaming
-hiddens
-  variables
-    "L"[0-9\']*      -> Literal
-    "_"[ABC][0-9\']* -> Symbol 
-    "'r"[0-9\']*        -> Renamings                    

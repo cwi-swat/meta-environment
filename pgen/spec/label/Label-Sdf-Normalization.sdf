@@ -1,7 +1,0 @@
-module Label-Sdf-Normalization
-
-imports Label-Sdf-Syntax Literals-Sdf-Normalization
-hiddens
-  variables
-    "L"[0-9\']*      -> Literal 
-    "_"[ABC][0-9\']* -> Symbol 

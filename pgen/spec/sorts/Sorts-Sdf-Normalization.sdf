@@ -1,9 +1,0 @@
-module Sorts-Sdf-Normalization
-imports
-        sdf2/syntax/Sorts
-        Kernel-Sdf-Normalization
-
-hiddens
-  variables
-    [p]"*"[0-9\']*      -> Production*
-    "'"[abc][0-9\']*    -> Symbol*
