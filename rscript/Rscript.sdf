@@ -77,12 +77,7 @@ exports
 
 %% Bag and relation formers
 
-%% old:    "{" REXP "|" {FROM ","}+ ("," REXP)? "}"	-> REXP
-
     "{" REXP ":" {FROM ","}+ ("|" REXP)? "}"	-> REXP
-
-%% old:     RVAR ":" REXP                           	-> FROM
-%% old:    "<" RVAR "," RVAR ">" ":" REXP            	-> FROM
 
      RVAR "in" REXP                           	-> FROM
      "<" RVAR "," RVAR ">" "in" REXP           	-> FROM
@@ -109,6 +104,8 @@ exports
      DCLRVAR				      	-> RSTAT
 
      DCLRVAR "=" REXP                         	-> RSTAT
+
+     DCLRVAR "=" "{" "}"			-> RSTAT
 
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
  

@@ -33,23 +33,22 @@ inter:	   intersection
 
 o:	   composition
 Def:	   rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
-		      {<v, y> | <v, w> : R1, <x, y> : R2, w == x }
+		      {<v, y> : <v, w> in R1, <x, y> in R2 | w == x }
 
 x:	   carthesian product
 Def:	   rel[T1,T2] x(bag[T1] B1, bag[T2] B2) =
-		      {<x, y> | x : B1, y : B2 }
+		      {<x, y> : x in B1, y in B2 }
 
 .:	   left or right image
 
-Def:	   bag[T2] .(T1 E, rel[T1,T2] R) = { W | <V, W> : R, V == E }
-	   bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
+Def:	   bag[T2] .(T1 E, rel[T1,T2] R) = { W : <V, W> in R | V == E }
+	   bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W : <V, W> in R | V in B}
 
-	   bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
-	   bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
+	   bag[T1] .(rel[T1,T2] R, T2 E) = { V : <V, W> in R | W == E }
+	   bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V : <V, W> in R |  W in B }
 
 +:	   transitive closure
 *:	   reflexive transitive closure
-
 
 
 Built-in Functions
@@ -58,19 +57,19 @@ Built-in Functions
 ------------------------------------------------------------------
 Identity:
 
-Def:	rel[T,T] id(bag[T] B) = { <X, X> | X : B }
+Def:	rel[T,T] id(bag[T] B) = { <X, X> : X in B }
 
 Ex:	id({1,2,3}) = {<1,1>, <2,2>, <3,3>}
 
 ------------------------------------------------------------------
 Domain:
 
-Def:	bag[T1] domain (rel[T1,T2] R) = { X | <X, Y> : R }
+Def:	bag[T1] domain (rel[T1,T2] R) = { X : <X, Y> in R }
 Ex:	domain({<1,10>, <2,20>}) = {1, 2}
 ------------------------------------------------------------------
 Range:
 
-Def:	bag[T2] range (rel[T1,T2] R) = { Y | <X, Y> : R }
+Def:	bag[T2] range (rel[T1,T2] R) = { Y : <X, Y> in R }
 Ex:	range({<1,10>, <2,20>}) = {10, 20}
 ------------------------------------------------------------------
 Carrier:
@@ -89,7 +88,7 @@ Def:	bag[T] bottom(rel[T,T] R) = range(R) \ domain(R)
 Ex:
 ------------------------------------------------------------------
 Inverse:
-Def:	rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> | <X, Y> : R }
+Def:	rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> : <X, Y> in R }
 Ex:	inv({<1,10>, <2,20>}) = {<10,1>,<20,2>}
 ------------------------------------------------------------------
 Complement:
@@ -100,37 +99,37 @@ Ex:
 Domain Restriction
 
 Def:   rel[T1,T2] domR (rel[T1,T2] R, Bag[T1] B) = 
-		  { <X, Y> | <X, Y> : R, X in B }
+		  { <X, Y> : <X, Y> in R, X in B }
 
 ------------------------------------------------------------------
 Range Restriction:
 
 Def:  rel[T1,T2] ranR (rel[T1,T2] R, Bag[T2] B) = 
-		 { <X, Y> | <X, Y> : R, Y in B  }
+		 { <X, Y> : <X, Y> in R | Y in B  }
 
 ------------------------------------------------------------------
 Carrier Restriction:
 
 Def:	rel[T,T] carR (rel[T,2] R, Bag[T] B) = 
-		 { <X, Y> | <X, Y> : R, X in B and Y in B }
+		 { <X, Y> : <X, Y> in R | X in B and Y in B }
 Ex:
 ------------------------------------------------------------------
 Domain Exclusion:
 
 Def:   rel[T1,T2] domX (rel[T1,T2] R, Bag[T1] B) = 
-		  { <X, Y> | <X, Y> : R, X notin B }
+		  { <X, Y> : <X, Y> in R | X notin B }
 Ex:
 ------------------------------------------------------------------
 Range Exclusion:
 
 Def:  rel[T1,T2] ranR (rel[T1,T2] R, Bag[T2] B) = 
-	   { <X, Y> | <X, Y> : R, Y notin B }
+	   { <X, Y> : <X, Y> in R | Y notin B }
 Ex:
 ------------------------------------------------------------------
 Carrier Exclusion:
 
-rel[T,T] carX (rel[T,2] R, Bag[T] B) = 
-	   { <X, Y> | <X, Y> : R, X notin B or Y notin B }
+rel[T,T] carX (rel[T,T] R, Bag[T] B) = 
+	   { <X, Y> : <X, Y> in R | X notin B or Y notin B }
 ------------------------------------------------------------------
 First of Tuple:
 

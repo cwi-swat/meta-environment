@@ -4,6 +4,7 @@ imports Rscript
 imports containers/Table[RVAR REXPTYPE]
 
 imports ListItems
+imports MyPosInfo[RSTAT]
 imports MyPosInfo[REXP]
 imports MyPosInfo[FROM]
 imports MyPosInfo[Bag[[Elem]]]
@@ -26,6 +27,7 @@ exports
 
 	REXPTYPE "==" REXPTYPE					-> Boolean
 
+	RSTAT cannot be typed 					-> ERROR
 	REXP cannot be typed 					-> ERROR
 	FROM cannot be typed					-> ERROR
 	Bag[[Elem]] cannot be typed 				-> ERROR
