@@ -14,9 +14,9 @@ configuration interface
 
 requires
    asc-support	1.6
-   asf-support	1.1beta
-   sdf-support	1.1beta
-   pt-support   0.12beta
-   sglr		3.10beta
+   asf-support	1.1
+   sdf-support	1.1
+   pt-support   0.12
+   sglr		3.10
    aterm	2.0.2
-   toolbuslib	0.5beta
+   toolbuslib	0.5
