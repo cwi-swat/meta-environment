@@ -25,6 +25,7 @@ EXTRA_DIST = Pico-Booleans.1.ref.asfix1 \
              Pico-Integers.2.ref.asfix1 \
              Pico-Integers.3.ref.asfix1 \
              Pico-typecheck.1.ref.asfix1 \
+             Pico-typecheck.2.ref.asfix1 \
              Set.1.ref.asfix1 \
              Set.2.ref.asfix1 \
              Set.3.ref.asfix1 \

@@ -29,6 +29,7 @@ EXTRA_DIST = Pico-Booleans.1.trm.asfix1 \
              Pico-syntax.1.trm.asfix1 \
              Pico-syntax.2.trm.asfix1 \
              Pico-typecheck.1.trm.asfix1 \
+             Pico-typecheck.2.trm.asfix1 \
              Set.1.trm.asfix1 \
              Set.2.trm.asfix1 \
              Set.3.trm.asfix1 \
