@@ -19,9 +19,6 @@ buttons([
 	  check-sort("RVALUE"),
 	  apply("display-result", "List", 1),
 	  rewrite("DisplayQuery"),
-          dup,
-	  push-filename("query-result.list"),
-	  save-tree,
 	  unparse,
           push-active-module,
 	  show-list
