@@ -5,7 +5,7 @@ BUILTIN_NAMES_ARITY=\
 	get-anno_2\
 	get-term-anno_2 \
 	shell_1 \
-	term-compare_2 \
+	term-less_2 \
 	lift-to-tree_1 \
 	lower-from-tree_1 \
 	lift-to-term_1 \

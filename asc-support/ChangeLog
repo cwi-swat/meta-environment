@@ -1,5 +1,8 @@
 $Id$
 
+Mon Feb 16 10:26:59 CET 2004 <jurgenv@cwi.nl>
+ * term-compare builtin changed to term-less 
+
 Wed Feb 11 15:27:49 CET 2004 <jurgenv@cwi.nl>
  * Reactivated memoization. It seems that this feature was #ifndeffed out
    a long time ago!
