@@ -47,11 +47,11 @@
 #include <asc-support.h>
 #include <AsFix2src.h>
 
-#include "compiler.tif.h"
+#include "asfc.tif.h"
 
 ATbool run_verbose;
 
-static char myname[] = "compiler";
+static char myname[] = "asfc";
 static char myversion[] = "1.3";
 
 static char *outputDirName = NULL;
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
   if (toolbus_mode) {
 #ifndef WIN32 /* Code with Toolbus calls, non Windows */
     ATBinit(argc, argv, &bottomOfStack);  
-    cid = ATBconnect(NULL, NULL, -1, compiler_handler);
+    cid = ATBconnect(NULL, NULL, -1, asfc_handler);
     ATBeventloop();
 #else
     ATwarning("compiler: Toolbus cannot be used in Windows.\n");

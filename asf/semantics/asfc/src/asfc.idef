@@ -25,13 +25,13 @@
  */
 process Compiler is
 let
-  COM           : compiler,
+  COM           : asfc,
   OutputDir     : str,
   ModuleName    : str,
   Tree          : term
 in
   /* Start the compiler */
-  execute(compiler, COM?) .
+  execute(asfc, COM?) .
   (
     rec-msg(compiler-output-dir(OutputDir?)).
     snd-do(COM, set-output-dir(OutputDir))
@@ -44,6 +44,6 @@ in
   delta
 endlet
 
-tool compiler is {
-  command = "compiler -print-gc-info -termtable 20"
+tool asfc is {
+  command = "asfc -print-gc-info -termtable 20"
 }

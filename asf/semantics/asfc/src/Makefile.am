@@ -22,15 +22,15 @@
 
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS     = compiler
-data_DATA        = compiler.idef
+bin_PROGRAMS     = asfc
+data_DATA        = asfc.idef
 
-EXTRA_DIST       = compiler.idef compiler.tif.h compiler.tif.c
+EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c
 
-CLEANFILES       = compiler.tif.h compiler.tif.c compiler.tifs
+CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
-compiler_SOURCES = compiler.c
-compiler_LDADD   = compiler.tif.o \
+asfc_SOURCES = asfc.c
+asfc_LDADD   = asfc.tif.o \
                    -L../c-source  -lAsFix2C \
                    -L$(ASC_SUPPORT)/lib -lasc-support \
                    -L$(PT_SUPPORT)/lib -lAsFix \
@@ -38,4 +38,4 @@ compiler_LDADD   = compiler.tif.o \
 
 INCLUDES         = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
-compiler.o : compiler.tif.h ../c-source/libAsFix2C.a
+asfc.o : asfc.tif.h ../c-source/libAsFix2C.a

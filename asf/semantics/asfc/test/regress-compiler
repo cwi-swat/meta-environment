@@ -30,7 +30,7 @@ cd `dirname $0`;
 mydir=`pwd`
 
 RM=rm
-COMPILER="compiler"
+COMPILER="$mydir/../src/asfc"
 COMPARE="$mydir/codediff"
 
 terms=$mydir/terms

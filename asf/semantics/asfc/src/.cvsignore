@@ -1,6 +1,6 @@
 Makefile
 Makefile.in
 *.deps
-compiler
-compiler.tif.h 
-compiler.tif.c
+asfc
+asfc.tif.h 
+asfc.tif.c
