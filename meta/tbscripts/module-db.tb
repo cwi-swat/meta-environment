@@ -8,24 +8,6 @@
 #include <term-store.idef>
 #define DEBUG printf("FILE: %s LINE: %d\n", __FILE__, __LINE__)
 
-process Stripper(Values : list, StrippedValues : list?) is
-let
-  Value : term,
-  ValueList : list
-in
-  ValueList := Values .
-  StrippedValues := [] .
-  if not-equal(ValueList, []) then
-    Value := first(ValueList) .
-    StrippedValues := join(StrippedValues, first(args(Value))) .
-    ValueList := next(ValueList)
-  fi*
-  if equal(ValueList, []) then
-    tau
-  fi
-endlet
-
-
 process ModuleDB is
 let
   Path      : str,
@@ -90,16 +72,16 @@ in
       rec-msg(io-filename(FileName?)) .
       snd-msg(addPosInfo(FileName, SyntaxTree)) .
       rec-msg(tree-with-pos-info(SyntaxTree?)) .
-      snd-msg(ts-put-value("sdf-tree", ModuleId, tree(SyntaxTree))) .
+      snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
       rec-msg(sm-imported-module-names(Modules?)) 
     else 
       ModuleId := Name .
       Modules := []
     fi .
-    snd-msg(ts-put-value("active-modules", ModuleId, path(Path))) .
-    snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
-    snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
+    snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+    snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+    snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
     snd-msg(ts-filter-keys("active-modules", Modules)) .
     rec-msg(ts-keys(Modules?)) .
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
@@ -111,8 +93,8 @@ in
     snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(sm-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
-      snd-msg(ts-get-value("sdf-tree", Name)) .
-      rec-msg(ts-value(tree(OldSyntaxTree?))) .
+      snd-msg(ts-get-term-value("sdf-tree", Name)) .
+      rec-msg(ts-value(OldSyntaxTree?)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
       printf("DEBUG: just get all imports, not just the new ones?") .
       rec-msg(sm-imported-module-names(Modules?)) .
@@ -143,9 +125,9 @@ in
     snd-msg(eqs-needed-for-modules(Modules))
   +
     rec-msg(get-eqs-text(Name?)).
-    snd-msg(ts-get-value("asf-text", Name)) .
+    snd-msg(ts-get-str-value("asf-text", Name)) .
     (
-      rec-msg(ts-value(text(EqsText?))) .
+      rec-msg(ts-value(EqsText?)) .
       snd-msg(eqs-text(Name, EqsText))
     +
       rec-msg(ts-no-value) .
@@ -153,47 +135,47 @@ in
     )
   +
     rec-msg(add-eqs-to-db(Name?, text(EqsText?))) .
-    snd-msg(ts-put-value("asf-text", Name, text(EqsText))) .
+    snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
     snd-msg(eqs-added)
   +
     rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
-    snd-msg(ts-get-value("module-paths", Name)) .
-    rec-msg(ts-value(path(Path?))) .
+    snd-msg(ts-get-str-value("module-paths", Name)) .
+    rec-msg(ts-value(Path?)) .
     snd-msg(io-get-filename(Path, Name, ".asf")) .
     rec-msg(io-filename(FileName?)) .
     printf("DEBUG: addPosinfo used to be restricted to a certain depth\n") .
     snd-msg(addPosInfo(FileName,EqsTree)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
-    snd-msg(ts-put-value("asf-tree", Name, tree(EqsTree))) .
+    snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
     snd-msg(eqs-updated)
   +
     rec-msg(update-eqs-text-in-db(Name?, text(EqsText?))).
     snd-msg(ts-remove-value("asf-tree", Name)) .
-    snd-msg(ts-put-value("asf-text", Name, text(EqsText))) .
+    snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
     snd-msg(eqs-text-updated(Name))
   +
     rec-msg(add-parse-table-to-db(eqs(Name?), Table?)) .
-    snd-msg(ts-put-value("asf-parse-table", Name, table(Table))) .
+    snd-msg(ts-put-term-value("asf-parse-table", Name, Table)) .
     snd-msg(parse-table-added)
   +
     rec-msg(add-parse-table-to-db(trm(Name?), Table?)) .
-    snd-msg(ts-put-value("term-parse-table", Name, table(Table))) .
+    snd-msg(ts-put-term-value("term-parse-table", Name, Table)) .
     snd-msg(parse-table-added)
   +
     rec-msg(get-path-from-db(Name?)).
-    snd-msg(ts-get-value("module-paths", Name)) .
-    rec-msg(ts-value(path(Path?))) .
+    snd-msg(ts-get-str-value("module-paths", Name)) .
+    rec-msg(ts-value(Path?)) .
     snd-msg(path(Path))
   +
     (
       rec-msg(get-table-from-db(eqs(Name?))) .
-      snd-msg(ts-get-value("asf-parse-table", Name)) 
+      snd-msg(ts-get-term-value("asf-parse-table", Name)) 
     +
       rec-msg(get-table-from-db(trm(Name?))) .
-      snd-msg(ts-get-value("term-parse-table", Name)) 
+      snd-msg(ts-get-term-value("term-parse-table", Name)) 
     ).
     (
-      rec-msg(ts-value(table(Table?))) .
+      rec-msg(ts-value(Table?)) .
       snd-msg(table(Table))
     +
       rec-msg(ts-no-value) .
@@ -211,7 +193,6 @@ in
     rec-msg(get-all-modules) .
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
-    Stripper(Modules,Modules?) .
     snd-msg(all-modules(Modules))
   +
     rec-msg(get-imported-modules(Name?)).
@@ -235,15 +216,14 @@ in
     rec-msg(get-all-sdf2-definitions(Name?)) .
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
-    Stripper(Modules, Modules?) .
     snd-msg(sm-make-sdf-definition(Modules, Name)) .
     rec-msg(sm-sdf-definition(Syntax?)) .
     snd-msg(syntax(Syntax))
   +
     rec-msg(get-sdf2-asfix(Name?)) .
-    snd-msg(ts-get-value("sdf-tree", Name)) .
+    snd-msg(ts-get-term-value("sdf-tree", Name)) .
     (
-      rec-msg(ts-value(tree(Syntax?))) .
+      rec-msg(ts-value(Syntax?)) .
       snd-msg(syntax(Syntax))
     +
       rec-msg(ts-no-value) .
@@ -251,19 +231,19 @@ in
     )
   +
     rec-msg(get-eqs-tree(Name?)) .
-    snd-msg(ts-get-value("asf-tree", Name)) .
+    snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
-      rec-msg(ts-value(tree(EqsTree?))) .
-      snd-msg(tree(EqsTree))
+      rec-msg(ts-value(EqsTree?)) .
+      snd-msg(EqsTree)
     +
       rec-msg(ts-no-value) .
       snd-msg(unavailable)
     )
   +
     rec-msg(get-equations-for-module(Name?)).
-    snd-msg(ts-get-value("asf-tree", Name)) .
+    snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
-      rec-msg(ts-value(tree(EqsTree?))) .
+      rec-msg(ts-value(EqsTree?)) .
       snd-msg(equations(EqsTree))
     + 
       rec-msg(ts-no-value) .
@@ -274,9 +254,9 @@ in
     MDB-InvalidateParseTables(Name)
   +
     rec-msg(get-module-info(Name?)) .
-    snd-msg(ts-get-value("module-paths", Name)) .
+    snd-msg(ts-get-str-value("module-paths", Name)) .
     (
-      rec-msg(ts-value(path(Path?))) .
+      rec-msg(ts-value(Path?)) .
       snd-msg(module-info(Name, [[path, Path]]))
     +
       rec-msg(ts-no-value) .
@@ -287,15 +267,15 @@ delta
 endlet
 
 process MDB-InitializeModuleDb is
-  snd-msg(ts-add-table("extensions")) .
-  snd-msg(ts-add-table("active-modules")) .
-  snd-msg(ts-add-table("module-paths")) .
-  snd-msg(ts-add-table("sdf-tree")) .
-  snd-msg(ts-add-table("sdf-text")) .
-  snd-msg(ts-add-table("asf-tree")) .
-  snd-msg(ts-add-table("asf-text")) .
-  snd-msg(ts-add-table("asf-parse-table")) .
-  snd-msg(ts-add-table("term-parse-table"))
+  snd-msg(ts-add-table("extensions", "str")) .
+  snd-msg(ts-add-table("active-modules", "str")) .
+  snd-msg(ts-add-table("module-paths", "str")) .
+  snd-msg(ts-add-table("sdf-tree", "term")) .
+  snd-msg(ts-add-table("sdf-text", "str")) .
+  snd-msg(ts-add-table("asf-tree", "term")) .
+  snd-msg(ts-add-table("asf-text", "str")) .
+  snd-msg(ts-add-table("asf-parse-table", "term")) .
+  snd-msg(ts-add-table("term-parse-table", "term"))
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions")) .
@@ -318,9 +298,9 @@ in
   rec-msg(set-file-extensions(syntax(SyntaxExt?),
                               rules(RulesExt?),
 			      term(TermExt?))) .
-  snd-msg(ts-put-value("extensions", "syntax", string(SyntaxExt))) .
-  snd-msg(ts-put-value("extensions", "equations", string(RulesExt))) .
-  snd-msg(ts-put-value("extensions", "term", string(TermExt)))
+  snd-msg(ts-put-str-value("extensions", "syntax", SyntaxExt)) .
+  snd-msg(ts-put-str-value("extensions", "equations", RulesExt)) .
+  snd-msg(ts-put-str-value("extensions", "term", TermExt))
 endlet
  
 process MDB-GetAllDependingModules(Name : str, DependingModules : list?) is
@@ -329,7 +309,6 @@ let
 in
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
-    Stripper(Modules, Modules?) .
     snd-msg(sm-get-all-depending-module-names(Modules, Name)) .
     rec-msg(sm-all-depending-module-names(DependingModules?)) 
 endlet
@@ -340,7 +319,6 @@ let
 in
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
-    Stripper(Modules, Modules?) .
     snd-msg(sm-get-all-needed-module-names(Modules, Name)) .
     rec-msg(sm-all-needed-module-names(Imported?))
 endlet
@@ -349,8 +327,8 @@ process MDB-GetImportedModules(Name : str, Imported : list?) is
 let
   Syntax : term
 in
-    snd-msg(ts-get-value("sdf-tree", Name)) .
-    rec-msg(ts-value(tree(Syntax?))) .
+    snd-msg(ts-get-term-value("sdf-tree", Name)) .
+    rec-msg(ts-value(Syntax?)) .
     snd-msg(sm-all-imports(Syntax)) .
     rec-msg(sm-all-imports(Imported?))
 endlet
@@ -365,11 +343,11 @@ in
     if not(equal(Modules,[])) then
       Module := first(Modules) .
       Modules := next(Modules) .
-      snd-msg(ts-get-value("sdf-tree", Module)) .
-      rec-msg(ts-value(tree(Syntax?))) .
+      snd-msg(ts-get-term-value("sdf-tree", Module)) .
+      rec-msg(ts-value(Syntax?)) .
       snd-msg(sm-remove-import-from-module(Syntax, Name)) .
       rec-msg(sm-import-removed-from-module(Syntax?)) .
-      snd-msg(ts-put-value("sdf-tree", Module, tree(Syntax))) 
+      snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) 
     fi
     *
     if equal(Modules,[]) then
@@ -383,7 +361,6 @@ let
 in
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
-    Stripper(Modules, Modules?) .
     snd-msg(sm-get-import-graph(Modules)) .
     rec-msg(sm-import-graph(Nodes?,Edges?)) 
 endlet
@@ -400,17 +377,17 @@ in
   if not(equal(Modules, [])) then
     Module := first(Modules) .
     Modules := next(Modules) .
-    snd-msg(ts-get-value("asf-text", Module)) . 
+    snd-msg(ts-get-str-value("asf-text", Module)) . 
     (
       rec-msg(ts-no-value)
     +
-      rec-msg(ts-value(text(Text?))) .
-      snd-msg(ts-get-value("asf-tree", Module)) .
+      rec-msg(ts-value(Text?)) .
+      snd-msg(ts-get-term-value("asf-tree", Module)) .
       (
         rec-msg(ts-no-value) .
 	Missing := join(Module, Missing)
       +
-        rec-msg(ts-value(tree(Tree?)))
+        rec-msg(ts-value(Tree?))
       )
     )
   fi
