@@ -11,29 +11,30 @@ graph_support=__GRAPH_SUPPORT__
 sglr=__SGLR__
 pgen=__PGEN__
 toolbus=__TOOLBUS__
-xemacs=__XEMACS__
 prefix=__PREFIX__
+editor=__DEFAULT_EDITOR__
+myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${sdf_support}/bin:${PATH}"; 
 export PATH
 
-# use xemacs by default
-editor="emacs-editor"
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${prefix}/lib
+export LD_LIBRARY_PATH
+
 
 ###
 #  Handle the command line, &c.
 ###
 
 myname=`basename $0`
-myversion=`echo $Revision| cut -d' ' -f2`
 verbose=0
 xargs=""
 
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:I:deghi:m:o:p:qr:sS:t:T:vV"
+myarguments="C:I:de:g:hi:m:o:p:qr:sS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -43,8 +44,8 @@ Options:
     -C file         specifies the configuration file to be processed
     -I dir          location of extra toolbus scripts
     -d              run in debug mode (with viewer)
-    -e              use xemacs editor [default]
-    -g              use gvim editor   (experimental)
+    -e <editor>     select one of gnu-emacs, gvim, or xemacs
+    -g <gui>        select one of swing or eclipse
     -h              display help information (usage)
     -i <file>       input file works only for the term-editor
     -m modulename   specifies the name of the top module to start with
@@ -63,18 +64,6 @@ E_O_USAGE
 
 Version() {
     echo "$myname v$myversion" >&2
-    baffle -v
-    configmanager -V
-    editor-manager -V
-    in-output -V
-    module-db -V
-    parsetablegen -V
-    restorebrackets -V
-    se -V
-    sglr -V
-    toolbus -version
-    unparsePT -V
-    xemacs -V
 }
 
 # getopt handles command line...
@@ -111,10 +100,12 @@ do
 		xargs="${xargs} -viewer" 
 		;;
 	-e)
-		editor="emacs-editor" 
+		shift
+		editor=$1
 		;;
 	-g)
-		editor="gvim-editor" 
+		shift
+		gui=$1
 		;;
         -h)
 		Usage ; exit 0 
@@ -180,8 +171,13 @@ done
 ###
 #  Get to the real work now...
 ###
+if [ "x$gui" == "xeclipse" ] ; then
+  gui="-DECLIPSE"
+else
+  gui=""
+fi
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DTERMSTORENAME=\\\"${termstorename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" ${gui} -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DTERMSTORENAME=\\\"${termstorename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x

@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Mar  8 15:06:41 2002
+ * Generated at Mon Jul 28 14:53:23 2003
  */
 
 #ifndef __EditorData_dict_H
@@ -7,18 +7,18 @@
 
 #include <aterm2.h>
 
-extern AFun SE_afun0;
-extern AFun SE_afun1;
-extern AFun SE_afun2;
-extern AFun SE_afun3;
-extern AFun SE_afun4;
-extern AFun SE_afun5;
-extern AFun SE_afun6;
-extern AFun SE_afun7;
 extern AFun SE_afun8;
+extern AFun SE_afun4;
+extern AFun SE_afun0;
+extern AFun SE_afun2;
+extern AFun SE_afun11;
+extern AFun SE_afun7;
+extern AFun SE_afun5;
+extern AFun SE_afun3;
 extern AFun SE_afun9;
 extern AFun SE_afun10;
-extern AFun SE_afun11;
+extern AFun SE_afun1;
+extern AFun SE_afun6;
 
 extern ATerm SE_patternMoveDown;
 extern ATerm SE_patternMoveUp;

@@ -500,6 +500,59 @@ ATerm get_filename(int cid, char *directory, char *name, char *extension)
 }
 
 /*}}}  */
+/*{{{  ATerm decons_filename(int conn, char *, char *) */
+
+ATerm decons_filename(int conn, char *filename, char *extension)
+{
+  int filenameLength = strlen(filename);
+  int extensionLength = strlen(extension);
+  char *path;
+  char *p;
+  
+  p = filename + filenameLength - extensionLength;
+  if (strncmp(p, extension, extensionLength) == 0) {
+    *p = '\0';
+  }
+  else {
+    extension = "";
+  }
+
+  p = strrchr(filename, '/'); /* TODO: separator is hardcoded */
+  if (p != NULL) {
+    path = filename;
+    *p++ = '\0';
+    filename = p;
+  }
+  else {
+    path = "";
+  }
+
+  return ATmake("snd-value(file-name(<str>,<str>,<str>))",
+		path, filename, extension);
+}
+
+#if 0
+  public ATerm deconsFilename(String filename, String extension) {
+    if (filename.endsWith(extension)) {
+      filename = filename.substring(0, filename.length() - extension.length());
+    } else {
+      extension = "";
+    }
+
+    String path = filename;
+    int lastIndex = path.lastIndexOf('/');
+
+    if (lastIndex >= 0) {
+      path = path.substring(0, lastIndex + 1);
+      filename = filename.substring(lastIndex + 1, filename.length());
+    }
+
+    return factory.make("snd-value(file-name(<str>,<str>,<str>))", path, filename, extension);
+  }
+
+#endif
+
+/*}}}  */
 /*{{{  void rec_terminate(int cid, ATerm arg) */
 
 void rec_terminate(int cid, ATerm arg)
@@ -570,7 +623,6 @@ int main(int argc, char *argv[])
     cid = ATBconnect(NULL, NULL, -1, in_output_handler);
     ATBeventloop();
   }
-
 
   return 0;
 }

@@ -35,7 +35,7 @@
 #include "in-output.idef"
 #include "restorebrackets.idef"
 #include "parsetablegen.idef"
-#include "text-editor.idef"
+#include "editor-hive.idef"
 #include "tree2graph.idef"
 #include "configmanager.idef"
 #include "editor-manager.idef"

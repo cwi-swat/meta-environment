@@ -3,12 +3,10 @@
 process EditorManager is
 let
   EM : editor-manager,
-  Name : str,
   ModuleName: str,
-  Editors: list,
+  FileName : str,
   EditorId : term,
-  Path : str,
-  FileName : str
+  EditorIds: list
 in
   execute(editor-manager, EM?) .
   subscribe(delete-editor(<term>)) .
@@ -19,32 +17,34 @@ in
       rec-value(EM, new-editor(EditorId?)) .
       snd-msg(new-editor(EditorId))
     +
-      rec-value(EM, consistent-existing-editor(EditorId?)) .
-      snd-msg(consistent-existing-editor(EditorId))
-    +
-      rec-value(EM, inconsistent-existing-editor(EditorId?)) .
-      snd-msg(inconsistent-existing-editor(EditorId))
+      rec-value(EM, existing-editor(EditorId?)) .
+      snd-msg(existing-editor(EditorId))
     )
   +
-    rec-msg(check-editor-id(Name?, ModuleName?)) .
-    snd-eval(EM, check-editor-id(Name, ModuleName)) .
+    rec-msg(check-editor-id(FileName?, ModuleName?)) .
+    snd-eval(EM, check-editor-id(FileName, ModuleName)) .
     (
       rec-value(EM, existing-editor(EditorId?)) .
       snd-msg(existing-editor(EditorId))
     +
       rec-value(EM, non-existing-editor) .
-      snd-msg(non-existing-editor(Name))
+      snd-msg(non-existing-editor(FileName))
     )
   +
-    rec-msg(get-editor-name(EditorId?)) .
-    snd-eval(EM, get-editor-name(EditorId)).
-    rec-value(EM, editor-name(Name?)).
-    snd-msg(editor-name(Name))
+    rec-msg(get-editor-filename(EditorId?)) .
+    snd-eval(EM, get-filename(EditorId)).
+    rec-value(EM, filename(FileName?)).
+    snd-msg(editor-filename(FileName))
   +
-    rec-msg(get-editors-by-module(Name?)) .
-    snd-eval(EM, get-editors-by-module(Name)) .
-    rec-value(EM, editors-by-module(Editors?)) .
-    snd-msg(editors-by-module(Editors))
+    rec-msg(get-editor-module-name(EditorId?)) .
+    snd-eval(EM, get-module-name(EditorId)).
+    rec-value(EM, module-name(ModuleName?)).
+    snd-msg(editor-module-name(EditorId, ModuleName))
+  +
+    rec-msg(get-editors-by-module(FileName?)) .
+    snd-eval(EM, get-editors-by-module(FileName)) .
+    rec-value(EM, editors-by-module(EditorIds?)) .
+    snd-msg(editors-by-module(EditorIds))
   +
     rec-note(delete-editor(EditorId?)) .
     snd-do(EM, delete-editor(EditorId))

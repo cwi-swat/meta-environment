@@ -1,19 +1,38 @@
 # $Id$
 
-pkgdata_DATA = text-editor.idef meta.el
+SUBDIRS = common . gvim emacs xemacs
 
-bin_SCRIPTS = emacs-editor
+CFLAGS += -Werror
+
+IDEF2TIF = $(TOOLBUS)/bin/idef2tif
+TIFSTOC = $(TOOLBUS)/bin/tifstoc
+
+INCLUDES = \
+	-I$(top_srcdir)/editors/text/common \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ATERM)/include
 
 EXTRA_DIST = \
-	meta.el \
-	emacs-editor.src \
-	text-editor.idef \
-	text-editor.tif.c \
-	text-editor.tif.h
+	editor-hive.idef \
+	editor-hive.tif.c \
+	editor-hive.tif.h
 
-CLEANFILES = emacs-editor
+pkgdata_DATA = editor-hive.idef
 
-emacs-editor: emacs-editor.src
-	sed 's@__DATADIR__@$(pkgdatadir)@g' < $< > $@ \
-	&& chmod +x $@
+bin_PROGRAMS = editor-hive
 
+editor_hive_SOURCES = \
+	editor-hive.c \
+	editor-hive.tif.c
+
+editor_hive_LDADD = \
+	-L$(top_builddir)/editors/text/common -lTextEditor \
+	-L$(TOOLBUSLIB)/lib -lATB \
+	-L$(ATERM)/lib -lATerm \
+	$(SOCKLIBS) -ldl
+
+%.tifs: %.idef
+	$(IDEF2TIF) $<
+
+editor-hive.tif.c editor-hive.tif.h: editor-hive.tifs
+	$(TIFSTOC) -tool editor-hive $<

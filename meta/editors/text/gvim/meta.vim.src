@@ -1,0 +1,32 @@
+" $Id$
+
+let meta_dlso = "__LIBDIR__/lib_gvim.so"
+
+func! AddMenu(vim_fd, menu, item, action)
+  let cmd = a:vim_fd
+  let cmd = cmd . '#' . a:action
+  let cmd = '"' . cmd . '"'
+
+  " build call to add menu entry
+  let menu = ':silent amenu <silent> ' . a:menu . '.' . a:item . ' '
+
+  " add menu, binding menu-item to callback using encoded menu-item
+  exe menu . ':silent call libcallnr(meta_dlso, "send", ' . cmd . ')<CR>'
+endfunc
+
+" Update current location
+func! SetLocation()
+  let pos=line2byte(".") + col(".") - 1
+  let desc=g:tb_pipe . '#' . pos
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
+func! SetModified()
+  let desc=g:tb_pipe . '#modified'
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
+" Remap <CTRL-]> to update focus around current location
+map <silent> <C-]> :call SetLocation()<CR>
+
+autocmd BufWritePost * :call SetModified()

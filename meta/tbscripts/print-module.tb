@@ -1,6 +1,5 @@
-/*
-  $Id$
- */
+/* $Id$ */
+
 process PrintModule is
 let 
   Id         : term,
@@ -35,7 +34,8 @@ in
         rec-msg(io-file-written)
       +
         rec-msg(io-file-not-written(ErrMsg?)) .
-	snd-note(ui-status(errorf("Printing of %s failed: %s",[ModuleName,ErrMsg])))
+	snd-note(ui-status(errorf("Printing of %s failed: %s",
+	                   [ModuleName, ErrMsg])))
       )
     +
       rec-msg(ts-no-value) .

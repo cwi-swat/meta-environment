@@ -1,6 +1,4 @@
-/*
-  $Id$
-*/       
+/* $Id$ */       
 
 process GetText (EditorId : term, Text : str?, Focus : term?, Status : term?) is
 let
@@ -11,7 +9,7 @@ in
   if not-equal(DirtyFoci, []) then
     Focus := first(DirtyFoci).
     DirtyFoci := next(DirtyFoci).
-    snd-note(get-focus-text(EditorId, Focus)).
+    snd-msg(get-focus-text(EditorId, Focus)).
     (
       rec-msg(focus-text(EditorId, Text?)) .
       Status := parse-needed 

@@ -1,6 +1,5 @@
 /* This used to be the module-db.idef, it now (temporarily) serves as
  * a wrapper for a number of new tools that have replaced the module-db.
- *
  */
 
 #include <sdf-modules.idef>

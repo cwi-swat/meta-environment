@@ -60,22 +60,19 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
-/*{{{  ATerm new_editor_given_text(int cid, ATerm editorId, char *text) */
+/*{{{  void new_editor_given_text(int cid, ATerm editorId, char *text) */
 
-ATerm new_editor_given_text(int cid, ATerm editorId, char *text)
+void new_editor_given_text(int cid, ATerm editorId, char *text)
 {
   SE_Editor editor = newEditorGivenText(text);
 
   putEditor(editorId, editor);
-
-  return ATmake("snd-value(initial-focus(<term>))",
-		SE_makeTermFromFocus(SE_getEditorFocus(editor)));
 }
 
 /*}}}  */
-/*{{{  ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t) */
+/*{{{  void new_editor_given_tree(int cid, ATerm editorId, ATerm t) */
 
-ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
+void new_editor_given_tree(int cid, ATerm editorId, ATerm t)
 {
   SE_Editor editor;
   PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
@@ -84,14 +81,7 @@ ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
 
   editor = newEditorGivenTree(parse_tree, SORT_TERM, FOCUS_PARSED);
 
-  if (editor == NULL) {
-    return ATmake("snd-value(no-such-editor)");
-  }
-
   putEditor(editorId, editor);
-
-  return ATmake("snd-value(initial-focus(<term>))",
-		SE_makeTermFromFocus(SE_getEditorFocus(editor)));
 }
 
 /*}}}  */
@@ -462,18 +452,27 @@ ATerm calc_error_location(int cid, ATerm f, ATerm error)
 }
 
 /*}}}  */
-/*{{{  ATerm get_modification_status(int cid, ATerm editorId) */
+/*{{{  ATerm is_editor_modified(int cid, ATerm editorId) */
 
-ATerm get_modification_status(int cid, ATerm editorId)
+ATerm is_editor_modified(int cid, ATerm editorId)
 {
+  ATerm isModified;
   SE_Editor editor = getEditor(editorId);
-  ATerm status = ATparse("modified");
   
   if (editor) {
-    status = SE_getEditorModified(editor) ? status : ATparse("unmodified");
+    if (SE_getEditorModified(editor)) {
+      isModified = ATparse("true");
+    }
+    else {
+      isModified = ATparse("false");
+    }
+  }
+  else {
+    ATabort("se.c:is_editor_modified: editorId %t unknown\n", editorId);
+    return NULL;
   }
   
-  return ATmake("snd-value(modification-status(<term>))",status);
+  return ATmake("snd-value(editor-modified(<term>))", isModified);
 }
 
 /*}}}  */

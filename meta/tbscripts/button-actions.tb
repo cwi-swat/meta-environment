@@ -106,31 +106,33 @@ process ReturnAbort(EditorId : term, Stack : list) is
 process ButtonActionExecutor is
 let
   ModuleName : str,
-  ArgList    : list,
-  Stack      : list,
-  EditorId   : term,
-  EditorId2  : term,
-  STree      : term,
-  SList	     : list,
-  RTree      : term,
-  Error      : term,
-  Trees      : list,
+  ArgList : list,
+  Stack : list,
+  EditorId : term,
+  EditorId2 : term,
+  STree : term,
+  Focus : term,
+  SList	: list,
+  RTree : term,
+  Error : term,
+  Trees : list,
   ActionEvent : term,
-  SortName   : str,
-  FilePath   : str,
+  PosInfo : term,
+  SortName : str,
+  FilePath : str,
   NewModuleName : str,
-  FileName   : str,
+  FileName : str,
   EditorName : str,
-  FuncName   : str,
-  FunSym     : str,
-  String     : str,
-  NrOfArgs   : int,
-  Location   : int,
-  Integer    : int,
+  FuncName : str,
+  FunSym : str,
+  String : str,
+  NrOfArgs : int,
+  Location : int,
+  Integer : int,
   Query : str,
-  Action       : str,
-  OutStr       : str,
-  InStr        : str,
+  Action : str,
+  OutStr : str,
+  InStr : str,
   Name : str,
   ExecName : str,
   Path : str,
@@ -324,8 +326,8 @@ in
         fi
       +
         rec-msg(push-editor-name, Stack?, EditorId?) .
-        snd-msg(get-editor-name(EditorId)) .
-        rec-msg(editor-name(FileName?)) .
+        snd-msg(get-editor-filename(EditorId)) .
+        rec-msg(editor-filename(FileName?)) .
         StackPushString(Stack,Stack?,FileName) .
         ReturnSuccess(EditorId,Stack)
       +
@@ -476,13 +478,16 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area, Stack?, EditorId?) .
-        StackPopTerm(Stack,Stack?,STree?) .
+        StackPopTerm(Stack, Stack?, PosInfo?) .
         StackPopString(Stack,Stack?, ModuleName?) .
-        FileName := first(args(STree)) .
+        FileName := first(args(PosInfo)) .
         snd-msg(edit-general(ModuleName, FileName)) .
         rec-msg(editor-opened(ModuleName, EditorId2?)).
         GetTree(EditorId2, ModuleName, Tree?) .
-        snd-msg(goto-focus-at-posinfo(EditorId2, STree)) .    
+        snd-msg(get-focus-at-posinfo(EditorId2, PosInfo)) .
+        rec-msg(focus-at-posinfo(EditorId2, PosInfo, Focus?)) .
+	snd-msg(set-cursor-at-focus(EditorId2, Focus)) .
+	snd-msg(set-focus(EditorId2, Focus)) .
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-list, Stack?, EditorId?) .
@@ -782,7 +787,7 @@ in
   snd-msg(parse-focusses(EditorId, ModuleName, trm)) .
   (
     rec-msg(parse-ok(ModuleName)) .
-    snd-note(clear-focus(EditorId))
+    snd-msg(clear-focus(EditorId))
   +
     rec-msg(parse-failed(ModuleName, Focus?))
   )
@@ -850,7 +855,7 @@ in
 	  rec-msg(notify-about-changed-modules-done) .
           snd-msg(open-modules(NewModules, Type)).
           rec-msg(finished-opening-modules) .
-          snd-note(clear-focus(EditorId))
+          snd-msg(clear-focus(EditorId))
         +
           rec-msg(error-opening(ModuleName, name-inconsistent)).
           snd-msg(invalidate-sdf-in-db(ModuleName)).
@@ -890,7 +895,7 @@ in
       rec-msg(postprocess-semantics-hook-result(Tree?)).
       snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
       rec-msg(eqs-updated) .
-      snd-note(clear-focus(EditorId))
+      snd-msg(clear-focus(EditorId))
     +
       rec-msg(no-tree)
     )
@@ -932,37 +937,11 @@ endlet
 
 process ReplaceRoot(EditorId: term, Tree: term) is
 let
-  TotalTree : term,
-  Text      : str,
-  Focus     : term,
-  FileName  : str,
-  ErrorMessage : str
+  Focus : term
 in
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(focus-moved(EditorId, Focus?)) .
-  snd-msg(replace-focussed-tree(EditorId, Tree)) .
-  rec-msg(focus(Focus?)) .
-  snd-msg(get-tree(EditorId)) .
-  (
-    rec-msg(tree(TotalTree?)) .
-    snd-msg(unparse(TotalTree)) .
-    rec-msg(unparsed-text(Text?)) .
-    snd-msg(get-editor-name(EditorId)) .
-    rec-msg(editor-name(FileName?)) .
-    snd-msg(io-write-text-file(FileName,[Text])) .
-    (
-      rec-msg(io-file-written) .
-      snd-note(reload-file(EditorId, FileName)) .
-      snd-msg(move-focus-to-root(EditorId)) .
-      rec-msg(focus-moved(EditorId, Focus?)) .
-      snd-note(set-focus(EditorId, Focus))
-    +
-      rec-msg(io-file-not-written(ErrorMessage?)) .
-      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
-    )
-  +
-    rec-msg(no-tree)
-  )
+  ReplaceFocus(EditorId, Tree)
 endlet
 
 
@@ -978,9 +957,9 @@ process GetFocus(EditorId: term, Tree: term?) is
 process ReplaceFocus(EditorId: term, Tree: term) is
 let
   TotalTree : term,
-  Text      : str,
-  Focus     : term,
-  FileName  : str,
+  Text : str,
+  Focus : term,
+  FileName : str,
   ErrorMessage : str
 in
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
@@ -990,14 +969,14 @@ in
     rec-msg(tree(TotalTree?)) .
     snd-msg(unparse(TotalTree)) .
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(get-editor-name(EditorId)) .
-    rec-msg(editor-name(FileName?)) .
+    snd-msg(get-editor-filename(EditorId)) .
+    rec-msg(editor-filename(FileName?)) .
     snd-msg(io-write-text-file(FileName,[Text])) .
     (
       rec-msg(io-file-written) . 
-      snd-note(reload-file(EditorId, FileName)) .
-      snd-note(goto-focus(EditorId, Focus)) .
-      snd-note(set-focus(EditorId, Focus))
+      snd-msg(reread-contents(EditorId)) .
+      snd-msg(set-cursor-at-focus(EditorId, Focus)) .
+      snd-msg(set-focus(EditorId, Focus))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))

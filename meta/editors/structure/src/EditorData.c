@@ -176,9 +176,9 @@ SE_Focus SE_makeFocusEmpty()
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed) */
+/*{{{  SE_Focus SE_makeFocusNotEmpty(SE_Path path, char* sort, SE_Area area, int unparsed) */
 
-SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed)
+SE_Focus SE_makeFocusNotEmpty(SE_Path path, char* sort, SE_Area area, int unparsed)
 {
   return (SE_Focus)(ATerm)ATmakeAppl4(SE_afun2, (ATerm)path, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)area, (ATerm)ATmakeInt(unparsed));
 }
@@ -216,9 +216,9 @@ SE_SymbolList SE_makeSymbolListEmpty()
 }
 
 /*}}}  */
-/*{{{  SE_SymbolList SE_makeSymbolListMulti(char * head, SE_SymbolList tail) */
+/*{{{  SE_SymbolList SE_makeSymbolListMulti(char* head, SE_SymbolList tail) */
 
-SE_SymbolList SE_makeSymbolListMulti(char * head, SE_SymbolList tail)
+SE_SymbolList SE_makeSymbolListMulti(char* head, SE_SymbolList tail)
 {
   return (SE_SymbolList)(ATerm)ATinsert((ATermList)tail, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)));
 }
@@ -561,14 +561,21 @@ ATbool SE_isValidFocus(SE_Focus arg)
 
 inline ATbool SE_isFocusEmpty(SE_Focus arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternFocusEmpty)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternFocusEmpty);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternFocusEmpty));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -576,14 +583,21 @@ inline ATbool SE_isFocusEmpty(SE_Focus arg)
 
 inline ATbool SE_isFocusNotEmpty(SE_Focus arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternFocusNotEmpty)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternFocusNotEmpty, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternFocusNotEmpty, NULL, NULL, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -631,18 +645,18 @@ ATbool SE_hasFocusSort(SE_Focus arg)
 }
 
 /*}}}  */
-/*{{{  char * SE_getFocusSort(SE_Focus arg) */
+/*{{{  char* SE_getFocusSort(SE_Focus arg) */
 
-char * SE_getFocusSort(SE_Focus arg)
+char* SE_getFocusSort(SE_Focus arg)
 {
   
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_setFocusSort(SE_Focus arg, char * sort) */
+/*{{{  SE_Focus SE_setFocusSort(SE_Focus arg, char* sort) */
 
-SE_Focus SE_setFocusSort(SE_Focus arg, char * sort)
+SE_Focus SE_setFocusSort(SE_Focus arg, char* sort)
 {
   if (SE_isFocusNotEmpty(arg)) {
     return (SE_Focus)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), 1);
@@ -985,18 +999,18 @@ ATbool SE_hasSymbolListHead(SE_SymbolList arg)
 }
 
 /*}}}  */
-/*{{{  char * SE_getSymbolListHead(SE_SymbolList arg) */
+/*{{{  char* SE_getSymbolListHead(SE_SymbolList arg) */
 
-char * SE_getSymbolListHead(SE_SymbolList arg)
+char* SE_getSymbolListHead(SE_SymbolList arg)
 {
   
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
 }
 
 /*}}}  */
-/*{{{  SE_SymbolList SE_setSymbolListHead(SE_SymbolList arg, char * head) */
+/*{{{  SE_SymbolList SE_setSymbolListHead(SE_SymbolList arg, char* head) */
 
-SE_SymbolList SE_setSymbolListHead(SE_SymbolList arg, char * head)
+SE_SymbolList SE_setSymbolListHead(SE_SymbolList arg, char* head)
 {
   if (SE_isSymbolListMulti(arg)) {
     return (SE_SymbolList)ATreplace((ATermList)arg, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)), 0);
@@ -1068,14 +1082,21 @@ ATbool SE_isValidPath(SE_Path arg)
 
 inline ATbool SE_isPathRoot(SE_Path arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathRoot)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternPathRoot);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternPathRoot));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1083,14 +1104,21 @@ inline ATbool SE_isPathRoot(SE_Path arg)
 
 inline ATbool SE_isPathLeftLayout(SE_Path arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathLeftLayout)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternPathLeftLayout);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternPathLeftLayout));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1098,14 +1126,21 @@ inline ATbool SE_isPathLeftLayout(SE_Path arg)
 
 inline ATbool SE_isPathTerm(SE_Path arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathTerm)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternPathTerm, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternPathTerm, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1113,14 +1148,21 @@ inline ATbool SE_isPathTerm(SE_Path arg)
 
 inline ATbool SE_isPathRightLayout(SE_Path arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathRightLayout)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternPathRightLayout);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternPathRightLayout));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1299,14 +1341,21 @@ ATbool SE_isValidMove(SE_Move arg)
 
 inline ATbool SE_isMoveLeft(SE_Move arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveLeft)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternMoveLeft);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternMoveLeft));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1314,14 +1363,21 @@ inline ATbool SE_isMoveLeft(SE_Move arg)
 
 inline ATbool SE_isMoveRight(SE_Move arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveRight)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternMoveRight);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternMoveRight));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1329,14 +1385,21 @@ inline ATbool SE_isMoveRight(SE_Move arg)
 
 inline ATbool SE_isMoveUp(SE_Move arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveUp)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternMoveUp);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternMoveUp));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1344,14 +1407,21 @@ inline ATbool SE_isMoveUp(SE_Move arg)
 
 inline ATbool SE_isMoveDown(SE_Move arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveDown)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SE_patternMoveDown);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SE_patternMoveDown));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1376,9 +1446,9 @@ SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_Parse
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int)) */
+/*{{{  SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char* (*acceptSort)(char*), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int)) */
 
-SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int))
+SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char* (*acceptSort)(char*), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int))
 {
   if (SE_isFocusEmpty(arg)) {
     return SE_makeFocusEmpty();
@@ -1426,9 +1496,9 @@ SE_FocusList SE_visitFocusList(SE_FocusList arg, SE_Focus (*acceptHead)(SE_Focus
 }
 
 /*}}}  */
-/*{{{  SE_SymbolList SE_visitSymbolList(SE_SymbolList arg, char * (*acceptHead)(char *)) */
+/*{{{  SE_SymbolList SE_visitSymbolList(SE_SymbolList arg, char* (*acceptHead)(char*)) */
 
-SE_SymbolList SE_visitSymbolList(SE_SymbolList arg, char * (*acceptHead)(char *))
+SE_SymbolList SE_visitSymbolList(SE_SymbolList arg, char* (*acceptHead)(char*))
 {
   if (SE_isSymbolListEmpty(arg)) {
     return SE_makeSymbolListEmpty();

@@ -1,0 +1,50 @@
+; improve readability of legacy constructs
+(defun head (list) (car list))
+(defun tail (list) (cdr list))
+
+(defvar current-partial-msg "")
+(defvar must-send-modified t)
+
+(defun init (args)
+  (debug-out (concat "init called: " (prin1-to-string args)))
+  (setq hive-connector
+    (let((process-connection-type nil))
+         (apply 'start-process-internal "xemacs-editor" "*Meta*" "xemacs-editor"
+           (split-string args))
+    )
+  )
+  (set-process-filter hive-connector 'handle-input-from-hive)
+  (process-kill-without-query hive-connector)
+  ;;(define-key global-map [mouse-1] 'mouse-clicked)
+  ;;(add-local-hook 'after-change-functions 'buffer-modified)
+)
+
+(defun handle-input-from-hive (proc args)
+  (debug-out (concat (prin1-to-string proc) (prin1-to-string args)))
+)
+
+(defun handle-input-from-hive2 (proc args)
+  (setq new-string (concat current-partial-msg args))
+  (let ((eval-list (split-string new-string "\n"))
+	(last-char (substring new-string -1)))
+    (while (< 1 (list-length eval-list))
+      (eval (head (read-from-string (head eval-list))))
+      (set 'eval-list (tail eval-list))
+    )
+    (if (not (string= last-char "\n"))
+	(setq current-partial-msg (head eval-list))
+      (progn (eval (head (read-from-string (head eval-list))))
+             (setq current-partial-msg "")
+             )
+      )
+    )
+)
+
+(defun send-to-hive (message)
+  (process-send-string hive-connector message)
+)
+
+(defun debug-out (msg)
+  (switch-to-buffer "meta-debug")
+  (print msg (get-buffer "meta-debug"))
+)

@@ -2,4 +2,5 @@
 .libs
 Makefile
 Makefile.in
-emacs-editor
+editor-hive
+editor-hive.tifs

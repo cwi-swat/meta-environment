@@ -4,39 +4,37 @@ tool se is {
   command = "se"
 }
 
-/* Because EditorId's can dissappear suddenly, the structure editor
- * should always be robust against non-existing EditorId's. If possible
+/* Because EditorIds can dissappear suddenly, the structure editor
+ * should always be robust against non-existing EditorIds. If possible
  * a default answer should be returned, otherwise an error message to
  * ensure that normal operation can continue even if an editor is missing.
  */
 
-process SE is
+process StructureEditor is
 let
-  EditorId     : term,
-  Focus        : term,
-  Error        : list,
-  Focuses      : list,
-  FocusList    : list,
-  Location     : int,
-  SE           : se,
-  Text         : str,
-  Move         : term,
-  Nonterminal  : str,
-  Tree         : term,
-  ModifiedStatus : term,
-  Msg            : term,
+  EditorId : term,
+  Focus : term,
+  Error : list,
+  Focuses : list,
+  FocusList : list,
+  Location : int,
+  SE : se,
+  Text : str,
+  Move : term,
+  Nonterminal : str,
+  Tree : term,
+  Modified : term,
+  Msg : term,
   PosInfo : term
 in 
   execute(se, SE?) .
   (
     rec-msg(initialize-structure-editor(EditorId?, Text?, Tree?)) .
-    if equal(Tree,none) then
-      snd-eval(SE, new-editor-given-text(EditorId, Text)) 
+    if equal(Tree, none) then
+      snd-do(SE, new-editor-given-text(EditorId, Text)) 
     else 
-      snd-eval(SE, new-editor-given-tree(EditorId, Tree)) 
-    fi .
-    rec-value(SE, initial-focus(Focus?)) .       
-    snd-msg(initial-focus(Focus)) 
+      snd-do(SE, new-editor-given-tree(EditorId, Tree)) 
+    fi
   +
     rec-msg(replace-focus(EditorId?, Focus?, Tree?)) .
     snd-do(SE, replace-focus(EditorId, Focus, Tree))
@@ -49,23 +47,22 @@ in
     rec-msg(move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .
     rec-value(SE, focus(Focus?)) .
-    snd-note(set-focus(EditorId, Focus))
+    snd-msg(set-focus(EditorId, Focus))
   +
     rec-msg(invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .
     rec-value(SE, focus(Focus?)) .
     snd-msg(invalidation-done(EditorId, Focus))
   +
-    rec-msg(set-current-location(EditorId?, Location?)) .
+    rec-msg(set-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
     rec-value(SE, focus(Focus?)) .  
-    snd-note(set-focus(EditorId, Focus)) 
+    snd-msg(set-focus(EditorId, Focus)) 
   +
-    rec-msg(goto-focus-at-posinfo(EditorId?, PosInfo?)) .
+    rec-msg(get-focus-at-posinfo(EditorId?, PosInfo?)) .
     snd-eval(SE, get-focus-at-posinfo(EditorId, PosInfo)) .
     rec-value(SE, focus(Focus?)) .  
-    snd-note(goto-focus(EditorId, Focus)) .
-    snd-note(set-focus(EditorId, Focus)) 
+    snd-msg(focus-at-posinfo(EditorId, PosInfo, Focus)) 
   +
     rec-msg(get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .
@@ -125,13 +122,13 @@ in
     rec-msg(delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId)) 
   +
-    rec-msg(set-modified(EditorId?)) .
+    rec-msg(editor-contents-changed(EditorId?)) .
     snd-do(SE, modify(EditorId))
   +
-    rec-msg(get-modified-status(EditorId?)).
-    snd-eval(SE, get-modification-status(EditorId)).
-    rec-value(SE, modification-status(ModifiedStatus?)).
-    snd-msg(modified-status(EditorId, ModifiedStatus))
+    rec-msg(is-editor-modified(EditorId?)) .
+    snd-eval(SE, is-editor-modified(EditorId)) .
+    rec-value(SE, editor-modified(Modified?)) .
+    snd-msg(editor-modified(EditorId, Modified))
   ) *
   delta
 endlet

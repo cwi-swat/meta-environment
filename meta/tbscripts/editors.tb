@@ -1,12 +1,10 @@
-/* This file contains everything related to xemacs editors */
-
 process Editors is
 let
   Pid : int
 in
   create(EditorManager,Pid?) .
   create(EditorCreator,Pid?) .
-  create(SE, Pid?) /* Structure Editor */
+  create(StructureEditor, Pid?)
 endlet
 
 process EditorCreator is
@@ -160,36 +158,35 @@ process CreateEditor(Type : term, ModuleName : str,
                      FileName : str, 
 		     Text : str, Tree : term) is
 let
-  EditorId   : term,
+  EditorId : term,
   ButtonList : list,
-  Pid        : int,
-  Focus      : term
+  Pid : int,
+  CurrentModuleName : str
 in
-    /* The 'creates' in the following process are essential to 
+    /* The 'create' in the following process are essential to 
      * spawn the actual editors and make the editor creation 
      * process available to the next request.
      */
-    snd-msg(get-auxilary-buttons(Type, ModuleName)) .
+    snd-msg(get-auxiliary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName, ButtonList?)).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(EditorId?)) .
       snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
-      rec-msg(initial-focus(Focus?)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
-      create(TextEditor, Pid?) .
-      snd-msg(edit-text(EditorId, FileName, ButtonList)) .
-      rec-msg(text-editor-initialized(EditorId)) .
-      snd-msg(editor-opened(ModuleName, EditorId))
+      snd-msg(edit-text(EditorId, EDITOR, FileName, ButtonList))
     +
-      rec-msg(consistent-existing-editor(EditorId?)) .
-      snd-note(move-editor-to-front(EditorId)) .
-      snd-msg(editor-opened(ModuleName, EditorId))
-    +
-      rec-msg(inconsistent-existing-editor(EditorId?)) .
-      Error("Term %s is already being edited for a different module", [FileName]) .
-      snd-msg(editor-opened(ModuleName, EditorId))
-    )
+      rec-msg(existing-editor(EditorId?)) .
+      snd-msg(get-editor-modulename(EditorId)) .
+      rec-msg(editor-modulename(EditorId, CurrentModuleName?)) .
+      if equal(CurrentModuleName, ModuleName) then
+	snd-msg(editor-to-front(EditorId))
+      else
+	Error("Term %s is already being edited for a different module",
+	      [FileName])
+      fi
+    ) .
+    snd-msg(editor-opened(ModuleName, EditorId))
 endlet
 
 process CloseEditor(ModuleName : str, FileName : str) is
@@ -221,8 +218,7 @@ in
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-msg(kill-editor(EditorId)) .
-    snd-note(kill-text-editor(EditorId)) .
-    rec-msg(text-editor-killed(EditorId)) .
+    snd-msg(kill-text-editor(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-note(syntax-changed(ModuleName)).
@@ -246,8 +242,7 @@ let
   Focus : term
 in
   snd-msg(invalidate-tree(EditorId)) .
-  rec-msg(invalidation-done(EditorId,Focus?)) .
-  snd-note(set-focus(EditorId, Focus))  
+  rec-msg(invalidation-done(EditorId,Focus?))
 endlet
 
 process KillEditor(EditorId : term, Type : term, ModuleName : str) is
@@ -267,11 +262,11 @@ process KillEditor(EditorId : term, Type : term, ModuleName : str) is
 
 process KillModuleEditor(EditorId : term, ModuleName : str, Type : term) is
 let
-  ModifiedStatus : term
+  EditorIsModified : term
 in
-  snd-msg(get-modified-status(EditorId)) .
-  rec-msg(modified-status(EditorId, ModifiedStatus?)) .
-  if equal(ModifiedStatus, modified) then
+  snd-msg(is-editor-modified(EditorId)) .
+  rec-msg(editor-modified(EditorId, EditorIsModified?)) .
+  if equal(EditorIsModified, quote(true)) then
     snd-msg(revert-module(ModuleName, Type)).
     rec-msg(module-reverted(ModuleName)).
     snd-note(ui-status(errorf("Dirty module %s is reread from disk",

@@ -1,0 +1,82 @@
+/* $Id$ */
+
+tool editor-hive is {
+  command = "editor-hive"
+}
+
+process EditorHive is
+let
+  ActionList : list,
+  EditorId : term,
+  Editor : str,
+  FileName : str,
+  Focus : term,
+  FocusText : str,
+  Hive : editor-hive,
+  Location : int,
+  MenuEvent : term,
+  Message : str,
+  MouseEvent : int
+in
+#ifdef ECLIPSE
+  rec-connect(Hive?)
+#else
+  execute(editor-hive, Hive?)
+#endif
+  .
+  (
+    rec-msg(edit-text(EditorId?, Editor?, FileName?, ActionList?))
+    . snd-do(Hive, edit-file(EditorId, Editor, FileName))
+    . snd-do(Hive, set-actions(EditorId, ActionList))
+  +
+    rec-msg(reread-contents(EditorId?))
+    . snd-do(Hive, reread-contents(EditorId))
+  +
+    rec-msg(set-focus(EditorId?, Focus?))
+    . snd-do(Hive, set-focus(EditorId, Focus))
+  +
+    rec-msg(get-focus-text(EditorId?, Focus?))
+    . snd-do(Hive, get-contents(EditorId, Focus))
+  + 
+    rec-msg(clear-focus(EditorId))
+    . snd-do(Hive, clear-focus(EditorId))
+  +
+    rec-msg(display-message(EditorId?, Message?))
+    . snd-do(Hive, display-message(EditorId, Message))
+  +
+    rec-msg(set-cursor-at-location(EditorId?, Location?))
+    . snd-do(Hive, set-cursor-at-location(EditorId, Location))
+  +
+    rec-msg(set-cursor-at-focus(EditorId?, Focus?))
+    . snd-do(Hive, set-cursor-at-focus(EditorId, Focus))
+  +
+    rec-msg(editor-to-front(EditorId?))
+    . snd-do(Hive, editor-to-front(EditorId))
+  +
+    rec-msg(kill-text-editor(EditorId?))
+    . snd-do(Hive, kill-editor(EditorId))
+  +
+    rec-event(Hive, contents-changed(EditorId?))
+    . snd-ack-event(Hive, contents-changed(EditorId))
+    . snd-msg(editor-contents-changed(EditorId))
+  +
+    rec-event(Hive, mouse-event(EditorId?, MouseEvent?))
+    . snd-ack-event(Hive, mouse-event(EditorId, MouseEvent))
+    . snd-msg(set-location(EditorId, MouseEvent))
+  +
+    rec-event(Hive, menu-event(EditorId?, MenuEvent?))
+    . snd-ack-event(Hive, menu-event(EditorId, MenuEvent))
+    . snd-msg(extra-button-action(EditorId, MenuEvent))
+  +
+    rec-event(Hive, contents(EditorId, FocusText?))
+    . snd-msg(focus-text(EditorId, FocusText))
+    . snd-ack-event(Hive, contents(EditorId, FocusText))
+  +
+    rec-event(Hive, editor-disconnected(EditorId?))
+    . snd-ack-event(Hive, editor-disconnected(EditorId))
+    . snd-msg(text-editor-disconnected(EditorId))
+  )
+  * delta
+endlet
+
+toolbus(EditorHive)

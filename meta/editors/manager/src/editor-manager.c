@@ -63,7 +63,9 @@ static ATerm moduleStringToTerm(const char *module)
 
 static ATerm newEditor(ATerm id, ATerm name, ATerm module)
 {
-  assert(id && name);
+  assert(id != NULL);
+  assert(name != NULL);
+  assert(module != NULL);
 
   return ATmake("editor(<term>,<term>,<term>)", id, name, module);
 }
@@ -204,35 +206,26 @@ static ATerm sndValue(ATerm result)
 
 /*{{{  ATerm get_editor_id(int conn, char *pathAsString,  */
 
-ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
+ATerm get_editor_id(int conn, char *filename, char *modulename)
 {
   ATerm editor;
   ATerm editorId;
   ATerm nameAsTerm;
   ATerm moduleAsTerm;
-  ATerm storedModuleName;
 
-  assert(nameAsString);
+  assert(filename != NULL);
+  assert(modulename != NULL);
 
-  nameAsTerm = nameStringToTerm(nameAsString);
+  nameAsTerm = nameStringToTerm(filename);
+  moduleAsTerm = moduleStringToTerm(modulename);
+
   editor = getEditorByName(nameAsTerm);
-
   if (editor != NULL) {
     editorId = getEditorId(editor);
-
-    moduleAsTerm = moduleStringToTerm(moduleAsString);
-    storedModuleName = getModule(editor);
-
-    if (ATisEqual(moduleAsTerm, storedModuleName)) {
-      return sndValue(ATmake("consistent-existing-editor(<term>)", editorId));
-    }
-    else {
-      return sndValue(ATmake("inconsistent-existing-editor(<term>)", editorId));
-    }
+    return sndValue(ATmake("existing-editor(<term>)", editorId));
   }
 
   editorId = getUniqueId();
-  moduleAsTerm = moduleStringToTerm(moduleAsString);
   addEditor(newEditor(editorId, nameAsTerm, moduleAsTerm));
 
   return sndValue(ATmake("new-editor(<term>)", editorId));
@@ -262,9 +255,9 @@ ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString)
 }
 
 /*}}}  */
-/*{{{  ATerm get_editor_name(int conn, ATerm editorId) */
+/*{{{  ATerm get_filename(int conn, ATerm editorId) */
 
-ATerm get_editor_name(int conn, ATerm editorId)
+ATerm get_filename(int conn, ATerm editorId)
 {
   ATerm editor;
   ATerm nameTerm;
@@ -275,15 +268,35 @@ ATerm get_editor_name(int conn, ATerm editorId)
   if (editor != NULL) {
     nameTerm = getEditorName(editor);
     ATmatch(nameTerm,"name(<str>)", &name);  
-    return ATmake("snd-value(editor-name(<str>))", name);
+    return ATmake("snd-value(filename(<str>))", name);
   }
   else {
-    return ATmake("snd-value(editor-name(\"unknown-editor\"))");
+    return ATmake("snd-value(filename(\"unknown-editor\"))");
   }
 }
 
 /*}}}  */
+/*{{{  ATerm get_module_name(int conn, ATerm editorId) */
 
+ATerm get_module_name(int conn, ATerm editorId)
+{
+  ATerm editor;
+  ATerm nameTerm;
+  char *name;
+
+  editor = getEditorById(editorId);
+
+  if (editor != NULL) {
+    nameTerm = getEditorName(editor);
+    ATmatch(nameTerm,"module(<str>)", &name);  
+    return ATmake("snd-value(module-name(<str>))", name);
+  }
+  else {
+    return ATmake("snd-value(module-name(\"unknown-editor\"))");
+  }
+}
+
+/*}}}  */
 /*{{{  void delete_editor(int conn, ATerm editorId) */
 
 void delete_editor(int conn, ATerm editorId)
@@ -311,7 +324,7 @@ ATerm get_editors_by_module(int conn, char *moduleAsString)
 
   assert(moduleAsString);
 
-  moduleAsTerm    = moduleStringToTerm(moduleAsString);
+  moduleAsTerm = moduleStringToTerm(moduleAsString);
   editorsByModule = getEditorsByModule(moduleAsTerm);
 
   return sndValue(ATmake("editors-by-module([<list>])", editorsByModule));

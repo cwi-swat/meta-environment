@@ -1,0 +1,24 @@
+[
+  [Action, to-front, action(to-front)],
+  [Action, reread-contents, action(reread-contents)],
+  [Action, display-message, action(display-message(<message(str)>))],
+  [Action, set-cursor-at-location, action(set-cursor-at-location(<location(int)>))],
+  [Action, set-cursor-at-focus, action(set-cursor-at-focus(<focus(term)>))],
+  [Action, clear-focus, action(clear-focus)],
+  [Action, set-focus, action(set-focus(<focus(term)>))],
+  [Action, get-contents, action(get-contents(<focus(term)>))],
+  [Action, set-actions, action(set-actions(<actions(ActionList)>))],
+
+  [ActionList, empty, []],
+  [ActionList, multi, [<head(Menu)>, <[tail(ActionList)]>]],
+
+  [Menu, default, menu([<main(str)>,<sub(str)>])],
+
+  [Event, menu, menu-event(<menu(Menu)>)],
+  [Event, mouse, mouse-event(<location(int)>)],
+  [Event, contents, contents(<text(str)>)],
+  [Event, modified, modified],
+
+  [Process, default, process(<to-child(Pipe)>,<from-child(Pipe)>)],
+  [Pipe, default, pipe(<read(int)>,<write(int)>)]
+]

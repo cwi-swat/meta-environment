@@ -4,21 +4,21 @@
 
 process Io is
 let
-  IO         : in-output,
-  Name       : str,
-  Path       : str,
-  Term       : term,
+  IO : in-output,
+  Name : str,
+  Path : str,
+  Term : term,
+  FileName : str,
   FileName1 : str,
   FileName2 : str,
-  FileName : str,
-  Contents   : term,
+  Contents : term,
   ContentList: list,
-  Extension  : str,
+  Extension : str,
   ErrorMessage : str,
   Directory : str,
   Directories : list
 in
-  execute(in-output,IO?).
+  execute(in-output, IO?).
   (
     rec-msg(io-relative-to-absolute(Directories?)) .
     snd-eval(IO, relative-to-absolute(Directories)) .
@@ -137,6 +137,11 @@ in
     snd-eval(IO, get-filename(Directory, Name, Extension)) .
     rec-value(IO, filename(FileName?)) .
     snd-msg(io-filename(FileName))
+  +
+    rec-msg(decons-file-name(FileName?, Extension?)) .
+    snd-eval(IO, decons-filename(FileName, Extension)) .
+    rec-value(IO, file-name(Path?, FileName?, Extension?)) . 
+    snd-msg(decons-file-name-result(Path, FileName, Extension)) 
   ) *
   delta
 endlet
