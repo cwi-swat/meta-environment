@@ -159,26 +159,52 @@ you should now call
  
 static term *parse_anno(term *t)
 {
+  term_list args;
+  term *arg;
   term *anno,*t2,*res;
+  char close_char;
+
   if(lastc && lastc == '{') {
-    get_char();
-    skip_layout();
     /* Take a deep breath... */
     /* This is the actual annotation (which can or cannot itself be annotated).
        As in term{anno{anno'}}, since an annotation is a term. */
-    anno = parse_anno(parse_term0());
-    skip_layout();
-    if(lastc && lastc == '}')  {
-      t2 = mk_anno(anno,t);
-      get_char();
+    /* anno = parse_anno(parse_term0()); */
+    close_char = '}';
+    next(&args) = NULL;
+    get_char(); skip_layout();
+    
+    while(lastc != close_char){
+      if(lastc == '%') {
+	if(get_char() == 'l'){
+	  next(&args) = 
+	    list_concat(next(&args),
+			     va_arg(mk_term_args, term_list *));
+	  get_char(); skip_layout();
+	  goto list_args_seen_anno;
+	} else {
+	  unget_char();
+	}
+      }
+      arg = parse_anno(parse_term0());
+
+      next(&args) = list_concat_term(next(&args), arg);
       skip_layout();
-      /* Now, we can have _another_ annotation:
-              term{anno}{anno'} */
-      res = parse_anno(t2);
-    } else {
-      parse_error("Unexpected character");
-      res = NULL;
+      if(lastc == ','){
+	get_char(); skip_layout(); continue;
+      } else
+	break;
     }
+    list_args_seen_anno:
+    if(lastc != close_char){
+      parse_error("Missing }");
+      return NULL;
+    } 
+    get_char(); skip_layout();
+    anno = next(&args);
+    t2 = mk_anno(anno,t);
+    /* Now, we can have _another_ annotation:
+       term{anno}{anno'} */
+    res = parse_anno(t2);
   } else {
     res = t;
   }
@@ -1015,26 +1041,60 @@ The structure of match_anno() is very similar to that of parse_anno().
 
 TBbool match_anno(term *t)
 {
-  TBbool res=TBtrue;
+  TBbool res;
+  term_list *tl;
+  char close_char;
+  term_list **ptl;
 
   skip_layout();
   if (lastc && is_anno(t) ) {
     /* We might have a nested annotation */
     res = match_anno(anno_term(t));
-    if (lastc=='{') {
-      get_char();
-      /* Proceed with the actual annotation (a term). The annotation could
-	 also be annotated */
-      res = res && TBmatch1(anno_val(t)) && match_anno(anno_val(t));
-      skip_layout();
-      if (res == TBtrue && lastc=='}') {
-	get_char();
-      } else {
-	res = TBfalse;
-      }
+    if (res == TBfalse) {
+      return TBfalse;
     }
-  }
-  return res;
+    /* Proceed with the actual annotation (a term). The annotation could
+       also be annotated */
+    if (lastc=='{') {
+      if(!is_list(anno_val(t))){
+	return TBfalse;
+      }
+      tl = anno_val(t);
+      close_char = '}';
+      get_char();
+      do {
+	skip_layout();
+	if(lastc == '%' && buf_ptr[0] == 'l'){
+	  ptl = va_arg(match_args, term_list **);
+	  *ptl = tl;
+	  get_char(); get_char();
+	  break;
+	}
+	if(tl){
+	  if(!(TBmatch1(first(tl))&& match_anno(first(tl))))
+	    return TBfalse;
+	  else {
+	    skip_layout();
+	    if(lastc == ',')
+	      get_char();
+	    else {
+	      if(next(tl))
+		return TBfalse;	      
+	    }
+	    tl = next(tl);	  
+	}
+      } else
+	break;
+    } while (TBtrue);
+
+    { TBbool res;
+      skip_layout();
+      res = (lastc == close_char) ? TBtrue : TBfalse;
+      get_char();
+      return res;
+    } 
+    } else return TBtrue;
+  } else return TBtrue;
 }
 
 TBbool TBmatch(term *t, char *fmt, ...)
