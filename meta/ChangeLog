@@ -3,6 +3,7 @@
 2003/07/14 ({jurgenv,markvdb}@cwi.nl)
  * Added graph attributes to the graph format (updated MetaStudio)
  * Dot bounding box information used to calculate size of canvas
+ * Fixed a bug in Close Module use-case.
 
 2003/07/14 (markvdb@cwi.nl)
  * Added a declaration in a TB script.

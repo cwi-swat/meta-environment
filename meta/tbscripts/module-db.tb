@@ -410,8 +410,13 @@ process MDB-GetImportedModules(Name : str, Imported : list?) is
 let
   Syntax : term
 in
-    snd-msg(ts-get-term-value("import-relations", Name)) .
+  snd-msg(ts-get-term-value("import-relations", Name)) .
+  (
     rec-msg(ts-value(Imported?))
+  +
+    rec-msg(ts-no-value) .
+    Imported := []
+  )
 endlet
 
 process MDB-DisplayGraph is
