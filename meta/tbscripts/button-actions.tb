@@ -477,6 +477,9 @@ in
           Text := first(args(Tree)) .
           snd-msg(io-write-text-file(Path,[Text])).
           rec-msg(io-file-written)
+      
+          rec-msg(io-file-not-written(ErrorMessage?))
+          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
         fi .
         ReturnSuccess(EditorId, Stack)
       +
@@ -680,7 +683,8 @@ let
   TotalTree : term,
   Text      : str,
   Focus     : term,
-  FileName  : str
+  FileName  : str,
+  ErrorMessage : str
 in
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(focus-moved(EditorId, Focus?)) .
@@ -701,7 +705,8 @@ in
       rec-msg(focus-moved(EditorId, Focus?)) .
       snd-note(set-focus(EditorId, Focus))
     +
-      rec-msg(io-file-not-written)
+      rec-msg(io-file-not-written(ErrorMessage?))
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
     )
   +
     rec-msg(no-tree)
@@ -723,7 +728,8 @@ let
   TotalTree : term,
   Text      : str,
   Focus     : term,
-  FileName  : str
+  FileName  : str,
+  ErrorMessage : str
 in
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
@@ -735,9 +741,14 @@ in
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
     snd-msg(io-write-text-file(FileName,[Text])) .
-    rec-msg(io-file-written) .
-    snd-note(reload-file(EditorId, FileName)) .
-    snd-note(set-focus(EditorId, Focus))
+    (
+      rec-msg(io-file-written) . 
+      snd-note(reload-file(EditorId, FileName)) .
+      snd-note(set-focus(EditorId, Focus))
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    )
   +
     rec-msg(no-tree)
   )
@@ -787,25 +798,38 @@ process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
 let
   Text        : str,
   EditorId    : term,
-  NewModuleName : str
+  NewModuleName : str,
+  ErrorMessage : str
 in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
     snd-msg(io-write-text-file(FileName,[Text])) .
-    rec-msg(io-file-written) .
-    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
-    rec-msg(editor-opened(ModuleName, EditorId?))
+    (
+      rec-msg(io-file-written) .
+      snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
+      rec-msg(editor-opened(ModuleName, EditorId?))
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    )
   fi
 endlet
 
 process ActivateEditorWithString(Text: str, ModuleName: str, FileName: str) is
 let
   EditorId    : term,
-  NewModuleName : str
+  NewModuleName : str,
+  ErrorMessage : str
 in
   snd-msg(io-write-text-file(FileName,[Text])) .
-  rec-msg(io-file-written) .
-  snd-msg(edit-term-file(ModuleName, FileName)) .
-  rec-msg(editor-opened(ModuleName, EditorId?))
+  (
+    rec-msg(io-file-written) .
+    snd-msg(edit-term-file(ModuleName, FileName)) .
+    rec-msg(editor-opened(ModuleName, EditorId?))
+  +
+    rec-msg(io-file-not-written(ErrorMessage?)) .
+    snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+  )
+
 endlet
