@@ -1,3 +1,6 @@
+2001/05/11 (markvdb@cwi.nl)
+ * Added Set.
+
 2001/05/07 (markvdb@cwi.nl)
  * Add "empty", "seq", "func", "perm", and "iter-(sep-)n" symbol.
 
