@@ -93,7 +93,7 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         // intentionally left empty
     }
 
-    public void displayFeedbackSummary(ATerm t0) {
+    public void showFeedbackSummary(ATerm t0) {
         // intentionally left empty        
     }
 

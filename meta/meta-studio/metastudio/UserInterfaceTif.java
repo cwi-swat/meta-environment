@@ -1,6 +1,6 @@
 // Java tool interface UserInterfaceTif
 // This file is generated automatically, please do not edit!
-// generation time: Jan 14, 2004 1:57:26 PM
+// generation time: Jan 28, 2004 11:52:11 AM
 
 package metastudio;
 
@@ -22,8 +22,8 @@ public interface UserInterfaceTif
   public void warning(String s0);
   public void error(String s0);
   public void buttonsFound(ATerm t0, String s1, ATerm t2);
-  public void displayFeedbackSummary(ATerm t0);
   public void removeFeedbackSummary(String s0, String s1);
+  public void showFeedbackSummary(ATerm t0);
   public void addStatusf(ATerm t0, String s1, ATerm t2);
   public void endStatus(ATerm t0);
   public void addStatus(ATerm t0, String s1);

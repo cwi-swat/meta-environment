@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 14, 2004 1:57:26 PM
+// generation time: Jan 28, 2004 11:52:11 AM
 
 package metastudio;
 
@@ -203,19 +203,6 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void displayFeedbackSummary(ATerm t0)
-
-  public void displayFeedbackSummary(ATerm t0)
-  {
-    if (tool != null) {
-      tool.displayFeedbackSummary(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `displayFeedbackSummary' not supported.");
-    }
-  }
-
-  //}}}
   //{{{  public void removeFeedbackSummary(String s0, String s1)
 
   public void removeFeedbackSummary(String s0, String s1)
@@ -225,6 +212,19 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void showFeedbackSummary(ATerm t0)
+
+  public void showFeedbackSummary(ATerm t0)
+  {
+    if (tool != null) {
+      tool.showFeedbackSummary(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showFeedbackSummary' not supported.");
     }
   }
 

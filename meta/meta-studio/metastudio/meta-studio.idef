@@ -38,7 +38,7 @@ let
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
-  subscribe(display-feedback-summary(<term>)) .
+  subscribe(show-feedback-summary(<term>)) .
   subscribe(remove-feedback-summary(<str>,<str>)) .
   Id := process-id.
 #ifdef ECLIPSE
@@ -78,8 +78,8 @@ in
       rec-note(ui-status(messagef(Str?, Arguments?))) .
       snd-do(UI, messagef(Str, Arguments))
     +
-      rec-note(display-feedback-summary(FeedbackSummary?)) .
-      snd-do(UI, display-feedback-summary(FeedbackSummary))
+      rec-note(show-feedback-summary(FeedbackSummary?)) .
+      snd-do(UI, show-feedback-summary(FeedbackSummary))
     +
       rec-note(remove-feedback-summary(Producer?, SummaryId?)) .
       snd-do(UI, remove-feedback-summary(Producer, SummaryId))

@@ -180,7 +180,7 @@ in
     if not-equal(FunSym, "feedback") then
       Error("Opening module %s failed: %s", [Module, Error])
     else
-      snd-note(display-feedback-summary(Error))
+      snd-note(show-feedback-summary(Error))
     fi
   else
     tau

@@ -81,7 +81,7 @@ in
   FunSym := fun(ParseError) .
   snd-note(remove-feedback-summary("sglr", Path)) .
   if not-equal(FunSym, "no-errors") then
-    snd-note(display-feedback-summary(ParseError)) 
+    snd-note(show-feedback-summary(ParseError)) 
   else
     tau
   fi
@@ -107,7 +107,7 @@ in
       rec-msg(error-location(Location?)) .
       snd-msg(set-cursor-at-location(EditorId, Location)) .
       snd-msg(display-message(EditorId, "Parse error near cursor")) .
-      snd-note(display-feedback-summary(ParseError)) .
+      snd-note(show-feedback-summary(ParseError)) .
       snd-msg(parse-failed(ModuleName, Focus))
     else
       tau

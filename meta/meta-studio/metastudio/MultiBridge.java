@@ -88,12 +88,12 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
 
-    public void displayFeedbackSummary(ATerm t0) {
+    public void showFeedbackSummary(ATerm t0) {
         Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.displayFeedbackSummary(t0);
+            tif.showFeedbackSummary(t0);
         }
     }
 
