@@ -100,14 +100,6 @@ AC_ARG_WITH(tcltk,
    TCLTK_ADAPTER=tcltk-adapter)
 AC_SUBST(TCLTK_ADAPTER)
 
-AC_ARG_WITH(graphviz,
-   [  --with-graphviz=DIR     include dot support from DIR],
-   DOT=${withval}
-   DOT_ADAPTER=dot-adapter
-)
-AC_SUBST(DOT)
-AC_SUBST(DOT_ADAPTER)
-
 AC_HEADER_CHECK(arpa/inet.h,:, AC_MSG_ERROR("*** no arpa/inet.h"))
 AC_HEADER_CHECK(assert.h,:, AC_MSG_ERROR("*** no assert.h"))
 AC_HEADER_CHECK(ctype.h,:, AC_MSG_ERROR("*** no ctype.h"))
@@ -196,7 +188,6 @@ AC_OUTPUT(
   adapters/toolbus-adapter/Makefile
   adapters/emacs-adapter/Makefile
   adapters/python-adapter/Makefile
-  adapters/dot-adapter/Makefile
   tbviz/Makefile
   doc/Makefile
   doc/src/Makefile
