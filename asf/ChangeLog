@@ -1,3 +1,8 @@
+2001/11/21 (jurgen@cwi.nl)
+ * Bumped to 1.3beta
+ * Fixed a (part of a) serious bug in the list matching code of asfe concerning 
+   list separators.
+
 2001/11/20 ({olivierp,jurgenv}@cwi.nl)
  * Fixed wrong tag reporting in error messages and TIDE stack trace.
  * Fixed a bug in the interpreter concerning uninitialized list variables
