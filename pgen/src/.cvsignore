@@ -10,3 +10,4 @@ gen-table
 sdf2table.1
 sdf2table.test
 test-chars
+parse-sdf2
