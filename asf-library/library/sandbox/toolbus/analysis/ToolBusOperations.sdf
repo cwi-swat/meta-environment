@@ -7,7 +7,37 @@ exports
   context-free syntax
     var2str(Var) -> String
     processname2str(ProcessName) -> String
+    sign2str(Term) -> String
+
+hiddens
+  context-free syntax
+    term2str(Term) -> String
+    terms2str({Term ","}+) -> String
+
+exports
+  context-free syntax    
+    get-formal-parameters(ProcessSignature) -> {FormalParam ","}*
+    get-local-variables(ProcessBody)        -> {VarDecl ","}*
+    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term
+
+hiddens
+  context-free syntax
+    make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}*) -> {Term ","}+ {traversal(trafo,top-down,break)}
+    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}*)        -> Term {traversal(trafo,top-down,break)}
 
 hiddens
   variables
-    "Char*"[0-9]* -> CHAR*
+    "$Atom"[0-9]* 		-> Atom
+    "Char*"[0-9]* 		-> CHAR*
+    "$Term"[0-9]*		-> Term
+    "$Terms"[0-9]*		-> {Term ","}*
+    "$TermPlus"[0-9]*		-> {Term ","}+
+    "$Var"[0-9]*		-> Var
+    "$FormalParam"[0-9]*	-> FormalParam
+    "$FormalParams"[0-9]*	-> {FormalParam ","}*
+    "$VarDecl"[0-9]*		-> VarDecl
+    "$VarDecls"[0-9]*		-> {VarDecl ","}*
+    "$ProcessExpr"[0-9]*	-> ProcessExpr    
+    "$ProcessName"[0-9]*	-> ProcessName    
+    "$Id"[0-9]*			-> Id
+

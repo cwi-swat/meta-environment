@@ -51,7 +51,7 @@ buttons([
           push-modulename("ToolBusExtraction"),
           reduce,
 
-          apply("toolbus-query", "List", 4),
+          apply("display-query", "List", 4),
           push-modulename("ToolBusQuery"),
           reduce,
           execute-action("unparsePT"),
@@ -76,9 +76,59 @@ buttons([
           push-modulename("ToolBusExtraction"),
           reduce,
 
-          apply("toolbus-query", "List", 4),
+          apply("display-query", "List", 4),
           push-modulename("ToolBusQuery"),
           reduce,
+          execute-action("unparsePT"),
+          show-list
+        ]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Unmatched Messages"],
+         [push-string("\"Unmatched message \""),
+          parse("basic/Strings", "String"),
+
+          push-filename("mismatchmsg.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"UNMATCHED_MESSAGES\""),
+          parse("basic/Strings", "String"),
+
+          push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+
+          apply("display-query", "List", 4),
+          push-modulename("ToolBusQuery"),
+          reduce,
+          execute-action("unparsePT"),
+          show-list
+        ]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Test"],
+         [push-string("\"Unmatched message \""),
+          parse("basic/Strings", "String"),
+
+          push-filename("mismatchmsg.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"UNMATCHED_MESSAGES\""),
+          parse("basic/Strings", "String"),
+
+          push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+
+          apply("display-query", "List", 4),
+          exists("DisplayQuery"),
+          execute-action("DisplayQuery -t"),
           execute-action("unparsePT"),
           show-list
         ])

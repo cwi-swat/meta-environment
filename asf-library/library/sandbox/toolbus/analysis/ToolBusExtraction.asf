@@ -4,10 +4,15 @@ equations
     extractRelations($TscriptDefs) = extractRelations($TscriptDefs, [])
 
   [extractRelations-process]
+    $ProcessDef = process $ProcessSignature is $ProcessBody,
     findVarInProcess($ProcessDef, $Rstore1, get-area($ProcessDef)) = $Rstore2,
-    findProcessInfoInProcessDef($ProcessDef, $Rstore2) = $Rstore3
+    findProcessInfoInProcessDef($ProcessDef, $Rstore2) = $Rstore3,
+    get-formal-parameters($ProcessSignature) = $FormalParams,
+    get-local-variables($ProcessBody) = $VarDecls,
+    findMessages($ProcessDef, $Rstore3, $FormalParams, $VarDecls) = 
+      $Rstore4
     ===>
-    extractRelations($ProcessDef, $Rstore1) = $Rstore3
+    extractRelations($ProcessDef, $Rstore1) = $Rstore4
 
   [extractRelations-tscriptdef]
     $ProcessNameId = get-area($ProcessName),
@@ -111,3 +116,21 @@ equations
     $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
     ===>
     findProcessApplicationInBody($ProcessName($Terms), $Rstore1) = $Rstore2
+
+  [findSendMsg] 
+    $Atom = snd-msg($TermPlus),
+    $MessageId = get-area($Atom),
+    $Signature = make-signature($Atom, $FormalParams, $VarDecls),
+    $Tuple = <$MessageId, sign2str($Signature)>,
+    $Rstore2 = add-tuple(SENDMESSAGES, $Tuple, $Rstore1)
+    ===>
+    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore2
+
+  [findReceiveMsg] 
+    $Atom = rec-msg($TermPlus),
+    $MessageId = get-area($Atom),
+    $Signature = make-signature($Atom, $FormalParams, $VarDecls),
+    $Tuple = <$MessageId, sign2str($Signature)>,
+    $Rstore2 = add-tuple(RECEIVEMESSAGES, $Tuple, $Rstore1)
+    ===>
+    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore2

@@ -1,17 +1,19 @@
-module ToolBusQuery
-
-imports ToolBusExtraction 
+module DisplayQuery
+ 
 imports ListOperations
 
 exports
   context-free syntax
-    toolbus-query(String, RSCRIPT, String, RSTORE) -> List
+    display-query(String, RSCRIPT, String, RSTORE) -> List
+    display-query(String, RVALUE) -> List
 
     str2rvar(String) -> RVAR
 
 hiddens
   variables
+    "$Char*"[0-9]*   -> CHAR*
     "$Rstore"[0-9]*  -> RSTORE
+    "$Rvalue"[0-9]*  -> RVALUE
     "$Script"[0-9]*  -> RSCRIPT
     "$String"[0-9]*  -> String
     "$ActionName"[0-9]*  -> String

@@ -6,6 +6,7 @@ imports MyPosInfo[Var]
 imports MyPosInfo[VarDecl]
 imports MyPosInfo[ProcessDef]
 imports MyPosInfo[ProcessName]
+imports MyPosInfo[Atom]
 
 exports
   context-free syntax
@@ -56,6 +57,17 @@ hiddens
     findProcessApplicationInBody(ProcessCreation, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
+hiddens
+  context-free syntax
+    findMessages(ProcessDef, RSTORE, 
+                 {FormalParam ","}*, {VarDecl ","}*) -> 
+      RSTORE {traversal(accu, top-down, break)}
+    findMessages(Atom, RSTORE, 
+                 {FormalParam ","}*, {VarDecl ","}*) -> 
+      RSTORE {traversal(accu, top-down, break)}
+    
+
+hiddens
   variables
     "$Area"[0-9]*		-> Area      
     "$Rstore"[0-9]*		-> RSTORE
@@ -63,6 +75,7 @@ hiddens
     "$VarId"[0-9]*		-> Area
     "$ProcessDefId"		-> Area
     "$ProcessNameId"		-> Area
+    "$MessageId"		-> Area
 
     "$TscriptDefs"[0-9]*	-> TscriptDef*
     "$ProcessDef"[0-9]*		-> ProcessDef
@@ -70,6 +83,10 @@ hiddens
     "$ProcessBody"[0-9]*	-> ProcessBody
     "$ProcessName"[0-9]*	-> ProcessName
     "$FormalParams"[0-9]* 	-> {FormalParam ","}*
+    "$Atom"[0-9]*		-> Atom
+    "$Signature"[0-9]*		-> Term
     "$Term"[0-9]*		-> Term
     "$Terms"[0-9]*		-> {Term ","}*
+    "$TermPlus"[0-9]*		-> {Term ","}+
     "$Var"[0-9]*		-> Var
+    "$VarDecls"[0-9]*           -> {VarDecl ","}*
