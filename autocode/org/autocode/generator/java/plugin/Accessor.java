@@ -40,7 +40,6 @@ public class Accessor
   }
 
   //}}}
-
   //{{{ private void generateGet(name, generator, type, field, operation)
 
   private void generateGet(String name, JavaGenerator generator,
@@ -84,6 +83,7 @@ public class Accessor
   }
 
   //}}}
+
   //{{{ public void generateGet(generator, type, field, operation)
 
   public void generateGet(JavaGenerator generator,
@@ -283,7 +283,7 @@ public class Accessor
     if (element == null) {
       throw new RuntimeException("field operation 'add' requires an "
 				 + "element-type to be present in the "
-				 + " field-type");
+				 + "field-type");
     }
     String elementType = generator.typeName(fieldTypeContext.getString("element-type"));
     

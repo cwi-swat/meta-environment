@@ -26,7 +26,9 @@ public class Equality
 
     JavaMethod method
       = createMethod(operationContext, "equals", "boolean", body);
-    method.addFormalParameter(new FormalParameter("peerObject", "Object"));
+    FormalParameter peerParam = new FormalParameter("peerObject", "Object");
+    peerParam.setDescription("the peer object to test for equality");
+    method.addFormalParameter(peerParam);
     
     body.addLine("if (!(peerObject instanceof " + typeContext.getName()
 		 + ")) {");
@@ -119,7 +121,7 @@ public class Equality
 	  if ("boolean".equals(impl)) {
 	    // Constants as specified in JDK-1.4 API documentation
 	    expr = "(" + getter + "() ? 1231 : 1237)";
-	  } else if ("integer".equals(impl)) {
+	  } else if ("int".equals(impl)) {
 	    expr = getter + "()";
 	  } else if ("float".equals(impl)) {
 	    expr = "new Float("+ getter + "()).hashCode()";
