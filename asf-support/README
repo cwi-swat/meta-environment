@@ -16,8 +16,7 @@ Installation Instructions
    -GNU make, available from:
       www.gnu.org
 
-   -The ATerm library, available from:
-      www.cwi.nl/projects/MetaEnv/ 
+   See the file ./package for the dependencies
 
 2) Configuring ASF Support.
 
@@ -25,7 +24,7 @@ Installation Instructions
    that ASF Support should be installed in <asf-support> then 
    the following command will configure ASF Support accordingly: 
 
-    ./configure --prefix=<asf-support> --with-aterm=<aterm> 
+    ./configure --prefix=<asf-support> 
 
    Note. Default behaviour of configure is that it will look for libraries               in <prefix>/lib and for executables in your search paths. So,                   you do not need to specify the locations of all these packages                  explicitly (as we did in the example above).
 
@@ -52,14 +51,10 @@ Installation Instructions
 
    Please report bugs via:               
 
-   http://www.cwi.nl/htbin/MetaEnv/meta-bugs
+   http://www.cwi.nl/projects/MetaEnv/bugs
 
    This is the general bug reporting page of the ASF+SDF Meta-Environment.
 
    Support can be obtained via:
 
    meta-support@cwi.nl
-
-6) Known bugs.
-
-   None.            
