@@ -18,5 +18,6 @@
 #include "edit-module.tb"
 #include "clear-all.tb"
 #include "compiler.tb"
+#include "edit-master.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui)
+toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master)
