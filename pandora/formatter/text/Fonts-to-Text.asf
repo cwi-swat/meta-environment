@@ -1,0 +1,10 @@
+equations
+
+  [FBtT1'1]   B2 ## Point := length of B1 with Frame and 'C
+              ============================================
+              length of f [B1] with Frame and 'C = f [B2] Point ## Point
+
+  [FBtT2'1]   place f [B] with Frame and Struct and 'C =
+                place B with Frame and Struct and 'C
+
+

@@ -1,0 +1,50 @@
+module Basic-to-Text
+
+  imports
+    Frame LengthofBoxes Text
+
+  exports
+    context-free syntax
+      box2text(Box) -> Text 
+      box2text(Box, Integer) -> Text 
+      text(Box*) -> Text 
+      text(Box*, Integer) -> Text 
+
+context-free start-symbols TextStruct
+  sorts TextStruct
+    context-free syntax
+      Text "&&" Point                                       -> TextStruct
+      "place" Box* "with" Frame "and" TextStruct "and" Context -> TextStruct
+
+hiddens
+  variables
+    "Text"[0-9]*    -> String+
+    "Struct"[0-9]*  -> TextStruct
+
+
+  hiddens
+    context-free syntax
+      "hplace" Box* "h" Integer "with" Frame "and" TextStruct                         -> TextStruct
+      "vplace" Box* "v" Integer "with" Frame "and" TextStruct                         -> TextStruct
+      "hvplace" Box* "h" Integer "v" Integer "i" Integer "with" Frame "and" TextStruct    -> TextStruct
+      "hovplace" Box* "with" Frame "and" TextStruct                                 -> TextStruct
+      "reshuffle" Box* "given" Frame "and" TextStruct "h" Integer "v" Integer "i" Integer -> TextStruct
+      "dplace" Box* "with" Frame "and" TextStruct "and" Context                       -> TextStruct
+      "add" "to" "last" "line" "(" Text "," String ")"                                 -> Text
+
+hiddens
+  variables
+    "String"[0-9]* -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Int"[0-9]*    -> Integer
+    "Point"[0-9]*  -> Point
+    "Defs"[0-9]*   -> Defs
+    "Frame"[0-9]*  -> Frame
+    [XY][0-9]*     -> Integer
+    "'C"[0-9]*     -> Context
+    "so*"[0-9]*    -> SpaceOption*
+    "Hs"[0-9]*     -> Integer
+    "Vs"[0-9]*     -> Integer
+    "Is"[0-9]*     -> Integer

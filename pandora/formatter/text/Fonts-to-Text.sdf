@@ -1,0 +1,18 @@
+module Fonts-to-Text
+
+imports Basic-to-Text
+imports languages/box/syntax/Fonts 
+imports LengthofBoxes
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Frame"[0-9]*  -> Frame
+    "'C"[0-9]*     -> Context
+    "Point"[0-9]*  -> Point
+    [f][0-9]*     -> FontOperator
+    "Struct"[0-9]*  -> TextStruct
+
+

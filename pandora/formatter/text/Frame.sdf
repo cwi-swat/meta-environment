@@ -19,7 +19,7 @@ imports Points
       "set" "lmargin" "in" Frame                             -> Frame
       "set" "rmargin" Integer "in" Frame                     -> Frame
       "value" SpaceSymbol "in" Frame                      -> Integer
-      "set" SpaceSymbol "value" "given" SOptions "and" Frame -> Integer
+      "set" SpaceSymbol "value" "given" SpaceOption* "and" Frame -> Integer
 
     context-free syntax
       "hsep" Point "h" Integer "with" Frame -> Frame
@@ -40,4 +40,4 @@ hiddens
     "Int"[0-9]*     -> NatCon
     "Nat"[0-9]*     -> Natural
     "ss"[0-9]*      -> SpaceSymbol
-    "so""*"[0-9]*   -> SOption*
+    "so""*"[0-9]*   -> SpaceOption*

@@ -5,30 +5,37 @@ imports Outstrings Frame
 
 exports
   context-free start-symbols BoxPoint
+
   sorts BoxPoint
+
   context-free syntax
-    Box Point                                 -> Box
-    Box* "##" Point                        -> BoxPoint
+    Box Point                                      -> Box
+
+%% Box* "##" Point should be replaced by <Box*, Point> when
+%% ApiGen supports tuple syntax.
+  context-free syntax
+    Box* "##" Point                                -> BoxPoint
     "length" "of" Box* "with" Frame "and" Context  -> BoxPoint
 
 hiddens
   variables
     "bi"[0-9]*     -> BoxPoint
+
 %% The function {\tt length of \_ with \_ and \_} is the function visible
 %% to the outside world. The actual job is performed by the following
 %% `hidden' functions.
 hiddens
   context-free syntax
-    "hlength" "of" Box* "h" Integer "with" Frame   -> BoxPoint
-    "vlength" "of" Box* "with" Frame             -> BoxPoint
-    "hvlength" "of" Box* "h" Integer "with" Frame  -> BoxPoint
-    "hovlength" "of" Box* "h" Integer "with" Frame -> BoxPoint
-    "dlength" "of" Box* "with" Frame             -> BoxPoint
+    "hlength" "of" Box* "h" Integer "with" Frame    -> BoxPoint
+    "vlength" "of" Box* "with" Frame                -> BoxPoint
+    "hvlength" "of" Box* "h" Integer "with" Frame   -> BoxPoint
+    "hovlength" "of" Box* "h" Integer "with" Frame  -> BoxPoint
+    "dlength" "of" Box* "with" Frame                -> BoxPoint
     "h" BoxPoint "and" BoxPoint "h" Integer         -> BoxPoint
-    "v" BoxPoint "and" BoxPoint                   -> BoxPoint
+    "v" BoxPoint "and" BoxPoint                     -> BoxPoint
     "hv" BoxPoint "and" BoxPoint "h" Integer        -> BoxPoint
     "hov" BoxPoint "and" BoxPoint "h" Integer       -> BoxPoint
-    "select" "operator" BoxPoint "and" SOptions     -> BoxPoint
+    "select" "operator" BoxPoint "and" SpaceOption* -> BoxPoint
 
 hiddens
   variables
@@ -38,7 +45,7 @@ hiddens
     [B-E]"*"[0-9]*   -> Box*
     "Int"[0-9]*      -> Integer
     "'C"[0-9]*       -> Context
-    "so""*"[0-9]*   -> SOption*
+    "so""*"[0-9]*   -> SpaceOption*
     "Hs"[0-9]*      -> Integer
     "Is"[0-9]*      -> Integer
     "Frame"[0-9]*   -> Frame
