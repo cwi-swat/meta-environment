@@ -307,6 +307,7 @@ ATwarning("Halllo: result2 = %t\n", result2);
   }
   else if (ATmatch(aResult, "failure")) {
     ready = ATfalse;
+    stack = AC_makeStackEmpty();
   }
   
   if (!ready) {
