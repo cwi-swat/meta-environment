@@ -21,7 +21,7 @@
 
 static char myname[] = "tree2graph";
 static char myversion[] = "1.0";
-static char myarguments[] = "bchi:lmo:ptV";
+static char myarguments[] = "bchi:lmo:pstV";
 
 
 /*}}}  */
@@ -43,6 +43,7 @@ void usage(void)
           "\t-l              display layout nodes\n"
           "\t-o filename     output to file (default stdout)\n"
           "\t-p              show the productions\n"
+          "\t-s              sharing on\n"
           "\t-t              save graph in textual format\n"
           "\t-V              reveal program version (i.e. %s)\n",
           myname, myarguments, myversion);
@@ -63,7 +64,7 @@ ATerm tree2graph(int cid, const char *name, ATerm tree, ATerm leafs_on)
 {
   ATbool flag = ATmatch(leafs_on, "true");
 
-  Graph graph = PT_printAnyToGraph(name, tree, flag, ATtrue, flag, flag);
+  Graph graph = PT_printAnyToGraph(name, tree, flag, ATtrue, flag, flag, ATfalse);
 
   return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
 }
@@ -110,6 +111,7 @@ int main (int argc, char *argv[])
   ATbool layout = ATfalse;
   ATbool literals = ATtrue;
   ATbool binary = ATtrue;
+  ATbool sharing = ATfalse;
 
 #ifndef WITHOUT_TOOLBUS
   ATbool use_toolbus = ATfalse;
@@ -141,6 +143,7 @@ int main (int argc, char *argv[])
         case 'o':  output_file_name = optarg;    break;
         case 'p':  productions = ATtrue;         break;
         case 't':  binary = ATfalse;             break;
+        case 's':  sharing = ATtrue;             break;
         case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
                                                  exit(0);
         default :  usage();                      exit(1);
@@ -159,7 +162,7 @@ int main (int argc, char *argv[])
 
     graph = PT_printAnyToGraph("",
                                tree, characters, productions,
-			       layout, literals);
+			       layout, literals, sharing);
 
     if (!strcmp(output_file_name,"-")) {
       if (binary) {

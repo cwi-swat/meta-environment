@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include "Graph.h"
+#include <aterm2.h>
 
 /*}}}  */
 
@@ -17,6 +18,8 @@ static ATbool characters_on;
 static ATbool productions_on;
 static ATbool layout_on;
 static ATbool literals_on;
+static ATbool sharing_on;
+static ATermIndexedSet done;
 
 static long   unique_key;
 static size_t size;
@@ -85,7 +88,12 @@ static long makeNodeId(PT_Tree tree)
 {
   long key;
 
-  key = ++unique_key;
+  if (!sharing_on) {
+    key = ++unique_key;
+  }
+  else {
+    key = (long) tree;
+  }
 
   return key;
 }
@@ -269,11 +277,21 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 
 /*{{{  static Graph treeToGraph(Graph graph, PT_Tree tree, int parent) */
 
-static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent)
+static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent, int argnr)
 {
   long key = makeNodeId(tree);
   ATerm posInfoArea = (ATerm)PT_getTreeLocation(tree);
+  ATbool isNew = ATfalse;
 
+  if (sharing_on) {
+    (void) ATindexedSetPut(done, 
+			   ATmake("(<int>,<int>,<term>)", argnr, parent,
+				  PT_TreeToTerm(tree)), &isNew);
+    if (!isNew) {
+      return graph;
+    }
+  }
+  
   nr_of_nodes++;
   if (nr_of_nodes == MAX_NR_OF_NODES) {
     return printOverFlowNode(graph, parent, key);
@@ -291,16 +309,6 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 
       graph = printNode(name, graph, makeShapeEllipse(), parent,key,
 			escape(ch),"character", posInfoArea);
-    }
-
-    /*}}}  */
-  }
-  else if (PT_isTreeLit(tree)) {
-    /*{{{  handle literal */
-
-    if (literals_on) {
-      graph = printNode(name, graph,makeShapeEllipse(),parent,key,
-                        PT_getTreeString(tree),"literal", posInfoArea);
     }
 
     /*}}}  */
@@ -334,9 +342,12 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
     }
 
     if ((layout_on || !layout) && (literals_on || !literal)) {
-      for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
+      int argnr;
+
+      for(argnr = 0;PT_hasArgsHead(args); 
+	  args = PT_getArgsTail(args), argnr++) {
 	  PT_Tree arg = PT_getArgsHead(args);
-	  graph = treeToGraph(name, graph,arg,key);
+	  graph = treeToGraph(name, graph,arg,key,argnr);
       }
     }
 
@@ -354,7 +365,7 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
-      graph = treeToGraph(name, graph,arg,key);
+      graph = treeToGraph(name, graph,arg,key,0);
     }
 
     /*}}}  */
@@ -373,7 +384,7 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 
 Graph PT_printTreeToGraph(const char *name, PT_Tree tree, ATbool characters, 
 			  ATbool productions, 
-			  ATbool layout, ATbool literals)
+			  ATbool layout, ATbool literals, ATbool sharing)
 {
   NodeList nodes;
   Graph graph = makeGraphDefault(makeNodeListEmpty(), makeEdgeListEmpty(),
@@ -383,13 +394,18 @@ Graph PT_printTreeToGraph(const char *name, PT_Tree tree, ATbool characters,
   productions_on = productions;
   layout_on = layout;
   literals_on = literals;
+  sharing_on = sharing;
+
+  if (sharing_on) {
+    done = ATindexedSetCreate(1024, 80);
+  }
 
   unique_key = 0;
   size = INITIAL_SIZE;
   
   nr_of_nodes = 0;
 
-  graph = treeToGraph(name, graph, tree, 0);
+  graph = treeToGraph(name, graph, tree, 0, 0);
 
   /* Reverse edgelist to keep the original order */
   nodes = getGraphNodes(graph);
@@ -405,10 +421,10 @@ Graph PT_printTreeToGraph(const char *name, PT_Tree tree, ATbool characters,
 Graph PT_printParseTreeToGraph(const char *name, PT_ParseTree parsetree, 
 			      ATbool characters, 
 			      ATbool productions, ATbool layout, 
-			      ATbool literals)
+			      ATbool literals, ATbool sharing)
 {
   return PT_printTreeToGraph(name, PT_getParseTreeTop(parsetree),characters,
-			     productions, layout, literals);
+			     productions, layout, literals, sharing);
 }
 
 /*}}}  */
@@ -417,23 +433,23 @@ Graph PT_printParseTreeToGraph(const char *name, PT_ParseTree parsetree,
 
 Graph PT_printAnyToGraph(const char *name, ATerm term, ATbool characters, 
   		         ATbool productions, 
-		         ATbool layout, ATbool literals)
+		         ATbool layout, ATbool literals, ATbool sharing)
 {
   if (ATmatchTerm(term, PT_patternParseTreeTop, NULL, NULL)){
     return PT_printParseTreeToGraph(name, (PT_ParseTree) term, characters, 
 				    productions, layout,
-				    literals);
+				    literals, sharing);
   }
   else if (ATgetType(term) == AT_LIST) {
     PT_Production prod = PT_makeProductionList(PT_makeSymbolLit("*dummy*"));
     PT_Tree dummy = PT_makeTreeAppl(prod, (PT_Args) term);
 
     return PT_printTreeToGraph(name, dummy, characters, 
-			       productions, layout, literals);
+			       productions, layout, literals, sharing);
   }
 
   return PT_printTreeToGraph(name, (PT_Tree) term, characters, 
-			     productions, layout, literals);
+			     productions, layout, literals, sharing);
 }
 
 /*}}}  */
