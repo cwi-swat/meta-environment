@@ -9,7 +9,7 @@ sorts Location Area
  
 context-free syntax
 
-"location" "(" filename:String "," Area ")" -> Location {cons("location")}
+"location" "(" filename:StrCon "," Area ")" -> Location {cons("location")}
 
 "area" "(" start-line:NatCon    "," 
            start-column:NatCon  ","

@@ -9,28 +9,28 @@ sorts Feedback Subject
 
 context-free syntax
 
-"info" "(" id:String "," 
-           producer-id:String "," 
-           producer-type:String "," 
-           description:String "," 
+"info" "(" id:StrCon "," 
+           producer-id:StrCon "," 
+           producer-type:StrCon "," 
+           description:StrCon "," 
            "[" {Subject ","}* "]" ")" -> Feedback {cons("info")}
 
-"warning" "(" id:String "," 
-              producer-id:String "," 
-              producer-type:String "," 
-              description:String "," 
+"warning" "(" id:StrCon "," 
+              producer-id:StrCon "," 
+              producer-type:StrCon "," 
+              description:StrCon "," 
               "[" {Subject ","}* "]" ")" -> Feedback {cons("warning")}
 
-"error" "(" id:String "," 
-            producer-id:String "," 
-            producer-type:String "," 
-            description:String "," 
+"error" "(" id:StrCon "," 
+            producer-id:StrCon "," 
+            producer-type:StrCon "," 
+            description:StrCon "," 
             "[" {Subject ","}* "]" ")" -> Feedback {cons("error")}
 
-"fatal-error" "(" id:String "," 
-                  producer-id:String "," 
-                  producer-type:String "," 
-                  description:String "," 
+"fatal-error" "(" id:StrCon "," 
+                  producer-id:StrCon "," 
+                  producer-type:StrCon "," 
+                  description:StrCon "," 
                   "[" {Subject ","}* "]" ")" -> Feedback {cons("fatal-error")}
 
-"subject""("id:String "," Location ")" -> Subject {cons("subject")}
+"subject""("id:StrCon "," Location ")" -> Subject {cons("subject")}
