@@ -1,0 +1,16 @@
+[
+  [TermStore, Main, term-store(<tables(Tables)>)],
+
+  [Tables, Empty, []],
+  [Tables, Many,[<head(Table)>,<[tail(Tables)]>]],
+
+  [Table, default, table(<name(str)>,<value-type(ValueType)>,<tuples(Rows)>)],
+
+  [ValueType, string-type, string-type],
+  [ValueType, term-type, term-type],
+
+  [Rows, Empty, []],
+  [Rows, Many, [<head(Row)>,<[tail(Rows)]>]],
+
+  [Row, default, row(<key(term)>,<value(term)>)]
+]
