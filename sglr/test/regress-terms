@@ -6,7 +6,6 @@ ERROR=0
 
 A2TOA1="a2toa1 -t -silent"
 SGLR="sglr"
-SGLR="sglr-gc"
 
 cd `dirname $0`;
 mydir=`pwd`
