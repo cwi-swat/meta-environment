@@ -31,6 +31,8 @@ int nr_of_actions;
 int max_nr_actions;
 int nr_of_gotos;
 int max_nr_gotos;
+int nr_of_lhs_members;
+int max_nr_lhs_members;
 extern int nr_of_items;
 extern int max_nr_items;
 ATerm empty_set;
@@ -53,6 +55,7 @@ extern ATermList SDFgetProductions(ATerm g);
 extern ATermList SDFgetRestrictions(ATerm g);
 extern ATermList SDFgetPriorities(ATerm g);
 extern ATerm remove_attrs(ATerm prod);
+extern int count_members_in_lhs(ATerm prod);
  
 /*}}}  */
 /*{{{  function declarations */
@@ -221,7 +224,7 @@ ATerm process_productions(ATermList prods)
 {
   ATerm prod, flatprod, aint, labelentry, newprod;
   ATermList localprods, labelentries = ATempty;
-  int ip, cnt = MIN_PROD;
+  int ip, cnt = MIN_PROD, nr_of_members, nr_of_kernel_prods;
 
   localprods = prods;
   while(!ATisEmpty(localprods)) {
@@ -234,11 +237,13 @@ ATerm process_productions(ATermList prods)
 
   nr_prod_table = (ATerm *)malloc(sizeof(ATerm)*MAX_PROD);
 
-  if(!nr_prod_table)
+  if (!nr_prod_table) {
     ATerror("out of memory!\n");
+  }
 
-  for(ip=MIN_PROD; ip<MAX_PROD; ip++)
+  for (ip=MIN_PROD; ip<MAX_PROD; ip++) {
     nr_prod_table[ip] = NULL;
+  }
 
   ATprotectArray((ATerm *)nr_prod_table+MIN_PROD, MAX_PROD-MIN_PROD);
 
@@ -246,23 +251,34 @@ ATerm process_productions(ATermList prods)
   while(!ATisEmpty(prods)) {
     prod = ATgetFirst(prods);
     prods = ATgetNext(prods);
-    if(!AFTisWS(prod)) {
+    if (!AFTisWS(prod)) {
 
       flatprod = SDFflattenProd(prod);
+      if (statisticsMode) {
+        nr_of_members = count_members_in_lhs(flatprod);
+        if (nr_of_members > max_nr_lhs_members) {
+          max_nr_lhs_members = nr_of_members;
+        }
+        nr_of_lhs_members += nr_of_members;
+      }
       newprod = remove_attrs(prod);
 
       aint = (ATerm)ATmakeInt(cnt);
       ATtablePut(prod_nr_pairs, newprod, aint);
       nr_prod_table[cnt] = flatprod;
 
-      if(has_reject_attr(prod))
+      if (has_reject_attr(prod)) {
         ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(1));
-      else if(has_prefer_attr(prod))
+      }
+      else if (has_prefer_attr(prod)) {
         ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(2));
-      else if(has_avoid_attr(prod))
+      }
+      else if (has_avoid_attr(prod)) {
         ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(4));
-      else
+      }
+      else {
         ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(0));
+      }
 
       sort_on_rhs_symbol(flatprod,aint);
       init_first(flatprod);
@@ -272,7 +288,11 @@ ATerm process_productions(ATermList prods)
       cnt++;
     }
   }
+  nr_of_kernel_prods = cnt - MIN_PROD;
+
   IF_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", cnt - MIN_PROD));
+  IF_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
+  IF_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
 
   return ATmake("[<list>]",labelentries);
 }

@@ -1,7 +1,8 @@
 /*
 
     PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -172,6 +173,29 @@ ATerm remove_attrs(ATerm prod)
   newargs = ATappend(newargs,newattrs);
   return ATmakeTerm(pattern_asfix_appl,mprod,mws,newargs);
 }
+
+/*}}}  */
+/*{{{  int count_members_in_lhs(ATerm prod) */
+
+/**
+ * Count the number of members in the left hand side of a production rule.
+ */   
+
+int count_members_in_lhs(ATerm prod)
+{
+  ATerm symbol;
+  ATermList args;
+  ATerm attrs;
+  int nr_of_members = 0;
+
+  if (ATmatch(prod,"prod([<list>],<term>,<term>)",&args,&symbol,&attrs)) {
+    nr_of_members = ATgetLength(args);
+  }
+  else {
+    ATerror("expected prod, got %t\n", prod);
+  }
+  return nr_of_members;
+}    
 
 /*}}}  */
 /*{{{  ATerm remove_modulename_attr(ATerm prod) */
