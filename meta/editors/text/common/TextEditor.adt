@@ -1,26 +1,27 @@
 [
-  [Action, to-front, action(to-front)],
-  [Action, quit, action(quit)],
-  [Action, write-contents, action(write-contents)],
-  [Action, reread-contents, action(reread-contents)],
-  [Action, get-contents, action(get-contents)],
-  [Action, display-message, action(display-message(<message(str)>))],
-  [Action, set-cursor-at-offset, action(set-cursor-at-offset(<offset(int)>))],
-  [Action, set-focus, action(set-focus(<focus(term)>))],
-  [Action, clear-focus, action(clear-focus)],
-  [Action, set-actions, action(set-actions(<actions(ActionList)>))],
+  constructor(Action, to-front, action(to-front)),
+  constructor(Action, quit, action(quit)),
+  constructor(Action, write-contents, action(write-contents)),
+  constructor(Action, reread-contents, action(reread-contents)),
+  constructor(Action, get-contents, action(get-contents)),
+  constructor(Action, display-message, action(display-message(<message(str)>))),
+  constructor(Action, set-cursor-at-offset,
+                      action(set-cursor-at-offset(<offset(int)>))),
+  constructor(Action, set-focus, action(set-focus(<focus(term)>))),
+  constructor(Action, clear-focus, action(clear-focus)),
+  constructor(Action, set-actions, action(set-actions(<actions(ActionList)>))),
 
-  [ActionList, empty, []],
-  [ActionList, multi, [<head(Menu)>, <[tail(ActionList)]>]],
+  constructor(Menu, default, menu(<items(Items)>)),
+  constructor(Menu, shortcut, menu(<items(Items)>, <shortcut(str)>)),
+  list(ActionList, Menu),
+  list(Items, str),
 
-  [Menu, default, menu([<main(str)>,<sub(str)>])],
-  [Menu, shortcut, menuwithshortcut([<main(str)>,<sub(str)>],<shortcut(str)>)],
+  constructor(Event, menu, menu-event(<menu(Menu)>)),
+  constructor(Event, mouse, mouse-event(<location(int)>)),
+  constructor(Event, contents, contents(<text(str)>)),
+  constructor(Event, modified, modified),
 
-  [Event, menu, menu-event(<menu(Menu)>)],
-  [Event, mouse, mouse-event(<location(int)>)],
-  [Event, contents, contents(<text(str)>)],
-  [Event, modified, modified],
+  constructor(Process, default, process(<to-child(Pipe)>, <from-child(Pipe)>)),
 
-  [Process, default, process(<to-child(Pipe)>,<from-child(Pipe)>)],
-  [Pipe, default, pipe(<read(int)>,<write(int)>)]
+  constructor(Pipe, default, pipe(<read(int)>, <write(int)>))
 ]

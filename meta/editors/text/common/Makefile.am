@@ -26,9 +26,8 @@ libTextEditor_a_SOURCES = \
 	TextEditor_dict.c
 
 api: TextEditor.adt
-	upgrade-adt -i $< -o $<.upgraded
 	adt-to-c \
-		--input $<.upgraded \
+		--input $< \
 		--name TextEditor \
-		--prefix TE_ 
-	rm -f $<.upgraded
+		--prefix TE_ \
+		--version 1.2

@@ -18,12 +18,10 @@
   constructor(ButtonType,studio-toolbar,studio-toolbar),
   constructor(ButtonType,wildcard,"*"),
 
-  constructor(ButtonArgs,click,click),
-  constructor(ButtonArgs,icon,icon(<title(str)>,<path(str)>)),
-
-  constructor(Menu, default, menu-entry(<items(Items)>)),
-  constructor(Menu, shortcut, menu-entry(<items(Items)>, <shortcut(str)>)),
-  list(ActionList, Menu),
+  constructor(ButtonArgs, click, click),
+  constructor(ButtonArgs, icon, icon(<title(str)>, <path(str)>)),
+  constructor(ButtonArgs, default, menu(<items(Items)>)),
+  constructor(ButtonArgs, shortcut, menu(<items(Items)>, <shortcut(str)>)),
   list(Items, str),
 
   constructor(ModuleName, wildcard, "*")

@@ -115,28 +115,34 @@ static void sendToVim(const char *cmd)
 
 /*}}}  */
 
-/*{{{  static void makeVimMenuItem(char *menu, char *item) */
+/*{{{  static void makeVimMenuItem(TE_Menu menu) */
 
-static void makeVimMenuItem(char *menu, char *item)
+static void makeVimMenuItem(TE_Menu menu)
 {
+  TE_Items items;
+  const char *item;
   char buf[BUFSIZ];
   char escapedBuf[BUFSIZ];
-  TE_Menu menuAction;
+
+  items = TE_getMenuItems(menu);
 
   strcpy(buf, ":call AddMenu(tb_pipe, \"");
 
-  strcpy(escapedBuf, escape(menu, SPACE_CHAR));
-  strcat(buf, escape(escapedBuf, SPACE_CHAR));
-
-  strcat(buf, "\", \"");
-
+  item = TE_getItemsHead(items);
+  items = TE_getItemsTail(items);
   strcpy(escapedBuf, escape(item, SPACE_CHAR));
   strcat(buf, escape(escapedBuf, SPACE_CHAR));
 
   strcat(buf, "\", \"");
 
-  menuAction = TE_makeMenuDefault(menu, item);
-  strcpy(escapedBuf, escape(menuToString(menuAction), QUOTE_CHAR));
+  item = TE_getItemsHead(items);
+  items = TE_getItemsTail(items);
+  strcpy(escapedBuf, escape(item, SPACE_CHAR));
+  strcat(buf, escape(escapedBuf, SPACE_CHAR));
+
+  strcat(buf, "\", \"");
+
+  strcpy(escapedBuf, escape(menuToString(menu), QUOTE_CHAR));
   strcat(buf, escape(escapedBuf, QUOTE_CHAR));
 
   strcat(buf, "\")");
@@ -173,7 +179,7 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
   while (!TE_isActionListEmpty(actionList)) {
     TE_Menu menu = TE_getActionListHead(actionList);
     assert(TE_isValidMenu(menu));
-    makeVimMenuItem(TE_getMenuMain(menu), TE_getMenuSub(menu));
+    makeVimMenuItem(menu);
     actionList = TE_getActionListTail(actionList);
   }
   sendToVimVerbatim("");

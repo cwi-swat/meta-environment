@@ -45,8 +45,9 @@ char *TE_charsToString(ATerm arg)
 /*{{{  typedefs */
 
 typedef struct ATerm _TE_Action;
-typedef struct ATerm _TE_ActionList;
 typedef struct ATerm _TE_Menu;
+typedef struct ATerm _TE_ActionList;
+typedef struct ATerm _TE_Items;
 typedef struct ATerm _TE_Event;
 typedef struct ATerm _TE_Process;
 typedef struct ATerm _TE_Pipe;
@@ -69,12 +70,17 @@ void TE_protectAction(TE_Action *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
+void TE_protectMenu(TE_Menu *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
 void TE_protectActionList(TE_ActionList *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void TE_protectMenu(TE_Menu *arg)
+void TE_protectItems(TE_Items *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -114,6 +120,22 @@ ATerm TE_ActionToTerm(TE_Action arg)
 }
 
 /*}}}  */
+/*{{{  TE_Menu TE_MenuFromTerm(ATerm t) */
+
+TE_Menu TE_MenuFromTerm(ATerm t)
+{
+  return (TE_Menu)t;
+}
+
+/*}}}  */
+/*{{{  ATerm TE_MenuToTerm(TE_Menu arg) */
+
+ATerm TE_MenuToTerm(TE_Menu arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  TE_ActionList TE_ActionListFromTerm(ATerm t) */
 
 TE_ActionList TE_ActionListFromTerm(ATerm t)
@@ -130,17 +152,17 @@ ATerm TE_ActionListToTerm(TE_ActionList arg)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_MenuFromTerm(ATerm t) */
+/*{{{  TE_Items TE_ItemsFromTerm(ATerm t) */
 
-TE_Menu TE_MenuFromTerm(ATerm t)
+TE_Items TE_ItemsFromTerm(ATerm t)
 {
-  return (TE_Menu)t;
+  return (TE_Items)t;
 }
 
 /*}}}  */
-/*{{{  ATerm TE_MenuToTerm(TE_Menu arg) */
+/*{{{  ATerm TE_ItemsToTerm(TE_Items arg) */
 
-ATerm TE_MenuToTerm(TE_Menu arg)
+ATerm TE_ItemsToTerm(TE_Items arg)
 {
   return (ATerm)arg;
 }
@@ -198,6 +220,78 @@ ATerm TE_PipeToTerm(TE_Pipe arg)
 /*}}}  */
 /*{{{  list functions */
 
+int TE_getActionListLength (TE_ActionList arg) {
+  return ATgetLength((ATermList) arg);
+}
+TE_ActionList TE_reverseActionList(TE_ActionList arg) {
+  return (TE_ActionList) ATreverse((ATermList) arg);
+}
+TE_ActionList TE_appendActionList(TE_ActionList arg, TE_Menu elem) {
+  return (TE_ActionList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+TE_ActionList TE_concatActionList(TE_ActionList arg0, TE_ActionList arg1) {
+  return (TE_ActionList) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+TE_ActionList TE_sliceActionList(TE_ActionList arg, int start, int end) {
+  return (TE_ActionList) ATgetSlice((ATermList) arg, start, end);
+}
+TE_Menu TE_getActionListMenuAt(TE_ActionList arg, int index) {
+ return (TE_Menu)ATelementAt((ATermList) arg,index);
+}
+TE_ActionList TE_replaceActionListMenuAt(TE_ActionList arg, TE_Menu elem, int index) {
+ return (TE_ActionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+TE_ActionList TE_makeActionList2(TE_Menu elem1, TE_Menu elem2) {
+  return (TE_ActionList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+TE_ActionList TE_makeActionList3(TE_Menu elem1, TE_Menu elem2, TE_Menu elem3) {
+  return (TE_ActionList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+TE_ActionList TE_makeActionList4(TE_Menu elem1, TE_Menu elem2, TE_Menu elem3, TE_Menu elem4) {
+  return (TE_ActionList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+TE_ActionList TE_makeActionList5(TE_Menu elem1, TE_Menu elem2, TE_Menu elem3, TE_Menu elem4, TE_Menu elem5) {
+  return (TE_ActionList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+TE_ActionList TE_makeActionList6(TE_Menu elem1, TE_Menu elem2, TE_Menu elem3, TE_Menu elem4, TE_Menu elem5, TE_Menu elem6) {
+  return (TE_ActionList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+int TE_getItemsLength (TE_Items arg) {
+  return ATgetLength((ATermList) arg);
+}
+TE_Items TE_reverseItems(TE_Items arg) {
+  return (TE_Items) ATreverse((ATermList) arg);
+}
+TE_Items TE_appendItems(TE_Items arg, char* elem) {
+  return (TE_Items) ATappend((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))));
+}
+TE_Items TE_concatItems(TE_Items arg0, TE_Items arg1) {
+  return (TE_Items) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+TE_Items TE_sliceItems(TE_Items arg, int start, int end) {
+  return (TE_Items) ATgetSlice((ATermList) arg, start, end);
+}
+char* TE_getItemsstrAt(TE_Items arg, int index) {
+ return (char*)ATgetName(ATgetAFun((ATermAppl) ATelementAt((ATermList) arg,index)));
+}
+TE_Items TE_replaceItemsstrAt(TE_Items arg, char* elem, int index) {
+ return (TE_Items) ATreplace((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))), index);
+}
+TE_Items TE_makeItems2(char* elem1, char* elem2) {
+  return (TE_Items) ATmakeList2((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))));
+}
+TE_Items TE_makeItems3(char* elem1, char* elem2, char* elem3) {
+  return (TE_Items) ATmakeList3((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))));
+}
+TE_Items TE_makeItems4(char* elem1, char* elem2, char* elem3, char* elem4) {
+  return (TE_Items) ATmakeList4((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))));
+}
+TE_Items TE_makeItems5(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5) {
+  return (TE_Items) ATmakeList5((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))));
+}
+TE_Items TE_makeItems6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6) {
+  return (TE_Items) ATmakeList6((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))));
+}
 
 /*}}}  */
 /*{{{  constructors */
@@ -282,6 +376,22 @@ TE_Action TE_makeActionSetActions(TE_ActionList actions)
 }
 
 /*}}}  */
+/*{{{  TE_Menu TE_makeMenuDefault(TE_Items items) */
+
+TE_Menu TE_makeMenuDefault(TE_Items items)
+{
+  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm) items);
+}
+
+/*}}}  */
+/*{{{  TE_Menu TE_makeMenuShortcut(TE_Items items, const char* shortcut) */
+
+TE_Menu TE_makeMenuShortcut(TE_Items items, const char* shortcut)
+{
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  TE_ActionList TE_makeActionListEmpty(void) */
 
 TE_ActionList TE_makeActionListEmpty(void)
@@ -290,27 +400,43 @@ TE_ActionList TE_makeActionListEmpty(void)
 }
 
 /*}}}  */
-/*{{{  TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail) */
+/*{{{  TE_ActionList TE_makeActionListSingle(TE_Menu head) */
 
-TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail)
+TE_ActionList TE_makeActionListSingle(TE_Menu head)
+{
+  return (TE_ActionList)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_makeActionListMany(TE_Menu head, TE_ActionList tail) */
+
+TE_ActionList TE_makeActionListMany(TE_Menu head, TE_ActionList tail)
 {
   return (TE_ActionList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_makeMenuDefault(const char* main, const char* sub) */
+/*{{{  TE_Items TE_makeItemsEmpty(void) */
 
-TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
+TE_Items TE_makeItemsEmpty(void)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
+  return (TE_Items)(ATerm)ATempty;
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut) */
+/*{{{  TE_Items TE_makeItemsSingle(const char* head) */
 
-TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut)
+TE_Items TE_makeItemsSingle(const char* head)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (TE_Items)(ATerm)ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  TE_Items TE_makeItemsMany(const char* head, TE_Items tail) */
+
+TE_Items TE_makeItemsMany(const char* head, TE_Items tail)
+{
+  return (TE_Items)(ATerm)ATinsert((ATermList)tail, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -371,12 +497,17 @@ ATbool TE_isEqualAction(TE_Action arg0, TE_Action arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
+ATbool TE_isEqualMenu(TE_Menu arg0, TE_Menu arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
 ATbool TE_isEqualActionList(TE_ActionList arg0, TE_ActionList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool TE_isEqualMenu(TE_Menu arg0, TE_Menu arg1)
+ATbool TE_isEqualItems(TE_Items arg0, TE_Items arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -791,120 +922,6 @@ TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions)
 /*}}}  */
 
 /*}}}  */
-/*{{{  TE_ActionList accessors */
-
-/*{{{  ATbool TE_isValidActionList(TE_ActionList arg) */
-
-ATbool TE_isValidActionList(TE_ActionList arg)
-{
-  if (TE_isActionListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (TE_isActionListMulti(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool TE_isActionListEmpty(TE_ActionList arg) */
-
-inline ATbool TE_isActionListEmpty(TE_ActionList arg)
-{
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TE_patternActionListEmpty));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool TE_isActionListMulti(TE_ActionList arg) */
-
-inline ATbool TE_isActionListMulti(TE_ActionList arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TE_patternActionListMulti, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasActionListHead(TE_ActionList arg) */
-
-ATbool TE_hasActionListHead(TE_ActionList arg)
-{
-  if (TE_isActionListMulti(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_Menu TE_getActionListHead(TE_ActionList arg) */
-
-TE_Menu TE_getActionListHead(TE_ActionList arg)
-{
-  
-    return (TE_Menu)ATgetFirst((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  TE_ActionList TE_setActionListHead(TE_ActionList arg, TE_Menu head) */
-
-TE_ActionList TE_setActionListHead(TE_ActionList arg, TE_Menu head)
-{
-  if (TE_isActionListMulti(arg)) {
-    return (TE_ActionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("ActionList has no Head: %t\n", arg);
-  return (TE_ActionList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasActionListTail(TE_ActionList arg) */
-
-ATbool TE_hasActionListTail(TE_ActionList arg)
-{
-  if (TE_isActionListMulti(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_ActionList TE_getActionListTail(TE_ActionList arg) */
-
-TE_ActionList TE_getActionListTail(TE_ActionList arg)
-{
-  
-    return (TE_ActionList)ATgetNext((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  TE_ActionList TE_setActionListTail(TE_ActionList arg, TE_ActionList tail) */
-
-TE_ActionList TE_setActionListTail(TE_ActionList arg, TE_ActionList tail)
-{
-  if (TE_isActionListMulti(arg)) {
-    return (TE_ActionList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
-  }
-
-  ATabort("ActionList has no Tail: %t\n", arg);
-  return (TE_ActionList)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
 /*{{{  TE_Menu accessors */
 
 /*{{{  ATbool TE_isValidMenu(TE_Menu arg) */
@@ -934,7 +951,7 @@ inline ATbool TE_isMenuDefault(TE_Menu arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuDefault, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuDefault, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -956,7 +973,7 @@ inline ATbool TE_isMenuShortcut(TE_Menu arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuShortcut, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuShortcut, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -965,9 +982,9 @@ inline ATbool TE_isMenuShortcut(TE_Menu arg)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasMenuMain(TE_Menu arg) */
+/*{{{  ATbool TE_hasMenuItems(TE_Menu arg) */
 
-ATbool TE_hasMenuMain(TE_Menu arg)
+ATbool TE_hasMenuItems(TE_Menu arg)
 {
   if (TE_isMenuDefault(arg)) {
     return ATtrue;
@@ -979,72 +996,30 @@ ATbool TE_hasMenuMain(TE_Menu arg)
 }
 
 /*}}}  */
-/*{{{  char* TE_getMenuMain(TE_Menu arg) */
+/*{{{  TE_Items TE_getMenuItems(TE_Menu arg) */
 
-char* TE_getMenuMain(TE_Menu arg)
+TE_Items TE_getMenuItems(TE_Menu arg)
 {
   if (TE_isMenuDefault(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 0))));
+    return (TE_Items)ATgetArgument((ATermAppl)arg, 0);
   }
   else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 0))));
+    return (TE_Items)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuMain(TE_Menu arg, const char* main) */
+/*{{{  TE_Menu TE_setMenuItems(TE_Menu arg, TE_Items items) */
 
-TE_Menu TE_setMenuMain(TE_Menu arg, const char* main)
+TE_Menu TE_setMenuItems(TE_Menu arg, TE_Items items)
 {
   if (TE_isMenuDefault(arg)) {
-    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), 0), 0);
+    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) items), 0);
   }
   else if (TE_isMenuShortcut(arg)) {
-    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), 0), 0);
+    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) items), 0);
   }
 
-  ATabort("Menu has no Main: %t\n", arg);
-  return (TE_Menu)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasMenuSub(TE_Menu arg) */
-
-ATbool TE_hasMenuSub(TE_Menu arg)
-{
-  if (TE_isMenuDefault(arg)) {
-    return ATtrue;
-  }
-  else if (TE_isMenuShortcut(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* TE_getMenuSub(TE_Menu arg) */
-
-char* TE_getMenuSub(TE_Menu arg)
-{
-  if (TE_isMenuDefault(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 0), 1)));
-  }
-  else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 0), 1)));
-}
-
-/*}}}  */
-/*{{{  TE_Menu TE_setMenuSub(TE_Menu arg, const char* sub) */
-
-TE_Menu TE_setMenuSub(TE_Menu arg, const char* sub)
-{
-  if (TE_isMenuDefault(arg)) {
-    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), 1), 0);
-  }
-  else if (TE_isMenuShortcut(arg)) {
-    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), 1), 0);
-  }
-
-  ATabort("Menu has no Sub: %t\n", arg);
+  ATabort("Menu has no Items: %t\n", arg);
   return (TE_Menu)NULL;
 }
 
@@ -1079,6 +1054,328 @@ TE_Menu TE_setMenuShortcut(TE_Menu arg, const char* shortcut)
 
   ATabort("Menu has no Shortcut: %t\n", arg);
   return (TE_Menu)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  TE_ActionList accessors */
+
+/*{{{  ATbool TE_isValidActionList(TE_ActionList arg) */
+
+ATbool TE_isValidActionList(TE_ActionList arg)
+{
+  if (TE_isActionListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isActionListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionListEmpty(TE_ActionList arg) */
+
+inline ATbool TE_isActionListEmpty(TE_ActionList arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, TE_patternActionListEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionListSingle(TE_ActionList arg) */
+
+inline ATbool TE_isActionListSingle(TE_ActionList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionListMany(TE_ActionList arg) */
+
+inline ATbool TE_isActionListMany(TE_ActionList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionListMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionListHead(TE_ActionList arg) */
+
+ATbool TE_hasActionListHead(TE_ActionList arg)
+{
+  if (TE_isActionListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  TE_Menu TE_getActionListHead(TE_ActionList arg) */
+
+TE_Menu TE_getActionListHead(TE_ActionList arg)
+{
+  if (TE_isActionListSingle(arg)) {
+    return (TE_Menu)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (TE_Menu)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_setActionListHead(TE_ActionList arg, TE_Menu head) */
+
+TE_ActionList TE_setActionListHead(TE_ActionList arg, TE_Menu head)
+{
+  if (TE_isActionListSingle(arg)) {
+    return (TE_ActionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (TE_isActionListMany(arg)) {
+    return (TE_ActionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("ActionList has no Head: %t\n", arg);
+  return (TE_ActionList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionListTail(TE_ActionList arg) */
+
+ATbool TE_hasActionListTail(TE_ActionList arg)
+{
+  if (TE_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_getActionListTail(TE_ActionList arg) */
+
+TE_ActionList TE_getActionListTail(TE_ActionList arg)
+{
+  
+    return (TE_ActionList)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_setActionListTail(TE_ActionList arg, TE_ActionList tail) */
+
+TE_ActionList TE_setActionListTail(TE_ActionList arg, TE_ActionList tail)
+{
+  if (TE_isActionListMany(arg)) {
+    return (TE_ActionList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("ActionList has no Tail: %t\n", arg);
+  return (TE_ActionList)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  TE_Items accessors */
+
+/*{{{  ATbool TE_isValidItems(TE_Items arg) */
+
+ATbool TE_isValidItems(TE_Items arg)
+{
+  if (TE_isItemsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isItemsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isItemsEmpty(TE_Items arg) */
+
+inline ATbool TE_isItemsEmpty(TE_Items arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, TE_patternItemsEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isItemsSingle(TE_Items arg) */
+
+inline ATbool TE_isItemsSingle(TE_Items arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternItemsSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isItemsMany(TE_Items arg) */
+
+inline ATbool TE_isItemsMany(TE_Items arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternItemsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasItemsHead(TE_Items arg) */
+
+ATbool TE_hasItemsHead(TE_Items arg)
+{
+  if (TE_isItemsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* TE_getItemsHead(TE_Items arg) */
+
+char* TE_getItemsHead(TE_Items arg)
+{
+  if (TE_isItemsSingle(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)arg)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)arg)));
+}
+
+/*}}}  */
+/*{{{  TE_Items TE_setItemsHead(TE_Items arg, const char* head) */
+
+TE_Items TE_setItemsHead(TE_Items arg, const char* head)
+{
+  if (TE_isItemsSingle(arg)) {
+    return (TE_Items)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
+  }
+  else if (TE_isItemsMany(arg)) {
+    return (TE_Items)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
+  }
+
+  ATabort("Items has no Head: %t\n", arg);
+  return (TE_Items)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasItemsTail(TE_Items arg) */
+
+ATbool TE_hasItemsTail(TE_Items arg)
+{
+  if (TE_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  TE_Items TE_getItemsTail(TE_Items arg) */
+
+TE_Items TE_getItemsTail(TE_Items arg)
+{
+  
+    return (TE_Items)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  TE_Items TE_setItemsTail(TE_Items arg, TE_Items tail) */
+
+TE_Items TE_setItemsTail(TE_Items arg, TE_Items tail)
+{
+  if (TE_isItemsMany(arg)) {
+    return (TE_Items)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("Items has no Tail: %t\n", arg);
+  return (TE_Items)NULL;
 }
 
 /*}}}  */
@@ -1526,6 +1823,24 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
 }
 
 /*}}}  */
+/*{{{  TE_Menu TE_visitMenu(TE_Menu arg, TE_Items (*acceptItems)(TE_Items), char* (*acceptShortcut)(char*)) */
+
+TE_Menu TE_visitMenu(TE_Menu arg, TE_Items (*acceptItems)(TE_Items), char* (*acceptShortcut)(char*))
+{
+  if (TE_isMenuDefault(arg)) {
+    return TE_makeMenuDefault(
+        acceptItems ? acceptItems(TE_getMenuItems(arg)) : TE_getMenuItems(arg));
+  }
+  if (TE_isMenuShortcut(arg)) {
+    return TE_makeMenuShortcut(
+        acceptItems ? acceptItems(TE_getMenuItems(arg)) : TE_getMenuItems(arg),
+        acceptShortcut ? acceptShortcut(TE_getMenuShortcut(arg)) : TE_getMenuShortcut(arg));
+  }
+  ATabort("not a Menu: %t\n", arg);
+  return (TE_Menu)NULL;
+}
+
+/*}}}  */
 /*{{{  TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu)) */
 
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu))
@@ -1533,8 +1848,12 @@ TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Men
   if (TE_isActionListEmpty(arg)) {
     return TE_makeActionListEmpty();
   }
-  if (TE_isActionListMulti(arg)) {
-    return TE_makeActionListMulti(
+  if (TE_isActionListSingle(arg)) {
+    return TE_makeActionListSingle(
+        acceptHead ? acceptHead(TE_getActionListHead(arg)) : TE_getActionListHead(arg));
+  }
+  if (TE_isActionListMany(arg)) {
+    return TE_makeActionListMany(
         acceptHead ? acceptHead(TE_getActionListHead(arg)) : TE_getActionListHead(arg),
         TE_visitActionList(TE_getActionListTail(arg), acceptHead));
   }
@@ -1543,23 +1862,24 @@ TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Men
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*), char* (*acceptShortcut)(char*)) */
+/*{{{  TE_Items TE_visitItems(TE_Items arg, char* (*acceptHead)(char*)) */
 
-TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*), char* (*acceptShortcut)(char*))
+TE_Items TE_visitItems(TE_Items arg, char* (*acceptHead)(char*))
 {
-  if (TE_isMenuDefault(arg)) {
-    return TE_makeMenuDefault(
-        acceptMain ? acceptMain(TE_getMenuMain(arg)) : TE_getMenuMain(arg),
-        acceptSub ? acceptSub(TE_getMenuSub(arg)) : TE_getMenuSub(arg));
+  if (TE_isItemsEmpty(arg)) {
+    return TE_makeItemsEmpty();
   }
-  if (TE_isMenuShortcut(arg)) {
-    return TE_makeMenuShortcut(
-        acceptMain ? acceptMain(TE_getMenuMain(arg)) : TE_getMenuMain(arg),
-        acceptSub ? acceptSub(TE_getMenuSub(arg)) : TE_getMenuSub(arg),
-        acceptShortcut ? acceptShortcut(TE_getMenuShortcut(arg)) : TE_getMenuShortcut(arg));
+  if (TE_isItemsSingle(arg)) {
+    return TE_makeItemsSingle(
+        acceptHead ? acceptHead(TE_getItemsHead(arg)) : TE_getItemsHead(arg));
   }
-  ATabort("not a Menu: %t\n", arg);
-  return (TE_Menu)NULL;
+  if (TE_isItemsMany(arg)) {
+    return TE_makeItemsMany(
+        acceptHead ? acceptHead(TE_getItemsHead(arg)) : TE_getItemsHead(arg),
+        TE_visitItems(TE_getItemsTail(arg), acceptHead));
+  }
+  ATabort("not a Items: %t\n", arg);
+  return (TE_Items)NULL;
 }
 
 /*}}}  */

@@ -148,12 +148,11 @@ static void addTopMenu(int write_to_editor_fd, const char *menu)
 }
 
 /*}}}  */
-/*{{{  static void addSubMenu(int write_to_editor_fd, char *menu, char *item) */
+/*{{{  static void addSubMenu(int write_to_editor_fd, const char *menu, const char *item) */
 
-static void addSubMenu(int write_to_editor_fd, char *menu, char *item, char *shortcut)
+static void addSubMenu(int write_to_editor_fd, const char *menu, const char *item)
 {
   char buf[BUFSIZ];
-  char shortcutbuf[BUFSIZ];
   char strippedMenu[BUFSIZ];
   char strippedItem[BUFSIZ];
   char menuString[BUFSIZ];
@@ -162,21 +161,8 @@ static void addSubMenu(int write_to_editor_fd, char *menu, char *item, char *sho
   strcpy(strippedMenu, stripIllegalMenuChars(menu));
   strcpy(strippedItem, stripIllegalMenuChars(item));
 
-  if (strcmp(shortcut, "")) {
-    strcpy(menuString, menuToString(TE_makeMenuShortcut(menu, item, shortcut)));
-    strcpy(escapedMenu, escapeQuotes(menuString));
-
-    sprintf(shortcutbuf, 
-	    "(define-key global-map (edmacro-parse-keys \"%s\")"
-	    " (lambda () (interactive) (meta-menu-event \"%s\")))",
-	    shortcut,
-	    escapedMenu);
-    sendToEmacs(write_to_editor_fd, shortcutbuf);
-  }
-  else {
-    strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
-    strcpy(escapedMenu, escapeQuotes(menuString));
-  }
+  strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
+  strcpy(escapedMenu, escapeQuotes(menuString));
 
   sprintf(buf,
 	  "(define-key-after"
@@ -195,12 +181,36 @@ static void addSubMenu(int write_to_editor_fd, char *menu, char *item, char *sho
 }
 
 /*}}}  */
-/*{{{  static void makeEmacsMenuItem(int write_to_editor_fd, char *menu, char *item) */
+/*{{{  static void makeEmacsMenuItem(int write_to_editor_fd, TE_Menu menu) */
 
-static void makeEmacsMenuItem(int write_to_editor_fd, char *menu, char *item, char *shortcut)
+static void makeEmacsMenuItem(int write_to_editor_fd, TE_Menu menu)
 {
-  addTopMenu(write_to_editor_fd, menu);
-  addSubMenu(write_to_editor_fd, menu, item, shortcut);
+  const char *mainMenu = TE_getMenuMain(menu);
+  const char *subMenu = TE_getMenuSub(menu);
+
+  addTopMenu(write_to_editor_fd, mainMenu);
+  addSubMenu(write_to_editor_fd, mainMenu, subMenu);
+}
+
+/*}}}  */
+
+/*{{{  static void makeEmacsShortcut(int write_to_editor_fd, TE_Menu menu) */
+
+static void makeEmacsShortcut(int write_to_editor_fd, TE_Menu menu)
+{
+  char buf[BUFSIZ];
+  char escapedMenu[BUFSIZ];
+
+  strcpy(escapedMenu, escapeQuotes(menuToString(menu)));
+
+  sprintf(buf, 
+	  "(define-key global-map (edmacro-parse-keys \"%s\")"
+	  " (lambda () (interactive) (meta-menu-event \"%s\")))"
+	  , TE_getMenuShortcut(menu)
+	  , escapedMenu
+	  );
+  sendToEmacs(write_to_editor_fd, buf);
+  /*sendToEmacs(write_to_editor_fd, "(redraw-display)"); Needed ??? */
 }
 
 /*}}}  */
@@ -231,18 +241,13 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
   while (!TE_isActionListEmpty(actionList)) {
     TE_Menu menu = TE_getActionListHead(actionList);
     assert(TE_isValidMenu(menu));
-    if (TE_hasMenuShortcut(menu) == ATtrue) {
-      makeEmacsMenuItem(write_to_editor_fd,
-			TE_getMenuMain(menu),
-			TE_getMenuSub(menu),
-			TE_getMenuShortcut(menu));
+
+    makeEmacsMenuItem(write_to_editor_fd, menu);
+
+    if (TE_hasMenuShortcut(menu)) {
+      makeEmacsShortcut(write_to_editor_fd, menu);
     }
-    else {
-      makeEmacsMenuItem(write_to_editor_fd,
-			TE_getMenuMain(menu),
-			TE_getMenuSub(menu),
-			"");
-    }
+
     actionList = TE_getActionListTail(actionList);
   }
 }
