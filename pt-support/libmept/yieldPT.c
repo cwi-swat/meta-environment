@@ -38,8 +38,23 @@ lengthOfTree(PT_Tree tree, ATbool visualAmbs)
     length = lengthOfArgs(args, visualAmbs);
   }
   else if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
-    char *str = PT_getTreeString(tree);
-    length = strlen(str);
+    char *lit = PT_getTreeString(tree);
+    int i;
+    int len = strlen(lit);
+    
+    for (i = 0; i < len; i++) {
+      if (i+1 < len && lit[i] == '\\') {
+	switch(lit[i+1]) {
+	  case 'n':
+	  case 't':
+	  case ' ':
+	  case '`':
+	    i++;
+	  default:
+	}
+      }
+      length++;
+    }
   }
   else if (PT_isTreeAmb(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
@@ -104,8 +119,33 @@ yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufS
     char *lit = PT_getTreeString(tree);
     len = strlen(lit);
 
-    for (i = 0; i < len; i++) {
-      buf[idx++] = lit[i];
+    /* TO BE FIXED: there should be a complete mapping from all SDF2
+     * escapes to ascii here
+     */
+    for (i = 0; i < len; i++, idx++) {
+      if (i+1 < len && lit[i] == '\\') {
+	switch(lit[i+1]) {
+	  case 'n':
+	    buf[idx] = '\n';
+	    break;
+	  case 't':
+	    buf[idx] = '\t';
+	    break;
+	  case ' ':
+	    buf[idx] = ' ';
+	    break;
+	  case '`':
+	    buf[idx] = '`';
+	    break;
+	  default:
+	    buf[idx] = lit[i];
+	}
+
+	i++;
+      }
+      else {
+	buf[idx] = lit[i];
+      }
     }
   }
   else if (PT_isTreeAmb(tree)) {
