@@ -992,17 +992,17 @@ $Error]>
 %% ---- Check variable declarations
 
 [check-vardef1]
-	check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
+	check-stat($Yield $Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
 
 [check-vardef2] 
-	check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() =
+	check-stat($Yield $Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() =
 	$Exp, $Tenv)
 
 [check-vardef3]
 	$Tenv1 := require-type($Var, $Etype, $Tenv),	
 	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
 	=========================================
-	check-stat($Etype $Var += $Exp, $Tenv) =
+	check-stat($Yield $Etype $Var += $Exp, $Tenv) =
 	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
         else $Tenv2 + $Etype should be bag or rel type
         fi
@@ -1011,7 +1011,7 @@ $Error]>
 	$Tenv1 := require-type($Var, $Etype, $Tenv),	
 	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
 	=========================================
-	check-stat($Etype $Var -= $Exp, $Tenv) =
+	check-stat($Yield $Etype $Var -= $Exp, $Tenv) =
 	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
         else $Tenv2 + $Etype should be bag or rel type
         fi

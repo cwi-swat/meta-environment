@@ -6,7 +6,7 @@ int THREE = 3
 
 <int,int> ONE-TWO = <1,2>
 
-bag[bag[int]] EMPTYBAGBAG = {}
+yield bag[bag[int]] EMPTYBAGBAG = {}
 
 bag[int] Bag1 = {1,2,3}
 bag[int] Bag2 = {3, 4, 5}

@@ -91,6 +91,7 @@
 
 %% ---- Eval one statement
 
+[S0]	eval-rstat(yield $Etype $Var, $Rstore)	=  eval-rstat($Etype $Var, add-elem(YIELD, rvar2str($Var), $Rstore))
 [S1]	eval-rstat(bool $Var, $Rstore) 		= assign-when-undef($Var, bool, true, $Rstore)
 [S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, int, 0, $Rstore)
 [S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, str, "", $Rstore)
@@ -101,7 +102,14 @@
 						= assign-when-undef($Var, rel[$Etype1, $Etype2], empty-bag, $Rstore)
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
-[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, $Etype,evalx($Exp, $Rstore), $Rstore)
+[S8a]   eval-rstat(yield $Etype $Var = $Exp, $Rstore) = 
+						      eval-rstat($Etype $Var = $Exp, add-elem(YIELD, rvar2str($Var), $Rstore))
+
+[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, $Etype,
+evalx($Exp, $Rstore), $Rstore)
+
+[S8a]   eval-rstat(yield $Etype $Var += $Exp, $Rstore) = 
+						      eval-rstat($Etype $Var += $Exp, add-elem(YIELD, rvar2str($Var), $Rstore))
 
 [S8b]	eval-rstat(rel[$Etype+] $Var += $Exp, $Rstore)  
 						= add-tuples($Var, rel[$Etype+], evalr($Exp, $Rstore), $Rstore)
@@ -124,8 +132,8 @@
 [default-assert]	
 	eval-rstat(assert $String : $Exp, $Rstore) = $Rstore
 
-[S13]	$Elem :=  value($Var, $Rstore)
-	=======================================================
+[S13]%%	$Elem :=  value($Var, $Rstore)
+     %%	=======================================================
 	eval-rstat(yield $Var, $Rstore) = add-elem(YIELD, rvar2str($Var), $Rstore)
 
 %% ----	eval-fields
