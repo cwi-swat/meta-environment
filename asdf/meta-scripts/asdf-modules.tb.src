@@ -474,6 +474,94 @@ process GetASDFTree(ModuleName: str, Tree: term?) is
 
 
 
+process ActivateEditorWithTreeTyped(Tree: term, Modulename: str, Filename: str, EditorType: term) is
+let
+  Error: term,
+  Pid: int,
+  Sid: term,
+  Text: str
+in
+  if not-equal(Tree, error-tree) then
+    snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(io-write-text-list(Filename, [Text]))
+    .
+    (
+      rec-msg(io-file-written)
+      . create(EditTermTyped(Filename, Modulename, EditorType), Pid?)
+      . rec-msg(term-editor-started(Filename, Modulename, Sid?))
+    +
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
+    )
+  fi
+endlet
+
+process ActivateEditorWithStringTyped(Text: str, Modulename: str, Filename: str, EditorType: term) is
+let
+  Error: term,
+  Pid: int,
+  Sid: term
+in
+  snd-msg(io-write-text-list(Filename, [Text]))
+  .
+  (
+    rec-msg(io-file-written)
+    . create(EditTermTyped(Filename, Modulename, EditorType), Pid?)
+    . rec-msg(term-editor-started(Filename, Modulename, Sid?))
+  +
+    rec-msg(io-file-not-written(Error?))
+    . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
+  )
+endlet
+
+process EditTermTyped(Path: str, ModuleId: str, EditorType: term) is
+let
+  AlreadyExists: bool,
+  Available: bool,
+  Error: str,
+  Sid: term,
+  Tree: term,
+  Valid: bool
+in
+  CheckSanity(Path, ModuleId, Valid?)
+  .
+  if equal(Valid, true) then
+    Edit(Path, Sid?)
+    . EditText(Sid, EditorType, AlreadyExists?)
+    . snd-msg(term-editor-started(Path, ModuleId, Sid))
+    .
+    if equal(AlreadyExists, false) then
+      snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetTermTree(Path, Tree?, Available?)
+      .
+      if equal(Available, true) then
+        EditStructure(Sid, Tree)
+      else
+        tau
+      fi
+      .
+      (
+        MenuSelected(Sid, EditorType)
+      +
+        MouseClicked(Sid)
+      +
+        TextChanged(Sid)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
+    else
+      tau
+    fi
+  else
+    Error := "Term is already being edited over a different module."
+    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
+  fi
+endlet
+
+
 /* Creates an ASDFEditor
    Almost a copy of EditSyntax in editing.tb.
    Perhaps we can refactor EditSyntax. */
@@ -866,6 +954,18 @@ in
     . snd-msg(ts-get-all-keys("import-relations"))
     . rec-msg(ts-all-keys(Modules?))
     . snd-msg(get-modulenames-for-consistency-checking-hook-result(Modules))
+  +
+    rec-msg(get-syntax-tree(ModuleId?, asdf))
+    . snd-msg(ts-get-term-value("asdf-tree", ModuleId))
+    .
+    (
+      rec-msg(ts-value(Syntax?))
+      . snd-msg(syntax(Syntax))
+      . Syntax := help-the-garbage-collector
+    +
+      rec-msg(ts-no-value)
+      . snd-msg(unavailable)
+    )
    )* delta
 endlet
 
@@ -1152,6 +1252,9 @@ process ASDFButtons is
 let
   Registered : bool,
   ConstraintMod : str,
+  EditorType : term,
+  FileName : str,
+  FunSym : term,
   Id : int,
   InStr : str,
   ModuleName : str,
@@ -1165,6 +1268,7 @@ let
   RTree : term,
   Stack : list,
   STree : term,
+  String : str,
   Table : term,
   Nonterminal : term
 
@@ -1222,6 +1326,20 @@ in
   create(NewModuleContentHandler(), Pid?) .
   CreateModule(Pid, Path, ModuleName, asdf) .
   ReturnSuccess(EditorId, Stack)	
++
+  /* Studio, create ASDF module on disk */
+  rec-msg(create-asdf-module, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . snd-msg(io-relative-to-absolute(["."]))
+  . rec-msg(io-absolute-directories([Directory?]))
+  . create(NewModuleContentHandler(), Pid?)
+  . CreateModule(Pid, Directory, ModuleName, asdf)
+  . ReturnSuccess(EditorId, Stack)	
++
+  rec-msg(delete-asdf-module, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+/*  . DeleteModule(ModuleName, asdf) */
+  . ReturnSuccess(EditorId, Stack) 
 +
   /* ASDF editor, Parse ASDF */
   rec-msg(parse-asdf-action, Stack?, EditorId?)
@@ -1332,7 +1450,22 @@ in
   else 
     ReturnAbort(EditorId, Stack)
   fi
-) * delta
++
+  rec-msg(activate-typed-editor, Stack?, EditorId?)
+  . StackPopTerm(Stack, Stack?, EditorType?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . StackPopString(Stack, Stack?, FileName?)
+  . StackPopTerm(Stack, Stack?, STree?)
+  . FunSym := fun(STree)
+  .
+  if equal(FunSym, "str") then
+    String := first(args(STree))
+    . ActivateEditorWithStringTyped(String, ModuleName, FileName, EditorType)
+  else
+    ActivateEditorWithTreeTyped(STree, ModuleName, FileName, EditorType)
+  fi
+  . ReturnSuccess(EditorId, Stack)
+  ) * delta
 endlet
 
 process ParseASDFText(Pid: int, Text: str, ModuleName: str) is
