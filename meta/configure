@@ -1054,7 +1054,7 @@ fi
 
 
 if test ${CC} = gcc ; then
-	CFLAGS="-g -Wall"
+	CFLAGS="-g -Wall -O4"
 fi
 
 
@@ -1542,37 +1542,29 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
-	Makefile.skel \
-	evaluator/Makefile \
-	toolbus/Makefile \
-	module-db/Makefile \
-	module-db/genmakefile.sh \
-	in-output/Makefile \
-	graph-browser/Makefile graph-browser/graph-browser \
-	editor/Makefile editor/editor \
-	compiler/Makefile \
-	compiler/c-source/Makefile \
-	compiler/support/Makefile \
-	compiler/support-muasf/Makefile \
-	stred/nl/cwi/gipe/stred/Makefile \
+trap 'rm -fr `echo "Makefile Makefile.skel install-prog-sh install-data-sh meta \
 	asource/Makefile \
+	compiler/Makefile compiler/c-source/Makefile \
+	compiler/support/Makefile compiler/support-muasf/Makefile \
+	editor/Makefile editor/editor \
+	evaluator/Makefile \
+	graph-browser/Makefile graph-browser/graph-browser \
+	in-output/Makefile \
+	module-db/Makefile module-db/genmakefile.sh \
+	pgen/c-source/Makefile pgen/c-files/Makefile \
+	pgen/addeqs/c-source/Makefile \
 	sglr/a2toa1/Makefile \
 	sglr/client/Makefile \
 	sglr/dump/Makefile \
 	sglr/parser/Makefile \
-	sglr/tree2dot/Makefile \
 	sglr/sdf1tosdf2/Makefile \
 	sglr/sdf1tosdf2/sdf1tosdf2 \
-	pgen/c-source/Makefile \
-	pgen/c-files/Makefile \
-	pgen/addeqs/c-source/Makefile \
-	utils/Makefile \
-	utils/gen-table \
-	utils/idef2tif \
-	utils/parse-sdf2 \
-	utils/ps-dot \
-	utils/sdf2table \
+	sglr/tree2dot/Makefile \
+	stred/nl/cwi/gipe/stred/Makefile \
+	toolbus/Makefile toolbus/edit-module.tb \
+	toolbus/open-modules.tb toolbus/revert-module.tb \
+	utils/Makefile utils/gen-table utils/idef2tif \
+	utils/parse-sdf2 utils/ps-dot utils/sdf2table \
   " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1667,37 +1659,29 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
-	Makefile.skel \
-	evaluator/Makefile \
-	toolbus/Makefile \
-	module-db/Makefile \
-	module-db/genmakefile.sh \
-	in-output/Makefile \
-	graph-browser/Makefile graph-browser/graph-browser \
-	editor/Makefile editor/editor \
-	compiler/Makefile \
-	compiler/c-source/Makefile \
-	compiler/support/Makefile \
-	compiler/support-muasf/Makefile \
-	stred/nl/cwi/gipe/stred/Makefile \
+CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel install-prog-sh install-data-sh meta \
 	asource/Makefile \
+	compiler/Makefile compiler/c-source/Makefile \
+	compiler/support/Makefile compiler/support-muasf/Makefile \
+	editor/Makefile editor/editor \
+	evaluator/Makefile \
+	graph-browser/Makefile graph-browser/graph-browser \
+	in-output/Makefile \
+	module-db/Makefile module-db/genmakefile.sh \
+	pgen/c-source/Makefile pgen/c-files/Makefile \
+	pgen/addeqs/c-source/Makefile \
 	sglr/a2toa1/Makefile \
 	sglr/client/Makefile \
 	sglr/dump/Makefile \
 	sglr/parser/Makefile \
-	sglr/tree2dot/Makefile \
 	sglr/sdf1tosdf2/Makefile \
 	sglr/sdf1tosdf2/sdf1tosdf2 \
-	pgen/c-source/Makefile \
-	pgen/c-files/Makefile \
-	pgen/addeqs/c-source/Makefile \
-	utils/Makefile \
-	utils/gen-table \
-	utils/idef2tif \
-	utils/parse-sdf2 \
-	utils/ps-dot \
-	utils/sdf2table \
+	sglr/tree2dot/Makefile \
+	stred/nl/cwi/gipe/stred/Makefile \
+	toolbus/Makefile toolbus/edit-module.tb \
+	toolbus/open-modules.tb toolbus/revert-module.tb \
+	utils/Makefile utils/gen-table utils/idef2tif \
+	utils/parse-sdf2 utils/ps-dot utils/sdf2table \
   "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
