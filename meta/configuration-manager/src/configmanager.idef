@@ -133,9 +133,10 @@ in
     rec-value(CMNG, button-names(ButtonNames?)) .
     snd-msg(button-list(ModuleName, ButtonNames))
   +
-    rec-msg(extra-button-action(ButtonName?, ModuleName?, EditorId?)) .
-    snd-eval(CMNG, get-button-actions(ButtonName, ModuleName)) .
+    rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?, EditorId?)) .
+    snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
+    printf("button actions for <%t,%t,%t,%t> are %t\n",ButtonName,EditorType,ModuleName,EditorId,ButtonActions).
     create(PerformButtonActions(EditorId, ButtonActions), Pid?)
   ) * delta
 endlet

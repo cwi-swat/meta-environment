@@ -99,7 +99,7 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
   return ATmake("snd-value(button-names(<term>))", buttonNames);
 }
 
-ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
+ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName)
 {
   ATermList localButtons = buttons;
   ATermList buttonActions = ATempty;
@@ -119,14 +119,19 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
   }
 
   if (ATisEmpty(buttonActions)) {
-    if (strcmp(buttonName, "Parse") == 0 &&
-        (strcmp(moduleName, "Equations") == 0 ||
-         strcmp(moduleName, "Syntax") == 0)) {
-      buttonActions = ATinsert(buttonActions, ATmake("parse-buffer"));
-    }
-    else if (strcmp(buttonName, "Parse") == 0) {
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("parse-action(<str>)", moduleName));
+    if (strcmp(buttonName, "Parse") == 0) {
+      ATerm action = NULL;
+
+      if (strcmp(type,"Equations") == 0) {
+	action = ATmake("parse-equations-action(<str>)", moduleName);
+      }
+      else if (strcmp(type,"Syntax") == 0) {
+	action = ATmake("parse-syntax-action(<str>)", moduleName);
+      }
+      else {
+	action = ATmake("parse-action(<str>)", moduleName);
+      }
+      buttonActions = ATinsert(buttonActions,  action);
     }
     else if (strcmp(buttonName, "Reduce") == 0) {
       buttonActions = ATinsert(buttonActions, 
