@@ -77,7 +77,6 @@ ATerm exists(int cid, char *modulename)
 }
 
 /*}}}  */
-/*{{{  ATerm get_all_equations(int cid, char *moduleName) */
 
 ASF_CondEquationList getEquations(ATermList mods)
 {
@@ -496,6 +495,22 @@ void update_eqs_text(int cid, char *moduleName, char *eqsText)
   PutValue(modules_db, atModuleName, entry);
 }
 
+void invalidate_sdf(int cid, char *moduleName)
+{
+  ATerm entry;
+  ATerm isChanged = Mtrue;
+  ATerm atModuleName;
+
+  atModuleName = ATmake("<str>", moduleName);
+
+  entry = GetValue(modules_db, atModuleName);
+
+  entry = (ATerm)ATreplace((ATermList)entry, isChanged, SYN_UPDATED_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry, ATparse("unavailable"), SYN_LOC);
+
+  PutValue(modules_db, atModuleName, entry);
+}
+
 /*{{{  void add_empty_eqs_section(int cid, char *moduleName, char* path) */
 
 void add_empty_eqs_section(int cid, char *moduleName, char* path)
@@ -644,8 +659,8 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
 {
   ATerm entry, asfix;
   ATerm isChanged, modname;
-  enum { sdf2, eqs } module_type = sdf2; /* to keep compiler happy */
-  int location = 0, updated_location = 0; /* To keep compiler happy*/
+  enum { sdf2, eqs } module_type = sdf2; 
+  int location = 0, updated_location = 0;
 
   if (ATmatch(type,"sdf2")) {
       updated_location = SYN_UPDATED_LOC;

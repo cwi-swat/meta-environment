@@ -88,13 +88,13 @@ in
              snd-note(ui-status(errorf(
                       "Character %d unexpected in %s, line %d, column %d\n",
                       [Ch, Module, Li, Co])))
-           ).
-           snd-note(ui-status(endstat(Id)))
+           )
          +
-	   rec-msg(parsetable-not-set(Module)).
-	   snd-note(ui-status(errorf("Unable to open parse table for \"%s\"",
+	   rec-msg(parsetable-not-set(eqs(Module))).
+	   snd-note(ui-status(errorf("Unable to open parse table for %s",
 				     [Module])))
-         )
+         ) .
+         snd-note(ui-status(endstat(Id)))
       +
         rec-msg(no-eqs-text(Module))
       )

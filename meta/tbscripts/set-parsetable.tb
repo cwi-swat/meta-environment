@@ -56,6 +56,7 @@ let
   Syntax    : term,
   Table     : term,
   Path      : str,
+  ErrorMsg  : str,
   TimeStamp : term
 in
   snd-msg(get-all-sdf2-definitions(ModuleId)).
@@ -75,7 +76,8 @@ in
     rec-msg(table(Table?, Path?)).
     ReopenLanguage(ModuleId, Table)
     +
-    rec-msg(no-syntax).
+    rec-msg(no-syntax(ErrorMsg?)).
+    snd-note(ui-status(errorf("%s",[ErrorMsg]))).
     snd-msg(parsetable-not-set(ModuleId))
   )
 endlet

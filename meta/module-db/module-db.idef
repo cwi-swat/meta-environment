@@ -103,6 +103,9 @@ snd-do(Mdb, create-module-db).
     snd-msg(need-modules([]))
   )
 +
+  rec-msg(invalidate-sdf-in-db(Name?)).
+  snd-do(Mdb, invalidate-sdf(Name))
++
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(update-module-in-db(AsFixModule?,Language?)).
@@ -246,7 +249,7 @@ snd-do(Mdb, create-module-db).
     snd-msg(syntax(Syntax))
   +
     rec-value(Mdb, sdf2-definition-error(ErrorMsg?)).
-    snd-msg(no-syntax)
+    snd-msg(no-syntax(ErrorMsg))
   )
 +
   rec-msg(get-sdf2-asfix(Name?)).

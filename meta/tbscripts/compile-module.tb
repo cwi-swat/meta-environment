@@ -27,6 +27,7 @@ process Compile-module is
 let
   ModuleName    : str,
   OutputDir     : str,
+  ErrorMsg      : str,
   Id            : term,
   Syntax        : term,
   Equations     : term 
@@ -52,7 +53,7 @@ in
                                     [ModuleName])))
         )
       +
-        rec-msg(no-syntax) .
+        rec-msg(no-syntax(ErrorMsg?)) .
         snd-note(ui-status(errorf("Syntax incomplete for %s", [ModuleName])))
       ) .
       snd-msg(compilation-ready(ModuleName)) .
