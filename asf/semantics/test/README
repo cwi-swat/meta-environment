@@ -11,15 +11,15 @@ sglr -p <TopModuleName>.trm.tbl -i <input> -o ../../input/<TopModuleName>.1.pt
 7. cd ../..
 8. add <TopModuleName> to the list of tested specifications in ./Makefile.am
 9. make check
-   This generates an error message and a normal form.
+   This generates a few scripts <TopModuleName>.{asfe,asfc,diff}.sh and 
+   an error message.
 10. mv <TopModuleName>.1.asfe.test output/<TopModuleName>.1.pt
-   To fix this normal form as the correct one.
-11. make check
-   This generated an error message and a c file.
-12. mv check
-   To fix the c code as the correct result.
+   To fix the normal form as the correct one.
+11. run <TopModuleName>.asfe.sh to check
+    run <TopModuleName>.asfc.sh to check
+    run <TopModuleName>.diff.sh to check
 13. cvs add spec/<TopModule>/*.{asf,sdf} eqs/*.eqs input/*.pt \
             output/*.pt c-code/*.c
 14. type make check to verify that everything works.
-15. cvs commit
+15. cvs commit, make check.
 16. DONE! 
