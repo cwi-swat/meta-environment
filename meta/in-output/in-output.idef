@@ -12,17 +12,23 @@ let
 in
   execute(in-output,IO?).
   (
-    rec-msg(Id?,locate-parse-table-file(id(Name?))).
+/*    rec-msg(Id?,locate-parse-table-file(Name?)).
     snd-eval(IO,locate-parse-table-file(Name)).
     (
       rec-value(IO,located-parse-table-file(Name?,Path?,timestamp(TS?))).
-      snd-msg(Id,located-parse-table-file(id(Name),Path,timestamp(TS)))
+      snd-msg(Id,located-parse-table-file(Name,Path,timestamp(TS)))
       +
       rec-value(IO,unavailable-parse-table(Name?)).
       snd-msg(Id,error-locating(Name))
     )
   +
-    rec-msg(Id?,read-parse-table(id(Name?))).
+*/
+    rec-msg(get-table-timestamp(Name?)).
+    snd-eval(IO,get-timestamp(Name,".tbl")).
+    rec-value(IO,timestamp(TS?)).
+    snd-msg(table-timestamp(timestamp(TS)))
+    +
+    rec-msg(Id?,read-parse-table(Name?)).
     snd-eval(IO,read-parse-table(Name)).
     (
       rec-value(IO,table-on-disk(Text?,timestamp(TS?))).
@@ -32,61 +38,61 @@ in
       snd-msg(Id,no-table-on-disk)
     )
   +
-    rec-msg(Id?,open-trm-file(id(Name?))).
+    rec-msg(Id?,open-trm-file(Name?)).
     snd-eval(IO,open-trm-file(Name)).
     ( rec-value(IO,opened-file(raw,Name,Text?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Path,timestamp(TS)))
+      snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS)))
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
     )
   +
-    rec-msg(Id?,open-file(id(Name?))).
+    rec-msg(Id?,open-file(Name?)).
     snd-eval(IO, open-old-asfix-file(Name)).
     (
       rec-value(IO,opened-file(asfix,Name?,T?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(asfix,id(Name),T,Path,timestamp(TS)))
+      snd-msg(Id,opened-file(asfix,Name,T,Path,timestamp(TS)))
     +
       rec-value(IO,error-opening(Name?)).
       snd-eval(IO,open-sdf2-file(Name)).
       (
         rec-value(IO,opened-file(raw,Name?,Text?,Path?,timestamp(TS?))).
-        snd-msg(Id,opened-file(raw,id(Name),Text,Path,timestamp(TS)))
+        snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS)))
         + 
         rec-value(IO,opened-file(baf,Name?,T?,Path?,timestamp(TS?))).
-        snd-msg(Id,opened-file(baf,id(Name),T,Path,timestamp(TS)))
+        snd-msg(Id,opened-file(baf,Name,T,Path,timestamp(TS)))
         +
         rec-value(IO,error-opening(Name?)).
         snd-msg(Id, error-opening(Name))
       )
     )
   +
-    rec-msg(Id?,open-eqs-asfix-file(id(Name?))).
+    rec-msg(Id?,open-eqs-asfix-file(Name?)).
     snd-eval(IO,open-eqs-asfix-file(Name)).
     (
       rec-value(IO,opened-file(baf,Name?,T?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(baf,id(Name),T,Path,timestamp(TS)))
+      snd-msg(Id,opened-file(baf,Name,T,Path,timestamp(TS)))
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
     )
   +
-    rec-msg(Id?,open-eqs-text-file(id(Name?))).
+    rec-msg(Id?,open-eqs-text-file(Name?)).
     snd-eval(IO,open-eqs-text-file(Name)).
     (
       rec-value(IO,opened-file(raw,Name?,Text?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Path,timestamp(TS))) 
+      snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS))) 
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
     )
   +
-    rec-msg(save-sdf2-asfix(id(Name?),Path?,Asfix?)).
+    rec-msg(save-sdf2-asfix(Name?,Path?,Asfix?)).
     snd-eval(IO,save-sdf2-asfix(Name,Path,Asfix)).
     rec-value(IO,save-done(Name?)).
     snd-msg(save-done)
   +
-    rec-msg(save-eqs-asfix(id(Name?),Path?,Asfix?)).
+    rec-msg(save-eqs-asfix(Name?,Path?,Asfix?)).
     snd-eval(IO,save-eqs-asfix(Name,Path,Asfix)).
     rec-value(IO,save-done(Name?)).
     snd-msg(save-done)
