@@ -1,0 +1,39 @@
+Conversion Notes by Mark van den Brand (07-02-2001).
+
+This pt-support directory contains 4 different "AsFix" sublibraries:
+- asfix-old
+- asfix1
+- asfix2
+- mept
+
+The library asfix-old contains all old AsFix functionality.
+
+The library asfix1 contains all AsFix functionality based on "api-gen"
+for AsFix1.
+
+The library asfix2 contains all AsFix functionality partly based on
+"api-gen" for plain AsFix2 and partly hand-coded. By plain AsFix2
+is meant the AsFix2 as described in the PhD thesis of Eelco Visser.
+
+The library mept contains all AsFix functionality partly based on
+"api-gen" for AsFix2ME and partly hand-coded. By AsFix2ME is meant
+the "imploded" AsFix2 which will be the common format for all
+Meta-Environment components.
+
+The actual conversion from "old" AsFix to AsFix2ME will take place
+in 3 major steps. 
+In the first step the components: module-db, structure editor and 
+evaluator are rewritten such that the use only functionality provided
+by asfix1.
+If this is completed, step 2 can be realised: SGLR produced terms
+in AsFix2ME instead of AsFix1 and a filter from AsFix2ME-to-AsFix1
+is inserted in front of the ASF+SDF compiler and parse-table
+functionality (Add-Eqs-Syntax, Remove-Vars, pgen). The tools
+module-db, structure editor and evaluator now work on AsFix2ME instead
+of AsFix1.
+In step 3 the compiler has to be adapted from "old" AsFix to AsFix2ME.
+This means an adaptation of the specification as well as of the 
+runtime environment.
+In step 4 compiled specifications (Add-Eqs-Syntax and Remove-Vars) and
+pgen have to be adapted.
+In step 5 the libraries asfix-old and asfix1 can be removed.
