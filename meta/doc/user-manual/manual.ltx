@@ -14,6 +14,7 @@
 \newcommand{\ASmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
 \newcommand{\sdf}{{\sc Sdf}}
 \newcommand{\asf}{{\sc Asf}}
+\newcommand{\asfsdf}{{\sc Asf}+{\sc Sdf}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 
@@ -113,7 +114,7 @@
 \maketitle    
 
 \begin{abstract}
-A first version of the \ASmetaenv\ for Release 1.
+This is a very preliminary user manual for the \ASmetaenv\ Release 1.
 \end{abstract}
 
 \tableofcontents
@@ -264,30 +265,53 @@ specification, etc., will be addressed in the final sections.
 
 \section{Starting the system}
 
-The \ASmetaenv\ can be invoked via the command {\tt meta}.
-The exact usage is {\tt meta -b -c dir -dh -i file -o file -t -T portnumber -vV}.
+The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
+result, the \ASmetaenv\ screen pops up. This is shown in
+Figure~\ref{FIG:meta1}.
+
+
+The {\tt meta} command has the following options, which may come in
+handy later on.
+
+\begin{itemize}
+
+\item {\tt -c \emph{dir}} instructs the \asfsdf\ compiler to generate
+C files in the directory \emph{dir}. Note that this directory is also
+controlled by the environment {\tt COMPILER\_OUTPUT}
+
+\item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
+an interactive viewer (``ToolBus viewer'') will be started that allows the study of
+the internal behabiour of the system.
+
+\item {\tt -h } shows help information for the {\tt meta} command.
+
+\item {\tt -T \emph{port}} controls the communication ports that will
+be used for communication between the components of the \ASmetaenv.
+Note that these ports are also controlled by the environment variable
+{\tt TB\_PORT}.  The default value is {\tt 8999}, but this port may be
+in use by someone else (or by a aborted previous run of the
+\ASmetaenv). In that case, it is advisable to use other value in the
+range 9000 and up.
+
+
+\item {\tt -v} runs the \ASmetaenv\ in verbose mode.
+
+\item {\tt -V} shows the version number of the \ASmetaenv\ you are running.
+
+\end{itemize}
+
 Search paths can initialized via creating a file ``meta.conf''. This file
 may contain a list of absolute and/or relative paths. See the meta.conf
-file in the demo directory for an example.
+file in the demo directory for an example. (**)
 
-The option {\tt -c} is used to initialize the variable {\tt COMPILER\_OUTPUT}
-which is used by the compiler to save generated C files.
-The option {\tt -d} starts the ToolBus in debug mode, thus the viewer
-is activated in order to study the behaviour.
-The option {\tt -T} is used to initialize the variable {\tt TB\_PORT}, this
-is a ToolBus specific variable.
-The option {\tt -v} is used to run the \ASmetaenv\ in verbose mode.
-The option {\tt -V} is used to print the version number of the \ASmetaenv.
 
-After invoking the \ASmetaenv\ the screen presented in Figure
-\ref{FIG:meta1} pops up.
 
 \begin{figure}[tb]
   \centerline{\epsfig{file=meta1.ps,width=10cm}}
   \caption{\label{FIG:meta1} Initial window of \ASmetaenv}
 \end{figure}
  
-\section{Opening a specification}
+\section{Opening a specification: the File menu}
 
 If the \ASmetaenv\ is running a module can be opened by either clicking
 in the leftmost canvas or via the pull down menu {\tt File}.
