@@ -1,3 +1,4 @@
 module languages/box/syntax/Box
 
 imports languages/box/syntax/Fonts
+imports languages/box/syntax/Comments
