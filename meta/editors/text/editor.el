@@ -190,6 +190,10 @@ point."
                          (number-to-string oldlength) ")" 
                  )
         )
+
+        ; Suspend xemacs until toolbus adapter has processed this event
+				; ***Hack Alert***
+        (accept-process-output (get-process "adapter"))
 		)
 	)
 )
@@ -210,7 +214,6 @@ point."
       )
     res)
 )
-
 
 
 
