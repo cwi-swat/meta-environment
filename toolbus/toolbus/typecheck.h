@@ -36,6 +36,6 @@ void tc_double_decl(char *, char *, term *, int);
 void tc_not_decl(char *, char *, term *, int);
 void tc_ill_result(char *, char *, term *, int);
 
-TBbool typecheck(char *, TBbool);
+TBbool typecheck(char *, TBbool, char *);
 
 #endif /*  __TYPECHECK_H__ */

@@ -789,7 +789,7 @@ term_list *replace_more_specific(term *t, term_list *sig_list)
 
 /*{{{  int typecheck(char *script, TBbool gen_tifs) */
 
-int typecheck(char *script, TBbool gen_tifs)
+int typecheck(char *script, TBbool gen_tifs, char *output)
 {
   term *triple, *call, *creator;
   term_list *calls1, *args;
@@ -801,7 +801,13 @@ int typecheck(char *script, TBbool gen_tifs)
   int tifs = -1;
 
   if(gen_tifs){
-    tifs_name = add_suffix(script, ".tifs");
+    if (output == NULL)  {
+      tifs_name = add_suffix(script, ".tifs");
+    }
+    else {
+      tifs_name = output;
+    }
+
     tifs = creat(tifs_name, 0666);
     if(tifs < 0){
       TBmsg("Can't create %s", tifs_name);

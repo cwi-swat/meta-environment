@@ -1,23 +1,5 @@
 #! __PERL__
 #
-#    ToolBus -- The ToolBus Application Architecture
-#    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam,
-#                             The  Netherlands.
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
 
 #$Id$
 
@@ -44,15 +26,17 @@ $ENV{'PATH'} = "__TOOLBUSBIN__:$ENV{'PATH'}" ;
 
 
 $idefsuf = '.idef';
+$tifsuf = '.tifs';
 
 sub usage {
-  print "Usage: idef2tif file$idefsuf\n";
+  print "Usage: idef2tif file$idefsuf [outputfile$tifsuf]\n";
   exit 0;
 }
 
 if ($#ARGV < 0) {
   &usage;
 }
+
 
 # Get filename form commandline
 $fullname = $ARGV[0];
@@ -63,6 +47,14 @@ $dir = join("/",@dirarray);
 if ($dir ne "") {
   $dir .= "/";
 }
+
+if ($#ARGV < 1) {
+  $output = $basename$tifsuf;
+}
+else {
+  $output = $ARGV[1];
+}
+
 # Where to put temporary files?
 $tmpdir=$ENV{'TMPDIR'}?$ENV{'TMPDIR'}:'/tmp';
 # Check for right suffix
@@ -104,7 +96,7 @@ if ($pc != 1) {
 print TB "toolbus(",$process,")\n";
 close(TB);
 
-system("toolbus -gentifs $stmp 2> $serr > /dev/null");
+system("toolbus -output $output -gentifs $stmp 2> $serr > /dev/null");
 #$err=-s $serr;
 $err=$?;
 if($err) {

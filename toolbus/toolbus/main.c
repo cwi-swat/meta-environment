@@ -160,7 +160,7 @@ static void debug_handler(int sig)
 void usage(char *prg, int is_err)
 {
  fprintf(stderr, "Usage: %s [-help|-version|-verbose] "
-	 "[-logger|-viewer|-controller] [-gentifs] "
+	 "[-logger|-viewer|-controller] [-gentifs] [-output <file>]"
 	 "[-fixed-seed] Script.tb\n", prg);
 
  exit(is_err);
@@ -195,6 +195,7 @@ Options are:\n\
 -viewer               attach a viewer tool\n\
 -controller           attach a controller tool\n\
 -gentifs              generate tool interfaces, do not execute script\n\
+-output <file>        output file for tool interfaces (default script.tifs)\n\
 -fixed-seed           use a fixed seed for the random generator\n\
 -TB_PORT N            use N as well-known socket of ToolBus\n\
 Options for the preprocessor are:\n\
@@ -215,6 +216,7 @@ int main(int argc, char *argv[])
   unsigned int seed = time(NULL);
   char *s;
   char *sname = NULL;
+  char *output = NULL;
   TBbool gen_tifs = TBfalse;
   term *monitor;
   struct sigaction act;
@@ -224,7 +226,6 @@ int main(int argc, char *argv[])
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
   extern void chld_handler(int);
-
 
   act.sa_handler = interrupt_handler;
   sigemptyset(&act.sa_mask);
@@ -284,6 +285,8 @@ int main(int argc, char *argv[])
       WellKnownGlobalSocket = atoi(argv[++i]);
     } else if(streq(argv[i], "-gentifs")){
       gen_tifs = TBtrue;
+    } else if(streq(argv[i], "-output")){
+      output = strdup(argv[++i]);
     } else if((argv[i][0] == '-') && ((argv[i][1] == 'I') || (argv[i][1] == 'D'))){
 
     } else if(streq(argv[i], "-fixed-seed")) {
@@ -318,12 +321,13 @@ int main(int argc, char *argv[])
     /* HDJ: Don't init_monitoring() until WellKnownPort has been established!
      * monitor = init_monitoring();
      */
-    if(typecheck(sname, gen_tifs)){
+    if(typecheck(sname, gen_tifs, output)){
  
       if (TBverbose) TBmsg("typechecking completed\n");
       expand_all_calls();
-      if(gen_tifs)
+      if(gen_tifs) {
 	exit(0);
+      }
       if (WellKnownGlobalSocket < 0 || WellKnownLocalSocket < 0) {
 	if(mk_server_ports(local_ports) < 0) {
 	  err_sys_fatal("Cannot create input/output ports of ToolBus");
