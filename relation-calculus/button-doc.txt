@@ -1,0 +1,87 @@
+
+
+
+[T_1, ..., T_NrOfArgs] apply(FuncName, SortName, NrOfArgs)
+
+      constructs a function application for function FuncName
+      with result sort SortName and NrOfArgs arguments (on the stack)
+
+[Tree] activate-given-tree(Action)
+
+       execute Action (a shell command) with Tree as string input
+
+execute-action
+
+move-left
+
+move-right
+
+move-up
+
+move-down
+
+parse-action
+
+parse-syntax-action
+
+parse-equations-action
+
+get-root
+
+set-root
+
+get-focus
+
+set-focus
+
+check-sort
+
+[Tree, ModName] reduce
+
+get-other-focus(ModName)
+
+push-editor-name
+
+[Tree, FileName, ModName] activate-editor
+
+send
+
+receive
+
+parse(ModName, SortName)
+
+get-argument(NrOfArgs)
+
+exists(FileName)
+
+locate(FileName)
+
+push-active-module
+
+push-modulename(ModName)
+
+push-filename(FileName)
+
+push-string(String)
+
+push-integer(Integer)
+
+message(String)
+
+show-tree
+
+show-area(ModName)
+
+show-list
+
+show-tree
+
+save-tree(Name, Path)
+
+read-tree(Path)
+
+
+
+
+
+

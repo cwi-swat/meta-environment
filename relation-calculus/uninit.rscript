@@ -7,5 +7,5 @@
 
         rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
 
-        rel[str,node] UNDEF = { <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
-                           occurrences(<N,V>)}
+        rel[str,node] UNDEF = { <N, V> in USES : occurrences(<N,V>) | <ROOT, N> elem carX(PRED, DEFS . V)+ }
+                         

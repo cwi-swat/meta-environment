@@ -1,33 +1,5 @@
 buttons([
 
-  button("RScripts",
-          ["term"],
-          ["Actions", "Check Rscript"],
-          [push-active-module,
-	   get-root,
-           check-sort("RSCRIPT"),
-           apply("check-rscript", "ERRORS", 1),
-           push-modulename("RelationChecker"),
-           reduce,
-	   push-filename("RelationChecker.results"),
-	   push-active-module,
-	   activate-editor
-           ]),
-
-  button("RScripts",
-          ["term"],
-          ["Actions", "Exec Rscript"],
-          [push-active-module,
-	   get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript", "RSTORE", 1),
-           push-modulename("RelationCalculator"),
-           reduce,
-	   push-filename("RelationCalculator.results"),
-	   push-active-module,
-	   activate-editor
-           ]),
-
   button("Pico-syntax",
           ["term"],
           ["Actions", "Extract Relations"],
@@ -75,6 +47,18 @@ buttons([
            push-filename("query.out"),
            push-modulename("PicoQuery"),
 	   activate-editor
-           ])
+           ]),
 
+    button(["term"],
+          "message-list",
+          ["ShowSource"],
+          [show-area("Pico-syntax")]) ,
+
+    button(["term"],
+	"term",
+	["Actions", "Show List"],
+	[push-active-module,
+	get-root,
+	execute-action("unparsePT"),
+	show-list])
 ])

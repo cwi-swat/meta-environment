@@ -1,4 +1,6 @@
-eval-rscript(
+
+
+int ROOT = 0
 
 rel[str,int] D = dominators({<"y", 3>}, {<"y", 5>}, {<3, 2>, <2, 1>, <1, 0>})
 
@@ -6,24 +8,24 @@ rel[str,int] DEFS    = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
 
 rel[str,int] USES    = {<"y", 3>, <"x", 3>, <"z", 5>}
 
-rel[int,int]  SUCC    = {<0, 1>,<1, 2>, <2, 3>, <2, 4>, <3, 5>, <4, 5>}
-rel[int,int]  PRED   = inv(SUCC)
+rel[int,int]  PRED    = {<0, 1>,<1, 2>, <2, 3>, <2, 4>, <3, 5>, <4, 5>}
+%%rel[int,int]  PRED   = inv(SUCC)
 
 rel[str,int] D0 = {<"y",3>}
 rel[str,int] D1 = (D0 o PRED) \ DEFS
 
-rel[str,int] D4 = dominators({<"y", 3>}, DEFS, PRED)
+rel[int,int] D4 = reachX({3}, "y" . DEFS, PRED)
 bool DD = 0 elem range(dominators({<"y", 3>}, DEFS, PRED))
 
 bool  reaches_root(rel[str,int] R) = 0 elem range(R)
 
-rel[str,int]  UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) }
+rel[str,int]  UN = { <V, N> in USES : if <ROOT, N> elem reachX({0}, V . DEFS, PRED) then <V,N> }
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> in USES | <ROOT, N> elem carX(PRED, V .  DEFS)+ }
+rel[str,int]  UN1 = { <V, N> in USES : if <ROOT, N> elem carX(PRED, V .  DEFS)+ then <V, N>}
 
-<$T1,$T2> swap(<$T2,$T1> P) = <sec(P), fst(P)>
+<T1,T2> swap(<T2,T1> P) = <sec(P), fst(P)>
 
 bag[str] Bag1     = {"a", "b", "c"}
 bag[str] Bag2     = {"d", "e", "f"}
@@ -32,25 +34,23 @@ rel[int,int] Rel2     = {<1, 10>, <3, 30>}
 
 <str,int> P1 = swap(<0,"a">)
 
-rel[int,str] SRel1 = {<V,N> in Rel1 | true | swap(<V,N>) }
+rel[int,str] SRel1 = {<V,N> in Rel1 : swap(<V,N>) }
 
-rel[int,bag[int]] VERT = { V in {1,2,3} |true | <V, {1,2,3}>}
+rel[int,bag[int]] VERT = { V in {1,2,3} : <V, {1,2,3}>}
 
 
 bag[int] BBB = 2 . {<1,10>, <2, 20>, <3,30>}
 
-bag[str] Tst      = {X in Bag1 | true }
-rel[str,str] REL      = {X in Bag1, Y in Bag2 | true | <X, Y>}
+bag[str] Tst      = {X in Bag1 : X }
+rel[str,str] REL      = {X in Bag1, Y in Bag2 : <X, Y>}
 
-rel[$X,$Y] finv(rel[$Y,$X] REL) = {<X, Y> in REL | true | <Y, X>}
-bag[$X] fdom(rel[$X,$Y] REL) = {<X, Y> in REL | true | X}
+rel[X,Y] finv(rel[Y,X] REL) = {<X, Y> in REL : <Y, X>}
+bag[X] fdom(rel[X,Y] REL) = {<X, Y> in REL : X}
 
-rel[$X,$Y] pair(bag[$X] R1, bag[$Y] R2) = { X in R1, Y in R2 | true | <X, Y>}
+rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { X in R1, Y in R2 : <X, Y>}
 
-rel[$A,$C] comp(rel[$A,$B] R1, rel[$B,$C] R2) =
-    { <X, Y> in R1, <S, T> in R2
-    | Y == S
-   | <X, T>}
+rel[A,C] comp(rel[A,B] R1, rel[B,C] R2) =
+    { <X, Y> in R1, <S, T> in R2 : if Y == S then <X, T> }
 
 rel[int,str] bag5     = inv(DEFS)
 bag[str] bag6     = fdom(DEFS)
@@ -73,8 +73,6 @@ bool C = Bag1 x Bag2 <= Bag2 x Bag1
 
 rel[str,str] C2 = (Bag1 x Bag2)+
 
-rel[int,int] C3 = SUCC *
+%%rel[int,int] C3 = SUCC *
 
 int mysize(bag[int] B) = # B
-
-)
