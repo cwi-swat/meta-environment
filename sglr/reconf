@@ -1,6 +1,6 @@
-#! /bin/sh
+#!/bin/sh
 #
-#    SGLR - the Scannerless Generalized LR parser.
+#    Evaluator - the ASF interpreter
 #    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -17,32 +17,10 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
+#
+# make sure you have installed automake version 1.4 or above.
 
-usage () {
-	echo "Usage: $1 <program-under-test>"
-	exit 1
-}
-
-if [ $# != 1 ]; then
-  usage $0
-fi
-
-if [ $1 = "-h" ]; then
-  usage $0
-fi
-
-output=`$1 -h 2>&1`
-result=$?
-
-if [ $result != 0 ]; then
-	echo "$1 -h returned $result result"
-	exit 1
-fi
-
-if echo $output | grep -i usage > /dev/null; then
-	exit 0
-else
-  echo "$1 -h does not return \"usage\"";
-  exit 1
-fi
-
+aclocal 
+autoconf
+autoheader
+automake -a

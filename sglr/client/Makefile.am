@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 bin_PROGRAMS = parse-client
 
@@ -29,8 +29,8 @@ HDRS         =
 
 parse_client_SOURCES = $(SRCS) $(HDRS)
 
-LDADD        = -L$(ASFIXLIB) -lAsFix \
-               -L$(ATERMLIB) -lATerm \
+LDADD        = -L$(ASFIX)/lib -lAsFix \
+               -L$(ATERM)/lib -lATerm \
                -lATB $(SOCKLIBS)
 
 # make sure generates files are removed during "make clean"

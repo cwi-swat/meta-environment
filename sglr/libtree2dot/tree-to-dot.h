@@ -23,7 +23,7 @@
 #ifndef _TREE_TO_DOT_H_
 #define _TREE_TO_DOT_H_ 1
 
-#include <stack.h>
+#include "stack.h"
 
 void SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress, 
 										 ATbool print_prods);

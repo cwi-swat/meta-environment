@@ -18,7 +18,9 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
+
+INCLUDES += -I $(top_srcdir)/sglr/libsglr
 
 bin_PROGRAMS             = dump-actions dump-gotos dump-priorities \
                            dump-productions
@@ -34,8 +36,8 @@ dump_productions_SOURCES = dump-productions.c dump-skel.c dump-skel.h
 
 LDADD     = -L$(top_builddir)/libsglr -lsglr \
             -L$(top_builddir)/libtree2dot -ltree2dot \
-            -L$(ASFIXLIB) -lAsFix\
-            -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+            -L$(ASFIX)/lib -lAsFix\
+            -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 test: all
 	@for prg in $(bin_PROGRAMS); \

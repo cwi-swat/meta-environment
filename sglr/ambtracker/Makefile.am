@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 bin_PROGRAMS     = ambtracker
 
@@ -27,9 +27,9 @@ HDRS             =
 
 ambtracker_SOURCES = $(SRCS) $(HDRS)
 
-LDADD            =  -L${top_builddir}/libsglr -lsglr \
-                    -L${top_builddir}/libtree2dot -ltree2dot \
-                     -L$(ASFIXLIB) -lAsFix \
-                    -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+LDADD            =  -L${top_builddir}/sglr/libsglr -lsglr \
+                    -L${top_builddir}/sglr/libtree2dot -ltree2dot \
+                    -L$(ASFIX)/lib -lAsFix \
+                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-ambtracker.o: ${top_builddir}/libsglr/libsglr.a
+ambtracker.o: ${top_builddir}/sglr/libsglr/libsglr.a

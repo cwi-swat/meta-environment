@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 lib_LIBRARIES          = libsglr.a #libsglr-prof.a 
 include_HEADERS        = sglr.h
@@ -42,3 +42,5 @@ libsglr_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
 
 libsglr_gc_a_SOURCES   = $(HDRS)
 libsglr_gc_a_LIBADD    = $(SRCS:.c=-gc.o) -lgc
+
+INCLUDES += -I$(top_srcdir)/sglr/libtree2dot

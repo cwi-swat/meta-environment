@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 lib_LIBRARIES    = libtree2dot.a
 include_HEADERS  = tree-to-dot.h
@@ -28,7 +28,9 @@ include_HEADERS  = tree-to-dot.h
 SRCS             = tree-to-dot.c sg_growbuf.c
 HDRS             = tree-to-dot.h sg_growbuf.h
 
-libtree2dot_a_SOURCES      = $(SRCS) $(HDRS)
+libtree2dot_a_SOURCES      = $(SRCS) $(HDRS) 
+
+INCLUDES += -I$(top_srcdir)/sglr/libsglr
 
 # libtree2dot_prof_a_SOURCES = $(HDRS)
 # libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)

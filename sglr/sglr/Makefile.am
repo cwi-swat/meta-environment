@@ -18,7 +18,9 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
+
+INCLUDES += -I$(top_srcdir)/sglr/libsglr -I$(top_srcdir)/sglr/libtree2dot
 
 bin_PROGRAMS      = sglr #sglr_prof
 data_DATA         = sglr.idef
@@ -29,18 +31,18 @@ SRCS              = sglr-main.c  getopt.c getopt1.c
 HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)
-sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
-                    -L$(top_builddir)/libtree2dot -ltree2dot \
-                    -L$(ASFIXLIB) -lAsFix \
-                    -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+sglr_LDADD        = -L$(top_builddir)/sglr/libsglr -lsglr \
+                    -L$(top_builddir)/sglr/libtree2dot -ltree2dot \
+                    -L$(ASFIX)/lib -lAsFix \
+                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 #sglr_prof_SOURCES = $(HDRS)
 #sglr_prof_LDFLAGS = -pg
 #sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
-#                    -L$(top_builddir)/libsglr -lsglr-prof \
-#                    -L$(top_builddir)/libtree2dot -ltree2dot \
-#                    -L$(ASFIXLIB) -lAsFix \
-#                    -L$(ATERMLIB) -lATerm-prof -lATB-prof $(SOCKLIBS)
+#                    -L$(top_builddir)/sglr/libsglr -lsglr-prof \
+#                    -L$(top_builddir)/sglr/libtree2dot -ltree2dot \
+#                    -L$(ASFIX)/lib -lAsFix \
+#                    -L$(ATERM)/lib -lATerm-prof -lATB-prof $(SOCKLIBS)
 #CFLAGS		= -Wall
 
 
@@ -48,5 +50,5 @@ sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
 CLEANFILES = sglr.tifs
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a \
-              $(top_builddir)/libtree2dot/libtree2dot.a
+sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/sglr/libsglr/libsglr.a \
+              $(top_srcdir)/sglr/libtree2dot/libtree2dot.a

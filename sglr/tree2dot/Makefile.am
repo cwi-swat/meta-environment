@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 bin_PROGRAMS     = tree2dot
 
@@ -29,7 +29,9 @@ tree2dot_SOURCES = $(SRCS) $(HDRS)
 
 LDADD            =  -L${top_builddir}/libtree2dot -ltree2dot \
                     -L${top_builddir}/libsglr -lsglr \
-                    -L$(ASFIXLIB) -lAsFix \
-                    -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+                    -L$(ASFIX)/lib -lAsFix \
+                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-tree2dot-main.o: $(top_builddir)/libtree2dot/libtree2dot.a
+INCLUDES+=-I${top_builddir}/sglr/libsglr
+
+tree2dot-main.o: $(top_builddir)/sglr/libtree2dot/libtree2dot.a

@@ -33,7 +33,7 @@ mydir=`pwd`
 MV=mv
 RM=rm
 SGLR="../sglr/sglr"
-COMPARE="$mydir/trmdiff"
+COMPARE="atdiff"
 
 languages=$mydir/lang-types
 tables=$mydir/tables

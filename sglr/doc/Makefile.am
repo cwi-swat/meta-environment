@@ -18,7 +18,7 @@
 #
 # $Id$
 
-include ../make_rules
+include $(top_srcdir)/make_rules
 
 POD_SRCS   = sglr.pod tree2dot.pod sglr-api.pod
 
