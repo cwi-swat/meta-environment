@@ -1,5 +1,8 @@
 $Id$
 
+Wed Apr 14 13:00:25 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed core dump for optional literals in implodePT
+
 Mon Apr  5 10:52:55 CEST 2004 <{jong,kooiker}@cwi.nl>
  * assert valid parsetree in PT_addParseTreePosInfoToDepth
 
