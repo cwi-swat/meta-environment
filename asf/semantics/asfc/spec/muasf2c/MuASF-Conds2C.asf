@@ -172,7 +172,29 @@ equations
                                   C-rule*2;C-rule*5,
                                   Namepair*,Aint1,Expression)
 
+  [ac2c-2'3'ignored] 
+             is-list-funid(Funid1) = false,
+             is-ignored-funid(Funid1) = true,
+             cterms2cstats(Term+,Expression,Aint1,0) = (Stat*1,Cenv3,Aint2),
+             select-same-rhs-cond([Fv-path*|Term1 =:  Funid1(Term+) & Cond*|
+                                   Term3|Cenv1|Cenv2|Funid2],C-rule*1) =
+               (C-rule*3,C-rule*4),
+             remove-first-cond-and-add-env(C-rule*3,Cenv3) = C-rule*5,
+             conds2cstats(C-rule*5,Namepair*,Aint2) = (Stat*3,Aint3),
+             Stat*1 ++ Stat*3 = Stat*4,
+             assign-cond2cstats(C-rule*4,
+                                C-rule*2,
+                                Namepair*,Aint1,Expression) = (Stat*2,Aint4),
+             gtr(Aint3,Aint4) = Aint5
+             ========================
+             assign-cond2cstats([Fv-path*|
+                                 Term1 =: Funid1(Term+) & Cond*|
+                                 Term3|Cenv1|Cenv2|Funid2];C-rule*1,
+                                C-rule*2,Namepair*,Aint1,Expression) =
+               (Stat*4 ++ Stat*2,Aint5)
+
   [ac2c-2'3] is-list-funid(Funid1) = false,
+             is-ignored-funid(Funid1) = false,
              make-c-expression(Funid1,Expression,Namepair*) = Ltest,
              cterms2cstats(Term+,Expression,Aint1,0) = (Stat*1,Cenv3,Aint2),
              select-same-rhs-cond([Fv-path*|Term1 =:  Funid1(Term+) & Cond*|
@@ -209,6 +231,7 @@ equations
                (Stat*1 ++ Stat*2,Aint4)
 
   [lc2cs-1'1] make-c-expression(Funid1,Expression,Namepair*) = Ltest,
+              is-ignored-funid(Funid1) = false,
               make-c-temp(Aint1) = Expression2,
               Expression2 = arg_0(Expression); = Stat*1,
               listcondspatterns2cstats([Fv-path*|
@@ -222,20 +245,20 @@ equations
                                 Term3|Cenv1|Cenv2|Funid2];C-rule*1,
                                Namepair*,Aint1,Expression) = (Stat*3,Aint2)
 
-%%%  [lcps2cs-1'1] listcondspattern2cstats(C-rule,Expression1,Namepair*,Aint1) =
-%%%                  (Decl*,Stat*,Aint2)
-%%%                =====================
-%%%                listcondspatterns2cstats(C-rule,Expression1,Namepair*,Aint1) =
-%%%                  (Decl* ++d Stat*,Aint2)
-
-%%%  [lcps2cs-1'2] listcondspattern2cstats(C-rule,Expression1,Namepair*,Aint1) =
-%%%                  (Decl*,Stat*1,Aint2),
-%%%                listcondspatterns2cstats(C-rule+,Expression1,Namepair*,Aint2) =
-%%%                  (Stat*2,Aint3),
-%%%                Decl* ++d Stat*1 = Stat*3
-%%%                =========================
-%%%                listcondspatterns2cstats(C-rule;C-rule+,Expression1,Namepair*,Aint1) =
-%%%                  (Stat*2 ++ Stat*3,Aint3)
+  [lc2cs-1'1'ignored] 
+              is-ignored-funid(Funid1) = true,
+              make-c-temp(Aint1) = Expression2,
+              Expression2 = arg_0(Expression); = Stat*1,
+              listcondspatterns2cstats([Fv-path*|
+                                        Term1 =: Funid1(Term+) & Cond*|
+                                        Term3|Cenv1|Cenv2|Funid2];C-rule*1,Expression2,
+                                       Namepair*,succ(Aint1)) = (Stat*2,Aint2),
+              Stat*1 ++ Stat*2 = Stat*3
+              ==========================================
+              listconds2cstats([Fv-path*|
+                                Term1 =: Funid1(Term+) & Cond*|
+                                Term3|Cenv1|Cenv2|Funid2];C-rule*1,
+                               Namepair*,Aint1,Expression) = (Stat*3,Aint2)
 
   [lcp2cs-1'1] remove-first-cond(C-rule*1) = C-rule*2,
                listcondspattern2cstats(false,Term+,
