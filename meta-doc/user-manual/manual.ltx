@@ -2982,6 +2982,7 @@ module Sets
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Set
   sorts Elem Set
 
   lexical syntax
@@ -3017,15 +3018,17 @@ as result.
 \begin{verbatim}
 module Split
 
-imports Integers
+imports basic/Integers
 
 exports
+  context-free start-symbols List
   sorts El List
+
   lexical syntax
     [a-z]+ -> El
   context-free syntax
     {El ","}* -> List
-    "length" "(" List ")"       -> Int
+    "length" "(" List ")"       -> Integer
     "split-in-two" "(" List ")" -> List
 
 hiddens
@@ -3092,9 +3095,11 @@ module Nats
 imports basic/Whitespace
 
 exports
-  sorts NAT-CON
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
   lexical syntax
-    [0-9]+ -> NAT-CON 
+    [0-9]+ -> Nat-con 
 
 hiddens
   variables
@@ -3118,9 +3123,11 @@ module Nats
 imports basic/Whitespace
 
 exports
-  sorts NAT-CON
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
   lexical syntax
-    [0-9]+ -> NAT-CON 
+    [0-9]+ -> Nat-con 
 
 hiddens
   variables
@@ -3158,15 +3165,17 @@ an example of the use of a default equation.
 \begin{verbatim}
 module Types
 
-imports Booleans
+imports basic/Booleans
 
 exports
+  context-free start-symbols Type
   sorts Type
+
   context-free syntax
     "natural"     -> Type
     "string"      -> Type
     "nil-type"    -> Type
-    "compatible" "(" Type "," Type ")" -> Bool 
+    "compatible" "(" Type "," Type ")" -> Boolean
 
 hiddens
   variables
@@ -3221,7 +3230,9 @@ module Fib
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Int
   sorts Int
+
   context-free syntax
     "0"             -> Int
     "s" "(" Int ")" -> Int
@@ -3440,14 +3451,18 @@ Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 \begin{IncCode}
 \begin{verbatim}
 module Tree-syntax
+
 imports Naturals
+
 exports
-  sorts TREE
+  context-free start-symbols TreNat
+  sorts Tree
+
   context-free syntax
-    NAT           -> TREE
-    f(TREE, TREE) -> TREE
-    g(TREE, TREE) -> TREE
-    h(TREE, TREE) -> TREE
+    Nat           -> Tree
+    f(Tree, Tree) -> Tree
+    g(Tree, Tree) -> Tree
+    h(Tree, Tree) -> Tree
 \end{verbatim}
 \end{IncCode}
 \caption{A simple tree language}
@@ -3467,7 +3482,7 @@ module Tree-inc
 imports Tree-syntax
   exports
     context-free syntax
-      inc(TREE) -> TREE {traversal(trafo, top-down, continue)}
+      inc(Tree) -> Tree {traversal(trafo, top-down, continue)}
 equations
 [1] inc(N) = N + 1  
 \end{verbatim}
@@ -3489,7 +3504,7 @@ module Tree-sum
 imports Tree-syntax
 exports
   context-free syntax
-    sum(TREE, NAT) -> NAT {traversal(accu, top-down, continue)}
+    sum(Tree, Nat) -> Nat {traversal(accu, top-down, continue)}
 equations
 [1] sum(N1, N2) = N1 + N2
 \end{verbatim}
@@ -3544,6 +3559,7 @@ module ItemSet
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Set
   sorts Item Set 
 
   lexical syntax
@@ -3609,8 +3625,8 @@ Computing the derivative of {\tt X * (X + Y + Z)} with respect to {\tt X gives:}
 
 \noindent Differentiation is defined in three stages in the specification
 \link*{below}[in Figure~\Ref]{CODE:diff}.
-First, the sorts {\tt NAT}
-(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
+First, the sorts {\tt Nat}
+(natural numbers), {\tt Var} (variables), and {\tt Exp} (expressions) are
 introduced. Next, a differentiation operator of the form {\tt d $E$ / d $V$} is
 defined. Then, the differentiation rules are defined (equations [1]-[5]).
 Finally, some rules for simplifying expressions are given. As the above
@@ -3627,28 +3643,29 @@ module Diff
 imports basic/Whitespace
 
 exports
-  sorts NAT VAR EXP
+  context-free start-symbols Exp
+  sorts Nat Var Exp
  
   lexical syntax
-    [0-9]+   -> NAT 
-    [XYZ]    -> VAR
+    [0-9]+   -> Nat 
+    [XYZ]    -> Var
 
   context-free syntax
-    NAT                 -> EXP 
-    VAR                 -> EXP 
-    EXP "+" EXP         -> EXP {left} 
-    EXP "*" EXP         -> EXP {left} 
-    "(" EXP ")"         -> EXP {bracket} 
-    "d" EXP "/" "d" VAR -> EXP
+    Nat                 -> Exp 
+    Var                 -> Exp 
+    Exp "+" Exp         -> Exp {left} 
+    Exp "*" Exp         -> Exp {left} 
+    "(" Exp ")"         -> Exp {bracket} 
+    "d" Exp "/" "d" Var -> Exp
 
  context-free priorities
-   EXP "*" EXP -> EXP > EXP "+" EXP -> EXP
+   Exp "*" Exp -> Exp > Exp "+" Exp -> Exp
 
 hiddens
   variables
-    "N"       -> NAT 
-    "V"[0-9]* -> VAR 
-    "E"[0-9]* -> EXP 
+    "N"       -> Nat 
+    "V"[0-9]* -> Var 
+    "E"[0-9]* -> Exp 
 
 equations 
   [ 1] dN/dV = 0            [ 2] dV/dV = 1 
@@ -3690,6 +3707,7 @@ module Flag
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Flag 
   sorts Color Flag 
 
   context-free syntax
@@ -3777,7 +3795,9 @@ sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
 \begin{verbatim}
 module BasicNotions 
 exports
+  context-free start-symbols Nat Id
   sorts Nat Id 
+
   lexical syntax
     [0-9]+         -> Nat 
     [a-z][a-z0-9]* -> Id
@@ -3801,7 +3821,9 @@ module Expressions
 imports BasicNotions
 
 exports
+  context-free start-symbols Exp
   sorts Exp 
+
   context-free syntax
     Nat         -> Exp 
     Id          -> Exp 
@@ -3827,7 +3849,9 @@ module Statements
 imports Expressions 
 
 exports
+  context-free start-symbols Stats
   sorts Stat Stats 
+
   context-free syntax
     Id ":=" Exp                 -> Stat 
     "if" Exp "then" Stats "fi"  -> Stat 
@@ -3852,7 +3876,9 @@ module AssemblyLanguage
 
 imports BasicNotions 
 exports 
+  context-free start-symbols Instrs
   sorts Label Instr Instrs
+
   lexical syntax
     [a-z0-9]+ -> Label 
   context-free syntax
