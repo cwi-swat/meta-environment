@@ -637,8 +637,7 @@ static ATbool SG_AmbClusterContainsProd(label prodl, tree t)
 static ATbool SG_CheckValidAssociativity(parse_table *pt, label prodl, ATermList kids)
 {
 	/* the rightmost child cluster of a left associative prod should
-	 * never be the same left associative prod, so we remove
-	 * from the such clusters all these prods.
+	 * never be the same left associative prod, so we check for this
 	 *
 	 * Note that this can only happen in an amb cluster due to the filtering
 	 * algorithm because otherwise it would have been an error in the parsetable.
