@@ -51,3 +51,5 @@ ${srcdir}/rewriter.c: rewriter.tif.h
 %.tif.c %.tif.h: %.tifs
 	$(ATERMBIN)/tifstoc -tool $* $<
 
+test: all
+	@echo "Test not yet implemented for asc-support"
