@@ -3,6 +3,7 @@
 2003/10/17 (jurgenv@cwi.nl)
  * Added syntax for writing positive and negative tests to ASF
  * Added test-runner and test-runner interface to asfe
+ * Added conditional tests
 
 2003/10/09 (markvdb@cwi.nl)
  * Added a check on ASF sorts.
