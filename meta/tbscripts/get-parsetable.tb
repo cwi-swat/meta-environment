@@ -14,7 +14,8 @@ let
   Path       : str,
   ErrorMsg   : str,
   Id         : int,
-  Msgs       : list
+  Msgs       : list,
+  Str        : str
 in
 Id := process-id.
 ( 
@@ -25,7 +26,8 @@ Id := process-id.
     snd-msg(parse-table(Table, Path))
   +
     rec-msg(no-table) .
-    snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleId]))).
+    Str := first(args(ModuleId)).
+    snd-note(ui-status(statf(Id, "Generating parsetable %s",[Str]))).
     snd-msg(get-all-sdf2-definitions(ModuleId)).
     (
       rec-msg(syntax(Syntax?)).
