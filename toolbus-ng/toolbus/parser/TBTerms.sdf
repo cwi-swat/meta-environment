@@ -1,6 +1,6 @@
 module TBTerms 
 
-imports asf/Comments
+imports asf/syntax/Comments
 
 exports
 
