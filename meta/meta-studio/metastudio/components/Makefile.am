@@ -18,5 +18,6 @@ ModuleStatusPanel.java \
 StatusBar.java\
 QuestionDialog.java\
 FileDialog.java\
-ToolBar.java
+ToolBar.java\
+MenuBar.java
 

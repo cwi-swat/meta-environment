@@ -46,13 +46,16 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
         border = new TitledBorder(new LineBorder(Color.black), NO_MODULE_NAME);
 
         setBorder(border);
+        setBackground(Color.white);
 
         imports = new LinkedList();
         importsMenu = makeModuleSelectionMenu(IMPORTS, imports, moduleManager);
+        importsMenu.setBackground(Color.white);
         add(importsMenu, BorderLayout.NORTH);
 
         importedBy = new LinkedList();
         importedByMenu = makeModuleSelectionMenu(IMPORTED_BY, importedBy, moduleManager);
+        importedByMenu.setBackground(Color.white);
         add(importedByMenu, BorderLayout.SOUTH);
 
         setMaximumSize(

@@ -24,7 +24,7 @@ public class QuestionDialog extends ToolComponent {
         if (choice == JOptionPane.NO_OPTION) {
             return getFactory().make("answer(no)");
         }
-
+        
         return getFactory().make("answer(cancel)");
     }
 }

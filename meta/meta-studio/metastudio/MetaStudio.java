@@ -30,7 +30,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -47,13 +46,13 @@ import javax.swing.tree.TreePath;
 import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
+import metastudio.components.MenuBar;
 import metastudio.components.MessageList;
 import metastudio.components.ModuleSelectionListener;
 import metastudio.components.ModuleStatusPanel;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
-import metastudio.components.ToolComponent;
 import metastudio.components.graphs.GraphPanel;
 import metastudio.components.graphs.ImportGraphPanel;
 import metastudio.components.graphs.NodeSizer;
@@ -91,9 +90,8 @@ public class MetaStudio
 
     private UserInterfaceBridge bridge;
 
-    private JMenuBar menuBar;
-    private ToolComponent toolBar;
-    private Map menuMap;
+    private ToolBar toolBar;
+    
     private JTree moduleTree;
     //	private JPopupMenu popupMenu;
     private JComponent component;
@@ -119,19 +117,15 @@ public class MetaStudio
     private ModuleTreeModel moduleManager;
 
     private LinkedList toolComponents;
-    
-    
+
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
         studio.bridge.run();
     }
 
-   
-    
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        bridge.postEvent(factory.make("get-buttons(<term>,<str>)", ACTION_MENUBAR, "*"));
-
+    private MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar(factory, bridge, this);
+        addToolComponent(menuBar);
         return menuBar;
     }
 
@@ -152,8 +146,8 @@ public class MetaStudio
         return popup;
     }
 
-    private ToolComponent createToolBar() {
-        ToolComponent toolBar = new ToolBar(factory, bridge);
+    private ToolBar createToolBar() {
+        ToolBar toolBar = new ToolBar(factory, bridge);
         addToolComponent(toolBar);
         return toolBar;
     }
@@ -169,19 +163,19 @@ public class MetaStudio
         moduleManager = new ModuleTreeModel();
 
         initializeProperties();
-        initializeATermPatterns(); 
+        initializeATermPatterns();
 
         createToolBusBridge(args);
         handleCloseRequests();
- 
+
         moduleManager.addModuleSelectionListener(this);
         createContentPane();
 
         addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
         addToolComponent(new FileDialog(factory, bridge));
-        
+
         makeStudioVisible();
-        
+
     }
 
     private void initializeATermPatterns() {
@@ -245,8 +239,7 @@ public class MetaStudio
         mainTabs = createGraphTabs();
         JPanel panel = createMessageStatusPanel();
 
-        JSplitPane mainPanel =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainTabs, panel);
+        JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainTabs, panel);
         mainPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
         mainPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
         return mainPanel;
@@ -255,7 +248,7 @@ public class MetaStudio
     private JPanel createLeftPane() {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        
+
         JScrollPane moduleTreePane = createModuleTreePane();
         createModuleStatusPanel();
 
@@ -270,19 +263,28 @@ public class MetaStudio
         mainTabs = tabs;
 
         JSplitPane moduleBrowser = createModuleBrowser();
-        
-        mainTabs.insertTab("Modules", null, moduleBrowser, "Modules", mainTabs.getTabCount());
+
+        mainTabs.insertTab(
+            "Modules",
+            null,
+            moduleBrowser,
+            "Modules",
+            mainTabs.getTabCount());
 
         createParsetreePanel();
         addGraphPanel(parseTreePanel, "parsetree");
-        mainTabs.insertTab("Parse tree", null, parseTreePanel, "Parse tree", mainTabs.getTabCount());
-        
+        mainTabs.insertTab(
+            "Parse tree",
+            null,
+            parseTreePanel,
+            "Parse tree",
+            mainTabs.getTabCount());
+
         return tabs;
     }
 
     private void createContentPane() {
-        menuBar = createMenuBar();
-        setJMenuBar(menuBar);
+        createMenuBar();
 
         Container content = getContentPane();
         content.setLayout(new BorderLayout());
@@ -323,15 +325,16 @@ public class MetaStudio
 
     private JSplitPane createModuleBrowser() {
         JPanel left = createLeftPane();
-        
+
         createModuleGraph();
         addGraphPanel(importGraphPanel, "import");
-        
-        JSplitPane moduleBrowser = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
+
+        JSplitPane moduleBrowser =
+            new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
         moduleBrowser.setDividerLocation(-1);
         return moduleBrowser;
     }
-    
+
     private void createModuleGraph() {
         Color color;
 
@@ -610,14 +613,8 @@ public class MetaStudio
 
     }
 
-    
-
-    
-
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
-        if (buttonType.equals(ACTION_MENUBAR)) {
-            addMenu(buttonType, moduleName, (ATermList) buttons);
-        } else if (buttonType.equals(ACTION_TOOLBAR)) {
+        if (buttonType.equals(ACTION_TOOLBAR) || buttonType.equals(ACTION_MENUBAR)) {
             Iterator iter = getToolComponents().iterator();
 
             while (iter.hasNext()) {
@@ -633,90 +630,6 @@ public class MetaStudio
                 (ATermList) buttons,
                 factory.makeList());
             popupMenu.show(component, mouseX, mouseY);
-        }
-    }
-
-    private JMenu getMenu(String name) {
-        JMenu menu;
-
-        if (menuMap == null) {
-            menuMap = new HashMap();
-        }
-
-        menu = (JMenu) menuMap.get(name);
-
-        if (menu == null) {
-            menu = new JMenu(name);
-            menuMap.put(name, menu);
-            menuBar.add(menu);
-        }
-
-        validate();
-
-        return menu;
-    }
-
-    private JMenu findMenuLocation(JMenu[] children, String name) {
-        // TODO: use buttons.adt
-        for (int i = 0; i < children.length; i++) {
-            if (name.equals(children[i].getText())) {
-                return children[i];
-            }
-        }
-        return null;
-    }
-
-    private JMenu addMenuName(JMenu menu, String name) {
-        JMenu[] children = (JMenu[]) menu.getSubElements();
-        // TODO: this is illegal code, the cast is wrong
-        JMenu location = findMenuLocation(children, name);
-
-        if (location == null) {
-            JMenu newItem = new JMenu(name);
-            menu.add(newItem);
-            return newItem;
-        }
-
-        return location;
-    }
-
-    private JMenu getMenuItem(JMenu menu, ATermList names) {
-        JMenu cur = menu;
-
-        while (!names.isEmpty()) {
-            if (names.getLength() == 1) {
-                break;
-            } else {
-                String name = ((ATermAppl) names.getFirst()).getName();
-                cur = addMenuName(cur, name);
-                names = names.getNext();
-            }
-        }
-
-        return cur;
-    }
-
-    private String getMenuName(ATermList names) {
-        return ((ATermAppl) names.getLast()).getName();
-    }
-
-    private void addMenu(ATerm type, String moduleName, ATermList buttons) {
-        // TODO: use APIGEN on buttons.adt iso using ATermList et al. here
-        while (!buttons.isEmpty()) {
-            ATerm action = buttons.getFirst();
-            ATermList menuItems = (ATermList) ((ATermAppl) action).getArgument(0);
-            ATerm menuItem = menuItems.getFirst();
-            String menuName = ((ATermAppl) menuItem).getName();
-            JMenu menu = getMenuItem(getMenu(menuName), menuItems.getNext());
-            menu.add(
-                new TreeSelectionButtonAction(
-                    getMenuName(menuItems),
-                    type,
-                    action,
-                    moduleTree,
-                    bridge,
-                    metaGraphFactory));
-            buttons = buttons.getNext();
         }
     }
 
@@ -847,32 +760,6 @@ public class MetaStudio
         }
     }
 
-    
-
-    public ATerm deconsFilename(String filename, String extension) {
-        if (filename.endsWith(extension)) {
-            filename = filename.substring(0, filename.length() - extension.length());
-        } else {
-            extension = "";
-        }
-
-        String path = filename;
-        int lastIndex = path.lastIndexOf('/');
-
-        if (lastIndex >= 0) {
-            path = path.substring(0, lastIndex + 1);
-            filename = filename.substring(lastIndex + 1, filename.length());
-        }
-
-        return factory.make(
-            "snd-value(file-name(<str>,<str>,<str>))",
-            path,
-            filename,
-            extension);
-    }
-
-    
-
     String getCurrentModule() {
         TreePath path = moduleTree.getSelectionPath();
 
@@ -1000,11 +887,15 @@ public class MetaStudio
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             result = tif.showQuestionDialog(question);
+            
+            if (result != null) {
+                return factory.make("snd-value(<term>)", result);
+            }
         }
-        
-        return factory.make("snd-value(<term>)",result);
+
+        throw new UnsupportedOperationException("not implemented");
     }
-    
+
     public ATerm showFileDialog(String label, String loc, String extension) {
         ATerm result = null;
         Iterator iter = getToolComponents().iterator();
@@ -1012,11 +903,15 @@ public class MetaStudio
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             result = tif.showFileDialog(label, loc, extension);
+            
+            if (result != null) {
+                return factory.make("snd-value(<term>)", result);
+            }
         }
-        
-        return factory.make("snd-value(<term>)",result);
+
+        throw new UnsupportedOperationException("not implemented");
     }
-    
+
     public void recAckEvent(ATerm event) {
     }
 
@@ -1027,8 +922,8 @@ public class MetaStudio
     private LinkedList getToolComponents() {
         return toolComponents;
     }
-    
+
     private void addToolComponent(UserInterfaceTif tool) {
-        getToolComponents().add(new UserInterfaceBridge(factory, tool)); 
+        getToolComponents().add(new UserInterfaceBridge(factory, tool));
     }
 }
