@@ -1,3 +1,0 @@
-module Label-Sdf-ATerms
-imports Kernel-Sdf-ATerms
-        Label-Sdf-Syntax
