@@ -1,0 +1,14 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   description='A library of ASF+SDF specifications. This library contains
+                examples, reusable specifications such as data-structures and
+                also some grammars for programming-languages.'
+   keywords=meta-environment, asf, sdf, grammars, data-structures, examples
+
+configuration interface
+
+requires
