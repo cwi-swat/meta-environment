@@ -34,7 +34,7 @@ void usage(char *prg)
 }
 /*}}}  */
 
-/*{{{  int main(int argc, char *argv[]) */
+/*{{{  int asc_support_main(int argc, char *argv[],  */
 
 int asc_support_main(int argc, char *argv[], 
 		     void (*register_all)(), 
