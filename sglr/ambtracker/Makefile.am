@@ -29,9 +29,7 @@ ambtracker_SOURCES = $(SRCS) $(HDRS)
 
 LDADD              =  -L${top_srcdir}/libsglr -lsglr \
                       -L${top_srcdir}/libtree2dot -ltree2dot \
-                      -L$(PT_SUPPORT)/libconversion -lconversion \
-                      -L$(PT_SUPPORT)/libmept -lmept \
-                      -L$(PT_SUPPORT)/libasfix2 -lasfix2 \
+                      -L$(PT_SUPPORT) -lconversion -lmept -l asfix2 \
                       -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 INCLUDES           = -I$(ATERM)/include \

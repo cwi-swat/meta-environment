@@ -36,8 +36,6 @@ dump_productions_SOURCES = dump-productions.c dump-skel.c dump-skel.h
 
 LDADD     = -L$(top_srcdir)/libsglr -lsglr \
             -L$(top_srcdir)/libtree2dot -ltree2dot \
-            -L$(PT_SUPPORT)/libconversion -lconversion \
-            -L$(PT_SUPPORT)/libmept -lmept \
-            -L$(PT_SUPPORT)/libasfix2 -lasfix2 \
+            -L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
             -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 

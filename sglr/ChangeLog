@@ -19,6 +19,9 @@
 
 $Id$
 
+2001/04/23 (mdejonge@cwi.nl)
+  * Fixed library search-paths in ./dump, ./client, and ./ambtracker
+
 2001/03/27 (jurgenv@cwi.nl)
   * added six options to libsglr. Each option toggles the use of
     a specific disambigation filter.
