@@ -4,7 +4,15 @@ process GetPath(Sid: term, Path: str?) is
 
 process GetModuleId(Sid: term, ModuleId: str?) is
   snd-msg(em-get-modulename(Sid))
-  . rec-msg(em-modulename(Sid, ModuleId?))
+  .
+  (
+    rec-msg(em-modulename(Sid, ModuleId?))
+    . printf("ModuleId: %s\n", ModuleId)
+  +
+    rec-msg(em-session-not-bound(Sid))
+    . printf("FIX ME: GetModuleId: Session not bound, setting dummy module\n")
+    . ModuleId := "basic/Whitespace"
+  )
 
 process GetEditorType(Path: str, EditorType: term?) is
 let
