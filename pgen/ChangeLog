@@ -1,5 +1,11 @@
 $Id$
 
+Mon Jul  5 13:01:00 CEST 2004 <markvdb@cwi.nl>
+ * Bug fix wrt the translation of non-assoc in number priorities.
+
+Fri Jul  2 17:06:09 CEST 2004 <markvdb@cwi.nl>
+ * Fixed a serious bug wrt missing imports.
+
 Thu Jul  1 15:26:09 CEST 2004 <markvdb@cwi.nl>
  * Different translation of (kernel/lexical/context-free) start-symbols
    into production rules of the form X -> <START>
