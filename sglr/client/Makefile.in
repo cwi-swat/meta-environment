@@ -50,7 +50,7 @@ TOOLBUSLIB	= @TOOLBUSLIB@
 TOOLBUSINC	= @TOOLBUSINC@
 
 XCFLAGS		= ${DEFS}
-XINCLUDES	= -I${ATERM}/include
+XINCLUDES	= -I${includedir} -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix -lATB
 XLIBS		=  -L${libdir} -L$(ATERMLIB) ${addsuffix -${CC},${ATLIBS}}
 

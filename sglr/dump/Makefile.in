@@ -55,7 +55,7 @@ PARSERDIR	= ${srcdir}/../parser
 TREE2DOTDIR	= ${srcdir}/../tree2dot
 
 XCFLAGS		= ${DEFS}
-XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
+XINCLUDES	= -I${includedir} -I${PARSERDIR} -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix
 XLIBS		= -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir} -L$(ATERMLIB)	\
 		  -lsglr -la2toa1 -ltree2dot ${addsuffix -${CC},${ATLIBS}}

@@ -59,7 +59,7 @@ PARSERDIR	= ${srcdir}/../parser
 # The eXtra parts of some variables
 XCFLAGS		= ${DEFS}
 
-XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
+XINCLUDES	= -I${includedir} -I${PARSERDIR} -I${ATERM}/include
 ATLIBS 		= -lATerm -lAsFix -lATB
 XLIBS		= -L$(ATERMLIB) -ltree2dot -lsglr -la2toa1 ${addsuffix -${CC},${ATLIBS}}
 
