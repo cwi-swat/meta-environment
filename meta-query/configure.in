@@ -82,4 +82,5 @@ AC_OUTPUT(
   src/c/Makefile
   src/c/terms/Makefile
   src/spec/Makefile
+  utils/Makefile
 )

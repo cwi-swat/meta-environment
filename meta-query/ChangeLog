@@ -1,4 +1,7 @@
 # $Id$
 
+Fri May 23 09:33:28 CEST 2003 <jong@cwi.nl>
+ * add utils directory: meta-query-config support
+
 Thu May 22 14:24:17 CEST 2003 <jong@cwi.nl>
  * initial revision
