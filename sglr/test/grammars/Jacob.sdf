@@ -20,6 +20,12 @@ exports
    Keyw Follow* -> Stat
    Stat*        -> Prog
 
+  sorts  EvalStat Expression WhenPart EvEnd 
+  context-free syntax
+   "WHEN" Follow+ Stat+                  -> WhenPart
+   "EVALUATE" Expression WhenPart+ EvEnd -> EvalStat
+   Follow+                               -> Expression
+   "END-EVALUATE"                        -> EvEnd
 
 module Layout
    exports
