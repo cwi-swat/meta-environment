@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Dec  4 15:33:42 CET 2003 <jong@cwi.nl>
+ * semantics/asf-upgrade/.cvsignore added
+ * syntax/asfsdf-checker/src/AsfSdf-Checker.c regenerated
+
 2003/11/21 (jurgenv@cwi.nl)
  * Added dependency on sglr package because a new builtin uses libsglr
 
