@@ -1,5 +1,45 @@
 equations
 
+[emp]
+  empty([]) = true
+
+[default-emp]
+  empty([X,*]) = false
+
+[emp]
+  X,* = 
+  ===>
+  empty(X,*) = true
+
+[default-emp]
+  empty(X,*) = false
+
+[emp]
+  X* =
+  ===>
+  empty(X*) = true
+
+[default-emp]
+  empty(X*) = false
+
+[list-head]
+  head([X, X,*]) = X
+
+[list-head]
+  head( X, X,* ) = X
+
+[list-head]
+  head ( X X* ) = X
+
+[list-tail]
+  tail([X, X,*]) = [X,*]
+
+[list-tail]
+  tail(X, X,*) = X,*
+
+[list-tail]
+  tail(X X*) = X*
+
 [list-length]
   X* =
   ===>
@@ -27,4 +67,4 @@ equations
 
 [list-cons]		cons(X, X*) = X X*
 [list-cons]		cons(X, X,*) = X , X,*
-[list-cons]		cons(X, [ X,* ]) = [ cons(X, X,*) ]
+[list-cons]		cons(X, [ X,* ]) = [ X, X,* ]

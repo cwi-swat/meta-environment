@@ -9,18 +9,34 @@ exports
     length( {X ","}* )	-> Integer
     length( List[[X]] )	-> Integer
 
-    elem( X , X* )		-> Boolean
-    elem( X , {X ","}* )	-> Boolean
+    head( List[[X]] ) -> X
+    head( X* ) -> X
+    head( {X ","}*) -> X
+
+    tail( List[[X]] ) -> List[[X]]
+    tail( X* )        -> X
+    tail( {X ","}*) -> X
+    
+    elem( X , X* )		      -> Boolean
+    elem( X , {X ","}* )	  -> Boolean
     elem( X, List[[X]] )		-> Boolean
+
+    empty(List[[X]]) -> Boolean
+    empty( {X ","}*) -> Boolean
+    empty( X* ) -> Boolean
 
     cons( X , X* )		-> X*
     cons( X , {X ","}* )	-> {X ","}*
     cons( X, List[[X]] )		-> List[[X]]
 
+imports 
+  basic/Booleans
+
 hiddens
   imports
     basic/Integers
     asf/Comments
+    basic/Whitespace
   variables
     "X"[0-9\']*		-> X
     "X*"[0-9\']*	-> X*
