@@ -1,0 +1,240 @@
+#! /bin/sh
+#
+#   Meta-Environment - An environment for language prototyping.
+#   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+#   $Id$
+
+Revision='$Revision$'
+
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+PATH="$bindir:$PATH"
+
+PARSE="sglr"
+A2TOA1="a2toa1"
+TABLES="${datadir}"
+LANGTYPEDIR="${datadir}"
+LANGTYPEFILE="lang.types"
+PROG=`basename $0`
+
+CONVERT=0
+XOPTS=""
+DOTOUT=0
+
+verbose=0
+bafmode=1
+dotout=""
+
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="12bdDi:hlno:tvVx"
+
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+        -1       : use AsFix1 output format             [off]
+        -2       : use AsFix2 output format             [on]
+        -b       : use Binary AsFix (BAF) output format [on]
+        -d       : run in debugging mode                [off]
+        -D       : generate dot output for parse tree   [<off>]
+        -h       : display usage information
+        -i file  : input from |file|                    [-]
+        -l       : log statistics to file               [off]
+        -n       : don't write tree output              [off]
+        -o file  : output to |file|                     [-]
+        -t       : use PlainText AsFix output format    [off]
+        -v       : run in verbose mode                  [off]
+        -V       : reveal program version (i.e. $myversion)
+        -x       : suppress lexicals in dot output      [off]
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -1)
+            CONVERT=1 ;;
+        -2)
+            CONVERT=0 ;;
+	-b)
+	    bafmode=1 ;;
+        -d|-l)
+            XOPTS="$XOPTS $1" ;;
+        -D)
+            DOTOUT=1 ;;
+        -i)
+	    Files="$2 $Files"; shift ;;
+        -h)
+            Usage ; exit 0 ;;
+        -n)
+	    XOPTS="$XOPTS $1" ;;
+        -o)
+            if [ -d $2 ] ; then
+		OUTPUTDIR=$2
+            else
+		OUTPUTFILE=$2
+            fi
+	    shift ;;
+	-t)
+	    bafmode=0 ;;
+        -v)
+            verbose=1
+	    XOPTS="$XOPTS $1" ;;
+        -V)
+            Version ; exit 0 ;;
+        -x)
+            XOPTS="$XOPTS $1" ;;
+        --)
+            ;;
+	*)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
+if [ $bafmode -eq 0 ] ; then
+	XOPTS="-t $XOPTS"
+fi
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
+}
+
+Error () {
+	Warn $*
+	error=1
+}
+
+Abort () {
+	Error $*
+	exit 2
+}
+
+Notify () {
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
+	fi
+}
+
+
+###
+#  Main code
+###
+
+if [ ! -s $HOME/.$LANGTYPEFILE -a ! -s $LANGTYPEDIR/$LANGTYPEFILE ] ; then
+	Error "$LANGTYPES missing or empty"
+	exit 1;
+fi
+
+if [ -z "$Files" ] ; then
+	Warn "nothing to parse"
+fi
+
+for f in $Files
+do
+	if [ ! -e $f ] ; then
+		Warning "$f does not exist"
+		continue
+	fi
+	dir=${OUTPUTDIR:-`dirname $f`}
+	base=`basename $f`
+	ext=`echo $base | sed 's/.*\.\([^.]*\)/\1/'`
+	if [ $ext = $base ] ; then ext=""; fi
+	# More heuristics on file type determination could be added...
+	if [ -z $ext ] ; then
+		Warning "could not identify $base, skipping it"
+		continue
+	fi
+	base=`basename $base .$ext`
+	if [ $DOTOUT -gt 0 ] ; then
+		dotout="-D $dir/$base.dot"
+	else
+		dotout="-D $dir/$base.dot"
+	fi
+	lang=""
+	if [ -s $HOME/.$LANGTYPEFILE ] ; then
+		lang=`egrep "^$ext( |	)" $HOME/.$LANGTYPEFILE | cut -f2`
+	fi
+	if [ -z $lang ] ; then
+		lang=`egrep "^$ext( |	)" $LANGTYPEDIR/$LANGTYPEFILE | cut -f2`
+		if [ -z $lang ] ; then
+			Warning "no language available for *.$ext-files, skipping $base"
+			continue
+		fi
+	fi
+	table=$TABLES/$lang.baf
+	if [ ! -s $table ] ; then
+		table=$TABLES/$lang.tbl
+	fi
+	if [ ! -s $table ] ; then
+		Warning "no parse table for language $lang, skipping $base.$ext"
+		continue
+	fi
+
+	out2=${OUTPUTFILE:-"$dir/$base.asfix2"}
+	if $PARSE $XOPTS $dotout -p $table -i $f -o $out2
+	then
+		if [ $CONVERT -eq 1 -a -s $out2 ]
+		then
+			out1=${OUTPUTFILE:-"$dir/$base.asfix1"}
+			if [ $out2 = $out1 ]
+			then	# Move away $out2
+				mv $out2 $out2.tmp
+				out2=$out2.tmp
+			fi
+			$A2TOA1 < $out2 > $out1
+			rm -f $out2
+		fi
+	else
+		Warning "parse error in $base.$ext"
+	fi
+done

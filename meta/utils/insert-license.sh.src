@@ -19,7 +19,7 @@
 #
 #
 # $Id$
-#
+
 # insert-license inserts a (licence) file at the top of another file
 # and uses the right syntax for comments.
 #
@@ -79,7 +79,7 @@ findext () {
   esac
 
   case "`file $1`" in
-  *"shell script"*|"perl commands text"|"commands text for @SHELL@"|\
+  *"shell script"*|"perl commands text"|"commands text for "|\
   *"PostScript"*)
 						script="-s"
 						;;

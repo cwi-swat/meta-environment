@@ -62,7 +62,6 @@ static char myversion[] = "0.1";
 static void usage()
 {
   fprintf(stderr, USAGE_MSG);
-  exit(0);
 }
 
 static void version(const char *prg)
@@ -83,16 +82,18 @@ int main(int argc, char* argv[])
        if (strcmp(argv[i], "-h") == 0 ||
 	   strcmp(argv[i], "--help") == 0) {
 	   usage();
+	   exit( 0 );
        } else if (strcmp(argv[i], "-V") == 0 ||
 	   strcmp(argv[i], "--version") == 0) {
 	   version(argv[0]);
+	   exit( 0 );
        }
    }
 
    if( argc != 3 )
    {
       usage();
-      return 1;
+      exit( 1 );
    }
 
    meta_paths_file = argv[1];

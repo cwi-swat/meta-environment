@@ -105,7 +105,6 @@ extern ATbool silent;
 static void usage()
 {
   ATwarning(USAGE_MSG);
-  exit(0);
 }
 
 static char* basename( const char* s )
@@ -127,7 +126,6 @@ static char* basename( const char* s )
 static void version(const char *prg)
 {
     ATwarning("%s v%s\n", prg, myversion);
-    exit(1);
 }
 
 int main( int argc, char* argv[] )
@@ -168,6 +166,7 @@ int main( int argc, char* argv[] )
             break;
          case 'V':
 	    version(argv[0]);
+	    exit( 0 );
 	    break;
          default:
             usage();

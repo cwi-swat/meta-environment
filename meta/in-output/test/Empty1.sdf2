@@ -16,4 +16,6 @@
 %%    along with this program; if not, write to the Free Software
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
+%%    $Id$
+
 term(l("term"),w(" "),l("X"),w(" "),id("X"),w(""),appl(prod(id("Modular-Sdf-Syntax"),w(""),[ql("module"),w(""),sort("ModuleName"),w(""),iter(sort("ImpSection"),w(""),l("*")),w(""),sort("Sections")],w(""),l("->"),w(""),sort("Module"),w(""),no-attrs),w(""),[l("module"),w(" "),appl(prod(id("Modular-Sdf-Syntax"),w(""),[sort("ModuleId")],w(""),l("->"),w(""),sort("ModuleName"),w(""),no-attrs),w(""),[lex("Empty",sort("ModuleId"))]),w("\n"),list(iter(sort("ImpSection"),w(""),l("*")),w(""),[]),w(""),appl(prod(id("Modular-Sdf-Syntax"),w(""),[iter(sort("Section"),w(""),l("*"))],w(""),l("->"),w(""),sort("Sections"),w(""),no-attrs),w(""),[list(iter(sort("Section"),w(""),l("*")),w(""),[])])]),w(""),no-abbreviations)

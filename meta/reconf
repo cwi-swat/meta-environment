@@ -37,5 +37,7 @@ do
    cd ..
 done
 
-# execute autoconf in top-level source directory
+aclocal
 autoconf
+autoheader
+automake -a

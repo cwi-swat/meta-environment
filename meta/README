@@ -1,22 +1,24 @@
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-$Id$
+#    Meta-Environment - An environment for language prototyping.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#                        Amsterdam, The Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or (at
+#    your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#    USA
+#
+#
+# $Id$
 
 This is the README file for the ASF+SDF Meta-Environment distribution.
 
@@ -29,8 +31,6 @@ Installation instructions:
    To compile this distribution you will need the following items:
 
     -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
-    -- gnu autoconf <http://www.gnu.org/software/autoconf>)
-    -- gnu automake <http://www.gnu.org/software/automake>)
     -- jdk (The Java Development Kit, from
          <http://www.javasoft.com/products/jdk/>). Make sure you get version
          1.1 or higher.
@@ -59,12 +59,12 @@ Installation instructions:
 * Prerequisites for testing
 
      In order to be able to test meta by executing
-         $ make test
+         $ make check
      you will need the JUnit Java Unit Testing framework. It is available
      from <http://www.xprogramming.com/software.htm>.
      Note that some components have substantial memory requirements.
      These may differ somewhat across machine architectures; for the
-     test target, experiences have shown a practical minimum of about
+     check target, experiences have shown a practical minimum of about
      110-120MB, roughly.
 
 
@@ -88,69 +88,57 @@ Installation instructions:
 
   * Dependencies
 
-    The Meta-Environment distribution depends on four other
-    distributions.  Using CVS, you can get these distributions
-    as follows (assuming you have an accounts at CWI.  External
-    distribution will be available at a later stage):
+    The Meta-Environment distribution depends on the aterm and toolbus
+    distributions which can be downloaded from the CWi web-site:
 
-    -- cd to the directory just above new-meta (new-meta/..)
-    -- issue the following commands:
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout toolbus
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout aterm
-       (and, if you hadn't done so already)
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout new-meta
+       http://www.cwi.nl/projects/MetaEnv/aterm/
+       http://www.cwi.nl/projects/MetaEnv/toolbus/
 
-    You should now have a directory containing the `aterm', `toolbus'
-    and `new-meta' directories.  If so, then everything is set up for
-    configuration and compilation.
+    Before building the ASF+SDF Meta-Environment download and install both
+    distributions. Please consult the web-site for installation
+    instructions.
 
 
   * Configuring and compiling: final installation
 
-    Let's assume the `aterm', `toolbus' and `new-meta' directories are
-    all located in a directory `/path/to/meta'.  We also assume that
-    the `make' command is in fact GNU make (you may have use `gmake' or
-    `gnumake', depending on your site's configuration).  Furthermore,
-    you should make sure that your java installation's setup is correct,
-    and that your CLASSPATH variable points to the Java classes that
-    came with your JDK.
+    Let's assume the `aterm' and `toolbus' directories are located in the
+    directory `/some/prefix', that tcldot is installed in `/path/to/tcldot',
+    and that you want to install the ASF+SDF Meta-Enironment in
+    `/some/prefix'. Further we assume that the Meta-Environment sources are
+    unpacked in `/meta/source/` and that the `make' command is in fact GNU
+    make (you may have to use `gmake' or `gnumake', depending on your site's
+    configuration).  Furthermore, you should make sure that your java
+    installation's setup is correct, and that your CLASSPATH variable points
+    to the Java classes that came with your JDK.
 
     Here is the basic set-up.  These commands are the minimal config
     options for the Meta-Environment to compile.  Note that the order
     of execution is significant.  This will install everything in the
-    directories /path/to/meta/{bin,lib,include}.
+    directories /some/prefix/{bin,lib,include,classes,share,man}.
 
-    Make sure that your PATH points to the above /path/to/meta/bin
+    Make sure that your PATH points to the above /some/prefix/bin
     directory, for instance by typing:
 
-      $ PATH=/path/to/meta/bin:${PATH}; export PATH
+      $ PATH=/some/prefix/bin:${PATH}; export PATH
 
     for the sh family of shells, or alternatively (for csh-ish shells):
 
-      % setenv PATH /path/to/meta/bin:${PATH}
+      % setenv PATH /some/prefix/bin:${PATH}
 
     PATH being set properly, the installation procedure proceeds
     as follows:
 
-      $ cd /path/to/meta
-      $ cd toolbus
-      $ ./configure --prefix=/path/to/meta --with-java
-      $ make install
-      $ cd ../aterm
-      $ ./reconf
-      $ ./configure --prefix=/path/to/meta --with-gcc --with-dbg
-      $ make install
-      $ cd ../new-meta
-      $ ./reconf
-      $ ./configure --prefix=/path/to/meta \
-                    --with-toolbus=/path/to/meta \
-                    --with-aterm=/path/to/meta \
-                    --with-tcldot=/path/to/Tcldot            # see above
+      $ cd /meta/source/meta-<version>
+      $ ./configure --prefix=/some/prefix \
+                    --with-toolbus=/some/prefix \
+                    --with-aterm=/some/prefix \
+                    --with-tcldot=/path/to/tcldot
+      $ make 
       $ make install
 
     At this point, everything should be configured, compiled, and
     installed.  Once you have added the path to the directory
-    /path/to/meta/bin to your PATH (see above), you are all set up.
+    /some/prefix/bin to your PATH (see above), you are all set up.
 
 
 The Meta-Environment development team wishes you happy environmentaling;

@@ -22,9 +22,6 @@
   $Id$
  */
 
-tool compiler is {
-  command = "compiler -print-gc-info -termtable 20"
-}
 
 tool addeqssyntax is { 
   command = "addeqssyntax"

@@ -1246,7 +1246,7 @@ void gen_makefile(ATerm name)
       }
       fclose( output );
 
-      sprintf(buf, "cd %s; %s/genmakefile.sh %s", path, BINDIR, text);
+      sprintf(buf, "cd %s; %s/genmakefile %s", path, BINDIR, text);
       system(buf);
     }
   }

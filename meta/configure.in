@@ -19,16 +19,9 @@ dnl
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(meta, 0.12)
 
-dnl Product name and version number
-PRODUCT=new-meta
-VERSION=0.02
-NEW_META=`pwd`
-
-AC_SUBST(PRODUCT)
-AC_SUBST(VERSION)
-AC_SUBST(NEW_META)
 
 dnl Default locations of other components
 dnl Default locations of used components
@@ -45,16 +38,6 @@ else
 	ATERM=`dirname \`dirname ${ATERM}\``
 fi
 
-dnl Installation scripts
-INSTALL='$(top_srcdir)/install-sh'
-INSTALL_PROG='$(top_srcdir)/install-prog-sh'
-INSTALL_DATA='$(top_srcdir)/install-data-sh'
-UNINSTALL='$(top_srcdir)/uninstall-sh'
-AC_SUBST(INSTALL)
-AC_SUBST(INSTALL_PROG)
-AC_SUBST(INSTALL_DATA)
-AC_SUBST(UNINSTALL)
-
 dnl Our own version of libdir iwhose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -63,46 +46,21 @@ dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
-AC_DEFUN(AC_PROG_MAKEDEPEND, [
-AC_CHECK_PROGS(MAKEDEP, gccmakedep makedepend, no)
 AC_REQUIRE([AC_PROG_CC])
-AC_MSG_CHECKING([how to generate dependencies])
-AC_CACHE_VAL(ac_cv_prog_MAKEDEPEND,
-if test "${GCC}" = "yes"; then
-	ac_cv_prog_MAKEDEPEND="${CC-cc} -MM"
-else
-	ac_cv_prog_MAKEDEPEND="$MAKEDEP -f-"
-fi
-)
-MAKEDEPEND=$ac_cv_prog_MAKEDEPEND
-AC_MSG_RESULT([${ac_cv_prog_MAKEDEPEND}])
-AC_SUBST([MAKEDEPEND])
-])dnl
 
 dnl Which compiler to use?
 AC_PROG_CC
-dnl Which makedepend to use?
-AC_PROG_MAKEDEPEND
+
 dnl If anyone knows why this is used...
 AC_AIX
 
 dnl Where to locate a bourne-compatible shell?
-SHELL='/bin/sh'
-AC_SUBST(SHELL)
 
 dnl Where is perl5?
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
-
-dnl Which CFLAGS to use?
-if test "${GCC}" = "yes" ; then
-	CFLAGS="-g -Wall -O4"
-fi
-AC_SUBST(CFLAGS)
-AC_SUBST(DEFS)
-AC_SUBST(INCLUDES)
 
 dnl Handle --with-aterm=... argument to configure
 AC_ARG_WITH(aterm,
@@ -191,27 +149,41 @@ AC_SUBST(ASFIXBIN)
 AC_SUBST(ASFIXINC)
 AC_SUBST(ASFIXLIB)
 
+ASC='${top_srcdir}/asc-support'
+ASCBIN='$(ASC)'
+ASCINC='$(ASC)'
+ASCLIB='$(ASC)'
+
+AC_SUBST(ASC)
+AC_SUBST(ASCBIN)
+AC_SUBST(ASCINC)
+AC_SUBST(ASCLIB)
+
 dnl Which files need updating?
 AC_OUTPUT(
-	Makefile Makefile.skel meta \
-	compiler/Makefile compiler/c-source/Makefile \
-        asfix2c-compiler/Makefile \
-	editor/Makefile editor/editor \
-	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
-	graph-browser/Makefile graph-browser/graph-browser \
-	in-output/Makefile in-output/test/Makefile \
-	module-db/Makefile module-db/test/Makefile \
-	stred/nl/cwi/gipe/stred/Makefile \
-	toolbus/Makefile toolbus/test/Makefile \
-        utils/Makefile utils/genmakefile.sh \
-        utils/parse-sdf2 utils/parse-file \
-        utils/ps-dot \
-        grammars/Makefile \
-	grammars/sdf2/Makefile \
-  , chmod +x meta install-prog-sh install-data-sh; \
-    chmod +x graph-browser/graph-browser editor/editor; \
-    chmod +x utils/parse-sdf2 utils/ps-dot \
-             utils/genmakefile.sh utils/parse-file
+Makefile
+compiler/Makefile compiler/c-source/Makefile
+asfix2c-compiler/Makefile
+editor/Makefile
+evaluator/Makefile evaluator/src/Makefile evaluator/test/Makefile 
+evaluator/test/terms/Makefile
+graph-browser/Makefile
+in-output/Makefile in-output/test/Makefile
+module-db/Makefile module-db/test/Makefile
+stred/Makefile stred/nl/Makefile stred/nl/cwi/Makefile
+stred/nl/cwi/gipe/Makefile stred/nl/cwi/gipe/stred/Makefile
+stred/nl/cwi/gipe/stred/test/Makefile
+toolbus/Makefile toolbus/test/Makefile
+utils/Makefile 
+utils/genmakefile
+grammars/Makefile
+grammars/aterm/Makefile
+grammars/asfix/Makefile
+grammars/sdf2/Makefile
+demo/Makefile
+demo/pico/Makefile
+demo/user-manual-examples/Makefile
+, chmod +x utils/genmakefile
 )
 
 
