@@ -6,7 +6,7 @@ BUILTIN_NAMES=\
 	      shell \
 	      hashtable-lookup hashtable-store hashtable-delete \
 	      strategy-some strategy-all strategy-one \
-              toolbus-event
+              toolbus-event toolbus-term-event
 
 BUILTIN_SOURCES=common.c \
                 annos.c \
