@@ -1,3 +1,6 @@
+2001/11/13 (jurgenv@cwi.nl)
+ * Fixed bash compatibility bug in system call in asfc for SunOs.
+
 2001/11/13 (markvdb@cwi.nl)
  * Replaced ASC_applyFunctionToTree by PT_applyFunctionToTree.
  * Removed unused argument from PT_applyFunctionToTree.
