@@ -1,6 +1,8 @@
 # $Id$
 
-SUBDIRS		= lib utils doc
+SUBDIRS = lib utils doc
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
