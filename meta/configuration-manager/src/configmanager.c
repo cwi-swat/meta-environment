@@ -119,8 +119,10 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
     }
     if (strcmp(buttonName, "Reduce") == 0) {
       buttonActions = ATinsert(buttonActions, 
-			       ATmake("edit(<str>,\"reduct.out\")",
+			       ATmake("edit-given-filename(<str>)",
 				      moduleName));
+      buttonActions = ATinsert(buttonActions, 
+			       ATmake("push-filename(\"reduct.out\")"));
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("reduce(<str>)", moduleName));
       buttonActions = ATinsert(buttonActions, 
