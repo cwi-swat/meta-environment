@@ -1,20 +1,19 @@
 %% In the module {\tt MuASF-Basics} a number of datastructure
 %% are defined to be used by the various transformation phases.
-module  MuASF-Basics
 
-imports MuASF-Signs Literals
+imports MuASF-Signature-Ops VarEnv
 
 exports
   sorts FuncTermPair FuncRuleTuple FuncRulePair FuncRuleStruct
         MsFuncTermPair MsFuncRulePair MsFuncRuleTuple MsFuncCondPair
         RuleListPair FuncTermTableTuple FuncRuleTableTuple FuncCondTableTuple
   context-free syntax
-    "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"         -> FuncRuleTuple
-    "(" {FuncDef ";"}* "," {Rule ";"}* ")"                    -> FuncRulePair
+    "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"       -> FuncRuleTuple
+    "(" {FuncDef ";"}* "," {Rule ";"}* ")"                  -> FuncRulePair
     "(" {FuncDef ";"}* "," TermList "," NameTable ")"       -> FuncTermTableTuple
     "(" {FuncDef ";"}* "," {Rule ";"}* "," NameTable ")"    -> FuncRuleTableTuple
     "(" {FuncDef ";"}* "," {Cond "&"}* "," NameTable ")"    -> FuncCondTableTuple
-    "(" {Rule ";"}* "," {Rule ";"}* ")"                       -> RuleListPair
+    "(" {Rule ";"}* "," {Rule ";"}* ")"                     -> RuleListPair
 
   context-free syntax
     create-new-rulesopt({Rule ";"}*)               -> RulesOpt
@@ -23,6 +22,7 @@ exports
   context-free syntax
     get-funid(Term)                                -> FunId
     get-funid(Rule)                                -> FunId
+    get-funid(Term,{NamePair ","}*)                -> FunId
     get-funargs(Term)                              -> TermList
     get-funargs(Rule)                              -> TermList
     is-list-funid(FunId)                           -> Bool
@@ -32,11 +32,8 @@ exports
     is-boolean-term(Term)                          -> Bool
     is-default-rule(Rule)                          -> Bool
     is-cons(Term)                                  -> Bool
-%%%    are-all-var-args({Term ","}+)                  -> Bool
     term-contains-var(Term)                        -> Bool
     args-contain-var({Term ","}*)                  -> Bool
-    %%%get-list-type(FunId)                           -> SortId
-    %%%get-sort-prefix(FunId)                         -> SortId
     make-trans-list-id(FunId)                      -> FunId
     remove-trans-from-list-id(FunId)               -> FunId
     make-func(FunId,{Term ","}*)                   -> Term
@@ -46,9 +43,7 @@ exports
     is-quoted-funid(FunId)                         -> Bool
 
   context-free syntax
-    %%%make-new-args(TermList,AInt) -> TermList
     make-list-args({Term ","}*)  -> Term
-    %%%make-element-term(Term)      -> Term
 
   context-free syntax
     make-default-rule(Rule)                 -> Rule
@@ -56,23 +51,12 @@ exports
     make-rule(Bool,Term,Term)               -> Rule
     make-rule(Bool,{Cond "&"}*,Term,Term)   -> Rule
 
-  context-free syntax
-    lit2str(Literal)     -> Term
-    %%%fd-lit2str(Literal)  -> MsFuncTermPair
-    qlit2str(Literal)    -> Term
-    %%%fd-qlit2str(Literal) -> MsFuncTermPair
-
 hiddens
   context-free syntax
-    deslashed-lit2str(Literal)     -> Term
-    char2id(Literal)               -> Term
-%%%    strip-funid-aux(FunId)         -> FunId
-%%%    strip-quoted-funid-aux(FunId)  -> FunId
-%%%    is-internal-funid-aux(FunId)   -> Bool
     is-internal-funid-new(FunId)   -> Bool
 
 hiddens
   variables
-    "Char"[0-9]*    -> CHAR
-    "Char*"[0-9]*   -> CHAR*
-    "Char+"[0-9]*   -> CHAR+
+    Char[0-9]*       -> CHAR
+    Char[\*][0-9]*   -> CHAR*
+    Char[\+][0-9]*   -> CHAR+

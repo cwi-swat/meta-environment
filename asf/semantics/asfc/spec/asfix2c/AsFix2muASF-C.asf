@@ -9,8 +9,8 @@ equations
               (Funcdef*1,(Namepair*,Funid2,Aint1,Aint2)),
             eqs2rules(Amodule[equations],(Namepair*,ef,1,Aint1)) =
               (Funcdef*2,Rule*,Nametable),
-            Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-            =====================================
+            Funcdef*1 ++ Funcdef*2 = Funcdef*3
+            ==================================
             asfix2muasf(Amodule) =
               (module Mname signature Funcdef*3 rules Rule*,Nametable)
 
@@ -28,8 +28,8 @@ equations
               first(CeqEqs1) = CeqEq,
               pln-ceqeq2rules(CeqEq,Nametable1) = (Funcdef*1,Rule,Nametable2),
               ceqeqs2rules(CeqEqs2,Nametable2) = (Funcdef*2,Rule*,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               ceqeqs2rules(CeqEqs1,Nametable1) = (Funcdef*3,Rule; Rule*,Nametable3)
 
   [pce2r-1'1] remove-annotation(CeqEq1) = CeqEq2,
@@ -46,7 +46,7 @@ equations
              aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
              CeqEq[rhs] = Arhs,
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3,
              make-rule(is-default(CeqEq[tag]),Term1,Term2) = Rule
              ====================================================
              ceqeq2rules(ceq-equ,CeqEq,Nametable1) = (Funcdef*3,Rule,Nametable3)
@@ -57,7 +57,7 @@ equations
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
              CeqEq[conditions] = Aconds,
              conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
-             Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+             Funcdef*1 ++ Funcdef*2 ++ Funcdef*3 = Funcdef*4,
              make-rule(is-default(CeqEq[tag]),Cond+,Term1,Term2) = Rule
              ==========================================================
              ceqeq2rules(ceq-when,CeqEq,Nametable1) = (Funcdef*4,Rule,Nametable4)
@@ -68,7 +68,7 @@ equations
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
              CeqEq[conditions] = Aconds,
              conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
-             Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+             Funcdef*1 ++ Funcdef*2 ++ Funcdef*3 = Funcdef*4,
              make-rule(is-default(CeqEq[tag]),Cond+,Term1,Term2) = Rule
              ==========================================================
              ceqeq2rules(ceq-impl,CeqEq,Nametable1) = (Funcdef*4,Rule,Nametable4)
@@ -92,8 +92,8 @@ equations
               Aterm[args] = Args,
               args2muasf(Args,Nametable2) = (Funcdef*1,Term*2,Nametable3),
               make-external-funcdef(Funid2,Term*2) = Funcdef,
-              Funcdef ++_ss Funcdef*1 = Funcdef*2
-              ===================================
+              Funcdef ++ Funcdef*1 = Funcdef*2
+              ================================
               aterm2muasf(appl,Aterm,Nametable1) =
                 (Funcdef*2,make-func(Funid2,Term*2),Nametable3)
 
@@ -103,8 +103,8 @@ equations
               Aterm[elems] = Args,
               listargs2muasf(Args,Nametable2) = (Funcdef*1,Term*,Nametable3),
               make-funcdef(Funid1,null)= Funcdef,
-              Funcdef ++_ss Funcdef*1 = Funcdef*2
-              ===================================
+              Funcdef ++ Funcdef*1 = Funcdef*2
+              ================================
               aterm2muasf(list,Aterm,Nametable1) =
                 (Funcdef*2,make-list-func(Funid1,Term*),Nametable3)
 
@@ -137,8 +137,8 @@ equations
              first(Args1) = Aterm,
              aterm2muasf(get-cons(Aterm),Aterm,Nametable1) = (Funcdef*1,Term*1,Nametable2),
              args2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              args2muasf(Args1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
 
   [la2ma-1'1] listarg2muasf(Aterm,Nametable) =
@@ -151,7 +151,7 @@ equations
               first(Args1) = Aterm,
               listarg2muasf(Aterm,Nametable1) = (Funcdef*1,Term*1,Nametable2),
               listargs2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3,
               make-c-list-cons(Term*1,Term*2) = Term
               ======================================
               listargs2muasf(Args1,Nametable1) = (Funcdef*3,Term,Nametable3)
@@ -163,8 +163,8 @@ equations
               first(Aconds1) = Acond,
               cond2muasf(Acond,Nametable1) = (Funcdef*1,Cond1,Nametable2),
               conds2muasf(Aconds2,Nametable2) = (Funcdef*2,Cond*2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               conds2muasf(Aconds1,Nametable1) = (Funcdef*3,Cond1 & Cond*2,Nametable3)
 
 %% We assume that the assignment operator is already used in the
@@ -174,8 +174,8 @@ equations
              aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
              Acond[rhs] = Arhs,
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 =: Term2,Nametable3)
 
   [c2ma-1'2] Acond[cop] = l("="),
@@ -184,8 +184,8 @@ equations
              aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
              Acond[rhs] = Arhs,
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 == Term2,Nametable3)
 
   [c2ma-1'3] Acond[cop] = l("!="),
@@ -194,6 +194,6 @@ equations
              aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
              Acond[rhs] = Arhs,
              aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 != Term2,Nametable3)

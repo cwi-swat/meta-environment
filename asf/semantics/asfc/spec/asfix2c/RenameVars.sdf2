@@ -1,7 +1,7 @@
 %%  RenameVars
 module RenameVars
 
-imports VarEnv MuASF-Basics
+imports VarEnv MuASF-Equations-Ops
 
 exports
   sorts TIVE TIVEs CIVE CIVEs

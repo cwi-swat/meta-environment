@@ -1,0 +1,37 @@
+%% The module {\tt MuASF-Signs} defines a number
+%% of operations on the signature of a \muasf
+%% specification.
+
+imports ATerm-Booleans MuASF
+
+exports
+  context-free syntax
+    FuncDefList "++" FuncDefList -> FuncDefList {left}
+
+exports
+  context-free syntax
+    remove-funcdef(FunId,FuncDefList)   -> FuncDefList
+
+hiddens
+  context-free syntax
+    FuncDef "in" FuncDefList            -> Bool
+    is-external-funcdef(FuncDef)        -> Bool
+    add-external-funcdef(FuncDef)       -> FuncDef
+    remove-external-funcdef(FuncDef)    -> FuncDef
+    remove-funcdef(FuncDef,FuncDefList) -> FuncDefList
+
+exports
+  context-free syntax
+    make-funcdef(FunId,TermList)            -> FuncDef
+    make-external-funcdef(FunId,TermList)   -> FuncDef
+    is-external(Annotations)                 -> Bool
+%%%    make-new-funcdef(Term,FunId)            -> FuncDef
+
+  context-free syntax
+    addto-sign(SignatureOpt,{FuncDef ";"}*) -> SignatureOpt
+
+hiddens
+  variables
+    Char[0-9]*       -> CHAR
+    Char[\*][0-9]*   -> CHAR*
+    Char[\+][0-9]*   -> CHAR+

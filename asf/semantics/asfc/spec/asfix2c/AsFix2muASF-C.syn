@@ -46,3 +46,7 @@ hiddens
     Afun[0-9']*         -> AFun
     Attr[0-9']*         -> ATerm
     "L"[0-9']*          -> Literal
+
+hiddens
+  variables
+    "Char"[0-9] -> CHAR

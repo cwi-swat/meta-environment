@@ -8,7 +8,7 @@
 %% these datastructures.
 module VarEnv
 
-imports ANumerals MuASF-SingleSorted
+imports Integers-Extended MuASF
 
 exports
   sorts VarEnv IntVarEnv

@@ -1,8 +1,12 @@
 %%  RenameVars
 
-imports VarEnv MuASF-Basics
+imports VarEnv MuASF-Equations-Ops
 
 exports
+  context-free syntax
+    rename-in-rules({Rule ";"}*)            -> RuleList
+
+hiddens
   sorts TIVE TIVEs CIVE CIVEs
   context-free syntax
     "[" Term "," IntVVarEnv "]"        -> TIVE
@@ -10,25 +14,8 @@ exports
     "[" Cond "," IntVVarEnv "]"        -> CIVE
     "[" {Cond "&"}* "," IntVVarEnv "]" -> CIVEs
   context-free syntax
-    rename-in-rules({Rule ";"}*)            -> RuleList
     rename-in-rule(Rule,IntVVarEnv)         -> Rule
     rename-in-term(Term,IntVVarEnv)         -> TIVE
     rename-in-terms({Term ","}*,IntVVarEnv) -> TIVEs
     rename-in-conds({Cond "&"}*,IntVVarEnv) -> CIVEs
     rename-in-cond(Cond,IntVVarEnv)         -> CIVE
-
-  sorts TCE TsCE
-  context-free syntax
-    "[" Term "," {Cond "&"}* "," IntCon "]"                   -> TCE
-    "[" {Term ","}* "," {Cond "&"}* "," IntCon "]"            -> TsCE
-    move-cons-terms-in-rules({Rule ";"}*,{NamePair ","}*)     -> RuleList
-    move-cons-terms-in-rule(Rule,{NamePair ","}*)             -> Rule
-    move-cons-terms-in-terms({Term ","}+,{NamePair ","}*,IntCon) -> TsCE
-    move-cons-terms-in-term(Term,{NamePair ","}*,IntCon)         -> TCE
-    are-constructor-terms({Term ","}+,{NamePair ","}*)        -> Bool
-    is-constructor-term(Term,{NamePair ","}*)                 -> Bool
-
-hiddens
-  variables
-    Char[\*][0-9]*  -> CHAR*
-    Char[\+][0-9]*  -> CHAR+

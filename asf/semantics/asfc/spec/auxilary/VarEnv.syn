@@ -7,7 +7,7 @@
 %% store and retrieve information from
 %% these datastructures.
 
-imports ANumerals MuASF-SingleSorted %%MuASF-ManySorted
+imports Integers-Extended MuASF
 
 exports
   sorts VarEnv IntVarEnv

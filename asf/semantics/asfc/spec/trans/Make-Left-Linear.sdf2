@@ -2,7 +2,7 @@
 %% removal of non-left-linear rules.
 module Make-Left-Linear
 
-imports MuASF-Basics %%%MuASF-SingleSorted MuASF-ManySorted
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

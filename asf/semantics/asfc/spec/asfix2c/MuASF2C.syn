@@ -1,6 +1,6 @@
 %%  MuASF2C
 
-imports MuASF-Sign2C Locate-Constants Make-Left-Linear %%VarEnv
+imports MuASF-Sign2C Locate-Constants Make-Left-Linear
 
 exports
   context-free syntax

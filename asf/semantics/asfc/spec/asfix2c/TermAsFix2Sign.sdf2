@@ -1,7 +1,7 @@
 %%  TermAsFix2Sign
 module TermAsFix2Sign
 
-imports TermAsFixAccess AsFix-Basics
+imports TermAsFixAccess AsFix-Basics MuASF-Equations-Ops
 
 exports
   sorts FNT-tuple

@@ -29,4 +29,5 @@ hiddens
     Expression"+"[0-9]* -> {Expression ","}+
     Id[0-9]*            -> Identifier
     Stats"*"[0-9']*     -> Statement*
-    ICon[0-9]*           -> Integer-constant
+    ICon[0-9]*          -> Integer-constant
+    "Char*"[0-9]*       -> CHAR*

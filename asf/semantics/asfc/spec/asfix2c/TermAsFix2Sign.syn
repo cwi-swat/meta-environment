@@ -1,6 +1,6 @@
 %%  TermAsFix2Sign
 
-imports TermAsFixAccess AsFix-Basics
+imports AsFix2muASFnames TermAsFixAccess MuASF-Equations-Ops
 
 exports
   sorts FNT-tuple

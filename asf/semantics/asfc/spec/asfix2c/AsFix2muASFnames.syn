@@ -2,7 +2,7 @@
 %% translate the \asfix\ representation of context-free functions
 %% into \muasf\ names.
 
-imports AsFixPrint C-Basics %%MuASF-SingleSorted MuASF-ManySorted
+imports AsFixPrint MuASF C-Basics
 
 exports
   context-free syntax

@@ -1,7 +1,7 @@
 %% The module {\tt Make-Left-Linear} takes care of the
 %% removal of non-left-linear rules.
 
-imports MuASF-Basics %%%MuASF-SingleSorted MuASF-ManySorted
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

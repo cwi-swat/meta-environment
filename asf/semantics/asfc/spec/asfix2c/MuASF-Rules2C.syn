@@ -1,6 +1,6 @@
 %%  MuASF-Rules2C
 
-imports MuASF-Conds2C RenameVars Improve-C-code
+imports MuASF-Conds2C RenameVars Improve-C-code Transform-Constructors
 
 exports
   context-free syntax
@@ -45,7 +45,4 @@ hiddens
     Char[\*][0-9]*   -> CHAR*
     Char[\+][0-9]*   -> CHAR+
     Aexp[0-9]*       -> Expression
-    Eipair[0-9]*     -> EI-pair
-    Eipair"*"[0-9]*  -> {EI-pair ","}*
-    Eipair"+"[0-9]*  -> {EI-pair ","}+
     Cint[0-9]*       -> Integer-constant

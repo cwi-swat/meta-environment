@@ -1,6 +1,6 @@
 %%  Remove-Lists-Aux
 
-imports MuASF-Basics
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

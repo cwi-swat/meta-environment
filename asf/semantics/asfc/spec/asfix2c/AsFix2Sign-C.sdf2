@@ -4,7 +4,7 @@
 %% its result is a set of function definitions.
 module AsFix2Sign-C
 
-imports TermAsFix2Sign %%MuASF-Basics
+imports TermAsFix2Sign
 
 exports
   context-free syntax

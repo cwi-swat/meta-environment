@@ -1,6 +1,6 @@
 %%  MuASF-Sign2C
 
-imports C-Basics
+imports C-Basics MuASF-Equations-Ops
 
 exports
   context-free syntax

@@ -1,6 +1,6 @@
 %%%% $Id$
 
-imports Booleans Literals IntCon %%%RealCon
+imports ATerm-Booleans Literals IntCon
 exports
   sorts ATerms ATermList ACon AFun ATerm Ann
   context-free syntax
@@ -9,7 +9,6 @@ exports
     "[" "]"                   -> ATermList
     "[" ATerms "]"            -> ATermList
     IntCon                    -> ACon
-%%%    RealCon                   -> ACon
     Literal                   -> AFun
     ACon                      -> ATerm
     ATermList                 -> ATerm

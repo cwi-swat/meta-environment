@@ -1,4 +1,4 @@
-module ANumerals
+module Integers-Extended
 
 imports Integers
 

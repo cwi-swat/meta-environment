@@ -16,13 +16,13 @@ equations
              asfrules2cfuncs(Funcdef*1,Rule;Rule*1,Namepair*) =
                asfrules2cfuncs(Funcdef*2,Rule*2,Rule*3,Namepair*)
 
-  [ar2c-2'1] move-cons-terms-in-rules(Rule+1,Namepair*) = Rule+2,
+  [ar2c-2'1] transform-constructor-terms-in-rules(Rule+1,Namepair*) = Rule+2,
              rename-in-rules(Rule+2) = Rule+3,
              asfrules2cfunc(Rule+3,Namepair*) = Decl
              =======================================
              asfrules2cfuncs(Funcdef*,Rule+1,,Namepair*) = (Funcdef*,Decl)
 
-  [ar2c-2'2] move-cons-terms-in-rules(Rule+1,Namepair*) = Rule+3,
+  [ar2c-2'2] transform-constructor-terms-in-rules(Rule+1,Namepair*) = Rule+3,
              rename-in-rules(Rule+3) = Rule+4,
              asfrules2cfunc(Rule+4,Namepair*) = Decl,
              asfrules2cfuncs(Funcdef*1,Rule+2,Namepair*) = (Funcdef*2,Decl*)

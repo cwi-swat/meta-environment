@@ -31,8 +31,8 @@ equations
 %% one-by-one.
   [rlrs-1'3] rem-lists-from-rule(Rule,Aint1) = (Funcdef*1,Rule*2,Aint2),
              rem-lists-from-rules(Rule*1,Aint2) = (Funcdef*2,Rule*3,Aint3),
-             Funcdef*1 ++_ss Funcdef*2 =Funcdef*3
-             ====================================
+             Funcdef*1 ++ Funcdef*2 =Funcdef*3
+             =================================
              rem-lists-from-rules(Rule;Rule*1,Aint1) =
               (Funcdef*3,Rule*2;Rule*3,Aint3)
 
@@ -62,8 +62,8 @@ equations
 %% one-by-one.
   [rlvrs-1'2] rem-listvars-from-rule(Rule,Aint1) = (Funcdef*1,Rule*2,Aint2),
               rem-listvars-from-rules(Rule*1,Aint2) = (Funcdef*2,Rule*3,Aint3),
-              Funcdef*1 ++_ss Funcdef*2 =Funcdef*3
-              ====================================
+              Funcdef*1 ++ Funcdef*2 =Funcdef*3
+              =================================
               rem-listvars-from-rules(Rule;Rule*1,Aint1) =
                (Funcdef*3,Rule*2;Rule*3,Aint3)
 

@@ -1,6 +1,6 @@
 %%%% $Id$
 
-imports Basic-Integers Booleans
+imports Basic-Integers ATerm-Booleans
 exports
   context-free syntax
     Int "-" Int            -> Int {left}

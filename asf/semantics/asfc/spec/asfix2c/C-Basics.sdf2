@@ -1,11 +1,11 @@
 %%  C-Basics
 module C-Basics
 
-imports  C MuASF-Basics %%%Remove-Conds-Aux
+imports  ATerm-Booleans C MuASF
 
 exports
   sorts FTS-tuple FT-tuple C-env TE-pair ADS-tuple ADSI-tuple DCAS-tuple
-        E-tuple A-set PA-tuple EI-pair
+        E-tuple PA-tuple
   context-free syntax
     "(" {FuncDef ";"}* "," Declaration-list-opt ","
         Statement-list-opt ")"                         -> FTS-tuple
@@ -15,17 +15,11 @@ exports
     "(" Statement-list-opt "," C-env "," IntCon ")"    -> DCAS-tuple
     "(" Argument-expression-list ","
         Statement-list-opt "," IntCon ")"              -> ADS-tuple
-    "(" %%%Argument-expression-list ","
-        Declaration-list-opt ","
+    "(" Declaration-list-opt ","
         Statement-list-opt "," IntCon ")"              -> ADSI-tuple
     "(" Expression ")"                                 -> E-tuple
-    "(" Expression "," IntCon ")"                      -> EI-pair
-    "(" {EI-pair ","}* ")"                             -> A-set
     "(" Parameter-list ","
         Argument-expression-list "," IntCon ")"        -> PA-tuple
-
-  context-free syntax
-    remove-funcdef(FunId,{FuncDef ";"}*) -> FuncDefList
 
 exports
   context-free syntax
@@ -41,19 +35,15 @@ exports
     celookup(Term,C-env)                     -> E-tuple
     cecontains(Term,C-env)                   -> Bool
     make-c-temp(IntCon)                      -> Primary-expression
-    get-funid(Term,{NamePair ","}*)          -> FunId
     make-call-id(FunId)                      -> Primary-expression
     make-c-name(FunId)                       -> Identifier
     make-id-name(Identifier)                 -> FunId
     is-char(FunId)                           -> Bool
-    is-true(FunId)                           -> Bool
-    is-false(FunId)                          -> Bool
     translate-char(FunId)                    -> Expression
+
+hiddens
+  context-free syntax
     space                                    -> FunId
-    is-external(Annotations)                 -> Bool
-%%%    is-lazy(Annotations)                     -> Bool
-%%%    is-memo(Annotations)                     -> Bool
-%%%    is-constructor(Annotations)              -> Bool
 
   variables
     "Decls"[0-9]*        -> Declaration-list

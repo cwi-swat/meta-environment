@@ -32,8 +32,8 @@ equations
                (Funcdef*1,Sortlist2,Nametable2),
              synsecs2sign(Aname,SynSecs2,Sortlist2,Nametable2) =
                (Funcdef*2,Sortlist3,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              synsecs2sign(Aname,SynSecs1,Sortlist1,Nametable1) =
                (Funcdef*3,Sortlist3,Nametable3)
 
@@ -64,8 +64,8 @@ equations
               (Funcdef*1,Sortlist2,Nametable2),
             sections2sign(Aname,Sections2,Sortlist2,Nametable2) =
               (Funcdef*2,Sortlist3,Nametable3),
-            Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-            =====================================
+            Funcdef*1 ++ Funcdef*2 = Funcdef*3
+            ==================================
             sections2sign(Aname,Sections1,Sortlist1,Nametable1) =
               (Funcdef*3,Sortlist3,Nametable3)
 
@@ -103,8 +103,8 @@ equations
                (Funcdef*1,Sortlist2,Nametable2),
              lexfuncs2sign(LexFuncs2,Sortlist2,Nametable2) =
                (Funcdef*2,Sortlist3,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              lexfuncs2sign(LexFuncs1,Sortlist1,Nametable1) =
                (Funcdef*3,Sortlist3,Nametable3)
 
@@ -145,8 +145,8 @@ equations
              get-iter-tail(CfFuncs1) = CfFuncs2,
              cffunc2sign(Aname,first(CfFuncs1),Nametable1) = (Funcdef*1,Nametable2),
              cffuncs2sign(Aname,CfFuncs2,Nametable2) = (Funcdef*2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              cffuncs2sign(Aname,CfFuncs1,Nametable1) = (Funcdef*3,Nametable3)
 
   [cf2e-2'1] is-term-production(CfFunc) = true,
@@ -162,8 +162,8 @@ equations
              attrs2terms(Attr) = Term*2,
              nt-lookup(Funid1,Term*2,Nametable2) = (Funid2,Nametable3),
              make-funcdef(Funid2,Term*1) = Funcdef,
-             Funcdef ++_ss Funcdef*1 = Funcdef*2
-             ===================================
+             Funcdef ++ Funcdef*1 = Funcdef*2
+             ================================
              cffunc2sign(Aname,CfFunc,Nametable1) = (Funcdef*2,Nametable3)
 
 %% Functions without arguments, so-called constants, need not
@@ -181,8 +181,8 @@ equations
              get-iter-tail(CfElems1) = CfElems2,
              cfelem2args(first(CfElems1),Nametable1) = (Funcdef*1,Term*1,Nametable2),
              cfelems2args(CfElems2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-             =====================================
+             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+             ==================================
              cfelems2args(CfElems1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
 
 %% Only for sorts and lists arguments in the function definition have to

@@ -1,7 +1,7 @@
 %%  MuASF-Rules2C
 module MuASF-Rules2C
 
-imports MuASF-Conds2C RenameVars Improve-C-code
+imports MuASF-Conds2C RenameVars Improve-C-code Transform-Constructors
 
 exports
   context-free syntax

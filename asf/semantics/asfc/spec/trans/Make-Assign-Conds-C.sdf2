@@ -11,7 +11,7 @@
 %% \end{enumerate}
 module Make-Assign-Conds-C
 
-imports MuASF-Basics %%%MuASF-SingleSorted MuASF-ManySorted
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

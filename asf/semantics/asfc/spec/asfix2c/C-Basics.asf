@@ -1,39 +1,5 @@
 equations
 
-  [rfd-1'1] remove-funcdef(Funid,) =
-
-  [rfd-2'2] remove-funcdef(Funid,Funid;Funcdef*) = Funcdef*
-
-  [rfd-2'3] remove-funcdef(Funid,Funid Attrs; Funcdef*) = Funcdef*
-
-  [rfd-2'4] remove-funcdef(Funid,Funid(Sigarg+);Funcdef*) = Funcdef*
-
-  [rfd-2'5] remove-funcdef(Funid,Funid(Sigarg+) Attrs;Funcdef*) = Funcdef*
-
-  [rfd-2'6] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
-            ============================================
-            remove-funcdef(Funid1,Funid2;Funcdef*1) =
-              Funid2;Funcdef*2
-
-  [rfd-2'7] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
-            ============================================
-            remove-funcdef(Funid1,Funid2 Attrs;Funcdef*1) =
-              Funid2 Attrs;Funcdef*2
-
-  [rfd-2'8] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
-            ============================================
-            remove-funcdef(Funid1,Funid2(Sigarg+);Funcdef*1) =
-              Funid2(Sigarg+);Funcdef*2
-
-  [rfd-2'9] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
-            ============================================
-            remove-funcdef(Funid1,Funid2(Sigarg+) Attrs;Funcdef*1) =
-              Funid2(Sigarg+) Attrs;Funcdef*2
-
   [ctu-1'1] ++ Decl* = Decl*
 
   [ctu-1'2] Decl* ++ = Decl*
@@ -112,18 +78,6 @@ equations
 
   [default-mci-1'3] make-call-id(Funid) = make-c-name(Funid)
 
-  [gfi-1'1] get-funid(Term) = Funid1,
-            is-trans-list-funid(Funid1) = true,
-            remove-trans-from-list-id(Funid1) = Funid2,
-            pn-lookup(Funid2,Namepair*) = Funid3
-            ====================================
-            get-funid(Term,Namepair*) = Funid3
-
-  [gfi-1'2] get-funid(Term) = Funid,
-            is-trans-list-funid(Funid) = false
-            ==================================
-            get-funid(Term,Namepair*) = Funid
-
   [mcn-1'1] make-c-name(funid("-")) = identifier("_")
 
   [mcn-1'2] funid(Char) != funid("-")
@@ -159,14 +113,6 @@ equations
   [ic-1'2] is-char(funid("\" Char+)) = true
 
   [default-ic-1'3] is-char(Funid) = false
-
-  [it-1'1] is-true(funid("t")) = true
-
-  [default-it-1'2] is-true(Funid) = false
-
-  [if-1'1] is-false(funid("f")) = true
-
-  [default-if-1'2] is-false(Funid) = false
 
   [s-1'1] space = " "
 
@@ -367,21 +313,3 @@ equations
   [tc-1'2] translate-char(funid("'" "~")) = 126
 
   [default-tc-1'3] translate-char(funid("'" Char)) = 777
-
-  [ie-1'1] is-external({Term*1, external, Term*2}) = true
-
-  [default-ie-1'1] is-external(Annos) = false
-
-%%%  [il-1'1] is-lazy({Term*1, lazy, Term*2}) = true
-
-%%%  [il-1'1] is-lazy({Term*1, outermost, Term*2}) = true
-
-%%%  [default-il-1'1] is-lazy(Annos) = false
-
-%%%  [im-1'1] is-memo({Term*1, memo, Term*2}) = true
-
-%%%  [default-im-1'1] is-memo(Annos) = false
-
-%%%  [ic-1'1] is-constructor({Term*1, constructor, Term*2}) = true
-
-%%%  [default-ic-1'1] is-constructor(Annos) = false

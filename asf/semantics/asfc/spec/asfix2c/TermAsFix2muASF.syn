@@ -27,3 +27,7 @@ hiddens
     "Attr"[0-9']*         -> ATerm
      "Aconds"[0-9']*      -> ATermList
      "Acond"[0-9']*       -> ATerm
+
+hiddens
+  variables
+    "Char"[0-9]* -> CHAR

@@ -10,7 +10,7 @@
 %% Or, when translating \asfix\ to one of \msasf\ formalisms.
 %% \end{enumerate}
 
-imports MuASF-Basics %%%MuASF-SingleSorted MuASF-ManySorted
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

@@ -1,12 +1,12 @@
 %%  Rules2C-Aux
 
-imports C-Basics
+imports C-Basics MuASF-Equations-Ops
 
 exports
   sorts C-Rule C-RuleList C-RuleListPair FV-Path FV-PathList PathList-Cenv
         SlI-tuple SRI-tuple C-RuleListTriple
   context-free syntax
-    "(" Term "," {IntCon ","}+ ")"                              -> FV-Path
+    "(" Term "," {IntCon ","}+ ")"                            -> FV-Path
     {FV-Path ","}*                                            -> FV-PathList
     "(" {FV-Path ","}+ ")"                                    -> FV-Path
     "[" {FV-Path ","}* "|" {Cond "&"}* "|"
@@ -89,13 +89,9 @@ exports
     Fv-path"+"[0-9]* -> {FV-Path ","}+
     Aint"*"[0-9]*    -> {IntCon ","}*
     Aint"+"[0-9]*    -> {IntCon ","}+
-    Aset[0-9]*      -> A-set
     Aexp[0-9]*      -> Expression
     Expr[0-9]*      -> Expression
     Expression[0-9]* -> Expression
-    Eipair[0-9]*    -> EI-pair
-    Eipair"*"[0-9]* -> {EI-pair ","}*
-    Eipair"+"[0-9]* -> {EI-pair ","}+
     Cint[0-9]*       -> Integer-constant
 hiddens
   variables

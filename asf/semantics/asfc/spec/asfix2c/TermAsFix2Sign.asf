@@ -26,8 +26,8 @@ equations
               term-attrs2terms(Attr) = Term*2,
               nt-lookup(Funid1,Term*2,Nametable2) = (Funid2,Nametable3),
               make-funcdef(Funid2,Term*1) = Funcdef,
-              Funcdef ++_ss Funcdef*1 = Funcdef*2
-              ===================================
+              Funcdef ++ Funcdef*1 = Funcdef*2
+              ================================
               term-cffunc2sign(Aname,CfFunc,Nametable1) = (Funcdef*2,Nametable3)
 
   [tcf2a-1'1] term-cfelems2args([],Nametable) = (,,Nametable)
@@ -36,8 +36,8 @@ equations
               get-iter-tail(CfElems1) = CfElems2,
               term-cfelem2args(first(CfElems1),Nametable1) = (Funcdef*1,Term*1,Nametable2),
               term-cfelems2args(CfElems2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               term-cfelems2args(CfElems1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
 
 %% Only for sorts and lists arguments in the function definition have to

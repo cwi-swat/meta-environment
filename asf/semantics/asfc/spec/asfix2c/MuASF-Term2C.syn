@@ -34,7 +34,6 @@ exports
 
   variables
     Expression[0-9]* -> Expression
-    Aset[0-9]*       -> A-set
 
 hiddens
   variables

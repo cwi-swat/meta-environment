@@ -4,7 +4,7 @@ equations
                term2muasf(remove-annotation(Alhs),Nametable1) = (Funcdef*1,Term1,Nametable2),
                get-rhs-equ(CeqEqu) = Arhs,
                term2muasf(remove-annotation(Arhs),Nametable2) = (Funcdef*2,Term2,Nametable3),
-               Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+               Funcdef*1 ++ Funcdef*2 = Funcdef*3,
                make-rule(is-default-tag(remove-annotation(get-tag-equ(CeqEqu))),Term1,Term2) = Rule
                ===================================================================================
                term-equ2rules(ceq-equ,CeqEqu,Nametable1) = (Funcdef*3,Rule,Nametable3)
@@ -15,7 +15,7 @@ equations
                term2muasf(remove-annotation(Arhs),Nametable2) = (Funcdef*2,Term2,Nametable3),
                get-conds-equ(CeqEqu) = Aconds,
                term-conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
-               Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+               Funcdef*1 ++ Funcdef*2 ++ Funcdef*3 = Funcdef*4,
                make-rule(is-default-tag(remove-annotation(get-tag-equ(CeqEqu))),Cond+,Term1,Term2) = Rule
                ==========================================================================================
                term-equ2rules(ceq-when,CeqEqu,Nametable1) = (Funcdef*4,Rule,Nametable4)
@@ -26,7 +26,7 @@ equations
                term2muasf(remove-annotation(Arhs),Nametable2) = (Funcdef*2,Term2,Nametable3),
                get-conds-equ(CeqEqu) = Aconds,
                term-conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
-               Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+               Funcdef*1 ++ Funcdef*2 ++ Funcdef*3 = Funcdef*4,
                make-rule(is-default-tag(remove-annotation(get-tag-equ(CeqEqu))),Cond+,Term1,Term2) = Rule
                ==========================================================================================
                term-equ2rules(ceq-impl,CeqEqu,Nametable1) = (Funcdef*4,Rule,Nametable4)
@@ -53,8 +53,8 @@ equations
              Aterm[args] = Args,
              term-args2muasf(Args,Nametable2) = (Funcdef*1,Term*2,Nametable3),
              make-external-funcdef(Funid2,Term*2) = Funcdef,
-             Funcdef ++_ss Funcdef*1 = Funcdef*2
-             ===================================
+             Funcdef ++ Funcdef*1 = Funcdef*2
+             ================================
              term2muasf(Aterm,Nametable1) =
                (Funcdef*2,make-func(Funid2,Term*2),Nametable3)
 
@@ -65,8 +65,8 @@ equations
              Aterm[elems] = Args,
              term-listargs2muasf(Args,Nametable2) = (Funcdef*1,Term*,Nametable3),
              make-funcdef(Funid1,null)= Funcdef,
-             Funcdef ++_ss Funcdef*1 = Funcdef*2
-             ===================================
+             Funcdef ++ Funcdef*1 = Funcdef*2
+             ================================
              term2muasf(Aterm,Nametable1) =
                (Funcdef*2,make-list-func(Funid1,Term*),Nametable3)
 
@@ -101,8 +101,8 @@ equations
               first(Args1) = Aterm,
               term2muasf(remove-annotation(Aterm),Nametable1) = (Funcdef*1,Term*1,Nametable2),
               term-args2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               term-args2muasf(Args1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
 
   [tla2ma-1'1] term-listargs2muasf([],Nametable) = (,,Nametable)
@@ -112,7 +112,7 @@ equations
                first(Args1) = Aterm,
                term2muasf(remove-annotation(Aterm),Nametable1) = (Funcdef*1,Term*1,Nametable2),
                term-listargs2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
-               Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+               Funcdef*1 ++ Funcdef*2 = Funcdef*3,
                make-c-list-cons(Term*1,Term*2) = Term
                ======================================
                term-listargs2muasf(Args1,Nametable1) = (Funcdef*3,Term,Nametable3)
@@ -124,8 +124,8 @@ equations
                first(Aconds1) = Acond,
                term-cond2muasf(Acond,Nametable1) = (Funcdef*1,Cond1,Nametable2),
                term-conds2muasf(Aconds2,Nametable2) = (Funcdef*2,Cond*2,Nametable3),
-               Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-               =====================================
+               Funcdef*1 ++ Funcdef*2 = Funcdef*3
+               ==================================
                term-conds2muasf(Aconds1,Nametable1) = (Funcdef*3,Cond1 & Cond*2,Nametable3)
 
   [tc2ma-1'2] is-pos-cond-term(Acond) = true,
@@ -134,8 +134,8 @@ equations
               term2muasf(remove-annotation(Alhs),Nametable1) = (Funcdef*1,Term1,Nametable2),
               get-rhs-cond(Acond) = Arhs,
               term2muasf(remove-annotation(Arhs),Nametable2) = (Funcdef*2,Term2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               term-cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 == Term2,Nametable3)
 
   [tc2ma-1'3] is-neg-cond-term(Acond) = true,
@@ -144,8 +144,8 @@ equations
               term2muasf(remove-annotation(Alhs),Nametable1) = (Funcdef*1,Term1,Nametable2),
               get-rhs-cond(Acond) = Arhs,
               term2muasf(remove-annotation(Arhs),Nametable2) = (Funcdef*2,Term2,Nametable3),
-              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
-              =====================================
+              Funcdef*1 ++ Funcdef*2 = Funcdef*3
+              ==================================
               term-cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 != Term2,Nametable3)
 
 %% The function {\tt make-c-list-cons} normalizes the list matching patterns.

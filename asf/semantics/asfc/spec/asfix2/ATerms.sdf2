@@ -1,7 +1,7 @@
 %%%% $Id$
 module ATerms
 
-imports Booleans Literals IntCon %%%RealCon
+imports ATerm-Booleans Literals IntCon %%%RealCon
 exports
   sorts ATerms ATermList ACon AFun ATerm Ann
   context-free syntax

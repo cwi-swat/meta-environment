@@ -17,17 +17,10 @@ exports
     "{" {ATerm ";"}* "}"              -> SortList
     includes-sortname(ATerm,SortList) -> Bool
 
-%%%  context-free syntax
-%%%    is-aux-module(ATerm) -> Bool
-
   context-free syntax
     get-tail(AFun,ATermList)    -> ATermList
     get-iter-tail(ATermList)    -> ATermList
     get-itersep-tail(ATermList) -> ATermList
-
-%%%  context-free syntax
-%%%    is-CHAR-list(ATerm) -> Bool
-%%%    is-asfix-list(ATerm)      -> Bool
 
   context-free syntax
     is-default(ATerm) -> Bool
@@ -35,13 +28,21 @@ exports
   context-free syntax
     is-bracket-func(ATerm) -> Bool
 
+  context-free syntax
+    lit2str(Literal)  -> Term
+    qlit2str(Literal) -> Term
+
+hiddens
+  context-free syntax
+    deslashed-lit2str(Literal) -> Term
+    char2id(Literal)           -> Term
+
 hiddens
   context-free syntax
     is-attribute(ATermList,ATerm) -> Bool
 
 exports
   variables
-    "Char*"[0-9]*     -> CHAR*
     "Cffunc"[0-9\']*  -> ATerm
     "Lexsort*"[0-9]*  -> {ATerm ";"}*
     "Symbol"[0-9\']*  -> ATerm
@@ -51,6 +52,7 @@ exports
     "Amodule"[0-9\']* -> ATerm
 
 hiddens
-  priorities
-    <<ATerm -CF> -VAR> -> <ATerm -CF> >
-    "Symbol" -> <AFun -CF>
+  variables
+    "Char"[0-9]*    -> CHAR
+    "Char*"[0-9]*   -> CHAR*
+    "Char+"[0-9]*   -> CHAR+
