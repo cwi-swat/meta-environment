@@ -1,5 +1,8 @@
 $Id$
 
+2003/03/28 (jurgenv@cwi.nl)
+ * Moved tree2dot and tree2graph and libGraph to graph-support package
+
 2003/03/24 ({markvdb,iversen}@cwi.nl)
  * Added the function PT_setTreeAnnotations.
 
