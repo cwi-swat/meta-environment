@@ -1,0 +1,2 @@
+#!/bin/sh
+armcmd -TB_TOOL_NAME armcmd $@
