@@ -46,8 +46,8 @@
 #define MAX_PATHS 256
 
 /* Macro's for sdf2 file extensions */
-#define SDF2_TXT_EXT	".sdf2"
-#define SDF2_BAF_EXT	".sdf2.baf"
+#define SDF2_TXT_EXT	".sdf"
+#define SDF2_BAF_EXT	".sdf.baf"
 
 /* Macro's for equation extensions */
 #define EQS_TXT_EXT	".eqs"
@@ -62,7 +62,7 @@
 
 ATbool run_verbose = ATfalse;
 
-static char myversion[] = "1.4";
+static char myversion[] = "1.5";
 
 /*
    The argument vector: list of option letters, colons denote option
@@ -427,7 +427,7 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
     newest_is_binary = newerfile(newestbaf, newestraw);
 
     if (!newestraw[0] && !newestbaf[0]) {
-	ATwarning("%s(.sdf2|.sdf2.baf) not found in path\n", name);
+	ATwarning("%s(.sdf|.sdf.baf) not found in path\n", name);
 	return open_error(name);
     }
 
