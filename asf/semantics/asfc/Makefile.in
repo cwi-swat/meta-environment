@@ -57,7 +57,7 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
 CSRC		= compiler.c asfix2rnx.c expander.c asfixprinter.c aprinter.c \
-                  to-epic.c rnx2asfix.c
+                  to-epic.c rnx2asfix.c asfix-trans.c
 CHDR		= compiler.tif.c to-epic.tif.c
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= compiler to-epic aprinter
@@ -82,9 +82,9 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 compiler.tif.c: $(top_srcdir)/toolbus/meta.tifs
 	$(TOOLBUS)/bin/ctif -newstyle -tool compiler -tifs $(top_srcdir)/toolbus/meta.tifs
 
-compiler: compiler.o asfix2rnx.o asfixprinter.o expander.o 
+compiler: compiler.o asfix2rnx.o asfixprinter.o expander.o asfix-trans.o
 	$(CC) -o compiler compiler.o asfix2rnx.o asfixprinter.o \
-	 expander.o $(LIBS)
+	 expander.o asfix-trans.o $(LIBS)
 
 to-epic.tif.c: $(top_srcdir)/toolbus/meta.tifs
 	$(TOOLBUS)/bin/ctif -newstyle -tool to-epic -tifs $(top_srcdir)/toolbus/meta.tifs
