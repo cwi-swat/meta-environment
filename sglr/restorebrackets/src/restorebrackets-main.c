@@ -115,22 +115,26 @@ static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel,
         return AddBrackets(tree, pt);
       }
       if (SG_IsLeftAssociative(pt, fatherLabel) && argNr == 4) {
-        if (SG_IsLeftAssociative(pt, sonLabel)) {
+        if (SG_IsLeftAssociative(pt, sonLabel) &&
+            SGGtrPriority(pt, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsRightAssociative(pt, fatherLabel) && argNr == 0) {
-        if (SG_IsRightAssociative(pt, sonLabel)) {
+        if (SG_IsRightAssociative(pt, sonLabel) &&
+            SGGtrPriority(pt, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 0) {
-        if (SG_IsNonAssocAssociative(pt, sonLabel)) {
+        if (SG_IsNonAssocAssociative(pt, sonLabel) &&
+            SGGtrPriority(pt, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
       else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 4) {
-        if (SG_IsNonAssocAssociative(pt, sonLabel)) {
+        if (SG_IsNonAssocAssociative(pt, sonLabel) &&
+            SGGtrPriority(pt, fatherLabel, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }

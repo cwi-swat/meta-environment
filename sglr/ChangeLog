@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 27 17:26:14 CEST 2004 <markvdb@cwi.nl>
+ * Restore brackets improved with respect to the interaction
+   between left/right/non-associativity and priorities.
+
 Mon Apr  5 10:45:46 CEST 2004 <{jong,kooiker}@cwi.nl>
  * change error-handling in sglr and update erroneous tests accordingly
  * remove debug-spam in sglr-main.c
