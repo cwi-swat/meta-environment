@@ -157,6 +157,10 @@ void c_rehash(int newsize)
     }
   }
 
+  if(prod_table) {
+    free(prod_table);
+    free(sym_table);
+  }
   prod_table = newprodtable;
   sym_table = newsymtable;
   table_size = newsize;
