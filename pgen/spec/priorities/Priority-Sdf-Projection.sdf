@@ -12,3 +12,14 @@ exports
 hiddens
   context-free syntax
     "nm-Pr"(Grammar)               -> Priorities
+
+hiddens
+  variables
+    "pr"[0-9\']*      -> Priority
+    "pr""*"[0-9\']*   -> {Priority ","}*
+    "pr""+"[0-9\']*   -> {Priority ","}+
+    "as"[0-9\']*      -> Associativity
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+ 
+    "_G"[0-9\']*        -> Grammar 

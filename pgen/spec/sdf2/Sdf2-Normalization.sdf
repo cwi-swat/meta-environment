@@ -26,7 +26,7 @@ exports
     "<" Symbols "-CFr" ">"  -> Symbols
 hiddens
   variables
-    "L"[0-9\']          -> Literal
+    "L"[0-9\']*         -> Literal
     "_G"[0-9\']*        -> Grammar 
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*
@@ -36,8 +36,13 @@ hiddens
     "M"[0-9\']*         -> ModuleName
     "cc"[0-9\']*        -> CharClass
     "pr""*"[0-9\']*     -> {Priority ","}*
-    "pr""+"[0-9\']*   -> {Priority ","}+
+    "pr""+"[0-9\']*     -> {Priority ","}+
     [p]"*"[0-9\']*      -> Production*
     [p][0-9\']*         -> Production
-  
+    "as"[0-9\']*        -> Associativity
+    "restr*"[0-9\']*    -> Restriction* 
+    "restr+"[0-9\']*    -> Restriction+ 
+    "las"[0-9\']*       -> Lookaheads
+    "al*"[0-9\']*       -> Alias* 
+
 %%}

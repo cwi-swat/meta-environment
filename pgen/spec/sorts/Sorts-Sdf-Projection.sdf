@@ -3,3 +3,8 @@ imports Kernel-Sdf-Projection Sorts-Sdf-Syntax
 exports
   context-free syntax
     "S" ( Grammar ) -> Symbols
+
+hiddens
+  variables
+    "'"[abc][0-9\']*    -> Symbol*
+    "_G"[0-9\']*        -> Grammar

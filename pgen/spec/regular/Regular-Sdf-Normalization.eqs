@@ -88,8 +88,7 @@ equations
         p6 = _A+     -> _A*
         =============================================================
         r[[_A*]] = syntax p0 p1 p2 p3 p4 p5 p6
-                   priorities p0 > {left: p1 p2 p3 p4} > {p5 p6} r[[ _A ]]
-                   %% was: priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A ]]
+                   priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A ]]
    [0]
         r[[ _A+ ]] = r[[ _A* ]]
 
