@@ -121,7 +121,7 @@ accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
 
   [default-itd-1'2] is-trafo-definition(Production) = false
 
-  [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol1 # $Symbol2 Attributes) = true
+  [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> <$Symbol1, $Symbol2> Attributes) = true
 
   [default-iatd-1'2] is-accu-trafo-definition(Production) = false
 

@@ -1,5 +1,8 @@
 # $Id$
 
+2003/10/07 (markvdb@cwi.nl)
+ * Adapted to new tuples.
+
 2003/10/03 (markvdb@cwi.nl)
  * Removed the set and perm symbol in the library.
 

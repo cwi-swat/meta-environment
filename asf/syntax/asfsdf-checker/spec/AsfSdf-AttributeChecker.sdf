@@ -11,11 +11,11 @@ hiddens
     check-attributes(Definition, Messages)              -> Messages {traversal(accu, break, top-down)}
     check-attributes(Module, Messages)                  -> Messages {traversal(accu, break, top-down)}
     check-attributes-in-module(Module, 
-                               Messages # Production*, 
-                               ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
+                               <Messages, Production*>, 
+                               ModuleId)                -> <Messages, Production*> {traversal(accu, break, top-down)}
     check-attributes-in-module(Production, 
-                               Messages # Production*, 
-                               ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
+                               <Messages, Production*>, 
+                               ModuleId)                -> <Messages, Production*> {traversal(accu, break, top-down)}
 
   context-free syntax
     "consistent"                                          -> Message

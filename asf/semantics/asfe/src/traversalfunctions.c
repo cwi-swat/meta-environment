@@ -126,13 +126,13 @@ static ATbool checkTraversalType(Traversal trav)
     }
   }
   else if (trav.type == COMBINATION) {
-    if (!PT_isSymbolPair(cleanSymbol)) {
+    if (!PT_isSymbolTuple(cleanSymbol)) {
       RWsetError("Result sort should be a tuple", PT_makeTreeLit("")); 
       return ATfalse;
     }
     else {
-      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
-      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
+      PT_Symbol lhs = PT_getSymbolHead(cleanSymbol);
+      PT_Symbol rhs = PT_getSymbolsHead(PT_getSymbolRest(cleanSymbol));
 
       if (!PT_isEqualSymbol(PT_getSymbolSymbol(trav.traversed),lhs)) {
 	RWsetError("First argument sort should be equal to the first sort"
@@ -403,8 +403,9 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
   case COMBINATION:
     prod = PT_setProductionRhs(prod, 
                                PT_makeSymbolCf(
-                                 PT_makeSymbolPair(PT_getSymbolSymbol(symbol), 
-                                                   traversal.accumulated)));
+                                 PT_makeSymbolTuple(PT_getSymbolSymbol(symbol), 
+                                                    PT_makeSymbolsList(traversal.accumulated,
+                                                                       PT_makeSymbolsEmpty()))));
     break;
   case ACCUMULATOR:
   case UNDEFINED_TYPE:
@@ -511,7 +512,8 @@ static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
               PT_makeSymbolLit(">"),
             PT_makeSymbolsEmpty())))))))));
                        
-   rhs = PT_makeSymbolCf(PT_makeSymbolPair(treeSymbol, accuSymbol));
+   rhs = PT_makeSymbolCf(PT_makeSymbolTuple(treeSymbol, PT_makeSymbolsList(accuSymbol,
+                                                                           PT_makeSymbolsEmpty())));
    attrs = PT_makeAttributesNoAttrs();
    prod = PT_makeProductionDefault(lhs,rhs,attrs);
    layoutTree = PT_makeTreeLayoutEmpty();
