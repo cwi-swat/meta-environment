@@ -1,4 +1,4 @@
-#!__WISH__
+#__WISH__
 
 set MAXWINSIZE {1078 666}
 set MINWINSIZE {356 220}
@@ -42,6 +42,7 @@ proc MakeScreen {} {
   $c xview scroll 10 unit
   $c yview scroll 10 unit
 
+  entry     .graph.attributes -textvariable attributes
   scrollbar .graph.xscroll -width 8 -orient horizontal -command "$c xview"
   scrollbar .graph.yscroll -width 8 -orient vertical -command "$c yview"
   button    .graph.layout  -width 8 -height 8 -bitmap gray50
@@ -54,10 +55,46 @@ proc MakeScreen {} {
         -columnspan 1 -sticky news
   grid .graph.layout -row 1 -column 1 -rowspan 1 \
         -columnspan 1 -sticky news
+  grid .graph.attributes -row 2 -column 0 -rowspan 1 \
+        -columnspan 1 -sticky news
 
 
   bind $c <ButtonPress-1> "$c scan mark -%x -%y"
   bind $c <B1-Motion> "$c scan dragto -%x -%y"
+  $c bind all <Any-Enter> "Enter $c"
+  $c bind all <Any-Leave> "Leave $c"
+}
+
+proc Enter {c} {
+  global graph attributes
+
+  set object [string range [lindex [$c gettags current] 0] 1 end]
+  set type [string range $object 0 3]
+  set id   [string range $object 4 end]
+
+  if {$type == "node"} {
+    set attrs [$object listattributes]
+    set attrs [filter $attrs {shape label style color}]
+    set cmd "$object queryattributes $attrs"
+
+    set attributes [eval $cmd]
+  }
+
+}
+
+proc filter {list elements} {
+  foreach elem $elements {
+    set index [lsearch $list $elem]
+    set list [lreplace $list $index $index]
+  }
+
+  return $list
+}
+
+proc Leave {c} {
+  global attributes
+
+  set attributes ""
 }
 
 proc ReadGraph {} {
