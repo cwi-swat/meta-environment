@@ -433,7 +433,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
     fun  = ATgetAFun(t);
 
     /*  A small sanity check */
-    if (SG_FILTER_REJECT) {
+    if (SG_FILTER && SG_FILTER_REJECT) {
       assert(fun != SG_Reject_AFun);
     }
 
