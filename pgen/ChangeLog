@@ -1,5 +1,10 @@
 $Id$
 
+2002/06/24 (vandenbr@loria.fr)
+ * Fixed some bugs in the Sdf-Checker with respect to handling
+   of circular import relations.
+ * Removed an inefficiency bug revealed by Action Semantic specification.
+
 2002/05/22 (vandenbr@loria.fr)
  * Bumped into version 1.5beta.
  * Based the specification on the Sdf definition in the new asf-library.

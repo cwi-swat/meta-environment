@@ -10,10 +10,13 @@ exports
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                     -> Messages
-    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
-    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
-    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-sorts-and-prods(Definition)                         -> Messages
+    pre-check-module(Module, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
+    pre-check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-module(Module, Definition, Info-Msg-Tuple)	      -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple)     -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple)     -> Info-Msg-Tuple
 
 hiddens
   variables

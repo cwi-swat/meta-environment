@@ -7,27 +7,27 @@ exports
 
 hiddens
   context-free syntax
-    get-exported-cf-prods(Module, ProductionsSet)  -> ProductionsSet {traversal(accu, top-down)}
-    get-exported-cf-prods(Section, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
-    get-hidden-cf-prods(Module, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
-    get-hidden-cf-prods(Section, ProductionsSet)   -> ProductionsSet {traversal(accu, top-down)}
-    get-cf-prods(Grammar, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)}
-    get-prods(Production*, ProductionsSet)         -> ProductionsSet {traversal(accu, top-down)}
-    get-prods(Production, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)}
-    get-prods-in-prios(Module, ProductionsSet)     -> ProductionsSet {traversal(accu, top-down)}
-    get-prods-in-prios(Grammar, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
-    get-prods-in-prios(Priorities, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
-    get-prods-in-prios(Production, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
+    get-exported-cf-prods(Module, ProductionsSet)  -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-exported-cf-prods(Section, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-hidden-cf-prods(Module, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-hidden-cf-prods(Section, ProductionsSet)   -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-cf-prods(Grammar, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods(Production*, ProductionsSet)         -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods(Production, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods-in-prios(Module, ProductionsSet)     -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods-in-prios(Grammar, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods-in-prios(Priorities, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-prods-in-prios(Production, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
 
 hiddens
   context-free syntax
-    check-priorities(Module, Messages, ModuleId, ProductionsSet)               -> Messages {traversal(accu, top-down)}
-    check-priorities(Priority, Messages, ModuleId, ProductionsSet)             -> Messages {traversal(accu, top-down)}
-    check-priorities(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, top-down)}
-    check-priorities({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, top-down)}
-    check-priorities(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, top-down)}
-    get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)}
-    get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)}
+    check-priorities(Module, Messages, ModuleId, ProductionsSet)               -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-priorities(Priority, Messages, ModuleId, ProductionsSet)             -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-priorities(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-priorities({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-priorities(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     is-injection-production(Symbol, Symbol, ProductionsSet) -> Boolean
 
 

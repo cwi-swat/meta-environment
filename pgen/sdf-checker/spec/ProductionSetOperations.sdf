@@ -1,13 +1,21 @@
 module ProductionSetOperations
 
-imports sdf2/syntax/Sdf2
+imports basic/Booleans sdf2/syntax/Sdf2
 
 exports 
   sorts ProductionsSet
 
   context-free syntax
     productions(Production*)             -> ProductionsSet
+    ProductionsSet "++" ProductionsSet   -> ProductionsSet {left}
+    "(" ProductionsSet ")"               -> ProductionsSet {bracket}
     diff(ProductionsSet, ProductionsSet) -> ProductionsSet
+
+hiddens
+  context-free syntax
+    conc(Production*, Production*)                  -> Production*
+    includes(Production, Production*)               -> Boolean
+    if Boolean then Production* else Production* fi -> Production*  
 
 hiddens
   variables

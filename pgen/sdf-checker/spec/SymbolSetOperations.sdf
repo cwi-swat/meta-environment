@@ -3,15 +3,24 @@ module SymbolSetOperations
 imports sdf2/syntax/Sdf2 basic/Booleans
 
 exports 
-  sorts SymbolsSet
+  sorts SymbolsSet SymbolPair SymbolPairsSet
 
   context-free syntax
-    symbols(Symbol*)             -> SymbolsSet
-    diff(SymbolsSet, SymbolsSet) -> SymbolsSet
-    contains(Symbol, SymbolsSet) -> Boolean
+    "(" ModuleId "," Symbol ")"                -> SymbolPair
+    symbolpairs(SymbolPair*)                   -> SymbolPairsSet
+    contains(Symbol, SymbolPairsSet)           -> Boolean
+    contains(ModuleId, Symbol, SymbolPairsSet) -> Boolean
+  
+  context-free syntax
+    de-modularize(SymbolPairsSet) -> SymbolsSet
+    symbols(Symbol*)              -> SymbolsSet
+    diff(SymbolsSet, SymbolsSet)  -> SymbolsSet
+    contains(Symbol, SymbolsSet)  -> Boolean
 
 hiddens
   variables
+    "SymbolPair"[0-9]*  -> SymbolPair
     "$Symbol*"[0-9]*    -> Symbol*
+    "SymbolPair*"[0-9]* -> SymbolPair*
     "$Symbol"[0-9]*     -> Symbol
-    "$Symbols"[0-9]*    -> Symbols
+    "$ModuleId"[0-9]*   -> ModuleId

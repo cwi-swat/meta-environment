@@ -49,18 +49,21 @@ equations
         get-defined-productions(ImportsSet, get-module-info(InfoMsgTuple1)) = 
           productions(Prod*4),
 
-        check-priorities(Module, {}, $ModuleId, productions(Prod*1 Prod*2 Prod*4)) = Msgs0,
+        productions(Prod*1) ++ productions(Prod*4) = productions(Prod*5),
+        productions(Prod*2) ++ productions(Prod*5) = productions(Prod*6),
+
+        check-priorities(Module, {}, $ModuleId, productions(Prod*6)) = Msgs0,
 
         Msgs1 = get-messages(InfoMsgTuple1),
         Msgs2 = Msgs1 + 
 used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3), 
-                                                 productions(Prod*1 Prod*2 Prod*4))),
+                                                 productions(Prod*6))),
         Msgs3 = Msgs2 ++ Msgs0,
         InfoMsgTuple3 = put-messages(Msgs3, InfoMsgTuple1),
 
         get-module-info(InfoMsgTuple3) = ModuleInfoTable1,
         put-production-info($ModuleId, 
-                            productions(Prod*1 Prod*4), 
+                            productions(Prod*5), 
                             ModuleInfoTable1) = ModuleInfoTable2,
         put-module-info(ModuleInfoTable2, InfoMsgTuple3) =  InfoMsgTuple4
         =================================================================

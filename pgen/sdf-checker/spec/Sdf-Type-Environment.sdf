@@ -19,7 +19,7 @@ exports
     put-messages(Messages, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
-    "[" SymbolsSet "," SymbolsSet "," 
+    "[" SymbolPairsSet "," SymbolPairsSet "," 
         ProductionsSet "," ConstructorSet "]" -> Module-Info
 
   context-free syntax
@@ -27,21 +27,23 @@ exports
     "{" Module-Info-Entry* "}"                   -> Module-Info-Table
 
   context-free syntax
-    module-is-checked(ModuleId, Module-Info-Table)    -> Boolean
+    module-is-checked(ModuleId, Module-Info-Table)     -> Boolean
+    set-module-as-checked(ModuleId, Module-Info-Table) -> Module-Info-Table
+    mark-modules-as-unchecked(Module-Info-Table)       -> Module-Info-Table
 
   context-free syntax
-    get-declared-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    get-declared-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
     put-declared-symbols-info(ModuleId,
-                              SymbolsSet, 
+                              SymbolPairsSet, 
                               Module-Info-Table)        -> Module-Info-Table
-    get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
+    get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolPairsSet
 
   context-free syntax
-    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
     put-aliased-symbols-info(ModuleId,
-                             SymbolsSet, 
+                             SymbolPairsSet, 
                              Module-Info-Table)        -> Module-Info-Table
-    get-aliased-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
+    get-aliased-symbols(ImportsSet, Module-Info-Table) -> SymbolPairsSet
 
   context-free syntax
     get-defined-productions(ModuleId, Module-Info-Table)  -> ProductionsSet
@@ -67,7 +69,8 @@ hiddens
     "ModuleInfoEntry*"[0-9]* -> Module-Info-Entry*
     "ModuleInfoTable"[0-9]*  -> Module-Info-Table
     "ModuleInfo"[0-9]*       -> Module-Info
-    "Symbol*"[0-9]*          -> Symbol*
+    "SymbolPair*"[0-9]*      -> SymbolPair*
+    "SymbolPairsSet"[0-9]*   -> SymbolPairsSet
     "SymbolsSet"[0-9]*       -> SymbolsSet
     "Import"[0-9]*           -> Import
     "Import*"[0-9]*          -> Import*

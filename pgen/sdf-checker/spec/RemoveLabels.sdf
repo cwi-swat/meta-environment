@@ -4,8 +4,8 @@ imports sdf2/syntax/Sdf2
 
 exports
   context-free syntax
-    remove-labels(Definition) -> Definition {traversal(trafo, top-down)}
-    remove-labels(Symbol)     -> Symbol {traversal(trafo, top-down)}
+    remove-labels(Definition) -> Definition {traversal(trafo, top-down)} %%{traversal(trafo, break, top-down)}
+    remove-labels(Symbol)     -> Symbol {traversal(trafo, top-down)} %%{traversal(trafo, break, top-down)}
 
 hiddens
   variables

@@ -3,7 +3,7 @@ equations
   [diff1] diff(symbols($Symbol*1 $Symbol $Symbol*2), 
                symbols($Symbol*3 $Symbol $Symbol*4)) =
             diff(symbols($Symbol*1 $Symbol*2), 
-                 symbols($Symbol*3  $Symbol $Symbol*4))
+                 symbols($Symbol*3 $Symbol $Symbol*4))
 
   [default-diff] diff(symbols($Symbol*1), symbols($Symbol*2)) = 
                    symbols($Symbol*1)
@@ -11,6 +11,30 @@ equations
   [sym1] symbols($Symbol*1 $Symbol $Symbol*2 $Symbol $Symbol*3) =
            symbols($Symbol*1 $Symbol $Symbol*2 $Symbol*3)
 
-  [c-1'1] contains($Symbol, symbols($Symbol*1 $Symbol $Symbol*2)) = true
+  [c-1'1] contains($Symbol, 
+                   symbols($Symbol*1 $Symbol $Symbol*2)) = 
+            true
 
-  [default-c-1'1] contains($Symbol, symbols($Symbol*)) = false
+  [default-c-1'1] contains($Symbol, symbols(Symbol*)) = false
+
+  [dm-1'1] de-modularize(symbolpairs()) = symbols()
+
+  [dm-1'2] de-modularize(symbolpairs(SymbolPair*)) = symbols($Symbol*)
+           ===========================================================
+           de-modularize(symbolpairs(($ModuleId, $Symbol) SymbolPair*)) = 
+             symbols($Symbol $Symbol*)
+
+  [sym1] symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair SymbolPair*3) =
+           symbolpairs(SymbolPair*1 SymbolPair SymbolPair*2 SymbolPair*3)
+
+  [c-1'1] contains($Symbol, 
+                   symbolpairs(SymbolPair*1 ($ModuleId, $Symbol) SymbolPair*2)) = 
+            true
+
+  [default-c-1'1] contains($Symbol, symbolpairs(SymbolPair*)) = false
+
+  [c-2'1] contains($ModuleId, $Symbol, 
+                   symbolpairs(SymbolPair*1 ($ModuleId, $Symbol) SymbolPair*2)) = 
+            true
+
+  [default-c-2'1] contains($ModuleId, $Symbol, symbolpairs(SymbolPair*)) = false

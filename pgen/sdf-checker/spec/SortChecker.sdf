@@ -3,83 +3,84 @@ module SortChecker
 imports Sdf-Type-Environment
 exports
   context-free syntax
-    check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+    pre-check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-module-sorts(Module, Info-Msg-Tuple)     -> Info-Msg-Tuple
 
 hiddens
   sorts Symbols-Msg-Tuple
 
   context-free syntax
-    "[" SymbolsSet "," Messages "]" -> Symbols-Msg-Tuple
+    "[" SymbolPairsSet "," Messages "]" -> Symbols-Msg-Tuple
 
   context-free syntax
     get-exported-declared-symbols(Module, 
                                   Symbols-Msg-Tuple, 
                                   ModuleId, 
-                                  SymbolsSet)  -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                  SymbolPairsSet)  -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-exported-declared-symbols(Section, 
                                   Symbols-Msg-Tuple, 
                                   ModuleId, 
-                                  SymbolsSet)  -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                  SymbolPairsSet)  -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-hidden-declared-symbols(Module, 
                                 Symbols-Msg-Tuple, 
                                 ModuleId, 
-                                SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-hidden-declared-symbols(Section, 
                                 Symbols-Msg-Tuple, 
                                 ModuleId, 
-                                SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-declared-symbols(Section, 
                          Symbols-Msg-Tuple, 
                          ModuleId, 
-                         SymbolsSet)   	       -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                         SymbolPairsSet)   	       -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-declared-symbols(Grammar, 
                          Symbols-Msg-Tuple, 
                          ModuleId, 
-                         SymbolsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                         SymbolPairsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-declared-symbol(Symbol*, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                        SymbolPairsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-declared-symbol(Symbol, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                        SymbolPairsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
 
   context-free syntax
     get-exported-aliased-symbols(Module, 
                                  Symbols-Msg-Tuple, 
                                  ModuleId, 
-                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                 SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-exported-aliased-symbols(Section, 
                                  Symbols-Msg-Tuple, 
                                  ModuleId, 
-                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                                 SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-hidden-aliased-symbols(Module, 
                                Symbols-Msg-Tuple, 
                                ModuleId, 
-                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                               SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-hidden-aliased-symbols(Section, 
                                Symbols-Msg-Tuple, 
                                ModuleId, 
-                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                               SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-aliased-symbols(Grammar, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                        SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
     get-aliased-symbols(Alias, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
-                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+                        SymbolPairsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
 
   context-free syntax
-    get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
-    get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
-    get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
-    get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, top-down)}
-    get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)}
+    get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
 
   context-free syntax
-    add-symbol(Symbol, Symbols-Msg-Tuple, ModuleId, SymbolsSet) -> Symbols-Msg-Tuple
+    add-symbol(Symbol, Symbols-Msg-Tuple, ModuleId, SymbolPairsSet) -> Symbols-Msg-Tuple
 
 hiddens
   variables
@@ -92,11 +93,15 @@ hiddens
 
     "$Sort"[0-9]*           -> Sort
     "$Symbol*"[0-9]*        -> Symbol*
-    "DeclaredSymbol*"[0-9]* -> Symbol*
+    "SymbolPair*"[0-9]*     -> SymbolPair*
+    "DeclaredSymbolPair*"[0-9]* -> SymbolPair*
+    "DeclaredSymbol*"[0-9]*     -> Symbol*
+    "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
     "AliasedSymbol*"[0-9]*  -> Symbol*
     "$Symbol,*"[0-9]*       -> {Symbol ","}*
     "$Symbol"[0-9]*         -> Symbol
     "$Symbols"[0-9]*        -> Symbols
+    "SymbolPairsSet"[0-9]*  -> SymbolPairsSet
     "SymbolsSet"[0-9]*      -> SymbolsSet
     "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
     "$Literal"[0-9]*        -> Literal

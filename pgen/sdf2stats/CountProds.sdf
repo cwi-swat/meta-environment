@@ -1,65 +1,65 @@
 module CountProds
 
 imports
-  Sdf2-Syntax Integers
+  sdf2/syntax/Sdf2-Syntax basic/Integers
 
 exports
   sorts IntPair
   context-free syntax
-    "kernel" "functions"       Int 
-    "lexical" "functions"      Int 
-    "context-free" "functions" Int 
-    "reject" "functions"       Int  
-    "follow" "restrictions"    Int 
-    "priorities"               Int
-    "number" "of" "lhs"        Int 
-    "total" "lhs" "size"       Int 
-    "maximum" "lhs" "size"     Int 
-    "lists" "in" "lhs"         Int
-    "literals" "in" "lhs"      Int -> IntPair
+    "kernel" "functions"       Integer 
+    "lexical" "functions"      Integer 
+    "context-free" "functions" Integer 
+    "reject" "functions"       Integer  
+    "follow" "restrictions"    Integer 
+    "priorities"               Integer
+    "number" "of" "lhs"        Integer 
+    "total" "lhs" "size"       Integer 
+    "maximum" "lhs" "size"     Integer 
+    "lists" "in" "lhs"         Integer
+    "literals" "in" "lhs"      Integer -> IntPair
 
     "count-prods" "(" SDF ")" -> IntPair
 
 hiddens
   sorts LhsInfo
   context-free syntax
-    "(" Int "," Int "," Int "," Int "," Int ")" -> LhsInfo 
+    "(" Integer "," Integer "," Integer "," Integer "," Integer ")" -> LhsInfo 
   context-free syntax
-    "count-kernel-prods" (Definition, Int)      -> Int {traverse}
-    "count-kernel-prods" (Grammar, Int)         -> Int {traverse}
-    "count-kernel-prods" (Production, Int)      -> Int {traverse}
-    "count-lex-prods" (Definition, Int)         -> Int {traverse}
-    "count-lex-prods" (Grammar, Int)            -> Int {traverse}
-    "count-lex-prods" (Production, Int)         -> Int {traverse}
-    "count-cf-prods" (Definition, Int)          -> Int {traverse}
-    "count-cf-prods" (Grammar, Int)             -> Int {traverse}
-    "count-cf-prods" (Production, Int)          -> Int {traverse}
-    "count-reject-prods" (Definition, Int)      -> Int {traverse}
-    "count-reject-prods" (Production, Int)      -> Int {traverse}
-    "count-follow-restricts" (Definition, Int)  -> Int {traverse}
-    "count-follow-restricts" (Restriction, Int) -> Int {traverse}
-    "count-priorities" (Definition, Int)        -> Int {traverse}
-    "count-priorities" (Grammar, Int)           -> Int {traverse}
-    "count-priorities" (Production, Int)        -> Int {traverse}
-    "count-associativities" (Definition, Int)   -> Int {traverse}
-    "count-associativities" (Grammar, Int)      -> Int {traverse}
-    "count-associativities" (Production, Int)   -> Int {traverse}
-    "lhs-size-info" (Definition, LhsInfo)       -> LhsInfo {traverse}
-    "lhs-size-info" (Grammar, LhsInfo)          -> LhsInfo {traverse}
-    "lhs-size-info" (Production, LhsInfo)       -> LhsInfo {traverse}
-    "calc-lhs-size" (Production)                -> Int
-    "nr-of-symbols" (Symbol*)                   -> Int
-    "nr-of-sep-symbols" ({Symbol ","}*)         -> Int
-    "maximum" (Int, Int)                        -> Int
-    "count-lists" (Production, Int)             -> Int {traverse}
-    "count-lists" (Symbol, Int)                 -> Int {traverse}
-    "count-literals" (Production, Int)          -> Int {traverse}
-    "count-literals" (Symbol, Int)          -> Int {traverse}
+    "count-kernel-prods" (Definition, Integer)      -> Integer {traversal(accu, top-down)}
+    "count-kernel-prods" (Grammar, Integer)         -> Integer {traversal(accu, top-down)}
+    "count-kernel-prods" (Production, Integer)      -> Integer {traversal(accu, top-down)}
+    "count-lex-prods" (Definition, Integer)         -> Integer {traversal(accu, top-down)}
+    "count-lex-prods" (Grammar, Integer)            -> Integer {traversal(accu, top-down)}
+    "count-lex-prods" (Production, Integer)         -> Integer {traversal(accu, top-down)}
+    "count-cf-prods" (Definition, Integer)          -> Integer {traversal(accu, top-down)}
+    "count-cf-prods" (Grammar, Integer)             -> Integer {traversal(accu, top-down)}
+    "count-cf-prods" (Production, Integer)          -> Integer {traversal(accu, top-down)}
+    "count-reject-prods" (Definition, Integer)      -> Integer {traversal(accu, top-down)}
+    "count-reject-prods" (Production, Integer)      -> Integer {traversal(accu, top-down)}
+    "count-follow-restricts" (Definition, Integer)  -> Integer {traversal(accu, top-down)}
+    "count-follow-restricts" (Restriction, Integer) -> Integer {traversal(accu, top-down)}
+    "count-priorities" (Definition, Integer)        -> Integer {traversal(accu, top-down)}
+    "count-priorities" (Grammar, Integer)           -> Integer {traversal(accu, top-down)}
+    "count-priorities" (Production, Integer)        -> Integer {traversal(accu, top-down)}
+    "count-associativities" (Definition, Integer)   -> Integer {traversal(accu, top-down)}
+    "count-associativities" (Grammar, Integer)      -> Integer {traversal(accu, top-down)}
+    "count-associativities" (Production, Integer)   -> Integer {traversal(accu, top-down)}
+    "lhs-size-info" (Definition, LhsInfo)       -> LhsInfo {traversal(accu, top-down)}
+    "lhs-size-info" (Grammar, LhsInfo)          -> LhsInfo {traversal(accu, top-down)}
+    "lhs-size-info" (Production, LhsInfo)       -> LhsInfo {traversal(accu, top-down)}
+    "calc-lhs-size" (Production)                -> Integer
+    "nr-of-symbols" (Symbol*)                   -> Integer
+    "nr-of-sep-symbols" ({Symbol ","}*)         -> Integer
+    "maximum" (Integer, Integer)                        -> Integer
+    "count-lists" (Production, Integer)             -> Integer {traversal(accu, top-down)}
+    "count-lists" (Symbol, Integer)                 -> Integer {traversal(accu, top-down)}
+    "count-literals" (Production, Integer)          -> Integer {traversal(accu, top-down)}
+    "count-literals" (Symbol, Integer)          -> Integer {traversal(accu, top-down)}
 
   variables
     "Attributes"[0-9]*  -> Attributes
     "Definition"[0-9]*  -> Definition
-    "Int"[0-9]*         -> Int
+    "Int"[0-9]*         -> Integer
     "Lhsinfo"[0-9]*     -> LhsInfo
     "Literal"[0-9]*     -> Literal
     "Lookaheads"[0-9]*  -> Lookaheads

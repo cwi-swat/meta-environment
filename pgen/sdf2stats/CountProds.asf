@@ -158,7 +158,7 @@ literals in lhs        Int12
 
   [cl-1'4] count-lists({Symbol1 Symbol2}+, Int) = Int + 1
 
-  [cl-1'5] count-lists({Symbol}NatCon+, Int) = Int + 1
+  [cl-1'5] count-lists(Symbol NatCon+, Int) = Int + 1
 
   [cl-1'6] count-lists({Symbol1 Symbol2}NatCon+, Int) = Int + 1
 

@@ -1,9 +1,30 @@
 equations
 
+  [c-1'1] productions(Prod*1) ++ productions(Prod*2) =
+            productions(conc(Prod*1, Prod*2))
+
   [diff1] diff(productions(Prod*1 Prod Prod*2), 
                productions(Prod*3 Prod Prod*4)) =
             diff(productions(Prod*1 Prod*2), 
-                 productions(Prod*3  Prod Prod*4))
+                 productions(Prod*3 Prod Prod*4))
 
   [default-diff] diff(productions(Prod*1), productions(Prod*2)) = 
                    productions(Prod*1)
+
+  [c-2'1] conc(, Prod*) = Prod*
+
+  [c-2'2] conc(Prod*1, Prod*2) = Prod*3
+          =============================
+          conc(Prod Prod*1, Prod*2) = 
+            if includes(Prod, Prod*2) 
+            then Prod*3 
+            else Prod Prod*3
+            fi
+
+  [i-1'1] includes(Prod, Prod*1 Prod Prod*2) = true
+
+  [default-i-1'2] includes(Prod, Prod*) = false
+
+  [if-1'1] if true then Prod*1 else Prod*2 fi = Prod*1
+
+  [if-1'2] if false then Prod*1 else Prod*2 fi = Prod*2
