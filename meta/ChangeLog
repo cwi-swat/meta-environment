@@ -21,6 +21,9 @@
 # $Id$
 
 2001/02/15 (jong@cwi.nl)
+  * support for --with-sdf-support added to configure.in
+
+2001/02/15 (jong@cwi.nl)
   * module-db.c: uses libPT and libSDF instead of direct asfix-pattern
     matching. The ASF-related patterns are itching to be done as well!
 

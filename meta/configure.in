@@ -1,6 +1,7 @@
 dnl
 dnl    Meta-Environment - An environment for language prototyping.
-dnl    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+dnl    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+dnl                        The Netherlands. 
 dnl
 dnl    This program is free software; you can redistribute it and/or modify
 dnl    it under the terms of the GNU General Public License as published by
@@ -75,6 +76,14 @@ dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, asource,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
+
+SDF_SUPPORT='${prefix}'
+dnl Handle --with-sdf-support=... argument to configure
+AC_ARG_WITH(sdf-support,
+   [  --with-sdf-support=DIR  sdf-support is in DIR],
+   SDF_SUPPORT=${withval},)
+
+AC_SUBST(ASC_SUPPORT)
 
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
