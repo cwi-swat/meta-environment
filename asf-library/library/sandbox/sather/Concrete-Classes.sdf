@@ -1,0 +1,14 @@
+module Concrete-Classes
+
+imports Abstract-Classes
+	Parameterization
+	Class-Elements
+
+exports
+
+sorts Class
+
+context-free syntax
+	("immutable"|"partial"|("external" Identifier))?
+	"class" Uppercase-Identifier Parameterization? Subtyping-Clause?
+	"is" {Class-Element ";"}* ";"? "end" -> Class

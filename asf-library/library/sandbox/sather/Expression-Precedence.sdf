@@ -1,0 +1,45 @@
+module Expression-Precedence
+
+imports Syntactic-Sugar-Expressions
+	Creation-Expressions
+	And-Expressions
+	Or-Expressions
+
+exports
+
+context-free priorities
+	{Bool-Literal-Expression -> Expression
+	Char-Literal-Expression -> Expression
+	Str-Literal-Expression -> Expression
+	Int-Literal-Expression -> Expression
+	Flt-Literal-Expression -> Expression}
+	>
+	Create-Expression -> Expression
+	>
+	Local-Expression -> Expression
+	>
+	{Call-Expression -> Expression
+	Expression? "[" Expression-List "]" -> Expression}
+	>
+	Expression "^" Expression -> Expression {left}
+	>
+	{"-" Expression -> Expression
+	"~" Expression -> Expression}
+	>
+	{Expression "*" Expression -> Expression {assoc}
+	Expression "/" Expression -> Expression {left}
+	Expression "%" Expression -> Expression {left}}
+	>
+	{Expression "+" Expression -> Expression {assoc}
+	Expression "-" Expression -> Expression {left}}
+	>
+	{Expression "<" Expression -> Expression {left}
+	Expression "<=" Expression -> Expression {left}
+	Expression "=" Expression -> Expression {left}
+	Expression "/=" Expression -> Expression {left}
+	Expression ">" Expression -> Expression {left}
+	Expression ">=" Expression -> Expression {left}}
+	>
+	Expression "and" Expression -> Expression {left}
+	>
+	Expression "or" Expression -> Expression {left}

@@ -1,0 +1,12 @@
+module Case-Statements
+
+imports Expressions
+
+exports
+
+sorts Case-Statement
+
+context-free syntax
+	"case" Expression
+	("when" {Expression ","}+ "then" Statement-List)+
+	("else" Statement-List)? "end" -> Case-Statement

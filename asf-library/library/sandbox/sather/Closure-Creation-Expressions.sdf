@@ -1,0 +1,23 @@
+module Closure-Creation-Expressions
+
+imports Signatures
+
+exports
+
+sorts Closure-Create-Expression
+
+context-free syntax
+	Routine-Closure-Create-Expression -> Closure-Create-Expression
+	Iter-Closure-Create-Expression -> Closure-Create-Expression
+
+	"bind" "(" ( (Type-Specifier "::") | (Routine-Closure-Argument "."))? Identifier
+	( "(" {Routine-Closure-Argument ","}+ ")" )? ")"
+	-> Routine-Closure-Create-Expression 
+
+	Routine-Mode (Expression | "_") -> Routine-Closure-Argument
+
+	"bind" "(" ( (Type-Specifier "::") | (Iter-Closure-Argument "."))? Identifier
+	( "(" {Iter-Closure-Argument ","}+ ")" )? ")"
+	-> Iter-Closure-Create-Expression 
+	Iter-Mode (Expression|"_") -> Iter-Closure-Argument
+	

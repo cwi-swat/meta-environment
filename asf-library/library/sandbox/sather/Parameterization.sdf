@@ -1,0 +1,11 @@
+module Parameterization
+
+imports Type-Specifiers
+
+exports
+
+sorts Parameterization
+
+context-free syntax
+	"{" {Parameter-Declaration ","}+ "}" -> Parameterization
+	Uppercase-Identifier ("<" Type-Specifier)? -> Parameter-Declaration

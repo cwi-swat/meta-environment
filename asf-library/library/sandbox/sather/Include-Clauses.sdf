@@ -1,0 +1,14 @@
+module Include-Clauses
+
+imports Type-Specifiers
+
+exports
+
+sorts Include-Clause 
+
+context-free syntax
+	"private"? "include" Type-Specifier
+	{Feature-Modifier ","}* -> Include-Clause
+
+	(Identifier | Iter-Name) "->"
+	(("private" | "readonly")? (Identifier|Iter-Name))? -> Feature-Modifier

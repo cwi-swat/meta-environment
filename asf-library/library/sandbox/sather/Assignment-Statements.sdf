@@ -1,0 +1,12 @@
+module Assignment-Statements
+
+imports Type-Specifiers
+	Expressions
+
+exports
+
+sorts Assign-Statement
+
+context-free syntax
+	(Expression | (Identifier ":" Type-Specifier?)) ":="
+		Expression -> Assign-Statement

@@ -1,0 +1,10 @@
+module Local-Variable-Access-Expressions
+
+imports Lexical-Structure
+
+exports
+
+sorts Local-Expression
+
+context-free syntax
+	Identifier -> Local-Expression

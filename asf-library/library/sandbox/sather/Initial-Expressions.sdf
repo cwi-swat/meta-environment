@@ -1,0 +1,8 @@
+module Initial-Expressions
+
+exports
+
+sorts Initial-Expression
+
+context-free syntax
+	"initial" "(" Expression ")" -> Initial-Expression

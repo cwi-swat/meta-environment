@@ -1,0 +1,8 @@
+module WhileX-Expressions
+
+exports
+
+sorts WhileX-Expression
+
+context-free syntax
+	"while!" "(" Expression ")" -> WhileX-Expression

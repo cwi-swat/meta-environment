@@ -1,0 +1,8 @@
+module Or-Expressions
+
+exports
+
+sorts Expression
+
+context-free syntax
+	Expression "or" Expression -> Expression {left}

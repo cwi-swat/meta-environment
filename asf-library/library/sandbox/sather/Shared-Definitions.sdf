@@ -1,0 +1,13 @@
+module Shared-Definitions
+
+imports	Expressions
+
+exports
+
+sorts Shared-Definition
+
+context-free syntax
+	("private"|"readonly")? "shared"
+	((Identifier ":" Type-Specifier ":=" Expression) |
+	(Identifier-List ":" Type-Specifier)) -> Shared-Definition
+

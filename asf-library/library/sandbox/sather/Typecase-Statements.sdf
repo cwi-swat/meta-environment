@@ -1,0 +1,12 @@
+module Typecase-Statements
+
+imports Type-Specifiers
+
+exports
+
+sorts Typecase-Statement
+
+context-free syntax
+	"typecase" Identifier
+	("when" Type-Specifier "then" Statement-List)+
+	("else" Statement-List)? "end" -> Typecase-Statement

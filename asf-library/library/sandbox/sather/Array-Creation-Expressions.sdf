@@ -1,0 +1,11 @@
+module Array-Creation-Expressions
+
+exports
+
+sorts Array-Expression
+
+context-free syntax
+	"|" Expression-List "|" -> Array-Expression
+
+aliases
+	{Expression ","}+ -> Expression-List

@@ -1,0 +1,13 @@
+module String-Literal-Expressions
+
+imports Character-Literal-Expressions
+
+exports
+
+sorts Str-Literal-Expression
+
+lexical syntax
+	[\"] ISO-Character* [\"] -> Lex-Str-Literal-Expression
+
+context-free syntax
+	Lex-Str-Literal-Expression+ -> Str-Literal-Expression

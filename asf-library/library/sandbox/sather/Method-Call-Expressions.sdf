@@ -1,0 +1,16 @@
+module Method-Call-Expressions
+
+imports Signatures
+
+exports
+
+sorts Call-Expression
+
+context-free syntax
+
+	((Expression ".") | (Type-Specifier "::"))?
+	(Identifier | Iter-Name) ("(" Modal-List ")")? -> Call-Expression {avoid}
+
+	{(Mode Expression) ","}+ -> Modal-List
+
+

@@ -1,0 +1,10 @@
+module Declaration-Statements
+
+imports Type-Specifiers
+
+exports
+
+sorts Declaration-Statement
+
+context-free syntax
+	Identifier-List ":" Type-Specifier -> Declaration-Statement

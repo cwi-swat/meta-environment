@@ -1,0 +1,11 @@
+module Attribute-Definitions
+
+imports Type-Specifiers
+
+exports
+
+sorts Attr-Definition
+
+context-free syntax
+	("private"|"readonly")? "attr" 
+	Identifier-List ":" Type-Specifier -> Attr-Definition

@@ -1,0 +1,9 @@
+module Void-Test-Expressions
+
+exports
+
+sorts Void-Test-Expression
+
+context-free syntax
+	"void" "(" Expression ")" -> Void-Test-Expression
+

@@ -1,0 +1,12 @@
+module Floating-Point-Literal-Expressions
+
+imports Integer-Literal-Expressions
+
+exports
+
+sorts Flt-Literal-Expression
+
+lexical syntax
+	"-"? Decimal-Int "." Decimal-Int ("e" "-"? Decimal-Int)? "d"? 
+		-> Flt-Literal-Expression
+

@@ -1,0 +1,12 @@
+module Constant-Definitions
+
+imports	Expressions
+
+exports
+
+sorts Const-Definition
+
+context-free syntax
+	"private"? "const" Identifier
+	((":" Type-Specifier ":=" Expression)|
+	((":=" Expression)? Identifier-List?)) -> Const-Definition

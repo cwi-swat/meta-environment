@@ -1,0 +1,8 @@
+module And-Expressions
+
+exports
+
+sorts Expression
+
+context-free syntax
+	Expression "and" Expression -> Expression {left}

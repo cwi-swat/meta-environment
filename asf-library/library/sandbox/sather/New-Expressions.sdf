@@ -1,0 +1,8 @@
+module New-Expressions
+
+exports
+
+sorts New-Expression
+
+context-free syntax
+	"new" ("(" Expression ")")? -> New-Expression

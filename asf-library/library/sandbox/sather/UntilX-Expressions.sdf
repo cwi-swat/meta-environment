@@ -1,0 +1,8 @@
+module UntilX-Expressions
+
+exports
+
+sorts UntilX-Expression
+
+context-free syntax
+	"until!" "(" Expression ")" -> UntilX-Expression

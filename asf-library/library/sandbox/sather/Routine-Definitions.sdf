@@ -1,0 +1,14 @@
+module Routine-Definitions
+
+imports Signatures
+	Statements
+
+exports
+
+sorts Routine-Definition
+
+context-free syntax
+	"private"? Identifier
+	("(" {Routine-Argument ","}+ ")")? (":" Type-Specifier)?
+	("pre" Expression)? ("post" Expression)? 
+	("is" Statement-List "end")? -> Routine-Definition

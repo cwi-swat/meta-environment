@@ -1,0 +1,31 @@
+module Signatures
+
+imports Type-Specifiers
+
+exports
+
+context-free syntax
+	Abstract-Routine-Signature -> Abstract-Signature
+	Abstract-Iter-Signature -> Abstract-Signature
+
+	Identifier ("(" {Routine-Argument ","}+ ")")?
+		(":" Type-Specifier)? -> Abstract-Routine-Signature
+
+	Routine-Mode Identifier-List ":" Type-Specifier -> Routine-Argument
+
+
+	Iter-Name ("(" {Iter-Argument ","}+ ")")?
+		(":" Type-Specifier)? -> Abstract-Iter-Signature
+
+	Iter-Mode Identifier-List ":" Type-Specifier -> Iter-Argument
+	
+	("out" | "inout" | "once")? -> Mode
+	Mode -> Routine-Mode
+	"once" -> Routine-Mode {reject}
+	Mode -> Iter-Mode
+
+%%	("out" | "inout" | "once")? -> Iter-Mode
+%%	("out" | "inout")? -> Routine-Mode
+
+aliases
+	{Identifier ","}+ -> Identifier-List
