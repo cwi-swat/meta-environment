@@ -1,5 +1,8 @@
 $Id$
 
+Fri Nov 19 16:39:49 CET 2004 <jurgenv@cwi.nl>
+ * Bumped to 0.8
+
 Thu Mar 11 18:42:34 CET 2004 <jurgenv@cwi.nl>
 * -ltb library from the toolbuslib package is deprecated and was only used 
    inside of the toolbus package. So I moved it into the toolbus package.
