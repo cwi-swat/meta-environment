@@ -13,8 +13,19 @@ AC_SUBST(VERSION)
 AC_SUBST(NEW_META)
 
 dnl Default locations of other components
-TOOLBUS='${prefix}'
-ATERM='${prefix}'
+dnl Default locations of used components
+AC_PATH_PROG(TOOLBUS, toolbus, no)
+if test "${TOOLBUS}" = "no"; then
+	TOOLBUS='${prefix}'
+else
+	TOOLBUS=`dirname \`dirname ${TOOLBUS}\``
+fi
+AC_PATH_PROG(ATERM, tifstoc, no)
+if test "${ATERM}" = "no"; then
+	ATERM='${prefix}'
+else
+	ATERM=`dirname \`dirname ${ATERM}\``
+fi
 
 dnl Installation scripts
 INSTALL='$(top_srcdir)/install-sh'
