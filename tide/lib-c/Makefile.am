@@ -22,4 +22,4 @@ regen:
 EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c
 
 CFLAGS		+= ${DEVELOP_DEF}
-INCLUDES	= -I${ATERM}/include -I${TOOLBUS}/include
+INCLUDES	= -I${ATERM}/include -I${TOOLBUSLIB}/include
