@@ -58,7 +58,7 @@ DISTFILES	= Makefile.in hello1.tb hello1.tb.tex \
 	          pipe.tb pipe.tb.tex \
 		  printer.c \
 		  PC.tb producer.c store.c \
-		  hello.py hello2py.tb hello2tb.py.tex
+		  hello.py hello2py.tb
 
 all:    ${PROGRAMS}
 
