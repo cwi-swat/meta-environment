@@ -1,0 +1,74 @@
+module ExtInheritance
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[ClassDeclaration]
+imports MyPosInfo[ClassType]
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[Identifier]
+imports MyPosInfo[InterfaceType]
+
+exports
+  context-free syntax
+    extractInheritance(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractInheritance(CompilationUnit, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractInheritance(InterfaceDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractInheritance(ClassDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractInheritance(ClassBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractExtendsClass(Super?, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractExtendsClass(Super, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractExtendsInterface(ExtendsInterfaces?, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+    
+    extractExtendsInterface({InterfaceType ","}+, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractExtendsInterface(InterfaceType, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractImplements(Interfaces?, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractImplements(InterfaceType, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&ClassBody" -> ClassBody
+    "&ClassDeclaration" -> ClassDeclaration
+    "&ClassId" -> Area
+    "&ClassType" -> ClassType
+    "&CompilationUnit" -> CompilationUnit
+    "&Expressions" -> {Expression ","}*
+    "&ExtendsInterfaces" -> ExtendsInterfaces
+    "&ExtendsInterfacesOpt" -> ExtendsInterfaces?
+    "&Identifier" -> Identifier
+    "&InterfaceBody" -> InterfaceBody
+    "&InterfaceDeclaration" -> InterfaceDeclaration
+    "&InterfaceId" -> Area
+    "&Interfaces" -> Interfaces?
+    "&InterfaceType" -> InterfaceType
+    "&InterfaceTypes" -> {InterfaceType ","}+
+    "&Modifiers" -> Modifier*
+    "&Name" -> Name
+    "&Rstore"[0-9]* -> RSTORE
+    "&Super" -> Super
+    "&SuperOpt" -> Super?
+    "&SuperId" -> Area
+    "&Tuple"[0-9]* -> Elem # Elem
