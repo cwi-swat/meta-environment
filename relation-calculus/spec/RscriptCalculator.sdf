@@ -10,7 +10,7 @@ exports
 
         eval-rscript(RSCRIPT)                 			-> RSTORE
 	eval-rscript-with-rstore(RSCRIPT,RSTORE)		-> RSTORE
-        eval-rscript(RSCRIPT, RVAR, RSTORE)   			-> Elem
+        eval-rscript-with-rstore(RSCRIPT, RVAR, RSTORE)   	-> Elem
 
 %% should be hidden
 

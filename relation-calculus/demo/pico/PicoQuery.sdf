@@ -5,13 +5,12 @@ imports PicoExtraction %% should be only convertl
 
 exports
   context-free syntax
-	pico-query(PROGRAM, RSCRIPT, String, RSTORE) 	-> Summary
+	pico-query(RSCRIPT, String, RSTORE) 	-> Summary
 
-	str2rvar(String)				-> RVAR
+	str2rvar(String)			-> RVAR
 hiddens
   variables
 	"$Rstore" [0-9\']*  -> RSTORE
-	"$Program" [0-9\']* -> PROGRAM
 	"$Script" [0-9\']*  -> RSCRIPT
 	"$String" [0-9\']*  -> String
 	"$Char*" [0-9\']*    -> CHAR*
