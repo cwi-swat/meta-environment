@@ -45,3 +45,4 @@ ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int dep
 																	ATerm *traversal);
 
 
+extern ATbool traversals_on;

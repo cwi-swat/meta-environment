@@ -46,7 +46,7 @@ for e in eqs/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=ref/`basename $t .trm.asfix1`.ref.asfix1
-    ../src/evaluator -e $e -i $t -o $res
+    ../src/evaluator -w on -e $e -i $t -o $res
     ./equalModuloWhitespace $ref $res
     rm -f $res
     printf "."
@@ -60,7 +60,7 @@ for e in fail/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=ref/`basename $t .trm.asfix1`.ref.asfix1
-    ! ../src/evaluator -e $e -i $t -o $res > /dev/null 2>&1
+    ! ../src/evaluator -w on -e $e -i $t -o $res > /dev/null 2>&1
     rm -f $res
     printf "."
   done

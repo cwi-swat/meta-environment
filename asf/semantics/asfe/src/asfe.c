@@ -103,8 +103,11 @@
 #include "asfix_utils.h"
 #include "evaluator.h"
 
-#ifdef TRAVERSALS
 #include "traversals.h"
+#ifdef TRAVERSALS
+ATbool traversals_on = ATtrue;
+#else
+ATbool traversals_on = ATfalse;
 #endif
 
 #ifdef USE_TIDE
@@ -1390,8 +1393,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 			  ATgetNext(newargs));
       rewtrm = newtrm;
 
-#ifdef TRAVERSALS
-    } else if(is_traversal_prod(asfix_get_appl_prod(trm))) {
+    } else if(traversals_on && is_traversal_prod(asfix_get_appl_prod(trm))) {
       ATerm traversal;
 
       if(run_verbose) 
@@ -1403,7 +1405,6 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
       newtrm    = select_traversed_arg(newargs);
       rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
       rewtrm    = choose_normalform(rewtrm, traversal);
-#endif
     } else {
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
       rewtrm = select_and_rewrite(newtrm,depth);
