@@ -36,8 +36,7 @@ Booleans.c Booleans.h: Booleans.adt
 		--input Booleans.adt \
 		--prologue ${top_srcdir}/test/Booleans.pro \
 		--prefix SDF \
-		--compat-term \
-		--classpath ${top_builddir}:${ATERM}/classes
+		--compat-term 
 
 booltest.pt: Booleans.trm.tbl booltest.trm
 	${SGLR} -p Booleans.trm.tbl -i ${top_srcdir}/test/booltest.trm -o $@
