@@ -85,16 +85,8 @@ Installation instructions:
     Then proceed as follows:
 
       $ cd [the_directory_where_you've_put_the_aforementioned_distributions]
-      $ cd gel
-      $ ./configure
-      $ gmake install
-      $ cd ..
       $ cd toolbus
       $ ./configure --prefix=.. --with-java
-      $ gmake install
-      $ cd ..
-      $ cd aterm-lib
-      $ ./configure
       $ gmake install
       $ cd ..
       $ cd aterm
