@@ -686,6 +686,7 @@ public class MetaStudio
 		int x = (screenSize.width - width) / 2;
 		int y = (screenSize.height - height) / 2;
 
+		setTitle("Meta-Environment");
 		setSize(width, height);
 		setLocation(x, y);
 
@@ -915,6 +916,7 @@ public class MetaStudio
 		String syn_ext,
 		String sem_ext,
 		String trm_ext) {
+	        setTitle(name);
 		Preferences.setString("metastudio.name", name);
 		Preferences.setString("library.dir", libloc);
 		Preferences.setString("module.extension", syn_ext);
