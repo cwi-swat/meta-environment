@@ -24,7 +24,7 @@ Analysis of Software Systems}
 
 \section{Deadline}
 
-Friday october 24, 12:00.
+Friday October 24, 12:00.
 
 \section{Introduction}
 
@@ -32,13 +32,25 @@ This series of exercises is intended to get some experience with
 the analysis of the source code of software systems.
 
 \section{Preparations}
-\begin{verbatim}
-- naam + locatie van de tar file
-- wat zit erin?
-- Werken in de Meta-Environment
-- Werken op de command line
-- Welke datafiles?
-\end{verbatim}
+
+From the Lab Home Page (\url{http://gene.science.uva.nl/~akooiker/})
+you can download {\tt series3.tar.gz}. It contains the directory
+{\tt relation-calculus} with the following files:
+\begin{itemize}
+\item Several \asfsdf files that defines \rscript.
+The most important one for you is {\tt Rscript.sdf} that defines the syntax.
+Always open a term editor over this module to edit a script.
+
+
+\item {\tt exercise41.trm} contains the definitions of {\tt B1} and {\tt calls}
+(to save you some typing).
+
+\item {\tt RSTORE.rstore}: this is an rstore (explained below) that is needed for the exercises
+in section 4.2.
+
+\item {\tt evaluate-query}: a shell script that will be used in section 4.2.
+
+\end{itemize}
 
 \section{Exercises}
 
@@ -90,7 +102,7 @@ Given are the following relations about the AWT sources:
 element of {\tt INHERITANCE}, then class {\tt C$_1$} either extends
 class {\tt C$_2$} or {\tt C$_1$} implements interface {\tt C$_2$}.
 
-\item {\tt rel[str,str] CONTAINMENT}: If {\tt <C$_1$, C$_2$>} is an
+ \item {\tt rel[str,str] CONTAINMENT}: If {\tt <C$_1$, C$_2$>} is an
 element of {\tt CONTAINMENT}, then one of the attributes of class {\tt
 C$_1$} is of type {\tt C$_2$}.
 
@@ -102,7 +114,29 @@ declaration to the name of the declared class.
 
 \end{itemize}
 
-Write an \rscript to answer each of the following questions:
+\begin{sloppypar}
+These relations are available in {\tt RSTORE.rstore} that is provided
+in the files included in {\tt series3.tar.gz}. An rstore is simply a
+list of (name, value) pairs that is used to define the initial values
+of variables in the \rscript. By using the button {\tt Run with
+Rstore} (from the {\tt Rscript} menu) you can run your script with the
+variables {\tt INHERITANCE}, {\tt CONTAINMENT}, {\tt METHOD\_DECL},
+{\tt CLASS\_DECL} initialized to the values in {\tt RSTORE.rstore}.
+\end{sloppypar}
+
+{\tt RSTORE.rstore} is to be used for the development and testing of the rscripts
+in the following exercises using the \asfsdf Meta-Environment.
+However, it only contains a \emph{subset} of all available data.
+For efficiency reasons it is better to run the scripts on all the available data
+from the command line as follows:
+\begin{quote}
+{\tt evaluate-query YourRscript.rscript}
+\end{quote}
+The large rstore is used automatically by this command.
+
+\vspace{\baselineskip}
+
+\noindent Write an \rscript to answer each of the following questions:
 
 \begin{itemize}
 
@@ -112,7 +146,7 @@ Write an \rscript to answer each of the following questions:
 
 \item[Q9] How many method declarations are there?
 
-\item[Q10] What is the largests method?
+\item[Q10] What is the largest method?
 
 \item[Q11] Which cases of degenerate inheritance are there?
 Recall: if a class inherits an interface directly and indirectly,
