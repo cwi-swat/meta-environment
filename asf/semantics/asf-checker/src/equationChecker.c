@@ -173,6 +173,32 @@ static ATermList checkNegativeCondition(ASF_Tag tag,
   }
 }
 
+static ATbool isIntersectionCondVariablesEmpty(PT_Args lhsVariables, 
+                                               PT_Args rhsVariables, 
+                                               PT_Args allVariables)
+{
+  if (PT_isArgsEmpty(lhsVariables)) {
+    return ATtrue;
+  }
+  else { 
+    if (PT_isArgsEmpty(rhsVariables)) {
+      return ATtrue;
+    }
+    
+    while (!PT_isArgsEmpty(lhsVariables)) {
+      PT_Tree head = PT_getArgsHead(lhsVariables);
+
+      if (lookupVariable(head, rhsVariables) 
+          && !lookupVariable(head, allVariables)) {
+        return ATfalse;
+      }
+
+      lhsVariables = PT_getArgsTail(lhsVariables);
+    }
+    return ATtrue;
+  }
+}
+
 static ATermList checkPositiveCondition(ASF_Tag tag, 
 					ASF_Condition condition,
                                         ASF_Tree lhsCond,
@@ -180,9 +206,8 @@ static ATermList checkPositiveCondition(ASF_Tag tag,
                                         PT_Args *variables) 
 {
   ATermList messages = ATempty;
-/*
-  PT_Args condVariables;
-*/
+  PT_Args lhsVariables;
+  PT_Args rhsVariables;
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
     return makeAmbiguityMessage();
@@ -191,24 +216,18 @@ static ATermList checkPositiveCondition(ASF_Tag tag,
     return makeAmbiguityMessage();
   }
 
-/*
-  condVariables = collectVariables((PT_Tree)rhsCond, PT_makeArgsEmpty());
-  if (noNewVariables((PT_Tree) lhsCond, condVariables)) {
+  lhsVariables = collectVariables((PT_Tree)lhsCond, PT_makeArgsEmpty());
+  rhsVariables = collectVariables((PT_Tree)rhsCond, PT_makeArgsEmpty());
+  if (!isIntersectionCondVariablesEmpty(lhsVariables, 
+                                        rhsVariables, 
+                                        *variables)) {
     return ATmakeList1(
 	       makeMessage(
-		   "same variables used in both sides of condition",
+		   "same uninstantiated variables used in both sides of condition",
 		   tag,
 		   ASF_makeTermFromCondition(condition)));
   }
-  condVariables = collectVariables((PT_Tree)lhsCond, PT_makeArgsEmpty());
-  if (noNewVariables((PT_Tree) rhsCond, condVariables)) {
-    return ATmakeList1(
-	       makeMessage(
-		   "same variables used in both sides of condition",
-		   tag,
-		   ASF_makeTermFromCondition(condition)));
-  }
-*/
+
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
     return messages;
