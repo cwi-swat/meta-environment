@@ -1,42 +1,63 @@
 #include "SDF-utils.h"
 
-/*{{{  collect_lex_prods(SDF_Grammar grammar, ATermList *lexProds) */
+/*{{{  collect_lex_prods(SDF_Grammar grammar, SDF_Productions *lexProds) */
 
 static void
-collect_lex_prods(SDF_Grammar grammar, ATermList *lexProds)
+collect_lex_prods(SDF_Grammar grammar, SDF_ProductionList *lexProds)
 {
   if (SDF_isGrammarLexicalSyntax(grammar)) {
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
 
-    while (!SDF_isProductionListEmpty(prods)) {
-      SDF_Production prod = SDF_getProductionListHead(prods);
-
-      if (SDF_isProductionProd(prod)) {
-	*lexProds = ATinsert(*lexProds, SDF_makeTermFromProduction(prod));
-      }
-
-      if (SDF_isProductionListSingle(prods)) {
-	break;
-      }
-      prods = SDF_getProductionListTail(prods);
-    }
+    *lexProds = SDF_concatProductionList(*lexProds, prods);
   }
 }
 
 /*}}}  */
-/*{{{  SDFgetLexicalProductions(SDF_Module module) */
+/*{{{  SDF_getModuleLexicalProductions(SDF_Module module) */
 
-ATermList
-SDFgetLexicalProductions(SDF_Module module)
+SDF_ProductionList 
+SDF_getModuleLexicalProductions(SDF_Module module)
 {
-  ATermList lexProds = ATempty;
+  SDF_ProductionList lexProds = SDF_makeProductionListEmpty();
 
   SDFforeachGrammarInModule(module,
 			    (SDFGrammarFunc)collect_lex_prods,
-			    &lexProds);
+			    (void *)&lexProds);
 
   return lexProds;
+}
+
+/*}}}  */
+/*{{{  SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
+                                                  SDF_Module module) */
+
+SDF_ProductionList
+SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
+                                           SDF_Module module)
+{
+  SDF_ProductionList lexProds = SDF_getModuleLexicalProductions(module);
+  SDF_ProductionList newLexProds = SDF_makeProductionListEmpty();
+
+  while (!SDF_hasProductionListHead(lexProds)) {
+    SDF_Production lexProd = SDF_getProductionListHead(lexProds);
+
+    SDF_Symbol rhsSymbol = SDF_getProductionResult(lexProd);
+
+    if (SDF_isEqualSymbol(symbol, rhsSymbol)) {
+      if (SDF_isProductionListEmpty(newLexProds)) {
+        newLexProds = SDF_makeProductionListSingle(lexProd);
+      }
+      else {
+        newLexProds = SDF_makeProductionListMany(lexProd, "", newLexProds);
+      }
+    }
+    if (SDF_isProductionListSingle(lexProds)) {
+      break;
+    }
+    lexProds = SDF_getProductionListTail(lexProds);
+  }
+  return newLexProds;
 }
 
 /*}}}  */
