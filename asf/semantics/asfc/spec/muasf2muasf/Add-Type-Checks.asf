@@ -1,0 +1,40 @@
+equations
+
+%% Type checks are added to rules that define traversal functions.
+%% If such a rule is specified with only a variable to match the traversed
+%% tree, a dynamic match for the sort of the tree is added as a first condition.
+
+[] add-type-checks(Module,Nametable) = atc(Module,Nametable)
+
+[atc-0] 
+   get-funid(Term1) = Funid,
+   is-traversal-funid(Funid) = true,
+   Term1 = Funid(Var : Type,Term*)
+   ===>
+   atc(Term1 = Term2,Nametable) = 
+     term_equal(get_sort(Var),parse_sort(Type)) =: t ==> Term1 = Term2
+
+[atc-1] 
+   get-funid(Term1) = Funid,
+   is-traversal-funid(Funid) = true,
+   Term1 = Funid(Var : Type,Term*)
+   ===>
+   atc(default: Term1 = Term2,Nametable) = 
+     default: term_equal(get_sort(Var),parse_sort(Type)) =: t ==> Term1 = Term2
+
+[atc-2] 
+   get-funid(Term1) = Funid,
+   is-traversal-funid(Funid) = true,
+   Term1 = Funid(Var : Type,Term*)
+   ===>
+   atc(Cond* ==> Term1 = Term2,Nametable) = 
+     term_equal(get_sort(Var),parse_sort(Type)) =: t & Cond* ==> Term1 = Term2
+
+[atc-3] 
+   get-funid(Term1) = Funid,
+   is-traversal-funid(Funid) = true,
+   Term1 = Funid(Var : Type,Term*)
+   ===>
+   atc(default: Cond* ==> Term1 = Term2,Nametable) = 
+     default: term_equal(get_sort(Var),parse_sort(Type)) =: t & Cond* ==> Term1 = Term2
+
