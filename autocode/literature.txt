@@ -1,3 +1,80 @@
+DemeterJ (Adaptive Programming)
+-------------------------------
+
+http://www.ccs.neu.edu/research/demeter/biblio/components.html
+
+One key insight behind the STL template library is that iterators
+serve as interface to combine algorithms and data structures.
+Adaptive programming takes this idea one step higher: traversal
+strategies are the interface to combine algorithms and data structures.
+Algorithms are parameterized by interface class graphs and when
+the detailed data structure is given, we write traversal strategies
+(satisfying the constraints expressed by the algorithms) to
+link algorithms and data structures. The traversal strategies are used
+to generate all the iterators needed for the concrete data structure. Adaptive programs have interface class graphs
+in their interface (formal parameters)
+and class graphs serve as actual parameters.
+We write strategies to adapt actual parameters to formal parameters.
+
+http://www.ccs.neu.edu/research/demeter/DemeterJava/UserManual/
+
+- Java specific
+- Demeter is designed to help you build high- quality object-oriented
+software in a productive and timely manner.
+- Class structure is described using a 'class dictionary' comparable to autocode data definition file:
+
+Conglomerate = <name> Name <head> Company .
+Name = <n> Ident .
+Company = Name
+          <payroll> List(Employee)
+          <subsidiaries> List(Company) .
+Employee : Manager | Staff common Name
+                                    Salary.
+Salary = <amount> Integer .
+Manager = .
+Staff = .
+List(S) ~ { S }. 
+
+EmpSearchVisitor = <emplname> Name.
+
+class Conglomerate implements Cloneable {
+  protected Name name;
+  public Name get_name() { return name; }
+  public void set_name(Name new_name)
+    { name = new_name; }
+  protected Company head;
+  public Company get_head() { return head; }
+  public void set_head(Company new_head)
+    { head = new_head; }
+  Conglomerate() { super(); }
+  public Conglomerate(Name name, Company head) {
+    super();
+    set_name(name);
+    set_head(head);
+  }
+  ...
+};
+
+- Separate notion of collection classes
+- Concrete classes cannot have subclasses
+- Primitive classes: Ident, Text, String, Word, Line (+ Java builtin types)
+- Two-way Mapping between grammar and class structure (parser generator)
+- Separate behaviour definition
+- Traversal and visitor oriented
+
+- An adaptive program is an object-oriented program which
+  is abstracted over the particular class structure.
+
+Zephyr ASDL
+-----------
+- Targeted at compiler building.
+- Generates data structure implementations in C, C++, Java,
+  Standard ML and Haskell.
+- Generated operations include accessors and serialization code.
+- Serialization code aimed at reading and writing data structures
+  in a compact, machine and language independent way (pickles).
+- Offers a graphical browser and editor for data described in ASDL.
+
 Corba IDL compiler
 ------------------
 - Generated code is not meant to be readable (and is unreadable)
