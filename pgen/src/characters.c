@@ -88,6 +88,9 @@ void CC_cleanup()
 
 CC_Class *CC_alloc()
 {
+#ifdef DEBUG_ALLOC
+  return (CC_Class *)calloc(1, sizeof(CC_Class));
+#else
   int i;
   CC_Class *block;
   CC_Class *c;
@@ -115,6 +118,7 @@ CC_Class *CC_alloc()
   }
 
   return c;
+#endif
 }
 
 /*}}}  */
@@ -158,11 +162,16 @@ void CC_clear(CC_Class *cc)
 /*}}}  */
 /*{{{  void CC_free(CC_Class *cc) */
 
+
 void CC_free(CC_Class *cc)
 {
+#ifdef DEBUG_ALLOC
+  free(cc);
+#else
   struct CC_Node *node = (struct CC_Node *)cc;
   node->next = free_nodes;
   free_nodes = node;
+#endif
 }
 
 /*}}}  */
@@ -631,7 +640,7 @@ void CC_copySet(CC_Set *source, CC_Set *dest)
 
 /*}}}  */
 
-/*{{{  void CC_calcBoundaries(CC_Class *elems, CC_Class *bounds) */
+/*{{{  void CC_addBoundaries(CC_Class *elems, CC_Class *bounds) */
 
 void CC_addBoundaries(CC_Class *elems, CC_Class *bounds)
 {

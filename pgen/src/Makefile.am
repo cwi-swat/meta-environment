@@ -32,6 +32,7 @@ test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
 #CFLAGS += -pg
+#CFLAGS += -DDEBUG_ALLOC
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
