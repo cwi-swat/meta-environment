@@ -1,7 +1,8 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(error-support, 0.1)
 
 ACLOCAL="${ACLOCAL} -I ."
@@ -80,18 +81,18 @@ AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl }}}
 dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl }}}
 
 dnl {{{  Which files need updating?
-AC_OUTPUT(
-  Makefile
+AC_CONFIG_FILES([Makefile
   lib/Makefile
   doc/Makefile
   utils/Makefile
   utils/lift-error/Makefile
   utils/lower-error/Makefile
-)
+])
+AC_OUTPUT
 
 dnl }}}
