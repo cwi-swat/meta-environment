@@ -100,7 +100,6 @@ toolbus(
     DumpParseTable,
     Editors,
     File-creator,
-    GenAdapt,
     GetEquations,
     GetParseTable,
     Io,
