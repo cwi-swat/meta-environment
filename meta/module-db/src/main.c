@@ -263,9 +263,7 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
 	  fullImports = SDF_makeImportListEmpty();
         }
 	else {
-	  ATwarning("broken due to refactoring in sdf-support\n");
-	  /*fullImports = SDF_getModuleImportsList(module);*/
-	  fullImports = NULL;
+	  fullImports = SDF_getModuleImportsList(module);
 	}
 	return ATmake("snd-value(renaming-equations(<term>,<term>,<term>))",
 		      SDF_makeTermFromRenamings(renamings),
@@ -318,9 +316,7 @@ ATerm get_equations_for_renamed_import(int cid, ATerm atImport, ATerm atRenaming
 	    fullImports = SDF_makeImportListEmpty();
           }
 	  else {
-	    ATwarning("broken due to refactoring in sdf-support\n");
-	    /*fullImports = SDF_getModuleImportsList(module);*/
-	    fullImports = NULL;
+	    fullImports = SDF_getModuleImportsList(module);
 	  }
 	  return ATmake("snd-value(renamed-equations(<term>,<term>,<term>))",
 		        SDF_makeTermFromRenamings(newRenamings),

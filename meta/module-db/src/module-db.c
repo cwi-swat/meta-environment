@@ -23,7 +23,6 @@ SDF_ImportList MDB_getImports(ATerm moduleName)
     SDF_Module module = SDF_getStartTopModule(
                           SDF_StartFromTerm(
                             MS_getSdfTree(moduleName)));
-    printf("broken due to refactoring in sdf-support");
     result = SDF_getModuleImportsList(module);
   }
   else {
