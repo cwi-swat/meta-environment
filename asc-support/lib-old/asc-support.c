@@ -1,7 +1,8 @@
 /*
 
     Asf Sdf Compiler Runtime Library
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -473,7 +474,7 @@ ATermList string2list(char *s)
   ATermList result = ATempty;
 
   for(i=strlen(s)-1; i>=0; i--) {
-    result = ATinsert(result,make_char((int)s[i]));
+    result = ATinsert(result,make_char((int)((unsigned char)s[i])));
   }
 
   return result;
@@ -1193,6 +1194,7 @@ static int get_list_length(ATermList chars)
 
 static char *get_chars_from_list(char *buf, ATermList chars)
 {
+
   while(!ATisEmpty(chars)) {
     ATerm el = ATgetFirst(chars);
     chars = ATgetNext(chars);
