@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AM_INIT_AUTOMAKE(meta, 1.6)
+GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
 AC_PROG_CC

@@ -4,7 +4,7 @@ ACLOCAL_FLAGS = -I .
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = make_rules program-check.m4 $(wildcard *.pkg) libltdl/config-h.in
+EXTRA_DIST = make_rules program-check.m4 package libltdl/config-h.in
 
 CLEANFILES = \
 	${PACKAGE}-${VERSION}.pkg \
@@ -25,7 +25,5 @@ SUBDIRS = \
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
-${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
-	sed 's#__VERSION__#${VERSION}#g;\
-             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
-
+${PACKAGE}-${VERSION}.pkg: package Makefile
+	cp $< $@
