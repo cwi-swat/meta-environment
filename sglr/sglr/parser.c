@@ -611,7 +611,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
                           SG_ST_STATE(st0), SG_ST_STATE(st1),
                           reject?" {reject}":"");
     /*  Reject?  */
-    if (reject) {     /*  J$: Don't bother represing rejects  */
+    if (reject) {     /*  J$: Don't bother representing rejects  */
       if (SG_DEBUG)
         ATfprintf(SGlog(), "Rejecting %t\n", t);
       SG_PropagateReject(st1);
@@ -647,6 +647,10 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
     /* First check if one of the children of |st1| was not rejected already */
     nl = SG_AddLink(st1, st0, t);
+    if(SG_DEBUG && SG_Rejected(st1)) {
+      ATfprintf(SGlog(),"Stack %xd (state %d) was already rejected\n",
+                st1, SG_ST_STATE(st1));
+    }
     /*  Reject?  */
     if (reject) {
       if(SG_DEBUG)
@@ -661,7 +665,12 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
       st2 = head(sts);
       sts = tail(sts);
-      if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor, ATfalse)
+/*
+      if(SG_Rejected(st2)) {
+        ATfprintf(stderr,"Stack %xd was already rejected\n", SG_ST_STATE(st2));
+      } else
+ */
+        if(!SG_InStacks(st2, for_actor, ATfalse)
          && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
         as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
         for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
