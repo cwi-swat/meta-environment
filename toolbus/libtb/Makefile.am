@@ -17,18 +17,11 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-bin_PROGRAMS         = wish-adapter
-pkgdata_DATA            = tb.tcl
 
-EXTRA_DIST           = wish-adapter.guide.tex tb.tcl
+noinst_LIBRARIES   = libtb.a
 
-wish_adapter_SOURCES = wish-adapter.c
-wish_adapter_LDADD   = -L$(top_builddir)/libtb -ltb
+libtb_a_SOURCES = client.c evq.c sockets.c symbol.c \
+                  terms.c tool.c tool2.c utils.c 
 
-
-WISH_DEFS            = -DWISH=\"$(WISH)\" \
-                       -DTBTCL=\"$(pkgdatadir)/tb.tcl\" \
-                       -DLIBDIR=\"$(pkgdatadir)\"
-
-INCLUDES             = -I $(top_srcdir)/libtb $(WISH_DEFS)
-
+noinst_HEADERS  = procs.h sockets.h terms.h tool2.h toolbus.h tools.h \
+                  utils.h symbol.h evq.h TB.h tool.h

@@ -49,8 +49,8 @@ CLEANFILES = \
 	test-annos \
 	read
 
-LDADD           = -L$(TOOLBUSLIB)/lib -ltb
-INCLUDES        = -I$(TOOLBUSLIB)/include
+LDADD           = -L$(top_builddir)/libtb -ltb
+INCLUDES        = -I$(top_srcdir)/libtb
 
 %-ok : %.tb
 	echo '#!/bin/sh'  > $@
