@@ -58,7 +58,6 @@ static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
     newTree = PT_applyFunctionToTree("remove-var-syntax",
-                		     "Remove-Var-Syntax",
 				     "SDF",
 				     2,
 				     ptModuleName,

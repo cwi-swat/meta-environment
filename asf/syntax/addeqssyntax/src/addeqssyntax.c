@@ -58,7 +58,6 @@ static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
     newTree = PT_applyFunctionToTree("add-equation-module",
-                		     "Add-Eqs-Syntax",
 				     "SDF",
 				     2,
 				     ptModuleName,
