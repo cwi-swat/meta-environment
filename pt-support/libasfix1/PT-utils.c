@@ -121,6 +121,12 @@ int PT_getSymbolsLength(PT_Symbols symbols)
   return ATgetLength((ATermList)PT_makeTermFromSymbols(symbols));
 }
 
+PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
+{
+  return PT_makeSymbolFromTerm(
+           ATelementAt((ATermList)PT_makeTermFromSymbols(symbols), index));
+}
+
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
                                PT_AttrVisitorData data)
 {
