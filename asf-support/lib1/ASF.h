@@ -27,7 +27,7 @@ typedef struct _ASF_CondEquationList *ASF_CondEquationList;
 typedef struct _ASF_CondEquation *ASF_CondEquation;
 typedef struct _ASF_Tag *ASF_Tag;
 typedef struct _ASF_Tree *ASF_Tree;
-typedef struct _ASF_CHARChars *ASF_CHARChars;
+typedef struct _ASF_CHARList *ASF_CHARList;
 typedef struct _ASF_Equation *ASF_Equation;
 typedef struct _ASF_Condition *ASF_Condition;
 typedef struct _ASF_CHAR *ASF_CHAR;
@@ -54,8 +54,8 @@ ASF_Tag ASF_makeTagFromTerm(ATerm t);
 ATerm ASF_makeTermFromTag(ASF_Tag arg);
 ASF_Tree ASF_makeTreeFromTerm(ATerm t);
 ATerm ASF_makeTermFromTree(ASF_Tree arg);
-ASF_CHARChars ASF_makeCHARCharsFromTerm(ATerm t);
-ATerm ASF_makeTermFromCHARChars(ASF_CHARChars arg);
+ASF_CHARList ASF_makeCHARListFromTerm(ATerm t);
+ATerm ASF_makeTermFromCHARList(ASF_CHARList arg);
 ASF_Equation ASF_makeEquationFromTerm(ATerm t);
 ATerm ASF_makeTermFromEquation(ASF_Equation arg);
 ASF_Condition ASF_makeConditionFromTerm(ATerm t);
@@ -79,13 +79,13 @@ ASF_CondEquation ASF_makeCondEquationImplies(ASF_Tag Tag, ASF_Layout wsAfterTag,
 ASF_CondEquation ASF_makeCondEquationWhen(ASF_Tag Tag, ASF_Layout wsAfterTag, ASF_Equation Equation, ASF_Layout wsAfterEquation, ASF_Layout wsAfterWhen, ASF_Conditions Conditions);
 ASF_Tag ASF_makeTagEmpty(ASF_Layout wsAfterBracketOpen);
 ASF_Tag ASF_makeTagNotEmpty(ASF_Layout wsAfterBracketOpen, ASF_TagId TagId, ASF_Layout wsAfterTagId);
-ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Layout wsAfterFunction, ASF_Layout wsAfterParenOpen, ASF_CHARChars chars, ASF_Layout wsAfterChars);
-ASF_CHARChars ASF_makeCHARCharsEmpty();
-ASF_CHARChars ASF_makeCHARCharsSingle(ASF_CHAR head);
-ASF_CHARChars ASF_makeCHARCharsMany(ASF_CHAR head, ASF_Layout wsAfterFirst, ASF_CHARChars tail);
-ASF_Equation ASF_makeEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
-ASF_Condition ASF_makeConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
-ASF_Condition ASF_makeConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs);
+ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList);
+ASF_CHARList ASF_makeCHARListEmpty();
+ASF_CHARList ASF_makeCHARListSingle(ASF_CHAR head);
+ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_Layout wsAfterFirst, ASF_CHARList tail);
+ASF_Equation ASF_makeEquationDefault(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
+ASF_Condition ASF_makeConditionPositive(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
+ASF_Condition ASF_makeConditionNegative(ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs);
 ASF_CHAR ASF_makeCHARDefault(ASF_Lexical lex);
 
 /*{{{  equality functions */
@@ -99,7 +99,7 @@ ATbool ASF_isEqualCondEquationList(ASF_CondEquationList arg0, ASF_CondEquationLi
 ATbool ASF_isEqualCondEquation(ASF_CondEquation arg0, ASF_CondEquation arg1);
 ATbool ASF_isEqualTag(ASF_Tag arg0, ASF_Tag arg1);
 ATbool ASF_isEqualTree(ASF_Tree arg0, ASF_Tree arg1);
-ATbool ASF_isEqualCHARChars(ASF_CHARChars arg0, ASF_CHARChars arg1);
+ATbool ASF_isEqualCHARList(ASF_CHARList arg0, ASF_CHARList arg1);
 ATbool ASF_isEqualEquation(ASF_Equation arg0, ASF_Equation arg1);
 ATbool ASF_isEqualCondition(ASF_Condition arg0, ASF_Condition arg1);
 ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
@@ -240,35 +240,38 @@ ASF_Tag ASF_setTagWsAfterBracketOpen(ASF_Tag arg, ASF_Layout wsAfterBracketOpen)
 
 ATbool ASF_isValidTree(ASF_Tree arg);
 ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterList(ASF_Tree arg);
+ASF_Layout ASF_getTreeWsAfterList(ASF_Tree arg);
+ASF_Tree ASF_setTreeWsAfterList(ASF_Tree arg, ASF_Layout wsAfterList);
 ATbool ASF_hasTreeWsAfterParenOpen(ASF_Tree arg);
 ASF_Layout ASF_getTreeWsAfterParenOpen(ASF_Tree arg);
 ASF_Tree ASF_setTreeWsAfterParenOpen(ASF_Tree arg, ASF_Layout wsAfterParenOpen);
-ATbool ASF_hasTreeWsAfterFunction(ASF_Tree arg);
-ASF_Layout ASF_getTreeWsAfterFunction(ASF_Tree arg);
-ASF_Tree ASF_setTreeWsAfterFunction(ASF_Tree arg, ASF_Layout wsAfterFunction);
-ATbool ASF_hasTreeChars(ASF_Tree arg);
-ASF_CHARChars ASF_getTreeChars(ASF_Tree arg);
-ASF_Tree ASF_setTreeChars(ASF_Tree arg, ASF_CHARChars chars);
-ATbool ASF_hasTreeWsAfterChars(ASF_Tree arg);
-ASF_Layout ASF_getTreeWsAfterChars(ASF_Tree arg);
-ASF_Tree ASF_setTreeWsAfterChars(ASF_Tree arg, ASF_Layout wsAfterChars);
+ATbool ASF_hasTreeWsAfterName(ASF_Tree arg);
+ASF_Layout ASF_getTreeWsAfterName(ASF_Tree arg);
+ASF_Tree ASF_setTreeWsAfterName(ASF_Tree arg, ASF_Layout wsAfterName);
+ATbool ASF_hasTreeList(ASF_Tree arg);
+ASF_CHARList ASF_getTreeList(ASF_Tree arg);
+ASF_Tree ASF_setTreeList(ASF_Tree arg, ASF_CHARList list);
+ATbool ASF_hasTreeName(ASF_Tree arg);
+ASF_Tree ASF_getTreeName(ASF_Tree arg);
+ASF_Tree ASF_setTreeName(ASF_Tree arg, ASF_Tree name);
 
 /*}}}  */
-/*{{{  ASF_CHARChars accessor prototypes */
+/*{{{  ASF_CHARList accessor prototypes */
 
-ATbool ASF_isValidCHARChars(ASF_CHARChars arg);
-ATbool ASF_isCHARCharsEmpty(ASF_CHARChars arg);
-ATbool ASF_isCHARCharsSingle(ASF_CHARChars arg);
-ATbool ASF_isCHARCharsMany(ASF_CHARChars arg);
-ATbool ASF_hasCHARCharsWsAfterFirst(ASF_CHARChars arg);
-ASF_Layout ASF_getCHARCharsWsAfterFirst(ASF_CHARChars arg);
-ASF_CHARChars ASF_setCHARCharsWsAfterFirst(ASF_CHARChars arg, ASF_Layout wsAfterFirst);
-ATbool ASF_hasCHARCharsTail(ASF_CHARChars arg);
-ASF_CHARChars ASF_getCHARCharsTail(ASF_CHARChars arg);
-ASF_CHARChars ASF_setCHARCharsTail(ASF_CHARChars arg, ASF_CHARChars tail);
-ATbool ASF_hasCHARCharsHead(ASF_CHARChars arg);
-ASF_CHAR ASF_getCHARCharsHead(ASF_CHARChars arg);
-ASF_CHARChars ASF_setCHARCharsHead(ASF_CHARChars arg, ASF_CHAR head);
+ATbool ASF_isValidCHARList(ASF_CHARList arg);
+ATbool ASF_isCHARListEmpty(ASF_CHARList arg);
+ATbool ASF_isCHARListSingle(ASF_CHARList arg);
+ATbool ASF_isCHARListMany(ASF_CHARList arg);
+ATbool ASF_hasCHARListWsAfterFirst(ASF_CHARList arg);
+ASF_Layout ASF_getCHARListWsAfterFirst(ASF_CHARList arg);
+ASF_CHARList ASF_setCHARListWsAfterFirst(ASF_CHARList arg, ASF_Layout wsAfterFirst);
+ATbool ASF_hasCHARListTail(ASF_CHARList arg);
+ASF_CHARList ASF_getCHARListTail(ASF_CHARList arg);
+ASF_CHARList ASF_setCHARListTail(ASF_CHARList arg, ASF_CHARList tail);
+ATbool ASF_hasCHARListHead(ASF_CHARList arg);
+ASF_CHAR ASF_getCHARListHead(ASF_CHARList arg);
+ASF_CHARList ASF_setCHARListHead(ASF_CHARList arg, ASF_CHAR head);
 
 /*}}}  */
 /*{{{  ASF_Equation accessor prototypes */
@@ -278,15 +281,9 @@ ATbool ASF_isEquationDefault(ASF_Equation arg);
 ATbool ASF_hasEquationRhs(ASF_Equation arg);
 ASF_Tree ASF_getEquationRhs(ASF_Equation arg);
 ASF_Equation ASF_setEquationRhs(ASF_Equation arg, ASF_Tree rhs);
-ATbool ASF_hasEquationLhsSymbol(ASF_Equation arg);
-ASF_Symbol ASF_getEquationLhsSymbol(ASF_Equation arg);
-ASF_Equation ASF_setEquationLhsSymbol(ASF_Equation arg, ASF_Symbol lhsSymbol);
 ATbool ASF_hasEquationLhs(ASF_Equation arg);
 ASF_Tree ASF_getEquationLhs(ASF_Equation arg);
 ASF_Equation ASF_setEquationLhs(ASF_Equation arg, ASF_Tree lhs);
-ATbool ASF_hasEquationRhsSymbol(ASF_Equation arg);
-ASF_Symbol ASF_getEquationRhsSymbol(ASF_Equation arg);
-ASF_Equation ASF_setEquationRhsSymbol(ASF_Equation arg, ASF_Symbol rhsSymbol);
 ATbool ASF_hasEquationWsAfterEquals(ASF_Equation arg);
 ASF_Layout ASF_getEquationWsAfterEquals(ASF_Equation arg);
 ASF_Equation ASF_setEquationWsAfterEquals(ASF_Equation arg, ASF_Layout wsAfterEquals);
@@ -303,18 +300,12 @@ ATbool ASF_isConditionNegative(ASF_Condition arg);
 ATbool ASF_hasConditionRhs(ASF_Condition arg);
 ASF_Tree ASF_getConditionRhs(ASF_Condition arg);
 ASF_Condition ASF_setConditionRhs(ASF_Condition arg, ASF_Tree rhs);
-ATbool ASF_hasConditionLhsSymbol(ASF_Condition arg);
-ASF_Symbol ASF_getConditionLhsSymbol(ASF_Condition arg);
-ASF_Condition ASF_setConditionLhsSymbol(ASF_Condition arg, ASF_Symbol lhsSymbol);
 ATbool ASF_hasConditionLhs(ASF_Condition arg);
 ASF_Tree ASF_getConditionLhs(ASF_Condition arg);
 ASF_Condition ASF_setConditionLhs(ASF_Condition arg, ASF_Tree lhs);
 ATbool ASF_hasConditionWsAfterUnequal(ASF_Condition arg);
 ASF_Layout ASF_getConditionWsAfterUnequal(ASF_Condition arg);
 ASF_Condition ASF_setConditionWsAfterUnequal(ASF_Condition arg, ASF_Layout wsAfterUnequal);
-ATbool ASF_hasConditionRhsSymbol(ASF_Condition arg);
-ASF_Symbol ASF_getConditionRhsSymbol(ASF_Condition arg);
-ASF_Condition ASF_setConditionRhsSymbol(ASF_Condition arg, ASF_Symbol rhsSymbol);
 ATbool ASF_hasConditionWsAfterEquals(ASF_Condition arg);
 ASF_Layout ASF_getConditionWsAfterEquals(ASF_Condition arg);
 ASF_Condition ASF_setConditionWsAfterEquals(ASF_Condition arg, ASF_Layout wsAfterEquals);

@@ -1,1 +1,1684 @@
-[[Implies,default,lex(<lex(Lexical)>,sort("Implies"))],[TagId,one-char,lex(<lex(Lexical)>,sort("TagId"))],[TagId,many-chars,lex(<lex(Lexical)>,sort("TagId"))],[Conditions,Default,appl(prod(id("Equations"),w(""),[iter-sep(l("{"),w(""),sort("Condition"),w(""),ql(","),w(""),l("}"),w(""),l("+"))],w(""),l("->"),w(""),sort("Conditions"),w(""),no-attrs),w(""),[list(iter-sep(l("{"),w(""),sort("Condition"),w(""),ql(","),w(""),l("}"),w(""),l("*")),w(""),<list(Condition-list)>)])],[Condition-list,single,[<head(Condition)>]],[Condition-list,many,[<head(Condition)>,w(<ws-after-first(Layout)>),<sep(Separator)>,w(<ws-after-sep(Layout)>),<[tail(Condition-list)]>]],[Equations,absent,appl(prod(id("Equations"),w(""),[],w(""),l("->"),w(""),sort("Equations"),w(""),no-attrs),w(""),[])],[Equations,present,appl(prod(id("Equations"),w(""),[ql("equations"),w(""),iter(sort("CondEquation"),w(""),l("*"))],w(""),l("->"),w(""),sort("Equations"),w(""),no-attrs),w(""),[l("equations"),w(<"ws-after-equations"(Layout)>),list(iter(sort("CondEquation"),w(""),l("*")),w(""),<list(CondEquation-list)>)])],[CondEquation-list,empty,[]],[CondEquation-list,single,[<head(CondEquation)>]],[CondEquation-list,many,[<head(CondEquation)>,w(<ws-after-first(Layout)>),<[tail(CondEquation-list)]>]],[CondEquation,simple,appl(prod(id("Equations"),w(""),[sort("Tag"),w(""),sort("Equation")],w(""),l("->"),w(""),sort("CondEquation"),w(""),no-attrs),w(""),[<Tag(Tag)>,w(<ws-after-Tag(Layout)>),<Equation(Equation)>])],[CondEquation,implies,appl(prod(id("Equations"),w(""),[sort("Tag"),w(""),sort("Conditions"),w(""),sort("Implies"),w(""),sort("Equation")],w(""),l("->"),w(""),sort("CondEquation"),w(""),no-attrs),w(""),[<Tag(Tag)>,w(<ws-after-Tag(Layout)>),<Conditions(Conditions)>,w(<ws-after-Conditions(Layout)>),<Implies(Implies)>,w(<ws-after-Implies(Layout)>),<Equation(Equation)>])],[CondEquation,when,appl(prod(id("Equations"),w(""),[sort("Tag"),w(""),sort("Equation"),w(""),ql("when"),w(""),sort("Conditions")],w(""),l("->"),w(""),sort("CondEquation"),w(""),no-attrs),w(""),[<Tag(Tag)>,w(<ws-after-Tag(Layout)>),<Equation(Equation)>,w(<ws-after-Equation(Layout)>),l("when"),w(<"ws-after-when"(Layout)>),<Conditions(Conditions)>])],[Tag,empty,appl(prod(id("Equations"),w(""),[ql("["),w(""),ql("]")],w(""),l("->"),w(""),sort("Tag"),w(""),no-attrs),w(""),[l("["),w(<"ws-after-["(Layout)>),l("]")])],[Tag,not-empty,appl(prod(id("Equations"),w(""),[ql("["),w(""),sort("TagId"),w(""),ql("]")],w(""),l("->"),w(""),sort("Tag"),w(""),no-attrs),w(""),[l("["),w(<"ws-after-["(Layout)>),<TagId(TagId)>,w(<ws-after-TagId(Layout)>),l("]")])],[Tree,lexical-constructor,appl(prod(id("GEN-LexConsFuncs"),w(""),[ql("term"),w(""),ql("("),w(""),iter(sort("CHAR"),w(""),l("*")),w(""),ql(")")],w(""),l("->"),w(""),sort("Tree"),w(""),no-attrs),w(""),[l("term"),w(<ws-after-function(Layout)>),l("("),w(<"ws-after-("(Layout)>),list(iter(sort("CHAR"),w(""),l("*")),w(""),<chars(CHAR-chars)>),w(<ws-after-chars(Layout)>),l(")")])],[CHAR-chars,empty,[]],[CHAR-chars,single,[<head(CHAR)>]],[CHAR-chars,many,[<head(CHAR)>,w(<ws-after-first(Layout)>),<[tail(CHAR-chars)]>]],[Equation,Default,appl(prod(id("GEN-Equations"),w(""),[<lhs-symbol(Symbol)>,w(""),ql("="),w(""),<rhs-symbol(Symbol)>],w(""),l("->"),w(""),sort("Equation"),w(""),no-attrs),w(""),[<lhs(Tree)>,w(<ws-after-lhs(Layout)>),l("="),w(<"ws-after-="(Layout)>),<rhs(Tree)>])],[Condition,positive,appl(prod(id("GEN-Equations"),w(""),[<lhs-symbol(Symbol)>,w(""),ql("="),w(""),<rhs-symbol(Symbol)>],w(""),l("->"),w(""),sort("Condition"),w(""),no-attrs),w(""),[<lhs(Tree)>,w(<ws-after-lhs(Layout)>),l("="),w(<"ws-after-="(Layout)>),<rhs(Tree)>])],[Condition,negative,appl(prod(id("GEN-Equations"),w(""),[<lhs-symbol(Symbol)>,w(""),ql("!="),w(""),<rhs-symbol(Symbol)>],w(""),l("->"),w(""),sort("Condition"),w(""),no-attrs),w(""),[<lhs(Tree)>,w(<ws-after-lhs(Layout)>),l("!="),w(<ws-after-unequal(Layout)>),<rhs(Tree)>])],[CHAR,default,lex(<lex(Lexical)>,sort("CHAR"))]]
+
+
+
+[ 
+
+
+[ 
+
+Implies
+, 
+default
+, 
+lex ( 
+
+< 
+lex ( 
+
+Lexical ) >
+, 
+sort ( 
+
+
+"Implies" ) ) ]
+, 
+
+[ 
+
+TagId
+, 
+one-char
+, 
+lex ( 
+
+< 
+lex ( 
+
+Lexical ) >
+, 
+sort ( 
+
+
+"TagId" ) ) ]
+, 
+
+[ 
+
+TagId
+, 
+many-chars
+, 
+lex ( 
+
+< 
+lex ( 
+
+Lexical ) >
+, 
+sort ( 
+
+
+"TagId" ) ) ]
+, 
+
+[ 
+
+Conditions
+, 
+Default
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+iter-sep ( 
+
+l ( 
+
+
+"{" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Condition" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"," )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"}" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"+" ) ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Conditions" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+list ( 
+
+iter-sep ( 
+
+l ( 
+
+
+"{" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Condition" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"," )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"}" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"*" ) )
+, 
+w ( 
+
+
+"" )
+, 
+< 
+list ( 
+
+Condition-list ) > ) ] ) ]
+, 
+
+[ 
+
+Condition-list
+, 
+single
+, 
+
+[ 
+
+< 
+head ( 
+
+Condition ) > ] ]
+, 
+
+[ 
+
+Condition-list
+, 
+many
+, 
+
+[ 
+
+< 
+head ( 
+
+Condition ) >
+, 
+w ( 
+
+< 
+ws-after-first ( 
+
+Layout ) > )
+, 
+< 
+sep ( 
+
+Separator ) >
+, 
+w ( 
+
+< 
+ws-after-sep ( 
+
+Layout ) > )
+, 
+< 
+
+[ 
+
+tail ( 
+
+Condition-list ) ] > ] ]
+, 
+
+[ 
+
+Equations
+, 
+absent
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+ ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+ ] ) ]
+, 
+
+[ 
+
+Equations
+, 
+present
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+ql ( 
+
+
+"equations" )
+, 
+w ( 
+
+
+"" )
+, 
+iter ( 
+
+sort ( 
+
+
+"CondEquation" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"*" ) ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+l ( 
+
+
+"equations" )
+, 
+w ( 
+
+< 
+
+"ws-after-equations" ( 
+
+Layout ) > )
+, 
+list ( 
+
+iter ( 
+
+sort ( 
+
+
+"CondEquation" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"*" ) )
+, 
+w ( 
+
+
+"" )
+, 
+< 
+list ( 
+
+CondEquation-list ) > ) ] ) ]
+, 
+
+[ 
+
+CondEquation-list
+, 
+empty
+, 
+
+[ 
+ ] ]
+, 
+
+[ 
+
+CondEquation-list
+, 
+single
+, 
+
+[ 
+
+< 
+head ( 
+
+CondEquation ) > ] ]
+, 
+
+[ 
+
+CondEquation-list
+, 
+many
+, 
+
+[ 
+
+< 
+head ( 
+
+CondEquation ) >
+, 
+w ( 
+
+< 
+ws-after-first ( 
+
+Layout ) > )
+, 
+< 
+
+[ 
+
+tail ( 
+
+CondEquation-list ) ] > ] ]
+, 
+
+[ 
+
+CondEquation
+, 
+simple
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tag" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equation" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"CondEquation" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+Tag ( 
+
+Tag ) >
+, 
+w ( 
+
+< 
+ws-after-Tag ( 
+
+Layout ) > )
+, 
+< 
+Equation ( 
+
+Equation ) > ] ) ]
+, 
+
+[ 
+
+CondEquation
+, 
+implies
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tag" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Conditions" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Implies" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equation" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"CondEquation" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+Tag ( 
+
+Tag ) >
+, 
+w ( 
+
+< 
+ws-after-Tag ( 
+
+Layout ) > )
+, 
+< 
+Conditions ( 
+
+Conditions ) >
+, 
+w ( 
+
+< 
+ws-after-Conditions ( 
+
+Layout ) > )
+, 
+< 
+Implies ( 
+
+Implies ) >
+, 
+w ( 
+
+< 
+ws-after-Implies ( 
+
+Layout ) > )
+, 
+< 
+Equation ( 
+
+Equation ) > ] ) ]
+, 
+
+[ 
+
+CondEquation
+, 
+when
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tag" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equation" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"when" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Conditions" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"CondEquation" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+Tag ( 
+
+Tag ) >
+, 
+w ( 
+
+< 
+ws-after-Tag ( 
+
+Layout ) > )
+, 
+< 
+Equation ( 
+
+Equation ) >
+, 
+w ( 
+
+< 
+ws-after-Equation ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"when" )
+, 
+w ( 
+
+< 
+
+"ws-after-when" ( 
+
+Layout ) > )
+, 
+< 
+Conditions ( 
+
+Conditions ) > ] ) ]
+, 
+
+[ 
+
+Tag
+, 
+empty
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+ql ( 
+
+
+"[" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"]" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tag" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+l ( 
+
+
+"[" )
+, 
+w ( 
+
+< 
+
+"ws-after-[" ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"]" ) ] ) ]
+, 
+
+[ 
+
+Tag
+, 
+not-empty
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+ql ( 
+
+
+"[" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"TagId" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"]" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tag" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+l ( 
+
+
+"[" )
+, 
+w ( 
+
+< 
+
+"ws-after-[" ( 
+
+Layout ) > )
+, 
+< 
+TagId ( 
+
+TagId ) >
+, 
+w ( 
+
+< 
+ws-after-TagId ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"]" ) ] ) ]
+, 
+
+[ 
+
+Tree
+, 
+lexical-constructor
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"GEN-LexConsFuncs" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tree" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"(" )
+, 
+w ( 
+
+
+"" )
+, 
+iter ( 
+
+sort ( 
+
+
+"CHAR" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"*" ) )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+")" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tree" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+name ( 
+
+Tree ) >
+, 
+w ( 
+
+< 
+ws-after-name ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"(" )
+, 
+w ( 
+
+< 
+
+"ws-after-(" ( 
+
+Layout ) > )
+, 
+list ( 
+
+iter ( 
+
+sort ( 
+
+
+"CHAR" )
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"*" ) )
+, 
+w ( 
+
+
+"" )
+, 
+< 
+list ( 
+
+CHAR-list ) > )
+, 
+w ( 
+
+< 
+ws-after-list ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+")" ) ] ) ]
+, 
+
+[ 
+
+CHAR-list
+, 
+empty
+, 
+
+[ 
+ ] ]
+, 
+
+[ 
+
+CHAR-list
+, 
+single
+, 
+
+[ 
+
+< 
+head ( 
+
+CHAR ) > ] ]
+, 
+
+[ 
+
+CHAR-list
+, 
+many
+, 
+
+[ 
+
+< 
+head ( 
+
+CHAR ) >
+, 
+w ( 
+
+< 
+ws-after-first ( 
+
+Layout ) > )
+, 
+< 
+
+[ 
+
+tail ( 
+
+CHAR-list ) ] > ] ]
+, 
+
+[ 
+
+Equation
+, 
+Default
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"GEN-Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tree" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"=" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tree" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Equation" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+lhs ( 
+
+Tree ) >
+, 
+w ( 
+
+< 
+ws-after-lhs ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"=" )
+, 
+w ( 
+
+< 
+
+"ws-after-=" ( 
+
+Layout ) > )
+, 
+< 
+rhs ( 
+
+Tree ) > ] ) ]
+, 
+
+[ 
+
+Condition
+, 
+positive
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"GEN-Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tree" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"=" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tree" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Condition" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+lhs ( 
+
+Tree ) >
+, 
+w ( 
+
+< 
+ws-after-lhs ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"=" )
+, 
+w ( 
+
+< 
+
+"ws-after-=" ( 
+
+Layout ) > )
+, 
+< 
+rhs ( 
+
+Tree ) > ] ) ]
+, 
+
+[ 
+
+Condition
+, 
+negative
+, 
+appl ( 
+
+prod ( 
+
+id ( 
+
+
+"GEN-Equations" )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+sort ( 
+
+
+"Tree" )
+, 
+w ( 
+
+
+"" )
+, 
+ql ( 
+
+
+"!=" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Tree" ) ]
+, 
+w ( 
+
+
+"" )
+, 
+l ( 
+
+
+"->" )
+, 
+w ( 
+
+
+"" )
+, 
+sort ( 
+
+
+"Condition" )
+, 
+w ( 
+
+
+"" )
+, 
+no-attrs )
+, 
+w ( 
+
+
+"" )
+, 
+
+[ 
+
+< 
+lhs ( 
+
+Tree ) >
+, 
+w ( 
+
+< 
+ws-after-lhs ( 
+
+Layout ) > )
+, 
+l ( 
+
+
+"!=" )
+, 
+w ( 
+
+< 
+ws-after-unequal ( 
+
+Layout ) > )
+, 
+< 
+rhs ( 
+
+Tree ) > ] ) ]
+, 
+
+[ 
+
+CHAR
+, 
+default
+, 
+lex ( 
+
+< 
+lex ( 
+
+Lexical ) >
+, 
+sort ( 
+
+
+"CHAR" ) ) ] ]

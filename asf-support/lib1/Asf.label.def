@@ -44,7 +44,7 @@ exports
 %%   term := tolower(Sort);
 %%   ADD PRODUCTIONS {
 
-       function:term "(" chars:CHAR* ")" -> Tree {cons("lexical-constructor")}
+       name:Tree "(" list:CHAR* ")" -> Tree {cons("lexical-constructor")}
 
 %%   }
 %% NEXT Sort

@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Feb 14 16:23:26 2001
+ * Generated at Thu Feb 15 16:29:55 2001
  */
 
 #ifndef __ASF_dict_H
@@ -12,9 +12,9 @@ extern ATerm ASF_patternCHARDefault;
 extern ATerm ASF_patternConditionNegative;
 extern ATerm ASF_patternConditionPositive;
 extern ATerm ASF_patternEquationDefault;
-extern ATerm ASF_patternCHARCharsMany;
-extern ATerm ASF_patternCHARCharsSingle;
-extern ATerm ASF_patternCHARCharsEmpty;
+extern ATerm ASF_patternCHARListMany;
+extern ATerm ASF_patternCHARListSingle;
+extern ATerm ASF_patternCHARListEmpty;
 extern ATerm ASF_patternTreeLexicalConstructor;
 extern ATerm ASF_patternTagNotEmpty;
 extern ATerm ASF_patternTagEmpty;

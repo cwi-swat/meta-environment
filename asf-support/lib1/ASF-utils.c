@@ -32,7 +32,7 @@ ASF_getCondEquationListLength(ASF_CondEquationList eqs)
 }
 
 ASF_ConditionList 
-foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor) 
+ASF_foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor) 
 {
   ATermList store;
   ASF_ConditionList newList;
@@ -68,7 +68,7 @@ foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor)
 }
 
 ASF_CondEquationList
-foreachCondEquationInList(ASF_CondEquationList list, 
+ASF_foreachCondEquationInList(ASF_CondEquationList list, 
                           ASF_CondEquationVisitor visitor)
 {
   ATermList store;
@@ -102,4 +102,9 @@ foreachCondEquationInList(ASF_CondEquationList list,
   }
 
   return newList;
+}
+
+int ASF_getCHARListLength(ASF_CHARList list)
+{
+  return (ATgetLength((ATermList) ASF_makeTermFromCHARList(list)) / 2) + 1;
 }
