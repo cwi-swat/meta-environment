@@ -1,0 +1,26 @@
+package 
+identification
+   name=relation-calculus
+   version=0.1
+   location=http://www.cwi.nl/projects/MetaEnv/relation-calculus
+   info=http://www.cwi.nl/projects/MetaEnv/relation-calculus
+   description='A calculator for relational expressions'
+
+
+   keywords=program understanding, program analysis, fact extraction, reengineering
+
+configuration interface
+
+requires
+   aterm        2.0.6
+   aterm-java   1.5
+   shared-objects 1.4
+   sglr         3.11
+   pgen         2.0
+   asf          1.8
+   pt-support   1.1
+   error-support   0.1
+   sdf-support  2.0
+   asf-support  1.2
+   asc-support  1.8
+
