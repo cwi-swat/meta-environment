@@ -94,7 +94,7 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
         if (PT_isAttrTerm(attr)) {
           ATerm term = PT_getAttrTerm(attr);
           char *constructor;
-          if (ATmatch(term, "\"cons\"(<str>)", &constructor)) {
+          if (ATmatch(term, "cons(<str>)", &constructor)) {
             AFun acons = ATmakeAFun(constructor, ATgetLength(args), ATfalse);
             return (ATerm)ATmakeApplList(acons,args);
           }

@@ -1,3 +1,10 @@
+2001/11/29 (jurgenv@cwi.nl)
+ * Syntax of attributes in productions has changes:
+   assoc("left") becomes assoc(left) -- the quotes have dissappeared.
+   Similarly for the other builtin attributes the quotes are gone.
+ * User-defined attributes are now quoted only if they were in the SDF2
+   specification. 
+
 2001/11/25 (mdejonge@cwi.nl)
  * package now uses toolbuslib package
  * extended functionality of program-check.m4 macros

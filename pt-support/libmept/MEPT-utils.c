@@ -915,7 +915,7 @@ ATbool PT_hasProductionMemoAttr(PT_Production prod)
 ATbool PT_hasProductionTraverseAttr(PT_Production prod)
 {
   return PT_hasProductionCertainAttr(prod, 
-				     PT_makeAttrTerm(ATparse("\"traverse\"")));
+				     PT_makeAttrTerm(ATparse("traverse")));
 }
 
 /*}}}  */       
