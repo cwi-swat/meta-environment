@@ -22,7 +22,8 @@ noinst_HEADERS = \
 	equations.h \
 	pre-post.h\
 	memotable.h\
-	evaluator.h
+	evaluator.h\
+	test-runner.h
 
 asfe_SOURCES =\
 	asfe.tif.c\
