@@ -56,10 +56,10 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= compiler.c expander.c asfixprinter.c aprinter.c asfix-trans.c init-patterns.c
+CSRC		= compiler.c expander.c asfixprinter.c asfix-trans.c init-patterns.c
 CHDR		= compiler.tif.c
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler aprinter
+BINFILES	= compiler 
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
@@ -68,7 +68,7 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler compiler.tif.c aprinter
+CLEANFILES	= compiler compiler.tif.c 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -89,9 +89,6 @@ compiler: compiler.o asfixprinter.o expander.o asfix-trans.o init-patterns.o \
 	cd c-source; gmake libasfix2c.a
 	$(CC) -o compiler compiler.o asfixprinter.o init-patterns.o \
 	 expander.o asfix-trans.o $(COMPMODS) $(LIBS)
-
-aprinter: aprinter.o asfixprinter.o
-	$(CC) -o aprinter aprinter.o asfixprinter.o $(LIBS)
 
 ##########################################################
 ### Everything below this line should remain unchanged ###

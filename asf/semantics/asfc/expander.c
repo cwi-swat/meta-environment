@@ -1954,6 +1954,10 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
   aname  = Tmake(ar,"l(<str>)",name);
   idname = TmakeSimple(ar,"id(\"AsFix2C\")");
   fname = TmakeSimple(ar,"l(\"asfix2c\")");
+/*
+  idname = TmakeSimple(ar,"id(\"AsFix2muASF-C\")");
+  fname = TmakeSimple(ar,"l(\"asfix2muasf\")");
+*/
   osym = term_open;
   csym = term_close;
   cprod = AFmakeProd(ar,idname,
@@ -1964,6 +1968,9 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
                                     TmakeSimple(ar,"sort(\"ATerm\")"),
                                     esp,
                                     csym),
+/*
+                     TmakeSimple(ar, "sort(\"MN-struct\")"),
+*/
                      TmakeSimple(ar, "sort(\"CProgram\")"),
                      TmakeSimple(ar, "no-attrs"));
   cappl = AFmakeAppl(ar,cprod,
@@ -2002,3 +2009,21 @@ aterm *expand_to_asfix(arena *ar, aterm *mod, char *name)
   TdestroyArena(&local);
   return result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -685,8 +685,12 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
   aterm *oldmod;
   Tbool write;
 
-  /*char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";*/
+/*
+  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles3/";
+  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles4/";
+*/
+  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles5/";
 
   TinitArena(NULL, &local);
 
@@ -721,12 +725,18 @@ Tprintf(stderr,"compile_module entered\n");
         if(!output) 
           Tprintf(stderr,"Cannot open file %s\n",fname);
         else {
+/*
+          cmod = AFcollapseModule(&local,amod);
+          Tprintf(output,"%t",cmod); 
+*/
           Tprintf(output,"%t",amod);
+
           Tprintf(output, "\n");
           fclose(output);
         }
         Tprintf(stderr,"Writing: %s.asfix\n", text);
-        expmod = expand_to_asfix(ar,amod,fname);
+
+        expmod = expand_to_asfix(&local,amod,fname);
 
 Tprintf(stderr,"Reducing ...\n");
 
@@ -735,14 +745,14 @@ Tprintf(stderr,"Reducing ...\n");
        
         TinitArena(w, &rewrite_arena);
         reduct = innermost(&rewrite_arena, trm);
-	Tadd2Arena(ar, reduct);
+	Tadd2Arena(&local, reduct);
 	TdestroyArena(&rewrite_arena);
 
 Tprintf(stderr,"Reducing finished.\n");
 
-        aname  = Tmake(ar,"l(<str>)",fname);
-        idname = TmakeSimple(ar,"id(\"AsFix2C\")");
-        cmod = toasfix(ar, reduct, aname, idname);
+        aname  = Tmake(&local,"l(<str>)",fname);
+        idname = TmakeSimple(&local,"id(\"AsFix2C\")");
+        cmod = toasfix(&local, reduct, aname, idname);
 Tprintf(stderr,"toasfix finished.\n");
         free(fname);
         len = strlen(path) + strlen(text) + strlen(".c");
@@ -759,13 +769,13 @@ Tprintf(stderr,"toasfix finished.\n");
         if(!output) 
           Tprintf(stderr,"Cannot open file %s\n", fname);
         else {
-          /*AFsourceToFile(cmod,output);*/
           ToC_code(cmod,output);
 Tprintf(stderr,"ToC_code finished.\n");
           Tprintf(output, "\n");
           fclose(output);
         }
         Tprintf(stderr,"Writing: %s.c\n", text);
+
       }
       else
         free(fname);
