@@ -573,7 +573,7 @@ void process_restrictions(SDF_RestrictionList restricts)
 
 ATerm generate_parse_table(PT_ParseTree g)
 {
-  int i, nr_actions, nr_gotos;
+  int i, nr_actions = 0, nr_gotos = 0;
   ATerm labelsection, priosection, vnr, vertex, state, newaction;
   ATermList statelist = ATempty, gotos, actions;
 

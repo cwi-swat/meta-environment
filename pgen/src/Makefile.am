@@ -4,7 +4,6 @@ INCLUDES	= -I${ATERM}/include \
 		-I${TOOLBUS}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
-		-I${ASF_SUPPORT}/include \
 		-I${ASC_SUPPORT}/include
 
 bin_PROGRAMS	= parsetablegen
