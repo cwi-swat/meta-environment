@@ -4,6 +4,7 @@
 
 INCLUDES = \
 	-I$(ASC_SUPPORT)/include \
+	-I$(SGLR)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
