@@ -1,5 +1,10 @@
 module ToolDef
-imports Terms
+
+imports VarDecls
+
+hiddens
+  sorts
+    DetailsString DetailsChar
 
 exports
   sorts ToolDef ToolDefs ToolName ToolAttrib ToolAttribName ToolAttribValue

@@ -1,0 +1,49 @@
+module Fact
+
+imports
+  Tscript
+  containers/Set[Fact]
+
+exports
+  sorts Fact Facts
+  context-free syntax
+    process-declaration ProcessName               -> Fact
+    process-invocation ProcessName                -> Fact
+    send-atom Term                                -> Fact
+    recv-atom Term                                -> Fact
+    Set[[Fact]]                                   -> Facts
+
+exports
+  context-free syntax
+    find-facts( Tscript )                         -> Facts
+    get-var-decls ( ProcessDef )                  -> {VarDecl ","}*
+    lookup-var( Var, {VarDecl ","}*)              -> Term
+
+hiddens
+  context-free syntax
+    find-facts( TscriptDef*, Facts )              -> Facts {traversal(accu,top-down,continue)}
+    find-facts( ProcessDef, Facts )               -> Facts {traversal(accu,top-down,continue)}
+    find-facts( ProcessInvocation, Facts )        -> Facts {traversal(accu,top-down,continue)}
+    find-facts( {ProcessInvocation ","}+, Facts ) -> Facts {traversal(accu,top-down,continue)}
+    find-facts( Term, Facts )                     -> Facts {traversal(accu,top-down,continue)}
+
+    get-var-decls( ProcessExpr )                  -> {VarDecl ","}*
+
+  variables
+    "TscriptDefs"                                 -> TscriptDef*
+    "ProcessInvocations"                          -> {ProcessInvocation ","}+
+    "Facts"[0-9\']*                               -> Set[[Fact]]
+    "ProcessName"                                 -> ProcessName
+    "ProcessNames"                                -> ProcessName*
+    "VarDecl"                                     -> VarDecl
+    "VarDecls"[0-9]*                              -> {VarDecl ","}*
+    "ProcessExpr"                                 -> ProcessExpr
+    "GenVar"                                      -> GenVar
+    "Id"                                          -> Id
+    "Term"                                        -> Term
+    "Terms"                                       -> {Term ","}*
+    "TermList"                                    -> TermList
+    "Table"[0-9\']*                               -> Table[[Var # Term]]
+    "Var"                                         -> Var
+
+%% vim:columns=100:lines=30:ai

@@ -1,5 +1,9 @@
 module Terms
+
 imports Integers Booleans
+
+hiddens
+  sorts EscChar L-Char
 
 exports
   sorts Id Vname String Term TermList Var GenVar

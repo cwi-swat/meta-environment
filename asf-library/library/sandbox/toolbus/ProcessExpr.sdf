@@ -1,8 +1,9 @@
 module ProcessExpr
+
 imports Atom VarDecls TimeExpr
 
 exports
-  sorts ProcessExpr
+  sorts ProcessExpr ProcessInvocation
 
   context-free syntax
     Atom                                                        -> ProcessExpr {cons("atomProcExpr")}
@@ -22,7 +23,7 @@ exports
     "if" Term "then" ProcessExpr "else" ProcessExpr "fi"        -> ProcessExpr {cons("ifthenelse")}
 
   context-free priorities
-    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr")} >
+    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {cons("seqComp")} >
     ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr1")} >
     ProcessExpr "||" ProcessExpr                                -> ProcessExpr {cons("ProcessExpr-ProcessExpr2")} >
     ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr3")}

@@ -2,7 +2,7 @@ module Atom
 imports Terms
 
 exports
-  sorts Atom ProcessName ProcessInvocation
+  sorts Atom ProcessName
 
   lexical restrictions
     ProcessName -/- [a-zA-Z\-0-9]

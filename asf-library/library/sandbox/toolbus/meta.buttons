@@ -1,0 +1,25 @@
+buttons([
+   button("Main",
+          "term",
+          ["ToolBus","Info"],
+          [get-root,
+           check-sort("Tscript"),
+           apply("find-facts", "Facts", 1),
+           push-modulename("Main"),
+           reduce,
+           push-filename("reduct.out"),
+           push-modulename("Main"),
+           activate-editor]),
+   button("Fact",
+          "term",
+          ["ToolBus","Info"],
+          [get-root,
+           check-sort("Tscript"),
+           apply("find-facts", "Facts", 1),
+           push-modulename("Fact"),
+           reduce,
+           push-filename("reduct.out"),
+           push-modulename("Fact"),
+           activate-editor])
+])
+
