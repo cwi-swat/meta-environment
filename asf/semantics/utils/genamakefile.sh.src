@@ -139,7 +139,7 @@ END{
    print "\n\nSPEC_SRCS =" spec_srcs
 }'`
 
-init.c: \$(SPEC_SRCS)
+init.c: \$(SPEC_SRCS) Makefile
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\
 	SPEC_SRCS="\$(SPEC_SRCS)" ;\\
 	for file in \$\$SPEC_SRCS; do \\
