@@ -24,41 +24,41 @@ In particular, we will discuss:
 From the scenarios, we can derive the following minimum set of
 tools needed to get the Meta-Environment running:
 <UL>
-     <LI> A <A HREF="../meta/features.html#control-tool">control tool</A>, 
+     <LI> A <A HREF="../components/components.html#control-tool">control tool</A>, 
 	  offering the basic user interface functionality
           to control the rest of the system.
-     <LI> A <A HREF="../meta/features.html#hybrid-editor">hybrid editor</A>,
+     <LI> A <A HREF="../components/components.html#hybrid-editor">hybrid editor</A>,
 	  consisting of two subcomponents,
           the <EM>structured editor</EM> and the <EM>text editor</EM>.
 	  An editor instance of the hybrid editor can be used to edit the
 	  syntax of a module, the equations of a module, or a term over
           a specific module.
-     <LI> A <A HREF="../meta/features.html#parser">parser</A>, w
+     <LI> A <A HREF="../metA/components.html#parser">parser</A>, w
           hich can parse terms given a parse table
           and an input string.
-     <LI> A <A HREF="../meta/features.html#parser-generator">parser 
+     <LI> A <A HREF="../meta/components.html#parser-generator">parser 
           generator</A>,
 	  which can generate parse tables
           giving the complete syntax of a module and its submodules.
-     <LI> A <A HREF="../meta/features.html#evaluator">evaluator</A>,
+     <LI> A <A HREF="../meta/components.html#evaluator">evaluator</A>,
 	  which can evaluate a term given an
           input term and a list of equations.
-     <LI> A <A HREF="../meta/features.html#compiler">compiler</A>,
+     <LI> A <A HREF="../meta/components.html#compiler">compiler</A>,
           which can compile a specification and
           generate C code for it.
-     <LI> A <A HREF="../meta/features.html#module-database">module 
+     <LI> A <A HREF="../meta/components.html#module-database">module 
 	  database</A>,
           which keeps track of all modules
           and relations between modules in the system.
-     <LI> A <A HREF="../meta/features.html#term-database">term database</A>,
+     <LI> A <A HREF="../meta/components.html#term-database">term database</A>,
           which keeps track of all terms in the system, and acts as an
           <EM>AsFix term cache</EM>, caching the results of parsing terms. 
-     <LI> An <A HREF="../meta/features.html#unparser">unparser</A>, 
+     <LI> An <A HREF="../meta/components.html#unparser">unparser</A>, 
           which can unparse terms, either to text
           (by updating the layout in the AsFix representation of the term),
           TeX code, or HTML code, given a list consisting of pairs of
           syntax rules and box expressions.
-     <LI> An <A HREF="../meta/features.html#unparser-generator">unparser 
+     <LI> An <A HREF="../meta/components.html#unparser-generator">unparser 
           generator</A>, which can generate lists consisting
           of pairs of syntax rules and box expressions.
 </UL>
