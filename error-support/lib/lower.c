@@ -4,9 +4,11 @@
 
 /*{{{  static char *PERR_lowerStrCon(PERR_StrCon str) */
 
-static char *PERR_lowerStrCon(PERR_StrCon str)
+static char *PERR_lowerStrCon(PERR_StrCon pStr)
 {
-  return PERR_getStrConString(str);
+  char *str = PERR_getStrConString(pStr);
+  str[strlen(str)-1] = '\0';
+  return str+1;
 }
 
 /*}}}  */
