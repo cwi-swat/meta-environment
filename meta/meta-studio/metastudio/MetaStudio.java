@@ -31,6 +31,7 @@ public class MetaStudio
   private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
 
   private static final String PREF_TOOLBAR_OPEN_MODULE = "toolbar.open-module";
+  private static final String PREF_TOOLBAR_OPEN_LIB_MODULE = "toolbar.open-lib-module";
   private static final String PREF_TOOLBAR_NEW_MODULE = "toolbar.new-module";
   private static final String PREF_TOOLBAR_SAVE_ALL = "toolbar.save-all";
   private static final String PREF_TOOLBAR_CLEAR_ALL = "toolbar.clear-all";
@@ -82,6 +83,7 @@ public class MetaStudio
   private List statusMessages;
 
   private Action actionOpenModule;
+  private Action actionOpenLibModule;
   private Action actionNewModule;
   private Action actionSaveAll;
   private Action actionClearAll;
@@ -194,6 +196,18 @@ public class MetaStudio
 	public void actionPerformed(ActionEvent event)
 	{
 	  doOpenModule();
+	}
+      };
+
+    actionOpenLibModule =
+      new AbstractAction(Preferences.getString(PREF_TOOLBAR_OPEN_LIB_MODULE
+					       + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_OPEN_LIB_MODULE
+					     + ".icon"))
+      {
+	public void actionPerformed(ActionEvent event)
+	{
+	  doOpenLibModule();
 	}
       };
 
@@ -393,6 +407,7 @@ public class MetaStudio
 
     fileMenu = new JMenu("File");
     fileMenu.add(actionOpenModule).setIcon(null);
+    fileMenu.add(actionOpenLibModule).setIcon(null);
     fileMenu.add(actionNewModule).setIcon(null);
     fileMenu.add(actionSaveAll).setIcon(null);
     fileMenu.addSeparator();
@@ -412,6 +427,7 @@ public class MetaStudio
 
     addTool(actionNewModule, PREF_TOOLBAR_NEW_MODULE);
     addTool(actionOpenModule, PREF_TOOLBAR_OPEN_MODULE);
+    addTool(actionOpenLibModule, PREF_TOOLBAR_OPEN_LIB_MODULE);
     addTool(actionSaveAll, PREF_TOOLBAR_SAVE_ALL);
     toolBar.addSeparator();
     addTool(actionClearAll, PREF_TOOLBAR_CLEAR_ALL);
@@ -1043,15 +1059,14 @@ public class MetaStudio
 
   //}}}
 
-  //{{{ File showFileBrowser(String label) 
+  //{{{ File showFileBrowser(String label, File location) 
 
-  File showFileBrowser(String label) 
+  File showFileBrowser(String label, String location) 
   {
     String extension = Preferences.getString("module.extension");
     String[] exts = { extension };
     String description = Preferences.getString("module.extension.description");
-    JFileChooser chooser = 
-      new JFileChooser(System.getProperty("user.dir"));
+    JFileChooser chooser = new JFileChooser(location);
     chooser.setFileFilter(new ExtensionFilter(exts, description));
 
     int option = chooser.showDialog(this, label);
@@ -1096,7 +1111,8 @@ public class MetaStudio
 
   void doNewModule()
   {
-    File file = showFileBrowser(Preferences.getString("text.new-module"));
+    File file = showFileBrowser(Preferences.getString("text.new-module"),
+				System.getProperty("user.dir"));
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
@@ -1113,7 +1129,27 @@ public class MetaStudio
 
   void doOpenModule()
   {
-    File file = showFileBrowser(Preferences.getString("text.open-module")); 
+    File file = showFileBrowser(Preferences.getString("text.open-module"),
+				System.getProperty("user.dir"));
+
+    if (file != null) {
+      String extension = Preferences.getString("module.extension");
+      String module = getFileModule(file, extension);
+      String path = getFilePath(file, extension);
+      path += extension;
+
+      ATerm event = factory.make("open-module(<str>,<str>)", path, module);
+      bridge.postEvent(event);
+    }
+  }
+
+  //}}}
+  //{{{ void doOpenLibModule()
+
+  void doOpenLibModule()
+  {
+    File file = showFileBrowser(Preferences.getString("text.open-lib-module"),
+				Preferences.getString("library.dir"));
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
@@ -1132,7 +1168,8 @@ public class MetaStudio
   void doRenameModule(String oldModule)
   {
     File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.rename-module"));
+    File file = showFileBrowser(Preferences.getString("text.rename-module"),
+				System.getProperty("user.dir"));
 
     if (file != null) {
       String extension = Preferences.getString("module.extension");
