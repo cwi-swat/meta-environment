@@ -5,3 +5,6 @@ This package holds graph manipulation tools for the Meta-Environment:
   - a graph format based on ATerms
   - an algorithm to compute the layout of a graph in this graph format 
     via dot 
+
+These tools are now tailored for ToolBus interaction, on the commandline they
+to not function very well (yet)
