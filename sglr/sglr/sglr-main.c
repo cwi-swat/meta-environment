@@ -1,30 +1,15 @@
 /*  $Id$  */
 
-/*
- In this section we define an application of the parse table and
- parse functions defined in the previous sections. The program can
- run in two modes:
-
- (1) As a standalone tool that reads a parse table and parses
- the text in a file given that parse table.
-
- (2) Connected to the ToolBus. In this mode several parse tables
- can be read in and several strings can be parsed using any of
- the parse tables. This enables reuse of the parse table between
- consecutive parses.
- */
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
-/*#include <AsFix.h>*/
 #include <MEPT-utils.h>
 #include <asfix2.h>
 #include <conversion.h>
 #include <tree-to-dot.h>
 
-#ifndef WIN32  /*  Limited platform  */
+#ifndef WIN32
 #include <atb-tool.h>
 #include "sglr.tif.c"
 #endif
@@ -52,7 +37,7 @@ int     debugflag         = ATfalse;
 int     statisticsflag    = ATfalse;
 int     supplexflag       = ATfalse;
 int     printprodsflag    = ATfalse;
-int     asfix2meflag      = ATfalse;
+int     asfix2meflag      = ATtrue;
 
 char   *input_file_name   = "-";
 char   *output_file_name  = "-";
