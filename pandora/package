@@ -15,7 +15,7 @@ requires
 
 error-support 0.2.1
 
-toolbuslib 0.7
+toolbuslib 0.8
 
 sglr 3.12.1
 
@@ -25,4 +25,4 @@ asc-support 2.1
 
 asf-support 1.3
 
-tide-support 1.0
+tide-support 1.1
