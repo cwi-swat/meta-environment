@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/07/22 (markvdb@cwi.nl)
+ * Improved the Pico-compilation specification.
+
 2003/07/21 (markvdb@cwi.nl)
  * Added new terms and add a button to "compile" Pico programs.
 
