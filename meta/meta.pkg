@@ -16,7 +16,7 @@ configuration interface
 
 requires
    aterm 	2.0.2
-   aterm-java 	1.3.2
+   aterm-java 	1.5
    toolbus	0.3.1 with java=on 
    toolbuslib	0.5.1
    sglr		3.10.2
