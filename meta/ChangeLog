@@ -1,5 +1,9 @@
 # $Id$
 
+2004/01/30 <jurgenv@cwi.nl>
+ * Compliant with automake-1.6
+ * Using libtoolize instead of our own fixes to get libtool working
+
 2004/01/28 (markvdb@cwi.nl)
  * renamed display-feedback-summary to show-feedback-summary.
 
