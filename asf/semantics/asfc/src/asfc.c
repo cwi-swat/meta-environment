@@ -84,7 +84,7 @@ static void usage(void)
 	    "\t-m              output muasf code             (default %s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
 	    "\t-o filename     output c code to file         (default stdout)\n"
-	    "\t-t              make toolbus tool             (default %s\n"
+	    "\t-t              make toolbus tool             (default %s)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
