@@ -174,10 +174,12 @@ path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
     free_paths = free_paths->next;
     p->stack = st;
     p->args = sons;
+    p->length = length;
     p->next = ps;
   } else if((p = SG_Malloc(1, sizeof(path)))) {
     p->stack = st;
     p->args  = sons;
+    p->length = length;
     p->next  = ps;
     ATprotect((ATerm *) &(p->args));
   }
@@ -776,7 +778,6 @@ void SG_Reducer(stack *st0, state s, label prodl,
   IF_STATISTICS(num_reductions++);
 
   t = SG_Apply(table, prodl, kids, attribute);
-
   IF_DEBUG(
     fprintf(SG_log(), "Reducing; state %d, token: ", SG_GETSTATE(s));
     SG_PrintToken(SG_log(), current_token);
