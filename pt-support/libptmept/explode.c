@@ -4,6 +4,7 @@
 #include <assert.h>
 
 static PTPT_OptLayout e = NULL;
+ATermTable store = NULL;
 
 /*{{{  static PTPT_TreeList PTPT_reverseTreeList(PTPT_TreeList args) */
 
