@@ -19,12 +19,10 @@ import aterm.ATermList;
 public class StatusBar extends ToolComponent {
     private JLabel statusBar;
     private List statusMessages;
-    private HistoryPanel history;
 
-    public StatusBar(ATermFactory factory, MultiBridge bridge, HistoryPanel history) {
+    public StatusBar(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
-        this.history = history;
         statusMessages = new LinkedList();
 
         Color bgColor =
@@ -63,8 +61,6 @@ public class StatusBar extends ToolComponent {
     }
 
     public void addStatus(ATerm id, String message) {
-        history.addMessage(message);
-
         statusBar.setText(message);
         String[] pair = { id.toString(), message };
         statusMessages.add(pair);

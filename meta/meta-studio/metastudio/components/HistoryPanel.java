@@ -12,6 +12,9 @@ import javax.swing.JScrollPane;
 import metastudio.MultiBridge;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
+import metastudio.utils.StringFormatter;
+import aterm.ATerm;
+import aterm.ATermList;
 
 // todo: add copy paste facility?
 public class HistoryPanel extends ToolComponent {
@@ -36,11 +39,24 @@ public class HistoryPanel extends ToolComponent {
         add(new JScrollPane(list), BorderLayout.CENTER);
     }
 
-    public void addMessage(String message) {
+    private void addMessage(String id, String message) {
         String date = dateFormat.format(Calendar.getInstance().getTime());
-        data.add(date + " - " + message);
+        data.add(date + " - " + id + " - " + message);
     }
     
+    public void addStatus(ATerm id, String message) {
+        addMessage(id.toString(), message);
+    }
+
+    public void addStatusf(ATerm id, String format, ATerm args) {
+        String message = StringFormatter.format(format, (ATermList) args);
+        addMessage(id.toString(), message);
+    }
+    
+    public void endStatus(ATerm id) {
+        String date = dateFormat.format(Calendar.getInstance().getTime());
+        data.add(date + " - " + id + " - done");
+    }
 
     public void clearHistory() {
         data.setList(new LinkedList());
