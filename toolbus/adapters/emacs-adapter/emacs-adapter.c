@@ -189,24 +189,14 @@ term *handle_input_from_toolbus(term *e) {
       strcat(cmd_buf," ");
       print_args(fargs);
       exec_cmd();
-      if((from_cmd = fopen(tmp_out, "r")) == NULL)
-	err_sys_fatal("Can't open tmp output file");
-      /*    fprintf(stderr,"Opened tmp out file\n");*/
-      while((n=fread(outp, 1, 512, from_cmd)) > 0){
-	if(outp + n > &output[MAXOUTPUT]) 
-	  err_fatal("Executed command produces too long output");
-	outp += n;
-      }
-      *outp++ = '\0';
-      fclose(from_cmd);
-      result = TBmake("snd-value(output(%s))", output);
+      result = NULL;
   }
   return result;
 }
 
 void exec_cmd(void) {
   int old_stdin, old_stdout, fd_to_cmd, r, status;
-  /*  printf("Args are: %s\n", cmd_buf);*/
+  printf("Args are: %s\n", cmd_buf);
   gnuc_func = cmd_buf;
   
   old_stdin = dup(0);
