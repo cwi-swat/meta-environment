@@ -3,6 +3,7 @@
 include ${top_srcdir}/make_rules
 
 INCLUDES         = -I$(ASC_SUPPORT)/include \
+                   -I$(TOOLBUS)/include \
                    -I$(PT_SUPPORT)/include \
                    -I$(SDF_SUPPORT)/include \
                    -I$(ASF_SUPPORT)/include \
@@ -21,7 +22,9 @@ addeqssyntax_LDADD   = addeqssyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(PT_SUPPORT)/lib -lmept \
-                       -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+                       -L$(TOOLBUS)/lib -lATB \
+                       -L$(ATERM)/lib -lATerm \
+			$(SOCKLIBS)
 
 
 CLEANFILES = addeqssyntax.tifs addeqssyntax.1

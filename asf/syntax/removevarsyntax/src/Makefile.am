@@ -2,11 +2,12 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES         = -I$(ASC_SUPPORT)/include \
-                   -I$(PT_SUPPORT)/include \
-                   -I$(SDF_SUPPORT)/include \
-                   -I$(ASF_SUPPORT)/include \
-                   -I$(ATERM)/include
+INCLUDES		= -I$(ASC_SUPPORT)/include \
+			-I$(PT_SUPPORT)/include \
+			-I$(SDF_SUPPORT)/include \
+			-I$(ASF_SUPPORT)/include \
+			-I$(TOOLBUS)/include \
+			-I$(ATERM)/include
 
 bin_PROGRAMS = removevarsyntax
 man_MANS     = removevarsyntax.1
@@ -21,7 +22,9 @@ removevarsyntax_LDADD   = removevarsyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(PT_SUPPORT)/lib -lmept \
-                       -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+                       -L$(TOOLBUS)/lib -lATB \
+                       -L$(ATERM)/lib -lATerm \
+			$(SOCKLIBS)
 
 
 CLEANFILES = removevarsyntax.tifs removevarsyntax.1

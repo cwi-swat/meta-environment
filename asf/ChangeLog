@@ -1,3 +1,6 @@
+2001/07/12 (jong@cwi.nl)
+  * patched Makefile.am's to comply with new location of -lATB
+
 2001/07/10 (jurgenv@cwi.nl)
   * Added support for rewrite rules with a list as outermost function
     to asfc

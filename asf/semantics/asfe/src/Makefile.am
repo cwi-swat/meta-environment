@@ -20,16 +20,20 @@ libeval_a_SOURCES = asfe.c asfe.h asfix_utils.c asfix_utils.h \
 libeval_a_LIBADD  = asfe.tif.o
 
 #asfe_LDFLAGS	= -pg
-asfe_SOURCES = main.c
-asfe_LDADD   = libeval.a \
-                   -L$(PT_SUPPORT)/lib -lmept -L$(ASF_SUPPORT)/lib -lASFME \
-		   ${TIDELIB} \
-                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+asfe_SOURCES		= main.c
+asfe_LDADD		= libeval.a \
+			-L$(PT_SUPPORT)/lib -lmept \
+			-L$(ASF_SUPPORT)/lib -lASFME \
+			-L$(TOOLBUS)/lib -lATB \
+			-L$(ATERM)/lib -lATerm \
+			${TIDELIB} $(SOCKLIBS)
 
-INCLUDES          = ${TIDEINC} \
-                    -I$(ASC)/include \
-                    -I$(PT_SUPPORT)/include -I$(ATERM)/include \
-                    -I$(ASF_SUPPORT)/include \
-                    ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
+INCLUDES		= ${TIDEINC} \
+			-I$(ASC)/include \
+			-I$(PT_SUPPORT)/include \
+			-I$(ATERM)/include \
+			-I$(TOOLBUS)/include \
+			-I$(ASF_SUPPORT)/include \
+			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 
 asfe.o : asfe.tif.h
