@@ -6,6 +6,10 @@ INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ATERM)/include
 
+EXTRA_DIST = \
+	Box_dict.c \
+	Box_dict.h
+
 bin_PROGRAMS = pandora 
 
 noinst_HEADERS = pandora.h Box.h
