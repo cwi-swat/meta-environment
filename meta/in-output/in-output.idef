@@ -4,6 +4,7 @@ IO   : in-output,
 Id   : term,
 Asfix: term,
 Name : str,
+Dir  : str,
 Path : str,
 T    : term,
 Text : str
@@ -56,8 +57,8 @@ in
   +
     rec-msg(Id?,open-trm-file(id(Name?))).
     snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file(Name,Text?,Path?)).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
+    ( rec-value(IO,opened-file(Name,Text?,Dir?,Path?)).
+      snd-msg(Id,opened-file(raw,id(Name),Text,Dir,Path))
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))

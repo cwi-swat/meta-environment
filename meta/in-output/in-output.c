@@ -275,8 +275,8 @@ ATerm open_trm_file(int cid, char *name)
 	t = ATmake("<str>", buf);
  	free(buf);
         ATfprintf(stderr, "was found in: %s\n",paths[i]);
-	return ATmake("snd-value(opened-file(<str>,<term>,<str>))",
-                      name, t, paths[i]);
+	return ATmake("snd-value(opened-file(<str>,<term>,<str>,<str>))",
+                      name, t, paths[i],full);
     }
   }
   ATfprintf(stderr,"File could not be found\n");
