@@ -16,28 +16,40 @@ let
   EditorType : str,
   ModuleName : str,
   Actions    : list,
-  EditorId   : term
+  EditorId   : term,
+  Argument   : term
 in
   (
-    rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)).
+    (
+    rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)) .
+    Argument := none
+    +
+    rec-msg(extra-button-action(ButtonName?, Argument?, EditorType?, ModuleName?,
+                                EditorId?))
+    ) .
     snd-msg(get-button-actions(ButtonName,EditorType,ModuleName)).
     rec-msg(button-actions(ButtonName,EditorType,ModuleName,Actions?)).
-    PerformButtonActions(EditorId, Actions) 
+    PerformButtonActions(EditorId, Argument, Actions) 
   )* delta
 endlet
 
-process PerformButtonActions(EditorId : term, Actions : list) is
+process PerformButtonActions(EditorId : term, StackTop : term, Actions : list) is
 let
   ButtonActions : list,
   ButtonAction  : term,
   FunName       : str,
   Stack         : list
 in
-  Stack := [] .
+  if equal(StackTop,none) then
+    Stack := [] 
+  else
+    Stack := [StackTop]
+  fi .
   ButtonActions := quote(Actions) .
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .
+      printf("executing %t\n", ButtonAction) .
       ButtonActions := next(ButtonActions) .
       FunName := fun(ButtonAction) .
       if equal(FunName, "if-equal") then
@@ -56,6 +68,8 @@ in
             errorf("An error occurred while processing the action: %t",
                    [ButtonAction])))
         )
+      +
+        printf("failed to execute action %t\n", ButtonAction) delay(sec(10))
       fi
     fi
   )*
@@ -108,6 +122,7 @@ let
   EditorId   : term,
   EditorId2  : term,
   STree      : term,
+  SList	     : list,
   RTree      : term,
   Error      : term,
   Trees      : list,
@@ -185,7 +200,7 @@ in
       rec-msg(execute-action(Action?), Stack?, EditorId?) .
       StackPopTerm(Stack,Stack?,STree?).
       snd-msg(gen-adapter-term-evaluate(EditorId,Action, STree)).
-      rec-msg(gen-adapter-term-out(EditorId,RTree?)).
+      rec-msg(gen-adapter-term-result(EditorId,RTree?)).
       if not-equal(RTree, error-tree) then
         StackPushTerm(Stack,Stack?,RTree).
         ReturnSuccess(EditorId,Stack)
@@ -427,13 +442,28 @@ in
         ShowTree(STree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(show-area(NewModName), Stack?, EditorId?) .
+        rec-msg(show-area(NewModName?), Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?).
         snd-msg(edit-term-file(NewModName, FileName)) .
-        rec-msg(editor-opened(NewModName)).
+        printf("here0\n") .
+        rec-msg(editor-opened(NewModName, EditorId2?)).
+        printf("here1\n").
         ParseTerm(EditorId2, NewModName) .
+        printf("here2\n").
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
+        printf("here3\n").
         ReturnSuccess(EditorId,Stack)        
+      +
+        rec-msg(show-list, Stack?, EditorId?) .
+        StackPopTerm(Stack, Stack?, STree?) .
+        SList := first(args(STree)) .
+	snd-msg(update-list-view(SList)) .
+        ReturnSuccess(EditorId,Stack)        
+      +
+        rec-msg(show-tree, Stack?, EditorId?) .
+        StackPopTerm(Stack, Stack?, STree?) .
+        ShowTree(STree) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(save-tree(Name?, Path?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,Tree?) .
@@ -519,6 +549,7 @@ in
   +
     rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
+  . printf("ParseTerm finished\n")
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
@@ -760,7 +791,7 @@ in
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
-    rec-msg(editor-opened(ModuleName))
+    rec-msg(editor-opened(ModuleName, EditorId?))
   fi
 endlet
 
@@ -772,5 +803,5 @@ in
   snd-msg(save-text-file(FileName, Text)) .
   rec-msg(save-done(FileName)) .
   snd-msg(edit-term-file(ModuleName, FileName)) .
-  rec-msg(editor-opened(ModuleName))
+  rec-msg(editor-opened(ModuleName, EditorId?))
 endlet
