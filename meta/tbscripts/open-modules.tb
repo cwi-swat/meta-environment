@@ -27,14 +27,12 @@ endlet
 
 process DrawImportGraph is
 let
-  Nodes : list,
-  Vertices : list
+  ImportRelations : list
 in
-  snd-msg(get-import-graph) .
-  rec-msg(import-graph(Nodes?, Vertices?)) .
-  snd-note(display-import-graph(Nodes,Vertices)) .
-  Nodes := [] .
-  Vertices := []
+  snd-msg(get-import-relations) .
+  rec-msg(import-relations(ImportRelations?)) .
+  snd-note(display-import-graph(ImportRelations)) .
+  ImportRelations := []
 endlet
 
 process LocateFile(Name : str, Extension : str, Path : str?) is

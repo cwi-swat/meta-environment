@@ -17,7 +17,7 @@ public interface UserInterfaceTif
   public void deleteModules(ATerm t0);
   public void error(String s0);
   public void displayGraph(String s0, ATerm t1);
-  public void newGraph(ATerm t0, ATerm t1);
+  public void newGraph(ATerm t0);
   public void updateList(ATerm t0);
   public void endStatus(ATerm t0);
   public void recAckEvent(ATerm t0);

@@ -201,42 +201,40 @@ public class GraphWrapper
 
   //}}}
 
-  //{{{ public static GraphWrapper fromImportList(MetaGraphFactory factory, ATermList nodeList, ATermList imports)
+  //{{{ public static GraphWrapper fromImportList(MetaGraphFactory factory, ATermList imports)
 
-  public static GraphWrapper fromImportList(MetaGraphFactory factory, ATermList nodeList, ATermList imports)
+  public static GraphWrapper fromImportList(MetaGraphFactory factory, ATermList imports)
   {
     Set nodeSet = new HashSet();
     List nodeSequence = new LinkedList();
 
     EdgeList edges = factory.makeEdgeList_Empty();
 
-    while (!nodeList.isEmpty()) {
-      ATerm nodeTerm = nodeList.getFirst();
-      nodeList = nodeList.getNext();
-      if (nodeSet.add(nodeTerm)) {
-	nodeSequence.add(nodeTerm);
-      }
-    }
-
     while (!imports.isEmpty()) {
       ATermList pair = (ATermList)imports.getFirst();
       imports = imports.getNext();
 
       ATerm fromTerm = pair.getFirst();
-      ATerm toTerm = pair.getNext().getFirst();
-      NodeId from = NodeId.fromTerm(fromTerm);
-      NodeId to = NodeId.fromTerm(toTerm);
+      ATermList elems = (ATermList)pair.getNext().getFirst();
 
-      if (nodeSet.add(fromTerm)) {
-	nodeSequence.add(fromTerm);
-      }
-      if (nodeSet.add(toTerm)) {
-	nodeSequence.add(toTerm);
-      }
+      while (!elems.isEmpty()) {
+        ATerm toTerm = elems.getFirst();
+        elems = elems.getNext();
 
-      AttributeList attrs = factory.makeAttributeList_Empty();
-      Edge edge = factory.makeEdge_Default(from, to, attrs);
-      edges = factory.makeEdgeList_Multi(edge, edges);
+        NodeId from = NodeId.fromTerm(fromTerm);
+        NodeId to = NodeId.fromTerm(toTerm);
+
+        if (nodeSet.add(fromTerm)) {
+	  nodeSequence.add(fromTerm);
+        }
+        if (nodeSet.add(toTerm)) {
+	  nodeSequence.add(toTerm);
+        }
+
+        AttributeList attrs = factory.makeAttributeList_Empty();
+        Edge edge = factory.makeEdge_Default(from, to, attrs);
+        edges = factory.makeEdgeList_Multi(edge, edges);
+      }
     }
 
     NodeList nodes = factory.makeNodeList_Empty();

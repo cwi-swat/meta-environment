@@ -79,6 +79,7 @@ in
     rec-msg(ts-get-key-value-pairs(TableName?)) .
     snd-eval(TS, get-key-value-pairs(TableName)) .
     rec-value(TS, result(Pairs?)) .
+    snd-msg(ts-pairs(Pairs)) .
     Pairs := []
   +
     rec-msg(ts-filter-keys(TableName?, Keys?)) .

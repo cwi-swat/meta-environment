@@ -60,7 +60,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,delete-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<list>))"), new Boolean(true));
@@ -82,7 +82,7 @@ abstract public class UserInterfaceTool
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
-    PnewGraph0 = factory.parse("rec-do(new-graph(<term>,<term>))");
+    PnewGraph0 = factory.parse("rec-do(new-graph(<term>))");
     PupdateList0 = factory.parse("rec-do(update-list(<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -145,7 +145,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PnewGraph0);
     if (result != null) {
-      newGraph((ATerm)result.get(0), (ATerm)result.get(1));
+      newGraph((ATerm)result.get(0));
       return null;
     }
     result = term.match(PupdateList0);

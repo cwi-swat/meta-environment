@@ -68,7 +68,7 @@ let
   Tree : term,
   Lst : list
 in
-  subscribe(display-import-graph(<list>,<list>)) .
+  subscribe(display-import-graph(<list>)) .
   Id := process-id.
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
@@ -215,9 +215,8 @@ in
      snd-msg(debugging(On)) .
      snd-ack-event(UI,debugging(On))
    ) +
-   ( rec-note(display-import-graph(Mods?,Pairs?)).
-     snd-do(UI,new-graph(Mods,Pairs)) .
-     Mods := [] .
+   ( rec-note(display-import-graph(Pairs?)).
+     snd-do(UI,new-graph(Pairs)) .
      Pairs := []
    )
    +

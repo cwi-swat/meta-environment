@@ -138,12 +138,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void newGraph(ATerm t0, ATerm t1)
+  //{{{  public void newGraph(ATerm t0)
 
-  public void newGraph(ATerm t0, ATerm t1)
+  public void newGraph(ATerm t0)
   {
     if (tool != null) {
-      tool.newGraph(t0, t1);
+      tool.newGraph(t0);
     }
     else {
       throw new UnsupportedOperationException("method `newGraph' not supported.");

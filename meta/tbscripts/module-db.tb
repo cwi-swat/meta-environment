@@ -23,20 +23,19 @@ let
   OldName   : str,
   NewName   : str,
   Modules   : list,
-  Nodes     : list,
-  Edges     : list,
   DependingModules : list,
   ModuleNames : list,
-  FileName : str
+  FileName : str,
+  Pairs    : list
 in
   MDB-InitializeModuleDb() .
   MDB-InitializeFileExtensions() .
   (
-    rec-msg(get-import-graph) .
-    MDB-RetrieveImportGraph(Nodes?, Edges?) .
-    snd-msg(import-graph(Nodes,Edges)) .
-    Nodes := [] .
-    Edges := []
+    rec-msg(get-import-relations) .
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?))
+    snd-msg(import-relations(Pairs)) .
+    Pairs := []
   +
     rec-msg(clear-module-db) .
     MDB-ClearModuleDb()
@@ -79,6 +78,7 @@ in
       ModuleId := Name .
       Modules := []
     fi .
+    snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
     snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
     snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
     SyntaxText := "" .
@@ -100,6 +100,7 @@ in
       SyntaxTree := no-tree .
       SyntaxText := "" .
       rec-msg(sm-imported-module-names(Modules?)) .
+      snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       MDB-GetAllDependingModules(Name, DependingModules?) .
@@ -292,7 +293,8 @@ process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("asf-tree", "term")) .
   snd-msg(ts-add-table("asf-text", "str")) .
   snd-msg(ts-add-table("asf-parse-table", "term")) .
-  snd-msg(ts-add-table("term-parse-table", "term"))
+  snd-msg(ts-add-table("term-parse-table", "term")) .
+  snd-msg(ts-add-table("import-relations", "term"))
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions")) .
@@ -303,7 +305,8 @@ process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("asf-tree")) .
   snd-msg(ts-clear-table("asf-text")) .
   snd-msg(ts-clear-table("asf-parse-table")) .
-  snd-msg(ts-clear-table("term-parse-table"))
+  snd-msg(ts-clear-table("term-parse-table")) .
+  snd-msg(ts-clear-table("import-relations"))
 
 process MDB-InitializeFileExtensions is
 let
@@ -375,17 +378,6 @@ in
     if equal(Modules,[]) then
       tau
     fi 
-endlet
-
-process MDB-RetrieveImportGraph(Nodes : list?, Edges : list?) is
-let
-  Modules : list
-in
-    snd-msg(ts-get-all-values("sdf-tree")) .
-    rec-msg(ts-all-values(Modules?)) .
-    snd-msg(sm-get-import-graph(Modules)) .
-    Modules := [] .
-    rec-msg(sm-import-graph(Nodes?,Edges?))
 endlet
 
 process MDB-AllEquationsAvailable(Name : str, Missing : list?) is

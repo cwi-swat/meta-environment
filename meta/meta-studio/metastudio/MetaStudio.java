@@ -941,12 +941,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //}}}
   //{{{ private void setModules(ATermList moduleList)
 
-  private void setModules(ATermList moduleList) {
+  private void setModules(ATermList importList) {
     moduleManager.clearModules();
 
-    while (!moduleList.isEmpty()) {
-      ATermAppl moduleTerm = (ATermAppl) moduleList.getFirst();
-      moduleList = moduleList.getNext();
+    while (!importList.isEmpty()) {
+      ATermList importPair = (ATermList) importList.getFirst();
+      importList = importList.getNext();
+      ATermAppl moduleTerm = (ATermAppl) importPair.getFirst();
       String name = moduleTerm.getName();
       addModule(name);
     }
@@ -956,11 +957,12 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ private void setImports(ATermList importList)
 
   private void setImports(ATermList importList) {
+
     while (!importList.isEmpty()) {
-      ATermList edge = (ATermList) importList.getFirst();
+      ATermList importPair = (ATermList) importList.getFirst();
       importList = importList.getNext();
 
-      ATermAppl fromTerm = (ATermAppl) edge.getFirst();
+      ATermAppl fromTerm = (ATermAppl) importPair.getFirst();
       String from = fromTerm.getName();
       Module moduleFrom = moduleManager.getModule(from);
       if (moduleFrom == null) {
@@ -968,16 +970,22 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         moduleFrom.setState(Module.STATE_NEW);
       }
 
-      ATermAppl toTerm = (ATermAppl) edge.elementAt(1);
-      String to = toTerm.getName();
-      Module moduleTo = moduleManager.getModule(to);
-      if (moduleTo == null) {
-        moduleTo = addModule(to);
-        moduleTo.setState(Module.STATE_NEW);
-      }
+      ATermList imports = (ATermList) importPair.elementAt(1);
 
-      moduleFrom.addChild(to);
-      moduleTo.addParent(from);
+      while (!imports.isEmpty()) {
+        ATermAppl toTerm = (ATermAppl) imports.getFirst();
+        imports = imports.getNext();
+
+        String to = toTerm.getName();
+        Module moduleTo = moduleManager.getModule(to);
+        if (moduleTo == null) {
+          moduleTo = addModule(to);
+          moduleTo.setState(Module.STATE_NEW);
+        }
+
+        moduleFrom.addChild(to);
+        moduleTo.addParent(from);
+      }
     }
   }
 
@@ -1000,13 +1008,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ public void newGraph(ATerm moduleList, ATerm importRelations)
+  //{{{ public void newGraph(ATerm importRelations)
 
-  public void newGraph(ATerm moduleList, ATerm importRelations) {
-    setModules((ATermList) moduleList);
+  public void newGraph(ATerm importRelations) {
+    setModules((ATermList) importRelations);
     setImports((ATermList) importRelations);
 
-    graph = GraphWrapper.fromImportList(factory, (ATermList) moduleList, (ATermList) importRelations);
+    graph = GraphWrapper.fromImportList(factory, (ATermList) importRelations);
     layoutGraph(importGraphPanel, graph);
   }
 
