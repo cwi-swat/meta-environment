@@ -5,16 +5,23 @@ let
   S : str
 in
   execute(test, T?) .
-  snd-do(T, input2(["{", ["}{} {{", []]])) .
+  (
   snd-do(T, input([f(a,b), "a\"a} {b [b]c\nd }ef"])) .
   rec-event(T, output(S?)) .
   printf("event received: %s\n", S) .
   snd-ack-event(T, output(S)) .
   snd-do(T, input2(S)) .
   tau delay(sec(100))
+  ||
+  rec-event(T,activate) .
+  printf("activate!\n") .
+  snd-ack-event(T,activate)
+  )
 endlet
 
+
 tool test is { command = "./tcltk-adapter -tide -script test.tcl" }
+tool viewer is { command = "buscontrol" }
 
 toolbus(TEST)
 

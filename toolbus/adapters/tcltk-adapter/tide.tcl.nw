@@ -117,8 +117,6 @@ proc TBparseScript { proc } {
   for { set cur 0 } { $cur < $len } { incr cur; incr lnum } {
      set line [lindex $script $cur]
 
-     puts stderr "parsing $line"
-
      if { [regexp {^#line ([0-9]+) "([^"]+)"$} $line match nr module]} {
        set lnum $nr
        set mod $module

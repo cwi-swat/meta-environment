@@ -40,7 +40,7 @@ DISTFILES	= Makefile.in arm-resident.in arm-cmd $(SOURCE) $(DOC) \
 # With a little bit of luck, you only have to change the value of
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = arm-adapter
-PROGRAMS        = arm-adapter armcmd arm-resident
+PROGRAMS        = arm-adapter armcmd
 SOURCE          = arm-adapter.c.nw armcmd.c.nw arm.tb.nw
 LIBFILES        = arm.tb
 DOC             = arm-adapter.guide.tex
@@ -103,7 +103,7 @@ dist: $(DISTFILES)
 	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/adapters/$(ADAPTER-NAME); \
 	done
 
-install: $(PROGRAMS) arm-cmd $(LIBFILES)
+install: $(PROGRAMS) arm-cmd arm-resident $(LIBFILES)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done

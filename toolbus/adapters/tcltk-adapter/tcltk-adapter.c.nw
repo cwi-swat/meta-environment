@@ -476,7 +476,6 @@ term *from_toolbus(int cid, term *t)
   }
   
   if(TBmatch(t, "rec-eval(%f(%l))", &fname, &fargs)) {
-    TBprintf(stderr, "returning result of function %s: %l\n", fname, fargs);
     printb_str(fname);
     printb_char(' ');
     if(fargs)
@@ -829,9 +828,11 @@ The following functions are implemented by the tcltk-adapter.
 
 <<function table>>=
 <<eval_eval_1>>
+<<eval_var_1>>
 
 func_entry func_table[] =
 { { "eval", 1, eval_eval_1, NULL, "evaluate an expression" },
+  { "var", 1, eval_var_1, NULL, "return the value of a variable" },
   { NULL, 0, NULL, NULL, NULL }
 };
 @
@@ -847,14 +848,32 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
     return TBfalse;
   }
 
-  if(Tcl_Eval(tide_interp, expr) == TCL_OK) {
-    *result = TB_make("<str>", tide_interp->result);
-    return TBtrue;
+  Tcl_Eval(tide_interp, expr);
+  *result = TB_make("<str>", tide_interp->result);
+  Tcl_ResetResult(tide_interp);
+  return TBtrue;
+}
+@
+
+<<eval_var_1>>=
+TBbool eval_var_1(term_list *args, int pid, term **result, char **msg)
+{
+  char *var;
+  char expr[64];
+
+  if(!TB_match(args, "[<str>]", &var)) {
+    *result = list_first(args);
+    *msg = "var takes one string argument";
+    return TBfalse;
   }
 
-  *result = list_first(args);
-  *msg = "error while evaluating expression";
-  return TBfalse;
+  strcpy(expr, "set ");
+  strncat(expr, var, 58);
+
+  Tcl_Eval(tide_interp, expr);
+  *result = TB_make("<str>", tide_interp->result);
+  Tcl_ResetResult(tide_interp);
+  return TBtrue;
 }
 @
 
@@ -872,13 +891,16 @@ act_entry act_table[] =
 
 <<information table>>=
 char *information_table[] =
-{ "search-paths", 		NULL,
-  "observation-ports",		"[[on-halt,at,[]], [every-stat,before,[]]," \
-				"[loc,before,[lc]],[exception,at,[]]]",
-  "exec-control",		"[single-step, step-over, run, stop]",
-  "actions",			NULL,
-  "expressions",		NULL,
-  NULL,				NULL
+{ "name",		NULL,
+  "search-paths", 	NULL,
+  "ports",		"[[exec-state,at], [always,before], [always,after]," \
+			"[location,before], [location,after]," \
+			"[exception,at]]",
+  "exec-control",	"[single-step, step-over, run, stop]",
+  "actions",		NULL,
+  "expressions",	NULL,
+  "connections",	NULL,
+  NULL,			NULL
 };
 @
 
@@ -953,10 +975,8 @@ void tide_event_loop()
 {
   while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
         dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
-    fprintf(stderr, "handle one\n");
     TB_handle_one(tide_cid);
   }
-  fprintf(stderr, "continuing...\n");
 }
 @
 
@@ -1040,19 +1060,55 @@ void cbdap_change_exec_state(int pid, int exec_state)
 %}}}
 %{{{ term *cbdap_supply_info(int cid, char *key)
 
+This function supplies dynamic info.
+
 <<cbdap_supply_info>>=
 term *cbdap_supply_info(char *key)
 {
-  fprintf(stderr, "supply_info: %s\n", key);
-  if(streq(key, "search-paths")) {
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
+  static char buf[_POSIX_PATH_MAX];
 
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
-  }
+  <<name info>>
+  <<search-paths info>>
+  <<connections info>>
 
   return NULL;
 }
+@
+
+If we can take the ToolBus tool as the name, we do so.
+Otherwise, we take the name of the script, or just "wish".
+In all cases we make the name unique by prepending the
+Tid from the debug ToolBus.
+<<name info>>=
+  if(streq(key, "name")) {
+    int tid = TB_getTid(tide_cid);
+    if(use_toolbus)
+      sprintf(buf, "%s-%d(%d)", TB_getTool(cid), tid, TB_getTid(cid));
+    else
+      sprintf(buf, "%s-%d", script ? script : "wish", tide_cid);
+    return TB_make("<str>", buf);
+  }
+@
+
+Only look for search paths in the current directory. Later, we
+might want to look in the file {\tt "./.tide/toolbusrc"}.
+<<search-paths info>>=
+  if(streq(key, "search-paths")) {
+    getcwd(buf, _POSIX_PATH_MAX);
+
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", buf, buf);
+  }
+@
+
+<<connections info>>=
+  if(streq(key, "connections")) {
+    if(use_toolbus) {
+      sprintf(buf, "toolbus-%d", TB_getPort(cid));
+      return TB_make("[<str>]", buf);
+    }
+    /* No connections, return the empty list. */
+    return NULL;
+  }
 @
 
 %}}}
@@ -1095,7 +1151,6 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
   }
 
   if(strlen(argv[2]) != 0) {
-    fprintf(stderr, "executing: %s\n", argv[2]);
     return Tcl_Eval(interp, argv[2]);
   }
 }
@@ -1201,4 +1256,3 @@ void rec_terminate(int cid, term *arg)
 %}}}
 
 %}}}
-

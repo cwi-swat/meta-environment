@@ -34,7 +34,8 @@ NOWEB		= @NOWEB@
 
 ADAPTERS	= @ADAPTERS@
 SUBDIRS		= gen-adapter perl-adapter wish-adapter tcltk-adapter\
-		  python-adapter asf+sdf-adapter swipl-adapter arm-adapter
+		  python-adapter asf+sdf-adapter swipl-adapter arm-adapter \
+		  java-adapter
 
 DISTFILES	= Makefile.in Makefile.in.template
 
