@@ -320,7 +320,7 @@ open_file(char *std_error, char *FN)
     }
   else if ((file = fopen(FN, "r")) == NULL)
     {
-      fprintf(stderr, "%s:cannot open %s\n", program_name, FN);
+      fprintf(stderr, "%s: cannot open %s\n", program_name, FN);
       usage(stderr, FALSE);
       exit(1);
     }
