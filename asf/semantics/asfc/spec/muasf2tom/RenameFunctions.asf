@@ -1,0 +1,23 @@
+equations
+
+[] subst(FunId1, Table) = FunId2
+   when FunId2 := lookup(Table, FunId1)
+
+equations
+
+[constant] 
+collect(FunId1 {Attribute*1, cons(funid("""c*""")), Attribute*2}, Table) =
+store(Table,FunId1,funid(c*))
+
+[function] 
+collect(FunId1 (SigArg+) {Attribute*1, cons(funid("""c*""")), Attribute*2}, Table) =
+store(Table,FunId1,funid(c*))
+
+equations
+
+[] rename-functions(module ModuleId SignatureOpt RulesOpt) = 
+   module ModuleId
+     SignatureOpt
+     subst(RulesOpt, collect(SignatureOpt, new-table))
+
+   
