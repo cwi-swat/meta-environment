@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/23 (markvdb@cwi.nl)
+ * equal-trees have to unpack their arguments.
+
 2003/06/18 ({jong,markvdb}@cwi.nl)
  * Added explicit ATBpack to parsetrees.
 
