@@ -15,6 +15,6 @@ requires
 
 error-support 0.2.1
 
-aterm PARSE_ERROR_IN_PACKAGE_DEF
+aterm 2.4
 
 toolbuslib 0.6
