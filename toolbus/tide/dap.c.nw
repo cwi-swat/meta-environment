@@ -788,7 +788,7 @@ int dap_create_rule(term *procs, term *the_port, term *cond,
 
         if(the_port &&
 
-           dap_eventport(list_first(the_port)) == the_rule->the_port.type)
+           dap_eventport(list_first(the_port)) == the_rule->port.type)
           dap_activate_rule(0, the_port, the_rule);
       }
     }
@@ -876,10 +876,10 @@ void dap_activate_rule(int pid, term *the_port, event_rule *rule)
 
   /*TBprintf(stderr, "checking rule: %d (pids=%t)\n", rule->id, rule->pids);*/
   if(check_pid(rule->pids, pid) && 
-     (when == rule->the_port.when || rule->the_port.when == WHEN_AT)) {
+     (when == rule->port.when || rule->port.when == WHEN_AT)) {
     switch(type) {
 	case PORT_EXEC_STATE:	
-				if(check_exec_state(rule->the_port.u.exec_state, tdata))
+				if(check_exec_state(rule->port.u.exec_state, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 
@@ -888,25 +888,25 @@ void dap_activate_rule(int pid, term *the_port, event_rule *rule)
 	case PORT_ALWAYS:	cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 
-        case PORT_LOCATION:	if(check_location(&rule->the_port.u.loc, tdata))
+        case PORT_LOCATION:	if(check_location(&rule->port.u.loc, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 
         case PORT_CALL:
 	case PORT_RETRY:
 	case PORT_FAIL:
-	case PORT_SUCCEED:	if(!check_function(rule->the_port.u.function, tdata))
+	case PORT_SUCCEED:	if(!check_function(rule->port.u.function, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 
-	case PORT_EXCEPTION:	if(!check_exception(rule->the_port.u.exception, tdata))
+	case PORT_EXCEPTION:	if(!check_exception(rule->port.u.exception, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
-	case PORT_VARIABLE:	if(!check_variable(rule->the_port.u.var, tdata))
+	case PORT_VARIABLE:	if(!check_variable(rule->port.u.var, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 	case PORT_RECEIVE:
-	case PORT_SEND:		if(term_match(list_first(tdata), rule->the_port.u.msg,
+	case PORT_SEND:		if(term_match(list_first(tdata), rule->port.u.msg,
 					&dap_get_process(0, pid)->subterms))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
