@@ -1,5 +1,8 @@
 # $Id$
 
+2003/05/27 (jurgenv@cwi.nl)
+ * term-store has two types of tables now: str and term. 
+
 2003/05/27 (markvdb@cwi.nl)
  * Imports are filtered against the contents of the term-store.
  * meta.tb now has an explicit starting order of initial processes
