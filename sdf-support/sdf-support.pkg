@@ -1,0 +1,14 @@
+package 
+identification
+   name=sdf-support
+   version=1.1beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/sdf-support
+   description='The SDF support library.'
+   keywords=meta-environment, sdf, library
+
+configuration interface
+
+requires
+  aterm		2.0.1
+  pt-support	0.12beta
