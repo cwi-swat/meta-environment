@@ -6,6 +6,7 @@
 #include <sdf-modules.idef>
 #include <sdf-renaming.idef>
 #include <term-store.idef>
+#define DEBUG printf("FILE: %s LINE: %d\n", __FILE__, __LINE__)
 
 process Stripper(Values : list, StrippedValues : list?) is
 let
@@ -111,15 +112,11 @@ in
     if equal(Name, ModuleId) then
       snd-msg(ts-get-value("sdf-tree", Name)) .
       rec-msg(ts-value(tree(OldSyntaxTree?))) .
-      if equal(SyntaxTree, OldSyntaxTree) then
-	snd-msg(updating-succeeded([],[]))
-      else
-        snd-msg(sm-get-imported-module-names(SyntaxTree)) .
-	printf("DEBUG: just get all imports, not just the new ones?") .
-	rec-msg(sm-imported-module-names(Modules?)) .
-        MDB-GetAllDependingModules(Name, DependingModules?) .
-	snd-msg(updating-succeeded(DependingModules,Modules))
-      fi
+      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      printf("DEBUG: just get all imports, not just the new ones?") .
+      rec-msg(sm-imported-module-names(Modules?)) .
+      MDB-GetAllDependingModules(Name, DependingModules?) .
+      snd-msg(updating-succeeded(DependingModules,Modules))
     else
       snd-msg(error-opening(Name, name-inconsistent))
     fi
