@@ -1,0 +1,11 @@
+module StructureEditor
+
+imports basic/Whitespace
+
+exports
+  sorts Direction
+  context-free syntax
+    "Up" -> Direction {cons("up")}
+    "Left" -> Direction {cons("left")}
+    "Down" -> Direction {cons("down")}
+    "Right" -> Direction {cons("right")}

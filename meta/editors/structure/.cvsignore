@@ -3,4 +3,6 @@
 .libs
 Makefile
 Makefile.in
+StructureEditor.adt
+StructureEditor.def
 structure-editor
