@@ -1,24 +1,3 @@
-/*
-
-    Asf Sdf Compiler Runtime Library
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 #ifndef ASC_SUPPORT_H
 #define ASC_SUPPORT_H
 
@@ -26,6 +5,11 @@
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
+
+#define MEMO_OFF
+#define MEMO_MEM_INFO
+
+/*{{{  profiling */
 
 #define PROF(var)
 
@@ -75,19 +59,23 @@ extern Symbol record_sym;
 
 #endif
 
-#ifdef WIN32
-#include <string.h>
-#define streq(a,b) (!strcmp((a),(b)))
-#endif
 
+  /*}}}  */
+
+  /*{{{ muasf terms  */
+
+#define term_equal(t1,t2) (ATisEqual(t1,t2))
+/*#define ok(t) (ATmakeAppl1(oksym,t))*/
 #define is_char(t,c) (ATgetType(t) == AT_INT && ATgetInt((ATermInt) t) == (c))
 #define make_char(c) (char_table[c])
 #define make_list_char(c) ((ATerm)(ATmakeList1(char_table[c])))
 #define singleton(t) (ATerm)(ATmakeList1((t)))
 #define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
 
-#define MEMO_OFF
-#define MEMO_MEM_INFO
+
+/*}}}  */
+
+  /*{{{  memo functionality */
 
 /* Macros to access the database */
 #ifndef MEMO_OFF
@@ -108,6 +96,11 @@ extern void print_memo_table_sizes();
 #define create_table(db,v) (db = ATtableCreate(10,75))
 #endif
 
+
+/*}}}  */
+
+/*{{{  tail_n */
+
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))
 #define tail_3(l) (t_list_next(tail_2(l)))
@@ -123,6 +116,10 @@ extern void print_memo_table_sizes();
 #define tail_13(l) (t_list_next(tail_12(l)))
 #define tail_14(l) (t_list_next(tail_13(l)))
 #define tail_15(l) (t_list_next(tail_14(l)))
+
+
+/*}}}  */
+/*{{{  arg_n */
 
 #define arg_0(t) (ATgetArgument(t,0))
 #define arg_1(t) (ATgetArgument(t,1))
@@ -144,6 +141,10 @@ extern void print_memo_table_sizes();
 #define arg_17(t)  (ATgetArgument(t,17))
 #define arg_18(t)  (ATgetArgument(t,18))
 #define arg_19(t)  (ATgetArgument(t,19))
+
+
+/*}}}  */
+/*{{{  make_nf */
 
 #define make_nf0(s) (ATerm)(ATmakeAppl0((Symbol)s))
 #define make_nf1(s,t0) ((ATerm)(ATmakeAppl1((Symbol)s,t0)))
@@ -183,6 +184,10 @@ extern void print_memo_table_sizes();
 #define make_nf31(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30))
 #define make_nf32(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31))
 
+
+/*}}}  */
+/*{{{  quote */
+
 #define quote0(s) (ATerm)(ATmakeAppl1(sym_quote0, (ATerm) ATmakeInt((int)s)))
 #define quote1(s,t1) (ATerm)(ATmakeAppl2(sym_quote1, (ATerm) ATmakeInt((int)s), t1))
 #define quote2(s,t1,t2) (ATerm)(ATmakeAppl3(sym_quote2, (ATerm) ATmakeInt((int)s), t1, t2))
@@ -192,20 +197,24 @@ extern void print_memo_table_sizes();
 #define quote6(s,t1,t2,t3,t4,t5,t6) (ATerm)(ATmakeAppl(sym_quote6, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5, t6))
 #define quote7(s,t1,t2,t3,t4,t5,t6, t7) (ATerm)(ATmakeAppl(sym_quote7, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5, t6, t7))
 
+
+/*}}}  */
+/*{{{  make_tuple */
+
 #define make_tuple1(t0) (ATerm)(t0)
 #define make_tuple2(t0,t1) (ATerm)(ATmakeList2(t0,t1))
 #define make_tuple3(t0,t1,t2) (ATerm)(ATmakeList3(t0,t1,t2))
 #define make_tuple4(t0,t1,t2,t3) (ATerm)(ATmakeList4(t0,t1,t2,t3))
 
-#define ok(t) (ATmakeAppl1(oksym,t))
 
-#define term_equal(t1,t2) (ATisEqual(t1,t2))
+/*}}}  */
 
-/* List functions */
+/*{{{  list functions */
+
 #define null() (ATerm)(ATempty)
 #define list_head(l) (ATgetFirst((ATermList)l))
 #define list_tail(l) (ATerm)(ATgetNext((ATermList)l))
-#define conc(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
+/*#define conc(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))*/
 #define cons(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
 #define append(l,t) (ATerm)(ATappend((ATermList)l,t))
 #define insert(t,l) (ATerm)(ATinsert((ATermList)l,t))
@@ -217,12 +226,13 @@ extern void print_memo_table_sizes();
                               ATisEmpty(ATgetNext((ATermList)l))))
 #define slice_length(l1,l2) (ATgetLength(l1) - ATgetLength(l2))
 
-typedef ATerm (*funcptr)();
+
+  /*}}}  */
+
+/*{{{  external functions and globals */
 
 extern unsigned int rewrite_steps;
-
 extern ATerm char_table[];
-
 extern Symbol sym_quote0;
 extern Symbol sym_quote1;
 extern Symbol sym_quote2;
@@ -234,6 +244,8 @@ extern Symbol sym_quote7;
 extern Symbol make_listsym;
 extern Symbol concsym;
 extern Symbol conssym;
+
+typedef ATerm (*funcptr)();
 
 extern void c_rehash(int size);
 extern void register_prod(ATerm prod, funcptr func, Symbol sym);
@@ -248,5 +260,8 @@ extern ATerm unquote(ATerm t);
 extern void register_all();
 extern void resolve_all();
 extern void init_all();
+
+
+/*}}}  */
 
 #endif  /* ASC_SUPPORT_H */

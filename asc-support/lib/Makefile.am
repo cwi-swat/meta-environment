@@ -23,19 +23,15 @@ include $(top_srcdir)/make_rules
 
 lib_LIBRARIES            = libasc-support-me.a
 
-include_HEADERS          =  asc-apply-me.h 
-EXTRA_DIST               = rewriter.tb rewriter.tif.c rewriter.tif.h
+include_HEADERS          = asc-apply-me.h asc-support-me.h asc-support2-me.h
 
-SRCS = asc-apply-me.c asc-apply-me.h
-
-ALLSRCS = $(SRCS) rewriter-me.tif.c 
-
-libasc_support_me_a_SOURCES = $(SRCS)
-libasc_support_me_a_LIBADD  = rewriter-me.tif.o
+libasc_support_me_a_SOURCES = asc-apply.c \
+                              asc-support.c \
+                              nametable.c \
+                              muasf2pt.c \
+                              main.c
 
 # Default include directories
-INCLUDES   = -I. -I$(ASF_SUPPORT)/include \
-                 -I$(PT_SUPPORT)/include \
-                 -I$(ATERM)/include
-
-rewriter-me.o: rewriter-me.tif.h
+INCLUDES   = -I. \
+             -I$(PT_SUPPORT)/include \
+             -I$(ATERM)/include
