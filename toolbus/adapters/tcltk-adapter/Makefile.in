@@ -17,24 +17,28 @@ includedir      = $(prefix)/include
 x_includes	= @x_includes@
 x_libraries	= @x_libraries@
 
+TIDEDEF		= @TIDEDEF@
+
 SHELL		= /bin/sh
 
 CC		= @CC@
 CFLAGS		=
-INCLUDES	= @INCLUDES@ -I$(top_srcdir)/src $(EXTRA_INCLUDES)
-DEFS		= @DEFS@ $(EXTRA_DEFS)
+INCLUDES	= @INCLUDES@ -I$(top_srcdir)/src -I$(top_srcdir)/tide \
+		$(EXTRA_INCLUDES)
+DEFS		= @DEFS@ $(EXTRA_DEFS) $(TIDEDEF)
 
 INSTALL		= @INSTALL@
 
 CLEAN		= @CLEAN@
 GELOBJECTS	= @GELOBJECTS@ bgelio bgelo
-LIBS		= $(EXTRA_LIBS) $(top_srcdir)/src/libtb.a @LIBS@
+LIBS		= $(EXTRA_LIBS) $(top_srcdir)/tide/libtide.a \
+		$(top_srcdir)/src/libtb.a @LIBS@
 
 NOWEB		= @NOWEB@
 
 COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
-DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
+DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 
 TCLTK		= @TCLTKTOP@
 
@@ -42,27 +46,31 @@ TCLTK		= @TCLTKTOP@
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = tcltk-adapter
 PROGRAMS        = tcltk-adapter
-SOURCE          = tcltk-adapter.c.nw
-LIBFILES        =
+SOURCE          = tcltk-adapter.c.nw tide.tcl.nw
+LIBFILES        = tcltk.tcl tide.tcl
 DOC             = tcltk-adapter.guide.tex adapters.ps adapters.fig
 SRCDOC          = tcltk-adapter.c.tex
 GENSRC          = tcltk-adapter.c
 
 EXTRA_INCLUDES	= -I$(TCLTK)/include
-EXTRA_DEFS	=
-EXTRA_LIBS	= -L$(TCLTK)/lib -R$(TCLTK)/lib -ltk -ltcl \
-			-L$(x_libraries) -R$(x_libraries) -lX11 
+EXTRA_DEFS	= -DLIBDIR=\"$(libdir)\"
+EXTRA_LIBS	= -L$(TCLTK)/lib -R$(TCLTK)/lib -ltk4.1 -ltcl7.5 \
+			-L$(x_libraries) -R$(x_libraries) -lX11 -ldl
 
 # Here you can add the rules that actually build your adapter:
 
 all:	${PROGRAMS} $(LIBFILES) $(SRCDOC) ${DOC} 
 
 tcltk-adapter.c tcltk-adapter.c.tex: tcltk-adapter.c.nw
-	noweb tcltk-adapter.c.nw
+	$(NOWEB) tcltk-adapter.c.nw
 	touch tcltk-adapter.c tcltk-adapter.c.tex
 
 tcltk-adapter: tcltk-adapter.c
 	$(COMPILE) tcltk-adapter.c -o tcltk-adapter ${LIBS}
+
+tide.tcl tide.tcl.tex: tide.tcl.nw
+	$(NOWEB) tide.tcl.nw
+	touch tide.tcl tide.tcl.tex
 
 adapters.ps: adapters.fig
 	fig2dev -Lps adapters.fig adapters.ps
@@ -87,9 +95,9 @@ install: $(PROGRAMS) $(LIBFILES)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done
-#	for file in $(LIBFILES); do\
-#	  $(INSTALL) $$file $(libdir); \
-#	done
+	for file in $(LIBFILES); do\
+	  $(INSTALL) $$file $(libdir); \
+	done
 
 doc:	$(SRCDOC) $(DOC)
 	for file in $(DOC); do\
@@ -109,7 +117,7 @@ uninstall:
 	for file in $(DOC); do\
 	  rm -f $(docdir)/adapters/$$file; \
 	done
-#	for file in $(LIBFILES); do\
-#	  rm -f $(libdir)/$$file;\
-#	done 
+	for file in $(LIBFILES); do\
+	  rm -f $(libdir)/$$file;\
+	done 
 
