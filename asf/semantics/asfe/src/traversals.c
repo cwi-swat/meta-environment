@@ -306,15 +306,11 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
   }
 
   if (trav.continuation == UNDEFINED_CONTINUATION) {
-    ATwarning("WARNING: missing break or continue attribute in %s\n", 
-	     PT_yieldProduction(trav.prod)); 
     if (trav.strategy == TOPDOWN) { /* top down stops */
-      ATwarning("WARNING: suggested attribute: \'break\'\n");
       trav.continuation = BREAK;
     }
     else {                          /* bottom-up continues */
       trav.continuation = CONTINUE;
-      ATwarning("WARNING: suggested attribute: \'continue\'\n");
     }
   }
 

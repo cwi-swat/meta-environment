@@ -720,6 +720,7 @@ argsMatching(ATerm env, ASF_ConditionList conds,
       if (lhs_posinfo) {
 	TIDE_STEP(lhs_posinfo, newenv, depth);
       }
+
       newenv = condsSatisfied(conds, newenv, depth);
     }
   }
@@ -1144,19 +1145,117 @@ listMatching(ATerm env, PT_Production listProd,
 
 
 /*}}}  */
+
+/*{{{  static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,  */
+
+static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs, 
+				   ASF_ConditionList conds,
+				   ATerm env, 
+				   int depth)
+{
+  PT_Tree lhstrm, rhstrm;
+
+  /* assuming that none of the sides introduce new variables */
+
+  TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), env, depth);
+  lhstrm = rewriteInnermost(lhs, env, depth + 1 , NO_TRAVERSAL);
+
+  if (!lhstrm) {
+    ATwarning("*** fail_env on line %d\n", __LINE__);
+    return fail_env;
+  }
+
+  TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), env, depth);
+  rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
+
+  if (!rhstrm) {
+    ATwarning("*** fail_env on line %d\n", __LINE__);
+    return fail_env;
+  }
+
+  if (isAsFixEqual(lhstrm, rhstrm)) {
+    if (runVerbose) {
+      ATwarning("*** fail_env on line %d\n", __LINE__);
+    }
+
+    return fail_env;
+  }
+
+  return condsSatisfied(conds, env, depth);
+}
+
+/*}}}  */
+/*{{{  static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs,  */
+
+static ATerm positiveCondSatisfied(PT_Tree lhs, PT_Tree rhs, 
+				   ASF_ConditionList conds,
+				   ATerm env, int depth)
+{
+  PT_Tree lhstrm = lhs;
+  PT_Tree rhstrm = rhs;
+
+  /* assuming that not both sides have new vars */
+
+  if (!no_new_vars(rhs,env)) { /* a matching condition */
+    TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), env, depth);
+    lhstrm = rewriteInnermost(lhs, env, depth + 1, NO_TRAVERSAL);
+    if (!lhstrm) {
+      return fail_env;
+    }
+    TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), env, depth);
+    return argMatching(env, rhs, lhstrm, conds, 
+		       PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+		       NULL, depth);
+  }
+  else if (!no_new_vars(lhs, env)) { /* flip the sides */
+    return positiveCondSatisfied(rhs, lhs, conds, env, depth);
+  }
+  else { /* an equality condition */
+    TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), env, depth);
+    lhstrm = rewriteInnermost(lhs, env, depth + 1, NO_TRAVERSAL);
+    if (!lhstrm) {
+      return fail_env;
+    }
+
+    TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), env, depth);
+    rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
+    if (!rhstrm) {
+      return fail_env;
+    }
+
+    if (isAsFixEqual(lhstrm, rhstrm)) {
+      return condsSatisfied(conds, env, depth);
+    }
+    else {
+      return fail_env;
+    }
+  }
+}
+
+/*}}}  */
+/*{{{  static ATerm condSatisfied(ASF_Condition cond, ASF_ConditionList conds, */
+
+static ATerm condSatisfied(ASF_Condition cond, ASF_ConditionList conds,
+			   ATerm env, int depth)
+{
+  PT_Tree lhs = ASFtoPT(ASF_getConditionLhs(cond));
+  PT_Tree rhs = ASFtoPT(ASF_getConditionRhs(cond));
+
+
+  if (ASF_isConditionPositive(cond)) {
+    return positiveCondSatisfied(lhs, rhs, conds, env, depth);
+  }
+  else {
+    return negativeCondSatisfied(lhs, rhs, conds, env, depth);
+  }
+}
+
+/*}}}  */
 /*{{{  static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth) */
-
-/* Function ``condSatisfied'' check whether the conditions
-   of an equation can be satisfied. 
-   Remark access functions needed to retrieve the operator,
-   lhs, and rhs. */
-
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 {
   ASF_Condition cond;
-  PT_Tree lhs, rhs, lhstrm, rhstrm;
   ATerm newenv = env;
-
 
   if (conds == NULL) {
     return env;
@@ -1164,120 +1263,20 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 
   if (ASF_hasConditionListHead(conds)) {
     cond = ASF_getConditionListHead(conds);
-//ATwarning("cond: %t\nenv:%t\n", cond,env);
+
     if (ASF_hasConditionListTail(conds)) {
       conds = ASF_getConditionListTail(conds);
     }
     else {
       conds = NULL;
     }
+ 
+    newenv = condSatisfied(cond, conds, env, depth);
 
-    lhs = ASFtoPT(ASF_getConditionLhs(cond));
-    rhs = ASFtoPT(ASF_getConditionRhs(cond));
-
-    if (ASF_isConditionPositive(cond)) {
-      if (no_new_vars(lhs, newenv)) {
-	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
-	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
-	if (!lhstrm) {
-	  return fail_env;
-	}
-
-	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
-	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1 , NO_TRAVERSAL);
-	  if (!rhstrm) {
-	    return fail_env;
-	  }
-
-	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
-		    newenv, depth);
-	  if (isAsFixEqual(lhstrm, rhstrm)) {
-	    newenv = condsSatisfied(conds, newenv, depth);
-	  }
-	  else {
-	    newenv = fail_env;
-	    if (runVerbose) {
-	      ATwarning("*** fail_env on line %d\n", __LINE__);
-	    }
-	  }
-	}
-	else {
-	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
-		    newenv, depth);
-	  newenv =
-	    argMatching(newenv, rhs, lhstrm, conds,
-			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
-                        NULL, depth);
-	}
-      }
-      else {
-	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
-	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
-	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1 , NO_TRAVERSAL);
-	  if (!rhstrm) {
-	    return fail_env;
-	  }
-
-	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
-		    newenv, depth);
-	  newenv =
-	    argMatching(newenv, lhs, rhstrm, conds,
-			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
-                        NULL, depth);
-	}
-	else {
-	  RWsetError
-	    ("Both sides of condition introduce new variables.",
-	     (ATerm) cond);
-	  newenv = fail_env;
-	  if (runVerbose) {
-	    ATwarning("*** fail_env on line %d\n", __LINE__);
-	  }
-	}
-      }
-    }
-    else {
-      if (!no_new_vars(lhs, newenv) || !no_new_vars(rhs, newenv)) {
-	RWsetError("Negative condition introduces new variables.",
-		   (ATerm) cond);
-	newenv = fail_env;
-	if (runVerbose) {
-	  ATwarning("*** fail_env on line %d\n", __LINE__);
-	}
-      }
-      else {
-	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
-	lhstrm = rewriteInnermost(lhs, newenv, depth + 1 , NO_TRAVERSAL);
-	if (!lhstrm) {
-	  return fail_env;
-	}
-
-	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
-	rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
-	if (!rhstrm) {
-	  return fail_env;
-	}
-
-	TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
-		  newenv, depth);
-	if (isAsFixEqual(lhstrm, rhstrm)) {
-	  newenv = fail_env;
-	  if (runVerbose) {
-	    ATwarning("*** fail_env on line %d\n", __LINE__);
-	  }
-	}
-	else {
-	  newenv = condsSatisfied(conds, newenv, depth);
-	}
-      }
-    }
   }
 
   return newenv;
 }
-
 /*}}}  */
 
 /* Reduction functionality */
