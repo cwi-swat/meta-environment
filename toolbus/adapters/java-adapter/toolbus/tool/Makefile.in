@@ -39,13 +39,13 @@ PROGRAMS	= javatif
 all:	${CLASSES}
 
 %.class: %.java
-	javac -classpath $$CLASSPATH:../.. $<
+	javac -classpath ../..:$$CLASSPATH $<
 
 %.tifs: %.tb
 	toolbus -gentifs $<
 
 Testing.java: test.tifs
-	java -classpath $$CLASSPATH:../.. toolbus.tool.JavaTif -tool testing -tifs test.tifs -package toolbus.tool
+	java -classpath ../..:$$CLASSPATH toolbus.tool.JavaTif -tool testing -tifs test.tifs -package toolbus.tool
 
 clean:
 	${CLEAN} ${CLASSES}

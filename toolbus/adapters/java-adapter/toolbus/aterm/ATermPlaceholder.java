@@ -269,6 +269,15 @@ public class ATermPlaceholder extends ATerm
 	  }
 	  return false;
 	}
+
+	// Another application, make sure it matches with the
+	// function symbol we are looking for.
+	if(fun.equals(termfun)) {
+	  subterms.addElement(termfun);
+	  if(args == null)
+	    return true;
+	  return args.match(termargs, subterms);
+	}
 	break;
 
 	//}

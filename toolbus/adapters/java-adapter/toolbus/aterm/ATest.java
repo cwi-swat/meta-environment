@@ -207,6 +207,8 @@ public class ATest
     P[3] = new ATermPattern("<list>");
     P[4] = new ATermPattern("[<int>,<terms>]");
     P[5] = new ATermPattern("<fun(<int>,<terms>)>");
+    P[6] = new ATermPattern("<f>");
+    P[7] = new ATermPattern("<f(1,2,<int>)>");
 
     test(P[0].match(T[0]) && P[0].size() == 0, "match-1");
     test(!P[0].match(T[1]), "match-2");
@@ -227,6 +229,10 @@ public class ATest
     test(P[5].elementAt(1).equals(new Integer(1)), "match-7c");
     test(P[5].elementAt(2).equals(((ATermListRef)
           ATermParser.makeSimple("[2,3]")).getATerms()), "match-7d");
+    test(P[6].match(T[0]) && P[6].size()==1, "match-8a");
+    test(P[6].elementAt(0).equals("f"), "match-8b");
+    test(P[7].match(T[0]) && P[7].size() == 2, "match-9a");
+    test(P[7].elementAt(0).equals("f") && P[7].elementAt(1).equals(new Integer(3)), "match-9b");
   }
 
   //}
@@ -271,4 +277,3 @@ public class ATest
 
   //}
 }
-

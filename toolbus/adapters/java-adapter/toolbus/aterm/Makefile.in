@@ -45,10 +45,10 @@ PROGRAMS	= aterm-size
 all:	${CLASSES}
 
 %.class: %.java
-	javac -classpath $$CLASSPATH:../.. $<
+	javac -classpath ../..:$$CLASSPATH $<
 
-# The rules below this line are general rules and are based on the
-# defines listed above. You probably won't have to change them.
+test:	${CLASSES}
+	java -classpath ../..:$$CLASSPATH toolbus.aterm.ATest
 
 clean:
 	${CLEAN} ${CLASSES}

@@ -609,7 +609,7 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
       else if(fun.equals("str"))
 	out.print("(String)P.elementAt(" + idx + ")");
       else
-        System.err.println("Illegal placeholder: " + fun);
+	out.print("(ATermApplRef)P.elementAt(" + idx + ")");
       if(args != null)
         out.print(", ");
       idx++;
@@ -656,7 +656,8 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
       else if(fun.equals("str"))
 	out.print("String s" + idx);
       else
-        System.err.println("Illegal placeholder: " + fun);
+	out.print("ATermApplRef a" + idx);
+
       if(args != null)
         out.print(", ");
       idx++;

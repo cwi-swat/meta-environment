@@ -35,7 +35,7 @@ JDK11CLASSES	= Writer.class PrintWriter.class CharArrayWriter.class
 all:	${CLASSES}
 
 %.class: %.java
-	javac -classpath $$CLASSPATH:../.. $<
+	javac -classpath ../..:$$CLASSPATH $<
 
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.

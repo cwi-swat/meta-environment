@@ -26,14 +26,28 @@ DISTFILES	= Makefile.in $(SOURCE)
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/tide
 
-SOURCE		=
-CLASSES		=
+SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
+		ExceptionPort.java DebugRule.java \
+		DebugAdapterInfo.java SourceArea.java DebugProcess.java \
+		$(TOOLSOURCE)
+TOOLSOURCE	= ProcessListTif.java ProcessListTool.java
+CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
+		ExceptionPort.class DebugRule.class \
+		DebugAdapterInfo.class SourceArea.class DebugProcess.class \
+		$(TOOLCLASSES)
+TOOLCLASSES	= ProcessListTif.class ProcessListTool.class
 PROGRAMS	=
+
+JAVATIF		= java -classpath $(top_srcdir)/adapters/java-adapter:$$CLASSPATH toolbus.tool.JavaTif
 
 all:	${CLASSES}
 
 %.class: %.java
-	javac $<
+	javac -classpath ../..:$$CLASSPATH $<
+
+ProcessListTif.java: $(top_srcdir)/tide/tide.tifs
+	$(JAVATIF) -package toolbus.tide -class ProcessListTif \
+		-tool process-list -tifs $(top_srcdir)/tide/tide.tifs
 
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.
@@ -51,12 +65,13 @@ dist: $(DISTFILES)
 	done
 
 install: $(PROGRAMS) $(CLASSES)
-	for file in $(PROGRAMS); do\
-	  $(INSTALL) $$file $(bindir); \
-	done
 	for file in $(CLASSES); do\
 	  $(INSTALL) $$file $(classdir)/$(COMPONENT); \
 	done
+#	for file in $(PROGRAMS); do\
+#	  $(INSTALL) $$file $(bindir); \
+#	done
+ 
 
 doc:
 
