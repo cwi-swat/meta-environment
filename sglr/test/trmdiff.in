@@ -23,6 +23,13 @@ case $# in
 		exit 2 ;;
 esac
 
+Notify () {
+	if [ $VERBOSE -gt 0 ]
+	then
+		echo $*                                   >&2
+	fi
+}
+
 CheckSum () {
 	cksum $1 | cut -f1,2
 }
@@ -39,8 +46,7 @@ BinaryEqual () {
 
 if BinaryEqual $1 $2 ; then exit 0 ; fi
 
-echo === not binary identical -- text diff for `basename $1`/`basename $2` ===
-
+Notify === `basename $1`/`basename $2` not binary identical  ===
 trap 'rm -f $A $B' 0 1
 trmcat $1 | $PERL5 -pe "$break"	> $A
 trmcat $2 | $PERL5 -pe "$break"	> $B

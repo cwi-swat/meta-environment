@@ -7,6 +7,7 @@ cd `dirname $0`;
 mydir=`pwd`
 
 COMPARE="$mydir/trmdiff"
+RM=rm
 
 reference=$mydir/tables
 dirs="first grammars"
@@ -24,17 +25,12 @@ RegressGenTable () {
 		continue
 	fi
 	if sdf2table $1 ; then
-		diffs=1
-		if [ `wc -c < $ptbl` -eq `wc -c < $reference/$ptbl` ] ; then
-	        	Notify Comparing $ptbl...
-	                if $COMPARE $ptbl $reference/$ptbl	>/dev/null 2>&1
-	                then
-		                Notify "Regress test for $1 succeeded"
-		                rm -f $ptbl
-			        diffs=0
-	                fi
-		fi
-		if [ $diffs -ne 0 ] ; then
+	        Notify Comparing $ptbl...
+	        if $COMPARE $ptbl $reference/$ptbl	>/dev/null
+	        then
+		        Notify "Regress test for $1 succeeded"
+		        ${RM} -f $ptbl
+	        else
 		        Notify "Regress test for $1 failed"
 	        fi
 	else
