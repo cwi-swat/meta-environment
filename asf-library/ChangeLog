@@ -1,3 +1,9 @@
+# $Id$
+
+Tue Jan 20 14:46:47 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * utilities/IO:
+   added convenience functions unparse, and unparse-to-string.
+
 2003/16/01 (markvdb@cwi.nl)
   * First version of BOX language added to the library.
 
