@@ -168,13 +168,13 @@ binary exchange format. \aterms\ decrease memory usage thanks to sharing
 and they permit a very fast equality test since structural equality can
 be replaced by pointer equality thanks to the maximal subterm sharing.
 
-Another line of development is the \TB\ Integrated Debugging
-Environment ({\sc Tide}) described in~\cite{Olivier00}
+Another line of development is the \TB\ Integrated Debugging Environment
+({\sc Tide}) described in~\cite{Olivier00}.
 
 Today, beginning 2003, it turns out that the original software engineering
 goals that triggered the development of the \TB\ have been achieved
 and that the Meta-Environment can now be even further stretched than
-anticipated~\cite{RTA}. Therefore, it is time for some reflection.
+anticipated~\cite{RTA03}. Therefore, it is time for some reflection.
 What have we learned from this major renovation project and what are
 the implications for the \TB\ design and implementation?
 
@@ -1055,10 +1055,10 @@ Architecture  & Component    & Client & Client & Client \\
               & coordination  & Server & Client & Server \\ \hline
 Interface     & \Tscript & Java Interface & Java Interface & IDL \\ \hline
 GC            & yes & yes & no & no \\ \hline
-parameters /  & by-value & local: by-value & local: by-value & "in" and "out" \\
-return values &          & remote: by-ref & remote: by-ref & params \\ \hline
-language      & any via    & only Java & CORBA objects if &  any via \\
-              & TB adapter &         & interface in Java & IDL compiler \\ \hline
+parameters /  & by-value & local: by-value & local: by-value & depends on \\
+return values &          & remote: by-ref & remote: by-ref & signature \\ \hline
+language      & any with    & only Java & CORBA objects if &  any with \\
+              & TB adapter &         & interface in Java & IDL binding \\ \hline
 component     & yes & no & no & no \\
 coordination  &     &    &    &    \\ \hline
 
@@ -1094,9 +1094,9 @@ both pass-by-value and pass-by-reference, depending on whether the
 relevant data is serializable (it is a primitive type, or it implements
 \texttt{Serializable}) or is a remote object. In Java IDL the components
 abide by IDL prescribed interfaces. Determination of whether a parameter
-is to be passed by-value or by-reference is made by examination of
-the parameter's formal type (i.e. in the IDL signature of the method
-it is being passed to) If it is a CORBA \emph{value type}, it is passed
+is to be passed by-value or by-reference is made by examination of the
+parameter's formal type (i.e. in the IDL signature of the method it
+is being passed to). If it is a CORBA \emph{value type}, it is passed
 by-value. If it is an ordinary CORBA \emph{interface type} (the ``normal''
 case for all CORBA objects), it is passed by-reference.
 
