@@ -37,7 +37,7 @@ public class MessageList extends JScrollPane
 	    
 		    java.util.List matching;
 		    
-		    System.out.println(sel.toString());
+		    //System.out.println(sel.toString());
 
 		    try {
 			matching = sel.match("listitem(<str>,[<list>],<term>)");
@@ -51,7 +51,7 @@ public class MessageList extends JScrollPane
 			System.err.println("This is not a valid listitem: " + sel);
 		    }
 		    else {
-			System.out.println(matching);
+			//System.out.println(matching);
 			bridge.postEvent(factory.make("element-selected(<list>,<str>,<term>)", 
 						      matching.get(1), 
                                                       name,
