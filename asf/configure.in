@@ -171,6 +171,9 @@ AC_CONFIG_FILES([Makefile
    semantics/asf-upgrade/src/Makefile
    semantics/asf-operations/Makefile
    semantics/asf-operations/src/Makefile
+   semantics/asf-api/Makefile
+   semantics/asf-api/spec/Makefile
+   semantics/asf-api/src/Makefile
    semantics/utils/Makefile
    semantics/test/Makefile
    semantics/test/eqs/Makefile
