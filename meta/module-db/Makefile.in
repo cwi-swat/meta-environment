@@ -53,7 +53,7 @@ OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= module-db genmakefile.sh
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= module-db.idef
+LIBFILES	= module-db.idef genmakefile.proto
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	= module-db.h
 # Local includes
