@@ -22,7 +22,7 @@ in
     ( rec-value(IO,opened-file("asfix",Name,T?,Fn?)).
       snd-msg(Id,opened-file(asfix,id(Name),T,Fn))
     + rec-value(IO,opened-file("raw",Name,Text?,Fn?)).
-      snd-msg(Id,opened-file(raw,Name,Text,Fn))
+      snd-msg(Id,opened-file(raw,id(Name),Text,Fn))
     + rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
     )

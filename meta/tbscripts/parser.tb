@@ -14,7 +14,7 @@ process Parser is
     ( rec-msg(Id?, parse-string(L?, G?, S?)) .
       snd-eval(P, parse-string(L, G, S)) .
       rec-value(P, T?) .
-      snd-msg(parse-result(Id, T))
+      snd-msg(Id,parse-result(T))
     +
       rec-msg(parse-file(L?, G?, FN?, Id?)) .
       snd-eval(P, parse-file(L, G, FN)) .
@@ -24,7 +24,7 @@ process Parser is
       rec-msg(open-language(L?, FN?)) .
       snd-eval(P, open-language(L, FN)) .
       (
-	rec-value(P, language-opened(L?, FN)) .
+	rec-value(P, language-opened(L?, FN?)) .
 	snd-note(language-available(L))
       +
 	rec-value(P, open-language-failed(L, FN))

@@ -19,6 +19,8 @@
 #include "clear-all.tb"
 #include "compiler.tb"
 #include "edit-master.tb"
+#include "pgen.tb"
+#include "addeqsyn.tb"
 #include "module-db.idef"
 
 toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB)

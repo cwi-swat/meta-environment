@@ -74,7 +74,7 @@ ATerm open_file(int cid, char *name)
   char *buf;
   size_t size;
 
-  ATfprintf(stderr, "pre-parsed file %s.asfix", name);
+  ATfprintf(stderr, "pre-parsed file %s.asfix\n", name);
   for(i=0; i<nr_paths; i++) {
     strcpy(full, paths[i]);
     if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
@@ -88,15 +88,15 @@ ATerm open_file(int cid, char *name)
     if(f) {
       t = ATreadFromTextFile(f);
       if(!t) {
-        ATfprintf(stderr, " could not be read\n");
+        ATfprintf(stderr, "could not be read\n");
         fclose(f);
       }else {
-        ATfprintf(stderr, " was found in: %s\n",paths[i]);
+        ATfprintf(stderr, "was found in: %s\n",paths[i]);
         fclose(f);
         return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
                       "asfix",name, t,full);
       }
-    }
+    } 
   }
   /* JS  Try raw format if no pre-parsed version was found */
   for(i=0; i<nr_paths; i++) {
@@ -107,6 +107,7 @@ ATerm open_file(int cid, char *name)
     }
     strcat(full, "/");
     strcat(full, name);
+    strcat(full, ".sdf2");
     fprintf(stderr, "trying file %s\n", full);
     buf = SlurpFile(full, &size);
     if (buf != NULL) {

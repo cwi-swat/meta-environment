@@ -7,18 +7,14 @@ tool asource is {
 process Prettyprinter is
 let
   PP: asource,
-  T: term,
-  Str: str,
-  Src: term,
-  Clst: list,
-  Flst: list,
-  Tslst: list
+  T: term, 
+  Src: term 
 in
   execute(asource,PP?).
-  (  rec-msg(pp-module(T?)).
+  ( rec-msg(pp-module(T?)).
     snd-eval(PP,conssource(T)).
     rec-value(PP,source(Src?)).
-    snd-msg(module-source(Src))
+    snd-msg(module-source(Src)) 
   ) *
   delta
 endlet

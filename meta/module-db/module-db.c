@@ -80,11 +80,13 @@ void clear_module_db(int cid)
 
 ATermList get_import_section(ATermList sections);
 ATermList add_imports(ATerm name, ATermList mods);
+ATerm get_module_name(ATerm module);
+ATermList get_import_section_sdf2(ATerm module);
 
 ATerm add_module(int cid, ATerm asfix)
 {
-  ATerm t[7]; 
-  ATerm modname;
+  ATerm t[8]; 
+  ATerm modname, appl;
   ATermList sections, imports, unknowns;
   ATerm newasfix;
 
@@ -97,6 +99,16 @@ ATerm add_module(int cid, ATerm asfix)
     };
     imports = get_import_section(sections);
     unknowns = add_imports(modname,imports);
+    return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
+                  modname,unknowns);
+  }
+  if(ATmatchTerm(asfix,pattern_asfix_term,
+                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
+                 &appl, &t[6], &t[7])) {
+    modname = get_module_name(appl); 
+    PutValue(modules_db,modname,asfix); 
+    imports = get_import_section_sdf2(appl); 
+    unknowns = add_imports(modname,imports); 
     return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
                   modname,unknowns);
   }
@@ -263,6 +275,312 @@ ATerm calc_import_rels(int cid, ATerm name)
   return ATmake("snd-value(irels([<list>]))", imports);
 }
 
+/* A number of function to deal with modules which are recognized
+   via Sdf2. */
+
+ATerm get_module_name(ATerm module)
+{
+  ATerm t[2], elem;
+  ATermList args; 
+  char *text; 
+
+  if(ATmatchTerm(module,pattern_asfix_appl,
+                 & t[0], &t[1], &args)) {
+    elem = ATelementAt(args,2); 
+    if(ATmatchTerm(elem,pattern_asfix_appl,
+                   &t[0], &t[1], &args)) {
+      elem = ATelementAt(args,0); 
+      if(ATmatchTerm(elem,pattern_asfix_lex, &text, &t[0])) {   
+        return ATmakeTerm(pattern_asfix_id,text);
+      }
+      else {
+        ATerror("Not a correct Sdf2 module: %t\n", module);
+        return NULL;
+      }
+    }
+    else {
+      ATerror("Not a correct Sdf2 module: %t\n", module);
+      return NULL;
+    }
+  }
+  else {
+    ATerror("Not a correct Sdf2 module: %t\n", module);
+    return NULL;
+  }
+}
+
+ATermList filter_import_names(ATermList imps)
+{
+  ATerm t[2], elem, arg;
+  ATermList args, imports = ATempty;
+  char *text; 
+ 
+  while(!ATisEmpty(imps)) {
+    elem = ATgetFirst(imps); 
+    if(ATmatchTerm(elem,pattern_asfix_appl,
+                   &t[0], &t[1], &args)) {
+      arg = ATelementAt(args,0);  
+      if(ATmatchTerm(arg,pattern_asfix_appl,
+                     &t[0], &t[1], &args)) {
+        elem = ATelementAt(args,0);
+        if(ATmatchTerm(elem,pattern_asfix_lex,
+                       &text, &t[0])) { 
+          imports = ATinsert(imports,ATmakeTerm(pattern_asfix_id,text));
+        }
+      }
+    }
+    imps = ATgetNext(imps);
+  }
+  return imports;
+} 
+
+ATermList filter_import_list(ATermList imps)
+{
+  ATerm t[2], elem, arg;
+  ATermList args, elems, imports = ATempty;
+ 
+  while(!ATisEmpty(imps)) {
+    elem = ATgetFirst(imps); 
+    if(ATmatchTerm(elem,pattern_asfix_appl,
+                   &t[0], &t[1], &args)) {
+      arg = ATelementAt(args,2);  
+      if(ATmatchTerm(elem,pattern_asfix_appl,
+                     &t[0], &t[1], &args)) {
+        elem = ATelementAt(args,2); 
+        if(ATmatchTerm(elem,pattern_asfix_appl,
+                       &t[0], &t[1], &args)) {
+          elem = ATelementAt(args,0); 
+          if(ATmatchTerm(elem,pattern_asfix_list,
+                         &t[0], &t[1], &elems)) { 
+            imports = ATconcat(imports,filter_import_names(elems));
+          }
+        }
+      }
+    }
+    imps = ATgetNext(imps);
+  }
+  return imports;
+}
+
+ATermList get_import_section_sdf2(ATerm module)
+{ 
+  ATerm t[2], elem;
+  ATermList args, elems;  
+ 
+  if(ATmatchTerm(module,pattern_asfix_appl,
+                 &t[0], &t[1], &args)) {
+    elem = ATelementAt(args,4);  
+    if(ATmatchTerm(elem,pattern_asfix_list,
+                   &t[0], &t[1], &elems)) 
+      return filter_import_list(elems); 
+    else {
+      ATerror("Not a correct Sdf2 module: %t\n", module);
+      return ATempty;
+    } 
+  }
+  else {
+    ATerror("Not a correct Sdf2 module: %t\n", module);
+    return ATempty;
+  }
+  return ATempty;
+}
+
+ATerm make_main_module(ATerm mainname)
+{
+  ATerm result,result1,result2,result3;
+  char *text;
+
+  result1 = ATmakeTerm(pattern_asfix_list,
+                      ATparse("iter(sort(\"Section\"),w(\"\"),l(\"*\"))"),
+                      pattern_asfix_ews,
+                      ATmakeList0());
+  result1 = ATmakeTerm(pattern_asfix_appl,
+                      ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Section\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Sections\"),w(\"\"),no-attrs)"),
+                      pattern_asfix_ews,
+                      ATmakeList1(result1));
+  if(ATmatchTerm(mainname,pattern_asfix_id,&text)) {
+    result2 = ATmakeTerm(pattern_asfix_lex,
+                         text,
+                         ATparse("sort(\"ModuleId\")"));
+    result2 = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_nlws,
+                         ATmakeList1(result2));
+    result2 = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleName\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Import\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_ews,
+                         ATmakeList1(result2));
+    result2 = ATmakeTerm(pattern_asfix_list,
+                         ATparse("iter(sort(\"Import\"),w(\"\"),l(\"*\"))"),
+                         pattern_asfix_ews,
+                         ATmakeList1(result2));
+    result2 = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Import\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Imports\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_ews,
+                         ATmakeList1(result2));
+    result2 = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"imports\"),w(\"\"),sort(\"Imports\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ImpSection\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_ews,
+                         ATmakeList3(ATparse("l(\"imports\")"),
+                                     pattern_asfix_ews,
+                                     result2)); 
+    result2 = ATmakeTerm(pattern_asfix_list,
+                         ATparse("iter(sort(\"ImpSection\"),w(\"\"),l(\"*\"))"),
+                         pattern_asfix_ews,
+                         ATmakeList1(result2));  
+    result3 = ATmakeTerm(pattern_asfix_lex,
+                         "Main",
+                         ATparse("sort(\"ModuleId\")"));
+    result3 = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_ews,
+                         ATmakeList1(result3));
+    result = ATmakeTerm(pattern_asfix_appl,
+                        ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"module\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),iter(sort(\"ImpSection\"),w(\"\"),l(\"*\")),w(\"\"),sort(\"Sections\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)"),
+                        pattern_asfix_ews,
+                        ATmakeList(7,ATparse("l(\"module\")"),
+                                     pattern_asfix_ws,
+                                     result3,
+                                     pattern_asfix_nlws,
+                                     result2,
+                                     pattern_asfix_nlws,
+                                     result1));
+  }
+  return result;                    
+}
+
+
+ATerm make_name_term(ATerm name)
+{
+  ATerm result;
+  char *text;
+ 
+  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
+    result = ATmakeTerm(pattern_asfix_lex,
+                        text,
+                        ATparse("sort(\"ModuleId\")"));
+    result = ATmakeTerm(pattern_asfix_appl,
+                         ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
+                         pattern_asfix_nlws,
+                         ATmakeList1(result));  
+  }
+  return result;                    
+}
+
+ATerm get_syntax(ATerm name, ATermList modules)
+{
+  ATermList syntaxes = ATempty;
+  ATerm t[8], nameterm, appl, elem, module, result, term;
+
+  ATfprintf(stderr, "get_syntax entered\n");
+/*
+  appl = make_main_module(name);
+  syntaxes = ATinsert(syntaxes,appl);
+*/
+  nameterm = make_name_term(name);
+  while(!ATisEmpty(modules)) {
+    elem = ATgetFirst(modules);
+    module = GetValue(modules_db,elem);
+    if(ATmatchTerm(module,pattern_asfix_term,
+                   &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
+                   &appl, &t[6], &t[7])) {
+      if(ATisEmpty(syntaxes))
+        syntaxes = ATinsert(syntaxes,appl);
+      syntaxes = ATinsert(syntaxes,pattern_asfix_ews);
+      syntaxes = ATinsert(syntaxes,appl);
+    }
+    modules = ATgetNext(modules);
+  }
+  result = ATmakeTerm(pattern_asfix_list,
+                      ATparse("iter(sort(\"Module\"),w(\"\"),l(\"*\"))"),
+                      pattern_asfix_ews,
+                      syntaxes);
+  result = ATmakeTerm(pattern_asfix_appl,
+                      ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Definition\"),w(\"\"),no-attrs)"),
+                      pattern_asfix_ews,
+                      ATmakeList1(result)); 
+  result = ATmakeTerm(pattern_asfix_appl,
+                      ATparse("prod(id(\"Add-Eqs-Syntax\"),w(\"\"),[l(\"add-equation-module\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Definition\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
+                      pattern_asfix_ews,
+                      ATmakeList(11,ATparse("l(\"add-equation-module\")"),
+                                    pattern_asfix_ews,
+                                    ATparse("l(\"(\")"),
+                                    pattern_asfix_ews,
+                                    nameterm,
+                                    pattern_asfix_ews,
+                                    ATparse("l(\",\")"),
+                                    pattern_asfix_ews,
+                                    result,
+                                    pattern_asfix_ews,
+                                    ATparse("l(\")\")")));
+  term = ATmakeTerm(pattern_asfix_term,
+                    ATparse("l(\"term\")"),
+                    pattern_asfix_ews,
+                    ATparse("l(\"X\")"),
+                    pattern_asfix_ews,
+                    ATparse("id(\"X\")"),
+                    pattern_asfix_ews,
+                    result,
+                    pattern_asfix_ews,
+                    ATparse("no-abbreviations")); 
+  return term;
+}
+
+ATerm retrieve_syntax(int cid, ATerm name)
+{
+  ATerm result;
+  ATermList imports; 
+
+ATfprintf(stderr,"Module name is %t\n", name);
+
+  if(complete_specification(ATempty,name)) {
+    imports = get_imported_modules(name);
+    result = get_syntax(name,imports);
+    return ATmake("snd-value(syntax(<term>))",result);
+  }
+  else {
+    ATfprintf(stderr,
+              "Specification is incomplete and no parse table can be generated\n");
+    return ATmake("snd-value(syntax(done)))");  
+  }
+}
+
+ATerm add_pgen_func(int cid, ATerm syntax)
+{
+  ATerm t[8], result, term, appl;
+
+  if(ATmatchTerm(syntax,pattern_asfix_term,
+                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
+                 &appl, &t[6], &t[7])) {
+    result = ATmakeTerm(pattern_asfix_appl,
+                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"parse-table\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"),
+                        pattern_asfix_ews,
+                        ATmakeList(7,ATparse("l(\"parse-table\")"),
+                                     pattern_asfix_ews,
+                                     ATparse("l(\"(\")"),
+                                     pattern_asfix_ews,
+                                     appl,
+                                     pattern_asfix_ews,
+                                     ATparse("l(\")\")")));
+    term = ATmakeTerm(pattern_asfix_term,
+                      ATparse("l(\"term\")"),
+                      pattern_asfix_ews,
+                      ATparse("l(\"X\")"),
+                      pattern_asfix_ews,
+                      ATparse("id(\"X\")"),
+                      pattern_asfix_ews,
+                      result,
+                      pattern_asfix_ews,
+                      ATparse("no-abbreviations"));
+    return ATmake("snd-value(decorated-syntax(<term>)))",term);
+  }
+  else {
+    ATerror("not a legal term: %t\n", syntax);
+    return NULL;
+  }
+} 
+
+/* Main program */
 int main(int argc, char **argv)
 {
   int cid;

@@ -23,6 +23,7 @@ in
  */
     snd-msg(rewrite(Mod,T)).
 /* Again, a hack: Same as in rewrite and edit-module: */
+/*
     create(Editor(Term,"\"\"",Fn,Id),Tid?).
     rec-msg(Id, editortool(TE?)).
     snd-msg(pp-module(T)).
@@ -40,6 +41,7 @@ printf("%s\n",Src).
       snd-note(ui-status(endstat(Id)))
     ).
     rec-msg(Id,editortool(TE?,Fid?)).
+*/
 /* Send term specific stuff to text-editor */
 /*    snd-do(TE,tb-set-button("Reduce",reduce)). (
       rec-event(TE,reduce).

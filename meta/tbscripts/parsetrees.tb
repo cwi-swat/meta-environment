@@ -12,25 +12,40 @@ tool compiler is {
   command = "compiler -print-gc-info -termtable 20"
 }
 
+tool pgen is {
+/*  command = "/home/markvdb/NEW-META/new-meta/pgen/lst-source/Sdf2-Parse-Table -termtable 20" */
+  command = "pgen -termtable 20"
+}
+
+tool add-eqs-syntax is { 
+  command = "/home/markvdb/NEW-META/new-meta/pgen/addeqs/c-source/Add-Eqs-Syntax"
+}
+
 process Parsetrees is 
 let
-Com : compiler,
-Eval: evaluator,
-Id : term,
-Tid: int,
-Mod: term,
-Tmp: term
+Com :   compiler,
+Eval:   evaluator,
+Pgen:   pgen,
+Addsyn: add-eqs-syntax,
+Id :    term,
+Tid:    int,
+Mod:    term,
+Tmp:    term
 in
   /* Start up tools and initialize */
   execute(evaluator, Eval?).
   printf("evaluator tool connected.\n") .
   snd-do(Eval, create-equations-db).
   execute(compiler,Com?).
+  execute(pgen,Pgen?).
+  execute(add-eqs-syntax,Addsyn?).
   /* Start all controlling processes */
   create(Retrieve-eqs(Eval), Tid?).
   create(Open-modules(Eval),Tid?).
   create(Rewrite(Eval), Tid?).
   create(Compiler(Com), Tid?).
+  create(PGen(Pgen), Tid?).
+  create(AddEqSyn(Addsyn), Tid?).
   create(Clear-all(Eval), Tid?).
   create(Close-modules(Eval), Tid?)
 endlet

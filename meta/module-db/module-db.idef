@@ -4,6 +4,8 @@ Id : term,
 T1 : term,
 T2 : term,
 Module: term,
+Syntax: term,
+NewSyntax: term,
 Name: term,
 Mdb : module-db,
 Modules: list,
@@ -75,6 +77,17 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb, get-equations(Modules)).
   rec-value(Mdb, equations(Equations?)).
   snd-msg(all-equations(Equations))
++
+/* Get the syntax for a list of modules */
+  rec-msg(retrieve-syntax(Module?)).
+  snd-eval(Mdb, retrieve-syntax(Module)).
+  rec-value(Mdb, syntax(Syntax?)).
+  snd-msg(total-syntax(Syntax))
++
+  rec-msg(add-pgen-func(Syntax?)).
+  snd-eval(Mdb, add-pgen-func(Syntax)).
+  rec-value(Mdb, decorated-syntax(NewSyntax?)).
+  snd-msg(decorated-syntax(NewSyntax))
 ) *
 delta
 endlet

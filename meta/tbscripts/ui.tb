@@ -86,6 +86,13 @@ in
      snd-note(ui-status(endstat(Id))).
      snd-ack-event(UI,compile-module(Str))
    ) +
+   ( rec-event(UI,generate-parsetable(Str?)).
+     snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
+     snd-msg(generate-parsetable(Str)).
+     rec-msg(parsetable-generation-done).
+     snd-note(ui-status(endstat(Id))).
+     snd-ack-event(UI,generate-parsetable(Str))
+   ) +
    ( rec-event(UI,edit-term(Mod?,Str?)).
      create(Edit-term(Mod,Str),ET?).
      snd-ack-event(UI,edit-term(Mod,Str))
