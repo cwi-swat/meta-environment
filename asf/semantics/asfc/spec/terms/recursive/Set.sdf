@@ -1,0 +1,21 @@
+module Set
+
+exports
+
+sorts S
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+[a-z] -> E
+
+context-free syntax
+
+"[" E* "]" -> S
+
+variables
+
+"E*"[0-9]* -> E*
+"E"[0-9]* -> E
+
