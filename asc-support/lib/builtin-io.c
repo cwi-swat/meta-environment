@@ -70,7 +70,7 @@ static PT_Tree parse_result(ATerm result)
     return (PT_Tree) CO_makeParseResultNoValidResult();
   }
 
-  if(SGisParseTree(result)) {
+  if (SGisParseTree(result)) {
     PT_ParseTree pt = PT_ParseTreeFromTerm(result);
     int ambs = PT_getParseTreeAmbCnt(pt);
     PT_Tree tree = PT_getParseTreeTree(pt);
@@ -206,7 +206,7 @@ PT_Tree ASC_parse_bytes(ATerm aterm)
 {
   PT_Tree bytes = muASFToTree(aterm);
 
-  return parse_file(bytes);
+  return parse_bytes(bytes);
 }
 
 /*}}}  */
