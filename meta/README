@@ -24,14 +24,16 @@ To compile this distribution you will need the following tools:
 
 As well as a full set of UNIX development utilities.
 
-The Meta-Environment distribution depends on three other distributions. 
-Using CVS, you can get these distributions as follows:
+The Meta-Environment distribution depends on four other distributions. 
+Using CVS, you can get these distributions as follows: (if you have accounts
+at both UvA and CWI. External distribution will be available at a later stage)
 
 - cd to the directory just above new-meta (new-meta/..)
 - issue the following commands: 
-$ cvs -d artemis.cwi.nl:/ufs/gipe/CVS-repository checkout gel
-$ cvs -d artemis.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
+$ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout gel
+$ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
 $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm-lib
+$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
 (and, if you hadn't done so already)
 $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
 
@@ -39,21 +41,31 @@ Now everything needs to be configured and compiled.
 
 Here is the basic set-up: These commands are the minimal config options for 
 the Meta-Environment to compile: (and remember, order is important here)
-This will install everything in the directory new-meta/../{bin,lib,include}
+This will install everything in the directory new-meta/../{bin,lib,include}.
+Make sure that your PATH points to the above new-meta/../bin directory, for 
+instance by typing:
+$ setenv PATH /path/to/new-meta/../bin:${PATH}
+(if you have a csh)
+Then proceed as follows:
 $ cd gel
 $ ./configure
 $ gmake install
 $ cd ..
 $ cd toolbus
-$ ./configure --with-java
+$ ./configure --prefix=.. --with-java
 $ gmake install
 $ cd ..
 $ cd aterm-lib
 $ ./configure
 $ gmake install
 $ cd ..
+$ cd aterm
+$ autoconf
+$ ./configure
+$ gmake install
+$ cd ..
 $ cd new-meta
-$ ./config --with-tcldot=/path/to/directory/Tcldot (see above)
+$ ./configure --with-tcldot=/path/to/directory/Tcldot (see above)
 $ gmake install
 $ cd ..
 
@@ -61,7 +73,9 @@ $ cd ..
 After compilation:
 
 If you now add the path to the directory new-meta/../bin to your PATH, you 
-are al set up.
+are al set up. Furthermore, you should make sure that your java installation 
+correctly setup, and that your CLASSPATH variable points to the Java classes 
+that come with your JDK.
 
 The Meta-Environment development team wishes you happy environmentaling, 
 and may all your grammars be context free.
