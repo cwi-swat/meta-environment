@@ -241,11 +241,12 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 
     ksdf = toasfix(reduct, filename, modname); 
 
-    if(run_verbose) ATwarning("Normalization finished\n");
+    if(run_verbose) 
+      ATwarning("Normalization finished\n");
 
-/*
     ATwarning("Normalization finished\n");
-*/
+
+    /*print_memo_table_sizes();*/
 
     init_table_gen();
     nr_of_states = 0;
@@ -258,7 +259,7 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 }
 
 /*}}}  */
-/*{{{  ATerm normalize_and_generate_table(ATerm sdf2) */
+/*{{{  ATerm generate_parsetable(ATerm sdf2) */
 
 ATerm generate_parsetable(ATerm sdf2term)
 {
@@ -283,7 +284,7 @@ ATerm generate_parsetable(ATerm sdf2term)
     
     ptable = ATreadFromString(ptchars);
   }
-  else { /* Alex added {} after 'else' for readability */
+  else {
     ATwarning("not an asfix term: %t\n", sdf2term);
   }
 
