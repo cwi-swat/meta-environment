@@ -5,6 +5,9 @@ Mon Feb  9 14:59:39 CET 2004 <{jong,kooiker,vinju}@cwi.nl>
    - fix illegal memory overwrite which horked an existing AFun,
      causing the ATerm GC to break down.
  * term-store/*.c: all char* pointers in ToolBus API changed to const char*
+ * in-output/src/main.c:get_filename:
+   - and another ... which we now found because all ToolBus functions
+     that manipulate "char *' are now const.
 
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
  * fix Makefile.am to get "distcheck" working
