@@ -1,7 +1,11 @@
 # $Id$
 include ${top_srcdir}/make-rules
 
-MANUAL		= manual.ltx
+EXTRA_DIST = manual.ps
+
+noinst_DATA = manual.ps
+
+MANUAL	= manual.ltx
 
 PSJES = Bool-example.asf.ps Bool-example.sdf2.ps Bool-example.trm.ps \
 	Bool-example.trm2.ps Bool-example.trm3.ps Pico-Booleans.asf.ps \
@@ -14,10 +18,6 @@ PSJES = Bool-example.asf.ps Bool-example.sdf2.ps Bool-example.trm.ps \
 
 
 CLEANFILES = manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,toc}
-
-all:
-
-doc: manual.ps
 
 manual.dvi: $(MANUAL)
 

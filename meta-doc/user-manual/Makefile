@@ -63,6 +63,10 @@ MAKEINFO = makeinfo
 PACKAGE = meta-doc
 VERSION = 0.1alfa
 
+EXTRA_DIST = manual.ps
+
+noinst_DATA = manual.ps
+
 MANUAL = manual.ltx
 
 PSJES = Bool-example.asf.ps Bool-example.sdf2.ps Bool-example.trm.ps 	Bool-example.trm2.ps Bool-example.trm3.ps Pico-Booleans.asf.ps 	Pico-Booleans.sdf2.ps compiler-dir.ps compiler-warning.ps 	debug-menu.ps edit-menu.ps file-menu.ps graph-menu.ps help-menu.ps 	meta-Bool-example.ps meta-Pico-syntax.ps meta-booleans.ps 	meta-env-menu.ps meta-env-menu1.ps meta-env-menu2.ps meta-pico.ps 	meta-start.ps module-menu.ps move-menu.ps new-open.ps open-file.ps 	printer-setup.ps reduct.out.ps viewer.ps CobolEditor.ps newarch.eps
@@ -71,6 +75,8 @@ PSJES = Bool-example.asf.ps Bool-example.sdf2.ps Bool-example.trm.ps 	Bool-examp
 CLEANFILES = manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,toc}
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
+DATA =  $(noinst_DATA)
+
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -130,7 +136,7 @@ install-am: all-am
 install: install-am
 uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile
+all-am: Makefile $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
@@ -174,10 +180,6 @@ mostlyclean distclean maintainer-clean
 
 
 include ${top_srcdir}/make-rules
-
-all:
-
-doc: manual.ps
 
 manual.dvi: $(MANUAL)
 
