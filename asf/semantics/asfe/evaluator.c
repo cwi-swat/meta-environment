@@ -303,7 +303,7 @@ ATermList prepend_slice(ATermAppl slice, ATermList list)
 {
 	ATermList first = v_get_first(slice);
 	ATermList last  = v_get_last(slice);
-
+	
 	return prepend(first, last, list);
 }
 
@@ -720,6 +720,9 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 /*}}}  */
 /*{{{  ATermList list_matching(ar,sym,env,elems1,elems2,conds,args1,args2) */
 
+static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList elems2,
+											ATermList conds, ATermList args1, ATermList args2);
+
 ATerm list_matching(ATerm sym,
                     ATerm env,ATermList elems1, ATermList elems2,
                     ATermList conds, ATermList args1, ATermList args2)
@@ -728,7 +731,7 @@ ATerm list_matching(ATerm sym,
   ATerm newenv;
   ATerm newarg1, newarg2;
   ATermList newargs1, newargs2;
-
+	
   if(!ATisEmpty(elems1)) {
     elem1 = ATgetFirst(elems1);
     if(ATgetLength(elems1) == 1) {
@@ -742,13 +745,13 @@ ATerm list_matching(ATerm sym,
         }
         else { /* TdictGet(env,elem1) == Tfalse */
           if(asfix_is_plus_var(elem1) && ATisEmpty(elems2)) {
-	    newenv = fail_env;
-	  } else {
+						newenv = fail_env;
+					} else {
             if(AT_getAnnotations(elem1) != NULL)
               elem1 = AT_removeAnnotations(elem1);
-
-	    newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
-	    newenv = args_matching(newenv,conds,args1,args2);
+						
+						newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
+						newenv = args_matching(newenv,conds,args1,args2);
 					}
         }
       }
@@ -764,7 +767,7 @@ ATerm list_matching(ATerm sym,
     else { /* TlistSize(elems1) != 1 */
       elems1 = ATgetNext(elems1);
       if(asfix_is_list_var(elem1)) {
-	ATermAppl trms = v_lookup_list(env, elem1);
+				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
           elems2 = compare_sub_lists(trms,elems2);
           if(elems2)
@@ -785,31 +788,15 @@ ATerm list_matching(ATerm sym,
           newargs1 = ATinsert(args1, newarg1);
           newargs2 = ATinsert(args2, newarg2);
           newenv = arg_matching(env,elem1,elem2,conds,newargs1,newargs2);
-        }
-        else {
-					/* the right list is empty, but what if the pattern consists
-					 * of a star variable? Then the separator and the whitespace in
-					 * front of the star variable are still there, preventing a match!
-					 */
+        } else {
 					if(keep_whitespace) {
-						ATerm sep, ws, var;
-						ATwarning("ZIE JE WEL: %t AND %t\n", text((ATerm) elems1), text((ATerm) elems2));
-						
-						if(ATgetLength(elems1) == 3) {
-							sep = ATgetFirst(elems1);
-							elems1 = ATgetNext(elems1);
-							ws = ATgetFirst(elems1);
-							elems1 = ATgetNext(elems1);
-							var = ATgetFirst(elems1);
-							
-							if(asfix_is_list_sep(sep) && 
-								 asfix_is_whitespace(ws) && 
-								 asfix_is_list_var(var)) {
-								/* continue matching after stripping ws and sep */
-								return list_matching(sym,env,elems1,elems2,conds,args1, args2);
-							}
-						}
+						/* the right list is empty, but what if the pattern consists
+						 * of a star variable? Then the separator and the whitespace in
+						 * front of the star variable are still there, preventing a match.
+						 */
+						return match_list_tail(sym,env,elems1,elems2,conds,args1,args2);
 					}
+					
 					newenv = fail_env;
 				}
       }
@@ -825,6 +812,59 @@ ATerm list_matching(ATerm sym,
 }
 
 /*}}}  */
+
+/* match_list_tail
+ *
+ * this function is used when we rewrite with whitespace. It is called when
+ * the last variable of a list pattern is a star variable and the term to be matched
+ * is empty. In this case we need to check if there are some ws's and sep's in the 
+ * way of the matching algorithm.
+ */
+static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList elems2,
+											ATermList conds, ATermList args1, ATermList args2)
+{
+	ATerm sep, ws1, ws2, var;
+
+	/* We either have [ws,sep,ws,var], or [sep,ws,var].
+	 * if the pattern is one of those, then continue matching
+	 * without the ws's and the sep.
+	 */
+	if(ATgetLength(elems1) == 4) { /* [ws,sep,ws,var] */
+		ws1 = ATgetFirst(elems1);
+		elems1 = ATgetNext(elems1);
+		sep = ATgetFirst(elems1);
+		elems1 = ATgetNext(elems1);
+		ws2 = ATgetFirst(elems1);
+		elems1 = ATgetNext(elems1);
+		var = ATgetFirst(elems1);
+		
+		if(asfix_is_whitespace(ws1) &&
+			 asfix_is_list_sep(sep) && 
+			 asfix_is_whitespace(ws2) && 
+			 asfix_is_list_var(var)) {
+			/* continue matching after skipping ws and sep */
+			
+			return list_matching(sym,env,elems1,elems2,conds,args1, args2);
+		}
+	} else if(ATgetLength(elems1) == 3) { /* [sep,ws,var] */
+		sep = ATgetFirst(elems1);
+		elems1 = ATgetNext(elems1);
+		ws1 = ATgetFirst(elems1);
+		elems1 = ATgetNext(elems1);
+		var = ATgetFirst(elems1);
+		
+		if(asfix_is_list_sep(sep) && 
+			 asfix_is_whitespace(ws1) && 
+			 asfix_is_list_var(var)) {
+			/* continue matching after skipping ws and sep */
+			
+			return list_matching(sym,env,elems1,elems2,conds,args1, args2);
+		}
+	}
+	
+	return fail_env;
+}
+
 /*{{{  ATermList conds_satisfied(ATermList conds, ATermList env) */
 
 /* Function ``conds_satisfied'' check whether the conditions
@@ -1173,6 +1213,8 @@ void version(char *prg)
 
 ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 {
+	ATwarning("COMPARING:\n%t\nWITH\n%t\n",asfix1,asfix2);
+
 	if(!ATisEqual(asfix1, asfix2)) {
 		if(asfix_is_appl(asfix1) && asfix_is_appl(asfix2)) {
 			/* If it is an appl, prods should be ATequal and kids should be
@@ -1192,12 +1234,10 @@ ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 				}
 
 				if(ok && ATisEqual(args1,args2)) {
-					ATwarning("1.EQUAL: %t AND %t\n",text(asfix1),text(asfix2));
 					return ATtrue;
 				} 
 			} else {
 				/* prods not equal */
-				ATwarning("2.NOT EQUAL: %t AND %t\n",text(asfix1),text(asfix2)); 
 				return ATfalse;
 			}
 		} else if(asfix_is_list(asfix1) && asfix_is_list(asfix2)) {
@@ -1222,38 +1262,34 @@ ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 				ATermList elems1 = (ATermList) asfix_get_list_elems(asfix1);
 				ATermList elems2 = (ATermList) asfix_get_list_elems(asfix2);
 				
-				if(ATisEqual(elems1,elems2)) {
-					ATwarning("ELEMS.EQUAL: %t AND %t\n",text(asfix1),text(asfix2));
-				}
-
 				for(;!ATisEmpty(elems1) && !ATisEmpty(elems2) && ok; 
 						elems1 = ATgetNext(elems1), elems2 = ATgetNext(elems2)) {
 					ok = isEqualModuloWhitespace(ATgetFirst(elems1), ATgetFirst(elems2));
 				}
 				
 				if(ATisEqual(elems1, elems2) && ok) { /* both ATempty */
-					ATwarning("3.EQUAL: %t AND %t\n",text(asfix1),text(asfix2));
 					return ATtrue;
 				}
 			}
 		
-			ATwarning("4.NOT EQUAL: %t AND %t\n", text(asfix1),text(asfix2));
 			return ATfalse;
 		} else if(asfix_is_whitespace(asfix1) && asfix_is_whitespace(asfix2)) {
 			/* here we treat all whitespace equally */
-			ATwarning("5.EQUAL: \"%t\" AND \"%t\"\n", text(asfix1), text(asfix2));
 			return ATtrue;
 		} else {
-			ATwarning("6.NOT EQUAL: %t AND %t\n",text(asfix1),text(asfix2));
 			/* different or not handled types of asfix terms are not equal by definition */
+			
+			if(asfix_is_whitespace(asfix1) || asfix_is_whitespace(asfix2)) {
+				ATwarning("ABORT: %t AND %t\n",asfix1,asfix2);
+				ATabort("Normal term compared with whitespace.\n");
+			}
+			
 			return ATfalse;
 		}
 
-		ATwarning("7.NOT EQUAL: %t AND %t\n",text(asfix1),text(asfix2));
 		return ATfalse;
 	}
 	
-	ATwarning("8.EQUAL: \"%t\" AND \"%t\"\n",text(asfix1),text(asfix2));
 	/* asfix1 and asfix2 are ATequal */
 	return ATtrue;
 }

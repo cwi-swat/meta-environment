@@ -565,8 +565,7 @@ ATerm prepare_equ(ATerm equ)
     equ = AFTbuildWhenCondEqu(tag, w[0], newequ, w[1], 
                                      lit, w[2], newconds);
   } else {
-    ATfprintf(stderr, "equation: %t not supported..\n", equ);
-    assert(0);
+    ATabort("equation: %t not supported..\n", equ);
   }
 
   if(annos)
@@ -607,8 +606,10 @@ ATerm lexical_to_list(ATerm lextrm)
   qnewname = ATmake("ql(<str>)", sortstr);
   newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"*\"))");
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
-  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",qnewname, newiter);
-  newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
+  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",
+										qnewname, newiter);
+  newargs  = ATmake("[<term>,w(\"\"),l(\"(\"),w(\"\"),<term>,w(\"\"),l(\")\")]", 
+										newname, newlex);
   newprod  = ATmake("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),<term>,w(\"\")," \
 			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
   newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
@@ -823,7 +824,7 @@ ATerm list_to_lexical(ATerm lexappl)
 							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
 							&lit, &w[2], &sort, &w[3]))
 		ATerror("not a prod: %t\n", prod);
-  lexlist = ATelementAt(lexargs, 2);
+  lexlist = ATelementAt(lexargs, 4);
   if(!ATmatch(lexlist,"list(<term>,<term>,<term>)",&sym,&w[0],&listargs))
 		ATerror("not a list: %t\n", lexlist);
   len = ATgetLength(listargs);
