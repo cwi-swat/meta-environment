@@ -17,7 +17,7 @@ PTDUMP=${GENMETA} ${TIMEOUT} -S ${META}/share/meta/start-meta-pt-dumper.tb
 	echo 'test -f $*.eqs';\
 	echo 'test -f $*.trm.tbl') > $@ && chmod +x $@
 
-%: %.src
+%.conf: %.conf.src
 	sed 's@__SRCDIR__@${srcdir}@g' < $< > $@
 
-CLEANFILES=*.sh *.eqs *.tbl meta.conf
+CLEANFILES = *.sh *.eqs *.tbl meta.conf
