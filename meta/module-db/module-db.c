@@ -281,8 +281,8 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
         imports = get_import_section_sdf2(asfix);
         unknowns = replace_imports(modname,imports);
         irels = calc_import_relations(modname);
-        return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
-                      module_string,unknowns,irels);
+        return ATmake("snd-value(imports(<str>,changed-modules([<term>,<list>]),need-modules([<list>]),irels([<list>])))",
+                      module_string,modname,chg_mods,unknowns,irels);
       } else {
          ATerror("no path available for %t\n", asfix);
          return NULL; /* Silence the compiler */
