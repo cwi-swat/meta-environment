@@ -11,7 +11,7 @@ equations
       AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
       $TY2 != empty,
       AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY2, $EN),
-      $TY6 := unify($TY3, $TY5, get-subtypes($EN))
+      $TY6 := lub($TY3, $TY5, get-subtypes($EN))
       ==========================================================
       typecheck-action($A1 then $A2, $TY1, $EN) = 
 			AR[nor=$TY4, exc=$TY6, $ANS1 answerOr $ANS2] 
@@ -43,7 +43,7 @@ equations
       AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
       AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
       $TY6 := type-concat($TY2, $TY4),
-      $TY7 := unify($TY3, $TY5, get-subtypes($EN))
+      $TY7 := lub($TY3, $TY5, get-subtypes($EN))
       =====================================================
       typecheck-action($A1 and-then $A2, $TY1, $EN) = 
 		   AR[nor=$TY6, exc=$TY7, $ANS1 answerOr $ANS2] 
@@ -96,7 +96,7 @@ equations
     AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     $TY3 != empty, 
     AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY3, $EN),
-    $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
+    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
     $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
     typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
@@ -127,7 +127,7 @@ equations
 
     AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, (), $EN),
-    $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
+    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
     $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
     typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
@@ -169,8 +169,8 @@ equations
 
     AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
-    $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
-    $TY7 := unify($TY3, $TY5, get-subtypes($EN))
+    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
+    $TY7 := lub($TY3, $TY5, get-subtypes($EN))
     ==================================================================
     typecheck-action($A1 else $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY7, $ANS2]
 
@@ -220,7 +220,7 @@ equations
     AR[nor=$TY1, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN),
     AR[nor=$TY3, exc=$TY4, $ANS2] := typecheck-action($A2, $TY, $EN),
     subtype-of($TY1, bindings, get-subtypes($EN)) == yes,
-    $TY5 := unify($TY2, $TY4, get-subtypes($EN)),
+    $TY5 := lub($TY2, $TY4, get-subtypes($EN)),
     $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
     typecheck-action($A1 scope $A2, $TY, $EN) = AR[nor=$TY3, exc=$TY5, $ANS3]

@@ -12,17 +12,17 @@ equations
 
 [default-concat] type-concat($TY1, $TY2) = ($TY1, $TY2) 
 
-[unify-1] subtype-of($TY1, $TY2, $STS) == yes
-	  =================================
-	  unify($TY1, $TY2, $STS) = $TY1 
+[lub-1] subtype-of($TY1, $TY2, $STS) == yes
+	=================================
+	lub($TY1, $TY2, $STS) = $TY1 
 
-[unify-1] subtype-of($TY2, $TY1, $STS) == yes
-	  ===================================
-	  unify($TY1, $TY2, $STS) = $TY2  
+[lub-1] subtype-of($TY2, $TY1, $STS) == yes
+	===================================
+	lub($TY1, $TY2, $STS) = $TY2  
 
-[unify-1] unify(empty, $TY, $STS) = $TY
+[lub-1] lub(empty, $TY, $STS) = $TY
 
-[unify-1] unify($TY, empty, $STS) = $TY
+[lub-1] lub($TY, empty, $STS) = $TY
 
 [or-1] $END answerOr yes = yes
 

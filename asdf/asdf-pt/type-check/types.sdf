@@ -29,7 +29,7 @@ context-free syntax
 %% Type operators
 
   type-concat(Type, Type) 	-> Type
-  unify(Type, Type, SubTypes)	-> Type
+  lub(Type, Type, SubTypes)	-> Type
 
   Answer "answerOr" Answer 	-> Answer
 

@@ -65,7 +65,7 @@ equations
       $TY3 := get-giving($AFS1),
       $TY4 := get-raising($AFS1),
       $END := failing($AFS1),
-      $TY5 := unify($TY1, $TY2, get-subtypes($ENV))
+      $TY5 := lub($TY1, $TY2, get-subtypes($ENV))
       ============================================================
       typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, $END]
 

@@ -97,6 +97,22 @@ equations
 
 [ineffective-2] 
 
+     $AC == enact
+     ===================================
+     ineffective($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not ineffective due to enact", 
+			get-location($AC))])
+
+[ineffective-3] 
+
+     $AC == apply
+     ===================================
+     ineffective($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not ineffective due to apply", 
+			get-location($AC))])
+
+[ineffective-4] 
+
      $LT $CO := $AC,
      sigs($AFS1*, $AFS1, $AFS2*) := $SS,
      $LT == get-fun-name($AFS1),
@@ -123,6 +139,22 @@ equations
 			get-location($AC))])
 
 [uncreative-2] 
+
+     $AC == enact
+     ===================================
+     uncreative($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not uncreative due to enact", 
+			get-location($AC))])
+
+[uncreative-3] 
+
+     $AC == apply
+     ===================================
+     uncreative($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not uncreative due to apply", 
+			get-location($AC))])
+
+[uncreative-4] 
 
      $LT $CO := $AC,
      sigs($AFS1*, $AFS1, $AFS2*) := $SS,
