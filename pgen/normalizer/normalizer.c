@@ -71,7 +71,7 @@ static void version()
 int main( int argc, char* argv[] )
 {
    ATerm bottomOfStack;
-   ATerm term;
+   PT_ParseTree term;
 
    FILE* iofile;
   
@@ -105,34 +105,39 @@ int main( int argc, char* argv[] )
       }
    }
    
-   
    /* Open input (from standard input when "-" was passed as file name) */
-   if( input == NULL || strcmp( input, "-" ) == 0 )
+   if (input == NULL || strcmp(input, "-") == 0) {
       iofile = stdin;
-   else
-      iofile = fopen( input, "r" );
+   }
+   else {
+      iofile = fopen(input, "r");
+   }
 
-   if( iofile == NULL )
+   if (iofile == NULL) {
       ATerror("%s: cannot open %s\n", myname, input);
+   }
 
    /* Read input term */
-   term = ATreadFromFile( iofile );
+   term = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
 
    /* and normalize it */
-   term = normalize( term, top );
+   term = normalize(top, term);
 
    /* open output (standard output when "-" was passed as file name */
-   if( output == NULL || strcmp( output, "-" ) == 0 )
+   if (output == NULL || strcmp(output, "-") == 0) {
       iofile = stdout;
-   else
-      iofile = fopen( output, "r" );
+   }
+   else {
+      iofile = fopen(output, "r");
+   }
    
-   if( iofile == NULL )
+   if (iofile == NULL) {
       ATerror("%s: cannot open %s\n", myname, output);
+   }
    
    /* write the normilized term */
-   ATwriteToTextFile( term, iofile );
+   ATwriteToTextFile(PT_makeTermFromParseTree(term), iofile);
    
-   exit( 0 );
+   exit(0);
          
 }

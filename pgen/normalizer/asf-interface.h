@@ -27,8 +27,10 @@
 #ifndef __asc_interface_h__
 #define __asc_interface_h__
 
+#include <PT-utils.h>
+
 void asc_init();
-ATerm normalize( ATerm, char* );
+PT_ParseTree normalize(char *name, PT_ParseTree tree);
 
 #endif
 

@@ -57,7 +57,7 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
                                 ptSyntax);
   }
   else {
-    ATerror("addRemoveVarsFunction: not a proper parse tree: %t\n",
+    ATerror("addNormalizeFunction: not a proper parse tree: %t\n",
               (ATerm) parseTree);
 
     return (PT_Tree) NULL;
@@ -67,14 +67,12 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 
 }                                                       
 
-ATerm normalize(ATerm sdf2term, char* topModule )
+PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
 {
-   PT_ParseTree parseTree = PT_makeParseTreeFromTerm(sdf2term);
-   PT_Tree tree = addNormalizeFunction(topModule,parseTree);
+   PT_Tree tree = addNormalizeFunction(topModule, parseTree);
+
    ATerm reduct = innermost(tree);
-   PT_ParseTree ksdf = toasfix(reduct); 
-   
-   return PT_makeTermFromParseTree(ksdf);
+   return toasfix(reduct); 
 }
 
 void asc_init()
