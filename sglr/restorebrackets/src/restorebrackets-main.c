@@ -153,7 +153,7 @@ ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable)
   ATerm table = ATBunpack(packedTable);
   ATerm term = ATBunpack(packedTerm);
 
-  pt = SG_BuildParseTable((ATermAppl) table, "");
+  pt = SG_BuildParseTable((ATermAppl) table, NULL);
 
   restoredTerm
     = PT_ParseTreeToTerm(RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
