@@ -32,7 +32,8 @@ let
   ErrorFoci : term,
   Text      : str,
   DirtyFoci : list,
-  ModifiedStatus : term
+  ModifiedStatus : term,
+  Killed    : term
 in
   Text := "" .
   snd-msg(get-sdf2-asfix(ModuleName)).
@@ -56,43 +57,50 @@ in
     rec-msg(initial-focus(Focus?))
   ) .
   snd-msg(set-focus(EditorId, Focus)) .
-  (  
-    ( 
-      rec-msg(parse-focus(EditorId)) 
-    +
-      rec-msg(parse-buffer(EditorId)) .
-      snd-msg(invalidate-tree(EditorId))
-    ) . 
-    snd-msg(open-sdf2-language) .
-    (
-      rec-msg(sdf2-language-not-opened) .
-      snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
-    +
-      rec-msg(sdf2-language-opened) .
-      snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
-      (
-        rec-msg(parse-ok(trm("Sdf2"))) .
-        snd-msg(get-tree(EditorId)) .
-        rec-msg(tree(Tree?)) .
-        snd-msg(update-module-in-db(Tree, "Sdf2")).
-        rec-msg(extra-modules(Modules?)).
-        snd-msg(open-modules(Modules)).
-        rec-msg(finished-opening-modules) .
-        snd-msg(clear-focus(EditorId))
+  Killed := false .
+  (
+    (  
+      ( 
+	rec-msg(parse-focus(EditorId)) 
       +
-        rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
-        snd-msg(set-focus(EditorId, ErrorFoci))
+	rec-msg(parse-buffer(EditorId)) .
+	snd-msg(invalidate-tree(EditorId))
+      ) . 
+      snd-msg(open-sdf2-language) .
+      (
+	rec-msg(sdf2-language-not-opened) .
+	snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
+      +
+	rec-msg(sdf2-language-opened) .
+	snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
+	(
+	  rec-msg(parse-ok(trm("Sdf2"))) .
+	  snd-msg(get-tree(EditorId)) .
+	  rec-msg(tree(Tree?)) .
+	  snd-msg(update-module-in-db(Tree, "Sdf2")).
+	  rec-msg(extra-modules(Modules?)).
+	  snd-msg(open-modules(Modules)).
+	  rec-msg(finished-opening-modules) .
+	  snd-msg(clear-focus(EditorId))
+	+
+	  rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
+	  snd-msg(set-focus(EditorId, ErrorFoci))
+	)
       )
-    )
-  )
-  *
+    ) *
+    if equal(Killed, true) then
+      tau
+    fi
+  ) 
+  ||
   rec-msg(kill-editor(EditorId)).
+  Killed := true .
   snd-msg(get-modified-status(EditorId)) .
   rec-msg(modified-status(EditorId, ModifiedStatus?)) .
   snd-msg(kill-editor-done(EditorId)).
   if equal(ModifiedStatus, modified) then
-	  snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
-       [ModuleName]))).
+    snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
+                              [ModuleName]))).
     snd-msg(close-module(ModuleName)).
     rec-msg(module-closed(ModuleName)).
     snd-msg(delete-module(ModuleName)).

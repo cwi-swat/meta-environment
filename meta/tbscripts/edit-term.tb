@@ -81,41 +81,50 @@ let
   NormalForm : term,
   Focus      : term,
   DirtyFoci  : term,
-  ErrList    : list
+  ErrList    : list,
+  Killed     : term
 in
   subscribe(syntax-changed(ModuleName)) . 
   snd-msg(initialize-structure-editor(EditorId, Text)) .
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
+  Killed := false .
   (
-    rec-note(syntax-changed(ModuleName)) .
-    snd-msg(invalidate-tree(EditorId))
-  +
-    rec-msg(parse-focus(EditorId)) .
-    ParseTerm(EditorId, ModuleName) 
-  +
-    rec-msg(parse-buffer(EditorId)) .
-    snd-msg(invalidate-tree(EditorId)) .
-    ParseTerm(EditorId, ModuleName)
-  +
-    rec-msg(reduce(EditorId)) .
-    snd-msg(get-dirty-focuses(EditorId)) .
-    rec-msg(dirty-focuses(DirtyFoci?)) .
-    if equal(DirtyFoci, []) then
-      ReduceTerm(EditorId, ModuleName)
-    else
-      ParseTerm(EditorId, ModuleName) .
-      snd-msg(get-dirty-focuses(EditorId)) .
-      rec-msg(dirty-focuses(DirtyFoci?)) . 
-      if equal(DirtyFoci, []) then
-        ReduceTerm(EditorId, ModuleName)
-      else 
+    (
+      (
+       rec-note(syntax-changed(ModuleName)) .
+       snd-msg(invalidate-tree(EditorId))
+       +
+       rec-msg(parse-focus(EditorId)) .
+       ParseTerm(EditorId, ModuleName) 
+       +
+       rec-msg(parse-buffer(EditorId)) .
+       snd-msg(invalidate-tree(EditorId)) .
+       ParseTerm(EditorId, ModuleName)
+       +
+       rec-msg(reduce(EditorId)) .
+       snd-msg(get-dirty-focuses(EditorId)) .
+       rec-msg(dirty-focuses(DirtyFoci?)) .
+       if equal(DirtyFoci, []) then
+         ReduceTerm(EditorId, ModuleName)
+       else
+         ParseTerm(EditorId, ModuleName) .
+	 snd-msg(get-dirty-focuses(EditorId)) .
+	 rec-msg(dirty-focuses(DirtyFoci?)) . 
+	 if equal(DirtyFoci, []) then
+           ReduceTerm(EditorId, ModuleName)
+         else 
+          tau
+         fi
+       fi
+      ) *
+      if equal(Killed, true) then
         tau
       fi
-    fi
+    )
+    ||
+    rec-msg(kill-editor(EditorId)).
+    Killed := true .
+    snd-msg(kill-editor-done(EditorId))
   )
-  *
-  rec-msg(kill-editor(EditorId)).
-  snd-msg(kill-editor-done(EditorId))
-
 endlet
