@@ -901,14 +901,16 @@ int slice_length(ATerm l1, ATerm l2)
 ATerm slice(ATerm l1, ATerm l2)
 {
   ATermList result;
-  int i, len, ll;
+  int i, len;
 
   if(ATisEmpty((ATermList)l2)) {
     return l1;
   }
 
-  ll = slice_length(l1, l2);
-  len = (MAX_STORE > ll ? MAX_STORE : ll );
+  len = slice_length(l1, l2);
+  if( MAX_STORE < len )
+     len = MAX_STORE;
+
   for(i=0; i<len; i++) {
     term_store[i] = ATgetFirst((ATermList)l1);
     l1 = (ATerm)ATgetNext((ATermList)l1);
