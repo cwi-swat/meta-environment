@@ -12,8 +12,9 @@ endlet
 
 process Help is
 let
-  HELP : gen,
-  Id   : int
+  HELP    : gen,
+  Id      : int,
+  Started : bool
 in
   Id := process-id.  
   execute(gen,HELP?).
@@ -35,7 +36,8 @@ in
     (
       if Started then
         BROWSER(HELP,
-                "netscape -remote openUrl(@prefix@/new-meta/doc/html/open-module.html)")
+                "netscape -remote openUrl(@prefix@/new-meta/doc/html/open-module.html)",
+                "")
       fi
     +
       if not(Started) then
