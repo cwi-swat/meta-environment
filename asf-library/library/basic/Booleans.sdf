@@ -1,13 +1,7 @@
 module basic/Booleans
 
+imports basic/BoolCon
 exports
-  sorts BoolCon
-  context-free syntax
-    "true"  -> BoolCon {constructor, cons("true")}
-    "false" -> BoolCon {constructor, cons("false")}
-
-  context-free start-symbols Boolean
-
   sorts Boolean
 
   context-free syntax
@@ -22,6 +16,8 @@ exports
     Boolean "|" Boolean -> Boolean
 
 hiddens
+  context-free start-symbols Boolean
+
   imports
     basic/Comments
   variables
