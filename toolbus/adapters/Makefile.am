@@ -17,8 +17,8 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-SUBDIRS      = gen-adapter toolbus-adapter @EMACS_ADAPTER@ @JAVA_ADAPTER@ \
-		@PERL_ADAPTER@ @PYTHON_ADAPTER@ @TCLTK_ADAPTER@ @WISH_ADAPTER@
+SUBDIRS		= gen-adapter toolbus-adapter @EMACS_ADAPTER@ @PERL_ADAPTER@ \
+		@PYTHON_ADAPTER@ @TCLTK_ADAPTER@ @WISH_ADAPTER@
 
-DIST_SUBDIRS = gen-adapter toolbus-adapter emacs-adapter java-adapter \
-		perl-adapter python-adapter tcltk-adapter wish-adapter
+DIST_SUBDIRS	= gen-adapter toolbus-adapter emacs-adapter perl-adapter \
+		python-adapter tcltk-adapter wish-adapter
