@@ -13,11 +13,10 @@ xemacs=__XEMACS__
 graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
 metastudio_def=__METASTUDIO_DEF__
-asf_library_path=__ASF_LIBRARY__/share/asf-library
 wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-      ${asf}/bin:${asf}/bin:${toolbus}/bin:${xemacs}/bin:${PATH}"; 
+      ${toolbus}/bin:${xemacs}/bin:${PATH}"; 
 export PATH
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
@@ -37,7 +36,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="EC:deghm:o:PSI:T:vV"
+myarguments="EC:deghm:o:p:PSI:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -53,6 +52,7 @@ Options:
     -h              display help information (usage)
     -m modulename   specifies the name of the top module to start with
     -o              output file (only works with -P and -E)
+    -p <path>       add <path> to PATH of Meta-Environment
     -P              dump only .trm.tbl file for <modulename>
     -S              save intermediate files to disk (only works with -P and -E)
     -T <port>       specifies TB_PORT for toolbus
@@ -111,6 +111,11 @@ do
         -d)
 		xargs="${xargs} -viewer" ;;
 	-E)     meta_script=${prefix}/share/meta/eqs-dumper.tb ;;
+	-p)    
+	        shift;
+	        PATH="$1:${PATH}"
+		;;
+
 	-P)     meta_script=${prefix}/share/meta/pt-dumper.tb ;;
 	-e)
 		editor="emacs-editor" ;;
@@ -148,7 +153,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DFILENAME=\\\"${filename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\""
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DFILENAME=\\\"${filename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x
