@@ -74,6 +74,8 @@ CLEANFILES	= rewriter.tif.c rewriter.tif.h \
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= 
 
+.SILENT:	depend
+
 # The all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
@@ -113,13 +115,13 @@ libsupport-muasf-dbg.a: $(OBJ_DBG)
 libsupport-muasf-prof.a: $(OBJ_PROF)
 	$(AR) cr $@ $(OBJ_PROF)
 
-depend: rewriter.tif.c rewriter.tif.h
-	gcc -MM $(INCLUDES) $(CSRC) > .gendep
-	cat .gendep | sed "s/.o:/-cc.o:/"   >  .depend
-	cat .gendep | sed "s/.o:/-gcc.o:/"  >> .depend
-	cat .gendep | sed "s/.o:/-dbg.o:/"  >> .depend
-	cat .gendep | sed "s/.o:/-prof.o:/" >> .depend
-	rm .gendep
+depend: ${CSRC}
+	makedepend $(INCLUDES) $(CSRC) -f -	> .gendep
+	cat .gendep | sed "s/.o:/-cc.o:/"	>  .depend
+	cat .gendep | sed "s/.o:/-gcc.o:/"	>> .depend
+	cat .gendep | sed "s/.o:/-dbg.o:/"	>> .depend
+	cat .gendep | sed "s/.o:/-prof.o:/"	>> .depend
+	rm -f .gendep
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
