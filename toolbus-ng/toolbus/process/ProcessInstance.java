@@ -96,7 +96,7 @@ public class ProcessInstance {
     if (toolName == null)
       return null;
     else {
-      ToolDescriptor toolDef = new ToolDescriptor(toolName, makeSig());
+      ToolDefinition toolDef = new ToolDefinition(toolName, makeSig());
       return new InternalJavaTool(toolDef);
     }
   }

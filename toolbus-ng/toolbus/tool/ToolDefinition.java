@@ -2,7 +2,7 @@ package toolbus.tool;
 
 import aterm.ATermList;
 
-public class ToolDescriptor {
+public class ToolDefinition {
   private String toolName;
   private String hostName;
   private int restartFrequency;
@@ -10,7 +10,7 @@ public class ToolDescriptor {
   private String kind;
   private ATermList functionSignatures;
 
-  public ToolDescriptor(String toolName, ATermList functionSignatures) {
+  public ToolDefinition(String toolName, ATermList functionSignatures) {
     this.toolName = toolName;
     this.hostName = "localhost";
     this.restartFrequency = 0;
