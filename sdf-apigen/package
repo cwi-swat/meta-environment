@@ -18,7 +18,7 @@ requires
 
 aterm-java 1.6
 
-sglr 3.12
+sglr 3.12.1
 
 pgen 2.2
 
