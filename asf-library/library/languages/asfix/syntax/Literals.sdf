@@ -4,7 +4,7 @@ imports basic/Whitespace
 
 exports
 
-sorts Literal Integer L-Char EscChar DecimalEscChar AlphaNumericalEscChar
+sorts Literal L-Char EscChar DecimalEscChar AlphaNumericalEscChar
 lexical syntax
 "\\" ~ []                   -> AlphaNumericalEscChar     {cons("default")}
 "\\" [01] [0-9] [0-9]       -> DecimalEscChar {cons("dec0_199")}
