@@ -382,7 +382,7 @@ term *TBmake(char * fmt, ...)
     extend_buffer(0, n);
   /* err_fatal("format size exceeds buffer size"); */
   /* buf_ptr = fmt; */
-  memcpy(buffer, fmt, n);
+  memcpy(buffer, fmt, n+1);
   buf_ptr = buffer;
 
   /*fprintf(stderr, "TBmake %s\n", fmt);*/
