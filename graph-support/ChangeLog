@@ -2,6 +2,8 @@ $Id$
 
 2003/06/27 (markvdb@cwi.nl)
  * Extended the graph format with a generic info container (key,value).
+ * Position information, if any, is now stored in the parsetree graph
+   as well.
 
 2003/04/24 (jurgenv@cwi.nl)
  * In ToolBus mode layoutgraph will produce a graph with productions
