@@ -70,10 +70,13 @@ LIB_OBJECTS	= client.o sockets.o terms.o tool.o utils.o symbol.o
 DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
 		viewer.tcl
 
+TARGETS		= libtb.a toolbus logger.tcl viewer.tcl ctif script2latex verbatim
+
 # INIT_MODULES	= $(MODULES:.o=_init_module();)
 INIT_MODULES	=
 
-all:	libtb.a toolbus ctif script2latex verbatim
+# all:	libtb.a toolbus ctif script2latex verbatim
+all:	${TARGETS}
 
 toolbus: ${OBJECTS} 
 	${CC} ${CFLAGS} ${OBJECTS} -o toolbus ${LEXLIB} ${YACCLIB} ${LIBS}
@@ -139,7 +142,7 @@ dist: $(DISTFILES)
 	  || cp $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/src; \
 	done
 
-install: libtb.a toolbus logger.tcl viewer.tcl ctif script2latex
+install: ${TARGETS}
 	$(INSTALL) toolbus $(bindir)
 #	$(INSTALL) txt_dbg $(bindir)
 	$(INSTALL) ctif $(bindir)
