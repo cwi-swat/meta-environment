@@ -2441,7 +2441,328 @@ side of a condition or conclusion (but see Section ***[Lists]). This restriction
 Equations establish equalities between terms. How they are executed is
 discussed in Chapter **[Executing].
 
+\section{Examples of ASF+SDF Specifications}
 
+(*** Examples to be checked ***)
+
+Here are some small examples of ASF+SDF specifications, which are selected to
+illustrate specific features of the formalism. Larger examples can be found in
+the online specifications.
+
+\subsection{Symbolic Differentiation}
+
+Computing the derivative of an expression with respect to some variable is a
+classical problem we discuss in this example. Computing the derivative of {\tt
+  X * (X + Y + Z)} with respect to X gives:
+
+{\tt d(X * (X + Y + Z)) / dX ) X + Y + Z + X}
+
+Differentiation is defined in three stages. First, the sorts {\tt NAT}
+(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
+introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
+defined. Then, the differentiation rules are defined (equations [1]-[5]).
+Finally, some rules for simplifying expressions are given. As the above
+example shows, further simplification rules could have been added to collect
+multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to compute constant
+expressions.
+
+\begin{verbatim}
+
+module Diff 
+exports
+  sorts NAT VAR EXP 
+  lexical syntax
+    [0-9]+    -> NAT 
+    [XYZ]    -> VAR 
+    [\ \t\n] -> LAYOUT 
+  context-free syntax
+    NAT -> EXP 
+    VAR -> EXP 
+    EXP "+" EXP -> EXP {left} 
+    EXP "*" EXP -> EXP {left} 
+    "(" EXP ")" -> EXP {bracket} 
+    d EXP "/" d VAR -> EXP
+
+variables
+  N        -> NAT 
+  V [0-9]* -> VAR 
+  E [0-9]* -> EXP 
+
+priorities
+  "*" > "+" 
+
+equations 
+
+[1] dN/dV = 0
+[2] dV/dV = 1 
+[3] V1 != V2 ==> dV1/dV2 = 0 
+[4] d(E1+E2)/dV = dE1/dV + dE2/dV 
+[5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
+[6] E + 0 = E 
+[7] 0 + E = E 
+[8] E * 1 = E 
+[9] 1 * E = E 
+[10] 0 * E = 0 
+[11] E * 0 = 0
+
+\end{verbatim}
+
+\subsection{Sorting}
+
+The use of list structures is illustrated by the following specification of
+the "Dutch National Flag" problem: given an arbitrary list of the colours red,
+white and blue, sort them in the order as they appear in the Dutch National
+Flag. We want:
+
+{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
+ white blue blue\}}
+
+In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
+permit a succinct formulation of the search for adjacent colours that are in
+the wrong order.
+
+\begin{verbatim}
+module Flag
+exports
+  sorts Color Flag 
+  lexical syntax
+    [\ \n] -> LAYOUT 
+  context-free syntax
+    red            -> Color 
+    white          -> Color 
+    blue           -> Color 
+    "{" Color+ "}" -> Flag 
+
+variables
+    Cs[12] -> Color* 
+    C -> Color 
+
+equations
+[1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
+[2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
+[3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
+\end{verbatim}
+
+\subsection{Code Generation}
+
+Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
+
+\begin{description}
+\item{\tt push $N$} Push the number $N$. 
+\item{\tt rvalue $I$} Push the contents of data location $I$.
+\item{\tt lvalue $I$} Push the address of data location $I$. 
+\item{\tt pop} Remove the top of the stack. 
+\item{\tt copy} Push a copy of the top value on the stack. 
+\item{\tt assign} The r-value on top of the stack is stored in the l-value
+  below it and both are popped.
+\item{\tt add, sub, mul}
+Replace the two values on top of the stack by their sum (difference,
+product). 
+\item{\tt label $L$} Place a label (target of jumps). 
+\item{\tt goto $L$} Next instruction is taken from statement following label
+  $L$. 
+\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
+\item{\tt  gofalse $L$}
+Pop the top value; jump if it is zero.
+\end{description}
+
+\noindent The statement:
+\begin{quote}
+{\tt while a do a := a - 1; b := a * c od }
+\end{quote}
+will now be translated to the following instruction sequence:
+\begin{verbatim}
+
+label xx; 
+rvalue a; 
+gofalse xxx; 
+lvalue a; 
+rvalue a; 
+push 1;
+ sub; 
+assign;
+lvalue b; 
+rvalue a; 
+rvalue c; mul; 
+assign; 
+goto xx; 
+label xxx
+\end{verbatim}
+
+
+\noindent First, define {\tt NAT} (numbers) and {\tt ID} (identifiers):
+
+\begin{verbatim}
+module BasicNotions 
+exports
+  sorts NAT ID 
+  lexical syntax
+    [\ \t\n]       -> LAYOUT 
+    [0-9]+         -> NAT 
+    [a-z][a-z0-9]* -> ID
+
+variables
+  Nat [0-9']* -> NAT 
+  Id [0-9']*  -> ID
+\end{verbatim}
+
+\noindent Next, define the expressions and statements of our little source language:
+
+\begin{verbatim}
+module Expressions 
+  imports BasicNotions 
+  exports
+    sorts EXP 
+    context-free syntax
+      NAT -> EXP 
+      ID -> EXP 
+      EXP "+" EXP -> EXP {left}
+      EXP "-" EXP -> EXP {left}
+      EXP "*" EXP -> EXP {left}
+
+variables
+  Exp [0-9']* -> EXP 
+priorities
+  "*" > {left: "+", "-"}
+
+module Statements 
+  imports Expressions 
+  exports
+    sorts STAT STATS 
+    context-free syntax
+      ID ":=" EXP           -> STAT 
+      if EXP then STATS fi  -> STAT 
+      while EXP do STATS od -> STAT
+      { STAT ";" }+         -> STATS 
+
+    variables
+      Stat [0-9']*      -> STAT 
+      Stat-list [0-9']* -> {STAT ";"}+
+\end{verbatim}
+
+\noindent The instructions of the stack machine are defined as follows:
+
+\begin{verbatim}
+module AssemblyLanguage
+  imports BasicNotions 
+  exports 
+    sorts LABEL INSTR INSTRS 
+    lexical syntax
+      [a-z0-9]+ -> LABEL 
+    context-free syntax
+      push NAT      -> INSTR
+      rvalue ID     -> INSTR 
+      lvalue ID     -> INSTR 
+      assign        -> INSTR 
+      add           -> INSTR 
+      sub           -> INSTR 
+      mul           -> INSTR 
+      label LABEL   -> INSTR 
+      goto LABEL    -> INSTR 
+      gotrue LABEL  -> INSTR 
+      gofalse LABEL -> INSTR
+      {INSTR ";" }+ -> INSTRS 
+
+  variables
+    Instr [0-9']*      -> INSTR 
+    Instr-list [0-9']* -> { INSTR ";" }+
+    Label [0-9']*      -> LABEL
+\end{verbatim}
+
+\noindent Next, we define a function to construct a next label given the
+previous one. It is defined on the lexical notion of labels ({\tt LABEL}). The
+scheme of appending the character `{\tt x}' to the previous label is, of
+course, naive and will in real life be replaced by a more sophisticated one
+(see below).
+
+\begin{verbatim}
+
+module NextLabel1 
+  imports AssemblyLanguage
+  exports
+    context-free syntax
+      nextlabel "(" LABEL ")" -> LABEL 
+    variables
+      Label [0-9']* -> LABEL
+
+  hiddens
+    variables
+      Chars -> CHAR*
+
+equations
+ [1] nextlabel(label(Chars)) = label(Chars "x")
+\end{verbatim}
+
+It remains to define a function `{\tt tr}' that translates statements into
+instructions. During code generation we should generate new label names for
+the translation of if- and while-statements. This is an instance of a
+frequently occurring problem: how do we maintain global information (in this
+case: the last label name generated)? A standard solution is to introduce an
+auxiliary sort ({\tt INSTRS-LAB}) that contains both the generated instruction
+sequence and the last label name generated so far.
+
+\begin{verbatim}
+module CodeGenerator1 
+  imports Statements AssemblyLanguage NextLabel1 
+  exports
+    context-free syntax
+      tr "(" STATS ")" -> INSTRS 
+  hiddens
+    sorts INSTRS-LAB 
+    context-free syntax
+      "<" INSTRS "," LABEL ">"   -> INSTRS-LAB 
+      tr "(" STATS "," LABEL ")" -> INSTRS-LAB 
+      tr "(" EXP ")"             -> INSTRS
+ 
+equations 
+[1] tr(Stat-list, x) = <Instr-list, Label>
+    ======================================
+        tr(Stat-list) = Instr-list
+
+[2] tr(Stat, Label) = <Instr-list1, Label'>, 
+    tr(Stat-list, Label') = <Instr-list2, Label''>
+    ================================================================== 
+    tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
+
+[3] tr(Exp) = Instr-list
+    =============================================================== 
+    tr(Id := Exp, Label) = < lvalue Id; Instr-list; assign, Label >
+
+[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label') 
+    ================================================================ 
+    tr(if Exp then Stat-list fi, Label) =
+    <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
+
+[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
+    ================================================================ 
+    tr(while Exp do Stat-list od, Label) =
+    <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''>
+
+[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat [10] tr(Id) = rvalue Id
+\end{verbatim}
+
+\noindent This completes the specification of our code generator.
+
+\subsection{Larger Examples of ASF+SDF Specifications}
+
+See Chapter [Guided Tour] for an ASF+SDF specification of typechecking and execution of the toy language Pico. Other specifications are available describing (*******)
 
 \section{Miscellaneous}
 
