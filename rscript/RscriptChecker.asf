@@ -671,7 +671,7 @@ $Error]>
       	===========================================
 	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-[check-im3]
+[check-im3]    %%requires[pkg]
 	$Exp = $Exp1 [ $Exp2 ],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
@@ -750,13 +750,14 @@ $Error]>
       	==========================================
       	add-generators($Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv')
 
+
 [ag4] 	require-type($Exp, $Etype, $Tenv) = $Tenv',
       	store($Tenv', $Var, $Etype) = $Tenv''
       	==========================================
       	add-generators($Etype $Var <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag5] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-	match-targets($Target+, element-type($Etype, $Tenv), $Tenv') = $Tenv''
+	match-targets($Target+, $Etype, $Tenv') = $Tenv''
       	==========================================
       	add-generators(<$Target+> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
