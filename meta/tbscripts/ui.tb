@@ -110,9 +110,9 @@ in
      rec-msg(eqs-processed(Str1?)).
      snd-ack-event(UI,parse-equations(Str))
    ) +
-   ( rec-event(UI,edit-term(id(ModName?),Str?)).
+   ( rec-event(UI,edit-term(ModName?,Str?)).
      create(Edit-term(ModName,Str),ET?).
-     snd-ack-event(UI,edit-term(id(ModName),Str))
+     snd-ack-event(UI,edit-term(ModName,Str))
    ) +
    ( rec-event(UI,online-help).
      snd-msg(online-help-wanted).
