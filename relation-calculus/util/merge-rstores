@@ -1,8 +1,8 @@
 #! /bin/sh
 
 set -e
-datadir=/home/paulk/research/relation-calculus/tmp/share/relation-calculus
-bindir=/home/paulk/research/relation-calculus/tmp/bin
+datadir=/ufs/paulk/software/installed/share/relation-calculus
+bindir=/ufs/paulk/software/installed/bin
 TABLE=${datadir}/Rstore.trm.tbl
 RSTORE=${bindir}/Rstore
 RESULT=result.rstore.pt
