@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     contents = ATreadFromNamedFile(input);
     assert(contents != NULL);
 
-    parseTree =  PT_makeParseTreeFromTerm(contents);
+    parseTree =  PT_ParseTreeFromTerm(contents);
 
     if (!offset) {
       parseTree = PT_addParseTreePosInfoSome(path, parseTree, depth, 
@@ -211,10 +211,10 @@ int main(int argc, char *argv[])
     }
 
     if (text) {
-      ATwriteToNamedTextFile(PT_makeTermFromParseTree(parseTree), output);
+      ATwriteToNamedTextFile(PT_ParseTreeToTerm(parseTree), output);
     }
     else {
-      ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(parseTree), output);
+      ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(parseTree), output);
     }
 
   }

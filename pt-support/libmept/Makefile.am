@@ -1,6 +1,7 @@
 # $Id$
 
-lib_LIBRARIES           = libmept.a
+lib_LIBRARIES = libmept.a
+
 include_HEADERS = \
 	MEPT.h \
 	MEPT-utils.h \
@@ -22,12 +23,16 @@ libmept_a_SOURCES = \
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
-INCLUDES =\
+INCLUDES = \
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include
 
-api: 
-	adt-to-c --compat-term -i MEPT.adt --prefix PT_ -o MEPT
+api: MEPT.adt
+	upgrade-adt -i $< -o $<.1
+	adt-to-c \
+		--prefix PT_ \
+		--name MEPT \
+		--input $<.1
 
 api-clean:
 	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict

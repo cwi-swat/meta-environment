@@ -136,7 +136,7 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
   }
 
   return ATmake("appl(<term>,[<list>])", 
-		PT_makeTermFromProduction(prod), args);
+		PT_ProductionToTerm(prod), args);
 }
 
 /*}}}  */
@@ -187,7 +187,7 @@ static ATerm implodeLexical(PT_Tree tree)
     return ATmake("<str>", PT_yieldTree(tree));
   }
 
-  return PT_makeTermFromTree(tree);
+  return PT_TreeToTerm(tree);
 }
 
 /*}}}  */
@@ -199,7 +199,7 @@ static ATerm implodeLiteral(PT_Tree tree)
     return NULL;
   }
 
-  return PT_makeTermFromTree(tree);
+  return PT_TreeToTerm(tree);
 }
 
 /*}}}  */
@@ -236,7 +236,7 @@ static ATerm implodeAlt(PT_Tree tree)
     return ATmake("alt(<int>,[<term>])", index, child);
   }
 
-  return PT_makeTermFromTree(tree);
+  return PT_TreeToTerm(tree);
 }
 
 /*}}}  */
@@ -305,7 +305,7 @@ static ATerm implodeVar(PT_Tree tree)
     return ATmake("varsym([<str>])>", PT_yieldTree(tree));
   }
 
-  return PT_makeTermFromTree(tree);
+  return PT_TreeToTerm(tree);
 }
 
 /*}}}  */

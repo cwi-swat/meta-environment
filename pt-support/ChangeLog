@@ -1,5 +1,9 @@
 $Id$
 
+Mon Mar  8 14:20:01 CET 2004 <{jong,kooiker}@cwi.nl>
+ * regenerated using APIgen that generates 'const char *'
+ * removed legacy calls to "makeXXXToTerm" and "makeTermToXXX"
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 

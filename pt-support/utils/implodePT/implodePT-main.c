@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     inputTerm = ATreadFromNamedFile(input);
 
     if (inputTerm != NULL) {
-      tree = PT_makeParseTreeFromTerm(inputTerm);
+      tree = PT_ParseTreeFromTerm(inputTerm);
       implodedTree = PT_implodeParseTree(tree,
 					 interpret_cons ,
 					 remove_layout ,

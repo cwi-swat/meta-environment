@@ -3,6 +3,8 @@
 
 /*{{{  includes */
 
+#include <stdlib.h>
+#include <string.h>
 #include <aterm1.h>
 #include "MEPT_dict.h"
 
@@ -25,58 +27,59 @@ typedef struct _PT_CharRanges *PT_CharRanges;
 
 /*}}}  */
 
+/*{{{  definition of bottom types */
+
+
+/*}}}  */
+
 void PT_initMEPTApi(void);
 
+/*{{{  protect functions */
+
+void PT_protectParseTree(PT_ParseTree *arg);
+void PT_protectTree(PT_Tree *arg);
+void PT_protectProduction(PT_Production *arg);
+void PT_protectAttributes(PT_Attributes *arg);
+void PT_protectAttrs(PT_Attrs *arg);
+void PT_protectAttr(PT_Attr *arg);
+void PT_protectAssociativity(PT_Associativity *arg);
+void PT_protectArgs(PT_Args *arg);
+void PT_protectSymbol(PT_Symbol *arg);
+void PT_protectSymbols(PT_Symbols *arg);
+void PT_protectCharRange(PT_CharRange *arg);
+void PT_protectCharRanges(PT_CharRanges *arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
-#define PT_makeParseTreeFromTerm(t) (PT_ParseTreeFromTerm(t))
 PT_ParseTree PT_ParseTreeFromTerm(ATerm t);
-#define PT_makeTermFromParseTree(t) (PT_ParseTreeToTerm(t))
 ATerm PT_ParseTreeToTerm(PT_ParseTree arg);
-#define PT_makeTreeFromTerm(t) (PT_TreeFromTerm(t))
 PT_Tree PT_TreeFromTerm(ATerm t);
-#define PT_makeTermFromTree(t) (PT_TreeToTerm(t))
 ATerm PT_TreeToTerm(PT_Tree arg);
-#define PT_makeProductionFromTerm(t) (PT_ProductionFromTerm(t))
 PT_Production PT_ProductionFromTerm(ATerm t);
-#define PT_makeTermFromProduction(t) (PT_ProductionToTerm(t))
 ATerm PT_ProductionToTerm(PT_Production arg);
-#define PT_makeAttributesFromTerm(t) (PT_AttributesFromTerm(t))
 PT_Attributes PT_AttributesFromTerm(ATerm t);
-#define PT_makeTermFromAttributes(t) (PT_AttributesToTerm(t))
 ATerm PT_AttributesToTerm(PT_Attributes arg);
-#define PT_makeAttrsFromTerm(t) (PT_AttrsFromTerm(t))
 PT_Attrs PT_AttrsFromTerm(ATerm t);
-#define PT_makeTermFromAttrs(t) (PT_AttrsToTerm(t))
 ATerm PT_AttrsToTerm(PT_Attrs arg);
-#define PT_makeAttrFromTerm(t) (PT_AttrFromTerm(t))
 PT_Attr PT_AttrFromTerm(ATerm t);
-#define PT_makeTermFromAttr(t) (PT_AttrToTerm(t))
 ATerm PT_AttrToTerm(PT_Attr arg);
-#define PT_makeAssociativityFromTerm(t) (PT_AssociativityFromTerm(t))
 PT_Associativity PT_AssociativityFromTerm(ATerm t);
-#define PT_makeTermFromAssociativity(t) (PT_AssociativityToTerm(t))
 ATerm PT_AssociativityToTerm(PT_Associativity arg);
-#define PT_makeArgsFromTerm(t) (PT_ArgsFromTerm(t))
 PT_Args PT_ArgsFromTerm(ATerm t);
-#define PT_makeTermFromArgs(t) (PT_ArgsToTerm(t))
 ATerm PT_ArgsToTerm(PT_Args arg);
-#define PT_makeSymbolFromTerm(t) (PT_SymbolFromTerm(t))
 PT_Symbol PT_SymbolFromTerm(ATerm t);
-#define PT_makeTermFromSymbol(t) (PT_SymbolToTerm(t))
 ATerm PT_SymbolToTerm(PT_Symbol arg);
-#define PT_makeSymbolsFromTerm(t) (PT_SymbolsFromTerm(t))
 PT_Symbols PT_SymbolsFromTerm(ATerm t);
-#define PT_makeTermFromSymbols(t) (PT_SymbolsToTerm(t))
 ATerm PT_SymbolsToTerm(PT_Symbols arg);
-#define PT_makeCharRangeFromTerm(t) (PT_CharRangeFromTerm(t))
 PT_CharRange PT_CharRangeFromTerm(ATerm t);
-#define PT_makeTermFromCharRange(t) (PT_CharRangeToTerm(t))
 ATerm PT_CharRangeToTerm(PT_CharRange arg);
-#define PT_makeCharRangesFromTerm(t) (PT_CharRangesFromTerm(t))
 PT_CharRanges PT_CharRangesFromTerm(ATerm t);
-#define PT_makeTermFromCharRanges(t) (PT_CharRangesToTerm(t))
 ATerm PT_CharRangesToTerm(PT_CharRanges arg);
+
+/*}}}  */
+/*{{{  list functions */
+
 
 /*}}}  */
 /*{{{  constructors */
@@ -84,8 +87,8 @@ ATerm PT_CharRangesToTerm(PT_CharRanges arg);
 PT_ParseTree PT_makeParseTreeTop(PT_Tree top, int ambCnt);
 PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args);
 PT_Tree PT_makeTreeChar(int character);
-PT_Tree PT_makeTreeLit(char * string);
-PT_Tree PT_makeTreeFlatLayout(char * string);
+PT_Tree PT_makeTreeLit(const char* string);
+PT_Tree PT_makeTreeFlatLayout(const char* string);
 PT_Tree PT_makeTreeAmb(PT_Args args);
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes);
 PT_Production PT_makeProductionList(PT_Symbol rhs);
@@ -95,7 +98,7 @@ PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
 PT_Attrs PT_makeAttrsSingle(PT_Attr head);
 PT_Attr PT_makeAttrAssoc(PT_Associativity assoc);
 PT_Attr PT_makeAttrTerm(ATerm term);
-PT_Attr PT_makeAttrId(char * moduleName);
+PT_Attr PT_makeAttrId(const char* moduleName);
 PT_Attr PT_makeAttrBracket();
 PT_Attr PT_makeAttrReject();
 PT_Attr PT_makeAttrPrefer();
@@ -106,7 +109,7 @@ PT_Associativity PT_makeAssociativityAssoc();
 PT_Associativity PT_makeAssociativityNonAssoc();
 PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail);
 PT_Args PT_makeArgsEmpty();
-PT_Symbol PT_makeSymbolLit(char * string);
+PT_Symbol PT_makeSymbolLit(const char* string);
 PT_Symbol PT_makeSymbolCf(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLex(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolEmpty();
@@ -114,7 +117,7 @@ PT_Symbol PT_makeSymbolSeq(PT_Symbols symbols);
 PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs);
 PT_Symbol PT_makeSymbolTuple(PT_Symbol head, PT_Symbols rest);
-PT_Symbol PT_makeSymbolSort(char * string);
+PT_Symbol PT_makeSymbolSort(const char* string);
 PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator);
@@ -122,7 +125,7 @@ PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator);
 PT_Symbol PT_makeSymbolIterN(PT_Symbol symbol, int number);
 PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int number);
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol);
-PT_Symbol PT_makeSymbolParameterizedSort(char * sort, PT_Symbols parameters);
+PT_Symbol PT_makeSymbolParameterizedSort(const char* sort, PT_Symbols parameters);
 PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs);
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLayout();
@@ -181,8 +184,8 @@ ATbool PT_hasTreeCharacter(PT_Tree arg);
 int PT_getTreeCharacter(PT_Tree arg);
 PT_Tree PT_setTreeCharacter(PT_Tree arg, int character);
 ATbool PT_hasTreeString(PT_Tree arg);
-char * PT_getTreeString(PT_Tree arg);
-PT_Tree PT_setTreeString(PT_Tree arg, char * string);
+char* PT_getTreeString(PT_Tree arg);
+PT_Tree PT_setTreeString(PT_Tree arg, char* string);
 
 /*}}}  */
 /*{{{  PT_Production accessors */
@@ -241,8 +244,8 @@ ATbool PT_hasAttrTerm(PT_Attr arg);
 ATerm PT_getAttrTerm(PT_Attr arg);
 PT_Attr PT_setAttrTerm(PT_Attr arg, ATerm term);
 ATbool PT_hasAttrModuleName(PT_Attr arg);
-char * PT_getAttrModuleName(PT_Attr arg);
-PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName);
+char* PT_getAttrModuleName(PT_Attr arg);
+PT_Attr PT_setAttrModuleName(PT_Attr arg, char* moduleName);
 
 /*}}}  */
 /*{{{  PT_Associativity accessors */
@@ -292,8 +295,8 @@ inline ATbool PT_isSymbolVarSym(PT_Symbol arg);
 inline ATbool PT_isSymbolLayout(PT_Symbol arg);
 inline ATbool PT_isSymbolCharClass(PT_Symbol arg);
 ATbool PT_hasSymbolString(PT_Symbol arg);
-char * PT_getSymbolString(PT_Symbol arg);
-PT_Symbol PT_setSymbolString(PT_Symbol arg, char * string);
+char* PT_getSymbolString(PT_Symbol arg);
+PT_Symbol PT_setSymbolString(PT_Symbol arg, char* string);
 ATbool PT_hasSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_getSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol);
@@ -319,8 +322,8 @@ ATbool PT_hasSymbolNumber(PT_Symbol arg);
 int PT_getSymbolNumber(PT_Symbol arg);
 PT_Symbol PT_setSymbolNumber(PT_Symbol arg, int number);
 ATbool PT_hasSymbolSort(PT_Symbol arg);
-char * PT_getSymbolSort(PT_Symbol arg);
-PT_Symbol PT_setSymbolSort(PT_Symbol arg, char * sort);
+char* PT_getSymbolSort(PT_Symbol arg);
+PT_Symbol PT_setSymbolSort(PT_Symbol arg, char* sort);
 ATbool PT_hasSymbolParameters(PT_Symbol arg);
 PT_Symbols PT_getSymbolParameters(PT_Symbol arg);
 PT_Symbol PT_setSymbolParameters(PT_Symbol arg, PT_Symbols parameters);
@@ -374,14 +377,14 @@ PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail);
 /*{{{  sort visitors */
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTop)(PT_Tree), int (*acceptAmbCnt)(int));
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *));
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char* (*acceptString)(char*));
 PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
-PT_Attr PT_visitAttr(PT_Attr arg, PT_Associativity (*acceptAssoc)(PT_Associativity), ATerm (*acceptTerm)(ATerm), char * (*acceptModuleName)(char *));
+PT_Attr PT_visitAttr(PT_Attr arg, PT_Associativity (*acceptAssoc)(PT_Associativity), ATerm (*acceptTerm)(ATerm), char* (*acceptModuleName)(char*));
 PT_Associativity PT_visitAssociativity(PT_Associativity arg);
 PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
-PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_Symbols (*acceptSymbols)(PT_Symbols), PT_Symbols (*acceptRest)(PT_Symbols), int (*acceptNumber)(int), char * (*acceptSort)(char *), PT_Symbols (*acceptParameters)(PT_Symbols), PT_CharRanges (*acceptRanges)(PT_CharRanges));
+PT_Symbol PT_visitSymbol(PT_Symbol arg, char* (*acceptString)(char*), PT_Symbols (*acceptSymbols)(PT_Symbols), PT_Symbols (*acceptRest)(PT_Symbols), int (*acceptNumber)(int), char* (*acceptSort)(char*), PT_Symbols (*acceptParameters)(PT_Symbols), PT_CharRanges (*acceptRanges)(PT_CharRanges));
 PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));
 PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int (*acceptStart)(int), int (*acceptEnd)(int));
 PT_CharRanges PT_visitCharRanges(PT_CharRanges arg, PT_CharRange (*acceptHead)(PT_CharRange));

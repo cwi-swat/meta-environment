@@ -322,8 +322,8 @@ int PT_getSymbolsLength(PT_Symbols symbols)
 
 PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
 {
-    return PT_makeSymbolFromTerm(
-	 ATelementAt((ATermList)PT_makeTermFromSymbols(symbols), index));
+    return PT_SymbolFromTerm(
+	 ATelementAt((ATermList)PT_SymbolsToTerm(symbols), index));
 }
 
 /*}}}  */
@@ -1234,9 +1234,9 @@ ATbool PT_hasProductionConstructorAttr(PT_Production prod)
 
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 {
-  return PT_makeAttrsFromTerm(
+  return PT_AttrsFromTerm(
            (ATerm)ATreverse(
-                    (ATermList)PT_makeTermFromAttrs(attrs)));
+                    (ATermList)PT_AttrsToTerm(attrs)));
 }
 
 /*}}}  */

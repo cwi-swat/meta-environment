@@ -82,17 +82,17 @@ int main(int argc, char **argv)
   PT_initAsFix2Api();
 
   if(proceed) {
-    tree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(input));
+    tree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input));
     flatTree = flattenPT(tree);
 
     if(!flatTree) {
       ATerror("%s: conversion failed.", myname);
     }
     if(bafmode) {
-      ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(flatTree), output);
+      ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(flatTree), output);
     }
     else {
-      ATwriteToNamedTextFile(PT_makeTermFromParseTree(flatTree), output);
+      ATwriteToNamedTextFile(PT_ParseTreeToTerm(flatTree), output);
     }
   }
 

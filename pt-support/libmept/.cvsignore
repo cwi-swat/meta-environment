@@ -1,5 +1,5 @@
+.deps
 Makefile
 Makefile.in
-.deps
-*.o
 libmept.a
+MEPT.adt.1

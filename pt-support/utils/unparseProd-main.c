@@ -90,7 +90,7 @@ int main(int argc, char **argv)
       ATerror("asource: parse error in input term.\n");
     }
     else {
-      char *text = PT_yieldProduction(PT_makeProductionFromTerm(term));
+      char *text = PT_yieldProduction(PT_ProductionFromTerm(term));
       fprintf(outputFile, "%s", text);
       fclose(outputFile);
    }
