@@ -1,0 +1,10 @@
+module Layout
+exports
+  restrictions
+    <LAYOUT?-CF> -/- [\ \t\n\%\#]
+
+  lexical syntax
+    "%%" ~[\n]* [\n] -> LAYOUT
+    [\ \t\n]         -> LAYOUT
+    "#" ~[\n]* [\n]  -> LAYOUT
+

@@ -1,0 +1,14 @@
+module TimeExpr
+imports Terms
+
+exports
+  sorts TimeExpr Delay TimeOut
+
+  context-free syntax
+    delay                                           -> Delay {cons("delay")}
+    abs-delay                                       -> Delay {cons("abs-delay")}
+    timeout                                         -> TimeOut {cons("timeout")}
+    abs-timeout                                     -> TimeOut {cons("abs-timeout")}
+    Delay "(" TermList ")"                          -> TimeExpr {cons("delayExpr")}
+    Delay "(" TermList ")" TimeOut "(" TermList ")" -> TimeExpr {cons("delayTimeOutExpr")}
+

@@ -1,0 +1,11 @@
+module Booleans
+imports Layout
+
+exports
+  sorts Bool
+
+  context-free syntax
+    true         -> Bool {cons("true")}
+    false        -> Bool {cons("false")}
+    "(" Bool ")" -> Bool {bracket}
+

@@ -1,0 +1,29 @@
+module ProcessExpr
+imports Atom VarDecls TimeExpr
+
+exports
+  sorts ProcessExpr
+
+  context-free syntax
+    Atom                                                        -> ProcessExpr {cons("atomProcExpr")}
+    Atom TimeExpr                                               -> ProcessExpr {cons("atomTimeExpr")}
+    "create" "(" ProcessName "(" {Term ","}* ")" "," GenVar ")" -> ProcessInvocation {cons("createProcArgs")}
+    "create" "(" ProcessName "," GenVar ")"                     -> ProcessInvocation {cons("createProc")}
+    ProcessName                                                 -> ProcessInvocation {cons("procNameInvoc")}
+    ProcessName "(" {Term ","}* ")"                             -> ProcessInvocation {cons("procInvoc")}
+    ProcessInvocation                                           -> ProcessExpr {cons("procInvoExpr")}
+    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {left, cons("seqComp")}
+    ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
+    ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
+    ProcessExpr "||" ProcessExpr                                -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
+    "(" ProcessExpr ")"                                         -> ProcessExpr {bracket}
+    "let" VarDecls "in" ProcessExpr "endlet"                    -> ProcessExpr {cons("letCons")}
+    "if" Term "then" ProcessExpr "fi"                           -> ProcessExpr {cons("ifthen")}
+    "if" Term "then" ProcessExpr "else" ProcessExpr "fi"        -> ProcessExpr {cons("ifthenelse")}
+
+  context-free priorities
+    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr")} >
+    ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr1")} >
+    ProcessExpr "||" ProcessExpr                                -> ProcessExpr {cons("ProcessExpr-ProcessExpr2")} >
+    ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr3")}
+

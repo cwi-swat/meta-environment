@@ -1,0 +1,20 @@
+module ToolDef
+imports Terms
+
+exports
+  sorts ToolDef ToolDefs ToolName ToolAttrib ToolAttribName ToolAttribValue
+
+  lexical syntax
+    [a-z] [a-zA-Z0-9\-]*                                      -> ToolName
+    [a-z] [a-zA-Z\-]*                                         -> ToolAttribName
+    ~[\0-\31] \/ [\t\n]                                       -> DetailsChar
+    "<<" DetailsChar* ">>"                                    -> DetailsString
+    String                                                    -> ToolAttribValue
+    DetailsString                                             -> ToolAttribValue
+
+  context-free syntax
+    "tool" ToolName "is" "{" ToolAttrib* "}"                  -> ToolDef {cons("tooldef")}
+    "tool" ToolName "(" VarDecls ")" "is" "{" ToolAttrib* "}" -> ToolDef {cons("tooldefargs")}
+    ToolAttribName "=" ToolAttribValue                        -> ToolAttrib {cons("toolattrib")}
+    ToolDef*                                                  -> ToolDefs {cons("toolDefStar")}
+

@@ -1,0 +1,29 @@
+module Terms
+imports Integers Booleans
+
+exports
+  sorts Id Vname String Term TermList Var GenVar
+
+  lexical syntax
+    [a-z] [A-Za-z0-9\-]*    -> Id
+    "\\" ~[]                -> EscChar {avoid}
+    ~[\0-\31\"\\] \/ [\t\n] -> L-Char
+    EscChar                 -> L-Char
+    "\"" L-Char* "\""       -> String
+    [A-Z] [a-zA-Z0-9]*      -> Vname
+
+  context-free syntax
+    Bool                    -> Term {cons("boolTerm")}
+    Int                     -> Term {cons("intTerm")}
+    Real                    -> Term {cons("realTerm")}
+    String                  -> Term {cons("stringTerm")}
+    Vname                   -> Var {cons("vnameVar")}
+    Var                     -> GenVar {cons("var")}
+    Var "?"                 -> GenVar {cons("optVar")}
+    GenVar                  -> Term {cons("genvarTerm")}
+    "<" Term ">"            -> Term {cons("placeholder")}
+    Id                      -> Term {cons("idTerm")}
+    Id "(" TermList ")"     -> Term {cons("funTerm")}
+    {Term ","}*             -> TermList {cons("termStar")}
+    "[" TermList "]"        -> Term {cons("termList")}
+

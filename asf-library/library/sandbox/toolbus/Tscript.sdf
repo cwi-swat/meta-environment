@@ -1,0 +1,11 @@
+module Tscript
+imports ProcessDef ToolDef
+
+exports
+  sorts Tscript TscriptDef
+
+  context-free syntax
+    ToolDef                                                -> TscriptDef {cons("tooldefScript")}
+    ProcessDef                                             -> TscriptDef {cons("procdefScript")}
+    TscriptDef* "toolbus" "(" {ProcessInvocation ","}+ ")" -> Tscript {cons("tscript")}
+

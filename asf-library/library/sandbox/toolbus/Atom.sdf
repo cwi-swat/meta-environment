@@ -1,0 +1,16 @@
+module Atom
+imports Terms
+
+exports
+  sorts Atom ProcessName ProcessInvocation
+
+  lexical restrictions
+    ProcessName -/- [a-zA-Z\-0-9]
+
+  lexical syntax
+    [A-Z] [a-zA-Z\-0-9]* -> ProcessName
+
+  context-free syntax
+    Term                 -> Atom {cons("termAtom")}
+    Var ":=" Term        -> Atom {cons("assignment")}
+
