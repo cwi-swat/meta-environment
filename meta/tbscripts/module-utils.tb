@@ -29,18 +29,24 @@ in
     DoRevertModule(ModuleName1)
   +
     rec-msg(close-module(ModuleName1?, Option1?)).
-    DoCloseModule(ModuleName1, Option1).
-    snd-msg(module-closed(ModuleName1))
+    DoCloseModule(ModuleName1, Option1)
   ) *
   delta
 endlet
 
 process DoCloseModule(ModuleName : str, Recursive : term) is
-  printf ("closing a module is not yet implemented: %s\n", ModuleName)
+let
+  Status : term,
+  Changed : list
+in
+  Status := success.
+  CloseModuleInDB(ModuleName, Status?).
+  CloseModuleInUI(ModuleName)
+endlet
 
 
 process DoRevertModule(ModuleName : str) is
-  DoCloseModule(ModuleName, top).
+  CloseModuleInDB(ModuleName).
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules).
   snd-msg(module-reverted(ModuleName))
@@ -49,7 +55,7 @@ process DoDeleteModule(ModuleName : str) is
 let
   Changed : list
 in
-    RemoveModule(ModuleName).
+    RemoveModuleFromDisk(ModuleName).
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
@@ -76,7 +82,7 @@ in
         if equal(Status, success) then 
           SaveSdfModules(Changed). tau.
           SaveAsfSdfModule(RealNew). tau.
-          RemoveModule(Old). tau
+          RemoveModuleFromDisk(Old). tau
         else tau fi
       else tau fi
     else tau fi
@@ -178,9 +184,22 @@ process SaveAsfSdfModule(Module : str) is
    snd-msg(save-asfsdf-module(Module)) .
    rec-msg(saved-asfsdf-module(Module))
 
-process RemoveModule(Module : str) is
+process RemoveModuleFromDisk(Module : str) is
   snd-msg(remove-module(Module)) .
   rec-msg(removed-module)
+
+process CloseModuleInDB(ModuleName : str, Status : term?) is
+let 
+  Changed : list
+in
+  snd-msg(delete-module-from-db(ModuleName)).
+  rec-msg(changed-modules(Changed?)).
+  snd-msg(notify-about-changed-modules(Changed, "sdf")) .
+  rec-msg(notify-about-changed-modules-done) 
+endlet
+
+process CloseModuleInUI(ModuleName : str) is
+  snd-msg(ui-delete-module(ModuleName))
 
 process RenameModuleInDB(Old : str, New : str, Path : str, Status : term?, 
                          Changed : list?)
