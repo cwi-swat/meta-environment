@@ -1,7 +1,7 @@
 include ${top_srcdir}/templates/make_rules
 
-BUILTIN_NAMES=$(shell sort -u ${srcdir}/builtins.lst)
-BUILTIN_OBJECTS=$(shell sort -u ${srcdir}/objects.lst)
+BUILTIN_NAMES=$(shell cat ${srcdir}/builtins.lst | sed 's@^.*:@@g')
+BUILTIN_OBJECTS=$(shell cat ${srcdir}/objects.lst | sed 's@:@/@g')
 LIB_OBJECTS=$(foreach o,$(BUILTIN_OBJECTS),${top_builddir}/$o)
 
 CLEANFILES+=builtins.o forward.c asf-builtins.h
