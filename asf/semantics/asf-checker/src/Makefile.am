@@ -9,7 +9,7 @@ INCLUDES		= -I$(PT_SUPPORT)/include \
 
 bin_PROGRAMS = asfchecker
 
-data_DATA    = asfchecker.idef
+pkgdata_DATA    = asfchecker.idef
 
 EXTRA_DIST   = asfchecker.idef asfchecker.tif.c asfchecker.tif.h
 

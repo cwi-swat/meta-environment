@@ -6,7 +6,7 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = asfe
 
-data_DATA         = asfe.idef
+pkgdata_DATA         = asfe.idef
 EXTRA_DIST        = asfe.idef
 CLEANFILES        = asfe.tif.c asfe.tif.h asfe.tifs
 

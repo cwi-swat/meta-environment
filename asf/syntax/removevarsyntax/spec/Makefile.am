@@ -1,4 +1,3 @@
 # $Id$
-EXTRA_DIST=Remove-Var-Syntax.asf \
-           Remove-Var-Syntax.sdf \
-           meta.conf
+
+EXTRA_DIST=$(wildcard *.sdf) $(wildcard *.asf) meta.conf

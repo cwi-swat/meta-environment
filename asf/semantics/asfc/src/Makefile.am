@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 SUBDIRS = muasf
 
 bin_PROGRAMS     = asfc
-data_DATA        = asfc.idef
+pkgdata_DATA        = asfc.idef
 
 EXTRA_DIST       = asfc.idef
 

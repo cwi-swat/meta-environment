@@ -12,7 +12,7 @@ INCLUDES		= -I$(ASC_SUPPORT)/include \
 bin_PROGRAMS = removevarsyntax
 man_MANS     = removevarsyntax.1
 
-data_DATA    = removevarsyntax.idef
+pkgdata_DATA    = removevarsyntax.idef
 
 EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h \
                removevarsyntax.pod removevarsyntax.1
