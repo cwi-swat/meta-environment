@@ -3,10 +3,10 @@
 include ../make_rules
 
 bin_PROGRAMS      = sglr
-noinst_PROGRAMS   = sglr-prof
+# noinst_PROGRAMS   = sglr-prof
 
 SRCS              = sglr-main.c  getopt.c getopt1.c 
-HDRS              = getopt.h sglr-version.h
+HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)
 sglr_LDADD        = -L${top_builddir}/libsglr -lsglr \
@@ -15,14 +15,14 @@ sglr_LDADD        = -L${top_builddir}/libsglr -lsglr \
                     -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
                     $(SOCKLIBS)
 
-sglr_prof_SOURCES = $(HDRS)
-sglr_prof_LDFLAGS = -pg
-sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
-                    -L${top_builddir}/libsglr -lsglr-prof \
-                    -L${top_builddir}/libtree2dot -ltree2dot-prof \
-                    -L${top_builddir}/liba2toa1 -la2toa1-prof \
-                    -L$(ATERMLIB) -lATerm-prof -lAsFix-prof -lATB-prof \
-                    $(SOCKLIBS)
+# sglr_prof_SOURCES = $(HDRS)
+# sglr_prof_LDFLAGS = -pg
+# sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
+#                     -L${top_builddir}/libsglr -lsglr-prof \
+#                     -L${top_builddir}/libtree2dot -ltree2dot-prof \
+#                     -L${top_builddir}/liba2toa1 -la2toa1-prof \
+#                     -L$(ATERMLIB) -lATerm-prof -lAsFix-prof -lATB-prof \
+#                     $(SOCKLIBS)
 
 EXTRA_DIST = sglr.idef
 

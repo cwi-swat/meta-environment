@@ -337,7 +337,10 @@ void  SG_ParserCleanup(void)
       fprintf(SGlog(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
 	      allocated);
   )
+#if 0
+  /*  Seems to trigger a bug related to ATerm gc if running as ToolBus tool  */
   ATcollect();
+#endif
 }
 
 /*

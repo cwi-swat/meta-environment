@@ -36,7 +36,6 @@
 #include "getopt.h"
 #include "forest.h"
 #include "sglr.h"
-#include "sglr-version.h"
 #include "rsrc-usage.h"
 
 #define program_name "sglr"
@@ -340,7 +339,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
       DEFAULTMODE(posinfoflag),
       start_symbol?start_symbol:"<any>", stackoutput?stackoutput:"<off>",
       DEFAULTMODE(!binaryflag), DEFAULTMODE(verboseflag),
-      sglr_version, DEFAULTMODE(!supplexflag)
+      VERSION, DEFAULTMODE(!supplexflag)
     );
   }
 }
@@ -439,10 +438,12 @@ void handle_options (int argc, char **argv)
     case 'x':   supplexflag      = ATtrue;              break;
     default:    SG_Usage(stderr, ATfalse);              exit(1);
   }
-  if(show_version)
-    ATfprintf(stdout, "%s v%s\n", program_name, sglr_version);
   if(show_help) {
     SG_Usage(stdout, ATtrue);
+    exit(0);
+  }
+  if(show_version) {
+    ATfprintf(stdout, "%s v%s\n", program_name, VERSION);
     exit(0);
   }
 }
