@@ -1,3 +1,7 @@
+2003-07-04 (jurgenv@cwi.nl)
+ * Added package definition file
+ * Fixed configure.in error
+
 2003-01-22 (jurgenv@cwi.nl)
  * LGPL license
  * SGLR is not any more based on this library due to a 10% efficiency loss.

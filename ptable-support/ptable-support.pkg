@@ -1,0 +1,16 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/ptable-support
+   info=http://www.cwi.nl/projects/MetaEnv/ptable-support
+   description='A definition and a generated implementation of the parse table format for SDF2'
+
+   keywords=meta-environment, sdf, parse tables
+
+configuration interface
+
+requires
+  aterm		2.0.2
+  pt-support	0.12
+  toolbus	0.3
