@@ -2,17 +2,19 @@
 <HEAD>
 <TITLE>Design and implementation of the Asf+Sdf application suite</TITLE>
 </HEAD>
-<BODY>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
 
 <CENTER>
 <H1>Design and implementation of the new Asf+Sdf application suite</H1>
-Pieter Olivier, University of Amsterdam, olivierp@wins.uva.nl
+Mark van den Brand, CWI, markvdb@cwi.nl<BR>
+Pieter Olivier, University of Amsterdam, olivierp@wins.uva.nl<BR>
 </CENTER>
 
 <H2>Introduction</H2>
 We are currently designing and implementing a modular and extensible
 system for designing languages specifications in the
-Asf+Sdf specification formalism, and automatically generating
+<A HREF="http://www.springer.co.uk/ewic/workshops/ASFSDF97/">
+Asf+Sdf specification formalism</A>, and automatically generating
 programming environments from these specifications.
 Our work is based on the knowledge and experience gained with
 <A HREF="http://www.wins.uva.nl/pub/programming-research/reports/1995/P9504/">
@@ -48,6 +50,23 @@ Such a generated environment can consist of a completely interactive
 program development environment consisting of a structure editor,
 typechecker, interpreter and compiler, or it can be more batch oriented
 providing tools to do large scale program transformations or code analyzing.
+The old Asf+Sdf Meta-Environment has been develop based on languages like Pico 
+and Pascal.
+However, the application domain of the Meta-Environment is enlarged to a more 
+general
+field. Although the applications are still language oriented. The 
+Meta-Environment is currently
+intensively used in the field of re-engineering and it has to deal with huge 
+grammars like
+COBOL and huge amounts of code to be analyzed and processed. Furthermore, 
+applications
+like program transformation systems, like for Prolog, are developed with 
+Asf+Sdf as well.
+Such a system demands other functionality and features, such as flexibility of 
+transformation
+rule selection, history recording, undo facilities to name a few, than a 
+re-engineering system
+for COBOL.  
 In the next subsections, we will try to give an impression of the 
 programming environments that we are interested in.
 
@@ -64,6 +83,13 @@ as well as the Meta-environment itself. We have a description
 of the 
 <A HREF="meta/features.html">
 functionality that this Meta-enviroment has to offer.</A>
+Although the name of the Meta-Environment suggests otherwise, it must be 
+possible to
+parameterize the Meta-Environment with a language definition. In this way we 
+will be able
+to redesign Asf+Sdf in the (near) future and add language features like higher 
+order
+functionality, monads, parametrized modules, etc.
 
 <H3>Basic programming environment</H3>
 The most typical of generated environments is a so called 'basic 
