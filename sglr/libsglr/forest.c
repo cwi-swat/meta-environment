@@ -39,9 +39,6 @@
 #include "sglr.h"
 #include "sglr-strings.h"
 
-int SG_ProdType_AFun(AFun f);
-int SG_ProdType_Tree(tree t);
-
 extern long sg_nr_rejects;
 
 ATermTable resolvedtable = NULL;
@@ -751,28 +748,33 @@ int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
   return SG_PT_REGULAR;
 }
 
-int SG_ProdType_AFun(AFun f)
+static int SG_ProdType_AFun(AFun f)
 {
-  if(f == SG_Regular_AFun)
+  if (f == SG_Regular_AFun) {
     return SG_PT_REGULAR;
-  if(f == SG_Reject_AFun)
+  }
+  if (f == SG_Reject_AFun) {
     return SG_PT_REJECT;
-  if(f == SG_Eager_AFun)
+  }
+  if (f == SG_Eager_AFun) {
     return SG_PT_EAGER;
-  if(f == SG_Uneager_AFun)
+  }
+  if (f == SG_Uneager_AFun) {
     return SG_PT_UNEAGER;
+  }
 
   /*  None of the above...  */
   return -1;
 }
 
-int SG_ProdType_Tree(tree t)
+static int SG_ProdType_Tree(tree t)
 {
   int  TreeType = 0;
 
   TreeType = SG_ProdType_AFun(ATgetAFun(t));
-  if(TreeType < 0)
+  if(TreeType < 0) {
     ATerror("TreeType exception for %t\n", t);
+  }
   return TreeType;
 }
 
@@ -788,8 +790,19 @@ static ATbool SG_ContainsReject(tree t)
     case AT_APPL:
       fun = ATgetAFun(t);
 
-      if (SG_ProdType_Tree(t) == SG_PT_REJECT) {
+      if (fun == SG_Reject_AFun) {
         result = ATtrue;
+      }
+      else if(fun == SG_Amb_AFun) {
+        ATermList ambs = (ATermList) ATgetArgument((ATerm) t, 0);
+        for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+          result = result ||
+                   SG_ContainsReject((tree) ATgetFirst((ATermList) t));
+          if (result) {
+            /* if one of the elements contains an ambiguity, we can stop now */
+            break;
+          }
+        }
       }
       else {
         result = SG_ContainsReject((tree) ATgetArgument((ATermAppl) t, 1));
