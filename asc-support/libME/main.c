@@ -16,9 +16,8 @@
 /*}}}  */
 /*{{{  globals */
 
-static char *name; 
-
 #define streq(str1,str2) (!strcmp((str1),(str2)))
+#define MAX_ARGS 32
 /*}}}  */
 
 /*{{{  void usage(char *prg) */
@@ -26,16 +25,19 @@ static char *name;
 
 void usage(char *prg)
 {
-  fprintf(stderr, "Usage: %s -h -i <file> -o <file> -n <name> -m -s -v\n",prg);
-  fprintf(stderr, "Options:\n");
-  fprintf(stderr, "\t-h              display help information (usage)\n");
-  fprintf(stderr, "\t-i filename     input tree from file (default stdin)\n");
-  fprintf(stderr, "\t-o filename     output tree from file (default stdout)\n");
-  fprintf(stderr, "\t-m              mute: produce no output\n");
-  fprintf(stderr, "\t-s              print statistics\n");
-  fprintf(stderr, "\t-v              verbose mode\n");
-  fprintf(stderr, "\t-n name         set name of specification\n");
-  fprintf(stderr, "\nuse %s -at-help to get more aterm options.\n", prg);
+  fprintf(stderr, "Usage: %s -h -f <name> -i <file> -o <file> -m -r <sort>"
+	          " -s -v\n"
+                  "Options:\n"
+                  "\t-h              display help information (usage)\n"
+                  "\t-f name         apply prefix function to input terms\n"
+                  "\t-i filename     input tree from file (default stdin)\n"
+                  "\t-o filename     output tree from file (default stdout)\n"
+                  "\t-m              mute: produce no output\n"
+                  "\t-r sort         result sort name of prefix function\n"
+		  "\t-s              print statistics\n"
+                  "\t-v              verbose mode\n"
+		  "\nMore than one -i option can be supplied.\n"
+                  "\nUse %s -at-help to get more aterm options.\n", prg, prg);
   exit(1);
 }
 /*}}}  */
@@ -53,33 +55,42 @@ int asc_support_main(int argc, char *argv[],
   PT_Tree trm;
   ATerm t; 
   ATerm reduct;
-  ATbool printstats = ATfalse;
   ATbool produce_output = ATtrue;
   ATbool run_verbose = ATfalse;
-  char *input = "-";
+  ATbool printstats = ATfalse;
+  char *inputs[MAX_ARGS] = { "-" };
+  int nInputs = 0;
   char *output = "-";
+  char *function = "";
+  char *result = "";
   int i;
 
-  name = argv[0];
-
   for(i=1; i<argc; i++) {
-    if(streq(argv[i], "-s")) {
-      printstats = ATtrue;
-    } 
-    else if(streq(argv[i], "-n")) {
-      name = argv[++i];
-    } 
-    else if(streq(argv[i], "-v")) {
+    if(streq(argv[i], "-v")) {
       run_verbose = ATtrue;
     } 
     else if(streq(argv[i], "-h")) {
       usage(argv[0]);
     } 
+    else if(streq(argv[i], "-f")) {
+      function = argv[++i];
+    }
     else if(streq(argv[i], "-i")) {
-      input = argv[++i];
+      if (nInputs <= MAX_ARGS) {
+        inputs[nInputs++] = strdup(argv[++i]);
+      }
+      else {
+	ATerror("Maximim number of %d arguments exceeded.\n", MAX_ARGS);
+      }
     } 
     else if(streq(argv[i], "-o")) {
       output = argv[++i];
+    }
+    else if(streq(argv[i], "-r")) {
+      result = argv[++i];
+    }
+    else if(streq(argv[i], "-s")) {
+      printstats = ATtrue;
     }
     else if(streq(argv[i], "-m")) {
       produce_output = ATfalse;
@@ -94,8 +105,38 @@ int asc_support_main(int argc, char *argv[],
   resolve_all();
   init_all();
 
-  t = ATreadFromNamedFile(input);
-  pt = PT_makeParseTreeFromTerm(t);
+  if (!streq(function,"")) {
+    PT_Args args = PT_makeArgsEmpty();
+    
+    if (streq(inputs[0],"-")) {
+      nInputs++;
+    }
+
+    for (--nInputs; nInputs >= 0; nInputs--) {
+      PT_ParseTree parseTree = PT_makeParseTreeFromTerm(
+                                 ATreadFromNamedFile(inputs[nInputs]));
+
+      if (parseTree == NULL) {
+	ATerror("Unable to read in %s\n", inputs[nInputs]);
+	exit(1);
+      }
+
+      free(inputs[nInputs]);
+      args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
+    }
+
+    pt = PT_applyFunctionToArgsParseTree(function, result, args);
+  } 
+  else {
+    if (nInputs != 1) {
+      ATerror("Can only process one argument if no -f and -r option "
+	      "are supplied.\n");
+      return 1;
+    }
+
+    t = ATreadFromNamedFile(inputs[0]);
+    pt = PT_makeParseTreeFromTerm(t);
+  }
 
   if (PT_isValidParseTree(pt)) {
     trm = PT_getParseTreeTree(pt);
