@@ -92,7 +92,15 @@ equations
     symbol2str($Symbol1 # $Symbol2) = 
       symbol2str($Symbol1) 
       || strcon(""" "#" """)
+      || symbol2str($Symbol2) 
+
+  [symbol2str-tuple-new]
+    symbol2str(<$Symbol1, $Symbol2>) = 
+      strcon(""" "<" """)
+      || symbol2str($Symbol1) 
+      || strcon(""" "," """)
       || symbol2str($Symbol2)
+      || strcon(""" ">" """)
 
   [symbol2str-tuple]
     symbol2str($Literal : $Symbol) = 
