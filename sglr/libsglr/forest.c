@@ -261,7 +261,7 @@ ATermList Cycle = NULL;
  */
 ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited);
 
-ATbool SG_TermIsCyclicAmbs(ATermList ambs, Bitmap visited)
+ATbool SG_TermIsCyclicAmbs(tree t, ATermList ambs, Bitmap visited)
 {
   tree amb;
   ATbool hasCycle = ATfalse;
@@ -269,15 +269,17 @@ ATbool SG_TermIsCyclicAmbs(ATermList ambs, Bitmap visited)
   for (; !hasCycle && !ATisEmpty(ambs); ambs = ATgetNext(ambs)) { 
     SGnrAmb(SG_NR_INC);            /* Increase for each node in cluster */
     amb = (tree) ATgetFirst(ambs);
-    hasCycle =
-      SG_TermIsCyclicRecursive((tree) amb, ATtrue, visited);
+    if (!ATisEqual((ATerm) t, (ATerm) amb)) {
+      hasCycle =
+        SG_TermIsCyclicRecursive((tree) amb, ATtrue, visited);
+    }
   }
   return hasCycle;
 }
 
 ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
 {
-  ATermList ambs, tmp_ambs;
+  ATermList ambs;
 
   if (Cycle) {
     /*  Cycle has been detected, done  */
@@ -309,12 +311,11 @@ ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
           SGnrAmb(SG_NR_INC); /* new ambcluster */
 
           /*  First check whether or not t itself is cyclic...  */
+
           SG_TermIsCyclicRecursive((forest) ATgetArgument((ATermAppl) t, 1),
                                     ATtrue, visited);   
 
-          tmp_ambs = ATremoveAll(ambs, (ATerm) t);
-        
-          SG_TermIsCyclicAmbs(tmp_ambs, visited);
+          SG_TermIsCyclicAmbs(t, ambs, visited);
           visited = BitmapSet(visited, idx);
         }
       }
@@ -354,6 +355,10 @@ ATbool SG_TermIsCyclic(tree t)
   cyclic = SG_TermIsCyclicRecursive(t, ATfalse, visited);
 
   BitmapDestroy(visited);
+
+  /*  
+  AT_assertUnmarked(t);
+  */
  
   return cyclic;
 }
