@@ -51,6 +51,13 @@ ATwarning("symbol = %t, formalParam = %t, actualParam = %t\n",
  
     symbol = PT_setSymbolSymbols(symbol, newArgs);
   }
+  if (PT_hasSymbolParameters(symbol)) {
+    PT_Symbols args = PT_getSymbolParameters(symbol);
+
+    PT_Symbols newArgs = renameInSymbols(args, formalParam, actualParam);
+ 
+    symbol = PT_setSymbolParameters(symbol, newArgs);
+  }
   if (PT_hasSymbolSymbol(symbol)) {
     PT_Symbol arg = PT_getSymbolSymbol(symbol);
 
@@ -279,7 +286,7 @@ ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
 
     if (SDF_hasSymbolListTail(formalParamList)) {
       formalParamList = SDF_getSymbolListTail(formalParamList);
-      if (SDF_hasSymbolListTail(formalParamList)) {
+      if (SDF_hasSymbolListTail(actualParamList)) {
         actualParamList = SDF_getSymbolListTail(actualParamList);
       }
       else {
