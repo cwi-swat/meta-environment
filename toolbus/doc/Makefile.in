@@ -40,12 +40,6 @@ DISTFILES	= Makefile.in Guide.tex \
 
 all:    ${DOCUMENTS}
 
-#adapters.tex: adapters
-#	rm -f adapters.tex
-#	for file in `ls adapters/*.tex`; do\
-#	for file in ${ADAPTERS}; do\
-#	  echo \\input\{`ls $$file`\} >> adapters.tex;\
-#	done
 Arch.tex: Arch.pic
 	tpic Arch
 Tifs.tex: Tifs.pic
@@ -66,12 +60,13 @@ Guide.ps.gz: Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
 	gzip Guide.ps
 
 clean:
-	${CLEAN} ${DOCUMENTS} adapters.tex
+	${CLEAN} ${DOCUMENTS}
 
 install: Guide.ps.Z
 
 distclean: clean
-	rm -f Makefile
+	rm -f Makefile adapters.tex
+	rm -rf adapters
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
