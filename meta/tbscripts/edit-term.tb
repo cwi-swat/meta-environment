@@ -238,7 +238,8 @@ in
     snd-note(ui-status(stat(Id, "Rewriting"))) .
     snd-msg(rewrite(ModuleName, Equations, Tree)).
     (
-      rec-msg(rewrite-result(NormalForm?))
+      rec-msg(rewrite-result(NormalForm?)).
+      RestoreBracketsInTree(NormalForm,ModuleName,NormalForm?)
     +
       rec-msg(rewrite-errors(ErrList?)) .
       NormalForm := error-tree .
@@ -250,6 +251,22 @@ in
     NormalForm := error-tree .
     snd-note(ui-status(endstat(Id))) .
     snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+  )
+endlet
+
+process RestoreBracketsInTree(Tree : term, ModuleName : str, NewTree : term?) is
+let
+  Table : term,
+  Path : str
+in
+  snd-msg(get-parsetable(trm(ModuleName))).
+  (
+    rec-msg(parse-table(Table?, Path?)) .
+    snd-msg(restore-brackets(Tree, Table)) .
+    rec-msg(brackets-restored(NewTree?)) 
+  +
+    rec-msg(no-parse-table) .
+    NewTree := error-tree
   )
 endlet
 
