@@ -223,7 +223,6 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
 }
 
 /*  Managing Cyclic Syntax...  */
-FILE *graph;
 ATermList Cycle = NULL;
 
 ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, PosMap visited);
