@@ -32,7 +32,7 @@ exports
     NatCon -/- [0-9]
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Comments
    
   context-free syntax
     gt "(" Natural "," Natural ")" -> Boolean

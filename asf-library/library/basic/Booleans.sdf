@@ -21,7 +21,7 @@ exports
 
 hiddens
   imports
-    asf/syntax/Comments
+    basic/Comments
   variables
     "Bool"[0-9]* 	-> Boolean
     "Bool-con"[0-9]* 	-> BoolCon

@@ -1,3 +1,5 @@
-module languages/cpp/syntax/syntax/Basic
+module languages/cpp/syntax/Basic
 
-imports languages/cpp/syntax/Text languages/cpp/syntax/Layout languages/cpp/syntax/Ident
+imports languages/cpp/syntax/Text 
+imports languages/cpp/syntax/Layout 
+imports languages/cpp/syntax/Ident

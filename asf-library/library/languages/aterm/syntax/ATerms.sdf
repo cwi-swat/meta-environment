@@ -1,7 +1,7 @@
 %%% $Id$
                
-module languages/aterm/ATerms
-imports languages/aterm/Literals languages/aterm/IntCon languages/aterm/RealCon
+module languages/aterm/syntax/ATerms
+imports languages/aterm/syntax/Literals languages/aterm/syntax/IntCon languages/aterm/syntax/RealCon
 exports
   sorts ATermList ACon AFun ATerm Ann
   context-free syntax

@@ -14,7 +14,7 @@ length(String) -> Integer
 
 hiddens
 
-imports asf/syntax/Comments
+imports basic/Comments
 
 variables
 "string" -> String
