@@ -582,7 +582,7 @@ in
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(copy-module(ModuleName, NewModName, Path, Ext)) .
+	snd-msg(copy-module(ModuleName, NewModName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(rename-module, Stack?, EditorId?) .

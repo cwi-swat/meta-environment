@@ -18,8 +18,6 @@ in
     snd-note(ui-status(endstat(Id)))
   +
     rec-msg(copy-module(ModuleName1?, ModuleName2?, Path?)).
-    snd-note(ui-status(statf(Id, 
-             "Copying %s to %s",[ModuleName1,ModuleName2]))).
     DoCopyModule(ModuleName1, ModuleName2, Path).
     snd-note(ui-status(endstat(Id)))
   +
@@ -185,11 +183,8 @@ in
   if equal(Status, success) then
     CheckExistence(New, RealNew, Status?).
     if equal (Status, success) then
-      CopyModuleInDB(Old, RealNew, Path, Status?, Changed?).
-      if equal (Status, success) then
-        SaveSdfModules(Changed).
-	SaveAsfSdfModule(RealNew)
-      else tau fi
+      CopyModuleInDB(Old, New).
+      SaveAsfSdfModule(New)
     else tau fi
   else tau fi.
   HandleCopyModuleErrors(Old, RealNew, Status) . tau
@@ -309,16 +304,10 @@ is
   snd-msg(rename-module-in-db(Old, New, Path)) .
   rec-msg(renaming-module-done(Old, Changed?)) 
 
-process CopyModuleInDB(Old : str, New : str, Path : str, Status : term?, 
-                       Changed : list?)
+process CopyModuleInDB(Old : str, New : str)
 is
-  snd-msg(copy-module-in-db(Old, New, Path)) .
-  (
-    rec-msg(copy-done(Old, Changed?))
-  +
-    rec-msg(copy-not-done(Old)).
-    Status := module-not-copied
-  )
+  snd-msg(copy-module-in-db(Old, New)) .
+  rec-msg(copy-module-done(Old))
 
 process AddImportInDB(Mod : str, Import : str)
 is

@@ -113,6 +113,7 @@ in
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
     MDB-RenameModule(OldName, NewName, Modules?) .
+    MDB-DisplayGraph .
     snd-msg(renaming-module-done(OldName, Modules))
   +
     rec-msg(add-import-in-db(OldName?, NewName?)) .
@@ -123,9 +124,10 @@ in
     MDB-RemoveImportFromModules(NewName, [OldName]) .
     snd-msg(remove-import-done)
   +
-    rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(copy-not-done(OldName))
+    rec-msg(copy-module-in-db(OldName?, NewName?)) .
+    MDB-CopyModule(OldName, NewName) .
+    MDB-DisplayGraph .
+    snd-msg(copy-module-done(OldName))
   +
     rec-msg(eqs-not-available-for-modules(Name?)) .
     MDB-AllEquationsAvailable(Name, ModuleNames?) .
@@ -456,16 +458,27 @@ in
   if equal(Modules,[]) then
     tau
   fi .
+  MDB-CopyModule(OldName, NewName) .
+  snd-msg(ts-remove-value-from-all-tables(OldName))
+endlet
+
+process MDB-CopyModule(OldName : str, NewName : str) is
+let
+  Path : str,
+  Text : str,
+  Syntax : term,
+  Tree : term
+in
   snd-msg(ts-get-term-value("sdf-tree", OldName)) .
   rec-msg(ts-value(Syntax?)) .
-  snd-msg(ts-get-str-value("module-paths", OldName)) .
-  rec-msg(ts-value(Path?)) .
-  snd-msg(ts-put-str-value("module-paths", NewName, Path)) .
-  snd-msg(ts-put-str-value("active-modules", NewName, Path)) .
   snd-msg(sm-rename-modulename-in-module(Syntax, NewName)) .
   rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
   MDB-StoreModuleTree(NewName, Syntax) .
   Syntax := no-tree .
+  snd-msg(ts-get-str-value("module-paths", OldName)) .
+  rec-msg(ts-value(Path?)) .
+  snd-msg(ts-put-str-value("module-paths", NewName, Path)) .
+  snd-msg(ts-put-str-value("active-modules", NewName, Path)) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
     rec-msg(ts-value(Tree?)) .
@@ -481,9 +494,7 @@ in
     Text := ""
   +
     rec-msg(ts-no-value)
-  ) .
-  snd-msg(ts-remove-value-from-all-tables(OldName)) .
-  MDB-DisplayGraph
+  )
 endlet
 
 process MDB-AddImportToModule(OldName : str, NewName : str) is
