@@ -31,6 +31,7 @@ EXTRA_DIST=README
 CLEANFILES = *.out *.c ${TEST_MODULES}
 
 check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
+	rm -f *.out *.c
 
 %.test: %.asfe.test %.asfc.test
 	@printf "Testing $*, comparing asfe and asfc: "
@@ -39,7 +40,7 @@ check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
           printf "."; \
 	done;
 	@printf "\n"
-	@rm -f $* *.out *.c
+	rm -f $* *.out *.c
 
 %.asfe.test: 
 	@printf "Testing $* with asfe: "
