@@ -31,7 +31,7 @@ void ll_coords(int,int);
 void switch_source(char *name, int n);
 %}
 
-layout        [ \t]
+layout        [ \t\r]
 comment       "%%".*
 linedir       "#".*\n
 ws            {layout}|{comment}
