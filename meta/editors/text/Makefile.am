@@ -17,7 +17,9 @@ INCLUDES		= -I$(TOOLBUS)/include \
 
 gvim_editor_SOURCES	= gvim-editor.c text-editor.tif.c
 gvim_editor_LDADD	= -L$(TOOLBUS)/lib -ltb -lATB \
-			  -L$(ATERM)/lib -lATerm
+			  -L$(ATERM)/lib -lATerm \
+			  $(SOCKLIBS)
+
 libmeta_gvim_la_SOURCES	= meta_gvim.c
 
 emacs-editor: emacs-editor.src
