@@ -36,7 +36,7 @@ TESTS              = perform-test
 
 EXTRA_DIST         = genmakefile.in parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
-                     insert-license.sh.src README test-help test-version \
+                     insert-license.sh.src test-help test-version \
                      genmakefile.proto lang.types perform-test.sh.src \
                      parse-sdf2.pod genamakefile.sh.src change-sdf2-ext
 
