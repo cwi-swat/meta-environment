@@ -27,6 +27,7 @@ IN=${srcdir}/input
 OUT=${srcdir}/output
 CODE=${srcdir}/c-code
 
+EXTRA_DIST=README
 CLEANFILES = *.out *.c ${TEST_MODULES}
 
 check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
