@@ -49,10 +49,10 @@ Reveal program version.
 
 =head1 EXAMPLES
 
-    $ a2toa1 < Test.asfix2 > Test.asfix2
-    $ a2toa1 -c -i Test.asfix2 > Test.asfix2
-    $ a2toa1 -o Test.dot < Test.asfix2
-    $ a2toa1 -i Test.asfix2-o Test.asfix2
+    $ a2toa1 < Test.asfix2 > Test.asfix1
+    $ a2toa1 -c -i Test.asfix2 > Test.asfix1
+    $ a2toa1 -o Test.dot < Test.asfix1
+    $ a2toa1 -i Test.asfix2-o Test.asfix1
     $ cat MyCode.cod | sglr -p Term.tbl | a2toa1 > Test.asfix1
 
 
