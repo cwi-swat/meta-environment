@@ -178,6 +178,20 @@ static ATerm implodeLiteral(PT_Tree tree)
   return PT_makeTermFromTree(tree);
 }
 
+static ATerm implodeAlt(PT_Tree tree)
+{
+  ATwarning("WARNING: Alternatives not supported by implodePT\n");
+
+  return PT_makeTermFromTree(tree);
+}
+
+static ATerm implodeSeq(PT_Tree tree)
+{
+  ATwarning("WARNING: Alternatives not supported by implodePT\n");
+
+  return PT_makeTermFromTree(tree);
+}
+
 static ATerm implodeVar(PT_Tree tree)
 {
   return PT_makeTermFromTree(tree);
@@ -224,6 +238,12 @@ static ATerm implodeTerm(PT_Tree tree)
   }                        
   else if (PT_isTreeListInjection(tree)) {
     result = implodeListInjection(tree);
+  }
+  else if (PT_isTreeAlt(tree)) {
+    result = implodeAlt(tree);
+  }
+  else if (PT_isTreeSeq(tree)) {
+    result = implodeSeq(tree);
   }
   else if (PT_isTreeAppl(tree)) {
     result = implodeApplication(tree);
