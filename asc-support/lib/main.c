@@ -29,7 +29,7 @@ void usage(char *prg)
   fprintf(stderr, "\t-o filename     output tree from file (default stdout)\n");
   fprintf(stderr, "\t-s              print statistics\n");
   fprintf(stderr, "\t-n name         set name of specification\n");
-  fprintf(stderr, "\nuse %s -at-help to get more aterm/toolbus options.\n", prg);
+  fprintf(stderr, "\nuse %s -at-help to get more aterm options.\n", prg);
   exit(1);
 }
 /*}}}  */
