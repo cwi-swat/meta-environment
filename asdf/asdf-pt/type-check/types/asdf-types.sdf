@@ -7,6 +7,10 @@ imports
 
 exports
 
+context-free start-symbols
+
+  ActionType
+
 sorts
 
   SingleActionType ActionType
@@ -20,12 +24,17 @@ context-free syntax
   "giving" Type		-> SingleActionType
   "raising" Type	-> SingleActionType
   "infallible" | "terminates" | "closed" | 
-  "stable" | "ineffective" | "uncreative" 	-> SingleActionType
-    
-  ActionType "&" ActionType	-> ActionType {left, prefer}
-  SingleActionType		-> ActionType
+  "stable" | "ineffective" | "uncreative" 	-> SingleActionType {prefer}
 
-  ActionType	     -> Type 
+  "infallible" | "terminates" | "closed" | 
+  "stable" | "ineffective" | "uncreative"	-> AtomicType {reject}
+    
+  {SingleActionType "&"}*	-> ActionType 
+
+%%  ActionType "&" ActionType	-> ActionType {left, prefer}
+%%  SingleActionType		-> ActionType
+
+  "(" ActionType ")"	     -> Type {avoid}
 
   get-using(ActionType)		-> Type 
   get-giving(ActionType)	-> Type 
@@ -34,19 +43,14 @@ context-free syntax
   get-giving(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
   get-raising(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
 
-  not-in(SingleActionType, ActionType)	-> Answer
-  not-in(ActionType, Answer, SingleActionType)	
-			        -> Answer {traversal(accu, break, bottom-up)}
-
 lexical syntax
 
   [a-z\-]+	-> AtomicType
 
 context-free restrictions
 
-  AtomicType -/- [a-z\-]
-
-
+  AtomicType -/- [a-z\-]  
+    
 hiddens variables
 
    "$SAT"[0-9]?		-> SingleActionType

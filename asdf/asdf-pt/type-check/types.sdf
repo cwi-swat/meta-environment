@@ -4,7 +4,6 @@ imports
 
   basic/Errors
   type-check/pos-annotate
-  type-check/subtype
   basic/Integers
 
 exports 
@@ -19,31 +18,17 @@ context-free syntax
 
 %% Types
 
-  "std-at"	     -> ActionType
+  "std-at"	     -> {SingleActionType "&"}*
 
   ActionType "\\" SingleActionType	-> ActionType
-
-  infallible(ActionType)		-> SingleActionType
-  closed(ActionType)		-> SingleActionType
 
 %% Type variables
 
   TypeVariable		-> Type
-  ActionTypeVariable	-> ActionType
+  ActionTypeVariable	-> SingleActionType
 
   "_V"Integer		-> TypeVariable
   "_AV"Integer		-> ActionTypeVariable
-
-%% Type operators
-
-  concat(Type, Type) 	-> Type
-  lub(Type, Type, Environment)	-> Type
-  glb(Type, Type, Environment)	-> Type
-
-  action-type-and(ActionType, ActionType)	-> ActionType
-
-  highest-type(Type, Type, Environment)	-> Type
-  lowest-type(Type, Type, Environment)	-> Type
 
 %% Error messages
 

@@ -20,15 +20,15 @@ equations
 
 [tcd-3] 
 
-   <giving $TY1 & $AT1, $EN2> := typecheck-data($D1, $EN1),
-   <giving $TY2 & $AT2, $EN3> := typecheck-data($D2, $EN2)
+   <giving $TY1 & $SAT1*, $EN2> := typecheck-data($D1, $EN1),
+   <giving $TY2 & $SAT2*, $EN3> := typecheck-data($D2, $EN2)
    ========================================================
    typecheck-data(($D1, $D2), $EN1) = <giving ($TY1, $TY2), $EN3>
 
 [tcd-4] 
 
-   <giving $TY & $AT1, $EN2> := typecheck-data($D1, $EN1),
-   <giving ($TY*) & $AT2, $EN3> := typecheck-data(($D2, $D+), $EN2)
+   <giving $TY & $SAT1*, $EN2> := typecheck-data($D1, $EN1),
+   <giving ($TY*) & $SAT2*, $EN3> := typecheck-data(($D2, $D+), $EN2)
    ================================================================
    typecheck-data(($D1, $D2, $D+), $EN1) = <giving ($TY, $TY*), $EN3>
 

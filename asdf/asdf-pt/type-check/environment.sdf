@@ -3,7 +3,9 @@ module type-check/environment
 imports 
 
   asdf/functions
-  type-check/types  
+  type-check/typeops
+  type-check/constraints
+
 
 exports
 
@@ -13,7 +15,9 @@ sorts
 
 context-free syntax
 
-  <Signatures, SubTypes, DataOpSigs, DataConstants, ActionType, Integer>	-> Environment
+  <Signatures, SubTypes, DataOpSigs, DataConstants, ActionType, Integer, 
+   List[[Constraint]]>
+		-> Environment
 
   type-info-to-env(TypeInfo)	   -> Environment
 
@@ -23,6 +27,7 @@ context-free syntax
   get-data-constants(Environment)  -> DataConstants
   get-unfold-type(Environment)	   -> ActionType
   get-label(Environment)	   -> Integer
+  get-constraints(Environment)	   -> List[[Constraint]]
 
   set-signatures(Environment, Signatures)	-> Environment
   set-subtypes(Environment, SubTypes)		-> Environment
@@ -30,6 +35,8 @@ context-free syntax
   set-data-constants(Environment, DataConstants) -> Environment
   set-unfold-type(Environment, ActionType)	-> Environment
   set-label(Environment, Integer)		-> Environment
+
+  add-constraint(Constraint, Environment)	-> Environment
 
   "empty-env"					-> Environment
   "initial-dataop-sigs"				-> DataOpSigs
@@ -47,19 +54,19 @@ context-free syntax
   stable(AS-FunctionSig)	-> Answer
   ineffective(AS-FunctionSig)	-> Answer
   uncreative(AS-FunctionSig)	-> Answer
-  remove-using(ActionType)	-> ActionType
-  remove-giving(ActionType)	-> ActionType
-  remove-raising(ActionType)	-> ActionType
-  remove-infallible(ActionType)	-> ActionType
-  remove-terminates(ActionType)	-> ActionType
-  remove-closed(ActionType)	-> ActionType
-  remove-stable(ActionType)	-> ActionType
-  remove-ineffective(ActionType)   -> ActionType
-  remove-uncreative(ActionType)	-> ActionType 
-  remove-action(ActionType)	-> ActionType 
+  remove-using(ActionType)	-> {SingleActionType "&"}*
+  remove-giving(ActionType)	-> {SingleActionType "&"}*
+  remove-raising(ActionType)	-> {SingleActionType "&"}*
+  remove-infallible(ActionType)	-> {SingleActionType "&"}*
+  remove-terminates(ActionType)	-> {SingleActionType "&"}*
+  remove-closed(ActionType)	-> {SingleActionType "&"}*
+  remove-stable(ActionType)	-> {SingleActionType "&"}*
+  remove-ineffective(ActionType)   -> {SingleActionType "&"}*
+  remove-uncreative(ActionType)	-> {SingleActionType "&"}* 
+  remove-action(ActionType)	-> {SingleActionType "&"}* 
   remove-dobble-sigs(Signatures, Environment)	-> Signatures
   join-results(ActionType, ActionType, Environment)	
-				-> ActionType 
+				-> {SingleActionType "&"}*
   remove-dobble-dataops(DataOpSigs, Environment)	-> DataOpSigs
 
   Error		-> Answer
@@ -69,6 +76,7 @@ hiddens variables
 
   "$SIGS"[0-9]?		-> Signatures
   "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?"*"	-> { SingleActionType "&"}*
   "$STS"[0-9]?		-> SubTypes
   "$EN"[0-9]?		-> Environment
   "$DOS"[0-9]?		-> DataOpSigs
@@ -82,3 +90,4 @@ hiddens variables
   "$FS"[0-9]?		-> AS-FunctionSig
   "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*
   "$N"[0-9]?		-> Integer
+  "$LC"[0-9]?		-> List[[Constraint]]

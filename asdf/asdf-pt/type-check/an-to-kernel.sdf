@@ -4,6 +4,7 @@ imports
 
   asdf/an
   type-check/data/Tuple
+  type-check/data/Bindings
 
 hiddens variables
 

@@ -7,6 +7,7 @@ imports
   type-check/data/all
   asdf/an-supplement
   type-check/an-to-kernel
+  type-check/typeops
 
 exports 
 
@@ -20,23 +21,24 @@ hiddens
 
 variables
 
-  "$TY"[1-9]?		-> Type
-  "$TY"[1-9]?"*"	-> {Type ","}*
-  "$AT"[1-9]?		-> ActionType	
-  "$TV"[1-9]?		-> TypeVariable
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> {Type ","}*
+  "$AT"[0-9]?		-> ActionType	
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
+  "$TV"[0-9]?		-> TypeVariable
 	
-  "$EN"[1-9]?	-> Environment
-  "$CH+"[1-9]?	-> CHAR+
-  "$SC"[1-9]?	-> StrCon		
-  "$A"[1-9]?	-> Action
+  "$EN"[0-9]?	-> Environment
+  "$CH+"[0-9]?	-> CHAR+
+  "$SC"[0-9]?	-> StrCon		
+  "$A"[0-9]?	-> Action
   "$IA"		-> InfixAction
   "$D+"		-> {Data ","}+
   "$D"[0-9]?	-> Data
   "$N"		-> Number
   "$B"		-> Boolean
   "$TK"[0-9]?	-> Token
-  "$END"[1-9]?	-> Answer
-  "$ER"[1-9]?"+"	-> Error+
+  "$END"[0-9]?	-> Answer
+  "$ER"[0-9]?"+"	-> Error+
   "$DO"[0-9]?	-> DataOp
   "$IN"[0-9]?	-> Index
 

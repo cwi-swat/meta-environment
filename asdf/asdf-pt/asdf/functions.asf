@@ -76,7 +76,7 @@ equations
    =================================================================
    sort-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
 
-[sort-to-type-1] sort-to-type($AT) = $AT
+[sort-to-type-1] sort-to-type($AT) = ($AT)
 
 [join-sigs-1] 
 

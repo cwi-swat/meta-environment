@@ -29,7 +29,7 @@ equations
 
 [maybe-1] maybe $A = $A catch fail
 
-[bound-to-1] bound-to $Y = bound (current-bindings, $Y)
+[bound-to-1] give bound-to $Y = give (current-bindings, $Y) then give bound
 
 [bind-1] bind = give binding
 

@@ -3,7 +3,7 @@ module type-check/tc-functions
 imports
 
   type-check/tc-actions
-  type-check/tc-extra
+  
 
 exports
 
@@ -47,7 +47,7 @@ variables
   "$LDF"[0-9]?		-> List[[<DataOp, ActionType>]]
 
   "$SE"[1-9]?	-> SignatureEnv
-  "$EN"[1-9]?	-> Environment
+  "$EN"[0-9]?	-> Environment
   "$LT"[1-9]?	-> Literal
   "$SO"[1-9]?	-> Sort
   "$AT"[1-9]?	-> ActionType

@@ -23,37 +23,37 @@ equations
         ====================================================
         typecheck-definitions(defs($FD, $FD+), $EN) = $ANS1 $ANS2
 
-[tcd-3] 	
+%%[tcd-3] 	
 
-      $ET $LT $CO = $AC := $FD,
-      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
-      $LT == get-fun-name($AFS1),
-      $ANS1 := check-typing($FD, $AFS1, $EN),
-      $ANS2 := check-terminates($FD, $AFS1, $EN)
-      =========================================================================
-      typecheck-definitions(defs($FD), $EN) = $ANS1 $ANS2
+%%      $ET $LT $CO = $AC := $FD,
+%%      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+%%      $LT == get-fun-name($AFS1),
+%%      $ANS1 := check-typing($FD, $AFS1, $EN),
+%%      $ANS2 := check-terminates($FD, $AFS1, $EN)
+%%      =========================================================================
+%%      typecheck-definitions(defs($FD), $EN) = $ANS1 $ANS2
 
-[check-typing-1]
+%%[check-typing-1]
 
-      <$AT, $EN2> := typecheck-action($AC, $EN1),
-      yes == subtype-of(get-using($AFS), get-using($AT), $EN1), 
-      yes == subtype-of(get-giving($AT), get-giving($AFS), $EN1), 
-      yes == subtype-of(get-raising($AT), get-raising($AFS), $EN1), 
-      $ANS := check-infallible($ET $LT $CO = $AC, $AFS, failing(t: T->$AT))
-      =========================================================================
-      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = yes $ANS
+%%      <$AT, $EN2> := typecheck-action($AC, $EN1),
+%%      yes == subtype-of(get-using($AFS), get-using($AT), $EN1), 
+%%      yes == subtype-of(get-giving($AT), get-giving($AFS), $EN1), 
+%%      yes == subtype-of(get-raising($AT), get-raising($AFS), $EN1), 
+%%      $ANS := check-infallible($ET $LT $CO = $AC, $AFS, failing(t: T->$AT))
+%%      =========================================================================
+%%      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = yes $ANS
 
-[check-typing-2] 
+%%[check-typing-2] 
 
-      <$ER, $EN2> := typecheck-action($AC, $EN1)
-      ========================================================================
-      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = $ER
+%%      <$ER, $EN2> := typecheck-action($AC, $EN1)
+%%      ========================================================================
+%%      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = $ER
 
-[default-check-typing] 
+%%[default-check-typing] 
 
-  check-typing($FD, $AFS, $EN) = 
-	 error("Type error", 
-	     [localized("Error in function definitions", get-location($FD))])
+%%  check-typing($FD, $AFS, $EN) = 
+%%	 error("Type error", 
+%%	     [localized("Error in function definitions", get-location($FD))])
 
 [tca-function] 
 
