@@ -206,6 +206,7 @@ in
   GetRealModuleName(Import, Path, Status?, RealImport?).
   if equal(Status, success) then
     Status := success.
+    DeleteEditors(Mod). 
     AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
     if equal (Status, success) then
       SaveSdfModules(Changed).
@@ -224,6 +225,7 @@ in
   GetRealModuleName(Import, Path, Status?, RealImport?).
   if equal(Status, success) then
     Status := success.
+    DeleteEditors(Mod). 
     RemoveImportInDB(Mod, RealImport, Path, Status?, Changed?).
     if equal(Status, success) then
       SaveSdfModules(Changed).
@@ -231,7 +233,6 @@ in
     else tau fi
   else tau fi
 endlet
-
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
                           RealName : str?)
@@ -292,6 +293,7 @@ process HardCloseModuleInDB(ModuleName : str) is
 let
   Changed : list
 in
+  DeleteEditors(ModuleName).
   snd-msg(delete-module-from-db(ModuleName)).
   rec-msg(changed-modules(Changed?)).
   snd-msg(notify-about-changed-modules(Changed, "sdf")) .
