@@ -1,0 +1,20 @@
+equations
+
+
+[] bu-stop-tr(N(T1,T2)) = -N(T1,T2)
+[] bu-cont-tr(N(T1,T2)) = -N(T1,T2)
+
+[] td-stop-tr(N(T1,T2)) = -N(T1,T2)
+[] td-cont-tr(N(T1,T2)) = -N(T1,T2)
+
+[] bu-stop-ac(N(T1,T2),N*) = N N*
+[] bu-cont-ac(N(T1,T2),N*) = N N*
+
+[] td-stop-ac(N(T1,T2),N*) = N N*
+[] td-cont-ac(N(T1,T2),N*) = N N*
+
+[] bu-stop-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+[] bu-cont-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+
+[] td-stop-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+[] td-cont-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>

@@ -1,0 +1,32 @@
+module Tree
+imports Tree-syntax
+exports
+sorts NAT* TREE # NAT*
+
+context-free syntax
+
+  bu-stop-tr(TREE) -> TREE {traversal(bottom-up, trafo, break)}
+  bu-cont-tr(TREE) -> TREE {traversal(bottom-up, trafo, continue)}
+
+  td-stop-tr(TREE) -> TREE {traversal(top-down, trafo, break)}
+  td-cont-tr(TREE) -> TREE {traversal(top-down, trafo, continue)}
+
+  bu-stop-ac(TREE,NAT*) -> NAT* {traversal(bottom-up, accu, break)}
+  bu-cont-ac(TREE,NAT*) -> NAT* {traversal(bottom-up, accu, continue)}
+
+  td-stop-ac(TREE,NAT*) -> NAT* {traversal(top-down, accu, break)}
+  td-cont-ac(TREE,NAT*) -> NAT* {traversal(top-down, accu, continue)}
+
+  bu-stop-actr(TREE,NAT*) -> TREE # NAT* {traversal(bottom-up, accu, trafo, break)}
+  bu-cont-actr(TREE,NAT*) -> TREE # NAT* {traversal(bottom-up, accu, trafo, continue)}
+
+  td-stop-actr(TREE,NAT*) -> TREE # NAT* {traversal(top-down, accu, trafo, break)}
+  td-cont-actr(TREE,NAT*) -> TREE # NAT* {traversal(top-down, accu, trafo, continue)}
+
+variables
+
+"N*" -> NAT*
+  
+
+
+

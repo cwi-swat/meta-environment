@@ -2,7 +2,7 @@ module Traversal-Typecheck
 
 imports Pico-syntax
 
-exports
+exports sorts {STATEMENT ";"}*
 
 context-free syntax
 

@@ -1,0 +1,22 @@
+module Tree-syntax
+
+imports Layout
+
+exports
+
+lexical syntax
+  [0-9]+ -> NAT
+
+sorts TREE
+
+context-free syntax
+  "-" NAT -> NAT
+
+  NAT -> TREE
+  NAT "(" TREE "," TREE ")" -> TREE
+
+
+variables
+
+ "T" [0-9]* -> TREE
+ "N" [0-9]* -> NAT
