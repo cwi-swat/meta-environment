@@ -1,0 +1,80 @@
+module languages/asf/addeqssyntax/Add-Lexical-Constructor-Functions
+
+imports languages/asf/addeqssyntax/Upper-To-Lower
+imports languages/sdf2/syntax/Sdf2
+imports languages/sdf2/normalization/Character-Class
+imports languages/sdf2/normalization/Literals
+
+exports
+
+context-free syntax
+
+"add-shadow-syntax" "(" Definition ")" -> Definition
+
+
+hiddens
+
+context-free start-symbols
+	Grammar Definition
+
+context-free syntax
+
+%% traverse all grammars and generate a shadow syntax
+shadow(Definition) -> Definition {traversal(trafo,top-down,break)}
+shadow(Grammar   ) -> Grammar    {traversal(trafo,top-down,break)}
+
+%% shadow all non-terminals by wrapping them in CHARS[[X]]
+wrap( Grammar, Production*) -> <Grammar, Production*>
+	 {traversal(accu,trafo,top-down,break)}
+wrap( Symbol , Production*)  -> <Symbol, Production*>
+	 {traversal(accu,trafo,top-down,break)}
+
+abstract(Grammar) -> Grammar {traversal(trafo,top-down,break)}
+abstract(Production) -> Production {traversal(trafo,top-down,break)}
+abstract(Symbol) -> Symbol {traversal(trafo,top-down,break)}
+
+%% make literal productions
+make-literals(SymbolSet) -> Grammar
+make-literal(Symbol) -> Production
+"$make-literal-lhs"(Symbol) -> Symbols
+"$make-literal-char"(Symbol) -> Symbol
+translate-literals(Grammar) -> Grammar
+translate-literal(Production) -> Production
+
+%% create constructor functions (adding function names and brackets)
+apply( Grammar ) -> Grammar {traversal(trafo,top-down,break)}
+apply( Production )  -> Production {traversal(trafo,top-down,break)}
+
+%% inject the new shadow syntax into cf syntax
+inject( Grammar ) -> Grammar {traversal(trafo,top-down,break)}
+inject( Production )  -> Production {traversal(trafo,top-down,break)}
+
+Attributes "++" Attributes -> Attributes {left}
+
+%% retrieve all (nested) literals from a symbolset
+get-literals(SymbolSet,SymbolSet) -> SymbolSet {traversal(accu,bottom-up,continue)}
+get-literals(Symbol,SymbolSet) -> SymbolSet {traversal(accu,bottom-up,continue)}
+
+variables
+	"Production"[0-9\']* -> Production
+	"Definition"[0-9\']* -> Definition
+	"Symbol"[0-9\']* -> Symbol
+	"Literal"[0-9\']* -> StrCon
+	"Attributes"[0-9\']* -> Attributes
+	"Production*"[0-9\']* -> Production*
+	"Symbol*"[0-9\']* -> Symbol*
+	"Symbols"[0-9\']* -> Symbols
+	"SymbolSet"[0-9\']* -> SymbolSet
+	"Grammar"[0-9\']* -> Grammar
+	"CharClass"[0-9\']* -> CharClass
+	"CharClass*"[0-9\']* -> {CharClass","}*
+	"Attribute"[0-9\']* -> Attribute
+	"Attribute*"[0-9\']* -> {Attribute","}*
+	"Sort"[0-9\']* -> Sort
+	"ATerm"[0-9\']* -> ATerm
+	"ATerm*"[0-9\']* -> {ATerm","}*
+
+lexical variables
+	"c*" -> StrChar*
+	"c"-> StrChar
+

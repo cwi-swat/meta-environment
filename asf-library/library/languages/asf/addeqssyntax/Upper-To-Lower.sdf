@@ -1,0 +1,25 @@
+module languages/asf/addeqssyntax/Upper-To-Lower
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    "upper2lower" "(" IdCon ")" -> IdCon
+    "sort2id" "(" Sort ")"      -> IdCon
+    "id2str" "(" IdCon ")"      -> StrCon
+
+hiddens
+
+variables
+    "Sort"[0-9]*        -> Sort
+
+lexical variables
+	"C"[0-9]*  	-> StrChar
+	"C*"[0-9]* 	-> StrChar*
+	"c"[0-9]*	-> ~[\0-\31\n\t\"\\]
+	"h"[0-9\']*	-> [A-Za-z]
+	"t"[0-9\']*	-> [A-Za-z\-0-9]*
+	"m*"[0-9]*	-> [A-Za-z0-9\-]*
+	"m"[0-9]*	-> [A-Za-z0-9\-]
+	"l"[0-9]*	-> [A-Za-z0-9]
+	"f"[0-9]*	-> [A-Z]

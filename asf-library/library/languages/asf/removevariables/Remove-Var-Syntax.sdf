@@ -1,0 +1,20 @@
+module languages/asf/removevariables/Remove-Var-Syntax
+
+imports languages/sdf2/syntax/Sdf2 
+
+exports
+  context-free syntax
+    "remove-var-syntax" "(" SDF ")"                -> SDF
+    "remove-var-syntax" "(" ModuleName "," SDF ")" -> SDF
+
+hiddens
+  context-free syntax
+    "remove" "(" SDF ")" 	-> SDF 	{traversal(trafo,top-down,break)}
+    "remove" "(" Grammar ")" 	-> Grammar {traversal(trafo,top-down,break)}
+
+  variables
+    "SDF"[0-9]* 	-> SDF {strict}
+
+  variables
+    "Prod+"[0-9]*       -> Production+ {wild}
+    "Name"		-> ModuleName {wild}

@@ -1,0 +1,27 @@
+module languages/asf/compiler/tom/TomSyntax
+
+imports languages/asf/compiler/muasf/MuASF
+
+exports
+
+sorts TomRuleSection TomRule TomSpecification
+
+context-free start-symbols
+  TomSpecification
+
+context-free syntax
+
+TomRuleSection
+* -> TomSpecification
+
+"%rule" "{" 
+  TomRule
+* 
+"}" -> TomRuleSection
+
+"default:"? Term "->" Term -> TomRule
+
+context-free syntax
+
+FunId"("")" -> Term {cons("func-no-arguments")}
+"_"           -> Term {cons("anonymous-variable")}

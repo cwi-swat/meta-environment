@@ -1,0 +1,171 @@
+equations
+
+  [aem-1'1] add-equation-module(Sdf) = add-equation-module(Main,Sdf)
+
+  [aem-1'2] Prod*1 := create-eqs-and-conds(Module*1, [LAYOUT]),
+            Prod*3 := add-tagid-rejects(Module*1),
+            Module*2 := add-prefer-vars(Module*1),
+            Module*3 := add-shadow-syntax(Module*2),
+            Module*4 := add-eqs-to-module(ModName, Module*3)
+            ===============================================
+            add-equation-module(ModName, definition Module*1) =
+
+definition
+              
+Module*4
+
+%% NOTE: copies like this in this module are bad. We should use the
+%% library and find out a way to hide the imported modules from the
+%% import graph!      
+module languages/sdf2/syntax/Character
+
+imports basic/Comments
+
+exports
+  sorts Character NumChar ShortChar
+  lexical syntax
+    [\\] [0-9]+                     -> NumChar   {cons("digits")}
+    [a-zA-Z0-9]                     -> ShortChar {cons("regular")}
+    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+  context-free syntax
+    NumChar   -> Character {cons("numeric")}
+    ShortChar -> Character {cons("short")}    
+    
+module languages/asf/syntax/Characters
+
+%% The renaming is essential, such that normalization will not reduce 
+%% user defined syntax, only lexical constructor functions!
+imports languages/sdf2/syntax/Character[Character => CHAR NumChar => ASF-NumChar ShortChar => ASF-ShortChar]
+
+exports sorts CHAR ASF-NumChar ASF-ShortChar
+  
+module languages/asf/syntax/Tags
+
+exports 
+
+sorts ASF-TagId ASF-Tag
+
+lexical syntax
+
+    [A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("one-char")}
+    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("many-chars")}
+
+context-free syntax
+
+    "[" "]"           -> ASF-Tag {cons("empty")}
+    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
+
+    Prod*3
+
+module languages/asf/syntax/Module
+
+imports languages/asf/syntax/Equations 
+imports languages/asf/syntax/Tests 
+imports languages/asf/syntax/Characters 
+imports languages/asf/syntax/Constructors
+
+exports
+  context-free start-symbols ASF-Module
+  sorts ASF-Module ASF-Section
+
+context-free syntax
+
+  list:ASF-Section* -> ASF-Module {cons("default")}
+
+  "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
+  "tests" test-list:ASF-TestEquation*       -> ASF-Section {cons("tests")}
+
+module languages/asf/syntax/Conditions
+
+exports 
+   sorts ASF-Condition ASF-Conditions
+
+   context-free syntax
+     list:{ASF-Condition ","}+ -> ASF-Conditions
+module languages/asf/syntax/Tests
+
+imports languages/asf/syntax/Equations
+
+exports
+
+sorts ASF-TestEquation
+
+context-free syntax
+    ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
+    ASF-Tag ASF-Condition "when" ASF-Conditions  -> ASF-TestEquation {cons("when")}
+
+
+module languages/asf/syntax/Equations
+imports languages/asf/syntax/Conditions
+imports languages/asf/syntax/Tags
+exports
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation
+
+exports
+  lexical syntax
+                                      -> ASF-BarEnd {cons("Absent")}
+    [\>]                              -> ASF-BarEnd {cons("Present")}
+
+    start:"===" bar:[\=]* end:ASF-BarEnd  -> ASF-Implies {cons("default")}
+
+  lexical restrictions
+    ASF-Implies -/- [\=]
+
+  context-free syntax
+
+    ASF-Tag ASF-Equation -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
+
+    Prod*1
+
+
+
+
+
+
+  [aetm-1'1] add-eqs-to-module(ModuleId, Module*1
+                                         module ModuleId
+                                         ImpSection* imports Import*
+                                         Section*
+                                         Module*2) =
+               Module*1
+               module ModuleId
+               ImpSection* imports Import* languages/asf/syntax/Module
+               Section*
+               Module*2
+
+  [aetm-1'2] add-eqs-to-module(ModuleId, Module*1
+                                         module ModuleId
+                                         Section*
+                                         Module*2) =
+               Module*1
+               module ModuleId
+               imports languages/asf/syntax/Module
+               Section*
+               Module*2
+
+  [aetm-1'3] add-eqs-to-module(ModuleId, Module*1
+                                         module ModuleId[$Symbols]
+                                         ImpSection* imports Import* 
+                                         Section*
+                                         Module*2) =
+               Module*1
+               module ModuleId[$Symbols]
+               ImpSection* imports Import* languages/asf/syntax/Module
+               Section*
+               Module*2
+
+  [aetm-1'3] add-eqs-to-module(ModuleId, Module*1
+                                         module ModuleId[$Symbols]
+                                         Section*
+                                         Module*2) =
+               Module*1
+               module ModuleId[$Symbols]
+               imports languages/asf/syntax/Module
+               Section*
+               Module*2
+
+  [aetm-1'4] add-eqs-to-module(ModuleId [ $Symbols ], Module*) =
+              add-eqs-to-module(ModuleId,Module*)

@@ -1,0 +1,33 @@
+module languages/asf/addeqssyntax/Add-Eqs-Syntax
+
+imports languages/asf/addeqssyntax/Add-Lexical-Constructor-Functions
+	languages/asf/addeqssyntax/Add-Eqs-Conds 
+	languages/asf/addeqssyntax/Add-Prefer-Variables 
+	languages/asf/addeqssyntax/Add-TagId-Rejects
+
+exports
+  context-free syntax
+    "add-equation-module" "(" SDF ")"                -> SDF
+    "add-equation-module" "(" ModuleName "," SDF ")" -> SDF
+hiddens
+  context-free start-symbols
+    SDF Integer
+  context-free syntax
+    "add-eqs-to-module" "(" ModuleName "," Definition ")" -> Definition
+  
+hiddens
+  variables
+    "Import*"[0-9]*      -> Import*
+    "Grammar"[0-9]*      -> Grammar
+    "ModuleId"[0-9]*     -> ModuleId
+    "ModName"[0-9]*      -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "Prio*"[0-9]*        -> {Priority ","}*
+    "Prod"[0-9]*         -> Production
+    "Prod*"[0-9]*        -> Production*
+    "Sdf"[0-9]*          -> SDF
+    "Section"[0-9]*      -> Section
+    "Section*"[0-9]*     -> Section*
+    "$Symbols"[0-9]*     -> Symbols
+    "ImpSection*"[0-9]*  -> ImpSection*

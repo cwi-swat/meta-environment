@@ -1,0 +1,99 @@
+%% The goal of this algorithm is to provide, for all lexical syntax
+%% sections, an isomorphic context-free syntax. This cf syntax can
+%% be used in ASF equations to construct and deconstruct lexicals;
+%% the isomorphism is used to translate a parsed lexical in context-free
+%% 'lexical constructor function' syntax back to the original lexical syntax.
+%% (this translation is implemented by the ASF normalizer).
+
+equations
+
+[main]
+	add-shadow-syntax(Definition) = shadow(Definition)
+
+equations
+
+[copy-and-shadow-lexical-syntax]
+	<Grammar4, Production*2> := wrap(context-free syntax Production*, ),
+        Grammar5 := apply(Grammar4),
+	Grammar6 := inject(Grammar5)
+	======================================================
+	shadow(lexical syntax Production*) = 
+	lexical syntax 
+ 		Production*
+	context-free syntax
+		Production*2
+	Grammar5
+	Grammar6
+
+[transform-lexical-variables]
+	shadow(lexical variables Production*) = 
+	abstract(variables Production*)
+	
+equations
+
+[cc-variables]
+	abstract(Symbols -> CharClass Attributes) = 
+	Symbols -> CHAR Attributes ++ {prefer}
+
+[default-wrap]
+	<Symbol', Production*> := wrap(Symbol, )
+	===>
+	abstract(Symbols -> Symbol Attributes) =
+	Symbols -> Symbol' Attributes ++ {prefer}
+
+equations
+
+%% We wrap the leafs of symbols with CHARS[[ ]].
+%% Note that literals are left as-is.
+%% The other terminals are character classes, they get a syntax
+%% by injecting the predefined sort CHAR in them. Note that this
+%% effectively maps all character classes onto the same type, which
+%% is why *dynamic checking* is needed during rewriting to confirm that
+%% a character fits into a parse tree.
+
+[replace-sort]
+	Sort != CHAR
+	=======================
+	wrap(Sort, Production*) = <CHARS[[Sort]], Production*>
+
+[replace-layout]
+	wrap(LAYOUT, Production*) = <CHARS[[LAYOUT]], Production*>
+
+[replace-cc]
+	wrap(CharClass, Production*) = 
+	<CHARS[[CharClass]], CHAR -> CHARS[[CharClass]] Production*>
+
+equations
+
+%% We surround the wrapped syntax by a prefix function:
+
+[apply-constructor-function-sort]
+	Literal := id2str(upper2lower(sort2id(Sort)))
+	=============================================
+	apply(Symbol* -> CHARS[[Sort]] Attributes) =
+	  Literal "(" Symbol* ")" -> CHARS[[Sort]] 
+		Attributes ++ {lexical-constructor}
+
+[apply-constructor-function-layout]
+	apply(Symbol* -> CHARS[[LAYOUT]] Attributes) =
+	  "layout" "(" Symbol* ")" -> CHARS[[LAYOUT]] 
+		Attributes ++ {lexical-constructor}
+
+equations
+
+%% The wrapped syntax must be acceptable where the normal lexical
+%% is accepted too:
+
+[add-injection-sort]
+	inject(Symbol* -> CHARS[[Sort]] Attributes) = 
+	CHARS[[Sort]] -> Sort 
+
+[add-injection-layout]
+	inject(Symbol* -> CHARS[[LAYOUT]] Attributes) = 
+	CHARS[[LAYOUT]] -> LAYOUT 
+
+equations
+  
+[] ++ Attributes = Attributes
+[] Attributes ++ = Attributes
+[] {Attribute*1} ++ {Attribute*2} = {Attribute*1,Attribute*2} 

@@ -1,0 +1,75 @@
+
+equations
+
+[] id2str(idcon(h)) = strcon(\" strchar(h) \")
+[] id2str(idcon(h1 h2 t)) = strcon(\" strchar(h1) C* \")
+	when strcon(\" C* \") := id2str(idcon(h2 t)) 
+
+equations
+
+[] sort2id(sort(f)) = idcon(f)
+[] sort2id(sort(f l)) = idcon(f l)
+[] sort2id(sort(f m* l)) = idcon(f m* l)
+
+equations
+
+  [u2l-1'1]  upper2lower(A) = a
+
+  [u2l-1'2]  upper2lower(B) = b
+
+  [u2l-1'3]  upper2lower(C) = c
+
+  [u2l-1'4]  upper2lower(D) = d
+
+  [u2l-1'5]  upper2lower(E) = e
+
+  [u2l-1'6]  upper2lower(F) = f
+
+  [u2l-1'7]  upper2lower(G) = g
+
+  [u2l-1'8]  upper2lower(H) = h
+
+  [u2l-1'9]  upper2lower(I) = i
+
+  [u2l-1'10] upper2lower(J) = j
+
+  [u2l-1'11] upper2lower(K) = k
+
+  [u2l-1'12] upper2lower(L) = l
+
+  [u2l-1'13] upper2lower(M) = m
+
+  [u2l-1'14] upper2lower(N) = n
+
+  [u2l-1'15] upper2lower(O) = o
+
+  [u2l-1'16] upper2lower(P) = p
+
+  [u2l-1'17] upper2lower(Q) = q
+
+  [u2l-1'18] upper2lower(R) = r
+
+  [u2l-1'19] upper2lower(S) = s
+
+  [u2l-1'20] upper2lower(T) = t
+
+  [u2l-1'21] upper2lower(U) = u
+
+  [u2l-1'22] upper2lower(V) = v
+
+  [u2l-1'23] upper2lower(W) = w
+
+  [u2l-1'24] upper2lower(X) = x
+
+  [u2l-1'25] upper2lower(Y) = y
+
+  [u2l-1'26] upper2lower(Z) = z
+
+  [default]  upper2lower(idcon(h)) = idcon(h)
+
+  [u2l-1'27] idcon(h1')	:= upper2lower(idcon(h1)),
+             idcon(h2' t') := upper2lower(idcon(h2 t))
+             ===============================================
+             upper2lower(idcon(h1 h2 t)) = idcon(h1' h2' t')
+
+

@@ -1,0 +1,134 @@
+%%
+%%    PGEN - the SDF2 parse table generator.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%
+%%    This program is free software; you can redistribute it and/or modify
+%%    it under the terms of the GNU General Public License as published by
+%%    the Free Software Foundation; either version 2 of the License, or
+%%    (at your option) any later version.
+%%
+%%    This program is distributed in the hope that it will be useful,
+%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%    GNU General Public License for more details.
+%%
+%%    You should have received a copy of the GNU General Public License
+%%    along with this program; if not, write to the Free Software
+%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+%%
+equations
+
+  [avlp-1'1] collect-lexical-sorts-modules(Module*,sort("L""A""Y""O""U""T")) = Symbol*1,
+             add-vlp-for-modules(Module*, Symbol*1, ) = [Symbol*2, Prio*]
+             ============================================================
+             add-var-lex-priorities(Module*) = Prio*
+
+  [avfm-1'1] add-vlp-for-modules(Module, Symbol*1, Symbol*2) =
+               add-vlp-for-module(Module, Symbol*1, Symbol*2)
+
+  [avfm-1'2] add-vlp-for-module(Module, Symbol*1, Symbol*2) = [Symbol*3, Prio*1],
+             add-vlp-for-modules(Module*, Symbol*1, Symbol*3) = [Symbol*4, Prio*2]
+             =====================================================================
+             add-vlp-for-modules(Module Module*, Symbol*1, Symbol*2) = [Symbol*4, Prio*1, Prio*2]
+
+  [avfm-2'1] add-vlp-for-module(module ModName ImpSection* Section*, Symbol*1, Symbol*2) =
+               add-vlp-for-sections(Section*, Symbol*1, Symbol*2)
+
+  [avfs-1'1] add-vlp-for-sections(, Symbol*1, Symbol*2) = [Symbol*2,]
+
+  [avfs-1'2] add-vlp-for-section(Section, Symbol*1, Symbol*2) = [Symbol*3, Prio*1],
+             add-vlp-for-sections(Section*, Symbol*1, Symbol*3) = [Symbol*4, Prio*2]
+             =======================================================================
+             add-vlp-for-sections(Section Section*, Symbol*1, Symbol*2) = [Symbol*4, Prio*1, Prio*2]
+
+  [avfs-2'1] add-vlp-for-section(exports Grammar, Symbol*1, Symbol*2) =
+                add-vlp-for-grammar(Grammar, Symbol*1, Symbol*2)
+
+  [avfs-2'2] add-vlp-for-section(hiddens Grammar, Symbol*1, Symbol*2) =
+               add-vlp-for-grammar(Grammar, Symbol*1, Symbol*2)
+
+  [avfg-1'1] add-vlp-for-grammar(Grammar1, Symbol*1, Symbol*2) = [Symbol*3, Prio*1],
+             add-vlp-for-grammar(Grammar2, Symbol*1, Symbol*3) = [Symbol*4, Prio*2]
+             ======================================================================
+             add-vlp-for-grammar(Grammar1 Grammar2, Symbol*1, Symbol*2) = [Symbol*4, Prio*1, Prio*2]
+
+  [avfg-1'2] add-vlp-for-grammar(variables Prod*1, Symbol*1, Symbol*2) =
+               add-vlp-for-variables(Prod*1, Symbol*1, Symbol*2)
+
+  [default-avfg-1'3] add-vlp-for-grammar(Grammar, Symbol*1, Symbol*2) = [Symbol*2,]
+
+  [avfp-1'1] add-vlp-for-variables(,Symbol*1, Symbol*2) = [Symbol*2,]
+
+  [avfp-1'2] Symbol*3 = Symbol*4 Symbol2 Symbol*5,
+             Symbol1 = Symbol2
+             ===================================
+             add-vlp-for-variables(Symbol*1 -> Symbol1 Attrs Prod*, Symbol*2, Symbol*3) =
+               add-vlp-for-variables(Prod*, Symbol*2, Symbol*3)
+
+  [default-avfp-1'3] add-vlp-for-sort(Symbol,Symbol*2) = Prio*1,
+                     add-vlp-for-variables(Prod*, Symbol*2, Symbol Symbol*3) = [Symbol*4, Prio*2]
+                     ============================================================================
+                     add-vlp-for-variables(Symbol*1 -> Symbol Attrs Prod*, Symbol*2, Symbol*3) =
+                       [Symbol*4, Prio*1, Prio*2]
+
+  [avfs-1'1] add-vlp-for-sort($Sort, ) =
+
+  [avfs-1'2] $Sort2 != sort("L""A""Y""O""U""T"),
+             add-vlp-for-sort($Sort1, Symbol*) = Prio*
+             ========================================
+             add-vlp-for-sort($Sort1, $Sort2 Symbol*) =
+               < < $Sort1 -CF> -VAR> -> < $Sort1 -CF> >
+               < $Sort2 -LEX> -> < $Sort2 -CF>, Prio*
+
+  [avfs-1'3] add-vlp-for-sort($Sort1, Symbol*) = Prio*
+             ========================================
+             add-vlp-for-sort($Sort1, sort("L""A""Y""O""U""T") Symbol*) =
+               Prio*
+
+  [default-avfs-1'4] add-vlp-for-sort(Symbol, Symbol*) =
+
+  [clsm-1'1] collect-lexical-sorts-modules(,Symbol*) = Symbol*
+
+  [clsm-1'2] collect-lexical-sorts-module(Module,Symbol*1) = Symbol*2,
+             collect-lexical-sorts-modules(Module*,Symbol*2) = Symbol*3
+             ==========================================================
+             collect-lexical-sorts-modules(Module Module*,Symbol*1) = Symbol*3
+
+  [clsm-2'1] collect-lexical-sorts-sections(Section*,Symbol*1) = Symbol*2
+             ============================================================
+             collect-lexical-sorts-module(module ModName ImpSection* Section*,Symbol*1) = Symbol*2
+
+  [clss-1'1] collect-lexical-sorts-sections(,Symbol*) = Symbol*
+
+  [clss-1'2] collect-lexical-sorts-section(Section, Symbol*1) = Symbol*2,
+             collect-lexical-sorts-sections(Section*, Symbol*2) = Symbol*3
+             =============================================================
+             collect-lexical-sorts-sections(Section Section*, Symbol*1) = Symbol*3
+
+  [clss-2'1] collect-lexical-sorts-section(exports Grammar, Symbol*) =
+                collect-lexical-sorts-grammar(Grammar, Symbol*)
+
+  [clss-2'2] collect-lexical-sorts-section(hiddens Grammar, Symbol*) =
+               collect-lexical-sorts-grammar(Grammar, Symbol*)
+
+  [clsg-1'1] collect-lexical-sorts-grammar(Grammar1, Symbol*1) = Symbol*2,
+             collect-lexical-sorts-grammar(Grammar2, Symbol*2) = Symbol*3
+             ============================================================
+             collect-lexical-sorts-grammar(Grammar1 Grammar2, Symbol*1) = Symbol*3
+
+  [clsg-1'2] collect-lexical-sorts-productions(Prod*1, Symbol*1) = Symbol*2
+             ==============================================================
+             collect-lexical-sorts-grammar(lexical syntax Prod*1, Symbol*1) = Symbol*2
+
+  [default-clsg-1'3] collect-lexical-sorts-grammar(Grammar, Symbol*) = Symbol*
+
+  [clsp-1'1] collect-lexical-sorts-productions(,Symbol*) = Symbol*
+
+  [clsp-1'2] collect-lexical-sorts-productions(Symbol*1 -> $Sort Attrs Prod*1,
+                                               Symbol*2 $Sort Symbol*3) =
+               collect-lexical-sorts-productions(Prod*1,Symbol*2 $Sort Symbol*3)
+
+  [default-clsp-1'3] collect-lexical-sorts-productions(Prod*1,Symbol*2 $Sort) = Symbol*3
+                     ==================================================================
+                     collect-lexical-sorts-productions(Symbol*1 -> $Sort Attrs Prod*1,
+                                                       Symbol*2) = Symbol*3

@@ -1,0 +1,46 @@
+module languages/asf/addeqssyntax/Add-TagId-Rejects
+
+imports languages/sdf2/syntax/Sdf2 basic/Booleans
+
+exports
+  context-free syntax
+    "add-tagid-rejects" "(" Definition ")" -> Productions
+
+hiddens
+  context-free syntax
+    "add-tir-for-mod" "(" Module ")"              -> Productions
+    "add-tir-for-sections" "(" Section* ")"       -> Productions
+    "add-tir-for-section" "(" Section ")"         -> Productions
+    "add-tir-for-grammar" "(" Grammar ")"         -> Productions
+    "add-tir-for-productions" "(" Productions ")" -> Productions
+    "add-tir-for-production" "(" Production ")"   -> Productions
+    "add-tir-for-symbols" "(" Symbols ")"         -> Productions
+    "add-tir-for-symbol" "(" Symbol ")"           -> Productions
+
+hiddens
+  context-free syntax
+    "are-tagid-chars" "(" StrCon ")" -> Boolean
+
+hiddens
+  variables
+    "Attrs"[0-9]*        -> Attributes
+    "ImpSection*"[0-9]*  -> ImpSection*
+    "Grammar"[0-9]*      -> Grammar
+    "$Literal"[0-9]*     -> StrCon
+    "ModName"[0-9]*      -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "Prod"[0-9]*         -> Production
+    "Prod*"[0-9]*        -> Production*
+    "Section"[0-9]*      -> Section
+    "Section*"[0-9]*     -> Section*
+    "Sort"[0-9]*         -> Sort
+    "Symbol*"[0-9]*      -> Symbol*
+    "Symbol,*"[0-9]*     -> {Symbol ","}*
+    "Symbol"[0-9]*       -> Symbol
+
+  lexical variables
+    "C" -> StrChar
+    "C*" -> StrChar*
+    "C+"[0-9]* -> StrChar+
+

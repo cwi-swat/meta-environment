@@ -1,0 +1,45 @@
+module languages/asf/addeqssyntax/Add-Eqs-Conds 
+
+imports languages/sdf2/syntax/Sdf2 basic/Booleans
+
+exports
+  sorts SymbolsSet
+  context-free syntax
+    "[" Symbol* "]" -> SymbolsSet
+  context-free syntax
+    "create-eqs-and-conds" "(" Definition "," SymbolsSet ")" -> Productions
+
+hiddens
+  sorts
+    SymbolsSetProds
+  context-free syntax
+    "(" SymbolsSet "," Productions ")" -> SymbolsSetProds
+  context-free syntax
+    includes(Symbol, SymbolsSet) -> Boolean
+    add(Symbol, SymbolsSet)      -> SymbolsSet
+  context-free syntax
+    "eqs-and-conds-for-mod" "(" Module "," SymbolsSet ")"              -> SymbolsSetProds
+    "eqs-and-conds-for-sections" "(" Section* "," SymbolsSet ")"       -> SymbolsSetProds
+    "eqs-and-conds-for-section" "(" Section "," SymbolsSet ")"         -> SymbolsSetProds
+    "eqs-and-conds-for-grammar" "(" Grammar "," SymbolsSet ")"         -> SymbolsSetProds
+    "eqs-and-conds-for-productions" "(" Productions "," SymbolsSet ")" -> SymbolsSetProds
+    "eqs-and-conds-for-production" "(" Production "," SymbolsSet ")"   -> SymbolsSetProds
+
+hiddens
+  variables
+    "Attrs"[0-9]*        -> Attributes
+    "ImpSection*"[0-9]*  -> ImpSection*
+    "Grammar"[0-9]*      -> Grammar
+    "ModName"[0-9]*      -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "Prod"[0-9]*         -> Production
+    "Prod*"[0-9]*        -> Production*
+    "Section"[0-9]*      -> Section
+    "Section*"[0-9]*     -> Section*
+    "Symbol"[0-9]*       -> Symbol
+    "Symbol*"[0-9]*      -> Symbol*
+    "SymbolSep*"[0-9]*   -> {Symbol ","}*
+    "$"?"Literal"[0-9]*      -> StrCon
+    "Sort"[0-9]*         -> Sort
+    "SymbolsSet"[0-9]*   -> SymbolsSet
