@@ -72,9 +72,11 @@ ATerm findProduction(ATerm atModule, ATerm atTree)
   ATerm posInfo = queryProductionInModule(sdfModule, parseTree);
 
   if (posInfo) {
+    /*ATwarning("found %t\n", posInfo);*/
     return ATmake("snd-value(result(found(<term>)))", posInfo);
   }
   else {
+    /*ATwarning("not found\n");*/
     return ATmake("snd-value(result(not-found))");
   }
 }
@@ -85,6 +87,7 @@ ATerm findProduction(ATerm atModule, ATerm atTree)
 
 ATerm query(int cid, char *type, ATerm atModule, ATerm atTree)
 {
+  /*ATwarning("query: %s\n", type);*/
   if (strcmp(type, "symbol") == 0) {
     return findSortDefinition(atModule, atTree);
   }

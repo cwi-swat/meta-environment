@@ -111,6 +111,9 @@ static SDF_Production findProductionInModule(SDF_Production needle, SDF_Module h
     if (SDF_hasProductionListTail(productionList)) {
       productionList = SDF_getProductionListTail(productionList);
     }
+    else {
+      break;
+    }
   }
 
   return NULL;
