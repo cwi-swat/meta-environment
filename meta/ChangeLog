@@ -8,7 +8,7 @@ Tue Mar  1 14:07:44 CET 2005 <jurgenv@cwi.nl>
 	* production level: the user can annotate a production with the
 	  category(<str>) attribute. A number of predefined categories exist
 	  for the users convenience, but new ones can be added. Currently
-	  we have: Comment, Constant, Variable, Identifier, and Type.
+	  we have: Comment, Constant, Variable, Identifier, Type, and Todo.
 	* annotation level: the user can annotate a parse tree with an
 	  annotation having the "category" label. For example using the
 	  set-term-anno builtin in ASF. For this purpose we have predefined
