@@ -5,21 +5,17 @@
 POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
+IDEF=$(TOOLBUS)/bin/idef2tif
+TIFS=$(TOOLBUS)/bin/tifstoc
 
-%.tif.c %.tif.h: %.tifs
-	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
+tif:
+	for i in `ls *.idef`; do \
+          ${IDEF} $$i; \
+          ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
+        done
 
-%.tifs: %.idef
-	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
-
-%.tifs: %.tb
-	PATH=$(TOOLBUS)/bin:$${PATH} toolbus -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
+clean-tif:
+	rm -f *.tifs *.tif.[ch]
 
 CENTER="Meta-Environment Documentation"
 

@@ -13,11 +13,11 @@ bin_PROGRAMS = sdfchecker
 
 pkgdata_DATA    = sdfchecker.idef
 
-EXTRA_DIST   = sdfchecker.idef sdfchecker.tif.c sdfchecker.tif.h
+EXTRA_DIST   = sdfchecker.idef 
 
-sdfchecker_SOURCES = sdfchecker.c Sdf-Checker.c
-sdfchecker_LDADD   = sdfchecker.tif.o \
-                       -L$(ASC_SUPPORT)/lib -lasc-support-me \
+noinst_HEADERS = sdfchecker.tif.h
+sdfchecker_SOURCES = sdfchecker.c Sdf-Checker.c sdfchecker.tif.c
+sdfchecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept \
@@ -25,7 +25,3 @@ sdfchecker_LDADD   = sdfchecker.tif.o \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
 
-
-CLEANFILES = sdfchecker.tifs
-
-sdfchecker.o : sdfchecker.tif.h
