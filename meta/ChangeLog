@@ -1,6 +1,7 @@
 # $Id$
 
 Thu Jul 10 15:45:49 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
+ * started 0.3beta
  * images/*gif restored and renamed
  * improved buttons-adt and update several files to reflect new API
  * restored toolbar functionality
