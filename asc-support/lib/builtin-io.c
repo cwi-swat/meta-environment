@@ -66,6 +66,10 @@ static PT_Tree parse_result(ATerm result)
 {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
+  if (result == NULL) {
+    return (PT_Tree) CO_makeParseResultNoValidResult();
+  }
+
   if(SGisParseTree(result)) {
     PT_ParseTree pt = PT_ParseTreeFromTerm(result);
     int ambs = PT_getParseTreeAmbCnt(pt);
