@@ -9,7 +9,7 @@ pkgdata_DATA         = configmanager.idef standard.buttons
 
 EXTRA_DIST        = configmanager.idef standard.buttons standard.buttons.src
 
-CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
 
 noinst_HEADERS = configmanager.tif.h configmanager.h
 include_HEADERS = MetaButtons.h MetaButtons_dict.h 

@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Apr 28 17:29:06 2003
+ * Generated at Thu Jun  5 09:22:20 2003
  */
 
 #ifndef __MetaButtons_dict_H
@@ -21,6 +21,8 @@ extern ATerm MB_patternEditorTypeMessageList;
 extern ATerm MB_patternEditorTypeSyntax;
 extern ATerm MB_patternEditorTypeEquations;
 extern ATerm MB_patternEditorTypeTerm;
+extern ATerm MB_patternEditorTypesMany;
+extern ATerm MB_patternEditorTypesEmpty;
 extern ATerm MB_patternButtonEditor;
 extern ATerm MB_patternButtonListMany;
 extern ATerm MB_patternButtonListEmpty;

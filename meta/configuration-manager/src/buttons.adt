@@ -4,8 +4,11 @@
  [ButtonList, Empty, []],
  [ButtonList, Many,[<head(Button)>,<[tail(ButtonList)]>]],
 
- [Button, Editor, button(<module(str)>,<type(EditorType)>,
+ [Button, Editor, button(<module(str)>,<list(EditorTypes)>,
                          <name(term)>,<actions(term)>)],
+
+ [EditorTypes, Empty, []],
+ [EditorTypes, Many,[<head(EditorType)>,<[tail(EditorTypes)]>]],
 
  [EditorType, term, "term"],
  [EditorType, equations, "equations"],

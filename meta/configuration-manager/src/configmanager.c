@@ -9,7 +9,7 @@
 
 #define MAX_MESSAGE_LENGTH 133
 
-static char myversion[] = "2.0";     
+static char myversion[] = "3.0";     
 static MB_ButtonList buttons = NULL;
 static MB_ButtonList standardButtons = NULL;
 static ATermList userSearchPaths = NULL;
@@ -114,19 +114,30 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
 {
   MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
   ATermList buttonNames = ATempty;
-  MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
+  MB_EditorType editorType = 
+    MB_EditorTypeFromTerm(ATmake("<str>",editortype));
 
   while (!ATisEmpty(localButtons)) {
     MB_Button buttonDesc = MB_getButtonListHead(localButtons);
     char* buttonDescModule = MB_getButtonModule(buttonDesc);
-    MB_EditorType buttonDescType = MB_getButtonType(buttonDesc);
+    MB_EditorTypes buttonDescTypes = 
+      MB_getButtonList(buttonDesc);
     ATerm buttonDescName = MB_getButtonName(buttonDesc);
 
-    if (!strcmp(buttonDescModule, modulename) ||
-	!strcmp(buttonDescModule, "*")) {
-      if (ATisEqual(buttonDescType, editorType) ||
-	  MB_isEditorTypeAll(buttonDescType)) {
-	buttonNames = ATinsert(buttonNames,buttonDescName);
+    assert(MB_isValidEditorTypes(buttonDescTypes));
+
+    if (!strcmp(buttonDescModule, modulename) 
+	|| !strcmp(buttonDescModule, "*")) {
+      while (!ATisEmpty(buttonDescTypes)) {
+        MB_EditorType buttonDescType = 
+	  MB_getEditorTypesHead(buttonDescTypes);
+
+        if (ATisEqual(buttonDescType, editorType) 
+	    || MB_isEditorTypeAll(buttonDescType)) {
+	  buttonNames = ATinsert(buttonNames,buttonDescName);
+        }
+	buttonDescTypes = 
+	  MB_getEditorTypesTail(buttonDescTypes);
       }
     }
     localButtons = MB_getButtonListTail(localButtons);
@@ -143,7 +154,8 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,
 {
   char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
   MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
-  MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
+  MB_EditorType editorType = 
+    MB_EditorTypeFromTerm(ATmake("<str>",editortype));
   ATermList buttonActions;
   
   strncat(message, ATwriteToString(buttonName), 
@@ -155,16 +167,25 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,
     MB_Button buttonDesc = MB_getButtonListHead(localButtons);
     char* buttonDescModule = MB_getButtonModule(buttonDesc);
     ATerm buttonDescName = MB_getButtonName(buttonDesc);
-    MB_EditorType buttonDescType = MB_getButtonType(buttonDesc);
+    MB_EditorTypes buttonDescTypes = MB_getButtonList(buttonDesc);
     ATerm buttonDescActions = MB_getButtonActions(buttonDesc);
 
-    if (!strcmp(buttonDescModule, modulename) ||
-	!strcmp(buttonDescModule, "*")) {
-      if (MB_isEqualEditorType(buttonDescType, editorType) ||
-	  MB_isEditorTypeAll(buttonDescType)) {
-	if (ATisEqual(buttonDescName, buttonName)) {
-	  buttonActions = (ATermList) buttonDescActions;
-	}
+    assert(MB_isValidEditorTypes(buttonDescTypes));
+
+    if (!strcmp(buttonDescModule, modulename) 
+	|| !strcmp(buttonDescModule, "*")) {
+      while (!ATisEmpty(buttonDescTypes)) {
+        MB_EditorType buttonDescType = 
+	  MB_getEditorTypesHead(buttonDescTypes);
+
+        if (MB_isEqualEditorType(buttonDescType, editorType) 
+	    || MB_isEditorTypeAll(buttonDescType)) {
+	  if (ATisEqual(buttonDescName, buttonName)) {
+	    buttonActions = (ATermList) buttonDescActions;
+	  }
+        }
+	buttonDescTypes = 
+	  MB_getEditorTypesTail(buttonDescTypes);
       }
     }
     localButtons = MB_getButtonListTail(localButtons);

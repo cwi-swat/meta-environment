@@ -13,6 +13,7 @@
 typedef struct _MB_Buttons *MB_Buttons;
 typedef struct _MB_ButtonList *MB_ButtonList;
 typedef struct _MB_Button *MB_Button;
+typedef struct _MB_EditorTypes *MB_EditorTypes;
 typedef struct _MB_EditorType *MB_EditorType;
 typedef struct _MB_ModuleName *MB_ModuleName;
 
@@ -28,6 +29,8 @@ MB_ButtonList MB_ButtonListFromTerm(ATerm t);
 ATerm MB_ButtonListToTerm(MB_ButtonList arg);
 MB_Button MB_ButtonFromTerm(ATerm t);
 ATerm MB_ButtonToTerm(MB_Button arg);
+MB_EditorTypes MB_EditorTypesFromTerm(ATerm t);
+ATerm MB_EditorTypesToTerm(MB_EditorTypes arg);
 MB_EditorType MB_EditorTypeFromTerm(ATerm t);
 ATerm MB_EditorTypeToTerm(MB_EditorType arg);
 MB_ModuleName MB_ModuleNameFromTerm(ATerm t);
@@ -39,7 +42,9 @@ ATerm MB_ModuleNameToTerm(MB_ModuleName arg);
 MB_Buttons MB_makeButtonsList(MB_ButtonList list);
 MB_ButtonList MB_makeButtonListEmpty();
 MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail);
-MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions);
+MB_Button MB_makeButtonEditor(char * module, MB_EditorTypes list, ATerm name, ATerm actions);
+MB_EditorTypes MB_makeEditorTypesEmpty();
+MB_EditorTypes MB_makeEditorTypesMany(MB_EditorType head, MB_EditorTypes tail);
 MB_EditorType MB_makeEditorTypeTerm();
 MB_EditorType MB_makeEditorTypeEquations();
 MB_EditorType MB_makeEditorTypeSyntax();
@@ -53,6 +58,7 @@ MB_ModuleName MB_makeModuleNameAll();
 ATbool MB_isEqualButtons(MB_Buttons arg0, MB_Buttons arg1);
 ATbool MB_isEqualButtonList(MB_ButtonList arg0, MB_ButtonList arg1);
 ATbool MB_isEqualButton(MB_Button arg0, MB_Button arg1);
+ATbool MB_isEqualEditorTypes(MB_EditorTypes arg0, MB_EditorTypes arg1);
 ATbool MB_isEqualEditorType(MB_EditorType arg0, MB_EditorType arg1);
 ATbool MB_isEqualModuleName(MB_ModuleName arg0, MB_ModuleName arg1);
 
@@ -86,15 +92,28 @@ inline ATbool MB_isButtonEditor(MB_Button arg);
 ATbool MB_hasButtonModule(MB_Button arg);
 char * MB_getButtonModule(MB_Button arg);
 MB_Button MB_setButtonModule(MB_Button arg, char * module);
-ATbool MB_hasButtonType(MB_Button arg);
-MB_EditorType MB_getButtonType(MB_Button arg);
-MB_Button MB_setButtonType(MB_Button arg, MB_EditorType type);
+ATbool MB_hasButtonList(MB_Button arg);
+MB_EditorTypes MB_getButtonList(MB_Button arg);
+MB_Button MB_setButtonList(MB_Button arg, MB_EditorTypes list);
 ATbool MB_hasButtonName(MB_Button arg);
 ATerm MB_getButtonName(MB_Button arg);
 MB_Button MB_setButtonName(MB_Button arg, ATerm name);
 ATbool MB_hasButtonActions(MB_Button arg);
 ATerm MB_getButtonActions(MB_Button arg);
 MB_Button MB_setButtonActions(MB_Button arg, ATerm actions);
+
+/*}}}  */
+/*{{{  MB_EditorTypes accessors */
+
+ATbool MB_isValidEditorTypes(MB_EditorTypes arg);
+inline ATbool MB_isEditorTypesEmpty(MB_EditorTypes arg);
+inline ATbool MB_isEditorTypesMany(MB_EditorTypes arg);
+ATbool MB_hasEditorTypesHead(MB_EditorTypes arg);
+MB_EditorType MB_getEditorTypesHead(MB_EditorTypes arg);
+MB_EditorTypes MB_setEditorTypesHead(MB_EditorTypes arg, MB_EditorType head);
+ATbool MB_hasEditorTypesTail(MB_EditorTypes arg);
+MB_EditorTypes MB_getEditorTypesTail(MB_EditorTypes arg);
+MB_EditorTypes MB_setEditorTypesTail(MB_EditorTypes arg, MB_EditorTypes tail);
 
 /*}}}  */
 /*{{{  MB_EditorType accessors */
@@ -117,7 +136,8 @@ inline ATbool MB_isModuleNameAll(MB_ModuleName arg);
 
 MB_Buttons MB_visitButtons(MB_Buttons arg, MB_ButtonList (*acceptList)(MB_ButtonList));
 MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_Button));
-MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm));
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorTypes (*acceptList)(MB_EditorTypes), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm));
+MB_EditorTypes MB_visitEditorTypes(MB_EditorTypes arg, MB_EditorType (*acceptHead)(MB_EditorType));
 MB_EditorType MB_visitEditorType(MB_EditorType arg);
 MB_ModuleName MB_visitModuleName(MB_ModuleName arg);
 

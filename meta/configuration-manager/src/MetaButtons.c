@@ -9,6 +9,7 @@
 typedef struct ATerm _MB_Buttons;
 typedef struct ATerm _MB_ButtonList;
 typedef struct ATerm _MB_Button;
+typedef struct ATerm _MB_EditorTypes;
 typedef struct ATerm _MB_EditorType;
 typedef struct ATerm _MB_ModuleName;
 
@@ -68,6 +69,22 @@ MB_Button MB_ButtonFromTerm(ATerm t)
 /*{{{  ATerm MB_ButtonToTerm(MB_Button arg) */
 
 ATerm MB_ButtonToTerm(MB_Button arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_EditorTypesFromTerm(ATerm t) */
+
+MB_EditorTypes MB_EditorTypesFromTerm(ATerm t)
+{
+  return (MB_EditorTypes)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MB_EditorTypesToTerm(MB_EditorTypes arg) */
+
+ATerm MB_EditorTypesToTerm(MB_EditorTypes arg)
 {
   return (ATerm)arg;
 }
@@ -133,11 +150,27 @@ MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail)
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions) */
+/*{{{  MB_Button MB_makeButtonEditor(char * module, MB_EditorTypes list, ATerm name, ATerm actions) */
 
-MB_Button MB_makeButtonEditor(char * module, MB_EditorType type, ATerm name, ATerm actions)
+MB_Button MB_makeButtonEditor(char * module, MB_EditorTypes list, ATerm name, ATerm actions)
 {
-  return (MB_Button)(ATerm)ATmakeAppl4(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)type, (ATerm)name, (ATerm)actions);
+  return (MB_Button)(ATerm)ATmakeAppl4(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)list, (ATerm)name, (ATerm)actions);
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_makeEditorTypesEmpty() */
+
+MB_EditorTypes MB_makeEditorTypesEmpty()
+{
+  return (MB_EditorTypes)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_makeEditorTypesMany(MB_EditorType head, MB_EditorTypes tail) */
+
+MB_EditorTypes MB_makeEditorTypesMany(MB_EditorType head, MB_EditorTypes tail)
+{
+  return (MB_EditorTypes)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
 }
 
 /*}}}  */
@@ -204,6 +237,11 @@ ATbool MB_isEqualButtonList(MB_ButtonList arg0, MB_ButtonList arg1)
 }
 
 ATbool MB_isEqualButton(MB_Button arg0, MB_Button arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MB_isEqualEditorTypes(MB_EditorTypes arg0, MB_EditorTypes arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -451,9 +489,9 @@ MB_Button MB_setButtonModule(MB_Button arg, char * module)
 }
 
 /*}}}  */
-/*{{{  ATbool MB_hasButtonType(MB_Button arg) */
+/*{{{  ATbool MB_hasButtonList(MB_Button arg) */
 
-ATbool MB_hasButtonType(MB_Button arg)
+ATbool MB_hasButtonList(MB_Button arg)
 {
   if (MB_isButtonEditor(arg)) {
     return ATtrue;
@@ -462,24 +500,24 @@ ATbool MB_hasButtonType(MB_Button arg)
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_getButtonType(MB_Button arg) */
+/*{{{  MB_EditorTypes MB_getButtonList(MB_Button arg) */
 
-MB_EditorType MB_getButtonType(MB_Button arg)
+MB_EditorTypes MB_getButtonList(MB_Button arg)
 {
   
-    return (MB_EditorType)ATgetArgument((ATermAppl)arg, 1);
+    return (MB_EditorTypes)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_setButtonType(MB_Button arg, MB_EditorType type) */
+/*{{{  MB_Button MB_setButtonList(MB_Button arg, MB_EditorTypes list) */
 
-MB_Button MB_setButtonType(MB_Button arg, MB_EditorType type)
+MB_Button MB_setButtonList(MB_Button arg, MB_EditorTypes list)
 {
   if (MB_isButtonEditor(arg)) {
-    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)type, 1);
+    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)list, 1);
   }
 
-  ATabort("Button has no Type: %t\n", arg);
+  ATabort("Button has no List: %t\n", arg);
   return (MB_Button)NULL;
 }
 
@@ -547,6 +585,120 @@ MB_Button MB_setButtonActions(MB_Button arg, ATerm actions)
 
   ATabort("Button has no Actions: %t\n", arg);
   return (MB_Button)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MB_EditorTypes accessors */
+
+/*{{{  ATbool MB_isValidEditorTypes(MB_EditorTypes arg) */
+
+ATbool MB_isValidEditorTypes(MB_EditorTypes arg)
+{
+  if (MB_isEditorTypesEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isEditorTypesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isEditorTypesEmpty(MB_EditorTypes arg) */
+
+inline ATbool MB_isEditorTypesEmpty(MB_EditorTypes arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MB_patternEditorTypesEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isEditorTypesMany(MB_EditorTypes arg) */
+
+inline ATbool MB_isEditorTypesMany(MB_EditorTypes arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MB_patternEditorTypesMany, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasEditorTypesHead(MB_EditorTypes arg) */
+
+ATbool MB_hasEditorTypesHead(MB_EditorTypes arg)
+{
+  if (MB_isEditorTypesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_EditorType MB_getEditorTypesHead(MB_EditorTypes arg) */
+
+MB_EditorType MB_getEditorTypesHead(MB_EditorTypes arg)
+{
+  
+    return (MB_EditorType)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_setEditorTypesHead(MB_EditorTypes arg, MB_EditorType head) */
+
+MB_EditorTypes MB_setEditorTypesHead(MB_EditorTypes arg, MB_EditorType head)
+{
+  if (MB_isEditorTypesMany(arg)) {
+    return (MB_EditorTypes)ATreplace((ATermList)arg, (ATerm)head, 0);
+  }
+
+  ATabort("EditorTypes has no Head: %t\n", arg);
+  return (MB_EditorTypes)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasEditorTypesTail(MB_EditorTypes arg) */
+
+ATbool MB_hasEditorTypesTail(MB_EditorTypes arg)
+{
+  if (MB_isEditorTypesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_getEditorTypesTail(MB_EditorTypes arg) */
+
+MB_EditorTypes MB_getEditorTypesTail(MB_EditorTypes arg)
+{
+  
+    return (MB_EditorTypes)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_setEditorTypesTail(MB_EditorTypes arg, MB_EditorTypes tail) */
+
+MB_EditorTypes MB_setEditorTypesTail(MB_EditorTypes arg, MB_EditorTypes tail)
+{
+  if (MB_isEditorTypesMany(arg)) {
+    return (MB_EditorTypes)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
+  }
+
+  ATabort("EditorTypes has no Tail: %t\n", arg);
+  return (MB_EditorTypes)NULL;
 }
 
 /*}}}  */
@@ -748,19 +900,36 @@ MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_B
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm)) */
+/*{{{  MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorTypes (*acceptList)(MB_EditorTypes), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm)) */
 
-MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorType (*acceptType)(MB_EditorType), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm))
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorTypes (*acceptList)(MB_EditorTypes), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm))
 {
   if (MB_isButtonEditor(arg)) {
     return MB_makeButtonEditor(
         acceptModule ? acceptModule(MB_getButtonModule(arg)) : MB_getButtonModule(arg),
-        acceptType ? acceptType(MB_getButtonType(arg)) : MB_getButtonType(arg),
+        acceptList ? acceptList(MB_getButtonList(arg)) : MB_getButtonList(arg),
         acceptName ? acceptName(MB_getButtonName(arg)) : MB_getButtonName(arg),
         acceptActions ? acceptActions(MB_getButtonActions(arg)) : MB_getButtonActions(arg));
   }
   ATabort("not a Button: %t\n", arg);
   return (MB_Button)NULL;
+}
+
+/*}}}  */
+/*{{{  MB_EditorTypes MB_visitEditorTypes(MB_EditorTypes arg, MB_EditorType (*acceptHead)(MB_EditorType)) */
+
+MB_EditorTypes MB_visitEditorTypes(MB_EditorTypes arg, MB_EditorType (*acceptHead)(MB_EditorType))
+{
+  if (MB_isEditorTypesEmpty(arg)) {
+    return MB_makeEditorTypesEmpty();
+  }
+  if (MB_isEditorTypesMany(arg)) {
+    return MB_makeEditorTypesMany(
+        acceptHead ? acceptHead(MB_getEditorTypesHead(arg)) : MB_getEditorTypesHead(arg),
+        MB_visitEditorTypes(MB_getEditorTypesTail(arg), acceptHead));
+  }
+  ATabort("not a EditorTypes: %t\n", arg);
+  return (MB_EditorTypes)NULL;
 }
 
 /*}}}  */
