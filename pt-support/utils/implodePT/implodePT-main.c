@@ -46,9 +46,9 @@ void usage(void)
           "\t-q              interpret sequences\n"
           "\t-X              implode lexicals\n"
 	  "\n"
-	  "Note that if none of the [AclopILqX] switches are given, they are "
-          "all activated by default. If you give any of them, the others are "
-	  "off by default until you switch them on.\n" ,
+	  "Note that if none of the [AclopILqX] switches are given,\n"
+          "they are all activated by default. If you give any of them,\n"
+	  "the others are off by default until you switch them on.\n" ,
           myname, myarguments, myversion);
 }
 
