@@ -103,7 +103,7 @@ static void hiveClosed(int write_to_editor_fd)
 
 static void clearFocus(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("clear-focus"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(clear-focus)"));
 }
 
 /*}}}  */
@@ -111,7 +111,7 @@ static void clearFocus(int write_to_editor_fd)
 
 static void moveToFront(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("editor-to-front"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(editor-to-front)"));
 }
 
 /*}}}  */
@@ -119,7 +119,7 @@ static void moveToFront(int write_to_editor_fd)
 
 static void writeContents(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("write-contents"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(write-contents)"));
 }
 
 /*}}}  */
@@ -127,7 +127,7 @@ static void writeContents(int write_to_editor_fd)
 
 static void rereadContents(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("reread-contents"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(reread-contents)"));
 }
 
 /*}}}  */
@@ -135,11 +135,11 @@ static void rereadContents(int write_to_editor_fd)
 
 static void isModified(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("is-modified"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(is-modified)"));
 }
 
 /*}}}  */
-/*{{{  static void testSwingAction(int write_to_editor_fd, TE_Action action) */
+/*{{{  static void addActions(int write_to_editor_fd, TE_Action action) */
 
 static void addActions(int write_to_editor_fd, TE_Action action)
 {
@@ -175,7 +175,7 @@ static void setFocus(int write_to_editor_fd, TE_Action action)
 }
 
 /*}}}  */
-/*{{{  static void displayMessage(int write_to_editor_fd, TE_Action action) */
+/*{{{  static void setCursorAtOffset(int write_to_editor_fd, TE_Action action) */
 
 static void setCursorAtOffset(int write_to_editor_fd, TE_Action action)
 {
