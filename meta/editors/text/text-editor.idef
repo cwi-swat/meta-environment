@@ -89,19 +89,13 @@ in
     snd-ack-event(TE, set-current-location(Fid, Location))
   +
     rec-event(TE, changed(Fid)) .
-    snd-msg(change-status(EditorId)) .
+    (
+      rec-msg(set-focus(EditorId, Focus?)) 
+      *
+      snd-msg(change-status(EditorId))
+    ) .
     rec-msg(ack-change-status(EditorId)).
     snd-ack-event(TE, changed(Fid))
-  +
-    rec-event(TE, insert(Fid, Location?, Text?)) .
-    snd-msg(insert-chars(EditorId, Location, Text)) .
-    rec-msg(ack-insert-chars(EditorId)).
-    snd-ack-event(TE, insert(Fid, Location, Text))
-  +
-    rec-event(TE, delete(Fid, Location?, Count?)) .
-    snd-msg(delete-chars(EditorId, Location, Count)).
-    rec-msg(ack-delete-chars(EditorId)).
-    snd-ack-event(TE, delete(Fid, Location, Count))
   +
     rec-event(TE, modified(Fid)) .
     snd-msg(set-modified(EditorId)) .

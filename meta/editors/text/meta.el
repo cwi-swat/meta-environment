@@ -155,7 +155,7 @@ point."
 )
 
 (defun tb-changed-event (start end oldlength)
-  "Generates either a insert or a delete event to the ToolBus"
+  "Generates a changed event to the ToolBus"
 
   ; if this is one of our buffers
   (if (is-element (buffer-name) bufferlist)
@@ -167,34 +167,6 @@ point."
       )
     )
   )
-
-  ; if this is one of our buffers
-;  (if (is-element (buffer-name) bufferlist)
-;     (if (= oldlength 0)
- 		    ; this is for text-insertion,
-		    ; return insert(Bufname,Loc,Str)
-;			(TBevent (concat "insert(" 
-;                         (TBstring (buffer-name)) "," 
-;                         (number-to-string start) "," 
-;                         (TBstring (buffer-substring start end)) ")"
-;                 )
-;        )
-		
-        ; else this is for text-deletion,
-		    ; return delete(Bufname,Loc,Count)
-;				(TBevent (concat "delete(" 
-;                         (TBstring (buffer-name)) "," 
-;                         (number-to-string (+ start oldlength)) "," 
-;                         (number-to-string oldlength) ")" 
-;                 )
-;        )
-
-        ; Suspend xemacs until toolbus adapter has processed this event
-				; ***Hack Alert***
-;        (accept-process-output (get-process "adapter"))
-;				(discard-input)
-;		)
-;	)
 )
 
 ; declaring event handlers
