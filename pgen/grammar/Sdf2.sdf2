@@ -398,6 +398,8 @@ exports
     ShortChar -> Character
     "\\TOP"   -> Character
     "\\EOF"   -> Character
+    "\\BOT"   -> Character
+    "\\LABEL_START" -> Character
 
 module RealCon
 imports IntCon
