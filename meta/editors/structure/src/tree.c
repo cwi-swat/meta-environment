@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include <MEPT.h>
 #include <MEPT-utils.h>
@@ -37,10 +38,11 @@ getTreeSort(PT_Tree tree)
     return PT_getTreeSymbol(tree);
   }
   else if (PT_isTreeChar(tree)) {
-    char ch[2]; 
-    ch[0] = PT_getTreeCharacter(tree);
-    ch[1] = '\0';
-    return PT_makeSymbolSort(ch);
+    int ch = PT_getTreeCharacter(tree);
+
+    return PT_makeSymbolCharClass(PT_makeCharRangesList(
+                                  PT_makeCharRangeCharacter(ch),
+                                  PT_makeCharRangesEmpty()));
   }
   else if (PT_isTreeLit(tree)) {
     return PT_makeSymbolSort(PT_getTreeString(tree));
