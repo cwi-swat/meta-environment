@@ -134,9 +134,9 @@ ATermList SDF_getImports(SDF_Module module)
 
 /*{{{  static ATermList get_transitive_imports(ATermList todo) */
 
-static ATermList get_transitive_imports(ATermList todo)
+static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 {
-  ATermList result = ATempty;
+  SDF_ImportList result = SDF_makeImportListEmpty();
 
   /* The todo list contains imports with actual module parameters.
    * The result of this function will be a list of imports with the
@@ -145,20 +145,29 @@ static ATermList get_transitive_imports(ATermList todo)
 
   assert(moduleTable != NULL && "module table not initialized");
 
-  for (; !ATisEmpty(todo); todo = ATgetNext(todo)) {
-    SDF_Import     import = SDF_ImportFromTerm(ATgetFirst(todo));
-    SDF_ModuleName name = SDF_getImportModuleName(import);
-    SDF_ModuleId   id   = SDF_getModuleNameModuleId(name);
-    SDF_Start      smodule = MT_getModule(moduleTable, id);
-    SDF_Module     module = SDF_getStartTopModule(smodule);
-    SDF_Renamings  renamings = SDF_makeRenamingsRenamings(
+  for (; !SDF_isImportListEmpty(todo); todo = SDF_getImportListTail(todo)) {
+    SDF_Import     import;
+    SDF_ModuleName name;
+    SDF_ModuleId   id;
+    SDF_Start      smodule;
+    SDF_Module     module;
+    SDF_Renamings  renamings;
+
+    import = SDF_getImportListHead(todo);
+ATwarning("import =%t\n", import);
+    name = SDF_getImportModuleName(import);
+    id   = SDF_removeModuleIdAnnotations(
+			    SDF_getModuleNameModuleId(name));
+    smodule = MT_getModule(moduleTable, id);
+    module = SDF_getStartTopModule(smodule);
+    renamings = SDF_makeRenamingsRenamings(
                                  SDF_makeLayoutSpace(),
 			         SDF_makeRenamingListEmpty(),
 				 SDF_makeLayoutSpace());
 
     if (module != NULL &&
-	ATindexOf(result, SDF_ImportToTerm(import), 0) < 0) {
-      ATermList imports = SDF_getImports(module);
+	!SDF_containsImportListImport(result, import)) {
+      SDF_ImportList imports = SDF_getModuleImportsList(module);
 
       /* apply a renaming to the arguments of the import */
       if (SDF_isModuleNameParameterized(name)) {
@@ -170,13 +179,18 @@ static ATermList get_transitive_imports(ATermList todo)
 	imports = SDF_replaceParametersInImportList(imports, formals, actuals);
       }
 
-      todo = ATconcat(todo, imports);
+      todo = SDF_concatImportList(todo, imports);
 
       import = SDF_makeImportRenamedModule(
 	         SDF_makeModuleNameUnparameterized(id), 
 		 SDF_makeLayoutSpace(), renamings);
 
-      result = ATinsert(result, SDF_ImportToTerm(import));
+      result = SDF_concatImportList(result, 
+				    SDF_makeImportListSingle(import));
+    }
+
+    if (!SDF_hasImportListTail(todo)) {
+      break;
     }
   }
 
@@ -193,8 +207,9 @@ static void initModuleTable(ATermList modules)
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     SDF_Start smodule = SDF_StartFromTerm(ATgetFirst(modules));
     SDF_Module module = SDF_getStartTopModule(smodule);
-    SDF_ModuleId id = SDF_getModuleNameModuleId(
-	     	        SDF_getModuleModuleName(module));
+    SDF_ModuleId id = SDF_removeModuleIdAnnotations(
+			SDF_getModuleNameModuleId(
+	     	          SDF_getModuleModuleName(module)));
     MT_putModule(moduleTable, id, smodule);
   }
 }
@@ -203,23 +218,23 @@ static void initModuleTable(ATermList modules)
 
 /*{{{  static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) { */
 
-static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) 
+static SDF_ImportList do_get_transitive_imports(SDF_ModuleId moduleId) 
 {
   SDF_Import import = SDF_makeImportModule(
 		      SDF_makeModuleNameUnparameterized(moduleId)); 
 
   assert(moduleTable != NULL);
 
-  return get_transitive_imports(ATmakeList1(SDF_ImportToTerm(import)));
+  return get_transitive_imports(SDF_makeImportListSingle(import));
 }
 
 /*}}}  */
 
 /*{{{  ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId) */
 
-ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
+SDF_ImportList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
 {
-  ATermList result;
+  SDF_ImportList result;
 
   moduleTable = MT_createModuleTable();
   initModuleTable(modules);
@@ -257,6 +272,7 @@ static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id)
 static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
 {
   ATermList modules;
+  ATermList dependingModules = ATempty;
   assert(moduleTable != NULL);
 
   modules = MT_allModules(moduleTable);
@@ -268,11 +284,11 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
     if (imports_contains_id(imports, moduleId)) {
       ATerm mid = ATmake("<str>", 
 			 SDF_getCHARLISTString(SDF_getModuleIdChars(module)));
-      modules = ATinsert(modules, mid);
+      dependingModules = ATinsert(dependingModules, mid);
     }
   }
 
-  return modules;
+  return dependingModules;
 }
 
 /*}}}  */

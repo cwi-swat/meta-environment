@@ -242,31 +242,34 @@ static SDF_Import replaceParametersInImport(SDF_Import import,
 }
 
 /*}}}  */
-/*{{{  SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList, */
-
-ATermList SDF_replaceParametersInImportList(ATermList importList,
-                                             SDF_Symbols formalParams,
+SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
+					     SDF_Symbols formalParams,
                                              SDF_Symbols actualParams)
 {
   SDF_Import head, newHead;
-  ATermList result = ATempty;
+  SDF_ImportList tail, newTail;
 
-  for(;!ATisEmpty(importList); importList = ATgetNext(importList)) {
-    head = SDF_ImportFromTerm(ATgetFirst(importList));
+  if (SDF_hasImportListHead(importList)) {
+    head = SDF_getImportListHead(importList);
+
     newHead = replaceParametersInImport(head, formalParams, actualParams);
+    importList = SDF_setImportListHead(importList, newHead);
 
-    result = ATinsert(result, SDF_ImportToTerm(newHead));
+    if (SDF_hasImportListTail(importList)) {
+      tail = SDF_getImportListTail(importList);
+
+      newTail = SDF_replaceParametersInImportList(tail, formalParams, actualParams);
+      importList = SDF_setImportListTail(importList, newTail);
+    }
   }
-
-  return ATreverse(result);
+  return importList;
 }
 
-/*}}}  */
 /*{{{  SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName, */
 
-ATermList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
+SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
                                             SDF_Module sdfModule,
-                                            ATermList importList)
+                                            SDF_ImportList importList)
 {
   SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
   SDF_Symbols formalParams = SDF_getModuleNameParams(

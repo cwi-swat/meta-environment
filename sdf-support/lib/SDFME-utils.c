@@ -293,3 +293,8 @@ SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s)
 }
 
 /*}}}  */
+SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s)
+{
+  return SDF_ModuleIdFromTerm(ATremoveAllAnnotations(SDF_ModuleIdToTerm(s)));
+}
+

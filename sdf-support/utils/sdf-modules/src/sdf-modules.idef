@@ -62,10 +62,10 @@ in
     rec-msg(sm-is-valid-modulename-in-path(Path?, ModuleId?)) .
     snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
     (
-      rec-value(SM, yes) .
+      rec-value(SM, result(yes)) .
       snd-msg(sm-modulename-is-valid)
     +
-      rec-value(SM, no) .
+      rec-value(SM, result(no)) .
       snd-msg(sm-modulename-is-invalid)
     ) 
   +

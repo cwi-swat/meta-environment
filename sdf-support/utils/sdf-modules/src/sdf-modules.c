@@ -46,11 +46,11 @@ ATerm get_all_imports(int cid, ATerm atModules, char* name)
 {
   ATermList list = (ATermList) atModules;
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList imports;
+  SDF_ImportList imports;
  
   imports = SDF_getTransitiveImports(list, id);
-
-  return ATmake("snd-result(all-imports(<term>))", imports);
+ATwarning("get_all_imports returns al list of import trees, not names\n");
+  return ATmake("snd-value(all-imports(<term>))", imports);
 }
 
 /*}}}  */
@@ -58,10 +58,12 @@ ATerm get_all_imports(int cid, ATerm atModules, char* name)
 
 ATerm get_imports(int cid, ATerm atModule)
 {
-  SDF_Module module = SDF_ModuleFromTerm(atModule);
+  SDF_Start start = SDF_StartFromTerm(atModule);
+  SDF_Module module = SDF_getStartTopModule(start);
+
   ATermList imports = SDF_getImports(module);
  
-  return ATmake("snd-result(imports(<term>))", imports);
+  return ATmake("snd-value(imports(<term>))", imports);
 }
 
 /*}}}  */
@@ -73,7 +75,7 @@ ATerm get_all_depending_modules(int cid, ATerm atModules, char* name)
   ATermList list = (ATermList) atModules;
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
 
-  return ATmake("snd-result(all-depending-modules(<term>))",
+  return ATmake("snd-value(all-depending-modules(<term>))",
 		(ATerm) SDF_getDependingModuleIds(list, id));
 }
 
@@ -93,7 +95,7 @@ ATerm get_import_renamings(int cid, ATerm atImport)
   }
     
 
-  return ATmake("snd-result(renamings(<term>))", renamings);
+  return ATmake("snd-value(renamings(<term>))", renamings);
 }
 
 /*}}}  */
@@ -101,9 +103,10 @@ ATerm get_import_renamings(int cid, ATerm atImport)
 
 ATerm get_module_id(int cid, ATerm atModule)
 {
-  SDF_Module module = SDF_ModuleFromTerm(atModule);
+  SDF_Start start = SDF_StartFromTerm(atModule);
+  SDF_Module module = SDF_getStartTopModule(start);
 
-  return ATmake("snd-result(module-id(<str>))", SDF_getModuleName(module));
+  return ATmake("snd-value(module-id(<str>))", SDF_getModuleName(module));
 }
 
 /*}}}  */
@@ -119,7 +122,8 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
   SDF_Start start;
 
   for( ;!ATisEmpty(list); list = ATgetNext(list)) {
-    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
+    SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));
+    SDF_Module module = SDF_getStartTopModule(start);
 
     if (SDF_isModuleListEmpty(modules)) {
       modules = SDF_makeModuleListSingle(module);
@@ -132,7 +136,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
   sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
   start = SDF_makeStartSDF(space, sdf, space, 0);
 
-  return ATmake("snd-result(sdf-definition(<term>))", start); 
+  return ATmake("snd-value(sdf-definition(<term>))", start); 
 }
 
 /*}}}  */
@@ -145,7 +149,8 @@ ATerm get_import_graph(int cid, ATerm atModules)
   ATermList edges = ATempty;
 
   for (; !ATisEmpty(list); list = ATgetNext(list)) {
-    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
+    SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));
+    SDF_Module module = SDF_getStartTopModule(start);
     SDF_ModuleId id = SDF_getModuleNameModuleId(
 			SDF_getModuleModuleName(module));
     ATerm name = ATmake("<str>", 
@@ -159,14 +164,12 @@ ATerm get_import_graph(int cid, ATerm atModules)
       if (ATindexOf(edges, pair, 0) < 0) {
         edges = ATinsert(edges, pair);
       }
-
-      imports = ATgetNext(imports);
     }
 
     nodes = ATinsert(nodes, name);
   }
 
-  return ATmake("snd-result(import-graph(<term>,<term>))", nodes, edges);
+  return ATmake("snd-value(import-graph(<term>,<term>))", nodes, edges);
 }
 
 /*}}}  */
@@ -178,8 +181,8 @@ ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName)
   int i,j;
   int pathlen = strlen(path);
   int namelen = strlen(moduleName);
-  ATerm no = ATmake("snd-result(no)");
-  ATerm yes = ATmake("snd-result(yes)");
+  ATerm no = ATmake("snd-value(result(no))");
+  ATerm yes = ATmake("snd-value(result(yes))");
  
   for(i=pathlen - 1, j=namelen - 1; i >= 0 && j >= 0; i--, j--) {
     if (moduleName[j] != path[i]) {
