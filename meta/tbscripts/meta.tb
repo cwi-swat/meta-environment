@@ -24,7 +24,7 @@
  */
 
 #include "sglr.idef"
-#include "text-editor.tb"
+#include "text-editor.idef"
 #include "editor-creator.tb"
 #include "editor-manager.idef"
 #include "edit-syntax.tb"
