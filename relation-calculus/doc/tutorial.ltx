@@ -154,7 +154,7 @@ we offer a strongly typed language with user-defined types.
 \item We integrate an equation solver in a relational language. In this way
 dataflow problems can be expressed.
 
-\item We introduce an \emph{area} datatype with associated operations to
+\item We introduce an \emph{location} datatype with associated operations to
 easily manipulate references to source code.
 
 \item There is some innovation in syntactic notation and specific built-in
@@ -395,7 +395,7 @@ An \rscript consists of a sequence of declarations for variables and/or
 functions. Usually, the value of one of these variables is what the writer of the
 script is interested in.
 
-The language has scalar types (Boolean, integer, string, area) and
+The language has scalar types (Boolean, integer, string, location) and
 composite types (bag and relation). Expressions are constructed from
 comprehensions, function invocations and operators. These are all
 described below.
@@ -417,9 +417,10 @@ The string values are represented by the type {\tt str} and consist
 of character sequences surrounded by double quotes. e.g., {\tt "a"} or
 {\tt "a\ long\ string"}.
 
-\paragraph{Areas}
-Area values are represented by the type {\tt area} and serve as source text
-coordinates, they are written as in: {\tt area("/usr/paulk/myfile.c", 2, 3, 7,
+\paragraph{Locations}
+Location values are represented by the type {\tt loc} and serve as
+source text coordinates, they are always generated automatically but
+can be written as {\tt location(("/usr/paulk/myfile.c", area(2, 3, 7,
 55)}.
 
 \section{Tuples, Bags and Relations}
@@ -788,7 +789,7 @@ arithmetic operators ({\tt +}, {\tt -}, {\tt *}, and {\tt /}) and
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
 \item Operations on strings (Section~\ref{BO:str}):
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item operations on areas (Section~\ref{BO:area}).
+\item operations on locations (Section~\ref{BO:loc}).
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
 \item Operations on bags or relations (Section~\ref{BO:bag-or-rel}):
 membership tests ({\tt in}, {\tt notin}),
@@ -879,30 +880,30 @@ than or equal to \emph{str}$_2$  and {\tt false} otherwise\\ \hline
 and {\tt false} otherwise\\ \hline
 
 \end{tabular}
-\section{Operations on Areas} \label{BO:area}
+\section{Operations on Locations} \label{BO:loc}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{area}$_1$ {\tt ==} \emph{area}$_2$ & yields {\tt true} if both arguments
+\emph{loc}$_1$ {\tt ==} \emph{loc}$_2$ & yields {\tt true} if both arguments
 are identical and {\tt false}
 otherwise\\ \hline
 
-\emph{area}$_1$ {\tt !=} \emph{area}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
+\emph{loc}$_1$ {\tt !=} \emph{loc}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
 otherwise\\ \hline
 
-\emph{area}$_1$ {\tt <=} \emph{area}$_2$ & yields {\tt true} if
-\emph{area}$_1$ is textually contained in 
-or equal to \emph{area}$_2$ and {\tt false} otherwise\\ \hline
+\emph{loc}$_1$ {\tt <=} \emph{loc}$_2$ & yields {\tt true} if
+\emph{loc}$_1$ is textually contained in 
+or equal to \emph{loc}$_2$ and {\tt false} otherwise\\ \hline
 
-\emph{area}$_1$ {\tt <} \emph{area}$_2$ & yields {\tt true} if \emph{area}$_1$
-is strictly textually contained  in \emph{area}$_2$
+\emph{loc}$_1$ {\tt <} \emph{loc}$_2$ & yields {\tt true} if \emph{loc}$_1$
+is strictly textually contained  in \emph{loc}$_2$
 and {\tt false} otherwise\\ \hline
 
-\emph{area}$_1$ {\tt >=} \emph{area}$_2$ & yields {\tt true} if
-\emph{area}$_1$ textually encloses or
-or is equal to \emph{area}$_2$  and {\tt false} otherwise\\ \hline
+\emph{loc}$_1$ {\tt >=} \emph{loc}$_2$ & yields {\tt true} if
+\emph{loc}$_1$ textually encloses or
+or is equal to \emph{loc}$_2$  and {\tt false} otherwise\\ \hline
 
-\emph{area}$_1$ {\tt >} \emph{area}$_2$ & yields {\tt true} if \emph{area}$_1$
-strictly textually encloses \emph{area}$_2$
+\emph{loc}$_1$ {\tt >} \emph{loc}$_2$ & yields {\tt true} if \emph{loc}$_1$
+strictly textually encloses \emph{loc}$_2$
 and {\tt false} otherwise\\ \hline
 
 \end{tabular}
@@ -911,13 +912,13 @@ and {\tt false} otherwise\\ \hline
 
 \begin{itemize}
 
- \item {\tt area("f", 11, 1, 11, 9)  < area("f", 10, 2, 12, 8)} yields {\tt
+ \item {\tt location(``f'', area(11, 1, 11, 9))  < location("f", area(10, 2, 12, 8))} yields {\tt
  true}.
 
- \item {\tt area("f", 10, 3, 11, 7)  < area("f", 10, 2, 11, 8)} yields {\tt
+ \item {\tt location("f", area(10, 3, 11, 7))  < location("f", area(10, 2, 11, 8))} yields {\tt
  true}.
 
- \item {\tt area("f", 10, 3, 11, 7)  < area("g", 10, 3, 11, 7)} yields {\tt
+ \item {\tt location("f", area(10, 3, 11, 7))  < location("g", area(10, 3, 11, 7))} yields {\tt
  false}.
 
 \end{itemize}
@@ -1206,7 +1207,7 @@ the leaf elements ({\tt bottom}),
 reachability with restriction ({\tt reachR}), and
 reachability with exclusion ({\tt reachX}).
 
-\item Functions on areas (Section~\ref{areas}):
+\item Functions on Locations (Section~\ref{locations}):
 file name ({\tt filename}),
 beginning line ({\tt beginline}),
 first column ({\tt begincol}),
@@ -1570,70 +1571,70 @@ bag {\tt Excl} are used.
 \end{itemize}
 }
 %%---
-\section{Functions on Areas} \label{areas}
+\section{Functions on Locations} \label{locations}
 %%---
-\functiona{File Name of an Area}{filename}
+\functiona{File Name of a Location}{filename}
 \begin{exam}
 \begin{verbatim}
-str filename(area A) = primitive
+str filename(loc A) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the file name of area {\tt A}.}
+{Yields the file name of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@filename(area("pico1.trm",5,2,6,8))@ yields {\tt "pico1.trm"}.
+\item \verb@filename(location("pico1.trm",area(5,2,6,8)))@ yields {\tt "pico1.trm"}.
 \end{itemize}
 }
 %%----
-\functiona{Beginning Line of an Area}{beginline}
+\functiona{Beginning Line of a Location}{beginline}
 \begin{exam}
 \begin{verbatim}
-int beginline(area A) = primitive
+int beginline(loc A) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the first line of area {\tt A}.}
+{Yields the first line of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@beginline(area("pico1.trm",5,2,6,8))@ yields {\tt 5}.
+\item \verb@beginline(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 5}.
 \end{itemize}
 }
 %%----
-\functiona{First Column of an Area}{begincol}
+\functiona{First Column of a Location}{begincol}
 \begin{exam}
 \begin{verbatim}
-int begincol(area A) = primitive
+int begincol(loc A) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the first column of area {\tt A}.}
+{Yields the first column of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@begincol(area("pico1.trm",5,2,6,8))@ yields {\tt 2}.
+\item \verb@begincol(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 2}.
 \end{itemize}
 }
 %%----
-\functiona{Ending Line of an Area}{endline}
+\functiona{Ending Line of a Location}{endline}
 \begin{exam}
 \begin{verbatim}
-int endline(area A) = primitive
+int endline(loc A) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the last line of area {\tt A}.}
+{Yields the last line of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@endline(area("pico1.trm",5,2,6,8))@ yields {\tt 6}.
+\item \verb@endline(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 6}.
 \end{itemize}
 }
 %%----
-\functiona{Ending Column of an Area}{endcol}
+\functiona{Ending Column of a Location}{endcol}
 \begin{exam}
 \begin{verbatim}
-int endcol(area A) = primitive
+int endcol(loc A) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the last column of area {\tt A}.}
+{Yields the last column of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@endcol(area("pico1.trm",5,2,6,8))@ yields {\tt 8}.
+\item \verb@endcol(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 8}.
 \end{itemize}
 }
 %%----
@@ -1917,7 +1918,7 @@ predecessors.
 \end{itemize}
 
 In this example, we will use line numbers to identify the statements in the
-program.\footnote{In Section~\ref{SEC:UsingAreas}, we will use areas to represent statements.}
+program.\footnote{In Section~\ref{SEC:UsingLocations}, we will use locations to represent statements.}
 
 Assuming that there is a tool to extract the above information from a program text,
 we get the following for the above example:
@@ -2002,21 +2003,21 @@ Taking the range of the relations {\tt DEFS} and {\tt USES} yields the
 variables that are defined, respectively, used in the program. The difference
 of these two bags yields the unused variables, in this case \verb@{"p"}@.
 
-\section{Using Areas to Represent Program Fragments}\label{SEC:UsingAreas}
+\section{Using Locations to Represent Program Fragments}\label{SEC:UsingLocations}
 
 One aspect of the example we have just seen is artificial: where do these
 line numbers come from that we used to indicate statements in the program?
-One solution is to let the extraction phase generate \emph{area}s
+One solution is to let the extraction phase generate \emph{locations}
 to precisely indicate relevant places in the program text.
 
-Recall from Section~\ref{SEC:ElementaryTypes}, that an area is 5-tuple
-consisting of a file name, a begin line, a begin position, an end line, and an
-end position. Also recall that areas can be compared: an area $A_1$ is smaller
-than another area $A_2$, if $A_1$ is textually contained in $A_2$.
-By including areas in the final answer of a relational
+Recall from Section~\ref{SEC:ElementaryTypes}, that a location
+consists of a file name, a begin line, a begin position, an end line, and an
+end position. Also recall that locations can be compared: a location $A_1$ is smaller
+than another location $A_2$, if $A_1$ is textually contained in $A_2$.
+By including locations in the final answer of a relational
 expression, external tools will be able to highlight places of interest in the
 source text. The first step, is to define the types {\tt stat} and {\tt var}
-as aliases for {\tt area} (instead of {\tt int} and {\tt str}):
+as aliases for {\tt loc} (instead of {\tt int} and {\tt str}):
 
 \begin{exam}\begin{verbatim} 
 type stat = int
@@ -2028,10 +2029,10 @@ Of course, the actual relations are now represented differently.
 For instance,  the {\tt USES} relation may now look like:
 \begin{exam}
 \begin{verbatim}
-{ < area ("/home/paulk/pico1.trm", 11, 2, 11, 8), "z">, 
-  < area ("/home/paulk/pico1.trm", 6, 2, 10, 4), "q">, 
-  < area ("/home/paulk/pico1.trm", 7, 8, 7, 18), "x">, 
-  < area ("/home/paulk/pico1.trm", 7, 8, 7, 18), "y"> }
+{ < location("/home/paulk/pico1.trm", area(11, 2, 11, 8)), "z">, 
+  < location("/home/paulk/pico1.trm", area(6, 2, 10, 4)), "q">, 
+  < location("/home/paulk/pico1.trm", area(7, 8, 7, 18)), "x">, 
+  < location("/home/paulk/pico1.trm", area(7, 8, 7, 18)), "y"> }
 \end{verbatim}
 \end{exam}
 
@@ -2043,7 +2044,7 @@ relation {\tt OCCURS} that relates variable names to their occurrences.  The
 new relation {\tt OCCURS} will have to generated by the program extraction phase.
 
 \begin{exam}\begin{verbatim}
-type var-occ = area
+type var-occ = loc
 rel[var,var-occ] OCCURS
 \end{verbatim}
 \end{exam}
@@ -2059,7 +2060,7 @@ rel[var, var-occ] UNINIT-OCC =
 \end{verbatim}
 \end{exam}
 Here we consider all tuples {\tt <S, V>} in {\tt UNINIT} and all occurrences of variable {\tt V}.
-Those variable occurrences that are contained in {\tt S} (using a comparison of areas)
+Those variable occurrences that are contained in {\tt S} (using a comparison of locations)
 are included in the result.
 
 \section{McCabe Cyclomatic Complexity}
@@ -2658,14 +2659,169 @@ in Figure~\ref{FIG:slicing}(b).
 \end{itemize}
 }
 
-\chapter{Running a \rscript} \label{SEC:running-rscript}
+\chapter{Installing and Running \rscript} \label{SEC:running-rscript}
 
-Currently, the definition of \rscript resides in the CWI cvs repository {\tt /ufs/glt/CVS}.
-You can checkout your own copy by means of
-{\tt cvs -d ssh.cwi.nl:/ufs/glt/CVS co relation-calculus} (provided that you have an account at CWI).
-Otherwise you have to obtain a {\tt tar.gz} file of the relation calculus.
+\section{Installing \rscript}
+\rscript is available from \url{www.cwi.nl/projects/MetaEnv/...}
+as \texttt{relation-calculus-0.1.tar.gz}.
 
-\paragraph{Running a script}
+It requires a recent version (e.g. 1.5) of the ASF+SDF
+Meta-Environment to run.
+
+A typical installation session on a typical Unix/Linux system
+consists of the following steps:
+
+\begin{itemize}
+
+\item Extract all files from the distribution:
+  \texttt{tar xvf relation-calculus-0.1.tar.gz --gunzip}
+This command uncompresses the distribution file, creates a subdirectory
+\texttt{relation-calculus-0.1} and places all directories and files
+from the distribution in it.
+
+\item Change to the new directory:
+  \texttt{cd relation-calculus-0.1}
+\item Configure the sources: \texttt{./configure}
+
+\item Build and install application: \texttt{make install}
+
+\end{itemize}
+
+See the files \texttt{INSTALL} and \texttt{README} for more specific
+installation instructions.
+
+
+\section{Running \rscript from the command line} \label{SEC:running-commandline}
+
+\subsection{File extensions}
+The following file extensions are used by the command line tools:
+
+\begin{itemize}
+
+\item \texttt{.rscript} is the required file name extension for files that contain an \rscript.
+
+\item \texttt{.rstore} is the required file name extension for files
+that contain an rstore.  As intermediate result rstores also occur in
+parsed form and then have the extension \texttt{.rstore.pt}. The tools
+transparently accept rstores in both forms.
+
+\item \texttt{.rviz} is the required file name extension for files
+that contain relational data that are to be visualized.
+
+\end{itemize}
+
+\subsection{\texttt{rscript}: check and execute an rscript}
+The command \texttt{rscript} takes care of parsing, typechecking, and
+executing an \rscript. Optionally, the script can only be checked, can
+use a given rstore, be executed as test suite, or yield the value of a
+given variable from the resulting rstore.
+
+\begin{itemize}
+
+\item \texttt{-c} or \texttt{check-only}:
+Only check the rscript for syntactic errors or typechecking errors
+but do not execute it.
+
+\item \texttt{-h} or \texttt{--help}; print help information.
+
+\item \texttt{-i} \emph{name} or \texttt{--input} \emph{name}:
+The \rscript to be processed is on file \emph{name}.
+By default, the script is assumed to be on standard input.
+
+\item \texttt{-o} \emph{name} or \texttt{--output-parse-tree} \emph{name}:
+The result of the execution of the \rscript is an rstore and is written to file \emph{name}.
+Note that this rstore is in the form of a parse tree.
+By default, the resulting rstore is printed in textual form to standard output.
+
+\item \texttt{-s} \emph{name} or \texttt{--store} \emph{name}:
+The \rscript is executed using an initial rstore taken from file \emph{name}.
+By default, the initial rstore is empty.
+
+
+\item \texttt{-t} ot \texttt{--testsuite}:
+Execute the \rscript as a testsuite, i.e., execute all \texttt{assert} statements and report
+which ones failed.
+
+\item \texttt{-v} or \texttt{--verbose}: give verbose output.
+
+\item \texttt{-y} \emph{name} or \texttt{--yield} \emph{name}:
+Instead of producing a complete rstore as the result of executing the rscript,
+only return the value of the variable \emph{name}.r
+\end{itemize}
+
+The following examples illustrate the use of the \texttt{rscript} command:
+
+\begin{itemize}
+
+\item  \texttt{rscript query.rscript} executes the script \texttt{query.rscript}
+and prints the resulting rstore on standard output.
+
+\item \texttt{rscript -i query.rscript -s previous.rstore -o result.rstore.pt}:
+executes the same script, but uses \texttt{previous.rstore} as initial rstore.
+
+\item \texttt{rscript -y nCalls calls.rscript}:
+executes the script \texttt{calls.rscript} and prints the value of the variable \texttt{nCalls}
+in the resulting rstore.
+
+\item \texttt{rscript -t tests1.rscript}:
+excutes \texttt{tests2.rscript} as test suite.
+
+
+\end{itemize}
+
+
+\subsection{\texttt{merge-rstores}: combine several rstores}
+
+The command \texttt{merge-rstores} merges several rstores into a new
+rstore.  This command is used in a scenario where an extraction tool
+extracts facts from each source file in a software portfolio to be
+analyzed and deposits these facts in a separate rstore per source
+file.  When the complete portfolio is to be analyzed, the separate
+rstores have to be merged into a single one. This merged rstore is then
+used as initial rstore for the execution of some rscript.
+
+The command has as arguments, a list of names of rstores to be merged.
+
+The following optional arguments are supported:
+
+\begin{itemize}
+\item \texttt{-h} or \texttt{--help}: print help information.
+
+\item \texttt{-o} \emph{name} or \texttt{--output} \emph{name}:
+the name of the merged rstore is \emph{name}.
+By default, the output is \texttt{result.rstore.pt}.
+\note{tool should check for right output form}
+
+\item \texttt{-v} or \texttt{--verbose}: give verbose output.
+
+\end{itemize}
+
+
+\subsection{\texttt{rstore2rviz}: convert rstore to visualization format}
+The command \texttt{rstore2rviz} takes an rstore as input and converts it
+to the \texttt{.rviz} format that is accepted by the visualization tool \texttt{rviz}.
+
+\begin{itemize}
+
+\item \texttt{-h} or \texttt{--help}: print help information.
+
+\item \texttt{-i} \emph{name} or \texttt{--input} \emph{name}:
+rstore comes from file \emph{name}. By default: standard input.
+
+\item \texttt{-o} \emph{name} or \texttt{--output} \emph{name}:
+the result is written to file \emph{name}. By default, this is
+a file named \texttt{result.rviz}.
+
+\item \texttt{-v} or \texttt{--verbose}: give verbose output.
+
+\end{itemize}
+Example:
+   -i query.rstore -o query.rviz
+
+\subsection{\texttt{rviz}: visualize an rstore}
+
+
+\section{Running \rscript Interactively} \label{SEC:running-interactive}
 \begin{itemize}
 \item Change to your checked out copy of the directory {\tt relation-calculus}.
 \item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
@@ -2702,25 +2858,6 @@ operators and functions.
 
 The subdirectory {\tt demo} contains larger demos.
 
-\chapter{Differences with Previous Versions}
-\rscript is in under active development and several (incompatible)  changes
-have been made in the last few weeks. Here is an indicative list.
-
-\begin{itemize}
-
-\item The syntax of comprehension has been changed. Old
-\begin{verbatim}
-  { <X, Y> : <X, Y> in R | X in B and Y  in B }
-\end{verbatim}
-New:
-\begin{verbatim}
-  { <X, Y> | <X, Y> : R, X in B and Y in B }
-\end{verbatim}
-
-\item The type {\tt node} has been renamed into {\tt area}
-
-\end{itemize}
-
 \section*{Acknowledgments}
 Taeke Kooiker, Tijs van der Storm.
 
@@ -2744,32 +2881,32 @@ Taeke Kooiker, Tijs van der Storm.
 {\tt or} & Boolean or & \ref{BO:bool}\\
 {\tt union} & Union of bags/relations& \ref{BO:bag-or-rel}\\
 {\tt ==}  & Equality of integers & \ref{BO:int}\\
-{\tt ==}  & Equality of areas & \ref{BO:area}\\
+{\tt ==}  & Equality of areas & \ref{BO:loc}\\
 {\tt ==}  & Equality of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt !=}  & Inequality of integers & \ref{BO:int}\\
 {\tt !=}  & Inequality of strings & \ref{BO:str}\\
-{\tt !=}  & Inequality of areas & \ref{BO:area}\\
+{\tt !=}  & Inequality of areas & \ref{BO:loc}\\
 {\tt !=}  & Inequality of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt <=}  & Less than or equal of integers & \ref{BO:int}\\
 {\tt <=}  & Less than or equal of strings & \ref{BO:str}\\
-{\tt <=}  & Textual inclusion of areas & \ref{BO:area}\\
+{\tt <=}  & Textual inclusion of areas & \ref{BO:loc}\\
 {\tt <=}  & Subset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt <}  & Less than of integers & \ref{BO:int}\\
 {\tt <}  & Less than of strings & \ref{BO:str}\\
-{\tt <}  & Strict textual inclusion of areas & \ref{BO:area}\\
+{\tt <}  & Strict textual inclusion of areas & \ref{BO:loc}\\
 {\tt <}  & Strict subset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt >=}  & Greater than or equal of integers & \ref{BO:int}\\
 {\tt >=}  & Greater than or equal of strings & \ref{BO:str}\\
-{\tt >=}  & Textual containment of areas & \ref{BO:area}\\
+{\tt >=}  & Textual containment of areas & \ref{BO:loc}\\
 {\tt >=}  & Superset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt >}  & Greater than of integers & \ref{BO:int}\\
 {\tt >}  & Greater than of strings & \ref{BO:str}\\
-{\tt >}  & Strict textual containment of areas & \ref{BO:area}\\
+{\tt >}  & Strict textual containment of areas & \ref{BO:loc}\\
 {\tt >}  & Strict superset of bags/relations & \ref{BO:bag-or-rel}\\
 
 {\tt +}  & Addition of integers & \ref{BO:int}\\
