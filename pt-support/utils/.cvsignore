@@ -6,7 +6,7 @@ unparsePT
 implodePT
 unparseProd
 addPosInfo
-*.tif.[ch]
 ambtracker
 tree2dot
 apply-function
+*.tifs
