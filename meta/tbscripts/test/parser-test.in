@@ -1,0 +1,31 @@
+#! /bin/sh
+
+# $Id$
+
+toolbus=__bindir__/toolbus
+datadir=__datadir__
+
+call_toolbus () {
+  script=$1
+  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  if echo $result | grep -iq failed; then
+    echo ${result}
+    exit 1
+  else
+    echo -n "."
+  fi
+}
+
+# Attempt to open the Sdf2 language.
+call_toolbus open-sdf2-lang-test.tb
+
+# Attempt to open a non-existing table.
+call_toolbus open-table-test-1.tb
+
+# Attempt to open an erroneous table.
+@rm -f ErroneousTable.tbl
+@echo "table" > ErroneousTable.tbl
+call_toolbus open-table-test-2.tb
+@rm -f ErroneousTable.tbl
+
+echo ""

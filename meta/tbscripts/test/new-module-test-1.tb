@@ -11,7 +11,7 @@ process Test is
     rec-msg(module-exists) .
     printf("new-module-test-1 FAILED!\n")
   +
-    shutdown("test-1 FAILED! (timeout)\n") delay(sec(5))
+    shutdown("new-module-test-1 FAILED! (timeout)\n") delay(sec(5))
   ) .
   shutdown("") delay(sec(2))
 

@@ -7,16 +7,20 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
 
-# CLEANFILES are removed by 'make clean'
-CLEANFILES	= module-test
+TESTCASES	= module-test eqs-test parser-test
 
-test: module-test eqs-test
-	./module-test
-	./eqs-test
+# CLEANFILES are removed by 'make clean'
+CLEANFILES	= ${TESTCASES}
+
+test: ${TESTCASES}
+	@for testcase in ${TESTCASES}; do \
+		echo -n "Running $${testcase}"; \
+		./$${testcase}; \
+	done
 
 clean:
-	rm -f *.o *~ $(CLEANFILES)
+	@rm -f *.o *~ $(CLEANFILES)
 
 %: %.in
-	sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
-	chmod +x $@
+	@sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
+	@chmod +x $@

@@ -2,20 +2,32 @@
 
 # $Id$
 
-# Now let's do something
-
 toolbus=__bindir__/toolbus
 datadir=__datadir__
 
+call_toolbus () {
+  script=$1
+  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  if echo $result | grep -iq failed; then
+    echo ${result}
+    exit 1
+  else
+    echo -n .
+  fi
+}
+
 # Test 1. Attempt to create a non-existing module.
-${toolbus} -I${datadir} new-module-test-1.tb
+rm -f NonExistingModule.sdf2
+call_toolbus new-module-test-1.tb
 rm -f NonExistingModule.sdf2
 
 # Test 2. Attempt to create a module that would overwrite an existing file.
 rm -f ./ExistingModule.sdf2
 echo "module ExistingModule" > ./ExistingModule.sdf2
-${toolbus} -I${datadir} new-module-test-2.tb
+call_toolbus new-module-test-2.tb
 rm -f ./ExistingModule.sdf2
 
 # Test 3. Attempt to create a module that already exists in the module-db.
-${toolbus} -I${datadir} new-module-test-3.tb
+call_toolbus new-module-test-3.tb
+
+echo ""

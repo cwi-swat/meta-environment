@@ -2,15 +2,8 @@
 
 # $Id$
 
-# Now let's do something
-
 toolbus=__bindir__/toolbus
 datadir=__datadir__
-
-#result=`${toolbus} -I${datadir} new-eqs-test.tb 2>&1`
-#echo $result
-
-#exit 0
 
 call_toolbus () {
   script=$1
@@ -19,7 +12,7 @@ call_toolbus () {
     echo ${result}
     exit 1
   else
-    echo -n "."
+    echo -n .
   fi
 }
 
@@ -33,4 +26,4 @@ echo "equations" > Aap.eqs
 call_toolbus new-eqs-test.tb
 rm -f Aap.eqs
 
-echo
+echo ""
