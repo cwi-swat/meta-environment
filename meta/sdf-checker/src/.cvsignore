@@ -4,3 +4,4 @@ Makefile
 sdfchecker.tif.h
 sdfchecker.tif.c
 sdfchecker
+.libs
