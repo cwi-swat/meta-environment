@@ -1,11 +1,10 @@
 // Java tool interface UserInterfaceTif
 // This file is generated automatically, please do not edit!
-// generation time: Oct 29, 2002 4:18:01 PM
+// generation time: Jan 30, 2003 2:36:41 PM
 
 package metastudio;
 
-import aterm.*;
-import toolbus.*;
+import aterm.ATerm;
 
 public interface UserInterfaceTif
 {
@@ -14,7 +13,7 @@ public interface UserInterfaceTif
   public void moduleInfo(String s0, ATerm t1);
   public void addStatusf(ATerm t0, String s1, ATerm t2);
   public void errorf(String s0, ATerm t1);
-  public void graphLayouted(ATerm t0);
+  public void graphLayouted(String s0, ATerm t1);
   public void initializeUi(String s0, String s1, String s2, String s3, String s4);
   public void deleteModules(ATerm t0);
   public void error(String s0);

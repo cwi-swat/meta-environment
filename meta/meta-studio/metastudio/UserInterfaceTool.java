@@ -1,13 +1,13 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Oct 29, 2002 4:18:01 PM
+// generation time: Jan 30, 2003 2:36:41 PM
 
 package metastudio;
 
-import aterm.*;
-import toolbus.*;
-import java.net.*;
 import java.util.*;
+
+import toolbus.AbstractTool;
+import aterm.*;
 
 abstract public class UserInterfaceTool
   extends AbstractTool
@@ -61,7 +61,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,delete-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
@@ -77,7 +77,7 @@ abstract public class UserInterfaceTool
     PmoduleInfo0 = factory.parse("rec-do(module-info(<str>,<term>))");
     PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
-    PgraphLayouted0 = factory.parse("rec-do(graph-layouted(<term>))");
+    PgraphLayouted0 = factory.parse("rec-do(graph-layouted(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>,<str>,<str>,<str>,<str>))");
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
@@ -123,7 +123,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PgraphLayouted0);
     if (result != null) {
-      graphLayouted((ATerm)result.get(0));
+      graphLayouted((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PinitializeUi0);

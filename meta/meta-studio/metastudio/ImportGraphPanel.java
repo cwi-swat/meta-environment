@@ -4,7 +4,7 @@ import metastudio.graph.*;
 
 import java.awt.event.*;
 
-public class ModuleGraphPanel
+public class ImportGraphPanel
   extends GraphPanel
   implements ModuleSelectionListener
 {
@@ -12,8 +12,9 @@ public class ModuleGraphPanel
 
   //{{{ public ModuleGraphPanel(ModuleManager moduleManager)
 
-  public ModuleGraphPanel(final ModuleManager moduleManager)
+  public ImportGraphPanel(final ModuleManager moduleManager)
   {
+    super("import");
     this.moduleManager = moduleManager;
     moduleManager.addModuleSelectionListener(this);
 

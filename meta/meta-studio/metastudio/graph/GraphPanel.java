@@ -1,10 +1,9 @@
 package metastudio.graph;
 
-import java.util.*;
-import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+
 import javax.swing.*;
 
 import metastudio.Preferences;
@@ -29,6 +28,8 @@ public class GraphPanel
 
   //}}}
 
+  private String id;
+  
   private Graph graph;
 
   private int max_x;
@@ -55,8 +56,9 @@ public class GraphPanel
 
   //{{{ public GraphPanel()
 
-  public GraphPanel()
+  public GraphPanel(String id)
   {
+    this.id = id;
     transform = new AffineTransform();
     setAutoscrolls(true);
 
@@ -215,7 +217,7 @@ public class GraphPanel
       // large number below 32k so the whole background will be filled.
       g.fillRect(0, 0, 32000, 32000);
 
-      Stroke stroke = g2d.getStroke();
+      //Stroke stroke = g2d.getStroke();
       //g2d.setStroke(new BasicStroke((float)1.5));
       setupColors();
       paintNodes(g2d);
@@ -565,4 +567,8 @@ public class GraphPanel
   }
 
   //}}}
+  public String getId() {
+    return id;
+  }
+
 }

@@ -1,11 +1,10 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Oct 29, 2002 4:18:01 PM
+// generation time: Jan 30, 2003 2:36:41 PM
 
 package metastudio;
 
 import aterm.*;
-import toolbus.*;
 
 public class UserInterfaceBridge
   extends UserInterfaceTool
@@ -87,12 +86,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void graphLayouted(ATerm t0)
+  //{{{  public void graphLayouted(String s0, ATerm t1)
 
-  public void graphLayouted(ATerm t0)
+  public void graphLayouted(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.graphLayouted(t0);
+      tool.graphLayouted(s0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `graphLayouted' not supported.");

@@ -1,11 +1,11 @@
 package metastudio;
 
-import java.util.*;
-import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
-import javax.swing.table.*;
 import javax.swing.border.*;
 
 public class ModuleStatusPanel
