@@ -11,28 +11,27 @@ let
   ModuleName: str,
   Editors: list,
   EditorId : term,
-  Extension : str,
   Path : str,
   FileName : str
 in
   execute(editor-manager, EM?) .
   subscribe(delete-editor(<term>)) .
   (
-    rec-msg(get-editor-id(Path?, Extension?, ModuleName?)) .
-    snd-eval(EM, get-editor-id(Path, Extension, ModuleName)) .
+    rec-msg(get-editor-id(FileName?, ModuleName?)) .
+    snd-eval(EM, get-editor-id(FileName,  ModuleName)) .
     (
-      rec-value(EM, new-editor(FileName?, EditorId?)) .
-      snd-msg(new-editor(FileName, EditorId))
+      rec-value(EM, new-editor(EditorId?)) .
+      snd-msg(new-editor(EditorId))
     +
       rec-value(EM, existing-editor(FileName?, EditorId?)) .
-      snd-msg(existing-editor(FileName, EditorId))
+      snd-msg(existing-editor(EditorId))
     )
   +
     rec-msg(check-editor-id(Name?, ModuleName?)) .
     snd-eval(EM, check-editor-id(Name, ModuleName)) .
     (
       rec-value(EM, existing-editor(EditorId?)) .
-      snd-msg(existing-editor(Name, EditorId))
+      snd-msg(existing-editor(EditorId))
     +
       rec-value(EM, non-existing-editor) .
       snd-msg(non-existing-editor(Name))

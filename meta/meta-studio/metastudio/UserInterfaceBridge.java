@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 28, 2003 4:22:03 PM
+// generation time: May 26, 2003 10:13:54 PM
 
 package metastudio;
 
@@ -30,19 +30,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `addStatus' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void finishedOpeningModules(ATerm t0)
-
-  public void finishedOpeningModules(ATerm t0)
-  {
-    if (tool != null) {
-      tool.finishedOpeningModules(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `finishedOpeningModules' not supported.");
     }
   }
 

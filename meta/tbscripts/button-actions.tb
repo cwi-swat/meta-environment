@@ -386,12 +386,12 @@ in
         fi
       +
         rec-msg(exists(FileName?), Stack?, EditorId?) .
-        snd-msg(exists-named-file(FileName)) .
+        snd-msg(io-exists-file(FileName)) .
         (
-          rec-msg(file-exists(FileName)) .
+          rec-msg(io-file-exists(FileName)) .
           ReturnSuccess(EditorId,Stack)
         +
-          rec-msg(file-not-exists(FileName)) .
+          rec-msg(io-file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
           ReturnAbort(EditorId,Stack)
@@ -475,8 +475,8 @@ in
           rec-msg(save-done(Name))
         else
           Text := first(args(Tree)) .
-          snd-msg(write-text-file(Path,"",[Text])).
-          rec-msg(file-written)
+          snd-msg(io-write-text-file(Path,[Text])).
+          rec-msg(io-file-written)
         fi .
         ReturnSuccess(EditorId, Stack)
       +
@@ -554,11 +554,11 @@ process GetTextFromFile(FileName: str, Text: str?) is
 let
   ErrorMessage      : str
 in
-  snd-msg(read-named-file(FileName)).
+  snd-msg(io-read-file(FileName)).
   (
-    rec-msg(file-contents(Text?)) 
+    rec-msg(io-file-contents(Text?)) 
   +
-    rec-msg(error-reading(ErrorMessage?)) .
+    rec-msg(io-error-reading(ErrorMessage?)) .
     Text := error-text
   )
 endlet
@@ -693,15 +693,15 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(write-text-file(FileName,"",[Text])) .
+    snd-msg(io-write-text-file(FileName,[Text])) .
     (
-      rec-msg(file-written(FileName)) .
+      rec-msg(io-file-written(FileName)) .
       snd-note(reload-file(EditorId, FileName)) .
       snd-msg(move-focus-to-root(EditorId)) .
       rec-msg(focus-moved(EditorId, Focus?)) .
       snd-note(set-focus(EditorId, Focus))
     +
-      rec-msg(file-not-written)
+      rec-msg(io-file-not-written)
     )
   +
     rec-msg(no-tree)
@@ -734,8 +734,8 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(write-text-file(FileName,"",[Text])) .
-    rec-msg(file-written) .
+    snd-msg(io-write-text-file(FileName,[Text])) .
+    rec-msg(io-file-written) .
     snd-note(reload-file(EditorId, FileName)) .
     snd-note(set-focus(EditorId, Focus))
   +
@@ -792,8 +792,8 @@ in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(write-text-file(FileName,"",[Text])) .
-    rec-msg(file-written) .
+    snd-msg(io-write-text-file(FileName,[Text])) .
+    rec-msg(io-file-written) .
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
     rec-msg(editor-opened(ModuleName, EditorId?))
   fi
@@ -804,8 +804,8 @@ let
   EditorId    : term,
   NewModuleName : str
 in
-  snd-msg(write-text-file(FileName,"",[Text])) .
-  rec-msg(file-written) .
+  snd-msg(io-write-text-file(FileName,[Text])) .
+  rec-msg(io-file-written) .
   snd-msg(edit-term-file(ModuleName, FileName)) .
   rec-msg(editor-opened(ModuleName, EditorId?))
 endlet

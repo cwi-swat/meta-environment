@@ -29,14 +29,16 @@ in
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
       if equal(FileName, "") then
-        snd-msg(write-term-file(Path, ".trm.tbl", Table))
+        snd-msg(io-get-filename(Path, ModuleName, ".trm.tbl")) .
+	rec-msg(io-filename(FileName?)) 
       else
-        snd-msg(write-term-file(FileName, "", Table))
+        tau
       fi .
+      snd-msg(io-write-term-file(FileName, Table)) .
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?))
+        rec-msg(io-file-not-written(ErrorMessage?))
       )
     +
       rec-msg(no-parse-table(trm(ModuleName)))

@@ -29,7 +29,7 @@ process ModuleDB is
 let
   Path      : str,
   Table     : term,
-  ModuleId  : term,
+  ModuleId  : str,
   Syntax    : term,
   OldSyntaxTree : term,
   SyntaxTree: term,
@@ -43,7 +43,8 @@ let
   Nodes     : list,
   Edges     : list,
   DependingModules : list,
-  ModuleNames : list
+  ModuleNames : list,
+  FileName : str
 in
   MDB-InitializeModuleDb() .
   MDB-InitializeFileExtensions() .
@@ -79,31 +80,27 @@ in
   +
     rec-msg(add-sdf-module-to-db(Name?, Path?, 
 				 SyntaxText?, SyntaxTree?)) .
-    snd-msg(sm-is-valid-modulename-in-path(Path, Name)) .
-    (
-      rec-msg(sm-modulename-is-valid) .
-      if not-equal(SyntaxTree, no-tree) then
-        snd-msg(sm-get-module-id(SyntaxTree)) .
-        rec-msg(sm-module-id(ModuleId?)) .
-        printf("DEBUG: addPosInfo still needs an extension concatenated\n") .
-        snd-msg(addPosInfo(Path, SyntaxTree)) .
-        rec-msg(tree-with-pos-info(SyntaxTree?)) .
-        snd-msg(ts-put-value("sdf-tree", ModuleId, tree(SyntaxTree))) .
-	snd-msg(sm-get-imported-module-names(SyntaxTree)) .
-	rec-msg(sm-imported-module-names(Modules?)) 
-      else 
-        ModuleId := Name .
-	Modules := []
-      fi .
-      snd-msg(ts-put-value("active-modules", ModuleId, path(Path))) .
-      snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
-      snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
-      printf("DEBUG: just get the imported modules, not just the new ones?\n").
-      snd-msg(adding-succeeded(Name,ModuleId, Modules))
-    +
-      rec-msg(sm-modulename-is-invalid) .
-      snd-msg(error-opening(Name, name-inconsistency))
-    )
+    if not-equal(SyntaxTree, no-tree) then
+      snd-msg(sm-get-module-id(SyntaxTree)) .
+      rec-msg(sm-module-id(ModuleId?)) .
+      snd-msg(sm-get-module-path(Path, ModuleId)) .
+      rec-msg(sm-module-path(Path?)) .
+      snd-msg(io-get-filename(Path, ModuleId, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(addPosInfo(FileName, SyntaxTree)) .
+      rec-msg(tree-with-pos-info(SyntaxTree?)) .
+      snd-msg(ts-put-value("sdf-tree", ModuleId, tree(SyntaxTree))) .
+      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      rec-msg(sm-imported-module-names(Modules?)) 
+    else 
+      ModuleId := Name .
+      Modules := []
+    fi .
+    snd-msg(ts-put-value("active-modules", ModuleId, path(Path))) .
+    snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
+    snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
+    printf("DEBUG: just get the imported modules, not just the new ones?\n").
+    snd-msg(adding-succeeded(Name,ModuleId,Path,Modules))
   +
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))
@@ -164,8 +161,10 @@ in
     rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
     snd-msg(ts-get-value("module-paths", Name)) .
     rec-msg(ts-value(path(Path?))) .
-    printf("DEBUG: no extension yet using addPosInfo and also no depth maximum!\n") .
-    snd-msg(addPosInfo(Path,EqsTree)) .
+    snd-msg(io-get-filename(Path, Name, ".asf")) .
+    rec-msg(io-filename(FileName?)) .
+    printf("DEBUG: addPosinfo used to be restricted to a certain depth\n") .
+    snd-msg(addPosInfo(FileName,EqsTree)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-value("asf-tree", Name, tree(EqsTree))) .
     snd-msg(eqs-updated)

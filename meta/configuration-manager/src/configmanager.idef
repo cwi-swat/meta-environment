@@ -17,12 +17,12 @@ let
   Contents : str,
   ErrorMessage : str
 in
-  snd-msg(read-file(BUTTON_FILE, "")) .
+  snd-msg(io-read-file(BUTTON_FILE)) .
   (
-    rec-msg(file-contents(Contents?)) .
+    rec-msg(io-file-contents(Contents?)) .
     snd-eval(CMNG, process-button-file(BUTTON_FILE, Contents))
   +
-    rec-msg(error-reading(ErrorMessage?)) .
+    rec-msg(io-error-reading(ErrorMessage?)) .
     snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
   ) .
   rec-value(CMNG, buttons-processed) .
@@ -48,17 +48,17 @@ let
   ErrorMessage  : str
 in
   execute(configmanager, CMNG?) .
-  snd-msg(read-file(CONFIG_FILE, "")) .
+  snd-msg(io-read-file(CONFIG_FILE)) .
   (
-    rec-msg(file-contents(Text?))
+    rec-msg(io-file-contents(Text?))
   +
-    rec-msg(error-reading(ErrorMessage?)) .
+    rec-msg(io-error-reading(ErrorMessage?)) .
     Text := "."
   ) .
   snd-eval(CMNG, parse-config-file(Text)) .
   rec-value(CMNG, directories(Directories?)) .
-  snd-msg(relative-to-absolute(Directories)) .
-  rec-msg(absolute-directories(Directories?)) .
+  snd-msg(io-relative-to-absolute(Directories)) .
+  rec-msg(io-absolute-directories(Directories?)) .
   snd-do(CMNG, register-user-directories(Directories)) .
 
   snd-msg(library-location-hook).

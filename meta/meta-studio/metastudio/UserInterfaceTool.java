@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 28, 2003 4:22:03 PM
+// generation time: May 26, 2003 10:13:54 PM
 
 package metastudio;
 
@@ -18,7 +18,6 @@ abstract public class UserInterfaceTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PaddStatus0;
-  private ATerm PfinishedOpeningModules0;
   private ATerm PmoduleInfo0;
   private ATerm PaddStatusf0;
   private ATerm Perrorf0;
@@ -58,7 +57,6 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,error(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,errorf(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>,<str>,<str>,<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,finished-opening-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,delete-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
@@ -76,7 +74,6 @@ abstract public class UserInterfaceTool
   private void initPatterns()
   {
     PaddStatus0 = factory.parse("rec-do(add-status(<term>,<str>))");
-    PfinishedOpeningModules0 = factory.parse("rec-do(finished-opening-modules(<term>))");
     PmoduleInfo0 = factory.parse("rec-do(module-info(<str>,<term>))");
     PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
@@ -104,11 +101,6 @@ abstract public class UserInterfaceTool
     result = term.match(PaddStatus0);
     if (result != null) {
       addStatus((ATerm)result.get(0), (String)result.get(1));
-      return null;
-    }
-    result = term.match(PfinishedOpeningModules0);
-    if (result != null) {
-      finishedOpeningModules((ATerm)result.get(0));
       return null;
     }
     result = term.match(PmoduleInfo0);

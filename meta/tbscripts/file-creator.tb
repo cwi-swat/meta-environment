@@ -21,20 +21,21 @@ in
                                 [ModuleName])))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(exists-file(Path, ".sdf")) .
+      snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-exists-file(FileName)) .
       (
-        rec-msg(file-exists) .
+        rec-msg(io-file-exists) .
         snd-note(ui-status(
 	errorf("Module %s already exists on disk", [ModuleName])))
       +
-        rec-msg(file-not-exists) .
-        snd-msg(write-text-file(Path, ".sdf", 
-	                        ["module ", ModuleName, "\n"])) .
+        rec-msg(io-file-not-exists) .
+        snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
         (
-          rec-msg(file-written) .
-	  snd-msg(open-initial-module(Path, ModuleName))
+          rec-msg(io-file-written) .
+	  snd-msg(open-initial-module(Path, ModuleName, ".sdf"))
         +
-          rec-msg(file-not-written(ErrMsg?)) .
+          rec-msg(io-file-not-written(ErrMsg?)) .
 	  snd-note(ui-status(errorf("%s", [ErrMsg])))
         )
       )
@@ -49,26 +50,28 @@ in
       rec-msg(exists-in-module-db(ModuleName)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
-      snd-msg(exists-file(Path, ".asf")) .
+      snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-exists-file(FileName)) .
       (
-        rec-msg(file-exists) .
-	snd-msg(read-file(Path, ".asf")) .
-	rec-msg(file-contents(text(Text?))) .
+        rec-msg(io-file-exists) .
+	snd-msg(io-read-file(FileName)) .
+	rec-msg(io-file-contents(text(Text?))) .
 	snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
 	rec-msg(eqs-added) .
 	snd-msg(new-equations-created)
       +
-        rec-msg(file-not-exists) .
-	snd-msg(write-text-file(Path, ".asf", [])) .
+        rec-msg(io-file-not-exists) .
+	snd-msg(io-write-text-file(FileName, [])) .
         (
-          rec-msg(file-written) .
-	  snd-msg(read-file(Path, ".asf")) .
-	  rec-msg(file-contents(Text?)) .
+          rec-msg(io-file-written) .
+	  snd-msg(io-read-file(FileName)) .
+	  rec-msg(io-file-contents(Text?)) .
           snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
           rec-msg(eqs-added) .
           snd-msg(new-equations-created)
         +
-          rec-msg(file-not-written(ErrMsg?)) . 
+          rec-msg(io-file-not-written(ErrMsg?)) . 
 	  snd-note(ui-status(errorf("%s", ErrMsg))) .
           snd-msg(new-equations-not-created)
         )

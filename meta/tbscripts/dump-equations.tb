@@ -2,15 +2,19 @@
   $Id$
  */
 
-process WriteEquations(Path : str, Extension : str, Equations : term) is
+process WriteEquations(Path : str, ModuleName : str, Extension : str, 
+                       Equations : term) is
 let
-  Message : str
+  Message : str,
+  FileName : str
 in
-  snd-msg(write-term-file(Path, Extension, Equations)) .
+  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-write-term-file(FileName, Equations)) .
   (
-    rec-msg(file-written)
+    rec-msg(io-file-written)
   +
-    rec-msg(file-not-written(Message?))
+    rec-msg(io-file-not-written(Message?))
   )
 endlet
 
@@ -27,7 +31,7 @@ in
     snd-msg(get-all-equations(ModuleName)) .
     (
       rec-msg(all-equations(Equations?)) .
-      WriteEquations(Path, ".eqs", Equations)
+      WriteEquations(Path,ModuleName, ".eqs", Equations)
       +
       rec-msg(equations-incomplete) .
       snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))

@@ -21,95 +21,75 @@ let
 in
   execute(in-output,IO?).
   (
-    rec-msg(relative-to-absolute(Directories?)) .
+    rec-msg(io-relative-to-absolute(Directories?)) .
     snd-eval(IO, relative-to-absolute(Directories)) .
     rec-value(IO, absolute-directories(Directories?)) .
-    snd-msg(absolute-directories(Directories))
+    snd-msg(io-absolute-directories(Directories))
   +
-    rec-msg(find-file(Directories?, Name?, Extension?)) .
+    rec-msg(io-find-file(Directories?, Name?, Extension?)) .
     snd-eval(IO, find-file(Directories, Name, Extension)) .
     (
       rec-value(IO, file-found(Directories?)) .
-      snd-msg(file-found(Directories))
+      snd-msg(io-file-found(Directories))
     +
       rec-value(IO, file-not-found) .
-      snd-msg(file-not-found)
+      snd-msg(io-file-not-found)
     )
   +
-    rec-msg(exists-file(Path?, Extension?)) .
-    snd-eval(IO, exists-file(Path, Extension)) .
+    rec-msg(io-exists-file(FileName?)) .
+    snd-eval(IO, exists-file(FileName)) .
     (
       rec-value(IO, success) .
-      snd-msg(file-exists)
+      snd-msg(io-file-exists)
     +
       rec-value(IO, failure(ErrorMessage?)) .
-      snd-msg(file-not-exists)
+      snd-msg(io-file-not-exists)
     )
   +
-    rec-msg(write-text-file(Path?, Extension?, ContentList?)) .
-    snd-eval(IO, write-text-file(Path, Extension, ContentList)) .
+    rec-msg(io-write-text-file(FileName?, ContentList?)) .
+    snd-eval(IO, write-text-file(FileName, ContentList)) .
     (
       rec-value(IO, success) .
-      snd-msg(file-written)
+      snd-msg(io-file-written)
     +
       rec-value(IO, failure(Text?)) .
-      snd-msg(file-not-written(Text))
+      snd-msg(io-file-not-written(Text))
     )
   +
-    rec-msg(write-term-file(Path?, Extension?, Term?)) .
-    snd-eval(IO, write-term-file(Path, Extension, Term)) .
+    rec-msg(io-write-term-file(FileName?, Term?)) .
+    snd-eval(IO, write-term-file(FileName, Term)) .
     ( 
       rec-value(IO, success) .
-      snd-msg(file-written)
+      snd-msg(io-file-written)
     +
       rec-value(IO, failure(Text?)) .
-      snd-msg(file-not-written(Text))
+      snd-msg(io-file-not-written(Text))
     )
   +
-    rec-msg(read-named-file(Path?)).
-    snd-eval(IO,read-named-text-file(Path)).
+    rec-msg(io-read-file(FileName?)) .
+    snd-eval(IO,read-text-file(FileName)) .
     (
       rec-value(IO,file-contents(Contents?)).
-      snd-msg(file-contents(Contents))
-    + 
-      rec-value(IO, failure(ErrorMessage?)).
-      snd-msg(error-reading(Path))
-    )
-  +
-    rec-msg(read-file(Path?, Extension?)).
-    snd-eval(IO,read-text-file(Path, Extension)).
-    (
-      rec-value(IO,file-contents(Contents?)).
-      snd-msg(file-contents(Contents))
+      snd-msg(io-file-contents(Contents))
     + 
       rec-value(IO,failure(ErrorMessage?)).
-      snd-msg(error-reading(ErrorMessage))
+      snd-msg(io-error-reading(ErrorMessage))
     )
   +
-    rec-msg(exists-named-file(Name?)) .
-    snd-eval(IO, exists-named-file(Name)) .
-    (
-      rec-value(IO, success) .
-      snd-msg(file-exists(Name))
-    +
-      rec-value(IO, failure(ErrorMessage?)) .
-      snd-msg(file-not-exists(Name))
-    )
-  +
-    rec-msg(compare-files(FileName1?, FileName2?)) .
+    rec-msg(io-compare-files(FileName1?, FileName2?)) .
     snd-eval(IO, compare-files(FileName1, FileName2)) .
     (
       rec-value(IO, equal) .
-      snd-msg(files-equal)
+      snd-msg(io-files-equal)
     +
       rec-value(IO, different) .
-      snd-msg(files-differ)
+      snd-msg(io-files-differ)
     )
   +
-    rec-msg(get-filename(Directory?, Name?, Extension?)) .
+    rec-msg(io-get-filename(Directory?, Name?, Extension?)) .
     snd-eval(IO, get-filename(Directory, Name, Extension)) .
     rec-value(IO, filename(FileName?)) .
-    snd-msg(filename(FileName))
+    snd-msg(io-filename(FileName))
   ) *
   delta
 endlet

@@ -1,6 +1,6 @@
 // Java tool interface UserInterfaceTif
 // This file is generated automatically, please do not edit!
-// generation time: Apr 28, 2003 4:22:03 PM
+// generation time: May 26, 2003 10:13:54 PM
 
 package metastudio;
 
@@ -9,7 +9,6 @@ import aterm.*;
 public interface UserInterfaceTif
 {
   public void addStatus(ATerm t0, String s1);
-  public void finishedOpeningModules(ATerm t0);
   public void moduleInfo(String s0, ATerm t1);
   public void addStatusf(ATerm t0, String s1, ATerm t2);
   public void errorf(String s0, ATerm t1);

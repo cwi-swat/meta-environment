@@ -40,25 +40,28 @@ let
   Tree : term,
   Text : str,
   FileName : str,
-  Message : str
+  Message : str,
+  Path : str
 in
   Tree := none.
   Text := "".
   snd-msg(get-path-from-db(ModuleName)) .
-  rec-msg(path(FileName?)) .
+  rec-msg(path(Path?)) .
+  snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
   snd-msg(get-sdf2-asfix(ModuleName)).
   (
     rec-msg(syntax(Tree?))
   +
     rec-msg(unavailable).
-    snd-msg(read-file(FileName, ".sdf")) .
+    snd-msg(io-read-file(FileName)) .
     (
-      rec-msg(file-contents(Text?))
+      rec-msg(io-file-contents(Text?))
     +
-      rec-msg(error-reading(Message?))
+      rec-msg(io-error-reading(Message?))
     )
   ) .
-  CreateEditor("syntax",ModuleName,FileName,".sdf",Text,Tree)
+  CreateEditor("syntax",ModuleName,FileName,Text,Tree)
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -75,6 +78,9 @@ in
   Text := "" .
   snd-msg(get-path-from-db(ModuleName)) .
   rec-msg(path(Path?)) .
+  snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+  rec-msg(io-filename(FileName?)) .
+  printf("filename: %s\n", FileName) .
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?)) 
@@ -95,7 +101,7 @@ in
     )
   ) .
   if equal(Status, success) then
-    CreateEditor("equations",ModuleName,Path,".asf",Text,Tree)
+    CreateEditor("equations",ModuleName,FileName,Text,Tree)
   else
     tau
   fi   
@@ -107,24 +113,23 @@ let
   ErrorMessage : str
 in
   Text := "".
-  snd-msg(read-file(FileName,"")) .
+  snd-msg(io-read-file(FileName)) .
   (
-    rec-msg(file-contents(Text?))
+    rec-msg(io-file-contents(Text?))
     +
-    rec-msg(error-reading(ErrorMessage?)) 
+    rec-msg(io-error-reading(ErrorMessage?)) 
   ).
-  CreateEditor("term",ModuleName,FileName,"",Text,Tree)
+  CreateEditor("term",ModuleName,FileName,Text,Tree)
 endlet
 
 process CreateEditor(Type : str, ModuleName : str, 
-                     Path : str, Extension : str, 
+                     FileName : str, 
 		     Text : str, Tree : term) is
 let
   EditorId   : term,
   ButtonList : list,
   Pid        : int,
-  Focus      : term,
-  FileName   : str
+  Focus      : term
 in
     /* The 'creates' in the following process are essential to 
      * spawn the actual editors and make the editor creation 
@@ -132,9 +137,9 @@ in
      */
     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName,ButtonList?)).
-    snd-msg(get-editor-id(Path, Extension, ModuleName)) .
+    snd-msg(get-editor-id(FileName, ModuleName)) .
     (
-      rec-msg(new-editor(FileName?, EditorId?)) .
+      rec-msg(new-editor(EditorId?)) .
       snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
       rec-msg(initial-focus(Focus?)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
@@ -143,7 +148,7 @@ in
       rec-msg(text-editor-initialized(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     +
-      rec-msg(existing-editor(FileName?, EditorId?)) .
+      rec-msg(existing-editor(EditorId?)) .
       snd-note(move-editor-to-front(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     )

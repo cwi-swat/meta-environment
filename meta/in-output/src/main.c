@@ -144,27 +144,6 @@ static char *expandPath(const char *relative_path)
 }
 
 /*}}}  */
-/*{{{  static char *makeFileName(char *path, char *extension) */
-
-static char *makeFileName(char *path, char *extension)
-{
-  char *fileName = NULL;
-
-  assert(strlen(path) != 0 && "path is empty");
-
-  fileName = calloc(sizeof(char), strlen(path) + strlen(extension) + 1);
-
-  if (fileName != NULL) {
-    sprintf(fileName,"%s%s", path, extension);
-  }
-  else {
-    return NULL;
-  }
-
-  return fileName;
-}
-
-/*}}}  */
 /*{{{  static ATbool filesEqual(const char *f1, const char *f2) */
 
 static ATbool filesEqual(const char *f1, const char *f2)
@@ -252,30 +231,6 @@ static ATerm read_raw_from_named_file(char *fileName)
 }
 
 /*}}}  */
-/*{{{  ATerm read_named_text_file(int cid, char *fileName) */
-
-ATerm read_named_text_file(int cid, char *fileName)
-{
-  return read_raw_from_named_file(fileName);
-}
-
-/*}}}  */
-/*{{{  ATerm exists_named_file(int cid, char *fileName) */
-
-ATerm exists_named_file(int cid, char *fileName)
-{
-  ATerm result;
-
-  if (fileExists(fileName)) {
-    result = createSuccessMessage();
-  }
-  else {
-    result = createErrorMessage("file does not exist");
-  }
-  return result;
-}
-
-/*}}}  */
 
 /* io-tool interface implementation */
 /*{{{  ATerm relative_to_absolute(int cid, ATerm paths) */
@@ -303,11 +258,10 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 }
 
 /*}}}  */
-/*{{{  ATerm read_text_file(int cid, char *path, char *extension) */
+/*{{{  ATerm read_text_file(int cid, char *fileName) */
 
-ATerm read_text_file(int cid, char *path, char *extension)
+ATerm read_text_file(int cid, char *fileName)
 {
-  char *fileName = makeFileName(path, extension);
   ATerm t = read_raw_from_named_file(fileName);
 
   free(fileName);
@@ -315,13 +269,11 @@ ATerm read_text_file(int cid, char *path, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm write_text_file(int cid, char *fileName, char *path, char *extension, char *content) */
+/*{{{  ATerm write_text_file(int cid, char *fileName, ATerm content) */
 
-ATerm write_text_file(int cid, char *path,
-		      char *extension, ATerm content)
+ATerm write_text_file(int cid, char *fileName, ATerm content)
 {
   ATermList list = (ATermList) content;
-  char *fileName = makeFileName(path, extension);
   FILE *file = NULL;
   ATerm message;
 
@@ -358,12 +310,10 @@ ATerm write_text_file(int cid, char *path,
 }
 
 /*}}}  */
-/*{{{  ATerm write_term_file(int cid, char *path, char *extension, ATerm content) */
+/*{{{  ATerm write_term_file(int cid,  char *fileName, ATerm packedContent) */
 
-ATerm write_term_file(int cid, char *path, char *extension, 
-		      ATerm packedContent)
+ATerm write_term_file(int cid,  char *fileName, ATerm packedContent)
 {
-  char *fileName = makeFileName(path, extension);
   ATerm message;
 
   ATerm content = ATBunpack(packedContent);
@@ -394,9 +344,8 @@ ATerm write_term_file(int cid, char *path, char *extension,
 /*}}}  */
 /*{{{  ATerm exists_file(int cid, char *path, char *name, char *extension) */
 
-ATerm exists_file(int cid, char *path, char *extension)
+ATerm exists_file(int cid, char *fileName)
 {
-  char *fileName = makeFileName(path, extension);
   ATerm result;
 
   if (fileExists(fileName)) {

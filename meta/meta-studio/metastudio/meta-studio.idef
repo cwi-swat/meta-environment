@@ -48,6 +48,7 @@ let
   FT      : str,
   Path    : str,
   PathWithExt    : str,
+  Extension : str,
   ErrMsg  : str,
   On      : term,
   Graph   : term,
@@ -84,13 +85,13 @@ in
   Mods := [] .
   Pairs := [] .
   ( 
-    rec-event(UI, new-module(Path?, Str?)).
-    snd-msg(create-new-module(Path, Str)).
-    snd-ack-event(UI, new-module(Path, Str))
+    rec-event(UI, new-module(Path?,Name?, Str?)).
+    snd-msg(create-new-module(Path, Name, Str)).
+    snd-ack-event(UI, new-module(Path,Name, Str))
   +
-    ( rec-event(UI, open-module(Path?, Str?)).
-      snd-msg(open-initial-module(Path, Str)). 
-      snd-ack-event(UI, open-module(Path, Str))
+    ( rec-event(UI, open-module(Path?, Name?, Str?)).
+      snd-msg(open-initial-module(Path, Name, Str)). 
+      snd-ack-event(UI, open-module(Path, Name, Str))
     )
     +
     ( rec-msg(display-graph(GraphId?, Graph?)) .
@@ -164,21 +165,21 @@ in
      rec-msg(compilation-ready(Str)).
      snd-ack-event(UI, compile-module(Str))
    ) +
-   ( rec-event(UI, import-module(Str?, Str1?, Path?)) .
+   ( rec-event(UI, import-module(Str?, Str1?, Path?, Extension?)) .
      snd-msg(import-module(Str, Str1, Path)) .
-     snd-ack-event(UI, import-module(Str, Str1, Path))
+     snd-ack-event(UI, import-module(Str, Str1, Path, Extension))
    ) +
-   ( rec-event(UI, unimport-module(Str?, Str1?,Path?)) .
+   ( rec-event(UI, unimport-module(Str?, Str1?,Path?, Extension?)) .
      snd-msg(unimport-module(Str, Str1,Path)) .
-     snd-ack-event(UI, unimport-module(Str, Str1,Path))
+     snd-ack-event(UI, unimport-module(Str, Str1,Path, Extension))
    ) +
-   ( rec-event(UI, rename-module(Str?, Str1?, Path?)) .
+   ( rec-event(UI, rename-module(Str?, Str1?, Path?, Extension?)) .
      snd-msg(rename-module(Str, Str1, Path)) .
-     snd-ack-event(UI, rename-module(Str, Str1, Path))
+     snd-ack-event(UI, rename-module(Str, Str1, Path, Extension))
    ) +
-   ( rec-event(UI, copy-module(Str?, Str1?, Path?)) .
+   ( rec-event(UI, copy-module(Str?, Str1?, Path?, Extension?)) .
      snd-msg(copy-module(Str, Str1, Path)) .
-     snd-ack-event(UI, copy-module(Str, Str1, Path))
+     snd-ack-event(UI, copy-module(Str, Str1, Path, Extension))
    ) +
    ( rec-event(UI, dump-equations(Str?)).
      snd-msg(dump-equations(Str)).

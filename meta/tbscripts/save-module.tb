@@ -11,7 +11,8 @@ let
   Modules : list,
   Table   : term,
   Text    : str,
-  ErrorMessage : str
+  ErrorMessage : str,
+  FileName : str
 in
   Id := process-id. 
   (
@@ -19,14 +20,16 @@ in
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
+    snd-msg(io-get-filename(Path, Module, ".asf.baf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-eqs-tree(Module)).
     (
       rec-msg(tree(Eqs?)).
-      snd-msg(write-term-file(Path, ".asf.baf", Eqs)).
+      snd-msg(io-write-term-file(FileName, Eqs)).
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
         snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     +
@@ -34,27 +37,31 @@ in
     +
       rec-msg(unavailable)
     ).
+    snd-msg(io-get-filename(Path, Module, ".trm.tbl")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-table-from-db(trm(Module))).
     (
       rec-msg(table(Table?)). 
-      snd-msg(write-term-file(Path, ".trm.tbl", Table)).
+      snd-msg(io-write-term-file(FileName, Table)).
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
         snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     +
       rec-msg(no-table)
     ).
+    snd-msg(io-get-filename(Path, Module, ".asf.tbl")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-table-from-db(eqs(Module))).
     (
       rec-msg(table(Table?)).
-      snd-msg(write-term-file(Path, ".asf.tbl", Table)) .
+      snd-msg(io-write-term-file(FileName, Table)) .
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
         snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     +
@@ -67,16 +74,18 @@ in
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
+    snd-msg(io-get-filename(Path, Module, ".sdf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-sdf2-asfix(Module)).
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(write-text-file(Path, ".sdf", Text)) .
+      snd-msg(io-write-text-file(FileName, Text)) .
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
 	snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     ) .
@@ -87,28 +96,31 @@ in
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
+    snd-msg(io-get-filename(Path, Module, ".sdf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-sdf2-asfix(Module)).
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(write-text-file(Path, ".sdf", Text)) .
+      snd-msg(io-write-text-file(FileName, Text)) .
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
 	snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     ) .
     snd-msg(get-eqs-text(Module)).
     (
       rec-msg(eqs-text(Module, Text?)) .
-      snd-msg(write-text-file(Path, Text)) .
-      snd-msg(write-text-file(Path, ".asf", Text)) .
+      snd-msg(io-get-filename(Path, Module, ".asf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-write-text-file(FileName, Text)) .
       (
-        rec-msg(file-written)
+        rec-msg(io-file-written)
       +
-        rec-msg(file-not-written(ErrorMessage?)) .
+        rec-msg(io-file-not-written(ErrorMessage?)) .
         snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
       )
     +

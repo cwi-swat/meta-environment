@@ -1203,13 +1203,17 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ String getFilePath(File file, String extension)
+  //{{{ String getFilePath(File file, String module, String extension)
 
-  String getFilePath(File file, String extension) {
+  String getFilePath(File file, String module, String extension) {
     String path = file.getPath();
 
     if (path.endsWith(extension)) {
       path = path.substring(0, path.length() - extension.length());
+    }
+
+    if (path.endsWith(module)) {
+      path = path.substring(0, path.length() - module.length());
     }
 
     return path;
@@ -1227,9 +1231,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module,  extension);
 
-      ATerm event = factory.make("new-module(<str>,<str>)", path, module);
+      ATerm event = factory.make("new-module(<str>,<str>,<str>)", path, module, extension);
       bridge.postEvent(event);
     }
   }
@@ -1245,9 +1249,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("open-module(<str>,<str>)", path, module);
+      ATerm event = factory.make("open-module(<str>,<str>,<str>)", path, module, extension);
       bridge.postEvent(event);
     }
   }
@@ -1263,9 +1267,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("open-module(<str>,<str>)", path, module);
+      ATerm event = factory.make("open-module(<str>,<str>,<str>)", path, module,extension);
       bridge.postEvent(event);
     }
   }
@@ -1281,9 +1285,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("rename-module(<str>,<str>,<str>)", oldModule, module, path);
+      ATerm event = factory.make("rename-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
       bridge.postEvent(event);
     }
   }
@@ -1299,9 +1303,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("copy-module(<str>,<str>,<str>)", oldModule, module, path);
+      ATerm event = factory.make("copy-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
       bridge.postEvent(event);
     }
   }
@@ -1319,9 +1323,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("import-module(<str>,<str>,<str>)", oldModule, module, path);
+      ATerm event = factory.make("import-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
       bridge.postEvent(event);
     }
   }
@@ -1349,9 +1353,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
-      String path = getFilePath(file, extension);
+      String path = getFilePath(file, module, extension);
 
-      ATerm event = factory.make("unimport-module(<str>,<str>,<str>)", oldModule, module, path);
+      ATerm event = factory.make("unimport-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
       bridge.postEvent(event);
     }
   }
