@@ -18,7 +18,7 @@ static char myversion[] = "1.0";
  explanation.
  */
 
-static char myarguments[] = "bchi:o:tvV";
+static char myarguments[] = "bchi:lo:ptvILVX";
 
 /*
  Usage: displays helpful usage information
@@ -31,10 +31,15 @@ void usage(void)
             "\t-c              interpret `cons' attributes\n"
             "\t-h              display help information (usage)\n"
             "\t-i filename     input from file (default stdin)\n"
+            "\t-l              remove layout\n"
             "\t-o filename     output to file (default stdout)\n"
+            "\t-p              remove parsetree\n"
             "\t-t              output terms in plaintext format\n"
             "\t-v              verbose mode\n"
+            "\t-I              remove injections\n"
+            "\t-L              remove literals\n"
             "\t-V              reveal program version (i.e. %s)\n",
+            "\t-X              implode lexicals\n",
             myname, myarguments, myversion);
 }
 
@@ -55,7 +60,12 @@ int main(int argc, char **argv)
   ATbool bafmode=ATtrue;
   ATbool verbose=ATfalse;
   ATbool proceed=ATtrue;
-  ATbool interpret_cons=ATfalse;
+  extern ATbool interpret_cons;
+  extern ATbool remove_layout;
+  extern ATbool remove_literals;
+  extern ATbool remove_injections;
+  extern ATbool remove_parsetree;
+  extern ATbool implode_lexicals;
 
   extern char *optarg;
   extern int   optind;
@@ -67,10 +77,15 @@ int main(int argc, char **argv)
       case 'b':  bafmode = ATtrue;                       break;
       case 'c':  interpret_cons = ATtrue;                break;
       case 'i':  input=optarg;                           break;
+      case 'l':  remove_layout = ATtrue;                 break;
       case 'o':  output=optarg;                          break;
+      case 'p':  remove_parsetree = ATtrue;              break;
       case 't':  bafmode = ATfalse;                      break;
       case 'v':  verbose = ATtrue;                       break;
+      case 'I':  remove_injections = ATtrue;             break;
+      case 'L':  remove_literals = ATtrue;               break;
       case 'V':  version(); proceed=ATfalse;             break;
+      case 'X':  implode_lexicals = ATtrue;              break;
 
       case 'h':
       default:   usage(); proceed=ATfalse;                     break;
@@ -84,16 +99,16 @@ int main(int argc, char **argv)
 
   if(proceed) {
     PT_ParseTree tree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(input));
-    PT_ParseTree implodedTree = implodeParseTree(tree);
+    ATerm implodedTree = implodeParseTree(tree);
 
     if(!implodedTree) {
       ATerror("%s implosion conversion failed.", myname);
     }
     if(bafmode) {
-      ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(implodedTree), output);
+      ATwriteToNamedBinaryFile(implodedTree, output);
     }
     else {
-      ATwriteToNamedTextFile(PT_makeTermFromParseTree(implodedTree), output);
+      ATwriteToNamedTextFile(implodedTree, output);
     }
   }
 

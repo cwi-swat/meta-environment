@@ -1,3 +1,7 @@
+2001/10/25 (markvdb@cwi.nl)
+- Improved the functionality of implodePT. 
+  * alternatives and sequences have still to be done.
+
 2001/10/23 (markvdb@cwi.nl)
  * Added #ifndef WITHOUT_TOOLBUS in order to rule out ToolBus code, in
    unparsePT-main.c

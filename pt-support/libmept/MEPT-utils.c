@@ -205,8 +205,8 @@ PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol)
 ATbool PT_isIterSymbol(PT_Symbol symbol)
 {
   /* This implements: 
-   * "cf(iter-star(<term>,lit(<str>)))"
-   * "cf(iter(<term>,lit(<str>)))"
+   * "cf(iter-star(<term>))"
+   * "cf(iter(<term>))"
    */
   if (PT_isSymbolCf(symbol) || PT_isSymbolLex(symbol)) {
     PT_Symbol listsym = PT_getSymbolSymbol(symbol);
@@ -258,6 +258,20 @@ ATbool PT_isTreeApplList(PT_Tree tree)
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     return PT_isProductionList(prod);
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeListInjection(PT_Tree tree) */
+
+ATbool PT_isTreeListInjection(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_prodHasIterAsRhs(prod) || PT_prodHasIterSepAsRhs(prod)) {
+      return PT_isProductionInjection(prod);
+    }
   }
   return ATfalse;
 }

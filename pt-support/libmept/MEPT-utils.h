@@ -21,6 +21,7 @@ ATbool PT_isProductionInjection(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
 
+ATbool PT_isTreeListInjection(PT_Tree tree);
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);
 ATbool PT_isIterSymbol(PT_Symbol sym);
@@ -60,7 +61,7 @@ char* PT_printParseTreeToDot(PT_ParseTree parsetree, ATbool sharing,
 			     ATbool productions, ATbool layout, 
 			     ATbool literals);
 
-PT_ParseTree implodeParseTree(PT_ParseTree tree);
+ATerm implodeParseTree(PT_ParseTree tree);
 
 typedef void* PT_TreeVisitorData;
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);

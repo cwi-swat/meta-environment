@@ -9,7 +9,6 @@
 #include <MEPT-utils.h>
 
 #ifndef WITHOUT_TOOLBUS
-#include <atb-tool.h>
 #include "unparsePT.tif.h"
 #endif
 

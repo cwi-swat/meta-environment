@@ -1,24 +1,4 @@
 /*
-
-    MEPT -- The Meta-Environment Parse Tree library
-
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
     $Id$  
 */
 
@@ -31,60 +11,77 @@
 ATbool interpret_cons = ATfalse;
 ATbool remove_layout = ATfalse;
 ATbool lexical_to_string = ATtrue;
-ATbool layout_to_string = ATtrue;
 ATbool remove_literals = ATfalse;
+ATbool remove_injections = ATfalse;
+ATbool remove_parsetree = ATfalse;
+ATbool implode_lexicals = ATfalse;
  
-static PT_Tree implodeTerm(PT_Tree t);
-static PT_Tree implodeLayout(PT_Tree t);
-static PT_Tree implodeVar(PT_Tree t);
-static PT_Production implodeProd(PT_Production prod);
+static ATerm implodeTerm(PT_Tree t);
+static ATerm implodeLayout(PT_Tree t);
+static ATerm implodeVar(PT_Tree t);
+static ATerm implodeProd(PT_Production prod, ATermList args);
 
-static PT_Args implodeArgs(PT_Args args)
+static ATermList implodeArgs(PT_Args args)
 {
-  PT_Tree newTerm;
+  ATerm newTerm;
 
   if (PT_isArgsEmpty(args)) {
-    return args;
+    return ATempty;
   }
 
   newTerm = implodeTerm(PT_getArgsHead(args));
   if (newTerm) {
-    return PT_makeArgsList(newTerm, implodeArgs(PT_getArgsTail(args)));
+    return ATinsert(implodeArgs(PT_getArgsTail(args)),newTerm);
   }
   else {
     return implodeArgs(PT_getArgsTail(args));
   }
 }
 
-static PT_Args implodeList(PT_Args list)
+static PT_Production removeLayoutFromProd(PT_Production prod)
 {
-  PT_Args newList = PT_makeArgsEmpty();
-  
-  if (PT_hasArgsHead(list)) {
-    PT_Tree argHead = PT_getArgsHead(list);
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+    PT_Symbols symbols = PT_getProductionLhs(prod);
+    while (PT_hasSymbolsHead(symbols)) {
+      PT_Symbol symbol = PT_getSymbolsHead(symbols);
+      symbols = PT_getSymbolsTail(symbols);
 
-    if (PT_isTreeApplList(argHead)) {
-      PT_Args argList = PT_getTreeArgs(argHead);
-
-      while (PT_hasArgsHead(argList)) {
-        PT_Tree elem = PT_getArgsHead(argList);
-        PT_Tree newElem = implodeTerm(elem);
-        if (newElem) {
-          newList = PT_appendArgs(newList, newElem);
-        }
-
-        argList = PT_getArgsTail(argList);
+      if (!PT_isOptLayoutSymbol(symbol)) {
+        newSymbols = PT_appendSymbols(newSymbols,symbol);
       }
     }
+  
+    return PT_setProductionLhs(prod, newSymbols);
   }
-  return newList;
+
+  return prod;
 }
 
-static PT_Production implodeProd(PT_Production prod)
+static PT_Production removeLiteralsFromProd(PT_Production prod)
 {
-  /*
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+    PT_Symbols symbols = PT_getProductionLhs(prod);
+    while (PT_hasSymbolsHead(symbols)) {
+      PT_Symbol symbol = PT_getSymbolsHead(symbols);
+      symbols = PT_getSymbolsTail(symbols);
+
+      if (!PT_isSymbolLit(symbol)) {
+        newSymbols = PT_appendSymbols(newSymbols,symbol);
+      }
+    }
+  
+    return PT_setProductionLhs(prod, newSymbols);
+  }
+
+  return prod;
+}
+
+static ATerm implodeProd(PT_Production prod, ATermList args)
+{
   if (interpret_cons) {
-    PT_Attributes attrs = PT_getProductionAttrs(prod);
+    PT_Attributes attrs = PT_getProductionAttributes(prod);
     
     if (!PT_isAttributesNoAttrs(attrs)) {
       PT_Attrs attrList = PT_getAttributesAttrs(attrs);
@@ -93,51 +90,101 @@ static PT_Production implodeProd(PT_Production prod)
         PT_Attr attr = PT_getAttrsHead(attrList);
         attrList = PT_getAttrsTail(attrList);
 
-        if (PT_isAttrCons(attr)) {
-          char *lit = PT_getAttrString(attr);
+        if (PT_isAttrTerm(attr)) {
+          ATerm term = PT_getAttrTerm(attr);
+          char *constructor;
+          if (ATmatch(term, "\"cons\"(<str>)", &constructor)) {
+            AFun acons = ATmakeAFun(constructor, ATgetLength(args), ATfalse);
+            return (ATerm)ATmakeApplList(acons,args);
+          }
         }
       }
     }
   }
-  */
-  return prod;
+
+  if (PT_isProductionInjection(prod) && remove_injections) {
+    assert(ATgetLength(args) == 1);
+    return ATgetFirst(args);
+  }
+  else {
+    if (remove_layout) {
+      prod = removeLayoutFromProd(prod);
+    }
+    if (remove_literals) {
+      prod = removeLiteralsFromProd(prod);
+    }
+    return ATmake("appl(<term>,[<list>])", 
+                  PT_makeTermFromProduction(prod), args);
+  }
 }
 
-static PT_Tree implodeLayout(PT_Tree tree)
+static ATerm implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
-    if (layout_to_string) {
-      return PT_makeTreeFlatLayout(PT_yieldTree(tree));
-    }
-    else {
-      return tree;
-    }
+    return ATmake("layout([<str>])>", PT_yieldTree(tree));
   }
   else {
     return NULL;
   }
 }
 
-static PT_Tree implodeLiteral(PT_Tree tree)
+static ATerm implodeFlatList(PT_Tree tree)
+{
+  PT_Args args = PT_getTreeArgs(tree);
+  ATermList newList = implodeArgs(args);
+  
+  return ATmake("<term>", newList);
+}
+
+static ATerm implodeListInjection(PT_Tree tree)
+{
+  ATermList newList;
+  ATerm newTerm;
+
+  PT_Tree arg = PT_getArgsHead(PT_getTreeArgs(tree));
+  PT_Production prod = PT_getTreeProd(arg);
+
+  if (PT_isProductionList(prod)) {
+    newList = implodeArgs(PT_getTreeArgs(arg));
+  
+    return ATmake("<term>", newList);
+  }
+  else {
+    newTerm = implodeTerm(arg);
+
+    return ATmake("[<term>]", newTerm);
+  }
+}
+
+static ATerm implodeLexical(PT_Tree tree)
+{
+  if (implode_lexicals) {
+    return ATmake("<str>", PT_yieldTree(tree));
+  }
+
+  return PT_makeTermFromTree(tree);
+}
+
+static ATerm implodeLiteral(PT_Tree tree)
 {
   if (remove_literals) {
     return NULL;
   }
 
-  return tree;
+  return PT_makeTermFromTree(tree);
 }
 
-static PT_Tree implodeVar(PT_Tree tree)
+static ATerm implodeVar(PT_Tree tree)
 {
-  return tree;
+  return PT_makeTermFromTree(tree);
 }
 
-static PT_Tree implodeApplication(PT_Tree tree)
+static ATerm implodeApplication(PT_Tree tree)
 {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Args       args = PT_getTreeArgs(tree);
-  PT_Args       newList;
-     
+  ATermList     newList;
+   
   if (PT_isOptLayoutProd(prod)) {
     return implodeLayout(tree);
   }
@@ -146,27 +193,34 @@ static PT_Tree implodeApplication(PT_Tree tree)
     return implodeVar(tree);
   }
 
-  if (PT_prodHasIterSepAsRhs(prod) || PT_prodHasIterAsRhs(prod)) {
-    newList = implodeList(args);
+  if (PT_isProductionList(prod)) {
+    return implodeFlatList(tree);
   }
-  else {
-    newList = implodeArgs(args);
-  }
-  return PT_makeTreeAppl(implodeProd(prod), newList);
+
+  newList = implodeArgs(args);
+  return implodeProd(prod, newList);
 }
 
-static PT_Tree implodeTerm(PT_Tree tree)
+static ATerm implodeTerm(PT_Tree tree)
 {
   PT_Args args;
 
   if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
-    return PT_setTreeArgs(tree, implodeArgs(args));
+    return ATmake("amb(<list>)", implodeArgs(args));
+  }
+
+  if (PT_isTreeLexical(tree)) {
+    return implodeLexical(tree);
   }
 
   if (PT_isTreeLit(tree)) { 
     return implodeLiteral(tree);
   }                        
+
+  if (PT_isTreeListInjection(tree)) {
+    return implodeListInjection(tree);
+  }
 
   if (!PT_isTreeAppl(tree)) {
     ATerror("implodeTerm: not an application term: %t\n", tree);
@@ -175,16 +229,27 @@ static PT_Tree implodeTerm(PT_Tree tree)
   return implodeApplication(tree);
 }
 
-PT_ParseTree implodeParseTree(PT_ParseTree tree)
+ATerm implodeParseTree(PT_ParseTree tree)
 {
+  ATerm atermTree;
+
   if (PT_isParseTreeTree(tree)) {
     PT_Tree newTree = PT_getParseTreeTree(tree);
+    int     ambs = PT_getParseTreeAmbCnt(tree);
 
     PT_Args args = PT_getTreeArgs(newTree);
-    PT_Args newArgs = implodeArgs(args);
+    PT_Production prod = PT_getTreeProd(newTree);
+    ATermList newArgs = implodeArgs(args);
         
-    newTree = PT_setTreeArgs(newTree, newArgs);
-    return PT_setParseTreeTree(tree, newTree);
+    /*atermTree = implodeProd(prod, newArgs);*/
+    atermTree = implodeTerm(newTree);
+
+    if (remove_parsetree) {
+      return atermTree;
+    }
+    else {
+      return ATmake("parsetree(<term>,<int>)", atermTree, ambs);
+    }
   }
 
   ATerror("implodeParseTree: not a parsetree: %t\n", tree);
