@@ -1,4 +1,0 @@
-module Parse-Table-PCC
-imports
-        Table-To-ATerm
-        Action-Longest-Match

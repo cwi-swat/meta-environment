@@ -1,9 +1,0 @@
-module Earley-Graphs
-imports Earley-Items Labels Vertices Symbol-Sets
-exports
-  context-free syntax
-     Symbol             -> Label
-     labels(Symbols)    -> Labels
-     labels(SymbolSet)  -> LabelSet
-     Production         -> Label
-     ItemSet            -> Vertex

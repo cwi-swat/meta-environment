@@ -1,2 +1,0 @@
-module Follow-Priorities
-imports Follow-Earley Priority-Conflict

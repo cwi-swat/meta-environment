@@ -1,3 +1,0 @@
-module Sorts-Sdf-ATerms
-imports Kernel-Sdf-ATerms Sorts-Sdf-Tree-Constructors
-        Sorts-Sdf-Syntax
