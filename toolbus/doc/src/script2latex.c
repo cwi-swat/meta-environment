@@ -26,8 +26,6 @@
 #include <stdio.h>
 #include <limits.h>
 
-#include "TB.h"
-
 void usage(void)
 {
   fprintf(stderr, "Usage: script2latex [-strip]\n");

@@ -17,25 +17,31 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-DOCS       = Guide.ps Intro.ps pamflet.ps
+noinst_PROGRAMS      = script2latex verbatim
 
-EXTRA_DIST = Adapter.pic Arch.pic Tifs.pic Tool.pic \
-             Guide.tex Intro.tex Syntax-T-scripts.tex pamflet.tex \
-             arch-simpel.fig auction.fig calc.fig zeeslag.fig \
-             auction-bidder.eps auction-master.eps battleships.eps calc-ui.eps
+DOCS                 = Guide.ps Intro.ps pamflet.ps
 
-EXAMPLES   = hello1.tb.tex hello2.tb.tex hello3.tb.tex hello.c.tex \
-             hello-gen.c.tex hello.tif.c.tex pipe.tb.tex \
-             hello.tcl.tex hello.perl.tex Hello.java.tex \
-             HelloTool.java.tex hello.py.tex calc.tb.tex \
-             auction.tb.tex
+EXTRA_DIST           = Adapter.pic Arch.pic Tifs.pic Tool.pic Guide.tex \
+                       Intro.tex Syntax-T-scripts.tex pamflet.tex \
+                       arch-simpel.fig auction.fig calc.fig zeeslag.fig \
+                       auction-bidder.eps auction-master.eps battleships.eps \
+                       calc-ui.eps
 
-CLEANFILES = $(DOCS) *.dvi *.aux *.log *.toc \
-             adapters.tex Adapter.tex Arch.tex Tifs.tex Tool.tex \
-             arch-simpel.ps auction.ps calc.ps zeeslag.ps \
-             $(EXAMPLES)
+EXAMPLES             = hello1.tb.tex hello2.tb.tex hello3.tb.tex hello.c.tex \
+                       hello-gen.c.tex hello.tif.c.tex pipe.tb.tex \
+                       hello.tcl.tex hello.perl.tex Hello.java.tex \
+                       HelloTool.java.tex hello.py.tex calc.tb.tex \
+                       auction.tb.tex
 
-doc: $(DOCS)
+CLEANFILES           = $(DOCS) *.dvi *.aux *.log *.toc adapters.tex \
+                       Adapter.tex Arch.tex Tifs.tex Tool.tex \
+                       arch-simpel.ps auction.ps calc.ps zeeslag.ps \
+                       $(EXAMPLES)
+
+verbatim_SOURCES     = verbatim.c
+script2latex_SOURCES = script2latex.c
+
+doc: verbatim script2latex $(DOCS)
 
 Guide.dvi: $(EXAMPLES) Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
@@ -76,14 +82,14 @@ adapters.tex:
 	done ) > $@
 
 %.tb.tex : ${top_srcdir}/demos/hello/%.tb
-	$(top_builddir)/toolbus/script2latex <$< >$@
+	./script2latex <$< >$@
 
 %.tex : ${top_srcdir}/demos/hello/%
-	$(top_builddir)/toolbus/verbatim < $< >  $@
+	./verbatim < $< >  $@
 
 
 auction.tb.tex : ${top_srcdir}/demos/auction/auction.tb
-	$(top_builddir)/toolbus/script2latex < $< >  $@
+	./script2latex < $< >  $@
 
 calc.tb.tex : ${top_srcdir}/demos/calc/calc.tb
-	$(top_builddir)/toolbus/script2latex < $< >  $@
+	./script2latex < $< >  $@

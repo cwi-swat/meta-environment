@@ -20,8 +20,6 @@
 bin_PROGRAMS         = toolbus ctif
 bin_SCRIPTS          = idef2tif
 
-noinst_PROGRAMS      = script2latex verbatim
-
 data_DATA            = logger.tcl viewer.tcl
 
 EXTRA_DIST           = txt_dbg.c logger.tcl.src viewer.tcl.src \
@@ -32,15 +30,11 @@ toolbus_SOURCES      = calls.c env.c interpreter.c  main.c match.c \
                        interpreter.h match.h monitor.h script.h typecheck.h
 toolbus_LDADD        = lex.yy.o y.tab.o  -L../libtb -ltb
 
-verbatim_SOURCES     = verbatim.c
-
 ctif_SOURCES         = ctif.c
 ctif_LDADD           = -L../libtb -ltb
 
 # txt_dbg_SOURCES    = txt_dbg.c
 # txt_dbg_LDADD      = -L../libtb -ltb
-
-script2latex_SOURCES = script2latex.c
 
 CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
 
