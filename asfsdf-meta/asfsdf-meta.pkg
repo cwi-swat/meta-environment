@@ -1,0 +1,19 @@
+package 
+identification
+   name=asfsdf-meta
+   version=1.4beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/asfsdf-meta
+   description='The ASF+SDF Meta-Environment is an interactive tool suite
+                for building language-oriented tools for program
+                development, domain-specific languages, program analysis and
+                software renovation.'
+
+
+      keywords=meta-environment, asf, sdf, dsl, language environment, aterm
+
+configuration interface
+
+requires
+   meta		0.12beta
+   asf          1.7beta
