@@ -83,6 +83,25 @@ void  SGinitParser(ATbool toolbus_mode)
  */
 }
 
+void SGshowMode()
+{
+  ATfprintf(stderr, "TOOLBUS:     %s\n", SG_TOOLBUS?"y":"n");
+  ATfprintf(stderr, "ERROR:       %s\n", SG_ERROR?"y":"n");
+  ATfprintf(stderr, "VERBOSE:     %s\n", SG_VERBOSE?"y":"n");
+  ATfprintf(stderr, "DEBUG:       %s\n", SG_DEBUG?"y":"n");
+  ATfprintf(stderr, "SHOWSTAT:    %s\n", SG_SHOWSTAT?"y":"n");
+  ATfprintf(stderr, "OUTPUT:      %s\n", SG_OUTPUT?"y":"n");
+  ATfprintf(stderr, "ASFIX1:      %s\n", SG_ASFIX1?"y":"n");
+  ATfprintf(stderr, "BINARY:      %s\n", SG_BINARY?"y":"n");
+  ATfprintf(stderr, "DOTOUT:      %s\n", SG_DOTOUT?"y":"n");
+  ATfprintf(stderr, "NOLEX:       %s\n", SG_NOLEX?"y":"n");
+  ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
+  ATfprintf(stderr, "FILTER:      %s\n", SG_FILTER?"y":"n");
+  ATfprintf(stderr, "STARTSYMBOL: %s\n", SG_STARTSYMBOL?"y":"n");
+  ATfprintf(stderr, "GC:          %s\n", SG_GC?"y":"n");
+  ATfprintf(stderr, "CYCLE:       %s\n", SG_CYCLE?"y":"n");
+  ATfprintf(stderr, "POSINFO:     %s\n", SG_POSINFO?"y":"n");
+}
 
 /**  The ToolBus API functions  **/
 
