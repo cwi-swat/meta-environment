@@ -208,7 +208,7 @@ ATerm SGparseString(int conn, char *L, char *G, char *S)
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  ret = SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:0):NULL,
+  ret = SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:NULL):NULL,
                  SG_GetCharFromString);
   return ATmake("snd-value(<term>)", ret ? ret : (ATerm) ATempty);
 }

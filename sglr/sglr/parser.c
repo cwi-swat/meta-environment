@@ -417,7 +417,6 @@ ATerm SG_Result(char *sort)
 
     forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-
 // ATfprintf(stderr, "Unexpanded Forest: %t\n", forest);
 
     /*  We _must_ expand at least the top node to get the top sort  */
