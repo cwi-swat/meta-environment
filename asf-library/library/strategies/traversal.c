@@ -14,8 +14,6 @@ static ATerm appl_pattern = NULL;
 static const char fail_pattern_str[] = "appl(prod([lit(\"<\"),cf(opt(layout)),cf(sort(\"Strategy\")),cf(opt(layout)),lit(\">\"),cf(opt(layout)),<term>],<term>,attrs([term(cons(\"apply\"))])),[lit(\"<\"),appl(prod([],cf(opt(layout)),no-attrs),[]),appl(prod([lit(\"fail\")],cf(sort(\"Strategy\")),attrs([term(cons(\"fail\"))])),[lit(\"fail\")]),appl(prod([],cf(opt(layout)),no-attrs),[]),lit(\">\"),appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32]),<term>])";
 static ATerm fail_pattern = NULL;
 
-static ATerm fail_list_pattern = NULL;
-
 /*}}}  */
 
 /*{{{  static void initPatterns(void) */
@@ -23,14 +21,12 @@ static ATerm fail_list_pattern = NULL;
 static void initPatterns(void)
 {
   if (appl_pattern == NULL || 
-      fail_pattern == NULL || 
-      fail_list_pattern == NULL) {
+      fail_pattern == NULL) {
     appl_pattern = ATparse(appl_pattern_str);
     fail_pattern = ATparse(fail_pattern_str);
 
     ATprotect(&appl_pattern);
     ATprotect(&fail_pattern);
-    ATprotect(&fail_list_pattern);
   }
 }
 
@@ -42,10 +38,11 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
+  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
-  strategy = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
-  term = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+  strategy = PT_getArgsArgumentAt(args ,4);
+  term = PT_getArgsArgumentAt(args, 8);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -70,7 +67,13 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 					       strategy, kid);
 	PT_Tree newkid;
 
-	newkid = rewrite(kidappl);
+	if (PT_isTreeApplList(kid)) { /* skip lists for now */
+	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
+	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
+	}
+	else {
+	  newkid = rewrite(kidappl);
+	}
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
@@ -102,11 +105,12 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
+  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
 
-  strategy = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
-  term = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+  strategy = PT_getArgsArgumentAt(args,4);
+  term = PT_getArgsArgumentAt(args,8);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -131,13 +135,13 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 					       strategy, kid);
 	PT_Tree newkid;
 
-	if (PT_isProductionList(kidprod)) {
-	  kidappl = PT_makeTreeAppl(kidprod,PT_makeArgsList(kidappl,
-							    PT_makeArgsEmpty())
-				   );
+	if (PT_isTreeApplList(kid)) { /* skip lists for now */
+	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
+	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
 	}
-
-  	  newkid = rewrite(kidappl);
+	else {
+	  newkid = rewrite(kidappl);
+	}
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
@@ -169,11 +173,12 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
+  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
 
-  strategy = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
-  term = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+  strategy = PT_getArgsArgumentAt(args,4);
+  term = PT_getArgsArgumentAt(args,8);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -198,13 +203,13 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 					       strategy, kid);
 	PT_Tree newkid;
 
-	if (PT_isProductionList(kidprod)) {
-	  kidappl = PT_makeTreeAppl(kidprod,PT_makeArgsList(kidappl,
-							    PT_makeArgsEmpty())
-				   );
+	if (PT_isTreeApplList(kid)) { /* skip lists for now */
+	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
+	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
 	}
-
-	newkid = rewrite(kidappl);
+	else {
+	  newkid = rewrite(kidappl);
+	}
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 

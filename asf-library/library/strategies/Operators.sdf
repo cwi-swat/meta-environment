@@ -3,6 +3,8 @@ module strategies/Operators[X]
 imports basic/Whitespace
 imports basic/Booleans
 
+hiddens imports asf/Comments
+
 exports sorts Strategy
 
 lexical syntax
@@ -11,9 +13,8 @@ lexical syntax
 
 context-free syntax
     (X=>X) ":" X                     -> X          {cons("rule")}
-    (X=>X)                         	 -> Strategy   {cons("func-name")}
+    (X=>X)                        	 -> Strategy   {cons("func-name")}
     "<" Strategy ">" X 				    	 -> X          {cons("apply")}
-    "fail"                     	   	 -> X          {cons("fail")}    
 
 context-free syntax
     "fail"                         -> Strategy {cons("fail")}
@@ -39,9 +40,15 @@ context-free priorities
 hiddens
 
 context-free syntax
+   "fail"             -> X {cons("fail")}    
    some(Strategy,X)   -> X {built-in("strategy-some")}
    all(Strategy,X)    -> X {built-in("strategy-all")}
    one(Strategy,X)    -> X {built-in("strategy-one")}
+   choice(Strategy,Strategy,X) -> X
+   sequence(Strategy,Strategy,X) -> X
+   function((X=>X),X) -> X
+
+
 
 context-free syntax
    subst(Strategy,StrategyVar,Strategy) -> Strategy {traversal(trafo,bottom-up)}

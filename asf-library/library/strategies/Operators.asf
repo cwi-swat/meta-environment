@@ -1,28 +1,36 @@
 equations
 
-[] <id> T = T
+[] S1+S2 = S1<+S2
 
-[] <S1;S2> T = <S2> T' when T' = <S1> T, T' != <fail> T
-
-[] <S1;S2> T = <fail> T when <S1> T = <fail> T
-
-[] <S1<+S2> T = <S2> T when <S1> T = <fail> T
-
-[] <S1<+S2> T = T' when <S1> T = T', T' != <fail> T
-
-[] <S1+S2> T = <S1<+S2> T
-
+[] <id>          T = T
+[] <S1;S2>       T = sequence(S1,S2,T)
+[] <S1 <+ S2>    T = choice(S1,S2,T)
 [] <rec x ( S )> T = <subst(S,x,rec x (S))> T
+[] <some(S)>     T = some(S,T)
+[] <all(S)>      T = all(S,T)
+[] <one(S)>      T = one(S,T)
+[] <f>           T = function(f,T)
+[default] <S>    T = <fail> T when S != fail
 
-[] <f> T = <fail> T when f (T) = fail
-[] <f> T = T' when T' = f ( T ), T' != fail
+[] T' = <S1> T,
+   T' != <fail> T,
+   T'' = <S2> T',
+   T'' != <fail> T'
+   ======================= 
+   sequence(S1,S2,T) = T'' 
 
-[default] <S> T = <fail> T when S != fail
-     
+[default] sequence(S1,S2,T) = <fail> T 
+
+[] T' = <S1> T,
+   T' != <fail> T
+   ===============
+   choice(S1,S2,T) = T'
+
+[default] choice(S1,S2,T) = <S2> T
+
+[] function(f,T) = T' when T' = f ( T ), T' != fail
+[default] function(f,T) = <fail> T 
+
 [default] f ( T ) = fail
-
-[] <some(S)> T = some(S,T)
-[] <all(S)> T  = all(S,T)
-[] <one(S)> T  = one(S,T)
 
 [] subst(x,x,S) = S
