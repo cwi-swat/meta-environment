@@ -283,12 +283,15 @@ static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
   ATerm locationTerm = TE_getActionErrorLocation(edAction);
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
   ERR_Area area = ERR_getLocationArea(location);
-  int start = ERR_getAreaOffset(area) + 1;
-  int length = ERR_getAreaLength(area);
-  char buf[BUFSIZ];
 
-  sprintf(buf, "(set-focus %d %d)", start, start+length);
-  sendToEmacs(write_to_editor_fd, buf);
+  if (ERR_isAreaArea(area)) {
+    int start = ERR_getAreaOffset(area) + 1;
+    int length = ERR_getAreaLength(area);
+    char buf[BUFSIZ];
+
+    sprintf(buf, "(set-focus %d %d)", start, start+length);
+    sendToEmacs(write_to_editor_fd, buf);
+  }
 }
 
 /*}}}  */
