@@ -1,6 +1,6 @@
 module ExtractMethod
 
-imports Rstore
+imports RscriptElem
 imports JavaOperations
 imports utilities/PosInfo[MethodDeclaration]
 

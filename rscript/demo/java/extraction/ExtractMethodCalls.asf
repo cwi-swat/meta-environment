@@ -1,22 +1,16 @@
 equations
 
+%%   Name "(" {Expression ","}* ")"			-> MethodInvocation
+%%    Primary "." Identifier "(" {Expression ","}* ")"	-> MethodInvocation
+
 [extract-method-calls-2]
-  &Name ( &Expressions ) := &MethodInvocation,
-  &Var . &MethodCall := &Name
+  &Name ( &Expressions ) := &MethodInvocation
   ========================================================================
   extractMethodCalls(&MethodInvocation, &Rel) =
-  &Rel union {< id2str(&Var),  get-location(&Var), ids2str(&MethodCall) >}
+  &Rel union {< name2str(&Name),  get-location(&Name) >}
 
-%%[extract-method-calls-3]
-%%  super ( &Expressions ) ; := &ExplicitConstructorInvocation,
-%%  &ExplicitConstructorInvocationId := get-location(&ExplicitConstructorInvocation),
-%%  &Rstore2 := addSuperCall(&ExplicitConstructorInvocationId, &Loc, &Rstore1)
-%%  ===>
-%%  extractMethodCalls(&ExplicitConstructorInvocation, &Rstore1, &Loc) = &Rstore2
-
-
-%%[add-super-call-0]
-%%  &Tuple := <&ExplicitConstructorInvocationId, &Loc>,
-%%  &Rstore2 := add-tuple(SUPER_CALL, &Tuple, &Rstore1)
-%%  ===>
-%%  addSuperCall(&ExplicitConstructorInvocationId, &Loc, &Rstore1) = &Rstore2
+[extract-method-calls-2]
+  &Primary . &Identifier ( &Expressions ) := &MethodInvocation
+  ========================================================================
+  extractMethodCalls(&MethodInvocation, &Rel) =
+  &Rel union {< id2str(&Identifier),  get-location(&Identifier) >}

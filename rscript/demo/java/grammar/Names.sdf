@@ -5,6 +5,6 @@ exports
   sorts SimpleName Name
 
   context-free syntax
-    {Identifier "."}+  -> Name {cons("Identifier-p")}
+    {Identifier "."}+  -> Name {avoid,cons("Identifier-p")}
     Identifier         -> SimpleName {cons("Identifier")}
 

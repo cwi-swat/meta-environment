@@ -19,22 +19,35 @@ JAVA_ANALYSIS=${bindir}/JavaAnalysis
 
 usage() {
 cat << ENDCAT >&2
-Usage: $PRG dirname
+Usage: $PRG dirname [rstore]
 
 Options: none
 
 Examples:
-  $PRG JHotDraw5.2-sources
+  $PRG JHotDraw5.2-sources hotdraw.rstore.pt
 
 ENDCAT
 }
 
 # }}}
 
-if test $# -eq 1 -a -d $1
+if [ $# -eq 0 -o $# -gt 2 ]; then
+  usage
+  exit 1
+fi
+
+if [ -d $1 ]
 then
-    SOURCE_DIR=$1
-   extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -p $JAVA_PARSE_TABLE `find $SOURCE_DIR -name "*.java"`
+    SOURCE_DIR=$1; shift
+    if [ $# -eq 1 ]
+    then
+	RESULTING_RSTORE="--output $1"
+    fi
+    extract-relations --executable ${JAVA_ANALYSIS} \
+                      --sort CompilationUnit \
+                      --parse-table ${JAVA_PARSE_TABLE} \
+                      ${RESULTING_RSTORE} \
+                      `find $SOURCE_DIR -name "*.java"`
 else
     usage
     exit 1

@@ -1,52 +1,51 @@
-type File = str
-type Interface = str
-type Package = str
-type Method = str
-type Class = str
-type ClassUse = str
-type Var = str
-type Id = str
-type Type = str
-type Field = str
+type FileName = str
+type ClassName = str
+type ClassUseName = str   
+type PackageName = str
+type MethodName = str
+type InterfaceName = str
+type VarName = str
+type TypeName = str
+type FieldName = str
 
-rel[File, loc] FILES 
-rel[Interface,loc] INTERFACES
-rel[Package,loc] PACKAGES 
-rel[Class,loc] CLASSES  
-rel[Method, loc] METHODS 
-rel[ClassUse,loc] CLASS_USES 
-rel[Var, loc, Type] VARIABLE_DECLS
-rel[Field, loc, Type] FIELD_DECLS
+rel[FileName, loc] FILE
+rel[InterfaceName,loc] INTERFACE
+rel[PackageName,loc] PACKAGE
+rel[ClassName,loc] CLASS
+rel[MethodName, loc] METHOD
+rel[ClassUseName,loc] CLASS_USE
+rel[VarName, loc, TypeName] VARIABLE_DECL
+rel[FieldName, loc, TypeName] FIELD_DECL
 
-rel[Class,Class] EXTENDS_CLASS 
-rel[Class,Interface] IMPLEMENTS 
-rel[Interface,Interface] EXTENDS_INTERFACE
-                                   
-rel[Var, loc, Id] METHOD_CALLS 
+rel[ClassName,ClassName] EXTENDS_CLASS
+rel[ClassName,InterfaceName] IMPLEMENTS
+rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE     
+					
+rel[VarName, loc] METHOD_CALL		
 
 int nFiles = # FILES
-yield nFiles
+yield nFile
 
-assert "nFiles": nFiles == 160
+assert "nFile": nFile == 160
 
-int nInterfaces = # INTERFACES
-yield nInterfaces
+int nInterfaces = # INTERFACE
+yield nInterface
 
-assert "nInterfaces": nInterfaces == 23
+assert "nInterface": nInterface == 23
 
-int nPackages = # PACKAGES
-yield nPackages
+int nPackage = # PACKAGE
+yield nPackage
 
-assert "nPackages": nPackages == 160
+assert "nPackage": nPackage == 160
 
-int nClasses = # CLASSES
-yield nClasses
+int nClass = # CLASS
+yield nClass
 
-assert "nClasses": nClasses == 168
+assert "nClass": nClass == 168
 %% NB 148 ordinary classes + 20 inner classes
 
-int nMethods = # METHODS
-yield nMethods
+int nMethod = # METHOD
+yield nMethod
 
 int nExtendsClass = # EXTENDS_CLASS
 yield nExtendsClass
@@ -63,15 +62,21 @@ yield nExtendsInterface
 
 assert "nExtendsInterface": nExtendsInterface == 25
 
+int nMethodCall = #METHOD_CALL
+yield nMethodCall
 
-%%int nContainment = # CONTAINMENT
-%%yield nContainment
+rel [ClassName, ClassName] CONTAINMENT
 
-%%rel[str,str] USE = CONTAINMENT union INHERITANCE
+int nContainment = # CONTAINMENT
+yield nContainment
 
-%%bag[str] ClassesInCycle = {C1 | <str C1, str C2> : USE+, C1 == C2}
+assert "nContainment": nContainment == 81
 
-%%int nCycles = # ClassesInCycle
-%%yield nCycles
+rel[ClassName, ClassName] CALL
+
+int nCall = #CALL
+yield nCall
+
+yield CALL
 
 

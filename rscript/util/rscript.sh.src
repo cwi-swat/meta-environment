@@ -68,6 +68,37 @@ ENDCAT
 
 # }}}
 # {{{
+die(){
+  echo $PRG: $1
+  exit 1
+}
+# }}}
+# {{{
+check_rscript_file_type(){
+  case "$1" in
+  *.rscript) ;;
+  *) die "$1 is not an rscript"
+  esac
+  if [ ! -r $1 ]
+  then
+     die "$1 is not readable"
+  fi
+}
+#}}}
+# {{{
+check_rstore_file_type(){
+  case "$1" in
+  *.rstore) ;;
+  *.rstore.pt) ;;
+  *) die "$1 is not an rstore"
+  esac
+  if [ ! -r $1 ]
+  then
+     die "$1 is not readable"
+  fi
+}
+#}}}
+# {{{
 set_output_style(){
   if test -z "$OUTPUT_AS_TREE"
   then
@@ -160,9 +191,9 @@ do
     -o | --output-parse-tree)
       shift; OUTPUT_AS_TREE=$1 ;;
     -i | --input)
-      shift; THE_RSCRIPT=$1 ;;
+      shift; THE_RSCRIPT=$1 ; check_rscript_file_type ${THE_RSCRIPT};;
     -s | --store)
-      shift; RSTORE=$1; WITH_RSTORE=-with-rstore;;
+      shift; RSTORE=$1;  check_rstore_file_type ${RSTORE}; WITH_RSTORE=-with-rstore;;
     -t | --testsuite)
       USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_RESULT=TESTREPORT;;
      -c | --check-only)
@@ -172,7 +203,8 @@ do
     -v | --verbose)
       VERBOSE=-v ;;
     *.rscript)
-      THE_RSCRIPT=$1 ;; 
+      THE_RSCRIPT=$1 
+      check_rscript_file_type ${THE_RSCRIPT};; 
     *)
       usage; exit 1 ;;
   esac
@@ -181,7 +213,7 @@ done
 
 if test -n "$YIELD" -a  "(" $USE_TESTSUITES == "yes" ")"
 then
-    echo "$PRG: -y and -t cannot be combined"
+    echo "$PRG: -y (--yield) and -t (--testsuite) cannot be combined"
     usage
     exit 1
 else

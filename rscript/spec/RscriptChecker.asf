@@ -146,7 +146,8 @@ equations
 
 [wft5]	well-formed-type(<$DclVar+>, $Tenv) = well-formed-type(get-tuple-type(<$DclVar+>), $Tenv)
 
-[wft5]	lookup($Tenv, $Var) == not-in-table
+[wft5]	$Etype := lookup($Tenv, $Var),
+        $Etype == undefined
 	=======================================================
 	well-formed-type($Var, $Tenv) = $Tenv + Undeclared $Var
 
@@ -155,7 +156,8 @@ equations
 	======================================================
 	well-formed-type(fun [$Etype+] to $Etype, $Tenv) = $Tenv''
 
-[wft6]	$Etype := lookup($Tenv, $Var)
+[wft6]	$Etype := lookup($Tenv, $Var),
+	$Etype != undefined
 	=======================================================
 	well-formed-type($Var, $Tenv) = well-formed-type($Etype, $Tenv)
 
@@ -290,7 +292,12 @@ $Error]>
 
 %% ---- Lookup/store/delete
 
-[te2]	lookup(<$Table, $Errors>, $Var) = lookup($Table, $Var)
+[te2]	$Etype := lookup($Table, $Var),
+	$Etype != not-in-table
+	==============================================
+	lookup(<$Table, $Errors>, $Var) = $Etype
+[default-te]
+	lookup(<$Table, $Errors>, $Var) = undefined
 
 [te3]	$Tenv' := well-formed-type($Etype, $Tenv),
 	<$Table, $Errors> := $Tenv'
@@ -302,7 +309,7 @@ $Error]>
 %% ---- Check that variable is not yet defined
 
 [cnd]	check-not-defined($Var, $Tenv) = 
-	if equal-type(lookup($Tenv, $Var), not-in-table, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
+	if equal-type(lookup($Tenv, $Var), undefined, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
 
 %% ---- get index of a field (if any)
 
@@ -1003,15 +1010,6 @@ $Error]>
 	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
 	=========================================
 	check-stat($Yield $Etype $Var += $Exp, $Tenv) =
-	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
-        else $Tenv2 + $Etype should be bag or rel type
-        fi
-
-[check-vardef4]
-	$Tenv1 := require-type($Var, $Etype, $Tenv),	
-	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
-	=========================================
-	check-stat($Yield $Etype $Var -= $Exp, $Tenv) =
 	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
         else $Tenv2 + $Etype should be bag or rel type
         fi

@@ -7,6 +7,7 @@ imports basic/Errors
 
 imports utilities/PosInfo[RSTAT]
 imports utilities/PosInfo[REXP]
+imports utilities/PosInfo[RVAR]
 imports utilities/PosInfo[REXPTYPE]
 imports utilities/PosInfo[GENERATOR]
 imports utilities/PosInfo[Bag[[Elem]]]

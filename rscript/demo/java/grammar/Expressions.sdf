@@ -10,7 +10,7 @@ exports sorts Expression MethodInvocation StatementExpression Assignment Dim
   context-free syntax
     PrimaryNoNewArray						    -> Primary {cons("PrimaryNoNewArray")}
     ArrayCreationExpression					    -> Primary {cons("ArrayCreationExpression")}
-    Literal							    -> PrimaryNoNewArray {cons("Literal")}
+    Literal							    -> PrimaryNoNewArray {avoid,cons("Literal")}
     "this"							    -> PrimaryNoNewArray {cons("this0")}
     Name "." "this"						    -> PrimaryNoNewArray {cons("this1")}
     "(" Expression ")"						    -> PrimaryNoNewArray {cons("Expression1")}
@@ -27,16 +27,16 @@ exports sorts Expression MethodInvocation StatementExpression Assignment Dim
     "[" Expression? "]"						    -> DimExprInitialized {cons("Expression-opt")}
     "[" Expression "]"						    -> DimExpr {cons("Expression2")}
     "[" "]"							    -> Dim {cons("Dim-dunno-a_0")}
-    Name							    -> FieldAccess {cons("Name11")}
+    Name							    -> FieldAccess {avoid, cons("Name11")}
     Primary "." Identifier					    -> FieldAccess {cons("Primary-Identifier")}
     "super" "." Identifier					    -> FieldAccess {cons("super")}
     Name "(" {Expression ","}* ")"				    -> MethodInvocation {cons("comma11")}
-    Primary "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {cons("comma21")}
-    Primary "." ClassInstanceCreationExpression			    -> MethodInvocation {cons("MethodInvocationConstructor")}
-    "super" "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {cons("super-comma")}
+    Primary "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {prefer,cons("comma21")}
+    Primary "." ClassInstanceCreationExpression			    -> MethodInvocation {prefer,cons("MethodInvocationConstructor")}
+    "super" "." Identifier "(" {Expression ","}* ")"		    -> MethodInvocation {prefer,cons("super-comma")}
     Name "[" Expression "]"					    -> ArrayAccess {cons("Name-Expression")}
     PrimaryNoNewArray "[" Expression "]"			    -> ArrayAccess {cons("PrimaryNoNewArray-Expression")}
-    Primary							    -> Expression {cons("Primary")}
+    Primary							    -> Expression {prefer, cons("Primary")}
     Expression "++"						    -> StatementExpression {prefer, cons("incr21")}
     Expression "--"						    -> StatementExpression {prefer, cons("decr21")}
     "+" Expression						    -> Expression {cons("plus")}

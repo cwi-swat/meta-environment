@@ -1,0 +1,62 @@
+type FileName = str
+type ClassName = str
+type ClassUseName = str
+type PackageName = str
+type MethodName = str
+type InterfaceName = str
+type VarName = str
+type TypeName = str
+type FieldName = str
+
+rel[FileName, loc] FILE
+rel[InterfaceName,loc] INTERFACE
+rel[PackageName,loc] PACKAGE
+rel[ClassName,loc] CLASS
+rel[MethodName, loc] METHOD
+rel[ClassUseName,loc] CLASS_USE
+rel[VarName, loc, TypeName] VARIABLE_DECL
+rel[FieldName, loc, TypeName] FIELD_DECL
+
+rel[ClassName,ClassName] EXTENDS_CLASS
+rel[ClassName,InterfaceName] IMPLEMENTS
+rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE     
+					
+rel[VarName, loc, MethodName] METHOD_CALL
+
+rel[str,str] INHERITANCE =  EXTENDS_CLASS union EXTENDS_INTERFACE
+
+%%rel [ loc, str ]  METHOD_DECL = inv(METHOD)
+%%yield METHOD_DECL
+
+%%rel [ loc, str ] CLASS_DECL = inv(CLASS)
+%%yield CLASS_DECL
+
+bag[ClassName] CLASS_OR_INTERFACE_NAME = domain(CLASS) union domain(INTERFACE)
+
+rel [str, str] CONTAINMENT = 
+    {<C, T> | <FieldName F, loc FL, TypeName T> : FIELD_DECL, 
+	      T in CLASS_OR_INTERFACE_NAME,
+	      <ClassName C, loc CL> : CLASS,
+	      FL < CL }
+
+rel[ClassName, MethodName] CLASS_HAS_METHOD = 
+    {<C, M> | <MethodName M,loc LM> : METHOD, 
+              <ClassName C, loc LC> : CLASS, 
+	      LM < LC
+    }
+
+rel[ClassName, MethodName] CLASS_CALLS_METHOD =
+    {<C, M> | <MethodName M,loc LM> : METHOD_CALL, 
+	      <ClassName C, loc LC> : CLASS,
+	      LM < LC, 
+	      M notin CLASS_HAS_METHOD[C]
+    }
+
+rel[ClassName, ClassName] CALL = CLASS_CALLS_METHOD o inv(CLASS_HAS_METHOD)
+
+
+
+
+
+
+

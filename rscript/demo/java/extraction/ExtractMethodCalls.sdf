@@ -1,15 +1,15 @@
 module ExtractMethodCalls
 
-imports Rstore
-imports JavaOperations
-imports utilities/PosInfo[Identifier]
+  imports Rscript
+  imports JavaOperations
+  imports utilities/PosInfo[Identifier]
+  imports utilities/PosInfo[Name]
 
 exports
   context-free syntax
     extractMethodCalls(CompilationUnit, Rel[[Elem]])
       -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
-hiddens
   context-free syntax
     extractMethodCalls(MethodInvocation, Rel[[Elem]])
       -> Rel[[Elem]] {traversal(accu, top-down, break)}
@@ -17,6 +17,7 @@ hiddens
 hiddens
   variables
     "&Rel"[0-9]*			-> Rel[[Elem]] 
+    "&Primary"				-> Primary
     "&Name"				-> Name
     "&Expressions"			-> {Expression ","}*
     "&ExplicitConstructorInvocation"	-> ExplicitConstructorInvocation
