@@ -50,7 +50,7 @@ Advanced options:
 
 Examples:
   $PRG query.rscript
-  $PRG -i query.rscript -s previous.rstore -op result.rstore.pt
+  $PRG -i query.rscript -s previous.rstore -o result.rstore.pt
 
 ENDCAT
 }
