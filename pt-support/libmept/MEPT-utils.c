@@ -374,7 +374,17 @@ PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
                            PT_SymbolToTerm(symbol)));
 
 }   
-/*}}}  */   
+/*{{{  int PT_getSymbolsLength(PT_Symbols symbols)  */
+
+int PT_getSymbolsLength(PT_Symbols symbols) 
+{
+  return ATgetLength(PT_SymbolsToTerm(symbols));
+}
+
+/*}}}  */
+
+/*}}}  */
+
 /*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
 
 PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visitor,
