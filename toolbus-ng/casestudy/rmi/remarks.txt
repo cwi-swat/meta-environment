@@ -1,0 +1,14 @@
+[sharing]
+ * Naive sharing approach does not work:
+
+    String shared = new String("Balistraat 130 II");
+    add("hayco", shared);
+    add("loge", shared);
+
+  Result in client:
+    hayco: a1 = Balistraat 130 II
+    loge : a2 = Balistraat 130 II
+
+    a1.equals(a2): true
+    a1 == a2     : false
+
