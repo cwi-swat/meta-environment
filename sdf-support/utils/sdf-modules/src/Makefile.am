@@ -29,4 +29,5 @@ INCLUDES = \
 	-I$(top_srcdir)/lib  \
 	-I$(ATERM)/include  \
 	-I$(TOOLBUSLIB)/include \
+	-I$(PT_SUPPORT)/include \
 	-I$(SDF_SUPPORT)/include
