@@ -140,6 +140,7 @@ let
   OutStr       : str,
   InStr        : str,
   Name : str,
+  ExecName : str,
   Path : str,
   Tree : term,
   Text : str,
@@ -169,6 +170,13 @@ in
       else
         ReturnFailed(EditorId, Stack)
       fi
+      +
+      rec-msg(rewrite(ExecName?), Stack?, EditorId?) .
+      StackPopTerm(Stack,Stack?,STree?).
+      snd-msg(rewrite(ExecName, STree)) .
+      rec-msg(normalform(ExecName, RTree?)) .
+      StackPushTerm(Stack,Stack?,RTree).
+      ReturnSuccess(EditorId,Stack)
       +
       rec-msg(activate(Action?), Stack?, EditorId?) .
       snd-msg(gen-adapter-activate(EditorId, Action)).

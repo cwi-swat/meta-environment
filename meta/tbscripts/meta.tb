@@ -106,7 +106,6 @@ in
   . create(Set-parsetable, Pid?)
   . create(Tree2Graph, Pid?)
 #ifdef QUERY
-  . create(Query, Pid?)
   . create(QueryTool, Pid?)
 #endif
 #ifdef TIMEOUT
