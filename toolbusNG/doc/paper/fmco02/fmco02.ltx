@@ -906,29 +906,40 @@ strictly Java based: only components written in Java can communicate via
 RMI. In this section we have a closer look at RMI details in relation
 to our ToolBus needs.
 
-Data exchange in RMI is through \emph{serialization} or \emph{remote
-object} invocation:
+For components to work together in RMI, first a \emph{remote interface}
+is established. This Java interface has a ``real'' implementation
+in the tool (or \emph{server}) and a ``stub'' implementation on the
+client sides. The interface is typed by the programmer as opposed to
+the generated interfaces in a ToolBus setting where they are derived
+from the communication patterns found in the ToolBus script. The stubs
+in the RMI setting, are then generated from this Java interface using
+\texttt{rmic}: the RMI compiler. Stubs act as a client-side proxy,
+delegating the method call via the RMI system to the server object.
 
-\begin{description}
+Obviously any methods that have arguments or yield result values
+will need to pass data in some way. In RMI, arguments to or return
+values from remote methods can be primitive data, remote objects, or
+\emph{serializable}\footnote{implementing \texttt{These are objects
+that implement java.util.Serializable}} objects. Both primitive data
+and serializable objects are passed by value using Java's object
+serialization. Remote objects are essentially passed by reference.
+This means that changes to them are actually performed on the server,
+and updates become available to all clients. Only the behavior that was
+defined in the remote interface is available to the clients.
 
-\item[Serialization] is used to restore copies of atomic data
-types (such as \texttt{int}) and compound objects that implement
-\texttt{java.util.Serializable} in the remote client. The object is
-serialized on the server side, and de-serialized in the client, thus
-implementing a pass-by-value mechanism.
+RMI programmers should be aware of the fact that any parameters, return
+values and exceptions that are not remote objects are passed by value.
+This makes it hard to understand when looking at a system of RMI objects
+precisely which method calls will result in a \emph{local} state change,
+and which will have \emph{global} effect.
 
-\item[Remote objects] are Java Objects that implement the
-\texttt{java.rmi.Remote} interface, e.g. by extending the convenience
-class \texttt{UnicastRemoteObject}. The functionality that this
-object has to offer is captured in an interface. On the server side
-this object then serves as the implementation of the interface. On the
-client side, \emph{stubs} are generated based on the methods declared
-in the interface. The actual implementation of these stubs then ensures
-that the corresponding method is called on the \emph{server} side. Any
-results from these remote methods are transferred using serialization
-again, or they can be references to remote objects.
-
-\end{description}
+As an example of this, consider our address book example. If the
+AddressBookService is implemented as a remote object in RMI, then
+client-side invocations the \texttt{setAddress} method will cause a
+\emph{global} update. If, on the other hand, the AddressBookEntries are
+made \emph{serializable} and instances of this class are returned as
+the result of a query to the AddressBookService, then updates on these
+instances will have a \emph{local} state change only.
 
 %%Using the ToolBus communication primitives we can exactly specify which
 %%pattern of messages (communications) are allowed and in what order. The
