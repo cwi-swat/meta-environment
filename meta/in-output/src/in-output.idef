@@ -7,7 +7,6 @@ let
   IO         : in-output,
   Name       : str,
   Path       : str,
-  Text       : str,
   Term       : term,
   FileName1 : str,
   FileName2 : str,
@@ -52,8 +51,8 @@ in
       rec-value(IO, success) .
       snd-msg(io-file-written)
     +
-      rec-value(IO, failure(Text?)) .
-      snd-msg(io-file-not-written(Text))
+      rec-value(IO, failure(ErrorMessage?)) .
+      snd-msg(io-file-not-written(ErrorMessage))
     )
   +
     rec-msg(io-write-term-file(FileName?, Term?)) .
@@ -62,8 +61,8 @@ in
       rec-value(IO, success) .
       snd-msg(io-file-written)
     +
-      rec-value(IO, failure(Text?)) .
-      snd-msg(io-file-not-written(Text))
+      rec-value(IO, failure(ErrorMessage?)) .
+      snd-msg(io-file-not-written(ErrorMessage))
     )
   +
     rec-msg(io-read-file(FileName?)) .
