@@ -86,10 +86,9 @@ ATermList _getImports( char* path )
       exit( 1 );
    }
   
-   parseTree = PT_makeParseTreeFromTerm(module);
-   sdfModule = SDF_makeModuleFromTerm(
-               PT_makeTermFromTree(
-                 PT_getParseTreeTree(parseTree)));
+   parseTree = PT_ParseTreeFromTerm(module);
+   sdfModule = SDF_ModuleFromTerm(
+               PT_TreeToTerm(PT_getParseTreeTree(parseTree)));
  
    if (!SDF_isValidModule(sdfModule))
    {
