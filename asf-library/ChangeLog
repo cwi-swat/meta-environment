@@ -1,3 +1,10 @@
+2003/05/20 (jurgenv@cwi.nl)
+  * Fixed bug in containers/Set module. It imported basic/Boolean in an
+    hiddens section, but the 'elem' function exported a Boolean result.
+    This leads inevitably to problems when a Boolean value from the
+    elem function is matched against another Boolean value (due to the
+    id(<modulename>) production attribute).
+
 2003/04/15 (jurgenv@cwi.nl)
   * Added a number of very old specifications to the sandbox (unreleased
     specifications). Partially converted them to new ASF+SDF syntax.
