@@ -1,11 +1,11 @@
 equations
 
-  [cks-1'1] check-syntax(Definition, {}) = Msgs1,
-           check-renamings(Definition, Msgs1) = Msgs2
+  [cks-1'1] Msgs1 := check-syntax(Definition, {}),
+           Msgs2 := check-renamings(Definition, Msgs1)
            ==========================================
            check-for-kernel-syntax(Definition) = Msgs2
 
-  [cs-1'1] get-module-name(Module) = $ModuleId
+  [cs-1'1] $ModuleId := get-module-name(Module)
            ===================================
            check-syntax(Module, Msgs) = 
              check-syntax2(Module, Msgs, $ModuleId)
@@ -16,7 +16,7 @@ equations
   [cs-1'3] check-syntax2(priorities Prios, Msgs, $ModuleId) =
              Msgs + kernel-syntax-construction($ModuleId, "priorities")
 
-  [cr-1'1] get-module-name(Module) = $ModuleId
+  [cr-1'1] $ModuleId := get-module-name(Module)
            ===================================
            check-renamings(Module, Msgs) = 
              check-renamings2(Module, Msgs, $ModuleId)

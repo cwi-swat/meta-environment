@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Dec  8 15:11:54 CET 2003 <jong@cwi.nl>
+ * syntax/asfsdf-checker/spec/*.asf: upgraded condition syntax
+
 Thu Dec  4 15:33:42 CET 2003 <jong@cwi.nl>
  * semantics/asf-upgrade/.cvsignore added
  * syntax/asfsdf-checker/src/AsfSdf-Checker.c regenerated

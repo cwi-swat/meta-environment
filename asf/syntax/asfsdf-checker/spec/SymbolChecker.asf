@@ -2,78 +2,78 @@ equations
 
   [cs-1'1] check-symbols(Definition) = check-symbols(Definition, {})
 
-  [cs-1'2] get-module-name(Module) = $ModuleId
+  [cs-1'2] $ModuleId := get-module-name(Module)
            ====================================
            check-symbols(Module, Msgs) = 
              check-symbols2(Module, Msgs, $ModuleId)
 
-  [cs-2'1] check-symbols2(Prod*, Msgs1, $ModuleId) = Msgs2,
-           check-charclass-list-symbols(Prod*, Msgs2, $ModuleId) = Msgs3
+  [cs-2'1] Msgs2 := check-symbols2(Prod*, Msgs1, $ModuleId),
+           Msgs3 := check-charclass-list-symbols(Prod*, Msgs2, $ModuleId)
            =============================================================
            check-symbols2(context-free syntax Prod*, Msgs1, $ModuleId) =
              Msgs3
 
-  [cs-2'1] is-literal-symbol($Symbol2) = false
+  [cs-2'1] is-literal-symbol($Symbol2) == false
            ===================================
            check-symbols2({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}+)
 
-  [cs-2'2] is-literal-symbol($Symbol2) = false
+  [cs-2'2] is-literal-symbol($Symbol2) == false
            ===================================
            check-symbols2({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}*)
 
-  [cs-2'3] is-literal-symbol($Symbol2) = false
+  [cs-2'3] is-literal-symbol($Symbol2) == false
            ===================================
            check-symbols2({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}NatCon+)
 
-  [cs-2'4] is-list-symbol($Symbol) = true
+  [cs-2'4] is-list-symbol($Symbol) == true
            ==============================
            check-symbols2($Symbol+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, $Symbol+)
 
-  [cs-2'5] is-list-symbol($Symbol) = true
+  [cs-2'5] is-list-symbol($Symbol) == true
            ==============================
            check-symbols2($Symbol*, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, $Symbol*)
 
-  [cs-2'6] is-list-symbol($Symbol1) = true
+  [cs-2'6] is-list-symbol($Symbol1) == true
            ===============================
            check-symbols2({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}+)
 
-  [cs-2'7] is-list-symbol($Symbol1) = true
+  [cs-2'7] is-list-symbol($Symbol1) == true
            ===============================
            check-symbols2({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}*)
 
-  [cs-2'8] is-list-symbol($Symbol1) = true
+  [cs-2'8] is-list-symbol($Symbol1) == true
            ===============================
            check-symbols2({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}NatCon+)
 
-  [cs-4'1] is-charclass-symbol($Symbol) = true
+  [cs-4'1] is-charclass-symbol($Symbol) == true
            ===================================
            check-charclass-list-symbols($Symbol+, Msgs, $ModuleId) =
               Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol+)
 
-  [cs-4'2] is-charclass-symbol($Symbol) = true
+  [cs-4'2] is-charclass-symbol($Symbol) == true
            ===================================
            check-charclass-list-symbols($Symbol*, Msgs, $ModuleId) =
               Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol*)
 
-  [cs-4'3] is-charclass-symbol($Symbol1) = true
+  [cs-4'3] is-charclass-symbol($Symbol1) == true
            ====================================
            check-charclass-list-symbols({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
               Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}+)
 
-  [cs-4'4] is-charclass-symbol($Symbol1) = true
+  [cs-4'4] is-charclass-symbol($Symbol1) == true
            ====================================
            check-charclass-list-symbols({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
               Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}*)
 
-  [cs-4'5] is-charclass-symbol($Symbol1) = true
+  [cs-4'5] is-charclass-symbol($Symbol1) == true
            ===============================
            check-charclass-list-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
               Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}NatCon+)

@@ -2,81 +2,81 @@ equations
 
   [ca-1'1] check-asf-attributes(Definition) = check-attributes(Definition, {})
 
-  [ca-1'2] get-module-name(Module) = $ModuleId,
-           check-attributes-in-module(Module, <Msgs1,>, $ModuleId) = 
-             <Msgs2, Production*>
+  [ca-1'2] $ModuleId := get-module-name(Module),
+           <Msgs2, Production*> := 
+             check-attributes-in-module(Module, <Msgs1,>, $ModuleId)
            ======================
            check-attributes(Module, Msgs1) = Msgs2
 
-  [ca-2'1] has-traversal-attribute(Production) = false
+  [ca-2'1] has-traversal-attribute(Production) == false
            ===========================================
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = <Msgs, Production*>
 
 
-  [ca-2'2] has-traversal-attribute(Production) = true,
-           is-prefix-function(Production) = false
+  [ca-2'2] has-traversal-attribute(Production) == true,
+           is-prefix-function(Production) == false
            ======================================
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = 
 <Msgs +
 traversal-attributes-in-non-prefix-function($ModuleId, Production), Production*>
 
-  [ca-2'3] has-traversal-attribute(Production) = true,
-           is-prefix-function(Production) = true,
-           consistent-defined(Production, Production*, $ModuleId) = consistent,
-           check-form-production(Production, Msgs1, $ModuleId) = Msgs2
+  [ca-2'3] has-traversal-attribute(Production) == true,
+           is-prefix-function(Production) == true,
+           consistent-defined(Production, Production*, $ModuleId) == consistent,
+           Msgs2 := check-form-production(Production, Msgs1, $ModuleId)
            ===========================================================
            check-attributes-in-module(Production,
                                       <Msgs1, Production*>, $ModuleId) = <Msgs2, Production*>
 
-  [ca-2'4] has-traversal-attribute(Production) = true,
-           is-prefix-function(Production) = true,
-           consistent-defined(Production, Production*, $ModuleId) = not-found,
-           check-form-production(Production, Msgs1, $ModuleId) = Msgs2,
-           check-attributes-in-production(Production, Msgs2, $ModuleId) = Msgs3
+  [ca-2'4] has-traversal-attribute(Production) == true,
+           is-prefix-function(Production) == true,
+           consistent-defined(Production, Production*, $ModuleId) == not-found,
+           Msgs2 := check-form-production(Production, Msgs1, $ModuleId),
+           Msgs3 := check-attributes-in-production(Production, Msgs2, $ModuleId)
            ====================================================================
            check-attributes-in-module(Production,
                                       <Msgs1, Production*>, $ModuleId) = <Msgs3, Production Production*>
 
-  [ca-2'5] has-traversal-attribute(Production) = true,
-           is-prefix-function(Production) = true,
-           consistent-defined(Production, Production*, $ModuleId) = Msg,
+  [ca-2'5] has-traversal-attribute(Production) == true,
+           is-prefix-function(Production) == true,
+           Msg := consistent-defined(Production, Production*, $ModuleId),
            Msg != consistent,
            Msg != not-found 
            ================
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = <Msgs + Msg, Production*>
 
-  [ca-3'1] get-traversal-arguments(Production) = Aterm+,
-           contains-only-traversal-attributes(Aterm+) = false
+  [ca-3'1] Aterm+ := get-traversal-arguments(Production),
+           contains-only-traversal-attributes(Aterm+) == false
            ==================================================
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
 Msgs +
 illegal-traversal-attribute($ModuleId, Production)
 
-  [ca-3'2] get-traversal-arguments(Production) = Aterm+,
-           contains-accu(Aterm+) | contains-trafo(Aterm+) = false,
-           contains-break-or-continue(Aterm+) = true,
-           contains-top-down-or-bottom-up(Aterm+) = true
+  [ca-3'2] Aterm+ := get-traversal-arguments(Production),
+           contains-accu(Aterm+) | contains-trafo(Aterm+) == false,
+           contains-break-or-continue(Aterm+) == true,
+           contains-top-down-or-bottom-up(Aterm+) == true
            =============================================
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
 Msgs +
 missing-trafo-and-or-accu-attribute($ModuleId, Production)
 
-  [ca-3'3] get-traversal-arguments(Production) = Aterm+,
-           contains-accu(Aterm+) | contains-trafo(Aterm+) = true,
-           contains-break-or-continue(Aterm+) = false,
-           contains-top-down-or-bottom-up(Aterm+) = true
+  [ca-3'3] Aterm+ := get-traversal-arguments(Production),
+           contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
+           contains-break-or-continue(Aterm+) == false,
+           contains-top-down-or-bottom-up(Aterm+) == true
            =============================================
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
 Msgs +
 missing-break-or-continue-attribute($ModuleId, Production)
 
-  [ca-3'4] get-traversal-arguments(Production) = Aterm+,
-           contains-accu(Aterm+) | contains-trafo(Aterm+) = true,
-           contains-break-or-continue(Aterm+) = true,
-           contains-top-down-or-bottom-up(Aterm+) = false
+  [ca-3'4] Aterm+ := get-traversal-arguments(Production),
+           contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
+           contains-break-or-continue(Aterm+) == true,
+           contains-top-down-or-bottom-up(Aterm+) == false
            ==============================================
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
 Msgs +
@@ -84,28 +84,28 @@ missing-bottom-up-or-top-down-attribute($ModuleId, Production)
 
   [default-ca-2'5] check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
-  [cf-1'1] get-traversal-arguments(Production) = Aterm+,
-           contains-accu(Aterm+) = true,
-           contains-trafo(Aterm+) = false,
-           is-accu-definition(Production) = false
+  [cf-1'1] Aterm+ := get-traversal-arguments(Production),
+           contains-accu(Aterm+) == true,
+           contains-trafo(Aterm+) == false,
+           is-accu-definition(Production) == false
            ======================================
            check-form-production(Production, Msgs, $ModuleId) = 
 Msgs +
 accu-should-return-accumulated-type($ModuleId, Production)
 
-  [cf-1'2] get-traversal-arguments(Production) = Aterm+,
-           contains-trafo(Aterm+) = true,
-           contains-accu(Aterm+) = false,
-           is-trafo-definition(Production) = false
+  [cf-1'2] Aterm+ := get-traversal-arguments(Production),
+           contains-trafo(Aterm+) == true,
+           contains-accu(Aterm+) == false,
+           is-trafo-definition(Production) == false
            =======================================
            check-form-production(Production, Msgs, $ModuleId) = 
 Msgs +
 trafo-should-return-traversed-type($ModuleId, Production)
 
-  [cf-1'3] get-traversal-arguments(Production) = Aterm+,
-           contains-trafo(Aterm+) = true,
-           contains-accu(Aterm+) = true,
-           is-accu-trafo-definition(Production) = false
+  [cf-1'3] Aterm+ := get-traversal-arguments(Production),
+           contains-trafo(Aterm+) == true,
+           contains-accu(Aterm+) == true,
+           is-accu-trafo-definition(Production) == false
            ============================================
            check-form-production(Production, Msgs, $ModuleId) = 
 Msgs +
@@ -188,7 +188,7 @@ accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
                               Production*, 
                               $ModuleId) = consistent
 
-  [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) = false
+  [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) == false
            ==============================================
            consistent-defined($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2

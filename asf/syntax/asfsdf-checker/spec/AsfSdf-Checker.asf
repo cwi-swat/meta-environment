@@ -1,11 +1,11 @@
 equations
 
-  [cd1] check-sdf(definition Definition1) = Msgs1,
-        remove-labels(Definition1) = Definition2,
-        check-asf-attributes(Definition2) = Msgs2,
-        check-symbols(Definition2) = Msgs3,
-        check-for-asf-sorts(Definition2) = Msgs4,
-        check-for-kernel-syntax(Definition2) = Msgs5
+  [cd1] Msgs1 := check-sdf(definition Definition1),
+        Definition2 := remove-labels(Definition1),
+        Msgs2 := check-asf-attributes(Definition2),
+        Msgs3 := check-symbols(Definition2),
+        Msgs4 := check-for-asf-sorts(Definition2),
+        Msgs5 := check-for-kernel-syntax(Definition2)
         ============================================
         check-asfsdf(definition Definition1) =
           Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4 ++ Msgs5
