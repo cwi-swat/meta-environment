@@ -38,6 +38,7 @@ CLEANFILES  = graph-browser graph-browser.1
                  flag." >&2 ;\
 	   exit 1 ;\
 	 fi
-	sed 's@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
+	sed 's@__WISH__@$(WISH)@g;\
+	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@

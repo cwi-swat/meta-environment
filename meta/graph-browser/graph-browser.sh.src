@@ -19,6 +19,7 @@
 #
 # $Id$
 
+wish=__WISH__
 graphviz=__GRAPHVIZ__
 datadir=__DATADIR__
 
@@ -44,4 +45,4 @@ then
 fi
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
-wish-adapter -wish wish -script ${datadir}/graph-browser.tcl $@
+wish-adapter -wish ${wish} -script ${datadir}/graph-browser.tcl $@
