@@ -298,7 +298,7 @@ AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
 AC_OUTPUT(Makefile
-	src/Makefile src/viewer.tcl
+	src/Makefile src/logger.tcl src/viewer.tcl
 	tide/Makefile tide/tide
 	doc/Makefile \
 	test/Makefile \

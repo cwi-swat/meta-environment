@@ -2960,7 +2960,7 @@ done
 ac_given_srcdir=$srcdir
 
 trap 'rm -fr `echo "Makefile
-	src/Makefile src/viewer.tcl
+	src/Makefile src/logger.tcl src/viewer.tcl
 	tide/Makefile tide/tide
 	doc/Makefile \
 	test/Makefile \
@@ -3102,7 +3102,7 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
-	src/Makefile src/viewer.tcl
+	src/Makefile src/logger.tcl src/viewer.tcl
 	tide/Makefile tide/tide
 	doc/Makefile \
 	test/Makefile \
