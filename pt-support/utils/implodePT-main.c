@@ -25,23 +25,24 @@ static char myarguments[] = "abchi:lo:ptvILVX";
  */
 void usage(void)
 {
-  ATwarning("Usage: %s [%s]\n"
-            "Options:\n"
-	    "\t-a              keep annotations (default yes)\n"
-            "\t-b              output terms in BAF format (default)\n"
-            "\t-c              interpret `cons' attributes\n"
-            "\t-h              display help information (usage)\n"
-            "\t-i filename     input from file (default stdin)\n"
-            "\t-l              remove layout\n"
-            "\t-o filename     output to file (default stdout)\n"
-            "\t-p              remove parsetree\n"
-            "\t-t              output terms in plaintext format\n"
-            "\t-v              verbose mode\n"
-            "\t-I              remove injections\n"
-            "\t-L              remove literals\n"
-            "\t-V              reveal program version (i.e. %s)\n",
-            "\t-X              implode lexicals\n",
-            myname, myarguments, myversion);
+  fprintf(stderr,
+	  "Usage: %s [%s]\n"
+          "Options:\n"
+	  "\t-a              keep annotations (default yes)\n"
+          "\t-b              output terms in BAF format (default)\n"
+          "\t-c              interpret `cons' attributes\n"
+          "\t-h              display help information (usage)\n"
+          "\t-i filename     input from file (default stdin)\n"
+          "\t-l              remove layout\n"
+          "\t-o filename     output to file (default stdout)\n"
+          "\t-p              remove parsetree\n"
+          "\t-t              output terms in plaintext format\n"
+          "\t-v              verbose mode\n"
+          "\t-I              remove injections\n"
+          "\t-L              remove literals\n"
+          "\t-V              reveal program version (i.e. %s)\n"
+          "\t-X              implode lexicals\n",
+          myname, myarguments, myversion);
 }
 
 void version(void)
@@ -69,9 +70,6 @@ int main(int argc, char **argv)
   extern ATbool implode_lexicals;
   extern ATbool keep_annotations;
 
-  extern char *optarg;
-  extern int   optind;
-
   /*  Commandline mode  */
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
@@ -91,27 +89,36 @@ int main(int argc, char **argv)
       case 'X':  implode_lexicals = ATtrue;              break;
 
       case 'h':
-      default:   usage(); proceed=ATfalse;                     break;
+      default:   usage(); proceed=ATfalse;               break;
     }
   }
-  argc -= optind;
-  argv += optind;
 
-  ATinit(argc, argv, &bottomOfStack);       /* Initialize Aterm library */
+  ATinit(argc, argv, &bottomOfStack);     
   PT_initMEPTApi();
 
-  if(proceed) {
-    PT_ParseTree tree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(input));
-    ATerm implodedTree = implodeParseTree(tree);
+  if (proceed) {
+    ATerm inputTerm;
+    PT_ParseTree tree;
+    ATerm implodedTree;
 
-    if(!implodedTree) {
-      ATerror("%s implosion conversion failed.", myname);
-    }
-    if(bafmode) {
-      ATwriteToNamedBinaryFile(implodedTree, output);
+    inputTerm = ATreadFromNamedFile(input);
+
+    if (inputTerm != NULL) {
+      tree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(input));
+      implodedTree = implodeParseTree(tree);
+
+      if(!implodedTree) {
+	ATerror("%s implosion conversion failed.", myname);
+      }
+      if(bafmode) {
+	ATwriteToNamedBinaryFile(implodedTree, output);
+      }
+      else {
+	ATwriteToNamedTextFile(implodedTree, output);
+      }
     }
     else {
-      ATwriteToNamedTextFile(implodedTree, output);
+      fprintf(stderr,"%s: could not open file %s\n", myname, input);
     }
   }
 
