@@ -1,10 +1,16 @@
+/*{{{  includes */
+
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include <MEPT-utils.h>
 
 #include "path.h"
 #include "length.h"
+
+/*}}}  */
 
 /*{{{  SE_Steps stepUp(SE_Steps steps) */
 

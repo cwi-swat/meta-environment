@@ -1,5 +1,8 @@
 # $Id$
 
+2001/08/28 (jong@cwi.nl)
+ * Several code improvements to satisfy gcc-3.0.1
+
 2001/08/20 (jong@cwi.nl)
  * Version 0.7beta started
  * switched aterm and toolbus configuration options

@@ -1,101 +1,105 @@
-/*
- *  Meta-Environment - An environment for language prototyping.
- *  Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
- *                      The Netherlands.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- *
- * Author: Hayco de Jong <jong@cwi.nl>
- *
- */
+/*{{{  includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <aterm2.h>
 
 #include "editor-manager.tif.h"
 
+/*}}}  */
+/*{{{  defines */
 
 #define	POS_ID     0
 #define	POS_NAME   1
 #define	POS_MODULE 2
 
 
+/*}}}  */
+/*{{{  CVS-id */
+
 char editor_manager_id[] = "$Id$";
+
+/*}}}  */
+/*{{{  variables */
 
 static ATermList editors = NULL;
 
+/*}}}  */
 
-static ATerm
-getUniqueId()
+/*{{{  static ATerm getUniqueId() */
+
+static ATerm getUniqueId()
 {
   static int id = 0;
 
   return ATmake("eid(<int>)", id++);
 }
 
-static ATerm
-nameStringToTerm(const char *name)
+/*}}}  */
+/*{{{  static ATerm nameStringToTerm(const char *name) */
+
+static ATerm nameStringToTerm(const char *name)
 {
   assert(name);
 
   return ATmake("name(<str>)", name);
 }
 
-static ATerm
-moduleStringToTerm(const char *module)
+/*}}}  */
+/*{{{  static ATerm moduleStringToTerm(const char *module) */
+
+static ATerm moduleStringToTerm(const char *module)
 {
   assert(module);
 
   return ATmake("module(<str>)", module);
 }
 
-static ATerm
-newEditor(ATerm id, ATerm name, ATerm module)
+/*}}}  */
+/*{{{  static ATerm newEditor(ATerm id, ATerm name, ATerm module) */
+
+static ATerm newEditor(ATerm id, ATerm name, ATerm module)
 {
   assert(id && name);
 
   return ATmake("editor(<term>,<term>,<term>)", id, name, module);
 }
 
-static ATerm
-getEditorId(ATerm editor)
+/*}}}  */
+/*{{{  static ATerm getEditorId(ATerm editor) */
+
+static ATerm getEditorId(ATerm editor)
 {
   assert(editor);
 
   return ATgetArgument((ATermAppl) editor, POS_ID);
 }
 
-static ATerm
-getEditorName(ATerm editor)
+/*}}}  */
+/*{{{  static ATerm getEditorName(ATerm editor) */
+
+static ATerm getEditorName(ATerm editor)
 {
   assert(editor);
 
   return (ATerm) ATgetArgument((ATermAppl) editor, POS_NAME);
 }
 
-static ATerm
-getModule(ATerm editor)
+/*}}}  */
+/*{{{  static ATerm getModule(ATerm editor) */
+
+static ATerm getModule(ATerm editor)
 {
   assert(editor);
 
   return (ATerm) ATgetArgument((ATermAppl) editor, POS_MODULE);
 }
 
-static ATerm
-getEditorByName(ATerm name)
+/*}}}  */
+/*{{{  static ATerm getEditorByName(ATerm name) */
+
+static ATerm getEditorByName(ATerm name)
 {
   ATermList list;
 
@@ -116,8 +120,10 @@ getEditorByName(ATerm name)
   return NULL;
 }
 
-static ATerm
-getEditorById(ATerm id)
+/*}}}  */
+/*{{{  static ATerm getEditorById(ATerm id) */
+
+static ATerm getEditorById(ATerm id)
 {
   ATermList list;
 
@@ -138,8 +144,10 @@ getEditorById(ATerm id)
   return NULL;
 }
 
-static ATermList
-getEditorsByModule(ATerm module)
+/*}}}  */
+/*{{{  static ATermList getEditorsByModule(ATerm module) */
+
+static ATermList getEditorsByModule(ATerm module)
 {
   ATermList list;
   ATermList result;
@@ -160,32 +168,41 @@ getEditorsByModule(ATerm module)
   return result;
 }
 
-static void
-addEditor(ATerm editor)
+/*}}}  */
+/*{{{  static void addEditor(ATerm editor) */
+
+static void addEditor(ATerm editor)
 {
   assert(editor && editors);
 
   editors = ATinsert(editors, editor);
 }
 
-static void
-removeEditor(ATerm editor)
+/*}}}  */
+/*{{{  static void removeEditor(ATerm editor) */
+
+static void removeEditor(ATerm editor)
 {
   assert(editor && editors);
 
   editors = ATremoveElement(editors, editor);
 }
 
-static ATerm
-sndValue(ATerm result)
+/*}}}  */
+/*{{{  static ATerm sndValue(ATerm result) */
+
+static ATerm sndValue(ATerm result)
 {
   assert(result);
 
   return ATmake("snd-value(<term>)", result);
 }
 
-ATerm
-get_editor_id(int conn, char *nameAsString, char *moduleAsString)
+/*}}}  */
+
+/*{{{  ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString) */
+
+ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
 {
   ATerm editor;
   ATerm editorId;
@@ -209,8 +226,10 @@ get_editor_id(int conn, char *nameAsString, char *moduleAsString)
   return sndValue(ATmake("new-editor(<term>)", editorId));
 }
 
-void
-delete_editor(int conn, ATerm editorId)
+/*}}}  */
+/*{{{  void delete_editor(int conn, ATerm editorId) */
+
+void delete_editor(int conn, ATerm editorId)
 {
   ATerm editor;
 
@@ -226,8 +245,10 @@ delete_editor(int conn, ATerm editorId)
   removeEditor(editor);
 }
 
-ATerm
-get_editors_by_module(int conn, char *moduleAsString)
+/*}}}  */
+/*{{{  ATerm get_editors_by_module(int conn, char *moduleAsString) */
+
+ATerm get_editors_by_module(int conn, char *moduleAsString)
 {
   ATerm moduleAsTerm;
   ATermList editorsByModule;
@@ -240,6 +261,9 @@ get_editors_by_module(int conn, char *moduleAsString)
   return sndValue(ATmake("editors-by-module([<list>])", editorsByModule));
 }
 
+/*}}}  */
+
+/*{{{  rec_terminate(int conn, ATerm reason) */
 
 void
 rec_terminate(int conn, ATerm reason)
@@ -247,8 +271,11 @@ rec_terminate(int conn, ATerm reason)
   exit(0);
 }
 
-int
-main(int argc, char *argv[])
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
+int main(int argc, char *argv[])
 {
   int cid;
   ATerm bottomOfStack;
@@ -264,3 +291,5 @@ main(int argc, char *argv[])
 
   return 0;
 }
+
+/*}}}  */

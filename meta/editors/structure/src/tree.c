@@ -1,11 +1,12 @@
-
 /*{{{  includes */
 
+#include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+#include <string.h>
 #include <ctype.h>
-#include <aterm2.h>
+#include <assert.h>
 
+#include <aterm2.h>
 #include <MEPT.h>
 #include <MEPT-utils.h>
 
@@ -18,6 +19,7 @@
 
 /*}}}  */
 
+/*{{{  PT_ParseTree flattenParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)  */
 
 PT_ParseTree flattenParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path) 
 {
@@ -44,6 +46,8 @@ PT_ParseTree flattenParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)
 
   return parse_tree;
 }
+
+/*}}}  */
 
 /*{{{  PT_Symbol getParseTreeSort(PT_ParseTree parse_tree) */
 
@@ -158,8 +162,6 @@ PT_ParseTree setParseTreeTreeAt(PT_ParseTree parse_tree, PT_Tree tree, SE_Path p
 }
 
 /*}}}  */
-
-
 
 /*{{{  PT_Args concatLeftLayout(PT_Args l1, PT_Args l2) */
 
@@ -358,4 +360,3 @@ int calcParseTreeStart(PT_ParseTree parse_tree, SE_Path path)
 }
 
 /*}}}  */
-

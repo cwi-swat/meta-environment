@@ -1,6 +1,7 @@
 /*{{{  includes */
 
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include <MEPT-utils.h>
@@ -27,9 +28,10 @@ ATermTable editorInstances;
 
 /*}}}  */
 
+/*{{{  static SE_Focus createEditorFocus(SE_Editor editor, PT_ParseTree parse_tree, SE_Path path) */
 
-static SE_Focus createEditorFocus(SE_Editor editor, PT_ParseTree parse_tree, 
-                                  SE_Path path) {
+static SE_Focus createEditorFocus(SE_Editor editor, PT_ParseTree parse_tree, SE_Path path)
+{
   SE_Focus focus = createFocus(parse_tree, path, FOCUS_UNPARSED);
 
   if (isFocusInUnparsedFoci(editor, focus)) {
@@ -39,6 +41,7 @@ static SE_Focus createEditorFocus(SE_Editor editor, PT_ParseTree parse_tree,
   return SE_setFocusUnparsed(focus, FOCUS_PARSED);
 }
 
+/*}}}  */
 
 /*{{{  static SE_Editor moveFocusUp(SE_Editor editor) */
 
