@@ -103,6 +103,10 @@ Installation steps
     gives a list of the available adapters and whether they are compiled by
     default (you can deselect them using the --without-... option), or not
     (you should select them using --with-...)
+  
+    If you use gcc, this library is built with "gcc -Wall -g -O2". If you prefer
+    different options use --with-cflags="<options>" when you run configure.
+
 
 (2a) Compile the sources by typing:
 
