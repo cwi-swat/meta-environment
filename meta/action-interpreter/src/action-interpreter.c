@@ -306,7 +306,7 @@ ATwarning("Halllo: result2 = %t\n", result2);
     ready = performActions(cid);
   }
   else if (ATmatch(aResult, "failure")) {
-    ready = ATtrue;
+    ready = ATfalse;
   }
   
   if (!ready) {

@@ -1,6 +1,8 @@
 # $Id$
 
 Fri Jan 28 13:22:29 CET 2005 <kooiker@cwi.nl>
+ * action-interpreter/action-interpreter.c:
+   - process_result sets ready ATfalse if result is a failure
  * action-interpreter:
    - Use - as word separator according to naming convention
  * action-interpreter/action-interprecter.c:
