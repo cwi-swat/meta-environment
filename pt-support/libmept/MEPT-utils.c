@@ -825,3 +825,12 @@ PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
   
   return PT_makeTreeFromTerm(ATgetArgument(ATparseTree,0));
 }
+
+PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
+{
+  ATerm ATparseTree = PT_makeTermFromParseTree(parseTree);
+  
+  return PT_makeParseTreeFromTerm(
+           (ATerm) ATsetArgument((ATermAppl) ATparseTree,
+              PT_makeTermFromTree(top),0));
+}
