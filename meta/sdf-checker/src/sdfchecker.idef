@@ -1,0 +1,22 @@
+/*
+  $Id$
+   */
+process SdfChecker is
+let
+  Msgs   : list,
+  Syntax : term,
+  SC     : sdfchecker
+in
+  (
+    rec-msg(check-sdf(Syntax?)) .
+    execute(sdfchecker, SC?) .
+    snd-eval(SC, check-sdf(Syntax)) .
+    rec-value(SC, messages(Msgs?)) .
+    snd-msg(messages(Msgs)) .
+    snd-terminate(SC, "done") .
+    Syntax := none
+  )*
+  delta
+endlet
+
+tool sdfchecker is {command = "sdfchecker"}
