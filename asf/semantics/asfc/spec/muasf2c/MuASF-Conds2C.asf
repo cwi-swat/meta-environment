@@ -80,8 +80,11 @@ equations
                                 Term3|Cenv1|Cenv2|Funid1];C-rule*1,
                                Namepair*,Aint) = (Stat*1 ++ Stat*3 ++ Stat*2,Aint3)
 
+  %% Jurgen: added the lexical constructor around term_equal to disambiguate 
+  %% with Identifier. Why does this suddenly occur using sglr v2.40???
+
   [fc2c-1'2] get-funid(Term1) = Funid2,
-             Funid2 != term_equal,
+             Funid2 != funid("t""e""r""m""_""e""q""u""a""l"),
              is-boolean-term(Term2) = true,
              test-cond2cstats([Fv-path*|
                                Term1 =: Term2 & Cond*|
