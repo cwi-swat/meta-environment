@@ -1334,17 +1334,25 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 static PT_Tree reduce(PT_Tree trm, int depth)
 {
   PT_Tree first_arg;
-  PT_Production top_ofs;
+  PT_Production top_ofs = NULL;
+  PT_Production first_ofs = NULL;
   ATerm env = (ATerm) ATempty;
   equation_entry *entry = NULL;
+  int i, tries;
 
   top_ofs = PT_getTreeProd(trm);
   first_arg = getFirstArgument(trm);
 
-  /* first try equations that have (guarded) first arguments */
+  tries = 1;
   if (first_arg != NULL) {
-    PT_Production first_ofs = PT_getTreeProd(first_arg);
+    first_ofs = PT_getTreeProd(first_arg);
+    tries++;
+  }
 
+  /* We try to find equations, first with a (guarded) first argument,
+   * then once more without a guarded first argument.
+   */
+  for(i = 0; i <= tries; i++) {
     while ((entry = find_equation(entry, top_ofs, first_ofs))) {
       env = try(trm, entry, depth);
 
@@ -1356,19 +1364,11 @@ static PT_Tree reduce(PT_Tree trm, int depth)
 	return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
       }
     }
+
+    first_ofs = NULL;
   }
 
-  /* then try equations with variables as first arguments or
-   * that are constant terms
-   */
-  while ((entry = find_equation(entry, top_ofs, (PT_Production) NULL))) {
-    env = try(trm, entry, depth);
-
-    if (!is_fail_env(env)) {
-      return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
-    }
-  }
-
+  /* this should be 'return FAIL' */
   return trm;
 }
 
