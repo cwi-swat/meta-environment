@@ -1,0 +1,32 @@
+module ExtractProcessInvocations
+
+imports Rstore
+imports Tscript
+imports ToolBusOperations
+imports MyPosInfo[ProcessName]
+
+exports
+  context-free syntax
+    extractProcessInvocations(Tscript, RSTORE)
+      -> RSTORE {traversal(accu,top-down,break)}
+
+  context-free syntax
+    extractProcessInvocations(TscriptDef, RSTORE)
+      -> RSTORE {traversal(accu,top-down,break)}
+
+  context-free syntax
+    extractProcessInvocations(ProcessInvocation, RSTORE)
+      -> RSTORE {traversal(accu,top-down,break)}
+
+hiddens
+  context-free syntax
+    addProcessInvocation(RSTORE, ProcessName) -> RSTORE
+
+  variables
+    "$ProcessInvocation" -> ProcessInvocation
+    "$ProcessName" -> ProcessName
+    "$Rstore"[0-9]* -> RSTORE
+    "$Terms" -> {Term ","}*
+    "$TscriptDef" -> TscriptDef
+    "$TscriptDefId" -> Area
+    "$Tuple"[0-9]* -> Elem # Elem

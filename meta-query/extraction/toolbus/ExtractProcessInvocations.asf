@@ -1,0 +1,32 @@
+equations
+
+[extract-process-invocations-0]
+  $TscriptDef = toolbus ( $ProcessName ),
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessInvocations($TscriptDef, $Rstore1) = $Rstore2
+
+[extract-process-invocations-1]
+  $TscriptDef = toolbus ( $ProcessName ( $Terms ) ),
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessInvocations($TscriptDef, $Rstore1) = $Rstore2
+
+[extract-process-invocations-2]
+  $ProcessInvocation = $ProcessName,
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessInvocations($ProcessInvocation, $Rstore1) = $Rstore2
+
+[extract-process-invocations-3]
+  $ProcessInvocation = $ProcessName ( $Terms ),
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessInvocations($ProcessInvocation, $Rstore1) = $Rstore2
+
+[add-process-invocation-0]
+  $TscriptDefId = get-area($ProcessName),
+  $Tuple1 = <$TscriptDefId, processname2str($ProcessName)>,
+  add-tuple(PROCESS_INVOCATION, $Tuple1, $Rstore1) = $Rstore2
+  ===>
+  addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
