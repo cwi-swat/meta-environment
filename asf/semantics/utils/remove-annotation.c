@@ -34,6 +34,7 @@ static char myversion[] = "1.1";
 static char myarguments[] = "a:bhi:o:tV";
 
 #define arity(appl) (ATgetArity(ATgetAFun((ATermAppl) appl)))
+#define MAX_ANNOS 256
 
 ATerm RemoveAnnotation(ATerm tree, ATerm anno_label)
 {
@@ -94,7 +95,9 @@ void usage(void)
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              text output mode\n"
-        "\t-V              reveal program version (i.e. %s)\n",
+        "\t-V              reveal program version (i.e. %s)\n"
+        "\n"
+        "Use -a <label> multiple times to remove multiple labels.\n\n",
         myversion);
 }
 
@@ -105,7 +108,8 @@ int main (int argc, char **argv)
   ATerm t;
   ATbool txtout = ATfalse;
   char  *ATlibArgv[] = { "", "-silent"};
-  char *annotation = "";
+  char *annotation[256] = { "" };
+  int count_annos = 0;
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
  
@@ -116,7 +120,13 @@ int main (int argc, char **argv)
 
   while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
-    case 'a':  annotation = optarg;      break;    
+    case 'a':  
+      if(count_annos < MAX_ANNOS) {
+        annotation[count_annos++] = optarg; 
+      } else {
+        ATwarning("%s: Maximum number of labels (%d) exceeded.\n",myname,MAX_ANNOS);
+      }
+      break;    
     case 'h':  usage();                      exit(0);
     case 'i':  input_file_name  = optarg;    break;
     case 'o':  output_file_name = optarg;    break;
@@ -136,11 +146,13 @@ int main (int argc, char **argv)
     ATerror("%s: could not read term from input file %s\n", myname, input_file_name);
   }
 
-  if(!annotation || !strcmp(annotation, "")) {
+  if(!annotation[0] || !strcmp(annotation[0], "")) {
     usage();
     exit(1);
   } else {
-    t = RemoveAnnotation(t, ATparse(annotation));
+    while(--count_annos >= 0) {
+      t = RemoveAnnotation(t, ATparse(annotation[count_annos]));
+    }
   }
 
   if(txtout) {
