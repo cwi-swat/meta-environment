@@ -99,10 +99,19 @@
 \xmlattributes{BODY}{BGCOLOR="#ffffe6"}
 \xmlattributes{TABLE}{BORDER}
 \setcounter{htmldepth}{3}
+\setcounter{secnumdepth}{3}
 
 \date{\today}
 \begin{document}
 \maketitle    
+
+
+\begin{ifhtml}
+\begin{center}
+The postscript version of this document can also be
+\xlink{downloaded}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.ps.gz}.
+\end{center}
+\end{ifhtml}
 
 \begin{abstract}
 This is a preliminary user manual for the \ASmetaenv\ Release 1.
@@ -122,7 +131,7 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 
 %---- [ OVERVIEW ]---- 
 
-\section{Update with respect to previous version}
+\section*{Update with respect to previous version}
 
 \begin{itemize}
 \item Updated the text at various places.
