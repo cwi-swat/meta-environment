@@ -307,13 +307,17 @@ ATerm add_equations(int cid, char *name, ATerm equs)
   ATermList newequs;
   int l;
 
-  ATfprintf(stderr, "preparing equations...\n");
+  if(run_verbose) {
+    ATwarning("preparing equations...\n");
+  }
   newequs = RWprepareEqs((ATermList) equs);
   l = ATgetLength(newequs);
 
   enter_equations(name, newequs);
 
-  ATfprintf(stderr,"Processing %d equations of module %s\n",l,name);
+  if(run_verbose) {
+    ATwarning("Processing %d equations of module %s\n",l,name);
+  }
   return ATmake("snd-value(equ-added(<str>))",name);
 }
 
@@ -354,29 +358,31 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   rewrite_steps = 0;
   select_equations(modname);
 
-  ATfprintf(stderr, "rewriting...\n");
+  if(run_verbose) {
+    ATwarning("rewriting...\n");
+  }
   times(&start);
   newtrm = rewrite(realtrm,(ATerm) ATempty);
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
   result = asfix_put_term(trm,newatrm);
-/*
-  ATfprintf(stderr,"result = %t\n", result);
-*/
 
 #ifdef PROFILING
-  ATfprintf(stdout, "rewriting took %d rewrite steps.\n", rewrite_steps);
+  if(run_verbose) {
+    ATwarning("rewriting took %d rewrite steps.\n", rewrite_steps);
+  }
   user = rewriting.tms_utime - start.tms_utime;
   system = rewriting.tms_stime - start.tms_stime;
-  ATfprintf(stdout, "rewriting: %f user, %f system (%f steps/sec)\n",
+  if(run_verbose) {
+    ATwarning("rewriting: %f user, %f system (%f steps/sec)\n",
 	TICK2SEC(user), TICK2SEC(system),
 	((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
+  }
 #endif
 
   return ATmake("snd-value(result(<term>))",result);
 }
-
 
 /*}}}  */
 /*{{{  ATbool no_new_vars(ATerm trm,ATermList env) */
