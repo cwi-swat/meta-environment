@@ -272,7 +272,7 @@ system.  Topics that will be addressed include:
 
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
 result, the \ASmetaenv\ main window pops up. This is shown in
-Figure~\ref{FIG:meta1}.
+Figure~\ref{FIG:meta-start}.
 
 
 The {\tt meta} command has the following options, which may come in
@@ -309,8 +309,8 @@ may contain a list of absolute and/or relative paths. See the meta.conf
 file in the demo directory for an example. (**)
 
 \begin{figure}[tb]
-  \centerline{\epsfig{file=meta1.ps,width=10cm}}
-  \caption{\label{FIG:meta1} Initial window of \ASmetaenv}
+  \centerline{\epsfig{file=meta-start.ps,width=10cm}}
+  \caption{\label{FIG:meta-start} Initial window of \ASmetaenv}
 \end{figure}
 
 \section{The Main Window}
@@ -336,11 +336,13 @@ The main window of the  \ASmetaenv\ consists of the following parts:
 
   \end{itemize}
 
-\item The \emph{import pane}: A graphical canvas (empty in Figure~\ref{FIG:meta1}) at the left
+\item The \emph{import pane}: A graphical canvas (empty in
+Figure~\ref{FIG:meta-start}) at the left
 hand side of the window that shows the import graph of the
 specification you are editing.
 
-\item The \emph{module list}: a vertical list (empty in Figure~\ref{FIG:meta1}) at
+\item The \emph{module list}: a vertical list (empty in
+Figure~\ref{FIG:meta-start}) at
 the right/middle part of the window that shows the names of
 all modules in the current specification.
 
@@ -365,24 +367,12 @@ activity of the system.
 If the \ASmetaenv\ is running a module can be opened by either clicking
 in the import pane or via the pull down menu {\tt File}.
 
-The {\tt File} menu contains the following entries:
+The {\tt File} menu is shown in Figure \ref{FIG:file-menu}.
 
-\begin{itemize}
-
-\item {\tt New}
-\item {\tt Open}
-\item {\tt Save}
-
-\item {\tt Clear }
-\item {\tt Revert}
-
-\item {\tt Export}
-
-\item {\tt Print Setup}
-\item {\tt Print}
-\item {\tt Quit}
-
-\end{itemize} 
+\begin{figure}[tb]
+  \centerline{\epsfig{file=file-menu.ps,width=3cm}}
+  \caption{\label{FIG:file-menu} File pull-down menu of \ASmetaenv}
+\end{figure}
 
 \subsection{The Edit menu}
 
@@ -395,11 +385,12 @@ The {\tt File} menu contains the following entries:
 
 \subsection{The Graph Menu}
 
-\begin{itemize}
-\item {\tt View All}
-\item {\tt Autoresize after loading}
-\item {\tt Animate while loading}
-\end{itemize}
+The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=graph-menu.ps,width=5cm}}
+  \caption{\label{FIG:graph-menu} Graph pull-down menu of \ASmetaenv}
+\end{figure}
 
 \subsection{The Debug Menu}
 
