@@ -20,7 +20,8 @@ let
  Path : str,
  From : str,
  To   : str,
- ModuleNames : list
+ ModuleNames : list,
+ Paths : list
 in
   execute(sdf-modules, SM?) .
   (
@@ -38,6 +39,16 @@ in
       rec-value(SM, module-path-inconsistent) .
       snd-msg(sm-module-path-inconsistent)
     )
+  +
+    rec-msg(sm-get-new-module-name(Paths?, Path?, ModuleId?)) .
+    snd-eval(SM, get-new-module-name(Paths, Path, ModuleId)) .
+    (
+      rec-value(SM, new-module-name(Path?, ModuleId?)) .
+      snd-msg(sm-new-module-name(Path, ModuleId))
+    +
+      rec-value(SM, module-name-inconsistent) .
+      snd-msg(sm-new-module-name-inconsistent)
+    )   
   +
     rec-msg(sm-get-all-needed-module-names(ModuleImportPairs?, ModuleId?)) .
     snd-eval(SM, get-all-needed-module-names(ModuleImportPairs, ModuleId)) .

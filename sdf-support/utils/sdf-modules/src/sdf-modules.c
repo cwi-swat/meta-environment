@@ -5,6 +5,7 @@
 #include <atb-tool.h>
 #include <ctype.h>
 #include <assert.h>
+#include <limits.h>
 
 #include <SDFME-utils.h>
 #include "sdf-modules.tif.h"
@@ -12,6 +13,7 @@
 #include "plain-imports.h"
 
 #define SEP '/'
+#define PATH_LEN (_POSIX_PATH_MAX)
 
 static char myversion[] = "1.0";
 
@@ -147,6 +149,54 @@ ATerm get_module_path(int cid, char *path, char *id)
   }
 
   return ATmake("snd-value(module-path(<str>))", path);
+}
+
+/*}}}  */
+/*{{{  ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id) */
+
+ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
+{
+  ATermList search = (ATermList) searchPaths;
+  char chosenPath[PATH_LEN];
+  char chosenId[PATH_LEN];
+  int i;
+  
+  /* We will choose the first longest search path that matches the path of
+   * the chosen module, then construct a compound module id to complete
+   * the filename.
+   */
+
+  chosenPath[0] = '\0';
+
+  for (; !ATisEmpty(search); search = ATgetNext(search)) {
+    char *firstPath = ATgetName(ATgetAFun((ATermAppl) ATgetFirst(search)));
+    int len = strlen(firstPath);
+    char end = path[len];
+
+    path[len] = '\0';
+
+    if (!strcmp(path, firstPath)) {
+      if (strlen(chosenPath) < strlen(firstPath)) {
+	strcpy(chosenPath,firstPath);
+      }
+    }
+
+    path[len] = end;
+  }
+
+  if (strcmp(chosenPath,"")) {
+    /* skip trailing slashes */
+    for (i = strlen(chosenPath); i < strlen(path), path[i] == '/'; i++);
+
+    strcpy(chosenId,path+i);
+    strcat(chosenId,id);
+
+    return ATmake("snd-value(new-module-name(<str>,<str>))", chosenPath, 
+		  chosenId);
+  }
+  else {
+    return ATmake("snd-value(module-name-inconsistent)");
+  }
 }
 
 /*}}}  */
