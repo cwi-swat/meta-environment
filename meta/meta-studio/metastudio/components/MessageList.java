@@ -8,21 +8,21 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import metastudio.*;
 import metastudio.MultiBridge;
+import metastudio.UserInterfacePanel;
 import metastudio.utils.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
+import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.ParseError;
-import aterm.pure.PureFactory;
 
 public class MessageList extends UserInterfacePanel implements ListSelectionListener {
 	private JList list;
 	private String moduleName;
 	private ATermList data;
 
-	public MessageList(PureFactory factory, MultiBridge bridge) {
+	public MessageList(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
         
 		list = new JList();

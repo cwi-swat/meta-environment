@@ -23,5 +23,7 @@ ModulePopupMenu.java\
 ModuleTree.java\
 ModuleBrowser.java\
 ParseTreeBrowser.java\
-ChoiceDialog.java
+ChoiceDialog.java\
+MessageTabs.java\
+MainTabs.java
 

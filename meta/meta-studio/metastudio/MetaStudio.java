@@ -16,17 +16,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 
 import metastudio.components.ChoiceDialog;
-import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
-import metastudio.components.HistoryPanel;
+import metastudio.components.MainTabs;
 import metastudio.components.MenuBar;
-import metastudio.components.MessageList;
-import metastudio.components.ModuleBrowser;
+import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
-import metastudio.components.ParseTreeBrowser;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
@@ -36,8 +32,6 @@ import aterm.pure.PureFactory;
 public class MetaStudio extends JFrame  {
     private static PureFactory factory;
     private MultiBridge bridge;
-
-    private HistoryPanel historyPanel;
 
     public static final void main(String[] args) throws IOException {
         new MetaStudio(args);
@@ -116,12 +110,7 @@ public class MetaStudio extends JFrame  {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
 
-        container.add(createMessageTabs(), BorderLayout.CENTER);
-
-        if (historyPanel == null) {
-            historyPanel = new HistoryPanel(factory, getBridge());
-            getBridge().addToolComponent(historyPanel);
-        }
+        container.add(new MessageTabs(factory, getBridge()), BorderLayout.CENTER);
 
         StatusBar bar = new StatusBar(factory, getBridge());
         getBridge().addToolComponent(bar);
@@ -132,7 +121,7 @@ public class MetaStudio extends JFrame  {
 
 
     private JSplitPane createMainPane() {
-        JComponent tabs = createMainTabs();
+        JComponent tabs = new MainTabs(factory, getBridge());
         JPanel panel = createMessageStatusPanel();
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
@@ -143,38 +132,6 @@ public class MetaStudio extends JFrame  {
         return mainPanel;
     }
     
-    
-    private JTabbedPane createMainTabs() {
-        JTabbedPane tabs = new JTabbedPane();
-
-        addTab(tabs, "Modules", new ModuleBrowser(factory, getBridge()));
-        addTab(tabs, "Parse tree", new ParseTreeBrowser(factory, getBridge()));
-        
-        return tabs;
-    }
-    
-    private void addTab(JTabbedPane tabs, String title, JComponent tool) {
-        tabs.insertTab(title, null, tool, null, tabs.getTabCount());
-    }
-
-  
-    private JTabbedPane createMessageTabs() {
-        JTabbedPane messageTabs = new JTabbedPane();
-
-        if (historyPanel == null) {
-            historyPanel = new HistoryPanel(factory, getBridge());
-        }
-        
-        UserInterfacePanel feedbackList = new FeedbackList(factory, getBridge());
-        messageTabs.insertTab("feedback", null, feedbackList, "feedback messages", 0);
-       
-        UserInterfacePanel messageList = new MessageList(factory, getBridge());
-        messageTabs.insertTab("messages", null, messageList, "old-style messages", 1);
-        
-        messageTabs.insertTab("history", null, historyPanel, "Execution history", 2);
-      
-        return messageTabs;
-    }
 
     private void postQuitEvent() {
         getBridge().sendEvent(factory.parse("quit"));
