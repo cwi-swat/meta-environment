@@ -23,6 +23,7 @@ TEST_MODULES_ASFE_ONLY=Combination-Typecheck
 ASFC=${top_builddir}/asfc/src/asfc
 ASFE=${top_builddir}/asfe/src/asfe
 ATRMANNOS=${ATERM}/bin/atrmannos
+ATDIFF=${ATERM}/bin/atdiff
 EQS=${srcdir}/eqs
 IN=${srcdir}/input
 OUT=${srcdir}/output
@@ -37,7 +38,7 @@ check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
 %.test: %.asfe.test %.asfc.test
 	@printf "Testing $*, comparing asfe and asfc: "
 	@set -e; for i in *.asfc.out; do \
-          atdiff $$i `basename $$i .asfc.out`.asfe.out ;\
+          ${ATDIFF} $$i `basename $$i .asfc.out`.asfe.out ;\
           printf "."; \
 	done;
 	@printf "\n"
