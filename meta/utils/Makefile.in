@@ -16,17 +16,94 @@ libdir		= ${exec_prefix}/lib
 includedir	= ${prefix}/include
 
 SHELL		= @SHELL@
+CC              = @CC@
+CFLAGS          = @CFLAGS@ ${XCFLAGS}
+CPP             = @CPP@
+CPPFLAGS        = @CPP@ ${XCPPFLAGS}
+DEFS            = @DEFS@ ${XDEFS}
+INCLUDES        = @INCLUDES@ ${XINCLUDES}
+LIBS            = @LIBS@ ${XLIBS}
+SOCKLIBS        = @SOCKLIBS@
+GELLIBS         = @GELLIBS@
+
 INSTALL		= @INSTALL@
 INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
+AR              = @AR@
+
+GEL             = @GEL@
+EPIC            = @EPIC@
+ATERM           = @ATERM@
+TOOLBUS         = @TOOLBUS@
+
+NOWEB           = @NOWEB@
+NOWEAVE         = @NOWEAVE@
+NOTANGLE        = @NOTANGLE@
+
+# Implicit rules
+include ${top_srcdir}/implicit-rules
+
+# The eXtra parts of some variables
+XCFLAGS         =
+XCPPFLAGS       =
+XINCLUDES       = -I$(ATERM)/include -I.
+XLIBS           = -L$(ATERM)/lib -lATerm-cc -lAsFix-cc
+
+# Other variables
+# CSRC/CHDR are used to calculate dependencies.
+CSRC            = msm-paths.c msm-utils.c imports.c module-utils.c
+CHDR            = msm-utils.h module-utils.h libutil.h
+#All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= gen-table parse-sdf2 sdf2table idef2tif
-LIBFILES	= Sdf2.baf
+BINFILES	= gen-table parse-sdf2 sdf2table idef2tif msm-paths imports
+LIBFILES	= 
 INCLUDEFILES	=
 
-all doc clean:	${BINFILES} ${LIBFILES}
+OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
+OBJ_GCC         = $(patsubst %.c,%-gcc.o,$(CSRC))
+OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
+OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
+
+# CLEANFILES are removed by 'make clean'
+CLEANFILES      = $(LIBFILES) 
+
+# DISTCLEANFILES are removed by 'make distclean'
+DISTCLEANFILES  =
+
+all:	${BINFILES} ${LIBFILES}
+
+%-cc.o: %.c
+	cc -O $(INCLUDES) -c -o $@ $<
+
+%-gcc.o: %.c
+	gcc -Wall -pedantic -O4 $(INCLUDES) -c -o $@ $<
+
+%-dbg.o: %.c
+	gcc -Wall -pedantic -g $(INCLUDES) -c -o $@ $<
+
+%-prof.o: %.c
+	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
+
+libutils-cc.a: msm-utils-cc.o module-utils-cc.o
+	$(AR) cr $@ msm-utils-cc.o module-utils-cc.o
+
+libutils-gcc.a: msm-utils-gcc.o module-utils-gcc.o
+	$(AR) cr $@ msm-utils-gcc.o module-utils-gcc.o
+
+libutils-dbg.a: msm-utils-dbg.o module-utils-dbg.o
+	$(AR) cr $@ msm-utils-dbg.o module-utils-dbg.o
+
+libutils-prof.a: msm-utils-prof.o module-utils-prof.o
+	$(AR) cr $@ msm-utils-prof.o module-utils-prof.o
+
+msm-paths: msm-paths-cc.o libutils-cc.a
+	$(CC) -o $@ msm-paths-cc.o libutils-cc.a
+
+imports: imports-cc.o libutils-cc.a
+	$(CC) -o $@ imports-cc.o libutils-cc.a $(LIBS)
+
 
 uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
@@ -37,6 +114,11 @@ install:	all
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+
+# clean target (remove all easily build components and temporary files)
+clean:
+	rm -f *.o *~ $(CLEANFILES)
+doc:
 
 distclean:
 
