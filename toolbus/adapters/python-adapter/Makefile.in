@@ -56,7 +56,7 @@ all:	${PROGRAMS} $(LIBFILES) $(SRCDOC) ${DOC}
 
 TBstart.py TB.py TBterm.py: TB.py.nw
 	$(NOWEB) TB.py.nw
-	touch TBstart.py TB.py
+	touch TBstart.py TB.py TBterm.py
 
 parser: TBterm.py
 	python -c "import TBterm; TBterm.build_term_parser()"

@@ -72,14 +72,13 @@ def getint(sock, tool):
         return string.atoi(r.group(2))
 def putint(sock, tool, n):
         send_handshake(sock, "%s %d" % (tool, n))
+def connectsocket(host, port):
 	if not host:
 		sock = connect_UNIX_socket(port)
 	else:
 		sock = connect_INET_socket(host, port)
 	#sock.setsockopt(socket.IPPROTO_TCP, TCP_NODELAY, sock.fileno())
-	return socket
-
-%{{{ def connect_UNIX_socket(port):
+	return sock
 
 # Connect to a unix domain socket.
 
@@ -100,10 +99,6 @@ def connect_UNIX_socket(port):
 		time.sleep(1)
 	else: break
     return sock
-
-%}}}
-%{{{ def connect_INET_socket(host, port):
-
 # Connect to a internet socket.
 
 def connect_INET_socket(host, port):
@@ -118,9 +113,6 @@ def connect_INET_socket(host, port):
 		time.sleep(1)
 	else: break
     return sock
-
-%}}}
-
 def createsocket(host, port):
         if not host:
                 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -140,41 +132,30 @@ def createsocket(host, port):
         pair = sock.accept()
         return pair[0]
 def eventloop():
-        if TB.use_tk:
-		%{{{ Tk eventloop
-
-                tkinter.createfilehandler(TB.input,
-                                tkinter.__dict__["READABLE"], tkhandle_term)
-                try:
-                        Tkinter.Tk().mainloop()
-                        TB.send("snd-disconnect")
-                        TB.connected = 0
-                except KeyboardInterrupt:
-                        pass
-                except:
-                        if TB.connected:
-                                TB.msg("Something went wrong in Tk mainloop:")
-                                TB.msg("Exception type  = %s" % sys.exc_type)
-                                TB.msg("Exception value = %s" % sys.exc_value)
-                                print "Traceback:"
-                                traceback.print_exc()
-                                TB.connected = 0
-
-		%}}}
+	if TB.use_tk:
+		tkinter.createfilehandler(TB.input,
+		tkinter.__dict__["READABLE"], tkhandle_term)
+		try:
+			Tkinter.Tk().mainloop()
+			TB.send("snd-disconnect")
+			TB.connected = 0
+		except KeyboardInterrupt:
+			pass
+		except:
+			if TB.connected:
+				TB.msg("Something went wrong in Tk mainloop.")
+				traceback.print_exc()
+				TB.connected = 0
 	else:
-		%{{{ Non-Tk eventloop
-
 		while 1:
 			try:
-                                select.select([TB.input],[],[])
-                        except select.error, e:
-                                (n, msg) = e
-                                TB.connected = 0
-                                return
-                        else:
-                                handle_term()
-
-		%}}}
+				select.select([TB.input],[],[])
+			except select.error, e:
+				(n, msg) = e
+				TB.connected = 0
+				return
+			else:
+				handle_term()
 
 def tkhandle_term(file, mask):
         handle_term()
@@ -183,7 +164,7 @@ def handle_term():
         if t:
                 # Parse the term
                 try:
-                        T = TBterm.DoParse(t)
+                        T = TBterm.parse(t)
                 except:
                         TB.msg("Malformed term %s ignored (%s)" % (t, sys.exc_value))
                 else:
@@ -254,9 +235,9 @@ def dispatch_user(T):
                                         % (fun, TB.module))
                         else:
                                 return R
-		else:
-                raise TBillterm, (T, "Term must be an application")
- 
+	else:
+		raise TBillterm, (T, "Term must be an application")
+
 
 
 def check_signature(Sig):
@@ -295,10 +276,9 @@ except socket.error, e:
 	(n, msg) = e
 	TB.msg("Cannot connect to ToolBus: %s" % msg)
 except:
-	TB.msg("Something went wrong while initializing module TB:")
-	TB.msg("Exception type  = %s" % sys.exc_type)
-	TB.msg("Exception value = %s" % sys.exc_value)
-	TB.msg("Traceback =\n%s" % sys.exc_traceback)
+	TB.msg("Something went wrong while initializing module TB.")
+	traceback.print_exc()
+	sys.exit(1)
 try:
         cmd = "import " + TB.module
         exec cmd

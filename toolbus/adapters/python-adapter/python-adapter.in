@@ -12,7 +12,7 @@ else
   PYTHONPATH=$LIBDIR
   export PYTHONPATH
 fi
-echo $PYTHONPATH
+#echo $PYTHONPATH
 
 # start python
 python $LIBDIR/TBstart.py -TB_LIB $LIBDIR $@
