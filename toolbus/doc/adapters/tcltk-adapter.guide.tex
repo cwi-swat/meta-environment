@@ -15,11 +15,11 @@ the wish-adapter and the wish interpreter (see Figure \ref{tcltk-adapters}.
 \end{figure}
  
 
-\subsection{\label{wish-adapter}{\tt wish-adapter}}
+\subsection{\label{tcltk-adapter}{\tt tcltk-adapter}}
 
 \paragraph{Synopsis.} Execute Tcl/Tk's windowing shell {\tt wish} as a tool.
 
-\paragraph{Example.} {\tt wish-adapter -script calculator.tcl}
+\paragraph{Example.} {\tt tcltk-adapter -script calculator.tcl}
 
 \paragraph{Specific arguments.}
 \begin{itemize}
@@ -96,7 +96,7 @@ is read, and all further requests are directed to this incarnation
 of {\tt wish}. A small set of Tcl procedures is available for
 unpacking and packing \TB\ terms (see below).
 
-\subsection{\label{Tcl-functions}Predefined Tcl functions}
+\subsection{\label{TclTk-functions}Predefined Tcl functions}
 The following Tcl functions are predefined and can be used freely in Tcl
 script executed via the wish-adapter:
 \begin{itemize}
@@ -132,22 +132,13 @@ the standard error stream for print statements in the Tcl script,
 since using standard output will disrupt the communication with the
 \TB}.
 
-\subsection{\label{Ex-hello.tcl}The hello example in tcl: {\tt hello.tcl}}
+\subsection{\label{Ex-hello2.tcl}The hello example in tcl: {\tt hello.tcl}}
 
 Writing the hello tool in Tcl requires two steps:
 \begin{itemize}
 \item Write the required Tcl code {\tt hello.tcl}. The result is shown in Figure~\ref{fig:hello.tcl}.
 \item Replace {\tt hello}'s tool definition in {\tt hello2.tb} by:
 \begin{verbatim}
-      tool hello is {command = "wish-adapter -script hello.tcl"}
+      tool hello is {command = "tcltk-adapter -script hello.tcl"}
 \end{verbatim}
 \end{itemize}
-
-
-\begin{figure}
-\rule{\textwidth}{0.5mm}
-\input{../demos/hello/hello.tcl.tex}
-  \caption{{\tt hello.tcl}: the hello tool in Tcl}
-  \label{fig:hello.tcl}
-\rule{\textwidth}{0.5mm}
-\end{figure}
