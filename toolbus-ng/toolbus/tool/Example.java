@@ -58,6 +58,7 @@ public class Example extends Frame implements ActionListener {
 
   public void terminate(String msg) {
     // Just exit when the ToolBus terminates
+    dispose();  // of this frame
     bridge.terminate(msg);
   }
 

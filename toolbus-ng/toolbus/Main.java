@@ -24,8 +24,8 @@ public class Main {
     //NestedIterTest();
      //DisruptTest();
     //MergeTest();
-    //ParseTest();
-    ToolTest();
+    ParseTest();
+    //ToolTest();
   }
  
   
