@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #ifndef WITHOUT_TOOLBUS
-#include "addPosInfo.tif.h"
+#include "position-annotator.tif.h"
 #endif
 
 static char version[] = "1.3";
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    cid = ATBconnect(NULL, NULL, -1, addPosInfo_handler);
+    cid = ATBconnect(NULL, NULL, -1, position_annotator_handler);
     ATBeventloop();
   }
   else 
@@ -219,4 +219,3 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
-

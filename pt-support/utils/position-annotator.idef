@@ -1,17 +1,19 @@
+/* $Id$ */
 
-tool addPosInfo is { command = "addPosInfo" }  
+tool position-annotator is {
+  command = "addPosInfo"
+}
 
-
-process AddPosInfo is
+process PositionAnnotator is
 let
-  API  : addPosInfo,
+  API : position-annotator,
   Tree : term,
   Path : str,
   Depth : int
 in
   ( 
     rec-msg(add-posinfo(Path?, Tree?)).
-    execute(addPosInfo, API?) .
+    execute(position-annotator, API?) .
     snd-eval(API, add-posinfo(Path, Tree)) .
     rec-value(API, tree-with-pos-info(Tree?)) .
     snd-msg(tree-with-pos-info(Tree)) .
@@ -19,7 +21,7 @@ in
     snd-terminate(API,"") 
   +
     rec-msg(add-posinfo-packed(Path?, Tree?)).
-    execute(addPosInfo, API?) .
+    execute(position-annotator, API?) .
     snd-eval(API, add-posinfo-packed(Path, Tree)) .
     rec-value(API, tree-with-pos-info(Tree?)) .
     snd-msg(tree-with-pos-info(Tree)) .
@@ -27,7 +29,7 @@ in
     snd-terminate(API,"") 
   +
     rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
-    execute(addPosInfo, API?).
+    execute(position-annotator, API?).
     snd-eval(API, add-posinfo-to-depth(Path, Tree, Depth)).
     rec-value(API, tree-with-pos-info(Tree?)).
     snd-msg(tree-with-pos-info(Tree)).
@@ -37,4 +39,4 @@ in
   delta
 endlet
 
-toolbus(AddPosInfo)
+toolbus(PositionAnnotator)

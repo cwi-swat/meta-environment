@@ -4,7 +4,7 @@ SUBDIRS = implodePT
 
 EXTRA_DIST = \
 	unparser.idef \
-	addPosInfo.idef \
+	position-annotator.idef \
 	apply-function.idef
 
 bin_PROGRAMS = \
@@ -26,13 +26,13 @@ INCLUDES = \
 
 pkgdata_DATA = \
 	unparser.idef \
-	addPosInfo.idef \
+	position-annotator.idef \
 	apply-function.idef
 
 noinst_HEADERS = \
 	unparser.tif.h \
 	apply-function.tif.h \
-	addPosInfo.tif.h 
+	position-annotator.tif.h 
 
 apply_function_SOURCES = \
 	apply-function.tif.c \
@@ -45,7 +45,7 @@ apply_function_LDADD = \
 	${SOCKLIBS}
 
 addPosInfo_SOURCES = \
-	addPosInfo.tif.c \
+	position-annotator.tif.c \
 	addPosInfo.c
 
 addPosInfo_LDADD = \
