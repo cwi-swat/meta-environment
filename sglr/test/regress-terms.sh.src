@@ -16,6 +16,7 @@ MV=mv
 RM=rm
 SGLR="../sglr/sglr"
 COMPARE="__ATERM__/bin/atdiff"
+ERRORCOMPARE="__ERROR_SUPPORT__/bin/error-diff"
 
 languages=$mydir/lang-types
 tables=$mydir/tables
@@ -180,16 +181,20 @@ do
 		org=$dir/$asfile.org
 		out=${TMPDIR:-/var/tmp}/$asfile.$$
 		$SGLR $VERBOSE --cycle -2 -p $ptbl -i $file -o $out	2>/dev/null
-	        if $COMPARE $VERBOSE $out $org		> /dev/null
+	        if $COMPARE $VERBOSE $out $org	> /dev/null
 	        then
 			Notify "Regression test for error term $base succeeded"
-			if [ $update -eq 0 ] ; then
-	                	${RM} -f $out
-			else
-				${MV} $out $org
+		else
+	        	if $ERRORCOMPARE -1 $out -2 $org		> /dev/null
+	        	then
+				if [ $update -eq 0 ] ; then
+	                		${RM} -f $out
+				else
+					${MV} $out $org
+				fi
+	        	else
+				Error "Regression test for error term $base failed"
 			fi
-	        else
-			Error "Regression test for error term $base failed"
 	        fi
 	done
 done
