@@ -43,14 +43,10 @@ endlet
 process ShowLocation(Filename : str, Location : term) is
 let
   EditorId : term,
-  ModuleName : str,
-  Focus : term,
-  Positions : list
+  ModuleName : str
 in
   snd-msg(edit-general(Filename)) .
   rec-msg(editor-opened(ModuleName?, EditorId?)) .
-  snd-msg(get-focus-at-posinfo(EditorId, Location)) .
-  rec-msg(focus-at-posinfo(EditorId, Location, Focus?)) .
-  snd-msg(set-cursor-at-focus(EditorId, Focus)) .
-  snd-msg(set-focus(EditorId, Focus)) 
+  snd-msg(set-cursor-at-error-location(EditorId, Location)) .
+  snd-msg(set-focus-at-error-location(EditorId, Location)) 
 endlet  
