@@ -21,6 +21,14 @@ public class DelegateBridge extends DelegateTool {
 		}
 	}
 	
+	public void postMaskeradeTerminate(ATerm term) {
+		if (tool != null) {
+			tool.postMaskeradeTerminate(term);
+		} else {
+			throw new UnsupportedOperationException("method `postMaskeradeTerminate' not supported.");
+		}
+	}
+	
 	public void postMaskeradeValue(ATerm term) {
 		if (tool != null) {
 			tool.postMaskeradeValue(term);

@@ -9,8 +9,9 @@ import aterm.*;
 import toolbus.*;
 
 abstract public class DelegateTool extends AbstractTool implements DelegateTif {
-	private ATerm PrecValue;
 	private ATerm PrecEvent;
+	private ATerm PrecValue;
+	private ATerm PrecTerminate;
 	
 	// Mimic the constructor from the AbstractTool class
 	protected DelegateTool(ATermFactory factory) {
@@ -23,7 +24,7 @@ abstract public class DelegateTool extends AbstractTool implements DelegateTif {
 		PrecValue = factory.parse("rec-do(fun(value(<term>)))");
 		PrecEvent = factory.parse("rec-do(fun(event(<term>)))");
 //		PrecAckEvent = factory.parse("rec-ack-event(<term>)");
-//		PrecTerminate = factory.parse("rec-terminate(<term>)");
+		PrecTerminate = factory.parse("rec-terminate(<term>)");
 	  }
 	
 	// The generic handler calls the specific handlers
@@ -38,6 +39,11 @@ abstract public class DelegateTool extends AbstractTool implements DelegateTif {
 		result = term.match(PrecValue);
 		if (result != null) {
 			postMaskeradeValue((ATerm)result.get(0));
+			return null;
+		}
+		result = term.match(PrecTerminate);
+		if (result != null) {
+			postMaskeradeTerminate((ATerm)result.get(0));
 			return null;
 		}
 		
