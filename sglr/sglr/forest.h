@@ -28,12 +28,12 @@
     we're abusing here
 */
 
-/* Taken from @ATERMDIST@/aterm/encoding.h */
+/* Taken from @ATERMDIST@/aterm/encoding.h
 #define MASK_MARK         (1<<1)
 #define IS_MARKED(h)      ((h) &   MASK_MARK)
 #define SET_MARK(h)       ((h) |=  MASK_MARK)
 #define CLR_MARK(h)       ((h) &= ~MASK_MARK)
-
+ */
 #define SG_IS_MARKED(t)     IS_MARKED(t->header)
 #define SG_MARK(t)   	    SET_MARK(t->header)
 #define SG_UNMARK(t)        CLR_MARK(t->header)

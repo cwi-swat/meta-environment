@@ -113,7 +113,7 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
   FILE *file;
 
   if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-")) {
-      if (std_error == NULL || !strcmp(FN, "-"))
+      if (std_error == NULL || (FN && !strcmp(FN, "-")))
         return stdin;
 
       ATfprintf(stderr,"%s: %s\n", prgname, std_error);

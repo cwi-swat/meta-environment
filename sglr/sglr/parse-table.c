@@ -470,12 +470,12 @@ void SG_SaveParseTable(char *L, parse_table *pt)
 
 parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
 {
-  int i;
+  int i = 0;
 
   if (SG_DEBUG)
     ATfprintf(SGlog(), "Request for language %s\n", L);
 
-  for (i = 0; i < last_table; i++)
+  for (; L && i < last_table; i++)
     if (!strcmp(L, tables[i].name)) {
       if (SG_DEBUG)
         ATfprintf(SGlog(), "Table for language %s available with index %d\n", L, i);

@@ -600,57 +600,56 @@ ATbool ATtableIsEqual(ATermTable t1, ATermTable t2)
   return ATtrue;
 }
 
-ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
+ATbool SG_Injection(parse_table *pt, ATermInt label)
 {
-  ATermTable multiset1, multiset2;
-  ATermAppl  max = NULL;
+  ATerm prod, in;
 
-  if(ATisEqual(tree1, tree2))
-    return NULL;	/*  multi-prio is irreflexive  */
+  prod = SG_LookupProduction(pt, ATgetInt(label));
 
-  multiset1 = ATtableCreate(256, 75);
-  multiset2 = ATtableCreate(256, 75);
-
-  SG_MakeMultiSet((ATerm) tree1, multiset1);
-  SG_MakeMultiSet((ATerm) tree2, multiset2);
-
-  if(ATtableIsEqual(multiset1, multiset2))
-    return NULL;	/*  multi-prio is irreflexive  */
-
-  if(SG_MultiSetGtr(pt, multiset1, multiset2)) {
-    if(SG_DEBUG)
-      ATfprintf(SGlog(), "Multiset Priority: aprod %t >> aprod %t\n",
-                SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
-    max = tree1;
-  }
-/* else */
-  if(SG_MultiSetGtr(pt, multiset2, multiset1)) {
-    if(max != NULL) {
-      if(SG_DEBUG)
-        ATfprintf(SGlog(), "Multiset priority relation is not antisymmetric, ignoring it\n");
-      ATfprintf(stderr, "Multiset priority relation is not antisymmetric, ignoring it\n");
-      max = NULL;
-    } else {
-      if(SG_DEBUG)
-        ATfprintf(SGlog(), "Multiset Priority: aprod %t << aprod %t\n",
-                  SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
-      max = tree2;
-    }
+  if(ATmatch(prod, "prod([<term>],cf(sort(<str>)),<term>)",
+     &in, NULL, NULL)
+  && !ATmatch(in, "lit(<str>)", NULL)) {
+/* ATfprintf(stderr, "INJECTION (%t): %t\n", in, prod); */
+    return ATtrue; 
   }
 
-  ATtableDestroy(multiset1);
-  ATtableDestroy(multiset2);
-
-  if(max == NULL && SG_DEBUG)
-    ATfprintf(SGlog(), "Multiset Priority: %t >!< %t\n",
-              SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
-
-  return max;
+/* ATfprintf(stderr, "PROD: %t\n", prod); */
+  return ATfalse;
 }
 
-ATermAppl SG_MaxPriority(parse_table *pt, ATermAppl t0, ATermAppl t1)
+
+int SG_CountInjections(parse_table *pt, ATermTable T)
 {
-  ATermInt l0, l1;
+  ATerm     key;
+  ATermList keys;
+  int       ret = 0;
+
+  for(keys = ATtableKeys(T); keys && !ATisEmpty(keys);
+            keys=ATgetNext(keys)) {
+    key = ATgetFirst(keys);
+    if(SG_Injection(pt, (ATermInt) key))
+      ret += ATgetInt((ATermInt) ATtableGet(T, key));
+  }
+  return ret;
+}
+
+/*
+  SG_Filter -- a generic hook to add disambiguating `filters'
+
+  Arguments:  the current parse table
+	      two terms
+  Returns:    the preferred term of the two, or NULL if there is no
+              filter that prefers either one of them
+ */
+
+ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
+{
+  ATermInt   l0, l1;
+  ATermTable m0, m1;
+  ATermAppl  max = NULL;
+
+
+  /*  First apply direct priority filtering.  */
 
   l0 = SG_GetApplProdLabel((ATermAppl) t0);
   l1 = SG_GetApplProdLabel((ATermAppl) t1);
@@ -666,8 +665,55 @@ ATermAppl SG_MaxPriority(parse_table *pt, ATermAppl t0, ATermAppl t1)
     return t1;
   }
 
-  /*  No direct priority relation -- compare using multiset ordering  */
-  return SG_MultiSetPriority(pt, t0, t1);
+  /*  No direct priority relation?  Apply multiset ordering.  */
+
+  m0 = ATtableCreate(256, 75);
+  m1 = ATtableCreate(256, 75);
+  SG_MakeMultiSet((ATerm) t0, m0);
+  SG_MakeMultiSet((ATerm) t1, m1);
+
+  if(!ATisEqual(t0, t1) && !ATtableIsEqual(m0, m1)) {
+                                            /*  multi-prio is irreflexive  */
+    if(SG_MultiSetGtr(pt, m0, m1)) {
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "Multiset Priority: aprod %t >> aprod %t\n", l0, l1);
+      max = t0;
+    }
+  /* else */
+    if(SG_MultiSetGtr(pt, m1, m0)) {
+      if(max != NULL) {
+        if(SG_DEBUG)
+          ATfprintf(SGlog(), "Multiset priority relation is not antisymmetric, ignoring it\n");
+        ATfprintf(stderr, "Multiset priority relation is not antisymmetric, ignoring it\n");
+        max = NULL;
+      } else {
+        if(SG_DEBUG)
+          ATfprintf(SGlog(), "Multiset Priority: aprod %t << aprod %t\n", l0, l1);
+        max = t1;
+      }
+    }
+
+    if(max == NULL && SG_DEBUG)
+      ATfprintf(SGlog(), "Multiset Priority: %t >!< %t\n",
+                SG_GetApplProdLabel(t0), SG_GetApplProdLabel(t1));
+  }
+
+  /*  No multiset ordering either?  Count injections.  */
+
+  if(max == NULL) {
+    int in0, in1;
+
+    in0 = SG_CountInjections(pt, m0);
+    in1 = SG_CountInjections(pt, m1);
+
+    if(in0 > in1) max = t0;
+    if(in0 < in1) max = t1;
+  }
+
+  ATtableDestroy(m0);
+  ATtableDestroy(m1);
+
+  return max;
 }
 
 
@@ -698,8 +744,8 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
     SG_MaxNrAmb(SG_NRAMB_INC);
     newidxs = ATmakeList2(ex_annot, nw_annot);
 
-    /*  Enforce prioritization, if any, upon these two lovebirds  */
-    max = SG_MaxPriority(pt, existing, new);
+    /*  Filter the two  */
+    max = SG_Filter(pt, existing, new);
     if(!ATisEqual(max, new)) {
       ex_cln = ATremoveAnnotation((ATerm) existing, SG_ApplLabel());
       if(ATisEqual(max, existing)) {
@@ -723,12 +769,12 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
     ATbool    nw_has_lower_priority = ATfalse;
 
     newidxs = ATinsert((ATermList) ATgetLast(ambs), nw_annot);
-    /*  Refilter existing ambiguities to enforce priorities  */
+    /*  Re-filter with existing ambiguities  */
     newtrms = ATempty;
     for(oldtrms = (ATermList) ATgetFirst(ambs); !ATisEmpty(oldtrms);
         oldtrms = ATgetNext(oldtrms)) {
       prev = (ATermAppl) ATgetFirst(oldtrms);
-      max = SG_MaxPriority(pt, prev, new);
+      max = SG_Filter(pt, prev, new);
       if(!ATisEqual(max, new)) {
         newtrms = ATinsert(newtrms, (ATerm) prev);
         if(ATisEqual(max, prev)) {
