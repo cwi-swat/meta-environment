@@ -26,7 +26,7 @@ context-free syntax
   %% a lot of helper functions for the recursive-list optimization,
   %% also some structures are needed for keeping intermediate results
 
-sorts Embedding EmbeddingAt FunIdHasEmbeddingAt Rules IgnoreOrRemove
+sorts Embedding EmbeddingAt FunIdHasEmbeddingAt Rules 
 
 context-free syntax
 
@@ -35,9 +35,6 @@ context-free syntax
   "[" FunId* "]" -> Embedding
 	Embedding "at" Int -> EmbeddingAt
   FunId "has" EmbeddingAt -> FunIdHasEmbeddingAt
-
-  "ignore" -> IgnoreOrRemove
-  "remove" -> IgnoreOrRemove
 
   call-helper-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
   change-calls-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
@@ -51,12 +48,12 @@ context-free syntax
   remove-emb-rules(RuleList, FunIdHasEmbeddingAt) -> RuleList
   remove-emb-rule(Rule, FunIdHasEmbeddingAt) -> Rule
   remove-emb-side(Term, FunIdHasEmbeddingAt) -> Term
-  remove-emb-terms(TermList, FunIdHasEmbeddingAt, IgnoreOrRemove) -> TermList
-  remove-emb-term(Term, FunIdHasEmbeddingAt, IgnoreOrRemove) -> Term
+  remove-emb-terms(TermList, FunIdHasEmbeddingAt) -> TermList
+  remove-emb-term(Term, FunIdHasEmbeddingAt) -> Term
   remove-emb-conds(CondList, FunIdHasEmbeddingAt) -> CondList
   remove-emb-cond(Cond, FunIdHasEmbeddingAt) -> Cond
-  remove-emb-args(TermList, EmbeddingAt, IgnoreOrRemove) -> TermList
-  remove-emb-arg(Term, Embedding, IgnoreOrRemove) -> Term
+  remove-emb-args(TermList, EmbeddingAt) -> TermList
+  remove-emb-arg(Term, Embedding) -> Term
 
   get-list-embedding(RuleList, NameTable) -> FunIdHasEmbeddingAt
   
@@ -100,4 +97,3 @@ variables
   "Char*"[0-9]* -> CHAR*
   "Nametable"[0-9]* -> NameTable
   "Namepair*"[0-9]* -> {NamePair ","}*
-  "IgnoreOrRemove"[0-9]* -> IgnoreOrRemove

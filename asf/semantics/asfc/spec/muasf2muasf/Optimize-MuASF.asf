@@ -248,27 +248,27 @@ equations
          remove-emb-rules(Rule; Rule+, FunIdHasEmbeddingAt) =
            Rule2; Rule+2
 
-[rer-0] remove-emb-term(Term1, FunIdHasEmbeddingAt, ignore) = Term3,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term4
+[rer-0] remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
         ====
         remove-emb-rule(Term1 = Term2, FunIdHasEmbeddingAt) = Term3 = Term4
 
-[rer-1] remove-emb-term(Term1, FunIdHasEmbeddingAt, ignore) = Term3,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term4
+[rer-1] remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
         ====
         remove-emb-rule(default: Term1 = Term2, FunIdHasEmbeddingAt) = 
           default: Term3 = Term4
 
 [rer-2] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
-        remove-emb-term(Term1, FunIdHasEmbeddingAt, ignore) = Term3,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term4
+        remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
         ====
         remove-emb-rule(Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
           Cond+2 ==> Term3 = Term4
 
 [rer-3] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
-        remove-emb-term(Term1, FunIdHasEmbeddingAt,ignore) = Term3,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt,remove) = Term4
+        remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
         ====
         remove-emb-rule(default: Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
           default: Cond+2 ==> Term3 = Term4
@@ -284,14 +284,14 @@ equations
 %% Conditions are somewhat complicated. First we handle conditions that have
 %% a recursive call on both sides.
 
-[rec-0] remove-emb-term(FunId(Term+1), FunId has EmbeddingAt,remove) = Term3,
-        remove-emb-term(FunId(Term+2), FunId has EmbeddingAt,remove) = Term4
+[rec-0] remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(Term+2), FunId has EmbeddingAt) = Term4
         ====
         remove-emb-cond(FunId(Term+1) == FunId(Term+2), FunId has EmbeddingAt) =
           Term3 == Term4
 
-[rec-1] remove-emb-term(FunId(Term+1), FunId has EmbeddingAt,remove) = Term3,
-        remove-emb-term(FunId(Term+2), FunId has EmbeddingAt,remove) = Term4
+[rec-1] remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(Term+2), FunId has EmbeddingAt) = Term4
         ====
         remove-emb-cond(FunId(Term+1) != FunId(Term+2), FunId has EmbeddingAt) =
           Term3 != Term4
@@ -299,29 +299,29 @@ equations
 %% The next 4 rules cover assignment conditions where the embedding is matched
 %% in the assignment.
 
-[rec-2] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int,remove) = Term3,
-        remove-emb-arg(FunId2(Term+2), Embedding, remove) = Term4,
+[rec-2] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int) = Term3,
+        remove-emb-arg(FunId2(Term+2), Embedding) = Term4,
         FunId2(Term+2) != Term4
         ====
         remove-emb-cond(FunId1(Term+1) == FunId2(Term+2), FunId1 has Embedding at Int) =
           Term3 == Term4
 
-[rec-3] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int,remove) = Term3,
-        remove-emb-arg(FunId2(Term+2), Embedding, remove) = Term4,
+[rec-3] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int) = Term3,
+        remove-emb-arg(FunId2(Term+2), Embedding) = Term4,
         FunId2(Term+2) != Term4
         ====
         remove-emb-cond(FunId1(Term+1) != FunId2(Term+2), FunId1 has Embedding at Int) =
           Term3 != Term4
 
-[rec-4] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int,remove) = Term3,
-        remove-emb-arg(FunId2(Term+2), Embedding, remove) = Term4,
+[rec-4] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int) = Term3,
+        remove-emb-arg(FunId2(Term+2), Embedding) = Term4,
         FunId2(Term+2) != Term4
         ====
         remove-emb-cond(FunId2(Term+2) == FunId1(Term+1), FunId1 has Embedding at Int) =
           Term4 == Term3
 
-[rec-5] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int,remove) = Term3,
-        remove-emb-arg(FunId2(Term+2), Embedding, remove) = Term4,
+[rec-5] remove-emb-term(FunId1(Term+1), FunId1 has Embedding at Int) = Term3,
+        remove-emb-arg(FunId2(Term+2), Embedding) = Term4,
         FunId2(Term+2) != Term4
         ====
         remove-emb-cond(FunId2(Term+2) != FunId1(Term+1), FunId1 has Embedding at Int) =
@@ -330,25 +330,25 @@ equations
 %% If one of the sides is only a variable, then the other side can be transformed.
 
 [rec-6] is-var-term(Term2) = true,
-        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt, remove) = Term3
+        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3
         =================
         remove-emb-cond(FunId(Term+1) == Term2, FunId has EmbeddingAt) = 
            Term3 == Term2
 
 [rec-7] is-var-term(Term2),
-        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt, remove) = Term3
+        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3
         =================
         remove-emb-cond(FunId(Term+1) != Term2, FunId has EmbeddingAt) = 
            Term3 != Term2
 
 [rec-8] is-var-term(Term2),
-        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt, remove) = Term3
+        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3
         =================
         remove-emb-cond(Term2 == FunId(Term+1), FunId has EmbeddingAt) = 
            Term2 == Term3
 
 [rec-9] is-var-term(Term2),
-        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt, remove) = Term3
+        remove-emb-term(FunId(Term+1), FunId has EmbeddingAt) = Term3
         =================
         remove-emb-cond(Term2 != FunId(Term+1), FunId has EmbeddingAt) = 
            Term2 != Term3
@@ -357,63 +357,55 @@ equations
 
 [default-rec] remove-emb-cond(Cond,FunIdHasEmbeddingAt) = Cond
 
-[rets-0] remove-emb-terms(Term, FunIdHasEmbeddingAt,IgnoreOrRemove) = 
-           remove-emb-term(Term, FunIdHasEmbeddingAt,IgnoreOrRemove)
+[rets-0] remove-emb-terms(Term, FunIdHasEmbeddingAt) = 
+           remove-emb-term(Term, FunIdHasEmbeddingAt)
 
-[rets-1] remove-emb-term(Term, FunIdHasEmbeddingAt,IgnoreOrRemove) = Term2,
-         remove-emb-terms(Term+, FunIdHasEmbeddingAt,IgnoreOrRemove) = Term+2
+[rets-1] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term2,
+         remove-emb-terms(Term+, FunIdHasEmbeddingAt) = Term+2
          ====
-         remove-emb-terms(Term, Term+, FunIdHasEmbeddingAt,IgnoreOrRemove) = 
+         remove-emb-terms(Term, Term+, FunIdHasEmbeddingAt) = 
            Term2, Term+2
           
 
-[ret-0] remove-emb-args(Term+, EmbeddingAt, IgnoreOrRemove) = Term+2,
+[ret-0] remove-emb-args(Term+, EmbeddingAt) = Term+2,
         FunId2 = make-recursive-funid(FunId)
         ====
-        remove-emb-term(FunId(Term+), FunId has EmbeddingAt, IgnoreOrRemove) =
+        remove-emb-term(FunId(Term+), FunId has EmbeddingAt) =
          FunId2(Term+2)
 
 [ret-1] FunId1 != FunId2,
-        remove-emb-terms(Term+, FunId2 has EmbeddingAt, IgnoreOrRemove) = Term+2
+        remove-emb-terms(Term+, FunId2 has EmbeddingAt) = Term+2
         ====
-        remove-emb-term(FunId1(Term+), FunId2 has EmbeddingAt, IgnoreOrRemove) = 
+        remove-emb-term(FunId1(Term+), FunId2 has EmbeddingAt) = 
           FunId1(Term+2) 
 
-[default-ret] remove-emb-term(Term, FunIdHasEmbeddingAt, IgnoreOrRemove) = Term
+[default-ret] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term
 
-[reas-0] remove-emb-args(Term, Term+, Embedding at 0, IgnoreOrRemove) =
-          remove-emb-arg(Term, Embedding, IgnoreOrRemove), Term+
+[reas-0] remove-emb-args(Term, Term+, Embedding at 0) =
+          remove-emb-arg(Term, Embedding), Term+
 
-[reas-1] remove-emb-args(Term, Embedding at 0, IgnoreOrRemove) =
-          remove-emb-arg(Term, Embedding, IgnoreOrRemove)
+[reas-1] remove-emb-args(Term, Embedding at 0) =
+          remove-emb-arg(Term, Embedding)
 
 [reas-2] Int != 0,
-         Term+2 = remove-emb-args(Term+, Embedding at Int - 1, IgnoreOrRemove)
+         Term+2 = remove-emb-args(Term+, Embedding at Int - 1)
          ====
-         remove-emb-args(Term, Term+, Embedding at Int, IgnoreOrRemove) = Term, Term+2
+         remove-emb-args(Term, Term+, Embedding at Int) = Term, Term+2
            
 
 [rea-0]  make-ignored-funid(FunId) = FunId2,
-         remove-emb-arg(Term, [ FunId+ ], ignore) = Term2
+         remove-emb-arg(Term, [ FunId+ ]) = Term2
          ==== 
-         remove-emb-arg(FunId(Term), [ FunId FunId+ ], ignore) = FunId2( Term2 )
-
-[rea-0]  remove-emb-arg(Term, [ FunId+ ], remove) = Term2
-         ==== 
-         remove-emb-arg(FunId(Term), [ FunId FunId+ ], remove) = Term2
+         remove-emb-arg(FunId(Term), [ FunId FunId+ ]) = FunId2( Term2 )
 
 %% The innermost embedding should be a list.
 
 [rea-1]  is-list-funid(FunId) = true,
          make-ignored-funid(FunId) = FunId2
          ====
-         remove-emb-arg(FunId(Term), [ FunId ], ignore) = FunId2(Term)
+         remove-emb-arg(FunId(Term), [ FunId ]) = FunId2(Term)
 
-[rea-2]  is-list-funid(FunId) = true
-         ====
-         remove-emb-arg(FunId(Term), [ FunId ], remove) = Term
-
-[default-rea] remove-emb-arg(Term, Embedding, IgnoreOrRemove) = Term
+[default-rea] remove-emb-arg(Term, Embedding) = Term
 
 %%
 %% call-helper-rules
@@ -433,24 +425,24 @@ equations
          ====
          change-calls-rules(Rule; Rule+, FunIdHasEmbeddingAt) = Rule2 ; Rule+2
 
-[ccr-0] remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term3
+[ccr-0] remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
         ====
         change-calls-rule(Term1 = Term2, FunIdHasEmbeddingAt) = 
           Term1 = Term3
 
-[ccr-1] remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term3
+[ccr-1] remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
         ====
         change-calls-rule(default: Term1 = Term2, FunIdHasEmbeddingAt) = 
           default: Term1 = Term3
 
 [ccr-2] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term3
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
         ====
         change-calls-rule(Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
           Cond+2 ==> Term1 = Term3
 
 [ccr-3] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
-        remove-emb-term(Term2, FunIdHasEmbeddingAt, remove) = Term3
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
         ====
         change-calls-rule(default: Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
           default: Cond+2 ==> Term1 = Term3
