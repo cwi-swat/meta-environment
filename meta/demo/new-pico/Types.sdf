@@ -1,6 +1,6 @@
 module Types
 
-imports basic/Booleans asf/Comments
+imports basic/Booleans asf/syntax/Comments
 
 exports
   sorts TYPE
