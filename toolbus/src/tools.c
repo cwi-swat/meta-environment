@@ -205,8 +205,8 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
 	if(update)
 	  ti_pending(ti) = list_delete(pending, t);
 	  return_phase(PHASE2);
-	} else
-	  return -1;
+      } else
+	return -1;
 
     case a_snd_disconnect: return_phase(PHASE1);
 
@@ -241,7 +241,7 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
     case a_rec_ack_event:
       pending = ti_pending(ti);
       t = first(fun_args(event));
-      if(list_elem(t, pending)){
+      if(event_present(t, pending)){
 	if(update)
 	  ti_pending(ti) = list_delete(pending, t);
 	  return_phase(PHASE3);
