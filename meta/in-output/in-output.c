@@ -75,6 +75,7 @@ aterm *open_file(int cid, char *name)
   char *buf;
   size_t size;
 
+  fprintf(stderr, "pre-parsed file %s.asfix", name);
   for(i=0; i<nr_paths; i++) {
     strcpy(full, paths[i]);
     if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
@@ -84,14 +85,14 @@ aterm *open_file(int cid, char *name)
     strcat(full, "/");
     strcat(full, name);
     strcat(full, ".asfix");
-    fprintf(stderr, "trying pre-parsed file %s\n", full);
     f = fopen(full, "r");
     if(f) {
       if(TreadTermFile(f, ar, &t) < 0) {
-        fprintf(stderr, "error reading pre-parsed file %s\n", full);
+        fprintf(stderr, " could not be read\n");
         fclose(f);
       }else {
-        fprintf(stderr, "ok!\n");
+        /*fprintf(stderr, "ok!\n");*/
+        fprintf(stderr, " was found in: %s\n",paths[i]);
         fclose(f);
         return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "asfix",name, t,full);
       }
@@ -115,7 +116,7 @@ aterm *open_file(int cid, char *name)
 	return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "raw",name, t,full);
     }
   }
-  fprintf(stderr,"We kunnen de file helaas niet vinden\n");
+  fprintf(stderr,"File could not be found\n");
   return Tmake(ar, "snd-value(error-opening(<str>))", name);
 }
 
