@@ -34,7 +34,6 @@ let
   Action: str,
   OutStr: str,
   InStr: str,
-  FunSym: str,
   Id: term,
   STree: term,
   RTree: term
