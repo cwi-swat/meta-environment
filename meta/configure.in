@@ -159,7 +159,6 @@ AC_OUTPUT(
    editors/structure/Makefile
    editors/structure/src/Makefile
    tbscripts/Makefile
-   showdot/Makefile
    utils/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
