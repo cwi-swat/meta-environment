@@ -544,7 +544,7 @@ ATerm generate_parse_table(PT_ParseTree g)
                           SDF_getGrammarKernelRestrictions(grammarTerm);
     labelsection = process_productions(prods);
     priosection = process_priorities(prios);
-    process_restrictions((ATermList)SDF_makeTermFromRestrictionList(restricts));
+    process_restrictions(restricts);
     calc_first_table();
     calc_follow_table();
     calc_goto_graph();
