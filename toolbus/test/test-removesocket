@@ -9,5 +9,5 @@ testsocket () {
 	fi
 }
 
-testsocket 8999
 testsocket 6666
+testsocket 8999
