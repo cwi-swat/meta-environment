@@ -19,6 +19,9 @@
 
 $Id$
 
+2000/11/08 (markvdb@cwi.nl, jurgenv@cwi.nl)
+   * Bumped version to 0.6
+
 2000/10/26 (mdejonge@cwi.nl)
    * sdf2table now tries to create unique file names in /var/tmp to prevent
      write permission errors.
@@ -32,7 +35,7 @@ $Id$
 
 2000/4/25 (markvdb@cwi.nl)
    * upgraded to version 0.4
-   * Serious memory leak fixed: tables containing gotosets were not
+
      destroyed.
 
 2000/4/13 (mdejonge@cwi.nl)
