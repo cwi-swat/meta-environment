@@ -77,13 +77,13 @@ install:	incinstall libinstall bininstall
 incinstall:	${SGLRINC}
 	@for INC in $(SGLRINC);	\
 	do \
-		$(INSTALL_PROG) $(INSTALL) $(includedir) $$INC; \
+		$(INSTALL_DATA) $(INSTALL) $(includedir) $$INC; \
 	done
 
 libinstall:	${SGLRLIBS}
 	@for LIB in $(SGLRLIBS);	\
 	do \
-		$(INSTALL_PROG) $(INSTALL) $(libdir) $$LIB; \
+		$(INSTALL_DATA) $(INSTALL) $(libdir) $$LIB; \
 	done
 
 bininstall:	${PROGS}

@@ -37,7 +37,7 @@
     output of parse forests/parse stacks, and so on
  */
 
-int SG_mode;
+int SG_Mode;
 
 /*
     SG_Validate: check the `mode' bits, to make sure that no
