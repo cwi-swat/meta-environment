@@ -4,6 +4,7 @@
  * Added a number of "empty" assignments.
  * Replace the calculation of the import-graph by 
    a more direct derivation and display by meta-studio.
+ * Editing of syntax modules with errors is enabled again.
 
 2003/05/28 (jurgenv@cwi.nl)
  * The meta-studio.idef subscribes to notes before executing the studio
