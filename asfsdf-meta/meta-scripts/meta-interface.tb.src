@@ -146,13 +146,14 @@ endlet
 process Postprocess-collected-semantics is
 let
   Semantics : term,
+  ModuleName : term,
   Modules   : list
 in 
   (
-    rec-msg(postprocess-collected-semantics-hook(Modules?)).
+    rec-msg(postprocess-collected-semantics-hook(ModuleName?, Modules?)).
     snd-msg(extract-equations(Modules)).
     rec-msg(extract-equations-result(Semantics?)).
-    snd-msg(postprocess-collected-semantics-hook-result(Semantics))
+    snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics))
   )*delta
 endlet
 
