@@ -536,9 +536,9 @@ ATerm make_list(ATerm t)
 
 /*}}}  */
 
-/*{{{  static ATermList trafo_kids_list(funcptr trav, ATermList args) */
+/*{{{  static ATermList call_kids_list(funcptr trav, ATermList args) */
 
-static ATermList trafo_kids_list(funcptr trav, ATermList args, 
+static ATermList call_kids_list(funcptr trav, ATermList args, 
 				 ATermList extra_args)
 {
   ATermList result = ATempty;
@@ -580,9 +580,9 @@ static ATermList trafo_kids_list(funcptr trav, ATermList args,
 }
 /*}}}  */
 
-/*{{{  ATerm trafo_kids(funcptr trav, ATerm arg0) */
+/*{{{  ATerm call_kids(funcptr trav, ATerm arg0) */
 
-ATerm trafo_kids(funcptr trav, ATerm arg0, ATermList extra_args)
+ATerm call_kids(funcptr trav, ATerm arg0, ATermList extra_args)
 {
   int type = ATgetType(arg0);
 
@@ -612,7 +612,7 @@ ATerm trafo_kids(funcptr trav, ATerm arg0, ATermList extra_args)
     }
   }
   else if (type == AT_LIST) {
-    arg0 = (ATerm) trafo_kids_list(trav, (ATermList) arg0, extra_args);
+    arg0 = (ATerm) call_kids_list(trav, (ATermList) arg0, extra_args);
   }
 
 

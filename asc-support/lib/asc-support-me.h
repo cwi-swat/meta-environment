@@ -267,7 +267,7 @@ extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
 extern ATerm unquote(ATerm t);
-extern ATerm trafo_kids(funcptr trav, ATerm arg, ATermList extra_args);
+extern ATerm call_kids(funcptr trav, ATerm arg, ATermList extra_args);
 
 int asc_support_main(int argc, char *argv[],
                      void (*register_all)(void),
