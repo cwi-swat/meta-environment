@@ -26821,6 +26821,31 @@ FUNC_EXIT ( make_nf3 ( lf_337sym , make_nf1 ( lf_184sym , make_nf1 ( lf_183sym ,
 }
 }
 }
+if ( check_sym ( arg0 , lf_70sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( arg1 , lf_list_52sym ) ) {
+{
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( term_equal ( lf_189 ( atmp00 , make_nf1 ( lf_list_52sym , make_list ( atmp10 ) ) ) , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_10sym ) ) ) ) ) {
+if ( check_sym ( arg2 , lf_16sym ) ) {
+( tmp [ 0 ] = arg_0 ( arg2 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_15sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_list_1sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 2 ] ) ) {
+( tmp [ 3 ] = make_nf1 ( lf_182sym , make_nf1 ( lf_list_1sym , cons ( make_list_char ( 78 ) , cons ( make_list_char ( 67 ) , cons ( make_list_char ( 86 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf3 ( lf_337sym , make_nf1 ( lf_184sym , make_nf1 ( lf_183sym , tmp [ 3 ] ) ) , make_nf1 ( lf_list_174sym , make_list ( make_nf2 ( lf_173sym , lf_172 ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 10 , char_table [ 116 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] , char_table [ 95 ] , char_table [ 101 ] , char_table [ 113 ] , char_table [ 117 ] , char_table [ 97 ] , char_table [ 108 ] ) ) ) , make_nf1 ( lf_list_71sym , cons ( make_list ( make_nf1 ( lf_184sym , make_nf1 ( lf_183sym , tmp [ 3 ] ) ) ) , make_list ( arg0 ) ) ) ) , make_nf1 ( lf_70sym , make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , make_list ( make_char ( 116 ) ) ) ) ) ) ) ) , lf_63 ( arg2 ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
 if ( check_sym ( arg1 , lf_list_52sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;

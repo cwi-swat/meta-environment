@@ -260,7 +260,7 @@ static MA_Term atermToTerm(ATerm aterm)
     }
   }
   else {
-    ATerror("atermToTerm: ATerm type %s is not supported.\n", ATgetType(aterm));
+    ATerror("atermToTerm: ATerm %t is not supported.\n", aterm);
     result = NULL;
   }
 

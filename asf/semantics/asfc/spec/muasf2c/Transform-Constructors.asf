@@ -47,6 +47,13 @@ equations
            move-cons-terms-in-term(Funid(Term+),Namepair*,Aint) =
              [Varid,term_equal(Varid,Funid(Term+)) =: t,succ(Aint)]
 
+   [mc-4'2] is-constructor(Funid,Namepair*) = true,
+           Aint = natcon(Char+),
+           varid("N""C""V" Char+) = Varid
+           ==============================
+           move-cons-terms-in-term(Funid,Namepair*,Aint) =
+             [Varid,term_equal(Varid,Funid) =: t,succ(Aint)]
+
   [default-mc4'2] move-cons-terms-in-term(Term,Namepair*,Aint) = [Term,,Aint]
 
   [mc-4'1] are-constructor-terms(Term1,Namepair*) =

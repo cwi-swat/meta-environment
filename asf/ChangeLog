@@ -1,3 +1,8 @@
+2002/13/03 (jurgenv@cwi.nl)
+ * Fixed a bug in asfc. The compiler ignored constant arguments of functions
+   like: f("t" | "f") -> F in some cases.
+ * Bumped asfc to 2.5
+
 2002/03/04 (vandenbr@loria.fr)
  * Introduced parameterized sorts.
 
