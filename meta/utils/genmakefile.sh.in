@@ -86,9 +86,10 @@ then
    exit 1
 fi
 
-if [ ! -r $1.module-list ]
+Module=`basename $1 .module-list`
+if [ ! -r $Module.module-list ]
 then
-   echo "Could not find module list \"$1.module-list\"" >&2
+   echo "Could not find module list \"$Module.module-list\"" >&2
    exit 1
 fi
 
@@ -100,13 +101,13 @@ if [ "a$MAKETARGET" = "aMakefile.in" -o "a$MAKETARGET" = "aboth" ]
 then
 ( cat <<HDR					
 #
-# Makefile.in for target "$1" 
+# Makefile.in for target "$Module" 
 # generated automagically on `date`
 #
 HDR
 cat ${PROTO} |
-	$PERL -pe "s|\@TARGET\@|$1|g"		|
-	$PERL -pe 's|%!%([^@]+)%!%|\@$1\@|g'	
+	$PERL -pe "s|\@TARGET\@|$Module|g"		|
+	$PERL -pe 's|%!%([^@]+)%!%|\@$Module\@|g'	
 ) |\
 # When the '-i' command line option was specified we write the generated
 # Makefile.in to standard output, otherwise we write to Makefile
@@ -129,16 +130,18 @@ if [ "a$MAKETARGET" = "aMakefile" -o "a$MAKETARGET" = "aboth" ]
 then
 ( cat <<HDR
 #
-# Makefile for target "$1" 
+# Makefile for target "$Module" 
 # generated automagically on `date`
 #
 HDR
 cat ${PROTO} |
-	$PERL -pe "s|\@TARGET\@|$1|g"		|
+	$PERL -pe "s|\@TARGET\@|$Module|g"	|
 	$PERL -pe '
 		$srcdir   = q{@srcdir@};
 		$topsrc   = q{@top_srcdir@};
+		$AR       = q{@AR@};
 		$CC       = q{@CC@};
+		$RANLIB   = q{@RANLIB@};
 		$prefix   = q{@prefix@};
 		$eprefix  = q{@exec_prefix@};
 		$bindir   = q{@bindir@};
@@ -153,7 +156,9 @@ cat ${PROTO} |
 
 		s|\@srcdir\@|$srcdir|g;
 		s|\@top_srcdir\@|$topsrc|g;
+		s|\@AR\@|$AR|g;
 		s|\@CC\@|$CC|g;
+		s|\@RANLIB\@|$RANLIB|g;
 		s|\@prefix\@|$prefix|g;
 		s|\@exec_prefix\@|$eprefix|g;
 		s|\@bindir\@|$bindir|g;
