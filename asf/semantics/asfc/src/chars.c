@@ -5,6 +5,8 @@
 #include <aterm1.h>
 
 
+/*{{{  char* escape(const char* str, const char* escaped_chars, QuotedOption quoted) */
+
 char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
 {
   int i,j,e;
@@ -41,7 +43,10 @@ char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
   return escaped;
 }
 
-char *rmquotes(char *str)
+/*}}}  */
+/*{{{  char* rmquotes(char *str) */
+
+char* rmquotes(char *str)
 {
   char *new;
   int len;
@@ -64,6 +69,9 @@ char *rmquotes(char *str)
   }
 }
 
+/*}}}  */
+/*{{{  char* toalfanum(const char* str) */
+
 char* toalfanum(const char* str)
 {
   int len = strlen(str);
@@ -76,7 +84,7 @@ char* toalfanum(const char* str)
   }
 
   for(i = 0, j = 0; i < len; i++, j++) {
-    if (isalnum(str[i])) {
+    if (isalpha(str[i])) {
       new[j] = str[i];
     }
     else {
@@ -89,3 +97,4 @@ char* toalfanum(const char* str)
   return new;
 }
 
+/*}}}  */

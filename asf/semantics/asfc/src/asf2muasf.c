@@ -129,17 +129,25 @@ static char* prodToEscapedString(PT_Production prod)
 
 static int getProdArity(PT_Production prod, LayoutOption layout)
 {
-  PT_Symbols symbols = PT_getProductionLhs(prod);
+  PT_Symbols symbols;
   int arity = 0;
 
-  for (; PT_hasSymbolsHead(symbols); symbols = PT_getSymbolsTail(symbols)) {
-    PT_Symbol symbol = PT_getSymbolsHead(symbols);
+  if (PT_isProductionDefault(prod)) {
+    symbols = PT_getProductionLhs(prod);
 
-    if (!PT_isSymbolLit(symbol)  &&
-        (layout == WITH_LAYOUT || !PT_isOptLayoutSymbol(symbol))) {
-      arity++;
+    for (; PT_hasSymbolsHead(symbols); symbols = PT_getSymbolsTail(symbols)) {
+      PT_Symbol symbol = PT_getSymbolsHead(symbols);
+
+      if (!PT_isSymbolLit(symbol)  &&
+	  (layout == WITH_LAYOUT || !PT_isOptLayoutSymbol(symbol))) {
+	arity++;
+      }
     }
   }
+  else {
+    arity = 1; /* a list production */
+  }
+
   return arity;  
 }
 
@@ -266,32 +274,41 @@ static MA_SigArgElems makeSigArgElems(int arity)
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
 {
   MA_FunId maFunId = prodToFunId(ptProd);
-  PT_Attributes ptAttributes = PT_getProductionAttributes(ptProd);
-  int arity = getProdArity(ptProd, WITHOUT_LAYOUT);
+  PT_Attributes ptAttributes;
+  int arity ;
   MA_SigArgElems maSigArgElems;
   MA_FuncDef maFuncdef;
 
-  if (PT_isAttributesAttrs(ptAttributes)) {
-    MA_Annotations maAnnos = attributesToAnnotations(ptAttributes);
- 
-    if (arity > 0) {
-      maSigArgElems = makeSigArgElems(arity);
-      maFuncdef = MA_makeFuncDefFuncWithAnnos(maFunId,em,em,
-					      maSigArgElems,em,em,maAnnos);
+  arity = getProdArity(ptProd, WITHOUT_LAYOUT);
+
+  if (PT_isProductionDefault(ptProd)) {
+    ptAttributes = PT_getProductionAttributes(ptProd);
+
+    if (PT_isAttributesAttrs(ptAttributes)) {
+      MA_Annotations maAnnos = attributesToAnnotations(ptAttributes);
+   
+      if (arity > 0) {
+	maSigArgElems = makeSigArgElems(arity);
+	maFuncdef = MA_makeFuncDefFuncWithAnnos(maFunId,em,em,
+						maSigArgElems,em,em,maAnnos);
+      }
+      else {
+	maFuncdef = MA_makeFuncDefConstantWithAnnos(maFunId,em,maAnnos);
+      }
     }
-    else {
-      maFuncdef = MA_makeFuncDefConstantWithAnnos(maFunId,em,maAnnos);
+    else { /* no attributes */
+      if (arity > 0) {
+	maSigArgElems = makeSigArgElems(arity);
+	maFuncdef = MA_makeFuncDefFuncNoAnnos(maFunId,em,em,
+						maSigArgElems,em);
+      }
+      else {
+	maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
+      }
     }
   }
-  else { /* no attributes */
-    if (arity > 0) {
-      maSigArgElems = makeSigArgElems(arity);
-      maFuncdef = MA_makeFuncDefFuncNoAnnos(maFunId,em,em,
-					      maSigArgElems,em);
-    }
-    else {
-      maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
-    }
+  else { /* list production */
+    maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
   }
 
   return maFuncdef;
@@ -359,7 +376,7 @@ static MA_Term variableToTerm(PT_Tree var)
   if (PT_isTreeVarListStar(var)) {
     maVar = MA_makeVarStar(em, varid);
   }
-  if (PT_isTreeVarListPlus(var)) {
+  else if (PT_isTreeVarListPlus(var)) {
     maVar = MA_makeVarPlus(em, varid);
   }
   else {
