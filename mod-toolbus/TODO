@@ -1,9 +1,18 @@
 TODO
-----
+====
 
-- Please see doc/paper_mod_toolbus.{tex|dvi|ps|pfd} as well.
-- Apache provides 'libapreq' for manipulating (parts of) HTTP requests. They pretty much deprecate my read_HTTP_GET_arg() but it was left in for good measure.
-- Remove all Apache 1.3 code and update to the new Apache 2.0 APR-API
-- Make certain options user-configurable, like the ToolBus options for host, port, etc.
-- investigate thread-safety issues (function calls, global variables, calls across module boundaries, Toolbus/ATerm functions
+
+Please see doc/paper_mod_toolbus.{tex|dvi|ps|pfd} as well.
+
+non-code:
+---------
+* new version number
+* new documentation (erik)
+* development webpage (+public one?)
+
+code:
+-----
+* Convert Apache 1.3 code to the new Apache 2.0 APR-API
+* Make certain options user-configurable, like the ToolBus options for host, port, etc.
+* Investigate thread-safety issues (function calls, globals, external calls, Toolbus/ATerm functions)
 
