@@ -1,0 +1,18 @@
+process ModuleDB is
+let
+Id : term,
+T1 : term,
+T2 : term,
+Mdb : module-db
+in
+execute(module-db, Mdb?).
+snd-do(Mdb, create-module-db)
+endlet
+
+
+tool module-db is { command = "module-db" }
+
+#ifdef MAIN
+#else
+toolbus(ModuleDB)
+#endif
