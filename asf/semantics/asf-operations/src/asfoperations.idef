@@ -14,10 +14,10 @@ in
     rec-value(AO, equations(Equations?)) .
     snd-msg(equations(Equations))
   +
-    rec-msg(flatten-equations(Equations?)).
-    snd-eval(AO, flatten-equations(Equations)).
-    rec-value(AO, flatten-equations-result(Equations?)).
-    snd-msg(flatten-equations-result(Equations))
+    rec-msg(extract-equations(Equations?)).
+    snd-eval(AO, extract-equations(Equations)).
+    rec-value(AO, extract-equations-result(Equations?)).
+    snd-msg(extract-equations-result(Equations))
   )*
   delta
 endlet

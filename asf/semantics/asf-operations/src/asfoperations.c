@@ -49,9 +49,9 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
 }
  
 /*}}}  */ 
-/*{{{  ATerm flatten_equations(int cid, ATerm modules) */
+/*{{{  ATerm extract_equations(int cid, ATerm modules) */
 
-ATerm flatten_equations(int cid, ATerm modules)
+ATerm extract_equations(int cid, ATerm modules)
 {
   ATermList list = (ATermList) modules;
   ASF_CondEquationList eqsList;
@@ -61,11 +61,13 @@ ATerm flatten_equations(int cid, ATerm modules)
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     ATerm head = ATgetFirst(list);
     ASF_Equations eqs = ASF_getStartTopEquations(ASF_StartFromTerm(head));
-    
-    eqsList = ASF_unionCondEquationList(ASF_getEquationsList(eqs), eqsList);
+   
+    if (ASF_hasEquationsList(eqs)) {
+      eqsList = ASF_unionCondEquationList(ASF_getEquationsList(eqs), eqsList);
+    }
   }
 
-  return ATmake("snd-value(flatten-equations-result(<term>))",
+  return ATmake("snd-value(extract-equations-result(<term>))",
 		ATBpack(ASF_CondEquationListToTerm(eqsList)));
 }
 
