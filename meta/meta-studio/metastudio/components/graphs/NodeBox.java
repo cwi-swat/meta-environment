@@ -34,8 +34,7 @@ public class NodeBox extends JPanel {
         makeNode(node);
         
         if (leaf) {
-            JLabel label = new JLabel(node.getLabel());
-            label.setOpaque(false);
+            JLabel label = makeLeafLabel(node);
             setOpaque(false);
             add(label);
         }
@@ -48,6 +47,15 @@ public class NodeBox extends JPanel {
         addListeners(node, this);
     }
     
+    private JLabel makeLeafLabel(Node node) {
+        JLabel label = new JLabel(node.getLabel());
+        label.setOpaque(false);
+        label.setFont(Preferences.getFont("box.node.font"));
+        label.setForeground(Preferences.getColor("box.node.foreground"));
+        label.setBackground(Preferences.getColor("box.node.background"));
+        return label;
+    }
+
     private void addListeners(Node node, JComponent c) {
         c.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
