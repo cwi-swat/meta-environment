@@ -10,9 +10,13 @@ tool import-db is {
 tool tree-db is {
   command = "tree-db"
 }
+tool compiler is {
+  command = "compiler -hash-size=11"
+}
 
 process Parsetrees is 
 let
+Com : compiler,
 Eval: evaluator,
 Idb : import-db,
 Tdb : tree-db,
@@ -28,10 +32,13 @@ in
   snd-do(Idb, create-import-db).
   execute(tree-db, Tdb?).
   snd-do(Tdb, create-module-db).
+  execute(compiler,Com?).
+  snd-do(Com,create-module-db).
   /* Start all controlling processes */
   create(Retrieve-eqs(Eval,Idb,Tdb), Tid?).
   create(Open-modules(Eval,Idb,Tdb),Tid?).
-  create(Rewrite(Eval,Idb,Tdb), Tid?)
+  create(Rewrite(Eval,Idb,Tdb), Tid?).
+  create(Compiler(Com,Idb), Tid?)
 /*  create(Close-modules(Eval,Idb,Tdb), Tid?)*/
 endlet
 /*

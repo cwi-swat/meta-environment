@@ -17,6 +17,6 @@
 #include "status-display.tb"
 #include "edit-module.tb"
 #include "clear-all.tb"
-
+#include "compiler.tb"
 
 toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui)

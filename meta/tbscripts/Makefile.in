@@ -63,7 +63,7 @@ LIBFILES	= meta.tb editor.tb asfix2toasfix1.tb clear-all.tb \
                   close-modules.tb edit-module.tb edit-term.tb focus.tb io.tb \
                   open-modules.tb parser.tb parsetrees.tb prettyprinter.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
-                  structure-editor.tb ui.tb
+                  structure-editor.tb ui.tb compiler.tb
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)

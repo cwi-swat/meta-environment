@@ -1,7 +1,7 @@
 /* $Id$ */
 
 tool asource is {
-  command = "asource"
+  command = "/home/markvdb/NEW-META/bin/asource"
 }
 
 process Prettyprinter is

@@ -10,7 +10,9 @@ T  : term,
 T1 : term,T2 : term,T3 : term,T4 : term,T5 : term,T6 : term,T7 : term,T8 : term,T9 : term,
 A2toa1 : a2toa1
 in
-execute(a2toa1, A2toa1?).
+printf("starting a2toa1\n") .
+%% execute(a2toa1, A2toa1?).
+printf("a2toa1 started!\n") .
 ( rec-msg(Id?,a2toa1(T?)).
   snd-eval(A2toa1,trans(T)).
   rec-value(A2toa1,term(T1?,T2?,T3?,T4?,T5?,T6?,T7?,T8?,T9?)).

@@ -33,10 +33,9 @@ in
               snd-eval(Tdb,add-module(T)).
              /* mdb returns the imports section of Name as M1s */
               rec-value(Tdb,imports(Name,M1s?)).
-/* Compiler stuff turned off for the moment           
-snd-msg(prep,add-module(Name,T)).
-          rec-msg(open,done).
-*/
+/* update compiler db with module Name containing term T */
+              snd-msg(com,add-module(Name,T)).
+              rec-msg(com,done). 
              /* update import db with this information (Name imports M1s). */
               snd-eval(Idb,add-imports(Name,M1s)).
              /* im tells which modules still need to be opened 

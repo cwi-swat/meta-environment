@@ -13,6 +13,7 @@ process Parser is
     T  : term
   in
     execute(sglr, P?) .
+    printf("sglr tool connected.\n") .
     ( rec-msg(Id?, parse-string(L?, S?)) .
       snd-eval(P, parse-string(L, S)) .
       rec-value(P, T?) .
