@@ -19,6 +19,11 @@
 
 $Id$
 
+2001/01/15 ({markvdb,jurgenv}@cwi.nl)
+   * Bumped version of parsetablegen to 2.3
+   * Removed gen-table script. From now on use sdf2table only.
+   * Added -m option to specify topmodule for parsetable generation.
+
 2001/01/05 (markvdb@cwi.nl)
    * Bumped version of parsetablegen to 2.2.
    * Added constructor annotations to relevant function in normalization spec.

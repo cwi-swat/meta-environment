@@ -254,6 +254,7 @@ void usage(void)
         "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
         "\t-i filename     input from file (default stdin)\n"
+        "\t-l              display statistic information\n"
         "\t-m modulename   name of top module (default Main)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              output terms in plaintext format\n"

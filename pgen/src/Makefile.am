@@ -22,11 +22,11 @@
 include ${top_srcdir}/make_rules
 
 bin_PROGRAMS = parsetablegen
-bin_SCRIPTS  = sdf2table gen-table
+bin_SCRIPTS  = sdf2table 
 data_DATA    = parsetablegen.idef
 man_MANS     = sdf2table.1
 
-EXTRA_DIST   = parsetablegen.idef sdf2table.src gen-table.src \
+EXTRA_DIST   = parsetablegen.idef sdf2table.src \
                parsetablegen.tif.h parsetablegen.tif.c sdf2table.pod
 
 SRCS         = parsetablegen.c ksdf2table.c atsets.c flatten.c \
@@ -46,7 +46,7 @@ parsetablegen_LDADD   = parsetablegen.tif.o \
                         $(SOCKLIBS)
 
 # remove built files during "make clean"
-CLEANFILES = parsetablegen.tifs sdf2table gen-table sdf2table.1
+CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1
 
 parsetablegen.o : parsetablegen.tif.h
 sdf-help.o : parsetablegen.tif.h
