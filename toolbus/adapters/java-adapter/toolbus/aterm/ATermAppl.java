@@ -41,6 +41,12 @@ public class ATermAppl extends ATerm
   }
   //}  
 
+  /** Construct a function symbol without arguments. The symbol is quoted.
+    */
+  public ATermAppl(World world, String fun, boolean isquoted) {
+    this(world, fun, new ATerms(world), isquoted);
+  }
+
   //{ protected void intern(ATermApplImpl ap)
 
   /**
