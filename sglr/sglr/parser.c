@@ -316,19 +316,24 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
 {
   /*  Prune the forest  */
   ATermList trees, bonsai = ATempty;
-  ATerm     tree, prod;
+  ATerm     tree;
   char      *sort;
   ATbool    AmbStart;
 
+  /*  First expand the top node, it might be an ambiguity node  */
+  if (SG_MaxNrAmb(SG_NRAMB_ASK) != 0)
+    forest = SG_ExpandApplNode(forest, ATfalse);
+
+  /*  Is in in fact an ambiguity node?  If so, all trees in it must be done.  */
   if(!(AmbStart = ATmatch(forest, "amb(<list>)", &trees)))
     trees = ATmakeList1(forest);
 
   for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
     tree = ATgetFirst(trees);
-    if(ATmatch(tree, "appl(<term>,<list>)", &prod, NULL)
-    && ATmatch(prod, "prod([<term>,cf(sort(<str>)),<term>],sort(\"<START>\"),<term>)",
-               NULL, &sort, NULL, NULL)
-      ) {
+
+    if(ATmatch(tree, "appl(prod([<term>,cf(sort(<str>)),<term>],<term>,<term>),"
+                          "<list>)",
+               NULL, &sort, NULL, NULL, NULL, NULL)) {
       if(!strcmp(desiredsort, sort))
         bonsai = ATinsert(bonsai, tree);
     }
@@ -338,7 +343,7 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
       if(ATgetLength(bonsai) > 1) {
         return ATmake("amb(<list>)", bonsai);
       } else {
-        SG_MaxNrAmb(SG_NRAMB_DEC);
+        SGnrAmb(SG_NRAMB_DEC);
         return ATgetFirst(bonsai);
       }
     } else {
@@ -356,19 +361,15 @@ ATerm SG_Result(char *sort)
     ATerm forest;
 
     forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
-    if (sort != NULL && !SG_ABBREV) {
-      /*  Select only the desired start symbols  */
-      if (SG_MaxNrAmb(SG_NRAMB_ASK) != 0)
-        forest = SG_ExpandApplNode(forest, ATfalse);
-      if ((forest = SG_Prune(forest, sort)) == NULL)
+    /*  Select only the desired start symbols when so requested  */
+    if (sort!=NULL && !SG_ABBREV && (forest = SG_Prune(forest, sort))==NULL)
         return ATmake("parse-error([character(<int>), line(<int>),"
                       "col(<int>), char(<int>)])",
                       current_token, line, col, text_length);
-    }
 
-    if(!SG_OUTPUT)
+    if(!SG_OUTPUT)  /*  Ambiguity count > 0 is an upper limit in this case  */
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
-    else {
+    else {          /*  An exact ambiguity count can be given  */
       forest = SG_YieldPT(forest);
       forest = ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
 #ifdef HAVE_A2TOA1

@@ -305,9 +305,6 @@ ATerm SG_TreeType(ATerm t)
 
   if (ATgetType(t) == AT_INT)
     return t;
-  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>,<int>)",
-              NULL, &type, NULL,NULL,NULL))
-    return type;
   if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>)",
               NULL, &type, NULL,NULL))
     return type;
