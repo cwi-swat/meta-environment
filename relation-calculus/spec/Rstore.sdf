@@ -1,6 +1,6 @@
 module Rstore
 
-imports Rscript RSF Rviz RscriptCalculator
+imports Rscript RSF Rviz 
 
 exports 
   sorts RVALUE RSTORE
@@ -15,8 +15,6 @@ exports
          < {RVAR ","}+,  REXP>            		-> RVALUE
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"   -> RVALUE
-
-	Summary						-> RVALUE
 
 %% The RSTORE itself, maps RVARs to RVALUEs
 
@@ -34,10 +32,6 @@ exports
 
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
-
-	"[|" RSTAT* "|]"				-> RSTORE
-	"[|" RSTAT* "|]" "yield" RVAR			-> RVALUE
-        "[|" REXP "|]"                                  -> RVALUE
 
 %% Import a Rigi RSF file
 	import(RSFFILE)					-> RSTORE
@@ -101,8 +95,6 @@ hiddens
 
 	"$Char*" [0-9\']*	       -> CHAR*
 
-	"$Summary"  [0-9\']*	       -> Summary
-	
 	"$RsfName" [0-9\']*		-> RSFNAME
 
 	"$RsfTuple" [0-9\']*		-> RSFTUPLE

@@ -908,12 +908,23 @@ $Error]>
 
 %% ---- Check comprehensions
 
-[check-comprehension] 
+[check-comprehension1] 
       	$Tenv' := add-generators($Gen+, $Tenv),
       	<$Etype, $Tenv''> := check({$Exp+}, $Tenv'),
       	$Tenv''' := del-generators($Gen+, $Tenv'')
       	======================================
       	check({ $Exp+ | $Gen+ }, $Tenv) = <$Etype, $Tenv'''>
+
+%% ---- Special case: when combined with RscriptCalculator, all comprehensions
+%% ---- will be simplified to the form below.
+%% ---- The typechecker could be simplified by also using this approach
+
+%%[check-comprehension2]
+%%      	$Tenv' := add-generators($Gen, $Tenv),
+%%      	<$Etype, $Tenv''> := check({$Exp}, $Tenv'),
+%%      	$Tenv''' := del-generators($Gen, $Tenv'')
+%%	======================================
+%%	check({ $Gen :: $Exp }, $Tenv)  = <$Etype, $Tenv'''>
 
 %% --- Check Exists
 

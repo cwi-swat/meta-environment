@@ -1,6 +1,6 @@
 module RscriptCalculator
 
-imports Rstore ExtendedIntegers ExtendedStrings
+imports Rstore ExtendedIntegers ExtendedStrings basic/Errors RscriptChecker
 
 exports
 
@@ -16,6 +16,12 @@ exports
 	eval-rscript-with-rstore(RSCRIPT,RSTORE)			-> RSTORE
         eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, StrCon)   	-> Elem
         eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, RVAR)   	-> Elem
+
+	Summary						-> RVALUE
+
+	"[|" RSTAT* "|]"				-> RSTORE
+	"[|" RSTAT* "|]" "yield" RVAR			-> RVALUE
+        "[|" REXP "|]"                                  -> RVALUE
 
 %% should be hidden
 
@@ -64,6 +70,9 @@ exports
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
 
 	equal-rval(RVALUE, RVALUE)				-> Boolean
+
+	simplify(REXP)						-> REXP
+	simplify1(REXP)						-> REXP
 
 	eval-itern({TARGET ","}+,  BagIterator[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> Bag[[Elem]]
 
@@ -158,6 +167,8 @@ hiddens
        "$Target+" [0-9\']*		-> {TARGET ","}+
 
        "$Char*" [0-9\']*    -> CHAR*
+
+	"$Summary"  [0-9\']*	       -> Summary
 
 
 
