@@ -3,14 +3,16 @@
 
 The file tcltk-adapter.c implements the Tcl/Tk adapter, and consists
 of the following sections:
-\nwfilename{tcltk-adapter.c.nw}\nwbegincode{1}\sublabel{NWtclI-tclG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\moddef{tcltk-adapter.c*~{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwenddeflinemarkup
+\nwfilename{tcltk-adapter.c.nw}\nwbegincode{1}\sublabel{NWtclI-tclG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\moddef{tcltk-adapter.c*~{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 \LA{}includes~{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}\RA{}
 \LA{}variables~{\nwtagstyle{}\subpageref{NWtclI-var9-1}}\RA{}
 \LA{}functions~{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}\RA{}
 \LA{}term printing~{\nwtagstyle{}\subpageref{NWtclI-terD-1}}\RA{}
 \LA{}TclString2Term~{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}\RA{}
 
+#ifdef USE_TIDE
 \LA{}Tide support~{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}\RA{}
+#endif
 
 \LA{}signal_handler~{\nwtagstyle{}\subpageref{NWtclI-sigE-1}}\RA{}
 \LA{}signals_set~{\nwtagstyle{}\subpageref{NWtclI-sigB-1}}\RA{}
@@ -33,7 +35,7 @@ of the following sections:
 
 We need to know some things about the ToolBus and about Tcl/Tk.
 
-\nwenddocs{}\nwbegincode{3}\sublabel{NWtclI-inc8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}}\moddef{includes~{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{3}\sublabel{NWtclI-inc8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}}\moddef{includes~{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 #include <TB.h>
 #include <tcl.h>
 #include <tk.h>
@@ -47,7 +49,7 @@ We need to know some things about the ToolBus and about Tcl/Tk.
 
 The global variable section.
 
-\nwenddocs{}\nwbegincode{5}\sublabel{NWtclI-var9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-var9-1}}}\moddef{variables~{\nwtagstyle{}\subpageref{NWtclI-var9-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{5}\sublabel{NWtclI-var9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-var9-1}}}\moddef{variables~{\nwtagstyle{}\subpageref{NWtclI-var9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 /* 20 Kb should suffice for most applications. */
 #define DEFAULT_BUF_SIZE        20480
 
@@ -70,7 +72,7 @@ Tcl_File toolbus_file;
 
 Some handy function declarations.
 
-\nwenddocs{}\nwbegincode{7}\sublabel{NWtclI-fun9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}}\moddef{functions~{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{7}\sublabel{NWtclI-fun9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}}\moddef{functions~{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void pr_type_wish(type *tp);
 void pr_term_list_wish(const term_list *tl, char sep);
 void pr_env_wish(const env *e);
@@ -83,7 +85,7 @@ static void print_list(term_list* l, char* left, char* sep, char* right);
 
 %{{{ term printing
 
-\nwenddocs{}\nwbegincode{9}\sublabel{NWtclI-terD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-terD-1}}}\moddef{term printing~{\nwtagstyle{}\subpageref{NWtclI-terD-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{9}\sublabel{NWtclI-terD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-terD-1}}}\moddef{term printing~{\nwtagstyle{}\subpageref{NWtclI-terD-1}}}\endmoddef
 \LA{}reset_buffer~{\nwtagstyle{}\subpageref{NWtclI-resC-1}}\RA{}
 \LA{}wish_type_string~{\nwtagstyle{}\subpageref{NWtclI-wisG-1}}\RA{}
 \LA{}printb_char~{\nwtagstyle{}\subpageref{NWtclI-priB-1}}\RA{}
@@ -106,7 +108,7 @@ void pr_term_wish(term *t)
 
 %{{{ void reset_buffer()
 
-\nwenddocs{}\nwbegincode{11}\sublabel{NWtclI-resC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-resC-1}}}\moddef{reset_buffer~{\nwtagstyle{}\subpageref{NWtclI-resC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{11}\sublabel{NWtclI-resC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-resC-1}}}\moddef{reset_buffer~{\nwtagstyle{}\subpageref{NWtclI-resC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void reset_buffer()
 \{
   offset = 0;
@@ -119,7 +121,7 @@ void reset_buffer()
 
 Return a string representing the indicated type.
 
-\nwenddocs{}\nwbegincode{13}\sublabel{NWtclI-wisG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wisG-1}}}\moddef{wish_type_string~{\nwtagstyle{}\subpageref{NWtclI-wisG-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{13}\sublabel{NWtclI-wisG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wisG-1}}}\moddef{wish_type_string~{\nwtagstyle{}\subpageref{NWtclI-wisG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 char *wish_type_string(tkind kind)
 \{
   static char *types[] =
@@ -140,7 +142,7 @@ char *wish_type_string(tkind kind)
 
 Print a string in the internal buffer.
 
-\nwenddocs{}\nwbegincode{15}\sublabel{NWtclI-priA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA-1}}}\moddef{printb_str~{\nwtagstyle{}\subpageref{NWtclI-priA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{15}\sublabel{NWtclI-priA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA-1}}}\moddef{printb_str~{\nwtagstyle{}\subpageref{NWtclI-priA-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void printb_str(char *str)
 \{
   int len = strlen(str);
@@ -159,7 +161,7 @@ void printb_str(char *str)
 
 Print a char in the internal buffer.
 
-\nwenddocs{}\nwbegincode{17}\sublabel{NWtclI-priB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priB-1}}}\moddef{printb_char~{\nwtagstyle{}\subpageref{NWtclI-priB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{17}\sublabel{NWtclI-priB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priB-1}}}\moddef{printb_char~{\nwtagstyle{}\subpageref{NWtclI-priB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void printb_char(char c)
 \{
   if(offset >= bufsize)
@@ -177,7 +179,7 @@ void printb_char(char c)
 
 The {\tt error} function prints errors to standard out.
 
-\nwenddocs{}\nwbegincode{19}\sublabel{NWtclI-err5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-err5-1}}}\moddef{error~{\nwtagstyle{}\subpageref{NWtclI-err5-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{19}\sublabel{NWtclI-err5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-err5-1}}}\moddef{error~{\nwtagstyle{}\subpageref{NWtclI-err5-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void error( const char* msg )
 \{
    fprintf(stderr, "fatal error: %s\\n", msg); 
@@ -191,7 +193,7 @@ static void error( const char* msg )
 Print a character to wish. Duplicate it on
 the stderr stream when {\tt DEBUG_ON} is defined.
 
-\nwenddocs{}\nwbegincode{21}\sublabel{NWtclI-wpu5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\moddef{wputc~{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{21}\sublabel{NWtclI-wpu5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\moddef{wputc~{\nwtagstyle{}\subpageref{NWtclI-wpu5-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void wputc( int c )
 \{
    printb_char(c);
@@ -207,7 +209,7 @@ static void wputc( int c )
 Print a formatted string to the wish BUFfer. Duplicate it to stderr
 when {\tt DEBUG_ON} is defined.
 
-\nwenddocs{}\nwbegincode{23}\sublabel{NWtclI-wpr7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\moddef{wprintf~{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{23}\sublabel{NWtclI-wpr7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\moddef{wprintf~{\nwtagstyle{}\subpageref{NWtclI-wpr7-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void wprintf(char* fmt, ...)
 \{
   va_list ap;
@@ -229,7 +231,7 @@ at most $n$ characters are written.
 when non-printable characters are found in the string,
 their octal values are written.
 
-\nwenddocs{}\nwbegincode{25}\sublabel{NWtclI-priC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priC-1}}}\moddef{print_string~{\nwtagstyle{}\subpageref{NWtclI-priC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{25}\sublabel{NWtclI-priC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priC-1}}}\moddef{print_string~{\nwtagstyle{}\subpageref{NWtclI-priC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_string(char* s, int n)
 \{
   wputc('"');
@@ -263,7 +265,7 @@ static void print_string(char* s, int n)
 
 {\tt print_var} prints variables to the {\tt to\_wish} channel.
 
-\nwenddocs{}\nwbegincode{27}\sublabel{NWtclI-pri9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\moddef{print_var~{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{27}\sublabel{NWtclI-pri9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\moddef{print_var~{\nwtagstyle{}\subpageref{NWtclI-pri9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_var(term* e)
 \{
    char* txt;
@@ -281,7 +283,7 @@ static void print_var(term* e)
 
 {\tt print_env} prints environment terms to the {\tt to\_wish} channel.
 
-\nwenddocs{}\nwbegincode{29}\sublabel{NWtclI-pri9.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\moddef{print_env~{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{29}\sublabel{NWtclI-pri9.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\moddef{print_env~{\nwtagstyle{}\subpageref{NWtclI-pri9.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_env(env* e)
 \{
    TBbool first = TBtrue;
@@ -311,7 +313,7 @@ static void print_env(env* e)
 
 Print a term to the {\tt to\_wish} channel.
 
-\nwenddocs{}\nwbegincode{31}\sublabel{NWtclI-priA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.2-1}}}\moddef{print_term~{\nwtagstyle{}\subpageref{NWtclI-priA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{31}\sublabel{NWtclI-priA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.2-1}}}\moddef{print_term~{\nwtagstyle{}\subpageref{NWtclI-priA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_term(term* t)
 \{
    switch(tkind(t))
@@ -363,7 +365,7 @@ static void print_term(term* t)
 
 Print a list to the {\tt to\_wish} channel. A custom separator is used.
 
-\nwenddocs{}\nwbegincode{33}\sublabel{NWtclI-priA.3-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.3-1}}}\moddef{print_list~{\nwtagstyle{}\subpageref{NWtclI-priA.3-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{33}\sublabel{NWtclI-priA.3-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.3-1}}}\moddef{print_list~{\nwtagstyle{}\subpageref{NWtclI-priA.3-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_list(term_list* l, char* left, char* sep, char* right)
 \{
    int i;
@@ -383,7 +385,7 @@ static void print_list(term_list* l, char* left, char* sep, char* right)
 
 Print a list of arguments.
 
-\nwenddocs{}\nwbegincode{35}\sublabel{NWtclI-priA.4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.4-1}}}\moddef{print_args~{\nwtagstyle{}\subpageref{NWtclI-priA.4-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-terD-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{35}\sublabel{NWtclI-priA.4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-priA.4-1}}}\moddef{print_args~{\nwtagstyle{}\subpageref{NWtclI-priA.4-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void print_args(term_list *args)
 \{
   while(args) \{
@@ -404,7 +406,7 @@ static void print_args(term_list *args)
 
 %{{{ term *TclString2Term(char *str)
 
-\nwenddocs{}\nwbegincode{37}\sublabel{NWtclI-TclE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}}\moddef{TclString2Term~{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{37}\sublabel{NWtclI-TclE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}}\moddef{TclString2Term~{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 
 term *TclString2Term(char *str)
 \{
@@ -417,7 +419,7 @@ term *TclString2Term(char *str)
 
 %{{{ void handle_error(Tcl_Interp *interp, char *msg)
 
-\nwenddocs{}\nwbegincode{39}\sublabel{NWtclI-hanC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanC-1}}}\moddef{handle_error~{\nwtagstyle{}\subpageref{NWtclI-hanC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{39}\sublabel{NWtclI-hanC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanC-1}}}\moddef{handle_error~{\nwtagstyle{}\subpageref{NWtclI-hanC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void handle_error(Tcl_Interp *interp, char *msg)
 \{
   char *info = Tcl_GetVar(interp, "errorInfo", TCL_GLOBAL_ONLY);
@@ -435,7 +437,7 @@ void handle_error(Tcl_Interp *interp, char *msg)
 %}}}
 %{{{ tcl_toolbus_handler(ClientData data, int mask)
 
-\nwenddocs{}\nwbegincode{41}\sublabel{NWtclI-tclJ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclJ-1}}}\moddef{tcl_toolbus_handler~{\nwtagstyle{}\subpageref{NWtclI-tclJ-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{41}\sublabel{NWtclI-tclJ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclJ-1}}}\moddef{tcl_toolbus_handler~{\nwtagstyle{}\subpageref{NWtclI-tclJ-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tcl_toolbus_handler(ClientData data, int mask)
 \{
   if(TB_peek(cid))
@@ -447,7 +449,7 @@ void tcl_toolbus_handler(ClientData data, int mask)
 
 %{{{ term *from_toolbus(term *t)
 
-\nwenddocs{}\nwbegincode{43}\sublabel{NWtclI-froC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-froC-1}}}\moddef{from_toolbus~{\nwtagstyle{}\subpageref{NWtclI-froC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{43}\sublabel{NWtclI-froC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-froC-1}}}\moddef{from_toolbus~{\nwtagstyle{}\subpageref{NWtclI-froC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 term *from_toolbus(int cid, term *t) 
 \{
   char *fname;
@@ -528,7 +530,7 @@ term *from_toolbus(int cid, term *t)
 
 %{{{ int Tcl_TBsend(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
-\nwenddocs{}\nwbegincode{45}\sublabel{NWtclI-TclA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA-1}}}\moddef{Tcl_TBsend~{\nwtagstyle{}\subpageref{NWtclI-TclA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{45}\sublabel{NWtclI-TclA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA-1}}}\moddef{Tcl_TBsend~{\nwtagstyle{}\subpageref{NWtclI-TclA-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_TBsend(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 \{
   term *t;
@@ -552,7 +554,7 @@ int Tcl_TBsend(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 %}}}
 %{{{ int Tcl_TBstring(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
-\nwenddocs{}\nwbegincode{47}\sublabel{NWtclI-TclC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclC-1}}}\moddef{Tcl_TBstring~{\nwtagstyle{}\subpageref{NWtclI-TclC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{47}\sublabel{NWtclI-TclC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclC-1}}}\moddef{Tcl_TBstring~{\nwtagstyle{}\subpageref{NWtclI-TclC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_TBstring(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 \{
   char *buf,*src,*dest,size;
@@ -589,7 +591,7 @@ int Tcl_TBstring(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 %}}}
 %{{{ int Tcl_bgerror(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
-\nwenddocs{}\nwbegincode{49}\sublabel{NWtclI-TclB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclB-1}}}\moddef{Tcl_bgerror~{\nwtagstyle{}\subpageref{NWtclI-TclB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{49}\sublabel{NWtclI-TclB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclB-1}}}\moddef{Tcl_bgerror~{\nwtagstyle{}\subpageref{NWtclI-TclB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_bgerror(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 \{
   handle_error(interp, argv[1]);
@@ -604,7 +606,7 @@ int Tcl_bgerror(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 Initialize the ToolBus commands, and optionally the main ToolBus
 connection.
 
-\nwenddocs{}\nwbegincode{51}\sublabel{NWtclI-TB*7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TB*7-1}}}\moddef{TB_Init~{\nwtagstyle{}\subpageref{NWtclI-TB*7-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{51}\sublabel{NWtclI-TB*7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TB*7-1}}}\moddef{TB_Init~{\nwtagstyle{}\subpageref{NWtclI-TB*7-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int TB_Init(Tcl_Interp *interp)
 \{
   global_interp = interp;
@@ -628,6 +630,8 @@ int TB_Init(Tcl_Interp *interp)
     interp->result = "Cannot load file " LIBDIR "/tcltk.tcl";
     return TCL_ERROR;
   \}
+
+  Tcl_SetVar(interp, "TB_LIBDIR", LIBDIR, TCL_GLOBAL_ONLY);
 \}
 \nwused{\\{NWtclI-tclG-1}}\nwendcode{}\nwbegindocs{52}\nwdocspar
 
@@ -635,7 +639,7 @@ int TB_Init(Tcl_Interp *interp)
 
 %{{{ int Tcl_AppInit(Tcl_Interp *interp)
 
-\nwenddocs{}\nwbegincode{53}\sublabel{NWtclI-TclB.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclB.2-1}}}\moddef{Tcl_AppInit~{\nwtagstyle{}\subpageref{NWtclI-TclB.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{53}\sublabel{NWtclI-TclB.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclB.2-1}}}\moddef{Tcl_AppInit~{\nwtagstyle{}\subpageref{NWtclI-TclB.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_AppInit(Tcl_Interp *interp)
 \{
   if(Tcl_Init(interp) == TCL_ERROR)
@@ -668,7 +672,7 @@ int Tcl_AppInit(Tcl_Interp *interp)
 Analyze the executables arguments, and extract any arguments
 that are interesting for the Tcl/Tk adapter or the Tcl/Tk script.
 
-\nwenddocs{}\nwbegincode{55}\sublabel{NWtclI-hanB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanB-1}}}\moddef{handle_args~{\nwtagstyle{}\subpageref{NWtclI-hanB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{55}\sublabel{NWtclI-hanB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanB-1}}}\moddef{handle_args~{\nwtagstyle{}\subpageref{NWtclI-hanB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void handle_args(int argc, char *argv[])
 \{
   int i;
@@ -708,7 +712,7 @@ void handle_args(int argc, char *argv[])
 %}}}
 %{{{ void signal_handler(int sig)
 
-\nwenddocs{}\nwbegincode{57}\sublabel{NWtclI-sigE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-sigE-1}}}\moddef{signal_handler~{\nwtagstyle{}\subpageref{NWtclI-sigE-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{57}\sublabel{NWtclI-sigE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-sigE-1}}}\moddef{signal_handler~{\nwtagstyle{}\subpageref{NWtclI-sigE-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void signal_handler(int sig)
 \{
 #ifdef USE_TIDE
@@ -727,7 +731,7 @@ static void signal_handler(int sig)
 
 Catch a number of signals.
 
-\nwenddocs{}\nwbegincode{59}\sublabel{NWtclI-sigB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-sigB-1}}}\moddef{signals_set~{\nwtagstyle{}\subpageref{NWtclI-sigB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{59}\sublabel{NWtclI-sigB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-sigB-1}}}\moddef{signals_set~{\nwtagstyle{}\subpageref{NWtclI-sigB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 static void signals_set()
 \{
    struct sigaction act;
@@ -748,7 +752,7 @@ static void signals_set()
 %}}}
 %{{{ int main(int argc, char *argv[])
 
-\nwenddocs{}\nwbegincode{61}\sublabel{NWtclI-mai4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-mai4-1}}}\moddef{main~{\nwtagstyle{}\subpageref{NWtclI-mai4-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{61}\sublabel{NWtclI-mai4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-mai4-1}}}\moddef{main~{\nwtagstyle{}\subpageref{NWtclI-mai4-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int main(int argc, char *argv[])
 \{
   Tk_Window main_win;
@@ -770,7 +774,7 @@ int main(int argc, char *argv[])
 
 %{{{ Tide support
 
-\nwenddocs{}\nwbegincode{63}\sublabel{NWtclI-TidC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}}\moddef{Tide support~{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tclG-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{63}\sublabel{NWtclI-TidC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}}\moddef{Tide support~{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}}\endmoddef
 \LA{}tide includes~{\nwtagstyle{}\subpageref{NWtclI-tidD-1}}\RA{}
 \LA{}tide variables~{\nwtagstyle{}\subpageref{NWtclI-tidE-1}}\RA{}
 
@@ -779,28 +783,27 @@ int main(int argc, char *argv[])
 \LA{}tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}\RA{}
 \LA{}Tcl_TBtide~{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}\RA{}
 
+\LA{}cbdap_process_created~{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}\RA{}
+\LA{}cbdap_process_destroyed~{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}\RA{}
+\LA{}cbdap_change_exec_state~{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}\RA{}
+\LA{}cbdap_supply_info~{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}\RA{}
+
 \LA{}handle_tide_args~{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}\RA{}
 \LA{}Tide_Init~{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}\RA{}
 
-\LA{}continue_process~{\nwtagstyle{}\subpageref{NWtclI-conG-1}}\RA{}
-\LA{}stop_process~{\nwtagstyle{}\subpageref{NWtclI-stoC-1}}\RA{}
-\LA{}supply_info~{\nwtagstyle{}\subpageref{NWtclI-supB-1}}\RA{}
-
 \LA{}get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}\RA{}
-\LA{}set_observation_point~{\nwtagstyle{}\subpageref{NWtclI-setL-1}}\RA{}
-\LA{}clear_observation_point~{\nwtagstyle{}\subpageref{NWtclI-cleN-1}}\RA{}
-
-\LA{}exec_control~{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}\RA{}
-\LA{}execute_actions~{\nwtagstyle{}\subpageref{NWtclI-exeF-1}}\RA{}
-
+\LA{}get_processes~{\nwtagstyle{}\subpageref{NWtclI-getD-1}}\RA{}
+\LA{}create_rule~{\nwtagstyle{}\subpageref{NWtclI-creB-1}}\RA{}
+\LA{}modify_rule~{\nwtagstyle{}\subpageref{NWtclI-modB-1}}\RA{}
+\LA{}destroy_rule~{\nwtagstyle{}\subpageref{NWtclI-desC-1}}\RA{}
 \LA{}rec_ack_event~{\nwtagstyle{}\subpageref{NWtclI-recD-1}}\RA{}
 \LA{}rec_terminate~{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}\RA{}
 \nwused{\\{NWtclI-tclG-1}}\nwendcode{}\nwbegindocs{64}\nwdocspar
 
 %{{{ tide includes
 
-\nwenddocs{}\nwbegincode{65}\sublabel{NWtclI-tidD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidD-1}}}\moddef{tide includes~{\nwtagstyle{}\subpageref{NWtclI-tidD-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-#include <tide.h>
+\nwenddocs{}\nwbegincode{65}\sublabel{NWtclI-tidD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidD-1}}}\moddef{tide includes~{\nwtagstyle{}\subpageref{NWtclI-tidD-1}}}\endmoddef
+#include <dap.h>
 #include "debug-adapter.tif.c"
 #include <limits.h>
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{66}\nwdocspar
@@ -808,7 +811,7 @@ int main(int argc, char *argv[])
 %}}}
 %{{{ tide variables
 
-\nwenddocs{}\nwbegincode{67}\sublabel{NWtclI-tidE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidE-1}}}\moddef{tide variables~{\nwtagstyle{}\subpageref{NWtclI-tidE-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{67}\sublabel{NWtclI-tidE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidE-1}}}\moddef{tide variables~{\nwtagstyle{}\subpageref{NWtclI-tidE-1}}}\endmoddef
 TBbool use_tide = TBfalse;
 TBbool trace_ports = TBfalse;
 int tide_cid = -1;
@@ -824,7 +827,7 @@ Tcl_File tide_file = NULL;
 
 The following functions are implemented by the tcltk-adapter.
 
-\nwenddocs{}\nwbegincode{69}\sublabel{NWtclI-funE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\moddef{function table~{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tidE-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{69}\sublabel{NWtclI-funE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\moddef{function table~{\nwtagstyle{}\subpageref{NWtclI-funE-1}}}\endmoddef
 \LA{}eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}\RA{}
 
 func_entry func_table[] =
@@ -833,7 +836,7 @@ func_entry func_table[] =
 \};
 \nwused{\\{NWtclI-tidE-1}}\nwendcode{}\nwbegindocs{70}\nwdocspar
 
-\nwenddocs{}\nwbegincode{71}\sublabel{NWtclI-evaB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\moddef{eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-funE-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{71}\sublabel{NWtclI-evaB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\moddef{eval_eval_1~{\nwtagstyle{}\subpageref{NWtclI-evaB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 \{
   char *expr;
@@ -858,7 +861,7 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 %}}}
 %{{{ action table
 
-\nwenddocs{}\nwbegincode{73}\sublabel{NWtclI-actC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\moddef{action table~{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tidE-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{73}\sublabel{NWtclI-actC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\moddef{action table~{\nwtagstyle{}\subpageref{NWtclI-actC-1}}}\endmoddef
 act_entry act_table[] =
 \{ \{ NULL, 0, NULL, NULL, NULL \}
 \};
@@ -867,7 +870,7 @@ act_entry act_table[] =
 %}}}
 %{{{ information table
 
-\nwenddocs{}\nwbegincode{75}\sublabel{NWtclI-infH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\moddef{information table~{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-tidE-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{75}\sublabel{NWtclI-infH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\moddef{information table~{\nwtagstyle{}\subpageref{NWtclI-infH-1}}}\endmoddef
 char *information_table[] =
 \{ "search-paths",               NULL,
   "observation-ports",          "[[on-halt,at,[]], [every-stat,before,[]]," \\
@@ -885,13 +888,12 @@ char *information_table[] =
 
 %{{{ int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 
-\nwenddocs{}\nwbegincode{77}\sublabel{NWtclI-hanH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\moddef{handle_tide_error~{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{77}\sublabel{NWtclI-hanH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\moddef{handle_tide_error~{\nwtagstyle{}\subpageref{NWtclI-hanH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 \{
   if(use_tide) \{
-    dap_exception(0, "error", msg, info);
-    dap_exec_control(0, ES_STOP, -1);
-    return 1;
+    dap_activate_rules(0, TB_make("[exception,at,error,<str>,<str>]", msg, info));
+    /*return 1; For now, we also want to print the error. */
   \}
   return 0;
 \}
@@ -902,7 +904,7 @@ int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 
 Handle any Tide-related arguments.
 
-\nwenddocs{}\nwbegincode{79}\sublabel{NWtclI-hanG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\moddef{handle_tide_args~{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{79}\sublabel{NWtclI-hanG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\moddef{handle_tide_args~{\nwtagstyle{}\subpageref{NWtclI-hanG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void handle_tide_args(int argc, char *argv[])
 \{
   int i, port = 9500;
@@ -935,7 +937,7 @@ void handle_tide_args(int argc, char *argv[])
 
 Tcl informs us that a ToolBus message comes in over the Tide channel.
 
-\nwenddocs{}\nwbegincode{81}\sublabel{NWtclI-tclG.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\moddef{tcl_tide_handler~{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{81}\sublabel{NWtclI-tclG.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\moddef{tcl_tide_handler~{\nwtagstyle{}\subpageref{NWtclI-tclG.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tcl_tide_handler(ClientData data, int mask)
 \{
   if(TB_peek(tide_cid))
@@ -946,54 +948,54 @@ void tcl_tide_handler(ClientData data, int mask)
 %}}}
 %{{{ void tide_event_loop()
 
-\nwenddocs{}\nwbegincode{83}\sublabel{NWtclI-tidF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\moddef{tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{83}\sublabel{NWtclI-tidF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\moddef{tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tide_event_loop()
 \{
-  while(dap_exec_state(0) == ES_STOP || 
-        dap_exec_state(0) == ES_HIGH_WATER) \{
+  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
+        dap_get_exec_state(0, 0) == ES_HIGH_WATER)) \{
+    fprintf(stderr, "handle one\\n");
     TB_handle_one(tide_cid);
   \}
+  fprintf(stderr, "continuing...\\n");
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{84}\nwdocspar
 
 %}}}
-
 %{{{ int Tide_Init(Tcl_Interp *interp)
 
 Initialize Tide.
 
-\nwenddocs{}\nwbegincode{85}\sublabel{NWtclI-Tid9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\moddef{Tide_Init~{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{85}\sublabel{NWtclI-Tid9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\moddef{Tide_Init~{\nwtagstyle{}\subpageref{NWtclI-Tid9-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tide_Init(Tcl_Interp *interp)
 \{
   tide_interp = interp;
 
   Tcl_CreateCommand(interp, "TBtide", Tcl_TBtide, NULL, NULL);
 
-  if(use_tide) \{
-    TB_connect(tide_cid);
-    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
-    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
-  \}
-  dap_init(tide_cid, func_table, act_table);
-
   if(use_tide || trace_ports) \{
     if(Tcl_EvalFile(interp, LIBDIR "/tide.tcl") != TCL_OK) \{
-      interp->result = "cannot open file " LIBDIR "/tide.tcl";
+      /*interp->result = "cannot open file " LIBDIR "/tide.tcl";*/
+      Tcl_AddErrorInfo(interp, "while loading file " LIBDIR "/tide.tcl\\n");
       return TCL_ERROR;
     \}
   \}
 
   if(use_tide) \{
+    TB_connect(tide_cid);
+    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
+    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
+  \}
+
+  if(use_tide) \{
+    dap_init(tide_cid, information_table, func_table, act_table);
     if(script)
-      dap_create_process(0, script, ES_STOP);
+      dap_process_created(0, 0, script, ES_STOP);
     else \{
       char buf[32];
       sprintf(buf, "wish-%d", getpid());
-      dap_create_process(0, buf, ES_STOP);
+      dap_process_created(0, 0, buf, ES_STOP);
     \}
   \}
-  dap_set_observation_point(tide_cid, TB_make("all"), 
-        TB_make("[on-halt,at,\\"\\"]"), TB_make("always"), TB_make("[watch(cpe)]"));
 
   return TCL_OK;
 \}
@@ -1001,11 +1003,65 @@ int Tide_Init(Tcl_Interp *interp)
 
 %}}}
 
+%{{{ void cbdap_process_created(int dapid, int pid)
+
+This callback function is called when a new process was created.
+
+\nwenddocs{}\nwbegincode{87}\sublabel{NWtclI-cbdL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\moddef{cbdap_process_created~{\nwtagstyle{}\subpageref{NWtclI-cbdL-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+void cbdap_process_created(int dapid, int pid)
+\{
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
+
+%}}}
+%{{{ void cbdap_process_destroyed(int dapid, int pid)
+
+This callback function is called when a new process was created.
+
+\nwenddocs{}\nwbegincode{89}\sublabel{NWtclI-cbdN-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\moddef{cbdap_process_destroyed~{\nwtagstyle{}\subpageref{NWtclI-cbdN-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+void cbdap_process_destroyed(int dapid, int pid)
+\{
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{90}\nwdocspar
+
+%}}}
+%{{{ void cbdap_change_exec_state(int pid, int exec_state)
+
+This function is used as a callback to physically change
+the execution state of a process.
+In the tcltk-adapter this is handled at a higher level.
+
+\nwenddocs{}\nwbegincode{91}\sublabel{NWtclI-cbdN.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\moddef{cbdap_change_exec_state~{\nwtagstyle{}\subpageref{NWtclI-cbdN.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+void cbdap_change_exec_state(int pid, int exec_state)
+\{
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{92}\nwdocspar
+
+%}}}
+%{{{ term *cbdap_supply_info(int cid, char *key)
+
+\nwenddocs{}\nwbegincode{93}\sublabel{NWtclI-cbdH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\moddef{cbdap_supply_info~{\nwtagstyle{}\subpageref{NWtclI-cbdH-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+term *cbdap_supply_info(char *key)
+\{
+  fprintf(stderr, "supply_info: %s\\n", key);
+  if(streq(key, "search-paths")) \{
+    static char path[_POSIX_PATH_MAX];
+    getcwd(path, _POSIX_PATH_MAX);
+
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
+  \}
+
+  return NULL;
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{94}\nwdocspar
+
+%}}}
+
 %{{{ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
 The executing program just past an observation port.
 
-\nwenddocs{}\nwbegincode{87}\sublabel{NWtclI-TclA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\moddef{Tcl_TBtide~{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{95}\sublabel{NWtclI-TclA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\moddef{Tcl_TBtide~{\nwtagstyle{}\subpageref{NWtclI-TclA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 \{
   term *port;
@@ -1022,17 +1078,17 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
     TBprintf(stdout, "port: %t\\n", port);
 
   if(use_tide) \{
-    dap_check_observation_points(0, port);
-    switch(dap_exec_state(0)) \{
-      case ES_STOP:             dap_stop_process(0);
-                                break;
-      case ES_SINGLE_STEP:      dap_stop_process(0);
+    dap_activate_rules(0, port);
+
+    switch(dap_get_exec_state(0, 0)) \{
+      case ES_STOP:             
+      case ES_SINGLE_STEP:      dap_change_exec_state(0, ES_STOP);
                                 break;
       case ES_RUN_UNTIL_PARENT:
       case ES_STEP_OVER:        Tcl_Eval(interp, "info level");
                                 level = atoi(interp->result);
-                                if(level <= dap_stop_level(0))
-                                  dap_stop_process(0);
+                                if(level <= dap_get_stop_level(0, 0))
+                                  dap_change_exec_state(0, ES_STOP);
                                 break;
     \}
     tide_event_loop();
@@ -1043,111 +1099,78 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
     return Tcl_Eval(interp, argv[2]);
   \}
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
-
-%}}}
-
-%{{{ void continue_process(int pid)
-
-The tcl/tk adapter does not have to do anything special when a process
-is restarted.
-\nwenddocs{}\nwbegincode{89}\sublabel{NWtclI-conG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\moddef{continue_process~{\nwtagstyle{}\subpageref{NWtclI-conG-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-void continue_process(int pid)
-\{
-\}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{90}\nwdocspar
-
-%}}}
-%{{{ void stop_process(int pid)
-
-\nwenddocs{}\nwbegincode{91}\sublabel{NWtclI-stoC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-stoC-1}}}\moddef{stop_process~{\nwtagstyle{}\subpageref{NWtclI-stoC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-void stop_process(int pid)
-\{
-\}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{92}\nwdocspar
-
-%}}}
-
-%{{{ term *supply_info(int cid, char *key)
-
-\nwenddocs{}\nwbegincode{93}\sublabel{NWtclI-supB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-supB-1}}}\moddef{supply_info~{\nwtagstyle{}\subpageref{NWtclI-supB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-term *supply_info(int cid, char *key)
-\{
-  fprintf(stderr, "supply_info: %s\\n", key);
-  if(streq(key, "search-paths")) \{
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
-
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
-  \}
-
-  return NULL;
-\}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{94}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{96}\nwdocspar
 
 %}}}
 
 %{{{ term *get_info(int cid)
 
-\nwenddocs{}\nwbegincode{95}\sublabel{NWtclI-get8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\moddef{get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{97}\sublabel{NWtclI-get8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\moddef{get_info~{\nwtagstyle{}\subpageref{NWtclI-get8-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 term *get_info(int cid)
 \{
-  return dap_get_info(cid);
-\}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{96}\nwdocspar
-
-%}}}
-%{{{ void set_observation_point(int cid, term *pids, term *port, term *cond, term *acts)
-
-Set an observation point.
-
-\nwenddocs{}\nwbegincode{97}\sublabel{NWtclI-setL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-setL-1}}}\moddef{set_observation_point~{\nwtagstyle{}\subpageref{NWtclI-setL-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-term *set_observation_point(int cid, term *pids, term *port, term *cond, term_list *acts)
-\{
-  return dap_set_observation_point(cid, pids, port, cond, acts);
+  return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{98}\nwdocspar
 
 %}}}
-%{{{ void clear_observation_point(int cid, term *pids, int oid)
+%{{{ term *get_processes(int cid)
 
-Remove an observation point.
+ToolBus callback. Returns a list of process identifier/name pairs.
 
-\nwenddocs{}\nwbegincode{99}\sublabel{NWtclI-cleN-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-cleN-1}}}\moddef{clear_observation_point~{\nwtagstyle{}\subpageref{NWtclI-cleN-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-void clear_observation_point(int cid, term *pids, int oid)
+\nwenddocs{}\nwbegincode{99}\sublabel{NWtclI-getD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\moddef{get_processes~{\nwtagstyle{}\subpageref{NWtclI-getD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+term *get_processes(int cid)
 \{
-  dap_clear_observation_point(cid, pids, oid);
+  int i;
+  term_list *procs = NULL;
+
+  for(i=0; i<MAX_PROCESSES; i++) \{
+    process *p = dap_get_process(0, i);
+    if(p)
+      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+  \}
+  return TB_make("snd-value(processes(<term>))", procs);
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{100}\nwdocspar
 
 %}}}
-%{{{ void exec_control(int cid, term *, term *)
+%{{{ term *create_rule(int cid, term *procs, port, cond, acts, life)
 
-Control the execution state of a tool.
+This ToolBus callback function is called to create a new rule. 
 
-\nwenddocs{}\nwbegincode{101}\sublabel{NWtclI-exeC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}}\moddef{exec_control~{\nwtagstyle{}\subpageref{NWtclI-exeC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-void exec_control(int cid, term *pids, term *mode)
+\nwenddocs{}\nwbegincode{101}\sublabel{NWtclI-creB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\moddef{create_rule~{\nwtagstyle{}\subpageref{NWtclI-creB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 \{
-  int level, es = dap_term2es(mode);
-
-  Tcl_Eval(tide_interp, "info level");
-  level = atoi(tide_interp->result);
-  dap_exec_control(0, es, level);
+  int rid = dap_create_rule(procs, port, cond, acts, life);
+  return TB_make(
+        "snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
+        procs, port, cond, acts, life, rid);
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{102}\nwdocspar
 
 %}}}
-%{{{ term *execute_actions(int cid, term *pids, term_list *actions)
+%{{{ void modify_rule(int cid, rid, term *procs, port, cond, acts, life)
 
-Execute a set of actions.
+This ToolBus callback function is called to modify an existing rule. 
 
-\nwenddocs{}\nwbegincode{103}\sublabel{NWtclI-exeF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-exeF-1}}}\moddef{execute_actions~{\nwtagstyle{}\subpageref{NWtclI-exeF-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
-term *execute_actions(int cid, term *pids, term_list *actions)
+\nwenddocs{}\nwbegincode{103}\sublabel{NWtclI-modB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\moddef{modify_rule~{\nwtagstyle{}\subpageref{NWtclI-modB-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+void modify_rule(int cid, int rid, term *procs, term *port, 
+                                term *cond, term *acts, term *life)
 \{
-  return TB_make("snd-value(execute-actions(<term>,<term>,error(<str>)))",
-                        pids, actions, "not implemented yet");
+  dap_rule_modified(0, rid, procs, port, cond, acts, life);
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{104}\nwdocspar
+
+%}}}
+%{{{ void destroy_rule(int cid, term *procs, int rid)
+
+This ToolBus callback function is called to destroy an existing rule.
+
+\nwenddocs{}\nwbegincode{105}\sublabel{NWtclI-desC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\moddef{destroy_rule~{\nwtagstyle{}\subpageref{NWtclI-desC-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+void destroy_rule(int cid, term *procs, int rid)
+\{
+  dap_destroy_rule(rid);
+\}
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{106}\nwdocspar
 
 %}}}
 
@@ -1155,36 +1178,49 @@ term *execute_actions(int cid, term *pids, term_list *actions)
 
 Propagate event acknowledgements to the tide library.
 
-\nwenddocs{}\nwbegincode{105}\sublabel{NWtclI-recD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\moddef{rec_ack_event~{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{107}\sublabel{NWtclI-recD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\moddef{rec_ack_event~{\nwtagstyle{}\subpageref{NWtclI-recD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void rec_ack_event(int cid, term *event)
 \{
   dap_rec_ack_event(cid, event);
 \}
-\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{106}\nwdocspar
+\nwused{\\{NWtclI-TidC-1}}\nwendcode{}\nwbegindocs{108}\nwdocspar
 
 %}}}
 %{{{ void rec_terminate(int cid, term *arg)
 
 Propagate termination requests to the tide library.
 
-\nwenddocs{}\nwbegincode{107}\sublabel{NWtclI-recD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\moddef{rec_terminate~{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWtclI-TidC-1}}\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{109}\sublabel{NWtclI-recD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\moddef{rec_terminate~{\nwtagstyle{}\subpageref{NWtclI-recD.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void rec_terminate(int cid, term *arg)
 \{
   dap_rec_terminate(cid, arg);
+  use_tide = TBfalse;
 \}
 \nwused{\\{NWtclI-TidC-1}}\nwendcode{}
 
+\nwixlogsorted{c}{{TB_Init}{NWtclI-TB*7-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TB*7-1}}}%
+\nwixlogsorted{c}{{Tcl_AppInit}{NWtclI-TclB.2-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclB.2-1}}}%
+\nwixlogsorted{c}{{TclString2Term}{NWtclI-TclE-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclE-1}}}%
+\nwixlogsorted{c}{{Tcl_TBsend}{NWtclI-TclA-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclA-1}}}%
+\nwixlogsorted{c}{{Tcl_TBstring}{NWtclI-TclC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclC-1}}}%
+\nwixlogsorted{c}{{Tcl_TBtide}{NWtclI-TclA.2-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-TclA.2-1}}}%
+\nwixlogsorted{c}{{Tcl_bgerror}{NWtclI-TclB-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclB-1}}}%
+\nwixlogsorted{c}{{Tide support}{NWtclI-TidC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TidC-1}}}%
+\nwixlogsorted{c}{{Tide_Init}{NWtclI-Tid9-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-Tid9-1}}}%
 \nwixlogsorted{c}{{action table}{NWtclI-actC-1}{\nwixu{NWtclI-tidE-1}\nwixd{NWtclI-actC-1}}}%
-\nwixlogsorted{c}{{clear_observation_point}{NWtclI-cleN-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-cleN-1}}}%
-\nwixlogsorted{c}{{continue_process}{NWtclI-conG-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-conG-1}}}%
+\nwixlogsorted{c}{{cbdap_change_exec_state}{NWtclI-cbdN.2-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-cbdN.2-1}}}%
+\nwixlogsorted{c}{{cbdap_process_created}{NWtclI-cbdL-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-cbdL-1}}}%
+\nwixlogsorted{c}{{cbdap_process_destroyed}{NWtclI-cbdN-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-cbdN-1}}}%
+\nwixlogsorted{c}{{cbdap_supply_info}{NWtclI-cbdH-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-cbdH-1}}}%
+\nwixlogsorted{c}{{create_rule}{NWtclI-creB-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-creB-1}}}%
+\nwixlogsorted{c}{{destroy_rule}{NWtclI-desC-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-desC-1}}}%
 \nwixlogsorted{c}{{error}{NWtclI-err5-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-err5-1}}}%
 \nwixlogsorted{c}{{eval_eval_1}{NWtclI-evaB-1}{\nwixu{NWtclI-funE-1}\nwixd{NWtclI-evaB-1}}}%
-\nwixlogsorted{c}{{exec_control}{NWtclI-exeC-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-exeC-1}}}%
-\nwixlogsorted{c}{{execute_actions}{NWtclI-exeF-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-exeF-1}}}%
 \nwixlogsorted{c}{{from_toolbus}{NWtclI-froC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-froC-1}}}%
 \nwixlogsorted{c}{{function table}{NWtclI-funE-1}{\nwixu{NWtclI-tidE-1}\nwixd{NWtclI-funE-1}}}%
 \nwixlogsorted{c}{{functions}{NWtclI-fun9-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-fun9-1}}}%
 \nwixlogsorted{c}{{get_info}{NWtclI-get8-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-get8-1}}}%
+\nwixlogsorted{c}{{get_processes}{NWtclI-getD-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-getD-1}}}%
 \nwixlogsorted{c}{{handle_args}{NWtclI-hanB-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-hanB-1}}}%
 \nwixlogsorted{c}{{handle_error}{NWtclI-hanC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-hanC-1}}}%
 \nwixlogsorted{c}{{handle_tide_args}{NWtclI-hanG-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-hanG-1}}}%
@@ -1192,6 +1228,7 @@ void rec_terminate(int cid, term *arg)
 \nwixlogsorted{c}{{includes}{NWtclI-inc8-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-inc8-1}}}%
 \nwixlogsorted{c}{{information table}{NWtclI-infH-1}{\nwixu{NWtclI-tidE-1}\nwixd{NWtclI-infH-1}}}%
 \nwixlogsorted{c}{{main}{NWtclI-mai4-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-mai4-1}}}%
+\nwixlogsorted{c}{{modify_rule}{NWtclI-modB-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-modB-1}}}%
 \nwixlogsorted{c}{{print_args}{NWtclI-priA.4-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-priA.4-1}}}%
 \nwixlogsorted{c}{{printb_char}{NWtclI-priB-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-priB-1}}}%
 \nwixlogsorted{c}{{printb_str}{NWtclI-priA-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-priA-1}}}%
@@ -1203,32 +1240,20 @@ void rec_terminate(int cid, term *arg)
 \nwixlogsorted{c}{{rec_ack_event}{NWtclI-recD-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-recD-1}}}%
 \nwixlogsorted{c}{{rec_terminate}{NWtclI-recD.2-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-recD.2-1}}}%
 \nwixlogsorted{c}{{reset_buffer}{NWtclI-resC-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-resC-1}}}%
-\nwixlogsorted{c}{{set_observation_point}{NWtclI-setL-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-setL-1}}}%
 \nwixlogsorted{c}{{signal_handler}{NWtclI-sigE-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-sigE-1}}}%
 \nwixlogsorted{c}{{signals_set}{NWtclI-sigB-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-sigB-1}}}%
-\nwixlogsorted{c}{{stop_process}{NWtclI-stoC-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-stoC-1}}}%
-\nwixlogsorted{c}{{supply_info}{NWtclI-supB-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-supB-1}}}%
-\nwixlogsorted{c}{{TB_Init}{NWtclI-TB*7-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TB*7-1}}}%
-\nwixlogsorted{c}{{Tcl_AppInit}{NWtclI-TclB.2-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclB.2-1}}}%
-\nwixlogsorted{c}{{Tcl_bgerror}{NWtclI-TclB-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclB-1}}}%
-\nwixlogsorted{c}{{TclString2Term}{NWtclI-TclE-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclE-1}}}%
-\nwixlogsorted{c}{{Tcl_TBsend}{NWtclI-TclA-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclA-1}}}%
-\nwixlogsorted{c}{{Tcl_TBstring}{NWtclI-TclC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TclC-1}}}%
-\nwixlogsorted{c}{{Tcl_TBtide}{NWtclI-TclA.2-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-TclA.2-1}}}%
 \nwixlogsorted{c}{{tcl_tide_handler}{NWtclI-tclG.2-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-tclG.2-1}}}%
 \nwixlogsorted{c}{{tcltk-adapter.c*}{NWtclI-tclG-1}{\nwixd{NWtclI-tclG-1}}}%
 \nwixlogsorted{c}{{tcl_toolbus_handler}{NWtclI-tclJ-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-tclJ-1}}}%
 \nwixlogsorted{c}{{term printing}{NWtclI-terD-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-terD-1}}}%
 \nwixlogsorted{c}{{tide includes}{NWtclI-tidD-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-tidD-1}}}%
-\nwixlogsorted{c}{{Tide support}{NWtclI-TidC-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-TidC-1}}}%
 \nwixlogsorted{c}{{tide variables}{NWtclI-tidE-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-tidE-1}}}%
 \nwixlogsorted{c}{{tide_event_loop}{NWtclI-tidF-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-tidF-1}}}%
-\nwixlogsorted{c}{{Tide_Init}{NWtclI-Tid9-1}{\nwixu{NWtclI-TidC-1}\nwixd{NWtclI-Tid9-1}}}%
 \nwixlogsorted{c}{{variables}{NWtclI-var9-1}{\nwixu{NWtclI-tclG-1}\nwixd{NWtclI-var9-1}}}%
 \nwixlogsorted{c}{{wish_type_string}{NWtclI-wisG-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wisG-1}}}%
 \nwixlogsorted{c}{{wprintf}{NWtclI-wpr7-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wpr7-1}}}%
 \nwixlogsorted{c}{{wputc}{NWtclI-wpu5-1}{\nwixu{NWtclI-terD-1}\nwixd{NWtclI-wpu5-1}}}%
-\nwbegindocs{108}\nwdocspar
+\nwbegindocs{110}\nwdocspar
 
 %}}}
 
