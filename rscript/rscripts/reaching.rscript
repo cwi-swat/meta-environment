@@ -19,14 +19,13 @@ assert "kill": KILL ==  {<1, <4, "i">>, <1, <7, "i">>, <2, <5, "j">>, <3, <6, "a
                          <4, <1, "i">>, <4, <7, "i">>, <5, <2, "j">>, <6, <3, "a">>, 
                          <7, <1, "i">>, <7, <4, "i">>}
 
-bag[stat] STATEMENTS = carrier(PRED)
-rel[stat,stat] PRED-OF = inv(PRED)
+set[stat] STATEMENTS = carrier(PRED)
 
-bag[stat] predecessor(stat S) = PRED[-,S]
-bag[stat] successor(stat S) = PRED[S,-]
+set[stat] predecessor(stat S) = PRED[-,S]
+set[stat] successor(stat S) = PRED[S,-]
 
-bag[stat] gpredecessor(rel[stat,stat] P, stat S) = P[-,S]
-bag[stat] gsuccessor(rel[stat,stat] P, stat S) = P[S,-]
+set[stat] gpredecessor(rel[stat,stat] P, stat S) = P[-,S]
+set[stat] gsuccessor(rel[stat,stat] P, stat S) = P[S,-]
 
 %% Reaching definitions
 
@@ -55,9 +54,9 @@ assert "OUT": OUT == {<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>
                       <7, <3, "a">>, <7, <6, "a">>}
 
 rel[stat, def] reaching-definitions(rel[stat,var] MYDEFS, rel[stat,stat] MYPRED) = 
-   IN
+   MYIN
 where
-	bag[stat] STATEMENT = carrier(MYPRED)
+	set[stat] STATEMENT = carrier(MYPRED)
 
 	rel[stat,def] MYDEF  = {<S,<S,V>> | <stat S, var V> : MYDEFS}
 

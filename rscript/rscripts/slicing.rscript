@@ -12,14 +12,14 @@ type var  = str
 type def  = <stat theStat, var theVar>
 type use  = <stat theStat, var theVar>
 
-bag[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
 
-bag[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
 
 rel[stat, def] reaching-definitions(rel[stat,var] DEFS, rel[stat,stat] PRED) = 
    IN
 where
-	bag[stat] STATEMENT = carrier(PRED)
+	set[stat] STATEMENT = carrier(PRED)
 
 	rel[stat,def] DEF  = {<S,<S,V>> | <stat S, var V> : DEFS}
 
@@ -44,18 +44,18 @@ end where
 rel[stat,stat] dominators(rel[stat,stat] PRED) = 
    DOMINATES
 where
-	bag[stat] STATEMENT = carrier(PRED)
+	set[stat] STATEMENT = carrier(PRED)
 
-	bag[stat] ROOT = top(PRED)
+	set[stat] ROOT = top(PRED)
 
   	rel[stat,stat] DOMINATES =
   	{ <S, S1> | stat S : STATEMENT , 
-                    stat S1 : STATEMENT \ (ROOT union {S}) \ range(reachX(ROOT, {S}, PRED)) 
+                    stat S1 : STATEMENT \ (ROOT union {S}) \ reachX(ROOT, {S}, PRED) 
         }
 endwhere
 
-bag[use] BackwardSlice(
-	bag[stat] CONTROL-STATEMENT, 
+set[use] BackwardSlice(
+	set[stat] CONTROL-STATEMENT, 
 	rel[stat,stat] PRED,
 	rel[stat,var] USES,
 	rel[stat,var] DEFS,	
@@ -121,12 +121,12 @@ rel[stat,var] USES	= {<5, "i">, <5, "n">, <6, "sum">, <6,"i">,
 			   <7, "product">, <7, "i">, <8, "i">, <9, "sum">, 
 			   <10, "product">}
 
-bag[int] CONTROL-STATEMENT = { 5 }
+set[int] CONTROL-STATEMENT = { 5 }
 
-bag[use] Example1 = 
+set[use] Example1 = 
 	BackwardSlice(CONTROL-STATEMENT, PRED, USES, DEFS, <9, "sum">)
 
-bag[use] Example2 =
+set[use] Example2 =
 	BackwardSlice(CONTROL-STATEMENT, PRED, USES, DEFS,<10, "product">)
 
 
