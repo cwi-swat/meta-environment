@@ -29,9 +29,9 @@ public class LeftMerge extends AbstractProcessExpression {
 
     Vector leftfirst = left.getFirst().getAtomsAsVector();
 
-    for (Iterator it = leftfirst.iterator(); it.hasNext();) {
-      ((Atom) it.next()).extendFollow(right.getFirst());
-    }
+//    for (Iterator it = leftfirst.iterator(); it.hasNext();) {
+//      ((Atom) it.next()).extendFollow(right.getFirst());
+//    }
 
     setFirst(left.getFirst());
     setFollow(followSet);

@@ -55,10 +55,6 @@ public class ProcessCall implements ProcessExpression {
     return PE.getFollow();
   }
 
-  public void extendFollow(AtomSet f) {
-    PE.extendFollow(f);
-  }
-
   public AtomSet getAtoms() {
     return PE.getAtoms();
   }

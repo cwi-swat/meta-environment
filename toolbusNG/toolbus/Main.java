@@ -22,9 +22,9 @@ public class Main {
      //CallTest2();
     //IfTest(); 
     //CreateTest();
-    //NestedIterTest();
+    NestedIterTest();
     // MergeTest();
-    SieveTest();
+    //ieveTest();
     //producerTest();
     //ToolTest();
   }

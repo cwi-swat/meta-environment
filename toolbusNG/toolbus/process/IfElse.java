@@ -24,11 +24,12 @@ public class IfElse extends AbstractProcessExpression {
   public ProcessExpression copy() {
     return new IfElse(test, left.copy(), right.copy());
   }
-  
-   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+
+  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
     left.expand(P, calls);
     right.expand(P, calls);
-   }
+    setFirst(left.getFirst().union(right.getFirst()));
+  }
 
   public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
     left.compile(P, follows);
@@ -39,19 +40,9 @@ public class IfElse extends AbstractProcessExpression {
 
     right.getFirst().setTest(notTest);
 
-    setFirst(left.getFirst().union(right.getFirst()));
     setFollow(left.getFollow().union(right.getFollow()));
     //System.out.println("first = " + first);
     //System.out.println("follow = "+ follow);
-  }
-
-  public void extendFollow(AtomSet f) {
-    //System.out.println("extendFollow(" + f + ")");
-    left.extendFollow(f);
-    right.extendFollow(f);
-    if (getFollow().size() == 0) {
-      addToFollow(f);
-    }
   }
 
   public AtomSet getAtoms() {

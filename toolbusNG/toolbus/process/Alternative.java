@@ -28,21 +28,13 @@ public class Alternative extends AbstractProcessExpression {
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
     left.expand(P, calls);
     right.expand(P, calls);
+    setFirst(left.getFirst().union(right.getFirst()));
    }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     left.compile(P, follow);
     right.compile(P, follow);
-    setFirst(left.getFirst().union(right.getFirst()));
     setFollow(follow);
-  }
-  
-  public void extendFollow(AtomSet f) {
-    left.extendFollow(f);
-    right.extendFollow(f);
-    if (getFollow().size() == 0) {
-      addToFollow(f);
-    }
   }
 
   public AtomSet getAtoms() {

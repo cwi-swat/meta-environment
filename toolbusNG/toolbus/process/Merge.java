@@ -40,9 +40,9 @@ public class Merge implements ProcessExpression {
     return expansion.getFollow();
   }
 
-  public void extendFollow(AtomSet followSet) {
-    expansion.extendFollow(followSet);
-  }
+//  public void extendFollow(AtomSet followSet) {
+//    expansion.extendFollow(followSet);
+//  }
 
   public AtomSet getAtoms() {
     return expansion.getAtoms();
