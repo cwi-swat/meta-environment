@@ -1162,15 +1162,14 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
     Edit Term ...} button.  A standard dialog window pops up.
     Enter any new filename, for instance, `{\tt my-term}'.
 
-\item 
-  Type the term `{\tt true \& false}' in this editor. 
-The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
+\item Type the term `{\tt true \& false}' in this editor. 
+  The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
 \begin{figure}
 \begin{center}
 \begin{Label}{FIG:Bool-example.trm}
 
-\T \includegraphics[width=12cm]{Bool-example_trm}
+\T \includegraphics[width=12cm]{Bool-example-trm}
 \W \htmlimage{Bool-example.trm.gif}
 \caption{Term editor for {\tt Booleans} after entering `{\tt true \& false}'}
 
@@ -1186,14 +1185,14 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 move the cursor (a single character-sized rectangle).  You
 have selected `{\tt false}' as new focus and the blue background
 appears. 
-This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm3}.
+This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm2}.
 
 \begin{figure}
 \begin{center}
-\begin{Label}{FIG:Bool-example.trm3}
+\begin{Label}{FIG:Bool-example.trm2}
 
-\T \includegraphics[width=12cm]{Bool-example_trm3}
-\W \htmlimage{Bool-example.trm3.gif}
+\T \includegraphics[width=12cm]{Bool-example-trm2}
+\W \htmlimage{Bool-example-trm2.gif}
 \caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 
 \end{Label}
@@ -1220,7 +1219,7 @@ will be selected and becomes the focus.
 \begin{center}
 \begin{Label}{FIG:reduct.out}
 
-\T \includegraphics[width=12cm]{reduct_out}
+\T \includegraphics[width=12cm]{reduct-out}
 \W \htmlimage{reduct.out.gif}
 \caption{New term editor with normal form of `{\tt true \& false}'}
 
@@ -1351,7 +1350,38 @@ Modifying the priorities:
 \item Remove the priority declaration. 
   
 \item Type the term `{\tt true \& false | true}' in the term-editor (or
-  anything similar according to your current syntax). Try to parse this term.
+  anything similar according to your current syntax). Parse this term.
+  In the error pane of the user interface a message will be printed
+  which indicates that the parse contained 1 ambiguity. Clicking
+  in the \link{term editor window}[ (see Figure~\Ref)]{FIG:Bool-example-ambtrm}
+  will result in a focussed symbol {\tt <ambiguous>}. Viewing the
+  corresponding parse tree via {\tt ViewTree} in the menu {\tt Actions}
+  will give the \link{parsetree panel}[ (see
+  Figure~\Ref)]{FIG:meta-amb-parsetree}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Bool-example-ambtrm}
+
+\T \includegraphics[width=12cm]{Bool-example-ambtrm}
+\W \htmlimage{Bool-example-ambtrm.gif}
+\caption{Term editor with an ambiguous boolean term}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-amb-parsetree}
+
+\T \includegraphics[width=12cm]{meta-amb-parsetree}
+\W \htmlimage{meta-amb-parsetree.gif}
+\caption{Main window with an ambiguous tree in the parse tree panel}
+
+\end{Label}
+\end{center}
+\end{figure}
 
 \item Add the priority declarations again.
 

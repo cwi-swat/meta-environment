@@ -14,15 +14,15 @@ EXTRA_DIST = $(wildcard *.ltx) \
 
 MANUAL	= guided-tour.ltx
 
-PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example_trm.ps \
-	Bool-example_trm3.ps \
+PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example-trm.ps \
+	Bool-example-trm2.ps Bool-example-ambtrm.ps\
 	pico-syntax-term-actions-menu.ps \
 	open-library.ps open-file.ps file-menu.ps export-menu.ps \
 	refactor-menu.ps select-window.ps \
 	meta-Bool-example.ps meta-Pico-syntax.ps \
 	meta-env-menu1.ps meta-env-menu2.ps meta-pico.ps \
 	meta-parsetree.ps meta-start.ps module-menu.ps move-menu.ps \
-	reduct_out.ps viewer.ps newarch.eps
+	reduct-out.ps viewer.ps newarch.eps
 
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
