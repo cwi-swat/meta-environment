@@ -336,6 +336,10 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   AC_initActionsApi();
 
+  AC_protectActions(&actions);
+  AC_protectStack(&stack);
+  AC_protectSignature(&signature);
+
   cid = ATBconnect(NULL, NULL, -1, action_interpreter_handler);
 
   aSignature = ATparse("[action(add-import,[string]),\
