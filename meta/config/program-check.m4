@@ -1,3 +1,20 @@
+dnl Copyright (C) 2000 Merijn de Jonge <mdejonge@cwi.nl>
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2, or (at your option)
+dnl any later version.
+dnl
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+dnl 02111-1307, USA.
+
 dnl $Id$
 
 dnl Author Merijn de Jonge (mdejonge@cwi.nl)
@@ -69,11 +86,11 @@ AC_DEFUN(AC_PACKAGE_REQUIRE1,
       translit($1,a-z-,A-Z_)=${withval},
       dnl If switch not specified, try to find the program automatically
       [
-         AC_PATH_PROGS(translit($1,a-z-,A-Z_),$2,
-         [
-            dnl Not found; abort configuration
-            AC_ERROR( [ Required \"$1\" program not found. ] )
-         ])
+         AC_PATH_PROGS(translit($1,a-z-,A-Z_),$2)
+         dnl Not found; abort configuration
+         if test "a$translit($1,a-z-,A-Z_)" = "a" ; then
+            AC_MSG_ERROR(Required package or program \"$1\" not found.)
+         fi
          dnl Program found; evaluate <actions_of_found>
          $4
       ])
