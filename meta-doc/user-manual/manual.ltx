@@ -444,53 +444,68 @@ After loading a specification it may look as shown
 The main window consists of the following parts:
 
 \begin{itemize}
-\item At the top of the window is a menu bar that contains the following menus:
+\item At the top of the window is a menu bar that contains the following menu:
   \begin{itemize}
 
-   \item {\tt File}: for creating, opening, saving, and printing
-    specifications as well as for leaving the \ASmetaenv.
+   \item {\tt File}: for opening and creating of a module, opening a
+    library module, saving and closing a specification, 
+    refreshing of buttons as well as for leaving the \ASmetaenv.
     The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
     
-  \item {\tt Edit}: for setting user preferences.  The {\tt Edit} menu is
-    described in \link*{Edit Menu}[Section~\Ref]{EditMenu}.
-    
-  \item {\tt Graph}: for setting options for the display of the graph in the
-    import pane (see below).  The {\tt Graph} menu is described in
-    \link*{Graph Menu}[ Section~\Ref]{GraphMenu}.
-    
-  \item {\tt Debug}: for turning on/off the display of diagnostic messages.
-    The {\tt Debug} menu is described in 
-    \link*{DebugMenu}[Section~\Ref]{DebugMenu}.
-    
-  \item {\tt Help} for various forms of information and online help.  The {\tt
-      Help} menu is described in
-      \link*{Help Menu}[Section~\Ref]{HelpMenu}.
 
   \end{itemize}
+
+\item Below {\tt File} a list of icons is shown:
+  \begin{itemize}
+ 
+   \item {\tt New Module} (the empty page) for creating a new module.
+   \item {\tt Open Module} (the non-empty page) for opening an existing
+         module.
+   \item {\tt Open Library Module} (the nicely wrapped box) for opening a
+         library module.
+   \item {\tt Save All} (the diskette) for saving the specification.
+   \item {\tt Close All} (the eraser) for closing a specification.
+   \item {\tt Exit} (the open door) for exiting the \ASmetaenv.
+   \item The bug with the magnifying glass for activating the debugger.
+   \item {\tt 100\%} for scaling the import graph.
+  \end{itemize}
+  These icons are described in 
+  \link*{Button Pane}[Section~\Ref]{ButtonPane}.
   
-\item The \emph{import pane}: A graphical canvas (either \link{empty}[ in
+\item The pane \emph{import}: A graphical canvas (either \link{empty}[ in
   Figure~\Ref]{FIG:meta-start}, or containing \link{rectangles
-    and arrows}[ in Figure~\Ref]{FIG:meta-pico}) at the left
+    and arrows}[ in Figure~\Ref]{FIG:meta-pico}) at the right
   hand side of the window shows the import graph of the specification you are
   editing.  The import pane is described in 
   \link*{Import Pane}[Section~\Ref]{ImportPane}.
+
+\item The pane \emph{parsetree}: Again a graphical canvas which will be
+      used to visualize the parse tree of a selected piece of a parsed
+      term.
   
 \item The \emph{module pane}: a vertical list (either \link{empty}[ in
   Figure~\Ref]{FIG:meta-start}, or containing names like
-  \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[ in  Figure~\Ref]{FIG:meta-pico}) 
-  at the right/middle part of the
+  \link{{\tt Pico-syntax}, {\tt basic/Booleans}, ... }[ in  Figure~\Ref]{FIG:meta-pico}) 
+  at the left part (in the middle) of the
   window that shows the names of all modules in the current specification.
   The module pane is described in 
   \link*{Module Pane}[Section~\Ref]{ModulePane}.
 
  
-\item The \emph{button pane}: a vertical row of buttons at the right hand side
-  of the window containing buttons like {\tt Edit Syntax} and {\tt Edit
-    Equations}: they are used for common operations on the current
-  specification like editing, saving, or deleting a module or compiling the
-  complete specification. The button pane is described in 
-  \link*{Button Pane}[Section~\Ref]{ButtonPane}.
+\item The lower left part with the name {\tt No module} shows the import 
+      relations of a selected module. It contains 3 small panes: 
+      \begin{description}
+      \item {\tt Info}: showing the exact location of the selected module. 
+      \item {\tt Imports}: showing the list of modules the selected module
+             imports.
+      \item {\tt Imported by}: showing the list of modules that import the
+            selected module.
+      \end{description}
+      These panes are very convenient when processing a big specification.
   
+\item The empty rectangle below the {\tt import} and {\tt parsetree} pane
+      will be used for display warnings and error messages.
+
 \item A \emph{status bar} at the bottom of the window that shows the current
   activity of the system. Examples are: {\tt idle} (the system is doing
   nothing), {\tt parsing} (the system is performing a syntactic analysis of
@@ -508,13 +523,11 @@ The main window consists of the following parts:
 \end{center}
 \end{figure}
 
-\section{The Menus of the Main Window}
- 
 \subsection{The File menu}
 \label{FileMenu}
 
 The \link{{\tt File} menu}[]{FIG:file-menu} 
-is used for creating, opening, saving and printing
+is used for creating, opening, and saving
 specifications as well as for quitting the \ASmetaenv.  
 \T It is shown in Figure \ref{FIG:file-menu}.
 
@@ -528,7 +541,7 @@ specifications as well as for quitting the \ASmetaenv.
 \end{center}
 \end{figure}
 
-{\tt New} and {\tt Open} are used for creating
+{\tt New Module} and {\tt Open Module} are used for creating
 a new module and opening an existing one, respectively.
 In both cases a dialog window appears as shown 
 \link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
@@ -543,169 +556,42 @@ In both cases a dialog window appears as shown
 \end{center}
 \end{figure}
 
-{\tt Save All} saves all modules that have been opened so far.
-{\tt Clear All} removes all modules that have been opened so far from the
+{\tt Save All} saves all modules, this means the entire specification. 
+
+{\tt Close All} removes all modules from the
 Meta-Environment. If modules have been modified, you are explicitly
 asked to save them. The same effect can be achieved by exiting the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
 
-{\tt Export} allows the export of the import pane in various graphical
-formats.  \link{{\tt Print Setup}}[]{FIG:printer-setup}
-allows the customization of the command
-used for printing.  
-\begin{iftex}
-Its dialog window is shown in
-Figure~\ref{FIG:printer-setup}.  
-\end{iftex}
-{\tt Print} prints the current import pane.
+{\tt Refresh Buttons} reloads the file {\tt meta.buttons}, if available, which
+contains a description of which buttons have to be added to which
+term-editors.
 
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:printer-setup}
-\T \includegraphics[width=3cm]{printer-setup}
-\W \htmlimage{printer-setup.gif}
-\caption{Dialog for printer setup}
-\end{Label}
-\end{center}
-\end{figure}
+{\tt Exit} ends the execution of the \ASmetaenv.
 
-{\tt Quit} ends the execution of the \ASmetaenv.
+\subsection{The Panes of the Main Window}
 
-\subsection{The Edit menu}
-\label{EditMenu}
-
-
-
-
-
-The \link{{\tt Edit} menu}[(Figure~\Ref)]{FIG:edit-menu} is used for setting the preferences of a user.
-At this moment this functionality is not yet implemented and
-this menu is disabled.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:edit-menu}
-\T \includegraphics[width=3cm]{edit-menu}
-\W \htmlimage{edit-menu.gif}
-\caption{{\tt Edit} menu (main window)}
-\end{Label}
-\end{center}
-\end{figure}
-
-\subsection{The Graph Menu}
-\label{GraphMenu}
-
-The \link{{\tt Graph} menu}[ (Figure~\Ref)]{FIG:graph-menu} is used for 
-setting options for the display of the graph in the import pane.  
-
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:graph-menu}
-
-\T \includegraphics[width=4cm]{graph-menu}
-\W \htmlimage{graph-menu.gif}
-\caption{{\tt Graph} menu (main window)}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-{\tt View All} enlarges the import pane to enable the display of the whole
-import graph.
-
-{\tt Autoresize after loading} defines the size of the import pane
-after loading a specification. When enabled (check box red), the
-import pane will be enlarged to enable the display of the whole import
-graph.  When disabled (check box empty), only part of the import graph
-will be shown.
-
-{\tt Animate while loading} defines the visualization of the import
-graph while the system is loading a specification. When enabled, the
-import graph will be updated each time a module from the specification
-has been loaded in the system. When disabled, the new import graph
-will only be shown when the loading of the specification is complete.
-
-
-\subsection{The Debug Menu}
-\label{DebugMenu}
-
-The \link{{\tt Debug} menu}[ as is shown in Figure~\Ref]{FIG:debug-menu} 
-contains the
-single check box {\tt Diagnostic messages}.  When enabled, diagnostic
-messages will be displayed.  Otherwise the systems runs silently.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:debug-menu}
-
-\T \includegraphics[width=4cm]{debug-menu}
-\W \htmlimage{debug-menu.gif}
-\caption{{\tt Debug}  menu (main window)}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-\subsection{The Help Menu}
-\label{HelpMenu}
-
-The \link{{\tt Help} menu}[as is shown in Figure~\Ref]{FIG:help-menu}
-provides various (still experimental) help features.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:help-menu}
-
-\T \includegraphics[width=5cm]{help-menu}
-\W \htmlimage{help-menu.gif}
-\caption{{\tt Help}  menu (main window)}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-{\tt About Meta-Environment} and {\tt About Graph Browser}
-give background on the  \ASmetaenv\ and on the graph browser
-that is part of the main window.
-
-{\tt Mouse Operations} gives an overview of the meaning of
-the available mouse operations.
-
-
-{\tt Online Help} displays online help files in a {\tt Netscape
-Navigator} window.
-
-{\tt JitterBug Activated} opens in an active {\tt Netscape} window a page
-to enter a bug report. This offers the users of the \ASmetaenv\ an online
-facility to report bugs to the developers.
-
-Both {\tt Online Help} and {\tt JitterBug Activated} assume that there
-is a {\tt Netscape} running, other browsers are not yet supported.
-
-\section{The Panes of the Main Window}
-
-The two left-most panes of the main window give two, alternative,
+The two panes below the icons of the main window give two, alternative,
 views on the \asfsdf\ specification that has been loaded into the
-Meta-Environment.  On the left you see the import graph, on the right
-you see a list of modules.  Using one of these views, the same set of
-operations is available either via a pop up menu or via the buttons in
-the pane at the right-hand side of the main window.
+Meta-Environment.  In the rightmost pane you see the import graph, in the
+left-most pane you see a list of modules.  Using one of these views, 
+the same set of operations is available via a pop up menu.
 
-\subsection{The Import Pane}
+\subsubsection{The Import Pane}
 \label{ImportPane}
 
-The \emph{import pane} gives a graphical view of the specification by
+The pane with the name \emph{import} gives a graphical view of the specification by
 displaying the \emph{import} relation between modules in the form of a
 graph. A module $M_1$ imports another module $M_2$ if $M_1$ contains
 an import statement of the form {\tt imports $M_2$}.
 
 Each module is represented by a rectangle. An arrow between two
 rectangles represents an import relation between the two corresponding
-modules. Modules with a special status (e.g., imported by some other
-module but never defined, or containing syntax errors) are represented
-by a circle.
+modules. 
+%%Modules with a special status (e.g., imported by some other
+%%module but never defined, or containing syntax errors) are represented
+%%by a circle.
 
 The import pane has the following interaction facilities:
 
@@ -715,13 +601,15 @@ The import pane has the following interaction facilities:
   horizontal or vertical scrollbar at the right and at the bottom of the
   import pane.
 
-\item By clicking and holding the middle mouse button outside any
+\item The import graph can be scaled using the {\tt 100\%} icon.
+
+\item By clicking and holding the one mouse button outside any
 module, the import graph can be dragged across the import pane.
 
 \item Clicking \emph{on} a module yields 
 a \link{pop up menu}[ as shown in Figure~\Ref]{FIG:module-menu}. 
-It contains the same entries as the
-\link{button pane of the main window}[ (see Section~\Ref)]{ButtonPane}.
+The functionality of the various entries is discussed in the
+\link{module menu}[ (see Section~\Ref)]{ButtonPane}.
 
 \begin{figure}
 \begin{center}
@@ -735,27 +623,9 @@ It contains the same entries as the
 \end{center}
 \end{figure}
 
-\item Clicking \emph{outside} any module yields a \link{another pop-up menu}[ as shown
-in Figure~\Ref]{FIG:new-open}.  It contains the entries {\tt New} and
-{\tt Open} for creating a new and opening an existing module, respectively. 
-These two operations are also available from the 
-\link{{\tt File} menu}[ (see Section~\Ref)]{FileMenu}.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:new-open}
-
-\T \includegraphics[width=2cm]{new-open}
-\W \htmlimage{new-open.gif}
-\caption{Pop up menu for adding a module (import pane)}
-
-\end{Label}
-\end{center}
-\end{figure}
-
 \end{itemize}
 
-\subsection{The Module Pane}
+\subsubsection{The Module Pane}
 \label{ModulePane}
 
 The import pane is particularly useful when you want to understand the
@@ -779,61 +649,87 @@ selected modules by pushing a button from the button pane.  For
 instance, pushing the {\tt Edit Syntax} button will create editors for
 the syntax of all the selected modules.
 
-\subsection{The Button Pane of the Main Window}
+\subsubsection{The Module Menu}
 \label{ButtonPane}
 
-The entries in the button pane at the right-hand side of the main
-window (see \link{Main Window }[ in Figure~\Ref]{FIG:meta-start}) and
-in the module pop-up menu (see \link{screenshot}[ in
-Figure~\Ref]{FIG:module-menu} and the description of the \link{Import
-Pane}[ in Section~\Ref]{ImportPane}) are mostly identical in function,
-except that the latter may operate on more than one module while the
-former operate on a single module only.
-
-We describe them here together. The names of the entries in the
-pop-up menu are given in parentheses when they differ from the 
-corresponding button in the button pane.
-
-First, one or more modules are selected via the import pane or the
+First, one module can be selected via the import pane or the
 module pane. Next, one of the following operations can be applied to
 them.
 
 {\tt Edit Syntax}, {\tt Edit Equations},
-and {\tt Edit Term} activate (structure) editors for
+and {\tt Edit Term ...} activate (structure) editors for
 editing syntax, equations, or terms, respectively, for the selected module(s).
-{\tt New Term} allows the creation of a new term (pop-up menu only).
 
-{\tt Save} ({\tt Save Module}) saves the tree representation of the 
+{\tt Save Module} saves the tree representation of the 
 syntax definition and the equations section of the selected module(s).
-{\tt Save All} saves the tree representation of the 
-syntax definition and the equations section of all modules.
-{\tt Revert} ({\tt Revert Module}) removes modules and 
-re-opens the removed modules, 
-the effect is that modifications made to these modules are discarded.
-{\tt Delete} ({\tt Delete Module}) removes modules, 
-\emph{beware the deleted modules are also physically removed from 
-the file system}.
 
-{\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  
+{\tt Revert Module} removes the selected module and re-opens the removed module, 
+the effect is that modifications made to these modules are discarded.
+
+{\tt Close Module} this action removes a module from the specification.
+This action has only effect of the module is not imported by other modules.
+If the module imports other modules the user can decide to recursively
+close all imported modules as well. This can be done via 
+\link{{\tt Select an Option} window}[ (see Figure~\Ref)]{FIG:select-window}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:select-window}
+
+\T \includegraphics[width=12cm]{select-window}
+\W \htmlimage{select-window.gif}
+\caption{Select an Option window}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Refactor} opens another 
+\link{menu}[ (see Figure~\Ref)]{FIG:refactor-menu} in order to refactor the specification.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:refactor-menu}
+
+\T \includegraphics[width=12cm]{refactor-menu}
+\W \htmlimage{refactor-menu.gif}
+\caption{Refactor menu}
+
+\end{Label}
+\end{center}
+\end{figure}
+The {\tt Copy...} entry in the refactor menu allows you to make a copy of
+a module.
+The {\tt Delete...} entry allows you to delete a module, not only in the
+import pane but also on disk! The import sections of the modules importing
+the deleted module are updated as well.
+The {\tt Rename...} allows you to rename a module and the renaming is also
+performed in the import sections of the modules importing the renamed
+module.
+The {\tt Add Import...} allows you to create a new import relation between 
+2 modules.
+The {\tt Remove Import...} allows you to cancel an import relation between
+2 modules.
+All this functionality allows you to restructure your specification in a
+less tedious way.
+
+{\tt Compile Module} invokes the \asfsdf-compiler to generate C code.  
 \link{Compiling Specifications}[ Section~\Ref]{compiling-specs} 
 gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Dump Equations...} dumps the equation of the selected
+{\tt Dump Equations} dumps the equation of the selected
 module and all its imports. This feature is needed in order to 
-\link{run the evaluator in a stand-alone way}[, see Section~\Ref]{SEC:interpretationgofterms}.
+\link{run the evaluator in a stand-alone way}[, see
+Section~\Ref]{SEC:interpretationgofterms}, or to compile the specification
+on the command line. 
 
-{\tt Dump Parse Table...} dumps the parse table of the selected module and
+{\tt Dump ParseTable} dumps the parse table of the selected module and
 all its imports in order to parse terms. This functionality is needed in
 order to 
 \link{use the parser in a stand-alone way}[, see Section~\Ref]{SEC:parsingofterms}.
 
-{\tt Rename Module...} renames a module, not only in the
-Meta-En\-vir\-on\-ment but also physically on the file system.
-
-{\tt Print}({\tt Print Module}) prints the syntax and the equation part
+{\tt Print Module} prints the syntax and the equation part
 together in one file.
-
-{\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
 \section{Editing Specifications}
 
