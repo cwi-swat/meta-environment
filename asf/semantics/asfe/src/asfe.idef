@@ -30,7 +30,8 @@ let
   CanRewrite : term,
   NormalForm : term,
   ErrorList : list,
-  Id : term
+  Id : term,
+  On : term
 in
   Id := process-id .
 
@@ -38,6 +39,9 @@ in
   subscribe(language-unavailable(<str>)) .
   subscribe(equations-changed(<str>)) .
   (
+    rec-msg(debugging(On?)) .
+    snd-do(Eval, debugging(On))
+  +
     (
       rec-note(language-unavailable(ModuleName?))
     +

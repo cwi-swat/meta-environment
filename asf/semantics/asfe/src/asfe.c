@@ -1,3 +1,5 @@
+/*{{{  file header */
+
 /*
 
     Meta-Environment - An environment for language prototyping.
@@ -21,6 +23,8 @@
 /*
   $Id$
  */
+
+/*}}}  */
 
 /*{{{   evaluator.c */
 
@@ -98,6 +102,10 @@
 #include "evaluator.tif.h"
 #include "asfix_utils.h"
 
+#ifdef USE_TIDE
+#include "eval-tide.h"
+#endif
+
 /*}}}  */
 /*{{{  defines */
 
@@ -106,6 +114,12 @@
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 #else
 #define PROF_REWRITE
+#endif
+
+#ifdef USE_TIDE
+#define TIDE_STEP(posinfo, env, depth) Tide_step(posinfo, env, depth)
+#else
+#define TIDE_STEP(posinfo, env, depth)
 #endif
 
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
@@ -155,14 +169,15 @@ ATerm equations_db = NULL;
 /*{{{  function declarations */
 
 ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs);
-ATerm rewrite(ATerm trm, ATerm env);
+ATerm rewrite(ATerm trm, ATerm env, int depth);
 ATerm list_matching(ATerm sym, ATerm env,
 										ATermList elems1,ATermList elems2,
                         ATermList conds,
-                        ATermList args1,ATermList args2);
+		    ATermList args1,ATermList args2,
+		    ATerm lhs_posinfo, int depth);
 ATerm args_matching(ATerm env,ATermList conds,
-                        ATermList args1,ATermList args2);
-ATerm conds_satisfied(ATermList conds,ATerm env);
+		    ATermList args1,ATermList args2, ATerm lhs_posinfo, int depth);
+ATerm conds_satisfied(ATermList conds,ATerm env, int depth);
 static void rewrite_error(const char *message, ATerm subject);
 
 /*}}}  */
@@ -174,6 +189,7 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
+/*{{{  void rewrite_error(const char *message, ATerm subject) */
 
 /* rewrite_error adds an error to the list of errors in the global
  * variable rewrite_errors. The errors consist of a user message
@@ -181,6 +197,7 @@ void rec_terminate(int cid, ATerm t)
  * the usual ATmake interface. Also the tag of the current rule is passed
  * on.
  */
+
 void rewrite_error(const char *message, ATerm subject)
 {
 	ATerm error = ATmake("[<str>,<term>,<term>])", message, tagCurrentRule, subject);
@@ -196,6 +213,33 @@ void rewrite_error(const char *message, ATerm subject)
 	 
 	return;
 }
+
+/*}}}  */
+
+/*{{{  void debugging(int conn, ATerm on) */
+
+/**
+ * Switch debugging on/off
+ */
+
+void debugging(int conn, ATerm on)
+{
+#ifdef USE_TIDE
+  if(ATmatch(on, "on")) {
+    /* Switch on debugging */
+    fprintf(stderr, "switching on debugging!\n");
+    Tide_connect();
+  } else {
+    /* Switch off debugging */
+    fprintf(stderr, "switching off debugging.\n");
+    Tide_disconnect();
+  }
+#else
+  fprintf(stderr, "*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
+	  "(you might want to try configure --with-tide)\n");
+#endif
+}
+/*}}}  */
 
 /*{{{  ATerm v_lookup_plain(ATerm env, ATerm var) */
 
@@ -429,7 +473,7 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 
   times(&start);
-  newtrm = rewrite(realtrm,(ATerm) ATempty);
+  newtrm = rewrite(realtrm,(ATerm) ATempty, 0);
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
@@ -498,7 +542,7 @@ ATbool no_new_vars(ATerm trm, ATerm env)
 
 
 /*}}}  */
-/*{{{  ATermList arg_matching(env, arg1, arg2, conds, orgargs1, orgargs2) */
+/*{{{  ATermList arg_matching(env, arg1, arg2, conds, orgargs1, orgargs2, lp, depth) */
 
 /* Function which tries to match two arguments.
    First it is checked whether one of the arguments is a variable
@@ -519,7 +563,8 @@ ATbool no_new_vars(ATerm trm, ATerm env)
 
 ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
                        ATermList conds,
-                       ATermList orgargs1, ATermList orgargs2)
+		   ATermList orgargs1, ATermList orgargs2,
+		   ATerm lhs_posinfo, int depth)
 {
   ATerm trm, prod1, prod2, sym1, sym2;
   ATermList args1, args2;
@@ -532,7 +577,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 	if(!keep_whitespace && isAsFixEqual(arg1,arg2)) {
 		/* we don't test for equality with whitespace, because we might need some
 		 * skipping in case of lists. */
-    return args_matching(newenv,conds,orgargs1,orgargs2);
+    return args_matching(newenv,conds,orgargs1,orgargs2,lhs_posinfo,depth);
 	} else if(asfix_is_appl(arg1) && asfix_is_appl(arg2)) {
     prod1 = asfix_get_appl_prod(arg1);
     prod2 = asfix_get_appl_prod(arg2);
@@ -541,7 +586,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       args2 = (ATermList) asfix_get_appl_args(arg2);
       args1 = ATconcat(args1,orgargs1);
       args2 = ATconcat(args2,orgargs2);
-      newenv = (ATerm) args_matching(newenv,conds,args1,args2);
+      newenv = (ATerm) args_matching(newenv, conds, args1, args2,
+				     lhs_posinfo, depth);
     }
     else {
 			return fail_env;
@@ -561,30 +607,34 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       elems1 = (ATermList) asfix_get_list_elems(arg1);
       elems2 = (ATermList) asfix_get_list_elems(arg2);
       newenv = list_matching(sym1,newenv,elems1,elems2,
-                             conds,orgargs1,orgargs2);
+			     conds,orgargs1,orgargs2, lhs_posinfo, depth);
     }
     else
       newenv = fail_env;
   } else if(asfix_is_var(arg1)) {
     trm = v_lookup_plain(newenv, arg1);
     if(trm) {
-      if(isAsFixEqual(arg2,trm))
-        newenv = args_matching(newenv,conds,orgargs1,orgargs2);
-      else
+      if(isAsFixEqual(arg2,trm)) {
+        newenv = args_matching(newenv, conds, orgargs1, orgargs2,
+			       lhs_posinfo, depth);
+      } else {
         newenv = fail_env;
+    }
     }
     else {
       if(AT_getAnnotations(arg1) != NULL)
         arg1 = AT_removeAnnotations(arg1);
 
       newenv = v_put(newenv,arg1,arg2);
-      newenv = args_matching(newenv,conds,orgargs1,orgargs2);
+      newenv = args_matching(newenv, conds, orgargs1, orgargs2,
+			     lhs_posinfo, depth);
     }
   } else { /* terms are not any of the above, and not equal */
 		if(keep_whitespace) {
 			/* we didn't test for equality if rewriting with ws, so do it now */
 			 if(isEqualModuloWhitespace(arg1,arg2)) {
-				return args_matching(newenv,conds,orgargs1,orgargs2);
+	return args_matching(newenv, conds, orgargs1, orgargs2,
+			     lhs_posinfo, depth);
 			 } else {
 				 newenv = fail_env;
 			 }
@@ -602,7 +652,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
    to be matched this is performed if both argument lists are empty
    the conditions are inspected. */
 ATerm args_matching(ATerm env, ATermList conds,
-                    ATermList args1, ATermList args2)
+                    ATermList args1, ATermList args2, ATerm lhs_posinfo, int depth)
 {
   ATerm arg1, arg2;
   ATerm newenv = env;
@@ -613,7 +663,8 @@ ATerm args_matching(ATerm env, ATermList conds,
     if(!ATisEmpty(args2)) {
       arg2 = ATgetFirst(args2);
       args2 = ATgetNext(args2);
-      newenv = arg_matching(newenv,arg1,arg2,conds,args1,args2);
+      newenv = arg_matching(newenv,arg1,arg2,conds,args1,args2,
+			    lhs_posinfo, depth);
     }
     else
       newenv = fail_env;
@@ -621,8 +672,12 @@ ATerm args_matching(ATerm env, ATermList conds,
   else {
     if(!ATisEmpty(args2))
       newenv = fail_env;
-    else
-      newenv = conds_satisfied(conds, newenv);
+    else {
+      if(lhs_posinfo) {
+	TIDE_STEP(lhs_posinfo, newenv, depth);
+      }
+      newenv = conds_satisfied(conds, newenv, depth);
+    }
   };
   return newenv;
 }
@@ -707,12 +762,13 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
 
 
 /*}}}  */
-/*{{{  ATermList sub_list_matching(ar,sym,env,elem,elems1,elems2,conds,args1,args2) */
+/*{{{  ATermList sub_list_matching(ar,sym,env,elem,elems1,elems2,conds,args1,args2,lp,d) */
 
 ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
                         ATermList elems1, ATermList elems2,
                         ATermList conds,
-                        ATermList args1, ATermList args2)
+                        ATermList args1, ATermList args2,
+			ATerm lhs_posinfo, int depth)
 {
   ATerm subenv, newenv;
   ATermList last;
@@ -722,7 +778,8 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 
   if(asfix_is_star_var(elem)) {
 		newenv = v_put_list(env, elem, ATempty, ATempty);
-    subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
+    subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2,
+			   lhs_posinfo, depth);
   }
   else {
 		/* A plus variable should at least contain one element! */
@@ -739,18 +796,20 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 		
 		last = ATgetNext(last);
     newenv = v_put_list(env, elem, elems2, last);
-    subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2);
+    subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2,
+			   lhs_posinfo, depth);
   }
 
   return subenv;
 }
 
 /*}}}  */
-/*{{{  ATermList list_matching(ar,sym,env,elems1,elems2,conds,args1,args2) */
+/*{{{  ATermList list_matching(ar,sym,env,elems1,elems2,conds,args1,args2,lp,d) */
 
 ATerm list_matching(ATerm sym,
                     ATerm env,ATermList elems1, ATermList elems2,
-                    ATermList conds, ATermList args1, ATermList args2)
+                    ATermList conds, ATermList args1, ATermList args2,
+		    ATerm lhs_posinfo, int depth)
 {
   ATerm elem1, elem2 = NULL;
   ATerm newenv;
@@ -769,7 +828,8 @@ ATerm list_matching(ATerm sym,
 				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
           if(compare_lists(trms, elems2)) {
-            newenv = args_matching(env,conds,args1,args2);
+            newenv = args_matching(env, conds, args1, args2,
+				   lhs_posinfo, depth);
 					} else {
             newenv = fail_env;
 					}
@@ -789,13 +849,15 @@ ATerm list_matching(ATerm sym,
 						}
 
 						newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
-						newenv = args_matching(newenv,conds,args1,args2);
+	    newenv = args_matching(newenv, conds, args1, args2,
+				   lhs_posinfo, depth);
 					}
         }
       } else { /*is_list_var(elem1) == Tfalse */
         if(ATgetLength(elems2) == 1) {
           elem2 = ATgetFirst(elems2);
-          newenv = arg_matching(env,elem1,elem2,conds,args1,args2);
+          newenv = arg_matching(env, elem1, elem2, conds, args1, args2,
+				lhs_posinfo, depth);
         } else {
           newenv = fail_env;
 				}
@@ -806,13 +868,15 @@ ATerm list_matching(ATerm sym,
 				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
           elems2 = compare_sub_lists(trms,elems2);
-          if(elems2)
-            newenv = list_matching(sym,env,elems1,elems2,conds,args1,args2);
-          else
+          if(elems2) {
+            newenv = list_matching(sym, env, elems1, elems2, conds,
+				   args1, args2, lhs_posinfo, depth);
+          } else {
             newenv = fail_env;
+	  }
         } else  {/* TdictGet(env,elem1) == Tfalse */
           newenv = sub_list_matching(sym,env,elem1,elems1,elems2,
-                                     conds,args1,args2);
+                                     conds, args1, args2, lhs_posinfo, depth);
 				}
       } else { /*is_list_var(elem1) == Tfalse */
 				if(keep_whitespace) {
@@ -831,7 +895,8 @@ ATerm list_matching(ATerm sym,
           newarg2 = asfix_make_list(sym,elems2);
           newargs1 = ATinsert(args1, newarg1);
           newargs2 = ATinsert(args2, newarg2);
-          newenv = arg_matching(env,elem1,elem2,conds,newargs1,newargs2);
+          newenv = arg_matching(env, elem1, elem2, conds, newargs1, newargs2,
+				lhs_posinfo, depth);
         } else {
 					newenv = fail_env;
 				}
@@ -841,7 +906,8 @@ ATerm list_matching(ATerm sym,
     if(!ATisEmpty(elems2)) {
       newenv = fail_env;
 		} else {
-      newenv = args_matching(env,conds,args1,args2);
+      newenv = args_matching(env, conds, args1, args2,
+			     lhs_posinfo, depth);
     }
 	}
 
@@ -850,13 +916,13 @@ ATerm list_matching(ATerm sym,
 
 /*}}}  */
 
-/*{{{  ATermList conds_satisfied(ATermList conds, ATermList env) */
+/*{{{  ATermList conds_satisfied(ATermList conds, ATermList env, int depth) */
 
 /* Function ``conds_satisfied'' check whether the conditions
    of an equation can be satisfied.
    Remark access functions needed to retrieve the operator,
    lhs, and rhs. */
-ATerm conds_satisfied(ATermList conds, ATerm env)
+ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
 {
   ATerm cond;
   ATerm lhs, rhs, lhstrm, rhstrm;
@@ -872,22 +938,32 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
     if(AFTisEqualityCond(cond)) {
 			/* <PO:opt> couldn't we determine this statically? */
       if(no_new_vars(lhs,newenv)) {
-        lhstrm = rewrite(lhs,newenv);
+	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+        lhstrm = rewrite(lhs, newenv, depth+1);
+	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
         if(no_new_vars(rhs,newenv)) {
-          rhstrm = rewrite(rhs,newenv);
-          if(isAsFixEqual(lhstrm,rhstrm))
-            newenv = conds_satisfied(conds,newenv);
-          else
+          rhstrm = rewrite(rhs, newenv, depth+1);
+	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+	  if(isAsFixEqual(lhstrm,rhstrm)) {
+            newenv = conds_satisfied(conds, newenv, depth);
+          } else {
             newenv = fail_env;
         }
+        }
         else {
-          newenv = arg_matching(newenv,rhs,lhstrm,conds,ATempty,ATempty);
+	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+          newenv = arg_matching(newenv,rhs,lhstrm,conds,ATempty,ATempty,
+				NULL, depth);
         }
       }
       else {
+	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
         if(no_new_vars(rhs,newenv)) {
-          rhstrm = rewrite(rhs,newenv);
-          newenv = arg_matching(newenv,lhs,rhstrm,conds,ATempty,ATempty);
+          rhstrm = rewrite(rhs, newenv, depth+1);
+	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+          newenv = arg_matching(newenv,lhs,rhstrm,conds,ATempty,ATempty,
+				NULL, depth);
         }
         else {
 					rewrite_error("Both sides of condition introduce new variables.", cond);
@@ -901,12 +977,16 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
         newenv = fail_env;
       }
       else {
-        lhstrm = rewrite(lhs,newenv);
-        rhstrm = rewrite(rhs,newenv);
-        if(isAsFixEqual(lhstrm,rhstrm))
+	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+        lhstrm = rewrite(lhs, newenv, depth+1);
+	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+        rhstrm = rewrite(rhs, newenv, depth+1);
+	TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+        if(isAsFixEqual(lhstrm,rhstrm)) {
           newenv = fail_env;
-        else
-          newenv = conds_satisfied(conds,newenv);
+        } else {
+          newenv = conds_satisfied(conds, newenv, depth);
+	}
       }
     }
   }
@@ -915,7 +995,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
 
 
 /*}}}  */
-/*{{{  ATerm apply_rule(ATerm trm) */
+/*{{{  ATerm apply_rule(ATerm trm, int depth) */
 
 /* The function ``apply_rule'' tries to rewrite a term
    given a list of equations. As long as there is no
@@ -924,7 +1004,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
    the equation are matched.
 */
 
-ATerm apply_rule(ATerm trm)
+ATerm apply_rule(ATerm trm, int depth)
 {
   ATerm top_ofs, first_ofs;
   ATermList termargs, equargs, tmpargs;
@@ -956,11 +1036,13 @@ ATerm apply_rule(ATerm trm)
       conds = entry->conds;
       equargs = (ATermList) asfix_get_appl_args(entry->lhs);
 
-      env = args_matching((ATerm) ATempty, conds, equargs, termargs);
+      env = args_matching((ATerm) ATempty, conds, equargs, termargs,
+			  ATgetAnnotation(entry->lhs, posinfo), depth);
       if(!is_fail_env(env)) {
-
-				if(run_verbose)
+	TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+	if(run_verbose) {
 					ATwarning("Equation %t was successful.\n",entry->tag);
+	}
 
 
         rewrite_steps++;
@@ -982,52 +1064,54 @@ ATerm apply_rule(ATerm trm)
     conds = entry->conds;
     equargs = (ATermList) asfix_get_appl_args(entry->lhs);
 
-    env = args_matching((ATerm) ATempty, conds, equargs, termargs);
+    env = args_matching((ATerm) ATempty, conds, equargs, termargs,
+			ATgetAnnotation(entry->lhs, posinfo), depth);
     if(!is_fail_env(env)) {
-
-			if(run_verbose)
-				ATwarning("Equation: %t was successful.\n",entry->tag);
+      TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+      if(run_verbose) {
+	ATwarning("Equation: %t was successful.\n",entry->tag);
+      }
 
       rewrite_steps++;
       return (ATerm) make_cenv(entry->rhs, env);
     } else if(run_verbose) {
 		  ATwarning("Equation %t failed.\n",entry->tag);
     }
-	}
+  }
 	
   return (ATerm) make_cenv(trm, fail_env);
 }
 
 /*}}}  */
-/*{{{  ATerm select_and_rewrite(ATerm trm) */
+/*{{{  ATerm select_and_rewrite(ATerm trm, int depth) */
 
 /* The function ``select_and_rewrite'' selects the
    the set of rewrite rules from the active rules and
    tries to rewrite the term via the function ``apply_rule''.
 */
 
-ATerm select_and_rewrite(ATerm trm)
+ATerm select_and_rewrite(ATerm trm, int depth)
 {
   ATerm newtrm, complexenv;
   ATerm env;
 
-  complexenv = apply_rule(trm);
+  complexenv = apply_rule(trm, depth);
   env = get_env((ATermList) complexenv);
   if(!is_fail_env(env)) {
     newtrm = get_term((ATermList) complexenv);
-    trm = rewrite(newtrm, env);
+    trm = rewrite(newtrm, env, depth+1);
   }
   return trm;
 }
 
 
 /*}}}  */
-/*{{{  ATermList rewrite_args(ATermList args, ATerm env) */
+/*{{{  ATermList rewrite_args(ATermList args, ATerm env, int depth) */
 
 /* The list of arguments is rewritten and a new argumentlist
    is constructed. */
 
-ATermList rewrite_args(ATermList args, ATerm env)
+ATermList rewrite_args(ATermList args, ATerm env, int depth)
 {
   ATerm arg, newarg;
   ATermList newargs = ATempty;
@@ -1037,10 +1121,11 @@ ATermList rewrite_args(ATermList args, ATerm env)
     while(!ATisEmpty(args)) {
       arg = ATgetFirst(args);
       if(asfix_is_appl(arg) || asfix_is_var(arg) ||
-         asfix_is_list(arg) || asfix_is_lex(arg))
-        newarg = rewrite(arg,env);
-      else
+         asfix_is_list(arg) || asfix_is_lex(arg)) {
+        newarg = rewrite(arg, env, depth+1);
+      } else {
         newarg = arg;
+      }
       newargs = ATappend(newargs, newarg);
       args = ATgetNext(args);
     }
@@ -1051,7 +1136,7 @@ ATermList rewrite_args(ATermList args, ATerm env)
       arg = ATgetFirst(args);
       if(asfix_is_appl(arg) || asfix_is_var(arg) ||
          asfix_is_list(arg) || asfix_is_lex(arg)) {
-				newarg_table[i] = rewrite(arg, env);
+	newarg_table[i] = rewrite(arg, env, depth+1);
 			} else {
         newarg_table[i] = arg;
 			}
@@ -1066,12 +1151,12 @@ ATermList rewrite_args(ATermList args, ATerm env)
 }
 
 /*}}}  */
-/*{{{  ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env) */
+/*{{{  ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth) */
 
 /* The list of elements is rewritten and a new elementlist
    is constructed. */
 
-ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
+ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
 {
   ATerm elem, newelem;
   ATermList newelems = ATempty;
@@ -1087,7 +1172,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
 				assert(tuple);
 				newelems = append_slice(newelems, tuple);
 			} else {
-				newelem = rewrite(elem, env);
+	newelem = rewrite(elem, env, depth+1);
         newelems = ATappend(newelems, newelem);
 			}
       elems = ATgetNext(elems);
@@ -1101,7 +1186,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
 				newelem_table[i] = (ATerm)v_lookup_list(env, elem);
 				assert(newelem_table[i]);
 			} else {
-				newelem_table[i] = rewrite(elem, env);
+	newelem_table[i] = rewrite(elem, env, depth+1);
 			}
       elems = ATgetNext(elems);
 			i++;
@@ -1138,7 +1223,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
    REMARK: comments should be improved.
 */
 
-ATerm rewrite(ATerm trm, ATerm env)
+ATerm rewrite(ATerm trm, ATerm env, int depth)
 {
   ATerm newtrm, sym, rewtrm;
   ATermList args, newargs;
@@ -1146,14 +1231,14 @@ ATerm rewrite(ATerm trm, ATerm env)
 
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
-    newargs = rewrite_args(args,env);
+    newargs = rewrite_args(args, env, depth);
     if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(ATgetNext(newargs));
       rewtrm = newtrm;
     }
     else {
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
-      rewtrm = select_and_rewrite(newtrm);
+      rewtrm = select_and_rewrite(newtrm, depth);
     }
   } else if(asfix_is_var(trm)) {
       rewtrm = v_lookup_plain(env, trm);
@@ -1162,7 +1247,7 @@ ATerm rewrite(ATerm trm, ATerm env)
   } else if(asfix_is_list(trm)) {
     elems = (ATermList) asfix_get_list_elems(trm);
     sym = asfix_get_list_sym(trm);
-    newelems = rewrite_elems(sym, elems, env);
+    newelems = rewrite_elems(sym, elems, env, depth);
     rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
   }
   else {
@@ -1170,3 +1255,5 @@ ATerm rewrite(ATerm trm, ATerm env)
   }
   return rewtrm;
 }
+
+/*}}}  */
