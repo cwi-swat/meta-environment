@@ -1,5 +1,8 @@
 $Id$
 
+Tue Feb 25 12:42:59 CET 2003 <jong@cwi.nl>
+ * fix java-adapter: do not generate import statements for unused imports.
+
 Thu Feb 13 11:39:43 CET 2003 <{jong,olivierp}@cwi.nl>
  * version 0.26beta
  * java-adapter/SwingTool.java: downgraded to work with JDK1.3
