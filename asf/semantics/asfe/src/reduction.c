@@ -13,6 +13,7 @@
 #include "traversalfunctions.h"
 #include "errors.h"
 #include "debug.h"
+#include "builtins.h"
 #include <string.h>
 
 /*
@@ -39,8 +40,6 @@ static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth,
 			       void *extra);
 static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, 
 				 void *extra);
-static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, 
-			      void *extra);
 static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, 
 				    void *extra);
 static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth, 
@@ -52,6 +51,8 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, 
 				       Traversal *traversal);
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
+static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
+				  int depth, void* extra);
 /*}}}  */
 
 /* Printing a term for verbose messages */
@@ -161,6 +162,7 @@ static PT_Tree reduce(PT_Tree trm, int depth)
 static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
+  ATerm builtin = NULL;
 
   if (runVerbose) {
     ATwarning("rewriting: %s\n", term_prefix(trm));
@@ -183,8 +185,9 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
     /* only do this if we are not in a traversal already */
     reduct = rewriteTraversalAppl(trm, env, depth, extra);
   }
-  else if (isTreeAPIFunction(trm)) {
-    reduct = rewriteAPIAppl(trm, env, depth, extra);
+  else if ((builtin = getTreeBuiltin(trm)) != NULL) {
+    ATwarning("builtin: %t\n", builtin);
+    reduct = rewriteBuiltinAppl(builtin, trm, env, depth, extra);
   }
   else if (PT_isTreeAppl(trm)) {
     reduct = rewriteNormalAppl(trm, env, depth, extra);
@@ -384,22 +387,6 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
 }
 
 /*}}}  */
-/*{{{  static PT_Tree rewriteAPIAppl(PT_Tree tree) */
-
-static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
-{
-  PT_Tree result = FAIL;
-
-  result = interpretAPICall(tree);
-
-  if (result == tree) {
-    return tree;
-  }
-  
-  return rewriteInnermost(result, env, depth + 1, NO_TRAVERSAL);
-}
-
-/*}}}  */
 /*{{{  static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,  */
 
 static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, 
@@ -440,6 +427,15 @@ static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth,
 
   /* just remove the brackets */
   return PT_getArgsHead(skipWhitespace(PT_getArgsTail(args)));
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteBuiltinAppl(PT_Tree trm, ATerm env, int depth,  */
+
+static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
+				  int depth, void* extra)
+{
+  return forwardBuiltin(builtin, trm);
 }
 
 /*}}}  */

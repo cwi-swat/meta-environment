@@ -476,7 +476,7 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
 
 void enter_equations(ASF_ASFConditionalEquationList eqsList)
 {
-  equations = create_equation_table(ASF_getASFConditionalEquationListLength(eqsList) * 2);
+  equations = create_equation_table(ATgetLength((ATermList) eqsList)* 2);
 
   if (runVerbose) {
     ATwarning("reading in equations:\n");

@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS=api
-
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = asfe
@@ -11,7 +9,6 @@ EXTRA_DIST        = asfe.idef
 
 noinst_HEADERS = \
 	asfe.tif.h \
-	asf-api.h \
 	matching.h \
 	reduction.h \
 	environment.h\
@@ -23,7 +20,8 @@ noinst_HEADERS = \
 	pre-post.h\
 	memotable.h\
 	evaluator.h\
-	test-runner.h
+	test-runner.h\
+	builtins.h
 
 asfe_SOURCES =\
 	asfe.tif.c\
@@ -33,14 +31,14 @@ asfe_SOURCES =\
 	debug.c\
 	traversalfunctions.c\
 	memotable.c\
-	asf-api.c\
 	matching.c\
 	reduction.c\
 	environment.c\
 	values.c\
 	errors.c\
 	pre-post.c\
-	test-runner.c
+	test-runner.c\
+	builtins.c
 
 asfe_LDADD		= \
 			-L$(ASF_SUPPORT)/lib -lASFME \
@@ -48,7 +46,6 @@ asfe_LDADD		= \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
-                        -L./api -lASFAPI \
 			${TIDELIB} $(SOCKLIBS)
 
 INCLUDES		= ${TIDEINC} \
@@ -58,5 +55,4 @@ INCLUDES		= ${TIDEINC} \
 			-I$(ASF_SUPPORT)/include \
 			-I$(ASC_SUPPORT)/include \
 			-I$(top_builddir)/semantics/builtins/lib \
-                        -I$(srcdir)/api \
 			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}

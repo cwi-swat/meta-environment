@@ -16,7 +16,6 @@
 #include <MEPT.h>
 #include <PTMEPT.h>
 #include <ASFME.h>
-#include <ASFAPI.h>
 
 #include "asfe.tif.h"
 #include "evaluator.h"
@@ -215,7 +214,6 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
-  AA_initASFAPIApi();
 
   if (toolbus_mode) {
 #ifndef WIN32			/* Code with Toolbus calls, non Windows */
