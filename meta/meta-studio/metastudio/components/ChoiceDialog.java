@@ -6,13 +6,14 @@ import java.util.TreeSet;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class ChoiceDialog extends ToolComponent {
+public class ChoiceDialog extends UserInterfacePanel {
     private JComponent parent;
 
     public ChoiceDialog(ATermFactory factory, MultiBridge bridge, JComponent parent) {

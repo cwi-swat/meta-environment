@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2004 4:28:40 PM
+// generation time: Jan 14, 2004 1:57:26 PM
 
 package metastudio;
 
@@ -32,6 +32,7 @@ abstract public class UserInterfaceTool
   private ATerm Perror0;
   private ATerm PbuttonsFound0;
   private ATerm PdisplayFeedbackSummary0;
+  private ATerm PremoveFeedbackSummary0;
   private ATerm PaddStatusf0;
   private ATerm PendStatus0;
   private ATerm PaddStatus0;
@@ -70,6 +71,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,message(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,messagef(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-feedback-summary(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
@@ -78,8 +80,8 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,showListChoice(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
 
@@ -104,6 +106,7 @@ abstract public class UserInterfaceTool
     Perror0 = factory.parse("rec-do(error(<str>))");
     PbuttonsFound0 = factory.parse("rec-do(buttons-found(<term>,<str>,<term>))");
     PdisplayFeedbackSummary0 = factory.parse("rec-do(display-feedback-summary(<term>))");
+    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
     PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
     PaddStatus0 = factory.parse("rec-do(add-status(<term>,<str>))");
@@ -195,6 +198,11 @@ abstract public class UserInterfaceTool
     result = term.match(PdisplayFeedbackSummary0);
     if (result != null) {
       displayFeedbackSummary((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PremoveFeedbackSummary0);
+    if (result != null) {
+      removeFeedbackSummary((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PaddStatusf0);

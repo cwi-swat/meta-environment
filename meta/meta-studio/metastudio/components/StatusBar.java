@@ -9,6 +9,7 @@ import java.util.ListIterator;
 
 import javax.swing.JLabel;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
@@ -16,7 +17,7 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class StatusBar extends ToolComponent {
+public class StatusBar extends UserInterfacePanel {
     private JLabel statusBar;
     private List statusMessages;
 

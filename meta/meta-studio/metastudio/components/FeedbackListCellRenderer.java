@@ -6,6 +6,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import metastudio.data.FeedbackItem;
 import metastudio.utils.Preferences;
 import errorapi.types.Feedback;
 import errorapi.types.Location;
@@ -21,7 +22,7 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
         boolean isSelected,
         boolean cellHasFocus) {
         JLabel cell = (JLabel) super.getListCellRendererComponent(list,value, index, isSelected, cellHasFocus);
-        Feedback feedback = (Feedback) value;
+        Feedback feedback = ((FeedbackItem) value).getFeedback();
 
         if (feedback.isInfo()) {
             cell.setForeground(Preferences.getColor("feedback.info.foreground"));
@@ -41,7 +42,7 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
             cell.setFont(Preferences.getFont("feedback.fatalerror.font"));
         }
 
-        cell.setText(feedback.getDescription());
+        cell.setText(getErrorMessage(feedback));
         cell.setToolTipText(getTooltip(feedback));
         
         if (isSelected) {
@@ -51,23 +52,36 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
        
         return cell;
     }
+    
+    private String getErrorMessage(Feedback feedback) {
+        StringBuffer buf = new StringBuffer();
+        buf.append(feedback.getDescription());
+        SubjectList subjects = feedback.getList();
+        
+        if (!subjects.isEmpty()) {
+          buf.append(": ");
+          
+          for ( ; !subjects.isEmpty(); subjects = subjects.getTail()) {
+              buf.append(subjects.getHead().getDescription());
+          }
+        }
+        
+        return buf.toString();
+    }
 
     private String getTooltip(Feedback feedback) {
         SubjectList subjects = feedback.getList();
-        String tip = "no source location available";
 
-        while (subjects.hasHead()) {
+        for ( ; subjects.hasHead(); subjects = subjects.getTail()) {
             Subject subject = subjects.getHead();
             Location loc = subject.getLocation();
 
             if (!loc.isNoLocation()) {
-                tip = "click to go " + subject.getDescription() + " in " + loc.getFilename() + ")";
+                return "click to go " + loc.getFilename();
             }
-
-            subjects = subjects.getTail();
         }
 
-        return tip;
+        return "no source location available";
     }
 
     

@@ -4,12 +4,13 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.utils.ExtensionFilter;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class FileDialog extends ToolComponent {
+public class FileDialog extends UserInterfacePanel {
     public FileDialog(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
     }

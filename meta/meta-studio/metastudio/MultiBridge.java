@@ -219,12 +219,23 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
     
+    public void removeFeedbackSummary(String s0, String s1) {
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.removeFeedbackSummary(s0, s1);
+        }
+    }
+    
     public void recAckEvent(ATerm event) {
     }
 
     public void recTerminate(ATerm t0) {
         System.exit(0);
     }
+
+  
 
     
 

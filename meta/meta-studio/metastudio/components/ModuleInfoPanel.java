@@ -12,13 +12,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import metastudio.utils.Preferences;
 import aterm.ATermFactory;
 
-public class ModuleInfoPanel extends ToolComponent implements ModuleSelectionListener {
+public class ModuleInfoPanel extends UserInterfacePanel implements ModuleSelectionListener {
     private JTree tree;
 
     private DefaultMutableTreeNode root;

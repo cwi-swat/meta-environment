@@ -21,5 +21,5 @@ JARFILES = \
 meta-studio.jar: always
 	FILES="${JARFILES}"; \
 	jar cf meta-studio.jar $$FILES
-
+	
 always:

@@ -32,11 +32,14 @@ let
   FeedbackSummary : term,
   Choices : list,
   Choice : str,
-  Question : str
+  Question : str,
+  Producer : str,
+  SummaryId : str
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
   subscribe(display-feedback-summary(<term>)) .
+  subscribe(remove-feedback-summary(<str>,<str>)) .
   Id := process-id.
 #ifdef ECLIPSE
   rec-connect(UI?) . 
@@ -77,6 +80,9 @@ in
     +
       rec-note(display-feedback-summary(FeedbackSummary?)) .
       snd-do(UI, display-feedback-summary(FeedbackSummary))
+    +
+      rec-note(remove-feedback-summary(Producer?, SummaryId?)) .
+      snd-do(UI, remove-feedback-summary(Producer, SummaryId))
     ) * delta 
   ||
     ( 

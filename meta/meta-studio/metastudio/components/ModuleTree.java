@@ -11,6 +11,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleSelectionModel;
@@ -18,7 +19,7 @@ import metastudio.data.ModuleTreeModel;
 import metastudio.data.ModuleTreeNode;
 import aterm.ATermFactory;
 
-public class ModuleTree extends ToolComponent {
+public class ModuleTree extends UserInterfacePanel {
     private JTree tree;
 
     public ModuleTree(

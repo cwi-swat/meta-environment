@@ -29,7 +29,6 @@ import metastudio.components.ModulePopupMenu;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
-import metastudio.components.ToolComponent;
 import metastudio.components.ParseTreeBrowser;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
@@ -93,7 +92,7 @@ public class MetaStudio extends JFrame  {
         Container content = getContentPane();
         content.setLayout(new BorderLayout());
 
-        ToolComponent toolbar = new ToolBar(factory, getBridge());
+        UserInterfacePanel toolbar = new ToolBar(factory, getBridge());
         content.add(toolbar, BorderLayout.NORTH);
 
         content.add(createMainPane(), BorderLayout.CENTER);
@@ -166,10 +165,10 @@ public class MetaStudio extends JFrame  {
             historyPanel = new HistoryPanel(factory, getBridge());
         }
         
-        ToolComponent feedbackList = new FeedbackList(factory, getBridge());
+        UserInterfacePanel feedbackList = new FeedbackList(factory, getBridge());
         messageTabs.insertTab("feedback", null, feedbackList, "feedback messages", 0);
        
-        ToolComponent messageList = new MessageList(factory, getBridge());
+        UserInterfacePanel messageList = new MessageList(factory, getBridge());
         messageTabs.insertTab("messages", null, messageList, "old-style messages", 1);
         
         messageTabs.insertTab("history", null, historyPanel, "Execution history", 2);

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JSplitPane;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.components.graphs.ImportGraphPanel;
 import metastudio.data.ModuleTreeModel;
@@ -12,7 +13,7 @@ import metastudio.utils.Preferences;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
-public class ModuleBrowser extends ToolComponent {
+public class ModuleBrowser extends UserInterfacePanel {
     private ImportGraphPanel importGraphPanel;
     private ModuleInfoPanel moduleStatus;
     private ModuleTreeModel moduleManager;
@@ -48,7 +49,7 @@ public class ModuleBrowser extends ToolComponent {
     }
 
     private JSplitPane createLeftPane() {
-        ToolComponent moduleTree = new ModuleTree(getFactory(), getBridge(), moduleManager);
+        UserInterfacePanel moduleTree = new ModuleTree(getFactory(), getBridge(), moduleManager);
 
         createModuleStatusPanel();
 

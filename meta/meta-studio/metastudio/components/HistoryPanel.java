@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
@@ -17,7 +18,7 @@ import aterm.ATerm;
 import aterm.ATermList;
 
 // todo: add copy paste facility?
-public class HistoryPanel extends ToolComponent {
+public class HistoryPanel extends UserInterfacePanel {
     private JList list;
     private ListModel data;
     private DateFormat dateFormat;

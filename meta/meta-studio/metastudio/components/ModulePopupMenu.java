@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -22,7 +23,7 @@ import aterm.ATermList;
 //      * refactor constant strings...
 //      * try to get wrid of the duplication between JMenu and JPopupMenu...
 
-public class ModulePopupMenu extends ToolComponent {
+public class ModulePopupMenu extends UserInterfacePanel {
     private static ATerm ACTION_MODULE_POPUP;
     private static ATerm ACTION_NEW_MODULE_POPUP;
 

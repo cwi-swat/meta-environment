@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -20,7 +21,7 @@ import aterm.ATermList;
 //        * what can be shared with ModulePopupMenu?
 //        * add nested menu's?
 
-public class MenuBar extends ToolComponent {
+public class MenuBar extends UserInterfacePanel {
     private static ATerm ACTION_MENUBAR;
     private JMenuBar bar;
     private Map map;

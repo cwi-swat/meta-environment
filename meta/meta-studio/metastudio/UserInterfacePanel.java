@@ -1,11 +1,9 @@
-package metastudio.components;
+package metastudio;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import metastudio.MultiBridge;
-import metastudio.UserInterfaceTif;
 
 import aterm.ATerm;
 import aterm.ATermFactory;
@@ -20,11 +18,11 @@ import aterm.ATermFactory;
  * the methods that they are interested in.
  * 
  */
-public abstract class ToolComponent extends JPanel implements UserInterfaceTif {
+public abstract class UserInterfacePanel extends JPanel implements UserInterfaceTif {
     private ATermFactory factory;
     private MultiBridge bridge;
     
-    public ToolComponent(ATermFactory factory, MultiBridge bridge) {
+    public UserInterfacePanel(ATermFactory factory, MultiBridge bridge) {
         this.factory = factory;
         this.bridge = bridge;
         bridge.addToolComponent(this);
@@ -129,6 +127,10 @@ public abstract class ToolComponent extends JPanel implements UserInterfaceTif {
         // intentionally left empty
     }
 
+    public void removeFeedbackSummary(String s0, String s1) {
+        // intentionally left empty
+    }
+    
     public void recAckEvent(ATerm t0) {
         // intentionally left empty        
     }

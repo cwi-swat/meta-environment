@@ -20,4 +20,5 @@ java_JAVA = \
 	MultiBridge.java \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
-	UserInterfaceTool.java
+	UserInterfaceTool.java \
+	UserInterfacePanel.java

@@ -13,11 +13,11 @@ public class ListModel extends AbstractListModel {
 		this.list = list;
 	}
 
-	public void setList(List list) {
+	synchronized public void setList(List list) {
 		this.list = list;
 	}
 
-	public Object getElementAt(int index) {
+	synchronized public Object getElementAt(int index) {
         if (index >= 0 && index < list.size()) {
 		  return list.get(index);
         }
@@ -26,7 +26,7 @@ public class ListModel extends AbstractListModel {
         }
 	}
 
-	public int getSize() {
+	synchronized public int getSize() {
 		return list.size();
 	}
     
@@ -34,12 +34,16 @@ public class ListModel extends AbstractListModel {
 		fireIntervalAdded(list, list.size() - 1, list.size());
 	}
     
-    public void add(Object o) {
+    synchronized public void add(Object o) {
         list.add(list.size(), o);
         elementAdded();
     }
     
-    public void addAll(Collection c) {
+    synchronized public void remove(Object o) {
+        list.remove(o);
+    }
+    
+    synchronized public void addAll(Collection c) {
         Iterator iter = c.iterator();
         
         while (iter.hasNext()) {

@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import metastudio.MultiBridge;
-import metastudio.components.ToolComponent;
+import metastudio.UserInterfacePanel;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
@@ -20,7 +20,7 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
-public class BoxTree extends ToolComponent {
+public class BoxTree extends UserInterfacePanel {
     private MetaGraphFactory factory;
     private JPanel rootPanel;
 

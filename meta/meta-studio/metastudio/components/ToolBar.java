@@ -10,13 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import metastudio.*;
 import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class ToolBar extends ToolComponent {
+public class ToolBar extends UserInterfacePanel {
     private JToolBar toolBar;
     private static ATerm ACTION_TOOLBAR;
 

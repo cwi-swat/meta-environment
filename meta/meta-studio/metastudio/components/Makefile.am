@@ -11,7 +11,6 @@ java_JAVA = \
 FeedbackList.java \
 FeedbackListCellRenderer.java \
 HistoryPanel.java \
-ToolComponent.java \
 MessageList.java \
 ModuleSelectionListener.java \
 ModuleInfoPanel.java \

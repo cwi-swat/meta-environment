@@ -13,7 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import metastudio.MultiBridge;
-import metastudio.components.ToolComponent;
+import metastudio.UserInterfacePanel;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
@@ -21,7 +21,7 @@ import metastudio.utils.Preferences;
 import aterm.ATerm;
 
 // TODO: extract functionality from the GraphPanel that should be here.
-public class ZoomableGraphPanel extends ToolComponent {
+public class ZoomableGraphPanel extends UserInterfacePanel {
     private int SLIDER_STEP_SIZE;
     private int SLIDER_MINIMUM;
     private int SLIDER_MAXIMUM;

@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import metastudio.MultiBridge;
+import metastudio.UserInterfacePanel;
+import metastudio.data.FeedbackItem;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
@@ -20,8 +22,7 @@ import errorapi.Factory;
 import errorapi.types.Feedback;
 import errorapi.types.Summary;
 
-// TODO: add copy/paste facility
-public class FeedbackList extends ToolComponent {
+public class FeedbackList extends UserInterfacePanel {
     private JList list;
     private ListModel data;
     private Factory factory;
@@ -36,7 +37,8 @@ public class FeedbackList extends ToolComponent {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                Feedback feedback = (Feedback) list.getSelectedValue();
+                FeedbackItem item = (FeedbackItem) list.getSelectedValue();
+                Feedback feedback = item.getFeedback();
 
                 if (feedback != null && !feedback.getList().isEmpty()) {
                     postEvent(
@@ -69,64 +71,73 @@ public class FeedbackList extends ToolComponent {
     }
 
     private void setFeedbackList(Summary summary) {
+        String producer = summary.getProducer();
+        String summaryId = summary.getId();
+        System.err.println("adding: " + summary);
+
         errorapi.types.FeedbackList messages = summary.getList();
         for (; !messages.isEmpty(); messages = messages.getTail()) {
-            data.add(messages.getHead());
+            data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
         }
         list.repaint();
     }
 
-    private void addFeedback(Feedback feedback) {
-        data.add(feedback);
-        list.repaint();
-    }
-
-    private Feedback makeAnonymousError(String msg) {
-        return getErrorFactory().makeFeedback_Error(
-            "unknown",
-            msg,
-            getErrorFactory().makeSubjectList());
+    private FeedbackItem makeAnonymousError(String msg) {
+        return new FeedbackItem(
+            "meta",
+            "anonymous",
+            getErrorFactory().makeFeedback_Error(
+                msg,
+                getErrorFactory().makeSubjectList()));
     }
 
     private Feedback makeAnonymousWarning(String msg) {
         return getErrorFactory().makeFeedback_Warning(
-            "unknown",
             msg,
             getErrorFactory().makeSubjectList());
     }
     private Feedback makeAnonymousInfo(String msg) {
         return getErrorFactory().makeFeedback_Info(
-            "unknown",
             msg,
             getErrorFactory().makeSubjectList());
     }
 
     public void errorf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addFeedback(makeAnonymousError(message));
+        data.add(makeAnonymousError(message));
     }
 
     public void error(String message) {
-        addFeedback(makeAnonymousError(message));
+        data.add(makeAnonymousError(message));
     }
 
     public void messagef(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addFeedback(makeAnonymousInfo(message));
+        data.add(makeAnonymousInfo(message));
     }
 
     public void message(String message) {
-        addFeedback(makeAnonymousInfo(message));
+        data.add(makeAnonymousInfo(message));
     }
 
     public void warningf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addFeedback(makeAnonymousWarning(message));
+        data.add(makeAnonymousWarning(message));
     }
 
     public void warning(String message) {
-        addFeedback(makeAnonymousWarning(message));
+        data.add(makeAnonymousWarning(message));
     }
-    
-  
+
+    public void removeFeedbackSummary(String producer, String summaryId) {
+        System.err.println("removing errors for " + producer + ", " + summaryId);
+        for (int i = 0; i < data.getSize(); i++) {
+            FeedbackItem item = (FeedbackItem) data.getElementAt(i);
+
+            if (item.getProducer().equals(producer)
+                && item.getSummaryId().equals(summaryId)) {
+                data.remove(item);
+            }
+        }
+    }
 }
