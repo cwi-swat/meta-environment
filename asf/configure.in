@@ -138,15 +138,8 @@ AC_OUTPUT(
    asfc/Makefile
    asfc/src/Makefile
    asfc/src/muasf/Makefile
-   asfc/test/Makefile
-   asfc/test/terms/Makefile
    asfe/Makefile
    asfe/src/Makefile
-   asfe/test/Makefile
-   asfe/test/eqs/Makefile
-   asfe/test/fail/Makefile
-   asfe/test/ref/Makefile
-   asfe/test/terms/Makefile
    utils/Makefile
    test/Makefile
    test/eqs/Makefile
