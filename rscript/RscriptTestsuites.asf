@@ -8,10 +8,11 @@ equations
 	eval-rscript-testsuite($Stat*) = testsuite-report($NatCon1, $NatCon2, $Val)
 
 [TSR1] testsuite-report($NatCon, 0, $Val) = All $NatCon tests passed
+
 [TSR2] 	$NatCon2 != 0
 	===========================================================
 	testsuite-report($NatCon1, $NatCon2, $Val) = 
-	$NatCon2 of $NatCon1 tests failed: $Val
+	$NatCon2 of $NatCon1 + $NatCon2 tests failed: $Val
 
 %% ---- Increment a variable
 
