@@ -3,6 +3,7 @@
 include ${top_srcdir}/make_rules
 
 INCLUDES		= -I$(PT_SUPPORT)/include \
+			-I$(ERROR_SUPPORT)/include \
 			-I$(ASF_SUPPORT)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
@@ -18,6 +19,7 @@ noinst_HEADERS 	= asfoperations.tif.h
 asfoperations_SOURCES = asfoperations.c asfoperations.tif.c
 asfoperations_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept \
+                       -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)

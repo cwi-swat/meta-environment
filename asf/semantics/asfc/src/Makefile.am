@@ -55,6 +55,7 @@ DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
 INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
+            -I$(ERROR_SUPPORT)/include \
             -I$(ASF_SUPPORT)/include \
             -I$(ERROR_SUPPORT)/include \
             -I$(ATERM)/include \

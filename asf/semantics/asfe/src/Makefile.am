@@ -46,7 +46,7 @@ asfe_LDADD		= \
 			-L$(SGLR)/lib -lsglr \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ERRORS_SUPPORT)/lib -lErrorAPI \
+			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(ATERM)/lib -lATerm \
 			${TIDELIB} $(SOCKLIBS)
 

@@ -4,6 +4,7 @@ include ${top_srcdir}/make_rules
 
 INCLUDES		= -I$(PT_SUPPORT)/include \
 			-I$(ASF_SUPPORT)/include \
+			-I$(ERROR_SUPPORT)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
 
@@ -18,6 +19,7 @@ noinst_HEADERS 	= equationUpgrader.h asfupgrader.tif.h
 asfupgrader_SOURCES = asfupgrader.c equationUpgrader.c asfupgrader.tif.c
 asfupgrader_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME \
                 -L$(PT_SUPPORT)/lib -lmept \
+                -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                 -L$(TOOLBUSLIB)/lib -lATB \
                 -L$(ATERM)/lib -lATerm \
                  $(SOCKLIBS)
