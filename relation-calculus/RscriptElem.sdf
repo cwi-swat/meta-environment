@@ -1,0 +1,19 @@
+module RscriptElem
+
+exports
+  imports basic/Booleans basic/Integers basic/Strings
+  imports MyArea
+  imports Relations[Elem]
+
+  context-free syntax 
+
+%% Elementary values
+     BoolCon                                	-> Elem  
+     Integer                               	-> Elem  
+     String				    	-> Elem  
+     Area				    	-> Elem  
+
+%% Extend Elem to allow nested bags and relations
+
+     Bag[[Elem]]                   	    	-> Elem  
+     Tuple					-> Elem

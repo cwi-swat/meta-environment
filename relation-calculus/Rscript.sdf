@@ -1,15 +1,12 @@
 module Rscript
 
-imports basic/Booleans basic/Integers basic/Strings
-imports MyArea
-
 exports
 %%sorts Elem would be reasonable :-) but gives double declaration error
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
 	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR
 
-  imports Relations[Elem]
+  imports RscriptElem
 
   lexical syntax
      [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
@@ -19,17 +16,6 @@ exports
      RVAR -/- [A-Za-z0-9\_\-]
 
   context-free syntax
-
-%% Elementary values
-     BoolCon                                	-> Elem  
-     Integer                               	-> Elem  
-     String				    	-> Elem  
-     Area				    	-> Elem  
-
-%% Extend Elem to allow nested bags and relations
-
-     Bag[[Elem]]                   	    	-> Elem  
-     Tuple					-> Elem
 
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
