@@ -67,7 +67,7 @@ OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
 OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES      = $(LIBFILES) 
+CLEANFILES      = 
 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
