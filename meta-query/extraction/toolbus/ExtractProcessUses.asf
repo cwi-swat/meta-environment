@@ -1,0 +1,26 @@
+equations
+
+[extract-process-uses-0]
+  process $ProcessSignature is $ProcessBody := $ProcessDef,
+  $Caller := $ProcessSignature,
+  $Rstore2 := extractProcessUsesInScope($ProcessBody, $Rstore1, $Caller)
+  ===>
+  extractProcessUses($ProcessDef, $Rstore1) = $Rstore2
+
+[extract-process-uses-1]
+  process $ProcessSignature is $ProcessBody := $ProcessDef,
+  $Caller ( $FormalParams ) := $ProcessSignature,
+  $Rstore2 := extractProcessUsesInScope($ProcessBody, $Rstore1, $Caller)
+  ===>
+  extractProcessUses($ProcessDef, $Rstore1) = $Rstore2
+
+[extract-process-uses-in-scope-0]
+  $Rstore2 := addProcessUse($Caller, $Callee, $Rstore1)
+  ===>
+  extractProcessUsesInScope($Callee, $Rstore1, $Caller) = $Rstore2
+
+[add-process-use-0]
+  $Tuple := <unparse-to-string($Caller), unparse-to-string($Callee)>,
+  $Rstore2 := add-tuple(PROCESS_USE, $Tuple, $Rstore1)
+  ===>
+  addProcessUse($Caller, $Callee, $Rstore1) = $Rstore2

@@ -1,37 +1,37 @@
-module ExtractVariableDeclarations
+module ExtractParameters
 
+imports ToolBusExtraction
 imports utilities/PosInfo[ProcessName]
 imports utilities/Parsing[Term]
 imports utilities/Parsing[Var]
 imports utilities/PosInfo[Var]
-imports ToolBusExtraction
 
 exports
   context-free syntax
-    extractVariableDeclarations(Tscript, RSTORE) ->
+    extractParameters(Tscript, RSTORE) ->
       RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableDeclarations(ProcessDef, RSTORE) ->
-      RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractVariableDeclarationsInScope(VarDecls, RSTORE, Location) ->
-      RSTORE {traversal(accu, top-down, break)}
-
-    extractVariableDeclarationsInScope(VarDecl, RSTORE, Location) ->
+    extractParameters(ProcessDef, RSTORE) ->
       RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    addVariableDeclaration(Var, Term, Location, RSTORE) -> RSTORE
+    extractParametersInScope({FormalParam ","}*, RSTORE, Location) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+    extractParametersInScope(FormalParam, RSTORE, Location) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addParameter(Var, Term, Location, RSTORE) -> RSTORE
 
 hiddens
   variables
+    "$FormalParam" -> FormalParam
     "$FormalParams" -> {FormalParam ","}*
     "$ProcessBody" -> ProcessBody
     "$ProcessDef" -> ProcessDef
-    "$ProcessExpr" -> ProcessExpr
     "$ProcessName" -> ProcessName
     "$ProcessNameId" -> Location
     "$ProcessSignature" -> ProcessSignature
@@ -39,6 +39,4 @@ hiddens
     "$Term" -> Term
     "$Tuple"[0-9]* -> Tuple
     "$Var" -> Var
-    "$VarDecl" -> VarDecl
-    "$VarDecls" -> {VarDecl ","}*
     "$VarId" -> Location

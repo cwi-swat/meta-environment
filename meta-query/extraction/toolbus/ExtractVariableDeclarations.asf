@@ -13,29 +13,14 @@ equations
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName ( $FormalParams ) := $ProcessSignature,
   $ProcessNameId := get-location($ProcessName),
-  $Rstore2 := extractVariableDeclarationsInScope($FormalParams, $Rstore1, $ProcessNameId),
   let $VarDecls in $ProcessExpr endlet := $ProcessBody,
-  $Rstore3 := extractVariableDeclarationsInScope($VarDecls, $Rstore2, $ProcessNameId)
+  $Rstore2 := extractVariableDeclarationsInScope($VarDecls, $Rstore1, $ProcessNameId)
   ===>
-  extractVariableDeclarations($ProcessDef, $Rstore1) = $Rstore3
+  extractVariableDeclarations($ProcessDef, $Rstore1) = $Rstore2
 
 
 
 [extract-variable-declarations-in-scope-0]
-  $Var : $Term := $FormalParam,
-  $Rstore2 := addVariableDeclaration($Var, $Term, $ProcessNameId, $Rstore1)
-  ===>
-  extractVariableDeclarationsInScope($FormalParam, $Rstore1, $ProcessNameId) = $Rstore2
-
-[extract-variable-declarations-in-scope-1]
-  $Var : $Term ? := $FormalParam,
-  $Rstore2 := addVariableDeclaration($Var, $Term, $ProcessNameId, $Rstore1)
-  ===>
-  extractVariableDeclarationsInScope($FormalParam, $Rstore1, $ProcessNameId) = $Rstore2
-
-
-
-[extract-variable-declarations-in-scope-2]
   $Var : $Term := $VarDecl,
   $Rstore2 := addVariableDeclaration($Var, $Term, $ProcessNameId, $Rstore1)
   ===>

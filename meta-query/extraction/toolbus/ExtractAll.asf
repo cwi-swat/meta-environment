@@ -9,6 +9,10 @@ equations
   $Rstore5 := extractToolDeclarations($Tscript, $Rstore4),
   $Rstore6 := extractVariableDeclarations($Tscript, $Rstore5),
   $Rstore7 := extractVariableDefinitions($Tscript, $Rstore6),
-  $Rstore8 := extractVariableUses($Tscript, $Rstore7)
+  $Rstore8 := extractVariableUses($Tscript, $Rstore7),
+  $Rstore9 := extractInitialProcesses($Tscript, $Rstore8),
+  $Rstore10 := extractProcessUses($Tscript, $Rstore9),
+  $Rstore11 := extractProcessReferences($Tscript, $Rstore10),
+  $Rstore12 := extractParameters($Tscript, $Rstore11)
   ===>
-  extractAll($Tscript) = $Rstore8
+  extractAll($Tscript) = $Rstore12

@@ -31,6 +31,6 @@ equations
   $Tuple1 := <$VarId, unparse-to-string($Var)>,
   $Rstore2 := add-tuple(VAR_USE, $Tuple1, $Rstore1),
   $Tuple2 := <$VarId, $ProcessNameId>,
-  $Rstore3 := add-tuple(VAR_USE, $Tuple2, $Rstore2)
+  $Rstore3 := add-tuple(VAR_USE_SCOPE, $Tuple2, $Rstore2)
   ===>
   addVariableUse($Var, $ProcessNameId, $Rstore1) = $Rstore3

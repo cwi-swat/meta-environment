@@ -1,4 +1,4 @@
-extractToolDeclarations(
+extractAll(
 tool aap is { command = "/bin/aap" }
 
 process UI is
@@ -10,6 +10,7 @@ in
   execute(user-interface, UI?) .
   (
     rec-event(UI, parse-file(FileName?)) .
+    Parser().
     snd-msg(parse-file(FileName)) .
     rec-msg(parse-file-result(FileName, ParseTree?)) .
     snd-do(UI, show-tree(ParseTree)) .
@@ -29,6 +30,7 @@ let
 in
   execute(parser, Parser?) .
   (
+    create(UI, Pid?).
     rec-msg(parse-file(FileName?)) .
     snd-eval(Parser, parse(FileName)) .
     rec-value(Parser, parse-result(ParseTree?)) .
@@ -36,5 +38,5 @@ in
   ) * delta
 endlet
 
-toolbus(UI, Parser)
-,rstore())
+toolbus(UI)
+)

@@ -1,0 +1,27 @@
+module ExtractInitialProcesses
+
+imports ToolBusExtraction
+imports utilities/Parsing[ProcessName]
+imports utilities/PosInfo[ProcessName]
+
+exports
+  context-free syntax
+    extractInitialProcesses(Tscript, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+  context-free syntax
+    extractInitialProcesses(TscriptDef, RSTORE) ->
+      RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addInitialProcess(RSTORE, ProcessName) -> RSTORE
+
+  variables
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Location
+    "$Rstore"[0-9]* -> RSTORE
+    "$Terms" -> {Term ","}*
+    "$TscriptDef" -> TscriptDef
+    "$Tuple"[0-9]* -> Tuple
+

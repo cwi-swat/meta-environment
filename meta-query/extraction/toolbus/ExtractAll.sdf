@@ -1,9 +1,13 @@
 module ExtractAll
 
 imports ExtractEvents
+imports ExtractInitialProcesses
+imports ExtractParameters
 imports ExtractProcessCreations
 imports ExtractProcessDeclarations
 imports ExtractProcessInvocations
+imports ExtractProcessUses
+imports ExtractProcessReferences
 imports ExtractToolDeclarations
 imports ExtractVariableDeclarations
 imports ExtractVariableDefinitions
