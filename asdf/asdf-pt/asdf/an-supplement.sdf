@@ -4,7 +4,8 @@ exports
 
 sorts
 
-  Action Sort PrefixDataOp Yielder Data Variable
+  Action Sort PrefixDataOp Yielder Data Variable AtomicType Type
+  UserDefPrefixDataOp UserDefType Literal Constructor UQLiteral AtmYielder
 
 context-free syntax
 
@@ -13,27 +14,32 @@ context-free syntax
 
 lexical syntax
 
-  [a-z]+	-> Sort {avoid}
-  
-  [a-z\-]+	-> Data {avoid}
+  [a-z]+	-> UserDefType
+  UserDefType	->Type {avoid}
+   
+%%  [a-z\-]+	-> UserDefData
+%%  UserDefData	-> Data {avoid}
 
-  [a-z\-]+	-> PrefixDataOp {avoid}
+  [a-z\-]+	-> UserDefPrefixDataOp
+  UserDefPrefixDataOp -> PrefixDataOp {avoid}
 
-  [A-Z][a-z]*	-> Variable
+  [A-Z][a-z0-9]*[\*\+]?	-> Variable
 
-  "n"		-> Sort {reject}
+  "n"		-> Type {rejec}
+  "the"		-> PrefixDataOp {reject}
 
 context-free priorities
 
-  { Action Yielder	-> Action }
+  { Action AtmYielder	-> Action }
   >
   {Literal Constructor	-> Action }
 
-context-free restrictions
+lexical restrictions
 
-  Data -/- [a-z\-]
-  PrefixDataOp -/- [a-z\-]
-
+%%  UserDefData -/- [a-z\-]
+  UserDefType -/- [a-z\-]
+  UserDefPrefixDataOp -/- [a-z\-]
+  Variable -/- [a-z0-9\*\+]  
 
 %%%%%%%%%%
 % Reject %
@@ -113,40 +119,80 @@ lexical syntax
   "before"		-> PrefixDataOp {reject}
   "apply"		-> PrefixDataOp {reject}
 
-  "copy"		-> Sort {reject}
-  "skip"		-> Sort {reject}
-  "then"		-> Sort {reject}
-  "and-then"		-> Sort {reject}
-  "and"			-> Sort {reject}
-  "indivisibly"		-> Sort {reject}
-  "unfold"		-> Sort {reject}
-  "unfolding"		-> Sort {reject}
-  "throw"		-> Sort {reject}
-  "catch"		-> Sort {reject}
-  "err"			-> Sort {reject}
-  "and-catch"		-> Sort {reject}
-  "fail"		-> Sort {reject}
-  "maybe"		-> Sort {reject}
-  "else"		-> Sort {reject}
-  "choose-nat"		-> Sort {reject}
+  "copy"		-> Type {reject}
+  "skip"		-> Type {reject}
+  "then"		-> Type {reject}
+  "and-then"		-> Type {reject}
+  "and"			-> Type {reject}
+  "indivisibly"		-> Type {reject}
+  "unfold"		-> Type {reject}
+  "unfolding"		-> Type {reject}
+  "throw"		-> Type {reject}
+  "catch"		-> Type {reject}
+  "err"			-> Type {reject}
+  "and-catch"		-> Type {reject}
+  "fail"		-> Type {reject}
+  "maybe"		-> Type {reject}
+  "else"		-> Type {reject}
+  "choose-nat"		-> Type {reject}
 
-  "copy-bindings"	-> Sort {reject}
-  "scope"		-> Sort {reject}
+  "copy-bindings"	-> Type {reject}
+  "scope"		-> Type {reject}
 
 
-  "create"		-> Sort {reject}
-  "inspect"		-> Sort {reject}
-  "update"		-> Sort {reject}
+  "create"		-> Type {reject}
+  "inspect"		-> Type {reject}
+  "update"		-> Type {reject}
 
-  "enact"		-> Sort {reject}
-  "close"		-> Sort {reject}
-  "recursively"		-> Sort {reject}
+  "enact"		-> Type {reject}
+  "close"		-> Type {reject}
+  "recursively"		-> Type {reject}
 
-  "give" Yielder	-> Sort {reject}
-  "check" Yielder	-> Sort {reject}
-  "bind"		-> Sort {reject}
-  "furthermore"		-> Sort {reject}
-  "before"		-> Sort {reject}
-  "apply"		-> Sort {reject}
+  "give" Yielder	-> Type {reject}
+  "check" Yielder	-> Type {reject}
+  "bind"		-> Type {reject}
+  "furthermore"		-> Type {reject}
+  "before"		-> Type {reject}
+  "apply"		-> Type {reject}
 
   "n"			-> AtomicType {reject}
+
+  "copy"		-> UQLiteral {reject}
+  "skip"		-> UQLiteral {reject}
+  "then"		-> UQLiteral {reject}
+  "and-then"		-> UQLiteral {reject}
+  "and"			-> UQLiteral {reject}
+  "indivisibly"		-> UQLiteral {reject}
+  "unfold"		-> UQLiteral {reject}
+  "unfolding"		-> UQLiteral {reject}
+  "throw"		-> UQLiteral {reject}
+  "catch"		-> UQLiteral {reject}
+  "err"			-> UQLiteral {reject}
+  "and-catch"		-> UQLiteral {reject}
+  "fail"		-> UQLiteral {reject}
+  "maybe"		-> UQLiteral {reject}
+  "else"		-> UQLiteral {reject}
+  "choose-nat"		-> UQLiteral {reject}
+
+  "copy-bindings"	-> UQLiteral {reject}
+  "scope"		-> UQLiteral {reject}
+
+
+  "create"		-> UQLiteral {reject}
+  "inspect"		-> UQLiteral {reject}
+  "update"		-> UQLiteral {reject}
+
+  "enact"		-> UQLiteral {reject}
+  "close"		-> UQLiteral {reject}
+  "recursively"		-> UQLiteral {reject}
+
+  "give"		-> UQLiteral {reject}
+  "check"		-> UQLiteral {reject}
+  "bind"		-> UQLiteral {reject}
+  "furthermore"		-> UQLiteral {reject}
+  "before"		-> UQLiteral {reject}
+  "apply"		-> UQLiteral {reject}
+
+  "the"			-> UQLiteral {reject}
+  
+  

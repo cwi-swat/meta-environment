@@ -6,7 +6,7 @@ exports
 
 sorts
 
-  Boolean 
+  Boolean PrefixDataOp Datum
 
 context-free syntax
 

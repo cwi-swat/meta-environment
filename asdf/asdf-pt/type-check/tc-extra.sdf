@@ -57,6 +57,5 @@ variables
   "$AFS"[1-9]?	-> AS-FunctionSig
   "$AFS"[1-9]?"*"	-> {AS-FunctionSig ","}*
   "$FD"[1-9]?	-> AS-FunctionDef
-  "$SFR"[0-9]?	-> SingleFunResult
-  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$AT"[0-9]?	-> ActionType
   "$ENV"[0-9]?	-> Environment

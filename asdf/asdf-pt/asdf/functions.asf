@@ -52,7 +52,7 @@ equations
 
 
 [get-data-cons-1] get-data-constants(uqliteral($CH+) : $SO, $DCS) = 
-		  <data($CH+), sort-to-type($SO)>:$DCS
+		  <prefixdataop($CH+), sort-to-type($SO)>:$DCS
 
 [get-selectors-1] 
     

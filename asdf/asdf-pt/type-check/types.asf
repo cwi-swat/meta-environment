@@ -1,63 +1,84 @@
 equations
 
-[concat-1] type-concat(($TY1*), ($TY2*)) = ($TY1*, $TY2*)
+[concat-1] concat(($TY1*), ($TY2*)) = ($TY1*, $TY2*)
 
-[concat-2] type-concat($TY1, ($TY1*)) = ($TY1, $TY1*) 
+[concat-2] concat($TY1, ($TY1*)) = ($TY1, $TY1*) 
 
-[concat-2] type-concat(($TY1*), $TY1) = ($TY1*, $TY1) 
+[concat-2] concat(($TY1*), $TY1) = ($TY1*, $TY1) 
 
-[concat-2] type-concat(empty, $TY2) = empty
+[concat-2] concat(empty, $TY2) = empty
 
-[concat-2] type-concat($TY1, empty) = empty
+[concat-2] concat($TY1, empty) = empty
 
-[default-concat] type-concat($TY1, $TY2) = ($TY1, $TY2) 
+[default-concat] concat($TY1, $TY2) = ($TY1, $TY2) 
 
-[lub-1] subtype-of($TY1, $TY2, $STS) == yes
+[lub-1] subtype-of($TY1, $TY2, $EN) == yes
 	=================================
-	lub($TY1, $TY2, $STS) = $TY1 
+	lub($TY1, $TY2, $EN) = $TY1 
 
-[lub-1] subtype-of($TY2, $TY1, $STS) == yes
+[lub-1] subtype-of($TY2, $TY1, $EN) == yes
 	===================================
-	lub($TY1, $TY2, $STS) = $TY2  
+	lub($TY1, $TY2, $EN) = $TY2  
 
-[lub-1] lub(empty, $TY, $STS) = $TY
+[glb-1] subtype-of($TY1, $TY2, $EN) == yes
+	=================================
+	glb($TY1, $TY2, $EN) = $TY2 
 
-[lub-1] lub($TY, empty, $STS) = $TY
-
-[or-1] $END answerOr yes = yes
-
-[or-2] yes answerOr $END = yes
-
-[or-2] no answerOr no = no
+[glb-1] subtype-of($TY2, $TY1, $EN) == yes
+	===================================
+	glb($TY1, $TY2, $EN) = $TY1  
 
 [lowest-1] 
 
-   subtype-of($TY1, $TY2, $STS) == yes
+   subtype-of($TY1, $TY2, $EN) == yes
    ===================================
-   lowest-type($TY1, $TY2, $STS) = $TY1
+   lowest-type($TY1, $TY2, $EN) = $TY1
 
 [lowest-2] 
 
-   lowest-type(action[using $TY1 giving $TY2 raising $TY3], 
-	        action[using $TY4 giving $TY5 raising $TY6], $STS) = 
-		  action[using lowest-type($TY1, $TY4, $STS) 
-		         giving lowest-type($TY2, $TY5, $STS) 
-			 raising lowest-type($TY3, $TY6, $STS) ]
+   lowest-type(using $TY1 & giving $TY2 & raising $TY3, 
+	        using $TY4 & giving $TY5 & raising $TY6, $EN) = 
+		  using lowest-type($TY1, $TY4, $EN) & 
+		         giving lowest-type($TY2, $TY5, $EN) &
+			 raising lowest-type($TY3, $TY6, $EN) 
 
-[default-lowest-1] lowest-type($TY1, $TY2, $STS) = $TY2
+[default-lowest-1] lowest-type($TY1, $TY2, $EN) = $TY2
 
 [highest-1] 
 
-   subtype-of($TY1, $TY2, $STS) == yes
+   subtype-of($TY1, $TY2, $EN) == yes
    ===================================
-   highest-type($TY1, $TY2, $STS) = $TY2
+   highest-type($TY1, $TY2, $EN) = $TY2
 
 [highest-2] 
 
-   highest-type(action[using $TY1 giving $TY2 raising $TY3], 
-	        action[using $TY4 giving $TY5 raising $TY6], $STS) = 
-		  action[using highest-type($TY1, $TY4, $STS) 
-		         giving highest-type($TY2, $TY5, $STS) 
-			 raising highest-type($TY3, $TY6, $STS)]
+   highest-type(using $TY1 & giving $TY2 & raising $TY3, 
+	        using $TY4 & giving $TY5 & raising $TY6, $EN) = 
+		  using highest-type($TY1, $TY4, $EN) &
+		  giving highest-type($TY2, $TY5, $EN) &
+		  raising highest-type($TY3, $TY6, $EN)
 
-[default-highest-1] highest-type($TY1, $TY2, $STS) = $TY1
+[default-highest-1] highest-type($TY1, $TY2, $EN) = $TY1
+
+[std-at-1] std-at = infallible & closed & terminates & stable & 
+		    ineffective & uncreative
+
+[action-type-or-1] 
+
+    action-type-and($AT1 & $AT2, $AT3) = 
+	    action-type-and($AT1, $AT3) & action-type-and($AT2, $AT3)
+
+[action-type-or-2] 
+
+    not-in($SAT, $AT2) == yes
+    ======================================================================
+    action-type-and($SAT, $AT2) = Action
+
+[default-action-type-or-2]
+
+    action-type-and($SAT, $AT2) = $SAT 
+
+
+[rm-action-1] Action & $AT = $AT
+
+[rm-action-1] $AT & Action = $AT

@@ -12,20 +12,20 @@ exports
 
 context-free syntax 
 
-  typecheck-data(Data, Environment)		-> Type
-  typecheck-dataop(DataOp, Type, Environment)	-> ActionResult
-  typecheck-datapred(DataOp, Type, Environment)	-> ActionResult
+  typecheck-data(Data, Environment)		-> <ActionType, Environment>
+  typecheck-dataop(DataOp, Environment)		-> <ActionType, Environment>
+  typecheck-datapred(DataOp, Environment)	-> <ActionType, Environment>
   
 hiddens 
 
 variables
 
-  "$TY"[1-9]?	-> Type
+  "$TY"[1-9]?		-> Type
   "$TY"[1-9]?"*"	-> {Type ","}*
-  "$AT"[1-9]?	-> ActionType	
+  "$AT"[1-9]?		-> ActionType	
+  "$TV"[1-9]?		-> TypeVariable
 	
-  "$SE"		-> SignatureEnv
-  "$EN"		-> Environment
+  "$EN"[1-9]?	-> Environment
   "$CH+"[1-9]?	-> CHAR+
   "$SC"[1-9]?	-> StrCon		
   "$A"[1-9]?	-> Action
@@ -36,15 +36,14 @@ variables
   "$B"		-> Boolean
   "$TK"[0-9]?	-> Token
   "$END"[1-9]?	-> Answer
-  "$R"[1-9]?	-> ActionResult
   "$ER"[1-9]?"+"	-> Error+
   "$DO"[0-9]?	-> DataOp
   "$IN"[0-9]?	-> Index
 
-  "$DF"[0-9]?"*"   -> {<DataOp, FunResult> "," }*
-  "$FR"[0-9]?	   -> FunResult
+  "$DF"[0-9]?"*"   -> {<DataOp, ActionType> "," }*
+  "$FR"[0-9]?	   -> ActionType
 
-  "$DT"[0-9]?"*"   -> {<Data, Type> ","}*
+  "$DT"[0-9]?"*"   -> {<DataOp, Type> ","}*
 
   "$VR"[0-9]?	   -> Variable
 

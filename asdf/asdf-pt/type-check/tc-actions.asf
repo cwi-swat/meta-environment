@@ -1,344 +1,231 @@
 equations
 
-[tca-bracket] typecheck-action(($A), $TY, $EN) = typecheck-action($A, $TY, $EN)
+[tca-bracket] typecheck-action(($A), $EN) = typecheck-action($A, $EN)
 
-[tca-copy] typecheck-action(copy, $TY, $EN) = AR[nor=$TY, exc=empty, no]
+[tca-copy] 
 
-[tca-skip] typecheck-action(skip, $TY, $EN) = AR[nor=(), exc=empty, no]
-
-[tca-then] 
-
-      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-      $TY2 != empty,
-      AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY2, $EN),
-      $TY6 := lub($TY3, $TY5, get-subtypes($EN))
-      ==========================================================
-      typecheck-action($A1 then $A2, $TY1, $EN) = 
-			AR[nor=$TY4, exc=$TY6, $ANS1 answerOr $ANS2] 
+      <$TV, $EN2> := new-type-var($EN1)
+      ======================================================================
+      typecheck-action(copy, $EN1) = <using $TV & giving $TV & std-at, $EN2>
 
 [tca-then] 
 
-      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-      $TY2 != empty,
-      $ER+ := typecheck-action($A2, $TY2, $EN)
-      ==========================================
-      typecheck-action($A1 then $A2, $TY1, $EN) = $ER+
-
-[tca-then] 
-
-      AR[nor=empty, exc=$TY2, $ANS1] := typecheck-action($A1, $TY1, $EN)
-      ====================================================================
-      typecheck-action($A1 then $A2, $TY1, $EN) = AR[nor=empty, exc=$TY2, $ANS1] 
-
-
-[tca-then] 
-
-      $ER+ := typecheck-action($A1, $TY1, $EN)
-      ==========================================
-      typecheck-action($A1 then $A2, $TY1, $EN) = $ER+
-
+      <$AT1, $EN2> := typecheck-action($A1, $EN1),
+      <$AT2, $EN3> := typecheck-action($A2, $EN2),
+      $TY1 := get-giving($AT1),
+      $TY1 != empty,
+      $TY2 := get-using($AT2),
+      subtype-of($TY1, $TY2, $EN3) == yes,
+      $TY3 := lub(get-raising($AT1), get-raising($AT2), $EN3)
+      ===================================================================
+      typecheck-action($A1 then $A2, $EN1) = <using get-using($AT1) &
+					      giving get-giving($AT2) &
+					      raising $TY3 & 
+					      action-type-and($AT1, $AT2), 
+					      $EN3>
 
 [tca-and-then] 
 
-      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-      AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
-      $TY6 := type-concat($TY2, $TY4),
-      $TY7 := lub($TY3, $TY5, get-subtypes($EN))
-      =====================================================
-      typecheck-action($A1 and-then $A2, $TY1, $EN) = 
-		   AR[nor=$TY6, exc=$TY7, $ANS1 answerOr $ANS2] 
+      <$AT1, $EN2> := typecheck-action($A1, $EN1),
+      <$AT2, $EN3> := typecheck-action($A2, $EN2),
+      $TY1 := glb(get-using($AT1), get-using($AT2), $EN1),
+      $TY2 := concat(get-giving($AT1), get-giving($AT2)),
+      $TY3 := lub(get-raising($AT1), get-raising($AT2), $EN1)
+      =======================================================================
+      typecheck-action($A1 and-then $A2, $EN1) = <using $TY1 &
+						  giving $TY2 &
+						  raising $TY3 &
+						  action-type-and($AT1, $AT2), 
+						  $EN3>
 
-[tca-and-then] 
+[tca-and] 
 
-      $ER+ := typecheck-action($A1, $TY1, $EN)
-      ==============================================
-      typecheck-action($A1 and-then $A2, $TY1, $EN) = $ER+
-
-[tca-and-then] 
-
-      $ER+ := typecheck-action($A2, $TY1, $EN)
-      ==============================================
-      typecheck-action($A1 and-then $A2, $TY1, $EN) = $ER+
-
-[tca-and] typecheck-action($A1 and $A2, $TY1, $EN) = 
-	  typecheck-action($A1 and-then $A2, $TY1, $EN)
+   typecheck-action($A1 and $A2, $EN) = typecheck-action($A1 and-then $A2, $EN)
 
 [tca-result] 
 
-      $TY2 := typecheck-data($D, $EN)  
-      ================================================================
-      typecheck-action(result $D, $TY1, $EN) = AR[nor=$TY2, exc=empty, no] 
-
+   <$AT1, $EN2> := typecheck-data($D, $EN1)
+   =========================================================
+   typecheck-action(result $D, $EN1) = <$AT1 & std-at, $EN2> 
 
 [default-result] 
 
       result $D := $A
       =====================================================
-      typecheck-action($A, $TY1, $EN) = error("Type error", 
-		   [localized("Type error at result", get-location($A))])
-		
+      typecheck-action($A, $EN) = <error("Type error", 
+		   [localized("Type error at result", get-location($A))]), $EN>
 
 [tca-give] 
 
-        typecheck-action(give $DO, $TY, $EN) = typecheck-dataop($DO, $TY, $EN) 
+      typecheck-action(give $DO, $EN) = typecheck-dataop($DO, $EN) 
 
 [tca-check] 
 
-     typecheck-action(check $DO, $TY, $EN) = typecheck-datapred($DO, $TY, $EN) 
+     typecheck-action(check $DO, $EN) = typecheck-datapred($DO, $EN) 
 
-[tca-indivisibly] typecheck-action(indivisibly $A, $TY, $EN) = 
-			typecheck-action($A, $TY, $EN) 
+[tca-indivisibly] 
+ 
+     typecheck-action(indivisibly $A, $EN) = typecheck-action($A, $EN) 
 
-[tca-throw] typecheck-action(throw, $TY, $EN) = AR[nor=empty, exc=$TY, no]
+[tca-throw] 
 
-[tca-catch] 
-
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    $TY3 != empty, 
-    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY3, $EN),
-    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
-    $ANS3 := $ANS1 answerOr $ANS2
-    ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
+      <$TV, $EN2> := new-type-var($EN1)
+      ======================================================================
+      typecheck-action(throw, $EN1) = <using $TV & raising $TV & std-at, $EN2>
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    $TY3 != empty, 
-    $ER+ := typecheck-action($A2, $TY3, $EN)
-    ===================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = $ER+
+      <$AT1, $EN2> := typecheck-action($A1, $EN1),
+      <$AT2, $EN3> := typecheck-action($A2, $EN2),
+      $TY1 := get-raising($AT1),
+      $TY1 != empty,
+      $TY2 := get-using($AT2),
+      subtype-of($TY1, $TY2, $EN3) == yes,
+      $TY3 := lub(get-giving($AT1), get-giving($AT2), $EN3)
+      ===================================================================
+      typecheck-action($A1 catch $A2, $EN1) = <using get-using($AT1) &
+					       giving $TY3 &
+					       raising get-raising($AT2) & 
+					       action-type-and($AT1, $AT2), 
+					       $EN3>
 
-[tca-catch] 
-
-    $ER+ := typecheck-action($A1, $TY1, $EN)
-    ===================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = $ER+
-
-
-[tca-catch] 
-
-    AR[nor=$TY2, exc=empty, $ANS1] := typecheck-action($A1, $TY1, $EN)
-    ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty,$ANS1] 
-       
-
-[default-tca-catch] 
-
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, (), $EN),
-    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
-    $ANS3 := $ANS1 answerOr $ANS2
-    ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
-
-[default-tca-catch] 
-
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    $ER+ := typecheck-action($A2, (), $EN)
-    ==========================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = $ER+
-
-[tca-err] typecheck-action(err, $TY, $EN) = AR[nor=empty, exc=(), no]
-
-[tca-fail] typecheck-action(fail, $TY, $EN) = AR[nor=empty, exc=empty, yes]
-
-[tca-maybe-1] 
-
-  AR[nor=$TY1, exc=$TY2, $ANS] := typecheck-action($A, $TY, $EN),
-  $TY2 != empty
-  ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, yes]
-
-
-[tca-maybe-2] 
-
-  AR[nor=$TY1, exc=empty, $ANS] := typecheck-action($A, $TY, $EN)
-  ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, $ANS]
-
-[tca-maybe-3] 
-
-  $ER+ := typecheck-action($A, $TY, $EN)
-  ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = $ER+
-
+[tca-fail] typecheck-action(fail, $EN) = <std-at \ infallible, $EN>
 
 [tca-else] 
 
-
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
-    $TY6 := lub($TY2, $TY4, get-subtypes($EN)),
-    $TY7 := lub($TY3, $TY5, get-subtypes($EN))
-    ==================================================================
-    typecheck-action($A1 else $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY7, $ANS2]
-
-[tca-else] 
-
-    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
-    $ER+ := typecheck-action($A2, $TY1, $EN)
-    ==================================================
-    typecheck-action($A1 else $A2, $TY1, $EN) = $ER+
-
-[tca-else] 
-
-    $ER+ := typecheck-action($A1, $TY1, $EN)
-    ==========================================
-    typecheck-action($A1 else $A2, $TY1, $EN) = $ER+
-	
+      <$AT1, $EN2> := typecheck-action($A1, $EN1),
+      <$AT2, $EN3> := typecheck-action($A2, $EN2),
+      $TY1 := glb(get-using($AT1), get-using($AT2), $EN3),
+      $TY2 := lub(get-giving($AT1), get-giving($AT2), $EN3),
+      $TY3 := lub(get-raising($AT1), get-raising($AT2), $EN3),
+      not-in(infallible, $AT1) == yes
+      ===================================================================
+      typecheck-action($A1 else $A2, $EN1) = <using $TY1 &
+					      giving $TY2 &
+					      raising $TY3 &
+					      action-type-and($AT1, $AT2) &
+					      infallible($AT2), 
+					      $EN3>
 
 [tca-choose-nat] 
 
-    typecheck-action(choose-nat, $TY, $EN) = AR[nor=integer, exc=empty, no]
+    typecheck-action(choose-nat, $EN) = <giving integer & std-at, $EN>
 
 [tca-unfolding] 
 
-    typecheck-action(unfolding $A, $TY, $EN) = fix(3, $A, $TY, $EN)
+    typecheck-action(unfolding $A, $EN) = fix(3, $A, $EN)
 
 [tca-unfold] 
 
-    action[using $TY1 giving $TY2 raising $TY3] := get-unfold-type($EN),
-    subtype-of($TY, $TY2, get-subtypes($EN)) == yes
-    ===================================================================
-    typecheck-action(unfold, $TY, $EN) = AR[nor=$TY2, exc=$TY3, no]
-
-[default-tca-unfold] 
-
-    typecheck-action(unfold, $TY, $EN) = AR[nor=empty, exc=empty, no]
+    typecheck-action(unfold, $EN) = <get-unfold-type($EN), $EN>
 
 [tca-recursively] 
 
-    AR[nor=$TY1, exc=$TY2, $ANS] := typecheck-action($A, $TY, $EN),
-    subtype-of($TY1, bindings, get-subtypes($EN)) == yes
+    <$AT1, $EN2> := typecheck-action($A, $EN1),
+    get-giving($AT1) == bindings
     =====================================================================
-    typecheck-action(recursively $A, $TY, $EN) = AR[nor=$TY1, exc=$TY2, $ANS]
-
-[default-tca-recursively] 
-
-    $ER+ := typecheck-action($A, $TY, $EN)
-    =====================================================================
-    typecheck-action(recursively $A, $TY, $EN) = $ER+
+    typecheck-action(recursively $A, $EN1) = <$AT1, $EN2>
 
 [tca-copy-bindings] 
 
-    typecheck-action(copy-bindings, $TY, $EN) = AR[nor=bindings, exc=empty, no]
+    typecheck-action(copy-bindings, $EN) = <giving bindings & std-at \ closed, $EN>
 
 [tca-scope-1] 
 
-    AR[nor=$TY1, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN),
-    AR[nor=$TY3, exc=$TY4, $ANS2] := typecheck-action($A2, $TY, $EN),
-    subtype-of($TY1, bindings, get-subtypes($EN)) == yes,
-    $TY5 := lub($TY2, $TY4, get-subtypes($EN)),
-    $ANS3 := $ANS1 answerOr $ANS2
-    ===================================================================
-    typecheck-action($A1 scope $A2, $TY, $EN) = AR[nor=$TY3, exc=$TY5, $ANS3]
+      <$AT1, $EN2> := typecheck-action($A1, $EN1),
+      <$AT2, $EN3> := typecheck-action($A2, $EN2),
+      bindings == get-giving($AT1),
+      $TY1 := glb(get-using($AT1), get-using($AT2), $EN3),
+      $TY2 := lub(get-raising($AT1), get-raising($AT2), $EN3)
+      ===================================================================
+      typecheck-action($A1 scope $A2, $EN1) = <using $TY1 &
+				 	       giving get-giving($AT2) &
+					       raising $TY2 & 
+					       action-type-and($AT1, $AT2) &
+					       closed($AT1), 
+					       $EN3>
 
-[tca-scope-2] 
-
-    AR[nor=$TY1, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN),
-    subtype-of($TY1, bindings, get-subtypes($EN)) == yes,
-    $ER+ := typecheck-action($A2, $TY1, $EN)
-    ====================================================
-    typecheck-action($A1 scope $A2, $TY, $EN) = $ER+
-
-[tca-scope-2] 
-
-    AR[nor=empty, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN)
-    ====================================================
-    typecheck-action($A1 scope $A2, $TY, $EN) = AR[nor=empty, exc=$TY2, $ANS1]
-
-[tca-scope-3] 
-
-    $ER+ := typecheck-action($A1, $TY1, $EN)
-    ===========================================
-    typecheck-action($A1 scope $A2, $TY1, $EN) = $ER+
-	   
 [tca-enact] 	  
 
-    action[using () giving $TY2 raising $TY3] := $TY
-    ================================================================
-    typecheck-action(enact, $TY, $EN) = AR[nor=$TY2, exc=$TY3, yes] 
+     <$ATV, $EN2> := new-action-type-var($EN1)
+     ======================================================================
+     typecheck-action(enact, $EN1) = <using (using () & $ATV) & 
+			              $ATV \ terminates,
+				      $EN2>
 
 [default-enact] 
 
     $A == enact
     ====================================================================
-    typecheck-action($A, $TY, $EN) = error("Type error", 
-   [localized("Enact expects an action", get-location($A))])
+    typecheck-action($A, $EN) = <error("Type error", 
+   [localized("Enact expects an action", get-location($A))]), $EN>
 
 [tca-apply] 	  
 
-    action[using $TY2 giving $TY3 raising $TY4] := $TY1,
-    subtype-of(($TY*), $TY2, get-subtypes($EN)) == yes
-    =================================================================
-    typecheck-action(apply, ($TY1, $TY*), $EN) = AR[nor=$TY3, exc=$TY4, yes] 
+     <$TV, $EN2> := new-type-var($EN1),
+     <$ATV, $EN3> := new-action-type-var($EN2)
+     ======================================================================
+     typecheck-action(apply, $EN1) = <using (using $TV & $ATV, $TV) & 
+				      $ATV \ terminates,
+				      $EN3>
 
 [default-tca-apply] 	  
 
     $A == apply
     =================================================================
-    typecheck-action($A, ($TY1, $TY*), $EN) = error("Type error", 
-       [localized("Apply expects an action and data", get-location($A))])
-
+    typecheck-action($A, $EN) = <error("Type error", 
+       [localized("Apply expects an action and data", get-location($A))]), $EN>
 
 [tca-close]
-	
-    subtype-of($TY1, action, get-subtypes($EN))  == yes
+
+    <$ATV, $EN2> := new-action-type-var($EN1)
     ===================================================================
-    typecheck-action(close, $TY1, $EN) = AR[nor=$TY1, exc=empty, no]
+    typecheck-action(close, $EN1) = 
+			  <using $ATV & giving ($ATV & closed) & std-at, $EN2>
 
 [default-tca-close]
 	
     $A == close
     ===================================================================
-    typecheck-action($A, $TY1, $EN) = error("Type error", 
-       [localized("Close expects an action", get-location($A))])
+    typecheck-action($A, $EN) = <error("Type error", 
+       [localized("Close expects an action", get-location($A))]), $EN>
 
 
 [tca-create] 
 
-    subtype-of($TY, storable, get-subtypes($EN)) == yes 
-    ================================================================
-    typecheck-action(create, $TY, $EN) = AR[nor=cell($TY), exc=empty, no]  
-
+    typecheck-action(create, $EN) = <using storable & giving cell & 
+				     std-at \ uncreative, $EN>
 
 [default-create] 
 
     $A == create
     ====================================================================
-    typecheck-action($A, $TY, $EN) = error("Type error", 
-        [localized("Create expects a storable", get-location($A))])
+    typecheck-action($A, $EN) = <error("Type error", 
+        [localized("Create expects a storable", get-location($A))]), $EN>
 
 [tca-update] 
 
-    subtype-of($TY, (cell, storable), get-subtypes($EN)) == yes 
-    ============================================================
-    typecheck-action(update, $TY, $EN) = AR[nor=(), exc=(), no]
+    typecheck-action(update, $EN) = <using (cell, storable) & giving () &
+				     raising () & std-at \ ineffective, $EN>
 
 [default-update] 
 
     $A == update
     ============================================================
-    typecheck-action($A, $TY, $EN) = error("Type error", 
-        [localized("Update expects a cell and a storable", get-location($A))])
+    typecheck-action($A, $EN) = <error("Type error", 
+   [localized("Update expects a cell and a storable", get-location($A))]), $EN>
 
+[tca-inspect] 
 
-[tca-14] typecheck-action(inspect, cell($TY), $EN) = AR[nor=$TY, exc=(), no]
-
-[tca-14] 
-
-    subtype-of($TY, cell, get-subtypes($EN)) == yes 
-    ====================================================================
-    typecheck-action(inspect, $TY, $EN) = AR[nor=storable, exc=empty, no]
-	 
+    typecheck-action(inspect, $EN) = <using cell & giving storable &
+				      raising () & std-at \ stable, $EN>
 
 [default-inspect]
 
     $A == inspect
     ===========================================================
-    typecheck-action($A, $TY, $EN) = error("Type error", 
-        [localized("Inspect expects a cell", get-location($A))])
+    typecheck-action($A, $EN) = <error("Type error", 
+        [localized("Inspect expects a cell", get-location($A))]), $EN>
 
 
 
@@ -347,6 +234,6 @@ equations
     infixaction($CH+) := $IA,
     $SC := "Type error at " || strcon(""" $CH+ """)
     ============================================================
-    typecheck-action($A1 $IA $A2, $TY1, $EN) = error("Type error", 
-        [localized($SC, get-location($IA))])
+    typecheck-action($A1 $IA $A2, $EN) = <error("Type error", 
+        [localized($SC, get-location($IA))]), $EN>
 

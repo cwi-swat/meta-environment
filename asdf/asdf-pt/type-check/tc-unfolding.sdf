@@ -8,13 +8,14 @@ exports
 
 context-free syntax
 
-  fix(Integer, Action, Type, Environment)	-> ActionResult
-  iter(Integer, Action, Type, Environment)	-> ActionResult
+  fix(Integer, Action, Environment)	-> <ActionType, Environment>
+  iter(Integer, Action, Environment)	-> <ActionType, Environment>
 
 hiddens variables
 
   "$A"[0-9]?	-> Action
   "$TY"[0-9]?	-> Type
+  "$AT"[0-9]?	-> ActionType
   "$EN"[0-9]?	-> Environment
   "$STS"[0-9]?	-> SubTypes
   "$N"[0-9]?	-> Integer

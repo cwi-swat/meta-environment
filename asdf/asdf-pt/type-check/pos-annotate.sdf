@@ -9,7 +9,7 @@ exports
 
 sorts
 
-  Action Area SortWithPosition ActionWP
+  Action Area SortWithPosition ActionWP DataOpWP DataPredWP
 
 context-free syntax
 

@@ -6,9 +6,12 @@ imports
 
 sorts
   
-   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction Cons IdConst
-   InfixDataOp ConsIdConst StrConst IntConst Data Datum Index Sort
+   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction 
+   InfixDataOp Data Datum Index Type AtmYielder
 
+context-free start-symbols
+
+  Action
 
 %%%%%%%%%%%%%%%
 %% Kernel AN %%
@@ -21,7 +24,7 @@ context-free syntax
   "check" DataOp	-> Action
 
    PrefixAction Action		-> Action 
-   Action InfixAction Action	-> Action {left}
+   Action InfixAction Action	-> Action {left, prefer}
 
 
 lexical syntax
@@ -68,45 +71,38 @@ lexical syntax
 
   "no-bindings"		-> Datum {prefer}
 
-
-context-free priorities
-
-  { PrefixAction Action 	-> Action }
-  >
-  { Action InfixAction Action	-> Action }
-
 context-free priorities
 
   { PrefixDataOp Yielder 	-> Yielder }
   >
-  { Yielder InfixDataOp Yielder	-> Yielder }
-
-context-free priorities
-
-  { Action Yielder	-> Action }
+  { "bound-to" Yielder	  -> AtmYielder
+    "stored-at" Yielder	  -> AtmYielder
+    "closure" Yielder	  -> AtmYielder }
   >
-  { "give" Yielder 	-> Action 
-    "check" Yielder	-> Action}
-
-context-free priorities
-
-  { Action Yielder	-> Action }
-  >
-  { Action InfixAction Action	-> Action }
+  { Yielder InfixDataOp Yielder	-> Yielder {left}}
 
 context-free priorities
 
   { "(" Data ")"	-> Data }
   >
-  {  Action		-> Data }
-
-
-
-context-free priorities
-
   { Action   -> Data}
   >
   { Yielder InfixDataOp Yielder		-> Yielder {left}}
+
+context-free priorities
+
+  { Action AtmYielder	-> Action }
+  >
+  { "give" DataOp       -> Action
+    "check" DataOp      -> Action }
+  >
+  { "give" AtmYielder 	-> Action 
+    "given" AtmYielder 	-> Action 
+    "check" AtmYielder	-> Action}
+  >
+  { PrefixAction Action         -> Action }
+  >
+  { Action InfixAction Action	-> Action }
 
 %%%%%%%%%%%%%
 %% Full AN %%
@@ -114,32 +110,36 @@ context-free priorities
 
 context-free syntax
 
-  Data			-> Yielder
+  Data			-> AtmYielder
   DataOp		-> Yielder
-  "current-bindings"	-> Yielder
-  "bound-to" Yielder	-> Yielder
-  "stored-at" Yielder	-> Yielder
-  "closure" Yielder	-> Yielder
+  AtmYielder		-> Yielder
+  "current-bindings"	-> AtmYielder
+  "bound-to" Yielder	-> AtmYielder
+  "stored-at" Yielder	-> AtmYielder
+  "closure" Yielder	-> AtmYielder
 
   "it"			-> DataOp
 
-  "the" Sort		-> PrefixDataOp
+  "the" Type		-> PrefixDataOp
 
-  "give" Yielder	-> Action
-  "check" Yielder	-> Action
-  "given" Yielder	-> Action
+  "give"  AtmYielder	-> Action
+  "check" AtmYielder	-> Action
+  "given" AtmYielder	-> Action
+
   "bind"		-> Action
   "furthermore"		-> PrefixAction
   "before"		-> InfixAction
   "apply"		-> Action
 
 
-  Action Yielder		-> Action 
+  Action AtmYielder		-> Action {right}
+  Action DataOp			-> Action {right}
+
 	
   Yielder InfixDataOp Yielder	-> Yielder {left}
 
   PrefixDataOp Yielder		-> Yielder
-  "(" {Yielder ","}+ ")" 	-> Yielder
+  "(" {Yielder ","}+ ")" 	-> AtmYielder
 	
   InfixAction			-> InfixDataOp  {avoid}
   PrefixAction			-> PrefixDataOp  {avoid}

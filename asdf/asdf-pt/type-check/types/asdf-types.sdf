@@ -7,16 +7,36 @@ imports
 
 exports
 
+sorts
+
+  SingleActionType ActionType
+
 context-free syntax
 
   AtomicType	-> Type
 
-  "action" "[" AMusing? AMgiving? AMraising? "]" 	-> ActionType
-  "using" Type	 	-> AMusing
-  "giving" Type	 	-> AMgiving
-  "raising" Type	-> AMraising
-  ActionType		-> Type
+  "Action"		-> SingleActionType
+  "using" Type		-> SingleActionType
+  "giving" Type		-> SingleActionType
+  "raising" Type	-> SingleActionType
+  "infallible" | "terminates" | "closed" | 
+  "stable" | "ineffective" | "uncreative" 	-> SingleActionType
+    
+  ActionType "&" ActionType	-> ActionType {left, prefer}
+  SingleActionType		-> ActionType
 
+  ActionType	     -> Type 
+
+  get-using(ActionType)		-> Type 
+  get-giving(ActionType)	-> Type 
+  get-raising(ActionType)	-> Type 
+  get-using(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+  get-giving(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+  get-raising(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+
+  not-in(SingleActionType, ActionType)	-> Answer
+  not-in(ActionType, Answer, SingleActionType)	
+			        -> Answer {traversal(accu, break, bottom-up)}
 
 lexical syntax
 
@@ -27,5 +47,10 @@ context-free restrictions
   AtomicType -/- [a-z\-]
 
 
+hiddens variables
 
+   "$SAT"[0-9]?		-> SingleActionType
+   "$AT"[0-9]?		-> ActionType
+   "$AN"[0-9]?		-> Answer
+   
 

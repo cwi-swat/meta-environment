@@ -8,7 +8,7 @@ exports
 
 sorts
 
-  DataOp InfixDataOp Data PrefixDataOp
+  DataOp InfixDataOp Data PrefixDataOp Datum Index Type
 
 context-free syntax
 
@@ -26,7 +26,7 @@ lexical syntax
   "="		-> InfixDataOp
   "defined"	-> PrefixDataOp
 
-  "-1" | [1-9][0-9]*   -> Index
+  "-1" | [0-9]+   -> Index
 
 variables
 

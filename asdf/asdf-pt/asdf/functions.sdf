@@ -7,15 +7,15 @@ imports
   asdf/lower-case
   asdf/an-supplement
   containers/List[<DataOp, ActionType>]
-  containers/List[<Data, Type>]
+  containers/List[<DataOp, Type>]
 
 
 exports
-  context-free start-symbols TypeInfo
+  context-free start-symbols TypeInfo DataConstants
 
 sorts
 
-  FunctionDefs TypeInfo SubTypes DataOpSigs
+  FunctionDefs TypeInfo SubTypes DataOpSigs AS-Argument DataConstants
 
 context-free syntax
 
@@ -25,7 +25,7 @@ context-free syntax
 
   List[[<DataOp, ActionType>]]		-> DataOpSigs
 
-  List[[<Data, Type>]]			-> DataConstants
+  List[[<DataOp, Type>]]			-> DataConstants
 
   get-signatures(AS-Module)	-> Signatures
 
@@ -100,7 +100,7 @@ hiddens variables
 
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$DOS"[0-9]?		-> List[[<DataOp, ActionType>]]
-  "$DCS"[0-9]?		-> List[[<Data, Type>]]
+  "$DCS"[0-9]?		-> List[[<DataOp, Type>]]
 
   "$ARR"[0-9]?		-> AS-Requires-Rhs
   "$CH"[0-9]?		-> CHAR

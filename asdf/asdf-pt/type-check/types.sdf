@@ -5,12 +5,13 @@ imports
   basic/Errors
   type-check/pos-annotate
   type-check/subtype
+  basic/Integers
 
 exports 
 
 sorts 
 
-  ActionResult Answer
+  ActionType Answer TypeVariable ActionTypeVariable
 
 exports
 
@@ -18,34 +19,51 @@ context-free syntax
 
 %% Types
 
-  "AR" "[" NormalType"," ExceptionalType"," Answer "]" 
-				-> ActionResult
-  "nor" "=" Type		-> NormalType
-  "exc" "=" Type		-> ExceptionalType
+  "std-at"	     -> ActionType
 
-  ActionResult  		-> Type
+  ActionType "\\" SingleActionType	-> ActionType
 
- 
+  infallible(ActionType)		-> SingleActionType
+  closed(ActionType)		-> SingleActionType
+
+%% Type variables
+
+  TypeVariable		-> Type
+  ActionTypeVariable	-> ActionType
+
+  "_V"Integer		-> TypeVariable
+  "_AV"Integer		-> ActionTypeVariable
+
 %% Type operators
 
-  type-concat(Type, Type) 	-> Type
-  lub(Type, Type, SubTypes)	-> Type
+  concat(Type, Type) 	-> Type
+  lub(Type, Type, Environment)	-> Type
+  glb(Type, Type, Environment)	-> Type
 
-  Answer "answerOr" Answer 	-> Answer
+  action-type-and(ActionType, ActionType)	-> ActionType
 
-  highest-type(Type, Type, SubTypes)	-> Type
-  lowest-type(Type, Type, SubTypes)	-> Type
+  highest-type(Type, Type, Environment)	-> Type
+  lowest-type(Type, Type, Environment)	-> Type
 
 %% Error messages
 
-  Error+ 			-> ActionResult
-		
+  Error+ 			-> ActionType
+
+context-free priorities
+
+  { ActionType "&" ActionType	-> ActionType {left}}
+  >
+  { ActionType "\\" SingleActionType	-> ActionType }
+	
 hiddens 
 
 variables
 
-  "$END"[1-9]?	-> Answer
+  "$AN"[1-9]?	-> Answer
+  "$EN"[0-9]?	-> Environment
   "$TY"[1-9]?	-> Type
+  "$AT"[0-9]?	-> ActionType
+  "$SAT"[0-9]?	-> SingleActionType
   "$TY"[1-9]?"*"	-> {Type ","}*
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
 

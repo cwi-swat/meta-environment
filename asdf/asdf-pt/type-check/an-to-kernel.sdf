@@ -3,11 +3,12 @@ module type-check/an-to-kernel
 imports
 
   asdf/an
-  type-check/Layout
+  type-check/data/Tuple
 
 hiddens variables
 
   "$Y"[0-9]?             -> Yielder
+  "$AY"[0-9]?             -> AtmYielder
   "$Y"[0-9]?"+"          -> {Yielder ","}+
   "$DOP"[0-9]?           -> PrefixDataOp
   "$DOI"[0-9]?           -> InfixDataOp

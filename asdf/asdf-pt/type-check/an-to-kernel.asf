@@ -1,31 +1,31 @@
 equations
 
-[give-1] $DO := $Y
-	 ==================
-	 give $Y = give $DO 
+[skip-1] skip = result ()
+
+[give-1] give ($AY) = give $AY
 
 [give-2] give $D  = result $D
 
-[give-4] give $DOP $Y  = give $Y then give $DOP
+[give-3] give ($DO) = give $DO
 
-[give-5] give $Y1 $DOI $Y2  = (give $Y1 and give $Y2) then give $DOI
+[give-4] give ($DOP $Y)  = give ($Y) then give $DOP
 
-[give-6] give ($Y1, $Y2, $Y+)  = give $Y1 and give ($Y2, $Y+)
+[give-5] give ($Y1 $DOI $Y2)  = (give ($Y1) and give ($Y2)) then give $DOI
 
-[give-7] give ($Y1, $Y2)  = give $Y1 and give $Y2
+[give-6] give ($Y1, $Y2, $Y+)  = give ($Y1) and give ($Y2, $Y+)
 
-[give-8] give ($Y1) = give $Y1
+[give-7] give ($Y1, $Y2)  = give ($Y1) and give ($Y2)
 
-[action-1]  $A $Y  = give $Y then $A
+[action-1]  $A $AY  = give $AY then $A
 
-[check-1] check $Y = check $DO when $DO := $Y
+[check-1] check ($AY) = check $AY
 
-[check-1] check ($Y) = check $Y
+[check-2] check ($DOP $Y)  = copy and (give ($Y) then check $DOP then skip)
 
-[check-2] check $DOP $Y  = copy and (give $Y then check $DOP then skip)
-
-[give-5] check $Y1 $DOI $Y2  = copy and ((give $Y1 and give $Y2) then 
+[give-5] check ($Y1 $DOI $Y2)  = copy and ((give ($Y1) and give ($Y2)) then 
 				       check $DOI then skip)
+
+[err-1] err = throw ()
 
 [maybe-1] maybe $A = $A catch fail
 
@@ -42,7 +42,7 @@ equations
                           then give overriding
 
 
-[stored-at-1] give stored-at $Y = give $Y then inspect
+[stored-at-1] give stored-at $Y = give ($Y) then inspect
 
-[closure-1] give closure $Y = give $Y then close
+[closure-1] give closure $Y = give ($Y) then close
 

@@ -18,13 +18,13 @@ context-free syntax
 
 lexical syntax
 
-  "data"	-> AtomicType
-  "datum"	-> AtomicType
-  "integer"	-> AtomicType
-  "boolean"	-> AtomicType
-  "storable"	-> AtomicType
-  "bindable"	-> AtomicType
-  "string"	-> AtomicType
-  "cell"	-> AtomicType
-  "bindings"	-> AtomicType
-  "token"	-> AtomicType
+  "data"	-> AtomicType {prefer}
+  "datum"	-> AtomicType {prefer}
+  "integer"	-> AtomicType {prefer}
+  "boolean"	-> AtomicType {prefer}
+  "storable"	-> AtomicType {prefer}
+  "bindable"	-> AtomicType {prefer}
+  "string"	-> AtomicType {prefer}
+  "cell"	-> AtomicType {prefer}
+  "bindings"	-> AtomicType {prefer}
+  "token"	-> AtomicType {prefer}

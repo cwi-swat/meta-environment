@@ -6,74 +6,65 @@ equations
 
 [tcm-1] <sigs($AFS1*), $STS, $DOS1, $DCS> := $TI,	
 	defs($FD+) := get-function-defs($AM),
-	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*), $STS),
-	$ENV1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),
-	$LDF1 := get-dataop-sigs($ENV1),
+	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*),type-info-to-env($TI)),
+	$EN1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),
+	$LDF1 := get-dataop-sigs($EN1),
 	$LDF2 := initial-dataop-sigs,
 	$DOS2 := concat($LDF1, $LDF2),
-        $DOS3 := remove-dobble-dataops($DOS2, $STS),
-        $ENV2 := set-dataop-sigs($ENV1, $DOS3),
-	$ANS := typecheck-definitions(defs($FD+), $ENV2),
+        $DOS3 := remove-dobble-dataops($DOS2, $EN1),
+        $EN2 := set-dataop-sigs($EN1, $DOS3),
+	$ANS := typecheck-definitions(defs($FD+), $EN2),
 	$SUM := gen-summary($ANS)
 	=====================================================
 	typecheck($AM, $TI) = $SUM
 
-[tcd-1] $ANS1 := typecheck-definitions(defs($FD), $ENV),
-	$ANS2 := typecheck-definitions(defs($FD+), $ENV)
+[tcd-1] $ANS1 := typecheck-definitions(defs($FD), $EN),
+	$ANS2 := typecheck-definitions(defs($FD+), $EN)
         ====================================================
-        typecheck-definitions(defs($FD, $FD+), $ENV) = $ANS1 $ANS2
+        typecheck-definitions(defs($FD, $FD+), $EN) = $ANS1 $ANS2
 
 [tcd-3] 	
 
       $ET $LT $CO = $AC := $FD,
-      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
       $LT == get-fun-name($AFS1),
-      $ANS1 := check-typing($FD, $AFS1, $ENV),
-      $ANS2 := check-terminates($FD, $AFS1, $ENV)
+      $ANS1 := check-typing($FD, $AFS1, $EN),
+      $ANS2 := check-terminates($FD, $AFS1, $EN)
       =========================================================================
-      typecheck-definitions(defs($FD), $ENV) = $ANS1 $ANS2
+      typecheck-definitions(defs($FD), $EN) = $ANS1 $ANS2
 
 [check-typing-1]
 
-      $TY1 := get-using($AFS),
-      $TY2 := get-giving($AFS),
-      $TY3 := get-raising($AFS),
-      AR[nor=$TY4, exc=$TY5, $END] := typecheck-action($AC, $TY1, $ENV),
-      yes == subtype-of($TY4, $TY2, get-subtypes($ENV)), 
-      yes == subtype-of($TY5, $TY3, get-subtypes($ENV)),
-      $ANS := check-infallible($ET $LT $CO = $AC, $AFS, $END)
+      <$AT, $EN2> := typecheck-action($AC, $EN1),
+      yes == subtype-of(get-using($AFS), get-using($AT), $EN1), 
+      yes == subtype-of(get-giving($AT), get-giving($AFS), $EN1), 
+      yes == subtype-of(get-raising($AT), get-raising($AFS), $EN1), 
+      $ANS := check-infallible($ET $LT $CO = $AC, $AFS, failing(t: T->$AT))
       =========================================================================
-      check-typing($ET $LT $CO = $AC, $AFS, $ENV) = yes $ANS
+      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = yes $ANS
 
 [check-typing-2] 
 
-      $TY := get-using($AFS),
-      $ER := typecheck-action($AC, $TY, $ENV)
+      <$ER, $EN2> := typecheck-action($AC, $EN1)
       ========================================================================
-      check-typing($ET $LT $CO = $AC, $AFS, $ENV) = $ER
+      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = $ER
 
 [default-check-typing] 
 
-  check-typing($FD, $AFS, $ENV) = 
+  check-typing($FD, $AFS, $EN) = 
 	 error("Type error", 
 	     [localized("Error in function definitions", get-location($FD))])
 
 [tca-function] 
 
-      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
-      $LT == get-fun-name($AFS1),
-      $TY2 := get-using($AFS1),
-      $TY3 := get-giving($AFS1),
-      $TY4 := get-raising($AFS1),
-      $END := failing($AFS1),
-      $TY5 := lub($TY1, $TY2, get-subtypes($ENV))
+      sigs($AFS1*, $LT : $SO -> $AT, $AFS2*) := get-signatures($EN)
       ============================================================
-      typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, $END]
+      typecheck-action($LT $CO, $EN) = <$AT, $EN>
 
-[default-function] typecheck-action($LT $CO, $TY1, $ENV) = 
-		error("Type error", 
+[default-function] typecheck-action($LT $CO, $EN) = 
+		<error("Type error", 
           [localized("Unable to find semantic function with right type", 
-			get-location($LT $CO))])
+			get-location($LT $CO))]), $EN>
 
 [feedback-0] yes $ANS = $ANS
 

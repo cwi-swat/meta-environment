@@ -9,30 +9,33 @@ exports
 
 sorts
 
-  Environment
+  Environment Answers
 
 context-free syntax
 
-%% Signatures , Unfold type
+  <Signatures, SubTypes, DataOpSigs, DataConstants, ActionType, Integer>	-> Environment
 
-  <Signatures, SubTypes, DataOpSigs, DataConstants, ActionType>	-> Environment
-
-  type-info-to-env(TypeInfo)	     -> Environment
+  type-info-to-env(TypeInfo)	   -> Environment
 
   get-signatures(Environment)	   -> Signatures
   get-subtypes(Environment)	   -> SubTypes
   get-dataop-sigs(Environment)	   -> DataOpSigs
-  get-data-constants(Environment)	   -> DataConstants
+  get-data-constants(Environment)  -> DataConstants
   get-unfold-type(Environment)	   -> ActionType
+  get-label(Environment)	   -> Integer
 
   set-signatures(Environment, Signatures)	-> Environment
   set-subtypes(Environment, SubTypes)		-> Environment
   set-dataop-sigs(Environment, DataOpSigs)	-> Environment
   set-data-constants(Environment, DataConstants) -> Environment
   set-unfold-type(Environment, ActionType)	-> Environment
+  set-label(Environment, Integer)		-> Environment
 
   "empty-env"					-> Environment
   "initial-dataop-sigs"				-> DataOpSigs
+
+  new-type-var(Environment)		-> <TypeVariable, Environment>
+  new-action-type-var(Environment)	-> <ActionTypeVariable, Environment>
 
   get-fun-name(AS-FunctionSig)	-> Literal
   get-using(AS-FunctionSig)	-> Type
@@ -44,20 +47,20 @@ context-free syntax
   stable(AS-FunctionSig)	-> Answer
   ineffective(AS-FunctionSig)	-> Answer
   uncreative(AS-FunctionSig)	-> Answer
-  remove-using(FunResult)	-> { SingleFunResult "&" }*
-  remove-giving(FunResult)	-> { SingleFunResult "&" }*
-  remove-raising(FunResult)	-> { SingleFunResult "&" }*
-  remove-infallible(FunResult)	-> { SingleFunResult "&" }*
-  remove-terminates(FunResult)	-> { SingleFunResult "&" }*
-  remove-closed(FunResult)	-> { SingleFunResult "&" }*
-  remove-stable(FunResult)	-> { SingleFunResult "&" }*
-  remove-ineffective(FunResult)	-> { SingleFunResult "&" }*
-  remove-uncreative(FunResult)	-> { SingleFunResult "&" }*
-  remove-action(FunResult)	-> { SingleFunResult "&" }*
-  remove-dobble-sigs(Signatures, SubTypes)	-> Signatures
-  join-results({ SingleFunResult "&" }*, FunResult, SubTypes)	
-				-> { SingleFunResult "&" }+
-  remove-dobble-dataops(DataOpSigs, SubTypes)	-> DataOpSigs
+  remove-using(ActionType)	-> ActionType
+  remove-giving(ActionType)	-> ActionType
+  remove-raising(ActionType)	-> ActionType
+  remove-infallible(ActionType)	-> ActionType
+  remove-terminates(ActionType)	-> ActionType
+  remove-closed(ActionType)	-> ActionType
+  remove-stable(ActionType)	-> ActionType
+  remove-ineffective(ActionType)   -> ActionType
+  remove-uncreative(ActionType)	-> ActionType 
+  remove-action(ActionType)	-> ActionType 
+  remove-dobble-sigs(Signatures, Environment)	-> Signatures
+  join-results(ActionType, ActionType, Environment)	
+				-> ActionType 
+  remove-dobble-dataops(DataOpSigs, Environment)	-> DataOpSigs
 
   Error		-> Answer
   Answer+	-> Answers
@@ -67,15 +70,15 @@ hiddens variables
   "$SIGS"[0-9]?		-> Signatures
   "$AT"[0-9]?		-> ActionType
   "$STS"[0-9]?		-> SubTypes
+  "$EN"[0-9]?		-> Environment
   "$DOS"[0-9]?		-> DataOpSigs
-  "$DF"[0-9]?"*"	-> {<DataOp, FunResult> "," }*
+  "$DF"[0-9]?"*"	-> {<DataOp, ActionType> "," }*
   "$DO"[0-9]?		-> DataOp
   "$DCS"[0-9]?		-> DataConstants
   "$LT"[0-9]?		-> Literal
   "$SO"[0-9]?		-> Sort
-  "$FR"[0-9]?		-> FunResult
-  "$SFR"[0-9]?"+"	-> { SingleFunResult "&" }+
-  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$AT"[0-9]?		-> ActionType
   "$TY"[0-9]?		-> Type
   "$FS"[0-9]?		-> AS-FunctionSig
   "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*
+  "$N"[0-9]?		-> Integer

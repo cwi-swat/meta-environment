@@ -7,27 +7,32 @@ imports
 
 exports 
 
+context-free start-symbols
+
+  <ActionType, Environment>
+
 context-free syntax 
 
-  typecheck-action(Action, Type, Environment)	-> ActionResult {memo}
+  typecheck-action(Action, Environment)	-> <ActionType, Environment> {memo}
 
 hiddens 
 
 variables
 
-  "$TY"[1-9]?	-> Type
-  "$TY"[1-9]?"*"	-> {Type ","}*
-	
-  "$EN"		-> Environment
-  "$CH+"[1-9]?	-> CHAR+
-  "$SC"[1-9]?	-> StrCon		
-  "$A"[1-9]?	-> Action
-  "$IA"		-> InfixAction
-  "$D"[0-9]?	-> Data
-  "$ANS"[1-9]?	-> Answer
+  "$TY"[1-9]?		-> Type
+  "$AT"[1-9]?		-> ActionType
+  "$TV"[1-9]?		-> TypeVariable
+  "$ATV"[1-9]?		-> ActionTypeVariable
+  "$EN"[1-9]?		-> Environment
+  "$A"[1-9]?		-> Action
+  "$IA"			-> InfixAction
+  "$D"[1-9]?		-> Data
+  "$DO"[1-9]?		-> DataOp
   "$ER"[1-9]?"+"	-> Error+
-  "$DO"[0-9]?	-> DataOp
+  "$CH+"[1-9]?		-> CHAR+
+  "$SC"[1-9]?		-> StrCon		
+
 
 sorts
 
-  ExcepNoData SignatureEnv ActionType Type ErrorMessage	
+   ActionType Type 

@@ -2,7 +2,7 @@ equations
 
 [check-infallible-1] 
 
-  check-infallible($FD, $LT : $SO -> $SFR1* & infallible & $SFR2*, yes) = 
+  check-infallible($FD, $LT : $SO -> $AT1 & infallible & $AT2, yes) = 
       error("Type error", [localized("Semantic function can fail", 
 			get-location($FD))])
 
@@ -13,7 +13,7 @@ equations
 
   $ANS := terminates($FD, yes, get-signatures($ENV))
   ======================================================
-  check-terminates($FD, $LT : $SO -> $SFR1* & terminates & $SFR2*, $ENV) = $ANS
+  check-terminates($FD, $LT : $SO -> $AT1 & terminates & $AT2, $ENV) = $ANS
 
 [default-check-terminates-1] check-terminates($FD, $AFS, $ENV) = yes
 
@@ -56,7 +56,7 @@ equations
 
   $ANS := closed($FD, yes, get-signatures($ENV))
   ======================================================
-  check-closed($FD, $LT : $SO -> $SFR1* & closed & $SFR2*, $ENV) = $ANS
+  check-closed($FD, $LT : $SO -> $AT1 & closed & $AT2, $ENV) = $ANS
 
 [default-check-closed-1] check-closed($FD, $AFS, $ENV) = yes
 
@@ -83,7 +83,7 @@ equations
 
   $ANS := ineffective($FD, yes, get-signatures($ENV))
   ======================================================
-  check-ineffective($FD, $LT : $SO -> $SFR1* & ineffective & $SFR2*, $ENV) = $ANS
+  check-ineffective($FD, $LT : $SO -> $AT1 & ineffective & $AT2, $ENV) = $ANS
 
 [default-check-ineffective-1] check-ineffective($FD, $AFS, $ENV) = yes
 
@@ -126,7 +126,7 @@ equations
 
   $ANS := uncreative($FD, yes, get-signatures($ENV))
   ======================================================
-  check-uncreative($FD, $LT : $SO -> $SFR1* & uncreative & $SFR2*, $ENV) = $ANS
+  check-uncreative($FD, $LT : $SO -> $AT1 & uncreative & $AT2, $ENV) = $ANS
 
 [default-check-uncreative-1] check-uncreative($FD, $AFS, $ENV) = yes
 

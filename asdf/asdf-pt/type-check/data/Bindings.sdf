@@ -4,6 +4,10 @@ module type-check/data/Bindings
 
 exports
 
+sorts
+
+  PrefixDataOp Datum
+
 context-free syntax
 
   "no-bindings"		-> Datum

@@ -1,203 +1,218 @@
 equations
 
 [empty-1] empty-env = 
-	  <sigs(), [], initial-dataop-sigs, [], action[]>
+	  <sigs(), [], initial-dataop-sigs, [], Action, 0>
 
 [type-info-1] 
 
    type-info-to-env(<$SIGS, $STS, $DOS, $DCS>) = 
-				  <$SIGS, $STS, $DOS, $DCS, action[]>
+				  <$SIGS, $STS, $DOS, $DCS, Action, 0>
 
-[get-1] get-signatures(<$SIGS, $STS, $DOS, $DCS, $AT>) = $SIGS
+[get-1] get-signatures(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $SIGS
 
-[get-2] get-subtypes(<$SIGS, $STS, $DOS, $DCS, $AT>) = $STS
+[get-2] get-subtypes(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $STS
 
-[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $DCS, $AT>) = $DOS
+[get-3] get-dataop-sigs(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $DOS
 
-[get-4] get-data-constants(<$SIGS, $STS, $DOS, $DCS, $AT>) = $DCS
+[get-4] get-data-constants(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $DCS
 
-[get-5] get-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT>) = $AT
+[get-5] get-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $AT
 
-[set-1] set-signatures(<$SIGS1, $STS, $DOS, $DCS, $AT>, $SIGS2) = 
-				      <$SIGS2, $STS, $DOS, $DCS, $AT>
+[get-6] get-label(<$SIGS, $STS, $DOS, $DCS, $AT, $N>) = $N
 
-[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $DCS, $AT>, $STS2) = 
-				      <$SIGS, $STS2, $DOS, $DCS, $AT>
+[set-1] set-signatures(<$SIGS1, $STS, $DOS, $DCS, $AT, $N>, $SIGS2) = 
+				      <$SIGS2, $STS, $DOS, $DCS, $AT, $N>
 
-[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $DCS, $AT>, $DOS2) = 
-				      <$SIGS, $STS, $DOS2, $DCS, $AT>
+[set-2] set-subtypes(<$SIGS, $STS1, $DOS, $DCS, $AT, $N>, $STS2) = 
+				      <$SIGS, $STS2, $DOS, $DCS, $AT, $N>
 
-[set-4] set-data-constants(<$SIGS, $STS, $DOS, $DCS1, $AT>, $DCS2) = 
-				      <$SIGS, $STS, $DOS, $DCS2, $AT>
+[set-3] set-dataop-sigs(<$SIGS, $STS, $DOS1, $DCS, $AT, $N>, $DOS2) = 
+				      <$SIGS, $STS, $DOS2, $DCS, $AT, $N>
 
-[set-5] set-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT1>, $AT2) = 
-				      <$SIGS, $STS, $DOS, $DCS, $AT2>
+[set-4] set-data-constants(<$SIGS, $STS, $DOS, $DCS1, $AT, $N>, $DCS2) = 
+				      <$SIGS, $STS, $DOS, $DCS2, $AT, $N>
 
-[get-fun-name-1] get-fun-name($LT : $SO -> $FR) = $LT
+[set-5] set-unfold-type(<$SIGS, $STS, $DOS, $DCS, $AT1, $N>, $AT2) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT2, $N>
 
-[get-using-1] get-using($LT : $SO -> $SFR1* & using $TY & $SFR2*) = $TY
+[set-6] set-label(<$SIGS, $STS, $DOS, $DCS, $AT, $N1>, $N2) = 
+				      <$SIGS, $STS, $DOS, $DCS, $AT, $N2>
+
+[new-type-var-1] $N := get-label($EN1) + 1,
+		 $EN2 := set-label($EN1, $N)
+		 =================================
+		 new-type-var($EN1) = <_V$N, $EN2>
+
+[new-action-type-var-1] 
+
+		 $N := get-label($EN1) + 1,
+		 $EN2 := set-label($EN1, $N)
+		 ========================================
+		 new-action-type-var($EN1) = <_AV$N, $EN2>
+
+[get-fun-name-1] get-fun-name($LT : $SO -> $AT) = $LT
+
+[get-using-1] get-using($LT : $SO -> $AT1 & using $TY & $AT2) = $TY
 
 [default-get-using-1] get-using($FS) = data
 
-[get-giving-1] get-giving($LT : $SO -> $SFR1* & giving $TY & $SFR2*) = $TY
+[get-giving-1] get-giving($LT : $SO -> $AT1 & giving $TY & $AT2) = $TY
 
 [default-get-giving-1] get-giving($FS) = empty
 
-[get-raising-1] get-raising($LT : $SO -> $SFR1* & raising $TY & $SFR2*) = $TY
+[get-raising-1] get-raising($LT : $SO -> $AT1 & raising $TY & $AT2) = $TY
 
 [default-get-raising-1] get-raising($FS) = empty
 
-[failing-1] failing($LT : $SO -> $SFR1* & infallible & $SFR2*) = no
+[failing-1] failing($LT : $SO -> $AT1 & infallible & $AT2) = no
 
 [default-failing-1] failing($FS) = yes
 
-[terminates-1] terminates($LT : $SO -> $SFR1* & terminates & $SFR2*) = yes
+[terminates-1] terminates($LT : $SO -> $AT1 & terminates & $AT2) = yes
 
 [default-terminates-1] terminates($FS) = no
 
-[stable-1] stable($LT : $SO -> $SFR1* & stable & $SFR2*) = yes
+[stable-1] stable($LT : $SO -> $AT1 & stable & $AT2) = yes
 
 [default-stable-1] stable($FS) = no
 
-[closed-1] closed($LT : $SO -> $SFR1* & closed & $SFR2*) = yes
+[closed-1] closed($LT : $SO -> $AT1 & closed & $AT2) = yes
 
 [default-closed-1] closed($FS) = no
 
-[ineffective-1] ineffective($LT : $SO -> $SFR1* & ineffective & $SFR2*) = yes
+[ineffective-1] ineffective($LT : $SO -> $AT1 & ineffective & $AT2) = yes
 
 [default-ineffective-1] ineffective($FS) = no
 
-[uncreative-1] uncreative($LT : $SO -> $SFR1* & uncreative & $SFR2*) = yes
+[uncreative-1] uncreative($LT : $SO -> $AT1 & uncreative & $AT2) = yes
 
 [default-uncreative-1] uncreative($FS) = no
 
-[remove-using-1] remove-using($SFR1* & using $TY & $SFR2*) = $SFR1* & $SFR2*
+[remove-using-1] remove-using($AT1 & using $TY & $AT2) = $AT1 & $AT2
 
-[default-remove-using-1] remove-using($SFR+) = $SFR+
+[default-remove-using-1] remove-using($AT) = $AT
 
-[remove-giving-1] remove-giving($SFR1* & giving $TY & $SFR2*) = $SFR1* & $SFR2*
+[remove-giving-1] remove-giving($AT1 & giving $TY & $AT2) = $AT1 & $AT2
 
-[default-remove-giving-1] remove-giving($SFR+) = $SFR+
+[default-remove-giving-1] remove-giving($AT) = $AT
 
-[rm-raising-1] remove-raising($SFR1* & raising $TY & $SFR2*) = $SFR1* & $SFR2*
+[rm-raising-1] remove-raising($AT1 & raising $TY & $AT2) = $AT1 & $AT2
 
-[default-remove-raising-1] remove-raising($SFR+) = $SFR+
+[default-remove-raising-1] remove-raising($AT) = $AT
 
-[rm-infallible-1] remove-infallible($SFR1* & infallible & $SFR2*) = $SFR1* & $SFR2*
+[rm-infallible-1] remove-infallible($AT1 & infallible & $AT2) = $AT1 & $AT2
 
-[default-remove-infallible-1] remove-infallible($SFR+) = $SFR+
+[default-remove-infallible-1] remove-infallible($AT) = $AT
 
-[rm-terminates-1] remove-terminates($SFR1* & terminates & $SFR2*) = $SFR1* & $SFR2*
+[rm-terminates-1] remove-terminates($AT1 & terminates & $AT2) = $AT1 & $AT2
 
-[default-remove-terminates-1] remove-terminates($SFR+) = $SFR+
+[default-remove-terminates-1] remove-terminates($AT) = $AT
 
-[rm-closed-1] remove-closed($SFR1* & closed & $SFR2*) = $SFR1* & $SFR2*
+[rm-closed-1] remove-closed($AT1 & closed & $AT2) = $AT1 & $AT2
 
-[default-remove-closed-1] remove-closed($SFR+) = $SFR+
+[default-remove-closed-1] remove-closed($AT) = $AT
 
-[rm-stable-1] remove-stable($SFR1* & stable & $SFR2*) = $SFR1* & $SFR2*
+[rm-stable-1] remove-stable($AT1 & stable & $AT2) = $AT1 & $AT2
 
-[default-remove-stable-1] remove-stable($SFR+) = $SFR+
+[default-remove-stable-1] remove-stable($AT) = $AT
 
-[rm-ineffective-1] remove-ineffective($SFR1* & ineffective & $SFR2*) = $SFR1* & $SFR2*
+[rm-ineffective-1] remove-ineffective($AT1 & ineffective & $AT2) = $AT1 & $AT2
 
-[default-remove-ineffective-1] remove-ineffective($SFR+) = $SFR+
+[default-remove-ineffective-1] remove-ineffective($AT) = $AT
 
-[rm-uncreative-1] remove-uncreative($SFR1* & uncreative & $SFR2*) = $SFR1* & $SFR2*
+[rm-uncreative-1] remove-uncreative($AT1 & uncreative & $AT2) = $AT1 & $AT2
 
-[default-remove-uncreative-1] remove-uncreative($SFR+) = $SFR+
+[default-remove-uncreative-1] remove-uncreative($AT) = $AT
 
-[rm-action-1] remove-action($SFR1* & Action & $SFR2*) = $SFR1* & $SFR2*
+[rm-action-1] remove-action($AT1 & Action & $AT2) = $AT1 & $AT2
 
-[default-remove-action-1] remove-action($SFR+) = $SFR+
+[default-remove-action-1] remove-action($AT) = $AT
 
 
 [rm-dobble-sigs-1] 
 
-    $LT : $SO -> $FR1 := $FS1,
-    $LT : $SO -> $FR2 := $FS2,
-    $SFR1+ := $FR1,
-    $FR3 := join-results($SFR1+, $FR2, $STS),
-    $FS3 := $LT : $SO -> $FR3
+    $LT : $SO -> $AT1 := $FS1,
+    $LT : $SO -> $AT2 := $FS2,
+    $AT3 := join-results($AT1, $AT2, $EN),
+    $FS3 := $LT : $SO -> $AT3
     =======================================================================
-    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*), $STS) = 
-                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*), $STS)
+    remove-dobble-sigs(sigs($FS1*, $FS1, $FS2*, $FS2, $FS3*), $EN) = 
+                    remove-dobble-sigs(sigs($FS1*, $FS3, $FS2*, $FS3*), $EN)
 
 [default-rm-dobble-sigs-2] 
 
-    remove-dobble-sigs(sigs($FS1*), $STS) = sigs($FS1*)
+    remove-dobble-sigs(sigs($FS1*), $EN) = sigs($FS1*)
 
 [join-res-1] 
 	     
-    $TY2 := get-using(test : Test -> $FR),
-    $TY3 := lowest-type($TY1, $TY2, $STS)
+    $TY2 := get-using(test : Test -> $AT),
+    $TY3 := lowest-type($TY1, $TY2, $EN)
     ==================================================================
-    join-results($SFR1* & using $TY1 & $SFR2*, $FR, $STS) = 
-    using $TY3 & join-results($SFR1* & $SFR2*, Action & remove-using($FR),$STS)
+    join-results($AT1 & using $TY1 & $AT2, $AT, $EN) = 
+    using $TY3 & join-results($AT1 & $AT2, Action & remove-using($AT),$EN)
 
 [join-res-2] 
 	     
-    $TY2 := get-giving(test : Test -> $FR),
-    $TY3 := highest-type($TY1, $TY2, $STS)
+    $TY2 := get-giving(test : Test -> $AT),
+    $TY3 := highest-type($TY1, $TY2, $EN)
     ==================================================================
-    join-results($SFR1* & giving $TY1 & $SFR2*, $FR, $STS) = giving $TY3 & 
-	     join-results($SFR1* & $SFR2*, Action & remove-giving($FR), $STS)
+    join-results($AT1 & giving $TY1 & $AT2, $AT, $EN) = giving $TY3 & 
+	     join-results($AT1 & $AT2, Action & remove-giving($AT), $EN)
 
 [join-res-3] 
 	     
-    $TY2 := get-raising(test : Test -> $FR),
-    $TY3 := highest-type($TY1, $TY2, $STS)
+    $TY2 := get-raising(test : Test -> $AT),
+    $TY3 := highest-type($TY1, $TY2, $EN)
     ==================================================================
-    join-results($SFR1* & raising $TY1 & $SFR2*, $FR, $STS) = raising $TY3 & 
-	      join-results($SFR1* & $SFR2*, Action & remove-raising($FR), $STS)
+    join-results($AT1 & raising $TY1 & $AT2, $AT, $EN) = raising $TY3 & 
+	      join-results($AT1 & $AT2, Action & remove-raising($AT), $EN)
 
 [join-res-3] 
 	     
-    join-results($SFR1* & infallible & $SFR2*, $FR, $STS) = infallible & 
-         join-results($SFR1* & $SFR2*, Action & remove-infallible($FR),$STS)
+    join-results($AT1 & infallible & $AT2, $AT, $EN) = infallible & 
+         join-results($AT1 & $AT2, Action & remove-infallible($AT),$EN)
 
 [join-res-4] 
 	     
-    join-results($SFR1* & terminates & $SFR2*, $FR, $STS) = terminates & 
-         join-results($SFR1* & $SFR2*, Action & remove-infallible($FR),$STS)
+    join-results($AT1 & terminates & $AT2, $AT, $EN) = terminates & 
+         join-results($AT1 & $AT2, Action & remove-infallible($AT),$EN)
 
 [join-res-4] 
 	     
-    join-results($SFR1* & closed & $SFR2*, $FR, $STS) = closed & 
-         join-results($SFR1* & $SFR2*, Action & remove-closed($FR),$STS)
+    join-results($AT1 & closed & $AT2, $AT, $EN) = closed & 
+         join-results($AT1 & $AT2, Action & remove-closed($AT),$EN)
 
 [join-res-5] 
 	     
-    join-results($SFR1* & stable & $SFR2*, $FR, $STS) = stable & 
-         join-results($SFR1* & $SFR2*, Action & remove-stable($FR),$STS)
+    join-results($AT1 & stable & $AT2, $AT, $EN) = stable & 
+         join-results($AT1 & $AT2, Action & remove-stable($AT),$EN)
 
 [join-res-6] 
 	     
-    join-results($SFR1* & ineffective & $SFR2*, $FR, $STS) = ineffective & 
-         join-results($SFR1* & $SFR2*, Action & remove-ineffective($FR),$STS)
+    join-results($AT1 & ineffective & $AT2, $AT, $EN) = ineffective & 
+         join-results($AT1 & $AT2, Action & remove-ineffective($AT),$EN)
 
 [join-res-6] 
 	     
-    join-results($SFR1* & uncreative & $SFR2*, $FR, $STS) = uncreative & 
-         join-results($SFR1* & $SFR2*, Action & remove-uncreative($FR),$STS)
+    join-results($AT1 & uncreative & $AT2, $AT, $EN) = uncreative & 
+         join-results($AT1 & $AT2, Action & remove-uncreative($AT),$EN)
 
 [join-res-7] 
 	     
-    join-results(Action & $SFR1*, $FR, $STS) = 
-            Action & join-results($SFR1*, Action & remove-action($FR), $STS)
+    join-results(Action & $AT1, $AT, $EN) = 
+            Action & join-results($AT1, Action & remove-action($AT), $EN)
 
 [join-res-8]
 
-    join-results(, $SFR+, $STS) = $SFR+
+    join-results(Action, $AT, $EN) = $AT
 
 [remove-dobble-dataops-1] 
 
-  $SFR1+ := $FR1,
-  $FR3 := join-results($SFR1+, $FR2, $STS)
+  $AT3 := join-results($AT1, $AT2, $EN)
   =============================================================================
-  remove-dobble-dataops([$DF1*,<$DO, $FR1>, $DF2*, <$DO, $FR2>, $DF3*], $STS) =
-              remove-dobble-dataops([$DF1*,<$DO, $FR3>, $DF2*, $DF3*], $STS)
+  remove-dobble-dataops([$DF1*,<$DO, $AT1>, $DF2*, <$DO, $AT2>, $DF3*], $EN) =
+              remove-dobble-dataops([$DF1*,<$DO, $AT3>, $DF2*, $DF3*], $EN)
 
 [default-remove-dobble-dataops-1] 
 
-  remove-dobble-dataops($DOS, $STS) = $DOS
+  remove-dobble-dataops($DOS, $EN) = $DOS

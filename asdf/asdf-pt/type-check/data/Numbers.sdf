@@ -6,7 +6,7 @@ exports
 
 sorts
 
-  Number
+  Number InfixDataOp
 
 context-free syntax
 
