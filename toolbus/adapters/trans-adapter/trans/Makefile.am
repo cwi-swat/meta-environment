@@ -14,7 +14,7 @@ java_JAVA =  \
 	DelegateConnection.java \
 	DelegateTif.java \
 	DelegateTool.java \
-	MaskeradeBridge.java \
-	MaskeradeConnection.java \
-	MaskeradeTif.java \
-	MaskeradeTool.java
+	MasqueradeBridge.java \
+	MasqueradeConnection.java \
+	MasqueradeTif.java \
+	MasqueradeTool.java
