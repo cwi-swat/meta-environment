@@ -153,9 +153,14 @@ PT_Tree ASC_transformTraversalFunction(PT_Tree tree)
   if (type == TRANSFORMER) {
     prod = PT_setProductionRhs(prod, PT_makeSymbolSort(GEN_TRAVERSED_SORT));
   }
+  else if (type == COMBINATION) {
+    PT_Symbol rhs = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+    PT_Symbol accu = PT_getSymbolRhs(rhs);
+    prod = PT_setProductionRhs(prod, PT_makeSymbolCf(
+                                     PT_makeSymbolPair(
+                                     PT_makeSymbolSort(GEN_TRAVERSED_SORT),
+                                     accu)));
 
-  if (type == COMBINATION) {
-    ATerror("Combination not supported yet\n");
   }
   return PT_setTreeProd(tree, prod);
 }

@@ -75,8 +75,10 @@ extern Symbol record_sym;
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
 #define remove_list(t) (ATgetArgument((ATermAppl) t,0))
 #define parse_sort(s)  (ATparse(s))
-#define tuple_first(t) (ATgetArgument((ATermAppl) t,0))
-#define tuple_second(t) (ATgetArgument((ATermAppl) t,1))
+
+#define accutrafo_tuple_first(t)    (ATgetArgument((ATermAppl) t,0))
+#define accutrafo_tuple_second(t)   (ATgetArgument((ATermAppl) t,1))
+#define make_accutrafo_tuple(t0,t1) ((ATerm)(ATmakeAppl2(tuplesym,t0,t1)))
 /*}}}  */
 
   /*{{{  memo functionality */
@@ -264,7 +266,7 @@ extern Symbol sym_quote7;
 extern Symbol make_listsym;
 extern Symbol concsym;
 extern Symbol conssym;
-
+extern Symbol tuplesym;
 
 extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
@@ -274,6 +276,10 @@ extern ATerm unquote(ATerm t);
 extern ATerm call_kids_trafo(funcptr trav, ATerm arg, ATermList extra_args);
 extern ATerm call_kids_accu(funcptr trav, ATerm arg, ATerm accu, 
 			    ATermList extra_args);
+extern ATerm call_kids_accutrafo(funcptr trav, ATerm arg, ATerm accu, 
+				 ATermList extra_args);
+
+extern ATerm correct_tuple(ATerm arg, ATerm rhs);
 
 int asc_support_main(int argc, char *argv[],
                      void (*register_all)(void),

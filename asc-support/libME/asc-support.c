@@ -65,6 +65,7 @@ Symbol sym_quote5;
 Symbol sym_quote6;
 Symbol sym_quote7;
 
+Symbol tuplesym;
 Symbol make_listsym;
 Symbol concsym;    
 
@@ -146,6 +147,7 @@ ATerm innermost(PT_Tree tree)
       result = innermost(PT_getArgsArgumentAt(args, 2));    
     }
     else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
+      PT_Production origProd = PT_getTreeProd(tree);
       PT_Production prod;
       PT_Args args;
 
@@ -154,6 +156,10 @@ ATerm innermost(PT_Tree tree)
       args = PT_getTreeArgs(tree);
 
       result = call(prod, innermost_list(args));
+
+      if (ATgetAFun((ATermAppl) result) == tuplesym) {
+       result = correct_tuple(result, (ATerm) PT_getProductionRhs(origProd));
+      }       
     }
     else {
       result = call(prod, innermost_list(args));
@@ -584,8 +590,7 @@ static ATerm call_kids_accu_list(funcptr trav, ATermList args,
 /*}}}  */
 /*{{{  static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args,  */
 
-static ATerm call_kids_accutrafo_list(funcptr trav, Symbol tuplesym,
-				      ATermList args, ATerm accu, 
+static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, ATerm accu, 
 				      ATermList extra_args)
 {
   ATerm tuple;
@@ -682,8 +687,8 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 /*}}}  */
 /*{{{  ATerm call_kids_accutrafo(funcptr trav, Symbol tuple, ATerm arg0, ATerm arg1,  */
 
-ATerm call_kids_accutrafo(funcptr trav, Symbol tuplesym, ATerm arg0,
-			  ATerm arg1, ATermList extra_args)
+ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, 
+			  ATermList extra_args)
 {
   int type = ATgetType(arg0);
 
@@ -719,11 +724,10 @@ ATerm call_kids_accutrafo(funcptr trav, Symbol tuplesym, ATerm arg0,
     }
   }
   else if (type == AT_LIST) {
-     return call_kids_accutrafo_list(trav, tuplesym, (ATermList) arg0, arg1, 
-				     extra_args);
+     return call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
   }
 
-  return (ATerm) ATmakeAppl2(tuplesym, arg0,arg1);
+  return (ATerm) ATmakeAppl2(tuplesym , arg0,arg1);
 }
 
 /*}}}  */
@@ -794,6 +798,7 @@ void ASC_initRunTime(int tableSize)
   ATprotectSymbol(sym_quote7);
   make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
   ATprotectSymbol(make_listsym);
+  tuplesym = ATmakeSymbol("tuple", 2, ATfalse);
 
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
@@ -846,6 +851,46 @@ ATerm get_sort(ATerm tree)
   }
 
   return (ATerm) ATempty;
+}
+
+/*}}}  */
+
+/*{{{  ATerm correct_tuple(ATerm arg, ATerm rhs) */
+
+ATerm correct_tuple(ATerm arg, ATerm rhs)
+{
+  PT_Symbol rhsSymbol = PT_SymbolFromTerm(rhs);
+  PT_Symbol left;
+  PT_Symbol right;
+  PT_Symbols lhs;
+  PT_Symbol l = PT_makeSymbolCf(PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Production prod;
+  ATermList args = ATgetArguments((ATermAppl) arg);
+
+  assert(PT_isSymbolCf(rhsSymbol) && "Only context-free tuples allowed");
+
+  rhsSymbol = PT_getSymbolSymbol(rhsSymbol);
+
+  assert(PT_isSymbolPair(rhsSymbol) && "expect pair symbol in accu,trafo");
+
+  left = PT_getSymbolLhs(rhsSymbol);
+  right = PT_getSymbolRhs(rhsSymbol);
+
+  lhs = PT_makeSymbolsList(PT_makeSymbolLit("<"),
+        PT_makeSymbolsList(l,
+        PT_makeSymbolsList(PT_makeSymbolCf(left),
+        PT_makeSymbolsList(l,
+        PT_makeSymbolsList(PT_makeSymbolLit(","),
+        PT_makeSymbolsList(l,
+        PT_makeSymbolsList(PT_makeSymbolCf(right),
+        PT_makeSymbolsList(l,
+        PT_makeSymbolsList(PT_makeSymbolLit(">"),
+			   PT_makeSymbolsEmpty())))))))));
+
+  prod = PT_makeProductionDefault(lhs,PT_makeSymbolCf(rhsSymbol),
+				  PT_makeAttributesNoAttrs());
+	  
+  return call(prod, args);
 }
 
 /*}}}  */
