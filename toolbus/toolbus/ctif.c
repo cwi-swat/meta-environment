@@ -576,11 +576,13 @@ void gen_test_in_sign(char *the_tool_name, char *tmp)
   fprintf(c_handler, "\t  }\n");
   fprintf(c_handler, "\t  return %s(reqs);\n", firstel);
   fprintf(c_handler, "\t  found:;\n");
-  if(backdoor)
-    if(multitools)
+  if(backdoor) {
+    if(multitools) {
       fprintf(c_handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", the_tool_name, firstel);
-    else
+    } else {
       fprintf(c_handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", the_tool_name, firstel);
+    }
+  }
   fprintf(c_handler, "\t}\n");
   fprintf(c_handler, "\treturn NULL;\n");
   fprintf(c_handler, "}\n");

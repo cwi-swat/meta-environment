@@ -41,7 +41,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-extern int mk_server_ports(TBbool);
 extern int accept_client(TBbool);
 extern TBbool parse_script(char *);
 

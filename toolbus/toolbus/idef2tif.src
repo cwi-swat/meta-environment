@@ -95,7 +95,7 @@ while(<IDEF>) {
 close(IDEF);
 
 if ($pc != 1) {
-  print STDERR "Not exactly 1 process definition in $fullname\n";
+  print STDERR "Not exactly 1 process definition in $fullname ($pc)\n";
   print STDERR "Please make sure your idef file has exactly 1 process definition.\n";
   print STDERR "Abort.";
   exit 2;

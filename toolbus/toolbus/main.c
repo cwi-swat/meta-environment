@@ -131,7 +131,6 @@ int main(int argc, char *argv[])
 
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
-  extern int mk_server_ports(TBbool);
   extern void chld_handler(int);
 
 
@@ -184,6 +183,9 @@ int main(int argc, char *argv[])
     } else if(streq(argv[i],"-TB_PORT")){
       i++;
       WellKnownSocketPort = atoi(argv[i]);
+    } else if(streq(argv[i], "-TB_USE_SOCKETS")) {
+      WellKnownLocalSocket  = atoi(argv[++i]);
+      WellKnownGlobalSocket = atoi(argv[++i]);
     } else if(streq(argv[i], "-gentifs")){
       gen_tifs = TBtrue;
     } else if((argv[i][0] == '-') && ((argv[i][1] == 'I') || (argv[i][1] == 'D'))){
@@ -222,8 +224,11 @@ int main(int argc, char *argv[])
       expand_all_calls();
       if(gen_tifs)
 	exit(0);
-      if(mk_server_ports(local_ports) < 0)
-	err_sys_fatal("Cannot create input/output ports of ToolBus");
+      if (WellKnownGlobalSocket < 0 || WellKnownLocalSocket < 0) {
+	if(mk_server_ports(local_ports) < 0) {
+	  err_sys_fatal("Cannot create input/output ports of ToolBus");
+	}
+      }
 
       create_toolbus(monitor);
       if (TBverbose) TBmsg("ToolBus created\n");
