@@ -44,17 +44,17 @@ imports_mept_LDADD      = imports-mept.o \
 			-L$(PT_SUPPORT)/lib -lmept \
 			-L$(ATERM)/lib -lATerm
 
-imports.o: imports.c
-	${COMPILE} -DASFIX1 -c imports.c -o imports.o
+imports.o: ${srcdir}/imports.c
+	${COMPILE} -DASFIX1 -c $< -o $@
 
-imports-mept.o: imports.c
-	${COMPILE} -DMEPT -c imports.c -o imports-mept.o
+imports-mept.o: ${srcdir}/imports.c
+	${COMPILE} -DMEPT -c $< -o $@
 
-meta-utils-mept.o: meta-utils.c
-	${COMPILE} -DMEPT -c meta-utils.c -o meta-utils-mept.o
+meta-utils-mept.o: ${srcdir}/meta-utils.c
+	${COMPILE} -DMEPT -c $< -o $@
 
-module-utils-mept.o: module-utils.c
-	${COMPILE} -DMEPT -c module-utils.c -o module-utils-mept.o
+module-utils-mept.o: ${srcdir}/module-utils.c
+	${COMPILE} -DMEPT -c $< -o $@
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
