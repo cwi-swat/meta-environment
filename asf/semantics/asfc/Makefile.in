@@ -107,13 +107,13 @@ install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
-#	@for DIR in $(SUBDIRS); \
-#	do \
-#	   echo Make $@ in $$DIR; \
-#	   cd $$DIR; \
-#	   $(MAKE) $@; \
-#	   cd ..; \
-#	done
+	@for DIR in $(SUBDIRS); \
+	do \
+	   echo Make $@ in $$DIR; \
+	   cd $$DIR; \
+	   $(MAKE) $@; \
+	   cd ..; \
+	done
 
 
 # uninstall target (remove all files installed by 'install' target)

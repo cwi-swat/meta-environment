@@ -34,11 +34,11 @@
 # PROFILE_LD_FLAGS: optional flags for linking profiled object code
 #     PROFILE_COMP: compiler to use
 
-      DEBUG_LIBS="-lasfix-dbg -laterm-dbg"
+      DEBUG_LIBS="-lsupport-dbg -lATB-dbg -lAsFix-dbg -lATerm-dbg"
   DEBUG_CC_FLAGS=-g
   DEBUG_LD_FLAGS=
       DEBUG_COMP=gcc
-    PROFILE_LIBS="-lasfix-prof -laterm-prof"
+    PROFILE_LIBS="-lsupport-prof -lATB-prof -lAsFix-prof -lATerm-prof"
 PROFILE_CC_FLAGS=-pg
 PROFILE_LD_FLAGS=-pg
     PROFILE_COMP=gcc
@@ -100,7 +100,7 @@ PROFILE-COMP     = ${PROFILE_COMP}
 
 # There should be no need to change anything below
 
-prefix          = @prefix@ 
+prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir          = $(exec_prefix)/bin
 libdir          = $(exec_prefix)/lib
@@ -121,9 +121,9 @@ ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
 XINCLUDES       = -I$(ATERM)/include -I$(includedir)
-XLIBS           = -L$(prefix)/lib -L$(ATERM)/lib -lsupport -ltoolbus\\
+XLIBS           = -L$(prefix)/lib -L$(ATERM)/lib \\
                   $(VAR-LIBS) $(SOCKLIBS) $(GELLIBS)
-VAR-LIBS        = -lasfix -laterm
+VAR-LIBS        = -lsupport-cc -lATB-cc -lAsFix-cc -lATerm-cc
 VAR-FLAGS       = @CFLAGS@ $(XCFLAGS)
 
 SRCS=\\
@@ -169,7 +169,7 @@ init.c:
 	for file in \$\${NAMES}; do \\
 		echo "  resolve_\$\$file();"  ;\\
 	done ;\\
-	echo "}" ) > \$@
+	echo "}" ;\\
 	echo "void init_all() {" ;\\
 	for file in \$\${NAMES}; do \\
 		echo "  init_\$\$file();"  ;\\
