@@ -283,6 +283,7 @@ static ATerm implodeSeq(PT_Tree tree)
 static ATerm implodeOpt(PT_Tree tree)
 {
   PT_Args args = PT_getTreeArgs(tree);
+  ATerm child;
 
   if (!remove_layout && PT_isTreeLayout(tree)) {
     return implodeLayout(tree);
@@ -292,7 +293,14 @@ static ATerm implodeOpt(PT_Tree tree)
     return ATparse("None");
   }
 
-  return ATmake("Some(<term>)", implodeTerm(PT_getArgsHead(args)));
+  child = implodeTerm(PT_getArgsHead(args));
+
+  if (child != NULL) {
+    return ATmake("Some(<term>)", implodeTerm(PT_getArgsHead(args)));
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
@@ -316,7 +324,7 @@ static ATerm implodeApplication(PT_Tree tree)
   PT_Production prod = PT_getTreeProd(tree);
   PT_Args       args = PT_getTreeArgs(tree);
   ATermList     newList;
-   
+
   if (PT_isOptLayoutProd(prod)) {
     return implodeLayout(tree);
   }
@@ -343,7 +351,6 @@ static ATerm implodeTerm(PT_Tree tree)
   ATerm result = NULL;
   ATerm annos = ATgetAnnotations((ATerm)tree);
 
-  
   if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
     result = ATmake("amb(<list>)", implodeArgs(args));
@@ -416,11 +423,17 @@ ATerm PT_implodeParseTree(PT_ParseTree tree,
 
     atermTree = implodeTerm(newTree);
 
-    if (remove_parsetree) {
-      return atermTree;
+    if (atermTree != NULL) {
+      if (remove_parsetree) {
+	return atermTree;
+      }
+      else {
+	return ATmake("parsetree(<term>,<int>)", atermTree, ambs);
+      }
     }
     else {
-      return ATmake("parsetree(<term>,<int>)", atermTree, ambs);
+      ATerror("WARNING: No tree is left after implosion.");
+      return NULL;
     }
   }
 
