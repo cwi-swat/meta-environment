@@ -639,12 +639,53 @@ Given the following use cases of our \emph{address book service}:
   \item[delete] an existing entry from the database.
 \end{description}
 
-We can easily describe the desired behaviour of these use cases
-in a ToolBus script:
+The desired behaviour of these use cases can now easily be described in
+a number of ToolBus processes: one for each use case and one to describe
+their interaction and the startup procedure of the service:
+
+\begin{verbatim}
+process ADDRESS-BOOK is
+let ABTool : address-book
+in
+  execute(address-book, ABTool?) .
+  (
+    CREATE(ABTool) + UPDATE(ABTool) + DELETE(ABTool)
+  ) * delta
+endlet
+\end{verbatim}
+
+The process \texttt{ADDRESS-BOOK} tells the ToolBus that an instance
+of our \texttt{address-book} tool is to be executed, followed by a
+loop which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE}
+or \texttt{DELETE} processes each iteration. This construction, using
+the \texttt{+} operator ensures that at this level, the sub-processes
+can be regarded atomically: e.g. no \texttt{DELETE} will happen during
+an \texttt{UPDATE}.
+
+The operating system level details of starting the tool are defined in
+a separate section:
+\begin{verbatim}
+  tool address-book is {
+    command = "java-adapter -class TBAddressBookService"
+  }
+\end{verbatim}
+
+In this case, the we tell the ToolBus that our tool is written
+in Java, and that the main class to be started is called
+\texttt{TBAddressBookService}.
 
 \begin{footnotesize}
-\verbatiminput{address-book.tb}
+process CREATE(AB : address-book) is
+let AID : int in
+  rec-msg(create-address) .
+  snd-eval(AB, create-entry) .
+  rec-value(AB, new-entry(AID?)) .
+  snd-msg(address-created(AID))
+endlet
 \end{footnotesize}
+
+\texttt{TODO: move to appendix? remove?}
+\verbatiminput{address-book.tb}
 
 \section{Concluding Remarks}
 

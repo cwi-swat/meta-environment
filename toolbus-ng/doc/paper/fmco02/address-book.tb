@@ -1,14 +1,12 @@
-process CREATE-ADDRESS(AB : address-book) is
-let
-  AID : int
-in
+process CREATE(AB : address-book) is
+let AID : int in
   rec-msg(create-address) .
   snd-eval(AB, create-entry) .
   rec-value(AB, new-entry(AID?)) .
   snd-msg(address-created(AID))
 endlet
 
-process UPDATE-ADDRESS(AB : address-book) is
+process UPDATE(AB : address-book) is
 let
   AID : int,
   Name : str,
@@ -24,7 +22,7 @@ in
   rec-msg(update-address-done(AID))
 endlet
 
-process DELETE-ADDRESS(AB : address-book) is
+process DELETE(AB : address-book) is
 let
   Name : str,
   AID : int
@@ -35,12 +33,10 @@ in
 endlet
 
 process ADDRESS-BOOK is
-let
-  AB : address-book
+let AB : address-book
 in
   execute(address-book, AB?) .
-  ( CREATE-ADDRESS(AB) + UPDATE-ADDRESS(AB) + DELETE-ADDRESS(AB)
-  ) * delta
+  ( CREATE(AB) + UPDATE(AB) + DELETE(AB) ) * delta
 endlet
 
 tool address-book is { command = "java-adapter -class TBAddressBookService" }
