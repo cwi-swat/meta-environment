@@ -1,5 +1,10 @@
 
 
+Fri Feb 18 10:28:03 CET 2005 <jurgenv@cwi.nl>
+ * When called from  the Meta-Environment, the compiler always produces a 
+   binary that maps source-to-source by parsing and unparsing the input 
+   and output
+
 Thu Feb 17 16:08:51 CET 2005 <jurgenv@cwi.nl>
  * Added commandline option to asfc that activates parsing of
    input file with an available parsetable before rewriting. Now
