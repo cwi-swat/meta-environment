@@ -33,4 +33,6 @@ logger.tif.c logger.tif.h: tblog-interface.tifs
 
 tblog-interface.tifs: tblog-interface.tb
 	$(TOOLBUS) -gentifs $<
-	cp $@ ${top_srcdir}/aterm
+	@if [ "a${VPATH}" != "a" ]; then \
+		mv ${srcdir}/tblog-interface.tifs $@ ;\
+	fi
