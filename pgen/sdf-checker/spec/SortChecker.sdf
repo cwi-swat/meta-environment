@@ -46,6 +46,32 @@ hiddens
                         SymbolsSet)  	       -> Symbols-Msg-Tuple {traversal(accu, top-down)}
 
   context-free syntax
+    get-exported-aliased-symbols(Module, 
+                                 Symbols-Msg-Tuple, 
+                                 ModuleId, 
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+    get-exported-aliased-symbols(Section, 
+                                 Symbols-Msg-Tuple, 
+                                 ModuleId, 
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+    get-hidden-aliased-symbols(Module, 
+                               Symbols-Msg-Tuple, 
+                               ModuleId, 
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+    get-hidden-aliased-symbols(Section, 
+                               Symbols-Msg-Tuple, 
+                               ModuleId, 
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+    get-aliased-symbols(Grammar, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId, 
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+    get-aliased-symbols(Alias, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId, 
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, top-down)}
+
+  context-free syntax
     get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
     get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
@@ -64,14 +90,16 @@ hiddens
     "$Module*"[0-9]*    -> Module*
     "$ModuleId"[0-9]*   -> ModuleId
 
-    "$Sort"[0-9]*      	-> Sort
-    "$Symbol*"[0-9]*    -> Symbol*
-    "$Symbol,*"[0-9]*   -> {Symbol ","}*
-    "$Symbol"[0-9]*     -> Symbol
-    "$Symbols"[0-9]*    -> Symbols
-    "SymbolsSet"[0-9]*  -> SymbolsSet
-    "SymbolsMsgs"[0-9]* -> Symbols-Msg-Tuple
-    "$Literal"[0-9]*    -> Literal
+    "$Sort"[0-9]*           -> Sort
+    "$Symbol*"[0-9]*        -> Symbol*
+    "DeclaredSymbol*"[0-9]* -> Symbol*
+    "AliasedSymbol*"[0-9]*  -> Symbol*
+    "$Symbol,*"[0-9]*       -> {Symbol ","}*
+    "$Symbol"[0-9]*         -> Symbol
+    "$Symbols"[0-9]*        -> Symbols
+    "SymbolsSet"[0-9]*      -> SymbolsSet
+    "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
+    "$Literal"[0-9]*        -> Literal
 
     "Import*"[0-9]*         -> Import*
     "ImportsSet"[0-9]*      -> ImportsSet

@@ -18,7 +18,8 @@ exports
     put-messages(Messages, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
-    "[" SymbolsSet "," ProductionsSet "," ConstructorSet "]" -> Module-Info
+    "[" SymbolsSet "," SymbolsSet "," 
+        ProductionsSet "," ConstructorSet "]" -> Module-Info
 
   context-free syntax
     "[" ModuleId "," Bool "," Module-Info "]" -> Module-Info-Entry
@@ -28,14 +29,21 @@ exports
     module-is-checked(ModuleId, Module-Info-Table)    -> Bool
 
   context-free syntax
-    get-declared-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
-    put-symbol-info(ModuleId,
-                    SymbolsSet, 
-                    Module-Info-Table)                  -> Module-Info-Table
+    get-declared-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    put-declared-symbols-info(ModuleId,
+                              SymbolsSet, 
+                              Module-Info-Table)        -> Module-Info-Table
     get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
 
   context-free syntax
-    get-defined-productions(ModuleId, Module-Info-Table) -> ProductionsSet
+    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    put-aliased-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)        -> Module-Info-Table
+    get-aliased-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
+
+  context-free syntax
+    get-defined-productions(ModuleId, Module-Info-Table)  -> ProductionsSet
     put-production-info(ModuleId,
                         ProductionsSet, 
                         Module-Info-Table)                 -> Module-Info-Table

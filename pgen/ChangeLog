@@ -1,5 +1,8 @@
 $Id$
 
+2002/03/52 (vandenbr@cwi.nl)
+ * Improved the handling of aliased symbols.
+
 2002/03/22 (vandenbr@cwi.nl)
  * Added a simple check in the completeness of the definition.
  * Moved the Sdf part of the sdf-checker from meta to pgen.

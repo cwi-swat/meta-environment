@@ -24,21 +24,35 @@ equations
             =================================================================
             check-module-constructors(Module, InfoMsgTuple1) = InfoMsgTuple3
 
-  [gcsp-1'1] get-constructor-symbol-pairs(Symbol* -> Symbol Attrs,
+  [gcsp-1'1] get-constructor-symbol-pairs(context-free priorities Group+, 
+                                          ConsMsgTuple,
+                                          $ModuleId) = 
+               check-constructor-in-priorities(Group+, 
+                                               ConsMsgTuple,
+                                               $ModuleId)
+
+  [gcsp-1'2] get-constructor-symbol-pairs(priorities Group+, 
+                                          ConsMsgTuple,
+                                          $ModuleId) = 
+               check-constructor-in-priorities(Group+, 
+                                               ConsMsgTuple,
+                                               $ModuleId)
+
+  [gcsp-1'3] get-constructor-symbol-pairs(Symbol* -> Symbol Attrs,
                                           ConsMsgTuple,
                                           $ModuleId) =
                get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
                                             $ModuleId, Symbol,
                                             Symbol* -> Symbol Attrs)
 
-  [gcsp-1'1] get-constructor-symbol-pairs($Literal(Symbol,*) -> Symbol Attrs,
+  [gcsp-1'4] get-constructor-symbol-pairs($Literal(Symbol,*) -> Symbol Attrs,
                                           ConsMsgTuple,
                                           $ModuleId) =
                get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
                                             $ModuleId, Symbol,
                                             $Literal(Symbol,*) -> Symbol Attrs)
 
-  [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = true
+  [gcsp-2'1] contains(Symbol, $Literal, ConstructorSet) = true
              =================================================
              get-constructor-symbol-pairs(cons( $Literal ), 
                                           [ConstructorSet, Msgs], 
@@ -46,9 +60,38 @@ equations
                [ConstructorSet, 
 Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
 
-  [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = false
+  [gcsp-2'2] contains(Symbol, $Literal, ConstructorSet) = false
              ==================================================
              get-constructor-symbol-pairs(cons( $Literal ), 
                                           [ConstructorSet, Msgs], 
                                           $ModuleId, Symbol, Prod) =
                [add(Symbol, $Literal, ConstructorSet), Msgs]
+
+  [ccip-1'1] check-constructor-in-priorities(Symbol* -> Symbol Attrs,
+                                             ConsMsgTuple,
+                                             $ModuleId) =
+               check-constructor-in-priorities(Attrs, ConsMsgTuple, 
+                                               $ModuleId, Symbol,
+                                               Symbol* -> Symbol Attrs)
+
+  [ccip-1'2] check-constructor-in-priorities($Literal(Symbol,*) -> Symbol Attrs,
+                                             ConsMsgTuple,
+                                             $ModuleId) =
+               check-constructor-in-priorities(Attrs, ConsMsgTuple, 
+                                               $ModuleId, Symbol,
+                                               $Literal(Symbol,*) -> Symbol Attrs)
+
+  [ccip-2'1] contains(Symbol, $Literal, ConstructorSet) = true
+             =================================================
+             check-constructor-in-priorities(cons( $Literal ), 
+                                             ConsMsgTuple, 
+                                             $ModuleId, Symbol, Prod) = 
+               ConsMsgTuple
+
+  [ccip-2'2] contains(Symbol, $Literal, ConstructorSet) = false
+             ==================================================
+             check-constructor-in-priorities(cons( $Literal ), 
+                                             [ConstructorSet, Msgs], 
+                                             $ModuleId, Symbol, Prod) =
+               [ConstructorSet, 
+Msgs + unknown-constructor-used-in-priorities($ModuleId, Prod)]

@@ -15,6 +15,9 @@ hiddens
     get-constructor-symbol-pairs(Module,
                                  Constructors-Msg-Tuple,
                                  ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    get-constructor-symbol-pairs(Grammar,
+                                 Constructors-Msg-Tuple,
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
     get-constructor-symbol-pairs(Production,
                                  Constructors-Msg-Tuple,
                                  ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
@@ -26,6 +29,22 @@ hiddens
                                  Constructors-Msg-Tuple,
                                  ModuleId, Symbol,
                                  Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+
+  context-free syntax
+    check-constructor-in-priorities({Group ">"}+,
+                                    Constructors-Msg-Tuple,
+                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    check-constructor-in-priorities(Production,
+                                    Constructors-Msg-Tuple,
+                                    ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    check-constructor-in-priorities(Attributes,
+                                    Constructors-Msg-Tuple,
+                                    ModuleId, Symbol,
+                                    Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    check-constructor-in-priorities(Attribute,
+                                    Constructors-Msg-Tuple,
+                                    ModuleId, Symbol,
+                                    Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
 
 hiddens
   variables
@@ -49,3 +68,5 @@ hiddens
 
     "ConsMsgTuple"[0-9]*    -> Constructors-Msg-Tuple
     "Prod"[0-9]*            -> Production
+
+    "Group+"[0-9]*          -> {Group ">"}+
