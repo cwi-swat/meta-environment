@@ -1,4 +1,5 @@
 #include "SDFME-utils.h"
+#include "MEPT-utils.h"
 
 /*{{{  SDF_Import SDF_makeImport(char *moduleName) */
 
@@ -15,27 +16,68 @@ SDF_Import SDF_makeImport(char *moduleName)
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
                                     SDF_ImportList l2)
 {
-  if (!SDF_isImportListEmpty(l2)) {
-    if (SDF_hasImportListHead(l1)) {
-      SDF_Import head = SDF_getImportListHead(l1);
-      if (SDF_hasImportListTail(l1)) {
-        SDF_ImportList tail = SDF_getImportListTail(l1);
+  SDF_ImportList reversed = SDF_reverseImportList(l1);
 
-        return SDF_makeImportListMany(head, 
-                 SDF_makeLayoutEmpty(),
-                 SDF_concatImportList(tail, l2));
-      }
-      else {
-        return SDF_makeImportListMany(head, 
-                 SDF_makeLayoutEmpty(), l2);
-      }
+  while (!SDF_isImportListEmpty(reversed)) {
+    SDF_Import import = SDF_getImportListHead(reversed);
+
+    l2 = SDF_insertImport(import, l2);
+
+    if (SDF_hasImportListTail(reversed)) {
+      reversed = SDF_getImportListTail(reversed);
     }
     else {
-      return l2;
+      break;
     }
-  }          
+  }
 
-  return l1;
+  return l2;
+}
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_mergeImportList(SDF_ImportList l1, SDF_ImportList l2) */
+
+SDF_ImportList SDF_mergeImportList(SDF_ImportList l1, SDF_ImportList l2)
+{
+  while (!SDF_isImportListEmpty(l1)) {
+    SDF_Import import = SDF_getImportListHead(l1);
+
+    if (!SDF_containsImportListImport(l2, import)) {
+      l2 = SDF_insertImport(import, l2);
+    }
+
+    if (SDF_hasImportListTail(l1)) {
+      l1 = SDF_getImportListTail(l1);
+    }
+    else {
+      break;
+    }
+  }
+
+  return l2;
+}
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_reverseImportList(SDF_ImportList l) */
+
+SDF_ImportList SDF_reverseImportList(SDF_ImportList l)
+{
+  return SDF_ImportListFromTerm((ATerm)
+				ATreverse((ATermList)
+					  SDF_ImportListToTerm(l)));
+}
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_insertImport(SDF_Import i, SDF_ImportList l) */
+
+SDF_ImportList SDF_insertImport(SDF_Import i, SDF_ImportList l)
+{
+  if (SDF_isImportListEmpty(l)) {
+    return SDF_makeImportListSingle(i);
+  }
+  else {
+    return SDF_makeImportListMany(i, SDF_makeLayoutSpace(), l);
+  }
 }
 
 /*}}}  */
@@ -309,7 +351,14 @@ SDF_Import SDF_removeImportAnnotations(SDF_Import s)
 }
 
 /*}}}  */
+/*{{{  SDF_ImportList SDF_removeImportListAnnotations(SDF_ImportList l) */
 
+SDF_ImportList SDF_removeImportListAnnotations(SDF_ImportList l)
+{
+  return SDF_ImportListFromTerm(ATremoveAllAnnotations(SDF_ImportListToTerm(l)));
+}
+
+/*}}}  */
 
 /*{{{  SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l)  */
 

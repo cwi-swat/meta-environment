@@ -24,6 +24,10 @@ void       SDFforeachGrammarInModule   (SDF_Module      module,
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName);
 
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1, SDF_ImportList l2);
+SDF_ImportList SDF_mergeImportList(SDF_ImportList l1, SDF_ImportList l2);
+SDF_ImportList SDF_reverseImportList(SDF_ImportList l);
+SDF_ImportList SDF_insertImport(SDF_Import i, SDF_ImportList l);
+
 ATbool SDF_containsImportListImport(SDF_ImportList list, 
                                     SDF_Import  import);
 SDF_Module SDF_addModuleImport(SDF_Module mod, SDF_Import import);
@@ -64,6 +68,7 @@ SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
 SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId m);
 SDF_Import SDF_removeImportAnnotations(SDF_Import i);
+SDF_ImportList SDF_removeImportListAnnotations(SDF_ImportList l);
 
 SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l);
 SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l);
