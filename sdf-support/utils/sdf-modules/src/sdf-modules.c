@@ -202,12 +202,12 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 {
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   ATermList list = 
-    SDF_getTransitiveImportedModules((ATermList) ATBunpack(atModules), 
-				     id);
+    SDF_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
   SDF_ModuleList modules = SDF_makeModuleListEmpty();
   SDF_OptLayout space = SDF_makeLayoutSpace();
   SDF_SDF sdf;
   SDF_Start start;
+  ATerm result;
 
   for( ;!ATisEmpty(list); list = ATgetNext(list)) {
     SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));
@@ -223,8 +223,9 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 
   sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
   start = SDF_makeStartSDF(space, sdf, space, 0);
+  result = ATBpack(SDF_StartToTerm(start));
 
-  return ATmake("snd-value(sdf-definition(<term>))", start); 
+  return ATmake("snd-value(sdf-definition(<term>))", result);
 }
 
 /*}}}  */
