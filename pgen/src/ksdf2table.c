@@ -58,6 +58,7 @@ AFun afun_range = 0;
 AFun afun_shift = 0;
 AFun afun_non_assoc_prio = 0;
 AFun afun_gtr_prio = 0;
+AFun afun_arg_gtr_prio = 0;
 AFun afun_left_prio = 0;
 AFun afun_right_prio = 0;
 AFun afun_assoc_prio = 0;
@@ -136,6 +137,8 @@ void init_table_gen()
   ATprotectAFun(afun_non_assoc_prio);
   afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
   ATprotectAFun(afun_gtr_prio);
+  afun_arg_gtr_prio = ATmakeAFun("arg-gtr-prio", 3, ATfalse);
+  ATprotectAFun(afun_arg_gtr_prio);
   afun_state_rec = ATmakeAFun("state-rec", 3, ATfalse);
   ATprotectAFun(afun_state_rec);
   afun_label = ATmakeAFun("label", 2, ATfalse);
@@ -322,44 +325,51 @@ ATerm process_productions(SDF_ProductionList prods)
 }
 
 /*}}}  */
+
+static ATerm getProductionNumberForProduction(SDF_Production prod)
+{
+  ATerm nr = NULL;
+  ATerm zero = (ATerm)ATmakeInt(0);
+  ATerm newProd;
+
+  SDF_Production stripProd = SDF_removeAttributes(prod);
+  nr = ATtableGet(prod_nr_pairs,
+                  SDF_ProductionToTerm(stripProd));
+  if (!nr) {
+    newProd = PT_ProductionToTerm(SDFProductionToPtProduction(prod));
+    if (run_verbose) {
+      ATwarning("No rule found for %t\n", newProd);
+    }
+    nr = zero;
+  }
+  return nr;
+}
+
+static ATerm getProductionNumberForGroup(SDF_Group group)
+{
+  ATerm nr = NULL;
+
+  if (SDF_isGroupSimpleGroup(group)) {
+    SDF_Production prod = SDF_getGroupProduction(group);
+    nr = getProductionNumberForProduction(prod);
+  }
+  return nr;
+}
+
 /*{{{  ATerm process_priorities(SDF_PriorityList prios) */
 
-ATerm processAssocPriority(SDF_Priority prio)
+static ATerm processAssocPriority(SDF_Priority prio)
 {
   ATerm leftnr = NULL, rightnr = NULL;
   ATerm prioentry = NULL;
-  ATerm newprod;
   ATerm zero = (ATerm)ATmakeInt(0);
 
   SDF_Group leftGroup = SDF_getPriorityLeft(prio);
   SDF_Group rightGroup = SDF_getPriorityRight(prio);
 
-  if (SDF_isGroupSimpleGroup(leftGroup)) {
-    SDF_Production leftProd = SDF_getGroupProduction(leftGroup);
-    SDF_Production newProd = SDF_removeAttributes(leftProd);
-    leftnr = ATtableGet(prod_nr_pairs,
-                        SDF_ProductionToTerm(newProd));
-    if (!leftnr) {
-      newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
-      if (run_verbose) {
-        ATwarning("No rule found for %t\n", newprod);
-      }
-      leftnr = zero;
-    }
-  }
-  if (SDF_isGroupSimpleGroup(rightGroup)) {
-    SDF_Production rightProd = SDF_getGroupProduction(rightGroup);
-    SDF_Production newProd = SDF_removeAttributes(rightProd);
-    rightnr = ATtableGet(prod_nr_pairs,
-                         SDF_ProductionToTerm(newProd));
-    if (!rightnr) {
-      newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
-      if (run_verbose) {
-        ATwarning("No rule found for %t\n", newprod);
-      }
-      rightnr = zero;
-    }
-  }
+  leftnr = getProductionNumberForGroup(leftGroup);
+  rightnr = getProductionNumberForGroup(rightGroup);
+  
   if (!ATisEqual(leftnr, zero) && !ATisEqual(rightnr, zero)) {
     SDF_Associativity assoc = SDF_getPriorityAssociativity(prio);
     if (SDF_isAssociativityLeft(assoc)) {
@@ -388,11 +398,10 @@ ATerm processAssocPriority(SDF_Priority prio)
   return prioentry;
 }
 
-ATerm processChainPriority(SDF_Priority prio)
+static ATerm processChainPriority(SDF_Priority prio)
 {
   ATerm leftnr = NULL, rightnr = NULL;
   ATerm prioentry = NULL;
-  ATerm newprod;
   ATerm zero = (ATerm)ATmakeInt(0);
 
   SDF_GroupList groupList = SDF_getPriorityList(prio);
@@ -403,33 +412,9 @@ ATerm processChainPriority(SDF_Priority prio)
     groupList = SDF_getGroupListTail(groupList);
     if (SDF_isGroupListSingle(groupList)) {
       rightGroup = SDF_getGroupListHead(groupList);
+      leftnr = getProductionNumberForGroup(leftGroup);
+      rightnr = getProductionNumberForGroup(rightGroup);
 
-      if (SDF_isGroupSimpleGroup(leftGroup)) {
-        SDF_Production leftProd = SDF_getGroupProduction(leftGroup);
-        SDF_Production newProd = SDF_removeAttributes(leftProd);
-        leftnr = ATtableGet(prod_nr_pairs,
-                            SDF_ProductionToTerm(newProd));
-        if (!leftnr) {
-          newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
-          if (run_verbose) {
-            ATwarning("No rule found for %t\n", newprod);
-          }
-          leftnr = zero;
-        }
-      }
-      if (SDF_isGroupSimpleGroup(rightGroup)) {
-        SDF_Production rightProd = SDF_getGroupProduction(rightGroup);
-        SDF_Production newProd = SDF_removeAttributes(rightProd);
-        rightnr = ATtableGet(prod_nr_pairs,
-                             SDF_ProductionToTerm(newProd));
-        if (!rightnr) {
-          newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
-          if (run_verbose) {
-            ATwarning("No rule found for %t\n", newprod);
-          }
-          rightnr = zero;
-        }
-      }
       if (!ATisEqual(leftnr, zero) && !ATisEqual(rightnr, zero)) {
         prioentry = (ATerm)ATmakeAppl2(afun_gtr_prio, 
                                        leftnr, rightnr);
@@ -439,18 +424,59 @@ ATerm processChainPriority(SDF_Priority prio)
       }
     }
     else {
-      ATerror("priority group has too many arguments: %t\n",
-              groupList);
+      ATerror("priority group has too many arguments: %t\n", groupList);
     }
   }
   else {
-    ATerror("priority group has too few arguments: %t\n",
-            groupList);
+    ATerror("priority group has too few arguments: %t\n", groupList);
   }
   return prioentry;
 }
 
-ATerm process_priorities(SDF_PriorityList prios)
+static ATerm getPriorityArgument(SDF_Priority prio)
+{
+  SDF_NatConArguments nats = SDF_getPriorityArguments(prio);
+  
+  if (SDF_isNatConArgumentsSingle(nats)) {
+    SDF_NatCon arg = SDF_getNatConArgumentsHead(nats);
+    char *value = SDF_getNatConString(arg);
+    ATerm result = (ATerm)ATmakeInt(atoi(value));
+
+    return result;
+  }
+  ATerror("priority argument had too many elements: %t\n", prio);
+  return NULL;
+}
+
+static ATerm processArgumentPriority(SDF_Priority prio)
+{
+  ATerm leftnr = NULL, rightnr = NULL;
+  ATerm prioentry = NULL;
+  ATerm zero = (ATerm)ATmakeInt(0);
+  ATerm argNumber = getPriorityArgument(prio);
+
+  SDF_Production leftProd = SDF_getPriorityProduction(prio);
+  SDF_Group rightGroup = SDF_getPriorityGroup(prio);
+
+  leftnr = getProductionNumberForProduction(leftProd);
+  rightnr = getProductionNumberForGroup(rightGroup);
+
+  if (!ATisEqual(leftnr, zero) && !ATisEqual(rightnr, zero) &&
+      argNumber != NULL) {
+    prioentry = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                   leftnr, 
+                                   argNumber,
+                                   rightnr);
+  }
+  else {
+     prioentry = NULL;
+  }
+  
+  return prioentry;
+}
+
+
+static ATerm process_priorities(SDF_PriorityList prios)
 {
   ATerm prioentry = NULL;
   ATermList prioentries = ATempty;
@@ -467,6 +493,9 @@ ATerm process_priorities(SDF_PriorityList prios)
     if (SDF_isPriorityChain(prio)) {
       prioentry = processChainPriority(prio);
     }
+    if (SDF_isPriorityArgument(prio)) {
+      prioentry = processArgumentPriority(prio);
+    } 
 
     if (prioentry) {
       idx = ATindexedSetPut(priority_table, prioentry, &isnew);

@@ -17,8 +17,7 @@ Sdf2.def:
 	> $@
 
 bootstrap: Sdf2.def
-	sglr -m \
-		-p $(srcdir)/Sdf2-bootstrap.tbl \
+	sglr -p $(srcdir)/Sdf2-bootstrap.tbl \
 		-i $(srcdir)/Sdf2.def \
 		-o Sdf2.asfix
 	${top_builddir}/src/parsetablegen < Sdf2.asfix > Sdf2.baf

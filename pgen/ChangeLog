@@ -1,5 +1,10 @@
 $Id$
 
+Mon May 17 11:34:26 CEST 2004 <markvdb, jurgenv@cwi.nl>
+ * Increased version number in parsetable.
+ * Added the arg-gtr-prio in order to be more selective
+   in priority definitions.
+
 Tue May  4 13:23:03 CEST 2004 <markvdb@cwi.nl>
  * Improved the clickable error messages and solved bug 295.
 
