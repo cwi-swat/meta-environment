@@ -1,6 +1,5 @@
 configuration([
-   button("Tscript",
-          [description(term-editor, menu(["Tscript","PrettyPrint"]))],
+   action([description(term-editor, menu(["Tscript","PrettyPrint"]))],
           [push-active-module,
 	   get-root,
            push-string("Tscript"),
