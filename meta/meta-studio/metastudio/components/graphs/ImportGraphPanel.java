@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import metastudio.MultiBridge;
+import metastudio.components.ModuleBrowser;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.ModuleSelectionListener;
 import metastudio.data.Module;
@@ -68,10 +69,8 @@ public class ImportGraphPanel
                     module = moduleManager.getModule(node.getId().getId());
                     if (event.isPopupTrigger()
                         || SwingUtilities.isRightMouseButton(event)) {
-                        postEvent(
-                            getFactory().make(
-                                "get-buttons(module-popup,<str>)",
-                                node.getId().getId()));
+                        ModuleBrowser.postModuleMenuRequest(getFactory(),
+                                getBridge(), module);
                     }
 
                 }

@@ -11,8 +11,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import metastudio.*;
 import metastudio.MultiBridge;
+import metastudio.UserInterfacePanel;
 import metastudio.data.Module;
 import metastudio.data.ModuleSelectionModel;
 import metastudio.data.ModuleTreeModel;
@@ -21,12 +21,14 @@ import aterm.ATermFactory;
 
 public class ModuleTree extends UserInterfacePanel {
     private JTree tree;
+    private final ModuleTreeModel manager;
 
     public ModuleTree(
         ATermFactory factory,
         MultiBridge bridge,
         final ModuleTreeModel manager) {
         super(factory, bridge);
+        this.manager = manager;
 
         tree = new JTree(manager);
         tree.setRootVisible(false);
@@ -49,10 +51,7 @@ public class ModuleTree extends UserInterfacePanel {
 
                     if (path != null) {
                         tree.setSelectionPath(path);
-                        postEvent(
-                            getFactory().make(
-                                "get-buttons(module-popup,<str>)",
-                                getCurrentModule()));
+                        postButtonRequest();
                     }
 
                 }
@@ -75,12 +74,17 @@ public class ModuleTree extends UserInterfacePanel {
         });
     }
 
-    private String getCurrentModule() {
+    private void postButtonRequest() {
+        Module current = getCurrentModule();
+        ModuleBrowser.postModuleMenuRequest(getFactory(), getBridge(), current);
+    }
+    
+    private Module getCurrentModule() {
         TreePath path = tree.getSelectionPath();
 
         if (path != null) {
             ModuleTreeNode selectedModule = (ModuleTreeNode) path.getLastPathComponent();
-            return selectedModule.getFullName();
+            return manager.getModule(selectedModule.getFullName());
         }
 
         return null;

@@ -7,9 +7,11 @@ import javax.swing.JSplitPane;
 import metastudio.*;
 import metastudio.MultiBridge;
 import metastudio.components.graphs.ImportGraphPanel;
+import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
+import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
@@ -59,6 +61,18 @@ public class ModuleBrowser extends UserInterfacePanel {
         leftPanel.setDividerLocation(Preferences.getDouble("modulebrowser.graph.divider.location"));
         leftPanel.setResizeWeight(Preferences.getDouble("modulebrowser.graph.divider.resize"));
         return leftPanel;
+    }
+
+    static public void postModuleMenuRequest(ATermFactory factory, MultiBridge bridge,
+            Module current) {
+        
+        ATerm popup = factory.parse("module-popup");
+        
+        if (current.getState() == Module.STATE_NEW) {
+            popup = factory.parse("new-module-popup");
+        }
+        
+        bridge.postEvent(factory.make("get-buttons(<term>,<str>)", popup, current.getName()));
     }
 
     

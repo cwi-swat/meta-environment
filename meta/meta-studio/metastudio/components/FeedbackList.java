@@ -80,6 +80,7 @@ public class FeedbackList extends UserInterfacePanel {
         for (; !messages.isEmpty(); messages = messages.getTail()) {
             data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
         }
+        list.setSelectedIndex(data.getSize());
         list.repaint();
     }
 
