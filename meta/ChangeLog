@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 25 13:27:30 CET 2003 <jong@cwi.nl>
+ * refactoring: ApiGen generated sources only in metastudio.graph now
+ * cleanup: use ApiGen generated (auto)make support
+
 2003/02/18 (markvdb@cwi.nl)
  * Activated ViewTree button.
 
