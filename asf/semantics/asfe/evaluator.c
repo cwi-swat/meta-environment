@@ -447,11 +447,7 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 #endif
 	
-	if(!ATisEmpty(rewrite_errors)) {
-		return ATmake("snd-value(errors([<list>]))",rewrite_errors);
-	}
-
-	return ATmake("snd-value(result(<term>))",result);
+	return ATmake("snd-value(result(tree(<term>),errors([<list>])))",result,rewrite_errors);
 }
 
 /*}}}  */
@@ -1160,7 +1156,7 @@ int main(int argc, char *argv[])
   char *eqsfile = "-";
   int bafmode = 1;
   char *name = "Standalone";
-
+	int returncode = 0;
   ATerm eqs, term, aterm, realterm, newterm, newaterm, result;
   ATermList neweqs;
 
@@ -1253,54 +1249,55 @@ int main(int argc, char *argv[])
     newterm = rewrite(realterm,(ATerm) ATempty);
     /*times(&rewriting);*/
 
-		if(ATisEmpty(rewrite_errors)) {
-			/* Postprocessing of reduct */
-			newaterm = RWrestoreTerm(newterm);
-			result = asfix_put_term(term,newaterm);
-			
-			/* Communicate the reduct out of here */
-			if (!strcmp(output, "") || !strcmp(output, "-"))
-				iofile = stdout;
-			else if (!(iofile = fopen(output, "w")))
-				ATerror("%s: cannot open %s\n", myname, output);
-			
-			if(bafmode)
-				ATwriteToBinaryFile(result, iofile);
-			else
-				ATwriteToTextFile(result, iofile);
+		/* Postprocessing of reduct */
+		newaterm = RWrestoreTerm(newterm);
+		result = asfix_put_term(term,newaterm);
 
-			fclose(iofile);
-		} else { /* We have errors! */
-			for(;!ATisEmpty(rewrite_errors);rewrite_errors = ATgetNext(rewrite_errors)) {
-				ATerm message, tag, subject;
-				char *messageText = NULL, *tagText = NULL, *subjectText = NULL;
-				ATermList error;
+		/* If we have collected errors, pretty print them now */
+		returncode = ATisEmpty(rewrite_errors) ? 0 : 1;
+
+		for(;!ATisEmpty(rewrite_errors);rewrite_errors = ATgetNext(rewrite_errors)) {
+			ATerm message, tag, subject;
+			char *messageText = NULL, *tagText = NULL, *subjectText = NULL;
+			ATermList error;
 								
-				/* The errors are tuples containing a message and a subject */
-				error = (ATermList) ATgetFirst(rewrite_errors);
-				message = ATgetFirst(error);
-				tag = ATgetFirst(ATgetNext(error));
-				subject = ATgetFirst(ATgetNext(ATgetNext(error)));
+			/* The errors are tuples containing a message and a subject */
+			error = (ATermList) ATgetFirst(rewrite_errors);
+			message = ATgetFirst(error);
+			tag = ATgetFirst(ATgetNext(error));
+			subject = ATgetFirst(ATgetNext(ATgetNext(error)));
 				
-				/* Now unparse these fields to text */
-				messageText = (char*) malloc(AFsourceSize(message)+1);
-				tagText = (char*) malloc(AFsourceSize(tag)+1);
-				subjectText = (char*) malloc(AFsourceSize(subject));
-
-				if(messageText && tagText && subjectText) {
-					AFsource(message, messageText);
-					AFsource(tag,tagText);
-				  AFsource(subject,subjectText);
-
-					ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
-					return 1;
-				} else {
-					ATerror("No memory available to print errors.\n");
-				}
+			/* Now unparse these fields to text */
+			messageText = (char*) malloc(AFsourceSize(message)+1);
+			tagText = (char*) malloc(AFsourceSize(tag)+1);
+			subjectText = (char*) malloc(AFsourceSize(subject));
+			
+			if(messageText && tagText && subjectText) {
+				AFsource(message, messageText);
+				AFsource(tag,tagText);
+				AFsource(subject,subjectText);
+				
+				ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
+			} else {
+				ATerror("No memory available to print errors.\n");
 			}
 		}
-  }
-  return 0;
+
+		/* Communicate the reduct out of here */
+		if (!strcmp(output, "") || !strcmp(output, "-"))
+			iofile = stdout;
+		else if (!(iofile = fopen(output, "w")))
+			ATerror("%s: cannot open %s\n", myname, output);
+		
+		if(bafmode)
+			ATwriteToBinaryFile(result, iofile);
+		else
+			ATwriteToTextFile(result, iofile);
+		
+		fclose(iofile);
+	}
+  
+	return returncode;
 }
 
 /*}}}  */
