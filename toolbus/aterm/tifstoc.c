@@ -108,7 +108,7 @@ void generate_argument_list(FILE *f, ATermList args)
 	fprintf(f, "double");
       }
       else if(ATmatch(arg, "str")) {
-	fprintf(f, "char *");
+	fprintf(f, "const char *");
       }
       else {
 	fprintf(f, "ATerm");
