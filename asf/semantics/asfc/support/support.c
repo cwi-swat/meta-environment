@@ -348,6 +348,7 @@ static ATerm call(ATerm prod, ATermList args)
         result = (*func)(arg[0],arg[1],arg[2],arg[3],
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8]);
+        break;
     case 10:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -362,6 +363,7 @@ static ATerm call(ATerm prod, ATermList args)
         result = (*func)(arg[0],arg[1],arg[2],arg[3],
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9]);
+        break;
     case 11:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -377,6 +379,7 @@ static ATerm call(ATerm prod, ATermList args)
         result = (*func)(arg[0],arg[1],arg[2],arg[3],
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10]);
+        break;
     case 12:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -393,6 +396,7 @@ static ATerm call(ATerm prod, ATermList args)
         result = (*func)(arg[0],arg[1],arg[2],arg[3],
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11]);
+        break;
     case 13:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -411,6 +415,7 @@ static ATerm call(ATerm prod, ATermList args)
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11],
                          arg[12]);
+        break;
     case 14:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -430,6 +435,7 @@ static ATerm call(ATerm prod, ATermList args)
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11],
                          arg[12],arg[13]);
+        break;
     case 15:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -450,6 +456,7 @@ static ATerm call(ATerm prod, ATermList args)
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11],
                          arg[12],arg[13],arg[14]);
+        break;
     case 16:
         arg[0] = ATgetFirst(args);
         arg[1] = ATelementAt(args, 1);
@@ -471,6 +478,7 @@ static ATerm call(ATerm prod, ATermList args)
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11],
                          arg[12],arg[13],arg[14],arg[15]);
+        break;
     default:
       ATerror("too many arguments: %d\n", ATgetLength(args));
   }
