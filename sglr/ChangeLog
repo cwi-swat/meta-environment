@@ -22,18 +22,10 @@ $Id$
 2000/10/18 (jurgenv@cwi.nl, markvdb@cwi.nl)
   - Major revision of SGLR!
     * Filtering is moved from shifting/reducing phase to a postprocessing
-      phase. This was needed because the fixing a number of bugs in the
-      filtering introduced too many ad-hoc code (or hacks)! Disambiguation
-      (filtering) fired too early, there were still active stacks on which
-      reductions had to take place but this introduced "incorrect" trees.
+      phase.
     * All filtering code completely refactored.
-    * Ambiguity clusters are changed during filtering into "real" ambiguity
-      nodes, if more than one tree results.
-    * The previous has effect on YieldForest now called YieldTree and
-      this function is tremenduously simplified.
-    * Efficiency of cycle detection is improved, because keeping track
-      of visited nodes has become simpeler.
-    * Efficiency of filtering improved due to "storing" calculated multisets.
+    * Efficiency of cycle detection is improved.
+    * Efficiency of filtering improved.
     * Position information yielded by AmbTracker has been corrected.
     * Remove a lot of dead and obscure code.
     * New filter added: associativity filter.
