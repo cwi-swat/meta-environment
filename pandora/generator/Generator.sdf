@@ -1,6 +1,7 @@
 module Generator
 
 imports utilities/IO[Symbol]
+imports utilities/IO[ModuleName]
 imports languages/sdf2/syntax/Sdf2
 
 exports

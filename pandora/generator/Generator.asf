@@ -47,7 +47,7 @@ equations
 [makePPModuleName-0]
   bytes(bytes($Char+)) := unparse-to-bytes($ModuleName)
   ===>
-  makePPModuleName($ModuleName) = uqliteral("P" "P" $Char+)
+  makePPModuleName($ModuleName) = moduleid("P" "P" $Char+)
 
 [addBrackets-0]
   bytes(bytes($Char+)) := unparse-to-bytes($Symbol)
