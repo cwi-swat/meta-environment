@@ -239,7 +239,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 			 (ATermList)factory.make("[\"Exit\"]"),
 			 moduleTree, bridge, factory);
 
-*/
+
     //}}}
     //{{{ Create module menu
 
@@ -279,7 +279,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     });
 
     //}}}
-
+*/
     //{{{ Create menubar
 
     menuBar = new JMenuBar();
@@ -425,24 +425,21 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     statusBarPanel.setLayout(new BorderLayout());
 
     color = Preferences.getColor(PREF_MSGPANE_STATUS + ".background");
-    //statusBar.setBackground(color);
+    
     statusLog.setBackground(color);
     statusBarPanel.setBackground(color);
     color = Preferences.getColor(PREF_MSGPANE_STATUS + ".foreground");
-    //statusBar.setForeground(color);
+    
     statusLog.setForeground(color);
     statusBarPanel.setForeground(color);
     Font font = Preferences.getFont(PREF_MSGPANE_STATUS + ".font");
     statusBar.setFont(font);
     statusLog.setFont(font);
-    //statusBarPanel.setFont(font);
 
     statusBarPanel.add(statusBar, BorderLayout.CENTER);
     statusBarPanel.add(statusLog, BorderLayout.EAST);
     historyPanel.add(historyPane, BorderLayout.CENTER);
     historyPanel.add(statusBarPanel, BorderLayout.SOUTH);
-
-    //historyPane.setMinimumSize(new Dimension(50, 100));
 
     Container content = getContentPane();
 
@@ -460,8 +457,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     content.setLayout(new BorderLayout());
     content.add(toolBar, BorderLayout.NORTH);
     content.add(mainPanel, BorderLayout.CENTER);
-
-    //content.add(msgLabel, BorderLayout.SOUTH);
 
     //}}}
 
