@@ -1,2 +1,6 @@
-Makefile.in
+.*.swp
+.deps
+.libs
 Makefile
+Makefile.in
+structure-editor

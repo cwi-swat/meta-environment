@@ -1,0 +1,42 @@
+/* $Id$ */
+
+tool structure-editor is {
+  command = "structure-editor"
+}
+
+process StructureEditor is
+let
+  Direction: term,
+  EditorId: term,
+  Focus: term,
+  Offset: int,
+  ParseTree: term,
+  SE: structure-editor
+in
+  execute(structure-editor, SE?)
+  .
+  (
+    rec-msg(se-create(EditorId?, ParseTree?))
+    . snd-do(SE, create-editor(EditorId, ParseTree))
+  +
+    rec-msg(se-update(EditorId?, ParseTree?))
+    . snd-do(SE, update-editor(EditorId, ParseTree))
+  +
+    rec-msg(se-delete(EditorId?))
+    . snd-do(SE, delete-editor(EditorId))
+  +
+    rec-msg(se-set-cursor-at-offset(EditorId?, Offset?))
+    . snd-do(SE, set-cursor-at-offset(EditorId, Offset))
+  +
+    rec-msg(se-get-focus-at-cursor(EditorId?))
+    . snd-eval(SE, get-focus-at-cursor(EditorId))
+    . rec-value(SE, focus(Focus?))
+    . snd-msg(se-focus-at-cursor(EditorId, Focus))
+  +
+    rec-msg(se-move-cursor(EditorId?, Direction?))
+    . snd-do(SE, move-cursor(EditorId, Direction))
+  )
+  * delta
+endlet
+
+toolbus(StructureEditor)
