@@ -15,7 +15,7 @@ import aterm.ATermList;
 abstract public class CHARLIST
 {
   protected ATermList term = null;
-  private static aterm.ATermFactory factory = null;
+  protected static aterm.ATermFactory factory = null;
 
   static public void initialize(aterm.ATermFactory f)
   {

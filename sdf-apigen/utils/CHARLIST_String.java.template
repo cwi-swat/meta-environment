@@ -4,14 +4,8 @@ import aterm.*;
 
 public class CHARLIST_String extends CHARLIST
 {
-  static private ATermFactory factory;
   private String _string = null;
 
-  static public void initialize(aterm.ATermFactory f)
-  {
-    factory = f;
-  }
-  
   static public CHARLIST fromTerm(aterm.ATerm trm) 
   {
     if (trm.getType() == trm.LIST) {
