@@ -100,25 +100,28 @@ ATermList generalize_tifs(ATermList tifs)
 {
   ATermList result = ATempty;
 
-  while(!ATisEmpty(tifs)) {
+  while (!ATisEmpty(tifs)) {
     int i;
     char *name;
     ATermList newargs = ATempty;
     ATerm tif = ATgetFirst(tifs), newtif, tool;
     ATermAppl appl;
 
-    if(ATmatch(tif, "rec-terminate(<term>,<term>)", NULL, NULL) ||
-       ATmatch(tif, "rec-ack-event(<term>,<term>)", NULL, NULL)) {
+    if (ATmatch(tif, "rec-terminate(<term>,<term>)", NULL, NULL)
+	|| ATmatch(tif, "rec-ack-event(<term>,<term>)", NULL, NULL)) {
       result = ATinsert(result, tif);
     } else if(ATmatch(tif, "<appl(<term>,<term>)>", &name, &tool, &appl)) {
       Symbol sym = ATgetSymbol(appl);
-      for(i=ATgetArity(sym)-1; i>=0; --i) {
+      for (i=ATgetArity(sym)-1; i>=0; --i) {
 	ATerm arg = ATgetArgument(appl, i);
-	if(ATisEqual(arg, ATparse("<int>")) ||
-	   ATisEqual(arg, ATparse("<str>")))
+	if (ATisEqual(arg, ATparse("<int>"))
+	    || ATisEqual(arg, ATparse("<str>"))
+	    || ATisEqual(arg, ATparse("<real>"))) {
 	  newargs = ATinsert(newargs, arg);
-	else
+	}
+	else {
 	  newargs = ATinsert(newargs, ATparse("<term>"));
+	}
       }
 
       newtif = ATmake("<appl(<term>,<appl(<list>)>)>", 
@@ -254,21 +257,28 @@ void generate_prologue(FILE *f, char *tool, char *msg)
 void generate_argument_list(FILE *f, ATermList args)
 {
   fprintf(f, "int conn");
-  while(!ATisEmpty(args)) {
+  while (!ATisEmpty(args)) {
     ATerm arg = ATgetFirst(args);
     args = ATgetNext(args);
 
     fprintf(f, ", ");
-    if(ATgetType(arg) != AT_PLACEHOLDER)
+    if (ATgetType(arg) != AT_PLACEHOLDER) {
       fprintf(f, "ATerm");
+    }
     else {
       arg = ATgetPlaceholder((ATermPlaceholder)arg);
-      if(ATmatch(arg, "int"))
+      if (ATmatch(arg, "int")) {
 	fprintf(f, "int");
-      else if(ATmatch(arg, "str"))
+      }
+      else if(ATmatch(arg, "real")) {
+	fprintf(f, "double");
+      }
+      else if(ATmatch(arg, "str")) {
 	fprintf(f, "char *");
-      else
+      }
+      else {
 	fprintf(f, "ATerm");
+      }
     }
   }
 }
@@ -392,15 +402,16 @@ void generate_variables(FILE *f, ATermList tifs)
   int i;
   int max_strings = 0;
   int max_ints    = 0;
+  int max_reals   = 0;
   int max_terms   = 0;
-  int nrints, nrstrings, nrterms;
+  int nrints, nrreals, nrstrings, nrterms;
 
-  /* Calculate the maximum number of ints, strings, and terms. */
-  while(!ATisEmpty(tifs)) {
+  /* Calculate the maximum number of ints, reals, strings, and terms. */
+  while (!ATisEmpty(tifs)) {
     ATerm tif = ATgetFirst(tifs);
-    tifs = ATgetNext(tifs);
 
     nrints    = 0;
+    nrreals   = 0;
     nrstrings = 0;
     nrterms   = 0;
 
@@ -408,50 +419,68 @@ void generate_variables(FILE *f, ATermList tifs)
       max_terms = MAX(1, max_terms);
     } else if(ATmatch(tif, "rec-ack-event(<term>,<term>)", NULL, NULL)) {
       max_terms = MAX(1, max_terms);
-    } else if(ATmatch(tif, "rec-do(<term>,<appl(<list>)>)", 
-		      NULL, NULL, &args) ||
-	      ATmatch(tif, "rec-eval(<term>,<appl(<list>)>)",
-		      NULL, NULL, &args)) {
-      while(!ATisEmpty(args)) {
+    } else if(ATmatch(tif, "rec-do(<term>,<appl(<list>)>)", NULL, NULL, &args)
+	      || ATmatch(tif, "rec-eval(<term>,<appl(<list>)>)", NULL, NULL,
+			 &args)) {
+      while (!ATisEmpty(args)) {
 	ATerm arg = ATgetFirst(args);
 	args = ATgetNext(args);
-	if(ATgetType(arg) != AT_PLACEHOLDER) {
+	if (ATgetType(arg) != AT_PLACEHOLDER) {
 	  nrterms++;
 	} else {
 	  arg = ATgetPlaceholder((ATermPlaceholder)arg);
-	  if(ATmatch(arg, "int"))
+	  if (ATmatch(arg, "int")) {
 	    nrints++;
-	  else if(ATmatch(arg, "str"))
+	  }
+	  else if (ATmatch(arg, "real")) {
+	    nrreals++;
+	  }
+	  else if (ATmatch(arg, "str")) {
 	    nrstrings++;
-	  else
+	  }
+	  else {
 	    nrterms++;
+	  }
 	}
       }
       max_ints    = MAX(nrints, max_ints);
+      max_reals   = MAX(nrreals, max_reals);
       max_strings = MAX(nrstrings, max_strings);
       max_terms   = MAX(nrterms, max_terms);
     }
     /* Ignoring other patterns */		
+
+    tifs = ATgetNext(tifs);
   }
 
   /* Generate variable declarations */
   fprintf(f, "  /* We need some temporary variables during matching */\n");
-  if(max_ints > 0) {
+  if (max_ints > 0) {
     fprintf(f, "  int i0");
-    for(i=1; i<max_ints; i++)
+    for (i=1; i<max_ints; i++) {
       fprintf(f, ", i%d", i);
+    }
     fprintf(f, ";\n");
   }
-  if(max_strings > 0) {
+  if (max_reals > 0) {
+    fprintf(f, "  double r0");
+    for (i=1; i<max_reals; i++) {
+      fprintf(f, ", r%d", i);
+    }
+    fprintf(f, ";\n");
+  }
+  if (max_strings > 0) {
     fprintf(f, "  char *s0");
-    for(i=1; i<max_strings; i++)
+    for (i=1; i<max_strings; i++) {
       fprintf(f, ", *s%d", i);
+    }
     fprintf(f, ";\n");
   }
-  if(max_terms > 0) {
+  if (max_terms > 0) {
     fprintf(f, "  ATerm t0");
-    for(i=1; i<max_terms; i++)
+    for (i=1; i<max_terms; i++) {
       fprintf(f, ", t%d", i);
+    }
     fprintf(f, ";\n");
   }
   fprintf(f, "\n");
@@ -469,25 +498,32 @@ void generate_match(FILE *f, ATerm pattern, char *func,
 {
   ATermList arglist;
   int nrints    = 0;
+  int nrreals   = 0;
   int nrstrings = 0;
   int nrterms   = 0;
 
   ATfprintf(f, "  if(ATmatch(term, \"%t\"", pattern);
 
   /* Generate arguments of ATmatch */
-  for(arglist = args; !ATisEmpty(arglist); arglist = ATgetNext(arglist)) {
+  for (arglist = args; !ATisEmpty(arglist); arglist = ATgetNext(arglist)) {
     ATerm arg = ATgetFirst(arglist);
 
-    if(ATgetType(arg) != AT_PLACEHOLDER) {
+    if (ATgetType(arg) != AT_PLACEHOLDER) {
       fprintf(f, ", &t%d", nrterms++);
     } else {
       arg = ATgetPlaceholder((ATermPlaceholder)arg);
-      if(ATmatch(arg, "int"))
+      if (ATmatch(arg, "int")) {
 	fprintf(f, ", &i%d", nrints++);
-      else if(ATmatch(arg, "str"))
+      }
+      else if (ATmatch(arg, "real")) {
+	fprintf(f, ", &r%d", nrreals++);
+      }
+      else if (ATmatch(arg, "str")) {
 	fprintf(f, ", &s%d", nrstrings++);
-      else
+      }
+      else {
 	fprintf(f, ", &t%d", nrterms++);
+      }
     }
   }
 
@@ -495,35 +531,45 @@ void generate_match(FILE *f, ATerm pattern, char *func,
 
   /* Generate call to user function */
   fprintf(f, "    ");
-  if(ret)
+  if (ret) {
     fprintf(f, "return ");
+  }
   fprintf(f, "%s%s(conn", prefix, func);
 
   nrints    = 0;
+  nrreals   = 0;
   nrstrings = 0;
   nrterms   = 0;
 
   /* Generate arguments of user function */
-  for(arglist = args; !ATisEmpty(arglist); arglist = ATgetNext(arglist)) {
+  for (arglist = args; !ATisEmpty(arglist); arglist = ATgetNext(arglist)) {
     ATerm arg = ATgetFirst(arglist);
 
-    if(ATgetType(arg) != AT_PLACEHOLDER)
+    if (ATgetType(arg) != AT_PLACEHOLDER) {
       fprintf(f, ", t%d", nrterms++);
+    }
     else {
       arg = ATgetPlaceholder((ATermPlaceholder)arg);
-      if(ATmatch(arg, "int"))
+      if (ATmatch(arg, "int")) {
 	fprintf(f, ", i%d", nrints++);
-      else if(ATmatch(arg, "str"))
+      }
+      else if (ATmatch(arg, "real")) {
+	fprintf(f, ", r%d", nrreals++);
+      }
+      else if (ATmatch(arg, "str")) {
 	fprintf(f, ", s%d", nrstrings++);
-      else
+      }
+      else {
 	fprintf(f, ", t%d", nrterms++);
+      }
     }
   }
 
   fprintf(f, ");\n");
 
-  if(!ret)
+  if (!ret) {
     fprintf(f, "    return NULL;\n");
+  }
   fprintf(f, "  }\n");
 }
 
