@@ -1,0 +1,22 @@
+
+process RestoreTermBrackets is
+let
+  Table : term,
+  Path : str,
+  Tree : term,
+  ModuleName : str
+in
+  (
+    rec-msg(restore-term-brackets(ModuleName?, Tree?)).
+    snd-msg(get-parsetable(trm(ModuleName))).
+    (
+      rec-msg(parse-table(Table?, Path?)) .
+      snd-msg(restore-brackets(Tree, Table)) .
+      rec-msg(brackets-restored(Tree?)) 
+    +
+      rec-msg(no-parse-table) .
+      Tree := error-tree
+    ).
+    snd-msg(restore-term-brackets-result(ModuleName, Tree))
+  ) * delta
+endlet
