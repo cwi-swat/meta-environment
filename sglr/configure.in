@@ -84,8 +84,6 @@ AC_OUTPUT(
    dump/Makefile
    libsglr/Makefile
    sglr/Makefile
-   libtree2dot/Makefile
-   tree2dot/Makefile
    client/Makefile
    sdf1tosdf2/Makefile
    sdf1tosdf2/sdf1tosdf2

@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/25 (jurgenv@cwi.nl)
+ * Moved all tree2dot functionality to pt-support package.
+
 2001/07/25 ({jong,markvdb,olivierp}@cwi.nl)
  * Added Prefix term to test suite
  * Moved Sdf2.sdf to test/terms dir.
