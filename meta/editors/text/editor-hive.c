@@ -403,7 +403,7 @@ static void addEditorDescriptors(fd_set *set, int *max_fd)
 }
 
 /*}}}  */
-/*{{{  static void handleEditorInput(int tb_fd, ATerm editorId, const char *input) */
+/*{{{  static void handleEditorInput(int tb_fd, ATerm editorId, TE_Event event) */
 
 static void handleEditorInput(int tb_fd, ATerm editorId, TE_Event event)
 {
@@ -432,7 +432,7 @@ static void handleEditorInput(int tb_fd, ATerm editorId, TE_Event event)
 }
 
 /*}}}  */
-/*{{{  static void handleEditor(ATerm editorId) */
+/*{{{  static void handleEditor(int tb_fd, ATerm editorId) */
 
 static void handleEditor(int tb_fd, ATerm editorId)
 {
