@@ -136,7 +136,7 @@ ATermList SDF_getImports(SDF_Module module)
 /*{{{  static SDF_Renamings makeRenamingsFromParameters(SDF_Symbols formals, */
 
 static SDF_Renamings makeRenamingsFromParameters(SDF_Symbols formals,
-						     SDF_Symbols actuals)
+						 SDF_Symbols actuals)
 {
   SDF_OptLayout layout = SDF_makeLayoutEmpty();
   SDF_RenamingList renamingList;
@@ -179,10 +179,25 @@ static SDF_Renamings makeRenamingsFromParameters(SDF_Symbols formals,
 /*{{{  static SDF_Renamings makeRenamingsFromModuleNames(SDF_ModuleName formal, */
 
 static SDF_Renamings makeRenamingsFromModuleNames(SDF_ModuleName formal,
-						      SDF_ModuleName actual)
+						  SDF_ModuleName actual)
 {
-  SDF_Symbols actualParams = SDF_getModuleNameParams(actual);
-  SDF_Symbols formalParams = SDF_getModuleNameParams(formal);
+  SDF_Symbols actualParams;
+  SDF_Symbols formalParams;
+
+  if (SDF_hasModuleNameParams(actual)) {
+    actualParams = SDF_getModuleNameParams(actual);
+  }
+  else {
+    actualParams = SDF_makeSymbolsDefault(SDF_makeSymbolListEmpty());
+  }
+
+  if (SDF_hasModuleNameParams(formal)) {
+    formalParams = SDF_getModuleNameParams(formal);
+  }
+  else {
+    formalParams = SDF_makeSymbolsDefault(SDF_makeSymbolListEmpty());
+  }
+
   
   return makeRenamingsFromParameters(formalParams, actualParams);
 }
