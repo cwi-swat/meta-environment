@@ -12,7 +12,8 @@ BUILTIN_NAMES_ARITY=\
 	term-compare_2\
 	lift-to-tree_1 \
 	lift-to-term_1 \
-	unparse_1
+	unparse_1 \
+	implode_1
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
@@ -22,7 +23,8 @@ BUILTIN_SOURCEFILES=\
 	builtin-shell.c \
 	builtin-term-compare.c \
 	builtin-lifting.c\
-	builtin-unparse.c
+	builtin-unparse.c\
+	builtin-implode.c
 
 #The names of the modules that need to be included in a generated lib
 LIBRARY_MODULES=basic/Booleans utilities/Measure
