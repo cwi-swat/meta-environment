@@ -26,8 +26,10 @@ AC_CONFIG_FILES([Makefile
    library/languages/asf/normalization/Makefile
    library/languages/asf/addeqssyntax/Makefile
    library/languages/asf/removevariables/Makefile
+   library/languages/asf/idioms/Makefile
    library/languages/aterm/Makefile
    library/languages/aterm/syntax/Makefile
+   library/languages/aterm/pretty/Makefile
    library/languages/sdf2/Makefile
    library/languages/sdf2/syntax/Makefile
    library/languages/sdf2/normalization/Makefile
