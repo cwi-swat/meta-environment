@@ -1,6 +1,7 @@
 # $Id$
 
 Mon Feb  9 14:59:39 CET 2004 <{jong,kooiker,vinju}@cwi.nl>
+ * version bump to 1.3 (toolbus interface changed + several bugfixes)
  * in-output/src/main.c:decons_filename:
    - fix illegal memory overwrite which horked an existing AFun,
      causing the ATerm GC to break down.
