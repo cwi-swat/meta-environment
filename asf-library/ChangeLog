@@ -1,8 +1,12 @@
-2001/05/24 (jurgenv@cwi.nl)
+2002/06/14 (markvdb@cs.vu.nl)
+  * Added ATerm placeholder.
+  * Fixed ChangeLog dates.
+
+2002/05/24 (jurgenv@cwi.nl)
   * Added Stratego-like programming language with simple interpreter. 
     Heterogeneous data-types and traversals not supported (yet).
 
-2001/05/23 (jurgenv@cwi.nl)
+2002/05/23 (jurgenv@cwi.nl)
   * Added experimental library for functional programming in ASF containing:
       id, const, curry, uncurry, sequence, flip, apply, map and fold[lr],
       zip, zipWith, tuple, fst, snd etc.
@@ -12,12 +16,12 @@
   * Added setting and getting of annotations in terms.
   * Fixed some minor bugs in the built-in system.
 
-2001/05/22 (jurgenv@cwi.nl)
+2002/05/22 (jurgenv@cwi.nl)
   * Worked out built-in definition and compilation further. Built-in
     implementations are next to sdf files again where they are defined.
   * Added map function from List[[From]] to List[[To]]
 
-2001/05/21 ({jurgenv,markvdb}@cwi.nl)
+2002/05/21 ({jurgenv,markvdb}@cwi.nl)
   * Made built-in compilation more sophisticated. 
     - Every subdirectory can declare a PACKAGE_SRC variable that tells in which 
       files the built-ins are implemented
@@ -27,13 +31,13 @@
     - Every built-in is registered in ${top}/src/builtins.lst
     - Using these files the library is finally collected and built.
       
-2001/05/17 ({jurgenv,markvdb}@cwi.nl)
+2002/05/17 ({jurgenv,markvdb}@cwi.nl)
   * Added sdf2 syntax
   * Refactored sdf2 syntax
   * Moved ATerm syntax from sdf2 syntax to own toplevel library
   * Added read-term-from-file and write-term-to-file to system library
 
-2001/05/15 (jurgenv@cwi.nl)
+2002/05/15 (jurgenv@cwi.nl)
   * Baffiles and tables are also installed (after sdf files such that
     timestamps are correct.
   * Directories are made read-only after installation
@@ -41,12 +45,12 @@
   * Added builtin architecture (see STYLE-GUIDE)
   * Added part of ATerm level 1 interface
 
-2001/05/14 (jurgenv@cwi.nl)
+2002/05/14 (jurgenv@cwi.nl)
   * Added automatic installation of the library modules
   * Removed all dependencies on other packages for the moment
   * Set version to 0.2beta
 
-2001/05/13 (jurgenv@cwi.nl)
+2002/05/13 (jurgenv@cwi.nl)
   * Removed generation of configure script
   * Restarted asf library initiative using compound module names
 
