@@ -289,42 +289,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     menuBar.add(fileMenu);
     setJMenuBar(menuBar);
 
-    //}}}
-    //{{{ Create toolbar
-
-    toolBar = new JToolBar();
-    //MyToolbar.setClientProperty("JToolBar.isRollover", Boolean.TRUE);
-
-    addTool(actionNewModule, PREF_TOOLBAR_NEW_MODULE);
-    addTool(actionOpenModule, PREF_TOOLBAR_OPEN_MODULE);
-    addTool(actionOpenLibModule, PREF_TOOLBAR_OPEN_LIB_MODULE);
-    addTool(actionSaveAll, PREF_TOOLBAR_SAVE_ALL);
-    toolBar.addSeparator();
-    addTool(actionClearAll, PREF_TOOLBAR_CLEAR_ALL);
-    //addTool(actionRefreshButtons, PREF_TOOLBAR_REFRESH_BUTTONS);
-    toolBar.addSeparator();
-    addTool(actionQuit, PREF_TOOLBAR_QUIT);
-
-    toolBar.add(Box.createHorizontalGlue());
-
-    tideBox = new JCheckBox(Preferences.getIcon(PREF_TOOLBAR_TIDE + ".off.icon"));
-    tideBox.setSelectedIcon(Preferences.getIcon(PREF_TOOLBAR_TIDE + ".on.icon"));
-    toolBar.add(tideBox);
-    tideBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent event) {
-        toggleTide();
-      }
-    });
-
-    /*
-    if ("true".equals(System.getProperty("tide.enabled"))) {
-      tideBox.setToolTipText("Toggle tide debugger when rewriting");
-    } else {
-      tideBox.setEnabled(false);
-      tideBox.setToolTipText("Tide support disabled (configure with --with-tide=...)");
-    }
-    */
-
     String scaleList = Preferences.getString(PREF_GRAPHPANE_SCALES);
     Vector scales = new Vector();
     StringTokenizer t = new StringTokenizer(scaleList, ",");
@@ -356,7 +320,38 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     scaleBox.addActionListener(listener);
 
-    toolBar.add(scaleBox);
+    menuBar.add(Box.createHorizontalGlue());
+    menuBar.add(scaleBox);
+
+    //}}}
+    //{{{ Create toolbar
+
+    toolBar = new JToolBar();
+
+    /* Commented out to see if we miss them at all 
+    addTool(actionNewModule, PREF_TOOLBAR_NEW_MODULE);
+    addTool(actionOpenModule, PREF_TOOLBAR_OPEN_MODULE);
+    addTool(actionOpenLibModule, PREF_TOOLBAR_OPEN_LIB_MODULE);
+    addTool(actionSaveAll, PREF_TOOLBAR_SAVE_ALL);
+    toolBar.addSeparator();
+    addTool(actionClearAll, PREF_TOOLBAR_CLEAR_ALL);
+    //addTool(actionRefreshButtons, PREF_TOOLBAR_REFRESH_BUTTONS);
+    toolBar.addSeparator();
+    addTool(actionQuit, PREF_TOOLBAR_QUIT);
+
+    toolBar.add(Box.createHorizontalGlue());
+
+    tideBox = new JCheckBox(Preferences.getIcon(PREF_TOOLBAR_TIDE + ".off.icon"));
+    tideBox.setSelectedIcon(Preferences.getIcon(PREF_TOOLBAR_TIDE + ".on.icon"));
+    toolBar.add(tideBox);
+    tideBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent event) {
+        toggleTide();
+      }
+    });
+
+    */
+
 
     //}}}
     
