@@ -121,7 +121,6 @@ ATerm add_module(int cid, ATerm asfix)
                  &sections, &t[3], &t[4], &t[5], &t[6])) {
     if(GetValue(modules_db,modname) == ATfalse) {
       newasfix = AFexpandModule(asfix);
-			newasfix = AFaddPosInfoToModule(newasfix);
       PutValue(modules_db,modname,newasfix);
     };
     imports = get_import_section(sections);
@@ -169,7 +168,13 @@ ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
   entry = GetValue(new_modules_db, modname);
   if(!ATisEqual(eqs,ATparse("error")) &
      !ATisEqual(eqs,ATparse("no-equations"))) {
-    eqs = AFaddPosInfoToModule(eqs);
+		char *basename, *abspath;
+		ATerm path = ATelementAt((ATermList)entry, path_loc);
+		if(!ATmatch(path, "<str>", &abspath))
+			ATerror("not a string: %t\n", path);
+		if(!ATmatch(modname, "id(<str>)", &basename))
+			ATerror("not an id(<path>): %t\n", modname);
+    eqs = AFaddPosInfoToModule(abspath, basename, eqs);
   }
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
