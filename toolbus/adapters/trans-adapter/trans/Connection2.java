@@ -23,17 +23,17 @@ public class Connection2 implements Tb2Tif {
 	private Tb2Bridge bridge2;
 	private Connection1 con1;
 
-	public Connection2(ATermFactory factory) throws IOException {
+	public Connection2(String[] args, ATermFactory factory) throws IOException {
 		this.factory = factory;
 		bridge2 = new Tb2Bridge(factory, this);
 
-		String[] args = new String[6];
-		args[0] = "-TB_HOST_NAME";
-		args[1] = "localhost";
-		args[2] = "-TB_PORT";
-		args[3] = "9000";
-		args[4] = "-TB_TOOL_NAME";
-		args[5] = "tb2";
+//		args = new String[6];
+//		args[0] = "-TB_HOST_NAME";
+//		args[1] = "localhost";
+//		args[2] = "-TB_PORT";
+//		args[3] = "9000";
+//		args[4] = "-TB_TOOL_NAME";
+//		args[5] = "tb2";
 
 		bridge2.init(args);
 		bridge2.connect();
@@ -66,7 +66,6 @@ public class Connection2 implements Tb2Tif {
 	}
 	
 	public void postEventCon1(ATerm term) {
-		System.out.println(term);
 		ATerm fun;
 		List result;
 		

@@ -22,17 +22,17 @@ public class Connection1 implements Tb1Tif {
 	private Tb1Bridge bridge1;
 	private Connection2 con2;
 
-	public Connection1(ATermFactory factory) throws IOException {
+	public Connection1(String[] args, ATermFactory factory) throws IOException {
 		this.factory = factory;
 		bridge1 = new Tb1Bridge(factory, this);
 
-		String[] args = new String[6];
-		args[0] = "-TB_HOST_NAME";
-		args[1] = "localhost";
-		args[2] = "-TB_PORT";
-		args[3] = "8999";
-		args[4] = "-TB_TOOL_NAME";
-		args[5] = "tb1";
+//		args = new String[6];
+//		args[0] = "-TB_HOST_NAME";
+//		args[1] = "localhost";
+//		args[2] = "-TB_PORT";
+//		args[3] = "8999";
+//		args[4] = "-TB_TOOL_NAME";
+//		args[5] = "tb1";
 
 		bridge1.init(args);
 		bridge1.connect();
