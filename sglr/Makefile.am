@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS     = doc libsglr sglr client dump sdf1tosdf2 test
+SUBDIRS     = doc libsglr sglr client dump test
 
 EXTRA_DIST  = make_rules reconf
 

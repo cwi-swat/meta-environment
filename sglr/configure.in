@@ -85,8 +85,6 @@ AC_OUTPUT(
    libsglr/Makefile
    sglr/Makefile
    client/Makefile
-   sdf1tosdf2/Makefile
-   sdf1tosdf2/sdf1tosdf2
    test/Makefile
    test/erroneous/Makefile
    test/tables/Makefile
