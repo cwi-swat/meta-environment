@@ -63,14 +63,11 @@ in
   if equal(Recursive,recursive) then
     DoRecursiveCloseModule(ModuleName, Status?)
   else 
-    SoftCloseModuleInDB(ModuleName, Status?).
-    if equal(Status,success) then
-      CloseModuleInUI(ModuleName)
-    else tau fi
+    SoftCloseModuleInDB(ModuleName, Status?)
   fi.
   if not(equal(Status, success)) then
     snd-note(ui-status(errorf("Module %s not closed because other modules depend on it", [ModuleName])))
-  else tau fi
+  else MDB-DisplayGraph fi
 endlet
 
 process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
@@ -85,7 +82,6 @@ in
   rec-msg(imported-modules(Imports?)).
   SoftCloseModuleInDB(ModuleName, Status?).
   if equal(Status, success) then
-    CloseModuleInUI(ModuleName).
     Closed := [].
     if not(equal(Imports, [])) then
       Import := first(Imports).
@@ -101,7 +97,6 @@ in
       else tau fi
     fi*
     if equal(Imports,[]) then 
-      CloseModulesInUI(Closed).
       /* only give error if top module could not be closed */
       Status := success 
     fi
@@ -160,7 +155,6 @@ in
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
-    CloseModuleInUI(ModuleName).
     SaveSdfModules(Changed).
     snd-msg(notify-about-changed-modules(Changed, sdf)) .
     rec-msg(notify-about-changed-modules-done)
@@ -339,12 +333,6 @@ in
 endlet
 
   
-process CloseModuleInUI(ModuleName : str) is
-  snd-msg(ui-delete-modules([ModuleName]))
-
-process CloseModulesInUI(Modules : list) is
-  snd-msg(ui-delete-modules(Modules))
-
 process RenameModuleInDB(Old : str, New : str, Path : str, Changed : list?)
 is
   snd-msg(rename-module-in-db(Old, New, Path)) .
