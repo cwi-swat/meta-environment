@@ -20,4 +20,6 @@
 #
 # $Id$
 
-SUBDIRS = libasfix-old libasfix1
+SUBDIRS		= libasfix-old libasfix1
+
+EXTRA_DIST	= make_rules
