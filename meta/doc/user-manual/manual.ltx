@@ -1431,6 +1431,7 @@ introduce user-defined notation in specifications.
 definition of syntax and semantics.
 
 \subsection{Modules and Modular Structure}
+\label{modules}
 
 An \asfsdf\ specification consists of a sequence of module declarations. Each
 module may define syntax rules as well as semantic rules and the notation used
@@ -1539,6 +1540,7 @@ as layout symbol is ignored. Typically used for defining layout and comment
 conventions.
 
 \subsection{Lexical Syntax}
+\label{lexical-syntax}
 
 The lexical syntax describes the low level structure of text by means of
 \emph{lexical tokens}. A lexical token consists of a sort name (used to
@@ -1553,6 +1555,17 @@ sort. Regular expressions may contain strings, sort names, character classes,
 optional operators, alternative operators, and repetition operators.
 These notions will be explained in the next subsections. 
 Spaces are only significant inside strings and character classes.
+
+In fact the distinction between lexical syntax and context-free syntax
+in \sdf2 is artifical. In fact both can be seen as a kind of
+abbreviation mechanism. Between the members in the left-hand sides of 
+lexical functions no layout can be recognized, whereas in the
+left-hand side of context-free syntax non-terminals to recognize
+layout are implicitly inserted. \sdf2 offers a third mechanism
+to define syntax rules via a so-called {\tt syntax} section.
+The specification writer has to take care of the recognition of layout
+explicitly. This mechanism is beyond the scope of this manual
+and will not be discussed here, for more details see \cite{Vis9?.thesis}.
 
 \subsubsection{Lexical Functions}
 
@@ -1819,6 +1832,7 @@ exports
 \end{figure}   
 
 \subsubsection{Lexical Ambiguities}
+\label{lex-ambiguity}
 
 \sdf\ offers {\em no} automatic lexical disambiguation, it has a number of
 mechanism to disambiguate on the lexical level. The specification writer
@@ -2526,6 +2540,18 @@ exports
 
 \subsection{Restrictions}
 
+The use of restrictions have already been demonstrated in Section 
+\ref{lexical-syntax} where this mechanism is used to specified
+the lexical disambiguation rule ``longest match per sort''.
+
+Restrictions come in two flavours:
+\begin{itemize}
+\item lexical restrictions;
+\item context-free restrictions.
+\end{itemize}
+
+(*** Verder uitwerken ***)
+
 \subsection{Variables}
 \label{variables}
 
@@ -2533,32 +2559,60 @@ Variables are declared in the `variables' section of a module. It consists of
 a list of variables together with their sort. Each declaration defines a
 naming scheme for variables together with a result sort. A naming scheme is a
 regular expression like the ones allowed in the lexical syntax (See Section
-5.3 [Lexical Syntax], page 31) except that sorts are not allowed. One variable
+\ref{lexical-syntax}) except that sorts are not allowed. One variable
 declaration may thus define an unlimited number of variables. The sort of a
 variable may be a simple sort, or a list with or without separators. The
-variables `Id', `Type3', and `Id-list''' are examples of variables declared by
-the following specification:
+variables `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
+are examples of variables declared by
+the following specification presented in Figure \ref{CODE:variables}.
 
-\begin{verbatim}
-sorts ID DECL TYPE 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module VarDecls
 
-lexical syntax
-   [a-z]+ -> ID
-   " "    -> LAYOUT 
-context-free syntax
-   decl {ID ","}+ ":" TYPE -> DECL 
-   integer                 -> TYPE 
-   real                    -> TYPE 
+exports
+  sorts ID DECL TYPE 
 
-variables
-   Id           -> ID 
-   Type [0-9]*  -> TYPE 
-   Id-list [']* -> { ID "," }* 
-   Id-ne-list   -> {ID "," }+
-\end{verbatim}
+  lexical syntax
+    [a-z]+ -> ID
+    [\ \n] -> LAYOUT
 
-Note that variables (as all other entities in a module -- except equations)
-may be exported.  See Section ***[Modules]..
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
+ 
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -> DECL 
+    "integer"                 -> TYPE 
+    "real"                    -> TYPE 
+
+  variables
+    "Id"           -> ID 
+    "Type"[0-9]*   -> TYPE 
+    "Id-list"[\']* -> {ID ","}* 
+    "Id-ne-list"   -> {ID ","}+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Variable declarations}\label{CODE:variables}
+\end{figure}         
+
+Strings that occur in the left-hand side of variable declarations
+should {\em always} be quoted. The use of the character classes
+like in {\tt "Type"[0-9]*} and {\tt "Id-list"[\verb+\+\verb+'+]*} allows the
+generation of an infinite number of variable names.
+
+The variables can only be used when defining equations. It is not
+possible to use variables in ordinary terms. This would imply
+that we would allow the rewriting of {\em open} terms.
+
+In Section \ref{lex-ambiguity} we address the disambiguation rule
+{\em prefer variables}. This rule states that if a substring
+can be recognized as a variable it will be recognized as such.
+The parser generator decorates automatically each
+variable declaration with an attribute {\tt prefer}.
+
+Note that variables (as all other entities in a module --- except equations)
+may be exported, see Section \ref{modules}.
 
 \subsection{Equations}
 
@@ -2570,34 +2624,180 @@ an unconditional equation of the form:
 {\tt [$TagId$] $S$ = $T$} 
 \end{quote}
 
-where $TagId$ is a sequence of letters and/or digits starting with an
-uppercase letter or a digit, and $S$ and $T$ must be terms of the same sort. A
-conditional equation consists of a number of conditions (also called premises)
+where $TagId$ is a sequence of letters, digits, and/or {\tt -} 
+starting with an letter or a digit, and $S$ and $T$ must be 
+terms of the same sort. 
+A conditional equation consists of a number of conditions 
+(also called premises)
 and a conclusion. It can be written in three (syntactically different) ways:
 
-{\tt 
 \begin{tabbing}
-
-(a)  [$TagId$] \= $S$ = $T$ when $C_1$, $C_2$, ...\\
-(b)  [$TagId$] \> $C_1$, $C_2$, ... ====> $S$ = $T$\\ 
-(c)  [$TagId$] \> $C_1$, $C_2$, ...\\
-                 \> =================\\
-                 \> \ \ \ \ \ $S$ = $T$\\
+(a) \= {\tt [$TagId$]} \= {\tt $S$ = $T$ when $C_1$, $C_2$, ...} \\
+%(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ====> $S$ = $T$} \\ 
+(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
+             \>    \> {\tt =================} \\
+             \>    \> \ \ \ \ \ {\tt $S$ = $T$}
 \end{tabbing}
-}
 
-\noindent where $C_1$, $C_2$, ...  are conditions which may be either positive (and have
-the form `{\tt $S$ = $T$}'), or negative (and have the form `{\tt $S$ !=
-  $T$}').
 
-Note that list sorts are not allowed as the sort of the term at the left-hand side or right-hand
-side of a condition or conclusion (but see Section ***[Lists]). This restriction can be circumvented by introducing a new sort for the list.
+\noindent where $C_1$, $C_2$, ...  are conditions which may be 
+either positive (and have  the form `{\tt $S$ = $T$}'), 
+or negative (and have the form `{\tt $S$ != $T$}').
+
+%Note that list sorts are not allowed as the sort of the term at the 
+%left-hand side or right-hand side of a condition or 
+%conclusion (but see Section ***[Lists]). This restriction can be 
+%circumvented by introducing a new sort for the list.
 
 Equations establish equalities between terms. How they are executed is
-discussed in Chapter **[Executing].
+discussed in Section \ref{executing-spec}.
+The evaluation strategy is based on innermost rewriting.
+One thing the specification writer has to keep in mind
+that there is {\em no} semantics related to the order in which
+the rules are specified.
 
+In Section \ref{large-examples} we will present a number of larger
+examples. We conclude this section with a number of smaller examples
+to illustrate the use of list matching, lexical constructor functions,
+default equations, memo functions, and delaying.
+
+\subsubsection{List Matching}
+
+List matching also known as associative matching is a powerful
+mechanism to describe complex functionality in a compact way.
+See Figure \ref{CODE:sets} for a compact specification to remove
+double elements from a set.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Sets
+
+imports Layout
+
+exports
+  sorts Elem Set
+
+  lexical syntax
+    [a-z]+ -> Elem
+
+  context-free syntax
+    "{" {Elem ","}* "}" -> Set
+
+  variables
+    "Elem"[0-9]*  -> Elem
+    "Elem*"[0-9]* -> {Elem ","}*
+
+%% Sets.eqs
+equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Set specification}\label{CODE:sets}
+\end{figure}   
+
+Note: although Figure \ref{CODE:sets} contains both the syntax definition
+as well as the equations this is within the \ASmetaenv\ not possible.
+The equations are physically separated from the syntax definition.
+
+\subsubsection{Lexical Constructor Functions}
+
+The only way to access the actual characters of a lexical token is
+by means of the so-called {\em lexical constructor functions}.
+For each lexical sort $LEX$ a lexical constructor function is automatically
+derived, the corresponding syntax definition is:
+{\tt "lex" "(" CHAR* ")" -> LEX}.
+The sort {\tt CHAR} is a predefined sort to access the characters.
+
+Characters can directly addressed by the representation or via
+variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
+{\tt CHAR+}, where the latter two represent list of characters.
+In Figure \ref{CODE:lcfs} a lexical constructor function is used
+to remove the leading zeros for a number.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -> NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+
+
+%% Nats.eqs
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)  
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Use of lexical constructor functions}\label{CODE:lcfs}
+\end{figure}   
+
+\noindent Note: there is no check on the use of characters within the
+lexical constructor function.
+
+\noindent Note: the lexical constructor functions will disappear when 
+the \ASmetaenv\ supports fully \sdf2.
+
+\subsubsection{Default Equations}
+
+The evaluation strategy for normalizing terms given the equations is
+based on innermost rewriting. All equations have the same priority.
+Given the outermost function symbol of a redex the set of equations
+with this outermost function symbol in the left-hand side is selected
+and all these rules will be tried.
+However, sometimes a specification writer would like to write down
+a rule with a special status ``{\em try this rule if all other rules fail}''.
+A kind of default behaviour is needed. \asf\ offers functionality in order
+to obtain this behaviour. If the $TagId$ of a equation starts with
+{\tt default-} this equation is considered as special equation which
+will only applied if none of the other rules match.
+Figure \ref{CODE:types} shows an example of the use of a default equation.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Types
+
+imports Booleans
+
+exports
+  sorts Type
+  context-free syntax
+    "natural"     -> Type
+    "string"      -> Type
+    "nil-type"    -> Type
+    "compatible" "(" Type "," Type ")" -> Bool 
+  variables
+    "Type"[0-9]*  -> Type
+
+%% Types.eqs
+equations
+
+  [Type-1]  compatible(natural, natural) = true
+
+  [Type-2]  compatible(string, string) = true
+
+  [default-Type] compatible(Type1,Type2) = false
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Use of a default equation}\label{CODE:types}
+\end{figure}   
+
+\subsubsection{Memo Functions}
+
+\subsubsection{Delaying}
 
 \section{Executing Specifications}
+\label{executing-specs}
 
 \subsection{Evaluating Terms}
 \label{eval-term}
@@ -2605,19 +2805,18 @@ discussed in Chapter **[Executing].
 \subsection{Compiling a Specification}
 \label{compiling-specs}
 
-\section{Examples of ASF+SDF Specifications}
+\section{Examples of \asfsdf\ Specifications}
+\label{large-examples}
 
-(*** Examples to be checked ***)
-
-Here are some small examples of ASF+SDF specifications, which are selected to
+Here are some examples of \asfsdf\ specifications, which are selected to
 illustrate specific features of the formalism. Larger examples can be found in
 the online specifications.
 
 \subsection{Symbolic Differentiation}
 
 Computing the derivative of an expression with respect to some variable is a
-classical problem we discuss in this example. Computing the derivative of {\tt
-  X * (X + Y + Z)} with respect to X gives:
+classical problem we discuss in this example. 
+Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
 
 {\tt d(X * (X + Y + Z)) / dX ) X + Y + Z + X}
 
@@ -2627,49 +2826,56 @@ introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
 defined. Then, the differentiation rules are defined (equations [1]-[5]).
 Finally, some rules for simplifying expressions are given. As the above
 example shows, further simplification rules could have been added to collect
-multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to compute constant
-expressions.
-
-\begin{verbatim}
-
+multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
+compute constant expressions.
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module Diff 
+
+imports Layout
+
 exports
-  sorts NAT VAR EXP 
+  sorts NAT VAR EXP
+ 
   lexical syntax
-    [0-9]+    -> NAT 
-    [XYZ]    -> VAR 
-    [\ \t\n] -> LAYOUT 
+    [0-9]+   -> NAT 
+    [XYZ]    -> VAR
+
   context-free syntax
-    NAT -> EXP 
-    VAR -> EXP 
-    EXP "+" EXP -> EXP {left} 
-    EXP "*" EXP -> EXP {left} 
-    "(" EXP ")" -> EXP {bracket} 
-    d EXP "/" d VAR -> EXP
+    NAT                 -> EXP 
+    VAR                 -> EXP 
+    EXP "+" EXP         -> EXP {left} 
+    EXP "*" EXP         -> EXP {left} 
+    "(" EXP ")"         -> EXP {bracket} 
+    "d" EXP "/" "d" VAR -> EXP
 
-variables
-  N        -> NAT 
-  V [0-9]* -> VAR 
-  E [0-9]* -> EXP 
+  variables
+    "N"       -> NAT 
+    "V"[0-9]* -> VAR 
+    "E"[0-9]* -> EXP 
 
-priorities
-  "*" > "+" 
+ context-free priorities
+   EXP "*" EXP -> EXP > 
+   EXP "+" EXP -> EXP
 
+%% Diff.eqs
 equations 
-
-[1] dN/dV = 0
-[2] dV/dV = 1 
-[3] V1 != V2 ==> dV1/dV2 = 0 
-[4] d(E1+E2)/dV = dE1/dV + dE2/dV 
-[5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
-[6] E + 0 = E 
-[7] 0 + E = E 
-[8] E * 1 = E 
-[9] 1 * E = E 
-[10] 0 * E = 0 
-[11] E * 0 = 0
-
-\end{verbatim}
+  [1] dN/dV = 0
+  [2] dV/dV = 1 
+  [3] V1 != V2 ==> dV1/dV2 = 0 
+  [4] d(E1+E2)/dV = dE1/dV + dE2/dV 
+  [5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
+  [6] E + 0 = E 
+  [7] 0 + E = E 
+  [8] E * 1 = E 
+  [9] 1 * E = E 
+  [10] 0 * E = 0 
+  [11] E * 0 = 0
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for differentiating}\label{CODE:diff}
+\end{figure}   
 
 \subsection{Sorting}
 
