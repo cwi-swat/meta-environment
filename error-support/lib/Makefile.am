@@ -30,8 +30,7 @@ ABSOLUTE_SOURCE_MODULES=\
   $(foreach i, ${SOURCE_MODULES}, ${top_srcdir}/../asf-library/library/$i.sdf)
 
 MetaErrors.def: Makefile
-	@(echo "definition"; \
-	  cat ${ABSOLUTE_SOURCE_MODULES} ${top_srcdir}/lib/Lexicals.sdf) > $@
+	@(echo "definition"; cat ${ABSOLUTE_SOURCE_MODULES}) > $@
 	
 MetaErrors.impl.def: Makefile
 	@(echo "definition"; \
