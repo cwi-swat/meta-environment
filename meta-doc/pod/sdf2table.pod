@@ -4,7 +4,7 @@ SDF2TABLE - generate parse tables from SDF2 language definitions
 
 =head1 SYNOPSIS
 
-B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] 
+B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -29,11 +29,12 @@ Displays concise usage information.
 
 =item -B<i> I<file>
 
-Read input from F<file>; by default, input is read from stdin.
+Read input from F<file>; by default, input is either read from stdin,
+or from the named files supplied as arguments.
 
-=item -B<o> I<file>
-
-Write output to F<file>.  By default, output goes to stdout.
+Write output to F<file>.  By default, output is written to file with a
+name derived from the name of the input file for named files, and to
+standard output on input from standard input.
 
 =item B<-s>
 
