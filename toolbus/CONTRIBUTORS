@@ -4,7 +4,8 @@ of source code or comments on the distribution:
 
 Robert van Liere (provided the first version of the socket code)
 Simon Gray (binary strings, improvements to socket code)
-Pieter Olivier (asf+sdf-adapter, tcl tool interfacing)
+Pieter Olivier (asf+sdf-adapter, tcl tool interfacing,
+python-adapter, and many-many improvements all over the code).
 
 The following users are acknowledged for their comments:
 
