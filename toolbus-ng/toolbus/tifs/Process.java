@@ -6,41 +6,20 @@ import aterm.*;
 
 public class Process {
   private ATermAppl representation;
-  private List communicationList;
+  private CommunicationList communicationList;
 
   public Process(ATerm t) {
     setRepresentation(t);
     initCommunicationList();
   }
-
+  
   private void setRepresentation(ATerm t) {
     this.representation = (ATermAppl) t;
   }
 
   private void initCommunicationList() {
-    communicationList = new LinkedList();
-    ATermList iter = (ATermList) representation.getArgument(1);
-    while (!iter.isEmpty()) {
-      Communication comm = null;
-      ATermAppl appl = (ATermAppl) iter.getFirst();
-      AFun fun = appl.getAFun();
-      String name = fun.getName();
-      // <yuck>
-      if (name.equals("eval")) {
-        comm = new Eval(appl);
-      }
-      else if (name.equals("do")) {
-        comm = new Do(appl);
-      }
-      else if (name.equals("event")) {
-        comm = new Event(appl);
-      }
-      if (comm != null) {
-        communicationList.add(comm);
-      }
-      // </yuck>
-      iter = iter.getNext();
-    }
+    ATermList list = (ATermList) representation.getArgument(1);
+    communicationList = new CommunicationList(list);
   }
 
   public String getName() {
