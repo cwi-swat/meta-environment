@@ -29,7 +29,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   int start_col  = current->col;
   int len;
 
-  if (current->maxDepth > current->curDepth) {
+  if (current->maxDepth == current->curDepth) {
     return tree;
   }
 
