@@ -1,0 +1,62 @@
+/*
+ * $Id$
+ */
+
+process File-creator is
+let
+  FileName : str,
+  ModuleName: str,
+  ErrMsg: str
+in
+  (
+    %% Handle request to create a new module.
+    rec-msg(create-new-module(ModuleName?)) .
+    snd-msg(is-module-in-db(ModuleName)) .
+    (
+      rec-msg(exists-in-module-db(ModuleName)) .
+      snd-msg(module-not-created("Module already in database"))
+    +
+      rec-msg(not-exists-in-module-db(ModuleName)) .
+      snd-msg(exists-sdf2-module(ModuleName)) .
+      (
+        rec-msg(sdf2-module-exists(ModuleName)) .
+        snd-msg(module-not-created("Module already exists in text or baf"))
+      +
+        rec-msg(sdf2-module-not-exists(ModuleName)) .
+        snd-msg(create-empty-sdf2-module(ModuleName)) .
+        (
+	  rec-msg(module-created(ModuleName)) .
+      	  snd-msg(module-created)
+        +
+          rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
+	  snd-msg(module-not-created(ErrMsg))
+        )
+      )
+    )
+  +
+    %% Handle request to create a new equations section.
+    rec-msg(create-new-equations(ModuleName?)) .
+    snd-msg(is-module-in-db(ModuleName)) .
+    (
+      rec-msg(not-exists-in-module-db(ModuleName)) .
+      snd-msg(equations-not-created("Module not in database"))
+    +
+      rec-msg(exists-in-module-db(ModuleName)) .
+      snd-msg(exists-eqs-section(ModuleName)) .
+      (
+        rec-msg(eqs-section-exists(ModuleName)) .
+	snd-msg(equations-not-created("Equations section already exists."))
+      +
+        rec-msg(eqs-section-not-exists(ModuleName)) .
+	snd-msg(create-empty-equations(ModuleName)) .
+	(
+	  rec-msg(empty-equations-created(FileName?)) .
+	  snd-msg(new-equations-created(ModuleName, FileName))
+	+
+	  rec-msg(empty-equations-not-created(ModuleName, ErrMsg?)) .
+	  snd-msg(new-equations-not-created(ErrMsg))
+	)
+      )
+    )
+  ) * delta
+endlet

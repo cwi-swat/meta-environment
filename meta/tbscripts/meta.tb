@@ -13,13 +13,14 @@
 #include "in-output.idef"
 #include "parsetrees.tb"
 #include "open-modules.tb"
-#include "new-module.tb"
+#include "file-creator.tb"
 #include "close-modules.tb"
 #include "revert-module.tb"
 #include "retrieve-eqs.tb"
 #include "ui.tb"
 #include "status-display.tb"
 #include "edit-module.tb"
+#include "edit-equations.tb"
 #include "clear-all.tb"
 #include "compiler.tb"
 #include "edit-master.tb"
@@ -34,4 +35,6 @@
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,New-module,SE,Anno,Set-parsetable,Open-Sdf2-Language) 
+toolbus(Parser, Parsetrees, Prettyprinter, Io, Ui, Edit-master, ModuleDB, 
+	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
+	Set-parsetable, Open-Sdf2-Language) 

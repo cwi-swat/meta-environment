@@ -30,8 +30,8 @@ in
     ( if not-equal(Modules, []) then
        Module  := first(Modules).
        Modules := next(Modules).
-       snd-msg(Id,open-eqs-text-file(Module)).
-       ( rec-msg(Id, opened-file(raw,Mname?,FT?,Path?,Time1?)).
+       snd-msg(open-eqs-text-file(Module)).
+       ( rec-msg(opened-file(raw,Mname?,FT?,Path?,Time1?)).
          snd-msg(set-parsetable(Mname)).
          (
 	   rec-msg(parsetable-set(Mname)).
@@ -75,7 +75,7 @@ in
 				     [Mname])))
          )
        +
-       rec-msg(Id, error-opening(Mod?)).
+       rec-msg(error-opening(Mod?)).
        snd-msg(add-eqs-to-db(Module,"",no-equations,timestamp(0),"unchanged")).
        rec-msg(done)
       )

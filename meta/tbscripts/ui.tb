@@ -98,7 +98,7 @@ in
       snd-ack-event(UI,edit-module(ModName))
     ) +
     ( rec-event(UI,edit-eqs-module(ModName?)).
-      create(Edit-eqs-module(ModName),EM?).
+      create(Edit-equations(ModName),EM?).
       snd-ack-event(UI,edit-eqs-module(ModName))
     ) +
     ( rec-event(UI,revert-module(ModName?)).
