@@ -133,15 +133,17 @@ in
   (
     rec-msg(get-all-equations(ModuleName?)) .
     snd-msg(get-specification(ModuleName)) .
-    rec-msg(specification(NewEquations?)) .
-    snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
-    NewEquations := [] .
-    rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-    snd-msg(all-equations(AllEquations)) .
-    AllEquations := no-tree
-  +
-    rec-msg(specification-incomplete) .
-    snd-msg(equations-incomplete)
+    (
+      rec-msg(specification(NewEquations?)) .
+      snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
+      NewEquations := [] .
+      rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
+      snd-msg(all-equations(AllEquations)) .
+      AllEquations := no-tree
+    +
+      rec-msg(specification-incomplete) .
+      snd-msg(equations-incomplete)
+    )
   )
   * delta
 endlet

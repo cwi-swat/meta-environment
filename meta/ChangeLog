@@ -1,5 +1,9 @@
 # $Id$
 
+2003/12/08 <markvdb@cwi.nl>
+ * Fixed a bug when the specification is incomplete wrt
+   parsed equations.
+
 2003/10/27 <markvdb@cwi.nl>
  * Fixed bug #107, added a StackIsEmpty check.
 
