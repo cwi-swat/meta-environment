@@ -62,7 +62,7 @@ do
         -r)
 	    shift; reducer=$1;;
 	-R) 
-	    shift; reducer_options=$1;;
+	    shift; reducer_options="${reducer_options} $1";;
 	-v) 
 	    shift; version=$1;;
         -V)
