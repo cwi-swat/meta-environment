@@ -40,7 +40,7 @@ language $L$, and we have a parser $\Pi_L$ over this language and a pretty print
 then $pp(\Pi_L(\alpha)) = \alpha$. If $t$ the parse tree that results
 from $\Pi_L(\alpha)$ then also $\Pi_L(pp(t)) = t$.
 
-\subsection{External behaviour}
+\subsection{External behaviour}\label{externaleditor}
 
 If the edited text is not syntactically correct (which is inevitable
 during editing) then the smallest subtree that contains an incorrect
@@ -90,15 +90,41 @@ a number of strategies that could help us here. In this case, the
 solution would be to create a new focus that exactly contains all the
 old focuses, effectively giving the same functionality as \gse.
 
-\subsection{The Prototype}
 
-We are currently working on a prototype that lets us experiment with
-these different (parsing) strategies. Because all these strategies are
-implemented outside the structure editor (but in a ToolBus-script), it
-is relatively easy to change them. 
+\subsection{Implementation}
 
-The prototype currently consists of the aforementioned ToolBus script,
-an \asdf\ specification of the structure editor, a Java implementation
-of the structure editor, and a Tcl/Tk implementation of a text
-editor.
+As stated above, the editing system has been implemented as two
+separate tools. The structure editor was specified in \asdf. This
+specification can be used as implementation using the interpreter
+described in Section \ref{interpreter}. Because of the experimental
+nature of the system in this stage, it proves to be difficult to use
+the interpreter at two levels at the same time (as a rewrite machine
+for specifications written using the \metaenv, and as a implementation
+of the editor this specification is written in). Besides, the
+interpreter is not (currently) fast enough to support interactive
+use. We therefore implemented the structure editor in \java, which
+provides us with an implementation that is independent of the other
+components of the \metaenv, and sufficiently fast to cater for
+interactive use.
+
+The text editor we use is jedit, a public domain text editor written
+in \tcltk. It is easily extendible which allows us to experiment with
+different lay-outs, and {\ui}s. 
+
+\subsection{Discussion}
+
+In Section \ref{externaleditor} we mentioned the need for
+experimenting with different parsing strategies. By moving the
+implementation of these strategies out of the structure editor and
+into the \TB-script, we hope to create a system that provides us with
+the flexibility to try out different strategies. 
+
+The structure editing specification so far has only been tested on
+small examples. We need to see how the specification holds up when
+used with larger, more complex editing sessions. 
+
+The text editor that is used currently needs to be replaced with a
+well known editor. We will try to incorporate emacs into the structure
+editing system.
+
 
