@@ -6,7 +6,6 @@ Tue Mar  1 13:43:41 CET 2005 <markvdb@cwi.nl>
  * Adapted the priority relations generated for non-assoc attributes.
  * Removed equations dealing with old tuple syntax.
 
-
 Tue Mar  1 11:56:06 CET 2005 <kooiker@cwi.nl>
  * utilities/Makefile.am: no install due to () iso {}
 
