@@ -18,8 +18,8 @@
 %%
 module  MuASF2MuASF
 
-imports Remove-Lists Make-Left-Linear Make-Assign-Conds
+imports Optimize-MuASF Remove-Lists Make-Left-Linear Make-Assign-Conds
 
 exports
   context-free syntax
-    muasf2muasf(Module) -> Module
+    muasf2muasf(Module, NameTable) -> MN-struct

@@ -54,11 +54,13 @@ exports
     is-cons(Term)                     -> Bool
     term-contains-var(Term)           -> Bool
     args-contain-var({Term ","}*)     -> Bool
-    make-trans-list-id(FunId)         -> FunId
-    remove-trans-from-list-id(FunId)  -> FunId
+    make-trans-list-id(FunId)         -> FunId {prefer}
+    remove-trans-from-list-id(FunId)  -> FunId {prefer}
+    make-dummy-list-id(FunId)         -> FunId {prefer}
+    is-dummy-list-id(FunId)           -> Bool  {prefer}
     make-func(FunId,{Term ","}*)      -> Term
     make-list-func(FunId,{Term ","}*) -> Term
-    prefix-id(FunId,FunId,IntCon)     -> FunId
+    prefix-id(FunId,FunId,IntCon)     -> FunId {prefer}
     is-internal-funid(FunId)          -> Bool
     is-quoted-funid(FunId)            -> Bool
     is-plus-var(Term)                 -> Bool

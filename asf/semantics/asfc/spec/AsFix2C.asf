@@ -19,13 +19,12 @@
 equations
 
   [a2c-1'1] asfix2muasf(Amodule) = (Module1,Nametable),
-%%            optimize-muasf(Module1, Nametable) = (Module2, Nametable2),
-            muasf2muasf(Module1) = module modid(Char*1) Signopt Rulesopt,
-            make-muasf-name(funid(Char*1)) = funid(Char*2)
+            muasf2muasf(Module1,Nametable) = (Module2,Nametable2),
+            Module2 = module modid(Char*1) Signopt Rulesopt,
+            make-muasf-name(funid(Char*1)) = funid(Char*2),
+            muASF2C-internal(modid(Char*2),Module2, Nametable2) = CProgram
             ==============================================
-            asfix2c(Amodule) =  muASF2C-internal(modid(Char*2),
-                                                 module modid(Char*1) Signopt Rulesopt,
-                                                 Nametable)
+            asfix2c(Amodule) = CProgram
 
   [a2c-1'1] asfix2muasf(Amodule) = (Module1,Nametable),
             muasf2muasf(Module1) = Module2

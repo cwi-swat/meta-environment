@@ -140,31 +140,6 @@ equations
 
   [default-rlsr-1'5] rem-lists-from-simple-rule(Bool,Rule,Aint) = (,Rule,Aint)
 
-%% If a default rule contains list variable it is necessary to
-%% introduce a new function symbol, because it is not allowed
-%% to have default rules with conditions.
-%%%  [rldr-1'1] Term1 = Funid1(Term+1),
-%%%             prefix-id("new__",Funid1,Aint1) = Funid2,
-%%%             make-new-funcdef(Funid1(Term+1),Funid2) = Funcdef,
-%%%             rem-lists-from-simple-rule(Funid2(Term+1) = Term2,succ(Aint1)) = (Funcdef*1,Rule*2,Aint2),
-%%%             make-new-args(Term+1,1) = Term+2
-%%%             ================================
-%%%             rem-lists-from-default-rule(default:Term1 = Term2,Aint1) =
-%%%               (Funcdef*1;Funcdef,
-%%%                default:Funid1(Term+2) = Funid2(Term+2);
-%%%                Rule*2,Aint1)
-%%%
-%%%  [rldr-1'2] Term1 = Funid1(Term+1),
-%%%             prefix-id("new__",Funid1,Aint1) = Funid2,
-%%%             make-new-funcdef(Funid1(Term+1),Funid2) = Funcdef,
-%%%             rem-lists-from-simple-rule(Cond+ ==> Funid2(Term+1) = Term2,succ(Aint1)) = (Funcdef*1,Rule*2,Aint2),
-%%%             make-new-args(Term+1,1) = Term+2
-%%%             ================================
-%%%             rem-lists-from-default-rule(default:Cond+ ==> Term1 = Term2,Aint1) =
-%%%               (Funcdef*1;Funcdef,
-%%%                default:Funid1(Term+2) = Funid2(Term+2);
-%%%                Rule*2,Aint1)
-
   [rldr-1'1] rem-lists-from-simple-rule(true,Term1 = Term2,Aint1) =
                (Funcdef*,Rule2,Aint2),
              make-default-rule(Rule2) = Rule3
@@ -199,22 +174,6 @@ equations
             ====================================================================
             remove-simple-lists(Cond+ ==>
                                 Term1 = Term2) = Rule
-
-%%%  [rlr-1'3] contains-zero-or-one-list-var(Term1) = false,
-%%%            rem-lists-from-lhs-term(Term1,[1,]) = (Term3,Cond*1,Ivarenv1),
-%%%            rem-lists-from-rhs-term(Term2,Ivarenv1) = (Term4,Cond*2,Ivarenv2),
-%%%            make-conditional-rule(Cond*1 & Cond*2,Term3 = Term4) = Rule
-%%%            ===========================================================
-%%%            remove-simple-lists(Term1 = Term2) = Rule
-
-%%%  [rlr-1'4] contains-zero-or-one-list-var(Term1) = false,
-%%%            rem-lists-from-lhs-term(Term1,[1,]) = (Term3,Cond*1,Ivarenv1),
-%%%            rem-lists-from-conds(Cond+,Ivarenv1) = (Cond*2,Ivarenv2),
-%%%            rem-lists-from-rhs-term(Term2,Ivarenv2) = (Term4,Cond*3,Ivarenv3),
-%%%            make-conditional-rule(Cond*1 & Cond*2 & Cond*3,Term3 = Term4) = Rule
-%%%            ====================================================================
-%%%            remove-simple-lists(Cond+ ==>
-%%%                                Term1 = Term2) = Rule
 
 %% The equations to deal with the conditions in a rewrite rule.
   [rlcs-1'1] rem-lists-from-conds(Cond,Ivarenv1) =

@@ -29,8 +29,8 @@ equations
           ======================================
           optimize-recursive-list-functions(Module, Nametable) = (Module2, Nametable2)
 
-%%[default-orlfs] optimize-recursive-list-functions(Module, Nametable) = 
-%%                  (Module, Nametable)
+[default-orlfs] optimize-recursive-list-functions(Module, Nametable) = 
+                  (Module, Nametable)
 
 %% get-list-embedding
 %%
@@ -40,8 +40,9 @@ equations
 %% 1. it should be recursive and unary (for the moment)
 %% 2. one of it's argument should be an (embedded) list
 %% 3. the embedding should be made of only constructors
-%% 4. the embedding should be part of the right-hand-side too
-%% 5. the embedding should be the same for the left-hand side of all rules
+%% 4. the embedding should be the same for the left-hand side of all rules
+%% 5. the embedding should be part of the right-hand-side too
+
 %%
 %% It is this embedding that we are going to factorize out of 
 %% the recursive calls, so we return the embedding if all requiments
@@ -366,10 +367,15 @@ equations
          remove-emb-args(Term, Term+, Embedding at Int) = Term, Term+2
            
 
-[rea-0] remove-emb-arg(FunId(Term), [ FunId FunId+ ]) =
+[rea-0]  remove-emb-arg(FunId(Term), [ FunId FunId+ ]) =
           remove-emb-arg(Term, [ FunId+ ])
 
-[rea-1] remove-emb-arg(FunId(Term), [ FunId ]) = Term
+%% The innermost embedding should be a list
+
+[rea-1]  is-list-funid(FunId) = true,
+         make-dummy-list-id(FunId) = FunId2
+         ====
+         remove-emb-arg(FunId(Term), [ FunId ]) = FunId2(Term)
 
 [default-rea] remove-emb-arg(Term, Embedding) = Term
 

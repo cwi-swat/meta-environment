@@ -109,18 +109,28 @@ equations
 %% A function to check whether we are dealing with a list.
   [ilfi-1'1] is-trans-list-funid(funid(""" "{" Char+ "}" """)) = true
 
-  [ilfi-1'1] is-trans-list-funid(funid(""" "{" Char+ "}" """ "-" "t""r""a""n""s")) = true
+  [ilfi-1'1] is-trans-list-funid(funid(""" "{" Char+ "}"  "-" "t""r""a""n""s" """)) = true
 
   [default-ilfi-1'1] is-trans-list-funid(Funid) = false
 
   [mtli-1'1] make-trans-list-id(funid(""" "{" Char+ "}" """)) =
-               funid(""" "{" Char+ "}" """ "-" "t""r""a""n""s")
+               funid(""" "{" Char+ "}" "-" "t""r""a""n""s" """)
 
   [rtli-1'1] remove-trans-from-list-id(funid(""" "{" Char+ "}" """)) =
                funid(""" "{" Char+ "}" """)
 
-  [trli-1'2] remove-trans-from-list-id(funid(""" "{" Char+ "}" """ "-" "t""r""a""n""s")) =
+  [trli-1'2] remove-trans-from-list-id(funid(""" "{" Char+ "}" "-" "t""r""a""n""s" """)) =
                funid(""" "{" Char+ "}" """)
+
+%% functions to check whether we are dealing with a dummy list function as part
+%% of an optimization
+  [mrli-1'1] make-dummy-list-id(funid(""" "{" Char+ "}" """)) =
+               funid(""" "{" "d""u""m""m""y" "}" """)
+
+  [irli-1'1] is-dummy-list-id(funid(""" "{" "d""u""m""m""y" "}" """)) =
+               true
+
+  [default-irli] is-dummy-list-id(Funid) = false
 
   [ic-1'1] is-cons(funid("c""o""n""s")) = true
 

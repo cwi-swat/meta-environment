@@ -42,10 +42,6 @@ equations
            ================================
            normalize-rules(Rule1; Rule+1) =  Rule2; Rule+2
 
-%%%  [nr-2'1] normalize-rule(default:Term1 = Term2) = default:Term1 = Term2
-
-%%%  [nr-2'2] normalize-rule(Term1 = Term2) = Term1 = Term2
-
   [nr-2'1] normalize-conds(Cond+1,1) = (,Cond+2,Aint)
            ==========================================
            normalize-rule(default:Cond+1 ==> Term1 = Term2) =
@@ -187,42 +183,3 @@ equations
 
   [default-nla-2'2] normalize-list-arg(Term,Aint) = (Term,,Aint)
 
-%%%  [tll-1'3] Term1 = Funid1(Term+),
-%%%            prefix-id("lookup__",Funid1,Aint1) = Funid2
-%%%            ===========================================
-%%%            transform-list-rule(Cond+ ==> Term1 = Term2,Aint1) =
-%%%              transform-list-conds(Funid2(Term+),Cond+,,Term1,Term2,1)
-
-%%%  [tlc-1'1] contains-zero-or-one-list-vars-in-cond(Term1 =: Term2) = true,
-%%%            term-contains-var(Term2) = true
-%%%            ===============================
-%%%            transform-list-conds(Funid1(Term+1),Term1 =: Term2 & Cond+1,
-%%%                            Cond*2,Term3,Term4,Aint) =
-%%%              transform-list-conds(Funid1(Term+1,Term2),Cond+1,
-%%%                              Cond*2 & Term1 =: Term2,Term3,Term4,Aint)
-
-%%%  [tlc-1'2] contains-zero-or-one-list-vars-in-cond(Term1 =: Term2) = true,
-%%%            term-contains-var(Term2) = false
-%%%            ================================
-%%%            transform-list-conds(Funid1(Term+1),Term1 =: Term2 & Cond+1,
-%%%                            Cond*2,Term3,Term4,Aint) =
-%%%              transform-list-conds(Funid1(Term+1),Cond+1,
-%%%                              Cond*2 & Term1 =: Term2,Term3,Term4,Aint)
-
-%%%  [tlc-1'3] contains-zero-or-one-list-vars-in-cond(Term1 =: Term2) = false,
-%%%            newvar(succ(Aint),OkV) = Varid,
-%%%            make-new-funcdef(Funid1(Term+1,Term1),Funid1) = Funcdef,
-%%%            make-conditional-rule(Cond*1,Funid1(Term+1,Term2) = ok(Term4)) = Rule
-%%%            =====================================================================
-%%%            transform-list-conds(Funid1(Term+1),Term1 =: Term2 & Cond*1,
-%%%                            Cond*2,Term3,Term4,Aint) =
-%%%              (Funcdef,
-%%%               Cond*2 & Funid1(Term+1,Term1) =: ok(Varid)
-%%%               ==>
-%%%               Term3 = Varid;
-%%%               Rule,succ(succ(Aint)))
-
-%%%  [default-tlc-1'4] transform-list-conds(Term1,Cond & Cond+1,
-%%%                                    Cond*2,Term3,Term4,Aint) =
-%%%                      transform-list-conds(Term1,Cond+1,
-%%%                                      Cond*2 & Cond,Term3,Term4,Aint)

@@ -210,7 +210,7 @@ equations
               asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1) =
                 (Stat*4,Aint4)
 
-  [ar2cs-2'8] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+  [ar2cs-2'9] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               make-c-expression((Funid,Aint+),Namepair*) = Ltest,
               make-select-stat(Aint+) = Decl*,
               is-list-funid(Funid) = false,
@@ -305,6 +305,7 @@ equations
               sigargs2cbuild(Sigarg,Sigarg+,Aint1) = (ActualArgs',,succ(Aint2))
 
   [l2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+             is-dummy-list-id(Funid) = false,
              make-atmp(Aint+) = Expression,
              make-c-temp(Aint1) = Expression2,
              listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = (Stat*2,Aint2),
@@ -312,6 +313,14 @@ equations
              Expression2 = arg_0(Expression); = Stat*1,
              Stat*1 ++ Stat*2 = Stat*3,
              make-cond(Ltest,Stat*3) = Stat*4
+             ================================
+             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
+
+  [dl2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+              is-dummy-list-id(Funid) = true,
+              make-c-temp(Aint1) = Expression2,
+              listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = 
+                (Stat*2,Aint2)
              ================================
              list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
 

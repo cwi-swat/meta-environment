@@ -26,7 +26,7 @@
 %% of the C code.
 module AsFix2C
 
-imports AsFix2muASF  Optimize-MuASF MuASF2MuASF MuASF2C
+imports AsFix2muASF  MuASF2MuASF MuASF2C
 exports
   context-free syntax
     asfix2c ( ATerm ) -> CProgram
@@ -40,3 +40,5 @@ hiddens
     "Char"[0-9]*    -> CHAR
     "Char*"[0-9]*   -> CHAR*
     "Char+"[0-9]*   -> CHAR+ 
+  
+    "CProgram"[0-9]* -> CProgram
