@@ -18,12 +18,16 @@ endlet
 process SEARCH(AB : address-book) is
 let
   Aid : int,
-  Name : str
+  Name : str,
+  Address : str
 in
-  rec-msg(find-by-name(Name?)) .
-  snd-eval(AB, find-by-name(Name)) .
-  (
-    rec-value(AB, found(Aid?)) .
+  ( rec-msg(find-by-address(Address?)) .
+    snd-eval(AB, find-by-address(Address))
+  +
+    rec-msg(find-by-name(Name?)) .
+    snd-eval(AB, find-by-name(Name))
+  ) .
+  ( rec-value(AB, found(Aid?)) .
     snd-msg(found(Aid))
   +
     rec-value(AB, not-found) .
@@ -37,16 +41,16 @@ let
   Name : str,
   Address : str
 in
-  rec-msg(update-address(AID?)) .
+  rec-msg(update-entry(AID?)) .
   ( rec-msg(set-name(Name?)) .
     snd-do(AB, set-name(AID, Name))
   + rec-msg(set-address(Address?)) .
     snd-do(AB, set-address(AID, Address))
   ) *
-  rec-msg(update-address-done)
+  rec-msg(update-entry-done)
 endlet
 
-process MAIN is
+process ADDRESSBOOK is
 let ABTool : address-book
 in
   execute(address-book, ABTool?) .
@@ -60,32 +64,28 @@ endlet
 
 tool address-book is { command = "java-adapter -class TBAddressBookService" }
 
-process CLIENT is
+process UI is
 let
+  UITool : ui,
   AID : int,
-  Name : str,
-  Address : str
+  Name : str
 in
-  Name := "John Doe" .
-  Address := "1342 Elm Street" .
-
-  snd-msg(create-address) .
-  rec-msg(address-created(AID?)) .
-  printf("new entry created, id=%d\n", AID) .
-
-  snd-msg(update-address(AID)) .
-  snd-msg(set-name(Name)) .
-  snd-msg(set-address(Address)) .
-  snd-msg(update-address-done) .
-
-  snd-msg(find-by-name(Name)) .
+  rec-connect(UITool?) .
   (
-    rec-msg(found(AID?)) .
-    printf("%s found: id=%t\n", Name, AID)
-  + rec-msg(not-found) .
-    printf("%s not found!\n", Name)
-  ) .
-  shutdown("")
+    rec-event(UITool, create-address) .
+    snd-msg(create-address) .
+    rec-msg(address-created) .
+    snd-ack-event(UITool, create-address)
+  +
+    rec-event(UITool, update-name(AID?, Name?)) .
+    snd-msg(update-address(AID)) .
+    snd-msg(set-name(Name)) .
+    snd-msg(update-entry-done(AID)) .
+    snd-ack-event(UITool, new-name(AID, Name))
+  )
+  * rec-disconnect(UITool)
 endlet
 
-toolbus(MAIN, CLIENT)
+tool ui is { }
+
+toolbus(ADDRESSBOOK)
