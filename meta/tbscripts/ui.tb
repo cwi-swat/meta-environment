@@ -123,7 +123,10 @@ in
      snd-msg(no-online-help-wanted).
      rec-msg(done).
      snd-ack-event(UI,no-online-help)
-   ) 
+   ) +
+   ( rec-note(import-relations(irels(Pairs?))).
+     snd-do(UI,add-imports(Pairs))
+   )
   ) *
   rec-event(UI,button(quit)).
   shutdown("MSM exiting")
