@@ -1,0 +1,219 @@
+
+%{{{ tide-main.tcl
+
+The tool {\tt tide-main} controls the overal behaviour of tide.
+It keeps track of the ToolBus instances connected to the system,
+and lets the user open ToolBus view windows for these instances.
+
+{\tt tide-main} can also be used to shutdown the debugger.
+
+Later, I want to extent this tool to include project controls.
+
+<<tide-main.tcl>>=
+<<createWindow>>
+<<updateButtons>>
+
+<<doViewToolBus>>
+<<doShutdown>>
+
+<<toolbus-connected>>
+<<toolbus-disconnected>>
+<<rec-terminate>>
+<<rec-ack-event>>
+
+<<utility functions>>
+
+set TBlist {}
+createWindow
+
+@
+
+%}}}
+
+%{{{ createWindow
+
+<<createWindow>>=
+
+proc createWindow { } {
+  global tk_version
+
+  wm positionfrom . program
+  wm sizefrom . program
+  wm maxsize . 1152 900
+  wm title . "T.I.D.E."
+  wm geometry . 160x128
+
+  frame .menu -borderwidth 2 -relief flat
+  menubutton .menu.tide -menu .menu.tide.m -text "Tide"
+  menu .menu.tide.m
+  .menu.tide.m add command -label "Shutdown" -command "doShutdown"
+  pack append .menu \
+	.menu.tide {left frame center}  
+
+  frame .tb -borderwidth 2 -relief groove
+  frame .tb.list -borderwidth 0
+
+  if { $tk_version == "3.6" } {
+    listbox .tb.list.box -borderwidth 2 -relief sunken \
+	  -geometry 1x1 \
+	  -yscrollcommand ".tb.list.vert set"
+#	  -xscrollcommand ".tb.hor.bar set"
+  } else {
+    listbox .tb.list.box -borderwidth 2 -relief sunken \
+	  -width 1 \
+	  -height 1 \
+	  -yscrollcommand ".tb.list.vert set"
+#	  -xscrollcommand ".tb.hor.bar set"
+  }
+  BindSSL .tb.list.box
+
+  scrollbar .tb.list.vert -command ".tb.list.box yview" -orient vert
+
+  pack append .tb.list \
+	.tb.list.box {left frame center expand fill} \
+	.tb.list.vert {left frame center filly}
+
+#  frame .tb.hor -borderwidth 0
+#  scrollbar .tb.hor.bar -command ".tb.list.box xview" -orient hor
+ #frame .tb.hor.dummy -width 22 -height 20
+ 
+#  pack append .tb.hor \
+#	.tb.hor.bar {left frame center expand fill}
+#	.tb.hor.dummy {left frame center}
+  
+  frame .tb.buttons -borderwidth 2 -relief groove
+  button .tb.buttons.view -text "View" -command "doViewToolBus"
+ 
+  pack append .tb.buttons \
+	.tb.buttons.view {left frame center expand}
+
+  pack append .tb \
+	.tb.list {top frame center expand fill} \
+	.tb.buttons {top frame center fillx}
+#	.tb.hor {top frame center fillx}
+  
+  pack append . \
+	.menu {top frame center fillx} \
+	.tb {top frame center expand fill}
+
+  updateButtons
+}
+@
+
+%}}}
+%{{{ updateButtons
+
+<<updateButtons>>=
+proc updateButtons { } {
+  set sel [.tb.list.box curselection]
+  if { $sel != "" } {
+    .tb.buttons.view configure -state normal
+  } else {
+    .tb.buttons.view configure -state disabled
+  }  
+}
+@
+
+%}}}
+
+%{{{ doViewToolBus
+
+The user pressed the {\tt View} button in the ToolBus window.
+<<doViewToolBus>>=
+proc doViewToolBus {} {
+  global TBlist
+
+  set sel [.tb.list.box curselection]
+  if { $sel != "" } {
+    set index [lindex $sel 0]
+    set tbid [lindex $TBlist $index]
+    TBsend "snd-event(view-toolbus($tbid))"
+  }
+}
+@
+
+%}}}
+%{{{ doShutdown
+
+The user wants to quit.
+
+<<doShutdown>>=
+proc doShutdown {} {
+	TBsend "snd-event(tide-shutdown)"
+}
+@
+
+%}}}
+
+%{{{ toolbus-connected
+
+<<toolbus-connected>>=
+proc toolbus-connected { tb info } {
+  global TB TBlist tk_version
+
+  puts stderr "toolbus-connected $tb $info"
+  .tb.list.box insert end $tb
+  set TB($tb,info) $info
+  if { $tk_version == "3.6" } {
+  } else {
+      .tb.list.box selection clear 0 end
+      .tb.list.box selection set [llength $TBlist]
+  }   
+  lappend TBlist $tb
+  updateButtons
+}
+@
+
+%}}}
+%{{{ toolbus-disconnected
+
+<<toolbus-disconnected>>=
+proc toolbus-disconnected { tb } {
+	global TB TBlist
+
+	set index [lsearch $TBlist $tb]
+	set TBlist [lreplace $TBlist $index $index]
+
+	.tb.list.box delete $index
+}
+@
+
+%}}}
+
+%{{{ rec-terminate
+
+<<rec-terminate>>=
+proc rec-terminate { arg } {
+  exit
+}
+@
+
+%}}}
+%{{{ rec-ack-event
+
+<<rec-ack-event>>=
+proc rec-ack-event { event } {
+}
+@
+
+%}}}
+
+%{{{ utility functions
+
+<<utility functions>>=
+# procedure: BindSSL, adjust binding for single selection listbox
+proc BindSSL { Box } {
+  global tk_version
+
+ bind $Box <1> {updateButtons}
+ if { $tk_version == "3.6" } {
+    bind $Box <B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-Button-1> {%W select from [%W nearest %y]; updateButtons}
+  } else {
+    $Box configure -selectmode single
+  }
+}
+@
+
+%}}}

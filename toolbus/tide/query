@@ -1,0 +1,13 @@
+#!/bin/sh
+echo "y" | \
+/opt/sparc/www/bin/glimpse -i -F html -H help $@ 1> /usr/tmp/.gurl 2>> /usr/tmp/errors.out
+A=`cut -f1 -d':' /usr/tmp/.gurl`
+ID=`/opt/sparc/openwin/bin/xlswins -indent 0 | grep "Netscape:" | sort | cut -f1 -d' '`
+echo "netscape: $A"
+if test "#$ID#" != "##"  
+then
+  netscape -id $ID  -remote "openURL($A) -raise" &
+else
+  netscape $A &
+fi
+rm /usr/tmp/.gurl

@@ -1,0 +1,20 @@
+
+
+process Python is
+let
+  P1 : python1,
+  Count : int
+in
+  Count := 1 .
+  execute(python1, P1?) .
+  ( snd-do(P1, testing(Count)) .
+    Count := add(Count, 1) .
+    printf("increasing count: %d\n", Count)
+  ) * delta
+endlet
+
+tool python1 is { command = "python-adapter -program /usr/src/python/beta2/python -script python1.py" }
+tool viewer is { command = "../buscontrol" }
+
+toolbus(Python)
+

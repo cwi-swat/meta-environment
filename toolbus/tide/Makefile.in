@@ -1,0 +1,160 @@
+# @configure_input@
+# directory: tide
+
+PRODUCT         = @PRODUCT@
+VERSION         = @VERSION@
+
+SHELL           = /bin/sh
+srcdir          = @srcdir@
+VPATH           = @srcdir@
+top_srcdir      = @top_srcdir@
+
+CC              = @CC@
+CFLAGS          = -g @CFLAGS@
+CPP             = @CPP@
+CPPFLAGS        = @CPPFLAGS@
+DEFS            = @DEFS@ -DVERSION="\"$(VERSION)\""
+LIBS            = @LIBS@
+SHARED_TB_LIB   = @SHARED_TB_LIB@
+MODULES         = @MODULES@
+
+AR              = @AR@
+RANLIB          = @RANLIB@
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+LEX             = @LEX@
+LEXLIB          = @LEXLIB@
+YACC            = @YACC@
+YACCLIB         = @YACCLIB@
+CLEAN           = @CLEAN@
+@SET_MAKE@
+
+TIDE		= @TIDE@
+TIDEDEF		= @TIDEDEF@
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+bindir          = $(exec_prefix)/bin
+libdir          = $(exec_prefix)/lib
+includedir      = $(prefix)/include
+
+COMPILE = $(CC) -c $< $(DEFS) $(INCLUDE) $(CPPFLAGS) $(CFLAGS)
+LINK = $(CC) $(LDFLAGS) $(LIB) -o $@
+
+.SUFFIXES:
+.SUFFIXES: .c .o .y .l
+.c.o:
+	$(COMPILE) $<
+
+INCLUDE	= -I$(top_srcdir)/src -I$(srcdir)
+LIB	= -L$(top_srcdir)/src
+
+include general-make
+
+PRGS	= buscontrol
+SCRIPTS	= tide query
+SRC	= browser.py.nw buscontrol.c.nw evq.c.nw extui.py.nw fset.py.nw \
+	stub.tb tbview.py.nw tide-main.tcl.nw tide.tb.nw
+TEST	= test-browser.tb test-tbview.tb test-tide-main.tb \
+	testevq.c testevq.tb
+GENSRC	= tide.tb tbview.py browser.py fset.py extui.py evq.c buscontrol.c \
+	tide-main.tcl
+PRGDOC	= tide.tb.tex tbview.py.tex browser.py.tex fset.py.tex extui.py.tex \
+	tide-main.tcl.tex buscontrol.c.tex
+DIRS	= bitmaps test help
+
+DISTFILES = $(SCRIPTS) $(SRC) $(TEST) $(GENSRC) $(PRGDOC) tide.tex $(DIRS) \
+	Makefile.in
+
+all:  $(PRGS) $(GENSRC) testevq
+
+tide.tb tide.tb.tex: tide.tb.nw
+	noweb tide.tb.nw
+	touch tide.tb tide.tb.tex
+
+tide-main.tcl tide-main.tcl.tex: tide-main.tcl.nw
+	noweb tide-main.tcl.nw
+	touch tide-main.tcl tide-main.tcl.tex
+
+buscontrol.c buscontrol.c.tex: buscontrol.c.nw
+	noweb buscontrol.c.nw
+	touch buscontrol.c buscontrol.c.tex
+
+tbview.py tbview.py.tex: tbview.py.nw
+	noweb tbview.py.nw
+	touch tbview.py tbview.py.tex
+
+browser.py browser.py.tex: browser.py.nw
+	noweb browser.py.nw
+	touch browser.py browser.py.tex
+
+fset.py fset.py.tex: fset.py.nw
+	noweb fset.py.nw
+	touch fset.py fset.py.tex
+
+extui.py extui.py.tex: extui.py.nw
+	noweb extui.py.nw
+	touch extui.py extui.py.tex
+
+evq.c evq.h evq.c.tex: evq.c.nw
+	noweb evq.c.nw
+	touch evq.c evq.h evq.c.tex
+
+stub.tifs: stub.tb
+	toolbus -gentifs stub.tb
+
+tide.tifs: tide.tb
+	toolbus -gentifs tide.tb
+
+viewer.tif.c: stub.tifs
+	ctif -newstyle -tool viewer -tifs stub.tifs
+
+debug-nub.tif.c: tide.tifs
+	ctif -newstyle -tool debug-nub -tifs tide.tifs
+
+buscontrol.o: buscontrol.c viewer.tif.c debug-nub.tif.c
+	$(COMPILE)
+
+buscontrol: buscontrol.o evq.o
+	$(LINK) buscontrol.o evq.o -ltb $(LIBS)
+
+evq.o: evq.c evq.h
+	$(COMPILE)
+
+testevq.tifs: testevq.tb
+	toolbus -gentifs testevq.tb
+
+testevq.tif.c: testevq.tifs
+	ctif -newstyle -tool testevq -tifs testevq.tifs
+
+testevq.o: testevq.c evq.h testevq.tif.c
+	$(COMPILE)
+
+testevq: testevq.o evq.o
+	$(LINK) testevq.o evq.o -ltb $(LIBS)
+
+tide.dvi: tide.tex $(PRGDOC)
+
+tide.ps: tide.dvi
+	dvips tide.dvi
+
+clean:
+	${CLEAN}
+	rm -f *.pyc *.tifs *.tif.c $(PRGS)
+	rm -f *.c.tex *.py.tex *.tb.tex
+
+distclean: clean
+	rm -f Makefile
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(TIDE)/$$file ../../$(PRODUCT)-$(VERSION)/tide 2> /dev/null \
+	  || cp -r $(TIDE)/$$file ../../$(PRODUCT)-$(VERSION)/tide; \
+	done
+
+stats:
+	date >> .stats
+	wc *.nw >> .stats
+	date >> .stats.code
+	wc *.py *.tcl *.c *.tb >> .stats.code
+

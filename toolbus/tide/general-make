@@ -1,0 +1,22 @@
+.SUFFIXES: .grap .pic .tex .dvi .bbl .ind .idx .xwd .ps
+
+.tex.dvi:
+	latex $*
+	-@fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $*
+	-@fgrep -s 'Rerun to get cross-references right' $*.log && latex $*
+
+.tex.bbl:
+	bibtex $*
+
+.pic.tex:
+	gpic -t $*.pic > $*.tex
+
+.grap.pic:
+	grap $*.grap > $*.pic
+	remove-lfs $*.pic
+
+.idx.ind:
+	makeindex $*
+
+.xwd.ps:
+	xbm2ps -s 0.55x0.55 $*.xwd > $*.ps

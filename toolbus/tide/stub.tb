@@ -1,0 +1,27 @@
+
+process STUB1 is
+let
+  A:int
+in
+  ( printf("stub is running!\n") .
+    rec-msg(just-a-msg) .
+    SUB .
+    tau
+  ) * delta
+endlet
+
+process SUB is
+let
+  B:int
+in
+  B := 2 .
+  printf("SUB\n")
+endlet
+
+process STUB2 is
+  snd-msg(just-a-msg) * delta
+
+tool viewer is { command = "./buscontrol" }
+
+toolbus(STUB1, STUB2)
+    

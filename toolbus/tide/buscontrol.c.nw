@@ -1,0 +1,875 @@
+%{{{ buscontrol.c
+
+The file {\tt buscontrol.c} implements a tool that acts
+as a bridge between a ToolBus system being debugged (the 
+\emph{slave}) a ToolBus system that does the debugging
+(the \emph{master}). From the slave point of view, this
+tool is a \emph{viewer} tool, from the master point of 
+view, it is a \emph{debug-nub}.
+
+<<buscontrol.c*>>=
+<<includes>>
+<<global variables>>
+<<init>>
+<<get_var_value>>
+<<set_var_value>>
+<<init_process>>
+<<continue_process>>
+<<update_process>>
+<<create_process>>
+<<build_cpe>>
+<<change_cpe>>
+<<start_processes>>
+<<stop_processes>>
+
+<<rec_monitor>>
+<<rec_ack_event>>
+<<rec_terminate>>
+
+<<start>>
+<<stop>>
+<<get_info>>
+<<get_cpe>>
+<<get_var_list>>
+<<watch_vars>>
+<<change_var>>
+<<get_scopes>>
+
+<<sigint_handler>>
+<<main>>
+@
+
+%}}}
+
+%{{{ includes
+
+<<includes>>=
+#include <signal.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <limits.h>
+
+#include <TB.h>
+#include <tool2.h>
+#include "evq.h"
+#include "viewer.tif.c"
+#include "debug-nub.tif.c"
+@
+
+%}}}
+%{{{ global variables
+
+<<global variables>>=
+#define MAX(a,b) 	((a)>(b)?(a):(b))
+#define INITIAL_PROCS	256
+#define INIT_PID 	0
+
+#define ES_NONE		-1
+#define ES_STOPPED	0
+#define ES_RUNNING	1
+#define ES_STEP_IN	2
+#define ES_STEP_OVER	3
+#define ES_HIGH_WATER	4
+int global_exec_state = ES_STOPPED;
+
+int Tid = -1;
+int control_bus;
+int viewer;
+
+typedef struct {
+  char *name;
+  term_list *vars;
+  term *cpe;
+  int exec_state;
+  TBbool waiting;
+} proc;
+
+proc **proc_db;
+int last_proc = 0;
+
+/* Some event queues */
+#define MAX_QUEUE_SIZE		512
+#define QUEUE_HIGH_WATER	32
+#define EVQ_CPE			0
+#define EVQ_ATOM_EXECUTED	1
+#define EVQ_PROCESS_CREATED	2
+#define EVQ_PROCESS_DESTROYED	3
+#define EVQ_COMMUNICATION	4
+#define EVQ_VARS_CHANGED	5
+#define EVQ_LAST		EVQ_VARS_CHANGED
+
+event_queue *evq[EVQ_LAST+1] = { NULL };
+
+@
+
+%}}}
+
+%{{{ init
+
+The {\tt init} process takes care of the initialization
+of the {\tt buscontrol} tool.
+
+<<init>>=
+void init()
+{
+  int i;
+  void init_process(int pid);
+@
+
+{\tt init} starts by initializing the process database.
+
+<<init>>=
+  proc_db = malloc(sizeof(proc *)*INITIAL_PROCS);
+  if(!proc_db) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(1);
+  }
+
+  for(i=0; i<INITIAL_PROCS; i++)
+    proc_db[i] = NULL;
+@
+
+The {\tt INIT} process is always present, so initialize
+it.
+
+<<init>>=
+  /* Initialize INIT process */
+  init_process(INIT_PID);
+  proc_db[INIT_PID]->name = "INIT";
+@
+
+The event queues need to be created.
+<<init>>=
+  for(i=0; i<=EVQ_LAST; i++) {
+    evq[i] = TBcreate_evq(MAX_QUEUE_SIZE, control_bus);
+    if(!evq[i]) {
+      fprintf(stderr, "not enough memory!\n");
+      exit(1);
+    }
+  }
+@
+
+Now we can notify the world that {\tt INIT} is already there!
+<<init>>=
+  TBpost_event(evq[EVQ_PROCESS_CREATED], 
+      TB_make("process-created(<int>,<str>)", INIT_PID, proc_db[INIT_PID]->name));
+}
+@
+
+%}}}
+%{{{ get_var_value
+
+<<get_var_value>>=
+TBbool get_var_value(int pid, term *var, term **val)
+{
+  term *vars, *cur_var;
+  assert(proc_db[pid]);
+
+  /*TBprintf(stderr, "get_var_value in %s: %t vars: %t\n",
+	proc_db[pid]->name, var, proc_db[pid]->vars);*/
+  vars = proc_db[pid]->vars;
+
+  while(vars) {
+    /* Now search for the variable */
+    cur_var = first(vars);
+
+    if(term_equal(var, first(cur_var))) {
+      /*TBprintf(stderr, "\tvalue: %t=%t\n", var, first(next(cur_var)));*/
+      *val = first(next(cur_var));
+      return TBtrue;
+    } else {
+      /*TBprintf(stderr, "\t*** %t != %t\n", var, first(cur_var));*/
+    }
+
+    /*TBprintf(stderr, "\t*** env_next(%t) = %t\n", vars, next(vars));*/
+    vars = next(vars);
+  }
+  /*TBprintf(stderr, "\tnot found!\n");*/
+  return TBfalse;
+}
+@
+
+%}}}
+%{{{ set_var_value
+
+<<set_var_value>>=
+void set_var_value(int pid, term *var, term *val)
+{
+  /* A variable is identified by a term represention. */
+  term *vars, *cur_var;
+  assert(proc_db[pid]);
+
+  /*TBprintf(stderr, "set_var_value in %s: %t vars: %t\n", proc_db[pid]->name,
+	var, proc_db[pid]->vars);*/
+  vars = proc_db[pid]->vars;
+
+  while(vars) {
+    cur_var = first(vars);
+
+    if(term_equal(first(cur_var), var)) {
+      /*TBprintf(stderr, "\tset value: %t=%t\n", var, first(next(cur_var)));*/
+      first(next(cur_var)) = val;
+      return;
+    }
+    vars = next(vars);
+  }
+  /*TBprintf(stderr, "\tnot found, adding var %t (%t)!\n", var, val);*/
+  proc_db[pid]->vars = list_concat_term(proc_db[pid]->vars, 
+						mk_list2(var, val));
+}
+@
+
+%}}}
+%{{{ init_process
+
+Initialize a process.
+
+<<init_process>>=
+void init_process(int pid)
+{
+  if(!proc_db[pid]) {
+    proc_db[pid] = (proc *)malloc(sizeof(proc));
+    if(!proc_db[pid]) {
+      TBmsg("out of memory!");
+      exit(1);
+    }
+    proc_db[pid]->name = "<unknown>";
+    proc_db[pid]->vars = NULL;
+    proc_db[pid]->cpe  = NULL;
+    proc_db[pid]->exec_state = global_exec_state;
+    proc_db[pid]->waiting = TBfalse;
+    TBprotect(&proc_db[pid]->vars);
+    TBprotect(&proc_db[pid]->cpe);
+
+    if(pid > last_proc)
+      last_proc = pid;
+  }
+}
+@
+
+%}}}
+%{{{ continue_process
+
+Send a continue message to a process (only when needed).
+
+<<continue_process>>=
+void continue_process(int pid)
+{
+  if(proc_db[pid]->waiting) {
+    TB_send(viewer, TB_make("snd-continue(<int>)", pid));
+    proc_db[pid]->waiting = TBfalse;
+  }
+}
+@
+
+%}}}
+%{{{ update_process
+
+When a process executes an action, this process takes care
+of the updating of variables etc.
+
+<<update_process>>=
+void update_process(int pid, term *env)
+{
+  term *var, *val;
+  TBbool changed = TBfalse;
+
+  /*TBprintf(stderr, "update_process: %d, %t\n", pid, env);*/
+
+  if(!proc_db[pid])
+    init_process(pid);
+
+  while(env) {
+    var = first(env);
+    if(get_var_value(pid, first(var), &val)) {
+      if(!term_equal(val, first(next(var)))) {
+	set_var_value(pid, first(var), first(next(var)));
+        changed = TBtrue;
+      }
+    } else {
+      set_var_value(pid, first(var), first(next(var)));
+      changed = TBtrue;
+    }
+    env = next(env);    
+  }
+  if(changed) {
+    /*TBmsg("VARIABLES OF PROCESS %d CHANGED: %t\n", pid, proc_db[pid]->vars);*/
+    TBpost_event(evq[EVQ_VARS_CHANGED], TB_make("vars-changed([[<int>,<str>,<term>]])",
+ 		pid, proc_db[pid]->name, proc_db[pid]->vars));
+  } else {
+    /*TBmsg("VARIABLES OF PROCESS %d DIDN'T CHANGE!\n");*/
+  }
+}
+@
+
+%}}}
+%{{{ create_process
+
+<<create_process>>=
+void create_process(int pid, term *args)
+{
+  int new_pid;
+  term *pid_trm;
+
+  /* The pid is stored in the variable indicated by the second
+     argument of creating process */
+  pid_trm = NULL;
+  /*TBprintf(stderr, "create_process: args = %t\n", args);*/
+  get_var_value(pid,  first(next(args)), &pid_trm);
+  if(pid_trm) {
+    TBmatch(pid_trm, "%d", &new_pid);
+    if(!proc_db[new_pid])
+      init_process(new_pid);
+    TBmatch(first(args), "%f", &proc_db[new_pid]->name);
+    /*TBprintf(stderr, "create_process: %t (%d, %s)\n", 
+		args, new_pid, proc_db[new_pid]->name);*/
+    TBpost_event(evq[EVQ_PROCESS_CREATED], 
+	TB_make("process-created(<int>,<str>)", new_pid, proc_db[new_pid]->name));
+  } else {
+    TBprintf(stderr, "cannot find pid of created process: %t", args);
+  }  
+}
+@
+
+%}}}
+%{{{ build_cpe
+
+Build the global {\tt cpe} by simply concatenating the individual
+process {\tt cpe}'s.
+
+<<build_cpe>>=
+term *build_cpe()
+{
+  int i;
+  term_list *cpe = NULL;
+ term *entry;
+
+  for(i=0; i<= last_proc; i++) {
+    if(proc_db[i] && proc_db[i]->cpe) {
+      if(!proc_db[i]->name) {
+        entry = TBmake("[\"*\",\"lcp\",%l]", proc_db[i]->cpe);
+      } else {
+	entry = TBmake("[%s,\"lcp\",%l]", 
+			proc_db[i]->name, proc_db[i]->cpe);
+      }
+      cpe = list_concat_term(cpe, entry);
+    }
+  }
+  return cpe;
+}
+@
+
+%}}}
+%{{{ change_cpe
+
+<<change_cpe>>=
+void change_cpe(int pid, term *at_coords)
+{
+  assert(proc_db[pid]);
+  /* at_coords could be NULL, for instance when the action belongs to
+     the INIT process (pid == 0) */
+  if(at_coords != NULL) {
+    proc_db[pid]->cpe = at_coords;
+    /*TBmsg("posting event cpe(%t)\n", build_cpe());*/
+    TBpost_event(evq[EVQ_CPE], TB_make("cpe(<term>)", build_cpe()));
+  }
+}
+@
+
+%}}}
+%{{{ start_processes
+
+Start a number of processes. Start all processes when
+the list is empty.
+
+<<start_processes>>=
+void start_processes(term_list *procs, int es)
+{
+  int pid;
+
+  if(!procs) {
+    global_exec_state = es;
+    for(pid=0; pid <= last_proc; pid++) {
+       /* Only continue a process when it wasn't stopped */
+       if(proc_db[pid]->exec_state == ES_STOPPED) {
+	 continue_process(pid);
+	 proc_db[pid]->exec_state = es;
+       }
+    }
+  } else {
+    while(procs) {
+      if(!TBmatch(first(procs), "%d", &pid)) {
+	TBmsg("%t is not a list of proc-ids!\n", procs);
+      } else {
+	TBmsg("proc_db[%d]->exec_state = %d, waiting = %d\n", pid,
+		proc_db[pid]->exec_state, proc_db[pid]->waiting);
+        if(proc_db[pid]->exec_state == ES_STOPPED)
+          continue_process(pid);
+        proc_db[pid]->exec_state = es;
+      }
+      procs = next(procs);
+    }
+  }
+}
+@
+
+%}}}
+%{{{ stop_processes
+
+Stop a list of processes.
+
+<<stop_processes>>=
+
+void stop_processes(term_list *procs)
+{
+  int pid;
+
+  if(!procs) {
+    global_exec_state = ES_STOPPED;
+    for(pid=0; pid <= last_proc; pid++)
+      proc_db[pid]->exec_state = ES_STOPPED;
+  } else {
+    while(procs) {
+      if(!TBmatch(first(procs), "%d", &pid)) {
+        TBmsg("%t is not a list of proc-ids!\n", procs);
+        return;
+      } else {
+        proc_db[pid]->exec_state == ES_STOPPED; /* Stop this process */
+      }
+      procs = next(procs);
+    }
+  }
+}
+
+@
+
+%}}}
+
+%{{{ rec_monitor
+
+<<rec_monitor>>=
+<<is_to_tool_comm>>
+<<is_from_tool_comm>>
+
+term *rec_monitor(int cid, term *T)
+{
+  char *mon_point, *at_fun;
+  int pid1, pid2;
+  term *at_args, *at_coords, *env, *subs, *notes, *pe;
+
+  /*TBprintf(stderr, "monitor command received: %t\n", T);*/
+  if(TBmatch(T, "%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)",
+	     &mon_point, &pid1, &at_fun, &at_args, &at_coords,
+	     &env, &subs, &notes, &pid2, &pe)) {
+    /* Any common code prefix goes here */
+    update_process(pid1, env);
+    proc_db[pid1]->waiting = TBtrue;
+
+    if(streq(at_fun, "create")) {
+      /* Process creation monitoring */
+      create_process(pid1, at_args); 
+    } else if(streq(at_fun, "rec-connect")) {
+      /* Tool connection monitoring */
+    } else if(is_to_tool_comm(at_fun)) {
+      /* Process -> Tool communication monitoring */
+    } else if(is_from_tool_comm(at_fun)) {
+      /* Tool -> Process communication monitoring */
+    } else if(streq(at_fun, "endlet")) {
+      /* Endlet monitoring */
+    } else if(pid2 >= 0) {
+      /* Process <-> process communication */
+        TBpost_event(evq[EVQ_COMMUNICATION],
+	  TB_make("communication(proc-proc,<int>,<int>,<appl>,<term>)", 
+					pid1, pid2, at_fun, NULL, at_args));
+    } else {
+      /* Other atoms (assignment, printf, tau, etc.) */
+    }
+
+    /* Any common code postfix goes here */
+    switch(proc_db[pid1]->exec_state) {
+	case ES_STOPPED:
+	case ES_STEP_IN:
+	case ES_STEP_OVER:	/* Later, we need to do something more
+				   sophisticated here later. */
+				proc_db[pid1]->exec_state = ES_STOPPED;
+				break;
+	case ES_RUNNING:	continue_process(pid1);
+				break;
+        case ES_HIGH_WATER:	break;
+	default:	/* An illegal exec status? better crash and burn! */
+			TBmsg("process %d, exec_state = %d\n",
+					pid1, proc_db[pid1]->exec_state);
+			assert(0);
+    }
+    /* Now it's time to let the controlling ToolBus know something
+       interesting has happened. */
+    change_cpe(pid1, at_coords);
+    TBpost_event(evq[EVQ_ATOM_EXECUTED], 
+	TB_make("atom-executed(<int>,<appl>,<term>,<int>)", 
+			pid1, at_fun, NULL, at_args, pid2));
+  } else {
+    err_fatal("badly formed monitor function: %t\n", T);
+  }
+  return NULL;
+}
+@
+
+%{{{ is_to_tool_comm
+
+<<is_to_tool_comm>>=
+TBbool is_to_tool_comm(char *s)
+{
+  return streq(s, "snd-eval") 
+         || streq(s, "snd-cancel") 
+         || streq(s, "snd-do") 
+         || streq(s, "snd-ack-event") 
+         || streq(s, "snd-terminate");
+}
+@
+
+%}}}
+%{{{ is_from_tool_comm
+
+<<is_from_tool_comm>>=
+TBbool is_from_tool_comm(char *s)
+{
+  return streq(s, "rec-value") 
+         ||  streq(s, "rec-event") 
+         || streq(s, "rec-disconnect");
+}
+@
+
+%}}}
+
+%}}}
+%{{{ rec_ack_event
+
+<<rec_ack_event>>=
+void rec_ack_event(int cid, term *ev)
+{
+  int i;
+
+  /*TBprintf(stderr, "Received acknowledment: %t", ev);*/
+  for(i=0; i<=EVQ_LAST; i++) {
+    if(TBcheck_ack_event(evq[i], ev)) {
+      /*TBprintf(stderr, ", handled by queue %d\n", i);*/
+      return;
+    }
+  }
+  /*TBprintf(stderr, ", not handled by any queue\n");*/
+}
+@
+
+%}}}
+%{{{ rec_terminate
+
+<<rec_terminate>>=
+void rec_terminate(int cid, term *Arg)
+{
+  TBprintf(stderr, "Received termination request: %t\n", Arg);
+  TB_send(control_bus, TB_make("snd-disconnect"));
+  sleep(1); /* Incoming traffic must be consumed first */
+  exit(0);
+}
+@
+
+%}}}
+
+%{{{ start
+
+Start the ToolBus or just a set of processes.
+
+<<start>>=
+void start(int cid, term *who, term *mode)
+{
+  term_list *procs;
+  int es = ES_NONE;
+
+  if(TBmatch(mode, "step")) {
+    es = ES_STEP_IN;
+  } else if(TBmatch(mode, "run")) {
+    es = ES_RUNNING;
+  } else {
+    TBmsg("cannot-start %t in mode %t: %s\n", who, mode, 
+			"mode not implemented in buscontrol tool");
+    return;
+  }
+
+  if(TBmatch(who, "tb")) {
+    /*TBmsg("starting processes in mode %d\n", es);*/
+    start_processes(NULL, es);
+  } else if (TBmatch(who, "processes(%t)", &procs)) {
+    if(procs)
+      start_processes(procs, es);    
+  } else {
+    TBmsg("don't now how to start %t\n", who);
+  }
+}
+@
+
+%}}}
+%{{{ stop
+
+Stop current exection at the time indicated by {\tt when}.
+
+<<stop>>=
+void stop(int cid, term *who, term *when)
+{
+  term_list *procs;
+
+  if(TBmatch(who, "tb")) {
+    stop_processes(NULL);
+  } else if(TBmatch(who, "processes(%t)", &procs)) {
+    stop_processes(procs);
+  } else {
+    TBmsg("cannot-stop %t at %t: %s\n", who, when, 
+			"not implemented in buscontrol tool");
+  }
+}
+@
+
+%}}}
+%{{{ get_info
+
+<<get_info>>=
+<<attribute_pairs>>
+<<get_value>>
+
+term *get_info(int cid)
+{
+  term_list *info_list = NULL;
+  char **pair = attribute_pairs;
+  char *attrib, *value;
+  
+  while(*pair) {
+    attrib = *pair++;
+    value  = *pair++;
+    if(!value)		/* When value == NULL, it should be fetched now! */
+      value = get_value(attrib);
+    info_list = mk_list(TB_make("[<str>,<term>]", attrib, TB_make(value)), info_list);
+  }
+
+  return TB_make("snd-value(info(<term>))", info_list);
+}
+@
+
+%{{{ attribute_pairs
+
+<<attribute_pairs>>=
+static char *attribute_pairs[] = 
+{
+  "connections", NULL,	/* NULL pointer value means 'fill in at runtime' */ 
+  "type",	 "\"viewer\"",
+  "language",	 "\"T-script\"",
+  "toolbus",	 NULL,
+  "tid",	 NULL,
+  "name",	 NULL,
+  NULL,		 NULL	/* Sentennial */
+};
+@
+
+%}}}
+%{{{ get_value
+
+<<get_value>>=
+#define MAX_VALUE_LEN 32
+
+char *get_value(char *attrib)
+{
+  extern int WellKnownSocketPort;
+  static char buf[MAX_VALUE_LEN];
+  static char path[_POSIX_PATH_MAX];
+
+  if(streq(attrib, "connections")) {
+    sprintf(buf, "[tb(\"%s\",%d)]", TB_getHost(viewer), TB_getPort(viewer));
+  } else if(streq(attrib, "toolbus")) {
+    getcwd(path, _POSIX_PATH_MAX);
+    sprintf(buf, "tb(\"%s\",%d,\"%s\")", 
+				TB_getHost(viewer), TB_getPort(viewer), path);
+  } else if(streq(attrib, "tid")) {
+    sprintf(buf, "%d", TB_getTid(viewer));
+  } else if(streq(attrib, "name")) {
+    sprintf(buf, "\"%s\"", TB_getTool(viewer));
+  } else {
+    assert(0);
+  }
+
+  return buf;
+}
+@
+
+%}}}
+
+%}}}
+%{{{ get_cpe
+
+Retrieve the value of the global {\tt cpe}.
+
+<<get_cpe>>=
+term *get_cpe(int cid)
+{
+  return TB_make("snd-value(cpe(<term>))", build_cpe());
+}
+@
+
+%}}}
+%{{{ get_var_list
+
+<<get_var_list>>=
+term *get_var_list(int cid, term *scope_id)
+{
+  int pid;
+
+  if(TB_match(scope_id, "<int>", &pid))
+    return TB_make("[<int>,<str>,<term>]", pid, proc_db[pid]->name, proc_db[pid]->vars);
+  else
+    return TB_make("no-var-list(\"illegal scope type for viewer\")");
+}
+@
+
+%}}}
+%{{{ watch_vars
+
+Because the amount of variables in a ToolBus script is usually
+small, mainly because there are only \emph{local} variables,
+all variables are automatically watched.
+
+<<watch_vars>>=
+term *watch_vars(int cid, term_list *scope, term_list *names)
+{
+  return TB_make("cannot-watch(\"all viewer vars are automatically watched\")");
+}
+@
+
+%}}}
+%{{{ change_var
+
+<<change_var>>=
+term *change_var(int cid, term_list *scope, char *name, term *val)
+{
+  return TB_make("cannot-change(\"change-var not implemented yet!\")");
+}
+@
+
+%}}}
+%{{{ get_scopes
+
+<<get_scopes>>=
+<<proc_satisfies>>
+
+term *get_scopes(int cid, term *constraints)
+{
+  int pid;
+  term_list *scopes = NULL;
+
+  for(pid=0; pid<last_proc; pid++) {
+    if(proc_satisfies(pid, constraints))
+      scopes = list_concat_term(scopes, TB_make("[<int>,<str>]", 
+					pid, proc_db[pid]->name));
+  }
+  return TB_make("snd-value(scopes(<term>,<list>))", constraints, scopes); 
+}
+@
+
+<<proc_satisfies>>=
+TBbool proc_satisfies(int pid, term *constraints)
+{
+  char *name;
+
+  if(is_list(constraints)) {
+    while(constraints) {
+      if(!proc_satisfies(pid, first(constraints)))
+        return TBfalse;
+      constraints = next(constraints);
+    }
+    return TBtrue;
+  }
+  if(TBmatch(constraints, "name(%s)", &name)) {
+    if(streq(proc_db[pid]->name, name))
+      return TBtrue;
+    return TBfalse;
+  }
+
+  return TBfalse;
+}
+@
+%}}}
+
+%{{{ sigint_handler
+
+<<sigint_handler>>=
+void sigint_handler(int sig)
+{
+  /* There are three possibilities here:
+     1) Some outside source issued a SIGINT (not very likely)
+     2) The ToolBus system being debugged issued a SIGINT
+     3) The debugger ToolBus system issued a SIGINT
+     
+     In all three cases, we want to shutdown gracefully.
+     This means disconnect any living ToolBus connections
+     in a peaceful manner.
+  */
+
+/**** OLD, NON-WORKING DETECTION CODE ****
+  extern toToolBus;
+  fd_set set;
+  int result;
+  struct timeval zero_time = { 0, 0 };
+  
+  fprintf(stderr, 
+    "received SIGINT, using select to check for dead ToolBus connections\n");
+  
+
+  FD_ZERO(&set);
+  FD_SET(toToolBus, &set);
+  FD_SET(control_bus, &set);
+  select(MAX(toToolBus, control_bus), NULL, &set, NULL, &zero_time);
+  if(result) {
+    if(FD_ISSET(toToolBus, &set))
+      fprintf(stderr, "debugged ToolBus system is ready to receive data!\n");
+    if(FD_ISSET(control_bus, &set))
+      fprintf(stderr, "debugging ToolBus system is ready to receive data!\n");
+  } else {
+    fprintf(stderr, "Nobody is ready for writing!\n");
+  }
+*/
+
+  fprintf(stderr, "SIGINT received, disconnecting from debugger\n");
+  TB_send(control_bus, TB_make("snd-disconnect"));
+  sleep(1); /* Incoming traffic must be consumed first */
+  exit(0);
+}
+@
+
+%}}}
+%{{{ main
+
+<<main>>=
+int main(int argc, char *argv[])
+{
+  /*char host[MAXHOSTNAMELEN];
+  gethostname(host, MAXHOSTNAMELEN);*/
+
+  TB_init();
+
+  fprintf(stderr, "Opening initial connection for viewer\n");
+  viewer = TB_parseArgs(argc, argv, viewer_handler, viewer_check_in_sign);
+  TB_connect(viewer);
+
+  fprintf(stderr, "Opening second connection to debugging toolbus\n");
+  control_bus = TB_newConnection("debug-nub", NULL, 9500,
+		         debug_nub_handler, debug_nub_check_in_sign);
+  TB_connect(control_bus);
+
+  init();
+  signal(SIGINT, sigint_handler);
+
+  TB_eventloop();
+}
+@
+
+%}}}
+
+
+
+

@@ -1,0 +1,647 @@
+
+%{{{ browser.py
+
+The file {\tt browser.py} implements the tide source code viewer.
+The viewer offers the following features:
+\begin{itemize}
+\item The viewer offers a number of windows that each contain a
+      source file. Such a window is called a \emph{browser}.
+\item Associated with each browser is a tool-id referring to the
+      tool this source file is associated with.
+\item Every source file can have multiple browsers associated with it.
+\item Every browser can be configured with a number of buttons.
+\item Multiple areas in the source file can be highlighted using
+      a number of configurable highlight styles, examples are:
+      \begin{itemize}
+	\item {\tt cpe},  for highlighting the 
+		\emph{Current Point of Execution}.
+	\item {\tt break}: For highlighting breakpoints.
+      \end{itemize}
+\item Every highlighted area has a name and an id associated with it.
+\item Highlight styles can be registered from within the ToolBus.
+\item A browser can 'track' a certain highlighted area. This means that
+      when such an area moves, the browser keeps it visible.
+\item The user can select a highlighted are by clicking on it.
+\item If the user clicked on a non-highlighted piece of text,
+      the line is selected.
+\item Buttons can be enabled/disabled depending on the selected
+      area/line.
+\item When a button is pressed, an event is sent to the ToolBus.
+\end{itemize}
+
+<<browser.py>>=
+<<imports>>
+<<global variables>>
+
+<<class HLStyle>>
+<<class HLArea>>
+<<class Browser>>
+
+<<ToolBus interface functions>>
+
+TB.enableTk()
+cid = TB.parseArgs(sys.argv, __main__)
+TB.connect(cid)
+
+dummy = Frame()
+dummy.master.withdraw()
+dummy.mainloop()
+@
+
+%}}}
+
+%{{{ imports
+
+<<imports>>=
+import __main__
+import sys
+import types
+import string
+import regexp
+import regex
+
+import TB
+
+from Tkinter import *
+
+from fset import *
+from extui import *
+@
+
+%}}}
+%{{{ global variables
+
+{\tt all\_browsers} is a list containing all the active browsers.
+<<global variables>>=
+all_browsers = []
+@
+
+{\tt browsers\_on\_tool} contains a list of browsers for every tool/file.
+<<global variables>>=
+browsers_on_tool = { }
+@
+
+{\tt latest\_highlights} is a dictionary that contains the latest
+highlights for a certain tool. This enables a new browser to
+immediately highlight the right position.
+<<global variables>>=
+latest_highlights = { }
+@
+
+{\tt hlstyles} contains all the highlight styles known to this
+browser.
+<<global variables>>=
+hlstyles = { }
+@
+
+{\tt button\_list} , {\tt toolbar\_list}, and {\tt menu\_list} contain 
+the user interface items that have to be added to every new browser.
+<<global variables>>=
+button_list = []
+toolbar_list = []
+menu_list = []
+@
+%}}}
+
+%{{{ class HLStyle
+
+<<class HLStyle>>=
+class HLStyle:
+	def __init__(self, id, fore, back, relief):
+		self.id = id
+		self.fore = fore
+		self.back = back
+		self.relief = relief
+		#print "new highlight type: %s, fore=%s, back=%s, relief=%s"%(
+			#id,fore,back,relief)
+
+	def get_id(self):
+		return self.id
+
+	def get_fore(self):
+		return self.fore
+
+	def get_back(self):
+		return self.back
+
+	def get_relief(self):
+		return self.relief
+
+	def configure_tag(self, widget):
+		widget.tag_config(self.id, { "foreground":self.fore, 
+			"background":self.back, "relief":self.relief})
+@
+
+%}}}
+%{{{ class HLArea
+
+This class represents a text area which might be highlighted.
+The area is build from a input list representing the area.
+The first element of the list is always the id of the area
+(a string). The second element gives the format of coordinates,
+the third element gives the file and the rest of the list 
+gives the actual coordinates of the area. 
+The coordinates can be given in a number of formats:
+
+\begin{itemize}
+\item line/column pairs: \verb@ ["STUB()", "lcp", "stub.tb", 6, 4, 6, 32)]@
+\item line delimited: \verb@ ["*", "lines", "xyz", 19, 21]@
+\item single line: \verb@ ["*", "line", "test.c", 20]@
+\end{itemize}
+
+Only the line/column and single line formats 
+are implemented at the moment.
+
+<<class HLArea>>=
+class HLArea:
+	def __init__(self, type, area):
+		self.id = area[0]
+		self.type = type
+		self.format = area[1]
+		self.file = area[2]
+		self.coords = area[3:]
+
+	def get_id(self):
+		return self.id
+
+	def get_format(self):
+		return self.flavor
+
+	def get_file(self):
+		return self.file
+
+	<<HLArea.highlight>>
+@
+
+%{{{ highlight
+
+<<HLArea.highlight>>=
+def highlight(self, widget):
+	global hlstyles
+ 
+	if self.format == "lcp":
+		start = "%d.%d" % (self.coords[0],self.coords[1])
+		end   = "%d.%d" % (self.coords[2],self.coords[3])
+	elif self.format == "line":
+		start = "%d.0" % self.coords[0]
+		end   = "%d.0 lineend" % self.coords[0]
+	elif self.format == "lines":
+		start = "%d.0" % self.coords[0]
+		end   = "%d.0 lineend" % self.coords[1]
+	else:
+		print "Unknown highlight type: ", self.format
+		return
+
+	widget.tag_add(self.type, start, end)
+	hlstyles[self.type].configure_tag(widget)
+@
+
+%}}}
+
+%}}}
+%{{{ class Browser
+
+This class actually implements the separate browsers.
+
+<<class Browser>>=
+class Browser(Toplevel,ExtensibleUI):
+	<<Browser.__init__>>
+	<<Browser.get_id>>
+	<<Browser.get_tbid>>
+	<<Browser.get_tid>>
+	<<Browser.get_file>>
+	<<Browser.get_dir>>
+	<<Browser.load_file>>
+	<<Browser.set_highlight>>
+	<<Browser.action>>
+	<<Browser.mouse_down>>
+	<<Browser.close>>
+@
+
+%{{{ __init__
+
+The {\tt Browser} constructor initializes some attributes and
+creates the main browser window.
+
+<<Browser.__init__>>=
+def __init__(self, master, id, dir):
+	self.id  = id
+	self.file = None
+	self.dir = dir
+	Toplevel.__init__(self, master)
+
+	<<menu bar>>
+	<<tool bar>>
+	<<button frame>>
+	<<browser frame>>
+	<<info frame>>
+
+	ExtensibleUI.__init__(self, self, self.menu,self.toolbar,
+							self.main.buttons)
+	self.geometry("460x324")
+	self.title("Browser: %s - %s" % (id[0], id[1]))
+	self.areas = { }
+@
+
+Create all the browser widgets.
+
+%{{{ menu bar
+
+<<menu bar>>=
+self.menu = Frame(self)
+self.menu.pack({"side":"top", "fill":"x"})
+@
+
+%}}}
+%{{{ tool bar
+
+<<tool bar>>=
+self.toolbar = Frame(self, {"borderwidth":"2", "relief":"groove"})
+self.toolbar.pack({"side":"top", "fill":"x"})
+@
+
+%}}}
+%{{{ button frame
+
+<<button frame>>=
+self.main = Frame(self, {"borderwidth":"2", "relief":"groove"})
+self.main.buttons = Frame(self, {"borderwidth":"2", "relief":"groove"})
+self.main.buttons.label = Label(self.main.buttons, {"text":"Buttons:"})
+
+#self.main.buttons.label.pack({"side":"top", "fill":"x"})
+self.main.buttons.pack({"side":"left","fill":"y"})
+self.main.pack({"side":"top","expand":"1","fill":"both"})
+@
+
+%}}}
+%{{{ browser frame
+
+<<browser frame>>=
+self.main.browser = Text(self.main, {"borderwidth":"2", "relief":"sunken",
+		"width":"5", "height":"2", "bg":"white", "font":"8x13"})
+
+#self.main.browser.scrollx = \
+#	Scrollbar(self.main.browser, {"orient" : "horizontal"})
+self.main.scrolly = Scrollbar(self.main, {"orient" : "vertical"})
+self.main.browser.pack({"side":"left", "expand":"1", "fill":"both"})
+
+#self.main.browser["xscrollcommand"] = self.main.browser.scrollx.set
+self.main.browser["yscrollcommand"] = self.main.scrolly.set
+# self.main.browser.scrollx["command"] = self.main.browser.xview
+self.main.scrolly["command"] = self.main.browser.yview
+
+#self.main.browser.scrollx.pack({"side":"bottom","fill":"x"})
+self.main.scrolly.pack({"side":"left", "fill":"y"})
+@
+
+%}}}
+%{{{ info frame
+
+<<info frame>>=
+self.info = Frame(self, {"borderwidth":"2", "relief":"groove"})
+self.info.pack({"side":"bottom", "fill":"x"})
+@
+
+%}}}
+
+%}}}
+%{{{ get_id
+
+Retrieve the id identifying a browser.
+
+<<Browser.get_id>>=
+def get_id(self):
+	return self.id
+@
+
+%}}}
+%{{{ get_tbid
+
+Retrieve the ToolBus id belonging to a browser.
+
+<<Browser.get_tbid>>=
+def get_tbid(self):
+	return self.id[0]
+@
+
+%}}}
+%{{{ get_tid
+
+Retrieve the tool id belonging to a browser.
+
+<<Browser.get_tid>>=
+def get_tid(self):
+	return self.id[1]
+@
+
+%}}}
+%{{{ get_file
+
+Retrieve the file name belonging to a browser.
+
+<<Browser.get_file>>=
+def get_file(self):
+	return self.file
+@
+
+%}}}
+%{{{ get_dir
+
+Retrieve the file name belonging to a browser.
+
+<<Browser.get_dir>>=
+def get_dir(self):
+	return self.dir
+@
+
+%}}}
+
+%{{{ load_file
+
+Load the actual file.
+
+<<Browser.load_file>>=
+def load_file(self):
+	self.main.browser.delete("1.0","end")
+	try:
+		file = open(self.file, "r")
+	except IOError:
+		try:
+			name = self.dir + "/" + self.file
+			file = open(name, "r")
+		except IOError:
+			print "couldn't open file %s" % name
+	if file:
+		text = file.read()
+		self.main.browser.config({"state":"normal"})
+		self.main.browser.insert("end", text)
+		self.main.browser.config({"state":"disabled"})
+		#self.main.browser.tag_add("all","1.0","end")
+		#self.main.browser.tag_bind("all", "<3>", mouse_down, "+")
+@
+
+%}}}
+%{{{ set_highlight
+
+Highlight a number of areas in the file.
+
+<<Browser.set_highlight>>=
+def set_highlight(self, style, areas):
+	if self.areas.has_key(style):
+		# print "removing style ", style, "from:", self.areas[style]
+		#self.main.browser.tag_config(style, { "foreground":"black",
+		#	"background":"white", "relief":"flat"})
+		self.main.browser.tag_remove(style, "1.0", "end")
+		del self.areas[style]
+	self.areas[style] = []
+	for area in areas:
+		file = area[2]
+		if file != self.file:
+			print "file =",file,"self.file =",self.file
+			self.file = file
+			self.load_file()
+			self.main.browser.tag_remove(style, "1.0")
+			del self.areas[style]
+		hlarea = HLArea(style, area)
+		if self.areas.has_key(style):
+			self.areas[style].append(hlarea)
+		else:
+			self.areas[style] = [hlarea]
+		hlarea.highlight(self.main.browser)
+@
+
+%}}}
+%{{{ action
+
+<<Browser.action>>=
+def action(self, type, event, constraints):
+	global cid
+
+	TB.send(cid, TB.make("snd-event(%s(%s,%d,%s))" % 
+			(type, self.id[0], self.id[1], event)))
+@
+
+%}}}
+%{{{ mouse_down
+
+<<Browser.mouse_down>>=
+def mouse_down(self):
+	print "mouse down: "
+@
+
+%}}}
+%{{{ close
+
+Close this browser.
+
+<<Browser.close>>=
+def close(self):
+	self.destroy()
+	self._root().withdraw()
+@
+
+%}}}
+
+%}}}
+
+%{{{ ToolBus interface functions
+
+<<ToolBus interface functions>>=
+<<register_highlight>>
+<<browse>>
+<<highlight>>
+<<add_button>>
+<<add_toolbar_button>>
+<<add_menu_item>>
+
+<<close>>
+
+<<rec_terminate>>
+<<rec_ack_event>>
+@
+
+%{{{ register_highlight
+
+Register a highlight style.
+
+<<register_highlight>>=
+def register_highlight(cid, hid, fg, bg, relief):
+	hlstyles[hid] = HLStyle(hid, fg, bg, relief)
+@
+
+%}}}
+%{{{ browse
+
+View a file.
+
+<<browse>>=
+def browse(cid, tbid, tid):
+    try:
+	global latest_highlights
+
+	print "TB=%s, Tid=%s" % (tbid, tid)
+	id = (tbid, tid)
+	browser = None
+	if browsers_on_tool.has_key(id):
+		browsers = browsers_on_tool[id]
+		if browsers != []:
+			browser = browsers[0]
+	if browser == None:
+		expr = regex.compile('"tb"("[^"]*",[0-9]+,"\([^"]*\)")')
+		if expr.match(tbid) < 0:
+		  print "no match: %s" % tbid
+		  dir = "."
+		else:
+		  dir = expr.group(1)
+		browser = Browser(None, id, dir)
+		browsers_on_tool[id] = [browser]
+		all_browsers.append(browser)
+		for (tb, group, text, event, constraints) in button_list:
+			if tb == "all" or tb == tbid:
+				browser.add_button(group, text, event, constraints)
+		for (tb, group, image, event, constraints) in toolbar_list:
+			if tb == "all" or tb == tbid:
+				browser.add_toolbar_button(group, image, event, constraints)
+		for (tb, menu, text, event, constraints) in menu_list:
+			if tb == "all" or tb == tbid:
+				browser.add_menu_item(menu, text, event, constraints)
+		if latest_highlights.has_key(id):
+			(style, areas) = latest_highlights[id]
+			browser.set_highlight(style, areas)
+    except:
+        print sys.exc_type
+        print sys.exc_value
+@
+
+%}}}
+%{{{ highlight
+
+Highlight a certain area in a file.
+
+<<highlight>>=
+def highlight(cid, tbid, tid, style, areas):
+	global browsers_on_tool, latest_highlights
+
+	print "highlight: %s,%s,%s,%s" % (tbid, tid, style, str(areas))
+	id = (tbid, tid)
+	if browsers_on_tool.has_key(id):
+		for browser in browsers_on_tool[id]:
+			browser.set_highlight(style, areas)
+	latest_highlights[id] = (style, areas)
+@
+
+%}}}
+%{{{ add_button
+
+Add a button to all the browsers of a certain file.
+
+<<add_button>>=
+def add_button(cid, tbid, tid, group, text, event, caps):
+	global browsers_on_tool
+
+	if str(id) == "all":
+		for (tb,t) in browsers_on_tool.keys():
+			if str(tbid) == "all" or tbid == tb:
+				browsers = browsers_on_tool[id]
+				for browser in browsers:
+					browser.add_button(group, text, event, caps)
+		button_list.append((tbid, group, text, event, caps))
+	else:
+		id = (tbid, tid)
+		if browsers_on_tool.has_key(id):
+			browsers = browsers_on_tool[id]
+			for browser in browsers:
+				browser.add_button(group, text, event, caps)
+@
+
+%}}}
+%{{{ add_toolbar_button
+
+Add a toolbar button to all the browsers of a certain file.
+
+<<add_toolbar_button>>=
+def add_toolbar_button(cid, tbid, tid, group, image, event, caps):
+	global browsers_on_tool, toolbar_list
+
+	print "add_toolbar_button: ", tbid, tid, group, image, event, caps
+	if str(tid) == "all":
+		for (tb,t) in browsers_on_tool.keys():
+			if str(tbid) == "all" or tbid == tb:
+				browsers = browsers_on_tool[(tb,t)]
+				for browser in browsers:
+					browser.add_toolbar_button(group, image, event, caps)
+		toolbar_list.append((tbid, group, image, event, caps))
+	else:
+		id = (tbid, tid)
+		if browsers_on_tool.has_key(id):
+			browsers = browsers_on_tool[id]
+			for browser in browsers:
+				browser.add_toolbar_button(group, image, event, caps)
+		else:
+			print "no browsers on", id
+@
+
+%}}}
+%{{{ add_menu_item
+
+Add a menu-item to all the browsers of a certain tool.
+
+<<add_menu_item>>=
+def add_menu_item(cid, tbid, tid, group, text, event, caps):
+	global browsers_on_tool
+
+	if str(id) == "all":
+		for (tb,t) in browsers_on_tool.keys():
+			if str(tbid) == "all" or tbid == tb:
+				browsers = browsers_on_tool[id]
+				for browser in browsers:
+					browser.add_menu_item(group, text, event, caps)
+		menu_list.append((tbid, group, text, event, caps))
+	else:
+		id = (tbid, tid)
+		if browsers_on_tool.has_key(id):
+			browsers = browsers_on_tool[id]
+			for browser in browsers:
+				browser.add_menu_item(group, text, event, caps)
+@
+
+%}}}
+%{{{ close
+
+<<close>>=
+def close(cid, tbid, tid):
+	global browsers_on_tool
+
+	id = (tbid, tid)
+	print "closing ", id
+	if browsers_on_tool.has_key(id):
+		for browser in browsers_on_tool[id]:
+			print "closing browser ", browser
+			browser.close()
+		del browsers_on_tool[id]
+@
+
+%}}}
+
+%{{{ rec_terminate
+
+<<rec_terminate>>=
+def rec_terminate(cid, arg):
+	sys.exit(0)
+@
+
+%}}}
+%{{{ rec_ack_event
+
+<<rec_ack_event>>=
+def rec_ack_event(cid, arg):
+	pass
+@
+
+%}}}
+
+%}}}
+
+
+
+
