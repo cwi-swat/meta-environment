@@ -143,15 +143,16 @@ void SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept)
 {
   stack *st;
 
+  if(accept != NULL)
+    new = SG_AddStack(accept, new);
   while(shift(st, old))
-    SG_UnprotectUnusedStack(st, NULL, new, accept);
+    SG_UnprotectUnusedStack(st, NULL, new);
 }
 
-void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *new, stack *accept)
+void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *sts)
 {
     if(st->protected                    /*  Done if already unprotected */
-    && !SG_SubStack(st, accept)         /*  Accepting stack is sacred   */
-    && !SG_InStacks(st, new, ATtrue)) { /*  as are the living stacks    */
+    && !SG_InStacks(st, sts, ATtrue)) { /*  as are the living stacks    */
       st_links *lks = SG_ST_LINKS(st);
 
         st->protected = ATfalse;
@@ -161,7 +162,7 @@ void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *new, stack
       for (; lks != NULL; lks = tail(lks)) {
         st_link *lk = head(lks);
 
-        SG_UnprotectUnusedStack(SG_LK_STACK(lk), lk, new, accept);
+        SG_UnprotectUnusedStack(SG_LK_STACK(lk), lk, sts);
       }
     }
 }

@@ -103,7 +103,7 @@ st_links *SG_AddLinks(st_link *l, st_links *ls);
 
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept);
 void    SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept);
-void    SG_UnprotectUnusedStack(stack *st, st_link *guerilla, stacks *new, stack *accept);
+void    SG_UnprotectUnusedStack(stack *st, st_link *guerilla, stacks *new);
 void    SG_DisposeUnusedStacks(stacks *sts);
 void    SG_DisposeUnusedStack(stack *st, st_link *guerilla);
 

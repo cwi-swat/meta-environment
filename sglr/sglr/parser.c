@@ -233,10 +233,10 @@ void  SG_ParserPreparation(void)
 
 void  SG_ParserCleanup(void)
 {
-  active_stacks = SG_AddStack(accepting_stack, active_stacks);
+  SG_PurgeOldStacks(SG_AddStack(accepting_stack, active_stacks), NULL, NULL);
+  active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
-  active_stacks = SG_PurgeOldStacks(active_stacks, NULL, NULL);
 }
 
 /*
