@@ -1,11 +1,13 @@
 $Id$
 
-2003/11/21 (jurgenvm@cwi.nl)
+2003/11/21 (jurgenv@cwi.nl)
  * Added a number of builtins concerning parsing
  * Reading in parse trees from files uses the same API as parsing builtins
  * All file IO is now implemented in a single builtin-io.c file
  * Shell builtin takes Bytes as argument instead of Strings
  * Parse tables can now be included in generated code
+ * reduction of a function without any input files made possible for
+   a compiled specification
  
 2003/11/03 (jurgenvm@cwi.nl)
  * Added lower-from-tree builtin.
