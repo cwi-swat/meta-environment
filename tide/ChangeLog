@@ -1,3 +1,6 @@
+2002/12/09 (jurgenv@cwi.nl)
+ * Changed version numbers of aterm-java and shared-objects jarfiles
+
 2002/05/22 (mdejonge@cwi.nl)
  * Added package definition file for tide package (tide-0.3a.pkg)
 
