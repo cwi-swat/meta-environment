@@ -1,0 +1,60 @@
+equations
+
+[get-sig-0] getSignatures(ASM) = getSigs(ASM, sigs())
+
+[get-sig-1] 
+
+  getSigs(module ModName ImpSec* AS-Sec*, sigs(AS-FS*)) = 
+				 getSigs(AS-Sec*, sigs(AS-FS*))
+
+[get-sig-2] getSigs(AS-FS, sigs(AS-FS*)) = sigs(AS-FS, AS-FS*)
+
+[get-fun-1] 
+
+  getFunctions(module ModName ImpSec* AS-Sec*, $FD*) = 
+			      getFunctions(AS-Sec*, $FD*)
+
+[get-fun-2] getFunctions($FD, $FD*) = $FD $FD*
+
+[module-name-1] getModuleName(module ModName ImpSec* AS-Sec*) = ModName
+
+[imports-0] 
+
+  moduleid($Char+) := getModuleName(ASM),
+  [AT1*, uqliteral("""$Char+"""), AT2*] := getImports(ASM, [])
+  ============================================================
+  getImportedModules(ASM) = [AT1*, AT2*]
+
+[imports-1] 
+
+  Imp*1 := $extract-imports(AS-Sec*,),
+  [AT1*] := to-list(Imp*1),
+  [AT2*] := getImports(ImpSec*, ATL),
+  [AT3*] := remove-dups([AT1*, AT2*])
+  ===============================================
+  getImports(module ModName ImpSec* AS-Sec*, ATL) = [AT3*]
+
+[default-imports-0] getImportedModules(ASM) = getImports(ASM, [])
+
+[imports-2] 
+
+  ATL := [AT*, uqliteral("""$Char+""")]
+  =========================================
+  getImports(moduleid($Char+), [AT*]) = ATL
+
+[remove-duplicates-1] 
+
+  remove-dups([AT1*, AT, AT2*, AT, AT3*]) = remove-dups([AT1*, AT, AT2*, AT3*])
+
+[default-remove-duplicates-1] remove-dups([AT1*]) = [AT1*]
+
+[to-list-1] 
+
+  [AT*] := to-list(Imp+)
+  ==========================
+  to-list(moduleid($Char+) Imp+) = [uqliteral("""$Char+"""), AT*]
+
+[to-list-3] to-list() = []
+
+[to-list-1] to-list(moduleid($Char+)) = [uqliteral("""$Char+""")]
+

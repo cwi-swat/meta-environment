@@ -1,0 +1,51 @@
+module asdf/asdf-support
+
+imports asdf/asdf2sdf
+
+exports
+
+sorts
+
+	Signatures AS-FunctionDef*
+
+context-free syntax
+
+  getSigs(AS-Module, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+  getSigs(AS-Section*, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+  getSigs(AS-FunctionSig, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+
+  getSignatures(AS-Module)	-> Signatures
+
+  sigs({AS-FunctionSig ","}*)		-> Signatures
+
+  getFunctions(AS-Module, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
+  getFunctions(AS-Section*, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
+  getFunctions(AS-FunctionDef, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
+
+  getModuleName(AS-Module) 	-> ModuleName
+  getImportedModules(AS-Module)		-> ATermList 
+  getImports(AS-Module, ATermList)		-> ATermList {traversal(accu, break, top-down)}
+  getImports(ImpSection*, ATermList)	-> ATermList {traversal(accu, break, top-down)}
+  getImports(ModuleId, ATermList)		-> ATermList {traversal(accu, break, top-down)}
+  remove-dups(ATermList)	-> ATermList
+  to-list(Import*)		-> ATermList
+
+hiddens variables
+
+  "ASM"			-> AS-Module
+  "ModName"		-> ModuleName
+  "ImpSec"[1-9]?	-> ImpSection
+  "ImpSec*"		-> ImpSection*
+  "Imps"		-> Imports
+  "Imp*"[1-9]?		-> Import*
+  "Imp+"		-> Import+
+  "Imp"[1-9]?		-> Import
+  "AS-Sec*"		-> AS-Section*
+  "AS-FS*"		-> {AS-FunctionSig ","}*
+  "AS-FS"		-> AS-FunctionSig
+  "$FD*"		-> AS-FunctionDef*
+  "$FD"			-> AS-FunctionDef
+  "AT"[1-9]?		-> ATerm
+  "AT"[1-9]?"*"		-> { ATerm ","}*
+  "ATL"			-> ATermList
+ "$Char+"[1-9]?   	-> CHAR+ 

@@ -1,0 +1,224 @@
+equations
+
+  [t-1] Section* := $sections-to-sdf(AS-Section*),
+        Import*1 := $remove-duplets($extract-imports(AS-Section*,)),
+	Import*2 := $remove(Import*1, ModuleName)
+        =======================================
+        asdf2sdf(module ModuleName ImpSection* AS-Section*) =
+module ModuleName 
+ImpSection* 
+imports asdf/an
+imports basic/Whitespace
+imports Import*2
+exports sorts Action
+
+Section*
+
+  [t-2] $sections-to-asf(AS-Section*) == eqlist()
+	=======================================
+	asdf2asf(module ModuleName ImpSection* AS-Section*) =
+
+  [t-2] eqlist(ASFequation+) := $sections-to-asf(AS-Section*),
+	ASFEquations := equations 
+ASFequation+
+	=======================================
+	asdf2asf(module ModuleName ImpSection* AS-Section*) = ASFEquations
+
+  [ia-1] moduleid($CH+1"/"$CH+2) := ModuleName 
+	 ========================================
+	 $import-an(ModuleName) = 
+
+  [default-ia-2] $import-an(ModuleName) = moduleid("A""c""t""i""o""n""/""F""u""l""l""-""A""N")
+
+  [tss-1] $sections-to-sdf() = 
+
+  [tss-2] Section*1 := $section-to-sdf(AS-Section),
+          Section*2 := $sections-to-sdf(AS-Section*)
+          ===========================================
+          $sections-to-sdf(AS-Section AS-Section*) = 
+Section*1 
+Section*2
+
+  [tss-1] $sections-to-asf() = eqlist()
+
+  [tss-2] eqlist(ASFequation*1) := $section-to-asf(AS-Section),
+          eqlist(ASFequation*2) := $sections-to-asf(AS-Section*)
+          ===========================================
+          $sections-to-asf(AS-Section AS-Section*) = 
+eqlist(ASFequation*1 
+
+ASFequation*2)
+
+
+  [ts-1] $section-to-sdf(syntax ) = 
+
+  [ts-2] Grammar := $transform-syntax(AS-Syntax+)
+         ===============================================
+         $section-to-sdf(syntax AS-Syntax+) = 
+exports 
+Grammar
+
+  [ts-3] $section-to-sdf(requires ) = 
+
+  [ts-4] Grammar := $transform-requires(AS-Requires+)
+         ===============================================
+         $section-to-sdf(requires AS-Requires+) = 
+exports 
+Grammar
+
+  [ts-5] $section-to-sdf(semantics ) = 
+
+  [ts-6] Grammar := $transform-semantics(AS-Semantics+)
+         ===============================================
+         $section-to-sdf(semantics AS-Semantics+) = 
+exports 
+Grammar
+  
+  [ts-7] $section-to-sdf(sdf-section Section*) = Section*
+
+  [default-ts-7] $section-to-sdf(AS-Section) = 
+
+  [ts-8] $section-to-asf(semantics ) = eqlist()
+
+  [ts-6] eqlist(ASFequation*) := $get-equations(AS-Semantics+)
+         ===============================================
+         $section-to-asf(semantics AS-Semantics+) = eqlist(ASFequation*)
+	 
+  [default-ts-7] $section-to-asf(AS-Section) = eqlist()
+
+  [tsy-1] Grammar1 := $transform-syntax(AS-Syntax),
+          Grammar2 := $transform-syntax(AS-Syntax+)
+	  =======================================
+	  $transform-syntax(AS-Syntax AS-Syntax+) = Grammar1 
+Grammar2
+
+  [tsy-3] $transform-syntax(Sort ::= AS-Syntax-Rhs) = 
+sorts Sort
+context-free syntax
+  $transform-syntax-rhs(Sort, AS-Syntax-Rhs)
+
+  [tsr-1] $transform-syntax-rhs(Sort, AS-Syntax-Rhs1 | AS-Syntax-Rhs2) = 
+$transform-syntax-rhs(Sort, AS-Syntax-Rhs1)
+$transform-syntax-rhs(Sort, AS-Syntax-Rhs2)
+
+  [tsr-2] $transform-syntax-rhs(Sort1, Sort2) = Sort2 -> Sort1
+
+  [tsr-2] $transform-syntax-rhs(Sort, Literal) = Literal -> Sort
+
+  [tsr-3] $transform-syntax-rhs(Sort, Literal(Symbol,*) ) = Literal(Symbol,*) -> Sort
+
+  [trq-1] Grammar1 := $transform-requires(AS-Requires),
+          Grammar2 := $transform-requires(AS-Requires+)
+          ================================================
+          $transform-requires(AS-Requires AS-Requires+) = Grammar1 
+Grammar2
+
+  [trq-2] $transform-requires(AS-Variable) = $transform-variable(AS-Variable)
+
+  [trq-3] $transform-requires(AS-Requires-Production) = $transform-production(AS-Requires-Production)
+
+  [trq-4] $transform-requires(AS-Constant) = $transform-constant(AS-Constant)
+
+
+  [tsm-1] Grammar1 := $transform-semantics(AS-Semantics),
+          Grammar2 := $transform-semantics(AS-Semantics+)
+	  =======================================
+	  $transform-semantics(AS-Semantics AS-Semantics+) = Grammar1 
+Grammar2
+
+  [tsm-2] $transform-semantics(Literal : Sort1 -> Sort2) = context-free syntax
+  Literal Sort1 -> Sort2
+
+  [tsm-3] $transform-semantics(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs) = 
+context-free syntax
+
+  [tsm-1] eqlist(ASFequation*1) := $get-equations(AS-Semantics),
+          eqlist(ASFequation*2) := $get-equations(AS-Semantics+)
+	  =======================================
+	  $get-equations(AS-Semantics AS-Semantics+) = eqlist(ASFequation*1
+ASFequation*2)
+
+  [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Symbol1 -> Symbol2 := AS-Semantics
+
+  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = AS-Eqs-Rhs)
+
+
+  [tp-1] Sort1 == sort("D""a""t""u""m"), 
+	 Sort2 := AS-Requires-Rhs, sort($CH+) := Sort2
+	 ===============================
+         $transform-production(Sort1 ::= AS-Requires-Rhs) = 
+sorts Sort2
+context-free syntax
+  Sort2 -> Sort1
+  qliteral("""$CH+""") -> DataSet %% MAKE LOWERCASE!
+
+  [default-tp-2] $transform-production(Sort ::= AS-Requires-Rhs) = 
+context-free syntax
+  $transform-requires-rhs(Sort, AS-Requires-Rhs) 
+
+  [trhs-1] Production+1 := $transform-requires-rhs(Sort, AS-Requires-Rhs1),
+            Production+2 := $transform-requires-rhs(Sort, AS-Requires-Rhs2)
+            =========================================================
+            $transform-requires-rhs(Sort, AS-Requires-Rhs1 | AS-Requires-Rhs2) = 
+Production+1
+  Production+2
+
+  [trhs-2] $transform-requires-rhs(Sort1, Sort2) = Sort2 -> Sort1
+
+  [trhs-2] $transform-requires-rhs(Sort, Literal) = Literal -> Sort
+
+  [trhs-3] $transform-requires-rhs(Sort, Literal(Symbol,*) ) = Literal -> PrefixDataOp
+
+  [trhs-4] Sort == sort($CH+)
+	   ========================
+	   $transform-requires-rhs(sort($CH+), Literal Sort ) = qliteral(""")Literalqliteral(""") -> sort("P""r""e""f""i""x"$CH+)
+sort("P""r""e""f""i""x"$CH+) Sort -> sort($CH+)
+
+  [default-trhs-4] $transform-requires-rhs(Sort, Literal Sort1 ) = 
+qliteral(""")Literalqliteral(""") Sort1 -> Sort
+
+  [trhs-5] Sort == sort($CH+)
+	   ========================
+	   $transform-requires-rhs(sort($CH+), Sort Literal Sort) = qliteral(""")Literalqliteral(""") -> sort("I""n""f""i""x"$CH+)
+Sort sort("I""n""f""i""x"$CH+) Sort -> sort($CH+)
+
+  [default-trhs-5] $transform-requires-rhs(Sort, Sort1 Literal Sort2) = 
+Sort1 qliteral(""")Literalqliteral(""") Sort2	-> Sort
+
+  [tv-1] $transform-variable(sort($CH+) : Symbol) = 
+sorts Symbol
+variables qliteral("""$CH+""")[0-9\']* 		-> Symbol
+	  qliteral("""$CH+""")[0-9\']*"+"	-> Symbol+
+	  qliteral("""$CH+""")[0-9\']*"*"	-> Symbol*
+
+  [tc-1] $transform-constant(Literal : Symbol) = 
+context-free syntax
+  Literal -> Symbol
+
+  [tf-1] $transform-function(Literal : Symbol1 -> Symbol2) = 
+context-free syntax
+  Literal -> sort("P""r""e""f""i""x")
+
+  [ei-1] $extract-imports(sort($CH+),Import*) = 
+         $add-to(moduleid($CH+), Import*)
+
+  [ei-2] $extract-imports(Sort ::= AS-Requires-Rhs, Import*) = $extract-req-imports(AS-Requires-Rhs, Import*)
+   
+  [ei-2] $extract-imports(semantics AS-Semantics*,Import*) = Import*
+
+  [ei-3] $extract-imports(sdf-section Section*,Import*) = Import*
+
+  [ei-4] $extract-imports(Sort : Symbol, Import*) = $extract-imports(Symbol, Import*)
+
+  [ei-4] $extract-req-imports(sort($CH+),Import*) = 
+         $add-to(moduleid("D""a""t""a""/"$CH+), Import*)
+   
+  [at-1] $add-to(Import, Import*) = Import Import*
+
+  [remove-1] $remove(Import*1 Import Import*2, Import) = $remove(Import*1 Import*2, Import)
+  
+  [default-remove-2] $remove(Import*, Import) = Import*
+
+  [remove-duplets-1] $remove-duplets(Import*1 Import Import*2 Import Import*3) = $remove-duplets(Import*1 Import Import*2 Import*3)
+
+  [default-remove-duplets-2] $remove-duplets(Import*) = Import*

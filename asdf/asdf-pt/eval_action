@@ -1,0 +1,4 @@
+METAPATH=/ufs/iversen/asenv/install/bin
+ASDFPATH=/ufs/iversen/asenv/install/share/asdf-env
+
+${METAPATH}/sglr -p ${ASDFPATH}/ChangeNotation.trm.tbl | ${METAPATH}/apply-function -f change -s Action | ${METAPATH}/apply-function -f eval -s Configuration | ${METAPATH}/unparsePT | ${METAPATH}/sglr -p ${ASDFPATH}/ChangeNotation.trm.tbl | ${METAPATH}/asfe -e ${ASDFPATH}/ChangeNotation.eqs | ${METAPATH}/unparsePT

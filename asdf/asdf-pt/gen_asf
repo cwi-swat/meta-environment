@@ -1,0 +1,4 @@
+ASBIN=/ufs/iversen/asenv/install/bin
+ASSHARE=/ufs/iversen/asenv/install/share/asdf-env
+$ASBIN/apply-function -f asdf2asf -s ASFEquations | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT
+

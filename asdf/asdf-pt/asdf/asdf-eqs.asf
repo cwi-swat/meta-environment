@@ -1,0 +1,57 @@
+equations
+
+
+[eqs-table-1]   module $MN $IS* $Sec1* := asdf2sdf($ASM),
+		$Sec2* := $trans-var-section($Sec1*)
+                ========================
+                $asdf2asdf-pt($ASM) = 
+module $MN
+$IS*
+imports asdf/asdf
+imports languages/asf/syntax/Equations
+
+exports
+
+sorts 
+
+    ASDFModule
+
+context-free syntax
+
+AS-FunctionSig			-> ASF-ConditionalEquation
+
+context-free syntax
+    "module" ModuleName ImpSection* ASDF-Section* -> ASDFModule
+    "semantics" SemContent*  -> ASDF-Section {prefer}
+    ASF-ConditionalEquation | AS-FunctionSig  -> SemContent
+    AS-Section	-> ASDF-Section
+
+    "semantics" AS-Semantics* 		-> AS-Section {reject}
+
+    Action	-> Tree
+
+$Sec2*
+
+[get-exported-sorts-1] $get-exported-sorts(sorts $S1*, $S2*) = $S1* $S2*
+
+[cons-equation-imports-1] $Im1* := $cons-equation-imports($Sym1),
+                          $Im2* := $cons-equation-imports($Sym2 $S*)
+                          =================================
+                          $cons-equation-imports($Sym1 $Sym2 $S*) = $Im1* 
+$Im2*
+
+[cons-equation-imports-2] $cons-equation-imports($Sym) = asf/syntax/Equation[$Sym]
+
+[cons-equation-imports-3] $cons-equation-imports() = 
+ 
+[trans-var-section-1] $trans-var-section(variables $P*) = context-free syntax 
+$trans-var-prods($P*)
+
+[trans-var-prods-1] $trans-var-prods() = 
+
+[trans-var-prods-2] $P2* := $trans-var-prods($P1*)
+		    ==============================
+		    $trans-var-prods($S* -> $Sym $P1*) =
+$S* -> $Sym {prefer}
+$P2*
+

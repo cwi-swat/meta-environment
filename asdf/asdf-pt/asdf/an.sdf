@@ -1,0 +1,160 @@
+module asdf/an
+
+exports
+
+imports
+
+sorts
+  
+   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction 
+   InfixDataOp ConsIdConst StrConst IntConst Data Datum Index Sort
+
+
+%%%%%%%%%%%%%%%
+%% Kernel AN %%
+%%%%%%%%%%%%%%%
+
+context-free syntax
+
+  "result" Data		-> Action
+  "copy"		-> Action
+  "skip"		-> Action
+  "then"		-> InfixAction
+  "and-then"		-> InfixAction
+  "and"			-> InfixAction
+  "indivisibly"		-> PrefixAction
+  "unfold"		-> Action
+  "unfolding"		-> PrefixAction
+  "throw"		-> Action
+  "catch"		-> InfixAction
+  "err"			-> Action
+  "and-catch"		-> InfixAction
+  "fail"		-> Action
+  "maybe"		-> PrefixAction
+  "else"		-> InfixAction
+  "give" DataOp		-> Action
+  "check" DataOp	-> Action
+  "choose-nat"		-> Action
+
+  "copy-bindings"	-> Action
+  "scope"		-> InfixAction
+
+
+  "create"		-> Action
+  "inspect"		-> Action
+  "update"		-> Action
+
+  "enact"		-> Action
+  "close"		-> Action
+  "recursively"		-> PrefixAction
+
+  "disj-union"		-> PrefixDataOp
+  "binding"		-> PrefixDataOp
+  "bound"		-> PrefixDataOp
+  "overriding"		-> PrefixDataOp
+
+  "no-bindings"		-> Datum
+
+context-free syntax
+	
+	PrefixAction Action		-> Action	
+
+	Action InfixAction Action	-> Action {left}
+	
+	Action	-> Data
+
+context-free priorities
+
+  { "result" Data                -> Action } 
+  >
+  { Action InfixAction Action     -> Action }
+
+context-free priorities
+
+  { Action Yielder    		-> Action }
+  >
+  { "give" Yielder         	-> Action } 
+  >
+  { PrefixAction Action 	-> Action }
+  >
+  { Action InfixAction Action	-> Action }
+
+%%%%%%%%%%%%%
+%% Full AN %%
+%%%%%%%%%%%%%
+
+context-free syntax
+
+  Data			-> Yielder
+  DataOp		-> Yielder
+  "current-bindings"	-> Yielder
+  "bound-to" Yielder	-> Yielder
+  "stored-at" Yielder	-> Yielder
+  "closure" Yielder	-> Yielder
+
+  "it"			-> DataOp
+  "defined"		-> DataOp
+
+  "the" Sort		-> PrefixDataOp
+
+  "give" Yielder	-> Action
+  "check" Yielder	-> Action
+  "bind"		-> Action
+  "furthermore"		-> PrefixAction
+  "before"		-> InfixAction
+  "apply"		-> Action
+
+
+  Action Yielder		-> Action {avoid}
+	
+  Yielder InfixDataOp Yielder	-> Yielder {left}
+
+  PrefixDataOp Yielder		-> Yielder
+  "(" {Yielder ","}+ ")" 	-> Yielder
+	
+  InfixAction			-> InfixDataOp  {avoid}
+  PrefixAction			-> PrefixDataOp  {avoid}
+
+  "(" Action ")"		-> Action 
+	
+
+context-free priorities
+
+  {PrefixDataOp Yielder		-> Yielder}
+  >
+  {Yielder InfixDataOp Yielder	-> Yielder}
+
+
+%%%%%%%%
+% Data %
+%%%%%%%%
+
+context-free syntax
+
+  "#" Index       -> PrefixDataOp
+
+
+lexical syntax
+
+  "-1" | [0-9]+   -> Index
+
+context-free syntax
+
+  Datum 	-> Data 
+     
+lexical syntax
+
+  [0-9]+                  -> IntConst
+  "\""~[\"]*"\""          -> StrConst
+  [a-zA-Z][a-zA-Z0-9]*    -> IdConst
+
+  IntConst | StrConst | IdConst   -> Cons
+
+  "="			-> InfixDataOp
+
+  "not" | "def"  	-> PrefixDataOp
+
+context-free syntax
+        
+  InfixDataOp     -> DataOp
+  PrefixDataOp    -> DataOp

@@ -1,0 +1,102 @@
+module asdf/asdf
+
+imports 
+
+  asdf/an
+  languages/sdf2/syntax/Sdf2
+  basic/Integers
+	
+
+exports
+
+  sorts 
+
+    AS-Module AS-Section AS-Syntax AS-Requires AS-Semantics 
+    AS-Variable AS-Syntax-Production AS-Requires-Production 
+    AS-Syntax-Rhs AS-Requires-Rhs AS-Function AS-FunctionSig
+    AS-FunctionDef AS-Constant AS-Eqs-Tag AS-Eqs-Rhs AS-Eqs-Lhs
+    AS-Eqs-Symbols Constructor Special Word Token Symbol
+
+  context-free syntax
+
+    "module" ModuleName ImpSection* AS-Section* -> AS-Module {cons("module")}
+
+  context-free syntax
+
+    "syntax" AS-Syntax*  	-> AS-Section {cons("syntax-sec")}
+    "requires" AS-Requires* 	-> AS-Section {cons("requires-sec")}
+    "semantics" AS-Semantics* 	-> AS-Section {cons("semantics-sec")}
+    "sdf-section" Section* 	-> AS-Section {cons("sdf-sec")}
+
+  context-free syntax
+
+    AS-Syntax-Production 	-> AS-Syntax {cons("syntax")}
+
+  context-free syntax
+
+    AS-Variable 		-> AS-Requires {cons("requires")}
+    AS-Requires-Production 	-> AS-Requires {cons("requires")}
+    AS-Constant 		-> AS-Requires {cons("requires")}
+
+  context-free syntax
+
+    AS-Function 	-> AS-Semantics {cons("semantics")}
+
+  context-free syntax
+
+    Sort ":" Symbol			-> AS-Variable {cons("variable")}
+
+  context-free syntax
+
+    Sort "::=" AS-Syntax-Rhs 	-> AS-Syntax-Production {cons("syn-prod")}
+    Sort "::=" AS-Requires-Rhs 	-> AS-Requires-Production {cons("req-prod")}
+
+  context-free syntax
+
+    Sort                       		-> AS-Syntax-Rhs {cons("syn-rhs-sort")}
+    Literal                       	-> AS-Syntax-Rhs {cons("syn-rhs-lit")}
+    Literal "(" {Symbol ","}* ")" 	-> AS-Syntax-Rhs {cons("syn-rhs-app")}
+    AS-Syntax-Rhs "|" AS-Syntax-Rhs   
+		        -> AS-Syntax-Rhs {right,prefer, cons("syn-rhs-union")}
+
+    Sort                       	    -> AS-Requires-Rhs {cons("req-rhs-sort")}
+    Literal                         -> AS-Requires-Rhs {cons("req-rhs-lit")}
+    Literal Sort                    -> AS-Requires-Rhs {cons("req-rhs-prefix")}
+    Sort Literal Sort               -> AS-Requires-Rhs {cons("req-rhs-infix")}
+    Literal "(" {Symbol ","}* ")"   -> AS-Requires-Rhs {cons("req-rhs-app")}
+    AS-Requires-Rhs "|" AS-Requires-Rhs	
+		    -> AS-Requires-Rhs {right,prefer, cons("req-rhs-union")}
+
+  context-free syntax
+
+    Literal ":" Symbol			-> AS-Constant {cons("constant")}
+
+  context-free syntax
+    
+    AS-FunctionDef | AS-FunctionSig 	   -> AS-Function {cons("function")}
+    Literal ":" Sort "->" Sort 		   -> AS-FunctionSig {cons("funsig")}
+    AS-Eqs-Tag AS-Eqs-Lhs "=" AS-Eqs-Rhs   -> AS-FunctionDef {cons("fundef")}
+
+  context-free syntax
+
+    Literal Constructor 		-> AS-Eqs-Lhs {cons("eqs-lhs")} 
+    Literal "(" {Symbol ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
+    Literal "(" Symbol* ")"	   -> Constructor {cons("cons-seq")}
+    Symbol			   -> Constructor {cons("cons-symbol")}
+    "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
+
+    AS-Eqs-Symbols+ 		-> AS-Eqs-Rhs {cons("eqs-rhs")}
+    "(" AS-Eqs-Rhs ")"  	-> AS-Eqs-Symbols {cons("eqs-sym-par")}
+    Word | Special | NatCon 	-> AS-Eqs-Symbols {cons("eqs-sym")}
+    "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
+
+  lexical syntax
+
+    [\#\_\,\=\-\*\+\\\/]	-> Special 
+    [a-zA-Z0-9\-]+		-> Token 
+    [a-zA-Z]+			-> Word 
+
+  lexical restrictions
+
+    Token -/- [a-zA-Z0-9\-]
+    Word -/- [a-zA-Z]

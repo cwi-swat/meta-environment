@@ -1,0 +1,132 @@
+module asdf/asdf2sdf
+
+imports 
+	
+  asdf/asdf
+  languages/sdf2/syntax/Sdf2 
+  basic/Booleans
+
+
+exports
+
+  sorts
+    ASFEquation ASFEquations EquationList
+
+  context-free syntax
+
+    asdf2sdf(AS-Module) -> Module 
+    asdf2asf(AS-Module) -> ASFEquations 
+
+    "$import-an"(ModuleName)	-> Import*
+
+  context-free syntax
+
+    "$section-to-sdf"(AS-Section)   	-> Section* {prefer}
+    "$sections-to-sdf"(AS-Section*) 	-> Section* {prefer}
+    "$section-to-asf"(AS-Section*) 	-> EquationList {prefer}
+    "$sections-to-asf"(AS-Section*) 	-> EquationList {prefer}
+
+  context-free syntax
+
+    "$transform-syntax"(AS-Syntax*)        -> Grammar {prefer}
+    "$transform-requires"(AS-Requires*) 	-> Grammar {prefer}
+    "$transform-semantics"(AS-Semantics*)	-> Grammar {prefer}
+
+    eqlist(ASFequation*)	-> EquationList {prefer}
+
+    "$get-equations"(AS-Semantics*)	-> EquationList {prefer}
+
+    "$transform-variable"(AS-Variable)             	-> Grammar {prefer}
+    "$transform-constant"(AS-Constant)			-> Grammar {prefer}
+    "$transform-function"(AS-Function)			-> Grammar {prefer}
+    "$transform-production"(AS-Requires-Production)	-> Grammar {prefer}
+
+    "$transform-syntax-rhs"(Symbol, AS-Syntax-Rhs)	-> Production* {prefer}
+    "$transform-requires-rhs"(Symbol, AS-Requires-Rhs)	-> Production* {prefer}
+
+  context-free syntax
+    "$extract-imports"(AS-Section*, Import*) -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-imports"(AS-Section, Import*) -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-imports"(AS-Requires-Production, Import*) -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-imports"(AS-Variable, Import*) -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-imports"(Symbol, Import*)        -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-imports"(Sort, Import*)        -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-req-imports"(AS-Requires-Rhs, Import*)        -> Import* 
+					{traversal(top-down,accu,break)}
+    "$extract-req-imports"(Sort, Import*)        -> Import* 
+					{traversal(top-down,accu,break)}
+
+    AS-Eqs-Tag AS-Eqs-Lhs "=" AS-Eqs-Rhs		-> ASFequation
+
+    "equations" ASFequation+		-> ASFEquations
+					-> ASFEquations
+
+  context-free syntax
+
+    "$contains"(Import, Import*) -> Boolean
+    "$add-to"(Import, Import*)   -> Import*
+    "$remove"(Import*, Import)   -> Import*
+    "$remove-duplets"(Import*)	 -> Import*
+
+
+  variables
+
+    "ModuleName"[0-9]*     -> ModuleName
+    "ImpSection*"[0-9]*    -> ImpSection*
+    "Import"[0-9]*         -> Import
+    "Import*"[0-9]*        -> Import*
+    "AS-Section"[0-9]*     -> AS-Section
+    "AS-Section*"[0-9]*    -> AS-Section*
+    "AS-Syntax"[0-9]*     -> AS-Syntax
+    "AS-Syntax*"[0-9]*    -> AS-Syntax*
+    "AS-Syntax+"[0-9]*    -> AS-Syntax+
+    "AS-Requires"[0-9]*     -> AS-Requires
+    "AS-Requires*"[0-9]*    -> AS-Requires*
+    "AS-Requires+"[0-9]*    -> AS-Requires+
+    "AS-Semantics"[0-9]*     -> AS-Semantics
+    "AS-Semantics*"[0-9]*    -> AS-Semantics*
+    "AS-Semantics+"[0-9]*    -> AS-Semantics+
+    "Section"[0-9]*        -> Section
+    "Section*"[0-9]*       -> Section*
+    "ASFequation"[0-9]*  -> ASFequation
+    "ASFequation+"[0-9]*  -> ASFequation+
+    "ASFequation*"[0-9]*  -> ASFequation*
+    "ASFEquations"[0-9]*	   -> ASFEquations
+    "AS-Syntax-Production"[0-9]*  -> AS-Syntax-Production
+    "AS-Syntax-Production*"[0-9]* -> AS-Syntax-Production*
+    "AS-Syntax-Production+"[0-9]* -> AS-Syntax-Production+
+    "AS-Requires-Production"[0-9]*  -> AS-Requires-Production
+    "AS-Requires-Production*"[0-9]* -> AS-Requires-Production*
+    "AS-Requires-Production+"[0-9]* -> AS-Requires-Production+
+    "AS-Variable"[0-9]*    -> AS-Variable
+    "AS-Variable*"[0-9]*   -> AS-Variable*
+    "AS-Variable+"[0-9]*   -> AS-Variable+
+    "AS-Function"[0-9]*    -> AS-Function
+    "AS-Function*"[0-9]*   -> AS-Function*
+    "AS-Function+"[0-9]*   -> AS-Function+
+    "AS-FunctionSig"[0-9]*    -> AS-FunctionSig
+    "AS-Constant"[0-9]*    -> AS-Constant
+    "AS-Constant*"[0-9]*   -> AS-Constant*
+    "AS-Constant+"[0-9]*   -> AS-Constant+
+    "AS-Syntax-Rhs"[0-9]*         -> AS-Syntax-Rhs
+    "AS-Requires-Rhs"[0-9]*         -> AS-Requires-Rhs
+    "Grammar"[0-9]*        -> Grammar
+    "Sort"[0-9]*	   -> Sort
+    "Literal"[0-9]*        -> Literal
+    "Symbol"[0-9]*         -> Symbol
+    "Symbs"[0-9]*         -> Symbols
+    "Symbol,*"[0-9]*       -> {Symbol ","}*
+    "Symbol+"[0-9]*        -> Symbol+
+    "Production"[0-9]*     -> Production
+    "Production*"[0-9]*    -> Production*
+    "Production+"[0-9]*    -> Production+
+    "$CH+"[0-9]*          -> CHAR+
+    "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
+    "AS-Eqs-Rhs"[0-9]?	   -> AS-Eqs-Rhs
+    "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag

@@ -1,0 +1,30 @@
+module asdf/asdf-eqs
+
+imports asdf/asdf2sdf
+
+exports
+
+sorts
+
+   Module Symbol* Import* Section* Grammar Production*
+
+context-free syntax
+
+	"$asdf2asdf-pt"(AS-Module)	-> Module
+	"$get-exported-sorts"(Section*, Symbol*)	-> Symbol* {traversal(top-down, accu, break)}
+	"$get-exported-sorts"(Grammar, Symbol*)	-> Symbol* {traversal(top-down, accu, break)}
+	"$cons-equation-imports"(Symbol*)		-> Import*
+	"$trans-var-section"(Section*)	-> Section* {traversal(top-down, trafo, break)}
+	"$trans-var-section"(Grammar)	-> Grammar {traversal(top-down, trafo, break)}
+	"$trans-var-prods"(Production*)	-> Production*
+
+variables
+
+	"$ASM"		-> AS-Module
+	"$MN"[0-9]?	-> ModuleName
+	"$IS"[0-9]?"*"	-> ImpSection*
+	"$Im"[0-9]?"*"	-> Import*
+	"$Sec"[0-9]?"*"	-> Section*
+	"$S"[0-9]?"*"	-> Symbol*
+	"$Sym"[0-9]?	-> Symbol
+	"$P"[0-9]?"*"	-> Production*
