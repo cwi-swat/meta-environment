@@ -22,10 +22,9 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-This short note documents the current state of the \rscript language.
-Be aware, this work in progress.
-\end{abstract}
+\tableofcontents
+
+\newpage
 
 \section{Introduction}\label{SEC:Introduction}
 
@@ -72,9 +71,9 @@ composite types (bag and relation). Expressions are constructed from
 comprehensions, function invocations and operators. These are all
 described below.
 
-\section{Types and values}
+\subsection{Types and values}
 
-\subsection{Elementary Types and Values}
+\subsubsection{Elementary Types and Values}
 
 \paragraph{Booleans}
 The Booleans are represented by the type {\tt bool} and have two values:
@@ -94,7 +93,7 @@ Area values are represented by the type {\tt area} and serve as source text
 coordinates, they are written as in: {\tt area("/usr/paulk/myfile.c", 2, 3, 7,
 55)}.
 
-\subsection{Composite Types and Values}
+\subsubsection{Composite Types and Values}
 
 \paragraph{Tuples}
 
@@ -133,9 +132,9 @@ yield the desired element type. For example, {\tt \{<1, "a">, <2, "b">,
 <3,"c">\}} is of type {\tt rel[int, str]}.
 
 Not surprisingly, $n$-ary relations are represented by the type {\tt rel[$T_1$, $T_2$, ..., $T_n$]}
-which is  a shorthand for  {\tt bag[<$T_1$, $T_2$, ..., $T_n$>]}
+which is  a shorthand for  {\tt bag[<$T_1$, $T_2$, ..., $T_n$>]}.
 
-\section{Comprehensions}
+\subsection{Comprehensions}
 
 We will use the familiar notation
 \begin{quote}
@@ -154,7 +153,7 @@ generators.  Generators may enumerate all the values in a bag or
 relation, they may perform a test, or they may assign a value to
 variables.
 
-\subsection{Generators}
+\subsubsection{Generators}
 
 \paragraph{Enumerator}
 Enumerators generate all the values in a given bag or relation.
@@ -192,7 +191,7 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 \end{itemize}
 
 
-\subsection{Examples of Comprehensions}
+\subsubsection{Examples of Comprehensions}
 
 \paragraph{Example}
 
@@ -207,9 +206,9 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 {\tt \{<Y, X> | X, Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
 the given relation: {\tt \{<10,1>, <20,2>\}}.
 
-\section{Declarations}
+\subsection{Declarations}
 
-\subsection{Variable declarations}
+\subsubsection{Variable declarations}
 A variable declaration has the form 
 \begin{quote}
 {\tt $T$ $V$ = $E$}
@@ -234,7 +233,7 @@ and only introduce the variable $V$.
     3>, <"thu", 4>, <"fri", 5>, <"sat",6>, <"sun",7>\}}
 declares the variable {\tt day}, a relation that maps strings to integers.
 
-\subsection{Local variable declarations}
+\subsubsection{Local variable declarations}
 Local variables can be introduced as follows:
 \begin{quote}
 {\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ end where}
@@ -243,7 +242,7 @@ First the local variables $V_i$ are bound to their respective values
 $E_i$, and then the value of expression $E$ is yielded.
 
 
-\subsection{Function declarations}
+\subsubsection{Function declarations}
 A function declaration has the form
 \begin{quote}
 {\tt $T$ $F$($T_1 ~ V_1$, ..., $T_n ~ V_n$) = $E$}
@@ -360,26 +359,9 @@ The resulting value of {\tt T} is as expected:
 
 \section{Built-in Operators}
 
-\note{The format of this section will be changed to the style of the built-in
-  functions.}
+\subsection{Operations on Booleans} \label{BO:bool}
 
-In the following two tables the built-in operators and functions are given.
-For readability, the argument types are indicated as follows:
-\begin{itemize}
-\item \emph{bool}: argument is of type {\tt bool}
-\item \emph{int}: argument is of type {\tt int}
-\item \emph{str}: argument is of type {\tt str}
-\item \emph{area}: argument is of type {\tt area}
-\item \emph{tuple}: argument is any tuple type.
-\item \emph{bag}: argument is of any bag type
-\item \emph{rel}: argument is of any relation type
-\end{itemize}
-
-\tablecaption{Built-in operators}
-\tablehead{\hline}
-\tabletail{\hline}
-\begin{supertabular}{|p{3.3cm}|p{10.7cm}|} \hline
-
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 \emph{bool}$_1$ \texttt{and} \emph{bool}$_2$ & yields {\tt true} if both arguments have the value true and
 {\tt false} otherwise\\ \hline
 
@@ -393,105 +375,120 @@ For readability, the argument types are indicated as follows:
 
 {\tt not} \emph{bool} & yields true if \emph{bool} is {\tt false} and {\tt true} otherwise \\
 \hline
+\end{tabular}
+
+\subsection{Operations on Integers} \label{BO:int}
+
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
+\emph{int}$_1$ {\tt ==} \emph{int}$_2$ & yields true if both arguments are numerically equal and false
+otherwise\\ \hline
+
+\emph{int}$_1$ {\tt !=} \emph{int}$_2$ & yields true if both arguments are numerically unequal  and false
+otherwise\\ \hline
+
+\emph{int}$_1$ {\tt <=} \emph{int}$_2$ & yields true if \emph{int}$_1$is numerically less than
+or equal \emph{int}$_2$ and false otherwise\\ \hline
+
+\emph{int}$_1$ {\tt <} \emph{int}$_2$ & yields true if \emph{int}$_1$ is a numerically less than \emph{int}$_2$
+and false otherwise\\ \hline
+
+\emph{int}$_1$ {\tt >=} \emph{int}$_2$ & yields true if \emph{int}$_1$ is numerically greater
+than or equal \emph{int}$_2$  and false otherwise\\ \hline
+
+\emph{int}$_1$ {\tt >} \emph{int}$_2$ & yields true if\emph{int}$_1$  is numerically greater than \emph{int}$_2$
+and false otherwise\\ \hline
+\end{tabular}
+
+\subsection{Operations on Bags or Relations} \label{BO:bag-or-rel}
+
+\subsubsection{Membership tests} \label{BO:member}
+
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 
 \emph{any} {\tt in} \emph{bag} & yields true if \emph{any} occurs as element
 in \emph{bag} and false otherwise \\ \hline
 
 \emph{any} {\tt notin} \emph{bag} & yields {\tt false} if \emph{any} occurs as
-element in \emph{bag} and {\tt true} otherwise \\ \hline \hline
+element in \emph{bag} and {\tt true} otherwise \\ \hline
 
-\emph{\emph{tuple}} {\tt in} \emph{rel} & yields true if the left argument occurs as element in the
-right argument and false otherwise \\ \hline
+\emph{tuple} {\tt in} \emph{rel} & yields true if \emph{tuple} occurs as element in
+\emph{rel}  and false otherwise \\ \hline
 
-\emph{\emph{tuple}} {\tt notin} \emph{rel} & yields false if the left argument occurs as element in the
-right argument and true otherwise \\ \hline \hline
+\emph{tuple} {\tt notin} \emph{rel} & yields false if \emph{tuple} occurs as
+element in \emph{rel} and true otherwise \\ \hline
+\end{tabular}
 
-\emph{bag} {\tt ==} \emph{bag} & yields true if both arguments are equal bags and false
+\paragraph{Examples}
+
+\begin{itemize}
+
+\item {\tt 3 in \{1, 2, 3\}} yields {\tt true}.
+\item {\tt 4 in \{1, 2, 3\}} yields {\tt false}.
+\item {\tt 3 notin \{1, 2, 3\}} yields {\tt false}.
+\item {\tt 4 notin \{1, 2, 3\}} yields {\tt true}.
+\item {\tt <2,20> in \{<1,10>, <2,20>, <3,30>\}} yields {\tt true}.
+\item {\tt <4,40> notin \{<1,10>, <2,20>, <3,30>\}} yields {\tt true}.
+
+\end{itemize}
+
+\paragraph{Note} If the first argument of these operators has type $T$, then
+the second argument should have type {\tt bag[$T$]}.
+
+\subsubsection{Comparisons} \label{BO:bag-comp}
+
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
+\emph{bag}$_1$ {\tt ==} \emph{bag}$_2$ & yields true if both arguments are equal bags and false
 otherwise\\ \hline
 
-\emph{bag} {\tt !=} \emph{bag} & yields true if both arguments are unequal bags and false
+\emph{bag}$_1$ {\tt !=} \emph{bag}$_2$ & yields true if both arguments are unequal bags and false
 otherwise\\ \hline
 
-\emph{bag} {\tt <=} \emph{bag} & yields true if the left argument is a subset of the right argument
+\emph{bag}$_1$ {\tt <=} \emph{bag}$_2$ & yields true if \emph{bag}$_1$ is a subset of \emph{bag}$_2$
 and false otherwise\\ \hline
 
-\emph{bag} {\tt <} \emph{bag} & yields true if the left argument is a strict subset of the right argument
+\emph{bag}$_1$ {\tt <} \emph{bag}$_2$ & yields true if \emph{bag}$_1$ is a
+strict subset of \emph{bag}$_2$
 and false otherwise\\ \hline
 
-\emph{bag} {\tt >=} \emph{bag} & yields true if the left argument is a superset of the right argument
+\emph{bag}$_1$ {\tt >=} \emph{bag}$_2$ & yields true if \emph{bag}$_1$  is a
+superset of \emph{bag}$_2$
 and false otherwise\\ \hline
 
-\emph{bag} {\tt >} \emph{bag} & yields true if the left argument is a strict superset of the right argument
-and false otherwise\\ \hline \hline
+\emph{bag}$_1$ {\tt >} \emph{bag}$_2$ & yields true if  \emph{bag}$_1$  is a strict superset of \emph{bag}$_2$
+and false otherwise\\ \hline 
+\end{tabular}
 
-\emph{rel} {\tt ==} \emph{rel} & yields true if both arguments are equal relations and false
-otherwise\\ \hline
+\subsubsection{Construction} \label{BO:bag-cons}
 
-\emph{rel} {\tt !=} \emph{rel} & yields true if both arguments are unequal relations and false
-otherwise\\ \hline
-
-\emph{rel} {\tt <=} \emph{rel} & yields true if the left argument is a subset of the right argument
-and false otherwise\\ \hline
-
-\emph{rel} {\tt <} \emph{rel} & yields true if the left argument is a strict subset of the right argument
-and false otherwise\\ \hline
-
-\emph{rel} {\tt >=} \emph{rel} & yields true if the left argument is a superset of the right argument
-and false otherwise\\ \hline
-
-\emph{rel} {\tt >} \emph{rel} & yields true if the left argument is a strict superset of the right argument
-and false otherwise\\ \hline \hline
-
-\emph{int} {\tt ==} \emph{int} & yields true if both arguments are numerically equal and false
-otherwise\\ \hline
-
-\emph{int} {\tt !=} \emph{int} & yields true if both arguments are numerically unequal  and false
-otherwise\\ \hline
-
-\emph{int} {\tt <=} \emph{int} & yields true if the left argument is numerically less than
-or equal the right argument and false otherwise\\ \hline
-
-\emph{int} {\tt <} \emph{int} & yields true if the left argument is a numerically less than the right argument
-and false otherwise\\ \hline
-
-\emph{int} {\tt >=} \emph{int} & yields true if the left argument is numerically greater
-than or equal the right argument and false otherwise\\ \hline
-
-\emph{int} {\tt >} \emph{int} & yields true if the left argument is numerically greater than the right argument
-and false otherwise\\ \hline \hline
-
-\emph{bag} {\tt union} \emph{bag} & yields the bag resulting from the union of the two arguments
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
+\emph{bag}$_1$ {\tt union} \emph{bag}$_2$ & yields the bag resulting from the union of the two arguments
  \\ \hline
 
-\emph{bag} {\tt inter} \emph{bag} & yields the bag resulting from the intersection of the two arguments
+\emph{bag}$_1$ {\tt inter} \emph{bag}$_2$ & yields the bag resulting from the intersection of the two arguments
  \\ \hline
 
-\emph{bag} \verb+\+ \emph{bag} & yields the bag resulting from the difference of the two arguments
+\emph{bag}$_1$ \verb+\+ \emph{bag}$_2$ & yields the bag resulting from the difference of the two arguments
  \\ \hline \hline
 
-\emph{rel} {\tt union} \emph{rel} & yields the relation resulting from the union of the two arguments
+\end{tabular}
+
+\subsection{Operations on Relations} \label{BO:relations}
+
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
+
+\emph{rel}$_1$ {\tt o} \emph{rel}$_2$ & yields the relation resulting from the composition of the two arguments
  \\ \hline
 
-\emph{rel} {\tt inter} \emph{rel} & yields the relation resulting from the intersection of the two arguments
- \\ \hline
-
-\emph{rel} \verb+\+ \emph{rel} & yields the relation resulting from the difference of the two arguments
- \\ \hline
-
-\emph{rel} {\tt o} \emph{rel} & yields the relation resulting from the composition of the two arguments
- \\ \hline
-
-
-\emph{bag} {\tt x} \emph{bag} & yields the relation resulting from the carthesian product of the two arguments
+\emph{bag}$_1$ {\tt x} \emph{bag}$_2$ & yields the relation resulting from the carthesian product of the two arguments
  \\ \hline
 
 \emph{rel} {\tt +} & yields the relation resulting from the transitive closure of
- the argument  \\ \hline
+ \emph{rel}  \\ \hline
 
 \emph{rel} {\tt *}  & yields the relation resulting from the reflexive transitive closure of
- the argument  \\ \hline
+ \emph{rel}  \\ \hline
 
-\end{supertabular}
+\end{tabular}
 
 \section{Built-in functions}
 
@@ -500,19 +497,19 @@ and false otherwise\\ \hline \hline
 \tabletail{\hline}
 
 
-\newcommand{\function}[4]{\subsection{#1}
+\newcommand{\function}[5]{\subsection{#1: {\tt #2}}\label{BI:#2}
 Definition:
 \begin{quote}
-#2
-\end{quote}
 #3
+\end{quote}
+#4
 Example(s):
 \begin{itemize}
-#4
+#5
 \end{itemize}
 }
 
-\function{The identity relation: {\tt id}}
+\function{Identity relation}{id}
 {\tt rel[$T$,$T$] id(bag[$T$] B) = \{ <X, X> | X : B \}}
 {Yields the relation that results from transforming
 each element in {\tt B} into a pair with that element as first and
@@ -524,7 +521,7 @@ second element.
   <"tue","tue">, <"wed","wed">\}}. \end{sloppypar}
 }
 
-\function{The domain of a relation: {\tt domain}}
+\function{Domain of a relation}{domain}
 {\tt bag[$T_1$] domain (rel[$T_1$,$T_2$] R) = \{ X | <X, Y> : R \}}
 {Yields the bag that results from taking
 the first element of each tuple in relation {\tt R}.
@@ -535,7 +532,7 @@ the first element of each tuple in relation {\tt R}.
 
 }
 
-\function {The range of a relation: {\tt range}}
+\function {Range of a relation}{range}
 {\tt bag[$T_2$] range (rel[$T_1$,$T_2$] R) = \{ Y | <X, Y> : R \}}
 {Yields the bag that results from taking
 the second element of each tuple in relation {\tt R}.
@@ -545,7 +542,7 @@ the second element of each tuple in relation {\tt R}.
 \item {\tt range(\{<"mon", 1>, <"tue", 2>\})} yields {\tt \{1, 2\}}.
 }
 
-\function {The carrier of a relation: {\tt carrier}}
+\function {Carrier of a relation}{carrier}
 {\tt bag[$T$]  carrier (rel[$T$,$T$] R) = domain(R) union range(R)}
 {Yields the bag that results from taking
 the first and  second element of each tuple in the relation {\tt R}.
@@ -555,7 +552,7 @@ Note that the domain and range type of {\tt R} should be the same.
 \item {\tt carrier(\{<1,10>, <2,20>\})} yields {\tt \{1, 10, 2, 20\}}.
 }
 
-\function {The top of a relation: {\tt top}}
+\function {Top of a relation}{top}
 {\tt bag[$T$] top(rel[$T$, $T$] R) = domain(R) BACKSLASH range(R)}
 {Yields the bag of all roots when the relation {\tt R} is
 viewed as a graph. Note that the domain and range type of {\tt R} should be the same.
@@ -564,7 +561,7 @@ viewed as a graph. Note that the domain and range type of {\tt R} should be the 
 \item {\tt top(\{<1,2>, <1,3>, <2,4>, <3,4>\}} yields {\tt \{1\}}.
 }
 
-\function{The bottom of a relation: {\tt bottom}}
+\function{Bottom of a relation}{bottom}
 {\tt bag[$T$] bottom(rel[$T$,$T$] R) = range(R) BACKSLASH domain(R)}
 {Yields the bag of all leaves when the relation {\tt R} is
 viewed as a graph. Note that the domain and range type of {\tt R} should be
@@ -574,7 +571,7 @@ the same.
 \item {\tt bottom(\{<1,2>, <1,3>, <2,4>, <3,4>\}} yields {\tt \{4\}}.
 }
 
-\function{The inverse of a relation: {\tt inv}}
+\function{Inverse of a relation}{inv}
 {\tt rel[$T_2$,$T_1$] inv (rel[$T_1$,$T_2$] R) = \{ <Y, X> | <X, Y> : R \}}
 { Yields the relation that is the inverse of the
 argument relation {\tt R}, i.e. the relation in which the elements of all
@@ -584,7 +581,7 @@ interchanged.
 {
 \item {\tt inv(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>,<20,2>]}.
 }
-\function{The complement of a relation: {\tt compl}}
+\function{Complement of a relation}{compl}
 {\tt rel[$T_1$, $T_2$] compl(rel[$T_1$,$T_2$] R) = (domain(R) x range(R)) BACKSLASH R}
 { Yields the relation that is the complement of the
 argument relation {\tt R}, using the carrier set of {\tt R} as universe.
@@ -593,7 +590,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \item {\tt compl(\{<1,10>\}}  yields {\tt \{<1, 1>, <10, 1>, <10, 10>\}}.
 }
 
-\function{Domain restriction of a relation: {\tt domainR}}
+\function{Domain restriction of a relation}{domainR}
 {\tt rel[$T_1$,$T_2$] domainR (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
    \{ <X, Y> | <X, Y> : R, X in B \}}
 { Yields a relation identical to the relation {\tt R}
@@ -603,7 +600,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \item {\tt domainR(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<1,10>, <3,30>\}}.
 }
 
-\function{Range restriction of a relation: {\tt rangeR}}
+\function{Range restriction of a relation}{rangeR}
 {\tt rel[$T_1$,$T_2$] rangeR (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) =  \\
    \{ <X, Y> | <X, Y> : R, Y in B \}}
 { Yields a relation identical to relation {\tt R} but only containing tuples
@@ -613,7 +610,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
  \item {\tt rangeR(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<1,10>, <3,30>\}}.
 }
 
-\function{Carrier restriction of a relation: {\tt carrierR}}
+\function{Carrier restriction of a relation}{carrierR}
 {\tt rel[$T$,$T$] carrierR (rel[$T$,$T$] R, Bag[$T$] B) = \\ 
    \{ <X, Y> | <X, Y> : R, X in B, Y in B \}}
 { Yields a relation identical to relation {\tt R}
@@ -624,7 +621,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
  \item {\tt carrierR(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<1,10>\}}.
 }
 
-\function{Domain exclusion of a relation: {\tt domainX}}
+\function{Domain exclusion of a relation}{domainX}
 {\tt rel[$T_1$,$T_2$] domainX (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
    \{ <X, Y> | <X, Y> : R, X notin B \}}
 { Yields a relation identical to relation {\tt R}
@@ -633,7 +630,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \item {\tt domainX(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<2, 20>\}}.
 }
 
-\function{Range exclusion of a relation: {\tt rangeX}}
+\function{Range exclusion of a relation}{rangeX}
 {\tt rel[$T_1$,$T_2$] rangeX (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) = \\
 	   \{ <X, Y> | <X, Y> : R, Y notin B \}}
 { Yields a relation identical to relation {\tt R} but with all tuples removed
@@ -642,7 +639,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
  \item {\tt rangeX(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<2, 20>\}}.
 }
 
-\function{Carrier exclusion of a relation: {\tt carrierX}}
+\function{Carrier exclusion of a relation}{carrierX}
 {\tt rel[$T$,$T$] carrierX (rel[$T$,$T$] R, Bag[$T$] B) = \\
    \{ <X, Y> | <X, Y> : R, X notin B, Y notin B \}}
 { Yields a relation identical to relation {\tt R}
@@ -652,7 +649,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
  \item {\tt carrierX(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<3,30>\}}.
 }
 
-\function{First element of a tuple: {\tt first}}
+\function{First element of a tuple}{first}
 {\tt $T_1$ first(<$T_1$, $T_2$> P) = primitive}
 { Yields the first element of the tuple {\tt P}.}
 {
@@ -660,7 +657,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \item {\tt first(<"mon", 1>)} yields {\tt "mon"}.
 }
 
-\function{Second element of a tuple: {\tt second}}
+\function{Second element of a tuple}{second}
 {\tt $T_2$ second(<$T_1$, $T_2$> P) = primitive}
 { Yields the second element of the tuple {\tt P}.}
 {
@@ -668,7 +665,7 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \item {\tt second(<"mon", 1>)} yields {\tt 1}.
 }
 
-\function{Reachability with restriction: {\tt reachR}}
+\function{Reachability with restriction}{reachR}
 {\tt rel[$T$,$T$] reachR( bag[$T$] Start, bag[$T$] Restr, rel[T,T] Rel) =\\
 	       domainR(Rel, Start) o carrierR(Rel, Restr)+ }
 { Yields the relation that describes
@@ -680,7 +677,7 @@ bag {\tt Restr} are used.
   \{<1,2>, <1, 3>\}}.
 }
 
-\function{Reachability with exclusion: {\tt reachX}}
+\function{Reachability with exclusion}{reachX}
 {\tt rel[$T$,$T$] reachX( bag[$T$] Start, bag[$T$] Excl, rel[T,T] Rel) =\\
 	       domainR(Rel, Start) o carrierX(Rel, Excl)+ }
 { Yields the relation that describes
@@ -692,7 +689,7 @@ bag {\tt Excl} are used.
   \{<1,3>, <1, 4>\}}.
 }
 
-\function{Powerset of a bag: {\tt power0}}
+\function{Powerset of a bag}{power0}
 {\tt bag[bag[$T$]] power0(bag[$T$] B) = primitive}
 { Yields the powerset of bag {\tt B} (including the empty bag).}
 {
@@ -701,7 +698,7 @@ bag {\tt Excl} are used.
     \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
 }
 
-\function{Powerset of a bag: {\tt power1}}
+\function{Powerset of a bag}{power1}
 {\tt bag[bag[$T$]] power1(bag[$T$] B) = primitive}
 { Yields the powerset of bag {\tt B} (excluding the empty bag).}
 {
@@ -710,56 +707,56 @@ bag {\tt Excl} are used.
     \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
 }
 
-\function{File name of an area: {\tt filename}}
+\function{File name of an area}{filename}
 {\tt str filename(area A) = primitive}
 {Yields the file name of area {\tt A}.}
 {  
 \item {\tt filename(area("pico1.trm",5,2,6,8))} yields {\tt "pico1.trm"}.
 }
 
-\function{Beginning line of an area: {\tt beginline}}
+\function{Beginning line of an area}{beginline}
 {\tt int beginline(area A) = primitive}
 {Yields the first line of area {\tt A}.}
 {  
 \item {\tt beginline(area("pico1.trm",5,2,6,8))} yields {\tt 5}.
 }
 
-\function{First column of an area: {\tt begincol}}
+\function{First column of an area}{begincol}
 {\tt int begincol(area A) = primitive}
 {Yields the first column of area {\tt A}.}
 {  
 \item {\tt begincol(area("pico1.trm",5,2,6,8))} yields {\tt 2}.
 }
 
-\function{Ending line of an area: {\tt endline}}
+\function{Ending line of an area}{endline}
 {\tt int endline(area A) = primitive}
 {Yields the last line of area {\tt A}.}
 {  
 \item {\tt endline(area("pico1.trm",5,2,6,8))} yields {\tt 6}.
 }
 
-\function{Ending column of an area: {\tt endcol}}
+\function{Ending column of an area}{endcol}
 {\tt int endcol(area A) = primitive}
 {Yields the last column of area {\tt A}.}
 {  
 \item {\tt endcol(area("pico1.trm",5,2,6,8))} yields {\tt 8}.
 }
 
-\function{Summation of a bag of integers: {\tt sum}}
+\function{Sum of a bag of integers}{sum}
 {\tt int sum(bag[int] B) = primitive}
 {Yields the sum of the integers in bag {\tt B}.}
 {
 \item {\tt sum(\{1, 2, 3\})} yields {\tt 6}.
 }
 
-\function{Maximum of a bag of integers: {\tt max}}
+\function{Maximum of a bag of integers}{max}
 {\tt int max(bag[int] B) = primitive}
 {Yields the largest integer in bag {\tt B}.}
 {
 \item {\tt max(\{1, 2, 3\})} yields {\tt 3}.
 }
 
-\function{Minimum of a bag of integers: {\tt max}}
+\function{Minimum of a bag of integers}{min}
 {\tt int min(bag[int] B) = primitive}
 {Yields the smalles integer in bag {\tt B}.}
 {
@@ -1203,8 +1200,6 @@ bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
 \end{verbatim}
 
 
-
-
 \section{Differences with previous versions}
 \rscript is in under active development and several (incompatible)  changes
 have been made in the last few weeks. Here is an indicative list.
@@ -1223,5 +1218,50 @@ New:
 \item The type {\tt node} has been renamed into {\tt area}
 
 \end{itemize}
+
+\appendix
+
+\section{Tables of built-in Operators and Functions}
+
+\tablecaption{Built-in functions}
+\tablehead{\hline}
+\tabletail{\hline}
+
+\begin{center}
+\begin{supertabular}{|l|l|l|}
+
+{\bf Function}    & {\bf Description}   & {\bf Section} \\ \hline \hline
+{\tt id}          & Identity relation & \ref{BI:id} \\
+{\tt domain}      & Domain of a relation & \ref{BI:domain} \\
+{\tt range}       & Range of a relation  & \ref{BI:range} \\
+{\tt carrier}     & Carrier of a relation & \ref{BI:carrier} \\
+{\tt top}         & Top of a relation & \ref{BI:top} \\
+{\tt bottom}      & Bottom of a relation & \ref{BI:bottom} \\
+{\tt inv}         & Inverse of a relation & \ref{BI:inv} \\
+{\tt compl}       & Complement of a relation & \ref{BI:compl} \\
+{\tt domainR}     & Domain restriction of a relation & \ref{BI:domainR} \\
+{\tt rangeR}      & Range restriction of a relation & \ref{BI:rangeR} \\
+{\tt carrierR}    & Carrier restriction of a relation & \ref{BI:carrierR} \\
+{\tt domainX}     & Domain exclusion of a relation & \ref{BI:domainX} \\
+{\tt rangeX}      & Range exclusion of a relation & \ref{BI:rangeX} \\
+{\tt carrierX}    & Carrier exclusion of a relation & \ref{BI:carrierX} \\
+{\tt first}       & First element of a tuple & \ref{BI:first} \\
+{\tt second}      & Second element of a tuple & \ref{BI:second} \\
+{\tt reachR}      & Reachability with restriction & \ref{BI:reachR} \\
+{\tt reachX}      & Reachability with exclusion& \ref{BI:reachX} \\
+{\tt power0}      & Powerset of a bag & \ref{BI:power0} \\
+{\tt power1}      & Powerset of a bag & \ref{BI:power1} \\
+{\tt filename}    & File name of an area & \ref{BI:filename}\\
+{\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
+{\tt begincol}    & First column of an area & \ref{BI:begincol}\\
+{\tt endline}     & Ending line of an area & \ref{BI:endline}\\
+{\tt endcol}      & Last column of an area & \ref{BI:endcol}\\
+{\tt sum}         & Sum of a bag of integers & \ref{BI:sum} \\
+{\tt max}         & Maximum of a bag of integers & \ref{BI:max} \\
+{\tt min}         & Minimum of a bag of integers & \ref{BI:max} \\
+
+\end{supertabular}
+\end{center}
+
 
 \end{document}
