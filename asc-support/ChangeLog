@@ -1,44 +1,29 @@
-
-    Asf Sdf Compiler Runtime Library
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
 $Id$
 
-2001/02/01 (mdejonge @cwi.nl)
-   * Fixed tifstoc path problem
+2001/03/06 (jong@cwi.nl)
+ * Added make_rules to toplevel EXTRA_DIST
+
+2001/02/01 (mdejonge@cwi.nl)
+ * Fixed tifstoc path problem
 
 2000/11/09 (jurgenv@cwi.nl)
-   * Version is now 0.4
-   * Only minor maintenance differences
+ * Version is now 0.4
+ * Only minor maintenance differences
 
 2000/4/05 (mdejonge @cwi.nl)
-   * Version is now 0.3
-   * Adapted for use with separate asfix distribution (i.e., libasfix is no
-     longer distributed as part of the aterm library).
+ * Version is now 0.3
+ * Adapted for use with separate asfix distribution (i.e., libasfix is no
+ longer distributed as part of the aterm library).
 
 2000/3/31 (mdejonge @cwi.nl)
-   * The toolbus is no longer required during the build process of
-     libasc-support.a
+ * The toolbus is no longer required during the build process of
+ libasc-support.a
 
 2000/03/06 (mdejogne@cwi.nl)
-   * By default generate lib-asc-support.a, lib-asc-support-cc.a,
-     lib-asc-support-cc.a, lib-asc-support-dbg.a, and
-     lib-asc-support-prof.a.
+ * By default generate lib-asc-support.a, lib-asc-support-cc.a,
+ lib-asc-support-cc.a, lib-asc-support-dbg.a, and
+ lib-asc-support-prof.a.
 
 2000/03/03 (mdejonge@cwi.nl)
-   * Asf+Sdf compiler support library is now a self-cotained
-     component built and configured using automake/autoconf
+ * Asf+Sdf compiler support library is now a self-cotained
+ component built and configured using automake/autoconf
