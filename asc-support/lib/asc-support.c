@@ -824,17 +824,8 @@ PT_ParseTree toasfix(ATerm term)
   PT_Symbols symbols;
 
   tree = yieldTree(term);  
-  symbol = PT_getProductionRhs(PT_getTreeProd(tree));
-  symbols = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-              PT_makeSymbolsList(symbol, 
-	        PT_makeSymbolsList(PT_makeOptLayoutSymbol(), 
-	          PT_makeSymbolsEmpty())));
 
-  return PT_makeParseTreeTree(symbols, 
-			      PT_makeTreeLayoutEmpty(),
-			      tree,
-			      PT_makeTreeLayoutEmpty(), 0);
-
+  return PT_makeValidParseTreeFromTree(tree);
 }
 
 /*}}}  */
