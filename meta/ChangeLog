@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/17 ({markvdb,jurgenv}@cwi.nl)
+ * Show area now sets the focus and lets the cursor jump to the beginning
+   of the focus. 
+
 2003/07/15 (markvdb@cwi.nl)
  * Button/action registration changed.
  * Number of buttons/actions moved to ASF+SDF package.
