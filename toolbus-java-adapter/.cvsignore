@@ -9,3 +9,5 @@ toolbus-java-adapter-*.jar
 toolbus-java-adapter-*.pkg
 toolbus-java-adapter-*.tar.gz
 toolbus-java-adapter-config
+.project
+.classpath
