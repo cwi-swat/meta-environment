@@ -59,10 +59,9 @@ CHDR		= rewriter.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= libsupport-muasf-cc.a libsupport-muasf-gcc.a \
-		libsupport-muasf-prof.a libsupport-muasf-dbg.a
+LIBFILES	= 
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	= support.h libsupport.h
+INCLUDEFILES	= 
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
