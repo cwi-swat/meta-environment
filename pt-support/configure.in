@@ -97,6 +97,10 @@ AC_OUTPUT(
   utils/Makefile
   utils/implodePT/Makefile
   utils/implodePT/test/Makefile
+  utils/implodePT/test/in/Makefile
+  utils/implodePT/test/out/Makefile
+  utils/implodePT/test/terms/Makefile
+  utils/implodePT/test/grammar/Makefile
 )
 
 dnl }}}
