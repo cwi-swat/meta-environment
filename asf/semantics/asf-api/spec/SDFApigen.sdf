@@ -17,7 +17,7 @@ context-free syntax
 
 make-modulename(ModuleName) -> ModuleName {traversal(trafo,top-down,break)}
 make-modulename(ModuleId) -> ModuleId {traversal(trafo,top-down,break)}
-make-sections(Sections) -> Sections
+make-sections(Section*) -> Section*
 
 context-free syntax
 
@@ -41,7 +41,7 @@ variables
 "NewModuleName"[0-9]* -> ModuleName
 "ModuleName"[0-9]* -> ModuleName
 "ModuleId"[0-9]* -> ModuleId
-"Sections"[0-9]* -> Sections
-"NewSections"[0-9]* -> Sections
+"Sections"[0-9]* -> Section*
+"NewSections"[0-9]* -> Section*
 "ImpSection*"[0-9]* -> ImpSection*
 "Literal"[0-9]* -> Literal

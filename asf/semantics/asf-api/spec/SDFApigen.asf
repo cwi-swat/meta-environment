@@ -7,8 +7,10 @@ NewSections := make-sections(Sections)
 generate-syntax(module ModuleName ImpSection* Sections) =
 module NewModuleName 
 imports basic/Booleans 
+imports ModuleName
 ImpSection* 
 NewSections
+hiddens imports basic/Whitespace
 
 
 equations
