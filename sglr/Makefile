@@ -22,8 +22,9 @@ all libs doc clean install uninstall distclean:
 	done
 
 test:	termtest
+	@echo "Tests for sglr succeeded."
 
-termtest:
+termtest:	all
 	@cd regress-test; ./regress-terms
 
 langtest:
