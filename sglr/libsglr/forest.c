@@ -1073,7 +1073,7 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
   /* only try these filters if the parsetable contains such info */
     /*  Next, inspect direct eager/avoid status  */
   
-  /*
+/*
   if (SG_PT_HAS_PREFERENCES(pt)) {
     
     if (SG_FILTER_DIRECTEAGERNESS) {
@@ -1083,7 +1083,8 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
       }
     }
   }
-  */
+*/
+  
   
 
   /* An experiment to see whether the ambiguity node can

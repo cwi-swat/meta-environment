@@ -37,7 +37,7 @@ process Parser is
         snd-msg(parse-result(Id, parse-error(Err,ambiguities(Amb, Ambs))))
       +
         rec-value(P, parse-error(Err?,cycle(T?))) .
-        snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
+        snd-msg(parse-result(Id, parse-error(Err,cycle(T))))
       )
     +
       rec-msg(Id?, parse-string-as-asfix2me(Lid?, G?, S?)) .
@@ -59,7 +59,7 @@ process Parser is
         snd-msg(parse-result-asfix2me(Id, parse-error(Err,ambiguities(Amb, Ambs))))
       +
         rec-value(P, parse-error(Err?,cycle(T?))) .
-        snd-msg(parse-result-asfix2me(Id, parse-error(Err,cycle(T?))))
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,cycle(T))))
       )
     +
       (
