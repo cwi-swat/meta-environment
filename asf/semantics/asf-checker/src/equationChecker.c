@@ -213,12 +213,19 @@ static ATermList checkCondition(ASF_Tag tag,
   else {
     ASF_Tree lhsCond = ASF_getConditionLhs(condition);
     ASF_Tree rhsCond = ASF_getConditionRhs(condition);
-  
+
     if (ASF_isConditionNegative(condition)) {
       return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
     }
-    else {
+    else if (ASF_isConditionNegative(condition)) {
       return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
+    }
+    else {
+      return ATmakeList1(
+              makeMessage(
+                "strange condition encountered", 
+	        tag,
+	        ASF_makeTermFromCondition(condition)));
     }
   }
 }
