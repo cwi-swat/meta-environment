@@ -1,0 +1,10 @@
+Makefile.in
+Makefile
+.deps
+prepare-restore
+equalModuloWhitespace
+whitespace
+reduce-test
+prepare-restore-test
+equalModuloWhitespace-test
+whitespace-test

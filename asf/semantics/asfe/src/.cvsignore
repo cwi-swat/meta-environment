@@ -1,0 +1,6 @@
+Makefile.in
+Makefile
+.deps
+evaluator.tif.h
+evaluator.tif.c
+evaluator
