@@ -1,5 +1,10 @@
 $Id$
 
+Mon Mar 17 10:11:35 CET 2003 <jong@cwi.nl>
+ * Major hack to fix unexpected dependency on jjtraveler:
+   expect it in the same location as aterm-java.jar and use
+   it to build tifstojava.
+
 Wed Feb 26 09:38:06 CET 2003 <jong@cwi.nl>
  * fix perl-adapter: use mkstemp instead of unsafe tmpnam.
    Closes some security-conscious user reports.

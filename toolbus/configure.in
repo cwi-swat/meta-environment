@@ -84,6 +84,8 @@ AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
 dnl ATERM_JAVA is not allowed in Makefile.am's
 JAVA_ATERM="${ATERM_JAVA}/share/aterm-1.1.jar"
 AC_SUBST(JAVA_ATERM)
+JJTRAVELER="${ATERM_JAVA}/share/jjtraveler-1.3.jar"
+AC_SUBST(JJTRAVELER)
 
 dnl Require toolbuslib library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,

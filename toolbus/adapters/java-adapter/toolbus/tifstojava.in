@@ -3,6 +3,7 @@
 prefix=@prefix@
 aterm=@JAVA_ATERM@
 shared_objects=@SHARED_OBJECTS@
+jjtraveler=@JJTRAVELER@
 javadir=${prefix}/classes
 
-java -classpath ${javadir}:${shared_objects}:${aterm}:${CLASSPATH} toolbus.JavaTif $@
+java -classpath ${javadir}:${jjtraveler}:${shared_objects}:${aterm}:${CLASSPATH} toolbus.JavaTif $@
