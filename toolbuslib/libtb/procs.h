@@ -279,5 +279,8 @@ typedef term proc_id;
 					     (fun_sym(t) == mon_controller)))
 void init_procs(void);
 term_list *mk_functions(void);
+void print_process(term *proc);
+void print_alternatives(term *t);
+void print_alternative(term *t);
 
 #endif /* __PROCS_H__ */
