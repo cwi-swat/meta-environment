@@ -10,27 +10,26 @@ import aterm.ATerm;
  */
 public class AckEvent extends ToolAtom {
 
-	public AckEvent(ATerm trm) {
-		super(trm);
-	}
+  public AckEvent(ATerm trm) {
+    super(trm);
+  }
 
-	public AckEvent() {
-		super();
-	}
+  public AckEvent() {
+    super();
+  }
 
-	public void compile(ProcessInstance P, AtomSet follow)
-		throws ToolBusException {
-		super.compile(P, follow);
-	}
+  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+    super.compile(P, follow);
+  }
 
-	public boolean execute() throws ToolBusException {
-		if (!isEnabled())
-			return false;
-		
-		ToolInstance ti = getToolInstance();
+  public boolean execute() throws ToolBusException {
+    if (!isEnabled())
+      return false;
 
-		ti.sndEvalToTool(getSubstitutedArg());
-		return true;
-	}
+    ToolInstance ti = getToolInstance();
+
+    ti.sndEvalToTool(getSubstitutedArg());
+    return true;
+  }
 
 }

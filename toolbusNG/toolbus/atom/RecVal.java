@@ -12,30 +12,29 @@ import aterm.ATerm;
 
 public class RecVal extends ToolAtom {
 
-	public RecVal(ATerm trm) {
-		super(trm);
-	}
+  public RecVal(ATerm trm) {
+    super(trm);
+  }
 
-	public RecVal() {
-		super();
-	}
+  public RecVal() {
+    super();
+  }
 
-	public void compile(ProcessInstance P, AtomSet follow)
-		throws ToolBusException {
-		super.compile(P, follow);
-	}
+  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+    super.compile(P, follow);
+  }
 
-	public boolean execute() throws ToolBusException {
-		if (!isEnabled())
-			return false;
-		// ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
-		ToolInstance ti = getToolInstance();
-		MatchResult mr = ti.getValueFromTool(getToolarg(), getEnv());
-		if (mr.matches()) {
-			mr.getLeft().update(getEnv());
-			return true;
-		} else
-			return false;
-	}
+  public boolean execute() throws ToolBusException {
+    if (!isEnabled())
+      return false;
+    // ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
+    ToolInstance ti = getToolInstance();
+    MatchResult mr = ti.getValueFromTool(getToolarg(), getEnv());
+    if (mr.matches()) {
+      mr.getLeft().update(getEnv());
+      return true;
+    } else
+      return false;
+  }
 
 }

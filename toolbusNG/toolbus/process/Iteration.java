@@ -23,21 +23,20 @@ public class Iteration extends AbstractProcessExpression {
   public String toString() {
     return "Iter(" + left.toString() + ", " + right.toString() + ")";
   }
-  
-  public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+
+  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
     left.expand(P, calls);
     right.expand(P, calls);
     setFirst(left.getFirst().union(right.getFirst()));
-   }
+  }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    
-      left.compile(P, getFirst());
-      right.compile(P, follow);
-      
-      setFollow(follow);
+
+    left.compile(P, getFirst());
+    right.compile(P, follow);
+
+    setFollow(follow);
   }
-  
 
   public AtomSet getAtoms() {
     return left.getAtoms().union(right.getAtoms());

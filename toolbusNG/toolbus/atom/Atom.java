@@ -5,7 +5,6 @@
 package toolbus.atom;
 
 import java.util.*;
-import java.util.Random;
 
 import toolbus.*;
 import toolbus.process.*;
@@ -18,8 +17,6 @@ abstract public class Atom extends AbstractProcessExpression {
   // process instance to which the atom belongs
   private Environment env; // the environment of that process instance
   private ATerm test; // optional test that guards this atom
-
-  protected static Random rand = new Random();
 
   public Atom() {
     this.args = null;
