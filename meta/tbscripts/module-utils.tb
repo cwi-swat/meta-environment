@@ -564,7 +564,8 @@ in
     ) .
     snd-note(ui-status(endstat(Id)))
   +
-    rec-msg(io-file-not-exists)
+    rec-msg(io-file-not-exists) .
+    snd-note(ui-status(errorf("Termstore %s does not exist!", [Name])))
   )
 endlet
 
