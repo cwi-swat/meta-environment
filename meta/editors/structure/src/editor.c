@@ -260,7 +260,25 @@ static SE_Editor moveFocusToStartSymbol(SE_Editor editor, int location, int leng
 }
 
 /*}}}  */
+/*{{{  SE_Editor changeStatus(SE_Editor editor) */
+ 
+SE_Editor changeStatus(SE_Editor editor)
+{
+  SE_Focus focus = SE_getEditorFocus(editor);
+  SE_FocusList new_foci = SE_makeFocusListEmpty();
 
+  focus = SE_setFocusUnparsed(focus, FOCUS_UNPARSED);
+  focus = SE_setFocusSort(focus, SORT_UNPARSED);
+  new_foci = SE_makeFocusListMulti(focus, new_foci);
+
+  editor = SE_setEditorFocus(editor, focus);
+  editor = SE_setEditorUnparsedFoci(editor, new_foci);
+  editor = SE_setEditorModified(editor, EDITOR_MODIFIED);
+ 
+  return editor;
+}
+ 
+/*}}}  */
 /*{{{  SE_Editor insertChars(SE_Editor editor, int location, int nr_chars) */
 
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars)

@@ -98,6 +98,25 @@ void remove_tree(int cid, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  ATerm change_status(int cid, ATerm editorId) */
+
+ATerm change_status(int cid, ATerm editorId)
+{
+  SE_Focus focus;
+  SE_Editor editor;
+
+  editor = getEditor(editorId);
+  assert(editor);
+  editor = changeStatus(editor);
+
+  putEditor(editorId, editor);
+
+  focus = SE_getEditorFocus(editor);
+
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
+}
+
+/*}}}  */
 /*{{{  ATerm insert_chars(int cid, ATerm editorId, int location, char *text) */
 
 ATerm insert_chars(int cid, ATerm editorId, int location, char *text)

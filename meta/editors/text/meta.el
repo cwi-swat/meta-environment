@@ -5,9 +5,11 @@
 
 ; we keep a list of the buffers for the structure editor
 (setq bufferlist ())
+(setq changed ())
 
 (defun tb-init (filename)
   "Load the file filename, and return a unique buffer name to the ToolBus"
+  (setq changed t)
   (edit-file filename)
   ()
 )
@@ -102,6 +104,7 @@ characters long. "
 STR is the sortname of the focus. START is the starting
 character, and LENGTH the length (in characters) of the focus."
 ; first we retrieve a handle to the buffer
+  (setq changed t)
   (let (buf (get-file-buffer filename))
 
     ; we find and select the window for this file ('t' means search in all frames)
@@ -149,6 +152,16 @@ point."
 
 (defun tb-changed-event (start end oldlength)
   "Generates either a insert or a delete event to the ToolBus"
+
+  ; if this is one of our buffers
+  (if (is-element (buffer-name) bufferlist)
+    (if (eq changed ())
+      (setq changed t)
+      (TBevent (concat "changed(" (TBstring (buffer-name)) ")"))
+      (accept-process-output (get-process "adapter"))
+      (discard-input)
+    )
+  )
 
   ; if this is one of our buffers
 ;  (if (is-element (buffer-name) bufferlist)
