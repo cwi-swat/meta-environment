@@ -16,7 +16,7 @@ AC_PREFIX_DEFAULT(`echo $PWD`/..)
 dnl Default locations of other components
 EPIC='\$(prefix)'
 GEL='\$(prefix)'
-TOOLBUS='$prefix'
+TOOLBUS='\$(prefix)'
 ATERM='\$(prefix)'
 NEWATERM='\$(prefix)'
 
