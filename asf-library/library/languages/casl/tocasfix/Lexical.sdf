@@ -1,0 +1,24 @@
+module languages/casl/tocasfix/Lexical
+
+imports languages/aterm/syntax/ATerms
+
+exports
+  context-free syntax
+
+    "TOKEN"           -> AFun
+    "WORDS"           -> AFun
+
+    c2a-Words(Words)  -> ALit
+
+    c2a-Simple-Id(Simple-Id) -> ATerm
+    c2a-Token-Id(Token-Id)   -> ATerm
+    c2a-Token(Token)         -> ATerm
+
+  variables
+    "var-Words"[0-9]*             -> Words
+    "var-Simple-Id"[0-9]*         -> Simple-Id
+    "var-Token-Id"[0-9]*          -> Token-Id
+
+hiddens
+  variables
+    "var-Token"[0-9]*             -> Token

@@ -1,0 +1,22 @@
+equations
+
+  [c2a-01'1] c2a-Lib-Name(var-Lib-Name) = T,
+             c2a-Lib-Item-plus(var-Lib-Item+) = Tl
+             =====================================
+             c2a-Lib-Defn(library var-Lib-Name var-Ann var-Lib-Item+) = 
+                   lib-defn(T, Tl)
+
+  [c2a-02'1] c2a-Lib-Item-plus(var-Lib-Item) = [c2a-Lib-Item(var-Lib-Item)]
+
+  [c2a-02'2] c2a-Lib-Item(var-Lib-Item) = T,
+             c2a-Lib-Item-plus(var-Lib-Item+) = Tl
+             =====================================
+             c2a-Lib-Item-plus(var-Lib-Item var-Lib-Item+) = T :: Tl
+
+  [c2a-03'1] c2a-Lib-Item(var-Spec-Defn) = c2a-Spec-Defn(var-Spec-Defn)
+
+  [c2a-07'1] c2a-Lib-Name(var-Lib-Id) = c2a-Lib-Id(var-Lib-Id)
+
+  [c2a-08'2] c2a-Lib-Id(var-Path) = indirect-link(c2a-Path(var-Path))
+
+  []         c2a-Path(path(S)) = alit(""" S """)

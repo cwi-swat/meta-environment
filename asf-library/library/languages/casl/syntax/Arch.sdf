@@ -1,0 +1,83 @@
+module languages/casl/syntax/Arch
+imports languages/casl/syntax/Struct
+exports
+  sorts
+    Arch-Spec-Defn Arch-Spec Basic-Arch-Spec
+    Unit-Decl-Defn Unit-Spec-Defn Unit-Spec
+    Unit-Expression Unit-Binding Unit-Term
+    Fit-Arg-Unit Arch-Spec-Name Fit-Unit-Arg
+    Unit-Name Unit-Defn Unit-Decl Group-Arch-Spec 
+    Group-Unit-Term Unit-S
+
+  context-free syntax
+
+%% Arch-Spec-Defn
+    "arch" "spec" Arch-Spec-Name "=" Arch-Spec Opt-End -> Arch-Spec-Defn
+
+%% Arch-Spec
+    Basic-Arch-Spec -> Arch-Spec
+    Group-Arch-Spec -> Arch-Spec
+
+%% Group-Arch-Spec
+    "{" Arch-Spec "}" -> Group-Arch-Spec
+    Arch-Spec-Name    -> Group-Arch-Spec
+
+%% Basic-Arch-Spec
+    Unit-S {Unit-Decl-Defn ";"}+ Opt-Semi 
+      "result" Unit-Expression Opt-Semi    -> Basic-Arch-Spec
+
+%% Unit-Decl-Defn
+    Unit-Decl -> Unit-Decl-Defn
+    Unit-Defn -> Unit-Decl-Defn
+
+%% Unit-Decl
+    Unit-Name ":" Unit-Spec "given" {Unit-Term ","}+ -> Unit-Decl
+    Unit-Name ":" Unit-Spec                          -> Unit-Decl
+
+%% Unit-Defn
+    Unit-Name "=" Unit-Expression -> Unit-Defn
+
+%% Unit-Spec-Defn
+    "unit" "spec" Unit-Name "=" Unit-Spec Opt-End -> Unit-Spec-Defn
+
+%% Unit-Spec
+    Group-Spec                        -> Unit-Spec
+    {Group-Spec "*"}+ "->" Group-Spec -> Unit-Spec
+    "arch" "spec" Group-Arch-Spec     -> Unit-Spec
+    "closed" Unit-Spec                -> Unit-Spec
+
+%% Unit-Expression
+    "lambda" {Unit-Binding ";"}+ "." Unit-Term ->  Unit-Expression
+    Unit-Term                                  ->  Unit-Expression
+
+%% Unit-Binding
+    Unit-Name ":" Unit-Spec -> Unit-Binding
+
+%% Unit-Term
+    Unit-Term-3                                          -> Unit-Term-2
+    Unit-Term-2                                          -> Unit-Term-1
+    Unit-Term-1                                          -> Unit-Term
+    Unit-Term-3 Renaming                                   -> Unit-Term-3
+    Unit-Term-3 Restriction                                -> Unit-Term-3
+    Unit-Term-2 "and" {Unit-Term "and"}+                   -> Unit-Term-1
+    "local" {Unit-Defn ";"}+ Opt-Semi "within" Unit-Term-2 -> Unit-Term-2
+    Group-Unit-Term                                        -> Unit-Term-3
+
+%% Group-Unit-Term
+    "{" Unit-Term "}"       -> Group-Unit-Term
+    Unit-Name               -> Group-Unit-Term
+    Unit-Name Fit-Unit-Arg+ -> Group-Unit-Term
+
+%% Fit-Arg
+    "[" Fit-Arg-Unit "]" -> Fit-Unit-Arg
+
+%% Fit-Arg-Unit
+    Unit-Term                             -> Fit-Arg-Unit
+    Unit-Term "fit" {Symb-Map-Items ","}+ -> Fit-Arg-Unit
+
+    Simple-Id -> Arch-Spec-Name
+    Simple-Id -> Unit-Name
+%% Unit-S
+    "unit"  -> Unit-S
+    "units" -> Unit-S
+

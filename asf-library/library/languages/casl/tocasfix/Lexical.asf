@@ -1,0 +1,10 @@
+equations
+
+  []  c2a-Words(words(S)) = alit(""" S """)
+
+  []  c2a-Token(var-Words) = WORDS(c2a-Words(var-Words))
+
+  []  c2a-Token-Id(var-Token) = TOKEN(c2a-Token(var-Token))
+
+  []  c2a-Simple-Id(var-Words) = WORDS(c2a-Words(var-Words))
+

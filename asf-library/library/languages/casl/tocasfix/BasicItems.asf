@@ -1,0 +1,81 @@
+equations
+
+  [c2a-1'1] c2a-Basic-Spec({}) = basic-spec([])
+
+  [c2a-1'2] c2a-Basic-Items-plus(var-Basic-Item+) = Tl
+            ===============================
+            c2a-Basic-Spec(var-Ann var-Basic-Item+) =  basic-spec(Tl)
+
+  [c2a-2'1] c2a-Basic-Items-plus(var-Basic-Item) = 
+			[c2a-Basic-Items(var-Basic-Item)]
+
+  [c2a-2'2] c2a-Basic-Items(var-Basic-Item) = T,
+            c2a-Basic-Items-plus(var-Basic-Item+) = Tl
+            ==========================================
+            c2a-Basic-Items-plus(var-Basic-Item var-Basic-Item+) = T :: Tl
+
+  [c2a-3'1] c2a-Sig-Items(var-Sig-Items) = T
+            ================================
+            c2a-Basic-Items(var-Sig-Items) = T
+
+  [c2a-4'1] c2a-Sort-Item-plus(var-Sort-Item+) = Tl,
+            =============================
+            c2a-Sig-Items(var-Sort-S var-Ann var-Sort-Item+ var-Opt-Semi) =
+              sort-items(Tl)
+
+  [c2a-5'1] c2a-Sort-Item-plus(var-Sort-Item) = [c2a-Sort-Item(var-Sort-Item)]
+
+  [c2a-5'2] c2a-Sort-Item(var-Sort-Item) = T,
+            c2a-Sort-Item-plus(var-Sort-Item+) = Tl
+            =======================================
+            c2a-Sort-Item-plus(var-Sort-Item var-Semi-Ann var-Sort-Item+) = 
+			T :: Tl
+
+  [c2a-6'1] c2a-Sort-,-plus(var-Sort,+) = Tl,
+            ========================
+            c2a-Sort-Item(var-Sort,+) = sort-decl(Tl)
+
+  [c2a-6'2] c2a-Sort-,-plus(var-Sort,+) = Tl,
+            c2a-Sort(var-Sort) = T3
+            =======================
+            c2a-Sort-Item(var-Sort,+ < var-Sort) = subsort-decl(Tl,T3)
+
+  [c2a-6'3] c2a-Sort(var-Sort1) = T1,
+            c2a-Var(var-Var) = T2,
+            c2a-Sort(var-Sort2) = T3,
+            =============================
+            c2a-Sort-Item(var-Sort1 = { var-Var : var-Sort2 . var-Formula}) =
+              subsort-defn(T1,T2,T3)
+
+  [c2a-6'4] c2a-Sort(var-Sort) = T,
+            c2a-Sort-=-plus(var-Sort=+) = Tl,
+            ========================
+            c2a-Sort-Item(var-Sort = var-Sort=+) = iso-decl([T] ++ Tl)
+
+  [c2a-7'1] c2a-Sort-,-plus(var-Sort) = [c2a-Sort(var-Sort)]
+
+  [c2a-7'2] c2a-Sort(var-Sort) = T,
+            c2a-Sort-,-plus(var-Sort,+) = Tl
+            ================================
+            c2a-Sort-,-plus(var-Sort , var-Sort,+) = [T] ++ Tl
+
+  [c2a-8'1] c2a-Sort-=-plus(var-Sort) = [c2a-Sort(var-Sort)]
+
+  [c2a-8'2] c2a-Sort(var-Sort) = T,
+            c2a-Sort-=-plus(var-Sort=+) = Tl
+            ================================
+            c2a-Sort-=-plus(var-Sort = var-Sort=+) = [T] ++ Tl
+
+  [c2a-9'1] c2a-Token-Id(var-Token-Id) = T
+            ==============================
+            c2a-Sort(var-Token-Id) = TOKEN-ID(T)
+
+
+  [c2a-33'1] c2a-Sort-*-plus(var-Sort) = [c2a-Sort(var-Sort)]
+
+  [c2a-33'2] c2a-Sort(var-Sort) = T,
+             c2a-Sort-*-plus(var-Sort*+) = Tl
+             ================================
+             c2a-Sort-*-plus(var-Sort * var-Sort*+) = [T] ++ Tl
+
+  [] c2a-Var(var-Simple-Id) = SIMPLE-ID(c2a-Simple-Id(var-Simple-Id))

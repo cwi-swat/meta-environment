@@ -1,0 +1,5 @@
+equations
+
+  [c2a-23'1] c2a-Arch-Spec-Name(var-Simple-Id) = c2a-Simple-Id(var-Simple-Id)
+
+  [c2a-24'1] c2a-Unit-Name(var-Simple-Id) = c2a-Simple-Id(var-Simple-Id)
