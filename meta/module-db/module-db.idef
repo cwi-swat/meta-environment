@@ -95,8 +95,8 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-for-modules(Modules))
 +
 /* Add the equations to the database for the given module name */
-  rec-msg(add-eqs-to-db(Module?,Eqs?)).
-  snd-eval(Mdb,add-eqs-module(Module,Eqs)).
+  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?)).
+  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
