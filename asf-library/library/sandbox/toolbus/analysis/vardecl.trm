@@ -1,0 +1,7 @@
+remove-variable(
+Pid,
+
+ Aap : term,
+  Editor : str,
+  Pid : int
+)

@@ -1,0 +1,13 @@
+equations
+
+[remvar-0]
+  remove-variable($Var, ) = 
+
+[remvar-1]
+  remove-variable($Var, $Var : $Term, $VarDecls) = $VarDecls
+
+[default-remvar]
+  $Var != $Var2,
+  remove-variable($Var, $VarDecls) = $VarDecls2
+  ===>
+  remove-variable($Var, $Var2 : $Term, $VarDecls) = $Var2 : $Term, $VarDecls2

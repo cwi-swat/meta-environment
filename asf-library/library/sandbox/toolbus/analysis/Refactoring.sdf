@@ -1,0 +1,12 @@
+module Refactoring
+
+imports VarDecls
+
+exports
+  context-free syntax
+    "remove-variable" "(" Var "," {VarDecl ","}* ")" -> {VarDecl ","}*
+
+variables
+  "$Var"[0-9]* -> Var
+  "$Term" -> Term
+  "$VarDecls"[0-9]* -> {VarDecl ","}*
