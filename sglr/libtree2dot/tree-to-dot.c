@@ -150,7 +150,9 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
       arg = ATgetFirst(args);
       args = ATgetNext(args);
       SG_PrintSymbolToGrowBuf(gb, arg, escaped);
-      if (args) SG_AddStringToGrowBuf(gb, escaped ? "\\ " : " ");
+      if (args) {
+        SG_AddStringToGrowBuf(gb, escaped ? "\\ " : " ");
+      }
     }
     SG_AddStringToGrowBuf(gb, ")");
   } else if (ATmatch(t, "opt(<term>)", &arg)) {
@@ -164,7 +166,34 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
     SG_PrintSymbolToGrowBuf(gb, arg, escaped);
     SG_AddStringToGrowBuf(gb, "#");
     SG_PrintSymbolToGrowBuf(gb, arg2, escaped);
-  } else if (ATmatch(t, "char-class([<list>])", &args)) {
+  }
+  else if (ATmatch(t, "perm([<list>])", &args)) {
+    SG_AddStringToGrowBuf(gb, "<<");
+    while (!ATisEmpty(args)) {
+      arg = ATgetFirst(args);
+      args = ATgetNext(args);
+      SG_PrintSymbolToGrowBuf(gb, arg, escaped);
+      if (args) {
+        SG_AddStringToGrowBuf(gb, escaped ? "\\ " : " ");
+      }
+    }
+    SG_AddStringToGrowBuf(gb, ">>");
+  }
+  else if (ATmatch(t, "func([<list>], <term>)", &args, &arg2)) {
+    SG_AddStringToGrowBuf(gb, "(");
+    while (!ATisEmpty(args)) {
+      arg = ATgetFirst(args);
+      args = ATgetNext(args);
+      SG_PrintSymbolToGrowBuf(gb, arg, escaped);
+      if (args) {
+        SG_AddStringToGrowBuf(gb, escaped ? "\\ " : " ");
+      }
+    }
+    SG_AddStringToGrowBuf(gb, "=>");
+    SG_PrintSymbolToGrowBuf(gb, arg2, escaped);
+    SG_AddStringToGrowBuf(gb, ")");
+  }
+  else if (ATmatch(t, "char-class([<list>])", &args)) {
     SG_AddStringToGrowBuf(gb, "[");
     while (!ATisEmpty(args)) {
       char *thischar = NULL;
@@ -198,12 +227,15 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
 			}
     }
     SG_AddStringToGrowBuf(gb, "]");
-  } else if (ATmatch(t, "varsym(<term>)", &arg)) {
+  }
+  else if (ATmatch(t, "varsym(<term>)", &arg)) {
     SG_AddStringToGrowBuf(gb, "<");
     SG_PrintSymbolToGrowBuf(gb, arg, escaped);
     SG_AddStringToGrowBuf(gb, "-VAR>");
-  } else
+  }
+  else {
     ATerror("SG_PrintSymbol: strange symbol %t\n", t);
+  }
 
   return gb;
 }
