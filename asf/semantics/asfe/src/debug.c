@@ -24,6 +24,7 @@
 
 #include <tide-adapter.h>
 #include <asc-support-me.h>
+#include <Location.h>
 
 /*}}}  */
 
@@ -47,36 +48,34 @@ static ATerm	       position_stack[MAX_DEPTH];
 static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
 			     int target_line, int target_col)
 {
-  char *yield;
-  int i, length, cur_line, cur_col;
-
+  /* if a variable contains the pointer (according to the pos-info attribute)
+   * , we return it, * otherwise just keep on searching
+   */
   if (PT_isTreeVar(tree)) {
-    return tree;
-  }
+    LOC_Location loc = PT_getTreeLocation(tree);
+    LOC_Area area = LOC_getLocationArea(loc);
 
-  if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-    while (!PT_isArgsEmpty(args)) {
-      PT_Tree arg = PT_getArgsHead(args);
-      yield = PT_yieldTreeToString(arg, ATfalse);
-      length = strlen(yield);
-      cur_line = *line;
-      cur_col  = *col;
-      for (i=0; i<length; i++) {
-	if (yield[i] == '\n') {
-	  cur_line++;
-	  cur_col = 0;
-	} else {
-	  cur_col++;
+    if (LOC_getAreaBeginLine(area) <= target_line 
+	&& LOC_getAreaEndLine(area) >= target_line 
+	&& LOC_getAreaBeginColumn(area) <= target_col
+	&& LOC_getAreaEndColumn(area) >= target_col) {
+      return tree;
+    }
+
+    return NULL;
+  }
+  else {
+    if (PT_hasTreeArgs(tree)) {
+      PT_Args args = PT_getTreeArgs(tree);
+      for ( ;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+	PT_Tree arg = PT_getArgsHead(args);
+
+	arg = find_variable(arg, line, col, target_line, target_col);
+
+	if (arg != NULL) {
+	  return arg;
 	}
       }
-      if (cur_line > target_line
-	  || (cur_line == target_line && cur_col >= target_col)) {
-	return find_variable(arg, line, col, target_line, target_col);
-      }
-      *line = cur_line;
-      *col  = cur_col;
-      args = PT_getArgsTail(args);
     }
   }
 
@@ -166,12 +165,10 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
 
 static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 {
-  char *req_file, *file, *name, *yield;
+  char *req_file, *name, *yield;
   int req_pos, req_line, req_col, diff_start;
-  int start_line, start_col, end_line, end_col;
   int line, col;
   PT_Tree equ_tree;
-  ATerm pos_anno;
   PT_Tree var, value;
   ATerm val;
 
@@ -185,34 +182,14 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   }
 
   equ_tree = (PT_Tree) currentRule->equation;
-  pos_anno = PT_getTreeAnnotation(equ_tree, pos_info);
 
-  if (!pos_anno) {
-    return TA_makeExprError("no position information on equation", NULL);
-  }
-
-  /* TODO: why is this not apified? */
-  if (!ATmatch(pos_anno, 
-	       "area-in-file(<str>,area(<int>,<int>,<int>,<int>,<int>,<int>))",
-	       &file, &start_line, &start_col, &end_line, &end_col, NULL, NULL)) {
-    return TA_makeExprError("malformed position information", pos_anno);
-  }
-
-  if ((strcmp(file, req_file) != 0)
-      || (req_line < start_line)
-      || (req_line == start_line && req_col < start_col)
-      || (req_line > end_line)
-      || (req_line == end_line && req_col >= end_col)) {
-    return TA_makeExprVarUnknown("outside current equation");
-  }
-
-  line = start_line;
-  col  = start_col;
+  line = 1;
+  col  = 0;
 
   var = find_variable(equ_tree, &line, &col, req_line, req_col);
 
   if (var == NULL) {
-    return TA_makeExprError("not a variable", NULL);
+    return TA_makeExprError("variable not available now", NULL);
   }
   diff_start = col - req_col;
 
@@ -221,7 +198,6 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   if (value == NULL) {
     yield = "<uninitialized>";
   } else {
-    /*restored = RWrestoreTerm(value, ATfalse);*/
     yield = PT_yieldTreeToString(value, ATfalse);
   }
 

@@ -1,5 +1,13 @@
 
 
+Tue Feb  8 08:39:23 CET 2005 <jurgenv@cwi.nl>
+ * Factored out lifting and lowering from ASF-Normalization spec into
+   surrounding C code in asf-operations.
+        - this enables keeping layout and annotations without the efficiency
+          hazards.
+ * Simplified asfe's tide interface w.r.t. variable lookup (finally using
+   the location API instead of ATmatch's.
+
 Mon Feb  7 16:39:27 CET 2005 <jurgenv@cwi.nl>
  * Added debugging and bootstrapping tool for ASF: lift-asf.
 

@@ -73,7 +73,7 @@ int main (int argc, char **argv)
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
 
-  ATsetChecking(ATtrue);
+  /*ATsetChecking(ATtrue);*/
 
   in = ATreadFromNamedFile(input);
 

@@ -118,55 +118,6 @@ static unsigned hash_function(equation_table *table, PT_Production top_ofs,
 
 /*}}}  */
 
-/*{{{  ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ) */
-
-ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
-{
-  PT_Tree tree;
-  char *path;
-  int start_line, start_col, end_line, end_col;
-  ASF_ASFEquation equation;
-
-  tree = PT_TreeFromTerm(ASF_ASFConditionalEquationToTerm(equ));
-
-  if (!PT_getTreePosInfo(tree, &path, &start_line,
-			 &start_col, &end_line, &end_col)) {
-    ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
-	        PT_yieldTree((PT_Tree) ASF_getASFConditionalEquationASFTag(equ)), tree);
-    return equ;
-  }
-
-  equ = ASF_ASFConditionalEquationFromTerm(PT_TreeToTerm(tree));
-
-  if (ASF_hasASFConditionalEquationASFConditions(equ)) {
-    ASF_ASFConditions conds = ASF_getASFConditionalEquationASFConditions(equ);
-    tree = PT_TreeFromTerm(ASF_ASFConditionsToTerm(conds));
-    if (!PT_getTreePosInfo(tree, &path, &start_line,
-			   &start_col, &end_line, &end_col)) {
-      ATwarning("no position information on conditions, "
-		"crippled debugging: %t\n", tree);
-    } else {
-      conds = ASF_ASFConditionsFromTerm(PT_TreeToTerm(tree));
-      equ = ASF_setASFConditionalEquationASFConditions(equ, conds);
-    }
-  }
-
-  equation = ASF_getASFConditionalEquationASFEquation(equ);
-  tree = PT_TreeFromTerm(ASF_ASFEquationToTerm(equation));
-  if (!PT_getTreePosInfo(tree, &path, &start_line, &start_col,
-			 &end_line, &end_col)) {
-    ATwarning("no position information on equation, crippled debugging: %t\n",
-	      tree);
-  } else {
-    equation = ASF_ASFEquationFromTerm(PT_TreeToTerm(tree));
-
-    equ = ASF_setASFConditionalEquationASFEquation(equ, equation);
-  }
-
-  return equ;
-}
-
-/*}}}  */
 /*{{{  ATerm getPosInfoEquals(ASF_ASFEquation equ) */
 
 ATerm getPosInfoEquals(ASF_ASFEquation equ)
@@ -359,10 +310,6 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
   ASF_ASFConditions conditions;
   unsigned hnr;
   equation_entry *cur;
-
-  if (useTide) {
-    equation = add_equ_pos_info(equation);
-  }
 
   if (ASF_isASFConditionalEquationImplies(equation) 
       || ASF_isASFConditionalEquationWhen(equation)) {
