@@ -4,7 +4,7 @@ SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 
-B<sglr> -B<p> file [-B<12?bcdfghlnPstvVx>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+B<sglr> -B<p> file [-B<12?bcdfghlnPstvV>] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
 
 =head1 DESCRIPTION
 
@@ -36,11 +36,6 @@ Toggles cycle detection (on by default).
 Toggles debug mode.  In debug mode, a full trace for the entire parse
 is maintained in the F<.sglr-log>.  Be alert: such files tend to become
 rather big.
-
-=item -B<D> I<file>
-
-Write a representation of the resulting parse forest as a dot file to
-F<file>.
 
 =item -B<f>
 
@@ -99,13 +94,6 @@ Toggles chatty (verbose) operation.
 
 Displays the program's version number.
 
-=item -B<x>
-
-Toggles suppression of lexical subtrees for dotfiles.  By default,
-the full, unabbreviated parse forest is entirely dumped as a dot graph
-when writing dot output; pruning out the lexical detail can substantially
-reduce the size of the resulting graph.
-
 =back
 
 =head1 USAGE
@@ -118,8 +106,8 @@ the grammar corresponding to the specified parse table.
 
     $ sglr -h
     Usage:
-            sglr    -p file [-12?bcdfghlnPtvVx] [-i file] [-o file] \
-                    [-D file] [-s sort] [-S file]
+            sglr    -p file [-12?bcdfghlnPtvV] [-i file] [-o file] \
+                    [-s sort] [-S file]
     [. . .]
     $ sglr -vp Test.tbl -i MyCode.cod -o Output.File -l
     sglr: logging to sglr-stats.txt
