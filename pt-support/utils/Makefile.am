@@ -62,8 +62,8 @@ tree2dot_SOURCES        = tree2dot-main.c
 tree2dot_LDADD          = -L../libmept -lmept \
                           -L${ATERM}/lib -lATerm
 
-IDEF=${TOOLBUS}/bin/idef2tif
-TIFS=${TOOLBUS}/bin/tifstoc
+IDEF=idef2tif
+TIFS=tifstoc
 
 tif:
 	for i in `ls *.idef`; do \
