@@ -38,8 +38,11 @@
 /*{{{  global variables */
 
 ATbool run_verbose;
+ATbool toolbus_mode;
 ATbool output_muasf;
 ATbool use_c_compiler;
+
+int toolbus_id;
 
 char myname[] = "asfc";
 char myversion[] = "2.0";
@@ -49,22 +52,37 @@ static char myarguments[] = "chi:mn:o:vV";
 
 /*}}}  */
 
+/*{{{  static void VERBOSE(const char* msg) */
+
+static void VERBOSE(const char* msg)
+{
+  if (toolbus_mode) {
+    ATBwriteTerm(toolbus_id, ATmake("snd-event(asfc-progress(<str>))", msg));
+    ATBhandleOne(toolbus_id);
+  }
+  else if (run_verbose) {
+    ATwarning("%s\n", msg);
+  }
+}
+
+/*}}}  */
+
 /*{{{  static void usage(void) */
 
 static void usage(void)
 {
   ATwarning(
-            "Usage: %s [options]\n"
-            "Options:\n"
+	    "Usage: %s [options]\n"
+	    "Options:\n"
 	    "\t-c              toggle compilation to a binary(default: %s)   \n"
-            "\t-h              display this message                           \n"
-            "\t-i filename     input equations from file     (default stdin) \n"
+	    "\t-h              display this message                           \n"
+	    "\t-i filename     input equations from file     (default stdin) \n"
 	    "\t-m              output muasf code             (default %s)    \n"
-            "\t-n name         name of the tool              (obligatory)    \n"
-            "\t-o filename     output c code to file         (default <name>.c)\n"
-            "\t-v              verbose mode                                   \n"
-            "\t-V              reveal program version         (i.e. %s)       \n",
-            myname, 
+	    "\t-n name         name of the tool              (obligatory)    \n"
+	    "\t-o filename     output c code to file         (default <name>.c)\n"
+	    "\t-v              verbose mode                                   \n"
+	    "\t-V              reveal program version         (i.e. %s)       \n",
+	    myname, 
 	    use_c_compiler ? "on" : "off",
 	    output_muasf ? "on" : "off", 
 	    myversion);
@@ -72,6 +90,7 @@ static void usage(void)
 }
 
 /*}}}  */
+
 /*{{{  static void version(void) */
 
 static void version(void)
@@ -94,9 +113,7 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
 
   saveName = dashesToUnderscores(name);
 
-  if (run_verbose) {
-    ATwarning("transforming asf to muasf\n");
-  }
+  VERBOSE("transforming ASF to MuASF");
 
   muasf = asfToMuASF(saveName, equations);
 
@@ -114,9 +131,8 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
     return pt;
   }
   else {
-    if (run_verbose) {
-      ATwarning("transforming muasf to c\n");
-    }
+    
+    VERBOSE("transforming muasf to C");
 
     c_code = muasfToC(muasf); 
 
@@ -130,17 +146,15 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
       ATerror("Error: unable to open %s for writing\n", output);
     }
 
-    if (run_verbose) {
-      ATwarning("pretty printing c code\n");
-    }
+    VERBOSE("pretty printing c code");
 
     ToC_code(saveName, c_code, fp , myversion);
     fclose(fp);
 
     if (use_c_compiler) {
-      if (run_verbose) {
-	ATwarning("calling c compiler\n");
-      }
+      
+      VERBOSE("invoking C compiler");
+
       call_c_compiler(name, saveName, output);
     }
   }
@@ -160,6 +174,16 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
+
+/*{{{  void rec_ack_event(int cid, ATerm t) */
+
+void rec_ack_event(int cid, ATerm t)
+{
+  return;
+}
+
+/*}}}  */
+
 /*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations, char *output) */
 
 ATerm compile_module(int cid, char *moduleName, ATerm equations)
@@ -167,6 +191,8 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
   char output[2000];
   ASF_CondEquationList eqsList;
   PT_ParseTree result;
+
+  toolbus_id = cid;
 
   sprintf(output, "%s.c", moduleName);
 
@@ -184,7 +210,7 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
 int main(int argc, char *argv[])
 {
   ATerm bottom;
-  int c, toolbus_mode = 0;
+  int c;
   char *equations = "-";
   char *output = "-";
   char *name = "";
@@ -194,10 +220,13 @@ int main(int argc, char *argv[])
   run_verbose = ATfalse;
   output_muasf = ATfalse;
   use_c_compiler = ATtrue;
+  toolbus_mode = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
-    toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
+    if(!strcmp(argv[c], "-TB_TOOL_NAME")) {
+      toolbus_mode = ATtrue;
+    }
   }
 
   ATinit(argc, argv, &bottom);
