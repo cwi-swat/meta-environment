@@ -55,7 +55,7 @@ $^3$ Faculty of Mathematics and Computer Science, Utrecht University,
 
 \section{Introduction}
 
-The \ASmetaenv\ is an interactive development environment
+The \ASmetaenv\ \cite{Kli93} is an interactive development environment
 for the automatic generation of interactive systems for manipulating
 programs, specifications, or other texts written in a formal
 language. The generation process is controlled by a definition of the
@@ -75,7 +75,7 @@ language. The \ASmetaenv\ can help if:
    want to analyze or transform them.
 \end{itemize}
  
-The \asfsdf\ formalism allows the definition of syntactic as well as
+The \asfsdf\ formalism \cite{DHK96} allows the definition of syntactic as well as
 semantic issues. It can be used for the definition of languages (for
 programming, for writing specifications, for querying databases, for
 text processing, or for dedicated applications). In addition it can be
@@ -95,7 +95,7 @@ problems. \asfsdf\ provides:
   \item Complete integration of the definition of syntax and semantics.
     
   \item Traversal functions (for writing very concise program
-    transformations), memo functions (for cacheing repeated computations), and
+    transformations), memo functions (for caching repeated computations), and
     more.
  
 \end{itemize}
@@ -157,7 +157,8 @@ languages.
 \asfsdf\ specifications are executed as rewrite rules. Both an
 interpreter and a compiler (ASF2C, see~\cite{BKO99}) are supported.  The
 latter generates very efficient C code that implements pattern
-matching and term traversal.
+matching and term traversal. The generated code is based on the ATerms library
+and ensures a minimal use of memory during normalization of terms.
 
 \begin{figure}
 \centerline{\psfig{file=newarch.eps,width=12cm}}
@@ -177,7 +178,7 @@ It consists of a ToolBus that interconnects the following components:
 \item Structure Editor: a syntax-directed editor that closely cooperates with the Text Editor.
 
 \item Parser:  scannerless, generalized, LR parser (SGLR) that is parametrized with a parse table.
-\item Parsertable generator: takes an SDF definition as input and generates a parse table for SGLR.
+\item Parsetable generator: takes an SDF definition as input and generates a parse table for SGLR.
 \item Tree Repository: stores all terms corresponding to specification modules, parse tables,
 user-defined terms, etc.
 \item Compiler: the ASF2C compiler.
@@ -212,13 +213,8 @@ Meta-Environment uses the ToolBus while editing a very simple specification
 
 Next we will show a number of applications of the Meta-Environment ranging from a simple
 typechecking problem (Figure~\ref{FIG:meta-pico}), to syntax-directed
-editing (Figure ~ \ref
-	 {
-FIG:	 edit - cobol}
-
-)
-     and transformation of COBOL
-systems.
+editing (Figure~\ref{FIG:edit-cobol}) and transformation of COBOL
+systems \cite{BSV00}.
 
 \bibliographystyle{alpha}
 \bibliography{etaps}  
