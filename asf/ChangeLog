@@ -1,9 +1,10 @@
 # $Id$
 
-2003/10/17 (jurgenv@cwi.nl)
+2003/10/17 (markvdb@cwi.nl)
  * Added a message on deprecated unquoted literals.
  * Added a message on usage of non Sort symbols in
    right hand side of lexical functions.
+ * Adapted the asf-checker in order to check the newly introduced tests.
 
 2003/10/17 (jurgenv@cwi.nl)
  * Added syntax for writing positive and negative tests to ASF

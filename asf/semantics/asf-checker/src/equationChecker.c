@@ -318,6 +318,51 @@ static ATermList checkEquation(ASF_ASFConditionalEquation condEquation)
   }
 }
 
+static ATermList checkTest(ASF_ASFTestEquation testEquation) 
+{
+  ATerm message;
+  ATermList messages = ATempty;
+
+  if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFTestEquationToTerm(testEquation)))) {
+    return makeAmbiguityMessage();
+  }
+  else {
+    ASF_ASFTag tag = ASF_getASFTestEquationASFTag(testEquation);
+
+    ASF_ASFCondition condition = ASF_getASFTestEquationASFCondition(testEquation);
+  
+    if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
+      return makeAmbiguityMessage();
+    }
+    else {
+      ASF_Tree lhsCond = ASF_getASFConditionLhs(condition);
+      ASF_Tree rhsCond = ASF_getASFConditionRhs(condition);
+      PT_Args variables = collectVariables((PT_Tree)lhsCond, 
+				           PT_makeArgsEmpty());
+
+      if (!PT_isArgsEmpty(variables)) {
+        message = makeMessage("no variables may be introduced in left hand side of test", tag, ASF_TreeToTerm(lhsCond));
+        messages = ATinsert(messages, message);
+	variables = PT_makeArgsEmpty();
+      }
+      messages = ATconcat(messages, checkLhs(tag, lhsCond));
+
+      if (ASF_hasASFTestEquationASFConditions(testEquation)) {
+        messages = ATconcat(messages,
+			    checkConditions(tag,
+				    ASF_getASFTestEquationASFConditions(testEquation),
+				    &variables));
+      }
+
+      messages =  ATconcat(messages,
+		           checkTreeGivenVariables(tag, 
+					           (PT_Tree)rhsCond, 
+					           variables));
+      return messages;
+    }
+  }
+}
+
 ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList) 
 {
   ATermList messages = ATempty;
@@ -337,6 +382,25 @@ ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEqu
   return messages;
 }
 
+ATermList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList) 
+{
+  ATermList messages = ATempty;
+  
+  while (!ASF_isASFTestEquationTestListEmpty(testEquationList)) {
+    ASF_ASFTestEquation testEquation =
+      ASF_getASFTestEquationTestListHead(testEquationList);
+    
+    messages = ATconcat(messages,
+                        checkTest(testEquation));
+
+    if (!ASF_hasASFTestEquationTestListTail(testEquationList)) {
+      break;
+    }
+    testEquationList = ASF_getASFTestEquationTestListTail(testEquationList);
+  }
+  return messages;
+}
+
 ATermList checkEquations(ASF_ASFEquations equations) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFEquationsToTerm(equations)))) {
@@ -347,6 +411,15 @@ ATermList checkEquations(ASF_ASFEquations equations)
       ASF_getASFEquationsList(equations);
   
     return checkASFConditionalEquationList(condEquationList);
+  }
+  else if (ASF_isASFEquationsPresentWithTests(equations)) {
+    ASF_ASFConditionalEquationList condEquationList = 
+      ASF_getASFEquationsList(equations);
+    ASF_ASFTestEquationTestList testEquationList = 
+      ASF_getASFEquationsTestList(equations);
+  
+    return ATconcat(checkASFConditionalEquationList(condEquationList),
+                    checkASFTestEquationList(testEquationList));
   }
   return ATempty;
 }
