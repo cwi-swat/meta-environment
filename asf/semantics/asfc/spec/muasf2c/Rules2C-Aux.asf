@@ -7,19 +7,21 @@ equations
 [wek-4] wrap-extra-kids(trafo,ActualArg, ActualArg*,5) = ATmakeList4(ActualArg*)
 [wek-5] wrap-extra-kids(trafo,ActualArg, ActualArg*,6) = ATmakeList5(ActualArg*)
 [wek-6] wrap-extra-kids(trafo,ActualArg, ActualArg*,7) = ATmakeList6(ActualArg*)
-%% WARNING: HIER MOET NOG 1 AFGETROKKEN WORDEN VAN Int
-[default-wek] wrap-extra-kids(trafo,ActualArg, ActualArg*,Int) = 
-               ATmakeList(Int,ActualArg*)
 
+[default-wek] Int - 1 = natcon(Char*)
+              ===>
+              wrap-extra-kids(trafo,ActualArg, ActualArg*,Int) = 
+                  ATmakeList(integer-constant(Char*) ,ActualArg*)
+               
 [wek-1] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,2) = ATempty
 [wek-2] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,3)= ATmakeList1(ActualArg*)
 [wek-3] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,4)= ATmakeList2(ActualArg*)
 [wek-4] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,5)= ATmakeList3(ActualArg*)
 [wek-5] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,6)= ATmakeList4(ActualArg*)
 [wek-6] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,7)= ATmakeList5(ActualArg*)
-[default-wek] 
+[default-wek]  Int - 2 = natcon(Char*) ===>
         wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,Int)=
-          ATmakeList(Int,ActualArg*)
+          ATmakeList(integer-constant(Char*),ActualArg*)
 
 [wek-1] wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,2) = ATempty
 [wek-2] wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,3)= ATmakeList1(ActualArg*)
@@ -27,9 +29,9 @@ equations
 [wek-4] wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,5)= ATmakeList3(ActualArg*)
 [wek-5] wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,6)= ATmakeList4(ActualArg*)
 [wek-6] wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,7)= ATmakeList5(ActualArg*)
-[default-wek] 
+[default-wek] Int - 2 = natcon(Char*) ===> 
         wrap-extra-kids(accutrafo,ActualArg1,ActualArg2,ActualArg*,Int)=
-          ATmakeList(Int,ActualArg*)
+          ATmakeList(integer-constant(Char*),ActualArg*)
 
 [mts-0] remove-returns-list(Funid) = Funid2,
         get-traversal-strategy(Funid2) = bottom-up,
