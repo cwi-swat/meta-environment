@@ -14,27 +14,28 @@ getArity() {
 }
 
 formals() {
-  arity=$1
-  type=$2
+  ar=$1
+  ty=$2
 
-  while [ ${arity} != 1 ]; do
-    printf "${type} arg${arity}, "
-    arity=`expr ${arity} - 1`
+  while [ ${ar} != 1 ]; do
+    printf "${ty} arg${ar}, "
+    ar=`expr ${ar} - 1`
   done
 
-  if [ $arity = 1 ]; then
-    printf "${type} arg${arity}"
+  if [ $ar = 1 ]; then
+    printf "${ty} arg${ar}"
   fi
 }
 
 actuals() {
-  arity=$1
+  ar=$1
 
-  for (( 0 ; ${arity} > 1 ; arity=`expr ${arity} - 1` )); do 
+  while [ ${ar} != 1 ]; do
     printf "NULL, "
+    ar=`expr ${ar} - 1`
   done
 
-  if [ $arity = 1 ]; then
+  if [ $ar = 1 ]; then
     printf "NULL"
   fi
 }
