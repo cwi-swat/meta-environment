@@ -17,19 +17,22 @@
 
 */
 
+#define SG_APPLLABEL  "#"
+
 enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_ADD,
                      SG_AMBTBL_REMOVE, SG_AMBTBL_LOOKUP, SG_AMBTBL_DUMP};
 
 enum SG_ApplIDAction { SG_APPLID_ZERO, SG_APPLID_INC };
 
 ATermList SG_AmbTable(int Mode, ATermInt key, ATermList value);
+int   SG_MaxNrAmb(int Mode);
 void  SG_Amb(ATerm, ATerm);
+ATerm SG_ExpandApplNode(ATerm t);
 ATerm SG_YieldPT(ATerm t);
 int   SG_ApplID(int Action);
 ATerm SG_Apply(parse_table *, label, ATermList);
 ATerm SG_TreeType(ATerm);
-ATerm SG_TermYield(ATerm);
-ATerm SG_YieldAmbPT(ATerm t);
 
+ATerm SG_TermYield(ATerm);
 ATerm SG_DotTermYield(ATerm);
 

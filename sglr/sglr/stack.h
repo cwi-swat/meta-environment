@@ -110,7 +110,8 @@ void    SG_MarkStacks(stacks *old, stacks *new, stack *accept);
 void    SG_MarkStack(stack *st, st_link *guerilla, stacks *new);
 void    SG_StackCleanupList(int Mode, stack *st);
 
-void      SG_DeleteStack(stack *st);
+void    SG_DeleteStacks(stacks *sts);
+void    SG_DeleteStack(stack *st);
 
 
 stack *   SG_FindStack(state , stacks *);

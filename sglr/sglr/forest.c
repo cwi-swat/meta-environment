@@ -25,6 +25,24 @@
 #include "sglr.h"
 
 
+int SG_MaxNrAmb(int mode)
+{
+  static int nr_ambiguities = 0;
+
+  switch(mode) {
+    case SG_NRAMB_ASK:
+      return nr_ambiguities;
+    case SG_NRAMB_ZERO:
+      return nr_ambiguities = 0;
+    case SG_NRAMB_INC:
+      return ++nr_ambiguities;
+    case SG_NRAMB_DEC:
+      return --nr_ambiguities;
+    default:
+      return nr_ambiguities;  /* silence the compiler */
+  }
+}
+
 int SGnrAmb(int mode)
 {
   static int nr_ambiguities = 0;
@@ -60,7 +78,7 @@ ATerm SG_ApplLabel(void)
   static ATerm label = NULL;
 
   if(label == NULL) {
-    label = ATmake("<str>", "#");
+    label = ATmake("<str>", SG_APPLLABEL);
     ATprotect(&label);
   }
   return label;
@@ -109,56 +127,53 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
+ATerm SG_ExpandApplNode(ATerm t)
+{
+  AFun      fun;
+  ATermList args, ambs;
+
+  fun  = ATgetAFun(t);
+  args = ATgetArguments((ATermAppl) t);
+  if(fun == SG_ApplAfun()) {
+    ATermInt  idx = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
+
+    /*  Are we indeed encountering an ambiguity cluster?  */
+    if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+      /*  No ambiguity  */
+      return (ATerm)ATmakeAppl2(SG_ApplAfun(),
+                                SG_YieldPT(ATgetFirst(args)),
+                                SG_YieldPT(ATelementAt(args, 1)));
+    } else {
+      /*  Ambiguous node  */
+      SGnrAmb(SG_NRAMB_INC);
+      return (ATerm)ATmake("amb(<list>)",
+                           (ATermList)SG_YieldPT(ATgetFirst((ATermList)ambs)));
+    }
+  } else {
+    return (ATerm) ATmakeApplList(fun,
+                                  (ATermList) SG_YieldPT((ATerm)args));
+  }
+}
 
 ATerm SG_YieldPT(ATerm t)
 {
-  if(SGnrAmb(SG_NRAMB_ASK) == 0)
-    return t;
-
-  SGnrAmb(SG_NRAMB_ZERO);
-  return SG_YieldAmbPT(t);
-}
-
-ATerm SG_YieldAmbPT(ATerm t)
-{
-  ATerm     ret, t2;
+  ATerm     elt;
   ATermList args, l;
-  AFun      fun;
+  int       maxambs;
+
+  if((maxambs  = SG_MaxNrAmb(SG_NRAMB_ASK)) == 0
+  ||  maxambs <= SGnrAmb(SG_NRAMB_ASK))
+    return t;
 
   switch(ATgetType(t)) {
     case AT_APPL:
-      fun  = ATgetAFun(t);
-      args = ATgetArguments((ATermAppl) t);
-      if(fun == SG_ApplAfun()) {
-        ATermList ambs;
-        ATermInt  idx = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
-/*
-        if (!idx) ATfprintf(stderr, "Not annotated: %t\n", t);
-*/
-        /*  Are we indeed encountering an ambiguity cluster?  */
-        if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
-          /*  No ambiguity  */
-          ret = (ATerm)ATmakeAppl2(SG_ApplAfun(),
-                                   SG_YieldAmbPT(ATgetFirst(args)),
-                                   SG_YieldAmbPT(ATelementAt(args, 1)));
-        } else {
-          /*  Ambiguous node  */
-          SGnrAmb(SG_NRAMB_INC);
-          ambs = (ATermList) ATgetFirst((ATermList)ambs);
-          ret  = (ATerm)ATmake("amb(<list>)",
-                               (ATermList)SG_YieldAmbPT((ATerm) ambs));
-        }
-      } else {
-        ret = (ATerm) ATmakeApplList(fun,
-                                    (ATermList) SG_YieldAmbPT((ATerm)args));
-      }
-      return ret;
+      return SG_ExpandApplNode(t);
     case AT_LIST:
       if(ATisEmpty((ATermList) t)) return (ATerm) ATempty;
       for(l = ATempty, args = (ATermList) t;
           !ATisEmpty(args); args = ATgetPrefix(args)) {
-        t2 = ATgetLast(args);
-        l = ATinsert(l, SG_YieldAmbPT(t2));
+        elt = ATgetLast(args);
+        l = ATinsert(l, SG_YieldPT(elt));
       }
       return (ATerm) l;
 /*
@@ -235,6 +250,7 @@ void SG_Amb(ATerm existing, ATerm new) {
   nw_cln = ATremoveAnnotation(new, SG_ApplLabel());
   if(ATisEmpty(ambs)) {
     /* New ambiguity */
+    SG_MaxNrAmb(SG_NRAMB_INC);
     ex_cln = ATremoveAnnotation(existing, SG_ApplLabel());
     newtrms = ATmakeList2(ex_cln, nw_cln);
     newidxs = ATmakeList2(ex_annot, nw_annot);
@@ -251,7 +267,6 @@ void SG_Amb(ATerm existing, ATerm new) {
     SG_AmbTable(SG_AMBTBL_ADD, index, ambs);
   }
 
-  SGnrAmb(SG_NRAMB_INC);
   return;
 }
 

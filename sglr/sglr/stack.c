@@ -152,6 +152,8 @@ void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
     old = tail(old);
     SG_free(sts);
   }
+  if(accept != NULL)                    /*  Free this fragment too  */
+    SG_free(new);
 }
 
 void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
@@ -209,6 +211,17 @@ void SG_StackCleanupList(int Mode, stack *st)
 #endif
       gcstacks[count++] = st;
       break;
+  }
+}
+
+void SG_DeleteStacks(stacks *sts)
+{
+  stacks *osts;
+
+  while(sts != NULL) {
+    osts = sts;
+    sts = tail(sts);
+    SG_free(osts);
   }
 }
 

@@ -61,7 +61,6 @@ void SG_InitInput(void)
   line        = 1;
   col         = 0;
   text_length = 0;
-  SGnrAmb(SG_NRAMB_ZERO);
 }
 
 /*
@@ -149,6 +148,16 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
   return p;
 }
 
+void SG_ClearPath(path *p)
+{
+  path *oldp;
+
+  while(p) {
+    oldp = p;
+    p = p->next;
+    SG_free(oldp);
+  }
+}
 
 /*
   The concatenation of two paths
@@ -228,6 +237,7 @@ ATerm SG_Result(char *sort);
 void  SG_ParserPreparation(void)
 {
   accepting_stack = NULL;
+  SG_MaxNrAmb(SG_NRAMB_ZERO);
   SGnrAmb(SG_NRAMB_ZERO);
   active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL));
 }
@@ -329,16 +339,15 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
       if(ATgetLength(bonsai) > 1) {
         return ATmake("amb(<list>)", bonsai);
       } else {
-        SGnrAmb(SG_NRAMB_DEC);
+        SG_MaxNrAmb(SG_NRAMB_DEC);
         return ATgetFirst(bonsai);
       }
     } else {
        return ATgetFirst(bonsai);
     }
-  } else {
-    if(AmbStart)
-      SGnrAmb(SG_NRAMB_ZERO);
-      return NULL;
+  } else {    /*  Nothing left  */
+    SGnrAmb(SG_NRAMB_ZERO);
+    return NULL;
   }
 }
 
@@ -347,37 +356,35 @@ ATerm SG_Result(char *sort)
   if (accepting_stack != NULL) {
     ATerm forest;
 
-    if(sort != NULL || SGnrAmb(SG_NRAMB_ASK) != 0) {
-      forest = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
-    } else {
-      forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
-    }
-
-    if(sort != NULL)
-      forest = SG_Prune(forest, sort);
-    if(forest == NULL) {
-      return ATmake("parse-error([character(<int>), line(<int>),"
-                    "col(<int>), char(<int>)])",
-                    current_token, line, col, text_length);
-/*
-      return ATmake("parse-error(\"input is not a <str>\")", desiredsort);
-*/
+    forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
+    if (sort != NULL) {      /*  Select only the desired start symbols  */
+      if (SG_MaxNrAmb(SG_NRAMB_ASK) != 0)
+        forest = SG_ExpandApplNode(forest);
+      if ((forest = SG_Prune(forest, sort)) == NULL)
+        return ATmake("parse-error([character(<int>), line(<int>),"
+                      "col(<int>), char(<int>)])",
+                      current_token, line, col, text_length);
     }
 
     if(!SG_OUTPUT)
-      return(ATmake("parsetree(suppressed,<int>)", SGnrAmb(SG_NRAMB_ASK)));
+      forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
+    else if (SG_MaxNrAmb(SG_NRAMB_ASK) == 0)
+      forest = ATmake("parsetree(<term>,<int>)",forest, 0);
+    else {    /*  The full yield is necessary only in this case  */
+      forest = SG_YieldPT(forest);
+      forest = ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
+    }
 
 #ifdef HAVE_A2TOA1
     if(SG_ASFIX1)
-      return a2toa1(forest);
+      forest = a2toa1(forest);
 #endif
 
-    return ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
-  }
-
-  return ATmake("parse-error([character(<int>), line(<int>),"
-                "col(<int>), char(<int>)])",
-                current_token, line, col, text_length);
+    return forest;
+  } else
+    return ATmake("parse-error([character(<int>), line(<int>),"
+                  "col(<int>), char(<int>)])",
+                  current_token, line, col, text_length);
 }
 
 /*
@@ -389,7 +396,8 @@ ATerm SG_Result(char *sort)
 
 void SG_ParseChar(void)
 {
-  stack *st;
+  stack   *st;
+  ATbool  delayed = ATfalse;
 
   for_actor = active_stacks;
   for_actor_delayed = NULL;
@@ -471,18 +479,18 @@ void SG_Actor(stack *st)
 */
 void SG_DoReductions(stack *st, action a)
 {
-  path  *ps;
+  path  *fps, *ps;
   label prod;
 
   prod = SG_A_PROD(a);
 
-  for(ps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty);
+  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty);
       ps != NULL; ps = SG_P_NEXT(ps)) {
-
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_A_REJECT(a), st);
   }
+  SG_ClearPath(fps);
 }
 
 /*
@@ -585,17 +593,18 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 */
 void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 {
-  path  *ps;
+  path  *fps, *ps;
   label prod;
 
   prod = SG_A_PROD(a);
 
-  for(ps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse, ATempty);
+  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse, ATempty);
       ps != NULL; ps = SG_P_NEXT(ps)) {
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_A_REJECT(a), st);
   }
+  SG_ClearPath(fps);
 }
 
 /*
