@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,7 +84,11 @@ in
 	LangOK := false
       )
     else
-      snd-msg(set-parsetable(Language)).
+      if equal(IsTerm,"eqs") then
+        snd-msg(set-parsetable(Language, eqs))
+      else
+        snd-msg(set-parsetable(Language, trm))
+      fi .
       (
         rec-msg(parsetable-set(Language)).
         if equal(IsTerm,"eqs") then
@@ -210,12 +215,7 @@ in
     printf("Tree display not yet implemented\n").
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
     +
-    rec-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid)).
-    snd-msg(set-parsetable(Language)).
-    rec-msg(parsetable-set(Language)).
-    snd-ack-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid))
-    +
-    rec-event(TE,menu-event("Move",Str?,Fid)).
+    rec-event(TE,menu-event("Move", Str?, Fid)).
     snd-eval(SE,moveFocus(Fid,Str)).
     rec-value(SE,Fl?).
     Foc := first(Fl).

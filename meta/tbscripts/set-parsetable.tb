@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,27 +25,30 @@
 
 process Set-parsetable is
 let
-  Module: str, Table: str, 
-  Time: term, Id: term,
-  NoTable : term
+  Module    : str, 
+  Table     : str, 
+  Time      : term,
+  Id        : term,
+  NoTable   : term,
+  TableType : term
 in
 Id := process-id.
 
 ( 
-  rec-msg(set-parsetable(Module?)) .
+  rec-msg(set-parsetable(Module?, TableType?)) .
   NoTable := false.
-  snd-msg(get-table-from-db(Module)) .
+  snd-msg(get-table-from-db(Module, TableType)) .
   (
     rec-msg(table(Table?))
   +
     rec-msg(no-table) .
-    snd-msg(generate-parsetable(Module)) .
+    snd-msg(generate-parsetable(Module, TableType)) .
     (
 	rec-msg(parsetable(Table?)) .
     	snd-msg(get-table-timestamp(Module)) .
     	rec-msg(table-timestamp(Time?)) .
-    	snd-msg(add-table-to-db(Module,Table,Time)) .
-    	rec-msg(done)
+    	snd-msg(add-parse-table-to-db(Module, Table, TableType, Time)) .
+    	rec-msg(parse-table-added)
      +
 	rec-msg(no-parsetable(Module)).
         NoTable := true
@@ -53,7 +57,7 @@ Id := process-id.
   if equal(NoTable, true) then
     	snd-msg(parsetable-not-set(Module))
   else
-  	snd-msg(reopen-language(Module,Table)) .
+  	snd-msg(reopen-language(Module, Table)) .
   	(
     	    rec-msg(language-opened(Module)) .
 	    snd-msg(parsetable-set(Module))

@@ -43,13 +43,14 @@ let
   Tmp    : term
 in
   /* Start up tools and initialize */
-  execute(addeqssyntax,Addsyn?).
+  execute(addeqssyntax, Addsyn?).
   /* Start all controlling processes */
   create(Open-modules, Tid?).
   create(Compiler(), Tid?).
   create(PGen(), Tid?).
   create(Help(), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
+  create(RemoveVarSyn(), Tid?).
   create(Clear-all(), Tid?).
   create(Close-modules(), Tid?)
 endlet

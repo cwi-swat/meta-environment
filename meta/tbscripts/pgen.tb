@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,27 +40,45 @@ let
   Str       : str,
   Table     : str,
   Mods      : list,
-  Id        : int
+  Id        : int,
+  TableType : term
 in
   (
     Id := process-id .
-    rec-msg(generate-parsetable(Str?)) .
+    rec-msg(generate-parsetable(Str?, TableType?)) .
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
     execute(parsetablegen,GENTABLE?) .
-    snd-msg(add-eqs-syntax(Str)) .
-    (
-    	rec-msg(extended-syntax(Syntax?)) .
-    	snd-eval(GENTABLE,generate-table(Syntax,Str,"tbl")) .
+    if equal(TableType, eqs) then
+      snd-msg(add-eqs-syntax(Str)) .
+      (
+      	rec-msg(extended-syntax(Syntax?)) .
+      	snd-eval(GENTABLE,generate-table(Syntax, Str, "eqs.tbl")) .
     	rec-value(GENTABLE,generation-finished(Table?)) .
     	snd-msg(parsetable(Table)) .
     	snd-note(ui-status(endstat(Id))) .
-    	snd-terminate(GENTABLE,"terminate")
-     +
+    	snd-terminate(GENTABLE, "terminate")
+      +
   	rec-msg(no-extended-syntax).
     	snd-msg(no-parsetable(Str)).
     	snd-note(ui-status(endstat(Id))).
 	snd-terminate(GENTABLE,"terminate")
-    )
+      )
+    else
+      snd-msg(remove-var-syntax(Str)) .
+      (
+        rec-msg(changed-syntax(Syntax?)) .
+        snd-eval(GENTABLE,generate-table(Syntax, Str, "trm.tbl")) .
+        rec-value(GENTABLE,generation-finished(Table?)) .
+        snd-msg(parsetable(Table)) .
+        snd-note(ui-status(endstat(Id))) .
+        snd-terminate(GENTABLE, "terminate")
+      +
+        rec-msg(no-chanaged-syntax).
+        snd-msg(no-parsetable(Str)).
+        snd-note(ui-status(endstat(Id))).
+        snd-terminate(GENTABLE,"terminate")
+      ) 
+    fi
   )*
   delta
 endlet

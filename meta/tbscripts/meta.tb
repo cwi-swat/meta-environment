@@ -44,6 +44,7 @@
 #include "edit-master.tb"
 #include "pgen.tb"
 #include "addeqsyn.tb"
+#include "removevarsyn.tb"
 #include "module-db.idef"
 #include "process-eqs.tb"
 #include "save-module.tb" 
