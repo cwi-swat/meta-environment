@@ -11,12 +11,12 @@ static asymbol * ef14sym;
 static funcptr ef14;
 static asymbol * ef15sym;
 static funcptr ef15;
-static asymbol * ef5sym;
-static funcptr ef5;
 static asymbol * ef1sym;
 static funcptr ef1;
 static asymbol * lf3sym;
 static aterm * lf3( aterm * arg1);
+static asymbol * ef5sym;
+static funcptr ef5;
 static asymbol * ef13sym;
 static funcptr ef13;
 static asymbol * ef3sym;
@@ -173,7 +173,7 @@ t_protect( atmp010);
 tmp[ 4]= ( * ef10)( tmp[ 3] , ( * ef11)( atmp00 , lf2( make_list( atmp010))));
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-return ( * ef1)( lf2( make_list( tmp[ 3])) , lf3( make_list( tmp[ 4])) , arg1);
+return ( * ef1)( lf2( make_list( tmp[ 3])) , lf3( make_list( tmp[ 4])) , ( * ef5)( arg1));
 }
 }
 }

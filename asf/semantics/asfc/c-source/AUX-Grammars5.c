@@ -40,28 +40,26 @@ if( check_sym( arg0 , ef1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
-{
-aterm * atmp000= arg_0( atmp00);
+tmp[ 0]= arg_0( atmp00);
 {
 aterm * atmp0000[2];
-atmp0000[ 0]= atmp000;
-if( not_empty_list( atmp000)) {
-t_protect( atmp000);
-atmp000= list_tail( atmp000);
-atmp0000[ 1]= atmp000;
-t_protect( atmp000);
-while( not_empty_list( atmp000)) {
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
-t_protect( atmp000);
+atmp0000[ 0]= tmp[ 0];
+t_protect( tmp[ 0]);
+if( not_empty_list( tmp[ 0])) {
+t_protect( tmp[ 0]);
+tmp[ 0]= list_tail( tmp[ 0]);
+atmp0000[ 1]= tmp[ 0];
+t_protect( tmp[ 0]);
+while( not_empty_list( tmp[ 0])) {
+t_protect( tmp[ 0]);
+if( not_empty_list( tmp[ 0])) {
+t_protect( tmp[ 0]);
 t_unprotect( arg0);
-return ( * ef2)( lf_AUX_Grammars5_1( ( * ef1)( lf2( slice( atmp0000[ 0] , atmp0000[ 1])))) , ( * ef2)( ( * ef1)( lf2( make_list( ( * ef3)( ( * ef4)( ))))) , lf_AUX_Grammars5_1( ( * ef1)( lf2( atmp000)))));
+return ( * ef2)( lf_AUX_Grammars5_1( ( * ef1)( lf2( slice( atmp0000[ 0] , atmp0000[ 1])))) , ( * ef2)( ( * ef1)( lf2( make_list( ( * ef3)( ( * ef4)( ))))) , lf_AUX_Grammars5_1( ( * ef1)( lf2( tmp[ 0])))));
 }
 atmp0000[ 1]= t_list_next( atmp0000[ 1]);
-t_protect( atmp000);
-atmp000= list_tail( atmp000);
-t_protect( atmp000);
-}
+tmp[ 0]= atmp0000[ 1];
+t_protect( tmp[ 0]);
 }
 }
 }

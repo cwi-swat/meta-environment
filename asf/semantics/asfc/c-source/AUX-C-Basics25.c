@@ -16,7 +16,7 @@ static aterm * lf_AUX_C_Basics25_7( aterm * arg1 , aterm * arg2 , aterm * arg3 ,
 static asymbol * lf_AUX_C_Basics25_8sym;
 static aterm * lf_AUX_C_Basics25_8( aterm * arg1 , aterm * arg2 , aterm * arg3);
 static asymbol * lf_AUX_C_Basics25_9sym;
-static aterm * lf_AUX_C_Basics25_9( aterm * arg1 , aterm * arg2 , aterm * arg3 , aterm * arg4);
+static aterm * lf_AUX_C_Basics25_9( aterm * arg1 , aterm * arg2 , aterm * arg3);
 static asymbol * lf_AUX_C_Basics25_10sym;
 static aterm * lf_AUX_C_Basics25_10( aterm * arg1);
 static asymbol * lf_AUX_C_Basics25_11sym;
@@ -39,7 +39,7 @@ lf_AUX_C_Basics25_6sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\
 lf_AUX_C_Basics25_5sym= TmkSymbol( "listtype(sort(\"TE-pair\"),ql(\",\"))" , SYM_STRING);
 lf_AUX_C_Basics25_7sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"A-set\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"DCAS-tuple\"),w(\"\"),no-attrs)" , SYM_STRING);
 lf_AUX_C_Basics25_8sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADS-tuple\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_C_Basics25_9sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)" , SYM_STRING);
+lf_AUX_C_Basics25_9sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)" , SYM_STRING);
 lf_AUX_C_Basics25_10sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E-tuple\"),w(\"\"),no-attrs)" , SYM_STRING);
 lf_AUX_C_Basics25_11sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EI-pair\"),w(\"\"),no-attrs)" , SYM_STRING);
 lf_AUX_C_Basics25_13sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"EI-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"A-set\"),w(\"\"),no-attrs)" , SYM_STRING);
@@ -53,7 +53,7 @@ register_prod( TmakeSimple( & local , "listtype(sort(\"TE-pair\"),ql(\",\"))") ,
 register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"TE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-env\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_6 , lf_AUX_C_Basics25_6sym);
 register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"A-set\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"DCAS-tuple\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_7 , lf_AUX_C_Basics25_7sym);
 register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADS-tuple\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_8 , lf_AUX_C_Basics25_8sym);
-register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_9 , lf_AUX_C_Basics25_9sym);
+register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ADSI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_9 , lf_AUX_C_Basics25_9sym);
 register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E-tuple\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_10 , lf_AUX_C_Basics25_10sym);
 register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EI-pair\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics25_11 , lf_AUX_C_Basics25_11sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"EI-pair\"),ql(\",\"))") , lf_AUX_C_Basics25_12 , lf_AUX_C_Basics25_12sym);
@@ -84,9 +84,9 @@ aterm * lf_AUX_C_Basics25_10( aterm * arg0) {
 PROF( prof_lf_AUX_C_Basics25_10);
 return make_nf1( lf_AUX_C_Basics25_10sym , arg0);
 }
-aterm * lf_AUX_C_Basics25_9( aterm * arg0 , aterm * arg1 , aterm * arg2 , aterm * arg3) {
+aterm * lf_AUX_C_Basics25_9( aterm * arg0 , aterm * arg1 , aterm * arg2) {
 PROF( prof_lf_AUX_C_Basics25_9);
-return make_nf4( lf_AUX_C_Basics25_9sym , arg0 , arg1 , arg2 , arg3);
+return make_nf3( lf_AUX_C_Basics25_9sym , arg0 , arg1 , arg2);
 }
 aterm * lf_AUX_C_Basics25_8( aterm * arg0 , aterm * arg1 , aterm * arg2) {
 PROF( prof_lf_AUX_C_Basics25_8);
