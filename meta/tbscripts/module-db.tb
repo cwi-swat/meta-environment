@@ -218,6 +218,7 @@ in
     snd-msg(all-modules(Modules))
   +
     rec-msg(get-imported-modules(Name?)).
+    printf("DEBUG: NYI, should this be transitive?") .
     MDB-GetImportedModules(Name, Modules?) .
     snd-msg(imported-modules(Modules))
   +

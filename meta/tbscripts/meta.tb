@@ -91,8 +91,6 @@ in
 endlet
 
 toolbus(
-    AddPosInfo,
-    ApplyFunc,
     ButtonActionExecutor,
     ButtonActionReceiver,
     ClearAll,
@@ -129,8 +127,7 @@ toolbus(
     Save-modules,
     Set-parsetable,
     Tree2Graph,
-    Ui,
-    Unparser
+    Ui
 #ifdef TIMEOUT
     , AbortMetaEnvironment
 #endif
