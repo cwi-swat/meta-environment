@@ -1,0 +1,38 @@
+process Parser is
+  let
+    P  : sglr,
+    L  : str,
+    S  : str,
+    Id : term,
+    FN : str,
+    T  : term
+  in
+    execute(sglr, P?) .
+    ( rec-msg(parse-string(L?, S?, Id?)) .
+      snd-eval(P, parse-string(L, S)) .
+      rec-value(P, T?) .
+      snd-msg(parse-result(Id, T))
+    +
+      rec-msg(parse-file(L?, FN?, Id?)) .
+      snd-eval(P, parse-file(L, FN)) .
+      rec-value(P, T?) .
+      snd-msg(parse-result(Id, T))
+    +
+      rec-msg(open-language(L?, FN?)) .
+      snd-eval(P, open-language(L, FN)) .
+      (
+	rec-value(P, language-opened(L?, FN)) .
+	snd-note(language-available(L))
+      +
+	rec-value(P, open-language-failed(L, FN)) 
+      )
+    ) 
+    * rec-disconnect(P)
+  endlet
+
+tool sglr is {command = "/home/visser/syntax/sglr/src/sglr"}
+
+#ifdef MAIN
+#else
+toolbus(Parser)
+#endif
