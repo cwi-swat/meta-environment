@@ -51,7 +51,7 @@ in
       MDB-GetModuleName(Path, FileName, ModuleName?) .
       EquationsEditorCreator(ModuleName)
     else
-      SmartTermEditorCreator(FullFileName)
+      ExtensionBasedTermEditorCreator(FullFileName)
     fi
   fi
 endlet
@@ -147,7 +147,7 @@ in
   )
 endlet
 
-process SmartTermEditorCreator (FileName : str) is
+process ExtensionBasedTermEditorCreator (FileName : str) is
 let
   Extension : str,
   ModuleName : str
