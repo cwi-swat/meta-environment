@@ -1,21 +1,3 @@
-process FindModuleFilename(ModuleId: str, Type: term, Path: str?) is
-let
-  Extension: str,
-  Basedir: str
-in
-  snd-msg(get-path-from-db(ModuleId))
-  .
-  (
-    rec-msg(path(Basedir?))
-    . snd-msg(file-extension-hook(Type))
-    . rec-msg(file-extension-hook-result(Extension?))
-    . BuildPath(Basedir, ModuleId, Extension, Path?)
-  +
-    rec-msg(no-path)
-    . LocateFile(ModuleId, Type, Path?)
-  )
-endlet
-
 process GetPath(Sid: term, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
