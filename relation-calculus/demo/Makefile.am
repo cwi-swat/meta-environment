@@ -1,1 +1,1 @@
-SUBDIRS =	pico
+SUBDIRS =	pico java
