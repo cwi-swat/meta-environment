@@ -157,23 +157,6 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDEINC)
 AC_SUBST(USE_TIDE)
 
-dnl Try to locate at&t graphviz stuff
-AC_PATH_PROGS(GRAPHVIZ, dot, no)
-if  test "${GRAPHVIZ}" != "no"; then
-   GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\``
-fi
-
-dnl Handle --with-graphviz=... argument to configure
-AC_ARG_WITH(graphviz,
-   [  --with-graphviz=DIR     graphviz package is in DIR],
-   GRAPHVIZ=${withval})
-
-dnl Fail when graphviz was not specified and could not be found automatically.
-if test "${GRAPHVIZ}" = "no" ; then
-   AC_ERROR(Required \"graphviz\" package not found.)
-fi
-AC_SUBST(GRAPHVIZ)
-
 dnl Check for wish
 META_CHECK_WISH
 
