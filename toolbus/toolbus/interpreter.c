@@ -175,6 +175,10 @@ void create_toolbus(term *monitor)
 { 
   extern proc *initial_toolbus_proc;  /*created by parser */
 
+  if (initial_toolbus_proc == NULL) {
+    err_fatal("No toolbus commands found. At least one initial process must be supplied.");
+  }
+
   if(monitor){
     assert(is_monitor(monitor));
     initial_toolbus_proc =
