@@ -93,7 +93,6 @@ static PT_Args getSliceLast(Slice slice);
 static ATbool isBoundVariable(ATerm env, PT_Tree var);
 static PT_Args prepend(PT_Args first, PT_Args last, PT_Args list);
 static PT_Args prependSlice(Slice slice, PT_Args list);
-static PT_Args appendSlice(PT_Args list, Slice slice);
 static PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems);
 static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem);
 static ATbool no_new_vars(PT_Tree trm, ATerm env);
@@ -107,7 +106,7 @@ static ATbool isListSeparator(PT_Tree elem, PT_Production listProd);
 static ATerm nextListElementMatching(ATerm env, PT_Tree elem1, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
-static ATermList apply_rule(PT_Tree trm, int depth);
+static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equ);
 static PT_Tree selectAndRewrite(PT_Tree trm, int depth);
 static PT_Tree rewrite(PT_Tree trm);
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void *extra);
@@ -429,13 +428,13 @@ static PT_Args prependSlice(Slice slice, PT_Args list)
 }
 
 /*}}}  */
-/*{{{  static PT_Args appendSlice(PT_Args list, Slice slice) */
+/*{{{  PT_Args appendSlice(PT_Args list, Slice slice) */
 
 /*
  * Append a slice to a list
  */
 
-static PT_Args appendSlice(PT_Args list, Slice slice)
+PT_Args appendSlice(PT_Args list, Slice slice)
 {
   return PT_concatArgs(list, prependSlice(slice, PT_makeArgsEmpty()));
 }
@@ -1287,7 +1286,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
    the equation are matched.
 */
 
-static ATermList apply_rule(PT_Tree trm, int depth)
+static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
 {
   PT_Production top_ofs, first_ofs;
   PT_Args termargs, equargs, tmpargs;
@@ -1346,6 +1345,7 @@ static ATermList apply_rule(PT_Tree trm, int depth)
 	  }
 
 	  rewrite_steps++;
+	  *equation = entry;
 	  return make_cenv(entry->rhs, env);
         }
         else if (runVerbose) {
@@ -1391,6 +1391,7 @@ static ATermList apply_rule(PT_Tree trm, int depth)
       }
 
       rewrite_steps++;
+      *equation = entry;
       return make_cenv(entry->rhs, env);
     }
     else if (runVerbose) {
@@ -1398,6 +1399,7 @@ static ATermList apply_rule(PT_Tree trm, int depth)
     }
   }
 
+  *equation = NULL;
   return make_cenv(trm, fail_env);
 }
 
@@ -1414,8 +1416,9 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
   PT_Tree newtrm;
   ATermList complexenv;
   ATerm env;
+  equation_entry *equation;
 
-  complexenv = apply_rule(trm, depth);
+  complexenv = apply_rule(trm, depth, &equation);
   env = get_env(complexenv);
 
   if (!is_fail_env(env)) {
@@ -1423,6 +1426,10 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
 
     /* construct the right hand side */
     trm = rewriteRecursive(newtrm, env, depth + 1, NULL);
+
+    assert(equation);
+    tagCurrentRule = equation->tag;
+    TIDE_STEP(equation->posinfo_equals, env, depth);
   }
 
   return trm;

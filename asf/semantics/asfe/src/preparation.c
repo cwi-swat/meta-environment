@@ -35,6 +35,7 @@
 #include <deprecated.h>
 #include "preparation.h"
 #include "asfix_utils.h"
+#include "asfe.h"
 
 #include <MEPT.h>
 #include <ASFME-utils.h>
@@ -217,6 +218,17 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
 
 /*}}}  */
 
+/*{{{  ATerm getPosInfoEquals(ASF_Equation equ) */
+
+ATerm getPosInfoEquals(ASF_Equation equ)
+{
+  PT_Tree tree = PT_makeTreeFromTerm(ASF_makeTermFromEquation(equ));
+  PT_Tree equals = PT_getArgsArgumentAt(PT_getTreeArgs(tree), 2);
+  return ATgetAnnotation(PT_makeTermFromTree(equals), posinfo);
+}
+
+/*}}}  */
+
 /*{{{  void enter_equation(equation_table * table, ASF_CondEquation equation) */
 
 /* Enter an equation in an equation table.
@@ -314,6 +326,9 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
 
   entry->rhs = rhs;
   ATprotect((ATerm*)&entry->rhs);
+
+  entry->posinfo_equals = getPosInfoEquals(equ);
+  ATprotect((ATerm *)&entry->posinfo_equals);
 
   entry->conds = conds;
   ATprotect((ATerm *) (&entry->conds));
@@ -886,6 +901,14 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 PT_Tree RWrestoreTerm(PT_Tree tree)
 {
   return restoreTerm(tree, NULL);
+}
+
+/*}}}  */
+/*{{{  PT_Args RWrestoreArgs(PT_Args args) */
+
+PT_Args RWrestoreArgs(PT_Args args)
+{
+  return PT_foreachTreeInArgs(args, restoreTerm, NULL);
 }
 
 /*}}}  */

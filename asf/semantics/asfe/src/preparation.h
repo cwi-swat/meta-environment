@@ -37,6 +37,9 @@ typedef struct equation_entry
 
   PT_Production top_ofs;
   PT_Production first_ofs;
+
+  ATerm posinfo_equals;
+
   PT_Tree lhs;
   PT_Tree rhs;
 } equation_entry;
@@ -57,6 +60,7 @@ typedef struct equation_table
 PT_Tree RWprepareTerm(PT_Tree t);
 ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList);
 PT_Tree RWrestoreTerm(PT_Tree t);
+PT_Args RWrestoreArgs(PT_Args args);
 void RWflushEquations();
 PT_Args AFfilterLayout(PT_Args elems);
 PT_Tree AFremoveTermLayout(PT_Tree t);

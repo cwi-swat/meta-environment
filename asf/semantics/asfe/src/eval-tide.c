@@ -39,6 +39,12 @@
 static int pid;
 static ATerm env = NULL;
 
+static int             stack_level = -1;
+static ASF_Tag         tag_stack[MAX_DEPTH];
+static equation_entry *rule_stack[MAX_DEPTH];
+static ATerm           env_stack[MAX_DEPTH];
+static ATerm	       position_stack[MAX_DEPTH];
+
 /*}}}  */
 
 /*{{{  static PT_Tree find_variable(tree, line, col, target_line, target_col) */
@@ -80,6 +86,37 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
   }
 
   return NULL;
+}
+
+/*}}}  */
+/*{{{  static ATermList varlist_from_env(ATerm env) */
+
+static ATermList varlist_from_env(ATerm environment)
+{
+  ATermList list = ATempty;
+  ATermList env = (ATermList)environment;
+  char *value;
+
+  while (env && !ATisEmpty(env)) {
+    ATermAppl tuple = (ATermAppl) ATgetFirst(env);
+    ATermAppl variable = (ATermAppl) ATgetArgument(tuple, 0);
+    /* Check for a 'slice' (list variable) */
+    /*ATwarning("tuple=%t\n\n\n", tuple);*/
+    if (ATgetArity(ATgetAFun((ATermAppl)tuple)) == 3) {
+      PT_Args args = appendSlice(PT_makeArgsEmpty(), (Slice)tuple);
+      args = RWrestoreArgs(args);
+      value = PT_yieldArgs(args);
+    } else {
+      ATerm val = ATgetArgument(tuple, 1);
+      PT_Tree tree = PT_TreeFromTerm(val);
+      tree = RWrestoreTerm(tree);
+      value = PT_yieldTree(tree);
+    }
+    list = ATinsert(list, ATmake("variable(<term>,<str>)", variable, value));
+    env = ATgetNext(env);
+  }
+
+  return list;
 }
 
 /*}}}  */
@@ -240,6 +277,35 @@ static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
+/*{{{  static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args) */
+
+
+static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
+{
+  ATermList frames = ATempty;
+  ATerm frame;
+  ATermList var_list;
+  //static frame_name[BUFSIZ];
+  char *frame_name; 
+  int i;
+
+  for (i=0; i<=stack_level; i++) {
+    if (tag_stack[i] == NULL) {
+      frame = ATmake("frame(<int>,\"anonymous\",location(unknown),[])", i);
+    } else {
+      var_list = varlist_from_env(env_stack[i]);
+      frame_name = PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(tag_stack[i])));
+
+      frame = ATmake("frame(<int>,<str>,location(<term>),<term>)",
+		     i, frame_name, position_stack[i], var_list);
+    }
+    frames = ATinsert(frames, frame);
+  }
+
+  return ATmake("stack(<term>)", frames);
+}
+
+/*}}}  */
 
 /*{{{  void Tide_connect() */
 
@@ -256,6 +322,7 @@ void Tide_connect()
   TA_registerFunction(ATmakeAFun("var",        1, ATfalse), eval_var);
   TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
   TA_registerFunction(ATmakeAFun("list-sources", 0, ATfalse), eval_list_sources);
+  TA_registerFunction(ATmakeAFun("stack-trace",0, ATfalse), eval_stack_trace);
 
   TA_connect();
 
@@ -287,6 +354,16 @@ void Tide_step(ATerm position, ATerm newenv, int level)
     PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
   fprintf(stderr, "Tide_step: cureq = %s\n", PT_yieldTree(equ_tree));
    */
+
+  assert(tagCurrentRule);
+  assert(currentRule);
+  assert(position);
+
+  stack_level       = level;
+  tag_stack[level]  = tagCurrentRule;
+  rule_stack[level] = currentRule;
+  position_stack[level] = position;
+  env_stack[level] = newenv;
 
   if (TA_isConnected()) {
     int old_state;

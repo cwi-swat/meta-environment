@@ -26,6 +26,8 @@
 #include <ASFME-utils.h>
 #include <MEPT.h>
 
+#define MAX_DEPTH 2000
+
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs, ATerm debug);
 
 /* toolbus interface */
@@ -53,3 +55,4 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol);
 #define make_cenv(t,e)		(ATmakeList(2, PT_makeTermFromTree(t), e))
 
 typedef ATermAppl Slice;
+PT_Args appendSlice(PT_Args list, Slice slice);
