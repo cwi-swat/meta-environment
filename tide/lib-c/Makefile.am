@@ -15,6 +15,6 @@ TA.h TA.c TA_dict.c TA_dict.h: TA.adt
 
 EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c
 
-CFLAGS		= -g -Wall -O2
+CFLAGS		+= ${DEVELOP_DEF}
 INCLUDES	= -I${ATERM}/include
 

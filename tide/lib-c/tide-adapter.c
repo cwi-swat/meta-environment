@@ -44,6 +44,8 @@ typedef struct
   int         id;
   char       *name;
   int         state;
+  int         stack_level;
+  int         start_level;
   TA_Location cpe;
   TA_Rule    *enabled_rules[MAX_PORT_TYPES];
   TA_Rule     rules[MAX_EVENT_RULES];
@@ -69,6 +71,12 @@ static TA_Process processes[MAX_PROCESSES];
 
 static int nr_functions = 0;
 static TA_FunctionRecord functions[MAX_FUNCTIONS];
+
+#if DEVELOP
+static int message_mask = TA_WARNING | TA_DEBUG;
+#else
+static int message_mask = TA_WARNING;
+#endif
 
 
 /*}}}  */
@@ -181,6 +189,43 @@ TA_Expr eval_location(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
+/*{{{  TA_Expr eval_higher_equal(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_higher_equal(int pid, AFun fun, TA_ExprList args)
+{
+  TA_Expr left = ATgetFirst(args);
+  TA_Expr right = ATgetFirst(ATgetNext(args));
+
+  if (ATgetType(left) != AT_INT || ATgetType(right) != AT_INT) {
+    return ATmake("error(\"higher-equal expects two integers\",<term>)", args);
+  }
+
+  if (ATgetInt((ATermInt)left) >= ATgetInt((ATermInt)right)) {
+    return ATparse("true");
+  } else {
+    return ATparse("false");
+  }
+}
+
+/*}}}  */
+/*{{{  TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args)
+{
+  TA_debug("stack_level=%d\n", processes[pid].stack_level);
+  return (ATerm)ATmakeInt(processes[pid].stack_level);
+}
+
+/*}}}  */
+/*{{{  TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args)
+{
+  TA_debug("start_level=%d\n", processes[pid].start_level);
+  return (ATerm)ATmakeInt(processes[pid].start_level);
+}
+
+/*}}}  */
 
 /*{{{  void TA_connect() */
 
@@ -200,10 +245,13 @@ void TA_connect()
     processes[pid].id = PID_FREE;
   }
 
-  TA_registerFunction(ATmakeAFun("true",     0, ATfalse), eval_true);
-  TA_registerFunction(ATmakeAFun("false",    0, ATfalse), eval_false);
-  TA_registerFunction(ATmakeAFun("cpe",      0, ATfalse), eval_cpe);
-  TA_registerFunction(ATmakeAFun("location", 1, ATfalse), eval_location);
+  TA_registerFunction(ATmakeAFun("true",     0, ATfalse),    eval_true);
+  TA_registerFunction(ATmakeAFun("false",    0, ATfalse),    eval_false);
+  TA_registerFunction(ATmakeAFun("cpe",      0, ATfalse),    eval_cpe);
+  TA_registerFunction(ATmakeAFun("location", 1, ATfalse),    eval_location);
+  TA_registerFunction(ATmakeAFun("higher-equal", 2, ATfalse),eval_higher_equal);
+  TA_registerFunction(ATmakeAFun("stack-level", 0, ATfalse), eval_stack_level);
+  TA_registerFunction(ATmakeAFun("start-level", 0, ATfalse), eval_start_level);
 
   connected = ATtrue;
 }
@@ -446,10 +494,11 @@ void TA_deleteRule(int pid, int rid)
 
 /*{{{  void TA_atCPE(int pid, TA_Location cpe) */
 
-void TA_atCPE(int pid, TA_Location cpe)
+void TA_atCPE(int pid, TA_Location cpe, int stack_level)
 {
   ASSERT_VALID_PID(pid);
   processes[pid].cpe = cpe;
+  processes[pid].stack_level = stack_level;
 }
 
 /*}}}  */
@@ -459,8 +508,8 @@ static void triggerRule(int pid, TA_Rule *rule)
 {
   TA_Expr value = TA_evaluate(pid, rule->action);
 
-  ATfprintf(stderr, "actions of rule %d (%t) evaluate to %t\n",
-	    rule->id, rule->action, value);
+  TA_debug("actions of rule %d (%t) evaluate to %t\n",
+	   rule->id, rule->action, value);
 
   ATBpostEvent(tide_cid, ATmake("event(<int>,<int>,<term>)",
 				pid, rule->id, value));
@@ -473,7 +522,7 @@ static void activateRule(int pid, TA_Rule *rule)
 {
   TA_Expr value = TA_evaluate(pid, rule->condition);
 
-  ATfprintf(stderr, "condition of rule %d (%t,%t) evaluates to %t\n",
+  TA_debug("condition of rule %d (%t,%t) evaluates to %t\n",
 	    rule->id, rule->port, rule->condition, value);
 
   if (ATisEqual(value, ATparse("true"))) {
@@ -519,6 +568,11 @@ void TA_setProcessState(int pid, int state)
 {
   ASSERT_VALID_PID(pid);
   processes[pid].state = state;
+
+  if (state == STATE_RUNNING) {
+    TA_debug("starting process %d\n", pid);
+    processes[pid].start_level = processes[pid].stack_level;
+  }
 }
 
 /*}}}  */
@@ -613,6 +667,53 @@ TA_Expr TA_makeExprVar(char *var, TA_Expr value, int pos,
 {
   return ATmake("var(<str>,<term>,<int>,<int>,<int>,<int>)",
 		var, value, pos, line, column, length);
+}
+
+/*}}}  */
+
+/*{{{  void TA_vmsg(int level, char *pattern, va_list args) */
+
+void TA_vmsg(int level, char *pattern, va_list args)
+{
+  if (message_mask & level) {
+    ATvfprintf(stderr, pattern, args);
+  }
+}
+
+/*}}}  */
+/*{{{  void TA_msg(int level, char *pattern, ...) */
+
+void TA_msg(int level, char *pattern, ...)
+{
+  va_list args;
+
+  va_start(args, pattern);
+  TA_vmsg(level, pattern, args);
+  va_end(args);
+}
+
+/*}}}  */
+/*{{{  void TA_debug(char *pattern, ...) */
+
+void TA_debug(char *pattern, ...)
+{
+  va_list args;
+
+  va_start(args, pattern);
+  TA_vmsg(TA_DEBUG, pattern, args);
+  va_end(args);
+}
+
+/*}}}  */
+/*{{{  void TA_warning(char *pattern, ...) */
+
+void TA_warning(char *pattern, ...)
+{
+  va_list args;
+
+  va_start(args, pattern);
+  TA_vmsg(TA_WARNING, pattern, args);
+  va_end(args);
 }
 
 /*}}}  */

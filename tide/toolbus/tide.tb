@@ -2,7 +2,11 @@
 tool debug-adapter is { /* All kinds of adapters */ }
 tool debug-tool    is { /* All kinds of tools */    }
 tool tide-control  is { 
-    command="java-adapter -class tide.tool.TideControl -java-args -verbose:class"
+#if DEVELOP
+    command="java-adapter -class tide.tool.TideControl -jvm-arg -Dtide.develop=true"
+#else
+    command="java-adapter -class tide.tool.TideControl"
+#endif
 }
 
 

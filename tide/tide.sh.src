@@ -2,4 +2,3 @@
 CLASSPATH=__JARDIR__/tide.jar:$CLASSPATH
 export CLASSPATH
 toolbus $@ -TB_PORT 9500 __TBDIR__/tide.tb
-echo "TOOLBUS ENDED EXECUTION"

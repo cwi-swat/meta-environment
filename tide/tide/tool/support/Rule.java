@@ -4,12 +4,18 @@ import java.util.*;
 
 public class Rule
 {
+  private static int TYPE_UNKNOWN    = 0;
+  private static int TYPE_BREAKPOINT = 1;
+  private static int TYPE_WATCHPOINT = 2;
+
   private int  rid;
   private boolean enabled;
   private Port port;
   private Expr cond;
   private Expr act;
   private String tag;
+
+  private int type;
 
   //{{{ public Rule(int rid, Port port, Expr cond, Expr act, tag, enabled)
 
@@ -105,16 +111,21 @@ public class Rule
 
   public boolean isBreakpoint()
   {
-    Iterator iter = act.iterator();
+    if (type == TYPE_UNKNOWN) {
+      type = TYPE_WATCHPOINT;
 
-    while (iter.hasNext()) {
-      Expr expr = (Expr)iter.next();
-      if (expr.isBreak()) {
-	return true;
+      Iterator iter = act.iterator();
+
+      while (iter.hasNext()) {
+	Expr expr = (Expr)iter.next();
+	if (expr.isBreak()) {
+	  type = TYPE_BREAKPOINT;
+	  break;
+	}
       }
     }
 
-    return false;
+    return type == TYPE_BREAKPOINT;
   }
 
   //}}}

@@ -152,7 +152,7 @@ void debugstep(int linenr)
     TA_Location cpe = TA_makeLocationLine(source, linenr);
     last_line = linenr;
 
-    TA_atCPE(pid, cpe);
+    TA_atCPE(pid, cpe, 0);
 
 
     TA_activateRules(pid, TA_makePortStep());

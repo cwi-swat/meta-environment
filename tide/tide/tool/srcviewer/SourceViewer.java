@@ -38,10 +38,8 @@ public class SourceViewer
   //{{{ Attributes
 
   private JToolBar      tools;
-  private JPanel        center;
+  private JTabbedPane	center;
   private JLabel        message;
-
-  private CardLayout    cardLayout;
 
   private String tag_step_into;
   private String tag_step_over;
@@ -144,12 +142,7 @@ public class SourceViewer
     message.setBackground(tools.getBackground());
     message.setOpaque(true);
 
-    center = new JPanel();
-    cardLayout = new CardLayout();
-    center.setLayout(cardLayout);
-
-    JLabel noSource = new JLabel("No source (yet)");
-    center.add(NO_SOURCE, noSource);
+    center = new JTabbedPane();
 
     content.add("North", tools);
     content.add("Center", center);
@@ -184,7 +177,7 @@ public class SourceViewer
 				Expr.makeBreak(), tag_step_into, false);
 
     Expr stepOverCondition =
-      Expr.make("higher-equal(stack-level,start-level)");
+      Expr.make("higher-equal(start-level,stack-level)");
     process.requestRuleCreation(Port.makeStep(), stepOverCondition,
 				Expr.makeBreak(), tag_step_over, false);
 
@@ -227,7 +220,10 @@ public class SourceViewer
       ruleStepInto = null;
       ruleStepOver = null;
       //getParent().remove(this);
-      dispose();
+      Object lock = getTreeLock();
+      synchronized (lock) {
+	dispose();
+      }
     }
   }
 
@@ -360,12 +356,11 @@ public class SourceViewer
       synchronized (process) {
 	currentViewer.highlightRules(process.ruleIterator());
       }
-      center.add(currentViewer, file);
-      //cardLayout.addLayoutComponent(file, currentViewer);
-      cardLayout.show(center, file);
-    } else {
-      cardLayout.show(center, file);
+      File f = new File(file);
+      center.insertTab(f.getName(), null, currentViewer,
+		       file, center.getTabCount());
     }
+    center.setSelectedComponent(currentViewer);
 
     /*
     text.clear();
@@ -407,7 +402,8 @@ public class SourceViewer
 
     if (expr != null && expr.isLocation()) {
       if (expr.isLocationUnknown()) {
-	showNoSource();
+	message.setText("Current location is unknown: "
+			+ expr.toString());
       } else {
 	String file = expr.getLocationFileName();
 
@@ -427,14 +423,6 @@ public class SourceViewer
     if (currentViewer != null) {
       currentViewer.unhighlightCpe();
     }
-  }
-
-  //}}}
-  //{{{ private void showNoSource()
-
-  private void showNoSource()
-  {
-    cardLayout.show(center, NO_SOURCE);
   }
 
   //}}}

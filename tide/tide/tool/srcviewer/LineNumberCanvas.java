@@ -13,14 +13,21 @@ class LineNumberCanvas
   JTextArea text;
   FontMetrics fontMetrics;
   FontMetrics sourceMetrics;
+
   int cpe;
-  Polygon cpePoly;
+
+  Map rulesByRule;
+  Map rulesByLine;
+
+  Polygon rulePoly;
 
   //{{{ public LineNumberCanvas(JTextArea text)
 
   public LineNumberCanvas(JTextArea text)
   {
     this.text = text;
+    rulesByRule = new HashMap();
+    rulesByLine = new HashMap();
   }
 
   //}}}
@@ -34,11 +41,11 @@ class LineNumberCanvas
       fontMetrics = getFontMetrics(getFont());
       sourceMetrics = text.getFontMetrics(text.getFont());
 
-      cpePoly = new Polygon();
-      cpePoly.addPoint(0, 0);
-      cpePoly.addPoint(fontMetrics.stringWidth("1999"),
+      rulePoly = new Polygon();
+      rulePoly.addPoint(0, 0);
+      rulePoly.addPoint(fontMetrics.stringWidth("1999"),
 		       sourceMetrics.getHeight()/2);
-      cpePoly.addPoint(0, sourceMetrics.getHeight());
+      rulePoly.addPoint(0, sourceMetrics.getHeight());
     }
   }
 
@@ -63,9 +70,16 @@ class LineNumberCanvas
     while (y < (clip.y + clip.height)) {
       if (line == cpe) {
 	g.setColor(SourceFileViewer.COLOR_CPE);
-	cpePoly.translate(0, y);
-	g.fillPolygon(cpePoly);
-	cpePoly.translate(0, -y);
+	g.fillRect(0, y, clip.width, sourceMetrics.getHeight());
+      }
+
+      Rule rule = (Rule)rulesByLine.get(new Integer(line));
+      if (rule != null) {
+	g.setColor(getRuleColor(rule));
+	Polygon rulePoly = getRulePoly(rule);
+	rulePoly.translate(0, y);
+	g.fillPolygon(rulePoly);
+	rulePoly.translate(0, -y);
       }
 
       g.setColor(getForeground());
@@ -115,5 +129,49 @@ class LineNumberCanvas
   }
 
   //}}}
+
+  //{{{ public void addLocationRule(Rule rule, int line)
+
+  public void addLocationRule(Rule rule, int line)
+  {
+    rulesByRule.put(rule, new Integer(line));
+    rulesByLine.put(new Integer(line), rule);
+  }
+
+  //}}}
+  //{{{ public void removeLocationRule(Rule rule)
+
+  public void removeLocationRule(Rule rule)
+  {
+    Integer line = (Integer)rulesByRule.remove(rule);
+    if (line != null) {
+      rulesByLine.remove(line);
+    }
+  }
+
+  //}}}
+
+  //{{{ public Color getRuleColor(Rule rule)
+
+  public Color getRuleColor(Rule rule)
+  {
+    if (rule.isBreakpoint()) {
+      return SourceFileViewer.COLOR_BREAKPOINT;
+    }
+
+    return SourceFileViewer.COLOR_WATCHPOINT;
+  }
+
+  //}}}
+
+  //{{{ public Polygon getRulePoly(Rule rule)
+
+  public Polygon getRulePoly(Rule rule)
+  {
+    return rulePoly;
+  }
+
+  //}}}
+  
 }
 

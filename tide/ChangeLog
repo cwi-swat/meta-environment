@@ -1,4 +1,11 @@
 
+2001-06-15 (olivierp@cwi.nl)
+ * Changed highlighting behaviour to avoid overlapping highlights
+ * Fixed step-over functionality
+ * Introduced --with-develop mode to enable/disable debug prints
+ * Introduced tabbed pane in source viewer to be able to switch between
+   source files.
+
 2001-05-04 (olivierp@cwi.nl)
  * Initial working version of tide
 

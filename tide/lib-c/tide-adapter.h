@@ -1,6 +1,8 @@
 #ifndef TIDE_ADAPTER_H
 #define TIDE_ADAPTER_H
 
+#include <stdarg.h>
+
 #include "tide-common.h"
 #include <aterm1.h>
 
@@ -30,7 +32,7 @@ void TA_enableRule(int pid, int rid);
 void TA_disableRule(int pid, int rid);
 void TA_deleteRule(int pid, int rid);
 
-void TA_atCPE(int pid, TA_Location cpe);
+void TA_atCPE(int pid, TA_Location cpe, int stack_level);
 void TA_activateRules(int pid, TA_Port port);
 int TA_getProcessState(int pid);
 void TA_setProcessState(int pid, int state);
@@ -41,5 +43,13 @@ TA_Expr TA_makeExprError(char *msg, ATerm data);
 TA_Expr TA_makeExprVarUnknown(char *msg);
 TA_Expr TA_makeExprVar(char *var, TA_Expr value, int pos,
 		       int line, int column, int length);
+
+#define TA_DEBUG   (1<<0)
+#define TA_WARNING (1<<1)
+
+void TA_msg(int level, char *pattern, ...);
+void TA_vmsg(int level, char *pattern, va_list args);
+void TA_debug(char *pattern, ...);
+void TA_warning(char *pattern, ...);
 
 #endif

@@ -6,7 +6,7 @@ public class Info
 {
   PrintStream stream;
   String subject;
-  boolean verbose = true;
+  boolean verbose;
 
   //{{{ public Info(String subject)
 
@@ -14,6 +14,8 @@ public class Info
   {
     this.subject = subject;
     this.stream  = System.out;
+
+    verbose = "true".equals(System.getProperty("tide.develop"));
   }
 
   //}}}

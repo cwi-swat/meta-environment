@@ -178,19 +178,24 @@ class SourceFileViewer
     if (location != null
 	&& location.isLocation()
 	&& location.getLocationFileName().equals(file)) {
-      Highlighter.HighlightPainter painter;
+
+      lineNumbers.addLocationRule(rule, location.getLocationStartLine());
+      //Highlighter.HighlightPainter painter;
 
       if (rule.isBreakpoint()) {
-	painter = breakpointPainter;
+	//painter = breakpointPainter;
 	text.addBreakpoint(rule, location);
       } else {
-	painter = watchpointPainter;
+	//painter = watchpointPainter;
 	text.addWatchpoint(rule, location);
       }
+      /*
       Object highlight = addHighlight(location, painter, true, false);
       if (highlight != null) {
 	ruleHighlights.put(rule, highlight);
       }
+      */
+      repaint();
     }
   }
 
@@ -199,13 +204,14 @@ class SourceFileViewer
 
   private void unhighlightRule(Rule rule)
   {
-    Object highlight = ruleHighlights.remove(rule);
+    /*Object highlight = ruleHighlights.remove(rule);
     if (highlight != null) {
       highlighter.removeHighlight(highlight);
-      text.removeWatchpoint(rule);
-      text.removeBreakpoint(rule);
-      repaint();
-    }
+    */
+    text.removeWatchpoint(rule);
+    text.removeBreakpoint(rule);
+    lineNumbers.removeLocationRule(rule);
+    repaint();
   }
 
   //}}}
@@ -218,8 +224,8 @@ class SourceFileViewer
       unhighlightCpe();
     }
     Expr location = process.getLastLocation();
-    String file = location.getLocationFileName();
     cpeHighlight = addHighlight(location, cpePainter, false, true);
+    centerAround(location);
   }
 
   //}}}
@@ -270,6 +276,39 @@ class SourceFileViewer
     highlighter.removeHighlight(highlight);
     glass.remove(popup);
     repaint();
+  }
+
+  //}}}
+
+  //{{{ private void centerAround(Expr location)
+
+  private void centerAround(Expr location)
+  {
+    try {
+      int start =
+	text.getLineStartOffset(location.getLocationStartLine()-1);
+      Rectangle rect = text.modelToView(start);
+      if (rect != null) {
+	JViewport viewport = getViewport();
+
+	// Make rectangle relative to viewport, and add
+	// some extra context to make behaviour more intuitive
+	rect.x -= (viewport.getViewPosition().x + 20);
+	rect.y -= (viewport.getViewPosition().y + 20);
+	rect.height += 40;
+	rect.width += 40;
+	viewport.scrollRectToVisible(rect);
+      }
+      /*
+      if (rect != null) {
+	JScrollBar vertical = getVerticalScrollBar();
+	vertical.setValue(Math.max(rect.y-20, rect.y));
+      }
+      */
+      //System.out.println("rect = " + rect);
+    } catch (BadLocationException e) {
+      System.out.println("bad location of cpe: " + e.getMessage());
+    }
   }
 
   //}}}

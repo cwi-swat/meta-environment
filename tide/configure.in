@@ -19,13 +19,21 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
+dnl Development mode
+AC_ARG_WITH(develop,
+   [  --with-develop          Enable development mode (extra dbg prints etc.)],
+   DEVELOP_DEF=-DDEVELOP=1,
+)
+AC_SUBST(DEVELOP_DEF)
+
+
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, tifstoc,
-   [ --with-aterm=DIR         Specify location of the ATerm library])
+   [  --with-aterm=DIR        Specify location of the ATerm library])
 AC_SUBST(ATERM)
 
 dnl Require toolbus package
