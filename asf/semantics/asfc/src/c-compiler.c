@@ -27,6 +27,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -I" ASF_SUPPORT "/include \\\n"
 	 "  -I" PT_SUPPORT "/include \\\n"
 	 "  -I" ATERM "/include \\\n"
+	 "  -I" TOOLBUSLIB "/include \\\n"
 	 "  -I" ERROR_SUPPORT "/include \\\n"
 	 "  -L" ASC_SUPPORT "/lib" " -lasc-support-me \\\n"
 	 "  -L" SGLR "/lib" " -lsglr \\\n"
