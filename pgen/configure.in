@@ -45,12 +45,6 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Required for generated Makefile.am's to work until genamakefile patched:
-ATERMINC=${ATERM}/include
-ATERMLIB=${ATERM}/lib
-AC_SUBST(ATERMINC)
-AC_SUBST(ATERMLIB)
-
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
@@ -71,14 +65,21 @@ dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,
    [  --with-asc-support=DIR  asc-support is in DIR],
    ASC_SUPPORT=${withval},)
-
 AC_SUBST(ASC_SUPPORT)
 
-dnl Again for Asc (fix for generated Makefile.am's)
-ASCINC=${ASC_SUPPORT}/include
-ASCLIB=${ASC_SUPPORT}/lib
-AC_SUBST(ASCINC)
-AC_SUBST(ASCLIB)
+dnl Handle --with-asf-support
+ASF_SUPPORT='${prefix}'
+AC_ARG_WITH(asf-support,
+   [  --with-asf-support=DIR  asf-support is in DIR],
+   ASF_SUPPORT=${withval},)
+AC_SUBST(ASF_SUPPORT)
+
+dnl Handle --with-sdf-support
+SDF_SUPPORT='${prefix}'
+AC_ARG_WITH(sdf-support,
+   [  --with-sdf-support=DIR  sdf-support is in DIR],
+   SDF_SUPPORT=${withval},)
+AC_SUBST(SDF_SUPPORT)
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
