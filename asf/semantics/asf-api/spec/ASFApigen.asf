@@ -24,16 +24,16 @@ equations
 [generate2]
 
 {Attribute*3, bracket, Attribute*4} !:= {Attribute*1, Attribute*2},
-String := "is-" || strcon("""c*"""),
-Pattern :=  generate-pattern(Symbol* -> Symbol, 0), 
-Type := generate-field(Symbol, 0),
+String := "is-" || Name,
+Pattern :=  generate-pattern(Symbol*, 0, -1), 
+Type := generate-field(Symbol, 0, -1),
 Equation1 := [ ] String || "(" || Pattern || ")" = "true",
 Equation2 := [default-equation] String || "(" || Type || ")" = "false",
-Equation*1 := generate-make(strcon("""c*"""), Symbol*, Symbol),
-Equation*2 := generate-get-and-set(Symbol*, Pattern, 0)
+Equation*1 := generate-make(Name, Symbol*, Symbol),
+Equation*2 := generate-get-and-set(Symbol*, Symbol*, 0)
 ====>
 generate-for-production(Symbol* -> Symbol
-                        {Attribute*1, cons(qliteral("""c*""")), Attribute*2})
+                        {Attribute*1, cons(Name), Attribute*2})
 = 
 Equation1
 Equation2
@@ -46,75 +46,85 @@ generate-for-production(Production) =
 equations
 
 [empty]
-generate-pattern( -> Symbol Attributes, ArgNr) = ""
+generate-pattern( , ArgNr, Primed) = ""
 
 [loop]
-generate-pattern(Symbol Symbol* -> Symbol2 Attributes, ArgNr) =
-generate-field(Symbol, ArgNr) || 
+generate-pattern(Symbol Symbol*, ArgNr, Primed) =
+generate-field(Symbol, ArgNr, Primed) || 
 " " || 
-generate-pattern(Symbol* -> Symbol2 Attributes, ArgNr + 1)
+generate-pattern(Symbol* , ArgNr + 1, Primed)
 
 [literal]
-generate-field(qliteral("""c*"""), ArgNr) = strcon("""c*""")
+generate-field(Literal, ArgNr, Primed) = Literal
 
-[default]
-generate-field(Symbol, natcon(c*)) = 
-"$" || symbol2string(Symbol) || "_" || strcon("""c*""")
+[default-primed]
+generate-field(Symbol, ArgNr, ArgNr) = 
+"$" || symbol2string(Symbol) || "_" || natcon2strcon(ArgNr) || "'"
+
+[default-not-primed]
+ArgNr != Primed
+===>
+generate-field(Symbol, ArgNr, Primed) = 
+"$" || symbol2string(Symbol) || "_" || natcon2strcon(ArgNr)
 
 [labelled]
-generate-field(Literal : Symbol, NatCon) =
-generate-field(Symbol, NatCon)
+generate-field(Literal : Symbol, ArgNr, Primed) =
+generate-field(Symbol, ArgNr, Primed)
 
 equations
 
 [empty]
-generate-get-and-set( ,Pattern, ArgNr) =
+generate-get-and-set( , Symbol*, ArgNr) =
 
 [loop]
-generate-get-and-set(Symbol Symbol*, Pattern, ArgNr) =
-generate-get-and-set-field(Symbol, Pattern, ArgNr)
-generate-get-and-set(Symbol*, Pattern, ArgNr + 1)
+generate-get-and-set(Symbol Symbol*, Symbol*2, ArgNr) =
+generate-get-and-set-field(Symbol, Symbol*2, ArgNr)
+generate-get-and-set(Symbol*, Symbol*2, ArgNr + 1)
 
 [literal]
-generate-get-and-set-field(Literal, Pattern, ArgNr) =
+generate-get-and-set-field(Literal, Symbol*2, ArgNr) =
 
 [unquoted-field]
-generate-get-and-set-field(uqliteral(c*) : Symbol, Pattern, ArgNr) =
-generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern, ArgNr)
+generate-get-and-set-field(IdCon : Symbol, Symbol*, ArgNr) =
+generate-get-and-set-field(idcon2strcon(IdCon) : Symbol, Symbol*, ArgNr)
 
 [quoted-field]
-strcon("""symbol""") := symbol2string(Symbol),
-natcon(num) := ArgNr,
-Field := "$" || strcon("""symbol""") || "_" || strcon("""num"""),
+Type := symbol2string(Symbol),
+Field := "$" || Type || "_" || natcon2strcon(ArgNr),
 Field2 := Field || "'",
-Equation1 := [] "get-" || strcon("""label""") || "(" || Pattern || ")" = Field,
-strcon("""c*1 "$" symbol "_" num c*2 """) := Pattern,
-Pattern2 := strcon("""c*1 "$" symbol "_" num "'" c*2 """),
-Equation2 := [] "set-" || strcon("""label""") || "(" || Pattern || "," || Field2 || ")" = Pattern2
+Pattern := generate-pattern(Symbol*, 0, -1),
+Equation1 := [] "get-" || Name || "(" || Pattern || ")" = Field,
+Pattern2 := generate-pattern(Symbol*, 0, ArgNr),
+Equation2 := [] "set-" || Name || "(" || Pattern || "," || Field2 || ")" = 
+	Pattern2
 ====>
-generate-get-and-set-field(qliteral("""label""") : Symbol, Pattern, ArgNr) =
+generate-get-and-set-field(Name : Symbol, Symbol*, ArgNr) =
 Equation1
 Equation2
 
 [default]
-generate-get-and-set-field(Symbol, Pattern, ArgNr) = 
+generate-get-and-set-field(Symbol, Symbol*, ArgNr) = 
 
 equations
 
 [make]
 Equation := [] generate-make-match(Name, Symbol*) = 
-  generate-pattern(Symbol* -> Symbol, 0)
+  generate-pattern(Symbol* , 0, -1)
 ===>
 generate-make(Name, Symbol*, Symbol) = Equation
 
 [default-no-make]
 generate-make(Name, Symbol*, Symbol) =
 
+equations
 
 [top]
 generate-make-match(String, Symbol*) =
-"make-" || String || " " || "(" || " " || 
-generate-make-args(Symbol*, 0) || " " ||  ")"
+	"make-" || String || " " || "(" || " " || 
+		generate-make-args(Symbol*, 0) 
+	|| " " ||  ")"
+
+equations
 
 [default-empty]
 generate-make-args(, ArgNr) = ""
@@ -144,14 +154,16 @@ generate-make-args(Symbol*, ArgNr + 1)
 generate-make-args(Symbol, ArgNr) =
 generate-make-arg(Symbol, ArgNr)
 
+equations
+
 [literal]
 generate-make-arg(Literal, ArgNr) = ""
 
 [default-single]
-generate-make-arg(Symbol, natcon(c*)) = 
-"$" || symbol2string(Symbol) || "_" || strcon("""c*""")
+generate-make-arg(Symbol, ArgNr) = 
+"$" || symbol2string(Symbol) || "_" || natcon2strcon(ArgNr)
 
 [quoted-labelled]
-generate-make-arg(Literal : Symbol, NatCon) =
+generate-make-arg(Name : Symbol, NatCon) =
 generate-make-arg(Symbol, NatCon)
 

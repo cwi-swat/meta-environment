@@ -4,11 +4,6 @@ equations
 Production*1 Production Production*2 Production Production*3 =
 Production*1 Production Production*2 Production*3
 
-
-[string-main]
-generate-syntax(Module, strcon("""c*""")) =
-generate-syntax(Module, moduleid(c*))
-
 [main]
 NewModuleName := make-modulename(ModuleName, ModuleId),
 NewSections := make-sections(Sections)
@@ -55,15 +50,15 @@ equations
 generate-variables() =
 
 [quoted-labelled]
-generate-variables(Literal : Symbol Symbol*) = 
+generate-variables(Name : Symbol Symbol*) = 
 generate-variables(Symbol Symbol*)
 
 [non-labelled]
-Literal !:= Symbol,
-strcon("""c*""") := symbol2string(Symbol)
+Name !:= Symbol,
+Literal := symbol2string(Symbol)
 ===>
 generate-variables(Symbol Symbol*) =
-"$" qliteral(""" c* "_" """)[0-9\']* -> Symbol 
+"$" Literal ++ "_" [0-9\']* -> Symbol 
 generate-variables(Symbol*)
 
 [default-ignore-symbol]
@@ -88,10 +83,10 @@ Field* := collect-labelled-symbols(Symbol* -> Symbol, ),
 Symbol,* := Symbol
 ===>
 generate-functions-prod(
-Symbol* -> Symbol {Attribute*1, cons(qliteral("""c*""")), Attribute*2}
+Symbol* -> Symbol {Attribute*1, cons(Name), Attribute*2}
 ) = 
-qliteral(""" "i" "s" "-" c* """) ( Symbol,* ) -> Boolean 
-generate-make(qliteral("""c*"""), Symbol*, Symbol)
+"is-" ++ Name ( Symbol,* ) -> Boolean 
+generate-make(Name, Symbol*, Symbol)
 generate-get-and-set(Field*, Symbol)
 
 [default]
@@ -100,15 +95,15 @@ generate-functions-prod(Production) =
 equations
 
 [normalize-quoting]
-generate-get-and-set(uqliteral(c*) : Symbol, Result) =
-generate-get-and-set(qliteral("""c*""") : Symbol, Result)
+generate-get-and-set(IdCon : Symbol, Result) =
+generate-get-and-set(idcon2strcon(IdCon) : Symbol, Result)
 
 [generate]
 Symbol,* := Result
 ===>
-generate-get-and-set(qliteral("""c*""") : Symbol, Result) =
-qliteral(""" "g" "e" "t" "-" c* """) ( Symbol,* ) -> Symbol 
-qliteral(""" "s" "e" "t" "-" c* """) ( Result, Symbol ) -> Result 
+generate-get-and-set(Name : Symbol, Result) =
+"get-" ++ Name ( Symbol,* ) -> Symbol 
+"set-" ++ Name ( Result, Symbol ) -> Result 
 
 [loop]
 generate-get-and-set(Symbol Symbol2 Symbol*, Result) =
@@ -126,8 +121,8 @@ equations
 [top]
 Symbol,* := generate-make-fields(Field*)
 ===>
-generate-make(qliteral("""c*"""), Field*, Result) =
-qliteral(""""m""a""k""e""-"c*""") ( Symbol,* ) -> Result
+generate-make(Name, Field*, Result) =
+"make-" ++ Name ( Symbol,* ) -> Result
 
 [default-top]
 generate-make(Name, Field*, Result) =
@@ -146,7 +141,10 @@ generate-make-fields(Field) = Field
 [empty]
 generate-make-fields() =
 
+equations
 
+[concat]
+	strcon(\" c*1 \") ++ strcon(\" c*2 \") = strcon(\" c*1 c*2 \")
 
 tests
 

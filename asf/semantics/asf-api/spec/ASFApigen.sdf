@@ -1,5 +1,6 @@
 module ASFApigen
 imports basic/Integers
+imports basic/Identifiers
 imports SymbolToString
 imports EquationsSkeleton
 imports SdfCollect
@@ -22,11 +23,11 @@ context-free start-symbols
 context-free syntax
 
   generate-for-production(Production) -> Equation*
-  generate-pattern(Production, Integer) -> String
-  generate-field(Symbol, Integer) -> String
+  generate-pattern(Symbol*, Integer, primed:Integer) -> String
+  generate-field(Symbol, Integer, primed:Integer) -> String
   
-  generate-get-and-set(Symbol*, String, Integer) -> Equation*
-  generate-get-and-set-field(Symbol, String, Integer) -> Equation*
+  generate-get-and-set(Symbol*, Symbol*, Integer) -> Equation*
+  generate-get-and-set-field(Symbol, Symbol*, Integer) -> Equation*
 
   generate-make(String, Symbol*, Symbol) -> Equation*
   generate-make-match(String, Symbol*) -> String
@@ -44,7 +45,6 @@ variables
 "Symbol*"[0-9]* -> Symbol*
 "Symbol+"[0-9]* -> Symbol+
 "Field*"[0-9]* -> Symbol*
-"c*"[0-9]* -> CHAR*
 "Production"[0-9]* -> Production
 "Production*"[0-9]* -> Production*
 "ATerm"[0-9]* -> ATerm
@@ -55,16 +55,23 @@ variables
 "Sections"[0-9]* -> Sections
 "NewSections"[0-9]* -> Sections
 "ImpSection*"[0-9]* -> ImpSection*
-"Literal"[0-9]* -> Literal
+"Literal"[0-9]* -> StrCon
 "Field"[0-9]* -> String
 "Pattern"[0-9]* -> String
 "String"[0-9]* -> String
 "Postfix"[0-9]* -> String
 "Equation*"[0-9]* -> Equation*
 "Type" -> String
-"ArgNr"[0-9]* -> Integer
-"Name" -> String
+"ArgNr"[0-9]* -> NatCon
+"Name" -> StrCon
+"Type" -> StrCon
 "NatCon"[0-9]* -> NatCon
-"label" -> CHAR*
-"symbol" -> CHAR*
-"num" -> CHAR*
+"IdCon" -> IdCon
+"Primed"[0-9]* -> Integer
+
+lexical variables
+
+"c*"[0-9]* -> StrChar*
+"label" -> StrChar*
+"symbol" -> StrChar*
+"num" -> StrChar*

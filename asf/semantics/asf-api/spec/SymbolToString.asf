@@ -6,8 +6,8 @@ syntax Symbol2 -> X := lift[[syntax `Symbol` -> X]]
 symbol2string( Symbol ) = merge(Symbol2, "")
 
 [] 
-merge(qliteral("""c*1"""), strcon("""c*2""")) =
-strcon("""c*2 c*1""")
+merge(strcon(\" c*1 \"), strcon(\" c*2 \")) =
+strcon(\" c*2 c*1 \")
 
 tests
 

@@ -11,7 +11,9 @@ generate-api(Module, newname:ModuleId) -> <Module,Skeleton>
 
 hiddens
 context-free start-symbols
-  <Module,Skeleton>
+	<Module,Skeleton>
+	Skeleton
+	Module
 
 variables
 

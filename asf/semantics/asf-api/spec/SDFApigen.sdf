@@ -2,12 +2,12 @@ module SDFApigen
 
 imports SymbolToString
 imports SdfCollect
+imports basic/Identifiers
 
 exports
 
 context-free syntax
 
-generate-syntax(Module, StrCon) -> Module
 generate-syntax(Module, ModuleId) -> Module
 
 hiddens
@@ -30,8 +30,13 @@ context-free syntax
   generate-functions(Production*) -> Production*
   generate-functions-prod(Production) -> Production*
   generate-get-and-set(Symbol*, Symbol) -> Production*
-  generate-make(Literal, Symbol*, Symbol) -> Production*
+  generate-make(StrCon, Symbol*, Symbol) -> Production*
   generate-make-fields(Symbol*) -> {Symbol ","}*
+
+context-free syntax
+  string2moduleid(Name) -> ModuleId
+
+  StrCon "++" StrCon -> StrCon {left}
 
 context-free start-symbols
   {Symbol ","}* Production*
@@ -47,7 +52,6 @@ variables
 "Field*"[0-9]* -> Symbol*
 "Field+"[0-9]* -> Symbol+
 "Field"[0-9]* -> Symbol
-"c*" -> CHAR*
 "Production"[0-9]* -> Production
 "Production*"[0-9]* -> Production*
 "ATerm"[0-9]* -> ATerm
@@ -58,4 +62,14 @@ variables
 "Sections"[0-9]* -> Section*
 "NewSections"[0-9]* -> Section*
 "ImpSection*"[0-9]* -> ImpSection*
-"Literal"[0-9]* -> Literal
+"Literal"[0-9]* -> StrCon
+"Name"[0-9]* -> StrCon
+"IdCon"[0-9]* -> IdCon
+
+lexical variables
+
+"ModuleWord" -> ModuleWord
+"ModuleIdLex"   -> ModuleId
+"c*"[0-9]* -> StrChar*
+"letter+" -> [A-Za-z0-9\_\-]+
+"letter" -> [A-Za-z0-9\_\-]
