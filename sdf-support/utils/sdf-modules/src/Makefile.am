@@ -10,7 +10,8 @@ bin_PROGRAMS = sdf-modules
 sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c
 sdf_modules_LDADD = -L$(top_builddir)/lib -lSDFME \
                  -L$(ATERM)/lib -lATerm \
-                 -L$(TOOLBUSLIB)/lib -lATB 
+                 -L$(TOOLBUSLIB)/lib -lATB \
+                 $(SOCKLIBS)
 
 noinst_HEADERS		= sdf-modules.tif.h
 
