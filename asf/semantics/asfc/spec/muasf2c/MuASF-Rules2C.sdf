@@ -24,6 +24,7 @@ hiddens
     asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
     funargs2cargs({Term ","}+,IntCon)                    -> PA-tuple
     asfrules2cstats({Rule   ";"}*,{NamePair ","}*) -> SlI-tuple
+    asflistrules2cstats({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
 
   sorts MakeSelectStat
   context-free syntax

@@ -9,12 +9,12 @@ data_DATA        = asfc.idef
 
 EXTRA_DIST       = asfc.idef
 
-asfc_SOURCES = asfc.c \
+asfc_SOURCES = asfc.tif.c \
+               asfc.c \
                chars.c \
                c-code.c \
                asf2muasf.c \
                lex-cons.c \
-               asfc.tif.c \
                muasf2c.c \
                c-compiler.c \
                Compiler.c

@@ -17,6 +17,9 @@ ATerm lf_list_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_list_1sym , ATmakeAppl ( lf_list_1sym , arg0 ) ) ;
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_list_1 : ltmp [ 0 ] = arg0 ;
 ( tmp [ 0 ] = arg0 ) ;
 {
 ATerm atmp01110 ;
@@ -34,7 +37,8 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp01110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( atmp010 , atmp01110 ) ) {
-FUNC_EXIT ( lf_list_1 ( cons ( slice ( atmp00 [ 0 ] , atmp00 [ 1 ] ) , cons ( make_list ( atmp010 ) , cons ( slice ( atmp0110 [ 0 ] , atmp0110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+( arg0 = cons ( slice ( atmp00 [ 0 ] , atmp00 [ 1 ] ) , cons ( make_list ( atmp010 ) , cons ( slice ( atmp0110 [ 0 ] , atmp0110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ;
+goto lbl_lf_list_1 ;
 }
 ( atmp0110 [ 1 ] = list_tail ( atmp0110 [ 1 ] ) ) ;
 ( tmp [ 0 ] = atmp0110 [ 1 ] ) ;
@@ -43,7 +47,8 @@ FUNC_EXIT ( lf_list_1 ( cons ( slice ( atmp00 [ 0 ] , atmp00 [ 1 ] ) , cons ( ma
 ( tmp [ 0 ] = atmp00 [ 1 ] ) ;
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_list_1sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_list_1sym , ltmp [ 0 ] ) ) ;
+}
 }
 }
 #ifdef MAIN_OutermostList                                           

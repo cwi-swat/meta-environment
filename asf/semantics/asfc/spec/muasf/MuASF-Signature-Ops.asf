@@ -55,38 +55,45 @@ equations
             remove-funcdef(Funcdef1,Funcdef2;Funcdef*1) =
               Funcdef2;Funcdef*2
 
-  [rfd-1'1] remove-funcdef(Funid,) =
+[rd] 
+remove-funcdef(funid(""""{"Char*"}""""),Funcdef*) = 
+remove-funcdef1(funid(Char*),Funcdef*)
 
-  [rfd-2'2] remove-funcdef(Funid,Funid;Funcdef*) = Funcdef*
+[default-rd]
+remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
 
-  [rfd-2'3] remove-funcdef(Funid,Funid Attrs; Funcdef*) = Funcdef*
+  [rfd-1'1] remove-funcdef1(Funid,) =
 
-  [rfd-2'4] remove-funcdef(Funid,Funid(Sigarg+);Funcdef*) = Funcdef*
+  [rfd-2'2] remove-funcdef1(Funid,Funid;Funcdef*) = Funcdef*
 
-  [rfd-2'5] remove-funcdef(Funid,Funid(Sigarg+) Attrs;Funcdef*) = Funcdef*
+  [rfd-2'3] remove-funcdef1(Funid,Funid Attrs; Funcdef*) = Funcdef*
+
+  [rfd-2'4] remove-funcdef1(Funid,Funid(Sigarg+);Funcdef*) = Funcdef*
+
+  [rfd-2'5] remove-funcdef1(Funid,Funid(Sigarg+) Attrs;Funcdef*) = Funcdef*
 
   [rfd-2'6] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
+            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
             ============================================
-            remove-funcdef(Funid1,Funid2;Funcdef*1) =
+            remove-funcdef1(Funid1,Funid2;Funcdef*1) =
               Funid2;Funcdef*2
 
   [rfd-2'7] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
+            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
             ============================================
-            remove-funcdef(Funid1,Funid2 Attrs;Funcdef*1) =
+            remove-funcdef1(Funid1,Funid2 Attrs;Funcdef*1) =
               Funid2 Attrs;Funcdef*2
 
   [rfd-2'8] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
+            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
             ============================================
-            remove-funcdef(Funid1,Funid2(Sigarg+);Funcdef*1) =
+            remove-funcdef1(Funid1,Funid2(Sigarg+);Funcdef*1) =
               Funid2(Sigarg+);Funcdef*2
 
   [rfd-2'9] Funid1 != Funid2,
-            remove-funcdef(Funid1,Funcdef*1) = Funcdef*2
+            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
             ============================================
-            remove-funcdef(Funid1,Funid2(Sigarg+) Attrs;Funcdef*1) =
+            remove-funcdef1(Funid1,Funid2(Sigarg+) Attrs;Funcdef*1) =
               Funid2(Sigarg+) Attrs;Funcdef*2
 
   [iefd-2'1] is-external-funcdef(Funid {external}) = true

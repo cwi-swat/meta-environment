@@ -17,6 +17,7 @@ hiddens
     add-external-funcdef(FuncDef)       -> FuncDef
     remove-external-funcdef(FuncDef)    -> FuncDef
     remove-funcdef(FuncDef,FuncDefList) -> FuncDefList    
+    remove-funcdef1(FuncDef,FuncDefList) -> FuncDefList    
 
 exports
   context-free syntax

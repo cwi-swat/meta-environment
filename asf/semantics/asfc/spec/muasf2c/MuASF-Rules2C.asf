@@ -65,16 +65,15 @@ equations
                 ATerm identifier(Char*)(FormalArgs)
                 { Stat*9 }
 
- [ar2cf-3'list] 
-             get-funid(Rule) = funid(""""{" Char* "}""""),
+  [ar2cf-3'1] get-funid(Rule) = funid(""""{"Char*"}""""),
               is-memo(funid(""""{"Char*"}""""),Namepair*) = false,
               get-funargs(Rule) = Term+,
               funargs2cargs(Term+,0) = (FormalArgs,ActualArgs,Aint0),
               select-on-defaults(Rule;Rule*1) = (Rule*2,Rule*3),
               %% None default rules:
-              asfrules2cstats(Rule*3,Namepair*) = (Stat*1,Aint1),
+              asflistrules2cstats(Rule*3,Namepair*) = (Stat*1,Aint1),
               %% Default rules:
-              asfrules2cstats(Rule*2,Namepair*) = (Stat*2,Aint2),
+              asflistrules2cstats(Rule*2,Namepair*) = (Stat*2,Aint2),
               %% Normal form construction
               funargs2cstats(funid(Char*),ActualArgs,Term+,Namepair*,Aint0) = 
                  (Stat*3,Aint3),
@@ -84,7 +83,8 @@ equations
               Stat*1 ++ Stat*2 = Stat*4,
               Stat*4 ++r Stat*3 = Stat*5,
               identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
-              remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
+%%              remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
+Stat*5 = Stat*7,
               FUNC_ENTRY(identifier(Char* "s""y""m"),
                          ATmakeAppl(ActualArgs2)); ++ Stat*7 = Stat*8,
               Decl* ++d Stat*8 = Stat*9
@@ -93,7 +93,7 @@ equations
                 ATerm identifier(Char*)(FormalArgs)
                 { Stat*9 }
 
-  [ar2cf-3'2] get-funid(Rule) = funid(Char*),
+ [ar2cf-3'2] get-funid(Rule) = funid(Char*),
               is-memo(funid(Char*),Namepair*) = true,
               get-funargs(Rule) = Term+,
               funargs2cargs(Term+,0) = (FormalArgs,ActualArgs,Aint0),
@@ -128,6 +128,7 @@ equations
                   }
                 }
 
+
   [ar2cf-3'3] get-funid(Rule) = funid(Char*),
               get-funargs(Rule) = ,
               asfrules2cstats(Rule;Rule*,Namepair*) = (Stat*1,Aint1),
@@ -156,10 +157,17 @@ equations
                 (ATerm identifier("a""r""g" Char*) ++ FormalArgs,
                  identifier("a""r""g" Char*) ++ ActualArgs,succ(Aint2))
 
-  [ar2cs-1'1] Rule+ = Rule; Rule*,
-              get-funid(Rule) = Funid,
-              is-list-funid(Funid) = false,
-              make-c-rules(Rule+) = C-rule*,
+[alr2cs] asflistrules2cstats(,Namepair*) = (,0)
+
+[alr2cs]  
+make-c-rules(Rule+) = C-rule+,
+make-c-temp(0) = Expression,
+Stat*1 = (tmp[0] = arg0);,
+listpatterns2cstats(C-rule+,Expression,Namepair*,succ(0)) = (Stat*,Aint)
+===>
+asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
+
+  [ar2cs-1'1] make-c-rules(Rule+) = C-rule*,
               select-on-ofs-first-arg(C-rule*) = (C-rule*1,C-rule*2)
               ======================================================
               asfrules2cstats(Rule+,Namepair*) =
