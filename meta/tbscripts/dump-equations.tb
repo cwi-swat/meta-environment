@@ -17,7 +17,7 @@ in
     +
       rec-msg(dump-equations-given-file(ModuleName?, FileName?))
     ) .
-    snd-note(ui-status(statf(Id,"Dumping equations for %s", [ModuleName]))) .
+    snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName]))) .
     snd-msg(get-all-equations(ModuleName)) .
     (
       rec-msg(all-equations(Equations?)) .

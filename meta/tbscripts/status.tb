@@ -9,10 +9,22 @@ in
   subscribe(ui-status(<term>)) .
   ( 
     rec-note(ui-status(error(Str?))) .
-    printf(Str)
-    +
+    printf("Error: %s", Str)
+  +
     rec-note(ui-status(errorf(Str?, Lst?))) .
-    printf("%s [%t]\n", Str, Lst)
+    printf("Error: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(warning(Str?))) .
+    printf("Warning: %s", Str)
+  +
+    rec-note(ui-status(warningf(Str?, Lst?))) .
+    printf("Warning: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(message(Str?))) .
+    printf("Message: %s", Str)
+  +
+    rec-note(ui-status(messagef(Str?, Lst?))) .
+    printf("Message: %s [%t]\n", Str, Lst)
   ) *
   delta
 endlet

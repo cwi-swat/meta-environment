@@ -309,14 +309,14 @@ in
               StackPushTerm(Stack,Stack?,RTree) .
               ReturnSuccess(EditorId,Stack)
             else
-              snd-note(ui-status(errorf("please set a focus %s", 
-                                        [FilePath]))) .
+              snd-note(ui-status(messagef("please set a focus %s", 
+                                          [FilePath]))) .
               ReturnAbort(EditorId,Stack)
             fi
           +
             rec-msg(non-existing-editor(FilePath?)).
-            snd-note(ui-status(errorf("editor for %s not active", 
-                                      [FilePath]))) .
+            snd-note(ui-status(messagef("editor for %s not active", 
+                                        [FilePath]))) .
             ReturnAbort(EditorId,Stack)
           )
         else
@@ -452,7 +452,7 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(message(String?), Stack?, EditorId?) .
-        snd-note(ui-status(errorf("%s", [String]))) .
+        snd-note(ui-status(messagef("%s", [String]))) .
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(unpack-tree, Stack?, EditorId?) .

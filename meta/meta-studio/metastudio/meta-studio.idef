@@ -51,6 +51,18 @@ in
     +
       rec-note(ui-status(errorf(Str?, Arguments?))) .
       snd-do(UI, errorf(Str, Arguments))
+    +
+      rec-note(ui-status(warning(Str?))) .
+      snd-do(UI, warning(Str))
+    +
+      rec-note(ui-status(warningf(Str?, Arguments?))) .
+      snd-do(UI, warningf(Str, Arguments))
+    +
+      rec-note(ui-status(message(Str?))) .
+      snd-do(UI, message(Str))
+    +
+      rec-note(ui-status(messagef(Str?, Arguments?))) .
+      snd-do(UI, messagef(Str, Arguments))
     ) * delta 
   ||
     ( 

@@ -556,6 +556,20 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     addMessage(styleError, null, message);
   }
 
+  public void messagef(String format, ATerm args) {
+    String message = formatString(format, (ATermList) args);
+    addMessage(styleMessage, null, message);
+  }
+
+  public void message(String message) {
+    addMessage(styleMessage, null, message);
+  }
+
+  public void warningf(String format, ATerm args) {
+    String message = formatString(format, (ATermList) args);
+    addMessage(styleWarning, null, message);
+  }
+
   public void warning(String message) {
     addMessage(styleWarning, null, message);
   }
