@@ -95,7 +95,7 @@ static int allocate_inet_socket(int *port)
 
 static void hiveClosed(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-terminate(\"hive closed\")"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-terminate(\"hive closed\")"));
 }
 
 /*}}}  */
