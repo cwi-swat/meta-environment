@@ -9,7 +9,11 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <MEPT-utils.h>
+#include <MEPT-utils.h> 
+ 
+#ifndef WITHOUT_TOOLBUS
+#include "apply-function.tif.h"
+#endif
 
 static char myname[]    = "apply-function";
 static char myversion[] = "1.2";
@@ -37,11 +41,36 @@ usage(void)
         myversion);
 }
 
+void rec_terminate(int cid, ATerm t)
+{
+  exit(0);
+}
+
+ATerm apply_function_to_args(int cid, char *function, char *sort, ATerm args)
+{
+  PT_ParseTree newParseTree;
+  PT_Args ptArgs = PT_makeArgsEmpty(); 
+  ATermList argsList = (ATermList)args;
+
+  while (!ATisEmpty(argsList)) {
+    ATerm arg = ATgetFirst(argsList);
+    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(arg);
+    argsList = ATgetNext(argsList);
+    ptArgs = PT_makeArgsList(PT_getParseTreeTree(parseTree), ptArgs);
+  }
+ 
+  newParseTree = PT_applyFunctionToArgsParseTree(function, sort, ptArgs);
+ 
+  return ATmake("snd-value(tree(<term>))", 
+                PT_makeTermFromParseTree(newParseTree));
+}
+
 int 
 main (int argc, char **argv)
 {
   int c; /* option character */
   ATerm bottomOfStack;
+
   PT_ParseTree parseTree = NULL, newParseTree = NULL;
   char *inputs[MAX_ARGS] = { "-" };
   int  nInputs = 0;
@@ -49,62 +78,79 @@ main (int argc, char **argv)
   char *function = "";
   char *sort = "";
   PT_Args args;
+#ifndef WITHOUT_TOOLBUS
+  ATbool use_toolbus = ATfalse;
+  int i;
  
-  if(argc == 1) { /* no arguments */
-    usage();
-    exit(1);
-  }
-
-  while ((c = getopt(argc, argv, myarguments)) != EOF) {
-    switch (c) {
-      case 'h':  
-	usage();                      
-	exit(0);
-      case 'i':
-	if (nInputs < MAX_ARGS) {
-	  inputs[nInputs++] = strdup(optarg);  
-	} else {
-	  ATerror("Maximum number of %s arguments exceeded.\n", MAX_ARGS);
-	}
-	break;
-      case 'o':  
-	output = strdup(optarg);    
-	break;
-      case 'f':  function = optarg;            break;  
-      case 's':  sort = optarg;                break;
-      case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
-		 exit(0);
-      default :  usage();                      exit(1);
-    }
+  for (i=1; !use_toolbus && i < argc; i++) {
+    use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
  
-  if (nInputs == 0) {
-    nInputs = 1;
+  if (use_toolbus) {
+    int cid;
+    ATBinit(argc, argv, &bottomOfStack);
+    PT_initMEPTApi();
+    cid = ATBconnect(NULL, NULL, -1, apply_function_handler);
+    ATBeventloop();
   }
-
-  /* check if all needed arguments were supplied */
-  if (!function || !strcmp(function, "") || !sort || !strcmp(sort,"")) {
-    usage();
-    exit(1);
-  }
-
-  ATinit(argc, argv, &bottomOfStack); 
-  PT_initMEPTApi();
-
-  args = PT_makeArgsEmpty(); 
-
-  for (--nInputs; nInputs >= 0; nInputs--) {
-    parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
-    if (parseTree == NULL) {
-      ATerror("Unable to read in %s\n", inputs[nInputs]);
+  else 
+#endif
+  {
+    if(argc == 1) { /* no arguments */
+      usage();
       exit(1);
     }
-    args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
-  }
- 
-  newParseTree = PT_applyFunctionToArgsParseTree(function, sort, args);
 
-  ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(newParseTree), output);
- 
+    while ((c = getopt(argc, argv, myarguments)) != EOF) {
+      switch (c) {
+        case 'h':  
+	  usage();                      
+	  exit(0);
+        case 'i':
+	  if (nInputs < MAX_ARGS) {
+	    inputs[nInputs++] = strdup(optarg);  
+	  } else {
+	    ATerror("Maximum number of %s arguments exceeded.\n", MAX_ARGS);
+	  }
+	  break;
+        case 'o':  
+	  output = strdup(optarg);    
+	  break;
+        case 'f':  function = optarg;            break;  
+        case 's':  sort = optarg;                break;
+        case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
+		   exit(0);
+        default :  usage();                      exit(1);
+      }
+    }
+   
+    if (nInputs == 0) {
+      nInputs = 1;
+    }
+  
+    /* check if all needed arguments were supplied */
+    if (!function || !strcmp(function, "") || !sort || !strcmp(sort,"")) {
+      usage();
+      exit(1);
+    }
+  
+    ATinit(argc, argv, &bottomOfStack); 
+    PT_initMEPTApi();
+
+    args = PT_makeArgsEmpty(); 
+  
+    for (--nInputs; nInputs >= 0; nInputs--) {
+      parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
+      if (parseTree == NULL) {
+        ATerror("Unable to read in %s\n", inputs[nInputs]);
+        exit(1);
+      }
+      args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
+    }
+   
+    newParseTree = PT_applyFunctionToArgsParseTree(function, sort, args);
+
+    ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(newParseTree), output);
+  }
   return 0;
 }

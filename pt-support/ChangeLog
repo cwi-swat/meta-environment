@@ -1,3 +1,6 @@
+2002/05/07 (vandenbr@loria.fr)
+ * Transformed apply-function into a TB tool.
+
 2002/05/06 (vandenbr@loria.fr)
  * Bumped to pt-support to 0.10beta.
  * Added a function to construct a parsetree given an arbitrary tree.

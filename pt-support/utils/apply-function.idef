@@ -1,0 +1,24 @@
+/*
+  $Id $
+ */
+
+process ApplyFunc is
+let
+  AF       : apply-function,
+  FuncName : str,
+  SortName : str,
+  TreeList : list,
+  Tree     : term
+in
+  (
+    rec-msg(apply-function(FuncName?, SortName?, TreeList?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, apply-function-to-args(FuncName, SortName, TreeList)).
+    rec-value(AF, tree(Tree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(Tree))
+  ) *
+  delta
+endlet
+
+tool apply-function is { command = "apply-function" }  
