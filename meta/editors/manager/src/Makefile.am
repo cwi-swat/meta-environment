@@ -35,3 +35,5 @@ editor_manager_LDADD   = editor-manager.tif.o \
 
 INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) \
                     -DBINDIR=\"$(bindir)\"
+
+editor-manager.o: editor-manager.tif.h
