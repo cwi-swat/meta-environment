@@ -1,6 +1,6 @@
 /*
 
-    Asf Sdf Compiler Runtime Library
+    Meta-Environment - An environment for language prototyping.
     Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 

@@ -169,6 +169,8 @@ AUX-Integers4.c
 AUX-Integers3.c
 AUX-Integers2.c
 AUX-Integers1.c
+AUX-TermAsFixAccess59.c
+AUX-TermAsFixAccess58.c
 AUX-TermAsFixAccess57.c
 AUX-TermAsFixAccess56.c
 AUX-TermAsFixAccess55.c
@@ -250,6 +252,8 @@ AUX-MuASF-Term2C1.c
 AUX-Integers-Extended3.c
 AUX-Integers-Extended2.c
 AUX-Integers-Extended1.c
+AUX-TermAsFix2Sign26.c
+AUX-TermAsFix2Sign25.c
 AUX-TermAsFix2Sign24.c
 AUX-TermAsFix2Sign23.c
 AUX-TermAsFix2Sign22.c

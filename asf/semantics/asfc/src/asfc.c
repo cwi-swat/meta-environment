@@ -52,7 +52,7 @@
 ATbool run_verbose;
 
 static char myname[] = "compiler";
-static char myversion[] = "1.2";
+static char myversion[] = "1.3";
 
 static char *outputDirName = NULL;
 
