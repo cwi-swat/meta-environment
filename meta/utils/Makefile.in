@@ -76,7 +76,7 @@ CLEANFILES      = libutils-*.a
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
 
-all:	${BINFILES} ${LIBFILES}
+all:	${BINFILES} ${LIBFILES} ${DATAFILES}
 
 # Unit test target
 test:	all
@@ -124,6 +124,7 @@ uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
 	@$(UNINSTALL) $(libdir) $(LIBFILES)
 	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
+	@$(UNINSTALL) $(datadir) $(DATAFILES)
 
 install:	all
 	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir)
