@@ -113,8 +113,14 @@ in
                 Ms := join(Ms,M1s) .
                 snd-msg(open-eqs-file(Name)).
                 (
-                  rec-msg(opened-file(Name?, Contents?, Path?, Time?)).
-                  snd-msg(add-eqs-to-db(Name, Path, Contents, Time)).
+                  rec-msg(opened-file(Name?, text(EqsText?), Path?, Time?)).
+                  snd-msg(add-eqs-to-db(Name, Path, text(EqsText), Time)).
+                  rec-msg(eqs-added)
+                +
+                  rec-msg(opened-file(Name?, tree(EqsTree?), Path?, Time?)).
+                  snd-msg(unparse(EqsTree)) .
+                  rec-msg(unparsed-text(EqsText?)) .
+                  snd-msg(add-eqs-to-db(Name, Path, text(EqsText), Time)) .
                   rec-msg(eqs-added)
                 +
                   rec-msg(error-opening(Name?))
