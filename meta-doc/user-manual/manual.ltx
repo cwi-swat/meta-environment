@@ -1,8 +1,7 @@
 %{{{ LaTeX configuration
 
 % vim:ts=4:sw=4:tw=75
-%% \documentclass[a4paper,twoside]{article}
-\documentclass{article}
+\documentclass[a4paper,twoside]{article}
 \usepackage{hyperlatex} 
 \usepackage{xspace}
 \usepackage{verbatim}
@@ -16,6 +15,7 @@
 \W\usepackage{makeidx}
 \W\usepackage{frames}
 \W\usepackage{sequential}
+
 \T\usepackage{epsfig}
 
 \makeindex
@@ -100,11 +100,14 @@
 \begin{abstract}
 This is a preliminary user manual for the \ASmetaenv\ Release 1.
 This is work under construction.
+
+\T {\noindent \bf NOTE: in the printed version references to figures go wrong, this
+\T will hopefully be repaired shortly.}
 \end{abstract}
 
 \T\tableofcontents
 
-\htmlmenu{0}
+\W\htmlmenu{0}
 
 %}}}
 
@@ -410,9 +413,9 @@ path `{\tt .}', i.e., only the current directory will be searched.
 \label{MainWindow}
 
 The main window of the \ASmetaenv\ immediately after starting the system was
-already \link{shown}[ (Figure~\ref{FIG:meta-start})]{FIG:meta-start}.
+already \link{shown}[ (Figure~\Ref)]{FIG:meta-start}.
 After loading a specification it may look as shown
-\link{\htmlonly{below}}[in Figure~]{FIG:meta-pico}.
+\link*{below}[in Figure~\Ref]{FIG:meta-pico}.
 
 The main window consists of the following parts:
 
@@ -422,29 +425,22 @@ The main window consists of the following parts:
 
    \item {\tt File}: for creating, opening, saving, and printing
     specifications as well as for leaving the \ASmetaenv.
-    The {\tt File} menu is described in 
-    \T Section~\ref{FileMenu}.
-    \W \link{File Menu}[]{FileMenu}.
+    The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
     
   \item {\tt Edit}: for setting user preferences.  The {\tt Edit} menu is
-    described in 
-    \T Section~\ref{EditMenu}.  
-    \W \link{Edit Menu}[]{EditMenu}.
+    described in \link*{Edit Menu}[Section~\Ref]{EditMenu}.
     
   \item {\tt Graph}: for setting options for the display of the graph in the
     import pane (see below).  The {\tt Graph} menu is described in
-    \T Section~\ref{GraphMenu}.
-    \W \link{Graph Menu}[]{GraphMenu}.
+    \link*{Graph Menu}[ Section~\Ref]{GraphMenu}.
     
   \item {\tt Debug}: for turning on/off the display of diagnostic messages.
     The {\tt Debug} menu is described in 
-    \T Section~\ref{DebugMenu}.
-    \W \link{DebugMenu}[]{DebugMenu}.
+    \link*{DebugMenu}[Section~\Ref]{DebugMenu}.
     
   \item {\tt Help} for various forms of information and online help.  The {\tt
       Help} menu is described in
-      \T Section~\ref{HelpMenu}.
-      \W \link{Help Menu}[]{HelpMenu}.
+      \link*{Help Menu}[Section~\Ref]{HelpMenu}.
 
   \end{itemize}
   
@@ -453,8 +449,7 @@ The main window consists of the following parts:
     and arrows}[ in Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the left
   hand side of the window shows the import graph of the specification you are
   editing.  The import pane is described in 
-  \T Section~\ref{ImportPane}.
-  \W \link{Import Pane}[]{ImportPane}.
+  \link*{Import Pane}[Section~\Ref]{ImportPane}.
   
 \item The \emph{module pane}: a vertical list (either \link{empty}[ in
   Figure~\ref{FIG:meta-start}]{FIG:meta-start}, or containing names like
@@ -462,8 +457,7 @@ The main window consists of the following parts:
   Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the right/middle part of the
   window that shows the names of all modules in the current specification.
   The module pane is described in 
-  \T Section~\ref{ModulePane}.
-  \W \link{Module Pane}[]{ModulePane}.
+  \link*{Module Pane}[Section~\Ref]{ModulePane}.
 
  
 \item The \emph{button pane}: a vertical row of buttons at the right hand side
@@ -471,8 +465,7 @@ The main window consists of the following parts:
     Equations}: they are used for common operations on the current
   specification like editing, saving, or deleting a module or compiling the
   complete specification. The button pane is described in 
-  \T Section~\ref{ButtonPane}.
-  \W \link{Button Pane}[]{ButtonPane}.
+  \link*{Button Pane}[Section~\Ref]{ButtonPane}.
   
 \item A \emph{status bar} at the bottom of the window that shows the current
   activity of the system. Examples are: {\tt idle} (the system is doing
@@ -502,13 +495,13 @@ specifications as well as for quitting the \ASmetaenv.
 \T It is shown in Figure \ref{FIG:file-menu}.
 
 \begin{figure}
-\begin{Label}{FIG:file-menu}
+\W \label{FIG:file-menu}
 \begin{center}
 \T \epsfig{file=file-menu.ps,width=3cm}
 \W \htmlimage{file-menu.gif}
 \caption{{\tt File} menu (main window)}
 \end{center}
-\end{Label}
+\T \label{FIG:file-menu}
 \end{figure}
 
 {\tt New} and {\tt Open} are used for creating
@@ -517,13 +510,13 @@ In both cases a dialog window appears as shown
 \link{dialog window}[ (Figure~\ref{FIG:open-file})]{FIG:open-file} appears.
 
 \begin{figure}
-\begin{Label}{FIG:open-file}
+\W \label{FIG:open-file}
 \begin{center}
 \T \epsfig{file=open-file.ps,width=8cm}
 \W \htmlimage{open-file.gif}
 \caption{Dialog for opening a module ({\tt File} menu)}
 \end{center}
-\end{Label}
+\T \label{FIG:open-file}
 \end{figure}
 
 {\tt Save All} saves all modules that have been opened so far.
@@ -544,13 +537,13 @@ Figure~\ref{FIG:printer-setup}.
 {\tt Print} prints the current import pane.
 
 \begin{figure}
-\begin{Label}{FIG:printer-setup}
+\W \label{FIG:printer-setup}
 \begin{center}
 \T \epsfig{file=printer-setup.ps,width=3cm}
 \W \htmlimage{printer-setup.gif}
 \caption{Dialog for printer setup}
 \end{center}
-\end{Label}
+\T \label{FIG:printer-setup}
 \end{figure}
 
 {\tt Quit} ends the execution of the \ASmetaenv.
@@ -567,13 +560,13 @@ At this moment this functionality is not yet implemented and
 this menu is disabled.
 
 \begin{figure}
-\begin{Label}{FIG:edit-menu}
+\W \label{FIG:edit-menu}
 \begin{center}
 \T \epsfig{file=edit-menu.ps,width=3cm}
 \W \htmlimage{edit-menu.gif}
 \caption{{\tt Edit} menu (main window)}
 \end{center}
-\end{Label}
+\T \label{FIG:edit-menu}
 \end{figure}
 
 \subsection{The Graph Menu}
@@ -584,13 +577,13 @@ setting options for the display of the graph in the import pane.
 
 
 \begin{figure}
-\begin{Label}{FIG:graph-menu}
+\W \label{FIG:graph-menu}
 \begin{center}
 \T \epsfig{file=graph-menu.ps,width=4cm}
 \W \htmlimage{graph-menu.gif}
 \caption{{\tt Graph} menu (main window)}
 \end{center}
-\end{Label}
+\T \label{FIG:graph-menu}
 \end{figure}
 
 {\tt View All} enlarges the import pane to enable the display of the whole
@@ -618,13 +611,13 @@ single check box {\tt Diagnostic messages}.  When enabled, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
 
 \begin{figure}
-\begin{Label}{FIG:debug-menu}
+\W \label{FIG:debug-menu}
 \begin{center}
 \T \epsfig{file=debug-menu.ps,width=4cm}
 \W \htmlimage{debug-menu.gif}
 \caption{{\tt Debug}  menu (main window)}
 \end{center}
-\end{Label}
+\T \label{FIG:debug-menu}
 \end{figure}
 
 \subsection{The Help Menu}
@@ -635,13 +628,13 @@ Figure~\ref{FIG:help-menu} and]{FIG:help-menu}
 provides various (still experimental) help features.
 
 \begin{figure}
-\begin{Label}{FIG:help-menu}
+\W \label{FIG:help-menu}
 \begin{center}
 \T \epsfig{file=help-menu.ps,width=5cm}
 \W \htmlimage{help-menu.gif}
 \caption{{\tt Help}  menu (main window)}
 \end{center}
-\end{Label}
+\T \label{FIG:help-menu}
 \end{figure}
 
 {\tt About Meta-Environment} and {\tt About Graph Browser}
@@ -703,13 +696,13 @@ It contains the same entries as the
 Section \ref{ButtonPane})]{ButtonPane}.
 
 \begin{figure}
-\begin{Label}{FIG:module-menu}
+\W \label{FIG:module-menu}
 \begin{center}
 \T \epsfig{file=module-menu.ps,width=3cm}
 \W \htmlimage{module-menu.gif}
 \caption{Pop up menu for module operations (import pane)}
 \end{center}
-\end{Label}
+\T \label{FIG:module-menu}
 \end{figure}
 
 \item Clicking \emph{outside} any module yields a \link{another pop-up menu}[ as shown
@@ -719,13 +712,13 @@ These two operations are also available from the
 \link{{\tt File} menu}[ (see Section~\ref{FileMenu})]{FileMenu}.
 
 \begin{figure}
-\begin{Label}{FIG:new-open}
+\W \label{FIG:new-open}
 \begin{center}
 \T \epsfig{file=new-open.ps,width=2cm}
 \W \htmlimage{new-open.gif}
 \caption{Pop up menu for adding a module (import pane)}
 \end{center}
-\end{Label}
+\T \label{FIG:new-open}
 \end{figure}
 \end{itemize}
 
@@ -829,13 +822,13 @@ menu contains a \link{single button}[
 \asfsdf\ parser to the complete text buffer..
 
 \begin{figure}
-\begin{Label}{FIG:meta-env-menu1}
+\W \label{FIG:meta-env-menu1}
 \begin{center}
 \T \epsfig{file=meta-env-menu1.ps,width=1.2cm}
 \W \htmlimage{meta-env-menu1.gif}
 \caption{{\tt Meta-Environment} menu (editor)}
 \end{center}
-\end{Label}
+\T \label{FIG:meta-env-menu1}
 \end{figure}
 
 For term editors the {\tt Meta-Environment} menu contains \link{two
@@ -844,13 +837,13 @@ Parse} and {\tt Reduce}. {\tt Parse} parses the term in the editor and
 {\tt Reduce} that applies the evaluator to the text in the editor.
 
 \begin{figure}
-\begin{Label}{FIG:meta-env-menu2}
+\W \label{FIG:meta-env-menu2}
 \begin{center}
 \T \epsfig{file=meta-env-menu2.ps,width=1.6cm}
 \W \htmlimage{meta-env-menu2.gif}
 \caption{{\tt Meta-Environment} menu (term editor)}
 \end{center}
-\end{Label}
+\T \label{FIG:meta-env-menu2}
 \end{figure}
 
 \item The {\tt Move} pull-down menu
@@ -862,13 +855,13 @@ user can navigate in the tree.
 
 
 \begin{figure}
-\begin{Label}{FIG:move-menu}
+\W \label{FIG:move-menu}
 \begin{center}
 \T \epsfig{file=move-menu.ps,width=1.2cm}
 \W \htmlimage{move-menu.gif}
 \caption{{\tt Move} menu (editor)}
 \end{center}
-\end{Label}
+\T \label{FIG:move-menu}
 \end{figure}
 
 Editing is now described in more detail.
@@ -970,13 +963,13 @@ The rewriting process is further described in Section
 \label{GuidedTour}
 
 %%\begin{figure}
-%%\begin{Label}{FIG:meta-booleans}
+%%\W \label{FIG:meta-booleans}
 %%\begin{center}
 %%\T \epsfig{file=meta-booleans.ps,width=12cm}
 %%\W \htmlimage{meta-booleans.gif}
 %%\caption{Main window after opening {\tt Pico-Booleans}}
 %%\end{center}
-%%\end{Label}
+%%\T \label{FIG:meta-booleans}
 %%\end{figure}
 
 To help you get acquainted with the \ASmetaenv\ the system
@@ -1048,13 +1041,13 @@ Figure~\ref{FIG:meta-Bool-example}]{FIG:meta-Bool-example}.
 \end{itemize}
 
 \begin{figure}
-\begin{Label}{FIG:meta-Bool-example}
+\W \label{FIG:meta-Bool-example}
 \begin{center}
 \T \epsfig{file=meta-Bool-example.ps,width=12cm}
 \W \htmlimage{meta-Bool-example.gif}
 \caption{Main window after opening {\tt Bool-example}}
 \end{center}
-\end{Label}
+\T \label{FIG:meta-Bool-example}
 \end{figure}
 
 \subsection{The Module Bool-example}
@@ -1128,13 +1121,13 @@ The result is shown
 \W \link{below}[]{FIG:Bool-example.sdf}.
 
 \begin{figure}
-\begin{Label}{FIG:Bool-example.sdf}
+\W \label{FIG:Bool-example.sdf}
 \begin{center}
 \T \epsfig{file=Bool-example.sdf2.ps,width=12cm}
 \W \htmlimage{Bool-example.sdf2.gif}
 \caption{Editor for the syntax of {\tt Bool-example}}
 \end{center}
-\end{Label}
+\T \label{FIG:Bool-example.sdf}
 \end{figure}
   
 \item Push the button {\tt Edit Equations}.  This will open a new 
@@ -1147,13 +1140,13 @@ The result is shown
 \W \link{below}[]{FIG:Bool-example.asf}.
 
 \begin{figure}
-\begin{Label}{FIG:Bool-example.asf}
+\W \label{FIG:Bool-example.asf}
 \begin{center}
 \T \epsfig{file=Bool-example.asf.ps,width=12cm}
 \W \htmlimage{Bool-example.asf.gif}
 \caption{Editor for the equations of {\tt Bool-example}}
 \end{center}
-\end{Label}
+\T \label{FIG:Bool-example.asf}
 \end{figure}
 
 \end{itemize}
@@ -1175,14 +1168,14 @@ The result is shown
 \W \link{below}[]{FIG:Bool-example.trm}.
 
 \begin{figure}
-\begin{Label}{FIG:Bool-example.trm}
+\W \label{FIG:Bool-example.trm}
 \begin{center}
 \T \epsfig{file=Bool-example.trm.ps,width=12cm}
 \W \htmlimage{Bool-example.trm.gif}
 \caption{Term editor for {\tt Bool-example} after entering `{\tt true \&
     false}'}
 \end{center}
-\end{Label}
+\T \label{FIG:Bool-example.trm}
 \end{figure}
 
 \item Click in the focus, this will move the cursor (a single character-sized
@@ -1196,14 +1189,14 @@ The result is shown
 \W \link{below}[]{FIG:Bool-example.trm2}.
 
 \begin{figure}
-\begin{Label}{FIG:Bool-example.trm2}
+\W \label{FIG:Bool-example.trm2}
 \begin{center}
 \T \epsfig{file=Bool-example.trm2.ps,width=12cm}
 \W \htmlimage{Bool-example.trm2.gif}
 \T \caption{Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parsing}
 \W \caption{Same term editor as \link{above}[]{FIG:Bool-example.trm} after parsing}
 \end{center}
-\end{Label}
+\T \label{FIG:Bool-example.trm2}
 \end{figure}
 
 \end{itemize}
@@ -1222,13 +1215,13 @@ This is shown
 \W \link{below}[]{FIG:Bool-example.trm2}.
 
 \begin{figure}
-\begin{Label}{FIG:Bool-example.trm3}
+\W \label{FIG:Bool-example.trm3}
 \begin{center}
 \T \epsfig{file=Bool-example.trm3.ps,width=12cm}
 \W \htmlimage{Bool-example.trm3.gif}
 \caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 \end{center}
-\end{Label}
+\T \label{FIG:Bool-example.trm3}
 \end{figure}
 
 \item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
@@ -1248,13 +1241,13 @@ will be selected and becomes the focus.
   a new \link{term editor window}[ (Figure~\ref{FIG:reduct.out})]{FIG:reduct.out}.
 
 \begin{figure}
-\begin{Label}{FIG:reduct.out}
+\W \label{FIG:reduct.out}
 \begin{center}
 \T \epsfig{file=reduct.out.ps,width=12cm}
 \W \htmlimage{reduct.out.gif}
 \caption{New term editor with normal form of `{\tt true \& false}'}
 \end{center}
-\end{Label}
+\T \label{FIG:reduct.out}
 \end{figure}
 \end{itemize}
 
@@ -1437,26 +1430,26 @@ Pico specification. Pico is a toy language used demonstration purposes.
       of {\tt Pico-Booleans}.
 
 \begin{figure}[t]
-\begin{Label}{FIG:Pico-Booleans-sdf}
+\W \label{FIG:Pico-Booleans-sdf}
 \begin{center}
 \T \epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}
 \W \htmlimage{Pico-Booleans.sdf2.gif}
 \caption{Editor for syntax of {\tt Pico-Booleans}}
 \end{center}
-\end{Label}
+\T \label{FIG:Pico-Booleans-sdf}
 \end{figure}
 
 \item Open an editor for the \link{equations}[
 (Figure~\ref{FIG:Pico-Booleans-eqs})]{FIG:Pico-Booleans-eqs}.
 
 \begin{figure}
-\begin{Label}{FIG:Pico-Booleans-eqs}
+\W \label{FIG:Pico-Booleans-eqs}
 \begin{center}
 \T \epsfig{file=Pico-Booleans.asf.ps,width=12cm}
 \W \htmlimage{Pico-Booleans.asf.gif}
 \caption{Editor for equations of {\tt Pico-Booleans}}
 \end{center}
-\end{Label}
+\T \label{FIG:Pico-Booleans-eqs}
 \end{figure}
 
 \item Study the differences in syntax and equations between with {\tt Bool-example}
@@ -1485,13 +1478,13 @@ selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section
   transitively imported by {\tt Pico-syntax}.
 
 \begin{figure}
-\begin{Label}{FIG:Pico-syntax}
+\W \label{FIG:Pico-syntax}
 \begin{center}
 \T \epsfig{file=meta-Pico-syntax.ps,width=12cm}
 \W \htmlimage{meta-Pico-syntax.gif}
 \caption{Main window after opening {\tt Pico-syntax}}
 \end{center}
-\end{Label}
+\T \label{FIG:Pico-syntax}
 \end{figure}
 
 
@@ -1871,7 +1864,7 @@ An example of the use of comments is given
 
 
 \begin{figure}
-\begin{Label}{CODE:sdfcomment}
+\W \label{CODE:sdfcomment}
 \begin{IncCode}
 \begin{verbatim}
 module Layout
@@ -1886,7 +1879,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\sdf\ comment}
-\end{Label}
+\T \label{CODE:sdfcomment}
 \end{figure}  
 
 This definition also defines the comment convention in \sdf\ itself.
@@ -2219,7 +2212,7 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
-\begin{Label}{CODE:simplelex}
+\W \label{CODE:simplelex}
 \begin{IncCode}
 \begin{verbatim}
 module LeesPlank
@@ -2236,7 +2229,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple lexical functions}
-\end{Label}
+\T \label{CODE:simplelex}
 \end{figure}   
       
 
@@ -2277,7 +2270,7 @@ digits ({\tt Digit}) are shown in
 \W in the first example \link{below}[]{CODE:LettersDigits1}. 
 
 \begin{figure}
-\begin{Label}{CODE:LettersDigits1}
+\W \label{CODE:LettersDigits1}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits1
@@ -2294,7 +2287,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}
-\end{Label}
+\T \label{CODE:LettersDigits1}
 \end{figure}   
 
 \T Figure~\ref{CODE:LettersDigits2}
@@ -2304,7 +2297,7 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
 \begin{figure}
-\begin{Label}{CODE:LettersDigits2}
+\W \label{CODE:LettersDigits2}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
@@ -2319,7 +2312,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit}
-\end{Label}
+\T \label{CODE:LettersDigits2}
 \end{figure}   
 
 \paragraph{Escape Conventions}
@@ -2378,7 +2371,7 @@ This definition is equivalent to the one given
 \link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
 
 \begin{figure}
-\begin{Label}{CODE:LettersDigits3}
+\W \label{CODE:LettersDigits3}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits3
@@ -2389,7 +2382,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit using the alternative operator}
-\end{Label}
+\T \label{CODE:LettersDigits3}
 \end{figure}
 
 
@@ -2401,7 +2394,7 @@ all possible characters, either by means of the ordinary representation
 or via their decimal representation.
 
 \begin{figure}
-\begin{Label}{CODE:charclasses}
+\W \label{CODE:charclasses}
 \begin{IncCode}
 \begin{verbatim}
 module Characters
@@ -2425,7 +2418,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of character classes}
-\end{Label}
+\T \label{CODE:charclasses}
 \end{figure}  
 
 
@@ -2445,7 +2438,7 @@ operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
 
 \begin{figure}
-\begin{Label}{CODE:repetition}
+\W \label{CODE:repetition}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-repetition
@@ -2462,7 +2455,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining identifiers using the repetition operator {\tt *}}
-\end{Label}
+\T \label{CODE:repetition}
 \end{figure}   
 
 \subsubsection{Option}
@@ -2482,7 +2475,7 @@ digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\t
   z789}.
 
 \begin{figure}
-\begin{Label}{CODE:option}
+\W \label{CODE:option}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-optional
@@ -2500,7 +2493,7 @@ exports
 \end{IncCode}
 \caption{Defining a letter followed by an optional number using the option
   operator {\tt ?} }
-\end{Label}
+\T \label{CODE:option}
 \end{figure}   
 
 \subsubsection{Alternative}
@@ -2536,7 +2529,7 @@ followed by one of the following:
   B49a} and {\tt 007} are not.
 
 \begin{figure}
-\begin{Label}{CODE:alternative1}
+\W \label{CODE:alternative1}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-alternative1
@@ -2554,7 +2547,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }
-\end{Label}
+\T \label{CODE:alternative1}
 \end{figure}   
 
 
@@ -2586,7 +2579,7 @@ In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
 \begin{figure}
-\begin{Label}{CODE:alternative2}
+\W \label{CODE:alternative2}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-alternative2
@@ -2604,7 +2597,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }
-\end{Label}
+\T \label{CODE:alternative2}
 \end{figure}   
 
 \subsubsection{Miscellaneous Operators}
@@ -2631,7 +2624,7 @@ of the option operator in the definitions of {\tt SignedReal} and {\tt
 UnsignedReal}.
 
 \begin{figure}[t]
-\begin{Label}{CODE:numbers}
+\W \label{CODE:numbers}
 \begin{IncCode}
 \begin{verbatim}
 module Numbers
@@ -2653,7 +2646,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of Numbers}
-\end{Label}
+\T \label{CODE:numbers}
 \end{figure}   
 
 \paragraph{Defining Strings}
@@ -2673,7 +2666,7 @@ arbitrary characters except double quote or newline, or
 double quotes.
 
 \begin{figure}
-\begin{Label}{CODE:string}
+\W \label{CODE:string}
 \begin{IncCode}
 \begin{verbatim}
 module Strings
@@ -2690,7 +2683,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of String}
-\end{Label}
+\T \label{CODE:string}
 \end{figure}   
 
 \subsection{Context-free Syntax}
@@ -2722,7 +2715,7 @@ language of coordinates and drawing commands presented
 \W \link{below}[]{CODE:simple-cf}.
 
 \begin{figure}
-\begin{Label}{CODE:simple-cf}
+\W \label{CODE:simple-cf}
 \begin{IncCode}
 \begin{verbatim}
 module DrawingCommands
@@ -2742,7 +2735,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple context-free syntax definition}
-\end{Label}
+\T \label{CODE:simple-cf}
 \end{figure}   
 
 
@@ -2752,7 +2745,7 @@ of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
 \W \link{as follows}[]{CODE:simple-bnf}.
 
 \begin{figure}
-\begin{Label}{CODE:simple-bnf}
+\W \label{CODE:simple-bnf}
 \begin{IncCode}
 \begin{verbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
@@ -2760,7 +2753,7 @@ of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
 \end{verbatim}
 \end{IncCode}
 \caption{BNF definition of simple grammar}
-\end{Label}
+\T \label{CODE:simple-bnf}
 \end{figure}   
 
 When a literal in a context-free function consists only of lower-case letters
@@ -2788,7 +2781,7 @@ the syntax of a list of identifiers (occurring in a declaration
 in a Pascal-like language).
 
 \begin{figure}
-\begin{Label}{CODE:pascal-ids}
+\W \label{CODE:pascal-ids}
 \begin{IncCode}
 \begin{verbatim}
 module Decls
@@ -2808,7 +2801,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of a list of identifiers}
-\end{Label}
+\T \label{CODE:pascal-ids}
 \end{figure}
 
 \subsubsection{Chain Functions}
@@ -2843,7 +2836,7 @@ sort {\tt SORT-B} is required.
 the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
 
 \begin{figure}
-\begin{Label}{CODE:inj-exp}
+\W \label{CODE:inj-exp}
 \begin{IncCode}
 \begin{verbatim}
 module Exp
@@ -2864,7 +2857,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of expressions that uses injections}
-\end{Label}
+\T \label{CODE:inj-exp}
 \end{figure}
 
 \subsubsection{Miscellaneous Operators}
@@ -2888,7 +2881,7 @@ by commas whereas {\tt LIST2} represents a list of naturals terminated
 by commas.
 
 \begin{figure}[t]
-\begin{Label}{CODE:lists-usage}
+\W \label{CODE:lists-usage}
 \begin{IncCode}
 \begin{verbatim}
 module Lists
@@ -2907,7 +2900,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of two list variants}
-\end{Label}
+\T \label{CODE:lists-usage}
 \end{figure}
 
 \paragraph{Alternative alternatives}
@@ -2927,7 +2920,7 @@ than {\tt "|"}, see
 for more details on priority definitions.
 
 \begin{figure}
-\begin{Label}{CODE:alternative-alternatives}
+\W \label{CODE:alternative-alternatives}
 \begin{IncCode}
 \begin{verbatim}
 module Bool
@@ -2948,7 +2941,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Two ways of defining {\tt |} and {\tt \&}}
-\end{Label}
+\T \label{CODE:alternative-alternatives}
 \end{figure}
 
 \subsubsection{Lists in combination with optionals or empty producing
@@ -2962,7 +2955,7 @@ See
 for an example of such a specification.
 
 \begin{figure}
-\begin{Label}{CODE:listcycle}
+\W \label{CODE:listcycle}
 \begin{IncCode}
 \begin{verbatim}   
 module Cycle
@@ -2979,7 +2972,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Dangerous combination of lists and optionals}
-\end{Label}
+\T \label{CODE:listcycle}
 \end{figure}                                                                              
 
 \subsection{Attributes of Lexical and Context-free Functions}
@@ -3103,7 +3096,7 @@ is given
 \W \link{below}[]{CODE:bracket-expr}.
 
 \begin{figure}
-\begin{Label}{CODE:bracket-expr}
+\W \label{CODE:bracket-expr}
 \begin{IncCode}
 \begin{verbatim}
 module BracketExpr
@@ -3121,7 +3114,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition with a bracket function}
-\end{Label}
+\T \label{CODE:bracket-expr}
 \end{figure}
 
 Since brackets are necessary for overruling the priority and associativity of
@@ -3195,7 +3188,7 @@ simple arithmetic expressions with the usual priorities and
 associativities.
 
 \begin{figure}
-\begin{Label}{CODE:simple-prio}
+\W \label{CODE:simple-prio}
 \begin{IncCode}
 \begin{verbatim}
 module SimpleExpr
@@ -3219,7 +3212,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple context-free priority definition}
-\end{Label}
+\T \label{CODE:simple-prio}
 \end{figure}   
 
 \subsubsection{Groups of Associative Functions}
@@ -3245,7 +3238,7 @@ declaration with one of the following attributes:
 an example of the use of grouped associativity.
 
 \begin{figure}
-\begin{Label}{CODE:complex-prio}
+\W \label{CODE:complex-prio}
 \begin{IncCode}
 \begin{verbatim}
 module ComplexExpr
@@ -3275,7 +3268,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{More complex associativity and priority definitions}
-\end{Label}
+\T \label{CODE:complex-prio}
 \end{figure}   
 
 \subsubsection{Restrictions}
@@ -3342,7 +3335,7 @@ followed by a letter. It does not forbid layout characters between
 the letters, e.g. {\tt a b} is a legal recognizable string.
 
 \begin{figure}
-\begin{Label}{CODE:functional}
+\W \label{CODE:functional}
 \begin{IncCode}
 \begin{verbatim}
 module Functional
@@ -3366,7 +3359,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using restrictions in the definition of a simple functional language}
-\end{Label}
+\T \label{CODE:functional}
 \end{figure}   
 
 {\tt <Lookaheads>} are slightly more complex.  The most compact way is to
@@ -3398,7 +3391,7 @@ This problem is avoided by the definition
 it simply forbids that optional layout is followed by layout characters.
 
 \begin{figure}
-\begin{Label}{CODE:safe-layout}
+\W \label{CODE:safe-layout}
 \begin{IncCode}
 \begin{verbatim}
 module Layout
@@ -3412,7 +3405,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Safe way of defining {\tt LAYOUT}}
-\end{Label}
+\T \label{CODE:safe-layout}
 \end{figure}
 
 The example
@@ -3427,7 +3420,7 @@ The repetition of this first restriction is
 redundant and could be eliminated.
 
 \begin{figure}
-\begin{Label}{CODE:c-comment}
+\W \label{CODE:c-comment}
 \begin{IncCode}
 \begin{verbatim}
 module Comment
@@ -3449,7 +3442,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of C comments}
-\end{Label}
+\T \label{CODE:c-comment}
 \end{figure}
 
 A frequently asked question is when to use \emph{lexical} restrictions
@@ -3473,7 +3466,7 @@ is necessary to transform this context-free restriction into
 a lexical restriction.
 
 \begin{figure}
-\begin{Label}{CODE:restrictedexpressions}
+\W \label{CODE:restrictedexpressions}
 \begin{IncCode}
 \begin{verbatim}
 module RestrictedExpressions
@@ -3495,7 +3488,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Erroneous use of restrictions in the definition of simple expressions}
-\end{Label}
+\T \label{CODE:restrictedexpressions}
 \end{figure}   
 
 
@@ -3565,7 +3558,7 @@ The specification \link*{below}[ in Figure \Ref]{CODE:restrict-id}
 shows how to enforce the longest match for the sort {\tt Id}.
 
 \begin{figure}
-\begin{Label}{CODE:restrict-id}
+\W \label{CODE:restrict-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-restrict
@@ -3583,7 +3576,7 @@ exports
 \end{IncCode}
 \caption{Using context-free restrictions to define a longest match for
     identifiers}
-\end{Label}
+\T \label{CODE:restrict-id}
 \end{figure}   
 
 \paragraph{Prefer Literals} 
@@ -3613,7 +3606,7 @@ that the addition of a literal in any context-free rule also requires
 the addition of a new reject rule for that literal.
 
 \begin{figure}
-\begin{Label}{CODE:reject-id}
+\W \label{CODE:reject-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-reject
@@ -3632,7 +3625,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using {\tt reject} to implement Prefer Literals}
-\end{Label}
+\T \label{CODE:reject-id}
 \end{figure}   
 
 The second approach is more attractive. The lexical definition of the general
@@ -3648,7 +3641,7 @@ Although the first approach is more tedious, it allows more flexibility
 than the second one.
 
 \begin{figure}
-\begin{Label}{CODE:avoid-id}
+\W \label{CODE:avoid-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-avoid
@@ -3664,7 +3657,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using {\tt avoid} to implement Prefer Literals}
-\end{Label}
+\T \label{CODE:avoid-id}
 \end{figure}   
 
 \paragraph{Prefer Non-Layout} If there are interpretations of the text as
@@ -3774,7 +3767,7 @@ combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
   E}'.
 
 \begin{figure}
-\begin{Label}{CODE:eqn-exprs}
+\W \label{CODE:eqn-exprs}
 \begin{IncCode}
 \begin{verbatim}
 module Eqn
@@ -3793,7 +3786,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of EQN expressions}
-\end{Label}
+\T \label{CODE:eqn-exprs}
 \end{figure}
 
 In the \link{second example}[ (Figure~\Ref)]{CODE:dangling-else}
@@ -3813,7 +3806,7 @@ has the prefer attribute this derivation is selected and the other
 tree is removed from the ambiguity node.
 
 \begin{figure}
-\begin{Label}{CODE:dangling-else}
+\W \label{CODE:dangling-else}
 \begin{IncCode}
 \begin{verbatim}
 module DanglingElse
@@ -3831,7 +3824,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of conditionals}
-\end{Label}
+\T \label{CODE:dangling-else}
 \end{figure}
 
 \subsection{Parameterization and Renaming}
@@ -3866,7 +3859,7 @@ in order to increase readability and to avoid name clashes between
 different instances of the same module.
 
 \begin{figure}
-\begin{Label}{CODE:generic-pairs}
+\W \label{CODE:generic-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module Pair[X Y]
@@ -3888,7 +3881,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
-\end{Label}
+\T \label{CODE:generic-pairs}
 \end{figure}
 
 When importing a parameterized module the formal parameters have
@@ -3899,7 +3892,7 @@ The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
 actual parameters of the module {\tt Pair[X Y]} in the last import.
 
 \begin{figure}
-\begin{Label}{CODE:importing-pairs}
+\W \label{CODE:importing-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module TestPair
@@ -3910,7 +3903,7 @@ imports Booleans Pair[Bool Bool]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
-\end{Label}
+\T \label{CODE:importing-pairs}
 \end{figure}
 
 \subsubsection{Symbol Renaming}
@@ -3928,7 +3921,7 @@ by explicitly renaming {\tt X} and {\tt Y} to the desired
 names when {\tt Pair} is imported.
 
 \begin{figure}
-\begin{Label}{CODE:pairs}
+\W \label{CODE:pairs}
 \begin{IncCode}
 \begin{verbatim}
 module Pair
@@ -3950,7 +3943,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
-\end{Label}
+\T \label{CODE:pairs}
 \end{figure}
 
 During import such module symbols can be renamed via symbol renaming.
@@ -3960,7 +3953,7 @@ using renamings. Renaming {\tt X} to {\tt Bool} is, for instance,
 written as {\tt X => Bool}.
 
 \begin{figure}
-\begin{Label}{CODE:renaming-pairs}
+\W \label{CODE:renaming-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module TestPair
@@ -3971,7 +3964,7 @@ imports Booleans Pair[X => Bool Y => Bool]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
-\end{Label}
+\T \label{CODE:renaming-pairs}
 \end{figure}
 
 \subsection{Variables}
@@ -3997,7 +3990,7 @@ Strings that occur in the left-hand side of variable declarations
 should {\em always} be quoted.
 
 \begin{figure}
-\begin{Label}{CODE:variables}
+\W \label{CODE:variables}
 \begin{IncCode}
 \begin{verbatim}
 module VarDecls
@@ -4024,7 +4017,7 @@ hiddens
 \end{verbatim}
 \end{IncCode}
 \caption{Variable declarations using naming schemes}
-\end{Label}
+\T \label{CODE:variables}
 \end{figure}         
 
 Declared variables can only be used when defining equations. It is not
@@ -4043,7 +4036,7 @@ a set an auxilary variable has to be defined
 as shown \link*{below}[in Figure~\Ref]{CODE:set-variable}.
 
 \begin{figure}
-\begin{Label}{CODE:set-variable}
+\W \label{CODE:set-variable}
 \begin{IncCode}
 \begin{verbatim}
 module Set
@@ -4067,7 +4060,7 @@ hiddens
 \end{verbatim}
 \end{IncCode}
 \caption{Variable declarations for Set}
-\end{Label}
+\T \label{CODE:set-variable}
 \end{figure}         
 
 \subsection{Equations}
@@ -4253,7 +4246,7 @@ list variable leads to the trial of the next possible match of the list
 variable and the repeated evaluation of following conditions.
 
 \begin{figure}[tb]
-\begin{Label}{CODE:sets}
+\W \label{CODE:sets}
 \begin{IncCode}
 \begin{verbatim}
 module Sets
@@ -4280,7 +4273,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Set specification}
-\end{Label}
+\T \label{CODE:sets}
 \end{figure}   
 
 Another example of list matching in combination with the evaluation
@@ -4291,7 +4284,7 @@ the middle element is ignored. The first part of the list is returned
 as result.
 
 \begin{figure}[t]
-\begin{Label}{CODE:split}
+\W \label{CODE:split}
 \begin{IncCode}
 \begin{verbatim}
 module Split
@@ -4328,7 +4321,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Split-in-two specification}
-\end{Label}
+\T \label{CODE:split}
 \end{figure}  
 
 
@@ -4356,7 +4349,7 @@ the lexical definition of the corresponding sort}.
 
 
 \begin{figure}[tb]
-\begin{Label}{CODE:lcfs}
+\W \label{CODE:lcfs}
 \begin{IncCode}
 \begin{verbatim}
 module Nats
@@ -4378,7 +4371,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Use of lexical constructor functions}
-\end{Label}
+\T \label{CODE:lcfs}
 \end{figure}    
 
 \subsubsection{Default Equations}
@@ -4399,7 +4392,7 @@ The specification \link*{below}[in Figure \Ref]{CODE:types} shows
 an example of the use of a default equation.
 
 \begin{figure}
-\begin{Label}{CODE:types}
+\W \label{CODE:types}
 \begin{IncCode}
 \begin{verbatim}
 module Types
@@ -4428,7 +4421,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Using a default equation}
-\end{Label}
+\T \label{CODE:types}
 \end{figure}   
 
 \subsubsection{Memo Functions}
@@ -4459,7 +4452,7 @@ The Fibonacci function shown \link*{below}[in Figure~\Ref]{CODE:fib}
 is decorated with the memo attribute to improve its efficiency.
 
 \begin{figure}
-\begin{Label}{CODE:fib}
+\W \label{CODE:fib}
 \begin{IncCode}
 \begin{verbatim}
 module Fib
@@ -4493,7 +4486,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Using the memo attribute when defining Fibonacci}
-\end{Label}
+\T \label{CODE:fib}
 \end{figure}   
 
 The resulting improvement in performance is shown
@@ -4501,7 +4494,7 @@ The resulting improvement in performance is shown
 \W as follows:
 
 \begin{table}
-\label{TABLE:fibn}
+\W \label{TABLE:fibn}
 \begin{center}
 \begin{tabular}{|l|c|c|} \hline
 fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
@@ -4512,6 +4505,7 @@ fib(19)          &  10.4 & 3.3  \\ \hline
 \end{tabular}
 \caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
 \end{center}
+\T \label{TABLE:fibn}
 \end{table}
 
 
@@ -4655,7 +4649,7 @@ that describes binary prefix expressions with natural numbers as leaves.
 Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 
 \begin{figure}
-\begin{Label}{FIG:tree-language}
+\W \label{FIG:tree-language}
 \begin{IncCode}
 \begin{verbatim}
 module Tree-syntax
@@ -4670,7 +4664,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{A simple tree language}
-\end{Label}
+\T \label{FIG:tree-language}
 \end{figure}     
 
 
@@ -4679,7 +4673,7 @@ transforms a given tree into a new tree in which
 all numbers have been incremented. 
 
 \begin{figure}
-\begin{Label}{FIG:inc}
+\W \label{FIG:inc}
 \begin{IncCode}
 \begin{verbatim}
 module Tree-inc
@@ -4692,7 +4686,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{The transformer {\tt inc} increments all numbers in a tree}
-\end{Label}
+\T \label{FIG:inc}
 \end{figure}   
 
 Our \link{second example}[ (Figure~\ref{FIG:sum})]{FIG:sum}
@@ -4701,7 +4695,7 @@ For many more examples and a detailed description of traversal functions
 see~\cite{BKV01}.
 
 \begin{figure}
-\begin{Label}{FIG:sum} 
+\W \label{FIG:sum} 
 \begin{IncCode}
 \begin{verbatim}
 module Tree-sum
@@ -4714,7 +4708,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{The accumulator {\tt sum} that sums all numbers in a tree.}
-\end{Label}
+\T \label{FIG:sum} 
 \end{figure}   
 
 Implicitly, each traversal function corresponds to a set of functions,
@@ -4733,7 +4727,7 @@ since equation {\tt [2]}, which expresses that two elements in a set may
 be exchanged, will lead to an infinite rewriting loop.
 
 \begin{figure}
-\begin{Label}{CODE:itemsets}
+\W \label{CODE:itemsets}
 \begin{IncCode}
 \begin{verbatim}
 module ItemSet
@@ -4761,7 +4755,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Non-executable specification for sets}
-\end{Label}
+\T \label{CODE:itemsets}
 \end{figure}   
 
 \subsubsection{Common Errors when Executing Specifications}
@@ -4798,7 +4792,7 @@ the online specifications.
 
 Computing the derivative of an expression with respect to some variable is a
 classical problem. 
-Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
+Computing the derivative of {\tt X * (X + Y + Z)} with respect to {\tt X gives:}
 \begin{quote}
 {\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
 \end{quote}
@@ -4815,7 +4809,7 @@ multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to
 compute constant expressions.
 
 \begin{figure}
-\begin{Label}{CODE:diff}
+\W \label{CODE:diff}
 \begin{IncCode}
 \begin{verbatim}
 module Diff 
@@ -4857,7 +4851,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for differentiation}
-\end{Label}
+\T \label{CODE:diff}
 \end{figure}   
 
 
@@ -4878,7 +4872,7 @@ order.
 
 
 \begin{figure}
-\begin{Label}{CODE:flag}
+\W \label{CODE:flag}
 \begin{IncCode}
 \begin{verbatim}
 module Flag
@@ -4909,7 +4903,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for sorting}
-\end{Label}
+\T \label{CODE:flag}
 \end{figure} 
 
 \subsection{Code Generation}
@@ -4968,7 +4962,7 @@ The specification \link*{below}[in Figure \Ref]{CODE:basicnotions} defines the
 sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
 
 \begin{figure}
-\begin{Label}{CODE:basicnotions}
+\W \label{CODE:basicnotions}
 \begin{IncCode}
 \begin{verbatim}
 module BasicNotions 
@@ -4980,7 +4974,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for BasicNotions}
-\end{Label}
+\T \label{CODE:basicnotions}
 \end{figure}
 
 \paragraph{Expressions and Statements}
@@ -4990,7 +4984,7 @@ Given these basic notions the \link{expressions}[, see Figure
 of our little source language are defined.
 
 \begin{figure}
-\begin{Label}{CODE:expressions}
+\W \label{CODE:expressions}
 \begin{IncCode}
 \begin{verbatim}
 module Expressions 
@@ -5012,11 +5006,11 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Expressions}
-\end{Label}
+\T \label{CODE:expressions}
 \end{figure}
 
 \begin{figure}[tb]
-\begin{Label}{CODE:statements}
+\W \label{CODE:statements}
 \begin{IncCode}
 \begin{verbatim}
 module Statements 
@@ -5033,7 +5027,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Statements}
-\end{Label}
+\T \label{CODE:statements}
 \end{figure}
 
 
@@ -5042,7 +5036,7 @@ The instructions of the assembly language for the stack machine are defined
 \link*{below}[ in Figure~\Ref]{CODE:assemblylanguage}.
 
 \begin{figure}
-\begin{Label}{CODE:assemblylanguage}
+\W \label{CODE:assemblylanguage}
 \begin{IncCode}
 \begin{verbatim}
 module AssemblyLanguage
@@ -5068,7 +5062,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for AssemblyLanguage}
-\end{Label}
+\T \label{CODE:assemblylanguage}
 \end{figure}
 
 \paragraph{Label generation}
@@ -5080,7 +5074,7 @@ lexical notion of labels ({\tt Label}).  The scheme of appending the character
 replaced by a more sophisticated one.
 
 \begin{figure}
-\begin{Label}{CODE:nextlabel}
+\W \label{CODE:nextlabel}
 \begin{IncCode}
 \begin{verbatim}
 module NextLabel
@@ -5101,7 +5095,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for NextLabel}
-\end{Label}
+\T \label{CODE:nextlabel}
 \end{figure}
 
 \paragraph{Codegenerator}
@@ -5120,7 +5114,7 @@ the actual translation function.
 
 
 \begin{figure}
-\begin{Label}{CODE:codegenerator.sdf}
+\W \label{CODE:codegenerator.sdf}
 \begin{IncCode}
 \begin{verbatim}
 module CodeGenerator
@@ -5151,12 +5145,12 @@ hiddens
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for CodeGenerator}
-\end{Label}
+\T \label{CODE:codegenerator.sdf}
 \end{figure}
 
     
 \begin{figure}
-\begin{Label}{CODE:codegenerator.asf}
+\W \label{CODE:codegenerator.asf}
 \begin{IncCode}
 \begin{verbatim}
 equations 
@@ -5205,7 +5199,7 @@ equations
 \end{IncCode}
 \caption{\asfsdf\ specification for
 CodeGenerator}
-\end{Label}
+\T \label{CODE:codegenerator.asf}
 \end{figure}
 
 This completes the specification of our code generator.
@@ -5338,14 +5332,14 @@ use of memory during normalization of terms.
 \subsection{Architecture}
 
 \begin{figure}
-\begin{Label}{FIG:architecture}
+\W \label{FIG:architecture}
 \begin{center}
 \begin{iftex}
 \psfig{file=newarch.eps,width=12cm}
 \end{iftex}
 \end{center}
 \caption{Architecture of the \ASmetaenv}
-\end{Label}
+\T \label{FIG:architecture}
 \end{figure}
 
 The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.

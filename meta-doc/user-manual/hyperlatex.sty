@@ -78,9 +78,7 @@
 \let\html\xml
 
 \newcommand{\xmlsym}[1]{}
-\def\htmlrule{\@ifnextchar [{\@htmlrule}{\@htmlrule[]}}
-\def\@htmlrule{\Hlx@pass\@@htmlrule}
-\def\@@htmlrule[#1]{\endgroup}
+\newcommand{\htmlrule}{}
 
 \newcommand{\htmlmenu}[1]{}
 \newcommand{\htmlautomenu}[1]{}
@@ -92,9 +90,7 @@
 \newcommand{\htmlcharset}[1]{}
 \newcommand{\htmlcss}[1]{}
 
-\def\htmlimage{\@ifnextchar [{\@htmlimage}{\@htmlimage[]}}
-\def\@htmlimage{\Hlx@pass\@@htmlimage}
-\def\@@htmlimage[#1]#2{\endgroup}
+\newcommand{\htmlimg}[2]{}
 
 \newcommand{\xname}{\Hlx@pass\Hlx@ignore}
 \def\Hlx@ignore#1{\endgroup}
@@ -135,7 +131,8 @@
 \def\endgif{\egroup
   {\global\advance\@gifcount by 1\count0=\@gifcount
     \immediate\write\@makegifcmds{dvips\space -f\space -p\space
-      \the\@gifcount\space -n\space 1\space -E\space -D\space \gif@dpi\space
+      \the\@gifcount\space -n\space 1\space -D\space \gif@dpi\space
+      -T\the\wd\@gifbox,\the\ht\@gifbox\space-O-72bp,-72bp\space
       \jobname.dvi\space>\space\gif@name.ps^^J%
       ps2gif\space -res\space \gif@resolution\space \gif@name.ps^^J%
       mv\space \gif@name.gif\space \Hlx@directory^^J}
