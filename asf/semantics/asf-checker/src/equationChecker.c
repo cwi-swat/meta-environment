@@ -261,6 +261,24 @@ static ATermList checkConditions(ASF_Tag tag,
   }
 }
 
+static ATermList checkLhs(ASF_Tag tag, ASF_Tree asfTree) 
+{
+
+  PT_Tree ptTree = PT_TreeFromTerm(ASF_TreeToTerm(asfTree));
+  if (PT_isTreeAmb(ptTree)) {
+    return makeAmbiguityMessage();
+  }
+  else {
+    if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
+      ATerm message = makeMessage("constructor not allowed as outermost function symbol of left hand side", tag, PT_TreeToTerm(ptTree));
+      return ATmakeList1(message);
+    }
+    else {
+      return ATempty;
+    }
+  }
+}
+
 static ATermList checkEquation(ASF_CondEquation condEquation) 
 {
   ATermList messages = ATempty;
@@ -281,6 +299,8 @@ static ATermList checkEquation(ASF_CondEquation condEquation)
       ASF_Tree rhsEq = ASF_getEquationRhs(equation);
       PT_Args variables = collectVariables((PT_Tree)lhsEq, 
 				           PT_makeArgsEmpty());
+
+      messages = ATconcat(messages, checkLhs(tag, lhsEq));
 
       if (ASF_hasCondEquationConditions(condEquation)) {
         messages = ATconcat(messages,
