@@ -32,7 +32,8 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= $(prefix)/include
+includedir	= @includedir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
@@ -74,24 +75,26 @@ XLIBS		= -L$(ATERMLIB) -lATB -lAsFix -lATerm $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= evaluator.c preparation.c
-CHDR		= preparation.h evaluator.tif.c
+CSRC		= evaluator.c preparation.c evaluator.tif.c
+CHDR		= preparation.h evaluator.tif.h
+OBJ		= $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= evaluator
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
+DATAFILES	= evaluator.idef
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= evaluator evaluator.tif.c
+CLEANFILES	= evaluator
 # DISTCLEANFILES are removed by 'make distclean'
-DISTCLEANFILES	=
+DISTCLEANFILES	= depend Makefile evaluator.tif.c evaluator.tif.h
 
 # all target must be defined:
-all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 .PHONY: test
 
@@ -102,14 +105,18 @@ test:	all
 	@cd test; $(MAKE) test
 
 	
-MODULES	= evaluator.o preparation.o
+%.tif.c: %.tifs
+	$(ATERMBIN)/tifstoc -tool $* $<
+
+%.tifs: %.idef
+	$(TOOLBUSBIN)/idef2tif $<
 
 # Explicit rules
-evaluator.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(ATERMBIN)/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
+evaluator: depend $(OBJ)
+	$(CC) -o $@ $(OBJ) $(LIBS)
 
-evaluator: $(MODULES)
-	$(CC) -o evaluator $(MODULES) $(LIBS)
+%.o: %.c $(INCLUDEFILES)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
@@ -117,10 +124,11 @@ evaluator: $(MODULES)
 
 # install target (install binaries, include files, and libraries)
 install: all
-	mkdir -p $(bindir) $(libdir) $(includedir)
+	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
@@ -147,4 +155,4 @@ distclean: clean
 
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
-	@$(MAKEDEPEND) $(INCLUDES) $(CSRC) > depend
+	-@$(MAKEDEPEND) $(INCLUDES) $(CSRC) > $@

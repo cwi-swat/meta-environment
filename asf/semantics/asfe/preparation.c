@@ -275,11 +275,13 @@ void select_equations(char *module)
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
 
-  while(cur && !ATisEqual(cur->module, t_module))
+  while (cur && !ATisEqual(cur->module, t_module)) {
     cur = cur->next;
+  }
 
-  if(!cur)
+  if (!cur) {
     ATerror("equations of module %s have not been registered.\n", module);
+  }
 
   equations = cur;
 }
@@ -319,13 +321,22 @@ equation_table *find_equation_table(char *modname)
 
 /*{{{  void enter_equations(char *modname, ATermList eqs) */
 
+/*
+  The equations are ``sorted'' by outermost function symbols.
+  This is performed by the function ``sort_and_filter_on_ofs''.
+  This function adds the equations with the same ofs in the
+  left hand side of an equation to the database, and returns
+  the original list of equations minus the equations which
+  where stored.
+*/
+
 void enter_equations(char *modname, ATermList eqs)
 {
   equation_table *table;
 
   table = find_equation_table(modname);
 
-  if(!table) {
+  if (!table) {
     table = create_equation_table(ATgetLength(eqs)*2);
     table->module = ATmake("<str>", modname);
     table->next = tables;
@@ -349,8 +360,8 @@ void delete_equations(char *modname)
 {
   equation_table *cur = tables, *prev = NULL;
   ATerm t_module = ATmake("<str>", modname);
- 
-  while(cur && !ATisEqual(cur->module, t_module)) {
+
+  while (cur && !ATisEqual(cur->module, t_module)) {
     prev = cur;
     cur = cur->next;
   }
@@ -690,7 +701,7 @@ ATermList RWprepareEqs(ATermList eqs)
 void RWflushEquations()
 {
   equation_table *table;
-  while(tables) {
+  while (tables) {
     table = tables;
     tables = tables->next;
     destroy_equation_table(table);

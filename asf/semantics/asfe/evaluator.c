@@ -95,7 +95,7 @@
 #include <deprecated.h>
 
 #include "preparation.h"
-#include "evaluator.tif.c"
+#include "evaluator.tif.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -177,15 +177,7 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  void create_equations_db(int cid) */
-
-void create_equations_db(int cid)
-{
-}
-
-/*}}}  */
-
-/*{{{  void create_equations_db(int cid) */
+/*{{{  void rewrite_error(const char *message, ATerm subject) */
 
 /* rewrite_error adds an error to the list of errors in the global
  * variable rewrite_errors. The errors consist of a user message
@@ -336,23 +328,17 @@ ATerm equations_available(int cid, char *name)
 
 
 /*}}}  */
-/*{{{  ATerm add_equations(int cid, char *modname, ATermList equs) */
+/*{{{  void add_equations(int cid, char *modname, ATermList equs) */
 
-/* The function ``add_equations'' takes care of adding a new list
+/* The procedure ``add_equations'' takes care of adding a new list
    of equations that is added to the internal database. The arguments
    of this function are a module name and a list of equations.
    Before this list of equations is added to the database some
    preprocessing is needed.
-   1. Layout and list separators are removed, and the lexicals are
-      expanded to a list of lexical characters.
-   2. The equations are ``sorted'' on outermost function symbols.
-      This is performed by the function ``sort_and_filter_on_ofs''.
-      This function adds the equations with the same ofs in the
-      left hand side of an equation to the database, and returns
-      the original list of equations minus the equations which
-      where stored. Therefore the function ``add_equations''
-      contains a loop. */
-ATerm add_equations(int cid, char *modname, ATerm equs)
+   Layout and list separators are removed, and the lexicals are
+   expanded to a list of lexical characters.
+*/
+void add_equations(int cid, char *modname, ATerm equs)
 {
   ATermList newequs;
   int l;
@@ -368,7 +354,7 @@ ATerm add_equations(int cid, char *modname, ATerm equs)
   if(run_verbose) {
     ATwarning("Processing %d equations of module %s\n",l,modname);
   }
-  return ATmake("snd-value(equ-added(<str>))",modname);
+
 }
 
 
@@ -411,7 +397,10 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   ATerm atrm, realtrm;
 
   struct tms start, rewriting;
+
+#ifdef PROFILING
   clock_t user, system;
+#endif
 
   trm = ATremoveAllAnnotations(trm);
   atrm = asfix_get_term(trm);
@@ -447,7 +436,11 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 #endif
 	
-	return ATmake("snd-value(result(tree(<term>),errors([<list>])))",result,rewrite_errors);
+  if (ATisEmpty(rewrite_errors)) {
+	  return ATmake("snd-value(rewrite-result(<term>))", result);
+  } else {
+	  return ATmake("snd-value(rewrite-errors([<list>]))", rewrite_errors);
+  }
 }
 
 /*}}}  */
