@@ -14,6 +14,7 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include
 
 bin_PROGRAMS = configmanager
+noinst_LIBRARIES = libMetaConfig.a
 
 pkgdata_DATA = \
 	configuration-manager.idef \
@@ -48,6 +49,10 @@ configmanager_SOURCES = \
 	MetaConfig_dict.c \
 	configmanager.c \
 	configuration-manager.tif.c
+
+libMetaConfig_a_SOURCES = \
+	MetaConfig.c \
+	MetaConfig_dict.c 
 
 configmanager_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
