@@ -215,6 +215,9 @@ public class GraphWrapper
       imports = imports.getNext();
 
       ATerm fromTerm = pair.getFirst();
+      if (nodeSet.add(fromTerm)) {
+        nodeSequence.add(fromTerm);
+      }
       ATermList elems = (ATermList)pair.getNext().getFirst();
 
       while (!elems.isEmpty()) {
@@ -224,9 +227,6 @@ public class GraphWrapper
         NodeId from = NodeId.fromTerm(fromTerm);
         NodeId to = NodeId.fromTerm(toTerm);
 
-        if (nodeSet.add(fromTerm)) {
-	  nodeSequence.add(fromTerm);
-        }
         if (nodeSet.add(toTerm)) {
 	  nodeSequence.add(toTerm);
         }
