@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jan 26 11:55:29 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * bump version to 0.2
+
 2003/01/13 (jurgenv@cwi.nl)
  * Added dependency on error-support package
 
