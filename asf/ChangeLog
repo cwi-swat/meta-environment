@@ -1,5 +1,9 @@
 # $Id$
 
+2003/11/10 ({markvdb,jurgenv}@cwi.nl)
+ * Fixed a subtle bug in the implementation of := and !:= conditions
+   in asfe. The interpreter did a lot of extra work for nothing.
+
 2003/11/09 (jurgenv@cwi.nl)
  * Added implementation of "!:=" to the asfc compiler. For each negative
    match a new function is generated. The arguments of the function are
