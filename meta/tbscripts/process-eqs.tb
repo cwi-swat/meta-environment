@@ -62,6 +62,30 @@ in
   )* delta
 endlet
 
+process ProcessRenamedImports(Renamings : term, 
+			      ImportsList : list, 
+                              Equations : term?) is
+let
+  Id      : term,
+  Import  : term,
+  Imports : list
+in
+  Id := process-id .
+  Imports := ImportsList .
+  Equations := [] .
+  (
+    if not-equal(Imports, []) then
+      Import  := first(Imports) .
+      Imports := next(Imports) /*.
+      printf("import = %t\n", Import)
+      */
+    fi
+  )*
+  if equal(Imports,[]) then 
+    tau
+  fi 
+endlet
+
 process GetEquations is
 let
   Id           : term,
@@ -70,6 +94,7 @@ let
   AllEquations : term,
   Modules      : list,
   NewModules   : list,
+  Imports      : list,
   Module       : term,
   Renamings    : term,
   FormalName   : term,
@@ -93,9 +118,11 @@ in
 	    rec-msg(plain-equations(Equations?)) .
 	    NewModules := join(Equations, NewModules)
           +
-            rec-msg(renaming-equations(Renamings?, Equations?)) .
+            rec-msg(renaming-equations(Renamings?, Imports?, Equations?)) .
 	    snd-msg(rename-semantics-hook(Renamings, Equations)).
 	    rec-msg(rename-semantics-hook-result(Equations?)).
+	    NewModules := join(Equations, NewModules) .
+	    ProcessRenamedImports(Renamings, Imports, Equations?) .
 	    NewModules := join(Equations, NewModules)
           +
 	    rec-msg(no-equations)
