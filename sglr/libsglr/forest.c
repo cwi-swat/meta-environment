@@ -510,7 +510,7 @@ forest     SG_YieldForest(parse_table *pt, forest t,
     }
     if(recurse) {
       if(!(res = SG_YieldForest(pt, (forest) ATelementAt(args, 1),
-                                recurse, doambs))) {
+                                recurse, ATtrue))) {
         return NULL;
       }
       res = (forest) ATmakeAppl2(SG_Appl_AFun, (ATerm) t, (ATerm) res);
