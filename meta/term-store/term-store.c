@@ -39,6 +39,83 @@ static void version(const char *msg)
 
 /*}}}  */
 
+#define RESULT_TERM(t) (ATmake("snd-value(result(<term>))",t))
+
+/*{{{  ATerm get_value(int conn, char *table, ATerm key) */
+
+ATerm get_value(int conn, char *table, ATerm key)
+{
+  return RESULT_TERM(TS_getValue(table, key));
+}
+
+/*}}}  */
+/*{{{  void remove_value(int conn, char *table, ATerm key) */
+
+void remove_value(int conn, char *table, ATerm key)
+{
+  TS_removeValue(table, key);
+}
+
+/*}}}  */
+/*{{{  void put_value(int conn, char *table, ATerm key, ATerm value) */
+
+void put_value(int conn, char *table, ATerm key, ATerm value)
+{
+  TS_putValue(table,key,(ATermList) value);
+}
+
+/*}}}  */
+/*{{{  ATerm contains_key(int conn, char *table, ATerm key) */
+
+ATerm contains_key(int conn, char *table, ATerm key)
+{
+  return TS_containsKey(table,key) ?
+    ATparse("true") :
+    ATparse("false");
+}
+
+/*}}}  */
+/*{{{  void clear_table(int conn, char *table) */
+
+void clear_table(int conn, char *table)
+{
+  TS_clearTable(table);
+}
+
+/*}}}  */
+/*{{{  ATerm get_all_keys(int conn, char *table) */
+
+ATerm get_all_keys(int conn, char *table)
+{
+  return RESULT_TERM((ATerm) TS_getAllKeys(table));
+}
+
+/*}}}  */
+/*{{{  void remove_table(int conn, char *table) */
+
+void remove_table(int conn, char *table)
+{
+  TS_removeTable(table);
+}
+
+/*}}}  */
+/*{{{  void add_table(int conn, char *table) */
+
+void add_table(int conn, char *table)
+{
+  TS_addTable(table);
+}
+
+/*}}}  */
+/*{{{  void remove_value_from_all_tables(int conn, ATerm key) */
+
+void remove_value_from_all_tables(int conn, ATerm key)
+{
+  TS_removeValueFromAllTables(key);
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])

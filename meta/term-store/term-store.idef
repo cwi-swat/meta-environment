@@ -7,40 +7,44 @@ let
  TableName : str,
  Key : term,
  Value : list,
- ContainsKey : bool
+ ContainsKey : bool,
+ Keys : list,
+ Values : list
 in
   execute(term-store, TS?).
   (
     rec-msg(ts-add-table(TableName?)).
-    printf("not implemented\n")
+    snd-do(TS,add-table(TableName))
   +
     rec-msg(ts-remove-table(TableName?)).
-    printf("not implemented\n")
+    snd-do(TS,remove-table(TableName))
   +
     rec-msg(ts-clear-table(TableName?)).
-    printf("not implemented\n")
+    snd-do(TS,clear-table(TableName))
   +
     rec-msg(ts-put-value(TableName?,Key?,Value?)).
-    printf("not implemented\n")
+    snd-do(TS,put-value(TableName,Key,Value))
   +
     rec-msg(ts-get-value(TableName?,Key?)).
-    printf("not implemented\n")
+    snd-eval(TS,get-value(TableName,Key)) .
+    rec-value(TS,result(Value?)).
+    snd-msg(ts-get-value(TableName,Key,Value))
   +
     rec-msg(ts-remove-value(TableName?,Key?)).
-    printf("not implemented\n")
+    snd-do(TS,remove-value(TableName,Key))
   +
     rec-msg(ts-contains-key(TableName?,Key?)).
-    printf("not implemented\n")
+    snd-eval(TS,contains-key(TableName,Key)).
+    rec-value(TS,result(ContainsKey?)).
+    snd-msg(ts-contains-key(TableName,Key,ContainsKey))
   +
     rec-msg(ts-get-all-keys(TableName?)).
-    printf("not implemented\n")
-  +
-    rec-msg(ts-get-all-values(TableName?)).
-    printf("not implemented\n")
+    snd-eval(TS,get-all-keys(TableName)).
+    rec-value(TS,result(Keys?)).
+    snd-msg(ts-all-keys(TableName,Keys))
   +
     rec-msg(ts-remove-value-from-all-tables(Key?)).
-    printf("not implemented\n")
-
+    snd-do(TS,remove-value-from-all-tables(Key))
   )
   * delta
 endlet
