@@ -158,6 +158,8 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   ASF_ASFTestEquationTestList testList;
   ATerm result;
 
+  useTide = ATfalse;
+
   eqs = ATBunpack(eqs);
   eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
 
