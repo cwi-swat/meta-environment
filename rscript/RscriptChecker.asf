@@ -887,7 +887,14 @@ $Error]>
 		<power,		fun[ bag[T] ]				to bag[bag[T]]>,
 
                 <reachX,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
-                <reachR,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >
+                <reachR,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
+
+		<filename,	fun [ area ]				to str >,
+		<beginline,	fun [ area ]				to int >,
+		<begincol,	fun [ area ]				to int >,
+
+		<endline,	fun [ area ]				to int >,
+		<endcol,	fun [ area ]				to int >
 
         ]
 
