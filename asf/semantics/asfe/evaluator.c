@@ -1168,7 +1168,7 @@ int main(int argc, char *argv[])
       cid = ATBconnect(NULL, NULL, -1,evaluator_handler); 
       ATBeventloop();
     #else
-      ATwarning("compiler: Toolbus cannot be used in Windows.\n");
+      ATwarning("evaluator: Toolbus cannot be used in Windows.\n");
     #endif
   } 
   else {
