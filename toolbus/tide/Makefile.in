@@ -49,8 +49,6 @@ LINK = $(CC) $(LDFLAGS) $(LIB) -o $@
 INCLUDE	= -I$(top_srcdir)/src -I$(srcdir)
 LIB	= -L$(top_srcdir)/src
 
-include general-make
-
 PRGS	= buscontrol
 SCRIPTS	= tide query
 SRC	= browser.py.nw buscontrol.c.nw evq.c.nw extui.py.nw fset.py.nw \
