@@ -19,6 +19,9 @@
 
 $Id$
 
+2000/11/08 (jurgenv@cwi.nl)
+    * ambtrakker renamed to ambtracker
+
 2000/11/04 (mdejonge@cwi.nl)
     * Bug fix: of by one error in SG_ReadFile (sglr-interface,c)
       which caused sglr to dump core when reading from standard input  is
