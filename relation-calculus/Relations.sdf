@@ -6,12 +6,11 @@ exports
 
   sorts Tuple {Elem ","}+
 
-%%  aliases
-%%	Rel[[Elem]]					-> Bag[[Elem]]
-
   context-free syntax
      Elem # Elem					-> Tuple
      Tuple						-> Elem
+
+     "silence-the-checker"				-> {Elem ","}+
 
      "<" Elem "," Elem "," {Elem ","}+ ">"		-> Tuple
 

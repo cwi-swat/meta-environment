@@ -6,8 +6,8 @@ imports MyArea
 exports
 %%sorts Elem would be reasonable :-) but gives double declaration error
 
-  sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE EQU TARGET
-	{REXP ","}+
+  sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
+	REXP REXPTYPE EQU DESTINATION {REXP ","}+
 
   imports Relations[Elem]
 
@@ -71,7 +71,7 @@ exports
 
 %% Types
 
-     "bool" | "int" | "str" | "node"	     	-> ElemType
+     "bool" | "int" | "str" | "area"	     	-> ElemType
      ElemType                                	-> REXPTYPE
      "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
      "<" REXPTYPE "," REXPTYPE "," {REXPTYPE ","}+">" 
@@ -82,20 +82,21 @@ exports
 
 %% Bag and relation formers
 
-     "{" REXP "|" {FROM ","}+ "}"		-> REXP
+     "{" REXP "|" {GENERATOR ","}+ "}"		-> REXP
 
-     RVAR 					-> TARGET
-     "<" RVAR "," RVAR ">"			-> TARGET
-     "<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> TARGET
+     RVAR 					-> DESTINATION
+     "<" RVAR "," RVAR ">"			-> DESTINATION
+     "<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> DESTINATION
 
-     TARGET ":" REXP                           	-> FROM
-     REXP					-> FROM
-     TARGET "<-" REXP				-> FROM {prefer}
+     DESTINATION ":" REXP                      	-> SIMPLE-GENERATOR
+     SIMPLE-GENERATOR				-> GENERATOR
+     REXP					-> GENERATOR
+     DESTINATION "<-" REXP			-> GENERATOR {prefer}
 
 %% Quantifiers
 
-     "exists" "(" FROM "|" REXP ")"		-> REXP
-     "forall" "(" FROM "|" REXP	")"		-> REXP
+     "exists" "(" SIMPLE-GENERATOR "|" REXP ")" -> REXP
+     "forall" "(" SIMPLE-GENERATOR "|" REXP ")"	-> REXP
 
 %% Functions
 

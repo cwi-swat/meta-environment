@@ -3,39 +3,32 @@ module RscriptCalculator
 imports Rstore
 
 exports
-   sorts TESTREPORT { DCLRVAR ","}+
+   sorts TESTREPORT %%{ DCLRVAR ","}+
 
    context-free syntax
-	is-rel(RVALUE)					-> Boolean
 
-	increment(RVAR, RSTORE)				-> RSTORE
- 
 %% Main evaluation functions for Rscripts
 
-        eval-rscript(RSCRIPT)                 		-> RSTORE
-        eval-rscript-value(RSCRIPT, RSTORE)   		-> Elem  %% not yet defined!
-        eval-rscript(RSCRIPT, RVAR, RSTORE)   		-> Elem
+        eval-rscript(RSCRIPT)                 			-> RSTORE
+        eval-rscript(RSCRIPT, RVAR, RSTORE)   			-> Elem
 
 %% Test suite support
 
-	"All" Integer "tests" "passed"			-> TESTREPORT
-	Integer "of" Integer "tests" "failed:" RVALUE 	-> TESTREPORT
+	"All" Integer "tests" "passed"				-> TESTREPORT
+	Integer "of" Integer "tests" "failed:" RVALUE 		-> TESTREPORT
 
-	testsuite-report(Integer, Integer, RVALUE) 	-> TESTREPORT
-
-	eval-rscript-testsuite(RSCRIPT)			-> TESTREPORT
+	testsuite-report(Integer, Integer, RVALUE) 		-> TESTREPORT
+	eval-rscript-testsuite(RSCRIPT)				-> TESTREPORT
+	increment(RVAR, RSTORE)					-> RSTORE
 
 %% should be hidden
-
-   sorts INFIXOP PREFIXOP POSTFIXOP
 
    context-free syntax
 
         eval-rstat(RSTAT, RSTORE)           			-> RSTORE
         eval-rstats(RSTAT*, RSTORE)          			-> RSTORE
 
-	 "{" {FROM ","}+ "::" REXP  "}"				-> REXP
-	FROM "::" REXP						-> REXP
+	 "{" {GENERATOR ","}+ "::" REXP  "}"			-> REXP
  
         evalp(REXP, RSTORE)            				-> Boolean
         evale(REXP, RSTORE)            				-> Elem
@@ -43,6 +36,10 @@ exports
         evalb(REXP, RSTORE)            				-> Bag[[Elem]]
         evalr(REXP, RSTORE)            				-> Bag[[Elem]]
         evalx(REXP, RSTORE)            				-> Elem
+
+	eval-lt(RVALUE, RVALUE)					-> Boolean
+	eval-le(RVALUE, RVALUE)					-> Boolean
+	eval-im(RVALUE, RVALUE)					-> Elem
 
 	add-element(Elem, Bag[[Elem]])				-> Bag[[Elem]]
 	power(Bag[[Elem]])					-> Bag[[Elem]]
@@ -54,54 +51,15 @@ exports
 	equal-rval(RVALUE, RVALUE)				-> Boolean
 
 	eval-itern({RVAR ","}+,  RVALUE, RVALUE, REXP, RSTORE)	-> Elem
-	store-var({RVAR ","}+, RVALUE, RSTORE)			-> RSTORE
+	store-rvars({RVAR ","}+, RVALUE, RSTORE)		-> RSTORE
 
 	append(RVALUE, RVALUE)					-> Elem
-	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)		-> Boolean
-	existsr(RVAR, RVAR, Bag[[Elem]], REXP, RSTORE)		-> Boolean
-	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)		-> Boolean
-	forallr(RVAR, Bag[[Elem]], REXP, RSTORE)		-> Boolean
+	exists({RVAR ","}+, Bag[[Elem]], REXP, RSTORE)		-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
 
-        apply(RVALUE, INFIXOP, RVALUE)    			-> Elem
-        apply(PREFIXOP, RVALUE)         			-> Elem
-        apply(RVALUE, POSTFIXOP)        			-> Elem
-
-%% Binary operators
-
-	"and"					-> INFIXOP
-	"or"					-> INFIXOP
-	"implies"				-> INFIXOP
-
-        "in"			       		-> INFIXOP
-        "notin"			       		-> INFIXOP
-
-        "=="                           		-> INFIXOP
-        "!="                           		-> INFIXOP
-        "<="                           		-> INFIXOP
-        "<"                            		-> INFIXOP
-        ">="                           		-> INFIXOP
-        ">"                            		-> INFIXOP
-
-        "union"                        		-> INFIXOP
-        "inter"                        		-> INFIXOP
-        "\\"                           		-> INFIXOP
-        "o"                            		-> INFIXOP
-        "x"                            		-> INFIXOP
-        "."                            		-> INFIXOP
-
-%% Prefix Operators
-
-	"not"					-> PREFIXOP
-        "#"                            		-> PREFIXOP
-
-%% Postfix Operators
-
-	"+"					-> POSTFIXOP
-	"*"					-> POSTFIXOP
-
+	is-rel(RVALUE)						-> Boolean
 
 hiddens
 %%  imports asf/syntax/Comments
@@ -132,9 +90,9 @@ hiddens
         "$Tuple*" [0-9\']*             -> { Tuple ","}*
         "$Tuple+" [0-9\']*             -> { Tuple ","}+
 
-        "$From" [0-9\']*               -> FROM
-        "$From*" [0-9\']*              -> {FROM ","}*
-        "$From+" [0-9\']*              -> {FROM ","}+
+        "$Gen" [0-9\']*                -> GENERATOR
+        "$Gen*" [0-9\']*               -> {GENERATOR ","}*
+        "$Gen+" [0-9\']*               -> {GENERATOR ","}+
 
         "$Rscript" [0-9\']*            -> RSCRIPT
 
@@ -150,13 +108,7 @@ hiddens
 	"$Etype*" [0-9\']*             -> {REXPTYPE ","}*
 	"$Etype+" [0-9\']*             -> {REXPTYPE ","}+
 
-	"$Iop"				-> INFIXOP
-	"$Preop"			-> PREFIXOP
-	"$Postop"			-> POSTFIXOP
-
-	"$Target"  [0-9\']*  		-> TARGET
-
-	"$DclRvar+" [0-9\']*		-> { DCLRVAR ","}+
+	"$DclRvar+" [0-9\']*	-> { DCLRVAR ","}+
 
 
      

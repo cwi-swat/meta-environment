@@ -6,7 +6,7 @@ imports containers/Table[RVAR REXPTYPE]
 imports ListItems
 imports MyPosInfo[RSTAT]
 imports MyPosInfo[REXP]
-imports MyPosInfo[FROM]
+imports MyPosInfo[GENERATOR]
 imports MyPosInfo[Bag[[Elem]]]
 %%imports MyPosInfo[Rel[[Elem]]]
 
@@ -30,7 +30,7 @@ exports
 
 	RSTAT cannot be typed 					-> ERROR
 	REXP cannot be typed 					-> ERROR
-	FROM cannot be typed					-> ERROR
+	GENERATOR cannot be typed				-> ERROR
 	Bag[[Elem]] cannot be typed 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
@@ -70,7 +70,7 @@ exports
         check-rscript(RSTAT*, TENV)				-> TENV
 	check(REXP, TENV) 					-> REXPTYPE # TENV
 
-	check-const(Elem, TENV) 					-> REXPTYPE # TENV
+	check-const(Elem, TENV) 				-> REXPTYPE # TENV
 	check-const-tuple(Elem, TENV)				-> REXPTYPE # TENV
 	check-const-bag-or-rel(Bag[[Elem]], TENV) 		-> REXPTYPE # TENV
 	check-stat(RSTAT, TENV) 				-> TENV
@@ -87,9 +87,8 @@ exports
         
         "[" { DCLRVAR ","}* "]"					-> DCLRVARS
 
-	add-from({FROM ","}*, TENV)             		-> TENV
-	del-from({FROM ","}*, TENV)             		-> TENV
-
+	add-generators({GENERATOR ","}*, TENV)            	-> TENV
+	del-generators({GENERATOR ","}*, TENV)         		-> TENV
 
         add-formals(DCLRVARS, TENV)             		-> TENV
         del-formals(DCLRVARS, TENV)				-> TENV
@@ -186,9 +185,11 @@ hiddens
      "$Stat*" [0-9\']*           -> RSTAT*
      "$Stat+" [0-9\']*           -> RSTAT+
 
-     "$From" [0-9\']*   	-> FROM
-     "$From*" [0-9\']*   	-> {FROM ","}*
-     "$From+" [0-9\']*   	-> {FROM ","}+
+     "$SimpleGen" [0-9\']*   	-> SIMPLE-GENERATOR
+
+     "$Gen" [0-9\']*   		-> GENERATOR
+     "$Gen*" [0-9\']*   	-> {GENERATOR ","}*
+     "$Gen+" [0-9\']*   	-> {GENERATOR ","}+
 
       "$ListItem*" [0-9\']*	-> {ListItem ","}*
 	
