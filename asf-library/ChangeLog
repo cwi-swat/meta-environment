@@ -1,5 +1,6 @@
 2001/12/21 (jurgenv@cwi.nl)
   * Added --with-pt-support, --with-sglr and --with-asf configure options.
+  * Fixed make_rules.asf to be able to handle distcheck target.
 
 2001/08/30 (markvdb@cwi.nl)
   * improved the efficiency of the addition.
