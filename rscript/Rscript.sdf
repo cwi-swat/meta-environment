@@ -3,7 +3,7 @@ module Rscript
 exports
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
-	REXP REXPTYPE EQU DESTINATION %% {REXP ","}+ 
+	REXP0 REXP REXPTYPE EQU DESTINATION %% {REXP ","}+ 
 	INITVAR TARGET
 
   imports RscriptElem basic/Comments
@@ -24,11 +24,15 @@ exports
 
   context-free syntax
 
-     Elem                                    	-> REXP
-     RVAR                                    	-> REXP
-%%     REXP # REXP			     	-> REXP {avoid}
-     "<" {REXP ","}+ ">"			-> REXP {avoid}
-     "{" {REXP ","}* "}"                     	-> REXP {avoid}
+     Elem                                    	-> REXP0
+     RVAR                                    	-> REXP0
+%%     REXP # REXP			     	-> REXP0 {avoid}
+     "<" {REXP ","}+ ">"			-> REXP0 {avoid}
+     "{" {REXP ","}* "}"                     	-> REXP0 {avoid}
+
+     "(" REXP ")"                             	-> REXP0
+
+     REXP0					-> REXP 
 
 
      REXP "and" REXP                         	-> REXP {left}
@@ -57,9 +61,9 @@ exports
      REXP "o" REXP                           	-> REXP {left}
      REXP "x" REXP                           	-> REXP {left}
 
-     REXP "[" REXP "]"				-> REXP {prefer}
-     REXP "[" REXP "," "-" "]"			-> REXP {prefer}
-     REXP "[" "-" "," REXP "]"			-> REXP {prefer}
+     REXP0 "[" REXP "]"				-> REXP
+     REXP0 "[" REXP "," "-" "]"			-> REXP 
+     REXP0 "[" "-" "," REXP "]"			-> REXP
 
      REXP "." REXP				-> REXP {left}
 
@@ -94,7 +98,7 @@ exports
 %% Functions
 
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
-     "(" REXP ")"                             	-> REXP {bracket}
+
 
 %% Types
 
@@ -142,10 +146,10 @@ exports
     {	REXP "+" -> REXP
        	REXP "*" -> REXP
     }					>
-    {	REXP "[" REXP "]" -> REXP
-	REXP "[" REXP "," "-" "]"  -> REXP
-	REXP "[" "-" "," REXP  "]" -> REXP
-    }					>
+%%    {	REXP "[" REXP "]" -> REXP
+%%	REXP "[" REXP "," "-" "]"  -> REXP
+%%	REXP "[" "-" "," REXP  "]" -> REXP
+%%    }					>
 
     REXP "." REXP -> REXP		>
     REXP "o" REXP -> REXP		>

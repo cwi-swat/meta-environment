@@ -217,6 +217,8 @@
 
 %% ---- Eval binary operators
 
+[PAR]	evalx(( $Exp ), $Rstore) = evalx($Exp, $Rstore)
+
 [AND1]	$BoolCon = evalp($Exp1, $Rstore) & evalp($Exp2, $Rstore)
 	====================================================
 	evalx($Exp1 and $Exp2, $Rstore) = $BoolCon
@@ -316,11 +318,11 @@
 [erim1]	eval-rim($Rel, $Elem)			= rimage($Rel, $Elem)%% when is-rel($Rel) = true
 [erim2]	eval-rim($Rel, $Bag)			= rimage($Rel, $Bag) %% when is-rel($Rel) = true
 
-[IM1]	evalx($Exp1 [ -, $Exp2], $Rstore)	= eval-lim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[IM1]	evalx($Exp0 [ -, $Exp1], $Rstore)	= eval-lim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
 
-[IM2]	evalx($Exp1 [ $Exp2, - ], $Rstore)	= eval-rim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[IM2]	evalx($Exp0 [ $Exp1, - ], $Rstore)	= eval-rim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
 
-[IM3]	evalx($Exp1 [ $Exp2 ], $Rstore)		= eval-rim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[IM3]	evalx($Exp0 [ $Exp1 ], $Rstore)		= eval-rim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
 
 %% ---- Closures
 

@@ -148,8 +148,9 @@ hiddens
      "$Error*" [0-9\']* 	-> {ERROR ";"}*
      "$Error+" [0-9\']* 	-> {ERROR ";"}+
      "$Errors" [0-9\']*		-> ERRORS
-
-     "$Exp" [0-9\']*    	-> REXP
+     
+     "$Exp0" [0-9\']*    	-> REXP0
+     "$Exp" [1-9\']*    	-> REXP
      "$Test" [0-9\']*    	-> REXP
      "$Exp*" [0-9\']*    	-> {REXP ","}*
      "$Exp+" [0-9\']*    	-> {REXP ","}+

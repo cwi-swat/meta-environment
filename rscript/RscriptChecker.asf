@@ -386,6 +386,16 @@ $Error]>
 
 %% ---- Check arbitrary expressions
 
+%% ---- Default case for check
+
+[default-check]
+	check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
+
+%% ---- Parentheses
+
+[check-par]
+	check(( $Exp ), $Tenv) = check($Exp, $Tenv)
+
 [check-const1]
 	check($Elem, $Tenv) = check-const($Elem, $Tenv)
 
@@ -667,28 +677,28 @@ $Error]>
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [check-im1] 	
-	$Exp = $Exp1 [ -, $Exp2],
-      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
-      	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-lim($Exp, norm($Etype1, $Tenv), norm($Etype2, $Tenv), $Tenv'') = <$Etype3, $Tenv'''>
+	$Exp = $Exp0 [ -, $Exp1],
+      	check($Exp0, $Tenv) = <$Etype0, $Tenv'>, 
+      	check($Exp1, $Tenv') = <$Etype1, $Tenv''>,
+      	compat-lim($Exp, norm($Etype0, $Tenv), norm($Etype1, $Tenv), $Tenv'') = <$Etype2, $Tenv'''>
       	===========================================
-      	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
+      	check($Exp, $Tenv) = <$Etype2, $Tenv'''>
 
 [check-im2]
-	$Exp = $Exp1 [ $Exp2, - ],
-      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
-      	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-rim($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
+	$Exp = $Exp0 [ $Exp1, - ],
+      	check($Exp0, $Tenv) = <$Etype0, $Tenv'>, 
+      	check($Exp1, $Tenv') = <$Etype1, $Tenv''>,
+      	compat-rim($Exp, norm($Etype0,$Tenv), norm($Etype1,$Tenv), $Tenv'') = <$Etype2, $Tenv'''>
       	===========================================
-	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
+	check($Exp, $Tenv) = <$Etype2, $Tenv'''>
 
-[check-im3]    %%requires[pkg]
-	$Exp = $Exp1 [ $Exp2 ],
-      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
-      	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-rim($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
+[check-im3]
+	$Exp = $Exp0 [ $Exp1 ],
+      	check($Exp0, $Tenv) = <$Etype0, $Tenv'>, 
+      	check($Exp1, $Tenv') = <$Etype1, $Tenv''>,
+      	compat-rim($Exp, norm($Etype0,$Tenv), norm($Etype1,$Tenv), $Tenv'') = <$Etype2, $Tenv'''>
       	===========================================
-	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
+	check($Exp, $Tenv) = <$Etype2, $Tenv'''>
 
 %% ---- field selection
 
@@ -984,10 +994,7 @@ $Error]>
 [default-check-stat]
 	check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
 
-%% ---- Default case for check
 
-[default-check]
-	check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
 
 %% ---- Find result type of a function, given list of argument types
 
