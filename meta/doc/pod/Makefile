@@ -21,7 +21,7 @@
 CENTER="Meta-Environment Documentation"
 RELEASE="1.0"
 
-target=parse-sdf2 sdf2table
+target=parse-sdf2 sdf2table graph-browser
 files=	${addsuffix .7,${target}} ${addsuffix .txt,${target}} \
 	${addsuffix .html,${target}} ${addsuffix .bok,${target}}
 
