@@ -7,11 +7,14 @@ tool se is {
 process Structure-editor(TE: text-edit, Fid: str, Text: str) is
 let
 Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
-L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int, Char: term
+L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int,
+Char: term, G: str
 in
   Id := process-id.
 /* Only one language can currently be edited. It is: */
   L := "Pico".
+/* We're not selective about start symbols yet */
+  G := "" .
 /* And here we'll tell the parser to open it */
   snd-msg(open-language(L,"/ufs/kuipers/petr/new-meta/sglr/tables/Pico.tbl")).
   execute(se, SE?).
@@ -37,7 +40,7 @@ in
         Foc:= first(Fl).
         snd-msg(TE,get-focus-text(Foc)).
         rec-msg(TE,focus-text(Str?)).
-        snd-msg(Id,parse-string(L,Str)).(( 
+        snd-msg(Id,parse-string(L, G, Str)).(( 
             rec-msg(Id,parse-result(parsetree(T?,I?))).
             if equal(I,0) then
               snd-msg(Id,a2toa1(T)).
