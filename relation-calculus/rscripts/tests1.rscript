@@ -398,6 +398,9 @@ assert "Advanced value former 3":
 	{<X,S> | int X : {10,20}, <int P, int Q, int R, int S> <- <1,2,3,4>}
 	== {<10,4>, <20,4>}
 
+assert "Advanced value former 4":
+	{<X, Y> | int X : {1,2}, <int,int,int> Y <- <1,2,3>} == {<1,<1,2,3>>, <2,<1,2,3>>}
+
 %% ---- Exists
 
 assert "exists, 1": exists(int X : {1,2,3} | X > 2) == true

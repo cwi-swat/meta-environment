@@ -728,10 +728,10 @@ $Error]>
       	==========================================
       	add-generators($Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv')
 
-[ag4] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-	match-targets($Target, element-type($Etype, $Tenv), $Tenv') = $Tenv''
+[ag4] 	require-type($Exp, $Etype, $Tenv) = $Tenv',
+      	store($Tenv', $Var, $Etype) = $Tenv''
       	==========================================
-      	add-generators($Target <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
+      	add-generators($Etype $Var <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag5] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
 	match-targets($Target+, element-type($Etype, $Tenv), $Tenv') = $Tenv''
