@@ -100,7 +100,7 @@ functionality, monads, parametrized modules, etc.
 The most typical of generated environments is a so called 'basic 
 programming environment' containing a syntax directed editor, a parser,
 a typechecker and an interpreter. The user of such an enviroment can
-type in programs in the syntax directed editor, use the typechecker
+type in programs using the syntax directed editor, use the typechecker
 to check the type correctness of the programs, and the interpreter
 to run the program and see the results.
 
@@ -109,17 +109,24 @@ It should also be possible to use generated components in a
 batch oriented fashion. For instance, a compiler that is part of
 a generated interactive environment should also be available as
 a standalone tool so large amounts of source code can be
-compiled automatically in a batch oriented fashion.
+compiled automatically in a batch oriented way.
 
 <H3>Extensibility</H3>
 Not all behaviour of the generated environments can be specified
 accurately and concisely using the Asf+Sdf formalism. Especially
-user interface extensions and interactions with components outside
-the Asf+Sdf Meta-Environment are difficult, if not impossible to
-express. This means that the generated environments should not be
+application specific extensions of the user interface and interactions
+with components outside the Asf+Sdf Meta-Environment, e.g., proof checkers,
+are difficult, if not impossible to foresee.
+This means that the generated environments should not be
 final and closed, but rather open and extensible. Important in this
 respect is that extensions and modifications made by the user should be
 preserved when the environment is regenerated.
+
+<P> Furthermore, a number of tools, e.g., compiler, parser generator, and
+unparser generator, should be usable as independent components as well.
+They should be usable in different systems.
+Systems not developed using or based on Asf+Sdf, the Meta-Environment,
+and the ToolBus.
 
 </BODY>
 </HTML>
