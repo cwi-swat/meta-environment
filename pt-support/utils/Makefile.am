@@ -26,7 +26,7 @@ INCLUDES = \
 	-I${top_srcdir}/libptmept  \
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include \
-	-I${TOOLBUSLIB}/include \
+	-I${TOOLBUSLIB}/include
 
 pkgdata_DATA = \
 	unparser.idef \

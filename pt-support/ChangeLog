@@ -1,5 +1,8 @@
 $Id$
 
+Tue May  4 09:16:04 CEST 2004 <kooiker@cwi.nl>
+ * utils/Makefile.am: removed trailing backslash 
+
 Fri Apr 23 10:46:40 CEST 2004 <{jong,kooiker}@cwi.nl>
  * utils/unparse.idef: unparsed text is a "str", not a "term" !
 
