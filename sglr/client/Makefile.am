@@ -11,8 +11,7 @@ HDRS         =
 
 parse_client_SOURCES = $(SRCS) $(HDRS)
 
-LDADD        = -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
-               $(SOCKLIBS)
+LDADD        = -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
 
 # make sure generates files are removed during "make clean"
 CLEANFILES   = parse-client.tif.c parse-client.tif.h

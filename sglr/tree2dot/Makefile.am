@@ -12,5 +12,4 @@ tree2dot_SOURCES = $(SRCS) $(HDRS)
 LDADD            =  -L${top_builddir}/libtree2dot -ltree2dot \
                     -L${top_builddir}/libsglr -lsglr \
                     -L${top_builddir}/liba2toa1 -la2toa1 \
-                    -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
-                    $(SOCKLIBS)
+                    -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
