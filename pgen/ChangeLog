@@ -1,6 +1,9 @@
 $Id$
 
 
+2002/10/04 (vinju@loria.fr)
+ * sdfchecker brought up to date with changed pt-support interface
+
 2002/09/26 (vinju@loria.fr)
  * Bumped to 1.6beta
 
