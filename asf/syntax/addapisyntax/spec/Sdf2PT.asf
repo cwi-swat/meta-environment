@@ -12,8 +12,8 @@ equations
 [0] sdf2pt(Lhs -> Rhs Attributes, cf) =
     prod([asyms(Lhs,cf)],cf(asym(Rhs)),aattributes(Attributes)) 
 
-[0] sdf2pt(Lhs -> Rhs Attributes, lex) =
-    prod([asyms(Lhs,lex)],lex(asym(Rhs)),aattributes(Attributes)) 
+%%[0] sdf2pt(Lhs -> Rhs Attributes, lex) =
+%%    prod([asyms(Lhs,lex)],lex(asym(Rhs)),aattributes(Attributes)) 
 
 [1] asyms(,lex|cf) =
 
@@ -33,6 +33,7 @@ equations
 [4] asym(sort(c*))             = sort(literal(""" c* """))
 [5] asym(Symbol ?)             = opt(asym(Symbol))
 [6] asym(Symbol1 | Symbol2)    = alt(asym(Symbol1),asym(Symbol2))
+
 [7] asym(Symbol +)             = iter(asym(Symbol))
 [8] asym(Symbol *)             = iter-star(asym(Symbol))
 [9] asym({Symbol1 Symbol2}+)   = iter-sep(asym(Symbol1),asym(Symbol2))
@@ -41,6 +42,17 @@ equations
 [12] asym(uqliteral(c*))       = lit(literal(""" c* """))
 [14] asym($Literal : Symbol)   = asym(Symbol)
 [15] asym(($Symbol $Symbol+))  = seq(aseqlist($Symbol $Symbol+))
+[16] asym(Symbol1 # Symbol2)   = pair(asym(Symbol1),asym(Symbol2))
+[17] asym(<Symbol -CF>)        = cf(asym(Symbol))
+[18] asym(<Symbol -LEX>)       = lex(asym(Symbol))
+[19] asym(<Symbol -VAR>)       = varsym(asym(Symbol))
+[20] asym(LAYOUT)              = layout
+[21] asym(())                  = empty
+[22] asym(Symbol Natcon +)     = iter-n(asym(Symbol),Natcon)
+[23] asym({Symbol1 Symbol2} Natcon +) = iter-sep-n(asym(Symbol1),asym(Symbol2),Natcon)
+[24] asym(Set [ Symbol ])      = set(asym(Symbol))
+[25] asym((Symbol* => Symbol)) = func([asyms(Symbol*,cf)],asym(Symbol))
+[26] asym(<<Symbol*>>)         = perm([asyms(Symbol*,cf)])
 
 [13] aattributes()             = no-attrs
 [14] aattributes({})           = no-attrs

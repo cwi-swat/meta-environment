@@ -40,6 +40,7 @@ variables
 "c"[0-9]*            -> CHAR
 "Term"[0-9]*         -> ATerm
 "Intcon"[0-9]*       -> IntCon
+"Natcon"[0-9]*       -> NatCon
 "lex|cf"[0-9]*       -> "lex" | "cf"
 "$"? "Symbol+"[0-9]* -> Symbol+
 "$"? "Symbol"[0-9]*  -> Symbol
