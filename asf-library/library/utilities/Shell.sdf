@@ -1,7 +1,8 @@
 module utilities/Shell
 
 imports basic/Strings
+imports basic/Booleans
 
 exports
   context-free syntax
-    shell(String) -> String {built-in("shell")}
+    shell(String) -> Boolean {built-in("shell")}
