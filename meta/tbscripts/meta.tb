@@ -9,7 +9,7 @@
 #include "prettyprinter.tb"
 #include "rewrite.tb"
 #include "evaluator.tb"
-#include "io.tb"
+#include "in-output.idef"
 #include "parsetrees.tb"
 #include "open-modules.tb"
 #include "retrieve-eqs.tb"
