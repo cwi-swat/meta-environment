@@ -71,9 +71,11 @@ ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start
 /*}}}  */
 /*{{{  static ATerm PT_makePosInfo(path, line1, int col1, line2, col2) */
 
-static ATerm PT_makePosInfo(const char *path, int line1, int col1, int line2, int col2)
+static ATerm PT_makePosInfo(const char *path, int line1, int col1, 
+                                              int line2, int col2,
+                                              int offset, int length)
 {
-  ERR_Area area = ERR_makeAreaArea(line1, col1, line2, col2);
+  ERR_Area area = ERR_makeAreaArea(line1, col1, line2, col2, offset, length);
   ERR_Location location = ERR_makeLocationLocation((char*) path, area);
 
   return (ATerm) location;
@@ -90,7 +92,9 @@ static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
   ATerm t = PT_TreeToTerm(tree);
 
   t = ATsetAnnotation(t, ATparse("pos-info"), 
-		      PT_makePosInfo(path, start_line, start_col, to_line, to_col));
+		      PT_makePosInfo(path, start_line, start_col, 
+                                           to_line, to_col, 
+                                           offset, length));
 
   return PT_TreeFromTerm(t);
 }
