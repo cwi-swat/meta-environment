@@ -17,4 +17,4 @@ requires
 
 error-support 0.2.1
 
-toolbuslib 0.6
+toolbuslib 0.8
