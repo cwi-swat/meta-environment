@@ -947,6 +947,7 @@ Note that this interface is written by the programmer. In the ToolBus
 setting, the interface is derived from the inter-component communication
 described by ToolBus processes.
 
+\subsection{Comparison of the \texttt{findByName} implementation}
 Take a loot at the implementation of \texttt{findByName}. First the
 ToolBus version:
 
@@ -993,6 +994,7 @@ an \texttt{int} (the unique id of the addressbook entry), we have to
 pick a number outside the range of valid identities (here we chose $-1$)
 to represent the case that the address is not in the database.
 
+\subsection{Passing compound data structures}
 So far, information about address book entries is exchanged by means
 of an identifier represented as an \texttt{int} and other parameters
 as \texttt{String}s. As an extension to the example, consider the case
@@ -1005,8 +1007,11 @@ First, we take a look at the ToolBus version.
 
 \begin{footnotesize}
 \begin{verbatim}
-  return factory.make("snd-value(found(name(<string>),address(<string>)))",
-                      entry.getName(), entry.getAddress());
+  public ATerm findByName(String name) {
+  ...
+    return factory.make("snd-value(found(name(<string>),address(<string>)))",
+                        entry.getName(), entry.getAddress());
+  }
 \end{verbatim}
 \end{footnotesize}
 
@@ -1020,6 +1025,33 @@ example of such a result term, assuming that \texttt{name} equals
  snd-value(found(name("John Doe"), address("1234 Elm Street")))
 \end{verbatim}
 \end{footnotesize}
+
+In RMI, sending an instance of a class to another tool is done through
+Java Serialization. For our address book entries to be serialized in Java,
+we need to add \texttt{implements Serializable} to the class definition.
+In contrast to the ToolBus version, we do not write explicit serialization
+code (to linearize the entry to a stream for example), this is taken
+care of by the Java Serialization Protocol. RMI exploits the fact that
+only Java tools are interacting with eachother, whereas in the ToolBus
+setting we represent the data in a platform and programming language
+independent term format, enabling data exchange between components
+written in different languages.
+
+\begin{footnotesize}
+\begin{verbatim}
+public class AddressBookEntry implements IAddressBookEntry, Serializable {
+  private String name;
+  public String getName() { return name; }
+  ...
+}
+
+public IAddressBookEntry findByName(String name) {
+  return (IAddressBookEntry) addressByName.get(name);
+}
+\end{verbatim}
+\end{footnotesize}
+
+
 
 \section{Concluding Remarks}
 
