@@ -16,6 +16,7 @@ Options:
 	-r file : reducer
 	-P str  : parser options
 	-R str  : reducer options
+	-v num  : version
 	-V	: reveal program version (i.e. $myversion)
 E_O_USAGE
 }
@@ -27,7 +28,7 @@ Version() {
 input="-"
 output="-"
 
-myarguments="ho:p:P:r:R:vV"
+myarguments="ho:p:P:r:R:v:V"
 
 
 args=`getopt $myarguments $* 2> /dev/null`
@@ -40,6 +41,7 @@ fi
 set -- $args
 
 reducer=cat
+version=0.0
 parsetable=""
 parser_options=""
 reducer_options=""
@@ -61,6 +63,8 @@ do
 	    shift; reducer=$1;;
 	-R) 
 	    shift; reducer_options=$1;;
+	-v) 
+	    shift; version=$1;;
         -V)
             Version ; exit 0 ;;
     esac
@@ -71,7 +75,7 @@ cat << E_O_SCRIPT > ${output} && chmod +x ${output}
 #! /bin/sh
 
 name=${output}
-myversion=0.0
+myversion=${version}
 
 Usage() {
 cat << E_O_USAGE >&2
