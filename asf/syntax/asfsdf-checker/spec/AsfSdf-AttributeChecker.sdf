@@ -33,6 +33,9 @@ hiddens
     contains-top-down-or-bottom-up({ATerm ","}*)  -> Boolean
 
   context-free syntax
+    "equal-arguments" "(" {Symbol ","}* ";" {Symbol ","}* ")" -> Boolean 
+
+  context-free syntax
     contains-only-traversal-attributes({ATerm ","}*)      -> Boolean
 
   context-free syntax

@@ -133,17 +133,17 @@ accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
 
   [default-ct-3'2] contains-trafo(Aterm*) = false
 
-  [cb-1'1] contains-break-or-continue(Aterm*1, break, Aterm*2) = true
+  [cbc-1'1] contains-break-or-continue(Aterm*1, break, Aterm*2) = true
 
-  [cc-1'1] contains-break-continue(Aterm*1, continue, Aterm*2) = true
+  [cbc-1'2] contains-break-or-continue(Aterm*1, continue, Aterm*2) = true
 
-  [default-cc-1'2] contains-break-or-continue(Aterm*) = false
+  [default-cbc-1'3] contains-break-or-continue(Aterm*) = false
 
-  [ctd-1'1] contains-top-down-or-bottom-up(Aterm*1, top-down, Aterm*2) = true
+  [ctdbu-1'1] contains-top-down-or-bottom-up(Aterm*1, top-down, Aterm*2) = true
 
-  [cbu-1'1] contains-top-down-or-bottom-up(Aterm*1, bottom-up, Aterm*2) = true
+  [ctdbu-1'2] contains-top-down-or-bottom-up(Aterm*1, bottom-up, Aterm*2) = true
 
-  [default-cbu-1'2] contains-top-down-or-bottom-up(Aterm*) = false
+  [default-ctdbu-1'2] contains-top-down-or-bottom-up(Aterm*) = false
 
   [cota-1'1] contains-only-traversal-attributes() = true
 
@@ -188,6 +188,15 @@ accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
                               Production*, 
                               $ModuleId) = consistent
 
+  [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) = false
+           ==============================================
+           consistent-defined($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
+                              $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
+                              Production*, 
+                              $ModuleId) = 
+inconsistent-arguments-of-traversal-productions($ModuleId, $Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
+                                                           $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2)
+
   [cd-1'3] Attributes1 != Attributes2
            ==========================
            consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
@@ -199,3 +208,7 @@ inconsistent-traversal-attributes($ModuleId, $Literal ( $Symbol1 , $Symbol,* ) -
 
   [default-cd-1'4] consistent-defined(Production1, Production2 Production*, $ModuleId) =
                       consistent-defined(Production1, Production*, $ModuleId)
+
+  [ea-1'1] equal-arguments($Symbol,*;$Symbol,*) = true
+
+  [default-ea-1'1] equal-arguments($Symbol,*1;$Symbol,*2) = false

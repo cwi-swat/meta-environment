@@ -15,6 +15,7 @@ exports
     trafo-should-return-traversed-type(ModuleId, Production)                -> Message
     accu-should-return-accumulated-type(ModuleId, Production)               -> Message
     accutrafo-should-return-tuple-of-correct-types(ModuleId, Production)    -> Message
+    inconsistent-arguments-of-traversal-productions(ModuleId, Production, Production) -> Message
     charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol)        -> Message
     production-renamings-not-supported(ModuleId, Renaming)                  -> Message
 
