@@ -434,6 +434,7 @@ ATerm open_eqs_text_file(int cid, char *name)
 
 ATerm read_parse_table(int cid, char *name, ATerm tableType)
 {
+    ATerm t;
     char *full, fullname[PATH_LEN];
 
     if(ATisEqual(tableType, ATmake("eqs"))) {
@@ -442,10 +443,18 @@ ATerm read_parse_table(int cid, char *name, ATerm tableType)
 	sprintf(fullname, "%s%s", name, TRM_TBL_EXT);
     }
 
-    if((full = find_in_path(fullname)))
-	return ATmake("snd-value(table-on-disk(<str>,timestamp(<int>)))",
-		      full, filetime(full));
+    if ((full = find_in_path(fullname))) {
+      if (!(t = ATreadFromNamedFile(full))) {
+ATwarning("error reading %s\n", full);
+        if (run_verbose) {
+          ATwarning("error reading %s\n", full);
+        }
+        return open_error(name);
+      }
 
+      return ATmake("snd-value(table-on-disk(<term>,timestamp(<int>)))",
+                    ATBpack(t), filetime(full));
+    }
     return open_error(name);
 }
 

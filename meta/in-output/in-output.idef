@@ -37,7 +37,8 @@ let
   FileName  : str,
   Contents  : term,
   TimeStamp : term,
-  TableType : term
+  TableType : term,
+  Table     : term
 in
   execute(in-output,IO?).
   (
@@ -51,11 +52,11 @@ in
     rec-value(IO, TimeStamp?) .
     snd-msg(table-timestamp(TimeStamp))
     +
-    rec-msg(read-parse-table(Name?, TableType?)).
-    snd-eval(IO,read-parse-table(Name, TableType)).
+    rec-msg(read-parse-table(Name?, TableType?)) .
+    snd-eval(IO,read-parse-table(Name, TableType)) .
     (
-      rec-value(IO,table-on-disk(Path?,TimeStamp?)).
-      snd-msg(table-on-disk(Path,TimeStamp))
+      rec-value(IO,table-on-disk(Table?, TimeStamp?)) .
+      snd-msg(table-on-disk(Table, TimeStamp))
     +
       rec-value(IO,error-opening(Name)).
       snd-msg(no-table-on-disk)
