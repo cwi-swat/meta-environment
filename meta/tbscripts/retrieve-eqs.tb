@@ -24,7 +24,7 @@ in
       snd-msg(get-all-equations(Mods)).
       rec-msg(all-equations(Eqs?)).
       snd-eval(Eval,add-equations(Mod,Eqs)).
-      rec-value(Eval,equ-added(Mod)). 
+      rec-value(Eval,equ-added(Mod?)). 
       snd-note(ui-status(endstat(Id))).
       snd-msg(finished-retrieval)
     +

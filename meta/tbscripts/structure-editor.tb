@@ -11,7 +11,7 @@ let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
   Char: term, G: str, ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list
+  Fun: str, Args: list, Fid2: str
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
@@ -40,7 +40,7 @@ in
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid, Foc))
     +
-    rec-event(TE,menu-event("Meta-Environment","Parse",Fid)).
+    rec-event(TE,menu-event("Meta-Environment","Parse",Fid2?)).
     snd-note(ui-status(stat(Id,"Parsing..."))).
     FF := []. (
       if not-equal(Fl,[]) then
@@ -87,7 +87,7 @@ in
     snd-note(ui-status(endstat(Id))).
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
-    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
+    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid2?)).
     if equal(FF,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
@@ -110,7 +110,7 @@ in
 printf("New focus list: %t\n", Fl).
     snd-ack-event(TE,get-focus(Fid,I))
     +
-    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
+    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid2?)).
     printf("Tree display not yet implemented\n").
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
     +
