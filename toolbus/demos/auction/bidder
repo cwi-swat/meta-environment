@@ -1,2 +1,23 @@
 #!/bin/sh
-wish-adapter -TB_TOOL_NAME bidder -script bidder.tcl -script-args $@
+if test x$1 = x
+then
+  NAME=Vince
+else
+  NAME=$1
+fi
+
+if test x$2 = x
+then
+  HOST=""
+else
+  HOST="-TB_HOST $2"
+fi
+
+if test x$3 = x
+then
+  PORT=""
+else
+  PORT="-TB_PORT $3"
+fi
+
+wish-adapter $HOST $PORT -TB_TOOL_NAME bidder -script bidder.tcl -script-args -name $NAME
