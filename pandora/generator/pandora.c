@@ -433,7 +433,7 @@ static PT_Tree transformBox(PT_Tree tree)
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
 
-    if (PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
+    if (PT_isTreeLexical(arg) || PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
       ATwarning("%s -> TODO: Fix me!\n", __FILE__);
       boxArgs = PT_appendArgs(boxArgs, arg);
     }
