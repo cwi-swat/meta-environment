@@ -31,7 +31,6 @@ AC_CONFIG_FILES([Makefile
   test/Makefile
   demo/Makefile
   demo/old-pico/Makefile
-  demo/pico/Makefile
   demo/user-manual-examples/Makefile
 ])
 AC_OUTPUT

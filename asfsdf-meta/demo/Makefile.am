@@ -1,4 +1,4 @@
 # $Id$
 
-SUBDIRS = old-pico pico user-manual-examples
+SUBDIRS = old-pico user-manual-examples
 
