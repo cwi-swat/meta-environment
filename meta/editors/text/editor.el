@@ -131,7 +131,7 @@ character, and LENGTH the length (in characters) of the focus."
     ; we find and select the window for this file ('t' means search in all frames)
     (select-window (get-buffer-window filename t))
 
-		(display-message 'focus (concat "Focus sort: " str))
+		(display-message 'focus (concat "Focus symbol: " str))
 		    
     ; first clear ALL colorings ;-(( (including the previous focus)
     (remove-text-properties 1 (point-max buf) '(face nil) buf)
