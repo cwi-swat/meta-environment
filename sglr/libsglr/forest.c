@@ -1138,13 +1138,14 @@ ATbool SG_MultiSetEqual(multiset M1, multiset M2, ATermList k1, ATermList k2)
  * this is due to the fact that the multiset is not defined
  * on ambiguity clusters, but injection count is.
  */
-size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections);
+size_t SG_CountInjectionsInTree(parse_table *pt, tree t);
 
-size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t, size_t injections)
+size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t)
 {
   label l;
   ATermList ambs;
   ATerm kids;
+	size_t injections = 0;
 
   switch (ATgetType(t)) {
   case AT_APPL:
@@ -1158,21 +1159,21 @@ size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t, size_t injecti
         injections++;
       }
       
-      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
+      injections += SG_CountInjectionsInTreeRecursive(pt, (tree) kids);
     } else {
       /* Either we have a singleton or
        * the injection count of all elements in the cluster are
        * equal due to earlier filtering, so we just take the first.
        */
       tree first = (tree) ATgetFirst(ambs);
-      injections = SG_CountInjectionsInTree(pt, first, injections);
+      injections += SG_CountInjectionsInTree(pt, first);
     }
         
     break;
   case AT_LIST:
     for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
       ATerm elem = ATgetFirst((ATermList) t);
-      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
+      injections += SG_CountInjectionsInTreeRecursive(pt, (tree) elem);
     }
     break;
   case AT_INT:
@@ -1186,10 +1187,11 @@ size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t, size_t injecti
   return injections;
 }    
 
-size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections)
+size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
 {
   label    l;
   ATerm kids;
+	size_t injections = 0;
 
   switch (ATgetType(t)) {
   case AT_APPL:
@@ -1200,12 +1202,12 @@ size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections)
       injections++;
     }
     
-    injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
+    injections += SG_CountInjectionsInTreeRecursive(pt, (tree) kids);
     break;
   case AT_LIST:
     for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
       ATerm elem = ATgetFirst((ATermList) t);
-      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
+      injections += SG_CountInjectionsInTreeRecursive(pt, (tree) elem);
     }
     break;
   case AT_INT:
@@ -1228,27 +1230,10 @@ size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections)
  filter that prefers either one of them
  */
 
-tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
+static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
 {
-  ATermInt   l0, l1;
-  multiset   m1  = NULL;
-  tree       max = NULL;
-  ATermList  k1  = NULL;
-  ATbool     m0made = ATfalse;
-
-/* If one of the terms is cyclic, no comparison is possible.
- * This should be improved one way or the other.
- */
-  if (SG_TermIsCyclic(t0)) {
-    return NULL;
-  }
-  if (SG_TermIsCyclic(t1)) {
-    return NULL;
-  } 
-
-  /*  Always apply direct priority filtering first  */
-  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
-  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+	ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+	ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
 
   if (SG_GtrPriority(pt, l0, l1)) {
     IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t > %t\n", l0, l1))
@@ -1259,9 +1244,15 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     return t1;
   }
 
-  /*  Next, inspect eager/avoid status  */
+	return NULL;
+}
 
-  /*  Don't even bother unless there are preferred actions  */
+static tree SG_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
+{
+ ATermInt l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+ ATermInt l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+
+	/*  Don't even bother unless there are preferred actions  */
   if (SG_PT_HAS_PREFERENCES(pt)) {
     if (SG_EagerPriority_Tree(t0, t1)) {
       IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
@@ -1273,6 +1264,137 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     }
   }
 
+	return NULL;
+}
+
+static tree SG_Multiset_Filter(parse_table *pt, tree t0, tree t1, 
+															 multiset m0, ATermList k0)
+{
+	tree max = NULL;
+	ATermList k1;
+
+	ATbool m0made = ATfalse;
+	ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+	ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+	multiset m1;
+
+	/* don't bother unless the parsetable contains priorities or preferences */
+  if (!SG_PT_HAS_PRIORITIES(pt) && !SG_PT_HAS_PREFERENCES(pt)) {
+		return NULL;
+	}
+	
+
+	/* if multiset for t0 not yet calculated, do it now */
+	if (!m0) {
+		m0made = ATtrue;
+		m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+	}
+	
+	m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+	
+	if(!m0 || !m1) {
+		/* at least one of the multisets wasn't calculated.
+		 * probably due to an ambiguity node in the tree.
+		 */
+		return NULL;
+	}
+	
+	/* if keys for t0 not yet calculated, do it now */
+	if (!k0) {
+		k0 = SG_GetMultiSetKeys(m0);
+	}
+	k1 = SG_GetMultiSetKeys(m1);
+	
+	if (!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
+		/*  multi-prio is irreflexive  */
+		if (SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
+			IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
+        max = t0;
+		}
+		if (SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
+			if (max) {                             /*  shouldn't happen, really  */
+				IF_DEBUG(fprintf(SG_log(),
+												 "Symmetric multiset priority relation ignored\n"))
+          ATwarning("Ignoring symmetric multiset priority relation\n");
+				max = NULL;
+			} else {
+				IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
+          max = t1;
+			}
+		}
+	}
+	else {          
+		IF_DEBUG(fprintf(SG_log(), "Multisets were equal\n"))
+	}
+
+  if (max) {
+    IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
+	}
+
+	/* clean up multisets now */
+  if (m0made) {
+    ATtableDestroy(m0);
+  }
+  if (m1) {
+    ATtableDestroy(m1);
+  }
+
+	return max;
+}
+
+static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
+{
+	ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+	ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+	size_t in0   = SG_CountInjectionsInTree(pt, t0);
+	size_t in1   = SG_CountInjectionsInTree(pt, t1);
+	
+	IF_STATISTICS(if (in0 != in1) {
+		SG_InjectionFilterSucceeded(SG_NR_INC);
+	});
+
+	if (in0 > in1) {
+		IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
+											 l0, l1, in0, in1))
+			return t1;
+	} else if (in0 < in1) {
+		IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t > %t (%d < %d)\n",
+											 l0, l1, in0, in1))
+			return t0;
+	}
+
+	return NULL;
+}
+
+
+tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
+{
+  tree max = NULL;
+	ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+
+	/* If one of the terms is cyclic, no comparison is possible.
+	 * This should be improved one way or the other.
+	 */
+  if (SG_TermIsCyclic(t0)) {
+    return NULL;
+  }
+
+  if (SG_TermIsCyclic(t1)) {
+    return NULL;
+  } 
+
+  /*  Always apply direct priority filtering first  */
+	max = SG_Priority_Filter(pt, t0, t1);
+	if(max) {
+		return max;
+	}
+
+  /*  Next, inspect eager/avoid status  */
+  max = SG_Eagerness_Filter(pt, t0, t1);
+	if(max) {
+		return max;
+	}
+ 
   /*
      Don't even bother filtering any further if filtering is disabled
      or there's nothing to filter with (no prios, no preferences)
@@ -1281,133 +1403,20 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     return NULL;
   }
 
-  /* the next code is a filter that finds the topmost preference in both
-   * trees. If one of them is prefered or avoided, and the other has no
-   * explicit preference, then it throws one of them away.
-   */
-  
-/* The next ifdef maybe removed when it is clear that
- * this code has no effect. (03-10-2000) 
- * Mark
- */
-#ifdef MAYBE_OBSOLETE
-  /*  Don't even bother unless there are preferred actions  */
-  if (SG_PT_HAS_PREFERENCES(pt)) {
-    /* search for prefers */
-    ATbool has_prefs0  = SG_HasPreferredProds(t0);
-    ATbool has_prefs1  = SG_HasPreferredProds(t1);
-    /* search for avoids */
-    ATbool has_avoids0 = SG_HasAvoidedProds(t0);
-    ATbool has_avoids1 = SG_HasAvoidedProds(t1);
-  
-    /* draw safe conclusions */
-    if (has_prefs0 && !has_prefs1) {
-      IF_DEBUG(ATfprintf(SG_log(), 
-                         "Implicit Preference Priority: %t > %t\n", l0, l1))
-      return t0;
-    } else if (has_prefs1 && !has_prefs0) {
-      IF_DEBUG(ATfprintf(SG_log(), 
-                         "Implicit Preference Priority: %t < %t\n", l0, l1))
-      return t1;
-    }
-
-    if (has_avoids0 && !has_avoids1) {
-      IF_DEBUG(ATfprintf(SG_log(), 
-                         "Implicit Preference Priority: %t < %t\n", l0, l1))
-      return t1;
-    } else if (has_avoids1 && !has_avoids0) {
-      IF_DEBUG(ATfprintf(SG_log(), 
-                         "Implicit Preference Priority: %t > %t\n", l0, l1))
-      return t0;
-    }
-  }
-#endif
-
   /*  Don't filter START symbols when start symbol subselection is on  */
   if (SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0))) {
     return (tree) NULL;
   }
 
-  /*
-      No direct priority relation?  Apply multiset ordering,
-      if there is anything to filter on
-   */
-  if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
-    if (!m0) {
-      m0made = ATtrue;
-      m0 = SG_GetMultiSet(t0, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
-    }
-    m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
+  /* multiset filter */
+	max = SG_Multiset_Filter(pt, t0, t1, m0, k0);
+	if(max) {
+		return max;
+	}
 
-    if(!m0 || !m1) {
-      /* at least one of the multisets wasn't calculated.
-       * probably due to an ambiguity node in the tree.
-       * So bail out!
-       */
-      return NULL;
-    }
-
-    if (!k0) {
-      k0 = SG_GetMultiSetKeys(m0);
-    }
-    k1 = SG_GetMultiSetKeys(m1);
-
-    if (!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
-      /*  multi-prio is irreflexive  */
-      if (SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
-        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
-        max = t0;
-      }
-      if (SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
-        if (max) {                             /*  shouldn't happen, really  */
-          IF_DEBUG(fprintf(SG_log(),
-                           "Symmetric multiset priority relation ignored\n"))
-          ATwarning("Ignoring symmetric multiset priority relation\n");
-          max = NULL;
-        } else {
-          IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
-          max = t1;
-        }
-      }
-    }
-    else {          
-       IF_DEBUG(fprintf(SG_log(), "Multisets were equal\n"))
-    }
-  }
-
-  /*  Did we find a multiset ordering?  */
-  if (max) {
-    IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
-  } else {
-  /*  No multiset ordering either?  Count injections.  */
-    size_t in0 = 0, in1 = 0;
-
-    in0 = SG_CountInjectionsInTree(pt, t0, 0);
-    in1 = SG_CountInjectionsInTree(pt, t1, 0);
-    
-    IF_STATISTICS(
-      if (in0 != in1) {
-        SG_InjectionFilterSucceeded(SG_NR_INC);
-      }
-    );
-    if (in0 > in1) {
-      IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
-                         l0, l1, in0, in1))
-      max = t1;
-    } else if (in0 < in1) {
-      IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t > %t (%d < %d)\n",
-                         l0, l1, in0, in1))
-      max = t0;
-    }
-  }
-
-  if (m0made) {
-    ATtableDestroy(m0);
-  }
-  if (m1) {
-    ATtableDestroy(m1);
-  }
-
+	/* injectionscount filter  */
+	max = SG_InjectionCount_Filter(pt, t0, t1);
+	
   return max;
 }
 
