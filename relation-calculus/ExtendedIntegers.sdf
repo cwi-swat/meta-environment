@@ -10,7 +10,7 @@ exports
 	min(Integer, Integer)	-> Integer
 
 hiddens
-   imports asf/syntax/Comments
+   imports basic/Comments
 
    variables	
     "$Nat" [0-9\']*      -> Natural 

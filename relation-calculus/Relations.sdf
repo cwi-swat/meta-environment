@@ -54,7 +54,7 @@ exports
 
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Comments
 
   context-free syntax
      closure(Bag[[Elem]],Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]

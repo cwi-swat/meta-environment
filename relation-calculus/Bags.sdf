@@ -31,7 +31,7 @@ context-free syntax
                                            	-> Bag[[Elem]]
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Comments
 
   variables
     "$Bag" [0-9\']*           -> Bag[[Elem]]
