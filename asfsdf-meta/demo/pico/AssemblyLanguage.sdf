@@ -8,23 +8,24 @@ exports
   lexical syntax
     [a-z0-9]+       -> Label 
   context-free syntax
-    "dclnat" PICO-ID	    -> Instr
-    "dclstr" PICO-ID	    -> Instr
+    "dclnat"	PICO-ID	    -> Instr
+    "dclstr"	PICO-ID	    -> Instr
 
-    "push" NatCon     -> Instr
-    "push" StrCon     -> Instr
-    "rvalue" PICO-ID  -> Instr 
-    "lvalue" PICO-ID  -> Instr 
+    "push"	NatCon     -> Instr
+    "push"	StrCon     -> Instr
+    "rvalue"	PICO-ID  -> Instr 
+    "lvalue"	PICO-ID  -> Instr 
     "assign"          -> Instr 
     "add"             -> Instr 
     "sub"             -> Instr 
     "conc"            -> Instr 
-    "label" Label     -> Instr 
-    "goto" Label      -> Instr 
-    "gotrue" Label    -> Instr 
-    "gofalse" Label   -> Instr
+    "label"	Label     -> Instr 
+    "goto"	Label      -> Instr 
+    "gotrue"	Label    -> Instr 
+    "gofalse"	Label   -> Instr
     "noop"            -> Instr
 
   sorts Instrs
-  context-free syntax
-    {Instr ";"}+ -> Instrs 
+context-free syntax
+{Instr";"
+}+ -> Instrs 
