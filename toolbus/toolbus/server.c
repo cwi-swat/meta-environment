@@ -18,6 +18,7 @@ int mk_server_ports(TBbool local_port_only)
 {
   int lsock, gsock = -1;
 	int attempts = 1000;
+  int initialWellKnownSocketPort = WellKnownSocketPort;
 
 	/* We try to create a socket, incrementing the port number if we fail. */
 	do {
@@ -46,7 +47,9 @@ int mk_server_ports(TBbool local_port_only)
 	WellKnownLocalSocket = lsock;
   WellKnownGlobalSocket = gsock;
 
-	fprintf(stderr, "The toolbus server allocated port %d.\n", WellKnownSocketPort);
+  if(initialWellKnownSocketPort != WellKnownSocketPort) {
+		fprintf(stderr, "The toolbus server allocated port %d.\n", WellKnownSocketPort);
+  }
  
   return TB_OK;
 }
