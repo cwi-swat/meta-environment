@@ -108,6 +108,38 @@ ATerm get_feedback_subjects(int cid, ATerm t)
 }
 
 /*}}}  */
+/*{{{  ATerm calc_error_location(int cid, ATerm focus, ATerm error) */
+
+ATerm get_first_error_location(int cid, ATerm error)
+{
+  ERR_Summary summary = ERR_SummaryFromTerm(error);
+  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
+  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
+  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+  ERR_Subject subject = ERR_getSubjectListHead(subjects);
+  ERR_Location location = ERR_getSubjectLocation(subject);
+
+  return ATmake("snd-value(error-location(<term>))",
+                ERR_LocationToTerm(location));
+}
+
+/*}}}  */
+/*{{{  ATerm calc_error_location(int cid, ATerm focus, ATerm error) */
+
+ATerm get_first_error_description(int cid, ATerm error)
+{
+  ERR_Summary summary = ERR_SummaryFromTerm(error);
+  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
+  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
+  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+  ERR_Subject subject = ERR_getSubjectListHead(subjects);
+  char *description = ERR_getSubjectDescription(subject);
+
+  return ATmake("snd-value(error-description(<str>))", description);
+}
+
+/*}}}  */
+
 
 /*{{{  int main(int argc, char *argv[]) */
 

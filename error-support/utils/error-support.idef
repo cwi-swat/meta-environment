@@ -7,10 +7,13 @@ tool error-support is {
 process ErrorSupport is
 let
   ES : error-support,
+  Summary : term,
+  PosInfo : term,
   Feedback : term,
   NewFeedback : term,
   Producer : str,
   Identification : str,
+  Description : str,
   Subjects : list
 in
   execute(error-support, ES?) .
@@ -34,6 +37,16 @@ in
     snd-eval(ES, get-feedback-subjects(Feedback)) .
     rec-value(ES, subjects(Subjects?)) .
     snd-msg(subjects(Subjects))
+  +
+    rec-msg(get-error-location(Summary?)) .
+    snd-eval(ES, get-first-error-location(Summary)) .
+    rec-value(ES, error-location(PosInfo?)) .
+    snd-msg(error-location(PosInfo))
+  +
+    rec-msg(get-error-description(Summary?)) .
+    snd-eval(ES, get-first-error-description(Summary)) .
+    rec-value(ES, error-description(Description?)) .
+    snd-msg(error-description(Description))
   ) * delta
 endlet
 
