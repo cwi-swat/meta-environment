@@ -2,8 +2,12 @@ module Lexical
 
 imports basic/Whitespace
 
-exports
-  sorts Identifier Literal NullLiteral StringLiteral CharacterLiteral BooleanLiteral FloatingPointLiteral IntegerLiteral OctalIntegerLiteral HexIntegerLiteral DecimalIntegerLiteral StringCharacter EscapeSequence UnicodeEscape SingleCharacter
+exports 
+
+  sorts Identifier Literal NullLiteral StringLiteral
+        CharacterLiteral BooleanLiteral FloatingPointLiteral IntegerLiteral
+        OctalIntegerLiteral HexIntegerLiteral DecimalIntegerLiteral
+        StringCharacter EscapeSequence UnicodeEscape SingleCharacter
 
   lexical syntax
     "\\" [u]+ [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] -> UnicodeEscape
@@ -70,6 +74,8 @@ exports
     "try" -> Identifier {reject}
     "catch" -> Identifier {reject}
     "finally" -> Identifier {reject}
+
+
     "boolean" -> Identifier {reject}
     "byte" -> Identifier {reject}
     "short" -> Identifier {reject}
@@ -78,6 +84,7 @@ exports
     "char" -> Identifier {reject}
     "float" -> Identifier {reject}
     "double" -> Identifier {reject}
+
     "\"" StringCharacter* "\"" -> StringLiteral {cons("StringCharacter-s")}
 
   lexical restrictions

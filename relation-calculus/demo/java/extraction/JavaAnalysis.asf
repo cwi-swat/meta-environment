@@ -21,5 +21,4 @@ equations
      rel[Interface,Interface] EXTENDS_INTERFACE     
 					+= extractExtendsInterface(&CompilationUnit, {})
      rel[Var, loc, Id] METHOD_CALLS     += extractMethodCalls(&CompilationUnit, {})
-     str DUMMY
   |]
