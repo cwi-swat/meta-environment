@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<TITLE>Features offered by the new Asf+Sdf Meta-environment</TITLE>
+</HEAD>
+
+<H1>Features offered by the new Asf+Sdf Meta-environment</H1>
+
+The user interface of the Meta-environment is based on two components:
+A syntax directed editor that can be used to edit both specifications
+and terms over the specified language(s), and a central control tool
+that gives an overview of the specifications at the module level.
+This control tool allows the user to load and save specifications,
+add and delete modules, and controls the creation of new editors instances. 
+
+<H2>The control tool</H2>
+<!-- In the current prototype, the control tool looks something like this:
+<IMG SRC="control.gif"> -->
+The current prototype shows an overview of the module import graph, giving
+a good impression of the internal structure of the specification.
+A number of buttons and menu items give access to the functionality
+of the tool.
+The control tool must provide the following functionality:
+<UL>
+<LI> Show the import relation between the currently loaded modules.
+<LI> Load a module and all its submodules.
+<LI> Save changes in a specific module.
+<LI> Save all elements that have been changed since the last 
+     save operations, be it modules or terms.
+<LI> Remove a module from the Meta-environment, even if some
+     other module still depends on this module. Modules that are now
+     no longer in working order, should be 'greyed out' somehow.
+<LI> Quit the Meta-environment.
+<LI> Inspect and change the list of search-paths in which the Meta-environment
+     searches for new modules.
+<LI> Create both new module editor and term editor instances.
+<LI> Show a list of currently active module editors and term editors,
+     and enable the user to activate (bring them to the front), and
+     remove them.
+</UL>
+
+<H3>Extensibility</H3>
+In the future, we can imagine all kinds of other operations on modules
+or even whole specifications. Examples include queries on specifications
+to select all modules using a specific function, or calculating some
+complexity metrics to find possible weak spots in a specification.
+These kind of extensions can be implemented in separate tools, but the
+user interface extension needed to access this new functionality should
+be added to the existing user interface. In order to do this, the
+control tool must provide a way to add user interface items like
+buttons and menu items, from within the controlling ToolBus script.
+This allows tools to add new functionality <EM>at runtime!</EM>
+
+<H2>The structure editor</H2>
+<!--The structure editor currently looks like this:
+<IMG SRC="structedit.gif"> -->
+The structure editor must provide the following functionality:
+<UL>
+<LI> Editing of both modules and terms.
+<LI> Provide a 'structure editing mode' and a 'text editing' mode.
+     In text editing mode, the editor will provide all the usual
+     operations like cut/copy/paste, search and replace, etc.
+     In structure editing mode, the user can perform operations on
+     subtrees of the term/module. Typical operations include:
+     <UL> 
+     <LI> Show the sort of the current subtree (focus)
+     <LI> Provide a notion of placeholders, which represent
+          a hole in the tree.
+     <LI> Replace the current subtree with another subtree of the same
+          sort, for instance with a placeholder.
+     <LI> Replace a placeholder with a context-free function
+          optionally containing new placeholders, to build a term
+          using template expansion.
+     </UL> 
+<LI> The user must be able to switch from 'structure editing mode'
+     to 'text editing mode' by starting to type text.
+<LI> To switch back to 'structure editing mode', the text in the
+     editor must be reparsed by double clicking.
+<LI> When editing a term, the user must be able to reduce the term 
+     currently in the editor.
+</UL>
+
+<H3>Extensibility</H3>
+Just like the control tool, the structure editor needs an extensible
+user interface to allow flexible addition of new functionality.
+In this way, typecheckers, compilers, and other tools can be
+to the user interface when they become available.
+
+<BODY>
+</BODY>
+</HTML>
