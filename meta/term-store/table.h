@@ -16,4 +16,5 @@ ATermList T_getAllKeys(Table table);
 ATermList T_getAllValues(Table table);
 ATermList T_getValues(Table table, ATermList keys);
 ATermList T_getAllKeyValuePairs(Table table);
+
 #endif

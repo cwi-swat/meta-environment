@@ -10,7 +10,7 @@
 
 /*{{{  typedefs */
 
-typedef struct _SS_TermStore *SS_TermStore;
+typedef struct _SS_Snapshot *SS_Snapshot;
 typedef struct _SS_Tables *SS_Tables;
 typedef struct _SS_Table *SS_Table;
 typedef struct _SS_ValueType *SS_ValueType;
@@ -23,8 +23,8 @@ void SS_initSnapshotApi(void);
 
 /*{{{  term conversion functions */
 
-SS_TermStore SS_TermStoreFromTerm(ATerm t);
-ATerm SS_TermStoreToTerm(SS_TermStore arg);
+SS_Snapshot SS_SnapshotFromTerm(ATerm t);
+ATerm SS_SnapshotToTerm(SS_Snapshot arg);
 SS_Tables SS_TablesFromTerm(ATerm t);
 ATerm SS_TablesToTerm(SS_Tables arg);
 SS_Table SS_TableFromTerm(ATerm t);
@@ -39,7 +39,7 @@ ATerm SS_RowToTerm(SS_Row arg);
 /*}}}  */
 /*{{{  constructors */
 
-SS_TermStore SS_makeTermStoreMain(SS_Tables tables);
+SS_Snapshot SS_makeSnapshotMain(SS_Tables tables);
 SS_Tables SS_makeTablesEmpty();
 SS_Tables SS_makeTablesMany(SS_Table head, SS_Tables tail);
 SS_Table SS_makeTableDefault(char* name, SS_ValueType valueType, SS_Rows tuples);
@@ -52,7 +52,7 @@ SS_Row SS_makeRowDefault(ATerm key, ATerm value);
 /*}}}  */
 /*{{{  equality functions */
 
-ATbool SS_isEqualTermStore(SS_TermStore arg0, SS_TermStore arg1);
+ATbool SS_isEqualSnapshot(SS_Snapshot arg0, SS_Snapshot arg1);
 ATbool SS_isEqualTables(SS_Tables arg0, SS_Tables arg1);
 ATbool SS_isEqualTable(SS_Table arg0, SS_Table arg1);
 ATbool SS_isEqualValueType(SS_ValueType arg0, SS_ValueType arg1);
@@ -60,13 +60,13 @@ ATbool SS_isEqualRows(SS_Rows arg0, SS_Rows arg1);
 ATbool SS_isEqualRow(SS_Row arg0, SS_Row arg1);
 
 /*}}}  */
-/*{{{  SS_TermStore accessors */
+/*{{{  SS_Snapshot accessors */
 
-ATbool SS_isValidTermStore(SS_TermStore arg);
-inline ATbool SS_isTermStoreMain(SS_TermStore arg);
-ATbool SS_hasTermStoreTables(SS_TermStore arg);
-SS_Tables SS_getTermStoreTables(SS_TermStore arg);
-SS_TermStore SS_setTermStoreTables(SS_TermStore arg, SS_Tables tables);
+ATbool SS_isValidSnapshot(SS_Snapshot arg);
+inline ATbool SS_isSnapshotMain(SS_Snapshot arg);
+ATbool SS_hasSnapshotTables(SS_Snapshot arg);
+SS_Tables SS_getSnapshotTables(SS_Snapshot arg);
+SS_Snapshot SS_setSnapshotTables(SS_Snapshot arg, SS_Tables tables);
 
 /*}}}  */
 /*{{{  SS_Tables accessors */
@@ -131,7 +131,7 @@ SS_Row SS_setRowValue(SS_Row arg, ATerm value);
 /*}}}  */
 /*{{{  sort visitors */
 
-SS_TermStore SS_visitTermStore(SS_TermStore arg, SS_Tables (*acceptTables)(SS_Tables));
+SS_Snapshot SS_visitSnapshot(SS_Snapshot arg, SS_Tables (*acceptTables)(SS_Tables));
 SS_Tables SS_visitTables(SS_Tables arg, SS_Table (*acceptHead)(SS_Table));
 SS_Table SS_visitTable(SS_Table arg, char* (*acceptName)(char*), SS_ValueType (*acceptValueType)(SS_ValueType), SS_Rows (*acceptTuples)(SS_Rows));
 SS_ValueType SS_visitValueType(SS_ValueType arg);

@@ -235,6 +235,8 @@ ATermList TS_getAllValues(char* name)
 }
 
 /*}}}  */
+/*{{{  ATermList TS_getValues(char* name, ATermList keys) */
+
 ATermList TS_getValues(char* name, ATermList keys)
 {
   Table table = TS_getTable(name);
@@ -245,6 +247,8 @@ ATermList TS_getValues(char* name, ATermList keys)
 
   return ATempty;
 }
+
+/*}}}  */
 /*{{{  ATermList TS_getAllKeyValuePairs(char *table) */
 
 ATermList TS_getAllKeyValuePairs(char *table)
@@ -277,6 +281,68 @@ ATermList TS_filterKeys(char *table, ATermList keysList)
   }
      
   return unknownKeys;
+}
+
+/*}}}  */
+
+/*{{{  SS_ValueType getTableType(Table table) */
+
+SS_ValueType getTableType(TableEntry table)
+{
+  SS_ValueType type = NULL;
+
+  if (streq(table.valueType,"str")) {
+    type = SS_makeValueTypeStringType();
+  }
+  else if (streq(table.valueType,"term")) {
+    type = SS_makeValueTypeTermType();
+  }
+  else {
+    ATwarning("getTableSnapshot: unknown table type: %s\n", table.valueType);
+  }
+
+  return type;
+}
+
+/*}}}  */
+/*{{{  SS_Table getTableSnapshot(Table table) */
+
+SS_Table getTableSnapshot(TableEntry table)
+{
+  SS_ValueType type = getTableType(table);
+  ATermList pairs = T_getAllKeyValuePairs(table.table);
+  SS_Rows rows = SS_makeRowsEmpty();
+ 
+  for( ;!ATisEmpty(pairs); pairs = ATgetNext(pairs)) {
+    ATerm pair = ATgetFirst(pairs);
+    ATerm key = ATgetFirst((ATermList) pair);
+    ATerm value = ATgetFirst(ATgetNext((ATermList) pair));
+    SS_Row row = SS_makeRowDefault(key,value);
+    rows = SS_makeRowsMany(row, rows);
+  }
+
+  return SS_makeTableDefault(table.name, type, rows); 
+}
+
+/*}}}  */
+/*{{{  SS_Snapshot TS_getSnapshot() */
+
+ATerm TS_getSnapshot()
+{
+  int i;
+  SS_Tables tables = SS_makeTablesEmpty(); 
+
+  for (i = 0; i < MAX_NR_OF_TABLES; i++) {
+    if (tableStore[i].name != NULL) {
+      SS_Table tableSnapshot = getTableSnapshot(tableStore[i]);
+
+      if (tableSnapshot != NULL) {
+	tables = SS_makeTablesMany(tableSnapshot, tables);
+      }
+    }
+  }
+
+  return SS_SnapshotToTerm(SS_makeSnapshotMain(tables));
 }
 
 /*}}}  */

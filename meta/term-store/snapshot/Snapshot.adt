@@ -1,5 +1,5 @@
 [
-  [TermStore, Main, term-store(<tables(Tables)>)],
+  [Snapshot, Main, term-store(<tables(Tables)>)],
 
   [Tables, Empty, []],
   [Tables, Many,[<head(Table)>,<[tail(Tables)]>]],

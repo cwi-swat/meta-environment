@@ -69,6 +69,8 @@ ATermList T_getAllValues(Table table)
 }
 
 /*}}}  */
+/*{{{  ATermList T_getValues(Table table, ATermList keys) */
+
 ATermList T_getValues(Table table, ATermList keys)
 {
   ATermList values = ATempty;
@@ -84,6 +86,8 @@ ATermList T_getValues(Table table, ATermList keys)
 
   return values;
 }
+
+/*}}}  */
 /*{{{  ATermList T_getAllKeyValuePairs(Table table) */
 
 ATermList T_getAllKeyValuePairs(Table table)
@@ -103,3 +107,4 @@ ATermList T_getAllKeyValuePairs(Table table)
 }
 
 /*}}}  */
+

@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jun 27 16:27:16 2003
+ * Generated at Fri Jun 27 16:35:47 2003
  */
 
 #ifndef __Snapshot_dict_H
@@ -21,7 +21,7 @@ extern ATerm SS_patternValueTypeStringType;
 extern ATerm SS_patternTableDefault;
 extern ATerm SS_patternTablesMany;
 extern ATerm SS_patternTablesEmpty;
-extern ATerm SS_patternTermStoreMain;
+extern ATerm SS_patternSnapshotMain;
 
 extern void init_Snapshot_dict();
 

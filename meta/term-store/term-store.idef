@@ -14,7 +14,8 @@ let
  Keys : list,
  Values : list,
  ValueType : str,
- Pairs : list
+ Pairs : list,
+ Snapshot : term
 in
   execute(term-store, TS?).
   (
@@ -102,6 +103,11 @@ in
   +
     rec-msg(ts-remove-value-from-all-tables(Key?)).
     snd-do(TS,remove-value-from-all-tables(Key))
+  +
+    rec-msg(ts-get-snapshot) .
+    snd-eval(TS, get-snapshot) .
+    rec-value(TS, result(Snapshot?)) .
+    snd-msg(ts-snapshot(Snapshot))
   )
   * delta
 endlet

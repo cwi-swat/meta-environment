@@ -6,7 +6,7 @@
 
 /*{{{  typedefs */
 
-typedef struct ATerm _SS_TermStore;
+typedef struct ATerm _SS_Snapshot;
 typedef struct ATerm _SS_Tables;
 typedef struct ATerm _SS_Table;
 typedef struct ATerm _SS_ValueType;
@@ -26,17 +26,17 @@ void SS_initSnapshotApi(void)
 
 /*{{{  term conversion functions */
 
-/*{{{  SS_TermStore SS_TermStoreFromTerm(ATerm t) */
+/*{{{  SS_Snapshot SS_SnapshotFromTerm(ATerm t) */
 
-SS_TermStore SS_TermStoreFromTerm(ATerm t)
+SS_Snapshot SS_SnapshotFromTerm(ATerm t)
 {
-  return (SS_TermStore)t;
+  return (SS_Snapshot)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SS_TermStoreToTerm(SS_TermStore arg) */
+/*{{{  ATerm SS_SnapshotToTerm(SS_Snapshot arg) */
 
-ATerm SS_TermStoreToTerm(SS_TermStore arg)
+ATerm SS_SnapshotToTerm(SS_Snapshot arg)
 {
   return (ATerm)arg;
 }
@@ -126,11 +126,11 @@ ATerm SS_RowToTerm(SS_Row arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  SS_TermStore SS_makeTermStoreMain(SS_Tables tables) */
+/*{{{  SS_Snapshot SS_makeSnapshotMain(SS_Tables tables) */
 
-SS_TermStore SS_makeTermStoreMain(SS_Tables tables)
+SS_Snapshot SS_makeSnapshotMain(SS_Tables tables)
 {
-  return (SS_TermStore)(ATerm)ATmakeAppl1(SS_afun0, (ATerm)tables);
+  return (SS_Snapshot)(ATerm)ATmakeAppl1(SS_afun0, (ATerm)tables);
 }
 
 /*}}}  */
@@ -202,7 +202,7 @@ SS_Row SS_makeRowDefault(ATerm key, ATerm value)
 /*}}}  */
 /*{{{  equality functions */
 
-ATbool SS_isEqualTermStore(SS_TermStore arg0, SS_TermStore arg1)
+ATbool SS_isEqualSnapshot(SS_Snapshot arg0, SS_Snapshot arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -233,61 +233,61 @@ ATbool SS_isEqualRow(SS_Row arg0, SS_Row arg1)
 }
 
 /*}}}  */
-/*{{{  SS_TermStore accessors */
+/*{{{  SS_Snapshot accessors */
 
-/*{{{  ATbool SS_isValidTermStore(SS_TermStore arg) */
+/*{{{  ATbool SS_isValidSnapshot(SS_Snapshot arg) */
 
-ATbool SS_isValidTermStore(SS_TermStore arg)
+ATbool SS_isValidSnapshot(SS_Snapshot arg)
 {
-  if (SS_isTermStoreMain(arg)) {
+  if (SS_isSnapshotMain(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool SS_isTermStoreMain(SS_TermStore arg) */
+/*{{{  inline ATbool SS_isSnapshotMain(SS_Snapshot arg) */
 
-inline ATbool SS_isTermStoreMain(SS_TermStore arg)
+inline ATbool SS_isSnapshotMain(SS_Snapshot arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SS_patternTermStoreMain, NULL));
+  assert(ATmatchTerm((ATerm)arg, SS_patternSnapshotMain, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SS_hasTermStoreTables(SS_TermStore arg) */
+/*{{{  ATbool SS_hasSnapshotTables(SS_Snapshot arg) */
 
-ATbool SS_hasTermStoreTables(SS_TermStore arg)
+ATbool SS_hasSnapshotTables(SS_Snapshot arg)
 {
-  if (SS_isTermStoreMain(arg)) {
+  if (SS_isSnapshotMain(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SS_Tables SS_getTermStoreTables(SS_TermStore arg) */
+/*{{{  SS_Tables SS_getSnapshotTables(SS_Snapshot arg) */
 
-SS_Tables SS_getTermStoreTables(SS_TermStore arg)
+SS_Tables SS_getSnapshotTables(SS_Snapshot arg)
 {
   
     return (SS_Tables)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  SS_TermStore SS_setTermStoreTables(SS_TermStore arg, SS_Tables tables) */
+/*{{{  SS_Snapshot SS_setSnapshotTables(SS_Snapshot arg, SS_Tables tables) */
 
-SS_TermStore SS_setTermStoreTables(SS_TermStore arg, SS_Tables tables)
+SS_Snapshot SS_setSnapshotTables(SS_Snapshot arg, SS_Tables tables)
 {
-  if (SS_isTermStoreMain(arg)) {
-    return (SS_TermStore)ATsetArgument((ATermAppl)arg, (ATerm)tables, 0);
+  if (SS_isSnapshotMain(arg)) {
+    return (SS_Snapshot)ATsetArgument((ATermAppl)arg, (ATerm)tables, 0);
   }
 
-  ATabort("TermStore has no Tables: %t\n", arg);
-  return (SS_TermStore)NULL;
+  ATabort("Snapshot has no Tables: %t\n", arg);
+  return (SS_Snapshot)NULL;
 }
 
 /*}}}  */
@@ -804,16 +804,16 @@ SS_Row SS_setRowValue(SS_Row arg, ATerm value)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  SS_TermStore SS_visitTermStore(SS_TermStore arg, SS_Tables (*acceptTables)(SS_Tables)) */
+/*{{{  SS_Snapshot SS_visitSnapshot(SS_Snapshot arg, SS_Tables (*acceptTables)(SS_Tables)) */
 
-SS_TermStore SS_visitTermStore(SS_TermStore arg, SS_Tables (*acceptTables)(SS_Tables))
+SS_Snapshot SS_visitSnapshot(SS_Snapshot arg, SS_Tables (*acceptTables)(SS_Tables))
 {
-  if (SS_isTermStoreMain(arg)) {
-    return SS_makeTermStoreMain(
-        acceptTables ? acceptTables(SS_getTermStoreTables(arg)) : SS_getTermStoreTables(arg));
+  if (SS_isSnapshotMain(arg)) {
+    return SS_makeSnapshotMain(
+        acceptTables ? acceptTables(SS_getSnapshotTables(arg)) : SS_getSnapshotTables(arg));
   }
-  ATabort("not a TermStore: %t\n", arg);
-  return (SS_TermStore)NULL;
+  ATabort("not a Snapshot: %t\n", arg);
+  return (SS_Snapshot)NULL;
 }
 
 /*}}}  */

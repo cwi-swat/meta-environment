@@ -198,7 +198,14 @@ ATerm filter_keys(int conn, char *table, ATerm keys)
 }
 
 /*}}}  */
+/*{{{  ATerm get_snapshot(int conn) */
 
+ATerm get_snapshot(int conn)
+{
+  return RESULT(TS_getSnapshot());
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])

@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jun 27 16:27:16 2003
+ * Generated at Fri Jun 27 16:35:47 2003
  */
 
 #include "Snapshot_dict.h"
@@ -18,7 +18,7 @@ ATerm SS_patternValueTypeStringType = NULL;
 ATerm SS_patternTableDefault = NULL;
 ATerm SS_patternTablesMany = NULL;
 ATerm SS_patternTablesEmpty = NULL;
-ATerm SS_patternTermStoreMain = NULL;
+ATerm SS_patternSnapshotMain = NULL;
 
 /*
  * SS_afun4 = row(x,x)
@@ -35,7 +35,7 @@ ATerm SS_patternTermStoreMain = NULL;
  * SS_patternTableDefault = table(<str>,<term>,<term>)
  * SS_patternTablesMany = [<term>,<list>]
  * SS_patternTablesEmpty = []
- * SS_patternTermStoreMain = term-store(<term>)
+ * SS_patternSnapshotMain = term-store(<term>)
  *
  */
 
@@ -97,6 +97,6 @@ void init_Snapshot_dict()
   terms = ATgetNext(terms);
   SS_patternTablesEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SS_patternTermStoreMain = ATgetFirst(terms);
+  SS_patternSnapshotMain = ATgetFirst(terms);
   terms = ATgetNext(terms);
 }

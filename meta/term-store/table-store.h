@@ -2,6 +2,7 @@
 #define TABLE_STORE_H
 
 #include "table.h"
+#include <Snapshot.h>
 
 #define TS_STR_TYPE "str"
 #define TS_TERM_TYPE   "term"
@@ -25,5 +26,6 @@ ATermList TS_getAllValues(char* table);
 ATermList TS_getValues(char* table, ATermList keys);
 ATermList TS_getAllKeyValuePairs(char *table);
 ATermList TS_filterKeys(char* table, ATermList keys);
+ATerm     TS_getSnapshot();
 
 #endif
