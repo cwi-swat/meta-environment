@@ -13,12 +13,12 @@ The ToolBus is a novel software architecture intended for the
 flexible development of cooperating, distributed applications
 and is described in detail in:
 
-	J.A Bergstra & P. Klint
+	J.A. Bergstra & P. Klint
 	The ToolBus: a component interconnection architecture,
 	Technical Report P9408,
 	Programming Research Group, University of Amsterdam, 1994
 and
-	J.A Bergstra & P. Klint
+	J.A. Bergstra & P. Klint
 	The Discrete Time ToolBus,
 	Technical Report, P9502,
 	Programming Research Group, University of Amsterdam, 1995

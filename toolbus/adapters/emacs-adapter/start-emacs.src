@@ -1,0 +1,13 @@
+#! /bin/sh
+
+#echo $* 2>&1
+
+if test "x$1" = "x-h"
+then
+  echo "This script can only be used as a ToolBus tool!"
+  exit 0
+fi
+
+datadir=__DATADIR__
+
+xemacs -load ${datadir}/tb.el -eval "(TBinit \"$*\")"

@@ -1,15 +1,15 @@
-expr-errors.tb, line 9: function `is-bool': 1 argument(s) required
-expr-errors.tb, line 9: type of condition should be bool
-expr-errors.tb, line 32: function `is-mvar' undefined
-expr-errors.tb, line 32: type of condition should be bool
-expr-errors.tb, line 33: function `is-mvar' undefined
-expr-errors.tb, line 33: type of condition should be bool
-expr-errors.tb, line 40: function `add': wrong type for argument 2
-expr-errors.tb, line 46: type of condition should be bool
-expr-errors.tb, line 48: type of condition should be bool
-expr-errors.tb, line 57: type mismatch in assignment
-expr-errors.tb, line 68: function `member': wrong type for argument 2
-expr-errors.tb, line 68: type of condition should be bool
-expr-errors.tb, line 83: function `subset': 2 argument(s) required
-expr-errors.tb, line 83: type of condition should be bool
+line 9: function `is-bool': 1 argument(s) required
+line 9: type of condition should be bool
+line 32: function `is-mvar' undefined
+line 32: type of condition should be bool
+line 33: function `is-mvar' undefined
+line 33: type of condition should be bool
+line 40: function `add': wrong type for argument 2
+line 46: type of condition should be bool
+line 48: type of condition should be bool
+line 57: type mismatch in assignment
+line 68: function `member': wrong type for argument 2
+line 68: type of condition should be bool
+line 83: function `subset': 2 argument(s) required
+line 83: type of condition should be bool
 ToolBus: execution stopped due to the above error(s)

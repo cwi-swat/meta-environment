@@ -1,0 +1,14 @@
+#! /bin/sh
+
+top_builddir=__TOP_BUILDDIR__
+srcdir=__SRCDIR__
+
+testsocket () {
+	${top_builddir}/toolbus/toolbus -TB_PORT $1 ${srcdir}/msg.tb
+	if [ -r /var/tmp/$1 ]; then
+		echo "/var/tmp/$1 still exists" >&2 ; exit 1
+	fi
+}
+
+testsocket 6666
+testsocket 8999

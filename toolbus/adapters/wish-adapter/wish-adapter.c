@@ -719,7 +719,7 @@ static void help()
    fprintf( stderr, USAGE_MSG );
    exit(0);
 }
-#line 1109 "wish-adapter.c.nw"
+#line 1110 "wish-adapter.c.nw"
 static void cmd_options( int argc, char* argv[] )
 {
    int i;
@@ -747,8 +747,8 @@ static void cmd_options( int argc, char* argv[] )
       i++;
    }
 }
-#line 1146 "wish-adapter.c.nw"
-int main( int argc, char* argv[] )
+#line 1147 "wish-adapter.c.nw"
+void main( int argc, char* argv[] )
 {
    cmd_options(argc, argv);
    signals_set();
@@ -769,7 +769,6 @@ int main( int argc, char* argv[] )
    signals_set();
    
    TBeventloop();
-   return 0;
 }
 
 #line 48 "wish-adapter.c.nw"

@@ -1,24 +1,24 @@
-tc-errors.tb, line 2: (warning) variable `Y' redefines formal in enclosing scope
-tc-errors.tb, line 2: double declaration of let variable `Z'
-tc-errors.tb, line 1: double declaration of formal `X'
-tc-errors.tb, line 7: double declaration of process name `A'
-tc-errors.tb, line 13: function `f' undefined
-tc-errors.tb, line 26: undeclared variable `Tid'
-tc-errors.tb, line 33: double declaration of tool name `tt'
-tc-errors.tb, line 20: process `A': type mismatch for argument 1
-tc-errors.tb, line 20: process `A': too few actuals
-tc-errors.tb, line 21: process `A': type mismatch for argument 2
-tc-errors.tb, line 21: process `A': too few actuals
-tc-errors.tb, line 22: process `A': type mismatch for argument 3
-tc-errors.tb, line 12: tool `tt': type mismatch for argument 1
-tc-errors.tb, line 14: rec-connect: type of argument 1 (`int') not declared as tool name
-tc-errors.tb, line 16: rec-connect: type of argument 1 (`int') not declared as tool name
-tc-errors.tb, line 25: snd-eval: too few arguments
-tc-errors.tb, line 26: snd-eval: argument 1 should be a variable
-tc-errors.tb, line 27: snd-eval: argument 1 should be a variable
-tc-errors.tb, line 28: snd-ack-event: too few arguments
-tc-errors.tb, line 29: snd-ack-event: argument 1 should be a variable
-tc-errors.tb, line 35: process `A': too few actuals
-tc-errors.tb, line 35: undeclared process name `Z'
-tc-errors.tb, line 35: undeclared process name `Z'
+line 2: (warning) variable `Y' redefines formal in enclosing scope
+line 2: double declaration of let variable `Z'
+line 1: double declaration of formal `X'
+line 7: double declaration of process name `A'
+line 13: function `f' undefined
+line 26: undeclared variable `Tid'
+line 33: double declaration of tool name `tt'
+line 20: process `A': type mismatch for argument 1
+line 20: process `A': too few actuals
+line 21: process `A': type mismatch for argument 2
+line 21: process `A': too few actuals
+line 22: process `A': type mismatch for argument 3
+line 12: tool `tt': type mismatch for argument 1
+line 14: rec-connect: type of argument 1 (`int') not declared as tool name
+line 16: rec-connect: type of argument 1 (`int') not declared as tool name
+line 25: snd-eval: too few arguments
+line 26: snd-eval: argument 1 should be a variable
+line 27: snd-eval: argument 1 should be a variable
+line 28: snd-ack-event: too few arguments
+line 29: snd-ack-event: argument 1 should be a variable
+line 35: process `A': too few actuals
+line 35: undeclared process name `Z'
+line 35: undeclared process name `Z'
 ToolBus: execution stopped due to the above error(s)

@@ -1,0 +1,47 @@
+bin_PROGRAMS         = toolbus ctif
+bin_SCRIPTS          = idef2tif
+
+noinst_PROGRAMS      = script2latex verbatim
+
+data_DATA            = logger.tcl viewer.tcl
+
+EXTRA_DIST           = txt_dbg.c logger.tcl.src viewer.tcl.src \
+                       script.l script.y idef2tif.src
+
+toolbus_SOURCES      = calls.c env.c interpreter.c  main.c match.c \
+                       monitor.c procs.c server.c tools.c typecheck.c env.h \
+                       interpreter.h match.h monitor.h script.h typecheck.h
+toolbus_LDADD        = lex.yy.o y.tab.o  -L../libtb -ltb
+
+verbatim_SOURCES     = verbatim.c
+
+ctif_SOURCES         = ctif.c
+ctif_LDADD           = -L../libtb -ltb
+
+# txt_dbg_SOURCES    = txt_dbg.c
+# txt_dbg_LDADD      = -L../libtb -ltb
+
+script2latex_SOURCES = script2latex.c
+
+CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
+
+YFLAGS               = -d
+
+TOOLBUS_DEFS         = -DCPP='"$(CPP)"' \
+                       -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
+                       -DLOGGER_TCL=\"$(datadir)/logger.tcl\"
+
+INCLUDES            = -I$(top_srcdir)/libtb -I$(srcdir) -I. $(TOOLBUS_DEFS)
+
+%.tcl : %.tcl.src
+	sed 's#__WISH__#$(WISH)#g;' < $< > $@
+
+y.tab.c y.tab.h: script.y
+	$(YACC) $(AM_YFLAGS) $(YFLAGS) $<
+
+lex.yy.c : script.l y.tab.h
+	$(LEX) $(AM_LFLAGS) $(LFLAGS) $<
+
+idef2tif : idef2tif.src Makefile
+	sed 's#__PERL__#$(PERL)#g;s#__TOOLBUSBIN__#$(bindir)#g;' \
+	   < $< > $@

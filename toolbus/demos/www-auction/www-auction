@@ -1,3 +1,0 @@
-#!/bin/sh
-PORT=9004
-toolbus -TB_PORT $PORT $@ www-auction.tb

@@ -1,0 +1,8 @@
+CVS
+Makefile.am
+q
+swipl-adapter
+swipl-adapter.guide.tex
+swipl.c.nw
+test.pl
+test.tb

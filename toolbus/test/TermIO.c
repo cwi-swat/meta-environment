@@ -16,10 +16,14 @@ void write_read(char *name, term *t1)
   in = open(name, O_RDONLY);
 
   if(in < 0)
+  {
+    unlink(name);
     err_sys_fatal("Can't open %s for reading\n", name);
-
+  }
+  
   t2 =TBread(in);
   close(in);
+  unlink(name);
   
   if(!t2)
     err_fatal("Parse errors during reading\n");

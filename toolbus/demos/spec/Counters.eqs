@@ -1,4 +1,0 @@
-equations
-
-[1]  init       = 0
-[2]  inc(N)     = succ(N)
