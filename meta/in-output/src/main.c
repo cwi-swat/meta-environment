@@ -231,6 +231,7 @@ ATerm relative_to_absolute(int cid, ATerm paths)
     absolutePath = NULL;
   }
 
+  // Found files should be reported in order of the searchPaths
   return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
 }
 
@@ -465,7 +466,7 @@ ATerm find_file(int cid, ATerm paths, char *name, char *extension)
     return createFileNotFoundMessage();
   }
   else {
-    return createFileFoundMessage(directories);
+    return createFileFoundMessage(ATreverse(directories));
   }
 }
 
