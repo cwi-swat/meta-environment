@@ -19,8 +19,8 @@ let
 in
   (
     rec-msg(display-rewrite-errors(ModuleName?, Errors?)).
-    snd-note(remove-feedback-summary("asfe",ModuleName)) .
-    snd-note(display-feedback-summary(feedback("asfe",ModuleName,Errors)))
+    snd-note(remove-feedback-summary("asfe","all")) .
+    snd-note(display-feedback-summary(feedback("asfe","all",Errors)))
   +
     rec-msg(display-asf-errors(ModuleName?, Errors?)).
     snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
