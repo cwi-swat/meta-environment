@@ -14,28 +14,19 @@ rel[node,str] PROCESSINVOCATIONS
 
 rel[node,str] USED_PROCESSES = PROCESSCREATES union PROCESSINVOCATIONS
 rel[str,<node,str>] UNUSED_PROCESSES 
-  = {<"Unused process ",<N,V>> : <N,V> in PROCESSNAMES | V notin range(USED_PROCESSES)}
+  = {<"Unused process ",<N,V>> | <N,V> : PROCESSNAMES , V notin range(USED_PROCESSES)}
 
 rel[node,str] USED_VARS = USES union DEFS
-rel[node,str] UNUSED_VARS_PER_PROCESS = {<N,V> : <N,V> in DECLS | V notin range(domR(USED_VARS,{N}))}
+rel[node,str] UNUSED_VARS_PER_PROCESS = {<N,V> | <N,V> : DECLS , V notin range(domR(USED_VARS,{N}))}
 rel[str,<node,str>] UNUSED_VARS 
- = {<"Unused variable ",<N2,sec(N1)>> : <N1,N2> in DECL_OCCURS | N1 in UNUSED_VARS_PER_PROCESS}
+ = {<"Unused variable ",<N2,sec(N1)>> | <N1,N2> : DECL_OCCURS , N1 in UNUSED_VARS_PER_PROCESS}
 
 rel[str,<node,str>] UNMATCHED_SENDS
- = {<"Unmatched send ",<N,V>> : <N,V> in SENDMESSAGES | V notin range(RECEIVEMESSAGES)} 
+ = {<"Unmatched send ",<N,V>> | <N,V> : SENDMESSAGES , V notin range(RECEIVEMESSAGES)} 
 rel[str,<node,str>] UNMATCHED_RECEIVES
- = {<"Unmatced receive ",<N,V>> : <N,V> in RECEIVEMESSAGES | V notin range(SENDMESSAGES)}
+ = {<"Unmatced receive ",<N,V>> | <N,V> : RECEIVEMESSAGES , V notin range(SENDMESSAGES)}
 
 rel[str,<node,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
-
-rel[node,str] MATCHED_SENDS
-  = {<N,V> : <N,V> in SENDMESSAGES | V in range(RECEIVEMESSAGES)}
-
-rel[str,<str,str>] MATCHED_PARAM
-  = {<"Debug ",<fst(N2),sec(N2)>> : <N1,N2> in MSGTYPES | N1 in domain(MATCHED_SENDS)}
-
-rel[node,str] MATCHED_RECEIVES
-  = {<N,V> : <N,V> in RECEIVEMESSAGES | V in range(SENDMESSAGES)}
 
 rel[str,<node,str>] ALL_MESSAGES 
  = UNUSED_PROCESSES union UNMATCHED_MESSAGES union UNUSED_VARS

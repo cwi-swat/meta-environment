@@ -8,7 +8,7 @@ buttons([
           apply("check-rscript", "List", 1),
           push-modulename("RscriptChecker"),
           reduce,
-          execute-action("unparsePT"),
+          unparse,
           show-list
          ]),
   button("*",
@@ -33,8 +33,9 @@ buttons([
           check-sort("RSTORE"),
 
           apply("display-query", "List", 3),
-          rewrite("DisplayQuery"),
-          execute-action("unparsePT"),
+          push-modulename("DisplayQuery"),
+          reduce,
+          unparse,
           show-list
         ]),
   button("Tscript",
@@ -52,7 +53,7 @@ buttons([
 
           apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
-          execute-action("unparsePT"),
+          unparse,
           show-list
         ]),
   button("Tscript",
@@ -70,7 +71,7 @@ buttons([
 
           apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
-          execute-action("unparsePT"),
+          unparse,
           show-list
         ]),
   button("Tscript",
