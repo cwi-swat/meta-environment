@@ -153,7 +153,6 @@ env       *mk_env(var *, term *, env *);
 term      *mk_list(term *, term_list *);
 void      convert_form_to_var(var *);
 void      convert_form_to_mvar(var *);
-char      *strndup(char *, char *);
 void      print_str(const char *);
 void      print_bstr(const char *, int);
 void      pr_term(const term *);
@@ -165,7 +164,8 @@ void       pr_term_list(const term_list *);
 TBbool    streq(const char *, const char *);
 TBbool    streq_unres(char *, char *);
 TBbool    bstreq(bstr *, bstr *);
-char *    strdup(const char *);
+char      *strdup(const char *);
+char      *strndup(char *, int);
 
 #define   list_first(tl) first(tl)
 #define   list_next(tl)  next(tl)

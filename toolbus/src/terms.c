@@ -518,23 +518,24 @@ env *mk_env(var *v, term *t, env *e)
   return re;
 }
 
-/* MP_ bgn is the address of the first char in the string and
-       end is the address of the char _after_ the last char of 
-	   the string (based on the way the while loop is written).
+#ifndef HAVE_STRNDUP
+/* MP_ bgn  is the address of the first char in the string and
+       size is the maximum number of chars copied into the newly
+       allocated string.
 */
-char *strndup(register char *bgn, register char *end)
+char *strndup(register char *bgn, int size)
 {
-  register char *r,  *s;
-  r = s = (char *) malloc(sizeof(*bgn) *
-                          (end - bgn + 1));
+  register char *r,  *s, *end;
+  r = s = (char *) malloc(sizeof(char) * (size + 1));
   if(!r)
     err_sys_fatal("strndup: can't malloc");
+  end = &bgn[size];
   while(bgn < end)
     *s++ = *bgn++;
   *s = '\0';
   return r;
 }
-
+#endif /* HAVE_STRNDUP */
 
 term *mk_bstr(char *s, int n)
 {
@@ -543,7 +544,7 @@ term *mk_bstr(char *s, int n)
 
   t->trm_kind = t_bstr;
   bstr_len(t) = n;
-  bstr_val(t) = strndup(s, &s[n]);
+  bstr_val(t) = strdup(s);
   return t;
 
 }
