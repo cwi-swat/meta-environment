@@ -1,12 +1,10 @@
 # $Id$
 
-SUBDIRS=examples
+#SUBDIRS=examples
 
 INCLUDES = \
 	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \
-	-I$(SDF_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include
 
@@ -19,7 +17,6 @@ noinst_HEADERS = pandora.h Box.h
 
 pandora_SOURCES = main.c pandora.c Box.c
 pandora_LDADD = \
-	-L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \

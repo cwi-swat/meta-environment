@@ -1,4 +1,3 @@
-#include <SDFME-utils.h>
 #include <MEPT-utils.h>
 #include <unistd.h>
 #include <assert.h>
@@ -7,8 +6,8 @@
 #include <string.h>
 #include <atb-tool.h>
 
-#include "ptpretty.tif.h"
-#include "pretty.h"
+#include "Box.h"
+#include "pandora.h"
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
@@ -45,32 +44,6 @@ static void version(void)
 
 /*}}}  */
 
-/*{{{  ATerm format(int cid, ATerm syntax, ATerm tree) */
-
-ATerm format(int cid, ATerm syntax, ATerm tree)
-{
-  SDF_Start start = SDF_StartFromTerm(ATBunpack(syntax));
-  ATerm result = PT_ParseTreeToTerm(pretty(SDF_getStartTopSDF(start),
-		   PT_ParseTreeFromTerm(ATBunpack(tree))));
-
-  if (result != NULL) {
-    return ATmake("snd-value(formatted(<term>))", result);
-  }
-  else {
-    return ATmake("snd-value(error(\"Unknown error during formatting\"))");
-  }
-}
-
-/*}}}  */
-/*{{{  void rec_terminate(int cid, ATerm msg)  */
-
-void rec_terminate(int cid, ATerm msg) 
-{
-  exit(0);
-}
-
-/*}}}  */
-
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[]) 
@@ -83,26 +56,12 @@ int main(int argc, char *argv[])
   int c;
   int i;
 
-  ATerm at_sdf;
   ATerm at_tree;
   PT_ParseTree tree;
-  SDF_SDF sdf;
 
   ATinit(argc, argv, &bottomOfStack); 
   PT_initMEPTApi(); 
-  SDF_initSDFMEApi(); 
 
-  for (i=1; !useToolbus && i < argc; i++) {
-    useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
-  }
-
-  if (useToolbus) {
-    int cid;
-    ATBinit(argc, argv, &bottomOfStack);
-    cid = ATBconnect(NULL, NULL, -1, ptpretty_handler);
-    ATBeventloop();
-  }
-  else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
 	case 'i':  input=optarg; break;
@@ -121,16 +80,13 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    at_sdf = ATreadFromNamedFile(syntax);
     at_tree = ATreadFromNamedFile(input);
 
     if (at_tree != NULL) {
 
       tree = PT_ParseTreeFromTerm(at_tree);
-      sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(
-				PT_ParseTreeFromTerm(at_sdf)));
 
-      tree = pretty(sdf, tree);
+      tree = pandora(tree);
 
       ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
 
