@@ -21,11 +21,13 @@ equations
 
   [cl-1'4] contains($Literal, LabelsSet) == true,
            %%$Location := get-location($Literal)
-           $String := production2str(Prod)
+           $String1 := production2str(Prod),
+           $String2 := moduleid2str($ModuleId),
+           $String3 := "double used label in " || $String2
            ====>
            check-labels3($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
              [LabelsSet, 
-              Msgs, make-warning("double-used-label", $String)]
+              Msgs, make-error($String3, $String1)]
 
   [cl-1'4] contains($Literal, LabelsSet) == false
            ====>

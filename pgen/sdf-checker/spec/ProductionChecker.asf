@@ -61,7 +61,7 @@ equations
 
         $String1 := moduleid2str($ModuleId),
         $String2 := productions2str(Prod*7),
-        $String3 := "used-in-priorities-but-undefined in " || $String1,
+        $String3 := "used in priorities but undefined in " || $String1,
  
         Msgs4 := get-messages(InfoMsgTuple1),
         Msgs5 := Msgs4, make-warning($String3, $String2),
@@ -98,7 +98,7 @@ equations
            is-injection-production(Symbol2, Symbol1, ProductionsSet) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Symbol* -> Symbol1 Attrs),
-           $String3 := "inconsistent-rhs-in-priorities in " || $String1
+           $String3 := "inconsistent rhs in priorities in " || $String1
            ====>
            check-priorities-given-symbol(Symbol* -> Symbol1 Attrs, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
@@ -109,7 +109,7 @@ equations
            is-injection-production(Symbol2, Symbol1, ProductionsSet) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($Literal (Symbol,*) -> Symbol1 Attrs),
-           $String3 := "inconsistent-rhs-in-priorities in " || $String1
+           $String3 := "inconsistent rhs in priorities in " || $String1
            ====>
            check-priorities-given-symbol($Literal (Symbol,*) -> Symbol1 Attrs, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
@@ -131,17 +131,17 @@ equations
 
   [crhs-1'1] $String1 := moduleid2str($ModuleId),
              $String2 := production2str(Symbol* -> $Literal Attrs),
-             $String3 := "literal-in-right-hand-side-not-allowed in " || $String1
+             $String3 := "literal in right-hand-side not allowed in " || $String1
              ====>
              check-right-hand-sides(Symbol* -> $Literal Attrs, Msgs, $ModuleId) =
-               Msgs, make-warning($String3, $String2)
+               Msgs, make-error($String3, $String2)
 
   [crhs-1'2] $String1 := moduleid2str($ModuleId),
              $String2 := production2str($Literal1 (Symbol,*) -> $Literal2 Attrs),
-             $String3 := "literal-in-right-hand-side-not-allowed in " || $String1
+             $String3 := "literal in right-hand-side not allowed in " || $String1
              ====>
              check-right-hand-sides($Literal1 (Symbol,*) -> $Literal2 Attrs, Msgs, $ModuleId) =
-               Msgs, make-warning($String3, $String2)
+               Msgs, make-error($String3, $String2)
 
   [crl-1'1] check-right-hand-side-lexical-prod(lexical syntax Prod*, Msgs, $ModuleId) =
               check-right-hand-side-lexical-prod(Prod*, Msgs, $ModuleId)
@@ -154,17 +154,17 @@ equations
 
   [default-crl-1'1] $String1 := moduleid2str($ModuleId),
                     $String2 := production2str(Symbol* -> Symbol Attrs),
-                    $String3 := "only-sort-allowed-in-right-hand-side-of-lexical-function in " || $String1
+                    $String3 := "only sort allowed in right-hand-side of lexical-function in " || $String1
                     ====>
                     check-right-hand-side-lexical-prod(Symbol* -> Symbol Attrs, Msgs, $ModuleId) =
-                      Msgs, make-warning($String3, $String2)
+                      Msgs, make-error($String3, $String2)
 
   [crl-1'2] check-right-hand-side-lexical-prod($Literal (Symbol,*) -> $Sort Attrs, Msgs, $ModuleId) = Msgs
 
   [default-crl-1'2] $String1 := moduleid2str($ModuleId),
                     $String2 := production2str($Literal (Symbol,*) -> Symbol Attrs),
-                    $String3 := "only-sort-allowed-in-right-hand-side-of-lexical-function in " || $String1
+                    $String3 := "only sort allowed in right-hand-side of lexical-function in " || $String1
                     ====>
                     check-right-hand-side-lexical-prod($Literal (Symbol,*) -> Symbol Attrs, Msgs, $ModuleId) =
-                      Msgs, make-warning($String3, $String2)
+                      Msgs, make-error($String3, $String2)
  

@@ -2,6 +2,11 @@ equations
 
   [cs-1'1] Msg* := check-sdf(Definition)
            ====>
+           check-sdf(definition Definition, $String) =
+             feedback("SdfChecker", $String, [Msg*])
+
+  [cs-1'1] Msg* := check-sdf(Definition)
+           ====>
            check-sdf(definition Definition) =
              feedback("SdfChecker", "Unknown", [Msg*])
 
@@ -64,7 +69,7 @@ equations
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
            Msgs1 := get-messages(InfoMsgTuple2),
            Msgs2 := Msgs1,
-make-warning("module-not-available", strcon(""" $Char* """)),
+make-error("module not available", strcon(""" $Char* """)),
            InfoMsgTuple3 := put-messages(Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
@@ -145,7 +150,7 @@ make-warning("module-not-available", strcon(""" $Char* """)),
                                       symbols($Symbol*1)),
            $String := symbols2str($Symbol*4),
            $Msgs2 := $Msgs1,
-make-warning("unused-sort-definitions", $String),
+make-warning("unused sort definitions", $String),
            InfoMsgTuple2 := put-messages($Msgs2, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2

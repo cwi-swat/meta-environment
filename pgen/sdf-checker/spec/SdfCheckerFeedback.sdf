@@ -9,6 +9,7 @@ imports ProductionSetOperations
 exports
   context-free syntax
     make-warning(StrCon, StrCon) -> {Feedback ","}*
+    make-error(StrCon, StrCon)   -> {Feedback ","}*
 
 hiddens
   variables 

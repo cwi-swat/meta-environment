@@ -8,11 +8,12 @@ exports
   context-free start-symbols Summary
 
   context-free syntax
-    check-sdf(SDF) -> Summary
-    check-sdf(Definition) -> {Feedback ","}*
+    check-sdf(SDF)         -> Summary
+    check-sdf(SDF, StrCon) -> Summary
 
 hiddens
   context-free syntax
+    check-sdf(Definition)                                      -> {Feedback ","}*
     check-sorts-and-prods(Definition)                          -> {Feedback ","}*
     pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
     pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
