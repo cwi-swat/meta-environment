@@ -95,3 +95,8 @@ Aspect-J
 - in autocode the generators can implement some cross-type
   concerns (profiling, tracing, etc).
 
+
+XUL Overlays
+------------
+Use id attribute to bind included constructs to current construct.
+http://xulplanet.com/tutorials/xultu/
