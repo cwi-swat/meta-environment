@@ -121,7 +121,7 @@ ATerm process_button_file(int cid, char *filename, char *contents)
 
 static MB_ButtonList getButtonList()
 {
-  return MB_concatButtonList(buttons, standardButtons);
+  return MB_concatButtonList(standardButtons, buttons);
 }
 
 /*}}}  */
