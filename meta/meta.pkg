@@ -16,14 +16,14 @@ configuration interface
 
 requires
    xemacs	20.4
-   aterm 	2.0
-   aterm-java 	1.2
-   toolbus	0.25 with java=on 
-   toolbuslib	0.4
+   aterm 	2.0.2
+   aterm-java 	1.3beta
+   toolbus	0.26beta with java=on 
+   toolbuslib	0.5beta
    sglr		3.10beta
-   pgen		1.6
-   pt-support   0.11
+   pgen		1.7beta
+   pt-support   0.12beta
    graph-support   0.1beta
-   sdf-support  1.0
+   sdf-support  1.1beta
 
 configuration
