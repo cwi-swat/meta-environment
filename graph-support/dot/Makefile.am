@@ -1,8 +1,8 @@
 
-bin_PROGRAMS = dot-adapter
-pkgdata_DATA = dot-adapter.idef 
+bin_PROGRAMS = layoutgraph
+pkgdata_DATA = layoutgraph.idef 
 
-EXTRA_DIST = dot-adapter.idef dot.l dot.y
+EXTRA_DIST = layoutgraph.idef dot.l dot.y
 
 CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output
 
@@ -14,9 +14,11 @@ INCLUDES = \
         -I${top_srcdir}/lib \
 	-I${TOOLBUSLIB}/include
 
-noinst_HEADERS = dot.h
-dot_adapter_SOURCES = dot-adapter.c dot-adapter.tif.c dot-adapter.tif.h
-dot_adapter_LDADD = \
+noinst_HEADERS = dot.h graph2dot.h
+layoutgraph_SOURCES = layoutgraph.c layoutgraph.tif.c layoutgraph.tif.h \
+                      graph2dot.c
+
+layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \
 	-L${top_builddir}/lib -lGraph \
 	-L${TOOLBUSLIB}/lib -lATB \

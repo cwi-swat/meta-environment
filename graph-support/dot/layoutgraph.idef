@@ -1,17 +1,18 @@
 
-process DOT-ADAPTER is
+process LAYOUT-GRAPH is
 let
-  D : dot-adapter,
+  D : layout-graph,
   Graph : term
 in
-  execute(dot-adapter, D?) .
   (
     rec-msg(layout-graph(Graph?)) .
+    execute(layout-graph, D?) .
     snd-eval(D, layout-graph(Graph)) .
     rec-value(D, graph-layouted(Graph?)) .
+    snd-terminate(D,"done").
     snd-msg(graph-layouted(Graph))
   ) * delta
 endlet
 
-tool dot-adapter is { command = "dot-adapter" }
+tool layout-graph is { command = "layoutgraph" }
 
