@@ -12,5 +12,3 @@ context-free syntax
 	"#" "pragma" tokens:Tokens? NewLine -> Line {cons("pragma")}
 	"#" NewLine -> Line {cons("empty")}
 
-hiddens
-sorts Header
