@@ -161,7 +161,7 @@ void tb_set_focus(int conn, char *fid, char *s, int start, int len)
   sprintf(buf, ":echo \"FocusSort: %s\"", sort);
   sendToVim(buf);
 
-  sprintf(buf, "v%d ", len);
+  sprintf(buf, "v%d ", len-1);
   sendToVimVerbatim(buf);
 }
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jan 22 13:02:45 CET 2003 <jong@cwi.nl>
+ * version 0.4.1
+ * fixed off-by-one error in focus visualization
+
 Fri Jan 17 11:12:35 CET 2003 <jong@cwi.nl>
  * version 0.4
  * fix "Parse" submenu-item is no longer always in a well-known place,
