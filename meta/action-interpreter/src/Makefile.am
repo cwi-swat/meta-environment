@@ -10,10 +10,10 @@ API_VERSION=1.0
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 INCLUDES = \
-	-I$(ATERM)/include \
-        -I${ERROR_SUPPORT}/include
 	-I$(PT_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include
+        -I${ERROR_SUPPORT}/include \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ATERM)/include
 
 bin_PROGRAMS = actioninterpreter
 #bin_SCRIPTS = metaconfig-config
