@@ -67,12 +67,8 @@ in
 	rec-note(syntax-changed(ModuleName)) .
 	snd-msg(invalidate-tree(EditorId))
       +
-	(
-	  rec-msg(parse-focus(EditorId))
-	+
-	  rec-msg(parse-buffer(EditorId)) .
-	  snd-msg(invalidate-tree(EditorId))
-	) . 
+	rec-msg(parse-buffer(EditorId)) .
+	snd-msg(invalidate-tree(EditorId)).
 	snd-msg(set-parsetable(eqs(ModuleName))) .
 	(
 	  rec-msg(parsetable-not-set(eqs(ModuleName))) .

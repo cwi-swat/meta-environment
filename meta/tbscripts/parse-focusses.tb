@@ -31,7 +31,8 @@ let
   DirtyFoci    : list,
   ErrorFoci    : list,
   Text         : str,
-  Fun          : str,
+  Type         : str,
+  ModuleName   : str,
   EditorId     : term,
   StartSymbols : term,
   Pos          : int,
@@ -46,8 +47,9 @@ in
   Id := process-id . 
   (
     rec-msg(parse-focusses(EditorId?, ModuleId?)) .
-    Fun := fun(ModuleId) .
-    if equal(Fun, "eqs") then
+    Type := fun(ModuleId) .
+    ModuleName := first(args(ModuleId)).
+    if equal(Type, "eqs") then
       Nonterminal := "Equations"
     else
       Nonterminal := ""
@@ -72,6 +74,7 @@ in
         rec-msg(focus-text(EditorId, Text?)).
         snd-msg(get-focus-sort(Nonterminal, Focus)) .
         rec-msg(focus-sort(Nonterminal?)) .
+        UpdateTextInModuleDb(Type, ModuleName, Text).
         snd-msg(Id, parse-string-as-asfix2me(ModuleId, Nonterminal, Text)).
         snd-note(ui-status(statf(Id,"Parsing %s",[ModuleId]))).
         (
@@ -122,3 +125,10 @@ in
   *
   delta
 endlet
+
+process UpdateTextInModuleDb(Type : str, ModuleName : str, Text : str) is
+  if equal(Type, "eqs") then
+    snd-msg(update-eqs-text-in-db(ModuleName, text(Text)))
+  else
+    tau
+  fi

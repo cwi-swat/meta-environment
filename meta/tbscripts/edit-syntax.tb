@@ -77,12 +77,8 @@ in
   Killed := false .
   (
     (  
-      ( 
-	rec-msg(parse-focus(EditorId)) 
-      +
-	rec-msg(parse-buffer(EditorId)) .
-	snd-msg(invalidate-tree(EditorId))
-      ) . 
+      rec-msg(parse-buffer(EditorId)) .
+      snd-msg(invalidate-tree(EditorId)).
       snd-msg(open-sdf2-language) .
       (
         rec-msg(sdf2-language-not-opened) .
@@ -101,7 +97,7 @@ in
           snd-msg(clear-focus(EditorId))
         +
           rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
-          snd-msg(set-focus(EditorId, ErrorFoci))
+          snd-msg(set-focus(EditorId, ErrorFoci)) 
         )
       )
     ) *
