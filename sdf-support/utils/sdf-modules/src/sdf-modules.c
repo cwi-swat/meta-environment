@@ -4,9 +4,12 @@
 #include <aterm2.h>
 #include <atb-tool.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include <SDFME-utils.h>
 #include "sdf-modules.tif.h"
+
+#define SEP '/'
 
 static char myversion[] = "1.0";
 
@@ -165,29 +168,48 @@ ATerm get_module_id(int cid, ATerm atModule)
 }
 
 /*}}}  */
-/*{{{  ATerm get_module_id(int cid, ATerm atModule) */
+/*{{{  ATerm get_module_path(int cid, char *path, char *id) */
 
 ATerm get_module_path(int cid, char *path, char *id)
 {
-  ATbool consistent = ATtrue;
-  int p = strlen(path);
-  int i = strlen(id);
+  int p;
+  int i;
 
-  for(; p >= 0 && i >= 0; p--, i--) {
-    if (path[p] != id[i]) {
-      consistent = ATfalse;
-      break;
+  /* If path equals "/bla/basic/" and id equals "basic/Booleans"
+   * then we should return "/bla".
+   *
+   * If path equals "/bla/basic" and id equals "Booleans"
+   * then we should return "/bla/basic"
+   */
+  
+  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--);
+  path[p+1] = '\0';
+  
+  for(i = strlen(id) - 1; i >= 0 && id[i] != SEP; i--);
+
+  /* if i < 0, then the module name is not compound */
+  if (i >= 0) {
+    assert(id[i] == SEP);
+    id[i] = '\0';
+    i--;
+
+    /* Eat up as much overlap as possible */
+    for(; p >= 0 && i >= 0; p--, i--) {
+      ATwarning("%d == %d ??\n", path[p], id[i]);
+      if (path[p] != id[i]) {
+	break;
+      }
+      else {
+	path[p] = '\0';
+      }
     }
   }
 
-  path[i] = '\0';
+  /* remove trailing directory separators */
+  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--);
+  path[p+1] = '\0';
 
-  if (consistent && p > 0) {
-    return ATmake("snd-value(module-path(<str>))", path);
-  }
-  else {
-    return ATmake("snd-value(module-path-inconsistent)");
-  }
+  return ATmake("snd-value(module-path(<str>))", path);
 }
 
 /*}}}  */

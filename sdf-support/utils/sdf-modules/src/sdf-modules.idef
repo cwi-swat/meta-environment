@@ -27,7 +27,7 @@ in
     rec-value(SM, module-id(ModuleId?)) .
     snd-msg(sm-module-id(ModuleId))
   +
-    rec-msg(sm-get-module-path(Path, ModuleId?)) .
+    rec-msg(sm-get-module-path(Path?, ModuleId?)) .
     snd-eval(SM, get-module-path(Path, ModuleId)) .
     (
       rec-value(SM, module-path(Path?)) .
