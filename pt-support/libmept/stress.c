@@ -11,7 +11,7 @@
 
 void testCompare()
 { 
-  test_equal("stupid", 1, 0);
+  
 
 }
 
