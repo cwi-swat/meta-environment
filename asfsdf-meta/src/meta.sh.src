@@ -1,4 +1,6 @@
 #! /bin/sh
 
 __META__/bin/generic-meta -I __ASF__/share/asf \
-                          -I __PREFIX__/share/asfsdf-meta $* 
+                          -I __PREFIX__/share/asfsdf-meta \
+			  -p __ASF__/bin \
+			  $*
