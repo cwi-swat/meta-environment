@@ -60,19 +60,19 @@ Guide.ps.gz: Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
 	export TEXINPUTS; \
 	latex Guide.tex; \
 	latex Guide.tex
-	dvips Guide.dvi >Guide.ps
+	dvips -o Guide.ps Guide.dvi
 	rm -f Guide.ps.Z Guide.ps.gz
 	gzip Guide.ps
 
 Intro.ps: Intro.tex calc.ps auction.ps
 	latex Intro.tex
 	latex Intro.tex
-	dvips Intro.dvi >Intro.ps
+	dvips -o Intro.ps Intro.dvi 
 
 pamflet.ps: pamflet.tex arch-simpel.ps battleships.eps zeeslag.ps
 	latex pamflet.tex
 	latex pamflet.tex
-	dvips pamflet.dvi > pamflet.ps
+	dvips -o pamflet.ps  pamflet.dvi
 
 arch-simpel.ps: arch-simpel.fig
 	fig2dev -Lps arch-simpel.fig arch-simpel.ps
