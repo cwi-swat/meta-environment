@@ -151,14 +151,14 @@ static void print_backslashes(int n)
 #line 261 "wish-adapter.c.nw"
 static void print_string(char* s, int n, int depth)
 {
-  print_backslashes(depth*2);
+  print_backslashes(depth*2+1);
   CHAR2WISH('"');
   while(n--)
   {
     if(isprint(*s)) {
       switch (*s) {
 	case '\\':
-	case '"':	print_backslashes(depth*2+1);
+	case '"':	print_backslashes(depth*2+3);
 			CHAR2WISH(*s);
 			break;
 	case '{':
@@ -173,7 +173,7 @@ static void print_string(char* s, int n, int depth)
     }
     s++;
   }
-  print_backslashes(depth*2);
+  print_backslashes(depth*2+1);
   CHAR2WISH('"');
 }
 #line 296 "wish-adapter.c.nw"
@@ -249,10 +249,10 @@ static void print_term(term* t, int depth)
             print_list(fun_args(t), "(", ",", ")", depth);
          break;
       case t_list:
-	 print_backslashes(depth*2);
+	 print_backslashes(depth*2+1);
 	 CHAR2WISH('"');
          print_list(t, "", " ", "", depth+1);	
-	 print_backslashes(depth*2);
+	 print_backslashes(depth*2+1);
 	 CHAR2WISH('"');
          break;
       case t_env:
@@ -276,7 +276,7 @@ static void print_list(term_list* l, char* left, char* sep, char* right, int dep
 #line 422 "wish-adapter.c.nw"
 static void print_args(term_list *args, int depth)
 {
-  print_list(args, "", " ", "", depth);
+  print_list(args, "\"", " ", "\"", depth);
 /*  while(args) {
     if(tkind(first(args)) != t_list)
       PRINT2WISH0(" \"");
