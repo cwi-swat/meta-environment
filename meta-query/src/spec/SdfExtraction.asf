@@ -6,7 +6,7 @@ equations
   [extractRelations-production]
     $Production = $Symbols -> $Sort $Attributes,
     $ProductionId = get-area($Production),
-    $Tuple = <$ProductionId, "production">,
+    $Tuple = <$ProductionId, production2str($Production)>,
     $Rstore2 = add-tuple(PRODUCTIONS, $Tuple, $Rstore1)
     ===>
     extractRelations($Production, $Rstore1) = $Rstore2
@@ -14,7 +14,7 @@ equations
   [extractRelations-prefixproduction]
     $Production = $Literal($Symbol*) -> $Sort $Attributes,
     $ProductionId = get-area($Production),
-    $Tuple = <$ProductionId, "production">,
+    $Tuple = <$ProductionId, production2str($Production)>,
     $Rstore2 = add-tuple(PREFIXPRODUCTIONS, $Tuple, $Rstore1)
     ===>
     extractRelations($Production, $Rstore1) = $Rstore2

@@ -15,6 +15,7 @@ hiddens
   variables
     "$Char*"[0-9]*		-> CHAR*
     "$Attributes"[0-9]*         -> Attributes
+    "$Literal"[0-9]*		-> Literal
     "$Symbol"[0-9]*		-> Symbol
     "$Symbol*"[0-9]*		-> Symbol*
     "$Symbol+"[0-9]*		-> Symbol+
