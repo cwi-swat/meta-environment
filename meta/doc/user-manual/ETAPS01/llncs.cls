@@ -1,8 +1,8 @@
-% LLNCS DOCUMENT CLASS -- version 2.6
+% LLNCS DOCUMENT CLASS -- version 2.4
 % for LaTeX2e
 %
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{llncs}[1999/04/27 v2.6
+\ProvidesClass{llncs}[1998/11/20 v2.4
 ^^JLaTeX document class for Lecture Notes in Computer Science]
 % Options
 \let\if@envcntreset\iffalse
@@ -28,10 +28,6 @@
 
 \setlength{\textwidth}{12.2cm}
 \setlength{\textheight}{19.3cm}
-
-% Ragged bottom for the actual page
-\def\thisbottomragged{\def\@textbottom{\vskip\z@ plus.0001fil
-\global\let\@textbottom\relax}}
 
 \renewcommand\small{%
    \@setfontsize\small\@ixpt{11}%
@@ -592,11 +588,9 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
   \kern-3\p@
   \hrule\@width 2truecm
   \kern2.6\p@}
-  \newdimen\fnindent
-  \fnindent1em
 \long\def\@makefntext#1{%
-    \parindent \fnindent%
-    \leftskip \fnindent%
+    \parindent 1em%
+    \leftskip 1em%
     \noindent
     \llap{\hb@xt@1em{\hss\@makefnmark\ }}\ignorespaces#1}
 
@@ -612,8 +606,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
   \vskip\belowcaptionskip}
 
 \def\fps@figure{htbp}
-% J$ \def\fnum@figure{\figurename\thefigure}
-\def\fnum@figure{\figurename~\thefigure}
+\def\fnum@figure{\figurename\thefigure}
 \def \@floatboxreset {%
         \reset@font
         \small
@@ -692,7 +685,6 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 \def\inst#1{\unskip$^{#1}$}
 \def\fnmsep{\unskip$^,$}
 \def\email#1{{\tt#1}}
-% \def\url#1{#1}
 \def\homedir{\~{ }}
 
 \def\subtitle#1{\gdef\@subtitle{#1}}
@@ -926,8 +918,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
          \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
                                    \@addtoreset{#1}{section}}
       \else
-         \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
-                                   \@addtoreset{#1}{chapter}}%
+         \let\spn@wtheorem=\@spynthm
       \fi
    \fi
 \fi
@@ -976,8 +967,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
     {\endlist}
 \renewcommand{\abstractname}{Abstract.}
 \renewcommand{\contentsname}{Table of Contents}
-% J$ \renewcommand{\figurename}{Fig.\thinspace}
-\renewcommand{\figurename}{Fig.\medspace}
+\renewcommand{\figurename}{Fig.\thinspace}
 \renewcommand{\tablename}{Table~}
 
 \newdimen\headlineindent             % dimension for space between
