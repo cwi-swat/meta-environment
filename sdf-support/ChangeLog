@@ -1,5 +1,6 @@
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Fixed some problems in sdf2pt.c and added sdf2pt.c
+ * added a function to construct a modulename given a string.
 
 2001/07/03 (markvdb@cwi.nl)
  * Added functionality to deal with renaming and parameters.
