@@ -1,5 +1,11 @@
 # $Id$
 
+2003/06/26 (markvdb@cwi.nl)
+ * The update-list takes a string as argument and not a term.
+ * execute-action("unparsePT") is replaced by the button action unparse,
+   this in order to be robust against ATBpack terms. The gen-adapter
+   does not know how to handle these.
+
 2003/06/25 (iversen@cwi.nl)
  * Improved the code in the TreeModel
 
