@@ -1,9 +1,12 @@
 2001/05/23 (jurgenv@cwi.nl)
   * Added experimental library for functional programming in ASF containing:
-      id, const, curry, uncurry, sequence, flip, apply, map and fold[lr]a
+      id, const, curry, uncurry, sequence, flip, apply, map and fold[lr],
+      zip, zipWith, tuple, fst, snd etc.
   * Added experimental library for traversal programming in ASF containing:
       topdown, bottomup, oncetd for type-preserving and type-unifying 
       traversals
+  * Added setting and getting of annotations in terms.
+  * Fixed some minor bugs in the built-in system.
 
 2001/05/22 (jurgenv@cwi.nl)
   * Worked out built-in definition and compilation further. Built-in
