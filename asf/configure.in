@@ -8,7 +8,6 @@ ACLOCAL="${ACLOCAL} -I ."
 AC_SET_MAKE
 
 dnl {{{  Which compiler to use?
-AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
 dnl }}}
