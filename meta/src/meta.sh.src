@@ -58,7 +58,6 @@ E_O_USAGE
 
 Version() {
     echo "$myname v$myversion" >&2
-    addeqssyntax -V
     unparsePT -V
     baffle -v
     asfc -V
@@ -67,8 +66,11 @@ Version() {
     in-output -V
     module-db -V
     parsetablegen -V
+    asfsdfchecker -V
+    addeqssyntax -V
     removevarsyntax -V
     sglr -V
+    restorebrackets -V
     toolbus -version
     xemacs -V
     echo 'puts "wish v$tk_version" ;\
