@@ -1,3 +1,8 @@
+
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
 2001/11/21 (jurgen@cwi.nl)
  * Fixed a bug in the compiler. Functions with list arguments were not
    compiled correctly, resulting in core dumps.

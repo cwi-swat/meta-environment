@@ -11,7 +11,7 @@ EXTRA_DIST	= $(data_DATA)
 
 INCLUDES	= \
 		-I${ATERM}/include \
-		-I${TOOLBUS}/include \
+		-I${TOOLBUSLIB}/include \
 		-I${PT_SUPPORT}/include \
 		-I${ASF_SUPPORT}/include
 
@@ -30,6 +30,6 @@ filtereqssyntaxtool_SOURCES	= filtereqssyntaxtool.tif.c \
 				tool.c \
 				${GENERIC_SOURCES}
 
-filtereqssyntaxtool_LDADD	= -L${TOOLBUS}/lib -lATB \
+filtereqssyntaxtool_LDADD	= -L${TOOLBUSLIB}/lib -lATB \
 				${GENERIC_LDADD} \
 				$(SOCKLIBS)

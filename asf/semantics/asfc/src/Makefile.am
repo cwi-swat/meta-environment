@@ -35,7 +35,7 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept  \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
-               -L$(TOOLBUS)/lib -lATB \
+               -L$(TOOLBUSLIB)/lib -lATB \
                -L$(ATERM)/lib -lATerm \
 		$(SOCKLIBS)
 
@@ -48,6 +48,6 @@ INCLUDES  = $(DEFINES) \
             -I$(PT_SUPPORT)/include \
             -I$(ASF_SUPPORT)/include \
             -I$(ATERM)/include \
-            -I$(TOOLBUS)/include \
+            -I$(TOOLBUSLIB)/include \
             -I$(srcdir)/muasf 
 
