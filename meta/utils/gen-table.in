@@ -15,6 +15,7 @@ PGEN="${bindir}/ParseTable-Generator -silent"
 A2TOA1="${bindir}/a2toa1 -silent"
 ASOURCE="${bindir}/asource -silent"
 ADDFUNC="${bindir}/add-pt-func -silent"
+TRM2BAF="${bindir}/trm2baf"
 EXTENSIONS=".sdf .sdf2"
 VERBOSE=0;
 
@@ -90,7 +91,7 @@ do
 	Notify "Running asource..."
 	out=$dir/$file.tbl
 	err=$dir/$file.asource.err
-	if $ASOURCE $TERMTABLE < $in 2> $err > $out  2>> $err
+	if $ASOURCE $TERMTABLE < $in 2> $err | $TRM2BAF > $out  2>> $err
 	then
 		rm -f $err
 	else
