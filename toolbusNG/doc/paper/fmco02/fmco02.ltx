@@ -887,13 +887,15 @@ disadvantages of the pure call-by-reference model in a distributed
 environment.
 
 The downside is, however, that the \TB\ becomes a data bottleneck when
-huge values really have to be transmitted between tools. Currently, two
-workarounds are used.  A first workaround is to get temporary relief by
-sending compressed values rather than the values themselves.  A second
-workaround is to store the large value in the filesystem and to send
-a file name rather than the file itself. This approach does scale but
-creates an additional inter-tool dependency and assumes that both tools
-have access to the same shared file system. 
+huge values really have to be transmitted between tools. Currently,
+two workarounds are used.  A first workaround is to get temporary
+relief by sending compressed values rather than the values
+themselves. A second workaround is to store the large value in
+the filesystem and to send a file name rather than the file itself.
+This approach is in fact a form of channel-based transmission as seen in
+Figure~\ref{Fig:toolbus-values}(b). It does scale, but it also creates
+an additional inter-tool dependency and assumes that both tools have
+access to the same shared file system.
 
 We will now first discuss how related frameworks handle
 call-by-reference and then we come back to implications for the \TB\ design.
