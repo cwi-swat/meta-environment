@@ -43,7 +43,7 @@ static ATerm lf4 ( ATerm arg1 ) ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
 void register_AUX_Literals_Sdf_Syntax3 ( ) {
-lf_AUX_Literals_Sdf_Syntax3_2sym = ATmakeSymbol ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),no-attrs)"
+lf_AUX_Literals_Sdf_Syntax3_2sym = ATmakeSymbol ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"avoid\")],w(\"\"),l(\"}\")))"
  , 4 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Literals_Sdf_Syntax3_2sym ) ;
 lf_AUX_Literals_Sdf_Syntax3_1sym = ATmakeSymbol ( "listtype(sort(\"Symbol\"),ql(\",\"))" , 1 , ATtrue ) ;
@@ -53,7 +53,7 @@ ATprotectSymbol ( lf3sym ) ;
 lf4sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Symbol\"),ql(\",\"))" ) , lf_AUX_Literals_Sdf_Syntax3_1 , lf_AUX_Literals_Sdf_Syntax3_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),no-attrs)" ) , lf_AUX_Literals_Sdf_Syntax3_2 , lf_AUX_Literals_Sdf_Syntax3_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"avoid\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Literals_Sdf_Syntax3_2 , lf_AUX_Literals_Sdf_Syntax3_2sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Symbol\"))" ) , lf3 , lf3sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf4 , lf4sym ) ;
 }
