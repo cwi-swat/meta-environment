@@ -9,8 +9,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <ASF-utils.h>
-#include <PT-utils.h>
+#include <ASFME-utils.h>
+#include <MEPT-utils.h>
 
 static char myname[]    = "concat-asf";
 static char myversion[] = "1.0";
@@ -90,8 +90,8 @@ main (int argc, char **argv)
   }
 
   ATinit(argc, argv, &bottomOfStack); 
-  PT_initPTApi();
-  ASF_initASFApi();
+  PT_initMEPTApi();
+  ASF_initASFMEApi();
 
   alleqs = ASF_makeCondEquationListEmpty();
 
