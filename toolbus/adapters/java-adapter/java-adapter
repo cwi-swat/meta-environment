@@ -1,4 +1,8 @@
-#!/bin/sh
+#! /bin/sh -m
+#
+# Note: -m enables 'monitor mode', making it possible to send 'SIGQUIT'
+# to Java processes in order to get a thread dump!
+#
 
 PROGRAM=java
 CLASS=
