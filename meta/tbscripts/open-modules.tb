@@ -4,6 +4,7 @@ process Open-initial-module is
 let
   Path : str,
   Module : str,
+  RealModule : str,
   Imports : list,
   Status : term
 in
@@ -13,8 +14,9 @@ in
     (
       rec-msg(not-exists-in-module-db(Module)) .
       Status := success.
-      Open-Module(Module, Path, Status?, Imports?).
+      Open-Module(Module, Path, Status?, RealModule?, Imports?).
       snd-msg(open-modules(Imports)).
+      Invalidate-Dirty-ParseTables([RealModule]).
       rec-msg(finished-opening-modules)
     +
       rec-msg(exists-in-module-db(Module))
@@ -29,6 +31,8 @@ let
   Id : int,
   Modules : list,
   Module : str,
+  RealModules : list,
+  RealModule : str,
   Imports : list,
   Status : term
 in
@@ -36,6 +40,7 @@ in
   (
     rec-msg(open-modules(Modules?)).
     snd-note(ui-status(stat(Id,"Opening Modules"))). 
+    RealModules := [].
     if not-equal(Modules, []) then
       Module := first(Modules).
       Modules := next(Modules).
@@ -45,11 +50,13 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-        Open-Module(Module, "", Status?, Imports?).
-        Modules := join(Imports, Modules) 
+        Open-Module(Module, "", Status?, RealModule?, Imports?).
+        Modules := join(Imports, Modules).
+        RealModules := join(RealModules, RealModule)
       )
     fi *
     if equal(Modules, []) then
+      Invalidate-Dirty-ParseTables(RealModules).
       snd-msg(finished-opening-modules)
     fi.
     snd-note(ui-status(endstat(Id)))
@@ -57,11 +64,27 @@ in
   delta
 endlet
 
-process Open-Module (Module : str, Path : str, Status : term?, Imports : list?) 
+process Invalidate-Dirty-ParseTables(Modules : list) is
+let
+  Runner : list,
+  Module : str
+in
+  Runner := Modules.
+  if not-equal(Runner, []) then
+    Module := first(Runner).
+    Runner := next(Runner).
+    snd-msg(invalidate-parse-tables(Module))
+  fi *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
+
+process Open-Module (Module : str, Path : str, Status : term?, 
+                     RealModule : str?, Imports : list?) 
 is
 let
   Id : int,
-  RealModule : str,
   RealPath : str
 in
   Id := process-id.
@@ -71,22 +94,30 @@ in
     Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then
       Open-ParseTables(RealModule, RealPath).
-      tau. /* needed to activate the next process (bug in ToolBus) */
+      tau.
       Open-Equations(RealModule, RealPath)
     else
-      Handle-Open-Module-Errors(Module, Status)
+      RealModule := Module.
+      Handle-Open-Module-Errors(RealModule, Status)
     fi
   ).
   snd-note(ui-status(endstat(Id)))
 endlet
 
+process Add-Empty-Module(Module : str) is
+  snd-msg(add-empty-module-to-db(Module)).
+  rec-msg(empty-module-added)
+  
 process Handle-Open-Module-Errors(Module : str, Status : term) is
   if equal(Status, parse-error) then
-    snd-msg(add-empty-module-to-db(Module)).
-    rec-msg(empty-module-added)
-  else
-    tau
-  fi
+    Add-Empty-Module(Module)
+  else tau fi.
+  if equal(Status, name-inconsistent) then
+    Add-Empty-Module(Module)
+  else tau fi.
+  if equal(Status, erroneous-module) then
+    Add-Empty-Module(Module)
+  else tau fi
 
 process Open-Syntax (Module : str, Path : str, Status : term?, 
                      RealModule : str?, RealPath : str?, Imports : list?) 
@@ -126,7 +157,7 @@ in
       rec-msg(real-module-name(Module, RealModule?)).
       rec-msg(need-modules(Imports?))
     +
-      rec-msg(error-opening(Module))
+      rec-msg(error-opening(Module, Status?))
     )
   else
     tau
