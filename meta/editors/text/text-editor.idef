@@ -73,6 +73,11 @@ in
     rec-note(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +
+    /* This is the only place where the text editor is supposed to
+     * return data, a deadlock might occur when this editor suddenly
+     * dissappears! Processes that use this note, should deal with this
+     * fact.
+     */
     rec-note(get-focus-text(EditorId,
       focus(Path?, Sort?, area(StartPos?,Length?),Dirty?))) .
     snd-eval(TE, tb-get-focus-text(Fid, StartPos, Length)) .
