@@ -15,8 +15,8 @@ Installation instructions:
          <http://www.javasoft.com/products/jdk/>). Make sure you get version
          1.1 or higher.
     -- wish (A user-interface system, part of Tcl/Tk, from 
-         <http://www.tclconsortium.org/resources/download.html>) Make sure you
-         get version 8.0 or higher.
+         <http://www.tclconsortium.org/software/index.vet>). Make sure you
+         get version 8.0.1 or higher.
     -- tcldot (A graph visualization library from AT&T. Part of their graphviz
          package, from <http://www.research.att.com/sw/tools/graphviz/>)
          Move the directory lib/Tcldot to some convenient place. This is
@@ -48,6 +48,10 @@ Installation instructions:
        include directory).
        With Boehm GC installed, sglr's `-gc' compilation targets
        can be used (read sglr/src/Makefile.in if interested).
+       It should be noted that it is somewhat eufemistic to refer
+       to BoehmGC versions of the sglr parser as `experimental'.
+       Usual disclaimers about operating heavy machinery and
+       controlling nuclear facilities severely apply.
 
 
   * Dependencies
