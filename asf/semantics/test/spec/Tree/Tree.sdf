@@ -1,7 +1,31 @@
 module Tree
 imports Tree-syntax
 exports
-sorts NAT* <TREE, NAT*>
+
+context-free start-symbols
+	TREE
+	NAT*
+	<TREE, NAT*>
+
+context-free syntax
+
+  start-bu-stop-tr(TREE) -> TREE
+  start-bu-cont-tr(TREE) -> TREE
+
+  start-td-stop-tr(TREE) -> TREE
+  start-td-cont-tr(TREE) -> TREE
+
+  start-bu-stop-ac(TREE,NAT*) -> NAT*
+  start-bu-cont-ac(TREE,NAT*) -> NAT* 
+
+  start-td-stop-ac(TREE,NAT*) -> NAT* 
+  start-td-cont-ac(TREE,NAT*) -> NAT* 
+
+  start-bu-stop-actr(TREE,NAT*) -> <TREE, NAT*> 
+  start-bu-cont-actr(TREE,NAT*) -> <TREE, NAT*> 
+
+  start-td-stop-actr(TREE,NAT*) -> <TREE, NAT*> 
+  start-td-cont-actr(TREE,NAT*) -> <TREE, NAT*> 
 
 context-free syntax
 
@@ -10,6 +34,8 @@ context-free syntax
 
   td-stop-tr(TREE) -> TREE {traversal(top-down, trafo, break)}
   td-cont-tr(TREE) -> TREE {traversal(top-down, trafo, continue)}
+
+  %% interesting combination of traversal and function that returns a list
 
   bu-stop-ac(TREE,NAT*) -> NAT* {traversal(bottom-up, accu, break)}
   bu-cont-ac(TREE,NAT*) -> NAT* {traversal(bottom-up, accu, continue)}

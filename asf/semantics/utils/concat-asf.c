@@ -12,7 +12,7 @@
 
 static char myname[]    = "concat-asf";
 static char myversion[] = "1.0";
-static char myarguments[] = "ho:V";
+static char myarguments[] = "hmo:V";
 
 void usage(void)
 {
@@ -23,6 +23,7 @@ void usage(void)
         "Options:\n"
         "\t-h              display help information (usage)\n"
         "\t-o filename     output to file (default stdout)\n"
+	"\t-m              make a module instead of an equation list\n"
         "\t-V              reveal program version (i.e. %s)\n"
         "\n"
 	"For example:\n" 
@@ -40,6 +41,7 @@ main (int argc, char **argv)
   char *inputs[MAX_MODULES] = { "-" };
   int  nInputs = 0;
   char *output = "-";
+  ATbool module = ATfalse;
   ATermList list;
   ASF_ASFConditionalEquationList alleqs;
   int i;
@@ -54,6 +56,9 @@ main (int argc, char **argv)
     case 'h':  
       usage();                      
       exit(0);
+    case 'm':
+      module = ATtrue;
+      break;
     case 'o':  
       output = strdup(optarg);    
       break;
@@ -112,11 +117,24 @@ main (int argc, char **argv)
       list = ASF_getASFModuleEquationList(module);
     }
 
+    ATwarning("Adding %d equations\n", ASF_getASFConditionalEquationListLength(list));
+
     alleqs = ASF_unionASFConditionalEquationList(alleqs, ASF_makeLayoutNewline(), list);
+
   }
 
-  ATwriteToNamedBinaryFile(ASF_ASFConditionalEquationListToTerm(alleqs),
-			   output);
+  if (module) {
+    ASF_OptLayout l = ASF_makeLayoutNewline();
+    ASF_ASFSection sec = ASF_makeASFSectionEquations(l, alleqs);
+    ASF_ASFModule mod = ASF_makeASFModuleDefault(ASF_makeASFSectionListSingle(sec));
+    /*PT_ParseTree pt = PT_makeValidParseTreeFromTree((PT_Tree) mod);*/
+
+    ATwriteToNamedBinaryFile((ATerm) mod, output);
+  } 
+  else {
+    ATwriteToNamedBinaryFile(ASF_ASFConditionalEquationListToTerm(alleqs),
+			     output);
+  }
  
   return 0;
 }

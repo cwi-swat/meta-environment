@@ -4,6 +4,9 @@ exports
 
 sorts ID ID* 
 
+context-free start-symbols
+	ID*
+
 lexical syntax
 
 [a-z]+   -> ID

@@ -5,6 +5,9 @@ imports Layout
 exports 
   sorts Yielder Action
 
+  context-free start-symbols
+	Action
+
   context-free syntax
     "1"			-> Yielder
     "2"			-> Yielder

@@ -1,5 +1,98 @@
 
 
+Tue Jan 25 11:58:24 CET 2005 <jurgenv@cwi.nl>
+ * TODO: regenerate remove-var-syntax!
+ * TODO: reimplement and regenerate ASF-apigen
+ * Removed implementation for "=" conditions. 
+	* asf-upgrade tool is now dead
+	* muasf still has = operator. TODO: remove and reimplement part
+	  of the muasf2muasf code to fix.
+	* asf-checker simplified
+	* asf interpreter simplified.
+ * ASF now implements structured lexicals:
+	- Changes in all files due to API changes 
+        - AddEqsSyntax generates different lexical constructor functions.
+        * For each lexical syntax section a context-free syntax section
+          is generated. Each production is copied and wrapped by a 
+          prefix function, in the resulting productions each sortname is
+          wrapped by CHARS[[ ]], and each character class too. 
+        * Each lexical variables section is translated to a normal
+          variables section by transforming the right-hand sides.
+          Here too, each sort and cc are wrapped by CHARS[[ ]].
+        * Each CHARS[[CC]] is defined by CHAR -> CHARS[[CC]], and
+          CHAR is the SDF Character sort renamed to CHAR.
+ 	- A new tool asf-normalization, written in ASF+SDF has the following
+	  functionality at the moment:
+		* Mapping lexical constructor functions to lexical trees
+		* Removing bracket productions
+		* Removing the list wrappers on the lhs of an equation
+		  for function that return lists.
+	- IDEA: the ASF normalizer already reuses large parts of the SDF 
+          normalizer. Why not more, and integrate renaming intro the 
+	  ASF-normalizer. This will result in less ToolBus scripts, and
+          more reuse.
+	- Flattening of AsFix2 changed, which means the implementation
+          for functions that return lists could be fixed in both the compiler
+          and the interpreter.
+        - Literal trees dissappeared, leading to changes in compiler and
+          interpreter
+        - Compiled specifications no longer rewrite traversal functions 
+          that occur in the input term. This is for a number of reasons,
+          one of them to simplify bootstrapping  the asf-normalizer.
+	- Removed pre-processing from asf interpreter, since this
+ 	  task is now done by the asf-normalizer
+ * Moved addeqssyntax specification to asf-library package
+ * Moved compiler specification to asf-library package.
+ 	- replaced lexical encodings of function semantics ({ } for lists, 
+	  _bu_ for bottom-up etc. by context-free FunId modifiers:
+		* { FunId } = list
+		* [ FunId ] = returns a list
+		* | FunId Type Strat Cont | = traversal function
+		* TRANSLATE [ FunId ] = list translation
+	 	* IGNORE [ FunId ] = ignore during match (known wrapper)
+	- TODO: extend modifier syntax with CONSTANT, CONSTRUCTOR, etc.
+	  which will make the nametable and the signature superfluous in 
+	  many parts of the compiler. Also, more finegrained control of 
+	  which applications are CONSTRUCTORS and which aren't will allow
+	  for optimizations!
+	- Due to new representation of functions returning lists in AsFix, 
+	  the are now better supported. 
+		* No changes in the interpreter necessary, because it
+		  actively flattens nested lists of the same type
+	  	* A new module added to the muasf2muasf phase that fully
+		  deals with functions that returns lists. The right-hand
+	 	  sides of those functions are 'unwrapped'; the list
+		  node is removed. This is because they are ALWAYS a
+		  child of such a node anyway, thus their result must
+		  be spliced in as a sublist. See also pt-support/ChangeLog.
+		* Traversal functions that return lists are special;
+		  accumulators need to be adapted because their result
+		  must be equal to their argument type. Ergo, removing the
+		  list node from the result means removing the list node
+	   	  from their argument.
+		  Transformers that visit a list must return the list 
+		  node, so they are not 'unwrapped'. The reason is that
+		  the call_kids.. functions eat up a list node, and thus
+		  it is not replaced. To fix the extra list nodes at the
+		  CALL sites of transformers that return lists, we put
+		  the old remove_list run-time function around the calls.
+	  	  This is the only place where remove_list is used now.
+	- List matching in the interpreter was adapted to deal with the
+	  new representation of literal separators.
+	- Several new warnings added to asf-checker:
+		- test if lexical (or context-free tree that ends up being
+		  a lexical) is equal to its own sort name modulo 
+		  capitalization.  Because people often use variable names 
+                  that look like sort names, this warning detects if a 
+                  lexical was intended to be a variable but was not defined.
+		- Constant equality or inequality conditions
+		- NB: Constant right-hand sides of matching conditions. 
+		  This one is not clear yet, it may result in many false 
+                  positives.
+	- Bootstrapped ASF compiler and ASF normalizer.
+ * Manually checked the ASF regression tests and regenerated them because
+   of changed AsFix representation.
+
 Fri Nov 19 16:30:44 CET 2004 <jurgenv@cwi.nl>
  * Merged whole package asf from 1.5 branch to trunk. Most changes had
    to be done in asf-checker. In asfsdf-checker something happened to,

@@ -20,6 +20,6 @@ extern ASF_ASFTag innermostTag;
 extern ASF_ASFTag testRunnerTag;
 extern PT_Tree innermostSubject;
 extern MemoTable memo_table;
-extern unsigned int rewrite_steps;
+extern unsigned int asfe_rewrite_steps;
 
 #define MAX_DEPTH 2000

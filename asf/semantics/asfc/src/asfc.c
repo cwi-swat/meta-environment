@@ -293,7 +293,7 @@ int main(int argc, char *argv[])
   for(c=1; !toolbus_mode && c<argc; c++) {
     if(!strcmp(argv[c], "-TB_TOOL_NAME")) {
       toolbus_mode = ATtrue;
-      use_c_compiler = ATtrue;
+     use_c_compiler = ATtrue;
     }
   }
 
@@ -301,8 +301,6 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   ASF_initASFMEApi();
   MA_initMuASFApi();
-
-  /*ATsetChecking(ATtrue);*/
 
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottom);  
@@ -363,6 +361,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
+    ATsetChecking(ATtrue);
     compile(name, eqs, parseTable, output);
   }
 

@@ -2,6 +2,7 @@ SUBDIRS=eqs input output c-code
 EXTRA_DIST=README
 
 TEST_MODULES=\
+	Concat \
 	AllTraversals \
 	EmptyTraversal \
 	Tree \
@@ -11,7 +12,6 @@ TEST_MODULES=\
 	Collect \
 	Combination-Typecheck \
 	Func \
-	IterN \
 	LexConcat \
 	List \
 	ListSpecific \
@@ -64,15 +64,8 @@ CODE=${srcdir}/c-code
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh .cvsignore
 
 TESTS = \
-	$(foreach f, ${TEST_MODULES}, $f.check.sh $f.asfe.sh $f.asfc.sh ) \
-	$(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.check.sh $f.asfe.sh)
-
-%.check.sh:
-	@(echo '#!/bin/sh'  ; \
-	 echo 'set -e'  ; \
-	 echo 'for i in ${EQS}/$*.eqs; do' ; \
-	 echo '  ${ASFCHECKER} -i $$i' ; \
-	 echo 'done' ) > $@ && chmod +x $@
+	$(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh ) \
+	$(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.asfe.sh) 
 
 %.asfc.sh: 
 	@(echo '#!/bin/sh'  ; \

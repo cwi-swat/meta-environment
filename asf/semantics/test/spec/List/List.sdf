@@ -8,6 +8,9 @@ lexical syntax
 
 [\ \t\n] -> LAYOUT
 
+context-free start-symbols
+	("a" | "b" | "c")*
+
 context-free restrictions
 
 LAYOUT? -/- [\ \t\n]

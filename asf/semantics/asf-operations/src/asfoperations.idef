@@ -3,6 +3,7 @@
    */
 process AsfOperations is
 let
+  Module : term,
   Equations  : term,
   Tests  : term,
   AO         : asfoperations
@@ -18,6 +19,11 @@ in
     snd-eval(AO, extract-tests(Equations)) .
     rec-value(AO, extract-tests-result(Tests?)) .
     snd-msg(extract-tests-result(Tests)) 
+  +
+    rec-msg(normalize-module(Module?)) .
+    snd-eval(AO, normalize-module(Module)) .
+    rec-value(AO, normalized-module(Module?)) .
+    snd-msg(normalize-module-result(Module))
   )*
   delta
 endlet

@@ -148,6 +148,12 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
   result
     = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse, ATtrue);
 
+  { 
+    FILE *fp = fopen("debug.asfe", "w");
+    ATfprintf(fp,"%t", result);
+    fclose(fp);
+  }
+
   if (RWgetErrors() == NULL || ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }

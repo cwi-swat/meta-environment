@@ -3,3 +3,7 @@ module RelationsTest
   imports basic/Integers
   imports Bags[Integer]
   imports Relations[Integer]
+
+exports 
+
+context-free start-symbols Rel[[Integer]]

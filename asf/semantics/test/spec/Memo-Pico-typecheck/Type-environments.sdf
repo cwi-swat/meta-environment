@@ -1,6 +1,7 @@
 module Type-environments
 
-imports Pico-Identifiers Types
+imports languages/pico/syntax/Pico-Identifiers 
+imports languages/pico/syntax/Pico-Types
 
 exports
   sorts TENV PAIR
@@ -15,3 +16,5 @@ exports
     "Pair" [0-9\']*  -> PAIR
     "Pair*" [0-9\']* -> {PAIR ","}*
     "Tenv" [0-9\']*  -> TENV
+    "Id"[0-9]* -> PICO-ID
+    "Type"[0-9]* -> TYPE

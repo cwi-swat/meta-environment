@@ -13,6 +13,9 @@ exports
 
     f(A*, B, C) -> Boolean
 
+  context-free start-symbols
+	Boolean
+
 hiddens
   variables
     "vA*"[0-9]* -> A*

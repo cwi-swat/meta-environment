@@ -1,10 +1,13 @@
 module Pico-set
 
-imports Pico-syntax
+imports languages/pico/syntax/Pico-Syntax
 
 exports
 
 sorts PICO-SET
+
+context-free start-symbols
+	PICO-SET
 
 context-free syntax
 
@@ -13,3 +16,4 @@ context-free syntax
 variables
 
 "Id*"[0-9]* -> {PICO-ID ","}*
+"Id"[0-9]* -> PICO-ID

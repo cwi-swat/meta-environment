@@ -34,3 +34,7 @@ addeqssyntax_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
+
+asfc:
+	asfc -i Add-Eqs-Syntax.eqs -o Add-Eqs-Syntax.c -v
+

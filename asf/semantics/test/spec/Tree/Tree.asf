@@ -1,5 +1,62 @@
 equations
 
+[] start-bu-stop-tr(T) = bu-stop-tr(T)
+[] start-bu-cont-tr(T) = bu-cont-tr(T)
+
+[] start-td-stop-tr(T) = td-stop-tr(T)
+[] start-td-cont-tr(T) = td-cont-tr(T)
+
+[] start-bu-stop-ac(T,N*) = bu-stop-ac(T,N*)
+[] start-bu-cont-ac(T,N*) = bu-cont-ac(T,N*)
+
+[] start-td-stop-ac(T,N*) = td-stop-ac(T,N*)
+[] start-td-cont-ac(T,N*) = td-cont-ac(T,N*)
+
+[] start-bu-stop-actr(T,N*) = bu-stop-actr(T,N*) 
+[] start-bu-cont-actr(T,N*) = bu-cont-actr(T,N*)
+
+[] start-td-stop-actr(T,N*) = td-stop-actr(T,N*)
+[] start-td-cont-actr(T,N*) = td-cont-actr(T,N*)
+
+
+[] start-bu-stop-tr(T) = bu-stop-tr(T)
+[] start-bu-cont-tr(T) = bu-cont-tr(T)
+
+[] start-td-stop-tr(T) = td-stop-tr(T)
+[] start-td-cont-tr(T) = td-cont-tr(T)
+
+[] start-bu-stop-ac(T,N*) = bu-stop-ac(T,N*)
+[] start-bu-cont-ac(T,N*) = bu-cont-ac(T,N*)
+
+[] start-td-stop-ac(T,N*) = td-stop-ac(T,N*)
+[] start-td-cont-ac(T,N*) = td-cont-ac(T,N*)
+
+[] start-bu-stop-actr(T,N*) = bu-stop-actr(T,N*)
+[] start-bu-cont-actr(T,N*) = bu-cont-actr(T,N*)
+
+[] start-td-stop-actr(T,N*) = td-stop-actr(T,N*)
+[] start-td-cont-actr(T,N*) = td-cont-actr(T,N*)
+
+equations
+
+[] bu-stop-tr(N(T1,T2)) = -N(T1,T2)
+[] bu-cont-tr(N(T1,T2)) = -N(T1,T2)
+
+[] td-stop-tr(N(T1,T2)) = -N(T1,T2)
+[] td-cont-tr(N(T1,T2)) = -N(T1,T2)
+
+[] bu-stop-ac(N(T1,T2),N*) = N N*
+[] bu-cont-ac(N(T1,T2),N*) = N N*
+
+[] td-stop-ac(N(T1,T2),N*) = N N*
+[] td-cont-ac(N(T1,T2),N*) = N N*
+
+[] bu-stop-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+[] bu-cont-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+
+[] td-stop-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+[] td-cont-actr(N(T1,T2),N*) = <-N(T1, T2), N N*>
+
 
 [] bu-stop-tr(N(T1,T2)) = -N(T1,T2)
 [] bu-cont-tr(N(T1,T2)) = -N(T1,T2)

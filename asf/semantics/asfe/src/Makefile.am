@@ -15,7 +15,6 @@ noinst_HEADERS = \
 	debug.h\
 	traversalfunctions.h\
 	equations.h \
-	pre-post.h\
 	memotable.h\
 	evaluator.h\
 	test-runner.h\
@@ -34,7 +33,6 @@ asfe_SOURCES =\
 	environment.c\
 	values.c\
 	errors.c\
-	pre-post.c\
 	test-runner.c\
 	builtins.c
 
@@ -58,5 +56,4 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ASC_SUPPORT)/include \
-	-I$(top_builddir)/semantics/builtins/lib \
 	${TRAVERSALSDEF} ${LAYOUTDEF}

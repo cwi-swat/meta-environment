@@ -12,12 +12,22 @@ INCLUDES		= -I${ATERM}/include
 LDADD			= -lATerm
 
 # Developers only:
+LIBRARY=../../../../../asf-library/library
+SPEC=${LIBRARY}/languages/asf/compiler/
+
+MuASF.label.def:
+	(echo "definition"; \
+	cat ${SPEC}/muasf/MuASF.sdf ; echo ""; \
+	cat ${LIBRARY}/basic/Whitespace.sdf; echo ""; \
+	cat ${LIBRARY}/basic/StrCon.sdf; echo ""; \
+	cat ${LIBRARY}/basic/NatCon.sdf; echo ""; \
+	cat ${LIBRARY}/basic/IdentifierCon.sdf ) > $@
+
 api: MuASF.label.def
 	sdf2-to-c \
 		--input $< \
 		--output MuASF \
-		--prefix MA_ \
-		--remove-cons
+		--prefix MA_ 
 
 api-clean:
 	rm -f MuASF.[ch] MuASF_dict.* MuASF.adt

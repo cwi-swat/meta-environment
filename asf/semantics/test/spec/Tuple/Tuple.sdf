@@ -1,15 +1,25 @@
 module Tuple
 
-imports Pico-Identifiers Pico-Integers
+imports languages/pico/syntax/Pico-Identifiers 
+imports basic/Integers
 
 exports
   sorts TUPLE
+  context-free start-symbols
+	Boolean
+	TUPLE
+
   context-free syntax
-    compose(PICO-ID, PICO-INT, PICO-BOOL) -> TUPLE
+    compose(PICO-ID, Integer, Boolean) -> TUPLE
     get-id(TUPLE) -> PICO-ID
-    get-int(TUPLE) -> PICO-INT
-    get-bool(TUPLE) -> PICO-BOOL
+    get-int(TUPLE) -> Integer
+    get-bool(TUPLE) -> Boolean
 
   aliases
     TUPLE             -> TUPLE3
-    PICO-ID # PICO-INT # PICO-BOOL -> TUPLE
+    <PICO-ID ,Integer , Boolean> -> TUPLE
+
+  variables
+  "Id"[0-9]* -> PICO-ID
+  "Int"[0-9]* -> Integer
+  "Bool"[0-9]* -> Boolean

@@ -1,3 +1,0 @@
-equations
-
-  [c-1'1] funid(""" Char*1 """) ++ funid(""" Char*2 """) = funid(""" Char*1 Char*2 """)

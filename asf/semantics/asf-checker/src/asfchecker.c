@@ -172,6 +172,7 @@ int main(int argc, char *argv[])
     if (!ATisEmpty(msgs)) {
       ERR_Summary sum = ERR_makeSummarySummary("asfchecker",input,msgs);
       ERR_displaySummary(sum);
+      ATwarning("%t\n", sum);
       return 1;
     }
   }

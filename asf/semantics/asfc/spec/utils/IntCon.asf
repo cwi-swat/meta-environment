@@ -1,5 +1,0 @@
-equations
-
-  [leading-zero]  natcon("0" c+) = natcon(c+)
-  [minus-zero]    - 0            = 0
-  [un-plus]       + n            = n

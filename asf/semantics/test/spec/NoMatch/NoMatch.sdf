@@ -6,6 +6,9 @@ exports
 
 sorts Id Tree
 
+context-free start-symbols
+	Tree
+
 lexical syntax
 
 [a-z] -> Id

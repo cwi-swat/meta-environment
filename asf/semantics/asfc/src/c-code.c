@@ -128,7 +128,8 @@ void ToC_code(ATbool keep_annos,
     if ((bp-buf) >= size) {
       fprintf(stderr, "could not find '#' marker, "
               "maybe the reduction failed?\n");
-      exit (1);
+      fprintf(file, buf);
+      return;
     }
   } while(c != '#');
 

@@ -1,8 +1,8 @@
 equations
 
-[] bytes(Bytes) := unparse-to-bytes(PROGRAM1)
+[] read(bytes(Bytes)) := unparse-to-bytes(PROGRAM1)
    ===>
-   test-unparsing(PROGRAM1) = bytes-to-string(Bytes)
+   test-unparsing(PROGRAM1) = bytes-to-string(bytes(Bytes))
 
 [] test-lifting-to-term(PROGRAM1) = lift-to-term(PROGRAM1)
 [] test-lifting-to-tree(PROGRAM1) = lift-to-tree(PROGRAM1)

@@ -1,16 +1,25 @@
 module Pico-Xml
 
-imports Pico-syntax
+imports languages/pico/syntax/Pico-Syntax
 
 exports
-sorts <PROGRAM , PICO-INT>
+sorts <PROGRAM , Integer>
+
+context-free start-symbols
+	PROGRAM
+	<PROGRAM , Integer>
 
 context-free syntax
 
-"<string Id=" PICO-INT ">" PICO-STR-CON "</string>" -> PICO-STR-CON
+"<string Id=" Integer ">" StrCon "</string>" -> StrCon
 
 context-free syntax
 
 xml(PROGRAM) -> PROGRAM
-xml(PROGRAM      , PICO-INT) -> <PROGRAM      , PICO-INT> {traversal(trafo,accu,bottom-up, continue)}
-xml(PICO-STR-CON , PICO-INT) -> <PICO-STR-CON , PICO-INT> {traversal(trafo,accu,bottom-up, continue)}
+xml(PROGRAM      , Integer) -> <PROGRAM      , Integer> {traversal(trafo,accu,bottom-up, continue)}
+xml(StrCon , Integer) -> <StrCon , Integer> {traversal(trafo,accu,bottom-up, continue)}
+
+variables
+"Str-con" -> StrCon
+"Int" -> Integer
+"Program"[0-9]* -> PROGRAM

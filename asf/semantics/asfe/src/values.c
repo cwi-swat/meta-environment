@@ -16,25 +16,27 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
 {
   PT_Symbol symbol, listSymbol;
   PT_Symbol separator;
-  char *str;
   PT_Production prod;
+
 
   listSymbol = PT_getProductionRhs(listProd);
 
   if (PT_isIterSepSymbol(listSymbol)) { 
     separator = PT_getIterSepSeparator(listSymbol);
     if (PT_isTreeAppl(elem)) {
+      PT_Symbol rhs;
       prod = PT_getTreeProd(elem);
-      symbol = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+      rhs = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+	symbol = PT_getSymbolSymbol(rhs);
+      }
+      else {
+	symbol = rhs;
+      }
       return PT_isEqualSymbol(separator, symbol);
     }
-    else {
-      str = PT_getTreeString(elem);
-      if (PT_isSymbolLit(separator)) {
-	return strcmp(str, PT_getSymbolString(separator)) == 0;
-      }
-    }
   }
+
   return ATfalse;
 }
 
@@ -292,6 +294,7 @@ PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
       isListSeparator(PT_getArgsHead(list), listProd)) {
     list = skipWhitespace(PT_getArgsTail(list));
   }
+
 
   return list;
 }

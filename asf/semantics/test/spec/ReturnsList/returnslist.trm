@@ -1,1 +1,1 @@
-f(true;false;true)
+f(true;f(true;false;false);true)

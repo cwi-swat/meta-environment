@@ -30,10 +30,6 @@ static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 				    ASF_ASFConditionList conds,
 				    ATerm env, 
 				    int depth);
-static ATerm matchPositiveCondition(ASF_ASFCondition cond,
-				    PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ASFConditionList conds,
-				    ATerm env, int depth);
 static ATerm matchArguments(ATerm env, ASF_ASFConditionList conds,
 			    PT_Args args1, PT_Args args2, 
 			    ATerm lhs_posinfo, int depth);
@@ -192,59 +188,6 @@ static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree r
 }
 
 /*}}}  */
-/* deprecated syntax "=", still supported for now but will dissappear */
-/*{{{  static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,  */
-
-static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ASFConditionList conds,
-				    ATerm env, int depth)
-{
-  PT_Tree lhstrm, rhstrm;
-  equation_entry *cur = currentRule;
-
-  /* assuming that not both sides have new vars */
-
-  if (!no_new_vars(rhs,env)) { /* a matching condition */
-    TIDE_STEP(lhs, env, depth);
-    lhstrm = rewriteInnermost(lhs, env, depth + 1, NO_TRAVERSAL);
-    if (!lhstrm) {
-      return fail_env;
-    }
-    TIDE_STEP(rhs, env, depth);
-    currentRule = cur;
-    TIDE_STEP((PT_Tree) cond, env, depth);
-    return matchArgument(env, rhs, lhstrm, conds, 
-			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
-			 NULL, depth);
-  }
-  else if (!no_new_vars(lhs, env)) { /* flip the sides */
-    return matchPositiveCondition(cond, rhs, lhs, conds, env, depth);
-  }
-  else { /* an equality condition */
-    TIDE_STEP(lhs, env, depth);
-    lhstrm = rewriteInnermost(lhs, env, depth + 1, NO_TRAVERSAL);
-    if (!lhstrm) {
-      return fail_env;
-    }
-
-    TIDE_STEP(rhs, env, depth);
-    rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
-    if (!rhstrm) {
-      return fail_env;
-    }
-
-    currentRule = cur;
-    TIDE_STEP((PT_Tree) cond, env, depth);
-    if (isAsFixEqual(lhstrm, rhstrm)) {
-      return matchConditions(conds, env, depth);
-    }
-    else {
-      return fail_env;
-    }
-  }
-}
-
-/*}}}  */
 
 /*{{{  static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds, */
 
@@ -262,9 +205,6 @@ ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
   }
   else if (ASF_isASFConditionNegative(cond)) {
     return matchNegativeCondition(cond, lhs, rhs, conds, env, depth);
-  }
-  else if (ASF_isASFConditionPositive(cond)) {
-    return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
   }
   else {
     return matchNoMatchCondition(cond, lhs, rhs, conds, env, depth);
@@ -310,6 +250,7 @@ static ATerm matchList(ATerm env, PT_Production listProd,
 {
   PT_Tree elem1;
   ATerm newenv = fail_env;
+
 
   elems1 = skipWhitespaceAndSeparator(elems1,listProd);
   elems2 = skipWhitespaceAndSeparator(elems2,listProd);
@@ -398,6 +339,7 @@ static ATerm matchListVariable(ATerm env, PT_Tree listvar,
     else {
       break;
     }
+
   }
 
   return newenv;
@@ -483,47 +425,49 @@ static ATerm matchAppl(ATerm env,
   PT_Production prod2 = PT_getTreeProd(arg2);
   ATerm newenv;
 
-  if (PT_isEqualProduction(prod1, prod2)) {
-    PT_Args args1 = PT_getTreeArgs(arg1);
-    PT_Args args2 = PT_getTreeArgs(arg2);
+    if (PT_isEqualProduction(prod1, prod2)) {
+      PT_Args args1 = PT_getTreeArgs(arg1);
+      PT_Args args2 = PT_getTreeArgs(arg2);
 
-    newenv = matchArguments(env, conds, 
-			    PT_concatArgs(args1, orgargs1),
-			    PT_concatArgs(args2, orgargs2),
-			    lhs_posinfo, depth);
-  }
-  else {
-    newenv = fail_env;
-  }
+      newenv = matchArguments(env, conds, 
+			      PT_concatArgs(args1, orgargs1),
+			      PT_concatArgs(args2, orgargs2),
+			      lhs_posinfo, depth);
+    }
+    else {
+      newenv = fail_env;
+    }
 
-  return newenv;
-}
-
-/*}}}  */
-/*{{{  static ATerm matchArgument(ATerm env,  */
-
-static ATerm matchArgument(ATerm env, 
-			   PT_Tree arg1, PT_Tree arg2,
-			   ASF_ASFConditionList conds,
-			   PT_Args orgargs1, PT_Args orgargs2,
-			   ATerm lhs_posinfo, int depth)
-{
-  ATerm newenv = fail_env;
-
-  if (depth > MAX_DEPTH / 2) {
-    char tmp[256];
-    sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
-	    MAX_DEPTH / 2);
-    RWaddError(tmp, "");
-    return fail_env;
+    return newenv;
   }
 
-  /* equality check is cheap, so try this first */
-  if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
+  /*}}}  */
+  /*{{{  static ATerm matchArgument(ATerm env,  */
+
+  static ATerm matchArgument(ATerm env, 
+			     PT_Tree arg1, PT_Tree arg2,
+			     ASF_ASFConditionList conds,
+			     PT_Args orgargs1, PT_Args orgargs2,
+			     ATerm lhs_posinfo, int depth)
+  {
+    ATerm newenv = fail_env;
+
+
+    if (depth > MAX_DEPTH / 2) {
+      char tmp[256];
+      sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
+	      MAX_DEPTH / 2);
+      RWaddError(tmp, "");
+      return fail_env;
+    }
+
+    /* equality check is cheap, so try this first */
+    if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
 		     PT_removeTreeAnnotations(arg2))) {
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
-  else if (PT_isTreeLayout(arg1)) {
+  else if (PT_isTreeLayout(arg1) || PT_isTreeLit(arg1)) {
+    /* Literals and layout always match */
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
   else if (PT_isTreeApplList(arg1) &&
@@ -540,6 +484,7 @@ static ATerm matchArgument(ATerm env,
 			   lhs_posinfo, depth);
   }
   else if (PT_isTreeAppl(arg1)) {
+    assert(!PT_isTreeLit(arg1));
     newenv = matchAppl(env, arg1, arg2, conds, orgargs1, orgargs2,
 		       lhs_posinfo, depth);
   }

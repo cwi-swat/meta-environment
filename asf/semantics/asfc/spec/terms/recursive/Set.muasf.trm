@@ -1,7 +1,8 @@
+compile-muasf(
 module Set
 signature
 "list(cf(iter-star(sort(\"E\"))))"(_);
 "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Set\")]))"(_){id(Set)}
 rules
 "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Set\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042049, V_E, *V_E042050, V_E, *V_E042051)) =
-"prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Set\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042049, V_E, *V_E042050, *V_E042051))
+"prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Set\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042049, V_E, *V_E042050, *V_E042051)))

@@ -48,9 +48,9 @@ void print_short_equation(int stack, const char *msg, equation_entry *entry)
       ATwarning(" ");
     }
     ATwarning("%s\t: %s ", msg,
-	      PT_yieldTreeToString((PT_Tree)entry->tag, ATfalse));
+	      PT_yieldTree((PT_Tree)entry->tag));
     ATwarning("%s = ...\n",
-	      PT_yieldTreeToString((PT_Tree)entry->lhs, ATfalse));
+	      PT_yieldTree((PT_Tree)entry->lhs));
   }
 }
 
@@ -132,8 +132,7 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
   if (!PT_getTreePosInfo(tree, &path, &start_line,
 			 &start_col, &end_line, &end_col)) {
     ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
-	        ASF_getASFTagIdString(
-		  ASF_getASFTagASFTagId(ASF_getASFConditionalEquationASFTag(equ))), tree);
+	        PT_yieldTree((PT_Tree) ASF_getASFConditionalEquationASFTag(equ)), tree);
     return equ;
   }
 

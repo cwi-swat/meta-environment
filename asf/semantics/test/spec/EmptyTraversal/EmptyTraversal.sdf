@@ -1,14 +1,15 @@
 module EmptyTraversal
+
 imports basic/Whitespace
-imports basic/Integers
+imports basic/NatCon
 
 exports
 
 context-free start-symbols
-  Integer
+  NatCon
 
 context-free syntax
 
-start-nothing    -> Integer
-nothing(Integer) -> Integer {traversal(trafo,top-down,break)}
+"start-nothing"    -> NatCon
+nothing(NatCon) -> NatCon {traversal(trafo,top-down,break)}
 

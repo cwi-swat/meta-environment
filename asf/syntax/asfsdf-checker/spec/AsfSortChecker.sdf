@@ -29,3 +29,7 @@ hiddens
 
     "$String"[0-9]* -> StrCon
     "$Location"[0-9]* -> Location
+
+  lexical variables
+    "t" -> [A-Za-z0-9\-]*
+    "l" -> [A-Za-z0-9]

@@ -21,7 +21,6 @@
 #include "debug.h"
 #include "equations.h"
 #include "environment.h"
-#include "pre-post.h"
 
 #include <tide-adapter.h>
 #include <asc-support-me.h>
@@ -99,12 +98,12 @@ static ATermList varlist_from_env(ATerm environment)
     /* Check for a 'slice' (list variable) */
     if (ATgetArity(ATgetAFun((ATermAppl)tuple)) == 3) {
       PT_Args args = appendSlice(PT_makeArgsEmpty(), (Slice)tuple);
-      args = RWrestoreArgs(args, ATfalse);
+      /*args = RWrestoreArgs(args, ATfalse);*/
       value = PT_yieldArgsToString(args, ATfalse);
     } else {
       ATerm val = ATgetArgument(tuple, 1);
       PT_Tree tree = PT_TreeFromTerm(val);
-      tree = RWrestoreTerm(tree, ATfalse);
+      /*tree = RWrestoreTerm(tree, ATfalse);*/
       value = PT_yieldTreeToString(tree, ATfalse);
     }
     list = ATinsert(list, ATmake("variable(<term>,<str>)", variable, value));
@@ -151,7 +150,7 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
     ATerm name = ATgetArgument(variable, 0);
     if (ATisEqual(name, var)) {
       PT_Tree val = PT_TreeFromTerm(ATgetArgument(tuple, 1));
-      val = RWrestoreTerm(val, ATfalse);
+      /*val = RWrestoreTerm(val, ATfalse);*/
       return ATmake("<str>", PT_yieldTreeToString(val, ATfalse));
     }
     list = ATgetNext(list);
@@ -173,7 +172,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   int line, col;
   PT_Tree equ_tree;
   ATerm pos_anno;
-  PT_Tree var, value, restored;
+  PT_Tree var, value;
   ATerm val;
 
   if (!currentRule) {
@@ -222,8 +221,8 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   if (value == NULL) {
     yield = "<uninitialized>";
   } else {
-    restored = RWrestoreTerm(value, ATfalse);
-    yield = PT_yieldTreeToString(restored, ATfalse);
+    /*restored = RWrestoreTerm(value, ATfalse);*/
+    yield = PT_yieldTreeToString(value, ATfalse);
   }
 
 

@@ -220,6 +220,54 @@ static void normalizeSortname(char *name)
 
 /*}}}  */
 
+/*{{{  static PT_Args checkCharClass(PT_Tree tree) */
+#if 0
+static PT_Args checkCharClass(PT_Tree tree)
+{
+  PT_Args result = PT_makeArgsEmpty();
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Symbol rhs = PT_getProductionRhs(prod);
+
+    if (PT_isSymbolCf(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+
+      if (PT_isSymbolParameterizedSort(rhs)) {
+	if (!strcmp(PT_getSymbolSort(rhs), "CHARS")) {
+	  PT_Symbols symbols = PT_getSymbolParameters(rhs);
+	  PT_Symbol cc = PT_getSymbolsHead(symbols);
+
+
+	  if (PT_isSymbolCharClass(cc)) {
+	    ATwarning("TODO: implement charchecking character!\n");
+	  }
+	}
+      }
+    }
+  }
+
+  return result;
+}
+#endif
+/*}}}  */
+/*{{{  static ATbool isLexicalTree(PT_Tree tree) */
+
+static ATbool isLexicalTree(PT_Tree tree)
+{
+  if (PT_isTreeLexical(tree)) {
+    return ATtrue;
+  }
+  else if (PT_hasTreeProd(tree) 
+	   && PT_isProductionInjection(PT_getTreeProd(tree))) {
+    return isLexicalTree(PT_getArgsHead(PT_getTreeArgs(tree)));
+  }
+  else {
+    return ATfalse;
+  }
+}
+
+/*}}}  */
 /*{{{  static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical) */
 
 static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
@@ -254,7 +302,7 @@ static ERR_ErrorList locatePossibleVariables(PT_Tree tree)
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
-  if (PT_isTreeLexical(tree)) {
+  if (isLexicalTree(tree)) {
     return checkForPossibleVariables(tree);
   }
 
@@ -296,7 +344,7 @@ static ERR_ErrorList generateVariablesMessage(char *msg, PT_Args vars)
 }
 /*}}} */
 
-/*{{{  static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVars) */
+/*{{{  static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVars, ATbool *containsVariables) */
 
 static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVars)
 {
@@ -325,7 +373,8 @@ static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVar
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
 
-      newVars = PT_concatArgs(checkVariables(arg, pDefVars, pUsedVars),
+      newVars = PT_concatArgs(checkVariables(arg, pDefVars, pUsedVars ),
+					     
                                newVars);
 
       args = PT_getArgsTail(args);
@@ -336,6 +385,32 @@ static PT_Args checkVariables(PT_Tree tree, PT_Args *pDefVars, PT_Args *pUsedVar
   else {
     return PT_makeArgsEmpty();
   }
+}
+
+/*}}}  */
+/*{{{  static ATbool isConstant(PT_Tree tree) */
+
+static ATbool isConstant(PT_Tree tree)
+{
+  ATbool result = ATtrue;
+
+  /* TODO: add something for builtins with no arguments (they are
+   * not necessarily constants due to side-effects) */
+
+  if (PT_isTreeVar(tree)) {
+    result = ATfalse;
+  }
+  else if (PT_hasTreeArgs(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    while (result && PT_hasArgsHead(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+
+      result = isConstant(arg);
+      args = PT_getArgsTail(args);
+    };
+  }
+
+  return result;
 }
 
 /*}}}  */
@@ -383,7 +458,22 @@ static ATbool isContextFreeSingleton(PT_Tree tree)
     }
     else if (PT_isProductionList(prod)) {
       if (PT_getArgsLength(args) == 1) {
-	return !PT_isTreeVar(PT_getArgsHead(args));
+	PT_Tree head = PT_getArgsHead(args);
+
+	if (PT_isTreeVar(head)) {
+	  return ATfalse;
+	}
+
+	/* a function returning a list is always a singleton, so no warning */
+	if (PT_hasTreeProd(head)) {
+	  PT_Production prod = PT_getTreeProd(head);
+
+	  if (PT_prodHasIterSepAsRhs(prod) || PT_prodHasIterAsRhs(prod)) {
+	    return ATfalse;
+	  }
+	}
+
+	return ATtrue;
       }
     }
     else {
@@ -413,61 +503,24 @@ static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition con
     return makeAmbiguityMessage(rhsCond);
   }
 
-  lhsNewVars = checkVariables((PT_Tree)lhsCond, pDefVars, pUsedVars);
+  lhsNewVars = checkVariables((PT_Tree)lhsCond, pDefVars, pUsedVars );
+			      
   rhsNewVars = checkVariables((PT_Tree)rhsCond, pDefVars, pUsedVars);
+			      
 
   if (!PT_isArgsEmpty(lhsNewVars) || !PT_isArgsEmpty(rhsNewVars)) {
     return ERR_makeErrorListSingle(
                         makeMessage("negative condition introduces variable(s)", 
 				    ASF_ASFConditionToTerm(condition)));
   }
-  else {
-    return messages;
-  }
-}
-
-static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *pDefVars, PT_Args *pUsedVars) 
-{
-  ERR_ErrorList messages = ERR_makeErrorListEmpty();
-  PT_Args tempDefVars=*pDefVars;
-  PT_Args tempUsedVars=*pUsedVars;
-  PT_Args newVars;
-
-  messages = ERR_makeErrorListSingle(
-			   makeWarning("Deprecated condition syntax \"=\". "
-                                "Please use either \"==\" for equality, or "
-                                "\":=\" for matching (Hint: see the Upgrade "
-                                "menu)", ASF_ASFConditionToTerm(condition)));
-
-  /* Use a copy of pDefVars and pUsedVars to prevent corruption in case the if
-  ** statement fails
-  */
-  newVars = checkVariables((PT_Tree) lhsCond, &tempDefVars,&tempUsedVars);
-  if (PT_isArgsEmpty(newVars)) {
-    *pDefVars=tempDefVars; *pUsedVars=tempUsedVars;
-    checkVariables((PT_Tree)rhsCond, pDefVars, pUsedVars);
-
-    messages = ERR_concatErrorList(messages, 
-				   locatePossibleVariables((PT_Tree) rhsCond));
-    return messages;
+  else if (isConstant((PT_Tree) lhsCond) && isConstant((PT_Tree) rhsCond)) {
+    return ERR_makeErrorListSingle(
+                        makeMessage("constant negative condition "
+				    "(has no variables)",
+				    ASF_ASFConditionToTerm(condition)));
   }
 
-  /* lhs introduces new variables -> lhs:=rhs match condition */
-
-  newVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
-  if (PT_isArgsEmpty(newVars)) {
-    checkVariables((PT_Tree)lhsCond, pDefVars, pUsedVars);
-    messages = ERR_concatErrorList(messages, 
-				   locatePossibleVariables((PT_Tree) lhsCond));
-    return messages;
-  }
-  else {
-    return ERR_makeErrorListMany(makeMessage("uninstantiated variables in "
-                                      "both sides of condition",
-                                      ASF_ASFConditionToTerm(condition)),
-                                 messages);
-  }
-
+  return messages;
 }
 
 /*}}}  */
@@ -484,8 +537,11 @@ static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition con
   messages = ERR_concatErrorList(messages,
 				 locatePossibleVariables((PT_Tree) rhsCond));
 
-  lhsNewVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars); 
+  lhsNewVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
+			      
   rhsNewVars = checkVariables((PT_Tree) rhsCond, pDefVars, pUsedVars);
+			      
+
   if (!PT_isArgsEmpty(lhsNewVars) || !PT_isArgsEmpty(rhsNewVars)) {
 
     message = makeMessage("uninstantiated variables in equality condition",
@@ -493,6 +549,13 @@ static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition con
     messages = ERR_concatErrorList(messages,
 				           ERR_makeErrorListSingle(message));
   }
+  else if (isConstant((PT_Tree) lhsCond) && isConstant((PT_Tree) rhsCond)) {
+    return ERR_makeErrorListSingle(
+                        makeMessage("constant positive condition "
+				    "(has no variables)",
+				    ASF_ASFConditionToTerm(condition)));
+  }
+  
 
   return messages;
 }
@@ -512,6 +575,13 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
 	     "right-hand side of matching condition introduces variables",
 	     ASF_ASFConditionToTerm(condition)));
   }
+
+  if (isConstant((PT_Tree) rhsCond)) {
+    messages = ERR_makeErrorListSingle(
+         makeWarning("right-hand side of matching condition is constant",
+		     ASF_TreeToTerm(rhsCond)));
+  }
+
 
   newVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
   if (PT_isArgsEmpty(newVars)) {
@@ -549,11 +619,20 @@ static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition cond
 			 makeMessage("right-hand side of matching condition introduces variables",
 					 ASF_ASFConditionToTerm(condition)));
   }
+  
+  if (isConstant((PT_Tree) rhsCond)) {
+    return ERR_makeErrorListSingle(
+			 makeWarning("right-hand side of matching condition is constant",
+					 ASF_TreeToTerm(rhsCond)));
+
+  }
 
   return ERR_makeErrorListEmpty();
 }
 
 /*}}}  */
+
+/*{{{  static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
 static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
@@ -579,11 +658,6 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
       return checkNegativeCondition(tag, condition, lhsCond, rhsCond,
                                     pDefVars, pUsedVars);
     }
-    else if (ASF_isASFConditionPositive(condition)) {
-      SCOUNT(nrEqualityConditions);
-      return checkPositiveCondition(tag, condition, lhsCond, rhsCond,
-                                    pDefVars, pUsedVars);
-    }
     else if (ASF_isASFConditionMatch(condition)) {
       SCOUNT(nrAssignmentConditions);
       return checkMatchCondition(tag, condition, lhsCond, rhsCond,
@@ -605,6 +679,10 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
     }
   }
 }
+
+/*}}}  */
+
+/*{{{  static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *pDefVars, PT_Args *pUsedVars)  */
 
 static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *pDefVars, PT_Args *pUsedVars) 
 {
@@ -639,6 +717,7 @@ static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condition
 }
 
 /*}}}  */
+
 /*{{{  static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)  */
 
 static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree) 

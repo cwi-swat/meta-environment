@@ -1,6 +1,8 @@
 module Lookup
 
 exports
+  context-free start-symbols
+	TYPE
 
   lexical syntax
     [\ \t\n]          -> LAYOUT

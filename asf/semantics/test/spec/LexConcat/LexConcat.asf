@@ -1,4 +1,4 @@
 equations
 
-[] concat(id(c+1),id(c+2)) = id(c+1 "_" c+2)
+[] concat(id(c+1),id(c+2)) = id(c+1 c+2)
 

@@ -80,6 +80,8 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 
   print_short_equation(depth, "try", entry);
 
+  /*ATwarning("%s\n\n", PT_yieldTree(trm));*/
+
   env = matchEquation(entry, trm, depth);
 
   tagCurrentRule = entry->tag;
@@ -90,7 +92,7 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 
     TIDE_STEP(entry->rhs, env, depth);
 
-    rewrite_steps++;
+    asfe_rewrite_steps++;
   }
   else {
     print_short_equation(depth, "fail", entry);
@@ -184,6 +186,9 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
   }
   else if ((builtin = getTreeBuiltin(trm)) != NULL) {
     reduct = rewriteBuiltinAppl(builtin, trm, env, depth, extra);
+  }
+  else if (PT_isTreeLit(trm)) {
+    reduct = trm;
   }
   else if (PT_isTreeAppl(trm)) {
     reduct = rewriteNormalAppl(trm, env, depth, extra);

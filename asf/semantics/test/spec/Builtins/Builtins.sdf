@@ -1,7 +1,7 @@
 module Builtins
 
 imports languages/pico/syntax/Pico-Syntax
-imports utilities/IO[PROGRAM]
+imports utilities/Parsing[PROGRAM]
 imports utilities/Lifting[PROGRAM]
 imports utilities/TermCompare[PROGRAM]
 imports basic/Whitespace
@@ -16,15 +16,24 @@ test-lifting-to-tree(PROGRAM) -> Tree
 test-term-compare(PROGRAM,PROGRAM) -> Boolean
 
 hiddens
+context-free start-symbols
+	ATerm
+	Tree
+	Boolean
+	String
+
 variables
 
 "PROGRAM"[123] -> PROGRAM 
-"ATermList"    -> ATermList
+"ATermList"    -> ATerm
 "Args"         -> Args
 "Tree" -> Tree
-"Ann" -> Ann
+"Ann" -> Annotation
 "Prod" -> Production
 "Symbol" -> Symbol
 "ATerm+" -> {ATerm ","}+
 "AFun" -> AFun
-"Bytes" -> Bytes
+
+lexical variables
+
+"Bytes" -> Byte*

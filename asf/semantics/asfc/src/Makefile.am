@@ -26,10 +26,11 @@ noinst_HEADERS = asfc.tif.h \
                  c-compiler.h \
                  idef.h
 
-asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
+asfc_LDADD   = \
+	       -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(SGLR)/lib -lsglr \
                -L$(TIDE_SUPPORT)/lib -ltide-adapter \
-               -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+               -L$(PT_SUPPORT)/lib -lPTMEPT -lmept \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
                -L$(TOOLBUSLIB)/lib -lATB \
@@ -49,7 +50,9 @@ DEFINES = -DASC_SUPPORT="\"$(ASC_SUPPORT)\"" \
           -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
           -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
           -DCOMPILER="\"$(CC)\"" \
-          -DCOMPILERFLAGS="\"$(CFLAGS)\""
+          -DCOMPILERFLAGS="\"-g -O0 -Wall\""
+
+#          -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
 INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \

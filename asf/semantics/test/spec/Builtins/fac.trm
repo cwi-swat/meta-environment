@@ -1,4 +1,1 @@
-test-unparsing(
-begin
-declare;
-end)
+test-lifting-to-term(begin declare ; end)

@@ -4,6 +4,9 @@ imports basic/Whitespace
 exports
 sorts Id Ids
 
+context-free start-symbols
+	Ids
+
 lexical syntax
 
 [A-Z]+ -> Id

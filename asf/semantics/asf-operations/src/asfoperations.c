@@ -9,6 +9,7 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
+#include <asfnormalization.h>
 
 /*{{{  globals */
 
@@ -19,6 +20,9 @@ ATbool run_verbose;
 static char myname[] = "asfoperations";
 static char myversion[] = "0.0";
 static char myarguments[] = "hV";
+
+/* TODO: see if another solution can be found to optimize this */
+static ATermTable cache = NULL;
 
 /*}}}  */
 /*{{{  ATerm extract_equations(int cid, ATerm modules) */
@@ -49,7 +53,7 @@ ATerm extract_tests(int cid, ATerm modules)
 {
   ATermList list = (ATermList) modules;
   ASF_ASFTestEquationTestList testList;
-  ASF_OptLayout ws = ASF_makeOptLayoutPresent("\n");
+  ASF_OptLayout ws = ASF_makeLayoutNewline();
 
   testList = ASF_makeASFTestEquationTestListEmpty();
 
@@ -66,6 +70,37 @@ ATerm extract_tests(int cid, ATerm modules)
 
   return ATmake("snd-value(extract-tests-result(<term>))",
 		ATBpack(ASF_ASFTestEquationTestListToTerm(testList)));
+}
+
+/*}}}  */
+/*{{{  ATerm normalize_module(int cid, ATerm module) */
+
+ATerm normalize_module(int cid, ATerm module)
+{
+  ASF_Start start = ASF_StartFromTerm(ATBunpack(module));
+  ASF_ASFModule mod = ASF_getStartTopASFModule(start);
+  ASF_ASFModule result;
+
+  if (cache == NULL) {
+    cache = ATtableCreate(1024, 75);
+  }
+
+  result = ASF_ASFModuleFromTerm(ATtableGet(cache, (ATerm) mod));
+
+  if (result == NULL) {
+    result = normalize(mod);
+    ATtablePut(cache, (ATerm) mod, (ATerm) result);
+  }
+
+  assert(result != NULL);
+
+  start = ASF_makeStartASFModule(ASF_getStartWsBefore(start),
+				 result,
+				 ASF_getStartWsAfter(start),
+				 ASF_getStartAmbCnt(start));
+
+  return ATmake("snd-value(normalized-module(<term>))", 
+		ATBpack(ASF_StartToTerm(start)));
 }
 
 /*}}}  */

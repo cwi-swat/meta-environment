@@ -1,13 +1,29 @@
 module Pico-typecheck
 
-imports Pico-Booleans Pico-syntax Type-environments
+imports basic/Booleans 
+imports languages/pico/syntax/Pico-Syntax 
+imports languages/pico/typechecker/Check-types
+imports Type-environments
 
 exports
+  context-free start-symbols
+	TENV Boolean
+
   context-free syntax
-    "tcp" "(" PROGRAM ")"                    -> PICO-BOOL
+    "tcp" "(" PROGRAM ")"                    -> Boolean
     "tcd" "(" DECLS ")"                      -> TENV
     "tcits" "(" {ID-TYPE  ","}* "," TENV ")" -> TENV
     "tcit" "(" ID-TYPE "," TENV ")"          -> TENV
-    "tcs" "(" {STATEMENT ";"}* "," TENV ")"  -> PICO-BOOL
-    "tcst" "(" STATEMENT "," TENV ")"        -> PICO-BOOL
+    "tcs" "(" {STATEMENT ";"}* "," TENV ")"  -> Boolean
+    "tcst" "(" STATEMENT "," TENV ")"        -> Boolean
     "tce" "(" EXP "," TENV ")"               -> TYPE
+
+  variables
+    "Decls" -> DECLS
+    "Series"[0-9]* -> {STATEMENT ";"}*
+    "Id-type*"[0-9]* -> {ID-TYPE ","}*
+    "Stat"[0-9]* -> STATEMENT
+    "Stat*"[0-9]* -> {STATEMENT ";"}*
+    "Exp"[0-9]* -> EXP
+    "Nat-con"[0-9]* -> NatCon
+    "Str-con"[0-9]* -> StrCon

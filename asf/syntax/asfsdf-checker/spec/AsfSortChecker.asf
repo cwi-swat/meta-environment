@@ -17,18 +17,6 @@ equations
            check-asf-sorts($Sort, Msgs, $ModuleId) =
               Msgs, make-error($String2, $String3, $Location)
 
-  [ias-1'1] is-asf-sort(ASF-Tag) = true
-
-  [ias-1'2] is-asf-sort(ASF-TagId) = true
-
-  [ias-1'3] is-asf-sort(ASF-ConditionalEquation) = true
-
-  [ias-1'4] is-asf-sort(ASF-Equation) = true
-
-  [ias-1'5] is-asf-sort(ASF-Implies) = true
-
-  [ias-1'6] is-asf-sort(ASF-Condition) = true
-
-  [ias-1'7] is-asf-sort(ASF-Equations) = true
+  [ias-1'1] is-asf-sort(sort(ASF- h t)) = true
 
   [default-ias-1'8] is-asf-sort($Sort) = false

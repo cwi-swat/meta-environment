@@ -1,10 +1,15 @@
 module SetAndElem
 
-imports Layout
+imports basic/Whitespace
 
 exports
 
 sorts ID BOOL {ID ";"}* ID*
+
+context-free start-symbols
+	ID* {ID ";"}*
+	BOOL
+	ID
 
 context-free syntax
 

@@ -1,10 +1,13 @@
 module ReturnsList
 
-imports Layout
+imports basic/Whitespace
 
 exports
 
 sorts B {B ";"}*
+
+context-free start-symbols
+	{B ";"}*
 
 context-free syntax
 

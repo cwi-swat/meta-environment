@@ -6,6 +6,9 @@ imports
 exports
     sorts A
 
+    context-free start-symbols
+	A
+
     context-free syntax
 
     "aap"  -> A

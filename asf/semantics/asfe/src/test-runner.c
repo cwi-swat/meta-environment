@@ -3,7 +3,6 @@
 #include "evaluator.h"
 #include "reduction.h"
 #include "errors.h"
-#include "pre-post.h"
 #include "traversalfunctions.h"
 #include "environment.h"
 #include "matching.h"
@@ -67,7 +66,6 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
 
   tagCurrentRule = testRunnerTag;
   TIDE_STEP(tobetested, environment, 0);
-  tobetested = prepareCondition(tobetested);
 
   tagCurrentRule = tag;
   if (ASF_hasASFTestEquationASFConditions(test)) {
@@ -75,7 +73,6 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
     ASF_ASFConditionList condList;
 
     conditions = ASF_getASFTestEquationASFConditions(test);
-    conditions = prepareConditions(conditions);
     
     condList = ASF_getASFConditionsList(conditions);
     environment = matchConditions(condList, environment, 1);
@@ -169,7 +166,6 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 
    useTide = debug;
 
-   eqs = RWprepareEquations(eqs, ATfalse);
    enter_equations(eqs);
 
    if (memo_table == NULL) {
@@ -177,15 +173,15 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    tagCurrentRule = ASF_makeASFTagNotEmpty(e,
-				   ASF_makeASFTagIdManyChars("*undefined*"),e);
+				   ASF_makeTagId("*undefined*"),e);
    innermostTag = ASF_makeASFTagNotEmpty(e,
-				 ASF_makeASFTagIdManyChars("*innermost*"),e);
+				 ASF_makeTagId("*innermost*"),e);
    testRunnerTag = ASF_makeASFTagNotEmpty(e,
-				  ASF_makeASFTagIdManyChars("*test-runner*"),e);
+				  ASF_makeTagId("*test-runner*"),e);
    innermostSubject = PT_makeTreeLit("*subject*");
    leftSubject = PT_makeTreeLit("*lhs*");
    rightSubject = PT_makeTreeLit("*rhs*");
-   rewrite_steps = 0;
+   asfe_rewrite_steps = 0;
    initBuiltins();
 
    if (runVerbose) {

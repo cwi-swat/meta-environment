@@ -1,18 +1,25 @@
 module Func
 
-imports Layout Pico-Integers Pico-Identifiers
+imports basic/Whitespace
+imports basic/Integers
+imports languages/pico/syntax/Pico-Identifiers
 
 exports
   sorts Pico-Func
+  context-free start-symbols
+	Integer
+	Pico-Func
   context-free syntax
 
     "f" -> Pico-Func
 
-    "apply" "(" PICO-BOOL "," PICO-INT "," Pico-Func ")" -> PICO-INT
+    "apply" "(" Boolean "," Integer "," Pico-Func ")" -> Integer
 
   aliases
-    (PICO-BOOL PICO-INT => PICO-INT) -> Pico-Func
+    (Boolean Integer => Integer) -> Pico-Func
 
   variables
     "vf"[0-9]* -> Pico-Func
+    "Int" -> Integer
+    "Bool" -> Boolean
  

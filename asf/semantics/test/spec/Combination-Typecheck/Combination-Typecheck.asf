@@ -4,9 +4,9 @@ equations
    ====>
    do-typecheck(Program) = Program2
 
-[0] typecheck(Id : Type, [ Pair* ]) = < Id : Type, [ ( Id : Type), Pair* ] >
+[0] typecheck(Id : Type, Tenv) = <Id : Type, store(Tenv,Id,Type)>
 
-[1] typecheck(Id, Tenv) = < type(lookup(Id,Tenv)),Tenv>
+[1] typecheck(Id, Tenv) = < type(lookup(Tenv,Id)),Tenv>
 [2] typecheck(Nat-Con,Tenv) = <type(natural),Tenv>
 [3] typecheck(Str-Con,Tenv) = <type(string),Tenv>
 
