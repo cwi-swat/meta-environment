@@ -5,7 +5,7 @@
 
 #include "editor-hive.tif.h"
 
-#define NR_SIG_ENTRIES	14
+#define NR_SIG_ENTRIES	13
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,edit-file(<term>,<str>,<str>))",
@@ -15,7 +15,6 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,is-modified(<term>))",
   "rec-do(<editor-hive>,set-focus(<term>,<term>))",
   "rec-do(<editor-hive>,set-cursor-at-offset(<term>,<int>))",
-  "rec-do(<editor-hive>,get-contents(<term>))",
   "rec-do(<editor-hive>,clear-focus(<term>))",
   "rec-do(<editor-hive>,display-message(<term>,<str>))",
   "rec-do(<editor-hive>,editor-to-front(<term>))",
@@ -37,16 +36,12 @@ ATerm editor_hive_handler(int conn, ATerm term)
     set_focus(conn, t0, t1);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
-    set_cursor_at_offset(conn, t0, i0);
-    return NULL;
-  }
   if(ATmatch(term, "rec-do(is-modified(<term>))", &t0)) {
     is_modified(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(get-contents(<term>))", &t0)) {
-    get_contents(conn, t0);
+  if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
+    set_cursor_at_offset(conn, t0, i0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(reread-contents(<term>))", &t0)) {

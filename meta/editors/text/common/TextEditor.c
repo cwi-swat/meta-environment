@@ -336,19 +336,11 @@ TE_Action TE_makeActionRereadContents(void)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionGetContents(void) */
-
-TE_Action TE_makeActionGetContents(void)
-{
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun6));
-}
-
-/*}}}  */
 /*{{{  TE_Action TE_makeActionDisplayMessage(const char* message) */
 
 TE_Action TE_makeActionDisplayMessage(const char* message)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -356,7 +348,7 @@ TE_Action TE_makeActionDisplayMessage(const char* message)
 
 TE_Action TE_makeActionSetCursorAtOffset(int offset)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun8, (ATerm) (ATerm) ATmakeInt(offset)));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) (ATerm) ATmakeInt(offset)));
 }
 
 /*}}}  */
@@ -364,7 +356,7 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset)
 
 TE_Action TE_makeActionSetFocus(ATerm focus)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun9, (ATerm) focus));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun8, (ATerm) focus));
 }
 
 /*}}}  */
@@ -372,7 +364,7 @@ TE_Action TE_makeActionSetFocus(ATerm focus)
 
 TE_Action TE_makeActionClearFocus(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun10));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun9));
 }
 
 /*}}}  */
@@ -380,7 +372,7 @@ TE_Action TE_makeActionClearFocus(void)
 
 TE_Action TE_makeActionAddActions(TE_ActionList actions)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun11, (ATerm) actions));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun10, (ATerm) actions));
 }
 
 /*}}}  */
@@ -388,7 +380,7 @@ TE_Action TE_makeActionAddActions(TE_ActionList actions)
 
 TE_Menu TE_makeMenuDefault(TE_Items items)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun12, (ATerm) items);
+  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm) items);
 }
 
 /*}}}  */
@@ -396,7 +388,7 @@ TE_Menu TE_makeMenuDefault(TE_Items items)
 
 TE_Menu TE_makeMenuShortcut(TE_Items items, const char* shortcut)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun13, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -452,7 +444,7 @@ TE_Items TE_makeItemsMany(const char* head, TE_Items tail)
 
 TE_Event TE_makeEventMenu(TE_Menu menu)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) menu);
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) menu);
 }
 
 /*}}}  */
@@ -460,15 +452,15 @@ TE_Event TE_makeEventMenu(TE_Menu menu)
 
 TE_Event TE_makeEventMouse(int location)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun15, (ATerm) (ATerm) ATmakeInt(location));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeInt(location));
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_makeEventContents(const char* text) */
+/*{{{  TE_Event TE_makeEventContentsWritten(void) */
 
-TE_Event TE_makeEventContents(const char* text)
+TE_Event TE_makeEventContentsWritten(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun16, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun15);
 }
 
 /*}}}  */
@@ -476,7 +468,7 @@ TE_Event TE_makeEventContents(const char* text)
 
 TE_Event TE_makeEventModified(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun17);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun16);
 }
 
 /*}}}  */
@@ -484,7 +476,7 @@ TE_Event TE_makeEventModified(void)
 
 TE_Event TE_makeEventIsModified(int modified)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun18, (ATerm) (ATerm) ATmakeInt(modified));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun17, (ATerm) (ATerm) ATmakeInt(modified));
 }
 
 /*}}}  */
@@ -492,7 +484,7 @@ TE_Event TE_makeEventIsModified(int modified)
 
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 {
-  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun19, (ATerm) toChild, (ATerm) fromChild);
+  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun18, (ATerm) toChild, (ATerm) fromChild);
 }
 
 /*}}}  */
@@ -500,7 +492,7 @@ TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 
 TE_Pipe TE_makePipeDefault(int read, int write)
 {
-  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun20, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
+  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun19, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
 }
 
 /*}}}  */
@@ -563,9 +555,6 @@ ATbool TE_isValidAction(TE_Action arg)
     return ATtrue;
   }
   else if (TE_isActionRereadContents(arg)) {
-    return ATtrue;
-  }
-  else if (TE_isActionGetContents(arg)) {
     return ATtrue;
   }
   else if (TE_isActionDisplayMessage(arg)) {
@@ -697,28 +686,6 @@ inline ATbool TE_isActionRereadContents(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool TE_isActionGetContents(TE_Action arg) */
-
-inline ATbool TE_isActionGetContents(TE_Action arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionGetContents);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
 /*{{{  inline ATbool TE_isActionDisplayMessage(TE_Action arg) */
 
 inline ATbool TE_isActionDisplayMessage(TE_Action arg)
@@ -840,12 +807,72 @@ ATbool TE_hasActionMessage(TE_Action arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasActionOffset(TE_Action arg) */
+
+ATbool TE_hasActionOffset(TE_Action arg)
+{
+  if (TE_isActionSetCursorAtOffset(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionFocus(TE_Action arg) */
+
+ATbool TE_hasActionFocus(TE_Action arg)
+{
+  if (TE_isActionSetFocus(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionActions(TE_Action arg) */
+
+ATbool TE_hasActionActions(TE_Action arg)
+{
+  if (TE_isActionAddActions(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* TE_getActionMessage(TE_Action arg) */
 
 char* TE_getActionMessage(TE_Action arg)
 {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0)));
+}
+
+/*}}}  */
+/*{{{  int TE_getActionOffset(TE_Action arg) */
+
+int TE_getActionOffset(TE_Action arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
+}
+
+/*}}}  */
+/*{{{  ATerm TE_getActionFocus(TE_Action arg) */
+
+ATerm TE_getActionFocus(TE_Action arg)
+{
+  
+    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_getActionActions(TE_Action arg) */
+
+TE_ActionList TE_getActionActions(TE_Action arg)
+{
+  
+    return (TE_ActionList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
 }
 
 /*}}}  */
@@ -862,26 +889,6 @@ TE_Action TE_setActionMessage(TE_Action arg, const char* message)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasActionOffset(TE_Action arg) */
-
-ATbool TE_hasActionOffset(TE_Action arg)
-{
-  if (TE_isActionSetCursorAtOffset(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TE_getActionOffset(TE_Action arg) */
-
-int TE_getActionOffset(TE_Action arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0));
-}
-
-/*}}}  */
 /*{{{  TE_Action TE_setActionOffset(TE_Action arg, int offset) */
 
 TE_Action TE_setActionOffset(TE_Action arg, int offset)
@@ -895,26 +902,6 @@ TE_Action TE_setActionOffset(TE_Action arg, int offset)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasActionFocus(TE_Action arg) */
-
-ATbool TE_hasActionFocus(TE_Action arg)
-{
-  if (TE_isActionSetFocus(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATerm TE_getActionFocus(TE_Action arg) */
-
-ATerm TE_getActionFocus(TE_Action arg)
-{
-  
-    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
-}
-
-/*}}}  */
 /*{{{  TE_Action TE_setActionFocus(TE_Action arg, ATerm focus) */
 
 TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
@@ -925,26 +912,6 @@ TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
 
   ATabort("Action has no Focus: %t\n", arg);
   return (TE_Action)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasActionActions(TE_Action arg) */
-
-ATbool TE_hasActionActions(TE_Action arg)
-{
-  if (TE_isActionAddActions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_ActionList TE_getActionActions(TE_Action arg) */
-
-TE_ActionList TE_getActionActions(TE_Action arg)
-{
-  
-    return (TE_ActionList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
 }
 
 /*}}}  */
@@ -1037,6 +1004,17 @@ ATbool TE_hasMenuItems(TE_Menu arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasMenuShortcut(TE_Menu arg) */
+
+ATbool TE_hasMenuShortcut(TE_Menu arg)
+{
+  if (TE_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  TE_Items TE_getMenuItems(TE_Menu arg) */
 
 TE_Items TE_getMenuItems(TE_Menu arg)
@@ -1046,6 +1024,15 @@ TE_Items TE_getMenuItems(TE_Menu arg)
   }
   else 
     return (TE_Items)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  char* TE_getMenuShortcut(TE_Menu arg) */
+
+char* TE_getMenuShortcut(TE_Menu arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -1062,26 +1049,6 @@ TE_Menu TE_setMenuItems(TE_Menu arg, TE_Items items)
 
   ATabort("Menu has no Items: %t\n", arg);
   return (TE_Menu)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasMenuShortcut(TE_Menu arg) */
-
-ATbool TE_hasMenuShortcut(TE_Menu arg)
-{
-  if (TE_isMenuShortcut(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* TE_getMenuShortcut(TE_Menu arg) */
-
-char* TE_getMenuShortcut(TE_Menu arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -1198,6 +1165,17 @@ ATbool TE_hasActionListHead(TE_ActionList arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasActionListTail(TE_ActionList arg) */
+
+ATbool TE_hasActionListTail(TE_ActionList arg)
+{
+  if (TE_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  TE_Menu TE_getActionListHead(TE_ActionList arg) */
 
 TE_Menu TE_getActionListHead(TE_ActionList arg)
@@ -1207,6 +1185,15 @@ TE_Menu TE_getActionListHead(TE_ActionList arg)
   }
   else 
     return (TE_Menu)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  TE_ActionList TE_getActionListTail(TE_ActionList arg) */
+
+TE_ActionList TE_getActionListTail(TE_ActionList arg)
+{
+  
+    return (TE_ActionList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1223,26 +1210,6 @@ TE_ActionList TE_setActionListHead(TE_ActionList arg, TE_Menu head)
 
   ATabort("ActionList has no Head: %t\n", arg);
   return (TE_ActionList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasActionListTail(TE_ActionList arg) */
-
-ATbool TE_hasActionListTail(TE_ActionList arg)
-{
-  if (TE_isActionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_ActionList TE_getActionListTail(TE_ActionList arg) */
-
-TE_ActionList TE_getActionListTail(TE_ActionList arg)
-{
-  
-    return (TE_ActionList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1359,6 +1326,17 @@ ATbool TE_hasItemsHead(TE_Items arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasItemsTail(TE_Items arg) */
+
+ATbool TE_hasItemsTail(TE_Items arg)
+{
+  if (TE_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* TE_getItemsHead(TE_Items arg) */
 
 char* TE_getItemsHead(TE_Items arg)
@@ -1368,6 +1346,15 @@ char* TE_getItemsHead(TE_Items arg)
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)arg)));
+}
+
+/*}}}  */
+/*{{{  TE_Items TE_getItemsTail(TE_Items arg) */
+
+TE_Items TE_getItemsTail(TE_Items arg)
+{
+  
+    return (TE_Items)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1384,26 +1371,6 @@ TE_Items TE_setItemsHead(TE_Items arg, const char* head)
 
   ATabort("Items has no Head: %t\n", arg);
   return (TE_Items)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasItemsTail(TE_Items arg) */
-
-ATbool TE_hasItemsTail(TE_Items arg)
-{
-  if (TE_isItemsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_Items TE_getItemsTail(TE_Items arg) */
-
-TE_Items TE_getItemsTail(TE_Items arg)
-{
-  
-    return (TE_Items)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1434,7 +1401,7 @@ ATbool TE_isValidEvent(TE_Event arg)
   else if (TE_isEventMouse(arg)) {
     return ATtrue;
   }
-  else if (TE_isEventContents(arg)) {
+  else if (TE_isEventContentsWritten(arg)) {
     return ATtrue;
   }
   else if (TE_isEventModified(arg)) {
@@ -1491,9 +1458,9 @@ inline ATbool TE_isEventMouse(TE_Event arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool TE_isEventContents(TE_Event arg) */
+/*{{{  inline ATbool TE_isEventContentsWritten(TE_Event arg) */
 
-inline ATbool TE_isEventContents(TE_Event arg)
+inline ATbool TE_isEventContentsWritten(TE_Event arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1504,7 +1471,7 @@ inline ATbool TE_isEventContents(TE_Event arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternEventContents, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternEventContentsWritten);
       last_gc = ATgetGCCount();
     }
 
@@ -1568,12 +1535,52 @@ ATbool TE_hasEventMenu(TE_Event arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasEventLocation(TE_Event arg) */
+
+ATbool TE_hasEventLocation(TE_Event arg)
+{
+  if (TE_isEventMouse(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasEventModified(TE_Event arg) */
+
+ATbool TE_hasEventModified(TE_Event arg)
+{
+  if (TE_isEventIsModified(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  TE_Menu TE_getEventMenu(TE_Event arg) */
 
 TE_Menu TE_getEventMenu(TE_Event arg)
 {
   
     return (TE_Menu)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  int TE_getEventLocation(TE_Event arg) */
+
+int TE_getEventLocation(TE_Event arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
+}
+
+/*}}}  */
+/*{{{  int TE_getEventModified(TE_Event arg) */
+
+int TE_getEventModified(TE_Event arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
@@ -1590,26 +1597,6 @@ TE_Event TE_setEventMenu(TE_Event arg, TE_Menu menu)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasEventLocation(TE_Event arg) */
-
-ATbool TE_hasEventLocation(TE_Event arg)
-{
-  if (TE_isEventMouse(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TE_getEventLocation(TE_Event arg) */
-
-int TE_getEventLocation(TE_Event arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
-}
-
-/*}}}  */
 /*{{{  TE_Event TE_setEventLocation(TE_Event arg, int location) */
 
 TE_Event TE_setEventLocation(TE_Event arg, int location)
@@ -1620,59 +1607,6 @@ TE_Event TE_setEventLocation(TE_Event arg, int location)
 
   ATabort("Event has no Location: %t\n", arg);
   return (TE_Event)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasEventText(TE_Event arg) */
-
-ATbool TE_hasEventText(TE_Event arg)
-{
-  if (TE_isEventContents(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* TE_getEventText(TE_Event arg) */
-
-char* TE_getEventText(TE_Event arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-}
-
-/*}}}  */
-/*{{{  TE_Event TE_setEventText(TE_Event arg, const char* text) */
-
-TE_Event TE_setEventText(TE_Event arg, const char* text)
-{
-  if (TE_isEventContents(arg)) {
-    return (TE_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue))), 0);
-  }
-
-  ATabort("Event has no Text: %t\n", arg);
-  return (TE_Event)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasEventModified(TE_Event arg) */
-
-ATbool TE_hasEventModified(TE_Event arg)
-{
-  if (TE_isEventIsModified(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TE_getEventModified(TE_Event arg) */
-
-int TE_getEventModified(TE_Event arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
@@ -1727,12 +1661,32 @@ ATbool TE_hasProcessToChild(TE_Process arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasProcessFromChild(TE_Process arg) */
+
+ATbool TE_hasProcessFromChild(TE_Process arg)
+{
+  if (TE_isProcessDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  TE_Pipe TE_getProcessToChild(TE_Process arg) */
 
 TE_Pipe TE_getProcessToChild(TE_Process arg)
 {
   
     return (TE_Pipe)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  TE_Pipe TE_getProcessFromChild(TE_Process arg) */
+
+TE_Pipe TE_getProcessFromChild(TE_Process arg)
+{
+  
+    return (TE_Pipe)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1746,26 +1700,6 @@ TE_Process TE_setProcessToChild(TE_Process arg, TE_Pipe toChild)
 
   ATabort("Process has no ToChild: %t\n", arg);
   return (TE_Process)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasProcessFromChild(TE_Process arg) */
-
-ATbool TE_hasProcessFromChild(TE_Process arg)
-{
-  if (TE_isProcessDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  TE_Pipe TE_getProcessFromChild(TE_Process arg) */
-
-TE_Pipe TE_getProcessFromChild(TE_Process arg)
-{
-  
-    return (TE_Pipe)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1820,12 +1754,32 @@ ATbool TE_hasPipeRead(TE_Pipe arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasPipeWrite(TE_Pipe arg) */
+
+ATbool TE_hasPipeWrite(TE_Pipe arg)
+{
+  if (TE_isPipeDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  int TE_getPipeRead(TE_Pipe arg) */
 
 int TE_getPipeRead(TE_Pipe arg)
 {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
+}
+
+/*}}}  */
+/*{{{  int TE_getPipeWrite(TE_Pipe arg) */
+
+int TE_getPipeWrite(TE_Pipe arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
 /*}}}  */
@@ -1839,26 +1793,6 @@ TE_Pipe TE_setPipeRead(TE_Pipe arg, int read)
 
   ATabort("Pipe has no Read: %t\n", arg);
   return (TE_Pipe)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasPipeWrite(TE_Pipe arg) */
-
-ATbool TE_hasPipeWrite(TE_Pipe arg)
-{
-  if (TE_isPipeDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TE_getPipeWrite(TE_Pipe arg) */
-
-int TE_getPipeWrite(TE_Pipe arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
 /*}}}  */
@@ -1897,9 +1831,6 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
   }
   if (TE_isActionRereadContents(arg)) {
     return TE_makeActionRereadContents();
-  }
-  if (TE_isActionGetContents(arg)) {
-    return TE_makeActionGetContents();
   }
   if (TE_isActionDisplayMessage(arg)) {
     return TE_makeActionDisplayMessage(
@@ -1985,9 +1916,9 @@ TE_Items TE_visitItems(TE_Items arg, char* (*acceptHead)(char*))
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*), int (*acceptModified)(int)) */
+/*{{{  TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), int (*acceptModified)(int)) */
 
-TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*), int (*acceptModified)(int))
+TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), int (*acceptModified)(int))
 {
   if (TE_isEventMenu(arg)) {
     return TE_makeEventMenu(
@@ -1997,9 +1928,8 @@ TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*accep
     return TE_makeEventMouse(
         acceptLocation ? acceptLocation(TE_getEventLocation(arg)) : TE_getEventLocation(arg));
   }
-  if (TE_isEventContents(arg)) {
-    return TE_makeEventContents(
-        acceptText ? acceptText(TE_getEventText(arg)) : TE_getEventText(arg));
+  if (TE_isEventContentsWritten(arg)) {
+    return TE_makeEventContentsWritten();
   }
   if (TE_isEventModified(arg)) {
     return TE_makeEventModified();

@@ -105,4 +105,5 @@
 (defun write-contents ()
   (save-buffer)
   (send-to-hive "handshake")
+  (send-to-hive "contents-written")
 )

@@ -29,5 +29,4 @@ api: TextEditor.adt
 	adt-to-c \
 		--input $< \
 		--name TextEditor \
-		--prefix TE_ \
-		--version 1.3
+		--prefix TE_

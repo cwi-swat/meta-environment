@@ -10,9 +10,8 @@
 
 /* Prototypes for functions called from the event handler */
 void set_focus(int conn, ATerm, ATerm);
-void set_cursor_at_offset(int conn, ATerm, int);
 void is_modified(int conn, ATerm);
-void get_contents(int conn, ATerm);
+void set_cursor_at_offset(int conn, ATerm, int);
 void reread_contents(int conn, ATerm);
 void clear_focus(int conn, ATerm);
 void write_contents(int conn, ATerm);

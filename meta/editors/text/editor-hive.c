@@ -31,8 +31,8 @@
 #define EVENT_EDITOR_DISCONNECTED "editor-disconnected(<term>)"
 #define EVENT_MENU "menu-event(<term>,<term>)"
 #define EVENT_MOUSE "mouse-event(<term>,<int>)"
-#define EVENT_CONTENTS "contents(<term>,<str>)"
 #define EVENT_CONTENTS_CHANGED "contents-changed(<term>)"
+#define EVENT_CONTENTS_WRITTEN "contents-written(<term>)"
 #define EVENT_EDITOR_MODIFIED "is-modified(<term>,<term>)"
 
 /*}}}  */
@@ -197,18 +197,6 @@ static void sendToToolBus(int tb_fd, ATerm event)
 
 /*}}}  */
 
-/*{{{  void get_contents(int c, ATerm editorId) */
-
-void get_contents(int c, ATerm editorId)
-{
-  TE_Process process = getEditorProcess(editorId);
-
-  if (process != NULL) {
-    sendToEditor(process, TE_makeActionGetContents());
-  }
-}
-
-/*}}}  */
 /*{{{  void clear_focus(int c, ATerm editorId) */
 
 void clear_focus(int c, ATerm editorId)
@@ -402,12 +390,11 @@ static void handleEditorInput(int tb_fd, ATerm editorId, TE_Event event)
     int location = TE_getEventLocation(event);
     sendToToolBus(tb_fd, ATmake(EVENT_MOUSE, editorId, location));
   }
-  else if (TE_isEventContents(event)) {
-    char *contents = TE_getEventText(event);
-    sendToToolBus(tb_fd, ATmake(EVENT_CONTENTS, editorId, contents));
-  }
   else if (TE_isEventModified(event)) {
     sendToToolBus(tb_fd, ATmake(EVENT_CONTENTS_CHANGED, editorId));
+  }
+  else if (TE_isEventContentsWritten(event)) {
+    sendToToolBus(tb_fd, ATmake(EVENT_CONTENTS_WRITTEN, editorId));
   }
   else if (TE_isEventIsModified(event)) {
     int modified = TE_getEventModified(event);

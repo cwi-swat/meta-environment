@@ -1,23 +1,5 @@
 /* $Id$ */
 
-/*{{{ process ReadFile(Filename: str, Text: str?) */
-
-process ReadFile(Filename: str, Text: str?)  is
-let
-  ErrorMessage: str
-in
-  snd-msg(io-read-file(Filename))
-  .
-  (
-    rec-msg(io-file-contents(Text?))
-  +
-    rec-msg(io-error-reading(ErrorMessage?)) 
-    . Text := ""
-  )
-endlet
-
-/*}}}  */
-
 /*{{{  process BuildEquationsFilename(ModuleId: str, Filename: str?) */
 
 process BuildEquationsFilename(ModuleId: str, Filename: str?) is

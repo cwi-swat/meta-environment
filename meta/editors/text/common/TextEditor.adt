@@ -4,7 +4,6 @@
   constructor(Action, is-modified, action(is-modified)),
   constructor(Action, write-contents, action(write-contents)),
   constructor(Action, reread-contents, action(reread-contents)),
-  constructor(Action, get-contents, action(get-contents)),
   constructor(Action, display-message, action(display-message(<message(str)>))),
   constructor(Action, set-cursor-at-offset,
                       action(set-cursor-at-offset(<offset(int)>))),
@@ -19,7 +18,7 @@
 
   constructor(Event, menu, menu-event(<menu(Menu)>)),
   constructor(Event, mouse, mouse-event(<location(int)>)),
-  constructor(Event, contents, contents(<text(str)>)),
+  constructor(Event, contents-written, contents-written),
   constructor(Event, modified, modified),
   constructor(Event, is-modified, is-modified(<modified(int)>)),
 

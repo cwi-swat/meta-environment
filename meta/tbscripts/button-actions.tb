@@ -504,7 +504,7 @@ in
     .
     if or(equal(FunSym, "file"), equal(FunSym, "path")) then
       FilePath := first(args(STree))
-      . GetTextFromFile(FilePath, String?)
+      . ReadFile(FilePath, String?)
       . printf("button-actions.tb:parse error ignored: %t\n", Error)
     else
       if equal(FunSym, "str") then
@@ -1040,20 +1040,6 @@ in
     rec-msg(parse-editor-failed(Sid))
   )
   . snd-note(ui-status(endstat(Id)))
-endlet
-
-process GetTextFromFile(Filename: str, Text: str?) is
-let
-  ErrorMessage: str
-in
-  snd-msg(io-read-file(Filename))
-  .
-  (
-    rec-msg(io-file-contents(Text?))
-  +
-    rec-msg(io-error-reading(ErrorMessage?))
-    . Text := error-text
-  )
 endlet
 
 process ParseSyntax(Sid: term, Type: term, ParseSucceeded: bool?) is

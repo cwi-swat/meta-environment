@@ -24,6 +24,7 @@
 /*{{{  defines */
 
 #define MODIFIED "modified"
+#define CONTENTS_WRITTEN "contents-written"
 
 /*}}}  */
 
@@ -110,57 +111,6 @@ void sendToHive(int write_to_hive_fd, TE_Event event)
 
 /*}}}  */
 
-/*{{{  static void getContents(int write_to_hive_fd) */
-
-static void getContents(int write_to_hive_fd)
-{
-  static char *contents = NULL;
-  struct stat statrec;
-  int size;
-
-  if (stat(getFileName(), &statrec) == -1) {
-    perror("stat");
-    size = 0;
-  }
-  else {
-    size = statrec.st_size;
-  }
-
-  if (size > 0) {
-    FILE *f;
-    int needed = size + 1; /* for terminating '\0' */
-
-    contents = realloc(contents, needed);
-    if (contents == NULL) {
-      ATerror("getContents: failed to realloc to %d bytes\n", needed);
-    }
-
-    f = fopen(getFileName(), "rb");
-    if (f == NULL) {
-      ATwarning("getContents: failed to read %s\n", getFileName());
-      strcpy(contents, "");
-    }
-    else {
-      int nr_read = fread(contents, sizeof(char), size, f);
-      if (nr_read == size) {
-	fclose(f);
-	contents[size] = '\0';
-      }
-      else {
-	perror("fread");
-      }
-    }
-  }
-
-  if (contents == NULL) {
-    ATwarning("editor: No focus text available, winging it.\n");
-    contents = strdup("");
-  }
-
-  sendToHive(write_to_hive_fd, TE_makeEventContents(contents));
-}
-
-/*}}}  */
 /*{{{  static int defaultHandleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive) */
 
 static int defaultHandleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
@@ -194,6 +144,9 @@ static int defaultHandleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
       event = TE_makeEventModified();
     }
   }
+  else if (strncmp(buf, CONTENTS_WRITTEN, strlen(CONTENTS_WRITTEN)) == 0) {
+    event = TE_makeEventContentsWritten();
+  }
   else {
     event = TE_makeEventMenu(TE_MenuFromTerm(ATparse(buf)));
   }
@@ -212,10 +165,7 @@ static void handleHiveInput(TextEditor editor,
 {
   assert(editor != NULL);
 
-  if (TE_isActionGetContents(action)) {
-    getContents(write_to_hive_fd);
-  }
-  else if (TE_isActionQuit(action)) {
+  if (TE_isActionQuit(action)) {
     editor->hiveClosed(write_to_editor_fd);
   }
   else if (TE_isActionClearFocus(action)) {

@@ -1,10 +1,20 @@
 /* $Id$ */       
 
-/*{{{  process GetText(EditorId: term, Text: str?) */
+/*{{{  process ReadFile(Path: str, Contents: str?) */
 
-process GetText(EditorId: term, Text: str?) is
-  snd-msg(te-get-contents(EditorId))
-  . rec-msg(te-contents(EditorId, Text?))
+process ReadFile(Path: str, Contents: str?) is
+let
+  Error: str
+in
+  snd-msg(io-read-file(Path))
+  .
+  (
+    rec-msg(io-file-contents(Contents?))
+  +
+    rec-msg(io-error-reading(Error?))
+    . Contents := ""
+  )
+endlet
 
 /*}}}  */
 /*{{{  process AnnotateTree(Tree: term, Filename: str, AnnotateTree: term?) */
@@ -30,7 +40,7 @@ endlet
 
 process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
 let
-  Filename: str,
+  Path: str,
   Pid: int,
   StructureEditor: bool,
   Text: str,
@@ -41,6 +51,7 @@ in
   if equal(TextChanged, quote(true))
   then
     snd-msg(te-write-contents(Sid))
+    . rec-msg(te-contents-written(Sid))
     . StructureEditor := false
   else
     IsStructureEditorRegistered(Sid, StructureEditor?)
@@ -50,9 +61,9 @@ in
   then
     snd-msg(parse-editor-ok(Sid))
   else
-    GetPath(Sid, Filename?)
-    . snd-msg(ui-remove-feedback-summary("sglr", Filename))
-    . GetText(Sid, Text?)
+    GetPath(Sid, Path?)
+    . snd-msg(ui-remove-feedback-summary("sglr", Path))
+    . ReadFile(Path, Text?)
     . create(EditorParseHandler(Sid), Pid?)
     . ParseText(Pid, Text, Table, Nonterminal)
   fi

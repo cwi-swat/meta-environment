@@ -8,7 +8,6 @@ process EditorHive is
 let
   ActionList : list,
   Area : term,
-  Contents : str,
   EditorId : term,
   Editor : str,
   Filename : str,
@@ -21,11 +20,7 @@ let
   SortName: str,
   Pid: int
 in
-#ifdef ECLIPSE
-  rec-connect(Hive?)
-#else
   execute(editor-hive, Hive?)
-#endif
   .
   (
     rec-msg(te-edit-text(EditorId?, Editor?, Filename?))
@@ -49,9 +44,6 @@ in
     rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
   +
-    rec-msg(te-get-contents(EditorId?))
-    . snd-do(Hive, get-contents(EditorId))
-  + 
     rec-msg(te-clear-focus(EditorId))
     . snd-do(Hive, clear-focus(EditorId))
   +
@@ -68,6 +60,10 @@ in
     . snd-msg(te-is-modified(EditorId, Modified))
     . snd-ack-event(Hive, is-modified(EditorId, Modified))
   +
+    rec-event(Hive, contents-written(EditorId?))
+    . snd-msg(te-contents-written(EditorId))
+    . snd-ack-event(Hive, contents-written(EditorId))
+  +
     rec-event(Hive, contents-changed(EditorId?))
     . create(ContentsChanged(EditorId), Pid?)
     . snd-ack-event(Hive, contents-changed(EditorId))
@@ -79,10 +75,6 @@ in
     rec-event(Hive, menu-event(EditorId?, MenuEvent?))
     . create(MenuEvent(EditorId, MenuEvent), Pid?)
     . snd-ack-event(Hive, menu-event(EditorId, MenuEvent))
-  +
-    rec-event(Hive, contents(EditorId, Contents?))
-    . snd-msg(te-contents(EditorId, Contents))
-    . snd-ack-event(Hive, contents(EditorId, Contents))
   +
     rec-event(Hive, editor-disconnected(EditorId?))
     . snd-msg(te-text-editor-disconnected(EditorId))
