@@ -50,8 +50,8 @@ static MA_OptLayout em  = NULL; /* empty */
 
 /*{{{  static function decls */
 
-static MA_OptLayout stringToLayout(char *str);
-static MA_FunId stringToFunId(char *str);
+static MA_OptLayout stringToLayout(const char *str);
+static MA_FunId stringToFunId(const char *str);
 static MA_FunId intToFunId(int ch);
 static void initLayoutAbbreviations(void);
 static int getProdArity(PT_Production prod, LayoutOption layout);
@@ -74,18 +74,20 @@ static MA_Rule condEquationToRule(ASF_ASFConditionalEquation condEquation,
 				  ATermIndexedSet funcdefs);
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList list,
 					       ATermIndexedSet funcdefs);
-static MA_ModId makeModId(char *str);
+static MA_ModId makeModId(const char *str);
 static ATbool checkListProductionCompatibility(PT_Production ptProd);
 
 /*}}}  */
 
-/*{{{  char *capitalize(char *str) */
+/*{{{  static char *capitalize(const char *str) */
 
-void capitalize(char *str)
+static char *capitalize(const char *str)
 {
-  if (isalpha((int) str[0])) {
-    str[0] = toupper(str[0]);
-  }
+  char *dup = strdup(str);
+
+  dup[0] = toupper(dup[0]);
+
+  return dup;
 }
 
 /*}}}  */
@@ -117,7 +119,7 @@ static ATbool prodReturnsList(PT_Production prod)
 
 /*{{{  static MA_Layout stringToLayout(const char *str) */
 
-static MA_OptLayout stringToLayout(char *str)
+static MA_OptLayout stringToLayout(const char *str)
 {
   if (strlen(str) == 0) {
     return (MA_OptLayout) PT_makeTreeLayoutEmpty();
@@ -129,9 +131,9 @@ static MA_OptLayout stringToLayout(char *str)
 /*}}}  */
 /*{{{  static MA_FunId stringToFunId(const char *str) */
 
-static MA_FunId stringToFunId(char *str)
+static MA_FunId stringToFunId(const char *str)
 {
-  return MA_makeFunIdUnquoted(MA_makeCHARLISTString(str));
+  return MA_makeFunIdUnquoted(str);
 }
 
 /*}}}  */
@@ -151,7 +153,7 @@ static MA_VarId stringToVarId(const char *str)
   strcpy(varid, "V_");
   strcat(varid, alfanum);
 
-  result = MA_makeVarIdDefault(MA_makeCHARLISTString(varid));
+  result = MA_makeVarIdDefault(varid);
 
   free(alfanum);
   free(varid);
@@ -173,7 +175,7 @@ static MA_FunId intToFunId(int ch)
 
   sprintf(num+1,"%03d", ch);
 
-  return MA_makeFunIdUnquoted(MA_makeCHARLISTString(num));
+  return MA_makeFunIdUnquoted(num);
 }
 
 /*}}}  */
@@ -181,14 +183,16 @@ static MA_FunId intToFunId(int ch)
 
 static void initLayoutAbbreviations(void)
 {
-  ATprotect((ATerm*) &em);
-  ATprotect((ATerm*) &sp);
-  ATprotect((ATerm*) &nl);
-  ATprotect((ATerm*) &nl2);
-
+  MA_protectOptLayout(&em);
   em = stringToLayout("");
+
+  MA_protectOptLayout(&sp);
   sp = stringToLayout(" ");
+
+  MA_protectOptLayout(&nl);
   nl = stringToLayout("\n");
+
+  MA_protectOptLayout(&nl2);
   nl2 = stringToLayout("\n\n");
 }
 
@@ -231,7 +235,7 @@ static MA_TermArgs atArgsToTermArgs(ATermList args)
       list = MA_makeTermArgsSingle(atermToTerm(ATgetFirst(args)));
     }
     else {
-      list = MA_makeTermArgsMany(atermToTerm(ATgetFirst(args)),em,",",sp,list);
+      list = MA_makeTermArgsMany(atermToTerm(ATgetFirst(args)),em,sp,list);
     }
   }
 
@@ -324,7 +328,7 @@ static MA_TermTerms attrsToTermList(PT_Attrs attrs)
 
   for(;PT_hasAttrsHead(attrs); attrs = PT_getAttrsTail(attrs)) {
     PT_Attr attr = PT_getAttrsHead(attrs);
-    terms = MA_makeTermTermsMany(attrToTerm(attr),em,",",sp,terms); 
+    terms = MA_makeTermTermsMany(attrToTerm(attr),em,sp,terms); 
   }
 
   return terms;
@@ -386,7 +390,7 @@ static MA_SigArgElems makeSigArgElems(int arity)
   assert(arity > 0);
   
   for(--arity;arity > 0; arity--) {
-    list = MA_makeSigArgElemsMany(arg,em,",",em,list);
+    list = MA_makeSigArgElemsMany(arg,em,em,list);
   }
 
   return list;
@@ -485,7 +489,7 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd, MA_Term type)
     }
 
     maAnnos = maAnnos ? 
-      MA_makeTermTermsMany(type, em, ",", em, maAnnos) : 
+      MA_makeTermTermsMany(type, em, em, maAnnos) : 
       MA_makeTermTermsSingle(type);
 
     wrappedAnnos = MA_makeAnnotationsDefault(em, maAnnos, em);
@@ -546,7 +550,7 @@ static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs)
     arg = PT_getArgsHead(args);
     term = treeToTerm(arg, funcdefs, WITHOUT_LAYOUT);
     if (term != NULL) { /* not ignored */
-      termArgs = MA_makeTermArgsMany(term,sp,",",em,termArgs);
+      termArgs = MA_makeTermArgsMany(term,sp,em,termArgs);
     }
   } 
 
@@ -722,7 +726,7 @@ static MA_CondList conditionsToCondList(ASF_ASFConditions conditions,
       elems = MA_makeCondElemsSingle(cond);
     }
     else {
-      elems = MA_makeCondElemsMany(cond,em,"&",sp,elems);
+      elems = MA_makeCondElemsMany(cond,em,sp,elems);
     }
 
     if (!ASF_hasASFConditionListTail(list)) {
@@ -797,7 +801,7 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList li
     }
 
     if (!MA_isRuleElemsEmpty(rules)) {
-      rules = MA_makeRuleElemsMany(rule,em,";",nl2,rules);
+      rules = MA_makeRuleElemsMany(rule,em,nl2,rules);
     }
     else {
       rules = MA_makeRuleElemsSingle(rule);
@@ -819,10 +823,20 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList li
 /*}}}  */
 /*{{{  static MA_ModId makeModId(const char *str) */
 
-static MA_ModId makeModId(char *str)
+static MA_ModId makeModId(const char *str)
 {
-  capitalize(str);
-  return MA_makeModIdDefault(MA_makeCHARLISTString(str));
+  MA_ModId modId = NULL;
+  char *capitalized = capitalize(str);
+  
+  if (capitalized == NULL) {
+    ATerror("%s:makeModId: out of memory.\n", __FILE__);
+  }
+  else {
+    modId = MA_makeModIdDefault(capitalized);
+    free(capitalized);
+  }
+
+  return modId;
 }
 
 /*}}}  */
@@ -845,7 +859,7 @@ MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs)
       elems = MA_makeFuncDefElemsSingle(def);
     }
     else {
-      elems = MA_makeFuncDefElemsMany(def, em,";",nl,elems);
+      elems = MA_makeFuncDefElemsMany(def, em,nl,elems);
     }
   }
 

@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Jun  9 15:38:01 CEST 2004 <jong@cwi.nl>
+ * semantics: regenerate APIs, fix resulting errors
+
 Mon May 17 09:48:59 CEST 2004 <kooiker@cwi.nl>
  * semantics/asf-checker/src/Makefile.am: Added PT-Support to LD_ADD section 
 

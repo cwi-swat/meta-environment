@@ -339,7 +339,7 @@ static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition con
       !noNewVariables((PT_Tree)rhsCond, *variables)) {
     return ERR_makeErrorListSingle(makeMessage(
 					     "negative condition introduces variable(s)", 
-					     ASF_makeTermFromASFCondition(condition)));
+					     ASF_ASFConditionToTerm(condition)));
   }
   else {
     return messages;
@@ -353,8 +353,8 @@ static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition con
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
-  messages = ERR_makeErrorListSingle(
-				   makeWarning("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)", ASF_makeTermFromASFCondition(condition)));
+  messages = ERR_makeErrorListSingle(makeWarning("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)",
+						 ASF_ASFConditionToTerm(condition)));
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
@@ -369,10 +369,9 @@ static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition con
     return messages;
   }
   else {
-    return ERR_makeErrorListMany(
-				    makeMessage(
-						"uninstantiated variables in both sides of condition",
-						ASF_makeTermFromASFCondition(condition)), messages);
+    return ERR_makeErrorListMany(makeMessage("uninstantiated variables in both sides of condition",
+					     ASF_ASFConditionToTerm(condition)),
+				 messages);
   }
 
 
@@ -395,7 +394,7 @@ static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition con
 				   ERR_makeErrorListSingle(
 				 makeMessage(
 			    "uninstantiated variables in equality condition",
-			     ASF_makeTermFromASFCondition(condition))));
+			     ASF_ASFConditionToTerm(condition))));
   }
 
   return messages;
@@ -412,14 +411,14 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
     return ERR_makeErrorListSingle(
 	 makeMessage(
 	     "right-hand side of matching condition introduces variables",
-	     ASF_makeTermFromASFCondition(condition)));
+	     ASF_ASFConditionToTerm(condition)));
   }
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     return ERR_makeErrorListSingle(
 	 makeMessage(
 	     "matching condition does not introduce new variables",
-		     ASF_makeTermFromASFCondition(condition)));
+		     ASF_ASFConditionToTerm(condition)));
   }
   else {
     *variables = collectVariables((PT_Tree)lhsCond, *variables);
@@ -436,17 +435,13 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
 static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
-    return ERR_makeErrorListSingle(
-				 makeMessage(
-					     "matching condition does not use new variables",
-					     ASF_makeTermFromASFCondition(condition)));
+    return ERR_makeErrorListSingle(makeMessage("matching condition does not use new variables",
+					       ASF_ASFConditionToTerm(condition)));
   }
 
   if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeErrorListSingle(
-				 makeMessage(
-					     "right-hand side of matching condition introduces variables",
-					     ASF_makeTermFromASFCondition(condition)));
+    return ERR_makeErrorListSingle(makeMessage("right-hand side of matching condition introduces variables",
+					       ASF_ASFConditionToTerm(condition)));
   }
 
   return ERR_makeErrorListEmpty();
@@ -495,10 +490,8 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
       return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else {
-      return ERR_makeErrorListSingle(
-				   makeMessage(
-					       "strange condition encountered", 
-					       ASF_makeTermFromASFCondition(condition)));
+      return ERR_makeErrorListSingle(makeMessage("strange condition encountered", 
+						 ASF_ASFConditionToTerm(condition)));
     }
   }
 }

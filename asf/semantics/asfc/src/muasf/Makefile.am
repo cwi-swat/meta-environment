@@ -2,7 +2,7 @@
 
 noinst_LIBRARIES	= libMuASF.a
 noinst_HEADERS		= MuASF.h MuASF_dict.h
-libMuASF_a_SOURCES	= MuASF.c MuASF_dict.c MuASF_bottom.c
+libMuASF_a_SOURCES	= MuASF.c MuASF_dict.c
 
 EXTRA_DIST		= MuASF.label.def
 
@@ -12,7 +12,11 @@ LDADD			= -lATerm
 
 # Developers only:
 api: MuASF.label.def
-	sdf2-to-c -i $< -r -P MA_ -o MuASF
+	sdf2-to-c \
+		--input $< \
+		--output MuASF \
+		--prefix MA_ \
+		--remove-cons
 
 api-clean:
-	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt SDFME_bottom.c
+	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt

@@ -41,7 +41,8 @@ static ERR_ErrorList checkAsf(ATerm term)
   initStatistics();
 
   if (ATgetType(term) == AT_LIST) {
-    ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
+    ASF_ASFConditionalEquationList rules
+      = ASF_ASFConditionalEquationListFromTerm(term);
     result = checkASFConditionalEquationList(rules);
   }
   else {

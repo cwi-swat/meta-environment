@@ -146,7 +146,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
      ATwarning("initializing...\n");
    }
 
-   ATprotect((ATerm*)&tagCurrentRule);
+   ASF_protectASFTag(&tagCurrentRule);
    useTide = ATfalse;
 
    eqs = RWprepareEquations(eqs, ATfalse);
@@ -157,8 +157,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    tagCurrentRule = ASF_makeASFTagNotEmpty(e,
-			   ASF_makeASFTagIdManyChars(
-			     ASF_makeCHARLISTString("*undefined*")),e);
+			   ASF_makeASFTagIdManyChars("*undefined*"),e);
    rewrite_steps = 0;
    initBuiltins();
 

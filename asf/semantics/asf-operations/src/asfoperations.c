@@ -52,16 +52,19 @@ ATerm extract_tests(int cid, ATerm modules)
 {
   ATermList list = (ATermList) modules;
   ASF_ASFTestEquationTestList testList;
+  ASF_OptLayout ws = ASF_makeOptLayoutPresent("\n");
 
   testList = ASF_makeASFTestEquationTestListEmpty();
 
-  for(;!ATisEmpty(list); list = ATgetNext(list)) {
+  while (!ATisEmpty(list)) {
     ATerm head = ATBunpack(ATgetFirst(list));
     ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
 
     testList = ASF_concatASFTestEquationTestList(testList,
-		  ASF_getASFModuleTestList(module));
+						 ws,
+						 ASF_getASFModuleTestList(module));
    
+    list = ATgetNext(list);
   }
 
   return ATmake("snd-value(extract-tests-result(<term>))",

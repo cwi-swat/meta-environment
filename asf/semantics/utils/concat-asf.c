@@ -110,7 +110,8 @@ main (int argc, char **argv)
 		  ASF_getASFModuleEquationList(module));
   }
 
-  ATwriteToNamedBinaryFile(ASF_makeTermFromASFConditionalEquationList(alleqs), output);
+  ATwriteToNamedBinaryFile(ASF_ASFConditionalEquationListToTerm(alleqs),
+			   output);
  
   return 0;
 }

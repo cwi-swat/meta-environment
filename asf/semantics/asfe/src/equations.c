@@ -130,9 +130,8 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
   if (!PT_getTreePosInfo(tree, &path, &start_line,
 			 &start_col, &end_line, &end_col)) {
     ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
-	      ASF_getCHARLISTString(
-	        ASF_getASFTagIdChars(
-		  ASF_getASFTagASFTagId(ASF_getASFConditionalEquationASFTag(equ)))), tree);
+	        ASF_getASFTagIdString(
+		  ASF_getASFTagASFTagId(ASF_getASFConditionalEquationASFTag(equ))), tree);
     return equ;
   }
 

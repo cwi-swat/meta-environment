@@ -40,7 +40,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
   PT_Tree result;
   PT_Tree tree;
 
-  ATprotect((ATerm*)&tagCurrentRule);
+  ASF_protectASFTag(&tagCurrentRule);
 
   useTide = debug;
 
@@ -60,7 +60,10 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
     memo_table = MemoTableCreate();
   }
 
-  tagCurrentRule = ASF_makeASFTagNotEmpty(e,ASF_makeASFTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
+  tagCurrentRule
+    = ASF_makeASFTagNotEmpty(e,
+			     ASF_makeASFTagIdManyChars("*undefined*"),
+			     e);
   rewrite_steps = 0;
   initBuiltins();
   

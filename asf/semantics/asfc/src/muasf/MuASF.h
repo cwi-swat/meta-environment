@@ -3,24 +3,13 @@
 
 /*{{{  includes */
 
+#include <stdlib.h>
+#include <string.h>
 #include <aterm1.h>
 #include "MuASF_dict.h"
 
 /*}}}  */
 
-/*{{{  prologue */
-
-typedef struct _MA_CHARLIST *MA_CHARLIST;
-
-ATbool MA_isValidCHARLIST(MA_CHARLIST arg);
-ATbool MA_isCHARLISTString(MA_CHARLIST arg);
-char*  MA_getCHARLISTString(MA_CHARLIST arg);
-MA_CHARLIST  MA_setCHARLISTString(MA_CHARLIST arg, char *str);
-ATerm  MA_CHARLISTToTerm(MA_CHARLIST arg);
-MA_CHARLIST MA_CHARLISTFromTerm(ATerm trm);
-MA_CHARLIST MA_makeCHARLISTString(char *str);
-
-/*}}}  */
 /*{{{  typedefs */
 
 typedef struct _MA_Int *MA_Int;
@@ -61,6 +50,43 @@ typedef struct _MA_OptLayout *MA_OptLayout;
 
 void MA_initMuASFApi(void);
 
+/*{{{  protect functions */
+
+void MA_protectInt(MA_Int *arg);
+void MA_protectIntCon(MA_IntCon *arg);
+void MA_protectNatCon(MA_NatCon *arg);
+void MA_protectVar(MA_Var *arg);
+void MA_protectTerm(MA_Term *arg);
+void MA_protectTermArgs(MA_TermArgs *arg);
+void MA_protectTermList(MA_TermList *arg);
+void MA_protectTermElems(MA_TermElems *arg);
+void MA_protectSigArg(MA_SigArg *arg);
+void MA_protectFuncDef(MA_FuncDef *arg);
+void MA_protectSigArgElems(MA_SigArgElems *arg);
+void MA_protectAnnotations(MA_Annotations *arg);
+void MA_protectTermTerms(MA_TermTerms *arg);
+void MA_protectSigArgList(MA_SigArgList *arg);
+void MA_protectFuncDefList(MA_FuncDefList *arg);
+void MA_protectFuncDefElems(MA_FuncDefElems *arg);
+void MA_protectRule(MA_Rule *arg);
+void MA_protectRuleList(MA_RuleList *arg);
+void MA_protectRuleElems(MA_RuleElems *arg);
+void MA_protectCondList(MA_CondList *arg);
+void MA_protectCondElems(MA_CondElems *arg);
+void MA_protectCond(MA_Cond *arg);
+void MA_protectSignatureOpt(MA_SignatureOpt *arg);
+void MA_protectRulesOpt(MA_RulesOpt *arg);
+void MA_protectModule(MA_Module *arg);
+void MA_protectEscChar(MA_EscChar *arg);
+void MA_protectQChar(MA_QChar *arg);
+void MA_protectFunId(MA_FunId *arg);
+void MA_protectVarId(MA_VarId *arg);
+void MA_protectModId(MA_ModId *arg);
+void MA_protectPropId(MA_PropId *arg);
+void MA_protectStart(MA_Start *arg);
+void MA_protectOptLayout(MA_OptLayout *arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 MA_Int MA_IntFromTerm(ATerm t);
@@ -131,6 +157,94 @@ MA_OptLayout MA_OptLayoutFromTerm(ATerm t);
 ATerm MA_OptLayoutToTerm(MA_OptLayout arg);
 
 /*}}}  */
+/*{{{  list functions */
+
+int MA_getTermArgsLength (MA_TermArgs arg);
+MA_TermArgs MA_reverseTermArgs(MA_TermArgs arg);
+MA_TermArgs MA_appendTermArgs(MA_TermArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
+MA_TermArgs MA_concatTermArgs(MA_TermArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermArgs arg1);
+MA_TermArgs MA_sliceTermArgs(MA_TermArgs arg, int start, int end);
+MA_Term MA_getTermArgsTermAt(MA_TermArgs arg, int index);
+MA_TermArgs MA_replaceTermArgsTermAt(MA_TermArgs arg, MA_Term elem, int index);
+MA_TermArgs MA_makeTermArgs2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
+MA_TermArgs MA_makeTermArgs3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
+MA_TermArgs MA_makeTermArgs4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
+MA_TermArgs MA_makeTermArgs5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
+MA_TermArgs MA_makeTermArgs6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
+int MA_getTermElemsLength (MA_TermElems arg);
+MA_TermElems MA_reverseTermElems(MA_TermElems arg);
+MA_TermElems MA_appendTermElems(MA_TermElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
+MA_TermElems MA_concatTermElems(MA_TermElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermElems arg1);
+MA_TermElems MA_sliceTermElems(MA_TermElems arg, int start, int end);
+MA_Term MA_getTermElemsTermAt(MA_TermElems arg, int index);
+MA_TermElems MA_replaceTermElemsTermAt(MA_TermElems arg, MA_Term elem, int index);
+MA_TermElems MA_makeTermElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
+MA_TermElems MA_makeTermElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
+MA_TermElems MA_makeTermElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
+MA_TermElems MA_makeTermElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
+MA_TermElems MA_makeTermElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
+int MA_getSigArgElemsLength (MA_SigArgElems arg);
+MA_SigArgElems MA_reverseSigArgElems(MA_SigArgElems arg);
+MA_SigArgElems MA_appendSigArgElems(MA_SigArgElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg arg1);
+MA_SigArgElems MA_concatSigArgElems(MA_SigArgElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArgElems arg1);
+MA_SigArgElems MA_sliceSigArgElems(MA_SigArgElems arg, int start, int end);
+MA_SigArg MA_getSigArgElemsSigArgAt(MA_SigArgElems arg, int index);
+MA_SigArgElems MA_replaceSigArgElemsSigArgAt(MA_SigArgElems arg, MA_SigArg elem, int index);
+MA_SigArgElems MA_makeSigArgElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2);
+MA_SigArgElems MA_makeSigArgElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3);
+MA_SigArgElems MA_makeSigArgElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4);
+MA_SigArgElems MA_makeSigArgElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4, MA_SigArg elem5);
+MA_SigArgElems MA_makeSigArgElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4, MA_SigArg elem5, MA_SigArg elem6);
+int MA_getTermTermsLength (MA_TermTerms arg);
+MA_TermTerms MA_reverseTermTerms(MA_TermTerms arg);
+MA_TermTerms MA_appendTermTerms(MA_TermTerms arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
+MA_TermTerms MA_concatTermTerms(MA_TermTerms arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermTerms arg1);
+MA_TermTerms MA_sliceTermTerms(MA_TermTerms arg, int start, int end);
+MA_Term MA_getTermTermsTermAt(MA_TermTerms arg, int index);
+MA_TermTerms MA_replaceTermTermsTermAt(MA_TermTerms arg, MA_Term elem, int index);
+MA_TermTerms MA_makeTermTerms2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
+MA_TermTerms MA_makeTermTerms3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
+MA_TermTerms MA_makeTermTerms4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
+MA_TermTerms MA_makeTermTerms5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
+MA_TermTerms MA_makeTermTerms6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
+int MA_getFuncDefElemsLength (MA_FuncDefElems arg);
+MA_FuncDefElems MA_reverseFuncDefElems(MA_FuncDefElems arg);
+MA_FuncDefElems MA_appendFuncDefElems(MA_FuncDefElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef arg1);
+MA_FuncDefElems MA_concatFuncDefElems(MA_FuncDefElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDefElems arg1);
+MA_FuncDefElems MA_sliceFuncDefElems(MA_FuncDefElems arg, int start, int end);
+MA_FuncDef MA_getFuncDefElemsFuncDefAt(MA_FuncDefElems arg, int index);
+MA_FuncDefElems MA_replaceFuncDefElemsFuncDefAt(MA_FuncDefElems arg, MA_FuncDef elem, int index);
+MA_FuncDefElems MA_makeFuncDefElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2);
+MA_FuncDefElems MA_makeFuncDefElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3);
+MA_FuncDefElems MA_makeFuncDefElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4);
+MA_FuncDefElems MA_makeFuncDefElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4, MA_FuncDef elem5);
+MA_FuncDefElems MA_makeFuncDefElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4, MA_FuncDef elem5, MA_FuncDef elem6);
+int MA_getRuleElemsLength (MA_RuleElems arg);
+MA_RuleElems MA_reverseRuleElems(MA_RuleElems arg);
+MA_RuleElems MA_appendRuleElems(MA_RuleElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule arg1);
+MA_RuleElems MA_concatRuleElems(MA_RuleElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_RuleElems arg1);
+MA_RuleElems MA_sliceRuleElems(MA_RuleElems arg, int start, int end);
+MA_Rule MA_getRuleElemsRuleAt(MA_RuleElems arg, int index);
+MA_RuleElems MA_replaceRuleElemsRuleAt(MA_RuleElems arg, MA_Rule elem, int index);
+MA_RuleElems MA_makeRuleElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2);
+MA_RuleElems MA_makeRuleElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3);
+MA_RuleElems MA_makeRuleElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4);
+MA_RuleElems MA_makeRuleElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4, MA_Rule elem5);
+MA_RuleElems MA_makeRuleElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4, MA_Rule elem5, MA_Rule elem6);
+int MA_getCondElemsLength (MA_CondElems arg);
+MA_CondElems MA_reverseCondElems(MA_CondElems arg);
+MA_CondElems MA_appendCondElems(MA_CondElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond arg1);
+MA_CondElems MA_concatCondElems(MA_CondElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_CondElems arg1);
+MA_CondElems MA_sliceCondElems(MA_CondElems arg, int start, int end);
+MA_Cond MA_getCondElemsCondAt(MA_CondElems arg, int index);
+MA_CondElems MA_replaceCondElemsCondAt(MA_CondElems arg, MA_Cond elem, int index);
+MA_CondElems MA_makeCondElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2);
+MA_CondElems MA_makeCondElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3);
+MA_CondElems MA_makeCondElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4);
+MA_CondElems MA_makeCondElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4, MA_Cond elem5);
+MA_CondElems MA_makeCondElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4, MA_Cond elem5, MA_Cond elem6);
+
+/*}}}  */
 /*{{{  constructors */
 
 MA_Int MA_makeIntCon(MA_IntCon IntCon);
@@ -149,61 +263,64 @@ MA_Term MA_makeTermInt(MA_Int Int);
 MA_Term MA_makeTermFunc(MA_FunId FunId, MA_OptLayout wsAfterFunId, MA_OptLayout wsAfterParenOpen, MA_TermArgs args, MA_OptLayout wsAfterArgs);
 MA_Term MA_makeTermList(MA_OptLayout wsAfterBracketOpen, MA_TermList TermList, MA_OptLayout wsAfterTermList);
 MA_Term MA_makeTermTyped(MA_Term term, MA_OptLayout wsAfterTerm, MA_OptLayout wsAfterColon, MA_Term type);
+MA_TermArgs MA_makeTermArgsEmpty(void);
 MA_TermArgs MA_makeTermArgsSingle(MA_Term head);
-MA_TermArgs MA_makeTermArgsMany(MA_Term head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_TermArgs tail);
+MA_TermArgs MA_makeTermArgsMany(MA_Term head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermArgs tail);
 MA_TermList MA_makeTermListDefault(MA_TermElems elems);
-MA_TermElems MA_makeTermElemsEmpty();
+MA_TermElems MA_makeTermElemsEmpty(void);
 MA_TermElems MA_makeTermElemsSingle(MA_Term head);
-MA_TermElems MA_makeTermElemsMany(MA_Term head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_TermElems tail);
-MA_SigArg MA_makeSigArgNormal();
+MA_TermElems MA_makeTermElemsMany(MA_Term head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermElems tail);
+MA_SigArg MA_makeSigArgNormal(void);
 MA_SigArg MA_makeSigArgStar(MA_OptLayout wsAfterUnderscore);
 MA_SigArg MA_makeSigArgPlus(MA_OptLayout wsAfterUnderscore);
 MA_FuncDef MA_makeFuncDefConstantNoAnnos(MA_FunId FunId);
 MA_FuncDef MA_makeFuncDefConstantWithAnnos(MA_FunId FunId, MA_OptLayout wsAfterFunId, MA_Annotations annos);
 MA_FuncDef MA_makeFuncDefFuncNoAnnos(MA_FunId FunId, MA_OptLayout wsAfterFunId, MA_OptLayout wsAfterParenOpen, MA_SigArgElems elems, MA_OptLayout wsAfterElems);
 MA_FuncDef MA_makeFuncDefFuncWithAnnos(MA_FunId FunId, MA_OptLayout wsAfterFunId, MA_OptLayout wsAfterParenOpen, MA_SigArgElems elems, MA_OptLayout wsAfterElems, MA_OptLayout wsAfterParenClose, MA_Annotations annos);
+MA_SigArgElems MA_makeSigArgElemsEmpty(void);
 MA_SigArgElems MA_makeSigArgElemsSingle(MA_SigArg head);
-MA_SigArgElems MA_makeSigArgElemsMany(MA_SigArg head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_SigArgElems tail);
+MA_SigArgElems MA_makeSigArgElemsMany(MA_SigArg head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArgElems tail);
 MA_Annotations MA_makeAnnotationsDefault(MA_OptLayout wsAfterBraceOpen, MA_TermTerms terms, MA_OptLayout wsAfterTerms);
+MA_TermTerms MA_makeTermTermsEmpty(void);
 MA_TermTerms MA_makeTermTermsSingle(MA_Term head);
-MA_TermTerms MA_makeTermTermsMany(MA_Term head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_TermTerms tail);
+MA_TermTerms MA_makeTermTermsMany(MA_Term head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermTerms tail);
 MA_SigArgList MA_makeSigArgListDefault(MA_SigArgElems elems);
 MA_FuncDefList MA_makeFuncDefListDefault(MA_FuncDefElems elems);
-MA_FuncDefElems MA_makeFuncDefElemsEmpty();
+MA_FuncDefElems MA_makeFuncDefElemsEmpty(void);
 MA_FuncDefElems MA_makeFuncDefElemsSingle(MA_FuncDef head);
-MA_FuncDefElems MA_makeFuncDefElemsMany(MA_FuncDef head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_FuncDefElems tail);
+MA_FuncDefElems MA_makeFuncDefElemsMany(MA_FuncDef head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDefElems tail);
 MA_Rule MA_makeRuleNoConds(MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterEquals, MA_Term rhs);
 MA_Rule MA_makeRuleDefaultNoConds(MA_OptLayout wsAfterDefaultColon, MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterEquals, MA_Term rhs);
 MA_Rule MA_makeRuleDefaultWithConds(MA_OptLayout wsAfterDefaultColon, MA_CondList conds, MA_OptLayout wsAfterConds, MA_OptLayout wsAfterImplies, MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterEquals, MA_Term rhs);
 MA_Rule MA_makeRuleWithConds(MA_CondList conds, MA_OptLayout wsAfterConds, MA_OptLayout wsAfterImplies, MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterEquals, MA_Term rhs);
 MA_RuleList MA_makeRuleListDefault(MA_RuleElems elems);
-MA_RuleElems MA_makeRuleElemsEmpty();
+MA_RuleElems MA_makeRuleElemsEmpty(void);
 MA_RuleElems MA_makeRuleElemsSingle(MA_Rule head);
-MA_RuleElems MA_makeRuleElemsMany(MA_Rule head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_RuleElems tail);
+MA_RuleElems MA_makeRuleElemsMany(MA_Rule head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_RuleElems tail);
 MA_CondList MA_makeCondListDefault(MA_CondElems elems);
-MA_CondElems MA_makeCondElemsEmpty();
+MA_CondElems MA_makeCondElemsEmpty(void);
 MA_CondElems MA_makeCondElemsSingle(MA_Cond head);
-MA_CondElems MA_makeCondElemsMany(MA_Cond head, MA_OptLayout wsAfterFirst, char * sep, MA_OptLayout wsAfterSep, MA_CondElems tail);
+MA_CondElems MA_makeCondElemsMany(MA_Cond head, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_CondElems tail);
 MA_Cond MA_makeCondAssign(MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterAssign, MA_Term rhs);
 MA_Cond MA_makeCondNoAssign(MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterNoAssign, MA_Term rhs);
 MA_Cond MA_makeCondEqual(MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterEqual, MA_Term rhs);
 MA_Cond MA_makeCondUnequal(MA_Term lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterUnequal, MA_Term rhs);
-MA_SignatureOpt MA_makeSignatureOptAbsent();
+MA_SignatureOpt MA_makeSignatureOptAbsent(void);
 MA_SignatureOpt MA_makeSignatureOptPresent(MA_OptLayout wsAfterSignature, MA_FuncDefList funcdefs);
-MA_RulesOpt MA_makeRulesOptAbsent();
+MA_RulesOpt MA_makeRulesOptAbsent(void);
 MA_RulesOpt MA_makeRulesOptPresent(MA_OptLayout wsAfterRules, MA_RuleList rules);
 MA_Module MA_makeModuleModule(MA_OptLayout wsAfterModule, MA_ModId id, MA_OptLayout wsAfterId, MA_SignatureOpt signature, MA_OptLayout wsAfterSignature, MA_RulesOpt rules);
-MA_EscChar MA_makeEscCharDefault(MA_CHARLIST chars);
-MA_EscChar MA_makeEscCharOct0Underscore177(MA_CHARLIST chars);
-MA_QChar MA_makeQCharPrintable(MA_CHARLIST chars);
-MA_QChar MA_makeQCharEscaped(MA_CHARLIST chars);
-MA_FunId MA_makeFunIdUnquoted(MA_CHARLIST chars);
-MA_FunId MA_makeFunIdQuoted(MA_CHARLIST chars);
-MA_FunId MA_makeFunIdSingleQuote(MA_CHARLIST chars);
-MA_FunId MA_makeFunIdDecimal(MA_CHARLIST chars);
-MA_VarId MA_makeVarIdDefault(MA_CHARLIST chars);
-MA_ModId MA_makeModIdDefault(MA_CHARLIST chars);
-MA_PropId MA_makePropIdDefault(MA_CHARLIST chars);
+MA_EscChar MA_makeEscCharDefault(const char* string);
+MA_EscChar MA_makeEscCharOct0Underscore177(const char* string);
+MA_QChar MA_makeQCharPrintable(const char* string);
+MA_QChar MA_makeQCharEscaped(const char* string);
+MA_FunId MA_makeFunIdUnquoted(const char* string);
+MA_FunId MA_makeFunIdQuoted(const char* string);
+MA_FunId MA_makeFunIdSingleQuote(const char* string);
+MA_FunId MA_makeFunIdDecimal(const char* string);
+MA_VarId MA_makeVarIdDefault(const char* string);
+MA_ModId MA_makeModIdDefault(const char* string);
+MA_PropId MA_makePropIdDefault(const char* string);
 MA_Start MA_makeStartPropId(MA_OptLayout wsBefore, MA_PropId topPropId, MA_OptLayout wsAfter, int ambCnt);
 MA_Start MA_makeStartVarId(MA_OptLayout wsBefore, MA_VarId topVarId, MA_OptLayout wsAfter, int ambCnt);
 MA_Start MA_makeStartModId(MA_OptLayout wsBefore, MA_ModId topModId, MA_OptLayout wsAfter, int ambCnt);
@@ -226,8 +343,8 @@ MA_Start MA_makeStartModule(MA_OptLayout wsBefore, MA_Module topModule, MA_OptLa
 MA_Start MA_makeStartIntCon(MA_OptLayout wsBefore, MA_IntCon topIntCon, MA_OptLayout wsAfter, int ambCnt);
 MA_Start MA_makeStartNatCon(MA_OptLayout wsBefore, MA_NatCon topNatCon, MA_OptLayout wsAfter, int ambCnt);
 MA_Start MA_makeStartInt(MA_OptLayout wsBefore, MA_Int topInt, MA_OptLayout wsAfter, int ambCnt);
-MA_OptLayout MA_makeOptLayoutAbsent();
-MA_OptLayout MA_makeOptLayoutPresent(MA_CHARLIST chars);
+MA_OptLayout MA_makeOptLayoutAbsent(void);
+MA_OptLayout MA_makeOptLayoutPresent(const char* string);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -413,17 +530,15 @@ MA_Term MA_setTermType(MA_Term arg, MA_Term type);
 /*{{{  MA_TermArgs accessors */
 
 ATbool MA_isValidTermArgs(MA_TermArgs arg);
+inline ATbool MA_isTermArgsEmpty(MA_TermArgs arg);
 inline ATbool MA_isTermArgsSingle(MA_TermArgs arg);
 inline ATbool MA_isTermArgsMany(MA_TermArgs arg);
 ATbool MA_hasTermArgsHead(MA_TermArgs arg);
 MA_Term MA_getTermArgsHead(MA_TermArgs arg);
 MA_TermArgs MA_setTermArgsHead(MA_TermArgs arg, MA_Term head);
-ATbool MA_hasTermArgsWsAfterFirst(MA_TermArgs arg);
-MA_OptLayout MA_getTermArgsWsAfterFirst(MA_TermArgs arg);
-MA_TermArgs MA_setTermArgsWsAfterFirst(MA_TermArgs arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasTermArgsSep(MA_TermArgs arg);
-char * MA_getTermArgsSep(MA_TermArgs arg);
-MA_TermArgs MA_setTermArgsSep(MA_TermArgs arg, char * sep);
+ATbool MA_hasTermArgsWsAfterHead(MA_TermArgs arg);
+MA_OptLayout MA_getTermArgsWsAfterHead(MA_TermArgs arg);
+MA_TermArgs MA_setTermArgsWsAfterHead(MA_TermArgs arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasTermArgsWsAfterSep(MA_TermArgs arg);
 MA_OptLayout MA_getTermArgsWsAfterSep(MA_TermArgs arg);
 MA_TermArgs MA_setTermArgsWsAfterSep(MA_TermArgs arg, MA_OptLayout wsAfterSep);
@@ -450,12 +565,9 @@ inline ATbool MA_isTermElemsMany(MA_TermElems arg);
 ATbool MA_hasTermElemsHead(MA_TermElems arg);
 MA_Term MA_getTermElemsHead(MA_TermElems arg);
 MA_TermElems MA_setTermElemsHead(MA_TermElems arg, MA_Term head);
-ATbool MA_hasTermElemsWsAfterFirst(MA_TermElems arg);
-MA_OptLayout MA_getTermElemsWsAfterFirst(MA_TermElems arg);
-MA_TermElems MA_setTermElemsWsAfterFirst(MA_TermElems arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasTermElemsSep(MA_TermElems arg);
-char * MA_getTermElemsSep(MA_TermElems arg);
-MA_TermElems MA_setTermElemsSep(MA_TermElems arg, char * sep);
+ATbool MA_hasTermElemsWsAfterHead(MA_TermElems arg);
+MA_OptLayout MA_getTermElemsWsAfterHead(MA_TermElems arg);
+MA_TermElems MA_setTermElemsWsAfterHead(MA_TermElems arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasTermElemsWsAfterSep(MA_TermElems arg);
 MA_OptLayout MA_getTermElemsWsAfterSep(MA_TermElems arg);
 MA_TermElems MA_setTermElemsWsAfterSep(MA_TermElems arg, MA_OptLayout wsAfterSep);
@@ -508,17 +620,15 @@ MA_FuncDef MA_setFuncDefWsAfterParenClose(MA_FuncDef arg, MA_OptLayout wsAfterPa
 /*{{{  MA_SigArgElems accessors */
 
 ATbool MA_isValidSigArgElems(MA_SigArgElems arg);
+inline ATbool MA_isSigArgElemsEmpty(MA_SigArgElems arg);
 inline ATbool MA_isSigArgElemsSingle(MA_SigArgElems arg);
 inline ATbool MA_isSigArgElemsMany(MA_SigArgElems arg);
 ATbool MA_hasSigArgElemsHead(MA_SigArgElems arg);
 MA_SigArg MA_getSigArgElemsHead(MA_SigArgElems arg);
 MA_SigArgElems MA_setSigArgElemsHead(MA_SigArgElems arg, MA_SigArg head);
-ATbool MA_hasSigArgElemsWsAfterFirst(MA_SigArgElems arg);
-MA_OptLayout MA_getSigArgElemsWsAfterFirst(MA_SigArgElems arg);
-MA_SigArgElems MA_setSigArgElemsWsAfterFirst(MA_SigArgElems arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasSigArgElemsSep(MA_SigArgElems arg);
-char * MA_getSigArgElemsSep(MA_SigArgElems arg);
-MA_SigArgElems MA_setSigArgElemsSep(MA_SigArgElems arg, char * sep);
+ATbool MA_hasSigArgElemsWsAfterHead(MA_SigArgElems arg);
+MA_OptLayout MA_getSigArgElemsWsAfterHead(MA_SigArgElems arg);
+MA_SigArgElems MA_setSigArgElemsWsAfterHead(MA_SigArgElems arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasSigArgElemsWsAfterSep(MA_SigArgElems arg);
 MA_OptLayout MA_getSigArgElemsWsAfterSep(MA_SigArgElems arg);
 MA_SigArgElems MA_setSigArgElemsWsAfterSep(MA_SigArgElems arg, MA_OptLayout wsAfterSep);
@@ -545,17 +655,15 @@ MA_Annotations MA_setAnnotationsWsAfterTerms(MA_Annotations arg, MA_OptLayout ws
 /*{{{  MA_TermTerms accessors */
 
 ATbool MA_isValidTermTerms(MA_TermTerms arg);
+inline ATbool MA_isTermTermsEmpty(MA_TermTerms arg);
 inline ATbool MA_isTermTermsSingle(MA_TermTerms arg);
 inline ATbool MA_isTermTermsMany(MA_TermTerms arg);
 ATbool MA_hasTermTermsHead(MA_TermTerms arg);
 MA_Term MA_getTermTermsHead(MA_TermTerms arg);
 MA_TermTerms MA_setTermTermsHead(MA_TermTerms arg, MA_Term head);
-ATbool MA_hasTermTermsWsAfterFirst(MA_TermTerms arg);
-MA_OptLayout MA_getTermTermsWsAfterFirst(MA_TermTerms arg);
-MA_TermTerms MA_setTermTermsWsAfterFirst(MA_TermTerms arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasTermTermsSep(MA_TermTerms arg);
-char * MA_getTermTermsSep(MA_TermTerms arg);
-MA_TermTerms MA_setTermTermsSep(MA_TermTerms arg, char * sep);
+ATbool MA_hasTermTermsWsAfterHead(MA_TermTerms arg);
+MA_OptLayout MA_getTermTermsWsAfterHead(MA_TermTerms arg);
+MA_TermTerms MA_setTermTermsWsAfterHead(MA_TermTerms arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasTermTermsWsAfterSep(MA_TermTerms arg);
 MA_OptLayout MA_getTermTermsWsAfterSep(MA_TermTerms arg);
 MA_TermTerms MA_setTermTermsWsAfterSep(MA_TermTerms arg, MA_OptLayout wsAfterSep);
@@ -591,12 +699,9 @@ inline ATbool MA_isFuncDefElemsMany(MA_FuncDefElems arg);
 ATbool MA_hasFuncDefElemsHead(MA_FuncDefElems arg);
 MA_FuncDef MA_getFuncDefElemsHead(MA_FuncDefElems arg);
 MA_FuncDefElems MA_setFuncDefElemsHead(MA_FuncDefElems arg, MA_FuncDef head);
-ATbool MA_hasFuncDefElemsWsAfterFirst(MA_FuncDefElems arg);
-MA_OptLayout MA_getFuncDefElemsWsAfterFirst(MA_FuncDefElems arg);
-MA_FuncDefElems MA_setFuncDefElemsWsAfterFirst(MA_FuncDefElems arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasFuncDefElemsSep(MA_FuncDefElems arg);
-char * MA_getFuncDefElemsSep(MA_FuncDefElems arg);
-MA_FuncDefElems MA_setFuncDefElemsSep(MA_FuncDefElems arg, char * sep);
+ATbool MA_hasFuncDefElemsWsAfterHead(MA_FuncDefElems arg);
+MA_OptLayout MA_getFuncDefElemsWsAfterHead(MA_FuncDefElems arg);
+MA_FuncDefElems MA_setFuncDefElemsWsAfterHead(MA_FuncDefElems arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasFuncDefElemsWsAfterSep(MA_FuncDefElems arg);
 MA_OptLayout MA_getFuncDefElemsWsAfterSep(MA_FuncDefElems arg);
 MA_FuncDefElems MA_setFuncDefElemsWsAfterSep(MA_FuncDefElems arg, MA_OptLayout wsAfterSep);
@@ -656,12 +761,9 @@ inline ATbool MA_isRuleElemsMany(MA_RuleElems arg);
 ATbool MA_hasRuleElemsHead(MA_RuleElems arg);
 MA_Rule MA_getRuleElemsHead(MA_RuleElems arg);
 MA_RuleElems MA_setRuleElemsHead(MA_RuleElems arg, MA_Rule head);
-ATbool MA_hasRuleElemsWsAfterFirst(MA_RuleElems arg);
-MA_OptLayout MA_getRuleElemsWsAfterFirst(MA_RuleElems arg);
-MA_RuleElems MA_setRuleElemsWsAfterFirst(MA_RuleElems arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasRuleElemsSep(MA_RuleElems arg);
-char * MA_getRuleElemsSep(MA_RuleElems arg);
-MA_RuleElems MA_setRuleElemsSep(MA_RuleElems arg, char * sep);
+ATbool MA_hasRuleElemsWsAfterHead(MA_RuleElems arg);
+MA_OptLayout MA_getRuleElemsWsAfterHead(MA_RuleElems arg);
+MA_RuleElems MA_setRuleElemsWsAfterHead(MA_RuleElems arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasRuleElemsWsAfterSep(MA_RuleElems arg);
 MA_OptLayout MA_getRuleElemsWsAfterSep(MA_RuleElems arg);
 MA_RuleElems MA_setRuleElemsWsAfterSep(MA_RuleElems arg, MA_OptLayout wsAfterSep);
@@ -688,12 +790,9 @@ inline ATbool MA_isCondElemsMany(MA_CondElems arg);
 ATbool MA_hasCondElemsHead(MA_CondElems arg);
 MA_Cond MA_getCondElemsHead(MA_CondElems arg);
 MA_CondElems MA_setCondElemsHead(MA_CondElems arg, MA_Cond head);
-ATbool MA_hasCondElemsWsAfterFirst(MA_CondElems arg);
-MA_OptLayout MA_getCondElemsWsAfterFirst(MA_CondElems arg);
-MA_CondElems MA_setCondElemsWsAfterFirst(MA_CondElems arg, MA_OptLayout wsAfterFirst);
-ATbool MA_hasCondElemsSep(MA_CondElems arg);
-char * MA_getCondElemsSep(MA_CondElems arg);
-MA_CondElems MA_setCondElemsSep(MA_CondElems arg, char * sep);
+ATbool MA_hasCondElemsWsAfterHead(MA_CondElems arg);
+MA_OptLayout MA_getCondElemsWsAfterHead(MA_CondElems arg);
+MA_CondElems MA_setCondElemsWsAfterHead(MA_CondElems arg, MA_OptLayout wsAfterHead);
 ATbool MA_hasCondElemsWsAfterSep(MA_CondElems arg);
 MA_OptLayout MA_getCondElemsWsAfterSep(MA_CondElems arg);
 MA_CondElems MA_setCondElemsWsAfterSep(MA_CondElems arg, MA_OptLayout wsAfterSep);
@@ -787,9 +886,9 @@ MA_Module MA_setModuleRules(MA_Module arg, MA_RulesOpt rules);
 ATbool MA_isValidEscChar(MA_EscChar arg);
 inline ATbool MA_isEscCharDefault(MA_EscChar arg);
 inline ATbool MA_isEscCharOct0Underscore177(MA_EscChar arg);
-ATbool MA_hasEscCharChars(MA_EscChar arg);
-MA_CHARLIST MA_getEscCharChars(MA_EscChar arg);
-MA_EscChar MA_setEscCharChars(MA_EscChar arg, MA_CHARLIST chars);
+ATbool MA_hasEscCharString(MA_EscChar arg);
+char* MA_getEscCharString(MA_EscChar arg);
+MA_EscChar MA_setEscCharString(MA_EscChar arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_QChar accessors */
@@ -797,9 +896,9 @@ MA_EscChar MA_setEscCharChars(MA_EscChar arg, MA_CHARLIST chars);
 ATbool MA_isValidQChar(MA_QChar arg);
 inline ATbool MA_isQCharPrintable(MA_QChar arg);
 inline ATbool MA_isQCharEscaped(MA_QChar arg);
-ATbool MA_hasQCharChars(MA_QChar arg);
-MA_CHARLIST MA_getQCharChars(MA_QChar arg);
-MA_QChar MA_setQCharChars(MA_QChar arg, MA_CHARLIST chars);
+ATbool MA_hasQCharString(MA_QChar arg);
+char* MA_getQCharString(MA_QChar arg);
+MA_QChar MA_setQCharString(MA_QChar arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_FunId accessors */
@@ -809,36 +908,36 @@ inline ATbool MA_isFunIdUnquoted(MA_FunId arg);
 inline ATbool MA_isFunIdQuoted(MA_FunId arg);
 inline ATbool MA_isFunIdSingleQuote(MA_FunId arg);
 inline ATbool MA_isFunIdDecimal(MA_FunId arg);
-ATbool MA_hasFunIdChars(MA_FunId arg);
-MA_CHARLIST MA_getFunIdChars(MA_FunId arg);
-MA_FunId MA_setFunIdChars(MA_FunId arg, MA_CHARLIST chars);
+ATbool MA_hasFunIdString(MA_FunId arg);
+char* MA_getFunIdString(MA_FunId arg);
+MA_FunId MA_setFunIdString(MA_FunId arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_VarId accessors */
 
 ATbool MA_isValidVarId(MA_VarId arg);
 inline ATbool MA_isVarIdDefault(MA_VarId arg);
-ATbool MA_hasVarIdChars(MA_VarId arg);
-MA_CHARLIST MA_getVarIdChars(MA_VarId arg);
-MA_VarId MA_setVarIdChars(MA_VarId arg, MA_CHARLIST chars);
+ATbool MA_hasVarIdString(MA_VarId arg);
+char* MA_getVarIdString(MA_VarId arg);
+MA_VarId MA_setVarIdString(MA_VarId arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_ModId accessors */
 
 ATbool MA_isValidModId(MA_ModId arg);
 inline ATbool MA_isModIdDefault(MA_ModId arg);
-ATbool MA_hasModIdChars(MA_ModId arg);
-MA_CHARLIST MA_getModIdChars(MA_ModId arg);
-MA_ModId MA_setModIdChars(MA_ModId arg, MA_CHARLIST chars);
+ATbool MA_hasModIdString(MA_ModId arg);
+char* MA_getModIdString(MA_ModId arg);
+MA_ModId MA_setModIdString(MA_ModId arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_PropId accessors */
 
 ATbool MA_isValidPropId(MA_PropId arg);
 inline ATbool MA_isPropIdDefault(MA_PropId arg);
-ATbool MA_hasPropIdChars(MA_PropId arg);
-MA_CHARLIST MA_getPropIdChars(MA_PropId arg);
-MA_PropId MA_setPropIdChars(MA_PropId arg, MA_CHARLIST chars);
+ATbool MA_hasPropIdString(MA_PropId arg);
+char* MA_getPropIdString(MA_PropId arg);
+MA_PropId MA_setPropIdString(MA_PropId arg, const char* string);
 
 /*}}}  */
 /*{{{  MA_Start accessors */
@@ -948,9 +1047,9 @@ MA_Start MA_setStartTopInt(MA_Start arg, MA_Int topInt);
 ATbool MA_isValidOptLayout(MA_OptLayout arg);
 inline ATbool MA_isOptLayoutAbsent(MA_OptLayout arg);
 inline ATbool MA_isOptLayoutPresent(MA_OptLayout arg);
-ATbool MA_hasOptLayoutChars(MA_OptLayout arg);
-MA_CHARLIST MA_getOptLayoutChars(MA_OptLayout arg);
-MA_OptLayout MA_setOptLayoutChars(MA_OptLayout arg, MA_CHARLIST chars);
+ATbool MA_hasOptLayoutString(MA_OptLayout arg);
+char* MA_getOptLayoutString(MA_OptLayout arg);
+MA_OptLayout MA_setOptLayoutString(MA_OptLayout arg, const char* string);
 
 /*}}}  */
 /*{{{  sort visitors */
@@ -960,34 +1059,34 @@ MA_IntCon MA_visitIntCon(MA_IntCon arg, MA_OptLayout (*acceptWsAfterCon)(MA_OptL
 MA_NatCon MA_visitNatCon(MA_NatCon arg, MA_OptLayout (*acceptWsAfterAbs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterParenOpen)(MA_OptLayout), MA_Int (*acceptIntArg)(MA_Int), MA_OptLayout (*acceptWsAfterIntArg)(MA_OptLayout));
 MA_Var MA_visitVar(MA_Var arg, MA_VarId (*acceptVarId)(MA_VarId), MA_OptLayout (*acceptWsAfterStar)(MA_OptLayout), MA_OptLayout (*acceptWsAfterPlus)(MA_OptLayout));
 MA_Term MA_visitTerm(MA_Term arg, MA_Var (*acceptVar)(MA_Var), MA_FunId (*acceptFunId)(MA_FunId), MA_Int (*acceptInt)(MA_Int), MA_OptLayout (*acceptWsAfterFunId)(MA_OptLayout), MA_OptLayout (*acceptWsAfterParenOpen)(MA_OptLayout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_OptLayout (*acceptWsAfterArgs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBracketOpen)(MA_OptLayout), MA_TermList (*acceptTermList)(MA_TermList), MA_OptLayout (*acceptWsAfterTermList)(MA_OptLayout), MA_OptLayout (*acceptWsAfterTerm)(MA_OptLayout), MA_OptLayout (*acceptWsAfterColon)(MA_OptLayout));
-MA_TermArgs MA_visitTermArgs(MA_TermArgs arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_TermArgs MA_visitTermArgs(MA_TermArgs arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_TermList MA_visitTermList(MA_TermList arg, MA_TermElems (*acceptElems)(MA_TermElems));
-MA_TermElems MA_visitTermElems(MA_TermElems arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_TermElems MA_visitTermElems(MA_TermElems arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_SigArg MA_visitSigArg(MA_SigArg arg, MA_OptLayout (*acceptWsAfterUnderscore)(MA_OptLayout));
 MA_FuncDef MA_visitFuncDef(MA_FuncDef arg, MA_FunId (*acceptFunId)(MA_FunId), MA_OptLayout (*acceptWsAfterFunId)(MA_OptLayout), MA_Annotations (*acceptAnnos)(MA_Annotations), MA_OptLayout (*acceptWsAfterParenOpen)(MA_OptLayout), MA_SigArgElems (*acceptElems)(MA_SigArgElems), MA_OptLayout (*acceptWsAfterElems)(MA_OptLayout), MA_OptLayout (*acceptWsAfterParenClose)(MA_OptLayout));
-MA_SigArgElems MA_visitSigArgElems(MA_SigArgElems arg, MA_SigArg (*acceptHead)(MA_SigArg), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_SigArgElems MA_visitSigArgElems(MA_SigArgElems arg, MA_SigArg (*acceptHead)(MA_SigArg), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_Annotations MA_visitAnnotations(MA_Annotations arg, MA_OptLayout (*acceptWsAfterBraceOpen)(MA_OptLayout), MA_TermTerms (*acceptTerms)(MA_TermTerms), MA_OptLayout (*acceptWsAfterTerms)(MA_OptLayout));
-MA_TermTerms MA_visitTermTerms(MA_TermTerms arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_TermTerms MA_visitTermTerms(MA_TermTerms arg, MA_Term (*acceptHead)(MA_Term), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_SigArgList MA_visitSigArgList(MA_SigArgList arg, MA_SigArgElems (*acceptElems)(MA_SigArgElems));
 MA_FuncDefList MA_visitFuncDefList(MA_FuncDefList arg, MA_FuncDefElems (*acceptElems)(MA_FuncDefElems));
-MA_FuncDefElems MA_visitFuncDefElems(MA_FuncDefElems arg, MA_FuncDef (*acceptHead)(MA_FuncDef), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_FuncDefElems MA_visitFuncDefElems(MA_FuncDefElems arg, MA_FuncDef (*acceptHead)(MA_FuncDef), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_Rule MA_visitRule(MA_Rule arg, MA_Term (*acceptLhs)(MA_Term), MA_OptLayout (*acceptWsAfterLhs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterEquals)(MA_OptLayout), MA_Term (*acceptRhs)(MA_Term), MA_OptLayout (*acceptWsAfterDefaultColon)(MA_OptLayout), MA_CondList (*acceptConds)(MA_CondList), MA_OptLayout (*acceptWsAfterConds)(MA_OptLayout), MA_OptLayout (*acceptWsAfterImplies)(MA_OptLayout));
 MA_RuleList MA_visitRuleList(MA_RuleList arg, MA_RuleElems (*acceptElems)(MA_RuleElems));
-MA_RuleElems MA_visitRuleElems(MA_RuleElems arg, MA_Rule (*acceptHead)(MA_Rule), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_RuleElems MA_visitRuleElems(MA_RuleElems arg, MA_Rule (*acceptHead)(MA_Rule), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_CondList MA_visitCondList(MA_CondList arg, MA_CondElems (*acceptElems)(MA_CondElems));
-MA_CondElems MA_visitCondElems(MA_CondElems arg, MA_Cond (*acceptHead)(MA_Cond), MA_OptLayout (*acceptWsAfterFirst)(MA_OptLayout), char * (*acceptSep)(char *), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
+MA_CondElems MA_visitCondElems(MA_CondElems arg, MA_Cond (*acceptHead)(MA_Cond), MA_OptLayout (*acceptWsAfterHead)(MA_OptLayout), MA_OptLayout (*acceptWsAfterSep)(MA_OptLayout));
 MA_Cond MA_visitCond(MA_Cond arg, MA_Term (*acceptLhs)(MA_Term), MA_OptLayout (*acceptWsAfterLhs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterAssign)(MA_OptLayout), MA_Term (*acceptRhs)(MA_Term), MA_OptLayout (*acceptWsAfterNoAssign)(MA_OptLayout), MA_OptLayout (*acceptWsAfterEqual)(MA_OptLayout), MA_OptLayout (*acceptWsAfterUnequal)(MA_OptLayout));
 MA_SignatureOpt MA_visitSignatureOpt(MA_SignatureOpt arg, MA_OptLayout (*acceptWsAfterSignature)(MA_OptLayout), MA_FuncDefList (*acceptFuncdefs)(MA_FuncDefList));
 MA_RulesOpt MA_visitRulesOpt(MA_RulesOpt arg, MA_OptLayout (*acceptWsAfterRules)(MA_OptLayout), MA_RuleList (*acceptRules)(MA_RuleList));
 MA_Module MA_visitModule(MA_Module arg, MA_OptLayout (*acceptWsAfterModule)(MA_OptLayout), MA_ModId (*acceptId)(MA_ModId), MA_OptLayout (*acceptWsAfterId)(MA_OptLayout), MA_SignatureOpt (*acceptSignature)(MA_SignatureOpt), MA_OptLayout (*acceptWsAfterSignature)(MA_OptLayout), MA_RulesOpt (*acceptRules)(MA_RulesOpt));
-MA_EscChar MA_visitEscChar(MA_EscChar arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
-MA_QChar MA_visitQChar(MA_QChar arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
-MA_FunId MA_visitFunId(MA_FunId arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
-MA_VarId MA_visitVarId(MA_VarId arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
-MA_ModId MA_visitModId(MA_ModId arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
-MA_PropId MA_visitPropId(MA_PropId arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
+MA_EscChar MA_visitEscChar(MA_EscChar arg, char* (*acceptString)(char*));
+MA_QChar MA_visitQChar(MA_QChar arg, char* (*acceptString)(char*));
+MA_FunId MA_visitFunId(MA_FunId arg, char* (*acceptString)(char*));
+MA_VarId MA_visitVarId(MA_VarId arg, char* (*acceptString)(char*));
+MA_ModId MA_visitModId(MA_ModId arg, char* (*acceptString)(char*));
+MA_PropId MA_visitPropId(MA_PropId arg, char* (*acceptString)(char*));
 MA_Start MA_visitStart(MA_Start arg, MA_OptLayout (*acceptWsBefore)(MA_OptLayout), MA_PropId (*acceptTopPropId)(MA_PropId), MA_OptLayout (*acceptWsAfter)(MA_OptLayout), int (*acceptAmbCnt)(int), MA_VarId (*acceptTopVarId)(MA_VarId), MA_ModId (*acceptTopModId)(MA_ModId), MA_FunId (*acceptTopFunId)(MA_FunId), MA_TermList (*acceptTopTermList)(MA_TermList), MA_Term (*acceptTopTerm)(MA_Term), MA_Var (*acceptTopVar)(MA_Var), MA_SigArgList (*acceptTopSigArgList)(MA_SigArgList), MA_SigArg (*acceptTopSigArg)(MA_SigArg), MA_FuncDefList (*acceptTopFuncDefList)(MA_FuncDefList), MA_FuncDef (*acceptTopFuncDef)(MA_FuncDef), MA_Annotations (*acceptTopAnnotations)(MA_Annotations), MA_CondList (*acceptTopCondList)(MA_CondList), MA_Cond (*acceptTopCond)(MA_Cond), MA_RuleList (*acceptTopRuleList)(MA_RuleList), MA_Rule (*acceptTopRule)(MA_Rule), MA_SignatureOpt (*acceptTopSignatureOpt)(MA_SignatureOpt), MA_RulesOpt (*acceptTopRulesOpt)(MA_RulesOpt), MA_Module (*acceptTopModule)(MA_Module), MA_IntCon (*acceptTopIntCon)(MA_IntCon), MA_NatCon (*acceptTopNatCon)(MA_NatCon), MA_Int (*acceptTopInt)(MA_Int));
-MA_OptLayout MA_visitOptLayout(MA_OptLayout arg, MA_CHARLIST (*acceptChars)(MA_CHARLIST));
+MA_OptLayout MA_visitOptLayout(MA_OptLayout arg, char* (*acceptString)(char*));
 
 /*}}}  */
 

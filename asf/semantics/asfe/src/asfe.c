@@ -144,7 +144,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
   }
 
   eqs = ATBunpack(eqs);
-  eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
+  eqsList = ASF_ASFConditionalEquationListFromTerm(eqs);
 
   trm = ATBunpack(trm);
   parseTree = PT_ParseTreeFromTerm(trm);
@@ -170,10 +170,10 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   ATerm result;
 
   eqs = ATBunpack(eqs);
-  eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
+  eqsList = ASF_ASFConditionalEquationListFromTerm(eqs);
 
   tests = ATBunpack(tests);
-  testList = ASF_makeASFTestEquationTestListFromTerm(tests);
+  testList = ASF_ASFTestEquationTestListFromTerm(tests);
 
   result = (ATerm) runTests(eqsList, testList);
 
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
     }
 
     eqs = ATreadFromFile(iofile);
-    eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
+    eqsList = ASF_ASFConditionalEquationListFromTerm(eqs);
     fclose(iofile);
 
     /* Get the term from file */

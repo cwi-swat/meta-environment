@@ -29,7 +29,7 @@ static char myarguments[] = "hi:o:vV";
 static ATerm upgradeAsf(ATerm term)
 {
   if (ATgetType(term) == AT_LIST) {
-    ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
+    ASF_ASFConditionalEquationList rules = ASF_ASFConditionalEquationListFromTerm(term);
     return (ATerm) upgradeASFConditionalEquationList(rules);
   }
   else {

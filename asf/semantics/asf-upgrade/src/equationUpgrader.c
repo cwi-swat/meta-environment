@@ -8,7 +8,7 @@ static ATerm makeMessage(const char *msg, ASF_ASFTag tag, ATerm subject)
 {
  return ATmake("[<str>,<term>,<term>]",
 	       msg,
-	       ASF_makeTermFromASFTag(tag),
+	       ASF_ASFTagToTerm(tag),
 	       subject);
 }
 
@@ -240,7 +240,7 @@ static ASF_ASFConditions upgradeConditions(ASF_ASFConditions conditions, PT_Args
       new = ASF_makeASFConditionListSingle(condition);
     }
     else {
-      new = ASF_makeASFConditionListMany(condition, l2,",",l1, new);
+      new = ASF_makeASFConditionListMany(condition, l2,l1, new);
 
     }
 
@@ -248,7 +248,7 @@ static ASF_ASFConditions upgradeConditions(ASF_ASFConditions conditions, PT_Args
       break;
     }
     else {
-      l1 = ASF_getASFConditionListWsAfterFirst(conditionList);
+      l1 = ASF_getASFConditionListWsAfterHead(conditionList);
       l2 = ASF_getASFConditionListWsAfterSep(conditionList);
     }
 
@@ -307,7 +307,7 @@ ASF_ASFConditionalEquationList upgradeASFConditionalEquationList(ASF_ASFConditio
       break;
     }
     else {
-      l = ASF_getASFConditionalEquationListWsAfterFirst(condEquationList);
+      l = ASF_getASFConditionalEquationListWsAfterHead(condEquationList);
     }
 
     condEquationList = ASF_getASFConditionalEquationListTail(condEquationList);
@@ -352,7 +352,7 @@ ASF_ASFModule upgradeModule(ASF_ASFModule module)
       break;
     }
     else {
-      l = ASF_getASFSectionListWsAfterFirst(sections);
+      l = ASF_getASFSectionListWsAfterHead(sections);
     }
   }
 

@@ -42,7 +42,7 @@ ASF_ASFConditions prepareConditions(ASF_ASFConditions conds)
 {
   ASF_ASFConditionList  condList = ASF_getASFConditionsList(conds);
   
-  condList = ASF_visitASFConditionList(condList, prepareCondition, NULL, NULL, NULL);
+  condList = ASF_visitASFConditionList(condList, prepareCondition, NULL, NULL);
 
   return ASF_setASFConditionsList(conds, condList);
 }

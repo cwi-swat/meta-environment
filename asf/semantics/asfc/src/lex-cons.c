@@ -8,12 +8,9 @@
 
 static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch)
 {
-  PT_Args listChars;
-  PT_Tree listChar;
+  const char *str = ASF_getCHARString(ch);
 
-  listChars = (PT_Args) ASF_getCHARChars(ch);
-  listChar = PT_getArgsArgumentAt(listChars,1);
-  return listChar;
+  return PT_makeTreeChar(str[1]);
 }
 
 static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
