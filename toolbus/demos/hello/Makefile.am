@@ -37,15 +37,13 @@ hello_LDADD       = -L$(ATERM)/lib -lATerm -lATB
 hello_gen_SOURCES = hello-gen.c hello.tif.c hello.tif.h
 hello_gen_LDADD   = -L$(ATERM)/lib -lATerm -lATB
 
-#$(srcdir)/hello-gen.c : hello.tif.c
-
 printer_SOURCES   = printer.c
 printer_LDADD     = -L$(top_builddir)/libtb -ltb
 
 INCLUDES          = -I$(ATERM)/include -I.
 
-hello.tif.c: hello2.tifs
-	$(ATERM)/bin/tifstoc -tool hello $<
+%.tif.c: hello2.tifs
+	$(ATERM)/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
