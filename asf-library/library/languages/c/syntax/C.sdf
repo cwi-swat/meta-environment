@@ -1,4 +1,4 @@
-module languages/c/syntax/Simplified-C
+module languages/c/syntax/C
 
 %% This grammar is a transformed version from the ANSI-C grammar.
 %% It has far less sorts, because more priorities have been used,
@@ -18,13 +18,6 @@ module languages/c/syntax/Simplified-C
 %% DONT: try to fully disambiguate this grammar because that would ruin
 %%       its declarative nature. C is ambiguous. However, the expression
 %%       grammar should be fully unambiguous (Expression).
-
-imports languages/c/syntax/Whitespace
-imports languages/cpp/syntax/CommentsAsLayout
-
-hiddens
-context-free start-symbols
-	TranslationUnit
 
 exports
 
@@ -118,12 +111,12 @@ HexadecimalConstant	-/- [a-fA-F0-9]
 
 context-free syntax
 
-Identifier 				-> Expression
-HexadecimalConstant 			-> Expression
-IntegerConstant				-> Expression
-CharacterConstant 			-> Expression
-FloatingPointConstant 			-> Expression
-StringConstant 				-> Expression
+Identifier 				-> Expression 
+HexadecimalConstant 			-> Expression {category("Constant")}
+IntegerConstant				-> Expression {category("Constant")}
+CharacterConstant 			-> Expression {category("Constant")}
+FloatingPointConstant 			-> Expression {category("Constant")}
+StringConstant 				-> Expression {category("Constant")}
 "(" Expression ")" 			-> Expression {bracket}
 Expression "["	Expression "]"	 	-> Expression
 Expression "("  {Expression ","}* ")"	-> Expression
@@ -277,7 +270,7 @@ Expression "," Expression -> Expression,
 Identifier "=" Expression -> Enumerator >
 Expression "," Expression -> Expression
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 context-free syntax
 Specifier+ {InitDeclarator ","}+ ";" -> Declaration
 
@@ -286,7 +279,7 @@ Declarator                 -> InitDeclarator
 Declarator "=" Initializer -> InitDeclarator
 
 context-free syntax
-Identifier		-> Specifier
+Identifier		-> Specifier 
 
 "typedef"		-> Specifier
 "extern"		-> Specifier

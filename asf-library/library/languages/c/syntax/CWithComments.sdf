@@ -1,5 +1,10 @@
 module languages/c/syntax/CWithComments
 
-imports languages/c/syntax/ANSI-C
-imports languages/cpp/syntax/CommentsAsLayout
 imports languages/c/syntax/Whitespace
+imports languages/c/syntax/Comments
+imports languages/c/syntax/C
+
+hiddens
+
+context-free start-symbols
+	TranslationUnit

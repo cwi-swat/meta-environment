@@ -1,7 +1,9 @@
-module languages/c/syntax/Simplified-C-Preprocessor
+module languages/c/syntax/CWithPreprocessor
 
+imports languages/c/syntax/Whitespace
+imports languages/c/syntax/Comments
 
-imports languages/c/syntax/Simplified-C
+imports languages/c/syntax/C
 
 imports languages/c/syntax/Generic-Preprocessor[
 	Identifier
@@ -21,6 +23,9 @@ imports languages/c/syntax/Generic-Preprocessor[
 
 exports
 
+lexical syntax
+  Comment -> LAYOUT
+
 context-free syntax
 	"va_arg" "(" Expression "," TypeName ")" -> Expression {prefer}
 
@@ -28,5 +33,3 @@ hiddens
 
 context-free start-symbols
 	TranslationUnit
-
-

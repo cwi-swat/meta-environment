@@ -43,6 +43,7 @@ context-free syntax
   "#" "include" IncludeFile -> Result
 
 context-free syntax
+  "#" "define" Identifier                               -> Result
   "#" "define" Identifier Expression                    -> Result
   "#" "define" Identifier "(" Expression ")" Expression -> Result
   "#" "undef" Expression                                -> Result
