@@ -79,9 +79,25 @@ if ( check_sym ( atmp01 , ef3sym ) ) {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 {
 ATerm atmp011 = arg_1 ( atmp01 ) ;
+if ( check_sym ( atmp011 , ef3sym ) ) {
+{
+ATerm atmp0110 = arg_0 ( atmp011 ) ;
+{
+ATerm atmp0111 = arg_1 ( atmp011 ) ;
+if ( check_sym ( atmp0111 , ef3sym ) ) {
+{
+ATerm atmp01110 = arg_0 ( atmp0111 ) ;
+{
+ATerm atmp01111 = arg_1 ( atmp0111 ) ;
 ( tmp [ 0 ] = ( * ef2 ) ( atmp00 ) ) ;
-( tmp [ 1 ] = lf_AUX_TermAsFix2Sign19_1 ( atmp011 ) ) ;
-FUNC_EXIT ( ( * ef4 ) ( ( * ef4 ) ( tmp [ 0 ] , ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 11 , char_table [ 34 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 34 ] ) ) ) ) , tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = lf_AUX_TermAsFix2Sign19_1 ( atmp01111 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef4 ) ( tmp [ 0 ] , ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 30 , char_table [ 34 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 115 ] , char_table [ 101 ] , char_table [ 112 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 44 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 119 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 44 ] , char_table [ 34 ] ) ) ) ) , tmp [ 1 ] ) ) ;
+}
+}
+}
+}
+}
+}
 }
 }
 }

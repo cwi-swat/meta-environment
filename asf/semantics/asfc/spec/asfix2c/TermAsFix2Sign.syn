@@ -1,6 +1,6 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -78,6 +78,7 @@ hiddens
     CfFunc[0-9']*       -> ATerm
     LexFunc[0-9']*      -> ATerm
     Ws[0-9']*           -> ATerm
+    Sep[0-9']*          -> ATerm
     Prod[0-9']*         -> ATerm
     Iter[0-9']*         -> ATerm
     Sort[0-9']*         -> ATerm

@@ -1,6 +1,6 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ equations
   [ap2i-1'2] attr2id(Attr) = Funid1,
              attrplus2id(Attr+) = Funid2
              ===============================
-             attrplus2id(Attr,Ws,Attr+) = Funid1 ++  ",w(\"\")," ++ Funid2
+             attrplus2id(Attr,Ws1,Sep,Ws2,Attr+) = Funid1 ++  ",w(\"\"),sep(\",\"),w(\"\")," ++ Funid2
 
   [ap2i-1'1] is-bracket-attr-prod(Prod) = true
              =================================
