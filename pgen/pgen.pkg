@@ -13,7 +13,7 @@ identification
 configuration interface
 
 requires
-   asc-support	1.6
+   asc-support	1.7
    asf-support	1.1
    sdf-support	1.1
    pt-support   0.12
