@@ -1,3 +1,6 @@
+2002/10/08 (vinju@loria.fr)
+ * Refactored asf-operations tool
+
 2002/09/27 ({vinju,moreau}@loria.fr)
  * Moved generic symbol renaming functionality to pt-support
 
