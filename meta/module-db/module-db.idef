@@ -244,10 +244,17 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
   rec-value(Mdb, all-depending-modules(Modules?)).
   snd-msg(all-depending-modules(Modules))
 +
+/* Get all SDF_ModuleNames that are (recursively) imported by this one */
   rec-msg(get-all-imported-modules(Name?)).
   snd-eval(Mdb, get-all-imported-modules(Name)).
   rec-value(Mdb, all-modules(Modules?)).
   snd-msg(all-modules(Modules))
++
+/* Get a list of modules that this module imports */
+  rec-msg(get-imported-modules(Name?)).
+  snd-eval(Mdb, get-imported-modules(Name)).
+  rec-value(Mdb, imported-modules(Modules?)).
+  snd-msg(imported-modules(Modules))
 +
 /* Return a list of all modules */
   rec-msg(get-all-modules).

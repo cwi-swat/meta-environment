@@ -177,7 +177,7 @@ static ATermList calc_trans(SDF_ImportList todo)
 /*{{{  static ATermList get_imported_modules(ATerm name) */
 
 static
-ATermList get_imported_modules(char *name)
+ATermList get_imported_modulenames(char *name)
 {
   ATermList result;
   ATerm atName, value;
@@ -196,12 +196,34 @@ ATermList get_imported_modules(char *name)
   return result;
 }
 
+ATerm get_imported_modules(int cid, char *moduleName)
+{
+  MDB_Entry entry = NULL;
+  ATermList result = ATempty;
+  ATerm modname;
+  SDF_Module mod;
+
+  modname = ATmake("<str>", moduleName);
+
+  entry = MDB_EntryFromTerm(GetValue(modules_db, modname));
+  if (!entry) {
+    ATwarning("Module %s not in database!", moduleName);
+  }
+
+  mod = SDF_getStartTopModule(SDF_StartFromTerm(MDB_getEntrySdfTree(entry)));
+
+  result = SDF_getImports(mod);
+
+  return ATmake("snd-value(imported-modules([<list>]))", result);
+
+}
+
 /*}}}  */ 
 /*{{{  ATerm get_all_imported_modules(int cid, char *moduleName) */
  
 ATerm get_all_imported_modules(int cid, char *moduleName)
 {
-  ATermList imports = get_imported_modules(moduleName);
+  ATermList imports = get_imported_modulenames(moduleName);
   return ATmake("snd-value(all-modules([<list>]))", imports);
 }
  
@@ -1545,7 +1567,7 @@ ATerm eqs_not_available_for_modules(int cid, char *moduleName)
 
   if (entry != NULL && MDB_isValidEntry(entry)) {
     /* Get all imported modules (including the module itself) */
-    modules = get_imported_modules(moduleName);
+    modules = get_imported_modulenames(moduleName);
 
     modules = ATreverse(modules);
     while (!ATisEmpty(modules)) {
@@ -1699,7 +1721,7 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
   name = ATmake("<str>", moduleName);
   missing = complete_sdf2_specification(ATempty, name);
   if (missing == NULL) {
-    imports = get_imported_modules(moduleName);
+    imports = get_imported_modulenames(moduleName);
     definition = getSyntax(imports);
     sdfTree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(definition));
     sort = PT_makeSymbolCf(PT_makeSymbolSort("SDF"));
