@@ -1,5 +1,7 @@
 SUBDIRS = generator
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST = reconf $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
