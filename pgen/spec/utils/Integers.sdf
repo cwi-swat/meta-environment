@@ -24,6 +24,8 @@ hiddens
     "(" NatCon ")"               -> NatCon {bracket}
     gt "(" NatCon "," NatCon ")" -> Bool
   variables
+    [n][0-9\']*            -> NatCon
+    [z][0-9\']*            -> IntCon
     "c"  [0-9]*            -> CHAR
     "c*" [0-9]*            -> CHAR*
     "c+" [0-9]*            -> CHAR+
