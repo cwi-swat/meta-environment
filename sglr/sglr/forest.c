@@ -619,6 +619,15 @@ ATbool ATtableIsEqual(ATermTable t1, ATermTable t2)
   return ATtrue;
 }
 
+
+ATbool SG_StartInjection(parse_table *pt, ATermInt label)
+{
+  return ATmatch(SG_LookupProduction(pt, ATgetInt(label)),
+                 "prod([cf(opt(layout)),cf(sort(<str>)),cf(opt(layout))],"
+                 "sort(\"<START>\"),no-attrs)",
+                 NULL, NULL, NULL);
+}
+
 ATbool SG_Injection(parse_table *pt, ATermInt label)
 {
   ATerm prod, in;
@@ -705,6 +714,11 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
     if(SG_DEBUG)
       ATfprintf(SGlog(), "Direct Priority: %t < %t (bad parse table?)\n", l0, l1);
     return t1;
+  }
+
+  if(SG_STARTSYMBOL && SG_StartInjection(pt, l0)) {
+ATfprintf(stderr, "NOT FILTERING <START>!\n");
+    return NULL;
   }
 
   /*  No direct priority relation?  Apply multiset ordering.  */
