@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
 
   ATinit(argc,argv,&bottom);
 
-  initModuleStore();
-  destroyModuleStore(); 
+  MS_initModuleStore();
+  MS_destroyModuleStore(); 
 
   return 0;
 }

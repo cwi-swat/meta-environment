@@ -13,6 +13,7 @@ noinst_HEADERS		= term-base.tif.h module-store.h
 term_base_SOURCES	= term-base.tif.c term-base.c module-store.c
 
 term_base_LDADD	= -L./tables -ltables \
+                  -L$(SDF_SUPPORT)/lib -lSDFME \
 	   	  -L$(TOOLBUSLIB)/lib -lATB \
 	    	  -L$(ATERM)/lib -lATerm \
 		  $(SOCKLIBS)

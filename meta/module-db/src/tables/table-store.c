@@ -17,7 +17,7 @@ typedef struct _table_entry_struct {
 
 static TableEntry* tableStore = NULL;
 
-void initTableStore() 
+void TS_initTableStore() 
 {
   if (tableStore == NULL) {
     tableStore = (TableEntry*) calloc(MAX_NR_OF_TABLES,
@@ -29,7 +29,7 @@ void initTableStore()
   }
 }
 
-static int findTable(char *name)
+static int TS_findTable(char *name)
 {
   int i;
 
@@ -43,20 +43,20 @@ static int findTable(char *name)
   return NO_SUCH_TABLE;
 }
 
-ATbool tableExists(char *name)
+ATbool TS_tableExists(char *name)
 {
-  return (findTable(name) != NO_SUCH_TABLE);
+  return (TS_findTable(name) != NO_SUCH_TABLE);
 }
 
-void addTable(char *name)
+void TS_addTable(char *name)
 {
   int i;
   
-  if (!tableExists(name)) {
+  if (!TS_tableExists(name)) {
     for (i = 0; i < MAX_NR_OF_TABLES; i++) {
       if (tableStore[i].name == NULL) {
         tableStore[i].name = strdup(name);
-        tableStore[i].table = createTable();
+        tableStore[i].table = T_createTable();
         return;
       }
     }
@@ -68,16 +68,16 @@ void addTable(char *name)
   }
 }  
 
-void removeTable(char *name)
+void TS_removeTable(char *name)
 {
   int i;
 
-  i = findTable(name);
+  i = TS_findTable(name);
 
   if (i != NO_SUCH_TABLE) {
     free(tableStore[i].name);
     tableStore[i].name = NULL;
-    destroyTable(tableStore[i].table);
+    T_destroyTable(tableStore[i].table);
     tableStore[i].table = NULL;
   }
   else {
@@ -85,11 +85,11 @@ void removeTable(char *name)
   }
 }
 
-Table getTable(char *name)
+Table TS_getTable(char *name)
 {
   int i;
 
-  i = findTable(name);
+  i = TS_findTable(name);
 
   if (i != NO_SUCH_TABLE) {
     return tableStore[i].table;
@@ -100,19 +100,70 @@ Table getTable(char *name)
   }
 }
 
-void clearTable(char *name)
+void TS_clearTable(char *name)
 {
-  removeTable(name);
-  addTable(name);
+  TS_removeTable(name);
+  TS_addTable(name);
 }
 
-void removeFromAllTables(ATerm key)
+void TS_removeFromAllTables(ATerm key)
 {
   int i;
 
   for(i = 0; i < MAX_NR_OF_TABLES; i++) {
     if (tableStore[i].name != NULL) {
-      removeValue(tableStore[i].table, key);
+      T_removeValue(tableStore[i].table, key);
     }
   }
-}    
+}
+
+void TS_putValue(char* name, ATerm key, ATermList value)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    T_putValue(table, key, value);
+  }
+}
+
+ATermList TS_getValue(char* name, ATerm key)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_getValue(table, key);
+  }
+
+  return NULL;
+}
+
+void TS_removeValue(char* name, ATerm key)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_removeValue(table, key);
+  }
+}
+
+ATbool    TS_containsKey(char* name, ATerm key)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_containsKey(table, key);
+  }
+
+  return ATfalse;
+}
+
+ATermList TS_getAllKeys(char* name)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_getAllKeys(table);
+  }
+
+  return ATempty;
+}

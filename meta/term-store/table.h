@@ -5,13 +5,13 @@
 
 typedef ATermTable Table;
 
-Table createTable();
-void destroyTable(Table table);
+Table     T_createTable();
+void      T_destroyTable(Table table);
 
-void      putValue(Table table, ATerm key, ATermList value);
-ATermList getValue(Table table, ATerm key);
-void      removeValue(Table table, ATerm key);
-ATbool    containsKey(Table table, ATerm key);
-ATermList getAllKeys(Table table);
+void      T_putValue(Table table, ATerm key, ATermList value);
+ATermList T_getValue(Table table, ATerm key);
+void      T_removeValue(Table table, ATerm key);
+ATbool    T_containsKey(Table table, ATerm key);
+ATermList T_getAllKeys(Table table);
 
 #endif

@@ -1,81 +1,81 @@
 
 #include "table-store.h"
 #include "table.h"
+#include <SDFME.h>
 
-void initModuleStore()
+#define makeString(s) ((ATerm) ATmakeAppl0(ATmakeAFun(s,0,ATtrue)))
+#define makeKey(s) (makeString(s))
+#define makeTextValue(text,path,timeStamp)  ((ATermList) ATmakeList3(makeString(text),makeString(path),(ATerm) ATmakeInt(timeStamp)))
+#define makeTreeValue(tree)  ((ATermList) ATmakeList1((ATerm) tree))
+
+void MS_initModuleStore()
 {
-  initTableStore();
-  addTable("active-modules");
-  addTable("imports-transitive");
-  addTable("sdf-tree");
-  addTable("sdf-text");
-  addTable("asf-tree");
-  addTable("asf-text");
-  addTable("asf-table");
-  addTable("term-table");
+  TS_initTableStore();
+  TS_addTable("active-modules");
+  TS_addTable("transitive-imports");
+  TS_addTable("sdf-tree");
+  TS_addTable("sdf-text");
+  TS_addTable("asf-tree");
+  TS_addTable("asf-text");
+  TS_addTable("asf-table");
+  TS_addTable("term-table");
 }
 
-void destroyModuleStore()
+void MS_destroyModuleStore()
 {
-  removeTable("active-modules");
-  removeTable("transitive-imports");
-  removeTable("sdf-tree");
-  removeTable("sdf-text");
-  removeTable("asf-tree");
-  removeTable("asf-text");
-  removeTable("asf-table");
-  removeTable("term-table");
+  TS_removeTable("active-modules");
+  TS_removeTable("transitive-imports");
+  TS_removeTable("sdf-tree");
+  TS_removeTable("sdf-text");
+  TS_removeTable("asf-tree");
+  TS_removeTable("asf-text");
+  TS_removeTable("asf-table");
+  TS_removeTable("term-table");
 }
 
-void clearModuleStore()
+void MS_clearModuleStore()
 {
-  destroyModuleStore();
-  initModuleStore();
+  MS_destroyModuleStore();
+  MS_initModuleStore();
 }
 
-void clearTransitiveImports()
+void MS_clearTransitiveImports()
 {
-  clearTable("transitive-imports");
+  TS_clearTable("transitive-imports");
 }
 
-static ATerm makeKeyFromModuleName(char *moduleName)
+ATbool MS_moduleExists(char *moduleName)
 {
-  return ATmake("<str>", moduleName);
+  return TS_containsKey("active-modules",makeKey(moduleName));
 }
 
-ATbool moduleExists(char *moduleName)
+ATermList MS_getTransitiveImports(char *moduleName) 
 {
-  return containsKey(getTable("active-modules"),
-                     makeKeyFromModuleName(moduleName));
+  return TS_getValue("transitive-imports",makeKey(moduleName));
 }
 
-ATermList getTransitiveImports(char *moduleName) 
+SDF_Module MS_getSdfTree(char *moduleName)
 {
-  return getValue(getTable("transitive-imports"),
-                  makeKeyFromModuleName(moduleName));
+  return (SDF_Module) TS_getValue("sdf-tree", makeKey(moduleName));
 }
 
-SDF_Module getSdfTree(char *moduleName)
+void MS_putSdfTree(char *moduleName, SDF_Module moduleTree)
 {
-  return getValue(getTable("sdf-tree"),
-                  makeKeyFromModuleName(moduleName));
+  TS_putValue("sdf-tree", makeKey(moduleName), 
+	      makeTreeValue(SDF_ModuleToTerm(moduleTree)));
 }
 
-void storeValueInTable(char *moduleName, char *tableName, ATermList value)
+void MS_addSdfText(char *moduleName, char *text, char *path, int timeStamp)
 {
-  ATermList value = ATmakeList1(SDF_ModuleToTerm(moduleTree));
-  putValue(getTable("sdf-tree"), moduleName, value);
+  TS_putValue("sdf-tree", moduleName, makeTextValue(text,path,timeStamp));
 }
 
-void addSdfText(char *moduleName, char *text, char *path, int timeStamp)
+void MS_addAsfTree(char *moduleName, SDF_Module moduleTree)
 {
-  ATermList value = ATmakeList3(text, path, timeStamp);
-  putValue(getTable("sdf-tree"), moduleName, value);
+  TS_putValue("sdf-tree", makeKey(moduleName), makeTreeValue(moduleTree));
 }
 
-void addAsfTree(char *moduleName, SDF_Module moduleTree)
+void MS_addAsfText(char *moduleName, char *text, char *path, int timeStamp)
 {
-  ATermList value = ATmakeList1(SDF_ModuleToTerm(moduleTree));
-  putValue(getTable("sdf-tree"), moduleName, value);
+  TS_putValue("asf-text", makeKey(moduleName),makeTextValue(text,path,timeStamp)); 
 }
-
