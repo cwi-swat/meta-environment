@@ -3,6 +3,7 @@
 2003/07/17 ({markvdb,jurgenv}@cwi.nl)
  * Show area now sets the focus and lets the cursor jump to the beginning
    of the focus. The normal set-focus does not set the cursor anymore.
+ * Set dependency on aterm-java-1.3.1
 
 2003/07/15 (markvdb@cwi.nl)
  * Button/action registration changed.
