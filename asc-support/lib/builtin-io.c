@@ -387,9 +387,7 @@ PT_Tree ASC_read_term_from_file(ATerm type, ATerm afile_arg)
   PT_Tree file_arg = muASFToTree(afile_arg);
   PT_Tree result = NULL;
 
-  result = read_term_from_file(file_arg);
-
-  return result ? result : PT_makeTreeLit("TODO: make proper normal form");
+  return read_term_from_file(file_arg);
 }
 
 /*}}}  */
