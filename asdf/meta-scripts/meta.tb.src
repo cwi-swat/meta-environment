@@ -2,26 +2,31 @@
 #include "__META__/share/meta/configuration-manager.idef"
 #include "__META__/share/meta/editor-hive.idef"
 #include "__META__/share/meta/editor-manager.idef"
-#include "__META__/share/meta/generic-adapter.idef" 
-#include "__META__/share/meta/graph-converter.idef"
+
+#include "generic-adapter.idef" 
+#include "graph-converter.idef"
+
 #include "__META__/share/meta/in-output.idef"
-#include "__META__/share/meta/layout-graph.idef"
-#include "__META__/share/meta/position-annotator.idef"
-#include "__META__/share/meta/sglr.idef"
-#include "__META__/share/meta/structure-editor.idef"
-#include "__META__/share/meta/unparser.idef"
+
+#include "layout-graph.idef"
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
+
 #include "__META__/share/meta/user-interface.tb"
 #include "__META__/share/meta/kernel-configuration.tb"
 #include "__META__/share/meta/user-configuration.tb"
 
 /* sdf-meta */
-#include "__META__/share/meta/parsetablegen.idef"
-#include "__META__/share/meta/sdf-import-graph.idef"
+
+#include "parsetablegen.idef"
+#include "sdf-import-graph.idef"
 #include "__META__/share/meta/graph-utils.tb"
 
 /* asf-sdf-meta */
-#include "__META__/share/meta/apply-function.idef"
-#include "__META__/share/meta/restorebrackets.idef"
+#include "apply-function.idef"
+#include "restorebrackets.idef"
 
 /* to be resolved */
 #include "__META__/share/meta/feedback.tb"
@@ -43,7 +48,8 @@
 #include "__META__/share/meta/dump-equations.tb"
 #include "__META__/share/meta/dump-sdf-definition.tb"
 #include "__META__/share/meta/pretty-print.tb"
-#include "__META__/share/meta/meta-interface.tb"
+
+#include "meta-interface.tb"
 
 process META is
 let 

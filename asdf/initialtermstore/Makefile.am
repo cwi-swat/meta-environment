@@ -1,6 +1,4 @@
 # $Id$
 
-EXTRA_DIST=initialtermstore
-
-initialtermstore: ${prefix}/bin/dump-termstore -s 
-
+install-exec-am: ../asdf-pt/asdf/*.sdf
+	${prefix}/bin/dump-termstore -s 

@@ -2,26 +2,31 @@
 #include "/users/fagidiot/asenv1.5/install/share/meta/configuration-manager.idef"
 #include "/users/fagidiot/asenv1.5/install/share/meta/editor-hive.idef"
 #include "/users/fagidiot/asenv1.5/install/share/meta/editor-manager.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/generic-adapter.idef" 
-#include "/users/fagidiot/asenv1.5/install/share/meta/graph-converter.idef"
+
+#include "generic-adapter.idef" 
+#include "graph-converter.idef"
+
 #include "/users/fagidiot/asenv1.5/install/share/meta/in-output.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/layout-graph.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/position-annotator.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/sglr.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/structure-editor.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/unparser.idef"
+
+#include "layout-graph.idef"
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
+
 #include "/users/fagidiot/asenv1.5/install/share/meta/user-interface.tb"
 #include "/users/fagidiot/asenv1.5/install/share/meta/kernel-configuration.tb"
 #include "/users/fagidiot/asenv1.5/install/share/meta/user-configuration.tb"
 
 /* sdf-meta */
-#include "/users/fagidiot/asenv1.5/install/share/meta/parsetablegen.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/sdf-import-graph.idef"
+
+#include "parsetablegen.idef"
+#include "sdf-import-graph.idef"
 #include "/users/fagidiot/asenv1.5/install/share/meta/graph-utils.tb"
 
 /* asf-sdf-meta */
-#include "/users/fagidiot/asenv1.5/install/share/meta/apply-function.idef"
-#include "/users/fagidiot/asenv1.5/install/share/meta/restorebrackets.idef"
+#include "apply-function.idef"
+#include "restorebrackets.idef"
 
 /* to be resolved */
 #include "/users/fagidiot/asenv1.5/install/share/meta/feedback.tb"
@@ -43,7 +48,8 @@
 #include "/users/fagidiot/asenv1.5/install/share/meta/dump-equations.tb"
 #include "/users/fagidiot/asenv1.5/install/share/meta/dump-sdf-definition.tb"
 #include "/users/fagidiot/asenv1.5/install/share/meta/pretty-print.tb"
-#include "/users/fagidiot/asenv1.5/install/share/meta/meta-interface.tb"
+
+#include "meta-interface.tb"
 
 process META is
 let 

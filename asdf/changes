@@ -66,11 +66,6 @@ still working although start would be set to zero!?!
 - Popup: Export Eqs parsetable
 
 
-- Documentation
-
-- Description of concrete syntax in the Action env.
-- - Consistency check, maybe a problem when including asf+sdf modules.
-
 - modulo and division for integers is not supported by asf, maybe it
   should be implemented in the evaluator.
 
@@ -94,6 +89,42 @@ still working although start would be set to zero!?!
 
 
 --------------------- Changes: --------------------
+
+Fre, Oct 29
+Note:
+- asdf-modules.tb.src: ASDF-ModuleDB,
+  rec-msg(invalidate-asdf-in-db(Name?)). now removes the values of the
+  asf and sdf trees and texts. Fixes the bug concerning term parse
+  over a module with no valid parsetree.
+
+- buttons-actions.tb: ParseTerm, The process now test whether the returned
+  parsetable is welldefined. Calling ParseEditor with no-table makes
+  sglr crash. Fixes the bug concerning term reduce
+  over a module with no valid parsetree.
+
+
+Thu, Oct 28
+Note:
+- The files used by the evaluator have been copied to the evaluator
+  subdir in asdf-pt.
+- A statusreport on the project has been produced.
+
+
+Wed, Oct 27
+Note:
+- The initial termstore is being generated and installed during setup.
+- A list of changes have been compiled, and can be found in the file
+  filechangesaof261004.txt.
+
+
+Tue, Oct 26
+Note:
+- Created meta.tb.src, start-meta-termstore-dumper.tb.src and
+  dump-termstore.sh.src.
+  It is now possible to generate the initial termstore from the
+  commandline.
+
+
 Mon, Oct 25
 Note:
 - Looking into the termstore generation buisness.
@@ -165,6 +196,9 @@ Note:
   Action editor for editing actions in action notation.
   Eval editor for displaying output of the evaluator.
 
+- editing.tb: EditTerm, added the editortype as a formal parameter.
+  It would be nice if it is possible to make termeditors with
+  different types to provide a different set of menu item.
 
 
 Wed, Oct 13

@@ -1,4 +1,4 @@
-#include "meta.tb"
+#include "__META__/share/asdf/meta.tb"
 #include "__META__/share/meta/status.tb"
 
 process StandaloneTermstoreDumper is
@@ -19,6 +19,9 @@ in
 
   /* Load initial modules */
   . printf("Loading initial ASDF support modules from ")
+  . snd-msg(ts-put-term-value("search-preferences", asdf, [asdf]))
+  . snd-msg(ts-put-term-value("search-preferences", sdf, [sdf, asdf]))
+  . snd-msg(ts-put-term-value("search-preferences", asf, [asf]))
   . LoadTSFromFiles
   .
   if equal(SAVING, "true") then
