@@ -165,12 +165,8 @@ TA_Expr eval_location(int pid, AFun fun, TA_ExprList args)
 
     char *cpe_file = TA_getLocationFile(cpe);
 
-    ATwarning("files: %s == %s\n", file, cpe_file);
     if (strcmp(file, cpe_file) == 0) {
-      ATwarning("comparing location: %t\n", location);
-      ATwarning("cpe: %t\n", cpe);
       if (TA_isLocationLine(cpe)) {
-	ATwarning("line %d == %d?\n", line, TA_getLocationLine(cpe));
 	if (line == TA_getLocationLine(cpe)) {
 	  return ATparse("true");
 	}
