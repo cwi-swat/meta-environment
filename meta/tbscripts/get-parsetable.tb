@@ -38,7 +38,7 @@ Id := process-id.
       snd-msg(generate-parsetable(Syntax, ModuleId)).
       (
         rec-msg(parsetable(Table?)).
-        snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
+        snd-msg(add-parse-table-to-db(ModuleId, Table)) .
         rec-msg(parse-table-added).
         snd-msg(get-table-from-db(ModuleId)) .
         rec-msg(table(Table?, Path?)) .
