@@ -54,7 +54,7 @@ void rec_terminate(term *t)
   exit(0);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   extern term_list *tool_in_sign, *tool_out_sign;
   term *trm;
@@ -62,4 +62,6 @@ void main(int argc, char *argv[])
   TBinit("calc", argc, argv, calc_handler, calc_check_in_sign);
 
   TBeventloop();
+
+  return 0;
 }
