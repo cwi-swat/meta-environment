@@ -31,7 +31,7 @@ LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
-DEFS		= @DEFS@
+DEFS		= @DEFS@ # -O2 -funroll-loops # -DDEBUG
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBSALL		= @LIBS@ ${SOCKLIBS} -L${libdir}
 LIBS		= ${LIBSALL} ${XLIBS}
@@ -179,10 +179,11 @@ love:
 	@echo "not war"
 
 
-# The GNU getopt sources ${GETOPTC} don't compile silently
+# The GNU getopt sources ${GETOPTC} might not compile silently
+# when using a high warning level in a really pedantic compiler 
 
 getopt.o: getopt.c
-	${CC} ${CFLAGS} ${INCLUDES} -c $< 2> /dev/null
+	${CC} -O3 -c $<
 
 getopt1.o: getopt1.c
-	${CC} ${CFLAGS} ${INCLUDES} -c $< 2> /dev/null
+	${CC} -O3 -c $<

@@ -47,13 +47,12 @@ stack *SG_NewStack(state s, stack *ancestor) {
   if((res = SG_Malloc(sizeof(stack))) != NULL) {
 SG_AllocStats(INC);
     res->state = s;
+#ifdef DEBUG
     res->parent = ancestor;
+#endif
     res->kid    = NULL;
     res->links  = NULL;
-    res->rejected  = ATfalse;
     res->protected   = ATtrue;
-    res->unprotector = NULL;
-    res->freed       = ATfalse;
   }
   return res;
 }
@@ -119,21 +118,49 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
   classic two `mark' and `sweep' passes.
  */
 
+#define SG_GC_CHUNK   64          /*  Stays typically below +- 32  */
+enum SG_GC_OPS {SG_GC_ADD, SG_GC_CLR};
+#define SG_GC_Sweep()   SG_StackCleanupList(SG_GC_CLR, NULL);
+
+void SG_StackCleanupList(int Mode, stack *st)
+{
+  static size_t size  = 0;
+  static size_t count = 0;
+  static stack  **gcstacks= NULL;
+
+  switch(Mode) {
+    case SG_GC_CLR:
+      while(count) {
+          count--;
+        SG_DeleteStack(gcstacks[count]);
+      }
+/*
+      SG_Free(gcstacks);
+      gcstacks = NULL;
+      size = 0;
+*/
+      break;
+    case SG_GC_ADD:
+      if(gcstacks == NULL) {
+        size += SG_GC_CHUNK;
+        gcstacks = SG_Malloc(size * sizeof(stack *));
+      } else if(count >= size) {
+        size += SG_GC_CHUNK;        
+        gcstacks = SG_Realloc(gcstacks, size * sizeof(stack *));
+      }
+#ifdef DEBUG
+      if(gcstacks == NULL)
+         ATerror("SG_GC: memory (re)allocation error\n");
+#endif
+      gcstacks[count++] = st;
+      break;
+  }
+}
+
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
 {
-/*
-  ATfprintf(stderr,"stack allocs before: %d\n", SG_AllocStats(NOP));
-  ATfprintf(stderr,"GC..");
-*/
-  SG_UnprotectUnusedStacks(old, new, accept);
-/*
-  ATfprintf(stderr,"..");
-*/
-  SG_DisposeUnusedStacks(old);
-/*
-  ATfprintf(stderr,"..\n");
-  ATfprintf(stderr,"stack allocs after:  %d\n", SG_AllocStats(NOP));
-*/
+  SG_MarkStacks(old, new, accept);
+  SG_GC_Sweep();
   return new;
 }
 
@@ -141,95 +168,56 @@ stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
   Garbage collection: unprotect (mark) phase
  */
 
-void SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept)
+void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
 {
   if(accept != NULL)                    /*  Add the sacred accepting stack  */
     new = SG_AddStack(accept, new);
 
   while(old) {
-    SG_UnprotectUnusedStack(head(old), NULL, new);
+    SG_MarkStack(head(old), NULL, new);
     old = tail(old);
   }
 }
 
-void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *sts)
+void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
 {
-  if(st->protected                    /*  Done if already unprotected */
+  if(st && st->protected               /*  Done if already unprotected */
    && !SG_InStacks(st, sts, ATtrue)) { /*  or in a living stack        */
      st_links *lks = SG_ST_LINKS(st);
 
-       st->protected = ATfalse;
-       st->unprotector = unprotector;
+      SG_StackCleanupList(SG_GC_ADD, st);
+      st->protected   = ATfalse;
 
      /*  The stacks descendants might also have been obsoleted         */
      for (; lks != NULL; lks = tail(lks)) {
        st_link *lk = head(lks);
 
-       SG_UnprotectUnusedStack(SG_LK_STACK(lk), lk, sts);
+       SG_MarkStack(SG_LK_STACK(lk), lk, sts);
      }
    }
 }
 
-
-/*
-  Garbage collection: disposal (sweep) phase
- */
-
-void SG_DisposeUnusedStacks(stacks *sts)
-{
-  while(sts) {
-    SG_DisposeUnusedStack(head(sts), NULL);
-    sts = tail(sts);
-  }
-}
-
-void SG_DisposeUnusedStack(stack *st, st_link *unprotector)
-{
-  if(st->freed) { return; ATerror("awreddi freed %xd!\n", st); }
-  if(!st->protected && (st->unprotector == unprotector)) {
-    st_links *lks = SG_ST_LINKS(st);
-
-    for (; lks != NULL; lks = tail(lks)) {
-      st_link *lk = head(lks);
-
-      SG_DisposeUnusedStack(SG_LK_STACK(lk), lk);
-    }
-  /*
-    ATfprintf(stderr, "Deleting stack %xd, unprotected by %xd\n", st, unprotector);
-  */
-    SG_DeleteStack(st);
-  }
-}
-
-stacks *SG_DeleteStacks(stacks *sts)
-{
-  while(sts) {
-    SG_DeleteStack(head(sts));
-    sts = tail(sts);
-  }
-  return NULL;
-}
-
 void SG_DeleteStack(stack *st)
 {
-SG_AllocStats(DEC);
-  SG_DeleteLinks(SG_ST_LINKS(st));
-  st->freed = ATtrue;
+  st_links *lks = SG_ST_LINKS(st), *curlks;
+  st_link  *lk;
+
+#if 0
+  for (; lks != NULL; lks = tail(lks)) {
+    lk = head(lks);
+    ATunprotect(&(lk->tree));
+    SG_free(lk);
+  }
+#endif
+  while(lks != NULL) {
+    lk = head(lks);
+    ATunprotect(&(lk->tree));
+    curlks = lks;
+    lks = tail(lks);
+    SG_free(curlks);
+    SG_free(lk);
+  }
   SG_free(st);
-}
-
-st_links *SG_DeleteLinks(st_links *lks)
-{
-  for (; lks != NULL; lks = tail(lks))
-    SG_DeleteLink(head(lks));
-
-  return NULL;
-}
-
-void SG_DeleteLink(st_link *lk)
-{
-  ATunprotect(&(lk->tree));
-  SG_free(lk);
 }
 
 

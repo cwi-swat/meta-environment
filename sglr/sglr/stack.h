@@ -73,13 +73,12 @@ typedef struct links {
 
 typedef struct stack {
   state         state;
+#ifdef DEBUG
   struct stack  *parent;
+#endif
   struct stack  *kid;
   st_links      *links;
-  ATbool        rejected;
   ATbool        protected;
-  st_link       *unprotector;
-  ATbool        freed;
 } stack;
 
 typedef struct stacks {
@@ -107,19 +106,12 @@ st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
 st_links *SG_AddLinks(st_link *l, st_links *ls);
 
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept);
-void    SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept);
-void    SG_UnprotectUnusedStack(stack *st, st_link *guerilla, stacks *new);
+void    SG_MarkStacks(stacks *old, stacks *new, stack *accept);
+void    SG_MarkStack(stack *st, st_link *guerilla, stacks *new);
 void    SG_DisposeUnusedStacks(stacks *sts);
 void    SG_DisposeUnusedStack(stack *st, st_link *guerilla);
 
-/*
-stacks   *SG_DeleteOldStacks(stacks *old, stacks *new);
-void      SG_DeleteOldStack(stack *st, stacks *new);
-*/
-stacks   *SG_DeleteStacks(stacks *sts);
 void      SG_DeleteStack(stack *st);
-st_links *SG_DeleteLinks(st_links *lks);
-void      SG_DeleteLink(st_link *lk);
 
 
 stack *   SG_FindStack(state , stacks *);

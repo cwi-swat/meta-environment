@@ -8,7 +8,11 @@
   #define SG_Calloc(m,n)  GC_calloc(m,n)
   #define SG_Malloc(n)    GC_malloc(n)
   #define SG_Realloc(o,s) GC_realloc(o,s)
+#if 1
   #define SG_free(o)      GC_free(o)
+#else
+  #define SG_free(o)      ;
+#endif
   #define free(n)    ;
 #else
   #include <stdlib.h>

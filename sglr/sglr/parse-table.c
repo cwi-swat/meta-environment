@@ -350,7 +350,10 @@ parse_table *SG_BuildParseTable(ATerm t)
   ATermList   prods, sts;
   parse_table *pt;
 
+/*
   pt = SG_NewParseTable(16384, 4096);
+*/
+  pt = SG_NewParseTable(8192, 2048);
 
   if(!ATmatch(t, "parse-table(<int>,[<list>],states([<list>]))",
               &(pt->init), &prods, &sts)) {

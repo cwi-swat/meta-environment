@@ -506,7 +506,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     }
   } else {  /* new stack */
     st1 = SG_NewStack(s, stpt);
-    nl = SG_AddLink(st1, st0, t);
+    nl  = SG_AddLink(st1, st0, t);
     SG_AddStackHist(stpt, st1);
     active_stacks = SG_AddStack(st1, active_stacks);
     for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
