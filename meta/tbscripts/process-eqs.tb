@@ -82,7 +82,7 @@ in
          snd-note(ui-status(endstat(Id)))
        +
        rec-msg(Id, error-opening(Mod?)).
-       snd-msg(add-eqs-to-db(Module,"",no-equations,0,"unchanged")).
+       snd-msg(add-eqs-to-db(Module,"",no-equations,timestamp(0),"unchanged")).
        rec-msg(done)
       )
       fi
