@@ -1,4 +1,7 @@
 # $Id$
+2001/10/11 (mdejonge@cwi.nl)
+ * Added (generated) manual pages to EXTRA_DIST variable because not
+   everybody has pod2man available
 
 2001/09/25 (jong@cwi.nl)
  * Introduced gvim support as text-editor.

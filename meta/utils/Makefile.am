@@ -13,7 +13,8 @@ noinst_LIBRARIES   = libutils.a
 
 EXTRA_DIST         = parse-sdf2.sh.src \
                      ps-dot.sh.src test-help test-version \
-                     lang.types parse-sdf2.pod sdf2stats.sh.src 
+                     lang.types parse-sdf2.pod parse-sdf2.1 \
+                     sdf2stats.sh.src 
 
 CLEANFILES         = parse-sdf2 ps-dot parse-sdf2.1 sdf2stats
 

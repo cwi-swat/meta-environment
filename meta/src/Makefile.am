@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST  = meta.sh.src pt-dump.sh.src eqs-dump.sh.src meta.pod 
+EXTRA_DIST  = meta.sh.src pt-dump.sh.src eqs-dump.sh.src meta.pod meta.1
 
 bin_SCRIPTS = meta pt-dump eqs-dump
 
