@@ -10,14 +10,16 @@ EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-java.sh.src \
 	     CHARLIST.java.template \
 	     CHARLIST_String.java.template \
-	     CHARLIST.t.template
+	     CHARLIST.t.template \
+	     CHARLIST.c.template
 
 pkgdata_DATA= CHARLIST.java.template \
 	      CHARLIST_String.java.template \
-	      CHARLIST.t.template
+	      CHARLIST.t.template \
+	      CHARLIST.c.template
 
 
-bin_SCRIPTS		= sdf2-to-adt sdf2-to-java
+bin_SCRIPTS		= sdf2-to-adt sdf2-to-java sdf2-to-c
 
 % : %.sh.src Makefile
 	sed 's@__APIGEN__@${APIGEN}@g;\
