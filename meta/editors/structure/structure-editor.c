@@ -33,24 +33,6 @@ static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
 }
 
 /*}}}  */
-/*{{{  static LOC_Area getAreaAtOffset(PT_Tree tree, int offset) */
-
-static LOC_Area getAreaAtOffset(PT_Tree tree, int offset)
-{
-  LOC_Location location;
-
-  assert(tree != NULL);
-  assert(offset >= 0);
-
-  location = PT_findLocationAtOffset(tree, offset);
-  if (location != NULL) {
-    return LOC_getLocationArea(location);
-  }
-
-  return NULL;
-}
-
-/*}}}  */
 
 /*{{{  void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
 
@@ -102,11 +84,15 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 {
   SE_StructureEditor editor;
 
-  ATwarning("set_cursor_at_offset: editorId %t, offset=%d\n", editorId, offset);
   editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
   if (editor != NULL) {
     PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
-    editor = SE_makeStructureEditorDefault(parseTree, offset);
+    PT_Tree tree = PT_getParseTreeTop(parseTree);
+    PT_Tree cursor = PT_findTreeAtOffset(tree, offset);
+    if (cursor == NULL) {
+      cursor = tree;
+    }
+    editor = SE_makeStructureEditorDefault(parseTree, cursor);
     ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
   }
   else {
@@ -124,13 +110,9 @@ ATerm get_focus_at_cursor(int cid, ATerm editorId)
   editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
   if (editor != NULL) {
     if (SE_hasStructureEditorCursor(editor)) {
-      int cursor = SE_getStructureEditorCursor(editor);
-      PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
-      PT_Tree tree = PT_getParseTreeTop(parseTree);
-      LOC_Area area = getAreaAtOffset(tree, cursor);
-      if (area == NULL) {
-	area = LOC_getLocationArea(PT_getTreeLocation(tree));
-      }
+      SE_Tree cursor = SE_getStructureEditorCursor(editor);
+      LOC_Location location = PT_getTreeLocation(cursor);
+      LOC_Area area = LOC_getLocationArea(location);
       return ATmake("snd-value(focus(<term>))", area);
     }
 

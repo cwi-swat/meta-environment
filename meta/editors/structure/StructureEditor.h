@@ -14,6 +14,7 @@
 
 #include <MEPT.h>
 
+typedef PT_Tree SE_Tree;
 typedef PT_ParseTree SE_ParseTree;
 
 /*}}}  */
@@ -50,7 +51,7 @@ SE_Direction SE_makeDirectionUp();
 SE_Direction SE_makeDirectionLeft();
 SE_Direction SE_makeDirectionDown();
 SE_Direction SE_makeDirectionRight();
-SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, int cursor);
+SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor);
 SE_StructureEditor SE_makeStructureEditorUnedited(SE_ParseTree parseTree);
 
 /*}}}  */
@@ -78,14 +79,14 @@ ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg);
 SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg);
 SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree);
 ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg);
-int SE_getStructureEditorCursor(SE_StructureEditor arg);
-SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, int cursor);
+SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg);
+SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor);
 
 /*}}}  */
 /*{{{  sort visitors */
 
 SE_Direction SE_visitDirection(SE_Direction arg);
-SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), int (*acceptCursor)(int));
+SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree));
 
 /*}}}  */
 

@@ -146,11 +146,11 @@ SE_Direction SE_makeDirectionRight()
 }
 
 /*}}}  */
-/*{{{  SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, int cursor) */
+/*{{{  SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor) */
 
-SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, int cursor)
+SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor)
 {
-  return (SE_StructureEditor)(ATerm)ATmakeAppl2(SE_afun4, (ATerm) parseTree, (ATerm) (ATerm) ATmakeInt(cursor));
+  return (SE_StructureEditor)(ATerm)ATmakeAppl2(SE_afun4, (ATerm) parseTree, (ATerm) cursor);
 }
 
 /*}}}  */
@@ -402,21 +402,21 @@ ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg)
 }
 
 /*}}}  */
-/*{{{  int SE_getStructureEditorCursor(SE_StructureEditor arg) */
+/*{{{  SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg) */
 
-int SE_getStructureEditorCursor(SE_StructureEditor arg)
+SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg)
 {
   
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+    return (SE_Tree)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
-/*{{{  SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, int cursor) */
+/*{{{  SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor) */
 
-SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, int cursor)
+SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor)
 {
   if (SE_isStructureEditorDefault(arg)) {
-    return (SE_StructureEditor)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(cursor)), 1);
+    return (SE_StructureEditor)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) cursor), 1);
   }
 
   ATabort("StructureEditor has no Cursor: %t\n", arg);
@@ -449,9 +449,9 @@ SE_Direction SE_visitDirection(SE_Direction arg)
 }
 
 /*}}}  */
-/*{{{  SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), int (*acceptCursor)(int)) */
+/*{{{  SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree)) */
 
-SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), int (*acceptCursor)(int))
+SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree))
 {
   if (SE_isStructureEditorDefault(arg)) {
     return SE_makeStructureEditorDefault(

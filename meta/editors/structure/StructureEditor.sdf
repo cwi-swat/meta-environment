@@ -13,7 +13,7 @@ exports
 
   sorts StructureEditor
   context-free syntax
-    "structure-editor" "(" parse-tree: ParseTree "," cursor: NatCon ")"
+    "structure-editor" "(" parse-tree: ParseTree "," cursor: Tree ")"
       -> StructureEditor
 
     "structure-editor" "(" parse-tree: ParseTree ")"
