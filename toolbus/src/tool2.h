@@ -44,6 +44,7 @@ int    TB_setVerbose(int cid, TBbool On);
 TBbool TB_getVerbose(int cid);
 TBbool TB_validConnection(int cid);
 int    TB_getSocket(int cid);
+term_list *TB_getConnections();
 
 /* The meat of the functionality is defined here */
 int    TB_init();

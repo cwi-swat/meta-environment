@@ -9,6 +9,8 @@
 
 term *substitute(term *t, env *loc_env)
 {
+  term *t2;
+
   switch(tkind(t)){
   case t_bool: case t_int: case t_real: case t_str: case t_bstr:     
     return t;
@@ -21,7 +23,9 @@ term *substitute(term *t, env *loc_env)
     if(!fun_args(t))
       return t;
     else
-      return mk_appl(fun_sym(t), substitute_list(fun_args(t), loc_env));
+      t2 = mk_appl(fun_sym(t), substitute_list(fun_args(t), loc_env));
+      fun_str_sym(t2) = fun_sym(t);
+      return t2;
   case t_anno:
     return mk_anno(anno_val(t), substitute(anno_term(t), loc_env));
   case t_list:

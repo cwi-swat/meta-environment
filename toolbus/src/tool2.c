@@ -31,14 +31,13 @@ int TB_newConnection(char *tool_name, char *host, int port,
 {
   int i = 0;
 
-  assert(tool_name && port > 0 && handler);
   for(i=0; i<MAX_CONNECTIONS && connections[i]; i++)
     ;
 
   if(i<MAX_CONNECTIONS) {
     connections[i] = malloc(sizeof(tb_connection));
     if(connections[i]) {
-      connections[i]->tool_name	= strdup(tool_name);
+      connections[i]->tool_name	= tool_name ? strdup(tool_name) : NULL;
       connections[i]->host	= host ? strdup(host) : NULL;
       connections[i]->port	= port;
       connections[i]->handler	= handler;
@@ -420,6 +419,21 @@ int TB_match(term *trm, char *fmt, ...)
 
 static term *term_make(term *template, va_list *args);
 
+/*{{{  TBbool valid_id() */
+
+TBbool valid_id(char *id)
+{
+  if(!islower(id[0]))
+    return TBfalse;
+
+  while(*(++id)) {
+    if(!isalpha(*id) && !isdigit(*id) && *id !=  '-' && *id != '_')
+      return TBfalse;
+  }
+  return TBtrue;
+}
+
+/*}}}  */
 /*{{{  term *list_make(term_list *l, va_list *args) */
 
 static term *list_make(term_list *l, va_list *args)
@@ -504,7 +518,12 @@ static term *term_make(term *template, va_list *args)
       default:     if(streq(get_txt(sym), "appl")) {
 		     s = (char *)va_arg(*args, char *);
 		     t = (term *)va_arg(*args, term *);
-		     return mk_appl(TBlookup(s), t);
+
+		     t = mk_appl(TBlookup(s), t);
+		     
+		     if(!valid_id(s))
+		       fun_str_sym(t) = TBtrue;
+		     return t;
 		   }
 
 /*}}}  */
@@ -682,6 +701,27 @@ int TB_getSocket(int cid)
 {
   assert_valid_cid(cid);
   return connections[cid]->socket;  
+}
+
+/*}}}  */
+/*{{{  term_list *TB_getConnections() */
+
+term_list *TB_getConnections()
+{
+  int i;
+  term_list *l = NULL;
+
+  for(i=0; i<MAX_CONNECTIONS; i++) {
+    if(TB_validConnection(i) && TB_getSocket(i) >= 0) {
+      l = list_concat_term(l, TB_make("[<int>,<str>,<int>,<int>,<int>]",
+        i,
+        TB_getHost(i),
+        TB_getPort(i),
+        TB_getTid(i),
+        TB_getSocket(i)));
+    }
+  }
+  return l;
 }
 
 /*}}}  */
