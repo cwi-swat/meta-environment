@@ -287,12 +287,7 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
     PT_Tree tree = PT_getParseTreeTop(parseTree);
     PT_Tree cursor;
 
-    if (PT_getParseTreeAmbCnt(parseTree) > 0) {
-      cursor = PT_findTopAmbiguity(tree);
-    }
-    else { 
-      cursor = PT_findTreeAtOffset(tree, offset);
-    }
+    cursor = PT_findTreeAtOffset(tree, offset);
 
     if (cursor == NULL) {
       cursor = tree;
