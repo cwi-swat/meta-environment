@@ -1,0 +1,337 @@
+<HTML>
+<HEAD>
+<TITLE>Components in the new Asf+Sdf Meta-Environment</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1>Components in the new Asf+Sdf Meta-Environment</H1>
+
+The new Asf+Sdf Meta-Environment consists of the following components:
+<UL>
+<LI> <A HREF="#control-tool">A control tool</A>, which shows an overview
+     of the module import graph and offers the basic user interface
+     functionality to control the rest of the system.
+     <LI> A <A HREF="#hybrid-editor">hybrid editor</A>,
+          consisting of two subcomponents,
+          the <EM>structured editor</EM> and the <EM>text editor</EM>.
+          An editor instance of the hybrid editor can be used to edit the
+          syntax of a module, the equations of a module, or a term over
+          a specific module.
+     <LI> A <A HREF="#parser">parser</A>, which can parse terms given a 
+	  parse table and an input string.
+     <LI> A <A HREF="#parser-generator">parser generator</A>,
+          which can generate parse tables
+          giving the complete syntax of a module and its submodules.
+     <LI> A <A HREF="#evaluator">evaluator</A>,
+          which can evaluate a term given an input term and a list 
+         of equations.
+     <LI> A <A HREF="#compiler">compiler</A>,
+          which can compile a specification and
+          generate C code for it.
+     <LI> A <A HREF="#module-database">module
+          database</A>,
+          which keeps track of all modules
+          and relations between modules in the system.
+     <LI> A <A HREF="#term-database">term database</A>,
+          which keeps track of all terms in the system, and acts as an
+          <EM>AsFix term cache</EM>, caching the results of parsing terms.
+     <LI> An <A HREF="#unparser">unparser</A>,
+          which can unparse terms, either to text
+          (by updating the layout in the AsFix representation of the term),
+          TeX code, or HTML code, given a list consisting of pairs of
+          syntax rules and box expressions.
+     <LI> An <A HREF="#unparser-generator">unparse generator</A>, 
+          which can generate lists consisting
+          of pairs of syntax rules and box expressions.
+</UL>
+
+<P> The user interface of the Meta-Environment is based on two components:
+<UL>
+<LI> A syntax directed editor that can be used to edit both modules
+and terms over the specified language(s).
+These terms can be evaluated by interpreting the equations in the
+specification as rewrite rules.
+<LI> A central control tool
+that gives an overview of the specifications at the module level.
+This control tool allows the user to load and save specifications,
+add and delete modules, typeset specifications in TeX or HTML,
+and controls the creation of new editors instances. 
+</UL>
+
+<H2>Control Tool</H2>
+<A NAME="control-tool">
+
+<!-- In the current prototype, the control tool looks something like this:
+&lt;IMG SRC="control.gif"&gt; -->
+The current prototype shows an overview of the module import graph, giving
+a good impression of the internal structure of the specification.
+A number of buttons and menu items give access to the functionality
+of the tool.
+The control tool must provide the following functionality:
+<UL>
+<LI> Load a module and all its submodules.
+<LI> Show the import relation between the currently loaded modules.
+<LI> Show a list of all currently loaded modules.
+<LI> Save changes in a specific module.
+<LI> Save all elements that have been changed since the last 
+     save operations, be it modules or terms.
+<LI> Remove a module from the Meta-Environment, even if some
+     other module still depends on this module. Modules that are now
+     no longer in working order, should be 'greyed out' somehow.
+<LI> Inspect and change the list of search-paths in which the Meta-Environment
+     searches for new modules.
+<LI> Set and/or change the directory in which the compiler writes the
+     generated C programs.
+<LI> Create new module and term editors.
+<LI> Show a list of currently active module editors and term editors,
+     and enable the user to activate (bring them to the front) and
+     remove them.
+<LI> Quit the Meta-Environment.
+</UL>
+
+<H3>Extensibility</H3>
+In the future, we can imagine all kinds of other operations on modules
+or even whole specifications. Examples include queries on specifications
+to select all modules using a specific function, calculating some
+complexity metrics to find possible weak spots in a specification, or 
+restructure specifications based on some clustering results.
+These kind of extensions can be implemented in separate tools, but the
+user interface extension needed to access this new functionality must
+be added to the existing user interface. In order to do this, the
+control tool must provide a way to add user interface items like
+buttons and menu items, from within the controlling ToolBus script.
+This allows tools to add new functionality <EM>at runtime!</EM>
+
+<A NAME="hybrid-editor">
+<H2>Hybrid Editor</H2>
+
+<!--The structure editor currently looks like this:
+&lt;IMG SRC="structedit.gif"&gt; -->
+The hybrid editor must provide the following functionality:
+<UL>
+<LI> Editing of both modules and terms.
+<LI> Provide a 'structure editing mode' and a 'text editing' mode.
+     In text editing mode, the editor will provide all the usual
+     operations like cut/copy/paste, search and replace, etc.
+     In structure editing mode, the user can perform operations on
+     subtrees of the term/module. Typical operations include:
+     <UL> 
+     <LI> Show the sort of the current subtree (focus).
+     <LI> Provide a notion of placeholders, which represent
+          a hole in the tree.
+     <LI> Replace the current subtree with another subtree of the same
+          sort, for instance with a placeholder.
+     <LI> Replace a placeholder with a context-free function
+          optionally containing new placeholders, to build a term
+          using template expansion.
+     </UL> 
+<LI> The user must be able to switch from 'structure editing mode'
+     to 'text editing mode' by starting to type text.
+<LI> To switch from 'text editing mode' to 'structure editing mode',
+     the text in the editor must be parsed.
+<LI> When editing a term, the user must be able to rewrite the term 
+     currently in the editor.
+</UL>
+
+<H3>Extensibility</H3>
+Just like the control tool, the structure editor needs an extensible
+user interface to allow flexible addition of new functionality.
+In this way, typecheckers, compilers, and other tools can be connected
+to the user interface when they become available.
+It should provide facilities to combine results of the evaluation
+of different terms.
+
+<A NAME="parser-generator">
+<H2>Parser Generator</H2>
+
+Given the syntax definition of a language (as defined in the Sdf parts of the
+modules in a specification),
+a parse table must be generated for parsing the equations in the modules
+and terms.
+A parse table interpreter (or simply stated: a parser) uses this table to parse
+terms and equations.
+The parser generator should be able to generate this parse table given a list
+of Sdf modules.
+
+<H3>Extensibility</H3>
+The parse table should contain information indicating which transitions
+in the table are valid for a specific module. So, for an entire
+specification only one parse table is needed, the modular structure of
+the specification is thus coded in the parse table.
+
+<A NAME="parser">
+<H2>Parser</H2>
+
+The parser must provide the following basic functionality:
+<UL>
+<LI> Parsing of a text given a parse table and a module name.
+This module name can be:
+<UL>
+<LI> Sdf(2) if the Sdf part of a module must be parsed. 
+<LI> a user defined module name extended with syntax rules for
+equations if the Asf part of a module must be parsed.
+<LI> a user defined module name if the text of an ordinary term must be
+parsed.
+</UL>
+<LI> Construction of a parse tree in AsFix format if the parse was successful.
+<LI> Generation of error messages if the text contains some syntax error.
+<LI> A mechanism to store parse tables, so that a parse table need not
+be regenerated for every text that must be parsed.
+<LI> A mechanism to select only these entries of a parse table which are
+valid for a specific Sdf modules.
+</UL>
+
+<A NAME="evaluator">
+<H2>Evaluator</H2>
+
+We consider both the interpreter, and generated C executables
+as instances of the evaluator.
+The basic functionality of the interpreter is rewriting terms given a set
+of equations.
+The generated C executables take a term and rewrites it by the C program.
+
+<P> The minimal functionality of the interpreter is:
+<UL>
+<LI> Rewriting a term given some module name.
+<LI> Construction of a normal form.
+<LI> A mechanism to store sets of equations, so that these need not be
+retrieved fore every term that must be rewritten.
+</UL>
+
+<P> The minimal functionality of the generated C executables is:
+<UL>
+<LI> Rewriting a term given some module name.
+<LI> Construction of a normal form.
+</UL>
+
+<H3>Extensions</H3>
+Enabling the interpreter to use compiled modules when rewriting terms.
+Provide origin tracking information during rewriting in the interpreter
+and the generated C executables.
+Storing intermediate rewrite results for functions annotated by
+the user with the memo-attribute.
+Provide facilities to incorporate incremental rewriting techniques.
+
+<A NAME="compiler">
+<H2>Compiler</H2>
+
+Given a module name the compiler generates C programs, these C programs
+consist of functions corresponding to the context-free functions in the
+specification.
+Furthermore functions are generated to register local function definitions,
+to resolve external function calls and to transform AsFix terms into
+the internal term representation used by the C functions.
+The registering and resolving of function definitions and calls is
+necessary to enable the separate compilation of Asf+Sdf modules.
+
+<H3>Extensions</H3>
+
+The generated C code should be extended with so-called "active" predicates
+to enable to possibility to rewrite over other modules than the top
+module. This is needed when the generated C executables are to replace
+the interpreter, because if a term is to be rewritten over a lower
+level module  not all equations may be active.
+Generate C code which takes care of origin tracking.
+Incorporate functionality to store intermediate rewrite results to enable
+memo functions.
+Provide a mechanism to implement heavily used modules such as the integers
+directly in C.
+
+<P> The interpreter and the generated C executables should
+<EM>all</EM> be based on the same Asf semantics.
+
+<A NAME="debugger">
+<H2>Debugger</H2>
+
+The debugger is able to debug specications that are reduced using
+the evaluator. When a term is to be reduced in debug mode, the
+evaluator connects to the debugger, and generates events related
+to the reduction process. The debugger processes these events
+by highlighting the appropriate lines in the source code of the
+specification, and showing the values of variables. The user can
+influence the execution by setting breakpoints and stepping through
+the specification one equation at a time, or even one condition at
+a time.
+
+<H3>Extensibility</H3>
+
+In the future, origin tracking could be used to generate debugging
+support in the generated environments.
+
+<A NAME="module-database">
+<H2>Module Database</H2>
+
+The basic functionality of both the module database is to
+store trees representing modules. The reason for separating
+module and term database is that in a standalone environment the
+Meta-Environment specific functionality of the module database is not
+needed, this will be explained more elaborately below.
+
+The module database should provide the following functionality:
+<UL>
+<LI>Storage, retrieval, replacement, and deletion of modules with (based on)
+version numbers.
+<LI>Calculation of the import relations of modules.
+<LI>Keeping track of missing modules in the database
+with respect to the import relations.
+<LI>Keeping track of modifications in the syntax part and the consequences
+for tools depending on this information such as
+the equation parts (interpreter),
+terms (term database), parse tables (parser), TeX and HTML code (unparser),
+and generated C executables.
+<LI>Retrieval of the syntax part of modules given a list of modules names
+and version numbers.
+<LI>Retrieval of the equation part of modules given a list of modules names
+and version numbers.
+<LI>Reshuffling of equations given a list of modules names
+and version numbers and construction of new modules.
+</UL>
+
+The term database contains only terms constructed by the user or derived
+by the evaluator. These terms correspond to syntax modules available in
+the module database, if any. In a standalone environment there will
+be terms of the so-called top module, e.g., Pico or COBOL, and reduction
+results, e.g., booleans values in case of type check results, transformed
+programs, or value environments. 
+The term database should provide the following functionality:
+<UL>
+<LI>Storage, retrieval, replacement, and deletion of term with (based on)
+version numbers and module names.
+</UL>
+
+<H3>Extensibility</H3>
+Both the module and term database could provide functionality to pose queries
+on the contents of the database. These queries can be used to implement 
+search facilities, global search and replace facilities, derivation of
+relations between various trees in the database, etc.
+
+<A NAME="unparser">
+<H2>Unparser</H2>
+
+The unparser must deal with the pretty printing of normalized terms to be shown
+to the user after rewriting, and the typesetting of modules in LaTeX or
+on the web via HTML.
+The formatting of terms and modules is expressed in language and 
+back-end independent box-oriented formatting language.
+
+<P>The unparser or pretty printer should provide the following functionality:
+<UL>
+<LI>Unparsing of a term (in AsFix format) given a list consisting of pairs
+of context-free syntax rules and box expressions and resulting in a
+modified term (spaces and newlines will be added to the AsFix representation).
+<LI>Calculation of the box expression given the AsFix representation of a
+module, and transformation of the box expression into TeX or HTML code.
+<LI>A mechanism to store the list consisting of pairs of
+context-free syntax rules and box expressions.
+</UL>
+
+<H2>Unparser Generator</H2>
+<A NAME="unparser-generator">
+
+The unparser generator should generate a list consisting of pairs
+of context-free syntax rules and initial box expressions.
+Users should be able to modify the initial box expressions in order
+to fine tune the pretty printing.
+
+</BODY>
+</HTML>
