@@ -1292,10 +1292,12 @@ in
   rec-msg(type-check-asdf, Stack?, EditorId?) .
 printf("Stack = %t\n", Stack) .
   StackPopString(Stack, Stack?, Ext?) .
-  StackPopString(Stack, Stack?, Path?) .
+  StackPopString(Stack, Stack?, Directory?) .
   StackPopString(Stack, Stack?, ConstraintMod?) .
   StackPopString(Stack, Stack?, ModuleName?) .
-  TypeCheckModule(ModuleName, ConstraintMod).
+  BuildPath(Directory, ConstraintMod, Ext, Path?) .
+  OpenModule(Path, asdf, ConstraintMod) .
+  TypeCheckModule(ModuleName, ConstraintMod) .
   ReturnSuccess(EditorId, Stack)
 ) * delta
 endlet
@@ -1496,125 +1498,6 @@ in
 endlet
 
 
-/* Not used any more scheduled for removal. */
-/*
-process ParseASDFA(Sid: term, ParseSucceeded: bool?) is
-let
-  DependingModules: list,
-  Directory: str,
-  Id: int,
-  ModuleId: str,
-  Modulename: str,
-  NewModules: list,
-  Nonterminal: term,
-  Path: str,
-  Pid: int,
-  Table: term,
-  Text: str,
-  Tree: term,
-  Type: term
-in
-  Id := process-id
-  . Type := asdf
-  . snd-msg(em-get-modulename(Sid))
-  . rec-msg(em-modulename(Sid, Modulename?))
-  . snd-note(ui-status(statf(Id, "Parsing ASDF of %s", [Modulename])))
-  . snd-msg(get-module-id-hook(Type))
-  . rec-msg(get-module-id-hook-result(ModuleId?))
-*/
-  /* The type parameter 'asdf1' is important */
-/*
-  . GetParseTable(ModuleId, asdf1, true, Table?)
-  . snd-msg(syntax-top-sort-hook(asdf))
-  . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
-  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
-
-  .
-  (
-    rec-msg(parse-editor-ok(Sid))
-    . GetPath(Sid, Path?)
-    . snd-msg(io-get-path-directory(Path))
-    . rec-msg(io-directory(Path, Directory?))
-    . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
-    . ParseSucceeded := true
-    . GetParsetree(Sid, Tree?)
-    . snd-msg(unparse(Tree))
-    . rec-msg(unparsed-text(Text?))
-    . snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type))
-    .
-    (
-      rec-msg(no-updating-needed)
-      . snd-msg(te-clear-focus(Sid))
-      . SecondParse(Sid, Modulename, ParseSucceeded?)
-      +
-      rec-msg(updating-succeeded(DependingModules?))
-      . snd-msg(update-module-in-db(Modulename, Tree, Type))
-      .
-      (
-        rec-msg(updating-succeeded(NewModules?))
-        . OpenModules(NewModules, Type)
-        . snd-msg(te-clear-focus(Sid))
-*/
-	/* First parse went okay, and now we do the second... */
-/*
- 	. SecondParse(Sid, Modulename, ParseSucceeded?)
-      +
-        rec-msg(error-opening(Modulename, name-inconsistent))
-        . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [Modulename])))
-      )
-    +
-      rec-msg(error-opening(Modulename, name-inconsistent))
-      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [Modulename])))
-    )
-  +
-    rec-msg(parse-editor-failed(Sid))
-    . ParseSucceeded := false
-  )
-endlet
-*/
-
-/* Not used any more scheduled for removal. */
-/* Do the second parse of an ASDF module */
-/*
-process SecondParse(Sid : term, ModuleName : str, ParseSucceeded : term?) is
-let
-  Id: int,
-  Nonterminal: term,
-  Pid: int,
-  Table: term,
-  Tree: term
-in
-  Id := process-id
-  . snd-note(ui-status(statf(Id, "Second parse of %s", [ModuleName])))
-  . ParseSucceeded := true
-*/
-     /* The type parameter 'asdf' is important */
-/*
-  . GetParseTable(ModuleName, asdf, true, Table?)
-  .
-  if not-equal(Table, no-table) then
-    snd-msg(other-top-sort-hook(asdf))
-    . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
-    . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
-    .
-    (
-      rec-msg(parse-editor-ok(Sid))
-      . snd-msg(se-get-parse-tree(Sid))
-      . rec-msg(se-parse-tree(Sid, Tree?))
-      . snd-note(te-clear-focus(Sid))
-      . snd-msg(te-display-message(Sid, "Second parse successful"))
-    +
-      rec-msg(parse-editor-failed(Sid))
-      . ParseSucceeded := false
-      . snd-msg(invalidate-sdf-in-db(ModuleName))
-      . snd-msg(invalidate-asdf-in-db(ModuleName))
-    )
-  else
-    ParseSucceeded := false
-    . snd-note(ui-status(errorf("Could not generate parse table for %s", [ModuleName])))
-  fi
-endlet
-*/
 process ASDFParseInfoOutput(Modulename: str, Id: int, Sid: term, ParseSucceeded: bool) is
   if equal(ParseSucceeded, true) then
       snd-note(ui-status(statf(Id, "Parse succesful of %s", [Modulename])))
@@ -1683,8 +1566,6 @@ in
    if equal(ConstraintsModule, "") then
      tau   
    else
-     snd-msg(open-modules([ConstraintsModule], asdf)) .
-     rec-msg(finished-opening-modules) .
      snd-msg(ts-get-term-value("asdf-tree",ConstraintsModule)) .
      (
        rec-msg(ts-value(ModuleTree?)) .

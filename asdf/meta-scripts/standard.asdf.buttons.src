@@ -14,7 +14,7 @@ configuration([
   action([description(asdf-editor, menu(["Actions", "Type check"]))],
          [push-active-module,
           prompt-for-file("Extra type constraints (default is none)", "",".asdf"),
-	  split-file-name(".asdf"),
+	  split-file-name,
 	  type-check-asdf]),
   action([description(term-editor, menu(["Actions","Parse"]))],
          [push-active-module,
