@@ -5,14 +5,20 @@
 
 ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree);
 ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree);
-ATbool ASF_isTreeTraversalFunction(ASF_Tree tree);                              ATbool ASF_isTreeGetterFunction(ASF_Tree tree);
+ATbool ASF_isTreeTraversalFunction(ASF_Tree tree);                              
+ATbool ASF_isTreeGetterFunction(ASF_Tree tree);
 
 ATbool ASF_isTagDefault(ASF_ASFTag tag);
 
-ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, ASF_ASFConditionalEquationList l2);
+int ASF_getTestEquationListLength(ASF_ASFTestEquationTestList list);
+ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, 
+								   ASF_OptLayout separator,
+								   ASF_ASFConditionalEquationList l2);
+
 ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationList(ATermList l);
 
 ASF_OptLayout ASF_makeLayoutEmpty();
+ASF_OptLayout ASF_makeLayoutNewline();
 
 ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree constructor);
 

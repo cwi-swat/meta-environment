@@ -36,7 +36,8 @@ ATbool ASF_isTagDefault(ASF_ASFTag tag)
 /*{{{  ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
 
 ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList cel1,
-                                               ASF_ASFConditionalEquationList cel2)
+								   ASF_OptLayout separator,
+								   ASF_ASFConditionalEquationList cel2)
 {
   if (!ASF_isASFConditionalEquationListEmpty(cel2)) {
     if (!ASF_isASFConditionalEquationListEmpty(cel1)) {
@@ -83,8 +84,8 @@ ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFCondit
       for (index=0; index <= maxIndex; index++) {
         ce = ASF_ASFConditionalEquationFromTerm(ATindexedSetGetElem(iSet, index));
         newCel = ASF_makeASFConditionalEquationListMany(ce,
-                                              ASF_makeLayoutEmpty(), 
-                                              newCel);
+							separator, 
+							newCel);
       }
       ATindexedSetDestroy(iSet);
       return newCel;
@@ -102,6 +103,14 @@ ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFCondit
 ASF_OptLayout ASF_makeLayoutEmpty()
 {
   return ASF_makeOptLayoutAbsent();
+} 
+
+/*}}}  */
+/*{{{  ASF_OptLayout ASF_makeLayoutNewline() */
+
+ASF_OptLayout ASF_makeLayoutNewline()
+{
+  return ASF_makeOptLayoutPresent("\n");
 } 
 
 /*}}}  */
@@ -223,7 +232,7 @@ ASF_ASFConditionalEquationList ASF_getASFModuleEquationList(ASF_ASFModule module
     ASF_ASFSection section = ASF_getASFSectionListHead(sections);
 
     if (ASF_isASFSectionEquations(section)) {
-      eqs = ASF_unionASFConditionalEquationList(eqs, 
+      eqs = ASF_unionASFConditionalEquationList(eqs, ASF_makeLayoutNewline(),
 						ASF_getASFSectionList(section));
     }
 
