@@ -6,7 +6,10 @@ imports basic/Integers
 imports basic/Strings 
 
 exports
+  context-free start-symbols PROGRAM
+
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
+
   context-free syntax
     
     "begin" DECLS {STATEMENT";" }* "end"                          -> PROGRAM
