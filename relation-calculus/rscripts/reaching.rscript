@@ -22,6 +22,9 @@ assert "kill": KILL ==  {<1, <4, "i">>, <1, <7, "i">>, <2, <5, "j">>, <3, <6, "a
 bag[stat] STATEMENTS = carrier(PRED)
 rel[stat,stat] PRED-OF = inv(PRED)
 
+bag[stat] predecessor(stat S) = PRED[-,S]
+bag[stat] successor(stat S) = PRED[S,-]
+
 %% Reaching definitions
 
 equations
@@ -29,7 +32,7 @@ equations
 	rel[stat,def] IN init {}
 	rel[stat,def] OUT init DEF
   satisfy
-	IN  =  {<S, D> | stat S : STATEMENTS, stat P : PRED-OF[S], def D : OUT[P]}
+	IN  =  {<S, D> | stat S : STATEMENTS, stat P : predecessor(S), def D : OUT[P]}
 	OUT =  {<S, D> | stat S : STATEMENTS, def D : DEF[S] union  (IN[S] \ (KILL[S]))}
 
 %% priorities!
@@ -57,8 +60,8 @@ equations
 	rel[stat,def] LIN init {}
 	rel[stat,def] LOUT init DEF
   satisfy
-	LIN  =  { < S, I> | stat S : STATEMENTS,  def I : USE[S] union (LOUT[S] \ (DEF[S]))}
-	LOUT =  { < S, O> | stat S : STATEMENTS,  def O : LIN[S] }
+	LIN  =  { < S, D> | stat S : STATEMENTS,  def D : USE[S] union (LOUT[S] \ (DEF[S]))}
+	LOUT =  { < S, D> | stat S : STATEMENTS,  stat Succ : successor(S), def D : LIN[Succ] }
 end equations
 
 assert "LIN": LIN == {<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, <4, <4, "i">>, 
