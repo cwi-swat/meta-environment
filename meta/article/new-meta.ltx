@@ -8,7 +8,7 @@
 \urlstyle{rm}
 
 %%\title{Design and Implementation of a New \metaenv}
-\title{Implementation of a Prototype of the New \metaenv}
+\title{Implementation of a Prototype for the New \metaenv}
 
 \author{Mark van den Brand$^{^1}$, Tobias Kuipers$^{^2}$, \\
         Leon Moonen$^{^1}$, Pieter Olivier$^{^1}$\\
@@ -115,8 +115,26 @@ generation of \LaTeX\ code~\cite{Vis95.tolatex} were performed in or with this
 implementation as well.
 
 The current implementation of the \metaenv\ has a number of drawbacks
-and shortcomings, the most important ones are listed in
-Table~\ref{short}.  This table shows that the system has all the signs
+and shortcomings, the most important ones are listed in below:
+\begin{itemize}
+\item The \ui{} is old-fashioned and badly organised: reduced terms not in
+  term-editor and long flat lists of modules for deleting and editing
+  of modules and terms.
+\item An often heard complaint was: ``The editor is too restricted, why is
+  it not emacs- or vi-like?''
+\item The creation of stand-alone environments is not possible.
+\item It is impossible to port to different architectures.  Limited
+  availability of \lelisp~\cite{LeLisp90} on various platforms.  Our version of
+  \lelisp\ is becoming obsolete.
+\item The tree formalism VTP~\cite{Aus90} is not easy to use, connection \lelisp/VTP is
+  complicated.
+\item The current monolithic system is hard to maintain. New research
+  ideas are hard to implement.
+\item Bugs are not fixed anymore, because the knowledge about the
+  intrinsics of the system needed to fix these bugs is no longer
+  present.
+\end{itemize}
+These points show that the system has all the signs
 of a \emph{legacy system}, mainly because most of the coding has been
 done by Ph.D. researchers, and consequently the project has had a
 large turnover of staff.
@@ -135,38 +153,6 @@ This initiated the development of the \TB, a software
 interconnection architecture~\cite{BK96a,TB-AMAST96} which takes care
 of the communication of software components.
 This \TB\ will be the backbone of the implementation of the new \metaenv.
-
-\begin{table}
-\centering
-\begin{tabular}{|p{13cm}|} \hline
-  Complaints or shortcomings
-  \\ \hline\hline 
-  The \ui{} is old-fashioned and badly organised: reduced terms not in
-  term-editor and long flat lists of modules for deleting and editing
-  of modules and terms.
-  \\ \hline
-  An often heard complaint was: ``The editor is too restricted, why is
-  it not emacs- or vi-like?''
-  \\ \hline
-  The creation of stand-alone environments is not possible.
-  \\ \hline
-  It is impossible to port to different architectures.  Limited
-  availability of \lelisp\ on various platforms.  Our version of
-  \lelisp\ is becoming obsolete.
-  \\ \hline 
-  The tree formalism VTP is not easy to use, connection \lelisp/VTP is
-  complicated.
-  \\ \hline
-  The current monolithic system is hard to maintain. New research
-  ideas are hard to implement.
-  \\ \hline 
-  Bugs are not fixed anymore, because the knowledge about the
-  intrinsics of the system needed to fix these bugs is no longer
-  present.
-  \\ \hline \hline
-\end{tabular}
-\caption{\label{short} Drawbacks of the current version of the \metaenv.}
-\end{table}
 
 Based on the experiences gained with the Epoch-\gse-UI coupling the
 decision was made
