@@ -134,6 +134,22 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol separator = PT_getSymbolSeparator(symbol);
     return lengthOfSymbol(newSymbol) + lengthOfSymbol(separator) + 4;
   }
+  if (PT_isSymbolIterN(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    int number = PT_getSymbolNumber(symbol);
+    return lengthOfSymbol(newSymbol) + lengthOfInteger(number) + 1;
+  }
+  if (PT_isSymbolIterSepN(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    PT_Symbol separator = PT_getSymbolSeparator(symbol);
+    int number = PT_getSymbolNumber(symbol);
+    return lengthOfSymbol(newSymbol) + lengthOfInteger(number) +
+           lengthOfSymbol(separator) + 4;
+  }
+  if (PT_isSymbolPerm(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    return lengthOfSymbols(newSymbols) + 4;
+  }
   if (PT_isSymbolCharClass(symbol)) {
     return lengthOfCharRanges(PT_getSymbolRanges(symbol)) + 2;
   }
@@ -414,6 +430,38 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     buf[idx++] = '}';
     buf[idx++] = '*';
 
+    return idx;
+  }
+  if (PT_isSymbolIterN(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    int number = PT_getSymbolNumber(symbol);
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+    idx = yieldInteger(number, idx, buf, bufSize);
+    buf[idx++] = '+';
+
+    return idx; 
+  }
+  if (PT_isSymbolIterSepN(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    PT_Symbol separator = PT_getSymbolSeparator(symbol);
+    int number = PT_getSymbolNumber(symbol);
+    buf[idx++] = '{';
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+    buf[idx++] = ' ';
+    idx = yieldSymbol(separator, idx, buf, bufSize);
+    buf[idx++] = '}';
+    idx = yieldInteger(number, idx, buf, bufSize);
+    buf[idx++] = '+';
+
+    return idx;      
+  }
+  if (PT_isSymbolPerm(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    buf[idx++] = '<';
+    buf[idx++] = '<';
+    idx = yieldSymbols(newSymbols, idx, buf, bufSize);
+    buf[idx++] = '>';
+    buf[idx++] = '>';
     return idx;
   }
   if (PT_isSymbolCharClass(symbol)) {

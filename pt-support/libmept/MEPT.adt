@@ -78,6 +78,12 @@
 
   [Symbol, iter-star-sep, iter-star-sep(<symbol(Symbol)>,<separator(Symbol)>)],
 
+  [Symbol, iter-n, iter-n(<symbol(Symbol)>,<number(int)>)],
+
+  [Symbol, iter-sep-n, iter-sep-n(<symbol(Symbol)>,<separator(Symbol)>,<number(int)>)],
+
+  [Symbol, perm, perm(<symbols(Symbols)>)],
+
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
   [Symbol, layout, layout],
