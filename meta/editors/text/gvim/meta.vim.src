@@ -45,10 +45,10 @@ func! SetModified()
 endfunc
 
 func! WriteContents()
-  call DisableModificationDetection()
+" call DisableModificationDetection()
   call WritePendingChanges()
   call Handshake()
-  call EnableModificationDetection()
+" call EnableModificationDetection()
 endfunc
 
 " Remap <CTRL-]> to update focus around current location

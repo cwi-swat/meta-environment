@@ -13,7 +13,6 @@ let
   SearchPaths: list
 in
   (
-    %% Handle request to create a new module.
     rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
     snd-msg(get-search-paths) .
     rec-msg(search-paths(SearchPaths?)) .
@@ -40,11 +39,12 @@ in
           rec-msg(io-file-not-exists) .
           snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
           (
-            rec-msg(io-file-written) .
-  	  snd-msg(open-initial-module(Path, ModuleName, Extension))
+            rec-msg(io-file-written)
+	    . snd-msg(open-modules([ModuleName], Type))
+	    . rec-msg(finished-opening-modules)
           +
             rec-msg(io-file-not-written(ErrMsg?)) .
-  	  snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
+	    snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
           )
         )
       )

@@ -16,7 +16,7 @@ let
 in
   snd-msg(ts-get-term-value("import-relations", ModuleId))
   . rec-msg(ts-value(Modules?))
-  . snd-msg(ts-filter-keys("module-paths", Modules))
+  . snd-msg(ts-filter-keys("module-path", Modules))
   . rec-msg(ts-keys(Inactive?))
 endlet
 
@@ -26,7 +26,13 @@ endlet
 
 process GetModuleImports(ModuleId: str, Imports: list?) is
   snd-msg(ts-get-term-value("import-relations", ModuleId))
-  . rec-msg(ts-value(Imports?))
+  .
+  (
+    rec-msg(ts-value(Imports?))
+  +
+    rec-msg(ts-no-value)
+    . Imports := []
+  )
 
   /*}}}  */
 /*{{{ process SetModuleImports(ModuleId: str, Imports: list) */
@@ -46,19 +52,6 @@ process SetModuleSyntaxText(ModuleId: str, Text: str) is
 
 process SetModuleSyntaxTree(ModuleId: str, Tree: term) is
   snd-msg(ts-put-term-value("sdf-tree", ModuleId, Tree))
-
-/*}}}  */
-
-/*{{{  RegisterModule(ModuleId: str, Directory: str) */
-
-process RegisterModule(ModuleId: str, Directory: str) is
-let
-  Path: str
-in
-  snd-msg(ts-put-str-value("module-paths", ModuleId, Directory))
-  . BuildPath(Directory, ModuleId, "", Path?)
-  . MDB-RegisterPath(Path, ModuleId)
-endlet
 
 /*}}}  */
 
@@ -118,7 +111,7 @@ in
     snd-msg(changed-modules(DependingModules))
   +
     rec-msg(is-module-in-db(Name?)) .
-    snd-msg(ts-contains-key("module-paths", Name)) .
+    snd-msg(ts-contains-key("module-path", Name)) .
     ( 
       rec-msg(ts-contains-key).
       snd-msg(exists-in-module-db(Name))
@@ -140,7 +133,7 @@ in
       SyntaxTree := no-tree .
       rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-      snd-msg(ts-filter-keys("module-paths", Modules)) .
+      snd-msg(ts-filter-keys("module-path", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       snd-msg(updating-succeeded(Modules))
     else
@@ -207,7 +200,7 @@ in
     snd-msg(eqs-added)
   +
     rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
-    snd-msg(ts-get-str-value("module-paths", Name)) .
+    snd-msg(ts-get-str-value("module-path", Name)) .
     rec-msg(ts-value(Path?)) .
     snd-msg(file-extension-hook(asf)) .
     rec-msg(file-extension-hook-result(Extension?)) .
@@ -235,7 +228,7 @@ in
     snd-msg(parse-table-added)
   +
     rec-msg(get-path-from-db(Name?)).
-    snd-msg(ts-get-str-value("module-paths", Name)) .
+    snd-msg(ts-get-str-value("module-path", Name)) .
     ( 
       rec-msg(ts-value(Path?)) .
       snd-msg(path(Path))
@@ -279,7 +272,7 @@ in
     snd-msg(imported-modules(Modules))
   +
     rec-msg(get-all-module-names).
-    snd-msg(ts-get-all-keys("module-paths")) .
+    snd-msg(ts-get-all-keys("module-path")) .
     rec-msg(ts-all-keys(Modulenames?)) .
     snd-msg(all-module-names(Modulenames))
   + 
@@ -366,7 +359,7 @@ in
     MDB-InvalidateModules(DependingModules, sdf)
   +
     rec-msg(get-module-info(Name?)) .
-    snd-msg(ts-get-str-value("module-paths", Name)) .
+    snd-msg(ts-get-str-value("module-path", Name)) .
     (
       rec-msg(ts-value(Path?)) .
       MDB-GetImportedModules(Name, Modules?) .
@@ -382,7 +375,7 @@ endlet
 
 process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("extensions", "str")) .
-  snd-msg(ts-add-table("module-paths", "str")) . 
+  snd-msg(ts-add-table("module-path", "str")) . 
   snd-msg(ts-add-table("path-modulename", "str")) . 
   snd-msg(ts-add-table("sdf-tree", "term")) .
   snd-msg(ts-add-table("sdf-text", "str")) .
@@ -395,7 +388,7 @@ process MDB-InitializeModuleDb is
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions")) .
-  snd-msg(ts-clear-table("module-paths")) .
+  snd-msg(ts-clear-table("module-path")) .
   snd-msg(ts-clear-table("path-modulename")) .
   snd-msg(ts-clear-table("sdf-tree")) .
   snd-msg(ts-clear-table("sdf-text")) .
@@ -592,7 +585,7 @@ in
   rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
   MDB-StoreModuleTree(NewName, Syntax) .
   Syntax := no-tree .
-  snd-msg(ts-put-str-value("module-paths", NewName, NewPath)) .
+  snd-msg(ts-put-str-value("module-path", NewName, NewPath)) .
   MDB-RegisterPath(NewPath, NewName) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
@@ -684,27 +677,13 @@ let
   Filename : str,
   Extension : str
 in
-  snd-msg(ts-get-str-value("module-paths", Module)) .
+  snd-msg(ts-get-str-value("module-path", Module)) .
   rec-msg(ts-value(Path?)) .
   snd-msg(file-extension-hook(Type)) .
   rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(Filename?)) .
   AnnotateTree(In, Filename, Out?)
-endlet
-
-process MDB-GetModulename(Directory: str, Filename: str, Modulename: str?) is
-let
-  Path: str
-in
-  BuildPath(Directory, Filename, "", Path?) .
-  snd-msg(ts-get-str-value("path-modulename", Path)) .
-  (
-    rec-msg(ts-value(Modulename?))
-  +
-    rec-msg(ts-no-value) .
-    Modulename := Filename
-  )
 endlet
 
 process MDB-InvalidateEntry(Name : str, Text : str, DependingModules : list?) is

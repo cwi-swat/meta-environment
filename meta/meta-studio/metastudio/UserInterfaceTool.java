@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 6, 2004 3:55:17 PM
+// generation time: Apr 19, 2004 1:34:44 PM
 
 package metastudio;
 
@@ -18,7 +18,6 @@ abstract public class UserInterfaceTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm Pmessagef0;
-  private ATerm PupdateList0;
   private ATerm PinitializeUi0;
   private ATerm PshowListChoice0;
   private ATerm Pwarningf0;
@@ -79,7 +78,6 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,showListChoice(<str>,<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
@@ -92,7 +90,6 @@ abstract public class UserInterfaceTool
   private void initPatterns()
   {
     Pmessagef0 = factory.parse("rec-do(messagef(<str>,<term>))");
-    PupdateList0 = factory.parse("rec-do(update-list(<str>,<str>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PshowListChoice0 = factory.parse("rec-do(showListChoice(<str>,<str>,<term>))");
     Pwarningf0 = factory.parse("rec-do(warningf(<str>,<term>))");
@@ -128,11 +125,6 @@ abstract public class UserInterfaceTool
     result = term.match(Pmessagef0);
     if (result != null) {
       messagef((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PupdateList0);
-    if (result != null) {
-      updateList((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PinitializeUi0);

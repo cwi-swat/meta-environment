@@ -126,6 +126,7 @@ process RevertModule(Modulename : str) is
   CloseModuleInDBandInvalidateDependingModules(Modulename)
   . snd-msg(open-modules([Modulename], sdf))
   . rec-msg(finished-opening-modules)
+  . DrawImportGraph()
   . snd-msg(module-reverted(Modulename))
 
 process DoDeleteModule(ModuleName : str) is
@@ -460,6 +461,7 @@ in
 	(
           rec-msg(updating-succeeded(Imports?)).
           snd-msg(open-modules(Imports, Type)) .
+	  DrawImportGraph() .
           rec-msg(finished-opening-modules)
         +
 	  rec-msg(error-opening(ModuleName, name-inconsistent)) .

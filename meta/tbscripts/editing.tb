@@ -523,19 +523,17 @@ endlet
 
 /*}}}  */
 
-/*{{{  process GetModuleForPath(Path: str, Modulename: str?) */
+/*{{{  process GetModuleForPath(Path: str, ModuleId: str?) */
 
-process GetModuleForPath(Path: str, Modulename: str?) is
-let
-  Directory: str,
-  Filename: str
-in
-  snd-msg(io-get-path-directory(Path))
-  . rec-msg(io-directory(Path, Directory?))
-  . snd-msg(io-get-path-filename(Path))
-  . rec-msg(io-filename(Path, Filename?))
-  . MDB-GetModulename(Directory, Filename, Modulename?)
-endlet
+process GetModuleForPath(Path: str, ModuleId: str?) is
+  snd-msg(ts-get-str-value("path-modulename", Path))
+  .
+  (
+    rec-msg(ts-value(ModuleId?))
+  +
+    rec-msg(ts-no-value)
+    . ModuleId := ""
+  )
 
 /*}}}  */
 /*{{{  process GetModuleByExtension(Path: str, Modulename: str?) */

@@ -88,15 +88,6 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
 
-    public void updateList(String moduleName, String actions) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.updateList(moduleName, actions);
-        }
-    }
-
     public void errorf(String format, ATerm args) {
         Iterator iter = getToolComponents().iterator();
 

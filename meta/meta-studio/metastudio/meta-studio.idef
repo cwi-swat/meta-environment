@@ -36,7 +36,6 @@ let
   Type : term,
   UI : user-interface
 in
-  subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
   Id := process-id.
 #ifdef ECLIPSE
@@ -96,7 +95,7 @@ in
       snd-msg(debugging(On)) .
       snd-ack-event(UI, debugging(On))
     +
-      rec-note(display-import-graph(Pairs?)).
+      rec-msg(display-import-graph(Pairs?)).
       snd-do(UI, new-graph(Pairs)) .
       Pairs := []
     +

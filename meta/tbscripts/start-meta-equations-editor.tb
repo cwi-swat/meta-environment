@@ -1,6 +1,5 @@
 #include "meta.tb"
 #include "status.tb"
-#include "dummy-display-graph.tb"
 
 process StandAloneEquationsEditor is
 let
@@ -22,4 +21,3 @@ in
 endlet   
 
 toolbus(StandAloneEquationsEditor)
-toolbus(DummyDisplayGraph)

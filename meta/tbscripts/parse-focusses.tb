@@ -36,6 +36,7 @@ in
   .
   if equal(Registered, true)
   then
+    printf("parse-editor-ok\n") .
     snd-msg(parse-editor-ok(Sid))
   else
     GetFilename(Sid, Filename?)

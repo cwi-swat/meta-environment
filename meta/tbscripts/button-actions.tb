@@ -148,6 +148,7 @@ let
   Message : str,
   Mode : term,
   Modulename : str,
+  Modulenames : list,
   Name : str,
   NewModulename : str,
   NrOfArgs : int,
@@ -711,12 +712,24 @@ in
 	  ReturnSuccess(EditorId, Stack)	
         fi
       + 
-	rec-msg(open-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Extension?) .
-       	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, Modulename?) .
-        snd-msg(open-initial-module(Path, Modulename, Extension)) .           
-	ReturnSuccess(EditorId, Stack)	
+	rec-msg(open-module, Stack?, EditorId?)
+       	. StackPopString(Stack, Stack?, Extension?)
+       	. StackPopString(Stack, Stack?, Directory?)
+       	. StackPopString(Stack, Stack?, Modulename?)
+	. BuildPath(Directory, Modulename, Extension, Path?)
+	. OpenSyntax(Path, sdf)
+	. snd-msg(ts-get-str-value("path-modulename", Path))
+	.
+	(
+	  rec-msg(ts-value(Modulename?))
+	  . GetModuleImports(Modulename, Modulenames?)
+	  . snd-msg(open-modules(Modulenames, sdf))
+	  . rec-msg(finished-opening-modules)
+	  . DrawImportGraph()
+	+
+	  rec-msg(ts-no-value)
+	)
+	. ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(new-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
@@ -836,9 +849,9 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(compile-module(ModuleName, Path)) .
-	  rec-msg(compilation-ready(ModuleName)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(compile-module(Modulename, Path)) .
+	  rec-msg(compilation-ready(Modulename)) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -1019,6 +1032,7 @@ let
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing term %s", [Modulename])))
+  . snd-msg(te-write-contents(Sid))
   . GetParseTable(Modulename, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
@@ -1064,8 +1078,7 @@ in
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
-  . snd-msg(notify-about-changed-modules([Modulename], Type))
-  . rec-msg(notify-about-changed-modules-done)
+  . snd-msg(te-write-contents(Sid))
   . snd-msg(get-module-id-hook(Type))
   . rec-msg(get-module-id-hook-result(ModuleId?))
   . GetParseTable(ModuleId, sdf, true, Table?)
@@ -1085,26 +1098,26 @@ in
       . snd-msg(te-clear-focus(Sid))
       . snd-msg(te-display-message(Sid, "Parse successful"))
     +
-      rec-msg(updating-succeeded(DependingModules?)).
-      snd-msg(update-module-in-db(Modulename, Tree, Type)) .
+      rec-msg(updating-succeeded(DependingModules?))
+      . snd-msg(update-module-in-db(Modulename, Tree, Type))
+      .
       (
-	rec-msg(updating-succeeded(NewModules?)).
-	snd-msg(notify-about-changed-modules(DependingModules, Type)) .
-	rec-msg(notify-about-changed-modules-done) .
-	snd-msg(open-modules(NewModules, Type)).
-	rec-msg(finished-opening-modules) .
-	snd-msg(te-clear-focus(Sid)) .
-	snd-msg(te-display-message(Sid, "Parse successful"))
+	rec-msg(updating-succeeded(NewModules?))
+	. snd-msg(open-modules(NewModules, Type))
+	. rec-msg(finished-opening-modules)
+	. DrawImportGraph()
+	. snd-msg(te-clear-focus(Sid))
+	. snd-msg(te-display-message(Sid, "Parse successful"))
       +
-	rec-msg(error-opening(Modulename, name-inconsistent)).
-	snd-msg(invalidate-sdf-in-db(Modulename)).
-	snd-note(ui-status(
+	rec-msg(error-opening(Modulename, name-inconsistent))
+	. snd-msg(invalidate-sdf-in-db(Modulename))
+	. snd-note(ui-status(
 	  errorf("Changing the name of %s is not permitted.",[Modulename])))
       )
     +
-      rec-msg(error-opening(Modulename, name-inconsistent)) .
-      snd-msg(invalidate-sdf-in-db(Modulename)).
-      snd-note(ui-status(
+      rec-msg(error-opening(Modulename, name-inconsistent))
+      . snd-msg(invalidate-sdf-in-db(Modulename))
+      . snd-note(ui-status(
 	errorf("Changing the name of %s is not permitted.",[Modulename])))
     )
   +
@@ -1120,12 +1133,11 @@ let
   Nonterminal: term,
   Pid: int,
   Table: term,
-  Text: str,
   Tree: term
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing equations of %s", [Modulename])))
-  . GetText(Sid, Text?)
+  . snd-msg(te-write-contents(Sid))
   . GetParseTable(Modulename, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
@@ -1257,6 +1269,7 @@ in
   Id := process-id .
   snd-msg(open-modules([Modulename], sdf)) .
   rec-msg(finished-opening-modules) .
+  DrawImportGraph() .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
   create(GetSpecification(Modulename), Pid?)
   .
@@ -1397,5 +1410,35 @@ in
   +
     rec-msg(em-no-such-session(Filename))
     . snd-msg(no-such-session(Pid))
+  )
+endlet
+
+process LocateFile(ModuleId: str, Type: term, Path: str?) is
+let
+  Extension: str,
+  Directory: str,
+  Directories: list
+in
+  snd-msg(get-search-paths)
+  . rec-msg(search-paths(Directories?))
+  . snd-msg(file-extension-hook(Type))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(io-find-file(Directories, ModuleId, Extension))
+  .
+  (
+    rec-msg(io-file-not-found)
+    . Path := "" 
+  +
+    rec-msg(io-file-found(Directories?))
+    . Directory := first(Directories)
+    . Directories := next(Directories)
+    .
+    if not-equal(Directories, [])
+    then
+      DealWithMultipleOccurrences(Directory, ModuleId, Extension, Directories)
+    else
+      tau
+    fi
+    . BuildPath(Directory, ModuleId, Extension, Path?)
   )
 endlet

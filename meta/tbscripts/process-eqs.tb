@@ -25,7 +25,7 @@ let
   Directory: str,
   Extension: str
 in
-  snd-msg(ts-get-str-value("module-paths", ModuleId))
+  snd-msg(ts-get-str-value("module-path", ModuleId))
   . rec-msg(ts-value(Directory?))
   . snd-msg(file-extension-hook(asf))
   . rec-msg(file-extension-hook-result(Extension?))

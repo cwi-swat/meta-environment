@@ -1,34 +1,12 @@
 /* $Id$ */
 
-process Open-initial-module is
-let
-  Path : str,
-  Module : str,
-  Extension : str,
-  Imports : list,
-  Type : term
-in
-  (
-    rec-msg(open-initial-module(Path?, Module?, Extension?)) .
-    if equal(Extension, "") then
-      Type := quote(sdf)
-    else 
-      snd-msg(extension-to-type-hook(Extension)) .
-      rec-msg(extension-to-type-hook-result(Type?))
-    fi .
-    snd-msg(is-module-in-db(Module)).
-    (
-      rec-msg(not-exists-in-module-db(Module)) .
-      OpenModule(Path, Module, Type) .
-      GetModuleImports(Module, Imports?) .
-      snd-msg(open-modules(Imports, Type)).
-      rec-msg(finished-opening-modules)
-    +
-      rec-msg(exists-in-module-db(Module))
-    )
-  ) *
-  delta
-endlet
+/*{{{ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) */
+
+process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
+  snd-msg(io-get-filename(Directory, Filename, Extension))
+  . rec-msg(io-filename(Path?))
+
+/*}}}  */
 
 process DrawImportGraph is
 let
@@ -36,33 +14,8 @@ let
 in
   snd-msg(get-import-relations) .
   rec-msg(import-relations(ImportRelations?)) .
-  snd-note(display-import-graph(ImportRelations)) .
+  snd-msg(display-import-graph(ImportRelations)) .
   ImportRelations := []
-endlet
-
-process LocateFile(Name : str, Extension : str, Path : str?) is
-let
-  Directories : list,
-  Chosen : str
-in
-  snd-msg(get-search-paths) .
-  rec-msg(search-paths(Directories?)) .
-  snd-msg(io-find-file(Directories, Name, Extension)) .
-  (
-    rec-msg(io-file-not-found) .
-    Path := "" 
-  +
-    rec-msg(io-file-found(Directories?)) .
-    Path := first(Directories) .
-    Directories := next(Directories) .
-    if not-equal(Directories, []) then
-      snd-msg(io-get-filename(Path, Name, Extension)) .
-      rec-msg(io-filename(Chosen?)) .
-      DealWithMultipleOccurrences(Chosen, Name, Extension, Directories)
-    else
-      tau
-    fi
-  )
 endlet
 
 process DealWithMultipleOccurrences(Chosen : str, Name : str,
@@ -76,8 +29,7 @@ in
   if not-equal(Directories, []) then
     Directory := first(Directories) .
     Directories := next(Directories) .
-    snd-msg(io-get-filename(Directory, Name, Extension)) .
-    rec-msg(io-filename(FileName?)) .
+    BuildPath(Directory, Name, Extension, FileName?) .
     snd-msg(io-compare-files(FileName, Chosen)) .
     (
       rec-msg(io-files-equal) 
@@ -93,68 +45,46 @@ in
   fi
 endlet
 
-process Open-modules is 
+process OpenModules is 
 let
-  Id : int,
-  Modules : list,
-  Module : str,
-  Imports : list,
-  Path : str,
-  FileName : str,
-  Extension : str,
-  Changed : term,
-  Type : term
+  ModuleId: str,
+  Modules: list,
+  Imports: list,
+  Path: str,
+  FileName: str,
+  Type: term
 in
-  Id := process-id.
   (
-    rec-msg(open-modules(Modules?, Type?)).
-    Changed := true .
-    snd-note(ui-status(stat(Id,"Opening Modules"))). 
-    if not-equal(Modules, []) then
-      Module := first(Modules).
-      Modules := next(Modules).
-      snd-msg(is-module-in-db(Module)).
-      (
-        rec-msg(exists-in-module-db(Module))
-      +
-        rec-msg(not-exists-in-module-db(Module)).
-	snd-msg(file-extension-hook(Type)) .
-	rec-msg(file-extension-hook-result(Extension?)) .
-        LocateFile(Module, Extension, Path?) .
-	if not-equal(Path, "") then
-          OpenModule(Path, Module, Type)
-	  . GetModuleImports(Module, Imports?)
-          . Modules := join(Imports, Modules)
-        else 
-          Error("Opening module %s failed: file not found!", [Module])
-        fi
-      )
-    fi *
+    rec-msg(open-modules(Modules?, Type?))
+    .
+    if not-equal(Modules, [])
+    then
+      ModuleId := first(Modules)
+      . Modules := next(Modules)
+      . LocateFile(ModuleId, Type, Path?)
+      .
+      if not-equal(Path, "")
+      then
+	snd-msg(ts-contains-key("path-modulename", Path))
+	.
+	(
+	  rec-msg(ts-contains-key)
+	+
+	  rec-msg(ts-not-contains-key)
+	  . OpenSyntax(Path, Type)
+	  . GetModuleImports(ModuleId, Imports?)
+	  . Modules := join(Imports, Modules)
+	)
+      else 
+	Error("Opening module %s failed: file not found!", [ModuleId])
+      fi
+    fi
+    *
     if equal(Modules, []) then
-      if equal(Changed, true) then
-        DrawImportGraph()
-      else
-        tau
-      fi .
-      snd-note(ui-status(endstat(Id))) .
       snd-msg(finished-opening-modules)
     fi
   ) *
   delta
-endlet
-
-process OpenModule(Path: str, ModuleId: str, Type: term)
-is
-let
-  Pid: int,
-  Error: term,
-  RealPath: str,
-  RealModule: str
-in
-  Pid := process-id
-  . snd-note(ui-status(statf(Pid, "Opening %s", [ModuleId])))
-  . OpenSyntax(Path, ModuleId, Type)
-  . snd-note(ui-status(endstat(Pid)))
 endlet
 
 process Error(Message : str, MessageArgs : list) is
@@ -181,81 +111,61 @@ in
   fi
 endlet
 
-/*{{{ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) */
-
-process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
-  snd-msg(io-get-filename(Directory, Filename, Extension))
-  . rec-msg(io-filename(Path?))
-
-/*}}}  */
-/*{{{  process VerifyModuleId(Tree: term, ModuleId: str, Valid: bool?) */
-
-process VerifyModuleId(Tree: term, ModuleId: str, Valid: bool?) is
-let
-  TreeId: term
-in
-  snd-msg(sm-get-module-id(Tree))
-  . rec-msg(sm-module-id(TreeId?))
-  . Valid := equal(ModuleId, TreeId)
-endlet
-
-/*}}}  */
-
-process OpenSyntax(Directory: str, ModuleId: str, Type: term) is
+process OpenSyntax(Path: str, Type: term) is
 let
   Error: term,
-  Extension: str,
+  Id: int,
   Message: str,
+  ModuleId: str,
   ParseTable: term,
-  Path: str,
   Pid: int,
   Sort: term,
   Text: str
 in
-  snd-msg(sm-is-valid-modulename(ModuleId))
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Opening %s", [Path])))
+  . snd-msg(io-read-file(Path))
   .
-  ( 
-    rec-msg(sm-modulename-is-valid)
-    . RegisterModule(ModuleId, Directory)
-    . snd-msg(file-extension-hook(Type))
-    . rec-msg(file-extension-hook-result(Extension?))
-    . BuildPath(Directory, ModuleId, Extension, Path?)
-    . snd-msg(io-read-file(Path))
+  (
+    rec-msg(io-file-contents(Text?))
+    . snd-msg(get-parse-table(Type))
     .
     (
-      rec-msg(io-file-contents(Text?))
-      . SetModuleSyntaxText(ModuleId, Text)
-      . snd-msg(get-parse-table(Type))
+      rec-msg(parse-table(Type, ParseTable?))
+      . snd-msg(syntax-top-sort-hook(Type))
+      . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
+      . create(OpenSyntaxParseHandler(Path), Pid?)
+      . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
-	rec-msg(parse-table(Type, ParseTable?))
-	. snd-msg(syntax-top-sort-hook(Type))
-	. rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-	. create(OpenSyntaxParseHandler(ModuleId, Path), Pid?)
-	. ParseText(Pid, Text, ParseTable, Sort)
-	. rec-msg(open-syntax-parse-handler-done(Pid))
+	rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
+	. SetModuleSyntaxText(ModuleId, Text)
       +
-	rec-msg(no-parse-table(Type, Error?))
-	. printf("Parse-Syntax: no parse table: %t\n", Error)
+	rec-msg(open-syntax-parse-handler-done(Pid))
       )
     +
-      rec-msg(io-error-reading(Message?))
-      . printf("io-error-reading: %s\n", Message)
+      rec-msg(no-parse-table(Type, Error?))
+      . Error("No parse table: %t\n", [Error])
     )
   +
-    rec-msg(sm-modulename-is-invalid)
+    rec-msg(io-error-reading(Message?))
+    . Error("io-error-reading: %s\n", [Message])
   )
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
-process OpenSyntaxParseHandler(ModuleId: str, Path: str) is
+process OpenSyntaxParseHandler(Path: str) is
 let
   AnnotatedTree: term,
+  Directory: str,
   Error: term,
+  Extension: str,
+  Filename: str,
   Imports: list,
+  ModuleId: str,
   ParseResult: term,
   Pid: int,
-  Summary: term,
-  Valid: bool
+  Summary: term
 in
   Pid := process-id
   .
@@ -267,23 +177,33 @@ in
       . ParseErrorToSummary(Error, Path, Summary?)
       . ShowSummaryInGUI(Summary)
     )
-    . VerifyModuleId(ParseResult, ModuleId, Valid?)
+    . AnnotateTree(ParseResult, Path, AnnotatedTree?)
+    . snd-msg(sm-get-module-id(ParseResult))
+    . rec-msg(sm-module-id(ModuleId?))
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(sm-get-module-path(Directory, ModuleId))
+    . rec-msg(sm-module-path(Directory?))
+    . snd-msg(io-get-path-extension(Path))
+    . rec-msg(io-extension(Path, Extension?))
+    . BuildPath(Directory, ModuleId, Extension, Filename?)
     .
-    if equal(Valid, true)
+    if equal(Filename, Path)
     then
-      AnnotateTree(ParseResult, Path, AnnotatedTree?)
+      snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
+      . MDB-RegisterPath(Path, ModuleId)
       . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
       . snd-msg(sm-get-imported-module-names(ParseResult))
       . rec-msg(sm-imported-module-names(Imports?))
+      . SetModuleImports(ModuleId, Imports)
     else
-      Imports := []
+      Error("Module %s should be in a file named %s\n", [ModuleId, Filename])
     fi
+    . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
     rec-msg(parse-error(Pid, Error?))
     . ParseErrorToSummary(Error, Path, Summary?)
     . ShowSummaryInGUI(Summary)
-    . Imports := []
+    . snd-msg(open-syntax-parse-handler-done(Pid))
   )
-  . SetModuleImports(ModuleId, Imports)
-  . snd-msg(open-syntax-parse-handler-done(Pid))
 endlet

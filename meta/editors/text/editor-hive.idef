@@ -43,8 +43,6 @@ in
     . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
   +
     rec-msg(te-get-contents(EditorId?))
-    /* TODO: separate writing and retrieval of contents */
-    . snd-do(Hive, write-contents(EditorId))
     . snd-do(Hive, get-contents(EditorId))
   + 
     rec-msg(te-clear-focus(EditorId))

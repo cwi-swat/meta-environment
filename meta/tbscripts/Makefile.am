@@ -6,7 +6,6 @@ TBSCRIPTS = \
   button-actions.tb \
   close-all.tb \
   compile-module.tb \
-  dummy-display-graph.tb \
   dump-equations.tb \
   dump-parsetable.tb \
   dump-sdf-definition.tb \
