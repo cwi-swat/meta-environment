@@ -1,7 +1,8 @@
-Makefile.in
-Makefile
 .deps
-module-db.tif.h
-module-db.tif.c
-module-db
 .libs
+Makefile
+Makefile.in
+module-db
+module-db.tif.c
+module-db.tif.h
+module-db.tifs
