@@ -38,7 +38,8 @@ let
   Text         : str,
   Number       : int,
   Nonterminal  : str,
-  Tree         : term
+  Tree         : term,
+  ModifiedStatus : term
 in 
   execute(se, SE?) .
   (
@@ -112,6 +113,11 @@ in
   +
     rec-msg(delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId))
+  +
+    rec-msg(get-modified-status(EditorId?)).
+    snd-eval(SE, get-modified-status(EditorId)).
+    rec-value(SE, modified-status(ModifiedStatus?)).
+    snd-msg(modified-status(EditorId, ModifiedStatus))
   ) *
   delta
 endlet

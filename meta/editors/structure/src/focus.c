@@ -368,6 +368,8 @@ updateFocus(ATerm tree, ATerm focus, int location, int length)
 
 /*}}}  */
 /*{{{  static ATerm moveFocusUp(ATerm editor) */
+static ATerm
+moveFocusLeft(ATerm editor);
 
 static ATerm
 moveFocusUp(ATerm editor)
@@ -400,16 +402,19 @@ moveFocusRight(ATerm editor)
 				editor = setCurrentFocus(editor, newFocus);
 				if (asfix_is_appl(subTree) ||
 						asfix_is_list(subTree) ||
-						asfix_is_lex(subTree) || asfix_is_var(subTree)) {
+						asfix_is_lex(subTree)  || 
+						asfix_is_var(subTree)) {
 					return editor;
 				}
+
 				return moveFocusRight(editor);
 			}
 		}
 	}
-  return moveFocusUp(editor);
+		
+	return moveFocusUp(editor);
 }
-
+	
 /*}}}  */
 /*{{{  static ATerm moveFocusDown(ATerm editor) */
 

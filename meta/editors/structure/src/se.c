@@ -293,6 +293,15 @@ registerSymbols(int cid, ATerm editorId, ATerm startSymbols)
 }
 
 /*}}}  */
+
+ATerm get_modified_status(int cid, ATerm editorId)
+{
+	ATerm editor = GetValue(editorInstances, editorId);
+	ATerm status = getModifiedStatus(editor);
+	
+	return ATmake("snd-value(modified-status(<term>))", status);
+}
+
 /*{{{  void usage(char *prg, ATbool is_err) */
 
 void

@@ -57,5 +57,6 @@ ATerm insertCharsAtLocation(ATerm editor, int location, char *text);
 ATerm deleteCharsAtLocation(ATerm editor, int location, int count);
 ATerm moveFocusInEditor(ATerm editor, ATerm move);
 ATerm getFocusGivenLocation(ATerm editorTree, int location);
+ATerm getModifiedStatus(ATerm editor);
 
 #endif /* EDITOR_H */

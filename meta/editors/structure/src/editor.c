@@ -52,10 +52,25 @@
 #define POS_CURFOCUS 1
 #define POS_FOCUSES 2
 #define POS_SYMBOLS 3
+#define POS_MODIFIED 4
 
 ATermTable editorInstances;
 
 /*}}}  */
+
+static ATerm setModified(ATerm editor, ATbool modified)
+{
+	ATerm value = modified ? ATparse("modified") : ATparse("unmodified");
+
+	return (ATerm) ATsetArgument((ATermAppl) editor, value , POS_MODIFIED);
+}
+
+ATerm getModifiedStatus(ATerm editor)
+{
+	ATerm value = ATgetArgument((ATermAppl) editor, POS_MODIFIED);
+
+	return value;
+}
 
 /*{{{  static ATerm newEditorInstanceGivenLength(ATerm atLength) */
 
@@ -71,6 +86,7 @@ newEditorInstanceGivenLength(ATerm atLength)
   ATerm st = newStart(1);
   ATerm area = newArea(st, atLength);
   ATerm focus = newFocus(path, sort, area);
+	ATerm modified = ATparse("unmodified");
 
   focus = setDirty(focus); 
   focusList = newFocusList(focus); 
@@ -86,8 +102,8 @@ newEditorInstanceGivenLength(ATerm atLength)
   startSymbols = (ATerm) ATempty;
 
   /* editor(TEXT, CURRENTFOCUS, DIRTYFOCUSES, STARTSYMBOLS) */
-  return ATmake("editor(<term>,<term>,<term>,<term>)",
-		textTree, focus, focusList, startSymbols);
+  return ATmake("editor(<term>,<term>,<term>,<term>,<term>)",
+		textTree, focus, focusList, startSymbols, modified);
 }
 
 /*}}}  */
@@ -96,6 +112,8 @@ newEditorInstanceGivenLength(ATerm atLength)
 static ATerm
 replaceTreeInEditor(ATerm editor, ATerm tree)
 {
+	editor = setModified(editor, ATfalse);
+
   return (ATerm) ATsetArgument((ATermAppl) editor, tree, POS_TREE);
 }
 
@@ -168,7 +186,8 @@ updateEditorWithInsertions(ATerm editor, int location, int insertionLength)
   editor = replaceTreeInEditor(editor, newTree);
   editor = setCurrentFocus(editor, newFocus);
   editor = replaceFocusesInEditor(editor, newDirtyFocuses);
-
+	editor = setModified(editor, ATtrue);
+	
   return editor;
 }
 
@@ -222,6 +241,7 @@ ATerm
 newEditorInstanceGivenText(char *text)
 {
   ATerm length = newLength(strlen(text));
+#ifdef JURGEN
 	ATerm newEditor;
 
   newEditor = newEditorInstanceGivenLength(length);
@@ -229,6 +249,8 @@ newEditorInstanceGivenText(char *text)
   newEditor = setFocuses(newEditor, (ATerm) ATempty);
 
 	return newEditor;
+#endif
+  return newEditorInstanceGivenLength(length);
 }
 
 /*}}}  */
@@ -331,6 +353,7 @@ replaceFocusByTree(ATerm editor, ATerm focus, ATerm tree)
 
     focuses = ATremoveElementAt(focuses, idx);
     editor = replaceFocusesInEditor(editor, focuses);
+		editor = setModified(editor, ATfalse);
 
     return editor;
   }
@@ -377,9 +400,9 @@ insertCharsAtLocation(ATerm editor, int location, char *text)
 {
   int textLength = strlen(text);
 
-/* After makeFocusToStartSymbol, the first element in focuses
- * is the focus being edited.
- */
+	/* After makeFocusToStartSymbol, the first element in focuses
+	 * is the focus being edited.
+	 */
   editor = moveFocusToStartSymbol(editor, location);
 
   return updateEditorWithInsertions(editor, location, textLength);
