@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
+ * editors/text/{common,emax,gvim}/connector.[ch]:
+   - refactored "getContents" into the common core. Both editors now
+   really use the *same* code to read the contents of the file.
+
 Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
  * tbscripts/feedback.tb: refactored and reimplemented (in error-support)
    the ShowXXX functions
