@@ -17,7 +17,7 @@ abstract public class NodeIdImpl extends MetaGraphConstructor
   }
   public boolean isEqual(NodeId peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortNodeId()  {
     return true;
