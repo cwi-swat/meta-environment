@@ -1,5 +1,11 @@
 /* $Id$ */
 
+2004/02/16 (markvdb@cwi.nl)
+ * The asfsdfchecker is now only called in case a parsetable
+   has to be generated for parsing terms and equations in
+   editors. When dumping equations, the parsetable is only
+   generated for the top module.
+
 Fri Feb 13 11:10:17 CET 2004 <jurgenv@cwi.nl>
  * Added new button to module popup: Generate ASF+SDF API. This functionality
    takes a module, and generates a module on top of it that implements
