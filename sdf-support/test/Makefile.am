@@ -4,16 +4,24 @@
 # $Id$
 #
 
-TESTS			= grammars sorts
+TESTS			= pt2sdf grammars sorts
 
 noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${top_srcdir}/lib \
-			-I$(ATERM)/include \
-			-DSRC_DIR=\"${srcdir}\"
 
 LDLIBS			= -L../lib -lSDFME \
                           -L$(ATERM)/lib -lATerm
+INCLUDES = \
+	-I${top_srcdir}/lib \
+	-I$(PT_SUPPORT)/include \
+	-I$(ATERM)/include \
+	-DSRC_DIR=\"${srcdir}\"
+
+pt2sdf_SOURCES = pt2sdf-test.c
+pt2sdf_LDADD = \
+	-L${top_builddir}/lib -lPT2SDF -lSDFME \
+	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(ATERM)/lib -lATerm
 
 grammars_SOURCES	= grammars.c
 grammars_LDADD		= $(LDLIBS)
