@@ -767,6 +767,7 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   p->cpe.when	    = WHEN_AT;
   p->exec_state = exec_state;
   p->new_es = exec_state;
+  p->new_es = exec_state;
   p->hw_reached = TBfalse;
   p->ruleid = -1;
   p->last_port = NULL;

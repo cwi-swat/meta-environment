@@ -1,6 +1,6 @@
 // Java tool interface class ProcessViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 23-Jun-97 11:51:21 AM
+// generation time: 25-Jun-97 2:32:48 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;

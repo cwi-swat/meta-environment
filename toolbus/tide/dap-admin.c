@@ -389,6 +389,7 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   p->cpe.when	    = WHEN_AT;
   p->exec_state = exec_state;
   p->new_es = exec_state;
+  p->new_es = exec_state;
   p->hw_reached = TBfalse;
   p->ruleid = -1;
   p->last_port = NULL;
@@ -408,7 +409,7 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   dap_set_last_port(0, pid, TB_make("[exec-state,at,<term>]", dap_es2term(exec_state)));
   cbdap_process_created(dapid, pid);
 }
-#line 797 "dap-admin.c.nw"
+#line 798 "dap-admin.c.nw"
 void dap_process_destroyed(int dapid, int pid)
 {
   assert(daps[dapid]);
@@ -424,13 +425,13 @@ void dap_process_destroyed(int dapid, int pid)
   free(daps[dapid]->procs[pid]);
   daps[dapid]->procs[pid] = NULL;
 }
-#line 818 "dap-admin.c.nw"
+#line 819 "dap-admin.c.nw"
 process *dap_get_process(int dapid, int pid)
 {
   assert(daps[dapid]);
   return daps[dapid]->procs[pid];  
 }
-#line 831 "dap-admin.c.nw"
+#line 832 "dap-admin.c.nw"
 int dap_term2es(term *t)
 {
   if(TBmatch(t, "stop"))
@@ -450,7 +451,7 @@ int dap_term2es(term *t)
   TBprintf(stderr, "illegal exec-control: %t, stop assumed\n", t);
   return ES_STOP;
 }
-#line 858 "dap-admin.c.nw"
+#line 859 "dap-admin.c.nw"
 term *dap_es2term(int es)
 {
   switch(es) {
@@ -462,88 +463,88 @@ term *dap_es2term(int es)
   }
   return TBmake("unknown");
 }
-#line 875 "dap-admin.c.nw"
+#line 876 "dap-admin.c.nw"
 int dap_get_stop_level(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->stop_level;
 }
-#line 885 "dap-admin.c.nw"
+#line 886 "dap-admin.c.nw"
 int dap_get_exec_state(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->exec_state;
 }
-#line 895 "dap-admin.c.nw"
+#line 896 "dap-admin.c.nw"
 int dap_get_new_exec_state(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->new_es;
 }
-#line 905 "dap-admin.c.nw"
+#line 906 "dap-admin.c.nw"
 TBbool dap_is_high_water(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->hw_reached;
 }
-#line 915 "dap-admin.c.nw"
+#line 916 "dap-admin.c.nw"
 void dap_set_high_water(int dapid, int pid, TBbool hw)
 {
   dap_get_process(dapid, pid)->hw_reached = hw;
 }
-#line 925 "dap-admin.c.nw"
+#line 926 "dap-admin.c.nw"
 char *dap_get_process_name(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->name;
 }
 
-#line 951 "dap-admin.c.nw"
+#line 952 "dap-admin.c.nw"
 void *dap_get_process_data(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->udata;
 }
-#line 939 "dap-admin.c.nw"
+#line 940 "dap-admin.c.nw"
 void  dap_set_process_data(int dapid, int pid, void *udata)
 {
   dap_get_process(dapid, pid)->udata = udata;
 }
-#line 964 "dap-admin.c.nw"
+#line 965 "dap-admin.c.nw"
 void  dap_set_process_flags(int dapid, int pid, int uflags)
 {
   dap_get_process(dapid, pid)->uflags |= uflags;
 }
-#line 977 "dap-admin.c.nw"
+#line 978 "dap-admin.c.nw"
 void  dap_clear_process_flags(int dapid, int pid, int uflags)
 {
   dap_get_process(dapid, pid)->uflags &= ~uflags;
 }
-#line 990 "dap-admin.c.nw"
+#line 991 "dap-admin.c.nw"
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags)
 {
   return dap_get_process(dapid, pid)->uflags & uflags;
 }
-#line 1000 "dap-admin.c.nw"
+#line 1001 "dap-admin.c.nw"
 void  dap_set_last_port(int dapid, int pid, term *port)
 {
   dap_get_process(dapid, pid)->last_port = port;  
 }
-#line 1010 "dap-admin.c.nw"
+#line 1011 "dap-admin.c.nw"
 term *dap_get_last_port(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->last_port;
 }
-#line 1020 "dap-admin.c.nw"
+#line 1021 "dap-admin.c.nw"
 void dap_set_last_msg(int dapid, int pid, term *msg)
 {
   dap_get_process(dapid, pid)->last_msg = msg;
 }
-#line 1030 "dap-admin.c.nw"
+#line 1031 "dap-admin.c.nw"
 term *dap_get_last_msg(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->last_msg;
 }
-#line 1040 "dap-admin.c.nw"
+#line 1041 "dap-admin.c.nw"
 void dap_set_last_peer(int dapid, int pid, term *peer)
 {
   dap_get_process(dapid, pid)->last_peer = peer;
 }
-#line 1050 "dap-admin.c.nw"
+#line 1051 "dap-admin.c.nw"
 term *dap_get_last_peer(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->last_peer;

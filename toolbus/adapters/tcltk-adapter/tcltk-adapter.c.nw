@@ -990,6 +990,7 @@ void tide_event_loop()
  // <PO> was:       dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
     TB_handle_one(tide_cid);
   }
+  fprintf(stderr, "dap_get_exec_state(0,0)=%d\n", dap_get_exec_state(0,0));
 }
 @
 
@@ -1296,3 +1297,5 @@ void rec_terminate(int cid, term *arg)
 %}}}
 
 %}}}
+
+

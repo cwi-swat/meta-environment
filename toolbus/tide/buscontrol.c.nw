@@ -192,7 +192,7 @@ void cbdap_change_exec_state(int pid, int exec_state)
 {
   switch(exec_state) {
     case ES_SINGLE_STEP:
-	dap_get_process(0, pid)->new_es = ES_STOP;
+/*	dap_get_process(0, pid)->exec_state = ES_STOP;*/
     case ES_RUN:
 	if(dap_check_process_flags(0, pid, PUF_WAITING))
 	  continue_process(pid);
@@ -562,24 +562,16 @@ term *rec_monitor(int cid, term *T)
 
     old_state = dap_get_exec_state(0, pid1);
     new_state = dap_get_new_exec_state(0, pid1);
-    TBprintf(stderr, "es of %d=%d, new_es=%d\n", 
+    TBprintf(stderr, "es of %d was %d, becomes %d\n",
 		pid1, old_state, dap_get_new_exec_state(0, pid1));
 
-    if(dap_get_new_exec_state(0,pid1) != dap_get_exec_state(0,pid1)) {
-      int new_state = dap_get_new_exec_state(0, pid1);
-      dap_get_process(0, pid1)->exec_state = new_state;
-      cbdap_change_exec_state(pid1, new_state);
+    if(new_state != dap_get_exec_state(0,pid1)) {
+      fprintf(stderr, "new exec state of process %d is %d\n", pid1, new_state);
+      dap_change_exec_state(pid1, new_state);
     }
+
     if(new_state == ES_SINGLE_STEP)
       dap_get_process(0, pid1)->new_es = ES_STOP;
-
-    if(dap_get_exec_state(0, pid1) != old_state)
-      dap_activate_rules(pid1, TB_make("[exec-state,at,<term>]", 
-				dap_es2term(dap_get_exec_state(0, pid1))));
-    if(dap_get_exec_state(0, pid1) != ES_STOP) {
-      if(!dap_is_high_water(0, pid1))
-        continue_process(pid1);
-    }
   } else {
     err_fatal("badly formed monitor function: %t\n", T);
   }
@@ -676,12 +668,24 @@ void rec_terminate(int cid, term *arg)
 <<main>>=
 int main(int argc, char *argv[])
 {
+  int i, port = 9500;
+  char *host = NULL;
+
   TB_init();
+
+  for(i=1; i<argc; i++) {
+    if(streq(argv[i], "-TB_TIDE_PORT"))
+      port = atoi(argv[++i]);
+    else if(streq(argv[i], "-TB_TIDE_HOST"))
+      host = argv[++i];
+  }
 
   viewer = TB_parseArgs(argc, argv, viewer_handler, viewer_check_in_sign);
   TB_connect(viewer);
 
-  control_bus = TB_newConnection("debug-adapter", NULL, 9500,
+  /*fprintf(stderr, "host=%s, port=%d\n", host, port);*/
+
+  control_bus = TB_newConnection("debug-adapter", host, port,
 	         debug_adapter_handler, debug_adapter_check_in_sign);
   TB_connect(control_bus);
 

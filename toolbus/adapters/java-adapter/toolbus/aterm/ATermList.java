@@ -141,7 +141,8 @@ public class ATermList extends ATerm
   {
     int size = super.printSize();
     size += 2;	// The '[' and ']' characters.
-    size += aterms.printSize();
+    if(aterms != null)
+      size += aterms.printSize();
     return size;
   }
 

@@ -241,12 +241,7 @@ public class ProcessViewer extends Frame
     Rectangle r = dap.getGeometry();
     boolean found = false;
 
-    int j = 1;
-    // The top line is reserved for anonymous processes
-    if(dapid == ANON_DAPID)
-      j = 0;
-
-    for(; j<r.height && !found; j++) {
+    for(int j=0; j<r.height && !found; j++) {
       for(int i=0; i<r.width && !found; i++) {
 	if(processGrid[r.x+i][r.y+j] == null && 
 	   (adapterGrid[r.x+i][r.y+j] == dap || 

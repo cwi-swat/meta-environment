@@ -285,7 +285,7 @@ TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg)
 	dap_when2term(p->cpe.when), p->cpe.module,
 	p->cpe.start_line, p->cpe.start_col, p->cpe.end_line, p->cpe.end_col);
   else
-    *result = TB_make("nothing");
+    *result = TB_make("[location,at,\"<none>\",0,0,0,0]");
 
   return TBtrue;  
 }
@@ -875,7 +875,8 @@ void dap_activate_rule(int pid, term *port, event_rule *rule)
   if(check_pid(rule->pids, pid) && 
      (when == rule->port.when || rule->port.when == WHEN_AT)) {
     switch(type) {
-	case PORT_EXEC_STATE:	if(check_exec_state(rule->port.u.exec_state, tdata))
+	case PORT_EXEC_STATE:	
+				if(check_exec_state(rule->port.u.exec_state, tdata))
 				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
 				break;
 
@@ -925,7 +926,7 @@ static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
   char *msg;
   process *p;
 
-  /*TBprintf(stderr, "cond_trigger_rule: %t\n", cond);*/
+  /*TBprintf(stderr, "cond_trigger_rule (%d): %t->%t\n", rid, cond, acts);*/
   if(cond) {
     if(!dap_evaluate(cond, pid, &res, &msg)) {
       TBprintf(stderr, "evaluating condition failed: %t - %s\n", res, msg);
@@ -1236,8 +1237,7 @@ stopped.
 <<dap_change_exec_state>>=
 void dap_change_exec_state(int pid, int new_state)
 {
-  dap_get_process(0, pid)->new_es = new_state;
-  if(dap_get_process(0, pid)->exec_state == ES_STOP) {
+  if(dap_get_process(0,pid)->exec_state != new_state) {
     dap_get_process(0, pid)->exec_state = new_state;
     cbdap_change_exec_state(pid, new_state);
     dap_activate_rules(pid, TB_make("[exec-state,at,<term>]", 

@@ -120,7 +120,7 @@ public class SourceArea
 
   /**
     * Generate the string representation of this area.
-    * An area is represented lie -12#-23:-14#--7
+    * An area is represented lie 12#23:14#7
     */
 
   public String toString()

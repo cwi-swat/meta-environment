@@ -11,7 +11,7 @@ in
     rec-value(D, info(Info?)) .
     snd-eval(D, get-processes) .
     rec-value(D, processes(P?)) .
-    %% printf("%t info: %t, procs: %t\n", D, Info, P) .
+    printf("%t info: %t, procs: %t\n", D, Info, P) .
     snd-note(event(proc(D,all), dap-connected(Info,P))) .
     create(DEBUG-ADAPTER(D), Pid?)
     +

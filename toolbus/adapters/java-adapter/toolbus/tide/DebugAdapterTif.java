@@ -1,6 +1,6 @@
 // Java tool interface class DebugAdapterTif
 // This file is generated automatically, please do not edit!
-// generation time: 23-Jun-97 11:51:38 AM
+// generation time: 25-Jun-97 2:33:26 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;

@@ -346,8 +346,9 @@ void tide_event_loop()
  // <PO> was:       dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
     TB_handle_one(tide_cid);
   }
+  fprintf(stderr, "dap_get_exec_state(0,0)=%d\n", dap_get_exec_state(0,0));
 }
-#line 1134 "tcltk-adapter.c.nw"
+#line 1135 "tcltk-adapter.c.nw"
 int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
   term *port;
@@ -385,25 +386,25 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
   }
 }
 
-#line 1044 "tcltk-adapter.c.nw"
+#line 1045 "tcltk-adapter.c.nw"
 void cbdap_process_created(int dapid, int pid)
 {
 }
-#line 1055 "tcltk-adapter.c.nw"
+#line 1056 "tcltk-adapter.c.nw"
 void cbdap_process_destroyed(int dapid, int pid)
 {
 }
-#line 1068 "tcltk-adapter.c.nw"
+#line 1069 "tcltk-adapter.c.nw"
 void cbdap_change_exec_state(int pid, int exec_state)
 {
 }
-#line 1079 "tcltk-adapter.c.nw"
+#line 1080 "tcltk-adapter.c.nw"
 term *cbdap_supply_info(char *key)
 {
   static char buf[_POSIX_PATH_MAX];
 
   
-#line 1096 "tcltk-adapter.c.nw"
+#line 1097 "tcltk-adapter.c.nw"
   if(streq(key, "name")) {
     int tid = TB_getTid(tide_cid);
     if(use_toolbus)
@@ -412,17 +413,17 @@ term *cbdap_supply_info(char *key)
       sprintf(buf, "%s-%d", script ? script : "wish", tide_cid);
     return TB_make("<str>", buf);
   }
-#line 1084 "tcltk-adapter.c.nw"
+#line 1085 "tcltk-adapter.c.nw"
   
-#line 1109 "tcltk-adapter.c.nw"
+#line 1110 "tcltk-adapter.c.nw"
   if(streq(key, "search-paths")) {
     getcwd(buf, _POSIX_PATH_MAX);
 
     return TB_make("[[config, [<str>]], [source, [<str>]]]", buf, buf);
   }
-#line 1085 "tcltk-adapter.c.nw"
+#line 1086 "tcltk-adapter.c.nw"
   
-#line 1117 "tcltk-adapter.c.nw"
+#line 1118 "tcltk-adapter.c.nw"
   if(streq(key, "connections")) {
     if(use_toolbus) {
       sprintf(buf, "toolbus-%d", TB_getPort(cid));
@@ -432,7 +433,7 @@ term *cbdap_supply_info(char *key)
     return NULL;
   }
 
-#line 1087 "tcltk-adapter.c.nw"
+#line 1088 "tcltk-adapter.c.nw"
   return NULL;
 }
 
@@ -462,7 +463,7 @@ void handle_tide_args(int argc, char *argv[])
 			debug_adapter_handler, debug_adapter_check_in_sign);
   }
 }
-#line 1002 "tcltk-adapter.c.nw"
+#line 1003 "tcltk-adapter.c.nw"
 int Tide_Init(Tcl_Interp *interp)
 {
   tide_interp = interp;
@@ -497,12 +498,12 @@ int Tide_Init(Tcl_Interp *interp)
   return TCL_OK;
 }
 
-#line 1177 "tcltk-adapter.c.nw"
+#line 1178 "tcltk-adapter.c.nw"
 term *get_info(int cid)
 {
   return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 }
-#line 1189 "tcltk-adapter.c.nw"
+#line 1190 "tcltk-adapter.c.nw"
 term *get_processes(int mycid)
 {
   int i;
@@ -523,7 +524,7 @@ term *get_processes(int mycid)
   }
   return TB_make("snd-value(processes(<term>))", procs);
 }
-#line 1217 "tcltk-adapter.c.nw"
+#line 1218 "tcltk-adapter.c.nw"
 term *exec_actions(int cid, term *procs, term *acts)
 {
   char *msg;
@@ -535,7 +536,7 @@ term *exec_actions(int cid, term *procs, term *acts)
 
   return TB_make("snd-value(exec-result(error(<str>)))", msg);
 }
-#line 1236 "tcltk-adapter.c.nw"
+#line 1237 "tcltk-adapter.c.nw"
 term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 {
   int rid = dap_create_rule(procs, port, cond, acts, life);
@@ -543,23 +544,23 @@ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term
 	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
 	procs, port, cond, acts, life, rid);
 }
-#line 1251 "tcltk-adapter.c.nw"
+#line 1252 "tcltk-adapter.c.nw"
 void modify_rule(int cid, int rid, term *procs, term *port, 
 				term *cond, term *acts, term *life)
 {
   dap_rule_modified(0, rid, procs, port, cond, acts, life);
 }
-#line 1264 "tcltk-adapter.c.nw"
+#line 1265 "tcltk-adapter.c.nw"
 void destroy_rule(int cid, term *procs, int rid)
 {
   dap_destroy_rule(rid);
 }
-#line 1277 "tcltk-adapter.c.nw"
+#line 1278 "tcltk-adapter.c.nw"
 void rec_ack_event(int cid, term *event)
 {
   dap_rec_ack_event(cid, event);
 }
-#line 1289 "tcltk-adapter.c.nw"
+#line 1290 "tcltk-adapter.c.nw"
 void rec_terminate(int cid, term *arg)
 {
   dap_rec_terminate(cid, arg);

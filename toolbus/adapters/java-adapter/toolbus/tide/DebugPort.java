@@ -117,6 +117,9 @@ abstract public class DebugPort
   static public DebugPort newPort(ATermRef port)
   {
     DebugPort result;
+
+    if(!(port instanceof ATermListRef))
+      System.err.println("expected list, got: " + port);
     ATermsRef Data = ((ATermListRef)port).getATerms();
 
     ATermRef Port = Data.getFirst();

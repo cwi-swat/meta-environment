@@ -3,6 +3,7 @@ package toolbus.tide;
 import java.util.*;
 import java.io.*;
 import java.awt.*;
+import java.awt.event.*;
 import toolbus.util.*;
 import toolbus.aterm.*;
 import toolbus.tool.*;
@@ -151,7 +152,7 @@ class SourceViewerTool extends SourceViewerTif
     Enumeration viewers = ((Vector)viewerTable.get(new Integer(dapid))).elements();
     while(viewers.hasMoreElements()) {
       SourceViewer viewer = (SourceViewer)viewers.nextElement();
-      viewer.destroy();
+      viewer.dispose();
     }
   }
 
@@ -834,6 +835,12 @@ class SourceViewer extends Frame implements TextHandler
   {
     if((curProcess != null && curProcess.getPid() == pid)
        || (curGroup != null && curGroup.contains(pid))) {
+
+      // Check for the empty location.
+      if(area.getStartLine() == 0 && area.getEndLine() == 0 &&
+	 area.getStartColumn() == 0 && area.getEndColumn() == 0)
+	return;
+
       Tag cpeTag;
       SourceArea cpeArea;
       Integer Pid = new Integer(pid);
@@ -1120,22 +1127,6 @@ class TextBrowser extends Panel
   }
 
   //}
-  //{ public boolean handleEvent(Event evt)
-
-  /**
-   * Catch scrollbar events.
-   */
-
-  public boolean handleEvent(Event evt)
-  {
-    if(evt.target instanceof Scrollbar) {
-      text.scrollbarChanged();
-      return true;
-    }
-    return super.handleEvent(evt);
-  }
-
-  //}
   //{ public String getFile()
 
   /**
@@ -1255,7 +1246,10 @@ interface TextHandler
  * to draw the actual text and markings.
  */
 
-class TextBrowserCanvas extends Canvas
+class TextBrowserCanvas 
+  extends Canvas
+  implements AdjustmentListener, MouseListener, MouseMotionListener,
+	     ComponentListener
 {
   private TextHandler handler;
   private Vector lines;
@@ -1275,6 +1269,7 @@ class TextBrowserCanvas extends Canvas
   private Graphics bg;
   private Tag selectionTag;
   private SourceArea selection;
+  private boolean needsClear;
 
   //{ public TextBrowserCanvas(Scrollbar hor, Scrollbar vert, TextHandler h)
 
@@ -1297,24 +1292,29 @@ class TextBrowserCanvas extends Canvas
     font = new Font("Courier", Font.PLAIN, 12);
     setFont(font);
     selectionTag = new Tag(font, null, new Color(200,200,255));
+    horizontal.addAdjustmentListener(this);
+    vertical.addAdjustmentListener(this);
+    addMouseMotionListener(this);
+    addMouseListener(this);
+    addComponentListener(this);
   }
 
   //}
-  //{ public void layout()
+  //{ public void doLayout()
 
   /**
     * The size of the canvas changes, update the scrollbar values.
     */
 
-  public void layout()
+  public void doLayout()
   {
-    super.layout();
+    super.doLayout();
 
     width = size().width/charWidth;
     height = size().height/charHeight;
 
-    horizontal.setValues(horizontal.getValue(), width, 0, nrColumns-width);
-    vertical.setValues(vertical.getValue(), height, 0, nrLines-height);
+    horizontal.setValues(horizontal.getValue(), width, 0, nrColumns);
+    vertical.setValues(vertical.getValue(), height, 0, nrLines);
 
     // We don't want to see the area outside the text.
     startColumn = -Math.max(0, Math.min(nrColumns-width, horizontal.getValue()));
@@ -1344,9 +1344,15 @@ class TextBrowserCanvas extends Canvas
   {
     int w = size().width;
     int h = size().height;
+
     if(bg == null || bgImg.getWidth(null) != w || bgImg.getHeight(null) != h) {
       bgImg = createImage(w, h);
       bg = bgImg.getGraphics();
+    }
+
+    if(needsClear) {
+      bg.clearRect(0, 0, w, h);
+      needsClear = false;
     }
 
     if(fontMetrics == null)
@@ -1366,62 +1372,163 @@ class TextBrowserCanvas extends Canvas
   }
 
   //}
-  //{ public boolean handleEvent(Event evt)
+  //{ public void componentHidden(ComponentEvent e)
 
   /**
-    * Catch scrollbar events.
+    * We are not interested in the hiding of components.
     */
 
-  public boolean handleEvent(Event evt)
+  public void componentHidden(ComponentEvent e)
+  {
+  }
+
+  //}
+  //{ public void componentMoved(ComponentEvent e)
+
+  /**
+    * We are not interested in the movement of components.
+    */
+
+  public void componentMoved(ComponentEvent e)
+  {
+  }
+
+  //}
+  //{ public void componentResized(ComponentEvent e)
+
+  /**
+    * When the component is resized, we need to relayout it.
+    */
+
+  public void componentResized(ComponentEvent e)
+  {
+    doLayout();
+  }
+
+  //}
+  //{ public void componentShown(ComponentEvent e)
+
+  /**
+    * We are not interested in the showing of components.
+    */
+
+  public void componentShown(ComponentEvent e)
+  {
+  }
+
+  //}
+  //{ public void mousePressed(MouseEvent evt)
+
+  /**
+    * The mouse has been pressed on the text area.
+    */
+  
+  public void mousePressed(MouseEvent evt)
   {
     int line, col;
 
-    if(evt.target instanceof Scrollbar) {
-      scrollbarChanged();
-      return true;
-    }
-    switch(evt.id) {
-      case Event.MOUSE_DOWN:
-	if(selection == null)
-	  selection = new SourceArea("", 0,0,0,0);
-	else
-	  removeTag(selection, selectionTag);
-	line = whichLine(evt.y);
-	col = whichColumn(evt.x);
-	if(line > nrLines)
-	  line = nrLines;
-	if(getLine(line).getLength() < col)
-	  col = -1;
-	selection.setStartLine(line);
-	selection.setEndLine(line);
-	if(evt.clickCount > 1) {
-	  selection.setStartColumn(0);
+    if(selection == null)
+      selection = new SourceArea("", 0,0,0,0);
+    else
+      removeTag(selection, selectionTag);
+    line = whichLine(evt.getY());
+    col = whichColumn(evt.getX());
+    if(line > nrLines)
+      line = nrLines;
+    if(getLine(line).getLength() < col)
+      col = -1;
+    selection.setStartLine(line);
+    selection.setEndLine(line);
+    if(evt.getClickCount() > 1) {
+      selection.setStartColumn(0);
 	  selection.setEndColumn(-1);
-	} else {
-	  selection.setStartColumn(col);
-	  selection.setEndColumn(col);
-	}
-	addTag(selection, selectionTag);
-	repaint();
-	handler.handleSelection(selection);
-	break;
-
-      case Event.MOUSE_DRAG:
-	removeTag(selection, selectionTag);
-	line = whichLine(evt.y);
-	col = whichColumn(evt.x);
-	if(line > nrLines)
-	  line = nrLines;
-	if(getLine(line).getLength() < col)
-	  col = -1;
-	selection.setEndLine(line);
-	selection.setEndColumn(col);
-	addTag(selection, selectionTag);
-	repaint();
-	handler.handleSelection(selection);
-	break;
+    } else {
+      selection.setStartColumn(col);
+      selection.setEndColumn(col);
     }
-    return super.handleEvent(evt);
+    addTag(selection, selectionTag);
+    repaint();
+    handler.handleSelection(selection);
+  }
+
+  //}
+  //{ public void mouseClicked(MouseEvent e)
+
+  /**
+    * We are not interested in mouse clicks.
+    */
+
+  public void mouseClicked(MouseEvent e)
+  {
+  }
+
+  //}
+  //{ public void mouseEntered(MouseEvent e)
+
+  /**
+    * We are not interested in mouse enterings
+    */
+
+  public void mouseEntered(MouseEvent e)
+  {
+  }
+
+  //}
+  //{ public void mouseExited(MouseEvent e)
+
+  /**
+    * We are not interested in mouse exits.
+    */
+
+  public void mouseExited(MouseEvent e)
+  {
+  }
+
+  //}
+  //{ public void mouseReleased(MouseEvent e)
+
+  /**
+    * We are not interested in mouse releases.
+    */
+
+  public void mouseReleased(MouseEvent e)
+  {
+  }
+
+  //}
+  //{ public void mouseDragged(MouseEvent evt)
+
+  /**
+    * React to mouse dragging.
+    */
+  
+  public void mouseDragged(MouseEvent evt)
+  {
+    int line, col;
+
+    removeTag(selection, selectionTag);
+    line = whichLine(evt.getY());
+    col = whichColumn(evt.getX());
+    if(line > nrLines)
+      line = nrLines;
+    if(getLine(line).getLength() < col)
+      col = -1;
+    selection.setEndLine(line);
+    selection.setEndColumn(col);
+    addTag(selection, selectionTag);
+    repaint();
+    handler.handleSelection(selection);
+  }
+
+  //}
+  //{ public void mouseMoved(MouseEvent e)
+
+  /**
+    * We are not interested in mouse movements.
+    */
+
+  public void mouseMoved(MouseEvent e)
+  {
   }
 
   //}
@@ -1435,7 +1542,20 @@ class TextBrowserCanvas extends Canvas
   {
     startLine = vertical.getValue();
     startColumn = horizontal.getValue();
+    needsClear = true;
     repaint();
+  }
+
+  //}
+  //{ public void adjustmentValueChanged(AdjustmentEvent e)
+
+  /**
+    * One of the scrollbars must have changed.
+    */
+
+  public void adjustmentValueChanged(AdjustmentEvent e)
+  {
+    scrollbarChanged();
   }
 
   //}
@@ -1480,10 +1600,9 @@ class TextBrowserCanvas extends Canvas
 	}
       }
     } while(c != -1);
-
     nrLines = lines.size();
 
-    layout();
+    doLayout();
     repaint();
   }
 
@@ -1598,6 +1717,7 @@ class TextBrowserCanvas extends Canvas
     startLine = centerLine - height/2;
     if(startLine < 0)
       startLine = 0;
+    needsClear = true;
   }
 
   //}
