@@ -1,7 +1,7 @@
 equations
 
   [extractRelations-start]
-    extractRelations($TscriptDefs) = extractRelations($TscriptDefs, [])
+    extractRelations($TscriptDefs) = extractRelations($TscriptDefs, rstore())
 
   [extractRelations-process]
     $ProcessDef = process $ProcessSignature is $ProcessBody,
