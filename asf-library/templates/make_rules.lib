@@ -6,6 +6,7 @@ include ${top_srcdir}/templates/make_rules
 # Initially there are no builtin source files, the user should override this
 # variable
 PACKAGE_SRC=
+PACKAGE_OBJECTS=$(PACKAGE_SRC:%.c=%.o)
 
 # Determine installation directory
 libpackagedir=${pkgdatadir}$(subst lib,,$(subdir))
@@ -30,14 +31,19 @@ link_test_LDADD=-L. -lasf-builtins \
                 -L${ATERM}/lib -lATerm
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
-# Register the source files for the built-in library
-$(PACKAGE_SRC): Makefile
-	echo "${subdir}:$*.o" >> $(top_builddir)/src/objects.lst
-
 # create the stub and at the same time register the built-ins
-link-test.c: $(PACKAGE_SRC) $(MODULES)
+link-test.c: remove-old $(PACKAGE_SRC) $(MODULES)
 	echo "${subdir}:${BUILTINS}" >> $(top_builddir)/src/builtins.lst
+	for o in ${PACKAGE_OBJECTS}; do \
+          echo "${subdir}:$${o}" >> $(top_builddir)/src/objects.lst ; \
+        done
 	${top_srcdir}/utils/gen-link-test.sh "${BUILTINS}" > $@
+
+remove-old:
+	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/builtins.lst > \
+           $(top_builddir)/src/builtins.lst
+	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/objects.lst > \
+           $(top_builddir)/src/objects.lst
 
 # Installation hooks take care of modifying access bits and installing
 # the files in the right order (time stamps are important here)
