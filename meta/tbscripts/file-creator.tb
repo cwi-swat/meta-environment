@@ -37,19 +37,19 @@ in
       snd-msg(module-not-created("Module already in database"))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(exists-sdf2-module(ModuleName)) .
+      snd-msg(exists-sdf-module(ModuleName)) .
       (
-        rec-msg(sdf2-module-exists(ModuleName)) .
+        rec-msg(sdf-module-exists(ModuleName)) .
         snd-msg(module-not-created("Module already exists in text or baf"))
       +
-        rec-msg(sdf2-module-not-exists(ModuleName)) .
-        snd-msg(create-empty-sdf2-module(ModuleName)) .
+        rec-msg(sdf-module-not-exists(ModuleName)) .
+        snd-msg(create-empty-sdf-module(ModuleName)) .
         (
-	  rec-msg(module-created(ModuleName)) .
+          rec-msg(module-created(ModuleName)) .
       	  snd-msg(module-created)
         +
           rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
-	  snd-msg(module-not-created(ErrMsg))
+          snd-msg(module-not-created(ErrMsg))
         )
       )
     )
@@ -62,22 +62,24 @@ in
       snd-msg(equations-not-created("Module not in database"))
     +
       rec-msg(exists-in-module-db(ModuleName)) .
-      snd-msg(exists-eqs-section(ModuleName)) .
+	  snd-msg(get-eqs-path-from-db(ModuleName)) .
+	  rec-msg(path(FileName?)) .
+      snd-msg(exists-asf-section(ModuleName, FileName)) .
       (
-        rec-msg(eqs-section-exists(ModuleName)) .
-	snd-msg(equations-not-created("Equations section already exists."))
+        rec-msg(asf-section-exists(ModuleName)) .
+        snd-msg(equations-not-created("Equations section already exists."))
       +
-        rec-msg(eqs-section-not-exists(ModuleName)) .
-	snd-msg(create-empty-equations(ModuleName)) .
-	(
-	  rec-msg(empty-equations-created(FileName?)) .
+        rec-msg(asf-section-not-exists(ModuleName)) .
+        snd-msg(create-empty-equations(ModuleName, FileName)) .
+        (
+          rec-msg(empty-equations-created(FileName)) .
           snd-msg(add-empty-eqs-to-db(ModuleName, FileName)) .
           rec-msg(empty-eqs-added) .
-	  snd-msg(new-equations-created(ModuleName, FileName))
-	+
-	  rec-msg(empty-equations-not-created(ModuleName, ErrMsg?)) .
-	  snd-msg(new-equations-not-created(ErrMsg))
-	)
+          snd-msg(new-equations-created(ModuleName, FileName))
+        +
+          rec-msg(empty-equations-not-created(ModuleName, ErrMsg?)) .
+          snd-msg(new-equations-not-created(ErrMsg))
+        )
       )
     )
   ) * delta

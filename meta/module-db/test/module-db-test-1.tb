@@ -30,7 +30,9 @@ let
   Path     : str,
   Time     : term
 in
-  snd-msg( open-file("Test")) .
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(open-file("Test")) .
   (
     rec-msg(opened-file("Test", tree(SdfTree?), Path?, Time?)) .
     snd-msg(add-sdf2-module-to-db("Test", Path, SdfTree, Time, "unchanged")) .
@@ -38,7 +40,7 @@ in
   +
     shutdown("module-db-test-1a FAILED! (timeout)\n") delay(sec(5))
   ).
-  snd-msg(open-eqs-file("Test")) .
+  snd-msg(open-asf-file("Test", "./Test.sdf")) .
   (
     rec-msg(opened-file("Test", text(EqsText?), Path?, Time?)) .
     snd-msg(add-eqs-to-db("Test", Path, text(EqsText), Time)) .

@@ -49,8 +49,8 @@ in
         rec-msg(new-equations-created(ModuleName, Path?))
       +
         rec-msg(new-equations-not-created(ErrMsg?)) .
-	snd-note(ui-status(errorf(
-	  "Could not create empty equations: %s", [ErrMsg])))
+        snd-note(ui-status(errorf(
+          "Could not create empty equations: %s", [ErrMsg])))
       )
     ) .
     snd-msg(initialize-structure-editor(EditorId, Text)) .

@@ -47,17 +47,9 @@ call_toolbus () {
   fi
 }
 
-# Test 1. Try to open eqs file that doesn't exist
-rm -f Aap.asf
-call_toolbus open-eqs-test.tb
-rm -f Aap.asf
+touch Empty.sdf.baf Pico-Booleans.sdf.baf
 
-# Test 2. Try to open a eqs file that _does_ exist
-echo "equations" > Aap.asf
-call_toolbus open-eqs-test.tb
-rm -f Aap.asf
-
-# Test 3. Try to create a new equations section.
+# Try to create a new equations section.
 rm -f Empty.asf
 call_toolbus new-eqs-test.tb
 rm -f Empty.asf

@@ -30,6 +30,8 @@ let
   Time : term
 in
   %% Read an existing module in baf.
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("Empty")) .
   (
     rec-msg(opened-file("Empty", tree(SdfTree?), Path?, Time?))

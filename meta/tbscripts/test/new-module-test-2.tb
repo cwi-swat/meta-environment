@@ -24,6 +24,8 @@
 #include "../file-creator.tb"
 
 process Test is
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(create-new-module("ExistingModule")) .
   (
     rec-msg(module-created) .

@@ -33,6 +33,8 @@ let
   Path     : str,
   Time     : term
 in
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("Pico-Booleans")) .
   (
     rec-msg(opened-file("Pico-Booleans", tree(SdfTree?), Path?, Time?)) .
@@ -42,12 +44,13 @@ in
   +
     shutdown("module-db-test-4a FAILED! (timeout)\n") delay(sec(50000))
   ).
-  snd-msg(open-eqs-file("Pico-Booleans")) .
+  snd-msg(open-asf-file("Pico-Booleans", "./Pico-Booleans.sdf")) .
   (
     rec-msg(opened-file("Pico-Booleans", tree(EqsTree?), Path?, Time?)) .
     snd-msg(unparse(EqsTree)) .
     rec-msg(unparsed-text(EqsText?)) .
-    snd-msg(add-eqs-to-db("Pico-Booleans", Path, tree(EqsTree), text(EqsText), Time)) .  
+    snd-msg(add-eqs-to-db("Pico-Booleans", Path, tree(EqsTree),
+                          text(EqsText), Time)) .  
     rec-msg(eqs-added) .
     snd-msg(update-eqs-tree-in-db("Pico-Booleans", tree(EqsTree))) .
     rec-msg(eqs-updated) .

@@ -23,6 +23,7 @@
 TESTS       = toolbus-test module-test parser-test
 
 noinst_DATA = ambi-test.tb
+noinst_SCRIPTS = toolbus-test
 
 EXTRA_DIST  = toolbus-test.sh.src module-test.sh.src parser-test.sh.src \
               new-eqs-test.tb new-module-test-1.tb new-module-test-2.tb \
