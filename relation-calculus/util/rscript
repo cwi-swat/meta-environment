@@ -1,0 +1,141 @@
+#! /bin/sh
+
+# rscript -- check and execute an Rscript
+# This utility provides the following functionality
+# - parse and check an Rscript
+# - parse, check and evaluate an Rscript
+# - parse, check and evaluate an Rscript with a given Rstore
+
+set -e
+
+# {{{  variables
+PREFIX=/home/paulk/research/relation-calculus
+PRG=`basename $0`
+VERBOSE=
+CHECK_ONLY=
+EVALUATOR=$PREFIX/RscriptCalculator
+PARSE_TABLE=$PREFIX/Rscript.trm.tbl
+THE_RSCRIPT=
+OUTPUT=./result.rstore
+RSTORE=
+TYPE_CHECKER="asfe -e $PREFIX/RscriptChecker.eqs"
+OUTPUT_TYPE_CHECKER=checker.feedback
+TYPE_CHECKING_OK="Rscript is type correct!"
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options]
+
+Options:
+  -i (--input)        filename	input from file (default: stdin)
+  -o (--output)       filename	output to file (default: result.rstore)
+  -s (--store)        filename  initial Rstore (default: empty)
+  -c (--check-only)             only check the Rscript, do not evaluate it
+  -v (--verbose)                verbose output (default:none)
+
+Advanced options:
+  -e (--evaluator)   filename  alternative Rscript evaluator
+  -p (--parse-table)  filename  alternative parse table
+  -t (--type-checker) filename  alternative type checker
+
+Example:
+  $PROG -i query.rscript
+
+ENDCAT
+}
+
+# }}}
+# {{{  parse
+
+parse() {
+  sglr $VERBOSE -p $PARSE_TABLE -s RSCRIPT -i $THE_RSCRIPT -o $THE_RSCRIPT.pt
+}
+
+# }}}
+# {{{  check
+
+check() {
+  addPosInfo -p $THE_RSCRIPT -i $THE_RSCRIPT.pt \
+  | apply-function -f check-rscript -s Summary \
+  | $TYPE_CHECKER \
+  | unparsePT >$OUTPUT_TYPE_CHECKER
+}
+
+# }}}
+
+# {{{ evaluate
+
+evaluate() {
+  if [ -z $RSTORE ]
+  then
+      $EVALUATOR $VERBOSE -s -f "eval-rscript" \
+	  -i $THE_RSCRIPT.pt -r RSTORE \
+	  | unparsePT > $OUTPUT
+  else
+      $EVALUATOR $VERBOSE -s -f "eval-rscript-with-rstore" \
+	  -i $THE_RSCRIPT.pt -i $RSTORE -r RSTORE \
+	  | unparsePT > $OUTPUT
+  fi
+}
+
+# }}}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -e | --evaluator)
+      shift; EVALUATOR=$1 ;;
+    -o | --output)
+      shift; OUTPUT=$1 ;;
+    -p | --parse-table)
+      shift; PARSE_TABLE=$1 ;;
+    -i | --input)
+      shift; THE_RSCRIPT=$1 ;;
+    -s | --store)
+      shift; RSTORE=$1 ;;
+    -t | --type-checker)
+      shift; TYPE_CHECKER=$1 ;;
+    -c | --check-only)
+      CHECK_ONLY=yes ;;
+    -v | --verbose)
+      VERBOSE=-v ;;
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+parse
+check
+
+
+if [ "$CHECK_ONLY" == "yes" ]
+then
+    if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
+    then 
+	echo $THE_RSCRIPT is type correct
+    else
+	cat $OUTPUT_TYPE_CHECKER
+	echo ""
+    fi
+    exit
+fi
+   
+if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
+then 
+    evaluate
+else 
+    cat $OUTPUT_TYPE_CHECKER
+    echo ""
+    echo "There are type errors in $THE_RSCRIPT; script is not executed"
+fi
+
