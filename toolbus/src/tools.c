@@ -648,7 +648,6 @@ tool_id *create_tool(term *creator, term_list *args)
      */
     setpgid(0, pgid);
 
-      err_sys_warn("setpgid failed");
     if(execvp(command, std_args) < 0){
       err_sys_warn("can't execute tool `%s'", command);
       exit(1);

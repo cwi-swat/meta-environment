@@ -19,7 +19,6 @@ CLEAN		= @CLEAN@
 MODULES		= 
 SUBDIRS		= @SUBDIRS@
 XTRADIRS	= @XTRADIRS@
-DISTDIRS	= @DISTDIRS@
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
@@ -57,7 +56,7 @@ dist: $(DISTFILES)
 	  ln $(srcdir)/$$file ../$(PRODUCT)-$(VERSION) 2> /dev/null \
 	  || cp $(srcdir)/$$file ../$(PRODUCT)-$(VERSION); \
 	done
-	@for subdir in $(SUBDIRS) $(DISTDIRS); do \
+	@for subdir in $(SUBDIRS) $(XTRADIRS); do \
 	  echo Making $@ in $$subdir; \
 	  mkdir ../$(PRODUCT)-$(VERSION)/$$subdir; \
 	  chmod 777 ../$(PRODUCT)-$(VERSION)/$$subdir; \

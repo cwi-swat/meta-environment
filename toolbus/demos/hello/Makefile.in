@@ -42,7 +42,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(
 .py.py.tex:
 	${bindir}/verbatim <$*.py >$*.py.tex
 .pl.pl.tex:
-	${bindir}/verbatim <$*.pl >$*.py.tex
+	${bindir}/verbatim <$*.py >$*.py.tex
  
 
 PROGRAMS	= hellopl hello printer hello-gen hello1.tb.tex hello2.tb.tex \
