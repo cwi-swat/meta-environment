@@ -1182,9 +1182,9 @@ char* PT_getTreeString(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_setTreeString(PT_Tree arg, char* string) */
+/*{{{  PT_Tree PT_setTreeString(PT_Tree arg, const char* string) */
 
-PT_Tree PT_setTreeString(PT_Tree arg, char* string)
+PT_Tree PT_setTreeString(PT_Tree arg, const char* string)
 {
   if (PT_isTreeLit(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue))), 0);
@@ -1879,9 +1879,9 @@ char* PT_getAttrModuleName(PT_Attr arg)
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_setAttrModuleName(PT_Attr arg, char* moduleName) */
+/*{{{  PT_Attr PT_setAttrModuleName(PT_Attr arg, const char* moduleName) */
 
-PT_Attr PT_setAttrModuleName(PT_Attr arg, char* moduleName)
+PT_Attr PT_setAttrModuleName(PT_Attr arg, const char* moduleName)
 {
   if (PT_isAttrId(arg)) {
     return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleName, 0, ATtrue))), 0);
@@ -2681,9 +2681,9 @@ char* PT_getSymbolString(PT_Symbol arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_setSymbolString(PT_Symbol arg, char* string) */
+/*{{{  PT_Symbol PT_setSymbolString(PT_Symbol arg, const char* string) */
 
-PT_Symbol PT_setSymbolString(PT_Symbol arg, char* string)
+PT_Symbol PT_setSymbolString(PT_Symbol arg, const char* string)
 {
   if (PT_isSymbolLit(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue))), 0);
@@ -3125,9 +3125,9 @@ char* PT_getSymbolSort(PT_Symbol arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_setSymbolSort(PT_Symbol arg, char* sort) */
+/*{{{  PT_Symbol PT_setSymbolSort(PT_Symbol arg, const char* sort) */
 
-PT_Symbol PT_setSymbolSort(PT_Symbol arg, char* sort)
+PT_Symbol PT_setSymbolSort(PT_Symbol arg, const char* sort)
 {
   if (PT_isSymbolParameterizedSort(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))), 0);

@@ -27,11 +27,6 @@ typedef struct _PT_CharRanges *PT_CharRanges;
 
 /*}}}  */
 
-/*{{{  definition of bottom types */
-
-
-/*}}}  */
-
 void PT_initMEPTApi(void);
 
 /*{{{  protect functions */
@@ -185,7 +180,7 @@ int PT_getTreeCharacter(PT_Tree arg);
 PT_Tree PT_setTreeCharacter(PT_Tree arg, int character);
 ATbool PT_hasTreeString(PT_Tree arg);
 char* PT_getTreeString(PT_Tree arg);
-PT_Tree PT_setTreeString(PT_Tree arg, char* string);
+PT_Tree PT_setTreeString(PT_Tree arg, const char* string);
 
 /*}}}  */
 /*{{{  PT_Production accessors */
@@ -245,7 +240,7 @@ ATerm PT_getAttrTerm(PT_Attr arg);
 PT_Attr PT_setAttrTerm(PT_Attr arg, ATerm term);
 ATbool PT_hasAttrModuleName(PT_Attr arg);
 char* PT_getAttrModuleName(PT_Attr arg);
-PT_Attr PT_setAttrModuleName(PT_Attr arg, char* moduleName);
+PT_Attr PT_setAttrModuleName(PT_Attr arg, const char* moduleName);
 
 /*}}}  */
 /*{{{  PT_Associativity accessors */
@@ -296,7 +291,7 @@ inline ATbool PT_isSymbolLayout(PT_Symbol arg);
 inline ATbool PT_isSymbolCharClass(PT_Symbol arg);
 ATbool PT_hasSymbolString(PT_Symbol arg);
 char* PT_getSymbolString(PT_Symbol arg);
-PT_Symbol PT_setSymbolString(PT_Symbol arg, char* string);
+PT_Symbol PT_setSymbolString(PT_Symbol arg, const char* string);
 ATbool PT_hasSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_getSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol);
@@ -323,7 +318,7 @@ int PT_getSymbolNumber(PT_Symbol arg);
 PT_Symbol PT_setSymbolNumber(PT_Symbol arg, int number);
 ATbool PT_hasSymbolSort(PT_Symbol arg);
 char* PT_getSymbolSort(PT_Symbol arg);
-PT_Symbol PT_setSymbolSort(PT_Symbol arg, char* sort);
+PT_Symbol PT_setSymbolSort(PT_Symbol arg, const char* sort);
 ATbool PT_hasSymbolParameters(PT_Symbol arg);
 PT_Symbols PT_getSymbolParameters(PT_Symbol arg);
 PT_Symbol PT_setSymbolParameters(PT_Symbol arg, PT_Symbols parameters);

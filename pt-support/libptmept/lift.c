@@ -23,7 +23,7 @@ static PTPT_NatCon   PTPT_liftNatCon(int val)
 {
   static char string[1024];
   sprintf(string, "%d", val);
-  return PTPT_makeNatConDigits(PTPT_makeCHARLISTString(string));
+  return PTPT_makeNatConDigits(string);
 }
 
 /*}}}  */
@@ -55,15 +55,15 @@ static PTPT_QLiteral PTPT_liftQLiteral(char *string)
 {
   char quotedString[1024];
   sprintf(quotedString, "\"%s\"", string);
-  return PTPT_makeQLiteralQuoted(PTPT_makeCHARLISTString(quotedString));
+  return PTPT_makeQLiteralQuoted(quotedString);
 }
 
 /*}}}  */
-/*{{{  static PTPT_UQLiteral PTPT_liftUQLiteral(char *string) */
+/*{{{  static PTPT_UQLiteral PTPT_liftUQLiteral(const char *string) */
 
-static PTPT_UQLiteral PTPT_liftUQLiteral(char *string)
+static PTPT_UQLiteral PTPT_liftUQLiteral(const char *string)
 {
-  return PTPT_makeUQLiteralMoreChars(PTPT_makeCHARLISTString(string));
+  return PTPT_makeUQLiteralMoreChars(string);
 }
 
 /*}}}  */
@@ -79,7 +79,7 @@ static PTPT_ATermList PTPT_liftATermList(ATermList elems)
     PTPT_ATerm head = PTPT_liftATerm(ATgetFirst(elems));
 
     if (!PTPT_isATermElemsEmpty(list)) {
-      list = PTPT_makeATermElemsMany(head,e,",",e,list);
+      list = PTPT_makeATermElemsMany(head, e, e, list);
     }
     else {
       list = PTPT_makeATermElemsSingle(head);
@@ -227,7 +227,7 @@ static PTPT_CharRanges PTPT_liftCharRanges(PT_CharRanges symbols)
   {
     PTPT_CharRange head = PTPT_liftCharRange(PT_getCharRangesHead(symbols));
     if (!PTPT_isCharRangeListEmpty(list)) {
-      list = PTPT_makeCharRangeListMany(head,e,",",e,list);
+      list = PTPT_makeCharRangeListMany(head, e, e, list);
     }
     else {
       list = PTPT_makeCharRangeListSingle(head);
@@ -248,14 +248,14 @@ static PTPT_Symbols PTPT_liftSymbols(PT_Symbols symbols)
   for(;!PT_isSymbolsEmpty(symbols); symbols = PT_getSymbolsTail(symbols)) {
     PTPT_Symbol head = PTPT_liftSymbol(PT_getSymbolsHead(symbols));
     if (!PTPT_isSymbolListEmpty(list)) {
-      list = PTPT_makeSymbolListMany(head,e,",",e,list);
+      list = PTPT_makeSymbolListMany(head, e, e, list);
     }
     else {
       list = PTPT_makeSymbolListSingle(head);
     }
   }
 
-  return PTPT_makeSymbolsList(e,PTPT_reverseSymbolList(list),e);
+  return PTPT_makeSymbolsList(e, PTPT_reverseSymbolList(list), e);
 }
 
 /*}}}  */
@@ -269,7 +269,7 @@ static PTPT_Attrs PTPT_liftAttrs(PT_Attrs attrs)
   for(;PT_hasAttrsHead(attrs); attrs = PT_getAttrsTail(attrs)) {
     PTPT_Attr head = PTPT_liftAttr(PT_getAttrsHead(attrs));
     if (list != NULL) {
-      list = PTPT_makeAttrListMany(head,e,",",e,list);
+      list = PTPT_makeAttrListMany(head,e,e,list);
     }
     else {
       list = PTPT_makeAttrListSingle(head);
@@ -536,7 +536,7 @@ static PTPT_Args PTPT_liftArgs(PT_Args args)
   for(;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
     PTPT_Tree head = PTPT_liftTree(PT_getArgsHead(args));
     if (!PTPT_isTreeListEmpty(list)) {
-      list = PTPT_makeTreeListMany(head,e,",",e,list);
+      list = PTPT_makeTreeListMany(head,e,e,list);
     }
     else {
       list = PTPT_makeTreeListSingle(head);
