@@ -1426,7 +1426,7 @@ specification writer has to take care of this explicitly.
 \sdf2 offers a number of language features which are not
 yet supported by the various components of the \ASmetaenv. In fact the 
 current version of the \ASmetaenv\ supports only the so-called 
-\sdf1 features of \sdf2.}
+\sdf1 features of \sdf2.}.
 
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
@@ -1437,11 +1437,6 @@ introduce user-defined notation in specifications.
 
 \asfsdf\ is therefore a modular specification formalism for the integrated
 definition of syntax and semantics.
-
-\paragraph{Note:} \sdf2 offers a number of language features which are not
-yet supported by the various components of the \ASmetaenv. In fact the 
-current version of the \ASmetaenv\ supports only the so-called 
-\sdf1 features of \sdf2.
 
 \subsection{Modules and Modular Structure}
 
@@ -1488,19 +1483,19 @@ exports-or-hiddens
   <Grammar>+
 \end{verbatim}
   
-\noindent A \emph{Grammar} can either be 
+\noindent A \emph{Grammar} can either be a(n) 
 \begin{itemize}
 \item import section;
 \item sorts section;
 \item lexical syntax section;
 \item context-free syntax section;
-\item variables section;
 %\item lexical variables section;
 %\item lexical priorities section;
 \item context-free priorities section;
 %\item priorities section;
 \item lexical restrictions section;
-\item context-free restrictions section.
+\item context-free restrictions section;
+\item variables section.
 %\item restriction section;
 %\item aliases section;
 \end{itemize}
@@ -1542,9 +1537,9 @@ sorts
 A sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in
 sort names. There is one predefined sort which may not be redeclared:
+{\tt LAYOUT}.
 
-\paragraph{LAYOUT}
-The {\tt LAYOUT} defines which parts of the text are layout symbols between
+{\tt LAYOUT} defines which parts of the text are layout symbols between
 lexical tokens and are to be skipped during lexical analysis. It may only be
 used as result sort of lexical functions. When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation
@@ -1583,11 +1578,16 @@ definition.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  "aap"         -> Aap
-  "noot"        -> Noot
-  "mies"        -> Mies
-  Aap Noot Mies -> LeesPlank
+module LeesPlank
+
+imports Layout
+
+exports
+  lexical syntax
+    "aap"         -> Aap
+    "noot"        -> Noot
+    "mies"        -> Mies
+    Aap Noot Mies -> LeesPlank
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Simple lexical functions}\label{CODE:simplelex}
@@ -1631,9 +1631,9 @@ complemented character class accepts all characters not in the original class.
 
 Characters with a special meaning in \asfsdf\ may cause problems when they are
 needed as ordinary characters in the lexical syntax. The backslash character
-(`{\tt \verb+\+\verb+\+}') is used as escape character for 
+(`{\tt \verb+\+}') is used as escape character for 
 the quoting of special characters. You
-should use `{\tt \verb+\+\verb+\+$c$}' whenever you need special 
+should use `{\tt \verb+\+$c$}' whenever you need special 
 character $c$ as ordinary character in a definition.
 
 All individual characters, except digits and letters,
@@ -1678,7 +1678,12 @@ using character classes.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
+module Characters
+
+imports Layout
+
+exports
+  lexical syntax
     "\\" ~[]                 -> AlphaNumericalEscChar
 
     "\\" [01] [0-9] [0-9]    -> DecimalEscChar
@@ -1716,7 +1721,12 @@ Figure \ref{CODE:repetition} shows the use of these repetition operators.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
+module Idetntifiers-repetition
+
+imports Layout
+
+exports
+  lexical syntax
     [a-z]       -> Let
     [a-z0-9]    -> NumLet
 
@@ -1738,7 +1748,12 @@ Figure \ref{CODE:optional} shows the use of this optional operator.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
+module Identifiers-optional
+
+imports Layout
+
+exports
+  lexical syntax
     [a-z]+   -> Let
     [0-9]    -> Num
 
@@ -1750,7 +1765,7 @@ lexical syntax
 
 \subsubsection{Alternative Operators}
 
-Functions with the smae result sort together define the lexical syntax of
+Functions with the same result sort together define the lexical syntax of
 tokens of that sort. Within the left-hand side of a lexical function
 definition alternative tokens can be defined. (* Beter formuleren *)
 By means of the binary operator {\tt |} the alternatives
@@ -1767,10 +1782,15 @@ given this definition.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [A-Z]    -> UcLet
-  [a-z]*   -> ScLets
-  [0-9]*   -> Digs
+module Identifiers-alternative1
+
+imports Layout
+
+exports
+  lexical syntax
+    [A-Z]    -> UcLet
+    [a-z]*   -> ScLets
+    [0-9]*   -> Digs
 
   UcLet ScLets | UcLet* | Digs -> Id
 \end{boxedverbatim}
@@ -1790,12 +1810,17 @@ of the identifier.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [A-Z]    -> UcLet
-  [a-z]*   -> ScLets
-  [0-9]*   -> Digs
+module Identifiers-alternative2
 
-  (Uclet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
+imports Layout
+
+exports
+  lexical syntax
+    [A-Z]    -> UcLet
+    [a-z]*   -> ScLets
+    [0-9]*   -> Digs
+
+    (UcLet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Lexical functions with alternative operator}\label{CODE:alternative2}
@@ -1824,11 +1849,16 @@ for the sort {\tt Id}.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [a-zA-Z][a-zA-Z0-9]* -> Id
+module Identifiers-restrict
 
-context-free restrictions
-  Id -/- [a-zA-Z0-9]  
+imports Layout
+
+exports
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Longest match for identifiers}\label{CODE:restrict-id}
@@ -1853,14 +1883,19 @@ of a keyword as a keyword of the given sort should be rejected.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [a-zA-Z][a-zA-Z0-9]* -> Id
+module Identifiers-reject
 
-context-free restrictions
-  Id -/- [a-zA-Z0-9]  
+imports Layout
 
-context-free syntax
-  "begin" -> Id {reject}
+exports
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+
+  context-free syntax
+    "begin" -> Id {reject}
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Reject rules for identifiers}\label{CODE:reject-id}
@@ -1875,11 +1910,16 @@ will be prefered see Figure \ref{CODE:avoid-id} for sort {\tt Id}.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
+module Identifiers-avoid
 
-context-free restrictions
-  Id -/- [a-zA-Z0-9]  
+imports Layout
+
+exports
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Using avoid for identifiers}\label{CODE:avoid-id}
@@ -1890,18 +1930,21 @@ as layout symbol. Between the members in the left-hand side of a
 context-free syntax rule optional layout may be recognized. However,
 if a such a member recognizes the empty string, this gives rise to
 a lexical ambiguity. So, the safe way of defining {\tt LAYOUT} is
-presented in Figure{CODE:save-layout}.
+presented in Figure \ref{CODE:safe-layout}.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-lexical syntax
-  [\ \t\n] -> LAYOUT
+module Layout
 
-context-free restrictions
-  LAYOUT? -/- [\ \t\n]
+exports
+  lexical syntax
+    [\ \t\n] -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Save way of defining {\tt LAYOUT}}\label{CODE:save-layout}
+\caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
 \end{figure}
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
@@ -1923,18 +1966,22 @@ Figure \ref{CODE:numbers}.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-sorts UnsignedInt SignedInt UnsignedReal Number 
+module Numbers
 
-lexical syntax
-  [0] | ([1-9][0-9]*)                           -> UnsignedInt
+imports Layout
 
-  [\+\-]? UnsignedInt                           -> SignedInt
+exports
+  sorts UnsignedInt SignedInt UnsignedReal Number 
 
-  UnsignedInt "." UnsignedInt ([eE] SignedInt)? -> UnsignedReal 
-  UnsignedInt [eE] SignedInt                    -> UnsignedReal
+  lexical syntax
+    [0] | ([1-9][0-9]*)                           -> UnsignedInt
 
-  UnsignedInt                                   -> Number 
-  UnsignedReal                                  -> Number
+    [\+\-]? UnsignedInt                           -> SignedInt
+
+    UnsignedInt "." UnsignedInt ([eE] SignedInt)? -> UnsignedReal 
+    UnsignedInt [eE] SignedInt                    -> UnsignedReal
+
+    UnsignedInt | UnsignedReal                    -> Number 
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Lexical definition of Numbers}\label{CODE:numbers}
@@ -1948,12 +1995,17 @@ strings which may contain escaped quotes in the actual string.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-sorts String StringChar
+module Strings
 
-lexical syntax
-   ~[\"\n]*              -> StringChar
-   [\\][\"]              -> StringChar
-   "\"" StringChar* "\"" -> String
+imports Layout
+
+exports
+  sorts String StringChar
+
+  lexical syntax
+    ~[\"\n]*              -> StringChar
+    [\\][\"]              -> StringChar
+    "\"" StringChar* "\"" -> String
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Lexical definition of String}\label{CODE:string}
@@ -1962,12 +2014,15 @@ lexical syntax
 \paragraph{Defining Comments}
 
 It is impossible to give {\em one} lexical definition of
-comments. We will give an example in which comments may be
-next like in C, see Figure \ref{CODE:c-comment}.
+comments. In Figure \ref{CODE:c-comment} we give an example in which 
+comments may be nested like in C.
 
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
+module Comment
+
+exports
   sorts ComWord Comment
   lexical syntax
     [\ \n\t]     -> LAYOUT
@@ -2004,24 +2059,27 @@ sequence of zero or more literal strings or sort names followed by `{\tt ->}'
 and the name of a result sort. All literal strings appearing in a context-free
 function declaration are implicitly added to the lexical syntax. Consider the
 language of coordinates and drawing commands presented in 
-Figure \ref{simple-cf}.
+Figure \ref{CODE:simple-cf}.
 
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-sorts NAT COORD CMND 
+module DrawingCommands
 
-lexical syntax
-  [0-9]+ -> NAT 
-  [\ \n] -> LAYOUT 
+exports
+  sorts NAT COORD CMND 
 
-context-free restrictions
-  LAYOUT? -/- [\ \n]
+  lexical syntax
+    [0-9]+ -> NAT 
+    [\ \n] -> LAYOUT 
 
-context-free syntax
-  "(" NAT "," NAT ")" -> COORD
-  "line" "to" COORD   -> CMND 
-  "move" "to" COORD   -> CMND
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
+
+  context-free syntax
+    "(" NAT "," NAT ")" -> COORD
+    "line" "to" COORD   -> CMND 
+    "move" "to" COORD   -> CMND
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Simple context-free syntax definition}\label{CODE:simple-cf}
@@ -2096,19 +2154,22 @@ in a Pascal-like language).
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-sorts ID DECL TYPE 
+module Decls
 
-lexical syntax
-  [a-z]+ -> ID 
-  [\ \n] -> LAYOUT
+exports
+  sorts ID DECL TYPE 
 
-context-free restrictions
-  LAYOUT? -/- [\ \n] 
+  lexical syntax
+    [a-z]+ -> ID 
+    [\ \n] -> LAYOUT
 
-context-free syntax
-  "decl" {ID ","}+ ":" TYPE -> DECL
-  "integer"                 -> TYPE 
-  "real"                    -> TYPE
+  context-free restrictions
+    LAYOUT? -/- [\ \n] 
+
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -> DECL
+    "integer"                 -> TYPE 
+    "real"                    -> TYPE
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Syntax definition of a list of identifiers}\label{CODE:pascal-ids}
@@ -2117,22 +2178,30 @@ context-free syntax
 \subsubsection{Chain Functions}
 
 A context-free syntax may contain functions that do not add syntax, but serve
-the sole purpose of including a smaller syntactic notion into a larger one. A
-typical example is the inclusion of identifiers in expressions or of natural
+the sole purpose of including a smaller syntactic notion into a larger one. 
+This notion is also known as {\em injections}. 
+Injections are functions ``without a name'' and with one argument sort
+like {\tt ID -> DATA}.
+A typical example is the inclusion of identifiers in expressions or of natural
 numbers in reals. Such a \emph{chain function} has one of the following forms:
 
 \begin{itemize}
 
 \item {\tt $SMALL$ -> $BIG$} 
-\item {\tt \{$SMALL$ $sep$\}* -> $BIG$} 
+\item {\tt \{$SMALL$ "$sep$"\}* -> $BIG$} 
 \item {\tt $SMALL$* -> $BIG$} 
-\item {\tt \{$SMALL$ $sep$\}+ -> $BIG$} 
+\item {\tt \{$SMALL$ "$sep$"\}+ -> $BIG$} 
 \item {\tt $SMALL$+ -> $BIG$}
 
 \end{itemize}
 
 Chain functions do not appear in the abstract syntax but correspond to a
 \emph{subsort relation} between $SMALL$ and $BIG$.
+If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
+tree a tree of sort {\tt SORT-A} can be put wherever a tree of
+sort {\tt SORT-B} is required.
+
+(* EXAMPLE should be added *)
 
 \subsubsection{Bracket Functions}
 
@@ -2143,12 +2212,12 @@ and `{\tt begin}' and `{\tt end}' in programs.
 In most cases, such brackets are only
 introduced for grouping and disambiguation, but have no further meaning. By
 adding the attribute {\tt bracket} to the function declaration, it will not be
-included in the abstract syntax.
+included in the abstract syntax. Figure \ref{CODE:bracket-expr} shows the
+definition of a bracket function for the sort {\tt EXPR}.
 
 Since brackets are necessary for overruling the priority and associativity of
-functions (see Section \ref{priorities}), 
-it is required that bracket functions are
-declared for the argument and result sorts of
+functions (see Section \ref{priorities}),  it is required that bracket 
+functions are declared for the argument and result sorts of
 
 \begin{itemize}
 
@@ -2159,6 +2228,27 @@ declared for the argument and result sorts of
 
 \end{itemize}
 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module BracketExpr
+
+exports
+  sorts EXPR
+
+  lexical syntax
+    [0-9]+ -> EXPR
+    [\ \n] -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \n] 
+
+  context-free syntax
+    "(" EXPR ")" -> EXPR {bracket}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Syntax definition with a bracket function}\label{CODE:bracket-expr}
+\end{figure}
 
 %\subsection{Optional Operator}
 
@@ -2169,46 +2259,53 @@ declared for the argument and result sorts of
 %\subsection{Tupling Operator}
 
 \subsection{Priorities}
+\label{priorities}
 
-The context-free syntax defined in an ASF+SDF specification may be ambiguous: there are sentences which have more than one associated tree. The common example are the arithmetic expressions in which definitions of the priority or associativity of operators are missing. There are three mechanisms for defining associativity and priority:
+The context-free syntax defined in an \asfsdf\ specification may be 
+ambiguous: there are sentences which have more than one associated tree. 
+The common example are the arithmetic expressions in which definitions 
+of the priority or associativity of operators are missing. There are 
+three mechanisms for defining associativity and priority:
 
 \begin{itemize}
 
-\item relative priorities of functions (defined in the `{\tt priorities}' section); 
+\item relative priorities of functions (defined in 
+the `{\tt context-free priorities}' section); 
 
 \item associativity of functions (defined as attribute following the function
   declaration); 
 
-\item associativity of groups of functions (defined in the `{\tt priorities}'
-  section).
+\item associativity of groups of functions (defined in 
+the `{\tt context-free priorities}' section).
 
 \end{itemize}
 
 \subsubsection{Relative Priorities}
 
 The relative priority of two functions is defined by including {\tt $F$ > $G$}
-in the `{\tt priorities}' section, where $F$ and $G$ are as written in the
-context-free grammar. Functions with a higher priority bind more strongly than
-functions with lower priorities and the nodes corresponding to them should
+in the `{\tt context-free priorities}' section, where $F$ and $G$ are 
+as written in the context-free grammar. Functions with a higher 
+priority bind more strongly than functions with lower priorities and 
+the nodes corresponding to them should
 thus appear at lower levels in the tree than nodes corresponding to functions
 with lower priorities. Lists of functions may be used in a priority
-declaration: {\tt $F$ > {$G$, $H$}} is an abbreviation for {\tt $F$ > $G$, $F$
-  > $H$} . 
+declaration: {\tt $F$ > \{$G$, $H$\}} is an 
+abbreviation for {\tt $F$ > $G$, $F$ > $H$} . 
 
 \subsubsection{Associative Functions}
 
-Associativity attributes can be attached to binary functions of the form `{\tt
-  $S$ $op$ $S$ -> $S$}', where $op$ is a literal or empty. Without
-  associativity attributes, nested occurrences of such functions immediately
-  lead to ambiguities, as is shown by the sentence `{\tt S-string op S-string
-    op S-string}' where `{\tt S-string}' is a string of sort $S$. The
-  particular associativity associated with $op$ determines the indented
-  interpretation of such sentences.
+Associativity attributes can be attached to binary functions of the form 
+`{\tt $S$ $op$ $S$ -> $S$}', where $op$ is a literal, non-terminal, or empty. 
+Without associativity attributes, nested occurrences of such 
+functions immediately lead to ambiguities, as is shown by the 
+sentence `{\tt S-string op S-string op S-string}' where 
+`{\tt S-string}' is a string of sort $S$. The particular associativity 
+associated with $op$ determines the indented interpretation of such sentences.
   
-  We call two occurrences of functions $F$ and $G$ related, when the node
-  corresponding to $F$ has a node corresponding to $G$ as first or last child.
-  The associativity attributes define how to accept or reject trees containing
-  related occurrences of the same function, $F$:
+We call two occurrences of functions $F$ and $G$ related, when the node
+corresponding to $F$ has a node corresponding to $G$ as first or last child.
+The associativity attributes define how to accept or reject trees containing
+related occurrences of the same function, $F$:
 
 \begin{itemize}
 
@@ -2223,7 +2320,7 @@ Associativity attributes can be attached to binary functions of the form `{\tt
 \end{itemize}
 
 Currently, there is no syntactic or semantic difference between `{\tt left}'
-and `{\tt assoc'}, but we may change that in the future.
+and `{\tt assoc}', but we may change that in the future.
 
 As an example, simple arithmetic expressions with usual priorities and
 associativities are defined below:
@@ -2244,9 +2341,7 @@ context-free priorities
    E "*" E   -> E > E "+" E   -> E {left}
 \end{verbatim}
 
-5.5.4 Groups of Associative Functions
-
-(*** Outdated ***)
+\subsubsection{Groups of Associative Functions}
 
 Groups of associative functions define how to accept or reject trees
 containing related occurrences of different functions with the same priority.
@@ -2373,6 +2468,7 @@ context-free priorities
 \subsection{Restrictions}
 
 \subsection{Variables}
+\label{variables}
 
 Variables are declared in the `variables' section of a module. It consists of
 a list of variables together with their sort. Each declaration defines a
