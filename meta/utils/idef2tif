@@ -1,4 +1,4 @@
-#! /usr/bin/env perl5.00404
+#! /usr/bin/env perl
 
 #$Id$
 
@@ -12,6 +12,12 @@
 
 # Author: Tobias Kuipers
 # Date:   1-feb-1999
+
+# Test for perl version:
+if ($] < 5) {
+  print "Please get perl 5 or better. idef2tif doesn't work under this version of perl\n";
+  exit(2);
+}
 
 $idefsuf = '.idef';
 
