@@ -14,7 +14,6 @@ static void post_event(ATerm label, ATerm event, char *msg)
 
 /*}}}  */
 
-
 /*{{{  PT_Tree toolbus_event(ATerm builtin, PT_Tree input) */
 
 PT_Tree toolbus_event(ATerm builtin, PT_Tree input)
