@@ -367,19 +367,16 @@ activity of the system.
 
 \section{The Menus of the Main Window}
  
-\subsection{The File menu}
-
-If the \ASmetaenv\ is running a module can be opened by either clicking
-in the import pane or via the pull down menu {\tt File}.
-
-The {\tt File} menu is shown in Figure \ref{FIG:file-menu}.
+\subsection{The File menu} \label{FileMenu}
 
 \begin{figure}[tb]
   \centerline{\epsfig{file=file-menu.ps,width=3cm}}
   \caption{\label{FIG:file-menu} File pull-down menu of \ASmetaenv}
 \end{figure}
 
-The {\tt File} menu contains the following entries:
+The {\tt File} menu is used for creating, opening, saving and printing
+specifications as well as for leaving the \ASmetaenv.  It is shown in Figure
+\ref{FIG:file-menu} and contains the following entries:
 
 \begin{itemize}
 
@@ -398,6 +395,11 @@ The {\tt File} menu contains the following entries:
 
 \end{itemize} 
 
+\begin{figure}[tb]
+  \centerline{\epsfig{file=open-file.ps,width=3cm}}
+  \caption{\label{FIG:open-file} Open module dialog}
+\end{figure}
+
 \subsection{The Edit menu}
 
 \begin{itemize}
@@ -409,14 +411,15 @@ The {\tt File} menu contains the following entries:
 
 \subsection{The Graph Menu}
 
-
-The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
-
 \begin{figure}[tb]
   \centerline{\epsfig{file=graph-menu.ps,width=5cm}}
   \caption{\label{FIG:graph-menu} Graph pull-down menu of \ASmetaenv}
 \end{figure}
 
+
+The {\tt Graph} menu is used for setting options for the display of the graph
+in the import pane.  It is shown in Figure \ref{FIG:graph-menu} and contains
+the entries:
 
 \begin{itemize}
 \item {\tt View All}
@@ -431,9 +434,9 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
   \caption{\label{FIG:debug-menu}The Debug  Menu}
 \end{figure}
 
-\begin{itemize}
-\item {\tt Diagnostic messages}
-\end{itemize}
+The {\tt Debug} menu is shown in Figure~\ref{FIG:debug-menu} and contains the
+single check box {\tt Diagnostic messages}.  When turned on, diagnostic
+messages will be displayed.  Otherwise the systems runs silently.
 
 \subsection{The Help Menu}
 
@@ -441,6 +444,9 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
   \centerline{\epsfig{file=help-menu.ps,width=6cm}}
   \caption{\label{FIG:help-menu}The Help  Menu}
 \end{figure}
+
+The {\tt Help} menu is shown in Figure~\ref{FIG:help-menu}
+and contains the following entries:
 
 \begin{itemize}
 \item {\tt About NewMeta}
@@ -453,7 +459,7 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
 
 The two left-most panes of the main window give two, alternative,
 views on the same information: the \asfsdf\ specification that has
-been loaded into the Meta-Environment.  Using one of these views the
+been loaded into the Meta-Environment.  Using one of these views, the
 same set of operations is available either via a pop menu or via the
 buttons in the pane at the right-hand side of the main window.
 
@@ -473,21 +479,35 @@ The import pane has the following interaction facilities:
 \begin{itemize}
 
 \item Clicking \emph{on} a module yields a pop up menu
-with the same entries as the button pane of tyhe main window
+with the same entries as the button pane of the main window
 (see Section \ref{ButtonPane})
-\item Click \emph{outside} any module:
+\item Clicking \emph{outside} any module yields a pop up menu
+with the entries {\tt New} and {\tt Open} for creating a new,
+respectively, opening an existing module. These two operations
+are also part of the file menu (see Section~\ref{FileMenu}).
+
 \end{itemize}
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=module-menu.ps,width=6cm}}
+  \caption{\label{FIG:module-menu}Pop up menu for module operations}
+\end{figure}
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=new-open.ps,width=6cm}}
+  \caption{\label{FIG:new-open}Pop up menu for adding a module}
+\end{figure}
+
+
+\subsection{The Module Pane}
 
 The import pane is particularly usefull when you want to understand the
 overall structure of a specification but it may become unwieldy for
 very large specifications. For large specifications the module pane
 may give you quicker access to the modules in the specification.
 
-
-\subsection{The Module Pane}
-
-The Module Pane presents a vertical, scrollable, list of all the module
-names in the specification.
+It presents a vertical, scrollable, list of the names of all the modules in
+the specification.
 
 \subsection{The Button Pane of the Main Window} \label{ButtonPane}
 
@@ -517,6 +537,389 @@ names in the specification.
 \subsection{Compiling a specification}
 
 \section{Guided Tour}
+
+(*** Under construction ***)
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=meta-booleans.ps,width=6cm}}
+  \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
+\end{figure}
+
+To help you to get acquainted with the ASF+SDF Meta-environment the system
+comprises two example specifications, namely the one-module specification:
+{\tt Bool-example}, and the specification of the syntax, typechecker and dynamic
+semantics of the small programming language Pico.
+
+This Guided Tour is meant to guide you through these specifications, and show
+you the main features of the ASF+SDF Meta-environment. Only global information
+is given about these features but references are made to parts of the
+user-manual with detailed information.
+
+\subsection{Before you start the Guided Tour}
+
+The Meta-Environment is usually installed in a directory named {\tt
+  meta-$version$}. For Release 1, this may, for instance, be {\tt meta-1.0.0}.
+You will then find the files needed for this Guided Tour in the directory {\tt
+  meta-1.0.0/demo/pico}. It is advisable to make your personal copy of this
+directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
+copy of the directory.
+
+For each module in a specification two files exist: `{\tt $module$.syn}'
+contains the syntax of $module$ and  `{\tt $module$.eqs}' contains the semantics
+(equations) of $module$. The directory pico contains:
+
+\begin{itemize}
+
+\item two files for the module {\tt Bool-example}.
+
+\item 24 files for the Pico-specification.
+
+\item three examples of Pico-programs: `{\tt bin.pico}', `{\tt fac.pico}',
+  `{\tt small.pico}'.
+
+\end{itemize}
+
+\subsection{Beginning the Guided Tour}
+
+\begin{itemize}
+
+\item Go to directory pico. 
+\item Type the command {\tt meta}. The main window of the Meta-environment
+  will appear.
+  
+\item Add the module {\tt Bool-example} by selecting the File menu, and
+  choosing the Open button. In a dialog window, the systems asks you to give
+  the name of the module to be opened.  The directory has already been filled
+  in (but you could modify it), and enter `{\tt Bool-example}' as module name.
+  
+\item Verify that {\tt Bool-example} appears in the import pane as well as in
+  the module pane of the main window.
+
+\end{itemize}
+
+\subsection{The Module Bool-example}
+
+One of the simplest specifications possible, and therefore frequently used as
+an example, is the datatype of the Boolean values. It defines the constants
+{\tt true} and {\tt false} and the functions \emph{and} and \emph{or}
+ (written in infix notation using
+the left-associative operators `{\tt \&}' and `{\tt |}', respectively) and
+\emph{not} (written
+in prefix notation using the function symbol `{\tt not}'). Here is the
+specification:
+
+\begin{verbatim}
+module Bool-example
+  exports
+    sorts BOOL 
+    lexical syntax
+
+
+      "%%" ~[\n]* [\n] -> LAYOUT 
+      [ \t\n]          -> LAYOUT 
+    context-free syntax
+
+      true             -> BOOL
+      false            -> BOOL 
+      BOOL "|" BOOL    -> BOOL {left}
+      BOOL "&" BOOL    -> BOOL {left}
+      not "(" BOOL ")" -> BOOL
+      "(" BOOL ")"     -> BOOL {bracket}
+
+    variables
+      Bool [0-9']* -> BOOL
+
+    priorities
+      "|" ! "&" 
+
+    equations
+    %% disjunction
+    [B1] true | Bool = true 
+    [B2] false | Bool = Bool
+
+    %% conjunction
+    [B3] true & Bool = Bool 
+    [B4] false & Bool = false
+
+    %% negation
+    [B5] not(false) = true 
+    [B6] not(true) = false
+
+\end{verbatim}
+
+\subsubsection{The module editor for {\tt Bool-example}}
+
+\begin{itemize}
+
+\item Select {\tt Bool-example} from the module pane.
+  
+\item Push the button {\tt Edit Sdf2}. An editor will appear containing the
+  syntax part of the {\tt Bool-example} specification: the SDF section.
+
+\item Push the button {\tt Edit Eqs}. An editor will appear containing the
+  semantic part of the {\tt Bool-example} specification: a list of conditional
+  equations. Note that the syntax of the equations is determined by the syntax
+  defined in the SDF section.
+
+\end{itemize}
+
+
+\subsubsection{A Term Editor for {\tt Bool-example}}
+
+\begin{itemize}
+\item Open a term-editor over module {\tt Bool-example}
+ by first selecting module  {\tt Bool-example} in the module pane,
+and then pushing the {\tt term} button.
+A dialog window pops up. Choose `.' (dot) for directory, choose any new filename. See, for instance, Figure ***.
+
+\item Notice there is a little blob in the top left corner of the window.
+  Type the term `{\tt true \& false}' in this editor and notice how the blob
+  becomes a block around the term when double click in the text (see below).
+  This block is called a focus.
+
+\item Click in the focus, this will move the cursor. 
+  
+\item When you double click in the focus, the text in the focus is parsed.
+
+\end{itemize}
+
+All the text\emph{ outside} the focus is (by definition) always syntactically
+correct. The text \emph{inside} the focus is fresh text which may contain syntax
+errors.
+
+\begin{itemize}
+
+\item Reduce the term in the term-editor by clicking the reduce button. The
+  result will appear in ***
+
+\end{itemize}
+
+\paragraph{Error-messages}
+
+\begin{itemize}
+  
+\item Edit the term `{\tt true \& false}' such that the new term will be
+  syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
+  parse of the term by clicking in the term. An error window pops up with
+  message `{\tt Lexical syntax error near 'w'}'
+
+\item Select the help button in the term-editor and choose cursor to error.
+
+\end{itemize}
+
+\paragraph{The expand menu}
+
+Instead of \emph{typing} a term you can construct a term using the {\tt expand} menu.
+
+\begin{itemize}
+  
+\item Type the string `{\tt <BOOL>}' in the term-editor. This is a
+  \emph{meta-variable}. Click \emph{inside} this string.
+You can then use the {\tt expand} menu to construct a Boolean term.
+
+\end{itemize}
+
+Note that you can only make syntactically correct terms when using the {\tt
+  expand} menu.
+
+\paragraph{Associativity, Priorities and Brackets}
+
+\begin{itemize}
+  
+\item Erase the term in your term-editor and type a new term `{\tt true \&
+    false \& true}'. Try to find out how this term has been parsed by clicking
+  on different parts of the term and studying the resulting focus.
+
+\end{itemize}
+
+The {\tt left} attribute in the SDF definition indicates that the `{\tt \&}'
+operator is left associative. 
+
+\begin{itemize}
+  
+\item Erase the term in your term-window and type a new term `{\tt true |
+    false \& true}'. Try to find out how this term has been parsed by clicking
+  and studying the resulting focus.
+
+\end{itemize}
+
+The {\tt priorities} definitions in the SDF definition state that the `{\tt
+  \&}' operator binds stronger than the `{\tt |}' operator.
+
+
+\begin{itemize}
+  
+\item Erase the term in the term-editor and type a new term `{\tt true \&
+    false}'.  Click on `false', so that the focus is around `false' only. Then
+  add `{\tt | true}' after `{\tt false}', so that the resulting term is `{\tt
+    true \& false | true}'.  Click on the `{\tt \&}' symbol.
+\end{itemize}
+  
+  To resolve a priority conflict `{\tt (}' and `{\tt )}' which are defined as
+  brackets in the SDF definition are put around the term `{\tt false | true}'.
+
+\subsubsection{Modifying {\tt Bool-example}}
+
+The ASF+SDF Meta-environment is an incremental environment generator. After each edit operation on a module, its implementation (i.e., scanner, parser and term rewriting system) is updated immediately.
+
+The editing of both the equations and the syntax part of a module is syntax-directed like the editing of terms in a term editor.
+
+\paragraph{Modifying the Equations}
+
+The equation section of a module appears in the bottom part of the module and begins with the keyword equations.
+
+ffl Click in the equation section to investigate the focus behavior. ffl Change the equations, for instance replace in equation [B1] the last part ` = true' by ` =
+
+false'. Study the effect on the reduction of terms in the term-editor.
+
+\paragraph{Modifying the Syntax}
+
+Modifying the syntax causes the generated scanner and parser to be adapted. After each edit operation in the SDF section that is followed by a parse of the SDF section, the focus in both the equations section and the term editor is extended to completely contain the text in these editors.
+
+
+Modifying the context-free syntax:
+
+16 The ASF+SDF Meta-environment
+
+ffl Change the syntax of the defined functions. E.g, replace `not' by `negation'. ffl Try to re-parse the equations. ffl Investigate the expand menu in the term-editor. (type `!BOOL?' and select expand.)
+
+Modifying the priorities: ffl Remove the priority declaration. ffl Type the term `true \& false -- true' in the term-editor (or anything similar according to your
+
+current syntax). Try to parse this term.
+
+ffl Add the priority declarations again.
+
+Modifying layout in the lexical section: ffl Remove the lexical syntax with the LAYOUT definitions. ffl Try parsing equations of Bool-example.
+
+Note: Not defining LAYOUT is one of the errors most commonly made when writing a new specification; always make sure your syntax definitions define at least spaces and newlines to be LAYOUT.
+
+ffl Close the term-editor and module-editor. By clicking the little button in the left corner of the
+
+menu bar. You may or may not save the changes to module Bool-example.
+
+If you save the changes the files `Bool-example.syn' and `Bool-example.eqs' will be modified. ffl Delete the module Bool-example from the specification. Select the delete button.
+
+\subsection{The Pico Specification}
+
+More features of the ASF+SDF Meta-environment can be studied by looking at the Picospecification.
+
+ffl If necessary, start the ASF+SDF Meta-environment. (Go to directory pico, type `ctasdf',
+
+select ASF+SDF in the centaur menu)
+
+Chapter 3: Guided Tour 17
+
+ffl Add the module Pico-syntax by selecting the Specification menu, and choosing the add
+
+button. The system will ask you for a directory(path) and a module name. Answer with `.' for directory. Answer with Pico-syntax for module name.
+
+ffl Check the Edit-Module menu. Not only Pico-syntax has been added, also all modules that
+
+are directly or transitively imported by Pico-syntax.
+
+Possible Error: `sort ``BOOL'' double declared'. Both the modules Booleans and Boolexample declare the sort BOOL. Delete module Bool-example.
+
+\subsubsection{The Module Editor for Pico-syntax}
+
+ffl Open the module-editor for Pico-syntax
+
+A Pico program consist of the word `begin', a declaration section, a series of zero or more statements, and the word `end'. The declaration section consists of the word `declare', a list of zero or more tuples `identifier : type' and a semi-colon `;'. Types are `string' and `natural'. There are three kinds of statements: assignments, if-then-else statements and while-loops. And there are expressions.
+
+Note: XX  A module Layout is imported, in which LAYOUT has been
+  specified. XX  The use of list constructs in the context-free section: `-ID-TYPE ","""*' and `-STATEMENT
+
+","""*'. In fact, the sort SERIES could have been left out entirely and be replaced by `-STATEMENT ","""*' all through the specification. SERIES is only used for abbreviation in the syntax rules. Also, variables over list constructs are being declared.
+
+XX  When a literal in a context-free function consists only of lower case letters and digits, and it
+
+is not a SDF-keyword, it need not be quoted.
+
+XX  The Pico-syntax module naturally contains no equations.
+
+\subsubsection{A Term Editor for Pico-syntax}
+
+ffl Open a term-editor for Pico-syntax, containing the program `small.pico'
+
+18 The ASF+SDF Meta-environment
+
+This term-editor not only has a reduce button but also the buttons typecheck and evaluate. These latter buttons have been defined in the configuration file `ctasdf.conf' (see Chapter 10 [Customization], page 69).
+
+ffl Press the reduce button.
+
+This has the following effects: XX  The term in the editor is parsed. XX  All the equations that are valid for this editor are parsed and compiled into a rewrite system.
+
+In this case that means the equations of the imported modules Booleans, Integers, Strings and Types. This takes some time.
+
+XX  The term in the editor is reduced. As no equation can be applied to reduce this term, the term
+
+itself is returned in the Lelisp-interaction window.
+
+Reducing a term for the second time is notably faster: the equations have been compiled already. ffl Press the typecheck (evaluate) button.
+
+This has the following effects: (See Appendix C [Pico Configuration File], page 87 for a listing of the configuration file for Pico.)
+
+XX  The module Pico-typecheck (Pico-eval) is added to the specification. XX  The term `tc[Program-in-editor]' (`eval[Program-in-editor]') is constructed. XX  All equations of Pico-typecheck (Pico-eval) and its imported modules are being compiled. XX  The term `tc[Program-in-editor]' (`eval[Program-in-editor]') is reduced using the equations
+
+of Pico-typecheck (Pico-eval).
+
+Typechecking (evaluating) a term for the second time is notably faster, the modules have been added already and the equations have been compiled.
+
+ffl Make some modifications to `small.pico' in the term-editor. Typecheck and evaluate the
+
+modified program.
+
+ffl Open term-editors with other pico programs (`fac.pico', `bin.pico') or create your own
+
+program. Typecheck and evaluate these programs.
+
+\subsubsection{More Exercises to Study the Pico Specification}
+
+Chapter 3: Guided Tour 19
+
+ffl Study other modules in the specification. The modules Pico-typecheck and Pico-eval are
+
+explained in the Section 3.4.4 [Pico-typecheck], page 19 and Section 3.4.5 [Pico-eval], page 20.
+
+ffl Add a repeat statement `repeat SERIES until EXP' to Pico-syntax, add typecheck equations
+
+to Pico-typecheck, and eval-equations to Pico-eval, for this new statement.
+
+ffl Add your own module to the specification. ffl Make your own specification. Create a new directory for each specification.
+
+\subsubsection{Module Pico-typecheck}
+
+ffl Open the module editor for Pico-typecheck.
+
+Functions `tcp' are defined for typechecking Pico-programs. The typechecking of the declarations yields a type-environment: a table of identifiers and their types. This type-environment, and the `look-up' function is specified in the module Type-environments. The typechecking of statements uses a type-environment and yields a Boolean value.
+
+In the equations is defined how a Pico-program is typechecked. Equation [Tc1a] says that the typechecking of a program is `true' if the typechecking of the Series in the type-environments, `tc[Decls]', is `true'.
+
+Equation [Tc1b] says that the typechecking of a program is `false' if the typechecking of the Series in the type-environments, `tc[Decls]', is not `true'.
+
+Equations [Tc2] and [Tc3] specify how a type-environment is constructed, when the declarations are typechecked.
+
+Equations [Tc4] and [Tc5] specify the typechecking of a, possibly empty, list of statements. Equations [Tc6], [Tc7], and [Tc8] specify how the three kinds of Statements are typechecked using the information from the type-environment.
+
+The rest of the equations deal with the typechecking of the expressions.
+
+\subsubsection{Module Pico-eval}
+
+20 The ASF+SDF Meta-environment
+
+ffl Open the module editor for Pico-eval.
+
+Functions `eval' are defined for describing the dynamic semantics of Pico. The result of evaluation is a value-environment: a table of identifiers and values with the final values of the declared identifiers. (Note that Pico does not have an output-statement.)
+
+In the equations is defined how a program is evaluated. Equation [Ev1] says that the evaluation of a program is the evaluation of the Series in the value-environments, `eval [Decls]'.
+
+Equations [Ev2a], [Ev2b], and [Ev3] specify how a value-environment is constructed, when the declarations are evaluated. Identifiers of type `natural' get value `0', Identifiers of type `string' get value `""' (empty-string)
+
+Equations [Ev4] and [Ev5] specify the evaluation of a, possibly empty, list of statements. Equations [Ev6], [Ev7a], [Ev7b], [Ev8a], and [Ev8b] specify how the three kinds of statements are evaluated using the information from the type-environment. Evaluating statements means updating the value-environment
+
+The rest of the equations deal with the evaluation of expressions. Evaluating expressions results in a value.
+
+
+
 
 \section{The ASF+SDF specification formalism}
 
