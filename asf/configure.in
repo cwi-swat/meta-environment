@@ -144,6 +144,5 @@ AC_OUTPUT(
    asfe/test/fail/Makefile
    asfe/test/ref/Makefile
    asfe/test/terms/Makefile
-   test/Makefile
    utils/Makefile
 )

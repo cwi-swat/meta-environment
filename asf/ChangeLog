@@ -1,3 +1,6 @@
+2001/08/13 (jong@cwi.nl)
+ * Added include directives for ToolBus in filtereqssyntax
+
 2001/08/08 (jurgenv@cwi.nl)
  * Added a new tool: filtereqssyntax that disambiguates ASF equations
    and condition by choosing the least number of injections in the

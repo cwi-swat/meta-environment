@@ -1,8 +1,4 @@
-#
-# vim:ts=8:sw=8:sts=0
-#
 # $Id$
-#
 
 noinst_LIBRARIES	= libMuASF.a
 noinst_HEADERS		= MuASF.h MuASF_dict.h

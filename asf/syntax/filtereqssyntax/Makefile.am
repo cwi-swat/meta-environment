@@ -8,18 +8,19 @@ noinst_HEADERS  = filtereqssyntaxtool.tif.h filtereqssyntax.h
 
 data_DATA = filtereqssyntaxtool.idef
 
-GENERIC_SOURCES = filtereqssyntax.c
-GENERIC_LDADD   = -L${ASF_SUPPORT}/lib -lASFME \
-                  -L${PT_SUPPORT}/lib -lmept \
-                  -L${ATERM}/lib -lATerm 
+GENERIC_SOURCES	= filtereqssyntax.c
+GENERIC_LDADD	= -L${ASF_SUPPORT}/lib -lASFME \
+		-L${PT_SUPPORT}/lib -lmept \
+		-L${ATERM}/lib -lATerm 
 
-INCLUDES = -I${ATERM}/include \
-           -I${PT_SUPPORT}/include \
-           -I${ASF_SUPPORT}/include
+INCLUDES	= -I${ATERM}/include \
+		-I${TOOLBUS}/include \
+		-I${PT_SUPPORT}/include \
+		-I${ASF_SUPPORT}/include
 
 
-filtereqssyntax_SOURCES = main.c ${GENERIC_SOURCES}
-filtereqssyntax_LDADD   = ${GENERIC_LDADD}
+filtereqssyntax_SOURCES		= main.c ${GENERIC_SOURCES}
+filtereqssyntax_LDADD		= ${GENERIC_LDADD}
 
 filtereqssyntaxtool_SOURCES = filtereqssyntaxtool.tif.c \
                               tool.c \
