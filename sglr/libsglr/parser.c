@@ -489,33 +489,15 @@ void  SG_ParserCleanup(void)
 {
   long allocated;
 
-  if (SG_GC) {
-    SG_CollectOldStacks(old_active_stacks, sg_tokens_read % GC_CYCLE, 
-			NULL, accepting_stack);
-  }
-
-#if !defined(HAVE_BOEHMGC)
-  if(SG_GC)
-    if(accepting_stack)
-      SG_ClearStack(accepting_stack);
-#endif
-
   active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
-#ifdef  MEMSTATS
   IF_STATISTICS(
-    if(SG_GC)
-    SG_PrintCurAllocStats();
-    SG_PrintMaxAllocStats();
+    allocated = SG_Allocated();
+    if(allocated > 0)
+      fprintf(SG_log(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
+              allocated);
   );
-#endif
-    IF_STATISTICS(
-      allocated = SG_Allocated();
-      if(allocated > 0)
-        fprintf(SG_log(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
-                allocated);
-    );
 #if 0
     /*  Seems to trigger a bug related to ATerm gc if running as ToolBus tool  */
     ATcollect();
@@ -800,8 +782,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
   IF_STATISTICS(num_reductions++);
 
-  t = SG_Apply(table, prodl, kids, attribute,
-               SG_POSINFO ? (ATerm) SG_CurrentPosInfo() : NULL);
+  t = SG_Apply(table, prodl, kids, attribute);
 
   IF_DEBUG(
     fprintf(SG_log(), "Reducing; state %d, token: ", SG_GETSTATE(s));
@@ -967,18 +948,6 @@ void SG_Shifter(void)
     );
   }
     SG_DiscardShiftPairs();
-
-#if !defined(HAVE_BOEHMGC)
-#ifdef  MEMSTATS
-    IF_STATISTICS(SG_MaxAllocStats());
-#endif
-    if(SG_GC) {
-      old_active_stacks[(sg_tokens_read-1) % GC_CYCLE] = active_stacks;
-      if (((sg_tokens_read-1) % GC_CYCLE) == (GC_CYCLE-1)) {
-	SG_CollectOldStacks(old_active_stacks, GC_CYCLE, new_active_stacks, accepting_stack);
-      }
-    }
-#endif
 
   active_stacks = new_active_stacks;
 } /*  Shifter  */

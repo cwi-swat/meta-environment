@@ -81,10 +81,6 @@ void  SGinitParser(ATbool toolbus_mode)
   
   SG_BINARY_ON();
   SG_CYCLE_ON();
-  SG_GC_ON();
-/*
-  SG_POSINFO_ON();
- */
 }
 
 void SGshowMode()
@@ -100,9 +96,7 @@ void SGshowMode()
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
   ATfprintf(stderr, "FILTER:      %s\n", SG_FILTER?"y":"n");
   ATfprintf(stderr, "STARTSYMBOL: %s\n", SG_STARTSYMBOL?"y":"n");
-  ATfprintf(stderr, "GC:          %s\n", SG_GC?"y":"n");
   ATfprintf(stderr, "CYCLE:       %s\n", SG_CYCLE?"y":"n");
-  ATfprintf(stderr, "POSINFO:     %s\n", SG_POSINFO?"y":"n");
 }
 
 /**  The ToolBus API functions  **/

@@ -1,24 +1,3 @@
-/*
-
-    SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 /*  $Id$  */
 
 /*
@@ -75,9 +54,6 @@ int     supplexflag       = ATfalse;
 int     printprodsflag    = ATfalse;
 int     asfix1flag        = ATfalse;
 int     asfix2meflag      = ATfalse;
-#if !defined(HAVE_BOEHMGC)
-int     gcflag          = ATtrue;
-#endif
 
 char   *input_file_name   = "-";
 char   *output_file_name  = "-";
@@ -148,11 +124,8 @@ void term_to_file(ATerm t, char *FN)
 
 void SG_Usage(FILE *stream, ATbool long_message)
 {
-  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcd"
-#if !defined(HAVE_BOEHMGC)
-  "g"
-#endif
-  "hlmnPtvV] [-f[adeirp]] [-i file] [-o file] \\"
+  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcdhlmnPtvV] "
+  "[-f[adeirp]] [-i file] [-o file] \\"
   "\n\t\t[-s sort]\n";
 
   ATfprintf(stream, usage, program_name);
@@ -171,9 +144,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t  i : injection count                             [%s]\n"
               "\t  p : priority                                    [%s]\n"
               "\t  r : reject                                      [%s]\n"
-#if !defined(HAVE_BOEHMGC)
-              "\t-g         : perform garbage collection           [%s]\n"
-#endif
               "\t-h, -?     : display usage information\n"
               "\t-i file    : input from |file|                    [%s]\n"
               "\t-l         : toggle statistics logging            [%s]\n"
@@ -198,9 +168,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(filter_injectioncountflag),
               DEFAULTMODE(filter_priorityflag),
               DEFAULTMODE(filter_rejectflag),
-#if !defined(HAVE_BOEHMGC)
-              DEFAULTMODE(gcflag),
-#endif
               input_file_name, 
               DEFAULTMODE(statisticsflag),
               DEFAULTMODE(asfix2meflag),
@@ -233,9 +200,6 @@ struct option longopts[] =
   {"debug",         no_argument,       &debugflag,         ATtrue},
   {"no-filter",     optional_argument, &filterflag,        ATfalse},
   {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
-#if !defined(HAVE_BOEHMGC)
-  {"no-gc",         no_argument,       &gcflag,            ATfalse},
-#endif
   {"help",          no_argument,       NULL,               'h'},
   {"input",         required_argument, NULL,               'i'},
   {"log",           no_argument,       NULL,               'l'},
@@ -302,11 +266,7 @@ void handle_options (int argc, char **argv)
   ATbool show_help = ATfalse, show_version = ATfalse;
 
   while ((c = getopt_long(argc, argv,
-                          "12?bcdf::"
-#if !defined(HAVE_BOEHMGC)
-                          "g"
-#endif
-                          "hi:lmno:p:Ps:S:tvV",
+                          "12?bcdf::hi:lmno:p:Ps:S:tvV",
                           longopts, NULL))
          != EOF) {
     switch (c) {
@@ -318,9 +278,6 @@ void handle_options (int argc, char **argv)
       case 'c':   cycleflag        = !cycleflag;          break;
       case 'd':   debugflag        = !debugflag;          break;
       case 'f':   handle_filter_options();                break;     
-#if !defined(HAVE_BOEHMGC)
-      case 'g':   gcflag           = ATfalse;             break;
-#endif
       case 'h':   show_help        = ATtrue;              break;
       case 'i':   input_file_name  = optarg;              break;
       case 'l':   statisticsflag   = !statisticsflag;     break;
@@ -364,9 +321,6 @@ ATbool set_global_options(void)
   if(asfix1flag)     SG_ASFIX1_ON();
   if(asfix2meflag)   SG_ASFIX2ME_ON();
   if(binaryflag)     SG_BINARY_ON();
-#if !defined(HAVE_BOEHMGC)
-  if(gcflag)         SG_GC_ON();
-#endif
   if(posinfoflag)    SG_POSINFO_ON();
 
   if(!parse_table_name) {

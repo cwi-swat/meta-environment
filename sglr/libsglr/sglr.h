@@ -258,13 +258,6 @@ enum SGmodeFlags {
 #define SG_POSINFO_ON()      (_SG_Mode |=  SG_BIT(SG_POSINFOFLAG))
 #define SG_POSINFO_OFF()     (_SG_Mode &= ~SG_BIT(SG_POSINFOFLAG))
 
-#if !defined(HAVE_BOEHMGC)
-#define SG_GC              (_SG_Mode  &  SG_BIT(SG_GCFLAG))
-#define SG_GC_ON()         (_SG_Mode |=  SG_BIT(SG_GCFLAG))
-#define SG_GC_OFF()        (_SG_Mode &= ~SG_BIT(SG_GCFLAG))
-#endif
-
-
 #define SG_STATISTICS        (SG_SHOWSTAT || SG_DEBUG)
 
 #define IF_VERBOSE(s)        if(SG_VERBOSE) {s;}

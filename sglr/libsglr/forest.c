@@ -213,33 +213,9 @@ ATbool SG_StartInjection(parse_table *pt, label l)
 }
 
 
-static ATerm sg_posinfo_label = NULL;
-
-ATerm SG_GetPosInfoLabel(forest t)
-{
-  if(!SG_POSINFO)
-    return NULL;
-
-  if(!sg_posinfo_label) {
-    sg_posinfo_label = ATmake("<str>", SG_POSITION_ATTR);
-  }
-  return ATgetAnnotation((ATerm) t, sg_posinfo_label);
-}
-
-forest SG_SetPosInfoLabel(forest t, ATerm pi)
-{
-  if(!SG_POSINFO)
-    return t;
-
-  if(!sg_posinfo_label) {
-    sg_posinfo_label = ATmake("<str>", SG_POSITION_ATTR);
-  }
-  return (forest) ATsetAnnotation((ATerm) t, sg_posinfo_label, pi);
-}
-
 /*  The function |SG_Apply| is defined directly in terms of ATerm functions.  */
 
-tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr, ATerm pi)
+tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
 {
   tree t;
   AFun fun = (AFun) NULL;
@@ -271,10 +247,7 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr, ATerm pi)
                                              (ATerm) SG_GetATint(l, 0)),
                          (ATerm) ts);
 
-  if(!SG_POSINFO || !pi)
-    return t;
-
-  return (tree) SG_SetPosInfoLabel((forest) t, pi);
+  return t;
 }
 
 /*  Managing Cyclic Syntax...  */
@@ -418,7 +391,6 @@ tree SG_YieldTree(parse_table *pt, tree t)
   tree      arg, res, newarg;
   ATermList args, newargs, ambs, tail;
   AFun      fun;
-  ATerm     pos_info;
   ATerm     prod;
 
   if (!t) {
@@ -468,16 +440,12 @@ tree SG_YieldTree(parse_table *pt, tree t)
        }
     }
     else {
-      pos_info = SG_GetPosInfoLabel(t);
       prod = ATgetArgument((ATerm) t, 0); /* get the prod */
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the args */
       args = (ATermList) SG_YieldTree(pt, (tree) args);
       prod = (ATerm) SG_LookupProduction(pt, SG_GetProdLabel((tree) prod));
  
       res  = ATmakeAppl2(SG_Appl_AFun, prod, (ATerm) args);
-      if(pos_info) {
-        res = SG_SetPosInfoLabel(res, pos_info);
-      }
     }
     return res;
   }

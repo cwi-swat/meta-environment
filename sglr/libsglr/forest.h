@@ -74,7 +74,7 @@ tree       SG_FilterTree(parse_table *pt, tree t);
 tree       SG_SelectOnTopSort(parse_table *pt, tree t, char *sort); 
 forest     SG_YieldTree(parse_table *pt, tree t);
 ATerm      SG_AmbTracker(forest t);
-tree       SG_Apply(parse_table *, label, ATermList, int attr, ATerm pi);
+tree       SG_Apply(parse_table *, label, ATermList, int attr);
 ATerm      SG_TreeType(ATerm);
 label      SG_GetProdLabel(tree aprod);
 label      SG_GetApplProdLabel(tree applprod);
