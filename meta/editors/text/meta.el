@@ -72,6 +72,14 @@
   ()
 )
 
+(defun replace-file (filename)
+  "Open a buffer, initialize with contents. If buffer exists contents are replaced."
+  (interactive "F")
+
+  (find-file filename) 
+  ()
+)
+
 (defun tb-set-char-pos (filename pos)
   "Set the cursor to position POS in FILENAME"
   (set-marker (point-marker t) pos (get-file-buffer filename))

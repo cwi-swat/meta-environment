@@ -34,9 +34,11 @@ in
   (
     rec-msg(set-filename(EditorId, FileName?)) .
     snd-eval(TE, edit-file(FileName))
+/*
   +
     rec-msg(set-text(EditorId, Text?)) .
     snd-eval(TE, edit-text("*reduct*", Text))
+*/
   ) .
   rec-value(TE, file-id(Fid?)) .
   if not-equal(EditorType, "term") then
@@ -87,8 +89,13 @@ in
     rec-msg(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
   +
+/*
     rec-msg(replace-text(EditorId, Text?)) .
     snd-do(TE, replace-text(Fid, Text)) 
+  +
+*/
+    rec-msg(replace-file(EditorId, FileName?)) .
+    snd-do(TE, replace-file(FileName))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
