@@ -1,4 +1,6 @@
-
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
 
 Improvements:
  * Scrolling is now done more intelligently
