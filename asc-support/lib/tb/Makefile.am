@@ -29,7 +29,7 @@ libtb_asc_support_me_a_SOURCES = client.c ${COPIED}
 tb-%.c : ${top_srcdir}/lib/%.c
 	cp -f $< $@
 
-CLEANFILES+=tb-*.c
+CLEANFILES=tb-*.c
 
 BUILT_SOURCES = ${COPIED}
 

@@ -94,7 +94,7 @@ GENFWD=${UTILS}/gen-forward.sh
 GENPRTS=${UTILS}/gen-protos.sh
 GENLNKTST=${UTILS}/gen-link-test.sh
 
-CLEANFILES+=builtin-forward.c asc-builtins.h builtin-link-test.c
+CLEANFILES=builtin-forward.c asc-builtins.h builtin-link-test.c
 
 BUILT_SOURCES=builtin-forward.c asc-builtins.h builtin-link-test.c
 
