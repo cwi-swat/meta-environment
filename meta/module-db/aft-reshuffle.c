@@ -92,10 +92,19 @@ void AFTaddSection(ATerm module, ATerm section)
 ATerm unique_new_name(ATerm name);
 
 ATerm AFTcreateNewModule(ATerm modname)
-{
+{ 
+  char *orig_modname_string;
+  ATerm module_name_with_id, module_name_string, extmodname;
+  ATerm orig_mod_name_with_id;
+
   ATerm newmodule = AFinitModule();
   ATerm newmodname = unique_new_name(modname);
-  ATerm extmodname = ATsetAnnotation(newmodname,ATparse("module-name"),modname);
+  
+  ATmatch(newmodname, "<str>", &module_name_string);
+  module_name_with_id = ATmakeTerm(pattern_asfix_id, module_name_string);
+  ATmatch(modname,"<str>",&orig_modname_string);
+  orig_mod_name_with_id = ATmakeTerm(pattern_asfix_id,orig_modname_string);
+  extmodname = ATsetAnnotation(module_name_with_id,ATparse("module-name"),orig_mod_name_with_id);
   newmodule = AFputModuleName(newmodule,extmodname);
   PutValue(compile_db,newmodname,newmodule);
   return newmodname;
@@ -118,7 +127,8 @@ void AFTwriteAsfixFile(int cid,ATerm modname)
 
   ATerm amod = GetValue(compile_db,modname);
 
-  if(ATmatchTerm(modname,pattern_asfix_id,&text)) {
+  if(ATmatch(modname,"<str>",&text)) {
+    ATwarning("The module name: %s\n",text);
     /* Check whether the C file exists. */
     len = strlen(output_path) + 1 + strlen(text) + strlen(".c");
     fname = malloc(len + 1);
@@ -164,8 +174,8 @@ void AFTwriteAsfixFile(int cid,ATerm modname)
       }
       /* write full path name instead of only module name */
       ATfprintf(stderr,"Writing: %s\n", fname);
-      element = ATmake("snd-event(generate-code(<term>,<term>))",
-                       modname,amod);
+      element = ATmake("snd-event(generate-code(<str>,<term>))",
+                       text,amod);
       if(!compiling) {
         compiling = ATtrue;
         ATBwriteTerm(cid,element);
