@@ -34,6 +34,7 @@ let
   Extension : str
 in
   MDB-InitializeModuleDb() .
+  snd-msg(termstore-initialized) .
   MDB-InitializeFileExtensions() .
   (
     rec-msg(get-import-relations) .

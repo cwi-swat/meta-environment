@@ -111,5 +111,6 @@ in
 #ifdef TIMEOUT
   . create(AbortMetaEnvironment, Pid?)
 #endif
+  . rec-msg(termstore-initialized) 
   . snd-msg(creation-finished)
 endlet
