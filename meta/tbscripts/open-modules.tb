@@ -11,7 +11,6 @@ let
 in
   (
     rec-msg(open-initial-module(Path?, Module?, Extension?)) .
-printf("Ex = %s\n", Extension).
     if equal(Extension, "") then
       Type := quote(sdf)
     else 
