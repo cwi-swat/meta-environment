@@ -96,8 +96,8 @@ ATfprintf(stderr,"Reducing finished.\n");
     ATfprintf(output, "\n");
     fclose(output);
   }
+  ATfprintf(stderr,"Writing: %s\n", fname);
   free(fname);
-  ATfprintf(stderr,"Writing: %s.c\n", text);
   return ATmake("snd-value(c-code-ready)");
 }
 
