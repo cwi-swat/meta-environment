@@ -1,5 +1,12 @@
 # $Id$
 
+2003/05/19 (jurgenv@cwi.nl)
+ * Moved term-store tool to toplevel
+ * Copied sdf specific functionality from module-db to sdf-modules tool
+   located in the sdf-support package.
+ * Partly reimplemented module-db in a ToolBus script that uses only
+   the sdf-modules.idef and term-store.idef
+
 2003/05/19 ({jong,markvdb}@cwi.nl)   
  * Added explicit ATBpack and ATBunpack.   
  * Introduced write-term-file.
