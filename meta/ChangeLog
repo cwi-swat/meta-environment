@@ -1,5 +1,8 @@
 # $Id$
 
+2003/03/28 (jurgenv@cwi.nl)
+ * Added dependency on new graph-support package
+
 2003/03/25 (markvdb@cwi.nl)
  * Restructured the killing of editors, a new process introduced.
    A number of small bugs are solved in this way. There is still
