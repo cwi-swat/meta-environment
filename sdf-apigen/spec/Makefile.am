@@ -16,7 +16,6 @@ INCLUDES	= -I$(ASCINC) \
 		-I$(ATERM)/include
 
 pkgdata_DATA	= Sdf2-to-ADT.trm.tbl
-CLEANFILES	= ${pkgdata_DATA}
 
 EXTRA_DIST	= \
 	$(wildcard *.sdf) \

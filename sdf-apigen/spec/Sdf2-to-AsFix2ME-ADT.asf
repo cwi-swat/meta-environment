@@ -19,8 +19,10 @@ equations
   $ADT4 := merge-adts($ADT2, $ADT3),
   $ADT5 := start-sorts-to-asfix2me-adt($Module),
   $ADT6 := merge-adts($ADT4, $ADT5),
-  $ADT7 := merge-adts($ADT6, [ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
-     constructor(OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<chars(CHARLIST)>))
+  $ADT7 := merge-adts($ADT6, 
+[ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
+  constructor(OptLayout, Present,appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<chars(CHARLIST)>)),
+  list(CHARLIST, int)
    ])
   ===>
   sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
