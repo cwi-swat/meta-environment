@@ -1,0 +1,127 @@
+# $Id$
+# Directory: sglr/src
+
+# Configure variable substitutions
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+@SET_MAKE@
+VPATH		= @srcdir@
+srcdir		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= ${exec_prefix}/bin
+libdir		= ${exec_prefix}/lib
+includedir	= ${prefix}/include
+docdir		= ${top_srcdir}/docs
+
+SHELL		= @SHELL@
+
+AR              = @AR@
+AR_FLAGS        = cr
+
+CC		= @CC@
+CFLAGS		= @CFLAGS@ ${XCFLAGS}
+CFLAGSPROF	= -pg ${CFLAGS}
+CPP		= @CPP@
+CPPFLAGS	= @CPP@ ${XCPPFLAGS}
+LDFLAGS         = -g
+LDFLAGSPROF     = ${LDFLAGS} -pg
+
+MAKE		= gmake
+
+DEFS		= @DEFS@
+INCLUDES	= @INCLUDES@ ${XINCLUDES}
+LIBSALL		= -L${PARSERDIR} -L${libdir} @LIBS@ ${SOCKLIBS}
+LIBS		= ${LIBSALL} ${XLIBS}
+LIBSPROF	= ${LIBSALL} ${XLIBSPROF}
+SOCKLIBS	= @SOCKLIBS@
+
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROG	= @INSTALL_PROG@
+UNINSTALL	= @UNINSTALL@
+
+ATERM           = @ATERM@
+TOOLBUS         = @TOOLBUS@
+
+PARSERDIR	= ${top_srcdir}/sglr/parser
+
+# The eXtra parts of some variables
+XCFLAGS		= ${DEFS}
+
+XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
+ATLIBS 		= -lATerm -lAsFix -lATB
+XLIBS		= ${addsuffix -${CC},${ATLIBS}}
+
+LIBSRC          = tree-to-dot.c
+LIBOBJ		= ${patsubst %.c,%.o,${LIBSRC}}
+OBJ		= ${patsubst %.c,%.o,${MAIN}}
+
+PROG            = tree2dot
+LIB		= libtree2dot.a
+
+all:	${PROG}
+
+.SILENT:	depend
+
+install:	libinstall bininstall
+
+incinstall:	${INC}
+	@for INC in ${INC};	\
+	do \
+		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
+	done
+
+libinstall:	${LIB}
+	@for LIB in ${LIB};	\
+	do \
+		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
+	done
+
+bininstall:	${PROG}
+	@for PROG in ${PROG};	\
+	do \
+		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
+	done
+
+distclean realclean spotless:	clean
+	rm -f	Makefile
+
+clean:
+	rm -f	core depend ${PROG} ${OBJ} ${LIB}
+
+# Generic rules
+
+%.o:	%.c
+	${CC} ${CFLAGS} ${INCLUDES} -c $<
+
+
+# Specific dependencies
+
+libtree2dot.a:  ${LIBOBJ}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
+
+tree2dot:	${LIB} ${OBJ}
+
+
+# ObTribute to Larry Wall
+love:
+	@echo "not war"
+
+
+# The GNU getopt sources ${GETOPTC} might not compile silently
+# when using a high warning level in a really pedantic compiler
+
+getopt.o: getopt.c
+	${CC} -O3 -c $<
+
+getopt1.o: getopt1.c
+	${CC} -O3 -c $<
+
+# Handle dependencies
+depend: ${LIBSRC} ${MAIN}
+	makedepend ${INCLUDES} ${LIBSRC} ${MAIN} -f -			>	$@
+
+-include depend
