@@ -24,7 +24,7 @@ include ${top_srcdir}/make_rules
 
 INCLUDES	  = -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
-bin_PROGRAMS	  = apply-function remove-annotation
+bin_PROGRAMS	  = apply-function
 
 bin_SCRIPTS	  = genmakefile genamakefile
 
@@ -33,10 +33,6 @@ EXTRA_DIST	  = genmakefile.proto genamakefile.sh.src
 apply_function_SOURCES	= apply-function.c
 apply_function_LDADD	= -L$(PT_SUPPORT)/lib -lAsFix \
 			  -L$(ATERM)/lib -lATerm
-
-remove_annotation_SOURCES = remove-annotation.c
-remove_annotation_LDADD	  = -L$(ATERM)/lib -lATerm
-
 
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
