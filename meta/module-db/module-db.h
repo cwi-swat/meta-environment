@@ -22,6 +22,3 @@ SDF_SDF getSyntax(ATermList modules);
 #define PutValue(db,k,v) (ATtablePut(db,k,v))
 #define RemoveKey(db,k) (ATtableRemove(db,k))
 #define CreateValueStore(i1,i2) (ATtableCreate(i1,i2))
-
-#define Mtrue (ATerm)ATmakeInt(1)
-#define Mfalse (ATerm)ATmakeInt(0)

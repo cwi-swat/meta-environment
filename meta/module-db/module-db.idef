@@ -269,21 +269,6 @@ snd-do(Mdb, create-module-db).
     snd-msg(parameterized-equations(ModName, Params, Equations))
   )
 +
-  rec-msg(rename(Renamings?, Equations?)) .
-  snd-eval(Mdb, rename-in-equations(Renamings, Equations)) .
-  rec-value(Mdb, equations(Equations?)) .
-  snd-msg(equations(Equations))
-+
-  rec-msg(substitute(ModName?, Params?, Equations?)) .
-  snd-eval(Mdb, substitute-in-equations(ModName, Params, Equations)) .
-  rec-value(Mdb, equations(Equations?)) .
-  snd-msg(equations(Equations))
-+
-  rec-msg(union-equations(EqsList1?, EqsList2?)) .
-  snd-eval(Mdb, union-equations(EqsList1, EqsList2)) .
-  rec-value(Mdb, equations(EqsList3?)) .
-  snd-msg(equations(EqsList3))
-+
 /* Validate the parse table */
   rec-msg(invalidate-parse-tables(Name?)).
   snd-do(Mdb, invalidate-parse-tables(Name))

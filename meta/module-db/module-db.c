@@ -6,7 +6,6 @@
 #include <assert.h>
 
 #include "module-db.h"
-#include "renaming-symbols.h"
 #include "renaming-imports.h"
 #include "MDB.h"
 
@@ -713,48 +712,6 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
   }
   return ATmake("snd-value(plain-equations(<term>))", 
                 ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-}
-
-/*}}}  */
-/*{{{  ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm atEqs) */
-
-ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm atEqs)
-{
-  SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
-  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListFromTerm(atEqs);
-
-  asfEqsList = renameSymbolsInEquations(asfEqsList, renamings);
-  
-  return ATmake("snd-value(equations(<term>))", 
-                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-}
-
-/*}}}  */
-/*{{{  ATerm substitute_in_equations(int cid, ATerm atModuleName, ATerm atParameters, ATerm atEqs) */
-
-ATerm substitute_in_equations(int cid, ATerm atModuleName, ATerm atParameters, ATerm atEqs)
-{
-  SDF_ModuleName formalModuleName = SDF_makeModuleNameFromTerm(atModuleName);
-  SDF_Symbols actualParams = SDF_makeSymbolsFromTerm(atParameters);
-  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListFromTerm(atEqs);
-
-  asfEqsList = renameParametersInEquations(formalModuleName, asfEqsList, actualParams);
-
-  return ATmake("snd-value(equations(<term>))",
-                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-}
-
-/*}}}  */
-/*{{{  ATerm union_equations(int cid, ATerm eqsList1, eqsList2) */
-
-ATerm union_equations(int cid, ATerm eqsList1, ATerm eqsList2)
-{
-  ASF_CondEquationList asfEqsList1 = ASF_makeCondEquationListFromTerm(eqsList1);
-  ASF_CondEquationList asfEqsList2 = ASF_makeCondEquationListFromTerm(eqsList2);
-  ASF_CondEquationList newAsfEqsList = ASF_unionCondEquationList(asfEqsList1, asfEqsList2);
-
-  return ATmake("snd-value(equations(<term>))", 
-                ATBpack(ASF_makeTermFromCondEquationList(newAsfEqsList)));
 }
 
 /*}}}  */

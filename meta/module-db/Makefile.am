@@ -9,9 +9,9 @@ EXTRA_DIST		= module-db.idef
 
 CLEANFILES		= module-db.tifs module-db.tif.c module-db.tif.h
 
-noinst_HEADERS		= module-db.tif.h module-db.h renaming-symbols.h \
+noinst_HEADERS		= module-db.tif.h module-db.h \
                           MDB.h MDB_dict.h renaming-imports.h
-module_db_SOURCES	= module-db.tif.c module-db.c renaming-symbols.c \
+module_db_SOURCES	= module-db.tif.c module-db.c \
                           MDB.c MDB_dict.c renaming-imports.c
 
 module_db_LDADD		= -L$(SDF_SUPPORT)/lib -lSDFME \
