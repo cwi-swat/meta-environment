@@ -1,6 +1,6 @@
 package toolbus.atom;
 import toolbus.ToolBusException;
-import toolbus.process.ProcessInstance;
+import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
@@ -9,16 +9,12 @@ import aterm.ATerm;
  */
 public class Eval extends ToolAtom {
 
-  public Eval(ATerm trm) {
-    super(trm);
+  public Eval(ATerm toolarg) {
+    super(toolarg);
   }
-
-  public Eval() {
-    super();
-  }
-
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    super.compile(P, follow);
+  
+  public ProcessExpression copy(){
+    return new Eval(getToolarg());
   }
 
   public boolean execute() throws ToolBusException {

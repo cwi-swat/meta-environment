@@ -16,7 +16,7 @@ public class Main {
     TBTerm.init(aterms);
     
     //atomTest();
-    //PETest();
+    PETest();
     //LetTest();
     //CallTest();
      //CallTest2();
@@ -24,7 +24,7 @@ public class Main {
     //CreateTest();
     //NestedIterTest();
      //DisruptTest();
-    MergeTest();
+    //MergeTest();
     //SieveTest();
     //NestedIterTest();
     //producerTest();
@@ -54,6 +54,7 @@ public class Main {
               new Alternative(new Print(al), new Print(bl)),
               new Print(cl))
              );
+    System.out.println(P1);
              
     ProcessDefinition P2 = new ProcessDefinition("P2",
             new SndMsg((ATermList) aterms.make("[z]"))
@@ -469,7 +470,7 @@ static void producerTest(){
             new Delta()
           ),
           new IfElse(aterms.make("equal(<term>,<term>)", varN, varMax),
-            new ShutDown(),
+            new ShutDown(aterms.make("the-end")),
             new Delta()
           )
         )

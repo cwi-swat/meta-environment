@@ -1,7 +1,7 @@
 package toolbus.atom;
 
 import toolbus.ToolBusException;
-import toolbus.process.ProcessInstance;
+import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
@@ -10,17 +10,13 @@ import aterm.ATerm;
  * @author paulk, Aug 7, 2002
  */
 public class Do extends ToolAtom {
-
-  public Do(ATerm toolarg) {
-    super(toolarg);
+  
+  public  Do(ATerm trm){
+    super(trm);
   }
-
-  public Do() {
-    super();
-  }
-
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    super.compile(P, follow);
+  
+  public ProcessExpression copy(){
+    return new Do(getToolarg());
   }
 
   public boolean execute() throws ToolBusException {

@@ -1,6 +1,7 @@
 package toolbus.atom;
 
 import toolbus.ToolBusException;
+import toolbus.process.*;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
@@ -10,12 +11,12 @@ import aterm.ATerm;
  */
 public class AckEvent extends ToolAtom {
 
-  public AckEvent(ATerm trm) {
-    super(trm);
+  public AckEvent(ATerm toolarg) {
+    super(toolarg);
   }
-
-  public AckEvent() {
-    super();
+  
+  public ProcessExpression copy(){
+    return new AckEvent(getToolarg());
   }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {

@@ -4,46 +4,45 @@
 package toolbus.atom;
 
 import toolbus.*;
-import toolbus.process.ProcessInstance;
+import toolbus.process.*;
 
 import aterm.*;
 
 public class Create extends Atom {
-  private ATerm pcall;
-  private ATerm rvar;
+  private Ref pcall;
+  private Ref rvar;
 
-  public Create(ATerm pcall, ATerm rvar) {
-    super(pcall, rvar);
+  public Create(ATerm c, ATerm v) {
+    pcall = new Ref(c);
+    rvar = new Ref(v);
+    setAtomArgs(pcall, rvar);
   }
-
-  public Create() {
-    super();
+  
+  public ProcessExpression copy(){
+    return new Create(pcall.value, rvar.value);
   }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     super.compile(P, follow);
-
-    ATermList args = getArgs();
-    pcall = args.getFirst();
-    rvar = args.getLast();
-    if (pcall.getType() != ATerm.APPL)
+ 
+    if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");
-    if (!TBTerm.isResVar(rvar))
+    if (!TBTerm.isResVar(rvar.value))
       throw new ToolBusException("second argument of create should be a result variable");
   }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    String name = ((ATermAppl) pcall).getName();
-    ATermList cargs = ((ATermAppl) pcall).getArguments();
+    String name = ((ATermAppl) pcall.value).getName();
+    ATermList cargs = ((ATermAppl) pcall.value).getArguments();
     ATermList evargs = (ATermList) TBTerm.eval(cargs, this.getEnv());
 
     ToolBus TB = getProcess().getToolBus();
 
     ProcessInstance P = TB.addProcess(name, evargs);
 
-    getEnv().putVar(rvar, P.getProcessId());
+    getEnv().putVar(rvar.value, P.getProcessId());
     return true;
 
   }

@@ -4,8 +4,7 @@
  */
 
 package toolbus.process;
-import java.util.*;
-import java.util.Set;
+import java.util.Stack;
 
 import toolbus.*;
 import toolbus.atom.AtomSet;

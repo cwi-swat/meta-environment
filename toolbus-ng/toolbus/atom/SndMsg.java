@@ -4,20 +4,21 @@
 
 package toolbus.atom;
 import toolbus.TBTerm;
+import toolbus.process.ProcessExpression;
 
-import aterm.ATermList;
+import aterm.*;
 
 public class SndMsg extends CommAtom {
 
-  public SndMsg(ATermList args) {
-    super(args);
+  public SndMsg(ATerm msg) {
+    super(msg);
+  }
+  
+  public ProcessExpression copy(){
+    return new SndMsg(getMsg());
   }
 
-  public SndMsg() {
-    super();
-  }
-
-  public boolean canCommunicate(Atom a) {
-    return a instanceof RecMsg && TBTerm.mightMatch(getArgs(), a.getArgs());
+  public boolean canCommunicate(CommAtom a) {
+    return a instanceof RecMsg && TBTerm.mightMatch(getMsg(), a.getMsg());
   }
 }

@@ -1,7 +1,6 @@
 package toolbus.atom;
-import toolbus.MatchResult;
-import toolbus.ToolBusException;
-import toolbus.process.ProcessInstance;
+import toolbus.*;
+import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
@@ -12,16 +11,12 @@ import aterm.ATerm;
 
 public class RecVal extends ToolAtom {
 
-  public RecVal(ATerm trm) {
-    super(trm);
+  public RecVal(ATerm toolarg) {
+    super(toolarg);
   }
-
-  public RecVal() {
-    super();
-  }
-
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    super.compile(P, follow);
+  
+  public ProcessExpression copy(){
+    return new RecVal(getToolarg());
   }
 
   public boolean execute() throws ToolBusException {
