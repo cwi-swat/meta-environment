@@ -94,8 +94,15 @@ equations
 %% Literals and character classes do not need the $\lexsort{\_}$ or $\cfsort{\_}$
 %% constructor, because they are lexical by definition
 
-  [0] <cc -LEX> = cc  [0] <cc -CF> = cc  [0]  <cc -VAR> = cc
-  [0] <L  -LEX> = L   [0] <L  -CF> = L   [0]  <L  -VAR> = L
+
+[0] <cc -LEX> = cc  [0] <cc -CF> = cc 
+[0] <L  -LEX> = L   [0] <L  -CF> = L   
+
+%% varsyms should not be removed, because that would ruin the injection from
+%% varsym into normal syms!
+%% [0]  <cc -VAR> = cc
+%% [0]  <L  -VAR> = L
+
 
 %% \paragraph{Basic + Priorities}
 %%

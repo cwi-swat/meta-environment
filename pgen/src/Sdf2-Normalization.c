@@ -9520,18 +9520,6 @@ goto lbl_lf_173 ;
 }
 }
 }
-if ( check_sym ( ltmp [ 0 ] , lf_64sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( ltmp [ 0 ] ) ;
-}
-}
-if ( check_sym ( ltmp [ 0 ] , lf_192sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( ltmp [ 0 ] ) ;
-}
-}
 FUNC_EXIT ( make_nf1 ( lf_173sym , ltmp [ 0 ] ) ) ;
 }
 }
