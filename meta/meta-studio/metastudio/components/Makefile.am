@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS = graphs statusbar .
+SUBDIRS = graphs statusbar errorlist infolist .
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 
@@ -11,8 +11,6 @@ EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
 	ChoiceDialog.java \
-	ErrorList.java \
-	ErrorListCellRenderer.java \
 	FileDialog.java \
 	HistoryPanel.java \
 	MainTabs.java \
@@ -26,5 +24,4 @@ java_JAVA = \
 	ParseTreeBrowser.java \
 	QuestionDialog.java \
 	ToolBar.java \
-	TideControl.java \
-	SystemInfoPanel.java
+	TideControl.java 

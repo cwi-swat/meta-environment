@@ -1,4 +1,4 @@
-package metastudio.components;
+package metastudio.components.errorlist;
 
 import java.awt.Component;
 import java.util.Iterator;

@@ -4,24 +4,33 @@ import javax.swing.JTabbedPane;
 
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
+import metastudio.components.errorlist.ErrorList;
+import metastudio.components.infolist.*;
 import aterm.ATermFactory;
 
 public class MessageTabs extends UserInterfacePanel {
     private JTabbedPane messageTabs;
     
-    public MessageTabs(ATermFactory factory, MultiBridge bridge) {
+    public MessageTabs(ATermFactory factory, MultiBridge bridge, String[] args) {
         super(factory, bridge);
-        createMessageTabs();
+        createMessageTabs(args);
         add(messageTabs);
     }
     
-    private void createMessageTabs() {
+    private void createMessageTabs(String[] args) {
         messageTabs = new JTabbedPane();
 
         HistoryPanel historyPanel = new HistoryPanel(getFactory(), getBridge());
         
-        UserInterfacePanel errorList = new ErrorList(getFactory(), getBridge());
-        UserInterfacePanel systemInfo = new SystemInfoPanel(getFactory(), getBridge());
+        ErrorList errorList = new ErrorList(getFactory(), args);
+        Thread errorListThread = new Thread(errorList);
+        errorListThread.setName("error-list");
+        errorListThread.start();
+        
+        InfoList systemInfo = new InfoList(getFactory(), args);
+        Thread systemInfoThread = new Thread(systemInfo);
+        systemInfoThread.setName("info-list");
+        systemInfoThread.start();
         
         messageTabs.insertTab("Errors", null, errorList, "Errors and warnings", 0);
         messageTabs.insertTab("Info",null, systemInfo,"System information", 1);

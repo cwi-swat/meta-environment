@@ -1,33 +1,33 @@
-package metastudio.components;
+package metastudio.components.infolist;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import metastudio.MultiBridge;
-import metastudio.UserInterfacePanel;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
+import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class SystemInfoPanel extends UserInterfacePanel {
+public class InfoList extends JPanel implements InfoListTif, Runnable {
     private static final String ERROR = "error";
 	private JList list;
     private ListModel data;
     private DateFormat dateFormat;
-
-    public SystemInfoPanel(aterm.ATermFactory factory, MultiBridge bridge) {
-        super(factory, bridge);
-
+    private InfoListBridge bridge;
+    
+    public InfoList(ATermFactory factory, String[] args) {
         this.data = new ListModel(new LinkedList());
 
         this.list = new JList();
@@ -39,7 +39,18 @@ public class SystemInfoPanel extends UserInterfacePanel {
 
         String format = Preferences.getString("history.dateformat");
         dateFormat = new SimpleDateFormat(format);
-        add(new JScrollPane(list), BorderLayout.CENTER);
+        JScrollPane pane= new JScrollPane(list);
+        add(pane, BorderLayout.CENTER);
+        
+        try {
+        	bridge = new InfoListBridge(factory, this);
+        	bridge.init(args);
+        	bridge.setLockObject(this);
+        	bridge.connect("info-list", null, -1);
+        } catch (IOException e) {
+        	remove(pane);
+        	e.printStackTrace();
+        }
     }
     
     private void setErrorColor() {
@@ -117,4 +128,12 @@ public class SystemInfoPanel extends UserInterfacePanel {
     	setWarningColor();
     	addMessageAndToFront(message);
     }
+
+	public void recTerminate(ATerm t0) {
+		
+	}
+
+	public void run() {
+		bridge.run();
+	}
 }
