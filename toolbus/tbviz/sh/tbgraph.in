@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-
+prefix=@prefix@
 CTASDF="ctasdf 100"
 
 TESTDIR="/tmp/tbgraph-$$"
