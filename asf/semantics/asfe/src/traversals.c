@@ -113,61 +113,6 @@ PT_Tree selectTree(PT_Args args, int pos)
 
 /*}}}  */
 
-/*{{{  static Traversal computeTraversalType(Traversal trav) */
-
-static Traversal computeTraversalType(Traversal trav)
-{
-  PT_Symbol symbol;
-  PT_Symbol cleanSymbol;
-
-  symbol = PT_getProductionRhs(trav.prod);
-  cleanSymbol = PT_getSymbolSymbol(symbol);
-
-  if (PT_isEqualSymbol(trav.traversed, symbol)) {
-    trav.type = TRANSFORMER;
-  } 
-  else if(trav.accumulated != NULL) {
-    if(PT_isEqualSymbol(trav.accumulated, cleanSymbol)) {
-      trav.type = ACCUMULATOR;
-    }
-    else if(trav.accumulated != NULL && PT_isSymbolPair(cleanSymbol)) {
-      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
-      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
-      
-      if (PT_isEqualSymbol(PT_getSymbolSymbol(trav.traversed),lhs) &&
-	  PT_isEqualSymbol(trav.accumulated,rhs)) {
-	trav.type = COMBINATION;
-      }
-    }
-    
-  }
-
-  /* Warn about deprecated use of old traversal attribute */
-  ATwarning("WARNING: using deprecated traversal syntax "
-            "in production:\n%s\n", PT_yieldProduction(trav.prod));
-
-  switch(trav.type) {
-    case TRANSFORMER:
-      ATwarning("Please use \"traversal(trafo, top-down, break)\"\n");
-      break;
-    case ACCUMULATOR:
-      ATwarning("Please use \"traversal(accu, top-down, break)\"\n");
-      break;
-    case COMBINATION:
-       ATwarning("Please use \"traversal(accu,trafo,top-down, break)\"\n");
-       break;
-    case UNDEFINED_TYPE:
-    default:
-      RWsetError("Illegal traversal syntax in production.", 
-  	         (ATerm) PT_makeTreeLit("")); 
-       break;
-  }
-
-  return trav;
-}
-
-/*}}}  */
-
 /*{{{  static ATbool checkTraversalType(Traversal trav) */
 
 static ATbool checkTraversalType(Traversal trav)
@@ -349,6 +294,8 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 
   /* default strategy behaviour */
   if (trav.strategy == UNDEFINED_STRATEGY) {
+    RWsetError("top-down or bottom-up missing in traversal strategy.", 
+	       (ATerm) PT_yieldProduction(trav.prod));
     if (trav.type == UNDEFINED_TYPE) { /* old style traversals */
       trav.strategy = TOPDOWN;
     }
@@ -357,12 +304,17 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
     }
 
   }
+
   if (trav.continuation == UNDEFINED_CONTINUATION) {
+    ATwarning("WARNING: missing break or continue attribute in %s\n", 
+	     PT_yieldProduction(trav.prod)); 
     if (trav.strategy == TOPDOWN) { /* top down stops */
+      ATwarning("WARNING: suggested attribute: \'break\'\n");
       trav.continuation = BREAK;
     }
     else {                          /* bottom-up continues */
       trav.continuation = CONTINUE;
+      ATwarning("WARNING: suggested attribute: \'continue\'\n");
     }
   }
 
@@ -413,10 +365,6 @@ Traversal createTraversalPattern(PT_Tree term)
  
   trav = setTraversalTypeAndStrategy(trav);
   
-  if (trav.type == UNDEFINED_TYPE) { /* backward compatibility */
-    trav = computeTraversalType(trav);
-  }
-
   if (!checkTraversalType(trav)) {
     trav.type = UNDEFINED_TYPE;
     trav.strategy = UNDEFINED_STRATEGY;
