@@ -4,9 +4,7 @@
 
 package toolbus;
 import java.util.Vector;
-
 import toolbus.process.*;
-
 import aterm.*;
 
 public class ToolBus {
