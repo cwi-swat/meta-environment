@@ -54,10 +54,10 @@ and others. \rscript is not concerned with viewing.
 
 \end{description}
 
-\section{The \rscript language}
+\section{The \rscript Language}
 
 \rscript is based on \emph{binary relations} only and has no direct support
-for n-ary relations with labelled columns as usual in a general
+for n-ary relations with labeled columns as usual in a general
 database language. However, some syntactic support for n-ary relations
 exists that translates them internally to binary relations. We will
 explain this further below.
@@ -71,7 +71,7 @@ composite types (bag and relation). Expressions are constructed from
 comprehensions, function invocations and operators. These are all
 described below.
 
-\subsection{Types and values}
+\subsection{Types and Values}
 
 \subsubsection{Elementary Types and Values}
 
@@ -148,7 +148,7 @@ combinations of values produced by the generators.
 
 Each generator may introduce new variables
 that can be used in subsequent generators as well as in the expression
-$E$.  A generator can use the variables introduced by preceeding
+$E$.  A generator can use the variables introduced by preceding
 generators.  Generators may enumerate all the values in a bag or
 relation, they may perform a test, or they may assign a value to
 variables.
@@ -157,7 +157,7 @@ variables.
 
 \paragraph{Enumerator}
 Enumerators generate all the values in a given bag or relation.
-They come in two flavours: 
+They come in two flavors: 
 
 \begin{itemize}
 \item {\tt $V$~:~$E$}: the elements of the bag or relation that results from the evaluation
@@ -173,13 +173,13 @@ new variables $V_1 ,..., V_n$.
 
 \paragraph{Test}
 A test is a boolean-valued expression. If the evaluation yields {\tt true}
-this indicates that the current combination of generated values upto this test
+this indicates that the current combination of generated values up to this test
 is still as desired and execution continues with subsequent generators.  If
 the evaluation yields {\tt false} this indicates that the current combination
 of values is undesired, and that another combination should be tried.
 
 \paragraph{Assignment}
-Assignments assign a value to one or more variables and also come in two flavours:
+Assignments assign a value to one or more variables and also come in two flavors:
 
 \begin{itemize}
 
@@ -208,7 +208,7 @@ the given relation: {\tt \{<10,1>, <20,2>\}}.
 
 \subsection{Declarations}
 
-\subsubsection{Variable declarations}
+\subsubsection{Variable Declarations}
 A variable declaration has the form 
 \begin{quote}
 {\tt $T$ $V$ = $E$}
@@ -233,7 +233,7 @@ and only introduce the variable $V$.
     3>, <"thu", 4>, <"fri", 5>, <"sat",6>, <"sun",7>\}}
 declares the variable {\tt day}, a relation that maps strings to integers.
 
-\subsubsection{Local variable declarations}
+\subsubsection{Local Variable Declarations}
 Local variables can be introduced as follows:
 \begin{quote}
 {\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ end where}
@@ -242,7 +242,7 @@ First the local variables $V_i$ are bound to their respective values
 $E_i$, and then the value of expression $E$ is yielded.
 
 
-\subsubsection{Function declarations}
+\subsubsection{Function Declarations}
 A function declaration has the form
 \begin{quote}
 {\tt $T$ $F$($T_1 ~ V_1$, ..., $T_n ~ V_n$) = $E$}
@@ -301,7 +301,7 @@ has the form
  where $L$ is a string that serves as a
 label for this assertion, and $E$ is a boolean-value expression.  During
 execution, a list of true and false assertions is maintained.  When the script
-is executed as a \emph{testsuite} (see Section~\ref{running}) a summary of this
+is executed as a \emph{test suite} (see Section~\ref{running}) a summary of this
 information is shown to the user. When the script is executed in the standard
 fashion, the assert statement has no affect.
 
@@ -358,6 +358,8 @@ The resulting value of {\tt T} is as expected:
 
 
 \section{Built-in Operators}
+Now we give brief descriptions in tabular form of the various groups of operators.
+Where appropriate, examples are given.
 
 \subsection{Operations on Booleans} \label{BO:bool}
 
@@ -380,42 +382,56 @@ The resulting value of {\tt T} is as expected:
 \subsection{Operations on Integers} \label{BO:int}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{int}$_1$ {\tt ==} \emph{int}$_2$ & yields true if both arguments are numerically equal and false
+\emph{int}$_1$ {\tt ==} \emph{int}$_2$ & yields {\tt true} if both arguments are numerically equal and {\tt false}
 otherwise\\ \hline
 
-\emph{int}$_1$ {\tt !=} \emph{int}$_2$ & yields true if both arguments are numerically unequal  and false
+\emph{int}$_1$ {\tt !=} \emph{int}$_2$ & yields {\tt true} if both arguments are numerically unequal  and {\tt false}
 otherwise\\ \hline
 
-\emph{int}$_1$ {\tt <=} \emph{int}$_2$ & yields true if \emph{int}$_1$is numerically less than
-or equal \emph{int}$_2$ and false otherwise\\ \hline
+\emph{int}$_1$ {\tt <=} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$is numerically less than
+or equal \emph{int}$_2$ and {\tt false} otherwise\\ \hline
 
-\emph{int}$_1$ {\tt <} \emph{int}$_2$ & yields true if \emph{int}$_1$ is a numerically less than \emph{int}$_2$
-and false otherwise\\ \hline
+\emph{int}$_1$ {\tt <} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$ is a numerically less than \emph{int}$_2$
+and {\tt false} otherwise\\ \hline
 
-\emph{int}$_1$ {\tt >=} \emph{int}$_2$ & yields true if \emph{int}$_1$ is numerically greater
-than or equal \emph{int}$_2$  and false otherwise\\ \hline
+\emph{int}$_1$ {\tt >=} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$ is numerically greater
+than or equal \emph{int}$_2$  and {\tt false} otherwise\\ \hline
 
-\emph{int}$_1$ {\tt >} \emph{int}$_2$ & yields true if\emph{int}$_1$  is numerically greater than \emph{int}$_2$
-and false otherwise\\ \hline
+\emph{int}$_1$ {\tt >} \emph{int}$_2$ & yields {\tt true} if\emph{int}$_1$  is numerically greater than \emph{int}$_2$
+and {\tt false} otherwise\\ \hline
 \end{tabular}
 
-\subsection{Operations on Bags or Relations} \label{BO:bag-or-rel}
-
-\subsubsection{Membership tests} \label{BO:member}
+\subsection{Operations on Strings} \label{BO:str}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 
-\emph{any} {\tt in} \emph{bag} & yields true if \emph{any} occurs as element
-in \emph{bag} and false otherwise \\ \hline
+\emph{str}$_1$ {\tt ==} \emph{str}$_2$ & yields {\tt true} if both arguments are equal and {\tt false}
+otherwise\\ \hline
+
+\emph{str}$_1$ {\tt !=} \emph{str}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
+otherwise\\ \hline
+\end{tabular}
+\subsection{Operations on Areas} \label{BO:area}
+
+The are no operators defined on areas.
+
+\subsection{Operations on Bags or Relations} \label{BO:bag-or-rel}
+
+\subsubsection{Membership Tests} \label{BO:member}
+
+\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
+
+\emph{any} {\tt in} \emph{bag} & yields {\tt true} if \emph{any} occurs as element
+in \emph{bag} and {\tt false} otherwise \\ \hline
 
 \emph{any} {\tt notin} \emph{bag} & yields {\tt false} if \emph{any} occurs as
 element in \emph{bag} and {\tt true} otherwise \\ \hline
 
-\emph{tuple} {\tt in} \emph{rel} & yields true if \emph{tuple} occurs as element in
-\emph{rel}  and false otherwise \\ \hline
+\emph{tuple} {\tt in} \emph{rel} & yields {\tt true} if \emph{tuple} occurs as element in
+\emph{rel}  and {\tt false} otherwise \\ \hline
 
-\emph{tuple} {\tt notin} \emph{rel} & yields false if \emph{tuple} occurs as
-element in \emph{rel} and true otherwise \\ \hline
+\emph{tuple} {\tt notin} \emph{rel} & yields {\tt false} if \emph{tuple} occurs as
+element in \emph{rel} and {\tt true} otherwise \\ \hline
 \end{tabular}
 
 \paragraph{Examples}
@@ -437,25 +453,25 @@ the second argument should have type {\tt bag[$T$]}.
 \subsubsection{Comparisons} \label{BO:bag-comp}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{bag}$_1$ {\tt ==} \emph{bag}$_2$ & yields true if both arguments are equal bags and false
+\emph{bag}$_1$ {\tt ==} \emph{bag}$_2$ & yields {\tt true} if both arguments are equal bags and {\tt false}
 otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt !=} \emph{bag}$_2$ & yields true if both arguments are unequal bags and false
+\emph{bag}$_1$ {\tt !=} \emph{bag}$_2$ & yields {\tt true} if both arguments are unequal bags and {\tt false}
 otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt <=} \emph{bag}$_2$ & yields true if \emph{bag}$_1$ is a subset of \emph{bag}$_2$
-and false otherwise\\ \hline
+\emph{bag}$_1$ {\tt <=} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$ is a subset of \emph{bag}$_2$
+and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt <} \emph{bag}$_2$ & yields true if \emph{bag}$_1$ is a
+\emph{bag}$_1$ {\tt <} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$ is a
 strict subset of \emph{bag}$_2$
-and false otherwise\\ \hline
+and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt >=} \emph{bag}$_2$ & yields true if \emph{bag}$_1$  is a
+\emph{bag}$_1$ {\tt >=} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$  is a
 superset of \emph{bag}$_2$
-and false otherwise\\ \hline
+and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt >} \emph{bag}$_2$ & yields true if  \emph{bag}$_1$  is a strict superset of \emph{bag}$_2$
-and false otherwise\\ \hline 
+\emph{bag}$_1$ {\tt >} \emph{bag}$_2$ & yields {\tt true} if  \emph{bag}$_1$  is a strict superset of \emph{bag}$_2$
+and {\tt false} otherwise\\ \hline 
 \end{tabular}
 
 \subsubsection{Construction} \label{BO:bag-cons}
@@ -479,7 +495,7 @@ and false otherwise\\ \hline
 \emph{rel}$_1$ {\tt o} \emph{rel}$_2$ & yields the relation resulting from the composition of the two arguments
  \\ \hline
 
-\emph{bag}$_1$ {\tt x} \emph{bag}$_2$ & yields the relation resulting from the carthesian product of the two arguments
+\emph{bag}$_1$ {\tt x} \emph{bag}$_2$ & yields the relation resulting from the Cartesian product of the two arguments
  \\ \hline
 
 \emph{rel} {\tt +} & yields the relation resulting from the transitive closure of
@@ -490,7 +506,35 @@ and false otherwise\\ \hline
 
 \end{tabular}
 
-\section{Built-in functions}
+\note{The image operators {\tt .} and {\tt [ ]} are missing.}
+
+\paragraph{$^\dagger$Composition: {\tt o}}
+
+\begin{verbatim}
+rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
+   {<v, y> | <v, w> : R1, <x, y> :  R2, w == x }
+\end{verbatim}
+
+\paragraph{$^\dagger$Cartesian product: {\tt x}}
+\begin{verbatim}
+rel[T1,T2] x(bag[T1] B1, bag[T2] B2) =
+   {<x, y> | x : B1, y : B2 }
+\end{verbatim}
+
+\paragraph{$^\dagger$ Left image: {\tt .}}
+\begin{verbatim}
+bag[T2] .(T1 E, rel[T1,T2] R) = { W | <V, W> : R, V == E }
+bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
+\end{verbatim}
+
+\paragraph{$^\dagger$Right image: {\tt .}}
+\begin{verbatim}
+bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
+bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
+\end{verbatim}
+
+
+\section{Built-in Functions}
 
 \tablecaption{Built-in functions}
 \tablehead{\hline}
@@ -758,14 +802,14 @@ bag {\tt Excl} are used.
 
 \function{Minimum of a bag of integers}{min}
 {\tt int min(bag[int] B) = primitive}
-{Yields the smalles integer in bag {\tt B}.}
+{Yields the smallest integer in bag {\tt B}.}
 {
 \item {\tt min(\{1, 2, 3\})} yields {\tt 1}.
 }
 
 \section{Larger Examples}
 
-\subsection{Analyzing the call structure of an application}
+\subsection{Analyzing the Call Structure of an Application}
 
 \begin{figure}[tb]
 \begin{center}
@@ -839,9 +883,9 @@ of the calls relation as shown in Figure~\ref{FIG:calls}.
 Observe that such a visual inspection does not scale to large graphs.
 
 
-\subsection{Finding uninitialized variables in a program}
+\subsection{Finding Uninitialized Variables in a Program}
 
-Consider the folowing program in the toy language Pico:
+Consider the following program in the toy language Pico:
 \begin{verbatim}
 [ 1] begin declare x : natural, y : natural,
 [ 2]              z : natural, p : natural;
@@ -936,7 +980,7 @@ In other words, we consider the use of each variable in turn.
     \item Finally, {\tt <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)} tests
     whether statement {\tt S} can be reached from the {\tt ROOT}.
   \end{itemize}
-\item The net effect is that {\tt UNINIT} will only conatin pairs
+\item The net effect is that {\tt UNINIT} will only contain pairs
 that satisfy the test just described.
 \end{itemize}
 
@@ -960,7 +1004,7 @@ Taking the range of the relations {\tt DEFS} and {\tt USES} yields the
 variables that are defined, respectively, used in the program. The difference
 of these two bags yields the unused variables, in this case {\tt \{"p"\}}.
 
-\subsection{Dataflow analysis}
+\subsection{Dataflow Analysis}
 
 \begin{figure}[tb]
 \begin{center}
@@ -976,14 +1020,14 @@ construction, e.g. XXX. The goal of dataflow analysis is to determine
 the effect of statements on their surroundings. Typical examples are:
 \begin{itemize}
 \item Reaching definitions: which definitions of variables are still valid at each statement?
-\item Available expressions: an expression is avaialble if it is computed
+\item Available expressions: an expression is available if it is computed
   along each path from the start of the program to the current statement.
 \item Live variables: of which variables will the values be used by successors
   of a statement?
 \item and more.
 \end{itemize}
 
-\subsubsection{Reaching definitions}
+\subsubsection{Reaching Definitions}
 
 We illustrate the calculation of reaching definitions using the example in
 Figure~\ref{FIG:reach} (based on an example in \ref{ASU}).
@@ -1053,7 +1097,7 @@ problem in terms of two relations {\tt IN} and {\tt OUT}.  {\tt IN} captures
 all the variable definitions that are valid at the entry of each statement and
 {\tt OUT} captures the definitions that are still valid after execution of
 each statement. Intuitively, for each statement {\tt S}, {\tt IN[S]} is equal to
-the union of the {\tt OUT} of all the predecesssors of {\tt S}.
+the union of the {\tt OUT} of all the predecessors of {\tt S}.
 {\tt OUT[S]}, on the other hand, is equal to the definitions generated by
 {\tt S} to which we add {\tt IN[S]} minus the definitions that are killed
 in {\tt S}. Mathematically, the following set of equations captures this idea
@@ -1075,9 +1119,9 @@ equations
     OUT =  {{S} x (DEF[S] union (IN[S] \ KILL[S])) | S : STATEMENTS }
 end equations
 \end{verbatim}
-First, the relations {\tt IN} and {\tt OUT} are declared and initalized. Next, 
+First, the relations {\tt IN} and {\tt OUT} are declared and initialized. Next, 
 two equations are given that very much resemble the ones given above.
-The carthesian product operator {\tt x} is used, to combine each statement
+The Cartesian product operator {\tt x} is used, to combine each statement
 with the relevant {\tt IN} or {\tt OUT} information.
 For our running example (Figure~\ref{FIG:reach}) the results are as follows.
 Relation {\tt IN} has as value:
@@ -1090,7 +1134,7 @@ Relation {\tt IN} has as value:
  <7, <3, "a">>, <7, <6, "a">>}
 \end{verbatim}
 If we consider statement {\tt 3}, then the definitions of {\tt i} and {\tt j}
-from the preceeding two statements are still valid. A more interesting case
+from the preceding two statements are still valid. A more interesting case
 are the definitions that can reach statement {\tt 4}:
 \begin{itemize}
 \item  The definitions of variables {\tt a}, {\tt j} and {\tt i} from,
@@ -1164,43 +1208,7 @@ operators and functions.
 
 The subdirectory {\tt demo} contains larger demos.
 
-\section{Pseudo definitions of some built-in operators and functions}
-\note{This section will be merged with preceeding ones.}
-
-It is interesting that most (but not all!) built-in operators and all
-functions can be defined in \rscript itself. They only serve convenience and
-efficiency.  The definitions marked with a dagger ($\dagger$) cannot be written
-as such since it is not possible to define operators in \rscript.  It is,
-however, allowed to write these polymorphic definitions where {\tt T1}, {\tt
-T2}, ... represent arbitrary types.
-
-\paragraph{$^\dagger$Composition: {\tt o}}
-
-\begin{verbatim}
-rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
-   {<v, y> | <v, w> : R1, <x, y> :  R2, w == x }
-\end{verbatim}
-
-\paragraph{$^\dagger$Carthesian product: {\tt x}}
-\begin{verbatim}
-rel[T1,T2] x(bag[T1] B1, bag[T2] B2) =
-   {<x, y> | x : B1, y : B2 }
-\end{verbatim}
-
-\paragraph{$^\dagger$ Left image: {\tt .}}
-\begin{verbatim}
-bag[T2] .(T1 E, rel[T1,T2] R) = { W | <V, W> : R, V == E }
-bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
-\end{verbatim}
-
-\paragraph{$^\dagger$Right image: {\tt .}}
-\begin{verbatim}
-bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
-bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
-\end{verbatim}
-
-
-\section{Differences with previous versions}
+\section{Differences with Previous Versions}
 \rscript is in under active development and several (incompatible)  changes
 have been made in the last few weeks. Here is an indicative list.
 
@@ -1221,7 +1229,52 @@ New:
 
 \appendix
 
-\section{Tables of built-in Operators and Functions}
+\section{Tables of Built-in Operators and Functions}
+
+
+\begin{center}
+\begin{supertabular}{|l|l|l|}
+\tablecaption{Built-in operators}
+\tablehead{\hline}
+\tabletail{\hline}
+{\bf Operator} & {\bf Description} & {\bf Section} \\ \hline \hline
+{\tt and} & Boolean and & \ref{BO:bool}\\
+{\tt implies} & Boolean implication & \ref{BO:bool}\\
+{\tt in}    & Membership test on bags/relations& \ref{BO:bag-or-rel}\\
+{\tt inter} & Intersection of bags/relations& \ref{BO:bag-or-rel}\\
+{\tt not} & Boolean negation & \ref{BO:bool}\\
+{\tt notin} & Non-membership test on bags/relations& \ref{BO:bag-or-rel}\\
+{\tt or} & Boolean or & \ref{BO:bool}\\
+{\tt union} & Union of bags/relations& \ref{BO:bag-or-rel}\\
+{\tt ==}  & Equality on integers & \ref{BO:int}\\
+{\tt ==}  & Equality on strings & \ref{BO:str}\\
+{\tt ==}  & Equality on bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt !=}  & Inequality on integers & \ref{BO:int}\\
+{\tt !=}  & Inequality on strings & \ref{BO:str}\\
+{\tt !=}  & Inequality on bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt <=}  & Less than or equal on integers & \ref{BO:int}\\
+{\tt <=}  & Subset on bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt <}  & Less than on integers & \ref{BO:int}\\
+{\tt <}  & Strict subset on bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt >=}  & Greater than or equal on integers & \ref{BO:int}\\
+{\tt >=}  & Superset on bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt >}  & Greater than on integers & \ref{BO:int}\\
+{\tt >}  & Strict superset on bags/relations & \ref{BO:bag-or-rel}\\
+
+\verb+\+   & Difference of bags/relations & \ref{BO:bag-or-rel}\\
+
+{\tt o}    & Composition of relations  & \ref{BO:relations}\\
+{\tt x}    & Carthesian product on bags & \ref{BO:relations}\\
+{\tt +}    & Transitive closure of a relation  & \ref{BO:relations}\\
+{\tt *}    & reflexive transitive closure of a relation  & \ref{BO:relations}\\ \hline
+
+\end{supertabular}
+\end{center}
 
 \tablecaption{Built-in functions}
 \tablehead{\hline}
@@ -1231,34 +1284,39 @@ New:
 \begin{supertabular}{|l|l|l|}
 
 {\bf Function}    & {\bf Description}   & {\bf Section} \\ \hline \hline
-{\tt id}          & Identity relation & \ref{BI:id} \\
-{\tt domain}      & Domain of a relation & \ref{BI:domain} \\
-{\tt range}       & Range of a relation  & \ref{BI:range} \\
-{\tt carrier}     & Carrier of a relation & \ref{BI:carrier} \\
-{\tt top}         & Top of a relation & \ref{BI:top} \\
+
+{\tt begincol}    & First column of an area & \ref{BI:begincol}\\
+{\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
 {\tt bottom}      & Bottom of a relation & \ref{BI:bottom} \\
-{\tt inv}         & Inverse of a relation & \ref{BI:inv} \\
-{\tt compl}       & Complement of a relation & \ref{BI:compl} \\
-{\tt domainR}     & Domain restriction of a relation & \ref{BI:domainR} \\
-{\tt rangeR}      & Range restriction of a relation & \ref{BI:rangeR} \\
+{\tt carrier}     & Carrier of a relation & \ref{BI:carrier} \\
 {\tt carrierR}    & Carrier restriction of a relation & \ref{BI:carrierR} \\
-{\tt domainX}     & Domain exclusion of a relation & \ref{BI:domainX} \\
-{\tt rangeX}      & Range exclusion of a relation & \ref{BI:rangeX} \\
 {\tt carrierX}    & Carrier exclusion of a relation & \ref{BI:carrierX} \\
+
+{\tt compl}       & Complement of a relation & \ref{BI:compl} \\
+{\tt endcol}      & Last column of an area & \ref{BI:endcol}\\
+{\tt endline}     & Ending line of an area & \ref{BI:endline}\\
+{\tt filename}    & File name of an area & \ref{BI:filename}\\
 {\tt first}       & First element of a tuple & \ref{BI:first} \\
-{\tt second}      & Second element of a tuple & \ref{BI:second} \\
-{\tt reachR}      & Reachability with restriction & \ref{BI:reachR} \\
-{\tt reachX}      & Reachability with exclusion& \ref{BI:reachX} \\
+{\tt id}          & Identity relation & \ref{BI:id} \\
+{\tt inv}         & Inverse of a relation & \ref{BI:inv} \\
+
+{\tt domain}      & Domain of a relation & \ref{BI:domain} \\
+{\tt domainR}     & Domain restriction of a relation & \ref{BI:domainR} \\
+{\tt domainX}     & Domain exclusion of a relation & \ref{BI:domainX} \\
+{\tt min}         & Minimum of a bag of integers & \ref{BI:max} \\
+{\tt max}         & Maximum of a bag of integers & \ref{BI:max} \\
 {\tt power0}      & Powerset of a bag & \ref{BI:power0} \\
 {\tt power1}      & Powerset of a bag & \ref{BI:power1} \\
-{\tt filename}    & File name of an area & \ref{BI:filename}\\
-{\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
-{\tt begincol}    & First column of an area & \ref{BI:begincol}\\
-{\tt endline}     & Ending line of an area & \ref{BI:endline}\\
-{\tt endcol}      & Last column of an area & \ref{BI:endcol}\\
+
+{\tt range}       & Range of a relation  & \ref{BI:range} \\
+{\tt rangeR}      & Range restriction of a relation & \ref{BI:rangeR} \\
+{\tt rangeX}      & Range exclusion of a relation & \ref{BI:rangeX} \\
+{\tt reachR}      & Reachability with restriction & \ref{BI:reachR} \\
+{\tt reachX}      & Reachability with exclusion& \ref{BI:reachX} \\
+
+{\tt second}      & Second element of a tuple & \ref{BI:second} \\
 {\tt sum}         & Sum of a bag of integers & \ref{BI:sum} \\
-{\tt max}         & Maximum of a bag of integers & \ref{BI:max} \\
-{\tt min}         & Minimum of a bag of integers & \ref{BI:max} \\
+{\tt top}         & Top of a relation & \ref{BI:top} \\
 
 \end{supertabular}
 \end{center}
