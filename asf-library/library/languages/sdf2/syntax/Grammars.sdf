@@ -1,7 +1,7 @@
 %%% $Id$
                     
 module languages/sdf2/syntax/Grammars
-imports languages/aterm/syntax/Layout
+imports basic/Comments
 exports
   sorts Grammar
   context-free syntax

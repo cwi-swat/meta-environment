@@ -1,7 +1,7 @@
 %%% $Id$
                                   
 module languages/aterm/syntax/IntCon
-imports languages/aterm/syntax/Layout
+imports basic/Whitespace
 exports
   sorts NatCon IntCon
   lexical syntax
@@ -10,7 +10,3 @@ exports
     NatCon     -> IntCon
     "+" NatCon -> IntCon
     "-" NatCon -> IntCon       
-
-hiddens
-  variables
-    "c+"[0-9]*            -> CHAR+

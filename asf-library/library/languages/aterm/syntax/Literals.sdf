@@ -1,7 +1,7 @@
 %%% $Id$
                                   
 module languages/aterm/syntax/Literals
-imports languages/aterm/syntax/Layout
+imports basic/Whitespace
 
 hiddens
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
@@ -19,7 +19,7 @@ exports
     DecimalEscChar                 -> EscChar
 
     %% fixme: replace \013 by \r when Character definition allows it.
-    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
-    EscChar                        -> L-Char
+    ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char
+    EscChar                      -> L-Char
 
     "\"" L-Char* "\""              -> Literal

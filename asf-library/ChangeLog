@@ -1,3 +1,9 @@
+2003/09/26 (markvdb@cwi.nl)
+  * Removed the Layout module from the aterm syntax.
+  * Added \r to basic/Whitespace
+  * Replaced the call to aterm/Layout by basic/Whitespace in
+    the ATerms and basic/Comments in Sdf2.
+
 2003/09/26 (jurgenv@cwi.nl)
   * Added some grammars to the sandbox
   * Added C language to the languages
