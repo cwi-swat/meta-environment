@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 16 15:40:14 CEST 2004 <kooiker@cwi.nl>
+ * libmept/posInfo.c: PT_findTreeAtOffset checks child is not FlatLexical
+
 Fri Apr 16 14:09:54 CEST 2004 <jurgenv@cwi.nl>
  * Reimplemented flattening of LAYOUT and lexicals. New algorithm generically
    collects all characters and puts them in a PT_Args. This reduces the
