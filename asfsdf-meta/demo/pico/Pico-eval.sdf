@@ -3,8 +3,15 @@ module Pico-eval
 imports Pico-syntax Value-environments
 
 exports
+  sorts VALUE-ENV
+
   context-free syntax
-    "evp"(PROGRAM)                -> VENV
+    VENV                          -> VALUE-ENV
+
+  context-free syntax
+    "evp"(PROGRAM)                -> VALUE-ENV
+
+  context-free syntax
     "evd"(DECLS)                  -> VENV
     "evits"({ID-TYPE  ","}*)      -> VENV
     "evs"({STATEMENT ";"}*, VENV) -> VENV

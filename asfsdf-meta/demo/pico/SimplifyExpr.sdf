@@ -6,6 +6,8 @@ exports
   context-free syntax
     simplify(EXP)        -> EXP
 
+hiddens
   variables
-    "Nat" [0-9\']*      -> Natural 
-    "Nat-con" [0-9\']*  -> NatCon
+    "Exp"[0-9]*      -> EXP
+    "Nat"[0-9]*      -> Natural 
+    "Nat-con"[0-9]*  -> NatCon
