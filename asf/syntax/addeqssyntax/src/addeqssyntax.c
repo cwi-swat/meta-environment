@@ -52,7 +52,7 @@ static char *name;
 ATbool run_verbose;      
 
 static char myname[] = "addeqssyntax";
-static char myversion[] = "1.0";  
+static char myversion[] = "1.1";  
 
 /*
     The argument vector: list of option letters, colons denote option
