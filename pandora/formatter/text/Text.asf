@@ -11,5 +11,10 @@ equations
         ===>
         string2bytes(string) = bytes || newlinechar
 
-  [bc-1'3] bytes(Char+1) || bytes(Char+2) =
-             bytes(Char+1 Char+2)
+  [bc-1'3] bytes(Char*1) || bytes(Char*2) =
+             bytes(Char*1 Char*2)
+
+tests
+
+[newlineconc] 
+bytes-to-string(string-to-bytes("aap") || newlinechar) == "aap\n"

@@ -34,6 +34,7 @@ hiddens
     "bytes*"  -> Bytes*
 
     "Char+"[0-9]*  -> CHAR+
+    "Char*"[0-9]*  -> CHAR*
 
     
 

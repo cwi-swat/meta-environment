@@ -1,6 +1,8 @@
 # $Id$
 
 Fri Mar  5 10:08:44 CET 2004 <kooiker@cwi.nl>
+ * formatter/Text.{asf,sdf}:
+   - Concatenation of bytes with newlines fixed
  * generator/Box-to-Text.c:
    - Regenerated: concatenates bytes with newlines correct now
  * generator/pandora.c:
