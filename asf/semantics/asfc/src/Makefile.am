@@ -36,6 +36,7 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
                -L$(TOOLBUSLIB)/lib -lATB \
+               -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                -L$(ATERM)/lib -lATerm \
 		$(SOCKLIBS)
 
@@ -43,6 +44,7 @@ DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
           -DSGLR=\"$(SGLR)\"   \
           -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
           -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
+          -DERROR_SUPPORT=\"$(ERROR_SUPPORT)\"   \
           -DATERM=\"$(ATERM)\" \
           -DTOOLBUSLIB=\"$(TOOLBUSLIB)\" \
           -DIDEF2TIF=\"$(TOOLBUS)/bin/idef2tif\" \
@@ -54,6 +56,7 @@ INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
             -I$(ASF_SUPPORT)/include \
+            -I$(ERROR_SUPPORT)/include \
             -I$(ATERM)/include \
             -I$(TOOLBUSLIB)/include \
             -I$(srcdir)/muasf 

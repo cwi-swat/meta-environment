@@ -46,12 +46,14 @@ asfe_LDADD		= \
 			-L$(SGLR)/lib -lsglr \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(TOOLBUSLIB)/lib -lATB \
+			-L$(ERRORS_SUPPORT)/lib -lErrorAPI \
 			-L$(ATERM)/lib -lATerm \
 			${TIDELIB} $(SOCKLIBS)
 
 INCLUDES		= ${TIDEINC} \
 			-I$(PT_SUPPORT)/include \
 			-I$(ATERM)/include \
+			-I$(ERROR_SUPPORT)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ASF_SUPPORT)/include \
 			-I$(ASC_SUPPORT)/include \

@@ -7,6 +7,7 @@ INCLUDES         = -I$(ASC_SUPPORT)/include \
                    -I$(PT_SUPPORT)/include \
                    -I$(SDF_SUPPORT)/include \
                    -I$(ASF_SUPPORT)/include \
+                   -I$(ERROR_SUPPORT)/include \
                    -I$(ATERM)/include
 
 bin_PROGRAMS = addeqssyntax
@@ -23,6 +24,7 @@ addeqssyntax_LDADD   = \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+                       -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)

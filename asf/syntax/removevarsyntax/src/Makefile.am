@@ -7,6 +7,7 @@ INCLUDES		= -I$(ASC_SUPPORT)/include \
 			-I$(SDF_SUPPORT)/include \
 			-I$(ASF_SUPPORT)/include \
 			-I$(TOOLBUSLIB)/include \
+			-I$(ERROR_SUPPORT)/include \
 			-I$(ATERM)/include
 
 
@@ -23,5 +24,6 @@ removevarsyntax_LDADD   = \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                        -L$(TOOLBUSLIB)/lib -lATB \
+                       -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
