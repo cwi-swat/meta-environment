@@ -1,6 +1,11 @@
 # $Id$
 
 2003/10/17 (jurgenv@cwi.nl)
+ * Added a message on deprecated unquoted literals.
+ * Added a message on usage of non Sort symbols in
+   right hand side of lexical functions.
+
+2003/10/17 (jurgenv@cwi.nl)
  * Added syntax for writing positive and negative tests to ASF
  * Added test-runner and test-runner interface to asfe
  * Added conditional tests
