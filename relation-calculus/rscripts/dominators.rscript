@@ -1,3 +1,5 @@
+check-rscript(
+
 %% Example from T. Lengauer and R.E. Tarjan, A Fast Algorithm for Finding Dominators
 %% in a Flowgraph, TOPLAS, Vol. 1, N0. 1, July 1979, 121-141.
 
@@ -43,7 +45,7 @@ rel[str,str] PRED ={
 bag[str] VERTICES = carrier(PRED)
 
 rel[str,bag[str]] DOMINATES =
-   { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> :  V in VERTICES}
+   { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  V : VERTICES}
 
 bag[str] Empty = {}	%% define as constant to avoid ambiguities when using
 			%% {} in an expression
@@ -67,3 +69,4 @@ assert "DOMINATES": DOMINATES ==
 
 
 
+)

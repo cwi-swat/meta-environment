@@ -29,9 +29,9 @@ rel[int,int] Rel2     = {<1, 10>, <3, 30>}
 
 <str,int> P1 = swap(<0,"a">)
 
-rel[int,str] SRel1 = {<V1,N1> | <V,N> : Rel1, <V1, N1> <- swap(<V, N>)  }
+rel[int,str] SRel1 = rel { swap(<V, N>) | <V,N> : Rel1  }
  
-rel[int,bag[int]] VERT = { <V, Z> |  V : {1,2,3}, Z <- {10,20,30}}
+rel[int,bag[int]] VERT = { <V, {10,20,30}> |  V : {1,2,3} }
 
 bag[int] BBB = 2 . {<1,10>, <2, 20>, <3,30>}
 

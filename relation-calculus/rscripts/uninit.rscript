@@ -1,3 +1,4 @@
+check-rscript(
  	node ROOT
         rel[node,node] PRED
         rel[<node,str>,node] USE_OCCURS
@@ -8,6 +9,7 @@
         rel[str,node] occurrences(<node,str> S) = second(S) x USE_OCCURS[S]
 
         rel[str,node] UNDEF = 
-        { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
+        rel { occurrences(<N,V>) | <N, V> : USES, <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
         }
+)
                          

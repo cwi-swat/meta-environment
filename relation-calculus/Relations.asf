@@ -1,7 +1,5 @@
 equations
 
-%%[emp-1]	EmptyRel = {}
-
 [comp-1] compose({<$Elem, $Elem'>, $Tuple*1}, {$Tuple*2}) = 
          union(product($Elem, $Elem' . {$Tuple*2}), compose({$Tuple*1}, {$Tuple*2}))
 [comp-2] compose({}, {$Tuple*}) = {}
