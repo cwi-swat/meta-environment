@@ -363,8 +363,8 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
 
   args = PT_getTreeArgs(tree);
   while (!PT_isArgsEmpty(args)) {
-    PT_Tree child = PT_getArgsHead(args);
-    if (PT_findTreeAtOffset(child, offset) != NULL) {
+    PT_Tree child = PT_findTreeAtOffset(PT_getArgsHead(args), offset);
+    if (child != NULL) {
       return child;
     }
     args = PT_getArgsTail(args);
