@@ -24,24 +24,17 @@
  */
 process RemoveVars is
 let
-  Name      : str,
   NewSyntax : term,
   Syntax    : term,
-  RVS       : removevarsyntax
+  RVS       : removevarsyntax,
+  ModuleName : str
 in  
   execute(removevarsyntax, RVS?) .
   (
-    rec-msg(remove-var-syntax(Name?)) .
-    snd-msg(get-all-sdf2-definitions(Name)) .
-    (
-      rec-msg(syntax(Syntax?)).
-      snd-eval(RVS, remove-var-syntax(Name, Syntax)).
-      rec-value(RVS, changed-syntax(NewSyntax?)). 
-      snd-msg(changed-syntax(NewSyntax))
-    +
-      rec-msg(no-syntax).
-      snd-msg(no-changed-syntax)   
-    )
+    rec-msg(remove-var-syntax(ModuleName?, Syntax?)) .
+    snd-eval(RVS, remove-var-syntax(ModuleName, Syntax)).
+    rec-value(RVS, changed-syntax(NewSyntax?)). 
+    snd-msg(changed-syntax(NewSyntax))
   )*
   delta
 endlet
