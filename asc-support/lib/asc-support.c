@@ -570,6 +570,34 @@ static ATerm call_kids_accu_list(funcptr trav, ATermList args,
 }
 
 /*}}}  */
+/*{{{  static ATermList call_kids_accu_list(funcptr trav, ATermList args,  */
+
+static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, 
+	  	                 ATerm accu, ATermList extra_args)
+{
+  ATerm tuple;
+  ATermList result = ATempty;
+  ATerm el;
+
+  for(;!ATisEmpty(args); args = ATgetNext(args)) {
+    tuple = call_using_list(trav,ATinsert(
+				  ATinsert(extra_args, accu),
+				    ATgetFirst(args)));
+
+    el = ATgetArgument((ATermAppl) tuple, 0);
+    accu = ATgetArgument((ATermAppl) tuple, 1);
+
+    if (el) {
+      result = ATinsert(result, el);
+    }
+  }
+
+  result = ATreverse(result);
+
+  return ATmake("tuple(<term>,<term>)",result,accu);
+}
+
+/*}}}  */
 
 /*{{{  ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args) */
 
@@ -636,6 +664,52 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
   }
 
   return arg1;
+}
+
+/*}}}  */
+/*{{{  ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args) */
+
+ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
+{
+  int type = ATgetType(arg0);
+
+  if (type == AT_APPL) {
+    int idx;
+    ATermList args;
+    Symbol sym;
+    funcptr func;
+    ATerm arg[33];
+    ATermList list;
+    ATerm tuple;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
+      tuple = call_using_list(trav, 
+			     ATinsert(
+			       ATinsert(extra_args, arg1),ATgetFirst(list)));
+
+      arg[idx++] = ATgetArgument((ATermAppl) tuple, 0);
+      arg1 = ATgetArgument((ATermAppl) tuple, 1);
+    }
+
+    sym = get_sym(arg0);
+    func = lookup_func_given_sym(sym);
+
+    if (func) {
+      arg0 = call_using_array(func, arg, ATgetLength(args));
+    }
+    else {
+      arg0 = (ATerm) ATmakeApplArray(ATgetAFun((ATermAppl) arg0), arg); 
+    }
+  }
+  else if (type == AT_LIST) {
+     return call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
+  }
+
+  /* FIX ME, Symbol of tuple is unknown ;-(  */
+  return ATmake("tuple(<term>,<term>)",arg0,arg1);
 }
 
 /*}}}  */
@@ -742,3 +816,22 @@ PT_ParseTree toasfix(ATerm term)
 
 /*}}}  */
 
+/*{{{  ATbool check_sort(ATerm tree, ATerm sort) */
+
+ATbool check_sort(ATerm tree, ATerm sort)
+{
+  if (ATgetType(tree) == AT_APPL) {
+    Symbol sym = get_sym(tree);
+
+    if (sym) {
+      if (ATisEqual(ATgetArgument((ATermAppl) lookup_prod(sym),1), 
+		    sort)) {
+	return ATtrue;
+      }
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */

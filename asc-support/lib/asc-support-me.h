@@ -278,4 +278,7 @@ int asc_support_main(int argc, char *argv[],
 
 /*}}}  */
 
+extern ATbool check_sort(ATerm tree, ATerm sort);
+
+
 #endif  /* ASC_SUPPORT_H */
