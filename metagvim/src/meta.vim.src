@@ -25,7 +25,7 @@ func! SetLocation()
 endfunc
 
 func! Parse()
-  let desc=g:tb_pipe . '#' . v:servername . '#Meta-Environment#Parse'
+  let desc=g:tb_pipe . '#' . v:servername . '#_parse'
   call libcallnr(g:meta_dlso, "send", desc)
 endfunc
 
