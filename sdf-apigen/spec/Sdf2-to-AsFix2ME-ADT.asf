@@ -26,8 +26,7 @@ equations
   layout-adt = 
    [ [OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])],
      [OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),
-                          <chars(CHARLIST)>)],
-     [CHARLIST, String, <string(str)>]
+                          <chars(CHARLIST)>)]
    ]
 
 
