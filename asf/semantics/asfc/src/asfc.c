@@ -134,7 +134,7 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
       ATerror("Error: unable to open %s for writing\n", output);
     }
 
-    ToC_code(result, fp , myversion);
+    ToC_code(moduleName, result, fp , myversion);
   }
 
   return ATmake("snd-value(compilation-done)");
