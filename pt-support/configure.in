@@ -1,0 +1,93 @@
+dnl
+dnl    PT-support - support for ParseTrees
+dnl    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+dnl                        The Netherlands. 
+dnl
+dnl    This program is free software; you can redistribute it and/or modify
+dnl    it under the terms of the GNU General Public License as published by
+dnl    the Free Software Foundation; either version 2 of the License, or
+dnl    (at your option) any later version.
+dnl
+dnl    This program is distributed in the hope that it will be useful,
+dnl    but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl    GNU General Public License for more details.
+dnl
+dnl    You should have received a copy of the GNU General Public License
+dnl    along with this program; if not, write to the Free Software
+dnl    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+dnl
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(sdf, 0.1)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Check for required packages and perform version check when needed.
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, tifstoc,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl Our own version of libdir whose value is set dynamically
+AC_SUBST(INSTLIBDIR)
+INSTLIBDIR="$libdir"
+
+dnl Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+AC_REQUIRE([AC_PROG_CC])
+
+dnl Which compiler to use?
+AC_PROG_CC
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+dnl Determine which libraries to use for programs using sockets
+NOSOCKLIBS=$LIBS
+dnl first, the socket functions
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  if test ${SOCKET_FOUND} = no; then
+    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
+  fi
+fi
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
+AC_CHECK_LIB(dl, dlopen)
+
+dnl Checks for header files.
+AC_CHECK_HEADER(getopt.h)
+
+dnl Which files need updating?
+AC_OUTPUT(
+  Makefile
+  libasfix-old/Makefile
+  libasfix-old/libasfix/Makefile
+  libasfix-old/asfix-tools/Makefile
+  libasfix-old/test/Makefile
+  libasfix1/Makefile
+)

@@ -1,7 +1,7 @@
+#!/bin/sh
 #
-#    AsFix -- The AsFix (ASF+SDF Prefix) library
-#    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-#                             The  Netherlands.
+#    Evaluator - the ASF interpreter
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,8 +17,10 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#   $Id$
+#
+# make sure you have installed automake version 1.4 or above.
 
-SUBDIRS=libasfix asfix-tools test
-
-EXTRA_DIST=make_rules
+aclocal -I .
+autoconf
+autoheader
+automake -a
