@@ -57,7 +57,7 @@ equations
    [0] <'a      -CFs>  =         when 'a =
    [0] <_A      -CFs>  = <_A-CF>
    [0] <'a+ 'b+ -CFs>  = <'a+ -CFs> ++ <LAYOUT?-CF> ++ <'b+ -CFs>
-   [0] <'a -> _A!-CF>   = <'a -CFs> -> <_A-CF>!
+   [default-0] <'a -> _A!-CF>   = <'a -CFs> -> <_A-CF>!
    [0] < p      -CFs>   = <p -CF>
    [0] <p*      -CFs>   =                        when p* =
    [0] <p+1 p+2 -CFs>   = <p+1 -CFs> ++ <p+2 -CFs>
