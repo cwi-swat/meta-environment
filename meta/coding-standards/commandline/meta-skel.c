@@ -57,7 +57,7 @@ void usage(void)
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myname, myversion);
-    exit(1);
+    exit(0);
 }
 
 void version(void)
