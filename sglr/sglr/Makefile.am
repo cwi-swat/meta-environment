@@ -35,6 +35,8 @@ noinst_HEADERS		= getopt.h
 EXTRA_DIST		= sglr.idef sglr.tif.c sglr.tif.h
 CLEANFILES		= sglr.tifs
 
+#CFLAGS			+= -pg
+
 sglr_LDADD		= -L$(top_builddir)/libsglr -lsglr \
 			-L$(top_builddir)/libtree2dot -ltree2dot \
 			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
