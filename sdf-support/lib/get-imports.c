@@ -15,11 +15,6 @@ getImpsectionImports(SDF_ImpSection impsection)
     SDF_ModuleName modname = SDF_getImportModuleName(import);
     SDF_ModuleId   modid   = SDF_getModuleNameModuleId(modname);
     char          *lex     = PT_yieldTree(SDF_getModuleIdLex(modid));
-ATwarning("import = %t\n", import);
-ATwarning("modname = %t\n", modname);
-ATwarning("modid = %t\n", modid);
-ATwarning("lex = %s\n", lex);
-
     modules = ATinsert(modules, ATmake("<str>", lex));
 
     if (SDF_isImportListSingle(importslist)) {
