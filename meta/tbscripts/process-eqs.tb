@@ -129,7 +129,6 @@ in
         fi
       )*
       if equal(Modules,[]) then  
-	printf("hierop\n").
         snd-msg(postprocess-collected-semantics-hook(NewModules)).
 	rec-msg(postprocess-collected-semantics-hook-result(AllEquations?)).
 	snd-msg(all-equations(AllEquations))
