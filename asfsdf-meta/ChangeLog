@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Thu Apr 15 14:54:36 CEST 2004 <jong@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - use GetSpecification, GetSpecification{Equations,Test}
+
 Mon Mar 29 16:17:14 CEST 2004 <{jong,kooiker}@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:
    - close editor based on its ID, not on a "reduct.out" heuristic
