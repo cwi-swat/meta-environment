@@ -1,0 +1,67 @@
+%% The module {\tt AsFix2Sign} generates functions for the given
+%% module.
+%% The translation is based on the {\sc Sdf} part of an {\sc Asf+Sdf} specification,
+%% its result is a set of function definitions.
+
+imports TermAsFix2Sign
+
+exports
+  context-free syntax
+    asfix2sign(ATerm,NameTable) -> FNT-tuple
+    attrs2terms(ATerm)          -> TermList
+
+hiddens
+  context-free syntax
+    syntax2rules(ATerm,ATermList,NameTable)         -> FNT-tuple
+
+    synsecs2sign(ATerm,ATermList,SortList,NameTable) -> FuncSortStruct
+    synsec2sign(ATerm,ATerm,SortList,NameTable)      -> FuncSortStruct
+
+    sections2sign(ATerm,ATermList,SortList,NameTable) -> FuncSortStruct
+    section2sign(ATerm,ATerm,SortList,NameTable)      -> FuncSortStruct
+
+    cffuncs2sign(ATerm,ATermList,NameTable) -> FNT-tuple
+    cffunc2sign(ATerm,ATerm,NameTable)      -> FNT-tuple
+
+    lexfuncs2sign(ATermList,SortList,NameTable) -> FuncSortStruct
+    lexfunc2sign(ATerm,SortList,NameTable)      -> FuncSortStruct
+
+    cfelems2args(ATermList,NameTable) -> FuncTermTableTuple
+    cfelem2args(ATerm,NameTable)      -> FuncTermTableTuple
+
+    attrlist2terms(ATermList) -> TermList
+    attr2term(ATerm)          -> Term
+
+hiddens
+  variables
+    Aname[0-9']*   -> ATerm
+    Amodule[0-9']* -> ATerm
+    Mname[0-9']*        -> ModId
+    Defrules[0-9']*     -> MsFuncRulePair
+    L[0-9']*            -> Literal
+    Lit[0-9']*          -> Literal
+    SynSecs[0-9']*      -> ATermList
+    SynSec[\*][0-9']*   -> ATerms
+    SynSec[0-9']*       -> ATerm
+    Sections[0-9']*     -> ATermList
+    Section[\*][0-9']*  -> ATerms
+    Section[0-9']*      -> ATerm
+    LexFuncs[0-9']*     -> ATermList
+    LexFunc[\*][0-9']*  -> ATerms
+    LexFunc[0-9']*      -> ATerm
+    CfFuncs[0-9']*      -> ATermList
+    CfFunc[\*][0-9']*   -> ATerms
+    CfFunc[0-9']*       -> ATerm
+    CfElems[0-9']*      -> ATermList
+    CfElem[\*][0-9']*   -> ATerms
+    CfElem[0-9']*       -> ATerm
+    Iter[0-9']*         -> ATerm
+    Sort[\*][0-9']*     -> ATerms
+    Sorts[0-9']*        -> ATermList
+    Sort[0-9']*         -> ATerm
+    Attr[0-9']*         -> ATerm
+    Attrlist[0-9']*     -> ATermList
+
+    Char[\*][0-9]*      -> CHAR*
+
+    Sortlist[0-9]*      -> SortList

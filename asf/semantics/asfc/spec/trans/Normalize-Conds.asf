@@ -71,7 +71,7 @@ equations
 
   [nt-2'2] Aint = natcon(Char*),
            varid("C""V" Char*) = Term2,
-           term-equal(Term2,Funid) =: t = Cond
+           term_equal(Term2,Funid) =: t = Cond
            ===================================
            normalize-term(Funid,Aint) = (Term2,Cond,succ(Aint))
 

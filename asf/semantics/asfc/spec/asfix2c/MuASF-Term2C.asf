@@ -254,20 +254,20 @@ equations
 
   [fct-1'1] is-var-term(Term1) = true
             =========================
-            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            find-common-terms([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                   Term4|Cenv1|Cenv2|Funid];C-rule*,
                               Namepair*,Aint) =
-              second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+              second-term-common([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                   Term4|Cenv1|Cenv2|Funid];C-rule*,
                                  Namepair*,Aint)
 
   [fct-1'2] is-var-term(Term1) = false,
             select-conds-on-first-term(Term1,C-rule*1) = (,C-rule*2)
             ========================================================
-            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            find-common-terms([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                Term4|Cenv1|Cenv2|Funid];C-rule*1,
                               Namepair*,Aint) =
-              second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+              second-term-common([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                   Term4|Cenv1|Cenv2|Funid];C-rule*1,
                                  Namepair*,Aint)
 
@@ -281,10 +281,10 @@ equations
             varid("C""V" Char*) = Term5,
             replace-first-term(Term5,((Term5,Expression)),
                                [Fv-path*|
-                                term-equal(Term1,Term2) =: Term3 & Cond*|
+                                term_equal(Term1,Term2) =: Term3 & Cond*|
                                 Term4|Cenv1|Cenv2|Funid];C-rule+1) = C-rule+2
             =================================================================
-            find-common-terms([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            find-common-terms([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                Term4|Cenv1|Cenv2|Funid];C-rule*1,
                               Namepair*,Aint1) =
               (Stat*1 ++ Expression = ActualArg;,
@@ -292,19 +292,19 @@ equations
 
   [sct-1'1] is-var-term(Term2) = true
             =========================
-            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            second-term-common([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                 Term4|Cenv1|Cenv2|Funid];C-rule*,
                                Namepair*,Aint) =
-               (,,[Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+               (,,[Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                   Term4|Cenv1|Cenv2|Funid];C-rule*,Aint)
 
   [sct-1'2] is-var-term(Term2) = false,
             select-conds-on-second-term(Term2,C-rule*1) = (,C-rule*2)
             =========================================================
-            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            second-term-common([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                  Term4|Cenv1|Cenv2|Funid];C-rule*1,
                                 Namepair*,Aint) =
-               (,,[Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+               (,,[Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                   Term4|Cenv1|Cenv2|Funid];C-rule*1,Aint)
 
   [sct-1'3] is-var-term(Term2) = false,
@@ -316,10 +316,10 @@ equations
             varid("C""V" Char*) = Term5,
             replace-second-term(Term5,((Term5,Expression)),
                                 [Fv-path*|
-                                 term-equal(Term1,Term2) =: Term3 & Cond*|
+                                 term_equal(Term1,Term2) =: Term3 & Cond*|
                                  Term4|Cenv1|Cenv2|Funid];C-rule+1) = C-rule+2
             ============================================================
-            second-term-common([Fv-path*|term-equal(Term1,Term2) =: Term3 & Cond*|
+            second-term-common([Fv-path*|term_equal(Term1,Term2) =: Term3 & Cond*|
                                 Term4|Cenv1|Cenv2|Funid];C-rule*1,
                                Namepair*,Aint1) =
               (Stat*1 ++ Expression = ActualArg;,

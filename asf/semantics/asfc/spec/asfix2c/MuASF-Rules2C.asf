@@ -1,12 +1,16 @@
 equations
 
-  [ro2c-1'1] rulesopt2cfuncs(Modid,Funcdef*,,Nametable) = (Funcdef*,)
+  [ro2c-1'1] locate-constants-in-decls(Modid,) = Decl*
+             =========================================
+             rulesopt2cfuncs(Modid,Funcdef*,,Nametable) = (Funcdef*,Decl*)
 
-  [ro2c-1'2] rulesopt2cfuncs(Modid,Funcdef*,rules ,Nametable) = (Funcdef*,)
+  [ro2c-1'2] locate-constants-in-decls(Modid,) = Decl*
+             =========================================
+             rulesopt2cfuncs(Modid,Funcdef*,rules ,Nametable) = (Funcdef*,Decl*)
 
   [ro2c-1'3] asfrules2cfuncs(Funcdef*,Rule+,Namepair*) = (Funcdef*2,Decl*1),
-             locate-constants-in-decls(Modid,Decl*1 ) = Decl*2
-             ===============================================================
+             locate-constants-in-decls(Modid,Decl*1) = Decl*2
+             ================================================
              rulesopt2cfuncs(Modid,Funcdef*,rules Rule+,(Namepair*,Funid,Aint1,Aint2)) =
                (Funcdef*2, Decl*2)
 

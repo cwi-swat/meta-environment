@@ -13,10 +13,10 @@ equations
                          Namepair*,Aint1) = (Stat*1 ++ Stat*2,Aint3)
 
 %% Dealing with conditions and more than one c-rule.
-  [c2c-1'3] first-cond2cstats([Fv-path*|term-equal(Term+) =: Term1 & Cond*|
+  [c2c-1'3] first-cond2cstats([Fv-path*|term_equal(Term+) =: Term1 & Cond*|
                               Term2|Cenv1|Cenv2|Funid];C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
             ====================================================================================
-            conds2cstats([Fv-path*|term-equal(Term+) =: Term1 & Cond*|
+            conds2cstats([Fv-path*|term_equal(Term+) =: Term1 & Cond*|
                           Term2|Cenv1|Cenv2|Funid];C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
 
 %% Dealing with conditions and exactly one c-rule.
@@ -48,22 +48,22 @@ equations
 %% This is done in order to extract common subexpressions in these {\tt term-equal}s
 %% so that these need to be evaluated only once.
   [fc2c-1'1] find-common-terms([Fv-path*1|
-                                term-equal(Term1,Term2) =: Term10 & Cond*1|
+                                term_equal(Term1,Term2) =: Term10 & Cond*1|
                                 Term3|Cenv1|Cenv2|Funid1];C-rule*1,
                                Namepair*,Aint) =
-               (Stat*1,Stat*2,[Fv-path*2|term-equal(Term4,Term5) =: Term11 & Cond*2|
+               (Stat*1,Stat*2,[Fv-path*2|term_equal(Term4,Term5) =: Term11 & Cond*2|
                                Term6|Cenv3|Cenv4|Funid2];C-rule*2,Aint2),
-             test-cond2cstats([Fv-path*2|term-equal(Term4,Term5) =: Term11 & Cond*2|
+             test-cond2cstats([Fv-path*2|term_equal(Term4,Term5) =: Term11 & Cond*2|
                                Term6|Cenv3|Cenv4|Funid2];C-rule*2,Namepair*,Aint2) =
                (Stat*3,Aint3)
              ================
              first-cond2cstats([Fv-path*1|
-                                term-equal(Term1,Term2) =: Term10 & Cond*1|
+                                term_equal(Term1,Term2) =: Term10 & Cond*1|
                                 Term3|Cenv1|Cenv2|Funid1];C-rule*1,
                                Namepair*,Aint) = (Stat*1 ++ Stat*3 ++ Stat*2,Aint3)
 
   [fc2c-1'2] get-funid(Term1) = Funid2,
-             Funid2 != term-equal,
+             Funid2 != term_equal,
              is-boolean-term(Term2) = true,
              test-cond2cstats([Fv-path*|
                                Term1 =: Term2 & Cond*|

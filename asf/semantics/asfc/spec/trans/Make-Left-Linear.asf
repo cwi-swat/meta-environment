@@ -150,10 +150,10 @@ equations
 
 %% This auxilary functions construct new conditions.
   [mec-1'1] make-eq-cond(Varid1,Varid2) =
-              term-equal(Varid1,Varid2) =: t
+              term_equal(Varid1,Varid2) =: t
 
   [mec-1'2] make-eq-cond(*Varid1,*Varid2) =
-              term-equal(*Varid1,*Varid2) =: t
+              term_equal(*Varid1,*Varid2) =: t
 
   [mec-1'3] make-eq-cond(+Varid1,+Varid2) =
-              term-equal(+Varid1,+Varid2) =: t
+              term_equal(+Varid1,+Varid2) =: t

@@ -28,7 +28,7 @@ equations
 
   [mnc-1'2] term-contains-var(Term2) = false
             ================================
-            make-new-cond(Term1,Term2) = term-equal(Term1,Term2) =: t
+            make-new-cond(Term1,Term2) = term_equal(Term1,Term2) =: t
 
 
   [rlcr-1'1] is-internal-funid(get-funid(Term1)) = Bool,

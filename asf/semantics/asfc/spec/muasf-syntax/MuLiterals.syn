@@ -12,10 +12,10 @@ exports
     ~ [\000-\037"\\]      -> QChar
     EscChar               -> QChar
 
-    [a-z][\-_A-Za-z0-9']* -> FunId %% identifiers start with lowercase
-    "\"" QChar* "\""      -> FunId %% quoted strings are identifiers
-    ['][!\-~]             -> FunId %% all printable characters
-    [\\][0-2][0-9][0-9]   -> FunId %% all characters; decimally coded
+    [a-z][_A-Za-z0-9']* -> FunId %% identifiers start with lowercase
+    "\"" QChar* "\""    -> FunId %% quoted strings are identifiers
+    ['][!~]             -> FunId %% all printable characters
+    [\\][0-2][0-9][0-9] -> FunId %% all characters; decimally coded
 
     [A-Z][a-zA-Z0-9'_\-]* -> VarId
 

@@ -468,9 +468,9 @@ equations
                                        C-rule*) = (C-rule*1,C-rule*2)
              ========================================================
              select-conds-on-first-term(Term,
-                                       [Fv-path*2|term-equal(Term,Term2) =: Ct-rhs2 & Cond*2|
+                                       [Fv-path*2|term_equal(Term,Term2) =: Ct-rhs2 & Cond*2|
                                         Term4|Cenv3|Cenv4|Funid]; C-rule*) =
-               ([Fv-path*2|term-equal(Term,Term2) =: Ct-rhs2 & Cond*2|
+               ([Fv-path*2|term_equal(Term,Term2) =: Ct-rhs2 & Cond*2|
                  Term4|Cenv3|Cenv4|Funid]; C-rule*1,C-rule*2)
 
 %% The left-hand side differ, so it is added to the second list
@@ -491,9 +491,9 @@ equations
                                          C-rule*) = (C-rule*1,C-rule*2)
              ==========================================================
              select-conds-on-second-term(Term,
-                                       [Fv-path*2|term-equal(Term1,Term) =: Ct-rhs2 & Cond*2|
+                                       [Fv-path*2|term_equal(Term1,Term) =: Ct-rhs2 & Cond*2|
                                         Term4|Cenv3|Cenv4|Funid]; C-rule*) =
-               ([Fv-path*2|term-equal(Term1,Term) =: Ct-rhs2 & Cond*2|
+               ([Fv-path*2|term_equal(Term1,Term) =: Ct-rhs2 & Cond*2|
                  Term4|Cenv3|Cenv4|Funid]; C-rule*1,C-rule*2)
 
 %% The left-hand side differ, so it is added to the second list
@@ -513,9 +513,9 @@ equations
   [sslc-1'2] replace-first-term(Term1,Cenv1,C-rule*1) = C-rule*2
              ===================================================
              replace-first-term(Term1,Cenv1,
-                                [Fv-path*2|term-equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
+                                [Fv-path*2|term_equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
                                        Term4|Cenv2|Cenv3|Funid]; C-rule*1) =
-               [Fv-path*2|term-equal(Term1,Term3) =: Ct-rhs2 & Cond*2|
+               [Fv-path*2|term_equal(Term1,Term3) =: Ct-rhs2 & Cond*2|
                 Term4|Cenv2++Cenv1|Cenv3++Cenv1|Funid]; C-rule*2
 
   [sslc-1'1] replace-second-term(Term,Cenv,) =
@@ -525,9 +525,9 @@ equations
   [sslc-1'2] replace-second-term(Term1,Cenv1,C-rule*1) = C-rule*2
              ====================================================
              replace-second-term(Term1,Cenv1,
-                                 [Fv-path*2|term-equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
+                                 [Fv-path*2|term_equal(Term2,Term3) =: Ct-rhs2 & Cond*2|
                                   Term4|Cenv2|Cenv3|Funid]; C-rule*1) =
-               [Fv-path*2|term-equal(Term2,Term1) =: Ct-rhs2 & Cond*2|
+               [Fv-path*2|term_equal(Term2,Term1) =: Ct-rhs2 & Cond*2|
                 Term4|Cenv2++Cenv1|Cenv3++Cenv1|Funid]; C-rule*2
 
 %% If there are no rewrite rules we are finished.

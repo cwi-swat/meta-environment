@@ -104,7 +104,7 @@ equations
              Ivarenv2 = Ivarenv3
              ===================
              make-mc-cond(Term1 == Term2,Ivarenv1) =
-               (term-equal(Term1,Term2) =: t,Ivarenv3)
+               (term_equal(Term1,Term2) =: t,Ivarenv3)
 
   [mmcc-1'4] inspect-term(Term1,Ivarenv1) = Ivarenv2,
              Ivarenv1 = Ivarenv2,
@@ -112,7 +112,7 @@ equations
              Ivarenv2 = Ivarenv3
              ===================
              make-mc-cond(Term1 != Term2,Ivarenv1) =
-               (term-equal(Term1,Term2) =: f,Ivarenv3)
+               (term_equal(Term1,Term2) =: f,Ivarenv3)
 
   [mmcc-1'5] inspect-term(Term2,Ivarenv1) = Ivarenv2
              =======================================

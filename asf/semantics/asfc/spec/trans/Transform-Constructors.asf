@@ -45,7 +45,7 @@ equations
            varid("N""C""V" Char+) = Varid
            ==============================
            move-cons-terms-in-term(Funid(Term+),Namepair*,Aint) =
-             [Varid,term-equal(Varid,Funid(Term+)) =: t,succ(Aint)]
+             [Varid,term_equal(Varid,Funid(Term+)) =: t,succ(Aint)]
 
   [default-mc4'2] move-cons-terms-in-term(Term,Namepair*,Aint) = [Term,,Aint]
 

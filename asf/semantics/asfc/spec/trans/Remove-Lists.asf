@@ -319,7 +319,7 @@ equations
              put-int(succ(Aint),Ivarenv1) = Ivarenv2
              =======================================
              transform-lhs-single-term(null,Ivarenv1) =
-               (Varid,not-empty-list(Varid) =: f,Ivarenv2)
+               (Varid,not_empty_list(Varid) =: f,Ivarenv2)
 
   [tlst-1'2] Term1 != null,
              is-list-var-term(Term1) = false,
@@ -330,8 +330,8 @@ equations
              put-int(succ(Aint),Ivarenv2) = Ivarenv3
              =======================================
              transform-lhs-single-term(Term1,Ivarenv1) =
-               (Varid,is-single-element(Varid) =: t &
-                      make-new-cond(list-head(Varid),Term2) & Cond*,Ivarenv3)
+               (Varid,is_single_element(Varid) =: t &
+                      make-new-cond(list_head(Varid),Term2) & Cond*,Ivarenv3)
 
   [tlst-1'2] Term1 != null,
              is-list-var-term(Term1) = false,
@@ -341,8 +341,8 @@ equations
              put-int(succ(Aint),Ivarenv1) = Ivarenv2
              =======================================
              transform-lhs-single-term(Term1,Ivarenv1) =
-               (Varid,is-single-element(Varid) =: t &
-                      make-new-cond(list-head(Varid),Term1),Ivarenv2)
+               (Varid,is_single_element(Varid) =: t &
+                      make-new-cond(list_head(Varid),Term1),Ivarenv2)
 
 %% If the single term is a list variable it is transformed via
 %% the function {\tt transform-list-var}.
@@ -372,12 +372,12 @@ equations
              put-int(succ(succ(Aint)),Ivarenv3) = Ivarenv4
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
-               (Varid1,not-empty-list(Varid1) =: t &
-                       make-new-cond(list-head(Varid1),Term3) &
+               (Varid1,not_empty_list(Varid1) =: t &
+                       make-new-cond(list_head(Varid1),Term3) &
                        Cond*1 &
-                       list-tail(Varid1) =: Varid2 &
-                       is-single-element(Varid2) =: t &
-                       make-new-cond(list-head(Varid2),Term4) & Cond*2 ,Ivarenv4)
+                       list_tail(Varid1) =: Varid2 &
+                       is_single_element(Varid2) =: t &
+                       make-new-cond(list_head(Varid2),Term4) & Cond*2 ,Ivarenv4)
 
   [tldt-1'2] is-list-var-term(Term1) = false,
              rem-lists-from-lhs-term(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
@@ -388,10 +388,10 @@ equations
              put-int(succ(Aint),Ivarenv3) = Ivarenv4
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
-               (Varid2,not-empty-list(Varid2) =: t &
-                       make-new-cond(list-head(Varid2),Term3) &
+               (Varid2,not_empty_list(Varid2) =: t &
+                       make-new-cond(list_head(Varid2),Term3) &
                        Cond*1 &
-                       list-tail(Varid2) =: Term4 &
+                       list_tail(Varid2) =: Term4 &
                        Cond*2,Ivarenv4)
 
   [tldt-1'3] is-list-var-term(Term1) = true,
@@ -403,9 +403,9 @@ equations
              put-int(succ(Aint),Ivarenv3) = Ivarenv4
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
-               (Varid,not-empty-list(Varid) =: t &
-                      list-prefix(Varid) =: Term3 & Cond*1 &
-                      make-new-cond(list-last(Varid),Term4) & Cond*2,
+               (Varid,not_empty_list(Varid) =: t &
+                      list_prefix(Varid) =: Term3 & Cond*1 &
+                      make-new-cond(list_last(Varid),Term4) & Cond*2,
                 Ivarenv4)
 
 %% If list of terms consists of three or more elements the
@@ -427,10 +427,10 @@ equations
              ==========================
              transform-lhs-multiple-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,%%%make-new-cond(list-head(Varid),make-element-term(Term3)) &
-                      not-empty-list(Varid) =: t &
-                      make-new-cond(list-head(Varid),Term3) &
+                      not_empty_list(Varid) =: t &
+                      make-new-cond(list_head(Varid),Term3) &
                       Cond*1 &
-                      list-tail(Varid) =: Varid2 & Cond*2,Ivarenv4)
+                      list_tail(Varid) =: Varid2 & Cond*2,Ivarenv4)
 
 %% If the first element is  list variable we must process the
 %% list with a ``prefix-last'' mechanism. This is performed
@@ -497,10 +497,9 @@ equations
              =======================================
              transform-no-list-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,
-                list-prefix(Varid) =: Term3 & Cond*1 &
-                %%%make-new-cond(list-last(Varid),make-element-term(Term4)) & Cond*2,
-                not-empty-list(Varid) =: t &
-                make-new-cond(list-last(Varid),Term4) & Cond*2,
+                list_prefix(Varid) =: Term3 & Cond*1 &
+                not_empty_list(Varid) =: t &
+                make-new-cond(list_last(Varid),Term4) & Cond*2,
                 Ivarenv4)
 
   [tnlt-1'2] is-list-cons(Term2) = true,
@@ -515,10 +514,9 @@ equations
              ==========================
              transform-no-list-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,
-                list-prefix(Varid) =: Varid2 &
-                %%%make-new-cond(list-last(Varid),make-element-term(Term4)) & Cond*1 & Cond*2,
-                not-empty-list(Varid) =: t &
-                make-new-cond(list-last(Varid),Term4) & Cond*1 & Cond*2,
+                list_prefix(Varid) =: Varid2 &
+                not_empty_list(Varid) =: t &
+                make-new-cond(list_last(Varid),Term4) & Cond*1 & Cond*2,
                 Ivarenv4)
 
 %% Equations to deal with list variables, if a list variable represents zero or
@@ -554,7 +552,7 @@ equations
             newlistvar(+Varid1) = Varid2
             ============================
             transform-lhs-list-var(+Varid1,Ivarenv1) =
-              (Varid2,not-empty-list(Varid2) =: t,Ivarenv2)
+              (Varid2,not_empty_list(Varid2) =: t,Ivarenv2)
 
   [tli-1'4] includes(+Varid1,Ivarenv) = true,
             newlistvar(+Varid1) = Varid2
