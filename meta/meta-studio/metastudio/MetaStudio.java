@@ -300,7 +300,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       public void actionPerformed(ActionEvent event) {
         int choice = JOptionPane.showConfirmDialog(topFrame, "Are you sure you want delete this module (from disk)?");
 
-        if (choice == YES_OPTION) {
+        if (choice == JOptionPane.YES_OPTION) {
           Object[] values = moduleList.getSelectedValues();
           for (int i = 0; i < values.length; i++) {
             bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));

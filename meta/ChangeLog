@@ -3,6 +3,8 @@
 Thu Feb 27 09:24:54 CET 2003 <jong@cwi.nl>
  * meta-studio: move NodeSizer.java from metastudio.graph to metastudio
    as it is not part of the generated graph package.
+ * fix: profane usage of literal constants 0, 1, and 2 into symbolic
+   constants (JOptionPane.YES_OPTION etc.) in handling of Dialogs.
 
 Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
  * MetaStudio.java: cleanup in file actions. Improved consistency,
