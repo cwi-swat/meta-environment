@@ -5,7 +5,59 @@
 
 #define TABLE_SIZE 2048
 
+static aterm *term_ws;
+static aterm *term_comma;
+static aterm *term_open;
+static aterm *term_close;
+static aterm *term_square_open;
+static aterm *term_square_close;
+static aterm *term_sort_literal;
 static aterm *term_w_appl;
+static aterm *term_l_appl;
+static aterm *term_ql_appl;
+static aterm *term_sep_appl;
+static aterm *term_id_appl;
+static aterm *term_exports_appl;
+static aterm *term_imports_appl;
+static aterm *term_hiddens_appl;
+static aterm *term_sorts_appl;
+static aterm *term_sort_appl;
+static aterm *term_lexicalsyntax_appl;
+static aterm *term_contextfreesyntax_appl;
+static aterm *term_variables_appl;
+static aterm *term_priorities_appl;
+static aterm *term_incrchain_appl;
+static aterm *term_decrchain_appl;
+static aterm *term_prodskel_appl;
+static aterm *term_agroup_appl;
+static aterm *term_group_appl;
+static aterm *term_noequations_appl;
+static aterm *term_equations_appl;
+static aterm *term_ceqequ_appl;
+static aterm *term_ceqimpl_appl;
+static aterm *term_ceqwhen_appl;
+static aterm *term_condition_appl;
+static aterm *term_appl_appl;
+static aterm *term_list_appl;
+static aterm *term_var_appl;
+static aterm *term_lex_appl;
+static aterm *term_prod_appl;
+static aterm *term_iter_appl;
+static aterm *term_itersep_appl;
+static aterm *term_neg_appl;
+static aterm *term_charclass_appl;
+static aterm *term_noattrs_appl;
+static aterm *term_attrs_appl;
+static aterm *term_module_appl;
+static aterm *term_abbreviations_appl;
+static aterm *term_literal_to_afun_prod;
+static aterm *term_afun_to_aterm_prod;
+static aterm *term_aterm_to_aterms_prod;
+static aterm *term_afun_aterms_to_aterm_prod;
+static aterm *term_aterm_aterms_to_aterms_prod;
+static aterm *term_atermlist_to_aterm_prod;
+static aterm *term_aterms_to_atermlist_prod;
+static aterm *term_empty_to_atermlist_appl;
 
 void init_expansion_terms()
 {
@@ -14,15 +66,537 @@ void init_expansion_terms()
 
   TinitArena(NULL, &local);
 
+  /* Building a white-space */
+  term_ws = TmakeSimple(&local, "w(\"\")");
+
+  /* Building a comma */
+  term_comma = TmakeSimple(&local, "l(\",\")");
+
+  /* Building an open */
+  term_open = TmakeSimple(&local, "l(\"(\")");
+
+  /* Building a close */
+  term_close = TmakeSimple(&local, "l(\")\")");
+
+  /* Building a square open */
+  term_square_open = TmakeSimple(&local, "l(\"[\")");
+
+  /* Building a square close */
+  term_square_close = TmakeSimple(&local, "l(\"]\")");
+
+  /* Building a sort Literal */
+  term_sort_literal = TmakeSimple(&local, "sort(\"Literal\")");
+
   /* Building a white-space appl */
   tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
-                        TmkList_n(&local,1,TmakeSimple(&local, "ql(\"w\")")), 
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"w\")")), 
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_w_appl = AFmakeAppl(&local, tmp, 
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"w\")")));
+ 
+  /* Building a literal appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"l\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_l_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"l\")")));
+
+  /* Building a qliteral appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"ql\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_ql_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"ql\")")));
+
+  /* Building a separator appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"sep\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_sep_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"sep\")")));
+
+  /* Building an identifier appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"id\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_id_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"id\")")));
+
+  /* Building an exports appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"exports\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_exports_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"exports\")")));
+
+  /* Building an imports appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"imports\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_imports_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"imports\")")));
+
+  /* Building a hiddens appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"hiddens\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_hiddens_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"hiddens\")")));
+
+  /* Building a sorts appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"sorts\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_sorts_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"sorts\")")));
+
+  /* Building a sort appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"sort\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_sort_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"sort\")")));
+
+  /* Building a lexical-syntax appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"lexical-syntax\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_lexicalsyntax_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"lexical-syntax\")")));
+
+  /* Building a context-free syntax appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"context-free-syntax\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_contextfreesyntax_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"context-free-syntax\")")));
+
+  /* Building a variables appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"variables\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_variables_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"variables\")")));
+
+  /* Building a priorities appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"priorities\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_priorities_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"priorities\")")));
+  
+  /* Building an incrchain appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"incr-chain\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_incrchain_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"incr-chain\")")));
+  
+  /* Building a decrchain appl */ 
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"decr-chain\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_decrchain_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"decr-chain\")")));
+  
+  /* Building a prodskel appl */ 
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"prod-skel\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_prodskel_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"prod-skel\")")));
+  
+  /* Building an agroup appl */ 
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"agroup\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_agroup_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"agroup\")")));
+  
+  /* Building a group appl */ 
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"group\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_group_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"group\")")));
+  
+  /* Building a noequations appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"no-equations\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_noequations_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"no-equations\")")));
+  
+  /* Building an equations appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"equations\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_equations_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"equations\")")));
+  
+  /* Building a ceqequ appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"ceq-equ\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_ceqequ_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"ceq-equ\")")));
+  
+  /* Building a ceqimpl appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"ceq-impl\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_ceqimpl_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"ceq-impl\")")));
+  
+  /* Building a ceqwhen appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"ceq-when\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_ceqwhen_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"ceq-when\")")));
+  
+  /* Building a condition appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"condition\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_condition_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"condition\")")));
+
+  /* Building an appl appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"appl\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_appl_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"appl\")")));
+
+  /* Building a list appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"list\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_list_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"list\")")));
+
+  /* Building a var appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"var\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_var_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"var\")")));
+
+  /* Building a lex appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"lex\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_lex_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"lex\")")));
+
+  /* Building a prod appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"prod\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_prod_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"prod\")")));
+
+  /* Building an iter appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"iter\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_iter_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"iter\")")));
+
+  /* Building an itersep appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"iter-sep\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_itersep_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"iter-sep\")")));
+
+  /* Building a neg appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"neg\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_neg_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"neg\")")));
+
+  /* Building a charclass appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"char-class\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_charclass_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"char-class\")")));
+
+  /* Building a noattrs appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"no-attrs\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_noattrs_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"no-attrs\")")));
+
+  /* Building an attrs appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"attrs\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_attrs_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"attrs\")")));
+
+  /* Building a module appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"module\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_module_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"module\")")));
+
+  /* Building an abbreviations appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"AsFixParseTrees\")"),
+                           TmkList_n(&local,1,
+                                     TmakeSimple(&local, "ql(\"abbreviations\")")),
+                           TmakeSimple(&local, "sort(\"AFun\")"),
+                           TmakeSimple(&local, "no-attrs"));
+  term_abbreviations_appl = AFmakeAppl(&local, tmp,
+                           TmkList_n(&local, 1,
+                                     TmakeSimple(&local, "l(\"abbreviations\")")));
+
+  /* Building a literal_to_afun prod */
+  term_literal_to_afun_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,1,TmakeSimple(&local, "sort(\"Literal\")")),
                         TmakeSimple(&local, "sort(\"AFun\")"),
                         TmakeSimple(&local, "no-attrs"));
-  term_w_appl = AFmakeAppl(&local, tmp, 
-                   TmkList_n(&local, 1, TmakeSimple(&local, "l(\"w\")")));
 
+  /* Building an afun_to_aterm prod */
+  term_afun_to_aterm_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,1,TmakeSimple(&local, "sort(\"AFun\")")),
+                        TmakeSimple(&local, "sort(\"ATerm\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an aterm_to_aterms prod */
+  term_aterm_to_aterms_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,1,TmakeSimple(&local, "sort(\"ATerm\")")),
+                        TmakeSimple(&local, "sort(\"ATerms\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an afun_aterms_to_aterm prod */
+  term_afun_aterms_to_aterm_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,7,TmakeSimple(&local, "sort(\"AFun\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "ql(\"(\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "sort(\"ATerms\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "ql(\")\")")),
+                        TmakeSimple(&local, "sort(\"ATerm\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an aterm_aterms_to_aterms prod */
+  term_aterm_aterms_to_aterms_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,5,TmakeSimple(&local, "sort(\"ATerm\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "ql(\",\")"),
+                                       TmakeSimple(&local, "w(\"\n\")"),
+                                       TmakeSimple(&local, "sort(\"ATerms\")")),
+                        TmakeSimple(&local, "sort(\"ATerms\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an atermlist_to_aterm prod */
+  term_atermlist_to_aterm_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,1,TmakeSimple(&local, "sort(\"ATermList\")")),
+                        TmakeSimple(&local, "sort(\"ATerm\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an aterms_to_atermlist prod */
+  term_aterms_to_atermlist_prod = 
+         AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,5,TmakeSimple(&local, "ql(\"[\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "sort(\"ATerms\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "ql(\"]\")")),
+                        TmakeSimple(&local, "sort(\"ATermList\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  /* Building an empty_to_atermlist appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ATerms\")"),
+                        TmkList_n(&local,3,TmakeSimple(&local, "ql(\"[\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
+                                       TmakeSimple(&local, "ql(\"]\")")),
+                        TmakeSimple(&local, "sort(\"ATermList\")"),
+                        TmakeSimple(&local, "no-attrs"));
+
+  term_empty_to_atermlist_appl = 
+         AFmakeAppl(&local,
+                    tmp,
+                    TmkList_n(&local,3,TmakeSimple(&local, "l(\"[\")"),
+                                   TmakeSimple(&local, "w(\"\")"),
+                                   TmakeSimple(&local, "l(\"]\")")));
+  Tprotect(term_ws);
+  Tprotect(term_comma);
+  Tprotect(term_open);
+  Tprotect(term_close);
+  Tprotect(term_square_open);
+  Tprotect(term_square_close);
+  Tprotect(term_sort_literal);
   Tprotect(term_w_appl);
+  Tprotect(term_l_appl);
+  Tprotect(term_ql_appl);
+  Tprotect(term_sep_appl);
+  Tprotect(term_id_appl);
+  Tprotect(term_exports_appl);
+  Tprotect(term_imports_appl);
+  Tprotect(term_hiddens_appl);
+  Tprotect(term_sorts_appl);
+  Tprotect(term_sort_appl);
+  Tprotect(term_lexicalsyntax_appl);
+  Tprotect(term_contextfreesyntax_appl);
+  Tprotect(term_variables_appl);
+  Tprotect(term_priorities_appl);
+  Tprotect(term_decrchain_appl);
+  Tprotect(term_incrchain_appl);
+  Tprotect(term_prodskel_appl);
+  Tprotect(term_agroup_appl);
+  Tprotect(term_group_appl);
+  Tprotect(term_noequations_appl);
+  Tprotect(term_equations_appl);
+  Tprotect(term_ceqequ_appl);
+  Tprotect(term_ceqwhen_appl);
+  Tprotect(term_ceqimpl_appl);
+  Tprotect(term_condition_appl);
+  Tprotect(term_appl_appl);
+  Tprotect(term_list_appl);
+  Tprotect(term_var_appl);
+  Tprotect(term_lex_appl);
+  Tprotect(term_prod_appl);
+  Tprotect(term_iter_appl);
+  Tprotect(term_itersep_appl);
+  Tprotect(term_neg_appl);
+  Tprotect(term_charclass_appl);
+  Tprotect(term_noattrs_appl);
+  Tprotect(term_attrs_appl);
+  Tprotect(term_module_appl);
+  Tprotect(term_abbreviations_appl);
+  Tprotect(term_literal_to_afun_prod);
+  Tprotect(term_afun_to_aterm_prod);
+  Tprotect(term_aterm_to_aterms_prod);
+  Tprotect(term_afun_aterms_to_aterm_prod);
+  Tprotect(term_aterm_aterms_to_aterms_prod);
+  Tprotect(term_atermlist_to_aterm_prod);
+  Tprotect(term_aterms_to_atermlist_prod);
+  Tprotect(term_empty_to_atermlist_appl);
   TdestroyArena(&local);
 }
 
@@ -66,715 +640,80 @@ int is_sep(aterm *sep)
   return Tmatch(sep,"sep(<str>)",&text);
 }
 
-aterm *make_l_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"l\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar, prod, TmkList_n(ar,1,TmakeSimple(ar, "l(\"l\")")));
-}
-
-aterm *make_ql_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"ql\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar, prod, TmkList_n(ar,1,TmakeSimple(ar, "l(\"ql\")")));
-}
-
-aterm *make_sep_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"sep\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar, prod, TmkList_n(ar,1,TmakeSimple(ar, "l(\"sep\")")));
-}
-
-aterm *make_id_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"id\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"id\")")));
-}
-
-aterm *make_exports_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"exports\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"exports\")")));
-}
-
-aterm *make_imports_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"imports\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"imports\")")));
-}
-
-aterm *make_hiddens_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"hiddens\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"hiddens\")")));
-}
-
-aterm *make_lexicalsyntax_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"lexical-syntax\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"lexical-syntax\")")));
-}
-
-aterm *make_contextfreesyntax_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"context-free-syntax\")")
-),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"context-free-syntax\")")));
-}
-
-aterm *make_variables_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"variables\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"variables\")")));
-}
-
-aterm *make_sorts_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"sorts\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"sorts\")")));
-}
-
-aterm *make_sort_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"sort\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"sort\")")));
-}
-
-aterm *make_priorities_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"priorities\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"priorities\")")));
-}
-
-aterm *make_incrchain_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"incr-chain\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"incr-chain\")")));
-}
-
-aterm *make_decrchain_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"decr-chain\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"decr-chain\")")));
-}
-
-aterm *make_prodskel_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"prod-skel\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"prod-skel\")")));
-}
-
-aterm *make_group_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"group\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"group\")")));
-}
-
-aterm *make_agroup_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"agroup\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"agroup\")")));
-}
-
-aterm *make_noattrs_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"no-attrs\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"no-attrs\")")));
-}
-
-aterm *make_attrs_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"attrs\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"attrs\")")));
-}
-
-aterm *make_noequations_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"no-equations\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"no-equations\")")));
-}
-
-aterm *make_equations_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"equations\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"equations\")")));
-}
-
-aterm *make_ceqequ_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"ceq-equ\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"ceq-equ\")")));
-}
-
-aterm *make_ceqimpl_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"ceq-impl\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"ceq-impl\")")));
-}
-
-aterm *make_ceqwhen_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"ceq-when\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"ceq-when\")")));
-}
-
-aterm *make_condition_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"condition\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"condition\")")));
-}
-
-aterm *make_iter_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"iter\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"iter\")")));
-}
-
-aterm *make_itersep_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"iter-sep\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"iter-sep\")")));
-}
-
-aterm *make_module_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"module\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"module\")")));
-}
-
-aterm *make_abbreviations_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"abbreviations\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"abbreviations\")")));
-}
-
-aterm *make_prod_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"prod\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"prod\")")));
-}
-
-aterm *make_appl_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"appl\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"appl\")")));
-}
-
-aterm *make_list_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"list\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"list\")")));
-}
-
-aterm *make_var_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"var\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"var\")")));
-}
-
-aterm *make_lex_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"lex\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"lex\")")));
-}
-
-aterm *make_neg_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"neg\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"neg\")")));
-}
-
-aterm *make_charclass_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"char-class\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar,
-                    prod,
-                    TmkList_n(ar,
-                              1,
-                              TmakeSimple(ar, "l(\"char-class\")")));
-}
-
-aterm *make_literal_to_afun_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "sort(\"Literal\")")),
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-}
-
 aterm *make_literal_to_afun_appl(arena *ar,aterm *arg)
 {
   return AFmakeAppl(ar,
-                    make_literal_to_afun_prod(ar),
+                    term_literal_to_afun_prod,
                     TmkList_n(ar,1,arg));
-}
-
-aterm *make_afun_to_aterm_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "sort(\"AFun\")")),
-                        TmakeSimple(ar, "sort(\"ATerm\")"),
-                        TmakeSimple(ar, "no-attrs"));
 }
 
 aterm *make_afun_to_aterm_appl(arena *ar,aterm *arg)
 {
   return AFmakeAppl(ar,
-                    make_afun_to_aterm_prod(ar),
+                    term_afun_to_aterm_prod,
                     TmkList_n(ar,1,arg));
-}
-
-aterm *make_aterm_to_aterms_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "sort(\"ATerm\")")),
-                        TmakeSimple(ar, "sort(\"ATerms\")"),
-                        TmakeSimple(ar, "no-attrs"));
 }
 
 aterm *make_aterm_to_aterms_appl(arena *ar,aterm *arg)
 {
   return AFmakeAppl(ar,
-                    make_aterm_to_aterms_prod(ar),
+                    term_aterm_to_aterms_prod,
                     TmkList_n(ar,1,arg));
-}
-
-aterm *make_afun_aterms_to_aterm_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,7,TmakeSimple(ar, "sort(\"AFun\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "ql(\"(\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "sort(\"ATerms\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "ql(\")\")")),
-                        TmakeSimple(ar, "sort(\"ATerm\")"),
-                        TmakeSimple(ar, "no-attrs"));
 }
 
 aterm *make_afun_aterms_to_aterm_appl(arena *ar,aterm *fun,aterm *arg)
 {
-  return AFmakeAppl(ar,make_afun_aterms_to_aterm_prod(ar),
+  return AFmakeAppl(ar,term_afun_aterms_to_aterm_prod,
                     TmkList_n(ar,7,
                               fun,
-                              TmakeSimple(ar, "w(\"\")"),
-                              TmakeSimple(ar, "l(\"(\")"),
-                              TmakeSimple(ar, "w(\"\")"),
+                              term_ws,
+                              term_open,
+                              term_ws,
                               arg,
-                              TmakeSimple(ar, "w(\"\")"),
-                              TmakeSimple(ar, "l(\")\")")));
-}
-
-/* <PO> wordt vaak aangeroepen + constant */
-aterm *make_aterm_aterms_to_aterms_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,5,TmakeSimple(ar, "sort(\"ATerm\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "ql(\",\")"),
-                                       TmakeSimple(ar, "w(\"\n\")"),
-                                       TmakeSimple(ar, "sort(\"ATerms\")")),
-                        TmakeSimple(ar, "sort(\"ATerms\")"),
-                        TmakeSimple(ar, "no-attrs"));
+                              term_ws,
+                              term_close));
 }
 
 aterm *make_aterm_aterms_to_aterms_appl(arena *ar,aterm *term, aterm *terms)
 {
-  return AFmakeAppl(ar,make_aterm_aterms_to_aterms_prod(ar),
+  return AFmakeAppl(ar,term_aterm_aterms_to_aterms_prod,
                     TmkList_n(ar,5,
                               term,
-                              TmakeSimple(ar, "w(\"\")"),
-                              TmakeSimple(ar, "l(\",\")"),
-                              TmakeSimple(ar, "w(\"\")"),
+                              term_ws,
+                              term_comma,
+                              term_ws,
                               terms));
-}
-
-aterm *make_atermlist_to_aterm_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "sort(\"ATermList\")")),
-                        TmakeSimple(ar, "sort(\"ATerm\")"),
-                        TmakeSimple(ar, "no-attrs"));
 }
 
 aterm *make_atermlist_to_aterm_appl(arena *ar,aterm *arg)
 {
-  return AFmakeAppl(ar,make_atermlist_to_aterm_prod(ar),
+  return AFmakeAppl(ar,term_atermlist_to_aterm_prod,
                     TmkList_n(ar,1,arg));
-}
-
-aterm *make_aterms_to_atermlist_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,5,TmakeSimple(ar, "ql(\"[\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "sort(\"ATerms\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "ql(\"]\")")),
-                        TmakeSimple(ar, "sort(\"ATermList\")"),
-                        TmakeSimple(ar, "no-attrs"));
 }
 
 aterm *make_aterms_to_atermlist_appl(arena *ar, aterm *args)
 {
-  return AFmakeAppl(ar,
-                    make_aterms_to_atermlist_prod(ar),
+  return AFmakeAppl(ar,term_aterms_to_atermlist_prod,
                     TmkList_n(ar,5,
-                              TmakeSimple(ar, "l(\"[\")"),
-                              TmakeSimple(ar, "w(\"\")"),
+                              term_square_open,
+                              term_ws,
                               args,
-                              TmakeSimple(ar, "w(\"\")"),
-                              TmakeSimple(ar, "l(\"]\")")));
-}
-
-aterm *make_empty_to_atermlist_prod(arena *ar)
-{
-  return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
-                        TmkList_n(ar,3,TmakeSimple(ar, "ql(\"[\")"),
-                                       TmakeSimple(ar, "w(\"\")"),
-                                       TmakeSimple(ar, "ql(\"]\")")),
-                        TmakeSimple(ar, "sort(\"ATermList\")"),
-                        TmakeSimple(ar, "no-attrs"));
-}
-
-aterm *make_empty_to_atermlist_appl(arena *ar)
-{
-  return AFmakeAppl(ar,
-                    make_empty_to_atermlist_prod(ar),
-                    TmkList_n(ar,3,TmakeSimple(ar, "l(\"[\")"),
-                                   TmakeSimple(ar, "w(\"\")"),
-                                   TmakeSimple(ar, "l(\"]\")")));
+                              term_ws,
+                              term_square_close));
 }
 
 aterm *make_lex(arena *ar,char *lsym)
 {
-  return AFmakeLex(ar,lsym,TmakeSimple(ar, "sort(\"Literal\")"));
+  return AFmakeLex(ar,lsym,term_sort_literal);
 }
 
 aterm *make_empty_abbreviations(arena *ar)
 {
   return make_afun_aterms_to_aterm_appl(ar,
-           make_abbreviations_appl(ar),
+           term_abbreviations_appl,
            make_aterm_to_aterms_appl(ar,
              make_atermlist_to_aterm_appl(ar,
-               make_empty_to_atermlist_appl(ar))));
+               term_empty_to_atermlist_appl)));
 }
 
 aterm *expand_asfix_ws(arena *ar, aterm *ws)
@@ -801,7 +740,7 @@ aterm *expand_asfix_literal(arena *ar, aterm *l)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_l_appl(ar),
+                                        term_l_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
@@ -815,7 +754,7 @@ aterm *expand_asfix_qliteral(arena *ar, aterm *ql)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_ql_appl(ar),
+                                        term_ql_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
@@ -829,7 +768,7 @@ aterm *expand_asfix_sep(arena *ar, aterm *s)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_sep_appl(ar),
+                                        term_sep_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
@@ -850,7 +789,7 @@ aterm *expand_asfix_iter(arena *ar, aterm *iter)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_literal(ar,l))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_iter_appl(ar),
+                                        term_iter_appl,
                                         args);
 }
 
@@ -881,7 +820,7 @@ aterm *expand_asfix_itersep(arena *ar, aterm *itersep)
                          make_aterm_to_aterms_appl(ar,
                            expand_asfix_literal(ar,l[2]))))))))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_itersep_appl(ar),
+                                        term_itersep_appl,
                                         args);
 }
 
@@ -899,7 +838,7 @@ aterm *expand_asfix_neg(arena *ar, aterm *neg)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_term(ar,term))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_neg_appl(ar),
+                                        term_neg_appl,
                                         args);
 }
 
@@ -913,7 +852,7 @@ aterm *expand_asfix_charclass(arena *ar, aterm *cc)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_charclass_appl(ar),
+                                        term_charclass_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
@@ -927,7 +866,7 @@ aterm *expand_asfix_id(arena *ar, aterm *id)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_id_appl(ar),
+                                        term_id_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
@@ -961,7 +900,7 @@ aterm *expand_asfix_idlist(arena *ar, aterm *idlist)
 
   assertp(Tmatch(idlist,"<list>",&ids));
   if(t_is_empty(ids))
-    return  make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return  make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -998,7 +937,7 @@ aterm *expand_asfix_attributes(arena *ar, aterm *attrlist)
   aterm *w[2],*l[2],*args;
 
   if(Tmatch(attrlist,"no-attrs")) {
-    return make_afun_to_aterm_appl(ar,make_noattrs_appl(ar));
+    return make_afun_to_aterm_appl(ar,term_noattrs_appl);
   }
   else {
     assertp(Tmatch(attrlist,"attrs(<term>,<term>,<list>,<term>,<term>)",
@@ -1016,7 +955,7 @@ aterm *expand_asfix_attributes(arena *ar, aterm *attrlist)
                      make_aterm_to_aterms_appl(ar,
                      expand_asfix_literal(ar,l[1]))))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_attrs_appl(ar),
+                                          term_attrs_appl,
                                           args);
   }
 }
@@ -1038,7 +977,7 @@ aterm *expand_asfix_appl(arena *ar, aterm *appl)
                make_aterm_to_aterms_appl(ar,
                  expand_asfix_argslist(ar,applargs))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                          make_appl_appl(ar),
+                                          term_appl_appl,
                                           args);
 }
 
@@ -1056,7 +995,7 @@ aterm *expand_asfix_list(arena *ar, aterm *list)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_argslist(ar,listargs))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                          make_list_appl(ar),
+                                          term_list_appl,
                                           args);
 }
 
@@ -1075,7 +1014,7 @@ aterm *expand_asfix_var(arena *ar, aterm *var)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_term(ar,t)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_var_appl(ar),
+                                        term_var_appl,
                                         args);
 }
 
@@ -1094,7 +1033,7 @@ aterm *expand_asfix_lex(arena *ar, aterm *lex)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_term(ar,t)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_lex_appl(ar),
+                                        term_lex_appl,
                                         args);
 }
 
@@ -1171,7 +1110,7 @@ aterm *expand_asfix_argslist(arena *ar, aterm *arglist)
 
   assertp(Tmatch(arglist,"<list>",&args));
   if(t_is_empty(args))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1191,7 +1130,7 @@ aterm *expand_asfix_prodskel(arena *ar, aterm *prodskel)
              make_aterm_to_aterms_appl(ar,
                expand_asfix_prod(ar,prod))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_prodskel_appl(ar),
+                                        term_prodskel_appl,
                                         args);
 }
 
@@ -1227,7 +1166,7 @@ aterm *expand_asfix_prodskellist(arena *ar, aterm *prodskellist)
 
   assertp(Tmatch(prodskellist,"<list>",&prodskels));
   if(t_is_empty(prodskels))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1246,7 +1185,7 @@ aterm *expand_asfix_chain(arena *ar, aterm *chain)
                make_aterm_to_aterms_appl(ar,
                  expand_asfix_prod(ar,prod))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_prodskel_appl(ar),
+                                          term_prodskel_appl,
                                           args);
   }
   else if(Tmatch(chain,"group(<term>,<term>,<term>,<term>,<term>)",
@@ -1262,7 +1201,7 @@ aterm *expand_asfix_chain(arena *ar, aterm *chain)
                    make_aterm_to_aterms_appl(ar, 
                      expand_asfix_literal(ar,l[1]))))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_group_appl(ar),
+                                          term_group_appl,
                                           args);
   }
   else {
@@ -1288,7 +1227,7 @@ aterm *expand_asfix_chain(arena *ar, aterm *chain)
                            make_aterm_to_aterms_appl(ar,
                              expand_asfix_literal(ar,l[3]))))))))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_agroup_appl(ar),
+                                          term_agroup_appl,
                                           args);
   }
 }
@@ -1325,7 +1264,7 @@ aterm *expand_asfix_chainlist(arena *ar, aterm *chainlist)
 
   assertp(Tmatch(chainlist,"<list>",&chains));
   if(t_is_empty(chains))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1338,13 +1277,13 @@ aterm *expand_asfix_prio(arena *ar, aterm *prio)
 
   if(Tmatch(prio,"incr-chain(<term>)",&chainlist)) {
     return make_afun_aterms_to_aterm_appl(ar,
-               make_incrchain_appl(ar),
+               term_incrchain_appl,
                expand_asfix_chainlist(ar,chainlist));
   }
   else {
     assertp(Tmatch(prio,"decr-chain(<term>)",&chainlist));
     return make_afun_aterms_to_aterm_appl(ar,
-               make_decrchain_appl(ar),
+               term_decrchain_appl,
                expand_asfix_chainlist(ar,chainlist));
   }
 }
@@ -1381,7 +1320,7 @@ aterm *expand_asfix_prioslist(arena *ar, aterm *priolist)
 
   assertp(Tmatch(priolist,"<list>",&prios));
   if(t_is_empty(prios))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1397,7 +1336,7 @@ aterm *expand_asfix_sort(arena *ar, aterm *sort)
   appl = make_afun_to_aterm_appl(ar,
              make_literal_to_afun_appl(ar,make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-             make_sort_appl(ar),make_aterm_to_aterms_appl(ar,appl));
+             term_sort_appl,make_aterm_to_aterms_appl(ar,appl));
 }
 
 aterm *expand_asfix_sorts(arena *ar, aterm *sorts)
@@ -1430,7 +1369,7 @@ aterm *expand_asfix_sortlist(arena *ar, aterm *sortlist)
 
   assertp(Tmatch(sortlist,"<list>",&sorts));
   if(t_is_empty(sorts))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1468,9 +1407,7 @@ aterm *expand_asfix_prod(arena *ar, aterm *prod)
                          expand_asfix_ws(ar,w[3]),
                            make_aterm_to_aterms_appl(ar,
                              expand_asfix_attributes(ar,attrs))))))))));
-  result = make_afun_aterms_to_aterm_appl(ar,
-                                        make_prod_appl(ar),
-                                        args);
+  result = make_afun_aterms_to_aterm_appl(ar, term_prod_appl, args);
 
   enter_prod(prod, result);
   return result;
@@ -1506,7 +1443,7 @@ aterm *expand_asfix_prodlist(arena *ar, aterm *prodlist)
 
   assertp(Tmatch(prodlist,"<list>",&prods));
   if(t_is_empty(prods))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1527,7 +1464,7 @@ aterm *expand_asfix_subsection(arena *ar, aterm *subsection)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_prodlist(ar,prods))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_lexicalsyntax_appl(ar),
+                                          term_lexicalsyntax_appl,
                                           args);
   }
   else if(Tmatch(subsection, "context-free-syntax(<term>,<term>,<term>)",
@@ -1539,7 +1476,7 @@ aterm *expand_asfix_subsection(arena *ar, aterm *subsection)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_prodlist(ar,prods))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_contextfreesyntax_appl(ar),
+                                          term_contextfreesyntax_appl,
                                           args);
   }
   else if(Tmatch(subsection, "variables(<term>,<term>,<term>)",
@@ -1551,7 +1488,7 @@ aterm *expand_asfix_subsection(arena *ar, aterm *subsection)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_prodlist(ar,prods))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_variables_appl(ar),
+                                          term_variables_appl,
                                           args);
   }
   else if(Tmatch(subsection, "sorts(<term>,<term>,<term>)",
@@ -1563,7 +1500,7 @@ aterm *expand_asfix_subsection(arena *ar, aterm *subsection)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_sortlist(ar,sorts))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_sorts_appl(ar),
+                                          term_sorts_appl,
                                           args);
   }
   else {
@@ -1576,7 +1513,7 @@ aterm *expand_asfix_subsection(arena *ar, aterm *subsection)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_prioslist(ar,prios))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_priorities_appl(ar),
+                                          term_priorities_appl,
                                           args);
   }
 }
@@ -1611,7 +1548,7 @@ aterm *expand_asfix_subsectionlist(arena *ar, aterm *subsectionlist)
 
   assertp(Tmatch(subsectionlist,"<list>",&subsections));
   if(t_is_empty(subsections))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else 
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1632,7 +1569,7 @@ aterm *expand_asfix_section(arena *ar, aterm *section)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_subsectionlist(ar,subsections))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_exports_appl(ar),
+                                          term_exports_appl,
                                           args);
   }
   else if(Tmatch(section, "imports(<term>,<term>,<term>)",
@@ -1644,7 +1581,7 @@ aterm *expand_asfix_section(arena *ar, aterm *section)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_idlist(ar,ids))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_imports_appl(ar),
+                                          term_imports_appl,
                                           args);
   }
   else {
@@ -1657,7 +1594,7 @@ aterm *expand_asfix_section(arena *ar, aterm *section)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_subsectionlist(ar,subsections))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_imports_appl(ar),
+                                          term_hiddens_appl,
                                           args);
   }
 }
@@ -1692,7 +1629,7 @@ aterm *expand_asfix_sectionlist(arena *ar, aterm *sectionlist)
 
   assertp(Tmatch(sectionlist,"<list>",&sections));
   if(t_is_empty(sections))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else 
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1717,7 +1654,7 @@ aterm *expand_asfix_cond(arena *ar, aterm *cond)
                  make_aterm_to_aterms_appl(ar,
                    expand_asfix_term(ar,rhs))))));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_condition_appl(ar),
+                                        term_condition_appl,
                                         args);
 }
 
@@ -1753,7 +1690,7 @@ aterm *expand_asfix_condslist(arena *ar, aterm *condslist)
 
   assertp(Tmatch(condslist,"<list>",&conds));
   if(t_is_empty(conds))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1789,7 +1726,7 @@ aterm *expand_asfix_equation(arena *ar, aterm *equation)
                            make_aterm_to_aterms_appl(&local,
                              expand_asfix_term(&local,rhs))))))))));
     res = make_afun_aterms_to_aterm_appl(&local,
-                                         make_ceqequ_appl(&local),
+                                         term_ceqequ_appl,
                                          args);
   }
   else if(Tmatch(equation,"ceq-impl(<term>,<term>,<term>,<term>,<term>," \
@@ -1825,7 +1762,7 @@ aterm *expand_asfix_equation(arena *ar, aterm *equation)
                                    make_aterm_to_aterms_appl(&local,
                                      expand_asfix_term(&local,rhs))))))))))))));
     res = make_afun_aterms_to_aterm_appl(&local,
-                                         make_ceqimpl_appl(&local),
+                                         term_ceqimpl_appl,
                                          args);
   }
   else {
@@ -1862,7 +1799,7 @@ aterm *expand_asfix_equation(arena *ar, aterm *equation)
                                    make_aterm_to_aterms_appl(&local,
                                      expand_asfix_condslist(&local,conds))))))))))))));
     res = make_afun_aterms_to_aterm_appl(&local,
-                                         make_ceqwhen_appl(&local),
+                                         term_ceqwhen_appl,
                                          args);
   }
   Tadd2Arena(ar,res);
@@ -1900,7 +1837,7 @@ aterm *expand_asfix_equationlist(arena *ar, aterm *equationlist)
 
   assertp(Tmatch(equationlist,"<list>",&equations));
   if(t_is_empty(equations))
-    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
+    return make_atermlist_to_aterm_appl(ar,term_empty_to_atermlist_appl);
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1913,7 +1850,7 @@ aterm *expand_asfix_equationssection(arena *ar, aterm *equations)
   aterm *args;
 
   if(Tmatch(equations,"no-equations"))
-    return make_afun_to_aterm_appl(ar,make_noequations_appl(ar));
+    return make_afun_to_aterm_appl(ar,term_noequations_appl);
   else {
     assertp(Tmatch(equations,"equations(<term>,<term>,<term>)",
                    &l,&w,&eqs));
@@ -1924,7 +1861,7 @@ aterm *expand_asfix_equationssection(arena *ar, aterm *equations)
                make_aterm_to_aterms_appl(ar,
                  expand_asfix_equationlist(ar,eqs))));
     return make_afun_aterms_to_aterm_appl(ar,
-                                          make_equations_appl(ar),
+                                          term_equations_appl,
                                           args);
   }
 }
@@ -1956,21 +1893,19 @@ aterm *expand_asfix_module(arena *ar, aterm *mod)
                          expand_asfix_ws(ar,w[3]),
                            make_aterm_to_aterms_appl(ar,
                              make_empty_abbreviations(ar))))))))));
-  return make_afun_aterms_to_aterm_appl(ar,
-                                        make_module_appl(ar),
-                                        args);
+  return make_afun_aterms_to_aterm_appl(ar, term_module_appl, args);
 }
 
 aterm *make_term(arena *ar,char *name,aterm *mod)
 {
   aterm *esp, *aname, *idname, *fname, *osym, *csym, *cprod, *cappl;
 
-  esp = TmakeSimple(ar, "w(\"\")");
+  esp = term_ws;
   aname  = Tmake(ar,"l(<str>)",name);
   idname = TmakeSimple(ar,"id(\"AsFix2Epic\")");
   fname = TmakeSimple(ar,"l(\"asfix2epic\")");
-  osym = TmakeSimple(ar,"l(\"(\")");
-  csym = TmakeSimple(ar,"l(\")\")");
+  osym = term_open;
+  csym = term_close;
   cprod = AFmakeProd(ar,idname,
                      TmkList_n(ar,7,fname,
                                     esp,
