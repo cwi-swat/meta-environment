@@ -59,6 +59,18 @@ context-free priorities
   Bool "&" Bool -> Bool >
   Bool "|" Bool -> Bool 
 </pre>
+<li>The variable names in the variable section must be quoted.
+<pre>
+variables 
+  Bool [0-9']* -> BOOL
+</pre>
+    becomes
+
+<pre>
+variables 
+  "Bool" [0-9\']* -> BOOL
+</pre>
+
        </ul>
 
     <h2>Lexical Disambiguation</h2>
@@ -181,7 +193,7 @@ This forces the parser not to stop after the "if" but to go on.
     <address><a href="mailto:Mark.van.den.Brand@cwi.nl">Mark van den Brand</a></address>
 <!-- Created: Mon Jun 21 11:28:10 MET DST 1999 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 21 16:49:26 MET DST 1999
+Last modified: Wed Aug  4 11:48:17 MET DST 1999
 <!-- hhmts end -->
   </body>
 </html>
