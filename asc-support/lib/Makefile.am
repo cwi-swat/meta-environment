@@ -6,29 +6,33 @@ BUILTIN_NAMES_ARITY=\
         set-anno_3\
 	get-anno_2\
 	get-term-anno_2 \
-	read-term-from-file_1 \
-	write-term-to-file_2\
 	shell_1 \
 	term-compare_2 \
 	lift-to-tree_1 \
 	lower-from-tree_1 \
 	lift-to-term_1 \
-	unparse_1 \
-	implode_1 
+	implode_1\
+	parse-file_1 \
+	parse-bytes_1 \
+	unparse-to-bytes_1 \
+	unparse-to-file_2 \
+	read-term-from-file_1 \
+	write-term-to-file_2\
+	read-bytes-from-file_1\
+	write-bytes-to-file_2
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
 	builtin-common.h \
 	builtin-annos.c \
-	builtin-fileio.c \
 	builtin-shell.c \
 	builtin-term-compare.c \
 	builtin-lifting.c\
-	builtin-unparse.c\
-	builtin-implode.c
+	builtin-implode.c \
+	builtin-io.c
 
 #The names of the modules that need to be included in a generated lib
-LIBRARY_MODULES=basic/Booleans utilities/Measure
+LIBRARY_MODULES=basic/Booleans utilities/Measure utilities/ParseResults
 
 lib_LIBRARIES = libasc-support-me.a 
 
@@ -48,6 +52,7 @@ libasc_support_me_a_SOURCES = \
 	asc-prod2str.h  \
 	asc-muasf2pt.c \
 	asc-muasf2pt.h \
+	asc-parsetable.c\
 	builtin-forward.c\
 	Library.c\
 	Library.h\
@@ -60,6 +65,7 @@ libasc_support_me_a_SOURCES = \
 INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
+	-I$(SGLR)/include \
 	-I$(ATERM)/include 
 
 TESTS=builtin-link-test
@@ -75,8 +81,9 @@ check_PROGRAMS=builtin-link-test
 builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD=\
 	-L. -lasc-support-me\
+	-L${SGLR}/lib -lsglr \
 	-L${ASF_SUPPORT}/lib -lASFME \
-	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
+	-L${PT_SUPPORT}/lib -lmept -lPTMEPT -lconversion -lasfix2 \
 	-L${TOOLBUSLIB}/lib -lATB  \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}

@@ -6,11 +6,8 @@
 static CO_Boolean shell(PT_Tree cmd_arg)
 {
   char *cmdline = PT_yieldTree(cmd_arg);
-  int result;
 
-  cmdline[strlen(cmdline) - 1] = '\0';
-
-  result = system(cmdline + 1);
+  result = system(cmdline);
 
   return result != 0 ?
     CO_makeBooleanConstant(CO_makeBoolConTrue()) :

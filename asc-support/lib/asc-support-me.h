@@ -299,5 +299,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 /*}}}  */
 
 ATerm innermost(PT_Tree tree);
+ATerm getParseTable();
+void setParseTable(ATerm tbl);
 
 #endif  /* ASC_SUPPORT_H */

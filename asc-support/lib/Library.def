@@ -37,3 +37,24 @@ context-free syntax
   "less"     -> Measure {cons("less")}
   "greater"  -> Measure {cons("greater")}
   "equal"    -> Measure {cons("equal")}
+module utilities/ParseResults[Sort]
+
+exports 
+
+sorts ParseResult 
+
+context-free syntax
+
+  "parse-tree" "(" left-layout:Bytes    c1:"," 
+                   tree:Sort            c2:"," 
+                   right-layout:Bytes   c3:","
+                   amb-cnt:NatCon
+               ")"                   -> ParseResult {cons("tree")}
+
+  "parse-error" "(" line:NatCon        c1:"," 
+                    column:NatCon      c2:"," 
+                    offset:NatCon 
+                ")"                  -> ParseResult {cons("error")}
+
+  "parse-table-unavailable"          -> ParseResult {cons("no-parsetable")}
+  "parse-result-invalid"             -> ParseResult {cons("no-valid-result")}

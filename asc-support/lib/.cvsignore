@@ -5,3 +5,6 @@ asc-builtins.h
 builtin-forward.c
 builtin-link-test
 builtin-link-test.c
+Library.adt
+Library.dict
+Library.pro
