@@ -1,3 +1,8 @@
+/*
+  $Id$
+ */
+
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -104,7 +109,7 @@ char *find_newest_in_path(char *name)
   char   thisname[PATH_LEN];
   static char   newestnamebuf[PATH_LEN];
   char*  newestname = NULL;
-  time_t newesttime = -1L, thistime;
+  time_t  newesttime = -1L, thistime;
 
   for(i=0; i<nr_paths; i++) {
     if(path_length_exceeded(strlen(paths[i])+strlen(name)+1, paths[i], name))
@@ -116,6 +121,9 @@ char *find_newest_in_path(char *name)
       newestname = newestnamebuf;
     }
   }
+  if(newestname)
+    ATfprintf(stderr, "Found %s\n", newestname);
+
   return newestname;
 }
 
@@ -193,8 +201,8 @@ ATerm locate_parse_table_file(int cid, char *name)
 
 ATerm open_old_asfix_file(int cid, char *name)
 {
-  ATerm t;
-  char  *fullname,namext[PATH_LEN];
+  ATerm  t;
+  char  *fullname, namext[PATH_LEN];
 
   if (asfix_status == 2) {
     return open_error(name);
@@ -333,7 +341,10 @@ void read_conf(char *cfg)
   while(fgets(paths[nr_paths], PATH_LEN, fd)) {
     if(*paths[nr_paths]) {
       if(*paths[nr_paths] != '#'){
-        paths[nr_paths][strlen(paths[nr_paths])-1] = '\0';
+        int len = strlen(paths[nr_paths])-1;
+
+        while(isspace(paths[nr_paths][len]))
+          paths[nr_paths][len--] = '\0';
         nr_paths++;
       } else
         *paths[nr_paths] = '\0';
