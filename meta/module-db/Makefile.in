@@ -77,7 +77,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 %.tif.c: %.tifs
-	${prefix}/bin/tifstoc -tool $* $<
+	$(ATERM)/bin/tifstoc -tool $* $<
 
 %.tifs: %.idef
 	${top_srcdir}/utils/idef2tif $<

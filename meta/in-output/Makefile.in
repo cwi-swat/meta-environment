@@ -78,10 +78,10 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 %.tif.c: %.tifs
-	${prefix}/bin/tifstoc -tool $* $<
+	$(ATERM)/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	${prefix}/bin/toolbus -gentifs $<
+	$(TOOLBUS)/bin/toolbus -gentifs $<
 
 in-output: depend ${OBJ} ${LIBFILES} 
 	$(CC) -o $@ ${OBJ} $(LIBFILES) $(LIBS)
