@@ -1,0 +1,100 @@
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(toolbuslib, 0.1)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Which compiler to use?
+AC_REQUIRE([AC_PROG_CC])
+AC_PROG_CC
+
+dnl Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+AC_PROG_RANLIB
+AR=ar
+AC_SUBST(AR)
+
+AC_AIX
+
+AC_SET_MAKE
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl Which additional adapters to build?
+
+
+AC_HEADER_CHECK(arpa/inet.h,:, AC_MSG_ERROR("*** no arpa/inet.h"))
+AC_HEADER_CHECK(assert.h,:, AC_MSG_ERROR("*** no assert.h"))
+AC_HEADER_CHECK(ctype.h,:, AC_MSG_ERROR("*** no ctype.h"))
+AC_HEADER_CHECK(errno.h,:, AC_MSG_ERROR("*** no errno.h"))
+AC_HEADER_CHECK(netdb.h,:, AC_MSG_ERROR("*** no netdb.h"))
+AC_HEADER_CHECK(netinet/in.h,:, AC_MSG_ERROR("*** no netinet/in.h"))
+
+dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
+dnl you need to include standards.h aswell.
+AC_MSG_CHECKING("for netinet/tcp.h")
+AC_TRY_CPP(
+[#ifdef sgi
+#include <standards.h>
+#endif
+#include <netinet/tcp.h>
+],AC_MSG_RESULT("yes"), AC_MSG_ERROR("*** no netinet/tcp.h"))
+
+AC_HEADER_CHECK(stdarg.h,:, AC_MSG_ERROR("*** no stdarg.h"))
+AC_HEADER_CHECK(stdio.h,:, AC_MSG_ERROR("*** no stdio.h"))
+AC_HEADER_CHECK(stdlib.h,:, AC_MSG_ERROR("*** no stdlib.h"))
+AC_HEADER_CHECK(string.h,:, AC_MSG_ERROR("*** no string.h"))
+
+AC_HEADER_CHECK(fcntl.h,:, AC_MSG_ERROR("*** no fcntl.h"))
+AC_HEADER_CHECK(sys/ioctl.h,:, AC_MSG_ERROR("*** no sys/ioctl.h"))
+AC_HEADER_CHECK(sys/param.h,:, AC_MSG_ERROR("*** no sys/param.h"))
+AC_HEADER_CHECK(sys/socket.h,:, AC_MSG_ERROR("*** no sys/socket.h"))
+AC_HEADER_CHECK(sys/stat.h,:, AC_MSG_ERROR("*** no sys/stat.h"))
+AC_HEADER_CHECK(sys/time.h,:, AC_MSG_ERROR("*** no sys/time.h"))
+AC_HEADER_CHECK(sys/types.h,:, AC_MSG_ERROR("*** no sys/types.h"))
+AC_HEADER_CHECK(sys/un.h,:, AC_MSG_ERROR("*** no sys/un.h"))
+AC_HEADER_CHECK(unistd.h,:, AC_MSG_ERROR("*** no unistd.h"))
+AC_HEADER_CHECK(math.h,:, AC_MSG_ERROR("*** no math.h"))
+
+AC_HAVE_FUNCS(strerror)
+AC_HAVE_FUNCS(strdup)
+
+dnl Find out which libraries we need
+
+SOCKET_FOUND=no
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsun"])
+if test ${SOCKET_FOUND} = no; then
+   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsocket"])
+   if test ${SOCKET_FOUND} = no; then
+      AC_CHECK_LIB(bsd,
+                   socket,
+                   [SOCKET_FOUND=yes;LIBS="$LIBS -lbsd";DEFS="$DEFS -D_BSD=43"])
+   fi
+fi
+
+GETHOSTNAME_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GETHOSTNAME_FOUND=yes])
+if test ${GETHOSTNAME_FOUND} = no; then
+   AC_CHECK_LIB(nsl,gethostname,[GETHOSTNAME_FOUND=yes;LIBS="$LIBS -lnsl"])
+fi
+
+# Check for math lib (-lm), use arbitrary function (atof) from
+# C library, since using, e.g., sin leads to compilation errors
+AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
+
+dnl add outputfiles as argument below
+AC_OUTPUT(
+  Makefile
+  libtb/Makefile
+  aterm/Makefile
+) 

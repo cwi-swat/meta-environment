@@ -1,0 +1,6 @@
+$Id$
+
+2001-11-25 Merijn de Jonge <mdejonge@cwi.nl>
+   * Released version 0.1
+   * Created toolbuslib package from the subdirs aterm and libtb of the toolbus
+     source tree

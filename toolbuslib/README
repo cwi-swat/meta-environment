@@ -1,0 +1,21 @@
+This package contains C libraries and utilities for building ToolBus client
+applications.
+
+See 
+  http://www.cwi.nl/projects/metaEnv/toolbus 
+
+for information about the ToolBus coordination architecture.
+
+
+Installations
+=============
+
+1) Run ./configure --prefix=installation-prefix
+2) Run make
+3) Run make install
+
+
+Developers
+==========
+Please read the file DEVELOPERS-INFO for information on building
+distributions of the toolbuslib package.
