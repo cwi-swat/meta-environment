@@ -9,6 +9,7 @@ Mon Jan 26 11:17:58 CET 2004 <jong@cwi.nl>
    removed hardwired path /home/markvdb/sdf-apigen/bin/adt-to-c
  * meta.pkg:
    upgrade dependency on graph-support to 0.2
+   upgrade dependency on asc-support to 1.8
 
 2004/01/20 (markvdb@cwi.nl)
  * First version of clickable parse errors.
