@@ -1,4 +1,18 @@
 
+2002/11/14 (vinju@loria.fr)
+ * CHARLIST implementation brought up-to-date with latest changes in
+   adt-to-java
+
+2002/11/13 (vinju@loria.fr)
+ * CHARLIST implementation is put in output directory instead of
+   output/package
+
+2002/11/04 (vinju@loria.fr)
+ * Bumped to 1.5beta
+ * CHARLIST is added to the ADT automatically
+ * Only CHARLIST_String is overwritten in order to make the
+   translation: " " <-> [10] at toTerm and fromTerm time.
+
 2002/11/04 (vinju@loria.fr)
  * Added support for lexicals and layout to sdf2-to-adt. They are no longer
    user defined 'bottom-sorts' in a generated SDF2 api. Instead there is

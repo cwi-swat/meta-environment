@@ -177,11 +177,11 @@ ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
              -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} 
 fi
 
-info " overwriting CHARLIST_String.java"
+info " overwriting CHARLIST_StringImpl.java"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
   info " generating API for bottom sorts"
-  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_String.java.template \
-     > ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
+  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_StringImpl.java.template \
+     > ${OUTPUT}/CHARLIST_StringImpl.java
 fi
 
 # }}}
