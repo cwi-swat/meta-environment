@@ -122,7 +122,7 @@ in
     rec-msg(unavailable) .
     snd-msg(get-eqs-text(ModuleName)) .
     (
-      rec-msg(eqs-text(ModuleName, Text?))
+      rec-msg(eqs-text(ModuleName, Text?)) 
     +
       rec-msg(no-eqs-text(ModuleName)) .
       snd-msg(create-new-equations(ModuleName))  .
@@ -152,7 +152,7 @@ in
     rec-msg(io-file-contents(Text?))
     +
     rec-msg(io-error-reading(ErrorMessage?)) 
-  ).
+  ) .
   CreateEditor(term-editor, ModuleName, FileName, Text, Tree)
 endlet
 

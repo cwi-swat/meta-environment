@@ -17,12 +17,8 @@ in
   (
     %% Handle request to create a new module.
     rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
-    printf("Path = %s\n", Path) .
-    printf("ModuleName = %s\n", ModuleName) .
-    printf("Type = %t\n", Type) .
     snd-msg(get-search-paths) .
     rec-msg(search-paths(SearchPaths?)) .
-    printf("Paths = %t\n", SearchPaths) .
     snd-msg(sm-get-new-module-name(SearchPaths, Path, ModuleName)) .
     (
       rec-msg(sm-new-module-name(Path?, ModuleName?)) .
@@ -78,7 +74,7 @@ in
       (
         rec-msg(io-file-exists) .
 	snd-msg(io-read-file(FileName)) .
-	rec-msg(io-file-contents(text(Text?))) .
+	rec-msg(io-file-contents(Text?)) .
 	snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
 	rec-msg(eqs-added) .
 	snd-msg(new-equations-created)
