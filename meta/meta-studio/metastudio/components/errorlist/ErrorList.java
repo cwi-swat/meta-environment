@@ -104,7 +104,9 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 		// TODO: find a better solution for this, we don't want this component
 		// to know what type of parent it has!
 		JTabbedPane parent = (JTabbedPane) getParent();
-		parent.setSelectedComponent(this);
+		if (parent != null) {
+			parent.setSelectedComponent(this);
+		}	
 	}
 
 	public void showFeedbackSummary(ATerm t0) {
