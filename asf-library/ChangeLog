@@ -7,6 +7,7 @@
   * Promoted cpp grammar from sandbox to languages
   * Changed module names of ATerm syntax to correspond better to the 
     style guide
+  * Added lifting operators in utilities/Lifting (reflection)
 
 2003/09/22 (storm@cwi.nl)
   * Added grammar for the C Preprocessor to the Sandbox.

@@ -1,4 +1,4 @@
-module Lifting[Sort]
+module utilities/Lifting[Sort]
 
 imports languages/asfix/syntax/Tree
 imports languages/aterm/syntax/ATerms
