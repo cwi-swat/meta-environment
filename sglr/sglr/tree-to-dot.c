@@ -236,7 +236,7 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
       }
     }
     SG_ApplNode(dot, t, fun, n);
-  } else if (ATmatch(t, "amb(<list>)", &args)) {
+  } else if (ATmatch(t, "amb([<list>])", &args)) {
       if(!ATisEmpty(args)) SG_AmbNode(dot, t, ATgetFirst(args));
       while (!ATisEmpty(args)) {
         arg = ATgetFirst(args);
