@@ -195,7 +195,6 @@ ATerm get_module_path(int cid, char *path, char *id)
 
     /* Eat up as much overlap as possible */
     for(; p >= 0 && i >= 0; p--, i--) {
-      ATwarning("%d == %d ??\n", path[p], id[i]);
       if (path[p] != id[i]) {
 	break;
       }
