@@ -1,7 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(meta, 1.2)
-AC_PREREQ(2.13)
+AC_PREREQ(2.53)
 
 dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ./config"
@@ -127,7 +128,7 @@ if test "x${JAVA}" = "x"; then
 fi
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
@@ -158,8 +159,7 @@ dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
 
 dnl Which files need updating?
-AC_OUTPUT(
-   Makefile
+AC_CONFIG_FILES([Makefile
    src/Makefile
    config/Makefile
    meta-studio/Makefile
@@ -191,4 +191,5 @@ AC_OUTPUT(
    configuration-manager/src/Makefile
    configuration-manager/action-checker/Makefile
    configuration-manager/action-checker/src/Makefile
-)
+])
+AC_OUTPUT
