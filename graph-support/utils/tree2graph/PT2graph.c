@@ -22,6 +22,9 @@ static ATbool literals_on;
 static long   unique_key;
 static size_t size;
 
+static int nr_of_nodes;
+
+#define MAX_NR_OF_NODES 3000
 #define  INITIAL_SIZE 4096
 #define  STEP_SIZE    2048
 #define XOR(p,q) ((!p && q) || (!q && p))
@@ -40,6 +43,56 @@ static long makeNodeId(PT_Tree tree)
 
 /*}}}  */
 
+/*{{{  static Graph printOverFlowNode(Graph graph, int parent, int node) */
+
+static Graph printOverFlowNode(Graph graph, 
+                               int parentNr, 
+                               int nodeNr)
+{
+  char str[BUFSIZ];
+  Attribute nameAttr;
+  AttributeList attrList = makeAttributeListEmpty();
+  Node node;
+  NodeList nodes;
+  Edge edge;
+  EdgeList edges;
+  Attribute shapeAttr;
+  NodeId nodeId;
+  NodeId parentId;
+
+  sprintf(str, "N%d", nodeNr); 
+  nodeId = makeNodeIdDefault(str);
+
+  sprintf(str, "N%d", parentNr);
+  parentId = makeNodeIdDefault(str);
+   
+  sprintf(str, "Graph contains more than %d nodes!", MAX_NR_OF_NODES);
+  nameAttr = makeAttributeLabel(str);
+  attrList = makeAttributeListMulti(nameAttr, attrList);
+  
+  shapeAttr = makeAttributeShape(makeShapeEllipse());
+  attrList = makeAttributeListMulti(shapeAttr, attrList);
+
+  node = makeNodeDefault(nodeId, attrList);
+
+  nodes = getGraphNodes(graph);
+  nodes = makeNodeListMulti(node, nodes);
+  graph = setGraphNodes(graph, nodes);
+
+  if (parentNr != 0) {
+    Attribute dir = makeAttributeDirection(makeDirectionNone());
+    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty()); 
+    edge = makeEdgeDefault(parentId, nodeId, l);
+
+    edges = getGraphEdges(graph);
+    edges = makeEdgeListMulti(edge, edges);
+    graph = setGraphEdges(graph, edges);
+  }
+
+  return graph;
+}
+
+/*}}}  */
 /*{{{  static Graph printNode(Graph graph, int parent, int node, char *contents) */
 
 static Graph printNode(char *name,
@@ -158,6 +211,14 @@ static Graph treeToGraph(char *name, Graph graph, PT_Tree tree, int parent)
   long key = makeNodeId(tree);
   ATerm posInfoArea = PT_getTreePosInfoArea(tree);
 
+  nr_of_nodes++;
+  if (nr_of_nodes == MAX_NR_OF_NODES) {
+    return printOverFlowNode(graph, parent, key);
+  }
+  if (nr_of_nodes > MAX_NR_OF_NODES) {
+    return graph;
+  }
+
   if (PT_isTreeChar(tree)) {
     /*{{{  handle characters */
 
@@ -259,6 +320,7 @@ Graph PT_printTreeToGraph(char *name, PT_Tree tree, ATbool characters,
   unique_key = 0;
   size = INITIAL_SIZE;
   
+  nr_of_nodes = 0;
 
   graph = treeToGraph(name, graph, tree, 0);
 
