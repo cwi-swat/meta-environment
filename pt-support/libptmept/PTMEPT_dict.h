@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Jan  9 20:29:35 2003
+ * Generated at Thu Jan  9 23:15:47 2003
  */
 
 #ifndef __PTMEPT_dict_H
@@ -104,29 +104,6 @@ extern AFun PTPT_afun93;
 extern AFun PTPT_afun94;
 extern AFun PTPT_afun95;
 extern AFun PTPT_afun96;
-extern AFun PTPT_afun97;
-extern AFun PTPT_afun98;
-extern AFun PTPT_afun99;
-extern AFun PTPT_afun100;
-extern AFun PTPT_afun101;
-extern AFun PTPT_afun102;
-extern AFun PTPT_afun103;
-extern AFun PTPT_afun104;
-extern AFun PTPT_afun105;
-extern AFun PTPT_afun106;
-extern AFun PTPT_afun107;
-extern AFun PTPT_afun108;
-extern AFun PTPT_afun109;
-extern AFun PTPT_afun110;
-extern AFun PTPT_afun111;
-extern AFun PTPT_afun112;
-extern AFun PTPT_afun113;
-extern AFun PTPT_afun114;
-extern AFun PTPT_afun115;
-extern AFun PTPT_afun116;
-extern AFun PTPT_afun117;
-extern AFun PTPT_afun118;
-extern AFun PTPT_afun119;
 
 extern ATerm PTPT_patternOptLayoutPresent;
 extern ATerm PTPT_patternOptLayoutAbsent;
