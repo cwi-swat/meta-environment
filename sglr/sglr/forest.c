@@ -36,6 +36,8 @@ int SGnrAmb(int mode)
       return nr_ambiguities = 0;
     case SG_NRAMB_INC:
       return ++nr_ambiguities;
+    case SG_NRAMB_DEC:
+      return --nr_ambiguities;
     default:
       return nr_ambiguities;  /* silence the compiler */
   }

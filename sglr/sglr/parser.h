@@ -7,7 +7,7 @@
 
 #include "parse-table.h"
 
-ATerm SG_Parse(parse_table *lr, int(*getchar)(void));
+ATerm SG_Parse(parse_table *pt, char *sort, int(*getchar)(void));
 
 void SG_ZeroStackHist(void);
 void SG_AddStackHist(stack *parent, stack *kid);

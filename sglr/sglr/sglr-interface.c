@@ -161,14 +161,14 @@ int SG_GetCharFromString(void)
   This is done now by making a duplicate of it, which is not efficient
   and clean.
 */
-ATerm SGparseString(int conn, char *L, char *S)
+ATerm SGparseString(int conn, char *L, char *G, char *S)
 {
   ATerm ret;
 
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), SG_GetCharFromString);
+  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G, SG_GetCharFromString);
   return ATmake("snd-value(<term>)", ret ? ret : (ATerm) ATempty);
 }
 
@@ -192,7 +192,7 @@ int SG_GetChar(void)
   If no filename is specified (|FN| is |""|), standard input
   is used.
 */
-ATerm SGparseFile(char *prgname, int conn, char *L, char *FN)
+ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
 {
   ATerm ret;
 
@@ -200,7 +200,7 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *FN)
   SG_inputFile = SGopenFile(prgname, NULL, FN);
   if (SG_VERBOSE)
     ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
-  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), SG_GetChar);
+  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G, SG_GetChar);
   SGcloseFile(SG_inputFile);
   return ret ? ret : (ATerm) ATempty;
 }
@@ -243,9 +243,10 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
     file, writes the parse tree to the output file and returns it.
  */
 
-ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *infil, char *outfil)
+ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
+                            char *infil, char *outfil)
 {
   if(!SG_LookupParseTable(ptblfil, ATtrue))
     SGopenLanguage(prg, 0, ptblfil, ptblfil);
-  return SGtermToFile(prg, SGparseFile(prg, 0, ptblfil, infil), outfil);
+  return SGtermToFile(prg, SGparseFile(prg, 0, ptblfil, sort, infil), outfil);
 }

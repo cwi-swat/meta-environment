@@ -10,16 +10,16 @@
     Externally available functions
  */
 
-ATerm SGparseFileUsingTable(char *prg, char *tbl, char *in, char *out);
+ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort, char *in, char *out);
 
 ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN);
 FILE *SGopenFile(char *prgname, char *std_error, char *FN);
 void  SGcloseFile(FILE *fd);
 
-ATerm SGparseFile(char *prgname, int conn, char *L, char *FN);
-ATerm SGparseString(int conn, char *L, char *S);
+ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN);
+ATerm SGparseString(int conn, char *L, char *G, char *S);
 
-enum SG_NrAmbKind {SG_NRAMB_ASK, SG_NRAMB_ZERO, SG_NRAMB_INC};
+enum SG_NrAmbKind {SG_NRAMB_ASK, SG_NRAMB_ZERO, SG_NRAMB_INC, SG_NRAMB_DEC};
 
 int  SGnrAmb(int mode);
 

@@ -179,7 +179,7 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
   ATermList newsons = NULL;
 
   if (SG_DEBUG)
-    ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %d)\n",
+    ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %xd)\n",
               SG_ST_STATE(st), i, link_seen, (int) sons);
 
   if (st == NULL) {
@@ -222,7 +222,8 @@ void  SG_DoReductions(stack*, action);
 void  SG_Reducer(stack *, state, label, ATermList, ATbool, stack *);
 void  SG_DoLimitedReductions(stack*, action, st_link*);
 void  SG_Shifter(void);
-ATerm  SG_Result(void);
+ATerm SG_Prune(ATerm t, char *sort);
+ATerm SG_Result(char *sort);
 
 void  SG_ParserPreparation(void)
 {
@@ -257,7 +258,7 @@ void  SG_ParserCleanup(void)
    message depending on the status.
 
 */
-ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
+ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
 {
   ATerm result;
 
@@ -282,7 +283,7 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
   if(SG_SHOWSTACK)
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), text_length);
 
-  result = SG_Result();
+  result = SG_Result(sort);
   ATprotect(&result);
   SG_ParserCleanup();
   ATunprotect(&result);
@@ -301,22 +302,77 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
   term is returned. A distinction is made between an error at end of
   file an error in the middle of the file.
 */
-ATerm SG_Result(void)
+
+ATerm SG_Prune(ATerm forest, char *desiredsort)
+{
+  /*  Prune the forest  */
+  ATermList trees, bonsai = ATempty;
+  ATerm     tree, prod;
+  char      *sort;
+  ATbool    AmbStart;
+
+  if(!(AmbStart = ATmatch(forest, "amb(<list>)", &trees)))
+    trees = ATmakeList1(forest);
+
+  for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
+    tree = ATgetFirst(trees);
+    if(ATmatch(tree, "appl(<term>,<list>)", &prod, NULL)
+    && ATmatch(prod, "prod([<term>,cf(sort(<str>)),<term>],sort(\"<START>\"),<term>)",
+               NULL, &sort, NULL, NULL)
+      ) {
+      if(!strcmp(desiredsort, sort))
+        bonsai = ATinsert(bonsai, tree);
+    }
+  }
+  if(!ATisEmpty(bonsai)) {
+    if(AmbStart) {
+      if(ATgetLength(bonsai) > 1) {
+        return ATmake("amb(<list>)", bonsai);
+      } else {
+        SGnrAmb(SG_NRAMB_DEC);
+        return ATgetFirst(bonsai);
+      }
+    } else {
+       return ATgetFirst(bonsai);
+    }
+  } else {
+    if(AmbStart)
+      SGnrAmb(SG_NRAMB_ZERO);
+      return NULL;
+  }
+}
+
+ATerm SG_Result(char *sort)
 {
   if (accepting_stack != NULL) {
-    ATerm yielded;
+    ATerm forest;
+
+    if(sort != NULL || SGnrAmb(SG_NRAMB_ASK) != 0) {
+      forest = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
+    } else {
+      forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
+    }
+
+    if(sort != NULL)
+      forest = SG_Prune(forest, sort);
+    if(forest == NULL) {
+      return ATmake("parse-error([character(<int>), line(<int>),"
+                    "col(<int>), char(<int>)])",
+                    current_token, line, col, text_length);
+/*
+      return ATmake("parse-error(\"input is not a <str>\")", desiredsort);
+*/
+    }
 
     if(!SG_OUTPUT)
       return(ATmake("parsetree(suppressed,<int>)", SGnrAmb(SG_NRAMB_ASK)));
 
-    yielded = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
-
 #ifdef HAVE_A2TOA1
     if(SG_ASFIX1)
-      return a2toa1(yielded);
+      return a2toa1(forest);
 #endif
 
-    return ATmake("parsetree(<term>,<int>)", yielded, SGnrAmb(SG_NRAMB_ASK));
+    return ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
   }
 
   return ATmake("parse-error([character(<int>), line(<int>),"
