@@ -1,4 +1,5 @@
 
+EXTRA_DIST = asc-support-config.src
 
 bin_SCRIPTS = asc-support-config
 
