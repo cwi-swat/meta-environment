@@ -910,18 +910,78 @@ static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
 
 static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
- ATermInt l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
- ATermInt l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+  ATermInt l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+  ATermInt l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
 
   if (SG_EagerPriority_Tree(pt, t0, t1)) {
-     IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
-     return t0;
+    IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
+    return t0;
   }
   if (SG_EagerPriority_Tree(pt, t1, t0)) {
     IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
     return t1;
   }
 
+  return NULL;
+}
+
+static int countDistinctArguments(ATermList args0, ATermList args1)
+{
+  int diffs = 0;
+  while (!ATisEmpty(args0)) {
+
+    if (!ATisEqual(ATgetFirst(args0), ATgetFirst(args1))) {
+      diffs++;
+    }
+
+    args1 =  ATgetNext(args1);
+    args0 =  ATgetNext(args0);
+  }
+  return diffs;
+}
+
+static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
+{
+  ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+  ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+  tree max;
+
+  if (!ATisEqual(l0,l1)) {
+    return SG_Direct_Eagerness_Filter(pt, t0, t1);
+  }
+  else {
+    if (SG_FILTER_INDIRECTEAGERNESS) {
+      ATermList args0 = (ATermList)ATgetArgument((ATerm)t0, 1);
+      ATermList args1 = (ATermList)ATgetArgument((ATerm)t1, 1);
+      int diffs = countDistinctArguments(args0, args1);
+    
+      if (diffs == 1) {
+        while (!ATisEmpty(args0)) {
+          tree arg0 = (tree)ATgetFirst(args0);
+          tree arg1 = (tree)ATgetFirst(args1);
+
+          if (!ATisEqual(arg0, arg1)) {
+            max = SG_Indirect_Eagerness_Filter(pt, arg0, arg1);
+
+            if (max) {
+	      if (ATisEqual(max, arg0)) {
+	        return t0;
+	      }
+	      else {
+	        return t1;
+	      }
+	    }
+	    else {
+	      return NULL;
+	    }
+          }
+         
+          args1 = ATgetNext(args1);
+          args0 = ATgetNext(args0);
+        }
+      }
+    }
+  }
   return NULL;
 }
 
@@ -1058,12 +1118,27 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
   }
  
   /* only try these filters if the parsetable contains such info */
+    /*  Next, inspect direct eager/avoid status  */
+  /*
   if (SG_PT_HAS_PREFERENCES(pt)) {
     
-    /*  Next, inspect direct eager/avoid status  */
     if (SG_FILTER_DIRECTEAGERNESS) {
       max = SG_Direct_Eagerness_Filter(pt, t0, t1);
       if(max) {
+	return max;
+      }
+    }
+  }
+  */
+
+  /* An experiment to see whether the ambiguity node can
+   * be pushed down the tree. This will only be done
+   * if only one argument of the node differs.
+   */
+  if (SG_PT_HAS_PREFERENCES(pt)) {
+    if (SG_FILTER_DIRECTEAGERNESS) {
+      max = SG_Indirect_Eagerness_Filter(pt, t0, t1);
+      if (max) {
 	return max;
       }
     }

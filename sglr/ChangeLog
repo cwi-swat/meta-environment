@@ -1,5 +1,13 @@
 $Id$
 
+2002/06/25 (vandenbr@loria.fr)
+ * Fine tuned the eagerness filter.
+ * Bumped to version 3.8beta.
+ * Added a test to check the implementation of the fine-tuned 
+   eagerness filter.
+ * Flag 'n' added to switch the check for this fine-tuned
+   eagerness filter off.
+
 2002/04/19 (jurgenv@cwi.nl)
  * Release 3.7
 

@@ -20,23 +20,24 @@
 
 #define program_name "sglr"
 
-int     outputflag                 = ATtrue;
-int     binaryflag                 = ATtrue;
-int     filterflag                 = ATtrue;
-int     filter_associativityflag   = ATtrue;
-int     filter_directeagernessflag = ATtrue;
-int     filter_eagernessflag       = ATtrue;
-int     filter_injectioncountflag  = ATtrue;
-int     filter_priorityflag        = ATtrue;
-int     filter_rejectflag          = ATtrue;
-int     cycleflag                  = ATtrue;
-int     verboseflag                = ATfalse;
-int     debugflag                  = ATfalse;
-int     statisticsflag             = ATfalse;
-int     supplexflag                = ATfalse;
-int     printprodsflag             = ATfalse;
-int     ambiguityerrorflag         = ATfalse;
-int     asfix2meflag               = ATtrue;
+int     outputflag                       = ATtrue;
+int     binaryflag                       = ATtrue;
+int     filterflag                       = ATtrue;
+int     filter_associativityflag         = ATtrue;
+int     filter_directeagernessflag       = ATtrue;
+int     filter_nesteddirecteagernessflag = ATtrue;
+int     filter_eagernessflag             = ATtrue;
+int     filter_injectioncountflag        = ATtrue;
+int     filter_priorityflag              = ATtrue;
+int     filter_rejectflag                = ATtrue;
+int     cycleflag                        = ATtrue;
+int     verboseflag                      = ATfalse;
+int     debugflag                        = ATfalse;
+int     statisticsflag                   = ATfalse;
+int     supplexflag                      = ATfalse;
+int     printprodsflag                   = ATfalse;
+int     ambiguityerrorflag               = ATfalse;
+int     asfix2meflag                     = ATtrue;
 
 char   *input_file_name   = "-";
 char   *output_file_name  = "-";
@@ -136,6 +137,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(filterflag),
               DEFAULTMODE(filter_associativityflag),
               DEFAULTMODE(filter_directeagernessflag),
+              DEFAULTMODE(filter_nesteddirecteagernessflag),
               DEFAULTMODE(filter_eagernessflag),
               DEFAULTMODE(filter_injectioncountflag),
               DEFAULTMODE(filter_priorityflag),
@@ -206,6 +208,9 @@ void handle_filter_options(void)
         case 'i':
           filter_injectioncountflag = !filter_injectioncountflag;
           break;
+        case 'n':
+          filter_nesteddirecteagernessflag = !filter_nesteddirecteagernessflag;
+          break;
         case 'p':
           filter_priorityflag = !filter_priorityflag;
 	  break;
@@ -275,22 +280,23 @@ void handle_options (int argc, char **argv)
 
 ATbool set_global_options(void)
 {
-  if(debugflag)                  SG_DEBUG_ON();
-  if(verboseflag)                SG_VERBOSE_ON();
-  if(filterflag)                 SG_FILTER_ON();
-  if(filter_associativityflag)   SG_FILTER_ASSOCIATIVITY_ON();
-  if(filter_directeagernessflag) SG_FILTER_DIRECTEAGERNESS_ON();
-  if(filter_eagernessflag)       SG_FILTER_EAGERNESS_ON();
-  if(filter_injectioncountflag)  SG_FILTER_INJECTIONCOUNT_ON();
-  if(filter_priorityflag)        SG_FILTER_PRIORITY_ON();
-  if(filter_rejectflag)          SG_FILTER_REJECT_ON();
-  if(cycleflag)                  SG_CYCLE_ON();
-  if(start_symbol)               SG_STARTSYMBOL_ON();
-  if(statisticsflag)             SG_SHOWSTAT_ON();
-  if(outputflag)                 SG_OUTPUT_ON();
-  if(asfix2meflag)               SG_ASFIX2ME_ON();
-  if(binaryflag)                 SG_BINARY_ON();
-  if(ambiguityerrorflag)         SG_AMBIGUITY_ERROR_ON();
+  if(debugflag)                    SG_DEBUG_ON();
+  if(verboseflag)                  SG_VERBOSE_ON();
+  if(filterflag)                   SG_FILTER_ON();
+  if(filter_associativityflag)     SG_FILTER_ASSOCIATIVITY_ON();
+  if(filter_directeagernessflag)   SG_FILTER_DIRECTEAGERNESS_ON();
+  if(filter_nesteddirecteagernessflag) SG_FILTER_INDIRECTEAGERNESS_ON();
+  if(filter_eagernessflag)         SG_FILTER_EAGERNESS_ON();
+  if(filter_injectioncountflag)    SG_FILTER_INJECTIONCOUNT_ON();
+  if(filter_priorityflag)          SG_FILTER_PRIORITY_ON();
+  if(filter_rejectflag)            SG_FILTER_REJECT_ON();
+  if(cycleflag)                    SG_CYCLE_ON();
+  if(start_symbol)                 SG_STARTSYMBOL_ON();
+  if(statisticsflag)               SG_SHOWSTAT_ON();
+  if(outputflag)                   SG_OUTPUT_ON();
+  if(asfix2meflag)                 SG_ASFIX2ME_ON();
+  if(binaryflag)                   SG_BINARY_ON();
+  if(ambiguityerrorflag)           SG_AMBIGUITY_ERROR_ON();
 
   if(!parse_table_name) {
     SG_DEBUG_OFF();

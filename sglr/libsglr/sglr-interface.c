@@ -52,6 +52,7 @@ void  SGinitParser(ATbool toolbus_mode)
   SG_FILTER_ON();
   SG_FILTER_ASSOCIATIVITY_ON();
   SG_FILTER_DIRECTEAGERNESS_ON();
+  SG_FILTER_INDIRECTEAGERNESS_ON();
   SG_FILTER_EAGERNESS_ON();
   SG_FILTER_INJECTIONCOUNT_ON();
   SG_FILTER_PRIORITY_ON();
@@ -347,6 +348,7 @@ ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
     ATwarning("could not open language!\n");
     return NULL;
   }
+
   return SGtermToFile(prg, SGparseFile(prg, L, sort, infil), outfil);
 }
 

@@ -1039,6 +1039,7 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
   IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
 
   t = ATreadFromFile(input_file);
+
   pt = SG_BuildParseTable((ATermAppl) t);
 
   IF_STATISTICS(ATfprintf(SG_log(),
@@ -1046,8 +1047,10 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
                         L, SG_Timer()));
 
   SG_CloseFile(input_file);
-  if(pt)
+
+  if(pt) {
     SG_SaveParseTable(L, pt);
+  }
 
   return pt;
 }
@@ -1057,8 +1060,9 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
 
 void SG_RemoveParseTable(language L)
 {
-  if(SG_LookupParseTable(L))
+  if(SG_LookupParseTable(L)) {
     SG_ClearParseTable(L);
+  }
 }
 
 /*}}}  */
@@ -1088,6 +1092,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
   if(ptfun != SG_PT5_AFun) {
     ATwarning("parse table format error\n");
+    t = NULL;
     return NULL;
   }
 
@@ -1095,6 +1100,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
   if (version_nr != 4) {
     ATwarning("versions of SGLR and parse table generator do not match\n");
+    t = NULL;
     return NULL;
   }
 
@@ -1102,6 +1108,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   prods = (ATermList) ATgetArgument(t, 2);
   states = (ATermList) ATgetArgument(ATgetArgument(t, 3), 0);
   prios = (ATermList) ATgetArgument(ATgetArgument(t, 4), 0);
+  t = NULL;
 
   for(sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
     ATerm     curstate = ATgetFirst(sts);
@@ -1133,11 +1140,14 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   );
 
   SG_AddPTStates(pt, states);
+  states = NULL;
   SG_AddPTGrammar(pt, prods);
+  prods = NULL;
 
   if(!ATisEmpty(prios)) {
     /*  Successful match, priorities included  */
     SG_AddPTPriorities(pt, prios);
+    prios = NULL;
   } else {
     IF_VERBOSE(ATwarning("warning: no priority information in parse table\n"))
   }
