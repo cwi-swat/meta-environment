@@ -1,0 +1,13 @@
+module asf/Lexicals[X]
+
+exports
+
+sorts CHAR
+
+lexical syntax
+
+"\"" ~[\257] "\""     -> CHAR
+
+context-free syntax
+
+`X` "(" chars:CHAR* ")" -> X {cons("lexical-constructor")}
