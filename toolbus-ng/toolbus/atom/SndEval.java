@@ -48,9 +48,8 @@ public class SndEval extends Atom {
 		if(!isEnabled())
 			return false;
 		ToolInstance ti = TB.getTool(this.getEnv().getVar(toolvar));
-		ti.sndTermToTool((ATermAppl) trm); // add a substitute!
+		ti.sndEvalToTool((ATermAppl) trm); // add a substitute!
 		
-		System.out.println("SndEval: done");
 		return true;
 	}
 

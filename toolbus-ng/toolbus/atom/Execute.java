@@ -52,8 +52,6 @@ public class Execute extends Atom {
 		
 		this.getEnv().putVar(rvar, TI.getToolId());
 		
-		System.out.println("end of Execute");
-		
 		return true;
       } else {
         return false;

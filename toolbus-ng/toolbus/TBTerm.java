@@ -330,22 +330,22 @@ public class TBTerm {
 				}
 				if(TBTerm.isBoolean(t))
 				   return BoolPlaceholder;
-				
+					
+				AFun fun = ((ATermAppl) t).getAFun();
+				ATerm args[] = ((ATermAppl) t).getArgumentArray();
+				if(args.length == 0){
+					if(fun.isQuoted())
+						return StrPlaceholder;
+					else
+						return t;
+				}
 				if(!recurring)
 					return makePlaceholder(t);
-				else {
-					
-					AFun fun = ((ATermAppl) t).getAFun();
-					ATerm args[] = ((ATermAppl) t).getArgumentArray();
-					if(args.length == 0)
-						return t;
-					ATerm vargs[] = new ATerm[args.length];
-					for (int i = 0; i < args.length; i++) {
-						vargs[i] = makePattern(args[i], env, false);
-					}
-				
-					return factory.makeAppl(fun, vargs);
+				ATerm vargs[] = new ATerm[args.length];
+				for (int i = 0; i < args.length; i++) {
+					vargs[i] = makePattern(args[i], env, false);
 				}
+				return factory.makeAppl(fun, vargs);
 
 			case ATerm.LIST :
 				ATermList lst = factory.makeList();
