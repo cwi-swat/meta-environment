@@ -165,7 +165,7 @@ TBbool    streq(const char *, const char *);
 TBbool    streq_unres(char *, char *);
 TBbool    bstreq(bstr *, bstr *);
 char      *strdup(const char *);
-char      *strndup(char *, int);
+char      *str_ndup(char *, int);
 
 #define   list_first(tl) first(tl)
 #define   list_next(tl)  next(tl)

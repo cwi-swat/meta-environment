@@ -242,7 +242,6 @@ AC_HEADER_CHECK(math.h,:, echo "*** no math.h";exit)
 
 AC_HAVE_FUNCS(strerror)
 AC_HAVE_FUNCS(strdup)
-AC_HAVE_FUNCS(strndup)
 AC_HAVE_FUNCS(yywrap)
 
 dnl Find out which libraries we need

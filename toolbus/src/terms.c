@@ -518,24 +518,25 @@ env *mk_env(var *v, term *t, env *e)
   return re;
 }
 
-#ifndef HAVE_STRNDUP
 /* MP_ bgn  is the address of the first char in the string and
        size is the maximum number of chars copied into the newly
        allocated string.
+       Note: looks a lot like posix' `strndup', but is slightly different.
+       it always allocates exactly _size_+1 octets, whereas strndup
+       will allocate only strlen(bgn) if that's less than _size_.
 */
-char *strndup(register char *bgn, int size)
+char *str_ndup(register char *bgn, int size)
 {
   register char *r,  *s, *end;
-  r = s = (char *) malloc(sizeof(char) * (size + 1));
+  r = s = (char *) malloc(sizeof(*bgn) * (size + 1));
   if(!r)
-    err_sys_fatal("strndup: can't malloc");
+    err_sys_fatal("str_ndup: can't malloc");
   end = &bgn[size];
   while(bgn < end)
     *s++ = *bgn++;
   *s = '\0';
   return r;
 }
-#endif /* HAVE_STRNDUP */
 
 term *mk_bstr(char *s, int n)
 {
@@ -544,7 +545,7 @@ term *mk_bstr(char *s, int n)
 
   t->trm_kind = t_bstr;
   bstr_len(t) = n;
-  bstr_val(t) = strndup(s,n);
+  bstr_val(t) = str_ndup(s, n);
   return t;
 }
 
