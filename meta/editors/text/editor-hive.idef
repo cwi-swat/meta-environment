@@ -17,6 +17,7 @@ let
   Offset : int,
   MenuEvent : term,
   Message : str,
+  Modified : term,
   SortName: str
 in
 #ifdef ECLIPSE
@@ -35,6 +36,9 @@ in
   +
     rec-msg(te-reread-contents(EditorId?))
     . snd-do(Hive, reread-contents(EditorId))
+  +
+    rec-msg(te-is-modified(EditorId?))
+    . snd-do(Hive, is-modified(EditorId))
   +
     rec-msg(te-set-focus(EditorId?, Area?))
     . snd-do(Hive, set-focus(EditorId, Area))
@@ -56,6 +60,10 @@ in
   +
     rec-msg(te-kill-text-editor(EditorId?)) 
     . snd-do(Hive, kill-editor(EditorId))
+  +
+    rec-event(Hive, is-modified(EditorId?, Modified?))
+    . snd-ack-event(Hive, is-modified(EditorId, Modified))
+    . snd-msg(te-is-modified(EditorId, Modified))
   +
     rec-event(Hive, contents-changed(EditorId?))
     . snd-ack-event(Hive, contents-changed(EditorId))

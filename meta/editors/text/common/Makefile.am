@@ -30,4 +30,4 @@ api: TextEditor.adt
 		--input $< \
 		--name TextEditor \
 		--prefix TE_ \
-		--version 1.2
+		--version 1.2.1

@@ -1,26 +1,5 @@
 /* $Id$ */
 
-process Module-Utilities is
-let
-  Id : int,
-  ModuleName1 : str,
-  ModuleName2 : str,
-  Extension : str,
-  Path : str,
-  Type : term,
-  Option1 : term
-in
-  Id := process-id.
-  (
-    rec-msg(revert-module(ModuleName1?))
-    . snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1])))
-    . RevertModule(ModuleName1)
-    . snd-note(ui-status(endstat(Id)))
-  )
-  *
-  delta
-endlet
-
 process CloseModule(ModuleId: str, Recursive: bool) is
 let
   Changed: list,
@@ -118,12 +97,6 @@ in
     ToBeClosed := diff(Imports, Needed)
   fi
 endlet  
-
-process RevertModule(Modulename: str) is
-  CloseModuleInDBandInvalidateDependingModules(Modulename)
-  . OpenModules([Modulename], sdf)
-  . DrawImportGraph()
-  . snd-msg(module-reverted(Modulename))
 
 process DeleteModule(ModuleName: str) is
 let
@@ -307,13 +280,16 @@ in
   . SaveAsfSdfModule(ModuleId, Status?) 
 endlet  
 
-process RemoveImport(Mod: str, RealImport: str) is
+process RemoveImport(ModuleId: str, Import: str) is
 let
+  Depending: list,
   Status : term
 in
-  DeleteEditorAndInvalidateDependingModules(Mod)
-  . RemoveImportInDB(Mod, RealImport)
-  . SaveAsfSdfModule(Mod, Status?)
+  DeleteSessions(ModuleId)
+  . GetDependingModules(ModuleId, Depending?)
+  . MDB-InvalidateModules(Depending, sdf)
+  . RemoveImportInDB(ModuleId, Import)
+  . SaveAsfSdfModule(ModuleId, Status?)
 endlet  
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,

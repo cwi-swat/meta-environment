@@ -16,10 +16,8 @@ TBSCRIPTS = \
   meta.tb \
   module-db.tb \
   module-utils.tb \
-  notification.tb \
   open-modules.tb \
-  parse-focusses.tb \
-  parse-utils.tb \
+  parse-focuses.tb \
   pretty-print.tb \
   print-module.tb \
   process-eqs.tb \

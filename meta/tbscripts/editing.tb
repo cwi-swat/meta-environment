@@ -314,29 +314,6 @@ endlet
 
 /*}}}  */
 
-/*{{{  process GetPendingChanges(Sid: term, HasChanges: bool?) */
-
-process GetPendingChanges(Sid: term, HasChanges: bool?) is
-let
-  HasText: bool,
-  HasStructure: bool
-in
-  IsTextEditorRegistered(Sid, HasText?)
-  . IsStructureEditorRegistered(Sid, HasStructure?)
-  . HasChanges := and(HasText, not(HasStructure))
-endlet
-
-/*}}}  */
-/*{{{  process CommitPendingChanges(Modulename: str, HasChanges: bool) */
-
-process CommitPendingChanges(Modulename: str, HasChanges: bool) is
-  if equal(HasChanges, true) then
-    snd-msg(revert-module(Modulename))
-    . rec-msg(module-reverted(Modulename))
-  else tau fi
-
-/*}}}  */
-
 /*{{{  process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) */
 
 process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) is
@@ -358,7 +335,8 @@ let
   Available: bool,
   EditorType: term,
   Filename: str,
-  HasChanges: bool,
+  HasText: bool,
+  HasStructure: bool,
   Sid: term,
   Tree: term
 in
@@ -380,14 +358,21 @@ in
     MenuSelected(Sid, EditorType)
   +
     MouseClicked(Sid)
-  +
+  + 
     TextChanged(Sid)
   )
   *
   EditorDisconnected(Sid)
-  . GetPendingChanges(Sid, HasChanges?)
+  . IsTextEditorRegistered(Sid, HasText?)
+  . IsStructureEditorRegistered(Sid, HasStructure?)
+  .
+  if and(HasText, not(HasStructure))
+  then
+    ParseSyntax(Sid, sdf)
+  else
+    tau
+  fi
   . DeleteSession(Sid)
-  . CommitPendingChanges(Modulename, HasChanges)
 endlet
 
 /*}}}  */

@@ -322,7 +322,15 @@ static void setCursorAtOffset(int write_to_editor_fd, TE_Action edAction)
 
 static void rereadContents(int write_to_editor_fd)
 {
-  sendToEmacs(write_to_editor_fd, "(revert-buffer nil t)");
+  sendToEmacs(write_to_editor_fd, "(reread-contents)");
+}
+
+/*}}}  */
+/*{{{  static void rereadContents(int write_to_editor_fd) */
+
+static void isModified(int write_to_editor_fd)
+{
+  sendToEmacs(write_to_editor_fd, "(is-modified)");
 }
 
 /*}}}  */
@@ -375,7 +383,8 @@ int main(int argc, char *argv[])
 			       displayMessage,
 			       setActions,
 			       setFocus,
-			       setCursorAtOffset);
+			       setCursorAtOffset,
+			       isModified);
 
   hiveToEditor = TE_makePipeDefault(read_from_hive_fd, fileno(stdout));
   editorToHive = TE_makePipeDefault(fileno(stdin), write_to_hive_fd);

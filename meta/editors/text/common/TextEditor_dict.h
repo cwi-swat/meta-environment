@@ -15,6 +15,7 @@ extern AFun TE_afun10;
 extern AFun TE_afun4;
 extern AFun TE_afun13;
 extern AFun TE_afun14;
+extern AFun TE_afun19;
 extern AFun TE_afun2;
 extern AFun TE_afun7;
 extern AFun TE_afun12;
@@ -22,9 +23,11 @@ extern AFun TE_afun15;
 extern AFun TE_afun18;
 extern AFun TE_afun6;
 extern AFun TE_afun1;
+extern AFun TE_afun20;
 
 extern ATerm TE_patternPipeDefault;
 extern ATerm TE_patternProcessDefault;
+extern ATerm TE_patternEventIsModified;
 extern ATerm TE_patternEventModified;
 extern ATerm TE_patternEventContents;
 extern ATerm TE_patternEventMouse;
@@ -45,6 +48,7 @@ extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionGetContents;
 extern ATerm TE_patternActionRereadContents;
 extern ATerm TE_patternActionWriteContents;
+extern ATerm TE_patternActionIsModified;
 extern ATerm TE_patternActionQuit;
 extern ATerm TE_patternActionToFront;
 

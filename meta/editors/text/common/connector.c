@@ -40,6 +40,7 @@ struct _TextEditor
   set_actions_t setActions;
   set_focus_t setFocus;
   set_cursor_at_offset_t setCursorAtOffset;
+  is_modified_t isModified;
 };
 
 /*}}}  */
@@ -158,7 +159,13 @@ static void handleEditorInput(int write_to_hive_fd, const char *input)
     event = TE_makeEventMouse(loc);
   }
   else if (strncmp(input, MODIFIED, strlen(MODIFIED)) == 0) {
-    event = TE_makeEventModified();
+    const char *p = input + strlen(MODIFIED);
+    if (*p == '#') {
+      event = TE_makeEventIsModified(atoi(p+1));
+    }
+    else {
+      event = TE_makeEventModified();
+    }
   }
   else {
     event = TE_makeEventMenu(TE_MenuFromTerm(ATparse(input)));
@@ -207,6 +214,9 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetCursorAtOffset(action)) {
     editor->setCursorAtOffset(write_to_editor_fd, action);
   }
+  else if (TE_isActionIsModified(action)) {
+    editor->isModified(write_to_editor_fd);
+  }
 }
 
 /*}}}  */
@@ -221,7 +231,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  display_message_t displayMessage,
 			  set_actions_t setActions,
 			  set_focus_t setFocus,
-			  set_cursor_at_offset_t setCursorAtOffset)
+			  set_cursor_at_offset_t setCursorAtOffset,
+			  is_modified_t isModified)
 {
   TextEditor textEditorImpl = (TextEditor) calloc(1, sizeof(struct _TextEditor));
 
@@ -251,6 +262,9 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 
   assert(setCursorAtOffset != NULL);
   textEditorImpl->setCursorAtOffset = setCursorAtOffset;
+
+  assert(isModified != NULL);
+  textEditorImpl->isModified = isModified;
 
   return textEditorImpl;
 }

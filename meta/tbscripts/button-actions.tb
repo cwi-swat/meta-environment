@@ -301,12 +301,19 @@ in
     else
       ReturnAbort(EditorId, Stack)
     fi
-      +
-        rec-msg(set-root, Stack?, EditorId?) .
-        StackPopTerm(Stack,Stack?,STree?) .
-        ReplaceRoot(EditorId, STree) .
-        ReturnSuccess(EditorId,Stack)
-      +
+    +
+      rec-msg(add-posinfo, Stack?, EditorId?)
+      . StackPopTerm(Stack, Stack?, STree?)
+      . GetFilename(EditorId, Filename?)
+      . AnnotateTree(STree, Filename, RTree?)
+      . StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
+    +
+      rec-msg(set-root, Stack?, EditorId?)
+      . StackPopTerm(Stack, Stack?, STree?)
+      . ReplaceFocus(EditorId, STree)
+      . ReturnSuccess(EditorId,Stack)
+    +
         rec-msg(get-focus, Stack?, EditorId?) .
         GetFocus(EditorId, RTree?) .
         StackPushTerm(Stack,Stack?,RTree) .
@@ -670,18 +677,6 @@ in
 	  ReturnSuccess(EditorId, Stack)	
 	fi   
       + 
-	rec-msg(revert-module, Stack?, EditorId?)
-	. StackIsEmpty(Stack, Empty?)
-	.
-	if equal(Empty, true) then
-	  ReturnSuccess(EditorId, Stack)
-        else
-          StackPopString(Stack, Stack?, Modulename?)
-          . snd-msg(revert-module(Modulename))
-          . rec-msg(module-reverted(Modulename))
-	  . ReturnSuccess(EditorId, Stack)	
-        fi
-      + 
 	rec-msg(close-module(Recursive?), Stack?, EditorId?)
 	. StackPopString(Stack, Stack?, Modulename?)
 	. CloseModule(Modulename, Recursive)
@@ -1044,10 +1039,10 @@ let
   Tree: term
 in
   Id := process-id
+  . printf("ParseSyntax\n")
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
-  . snd-msg(te-write-contents(Sid))
   . snd-msg(get-module-id-hook(Type))
   . rec-msg(get-module-id-hook-result(ModuleId?))
   . GetParseTable(ModuleId, sdf, true, Table?)
@@ -1165,49 +1160,31 @@ endlet
 
 /*}}}  */
 
-process ReplaceRoot(EditorId: term, Tree: term) is
-let
-  Focus : term
-in
-  snd-msg(se-move-focus-to-root(EditorId)) .
-  rec-msg(se-focus-moved(EditorId, Focus?)) .
-  ReplaceFocus(EditorId, Tree)
-endlet
-
-
 process GetFocus(Sid: term, Tree: term?) is
   snd-msg(se-get-cursor(Sid))
   . rec-msg(se-cursor(Sid, Tree?))
 
 process ReplaceFocus(Sid: term, Tree: term) is
 let
-  TotalTree : term,
-  Text : str,
-  Focus : term,
-  Filename : str,
-  ErrorMessage : str
+  Text: str,
+  Filename: str,
+  Error: str
 in
-  printf("button-actions.tb:ReplaceFocus is stuk!\n")
-#if 0
-  snd-msg(se-replace-focussed-tree(Sid, Tree)) .
-  rec-msg(se-focus(Focus?)) .
-  snd-msg(se-get-parse-tree(Sid)) .
-  rec-msg(se-parse-tree(Sid, TotalTree?)) .
-  snd-msg(unparse(TotalTree)) .
-  rec-msg(unparsed-text(Text?)) .
-  snd-msg(get-editor-filename(Sid)) .
-  rec-msg(editor-filename(Filename?)) .
-  snd-msg(io-write-text-file(Filename,[Text])) .
+  snd-msg(unparse(Tree))
+  . rec-msg(unparsed-text(Text?))
+  . printf("Text: [%s]\n", Text)
+  . GetFilename(Sid, Filename?)
+  . snd-msg(io-write-text-file(Filename, [Text]))
+  .
   (
-    rec-msg(io-file-written) . 
-    snd-msg(te-reread-contents(Sid)) .
-    printf("snd-msg(te-set-cursor-at-focus(Sid, Focus))\n") .
-    snd-msg(te-set-focus(Sid, Focus))
+    rec-msg(io-file-written)
+    . snd-msg(te-reread-contents(Sid))
   +
-    rec-msg(io-file-not-written(ErrorMessage?)) .
-    snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
+    rec-msg(io-file-not-written(Error?))
+    . snd-note(ui-status(errorf("%s: %s",[Filename, Error])))
   )
-#endif
+  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(te-clear-focus(Sid))
 endlet
 
 process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
@@ -1249,7 +1226,7 @@ in
   +
     rec-msg(specification-incomplete(Summary?)) .
     snd-note(ui-status(endstat(Id))) .
-    ShowSummaryInGUI(Summary) .
+    snd-msg(ui-show-feedback-summary(Summary)) .
     NormalForm := error-tree
   )
 endlet

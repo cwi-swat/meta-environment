@@ -44,11 +44,24 @@ func! SetModified()
   call libcallnr(g:meta_dlso, "send", desc)
 endfunc
 
+func! IsModified()
+  let desc=g:tb_pipe . '#modified#' . getbufvar("%", "&mod")
+  call Handshake()
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
 func! WriteContents()
-" call DisableModificationDetection()
+  call DisableModificationDetection()
   call WritePendingChanges()
   call Handshake()
-" call EnableModificationDetection()
+  call EnableModificationDetection()
+endfunc
+
+func! RereadContents()
+  call DisableModificationDetection()
+  exe ':e!'
+  call Handshake()
+  call EnableModificationDetection()
 endfunc
 
 " Remap <CTRL-]> to update focus around current location

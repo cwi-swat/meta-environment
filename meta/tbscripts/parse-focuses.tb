@@ -3,7 +3,8 @@
 /*{{{  process GetText(EditorId: term, Text: str?) */
 
 process GetText(EditorId: term, Text: str?) is
-  snd-msg(te-get-contents(EditorId))
+  snd-msg(te-write-contents(EditorId))
+  . snd-msg(te-get-contents(EditorId))
   . rec-msg(te-contents(EditorId, Text?))
 
 /*}}}  */
@@ -14,6 +15,9 @@ process AnnotateTree(Tree: term, Filename: str, AnnotatedTree: term?) is
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
 
 /*}}}  */
+process HasTextChanged(Sid: term, TextChanged: bool?) is
+  snd-msg(te-is-modified(Sid))
+  . rec-msg(te-is-modified(Sid, TextChanged?))
 
 process ParseErrorToSummary(Error: term, Filename: str, Summary: term?) is
 let
@@ -29,18 +33,19 @@ process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
 let
   Filename: str,
   Pid: int,
-  Registered: bool,
-  Text: str
+  StructureEditor: bool,
+  Text: str,
+  TextChanged: bool
 in 
-  IsStructureEditorRegistered(Sid, Registered?)
+  IsStructureEditorRegistered(Sid, StructureEditor?)
+  . HasTextChanged(Sid, TextChanged?)
   .
-  if equal(Registered, true)
+  if and(StructureEditor, not-equal(TextChanged, quote(true)))
   then
-    printf("parse-editor-ok\n") .
     snd-msg(parse-editor-ok(Sid))
   else
     GetFilename(Sid, Filename?)
-    . ClearSummaryInGUI("sglr", Filename)
+    . snd-msg(ui-remove-feedback-summary("sglr", Filename))
     . GetText(Sid, Text?)
     . create(EditorParseHandler(Sid), Pid?)
     . ParseText(Pid, Text, Table, Nonterminal)
@@ -70,13 +75,13 @@ in
     . EditStructure(Sid, AnnotatedTree)
     . ParseErrorToSummary(Error, Filename, Summary?)
     . ShowSummary(Sid, Summary)
-    . ShowSummaryInGUI(Summary)
+    . snd-msg(ui-show-feedback-summary(Summary)) 
     . snd-msg(parse-editor-failed(Sid))
   +
     rec-msg(parse-error(Pid, Error?))
     . ParseErrorToSummary(Error, Filename, Summary?)
     . ShowSummary(Sid, Summary)
-    . ShowSummaryInGUI(Summary)
+    . snd-msg(ui-show-feedback-summary(Summary)) 
     . snd-msg(parse-editor-failed(Sid))
   )
 endlet
@@ -89,13 +94,13 @@ in
   snd-msg(sglr-parse(Text, Table, Nonterminal))
   .
   (
-   rec-msg(sglr-parse-tree(ParseResult?))
-   . snd-msg(parse-tree(Pid, ParseResult))
-   +
-   rec-msg(sglr-parse-forest(ParseResult?, Error?))
-   . snd-msg(parse-forest(Pid, ParseResult, Error))
-   +
-   rec-msg(sglr-parse-error(Error?))
-   . snd-msg(parse-error(Pid, Error))
+    rec-msg(sglr-parse-tree(ParseResult?))
+    . snd-msg(parse-tree(Pid, ParseResult))
+  +
+    rec-msg(sglr-parse-forest(ParseResult?, Error?))
+    . snd-msg(parse-forest(Pid, ParseResult, Error))
+  +
+    rec-msg(sglr-parse-error(Error?))
+    . snd-msg(parse-error(Pid, Error))
   )
 endlet

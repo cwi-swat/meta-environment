@@ -199,7 +199,8 @@ static void writeContents(int write_to_editor_fd)
 
 static void rereadContents(int write_to_editor_fd)
 {
-  sendToVim(":e!");
+  sendToVim(":call RereadContents()");
+  protocolExpect(read_from_editor_fd, HANDSHAKE);
 }
 
 /*}}}  */
@@ -271,6 +272,15 @@ static void setCursorAtOffset(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
+/*{{{  static void isModified(int write_to_editor_fd) */
+
+static void isModified(int write_to_editor_fd)
+{
+  sendToVim(":call IsModified()");
+  protocolExpect(read_from_editor_fd, HANDSHAKE);
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -312,7 +322,8 @@ int main(int argc, char *argv[])
 			      displayMessage,
 			      setActions,
 			      setFocus,
-			      setCursorAtOffset);
+			      setCursorAtOffset,
+			      isModified);
 
   pwent = getpwuid(getuid());
 

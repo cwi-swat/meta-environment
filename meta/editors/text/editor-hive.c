@@ -33,6 +33,7 @@
 #define EVENT_MOUSE "mouse-event(<term>,<int>)"
 #define EVENT_CONTENTS "contents(<term>,<str>)"
 #define EVENT_CONTENTS_CHANGED "contents-changed(<term>)"
+#define EVENT_EDITOR_MODIFIED "is-modified(<term>,<term>)"
 
 /*}}}  */
 /*{{{  variables */
@@ -341,6 +342,18 @@ void kill_editor(int c, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  void is_modified(int c, ATerm editorId) */
+
+void is_modified(int c, ATerm editorId)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionIsModified());
+  }
+}
+
+/*}}}  */
 /*{{{  void rec_ack_event(int c, ATerm event) */
 
 void rec_ack_event(int c, ATerm event)
@@ -395,6 +408,11 @@ static void handleEditorInput(int tb_fd, ATerm editorId, TE_Event event)
   }
   else if (TE_isEventModified(event)) {
     sendToToolBus(tb_fd, ATmake(EVENT_CONTENTS_CHANGED, editorId));
+  }
+  else if (TE_isEventIsModified(event)) {
+    int modified = TE_getEventModified(event);
+    sendToToolBus(tb_fd, ATmake(EVENT_EDITOR_MODIFIED, editorId,
+				ATparse(modified ? "true" : "false")));
   }
   else {
     ATwarning("editor-hive: ignoring editor input: %t\n", event);

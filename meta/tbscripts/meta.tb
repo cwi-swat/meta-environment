@@ -23,7 +23,6 @@
 #include "feedback.tb"
 #include "abort.tb"
 #include "editing.tb"
-#include "parse-utils.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"
 #include "file-creator.tb"
@@ -37,7 +36,7 @@
 #include "get-parsetable.tb"
 #include "dump-parsetable.tb"
 #include "sdf2-language.tb"
-#include "parse-focusses.tb"
+#include "parse-focuses.tb"
 #include "button-actions.tb"
 #include "notification.tb"
 #include "dump-equations.tb"
@@ -91,9 +90,7 @@ in
   . create(File-creator, Pid?)
   . create(BuildParseTable, Pid?)
   . create(Meta-Interface, Pid?)
-  . create(Module-Utilities, Pid?)
   . create(ModuleDB, Pid?)
-  . create(Notify-about-changed-modules, Pid?)
   . create(Open-Sdf2-Language, Pid?)
   . create(PGen, Pid?)
   . create(PrintModule, Pid?)

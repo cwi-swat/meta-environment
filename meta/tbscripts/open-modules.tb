@@ -188,7 +188,7 @@ in
     +
       rec-msg(parse-forest(Pid, ParseResult?, Error?))
       . ParseErrorToSummary(Error, Path, Summary?)
-      . ShowSummaryInGUI(Summary)
+      . snd-msg(ui-show-feedback-summary(Summary)) 
     )
     . AnnotateTree(ParseResult, Path, AnnotatedTree?)
     . snd-msg(sm-get-module-id(ParseResult))
@@ -216,7 +216,7 @@ in
   +
     rec-msg(parse-error(Pid, Error?))
     . ParseErrorToSummary(Error, Path, Summary?)
-    . ShowSummaryInGUI(Summary)
+    . snd-msg(ui-show-feedback-summary(Summary)) 
     . snd-msg(open-syntax-parse-handler-done(Pid))
   )
 endlet
