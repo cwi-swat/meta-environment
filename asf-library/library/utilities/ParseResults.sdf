@@ -2,13 +2,20 @@ module utilities/ParseResults[Sort]
 
 exports 
 
-sorts ParseResult Tree ATerm
+sorts ParseResult 
 
 context-free syntax
 
-  "parse-tree" "(" left-layout:Tree c1:"," 
-                   tree:Sort c2:"," 
-                   right-layout:Tree
-               ")"                   -> ParseResult {cons("parse-tree")}
+  "parse-tree" "(" left-layout:Bytes    c1:"," 
+                   tree:Sort            c2:"," 
+                   right-layout:Bytes   c3:","
+                   amb-cnt:NatCon
+               ")"                   -> ParseResult {cons("tree")}
 
-  "parse-error" "(" error:ATerm ")"   -> ParseResult {cons("parse-error")}
+  "parse-error" "(" line:NatCon        c1:"," 
+                    column:NatCon      c2:"," 
+                    offset:NatCon 
+                ")"                  -> ParseResult {cons("error")}
+
+  "parse-table-unavailable"          -> ParseResult {cons("no-parsetable")}
+  "parse-result-invalid"             -> ParseResult {cons("no-valid-result")}
