@@ -1,3 +1,6 @@
+2003/10/03 (markvdb@cwi.nl)
+  * Removed the set and perm symbol from Sdf2.
+
 2003/10/01 (markvdb@cwi.nl)
   * Added constructor information to the Sdf2 and ATerm syntax
     in order to get in sync with Sdf.label.def in sdf-support.

@@ -9,8 +9,6 @@ exports
     "r[[" Symbols "]]"             -> Grammar
     alt(Symbol, Symbol)            -> Grammar
     tup(Symbol)                    -> Symbols
-    perm(Symbols)                  -> Productions
-    perm3(Symbols, Symbols)        -> Productions
 
 hiddens
   variables 

@@ -162,19 +162,6 @@ equations
   [0]         tup(_A # _B) = tup(_A) ++ "," ++ tup(_B)
   [default-0] tup(_A) = _A
 
-%% \paragraph{Sets}
-%%
-%% The conventional notation for sets is a list of items
-%% between $\{$ and $\}$. The operator $\mfun{Set}[\Sym{A}]$ generates
-%% this notation such that if $T_1\ldots{}T_n$ are expressions of
-%% type $\Sym{A}$, then $\{T_1,\ldots,T_n\}$ is an expression of
-%% type  $\mfun{Set}[\Sym{A}]$.
-
-   [0]
-        'a = "{" {_A ","}* "}", p = 'a -> Set[_A]
-        =========================================
-        r[[ Set[_A] ]] = r[['a]] syntax p
-
 %% \paragraph{Functions}
 %%
 %% Sometimes it is convenient to pass functions around as data.
@@ -188,52 +175,3 @@ equations
         =======================================
         r[[ ('a => _B) ]] = syntax p r[['a _B]]
 
-%% \paragraph{Permutation}
-%%
-%% The permutation symbol $\ll\alpha\gg$ denotes any concatenation of the symbols
-%% in $\alpha$, i.e., $\beta\to\ll\alpha\gg$ if $\beta$ is a permutation of $\alpha$.
-
-  [0] r[[ <<'a>> ]] = syntax perm('a) r[['a]]
-
-%% The function \fun{perm} generates the productions for all permutations of
-%% a set of symbols. In case the permutation consists of two elements it
-%% generates the two productions directly.
-%% In case of more elements the
-%% function \fun{perm3} is used to generate permutations.
-
-  [0] perm( )     = -> << >>
-  [0] perm(_A)    = _A -> <<_A>>
-  [0] perm(_A _B) = _A _B -> <<_A _B>> _B _A -> <<_A _B>>
-  [0] perm('a)    = perm3( , 'a) when |'a| > 2 = true
-
-%% For each symbol in the list a production is generated with that symbol
-%% first and a permutation of the other symbols following it.
-
-  [0]
-        perm3('a, ) =
-  [0]
-        p = _A <<'a 'b>> -> <<'a _A 'b>>
-        =======================================================
-        perm3('a, _A 'b) = p ++ perm3('a _A, 'b) ++ perm('a 'b)
-
-%% It should be observed that this is not a very efficient way to implement permutation
-%% constructs. It should be adequate for permutations of 2 or 3 elements, though. What is
-%% needed in addition to the generation of these productions, is the normalization
-%% of the parse trees over these productions to a form that lists the elements in
-%% a fixed order such that semantic functions do not also have to deal with all
-%% permutations.  \cite{Cam93} describes an extension of  LL(1) parsing for
-%% permutation operators. An alternative approach suggested by \cite{Cam93} is
-%% the introduction of an intermediate symbol representing the union of the symbols
-%% in the permutation and a check after parsing that each symbol in the permutation
-%% is represented exactly once.
-
-%%%%% This alternative just produces all permutations in a flat manner.
-%%%%%
-%%%%%  [] r[[ {'a} ]] = syntax perm( , 'a, {'a}) r[['a]]
-%%%%%  [] perm(, , _B)           = -> _B
-%%%%%  [] perm('a+, , _B)        =
-%%%%%  [] perm('a, _A 'b, _B)    = perm1(_A, perm( , 'a 'b, _B)) ++ perm('a _A, 'b, _B)
-%%%%%  [] perm1(_A, )            =
-%%%%%  [] perm1(_A, 'b -> _B p*) = _A 'b -> _B ++ perm1(_A, p*)
-
-%%%
