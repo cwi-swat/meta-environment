@@ -43,6 +43,12 @@ in
   subscribe(asfc-progress(<term>)).
   Create-Asf-Processes.
   (
+    rec-msg(file-extensions-hook).
+    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+  +
+    rec-msg(semantics-top-sort-hook).
+    snd-msg(semantics-top-sort-hook-result(sort("Equations")))
+  +
     rec-msg(postprocess-semantics-hook(Semantics?)).
     snd-msg(check-asf(Semantics)).
     rec-msg(messages(Msgs?)).
