@@ -218,8 +218,10 @@ $Error]>
 [e2i-16] e2i($Var exceeds number of targets of generator) =  
 	 error("Destination contains too many targets", [localized("var", get-location($Var))])
 
-%%[e2i-17] e2i(Field name $Var used at different record positions) =
-%%		   error("Field " || rvar2str($Var) || " used at different record positions", get-location($Var))
+[e2i-17] $StrCon := "Field " || rvar2str($Var) || " used at different record positions"
+	===============================================================
+	e2i(Field name $Var used at different record positions) =
+		   error($StrCon, [localized(rvar2str($Var), get-location($Var))])
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
@@ -1118,7 +1120,7 @@ $Error]>
 [sb1]	$Etype := lookup($Table, $Var)
 	======================================================
 	substitute(& $Var, $Table, $Tenv) = 
-	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv> %% + Undeclared $Var>
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
 						   else <$Etype, $Tenv> fi
 
 [sb2]   <$Etype', $Tenv'> := substitute($Etype, $Table, $Tenv)
