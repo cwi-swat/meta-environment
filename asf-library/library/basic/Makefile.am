@@ -1,2 +1,2 @@
-include $(top_srcdir)/templates/make_rules.lib
+include $(top_srcdir)/library/make_rules
 

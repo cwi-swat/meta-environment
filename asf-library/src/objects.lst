@@ -1,6 +1,0 @@
-lib/asf/tools:annos.o
-lib/asf/tools:normalize.o
-lib/system:shell.o
-lib/system:fileio.o
-lib/containers:hashtable.o
-lib/strategies:traversal.o

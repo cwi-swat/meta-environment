@@ -1,3 +1,0 @@
-#!/bin/sh
-
-echo "__PREFIX__"
