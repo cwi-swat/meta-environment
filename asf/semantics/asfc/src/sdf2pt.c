@@ -37,17 +37,66 @@ makeLexicalConstructorProd(SDF_Symbol symbol)
   return PT_makeProductionFromTerm(ASF_makeTermFromProduction(lexConsProd));
 }
 
+PT_Symbols flattenSdfProductionProdFun(SDF_Literal sdfPrefixFunc,
+				       SDF_SymbolArguments sdfPrefixArgs)
+{
+  PT_Symbols ptPrefixArgs;
+  PT_Symbol  ptPrefixArg;
+  PT_Symbol ptPrefixFunc = flattenSdfSymbol(SDF_makeSymbolLit(sdfPrefixFunc));
+  PT_Symbol layout = PT_makeSymbolEmptyLayout();
+  PT_Symbol comma  = PT_makeSymbolQuotedLiteral(",");
+  PT_Symbol open   = PT_makeSymbolQuotedLiteral("(");
+  PT_Symbol close  = PT_makeSymbolQuotedLiteral(")");
+
+  ptPrefixArgs = PT_makeSymbolsList(ptPrefixFunc, PT_makeSymbolsEmpty());
+  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, open);
+  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+
+  while (SDF_hasSymbolArgumentsHead(sdfPrefixArgs)) {
+    ptPrefixArg  = flattenSdfSymbol(SDF_getSymbolArgumentsHead(sdfPrefixArgs));
+    ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, ptPrefixArg);
+
+    if (SDF_hasSymbolArgumentsTail(sdfPrefixArgs)) {
+      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, comma);
+      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+    }
+    else {
+      break;
+    }
+
+    sdfPrefixArgs = SDF_getSymbolArgumentsTail(sdfPrefixArgs);
+  }
+  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, close);
+
+  return ptPrefixArgs;
+}
+
 PT_Production flattenSdfProduction(SDF_Production sdfProduction,                                                   SDF_ModuleName sdfModuleName)
 {
-  SDF_Symbols sdfSymbols = SDF_getProductionSymbols(sdfProduction);
+  char *modname = SDF_getModuleIdLex(SDF_getModuleNameModuleId(sdfModuleName));
   SDF_Symbol  sdfResult  = SDF_getProductionResult(sdfProduction);
   SDF_Attributes sdfAttributes = SDF_getProductionAttributes(sdfProduction);
-  char *modname = SDF_getModuleIdLex(SDF_getModuleNameModuleId(sdfModuleName));
 
-  PT_Symbols ptSymbols = flattenSdfSymbols(sdfSymbols);
+  PT_Symbols ptSymbols;
   PT_Symbol  ptResult  = flattenSdfSymbol(sdfResult);
   PT_Attributes ptAttributes = flattenSdfAttributes(sdfAttributes);
 
+  if (SDF_isProductionProd(sdfProduction)) {
+    SDF_Symbols sdfSymbols = SDF_getProductionSymbols(sdfProduction);
+    ptSymbols = flattenSdfSymbols(sdfSymbols);
+  }
+  else if (SDF_isProductionProdFun(sdfProduction)) {
+     SDF_Literal sdfLiteral = SDF_getProductionFunctionSymbol(sdfProduction);
+     SDF_SymbolArguments sdfArgs = SDF_getProductionArguments(sdfProduction);
+
+     ptSymbols = flattenSdfProductionProdFun(sdfLiteral, sdfArgs);
+  } else {
+    ATerror("flattenSdfProduction: illegal production %t\n", sdfProduction);
+    return NULL;
+  }
   return PT_makeProductionDefault(modname, ptSymbols, ptResult, ptAttributes);
 }
 
@@ -149,7 +198,7 @@ static PT_Symbol     flattenSdfSymbol(SDF_Symbol sdfSymbol)
     char *newSep = unquotedStrDup(sep);
     result = PT_makeSymbolIterStarSep(ptIterSymbol, newSep);
     free(newSep);
-  }
+  } 
  
   /* the following symbols need to be added for asfix2: 
   SDF_isSymbolCf(sdfSymbol)) {
