@@ -1,8 +1,3 @@
-/*
-  $Id$
- */
-
-/*tool logger is { command = "tblog -logfile meta.log" }*/
 
 /* The Meta-Environment protocol is expressed in the
  * following scripts:
@@ -33,7 +28,6 @@
 #include "meta-interface.tb"
 
 /* Tool interfaces */
-#include "meta-studio.idef"
 #include "sglr.idef"
 #include "layoutgraph.idef"
 #include "unparsePT.idef"
@@ -75,26 +69,14 @@ in
   +
     rec-msg(get-application-status) .
     snd-msg(status(interactive)) 
-  )*delta
-endlet
-
-process META-START is
-let
-  ModuleName : str
-in
-  if not-equal(MODULENAME,"") then
-    snd-msg(open-modules([MODULENAME])) .
-    rec-msg(finished-opening-modules)
-  else
-    tau
-  fi
+  ) * delta
 endlet
 
 process MetaCreator is
 let
   Pid : int
 in
-  create(Ui, Pid?)
+  create(META, Pid?)
   . create(ButtonActionExecutor, Pid?)
   . create(ButtonActionReceiver, Pid?)
   . create(ClearAll, Pid?)
@@ -108,8 +90,6 @@ in
   . create(GetParseTable, Pid?)
   . create(Io, Pid?)
   . create(LAYOUT-GRAPH, Pid?)
-  . create(META, Pid?)
-  . create(META-START, Pid?)
   . create(Meta-Interface, Pid?)
   . create(Module-Utilities, Pid?)
   . create(ModuleDB, Pid?)
@@ -134,5 +114,3 @@ in
   . create(AbortMetaEnvironment, Pid?)
 #endif
 endlet
-
-toolbus(MetaCreator)

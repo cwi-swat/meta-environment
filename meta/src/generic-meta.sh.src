@@ -90,7 +90,7 @@ set -- $args
 configfile="meta.conf"
 modulename=""
 extra_scripts="-I${prefix}/share/meta"
-meta_script=${prefix}/share/meta/meta.tb
+meta_script=${prefix}/share/meta/start-meta-studio.tb
 time_out_def=""
 query_def=""
 saving="false"

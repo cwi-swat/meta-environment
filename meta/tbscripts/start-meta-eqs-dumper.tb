@@ -1,23 +1,25 @@
-/*
-  $Id$
- */
+#include "meta.tb"
+#include "status.tb"
 
 process StandaloneEqsDumper is
 let
   ModuleName : str,
   Path       : str,
-  Equations  : term
+  Equations  : term,
+  Pid : int
 in
+  create(StatusDisplay, Pid?) .
+  create(MetaCreator, Pid?) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
   snd-msg(get-all-equations(MODULENAME)) .
   (
     rec-msg(all-equations(Equations?)) .
+    LocateFile(MODULENAME, ".sdf", Path?) .
     if equal(OUTFILENAME, "") then
-      LocateFile(MODULENAME, ".sdf", Path?) .
-      WriteEquations(Path, ".eqs", Equations) 
+      WriteEquations(Path,MODULENAME, ".eqs", Equations) 
     else 
-      WriteEquations(OUTFILENAME, "", Equations) 
+      WriteEquations(Path, OUTFILENAME, "", Equations) 
     fi
   +
     rec-msg(equations-incomplete) .
@@ -25,3 +27,5 @@ in
   ) .
   shutdown("")
 endlet   
+
+toolbus(StandaloneEqsDumper)

@@ -1,0 +1,19 @@
+#include "meta.tb"
+#include "meta-studio.idef"
+
+process MetaGUI is
+let
+  ModuleName : str,
+  Pid : int
+in
+  create(MetaCreator, Pid?) .
+  create(Ui, Pid?) .
+  if not-equal(MODULENAME,"") then
+    snd-msg(open-modules([MODULENAME])) .
+    rec-msg(finished-opening-modules)
+  else
+    tau
+  fi
+endlet
+
+toolbus(MetaGUI)

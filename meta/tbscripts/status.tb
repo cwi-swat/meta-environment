@@ -1,6 +1,6 @@
 /* $Id$ */
 
-process Status-display is
+process StatusDisplay is
 let
   Lst : list,
   Str : str,

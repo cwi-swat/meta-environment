@@ -1,11 +1,13 @@
-/*
-  $Id$
- */
+#include "meta.tb"
+#include "status.tb"
 
 process StandalonePtDumper is
 let
-  ModuleName : str
+  ModuleName : str,
+  Pid : int
 in
+  create(StatusDisplay, Pid?) .
+  create(MetaCreator, Pid?) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME)) .
@@ -13,3 +15,5 @@ in
   shutdown("")
 
 endlet   
+
+toolbus(StandalonePtDumper)

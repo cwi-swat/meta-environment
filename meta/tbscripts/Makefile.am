@@ -9,32 +9,28 @@ TBSCRIPTS = \
   dump-equations.tb \
   dump-parsetable.tb \
   editors.tb \
-  eqs-dumper.tb \
   file-creator.tb \
   gen.tb \
   get-parsetable.tb \
   meta.tb \
   module-utils.tb \
   notification.tb \
-  syntax-editor.tb \
-  equations-editor.tb \
-  term-editor.tb \
   open-modules.tb \
   parse-focusses.tb \
   parse-utils.tb \
   print-module.tb \
   process-eqs.tb \
-  pt-dumper.tb \
   query.tb \
   restore-term-brackets.tb \
   save-module.tb \
   set-parsetable.tb \
-  standalone-syntax-editor.tb \
-  standalone-equations-editor.tb \
-  standalone-term-editor.tb \
-  standalone-eqs-dumper.tb \
-  standalone-pt-dumper.tb \
-  standalone-status-display.tb \
+  start-meta-syntax-editor.tb \
+  start-meta-equations-editor.tb \
+  start-meta-term-editor.tb \
+  start-meta-eqs-dumper.tb \
+  start-meta-pt-dumper.tb \
+  start-meta-studio.tb \
+  status.tb \
   button-actions.tb
   
 # Alphabetical list of Generated ToolBus scripts

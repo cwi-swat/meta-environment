@@ -1,12 +1,14 @@
-/*
-  $Id$
- */
+#include "meta.tb"
+#include "status.tb"
 
 process StandAloneSyntaxEditor is
 let
   ModuleName : str,
-  EditorId   : term
+  EditorId   : term,
+  Pid : int
 in
+  create(StatusDisplay, Pid?) .
+  create(MetaCreator, Pid?) .
   subscribe(delete-editor(<term>)) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
@@ -16,3 +18,5 @@ in
   shutdown("")
 
 endlet   
+
+toolbus(StandAloneSyntaxEditor)

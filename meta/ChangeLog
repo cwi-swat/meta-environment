@@ -1,9 +1,11 @@
 # $Id$
 
 2003/05/27 (jurgenv@cwi.nl)
- * term-store has two types of tables now: str and term. 
- * pos-info is added up to depth 4 for equations as it used to  be,
+ * Term-store has two types of tables now: str and term. 
+ * Pos-info is added up to depth 4 for equations as it used to  be,
    but the script now contains a magical value!
+ * Factored out common functionality between all 'main' processes such
+   as meta-studio, the standalone dumpers and the standalone editors
 
 2003/05/27 (markvdb@cwi.nl)
  * Imports are filtered against the contents of the term-store.
