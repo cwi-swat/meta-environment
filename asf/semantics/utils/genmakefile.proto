@@ -90,8 +90,12 @@ STD-OBJS	:= $(SRCS:.c=-$(CC).o)
 DEBUG-OBJS	:= $(SRCS:.c=-dbg.o)
 PROFILE-OBJS	:= $(SRCS:.c=-prof.o)
 
+STD-LIBFILES	:= lib@TARGET@-$(CC).a
+DEBUG-LIBFILES	:= lib@TARGET@-dbg.a
+PROFILE-LIBFILES:= lib@TARGET@-prof.a
+
 BINFILES	:= @TARGET@
-LIBFILES	:= lib@TARGET@-$(CC).a
+LIBFILES	:=
 INCLUDEFILES	:=
 
 # Make rules
@@ -116,16 +120,16 @@ lib@TARGET@-$(CC).a:	$(STD-OBJS)
 	$(AR) $(AR_FLAGS) $@ $(STD-OBJS)
 	$(RANLIB) $@
 
-@TARGET@:	$(LIBFILES)
-	$(CC) $(STD-LD-FLAGS) -o $@ $(LIBDIR) $(STD-LIBS)
+@TARGET@:	$(STD-LIBFILES)
+	$(CC) $(STD-LD-FLAGS)     -o $@ $(LIBDIR) $(STD-LIBS)
 
-@TARGET@-debug:	$(DEBUG-OBJS)
-	$(CC) $(DEBUG-LD-FLAGS) -o $@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
+@TARGET@-dbg:	$(DEBUG-LIBFILES)
+	$(CC) $(DEBUG-LD-FLAGS)   -o $@ $(LIBDIR) $(DEBUG-LIBS)
 
-@TARGET@-prof:	$(PROFILE-OBJS)
-	$(CC) $(PROFILE-LD-FLAGS) -o $@ $(PROFILE-OBJS) $(LIBDIR) $(PROFILE-LIBS)
+@TARGET@-prof:	$(PROFILE-LIBFILES)
+	$(CC) $(PROFILE-LD-FLAGS) -o $@ $(LIBDIR) $(PROFILE-LIBS)
 
-debug:	@TARGET@-debug
+debug:	@TARGET@-dbg
 
 profile: @TARGET@-prof
 
