@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 10 17:50:37 CET 2004 <jurgenv@cwi.nl>
+ * sdf-modules and sdf-renaming use -TB_COLLECT_LOOP 1 to run the
+   garbage collector after every ToolBus event.
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 
