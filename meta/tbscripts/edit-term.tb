@@ -26,13 +26,15 @@ endlet
 
 process ReduceTerm(EditorId: term, ModuleName: str) is
 let
-  Id         : int,
-  Text       : str,
-  Tree       : term,
-  NormalForm : term,
-  FileName   : term,
-  ErrList    : list,
-  Equations  : term
+  Id          : int,
+  Text        : str,
+  Path        : str,
+  Tree        : term,
+  NormalForm  : term,
+  FileName    : term,
+  ErrList     : list,
+  Equations   : term,
+  Table       : term
 in
   Id := process-id .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
@@ -49,6 +51,14 @@ in
     snd-msg(rewrite(ModuleName, Equations, Tree)).
     (
       rec-msg(rewrite-result(NormalForm?)) .
+      snd-msg(get-parsetable(trm(ModuleName))) .
+      (
+        rec-msg(parse-table(Table?, Path?)) .
+        snd-msg(restore-brackets(NormalForm, Table)) .
+        rec-msg(brackets-restored(NormalForm?))
+      +
+        rec-msg(no-parse-table)
+      ) .
       snd-msg(unparse(NormalForm)) .
       rec-msg(unparsed-text(Text?)) .
 

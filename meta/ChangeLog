@@ -1,6 +1,10 @@
 # $Id$
 
 2001/12/07 (vandenbr@loria.fr)
+ * Activated the restore brackets tool in Meta-Environment after
+   reducing a term.
+
+2001/12/07 (vandenbr@loria.fr)
  * Replaced a snd-do by a snd-eval and rec-value in order to
    synchronize, with respect to storing equation text.
  * Fixed a bug in the complete_asf_specification top module was not
