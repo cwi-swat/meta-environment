@@ -1,0 +1,30 @@
+module basic/Strings
+
+
+hiddens 
+  sorts Escaped Normal
+
+
+exports
+  sorts StrCon String
+  lexical syntax
+    "\\n" |  "\\\"" -> Escaped
+    ~[\n\t\\]      -> Normal
+
+    "\"" (Normal | Escaped)*  "\"" -> StrCon
+
+  lexical restrictions
+    Normal -/- ~[\"\n]
+
+  context-free syntax
+    StrCon             -> String {constructor}
+    String "||" String -> String {left}
+  variables
+    "Str-con" [0-9\']* -> StrCon
+    "Str" [0-9\']*     -> String
+
+hiddens
+  imports
+    basic/Whitespace
+  variables
+    "Chars" [0-9]* -> CHAR*

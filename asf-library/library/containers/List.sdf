@@ -1,0 +1,30 @@
+module containers/List[X]
+
+exports
+  context-free syntax
+    "[" {X ","}* "]"	-> List[[X]]  {constructor}
+
+  context-free syntax
+    length( X* )	-> Integer
+    length( {X ","}* )	-> Integer
+    length( List[[X]] )	-> Integer
+
+    elem( X , X* )		-> Boolean
+    elem( X , {X ","}* )	-> Boolean
+    elem( X, List[[X]] )		-> Boolean
+
+    cons( X , X* )		-> X*
+    cons( X , {X ","}* )	-> {X ","}*
+    cons( X, List[[X]] )		-> List[[X]]
+
+hiddens
+  imports
+    basic/Integers
+    asf/Comments
+  variables
+    "X"[0-9\']*		-> X
+    "X*"[0-9\']*	-> X*
+    "X,*"[0-9\']*	-> {X ","}*
+  sorts
+    X
+

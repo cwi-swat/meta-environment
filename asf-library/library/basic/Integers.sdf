@@ -1,0 +1,48 @@
+module basic/Integers
+
+imports
+  basic/Booleans
+
+exports
+  sorts NatCon Natural Integer
+  lexical syntax
+    [0-9]+ -> NatCon
+  context-free syntax
+     NatCon           		-> Natural
+     Natural "-/" Natural	-> Natural {left}
+     "(" Natural ")"       	-> Natural {bracket}
+     Natural               	-> Integer
+     "+" Natural           	-> Integer
+     "-" Natural           	-> Integer
+     Integer "+" Integer       	-> Integer {left}
+     Integer "-" Integer       	-> Integer {left}
+     Integer "*" Integer       	-> Integer {left}
+     Integer ">" Integer       	-> Boolean
+     Integer ">=" Integer      	-> Boolean
+     Integer "<" Integer       	-> Boolean
+     Integer "<=" Integer      	-> Boolean
+     "(" Integer ")"       	-> Integer {bracket}
+
+  context-free priorities
+    Integer "*" Integer -> Integer >
+    {left: Integer "+" Integer -> Integer
+           Integer "-" Integer -> Integer}
+
+hiddens
+  imports asf/Comments
+   
+  context-free syntax
+    gt "(" Natural "," Natural ")" -> Boolean
+    Natural "-//" Natural          -> Natural
+    Natural ">-" Natural           -> Natural
+
+  variables
+    "Nat" [0-9\']*      -> Natural 
+    "Nat-con" [0-9\']*  -> NatCon
+    "Int" [0-9\']*      -> Integer
+
+  variables 
+    "n" [0-9]* -> NatCon
+    "c" [0-9]* -> CHAR
+    "x" [0-9]* -> CHAR*
+    "y" [0-9]* -> CHAR+

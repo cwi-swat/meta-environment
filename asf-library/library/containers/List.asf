@@ -1,0 +1,30 @@
+equations
+
+[list-length]
+  X* =
+  ===>
+  length ( X* )	= 0
+[list-length]
+  length ( X X* ) = 1 + length ( X* )
+
+[list-length]
+  X,* = 
+  ===>
+  length ( X,* ) = 0
+[list-length]
+  length ( X , X,* ) = 1 + length ( X,* )
+
+[list-length]
+  length ( [X,*] ) = length( X,* )
+
+[list-elem]		elem (X , X*1 X X*2 ) = true
+[default-list-elem]	elem (X, X*) = false
+
+[list-elem]		elem (X, X,*1 , X , X,*2) = true
+[default-list-elem]	elem (X, X,*) = false
+
+[list-elem]		elem (X, [ X,* ]) = elem (X, X,*)
+
+[list-cons]		cons(X, X*) = X X*
+[list-cons]		cons(X, X,*) = X , X,*
+[list-cons]		cons(X, [ X,* ]) = [ cons(X, X,*) ]

@@ -1,0 +1,35 @@
+module containers/Table[Key Value]
+
+imports basic/Booleans
+imports containers/List[Key]
+imports containers/List[Value]
+imports containers/List[Key # Value]
+exports
+
+context-free syntax
+ List[[Key # Value]] -> Table
+
+context-free syntax
+
+ "not-in-table"                    -> Value   {constructor}
+ "new-table"                       -> Table
+ lookup(Table,Key)                 -> Value   
+ store(Table,Key,Value)            -> Table
+ delete(Table,Key)                 -> Table
+ element(Table,Key)                -> Boolean
+ keys(Table)                       -> List[[Key]]
+ values(Table)                     -> List[[Value]]
+
+variables
+ "Table"[0-9\']* -> Table
+
+hiddens
+  imports asf/Comments
+  
+variables
+
+  "Key"[0-9]* -> Key
+  "Value"[0-9]* -> Value
+  "Pair*"[0-9]* -> {Key # Value ","}*
+  "Key*"[0-9]*  -> {Key ","}*
+  "Value*"[0-9]*  -> {Value ","}*

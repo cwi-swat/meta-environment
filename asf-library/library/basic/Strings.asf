@@ -1,0 +1,3 @@
+  equations
+     [S1]   strcon(""" Chars1 """) || strcon(""" Chars2 """) =
+                strcon(""" Chars1 Chars2 """)

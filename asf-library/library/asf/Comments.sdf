@@ -1,0 +1,11 @@
+module asf/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n"	-> LAYOUT
+    "%" ~[\%\n]+ "%"	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\%]
