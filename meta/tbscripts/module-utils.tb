@@ -13,7 +13,6 @@ in
     DoRenameModule(OldModuleName, NewModuleName, NewPath)
   +
     rec-msg(copy-module(OldModuleName?, NewModuleName?, NewPath?)).
-    printf("new path : %s\n", NewPath).
     DoCopyModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
