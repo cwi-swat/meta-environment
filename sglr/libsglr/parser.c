@@ -73,6 +73,8 @@ typedef struct path {
   struct path       *next;
 } path;
 
+static path *free_paths = NULL;
+
 #define SG_P_STACK(x)                  (x)->stack
 #define SG_P_ARGS(x)                   (x)->args
 #define SG_P_NEXT(x)                   (x)->next
@@ -187,7 +189,13 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
 {
   path *p;
 
-  if((p = SG_Malloc(1, sizeof(path)))) {
+  if (free_paths != NULL) {
+    p = free_paths;
+    free_paths = free_paths->next;
+    p->stack = st;
+    p->args = sons;
+    p->next = ps;
+  } else if((p = SG_Malloc(1, sizeof(path)))) {
     p->stack = st;
     p->args  = sons;
     p->next  = ps;
@@ -198,13 +206,20 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
 
 void SG_ClearPath(register path *p)
 {
+
   path *oldp;
 
   while(p) {
     oldp = p;
     p = p->next;
+
+    oldp->next = free_paths;
+    free_paths = oldp;
+    oldp->args = NULL;
+    /*
     ATunprotect((ATerm *) &(oldp->args));
     SG_Free(oldp);
+     */
   }
 }
 

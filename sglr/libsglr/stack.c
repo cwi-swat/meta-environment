@@ -1,3 +1,5 @@
+/*{{{  file header */
+
 /*
 
     SGLR - the Scannerless Generalized LR parser.
@@ -23,13 +25,19 @@
  $Id$
  */
 
-#include <stdlib.h>
 
+/*}}}  */
+/*{{{  includes */
+
+#include <stdlib.h>
 #include "mem-alloc.h"
 #include "forest.h"
 #include "stack.h"
 #include "sglr.h"
 
+/*}}}  */
+
+st_link *free_links = NULL;
 
 #ifdef  MEMSTATS
 /*
@@ -354,8 +362,20 @@ void SG_DeleteStacks(stacks *sts)
 #endif
 }
 
-st_link *SG_NewLink(tree t, stack *st) {
+st_link *SG_NewLink(tree t, stack *st)
+{
   st_link *lk;
+
+  if (free_links != NULL) {
+    lk = free_links;
+    free_links = (st_link *)lk->stack;
+
+    lk->tree = t;
+    lk->stack = st;
+    lk->rejected = ATfalse;
+
+    return lk;
+  } 
 
   if((lk = SG_MallocLink())) {
     lk->tree = t;
@@ -375,8 +395,14 @@ st_link *SG_NewLink(tree t, stack *st) {
 
 void SG_DeleteLink(st_link *lk)
 {
+  lk->tree = NULL;
+  lk->stack = (struct stack *)free_links;
+  free_links = lk;
+
+  /*
   ATunprotect((ATerm *)&SG_LK_TREE(lk));
   SG_FreeLink(lk);
+   */
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_link--);
 #endif

@@ -24,6 +24,8 @@ INCLUDES		= -I${top_srcdir}/libtree2dot \
 			-I$(ATERM)/include \
 			-I$(PT_SUPPORT)/include
 
+#CFLAGS			+= -pg
+
 lib_LIBRARIES		= libsglr.a
 
 include_HEADERS		= sglr.h
