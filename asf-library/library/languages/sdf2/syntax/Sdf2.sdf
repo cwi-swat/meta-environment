@@ -76,7 +76,6 @@ exports
     <NumChar -CF>       -/- [0-9]
     <ModuleName -CF>    -/- [A-Za-z0-9\_\-]
 
-
-hiddens
+exports
   context-free start-symbols
     SDF Module

@@ -135,6 +135,9 @@ equations
    [0] <pr*-CFp>                = when pr* ==
    [0] <pr+1, pr+2-CFp>         = <pr+1-CFp> ++ <pr+2-CFp>
    [0] <p1 > p2-CFp>            = <p1-CF> > <p2-CF>
+   [0] n+2 := adapt-arguments(n+1)
+       ====>
+       <p1 [n+1> p2-CFp>         = <p1-CF> [n+2> <p2-CF>
    [0] <p1 as p2-CFp>           = <p1-CF> as <p2-CF>
 
 %% Similarly for lexical priorities.
@@ -184,3 +187,12 @@ equations
         aliases al* := _G1, sorts 'a := _G2
         ====================================
         _G1 <> _G2 = <sorts 'a, aliases al*>
+
+  [aa-1'1] n2 := 2 * n1 - 1
+           ====>
+           adapt-arguments(n1) = n2 
+
+  [aa-1'2] n2 := 2 * n1 - 1,
+           n+2 := adapt-arguments(n+1)
+           ====>
+           adapt-arguments(n1, n+1) = n2, n+2

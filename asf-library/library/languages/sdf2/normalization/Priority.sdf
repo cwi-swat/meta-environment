@@ -34,3 +34,4 @@ hiddens
     "'"[abc][0-9\']*    -> Symbol*
     "'"[abc]"+"[0-9\']* -> Symbol+ 
     "attr""*"[0-9\']*   -> {Attribute ","}*
+    "n+"[0-9]*          -> {NatCon ","}+

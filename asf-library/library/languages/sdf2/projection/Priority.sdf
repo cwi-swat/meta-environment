@@ -22,4 +22,5 @@ hiddens
     [p][0-9\']*         -> Production
     [p]"*"[0-9\']*      -> Production*
     [p]"+"[0-9\']*      -> Production+ 
-    "_G"[0-9\']*        -> Grammar 
+    "_G"[0-9\']*        -> Grammar
+    "n+"[0-9]*          -> {NatCon ","}+

@@ -22,6 +22,7 @@ exports
 
     list:{Group ">"}+                        -> Priority  {cons("chain")}
     "left":Group Associativity "right":Group -> Priority  {cons("assoc")}
+    Production "[" arguments:{NatCon ","}+ ">" Group -> Priority  {cons("argument")}
 
     list:{Priority  ","}* -> Priorities
 

@@ -1,4 +1,5 @@
 module languages/sdf2/normalization/Sdf2-Normalization
+
 imports
         languages/sdf2/projection/Sdf2-Projection
         languages/sdf2/renaming/Sdf2-Renaming
@@ -10,6 +11,7 @@ imports
         languages/sdf2/normalization/Sorts
         languages/sdf2/normalization/Restrictions
         languages/sdf2/normalization/Aliases
+
 exports
   context-free syntax
     normalize(SDF)               -> Grammar
@@ -23,6 +25,7 @@ hiddens
     "normalize" "[[" SDF "]]" "(" ModuleName "," Symbol ")" -> Grammar
     "topsorts" "[[" Grammar "]]" "(" Symbol ")"             -> Grammar
     topsorts(Symbol, Symbols)                             -> Productions
+    adapt-arguments({NatCon ","}+) -> {NatCon ","}+
 
 %% \def\InterferenceSYN{
 
@@ -54,4 +57,6 @@ hiddens
     "restr+"[0-9\']*    -> Restriction+ 
     "las"[0-9\']*       -> Lookaheads
     "al*"[0-9\']*       -> Alias* 
+    "n"[0-9]*           -> NatCon
+    "n+"[0-9]*          -> {NatCon ","}+ 
 %%}

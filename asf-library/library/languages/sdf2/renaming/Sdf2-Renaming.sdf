@@ -1,5 +1,6 @@
 module languages/sdf2/renaming/Sdf2-Renaming
-imports languages/sdf2/syntax/Sdf2-Syntax
+
+imports languages/sdf2/syntax/Sdf2
         languages/sdf2/renaming/Priority
         languages/sdf2/renaming/Regular
         languages/sdf2/renaming/Lifting
