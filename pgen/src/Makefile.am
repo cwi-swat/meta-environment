@@ -13,37 +13,32 @@ noinst_SCRIPTS	= sdf2table.test
 data_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
-EXTRA_DIST   = parsetablegen.idef sdf2table.src \
-               parsetablegen.tif.h parsetablegen.tif.c sdf2table.pod
+EXTRA_DIST	= parsetablegen.idef sdf2table.src sdf2table.pod
 
-SRCS         = parsetablegen.c ksdf2table.c atsets.c flatten.c \
-               characters.c first.c follow.c goto.c parse-table.c \
-               predicted.c priorities.c reductions.c statistics.c \
-               Sdf2-Normalization.c
+SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
+		flatten.c characters.c first.c follow.c goto.c parse-table.c \
+		predicted.c priorities.c reductions.c statistics.c \
+		Sdf2-Normalization.c
 
 HDRS         = atsets.h ksdf2table.h statistics.h flatten.h
 
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
-parsetablegen_LDADD   = parsetablegen.tif.o \
-                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
+parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(SDF_SUPPORT)/lib -lSDFME \
                         -L$(PT_SUPPORT)/lib -lmept \
                         -L$(TOOLBUS)/lib -lATB \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
-# remove built files during "make clean"
-CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1 sdf2table.test
-
-parsetablegen.o : parsetablegen.tif.h
-sdf-help.o : parsetablegen.tif.h
+CLEANFILES		= parsetablegen.tifs sdf2table sdf2table.1 \
+			sdf2table.test parsetablegen.tif.h parsetablegen.tif.c 
 
 %.tif.c %.tif.h: %.tifs
-	@PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
+	${TOOLBUS}/bin/tifstoc -tool $* $<
 
 %.tifs: %.idef
-	@PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
+	${TOOLBUS}/bin/idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 		mv ${srcdir}/$@ $@ ;\
 	fi
