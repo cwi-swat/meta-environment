@@ -76,26 +76,53 @@ in
 
 endlet
 
+process CheckSyntaxSpecification(ModuleName : str) is
+let
+  Syntax    : term,
+  ErrorMessage : str,
+  Feedback  : term
+in
+  snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
+  (
+    rec-msg(syntax(Syntax?)) .
+    snd-msg(check-asfsdf(Syntax, ModuleName)) .
+    rec-msg(feedback(Feedback?)) .
+    snd-msg(display-sdf-errors(Feedback)) .
+    Syntax := no-tree
+  +
+    rec-msg(no-syntax(ErrorMessage?))
+  )
+endlet
+
 process Preprocess-syntax is
 let
   Syntax     : term, 
+  Checking   : term, 
   ModuleName : str,
   Feedback   : term
 in
   (
-    rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
-    snd-msg(check-asfsdf(Syntax, ModuleName)) .
-    rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Feedback)) .
+    rec-msg(pre-preprocess-syntax-hook(ModuleName?)).
+    CheckSyntaxSpecification(ModuleName) .
+    snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
+  +
+    rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
+    if equal(Checking, quote(true)) then
+      CheckSyntaxSpecification(ModuleName)
+    else
+      tau
+    fi .
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   +
-    rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
-    snd-msg(check-asfsdf(Syntax, ModuleName)) .
-    rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Feedback)) .
+    rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
+    if equal(Checking, quote(true)) then
+      CheckSyntaxSpecification(ModuleName)
+    else
+      tau
+    fi .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
@@ -254,14 +281,14 @@ in
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
   +
-    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, trm)) .
-    snd-msg(pre-get-all-sdf2-hook-result(success)) 
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm)) .
+    snd-msg(pre-get-all-syntax-hook-result(success)) 
   +
-    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, eqs)) .
-    snd-msg(pre-get-all-sdf2-hook-result(success)) 
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
+    snd-msg(pre-get-all-syntax-hook-result(success)) 
   +
-    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, sdf)) .
-    snd-msg(pre-get-all-sdf2-hook-result(success)) 
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, sdf)) .
+    snd-msg(pre-get-all-syntax-hook-result(success)) 
   ) * delta
 endlet
 

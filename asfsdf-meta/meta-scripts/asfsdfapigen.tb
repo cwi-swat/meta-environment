@@ -35,7 +35,7 @@ in
     snd-msg(sm-get-new-module-name(SearchPaths, NewPath, NewModuleName)) .
     (
       rec-msg(sm-new-module-name(NewPath?, NewModuleName?)) .
-      snd-msg(get-sdf2-asfix(ModuleName)) .
+      snd-msg(get-syntax-tree(ModuleName)) .
       (
 	rec-msg(syntax(SyntaxTree?)) .
 	snd-msg(apply-rewrite(Rewriter, "generate-syntax", "Module", 
