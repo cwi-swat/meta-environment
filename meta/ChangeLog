@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/07 (jurgenv@cwi.nl)
+ * Bugfix: deleting an import that does not exist was lead to a deadlock
+   because the io-tool returned an error that was not handled.
+
 2003/07/03 (markvdb@cwi.nl)
  * Reorganized the show-list and show-area in such a way that
    the show-area does no longer be parameterized with a module name.
