@@ -454,7 +454,7 @@ in
           Error("Check consistency: module name %s contains an error", [ModuleName])
         )
       else
-        Error("Check consistency: syntax of module %s contains an error", [ModuleName])
+        Error("Check consistency: syntax of module %s has %t", [ModuleName, Status])
       fi
     )
   +

@@ -158,48 +158,53 @@ let
   FileName     : str
 in
   FunSym := fun(ParseError) .
-  if not-equal(FunSym, "no-errors") then
-    ErrorList := first(args(ParseError)) .
-    snd-msg(get-editor-filename(EditorId)) .
-    rec-msg(editor-filename(FileName?)) .
-    snd-msg(get-error-position(Focus, ErrorList)) .
-    rec-msg(error-position(Pos?)) .
-    snd-msg(set-cursor-at-location(EditorId, Pos)) .
-    snd-msg(display-message(EditorId, "Parse error near cursor")) .
-    ErrorContent := first(next(args(ParseError))) .
-    FunSym := fun(ErrorContent) .
-    if equal(FunSym, "ambiguities") then
-      I := first(args(ErrorContent)) .
-      if greater(I, 1) then
-        snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
-                                  [FileName,I])))
-      else 
-        snd-note(ui-status(errorf("Parse of %s returned 1 ambiguity",
-                                  [FileName])))
+  if equal(FunSym, "no-parse-table") then
+    snd-msg(display-message(EditorId, "No parse table available")) .
+    snd-msg(parse-failed(ModuleName, Focus))
+  else
+    if not-equal(FunSym, "no-errors") then
+      ErrorList := first(args(ParseError)) .
+      snd-msg(get-editor-filename(EditorId)) .
+      rec-msg(editor-filename(FileName?)) .
+      snd-msg(get-error-position(Focus, ErrorList)) .
+      rec-msg(error-position(Pos?)) .
+      snd-msg(set-cursor-at-location(EditorId, Pos)) .
+      snd-msg(display-message(EditorId, "Parse error near cursor")) .
+      ErrorContent := first(next(args(ParseError))) .
+      FunSym := fun(ErrorContent) .
+      if equal(FunSym, "ambiguities") then
+        I := first(args(ErrorContent)) .
+        if greater(I, 1) then
+            snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                    [FileName,I])))
+        else 
+          snd-note(ui-status(errorf("Parse of %s returned 1 ambiguity",
+                                    [FileName])))
+        fi
+      else
+        tau
+      fi .
+      if equal(FunSym, "cycle") then
+        Cycle := first(args(ErrorContent)) .
+        snd-note(ui-status(errorf("Parse returned a cycle: %t\n", [Cycle]))) .
+        snd-msg(parse-failed(ModuleName, Focus))
+      else
+        tau
+      fi .
+      if equal(FunSym, "eof") then
+        snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                  [FileName]))) .
+        snd-msg(parse-failed(ModuleName, Focus))
+      else
+        tau
+      fi .
+      if equal(FunSym, "plain") then
+        snd-msg(parse-failed(ModuleName, Focus))
+      else
+        tau
       fi
     else
       tau
-    fi .
-    if equal(FunSym, "cycle") then
-      Cycle := first(args(ErrorContent)) .
-      snd-note(ui-status(errorf("Parse returned a cycle: %t\n", [Cycle]))) .
-      snd-msg(parse-failed(ModuleName, Focus))
-    else
-      tau
-    fi .
-    if equal(FunSym, "eof") then
-      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
-                                [FileName]))) .
-      snd-msg(parse-failed(ModuleName, Focus))
-    else
-      tau
-    fi .
-    if equal(FunSym, "plain") then
-      snd-msg(parse-failed(ModuleName, Focus))
-    else
-      tau
     fi
-  else
-    tau
   fi
 endlet

@@ -321,9 +321,14 @@ in
        rec-msg(ts-values(Modules?)) .
        snd-msg(sm-make-sdf-definition(Modules)) .
        Modules := [] .
-       rec-msg(sm-sdf-definition(Syntax?)) .
-       snd-msg(syntax(Syntax)) .
-       Syntax := no-tree
+       (
+         rec-msg(sm-sdf-definition(Syntax?)) .
+         snd-msg(syntax(Syntax)) .
+         Syntax := no-tree
+       +
+         rec-msg(sm-no-sdf-definition) .
+         snd-msg(no-syntax("syntax incomplete"))
+       )
      +
        rec-msg(pre-get-all-sdf2-hook-result(failure(ErrorMsg?))) .
        snd-msg(no-syntax(ErrorMsg)) 
