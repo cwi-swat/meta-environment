@@ -135,7 +135,6 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
                            import-graph(ActualMods?, Pairs?))) .
     snd-note(import-graph(ActualMods, Pairs)) .
     snd-msg(add-import-done(OldName, Modules)).
-    printf("changed: %t, graph: %t\n", Modules, Pairs)
   +
     rec-value(Mdb, illegal-module-name(NewName?)) .
     snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
