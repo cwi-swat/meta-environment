@@ -78,6 +78,7 @@ clean:
 	${CLEAN} ${PROGRAMS}
 
 distclean: clean
+	${CLEAN} Makefile
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
