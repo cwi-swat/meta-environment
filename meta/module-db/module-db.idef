@@ -18,7 +18,8 @@ Equations : list,
 Pairs     : list,
 ActualMods: list,
 Status    : str,
-Language  : str
+Language  : str,
+ErrorMsg  : str
 in
 
 /* First, execute the module db */
@@ -51,13 +52,13 @@ snd-do(Mdb, create-module-db).
 /* Delete one module from the db */
   rec-msg(delete-module(Name?)).
   snd-eval(Mdb, delete-module(Name)).
-  rec-value(Mdb, done).
-  snd-msg(done)
+  rec-value(Mdb, changed-modules(ChngMods?)).
+  snd-msg(changed-modules(ChngMods))
 +
 /* Revert one module from the db */
   rec-msg(revert-module-in-db(Name?)).
   snd-eval(Mdb, delete-module(Name)).
-  rec-value(Mdb, done).
+  rec-value(Mdb, changed-modules(ChngMods?)).
   snd-msg(done)
 +
 /* See if a module is in the db */
@@ -100,25 +101,10 @@ snd-do(Mdb, create-module-db).
     snd-eval(Mdb,update-sdf2-module(AsFixModule)).
     rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
                           import-graph(ActualMods?, Pairs?))).
-    (
-      /* For each changed module a message is sent to the
-       * sglr in order to remove the associated parse table, if available.
-       */
-      if not-equal(ChngMods,[]) then
-        Language := first(ChngMods).
-        ChngMods := next(ChngMods).
-	snd-note(language-changed(Language)).
-	snd-msg(close-language(Language))
-	/* How about a failing close language??? */
-      fi
-    )*
-    if equal(ChngMods,[]) then
-      /* If a new module is added, 
-       * we tell the world the current import relations 
-       */
-      snd-note(import-graph(ActualMods, Pairs)).
-      snd-msg(extra-modules(Modules))
-    fi
+    snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
+    rec-msg(notify-about-changed-modules-done).
+    snd-note(import-graph(ActualMods, Pairs)).
+    snd-msg(extra-modules(Modules))
   else
     snd-msg(extra-modules([]))
   fi
@@ -188,8 +174,13 @@ snd-do(Mdb, create-module-db).
 /* Get the syntax for a list of modules */
   rec-msg(get-all-sdf2-definitions(Name?)).
   snd-eval(Mdb, get-all-sdf2-definitions(Name)).
-  rec-value(Mdb, syntax(Syntax?)).
-  snd-msg(syntax(Syntax))
+  (
+    rec-value(Mdb, syntax(Syntax?)).
+    snd-msg(syntax(Syntax))
+  +
+    rec-value(Mdb, sdf2-definition-error(ErrorMsg?)).
+    snd-msg(no-syntax)
+  )
 +
   rec-msg(get-sdf2-asfix(Name?)).
   snd-eval(Mdb, get-asfix(Name, sdf2)).

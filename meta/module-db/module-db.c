@@ -14,7 +14,7 @@ Creation and clearing of the module database:
 
 Manipulation of modules in database:
    ATerm exists(char *modulename)
-   void delete_module(char *modulename)
+   ATerm delete_module(char *modulename)
    ATerm add_module(ATerm asfix)
    ATerm add_empty_module(char* modulename)
    ATerm add_sdf2_module(char* path, ATerm asfix, 
@@ -554,14 +554,22 @@ ATermList get_import_section(ATermList sections)
   return import_strings;
 }
 
-ATerm delete_module(int cid, char *modulename)
+/* If a module is delete a list of depending modules
+ * should be calculated and returned.
+ */
+ATerm delete_module(int cid, char *moduleName)
 {
-  ATerm name = ATmake("<str>",modulename);
+  ATerm name = ATmake("<str>",moduleName);
+  ATermList changedMods;
+
+  changedMods = modules_depend_on(name,ATempty);
+  update_syntax_status_of_modules(changedMods); 
   RemoveKey(modules_db,name);
   RemoveKey(new_modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
-  return ATmake("snd-value(done)");
+  return ATmake("snd-value(changed-modules([<term>,<list>]))",
+                name, changedMods);
 }
 
 ATermList select_unknowns(ATermList mods)
@@ -630,22 +638,28 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
 
   if(ATindexOf(visited, module, 0) < 0) {
     entry = GetValue(new_modules_db, module);
-    asfix = ATelementAt((ATermList)entry, SYN_LOC);
-    if(!ATisEqual(asfix,ATparse("unavailable"))) {
-      ATerm first;
-      ATbool result = ATtrue;
-      ATermList imports = (ATermList) GetValue(import_db,module);
-
-      visited = ATinsert(visited,module);
-      while(!ATisEmpty(imports) && result) {
-        first = ATgetFirst(imports);
-        result = complete_sdf2_specification(visited,first);
-        imports = ATgetNext(imports);
+    if(entry) {
+      asfix = ATelementAt((ATermList)entry, SYN_LOC);
+      if(!ATisEqual(asfix,ATparse("unavailable"))) {
+	ATerm first;
+	ATbool result = ATtrue;
+	ATermList imports = (ATermList) GetValue(import_db,module);
+	
+	visited = ATinsert(visited,module);
+	while(!ATisEmpty(imports) && result) {
+	  first = ATgetFirst(imports);
+	  result = complete_sdf2_specification(visited,first);
+	  imports = ATgetNext(imports);
+	}
+	return result;
       }
-      return result;
-    }
+      else {
+	ATwarning("Sdf2: %t is missing\n", module);
+	return ATfalse;
+      }
+    } 
     else {
-      ATfprintf(stderr,"Sdf2: %t is missing\n",module);
+      ATwarning("Sdf2: %t is missing\n", module);
       return ATfalse;
     }
   }
@@ -1047,9 +1061,7 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
     return ATmake("snd-value(syntax(<term>))",result);
   }
   else {
-    ATfprintf(stderr,
-              "Specification is incomplete, can not generate parse table\n");
-    return ATmake("snd-value(syntax(done)))");
+    return ATmake("snd-value(sdf2-definition-error(\"Specification is incomplete, can not generate parse table\"))");
   }
 }
 
