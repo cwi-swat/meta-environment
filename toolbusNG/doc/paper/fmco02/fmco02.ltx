@@ -321,7 +321,7 @@ of the UI connects to the ToolBus and during the subsequent session,
 the user can:
 
 \begin{description}
-  \item[create] a new entry in the addressbook database;
+  \item[create] a new entry in the address book database;
   \item[delete] an existing entry from the database;
   \item[search] for an entry in the database;
   \item[update] an existing entry in the database.
@@ -385,7 +385,7 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-The request to create a new addressbook entry is received and
+The request to create a new address book entry is received and
 delegated to the tool, so it can update its state. In this case, our
 tool yields a unique id for reference to the new entry, which is
 returned as the result of the creation message. Note that
@@ -408,7 +408,7 @@ process in that it does not need a return value:
 \end{footnotesize}
 
 \paragraph{The \texttt{SEARCH} process} \label{tb:search} in our
-example, implements but a single query: finding an addressbook entry by
+example, implements but a single query: finding an address book entry by
 name. It shows how different results from a tool-evaluation request can be
 processed in much the same way that different messages are handled. Upon
 receiving a \texttt{find-by-name} message from another process, this
@@ -446,7 +446,7 @@ an \texttt{update-address-done} message. This message pair thus acts
 as a very primitive locking scheme. More elaborate schemes are very
 well possible, but are not discussed in this paper. Summarizing, the
 \texttt{UPDATE} process shows that \emph{outside} the implementation
-of the addressbook service, we can enforce the order in which certain
+of the address book service, we can enforce the order in which certain
 parts of the service are invoked, as well as mutual exclusion of some
 of its sections.
 
@@ -608,7 +608,7 @@ be aware that at the top level all process run concurrently and that
 \spec{||} is only used for explicit concurrency inside a process. The
 level of concurrence is therefore circa 100.
 
-\section{Issues in a Next-Generation \TB}
+\section{Issues in a Next-Generation \TB} \label{Sec:issues-NG} 
 
 The \TB\ has been used in various applications of which the
 Meta-Environment is by far the largest. Some of the questions
@@ -753,7 +753,7 @@ handlers are ignored. If the call raises an exception, it is checked
 whether this exception can be handled locally by one of the given
 handlers.  If not, the exception is propagated to the caller of the
 current code. This model does, however, not work well in a setting
-where multiple processes are active and the occurence of an exception
+where multiple processes are active and the occurrence of an exception
 may require recovery in several processes.
 
 \paragraph{Local Exception Handling}
@@ -788,7 +788,7 @@ fails a rollback is made to the system state before the algorithm was
 started and one of the alternative algorithms is tried.  In
 \cite{Klint85} this idea is applied to backtracking in string
 processing languages. It turns out that the preservation of the state
-system state can be done eficiently by only saving updates to the
+system state can be done efficiently by only saving updates to the
 state after the last recovery point.
 
 Recovery blocks also form the basis for Coordinated Atomic Actions
@@ -801,11 +801,14 @@ acceptance test. In case one participant fails to pass its test, each
 participant is rolled back to the state when it entered the
 conversation.
 
-We are currently studying this model since it easily can be fit in the
+We are currently studying this model since it can be fit easily in the
 \TB\ framework and seems to solve our problem of global exception
 handling.  It is helpful that a backtrack operator similar to the one
 described in~\cite{Klint85} has also been described for Process
-Algebra~\cite{BergstraPonseVanWamel93}.
+Algebra~\cite{BergstraPonseVanWamel93}. What remains to be studied is
+how the recovery of \emph{tools} has to be organized. Most likely, we
+will add a limited undo request to the tool interface to recover from
+the last few operations carried out by a tool.
 
 \subsection{Call-by-value versus Call-by-reference}
 \label{Sec:value-ref}
@@ -1102,12 +1105,45 @@ or reference counting at the \TB\ level may solve this problem.
 
 \section{Current Status} \label{Sec:status}
 
-\begin{verbatim}
-Current ToolBus implemented in C target: ASF+SDF Meta-Environment Next
-generation ToolBus implemented in Java Tools on same machine run in a
-separate thread Easy connection with RMI/CORBA, database access, ...
-target: gamesquare.nl multi-user game site, thousands of users.
-\end{verbatim}
+The current \TB\ has been first specified in \asdf\ and has then been
+implemented manually in C. It had as primary target the renovation
+of the \asdf\ Meta-Environment.
+
+The next generation \TB\ is being implemented in Java and aims at
+supporting larger applications such as, for instance, a multi-user game
+site like \url{www.gamesquare.nl} with thousands of users. High
+performance and recovery of crashed game clients are then of paramount
+importance.  The Java implementation is organized in such a way that
+the actual implementation of tools is as much hidden as possible. This
+is achieved by introducing the interface \texttt{ToolInterface} that
+describes the required \TB/tool interaction. This interface can be
+implemented by a variety of classes:
+
+\begin{description}
+
+\item[\texttt{ClassicToolBusTool}:] this implements the \TB/tool communication
+as used in current applications. The tool is executed as separate,
+operating system level, process and the \TB/tool communication
+is done using sockets.
+
+\item[\texttt{JavaTool}:] this implements a new model that answer one
+  of the issues mentioned in \S\ref{Sec:issues-NG}: when \TB\ and tool
+  run on the same computer \emph{and} the tool is written in Java,
+  then the tool can be loaded dynamically in the executing \TB.  In
+  this way, the overhead of interprocess communication can be
+  eliminated.
+
+\item[\texttt{JavaRMITool}:] this is a special case when a Java tool
+runs on another computer.
+
+\item[\texttt{SOAPTool}:] this implements communication with a tool
+that has a SOAP interface.
+
+\end{description}
+
+\noindent A prototype implementation is under development that allows
+experimentation with the features mentioned in this paper.
+
 
 \section{Concluding Remarks}
 
