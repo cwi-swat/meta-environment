@@ -6,7 +6,7 @@ enough to replace the old one. The old one was part of the ToolBus
 distribution from the start, and its long evolution left its mark
 on the clearness and conciseness of the code.
 
-\nwfilename{wish-adapter.c.nw}\nwbegincode{1}\sublabel{NWwisH-wisF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\moddef{wish-adapter.c*~{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+\filename{wish-adapter.c.nw}\nwbegincode{1}\sublabel{NWwisH-wisF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\moddef{wish-adapter.c*~{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 \LA{}notice~{\nwtagstyle{}\subpageref{NWwisH-not6-1}}\RA{}
 \LA{}includes~{\nwtagstyle{}\subpageref{NWwisH-inc8-1}}\RA{}
 \LA{}defines~{\nwtagstyle{}\subpageref{NWwisH-def7-1}}\RA{}
@@ -39,7 +39,7 @@ on the clearness and conciseness of the code.
 \LA{}wish_start~{\nwtagstyle{}\subpageref{NWwisH-wisA-1}}\RA{}
 \LA{}signal_handler~{\nwtagstyle{}\subpageref{NWwisH-sigE-1}}\RA{}
 \LA{}disconnect~{\nwtagstyle{}\subpageref{NWwisH-disA-1}}\RA{}
-\LA{}shutdown~{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}\RA{}
+\LA{}wish_shutdown~{\nwtagstyle{}\subpageref{NWwisH-wisD-1}}\RA{}
 \LA{}signals_set~{\nwtagstyle{}\subpageref{NWwisH-sigB-1}}\RA{}
 \LA{}help~{\nwtagstyle{}\subpageref{NWwisH-hel4-1}}\RA{}
 \LA{}cmd_options~{\nwtagstyle{}\subpageref{NWwisH-cmdB-1}}\RA{}
@@ -192,7 +192,7 @@ static void wish_create();
 static void wish_start();
 static void signal_handler( int sig );
 static void disconnect();
-static void shutdown( int ret );
+static void wish_shutdown( int ret );
 static void signals_set();
 static void help();
 static void cmd_options( int argc, char* argv[] );
@@ -209,7 +209,7 @@ static void error( const char* msg )
 \{
    disconnect();
    fprintf(stderr, "%s: %s : %s\\n", progname, msg, strerror(errno));
-   shutdown(1);
+   wish_shutdown(1);
 \}
 \nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{14}\nwdocspar
 
@@ -806,7 +806,7 @@ static TBbool rec_terminate( term* e, term** out )
    wprintf("\}\} msg] \{TBerror $msg\}; exit\\n" );
    fflush(to_wish);
    connected = TBfalse;
-   shutdown(0);
+   wish_shutdown(0);
    
    /* not reached */
    return TBtrue;
@@ -856,7 +856,7 @@ term* handle_input_from_wish( term* e )
    /* snd-disconnect */
    if(TBmatch(e, "snd-disconnect")) \{
       disconnect();
-      shutdown( 0 );
+      wish_shutdown( 0 );
    \}
       
    return e;
@@ -1029,7 +1029,7 @@ static void signal_handler( int sig )
          break;
       default:
          disconnect();
-         shutdown( 1 );
+         wish_shutdown( 1 );
    \}
 \}
 \nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{86}\nwdocspar
@@ -1049,12 +1049,12 @@ static void disconnect()
 \nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
 
 %}}}
-%{{{ static void shutdown(int ret)
+%{{{ static void wish_shutdown(int ret)
 
 Kill the wish child and exit.
 
-\nwenddocs{}\nwbegincode{89}\sublabel{NWwisH-shu8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}}\moddef{shutdown~{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}}\endmoddef\let\nwnotused=\nwoutput{}
-static void shutdown( int ret )
+\nwenddocs{}\nwbegincode{89}\sublabel{NWwisH-wisD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisD-1}}}\moddef{wish_shutdown~{\nwtagstyle{}\subpageref{NWwisH-wisD-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+static void wish_shutdown( int ret )
 \{
    sleep(1);
    
@@ -1165,8 +1165,7 @@ void main( int argc, char* argv[] )
    
    TBeventloop();
 \}
-\nwused{\\{NWwisH-wisF-1}}\nwendcode{}
-
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\par
 \nwixlogsorted{c}{{bytes_in_term}{NWwisH-bytD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-bytD-1}}}%
 \nwixlogsorted{c}{{check_in_sign}{NWwisH-cheD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-cheD-1}}}%
 \nwixlogsorted{c}{{cmd_options}{NWwisH-cmdB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-cmdB-1}}}%
@@ -1205,7 +1204,6 @@ void main( int argc, char* argv[] )
 \nwixlogsorted{c}{{rec_monitor variables}{NWwisH-recL-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-recL-1}}}%
 \nwixlogsorted{c}{{rec_terminate}{NWwisH-recD.2-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-recD.2-1}}}%
 \nwixlogsorted{c}{{require_fun}{NWwisH-reqB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-reqB-1}}}%
-\nwixlogsorted{c}{{shutdown}{NWwisH-shu8-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-shu8-1}}}%
 \nwixlogsorted{c}{{signal_handler}{NWwisH-sigE-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-sigE-1}}}%
 \nwixlogsorted{c}{{signals_set}{NWwisH-sigB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-sigB-1}}}%
 \nwixlogsorted{c}{{update notes}{NWwisH-updC-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-updC-1}}}%
@@ -1213,6 +1211,7 @@ void main( int argc, char* argv[] )
 \nwixlogsorted{c}{{update variables}{NWwisH-updG-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-updG-1}}}%
 \nwixlogsorted{c}{{wish-adapter.c*}{NWwisH-wisF-1}{\nwixd{NWwisH-wisF-1}}}%
 \nwixlogsorted{c}{{wish_create}{NWwisH-wisB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wisB-1}}}%
+\nwixlogsorted{c}{{wish_shutdown}{NWwisH-wisD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wisD-1}}}%
 \nwixlogsorted{c}{{wish_start}{NWwisH-wisA-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wisA-1}}}%
 \nwixlogsorted{c}{{wprintf}{NWwisH-wpr7-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wpr7-1}}}%
 \nwixlogsorted{c}{{wputc}{NWwisH-wpu5-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wpu5-1}}}%

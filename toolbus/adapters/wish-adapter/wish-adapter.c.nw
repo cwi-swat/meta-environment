@@ -39,7 +39,7 @@ on the clearness and conciseness of the code.
 <<wish_start>>
 <<signal_handler>>
 <<disconnect>>
-<<shutdown>>
+<<wish_shutdown>>
 <<signals_set>>
 <<help>>
 <<cmd_options>>
@@ -192,7 +192,7 @@ static void wish_create();
 static void wish_start();
 static void signal_handler( int sig );
 static void disconnect();
-static void shutdown( int ret );
+static void wish_shutdown( int ret );
 static void signals_set();
 static void help();
 static void cmd_options( int argc, char* argv[] );
@@ -209,7 +209,7 @@ static void error( const char* msg )
 {
    disconnect();
    fprintf(stderr, "%s: %s : %s\n", progname, msg, strerror(errno));
-   shutdown(1);
+   wish_shutdown(1);
 }
 @
 
@@ -806,7 +806,7 @@ static TBbool rec_terminate( term* e, term** out )
    wprintf("}} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
-   shutdown(0);
+   wish_shutdown(0);
    
    /* not reached */
    return TBtrue;
@@ -856,7 +856,7 @@ term* handle_input_from_wish( term* e )
    /* snd-disconnect */
    if(TBmatch(e, "snd-disconnect")) {
       disconnect();
-      shutdown( 0 );
+      wish_shutdown( 0 );
    }
       
    return e;
@@ -1029,7 +1029,7 @@ static void signal_handler( int sig )
          break;
       default:
          disconnect();
-         shutdown( 1 );
+         wish_shutdown( 1 );
    }
 }
 @
@@ -1049,12 +1049,12 @@ static void disconnect()
 @
 
 %}}}
-%{{{ static void shutdown(int ret)
+%{{{ static void wish_shutdown(int ret)
 
 Kill the wish child and exit.
 
-<<shutdown>>=
-static void shutdown( int ret )
+<<wish_shutdown>>=
+static void wish_shutdown( int ret )
 {
    sleep(1);
    

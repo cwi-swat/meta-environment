@@ -104,7 +104,7 @@ static void wish_create();
 static void wish_start();
 static void signal_handler( int sig );
 static void disconnect();
-static void shutdown( int ret );
+static void wish_shutdown( int ret );
 static void signals_set();
 static void help();
 static void cmd_options( int argc, char* argv[] );
@@ -114,7 +114,7 @@ static void error( const char* msg )
 {
    disconnect();
    fprintf(stderr, "%s: %s : %s\n", progname, msg, strerror(errno));
-   shutdown(1);
+   wish_shutdown(1);
 }
 #line 223 "wish-adapter.c.nw"
 static void wputc( int c )
@@ -513,7 +513,7 @@ static TBbool rec_terminate( term* e, term** out )
    wprintf("}} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
-   shutdown(0);
+   wish_shutdown(0);
    
    /* not reached */
    return TBtrue;
@@ -548,7 +548,7 @@ term* handle_input_from_wish( term* e )
    /* snd-disconnect */
    if(TBmatch(e, "snd-disconnect")) {
       disconnect();
-      shutdown( 0 );
+      wish_shutdown( 0 );
    }
       
    return e;
@@ -677,7 +677,7 @@ static void signal_handler( int sig )
          break;
       default:
          disconnect();
-         shutdown( 1 );
+         wish_shutdown( 1 );
    }
 }
 #line 1043 "wish-adapter.c.nw"
@@ -688,7 +688,7 @@ static void disconnect()
    connected = TBfalse;
 }
 #line 1057 "wish-adapter.c.nw"
-static void shutdown( int ret )
+static void wish_shutdown( int ret )
 {
    sleep(1);
    
