@@ -987,4 +987,13 @@ PT_Attr PT_makeAttrTraverse(void)
   return PT_makeAttrAterm(PT_makeATermTraverse());
 }
 
+/*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
+PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
+{
+  return PT_makeAttrsFromTerm(
+           (ATerm)ATreverse(
+                    (ATermList)PT_makeTermFromAttrs(attrs)));
+}
+
+/*}}}  */
 

@@ -125,5 +125,7 @@ PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top);
 ATbool PT_isTreeBracket(PT_Tree tree);
 PT_Tree PT_getTreeBracketTree(PT_Tree tree);
 
+PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
+
 
 #endif /* _ME_PT_H */ 
