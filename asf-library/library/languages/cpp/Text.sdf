@@ -1,0 +1,19 @@
+module Text
+
+exports
+
+sorts Text
+
+lexical syntax
+	[\n] -> NewLine
+	~[\n]* -> Chars
+
+	~[\#\n] Chars NewLine -> Stuff
+	NewLine -> Stuff
+
+lexical restrictions
+	Chars -/- ~[\n]
+
+context-free syntax
+	Stuff -> Line {cons("stuff")}
+	Line* -> Text 
