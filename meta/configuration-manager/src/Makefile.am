@@ -9,11 +9,10 @@ pkgdata_DATA         = configmanager.idef
 
 EXTRA_DIST        = configmanager.idef
 
-CLEANFILES        = configmanager.tif.c configmanager.tif.h configmanager.tifs
 
-configmanager_SOURCES = configmanager.c configmanager.h
-configmanager_LDADD   = configmanager.tif.o \
-			-L$(TOOLBUSLIB)/lib -lATB \
+noinst_HEADERS = configmanager.tif.h
+configmanager_SOURCES = configmanager.c configmanager.h configmanager.tif.c
+configmanager_LDADD   = -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
 
@@ -21,4 +20,3 @@ INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
 			-DBINDIR=\"$(bindir)\"
 
-configmanager.o : configmanager.tif.h

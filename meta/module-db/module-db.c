@@ -838,6 +838,8 @@ ATerm get_parse_table(int cid, ATerm moduleId)
       newpath = malloc(strLen+lenExtension+1);
       strncpy(newpath, path, strLen-lenType);
       strcpy(newpath+strLen-lenType, pathExt);
+      ATwarning("table: %t\n", table);
+
       if (!ATisEqual(table, MDB_NONE)) {
         ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
         contents = (ATerm)ATgetArgument((ATermAppl)table, 0);

@@ -1,7 +1,6 @@
 Makefile.in
 Makefile
 .deps
-editor-manager.tif.h
-editor-manager.tif.c
 editor-manager
 .libs
+*.tifs

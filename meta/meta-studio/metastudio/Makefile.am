@@ -1,3 +1,4 @@
+include ${top_srcdir}/make_rules
 
 SUBDIRS		= graph
 
@@ -34,12 +35,7 @@ api: metastudio.ace ${TYPES}
 		--property "java->rootdir:=\"${JAVAROOT}\"" \
 		metastudio.ace
 
-${GENSOURCES}: meta-studio.tifs
-	${TOOLBUS}/bin/tifstojava -tool user-interface -tifs $< \
+jtif: 
+	${IDEF} meta-studio.idef
+	${TOOLBUS}/bin/tifstojava -tool user-interface -tifs meta-studio.tifs \
 		-package metastudio
-
-%.tifs: %.idef
-	$(TOOLBUS)/bin/idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
-		mv ${srcdir}/$@ $@ ;\
-	fi

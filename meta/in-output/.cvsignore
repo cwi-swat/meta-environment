@@ -1,7 +1,6 @@
 Makefile.in
 Makefile
 .deps
-in-output.tif.h
-in-output.tif.c
 in-output
+*.tifs
 .libs

@@ -7,8 +7,6 @@ pkgdata_DATA		= module-db.idef
 
 EXTRA_DIST		= module-db.idef
 
-CLEANFILES		= module-db.tifs module-db.tif.c module-db.tif.h
-
 noinst_HEADERS		= module-db.tif.h module-db.h \
                           MDB.h MDB_dict.h module-refactorings.h
 module_db_SOURCES	= module-db.tif.c module-db.c \

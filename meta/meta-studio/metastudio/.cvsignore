@@ -1,9 +1,6 @@
 Makefile.in
 Makefile
 *.class
-UserInterfaceBridge.java
-UserInterfaceTif.java
-UserInterfaceTool.java
 classjava.stamp
 files.lst
 meta-studio.tifs
