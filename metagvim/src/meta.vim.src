@@ -1,3 +1,5 @@
+" $Id$
+
 let meta_dlso = "__LIBDIR__/libmeta_gvim.so"
 
 func! AddMetaMenu(vim_fd, menu, item)
