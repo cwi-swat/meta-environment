@@ -1,0 +1,12 @@
+module Pico-eval
+
+imports Pico-Booleans Pico-syntax Value-environments
+
+exports
+  context-free syntax
+    "evp" "(" PROGRAM ")"             -> VENV
+    "evd" "(" DECLS ")"               -> VENV
+    "evits" "(" {ID-TYPE  ","}* ")"   -> VENV
+    "evs" "(" {STATEMENT ";"}* ","  VENV ")"    -> VENV
+    "evst" "(" STATEMENT "," VENV ")" -> VENV
+    "eve" "(" EXP "," VENV ")"        -> VALUE

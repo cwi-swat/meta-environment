@@ -1,0 +1,3 @@
+  equations
+     [S1]   pico-str-con(""" Chars1 """) || pico-str-con(""" Chars2 """) =
+                pico-str-con(""" Chars1 Chars2 """)
