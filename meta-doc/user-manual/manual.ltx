@@ -268,6 +268,8 @@ system.  Topics that will be addressed include:
 \item The stand alone usage of various parts fot he system.
 \end{itemize}
 
+\subsection{Further Reading}
+
 \section{Starting the System}
 
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
@@ -286,7 +288,7 @@ controlled by the environment {\tt COMPILER\_OUTPUT}
 
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
 an interactive viewer (``ToolBus viewer'') will be started that allows the study of
-the internal behabiour of the system.
+the internal behaviour of the system.
 
 \item {\tt -h } shows help information for the {\tt meta} command.
 
@@ -309,8 +311,10 @@ may contain a list of absolute and/or relative paths. See the meta.conf
 file in the demo directory for an example. (**)
 
 \begin{figure}[tb]
+
   \centerline{\epsfig{file=meta-start.ps,width=10cm}}
-  \caption{\label{FIG:meta-start} Initial window of \ASmetaenv}
+  \caption{\label{FIG:meta1} Main window of \ASmetaenv}
+
 \end{figure}
 
 \section{The Main Window}
@@ -357,9 +361,10 @@ activity of the system.
 \end{itemize}
 
 \begin{figure}[tb]
-  \centerline{\epsfig{file=meta-pico.ps,width=10cm,rot=-90}}
+  \centerline{\epsfig{file=meta-pico.ps,width=10cm,angle=-90}}
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
+
 \section{The Menus of the Main Window}
  
 \subsection{The File menu}
@@ -374,6 +379,25 @@ The {\tt File} menu is shown in Figure \ref{FIG:file-menu}.
   \caption{\label{FIG:file-menu} File pull-down menu of \ASmetaenv}
 \end{figure}
 
+The {\tt File} menu contains the following entries:
+
+\begin{itemize}
+
+\item {\tt New}
+\item {\tt Open}
+\item {\tt Save}
+
+\item {\tt Clear }
+\item {\tt Revert}
+
+\item {\tt Export}
+
+\item {\tt Print Setup}
+\item {\tt Print}
+\item {\tt Quit}
+
+\end{itemize} 
+
 \subsection{The Edit menu}
 
 \begin{itemize}
@@ -385,6 +409,7 @@ The {\tt File} menu is shown in Figure \ref{FIG:file-menu}.
 
 \subsection{The Graph Menu}
 
+
 The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
 
 \begin{figure}[tb]
@@ -392,7 +417,19 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
   \caption{\label{FIG:graph-menu} Graph pull-down menu of \ASmetaenv}
 \end{figure}
 
+
+\begin{itemize}
+\item {\tt View All}
+\item {\tt Autoresize after loading}
+\item {\tt Animate while loading}
+\end{itemize}
+
 \subsection{The Debug Menu}
+
+\begin{figure}[tb]
+  \centerline{\epsfig{file=debug-menu.ps,width=6cm}}
+  \caption{\label{FIG:debug-menu}The Debug  Menu}
+\end{figure}
 
 \begin{itemize}
 \item {\tt Diagnostic messages}
@@ -400,19 +437,59 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
 
 \subsection{The Help Menu}
 
+\begin{figure}[tb]
+  \centerline{\epsfig{file=help-menu.ps,width=6cm}}
+  \caption{\label{FIG:help-menu}The Help  Menu}
+\end{figure}
+
 \begin{itemize}
 \item {\tt About NewMeta}
-\item {\tt Meta-Envrionment}
+\item {\tt Meta-Environment}
 \item {\tt Mouse operations}
 \item {\tt Online help}
 \end{itemize}
 
 \section{The Panes of the Main Window}
 
-\subsection{The Import Pane}
-\subsection{The Module List}
+The two left-most panes of the main window give two, alternative,
+views on the same information: the \asfsdf\ specification that has
+been loaded into the Meta-Environment.  Using one of these views the
+same set of operations is available either via a pop menu or via the
+buttons in the pane at the right-hand side of the main window.
 
-\section{The Buttons of the Main Window}
+\subsection{The Import Pane}
+
+The \emph{import pane} gives a graphical view of the specification by
+displaying the \emph{import} relation between modules in the form of a
+graph. A module $M_1$ imports another module $M_2$ if $M_1$ contains
+an import statement of the form {\tt imports $M_2$}.
+
+Each module is represented by a circle and an arrow between two
+circles represents an import relation between the two corresponding
+modules.
+
+The import pane has the following interaction facilities:
+
+\begin{itemize}
+
+\item Clicking \emph{on} a module yields a pop up menu
+with the same entries as the button pane of tyhe main window
+(see Section \ref{ButtonPane})
+\item Click \emph{outside} any module:
+\end{itemize}
+
+The import pane is particularly usefull when you want to understand the
+overall structure of a specification but it may become unwieldy for
+very large specifications. For large specifications the module pane
+may give you quicker access to the modules in the specification.
+
+
+\subsection{The Module Pane}
+
+The Module Pane presents a vertical, scrollable, list of all the module
+names in the specification.
+
+\subsection{The Button Pane of the Main Window} \label{ButtonPane}
 
   \begin{itemize}
   \item {\tt Edit Sdf2}
@@ -438,6 +515,10 @@ The {\tt Graph} menu is shown in Figure \ref{FIG:graph-menu}.
 \subsection{Evaluating terms}
 
 \subsection{Compiling a specification}
+
+\section{Guided Tour}
+
+\section{The ASF+SDF specification formalism}
 
 \section{Miscellaneous}
 
