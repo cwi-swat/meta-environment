@@ -36,7 +36,7 @@ ATbool PT_prodHasCfLayoutAsRhs(PT_Production arg);
 ATbool PT_isOptLayoutProd(PT_Production arg);
 ATbool PT_prodHasVarSymAsRhs(PT_Production arg);
 ATbool PT_isVarDefault(PT_Production arg);
-ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod);
+ATbool PT_isLexicalInjectionProd(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
 ATbool PT_isProductionList(PT_Production prod);
@@ -106,5 +106,7 @@ ATbool PT_hasProductionMemoAttr(PT_Production prod);
 ATbool PT_hasProductionTraverseAttr(PT_Production prod); 
 
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
+PT_Symbol makeSymbolAllChars();
+PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
 
 #endif /* _ME_PT_H */ 

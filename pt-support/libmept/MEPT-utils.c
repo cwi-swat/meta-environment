@@ -55,7 +55,7 @@ ATbool PT_isLexicalProd(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_prodHasLexSortAsRhs: not a production: %t\n", prod);
+  ATerror("PT_isLexicalProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -136,7 +136,7 @@ ATbool PT_isVarDefault(PT_Production prod)
   return ATfalse;
 }
 
-ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod)
+ATbool PT_isLexicalInjectionProd(PT_Production prod)
 {
   /* This implements: "prod([lex(<term>)],cf(<term>),<term>)" */
   if (PT_isProductionDefault(prod)) {
@@ -144,14 +144,18 @@ ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod)
     PT_Symbol rhs = PT_getProductionRhs(prod);
 
     if (PT_isSymbolCf(rhs) && PT_hasSymbolsHead(lhs)) {
+      PT_Symbol rhsNestedSymbol = PT_getSymbolSymbol(rhs);
       PT_Symbol lhssym = PT_getSymbolsHead(lhs);
       PT_Symbols tail = PT_getSymbolsTail(lhs);
-      return PT_isSymbolsEmpty(tail) && PT_isSymbolLex(lhssym);
+      if (PT_isSymbolsEmpty(tail) && PT_isSymbolLex(lhssym)) {
+        PT_Symbol lhsNestedSymbol = PT_getSymbolSymbol(lhssym);
+        return PT_isEqualSymbol(rhsNestedSymbol, lhsNestedSymbol);
+      }
     }
     return ATfalse;
   }
 
-  ATerror("PT_prodHasLexAsLhsAndCfAsRhs: not a production: %t\n", prod);
+  ATerror("PT_isLexicalInjectionProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -781,3 +785,23 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod)
 }
 
 /*}}}  */       
+/*{{{  PT_Symbol makeSymbolAllChars() */
+
+PT_Symbol makeSymbolAllChars()
+{
+  PT_CharRanges ranges = PT_makeCharRangesList(
+                           PT_makeCharRangeRange(0,255),
+                           PT_makeCharRangesEmpty());
+  return PT_makeSymbolIterStar(
+           PT_makeSymbolCharClass(ranges));
+}  
+
+/*}}}  */
+/*{{{  PT_Tree PT_makeTreeFlatLexical(PT_Args charList) */
+
+PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
+{
+  return PT_makeTreeList(makeSymbolAllChars(), charList);
+}
+
+/*}}}  */
