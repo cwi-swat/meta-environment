@@ -185,16 +185,15 @@ fi,
 AC_SUBST(TBSWIPL)
 
 AC_ARG_WITH(java,
-[  --with-java=<classdir>	include java support (java-adapter)],
+[  --with-java          	include java support (java-adapter)],
 echo "Make sure javac and java are in your path and your CLASSPATH"
 echo "variable is pointing to the right locations."
-ADAPTERS="${ADAPTERS} java-adapter"
-DEMOS="${DEMOS} www-auction"
 if test ${withval} = "yes"
 then
-  classdir=${HOME}/classes
+  ADAPTERS="${ADAPTERS} java-adapter"
+  DEMOS="${DEMOS} www-auction"
 else
-  classdir=${withval}
+  classdir=""
 fi,
 )
 AC_SUBST(classdir) 
