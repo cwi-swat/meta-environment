@@ -66,6 +66,10 @@ DATAFILES	=
 
 all:	${BINFILES}
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 libs:	${LIBFILES}
 
 .SILENT:	depend

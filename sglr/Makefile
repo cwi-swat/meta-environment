@@ -10,7 +10,7 @@ all doc install:	libs
 
 libs:	config.status
 
-all libs doc clean install uninstall distclean:
+all libs doc clean install uninstall distclean test:
 	@for DIR in $(SUBDIRS);	\
 	do \
 		if [ -d $$DIR ]; then \

@@ -56,6 +56,10 @@ DISTCLEANFILES	= Makefile ${BINFILES} ${LIBFILES}
 # The all target must be defined:
 all: $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 libs:	${LIBFILES}
 
 
