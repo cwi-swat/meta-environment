@@ -63,11 +63,8 @@ dist: $(DISTFILES)
 	  || cp $(srcdir)/$$file ${INSTALLDIR}/${COMPONENT}; \
 	done
 
-install: $(PROGRAMS) $(CLASSES)
+install: $(CLASSES)
 	-mkdir $(classdir)/$(COMPONENT)
-	for file in $(PROGRAMS); do\
-	  $(INSTALL) $$file $(bindir); \
-	done
 	for file in $(CLASSES); do\
 	  $(INSTALL) $$file $(classdir)/$(COMPONENT); \
 	done
@@ -75,9 +72,6 @@ install: $(PROGRAMS) $(CLASSES)
 doc:
 
 uninstall:
-	for file in $(PROGRAMS); do\
-	  rm -f $(bindir)/$$file; \
-	done
 	for file in $(CLASSES); do\
 	  rm -f $(classdir)/$(COMPONENT)/$$file;\
 	done 
