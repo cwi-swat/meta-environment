@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/11 (jurgenv@cwi.nl)
+ * A lot of method extraction in MetaStudio.java
+ 
 2003/07/11 (markvdb@cwi.nl)
  * Added a button to read the term store from disk.
  * Some cleanup in meta-studio
