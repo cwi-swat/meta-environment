@@ -1,4 +1,8 @@
+/* $Id$ */
 
+Thu Mar 10 11:03:54 CET 2005 <{jong,kooiker}@cwi.nl>
+ * generator/main.c:
+   - fix compilation error
 
 Fri Feb 18 11:24:08 CET 2005 <kooiker@cwi.nl>
  * generator/pandora.c:

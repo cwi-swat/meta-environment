@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 	ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
       }
       else {
-	ptText = box;
+	ptText = PT_ParseTreeFromTerm(BOX_StartToTerm(box));
       }
 
       if (textmode) {
