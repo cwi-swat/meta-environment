@@ -2,26 +2,34 @@ equations
 
 %% ---- Get value of a variable
 
-[VL1]	value($Var, rstore(<$Var, $Val>, $VPair*)) = $Val
-[VL2]	$Var != $Var' ===> value($Var, rstore(<$Var', $Val>, $VPair*)) = value($Var, rstore($VPair*))
+[VL1]	value($Var, rstore(<$Var, $Type, $Val>, $VPair*)) = $Val
+[VL2]	$Var != $Var' ===> value($Var, rstore(<$Var', $Type, $Val>, $VPair*)) = value($Var, rstore($VPair*))
 
 %% Added by Mark van den Brand on 9th of July 2003
 [VL3]   value($Var, rstore()) = *undefined*
 
 %% ---- Assign value to variable
 
-[ASG1]  assign($Var, $Val, rstore($VPair*1, <$Var, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Val>, $VPair*2)
+[ASG1]  assign($Var, $Val, rstore($VPair*1, <$Var, $Type, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2)
 	
-[default-ASG1]	
-	assign($Var, $Val, rstore($VPair*)) = rstore(<$Var, $Val>, $VPair*)
+[default-ASG]	
+	assign($Var, $Val, rstore($VPair*)) = rstore(<$Var, undefined, $Val>,
+	$VPair*)
+
+%% ---- Assign value of given type to variable
+
+[ASGT1]  assign($Var, $Type, $Val, rstore($VPair*1, <$Var, $Type, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2)
+	
+[default-ASGT]	
+	assign($Var, $Type, $Val, rstore($VPair*)) = rstore(<$Var, $Type, $Val>, $VPair*)
 
 %% ---- Assign when undefined
 
-[AWU1]  assign-when-undef($Var, $Val, rstore($VPair*1, <$Var, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Val'>, $VPair*2)
+[AWU1]  assign-when-undef($Var, $Type, $Val, rstore($VPair*1, <$Var, $Type', $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Type', $Val'>, $VPair*2)
 	
 
 [default-AWU2]	
-	assign-when-undef($Var, $Val, rstore($VPair*)) = rstore(<$Var, $Val>, $VPair*)
+	assign-when-undef($Var, $Type, $Val, rstore($VPair*)) = rstore(<$Var, $Type, $Val>, $VPair*)
 
 %% Add elem to bag
 
@@ -35,26 +43,26 @@ equations
 
 %% ---- Add tuple to a relation
 
-[AT1]	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var, $Val>, $VPair*)) = 
-	rstore(<$Var, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
+[AT1]	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var, $Type, $Val>, $VPair*)) = 
+	rstore(<$Var, $Type, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
 
 [AT2]	$Var != $Var', 
 	rstore($VPair*') := add-tuple($Var, <$Elem1, $Elem2>, rstore($VPair*))
 	===============================================================
-	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var', $Val>, $VPair*)) = rstore(<$Var', $Val>, $VPair*')
+	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var', $Type, $Val>, $VPair*)) = rstore(<$Var', $Type, $Val>, $VPair*')
 
-[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, insert(<$Elem1, $Elem2>, empty-bag) >)
+[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, undefined, insert(<$Elem1, $Elem2>, empty-bag) >)
 
 %% ---- Add tuples to a relation
 
-[ATS1]	add-tuples($Var, $Rel, rstore(<$Var, $Val>, $VPair*)) = rstore(<$Var, xunion($Rel, $Val)>, $VPair*)
+[ATS1]	add-tuples($Var, $Rel, rstore(<$Var, $Type, $Val>, $VPair*)) = rstore(<$Var, $Type, xunion($Rel, $Val)>, $VPair*)
 
 [ATS2]	$Var != $Var', 
 	rstore($VPair*') := add-tuples($Var, $Rel, rstore($VPair*))
 	===============================================================
-	add-tuples($Var, $Rel, rstore(<$Var', $Val>, $VPair*)) = rstore(<$Var', $Val>, $VPair*')
+	add-tuples($Var, $Rel, rstore(<$Var', $Type, $Val>, $VPair*)) = rstore(<$Var', $Type, $Val>, $VPair*')
 
-[ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, $Rel >)
+[ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, undefined, $Rel >)
 
 [UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
 [UN3]	xunion($Elem, $Bag) 	= union(insert($Elem, empty-bag), $Bag)
@@ -74,7 +82,7 @@ equations
 [fr1]	$Bag != empty-bag,
 	in(rvar2str($Var), $Bag) == false
 	=========================================	
-	filter(rstore($VPair*1, <$Var, $Val>, $VPair*2), $Bag) = 
+	filter(rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2), $Bag) = 
 	filter(rstore($VPair*1, $VPair*2), $Bag)
 
 [default-fr1]	filter($Rstore, $Bag) = $Rstore
@@ -102,59 +110,91 @@ equations
 
 [imp12]	import1( , $Rstore) = $Rstore
 
+%% ---- Export an RVIZ file
+
+[erv1]	export-rviz($Rstore) = export($Rstore)
+
+[exp1]	export(rstore(<$Var, $Type, $Val>, $VPair*)) = 
+export-pair($Var, $Type, $Val) 
+export(rstore($VPair*))
+
+[exp1]	export(rstore()) =
+
+[expp1]	export-pair($Var1, rel[$Var2,area], {<$String, $Area>, $Elem*}) = 
+item rvar2str($Var2) $String get-filename($Area) get-beginline($Area) get-begincol($Area)  get-endline($Area) get-endcol($Area);
+export-pair($Var1, rel[$Var2,area], {$Elem*}) 
+
+
+[expp2]	export-pair($Var1, $Var2, {$String, $Elem*}) = 
+bag $Var1 rvar2str($Var2) $String;
+export-pair($Var1, $Var2, {$Elem*}) 
+
+
+[expp3]	export-pair($Var1, rel[$Var2,$Var3], {<$String1, $String2>, $Elem*}) = 
+rel $Var1 rvar2str($Var2)  $String1  rvar2str($Var3) $String2;
+export-pair($Var1, rel[$Var2, $Var3], {$Elem*}) 
+
+[expp2]	export-pair($Var, $Type, {}) =
+
+[default-expp]
+	export-pair($Var, $Type, {$Elem*}) = 
+
+%%[vc1]	Vdata*1 ++ Vdata*2 = Vdata*1 Vdata*2		
+
+
+
 %% ----- Merge two Rstores
 
 [zip-rstores-0]
-  zip-rstores(rstore(), $Rstore) = $Rstore
+	zip-rstores(rstore(), $Rstore) = $Rstore
 
 [zip-rstores-1]
-  zip-rstores($Rstore, rstore()) = $Rstore
+	zip-rstores($Rstore, rstore()) = $Rstore
 
 [zip-rstores-2]
-  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
-                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
-  = zip-rstores(rstore($VPair*),
-                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
+	zip-rstores(rstore(<$Var, $Type, {$Elem*1}>, $VPair*),
+                    rstore($VPair*1, <$Var, $Type, {$Elem*2}>, $VPair*2)) = 
+	zip-rstores(rstore($VPair*), rstore($VPair*1, <$Var, $Type, {$Elem*1,$Elem*2}>, $VPair*2))
 
 [default-zip-rstores]
-  zip-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))
-    = zip-rstores(rstore($VPair*), rstore(<$Var, $Val>, $VPair*1))
+	zip-rstores(rstore(<$Var, $Type, $Val>, $VPair*), rstore($VPair*1)) =
+	zip-rstores(rstore($VPair*), rstore(<$Var, $Type, $Val>, $VPair*1))
 
 [merge-1]
-  merge-rstores($Rstore) = $Rstore
+	merge-rstores($Rstore) = $Rstore
 
 [merge-2]
-  merge-rstores($Rstore1, $Rstore2)
-  = zip-rstores($Rstore1, $Rstore2)
+	merge-rstores($Rstore1, $Rstore2) = zip-rstores($Rstore1, $Rstore2)
 
 [merge-3]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3)
-  = merge-rstores(merge-rstores($Rstore1, $Rstore2), $Rstore3)
+	merge-rstores($Rstore1, $Rstore2, $Rstore3) = 
+	merge-rstores(merge-rstores($Rstore1, $Rstore2), $Rstore3)
 
 [merge-4]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4)
-  = merge-rstores(merge-rstores($Rstore1, $Rstore2),
-                  merge-rstores($Rstore3, $Rstore4))
+	merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4)= 
+	merge-rstores(merge-rstores($Rstore1, $Rstore2),
+		      merge-rstores($Rstore3, $Rstore4))
 
 [merge-5]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5)
-  = merge-rstores(
-      merge-rstores($Rstore1, $Rstore2, $Rstore3),
-      merge-rstores($Rstore4, $Rstore5))
+	 merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5) = 
+	 merge-rstores(
+		merge-rstores($Rstore1, $Rstore2, $Rstore3),
+		merge-rstores($Rstore4, $Rstore5))
 
 [merge-6]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6)
-  = merge-rstores(
-        merge-rstores($Rstore1, $Rstore2, $Rstore3),
-        merge-rstores($Rstore4, $Rstore5, $Rstore6))
+	merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6) = 
+	merge-rstores(
+		merge-rstores($Rstore1, $Rstore2, $Rstore3),
+		merge-rstores($Rstore4, $Rstore5, $Rstore6))
 
 [merge-7]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6, $Rstore7)
-  = merge-rstores(
-        merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4),
-        merge-rstores($Rstore5, $Rstore6, $Rstore7))
+	merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6, $Rstore7) = 
+	merge-rstores(
+		merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4),
+		merge-rstores($Rstore5, $Rstore6, $Rstore7))
 
 [merge-8]
-  merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6, $Rstore7, $Rstore8)
-  = merge-rstores(merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4),
-                  merge-rstores($Rstore5, $Rstore6, $Rstore7, $Rstore8))
+	merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4, $Rstore5, $Rstore6, $Rstore7, $Rstore8) = 
+	merge-rstores(
+		merge-rstores($Rstore1, $Rstore2, $Rstore3, $Rstore4),
+		merge-rstores($Rstore5, $Rstore6, $Rstore7, $Rstore8))

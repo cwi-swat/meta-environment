@@ -2,7 +2,8 @@
 
 set -e
 
-TABLE=/ufs/jong/Research/RPA/RscriptCalculator.trm.tbl
+TABLE=/home/paulk/research/relation-calculus/Rstore.trm.tbl
+RSTORE=/home/paulk/research/relation-calculus/Rstore
 RESULT=result.rstore
 
 echo -n "creating empty ${RESULT} .."
@@ -11,7 +12,7 @@ echo " done."
 
 for f in $*; do
   echo -n "merging $f into ${RESULT} .."
-  Rstore -f merge-rstores -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
+  $RSTORE -f merge-rstores -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
   echo " done."
 done
 

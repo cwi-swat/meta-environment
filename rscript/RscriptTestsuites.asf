@@ -1,9 +1,9 @@
 equations
 
-[ETS1]	$Rstore = eval-rstats($Stat*, rstore(<NPASSED,0>,<NFAILED,0>,<FAILED,empty-bag>)),
-	$NatCon1 = value(NPASSED, $Rstore),
-	$NatCon2 = value(NFAILED, $Rstore),
-	$Val = value(FAILED, $Rstore)
+[ETS1]	$Rstore := eval-rstats($Stat*, rstore(<NPASSED,int,0>,<NFAILED,int,0>,<FAILED,bag[str],empty-bag>)),
+	$NatCon1 := value(NPASSED, $Rstore),
+	$NatCon2 := value(NFAILED, $Rstore),
+	$Val := value(FAILED, $Rstore)
 	==========================================================
 	eval-rscript-testsuite($Stat*) = testsuite-report($NatCon1, $NatCon2, $Val)
 
@@ -16,18 +16,18 @@ equations
 
 %% ---- Increment a variable
 
-[INC1]	value($Var, $Rstore) = $NatCon,
-	$Integer =  $NatCon + 1,
-	$NatCon' = $Integer
+[INC1]	$NatCon := value($Var, $Rstore),
+	$Integer :=  $NatCon + 1,
+	$NatCon' := $Integer
 	==================================================
 	increment($Var, $Rstore) = assign($Var, $NatCon', $Rstore)
 
 %% ---- Evaluate assert
 
-[S10]	evalp($Exp,$Rstore) = true
+[S10]	evalp($Exp,$Rstore) == true
 	===================================================
 	eval-rstat(assert $String : $Exp, $Rstore)= increment(NPASSED, $Rstore)
 
-[S11]	evalp($Exp,$Rstore) = false, add-elem(FAILED, $String, $Rstore) = $Rstore'
+[S11]	evalp($Exp,$Rstore) == false, $Rstore' := add-elem(FAILED, $String, $Rstore)
 	===================================================
 	eval-rstat(assert $String : $Exp, $Rstore)= increment(NFAILED, $Rstore')

@@ -1,0 +1,14 @@
+module Rviz
+
+imports Rscript basic/Whitespace
+
+exports
+   sorts VDATA RVIZ
+
+   context-free syntax
+     "item" String String String Integer Integer Integer Integer ";" -> VDATA
+     "rel"  RVAR String String String String	";"		     -> VDATA
+     "bag" RVAR String String	";"				     -> VDATA
+
+     VDATA*							     -> RVIZ
+   

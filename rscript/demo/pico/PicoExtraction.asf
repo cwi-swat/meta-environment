@@ -2,44 +2,44 @@ equations
 
 [as-1] add-pred($Rel, $Rstore) = add-tuples(PRED, $Rel, $Rstore)
  
-[ex1] Stat = while Exp do Stat* od,
-      $Area = get-area(Stat),
-      $Rstore' = add-pred({<$Area, get-first(Stat*)>}, $Rstore),
-      $Rstore''= add-last(Stat*, $Area, $Rstore'),
-      $Rstore''' = extract-used-vars(Exp, $Rstore'', $Area)
+[ex1] while Exp do Stat* od := Stat,
+      $Area := get-area(Stat),
+      $Rstore' := add-pred({<$Area, get-first(Stat*)>}, $Rstore),
+      $Rstore'':= add-last(Stat*, $Area, $Rstore'),
+      $Rstore''' := extract-used-vars(Exp, $Rstore'', $Area)
       =========================================================
       extract(Stat, $Rstore) = $Rstore'''
 
 [ex2]
-      Stat = if Exp then Stat*1 else Stat*2 fi,
-      $Area = get-area(Stat),
-      $Rstore' = add-pred({ <$Area, get-first(Stat*1)>,
+      if Exp then Stat*1 else Stat*2 fi := Stat,
+      $Area := get-area(Stat),
+      $Rstore' := add-pred({ <$Area, get-first(Stat*1)>,
                            <$Area, get-first(Stat*2)> }, $Rstore),
-      $Rstore'' =  extract-used-vars(Exp, $Rstore', $Area)
+      $Rstore'' :=  extract-used-vars(Exp, $Rstore', $Area)
       ========================================================
       extract(Stat, $Rstore) = $Rstore''
 
-[ex3] extract(Stat, $Rstore) = $Rstore',
-      extract(Stat+, $Rstore') = $Rstore''
+[ex3] $Rstore' := extract(Stat, $Rstore),
+      $Rstore'' := extract(Stat+, $Rstore')
       ========================================================
       extract(Stat ; Stat+, $Rstore) = 
       add-pred(product(get-last(Stat), {get-first(Stat+)}), $Rstore'')
 
-[ex4] Stat = Id := Exp,
-      $Area = get-area(Stat),
-      $Area' = get-area(Id),
-      $Rstore' = extract-used-vars(Exp, $Rstore, $Area),
-      $Rstore'' = add-tuple(DEFS, <$Area, id2str(Id)>, $Rstore'),
-      $Rstore''' = add-tuple(OCCURS, <id2str(Id), $Area'>, $Rstore'')
+[ex4] Id := Exp := Stat,
+      $Area := get-area(Stat),
+      $Area' := get-area(Id),
+      $Rstore' := extract-used-vars(Exp, $Rstore, $Area),
+      $Rstore'' := add-tuple(DEFS, <$Area, id2str(Id)>, $Rstore'),
+      $Rstore''' := add-tuple(OCCURS, <id2str(Id), $Area'>, $Rstore'')
       ========================================================
       extract(Stat, $Rstore) = $Rstore'''
 
 [default-ex]
      extract(Stat, $Rstore) = extract-used-vars(Stat, $Rstore, get-area(Stat))
 
-[exv-1] $Area' = get-area(Id),
-	add-tuple(USES, <$Area, id2str(Id)> , $Rstore) = $Rstore',
-        add-tuple(OCCURS, <id2str(Id), $Area'>, $Rstore') = $Rstore''
+[exv-1] $Area' := get-area(Id),
+	$Rstore' := add-tuple(USES, <$Area, id2str(Id)> , $Rstore),
+        $Rstore'' := add-tuple(OCCURS, <id2str(Id), $Area'>, $Rstore')
 	=====================================================
         extract-used-vars(Id, $Rstore, $Area) = $Rstore''
 
@@ -51,23 +51,25 @@ equations
 [default-gl-3] 
        get-last(Stat*; Stat) = {get-area(Stat)}
 
-[al-1] get-last(Stat*) = $Bag
+[al-1] $Bag := get-last(Stat*)
        ========================================================
        add-last(Stat*, $Area, $Rstore) = add-pred(product($Bag, {$Area}), $Rstore)
 
-[er-1] Program = begin Decls Stat+ end,
-       $Area =  area("",0,0,0,0),
-       $Rstore = assign(ROOT, $Area, rstore()),
-       $Rstore' = add-pred({<$Area, get-first(Stat+)>}, $Rstore),
-       extract(Program, $Rstore') = $Rstore''
+[er-1] begin Decls Stat+ end := Program,
+       $Area :=  area("",0,0,0,0),
+       $Rstore1 := assign(ROOT, area, $Area, rstore()),
+       $Rstore2 := assign(USES, rel[area,str], {}, $Rstore1),
+       $Rstore3 := assign(OCCURS, rel[str,area], {}, $Rstore2),
+       $Rstore4 := assign(PRED, rel[area,area], {}, $Rstore3),
+       $Rstore5 := add-pred({<$Area, get-first(Stat+)>}, $Rstore4)
        =======================================================
-       extractRelations(Program) = $Rstore''
+       extractRelations(Program) = extract(Program, $Rstore5)
 
 [i2s] id2str(pico-id(Char*)) = strcon(""" Char* """)
 
 [cvt-1] convert(<$String, $Area>) = listitem("Unitialized variable " || $String, $Area)
 
-[cvt-2] convertl({$Elem*}) = [$ListItem*]
+[cvt-2] [$ListItem*] := convertl({$Elem*})
         ================================================
         convertl({<$String, $Area>, $Elem*})= [convert(<$String, $Area>), $ListItem*]
 
