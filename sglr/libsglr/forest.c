@@ -433,7 +433,9 @@ tree SG_YieldTree(parse_table *pt, tree t)
     fun  = ATgetAFun(t);
 
     /*  A small sanity check */
-    assert(fun != SG_Reject_AFun);
+    if (SG_FILTER_REJECT) {
+      assert(fun != SG_Reject_AFun);
+    }
 
     if(fun == SG_Amb_AFun) {
        ambs = (ATermList) ATgetArgument((ATerm) t, 0); /* get the ambs */
@@ -1378,6 +1380,10 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
       for (;!ATisEmpty(localAmbs); localAmbs = ATgetNext(localAmbs)) {
         amb = (tree) ATgetFirst(localAmbs);
         if (SG_HasRejectProd(amb)) {
+	  /* We need to filter the first tree in order to get the position
+	   * information correct.
+	   */
+          SG_FilterTreeRecursive(pt, amb, pos, ATtrue);
           return NULL;
         }
       }
@@ -1476,17 +1482,19 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
       t = newt;
     }
     else {
+      args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
+      newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, pos,
+                          ATfalse);
       if (SG_FILTER) {
         if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
+	  /* The check for reject productions has to be done afterwards
+	   * in order to get correct position information.
+	   */
           if (SG_HasRejectProd(t)) {
             return NULL;
           }
         }
       }
-
-      args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
-      newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, pos,
-                          ATfalse);
       if (newargs) {
         t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
       }
