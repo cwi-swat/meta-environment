@@ -94,6 +94,19 @@ equations
                                   [Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) =
                 "prod(id(" ++ funid(""" "\" """ Char* "\" """ """) ++ "),w(\"\")," ++ Funid1 ++ ",w(\"\"),l(\"->\"),w(\"\")," ++ Funid2 ++  ",w(\"\")," ++ Funid3 ++ ")"
 
+  [tcf2i-1'2] is-prefix-production-prod(Prod) = true,
+              literal2id(Symbol1) = Funid1,
+              argslist2id(Symbol2) = Funid2,
+              symbol2id(Symbol3) = Funid3,
+              attrs2id(Attr) = Funid4
+              =======================
+              term-cffunc2id(id(literal(""" Char* """)),appl(Prod,w(""),
+                                  [Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,l("->"),Ws5,Symbol3,Ws6,Attr])) =
+                "prod(id(" ++ funid(""" "\" """ Char* "\" """ """) ++ "),w(\"\"),[" ++ Funid1 ++
+                ",w(\"\"),ql(\"(\"),w(\"\")," ++ Funid2 ++
+                ",w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\")," ++ Funid3 ++
+                ",w(\"\")," ++ Funid4 ++ ")"
+
   [ss2i-1'1] is-symbols-prod(Prod) = true,
              symbollist2id(SymbolList) = Funid
              =================================
@@ -115,6 +128,22 @@ equations
              symbolplus2id(Symbol+) = Funid2
              ===============================
              symbolplus2id(Symbol,Ws,Symbol+) = Funid1 ++  ",w(\"\")," ++ Funid2
+
+  [al2i-1'1] is-symbol-itersep(Iter) = true
+             ==============================
+             argslist2id(list(Iter,w(""),[])) = ""
+
+  [al2i-1'2] is-symbol-itersep(Iter) = true,
+             argsplus2id(Symbol+) = Funid
+             ==============================
+             argslist2id(list(Iter,w(""),[Symbol+])) = Funid
+
+  [ap2i-1'1] argsplus2id(Symbol) = symbol2id(Symbol)
+
+  [ap2i-1'2] symbol2id(Symbol) = Funid1,
+             argsplus2id(Symbol+) = Funid2
+             ===============================
+             argsplus2id(Symbol,Ws1,Sep,Ws2,Symbol+) = Funid1 ++ ",w(\"\"),ql(\",\"),w(\"\")," ++ Funid2
 
   [s2i-1'1] is-literal-symbol-prod(Prod) = true,
             literal2id(Literal) = Funid

@@ -47,8 +47,10 @@ exports
 
   context-free syntax
    "is-production-prod" "(" ATerm ")"         -> Bool
+   "is-prefix-production-prod" "(" ATerm ")"  -> Bool
    "is-symbols-prod" "(" ATerm ")"            -> Bool
    "is-symbol-iter" "(" ATerm ")"             -> Bool
+   "is-symbol-itersep" "(" ATerm ")"          -> Bool
    "is-literal-symbol-prod" "(" ATerm ")"     -> Bool
    "is-uqliteral-prod" "(" ATerm ")"          -> Bool
    "is-sort-symbol-prod" "(" ATerm ")"        -> Bool
@@ -82,9 +84,10 @@ exports
    "is-neg-cond-prod" "(" ATerm ")"           -> Bool
 
   context-free syntax
-    "term-get-symbol-prod" "(" ATerm ")" -> ATerm
-    "term-get-args-prod" "(" ATerm ")"   -> ATermList
-    "term-get-attrs-prod" "(" ATerm ")"  -> ATerm
+    "term-get-symbol-prod" "(" ATerm ")"        -> ATerm
+    "term-get-args-prod" "(" ATerm ")"          -> ATermList
+    "term-get-args-prefix-prod" "(" ATerm ")"   -> ATermList
+    "term-get-attrs-prod" "(" ATerm ")"         -> ATerm
 
 hiddens
   variables

@@ -24,6 +24,10 @@ equations
              ===============================
              is-term-production(appl(Prod,Ws,CfArgs)) = true
 
+  [itcf-1'1] is-prefix-production-prod(Prod) = true
+             ======================================
+             is-term-production(appl(Prod,Ws,CfArgs)) = true
+
   [default-itcf-1'2] is-term-production(Aterm) = false
 
   [itcf-1'1] is-ceq-equ-prod(Prod) = true
@@ -197,6 +201,12 @@ equations
              ===========================
              term-get-args-prod(appl(Prod1,Ws0,[Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) = CfArgs
 
+  [tgap-1'2] is-prefix-production-prod(Prod1) = true,
+             Symbol2 = list(Iter,w(""),CfArgs)
+             =======================================
+             term-get-args-prod(appl(Prod1,Ws0,[Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,
+                                     l("->"),Ws5,Symbol3,Ws6,Attr])) = CfArgs
+
   [tgsp-1'1] is-production-prod(Prod) = true,
              Symbol = appl(Prod2,Ws4,[Sort]),
              is-sort-symbol-prod(Prod2) = true,
@@ -209,6 +219,11 @@ equations
              ===============================
              term-get-attrs-prod(appl(Prod,Ws0,[Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) = Attr
 
+  [tgap-1'2] is-prefix-production-prod(Prod) = true
+             =======================================
+             term-get-attrs-prod(appl(Prod,Ws0,[Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,
+                                     l("->"),Ws5,Symbol3,Ws6,Attr])) = Attr
+
 %% Various functions to check the productions.
 
   [ipp-1'1] is-production-prod(prod(id("Kernel-Sdf-Syntax"),w(""),[sort("Symbols"),
@@ -218,6 +233,16 @@ equations
 
   [default-ipp-1'2] is-production-prod(Prod) = false
 
+  [ippp-1'1] is-prefix-production-prod(prod(id("Literals-Sdf-Syntax"),w(""),[sort("Literal"),
+                                       w(""),ql("("),w(""),iter-sep(l("{"),w(""),
+                                       sort("Symbol"),w(""),ql(","),w(""),l("}"),w(""),
+                                       l("*")),w(""),ql(")"),w(""),ql("->"),w(""),
+                                       sort("Symbol"),w(""),sort("Attributes")],w(""),
+                                       l("->"),w(""),sort("Production"),w(""),
+                                       attrs(l("{"),w(""),[l("avoid")],w(""),l("}")))) = true
+
+  [default-ippp-1'2] is-prefix-production-prod(Prod) = false
+
   [isp-1'1] is-symbols-prod(prod(id("Symbols"),w(""),[iter(sort("Symbol"),w(""),l("*"))],
                             w(""),l("->"),w(""),sort("Symbols"),w(""),no-attrs)) = true
 
@@ -226,6 +251,10 @@ equations
   [isp-1'1] is-symbol-iter(iter(sort("Symbol"),w(""),l("*"))) = true
 
   [default-isp-1'2] is-symbol-iter(Iter) = false
+
+  [isp-1'1] is-symbol-itersep(iter-sep(l("{"),w(""),sort("Symbol"),w(""),ql(","),w(""),l("}"),w(""),l("*"))) = true
+
+  [default-isp-1'2] is-symbol-itersep(Iter) = false
 
   [ilsp-1'1] is-literal-symbol-prod(prod(id("Literals-Sdf-Syntax"),w(""),[sort("Literal")],
                                    w(""),l("->"),w(""),sort("Symbol"),w(""),no-attrs)) = true

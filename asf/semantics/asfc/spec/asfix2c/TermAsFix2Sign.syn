@@ -48,6 +48,8 @@ hiddens
     "symbols2id" "(" ATerm ")"               -> FunId
     "symbollist2id" "(" ATerm ")"            -> FunId
     "symbolplus2id" "(" ATerms ")"           -> FunId
+    "argslist2id" "(" ATerm ")"              -> FunId
+    "argsplus2id" "(" ATerms ")"             -> FunId
     "symbol2id" "(" ATerm ")"                -> FunId
     "term-sort2id" "(" ATerm ")"             -> FunId
     "literal2id" "(" ATerm ")"               -> FunId
