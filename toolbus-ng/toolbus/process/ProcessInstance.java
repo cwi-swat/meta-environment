@@ -16,7 +16,7 @@ public class ProcessInstance {
   static AtomSet empty = new AtomSet();
   private ATerm processId;
   private AtomSet atoms;
-  private AtomSet prefix;
+  private ProcessState currentState;
   private Environment env;
   private ToolBus toolbus;
   private ToolInstance toolinstance;
@@ -29,24 +29,23 @@ public class ProcessInstance {
     ProcessExpression call = new ProcessCall(name, actuals);
     call.expand(this, new Stack());
     call.compile(this, empty);
-
-    Vector procs = TB.getProcesses();
+    currentState = call.getStartState();
+    env.setExecuting();
 
     AFun afun = TBTerm.factory.makeAFun(name, 1, false);
     processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-
+    
+    Vector procs = TB.getProcesses();
     atoms = call.getAtoms();
     for (int i = 0; i < procs.size(); i++) {
       ((ProcessInstance) procs.elementAt(i)).findPartners(atoms);
     }
-    prefix = call.getFirst();
-    env.setExecuting();
-
+ 
     toolinstance = def.createToolInstance();
 
     System.out.println(processId + ": " + call);
     System.out.println(processId + ": atoms: =" + atoms);
-    System.out.println(processId + ": prefix = " + prefix);
+    System.out.println(processId + ": prefix = " + currentState);
     for (Iterator it = atoms.getAtomsAsVector().iterator(); it.hasNext();) {
       Atom a = (Atom) it.next();
       System.out.println(processId + ": " + a + " --> " + a.getFollow());
@@ -79,24 +78,24 @@ public class ProcessInstance {
     atoms.findPartners(a);
   }
 
-  public AtomSet getPrefix() {
-    return prefix;
+  public ProcessState getProcessState() {
+    return currentState;
   }
 
-  public boolean prefixContains(Atom a) {
-    return prefix.contains(a);
+  public boolean contains(Atom a) {
+    return currentState.contains(a);
   }
 
-  public void follow(Atom a) {
-    if (!prefix.contains(a))
-      System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + prefix);
-    prefix = a.getFollow();
+  public void nestState(Atom a) {
+    if (!currentState.contains(a))
+      System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + currentState);
+    currentState = currentState.nextState(a);
     //System.out.println("proc " + processId + ": follow(" + a + ") -> " + prefix);
   }
 
   public boolean step() throws ToolBusException {
     //System.out.println(this);
-    return prefix.execute();
+    return currentState.execute();
   }
 
   public boolean isTerminated() {
@@ -104,6 +103,6 @@ public class ProcessInstance {
   }
 
   public String toString() {
-    return "proc " + processId + " " + prefix;
+    return "proc " + processId + " " + currentState;
   }
 }

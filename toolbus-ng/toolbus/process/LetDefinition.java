@@ -38,6 +38,10 @@ public class LetDefinition implements ProcessExpression {
   public AtomSet getFirst() {
     return PE.getFirst();
   }
+  
+  public ProcessState getStartState(){
+    return PE.getStartState();
+  }
 
   public AtomSet getFollow() {
     return PE.getFollow();

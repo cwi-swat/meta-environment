@@ -18,6 +18,10 @@ abstract public class AbstractProcessExpression implements ProcessExpression {
     this.first = first;
   } 
   
+  public ProcessState getStartState(){
+    return first;
+  }
+  
   protected void addToFirst(Atom atom) {
     first.add(atom);
   }

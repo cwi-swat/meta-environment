@@ -49,9 +49,6 @@ public class IfElse extends AbstractProcessExpression {
     return left.getAtoms().union(right.getAtoms());
   }
 
-  public void execute() {
-  }
-
   public String toString() {
     return "IfElse(" + test + ", " + left + ", " + right + ")";
   }

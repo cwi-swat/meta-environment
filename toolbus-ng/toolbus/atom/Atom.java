@@ -133,6 +133,10 @@ abstract public class Atom extends AbstractProcessExpression {
       return true;
     }
   }
+  
+  public ProcessState getStartState(){
+    return getFirst();
+  }
 
   public ATerm getTest() {
     return test;
