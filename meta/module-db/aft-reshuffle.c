@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,21 +25,58 @@
 
 #include "module-db.h"
 
-extern ATermTable new_modules_db;
-extern ATermTable compile_db;
-extern ATermList modules_to_process; 
-extern ATbool compiling;
-extern ATbool reshuffling;
-extern ATerm top_module;
+extern ATermTable modules_db;
 
-/* From module-db.c */
-extern char *get_output_dir();
+static ATermTable compile_db;
+static ATermList modules_to_process; 
+static ATbool compiling  = ATfalse;
+static ATbool reshuffling  = ATfalse;
+static ATerm top_module;
+static char *outputDirName = NULL; 
+
+/*{{{  set_output_dir(int cid, char *dirName) */
+
+void
+set_output_dir(int cid, char *dirName)
+{
+  int len = strlen(dirName) + 1;
+
+  outputDirName = (char *) realloc(outputDirName, len);
+
+  if (outputDirName == NULL) {
+    ATerror("module-db: unable to allocate %d bytes\n", len);
+  } else {
+    strcpy(outputDirName, dirName);
+  }
+}
+
+/*}}}  */
+/*{{{  get_output_dir(void) */
+
+/*
+ * The same construct is used in compiler.c
+ * This obviously needs to be moved away altogether from the module-db.
+ */
+
+static char *
+get_output_dir(void)
+{
+    if (outputDirName != NULL) {
+        return outputDirName;
+    } else if (getenv("COMPILER_OUTPUT") != NULL) {
+        return getenv("COMPILER_OUTPUT");
+    } else {
+        return ".";
+    }
+}
+
+/*}}}  */
 
 /* The function {\tt AFTgeLexFuncsSort} traverse a list
    of modules and looks for all lexical functions
    with the given sorts as result sort. */
 
-ATerm AFTmakeId(ATerm id)
+static ATerm AFTmakeId(ATerm id)
 {
   char *id_str;
  
@@ -50,7 +88,7 @@ ATerm AFTmakeId(ATerm id)
   }
 }
 
-ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
+static ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
 {
   ATerm entry, lmod, amod, lexfunc, rsort;
   ATermList lexfuncs;
@@ -58,7 +96,7 @@ ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
 
   while(!ATisEmpty(mods)) {
     lmod = ATgetFirst(mods);
-    entry = GetValue(new_modules_db,lmod);
+    entry = GetValue(modules_db,lmod);
     amod = ATelementAt((ATermList)entry, SYN_LOC);
     lexfuncs = AFTgetLexFunctions(amod);
     lexfuncs = asfix_filter_layout(lexfuncs);
@@ -82,7 +120,7 @@ ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
    of modules and looks for all equations with the given
    context-free function as outermost function symbol in the
    left-hand side. */
-ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
+static ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
 {
   ATerm entry, mod, amod, eq, lhs, ofs;
   ATermList eqs;
@@ -90,7 +128,7 @@ ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
 
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
-    entry = GetValue(new_modules_db,mod);
+    entry = GetValue(modules_db,mod);
     amod = ATelementAt((ATermList)entry, EQS_TREE_LOC); 
     eqs = (ATermList)AFTgetEqs(amod);
     eqs = asfix_filter_layout(eqs);
@@ -110,7 +148,7 @@ ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
   return equations;
 }
 
-void AFTaddSection(ATerm module, ATerm section)
+static void AFTaddSection(ATerm module, ATerm section)
 {
   ATerm newmodule = GetValue(compile_db,module);
   ATermList sections = AFgetModuleSections(newmodule);
@@ -125,9 +163,35 @@ void AFTaddSection(ATerm module, ATerm section)
   PutValue(compile_db,module,newmodule);
 }
 
-ATerm unique_new_name(ATerm name);
+/*{{{  ATerm unique_new_name(ATerm name) */
 
-ATerm AFTcreateNewModule(ATerm modname)
+static ATerm unique_new_name(ATerm name)
+{
+  char *text, *newtext;
+  ATerm newname;
+  int n = 1;
+
+  if(ATmatch(name,"<str>",&text)) {
+    newtext = malloc(strlen(text)+16);
+    sprintf(newtext,"AUX-%s%d",text,n);
+    newname = ATmake("<str>",newtext);
+    while(GetValue(compile_db,newname)) {
+      n++;
+      sprintf(newtext,"AUX-%s%d",text,n);
+      newname = ATmake("<str>",newtext);
+    }
+    free(newtext);
+    return newname;
+  }
+  else {
+    ATerror("illegal name %t\n", name);
+    return NULL; /* silence the compiler */
+  }
+}
+
+/*}}}  */          
+
+static ATerm AFTcreateNewModule(ATerm modname)
 { 
   ATerm module_name_with_id, extmodname;
   ATerm orig_mod_name_with_id;
@@ -145,14 +209,14 @@ ATerm AFTcreateNewModule(ATerm modname)
   return newmodname;
 }
 
-void AFTaddEquations(ATerm module, ATermList eqs)
+static void AFTaddEquations(ATerm module, ATermList eqs)
 {
   ATerm newmodule = GetValue(compile_db,module);
   newmodule = AFputModuleEqs(newmodule,eqs);
   PutValue(compile_db,module,newmodule);
 }
 
-void AFTwriteAsfixFile(int cid,ATerm modname)
+static void AFTwriteAsfixFile(int cid,ATerm modname)
 {
   char *text, *fname;
   char *path;
@@ -226,14 +290,14 @@ void AFTwriteAsfixFile(int cid,ATerm modname)
 /* This function uses the sorts to determine whether there are equations
  * for the lexical functions.
  */
-void AFTreshuffleLexicalConstructorFunctions(int cid,
+static void AFTreshuffleLexicalConstructorFunctions(int cid,
                                              ATerm modname, ATerm newmod,
                                              ATermList orgmods)
 {
   ATerm entry, prod, amod, sort, newsection, newsubsection, newmodname;
   ATermList sorts, funcs, eqs;
 
-  entry = GetValue(new_modules_db,modname);
+  entry = GetValue(modules_db,modname);
   amod = ATelementAt((ATermList)entry, SYN_LOC);
   sorts = AFTgetSorts(amod); 
   sorts = asfix_filter_layout(sorts);
@@ -269,7 +333,41 @@ void AFTreshuffleLexicalConstructorFunctions(int cid,
   }
 }
 
-void gen_makefile(ATerm name);
+/*{{{  static void gen_makefile(ATerm name) */
+
+static static void gen_makefile(ATerm name)
+{
+  char *text, *mtext;
+  char *path;
+  char buf[1024];
+  FILE *output;
+  ATerm module;
+  ATermList modules = ATtableKeys(compile_db);  
+
+  if(ATmatch(name,"<str>",&text)) {
+    path = get_output_dir();
+    sprintf(buf, "%s/%s.module-list", path, text);
+    output = fopen(buf,"w");
+    if(!output)
+      ATfprintf(stderr,"Cannot open file %s\n",buf);
+    else {
+      fprintf( output, "# Generated automatically, please do not edit.\n" );
+      while (!ATisEmpty(modules)) {
+        module = ATgetFirst(modules);
+        if(ATmatch(module,"<str>",&mtext)) {
+          ATfprintf(output,"%s.c\n", mtext);
+        }
+        modules = ATgetNext(modules);
+      }
+      fclose( output );     
+    }
+  }
+  else {
+    ATerror("illegal name %t\n", name);
+  }
+}
+
+/*}}}  */          
 
 void AFTreshuffleModules(int cid, ATermList mods)
 {
@@ -277,6 +375,7 @@ void AFTreshuffleModules(int cid, ATermList mods)
   ATermList cffuncs, eqs, orgmods;
   ATerm newsubsection, newsection;
 
+  ATprotect((ATerm *)&modules_to_process); 
   compile_db = CreateValueStore(500,75);
   orgmods = mods;
   reshuffling = ATtrue;
@@ -284,7 +383,7 @@ void AFTreshuffleModules(int cid, ATermList mods)
     mod = ATgetFirst(mods);
     newmod = AFTcreateNewModule(mod);
     AFTreshuffleLexicalConstructorFunctions(cid,mod,newmod,orgmods);
-    entry = GetValue(new_modules_db,mod);
+    entry = GetValue(modules_db,mod);
     oldamod = ATelementAt((ATermList)entry, SYN_LOC);
     cffuncs = AFTgetCFFunctions(oldamod);
     cffuncs = asfix_filter_layout(cffuncs);
@@ -322,3 +421,72 @@ void AFTreshuffleModules(int cid, ATermList mods)
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
   }
 } 
+
+/*{{{  void process_next_module(int cid) */
+
+void process_next_module(int cid)
+{
+  ATerm event;
+
+  if(!ATisEmpty(modules_to_process)) {
+    compiling = ATtrue;
+    event = ATgetFirst(modules_to_process);
+    modules_to_process = ATgetNext(modules_to_process);
+    ATBwriteTerm(cid,event);
+  }
+  else {
+    compiling = ATfalse;
+    if(!reshuffling) {
+      gen_makefile(top_module);
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    }
+  }
+}
+
+/*}}}  */ 
+/*{{{  void rec_ack_event(int cid, ATerm term) */
+
+void rec_ack_event(int cid, ATerm term)
+{
+  char *name;
+  ATerm mod;
+
+  if(ATmatch(term,"new-aux-module(<str>,<term>)",&name,&mod)) {
+    process_next_module(cid);
+  }
+  else if(ATmatch(term,"done")) {
+    compiling = ATfalse;
+  }
+  else
+    exit(1);
+}
+
+/*}}}  */ 
+/*{{{  void reshuffle_modules_from(int cid, char *modulename) */
+
+void reshuffle_modules_from(int cid, char *modulename)
+{
+  ATerm mod;
+  ATermList imports;
+
+  mod = ATmake("<str>",modulename);
+  if(GetValue(modules_db, mod)) {
+    /* We are working with the term asfix representation. */
+    if(complete_asf_sdf2_specification(mod)) {
+      top_module = mod;
+      modules_to_process = ATempty;
+      imports = get_imported_modules(mod);
+      AFTreshuffleModules(cid,imports);
+    }      
+    else {
+      ATwarning("Specification is incomplete and can not be compiled!\n");
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    }
+  }
+  else {
+    ATwarning("Module %t not in module databases!\n", mod);
+    ATBwriteTerm(cid,ATmake("snd-event(done)"));
+  }
+}
+
+/*}}}  */   

@@ -32,6 +32,9 @@
 
 #include "module-db.tif.h"
 
+ATbool complete_asf_sdf2_specification(ATerm module);
+ATermList get_imported_modules(ATerm name); 
+
 #define GetValue(db,k) (ATtableGet(db,k))
 #define PutValue(db,k,v) (ATtablePut(db,k,v))
 #define RemoveKey(db,k) (ATtableRemove(db,k))
