@@ -1,11 +1,6 @@
 Makefile.in
 Makefile
-TA.[ch]
-TA.dict
-TA_dict.[ch]
-debug-adapter.tif.[ch]
 *.o
 .deps
 libtide-adapter.a
-debug-adapter.tif.c
-debug-adapter.tif.h
+*.tifs
