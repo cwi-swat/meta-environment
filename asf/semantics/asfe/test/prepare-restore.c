@@ -52,6 +52,7 @@ main(int argc, char *argv[])
   term = PT_getParseTreeTree(PT_makeParseTreeFromTerm(in));
 
   prepared = RWprepareTerm(term);
+
   restored = RWrestoreTerm(prepared);
 
   out = PT_makeTermFromParseTree(

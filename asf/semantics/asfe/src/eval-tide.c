@@ -355,9 +355,6 @@ void Tide_step(ATerm position, ATerm newenv, int level)
   fprintf(stderr, "Tide_step: cureq = %s\n", PT_yieldTree(equ_tree));
    */
 
-  assert(tagCurrentRule);
-  assert(currentRule);
-  assert(position);
 
   stack_level       = level;
   tag_stack[level]  = tagCurrentRule;
@@ -367,6 +364,10 @@ void Tide_step(ATerm position, ATerm newenv, int level)
 
   if (TA_isConnected()) {
     int old_state;
+
+    assert(tagCurrentRule);
+    assert(currentRule);
+    assert(position);
 
     if (!position) {
       static ATbool warning_printed = ATfalse;

@@ -1,3 +1,7 @@
+2001/10/25 (jurgenv@cwi.nl, markvdb@cwi.nl)
+ * Optimized evaluator. Lexical constructor functions are now imploded
+   to real lexical trees.
+
 2001/10/11 (mdejonge@cwi.nl)
  * Added (generated) manual pages to EXTRA_DIST variable because not
    everybody has pod2man available

@@ -561,98 +561,13 @@ ASF_CondEquation prepareEquation(ASF_CondEquation equ)
 
   equation = ASF_getCondEquationEquation(equ);
 
-  equation = ASF_setEquationLhs(equation,
+  equation = ASF_setEquationLhs(equation, 
           PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationLhs(equation)))));
 
   equation = ASF_setEquationRhs(equation,
           PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationRhs(equation)))));
 
   return ASF_setCondEquationEquation(equ, equation); 
-}
-
-/*}}}  */
-/*{{{  static PT_Tree lexicalToList(PT_Tree lextrm) */
-
-/*
- * lexicalToList converts a lexical into a list.
- */
-
-
-static PT_Tree lexicalToList(PT_Tree lextrm)
-{
-  PT_Symbol sort, rhs; 
-  PT_Production lexProd;
-  ASF_CHAR newChar; 
-  ASF_Tree newname;
-  ASF_Tree newTree;
-  PT_Tree newPTtree;
-  PT_Args charList;
-  PT_Tree treeChar;
-  char *lexstr, *sortstr;
-  ASF_CHARList newCharList = NULL;
-  int i, l;
-  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lextrm));
-
-
-  lexProd = PT_getTreeProd(lextrm);
-  rhs = PT_getProductionRhs(lexProd);
-  sort = PT_getSymbolSymbol(rhs);
-
-  if (!PT_isSymbolSort(sort)) {
-    ATerror("not a sort: %t\n", (ATerm) sort);
-  }
-  sortstr = strdup(PT_getSymbolString(sort));
-  
-  for (i = 0; sortstr[i]; i++) {
-    sortstr[i] = tolower(sortstr[i]);
-  }
-
-  /* Get the string name that represents the lexical */
-  lexstr = PT_yieldTree(lextrm);
-  l = strlen(lexstr);
-  for (i = l-1; i >= 0; i--) {
-    charList = PT_makeArgsList(
-                 PT_makeTreeChar('\"'),
-                 PT_makeArgsList(
-                   PT_makeTreeChar(lexstr[i]),
-                   PT_makeArgsList(
-                     PT_makeTreeChar('\"'),
-                     PT_makeArgsEmpty())));
-
-    treeChar = PT_makeTreeFlatLexical(charList);
-    newChar = ASF_makeCHARLexToCf((ASF_Lexical)treeChar);
-    if (i != l-1) {
-      newCharList = ASF_makeCHARListMany(newChar, 
-                                         ASF_makeLayoutEmpty(), 
-                                         newCharList);
-    }
-    else {
-      newCharList = ASF_makeCHARListSingle(newChar);
-    }
-  }
-
-  assert(newCharList != NULL);
-
-  newname = PTtoASF(PT_makeTreeLit(sortstr));
-
-  newTree = ASF_makeTreeLexicalConstructor(
-              sortstr,
-              (ASF_Symbol) rhs, 
-              newname,
-              ASF_makeLayoutEmpty(),
-              ASF_makeLayoutEmpty(),
-              newCharList,
-              ASF_makeLayoutEmpty());
-  
-  free(sortstr);
-
-  newPTtree = ASFtoPT(newTree);
-  
-  if (annos != NULL) {
-    newPTtree = PT_makeTreeFromTerm(
-                 AT_setAnnotations(PT_makeTermFromTree(newPTtree), annos));
-  }
-  return newPTtree;
 }
 
 /*}}}  */
@@ -710,15 +625,11 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
-  extern ATerm ASF_patternTreeLexicalConstructor;
+  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(tree));
 
-  if (ATmatchTerm(PT_makeTermFromTree(tree), ASF_patternTreeLexicalConstructor, 
-		  NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-    /* <PO> was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {*/
-    result = tree;
-  }
-  else if (PT_isTreeLexical(tree)) {
-    result = lexicalToList(tree);
+  if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) { 
+    result = (PT_Tree) 
+               ASF_LexicalConstructorTreeToLexicalTree((ASF_Tree) tree);
   }
   else if (PT_isTreeBracket(tree)) {
     result = prepareTerm(PT_getTreeBracketTree(tree), data);
@@ -733,6 +644,11 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   }
   else {
     result = tree;
+  }
+
+  if (annos != NULL) {
+    result = PT_makeTreeFromTerm(
+               AT_setAnnotations(PT_makeTermFromTree(result), annos));
   }
 
   return result;
@@ -770,73 +686,6 @@ void RWflushEquations()
     tables = tables->next;
     destroy_equation_table(table);
   }
-}
-
-/*}}}  */
-/*{{{  static PT_Production makeLexToCfProd(PT_Symbol symbol) */
-
-static PT_Production makeLexToCfProd(PT_Symbol symbol)
-{
-  PT_Symbol lex = PT_makeSymbolLex(symbol);
-  PT_Symbol cf = PT_makeSymbolCf(symbol);
-  
-  PT_Symbols symbols = PT_makeSymbolsList(lex, PT_makeSymbolsEmpty());
-
-  return PT_makeProductionDefault(symbols, cf, PT_makeAttributesNoAttrs());
-}
-
-/*}}}  */
-/*{{{  PT_Tree listToLexical(PT_Tree lexappl) */
-
-/* list_to_lexical converts  a list representing a lexical into a
- * lexical again. 
- */
-
-
-PT_Tree listToLexical(PT_Tree lexappl)
-{
-  ASF_Tree tree = PTtoASF(lexappl);
-  ASF_CHARList charList;
-  PT_Symbol symbol;
-  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lexappl));
-  PT_Tree newTree, charTree, listChar;
-  PT_Args listChars, newCharList = PT_makeArgsEmpty();
-
-  if (!ASF_isTreeLexicalConstructor(tree)) {
-    ATerror("listToLexical: not a lexical constructor %t\n", lexappl);
-  }
-
-  symbol = PT_getSymbolSymbol((PT_Symbol) ASF_getTreeSymbol(tree));
-
-  charList = ASF_getTreeList(tree);
-  
-  while(ASF_hasCHARListHead(charList)) {
-    ASF_CHAR ch = ASF_getCHARListHead(charList);
-    if (ASF_isCHARLexToCf(ch)) {
-      charTree = PT_makeTreeFromTerm(ASF_getCHARLex(ch));
-      listChars = PT_getTreeArgs(charTree);
-      listChar = PT_getArgsArgumentAt(listChars,1);
-      newCharList = PT_appendArgs(newCharList, listChar);
-    }
-    if (ASF_hasCHARListTail(charList)) {  
-      charList = ASF_getCHARListTail(charList);
-    } 
-    else {
-      break;
-    } 
-  }
-    
-  newTree = PT_makeTreeFlatLexical(newCharList);
-  newTree = PT_makeTreeAppl(makeLexToCfProd(symbol), 
-              PT_makeArgsList(newTree,
-                PT_makeArgsEmpty()));
-
-  if (annos != NULL) {
-    newTree = PT_makeTreeFromTerm(
-                 AT_setAnnotations(PT_makeTermFromTree(newTree), annos));
-  }
- 
-  return newTree; 
 }
 
 /*}}}  */
@@ -879,10 +728,7 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
   PT_Args args;
 
   if (PT_isTreeAppl(tree)) {
-    if (ASF_isTreeLexicalConstructorFunction(PTtoASF(tree))) { 
-      return listToLexical(tree);
-    }
-    else if (ASF_isTreeAmbConstructorFunction(PTtoASF(tree))) {
+    if (ASF_isTreeAmbConstructorFunction(PTtoASF(tree))) {
       return ambConstructorToAmb(tree, data);
     }
 

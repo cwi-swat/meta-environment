@@ -224,7 +224,6 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   PT_Tree result;
   PT_Tree tree;
 
-  ATsetChecking(ATtrue);
   eqs = RWprepareEquations(eqs);
   enter_equations(name, eqs);
   select_equations(name);
@@ -236,7 +235,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
 
   rewrite_steps = 0;
   RWclearError();
-  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("");
+  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
   memo_table = MemoTableCreate();
   aborted = ATfalse;
 
@@ -274,6 +273,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
     
     if (slice) {
       newelems = appendSlice(PT_makeArgsEmpty(), slice);
+
       return PT_makeTreeAppl(PT_makeProductionList(symbol), newelems);
     }
   }
@@ -450,6 +450,25 @@ static PT_Args
 concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
 {
   PT_Args newList;
+  PT_Symbol sym = PT_getProductionRhs(listProd);
+  int seplen = 0;
+
+  if (PT_isSymbolLex(sym)) {
+    if (PT_isIterSepSymbol(sym)) {
+      seplen = 1;
+    }
+    else {
+      seplen = 0;
+    }
+  }
+  else if (PT_isSymbolCf(sym)) {
+    if (PT_isIterSepSymbol(sym)) {
+      seplen = 3;
+    }
+    else {
+      seplen = 1;
+    }
+  }
 
   if (PT_isArgsEmpty(elems)) {
     newList = newElems;
@@ -459,23 +478,12 @@ concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
       newList = PT_concatArgs(elems, newElems);
     }
     else {
-      if (PT_isIterSepSymbol(PT_getProductionRhs(listProd))) {
-        int length = PT_getArgsLength(elems);
-        if (length > 3) {
-          newList = PT_sliceArgs(elems, 0, length-3);
-        }
-        else {
-          newList = PT_makeArgsEmpty();
-        }
+      int length = PT_getArgsLength(elems);
+      if (length > seplen) {
+	newList = PT_sliceArgs(elems, 0, length-seplen);
       }
       else {
-        int length = PT_getArgsLength(elems);
-        if (length > 0) {
-          newList = PT_sliceArgs(elems, 0, length-1);
-        }
-        else {
-          newList = PT_makeArgsEmpty();
-        }
+	newList = PT_makeArgsEmpty();
       }
     }
   }
@@ -590,7 +598,7 @@ argMatching(ATerm env,
 
       elems1 = PT_getTreeArgs(arg1);
       elems2 = PT_getTreeArgs(arg2);
-  
+
       return listMatching(newenv, prod1, elems1, elems2,
 			  conds, orgargs1, orgargs2, 
 			  lhs_posinfo, depth);
@@ -601,17 +609,6 @@ argMatching(ATerm env,
       args1 = PT_getTreeArgs(arg1);
       args2 = PT_getTreeArgs(arg2);
 
-/*
-      newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, NULL, depth);
-      if (newenv == fail_env) {
-	if (runVerbose) {
-	  ATwarning("*** fail_env on line %d\n", __LINE__);
-	}
-	return fail_env;
-      }
-      return (ATerm) argsMatching(newenv, conds, orgargs1, orgargs2,
-				  lhs_posinfo, depth);
-*/
       return (ATerm) argsMatching(newenv, conds, 
                                   PT_concatArgs(args1, orgargs1),
                                   PT_concatArgs(args2, orgargs2),
@@ -824,6 +821,7 @@ ATwarning("subListMatching entered for %t with %t\n",
     /* try to match with zero elements for star variable */
     newenv = putListVariableValue(env, elem, PT_makeArgsEmpty(),
 				  PT_makeArgsEmpty());
+
     subenv =
       listMatching(newenv, listProd, elems1, elems2, conds, 
                    args1, args2,
@@ -1175,12 +1173,14 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
   PT_Tree lhs, rhs, lhstrm, rhstrm;
   ATerm newenv = env;
 
+
   if (conds == NULL) {
     return env;
   }
 
   if (ASF_hasConditionListHead(conds)) {
     cond = ASF_getConditionListHead(conds);
+//ATwarning("cond: %t\nenv:%t\n", cond,env);
     if (ASF_hasConditionListTail(conds)) {
       conds = ASF_getConditionListTail(conds);
     }
@@ -1333,11 +1333,6 @@ static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
 	currentRule = entry;
 
         if (!is_fail_env(env)) {
-	  /*
-	  if (strcmp(PT_yieldTree(tagCurrentRule), "[l-1'3]") == 0) {
-	    ATwarning("env = %t\n", env);
-	  }
-	  */
 	  TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
 	  if (runVerbose) {
 	    ATwarning("Equation %s was successful.\n", 
@@ -1679,6 +1674,8 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
     else {
       newelems = appendElem(listProd, newelems, elem);
     }
+
+    assert(!PT_isTreeVar(elem) && "should be a closed term");
     
     elems = PT_getArgsTail(elems);
   }

@@ -148,7 +148,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
       fp = stdout;
     }
     else {
-      fp = fopen(output, "w");
+      fp = fopen(output, "wb");
     }
     if (fp == NULL) {
       ATerror("Error: unable to open %s for writing\n", output);
