@@ -2,7 +2,6 @@
  * An ASF file is now an ASF-Module which consists of a list of ASF-Sections.
    An ASF-Section is either an equations sections or a tests sections for now.
 
-
 2003/11/06 (jurgenv@cwi.nl)
  * Added "!:=" the condition operator that fails if a match succeeds and
    succeeds when a match fails
