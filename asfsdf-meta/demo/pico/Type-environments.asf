@@ -1,0 +1,12 @@
+equations
+
+  [T1] Pair + [Pair*]   = [Pair, Pair*]
+
+  [T2a] lookup (Id,[Pair*1,(Id:Type), Pair*2]) = Type
+
+  [default-T2b] lookup(Id,Tenv) = nil-type
+
+  [T3a] add-to (Id,Type1,[Pair*1,(Id:Type2), Pair*2]) =
+          [Pair*1,(Id:Type1), Pair*2]
+
+  [default-T3c] add-to(Id,Type,Tenv) = (Id:Type) + Tenv
