@@ -611,10 +611,13 @@ ATermList AFTflattenSdf2Symbollist(ATerm symbollist)
   while(!ATisEmpty(symbolelems)) {
     symbol = ATgetFirst(symbolelems);
     symbolelems = ATgetNext(symbolelems);
-    if(!AFTisWS(symbol)) {
+    if(!AFTisWS(symbol) && !AFTisSep(symbol)) {
       newsymbol = AFTflattenSdf2Symbol(symbol);
-      if(!ATisEmpty(newsymbollist))
+      if(!ATisEmpty(newsymbollist)) {
         newsymbollist = ATappend(newsymbollist,ATparse("w(\"\")"));
+        newsymbollist = ATappend(newsymbollist,ATparse("ql(\",\")"));
+        newsymbollist = ATappend(newsymbollist,ATparse("w(\"\")"));
+      }
       newsymbollist = ATappend(newsymbollist,newsymbol);
     }
   }
@@ -689,14 +692,19 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod)
     attrs = AFTgetPrefixProdAttrs(prod);
   
     newliteral = AFTflattenSdf2Literal(literal); 
-    newsymbollist = (ATermList)AFTflattenSdf2Symbollist(symbols);
+    newsymbollist = AFTflattenSdf2Symbollist(symbols);
     newsymbol = AFTflattenSdf2Symbol(symbol); 
     newattrs = AFTflattenSdf2Attrs(attrs); 
 
-    newprod = ATmake("prod(<term>,w(\"\"),[<term>,w(\"\"),l(\"(\"),w(\"\"),"
-                     "<term>,w(\"\"),l(\")\")],w(\"\"),"
+    newsymbollist = ATappend(newsymbollist, ATmake("w(\"\")"));
+    newsymbollist = ATappend(newsymbollist, ATmake("ql(\")\")"));
+    newsymbollist = ATinsert(newsymbollist, ATmake("w(\"\")"));
+    newsymbollist = ATinsert(newsymbollist, ATmake("ql(\"(\")"));
+    newsymbollist = ATinsert(newsymbollist, ATmake("w(\"\")"));
+    newsymbollist = ATinsert(newsymbollist, newliteral);
+    newprod = ATmake("prod(<term>,w(\"\"),[<list>],w(\"\"),"
                      "l(\"->\"),w(\"\"),<term>,w(\"\"),<term>)",
-                     modname, newliteral, newsymbollist, newsymbol, newattrs);
+                     modname, newsymbollist, newsymbol, newattrs);
     return newprod;
   }
   else {

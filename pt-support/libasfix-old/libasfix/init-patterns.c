@@ -756,7 +756,8 @@ void AFinitAsFixPatterns()
               "sort(\"Symbol\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),"
               "l(\"*\")),w(\"\"),ql(\")\"),w(\"\"),ql(\"->\"),w(\"\"),"
               "sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),"
-              "l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),no-attrs)");
+              "l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),"
+              "attrs(l(\"{\"),w(\"\"),[l(\"avoid\")],w(\"\"),l(\"}\")))");
 
     af_prod_sort_symbol =
       ATparse("prod(id(\"Sorts-Sdf-Syntax\"),w(\"\"),[sort(\"Sort\")],"
