@@ -8,7 +8,7 @@ TESTS			= grammars sorts
 
 noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${top_srcdir}/libME \
+INCLUDES		= -I${top_srcdir}/lib \
 			-I$(ATERM)/include \
 			-DSRC_DIR=\"${srcdir}\"
 
