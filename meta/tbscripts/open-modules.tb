@@ -130,18 +130,22 @@ in
     snd-msg(open-file(Path))
   fi.
   (
-    rec-msg(opened-file(Path,tree(Tree?), RealPath?, Time?))
+    rec-msg(opened-file(Path, tree(Tree?), RealPath?, Time?))
   +
     rec-msg(opened-file(Module, tree(Tree?), RealPath?, Time?))
   +
     (
-      rec-msg(opened-file(Path,text(Text?), RealPath?,Time?))
+      rec-msg(opened-file(Path, text(Text?), RealPath?, Time?))
     +
-      rec-msg(opened-file(Module,text(Text?), RealPath?,Time?))
+      rec-msg(opened-file(Module, text(Text?), RealPath?, Time?))
     ).
     Parse-Syntax(Text, Status?, Tree?)
   +
-    rec-msg(error-opening(Path)).
+    (
+      rec-msg(error-opening(Path))
+    +
+      rec-msg(error-opening(Module))
+    ) .
     Status := no-such-file
   ).
   if equal(Status,success) then
