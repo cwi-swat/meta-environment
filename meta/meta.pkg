@@ -17,13 +17,13 @@ configuration interface
 requires
    xemacs	20.4
    aterm 	2.0.2
-   aterm-java 	1.3beta
-   toolbus	0.26beta with java=on 
-   toolbuslib	0.5beta
-   sglr		3.10beta
-   pgen		1.7beta
-   pt-support   0.12beta
-   graph-support   0.1beta
-   sdf-support  1.1beta
+   aterm-java 	1.3
+   toolbus	0.3 with java=on 
+   toolbuslib	0.5
+   sglr		3.10
+   pgen		1.7
+   pt-support   0.12
+   graph-support   0.1
+   sdf-support  1.1
 
 configuration
