@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
   for(i=1; i<argc; i++) {
     if(streq(argv[i], "-stats") || streq(argv[i], "-s")) {
       printstats = ATtrue;
-    } else if(streq(argv[i], "-TB_TOOL_NAME")) {
+    } else if(streq(argv[i], "-TB_TOOL_NAME") || streq(argv[i], "-at-help")) {
       use_toolbus = ATtrue;
     } else if(streq(argv[i], "-name") || streq(argv[i], "-n")) {
       name = argv[++i];
