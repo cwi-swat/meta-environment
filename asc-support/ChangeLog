@@ -18,6 +18,9 @@
 
 $Id$
 
+2001/02/01 (mdejonge @cwi.nl)
+   * Fixed tifstoc path problem
+
 2000/11/09 (jurgenv@cwi.nl)
    * Version is now 0.4
    * Only minor maintenance differences

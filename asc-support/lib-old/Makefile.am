@@ -49,7 +49,7 @@ rewriter.o: rewriter.tif.h
 	fi
 
 %.tif.c %.tif.h: %.tifs
-	$(ATERMBIN)/tifstoc -tool $* $<
+	PATH=$(ATERMBIN):$(PATH) tifstoc -tool $* $<
 
 test: all
 	@echo "Test not yet implemented for asc-support"
