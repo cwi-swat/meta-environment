@@ -1,8 +1,4 @@
-/*
- *
- * $Id$
- *
- */
+/* $Id$ */
 
 process EditorManager is
 let
@@ -23,7 +19,7 @@ in
       rec-value(EM, new-editor(EditorId?)) .
       snd-msg(new-editor(EditorId))
     +
-      rec-value(EM, existing-editor(FileName?, EditorId?)) .
+      rec-value(EM, existing-editor(EditorId?)) .
       snd-msg(existing-editor(EditorId))
     )
   +

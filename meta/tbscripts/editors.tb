@@ -80,7 +80,6 @@ in
   rec-msg(path(Path?)) .
   snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
   rec-msg(io-filename(FileName?)) .
-  printf("filename: %s\n", FileName) .
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?)) 

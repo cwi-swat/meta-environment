@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jun  3 10:38:53 CEST 2003 <jong@cwi.nl>
+ * editors/manager/src/editor-manager.idef:
+   - fix mismatch in # of params in result of get-editor-id()
+
 2003/05/30 (jurgenv@cwi.nl)
  * removed module-db subtree from configure.in, but still left it in the
    source tree.
