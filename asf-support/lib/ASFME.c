@@ -520,11 +520,11 @@ ASF_CHAR ASF_makeCHARLexToCf(ASF_Lexical lex)
 }
 
 /*}}}  */
-/*{{{  ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt) */
+/*{{{  ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations topEquations, ASF_Layout wsAfter, int ambCnt) */
 
-ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt)
+ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations topEquations, ASF_Layout wsAfter, int ambCnt)
 {
-  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun37, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun38)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun39)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)top), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (ASF_Start)(ATerm)ATmakeAppl2(ASF_afun37, (ATerm)ATmakeAppl2(ASF_afun14, (ATerm)ATmakeAppl3(ASF_afun0, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun38)))), (ATerm)ATmakeAppl1(ASF_afun3, (ATerm)ATmakeAppl1(ASF_afun4, (ATerm)ATmakeAppl0(ASF_afun5)))), (ATerm)ATmakeAppl1(ASF_afun7, (ATerm)ATmakeAppl0(ASF_afun39)), (ATerm)ATmakeAppl0(ASF_afun17)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topEquations), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -3678,9 +3678,9 @@ ASF_Start ASF_setStartWsBefore(ASF_Start arg, ASF_Layout wsBefore)
 }
 
 /*}}}  */
-/*{{{  ATbool ASF_hasStartTop(ASF_Start arg) */
+/*{{{  ATbool ASF_hasStartTopEquations(ASF_Start arg) */
 
-ATbool ASF_hasStartTop(ASF_Start arg)
+ATbool ASF_hasStartTopEquations(ASF_Start arg)
 {
   if (ASF_isStartEquations(arg)) {
     return ATtrue;
@@ -3689,24 +3689,24 @@ ATbool ASF_hasStartTop(ASF_Start arg)
 }
 
 /*}}}  */
-/*{{{  ASF_Equations ASF_getStartTop(ASF_Start arg) */
+/*{{{  ASF_Equations ASF_getStartTopEquations(ASF_Start arg) */
 
-ASF_Equations ASF_getStartTop(ASF_Start arg)
+ASF_Equations ASF_getStartTopEquations(ASF_Start arg)
 {
   
     return (ASF_Equations)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
 }
 
 /*}}}  */
-/*{{{  ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top) */
+/*{{{  ASF_Start ASF_setStartTopEquations(ASF_Start arg, ASF_Equations topEquations) */
 
-ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top)
+ASF_Start ASF_setStartTopEquations(ASF_Start arg, ASF_Equations topEquations)
 {
   if (ASF_isStartEquations(arg)) {
-    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)top, 1), 1), 0);
+    return (ASF_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)topEquations, 1), 1), 0);
   }
 
-  ATabort("Start has no Top: %t\n", arg);
+  ATabort("Start has no TopEquations: %t\n", arg);
   return (ASF_Start)NULL;
 }
 
@@ -4080,14 +4080,14 @@ ASF_CHAR ASF_visitCHAR(ASF_CHAR arg, ASF_Lexical (*acceptLex)(ASF_Lexical))
 }
 
 /*}}}  */
-/*{{{  ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int)) */
+/*{{{  ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTopEquations)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int)) */
 
-ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int))
+ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTopEquations)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int))
 {
   if (ASF_isStartEquations(arg)) {
     return ASF_makeStartEquations(
         acceptWsBefore ? acceptWsBefore(ASF_getStartWsBefore(arg)) : ASF_getStartWsBefore(arg),
-        acceptTop ? acceptTop(ASF_getStartTop(arg)) : ASF_getStartTop(arg),
+        acceptTopEquations ? acceptTopEquations(ASF_getStartTopEquations(arg)) : ASF_getStartTopEquations(arg),
         acceptWsAfter ? acceptWsAfter(ASF_getStartWsAfter(arg)) : ASF_getStartWsAfter(arg),
         acceptAmbCnt ? acceptAmbCnt(ASF_getStartAmbCnt(arg)) : ASF_getStartAmbCnt(arg));
   }

@@ -1,3 +1,6 @@
+2002/10/07 (jurgenv@cwi.nl)
+ * Regenerated library to obtain improved start constructors
+
 2002/10/03 (jurgenv@cwi.nl)
  * Bumped to 1.0beta
  * Added ASF_makeCondEquationListFromParseTrees

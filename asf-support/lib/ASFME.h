@@ -137,7 +137,7 @@ ASF_TreeAmbs ASF_makeTreeAmbsEmpty();
 ASF_TreeAmbs ASF_makeTreeAmbsSingle(ASF_Tree head);
 ASF_TreeAmbs ASF_makeTreeAmbsMany(ASF_Tree head, ASF_Layout wsAfterFirst, char * sep, ASF_Layout wsAfterSep, ASF_TreeAmbs tail);
 ASF_CHAR ASF_makeCHARLexToCf(ASF_Lexical lex);
-ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations top, ASF_Layout wsAfter, int ambCnt);
+ASF_Start ASF_makeStartEquations(ASF_Layout wsBefore, ASF_Equations topEquations, ASF_Layout wsAfter, int ambCnt);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -453,9 +453,9 @@ inline ATbool ASF_isStartEquations(ASF_Start arg);
 ATbool ASF_hasStartWsBefore(ASF_Start arg);
 ASF_Layout ASF_getStartWsBefore(ASF_Start arg);
 ASF_Start ASF_setStartWsBefore(ASF_Start arg, ASF_Layout wsBefore);
-ATbool ASF_hasStartTop(ASF_Start arg);
-ASF_Equations ASF_getStartTop(ASF_Start arg);
-ASF_Start ASF_setStartTop(ASF_Start arg, ASF_Equations top);
+ATbool ASF_hasStartTopEquations(ASF_Start arg);
+ASF_Equations ASF_getStartTopEquations(ASF_Start arg);
+ASF_Start ASF_setStartTopEquations(ASF_Start arg, ASF_Equations topEquations);
 ATbool ASF_hasStartWsAfter(ASF_Start arg);
 ASF_Layout ASF_getStartWsAfter(ASF_Start arg);
 ASF_Start ASF_setStartWsAfter(ASF_Start arg, ASF_Layout wsAfter);
@@ -481,7 +481,7 @@ ASF_Equation ASF_visitEquation(ASF_Equation arg, ASF_Symbol (*acceptLhsSymbol)(A
 ASF_Condition ASF_visitCondition(ASF_Condition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_Layout (*acceptWsAfterLhs)(ASF_Layout), ASF_Layout (*acceptWsAfterEquals)(ASF_Layout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_Layout (*acceptWsAfterUnequal)(ASF_Layout));
 ASF_TreeAmbs ASF_visitTreeAmbs(ASF_TreeAmbs arg, ASF_Tree (*acceptHead)(ASF_Tree), ASF_Layout (*acceptWsAfterFirst)(ASF_Layout), char * (*acceptSep)(char *), ASF_Layout (*acceptWsAfterSep)(ASF_Layout));
 ASF_CHAR ASF_visitCHAR(ASF_CHAR arg, ASF_Lexical (*acceptLex)(ASF_Lexical));
-ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTop)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int));
+ASF_Start ASF_visitStart(ASF_Start arg, ASF_Layout (*acceptWsBefore)(ASF_Layout), ASF_Equations (*acceptTopEquations)(ASF_Equations), ASF_Layout (*acceptWsAfter)(ASF_Layout), int (*acceptAmbCnt)(int));
 
 /*}}}  */
 
