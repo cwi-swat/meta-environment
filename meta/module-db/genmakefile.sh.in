@@ -25,23 +25,25 @@
 #
 # You might want to change to following variables below:
 # 
-#       DEBUG_LIBS: libraries containing debugging information
 #   DEBUG_CC_FLAGS: compiler flags to store debugging information in object files
 #   DEBUG_LD_FLAGS: optional flags for linking with debugging information
-#       DEBUG_COMP: compiler to use
-#     PROFILE_LIBS: libraries containing profile information
 # PROFILE_CC_FLAGS: compiler flags to store profile information in object files
 # PROFILE_LD_FLAGS: optional flags for linking profiled object code
-#     PROFILE_COMP: compiler to use
+#     STD_CC_FLAGS: default compiler flags
+#     STD_LD_FLAGS: default linker flags
+#
+#      FLAGS_$(CC): Compiler dependent settings
 
-      DEBUG_LIBS="-lsupport-dbg -lATB-dbg -lAsFix-dbg -lATerm-dbg"
+
   DEBUG_CC_FLAGS=-g
   DEBUG_LD_FLAGS=
-      DEBUG_COMP=gcc
-    PROFILE_LIBS="-lsupport-prof -lATB-prof -lAsFix-prof -lATerm-prof"
 PROFILE_CC_FLAGS=-pg
 PROFILE_LD_FLAGS=-pg
-    PROFILE_COMP=gcc
+    STD_CC_FLAGS=-O
+    STD_LD_FLAGS=
+
+        FLAGS_cc=
+       FLAGS_gcc="-Wall"
 
 ## No changes below
 
@@ -74,29 +76,45 @@ then
    exit 0 
 fi
 
+if [ ! -r $1.module-list ]
+then
+   echo "Could not find module list \"$1.module-list\"" >&2
+   exit 1
+fi
 
 cat <<ENDCAT 
 # Makefile for target "$1" generated automatically on `date`
 #
 
+LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
+
+# Default compiler to use
+CC=gcc
+
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
 # DEBUG-LD-FLAGS: optional flags for linking with debugging information
-# DEBUG-COMP:     compiler to use
-DEBUG-LIBS     = ${DEBUG_LIBS}
+DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
 DEBUG-CC-FLAGS = ${DEBUG_CC_FLAGS}
 DEBUG-LD-FLAGS = ${DEBUG_LD_FLAGS}
-DEBUG-COMP     = ${DEBUG_COMP}
 
 # PROFILE-LIBS:     libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-# PROFILE-COMP:     compiler to use
-PROFILE-LIBS     = ${PROFILE_LIBS}
+PROFILE-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-prof) $(LIBS)
 PROFILE-CC-FLAGS = ${PROFILE_CC_FLAGS}
 PROFILE-LD-FLAGS = ${PROFILE_LD_FLAGS}
-PROFILE-COMP     = ${PROFILE_COMP}
 
+# STD-LIBS:     normal libraries
+# STD-CC-FLAGS: normal compiler flags
+# STD-LD-FLAGS: optional flags
+STD-LIBS      = -L$(ATERM)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-CC-FLAGS  = ${STD_CC_FLAGS}
+STD-LD-FLAGS  = ${STD_LD_FLAGS}
+
+# FLAGS_$(CC): compiler dependent flags (e.g., FLAGS-gcc=-Wall)
+FLAGS-cc      =${FLAGS_cc}
+FLAGS-gcc     =${FLAGS_gcc}
 
 # There should be no need to change anything below
 
@@ -106,10 +124,6 @@ bindir          = $(exec_prefix)/bin
 libdir          = $(exec_prefix)/lib
 includedir      = $(prefix)/include
 
-SHELL           = @SHELL@
-CC              = @CC@
-CPP             = @CPP@
-CPPFLAGS        = @CPP@ $(XCPPFLAGS)
 DEFS            = @DEFS@ $(XDEFS)
 INCLUDES        = @INCLUDES@ $(XINCLUDES)
 LIBS            = @LIBS@ $(XLIBS)
@@ -118,38 +132,40 @@ GELLIBS         = @GELLIBS@
 
 GEL             = @GEL@
 ATERM           = @ATERM@
-TOOLBUS         = @TOOLBUS@
 
 XINCLUDES       = -I$(ATERM)/include -I$(includedir)
-XLIBS           = -L$(prefix)/lib -L$(ATERM)/lib \\
-                  $(VAR-LIBS) $(SOCKLIBS) $(GELLIBS)
-VAR-LIBS        = -lsupport-cc -lATB-cc -lAsFix-cc -lATerm-cc
-VAR-FLAGS       = @CFLAGS@ $(XCFLAGS)
+XLIBS           = $(GELLIBS) -L$(prefix)/lib $(SOCKLIBS) 
 
 SRCS=\\
-`cat $1.module-list | sed 's/^/     /g' |\
+`cat $1.module-list | grep -v '#' | sed 's/^/     /g' |\
       sed 's/$/\\\\/g' ; echo "     init.c"`
 
-OBJS=$(SRCS:.c=.o)
+STD-OBJS=$(SRCS:.c=-$(CC).o)
+DEBUG-OBJS=$(SRCS:.c=-dbg.o)
+PROFILE-OBJS=$(SRCS:.c=-prof.o)
 
 # Make rules 
-.c.o:
-	$(CC) $(CFLAGS) $(VAR-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
+%-$(CC).o: %.c
+	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
 
-$1 : $(OBJS)
-	$(CC) $(LDFLAGS) -o $1 $(OBJS) $(LIBDIR) $(LIBS) 
+%-dbg.o: %.c
+	$(CC) $(FLAGS-$(CC)) $(DEBUG-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
 
-debug:
-	$(MAKE) $1-db CC="$(DEBUG-COMP)" VAR-FLAGS="$(DEBUG-FLAGS)" VAR-LIBS="$(DEBUG-LIBS)"
+%-prof.o: %.c
+	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
 
-profile:
-	$(MAKE) $1-prof CC="$(PROFILE-COMP)" VAR-FLAGS="$(PROFILE-CC-FLAGS)" VAR-LIBS="$(PROFILE-LIBS)"
+$1 : $(STD-OBJS)
+	$(CC) $(STD-LD-FLAGS) -o \$@ $(STD-OBJS) $(LIBDIR) $(STD-LIBS)
 
-$1-db : $(OBJS)
-	$(CC) $(LDFLAGS) $(DEBUG-LD-FLAGS) -o $1-db $(OBJS) $(LIBDIR) $(LIBS) 
+$1-debug : $(DEBUG-OBJS)
+	$(CC) $(DEBUG-LD-FLAGS) -o \$@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
 
-$1-prof : $(OBJS)
-	$(CC) $(LDFLAGS) $(PROFILE-LD-FLAGS) -o $1-prof $(OBJS) $(LIBDIR) $(LIBS) 
+$1-prof : $(PROFILE-OBJS)
+	$(CC) $(PROFILE-LD-FLAGS) -o \$@ $(PROFILE-OBJS) $(LIBDIR) $(PROFILE-LIBS)
+
+debug:  $1-debug
+
+profile: $1-prof
 
 
 init.c:
@@ -177,5 +193,5 @@ init.c:
 	echo "}" ) > \$@
 
 clean:
-	$(RM) $(OBJS) init.c $1 $1-db $1-prof
+	$(RM) *.o init.c $1 $1-db $1-prof
 ENDCAT
