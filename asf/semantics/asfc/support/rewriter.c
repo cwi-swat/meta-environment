@@ -109,10 +109,9 @@ ATfprintf(stderr,"Registering and resolving finished\n");
     ATBeventloop();
   } 
   else {
-    t = ATreadFromTextFile(stdin);
+    t = ATreadFromFile(stdin);
 ATfprintf(stderr,"Term read\n");
     t = AFexpandTerm(t);
-
 /*
 ATfprintf(stdout, "%t\n", t);
 */
@@ -126,7 +125,7 @@ ATfprintf(stderr, "%t\n", reduct);
 */
 ATfprintf(stderr,"Reducing finished.\n");
       asfix = toasfix(reduct, file, modname);
-      ATwriteToTextFile(asfix,stdout);
+      ATwriteToBinaryFile(asfix,stdout);
     }
     else
       ATfprintf(stderr, "not an asfix term: %t\n", t);
@@ -135,13 +134,3 @@ ATfprintf(stderr,"Reducing finished.\n");
 }
 
 /*}}}  */
-
-
-
-
-
-
-
-
-
-

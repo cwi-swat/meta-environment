@@ -190,7 +190,6 @@ funcptr lookup_func(ATerm prod)
   /* int hnr = prod->hnr % table_size;*/
   unsigned int hnr = (((int) prod)>>2);
   hnr %= table_size;
-
   b = prod_table[hnr];
 
   while(b) {
@@ -479,6 +478,534 @@ static ATerm call(ATerm prod, ATermList args)
                          arg[4],arg[5],arg[6],arg[7],
                          arg[8],arg[9],arg[10],arg[11],
                          arg[12],arg[13],arg[14],arg[15]);
+        break;
+    case 17:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16]);
+        break;
+    case 18:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17]);
+        break;
+    case 19:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18]);
+        break;
+    case 20:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19]);
+        break;
+    case 21:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20]);
+        break;
+    case 22:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21]);
+        break;
+    case 23:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22]);
+        break;
+    case 24:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23]);
+        break;
+    case 25:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24]);
+        break;
+    case 26:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25]);
+        break;
+  case 27:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26]);
+        break;
+    case 28:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        arg[27] = ATelementAt(args, 27);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26],arg[27]);
+        break;
+    case 29:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        arg[27] = ATelementAt(args, 27);
+        arg[28] = ATelementAt(args, 28);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26],arg[27],
+                         arg[28]);
+        break;
+    case 30:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        arg[27] = ATelementAt(args, 27);
+        arg[28] = ATelementAt(args, 28);
+        arg[29] = ATelementAt(args, 29);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26],arg[27],
+                         arg[28],arg[29]);
+        break;
+    case 31:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        arg[27] = ATelementAt(args, 27);
+        arg[28] = ATelementAt(args, 28);
+        arg[29] = ATelementAt(args, 29);
+        arg[30] = ATelementAt(args, 30);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26],arg[27],
+                         arg[28],arg[29],arg[30]);
+        break;
+    case 32:
+        arg[0] = ATgetFirst(args);
+        arg[1] = ATelementAt(args, 1);
+        arg[2] = ATelementAt(args, 2);
+        arg[3] = ATelementAt(args, 3);
+        arg[4] = ATelementAt(args, 4);
+        arg[5] = ATelementAt(args, 5);
+        arg[6] = ATelementAt(args, 6);
+        arg[7] = ATelementAt(args, 7);
+        arg[8] = ATelementAt(args, 8);
+        arg[9] = ATelementAt(args, 9);
+        arg[10] = ATelementAt(args, 10);
+        arg[11] = ATelementAt(args, 11);
+        arg[12] = ATelementAt(args, 12);
+        arg[13] = ATelementAt(args, 13);
+        arg[14] = ATelementAt(args, 14);
+        arg[15] = ATelementAt(args, 15);
+        arg[16] = ATelementAt(args, 16);
+        arg[17] = ATelementAt(args, 17);
+        arg[18] = ATelementAt(args, 18);
+        arg[19] = ATelementAt(args, 19);
+        arg[20] = ATelementAt(args, 20);
+        arg[21] = ATelementAt(args, 21);
+        arg[22] = ATelementAt(args, 22);
+        arg[23] = ATelementAt(args, 23);
+        arg[24] = ATelementAt(args, 24);
+        arg[25] = ATelementAt(args, 25);
+        arg[26] = ATelementAt(args, 26);
+        arg[27] = ATelementAt(args, 27);
+        arg[28] = ATelementAt(args, 28);
+        arg[29] = ATelementAt(args, 29);
+        arg[30] = ATelementAt(args, 30);
+        arg[31] = ATelementAt(args, 31);
+        result = (*func)(arg[0],arg[1],arg[2],arg[3],
+                         arg[4],arg[5],arg[6],arg[7],
+                         arg[8],arg[9],arg[10],arg[11],
+                         arg[12],arg[13],arg[14],arg[15],
+                         arg[16],arg[17],arg[18],arg[19],
+                         arg[20],arg[21],arg[22],arg[23],
+                         arg[24],arg[25],arg[26],arg[27],
+                         arg[28],arg[29],arg[30],arg[31]);
         break;
     default:
       ATerror("too many arguments: %d\n", ATgetLength(args));
