@@ -115,5 +115,7 @@ PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol);
 
 PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree);
 PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top);
+ATbool PT_isTreeBracket(PT_Tree tree);
+PT_Tree PT_getTreeBracketTree(PT_Tree tree);
 
 #endif /* _ME_PT_H */ 

@@ -837,3 +837,20 @@ PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
            (ATerm) ATsetArgument((ATermAppl) ATparseTree,
               PT_makeTermFromTree(top),0));
 }
+
+ATbool PT_isTreeBracket(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_hasProductionBracketAttr(prod);
+  }
+  return ATfalse;
+}
+
+PT_Tree PT_getTreeBracketTree(PT_Tree tree)
+{
+  if (PT_isTreeBracket(tree)) {
+    return PT_getArgsArgumentAt(PT_getTreeArgs(tree),2);
+  }
+  return NULL;
+}
