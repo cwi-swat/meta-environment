@@ -721,7 +721,8 @@ int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
   ATerm        attr;
   ATermList    attrs;
   static ATerm reject_attr = NULL;
-  static ATerm eager_attr = NULL, avoid_attr = NULL;
+  static ATerm eager_attr = NULL;
+  static ATerm avoid_attr = NULL;
 
   attr = ATgetArgument(SG_LookupProduction(pt, ATgetInt(prodlbl)), 2);
   if (!ATmatch(attr, "attrs([<list>])", &attrs)) { 
@@ -730,12 +731,15 @@ int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
 
   if (!reject_attr) {
     reject_attr = ATmake("atr(<str>)", SG_REJECT_ATTR);
+    ATprotect(&reject_attr);
   }
   if (!eager_attr) {
     eager_attr = ATmake("atr(<str>)", SG_PREFER_ATTR);
+    ATprotect(&eager_attr);
   }
   if (!avoid_attr) {
     avoid_attr = ATmake("atr(<str>)", SG_AVOID_ATTR);
+    ATprotect(&avoid_attr);
   }
 
   for (; !ATisEmpty(attrs); attrs = ATgetNext(attrs)) {
@@ -750,7 +754,6 @@ int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
     if (ATisEqual(attr, avoid_attr)) {
       return SG_PT_UNEAGER;
     }
-
   }
 
   return SG_PT_REGULAR;

@@ -1,5 +1,8 @@
 $Id$
 
+2001/06/13 (markvdb@cwi.nl)
+  * Fixed a protection bug of the reject/prefer/avoid attributes.
+
 2001/06/12 (markvdb@cwi.nl)
   * Changed size of state and label into int (was short).
 
