@@ -1,5 +1,8 @@
 $Id$
 
+2002/11/05 (vinju@loria.fr)
+ * Link and include SDF2PT library 
+
 2002/10/29 (vinju@loria.fr)
  * Removed dependency on ToolBus package by removing implicit build rules
    for ToolBus interfaces
