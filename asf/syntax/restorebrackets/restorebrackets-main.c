@@ -165,6 +165,7 @@ ATerm restore_brackets(int cid, ATerm term, ATerm tbl)
   pt = SG_BuildParseTable((ATermAppl) tbl);
   restoredTerm = PT_ParseTreeToTerm(
                    RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
+  SG_DiscardParseTable(pt);
 
   return ATmake("snd-value(brackets-restored(<term>))", restoredTerm);
 }
