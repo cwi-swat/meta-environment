@@ -30,7 +30,8 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(
 PROGRAMS	= clock log calc batch
 
 DISTFILES	= Makefile.in calc.tb batch.tif.c  batch.c calc.tif.c calc.c\
-		  clock.tif.c clock.c delay.h log.tif.c log.c ui-calc.tcl
+		  clock.tif.c clock.c delay.h log.tif.c log.c ui-calc.tcl \
+		calc.tb.tex
 
 all:    ${PROGRAMS} calc.tb.tex
 
