@@ -53,3 +53,7 @@ exports
   context-free syntax
     Identifier	-> Var1 {cons("Var1")}
     Identifier	-> Var2 {cons("Var2")}
+
+
+  variables
+    "A*" -> A*

@@ -5,7 +5,7 @@ SUBDIRS=terms grammar in out
 TEST_SET = Iter Iter-sep Iter-star Iter-star-sep Nesting-iter-sep1 \
            Nesting-iter-sep2 Nesting-iter-star-sep Empty-iter-star-sep \
 	   Alt1a Alt1b Alt2a Alt2b Alt3a Alt3b Alt4a SeqOpt1 SeqOpt2 SeqOpt3 \
-	   Seq Var1 Var2
+	   Seq Var1 Var2 ListVar
 
 Iter_flags= -X -l -p 
 Iter_sep_flags= -X -l -p 
@@ -15,6 +15,8 @@ Nesting_iter_sep1_flags= -X -l -p
 Nesting_iter_sep2_flags= -X -l -p 
 Nesting_iter_star_sep_flags= -X -l -p 
 Empty_iter_star_sep_flags= -X -l -p 
+ListVar_flags = -p -A -c -l -O -I -q -X
+
 
 TESTS = $(TEST_SET:%=%.sh)
 
