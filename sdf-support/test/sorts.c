@@ -26,13 +26,15 @@ int testSorts(void)
 
   sorts = SDF_getModuleSorts(module);
 
-  assert(ATgetLength((ATermList)SDF_makeTermFromSymbolList(sorts)) == 1);
+  assert(ATgetLength((ATermList)SDF_SymbolListToTerm(sorts)) == 1);
 
   symbol = SDF_getSymbolListHead(sorts);
   sort   = SDF_getSymbolSort(symbol);
-  str    = SDF_getCHARLISTString(SDF_getSortChars(sort));
+  str    = SDF_getSortString(sort);
 
   assert(strcmp(str, "PICO-BOOL") == 0);
+
+  free(str);
 
   return 0;
 }

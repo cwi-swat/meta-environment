@@ -8,7 +8,9 @@ static void collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restrict
     SDF_Restrictions grammarPrios = SDF_getGrammarRestrictions(grammar);
     SDF_RestrictionList kernelPrios = SDF_getRestrictionsList(grammarPrios);
 
-    *restricts = SDF_concatRestrictionList(*restricts, kernelPrios);
+    *restricts = SDF_concatRestrictionList(*restricts,
+					   SDF_makeLayoutSpace(),
+					   kernelPrios);
   }
 }
 

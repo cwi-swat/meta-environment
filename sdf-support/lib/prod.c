@@ -9,7 +9,9 @@ collect_lex_prods(SDF_Grammar grammar, SDF_ProductionList *lexProds)
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
 
-    *lexProds = SDF_concatProductionList(*lexProds, prods);
+    *lexProds = SDF_concatProductionList(*lexProds,
+					 SDF_makeLayoutSpace(),
+					 prods);
   }
 }
 
@@ -39,7 +41,9 @@ collect_var_prods(SDF_Grammar grammar, SDF_ProductionList *varProds)
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
 
-    *varProds = SDF_concatProductionList(*varProds, prods);
+    *varProds = SDF_concatProductionList(*varProds,
+					 SDF_makeLayoutSpace(),
+					 prods);
   }
 }
 
@@ -69,7 +73,9 @@ collect_cf_prods(SDF_Grammar grammar, SDF_ProductionList *cfProds)
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
 
-    *cfProds = SDF_concatProductionList(*cfProds, prods);
+    *cfProds = SDF_concatProductionList(*cfProds,
+					SDF_makeLayoutSpace(),
+					prods);
   }
 }
 
@@ -99,7 +105,9 @@ collect_all_prods(SDF_Grammar grammar, SDF_ProductionList *allProds)
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
 
-    *allProds = SDF_concatProductionList(*allProds, prods);
+    *allProds = SDF_concatProductionList(*allProds,
+					 SDF_makeLayoutSpace(),
+					 prods);
   }
 }
 
@@ -129,7 +137,9 @@ collect_kernel_prods(SDF_Grammar grammar, SDF_ProductionList *prods)
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
     SDF_ProductionList lexProds = SDF_getProductionsList(grammarProds);
 
-    *prods = SDF_concatProductionList(*prods, lexProds);
+    *prods = SDF_concatProductionList(*prods,
+				      SDF_makeLayoutSpace(),
+				      lexProds);
   }
 }
 

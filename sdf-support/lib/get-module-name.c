@@ -10,28 +10,29 @@ char *SDF_getModuleName(SDF_Module sdfModule)
   moduleName = SDF_getModuleModuleName(sdfModule);
   moduleId   = SDF_getModuleNameModuleId(moduleName);
 
-  return SDF_getCHARLISTString(SDF_getModuleIdChars(moduleId));
+  return SDF_getModuleIdString(moduleId);
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleId SDFmakeModuleId(char *moduleName) */
+/*{{{  SDF_ModuleId SDF_makeModuleId(const char *moduleStr)    */
 
-SDF_ModuleId SDF_makeModuleId(char *moduleStr)   
+SDF_ModuleId SDF_makeModuleId(const char *moduleStr)   
 {
-  return SDF_makeModuleIdWord(SDF_makeCHARLISTString(moduleStr));
+  return SDF_makeModuleIdWord(moduleStr);
 }
-/*}}}  */
-/*{{{  SDF_Module SDFmakeModuleName(char *moduleName) */
 
-SDF_ModuleName SDF_makeModuleName(char *moduleStr)   
+/*}}}  */
+/*{{{  SDF_ModuleName SDF_makeModuleName(const char *moduleStr)    */
+
+SDF_ModuleName SDF_makeModuleName(const char *moduleStr)   
 {
-  return SDF_makeModuleNameUnparameterized(
-           SDF_makeModuleId(moduleStr));
+  return SDF_makeModuleNameUnparameterized(SDF_makeModuleId(moduleStr));
 }
-/*}}}  */
-/*{{{  SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *moduleName) */
 
-SDF_Module SDF_setModuleName(SDF_Module sdfModule, char *newName)
+/*}}}  */
+/*{{{  SDF_Module SDF_setModuleName(SDF_Module sdfModule, const char *newName) */
+
+SDF_Module SDF_setModuleName(SDF_Module sdfModule, const char *newName)
 {
   SDF_ModuleName oldModuleName, newModuleName;
   SDF_ModuleId   moduleId = SDF_makeModuleId(newName);

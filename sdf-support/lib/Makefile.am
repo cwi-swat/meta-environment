@@ -1,7 +1,6 @@
 # $Id$
 
-# During development, DO NOT COMMIT ME!
-#CFLAGS += -DDISABLE_DYNAMIC_CHECKING
+#AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING # During development, DO NOT COMMIT ME!
 
 EXTRA_DIST = Sdf.label.def
 
@@ -14,7 +13,7 @@ include_HEADERS = \
 	SDFME.h \
 	SDFME_dict.h
 
-libSDFME_a_SOURCES = SDFME.c SDFME_dict.c SDFME_bottom.c ${UTILSRCS}
+libSDFME_a_SOURCES = SDFME.c SDFME_dict.c ${UTILSRCS}
 
 libSDF2PT_a_SOURCES = sdf2pt.c
 
@@ -37,7 +36,7 @@ UTILSRCS = \
 
 # Developers only:
 api: Sdf.label.def
-	sdf2-to-c -i $< --compat-term -P SDF_ -o SDFME
+	sdf2-to-c --input $< --prefix SDF_ --output SDFME
 
 api-clean:
-	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt SDFME_bottom.c
+	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt

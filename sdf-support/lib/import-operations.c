@@ -1,36 +1,12 @@
 #include "SDFME-utils.h"
 
-/*{{{  SDF_Import SDF_makeImport(char *moduleName) */
+/*{{{  SDF_Import SDF_makeImport(const char *moduleName) */
 
-SDF_Import SDF_makeImport(char *moduleName)
+SDF_Import SDF_makeImport(const char *moduleName)
 {
   return SDF_makeImportModule(
            SDF_makeModuleNameUnparameterized(
-	     SDF_makeModuleIdWord(SDF_makeCHARLISTString(moduleName))));
-}
-
-/*}}}  */
-/*{{{  SDF_ImportList SDF_concatImportList(SDF_ImportList l1, */
-
-SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
-                                    SDF_ImportList l2)
-{
-  SDF_ImportList reversed = SDF_reverseImportList(l1);
-
-  while (!SDF_isImportListEmpty(reversed)) {
-    SDF_Import import = SDF_getImportListHead(reversed);
-
-    l2 = SDF_insertImport(import, l2);
-
-    if (SDF_hasImportListTail(reversed)) {
-      reversed = SDF_getImportListTail(reversed);
-    }
-    else {
-      break;
-    }
-  }
-
-  return l2;
+	     SDF_makeModuleIdWord(moduleName)));
 }
 
 /*}}}  */
@@ -54,16 +30,6 @@ SDF_ImportList SDF_mergeImportList(SDF_ImportList l1, SDF_ImportList l2)
   }
 
   return l2;
-}
-
-/*}}}  */
-/*{{{  SDF_ImportList SDF_reverseImportList(SDF_ImportList l) */
-
-SDF_ImportList SDF_reverseImportList(SDF_ImportList l)
-{
-  return SDF_ImportListFromTerm((ATerm)
-				ATreverse((ATermList)
-					  SDF_ImportListToTerm(l)));
 }
 
 /*}}}  */

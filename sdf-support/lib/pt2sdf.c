@@ -51,7 +51,7 @@ static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr)
     SDF_ModuleId sdfModuleId;
     SDF_ModuleName sdfModuleName;
 
-    sdfModuleId = SDF_makeModuleIdWord(SDF_makeCHARLISTString(str));
+    sdfModuleId = SDF_makeModuleIdWord(str);
     sdfModuleName = SDF_makeModuleNameUnparameterized(sdfModuleId);
 
     result = SDF_makeAttributeId(SDF_makeLayoutEmpty(),
@@ -99,7 +99,6 @@ static SDF_AttributeList PTAttrsToSDFAttributeList(PT_Attrs ptAttrs)
 
     result = SDF_makeAttributeListMany(sdfAttribute,
 				       SDF_makeLayoutEmpty(),
-				       ",", /* FIXME in ApiGen!! */
 				       SDF_makeLayoutEmpty(),
 				       result);
   }
@@ -184,7 +183,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
   if (PT_isSymbolLit(ptSymbol)) {
     char *str = PT_getSymbolString(ptSymbol);
     char *qstr = escape(str, "\"\\", QUOTED);
-    SDF_Literal lit = SDF_makeLiteralQlit(SDF_makeQLiteralQuoted(SDF_makeCHARLISTString(qstr)));
+    SDF_Literal lit = SDF_makeLiteralQlit(SDF_makeQLiteralQuoted(qstr));
     free(qstr);
 
     result = SDF_makeSymbolLit(lit);
@@ -247,7 +246,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
   }
   else if (PT_isSymbolSort(ptSymbol)) {
     char *str = PT_getSymbolSort(ptSymbol);
-    SDF_Sort sort = SDF_makeSortMoreChars(SDF_makeCHARLISTString(str));
+    SDF_Sort sort = SDF_makeSortMoreChars(str);
 
     result = SDF_makeSymbolSort(sort);
   }
@@ -290,7 +289,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
     SDF_NatCon sdfNatCon;
     sprintf(str, "%d", nr);
     
-    sdfNatCon = SDF_makeNatConDigits(SDF_makeCHARLISTString(str));
+    sdfNatCon = SDF_makeNatConDigits(str);
 
     result = SDF_makeSymbolIterN(sdfSymbol, 
                                  SDF_makeLayoutSpace(),
@@ -305,7 +304,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
     SDF_NatCon sdfNatCon;
     sprintf(str, "%d", nr);
     
-    sdfNatCon = SDF_makeNatConDigits(SDF_makeCHARLISTString(str));
+    sdfNatCon = SDF_makeNatConDigits(str);
 
     result = SDF_makeSymbolIterSepN(SDF_makeLayoutEmpty(),
                                     sdfSymbol, 
@@ -357,7 +356,10 @@ static SDF_SymbolRest PTSymbolsToSDFSymbolRest(PT_Symbols ptSymbols)
       sdfHead = PTSymbolToSDFSymbol(ptHead);
       sdfTail = PTSymbolsToSDFSymbolRest(ptTail);
 
-      result = SDF_makeSymbolRestMany(sdfHead, SDF_makeLayoutEmpty(), ",", SDF_makeLayoutEmpty(), sdfTail);
+      result = SDF_makeSymbolRestMany(sdfHead,
+				      SDF_makeLayoutEmpty(),
+				      SDF_makeLayoutEmpty(),
+				      sdfTail);
       break;
   }
 

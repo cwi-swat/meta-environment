@@ -18,7 +18,7 @@ testGrammars(void)
 
   lexProds = SDF_getModuleLexicalProductions(module);
 
-  assert(ATgetLength((ATermList)SDF_makeTermFromProductionList(lexProds)) == 5);
+  assert(ATgetLength((ATermList)SDF_ProductionListToTerm(lexProds)) == 5);
 
   return 0;
 }

@@ -57,7 +57,7 @@ SDFforeachGrammarInModule(SDF_Module      module,
 static void
 collect_grammars(SDF_Grammar grammar, ATermList *grammars)
 {
-  *grammars = ATinsert(*grammars, SDF_makeTermFromGrammar(grammar));
+  *grammars = ATinsert(*grammars, SDF_GrammarToTerm(grammar));
 }
 
 /*}}}  */
