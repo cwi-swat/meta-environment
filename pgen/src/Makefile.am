@@ -10,13 +10,14 @@ INCLUDES	= -I${ATERM}/include \
 
 check_PROGRAMS	= test-chars
 bin_PROGRAMS	= parsetablegen
-bin_SCRIPTS	= sdf2table 
+bin_SCRIPTS	= sdf2table parse-sdf2
 noinst_SCRIPTS	= sdf2table.test
 data_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
 EXTRA_DIST	= parsetablegen.idef \
                   sdf2table.src \
+                  parse-sdf2.src \
                   sdf2table.pod \
                   sdf2table.1
 
