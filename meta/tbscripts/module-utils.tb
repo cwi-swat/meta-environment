@@ -18,7 +18,7 @@ in
     rec-msg(import-module(OldModuleName?, NewModuleName?, NewPath?)).
     DoImportModule(OldModuleName, NewModuleName, NewPath)
   +
-    rec-msg(close-module(OldModuleName?)) .
+    rec-msg(delete-module(OldModuleName?)) .
     DoDeleteModule(OldModuleName)
   +
     rec-msg(unimport-module(OldModuleName?, NewModuleName?, NewPath?)).
@@ -38,7 +38,7 @@ in
     SaveSdfModules(Changed).
     snd-msg(notify-about-changed-modules(Changed, "sdf")) .
     rec-msg(notify-about-changed-modules-done) .
-    snd-msg(module-closed(ModuleName))
+    snd-msg(module-deleted(ModuleName))
 endlet
 
 process DoRenameModule(Old : str, New : str, Path : str) is

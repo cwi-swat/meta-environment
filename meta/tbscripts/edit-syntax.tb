@@ -87,11 +87,10 @@ in
   rec-msg(modified-status(EditorId, ModifiedStatus?)) .
   snd-msg(kill-editor-done(EditorId)).
   if equal(ModifiedStatus, modified) then
-    snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
-                              [ModuleName]))).
-    snd-msg(delete-module(ModuleName)).
-    snd-msg(open-modules([ModuleName])).
-    rec-msg(finished-opening-modules)
+    snd-msg(revert-module(ModuleName)).
+    rec-msg(module-reverted(ModuleName)).
+    snd-note(ui-status(errorf("Dirty module %s is reread from disk",
+                       [ModuleName])))
   else
     tau
   fi
