@@ -24,6 +24,11 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
                                      PT_SymbolVisitor visitor, 
                                      PT_SymbolVisitorData data);
 
+typedef void* PT_AttrVisitorData;
+typedef PT_Attr (*PT_AttrVisitor)(PT_Attr attr, PT_AttrVisitorData data);
+PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
+                               PT_AttrVisitorData data);
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 int     PT_getArgsLength(PT_Args args);

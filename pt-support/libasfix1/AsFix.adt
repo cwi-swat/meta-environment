@@ -46,13 +46,15 @@
   ],
 
   [Attributes, no-attrs, no-attrs],
-  [Attributes, attrs, <attrs(Attrs)>],
+  [Attributes, attrs, attrs(l("{"),w(""),<attrs(Attrs)>,w(""),l("}"))],
 
-  [Attrs, list, [<head(Attr)>,<[tail(Attrs)]>]],
-  [Attrs, empty, []],
+  [Attrs, many, [<head(Attr)>,w(""),sep(","),w(""),<[tail(Attrs)]>]],
+  [Attrs, single, [<head(Attr)>]],
 
   [Attr, cons, cons(<string(str)>)],
-  [Attr, bracket, bracket], 
+  [Attr, bracket, l("bracket")],
+  [Attr, traverse, l("traverse")],
+  [Attr, memo, l("memo")], 
   
   [Symbol, iter-star, iter(<symbol(Symbol)>,
                     w(""),

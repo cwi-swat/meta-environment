@@ -105,6 +105,38 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
   return newSymbols;
 }
 
+PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
+                               PT_AttrVisitorData data)
+{
+  ATermList store;
+  PT_Attrs newAttrs;
+
+  /* apply func to each element */
+  for (store = ATempty;
+      PT_hasAttrsHead(attrs);
+      newAttrs = PT_getAttrsTail(attrs)) {
+    store = ATinsert(store,
+                     PT_makeTermFromAttr(
+                     visitor(PT_getAttrsHead(attrs), data)));
+  }
+
+  if (ATisEmpty(store)) {
+    ATerror("PT_foreachAttrInAttrs: plus list contains no elements");
+    return (PT_Attrs) NULL;
+  }
+
+  newAttrs = PT_makeAttrsSingle(PT_makeAttrFromTerm(ATgetFirst(store)));
+  store = ATgetNext(store);
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Attr newAttr = PT_makeAttrFromTerm(ATgetFirst(store));
+    newAttrs = PT_makeAttrsMany(newAttr,newAttrs);
+  }
+
+  return newAttrs;
+}
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
   ATerm atArg = PT_makeTermFromTree(arg);
