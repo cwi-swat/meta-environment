@@ -17,6 +17,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 $Id$
+
+2000/11/09 (jurgenv@cwi.nl)
+   * Version is now 0.4
+   * Small extensions for handling productions.
+
 2000/4/05 (mdejonge @cwi.nl)
    * Version is now 0.3
    * Adapted for use with separate asfix distribution (i.e., libasfix is no
