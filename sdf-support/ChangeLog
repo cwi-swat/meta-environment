@@ -1,5 +1,8 @@
 $Id$
 
+2003/07/18 (jurgenv@cwi.nl)
+ * Removed an unnecessary ATBunpack
+
 2003/07/02 (jurgenv@cwi.nl)
  * Release 0.2
 
