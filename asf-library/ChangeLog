@@ -1,5 +1,12 @@
 $Id$
 
+Wed Feb  9 09:15:20 CET 2005 <jurgenv@cwi.nl>
+ * languages/asf/compiler: stored the fact that a builtin function has
+   a side-effect attribute in the name of the function. Locate-Constants
+   can then decide not to factor out a constant function application.
+ * utilities/*.sdf: annotated all builtins with side-effects with the
+   'side-effect' production attribute.
+
 Thu Feb  3 10:00:57 CET 2005 <jurgenv@cwi.nl>
  * Added ATerm pretty printer
 
