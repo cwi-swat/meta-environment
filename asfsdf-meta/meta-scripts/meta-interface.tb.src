@@ -282,13 +282,19 @@ in
     snd-msg(other-tables-invalidated-hook)
   +
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm)) .
-    snd-msg(pre-get-all-syntax-hook-result(success)) 
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")) 
   +
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
-    snd-msg(pre-get-all-syntax-hook-result(success)) 
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree"))) 
   +
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, sdf)) .
-    snd-msg(pre-get-all-syntax-hook-result(success)) 
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
+/*  +
+    rec-msg(add-initial-sdf-modules-hook(Modules?, sdf)) .
+    snd-msg(initial-modules-added(Modules)) 
+  +
+    rec-msg(clear-module-db-hook) .
+    snd-msg(module-db-hook-done) */
   ) * delta
 endlet
 
