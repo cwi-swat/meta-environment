@@ -27,21 +27,6 @@ static char myversion[] = "0.0";
 static char myarguments[] = "hV";
 
 /*}}}  */
-/*{{{  ATerm get_equation_list(int cid, ATerm eqsTree) */
-
-ATerm get_equation_list(int cid, ATerm eqsPTree)
-{
-  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListEmpty();
-  PT_Tree eqsTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(eqsPTree));
-  ASF_Equations asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
-  if (ASF_isEquationsPresent(asfEqs)) {
-    asfEqsList = ASF_getEquationsList(asfEqs);
-  }
-  return ATmake("snd-value(equations(<term>))", 
-		ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-}
-
-/*}}}  */
 /*{{{  ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree) */
  
 ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
@@ -55,18 +40,22 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
     asfEqsList = ASF_getEquationsList(asfEqs);
     asfEqsList = doRenamingsInEquations(asfEqsList, renamings);
   }
+
+  asfEqs = ASF_setEquationsList(asfEqs, asfEqsList);
  
   return ATmake("snd-value(equations(<term>))",
-                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
+                ATBpack(ASF_makeTermFromEquations(asfEqs)));
 }
  
 /*}}}  */ 
 /*{{{  ATerm union_equations(int cid, ATerm eqsList1, eqsList2) */
  
-ATerm union_equations(int cid, ATerm eqsList1, ATerm eqsList2)
+ATerm union_equations(int cid, ATerm eqsList1, ATerm eqs2)
 {
   ASF_CondEquationList asfEqsList1 = ASF_makeCondEquationListFromTerm(eqsList1);
-  ASF_CondEquationList asfEqsList2 = ASF_makeCondEquationListFromTerm(eqsList2);
+  ASF_CondEquationList asfEqsList2 = ASF_getEquationsList(
+				       ASF_getStartTopEquations(
+					ASF_StartFromTerm(eqs2)));
   ASF_CondEquationList newAsfEqsList = ASF_unionCondEquationList(asfEqsList1, asfEqsList2);
  
   return ATmake("snd-value(equations(<term>))",
