@@ -1,3 +1,6 @@
+*.c
+reduct.out
 *.eqs
 *.tbl
-*.baf
+junk
+*.trm
