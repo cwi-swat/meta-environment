@@ -1,0 +1,54 @@
+
+\subsection{AsFix layout}
+
+<<preparation.h*>>=
+#ifndef PREPARATION_H
+#define PREPARATION_H
+
+#include <aterm.h>
+
+<<RWprepareTerm>>
+<<RWprepareEqs>>
+<<RWrestoreTerm>>
+
+#endif
+@
+
+\Function{RWprepareTerm}{aterm *}{arena *ar, aterm *t}{Prepare a term for
+rewriting.}
+<<RWprepareTerm>>=
+aterm *RWprepareTerm(arena *ar, aterm *t);
+@ %def RWprepareTerm
+
+\Function{RWprepareEqs}{aterm\_list *}{arena *ar, aterm\_list *eqs}{Prepare a 
+list of equations for rewriting.}
+<<RWprepareEqs>>=
+aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs);
+@ %def RWprepareEqs
+
+\Function{RWrestoreTerm}{aterm *}{arena *ar, aterm *t}{Restore layout after
+rewriting.}
+<<RWrestoreTerm>>=
+aterm *RWrestoreTerm(arena *ar, aterm *t);
+@ %def RWrestoreTerm
+
+%{{{ AFfilterLayout
+
+\Function{AFfilterLayout}{aterm\_list *}{arena *ar, aterm\_list *elems}{
+Remove all layout from an asfix term.}
+<<asfix layout>>=
+aterm_list *AFfilterLayout(arena *ar, aterm_list *elems);
+@
+\FunDescr{This functions removes all elements of the form {\tt w(<str>)}
+from elems.}
+
+%}}}
+%{{{ AFremoveLayout
+
+\Function{AFremoveLayout}{aterm *}{aterm *t}{Remove
+all layout from an asfix term.}
+<<asfix layout>>=
+aterm *AFremoveTermLayout(aterm *t);
+@ %def AFremoveTermLayout
+
+%}}}
