@@ -10,7 +10,6 @@ let
   ErrorList  : list,
   Id         : term,
   Tide       : term,
-  TestResults : term,
   ParseTable : term,
   Tests : term
 in

@@ -1,9 +1,7 @@
-/*
-  $Id$
-   */
+/* $Id$ */
+
 process AsfUpgrader is
 let
-  Msgs  : list,
   Rules : term,
   AC    : asfupgrader
 in
