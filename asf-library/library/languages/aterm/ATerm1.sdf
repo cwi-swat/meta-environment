@@ -1,13 +1,17 @@
-module aterm/ATerm1[String Term]
+module aterm/ATerm1[Term]
 
-imports containers/List[Term]
 imports basic/Strings
+
+hiddens 
+  aliases
+   {Term ","}* -> Terms
+
 exports
 
 context-free syntax
   
-"ATwarning"(String,List[[Term]]) -> String {built-in("ATermWarning")}
-"ATerror"(String,List[[Term]]) -> String {built-in("ATermError")}
+"ATwarning"(Term) -> Term {built-in("ATermWarning")}
+"ATerror"(Term)   -> Term {built-in("ATermError")}
   
 "ATreadFromNamedFile"(String) -> Term  {built-in("ATermReadFromNamedFile")}
 "ATwriteToNamedTextFile"(Term,String) -> Term {built-in("ATermWriteToNamedTextFile")}
