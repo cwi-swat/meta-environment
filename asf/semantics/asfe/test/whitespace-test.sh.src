@@ -22,6 +22,8 @@
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
 
+set -e
+
 ./whitespace terms/Set.eqs.asfix1 terms/Set2.trm.asfix1 
 printf "." 
 ./whitespace terms/Type-environment.eqs.asfix1 terms/Type-environment.trm.asfix1
@@ -33,4 +35,6 @@ printf "."
 ./whitespace terms/Pico-typecheck.eqs.asfix1 terms/fac.trm.asfix1
 printf "."
 ./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
+printf "."
+./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm2.asfix1
 printf ".\n"
