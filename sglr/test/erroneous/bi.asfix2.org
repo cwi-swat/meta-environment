@@ -1,0 +1,1 @@
+parse-error([character(0),line(1),col(2),char(3)],cycle([259,259]))
