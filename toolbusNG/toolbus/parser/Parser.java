@@ -12,7 +12,7 @@ import toolbus.process.*;
 
 public class Parser {
 
-  private ATermFactory factory;
+  private static ATermFactory factory = TBTerm.factory;
 
   public Parser() {
     factory = TBTerm.factory;
@@ -23,8 +23,7 @@ public class Parser {
 
   private static final int AckEvent = 0;
   private static final int Assign = AckEvent + 1;
-  private static final int Create0 = Assign + 1;
-  private static final int Create = Create0 + 1;
+  private static final int Create = Assign + 1;
   private static final int Delta = Create + 1;
   private static final int Do = Delta + 1;
   private static final int Eval = Do + 1;
@@ -48,7 +47,7 @@ public class Parser {
   private static final int ProcessDefinition0 = Sequence + 1;
   private static final int ProcessDefinition = ProcessDefinition0 + 1;
 
-  private static final int apply = ProcessDefinition + 1;// below args are not evaluated
+  private static final int apply = ProcessDefinition + 1; // below args are not evaluated
 
   private static final int vardecl = apply + 1;
   private static final int resvardecl = vardecl + 1;
@@ -102,11 +101,16 @@ public class Parser {
     Funs.put("posint", new Integer(posint));
     Funs.put("negint", new Integer(negint));
     Funs.put("id", new Integer(id));
-
   }
+  
+  private ATerm unquote(ATerm type){
+    AFun afun = factory.makeAFun(((ATermAppl) type).getName(), 0, false);
+    return factory.makeAppl(afun);
+  }
+  
   private ATerm mkSomeVar(String V, ATerm name, ATerm type) {
     AFun afun = factory.makeAFun(V, 3, false);
-    ATerm cargs[] = new ATerm[] { factory.makeInt(-1), type, name };
+    ATerm cargs[] = new ATerm[] { factory.makeInt(-1), unquote(type), name };
     return factory.makeAppl(afun, cargs);
   }
 
@@ -238,7 +242,7 @@ public class Parser {
         return new Merge((ProcessExpression) oargs[0], (ProcessExpression) oargs[1]);
 
       case ProcessCall :
-        return new ProcessCall(((ATerm) oargs[0]), (ATermList) oargs[1]);
+        return new ProcessCall(((ATerm) oargs[0]));
 
       case ProcessDefinition0 :
         return new ProcessDefinition(
@@ -259,13 +263,10 @@ public class Parser {
         return new AckEvent((ATerm) oargs[0]);
 
       case Assign :
-        return new Assign((ATerm) oargs[0], (ATerm) oargs[1]);
+        return new Assign(mkVar((ATerm) oargs[0], factory.make("none")), (ATerm) oargs[1]);
 
-      case Create0 :
-        return new Create((ATerm) oargs[0], (ATerm) oargs[1]);
-        
       case Create :
-        return new Create((ATerm) oargs[0], (ATermList) oargs[1], (ATerm) oargs[2]);
+        return new Create((ATerm) oargs[0], (ATerm) oargs[1]);
 
       case Delta :
         return new Delta();
@@ -301,7 +302,7 @@ public class Parser {
     }
   }
 
-  public void parse(String filename) throws ToolBusException {
+  public void parse(ToolBus toolbus, String filename) throws ToolBusException {
     ATerm interm;
     try {
       interm = factory.readFromFile(filename);
@@ -320,12 +321,15 @@ public class Parser {
     for (int i = 0; i < decls.getLength(); i++) {
       ProcessDefinition def = (ProcessDefinition) build(decls.elementAt(i));
       System.out.println(def);
-      //addProcessDefinition(def);
+      toolbus.addProcessDefinition(def);
     }
     ATermList calls = (ATermList) interm.getChildAt(1);
 
-    System.out.print("decls = " + decls);
-    System.out.println("calls = " + calls);
+    for (int i = 0; i < calls.getLength(); i++) {
+      ProcessCall call = (ProcessCall) build(calls.elementAt(i));
+      System.out.println(call);
+      toolbus.addProcess(call);
+    }
 
   }
 }

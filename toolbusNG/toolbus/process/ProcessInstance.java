@@ -22,7 +22,8 @@ public class ProcessInstance {
   private ToolBus toolbus;
   private ToolInstance toolinstance;
 
-  public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
+ public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
+    String name = call.getName();
     toolbus = TB;
     definition = TB.getProcessDefinition(name);
 
@@ -30,7 +31,6 @@ public class ProcessInstance {
     AFun afun = TBTerm.factory.makeAFun(name, 1, false);
     processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
 
-    ProcessCall call = new ProcessCall(name, actuals);
     call.expand(this, new Stack());
     call.compile(this, empty);
     currentState = call.getStartState();
@@ -52,6 +52,10 @@ public class ProcessInstance {
       System.out.println(processId + ": " + a + " --> " + a.getFollow());
     }
   }
+  
+   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
+    this(TB, new ProcessCall(name, actuals));
+   }
 
   public Environment getEnv() {
     return env;

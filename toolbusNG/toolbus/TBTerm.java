@@ -42,6 +42,11 @@ class FunctionDescriptor {
   }
 
   public boolean checkStatic(ATerm actual[]) throws ToolBusException {
+    System.out.println("checkStatic: " + name);
+    for(int i = 0; i < actual.length; i++){
+        System.out.println("actual[" + i + "] = " + actual[i]);
+        System.out.println("argtypes[" + i + "] = " + argtypes[i]);   
+    }
     if (argtypes.length != actual.length)
       throw new ToolBusException(name + " has wrong number of arguments");
     for (int i = 0; i < argtypes.length; i++) {

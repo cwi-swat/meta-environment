@@ -3,26 +3,25 @@ module ProcessExpr
 imports Atom VarDecls TimeExpr
 
 exports
-  sorts ProcessExpr ProcessName ProcessCall
-
-  lexical restrictions
-    ProcessName -/- [a-zA-Z\-0-9]
+  sorts ProcessExpr ProcessName ProcessCall Invocation
 
   lexical syntax
-    [A-Z] [a-zA-Z\-0-9]* 			-> ProcessName	{cons("id")}
+    [A-Z] [a-zA-Z0-9\-]* 			-> ProcessName	{cons("id")}
+
+%%  lexical restrictions
+%%    ProcessName -/- [a-zA-Z0-9\-]
 
   context-free syntax
+
+    ProcessName					-> Invocation {cons("apply")}
+    ProcessName "(" {TBTerm ","}* ")"		-> Invocation {cons("apply")}
+
     Atom 					-> ProcessExpr
 %%    Atom TimeExpr 				-> ProcessExpr
-    "create" "(" ProcessName  "," GenVar ")" 	-> ProcessExpr {cons("Create0")}
-   "create" "(" ProcessName "(" {TBTerm ","}* ")"  "," GenVar ")" 
-						-> ProcessExpr {cons("Create")}
-    ProcessName					-> ProcessCall  {cons("ProcessCall")}
-    ProcessName ("(" {TBTerm ","}* ")") 	-> ProcessCall  {cons("ProcessCall")}
-    ProcessCall					-> ProcessExpr
+   "create" "(" Invocation  "," GenVar ")" 	-> ProcessExpr {cons("Create")}
+    Invocation					-> ProcessCall  {cons("ProcessCall")}
 
     ProcessExpr "." ProcessExpr 		-> ProcessExpr {left, cons("Sequence")}
-
     ProcessExpr "+" ProcessExpr 		-> ProcessExpr {left, cons("Alternative")}
     ProcessExpr "*" ProcessExpr 		-> ProcessExpr {left, cons("Iteration")}
     ProcessExpr "||" ProcessExpr 		-> ProcessExpr {left, cons("Merge")}

@@ -5,6 +5,7 @@
 package toolbus;
 import java.util.*;
 
+import toolbus.parser.Parser;
 import toolbus.process.*;
 
 import aterm.*;
@@ -15,11 +16,13 @@ public class ToolBus {
   private ATermFactory factory;
   private Vector processes;
   private Vector procdefs;
+  private Parser parser;
 
   public ToolBus() {
     this.factory = TBTerm.factory;
     processes = new Vector();
     procdefs = new Vector();
+    parser = new Parser();
   }
 
   public ATermFactory getFactory() {
@@ -36,6 +39,10 @@ public class ToolBus {
 
   public static boolean nextBoolean() {
     return rand.nextBoolean();
+  }
+  
+  public void parse(String filename) throws ToolBusException {
+    parser.parse(this, filename);
   }
 
   public void addProcessDefinition(ProcessDefinition PD) throws ToolBusException {
@@ -56,6 +63,12 @@ public class ToolBus {
 
   public ProcessInstance addProcess(String name) throws ToolBusException {
     return addProcess(name, (ATermList) factory.make("[]"));
+  }
+  
+  public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
+    ProcessInstance P = new ProcessInstance(this, call);
+    processes.add(P);
+    return P;
   }
 
   public ProcessDefinition getProcessDefinition(String name) throws ToolBusException {
