@@ -15,7 +15,7 @@ exports
     AFun                          -> ATerm
     AFun "(" {ATerm ","}+ ")"     -> ATerm 
     "<" ATerm ">"                 -> ATerm
-    "{" { ATerm ","}+ "}"         -> Ann
+    "{" {ATerm ","}+ "}"          -> Ann
     ACon Ann                      -> ATerm
     ATermList Ann                 -> ATerm
     AFun Ann                      -> ATerm

@@ -1,6 +1,7 @@
 Makefile.in
 Makefile
 *.eqs
+*.trm.tbl
 .deps
 link-test
 link-test.c

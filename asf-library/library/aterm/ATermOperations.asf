@@ -1,0 +1,68 @@
+equations
+
+  [hasAnnotations-acon] ACon Ann.hasAnnotations() = true
+
+  [hasAnnotations-atermlist] ATermList Ann.hasAnnotations() = true
+
+  [hasAnnotations-afun] AFun Ann.hasAnnotations() = true
+
+  [hasAnnotations-appl] AFun(Args)Ann.hasAnnotations() = true
+
+  [hasAnnotations-placeholder] <ATerm>Ann.hasAnnotations() = true
+
+  [default-hasAnnotations] ATerm.hasAnnotations() = false
+
+
+  [getAnnotations-acon] ACon{Annos}.getAnnotations() = Annos
+
+  [getAnnotations-atermlist] ATermList{Annos}.getAnnotations() = Annos
+
+  [getAnnotations-afun] AFun{Annos}.getAnnotations() = Annos
+
+  [getAnnotations-appl] AFun(Args){Annos}.getAnnotations() = Annos
+
+  [getAnnotations-placeholder] <ATerm>{Annos}.getAnnotations() = Annos
+
+
+  [setAnnotations-acon] ACon.setAnnotations(Annos) = ACon {Annos}
+
+  [setAnnotations-acon] ACon{Annos1}.setAnnotations(Annos2) = ACon {Annos2}
+
+  [setAnnotations-atermlist] 
+     ATermList.setAnnotations(Annos) = ATermList{Annos}
+
+  [setAnnotations-atermlist] 
+     ATermList{Annos1}.setAnnotations(Annos2) = ATermList{Annos2}
+
+  [setAnnotations-afun] AFun.setAnnotations(Annos) = AFun{Annos}
+
+  [setAnnotations-afun] AFun{Annos1}.setAnnotations(Annos2) = AFun{Annos2}
+
+  [setAnnotations-appl] 
+     AFun(Args).setAnnotations(Annos) = AFun(Args){Annos}
+
+  [setAnnotations-appl] 
+     AFun(Args){Annos1}.setAnnotations(Annos2) = AFun(Args){Annos2}
+
+  [setAnnotations-placeholder] 
+     <ATerm>.setAnnotations(Annos) = <ATerm>{Annos}
+
+  [setAnnotations-placeholder] 
+     <ATerm>{Annos1}.setAnnotations(Annos2) = <ATerm>{Annos2}
+
+
+  [removeAnnotations-acon] ACon{Annos}.removeAnnotations() = ACon
+
+  [removeAnnotations-atermlist] 
+     ATermList{Annos}.removeAnnotations() = ATermList
+
+  [removeAnnotations-afun] AFun{Annos}.removeAnnotations() = AFun
+
+  [removeAnnotations-appl] AFun(Args){Annos}.removeAnnotations() = AFun(Args)
+
+  [removeAnnotations-placeholder] <ATerm>{Annos}.removeAnnotations() = <ATerm>
+
+  [default-removeAnnotations] ATerm.removeAnnotations() = ATerm
+
+
+  
