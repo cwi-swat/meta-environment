@@ -207,11 +207,10 @@ $Error]>
 [e2i-13] e2i($Exp should be of type rel) = 
 	 error("Expression should be of type relation", [localized("exp", get-location($Exp))])
 
-[e2i-14] $StrCon := " with argument " || t2s($Etype)
+[e2i-14] $StrCon := rvar2str($Var) || " with argument " || t2s($Etype)
 	 ==============================================================
 	 e2i(No definition for $Var with argument $Etype) = 
-	 error("No definition for ", [localized(rvar2str($Var), get-location($Var)), 
-				      localized($StrCon, get-location($Etype))])
+	 error("No definition found for ", [subject($StrCon)])
 
 [e2i-15] e2i(No definition for field $Var) =  
 	 error("No definition for ", [localized(rvar2str($Var), get-location($Var))])
