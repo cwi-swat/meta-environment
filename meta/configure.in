@@ -258,6 +258,8 @@ asf-syntax/traversals/test/Makefile
 asf-syntax/configmanager/Makefile
 asf-syntax/configmanager/src/Makefile
 parsetree/Makefile
+sdf/Makefile
+sdf/test/Makefile
 , chmod +x utils/genmakefile
 )
 
