@@ -1,6 +1,5 @@
 module Alignments-to-Text
 
-imports Basic-to-Text
 imports Text-Operators
 imports WidthofBoxes
 

@@ -1,7 +1,6 @@
 module Basic-to-Text
 
 imports
-  Frame 
   LengthofBoxes 
   Text
   Conditionals[Point]

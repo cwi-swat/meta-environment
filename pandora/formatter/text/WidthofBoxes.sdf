@@ -1,6 +1,5 @@
 module WidthofBoxes
 
-imports Outstrings 
 imports LengthofBoxes
 imports Conditionals[Integer]
 
