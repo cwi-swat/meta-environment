@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jul 16 15:18:45 CEST 2004 <markvdb@cwi.nl>
+ * Added a warning on missing exported start symbols.
+
 Fri Jul  9 11:54:37 CEST 2004 <markvdb@cwi.nl>
  * left-/right-/assoc-/non-assoc-prios have been replaced
    by numbered priorities.
