@@ -72,6 +72,28 @@ static MA_FunId stringToFunId(const char *str)
   return MA_makeFunIdLexToCf(stringToLexical(str));
 }
 
+static MA_VarId stringToVarId(const char *str)
+{
+  char* alfanum = toalfanum(str);
+  char* varid = malloc(strlen(alfanum) + 3);
+  MA_VarId result;
+
+  if (varid == NULL) {
+    ATerror("Not enought memory to prefix: %s\n", str);
+    return NULL;
+  }
+
+  strcpy(varid, "V_");
+  strcat(varid, alfanum);
+
+  result = MA_makeVarIdLexToCf(stringToLexical(varid));
+
+  free(alfanum);
+  free(varid);
+
+  return result;
+}
+
 static MA_FunId intToFunId(int ch)
 {
   char num[5] = "\\";
@@ -113,8 +135,8 @@ static int getProdArity(PT_Production prod, LayoutOption layout)
   for (; PT_hasSymbolsHead(symbols); symbols = PT_getSymbolsTail(symbols)) {
     PT_Symbol symbol = PT_getSymbolsHead(symbols);
 
-    if (!PT_isSymbolLit(symbol) &&
-        (layout == WITH_LAYOUT || !PT_isSymbolLayout(symbol))) {
+    if (!PT_isSymbolLit(symbol)  &&
+        (layout == WITH_LAYOUT || !PT_isOptLayoutSymbol(symbol))) {
       arity++;
     }
   }
@@ -249,7 +271,6 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
   MA_SigArgElems maSigArgElems;
   MA_FuncDef maFuncdef;
 
-  
   if (PT_isAttributesAttrs(ptAttributes)) {
     MA_Annotations maAnnos = attributesToAnnotations(ptAttributes);
  
@@ -327,6 +348,29 @@ static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs)
   }
 }
 
+static MA_Term variableToTerm(PT_Tree var)
+{
+  char *str = strdup(PT_yieldTree(var));
+  MA_VarId varid = stringToVarId(str);
+  MA_Var maVar = NULL;
+
+  assert(PT_isTreeVar(var));
+
+  if (PT_isTreeVarListStar(var)) {
+    maVar = MA_makeVarStar(em, varid);
+  }
+  if (PT_isTreeVarListPlus(var)) {
+    maVar = MA_makeVarPlus(em, varid);
+  }
+  else {
+    maVar = MA_makeVarNormal(varid);
+  }
+
+  free(str);
+
+  return MA_makeTermVar(maVar);
+}
+
 static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
 			  LayoutOption layout)
 {
@@ -337,6 +381,9 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
   }
   else if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) {
     return treeToTerm(constructorTreeToLexicalTree(tree), funcdefs, layout);
+  }
+  else if (PT_isTreeVar(tree)) {
+    return variableToTerm(tree);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
@@ -484,7 +531,10 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 
 static MA_ModId makeModId(const char *str)
 {
-  return MA_makeModIdLexToCf(stringToLexical(str));
+  char *alnum = toalfanum(str);
+  MA_ModId result = MA_makeModIdLexToCf(stringToLexical(alnum));
+  free(alnum);
+  return result;
 }
 
 MA_Module 

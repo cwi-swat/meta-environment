@@ -1,5 +1,6 @@
 #include <malloc.h>
 #include <string.h>
+#include <ctype.h>
 #include "chars.h"
 #include <aterm1.h>
 
@@ -61,5 +62,30 @@ char *rmquotes(char *str)
   else {
     return str;
   }
+}
+
+char* toalfanum(const char* str)
+{
+  int len = strlen(str);
+  char *new = malloc(3 * sizeof(char) * len + 1);
+  int i,j;
+
+  if (new == NULL) {
+    ATerror("Could not allocate memory to copy string\n");
+    return NULL;
+  }
+
+  for(i = 0, j = 0; i < len; i++, j++) {
+    if (isalnum(str[i])) {
+      new[j] = str[i];
+    }
+    else {
+      sprintf(new+j,"%03d",str[i]);
+      j += 2;
+    }
+  } 
+
+  new[j] = '\0';
+  return new;
 }
 

@@ -11,7 +11,7 @@ ATerm muasfToC(MA_Module muasf)
   ATerm reduct;
   ATerm result;
 
-  term = ASC_applyFunction("muASF2C","MuASF2C","CProgram", 1, (PT_Tree) muasf);
+  term = ASC_applyFunction("compile-muasf","Compiler","CProgram", 1, (PT_Tree) muasf);
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   register_all();

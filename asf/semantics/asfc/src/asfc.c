@@ -20,7 +20,6 @@
 #include <aterm2.h>
 
 #include "asfc.tif.h"
-#include "sdf.h"
 #include "asf2muasf.h"
 #include "muasf2c.h"
 
@@ -69,7 +68,13 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
 
   result = compile(moduleName, eqsList);
 
-  ATwriteToNamedTextFile(result, output); 
+  ATwriteToNamedTextFile( 
+    (ATerm) PT_makeParseTreeTree(
+      PT_makeSymbolsList(PT_makeSymbolSort("CProgram"), PT_makeSymbolsEmpty()), 
+      PT_makeTreeLayoutEmpty(),
+      (PT_Tree) result,
+      PT_makeTreeLayoutEmpty(),
+      0), output); 
 
   return ATmake("snd-value(compilation-done)");
 }                              
