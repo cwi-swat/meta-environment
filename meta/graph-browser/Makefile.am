@@ -32,8 +32,8 @@ man_MANS    = graph-browser.1
 CLEANFILES  = graph-browser graph-browser.1
 
 % : %.sh.src Makefile
-	@if [ ! -d $(GRAPHVIZ)/lib ]; then \
-	   echo "Required package `graphviz' not found. Please specify its\
+	@@if [ -z "$(GRAPHVIZ)" -o  ! -d $(GRAPHVIZ)/lib ]; then \
+	   echo "Required package \`graphviz' not found. Please specify its\
 	         location during configuration with the \`--with-graphviz'\
                  flag." >&2 ;\
 	   exit 1 ;\
