@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Apr 29 10:22:37 CEST 2004 <jurgenv@cwi.nl>
+ * Added basic/AreaOperations and basic/LocationOperations as imports
+   to MyArea to be up-to-date with latest asf-library.
+
 Tue Jan 20 16:57:03 CET 2004 <jong@cwi.nl>
  * remove MyPosInfo as its contents are in the asf-library now
  * remove access functions from MyArea that are in the asf-library
