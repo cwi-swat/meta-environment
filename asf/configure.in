@@ -54,7 +54,7 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
 AC_SUBST(TOOLBUSLIB)
 
 
-dnl Optional package ToolBus
+dnl Require package ToolBus
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus is in DIR])
 AC_SUBST(TOOLBUS)
