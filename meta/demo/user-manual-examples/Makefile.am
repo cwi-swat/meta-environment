@@ -20,15 +20,15 @@
 #
 # $Id$
 
-EXTRA_DIST = AssemblyLanguage.sdf BasicNotions.sdf Booleans.eqs \
+EXTRA_DIST = AssemblyLanguage.sdf BasicNotions.sdf Booleans.asf \
              Booleans.sdf BracketExpr.sdf Characters.sdf \
-             CodeGenerator.eqs CodeGenerator.sdf Comment.sdf Decls.sdf \
-             Diff.eqs Diff.sdf DrawingCommands.sdf Eqn.sdf Expr1.sdf \
-             Expr2.sdf Expressions.sdf Flag.eqs Flag.sdf \
+             CodeGenerator.asf CodeGenerator.sdf Comment.sdf Decls.sdf \
+             Diff.asf Diff.sdf DrawingCommands.sdf Eqn.sdf Expr1.sdf \
+             Expr2.sdf Expressions.sdf Flag.asf Flag.sdf \
              Identifiers-alternative1.sdf Identifiers-alternative2.sdf \
              Identifiers-avoid.sdf Identifiers-optional.sdf \
              Identifiers-reject.sdf Identifiers-repetition.sdf \
-             Identifiers-restrict.sdf Layout.sdf LeesPlank.sdf Nats.eqs \
-             Nats.sdf NextLabel.eqs NextLabel.sdf Numbers.sdf Sets.eqs \
-             Sets.sdf Statements.sdf Strings.sdf Types.eqs Types.sdf \
-             VarDecls.eqs VarDecls.sdf meta.conf
+             Identifiers-restrict.sdf Layout.sdf LeesPlank.sdf Nats.asf \
+             Nats.sdf NextLabel.asf NextLabel.sdf Numbers.sdf Sets.asf \
+             Sets.sdf Statements.sdf Strings.sdf Types.asf Types.sdf \
+             VarDecls.asf VarDecls.sdf meta.conf
