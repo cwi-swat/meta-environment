@@ -463,17 +463,14 @@ void AF2ProdAttrsToText(buffer *text, ATerm attrs)
 
 void AF2ProdArgsToText(buffer *text, ATermList args)
 {
-	ATerm sortname, sepname, litname;
-	char *sep, *lit, *sort;
-
-	for(; !ATisEmpty(args); args = ATgetNext(args)) {
-		AF2SymbolToText(text, ATgetFirst(args));
-    if(!ATisEmpty(ATgetNext(args))) {
-			AddStringToBuffer(text," ");
+  for (; !ATisEmpty(args); args = ATgetNext(args)) {
+    AF2SymbolToText(text, ATgetFirst(args));
+    if (!ATisEmpty(ATgetNext(args))) {
+      AddStringToBuffer(text," ");
     }
-	}
+  }
 
-	return;
+  return;
 }
 
 /* ATerm AF2ProdToText(ATerm t)
