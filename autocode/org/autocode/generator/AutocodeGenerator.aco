@@ -11,19 +11,26 @@ application * {
 
     type := { }
     type * {
+      super := { }
       operation += { }
       verbatim := { }
       description := "no description"
       field * {
         operation += { }
         description := "no description"
+        type * {
+          collection := false
+        }
 	type list? {
+          collection := true
           element-type := { }
         }
 	type set? {
+          collection := true
           element-type := { }
         }
 	type map? {
+          collection := true
           key-type := { }
           value-type := { }
         }

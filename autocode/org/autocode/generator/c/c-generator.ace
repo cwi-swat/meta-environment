@@ -23,9 +23,9 @@ application c-repository {
       field source-include {
         operation := { init, add, merge-collection, fetch-iterator}
       }
-      field struct { operation := { init, fetch-iterator } }
-      field macro { operation := { init, fetch-iterator } }
-      field function { operation := { init, fetch-iterator } }
+      field struct { operation := { init, get, put, fetch-iterator } }
+      field macro { operation := { init, add, fetch-iterator } }
+      field function { operation := { init, add, fetch-iterator } }
     } 
 
     type Include {
@@ -38,19 +38,21 @@ application c-repository {
     }
 
     type Struct {
-      field field { operation := { init, fetch-iterator } }
+      field field { operation := { init, add, contains-value, fetch-iterator } }
     }
 
     type Macro {
-      field argument { operation := { init, fetch-iterator } }
+      field argument { operation := { init, add, fetch-iterator } }
     }
 
     type Function {
-      field formal { operation := { init, fetch-iterator } }
+      import += { "org.autocode.generator.repository.FormalParameter" }
+      field formal-parameter { operation := { init, add, fetch-iterator } }
+      field static { operation := { is, set } }
     }
 
     type FunctionBody {
-      field line { operation := { init, fetch-iterator } }
+      field line { operation := { init, add, fetch-iterator } }
     }
   }
 }

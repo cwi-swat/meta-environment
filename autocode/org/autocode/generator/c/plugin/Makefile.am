@@ -1,4 +1,4 @@
-javadir = ${prefix}/classes/org/autocode/generator/java/plugin
+javadir = ${prefix}/classes/org/autocode/generator/c/plugin
 
 JAVAROOT = ${top_builddir}
 
@@ -6,5 +6,4 @@ EXTRA_DIST = Accessor.aco Constructor.aco
 
 java_JAVA = \
 	Accessor.java \
-	Constructor.java \
-	JavaGeneratorPlugin.java
+	CGeneratorPlugin.java

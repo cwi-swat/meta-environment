@@ -1,4 +1,4 @@
-package org.autocode.generator.java.plugin;
+package org.autocode.generator.c.plugin;
 
 //{{{ imports
 
@@ -6,36 +6,38 @@ import org.autocode.*;
 import org.autocode.property.*;
 import org.autocode.generator.*;
 import org.autocode.generator.repository.*;
-import org.autocode.generator.java.*;
-import org.autocode.generator.java.repository.*;
+import org.autocode.generator.c.*;
+import org.autocode.generator.c.repository.*;
 
 import java.util.*;
 
 //}}}
 
 public class Accessor
-  extends JavaGeneratorPlugin
+  extends CGeneratorPlugin
 {
-  //{{{ private void addAttribute(compilationUnit, fieldContext, name, type)
+  //{{{ private void addField(unit, typeContext, fieldContext, name, type)
 
-  private void addAttribute(JavaCompilationUnit unit,
-			    PropertyContext fieldContext,
-			    String attrName, String attrType)
+  private void addField(CGenerator generator, CCompilationUnit unit,
+			PropertyContext typeContext,
+			PropertyContext fieldContext,
+			String fieldName, String fieldType)
   {
     boolean isStatic = fieldContext.getBoolean("static");
-    boolean isFinal = fieldContext.getBoolean("final");
 
-    JavaAccessSpecifier access
-      = JavaAccessSpecifier.parse(fieldContext.getString("access"));
+    Field field = new Field(fieldName, fieldType, isStatic);
 
-    JavaAttribute attr =
-      new JavaAttribute(attrName, attrType, access, isFinal, isStatic);
+    String structName = generator.typeName(typeContext.getName());
 
-    String desc = "the " + fieldContext.getString("description") + ".";
-    attr.setDescription(desc);
+    Struct structure = unit.getStruct(structName);
 
-    if (!unit.hasAttribute(attr)) {
-      unit.addAttribute(attr);
+    if (structure == null) {
+      structure = new Struct(structName);
+      unit.putStruct(structName, structure);
+    }
+
+    if (structure.containsFieldValue(field)) {
+      structure.addField(field);
     }
   }
 
@@ -43,35 +45,44 @@ public class Accessor
 
   //{{{ public void generateGet(generator, type, field, operation)
 
-  public void generateGet(JavaGenerator generator,
+  public void generateGet(CGenerator generator,
 			  PropertyContext typeContext,
 			  PropertyContext fieldContext,
 			  PropertyContext operationContext)
   {
     PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
-    String attrType = generator.typeName(fieldTypeContext);
+    String field_type = generator.fieldTypeName(fieldTypeContext);
 
+    String typeName = typeContext.getName();
     String fieldName = fieldContext.getName();
-    String methodName = generator.methodName("get-" + fieldName);
+    String func_name = generator.functionName("get-" + typeName
+					      + "-" + fieldName);
 
-    String attrName = generator.attributeName(fieldName);
-    MethodBody body = new MethodBody();
-    body.addLine("return " + attrName + ";");
+    String field_name = generator.fieldName(fieldName);
 
-    JavaMethod method
-      = createMethod(operationContext, methodName, attrType, body);
-    method.setDescription("gets the " + fieldContext.getString("description") + ".");
+    FormalParameter param
+      = new FormalParameter("self", generator.typeName(typeName));
 
-    JavaCompilationUnit unit = generator.getCompilationUnit();
-    unit.addMethod(method);
+    FunctionBody body = new FunctionBody();
+    body.addLine("return self->" + field_name + ";");
 
-    addAttribute(unit, fieldContext, attrName, attrType);
+    Function function
+      = createFunction(operationContext, func_name, field_type, body);
+
+    function.addFormalParameter(param);
+
+    CCompilationUnit unit = generator.getCompilationUnit();
+    unit.addFunction(function);
+
+    addField(generator, unit, typeContext, fieldContext,
+	     field_name, field_type);
   }
 
   //}}}
+  /*
   //{{{ public void generateSet(generator, type, field, operation)
 
-  public void generateSet(JavaGenerator generator,
+  public void generateSet(CGenerator generator,
 			  PropertyContext typeContext,
 			  PropertyContext fieldContext,
 			  PropertyContext operationContext)
@@ -90,20 +101,20 @@ public class Accessor
 
     MethodBody body = new MethodBody();
     body.addLine(attrName + " = " + paramName + ";");
-    JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    CMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
     method.setDescription("sets the " + fieldContext.getString("description") + ".");
 
-    JavaCompilationUnit unit = generator.getCompilationUnit();
+    CCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
 
     addAttribute(unit, fieldContext, attrName, attrType);
   }
 
   //}}}
-  //{{{ public void generateInit(JavaGenerator generator)
+  //{{{ public void generateInit(CGenerator generator)
 
-  public void generateInit(JavaGenerator generator,
+  public void generateInit(CGenerator generator,
 			   PropertyContext typeContext,
 			   PropertyContext fieldContext,
 			   PropertyContext operationContext)
@@ -113,7 +124,7 @@ public class Accessor
       return;
     }
 
-    JavaCompilationUnit unit = generator.getCompilationUnit();
+    CCompilationUnit unit = generator.getCompilationUnit();
 
     String fieldName = fieldContext.getName();
     String collection = fieldTypeContext.getString("interface");
@@ -130,11 +141,12 @@ public class Accessor
     String attrName = generator.attributeName(fieldName);
     body.addLine(attrName + " = new " + implementation + "();");
 
-    JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    CMethod method = createMethod(operationContext, methodName, "void", body);
     method.setDescription("initializes the "
 			  + fieldContext.getString("description") + ".");
     unit.addMethod(method);
   }
 
   //}}}
+  */
 }

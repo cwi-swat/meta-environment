@@ -21,7 +21,6 @@ application client-app {
       operation := { constructor }
   
       field name {
-        operation += { init }
         access := public
         static := true
       }
@@ -54,17 +53,17 @@ application client-app {
     }
 
     //}}}
-    //{{{ type Article
-
-    @import "Article.add"
-
-    //}}}
   }
 
   generator C {
     enabled := true
     @import "Client.add"
     @import "Order.add"
-    @import "Article.add"
+
+    type * {
+      field * {
+        operation := { get }
+      }
+    }
   }
 }

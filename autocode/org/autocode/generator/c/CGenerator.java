@@ -4,7 +4,7 @@ package org.autocode.generator.c;
 
 import org.autocode.property.*;
 import org.autocode.generator.*;
-import org.autocode.generator.repository.Repository;
+import org.autocode.generator.repository.*;
 import org.autocode.generator.c.repository.*;
 
 import java.io.*;
@@ -25,8 +25,8 @@ public class CGenerator
 
   private Map unitMap;
 
-  private String prefix;
   private String typePrefix;
+  private String fieldTypePrefix;
 
   //}}}
 
@@ -52,7 +52,6 @@ public class CGenerator
 
   public void generate(PropertyContext generatorContext)
   {
-    prefix = generatorContext.getString("prefix");
     repository = new Repository();
     super.generate(generatorContext);
   }
@@ -92,6 +91,20 @@ public class CGenerator
 
   //}}}
 
+  //{{{ protected void generateField(typeContext, fieldContext)
+
+  protected void generateField(PropertyContext typeContext,
+			       PropertyContext fieldContext)
+  {
+    PropertyContext fieldTypeContext
+      = new PropertyContext(fieldContext, "type");
+    fieldTypePrefix = fieldTypeContext.getString("prefix");
+
+    super.generateField(typeContext, fieldContext);
+  }
+
+  //}}}
+
   //{{{ protected void generateVerbatim(String source)
 
   protected void generateVerbatim(String source)
@@ -127,8 +140,6 @@ public class CGenerator
       writer = new PrintWriter(new FileWriter(source));
       emitSource();
       writer.close();
-
-      writer.close();
     }
   }
 
@@ -144,6 +155,8 @@ public class CGenerator
     println();
 
     emitIncludes(compilationUnit.fetchHeaderIncludeIterator());
+    emitTypedefs();
+    emitFunctionDeclarations(false);
 
     println();
     println("#endif /* " + protectionMacro + " */");
@@ -174,6 +187,56 @@ public class CGenerator
       }
     }
     foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitTypedefs()
+
+  protected void emitTypedefs()
+  {
+    foldOpen("typedefs");
+    Iterator iter = compilationUnit.fetchStructIterator();
+    while (iter.hasNext()) {
+      Struct structure = (Struct)iter.next();
+      String typeName = structure.getName();
+      String structName = structName(typeName);
+      println("typedef struct " + structName + " *" + typeName + ";");
+    }
+    foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitFunctionDeclarations(boolean statics)
+
+  protected void emitFunctionDeclarations(boolean statics)
+  {
+    foldOpen("function declarations");
+    Iterator iter = compilationUnit.fetchFunctionIterator();
+    while (iter.hasNext()) {
+      Function func = (Function)iter.next();
+      if (func.isStatic() == statics) {
+	emitFunctionDeclaration(func);
+	println(";");
+      }
+    }
+    foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitFunctionDeclaration(Function func)
+
+  protected void emitFunctionDeclaration(Function func)
+  {
+    print(func.getReturnValue() + " " + func.getName() + "(");
+    Iterator iter = func.fetchFormalParameterIterator();
+    while (iter.hasNext()) {
+      FormalParameter param = (FormalParameter)iter.next();
+      print(param.getType() + " " + param.getName());
+      if (iter.hasNext()) {
+	print(", ");
+      }
+    }
+    print(")");
   }
 
   //}}}
@@ -212,7 +275,7 @@ public class CGenerator
   void foldOpen(String header)
   {
     if (getGeneratorContext().getBoolean("folding")) {
-      println("//{{" + "{ " + header);
+      println("/*{{" + "{  " + header + " */");
       println();
     }
   }
@@ -224,59 +287,69 @@ public class CGenerator
   {
     if (getGeneratorContext().getBoolean("folding")) {
       println();
-      println("//}}" + "}");
+      println("/*}}" + "}  */");
     }
   }
 
   //}}}
 
-  //{{{ private String prefix(String name)
+  //{{{ private String typePrefix(String name)
 
-  private String prefix(String name)
+  private String typePrefix(String name)
   {
-    if (typePrefix != null) {
-      return typePrefix + name;
-    }
-
-    return prefix + name;
+    return typePrefix + name;
   }
 
   //}}}
-  //{{{ public String typeName(PropertyContext fieldTypeContext)
+  //{{{ private String fieldTypeprefix(String name)
 
-  public String typeName(PropertyContext fieldTypeContext)
+  private String fieldTypePrefix(String name)
+  {
+    if (fieldTypePrefix != null) {
+      return fieldTypePrefix + name;
+    }
+
+    return typePrefix(name);
+  }
+
+  //}}}
+
+  //{{{ public String fieldTypeName(PropertyContext fieldTypeContext)
+
+  public String fieldTypeName(PropertyContext fieldTypeContext)
   {
     String fieldTypeName = fieldTypeContext.getName();
 
     String typeName = fieldTypeContext.getString("implementation");
     if (typeName != null) {
-      PropertyContext interfaceContext
+      PropertyContext implementationContext
 	= new PropertyContext(fieldTypeContext, "implementation");
-      Set includes = interfaceContext.getValueSet("include");
+      Set includes = implementationContext.getValueSet("include");
       getCompilationUnit().mergeHeaderIncludeCollection(includes);
       return typeName;
     }
 
-    String type = AutocodeGenerator.typeNameJava(fieldTypeContext.getName());
-    return prefix(type);
+    String type = AutocodeGenerator.typeNameJava(fieldTypeName);
+
+    return fieldTypePrefix(type);
   }
 
   //}}}
-  //{{{ public String attributeName(String name)
+  //{{{ public String typeName(String name)
 
-  public String attributeName(String name)
+  public String typeName(String name)
   {
-    return AutocodeGenerator.attributeNameJava(name);
+    String type = AutocodeGenerator.typeNameJava(name);
+
+    return typePrefix(type);
   }
 
   //}}}
-  //{{{ public String methodName(String name)
+  //{{{ public String fieldName(String name)
 
-  public String methodName(String name)
+  public String fieldName(String name)
   {
-    String method = AutocodeGenerator.methodNameJava(name);
-
-    return prefix(method);
+    return AutocodeGenerator.fieldNameC(name);
   }
 
   //}}}
@@ -288,11 +361,30 @@ public class CGenerator
   }
 
   //}}}
+
+  //{{{ public String functionName(String name)
+
+  public String functionName(String name)
+  {
+    String method = AutocodeGenerator.methodNameJava(name);
+
+    return typePrefix(method);
+  }
+
+  //}}}
   //{{{ public String macroName(String name)
 
   public String macroName(String name)
   {
     return AutocodeGenerator.constantNameJava(name);
+  }
+
+  //}}}
+  //{{{ public String structName(String name)
+
+  public String structName(String name)
+  {
+    return "_" + name;
   }
 
   //}}}

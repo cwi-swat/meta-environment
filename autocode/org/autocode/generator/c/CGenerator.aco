@@ -3,13 +3,54 @@ class := "org.autocode.generator.c.CGenerator"
 
 folding := true		// Enable folding support by default
 
-prefix := ""
-
 type * {
   module := "main"
-  prefix := { }
+  prefix := ""
+  field * {
+    static := false
+    operation * {
+      static := false
+    }
+    type * {
+      prefix := { }
+      static := false
+      implementation := { }
+      implementation * {
+        include := { }
+      }
+    }
+    type boolean? {
+      implementation := "gboolean"
+      include := "glib.h"
+    }
+    type integer? {
+      implementation := "gint32"
+      include := "glib.h"
+    }
+    type real? {
+      implementation := "gfloat"
+      include := "glib.h"
+    }
+    type string? {
+      implementation := "gchar *"
+      include := "glib.h"
+    }
+    type list? {
+      implementation := "GSList *"
+      include := "glib.h"
+    }
+    type map? {
+      implementation := "GHashTable *"
+      include := "glib.h"
+    }
+    type set? {
+      implementation := "GHashTable *"
+      include := "glib.h"
+    }
+
+  }
 }
 
-#@import "org/autocode/generator/java/plugin/Constructor.aco"
-#@import "org/autocode/generator/java/plugin/Accessor.aco"
+#@import "org/autocode/generator/c/plugin/Constructor.aco"
+@import "org/autocode/generator/c/plugin/Accessor.aco"
 

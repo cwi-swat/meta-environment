@@ -1,17 +1,12 @@
 plugin accessor {
   class := "org.autocode.generator.java.plugin.Accessor"
   provides operations {
-    field := { get, is, set, add, init, merge-collection, fetch-iterator }
-  }
-}
-
-type * {
-  field * {
-    type * {
-      collection-type := "Collection"
-      collection-type "Collection" {
-        import := "java.util.Collection"
-      }
+    field := {
+       init,
+       get, is, contains-key, contains-value,
+       set, add, put,
+       merge-collection, fetch-iterator
     }
   }
 }
+

@@ -1,5 +1,5 @@
 plugin constructor {
-  class := "org.autocode.generator.java.plugin.Constructor"
+  class := "org.autocode.generator.c.plugin.Constructor"
   provides operations {
     type := { constructor }
   }

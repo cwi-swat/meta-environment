@@ -1,4 +1,4 @@
-#SUBDIRS = repository plugin
+SUBDIRS = repository plugin
 
 javadir = ${prefix}/classes/org/autocode/generator/c
 

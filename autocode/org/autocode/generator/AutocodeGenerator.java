@@ -244,7 +244,8 @@ abstract public class AutocodeGenerator
 				       getFormalParameters(parameters));
       } catch(NoSuchMethodException e) {
 	System.err.println("Plugin " + pluginName + " cannot generate "
-			   + " field-operation: "+ operationName);
+			   + " field-operation: "+ operationName
+			   + " (" + methodName + ")");
 	return;
       }
 
@@ -325,7 +326,7 @@ abstract public class AutocodeGenerator
     StringBuffer buf = new StringBuffer();
 
     WordIterator iter = new WordIterator(name);
-    buf.append(loweralize((String)iter.next()));
+    buf.append((String)iter.next());
     while (iter.hasNext()) {
       buf.append(capitalize(iter.next()));
     }
@@ -362,6 +363,32 @@ abstract public class AutocodeGenerator
     }
 
     return buf.toString();
+  }
+
+  //}}}
+
+  //{{{ public static String fieldNameC(String name)
+
+  public static String fieldNameC(String name)
+  {
+    StringBuffer buf = new StringBuffer();
+
+    WordIterator iter = new WordIterator(name);
+    buf.append((String)iter.next());
+    while (iter.hasNext()) {
+      buf.append('_');
+      buf.append(iter.next());
+    }
+
+    return buf.toString();
+  }
+
+  //}}}
+  //{{{ public static String functionNameC(String name)
+
+  public static String functionNameC(String name)
+  {
+    return fieldNameC(name);
   }
 
   //}}}

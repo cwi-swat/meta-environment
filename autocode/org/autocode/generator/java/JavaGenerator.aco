@@ -7,7 +7,6 @@ javadoc := false
 type * {
   package := { }
   import := { }
-  super := { }
   access := public	// All types are public by default
   static := false	// and are not static
   final := false	// nor final
@@ -33,7 +32,6 @@ type * {
     //{{{ type *
 
     type * {
-      collection := false
       implementation := { }
       implementation * {
         import := { }
@@ -76,7 +74,6 @@ type * {
     //{{{ type list?
 
     type list? {
-      collection := true
       interface "List" {
         import := "java.util.List"
       }
@@ -84,13 +81,22 @@ type * {
       implementation "LinkedList" {
         import := "java.util.LinkedList"
       }
+      element-type * {
+        interface := { }
+        interface * {
+          import := { }
+        }
+        implementation := { }
+        implementation * {
+          import := { }
+        }
+      }
     }
 
     //}}}
     //{{{ type map?
 
     type map? {
-      collection := true
       interface "Map" {
         import := "java.util.Map"
       }
@@ -98,13 +104,32 @@ type * {
       implementation "HashMap" {
         import := "java.util.HashMap"
       }
+      key-type * {
+        interface := { }
+	interface * {
+	  import := { }
+	}
+        implementation := { }
+	implementation * {
+	  import := { }
+	}
+      }
+      value-type * {
+        interface := { }
+	interface * {
+	  import := { }
+	}
+        implementation := { }
+	implementation * {
+	  import := { }
+	}
+      }
     }
 
     //}}}
     //{{{ type set?
 
     type set? {
-      collection := true
       interface "Set" {
         import := "java.util.Set"
       }

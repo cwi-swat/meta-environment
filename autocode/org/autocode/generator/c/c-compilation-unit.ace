@@ -3,7 +3,7 @@ type C-CompilationUnit :: CompilationUnit
   module : string
   header-include : list<Include>
   source-include : list<Include>
-  struct : list<Struct>
+  struct : map<string,Struct>
   macro : list<Macro>
   function : list<Function>
 }
@@ -16,6 +16,7 @@ type Include
 
 type Struct
 {
+  name : string
   field : list<Field>
 }
 
@@ -38,15 +39,9 @@ type Function
 {
   name : string
   return-value : string
-  formal : list<Formal>
+  formal-parameter : list<FormalParameter>
   body : FunctionBody
-  public : boolean
-}
-
-type Formal
-{
-  name : string
-  type : string
+  static : boolean
 }
 
 type FunctionBody

@@ -1,5 +1,9 @@
 $Id$
 
+Sun Mar  3 16:35:48 CET 2002 <jong,olivierp>
+ * Added operations in JavaGenerator: fetch-iterator, get, put, ...
+ * C generator now generates typedefs and function decls
+
 Sun Feb 24 20:14:32 CET 2002 <jong,olivierp>
  * Added support for 'verbatim' code includes
  * Fixed enum support in Java generator

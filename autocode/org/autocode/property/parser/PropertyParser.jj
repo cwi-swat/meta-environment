@@ -50,7 +50,7 @@ public class PropertyParser
     } else if (type.equals("list") || type.equals("set")) {
       if (params.size() != 1) {
 	throw new IllegalArgumentException("type " + type
-					   + " requires exactly one paramter");
+					   + " requires exactly one param");
       }
       PropertyForest children = new PropertyForest();
       PropertyTree elementType =
@@ -59,9 +59,9 @@ public class PropertyParser
       children.addTree(elementType);
       tree = new PropertyTree("type", type, children);
     } else if (type.equals("map")) {
-      if (params.size() != 1) {
+      if (params.size() != 2) {
 	throw new IllegalArgumentException("type " + type
-					   + " requires exactly two paramters");
+					   + " requires exactly two params");
       }
       PropertyForest children = new PropertyForest();
       PropertyTree keyType =

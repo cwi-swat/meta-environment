@@ -38,9 +38,10 @@ mycheck:
 		--property "java->rootdir:=\"${top_builddir}/test\"" \
 		--property "C->rootdir:=\"${top_builddir}/test/c\"" \
 		client-app.add
-	javadoc \
-		-classpath ${top_builddir} \
-		-sourcepath ${top_builddir}/test \
-		-d ${top_builddir}/test/html \
-		org.autocode.test
+
+#	javadoc \
+#		-classpath ${top_builddir} \
+#		-sourcepath ${top_builddir}/test \
+#		-d ${top_builddir}/test/html \
+#		org.autocode.test
 
