@@ -98,13 +98,14 @@ in
       snd-msg(delete-structure-editor(EditorId))
     ) .
     create(TextEditor("term", EditorId), Id?) .
-    snd-msg(set-filename(EditorId, FileName)) .
     snd-msg(open-trm-file(FileName)) .
     (
       rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) .
+      snd-msg(set-filename(EditorId, Path)) .
       create(EditTerm(EditorId, ModuleName, Text), Id?)
       +
       rec-msg(error-opening(FileName)) .
+      snd-msg(set-filename(EditorId, FileName)) .
       create(EditTerm(EditorId, ModuleName, ""), Id?)
     )
   +
