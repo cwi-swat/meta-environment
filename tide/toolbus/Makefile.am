@@ -1,5 +1,5 @@
 
-data_DATA	= tide.tb tide.tifs
+pkgdata_DATA	= tide.tb tide.tifs
 
 EXTRA_DIST	= tide.tb
 

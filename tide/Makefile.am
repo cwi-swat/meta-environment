@@ -5,7 +5,7 @@ ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST      = $(wildcard *.pkg)
 
-data_DATA	= tide.jar
+pkgdata_DATA	= tide.jar
 
 JARCLASSDIRS	= tide tide/tool tide/tool/support \
 		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer \
