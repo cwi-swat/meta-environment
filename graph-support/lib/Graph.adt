@@ -17,6 +17,7 @@
 [Attribute, size, size(<width(int)>,<height(int)>)],
 [Attribute, curve-points, curve-points(<points(Polygon)>)],
 [Attribute, direction, direction(<direction(Direction)>)],
+[Attribute, info, info(<key(str)>,<value(term)>)],
 
 [Shape, plaintext, plaintext],
 [Shape, ellipse, ellipse],

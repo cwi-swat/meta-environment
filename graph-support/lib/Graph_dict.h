@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Mar 31 18:45:05 2003
+ * Generated at Fri Jun 27 13:05:14 2003
  */
 
 #ifndef __Graph_dict_H
@@ -9,6 +9,7 @@
 
 extern AFun afun24;
 extern AFun afun25;
+extern AFun afun26;
 extern AFun afun10;
 extern AFun afun11;
 extern AFun afun12;
@@ -56,6 +57,7 @@ extern ATerm patternShapeEgg;
 extern ATerm patternShapeCircle;
 extern ATerm patternShapeEllipse;
 extern ATerm patternShapePlaintext;
+extern ATerm patternAttributeInfo;
 extern ATerm patternAttributeDirection;
 extern ATerm patternAttributeCurvePoints;
 extern ATerm patternAttributeSize;

@@ -47,7 +47,8 @@ static Graph printNode(Graph graph,
                        int parentNr, 
                        int nodeNr, 
                        char *contents, 
-		       char *attr)
+		       char *attr,
+                       ATerm posInfo)
 {
   char str[BUFSIZ];
   Attribute nameAttr;
@@ -57,6 +58,7 @@ static Graph printNode(Graph graph,
   Edge edge;
   EdgeList edges;
   Attribute shapeAttr;
+  Attribute posAttr;
   NodeId nodeId;
   NodeId parentId;
 
@@ -72,6 +74,10 @@ static Graph printNode(Graph graph,
   shapeAttr = makeAttributeShape(shape);
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
+  if (posInfo) {
+    posAttr = makeAttributeInfo("pos-info", posInfo);
+    attrList = makeAttributeListMulti(posAttr, attrList);
+  }
   node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
@@ -147,6 +153,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
 {
   long key = makeNodeId(tree);
+  ATerm posInfoArea = PT_getTreePosInfoArea(tree);
 
   if (PT_isTreeChar(tree)) {
     /*{{{  handle characters */
@@ -155,7 +162,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      graph = printNode(graph, makeShapeEllipse(), parent,key,ch,"character");
+      graph = printNode(graph, makeShapeEllipse(), parent,key,ch,"character", posInfoArea);
     }
 
     /*}}}  */
@@ -164,7 +171,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     /*{{{  handle literal */
 
     if (literals_on) {
-      graph = printNode(graph,makeShapeEllipse(),parent,key,PT_getTreeString(tree),"literal");
+      graph = printNode(graph,makeShapeEllipse(),parent,key,PT_getTreeString(tree),"literal", posInfoArea);
     }
 
     /*}}}  */
@@ -185,10 +192,10 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
 				PT_yieldProduction(PT_getTreeProd(tree)) :
 				PT_yieldSymbol(rhs),
 				productions_on ? "" :
-				PT_yieldProduction(PT_getTreeProd(tree)));
+				PT_yieldProduction(PT_getTreeProd(tree)), posInfoArea);
     } 
     else if (layout_on && layout) {
-      graph = printNode(graph,shape,parent,key, "LAYOUT?","layout");
+      graph = printNode(graph,shape,parent,key, "LAYOUT?","layout", posInfoArea);
     }
 
     if (!characters_on && PT_isLexicalInjectionProd(prod)) {

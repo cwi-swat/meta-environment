@@ -70,6 +70,7 @@ Attribute makeAttributeLocation(int x, int y);
 Attribute makeAttributeSize(int width, int height);
 Attribute makeAttributeCurvePoints(Polygon points);
 Attribute makeAttributeDirection(Direction direction);
+Attribute makeAttributeInfo(char* key, ATerm value);
 Shape makeShapePlaintext();
 Shape makeShapeEllipse();
 Shape makeShapeCircle();
@@ -178,6 +179,7 @@ inline ATbool isAttributeLocation(Attribute arg);
 inline ATbool isAttributeSize(Attribute arg);
 inline ATbool isAttributeCurvePoints(Attribute arg);
 inline ATbool isAttributeDirection(Attribute arg);
+inline ATbool isAttributeInfo(Attribute arg);
 ATbool hasAttributeLabel(Attribute arg);
 char* getAttributeLabel(Attribute arg);
 Attribute setAttributeLabel(Attribute arg, char* label);
@@ -202,6 +204,12 @@ Attribute setAttributePoints(Attribute arg, Polygon points);
 ATbool hasAttributeDirection(Attribute arg);
 Direction getAttributeDirection(Attribute arg);
 Attribute setAttributeDirection(Attribute arg, Direction direction);
+ATbool hasAttributeKey(Attribute arg);
+char* getAttributeKey(Attribute arg);
+Attribute setAttributeKey(Attribute arg, char* key);
+ATbool hasAttributeValue(Attribute arg);
+ATerm getAttributeValue(Attribute arg);
+Attribute setAttributeValue(Attribute arg, ATerm value);
 
 /*}}}  */
 /*{{{  Shape accessors */
@@ -290,7 +298,7 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
 Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction));
+Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm));
 Shape visitShape(Shape arg);
 Direction visitDirection(Direction arg);
 EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge));
