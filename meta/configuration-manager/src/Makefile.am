@@ -5,9 +5,9 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = configmanager
 
-pkgdata_DATA         = configmanager.idef
+pkgdata_DATA         = configmanager.idef standard.buttons
 
-EXTRA_DIST        = configmanager.idef
+EXTRA_DIST        = configmanager.idef standard.buttons
 
 
 noinst_HEADERS = configmanager.tif.h
