@@ -80,7 +80,7 @@ static void handleVimInput(const char *cmd)
   /* terminate string at separator */
   *p++ = '\0';
 
-  if (isdigit(*p)) {
+  if (isdigit((int)*p)) {
     int loc = atoi(p);
     event = ATmake("set-current-location(<str>,<int>)", fid, loc);
   }
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
 
   pwent = getpwuid(getuid());
 
-  sprintf(buf, "meta:%s:%d", pwent ? pwent->pw_name : "anon", getpid());
+  sprintf(buf, "meta:%s:%d", pwent ? pwent->pw_name : "anon", (int)getpid());
   id = strdup(buf);
   for (p=id; *p; p++) {
     *p = (char)toupper((int)*p);
