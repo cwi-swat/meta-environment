@@ -9,6 +9,7 @@ import javax.swing.JList;
 import metastudio.utils.Preferences;
 import errorapi.types.Feedback;
 import errorapi.types.Location;
+import errorapi.types.Subject;
 import errorapi.types.SubjectList;
 
 public class FeedbackListCellRenderer extends DefaultListCellRenderer {
@@ -56,10 +57,11 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
         String tip = "no source location available";
 
         while (subjects.hasHead()) {
-            Location loc = subjects.getHead().getLocation();
+            Subject subject = subjects.getHead();
+            Location loc = subject.getLocation();
 
             if (!loc.isNoLocation()) {
-                tip = "click to go to source location (" + loc.getFilename() + ")";
+                tip = "click to go " + subject.getDescription() + " in " + loc.getFilename() + ")";
             }
 
             subjects = subjects.getTail();
