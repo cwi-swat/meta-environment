@@ -9115,7 +9115,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_AsfSdf_Checker,                   
                           resolve_AsfSdf_Checker,                    
-                          init_AsfSdf_Checker
+                          init_AsfSdf_Checker, NULL, -1
 );}                                                        
 #endif                                                   
 

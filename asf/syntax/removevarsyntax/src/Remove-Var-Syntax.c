@@ -513,7 +513,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Remove_Var_Syntax,                   
                           resolve_Remove_Var_Syntax,                    
-                          init_Remove_Var_Syntax
+                          init_Remove_Var_Syntax, NULL, -1
 );}                                                        
 #endif                                                   
 

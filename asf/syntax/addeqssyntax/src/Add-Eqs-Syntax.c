@@ -4236,7 +4236,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Add_Eqs_Syntax,                   
                           resolve_Add_Eqs_Syntax,                    
-                          init_Add_Eqs_Syntax
+                          init_Add_Eqs_Syntax, NULL, -1
 );}                                                        
 #endif                                                   
 
