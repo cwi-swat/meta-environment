@@ -63,6 +63,11 @@ this implementation as well.
 
 The current implementation of the \metaenv\ has a number of drawbacks
 and shortcomings, the most important ones are listed in Table~\ref{short}.
+This table shows that the system has all the signs of a \emph{legacy system},
+mainly because most of the coding has been done by
+Ph.D. researchers, and consequently the project has had a 
+large turnover of staff.
+
 These complaints initiated a redesign and reimplementation of the \metaenv.
 Initially we believed in an incremental reimplementation of the
 \metaenv\ was feasible, and therefore a number of people
@@ -91,7 +96,10 @@ Our version of \lelisp\ is becoming obsolete.               \\ \hline
 The tree formalism VTP is not easy to use, connection     \\
 \lelisp/VTP is complicated.                                \\ \hline
 The current monolithic system is hard to maintain. New    \\
-research ideas are hard to implement.                     \\ \hline \hline
+research ideas are hard to implement.                     \\ \hline 
+Bugs are not fixed anymore, because the knowledge about
+the intrinsics of the system needed to fix these bugs is
+no longer present.					\\ \hline \hline
 \end{tabular}
 \end{center}
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
@@ -244,7 +252,7 @@ The various components will be discussed in the next sections.
 
 \begin{figure}[htb]
 \centerline{\psfig{figure=newmeta.ps,width=\textwidth}}
-\caption{\label{nm} The new \metaenv.}
+\caption{\label{nm} Browsing the import graph in the new \metaenv.}
 \end{figure}
 
 \input{toolbus.ltx}
