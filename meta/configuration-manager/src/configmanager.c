@@ -44,7 +44,7 @@ static void addDescription(ATermTable table, MC_ActionDescription desc)
   ATerm type;
   ATermList list;
 
-  type = MC_ActionTypeToTerm(MC_getActionDescriptionType(desc));
+  type = MC_ActionTypeToTerm(MC_getActionDescriptionActionType(desc));
 
   list = (ATermList) ATtableGet(table, type);
   if (list == NULL) {

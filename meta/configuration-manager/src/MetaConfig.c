@@ -586,11 +586,11 @@ MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAtt
 }
 
 /*}}}  */
-/*{{{  MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType type, MC_Event event) */
+/*{{{  MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType actionType, MC_Event event) */
 
-MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType type, MC_Event event)
+MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType actionType, MC_Event event)
 {
-  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun5, (ATerm) type, (ATerm) event);
+  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun5, (ATerm) actionType, (ATerm) event);
 }
 
 /*}}}  */
@@ -1562,9 +1562,9 @@ inline ATbool MC_isActionDescriptionDefault(MC_ActionDescription arg)
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasActionDescriptionType(MC_ActionDescription arg) */
+/*{{{  ATbool MC_hasActionDescriptionActionType(MC_ActionDescription arg) */
 
-ATbool MC_hasActionDescriptionType(MC_ActionDescription arg)
+ATbool MC_hasActionDescriptionActionType(MC_ActionDescription arg)
 {
   if (MC_isActionDescriptionDefault(arg)) {
     return ATtrue;
@@ -1584,9 +1584,9 @@ ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg)
 }
 
 /*}}}  */
-/*{{{  MC_ActionType MC_getActionDescriptionType(MC_ActionDescription arg) */
+/*{{{  MC_ActionType MC_getActionDescriptionActionType(MC_ActionDescription arg) */
 
-MC_ActionType MC_getActionDescriptionType(MC_ActionDescription arg)
+MC_ActionType MC_getActionDescriptionActionType(MC_ActionDescription arg)
 {
   
     return (MC_ActionType)ATgetArgument((ATermAppl)arg, 0);
@@ -1602,15 +1602,15 @@ MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg)
 }
 
 /*}}}  */
-/*{{{  MC_ActionDescription MC_setActionDescriptionType(MC_ActionDescription arg, MC_ActionType type) */
+/*{{{  MC_ActionDescription MC_setActionDescriptionActionType(MC_ActionDescription arg, MC_ActionType actionType) */
 
-MC_ActionDescription MC_setActionDescriptionType(MC_ActionDescription arg, MC_ActionType type)
+MC_ActionDescription MC_setActionDescriptionActionType(MC_ActionDescription arg, MC_ActionType actionType)
 {
   if (MC_isActionDescriptionDefault(arg)) {
-    return (MC_ActionDescription)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) type), 0);
+    return (MC_ActionDescription)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) actionType), 0);
   }
 
-  ATabort("ActionDescription has no Type: %t\n", arg);
+  ATabort("ActionDescription has no ActionType: %t\n", arg);
   return (MC_ActionDescription)NULL;
 }
 
@@ -3422,13 +3422,13 @@ MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptD
 }
 
 /*}}}  */
-/*{{{  MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event)) */
+/*{{{  MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptActionType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event)) */
 
-MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event))
+MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptActionType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event))
 {
   if (MC_isActionDescriptionDefault(arg)) {
     return MC_makeActionDescriptionDefault(
-        acceptType ? acceptType(MC_getActionDescriptionType(arg)) : MC_getActionDescriptionType(arg),
+        acceptActionType ? acceptActionType(MC_getActionDescriptionActionType(arg)) : MC_getActionDescriptionActionType(arg),
         acceptEvent ? acceptEvent(MC_getActionDescriptionEvent(arg)) : MC_getActionDescriptionEvent(arg));
   }
   ATabort("not a ActionDescription: %t\n", arg);

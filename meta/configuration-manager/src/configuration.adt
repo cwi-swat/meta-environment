@@ -8,7 +8,7 @@
 
   constructor(Property, text-category, text-category(<category(TextCategoryName)>,<attributes(TextAttributes)>)),
 
-  constructor(ActionDescription, default, description(<type(ActionType)>, <event(Event)>)),
+  constructor(ActionDescription, default, description(<action-type(ActionType)>, <event(Event)>)),
   list(ActionDescriptionList, ActionDescription),
 
   constructor(ActionType, term-editor, term-editor),

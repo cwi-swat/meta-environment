@@ -143,7 +143,7 @@ MC_Property MC_makePropertyAction(MC_ActionDescriptionList descriptions, ATerm a
 MC_Property MC_makePropertyExtension(const char* language, const char* extension);
 MC_Property MC_makePropertyModulePath(const char* path);
 MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAttributes attributes);
-MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType type, MC_Event event);
+MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType actionType, MC_Event event);
 MC_ActionDescriptionList MC_makeActionDescriptionListEmpty(void);
 MC_ActionDescriptionList MC_makeActionDescriptionListSingle(MC_ActionDescription head);
 MC_ActionDescriptionList MC_makeActionDescriptionListMany(MC_ActionDescription head, MC_ActionDescriptionList tail);
@@ -259,11 +259,11 @@ MC_Property MC_setPropertyAttributes(MC_Property arg, MC_TextAttributes attribut
 
 ATbool MC_isValidActionDescription(MC_ActionDescription arg);
 inline ATbool MC_isActionDescriptionDefault(MC_ActionDescription arg);
-ATbool MC_hasActionDescriptionType(MC_ActionDescription arg);
+ATbool MC_hasActionDescriptionActionType(MC_ActionDescription arg);
 ATbool MC_hasActionDescriptionEvent(MC_ActionDescription arg);
-MC_ActionType MC_getActionDescriptionType(MC_ActionDescription arg);
+MC_ActionType MC_getActionDescriptionActionType(MC_ActionDescription arg);
 MC_Event MC_getActionDescriptionEvent(MC_ActionDescription arg);
-MC_ActionDescription MC_setActionDescriptionType(MC_ActionDescription arg, MC_ActionType type);
+MC_ActionDescription MC_setActionDescriptionActionType(MC_ActionDescription arg, MC_ActionType actionType);
 MC_ActionDescription MC_setActionDescriptionEvent(MC_ActionDescription arg, MC_Event event);
 
 /*}}}  */
@@ -417,7 +417,7 @@ MC_Color MC_setColorBlue(MC_Color arg, int blue);
 MC_Configuration MC_visitConfiguration(MC_Configuration arg, MC_Properties (*acceptList)(MC_Properties));
 MC_Properties MC_visitProperties(MC_Properties arg, MC_Property (*acceptHead)(MC_Property));
 MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes));
-MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event));
+MC_ActionDescription MC_visitActionDescription(MC_ActionDescription arg, MC_ActionType (*acceptActionType)(MC_ActionType), MC_Event (*acceptEvent)(MC_Event));
 MC_ActionDescriptionList MC_visitActionDescriptionList(MC_ActionDescriptionList arg, MC_ActionDescription (*acceptHead)(MC_ActionDescription));
 MC_ActionType MC_visitActionType(MC_ActionType arg, char* (*acceptModuleId)(char*));
 MC_Event MC_visitEvent(MC_Event arg, char* (*acceptTitle)(char*), char* (*acceptPath)(char*), MC_Items (*acceptItems)(MC_Items), char* (*acceptShortcut)(char*));
