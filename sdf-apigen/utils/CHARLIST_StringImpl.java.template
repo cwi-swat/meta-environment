@@ -1,4 +1,4 @@
-__PACKAGEDECL__;
+__PACKAGEDECL__
 
 public class CHARLIST_StringImpl
 extends CHARLIST
@@ -23,7 +23,7 @@ extends CHARLIST
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("<str>");
-    listpattern = getStaticFactory().parse("[<int>,<list>]");
+    listpattern = getStaticFactory().parse("[<list>]");
   }
 
 
