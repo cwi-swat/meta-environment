@@ -250,6 +250,12 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   assert(setFocus != NULL);
   textEditorImpl->setFocus = setFocus;
 
+  assert(registerTextCategories != NULL);
+  textEditorImpl->registerTextCategories = registerTextCategories;
+
+  assert(highlightSlices != NULL);
+  textEditorImpl->highlightSlices = highlightSlices;
+
   assert(setCursorAtOffset != NULL);
   textEditorImpl->setCursorAtOffset = setCursorAtOffset;
 
