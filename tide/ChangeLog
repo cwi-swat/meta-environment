@@ -9,9 +9,6 @@ Fri Nov 19 13:47:00 CET 2004 <jurgenv@cwi.nl>
  * configure.in: removed macros for C compilation (this is a pure
    Java package now)
 
-Mon Oct 18 19:31:42 CEST 2004 <jurgenv@cwi.nl>
- * Merged 1.5 developments into trunk
-
 Mon Oct 11 14:42:05 CEST 2004 <sgmcorne@science.uva.nl,jurgenv@cwi.nl>
  * lib-c: tide-adapter changed such that it supports multiple processes
    and multiple adapters running in the same C process.

@@ -67,7 +67,6 @@ public class SourceViewer
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
-		System.out.println("[SourceViewer] creating Viewer for process ("+process.getPid()+","+process.getName()+")");
 
 		setSize(360, 350);
 		setTitle("SourceViewer: " + process.getName());

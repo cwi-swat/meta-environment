@@ -21,7 +21,7 @@ java_JAVA	= ${TOOL_GEN} ${JAVA}
 EXTRA_DIST = ${java_JAVA}
 
 ${TOOL_GEN}: 
-	${TOOLBUS_JAVA_ADAPTER}/bin/tifstojava \
+	${TOOLBUS}/bin/tifstojava \
 		-tifs ${top_srcdir}/toolbus/tide.tifs \
 		-tool debug-tool \
 		-package tide.tool.support \

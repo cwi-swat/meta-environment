@@ -409,7 +409,6 @@ class StackFrame {
 		this.name = name;
 		this.location = location;
 		this.vars = vars;
-		System.out.println(depth + " :: " + name);
 	}
 
 	//}}}

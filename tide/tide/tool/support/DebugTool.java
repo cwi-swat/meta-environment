@@ -53,8 +53,6 @@ public class DebugTool extends DebugToolTool {
 		ATerm dap = ((ATermAppl) proc).getArgument(0);
 		int pid = ((ATermInt) ((ATermAppl) proc).getArgument(1)).getInt();
 		DebugAdapter adapter = findAdapter(dap);
-		System.out.println("[DebugTool] processCreated("+proc+","+name+")");
-		System.out.println("[DebugTool] ---> "+adapter.getName());
 		adapter.processCreated(pid, name);
 	}
 
@@ -78,8 +76,6 @@ public class DebugTool extends DebugToolTool {
 		ATerm dap = ((ATermAppl) proc).getArgument(0);
 		int pid = ((ATermInt) ((ATermAppl) proc).getArgument(1)).getInt();
 		DebugAdapter adapter = findAdapter(dap);
-		System.out.println("[DebugTool] event("+proc+","+rid+","+result+")");
-		System.out.println("[DebugTool] ---> "+adapter.getName());
 		adapter.event(pid, rid, result);
 	}
 

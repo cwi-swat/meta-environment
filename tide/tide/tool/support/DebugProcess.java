@@ -41,7 +41,6 @@ public class DebugProcess {
 		this.adapter = adapter;
 		this.pid = pid;
 		this.name = name;
-		System.out.println("["+name+"] [DebugProcess] nieuw process: ("+pid+","+name+")");
 
 		tag_started = TAG_STARTED + "-" + id;
 		tag_stopped = TAG_STOPPED + "-" + id;
@@ -289,8 +288,6 @@ public class DebugProcess {
 
 	public void evaluationResult(Expr expr, Expr value, String tag) {
 		if (tag.equals(tag_initial_cpe)) {
-			System.out.println("["+this.name+"] [DebugProcess] lastLocation in evaluationResult()");
-			System.out.println("["+this.name+"] [DebugProcess] "+value);
 			lastLocation = value;
 		}
 		fireEvaluationResult(expr, value, tag);
@@ -347,8 +344,6 @@ public class DebugProcess {
 			info.info("rule == stopped, running = " + running);
 			if (running == 0) {
 				info.info("running is now 0, firing processStatusChanged");
-				System.out.println("["+this.name+"] [DebugProcess] lastLocation in event()");
-				System.out.println("["+this.name+"] [DebugProcess] "+result);
 				lastLocation = value;
 				fireProcessStatusChanged();
 			}

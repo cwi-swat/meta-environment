@@ -27,7 +27,7 @@ noinst_SCRIPTS  = ${GENJAVA}
             ' < $< > $@
 
 ${CONTROL_GEN}: ${top_builddir}/toolbus/tide.tifs
-	${TOOLBUS_JAVA_ADAPTER}/bin/tifstojava \
+	${TOOLBUS}/bin/tifstojava \
 		-tifs ${top_builddir}/toolbus/tide.tifs \
 		-tool tide-control \
 		-package tide \
