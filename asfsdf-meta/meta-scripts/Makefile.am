@@ -14,4 +14,4 @@ pkgdata_DATA     = $(TBSCRIPTS) standard.asfsdf.buttons
 	     s@__META__@${META}@' < $< > $@
 
 standard.asfsdf.buttons:  standard.asfsdf.buttons.src Makefile
-	sed 's@__ASF_LIBRARY__@${prefix}/share/asf/library/@g' < $< > $@
+	sed 's@__ASF_LIBRARY__@${ASF_LIBRARY}@g' < $< > $@
