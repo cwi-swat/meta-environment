@@ -9,19 +9,6 @@ Mod : term,
 Mods : list
 in
   Id := process-id.(
-/*
-    ( rec-msg(com,compile-all).
-      snd-eval(Tdb,get-all-modules).
-      rec-value(Tdb,all-modules(Mods?)).
-      snd-do(COM,compile-modules(Mods)).
-      snd-msg(com,done).
-      ( rec-event(COM,compile(Name?,Mods?)).
-        snd-ack-event(COM,compile(Name,Mods))
-      )*rec-event(COM,done).
-      snd-ack-event(COM,done)
-    )
-    +
-*/
     ( rec-msg(com,compile-module(Name?)).
       snd-do(Tdb,compile-module(Name)).
       ( rec-event(Tdb,generate-code(Name?,Mod?)).
