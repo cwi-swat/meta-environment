@@ -1,7 +1,14 @@
 equations
 
-[le-0]       less-equal(X,X)   = true
-[default-le] less-equal(X1,X2) = less(X1,X2)
+[less-0] less(X1, X2) = true when compare(X1, X2) = less
+[default-less] less(X1, X2) = false
 
-[g ] greater(X1,X2)       = not(less-equal(X1,X2))
-[ge] greater-equal(X1,X2) = not(less(X1,X2))
+[less-0] greater(X1, X2) = true when compare(X1, X2) = greater
+[default-greater] greater(X1, X2) = false
+
+[equal-0] equal(X, X) = true 
+[default-equal] equal(X1, X2) = false
+
+[less-equal-0] less-equal(X1, X2) = equal(X1, X2) | less(X1, X2)
+
+[greater-equal-0] greater-equal(X1, X2) = equal(X1, X2) | greater(X1, X2)

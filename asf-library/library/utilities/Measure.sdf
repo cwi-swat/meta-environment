@@ -1,0 +1,10 @@
+module utilities/Measure
+
+exports
+
+sorts Measure
+
+context-free syntax
+  "less"     -> Measure {cons("less")}
+  "greater"  -> Measure {cons("greater")}
+  "equal"    -> Measure {cons("equal")}
