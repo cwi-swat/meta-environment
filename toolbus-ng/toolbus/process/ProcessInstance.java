@@ -97,7 +97,7 @@ public class ProcessInstance {
       return null;
     else {
       ToolDefinition toolDef = new ToolDefinition(toolName, makeSig());
-      return new InternalJavaTool(toolDef);
+      return new JavaTool(toolDef);
     }
   }
 

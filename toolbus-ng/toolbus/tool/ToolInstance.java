@@ -14,7 +14,7 @@ public interface ToolInstance {
 
   public void sndDoToTool(ATerm id, ATermAppl call);
 
-  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment);
+  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment) throws ToolBusException;
 
   public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
 

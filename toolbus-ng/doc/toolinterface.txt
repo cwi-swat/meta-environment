@@ -1,43 +1,60 @@
-The ToolBus/tool interface
-==========================
+The ToolBus/tool interface (uopdated 15/09/2002)
+================================================
+
+The global picture:
+
+							ToolBus
+	
+			|			|				|				|
+		JavaTool	RMIJavaTool		ClassicTBTool	SOAPTool	...
+		
+All these classes implement the interface ToolInstance (see below).
+
+In the case of the JavaTool the following applies (in the current, reflection-based, implementation):
+
+		JavaTool
+		
+			|
+		
+		ToolShield
+		
+			|
+		
+		ExampleTool (constructor has argument of type ToolBridge, used to pass calls upwards)
 
 The tool descriptor
 -------------------
 
-A tool is characterized by the class ToolDescriptor defined as follows (getters/setters omitted):
+A tool is characterized by the class ToolDefinition defined as follows (getters/setters omitted):
 
-public class ToolDescriptor {
+public class ToolDefinition {
   private String toolName;
-  private String hostName;
-  private int restartFrequency;
-  private boolean internal;
-  private String kind;
   private ATermList functionSignatures;
-  ...
 }
+
+Oher information is placed in a property file:
+	String hostName;
+	String launcher;
+	int restartFrequency;
 
 The meaning of these fields is as follows.
 
 - toolName: the name of the tool (for Java tools: the class name, for other tools: the command to execute the tool)
 
-- hostName: the host computer on which the tool is to be executed.
+- functionSignatures:
+	a list of eval/do/events
+	
+- launcher: the class that takes care of tool creation (e.g. JavaTool, ...)
+
+- hostName: the host computer on which the tool is to be executed
 
 - restartFrequency: 
 	(a) restartFrequncecy = 0 means execute tool only once and then execute requests until termination
 	(b) restartFrequency > 0 means execute tool and increment a counter (starting at 0) for each request, 
 	    is reached then restart the tool and reset the counter.
     (c) restartFrequency < 0: error
-    
-- internal:
-	(a) internal = true: execute tool inside ToolBus (only applicaable for Java tools)
-	(b) internal = false: execute tool outside ToolBus
-	
-- kind: indication of the platform used by the tool (e.g., "java", "c", "unknown", ...)
 
-- functionSignatures:
-	a list of eval/do/events
-	
-	
+
 The ToolBus/tool interface
 ---------------------------
 
@@ -51,7 +68,7 @@ public interface ToolInstance {
 
   public void sndDoToTool(ATerm id, ATermAppl call);
 
-  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment);
+  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment) throws ToolBusException;
 
   public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
 
@@ -85,23 +102,8 @@ Notes:
 Discussion
 ----------
 
-- Is it good/bad to keep the eval/event terminology while it might disappear at the script level?
-  [keep it]
-
-- Should we keep the eval/do distinction?
-  [yes]
-
-- ToolDescriptor.internal can be removed if we allow "ToolBus" as hostname.
-  [remove]
-
-- Is ToolDescriptor.kind usefull?
-  [remove and reintroduce maybe later]
-
-- Do we want InternalTool in two flavours: a version based on reflection and a version based on tif generation?
-  [?]
-
-- In the future, external tools could get the property  "SOAP" if they use soap as transport protocol.
-  [wait]
+- May be JavaTool will be split in two versions;
+  a version based on reflection (JavaTool) and a version based on tif generation (JavaTifTool)
 
 - How do we represent functionSignatures?
     - we might split it in two lists for functions and events

@@ -1,0 +1,92 @@
+Notes
+=====
+
+In the current ToolBus notes are used to broadcast information
+in an asynchronous manner. The primitives are:
+
+subscribe
+unsubscribe
+snd-note
+rec-note
+no-note
+
+Issues with the current primitives:
+
+- It is interesting that unsubscribe and no-note are never used in the Meta-scripts.
+
+- It is a bit annoying to repeat the same pattern in subscribe and rec-note
+
+- A source of errors is that a subscribing process misses notes because notes
+  have been sent before the subscribe has been executed.
+  
+- When notes are used to maintain lists of "consumers" (bidders, players, etc.)
+  is is essentital that these list are accurate and that no notes are missed.
+  
+- Is is desirable to be able to select sub-lists of consumers
+  (e.g., all players above 18, etc.)
+  
+
+Alternatives:
+
+- remove subscibe and unsubscribe. In that case the occurrence of a rec-note implies a subscribe.
+  Note that we should do constant propagation at the implementation level to avoid
+  efficiency problems (e.g. rec-note(chat(Room, Msg?)), where Room is a constant parameter
+  of the Player process; Player would get fludded with undesired notes for other rooms)
+  
+- Add to snd-note a list of adressees and add primitives to create such lists.
+  Idea:
+		snd-note(chat("Hi, there!")) to Player(Room=13)
+		
+  Disadvantage: each consumer *has* to be modelled as a separate process.
+  
+- Another idea: a different kind of subscribe mechanism.
+
+  In the existing subscribe mechanism, we subscribe per note pattern. We could replace this
+  by a subscription mechanism where the receiver subscribes to a note destination
+  (e.g. room(13)) and not to a specific note pattern (e.g. chat(<int>, <str>)).
+  
+  	consumer process says:
+  			subscribe(room(13))
+  	sending process says:
+  			snd-note(chat("Hi, there!")) to room(<int>)				(to all rooms)
+   			snd-note(chat("Hi, there!")) to room(13)				(to room 13)
+     		snd-note(chat("Hi, there!")) to [room(13), room(14)]	(to rooms 13 and 14)
+     		
+    In this way all notes addressed to room(13) will go to the consumer process.
+    This makes it also possible that one process manages several "consumers", e.g.
+    a single process that manages rooms 13 and 14.
+    
+    Question: is it good or bad that the sender of the note is aware of the destination?
+    Can we separate this?
+    
+- Losing notes: this occurs when a new process starts and a note is sent by another
+  process before this process can do a subscribe.
+  
+  In fact this requires that process creation *and* subscription become one atomic action.
+  
+  One solution: By making subscribe implicit, the new process can start receiving notes
+  from the moment of creation; no more notes lost.
+  
+  Question: Are there other cases?
+  
+- Combining the previous two alternatives we should do the following:
+
+  - make subscribe implicit
+  - add a destination to rec-note:
+  		rec-note(room(13), chat(Msg?))
+  		
+  Some extension is conceivable that allows addresses like room(13, male, above18).
+  Further discussion is needed for this.
+    
+    
+    
+    
+    
+    
+ 			
+ 			
+  
+
+  
+
+

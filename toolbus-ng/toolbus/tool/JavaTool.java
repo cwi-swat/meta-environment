@@ -23,7 +23,7 @@ import aterm.*;
 class ToolShield extends Thread implements ToolBridge {
 
   private Object toolinstance;
-  private InternalJavaTool javatool;
+  private JavaTool javatool;
   private LinkedList requests;
 
   /**
@@ -31,7 +31,7 @@ class ToolShield extends Thread implements ToolBridge {
    * Arguments: the name of the tool class and the JavaTool that creates us.
    */
 
-  public ToolShield(Constructor cons, InternalJavaTool javatool) {
+  public ToolShield(Constructor cons, JavaTool javatool) {
     try {
       Object actuals[] = new Object[] { this };
       toolinstance = cons.newInstance(actuals);
@@ -70,9 +70,9 @@ class ToolShield extends Thread implements ToolBridge {
       System.err.println("ToolShield.handleRequest: " + e);
       e.printStackTrace();
     }
-    if (operation == InternalJavaTool.EVAL) {
+    if (operation == JavaTool.EVAL) {
       javatool.addValue(id, res);
-    } else if (operation == InternalJavaTool.TERMINATE) {
+    } else if (operation == JavaTool.TERMINATE) {
       terminate("tool terminated by ToolShield");
     }
   }
@@ -126,12 +126,12 @@ class ToolShield extends Thread implements ToolBridge {
 /**
  * @author paulk, Jul 29, 2002
  * 
- * InternalJavaTool creates the environment for running a JavaTool.
+ * JavaTool creates the environment for running a JavaTool.
  * On creation it builds a table of all methods that are expected by the ToolBus.
  * Next a ToolShield is created to run the actual tool class.
  */
 
-public class InternalJavaTool implements ToolInstance {
+public class JavaTool implements ToolInstance {
   private String className;
   private Class toolClass;
   private Constructor toolConstructor;
@@ -154,7 +154,7 @@ public class InternalJavaTool implements ToolInstance {
    * tool and a list of function signatures.
    */
 
-  public InternalJavaTool(ToolDefinition toolDef) throws ToolBusException {
+  public JavaTool(ToolDefinition toolDef) throws ToolBusException {
     System.err.println("JavaTool");
     this.className = toolDef.getToolName();
     try {
