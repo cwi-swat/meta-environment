@@ -64,9 +64,12 @@ equations
 %% the symbols {\tt LAYOUT}, $\START$ and $\Start$ do not generate any
 %% productions.
 
-  [0] r[[ _S ]] = (/)            [0] r[[ LAYOUT  ]] = (/)
+  [0] r[[ _S ]] = (/)           %% [0] r[[ LAYOUT ]] = (/)
   [0] r[[ cc ]] = (/)            [0] r[[ <START> ]] = (/)
   [0] r[[ L  ]] = (/)            [0] r[[ <Start> ]] = (/)
+  [0] <_A?-CF> = <LAYOUT?-CF>
+      ===========
+      r[[ _A ]] = (/)
 
 %% The following equations define that the productions generated for
 %% some symbol \SymA{} should be transformed into productions for

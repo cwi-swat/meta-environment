@@ -24,18 +24,18 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Integers10_1sym ;
 static ATerm lf_AUX_Integers10_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 void register_AUX_Integers10 ( ) {
 lf_AUX_Integers10_1sym = ATmakeSymbol ( "prod(id(\"Integers\"),w(\"\"),[sort(\"NatCon\"),w(\"\"),ql(\">-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -75,14 +75,6 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( is_single_element ( atmp100 ) ) {
-( tmp [ 1 ] = list_head ( atmp100 ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
-}
-}
-{
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp000 ) ) ;
 {
@@ -92,26 +84,6 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 2 ] = list_prefix ( atmp100 ) ) ;
 ( tmp [ 3 ] = list_last ( atmp100 ) ) ;
-( tmp [ 4 ] = ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , ef1sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf2sym ) ) {
-( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 6 ] ) ) {
-( tmp [ 7 ] = list_head ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = lf_AUX_Integers10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 8 ] , ef1sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
-( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
-if ( not_empty_list ( tmp [ 10 ] ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
 ( tmp [ 4 ] = ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 3 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef1sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
@@ -149,10 +121,36 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp 
 }
 }
 }
+( tmp [ 4 ] = ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , ef1sym ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
+if ( check_sym ( tmp [ 5 ] , lf2sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( is_single_element ( tmp [ 6 ] ) ) {
+( tmp [ 7 ] = list_head ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = lf_AUX_Integers10_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 8 ] , ef1sym ) ) {
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
+if ( not_empty_list ( tmp [ 10 ] ) ) {
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 }
 }
+}
+}
+}
+}
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+if ( is_single_element ( atmp100 ) ) {
+( tmp [ 1 ] = list_head ( atmp100 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 }

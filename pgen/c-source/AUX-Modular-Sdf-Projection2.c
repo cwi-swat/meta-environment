@@ -44,10 +44,10 @@ register_prod ( ATparse ( "listtype(sort(\"Import\"))" ) , lf2 , lf2sym ) ;
 void resolve_AUX_Modular_Sdf_Projection2 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Import\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Imports\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Import\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Imports\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -73,7 +73,7 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp10010 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( arg0 , atmp10010 ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 ( atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ) ;
 ( tmp [ 0 ] = atmp1000 [ 1 ] ) ;
@@ -88,7 +88,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
 }

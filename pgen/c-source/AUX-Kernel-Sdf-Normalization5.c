@@ -75,7 +75,10 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( arg0 ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 if ( check_sym ( arg0 , ef2sym ) ) {
@@ -107,9 +110,6 @@ FUNC_EXIT ( lf_AUX_Kernel_Sdf_Normalization5_1_recursive ( tmp [ 13 ] , make_lis
 }
 }
 }
-}
-else {
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( arg0 ) ) ) ) ;
 }
 }
 }
@@ -145,7 +145,10 @@ lbl_lf_AUX_Kernel_Sdf_Normalization5_1_recursive : ltmp [ 0 ] = arg0 ;
 ATerm atmp10 = arg1 ;
 {
 ATerm atmp100 = atmp10 ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( ltmp [ 0 ] ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
@@ -179,9 +182,6 @@ goto lbl_lf_AUX_Kernel_Sdf_Normalization5_1_recursive ;
 }
 }
 }
-}
-else {
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( ltmp [ 0 ] ) ) ) ) ;
 }
 }
 }

@@ -64,7 +64,10 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
@@ -72,9 +75,6 @@ if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -91,7 +91,10 @@ FUNC_ENTRY ( lf_AUX_Modular_Sdf_Normalization3_1_recursivesym , ATmakeAppl ( lf_
 ATerm atmp10 = arg1 ;
 {
 ATerm atmp100 = atmp10 ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
@@ -99,9 +102,6 @@ if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

@@ -19,6 +19,12 @@
 
 $Id$
 
+2001/03/15 (markvdb@cwi.nl)
+  * Small bug removed in normalizer which causes r[[LAYOUT]] to occur
+    as a non normalized term.
+  * New test tables generated because the order in the priority section
+    differed slightly.
+
 2001/03/08 (jurgenv@cwi.nl)
    * normalizer based on PT and SDF library
 

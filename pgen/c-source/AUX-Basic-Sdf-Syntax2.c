@@ -37,12 +37,12 @@ ATprotectSymbol ( lf_AUX_Basic_Sdf_Syntax2_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-CF\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) , lf_AUX_Basic_Sdf_Syntax2_1 , lf_AUX_Basic_Sdf_Syntax2_1sym ) ;
 }
 void resolve_AUX_Basic_Sdf_Syntax2 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Literals-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Basic_Sdf_Syntax2 ( ) {
 }
@@ -54,7 +54,11 @@ lbl_lf_AUX_Basic_Sdf_Syntax2_1 : ltmp [ 0 ] = arg0 ;
 if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( ltmp [ 0 ] ) ;
+{
+ATerm atmp01 = arg_1 ( arg0 ) ;
+( arg0 = atmp01 ) ;
+goto lbl_lf_AUX_Basic_Sdf_Syntax2_1 ;
+}
 }
 }
 if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
@@ -66,11 +70,7 @@ FUNC_EXIT ( ltmp [ 0 ] ) ;
 if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-{
-ATerm atmp01 = arg_1 ( arg0 ) ;
-( arg0 = atmp01 ) ;
-goto lbl_lf_AUX_Basic_Sdf_Syntax2_1 ;
-}
+FUNC_EXIT ( ltmp [ 0 ] ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_Basic_Sdf_Syntax2_1sym , ltmp [ 0 ] ) ) ;

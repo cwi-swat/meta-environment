@@ -30,12 +30,12 @@ static Symbol ef2sym ;
 static funcptr ef2 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
 void register_AUX_Kernel_Sdf_Projection5 ( ) {
 lf_AUX_Kernel_Sdf_Projection5_1_recursivesym = ATmakeSymbol ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"(=\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -51,12 +51,12 @@ register_prod ( ATparse ( "listtype(sort(\"Production\"))" ) , lf2 , lf2sym ) ;
 void resolve_AUX_Kernel_Sdf_Projection5 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Production\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Production\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Production\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Production\"),w(\"\"),ql(\"(-\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_Kernel_Sdf_Projection5 ( ) {
@@ -78,13 +78,13 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , lf_AUX_Kernel_Sdf_Projection5_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ) ;
+if ( ! not_empty_list ( atmp000 ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , lf_AUX_Kernel_Sdf_Projection5_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ) ;
 }
 }
 }
@@ -111,13 +111,13 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , lf_AUX_Kernel_Sdf_Projection5_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ) ;
+if ( ! not_empty_list ( atmp000 ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , lf_AUX_Kernel_Sdf_Projection5_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ) ;
 }
 }
 }

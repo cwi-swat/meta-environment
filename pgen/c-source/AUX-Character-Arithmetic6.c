@@ -35,10 +35,10 @@ ATprotectSymbol ( lf_AUX_Character_Arithmetic6_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Character-Arithmetic\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"==\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Character_Arithmetic6_1 , lf_AUX_Character_Arithmetic6_1sym ) ;
 }
 void resolve_AUX_Character_Arithmetic6 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -49,9 +49,9 @@ ATprotect ( & constant1 ) ;
 ATerm lf_AUX_Character_Arithmetic6_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_Character_Arithmetic6_1sym , ATmakeAppl ( lf_AUX_Character_Arithmetic6_1sym , arg0 , arg1 ) ) ;
 if ( term_equal ( arg0 , arg1 ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
-FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Character_Arithmetic6_1sym , arg0 , arg1 ) ) ;
 }
 

@@ -77,9 +77,6 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
@@ -97,6 +94,9 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) (
 }
 }
 }
+}
+if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -113,9 +113,6 @@ FUNC_ENTRY ( lf_AUX_Restrictions_Sdf_Renaming2_1_recursivesym , ATmakeAppl ( lf_
 ATerm atmp00 = arg0 ;
 {
 ATerm atmp000 = atmp00 ;
-if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
@@ -133,6 +130,9 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) (
 }
 }
 }
+}
+if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

@@ -24,14 +24,14 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Integers11_1sym ;
 static ATerm lf_AUX_Integers11_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol lf2sym ;
-static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol lf2sym ;
+static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 void register_AUX_Integers11 ( ) {
 lf_AUX_Integers11_1sym = ATmakeSymbol ( "prod(id(\"Integers\"),w(\"\"),[ql(\"gt\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -73,31 +73,16 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( is_single_element ( atmp100 ) ) {
-( tmp [ 1 ] = list_head ( atmp100 ) ) ;
-( tmp [ 2 ] = ( * ef3 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
-if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( is_single_element ( tmp [ 4 ] ) ) {
-( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
-if ( ! term_equal ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
-}
-}
-}
-}
-}
-}
-{
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp000 ) ) ;
 {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_last ( atmp000 ) ) ;
+{
+if ( is_single_element ( atmp100 ) ) {
+( tmp [ 2 ] = list_head ( atmp100 ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
+}
 {
 if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 2 ] = list_prefix ( atmp100 ) ) ;
@@ -115,8 +100,23 @@ goto lbl_lf_AUX_Integers11_1 ;
 }
 }
 }
+}
+}
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 if ( is_single_element ( atmp100 ) ) {
-( tmp [ 2 ] = list_head ( atmp100 ) ) ;
+( tmp [ 1 ] = list_head ( atmp100 ) ) ;
+( tmp [ 2 ] = ( * ef3 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( is_single_element ( tmp [ 4 ] ) ) {
+( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
+if ( ! term_equal ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }

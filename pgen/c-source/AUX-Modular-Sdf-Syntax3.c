@@ -26,12 +26,12 @@ static Symbol lf_AUX_Modular_Sdf_Syntax3_2_recursivesym ;
 static ATerm lf_AUX_Modular_Sdf_Syntax3_2_recursive ( ATerm arg1 ) ;
 static Symbol lf_AUX_Modular_Sdf_Syntax3_2sym ;
 static ATerm lf_AUX_Modular_Sdf_Syntax3_2 ( ATerm arg1 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
-static Symbol lf_AUX_Modular_Sdf_Syntax3_1sym ;
-static ATerm lf_AUX_Modular_Sdf_Syntax3_1 ( ATerm arg1 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
+static Symbol lf_AUX_Modular_Sdf_Syntax3_1sym ;
+static ATerm lf_AUX_Modular_Sdf_Syntax3_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 void register_AUX_Modular_Sdf_Syntax3 ( ) {
@@ -47,12 +47,12 @@ register_prod ( ATparse ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"
 register_prod ( ATparse ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Section\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Sections\"),w(\"\"),no-attrs)" ) , lf_AUX_Modular_Sdf_Syntax3_2_recursive , lf_AUX_Modular_Sdf_Syntax3_2_recursivesym ) ;
 }
 void resolve_AUX_Modular_Sdf_Syntax3 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"exports\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"exports\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Grammar-Syntax\"),w(\"\"),[sort(\"Grammar\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Grammar-Syntax\"),w(\"\"),[sort(\"Grammar\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"hiddens\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"hiddens\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"hiddens\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"hiddens\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"exports\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"exports\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Section\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Grammar-Syntax\"),w(\"\"),[sort(\"Grammar\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Grammar-Syntax\"),w(\"\"),[sort(\"Grammar\"),w(\"\"),sort(\"Grammar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 }
 void init_AUX_Modular_Sdf_Syntax3 ( ) {
 }
@@ -74,22 +74,22 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp00110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-if ( check_sym ( atmp0010 , ef3sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
-if ( check_sym ( atmp00110 , ef3sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef3 ) ( ( * ef2 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ) ;
-}
-if ( check_sym ( atmp00110 , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef3 ) ( tmp [ 1 ] ) ) , tmp [ 0 ] ) ) ) ) ) ;
-}
-}
 if ( check_sym ( atmp0010 , ef1sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
 if ( check_sym ( atmp00110 , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( ( * ef2 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ) ;
+FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( ( * ef3 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ) ;
+}
+if ( check_sym ( atmp00110 , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
+FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef2 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef1 ) ( tmp [ 1 ] ) ) , tmp [ 0 ] ) ) ) ) ) ;
+}
+}
+if ( check_sym ( atmp0010 , ef2sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
+if ( check_sym ( atmp00110 , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
+FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax3_2_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ) ;
 }
 }
 }
@@ -122,24 +122,24 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp00110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-if ( check_sym ( atmp0010 , ef3sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
-if ( check_sym ( atmp00110 , ef3sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef3 ) ( ( * ef2 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ;
-goto lbl_lf_AUX_Modular_Sdf_Syntax3_2_recursive ;
-}
-if ( check_sym ( atmp00110 , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef3 ) ( tmp [ 1 ] ) ) , tmp [ 0 ] ) ) ) ) ;
-goto lbl_lf_AUX_Modular_Sdf_Syntax3_2_recursive ;
-}
-}
 if ( check_sym ( atmp0010 , ef1sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
 if ( check_sym ( atmp00110 , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
-( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( ( * ef2 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ;
+( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( ( * ef3 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ;
+goto lbl_lf_AUX_Modular_Sdf_Syntax3_2_recursive ;
+}
+if ( check_sym ( atmp00110 , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
+( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef2 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef1 ) ( tmp [ 1 ] ) ) , tmp [ 0 ] ) ) ) ) ;
+goto lbl_lf_AUX_Modular_Sdf_Syntax3_2_recursive ;
+}
+}
+if ( check_sym ( atmp0010 , ef2sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp0010 ) ) ;
+if ( check_sym ( atmp00110 , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( atmp00110 ) ) ;
+( arg0 = cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef2 ) ( ( * ef3 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , tmp [ 0 ] ) ) ) ;
 goto lbl_lf_AUX_Modular_Sdf_Syntax3_2_recursive ;
 }
 }

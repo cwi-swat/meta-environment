@@ -28,32 +28,32 @@ static Symbol lf_AUX_Regular_Sdf_Normalization7_1sym ;
 static ATerm lf_AUX_Regular_Sdf_Normalization7_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol lf3sym ;
-static ATerm lf3 ( ATerm arg1 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
-static Symbol ef7sym ;
-static funcptr ef7 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
 void register_AUX_Regular_Sdf_Normalization7 ( ) {
 lf_AUX_Regular_Sdf_Normalization7_1_recursivesym = ATmakeSymbol ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm3\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Regular_Sdf_Normalization7_1_recursivesym ) ;
 lf_AUX_Regular_Sdf_Normalization7_1sym = ATmakeSymbol ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm3\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Regular_Sdf_Normalization7_1sym ) ;
-lf3sym = ATmakeSymbol ( "listtype(sort(\"Production\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf3sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"Symbol\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
+lf3sym = ATmakeSymbol ( "listtype(sort(\"Production\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf3sym ) ;
 register_prod ( ATparse ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm3\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) , lf_AUX_Regular_Sdf_Normalization7_1 , lf_AUX_Regular_Sdf_Normalization7_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm3\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) , lf_AUX_Regular_Sdf_Normalization7_1_recursive , lf_AUX_Regular_Sdf_Normalization7_1_recursivesym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Symbol\"))" ) , lf2 , lf2sym ) ;
@@ -62,10 +62,10 @@ register_prod ( ATparse ( "listtype(sort(\"Production\"))" ) , lf3 , lf3sym ) ;
 void resolve_AUX_Regular_Sdf_Normalization7 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[ql(\"perm\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[sort(\"Symbols\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Production\"),w(\"\"),no-attrs)" ) ) ;
@@ -95,14 +95,14 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 ( tmp [ 2 ] = ( * ef5 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) , ( * ef7 ) ( ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef2sym , lf3 ( make_list ( tmp [ 2 ] ) ) ) , ( * ef3 ) ( lf_AUX_Regular_Sdf_Normalization7_1_recursive ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 0 ] ) ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 2 ] ) ) ) , ( * ef2 ) ( lf_AUX_Regular_Sdf_Normalization7_1_recursive ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 0 ] ) ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -129,14 +129,14 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
 ( tmp [ 2 ] = ( * ef5 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ) , ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) , ( * ef7 ) ( ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef2sym , lf3 ( make_list ( tmp [ 2 ] ) ) ) , ( * ef3 ) ( lf_AUX_Regular_Sdf_Normalization7_1_recursive ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 0 ] ) ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 2 ] ) ) ) , ( * ef2 ) ( lf_AUX_Regular_Sdf_Normalization7_1_recursive ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 0 ] ) ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( atmp000 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -147,12 +147,12 @@ FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf3 ( make_list ( null ( ) ) )
 FUNC_EXIT ( make_nf2 ( lf_AUX_Regular_Sdf_Normalization7_1_recursivesym , ( * ef1 ) ( lf2 ( arg0 ) ) , arg1 ) ) ;
 }
 }
-ATerm lf2 ( ATerm arg0 ) {
-CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
-}
 ATerm lf3 ( ATerm arg0 ) {
 CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
+}
+ATerm lf2 ( ATerm arg0 ) {
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

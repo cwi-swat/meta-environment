@@ -112,10 +112,13 @@ ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , lf3sym ) ) {
 {
 ATerm atmp200 = arg_0 ( atmp20 ) ;
-if ( not_empty_list ( atmp1000 ) ) {
+if ( ! not_empty_list ( atmp1000 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp1000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp1000 ) ) ;
-if ( term_equal ( ( * ef6 ) ( tmp [ 0 ] , ltmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef6 ) ( tmp [ 0 ] , ltmp [ 0 ] ) , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
 ( tmp [ 2 ] = ( * ef8 ) ( tmp [ 0 ] , make_nf1 ( ef3sym , lf3 ( make_list ( atmp200 ) ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
@@ -126,9 +129,6 @@ FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 4 ] ) ) ) , 
 }
 }
 }
-}
-else {
-FUNC_EXIT_CONST ( constant1 , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

@@ -37,12 +37,12 @@ ATprotectSymbol ( lf_AUX_Character_Class_Normalization6_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Character-Class-Normalization\"),w(\"\"),[sort(\"CharRange\"),w(\"\"),ql(\"-<<\"),w(\"\"),sort(\"CharRange\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Character_Class_Normalization6_1 , lf_AUX_Character_Class_Normalization6_1sym ) ;
 }
 void resolve_AUX_Character_Class_Normalization6 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Arithmetic\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"<\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Arithmetic\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"<\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Character_Class_Normalization6 ( ) {
 }
@@ -51,18 +51,21 @@ FUNC_ENTRY ( lf_AUX_Character_Class_Normalization6_1sym , ATmakeAppl ( lf_AUX_Ch
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
+{
+ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( ( * ef2 ) ( atmp00 , atmp10 ) ) ;
+{
+ATerm atmp11 = arg_1 ( arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp01 , atmp10 ) ) ;
+}
 }
 }
 if ( check_sym ( arg1 , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-{
-ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( ( * ef2 ) ( atmp00 , atmp10 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp01 , atmp10 ) ) ;
 }
 }
 }
@@ -71,22 +74,19 @@ FUNC_EXIT ( ( * ef2 ) ( atmp00 , atmp10 ) ) ;
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-{
-ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( ( * ef2 ) ( atmp01 , atmp10 ) ) ;
+{
+ATerm atmp11 = arg_1 ( arg1 ) ;
+FUNC_EXIT ( ( * ef2 ) ( atmp00 , atmp10 ) ) ;
+}
 }
 }
 if ( check_sym ( arg1 , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-{
-ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( ( * ef2 ) ( atmp01 , atmp10 ) ) ;
-}
-}
+FUNC_EXIT ( ( * ef2 ) ( atmp00 , atmp10 ) ) ;
 }
 }
 }

@@ -34,12 +34,12 @@ static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
-static Symbol ef5sym ;
-static funcptr ef5 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
 void register_AUX_Priority_Sdf_Normalization10 ( ) {
 lf_AUX_Priority_Sdf_Normalization10_1_recursivesym = ATmakeSymbol ( "prod(id(\"Priority-Sdf-Normalization\"),w(\"\"),[ql(\"trans2\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Priorities\"),w(\"\"),ql(\"]]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Priorities\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
