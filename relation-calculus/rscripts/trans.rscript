@@ -1,4 +1,4 @@
-check-rscript(
+
 
 rel[int,int] M =  {<1,2>, <2,3>, <3,4>}
 
@@ -9,5 +9,5 @@ rel[int,int] T = M
 solve {
 	T = T union (T o M)
 }
-)
+
 

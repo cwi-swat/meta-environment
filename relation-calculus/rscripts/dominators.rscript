@@ -1,4 +1,3 @@
-check-rscript(
 
 %% Example from T. Lengauer and R.E. Tarjan, A Fast Algorithm for Finding Dominators
 %% in a Flowgraph, TOPLAS, Vol. 1, N0. 1, July 1979, 121-141.
@@ -66,7 +65,3 @@ assert "DOMINATES": DOMINATES ==
 	<"J", Empty>, 
 	<"K", Empty>
 	}
-
-
-
-)

@@ -16,7 +16,7 @@ bag[str] HorsePower = {lowPower, mediumPower, highPower}
 bag[str] PullsTrailerOpt = {pullsTrailer, pullsNoTrailer}
 
 bag[bag[str]] Car = { {T union E union H union PT} | T : Transmission, E : Engine, H : HorsePower, PT : PullsTrailerOpt
-, PT == pullsTrailer, not(PT == pullsTrailer and H != highPower)
+, PT == pullsTrailer, (PT == pullsTrailer) implies (H == highPower)
 }
 
 int n = # Car
