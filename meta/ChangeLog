@@ -1,6 +1,17 @@
 # $Id$
 
-2004/01/26 (markvdb@cwi.nl)
+2004/01/26 (jurgenv@cwi.nl)
+ * fixed recursive closing of modules. Circular imports can be closed now
+   using "Recursive closing". A more complex analysis was needed to detect
+   if a module can be closed. Solution:
+    1: get all transitive imports for the top module that is to be closed
+    2: for all transitive imports, remove all modules from this list that
+       are used by modules that are not in the transitive imports list.
+    3: all remaining modules in the list can be closed then
+    4: if the top module was closed, the operation was successfull,
+       if not, the operation returns an error message.
+
+2004/01/26 (markvdb@cw.nl)
  * Fixed a hairy bug wrt generation of parse tables for modules with
    syntax errors.
 
