@@ -162,6 +162,8 @@ ATerm af_prod_uqliteral_symbol = NULL;
 ATerm af_prod_star_list_symbol = NULL;
 ATerm af_prod_star_sep_list_symbol = NULL;
 ATerm af_prod_plus_list_symbol = NULL;
+ATerm af_prod_list_number_symbol = NULL;
+ATerm af_prod_list_sep_number_symbol = NULL;
 ATerm af_prod_plus_sep_list_symbol = NULL;
 ATerm af_prod_empty_attrs = NULL;
 ATerm af_prod_attrs = NULL;
@@ -419,6 +421,8 @@ void AFinitAsFixPatterns()
     ATprotect(&af_prod_star_list_symbol);
     ATprotect(&af_prod_star_sep_list_symbol);
     ATprotect(&af_prod_plus_list_symbol);
+    ATprotect(&af_prod_list_number_symbol);
+    ATprotect(&af_prod_list_sep_number_symbol);
     ATprotect(&af_prod_plus_sep_list_symbol);
     ATprotect(&af_prod_empty_attrs);
     ATprotect(&af_prod_attrs);
@@ -734,6 +738,18 @@ void AFinitAsFixPatterns()
       ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),"
               "w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),"
               "w(\"\"),no-attrs)");
+
+    af_prod_list_number_symbol =
+      ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),"
+              "sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),sort(\"NatCon\"),"
+              "w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),"
+              "w(\"\"),no-attrs)");
+
+    af_prod_list_sep_number_symbol =
+      ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),"
+              "sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),"
+              "w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),"
+              "w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)");
 
     af_prod_plus_sep_list_symbol =
       ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),"

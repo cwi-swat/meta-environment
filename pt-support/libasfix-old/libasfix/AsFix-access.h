@@ -141,6 +141,10 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
                                         af_prod_star_sep_list_symbol))
 #define AFTisPlusListSymbol(symbol)    (AFTcheckAppl(symbol, \
                                         af_prod_plus_list_symbol))
+#define AFTisListNumberSymbol(symbol)    (AFTcheckAppl(symbol, \
+                                        af_prod_list_number_symbol))
+#define AFTisListSepNumberSymbol(symbol)    (AFTcheckAppl(symbol, \
+                                             af_prod_list_sep_number_symbol))
 #define AFTisPlusSepListSymbol(symbol) (AFTcheckAppl(symbol, \
                                         af_prod_plus_sep_list_symbol))
 #define AFTisEmptyAttrs(attr)       (AFTcheckAppl(attr, af_prod_empty_attrs))
@@ -409,6 +413,28 @@ extern ATerm AFTgetEquLhs(ATerm equ);
 #define AFTgetPlusSepListWS3(s)  (AFTarg((s), 7))
 #define AFTgetPlusSepListPlus(s) (AFTarg((s), 8))
 
+#define AFTgetListNumberLit0(s)   (AFTarg((s), 0))  
+#define AFTgetListNumberWS0(s)    (AFTarg((s), 1))  
+#define AFTgetListNumberSort(s)   (AFTarg((s), 2))  
+#define AFTgetListNumberWS1(s)    (AFTarg((s), 3))  
+#define AFTgetListNumberLit1(s)   (AFTarg((s), 4))  
+#define AFTgetListNumberWS2(s)    (AFTarg((s), 5))  
+#define AFTgetListNumberNumber(s) (AFTarg((s), 6))  
+#define AFTgetListNumberWS3(s)    (AFTarg((s), 7))  
+#define AFTgetListNumberPlus(s)   (AFTarg((s), 8))  
+
+#define AFTgetListSepNumberLit0(s)   (AFTarg((s), 0))  
+#define AFTgetListSepNumberWS0(s)    (AFTarg((s), 1))  
+#define AFTgetListSepNumberSort(s)   (AFTarg((s), 2))  
+#define AFTgetListSepNumberWS1(s)    (AFTarg((s), 3))  
+#define AFTgetListSepNumberSep(s)    (AFTarg((s), 4))  
+#define AFTgetListSepNumberWS2(s)    (AFTarg((s), 5))  
+#define AFTgetListSepNumberLit1(s)   (AFTarg((s), 6))  
+#define AFTgetListSepNumberWS3(s)    (AFTarg((s), 7))  
+#define AFTgetListSepNumberNumber(s) (AFTarg((s), 8))  
+#define AFTgetListSepNumberWS4(s)    (AFTarg((s), 9))  
+#define AFTgetListSepNumberPlus(s)   (AFTarg((s), 10))  
+
 /* Access macro's for plain aterm patterns */
 
 #define AFTgetAFunATerm(a) (AFTarg((a), 0))
@@ -509,6 +535,8 @@ extern ATerm af_prod_uqliteral_symbol;
 extern ATerm af_prod_star_list_symbol;
 extern ATerm af_prod_star_sep_list_symbol;
 extern ATerm af_prod_plus_list_symbol;
+extern ATerm af_prod_list_number_symbol;
+extern ATerm af_prod_list_sep_number_symbol;
 extern ATerm af_prod_plus_sep_list_symbol;
 extern ATerm af_prod_empty_attrs;
 extern ATerm af_prod_attrs;
