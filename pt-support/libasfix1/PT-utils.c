@@ -219,3 +219,10 @@ int PT_getArgsLength(PT_Args args)
    return ATgetLength((ATermList)PT_makeTermFromArgs(args));
 }
 
+PT_ParseTree PT_addPosInfoToParseTree(char *pathInfo, PT_ParseTree tree)
+{
+  ATwarning("***warning*** PT_addPosInfoToParseTree not yet implemented.\n");
+
+  return tree;
+}
+
