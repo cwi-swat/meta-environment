@@ -151,7 +151,7 @@ void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
     SG_PrintSymbol(dot, res);
     if(ATmatch(attrs,"attrs([atr(\"reject\"),<list>])", &attrs))
       ATfprintf(dot, " (reject)");
-    ATfprintf(dot, "\"]\n");
+    ATfprintf(dot, "\"];\n");
   } else
     ATerror("SG_ApplNode: not a production %t\n", fun);
 }
@@ -164,7 +164,7 @@ void SG_AmbNode(FILE *dot, ATerm t, ATerm arg)
               &args, &res, &attrs, &args2)) {
     ATfprintf(dot, "\tN%d [label=\"", (int)t);
     SG_PrintSymbol(dot, res);
-    ATfprintf(dot, " (amb)\"]\n");
+    ATfprintf(dot, " (amb)\"];\n");
   } else
     ATerror("SG_AmbNode: warning strange node %t\n", arg);
 }
@@ -200,7 +200,7 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
     ATfprintf(dot, "\tN%d%d%d [label=\"", (int) parent, child, c);
     SG_PrintChar(dot, c);
     ATfprintf(dot, "\"]\n");
-    ATfprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);
+    ATfprintf(dot, "\tN%d -> N%d%d%d;\n", parent, parent, child, c);
     prev_char_parent = parent;
     prev_char = c;
   }
@@ -213,7 +213,7 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
         args = ATgetNext(args);
         n++;
         if (ATgetType(arg) != AT_INT)
-          ATfprintf(dot, "\tN%d -> N%d\n", (int)t, (int)arg);
+          ATfprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
         SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
       }
     }
@@ -224,7 +224,7 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
         arg = ATgetFirst(args);
         args = ATgetNext(args);
         n++;
-        ATfprintf(dot, "\tN%d -> N%d\n", (int)t, (int)arg);
+        ATfprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
         SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
       }
   } else if (ATmatch(t, "parsetree(<term>, <int>)", &arg, &c))
@@ -243,8 +243,8 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
   prev_char_parent = NULL;
 
   ATfprintf(dot, "strict digraph ParseTree {\n"
-                 "\tordering=out\n"
-                 "\tedge[dir=none]\n\n");
+                 "\tordering=out;\n"
+                 "\tedge[dir=none];\n\n");
   SG_TreeToDot(dot, t, 0, NULL, suppress);
   ATfprintf(dot, "}\n");
 }
@@ -254,7 +254,7 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
   int  c;
   ATerm t, tree;
 
-  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2]\n",
+  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
             (int) st, SG_ST_STATE(st));
   ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
   tree = SG_LK_TREE(l);
@@ -271,7 +271,7 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
 #else
   if(SG_Rejected(st)) ATfprintf(dot, " style = dotted");
 #endif
-  ATfprintf(dot, "]\n");
+  ATfprintf(dot, "];\n");
 }
 
 void SG_LinksToDot(FILE *dot, stack *st)
@@ -290,7 +290,7 @@ void SG_StackToDot(FILE *dot, stack *st)
   st_links *ls;
 
   if(st == NULL) return;
-  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2]\n",
+  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
             (int) st, SG_ST_STATE(st));
   ls = SG_ST_LINKS(st);
   SG_LinksToDot(dot, st);
