@@ -57,6 +57,7 @@ class SourceFileViewer
   private String tag_breakpoint;
   private String tag_watchpoint;
 
+  private JLayeredPane pane;
   private LineNumberCanvas lineNumbers;
   private SourceBrowser text;
   private JPanel glass;
@@ -113,7 +114,7 @@ class SourceFileViewer
     textPanel.add("Center", text);
     textPanel.add("West", lineNumbers);
 
-    JLayeredPane pane = new JLayeredPane();
+    pane = new JLayeredPane();
     pane.setLayout(new OverlayLayout(pane));
     pane.add(textPanel, new Integer(1));
     pane.add(glass, new Integer(2));
@@ -414,7 +415,7 @@ class SourceFileViewer
       menu.add(ITEM_DELETE_RULE).addActionListener(this);
       menu.add(ITEM_EDIT_RULE).addActionListener(this);
     }
-    menu.show(this, x, y);
+    menu.show(glass, x, y);
   }
 
   //}}}
