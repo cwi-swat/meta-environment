@@ -650,6 +650,15 @@ proc CopyModule { mod newmod newpath} {
 }
 
 #--
+# ImportModule(M)
+#-
+# generates the toolbus event to request importing of a module M
+#--
+proc CopyModule { mod newmod newpath} {
+    GBevent "import-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
+}
+
+#--
 # RenameModuleWidget(M)
 #-
 # generates a widget to enter the new name for the selected module.
@@ -692,6 +701,29 @@ proc CopyModuleWidget {module} {
   if [ expr [ string length $file ] > 0 ] {
     set newmodule [lindex [split $file "/"] end]
     CopyModule $module $newmodule $file 
+  }
+}
+
+#--
+# ImportModuleWidget(M)
+#-
+# generates a widget to enter the new name for the selected module.
+#--
+proc ImportModuleWidget {module} {
+  global syntax_ext
+
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
+
+  set file [tk_getSaveFile -initialfile [lindex [split $module "/"] end]  \
+            -filetypes $types -title "Import Module..."]
+
+  if [ expr [ string length $file ] > 0 ] {
+    set newmodule [lindex [split $file "/"] end]
+    ImportModule $module $newmodule $file 
   }
 }
 
