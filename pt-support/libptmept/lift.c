@@ -109,7 +109,7 @@ PTPT_LexStrCon PTPT_makeLexStrCon(const char* str)
 	ch = PTPT_makeLexStrCharBackslash();
 	break;
       default:
-	if (isprint(str[i])) {
+	if (isprint((int) str[i])) {
 	  ch = PTPT_makeLexStrCharNormal(str[i]);
 	}
 	else {
