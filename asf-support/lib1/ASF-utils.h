@@ -9,7 +9,7 @@ typedef ASF_Condition (*ASF_ConditionVisitor)(ASF_Condition cond);
 typedef ASF_CondEquation (*ASF_CondEquationVisitor)(ASF_CondEquation cond); 
                       
 ATbool ASF_isTagDefault(ASF_Tag tag);
-int    ASF_isgetCondEquationListLength(ASF_CondEquationList eqs);
+int    ASF_getCondEquationListLength(ASF_CondEquationList eqs);
 
 int ASF_getCHARListLength(ASF_CHARList list);
 
