@@ -58,12 +58,7 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
     int n;
     ATfprintf(dot, "\\\"");
     for(n = 0; name[n] != '\0'; n++)
-      switch (name[n]) {
-        case '\n': ATfprintf(dot, "\\\\n"); break;
-        case '\\': ATfprintf(dot, "\\\\"); break;
-        case '"' : ATfprintf(dot, "\\\""); break;
-        default  : ATfprintf(dot, "%c", name[n]);
-    }
+      SG_PrintChar(dot, name[n]);
     ATfprintf(dot, "\\\"");
   } else if (ATmatch(t, "lex(<term>)", &arg)) {
     ATfprintf(dot, "<");
@@ -237,8 +232,10 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 
   if (strcmp(file, "") == 0)
     file = "parse.dot";
-  if ((dot = fopen(file, "w")) == NULL)
-    ATerror("%s: cannot create dotfile %s\n", prg, file);
+  if ((dot = fopen(file, "w")) == NULL) {
+    ATfprintf(stderr, "%s: cannot create dotfile %s\n", prg, file);
+    exit(1);
+  }
 
   prev_char_parent = NULL;
 

@@ -208,8 +208,10 @@ void SG_StackCleanupList(int Mode, stack *st)
         gcstacks = SG_Realloc(gcstacks, size * sizeof(stack *));
       }
 #ifdef DEBUG
-      if(gcstacks == NULL)
-         ATerror("SG_GC: memory (re)allocation error\n");
+      if(gcstacks == NULL) {
+        ATfprintf(stderr, "SG_GC: memory (re)allocation error\n");
+        exit(1);
+      }
 #endif
       gcstacks[count++] = st;
       break;

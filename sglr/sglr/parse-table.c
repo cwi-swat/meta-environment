@@ -32,7 +32,7 @@
 int     SG_ActionKind(action a)
 {
   if(!a) {
-    ATfprintf(stderr, "SG_ActionKind error!\n");ATerror(NULL);
+    ATfprintf(stderr, "SG_ActionKind error!\n");
     return ERROR;
   }
   if (ATmatch(a, "shift(<int>)", NULL))
@@ -179,8 +179,11 @@ void SG_AddToTable(ATermTable tbl, state s, int c, ATermList as, ATbool make_lis
       else
         ATtablePut(tbl, key, (ATerm) as);
   } else {                /* Existing key, insert into existing list */
-    if(!make_list)
-        ATerror("SG_AddToTable: attempt to add value to non-list table\n");
+    if(!make_list) {
+        ATfprintf(stderr, "SG_AddToTable: attempt to add value to "
+                          "non-list table\n");
+        exit(1);
+    }
     switch(ATgetType(prev)) {
       case  AT_LIST:
         if(ATgetType(as) == AT_LIST)
@@ -189,7 +192,9 @@ void SG_AddToTable(ATermTable tbl, state s, int c, ATermList as, ATbool make_lis
           ATtablePut(tbl, key, (ATerm) ATinsert(prev, (ATerm) as));
         break;
       default:
-        ATerror("SG_AddToTable: bad value in table (must be list): %t\n",(ATerm)prev);
+        ATfprintf(stderr, "SG_AddToTable: bad value in table "
+                          "(must be list): %t\n", (ATerm) prev);
+        exit(1);
         break;
     }
   }
@@ -212,7 +217,9 @@ void SG_AddClassesToTable(ATermTable tbl, state s, ATermList classes, ATermList 
           for(; first <= last; first++) {
             SG_AddToTable(tbl, s, first, as, make_list);
         } else {
-          ATerror("SG_AddClassesToTable: bad character class\n%t\n", firstTerm);
+          ATfprintf(stderr, "SG_AddClassesToTable: bad character class\n%t\n",
+                    firstTerm);
+          exit(1);
         }
       }
     }
@@ -229,8 +236,10 @@ void SG_AddPTActions(ATermList acts, parse_table *pt, state s)
     if (ATmatch(action, "action(char-class(<list>),<term>)",
                 &classes, &actions))
       SG_AddClassesToTable(pt->actions, s, classes, actions, ATtrue);
-    else
-      ATerror("SG_AddPTActions: cannot match action %t\n", action);
+    else {
+      ATfprintf(stderr, "SG_AddPTActions: cannot match action %t\n", action);
+      exit(1);
+    }
   }
 }
 
@@ -245,8 +254,10 @@ void SG_AddPTGotos(ATermList goto_lst, parse_table *pt, state s)
     if (ATmatch(curTerm, "goto(char-class(<list>),<int>)", &classes, &s2))
       SG_AddClassesToTable(pt->gotos, s, classes,
                            (ATermList)ATmakeInt(s2), ATfalse);
-    else
-      ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", curTerm);
+    else {
+      ATfprintf(stderr, "SG_AddPTGotos: cannot parse goto entry %t\n", curTerm);
+      exit(1);
+    }
   }
 }
 
@@ -271,8 +282,10 @@ void SG_AddPTStates(ATermList states, parse_table *pt)
       nr_of_states = SG_Max(nr_of_states, s);
       SG_AddPTGotos(gotos, pt, s);
       SG_AddPTActions(actions, pt, s);
-    } else
-      ATerror("SG_AddPTStates: cannot parse %t\n", curstate);
+    } else {
+      ATfprintf(stderr, "SG_AddPTStates: cannot parse %t\n", curstate);
+      exit(1);
+    }
   }
   if (SG_DEBUG || SG_SHOWSTAT)
     ATfprintf(SGlog(), "No. of states: %d\n", nr_of_states);
@@ -288,12 +301,15 @@ void SG_AddProduction(ATermTable tbl, int pr_num, production prod)
   ATerm key, prev;
 
   key = (ATerm) ATmakeInt(pr_num);
+/*
+  if((prev = ATtableGet(tbl, key))) {
+    ATfprintf(stderr, "SG_AddProduction: production %d (%t) already present, "
+                      "previous: %t\n", pr_num, prod, prev);
+    exit(1);
+  }
+ */
 
-  if((prev = ATtableGet(tbl, key)))
-    ATerror("SG_AddProduction: production %d (%t) already present, previous: %t\n",
-            pr_num, prod, prev);
-
-  ATtablePut(tbl, (ATerm) ATmakeInt(pr_num), prod);
+  ATtablePut(tbl, key, prod);
 }
 
 /*
@@ -310,8 +326,10 @@ void SG_AddPTGrammar(ATermList grammar, parse_table *pt)
 
   for (; !ATisEmpty(grammar); grammar = ATgetNext(grammar)) {
     prod = ATgetFirst(grammar);
-    if (!ATmatch(prod, "label(<term>,<int>)", &prod, &pr_num))
-      ATerror("SG_AddPTGrammar: cannot parse production %t\n", prod);
+    if (!ATmatch(prod, "label(<term>,<int>)", &prod, &pr_num)) {
+      ATfprintf(stderr, "SG_AddPTGrammar: cannot parse production %t\n", prod);
+      exit(1);
+    }
     SG_AddProduction(pt->productions, pr_num, prod);
     nr_of_prods = SG_Max(pr_num, nr_of_prods);
   }
@@ -456,9 +474,10 @@ void SG_SaveParseTable(char *L, parse_table *pt)
 {
   int i;
   for (i = 0; i < last_table && strcmp(L, tables[i].name); i++) ;
-  if (i > MAX_TABLES)
-    ATerror("maximum number (%d) of languages exceeded\n", MAX_TABLES);
-
+  if (i > MAX_TABLES) {
+    ATfprintf(stderr, "maximum number (%d) of languages exceeded\n", MAX_TABLES);
+    return;
+  }
   if (i == last_table)
     last_table++;
 
@@ -484,12 +503,16 @@ parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
       ATfprintf(SGlog(), "Language %s not at index %d (%s)\n",
                 L, i, tables[i].name);
 
-  if (i > MAX_TABLES)
-    ATerror("maximum number (%d) of languages exceeded\n", MAX_TABLES);
-  else {
+  if (i > MAX_TABLES) {
+    ATfprintf(stderr, "maximum number (%d) of languages exceeded\n", MAX_TABLES);
+    return NULL;
+  } else {
     if (SG_DEBUG)
       ATfprintf(SGlog(), "Language %s not available\n", L);
-    if(!may_fail) ATerror("No language %s open\n", L);
+    if(!may_fail) {
+      ATfprintf(stderr, "No language %s open\n", L);
+      exit(1);
+    }
   }
   return NULL;
 }

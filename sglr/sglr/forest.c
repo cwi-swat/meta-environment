@@ -840,9 +840,10 @@ char *SG_TYAuxBuf(int Mode, char c) {
     case TYA_INIT:
         if(tmp == NULL) {
           tmp = (char *) SG_Malloc(TYA_TMPCHUNK);
-          if(tmp == NULL)
-            ATerror("memory allocation error\n");
-          else
+          if(tmp == NULL) {
+            ATfprintf(stderr, "memory allocation error\n");
+            exit(1);
+          } else
             tmpsize = TYA_TMPCHUNK;
         }
         tmp[0] = index = 0;
@@ -852,9 +853,10 @@ char *SG_TYAuxBuf(int Mode, char c) {
     case TYA_ADD:
         if((index+2) > tmpsize) {
           tmp = (char *)SG_Realloc(tmp, tmpsize + TYA_TMPCHUNK);
-          if(tmp == NULL)
-            ATerror("memory reallocation error\n");
-          else
+          if(tmp == NULL) {
+            ATfprintf(stderr, "memory reallocation error\n");
+            exit(1);
+          } else
             tmpsize += TYA_TMPCHUNK;
         }
         tmp[index++] = c;

@@ -68,8 +68,11 @@ FILE  *SGopenLog(char *prg, char *fnam)
   if (SG_Log != NULL) return SG_Log;
   if (fnam == NULL || strcmp(fnam, "") == 0)
     fnam = ".parse-log";
-  if ((SG_Log = fopen(fnam, "w")) == NULL)
-    ATerror("%s%sCannot create logfile %s\n", prg?prg:"", prg?": ":"", fnam);
+  if ((SG_Log = fopen(fnam, "w")) == NULL) {
+    ATfprintf(stderr, "%s%sCannot create logfile %s\n",
+              prg?prg:"", prg?": ":"", fnam);
+    exit(1);
+  }
   if(SG_VERBOSE)
     ATfprintf(stderr, "%s%slogging to %s\n",  prg?prg:"", prg?": ":"", fnam);
   return SG_Log;
