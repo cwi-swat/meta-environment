@@ -20,7 +20,7 @@
 */
 #include "../../in-output/in-output.idef"
 #include "../module-db.idef"
-#include "../../toolbus/prettyprinter.tb"
+#include "../../asource/asource.idef"
 #include "../../toolbus/notification.tb"
 
 process Test is
@@ -56,4 +56,4 @@ in
   shutdown("") delay(sec(2))
 endlet
 
-toolbus(Test, ModuleDB, Io, Prettyprinter, Notify-about-changed-modules)
+toolbus(Test, ModuleDB, Io, Unparser, Notify-about-changed-modules)
