@@ -6,9 +6,9 @@ let
 in
   snd-msg(create-empty-equations("EmptyEqsSection")) .
   (
-    rec-msg(equations-created("EmptyEqsSection.eqs"))
+    rec-msg(empty-equations-created("EmptyEqsSection.eqs"))
   +
-    rec-msg(equations-creation-failed("EmptyEqsSection", Msg?)) .
+    rec-msg(empty-equations-not-created("EmptyEqsSection", Msg?)) .
     printf("in-output-test-5 FAILED! (%s)\n", Msg)
   +
     shutdown("test-5 FAILED! (timeout)\n") delay(sec(5))
