@@ -14,7 +14,7 @@ buttons([
   button("Tscript",
          [description(term-editor, menu(["ToolBus", 
                                          "Show Results as HTML"]))],
-	 [push-filename("query-result.rvalue"),
+	 [push-filename("query-result.trm"),
 	  read-tree,
 	  check-sort("Elem"),
 	  apply("result-to-html", "HTML", 1),
