@@ -31,3 +31,4 @@ hiddens
     [p][0-9\']*         -> Production 
     [n][0-9\']*         -> NatCon 
     "c*"[0-9\']*        -> CHAR*
+    "Sort"[0-9\']*      -> Sort

@@ -33,6 +33,9 @@ equations
    [0] sym2syntax(qliteral("""c*""")) = qliteral(""" "\" """ c* "\" """ """)
    [0] sym2syntax(sort(c*)) = qliteral("""c*""")
 
+   [0] sym2syntax(Sort [[ 'a,+ ]]) = 
+         ( sym2syntax(Sort) "[[" symbols2syntax('a,+) "]]" )
+
    [s2s] symbols2syntax('a,+ , 'b,+) = 
            symbols2syntax('a,+) "," symbols2syntax('b,+)
    [default-s2s] symbols2syntax(_A) = sym2syntax(_A)

@@ -8,7 +8,7 @@ imports languages/sdf2/syntax/Kernel
 hiddens
   sorts ModuleWord
 exports
-  context-free start-symbols Module Definition
+  context-free start-symbols Module
 
   sorts ModuleId ModuleName Import Imports
         Section Sections Module Definition ImpSection
