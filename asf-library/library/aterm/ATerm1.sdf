@@ -1,6 +1,6 @@
 module aterm/ATerm1[String Term]
 
-imports containers/Lists[Term]
+imports containers/List[Term]
 imports basic/Strings
 exports
 
