@@ -3,4 +3,4 @@ equations
 [pq1] pico-query($Script, $String, $Rstore) =
       convert2summary(eval-rscript-with-rstore($Script, str2rvar($String), $Rstore))
 
-[sv1] str2rvar(strcon("""  $Char* """)) = rvar(Char*)
+[sv1] str2rvar(strcon("""  $Char* """)) = rvar($Char*)
