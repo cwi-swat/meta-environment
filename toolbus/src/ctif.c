@@ -310,7 +310,9 @@ void read_tifs(int tifs, char *the_tool_name)
 	if(streq(atf, "rec-do") || streq(atf, "rec-eval")) {
 	  C_test_eval_do(els, atf, first(arg), t);
 	  els = " else ";
-	} else if(streq(atf, "rec-terminate") || streq(atf , "rec-ack-event")){
+	} else if(streq(atf, "rec-terminate") 
+		  || streq(atf , "rec-ack-event")
+		  || streq(atf , "rec-monitor")) {
 	  term *trm = mk_appl1(TBlookup(atf), first(arg));
 	  C_test_other(els, trm, t);
 	  els = " else ";

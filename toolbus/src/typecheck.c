@@ -606,6 +606,10 @@ int typecheck(char *script, TBbool gen_tifs)
     if(tifs < 0){
       TBmsg("Can't create %s", tifs_name);
       gen_tifs = TBfalse;
+    } else {
+      tool_def *def = find_tool_def(TBlookup("viewer"));
+      if(def)
+	TBwrite(tifs, TBmake("rec-monitor(<viewer>,<term>)"));
     }
   }
 
