@@ -17,9 +17,8 @@ TEST_MODULES=Bracket \
              ReturnsList \
              SetAndElem \
              Traversal-Typecheck \
-             Tuple
-
-TEST_MODULES_ASFE_ONLY=Combination-Typecheck
+             Tuple \
+             Combination-Typecheck
 
 ASFC=${top_builddir}/asfc/src/asfc
 ASFE=${top_builddir}/asfe/src/asfe
