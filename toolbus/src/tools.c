@@ -18,7 +18,7 @@
 #include <fcntl.h>
 
 extern int mk_server_ports(TBbool);
-extern int accept_client(void);
+extern int accept_client(TBbool);
 extern TBbool parse_script(char *);
 
 TBbool local_ports = TBfalse;
@@ -298,41 +298,22 @@ TBbool connect_tool(int tid, int in, int out)
   return TBfalse;
 }
 
-int calc_phys_inport(int tid)
+int add_tool(char *id, char *host)
 {
-  return WellKnownSocketInPort + 2 + 2 * tid;
-}
-
-int find_tool_inport(char *id, char *host, int *tid)
-{ 
-  tool_inst_list *tools;
-  tool_inst *ti;
   sym_idx idx = TBlookup(id);
   term *creator = mk_appl(idx, NULL);
+  tool_def *td = find_tool_def(idx);
 
- /*  TBmsg("find_tool_inport(%s,%s,%d)\n", id, host, *tid); */
-
-  if(*tid < 0){
-    tool_def *td = find_tool_def(idx);
-    if(!td){
-      err_warn("no definition for tool `%s'", id);
-      return -1;
-    }
-      
-    Tools = mk_list(mk_tool_inst(creator, n_tool_inst, host, -1,-1,PHASE1), Tools);
-    *tid = n_tool_inst++;
-    return calc_phys_inport(*tid);
+  if(!td){
+    err_warn("no definition for tool `%s'", id);
+    return -1;
   }
 
-  for(tools = Tools; tools; tools = next(tools)){
-    ti = first(tools);
-    /* pr_term(ti); fprintf(stderr, " ti_name = %d, lookup = %d\n", ti_name(ti), TBlookup(id)); */
-    if(int_val(ti_tid(ti)) ==  *tid){
-      return calc_phys_inport(*tid);
-    }
-  }
-  err_fatal("find_tool_inport");
-  return 0;
+  if(verbose)
+    TBmsg("adding tool, id=%s, host=%s, tid=%d\n", id, host, n_tool_inst);
+
+  Tools = mk_list(mk_tool_inst(creator, n_tool_inst, host, -1,-1,PHASE1), Tools);
+  return n_tool_inst++;
 }
 
 void destroy_ports_for_tool(tool_inst *ti)
@@ -345,17 +326,6 @@ void destroy_ports_for_tool(tool_inst *ti)
   /* TBmsg("destroy_ports_for_tool(%t)\n", ti); */
   TBdestroyPort(ti_in(ti));
   TBdestroyPort(ti_out(ti));
-  if(streq(this_host, ti_host(ti))){
-    tip = calc_phys_inport(int_val(ti_tid(ti)));
-    if(verbose)
-      TBmsg("%s: unlinking %d and %d\n", get_txt(ti_name(ti)), tip, tip+1);
-    sprintf (name, "/usr/tmp/%d", tip);
-    if(unlink(name) < 0)
-      err_sys_warn("cannot unlink %s", name);
-    sprintf (name, "/usr/tmp/%d", tip + 1);
-    if(unlink(name) < 0)
-      err_sys_warn("cannot unlink %s", name);
-  }
 }
 
 void destroy_ports(void)
@@ -490,7 +460,7 @@ tool_id *create_tool(term *creator, term_list *args)
 {
   char buf[EXP_TOOL_DEF], *cbuf = buf, *cbufmax = &buf[EXP_TOOL_DEF];
   char *command, *host_tool, *details, *cmd_args, *cmd_arg, *p;
-  char tid_buf[12], inport_buf[12], outport_buf[12];
+  char tid_buf[12], port_buf[12];
   int k, pid;
   char *std_args[NTOOLARGS];
   tool_def *td;
@@ -537,10 +507,8 @@ tool_id *create_tool(term *creator, term_list *args)
   std_args[k++] = "-TB_TOOL_ID";   std_args[k++] = tid_buf;
   std_args[k++] = "-details";      std_args[k++] = details;
 
-  sprintf(inport_buf, "%d", WellKnownSocketInPort);
-  sprintf(outport_buf, "%d", WellKnownSocketOutPort);
-  std_args[k++] = "-TB_INPORT";    std_args[k++] = inport_buf;
-  std_args[k++] = "-TB_OUTPORT";   std_args[k++] = outport_buf;
+  sprintf(port_buf, "%d", WellKnownSocketPort);
+  std_args[k++] = "-TB_PORT";    std_args[k++] = port_buf;
   
   if(local_ports){
       std_args[k++] = "-TB_LOCAL_PORTS";
@@ -620,16 +588,22 @@ retry:
 
   if(stand_alone)
     FD_SET(0,&read_template);
-  else
-    FD_SET(WellKnownSocketIn,&read_template);
+  else {
+    FD_SET(WellKnownLocalSocket,&read_template);
+    FD_SET(WellKnownGlobalSocket,&read_template);
+  }
   
   if((error = select(FD_SETSIZE, &read_template, NULL, NULL, get_timeout())) >= 0){
     if(stand_alone){
       nelem = read_from_stdin();
       return nelem;
-    } else if(FD_ISSET(WellKnownSocketIn, &read_template)){
-      if(accept_client() == TB_ERROR)
+    } else if(FD_ISSET(WellKnownLocalSocket, &read_template)){
+      if(accept_client(TBtrue) == TB_ERROR)
 	     err_warn("could not accept client");
+      all_internal_steps();
+    } else if(FD_ISSET(WellKnownGlobalSocket, &read_template)){
+      if(accept_client(TBfalse) == TB_ERROR)
+             err_warn("could not accept client");
       all_internal_steps();
     } else if(error == 0){           /* timeout expired */
       if(verbose)

@@ -117,8 +117,7 @@ int TBinit(char *tname, int argc, char *argv[],
     err_sys_fatal("TBinit -- can't get host name");
 
   strcpy(host_toolbus, this_host);
-  WellKnownSocketInPort = TB_INPORT;
-  WellKnownSocketOutPort = TB_OUTPORT;
+  WellKnownSocketPort = TB_PORT;
   while(i < argc){
     if(streq(argv[i], "-help")){
       help(); exit(0);
@@ -130,12 +129,9 @@ int TBinit(char *tname, int argc, char *argv[],
         err_fatal("TBinit -- name of ToolBus host too long");
       strcpy(host_toolbus, argv[i]);
       i++;
-    } else if(streq(argv[i],"-TB_INPORT")){
+    } else if(streq(argv[i],"-TB_PORT")){
       i++;
-      WellKnownSocketInPort = atoi(argv[i++]);
-    } else if(streq(argv[i],"-TB_OUTPORT")){
-      i++;
-      WellKnownSocketOutPort = atoi(argv[i++]);
+      WellKnownSocketPort = atoi(argv[i++]);
    } else if(streq(argv[i],"-TB_TOOL_ID")){
      i++;
      this_tool_id = atoi(argv[i++]);
@@ -192,26 +188,23 @@ int TBinit(char *tname, int argc, char *argv[],
   return TB_OK;
 }
 
-int TBconnect(char *tname, char *host, int inport, int outport,
+int TBconnect(char *tname, char *host, int port,
 	      TBcallbackTerm fun, term *(*check_in_sign)(term *), int *tid)
 {
   int to_tb, from_tb;
-  int old_inport, old_outport;
+  int old_port;
 
   term *tool_in_sign, *too_out_sign, *trm;
 
-  /* Fool mkports into assuming different WellKnown ports */
-  old_inport = WellKnownSocketInPort;
-  old_outport = WellKnownSocketOutPort;
-  WellKnownSocketInPort = inport;
-  WellKnownSocketOutPort = outport;
+  /* Fool mkports into assuming a different WellKnown port */
+  old_port = WellKnownSocketPort;
+  WellKnownSocketPort = port;
 
   if(mkports(TBfalse, tname, host, tid, &from_tb, &to_tb) == TB_ERROR)
     err_fatal("TBconnect -- can't connect to ToolBus");
 
-  /* Restore the old WellKnown ports */
-  WellKnownSocketInPort = old_inport;
-  WellKnownSocketOutPort = old_outport;
+  /* Restore the old WellKnown port */
+  WellKnownSocketPort = old_port;
 
   TBaddTermPort(from_tb, fun);
   trm = TBread(from_tb); /* obtain the tool signature from the ToolBus */

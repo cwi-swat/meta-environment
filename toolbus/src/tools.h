@@ -53,6 +53,7 @@ typedef term tool_id;
 int TCP_transition(tool_inst *, term *, TBbool);
 void destroy_ports_for_tool(tool_inst *);
 TBbool write_to_tool(sym_idx, term_list *);
+int add_tool(char *id, char *host);
 
 void complete_tool_sigs(int);
 

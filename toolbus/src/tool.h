@@ -5,7 +5,7 @@
 #include <stdarg.h>
 
 int  TBinit(char *, int, char **, TBcallbackTerm, term *(*sigchk)(term *));
-int  TBconnect(char *, char *, int in, int out, TBcallbackTerm, term *(*sigchk)(term *), int *);
+int  TBconnect(char *, char *, int port, TBcallbackTerm, term *(*sigchk)(term *), int *);
 int  TBgetTid();
 char *TBgetToolName();
 int  TBaddTermPort(int, TBcallbackTerm);

@@ -103,8 +103,7 @@ int main(int argc, char *argv[])
   tool_name = "ToolBus";
   gethostname(this_host, MAXHOSTNAMELEN);
   ToolBus = TBtrue;
-  WellKnownSocketInPort = TB_INPORT;
-  WellKnownSocketOutPort = TB_OUTPORT;
+  WellKnownSocketPort = TB_PORT;
 
   if((s = getenv("TB_VERBOSE")) && streq(s ,"true"))
     verbose = TBtrue;
@@ -127,12 +126,9 @@ int main(int argc, char *argv[])
         stand_alone = TBtrue;
     } else if(streq(argv[i],"-TB_LOCAL_PORTS")){
 	local_ports = TBtrue;
-    } else if(streq(argv[i],"-TB_INPORT")){
+    } else if(streq(argv[i],"-TB_PORT")){
       i++;
-      WellKnownSocketInPort = atoi(argv[i]);
-    } else if(streq(argv[i],"-TB_OUTPORT")){
-      i++;
-      WellKnownSocketOutPort = atoi(argv[i]);
+      WellKnownSocketPort = atoi(argv[i]);
     } else if(streq(argv[i], "-gentifs")){
       gen_tifs = TBtrue;
     } else if((argv[i][0] == '-') && ((argv[i][1] == 'I') || (argv[i][1] == 'D'))){

@@ -17,8 +17,7 @@
 /* Default "Well known" sockets of ToolBus */
 /* Allocation of tool ports starts at TB_INPORT+2 */
 
-#define TB_INPORT     8998
-#define TB_OUTPORT    (TB_INPORT+1)
+#define TB_PORT     8999
 
 extern char *tool_name;
 extern int buf_size;

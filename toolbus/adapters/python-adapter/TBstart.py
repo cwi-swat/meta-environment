@@ -17,43 +17,23 @@ import TB
 import TBterm
 def init():
 	# Find the well-known ToolBus sockets:
-        sock_out = connectsocket(TB.HOST, TB.INPORT)
-        send_handshake(sock_out, "%s %s %d" %
+	if TB.HOST == TB.LOCAL_HOST:
+        	sock = connectsocket(None, TB.PORT)
+	else:
+        	sock = connectsocket(TB.HOST, TB.PORT)
+        send_handshake(sock, "%s %s %d" %
                                 (TB.TOOL_NAME, TB.HOST, TB.TOOL_ID))
 
-        sock_in = sock_out
+        #sock_in = sock_out
 	# <PO> was: sock_in = connectsocket(TB.HOST, TB.OUTPORT)
-        portin = getint(sock_in, TB.TOOL_NAME)
-        toolid = getint(sock_in, TB.TOOL_NAME)
+        #portin = getint(sock_in, TB.TOOL_NAME)
+        toolid = getint(sock, TB.TOOL_NAME)
 
 	# Check if this went alright
-        if portin < 0: raise TB.connect, "Illegal port number: %d" % portin
         if toolid < 0: raise TB.connect, "Illegal tool-id: %d" % toolid
 
-	# The well-known sockets are no longer in use by this tool
-        sock_in.close()
-        # <PO> was: sock_out.close()
-
-	# The input/output ports are always consecutive
-        portout = portin+1
-
-	# Do we want global or local ports (AF_INET or AF_UNIX)
-        if not TB.HOST:
-                TB.HOST = TB.LOCAL_HOST
-        if TB.HOST == TB.LOCAL_HOST:
-                TB.output = connectsocket("", portin)
-                TB.input = createsocket("", portout)
-        else:
-                TB.output = connectsocket(TB.HOST, portin)
-                TB.input = createsocket(TB.LOCAL_HOST, portout)
-
-	# Handshake with the ToolBus after a connection is established
-        putint(TB.output, TB.TOOL_NAME, portin)
-        n = getint(TB.input, TB.TOOL_NAME)
-
-        if n != portin: raise TB.connect, "Illegal response from ToolBus"
-	
-	# Let the {\tt TB} module know we found the ToolBus
+	TB.input = sock
+	TB.output = sock
         TB.connected = 1
 
 def send_handshake(sock, msg):
