@@ -20,9 +20,9 @@ Issues with the current primitives:
   have been sent before the subscribe has been executed.
   
 - When notes are used to maintain lists of "consumers" (bidders, players, etc.)
-  is is essentital that these list are accurate and that no notes are missed.
+  it is essentital that these list are accurate and that no notes are missed.
   
-- Is is desirable to be able to select sub-lists of consumers
+- It is desirable to be able to select sub-lists of consumers
   (e.g., all players above 18, etc.)
   
 
@@ -31,9 +31,9 @@ Alternatives:
 - remove subscibe and unsubscribe. In that case the occurrence of a rec-note implies a subscribe.
   Note that we should do constant propagation at the implementation level to avoid
   efficiency problems (e.g. rec-note(chat(Room, Msg?)), where Room is a constant parameter
-  of the Player process; Player would get fludded with undesired notes for other rooms)
+  of the Player process; Player would get flooded with undesired notes for other rooms)
   
-- Add to snd-note a list of adressees and add primitives to create such lists.
+- Add to snd-note a list of addressees and add primitives to create such lists.
   Idea:
 		snd-note(chat("Hi, there!")) to Player(Room=13)
 		
