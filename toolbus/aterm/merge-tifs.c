@@ -1,6 +1,7 @@
 /*{{{  includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <atb-tool.h>
 
 #include "tifs.h"
@@ -37,6 +38,11 @@ int main(int argc, char *argv[])
   ATermList mergedTifs;
 
   ATBinit(argc, argv, &bottomOfStack);
+
+  if (argc != 7) {
+    fprintf(stderr, "Usage: %s <tifs1> <toolname1> <tifs2> <toolname2> <merged-toolname> <outfile>\n", argv[0]);
+    exit(1);
+  }
 
   tifs1 = read_tifs_from_named_file(argv[1]);
   tifs1 = extract_tool_from_tifs(tifs1, argv[2]);
