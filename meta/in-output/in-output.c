@@ -135,23 +135,33 @@ ATerm open_error(char *n)
 ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
 {
   ATerm t;
+  static char pn[PATH_LEN];
 
   if(!(t = ATreadFromNamedFile(fn))) {
     ATfprintf(stderr, "error reading %s\n", fn);
     return open_error(n);
   }
-  return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
-                oldstyle?"asfix":"baf", n, t, fn);
+  if(oldstyle)
+    return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
+                  "asfix", n, t, fn);
+  else {
+    strncpy(pn,fn,strlen(fn)-4);
+    pn[strlen(fn)-4] = '\0';
+    return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
+                  "baf", n, t, pn);
+  }
 }
 
 ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
 {
+  static char pn[PATH_LEN];
   FILE   *fd;
 
-  if(!(fd = fopen(fn, "w"))) {
-    ATfprintf(stderr,"%s: cannot create\n",fn);
+  sprintf(pn, "%s%s",fn, ".baf");
+  if(!(fd = fopen(pn, "w"))) {
+    ATfprintf(stderr,"%s: cannot create\n", pn);
    } else {
-    ATfprintf(stderr, "writing file %s\n", fn);
+    ATfprintf(stderr, "writing file %s\n", pn);
     ATwriteToBinaryFile(t,fd);
     fclose(fd);
   }
