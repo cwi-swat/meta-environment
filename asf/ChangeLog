@@ -1,3 +1,7 @@
+2002/07/30 (jurgenv@cwi.nl)
+ * Bumped to 1.6beta
+ * Added asserts concerning ill formed ambiguity clusters in asfe.
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 1.5
 
