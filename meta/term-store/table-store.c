@@ -235,6 +235,16 @@ ATermList TS_getAllValues(char* name)
 }
 
 /*}}}  */
+ATermList TS_getValues(char* name, ATermList keys)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_getValues(table, keys);
+  }
+
+  return ATempty;
+}
 /*{{{  ATermList TS_getAllKeyValuePairs(char *table) */
 
 ATermList TS_getAllKeyValuePairs(char *table)

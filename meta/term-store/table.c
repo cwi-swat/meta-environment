@@ -69,6 +69,21 @@ ATermList T_getAllValues(Table table)
 }
 
 /*}}}  */
+ATermList T_getValues(Table table, ATermList keys)
+{
+  ATermList values = ATempty;
+
+  for ( ;!ATisEmpty(keys); keys = ATgetNext(keys)) {
+    ATerm key = ATgetFirst(keys);
+    ATerm value = T_getValue(table, key);
+    
+    if (value != NULL) {
+      values = ATinsert(values, value);
+    }
+  }
+
+  return values;
+}
 /*{{{  ATermList T_getAllKeyValuePairs(Table table) */
 
 ATermList T_getAllKeyValuePairs(Table table)

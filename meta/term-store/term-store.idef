@@ -94,6 +94,12 @@ in
     snd-msg(ts-all-values(Values)) .
     Values := []
   +
+    rec-msg(ts-get-values(TableName?, Keys?)) .
+    snd-eval(TS, get-values(TableName, Keys)) .
+    rec-value(TS, result(Values?)) .
+    snd-msg(ts-values(Values)) .
+    Values := []
+  +
     rec-msg(ts-remove-value-from-all-tables(Key?)).
     snd-do(TS,remove-value-from-all-tables(Key))
   )

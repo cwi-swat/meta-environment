@@ -74,13 +74,6 @@ AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
    [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
 
-dnl By default, select meta-studio as the GUI
-UI_PACKAGE=meta-studio
-AC_SUBST(UI_PACKAGE)
-
-METASTUDIO_DEF=-DMETASTUDIO
-AC_SUBST(METASTUDIO_DEF)
-
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
    [  --with-tide             TIDE is in DIR],

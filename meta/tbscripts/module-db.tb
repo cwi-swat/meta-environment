@@ -226,8 +226,9 @@ in
     fi
   +
     rec-msg(get-all-sdf2-definitions(Name?)) .
-    snd-msg(ts-get-all-values("sdf-tree")) .
-    rec-msg(ts-all-values(Modules?)) .
+    MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
+    snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+    rec-msg(ts-values(Modules?)) .
     snd-msg(sm-make-sdf-definition(Modules, Name)) .
     Modules := [] .
     rec-msg(sm-sdf-definition(Syntax?)) .

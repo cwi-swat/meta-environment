@@ -149,6 +149,14 @@ ATerm get_all_values(int conn, char *table)
 }
 
 /*}}}  */
+/*{{{  ATerm get_values(int conn, char *table, ATerm keys) */
+
+ATerm get_values(int conn, char *table, ATerm keys)
+{
+  return RESULT((ATerm) TS_getValues(table, (ATermList) keys));
+}
+
+/*}}}  */
 /*{{{  ATerm get_key_value_pairs(int conn, char *table) */
 
 ATerm get_key_value_pairs(int conn, char *table)
