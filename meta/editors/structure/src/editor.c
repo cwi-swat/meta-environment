@@ -460,14 +460,19 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus,
   SE_FocusList foci = SE_getEditorUnparsedFoci(editor);
   SE_FocusList new_foci;
   SE_Path path;
+  int oldLength, newLength;
 
   new_foci = removeFocus(foci, focus);
   path = SE_getFocusPath(focus);
+  oldLength = PT_getParseTreeLengthAnno(parse_tree);
   new_tree = updateParseTree(parse_tree, path, tree, left_layout, right_layout);
   new_tree = PT_annotateParseTreeWithLength(new_tree);
+  newLength = PT_getParseTreeLengthAnno(new_tree);
 
   if (SE_isEqualFocus(SE_getEditorFocus(editor), focus)) {
     focus = SE_setFocusUnparsed(focus, FOCUS_PARSED);
+    focus = adaptFocusLength(focus, newLength - oldLength);
+
     editor = SE_setEditorFocus(editor, focus);
   }
 

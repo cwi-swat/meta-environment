@@ -149,7 +149,6 @@ ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus)
 
 SE_Focus updateFocus(SE_Focus focus, int location, int length)
 {
-  SE_Focus newFocus;
   SE_Area area = SE_getFocusArea(focus);
 
   /* Let's find out if insertions outside current focus are possible
@@ -159,8 +158,19 @@ SE_Focus updateFocus(SE_Focus focus, int location, int length)
 
   area = SE_setAreaLength(area, SE_getAreaLength(area) + length);
 
-  newFocus = SE_setFocusArea(focus, area);
-  return newFocus;
+  return SE_setFocusArea(focus, area);
+}
+
+/*}}}  */
+/*{{{  SE_Focus adaptFocusLength(SE_Focus focus, int length) */
+
+SE_Focus adaptFocusLength(SE_Focus focus, int length)
+{
+  SE_Area area = SE_getFocusArea(focus);
+
+  area = SE_setAreaLength(area, SE_getAreaLength(area) + length);
+
+  return SE_setFocusArea(focus, area);
 }
 
 /*}}}  */

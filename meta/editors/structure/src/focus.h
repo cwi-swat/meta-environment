@@ -15,6 +15,7 @@ SE_Focus createRootFocus(PT_ParseTree parse_tree, int focus_status);
 
 SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus);
 SE_Focus updateFocus(SE_Focus focus, int location, int length);
+SE_Focus adaptFocusLength(SE_Focus focus, int length);
 
 SE_Editor joinFoci(SE_Editor editor);
 SE_Editor joinUnparsedFoci(SE_Editor editor);
