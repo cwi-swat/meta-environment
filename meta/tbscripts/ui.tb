@@ -92,33 +92,33 @@ in
     ( rec-msg(cannot-open-module(ModName?)).
       snd-note(ui-status(errorf("cannot open module %s",[ModName])))
     ) +
-    ( rec-event(UI,delete-module(Str?)).
-      snd-msg(close-module(Str)).
-      rec-msg(closed-module(Str)).
-      snd-do(UI,delete-module(Str)) .
-      snd-ack-event(UI, delete-module(Str))
+    ( rec-event(UI, delete-module(ModName?)) .
+      snd-msg(close-module(ModName)) .
+      rec-msg(module-closed(ModName)) .
+      snd-do(UI, delete-module(ModName)) .
+      snd-ack-event(UI, delete-module(ModName))
     ) +
     ( rec-event(UI,save-module(Str?)).
       snd-msg(save-module(Str)).
       rec-msg(saved-module(Str)).
       snd-ack-event(UI,save-module(Str))
     ) +
-    ( rec-event(UI,edit-module(ModName?)) .
+    ( rec-event(UI, edit-module(ModName?)) .
       snd-msg(edit-syntax(ModName)) .
-      snd-ack-event(UI,edit-module(ModName))
+      snd-ack-event(UI, edit-module(ModName))
     ) +
-    ( rec-event(UI,edit-eqs-module(ModName?)).
+    ( rec-event(UI, edit-eqs-module(ModName?)).
       snd-msg(edit-equations(ModName)) .
-      snd-ack-event(UI,edit-eqs-module(ModName))
+      snd-ack-event(UI, edit-eqs-module(ModName))
     ) +
-   ( rec-event(UI,edit-term(ModName?, FileName?)).
+   ( rec-event(UI, edit-term(ModName?, FileName?)).
      snd-msg(edit-term-file(ModName, FileName)) .
-     snd-ack-event(UI,edit-term(ModName, FileName))
+     snd-ack-event(UI, edit-term(ModName, FileName))
    ) +
-    ( rec-event(UI,revert-module(ModName?)).
-      snd-msg(revert-module(ModName)).           
-      rec-msg(reverted-module(ModName?)).
-      snd-ack-event(UI,revert-module(ModName))
+    ( rec-event(UI, revert-module(ModName?)) .
+      snd-msg(revert-module(ModName)) .           
+      rec-msg(module-reverted(ModName?)) .
+      snd-ack-event(UI, revert-module(ModName))
     ) +
     ( rec-event(UI,get-module-info(Str?)).          /* Not yet implemented */ 
       snd-do(UI,module-info(Str,[["sorry","not implemented"],

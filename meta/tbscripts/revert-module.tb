@@ -21,23 +21,21 @@
 /*
   $Id$
  */
-process Revert-module is
+process RevertModule is
 let 
   Id         : term,
-  ChngMods   : list,
   ModuleName : str
 in 
-  Id := process-id. (
-    rec-msg(revert-module(ModuleName?)).
-    snd-note(ui-status(stat(Id,"Reverting ..."))).
-    snd-msg(delete-module(ModuleName)) .
-    rec-msg(changed-modules(ChngMods?)) .
-    snd-msg(notify-about-changed-modules(ChngMods, "sdf")) .
-    rec-msg(notify-about-changed-modules-done) .   
+  Id := process-id. 
+  (
+    rec-msg(revert-module(ModuleName?)) .
+    snd-note(ui-status(stat(Id,"Reverting ..."))) .
+    snd-msg(close-module(ModuleName)) .
+    rec-msg(module-closed(ModuleName)) .
     snd-msg(open-modules([ModuleName])) .
     rec-msg(finished-opening-modules) .
     snd-note(ui-status(endstat(Id))) .  
-    snd-msg(reverted-module(ModuleName))
+    snd-msg(module-reverted(ModuleName))
   ) *
   delta
 endlet

@@ -35,7 +35,7 @@
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
-#include "close-modules.tb"
+#include "close-module.tb"
 #include "revert-module.tb"
 #include "ui.tb"
 #include "status-display.tb"
@@ -58,8 +58,8 @@
 #include "removevarsyntax.idef"
 
 toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB, 
-	ProcessEqs, Save-modules, Revert-module, File-creator, SE,
+	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
 	Notify-about-changed-modules, Rewrite-Errors, Traversals,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
-	Help, Clear-all, Close-modules, ParseFocusses) 
+	Help, Clear-all, CloseModule, ParseFocusses) 

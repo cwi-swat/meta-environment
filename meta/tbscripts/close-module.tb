@@ -21,7 +21,7 @@
 /*
   $Id$
  */
-process Close-modules is
+process CloseModule is
 let
   ModuleName     : term,
   ChangedModules : list,
@@ -30,14 +30,14 @@ in
   Id := process-id. 
   (
     rec-msg(close-module(ModuleName?)) .
-    snd-note(ui-status(stat(Id, "Deleting ..."))) .
+    snd-note(ui-status(stat(Id, "Closing ..."))) .
     snd-msg(delete-editors-for-module(ModuleName)) .
-    snd-msg(delete-module(ModuleName)) .
+    snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(ChangedModules?)) .
     snd-msg(notify-about-changed-modules(ChangedModules, "sdf")) .
     rec-msg(notify-about-changed-modules-done) .
     snd-note(ui-status(endstat(Id))) .
-    snd-msg(closed-module(ModuleName))
+    snd-msg(module-closed(ModuleName))
   ) *
   delta
 endlet
