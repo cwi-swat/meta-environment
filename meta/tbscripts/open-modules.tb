@@ -157,6 +157,7 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
+    printf("Open-Module: %s, %s\n", Path, Module) .
     Open-Syntax(Path, Module, Type, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then
       if equal(Type, sdf) then 
@@ -191,29 +192,36 @@ let
   FileName : str,
   Extension : str
 in
-  snd-msg(file-extension-hook(Type)) .
-  rec-msg(file-extension-hook-result(Extension?)) .
-  snd-msg(io-get-filename(Path, Module, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(io-read-file(FileName)) .
-  (
-    rec-msg(io-file-contents(Text?)) .
-    Parse-Syntax(Text, Type, Status?, Tree?) 
-  +
-    rec-msg(io-error-reading(Message?)) .
-    Status := no-such-file
-  ) .
-  if not-equal(Status, no-such-file) then
-    Imports := [].
-    snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
+  snd-msg(sm-is-valid-modulename-in-path(Path, Module)) .
+  ( 
+    rec-msg(sm-modulename-is-valid) .
+    snd-msg(file-extension-hook(Type)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, Module, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    snd-msg(io-read-file(FileName)) .
     (
-      rec-msg(adding-succeeded(Module, RealModule?, RealPath?, Imports?))
+      rec-msg(io-file-contents(Text?)) .
+      Parse-Syntax(Text, Type, Status?, Tree?) 
     +
-      rec-msg(error-opening(Module, Status?))
-    )
-  else
-    tau
-  fi
+      rec-msg(io-error-reading(Message?)) .
+      Status := no-such-file
+    ) .
+    if not-equal(Status, no-such-file) then
+      Imports := [].
+      snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
+      (
+        rec-msg(adding-succeeded(Module, RealModule?, RealPath?, Imports?))
+      +
+        rec-msg(error-opening(Module, Status?))
+      )
+    else
+      tau
+    fi
+  +
+    rec-msg(sm-modulename-is-invalid) .
+    Status := invalid-module-name
+  )
 endlet
 
 process Parse-Syntax(Text : str, Type : term, Status : term?, Tree : term?) is
