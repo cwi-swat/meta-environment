@@ -6,15 +6,15 @@ VERSION     = @VERSION@
 
 @SET_MAKE@
 
-srcdir      = @srcdir@
-VPATH       = @srcdir@
-top_srcdir  = @top_srcdir@
-prefix      = @prefix@
-exec_prefix = @exec_prefix@
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir  = $(prefix)/include
-docdir      = $(top_srcdir)/docs
+includedir	= $(prefix)/include
+docdir		= $(top_srcdir)/docs
 
 RANLIB      = @RANLIB@
 SHELL       = @SHELL@
@@ -27,10 +27,10 @@ INCLUDES    = @INCLUDES@ ${XINCLUDES}
 LIBS        = @LIBS@ ${XLIBS}
 SOCKLIBS    = @SOCKLIBS@ 
 
-INSTALL     = @INSTALL@
-INSTALL_DATA    = @INSTALL_DATA@
-INSTALL_PROG    = @INSTALL_PROG@
-UNINSTALL   = @UNINSTALL@
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROG	= @INSTALL_PROG@
+UNINSTALL	= @UNINSTALL@
 
 ATERM		= @ATERM@
 ATERMBIN	= @ATERMBIN@
@@ -40,11 +40,10 @@ ATERMINC	= @ATERMINC@
 include Make.modules
 
 XCFLAGS = ${INCLUDE}
-INCLUDE = -I../support -I$(includedir) -I$(ATERMINC)
-LIBS	= -L$(ATERMLIB)   \
-	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
-	-lAsFix-${CC} -lATB-${CC} \
-	$(SOCKLIBS) 
+INCLUDE = -I$(top_srcdir)/asc-support -I$(includedir) -I$(ATERMINC)
+LIBS	= -L$(ATERMLIB) -L$(top_srcdir)/asc-support -L$(libdir) \
+	  -lasc-support-${CC} -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
+	  $(SOCKLIBS) 
 AR	= ar
 
 BASE	= ..
@@ -60,7 +59,7 @@ RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
 CLEANFILES = AsFix2C libasfix2c.a init.c
 
-all: AsFix2C libasfix2c.a
+all: libasfix2c.a
 
 AsFix2C : $(MODS)
 	$(CC) -o AsFix2C $(MODS) $(LIBS)

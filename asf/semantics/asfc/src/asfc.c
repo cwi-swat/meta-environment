@@ -12,16 +12,18 @@
 #include <string.h>
 #include <ctype.h>
 #include <AsFix.h>
-#include "aterm2.h"
-#include "deprecated.h"
+#include <aterm2.h>
+#include <deprecated.h>
 
 #include <sys/times.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "compiler.tif.h"
-#include "support/support.h"
 /* For cpu time calculation */
 #include <time.h>
+
+#include <asc-support.h>
+
+#include "compiler.tif.h"
 
 extern ATerm pattern_asfix_id;
 extern ATerm pattern_asfix_term;

@@ -48,10 +48,11 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS		=
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERMINC)
-XLIBS		=  -Lsupport -lsupport-${CC} -Lc-source -lasfix2c \
-		-L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
-		$(SOCKLIBS)
+XINCLUDES	= -I${top_srcdir}/asc-support -I$(ATERMINC)
+XLIBS		= -L${top_srcdir}/asc-support -lasc-support-${CC} \
+		  -Lc-source -lasfix2c \
+		  -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
+		  $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -74,7 +75,7 @@ CLEANFILES	= compiler compiler.tif.c compiler.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
-SUBDIRS=support c-source support-muasf
+SUBDIRS		= c-source support-muasf
 
 # The all target must be defined:
 all: subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
@@ -152,11 +153,11 @@ distclean: clean
 
 # distclean target
 
-# Included dependencies
-include .depend
 
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
-	$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > .depend
+	@$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > depend
 
+# Included dependencies
+-include depend
 

@@ -13,11 +13,10 @@
 #include <AsFix-expand.h>
 #include <atb-tool.h>
 
-#include "aterm2.h"
-#include "deprecated.h"
+#include <aterm2.h>
+#include <deprecated.h>
 
-#include "support/support.h"
-#include "support/rewriter.tif.c"
+#include <asc-support.h>
 
 /*{{{  globals */
 
