@@ -95,6 +95,24 @@ buttons([
         ]),
   button("Tscript",
          ["term"],
+         ["ToolBus", "All"],
+         [push-filename("all.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"ALL_MESSAGES\""),
+          parse("basic/Strings", "String"),
+
+          push-filename("extracted-relations.trm"),
+          read-tree,
+          check-sort("RSTORE"),
+
+          apply("display-query", "List", 3),
+          rewrite("DisplayQuery"),
+	  unparse,
+          show-list
+        ]),
+  button("Tscript",
+         ["term"],
          ["ToolBus", "Extract Relations"],
          [push-active-module,
           get-root,
