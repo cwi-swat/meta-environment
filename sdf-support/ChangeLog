@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jun 18 14:05:52 CEST 2004 <kooiker@cwi.nl>
+ * Also depends on toolbus 
+
 Fri Jun 18 10:27:56 CEST 2004 <jurgenv@cwi.nl>
  * Added dependency on graph-support in .pkg file
 

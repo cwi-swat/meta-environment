@@ -14,5 +14,6 @@ requires
   error-support 0.1
   pt-support	1.1
   toolbuslib	0.6
+  toolbus       85
   aterm-java    1.6
   graph-support 0.2
