@@ -469,7 +469,6 @@ static ATermList checkTest(ASF_ASFTestEquation testEquation)
         messages = ATinsert(messages, message);
 	variables = PT_makeArgsEmpty();
       }
-      messages = ATconcat(messages, checkLhs(tag, lhsCond));
 
       if (ASF_hasASFTestEquationASFConditions(testEquation)) {
         messages = ATconcat(messages,
