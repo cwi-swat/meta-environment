@@ -28,6 +28,7 @@ typedef struct PT_Position_Tag {
   char* path;
   int line;
   int col;
+  int offset;
 
   int maxDepth;
   int curDepth;
@@ -79,10 +80,12 @@ static ATerm PT_makePosInfo(const char *path, int line1, int col1, int line2, in
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_setTreePosInfo(tree, path, from_line, from_col, to_line, to_col) */
+/*{{{  static PT_Tree PT_setTreePosInfo(tree, path, from_line, from_col, to_line, to_col) */
 
-PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path, 
-			  int start_line, int start_col, int to_line, int to_col)
+static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path, 
+			  int start_line, int start_col, 
+                          int to_line, int to_col,
+                          int offset, int length)
 {
   ATerm t = PT_TreeToTerm(tree);
 
@@ -93,11 +96,13 @@ PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
 }
 
 /*}}}  */
-/*{{{  void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols) */
+/*{{{  void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset) */
 
-void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols)
+static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
 {
   if (PT_isTreeChar(tree)) {
+    (*offset)++;
+
     if (PT_getTreeCharacter(tree) == '\n') {
       *cols = 0;
       (*lines)++;
@@ -111,7 +116,7 @@ void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols)
   if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     while (!PT_isArgsEmpty(args)) {
-      PT_calcTreePosInfo(PT_getArgsHead(args), lines, cols);
+      PT_calcTreePosInfo(PT_getArgsHead(args), lines, cols, offset);
       args = PT_getArgsTail(args);
     }
   }
@@ -137,16 +142,18 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 {
   int start_line = current->line;
   int start_col  = current->col;
+  int start_offset  = current->offset;
   int len;
 
   /*ATwarning("adding pos-info at depth %d to %t\n", current->curDepth, tree);*/
 
   if (current->maxDepth == current->curDepth) {
-    PT_calcTreePosInfo(tree, &current->line, &current->col);
+    PT_calcTreePosInfo(tree, &current->line, &current->col, &current->offset);
     return tree;
   }
 
   if (PT_isTreeChar(tree)) {
+    current->offset++;
     if (PT_getTreeCharacter(tree) == '\n') {
       current->col = 0;
       current->line++;
@@ -199,6 +206,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
     char *str = PT_getTreeString(tree);
     len = strlen(str);
     while(--len >= 0) {
+      current->offset++;
       if (str[len] == '\n') {
         current->col = 0;
         current->line++;
@@ -216,7 +224,8 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   }
 
   return PT_setTreePosInfo(tree, current->path, start_line, start_col,
-			   current->line, current->col);
+			   current->line, current->col, 
+                            start_offset, (current->offset - start_offset));
 }
 
 /*}}}  */

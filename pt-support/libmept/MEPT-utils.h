@@ -126,9 +126,13 @@ PT_Tree PT_addTreePosInfoToDepth(char *pathInfo, PT_Tree tree, int maxDepth,
 PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
 			      int depth, ATbool layout, ATbool literals,
 			      int start_line, int start_col);
+/*
 PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
-			  int from_line, int from_col, int to_line, int to_col);
-void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols);
+			  int from_line, int from_col, 
+                          int to_line, int to_col,
+                          int offset, int length);
+void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset);
+*/
 ERR_Location PT_getTreeLocation(PT_Tree tree);
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col);

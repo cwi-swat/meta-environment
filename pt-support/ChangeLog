@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/12 (markvdb@cwi.nl)
+ * Prepared for the offset calculation.
+
 2004/01/09 ({markvdb,jurgenv}@cwi.nl)
  * Changed addPosInfo to use the locations from error-support. So the
    annotations in parse trees are not longer
