@@ -696,8 +696,8 @@ in
       +
         rec-msg(split-file-name(Ext?), Stack?, EditorId?) .   
 	StackPopString(Stack, Stack?, FileName?) .
-	snd-msg(decons-file-name(FileName, Ext)) .
-        rec-msg(decons-file-name-result(Path?, FileName?, Ext?)) .
+	snd-msg(io-decons-file-name(FileName, Ext)) .
+        rec-msg(io-decons-file-name-result(Path?, FileName?, Ext?)) .
 	StackPushString(Stack, Stack?, FileName) .	
 	StackPushString(Stack, Stack?, Path) .	
 	StackPushString(Stack, Stack?, Ext) .	

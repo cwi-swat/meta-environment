@@ -288,15 +288,16 @@ ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
 ATerm get_extension_modulename(int cid, char *extension)
 {
   MC_Properties properties = getProperties();
-
+ATwarning("searching for %s\n", extension);
   while (!MC_isPropertiesEmpty(properties)) {
     MC_Property property = MC_getPropertiesHead(properties);
 
     if (MC_isPropertyExtension(property)) {
       char *language = MC_getPropertyLanguage(property);
       char *stored = MC_getPropertyExtension(property);
-
+ATwarning("stored: %s\n", stored) ;
       if (strcmp(extension, stored) == 0) {
+	ATwarning("found: %s\n", language);
 	return ATmake("snd-value(extension-modulename(<str>))",
 		      language);
       }
@@ -309,7 +310,7 @@ ATerm get_extension_modulename(int cid, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm get_extension_modulename(int cid, char *extension) */
+/*{{{  ATerm get_modulename_extension(int cid, char *modulename) */
 
 ATerm get_modulename_extension(int cid, char *modulename)
 {
