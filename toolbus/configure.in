@@ -1,6 +1,6 @@
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(toolbus, 1.3)
+GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
 dnl Which compiler to use?
