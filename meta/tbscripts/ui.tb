@@ -155,6 +155,7 @@ in
      snd-do(UI,update-imports(Name, Pairs))
    )
   ) *
-  rec-event(UI,button(quit)).
+  ( rec-event(UI,button(quit))
+  + rec-disconnect(UI)) .
   shutdown("Asf+Sdf Meta-Environment exiting")
 endlet
