@@ -221,7 +221,6 @@ int main(int argc, char *argv[])
     if (use_tide) {
 #ifdef USE_TIDE
       ATBinit(argc, argv, &bottomOfStack);
-      Tide_connect();
 #else
       ATwarning("tide support is not enabled! (try configuring --with-tide)\n");
       exit(1);
