@@ -6,4 +6,4 @@ exports
 
 context-free syntax
 
-  less(X,X) -> Boolean {builtin("term-compare-less")}
+  less(X,X) -> Boolean {built-in("term-compare-less")}

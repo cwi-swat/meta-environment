@@ -3,17 +3,17 @@ module basic/Booleans
 exports
   sorts BoolCon
   context-free syntax
-    "true"  -> BoolCon {constructor}
-    "false" -> BoolCon {constructor}
+    "true"  -> BoolCon {constructor, cons("true")}
+    "false" -> BoolCon {constructor, cons("false")}
 
   sorts Boolean
   context-free syntax
-    BoolCon -> Boolean
+    BoolCon -> Boolean {cons("constant")}
 
-    Boolean "|" Boolean 	-> Boolean {left}
-    Boolean "&" Boolean 	-> Boolean {left}
-    "not" "(" Boolean ")" 	-> Boolean
-    "(" Boolean ")"       	-> Boolean {bracket}
+    lhs:Boolean "|" rhs:Boolean 	-> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean 	-> Boolean {left, cons("and")}
+    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
+    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
 
   context-free priorities
     Boolean "&" Boolean -> Boolean >
