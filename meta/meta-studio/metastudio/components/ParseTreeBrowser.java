@@ -1,7 +1,5 @@
 package metastudio.components;
 
-import javax.swing.JSplitPane;
-
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
 import metastudio.ValueChangedListener;
@@ -15,10 +13,6 @@ public class ParseTreeBrowser extends UserInterfacePanel {
         super(factory, bridge);
 
         ParseTreePanel parseTreePanel = new ParseTreePanel((PureFactory)factory, getBridge());
-        JSplitPane pane =  
-          new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
-                parseTreePanel,
-                new BoxTree(factory, getBridge()));
         
         parseTreePanel.addValueChangedListener(new ValueChangedListener() {
 			public void valueChanged() {
@@ -26,11 +20,6 @@ public class ParseTreeBrowser extends UserInterfacePanel {
 			}
 		});
         
-        //TODO: Preferences?
-        pane.setDividerLocation(0.5);
-        pane.setResizeWeight(0.5);
-        pane.setOneTouchExpandable(true);
-        
-        add(pane);
+        add(parseTreePanel);
     }
 }

@@ -1002,19 +1002,6 @@ in
   . RStack := IStack
 endlet
 
-process ShowTree(Modulename: str, Tree: term, ShowLeafs: term) is
-let
-  Graph: term,
-  Id: int
-in
-  Id := process-id
-  . snd-note(ui-status(stat(Id, "Computing graph layout...")))
-  . snd-msg(tree2graph(Modulename, Tree, ShowLeafs))
-  . rec-msg(graph(Graph?))
-  . snd-msg(display-graph("parsetree", Graph))
-  . snd-note(ui-status(endstat(Id)))
-endlet
-
 process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))

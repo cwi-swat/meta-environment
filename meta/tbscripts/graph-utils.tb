@@ -1,3 +1,9 @@
+process RenderGraph(GraphPanelId: str, Graph: term?) is
+  snd-msg(ui-render-graph(GraphPanelId, Graph))
+  . rec-msg(ui-rendered-graph(GraphPanelId, Graph?))
+  . snd-msg(gl-layout-graph(Graph))
+  . rec-msg(gl-graph(Graph?))
+
 process ShowImportGraph(ImportRelations: list) is
 let
   ImportGraph: term
@@ -5,9 +11,16 @@ in
   snd-msg(ui-display-treelist("import-relations", ImportRelations))
   . snd-msg(sig-import-relation-to-graph(ImportRelations))
   . rec-msg(sig-graph(ImportRelations, ImportGraph?))
-  . snd-msg(ui-render-graph("import-graph", ImportGraph))
-  . rec-msg(ui-rendered-graph("import-graph", ImportGraph?))
-  . snd-msg(gl-layout-graph(ImportGraph))
-  . rec-msg(gl-graph(ImportGraph?))
+  . RenderGraph("import-graph", ImportGraph?)
   . snd-msg(ui-display-graph("import-graph", ImportGraph))
+endlet
+
+process ShowTree(Modulename: str, Tree: term, ShowLeafs: term) is
+let
+  Graph: term
+in
+  snd-msg(gc-tree-to-graph(Modulename, Tree, ShowLeafs))
+  . rec-msg(gc-graph(Graph?))
+  . RenderGraph("parsetree", Graph?)
+  . snd-msg(ui-display-graph("parsetree", Graph))
 endlet
