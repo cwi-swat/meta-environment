@@ -30,6 +30,7 @@ verbose=0
 cd `dirname $0`;
 mydir=`pwd`
 
+MV=mv
 RM=rm
 COMPARE="$mydir/trmdiff"
 SDF2TABLE=sdf2table
@@ -93,7 +94,7 @@ do
     case "$1"
     in
         -h)
-            Usage; shift;;
+            Usage; exit 0;;
         -v)
             verbose=1; shift;;
         -U)

@@ -98,7 +98,7 @@ do
     case "$1"
     in
         -h)
-            Usage; shift;;
+            Usage; exit 0;;
         -v)
             verbose=1; shift;;
         -U)
