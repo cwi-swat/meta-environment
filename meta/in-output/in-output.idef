@@ -196,17 +196,17 @@ in
       snd-eval(IO, save-text-file(Path, Text)) .
       rec-value(IO, save-done(Path))
     fi .
-    snd-msg(stack(Stack))
+    snd-msg(stack(Stack), EditorId)
   +
     rec-msg(read-tree(Path?), Stack?, EditorId?) .
     snd-eval(IO,open-file(Path)) .
     (
       rec-value(IO,opened-file(Name?,tree(Tree?),Path?,TimeStamp?)) .
       Stack := join(Tree, Stack) .
-      snd-msg(stack(Stack))
+      snd-msg(stack(Stack), EditorId)
     + 
       rec-value(IO,error-opening(Path?)).
-      snd-msg(error-stack)
+      snd-msg(error-stack, EditorId)
     )
   +
     rec-msg(save-tree(Name?, Path?, Tree?)) .
