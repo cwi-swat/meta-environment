@@ -19,7 +19,7 @@
 \newcommand{\ATerms}{ATerms}
 \newcommand{\xemacs}{{\tt XEmacs}}                                                               
 
-\title{The \ASmetaenv: a component-based language laboratory}
+\title{The \ASmetaenv: a Component-Based Language Development Environment}
 \author{M.G.J. van den Brand$^1$, J. Heering$^1$, H.A. de Jong$^1$, \\
         M. de Jonge$^1$, T. Kuipers$^1$, P. Klint$^1$, \\
         L. Moonen$^1$, P.A. Olivier$^1$, J. Scheerder$^2$, \\
@@ -43,49 +43,49 @@ $^3$ Faculty of Mathematics and Computer Science, Utrecht University,
  
 \begin{abstract}
   The \ASmetaenv\ is an interactive development environment for the automatic
-  generation of interactive systems for manipulating programs, specifications,
-  or other texts written in a formal language. Over the years, this system has
+  generation of interactive systems for constructing language definitions and
+  generating tools for them.  Over the years, this system has
   been used in a variety of academic and commercial projects ranging from
   formal program manipulation to conversion of COBOL systems.  Since the
   existing implementation of the \metaenv\ started exhibiting more and
   more characteristics of a legacy system, we decided to build a completely
   new, component-based, version. We demonstrate this new system and stress its
-  open, component-based, architecture.
+  open architecture.
 
 \end{abstract}
 
 \section{Introduction}
 
 The \ASmetaenv\ \cite{Kli93} is an interactive development environment
-for the automatic generation of interactive systems for manipulating
-programs, specifications, or other texts written in a formal
-language. The generation process is controlled by a definition of a
-language, which typically includes such features as syntax,
-pretty printing, type checking, and execution of programs in the target
-language. The \ASmetaenv\ can help if:
+for the automatic generation of interactive systems for constructing 
+language definitions and generating tools for them.
+A language definition typically includes such features as syntax,
+prettyprinting, typechecking, and execution of programs in the target
+language. The \ASmetaenv\ can help in the following cases:
  
 \begin{itemize}
  
   \item You have to write a formal specification for some problem
   and you need interactive support for this.
  
-  \item You have developed your own (application) language and want to
+  \item You are developing your own (application) language and want to
   create an interactive environment for it.
  
   \item You have programs in some existing programming language and you
    want to analyze or transform them.
 \end{itemize}
  
-The \asfsdf\ formalism \cite{DHK96} allows the definition of syntactic as
-well as semantic issues. It can be used for the definition of languages
+The \asfsdf\ formalism \cite{BHK89} \cite{DHK96} allows the definition of syntactic as
+well as semantic aspects. It can be used for the definition of languages
 (for programming, for writing specifications, for querying databases,
-for text processing, or for dedicated applications). In addition it can be
+for text processing, or for other applications). In addition it can be
 used for the formal specification of a wide variety of problems. \asfsdf\
 provides:
 
 \begin{itemize}
  
-  \item A general-purpose algebraic specification formalism based on equational logic.
+  \item A general-purpose algebraic specification formalism based on (conditional)
+term rewriting.
  
   \item Modular structuring of specifications.
  
@@ -109,23 +109,24 @@ The \ASmetaenv\ offers:
  
   \item Incremental compilation and testing of specifications.
  
-  \item Compilation of \asfsdf\ specifications into dedicated interactive
-    environments containing various tools such as a parser, a pretty printer,
-    a syntax-directed editor, a debugger, and an interpreter or compiler.
+  \item Compilation of \asfsdf\ specifications into dedicated interactive stand-alone
+    environments containing various tools such as a parser, prettyprinter,
+    syntax-directed editor, debugger, and interpreter or compiler.
 
   \item User-defined extensions of the default user-interface.
 \end{itemize}
 
-The design goals of this new implementation include: openness, reuse,
-extensibility, and in particular the possibility to generate completely
-tailored stand-alone environments for user-defined languages.
+The design goals of the new implementation to be demonstrated include: openness, reuse,
+extensibility, and in particular the possibility to generate complete
+stand-alone environments for user-defined languages.
 
 \section{Technological background}
 
 \paragraph{ToolBus}
 
-A hall mark of legacy systems is the tangling of control flow and actual
-computation.  To fully separate coordination from computation we use the
+A hallmark of legacy systems in general and the old \ASmetaenv\ in particular is the 
+entangling of control flow and actual computation.  To separate coordination from 
+computation we use the
 ToolBus coordination architecture~\cite{BK98}, a programmable software bus based
 on process algebra.  Coordination is expressed by a formal description of the
 cooperation protocol between components while computation is expressed in
@@ -136,13 +137,13 @@ system.
 \paragraph{ATerms}
 
 Coordination protocol and components have to share data. We use
-ATerms~\cite{BJKO00} for this purpose: trees with optional annotations on
+ATerms~\cite{BJKO00} for this purpose. These are trees with optional annotations on
 each node.  The annotations are used to store tool-specific information
 like text coordinates or color attributes. The implementation of ATerms
 has two essential properties: terms are stored using maximal subterm
 sharing (reducing memory requirements and making deep equality tests
-very cheap) and can be exchanged using a very dense binary encoding that
-preserves sharing. As a result huge terms (with over $1,000,000$ nodes)
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over $1,000,000$ nodes)
 can be processed.
 
 \paragraph{SGLR}
@@ -155,8 +156,8 @@ languages.
 
 \paragraph{Term rewriting}
 
-\asfsdf\ specifications are executed as rewrite rules. Both interpretation
-and compilation (using the ASF2C compiler, see~\cite{BKO99}) of these
+\asfsdf\ specifications are executed as (conditional) rewrite rules. Both interpretation
+and compilation (using the ASF2C compiler~\cite{BKO99}) of these
 rewrite rules are supported. The compiler generates very efficient C
 code that implements pattern matching and term traversal. The generated
 code uses ATerms as its main data representation, and ensures a minimal
@@ -169,32 +170,34 @@ use of memory during normalization of terms.
 
 \section{Architecture}
 
-The architecture of \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
+The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
 It consists of a ToolBus that interconnects the following components:
 
 \begin{itemize}
-\item User interface: the top level user-interface of the system
-      that consists primarily of a graph browser for the import graph
+\item {\bf User interface}: the top level user-interface of the system.
+      It consists primarily of a graph browser for the import graph
       of the current specification.
 
-\item Text Editor: a customized version of XEmacs for text editing.
-\item Structure Editor: a syntax-directed editor that closely cooperates
+\item {\bf Text Editor}: a customized version of XEmacs for text editing.
+\item {\bf Structure Editor}: a syntax-directed editor that closely cooperates
 with the Text Editor.
 
-\item Parser:  scannerless, generalized-LR parser (SGLR) that is parametrized with a parse table.
-\item Parsetable generator: takes an SDF definition as input and generates a parse table for SGLR.
-\item Tree Repository: stores all terms corresponding to specification modules, parse tables,
-user-defined terms, etc.
-\item Compiler: the ASF2C compiler.
-\item Interpreter: executes specifiations by direct interpretation.
-\item Unparser generator: generates pretty printers.
+\item {\bf Parser}:  scannerless, generalized-LR parser (SGLR) that is parametrized 
+with a parse table.
+\item {\bf Parsetable generator}: takes an SDF syntax definition as input and 
+generates a parse table for SGLR.
+\item {\bf Tree Repository}: stores all terms corresponding to specification 
+modules, parse tables, user-defined terms, etc.
+\item {\bf Compiler}: the ASF2C compiler.
+\item {\bf Interpreter}: executes specifiations by direct interpretation.
+\item {\bf Unparser generator}: generates prettyprinters.
 \end{itemize}
 
 \begin{figure}[ht!]
 \centerline{\psfig{file=../meta-pico.ps,width=12cm}}
 \caption{\label{FIG:meta-pico}The main user-interface of the \metaenv\ is a module
 browser that provides a graphical and a textual view of the modules in a
-specification. A number of operations can be initiated for each module. Here it
+specification. A number of operations can be initiated for each module. Here it is
 shown with the modules from a small specification of a typechecker for the toy
 language Pico.}
 \end{figure} 
@@ -203,32 +206,32 @@ language Pico.}
 
 \centerline{\psfig{file=CobolEditor.ps,width=12cm}}
 \caption{\label{FIG:edit-cobol}The hybrid structure and text editors generated by the
-\metaenv\ allow selection of a part that corresponds to a subtree of the
+\metaenv\ allow selection of a part of the text that corresponds to a subtree of the
 underlying abstract syntax tree as illustrated here for a COBOL program.}
 
 \end{figure} 
 
 \section{Applications of \asfsdf\ and the \metaenv}
 
-There are several academic and industrial projects which use 
+There are a number of academic and industrial projects that use 
 either \asfsdf\ directly or components of the \metaenv\ in 
-one way or the other. 
-
-The application areas of \asfsdf\ can be split into three groups:
+one way or another. 
+c
+The applications of \asfsdf\ can be split into three groups:
 \begin{enumerate}
 \item In the field of language prototyping \asfsdf\ has been used
-to describe the syntax and semantics of domain specific languages,
+to describe the syntax and semantics of {\em domain specific languages},
 e.g., the language Risla for describing financial products
 \cite{BDKKM96}.  As another example, the syntax of the algebraic
-specification language Casl has been prototyped using \asfsdf~\cite{BS00}.
+specification language {\sc Casl} has been prototyped using \asfsdf~\cite{BS00}.
 {\sc Box} \cite{BV96} \cite{Jon00} is a small domain specific language
-developed for pretty printing within the \metaenv.
+developed for prettyprinting within the \metaenv.
 
-\item In the field of reverse engineering and system renovation, \asfsdf\
+\item In the field of {\em reverse engineering and system renovation}, \asfsdf\
 is used to analyze and transform COBOL legacy code \cite{BSV00}.
 
-\item As an algebraic specification formalism for specifying language
-processing tools. In fact, \asfsdf\ has been used to specify a number of
+\item As an algebraic specification formalism for specifying 
+{\em language processing tools}. In fact, \asfsdf\ has been used to specify a number of
 components of the \metaenv\ itself:
 
 \begin{itemize}
@@ -238,13 +241,13 @@ components of the \metaenv\ itself:
 \end{itemize}
 
 For other components, such as the ToolBus and the syntax-directed
-editor, an \asfsdf\ specification was made for prototyping only.
+editor, an \asfsdf\ specification was made for prototyping use only.
 That specification formed the basis for an optimized, handcrafted
 implementation.
 
 \end{enumerate}
 
-Components of the \metaenv\ are used as standalone tools in a variety
+Components of the \metaenv\ are used as stand-alone tools in a variety
 of applications. Examples are the Stratego compiler~\cite{VBT98},
 the Risla compiler, the Elan environment~\cite{BR00}, and a commercial
 tool for designing and implementing information systems.
@@ -252,21 +255,21 @@ tool for designing and implementing information systems.
 \section{Demonstration}
 
 We will show a number of applications of the \metaenv\ ranging
-from a simple typechecking problem (Figure~\ref{FIG:meta-pico}), to
+from a simple typechecking problem (Figure~\ref{FIG:meta-pico}) to
 syntax-directed editing (Figure~\ref{FIG:edit-cobol}) and transformation
 of COBOL systems.
 
 \section{Obtaining the \ASmetaenv}
 
-The \ASmetaenv\ can be downloaded via:
+The \ASmetaenv\ can be downloaded from:
 \[\mbox{\tt http://www.cwi.nl/projects/MetaEnv/completa/}\]
-The \ASmetaenv\ depends on a number of (third-party) software packages,
-among other Graphviz (open source graph drawing software) and XEmacs.
+The \ASmetaenv\ depends on a number of (third-party) programs,
+Graphviz (open source graph drawing software) and XEmacs among others.
 
 Individual components, such as the \ATerm\ library, ToolBus, parser
-generator, and SGLR can be obtained via:
+generator, and parser (SGLR) can be obtained from:
 \[{\tt http://www.cwi.nl/projects/MetaEnv/}\]
-All components of the \ASmetaenv\ are developed as open source software.
+All components of the \ASmetaenv\ are available as open source software.
 
 \bibliographystyle{alpha}
 \bibliography{etaps}  
