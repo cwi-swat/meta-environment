@@ -18,12 +18,17 @@
 
 $Id$
 
-2000/4/05 (mdejonge @cwi.nl)
+2000/4/05 (mdejonge@cwi.nl)
+   * Removed doc/a2toa1.pod because it now lives in the separate asfix
+     distribution
+   * manual pages are no longer stored in section 7 but in section 1
+
+2000/4/05 (mdejonge@cwi.nl)
    * Version is now 2.29
    * The asfix2 to asfix1 conversion stuff has been removed because it is
      now part of the asfix distribution.
 
-2000/3/31 (mdejonge @cwi.nl)
+2000/3/31 (mdejonge@cwi.nl)
    * The toolbus is no longer required during the build process of sglr
 
 2000/3/28 (mdejonge @cwi.nl)
