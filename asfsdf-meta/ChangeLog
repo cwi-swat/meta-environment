@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/12/15 (markvdb@cwi.nl)
+ * Added a "SdfUpgrade" button to the syntax editors.
+
 2003/11/09 (jurgenv@cwi.nl)
  * Top sort of ASF module changed from ASF-Equations to ASF-Module
  * Version bumped to 1.5

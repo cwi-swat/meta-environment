@@ -17,6 +17,10 @@ AC_PACKAGE_REQUIRE(asf, asfc,
    [  --with-asf=DIR           Asf is in DIR])
 AC_SUBST(ASF)
 
+AC_PACKAGE_REQUIRE(pgen, sdf2table,
+   [  --with-pgen=DIR         pgen is in DIR])
+AC_SUBST(PGEN)
+
 AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
    [  --with-asf=DIR           Asf+Sdf library is in DIR])
 AC_SUBST(ASF_LIBRARY)
