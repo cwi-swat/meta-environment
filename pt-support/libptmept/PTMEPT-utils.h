@@ -18,4 +18,5 @@ ATerm PTPT_lowerATerm(PTPT_ATerm trm);
 /* lowerTreeCache reuses a cache that liftTreeCache has created */
 PT_Tree PTPT_lowerTreeCache(PTPT_Tree pt, ATermTable lowerCache);
 
+PTPT_LexStrCon PTPT_makeLexStrCon(const char* str);
 #endif
