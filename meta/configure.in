@@ -249,8 +249,8 @@ AC_OUTPUT(
    Makefile
    compiler/Makefile
    compiler/c-source/Makefile
-   compiler/regress-test/Makefile
-   compiler/regress-test/terms/Makefile
+   compiler/test/Makefile
+   compiler/test/terms/Makefile
    asfix2c-compiler/Makefile
    graph-browser/Makefile
    graph-browser/graph-browser.tcl
@@ -269,8 +269,6 @@ AC_OUTPUT(
    utils/Makefile
    utils/genmakefile
    grammars/Makefile
-   grammars/aterm/Makefile
-   grammars/asfix/Makefile
    grammars/sdf2/Makefile
    demo/Makefile
    demo/pico/Makefile
@@ -295,22 +293,3 @@ AC_OUTPUT(
    configuration-manager/src/Makefile
 , chmod +x utils/genmakefile
 )
-
-
-dnl Handle subpackages...
-dnl AC_CONFIG_PKG(asfix)
-dnl AC_CONFIG_PKG(asc-support, --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asfix-lib='\${top_builddir}/../asfix/libasfix')
-dnl AC_CONFIG_PKG(sglr,        --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asfix-lib='\${top_builddir}/../asfix/libasfix')
-dnl 
-dnl AC_CONFIG_PKG(pgen,        --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asfix-lib='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asc-inc='\${top_builddir}/../asc-support'
-dnl                            --with-asc-lib='\${top_builddir}/../asc-support'
-dnl                            --with-sglr='\${top_builddir}/../sglr/sglr')
-dnl 
-dnl AC_CONFIG_PKG(evaluator,   --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asfix-lib='\${top_builddir}/../asfix/libasfix'
-dnl                            --with-asc-inc='\${top_builddir}/../asc-support'
-dnl                            --with-asc-lib='\${top_builddir}/../asc-support' )
