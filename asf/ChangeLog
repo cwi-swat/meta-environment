@@ -1,3 +1,6 @@
+2001/05/31 (jurgenv@cwi.nl)
+  * changed extension .eqs to .asf in compiler specification
+
 2001/05/30 (markvdb@cwi.nl)
   * Fixed a "bug" in addeqssyntax with respect to prefix functions.
   * Regenerated C code for Remove-Var-Syntax and Add-Eqs-Syntax.
