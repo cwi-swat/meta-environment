@@ -155,7 +155,7 @@ static void printEdges(EdgeList edges, FILE *file)
 
 static void printGraph(Graph graph, FILE *file)
 {
-  fprintf(file, "digraph TheGraph { ordering=out;\n");
+  fprintf(file, "digraph TheGraph { \n");
 
   printNodes(getGraphNodes(graph), file);
   printEdges(getGraphEdges(graph), file);
