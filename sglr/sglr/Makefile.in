@@ -95,14 +95,14 @@ incinstall:	${SGLRINC}
 		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
 	done
 
-libinstall:	${SGLRLIBS}
-	@for LIB in ${SGLRLIBS};	\
+libinstall:	${SGLRLIB}
+	@for LIB in ${SGLRLIB};	\
 	do \
 		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
 	done
 
-bininstall:	${PROGS}
-	@for PROG in ${PROGS};	\
+bininstall:	${PROG}
+	@for PROG in ${PROG};	\
 	do \
 		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
 	done
