@@ -1,7 +1,5 @@
 package tide.tool.srcviewer;
 
-//{{{ imports
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -15,8 +13,6 @@ import tide.*;
 import tide.tool.ToolManager;
 import tide.tool.support.*;
 
-//}}}
-
 class SourceFileViewer
 	extends JScrollPane
 	implements
@@ -26,8 +22,6 @@ class SourceFileViewer
 		ActionListener,
 		DebugProcessListener,
 		PreferenceListener {
-	//{{{ Constants
-
 	private static final String ITEM_ADD_BREAKPOINT = "Add Breakpoint";
 	private static final String ITEM_ADD_WATCHPOINT = "Add Watchpoint";
 	private static final String ITEM_EDIT_RULE = "Edit Rule";
@@ -43,10 +37,6 @@ class SourceFileViewer
 
 	private static final String TAG_BREAKPOINT = "sv-breakpoint";
 	private static final String TAG_WATCHPOINT = "sv-watchpoint";
-
-	//}}}
-
-	//{{{ Attributes
 
 	private ToolManager manager;
 	private PreferenceSet prefs;
@@ -82,9 +72,6 @@ class SourceFileViewer
 	private Rule lastSelectedRule;
 	private ValuePopup draggedPopup;
 
-	//}}}
-
-	//{{{ public SourceFileViewer(manager, process, file, id, tag_vv)
 
 	public SourceFileViewer(
 		ToolManager manager,
@@ -123,14 +110,19 @@ class SourceFileViewer
 		ScrollablePane pane = new ScrollablePane(textPanel, glass, text);
 		setViewportView(pane);
 
-		//{{{ Listen to MouseEvents
-
 		glass.addMouseListener(this);
 		glass.addMouseMotionListener(this);
 
-		//}}}
-		//{{{ Prepare highlighting stuff
+		prepareHighlightingStuff();
 
+		try {
+			text.read(new BufferedReader(new FileReader(file)), null);
+		} catch (IOException e) {
+			System.err.println("cannot find source file " + file);
+		}
+	}
+
+	private void prepareHighlightingStuff() {
 		highlighter = new DefaultHighlighter();
 		highlighter.setDrawsLayeredHighlights(true);
 		text.setHighlighter(highlighter);
@@ -149,36 +141,16 @@ class SourceFileViewer
 		ruleHighlights = new HashMap();
 
 		variableHighlights = new HashMap();
-
-		//}}}
-
-		try {
-			text.read(new BufferedReader(new FileReader(file)), null);
-		} catch (IOException e) {
-			System.err.println("cannot find source file " + file);
-		}
 	}
-
-	//}}}
-
-	//{{{ public String getFile()
 
 	public String getFile() {
 		return file;
 	}
 
-	//}}}
-
-	//{{{ protected void cleanup()
-
 	protected void cleanup() {
 		process.removeDebugProcessListener(this);
 		prefs.removePreferenceListener(this);
 	}
-
-	//}}}
-
-	//{{{ protected void highlightRules(Iterator rules)
 
 	protected void highlightRules(Iterator rules) {
 		while (rules.hasNext()) {
@@ -187,9 +159,6 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ private void highlightRule(Rule rule)
-
 	private void highlightRule(Rule rule) {
 		Expr location = rule.getLocation();
 		if (location != null
@@ -197,40 +166,22 @@ class SourceFileViewer
 			&& location.getLocationFileName().equals(file)) {
 
 			lineNumbers.addLocationRule(rule, location.getLocationStartLine());
-			//Highlighter.HighlightPainter painter;
 
 			if (rule.isBreakpoint()) {
-				//painter = breakpointPainter;
 				text.addBreakpoint(rule, location);
 			} else {
-				//painter = watchpointPainter;
 				text.addWatchpoint(rule, location);
 			}
-			/*
-			 * Object highlight = addHighlight(location, painter, true, false);
-			 * if (highlight != null) { ruleHighlights.put(rule, highlight); }
-			 */
 			repaint();
 		}
 	}
 
-	//}}}
-	//{{{ private void unhighlightRule(Rule rule)
-
 	private void unhighlightRule(Rule rule) {
-		/*
-		 * Object highlight = ruleHighlights.remove(rule); if (highlight !=
-		 * null) { highlighter.removeHighlight(highlight);
-		 */
 		text.removeWatchpoint(rule);
 		text.removeBreakpoint(rule);
 		lineNumbers.removeLocationRule(rule);
 		repaint();
 	}
-
-	//}}}
-
-	//{{{ protected void highlightCpe()
 
 	protected void highlightCpe() {
 		if (cpeHighlight != null) {
@@ -241,9 +192,6 @@ class SourceFileViewer
 		centerAround(location);
 	}
 
-	//}}}
-	//{{{ protected void unhighlightCpe()
-
 	protected void unhighlightCpe() {
 		if (cpeHighlight != null) {
 			highlighter.removeHighlight(cpeHighlight);
@@ -252,10 +200,6 @@ class SourceFileViewer
 			repaint();
 		}
 	}
-
-	//}}}
-
-	//{{{ private void showVariable(int x, int y)
 
 	private void showVariable(int x, int y) {
 		try {
@@ -277,9 +221,6 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ void removeValuePopup(ValuePopup popup)
-
 	void removeValuePopup(ValuePopup popup) {
 		popup.closePopup();
 		Object highlight = variableHighlights.remove(popup);
@@ -287,10 +228,6 @@ class SourceFileViewer
 		glass.remove(popup);
 		repaint();
 	}
-
-	//}}}
-
-	//{{{ private void centerAround(Expr location)
 
 	private void centerAround(Expr location) {
 		try {
@@ -308,20 +245,10 @@ class SourceFileViewer
 				rect.width += 40;
 				viewport.scrollRectToVisible(rect);
 			}
-			/*
-			 * if (rect != null) { JScrollBar vertical =
-			 * getVerticalScrollBar(); vertical.setValue(Math.max(rect.y-20,
-			 * rect.y)); }
-			 */
-			//System.out.println("rect = " + rect);
 		} catch (BadLocationException e) {
 			System.out.println("bad location of cpe: " + e.getMessage());
 		}
 	}
-
-	//}}}
-
-	//{{{ protected Object addHighlight(Expr location, painter)
 
 	protected Object addHighlight(
 		Expr location,
@@ -365,9 +292,6 @@ class SourceFileViewer
 		return null;
 	}
 
-	//}}}
-	//{{{ protected void highlightVariable(start, length, varWindow)
-
 	protected void highlightVariable(
 		int start,
 		int length,
@@ -389,10 +313,6 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-
-	//{{{ private void showMenu(int x, int y)
-
 	private void showMenu(int x, int y) {
 		lastSelected = text.viewToModel(new Point(x, y));
 		text.setSelectedPosition(lastSelected);
@@ -412,28 +332,15 @@ class SourceFileViewer
 		menu.show(glass, x, y);
 	}
 
-	//}}}
-	//{{{ public void popupMenuWillBecomeVisible(PopupMenuEvent event)
-
 	public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
 	}
-
-	//}}}
-	//{{{ public void popupMenuWillBecomeInvisible(PopupMenuEvent event)
 
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
 		text.clearSelectedPosition();
 	}
 
-	//}}}
-	//{{{ public void popupMenuCanceled(PopupMenuEvent event)
-
 	public void popupMenuCanceled(PopupMenuEvent event) {
 	}
-
-	//}}}
-
-	//{{{ public void mouseDragged(MouseEvent event)
 
 	public void mouseDragged(MouseEvent event) {
 		int x = event.getX() - text.getX();
@@ -457,14 +364,8 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void mouseMoved(MouseEvent event)
-
 	public void mouseMoved(MouseEvent event) {
 	}
-
-	//}}}
-	//{{{ public void mouseClicked(MouseEvent e)
 
 	public void mouseClicked(MouseEvent event) {
 		if (!event.isShiftDown()
@@ -482,20 +383,11 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void mouseEntered(MouseEvent e)
-
 	public void mouseEntered(MouseEvent e) {
 	}
 
-	//}}}
-	//{{{ public void mouseExited(MouseEvent e)
-
 	public void mouseExited(MouseEvent e) {
 	}
-
-	//}}}
-	//{{{ public void mousePressed(MouseEvent event)
 
 	public void mousePressed(MouseEvent event) {
 		Component comp = glass.findComponentAt(event.getX(), event.getY());
@@ -517,119 +409,87 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void mouseReleased(MouseEvent e)
-
 	public void mouseReleased(MouseEvent e) {
 		draggedPopup = null;
 	}
 
-	//}}}
-
-	//{{{ public void actionPerformed(ActionEvent event)
-
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals(ITEM_ADD_BREAKPOINT)) {
-			//{{{ Handle adding of breakpoints
-
-			Expr location =
-				Expr.makeLocation(
-					file,
-					text.getLine(lastSelected),
-					text.getColumn(lastSelected));
-			process.requestRuleCreation(
-				Port.makeStep(),
-				location,
-				Expr.makeBreak(),
-				tag_breakpoint,
-				true);
-
-			//}}}
+			handleAddBreakpoint();
 		} else if (event.getActionCommand().equals(ITEM_ADD_WATCHPOINT)) {
-			//{{{ Handle adding of watchpoints
-
-			Expr location =
-				Expr.makeLocation(
-					file,
-					text.getLine(lastSelected),
-					text.getColumn(lastSelected));
-			Expr value = null;
-			String expr = "";
-			String title = "What value do you want to watch?";
-			while (value == null) {
-				expr =
-					(String) JOptionPane.showInternalInputDialog(
-						this,
-						title,
-						"Watchpoint",
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						null,
-						expr);
-				if (expr == null) {
-					return;
-				}
-				try {
-					value = Expr.make(expr);
-				} catch (aterm.ParseError e) {
-					title = "Please enter a valid expression";
-				}
-			}
-			process.requestRuleCreation(
-				Port.makeStep(),
-				location,
-				value,
-				tag_watchpoint,
-				true);
-
-			//}}}
+			handleAddWatchpoint();
 		} else if (event.getActionCommand().equals(ITEM_EDIT_RULE)) {
-			//{{{ Handle editing of rules
-
 			manager.editRule(process, lastSelectedRule);
-
-			//}}}
 		} else if (event.getActionCommand().equals(ITEM_DELETE_RULE)) {
-			//{{{ Handle deletion of rules
-
 			process.requestRuleDeletion(lastSelectedRule);
-
-			//}}}
 		}
 	}
+	private void handleAddWatchpoint() {
+		Expr location =
+			Expr.makeLocation(
+				file,
+				text.getLine(lastSelected),
+				text.getColumn(lastSelected));
+		Expr value = null;
+		String expr = "";
+		String title = "What value do you want to watch?";
+		while (value == null) {
+			expr =
+				(String) JOptionPane.showInternalInputDialog(
+					this,
+					title,
+					"Watchpoint",
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					null,
+					expr);
+			if (expr == null) {
+				return;
+			}
+			try {
+				value = Expr.make(expr);
+			} catch (aterm.ParseError e) {
+				title = "Please enter a valid expression";
+			}
+		}
+		process.requestRuleCreation(
+			Port.makeStep(),
+			location,
+			value,
+			tag_watchpoint,
+			true);
+		return;
+	}
 
-	//}}}
-
-	//{{{ public void ruleCreated(DebugProcess process, Rule rule)
+	private void handleAddBreakpoint() {
+		Expr location =
+			Expr.makeLocation(
+				file,
+				text.getLine(lastSelected),
+				text.getColumn(lastSelected));
+		process.requestRuleCreation(
+			Port.makeStep(),
+			location,
+			Expr.makeBreak(),
+			tag_breakpoint,
+			true);
+	}
 
 	public void ruleCreated(DebugProcess process, Rule rule) {
 		highlightRule(rule);
 	}
 
-	//}}}
-	//{{{ public void ruleDeleted(DebugProcess process, Rule rule)
-
 	public void ruleDeleted(DebugProcess process, Rule rule) {
 		unhighlightRule(rule);
 	}
-
-	//}}}
-	//{{{ public void ruleModified(DebugProcess process, Rule rule)
 
 	public void ruleModified(DebugProcess process, Rule rule) {
 		unhighlightRule(rule);
 		highlightRule(rule);
 	}
 
-	//}}}
-	//{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr
-	// value)
-
 	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
 	}
-
-	//}}}
-	//{{{ public void evaluationResult(DebugProcess process, Expr expr,
 
 	public void evaluationResult(
 		DebugProcess process,
@@ -637,10 +497,6 @@ class SourceFileViewer
 		Expr value,
 		String tag) {
 	}
-
-	//}}}
-
-	//{{{ public void preferencesChanged(PreferenceSet set)
 
 	public void preferencesChanged(PreferenceSet prefs) {
 		String prefName = SourceViewerFactory.PREF_SOURCECODE_FONT;
@@ -653,9 +509,6 @@ class SourceFileViewer
 		repaint();
 	}
 
-	//}}}
-	//{{{ public void preferenceChanged(prefs, name, oldValue, newValue)
-
 	public void preferenceChanged(
 		PreferenceSet prefs,
 		String name,
@@ -667,20 +520,12 @@ class SourceFileViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void preferencesStatusChanged(PreferenceSet set, boolean
-	// clean)
-
 	public void preferencesStatusChanged(PreferenceSet set, boolean clean) {
 	}
-
-	//}}}
 }
 
 class ScrollablePane extends JLayeredPane implements Scrollable {
 	private SourceBrowser text;
-
-	//{{{ public ScrollablePane(JPanel textPanel, JPanel glass, text)
 
 	public ScrollablePane(JPanel textPanel, JPanel glass, SourceBrowser text) {
 		this.text = text;
@@ -689,10 +534,6 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 		add(textPanel, new Integer(1));
 		add(glass, new Integer(2));
 	}
-
-	//}}}
-	//{{{ public int getScrollableBlockIncrement(visibleRect, orientation,
-	// direction)
 
 	public int getScrollableBlockIncrement(
 		Rectangle visibleRect,
@@ -704,10 +545,6 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 			return visibleRect.height;
 		}
 	}
-
-	//}}}
-	//{{{ public int getScrollableUnitIncrement(visibleRect, orientation,
-	// direction)
 
 	public int getScrollableUnitIncrement(
 		Rectangle visibleRect,
@@ -723,27 +560,15 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 		}
 	}
 
-	//}}}
-
-	//{{{ public Dimension getPreferredScrollableViewportSize()
-
 	public Dimension getPreferredScrollableViewportSize() {
 		return text.getPreferredSize();
 	}
-
-	//}}}
-	//{{{ public boolean getScrollableTracksViewportHeight()
 
 	public boolean getScrollableTracksViewportHeight() {
 		return false;
 	}
 
-	//}}}
-	//{{{ public boolean getScrollableTracksViewportWidth()
-
 	public boolean getScrollableTracksViewportWidth() {
 		return false;
 	}
-
-	//}}}
 }

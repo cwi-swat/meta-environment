@@ -27,7 +27,6 @@ the actual adapter implementation.
 2.2 Saving of breakpoints/watchpoints
 2.3 Ask for confirmation when deleting windows with rules:	 5	 2h
     -> Keep or Remove or Cancel
-2.4 Make an applet demo						 8	 2d
 2.5 View the result of watchpoints in a way that is similar	 7	 1d
     to variables.
 2.6 View the result of expressions not just plain variables	 7	 1d

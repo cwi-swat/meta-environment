@@ -412,24 +412,8 @@ public class SourceViewer
 				file,
 				center.getTabCount());
 		}
+		
 		center.setSelectedComponent(currentViewer);
-
-		/*
-		 * text.clear();
-		 * 
-		 * Iterator highlights = ruleHighlights.values().iterator(); while
-		 * (highlights.hasNext()) {
-		 * highlighter.removeHighlight(highlights.next()); }
-		 * ruleHighlights.clear();
-		 * 
-		 * try { text.read(new BufferedReader(new FileReader(file)), null); }
-		 * catch (IOException e) { System.err.println("cannot find source file " +
-		 * file); } currentFile = file;
-		 * 
-		 * synchronized (process) { Iterator rules = process.ruleIterator();
-		 * while (rules.hasNext()) { Rule rule = (Rule)rules.next();
-		 * highlightRule(rule); } }
-		 */
 	}
 
 	//}}}
@@ -453,6 +437,7 @@ public class SourceViewer
 				if (!file.equals(currentFile)) {
 					switchToFile(file);
 				}
+				
 				currentViewer.highlightCpe();
 			}
 		}
