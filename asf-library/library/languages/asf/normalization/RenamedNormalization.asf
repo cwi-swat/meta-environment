@@ -1,0 +1,28 @@
+equations
+
+[module]
+	LiftedModule := lift-module(Module),
+	LiftedModule' := constructors(LiftedModule),
+	LiftedModule'' := remove-brackets(LiftedModule'),
+	Module' := lower-module(LiftedModule'')
+	===>
+	normalize(Module) = Module'
+
+[cast]
+	normalize-module(Module) = normalize(Module)
+
+[sections]
+	Section*' := normalize-module(Section*)
+	===>
+	normalize(Section*) = Section*'
+
+
+[eqs-list]
+	equations CondEquation*' := normalize(equations CondEquation*)
+	===>
+	normalize(CondEquation*) = CondEquation*'
+
+[test-list]
+	tests TestEquation*' := normalize(tests TestEquation*)
+	===>
+	normalize(TestEquation*) = TestEquation*'

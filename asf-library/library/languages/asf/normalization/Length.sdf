@@ -1,0 +1,20 @@
+module languages/asf/normalization/Length
+
+imports basic/Integers
+imports languages/asfix/syntax/Tree
+
+exports
+
+context-free syntax
+	length({Symbol ","}*) -> Integer
+	length({Tree ","}*) -> Integer
+
+hiddens
+
+variables
+	"_Tree" -> Tree {wild}
+	"_Symbol" -> Symbol {wild}
+
+variables
+	"Tree*" -> {Tree ","}* {strict}
+	"Symbol*" -> {Symbol ","}* {strict}

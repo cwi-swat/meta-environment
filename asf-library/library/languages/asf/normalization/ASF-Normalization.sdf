@@ -1,0 +1,18 @@
+module languages/asf/normalization/ASF-Normalization
+
+imports languages/asf/normalization/RenamedNormalization[
+	Equation => ASF-Equation
+	Condition => ASF-Condition
+	Tag	=> ASF-Tag
+	Module => ASF-Module
+	Section => ASF-Section
+	ConditionalEquation => ASF-ConditionalEquation
+	Conditions => ASF-Conditions
+	TestEquation => ASF-TestEquation
+	BarEnd => BASF-arEnd
+	Implies => ASF-Implies
+	TagId => ASF-TagId
+	NumChar => ASF-NumChar
+	ShortChar => ASF-ShortChar
+	Character => CHAR
+]

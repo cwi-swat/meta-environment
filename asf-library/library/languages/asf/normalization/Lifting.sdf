@@ -1,0 +1,34 @@
+module languages/asf/normalization/Lifting
+
+imports languages/asf/normalization/RenamedASF[Tree]
+
+imports utilities/Lifting[Equation]
+imports utilities/Lifting[Condition]
+
+exports
+
+context-free syntax
+
+lift-module(Module) -> Module
+lower-module(Module) -> Module
+
+equation(Tree) -> Equation
+condition(Tree) -> Condition
+
+hiddens
+
+context-free syntax
+
+lift(Module) -> Module {traversal(trafo,top-down,break)}
+lift(Condition) -> Condition {traversal(trafo,top-down,break)}
+lift(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+lower(Module)    -> Module {traversal(trafo,top-down,break)}
+lower(Condition) -> Condition {traversal(trafo,top-down,break)}
+lower(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+variables
+	"Module" -> Module {strict}
+	"Equation"[0-9]* -> Equation {strict}
+	"Condition" -> Condition {strict}
+	"Tree" -> Tree {strict}

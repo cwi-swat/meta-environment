@@ -1,0 +1,146 @@
+equations
+
+[main]	
+	Module2 := translate(Module),
+	Module3 := fix-list-types(Module2)
+	===>
+	constructors(Module) = Module3
+
+equations
+
+%% This function maps lexical constructor syntax back to normal syntax.
+%% The resulting tree are ``as if the parser produced them''.
+
+[translate-lexical]
+	<CCs,Attributes2> := extract-cc(Attributes),
+	Attributes3 := remove-tag(Attributes2),
+	Production2 := prod([Symbol*],lex(Symbol),Attributes3),
+	<Production3, []> := char-classes(Production2, CCs),
+	Args := remove-layout([Tree*])
+	===>
+	translate(appl(prod([lit(_QLit),cf(opt(layout)),lit("("),cf(opt(layout)),Symbol*,cf(opt(layout)),lit(")")],
+		cf(parameterized-sort("CHARS",[Symbol])),Attributes),
+		[_Name,_L1,_BO,_L2,Tree*,_L3,_BC]))
+	=
+	appl(Production3, Args)
+
+[translate-injection]
+	translate(
+	appl(prod([cf(parameterized-sort("CHARS",[Symbol]))],cf(Symbol),
+		no-attrs),
+	[Tree])) = 
+	appl(prod([lex(Symbol)],cf(Symbol),no-attrs),[Tree])
+
+[translate-character-escapes-to-real-chars]
+	translate(appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits)])])]))
+= translate-digits(Digits)
+
+[translate-char-lists]
+	Args2 := remove-layout(Args)
+	===>
+	translate(appl(list(cf(iter(sort("CHAR")))),Args)) =
+		appl(list(cf(iter(sort("CHAR")))), Args2)
+
+equations
+
+[top]
+	length(Symbol*1) == length(Tree*1)
+	===>
+	fix-list-types(appl(
+		prod([Symbol*1,lex(iter(PCC)),Symbol*2],Symbol,Attributes),
+		[Tree*1,appl(list(cf(iter(sort("CHAR")))),Args),Tree*2])) =
+	appl(prod([Symbol*1,lex(iter(PCC)),Symbol*2],Symbol,Attributes),
+		[Tree*1,appl(list(lex(iter(PCC))),Args),Tree*2])
+
+equations
+
+%% The digits after the \ in an ASF-NumChar are taken, and an ascii value
+%% is computed from them. Remember the NumChar notation in ASF and SDF2
+%% uses *octal* notation for ASCII values.
+
+[one]
+	NatCon2 := NatCon - 48
+	===>
+	translate-digits([NatCon]) = NatCon2
+
+[more]	
+	NatCon2 := translate-digits([Tree*]),
+	NatCon3 := NatCon - 48,
+	NatCon4 := 8*NatCon2 + NatCon3
+	===>
+	translate-digits([Tree*, NatCon]) = NatCon4
+
+equations
+
+%% Here we depend on the order of the classes, the tool AddEqsSyntax
+%% is responsible for putting them there in order:
+
+[replace-CHAR-sort-in-order-by-corresponding-classes]
+	char-classes(cf(sort("CHAR")),[CC,CC*]) = <convert-cc(CC),[CC*]>
+
+[replace-iter-char]
+	char-classes(cf(iter(sort("CHAR"))),[CC,CC*]) =
+	  <lex(iter(convert-cc(CC))),[CC*]>
+
+[replace-iter-star-char]
+	char-classes(cf(iter-star(sort("CHAR"))),[CC,CC*]) =
+	  <lex(iter-star(convert-cc(CC))),[CC*]>
+
+equations
+
+[empty-after]
+	extract-cc(attrs([term(char-classes(CCs))])) = <CCs,no-attrs>
+
+[non-empty-after-left]
+	extract-cc(attrs([Attr+,term(char-classes(CCs)),Attr*])) =
+	<CCs,attrs([Attr+,Attr*])>
+
+[non-empty-after-right]
+	extract-cc(attrs([Attr*,term(char-classes(CCs)),Attr+])) =
+	<CCs,attrs([Attr*,Attr+])>
+
+equations
+
+[empty-after]
+	remove-tag(attrs([term(lexical-constructor)])) = no-attrs
+
+[non-empty-after-left]
+	remove-tag(attrs([Attr*,term(lexical-constructor),Attr+])) =
+		attrs([Attr*,Attr+])
+
+[non-empty-after-right]
+	remove-tag(attrs([Attr+,term(lexical-constructor),Attr*])) =
+		attrs([Attr+,Attr*])
+
+equations
+
+[divide]
+	remove-layout([
+		Tree*1,
+		appl(prod(_Symbols,cf(opt(layout)),_Attributes),_Args),
+		Tree*2]) =
+	remove-layout([Tree*1, Tree*2])
+
+[default]
+	remove-layout([Tree*]) = [Tree*]
+		
+equations
+
+[id-cc]
+	convert-cc(char-class([ATerm*])) = char-class(convert-crs([ATerm*]))
+
+[id-done]
+	convert-crs([]) = []
+
+[id-crs]
+	CR := convert-cr(ATerm),
+	[CR*] := convert-crs([ATerm*])
+	===>
+	convert-crs([ATerm,ATerm*]) = [CR,CR*]
+
+[single-conversion]
+	convert-cr(NatCon) = NatCon
+
+[range-conversion]
+	convert-cr(range(NatCon1,NatCon2)) = range(NatCon1,NatCon2)
+

@@ -1,0 +1,17 @@
+equations
+
+[empty-symbols]
+	[Symbol*] == []
+	===>
+	length(Symbol*) = 0
+
+[many-symbols]
+	length(_Symbol, Symbol*) = 1 + length(Symbol*)
+
+[empty-args]
+	[Tree*] == []
+	===>
+	length(Tree*) = 0
+
+[many-args]
+	length(_Tree, Tree*) = 1 + length(Tree*)

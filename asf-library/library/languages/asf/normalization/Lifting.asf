@@ -1,0 +1,26 @@
+equations
+
+[lift-main]
+	lift-module(Module)  = lift(Module)
+
+[lower-main]
+	lower-module(Module) = lower(Module)
+
+equations
+
+[lift-equation]
+	lift(Equation) = equation(lift-to-tree(Equation))
+
+[lift-condition]
+	lift(Condition) = condition(lift-to-tree(Condition))
+
+equations
+
+[lower-equation]
+	lower(equation(Tree)) = lower-from-tree(Tree)
+
+[lower-condition]
+	lower(condition(Tree)) = lower-from-tree(Tree)
+
+
+

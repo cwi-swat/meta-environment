@@ -1,0 +1,88 @@
+module languages/asf/normalization/Constructors
+
+
+imports languages/asfix/syntax/Tree
+imports languages/sdf2/normalization/Character
+imports languages/asf/normalization/Length
+
+exports
+
+context-free syntax
+
+  constructors(Module) -> Module
+
+hiddens
+
+imports basic/Comments
+
+context-free start-symbols
+	Tree
+
+context-free syntax
+  translate(Module) -> Module {traversal(bottom-up, trafo, continue)}
+  translate(Tree)   -> Tree   {traversal(bottom-up, trafo, continue)}
+
+context-free syntax
+  fix-list-types(Module) -> Module {traversal(bottom-up, trafo, continue)}
+  fix-list-types(Tree)   -> Tree   {traversal(bottom-up, trafo, continue)}
+  
+
+context-free syntax
+	char-classes(Production, ATerm) -> <Production, ATerm>
+		{traversal(accu,trafo,top-down,break)}
+	char-classes(Symbol, ATerm) -> <Symbol, ATerm>
+		{traversal(accu,trafo,top-down,break)}
+
+
+context-free syntax
+	translate-prod(Production) -> Production
+	translate-digits(Args) -> Tree
+	remove-layout(Args) -> Args
+	extract-cc(Attributes) -> <ATerm,Attributes>
+	remove-tag(Attributes) -> Attributes
+
+context-free syntax
+	convert-cc(ATerm) -> Symbol
+	convert-crs(ATerm) -> CharRanges
+	convert-cr(ATerm) -> CharRange
+
+
+variables
+	"Symbol"[0-9]* -> Symbol {strict}
+	"Tree"[0-9]* -> Tree {strict}
+	"Tree*"[0-9]* -> {Tree ","}* {strict}
+	"Symbol*"[0-9]* -> {Symbol ","}* {strict}
+	"Attributes"[0-9]* -> Attributes {strict}
+	"Attr*"[0-9]* -> {Attr ","}* {strict}
+	"Attr+"[0-9]* -> {Attr ","}+ {strict}
+	"CCs"[0-9]* -> ATerm {strict}
+	"CC"[0-9]* -> ATerm {strict}
+	"CC*"[0-9]* -> {ATerm ","}* {strict}
+	"Production"[0-9]* -> Production {strict}
+	"AFun"[0-9]* -> AFun {strict}
+	"PCC"[0-9]* -> Symbol {strict}
+	"CR"[0-9]* -> CharRange {strict}
+	"CR*"[0-9]* -> {CharRange ","}* {strict}
+	"CRs"[0-9]* -> CharRanges {strict}
+	"ATerm*"[0-9]* -> {ATerm ","}* {strict}
+	"ATerm"[0-9]* -> ATerm {strict}
+	"NatCon"[0-9]* -> NatCon {strict}
+	"Symbols"[0-9]* -> Symbols {strict}
+	"Args"[0-9]* -> Args {strict}
+	"Tree*"[0-9]* -> {Tree ","}* {strict}
+	"Digits"[0-9]* -> Args {strict}
+	"NatCon"[0-9]* -> NatCon {strict}
+	"Module"[0-9]* -> Module {strict}
+
+
+variables
+	"_QLit" -> QLiteral {wild}
+	"_Args" -> Args {wild}
+	"_Symbols" -> Symbols {wild}
+	"_Attributes" -> Attributes {wild}
+	"_Name"[0-9]* -> Tree {wild}
+	"_" "BO"|"BC" -> Tree {wild}
+	"_L"[0-9]* -> Tree {wild}
+	"_Symbol" -> Symbol {wild}
+	"_Tree"[0-9]* -> Tree {wild}
+ 

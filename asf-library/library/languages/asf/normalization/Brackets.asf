@@ -1,0 +1,14 @@
+equations
+
+[main]
+	remove-brackets(Module) = brackets(Module)
+
+
+equations
+
+[remove-brackets-rule]
+	length(_Symbol*1) == length(Tree*1)
+	===>
+	brackets(appl(prod([Symbol*1,Symbol,Symbol*2],Symbol,
+			attrs([_Attr*1,bracket,_Attr*2])),
+		[Tree*1,Tree,Tree*2])) = Tree

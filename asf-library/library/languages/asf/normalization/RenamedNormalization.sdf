@@ -1,0 +1,28 @@
+module languages/asf/normalization/RenamedNormalization
+
+imports languages/asf/normalization/Brackets
+imports languages/asf/normalization/Constructors
+imports languages/asf/normalization/Lifting
+
+exports
+
+context-free syntax
+
+normalize(Module) -> Module
+normalize-module(Module) -> Module
+normalize(Section*) -> Section*
+normalize(ConditionalEquation*) -> ConditionalEquation*
+normalize(TestEquation*) -> TestEquation*
+
+context-free start-symbols
+	Module
+
+hiddens
+
+variables
+	"Module"[0-9\']* -> Module
+	"LiftedModule"[0-9\']* -> Module
+	"LoweredModule" -> Module
+	"Section*"[0-9\']* -> Section*
+	"TestEquation*"[\']* -> TestEquation*
+	"CondEquation*"[\']* -> ConditionalEquation*
