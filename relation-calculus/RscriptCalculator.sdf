@@ -73,6 +73,9 @@ exports
 	min1(BagIterator[[Elem]])				-> Integer
 	min2(BagIterator[[Elem]], Integer)			-> Integer
 
+	head(Tuple)						-> Elem
+	tail(Tuple)						-> Elem
+
 hiddens
 %%  imports asf/syntax/Comments
    imports basic/Comments
