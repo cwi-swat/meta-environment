@@ -2,7 +2,8 @@
 include general-make
 
 INPUTS = editors.ltx new-meta.ltx toolbus.ltx ui.ltx \
-         interpreter.ltx repos.ltx treerepr.ltx newarch.tex 
+         interpreter.ltx repos.ltx treerepr.ltx newarch.tex \
+	 metabib.bib
 
 PICTURES = newmeta.ps toolbus.ps
 
