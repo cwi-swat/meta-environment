@@ -8,6 +8,7 @@ TBSCRIPTS = \
   compile-module.tb \
   dump-equations.tb \
   dump-parsetable.tb \
+  dump-sdf-definition.tb \
   editors.tb \
   file-creator.tb \
   get-parsetable.tb \

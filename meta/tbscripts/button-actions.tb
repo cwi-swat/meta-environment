@@ -662,6 +662,12 @@ in
 	rec-msg(equations-dumped) .
 	ReturnSuccess(EditorId, Stack)	
       +
+        rec-msg(dump-sdf-definition, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(dump-sdf-definition(ModuleName)) .
+	rec-msg(sdf-definition-dumped) .
+	ReturnSuccess(EditorId, Stack)
+      +
 	rec-msg(dump-parse-table, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
 	snd-msg(dump-parse-table(ModuleName, trm)) .

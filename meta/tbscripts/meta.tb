@@ -40,6 +40,7 @@
 #include "button-actions.tb"
 #include "notification.tb"
 #include "dump-equations.tb"
+#include "dump-sdf-definition.tb"
 #include "meta-interface.tb"
 
 /* Experimental */
@@ -83,6 +84,7 @@ in
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)
   . create(DumpParseTable, Pid?)
+  . create(DumpSdfDefinition, Pid?)
   . create(EditorCreator, Pid?)
   . create(File-creator, Pid?)
   . create(GetEquations, Pid?)

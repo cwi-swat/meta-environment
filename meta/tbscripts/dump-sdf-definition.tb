@@ -1,0 +1,42 @@
+/* $Id$ */
+
+process DumpSdfDefinition is
+let
+  Id : int,
+  ModuleName   : str,
+  Syntax    : term,
+  Path         : str,
+  Text : str, 
+  FileName : str,
+  ErrorMessage : str
+in
+  Id := process-id .
+  (
+    rec-msg(dump-sdf-definition(ModuleName?)) .
+    FileName := "" .
+    snd-note(ui-status(statf(Id, "Dumping SDF for %s", [ModuleName]))) .
+    snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
+    (
+      rec-msg(syntax(Syntax?)) .
+      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(path(Path?)) .
+      snd-msg(io-get-filename(Path, ModuleName, ".def")) .
+      rec-msg(io-filename(FileName?))  .
+      printf("file: %s\n", FileName) .
+      snd-msg(io-write-term-file(FileName, Syntax)) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
+      )
+    +
+      rec-msg(no-syntax(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s", [ModuleName, ErrorMessage])))
+    ) .
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(sdf-definition-dumped)
+  ) * delta
+
+endlet
+
