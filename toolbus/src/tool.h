@@ -5,15 +5,17 @@
 #include <stdarg.h>
 
 int  TBinit(char *, int, char **, TBcallbackTerm, term *(*sigchk)(term *));
+int  TBconnect(char *, char *, int in, int out, TBcallbackTerm, term *(*sigchk)(term *), int *);
 int  TBaddTermPort(int, TBcallbackTerm);
 int  TBaddCharPort(int, TBcallbackChar);
-int TBfreePort(int port);
+int  TBfreePort(int port);
 void TBsend(term *);
 void TBreceive(void);
-int TBpeek(void);
+int  TBpeek(void);
 void TBeventloop(void);
-int mkports(TBbool, char *, int *, int *, int *);
+int  mkports(TBbool, char *, char *, int *, int *, int *);
 
+extern term *Snd_Void;
 
 typedef struct inport       /* connection info  */
 {                           /* for input ports  */

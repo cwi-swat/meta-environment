@@ -21,7 +21,7 @@
         if(*tin >= 0) { TBdestroyPort(*tin); *tin = TB_ERROR;}\
         if(*tout >= 0) { TBdestroyPort(*tout); *tout = TB_ERROR; }
 
-int mkports (TBbool local_ports, char *tb_host, int *tid, int *tin, int *tout)
+int mkports (TBbool local_ports, char *tool, char *tb_host, int *tid, int *tin, int *tout)
 {
   int portin, n;
   char buf[TB_MAX_HANDSHAKE];
@@ -40,7 +40,7 @@ int mkports (TBbool local_ports, char *tb_host, int *tid, int *tin, int *tout)
     if (out < 0)  return TB_ERROR;
 
     /* client coming from "this_host",  open connection */
-    sprintf(buf, "%s %s %d", tool_name, this_host, *tid);
+    sprintf(buf, "%s %s %d", tool, this_host, *tid);
 
     if(write(out, buf, TB_MAX_HANDSHAKE) < 0){
       err_sys_warn("mkports -- can't write");
@@ -55,8 +55,8 @@ int mkports (TBbool local_ports, char *tb_host, int *tid, int *tin, int *tout)
     if (in < 0) { cleanup (); goto sync; }  
 
     /* 2. get port number and tool id from server */
-    portin = getInt (in, tool_name);
-    get_tid = getInt(in, tool_name);
+    portin = getInt (in, tool);
+    get_tid = getInt(in, tool);
 
     /* close well known sockets */
     TBdestroyPort (in);  
@@ -98,8 +98,8 @@ int mkports (TBbool local_ports, char *tb_host, int *tid, int *tin, int *tout)
     /* 4. synchronize with server */
   sync:
     if(*tout >= 0){
-      if(putInt (*tout, tool_name, portin) >= 0){
-	if((n = getInt (*tin, tool_name)) != portin){
+      if(putInt (*tout, tool, portin) >= 0){
+	if((n = getInt (*tin, tool)) != portin){
 	  err_warn("mkports -- got %d should be %d\n", n, portin);
 	} else
 	  return TB_OK;
