@@ -18,4 +18,6 @@ void SG_PropagateUnreject(stack *st);
 
 typedef int label;
 
+extern size_t  sg_numtokens;
+
 #endif  /* _PARSER_H_ */

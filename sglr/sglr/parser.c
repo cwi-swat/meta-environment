@@ -45,9 +45,10 @@
    For the purpose of error messages we keep track of the current line
    and column.
 */
-int line;        /* current line */
-int col;         /* current column */
-int text_length; /* number of tokens read */
+size_t line;           /* current line */
+size_t col;            /* current column */
+size_t sg_tokens_read; /* number of tokens read */
+size_t sg_numtokens;   /* number of tokens in input file */
 #define eof 0
 
 /*
@@ -58,7 +59,7 @@ void SG_InitInput(void)
 {
   line        = 1;
   col         = 0;
-  text_length = 0;
+  sg_tokens_read = 0;
 }
 
 /*
@@ -71,12 +72,20 @@ int SG_NexToken(int(*get_next_char)(void))
 {
   int c;
   c = get_next_char();
-  text_length++;
+  sg_tokens_read++;
+/*
+  if(SG_VERBOSE && (sg_numtokens != -1)) {
+    if(sg_tokens_read > sg_numtokens)
+      ATfprintf(stderr, "\nall %d tokens read\n", sg_tokens_read-1);
+    else if (!((sg_tokens_read % sg_numtokens/78)))
+      ATfprintf(stderr, ".");
+  }
+ */
   switch(c) {
     case '\n' : line++; col = 0         ; break;
     case '\t' : col = (col / 8 + 1) * 8 ; break;
     case EOF  : c = eof                 ; break;
-    default  : col++                   ; break;
+    default   : col++                   ; break;
   }
   return c;
 }
@@ -237,6 +246,7 @@ ATerm SG_Result(char *sort);
 
 void  SG_ParserPreparation(void)
 {
+  SG_InitInput();
   accepting_stack = NULL;
   SG_MaxNrAmb(SG_NRAMB_ZERO);
   SGnrAmb(SG_NRAMB_ZERO);
@@ -273,26 +283,28 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
 {
   ATerm result;
 
-  SG_InitInput();
   table = ptable;
 
   SG_ParserPreparation();
 
   do {
-    if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, text_length);
+    if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, sg_tokens_read);
     current_token = SG_NexToken(get_next_char);
-    if(SG_DEBUG) {
-      if(isgraph(current_token))
-        ATfprintf(SGlog(), "Current token:  %c\n", current_token);
+    if(SG_DEBUG || SG_SHOWSTAT) {
+      if(isprint(current_token))
+        ATfprintf(SGlog(), "Token:  '%c'\n", current_token);
       else
-        ATfprintf(SGlog(), "Current token:  \\%o\n", current_token);
+        ATfprintf(SGlog(), "Token:  '\\%d'\n", current_token);
     }
     SG_ParseChar();
     SG_Shifter();
   } while (current_token != eof && active_stacks != NULL);
 
+  if(SG_VERBOSE)
+    ATfprintf(stderr, "parsing finished, read %d tokens\n", sg_tokens_read-1);
+
   if(SG_SHOWSTACK)
-    SG_StacksToDotFile(SG_NewStacks(accepting_stack), text_length);
+    SG_StacksToDotFile(SG_NewStacks(accepting_stack), sg_tokens_read);
 
   result = SG_Result(sort);
   SG_ParserCleanup();
@@ -365,7 +377,7 @@ ATerm SG_Result(char *sort)
     if (sort!=NULL && !SG_ABBREV && (forest = SG_Prune(forest, sort))==NULL)
         return ATmake("parse-error([character(<int>), line(<int>),"
                       "col(<int>), char(<int>)])",
-                      current_token, line, col, text_length);
+                      current_token, line, col, sg_tokens_read);
 
     if(!SG_OUTPUT)  /*  Ambiguity count > 0 is an upper limit in this case  */
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
@@ -380,7 +392,7 @@ ATerm SG_Result(char *sort)
                     SGnrAmb(SG_NRAMB_ASK));
           return ATmake("parse-error([character(<int>), line(<int>),"
                         "col(<int>), char(<int>)])",
-                        current_token, line, col, text_length);
+                        current_token, line, col, sg_tokens_read);
         }
         if (SG_VERBOSE)
           ATfprintf(stderr, "converting AsFix2 parse tree to AsFix1\n");
@@ -393,7 +405,7 @@ ATerm SG_Result(char *sort)
   } else
     return ATmake("parse-error([character(<int>), line(<int>),"
                   "col(<int>), char(<int>)])",
-                  current_token, line, col, text_length);
+                  current_token, line, col, sg_tokens_read);
 }
 
 /*

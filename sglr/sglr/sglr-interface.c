@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include <aterm1.h>
 #include <AsFix.h>
@@ -84,6 +85,19 @@ void SG_CloseLog(void)
   if(SG_Log) fclose(SG_Log);
 }
 
+size_t SG_FileSize(char *prg, char *FN)
+{
+  struct stat  statbuf;
+
+  if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-"))
+    return -1;	/*  We can't tell how many tokens to read  */
+
+  if(stat(FN, &statbuf) < 0) {
+    ATfprintf(stderr, "%s: cannot stat %s\n", prg, FN);
+    exit(1);
+  }
+  return statbuf.st_size;
+}
 
 /*
   \paragraph{Open File}
@@ -96,14 +110,18 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
   FILE *file;
 
   if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-")) {
-      if (std_error == NULL) return stdin;
+      if (std_error == NULL)
+        return stdin;
+
       ATfprintf(stderr,"%s: %s\n", prgname, std_error);
       exit(1);
-  } else if ((file = fopen(FN, "r")) == NULL) {
+  }
+
+  if ((file = fopen(FN, "r")) == NULL) {
       ATfprintf(stderr, "%s: cannot open %s\n", prgname, FN);
       exit(1);
-  } else
-    return file;
+  }
+  return file;
 }
 
 void SGcloseFile(FILE *fd)
@@ -199,9 +217,16 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
   ATerm ret;
 
   SG_Validate("SGparseFile");
+  sg_numtokens = SG_FileSize(prgname, FN);
+  if((SG_DEBUG || SG_SHOWSTAT) && sg_numtokens >= 0)
+    ATfprintf(SGlog(), "File %s contains %d input tokens\n", FN, sg_numtokens);
   SG_inputFile = SGopenFile(prgname, NULL, FN);
   if (SG_VERBOSE)
-    ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
+    if (sg_numtokens != -1)
+      ATfprintf(stderr, "%s: parsing file %s (%d tokens)\n",
+                prgname, FN, sg_numtokens);
+    else
+      ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
   ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G?(*G?G:0):NULL, SG_GetChar);
   SGcloseFile(SG_inputFile);
   return ret ? ret : (ATerm) ATempty;

@@ -335,11 +335,11 @@ char *SG_StackDotOut(char *s)
   return sdo;
 }
 
-void SG_StacksToDotFile(stacks *sts, int text_length)
+void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
 {
   char stk_file[256];
 
-  sprintf(stk_file, "%s%d.dot", SG_StackDotOut(NULL), text_length);
+  sprintf(stk_file, "%s%d.dot", SG_StackDotOut(NULL), sg_tokens_read);
 
   if ((SG_StackDotFP = fopen(stk_file, "w")) == NULL) {
     ATfprintf(stderr, "Cannot create stack dotfile %s\n", stk_file);
