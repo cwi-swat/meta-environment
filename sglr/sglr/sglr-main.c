@@ -464,6 +464,8 @@ int main (int argc, char **argv)
   if(use_toolbus) {
 #ifndef WIN32  /*  Sufficient functionality?  */
     set_global_options();
+    SG_TOOLBUS_ON();
+
     ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
     IF_STATISTICS(
                   fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
@@ -486,6 +488,7 @@ int main (int argc, char **argv)
     AFinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
     handle_options(argc, argv);
     have_complete_config = set_global_options();
+    SG_TOOLBUS_OFF();
 
     IF_STATISTICS(
       fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
