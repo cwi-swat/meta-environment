@@ -17,7 +17,7 @@ public class Expr
   private static final String PATTERN_LOC_LINE =
     "location(line(<str>,<int>))";
   private static final String PATTERN_LOC_AREA =
-    "location(area(<str>,<int>,<int>,<int>,<int>))";
+    "location(area-in-file(<str>,area(<int>,<int>,<int>,<int>,<int>,<int>)))";
   private static final String PAT_SOURCE_VAR =
     "source-var(<str>,<int>,<int>,<int>,<str>)";
   private static final String PAT_VARIABLE =
@@ -213,24 +213,16 @@ public class Expr
     throw new RuntimeException("not an error: " + term);
   }
 
-  //}}}
-
-  //{{{ public boolean isLocation()
-
   public boolean isLocation()
   {
     return term.match("location(<list>)") != null;
   }
-
-  //}}}
-  //{{{ public boolean isLocationUnknown()
 
   public boolean isLocationUnknown()
   {
     return term.match("location(unknown)") != null;
   }
 
-  //}}}
   //{{{ public String getLocationFileName()
 
   public String getLocationFileName()

@@ -1,9 +1,13 @@
 package tide.tool;
 
-import java.net.*;
-import javax.swing.*;
+import java.awt.EventQueue;
+import java.net.URL;
 
-import tide.tool.support.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JInternalFrame;
+
+import tide.tool.support.Expr;
 
 public abstract class TideTool
   extends JInternalFrame
@@ -92,7 +96,8 @@ public abstract class TideTool
 
   public void displayError(Expr error)
   {
-    displayError(error.getErrorMessage(), error.getErrorData());
+  	throw new RuntimeException("hallo");
+    // displayError(error.getErrorMessage(), error.getErrorData());
   }
 
   //}}}
@@ -123,7 +128,7 @@ public abstract class TideTool
     {
       public void run() { dispose(); }
     };
-    getToolkit().getSystemEventQueue().invokeLater(runnable);
+    EventQueue.invokeLater(runnable);
   }
 
   //}}}

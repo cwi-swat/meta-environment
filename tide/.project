@@ -3,6 +3,10 @@
 	<name>tide</name>
 	<comment></comment>
 	<projects>
+		<project>JJTraveler</project>
+		<project>aterm-java</project>
+		<project>shared-objects</project>
+		<project>toolbus-adapter</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

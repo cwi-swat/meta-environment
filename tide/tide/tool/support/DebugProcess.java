@@ -4,434 +4,426 @@ import java.util.*;
 
 import aterm.*;
 
-public class DebugProcess
-{
-  public static final String[] PORT_TYPES = 
-  {
-    "step", "stopped", "started"
-  };
+public class DebugProcess {
+	public static final String[] PORT_TYPES = { "step", "stopped", "started" };
 
-  private static final String TAG_STARTED = "process-started";
-  private static final String TAG_STOPPED = "process-stopped";
-  private static final String TAG_INITIAL_CPE = "initial-cpe";
+	private static final String TAG_STARTED = "process-started";
+	private static final String TAG_STOPPED = "process-stopped";
+	private static final String TAG_INITIAL_CPE = "initial-cpe";
 
-  private static int next_id;
-  private int id;
-  private String tag_started;
-  private String tag_stopped;
-  private String tag_initial_cpe;
+	private static int next_id;
+	private int id;
+	private String tag_started;
+	private String tag_stopped;
+	private String tag_initial_cpe;
 
-  private DebugAdapter adapter;
-  private int pid;
-  private String name;
-  private Rule started;
-  private Rule stopped;
+	private DebugAdapter adapter;
+	private int pid;
+	private String name;
+	private Rule started;
+	private Rule stopped;
 
-  private List rules;
-  private Map  ruleTable;
+	private List rules;
+	private Map ruleTable;
 
-  private int running;
-  private Expr lastLocation;
+	private int running;
+	private Expr lastLocation;
 
-  private List statusChangeListeners;
-  private List processListeners;
+	private List statusChangeListeners;
+	private List processListeners;
 
-  private Info info;
+	private Info info;
 
+	//{{{ public DebugProcess(DebugAdapter adapter, int pid)
 
-  //{{{ public DebugProcess(DebugAdapter adapter, int pid)
+	public DebugProcess(DebugAdapter adapter, int pid, String name) {
+		this.id = next_id++;
+		this.adapter = adapter;
+		this.pid = pid;
+		this.name = name;
 
-  public DebugProcess(DebugAdapter adapter, int pid, String name)
-  {
-    this.id      = next_id++;
-    this.adapter = adapter;
-    this.pid     = pid;
-    this.name    = name;
+		tag_started = TAG_STARTED + "-" + id;
+		tag_stopped = TAG_STOPPED + "-" + id;
+		tag_initial_cpe = TAG_INITIAL_CPE + "-" + id;
 
-    tag_started = TAG_STARTED + "-" + id;
-    tag_stopped = TAG_STOPPED + "-" + id;
-    tag_initial_cpe = TAG_INITIAL_CPE + "-" + id;
+		info = new Info("DebugProcess");
 
-    info = new Info("DebugProcess");
+		statusChangeListeners = new LinkedList();
+		processListeners = new LinkedList();
 
-    statusChangeListeners = new LinkedList();
-    processListeners      = new LinkedList();
+		requestRuleCreation(
+			Port.makeStarted(),
+			Expr.makeTrue(),
+			Expr.makeTrue(),
+			tag_started);
+		requestRuleCreation(
+			Port.makeStopped(),
+			Expr.makeTrue(),
+			Expr.makeCpe(),
+			tag_stopped);
+		requestEvaluation(Expr.makeCpe(), tag_initial_cpe);
 
-    requestRuleCreation(Port.makeStarted(), Expr.makeTrue(),
-			Expr.makeTrue(), tag_started);
-    requestRuleCreation(Port.makeStopped(), Expr.makeTrue(),
-			Expr.makeCpe(), tag_stopped);
-    requestEvaluation(Expr.makeCpe(), tag_initial_cpe);
+		rules = new LinkedList();
+		ruleTable = new HashMap();
+	}
 
-    rules = new LinkedList();
-    ruleTable = new HashMap();
-  }
+	//}}}
 
-  //}}}
+	//{{{ public DebugAdapter getAdapter()
 
-  //{{{ public DebugAdapter getAdapter()
+	public DebugAdapter getAdapter() {
+		return adapter;
+	}
 
-  public DebugAdapter getAdapter()
-  {
-    return adapter;
-  }
+	//}}}
 
-  //}}}
-
-  //{{{ public void addProcessStatusChangeListener(ProcessStatusChangeListener listener)
+	//{{{ public void
+	// addProcessStatusChangeListener(ProcessStatusChangeListener listener)
 
-  public void addProcessStatusChangeListener(ProcessStatusChangeListener listener)
-  {
-    statusChangeListeners.add(listener);
-  }
+	public void addProcessStatusChangeListener(ProcessStatusChangeListener listener) {
+		statusChangeListeners.add(listener);
+	}
 
-  //}}}
-  //{{{ public void removeProcessStatusChangeListener(ProcessStatusChangeListener listener)
+	//}}}
+	//{{{ public void
+	// removeProcessStatusChangeListener(ProcessStatusChangeListener listener)
 
-  public void removeProcessStatusChangeListener(ProcessStatusChangeListener listener)
-  {
-    statusChangeListeners.remove(listener);
-  }
-
-  //}}}
-  //{{{ public void fireProcessStatusChanged()
+	public void removeProcessStatusChangeListener(ProcessStatusChangeListener listener) {
+		statusChangeListeners.remove(listener);
+	}
 
-  public void fireProcessStatusChanged()
-  {
-    Iterator iter = statusChangeListeners.iterator();
+	//}}}
+	//{{{ public void fireProcessStatusChanged()
 
-    while (iter.hasNext()) {
-      ProcessStatusChangeListener listener = (ProcessStatusChangeListener)iter.next();
-      listener.processStatusChanged(this);
-    }
-  }
-
-  //}}}
-
-  //{{{ public void addDebugProcessListener(DebugProcessListener listener)
-
-  public void addDebugProcessListener(DebugProcessListener listener)
-  {
-    processListeners.add(listener);
-  }
-
-  //}}}
-  //{{{ public void removeDebugProcessListener(DebugProcessListener listener)
-
-  public void removeDebugProcessListener(DebugProcessListener listener)
-  {
-    processListeners.remove(listener);
-  }
-
-  //}}}
-  //{{{ public void fireRuleCreated(Rule rule)
-
-  public void fireRuleCreated(Rule rule)
-  {
-    Iterator iter =
-      ((List)((LinkedList)processListeners).clone()).iterator();
-
-    while (iter.hasNext()) {
-      DebugProcessListener listener = (DebugProcessListener)iter.next();
-      listener.ruleCreated(this, rule);
-    }
-  }
+	public void fireProcessStatusChanged() {
+		Iterator iter = statusChangeListeners.iterator();
 
-  //}}}
-  //{{{ public void fireRuleDeleted(Rule rule)
+		while (iter.hasNext()) {
+			ProcessStatusChangeListener listener =
+				(ProcessStatusChangeListener) iter.next();
+			listener.processStatusChanged(this);
+		}
+	}
 
-  public void fireRuleDeleted(Rule rule)
-  {
-    Iterator iter =
-      ((List)((LinkedList)processListeners).clone()).iterator();
+	//}}}
 
-    while (iter.hasNext()) {
-      DebugProcessListener listener = (DebugProcessListener)iter.next();
-      listener.ruleDeleted(this, rule);
-    }
-  }
+	//{{{ public void addDebugProcessListener(DebugProcessListener listener)
 
-  //}}}
-  //{{{ public void fireRuleModified(Rule rule)
+	public void addDebugProcessListener(DebugProcessListener listener) {
+		processListeners.add(listener);
+	}
 
-  public void fireRuleModified(Rule rule)
-  {
-    Iterator iter =
-      ((List)((LinkedList)processListeners).clone()).iterator();
+	//}}}
+	//{{{ public void removeDebugProcessListener(DebugProcessListener
+	// listener)
 
-    while (iter.hasNext()) {
-      DebugProcessListener listener = (DebugProcessListener)iter.next();
-      listener.ruleModified(this, rule);
-    }
-  }
+	public void removeDebugProcessListener(DebugProcessListener listener) {
+		processListeners.remove(listener);
+	}
 
-  //}}}
-  //{{{ public void fireRuleTriggered(Rule rule, Expr value)
+	//}}}
+	//{{{ public void fireRuleCreated(Rule rule)
 
-  public void fireRuleTriggered(Rule rule, Expr value)
-  {
-    Iterator iter =
-      ((List)((LinkedList)processListeners).clone()).iterator();
+	public void fireRuleCreated(Rule rule) {
+		Iterator iter =
+			((List) ((LinkedList) processListeners).clone()).iterator();
 
-    while (iter.hasNext()) {
-      DebugProcessListener listener = (DebugProcessListener)iter.next();
-      listener.ruleTriggered(this, rule, value);
-    }
-  }
+		while (iter.hasNext()) {
+			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			listener.ruleCreated(this, rule);
+		}
+	}
 
-  //}}}
-  //{{{ public void fireEvaluationResult(Expr expr, Expr value, String tag)
+	//}}}
+	//{{{ public void fireRuleDeleted(Rule rule)
 
-  public void fireEvaluationResult(Expr expr, Expr value, String tag)
-  {
-    Iterator iter =
-      ((List)((LinkedList)processListeners).clone()).iterator();
+	public void fireRuleDeleted(Rule rule) {
+		Iterator iter =
+			((List) ((LinkedList) processListeners).clone()).iterator();
 
-    while (iter.hasNext()) {
-      DebugProcessListener listener = (DebugProcessListener)iter.next();
-      listener.evaluationResult(this, expr, value, tag);
-    }
-  }
+		while (iter.hasNext()) {
+			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			listener.ruleDeleted(this, rule);
+		}
+	}
 
-  //}}}
+	//}}}
+	//{{{ public void fireRuleModified(Rule rule)
 
-  //{{{ public String getName()
+	public void fireRuleModified(Rule rule) {
+		Iterator iter =
+			((List) ((LinkedList) processListeners).clone()).iterator();
 
-  public String getName()
-  {
-    return name;
-  }
+		while (iter.hasNext()) {
+			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			listener.ruleModified(this, rule);
+		}
+	}
 
-  //}}}
-  //{{{ public int getPid()
+	//}}}
+	//{{{ public void fireRuleTriggered(Rule rule, Expr value)
 
-  public int getPid()
-  {
-    return pid;
-  }
+	public void fireRuleTriggered(Rule rule, Expr value) {
+		Iterator iter =
+			((List) ((LinkedList) processListeners).clone()).iterator();
 
-  //}}}
-  //{{{ public boolean isRunning()
+		while (iter.hasNext()) {
+			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			listener.ruleTriggered(this, rule, value);
+		}
+	}
 
-  public boolean isRunning()
-  {
-    return running > 0;
-  }
+	//}}}
+	//{{{ public void fireEvaluationResult(Expr expr, Expr value, String tag)
 
-  //}}}
-  //{{{ public boolean isStopped()
+	public void fireEvaluationResult(Expr expr, Expr value, String tag) {
+		Iterator iter =
+			((List) ((LinkedList) processListeners).clone()).iterator();
 
-  public boolean isStopped()
-  {
-    return running <= 0;
-  }
+		while (iter.hasNext()) {
+			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			listener.evaluationResult(this, expr, value, tag);
+		}
+	}
 
-  //}}}
-  //{{{ public Expr getLastLocation()
+	//}}}
 
-  public Expr getLastLocation()
-  {
-    return lastLocation;
-  }
+	//{{{ public String getName()
 
-  //}}}
+	public String getName() {
+		return name;
+	}
 
-  //{{{ public void ruleCreated(Rule rule)
+	//}}}
+	//{{{ public int getPid()
 
-  synchronized public void ruleCreated(Rule rule)
-  {
-    info.info("ruleCreated: " + rule);
+	public int getPid() {
+		return pid;
+	}
 
-    if (rule.getTag().equals(tag_started)) {
-      started = rule;
-    }
+	//}}}
+	//{{{ public boolean isRunning()
 
-    if (rule.getTag().equals(tag_stopped)) {
-      stopped = rule;
-    }
+	public boolean isRunning() {
+		return running > 0;
+	}
 
-    rules.add(rule);
-    ruleTable.put(new Integer(rule.getRid()), rule);
+	//}}}
+	//{{{ public boolean isStopped()
 
-    fireRuleCreated(rule);
-  }
+	public boolean isStopped() {
+		return running <= 0;
+	}
 
-  //}}}
-  //{{{ public void ruleDeleted(int rid)
+	//}}}
+	//{{{ public Expr getLastLocation()
 
-  synchronized public void ruleDeleted(int rid)
-  {
-    Integer ridKey = new Integer(rid);
+	public Expr getLastLocation() {
+		return lastLocation;
+	}
 
-    Rule rule = (Rule)ruleTable.get(ridKey);
-    fireRuleDeleted(rule);
+	//}}}
 
-    rules.remove(rule);
-    ruleTable.remove(ridKey);
+	//{{{ public void ruleCreated(Rule rule)
 
-    if (rule == stopped) {
-      stopped = null;
-    } else if (rule == started) {
-      started = null;
-    }
-  }
+	synchronized public void ruleCreated(Rule rule) {
+		info.info("ruleCreated: " + rule);
 
-  //}}}
-  //{{{ public void ruleModified(int rid, Expr cond, Expr action, boolean enabled)
+		if (rule.getTag().equals(tag_started)) {
+			started = rule;
+		}
 
-  public void ruleModified(int rid, Port port, Expr cond, Expr action, boolean enabled)
-  {
-    Integer ridKey = new Integer(rid);
+		if (rule.getTag().equals(tag_stopped)) {
+			stopped = rule;
+		}
 
-    Rule rule = (Rule)ruleTable.get(ridKey);
+		rules.add(rule);
+		ruleTable.put(new Integer(rule.getRid()), rule);
 
-    rule.modify(port, cond, action, enabled);
+		fireRuleCreated(rule);
+	}
 
-    fireRuleModified(rule);
-  }
+	//}}}
+	//{{{ public void ruleDeleted(int rid)
 
-  //}}}
+	synchronized public void ruleDeleted(int rid) {
+		Integer ridKey = new Integer(rid);
 
-  //{{{ public void evaluationResult(Expr expr, Expr value, String tag)
+		Rule rule = (Rule) ruleTable.get(ridKey);
+		fireRuleDeleted(rule);
 
-  public void evaluationResult(Expr expr, Expr value, String tag)
-  {
-    if (tag.equals(tag_initial_cpe)) {
-      lastLocation = value;
-    }
-    fireEvaluationResult(expr, value, tag);
-  }
+		rules.remove(rule);
+		ruleTable.remove(ridKey);
 
-  //}}}
+		if (rule == stopped) {
+			stopped = null;
+		} else if (rule == started) {
+			started = null;
+		}
+	}
 
-  //{{{ public Iterator ruleIterator()
+	//}}}
+	//{{{ public void ruleModified(int rid, Expr cond, Expr action, boolean
+	// enabled)
 
-  public Iterator ruleIterator()
-  {
-    return rules.iterator();
-  }
+	public void ruleModified(
+		int rid,
+		Port port,
+		Expr cond,
+		Expr action,
+		boolean enabled) {
+		Integer ridKey = new Integer(rid);
 
-  //}}}
-  //{{{ public int getNrOfRules()
+		Rule rule = (Rule) ruleTable.get(ridKey);
 
-  public int getNrOfRules()
-  {
-    return rules.size();
-  }
+		rule.modify(port, cond, action, enabled);
 
-  //}}}
-  //{{{ public Rule getRuleAt(int index)
+		fireRuleModified(rule);
+	}
 
-  public Rule getRuleAt(int index)
-  {
-    return (Rule)rules.get(index);
-  }
+	//}}}
 
-  //}}}
-  //{{{ public int getRuleIndex(Rule rule)
+	//{{{ public void evaluationResult(Expr expr, Expr value, String tag)
 
-  public int getRuleIndex(Rule rule)
-  {
-    return rules.indexOf(rule);
-  }
+	public void evaluationResult(Expr expr, Expr value, String tag) {
+		if (tag.equals(tag_initial_cpe)) {
+			lastLocation = value;
+		}
+		fireEvaluationResult(expr, value, tag);
+	}
 
-  //}}}
+	//}}}
 
-  //{{{ public void event(int rid, ATerm result)
+	//{{{ public Iterator ruleIterator()
 
-  public void event(int rid, ATerm result)
-  {
-    info.info("event: " + result);
+	public Iterator ruleIterator() {
+		return rules.iterator();
+	}
 
-    Rule rule = (Rule)ruleTable.get(new Integer(rid));
-    Expr value = Expr.fromTerm(result);
+	//}}}
+	//{{{ public int getNrOfRules()
 
-    fireRuleTriggered(rule, value);
-    if (rule == started) {
-      running++;
-      info.info("rule == started, running = " + running);
-      if (running == 1) {
-	fireProcessStatusChanged();
-      }
-    } else if (rule == stopped) {
-      running--;
-      info.info("rule == stopped, running = " + running);
-      if (running == 0) {
-	info.info("running is now 0, firing processStatusChanged");
-	lastLocation = value;
-	fireProcessStatusChanged();
-      }
-    }
-  }
+	public int getNrOfRules() {
+		return rules.size();
+	}
 
-  //}}}
+	//}}}
+	//{{{ public Rule getRuleAt(int index)
 
-  //{{{ public void requestRuleCreation(port, cond, act, tag)
+	public Rule getRuleAt(int index) {
+		return (Rule) rules.get(index);
+	}
 
-  public void requestRuleCreation(Port port, Expr cond, Expr act,
-				  String tag)
-  {
-    adapter.requestRuleCreation(pid, port, cond, act, tag, true);
-  }
+	//}}}
+	//{{{ public int getRuleIndex(Rule rule)
 
-  //}}}
-  //{{{ public void requestRuleCreation(port, cond, act, tag, enabled)
+	public int getRuleIndex(Rule rule) {
+		return rules.indexOf(rule);
+	}
 
-  public void requestRuleCreation(Port port, Expr cond, Expr act,
-				  String tag, boolean enabled)
-  {
-    adapter.requestRuleCreation(pid, port, cond, act, tag, enabled);
-  }
+	//}}}
 
-  //}}}
-  //{{{ public void requestRuleModification(rule, port, cond, act, enabled)
+	//{{{ public void event(int rid, ATerm result)
 
-  public void requestRuleModification(Rule rule, Port port, Expr cond, Expr act,
-				      boolean enabled)
-  {
-    adapter.requestRuleModification(pid, rule, port, cond, act, enabled);
-  }
+	public void event(int rid, ATerm result) {
+		info.info("event: " + result);
 
-  //}}}
-  //{{{ public void requestRuleDeletion(Rule rule)
+		Rule rule = (Rule) ruleTable.get(new Integer(rid));
+		Expr value = Expr.fromTerm(result);
 
-  public void requestRuleDeletion(Rule rule)
-  {
-    adapter.requestRuleDeletion(pid, rule);
-  }
+		fireRuleTriggered(rule, value);
+		if (rule == started) {
+			running++;
+			info.info("rule == started, running = " + running);
+			if (running == 1) {
+				fireProcessStatusChanged();
+			}
+		} else if (rule == stopped) {
+			running--;
+			info.info("rule == stopped, running = " + running);
+			if (running == 0) {
+				info.info("running is now 0, firing processStatusChanged");
+				lastLocation = value;
+				fireProcessStatusChanged();
+			}
+		}
+	}
 
-  //}}}
-  //{{{ public void requestRuleEnabling(Rule rule, boolean enabled)
+	//}}}
 
-  public void requestRuleEnabling(Rule rule, boolean enabled)
-  {
-    requestRuleModification(rule, rule.getPort(), rule.getCondition(),
-			    rule.getAction(), enabled);
-  }
+	//{{{ public void requestRuleCreation(port, cond, act, tag)
 
-  //}}}
-  //{{{ public void requestBreak()
+	public void requestRuleCreation(
+		Port port,
+		Expr cond,
+		Expr act,
+		String tag) {
+		adapter.requestRuleCreation(pid, port, cond, act, tag, true);
+	}
 
-  public void requestBreak()
-  {
-    adapter.requestBreak(pid);
-  }
+	//}}}
+	//{{{ public void requestRuleCreation(port, cond, act, tag, enabled)
 
-  //}}}
-  //{{{ public void requestResume()
+	public void requestRuleCreation(
+		Port port,
+		Expr cond,
+		Expr act,
+		String tag,
+		boolean enabled) {
+		adapter.requestRuleCreation(pid, port, cond, act, tag, enabled);
+	}
 
-  public void requestResume()
-  {
-    adapter.requestResume(pid);
-  }
+	//}}}
+	//{{{ public void requestRuleModification(rule, port, cond, act, enabled)
 
-  //}}}
-  //{{{ public void requestEvaluation(Expr expr, String tag)
+	public void requestRuleModification(
+		Rule rule,
+		Port port,
+		Expr cond,
+		Expr act,
+		boolean enabled) {
+		adapter.requestRuleModification(pid, rule, port, cond, act, enabled);
+	}
 
-  public void requestEvaluation(Expr expr, String tag)
-  {
-    adapter.requestEvaluation(pid, expr, tag);
-  }
+	//}}}
+	//{{{ public void requestRuleDeletion(Rule rule)
 
-  //}}}
+	public void requestRuleDeletion(Rule rule) {
+		adapter.requestRuleDeletion(pid, rule);
+	}
+
+	//}}}
+	//{{{ public void requestRuleEnabling(Rule rule, boolean enabled)
+
+	public void requestRuleEnabling(Rule rule, boolean enabled) {
+		requestRuleModification(
+			rule,
+			rule.getPort(),
+			rule.getCondition(),
+			rule.getAction(),
+			enabled);
+	}
+
+	//}}}
+	//{{{ public void requestBreak()
+
+	public void requestBreak() {
+		adapter.requestBreak(pid);
+	}
+
+	//}}}
+	//{{{ public void requestResume()
+
+	public void requestResume() {
+		adapter.requestResume(pid);
+	}
+
+	//}}}
+	//{{{ public void requestEvaluation(Expr expr, String tag)
+
+	public void requestEvaluation(Expr expr, String tag) {
+		adapter.requestEvaluation(pid, expr, tag);
+	}
+
+	//}}}
 }

@@ -73,7 +73,7 @@ public class ProcessList
 	repaint();
       }
     };
-    getToolkit().getSystemEventQueue().invokeLater(runnable);
+    EventQueue.invokeLater(runnable);
   }
 
   //}}}

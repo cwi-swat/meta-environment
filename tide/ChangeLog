@@ -1,5 +1,10 @@
 
 
+Sat May 22 11:52:04 CEST 2004 <jurgenv@cwi.nl>
+ * Brought tide up-to-date with format of locations and areas in 
+   asf-sdf-meta 1.5
+ * TODO: many terms need to be apified in Tide!
+
 Wed May 19 15:19:09 CEST 2004
 <jurgenv@cwi.nl,pieter@gamesquare.nl,sgmcorne@science.uva.nl>
  * Use SwingTool to prevent deadlocks with swing paint()

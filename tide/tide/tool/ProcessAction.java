@@ -1,10 +1,11 @@
 package tide.tool;
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
 
-import tide.tool.*;
-import tide.tool.support.*;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+
+import tide.tool.support.DebugProcess;
 
 public class ProcessAction
   extends AbstractAction

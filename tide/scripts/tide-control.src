@@ -1,4 +1,4 @@
 #!/bin/sh
 CLASSPATH=__BUILDDIR__/tide.jar:$CLASSPATH
 export CLASSPATH
-java-adapter -TB_PORT 9500 -TB_TOOL_NAME tide-control -class tide.TideControl -jvm-arg -Dtide.develop=true
+java-adapter -TB_PORT 9500 -TB_TOOL_NAME tide-control -class tide.TideControl -jvm-arg -Dtide.develop=true 
