@@ -10,7 +10,6 @@ dnl The following macro allows you to use it even with those versions.
 AC_PROG_MAKE_SET
 
 dnl Find a suitable C compiler
-AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
 dnl Set RANLIB if needed
