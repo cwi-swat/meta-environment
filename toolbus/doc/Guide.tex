@@ -209,7 +209,7 @@ This results in the script given in Figure~\ref{fig:hello2.tb}.
 But how do we implement the {\tt hello} tool itself?
 We will explain in this guide the range of implementation languages that 
 can be used (i.e., C, Tcl, Perl, \ASFSDF\ ...).
-For the sake of this example we only show how a C implementation will look like.
+For the sake of this example we only show what a C implementation will look like.
 
 In Figure~\ref{fig:hello.c} a first, simple, version of the {\tt hello} tool
 is shown. It consists of the following parts\footnote{
@@ -221,8 +221,8 @@ common definitions for all tools.
 \item A declaration of a function {\tt hello\_handler} that is called when there is
 input available from the \TB:
 its argument {\tt inp} is the input term, and its result (either a term
-or {\tt NULL}) will be sent back to the \TB.
-\footnote{It is important to stress that the handler should {\bf always} return a value:
+or {\tt NULL}) will be sent back to the \TB.\footnote{It is important
+to stress that the handler should {\bf always} return a value: 
 either a term or NULL.}
 The input is analyzed by using {\tt TBmatch}, a library function for matching
 terms. For the {\tt get-text} case, 
@@ -241,7 +241,7 @@ Although it is not yet clear from the examples given so far,
 it turns out that there is much commonality among the handlers
 written for different tools. In particular, the code for analyzing
 terms coming from the \TB\ is similar. This code also duplicates
-information in the script concerning the requests send to each tool.
+information in the script concerning the requests sent to each tool.
 For this reason, we also provide a {\em tool interface generator}
 that automatically generates tool interfaces from a given script.
 
@@ -287,18 +287,19 @@ In the current version, the \TB\ does not yet support a ``stop'' action
 to terminate execution. As a result you will have to kill the interpreter yourself.
 
 \subsection{Further reading}
-If you have come this far, you may be intested to learn more about the details
+If you have come this far, you may be interested to learn more about the details
 of \TB\ programming.
 In Section~\ref{ToolsInC} you will find a complete description
 of the library functions provided for writing tools in C.
 In Section~\ref{Executing} the ways to execute the \TB\ interpreter
 and tools are described.
 Next follows an intermezzo explaining the overall structure of \TB\ adapters.
-In the section that follow we explain how to write tool in various languages
+In the sections that follow we explain how to write tools in various languages
 and systems: Tcl/Tk (Section~\ref{ToolsInTcl}),
 Perl (Section~\ref{ToolsInPerl}),
 \ASFSDF\ (Section~\ref{ToolsInASFSDF}), 
 and arbitrary Unix commands (Section~\ref{ToolsFromUnix}).
+%%SG: these section references are missing.
 Four appendices with summaries conclude this guide.
 
 \section{\label{ToolsInC}Writing tools in C}
@@ -319,7 +320,7 @@ In the most general case, a tool has
 \begin{itemize}
 
 \item one input port from the \TB\ to the tool and
-can receive tree structures (terms) via this port.
+can receive tree structures (terms) via this port;
 
 \item one output port from the tool to the \TB\ and
 can  send terms to the \TB\ via this port;
@@ -334,17 +335,17 @@ This global, architectural, structure of a tool is shown in Figure~\ref{fig:Tool
 With each input port, an {\em event handler} is associated that takes care
 of the processing of the data received via that port and is responsible
 for returning a result (if any). One tool may thus contain several event handlers.
-When a request is received the following steps
+When a request is received, the following steps
 are taken:
 \begin{itemize}
 \item The data received are parsed to check that they form a legal \TB\ term $T$.
-(If this is impossible a warning message is generated).
+(If this is impossible, a warning message is generated).
 \item The event handler is called with $T$ as argument.
 \item The event handler can do arbitrary processing needed to decompose
 $T$, to determine what has to be done, and perform any desired computation.
 \item The event handler returns either:
 \begin{itemize}
-\item a legal \TB\ term representing a reply to be send back to the \TB.
+\item a legal \TB\ term representing a reply to be sent back to the \TB.
 \item {\tt NULL} indicating that there is no reply.
 \end{itemize}
 \end{itemize}
@@ -359,9 +360,9 @@ the \TB\ about some external event).
 
 A tool is thus on the one hand a reactive engine that responds to a
 request from the \TB\ and returns the result back to the \TB\ in the
-form of a term (e.g., calculate the value of some expression) but on
+form of a term (e.g., calculate the value of some expression), but on
 the other hand it can also take the initiative to send a term to the
-\TB (e.g., generate an event when a user pushes some button).
+\TB  (e.g., generate an event when a user pushes some button).
 
 At the level of the source code, the global structure of a purely
 reactive tool without additional term or character ports
@@ -373,18 +374,18 @@ Sections~\ref{TBaddTermPort} and~\ref{TBaddCharPort}.
 \subsubsection{The include file {\tt TB.h}}
 
 Each tool needs to include the file {\tt TB.h}
-which defines some basic types as well as the types
+which defines some basic types as well as the set
 of library functions available.
 
 The basic types are:
 \begin{itemize}
-\item {\tt TBbool}: the boolean datatype defined by
+\item {\tt TBbool}: the boolean data type defined by
 \begin{verbatim}
       typedef enum TBbool {TBfalse, TBtrue} TBbool;
 \end{verbatim}
-It is mainly used as return value of library functions.
+It is mainly used as the return value of library functions.
 
-\item {\tt term}: all information between tool and \TB\ is exchanged
+\item {\tt term}: all information between a tool and \TB\ is exchanged
 in the form of tree structures that are represented by the type
 {\tt term}. The tool library has been designed in such a way that
 only pointers to terms must be passed to or are returned by library
@@ -466,7 +467,8 @@ and no connection with the \TB\ is made.
 (This can also be achieved with the {\tt TB\_SINGLE} arguments,
 see Section~\ref{Executing}.)
 
-The {\tt ToolName} should be identical to a tool name as appearing in
+The {\tt ToolName} should be literally equal (including the case of letters)
+to a tool name as appearing in
 a tool declaration in the \T\ script. This is important since the tool name
 is used when the tool is connected to the \TB.
 
@@ -474,14 +476,14 @@ The standard program arguments that are passed (via  {\tt argc} and {\tt argv})
 are further described in Section~\ref{Executing}.
 
 The event handler {\tt handler} will handle all terms
-from the \TB\ and received by the tool. Event handlers are further explained
+from the \TB\  received by the tool. Event handlers are further explained
 in Section~\ref{TBaddTermPort}.
 
 The function {\tt check\_in\_sign} takes the input signature of the
 tool as received from the \TB\ and checks that it is compatible with
 the input signature as expected by the tool.  If this is the case,
-{\tt NULL} is returned as value.  Otherwise, the first offending
-signature element is returned as value.
+{\tt NULL} is returned.  Otherwise, the first offending
+signature element is returned.
 
 \subsubsection{\label{TBaddTermPort}{\tt TBaddTermPort}}
 
@@ -517,7 +519,7 @@ This is described by the predefined type {\tt TBcallbackTerm}.
 
 A new term port can be added by
 \begin{verbatim}
-      int TBaddTermPort(int Fd, TBcallbackTerm event_handler)}
+      int TBaddTermPort(int Fd, TBcallbackTerm event_handler)
 \end{verbatim}
 which establishes {\tt event\_handler} as the handler for the term port {\tt Fd}.
 In this fashion, an arbitrary number of term input ports can be set up which
@@ -544,10 +546,10 @@ The {\tt event\_handler} given as argument to
 This is described by the predefined type {\tt TBcallbackChar}.
 
 There is one important difference between term ports and character ports:
-for term ports a complete term has already been read from the port,
-while for character ports the data is only available {\em but must still
+for term ports, a complete term has already been read from the port,
+while for character ports the data is only available {\em and must still
 be read by the handler}. In this way, character ports have maximal
-freedom in the way they want to read and analyze incoming data.
+freedom in the way they can read and analyze incoming data.
 
 All character ports and term ports will be read in parallel
 and the handler of the first port that has data available will be called.
@@ -570,7 +572,7 @@ functions {\tt TBpeek} and {\tt TBsend} discussed below)
 should not be called from within event handlers.
 
 \subsubsection{\label{TBpeek}{\tt TBpeek}}
-In computation-intensive tools the need may arize to
+In computation-intensive tools, the need may arise to
 check for the availability of incoming data from the \TB\ during
 computations. This achieved by the function
 \begin{verbatim}
@@ -640,7 +642,7 @@ decomposition.  Such term patterns play the same role as format
 strings in the printf/scanf paradigm in C.  In first approximation, a
 term pattern is a literal string that would be obtained by a preorder
 traversal of a term.  For instance, the term pattern {\tt "or(true,
-false)"}, corresponds to a term whose root is label with the symbol
+false)"}, corresponds to a term whose root is labeled with the symbol
 {\tt or}, and whose children are labeled with, respectively, {\tt
 true} and {\tt false}. In this way, term patterns can be used to
 construct and to match terms.
@@ -664,6 +666,8 @@ in which they are used.  When constructing a term, directives indicate
 that a subterm should be obtained from some given variable.  When
 matching a term, directives indicate the assignment of subterms to
 given variables.
+For the implications of these directives for memory management,
+see Section~\ref{Memory}.
 
 \subsubsection{\label{TBmake}{\tt TBmake}}
 The function
@@ -682,14 +686,14 @@ For instance, assuming the declarations
 \end{verbatim}
 the call
 \begin{verbatim}
-      t = TBmake("exam(%f(%t,9),%d,%s)", fun, yellow, 10, name)
+      t = TBmake("exam(%f(%t,9),%d,%d%s)", fun, yellow, n, 10, name)
 \end{verbatim}
 will construct the term {\tt t} with value
 \begin{verbatim}
-      exam(pair(yellow,9),10,"any")
+      exam(pair(yellow,9),10,10,"any")
 \end{verbatim}
 
-Binary string are used to represent arbitrary length, binary data
+Binary strings are used to represent arbitrary length, binary data
 that cannot be represented by ordinary C strings because they may
 contain ``null'' characters. A binary string is represented by
 a character pointer and a length. For instance, given
@@ -719,14 +723,17 @@ Matching terms amounts to
 \end{verbatim}
 does. It matches {\tt Trm} against {\tt Pattern} and, when a submatch
 is found that corresponds to a directive, it makes assignments to
-variables whose addresses appear in {\tt ...}.  {\tt Pattern} should
+variables whose addresses appear in {\tt ...}.
+For most directives, the values assigned to these variables are pointers to
+subterms of {\tt Trm}.
+{\tt Pattern} should
 be a well-formed, textual representation of a term which may contain
 any of the directives described earlier.  For instance, in the context
 \begin{verbatim}
       term *t = TBmake("exam(pair(yellow,9),10, \"any\")");
       term *t1;
       int n;
-      char *ex;
+      char *s;
 \end{verbatim}
 the call 
 \begin{verbatim}
@@ -739,10 +746,15 @@ yields true and is equivalent to the following assignments:
       n = 10;
       s = "any";
 \end{verbatim}
+As explained in full detail in Section~\ref{Memory}, memory is managed
+automatically by the \TB.  As a general rule, the values for {\tt ex},
+{\tt t1}, and {\tt s} are pointers into the original term {\tt t}
+rather that newly created values. As a result, they have a life time
+that is equal to that of {\tt t}.
 
-Matching binary string is the inverse of constructing them. Given
-the term {\tt bstr} constructed at the end of the previous paragraph
-can be done as follows:
+Matching binary strings is the inverse of constructing them. Given
+the term {\tt bstr} constructed at the end of the previous paragraph,
+its size and contents can be extracted as follows:
 \begin{verbatim}
       char *p;
       int n;
@@ -752,7 +764,8 @@ can be done as follows:
 {\tt TBmatch} will succeed and assign a pointer to the character data
 in the binary string to the variable 
 {\tt p} and it will assign {\tt 3} to the variable {\tt n}.
-
+Here, again, the value of {\tt p} is a pointer into the term {\tt bstr}
+rather than a newly allocated string.
 
 \paragraph{Notes}
 \begin{itemize}
@@ -765,7 +778,7 @@ will strike (as usual when using C).
 may be performed, even if the match as a whole fails.
 \item Note that {\em receiving} a term from the \TB\ and {\em matching} it are distinct
 activities: a term is received once but can be used more than once
-as argument of {\tt TBmatch}.
+as an argument of {\tt TBmatch}.
 \end{itemize}
 
 \subsection{\label{TermIO}Input and output of terms}
@@ -776,7 +789,7 @@ of terms. Raw term i/o is provided by {\tt TBwrite} and {\tt TBread}.
 Formatted term output is provided by {\tt TBprintf} and {\tt TBsprintf}.
 There are currently no primitives for formatted term input.
 
-\subsubsection{\label{TBread/write}{\tt TBread} and {\tt TBwrite}}
+\subsubsection{\label{TBread/write}{\tt TBread}, {\tt TBwrite} and {\tt TBreadTerm}}
 The function
 \begin{verbatim}
       void TBwrite(FILE *File, term *Trm)
@@ -787,8 +800,7 @@ for reading terms in pure textual format.
 For instance, in the context:
 \begin{verbatim}
       FILE *f = fopen("foo", "w");
-      term *Trm1 = TBmake("%f(red,%d)", "freq", 17),
-           *Trm2;
+      term *Trm1 = TBmake("%f(red,%d)", "freq", 17);
 \end{verbatim}
 the statement
 \begin{verbatim}
@@ -801,12 +813,12 @@ The function
 \begin{verbatim}
       term *TBread(FILE *File)
 \end{verbatim}
-is the inverse of {\tt TBwrite}: it reads a term (in internal format) from
-a file and returns it as value. When end of file is encountered or
-the term could not be read, the value {\tt NULL} is returned.
-\footnote{Since {\tt NULL} is also used as the representation of the empty list
-``{\tt []}'', this implies that it is not possible to distinguish the
-case that an empty list is read from the error case.}
+is the inverse of {\tt TBwrite}: it reads a term (in internal format)
+from a file and returns it as value. When end of file is encountered
+or the term could not be read, the value {\tt NULL} is
+returned.\footnote{Since {\tt NULL} is also used as the representation
+of the empty list ``{\tt []}'', this implies that it is not possible
+to distinguish between an empty list and an error being returned.}
 
 The function
 \begin{verbatim}
@@ -821,7 +833,7 @@ The function
 \begin{verbatim}
       void TBprintf(FILE *File, char *Pattern, ...)
 \end{verbatim}
-writes formatted out to {\tt File}.
+writes formatted output to {\tt File}.
 {\tt Pattern} is printed literally except for occurrences
 of directives which are replaced by the textual representation
 of the values appearing in {\tt ...}. For instance,
@@ -837,7 +849,7 @@ Wrong event "failure(13)" ignored
 \begin{verbatim}
       char * TBsprintf(char *Pattern, ...)
 \end{verbatim}
-resembles {\tt TBprintf} but it returns the formatted value as string
+resembles {\tt TBprintf} but it returns the formatted value as a string
 rather then writing it to file. {\bf The string returned by {\tt TBsprintf}
 is volatile and may be overwritten by any other call to the
 \TB\ library. It is therefore good practice to duplicate or
@@ -863,7 +875,7 @@ will set the first element of the list {\tt tl} to the value of {\tt t}.
 \begin{center}
 \begin{tabular}{|l|p{5cm}|}
 \hline Function		& Description				\\ \hline \hline
-{\tt term **list\_first(term\_list *$L$)}					& Addres of first element of $L$\\
+{\tt term **list\_first(term\_list *$L$)}					& Address of first element of $L$\\
 {\tt term **list\_next(term\_list *$L$)}					& Address of remainder of $L$\\ \hline
 {\tt TBbool     list\_equal(term\_list *$L_1$, term\_list *$L_2$);}	& $L_1 = L_2$\\
 {\tt term\_list *list\_copy(term\_list *$L$);}					& Toplevel (shallow) copy of $L$\\
@@ -901,9 +913,22 @@ will set the first element of the list {\tt tl} to the value of {\tt t}.
 \end{figure}
 
 \subsection{\label{Memory}Memory management}
-The functions in the \TB\ library provide automatic memory management of
-terms that have been created but are no longer referenced.
-In order to protect terms from being collected the function
+The functions in the \TB\ library provide automatic memory management
+of terms.  Terms that have been created but are no longer referenced
+are removed by a method called {\em garbage collection}.  The global
+model is that there is a set of {\em protected} terms that are
+guaranteed to survive a garbage collection.  Effectively, all
+protected terms (and their subterms) are conserved and all other terms
+are considered as garbage and can be collected.
+
+It is guaranteed that no garbage collection takes place during
+the execution of an event handler, hence it is not necessary to
+protect temporary terms that are constructed during the execution
+of an event handler.
+However, terms that should have a longer life time must be protected
+in order to survive.
+
+In order to protect terms from being collected, the function
 \begin{verbatim}
       void TBprotect(term **TrmPtr)
 \end{verbatim}
@@ -913,13 +938,6 @@ by the function
 \begin{verbatim}
       void TBunprotect(term **TrmPtr)
 \end{verbatim}
-It is guaranteed that no garbage collection takes place during
-the execution of an event handler, hence it is not necessary to
-protect temporary terms that are constructed during the execution
-of an event handler.
-
-However, terms that have a longer life time must be protected
-in order to survive.
 
 Consider, for example, an event handler that maintains a list
 of all requests received from the \TB\ during the execution
@@ -948,12 +966,49 @@ a garbage collection. This is done by the following function:
 \begin{verbatim}
       void TBcollect(void);
 \end{verbatim}
+
 Usually, this function is called automatically after each invocation
-of an event handler. When large computations on terms are done--as
+of an event handler. However, when large computations on terms are done---as
 may occur in stand-alone utilities that are not connected to
-the \TB--the above function must be called regularly.
+the \TB---the above function must be called regularly.
 Be aware, that only protected term pointers can be trusted
 after a garbage collection.
+
+The interplay between garbage collection and program variables
+is subtle. The following points are therefore worth  mentioning:
+
+\begin{itemize}
+
+\item Functions that return a term as value (e.g., {\tt TBreadTerm}) 
+do not explicitly protect it but the result may, of course, be
+protected because it is a subterm of an already protected term.
+
+\item The function {\tt TBmake} uses strings and terms and includes
+them into a new term $T$. The implications for memory management are:
+\begin{itemize}
+\item All string arguments (using {\tt \%s}, {\tt \%b} or {\tt \%f})
+are copied before they are included into $T$.
+They can thus safely be deallocated (e.g., using {\tt free}) by the C program.
+
+\item All term arguments (using {\tt \%t} or {\tt \%l}) are included
+into $T$ by means of a pointer.
+They thus become reachable from $T$ and
+their life time becomes at least as large as that of $T$;
+it is unnecessary to explicitly protect them.
+\end{itemize}
+
+\item The function {\tt TBmatch} assigns strings and terms to program variables
+by extracting them from an existing term $T$. The general rule here is that
+extracted values have a life time that is equal to that of $T$.
+The implications for memory management are:
+\begin{itemize}
+\item All string values (obtained using {\tt \%s}, {\tt \%b} or {\tt \%f})
+should be copied if they should survive $T$.
+\item All term values (obtained using {\tt \%t} or {\tt \%l}) should
+be explicitly protected if they should survive $T$.
+\end{itemize}
+
+\end{itemize}
 
 \subsection{Compiling tools written in C}
 When compiling a tool written in C the following questions
@@ -1012,11 +1067,11 @@ option of the \TB\ interpreter. For instance,
 \begin{verbatim}
       toolbus -gentifs hello2.tb
 \end{verbatim}
-will create a file {\tt hello2.tifs} contain the tool interfaces.
+will create a file {\tt hello2.tifs} containing the tool interfaces.
 
 \item Use the language independent interface description
 to generate a tool interface for a specific tool in a specific
-implementation language. Currently, only the generator ``{\tt ctif}''
+implementation language. Currently, only the generator {\tt ctif}
 exists for generating C tool interfaces. It is called as follows:
 \begin{quote}
       {\tt ctif -tool $Name$ -tifs $TifsFile$}
@@ -1086,7 +1141,7 @@ the {\em same} host machine.
 
 \subsection{\label{TB-args}\TB\ arguments}
 The $script\_name$ (see below) given as argument to the \TB\ is always
-preprocessed by the C preprocessor before it is parsed as \T\ script.
+preprocessed by the C preprocessor before it is parsed as a \T\ script.
 In this way, directives like, e.g., {\tt \#define}, {\tt \#include} and
 {\tt \#ifdef} can be used freely in \T\ scripts. The following
 preprocessor arguments are accepted by the {\tt toolbus} command:
@@ -1151,7 +1206,7 @@ input, respectively, output. Next, consider,
 which searches the directory {\tt my-include-dir} for files used in {\tt \#include}
 directives in the script {\tt wave.tb} and it will define the macro
 {\tt CNT} with value {\tt 33}. All occurrences of {\tt CNT} in the script
-will be replaced by this value before parsing it as \T\ script.
+will be replaced by this value before parsing it as a \T\ script.
 Finally,
 \begin{verbatim}
       toolbus -gentifs hello.tb
@@ -1183,7 +1238,8 @@ outside the \TB. This requires that the script contains a {\tt rec-connect}
 for this particular tool.
 \end{itemize}
 
-\noindent When \TB\ and tool are running on different host machines, it is important
+\noindent When \TB\ and tool are running on different host machines,
+it is important
 to define the host machine on which the \TB\ interpreter is running
 when starting the execution of the tool.
 As an example, consider the ``{\tt hello}'' application described in Section~\ref{Hello}.

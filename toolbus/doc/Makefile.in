@@ -20,6 +20,8 @@ INCLUDES	= @INCLUDES@ -I$(includedir)
 LIBS		= @LIBS@
 TBLIB		= $(libdir)/libtb.a
 
+ADAPTERS	= @ADAPTERS@
+
 CLEAN		= @CLEAN@
 
 .SUFFIXES:
@@ -38,11 +40,12 @@ DISTFILES	= Makefile.in Guide.tex \
 
 all:    ${DOCUMENTS}
 
-adapters.tex: adapters
-	rm -f adapters.tex
-	for file in `ls adapters/*.tex`; do\
-	  echo \\input\{`ls $$file`\} >> adapters.tex;\
-	done
+#adapters.tex: adapters
+#	rm -f adapters.tex
+#	for file in `ls adapters/*.tex`; do\
+#	for file in ${ADAPTERS}; do\
+#	  echo \\input\{`ls $$file`\} >> adapters.tex;\
+#	done
 Arch.tex: Arch.pic
 	tpic Arch
 Tifs.tex: Tifs.pic
