@@ -30,7 +30,6 @@ let
 in
   /* Start up tools and initialize */
   execute(evaluator, Eval?).
-  printf("evaluator tool connected.\n") .
   snd-do(Eval, create-equations-db).
   execute(add-eqs-syntax,Addsyn?).
   /* Start all controlling processes */
