@@ -42,6 +42,9 @@ public class TBTerm {
   public static ATerm TermPlaceholder;
   public static ATerm ListPlaceholder;
 
+  public static ATerm TransactionIdVar;
+  public static ATerm TransactionIdResVar;
+
   public static void init() {
     if (!initDone) {
       init(new PureFactory());
@@ -69,6 +72,9 @@ public class TBTerm {
     StrPlaceholder = factory.makePlaceholder(StrType);
     TermPlaceholder = factory.makePlaceholder(TermType);
     ListPlaceholder = factory.makePlaceholder(ListType);
+
+    TransactionIdVar = factory.make("var(-1,term,TransactionId))");
+    TransactionIdResVar = factory.make("rvar(-1,term,TransactionId))");
 
     FunctionDescriptors.init(factory);
   }
@@ -268,16 +274,16 @@ public class TBTerm {
   public static ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
     switch (t.getType()) {
       case ATerm.BLOB : // ??
-      
+
       case ATerm.INT :
         return IntPlaceholder;
-        
+
       case ATerm.PLACEHOLDER :
         return t;
-        
+
       case ATerm.REAL :
         return RealPlaceholder;
-        
+
       case ATerm.APPL :
         if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
           ATerm type = TBTerm.getVarType(t);
@@ -301,7 +307,7 @@ public class TBTerm {
           vargs[i] = makePattern(args[i], env, false);
         }
         return factory.makeAppl(fun, vargs);
-        
+
       case ATerm.LIST :
         ATermList lst = factory.makeList();
         for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {

@@ -16,14 +16,14 @@ public class RecVal extends ToolAtom {
   }
   
   public ProcessExpression copy(){
-    return new RecVal(getToolarg());
+    return new RecVal(getToolTerm());
   }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
     ToolInstance ti = getToolInstance();
-    if (ti.getValueFromTool(getToolarg(), getEnv())){
+    if (ti.getValueFromTool(getToolTerm(), getEnv())){
       return nextState();
     } else
       return false;

@@ -19,7 +19,7 @@ public class RecMsg extends MsgAtom {
   }
   
   public ProcessExpression copy(){
-    return new RecMsg(getMsg(), getQual());
+    return new RecMsg(getMsg(), getId());
   }
  
 }

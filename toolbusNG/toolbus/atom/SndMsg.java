@@ -18,7 +18,7 @@ public class SndMsg extends MsgAtom {
   }
   
   public ProcessExpression copy(){
-    return new SndMsg(getMsg(), getQual());
+    return new SndMsg(getMsg(), getId());
   }
 
 }

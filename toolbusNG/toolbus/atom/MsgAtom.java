@@ -15,33 +15,33 @@ abstract class MsgAtom extends Atom {
 
   private State partners = new State(); // communication partners in other processes
   private Ref msg;
-  private Ref qual;
+  private Ref id;
 
   private ATerm matchPattern;
 
   public MsgAtom(ATerm msg) {
     super();
     this.msg = new Ref(msg);
-    this.qual = new Ref(TBTerm.TermPlaceholder);
-    setAtomArgs(this.msg, this.qual);
+    this.id = new Ref(this instanceof RecMsg ? TBTerm.TransactionIdResVar : TBTerm.TransactionIdVar);
+    setAtomArgs(this.msg, this.id);
   }
 
-  public MsgAtom(ATerm msg, ATerm qual) {
+  public MsgAtom(ATerm msg, ATerm id) {
     super();
     this.msg = new Ref(msg);
-    this.qual = new Ref(qual);
-    setAtomArgs(this.msg, this.qual);
+    this.id = new Ref(id);
+    setAtomArgs(this.msg, this.id);
   }
 
   public ATerm getMsg() {
     return msg.value;
   }
 
-  public ATerm getQual() {
-    return qual.value;
+  public ATerm getId() {
+    return id.value;
   }
-  
-  public ATerm getMatchPattern(){
+
+  public ATerm getMatchPattern() {
     return matchPattern;
   }
 
@@ -68,15 +68,10 @@ abstract class MsgAtom extends Atom {
 
   public void compile(ProcessInstance processInstance, State follow) throws ToolBusException {
     super.compile(processInstance, follow);
-    ATermFactory factory = getQual().getFactory();
-    if (this instanceof SndMsg) {
-      matchPattern =
-        factory.makeList(getMsg(), factory.makeList(getQual(), factory.makeList(processInstance.getProcessId())));
-    } else {
-      matchPattern =
-        factory.makeList(getMsg(), factory.makeList(processInstance.getProcessId(), factory.makeList(getQual())));
-    }
-   // System.err.println(matchPattern);
+    ATermFactory factory = getId().getFactory();
+    matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
+
+    System.err.println(matchPattern);
   }
 
   public boolean execute() throws ToolBusException {
@@ -91,14 +86,11 @@ abstract class MsgAtom extends Atom {
         MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
         ProcessInstance pb = b.getProcess();
         if (pb.contains(b) && b.isEnabled()) {
-          if (matchPartner(b)){
+          if (matchPartner(b)) {
             if (ToolBus.isVerbose()) {
               System.err.println(
                 "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
             }
-//            r.getLeft().update(pa.getEnv());
-//            r.getRight().update(pb.getEnv());
-
             this.nextState();
             b.nextState();
             return true;

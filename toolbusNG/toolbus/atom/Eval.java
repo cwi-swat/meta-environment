@@ -14,14 +14,14 @@ public class Eval extends ToolAtom {
   }
   
   public ProcessExpression copy(){
-    return new Eval(getToolarg());
+    return new Eval(getToolTerm());
   }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
     ToolInstance ti = getToolInstance();
-    ti.sndEvalToTool(getSubstitutedArg());
+    ti.sndEvalToTool(getSubstitutedCall(), getSubstitutedId());
     return nextState();
   }
 

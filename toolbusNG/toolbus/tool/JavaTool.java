@@ -245,11 +245,11 @@ public class JavaTool implements ToolInstance {
     toolshield.addRequest(operation, m, actuals);
   }
 
-  synchronized public void sndEvalToTool(ATermAppl call) {
+  synchronized public void sndEvalToTool(ATermAppl call, ATerm id) {
     sndRequestToTool(EVAL, call);
   }
 
-  synchronized public void sndDoToTool(ATermAppl call) {
+  synchronized public void sndDoToTool(ATermAppl call, ATerm id) {
     sndRequestToTool(DO, call);
   }
 
