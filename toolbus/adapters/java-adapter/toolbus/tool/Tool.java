@@ -136,7 +136,6 @@ abstract public class Tool implements Runnable
     channel = new ToolBusChannel(istream);
 
     //{ Determine the host name, even for the local host
-
     host = address.getHostName();
     if(host == null) {
       String pair = address.toString();
@@ -161,7 +160,6 @@ abstract public class Tool implements Runnable
 
     //}
     //{ Complete the handshake by checking the input signature
-
     try {
       ATermPattern sigpat = world.makePattern("rec-do(signature(<list>,<list>))");
       ATerm term = readTerm();
@@ -189,12 +187,12 @@ abstract public class Tool implements Runnable
      throws IOException
   {
     // jdk 1.1
-    // byte[] hs = string.getBytes();
+      byte[] hs = string.getBytes();
 
     // jdk 1.02
-    byte[] hs = new byte[string.length()];
-    string.getBytes(0, string.length(), hs, 0);
-
+      //byte[] hs = new byte[string.length()];
+      //string.getBytes(0, string.length(), hs, 0);
+    
     byte[] handshake = new byte[MAX_HANDSHAKE];
     for(int i=0; i<hs.length; i++)
       handshake[i] = hs[i];
@@ -222,10 +220,10 @@ abstract public class Tool implements Runnable
     istream.read(buffer);
 
     // jdk 1.1
-    // String string = new String(buffer);
+    String string = new String(buffer);
 
     // jdk 1.02
-    String string = new String(buffer, 0);
+    //String string = new String(buffer, 0);
 
     int space = string.indexOf(' ');
     int end = string.indexOf(0);
@@ -286,10 +284,10 @@ abstract public class Tool implements Runnable
       if(verbose) {
         System.out.print("tool " + name + " writes term:\n");
         // jdk 1.1
-	// System.out.print(new String(ls));
+	System.out.print(new String(ls));
 
 	// jdk 1.02
-	System.out.print(new String(ls, 0));
+	//	System.out.print(new String(ls, 0));
 
         term.print(System.out);
         System.out.println("");
@@ -513,9 +511,9 @@ class ToolBusChannel extends ATermChannel
     byte[] lspecBuf = new byte[Tool.LENSPEC];
     istream.read(lspecBuf);
     // jdk 1.1
-    // String lspec = new String(lspecBuf);
+    String lspec = new String(lspecBuf);
     // jdk 1.02
-    String lspec = new String(lspecBuf, 0);
+    //String lspec = new String(lspecBuf, 0);
 
     bytesLeft = Integer.parseInt(lspec.substring(0, Tool.LENSPEC-1));
     if(bytesLeft < Tool.MIN_MSG_SIZE)
