@@ -14,6 +14,7 @@
 #define MAX_MESSAGE_LENGTH 133
 #define INITIAL_TABLE_SIZE 100
 #define TABLE_RESIZE_PERCENTAGE 75
+#define MAX_PATH_LENGTH 1024
 
 /*}}}  */
 /*{{{  variables */
@@ -280,9 +281,16 @@ void add_user_properties(int cid, const char *contents)
 
 void remove_user_properties(int cid)
 {
+  char curdir[MAX_PATH_LENGTH];
   ATtableReset(userDescriptionsByType);
   ATtableReset(userActionsByDescription);
-  modulePaths = (ATermList) ATparse("[\".\"]");
+
+  if (getcwd(curdir, MAX_PATH_LENGTH) == NULL) {
+    ATerror("__FILE__: could not get current working directory");
+  }
+  else {
+    modulePaths = (ATermList) ATmake("[<str>]", curdir);
+  }
 }
 
 /*}}}  */
@@ -445,8 +453,15 @@ void version(const char *msg)
 
 static void initConfigurationManager(void)
 {
+  char curdir[MAX_PATH_LENGTH];
+
   ATprotectList(&modulePaths);
-  modulePaths = (ATermList) ATparse("[\".\"]");
+  if (getcwd(curdir, MAX_PATH_LENGTH) == NULL) {
+    ATerror("__FILE__: could not get current working directory");
+  }
+  else {
+    modulePaths = (ATermList) ATmake("[<str>]", curdir);
+  }
 
   ATprotectList(&userExtensions);
   userExtensions = ATempty;
