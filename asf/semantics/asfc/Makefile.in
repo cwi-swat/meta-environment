@@ -98,7 +98,7 @@ subdirs:
 compiler.tif.c compiler.tif.h: $(top_srcdir)/toolbus/meta.tifs
 	$(ATERMBIN)/tifstoc -tool compiler $(top_srcdir)/toolbus/meta.tifs
 
-compiler: compiler.o compiler.tif.o 
+compiler: compiler.o compiler.tif.o c-source/libAsFix2C-${CC}.a
 	$(CC) -o compiler compiler.o compiler.tif.o $(LIBS)
 
 #compile-one-module: compile-one-module.o
