@@ -1,16 +1,18 @@
-module Bag[Elem]
+module Bags[Elem]
 
 exports 
 imports basic/Booleans
 imports basic/Integers
-imports containers/List[Elem]
 
   sorts Elem Bag[[Elem]]  
 
 context-free syntax
-   List[[Elem]]                     -> Bag[[Elem]]
+   "{" {Elem ","}* "}"              -> Bag[[Elem]] {constructor}
 
  context-free syntax
+
+   "EmptyBag"                         -> Bag[[Elem]]
+
    Bag[[Elem]] "==" Bag[[Elem]]     -> Boolean
    Bag[[Elem]] "<=" Bag[[Elem]]     -> Boolean
    Bag[[Elem]] "<" Bag[[Elem]]      -> Boolean
@@ -21,17 +23,18 @@ context-free syntax
    Bag[[Elem]] "inter" Bag[[Elem]]  -> Bag[[Elem]]
    Bag[[Elem]] "\\" Bag[[Elem]]     -> Bag[[Elem]]
 
-   Elem "add-unique" Bag[[Elem]]     -> Bag[[Elem]]
-
    "(" Bag[[Elem]] ")"              -> Bag[[Elem]] {bracket}
 
    "#" Bag[[Elem]]                  -> Integer
+   Elem in Bag[[Elem]]              -> Boolean
+
+   "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" -> Bag[[Elem]]
 
  variables
    "Bag[[Elem]]" [0-9\']*           -> Bag[[Elem]]
 
 hiddens
-  imports asf/Comments
+  imports asf/syntax/Comments
 
   variables
     "Bag" [0-9\']*           -> Bag[[Elem]]

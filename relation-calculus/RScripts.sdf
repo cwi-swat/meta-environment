@@ -1,0 +1,77 @@
+module RScripts[Elem]
+
+imports Relations[Elem]
+
+exports
+  sorts SCRIPT STAT PRED RVAR BVAR EVAR VAR FUN FROM BFROM RFROM TEXP EXP
+
+  lexical syntax
+     [A-Z][A-Z][A-Z0-9]*     -> RVAR
+     [A-Z][a-z0-9]*          -> BVAR
+     "$" [A-Za-z0-9]+        -> EVAR
+     [a-z][A-Za-z0-9]*       -> FUN
+
+  context-free syntax
+
+     "true"                                  -> PRED
+     "false"                                 -> PRED
+     PRED "and" PRED                         -> PRED
+     PRED "or" PRED                          -> PRED
+     "not" PRED                              -> PRED
+     "(" PRED ")"                            -> PRED {bracket}
+
+     EXP "==" EXP                            -> PRED
+     EXP "<=" EXP                            -> PRED
+     EXP "<" EXP                             -> PRED
+     EXP ">=" EXP                            -> PRED
+     EXP ">" EXP                             -> PRED
+
+     EXP in EXP                              -> PRED
+
+     PRED                                    -> EXP
+
+     Elem                                    -> EXP
+     EVAR                                    -> EXP
+     BVAR                                    -> EXP
+     "{" {EXP ","}* "}"                      -> EXP
+     RVAR                                    -> EXP 
+     "<" EXP "," EXP ">"                     -> TEXP
+     "{" {TEXP ","}* "}"                     -> EXP
+
+     EXP "union" EXP                         -> EXP
+     EXP "inter" EXP                         -> EXP
+     EXP "\\" EXP                            -> EXP
+     EXP "o" EXP                             -> EXP
+     EXP "x" EXP                             -> EXP
+     EXP "." EXP                             -> EXP
+
+     EXP "+"                                 -> EXP
+     EXP "*"                                 -> EXP
+     EXP "until" "(" EXP "," EXP ")"         -> EXP
+
+     "(" EXP ")"                             -> EXP {bracket}
+
+     "{" BFROM "|" PRED "}"                  -> EXP
+     "{" {FROM ","}+ "|" PRED "|" EXP "}"    -> EXP
+
+     "{" RFROM "|" PRED "}"                  -> EXP
+
+     EVAR "in" EXP                           -> BFROM
+     "<" EVAR "," EVAR ">" in EXP            -> RFROM
+     BFROM | RFROM                           -> FROM
+
+     FUN "(" EXP ")"                         -> EXP
+     FUN "(" EXP "," EXP ")"                 -> EXP
+
+     "rel" RVAR "=" EXP                      -> STAT
+     "bag" BVAR "=" EXP                      -> STAT
+
+      EVAR | BVAR | RVAR                    -> VAR
+
+     "fun" FUN "(" VAR ")" "=" EXP           -> STAT
+     "fun" FUN "(" VAR "," VAR ")" "="  EXP  -> STAT
+
+     STAT*                                   -> SCRIPT
+     
+
+     

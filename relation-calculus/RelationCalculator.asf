@@ -1,0 +1,371 @@
+ equations
+
+%%---- Store
+
+[V1]   value(Var, [<Var, Val>, VPair*]) = Val
+[V2]   Var != Var' ===> value(Var, [<Var', Val>, VPair*]) = value(Var, [VPair*])
+
+[A1]   assign(Var, Val, [VPair*]) = [<Var, Val>, VPair*]
+
+%%--- if
+
+[if1]  if true then Val1 else Val2 fi  = Val1
+[if2]  if false then Val1 else Val2 fi = Val2
+
+%%---- Equality on elements
+
+[e1]   equal(E, E)  = true
+[default-e2] 
+       equal(E, E') = false
+
+%% --- 
+
+[EVP]  Bool = evalx(Exp, Store)
+       ==================================================
+       evalp(Exp, Store) = Bool
+
+[EVE]  E = evalx(Exp, Store)
+       ==================================================
+       evale(Exp, Store) = E
+
+[EVB1] Bag = evalx(Exp, Store)
+       ==================================================
+       evalb(Exp, Store) = Bag
+
+[EVB2] evalb(Empty, Store) = {}
+
+[EVR1] Rel = evalx(Exp, Store)
+       ==================================================
+       evalr(Exp, Store) = Rel
+
+[EVR2] evalr(Empty, Store) = {}
+
+%% ---- Eval script
+
+[ES1]  eval(Stat*) = eval1(Stat*, [])
+
+[ES2]  eval1(Stat Stat*, Store) = eval1(Stat*, eval(Stat, Store))
+[ES3]  eval1( , Store) = Store
+
+%% ---- Eval statements
+
+[S1]  Rel = evalr(Exp, Store)
+      ===================================================================
+      eval(rel Rvar = Exp, Store) = assign(Rvar, Rel, Store)
+
+[S2]  Bag = evalb(Exp, Store)
+      ====================================================================
+      eval(bag Bvar = Exp, Store) = assign(Bvar, Bag, Store)
+
+[S3]   eval(fun Fun(Var) = Exp, Store) = assign(Fun, <Var, Exp>, Store)
+
+[S7]   eval(fun Fun(Var, Var) = Exp, Store) = assign(Fun, <Var, Var, Exp>, Store)
+
+%% ---- Eval elementary predicates
+
+[Pt]   evalx(true, Store) = true
+
+[Pf]   evalx(false, Store) = false
+
+[Pa]   evalx(Pred1 and Pred2, Store) =  evalp(Pred1, Store) & evalp(Pred2, Store)
+
+[Pb]   evalx(Pred1 or Pred2, Store) = evalp(Pred1, Store) | evalp(Pred2, Store)
+
+[Pn]   evalx(not Pred, Store) =  not(evalp(Pred, Store))
+
+%% ---- Eval other predicates
+
+[EQ1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 == Exp2, Store) = apply(Val1 == Val2)
+
+[EQ2]  apply(Bag1 == Bag2) = Bag1 == Bag2
+[EQ3]  apply(Rel1 == Rel2) = Rel1 == Rel2
+[EQ4]  apply(E1   == E2)   = equal(E1, E2)
+
+[LE1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 <= Exp2, Store) = apply(Val1 <= Val2)
+
+[LE2]  apply(Bag1 <= Bag2) = Bag1 <= Bag2
+[LE3]  apply(Rel1 <= Rel2) = Rel1 <= Rel2
+
+[LT1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 < Exp2, Store) = apply(Val1 < Val2)
+
+[LT2]  apply(Bag1 < Bag2) = Bag1 < Bag2
+[LT3]  apply(Rel1 < Rel2) = Rel1 < Rel2
+
+[GE1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 >= Exp2, Store) = apply(Val1 >= Val2)
+
+[GE2]  apply(Bag1 >= Bag2) = Bag1 >= Bag2
+[GE3]  apply(Rel1 >= Rel2) = Rel1 >= Rel2
+
+[GT1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 > Exp2, Store) = apply(Val1 > Val2)
+
+[GT2]  apply(Bag1 > Bag2) = Bag1 > Bag2
+[GT3]  apply(Rel1 > Rel2) = Rel1 > Rel2
+
+[IB1]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
+       ====================================================
+       evalx(Exp1 in Exp2, Store) = E in Bag
+
+%% ---- Eval Elements
+
+[EE1]  evalx(E, Store) = E
+
+[EE2]  evalx(Evar, Store)  = value(Evar, Store)
+
+%% ---- Eval bags
+
+[EB1]  evalx(Bvar, Store) = value(Bvar, Store)
+
+[EB2]  E = evale(Exp, Store), {E+} = evalb({Exp+}, Store)
+       ===================================================
+       evalx({Exp, Exp+}, Store) = {E, E+}
+
+[EB3]  E = evale(Exp, Store)
+       ===================================================
+       evalx({Exp}, Store) = {E}
+
+%% ---- Eval relations
+
+[ER1] evalx(Rvar, Store)  = value(Rvar, Store)
+
+[ER2] E1 = evale(Exp1, Store), E2 = evale(Exp2, Store),
+      evalr({Texp+}, Store) = {Tuple+}
+      ====================================================
+      evalx({<Exp1, Exp2>, Texp+}, Store) = {<E1, E2>, Tuple+}
+
+[ER3] E1 = evale(Exp1, Store), E2 = evale(Exp2, Store)
+      ====================================================
+      evalx({<Exp1, Exp2>}, Store) = {<E1, E2>}
+
+%% ---- Eval operators
+
+[UN1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 union Exp2, Store) = apply(Val1 union Val2)
+
+[UN2]  apply(Bag1 union Bag2) = Bag1 union Bag2
+[UN3]  apply(Empty union Bag) = Bag 
+[UN4]  apply(Bag union Empty) = Bag
+
+[UN5]  apply(Rel1 union Rel2) = Rel1 union Rel2
+[UN6]  apply(Empty union Rel) = Rel
+[UN7]  apply(Rel union Empty) = Rel
+
+[IN1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 inter Exp2, Store) = apply(Val1 inter Val2)
+
+[IN2]  apply(Bag1 inter Bag2) = Bag1 inter Bag2
+[IN3]  apply(Rel1 inter Rel2) = Rel1 inter Rel2
+
+[DF1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 \  Exp2, Store) = apply(Val1 \ Val2)
+
+[DF2]  apply(Bag1 \ Bag2) = Bag1 \ Bag2
+[DF3]  apply(Rel1 \ Rel2) = Rel1 \ Rel2
+
+[CM1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 o  Exp2, Store) = apply(Val1 o Val2)
+
+[CM2]  apply(Rel1 o Rel2) = Rel1 o Rel2
+
+%%[XXX]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+%%       ====================================================
+%%       evalx(Exp1 x  Exp2, Store) = apply(Val1 x Val2)
+
+%%[xxx]  apply(Bag1 x Bag2) = Bag1 x Bag2
+
+[PJ1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 .  Exp2, Store) = apply(Val1 . Val2)
+
+[PJ2]  apply(Rel . E)   = Rel . E
+[PJ3]  apply(Rel . Bag) = Rel . Bag
+[PJ4]  apply(E . Rel)   = E . Rel
+[PJ5]  apply(Bag . Rel) = Bag . Rel
+
+[UN1]  Bag1 = evalb(Exp1, Store),  
+       Bag2 = evalb(Exp2, Store), 
+       Rel = evalr(Exp3, Store)
+       ===================================================
+       evalx(Exp1 until(Exp2, Exp3), Store) = Bag1 until(Bag2, Rel)
+
+[TC1] Rel = evalr(Exp, Store)
+      ===================================================
+      evalx(Exp +, Store) = Rel +
+
+[TC2] Rel = evalr(Exp, Store)
+       ===================================================
+       evalx(Exp *, Store) = Rel *
+
+%% ---- Eval bag and relation formers
+
+[EB10] evalx({ Evar in Exp | Pred }, Store) = evalx({ Evar in Exp | Pred | {Evar}}, Store)
+
+[EB11] evalx({ From+ | Pred | Exp}, Store) =
+       bagformer(get_from(From+, Store), Empty, Pred, Store, Exp)
+
+[ER11] evalx({ <Evar1, Evar2> in Exp | Pred }, Store) =
+       evalx({ <Evar1, Evar2> in Exp | Pred | {<Evar1, Evar2>}}, Store)
+
+%% ---- Auxiliary functions for bag and relation formers
+
+[GF1]  Bag = evalb(Exp, Store),
+       get_from(From*, Store) = [Gen*]
+       ==================================================
+       get_from(Evar in Exp, From*, Store) = [gen(Evar, Bag, Bag, true), Gen*]
+
+[GF2]  Rel = evalr(Exp, Store),
+       get_from(From*, Store) = [Gen*]
+       ==================================================
+       get_from(<Evar1, Evar2> in Exp, From*, Store) = [gen(Evar1, Evar2, Rel, Rel, true), Gen*]
+
+[GF3] get_from( , Store) = []
+
+[BF1] has_more(Gens) = false
+      ===================================================
+      bagformer(Gens, Val, Pred, Store, Exp) = Val
+
+[BF2] has_more(Gens) = true,
+      Store' = get_cur(Gens, Store),
+      Gens' = get_next(Gens),
+      Bool  =  evalp(Pred, Store')
+      =====================================================
+      bagformer(Gens, Val, Pred, Store, Exp) =
+       if Bool
+       then
+         bagformer(Gens', apply(evalx(Exp, Store') union Val), Pred, Store, Exp)
+       else
+         bagformer(Gens', Val, Pred, Store, Exp)
+       fi
+
+[HM1]  has_more([gen(Evar, Bag1, Bag2, Bool), Gen*]) = Bool | has_more([Gen*])
+
+[HM2]  has_more([gen(Evar1, Evar2, Rel1, Rel2, Bool), Gen*]) =  Bool | has_more([Gen*])
+
+[default-HM] 
+      has_more([Gen*]) = false
+
+[GN1] get_next([Gen*]) = [Gen*']
+      ====================================================
+      get_next([gen(Evar, {E}, Bag, Bool), Gen*]) = [gen(Evar, Bag, Bag, false), Gen*']
+
+[GN2] get_next([gen(Evar, {E, E+}, Bag, Bool), Gen*]) = [gen(Evar, {E+}, Bag, true), Gen*]
+
+[GN3] get_next([Gen*]) = [Gen*']
+      ====================================================
+      get_next([gen(Evar1, Evar2, {Tuple}, Rel, Bool), Gen*]) =
+      [gen(Evar1, Evar2, Rel, Rel,false), Gen*']
+
+[GN4] get_next([gen(Evar1, Evar2, {Tuple, Tuple+}, Rel, Bool), Gen*]) =
+      [gen(Evar1, Evar2, {Tuple+}, Rel, true), Gen*]
+
+[GN5] get_next([]) = []
+
+[GC1] get_cur([gen(Evar, {}, {E, E*}, Bool), Gen*], Store) = get_cur([Gen*], Store)
+
+[GC2] Store' = assign(Evar, E, Store)
+      ====================================================
+      get_cur([gen(Evar, {E, E*}, Bag, Bool), Gen*], Store) = get_cur([Gen*], Store')
+
+[GC3] get_cur([gen(Evar1, Evar2, {}, Rel, Bool), Gen*], Store) = get_cur([Gen*], Store)
+
+[GC4] Store' = assign(Evar1, E1, Store),
+      Store'' = assign(Evar2, E2, Store')
+      ====================================================
+      get_cur([gen(Evar1, Evar2, {<E1, E2>, Tuple*}, Rel, Bool), Gen*], Store) =
+      get_cur([Gen*], Store'')
+
+[GC5] get_cur([], Store) = Store
+
+%% ------------------------------
+
+%% ---- FUN ( EXP ) -> EXP
+
+[default-funBB]
+        value(Fun, Store) = <Var, Exp2>,
+        Val = evalx(Exp1, Store),
+        Store' = assign(Var, Val, Store)
+        ====================================================
+	evalx(Fun(Exp1), Store) = evalx(Exp2, Store')
+
+[BR1]   Bag  = evalb(Exp, Store)
+        ====================================================
+        evalx(id(Exp), Store) = id Bag
+
+[RB1]   Rel = evalr(Exp, Store)
+        ====================================================
+        evalx(dom(Exp), Store) = dom Rel
+
+[RB2]   Rel = evalr(Exp, Store)
+        ====================================================
+        evalx(ran(Exp), Store) = ran Rel
+
+[RB3]   Rel = evalr(Exp, Store)
+        ====================================================
+        evalx(car(Exp), Store) = car Rel
+   
+[RB4]   Rel = evalr(Exp, Store)
+        ====================================================
+        evalx(top(Exp), Store) = top Rel
+
+[RB5]   Rel = evalr(Exp, Store)
+        ====================================================
+        evalx(bot(Exp), Store) = bot Rel
+
+[RR1]   Rel = evalr(Exp, Store)
+        ===================================================
+        evalx(inv(Exp), Store) = inv Rel
+
+[RR2]   Rel = evalr(Exp, Store)
+        ===================================================
+        evalx(compl(Exp), Store) = compl Rel
+
+%% ---- FUN ( EXP , EXP )  -> EXP
+
+[default-fun2]
+        value(Fun, Store) = <Var1, Var2, Exp3>,
+        Val1 = evalx(Exp1, Store),
+        Val2 = evalx(Exp2, Store),
+
+        Store' = assign(Var1, Val1, Store),
+	Store'' = assign(Var2, Val2, Store')
+        ==================================================
+	evalx(Fun(Exp1, Exp2), Store) = evalx(Exp3, Store'')
+
+%%      fun domR(REL, Bag) = { <$x, $y> in REL | $x in Bag | {<$x, $y}>}
+
+[RBR1]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ===================================================
+        evalx(domR(Exp1, Exp2), Store) = Rel domR Bag
+
+[RBR2]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ===================================================
+        evalx(ranR(Exp1, Exp2), Store) = Rel ranR Bag
+
+[RBR3]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ====================================================
+        evalx(carR(Exp1, Exp2), Store) = Rel carR Bag
+
+[RBR4]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ====================================================
+        evalx(domX(Exp1, Exp2), Store) = Rel domX Bag
+
+[RBR5]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ====================================================
+        evalx(ranX(Exp1, Exp2), Store) = Rel ranX Bag
+
+[RBR6]  Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+        ====================================================
+        evalx(carX(Exp1, Exp2), Store) = Rel carX Bag
