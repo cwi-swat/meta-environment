@@ -512,6 +512,13 @@
 	$Bag  = evalb($Exp, $Rstore)
 	====================================================
 	evalx(power1($Exp), $Rstore) = power1(mk-iterator($Bag))
+
+[Fallpaths]
+	$Rel = evalr($Exp1, $Rstore),
+	$Bag = evalb($Exp2, $Rstore)
+	=============================
+	evalx(all-paths-from($Exp1, $Exp2), $Rstore) = 
+		all-paths-from($Rel, $Bag)
 	
 [RdomR]	$Rel = evalr($Exp1, $Rstore), $Bag = evalb($Exp2, $Rstore)
 	===================================================
@@ -575,6 +582,39 @@
 	power0($BagIter) = insert(empty-bag, empty-bag)						%%XXX
 
 [pw11]	power1($BagIter) = diff(power0($BagIter), insert(empty-bag, empty-bag))				%%XXX
+
+
+
+[chain-bag-1]
+	chain-bag({}) = {}
+
+[chain-bag-2]
+	chain-bag({$Elem}) = {}
+
+[chain-bag-3]
+	chain-bag({$Elem1, $Elem2, $Elem*}) =
+		union({<$Elem1, $Elem2>}, chain-bag({$Elem2,$Elem*}))
+
+[chain-each-nil]
+	chain-each({}) = {}
+
+[chain-each-cons]
+	chain-each({{$Elem*1}, $Elem*2}) = 
+		union({chain-bag({$Elem*1})}, chain-each({$Elem*2}))
+[all-nodes-nil]
+	all-nodes-from($Bag, {}) = {{}}
+
+[all-nodes-cons]
+	$Bag0 = domR($Bag, {$Elem}),
+	$Bag1 = range($Bag0),
+	$Bag2 = add-element($Elem, all-nodes-from($Bag, $Bag1))
+	===	
+	all-nodes-from($Bag, {$Elem, $Elem*}) =
+		union($Bag2, all-nodes-from($Bag, {$Elem*}))
+
+[all-paths-top]
+	all-paths-from($Bag1, $Bag2) = chain-each(all-nodes-from($Bag1, $Bag2))
+
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 

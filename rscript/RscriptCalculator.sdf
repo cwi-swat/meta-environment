@@ -41,6 +41,13 @@ exports
 	power0(BagIterator[[Elem]])				-> Bag[[Elem]]
 	power1(BagIterator[[Elem]])				-> Bag[[Elem]]
 
+	%% All paths from roots in the second bag.
+	all-paths-from(Bag[[Elem]],Bag[[Elem]]) -> Bag[[Elem]] 
+
+	chain-bag(Bag[[Elem]]) -> Bag[[Elem]]
+	chain-each(Bag[[Elem]]) -> Bag[[Elem]]
+	all-nodes-from(Bag[[Elem]], Bag[[Elem]]) -> Bag[[Elem]]
+
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
 
