@@ -1789,112 +1789,112 @@ aterm *make_nf15(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 aterm *arg_0(aterm *appl)
 {
   aterm *result = t_list_first(t_appl_args(appl));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_1(aterm *appl)
 {
   aterm *result = t_list_first(tail_1(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_2(aterm *appl)
 {
   aterm *result = t_list_first(tail_2(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_3(aterm *appl)
 {
   aterm *result = t_list_first(tail_3(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_4(aterm *appl)
 {
   aterm *result = t_list_first(tail_4(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_5(aterm *appl)
 {
   aterm *result = t_list_first(tail_5(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_6(aterm *appl)
 {
   aterm *result = t_list_first(tail_6(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_7(aterm *appl)
 {
   aterm *result = t_list_first(tail_7(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_8(aterm *appl)
 {
   aterm *result = t_list_first(tail_8(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_9(aterm *appl)
 {
   aterm *result = t_list_first(tail_9(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_10(aterm *appl)
 {
   aterm *result = t_list_first(tail_3(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_11(aterm *appl)
 {
   aterm *result = t_list_first(tail_11(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_12(aterm *appl)
 {
   aterm *result = t_list_first(tail_12(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_13(aterm *appl)
 {
   aterm *result = t_list_first(tail_13(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_14(aterm *appl)
 {
   aterm *result = t_list_first(tail_14(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
 aterm *arg_15(aterm *appl)
 {
   aterm *result = t_list_first(tail_15(t_appl_args(appl)));
-  t_protect(result);
+  /*t_protect(result);*/
   return result;
 }
 
