@@ -9,13 +9,13 @@ EXTRA_DIST = make_rules program-check.m4 $(wildcard *.pkg)
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
 SUBDIRS = \
-	editors \
 	meta-studio \
 	src \
 	in-output \
 	term-store \
 	tbscripts \
-	configuration-manager
+	configuration-manager \
+	editors
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
