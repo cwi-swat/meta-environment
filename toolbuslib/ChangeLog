@@ -1,5 +1,8 @@
 $Id$
 
+2002/10/10 (jurgenv@cwi.nl)
+* Added functionality to print only pending snd-msgs when ctrl+\ is pressed.
+
 2002/10/01 (vandenbr@loria.fr)
 * Bumped into 0.4beta.
 * Increased the number of sockets that can be open.
