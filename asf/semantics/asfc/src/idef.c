@@ -41,7 +41,7 @@ void make_idef_script(char *name)
 	    "    ).\n"
 	    "    rec-value(%sTool, normalform(Term?)) .\n"
             "    snd-terminate(%sTool,\"done\").\n"
-            "    snd-msg(normalform(%sTool, Term)).\n"
+            "    snd-msg(normalform(\"%s\", Term)).\n"
             "    Term := null\n"
             "  ) *\n"
             "  delta\n"
