@@ -1,3 +1,9 @@
+2002/07/01 (vandenbr@loria.fr)
+ * Bumped version to 0.8beta.
+ * Lexical constructor attribute added to lexical constructor
+   production.
+ * Ambiguity constructor attribute added to ambiguity production.
+
 2002/02/07 (jurgenv@cwi.nl)
  * Released 0.7
 
