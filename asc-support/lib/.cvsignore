@@ -1,0 +1,5 @@
+.deps
+Makefile
+Makefile.in
+rewriter.tif.c
+rewriter.tif.h
