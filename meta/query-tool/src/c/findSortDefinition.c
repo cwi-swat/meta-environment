@@ -19,11 +19,7 @@ static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol)
 
     SDF_Symbol rhs = SDF_getProductionResult(sdfProduction);
 
-    found = SDF_isEqualSymbol(rhs, sdfSymbol);
-
-    if (found) {
-      ATwarning("rhs = %t\n", rhs);
-    }
+    found = SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs), sdfSymbol);
 
     if (SDF_hasProductionListTail(sdfProductions)) {
       sdfProductions = SDF_getProductionListTail(sdfProductions);

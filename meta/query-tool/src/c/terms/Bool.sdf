@@ -1,0 +1,12 @@
+module Bool
+
+imports basic/Whitespace
+exports
+  sorts Bool BoolSepList BoolList
+  context-free syntax
+    "true" -> Bool
+    "false" -> Bool
+    Bool "\\/" Bool -> Bool {left}
+    Bool "/\\" Bool -> Bool {left}
+    "<" Bool* ">" -> BoolList
+    "[" {Bool ","}* "]" -> BoolSepList

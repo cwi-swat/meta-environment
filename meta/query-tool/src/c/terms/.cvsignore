@@ -1,0 +1,4 @@
+*.pt
+*.trm.tbl
+Makefile
+Makefile.in

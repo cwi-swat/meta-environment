@@ -9,8 +9,6 @@
 
 #include "findProduction.h"
 
-#define SDFremoveAllAnnotationsFromSymbol(s) (SDF_SymbolFromTerm(ATremoveAllAnnotations(SDF_SymbolToTerm(s))))
-
 /*}}}  */
 
 /*{{{  static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2) */
@@ -28,13 +26,15 @@ static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
     symbol1 = SDF_getSymbolListHead(s1);
     symbol2 = SDF_getSymbolListHead(s2);
 
-    if (SDF_isEqualSymbol(SDFremoveAllAnnotationsFromSymbol(symbol1), symbol2)) {
+    if (SDF_isEqualSymbol(SDF_removeSymbolAnnotations(symbol1), symbol2)) {
       equalLists = ATtrue;
     }
+/*
     else if (SDF_isSymbolLit(symbol1) &&
 	     SDF_isSymbolLit(symbol2)) {
       equalLists = ATtrue;
     }
+*/
     else {
       equalLists = ATfalse;
     }
@@ -46,7 +46,6 @@ static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
       }
       else {
         equalLists = ATfalse;
-	break;
       }
     }
     else {
@@ -70,7 +69,7 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
   rhs1 = SDF_getProductionResult(p1);
   rhs2 = SDF_getProductionResult(p2);
 
-  if (!SDF_isEqualSymbol(SDFremoveAllAnnotationsFromSymbol(rhs1), rhs2)) {
+  if (!SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs1), rhs2)) {
     return ATfalse;
   }
 
