@@ -114,20 +114,23 @@ set statuslist {}
 # and deletes all edges that start in that module.
 # The proc update-graph is performed afterwards.
 #---
-proc delete-module { mod } {
+proc delete-modules { mods } {
     global g SHADOWSTYLE
-    GBin "delete-module($mod)"
-    set node [$g findnode [StripId $mod]]
-    $node setattributes shape $SHADOWSTYLE
+    GBin "delete-module($mods)"
 
-    foreach edge [$node listoutedges] {
-	$edge delete
-    }
-    foreach edge [$node listinedges] {
-        $edge delete
-    }
+    foreach mod $mods {
+      set node [$g findnode [StripId $mod]]
+      $node setattributes shape $SHADOWSTYLE
 
-    $node delete
+      foreach edge [$node listoutedges] {
+  	$edge delete
+      }
+      foreach edge [$node listinedges] {
+          $edge delete
+      }
+
+      $node delete
+    }
 
     update-graph
 }

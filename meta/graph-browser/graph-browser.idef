@@ -119,8 +119,8 @@ in
       snd-msg(close-module(ModName, Recursive)).
       snd-ack-event(UI, close-module(ModName, Recursive))
     ) +
-    ( rec-msg(ui-delete-module(ModName?)).
-      snd-do(UI, delete-module(ModName))
+    ( rec-msg(ui-delete-modules(Mods?)).
+      snd-do(UI, delete-modules(Mods))
     ) +
     ( rec-event(UI,save-module(Str?)).
       snd-msg(save-module(Str)).

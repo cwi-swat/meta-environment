@@ -57,7 +57,7 @@ process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
 let
   Imports : list,
   MoreImports : list,
-  NotClosed : list,
+  Closed : list,
   Import : str
 in
   Status := success.
@@ -66,7 +66,7 @@ in
   SoftCloseModuleInDB(ModuleName, Status?).
   if equal(Status, success) then
     CloseModuleInUI(ModuleName).
-    NotClosed := [].
+    Closed := [].
     if not(equal(Imports, [])) then
       Import := first(Imports).
       Imports := next(Imports).
@@ -75,14 +75,13 @@ in
       rec-msg(imported-modules(MoreImports?)).
       SoftCloseModuleInDB(Import, Status?).
       if equal(Status,success) then
-        CloseModuleInUI(Import).
+        Closed := join(Import, Closed).
         /* continue only if closing succeeded */
         Imports := join(Imports, MoreImports)
-      else 
-        NotClosed := join(Import, NotClosed)
-      fi
+      else tau fi
     fi*
     if equal(Imports,[]) then 
+      CloseModulesInUI(Closed).
       /* only give error if top module could not be closed */
       Status := success 
     fi
@@ -280,7 +279,10 @@ endlet
 
   
 process CloseModuleInUI(ModuleName : str) is
-  snd-msg(ui-delete-module(ModuleName))
+  snd-msg(ui-delete-modules([ModuleName]))
+
+process CloseModulesInUI(Modules : list) is
+  snd-msg(ui-delete-modules(Modules))
 
 process RenameModuleInDB(Old : str, New : str, Path : str, Status : term?, 
                          Changed : list?)
