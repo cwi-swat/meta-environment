@@ -11,9 +11,10 @@ exports
 
 hiddens
   context-free syntax
-    extractRelations(TscriptDef*, RSTORE) -> RSTORE {traversal(accu,top-down,break)}
-    extractRelations(VarDecl, RSTORE)     -> RSTORE {traversal(accu,top-down,break)}
-    extractRelations(GenVar, RSTORE)      -> RSTORE {traversal(accu,top-down,break)}
+    extractRelations(TscriptDef*, RSTORE)   -> RSTORE {traversal(accu,top-down,break)}
+    extractRelations(ProcessDef, RSTORE)    -> RSTORE {traversal(accu,top-down,break)}
+    findVarInProcess(VarDecl, RSTORE, INFO) -> RSTORE {traversal(accu,top-down,break)}
+    findVarInProcess(GenVar, RSTORE, INFO)  -> RSTORE {traversal(accu,top-down,break)}
 
   variables
     "$Area"[0-9]*              -> Area      

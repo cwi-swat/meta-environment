@@ -8,14 +8,10 @@ equations
       extractRelations(TscriptDefs, $Rstore)
 
   [extractRelations-vardecl]
-    VarDecl = Var : Term,
-    $Area1 = get-area(VarDecl),
-    $Area2 = get-area(Var),
-    $Rstore2 = add-tuple(DEFS, <$Area1, var2str(Var)>, $Rstore1),
-    $Rstore3 = 
-      add-tuple(DEF_OCCURS, <<$Area1, var2str(Var)>, $Area2>, $Rstore2)
+    $Area1 = get-area(Var),
+    $Rstore2 = add-tuple(DECLS, <$Area1, var2str(Var)>, $Rstore1)
     ===>
-    extractRelations(VarDecl, $Rstore1) = $Rstore3
+    extractRelations(Var : Term, $Rstore1) = $Rstore2
 
   [extractRelations-genvar]
     $Area1 = get-area(Var),
