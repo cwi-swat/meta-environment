@@ -109,7 +109,7 @@ static void sendToVimVerbatim(const char *cmd)
 static void sendToVim(const char *cmd)
 {
   char buf[BUFSIZ];
-  sprintf(buf, "%s<Cr>", escape(cmd, QUOTE_CHAR));
+  sprintf(buf, "%s<Cr>", escape(cmd, QUOTE_CHAR));
   sendToVimVerbatim(buf);
 }
 

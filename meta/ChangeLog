@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Apr 19 09:49:45 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text/gvim/connector.c:
+   - reinstate "magical"  when sending to gvim, to ensure
+     gvim is in command-mode before issuing command-actions
+
 Fri Apr 16 17:24:15 CEST 2004 <jurgenv@cwi.nl>
  * Delete module takes care of IO errors when unlinking fails
 
