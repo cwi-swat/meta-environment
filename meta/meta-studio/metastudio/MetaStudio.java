@@ -517,7 +517,7 @@ public class MetaStudio
 				  public void mousePressed(MouseEvent e) {
 				    checkModulePopup(e);
 				  }
-				  public void mouseClicked(MouseEvent e) {
+				  public void mouseReleased(MouseEvent e) {
 				    checkModulePopup(e);
 				  }
 				}
@@ -540,7 +540,7 @@ public class MetaStudio
 				  public void mousePressed(MouseEvent e) {
 				    checkModulePopup(e);
 				  }
-				  public void mouseClicked(MouseEvent e) {
+				  public void mouseReleased(MouseEvent e) {
 				    checkModulePopup(e);
 				  }
 				}
@@ -1048,9 +1048,20 @@ public class MetaStudio
 
   //{{{ void checkModulePopup(MouseEvent e)
 
-  void checkModulePopup(MouseEvent e)
+    void checkModulePopup(MouseEvent e)
   {
-    if (e.isPopupTrigger()) {
+    boolean showPopup = false;
+
+    showPopup |= e.isPopupTrigger();
+    /* <PO:REMOVE> 
+       if (!showPopup) {
+      showPopup |= e.getButton() == MouseEvent.BUTTON3;
+      if (showPopup) {
+        System.err.println("activating popup on right-click!");
+      }
+    }
+    */
+    if (showPopup) {
       if (e.getSource() == moduleList) {
 	currentModule = (String)moduleList.getSelectedValue();
 	if (currentModule != null) {
