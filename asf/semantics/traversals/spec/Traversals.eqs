@@ -38,8 +38,9 @@ equations
 				normal_exported_productions(Definition, Import*) = NormalProduction*2 ,
 				NormalProductions = NormalProduction*1 NormalProduction*2  ,
 				make_productions(NormalProductions, TraversalProductions) = Productions ,
-        prefer_sorts(Productions) = Productions2,
-				add_productions(Module2,Productions2) = Module3
+%% prefer sorts is not needed while iter sorts are not supported
+%%        prefer_sorts(Productions) = Productions2,
+				add_productions(Module2,Productions) = Module3
       	==========================================================================
       	generate_module(Module, Definition) = Module3 
 
