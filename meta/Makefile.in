@@ -29,6 +29,8 @@ SUBDIRS		= toolbus editor evaluator graph-browser \
 		  in-output module-db compiler stred asource \
 		  sglr pgen utils
 
+.SILENT:
+
 all doc clean:
 	@for DIR in $(SUBDIRS);	\
 	do \
