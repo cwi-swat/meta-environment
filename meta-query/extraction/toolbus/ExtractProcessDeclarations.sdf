@@ -1,4 +1,4 @@
-module ExtractProcessCreations
+module ExtractProcessDeclarations
 
 imports Rstore
 imports Tscript
@@ -7,22 +7,20 @@ imports MyPosInfo[ProcessName]
 
 exports
   context-free syntax
-    extractProcessCreations(Tscript, RSTORE)
+    extractProcessDeclarations(Tscript, RSTORE)
       -> RSTORE {traversal(accu, top-down, break)}
 
-  context-free syntax
-    extractProcessCreations(ProcessCreation, RSTORE)
+    extractProcessDeclarations(ProcessSignature, RSTORE)
       -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    addProcessCreation(RSTORE, ProcessName) -> RSTORE
+    addProcessDeclaration(RSTORE, ProcessName) -> RSTORE
 
   variables
-    "$GenVar" -> GenVar
-    "$ProcessCreation" -> ProcessCreation
+    "$FormalParams" -> {FormalParam ","}*
     "$ProcessName" -> ProcessName
     "$ProcessNameId" -> Area
+    "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
-    "$Terms" -> {Term ","}*
     "$Tuple"[0-9]* -> Elem # Elem

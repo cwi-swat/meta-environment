@@ -8,15 +8,15 @@ imports MyPosInfo[ProcessName]
 exports
   context-free syntax
     extractProcessInvocations(Tscript, RSTORE)
-      -> RSTORE {traversal(accu,top-down,break)}
+      -> RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
     extractProcessInvocations(TscriptDef, RSTORE)
-      -> RSTORE {traversal(accu,top-down,break)}
+      -> RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
     extractProcessInvocations(ProcessInvocation, RSTORE)
-      -> RSTORE {traversal(accu,top-down,break)}
+      -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
