@@ -1,7 +1,48 @@
+@PREAMBLE{
+"\def\bibname{References}
+\addcontentsline{toc}{chapter}{\protect\numberline{}\bibname}
+\newcommand{\sortunder}[1]{} "
+}
+
+		  
+@STRING{ mark = "{\sortunder{Brand}} van den Brand, M. G. J." }
+
+@STRING{ arie = "{\sortunder{Deursen}}van Deursen, A." }
+
+@STRING{ niek = "{\sortunder{Diepen}}van Diepen, N. W. P." }
+
+@STRING{ leeuw = "{\sortunder{Leeuwen}}van Leeuwen, J." }
+
+@STRING{ emma = "{\sortunder{Meulen}}van der Meulen, E. A." }
+
+@STRING{ bas = "{\sortunder{Vlijmen}}van Vlijmen, S. F. M." }
+
+@STRING{ femke = "{\sortunder{Raamsdonk}}van Raamsdonk, F." }
+
+@STRING{ vincent = "{\sortunder{Oostrom}}van Oostrom, V." }
+
+@STRING{ jasper = "J. F. {\textrm{Th}}. Kamperman" }
+
+@STRING{ thierry = "{\textrm{Th}}. Despeyroux" }
+
+@STRING{ cwi = "Centrum voor Wiskunde en Informatica (CWI)" }
+
+@STRING{ fwi = "Programming Research Group, University of Amsterdam" }
+
+@STRING{ tue = "Eindhoven University of Technology" }
+
+@STRING{ lncs = "Lecture Notes in Computer Science" }
+
+@STRING{ lnai = "Lecture Notes in Artificial Intelligence" }
+
+
+		  
+		  
+		  
 @TechReport{BKOV97,
   author = {Brand, {M.G.J. van den} and Klint, P. and Olivier, P. and
             Visser, E.},
-  title =        {ATerms: representing structured data for exchange between
+  title =        {{AT}erms: representing structured data for exchange between
             heterogeneous tools},
   institution =  "University of Amsterdam, Programming Research Group",
   year = 1997,
@@ -87,4 +128,118 @@
   institution =  "Programming Research Group, University of Amsterdam",
   year = 	 1997,
   note =	 "(in preparation)"
+}
+@Article{BCDIKLP89,
+  author      =  "P. Borras and D. Cl{\'{e}}ment  and " # thierry #
+                 " and J. Incerpi and G. Kahn and B. Lang and V. Pascual",
+  title       =  "{C}entaur: The {S}ystem",
+  journal =	 "SIGPLAN Notices",
+  volume =	 "24",
+  number =	 "2",
+  pages       =  "14--24",
+  year        =  "1989", 
+  note =	 "{\it Proceedings of the ACM SIGSOFT/SIGPLAN Software Engineering
+                  Symposium on Practical Software Development
+		  Environments}. The Centaur Tutorial is available at
+		  URL: http://www.inria.fr/croap/centaur/tutorial/main/main.html"
+}
+@article{Kli93.meta,
+   author       = {P. Klint},
+   title        = {A meta-environment for
+	           generating programming environments},
+   journal      = {ACM Transactions on Software Engineering and Methodology},
+   volume       = {2},
+   year         = {1993},
+   pages        = {176--201}
+}
+@PhdThesis{Koo94.thesis,
+  author = 	 "J. W. C. Koorn",
+  title = 	 "Generating Uniform User-Interfaces for 
+			Interactive Programming Environments",
+  school = 	 "University of Amsterdam",
+  year = 	 1994
+} 
+@PhdThesis{Deu94.thesis,
+  author = 	 arie,
+  title = 	 "Executable Language Definitions: Case Studies and
+		  Origin Tracking Techniques",
+  school = 	 "University of Amsterdam",
+  year = 	 1994
+}
+@phdthesis{Meu94.thesis,
+  author      = emma,
+  title       = {Incremental Rewriting},
+  school      = {University of Amsterdam},
+  year        = {1994}
+}
+@article{BV96,
+  author = 	 mark # " and Eelco Visser",
+  title = 	 "Generation of Formatters for Context-free
+		  Languages",
+  journal = "ACM Transactions on Software Engineering and Methodology",
+  volume = "5",
+  pages = "1--41",
+  year = 	 1996
+}
+
+@inproceedings{BK96a,
+  author = 	 "J. A. Bergstra and P. Klint",
+  title = 	 "The {ToolBus} coordination architecture",
+  editor =       "P. Ciancarini and C. Hankin",
+  booktitle =    "Coordination Languages and
+		      Models ({COORDINATION} '96)",
+  volume = "1061",
+  pages = "75--88",
+  series = lncs,
+  publisher = "Springer-Verlag",
+  year = 	 1996,
+  note = "Full version: Technical Report P9408, " # fwi 
+}
+
+@inproceedings{BK96b,
+  author = 	 "J. A. Bergstra and P. Klint",
+  title = 	 "The {D}iscrete {T}ime {ToolBus}",
+  editor =       "M. Wirsing",
+  booktitle =    "Algebraic Methodology and Software Technology (AMAST
+		  '96)",
+  series =       lncs,
+  volume =  "xxx",
+  publisher = "Springer-Verlag",
+  year = 	 1996,
+  note = "To appear. Full version: Technical Report P9502, " # fwi
+}
+		  
+@Manual{Vis95.tolatex,
+  title = 	 "{ASF+SDF} to {LaTeX}: The User Manual",
+  author =	 "Eelco Visser",
+  organization = fwi,
+  year =	 1995,
+  note =	 "URL: http://adam.fwi.uva.nl/$\sim$visser/tolatex/"
+}
+
+@InProceedings{HK95,
+  author =      {J. Heering and P. Klint},
+  title =       {The Prehistory of {ASF+SDF} (1980--1984)},
+  pages =       {1--4},
+  crossref =	{ASF+SDF95}
+}
+
+@techreport{KB93,
+  author      = {Koorn, J.W.C. and Bakker, H.C.N.},
+  title       = {Building an editor from existing components: 
+	 	an exercise in software re-use},
+  institution = {Programming Research Group, University of Amsterdam},
+  type        = {Report {P}9312},
+  year        = {1993},
+  note        = {Available by {\em ftp} from ftp.cwi.nl:/pub/gipe/reports as  
+                 KB93.ps.Z}
+}
+@proceedings{ASF+SDF95,
+  editor	= mark # " and " # arie # 
+                  " and T. B. Dinesh and " # jasper # " and E. Visser",
+  title		= "{ASF+SDF} '95: A Workshop on Generating Tools
+		   from  Algebraic Specifications",
+  publisher	= fwi, 
+  series        = "Technical Report P9504",
+  year		= 1995
 }
