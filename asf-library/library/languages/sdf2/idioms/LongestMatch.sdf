@@ -1,0 +1,22 @@
+module languages/sdf2/idioms/LongestMatch
+
+exports
+
+sorts A List
+
+lexical syntax
+  [\ \t\n] -> LAYOUT
+  [a]+     -> A
+
+context-free start-symbols
+  List
+
+context-free syntax
+  A+ -> List
+
+%% without the restriction any term with consecutive a's is ambiguous:
+%% aa
+%% is either one or two A tokens in A List for example
+
+lexical restrictions
+  A -/- [a]
