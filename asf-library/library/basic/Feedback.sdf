@@ -5,9 +5,11 @@ imports basic/Locations
 
 exports
 
-sorts Feedback Subject 
+sorts Summary Feedback Subject 
 
 context-free syntax
+
+"feedback" "(" "[" {Feedback ","}* "]" ")" -> Summary {cons("feedback")}
 
 "info" "(" id:StrCon "," 
            producer-id:StrCon "," 
