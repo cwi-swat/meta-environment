@@ -44,14 +44,14 @@ E_O_USAGE
 Version() {
     echo "$myname v$myversion" >&2
     addeqssyntax -V
-#asource -V
+    asource -V
     a2toa1 -V
     baffle -v             # to get version of ATerm Library in use.
     compiler -V
     evaluator -V
-#graph-browser -V
+    graph-browser -V
     in-output -V
-#module-db -V
+    module-db -V
     parsetablegen -V
     sglr -V
     toolbus -version
