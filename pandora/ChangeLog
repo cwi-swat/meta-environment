@@ -1,5 +1,8 @@
 # $Id$
 
+Wed May 12 13:32:34 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * generator/main.c: default in/out to - (stdin)
+
 Mon May 10 13:35:12 CEST 2004 <kooiker@cwi.nl>
  * generator/pandora.c:
    - argsManyToBox uses isLayout on a yieldTree in stead of PT_isTreeLayout to

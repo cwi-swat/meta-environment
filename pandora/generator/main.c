@@ -1,3 +1,5 @@
+/*{{{  includes */
+
 #include <unistd.h>
 #include <assert.h>
 #include <stdio.h>
@@ -11,11 +13,15 @@
 #include "pandora.h"
 #include "pandora.tif.h"
 
+/*}}}  */
+/*{{{  variables */
+
 static char* myname = "pandora";
 static char* myversion = VERSION;
 static char* myarguments = "i:o:vVhs:";
 static ATbool run_verbose = ATfalse;
 
+/*}}}  */
 /*{{{  defines */
 
 #define INITIAL_TABLE_SIZE 8191
@@ -138,8 +144,8 @@ int main(int argc, char *argv[])
   ATerm at_tree;
   PT_ParseTree tree, ptText;
   BOX_Start box;
-  char *input = "";
-  char *output = "";
+  char *input = "-";
+  char *output = "-";
   int c;
   int i;
   ATbool useToolbus = ATfalse;
