@@ -310,15 +310,10 @@ abstract public class Tool implements Runnable
 
   public void run()
   {
-    try {
-      while(running) {
-	if(istream != null && istream.available() > 0)
-	  handleOne();
-	Thread.yield();
-      }
-    } catch (IOException e) {
-      System.err.println("oops, lost ToolBus connection, giving up!");
-      running = false;
+    while(running) {
+      if(istream != null)
+	handleOne();
+      Thread.yield();
     }
   }
 
