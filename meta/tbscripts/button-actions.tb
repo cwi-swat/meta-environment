@@ -331,8 +331,19 @@ in
 	. snd-msg(se-get-cursor(EditorId))
 	. rec-msg(se-cursor(EditorId, Cursor?))
 	. snd-msg(pa-get-origin(Cursor))
-	. rec-msg(pa-origin(Origin?))
-	. StackPushTerm(Stack, Stack?, Origin)
+	.
+	(
+	  rec-msg(pa-origin(Origin?))
+	  . StackPushTerm(Stack, Stack?, Origin)
+	+
+	  rec-msg(pa-no-origin)
+	  . StackPushTerm(Stack, Stack?, no-origin)
+	)
+	. ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(display-message, Stack?, EditorId?)
+	. StackPopString(Stack, Stack?, Message?)
+	. snd-msg(te-display-message(EditorId, Message))
 	. ReturnSuccess(EditorId, Stack)
       +
         rec-msg(set-focus, Stack?, EditorId?) .
