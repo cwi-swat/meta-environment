@@ -8,7 +8,7 @@ process Unparser is
 let
   UNP : unparser,
   Tree : term,
-  Text : term
+  Text : str
 in
   (
     rec-msg(unparse(Tree?)).

@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 23 10:46:40 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * utils/unparse.idef: unparsed text is a "str", not a "term" !
+
 Mon Apr 19 11:08:21 CEST 2004 <{jong,kooiker}@cwi.nl>
  * origins: account for the fact that there is no origin
  * libmept/posInfo.c: PT_containsAreaOffset count start upto and including end
