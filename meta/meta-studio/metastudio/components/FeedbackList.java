@@ -80,7 +80,7 @@ public class FeedbackList extends UserInterfacePanel {
         
         if (!messages.isEmpty()) {
           for (; !messages.isEmpty(); messages = messages.getTail()) {
-              data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
+              data.add(producer, summaryId, messages.getHead());
           }
         
           scrollToLast();
@@ -100,57 +100,52 @@ public class FeedbackList extends UserInterfacePanel {
         parent.setSelectedComponent(this);
     }
 
-    private FeedbackItem makeAnonymousError(String msg) {
-        return new FeedbackItem(
-            ANONYMOUS_ORIGIN,
-            ANONYMOUS_ORIGIN,
-            getErrorFactory().makeFeedback_Error(
+    private Feedback makeError(String msg) {
+        return getErrorFactory().makeFeedback_Error(
                 msg,
-                getErrorFactory().makeSubjectList()));
+                getErrorFactory().makeSubjectList());
     }
 
-    private FeedbackItem makeAnonymousWarning(String msg) {
-        return new FeedbackItem(
-            ANONYMOUS_ORIGIN,
-            ANONYMOUS_ORIGIN,
-            getErrorFactory().makeFeedback_Warning(
+    private Feedback makeWarning(String msg) {
+        return  getErrorFactory().makeFeedback_Warning(
                 msg,
-                getErrorFactory().makeSubjectList()));
+                getErrorFactory().makeSubjectList());
     }
-    private FeedbackItem makeAnonymousInfo(String msg) {
-        return new FeedbackItem(
-            ANONYMOUS_ORIGIN,
-            ANONYMOUS_ORIGIN,
-            getErrorFactory().makeFeedback_Info(
+    private Feedback makeInfo(String msg) {
+        return  getErrorFactory().makeFeedback_Info(
                 msg,
-                getErrorFactory().makeSubjectList()));
+                getErrorFactory().makeSubjectList());
+    }
+    
+    private void addAnonymousFeedbackItem(Feedback feedback) {
+        data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, feedback);
     }
 
     public void errorf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        data.add(makeAnonymousError(message));
+        addAnonymousFeedbackItem(makeError(message));
     }
 
     public void error(String message) {
-        data.add(makeAnonymousError(message));
+        addAnonymousFeedbackItem(makeError(message));
     }
 
     public void messagef(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        data.add(makeAnonymousInfo(message));
+        addAnonymousFeedbackItem(makeInfo(message));
     }
 
     public void message(String message) {
-        data.add(makeAnonymousInfo(message));
+        addAnonymousFeedbackItem(makeInfo(message));
     }
 
     public void warningf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        data.add(makeAnonymousWarning(message));
+        addAnonymousFeedbackItem(makeWarning(message));
     }
 
     public void warning(String message) {
-        data.add(makeAnonymousWarning(message));
+        addAnonymousFeedbackItem(makeWarning(message));
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {

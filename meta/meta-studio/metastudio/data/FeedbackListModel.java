@@ -13,9 +13,9 @@ public class FeedbackListModel extends ListModel {
     /* we will group feedback messages that have the
      * same error but a different producer and/or a different summaryId.
      */
-    public void add(String summary, String producer, Feedback feedback) {
+    public void add(String producer, String summary, Feedback feedback) {
        Iterator iter = iterator();
-        
+    
        while (iter.hasNext()) {
           FeedbackItem head = (FeedbackItem) iter.next();
           Feedback headFeedback = head.getFeedback();
@@ -37,5 +37,9 @@ public class FeedbackListModel extends ListModel {
                 iter.remove();
             }
         }
+    }
+    
+    public void add(Object o) {
+        throw new UnsupportedOperationException("use typed add method");
     }
  }
