@@ -204,9 +204,7 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
   struct tms start, rewriting;
   clock_t user, system; 
 
-  ATfprintf(stderr, "before AFexpandTerm\n");
   exptrm = AFexpandTerm(trm);
-  ATfprintf(stderr, "after AFexpandTerm\n");
   atrm = asfix_get_term(exptrm);
   realtrm = RWprepareTerm(atrm);
 
@@ -216,11 +214,11 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
   ATfprintf(stderr, "rewriting...\n");
   times(&start);
   newtrm = rewrite(realtrm,(ATerm) ATempty);
-ATfprintf(stderr,"result = %t\n", newtrm);
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
   result = asfix_put_term(exptrm,newatrm);
+ATfprintf(stderr,"result = %t\n", result);
 
 #ifdef PROFILING
   ATfprintf(stdout, "rewriting took %d rewrite steps.\n", rewrite_steps);
@@ -390,8 +388,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
     }
     else
       newenv = fail_env;
-  }
-  /*else if(asfix_is_var(arg1) && !asfix_is_var(arg2)) {
+  } 
+	/*else if(asfix_is_var(arg1) && !asfix_is_var(arg2)) {
     if(ATdictGet(newenv,arg1)) {
       trm = v_lookup(arg1,newenv);
       if(ATequal(arg2,trm))
@@ -403,8 +401,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       newenv = TdictPut(ar,newenv,arg1,arg2);
       newenv = args_matching(ar,newenv,conds,orgargs1,orgargs2);
     }
-  }*/
-  else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
+  } */
+	else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
     sym1 = asfix_get_list_sym(arg1);
     sym2 = asfix_get_list_sym(arg2);
     if(ATisEqual(sym1,sym2)) {
@@ -417,8 +415,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
     }
     else
       newenv = fail_env;
-  }
-  /*else if(!asfix_is_var(arg1) && asfix_is_var(arg2)) {*/
+  } /*else if(!asfix_is_var(arg1) && asfix_is_var(arg2)) {*/
   else if(asfix_is_var(arg1)) {
     if(ATdictGet(newenv,arg1)) {
       trm = v_lookup(arg1,newenv);
@@ -649,10 +646,8 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
     if(asfix_is_equality_cond(cond)) {
       if(no_new_vars(lhs,newenv)) {
         lhstrm = rewrite(lhs,newenv);
-ATfprintf(stderr,"lhs = %t\n",lhstrm);
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(rhs,newenv);
-ATfprintf(stderr,"rhs = %t\n",rhstrm);
           /*newenv = arg_matching(newenv,lhstrm,rhstrm,conds,ATempty,ATempty);*/
           if(ATisEqual(lhstrm,rhstrm)) 
             newenv = conds_satisfied(conds,newenv);
@@ -666,7 +661,6 @@ ATfprintf(stderr,"rhs = %t\n",rhstrm);
       else {
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(rhs,newenv);
-ATfprintf(stderr,"rhs = %t\n",rhstrm);
           newenv = arg_matching(newenv,lhs,rhstrm,conds,ATempty,ATempty);
         }
         else {
@@ -683,9 +677,7 @@ ATfprintf(stderr,"rhs = %t\n",rhstrm);
       }
       else {
         lhstrm = rewrite(lhs,newenv);
-ATfprintf(stderr,"lhs = %t\n",lhstrm);
         rhstrm = rewrite(rhs,newenv);
-ATfprintf(stderr,"rhs = %t\n",rhstrm);
         if(ATisEqual(lhstrm,rhstrm)) 
           newenv = fail_env;
         else
@@ -764,10 +756,9 @@ ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));
 
 ATerm select_and_rewrite(ATerm trm)
 {
-  ATerm ofs, newtrm, complexenv;
+  ATerm newtrm, complexenv;
   ATerm env;
 
-  ofs = asfix_get_appl_ofs(trm);
   complexenv = apply_rule(trm);
   env = get_env((ATermList) complexenv);
   if(!is_fail_env(env)) {
@@ -889,11 +880,12 @@ ATerm rewrite(ATerm trm, ATerm env)
   ATerm newtrm, sym, rewtrm;
   ATermList args, newargs;
   ATermList elems, newelems; 
- 
+
+	ATfprintf(stderr, "rewriting: %t\n", trm);
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
-    if(!args)
-      ATfprintf(stderr, "trm = %t\n", trm);
+    /*if(!args)
+      ATfprintf(stderr, "trm = %t\n", trm);*/
     newargs = rewrite_args(args,env);  
     if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(ATgetNext(newargs));

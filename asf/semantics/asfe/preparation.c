@@ -472,13 +472,13 @@ ATerm lexical_to_list(ATerm lextrm)
   lexstr = ATgetName(ATgetAFun((ATermAppl)asfix_get_lex_str(lextrm)));
   l = strlen(lexstr);
   for(i=0; i<l; i++) {
-    cbuf[1] = lexstr[i];
+		cbuf[1] = lexstr[i];
     newtrm = ATmake("lex(<str>,sort(\"CHAR\"))", cbuf, sort);
     newtrmlist = ATappend(newtrmlist, newtrm);
   }
   newname  = ATmake("l(<str>)", sortstr);
   newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))");
-  newlex   = ATmake("list(<term>,w(\"\"),<list>)", newiter, newtrmlist);
+  newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
   newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",newname, newiter);
   newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
   newprod  = ATmake("prod(id(\"caller\"),w(\"\"),<term>,w(\"\")," \
@@ -656,15 +656,15 @@ ATerm list_to_lexical(ATerm lexappl)
   ATermList args, lexargs, listargs;
   int len, i;
 	
-  if(!ATmatch(lexappl, "appl(<term>,<term>,<list>)", &prod, &w[0], &lexargs))
+  if(!ATmatch(lexappl, "appl(<term>,<term>,<term>)", &prod, &w[0], &lexargs))
     ATerror("not an appl: %t\n", lexappl);
 	
-  if(!ATmatch(prod, "prod(<term>,<term>,<list>,<term>,<term>,<term>," \
+  if(!ATmatch(prod, "prod(<term>,<term>,<term>,<term>,<term>,<term>," \
 							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
 							&lit, &w[2], &sort, &w[3]))
 		ATerror("not a prod: %t\n", prod);
   lexlist = ATelementAt(lexargs, 2);
-  if(!ATmatch(lexlist,"list(<term>,<term>,<list>)",&sym,&w[0],&listargs))
+  if(!ATmatch(lexlist,"list(<term>,<term>,<term>)",&sym,&w[0],&listargs))
 		ATerror("not a list: %t\n", lexlist);
   len = ATgetLength(listargs);
   newlexstr = (char *)malloc(len+1);
