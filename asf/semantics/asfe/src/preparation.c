@@ -423,10 +423,12 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   ASF_Symbol qnewname;
   ASF_Tree newname;
   ASF_Tree newTree;
+  PT_Tree newPTtree;
   char emptyLayout[] = "";
   char cbuf[4] = "\" \"", *lexstr, *sortstr;
   ASF_CHARList newCharList = NULL;
   int i, l;
+  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lextrm));
 
   sort = PT_getTreeSymbol(lextrm);
 
@@ -469,7 +471,15 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
               emptyLayout);
   
   free(sortstr);
-  return ASFtoPT(newTree);
+
+  newPTtree = ASFtoPT(newTree);
+  
+  if (annos != NULL) {
+    newPTtree = PT_makeTreeFromTerm(
+                 AT_setAnnotations(PT_makeTermFromTree(newPTtree), annos));
+  }
+
+  return newPTtree;
 }
 
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
@@ -532,7 +542,8 @@ PT_Tree listToLexical(PT_Tree lexappl)
   ASF_Tree tree = PTtoASF(lexappl);
   ASF_CHARList charList;
   PT_Symbol symbol;
-
+  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lexappl));
+  PT_Tree newTree;
   if (!ASF_isTreeLexicalConstructor(tree)) {
     ATerror("listToLexical: not a lexical constructor %t\n", lexappl);
   }
@@ -563,7 +574,14 @@ PT_Tree listToLexical(PT_Tree lexappl)
   }
   newlexstr[i] = '\0';
     
-  return PT_makeTreeLexical(newlexstr, symbol);
+  newTree = PT_makeTreeLexical(newlexstr, symbol);
+ 
+  if (annos != NULL) {
+    newTree = PT_makeTreeFromTerm(
+                 AT_setAnnotations(PT_makeTermFromTree(newTree), annos));
+  }
+ 
+  return newTree; 
 }
 
 
