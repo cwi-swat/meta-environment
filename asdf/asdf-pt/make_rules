@@ -1,0 +1,22 @@
+# $Id$
+
+LIBROOT=${top_srcdir}/lib
+
+# What gets installed, distributed, cleaned
+MODULES=$(wildcard *.asf *.sdf) 
+EXTRA_DIST = $(MODULES)
+
+# Determine installation directory
+libpackagedir=${pkgdatadir}/asdf-pt$(subst asdf-pt,,$(subdir))
+
+install-data-hook:
+	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
+	@list='$(MODULES)'; for p in $$list; do \
+          if test -f $(srcdir)/$$p; then \
+            echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
+          else if test -f $$p; then \
+            echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p; \
+          fi; fi; \
+        done; 

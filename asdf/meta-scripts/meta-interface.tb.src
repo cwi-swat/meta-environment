@@ -10,7 +10,6 @@
 #include "removevarsyntax.idef"
 #include "error-display.tb"
 #include "error-support.idef"
-#include "asfsdfapigen.tb"
 #include "asdf-modules.tb"
 
 process Create-Asf-Processes is

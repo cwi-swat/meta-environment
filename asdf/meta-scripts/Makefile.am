@@ -3,15 +3,12 @@
 TBSCRIPTS = \
 	meta-interface.tb \
 	error-display.tb \
-	asdf-modules.tb \
-	asfsdfapigen.tb
+	asdf-modules.tb
 
 EXTRA_DIST = \
 	meta-interface.tb.src \
 	error-display.tb \
-	asfsdfapigen.tb \
 	asdf-modules.tb \
-	standard.meta.buttons \
 	standard.asdf.buttons \
 	standard.asdf.buttons.src
 
@@ -19,7 +16,7 @@ CLEANFILES = \
 	meta-interface.tb \
 	standard.asdf.buttons
 
-pkgdata_DATA     = $(TBSCRIPTS) standard.meta.buttons standard.asdf.buttons
+pkgdata_DATA     = $(TBSCRIPTS) standard.asdf.buttons
 
 LIBRARY_LOCATION =${ASF_LIBRARY}/share/asf-library/library
 
