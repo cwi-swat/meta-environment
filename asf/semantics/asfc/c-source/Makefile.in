@@ -54,7 +54,7 @@ REGALL	:= $(patsubst %,register_%,$(INIT))
 EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
 RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
-CLEANFILES = AsFix2C libasfix2c.a
+CLEANFILES = AsFix2C libasfix2c.a init.c
 
 all: AsFix2C libasfix2c.a
 
