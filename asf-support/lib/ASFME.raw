@@ -8,7 +8,7 @@
 , lex-to-cf
 , appl ( prod ( [ lex ( sort ( "TagId" ) ) ]
 , cf ( sort ( "TagId" ) )
-, no-attrs )
+, attrs ( [ atr ( "avoid" ) ] ) )
 , [ < lex ( Lexical ) > ] ) ]
 , [ Conditions
 , Default
