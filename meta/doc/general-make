@@ -4,11 +4,14 @@
 	bibtex $*
 
 %.dvi: %.ltx
-	latex $<
-	-@fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $<
-	@while fgrep -s 'Rerun to get cross-references right' $*.log ;\
+	TEXINPUTS=$$TEXINPUTS:${INPUTS} ;\
+        export TEXINPUTS ;\
+        latex $< ;\
+	fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $< ;\
+	while fgrep -s 'Rerun to get cross-references right' $*.log ;\
 	do \
-		latex $< ;\
+	       TEXINPUTS=$$TEXINPUTS:${INPUTS} ;\
+       	       latex $< ;\
 	done
 
 %.eps: %.fig
