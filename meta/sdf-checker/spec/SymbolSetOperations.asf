@@ -10,3 +10,7 @@ equations
 
   [sym1] symbols($Symbol*1 $Symbol $Symbol*2 $Symbol $Symbol*3) =
            symbols($Symbol*1 $Symbol $Symbol*2 $Symbol*3)
+
+  [c-1'1] contains($Symbol, symbols($Symbol*1 $Symbol $Symbol*2)) = true
+
+  [default-c-1'1] contains($Symbol, symbols($Symbol*)) = false

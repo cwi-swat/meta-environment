@@ -8,16 +8,16 @@ exports
 
 hiddens
   context-free syntax
-    check-syntax(Definition, Messages)          -> Messages {traversal(accu, top-down)}
-    check-syntax(Module, Messages)              -> Messages {traversal(accu, top-down)}
-    check-syntax(Module, Messages, ModuleName)  -> Messages {traversal(accu, top-down)}
-    check-syntax(Grammar, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
+    check-syntax(Definition, Messages)        -> Messages {traversal(accu, top-down)}
+    check-syntax(Module, Messages)            -> Messages {traversal(accu, top-down)}
+    check-syntax(Module, Messages, ModuleId)  -> Messages {traversal(accu, top-down)}
+    check-syntax(Grammar, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
     "Module"[0-9]*     -> Module
-    "ModuleName"[0-9]* -> ModuleName
+    "$ModuleId"[0-9]*  -> ModuleId
     "Msgs"[0-9]*       -> Messages
     "Prod*"[0-9]*      -> Production*
     "Prios"[0-9]*      -> Priorities

@@ -8,10 +8,10 @@ exports
 
 hiddens
   context-free syntax
-    check-symbols(Definition, Messages)         -> Messages {traversal(accu, top-down)}
-    check-symbols(Module, Messages)             -> Messages {traversal(accu, top-down)}
-    check-symbols(Module, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
-    check-symbols(Symbol, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
+    check-symbols(Definition, Messages)       -> Messages {traversal(accu, top-down)}
+    check-symbols(Module, Messages)           -> Messages {traversal(accu, top-down)}
+    check-symbols(Module, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
+    check-symbols(Symbol, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
 
 hiddens
   context-free syntax
@@ -21,7 +21,7 @@ hiddens
 hiddens
   variables
     "Module"[0-9]*     -> Module
-    "ModuleName"[0-9]* -> ModuleName
+    "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
     "Msgs"[0-9]*       -> Messages
     "$Symbol"[0-9]*    -> Symbol

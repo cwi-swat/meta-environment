@@ -20,22 +20,22 @@ exports
     "[" SymbolsSet "," ProductionsSet "]" -> Module-Info
 
   context-free syntax
-    "[" ModuleName "," Bool "," Module-Info "]" -> Module-Info-Entry
+    "[" ModuleId "," Bool "," Module-Info "]" -> Module-Info-Entry
     "{" Module-Info-Entry* "}"                  -> Module-Info-Table
 
   context-free syntax
-    module-is-checked(ModuleName, Module-Info-Table)    -> Bool
+    module-is-checked(ModuleId, Module-Info-Table)    -> Bool
 
   context-free syntax
-    get-declared-symbols(ModuleName, Module-Info-Table) -> SymbolsSet
-    put-symbol-info(ModuleName,
+    get-declared-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
+    put-symbol-info(ModuleId,
                     SymbolsSet, 
                     Module-Info-Table)                  -> Module-Info-Table
     get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
 
   context-free syntax
-    get-defined-productions(ModuleName, Module-Info-Table) -> ProductionsSet
-    put-production-info(ModuleName,
+    get-defined-productions(ModuleId, Module-Info-Table) -> ProductionsSet
+    put-production-info(ModuleId,
                         ProductionsSet, 
                         Module-Info-Table)                 -> Module-Info-Table
     get-defined-productions(ImportsSet, Module-Info-Table) -> ProductionsSet
@@ -44,7 +44,8 @@ hiddens
   variables
     "Bool"[0-9]*             -> Bool
     "Messages"[0-9]*         -> Messages
-    "ModuleName"[0-9]*       -> ModuleName
+    "$ModuleId"[0-9]*        -> ModuleId
+    "$ModuleName"[0-9]*      -> ModuleName
     "ModuleInfoEntry"[0-9]*  -> Module-Info-Entry
     "ModuleInfoEntry*"[0-9]* -> Module-Info-Entry*
     "ModuleInfoTable"[0-9]*  -> Module-Info-Table

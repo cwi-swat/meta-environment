@@ -3,158 +3,158 @@ equations
   [ca-1'1] check-attributes(Definition) =
              check-attributes(Definition, {})
 
-  [ca-1'2] get-module-name(Module) = ModuleName
+  [ca-1'2] get-module-name(Module) = $ModuleId
            ====================================
            check-attributes(Module, Msgs) = 
-             check-attributes(Module, Msgs, ModuleName)
+             check-attributes(Module, Msgs, $ModuleId)
 
   [ca-2'1] is-bracket-definition($Symbol* -> $Symbol) = false
            =================================================
            check-attributes($Symbol* -> $Symbol {Attr*1, bracket, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, bracket, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, bracket, Attr*2})
 
   [ca-2'2] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2},
-                            Msgs, ModuleName) = 
+                            Msgs, $ModuleId) = 
              Msgs + 
-             illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2})
+             illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2})
 
   [ca-2'2] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
            check-attributes($Symbol* -> $Symbol {Attr*1, left, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, left, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, left, Attr*2})
 
   [ca-2'3] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2})
 
   [ca-2'4] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
            check-attributes($Symbol* -> $Symbol {Attr*1, assoc, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, assoc, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, assoc, Attr*2})
 
   [ca-2'5] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2})
 
   [ca-2'6] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
            check-attributes($Symbol* -> $Symbol {Attr*1, right, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, right, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, right, Attr*2})
 
 
   [ca-2'7] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2})
 
   [ca-2'8] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
            check-attributes($Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2})
 
   [ca-2'9] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2},
-                            Msgs, ModuleName) = 
-             Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2})
+                            Msgs, $ModuleId) = 
+             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2})
 
   [ca-2'10] contains-trafo(Aterm*1, Aterm*2) = false,
             is-accu-definition($Literal ( $Symbol,* ) -> $Symbol) = false
             =============================================================
             check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                              {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
 
   [ca-2'11] contains-trafo(Aterm*1, Aterm*2) = false,
             is-accu-definition($Symbol* -> $Symbol) = false
             ===============================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
 
   [ca-2'14] contains-trafo(Aterm*1, Aterm*2) = true,
             is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
             ===================================================================
             check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                              {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
 
   [ca-2'15] contains-trafo(Aterm*1, Aterm*2) = true,
             is-accu-trafo-definition($Symbol* -> $Symbol) = false
             =====================================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, accu, Aterm*2), Attr*2})
 
   [ca-2'16] contains-accu(Aterm*1, Aterm*2) = false,
             is-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
             ==============================================================
             check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                              {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
 
   [ca-2'17] contains-accu(Aterm*1, Aterm*2) = false,
             is-trafo-definition($Symbol* -> $Symbol) = false
             ================================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
 
   [ca-2'18] contains-accu(Aterm*1, Aterm*2) = true,
             is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
             ===================================================================
             check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                              {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
 
   [ca-2'19] contains-accu(Aterm*1, Aterm*2) = true,
             is-accu-trafo-definition($Symbol* -> $Symbol) = false
             =====================================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-attribute(ModuleName, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm*1, trafo, Aterm*2), Attr*2})
 
   [ca-2'20] contains-accu(Aterm+) = false,
             contains-trafo(Aterm+) = false
             ==============================
             check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                              {Attr*1, traversal(Aterm+), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-traversal-attribute(ModuleName, traversal(Aterm+))
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-traversal-attribute($ModuleId, traversal(Aterm+))
 
   [ca-2'21] contains-accu(Aterm+) = false,
             contains-trafo(Aterm+) = false
             ==============================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, traversal(Aterm+), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-traversal-attribute(ModuleName, traversal(Aterm+))
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-traversal-attribute($ModuleId, traversal(Aterm+))
 
   [ca-2'22] $Literal2 != traversal,
             contains-accu(Aterm+) \/ contains-trafo(Aterm+) = true
             ======================================================
             check-attributes($Literal1 ( $Symbol,* ) -> $Symbol 
                              {Attr*1, $Literal2(Aterm+), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-traversal-attribute(ModuleName, $Literal2(Aterm+))
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-traversal-attribute($ModuleId, $Literal2(Aterm+))
 
   [ca-2'23] $Literal2 != traversal,
             contains-accu(Aterm+) \/ contains-trafo(Aterm+) = true
             ======================================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, $Literal2(Aterm+), Attr*2},
-                             Msgs, ModuleName) = 
-              Msgs + illegal-traversal-attribute(ModuleName, $Literal2(Aterm+))
+                             Msgs, $ModuleId) = 
+              Msgs + illegal-traversal-attribute($ModuleId, $Literal2(Aterm+))
 
   [ibd-1'1] is-binary-definition($Symbol1 $Symbol2 $Symbol1 -> $Symbol1) = true 
 

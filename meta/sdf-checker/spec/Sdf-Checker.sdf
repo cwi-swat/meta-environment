@@ -21,9 +21,10 @@ hiddens
     "Msg*"[0-9]*       -> Message*
     "Msgs"[0-9]*       -> Messages
 
-    "Module"[0-9]*     -> Module
-    "Module*"[0-9]*    -> Module*
-    "ModuleName"[0-9]* -> ModuleName
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "$ModuleId"[0-9]*    -> ModuleId
+    "$ModuleName"[0-9]*  -> ModuleName
     
     "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
 

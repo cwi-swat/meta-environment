@@ -1,23 +1,17 @@
 equations
 
-  [x] get-module($ModuleName, $Module*1 
-                              module $ModuleName $ImpSection* $Sections 
-                              $Module*2) =
+  [gmi-1'1] get-module-id($ModuleId) = $ModuleId
+
+  [gmi-1'1] get-module-id($ModuleId[$Symbol*]) = $ModuleId
+
+  [x] get-module-id($ModuleName) = $ModuleId
+      ======================================
+      get-module($ModuleId, $Module*1 
+                            module $ModuleName $ImpSection* $Sections 
+                            $Module*2) =
         module $ModuleName $ImpSection* $Sections
 
-  [x] get-module-name(module $ModuleName $ImpSection* $Sections) = $ModuleName
-
-  [x] module $ModuleName $ImpSection* $Section* + $Section = 
-        module $ModuleName $ImpSection* $Section* $Section
-
-  [x] $Grammar syntax = $Grammar
-  [x] $Section*1 hiddens syntax $Section*2 = $Section*1 $Section*2
-        
-  [x] get-export-grammar(exports $Grammar1, $Grammar2, $Definition) = 
-          $Grammar2 $Grammar1
-
-  [x] get-export-grammar1($ModuleName, $Definition) =
-	get-export-grammar(get-module($ModuleName, $Definition), 
-                           syntax, 
-                           $Definition)
+  [x] get-module-id($ModuleName) = $ModuleId
+      ======================================
+      get-module-name(module $ModuleName $ImpSection* $Sections) = $ModuleId
 

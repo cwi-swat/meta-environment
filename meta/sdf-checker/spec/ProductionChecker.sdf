@@ -21,11 +21,11 @@ hiddens
 
 hiddens
   context-free syntax
-    check-priorities(Module, Messages, ModuleName)               -> Messages {traversal(accu, top-down)}
-    check-priorities(Priority, Messages, ModuleName)             -> Messages {traversal(accu, top-down)}
-    check-priorities(Group, Messages, ModuleName, Symbol)        -> Messages {traversal(accu, top-down)}
-    check-priorities({Group ">"}+, Messages, ModuleName, Symbol) -> Messages {traversal(accu, top-down)}
-    check-priorities(Production, Messages, ModuleName, Symbol)   -> Messages {traversal(accu, top-down)}
+    check-priorities(Module, Messages, ModuleId)               -> Messages {traversal(accu, top-down)}
+    check-priorities(Priority, Messages, ModuleId)             -> Messages {traversal(accu, top-down)}
+    check-priorities(Group, Messages, ModuleId, Symbol)        -> Messages {traversal(accu, top-down)}
+    check-priorities({Group ">"}+, Messages, ModuleId, Symbol) -> Messages {traversal(accu, top-down)}
+    check-priorities(Production, Messages, ModuleId, Symbol)   -> Messages {traversal(accu, top-down)}
     get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)}
     get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)}
 
@@ -41,7 +41,7 @@ hiddens
 
     "Module"[0-9]*          -> Module
     "Module*"[0-9]*         -> Module*
-    "ModuleName"[0-9]*      -> ModuleName
+    "$ModuleId"[0-9]*       -> ModuleId
 
     "Msg"[0-9]*             -> Message
     "Msg*"[0-9]*            -> Message*

@@ -8,10 +8,10 @@ exports
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)             -> Messages {traversal(accu, top-down)}
-    check-attributes(Module, Messages)                 -> Messages {traversal(accu, top-down)}
-    check-attributes(Module, Messages, ModuleName)     -> Messages {traversal(accu, top-down)}
-    check-attributes(Production, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
+    check-attributes(Definition, Messages)           -> Messages {traversal(accu, top-down)}
+    check-attributes(Module, Messages)               -> Messages {traversal(accu, top-down)}
+    check-attributes(Module, Messages, ModuleId)     -> Messages {traversal(accu, top-down)}
+    check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
 
   context-free syntax
     contains-accu({ATerm ","}*)  -> Bool
@@ -29,7 +29,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "Aterm*"[0-9]*     -> {ATerm ","}*
     "Aterm+"[0-9]*     -> {ATerm ","}+
-    "ModuleName"[0-9]* -> ModuleName
+    "$ModuleId"[0-9]*  -> ModuleId
     "Attributes"[0-9]* -> Attributes
     "Attr*"[0-9]*      -> {Attribute ","}*
     "Definition"[0-9]* -> Definition

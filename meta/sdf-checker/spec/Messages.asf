@@ -10,8 +10,8 @@ $Msg*2}
   [cm-1'1] {$Msg*1} ++ {$Msg*2} = {$Msg*1 
 $Msg*2}
 
-  [msg-3] undeclared($ModuleName, symbols()) = none
-  [msg-4] not-implemented($ModuleName, symbols()) = none
-  [msg-5] declared-but-undefined($ModuleName, symbols()) = none
+  [msg-3] undeclared($ModuleId, symbols()) = none
+  [msg-4] not-implemented($ModuleId, symbols()) = none
+  [msg-5] declared-but-undefined($ModuleId, symbols()) = none
 
-  [msg-6] used-but-undefined($ModuleName, productions()) = none
+  [msg-6] used-but-undefined($ModuleId, productions()) = none

@@ -17,12 +17,12 @@ equations
   [x] imports($Import*1 $ModuleName $Import*2 $ModuleName $Import*3) =
         imports($Import*1 $ModuleName $Import*2 $Import*3)
 
-  [x] get-imports($ModuleName, {$ImportRelation*1, 
-                                [$ModuleName : imports($Import*)], 
-                                $ImportRelation*2}) =
+  [x] get-imports($ModuleId, {$ImportRelation*1, 
+                             [$ModuleId : imports($Import*)], 
+                             $ImportRelation*2}) =
         imports($Import*)
 
-  [default-x] get-imports($ModuleName, {$ImportRelation*}) = imports()
+  [default-x] get-imports($ModuleId, {$ImportRelation*}) = imports()
 
   [gai-1'1] get-exported-imports($Module, imports()) = $ImportsSet1,
             get-hidden-imports($Module, $ImportsSet1) = $ImportsSet2

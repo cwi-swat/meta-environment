@@ -6,16 +6,17 @@ exports
   sorts Message Messages
 
   context-free syntax
-    "none"					           -> Message
-    undeclared(ModuleName, SymbolsSet)		           -> Message
-    not-implemented(ModuleName, SymbolsSet)	           -> Message
-    declared-but-undefined(ModuleName, SymbolsSet)         -> Message
-    illegal-attribute(ModuleName, Production)              -> Message
-    illegal-traversal-attribute(ModuleName, Attribute)     -> Message
-    not-supported-symbol(ModuleName, Symbol)               -> Message
-    used-but-undefined(ModuleName, ProductionsSet)         -> Message
-    kernel-syntax-construction(ModuleName, Literal)        -> Message
-    inconsistent-rhs-in-priorities(ModuleName, Symbol, Production) -> Message
+    "none"					                 -> Message
+    undeclared(ModuleId, SymbolsSet)		                 -> Message
+    not-implemented(ModuleId, SymbolsSet)	                 -> Message
+    declared-but-undefined(ModuleId, SymbolsSet)                 -> Message
+    double-declared-symbol(ModuleId, Symbol)                     -> Message
+    illegal-attribute(ModuleId, Production)                      -> Message
+    illegal-traversal-attribute(ModuleId, Attribute)             -> Message
+    not-supported-symbol(ModuleId, Symbol)                       -> Message
+    used-but-undefined(ModuleId, ProductionsSet)                 -> Message
+    kernel-syntax-construction(ModuleId, Literal)                -> Message
+    inconsistent-rhs-in-priorities(ModuleId, Symbol, Production) -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages
@@ -24,7 +25,7 @@ exports
 
 hiddens
   variables
-    "$ModuleName"[0-9]* -> ModuleName
+    "$ModuleId"[0-9]* -> ModuleId
 
     "$Msg"[0-9]*        -> Message
     "$Msg*"[0-9]*       -> Message*

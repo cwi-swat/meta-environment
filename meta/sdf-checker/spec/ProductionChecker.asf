@@ -36,7 +36,7 @@ equations
                                productions(Prod*)) =
               productions($Literal ( Symbol,* ) -> Symbol Prod*)
 	
-  [cm1] get-module-name(Module) = ModuleName,
+  [cm1] get-module-name(Module) = $ModuleId,
         get-exported-cf-prods(Module, productions()) = productions(Prod*1),
         get-hidden-cf-prods(Module, productions()) =  productions(Prod*2),
         get-prods-in-prios(Module, productions()) = productions(Prod*3),
@@ -46,17 +46,17 @@ equations
         get-defined-productions(ImportsSet, get-module-info(InfoMsgTuple1)) = 
           productions(Prod*4),
 
-        check-priorities(Module, {}, ModuleName) = Msgs0,
+        check-priorities(Module, {}, $ModuleId) = Msgs0,
 
         Msgs1 = get-messages(InfoMsgTuple1),
         Msgs2 = Msgs1 + 
-used-but-undefined(ModuleName, diff(productions(Prod*3), 
+used-but-undefined($ModuleId, diff(productions(Prod*3), 
                                      productions(Prod*1 Prod*2 Prod*4))),
         Msgs3 = Msgs2 ++ Msgs0,
         InfoMsgTuple3 = put-messages(Msgs3, InfoMsgTuple1),
 
         get-module-info(InfoMsgTuple3) = ModuleInfoTable1,
-        put-production-info(ModuleName, 
+        put-production-info($ModuleId, 
                             productions(Prod*1 Prod*4), 
                             ModuleInfoTable1) = ModuleInfoTable2,
         put-module-info(ModuleInfoTable2, InfoMsgTuple3) =  InfoMsgTuple4
@@ -64,35 +64,35 @@ used-but-undefined(ModuleName, diff(productions(Prod*3),
         check-module-prods(Module, InfoMsgTuple1) = InfoMsgTuple4
 
   [cp-1'1] get-rhs-production(Group, symbols()) = symbols(Symbol),
-           check-priorities(Group, Msgs1, ModuleName, Symbol) = Msgs2,
-           check-priorities(Group+, Msgs2, ModuleName, Symbol) = Msgs3
+           check-priorities(Group, Msgs1, $ModuleId, Symbol) = Msgs2,
+           check-priorities(Group+, Msgs2, $ModuleId, Symbol) = Msgs3
            ===========================================================
-           check-priorities(Group > Group+, Msgs1, ModuleName) = Msgs3
+           check-priorities(Group > Group+, Msgs1, $ModuleId) = Msgs3
 
   [cp-1'2] get-rhs-production(Group, symbols()) = symbols(Symbol),
-           check-priorities(Group, Msgs1, ModuleName, Symbol) = Msgs2
+           check-priorities(Group, Msgs1, $ModuleId, Symbol) = Msgs2
            ==========================================================
-           check-priorities(Group, Msgs1, ModuleName) = Msgs2
+           check-priorities(Group, Msgs1, $ModuleId) = Msgs2
 
   [cp-1'3] get-rhs-production(Group1, symbols()) = symbols(Symbol),
-           check-priorities(Group1, Msgs1, ModuleName, Symbol) = Msgs2,
-           check-priorities(Group2, Msgs2, ModuleName, Symbol) = Msgs3
+           check-priorities(Group1, Msgs1, $ModuleId, Symbol) = Msgs2,
+           check-priorities(Group2, Msgs2, $ModuleId, Symbol) = Msgs3
            ===========================================================
-           check-priorities(Group1 Assoc Group2, Msgs1, ModuleName) = Msgs3 
+           check-priorities(Group1 Assoc Group2, Msgs1, $ModuleId) = Msgs3 
 
   [cp-2'1] Symbol1 != Symbol2
            ==================
            check-priorities(Symbol* -> Symbol1 Attrs, 
-                            Msgs, ModuleName, Symbol2) =
+                            Msgs, $ModuleId, Symbol2) =
              Msgs + 
-inconsistent-rhs-in-priorities(ModuleName, Symbol2, Symbol* -> Symbol1 Attrs)
+inconsistent-rhs-in-priorities($ModuleId, Symbol2, Symbol* -> Symbol1 Attrs)
 
   [cp-2'2] Symbol1 != Symbol2
            ==================
            check-priorities($Literal (Symbol,*) -> Symbol1 Attrs, 
-                            Msgs, ModuleName, Symbol2) =
+                            Msgs, $ModuleId, Symbol2) =
              Msgs + 
-inconsistent-rhs-in-priorities(ModuleName, Symbol2, $Literal (Symbol,*) -> Symbol1 Attrs)
+inconsistent-rhs-in-priorities($ModuleId, Symbol2, $Literal (Symbol,*) -> Symbol1 Attrs)
 
   [grp-2'1] get-rhs-production(Symbol* -> Symbol Attrs, symbols()) = 
               symbols(Symbol)
