@@ -1,5 +1,5 @@
-#include <SDF-utils.h>
-#include <asc-support2.h>
+#include <SDFME-utils.h>
+#include <asc-support2-me.h>
 #include "ksdf2table.h"
 
 /*{{{  global variables */
@@ -33,9 +33,9 @@ static char myarguments[] = "bchi:lm:o:tvV";
 /*}}}  */
 /*{{{  external functions */
 
-extern void register_all();
-extern void resolve_all();
-extern void init_all();
+extern void register_Sdf050045Normalization();
+extern void resolve_Sdf050045Normalization();
+extern void init_Sdf050045Normalization();
  
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -56,8 +56,7 @@ void rec_terminate(int cid, ATerm t) {
 
 static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
-  SDF_ModuleName sdfModuleName = SDF_makeModuleNameUnparameterized(
-                               SDF_makeModuleIdWord(str));
+  SDF_ModuleName sdfModuleName = SDFmakeModuleName(str);
   PT_Tree ptModuleName = PT_makeTreeFromTerm(
                            SDF_makeTermFromModuleName(sdfModuleName));
   PT_Tree newTree = NULL;
@@ -113,6 +112,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
   max_nr_items = 0;
 
   if (ksdf)  {
+/*ATwarning("ksdf: %t\n", ksdf);*/
     pt = generate_parse_table(ksdf);
   }
   destroy_table_gen();       
@@ -191,19 +191,18 @@ int main(int argc, char *argv[])
   run_verbose = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
-  for(c=1; !toolbus_mode && c<argc; c++)
+  for(c=1; !toolbus_mode && c<argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
+  }
 
-  AFinit(argc, argv, &bottomOfStack);
-
-  AFinitAsFixPatterns();
+  ATinit(argc, argv, &bottomOfStack); 
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
-  SDF_initSDFApi(); 
+  SDF_initSDFMEApi(); 
 
-  register_all();
-  resolve_all();
-  init_all();
+  register_Sdf050045Normalization();
+  resolve_Sdf050045Normalization();
+  init_Sdf050045Normalization();
 
   if(toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */

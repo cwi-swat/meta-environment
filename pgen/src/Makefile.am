@@ -17,20 +17,17 @@ EXTRA_DIST   = parsetablegen.idef sdf2table.src \
 
 SRCS         = parsetablegen.c ksdf2table.c atsets.c flatten.c \
                characters.c first.c follow.c goto.c parse-table.c \
-               predicted.c priorities.c reductions.c sdf-help.c statistics.c
+               predicted.c priorities.c reductions.c statistics.c \
+               Sdf2-Normalization.c
 
 HDRS         = atsets.h ksdf2table.h statistics.h flatten.h
 
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = parsetablegen.tif.o \
-                        -L$(top_builddir)/c-source -lSdf2-Normalization \
-                        -L$(top_builddir)/c-lib -lnative \
-                        -L$(ASC_SUPPORT)/lib -lasc-support \
-                        -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
-                        -L$(PT_SUPPORT)/lib -lPT \
-                        -L$(SDF_SUPPORT)/lib -lSDF \
-                        -L$(ASF_SUPPORT)/lib -lASF \
+                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
+                        -L$(SDF_SUPPORT)/lib -lSDFME \
+                        -L$(PT_SUPPORT)/lib -lmept \
                         -L$(ATERM)/lib -lATB -lATerm \
                         $(SOCKLIBS)
 

@@ -1,27 +1,6 @@
-/*
-
-    PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 #include <unistd.h>
+#include "ksdf2table.h" 
 #include "flatten.h"
-#include "ksdf2table.h"
 #include "statistics.h"
 
 /*{{{  global variables */
@@ -46,7 +25,6 @@ extern ATbool statisticsMode;
 /*{{{  external functions */
 
 extern ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2);
-extern int count_members_in_lhs(ATerm prod);
  
 /*}}}  */
 /*{{{  function declarations */
@@ -215,6 +193,7 @@ ATerm process_productions(SDF_ProductionList prods)
   ATermList labelentries = ATempty;
   int ip, cnt = MIN_PROD, nr_of_members, nr_of_kernel_prods;
   SDF_Production prod, newProd;
+  PT_Production ptProd;
 
   SDF_ProductionList localProds = prods;
   while (SDF_hasProductionListHead(localProds)) {
@@ -244,9 +223,11 @@ ATerm process_productions(SDF_ProductionList prods)
   while (SDF_hasProductionListHead(prods)) {
     prod = SDF_getProductionListHead(prods);
 
-    flatprod = SDFflattenProd(SDF_makeTermFromProduction(prod));
+    ptProd = SDFProductionToPtProduction(prod);
+    flatprod = PT_makeTermFromProduction(ptProd);
+                 
     if (statisticsMode) {
-      nr_of_members = count_members_in_lhs(flatprod);
+      nr_of_members = PT_getSymbolsLength(PT_getProductionLhs(ptProd));
       if (nr_of_members > max_nr_lhs_members) {
         max_nr_lhs_members = nr_of_members;
       }
@@ -311,7 +292,7 @@ ATerm processAssocPriority(SDF_Priority prio)
     leftnr = ATtableGet(prod_nr_pairs,
                         SDF_makeTermFromProduction(newProd));
     if (!leftnr) {
-      newprod = SDFflattenProd(SDF_makeTermFromProduction(leftProd));
+      newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
       if (run_verbose) {
         ATwarning("No rule found for %t\n", newprod);
       }
@@ -324,7 +305,7 @@ ATerm processAssocPriority(SDF_Priority prio)
     rightnr = ATtableGet(prod_nr_pairs,
                          SDF_makeTermFromProduction(newProd));
     if (!rightnr) {
-      newprod = SDFflattenProd(SDF_makeTermFromProduction(rightProd));
+      newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
       if (run_verbose) {
         ATwarning("No rule found for %t\n", newprod);
       }
@@ -381,7 +362,7 @@ ATerm processChainPriority(SDF_Priority prio)
         leftnr = ATtableGet(prod_nr_pairs,
                             SDF_makeTermFromProduction(newProd));
         if (!leftnr) {
-          newprod = SDFflattenProd(SDF_makeTermFromProduction(leftProd));
+          newprod = PT_ProductionToTerm(SDFProductionToPtProduction(leftProd));
           if (run_verbose) {
             ATwarning("No rule found for %t\n", newprod);
           }
@@ -394,7 +375,7 @@ ATerm processChainPriority(SDF_Priority prio)
         rightnr = ATtableGet(prod_nr_pairs,
                              SDF_makeTermFromProduction(newProd));
         if (!rightnr) {
-          newprod = SDFflattenProd(SDF_makeTermFromProduction(rightProd));
+          newprod = PT_ProductionToTerm(SDFProductionToPtProduction(rightProd));
           if (run_verbose) {
             ATwarning("No rule found for %t\n", newprod);
           }
@@ -480,9 +461,7 @@ void process_restrictions(SDF_RestrictionList restricts)
         while (SDF_hasLookaheadListHead(lookaheadList)) {
           SDF_Lookahead lookahead = SDF_getLookaheadListHead(lookaheadList);
 
-          ATerm newLookahead = SDFflattenLookAhead(
-                                 SDF_makeTermFromLookahead(lookahead),
-                                 ATfalse);
+          ATerm newLookahead = SDFflattenLookAhead(lookahead, ATfalse);
           newLookaheads = ATappend(newLookaheads, newLookahead);
           
           if (SDF_isLookaheadListSingle(lookaheadList)) {
@@ -493,7 +472,7 @@ void process_restrictions(SDF_RestrictionList restricts)
  
         while (SDF_hasSymbolListHead(symbolList)) {
           SDF_Symbol symbol = SDF_getSymbolListHead(symbolList);
-          ATerm newsymbol = SDFflattenSymbol(SDF_makeTermFromSymbol(symbol));
+          ATerm newsymbol = PT_SymbolToTerm(SDFSymbolToPtSymbol(symbol));
   
           ATermList oldLookaheads = 
                       (ATermList)ATtableGet(symbol_lookaheads_table, newsymbol);

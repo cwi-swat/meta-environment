@@ -3,8 +3,6 @@
 
 #include "ksdf2table.h"
 
-ATerm SDFflattenProd(ATerm prod);
-ATerm SDFflattenSymbol(ATerm symbol);
-ATerm SDFflattenLookAhead(ATerm prod, ATbool nested); 
+ATerm SDFflattenLookAhead(SDF_Lookahead lookAhead, ATbool nested); 
 
 #endif
