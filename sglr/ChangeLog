@@ -19,6 +19,9 @@
 
 $Id$
 
+2001/05/04 (markvdb@cwi.nl)
+  * Added pair symbol.
+
 2001/05/03 (jong@cwi.nl)
  * version 3.2.2
  * cleaned up all Makefile.ams that caused "make install" to rebuild

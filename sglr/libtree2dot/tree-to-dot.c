@@ -160,6 +160,10 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
     SG_PrintSymbolToGrowBuf(gb, arg, escaped);
     SG_AddStringToGrowBuf(gb, "|");
     SG_PrintSymbolToGrowBuf(gb, arg2, escaped);
+  } else if (ATmatch(t, "pair(<term>,<term>)", &arg, &arg2)) {
+    SG_PrintSymbolToGrowBuf(gb, arg, escaped);
+    SG_AddStringToGrowBuf(gb, "#");
+    SG_PrintSymbolToGrowBuf(gb, arg2, escaped);
   } else if (ATmatch(t, "char-class([<list>])", &args)) {
     SG_AddStringToGrowBuf(gb, "[");
     while (!ATisEmpty(args)) {
