@@ -24,18 +24,28 @@
 # and uses the right syntax for comments.
 #
 
-if [ $# -lt 3 ] 
-then
-    cat <<EOF 
+usage() {
+   cat <<EOF 
 Usage:  insert-license <directory-with-headers> <package> <files-to-add-to>
 
 <package> can be any of "meta", "sglr", "pgen" or "asc".
 
-The authors would like you to know that insert-license COMES WITHOUT ANY WARRANTY; 
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-PURPOSE.
 EOF
+}
 
+version() {
+   echo "Something between 0.0 and 1.0" 
+}
+
+case $1 in
+  -h ) usage; exit 0;;
+  -V ) version; exit 0 ;;
+  -* ) usage; exit 1;;
+esac
+
+if [ $# -lt 3 ] 
+then
+   usage
    exit 1
 fi
 

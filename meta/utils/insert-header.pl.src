@@ -21,7 +21,7 @@
 # $Id$
 
 $prog = "insert-header";
-$version = "1";
+$version = "1.0";
 
 $info = "$prog - A script to insert a file at the start of another file
 
