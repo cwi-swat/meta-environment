@@ -1,0 +1,57 @@
+module Alignments-to-Text
+
+imports languages/box/syntax/Box
+imports Basic-to-Text
+imports ExtendedIntegers
+imports Text-Operators
+imports WidthofBoxes
+
+exports
+  sorts AlignInfo
+
+  context-free syntax
+    Point* -> AlignInfo
+
+  context-free syntax
+    "pre-align" Box "with" Frame "and" TextStruct "and" AlignInfo -> TextStruct
+    "align" Box "with" Frame "and" TextStruct "and" AlignInfo -> TextStruct
+    "align" Box "given" AlignmentOptions SpaceOption*
+      "with" Frame "and" TextStruct "and" AlignInfo -> TextStruct
+    "calc-width" Box "with" Frame "and" AlignInfo -> AlignInfo
+
+hiddens
+  context-free syntax
+    "get" "column" Box                            -> Box*
+    "remove" "column" Box                         -> Box
+    "minimal" "width" AlignInfo "with" Integer     -> Integer
+    "maximal" "width" AlignInfo "with" Integer     -> Integer
+    "fixed" "width" AlignInfo "with" Integer       -> Integer
+    "variable" "column"s AlignInfo               -> Integer
+    "fix" "column" "widths" AlignInfo "with" "minimal" -> AlignInfo
+    "fix" "column" "widths" AlignInfo "with" "maximal" -> AlignInfo
+    "fix" "column" "widths" AlignInfo "with"
+      "(" Integer "," Integer "," Integer ")" -> AlignInfo
+
+hiddens
+  variables
+    [B-E][0-9]* -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Align-info"[0-9]* -> AlignInfo
+    "Defs" -> Defs
+    "Frame"[0-9]* -> Frame
+    "Hs" -> Integer
+    "Int"[0-9]* -> Integer
+    "Point"[0-9]* -> Point
+    "Point*"[0-9]* -> Point*
+    "Point+"[0-9]* -> Point+
+    "Struct"[0-9]* -> TextStruct
+    "Text"[0-9]* -> Text
+    "Vs" -> Integer
+    "X" -> Integer
+    "Y" -> Integer
+    "'C" -> Context
+    "ao"[0-9]* -> AlignmentOption
+    "ao*"[0-9]* -> {AlignmentOption ","}*
+    "ao+"[0-9]* -> {AlignmentOption ","}+
+    "so*"[0-9]* -> SpaceOption*

@@ -1,7 +1,8 @@
 module LengthofBoxes
 
-imports Outstrings Frame 
-        languages/box/syntax/Contexts
+imports Outstrings 
+imports Frame 
+imports languages/box/syntax/Contexts
 
 exports
   context-free start-symbols BoxPoint

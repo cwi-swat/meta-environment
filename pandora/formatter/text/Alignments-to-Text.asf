@@ -1,0 +1,246 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+[ABtI1'1] 
+  Align-info := calc-width A (ao*) so*1 [B*1] with Frame and
+  ===>
+  place A (ao*) so*1 [B*1] with Frame and Struct and 'C =
+    pre-align A (ao*) so*1 [B*1] with Frame and Struct and Align-info
+
+  [ABtI2'1] calc-width A () so*1 [B*] with Frame and Align-info = Align-info
+
+  [ABtI2'2] B*2 := get column A (ao1,ao*1) [B*1],
+            Int := width of V so*1 [B*2] with Frame,
+            length of V so*1 [B*2] with Frame and H = B (Int1,Int2) ## Point,
+            if (Int1 < Int) then (Int,Int) else (Int,Int1) fi = Point1,
+            remove column A (ao1,ao*1) [B*1] = A (ao2,ao*2) [B*5]
+            ===>
+            calc-width A (ao1,ao*1) so*1 [B*1] with Frame and Point*1 =
+               calc-width A (ao*2) so*1 [B*5] with Frame and Point*1 Point1
+
+  [ABtI3'1] minimal width with Int = 0
+
+  [ABtI3'2] minimal width (Int1,Int2) with Int3 = Int1
+
+  [ABtI3'3] minimal width (Int1,Int2) Point+ with Int3 = Int1 + Int3 + minimal width Point+ with Int3
+
+  [ABtI4'1] maximal width with Int = 0
+
+  [ABtI4'2] maximal width (Int1,Int2) with Int3 = Int2
+
+  [ABtI4'2] maximal width (Int1,Int2) Point+ with Int3 = Int2 + Int3 + maximal width Point+ with Int3
+
+  [ABtI5'1] fixed width with Int = 0
+
+  [ABtI5'2] fixed width (Int1,Int1) with Int2 = Int1
+
+  [default-ABtI5'3]   fixed width (Int1,Int2) with Int3 = 0
+
+  [ABtI5'4] fixed width (Int1,Int1) Point+ with Int2 = Int1 + Int2 + fixed width Point+ with Int2
+
+  [default-ABtI5'5]   fixed width (Int1,Int2) Point+ with Int3 = Int3 + fixed width Point+ with Int3
+
+  [ABtI6'1] variable columns = 0
+
+  [ABtI6'2] variable columns (Int,Int) Point* = variable columns Point*
+
+  [default-ABtI6'3]   variable columns (Int1,Int2) Point* = 1 + variable columns Point*
+
+  [ABtI7'1] set hs value given so* and Frame1 = Hs,
+            maximal width Align-info1 with Hs = Int1,
+            rightm of Frame1 = Int2,
+            Int2 - X >= Int1 = true,
+            fix column widths Align-info1 with maximal = Align-info2,
+            set lmargin in Frame1 = Frame2
+            ===>
+            pre-align A (ao*) so* [B*1] with Frame1 and Text && (X,Y) and Align-info1 =
+              align A (ao*) so* [B*1] with Frame2 and Text && (X,Y) and Align-info2
+
+  [ABtI7'2] set hs value given so* and Frame1 = Hs,
+            minimal width Align-info1 with Hs = Int1,
+            rightm of Frame1 = Int2,
+            Int2 - X < Int1 = true,
+            fix column widths Align-info1 with minimal = Align-info2,
+            set lmargin in Frame1 = Frame2
+            ===>
+            pre-align A (ao*) so* [B*1] with Frame1 and Text && (X,Y) and Align-info1 =
+              align A (ao*) so* [B*1] with Frame2 and Text && (X,Y) and Align-info2
+
+  [default-ABtI7'3]   set hs value given so* and Frame1 = Hs,
+                      fixed width Align-info1 with Hs = Int1,
+                      rightm of Frame1 = Int2,
+                      Int2 - X - Int1 = Int3,
+                      variable columns Align-info1 = Int4,
+                      fix column widths Align-info1 with (Int3,Int4,Int3 / Int4) = Align-info2,
+                      set lmargin in Frame1 = Frame2
+                      ==============================
+                      pre-align A (ao*) so* [B*1] with Frame1 and Text && (X,Y) and Align-info1 =
+                        align A (ao*) so* [B*1] with Frame2 and Text && (X,Y) and Align-info2
+
+  [ABtI8'1] fix column widths with minimal =
+
+  [ABtI8'2] fix column widths Point*1 with minimal = Point*2
+            ===>
+            fix column widths (Int,Int) Point*1 with minimal = (Int,Int) Point*2
+
+  [default-ABtI8'3]   fix column widths Point*1 with minimal = Point*2
+                      ================================================
+                      fix column widths (Int1,Int2) Point*1 with minimal = (Int1,Int1) Point*2
+
+  [ABtI9'1] fix column widths with maximal =
+
+  [ABtI9'2] fix column widths Point*1 with maximal = Point*2
+            ===>
+            fix column widths (Int,Int) Point*1 with maximal = (Int,Int) Point*2
+
+  [default-ABtI9'3]   fix column widths Point*1 with maximal = Point*2
+                      ================================================
+                      fix column widths (Int1,Int2) Point*1 with maximal = (Int2,Int2) Point*2
+
+  [ABtI8'1]   fix column widths with (Int1,Int2,Int3) =
+
+  [ABtI8'2]   fix column widths Point*1 with (Int2,Int3,Int4) = Point*2
+              =========================================================
+              fix column widths (Int1,Int1) Point*1 with (Int2,Int3,Int4) =
+                (Int1,Int1) Point*2
+
+  [ABtI8'3]   Int1 != Int2,
+              Int1 >= Int5 = true,
+              Int3 - Int1 = Int6,
+              Int4 - 1 = Int7,
+              fix column widths Point*1 with (Int6,Int7, Int6 / Int7) = Point*2
+              =================================================================
+              fix column widths (Int1,Int2) Point*1 with (Int3,Int4,Int5) =
+                (Int1,Int1) Point*2
+
+  [ABtI8'4]   Int1 != Int2,
+              Int2 <= Int5 = true,
+              Int3 - Int2 = Int6,
+              Int4 - 1 = Int7,
+              fix column widths Point*1 with (Int6,Int7, Int6 / Int7) = Point*2
+              =================================================================
+              fix column widths (Int1,Int2) Point*1 with (Int3,Int4,Int5) =
+                (Int2,Int2) Point*2
+
+  [default-ABtI8'5] Int1 != Int2,
+                     fix column widths Point*1 with (Int3 - Int5,Int4 - 1,Int5) = Point*2
+                     ====================================================================
+                     fix column widths (Int1,Int2) Point*1 with (Int3,Int4,Int5) =
+                       (Int5,Int5) Point*2
+
+  [ABtI9'1]   align A (ao*) so* [] with Frame and Struct and Align-info = Struct
+
+  [ABtI9'2]   set vs value given so* and Frame1 = Vs,
+              align B given (ao*) so* with Frame1 and Struct1 and Align-info = Text1 && Point1,
+              vsep Point1 v Vs with Frame1 = Frame2
+              =====================================
+              align A (ao*) so* [B B*] with Frame1 and Struct1 and Align-info =
+                align A (ao*) so* [B*] with Frame2 and Text1 && Point1 and Align-info
+
+  [ABtI10'1]  align R [] given (ao*) so* with Frame and Struct and Align-info = Struct
+
+  [ABtI10'2]  Frame1 = (X,Y) & Defs,
+              set rmargin Int1 in (0,0) & Defs = Frame2,
+              set lmargin in Frame2 = Frame3,
+              place B with Frame3 and "" && (0,0) and H = Struct2,
+              align left Struct2 with Frame3 = Struct3,
+              concat (Struct1,Struct3) with Frame1 = Text2 && Point2,
+              set hs value given so* and Frame1 = Hs,
+              hsep Point2 h Hs with Frame1 = Frame4
+              =====================================
+              align R [B B*] given (l,ao*) so* with Frame1 and Struct1 and (Int1,Int1) Point* =
+                align R [B*] given (ao*) so* with Frame4 and Text2 && Point2 and Point*
+
+  [ABtI10'3]  Frame1 = (X,Y) & Defs,
+              set rmargin Int1 in (0,0) & Defs = Frame2,
+              set lmargin in Frame2 = Frame3,
+              place B with Frame3 and "" && (0,0) and H = Struct2,
+              align right Struct2 with Frame3 = Struct3,
+              concat (Struct1,Struct3) with Frame1 = Text2 && Point2,
+              set hs value given so* and Frame1 = Hs,
+              hsep Point2 h Hs with Frame1 = Frame4
+              =====================================
+              align R [B B*] given (r,ao*) so* with Frame1 and Struct1 and (Int1,Int1) Point* =
+                align R [B*] given (ao*) so* with Frame4 and Text2 && Point2 and Point*
+
+  [ABtI10'4]  Frame1 = (X,Y) & Defs,
+              set rmargin Int1 in (0,0) & Defs = Frame2,
+              set lmargin in Frame2 = Frame3,
+              place B with Frame3 and "" && (0,0) and H = Struct2,
+              align center Struct2 with Frame3 = Struct3,
+              concat (Struct1,Struct3) with Frame1 = Text2 && Point2,
+              set hs value given so* and Frame1 = Hs,
+              hsep Point2 h Hs with Frame1 = Frame4
+              ====================================
+              align R [B B*] given (c,ao*) so* with Frame1 and Struct1 and (Int1,Int1) Point* =
+                align R [B*] given (ao*) so* with Frame4 and Text2 && Point2 and Point*
+
+  [default-ABtI10'5] align B given (ao*) so* with Frame and Struct and Align-info =
+                       align R [B] given (ao*) so* with Frame and Struct and Align-info
+
+  [ABtI11'1]  get column A (ao*) [] =
+
+  [ABtI11'2]  get column A (ao*) [B*2] = B*3
+              ==============================
+              get column A (ao*) [R [B B*1] B*2] = B B*3
+
+  [ABtI11'3]   get column A (ao*) [B*2] = B*3
+              ==============================
+              get column A (ao*) [R [] B*2] = "" B*3
+
+  [default-ABtI11'4] get column A (ao*) [B*2] = B*3
+                     ==============================
+                     get column A (ao*) [B B*2] = B B*3
+
+  [ABtI12'1]   remove column A (ao*) [] = A (ao*) []
+
+  [ABtI12'2]   remove column A (ao*1) [B*2] = A (ao*2) [B*3]
+               =============================================
+               remove column A (ao*1) [R [B B*1] B*2] =
+                 A (ao*2) [R [B*1] B*3]
+
+  [ABtI12'3]   remove column A (ao*1) [B*2] = A (ao*2) [B*3]
+               =============================================
+               remove column A (ao*1) [R [] B*2] =
+                 A (ao*2) [R [] B*3]
+
+  [default-ABtI12'3] remove column A (ao*1) [B*2] = A (ao*2) [B*3]
+                     =============================================
+                     remove column A (ao*1) [B B*2] =
+                       A (ao*2) [R [] B*3]
+
+  [ABtI13'1]   length of A (ao*) so* [B*] with Frame and H = B (Int1,Int2) ## Point
+               ====================================================================
+               width of A (ao*) so* [B*] with Frame = Int1
+
+  [ABtI14'1]   length of A () so* [B*1] with Frame and 'C =
+                 A () so* [B*1] (0,0) ## (0,0)
+
+  [ABtI14'2]  get column A (ao1) [B*1] = B*2,
+              length of V so* [B*2] with Frame and H = B1 (Int1,Int2) ## Point,
+              width of V so* [B*2] with Frame = Int3
+              ======================================
+              length of A (ao1) so* [B*1] with Frame and 'C =
+                 A (ao1) so* [B*1] (Int3,Int2) ## (Int3,Int2)
+
+  [ABtI14'3]  get column A (ao1,ao+1) [B*1] = B*2,
+              width of V so* [B*2] with Frame = Int1,
+              remove column A (ao1,ao+1) [B*1] = A (ao2,ao*2) [B*5],
+              set hs value given so* and Frame = Hs,
+              length of A (ao*2) [B*5] with Frame and 'C = B2 (Int2,Int3) ## Point
+              ====================================================================
+              length of A (ao1,ao+1) so* [B*1] with Frame and 'C =
+                 A (ao1,ao+1) so* [B*1] (Int1+Hs+Int2,Int3) ## (Int1+Hs+Int2,Int3)

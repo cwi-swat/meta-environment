@@ -13,7 +13,7 @@ module Basic-to-Text
 context-free start-symbols TextStruct
   sorts TextStruct
     context-free syntax
-      Text "&&" Point                                       -> TextStruct
+      Text "&&" Point                                          -> TextStruct
       "place" Box* "with" Frame "and" TextStruct "and" Context -> TextStruct
 
 hiddens

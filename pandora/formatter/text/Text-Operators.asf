@@ -1,0 +1,60 @@
+equations
+
+  [TOp1'1]   Int1 := rightm of Frame,
+             Int2 := length(String)
+             =======================
+             align left String && (X1,Y1) with Frame =
+               String : string of Int1 - Int2 layoutchars && (X1 + (Int1 - Int2),Y1)
+
+  [TOp1'2]   Text2 && (X2,Y2) := align left Text1 && (X1,Y1) with Frame
+             ==========================================================
+             align left String Text1 && (X1,Y1) with Frame =
+               %%string of Int1 - Int2 layoutchars : String Text2 && (X2,Y2)
+               String Text2 && (X2,Y2)
+
+  [TOp2'1]   Int1 := rightm of Frame,
+             Int2 := length(String)
+             =======================
+             align right String && (X1,Y1) with Frame =
+               string of Int1 - Int2 layoutchars : String && (X1 + (Int1 - Int2),Y1)
+
+  [TOp2'2]   Int1 := rightm of Frame,
+             Int2 := length(String),
+             Text2 && (X2,Y2) := align right Text1 && (X1,Y1) with Frame
+             ==========================================================
+             align right String Text1 && (X1,Y1) with Frame =
+               string of Int1 - Int2 layoutchars : String Text2 && (X2,Y2)
+
+  [TOp3'1]   Int1 := rightm of Frame,
+             Int2 := length(String),
+             Int3 := Int1 - Int2,
+             Int4 := Int3 / 2,
+             Int5 := if Int4 + Int4 < Int3 then Int4 + 1 else Int4 fi
+             =======================================================
+             align center String && (X1,Y1) with Frame =
+               string of Int4 layoutchars : String : string of Int5 layoutchars
+                 && (X1 + (Int4 + Int5),Y1)
+
+  [TOp3'2]   Int1 := rightm of Frame,
+             Int2 := length(String),
+             Int3 := Int1 - Int2,
+             Int4 := Int3 / 2,
+             Text2 && (X2,Y2) := align center Text1 && (X1,Y1) with Frame
+             =====================================================
+             align center String Text1 && (X1,Y1) with Frame =
+               string of Int4 layoutchars : String
+               Text2 && (X2,Y2)
+
+  [TOp4'1]   Text3 := add to last line (Text1,string of X3 - X1 layoutchars)
+             ==============================================================
+             concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y1) & Defs =
+               Text3 || Text2 && (X1 + X2 + (X3 - X1) ,Y1 + Y2)
+
+  [TOp4'2]   Y1 != Y3
+             ========
+             concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs =
+               concat ( Text1 "" && (0,Y1 + 1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs
+
+  [TOp9'1]   add to last line (String1, String2) = String1 : String2
+
+  [TOp9'2]   add to last line (Text String1, String2) = Text String1 : String2

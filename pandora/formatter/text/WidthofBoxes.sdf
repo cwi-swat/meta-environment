@@ -1,0 +1,21 @@
+module WidthofBoxes
+
+imports Outstrings 
+imports Frame 
+imports languages/box/syntax/Contexts 
+imports LengthofBoxes
+
+exports
+  context-free syntax
+    width of Box* with Frame -> Integer
+
+hiddens
+  variables
+    "String"[0-9]* -> StrCon
+    [B-E][0-9]* -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Frame"[0-9]* -> Frame
+    "Int"[0-9]* -> Integer
+    "Hs"[0-9]* -> Integer
+    "so*"[0-9]* -> SpaceOption*

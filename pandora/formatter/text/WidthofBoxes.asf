@@ -1,0 +1,38 @@
+equations
+
+  [WoB1'1]   String2 := deslash(String1),
+             Int := length(String2)
+             =======================
+             width of String1 with Frame = Int
+
+  [WoB1'2]   width of H so* [] with Frame = 0
+
+  [WoB1'2]   width of H so* [B] with Frame = width of B with Frame
+
+  [WoB1'2]   Int1 := width of B with Frame,
+             Hs := set hs value given so* and Frame,
+             Int2 := width of H so* [B+] with Frame
+             =====================================
+             width of H so* [B B+] with Frame = Int1 + Hs + Int2
+
+  [WoB1'3]   width of V so* [] with Frame = 0
+
+  [WoB1'4]   Int1 := width of B with Frame,
+             Int2 := width of V so* [B*] with Frame
+             =====================================
+             width of V so* [B B*] with Frame =
+               if Int1 > Int2 then Int1 else Int2 fi
+
+  [WoB1'5]   width of HV so* [B*] with Frame =
+               width of V so* [B*] with Frame
+
+  [WoB1'6]   width of HOV so* [B*] with Frame =
+               width of V so* [B*] with Frame
+
+  [WoB1'7]   width of I so* [B] with Frame =
+               width of B with Frame
+
+  [WoB1'8]   width of WD [B] with Frame =
+               width of B with Frame
+
+  [WoB1'9]   width of with Frame = 0
