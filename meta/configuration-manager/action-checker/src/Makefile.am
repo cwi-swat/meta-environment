@@ -26,7 +26,8 @@ ActionScriptChecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+			-L$(ATERM)/lib -lATerm \
+			${SOCKLIBS}
 
 pkgdata_DATA = ActionScriptChecker.trm.tbl \
 		ActionScript.def.pt
