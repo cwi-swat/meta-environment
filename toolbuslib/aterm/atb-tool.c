@@ -839,7 +839,7 @@ ATerm ATBpack(ATerm t)
   memcpy(data, ptr, len);
   blob = ATmakeBlob(len, data);
 
-  return (ATerm)ATmakeAppl(symbol_baf, blob); 
+  return (ATerm)ATmakeAppl1(symbol_baf, (ATerm) blob); 
 }
 #else
 ATerm ATBpack(ATerm t)
