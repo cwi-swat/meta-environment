@@ -1,0 +1,46 @@
+definition
+
+module Main
+imports Actions
+
+module Actions
+
+imports Layout
+
+exports sorts
+
+        Action
+
+context-free syntax
+
+        "then"          ->      ActionInfix
+        "copy"          ->      ActionConst
+
+        "give" Yielder  ->      Action
+
+        Action ActionInfix Action       -> Action
+        ActionConst     ->      Action
+
+        "recursively"   ->      ActionPrefix
+        ActionPrefix Action     -> Action
+
+        Action          ->      Yielder
+
+
+context-free priorities
+
+        "give" Yielder -> Action >
+        Action ActionInfix Action -> Action,
+
+        ActionPrefix Action -> Action >
+        Action ActionInfix Action -> Action 
+
+module Layout
+
+exports lexical syntax
+
+  [\ \t\n]      -> LAYOUT
+
+context-free restrictions
+
+  LAYOUT? -/- [\ \t\n]   
