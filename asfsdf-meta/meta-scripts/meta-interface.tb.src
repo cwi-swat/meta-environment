@@ -245,15 +245,22 @@ endlet
 
 process Meta-Interface is
 let
+  Directory : str,
+  Filename : str,
   Id : int,
-  Pid : int,
   Module : str,
   ModuleNames : list,
-  Modules : list
+  Modules : list,
+  OpenSyntaxHandlerPid : int,
+  Path : str,
+  Pid : int,
+  Text : str,
+  Type : term
 in
   Id := process-id
   . Create-Asf-Processes
   . create(ParseTable-hooks, Pid?)
+  . create(Additional-Interface, Pid?)
   . AddAsfProperties()
   .
   (
@@ -320,13 +327,58 @@ in
     rec-msg(clear-module-db-hook) .
     snd-msg(module-db-hook-done) 
   +
-    rec-msg(add-initial-eqs-module-names-hook(ModuleNames?)) .
-    snd-msg(initial-eqs-module-names-added(ModuleNames)) 
+    rec-msg(extra-mod-path-hook).
+    snd-msg(extra-mod-path-hook-result([]))
   +
-    rec-msg(post-initialization-hook) .
-    snd-msg(post-initialization-hook-finished) 
+    rec-msg(get-open-syntax-parse-handler-hook(sdf,Path?))
+    . create(OpenSyntaxParseHandler(Path), OpenSyntaxHandlerPid?)
+    . snd-msg(get-open-syntax-parse-handler-hook-result(OpenSyntaxHandlerPid))
+  +
+    rec-msg(set-module-syntax-text-hook)
+  +
+    rec-msg(get-parse-equation-checking-hook)
+    . snd-msg(get-parse-equation-checking-hook-result(true))
+  +
+    rec-msg(get-asf-equations-text-hook(Module?))
+    /* BuildEquationsFilename */
+    . snd-msg(ts-get-str-value("module-path", Module))
+    . rec-msg(ts-value(Directory?))
+    . snd-msg(io-get-filename(Directory, Module, ".asf"))
+    . rec-msg(io-filename(Filename?))
+    . ReadFile(Filename, Text?)
+    . snd-msg(get-asf-equations-text-hook-result(Text))
+  +
+    rec-msg(post-initialization-hook)
+    . snd-msg(post-initialization-hook-finished) 
+  +
+    /* Send from TermStoreActivation in module-utils.tb.
+       Should we check the consistency of the termstore? */
+    rec-msg(termstore-consistency-check-hook)
+    . snd-msg(termstore-consistency-check-hook-result(true))
+  +
+    /* Send from TermStoreActivation in module-utils.tb.
+       Which modules in the termstore should be checked? */
+    rec-msg(get-modulenames-for-consistency-checking-hook)
+    . snd-msg(get-all-module-names)
+    .  rec-msg(all-module-names(ModuleNames?))
+    . snd-msg(get-modulenames-for-consistency-checking-hook-result(ModuleNames))
   ) * delta
 endlet
+
+process Additional-Interface is
+let
+  Path: str,
+  ModuleName: str
+in
+  (
+    /* Send from CheckModuleConsistency in module-utils.tb. */
+    rec-msg(do-consistency-check-hook(ModuleName?, Path?))
+    . CheckSyntaxConsistency(ModuleName, Path, sdf)
+    . CheckEquationConsistency(ModuleName, Path)
+    . snd-msg(do-consistency-check-hook-result)
+   )* delta
+endlet
+
 
 process ParseTable-hooks is
 let
