@@ -34,11 +34,9 @@ let
   Id      : term,
   Name    : term,
   Str     : term,
-  Str1    : term,
   Mod     : term,
   Pairs   : list,
   Mods    : list,
-  ModName : str,
   FileName : str,
   Path    : str,
   Extension : str,
@@ -48,17 +46,11 @@ let
   Info	  : list,
   LayoutedGraph : term,
   ModuleName : str,
-  LibraryPath : str,
-  SyntaxExt : str,
-  SemanticsExt : str,
-  TermExt : str,
   EnvironmentName : str,
-  Recursive : term,
-  EditorId : term,
   GraphId : str,
   ButtonName : list,
   Tree : term,
-  Lst : str,
+  Actions : str,
   ButtonList : list,
   Title : str,
   Answer : term,
@@ -82,11 +74,11 @@ in
     rec-msg(ui-delete-modules(Mods?)).
     snd-do(UI, delete-modules(Mods))
   +
-    rec-event(UI,get-module-info(ModName?)).
-    snd-msg(get-module-info(ModName)) .           
-    rec-msg(module-info(ModName, Info?)) .
-    snd-do(UI,module-info(ModName,Info)) .
-    snd-ack-event(UI,get-module-info(ModName))
+    rec-event(UI,get-module-info(ModuleName?)).
+    snd-msg(get-module-info(ModuleName)) .           
+    rec-msg(module-info(ModuleName, Info?)) .
+    snd-do(UI,module-info(ModuleName,Info)) .
+    snd-ack-event(UI,get-module-info(ModuleName))
   +
     rec-event(UI,clear-all).
     snd-msg(clear-all).
@@ -157,8 +149,8 @@ in
    )
    +
    (  
-     rec-msg(update-list-view(Lst?)).
-     snd-do(UI, update-list(Lst))
+     rec-msg(update-list-view(ModuleName?, Actions?)).
+     snd-do(UI, update-list(Actions))
    ) 
   ) *
   (
