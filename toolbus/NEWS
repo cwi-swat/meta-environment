@@ -17,6 +17,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
+Version 0.16
+    * A bug that sometimes resulting in deadlock of the ToolBus has been
+      repaired.
+
 Version 0.13
     * The Toolbus is now configures and build using automake
 
