@@ -379,7 +379,7 @@ static BOX_Box argsManyToBox(PT_Tree tree)
   for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) 
   {
     PT_Tree head = PT_getArgsHead(args);
-    if(!PT_isTreeLayout(head))
+    if(!isLayout(PT_yieldTree(head)))  
     {
       BOX_Box prettyHead = treeToBox(head);
 

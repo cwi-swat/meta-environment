@@ -1,5 +1,10 @@
 # $Id$
 
+Mon May 10 13:35:12 CEST 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - argsManyToBox uses isLayout on a yieldTree in stead of PT_isTreeLayout to
+     save comments
+
 Tue Mar 23 11:05:55 CET 2004 <{kooiker,jong}@cwi.nl>
  * generator/main.c: #include <Error.h>
 
