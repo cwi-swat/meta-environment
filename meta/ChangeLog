@@ -1,5 +1,9 @@
 # $Id$
 
+2001/11/15 (markvdb@cwi.nl)
+ * Version 0.8beta started
+ * fixed a bug when reading in stored Sdf files (in baf).
+
 2001/11/14 (jong@cwi.nl)
  * released version 0.7
  * header weeded from tbscripts/status-display.tb
