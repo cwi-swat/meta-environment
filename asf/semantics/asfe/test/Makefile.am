@@ -29,10 +29,9 @@ EXTRA_DIST      = reduce-test.sh.src prepare-restore-test.sh.src \
 
 noinst_PROGRAMS = prepare-restore 
 
-CLEANFILES                    = $(TESTS)
+CLEANFILES      = $(TESTS)
 
-prepare_restore_SOURCES = \
-                  prepare-restore.c
+prepare_restore_SOURCES = prepare-restore.c
 
 prepare_restore_LDADD = \
                   -L../src -leval \
