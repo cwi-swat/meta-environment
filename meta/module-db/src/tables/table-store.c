@@ -17,6 +17,8 @@ typedef struct _table_entry_struct {
 
 static TableEntry* tableStore = NULL;
 
+/*{{{  void TS_initTableStore()  */
+
 void TS_initTableStore() 
 {
   if (tableStore == NULL) {
@@ -28,6 +30,9 @@ void TS_initTableStore()
     }
   }
 }
+
+/*}}}  */
+/*{{{  static int TS_findTable(char *name) */
 
 static int TS_findTable(char *name)
 {
@@ -43,10 +48,16 @@ static int TS_findTable(char *name)
   return NO_SUCH_TABLE;
 }
 
+/*}}}  */
+/*{{{  ATbool TS_tableExists(char *name) */
+
 ATbool TS_tableExists(char *name)
 {
   return (TS_findTable(name) != NO_SUCH_TABLE);
 }
+
+/*}}}  */
+/*{{{  void TS_addTable(char *name) */
 
 void TS_addTable(char *name)
 {
@@ -68,6 +79,9 @@ void TS_addTable(char *name)
   }
 }  
 
+/*}}}  */
+/*{{{  void TS_removeTable(char *name) */
+
 void TS_removeTable(char *name)
 {
   int i;
@@ -85,6 +99,9 @@ void TS_removeTable(char *name)
   }
 }
 
+/*}}}  */
+/*{{{  Table TS_getTable(char *name) */
+
 Table TS_getTable(char *name)
 {
   int i;
@@ -100,11 +117,17 @@ Table TS_getTable(char *name)
   }
 }
 
+/*}}}  */
+/*{{{  void TS_clearTable(char *name) */
+
 void TS_clearTable(char *name)
 {
   TS_removeTable(name);
   TS_addTable(name);
 }
+
+/*}}}  */
+/*{{{  void TS_removeValueFromAllTables(ATerm key) */
 
 void TS_removeValueFromAllTables(ATerm key)
 {
@@ -117,6 +140,9 @@ void TS_removeValueFromAllTables(ATerm key)
   }
 }
 
+/*}}}  */
+/*{{{  void TS_putValue(char* name, ATerm key, ATermList value) */
+
 void TS_putValue(char* name, ATerm key, ATermList value)
 {
   Table table = TS_getTable(name);
@@ -125,6 +151,9 @@ void TS_putValue(char* name, ATerm key, ATermList value)
     T_putValue(table, key, value);
   }
 }
+
+/*}}}  */
+/*{{{  ATermList TS_getValue(char* name, ATerm key) */
 
 ATermList TS_getValue(char* name, ATerm key)
 {
@@ -137,6 +166,9 @@ ATermList TS_getValue(char* name, ATerm key)
   return NULL;
 }
 
+/*}}}  */
+/*{{{  void TS_removeValue(char* name, ATerm key) */
+
 void TS_removeValue(char* name, ATerm key)
 {
   Table table = TS_getTable(name);
@@ -145,6 +177,9 @@ void TS_removeValue(char* name, ATerm key)
     return T_removeValue(table, key);
   }
 }
+
+/*}}}  */
+/*{{{  ATbool    TS_containsKey(char* name, ATerm key) */
 
 ATbool    TS_containsKey(char* name, ATerm key)
 {
@@ -157,6 +192,9 @@ ATbool    TS_containsKey(char* name, ATerm key)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATermList TS_getAllKeys(char* name) */
+
 ATermList TS_getAllKeys(char* name)
 {
   Table table = TS_getTable(name);
@@ -167,3 +205,19 @@ ATermList TS_getAllKeys(char* name)
 
   return ATempty;
 }
+
+/*}}}  */
+/*{{{  ATermList TS_getAllKeys(char* name) */
+
+ATermList TS_getAllValues(char* name)
+{
+  Table table = TS_getTable(name);
+
+  if (table != NULL) {
+    return T_getAllValues(table);
+  }
+
+  return ATempty;
+}
+
+/*}}}  */

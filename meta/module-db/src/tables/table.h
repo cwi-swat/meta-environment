@@ -13,5 +13,6 @@ ATermList T_getValue(Table table, ATerm key);
 void      T_removeValue(Table table, ATerm key);
 ATbool    T_containsKey(Table table, ATerm key);
 ATermList T_getAllKeys(Table table);
+ATermList T_getAllValues(Table table);
 
 #endif
