@@ -1,12 +1,16 @@
 # $Id$
 
 2003/04/25 (jurgenv@cwi.nl)
-  * Deadlock problems caused by dissappearing text editors solved by 
+  * Deadlock problems caused by dissappearing text editors partially solved by 
     changing the idef of text-editor to use only notes.
+  * Processes that send messages to editors made more robust against 
+    non-existing editors, or they now listen to notes that declare an
+    editor dead.
   * This solved the memory leak introduced by a workaround for the
     previous problem that lead to eternally waiting Text-Editor processes.
   * Replaced assert statements in structure editor by proper handling
     of non-existing editors. 
+  * Replaced some assert statements in editor-manager too.
 
 2003/04/25 (jurgenv@cwi.nl)
  * Refactored button-actions to use StackPush/Pop operations

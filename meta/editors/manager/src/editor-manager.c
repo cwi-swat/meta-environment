@@ -285,7 +285,6 @@ void delete_editor(int conn, ATerm editorId)
   editor = getEditorById(editorId);
 
   if (editor == NULL) {
-    ATwarning("editor-manager: no such editor: %t\n", editorId);
     return;
   }
 
