@@ -91,6 +91,7 @@ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
   aterm *eq,*lhs,*firstofs;
   int l;
   
+  Tprintf(stderr, "preparing equations...\n");
   newequs = RWprepareEqs(&Ar, equs);
   l = TlistSize(newequs);
   change_equations_db(TdictPut(&Ar,equations_db,name,t_empty(NULL)));
@@ -103,7 +104,7 @@ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
 Tprintf(stderr,"Processing %d equations of module %t\n",l,name);
   return Tmake(&Ar,"snd-value(equ-added(<term>))",name);
 }
-#line 283 "evaluator.c.nw"
+#line 284 "evaluator.c.nw"
 aterm *interpret(int cid,aterm *modname, aterm *trm)
 {
   aterm *newtrm,*newatrm,*result;
@@ -114,7 +115,9 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
 
   TflushArena(&Ar);
 
+  Tprintf(stderr, "before AFexpandTerm\n");
   exptrm = AFexpandTerm(&Ar, trm);
+  Tprintf(stderr, "after AFexpandTerm\n");
   atrm = asfix_get_term(exptrm);
   realtrm = RWprepareTerm(&Ar, atrm);
 
@@ -123,6 +126,7 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
   change_active_rules(TdictGet(equations_db,modname));
   times(&rule_selection);
 
+  Tprintf(stderr, "rewriting...\n");
   newtrm = rewrite(&Ar, realtrm,t_empty(NULL));
   times(&rewriting);
 
@@ -147,13 +151,16 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
 
   return Tmake(&Ar,"snd-value(result(<term>))",result);
 }
-#line 341 "evaluator.c.nw"
+#line 345 "evaluator.c.nw"
 aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
 {
   aterm *eq,*lhs,*ofs,*pair;
   aterm_list *oldpairs,*newpairs;
   aterm_list *sameofs = t_empty(NULL);
   aterm_list *neweqs = t_empty(NULL);
+  arena local;
+
+  TinitArena(t_world(name), &local);
 
   while(!t_is_empty(eqs)) {
     eq = t_list_first(eqs);
@@ -161,26 +168,37 @@ aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
     ofs = asfix_get_appl_ofs(lhs);
     if(t_equal(firstofs,ofs)) {
       if(AFisDefaultEquation(eq))
-        sameofs = TlistAppend(&Ar,sameofs,eq);
+        sameofs = TlistAppend(&local,sameofs,eq);
       else
-        sameofs = TlistInsert(&Ar,sameofs, 0, eq);
+        sameofs = TlistInsert(&local,sameofs, 0, eq);
     }
     else
-      neweqs = TlistAppend(&Ar,neweqs,eq);
+      neweqs = TlistAppend(&local,neweqs,eq);
     eqs = t_list_next(eqs);
+
+    Tprotect(neweqs);
+    Tprotect(sameofs);
+    TflushArena(&local);
+    Tadd2Arena(&local, neweqs);
+    Tadd2Arena(&local, sameofs);
+    Tunprotect(neweqs);   
+    Tunprotect(sameofs);
   };
 
 /* Create a pair of the ofs and the list of equations
    with the same ofs in the left hand side.
    Update the entry in the equation-database */
-  pair = Tmake(&Ar,"[<term>,<list>]",firstofs,sameofs);
+  pair = Tmake(&local,"[<term>,<list>]",firstofs,sameofs);
   oldpairs = TdictGet(equations_db,name);
-  newpairs = TlistAppend(&Ar,oldpairs,pair);
+  newpairs = TlistAppend(&local,oldpairs,pair);
   change_equations_db(TdictPut(&Ar,equations_db,name,newpairs));
-  
+
+  Tadd2Arena(&Ar, neweqs);  
+  TdestroyArena(&local);
+
   return neweqs;
 }
-#line 382 "evaluator.c.nw"
+#line 400 "evaluator.c.nw"
 Tbool no_new_vars(aterm *trm,aterm_list *env)
 {
   aterm *arg;
@@ -216,7 +234,7 @@ Tbool no_new_vars(aterm *trm,aterm_list *env)
   else
     return Ttrue;
 }
-#line 428 "evaluator.c.nw"
+#line 446 "evaluator.c.nw"
 aterm_list *elems_matching(arena *ar, aterm *sym, aterm_list *env,
                            aterm_list *elems1,aterm_list *elems2,
                            aterm_list *conds,
@@ -227,7 +245,7 @@ aterm_list *elems_matching(arena *ar, aterm *sym, aterm_list *env,
   else
     return list_matching(ar,sym,env,elems2,elems1,conds,args1,args2);
 }
-#line 461 "evaluator.c.nw"
+#line 479 "evaluator.c.nw"
 aterm_list *arg_matching(arena *ar, aterm_list *env, aterm *arg1, aterm *arg2,
                         aterm_list *conds, 
                         aterm_list *orgargs1, aterm_list *orgargs2)
@@ -296,7 +314,7 @@ aterm_list *arg_matching(arena *ar, aterm_list *env, aterm *arg1, aterm *arg2,
   }
   return newenv;
 }
-#line 538 "evaluator.c.nw"
+#line 556 "evaluator.c.nw"
 aterm_list *args_matching(arena *ar, aterm_list *env,aterm_list *conds,
                          aterm_list *args1, aterm_list *args2)
 {
@@ -322,7 +340,7 @@ aterm_list *args_matching(arena *ar, aterm_list *env,aterm_list *conds,
   };
   return newenv;
 }
-#line 569 "evaluator.c.nw"
+#line 587 "evaluator.c.nw"
 aterm_list *compare_sub_lists(aterm_list *elems1, aterm_list *elems2)
 {
   aterm *elem1,*elem2;
@@ -347,7 +365,7 @@ aterm_list *compare_sub_lists(aterm_list *elems1, aterm_list *elems2)
   else
     return fail_env;
 }
-#line 599 "evaluator.c.nw"
+#line 617 "evaluator.c.nw"
 aterm_list *sub_list_matching(arena *ar, aterm *sym,aterm_list *env,aterm *elem,
                              aterm_list *elems1, aterm_list *elems2,
                              aterm_list *conds, 
@@ -377,7 +395,7 @@ aterm_list *sub_list_matching(arena *ar, aterm *sym,aterm_list *env,aterm *elem,
   };
   return subenv;
 }
-#line 634 "evaluator.c.nw"
+#line 652 "evaluator.c.nw"
 aterm_list *list_matching(arena *ar, aterm *sym,
                          aterm_list *env,aterm_list *elems1, aterm_list *elems2,
                          aterm_list *conds, aterm_list *args1, aterm_list *args2)
@@ -463,7 +481,7 @@ aterm_list *list_matching(arena *ar, aterm *sym,
     }
   return newenv;
 }
-#line 729 "evaluator.c.nw"
+#line 747 "evaluator.c.nw"
 aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
 {
   aterm *cond;
@@ -515,7 +533,7 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
   }
   return newenv;
 }
-#line 792 "evaluator.c.nw"
+#line 810 "evaluator.c.nw"
 aterm *apply_rule(arena *ar, aterm_list *rules,aterm *trm)
 {
   aterm *rule;
@@ -536,7 +554,7 @@ aterm *apply_rule(arena *ar, aterm_list *rules,aterm *trm)
   }; 
   return make_cenv(ar, trm, fail_env);
 }
-#line 822 "evaluator.c.nw"
+#line 840 "evaluator.c.nw"
 aterm *select_and_rewrite(arena *ar, aterm *trm)
 {
   aterm *ofs,*newtrm, *complexenv;
@@ -555,7 +573,7 @@ aterm *select_and_rewrite(arena *ar, aterm *trm)
   }
   return trm;
 }
-#line 848 "evaluator.c.nw"
+#line 866 "evaluator.c.nw"
 aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
 {
   aterm *arg,*newarg;
@@ -597,7 +615,7 @@ aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
   }
   return newargs;
 }
-#line 897 "evaluator.c.nw"
+#line 915 "evaluator.c.nw"
 aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *env)
 {
   aterm *elem,*newelem;
@@ -643,7 +661,7 @@ aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *en
   }
   return newelems;
 }
-#line 956 "evaluator.c.nw"
+#line 974 "evaluator.c.nw"
 aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
 {
   aterm *newtrm,*sym,*rewtrm;
@@ -690,7 +708,7 @@ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
   return rewtrm;
 }
 
-#line 1008 "evaluator.c.nw"
+#line 1026 "evaluator.c.nw"
 int main(int argc, char **argv)
 {
   int cid;

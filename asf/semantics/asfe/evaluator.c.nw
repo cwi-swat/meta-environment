@@ -244,6 +244,7 @@ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
   aterm *eq,*lhs,*firstofs;
   int l;
   
+  Tprintf(stderr, "preparing equations...\n");
   newequs = RWprepareEqs(&Ar, equs);
   l = TlistSize(newequs);
   change_equations_db(TdictPut(&Ar,equations_db,name,t_empty(NULL)));
@@ -290,7 +291,9 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
 
   TflushArena(&Ar);
 
+  Tprintf(stderr, "before AFexpandTerm\n");
   exptrm = AFexpandTerm(&Ar, trm);
+  Tprintf(stderr, "after AFexpandTerm\n");
   atrm = asfix_get_term(exptrm);
   realtrm = RWprepareTerm(&Ar, atrm);
 
@@ -299,6 +302,7 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
   change_active_rules(TdictGet(equations_db,modname));
   times(&rule_selection);
 
+  Tprintf(stderr, "rewriting...\n");
   newtrm = rewrite(&Ar, realtrm,t_empty(NULL));
   times(&rewriting);
 
@@ -344,6 +348,9 @@ aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
   aterm_list *oldpairs,*newpairs;
   aterm_list *sameofs = t_empty(NULL);
   aterm_list *neweqs = t_empty(NULL);
+  arena local;
+
+  TinitArena(t_world(name), &local);
 
   while(!t_is_empty(eqs)) {
     eq = t_list_first(eqs);
@@ -351,23 +358,34 @@ aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
     ofs = asfix_get_appl_ofs(lhs);
     if(t_equal(firstofs,ofs)) {
       if(AFisDefaultEquation(eq))
-        sameofs = TlistAppend(&Ar,sameofs,eq);
+        sameofs = TlistAppend(&local,sameofs,eq);
       else
-        sameofs = TlistInsert(&Ar,sameofs, 0, eq);
+        sameofs = TlistInsert(&local,sameofs, 0, eq);
     }
     else
-      neweqs = TlistAppend(&Ar,neweqs,eq);
+      neweqs = TlistAppend(&local,neweqs,eq);
     eqs = t_list_next(eqs);
+
+    Tprotect(neweqs);
+    Tprotect(sameofs);
+    TflushArena(&local);
+    Tadd2Arena(&local, neweqs);
+    Tadd2Arena(&local, sameofs);
+    Tunprotect(neweqs);   
+    Tunprotect(sameofs);
   };
 
 /* Create a pair of the ofs and the list of equations
    with the same ofs in the left hand side.
    Update the entry in the equation-database */
-  pair = Tmake(&Ar,"[<term>,<list>]",firstofs,sameofs);
+  pair = Tmake(&local,"[<term>,<list>]",firstofs,sameofs);
   oldpairs = TdictGet(equations_db,name);
-  newpairs = TlistAppend(&Ar,oldpairs,pair);
+  newpairs = TlistAppend(&local,oldpairs,pair);
   change_equations_db(TdictPut(&Ar,equations_db,name,newpairs));
-  
+
+  Tadd2Arena(&Ar, neweqs);  
+  TdestroyArena(&local);
+
   return neweqs;
 }
 @
