@@ -1025,6 +1025,8 @@ static ATbool checkModuleNameWithPath(const char *moduleName, const char *path)
 
 /*}}}  */
 
+/*{{{  static ATbool checkModuleName(const char *moduleName)   */
+
 static ATbool checkModuleName(const char *moduleName)  
 {
   int i;
@@ -1040,6 +1042,10 @@ static ATbool checkModuleName(const char *moduleName)
   }
   return ATtrue;
 }
+
+/*}}}  */
+
+/*{{{  ATerm rename_module(int cid, char *oldModuleName, char *newModuleName) */
 
 ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
 {
@@ -1103,10 +1109,10 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
 }
 
 /*}}}  */
-/*{{{  ATermList select_unknowns(ATermList mods) */
 
-static ATermList 
-select_unknowns(ATermList mods)
+/*{{{  static ATermList select_unknowns(ATermList mods) */
+
+static ATermList select_unknowns(ATermList mods)
 {
   ATermList result = ATempty;
 
@@ -1124,6 +1130,7 @@ select_unknowns(ATermList mods)
 }
 
 /*}}}  */
+
 /*{{{  ATermList add_imports(ATerm name, ATermList mods) */
 
 static ATermList 
@@ -1206,17 +1213,20 @@ is_valid_parse_table(ATermList visited, ATerm module,
   ATerm first;
   MDB_Entry entry;
   int time;
+  ATerm syntax = NULL;
+
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, module));
+  syntax = MDB_getEntrySdfTree(entry);
 
-  if (entry == NULL) {
+  if (entry == NULL && ATisEqual(module, MDB_NONE)) {
     return ATfalse;
   }
 
   time = MDB_getEntrySdfTreeCreationTime(entry);
 
-  if((timeOfEqsTable > 0 && time > timeOfEqsTable) ||
-     (timeOfTrmTable > 0 && time > timeOfTrmTable)) {
+  if ((timeOfEqsTable > 0 && time > timeOfEqsTable) ||
+      (timeOfTrmTable > 0 && time > timeOfTrmTable)) {
     return ATfalse;
   } else {
     result = ATtrue;
@@ -1229,8 +1239,9 @@ is_valid_parse_table(ATermList visited, ATerm module,
       first = ATgetFirst(imports);
 
       entry = MDB_EntryFromTerm(GetValue(modules_db, first));
+      syntax = MDB_getEntrySdfTree(entry);
 
-      if (entry == NULL) {
+      if (entry == NULL || ATisEqual(syntax, MDB_NONE))  {
 	return ATfalse;
       }
 
