@@ -1,4 +1,5 @@
 2002/06/14 (jong@cwi.nl,markvdb@cs.vu.nl)
+  * Restructured the "Literal"s in ATerm syntax and Sdf syntax.
   * Added ATermOperations (in OO style).
   * Added ATerm placeholder.
   * Fixed ChangeLog dates.

@@ -7,7 +7,7 @@ hiddens
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
 
 exports
-  sorts Literal
+  sorts QuotedLiteral
   lexical syntax
     "\\" ~ []                  -> AlphaNumericalEscChar
     "\\" [01] [0-9] [0-9]      -> DecimalEscChar
@@ -17,7 +17,14 @@ exports
     DecimalEscChar             -> EscChar
     ~ [\0-\31\"\\] \/ [\t\n]   -> L-Char
     EscChar                    -> L-Char
-    "\"" L-Char* "\""          -> Literal
+    "\"" L-Char* "\""          -> QuotedLiteral
 
   lexical restrictions
     AlphaNumericalEscChar     -/- [0-9]
+
+  sorts UnquotedLiteral
+  lexical syntax
+    [a-zA-Z\_][a-zA-Z0-9\_\-]* -> UnquotedLiteral
+
+  lexical restrictions
+    UnquotedLiteral -/- [a-zA-Z0-9\_\-]
