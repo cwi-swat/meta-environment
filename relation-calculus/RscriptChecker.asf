@@ -28,40 +28,79 @@ equations
 
 %% ---- first of type
 
-[ft1]	first(<$Etype1, $Etype+>) = $Etype1
+[ft1]	first(<$Etype1, $Etype+>, $Tenv) = $Etype1
+
+[ft2]	first(<$Etype1 $Var, $DclVar*>, $Tenv) = $Etype1
+
+[ft3]	first($Var, $Tenv) = first(lookup($Tenv, $Var), $Tenv)
+
 [default-ft]
-	first($Etype) = $Etype
+	first($Etype, $Tenv) = $Etype
 
 %% ---- second of type
 
-[st1]	second(<$Etype1, $Etype+>) = <$Etype+>
+[st1]	second(<$Etype1, $Etype+>, $Tenv) = <$Etype+>
+[st2]	second(<$Etype1 $Var, $DclVar+>, $Tenv) = <$DclVar+>
+[st3]	second($Var, $Tenv) = second(lookup($Tenv, $Var), $Tenv)
 [default-st]
-	second($Etype) = undefined
+	second($Etype, $Tenv) = undefined
+
+%% ---- normalize type
+
+[nm1]	norm(bag[$Etype], $Tenv) = bag[norm($Etype, $Tenv)]
+
+[nm2]	norm(rel[$Etype+], $Tenv) = bag[norm(<$Etype+>, $Tenv)]
+
+[nm3]	$Etype1' = norm($Etype1, $Tenv),
+	<$Etype+'> = norm(<$Etype2, $Etype+>, $Tenv)
+	=========================================================
+	norm(<$Etype1, $Etype2, $Etype+>, $Tenv) = <$Etype1', $Etype+'>
+
+[nm4]	$Etype1' = norm($Etype1, $Tenv),
+	$Etype2' = norm($Etype2, $Tenv)
+	=========================================================
+	norm(<$Etype1, $Etype2>, $Tenv) = <$Etype1', $Etype2'>
+
+[nm5]	norm(<$DclVar+>, $Tenv) = norm(get-tuple-type(<$DclVar+>), $Tenv)
+
+[nm6]	norm($Var, $Tenv) = norm(lookup($Tenv, $Var), $Tenv)
+
+[default-nm]
+	norm($Etype, $Tenv) = $Etype
 
 %% ---- Equality on types: ==
 
-[eqt1]	equal-type($Etype, $Etype, $Tenv) = true
+[eqt]	norm($Etype1, $Tenv) = norm($Etype2, $Tenv)
+	=====================================================
+	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt2]	equal-type(rel[$Etype+], bag[<$Etype+>], $Tenv) = true
-
-[eqt3]	equal-type(bag[<$Etype+>], rel[$Etype+], $Tenv) = true
-
-[eqt4]	equal-type($Var, $Etype, $Tenv) = equal-type(lookup($Tenv, $Var), $Etype, $Tenv)
-
-[eqt5]	equal-type($Etype, $Var, $Tenv) = equal-type($Etype, lookup($Tenv, $Var), $Tenv)
-
-[eqt6]	equal-type(<$DclVar+>, $Etype, $Tenv) = equal-type(get-tuple-type(<$DclVar+>), $Etype, $Tenv)
-
-[eqt7]	equal-type($Etype, <$DclVar+>, $Tenv) = equal-type($Etype, get-tuple-type(<$DclVar+>), $Tenv)
-
-[eqt8]	equal-type(<$Etype1, $Etype+>, <$Etype1', $Etype+'>, $Tenv) =
-	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype+>, <$Etype+'>, $Tenv)
-
-%%[eqt9]	equal-type(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Tenv) =
-%%	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Tenv)
 [default-eqt]
 	equal-type($Etype1, $Etype2, $Tenv) = false
 
+%%[eqt1]	equal-type($Etype, $Etype, $Tenv) = true
+%%
+%%[eqt2]	equal-type(bag[$Etype1], bag[$Etype2], $Tenv) = equal-type($Etype1, $Etype2, $Tenv)
+%%
+%%[eqt3]	equal-type(rel[$Etype+], rel[$Etype+'], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
+%%
+%%[eqt4]	equal-type(rel[$Etype+], bag[<$Etype+'>], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
+%%
+%%[eqt5]	equal-type(bag[<$Etype+>], rel[$Etype+'], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
+%%
+%%[eqt6]	equal-type($Var, $Etype, $Tenv) = equal-type(lookup($Tenv, $Var), $Etype, $Tenv)
+%%
+%%[eqt7]	equal-type($Etype, $Var, $Tenv) = equal-type($Etype, lookup($Tenv, $Var), $Tenv)
+%%
+%%[eqt8]	equal-type(<$DclVar+>, $Etype, $Tenv) = equal-type(get-tuple-type(<$DclVar+>), $Etype, $Tenv)
+%%
+%%[eqt9]	equal-type($Etype, <$DclVar+>, $Tenv) = equal-type($Etype, get-tuple-type(<$DclVar+>), $Tenv)
+%%
+%%[eqt10]	equal-type(<$Etype1, $Etype+>, <$Etype1', $Etype+'>, $Tenv) =
+%%	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype+>, <$Etype+'>, $Tenv)
+%%
+%%[default-eqt]
+%%	equal-type($Etype1, $Etype2, $Tenv) = false
+%%
 %% ---- get-tuple-type
 
 [gtt1]	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2>) = <$Etype1, $Etype2>
@@ -216,6 +255,17 @@ $Error]>
 	get-field-type(<$DclVar*>, $Var2, $Tenv)
 
 [gft3]	get-field-type(< > , $Var, $Tenv) = <undefined, $Tenv + No definition for field $Var>
+
+[rt1] 	check($Exp, $Tenv) = <$Etype', $Tenv'>
+      	=========================================
+      	require-type($Exp, $Etype, $Tenv) = 
+      	if equal-type($Etype, $Etype', $Tenv') then $Tenv' else $Tenv' + $Exp
+      	should have type $Etype fi
+
+[rt2]	require-type($Exp1, $Etype1, $Tenv) = $Tenv',
+	require-type($Exp2, $Etype2, $Tenv') = $Tenv''
+	==============================================================	
+	require-type2($Exp1, $Etype1, $Exp2, $Etype2, $Tenv) = $Tenv''
 
 %%-----------------------------------------------------------------------------------
 
@@ -380,16 +430,9 @@ $Error]>
 [default-bag-rel]
 	check({ $Exp* }, $Tenv) = <undefined, $Tenv + {$Exp*} cannot be typed>
 
+%% ---- Check Operators
 
-[rt2]	require-type($Exp1, $Etype1, $Tenv) = $Tenv',
-	require-type($Exp2, $Etype2, $Tenv') = $Tenv''
-	==============================================================	
-	require-type2($Exp1, $Etype1, $Exp2, $Etype2, $Tenv) = $Tenv''
-
-%% --- Check Operators
-
-
-%% --- Boolean operators
+%% ---- Boolean operators
 
 [check-and]
       	require-type2($Exp1, bool, $Exp2, bool, $Tenv) = $Tenv'
@@ -423,42 +466,39 @@ $Error]>
 	===================================================
 	check($Exp1 notin $Exp2, $Tenv) = <bool, $Tenv''>
 
-%% --- Comparison operators
+%% ---- Comparison operators
+
+%% ---- equal and notequal
 
 [check-eq] 
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
 	require-type($Exp2, $Etype1, $Tenv') = $Tenv''
       	===========================================
       	check($Exp1 == $Exp2, $Tenv) = <bool, $Tenv''>
-
 [check-ne] 
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
 	require-type($Exp2, $Etype1, $Tenv') = $Tenv''
       	===========================================
       	check($Exp1 != $Exp2, $Tenv) = <bool, $Tenv''>
 
+%% ---- compatibility for other comparison operators
+
 [compat-cmp1]
 	compat-cmp($Exp, bag[$Etype], bag[$Etype], $Tenv) = $Tenv
 [compat-cmp2]
-	compat-cmp($Exp, rel[$Etype+],  rel[$Etype+], $Tenv) = $Tenv
-[compat-cmp3]
-	compat-cmp($Exp, rel[$Etype+],  bag[<$Etype+>], $Tenv) = $Tenv
-[compat-cmp4]
-	compat-cmp($Exp, bag[<$Etype+>],  rel[$Etype+], $Tenv) = $Tenv
-[compat-cmp5]
 	compat-cmp($Exp, int, int, $Tenv) = $Tenv
-[compat-cmp6]
+[compat-cmp3]
 	compat-cmp($Exp, str, str, $Tenv) = $Tenv
-[compat-cmp7]
+[compat-cmp4]
 	compat-cmp($Exp, area, area, $Tenv) = $Tenv
-[compat-cmp8]
+[compat-cmp5]
 	compat-cmp($Exp, $Etype1, $Etype2, $Tenv) = 
 	$Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp
 
 [check-cmp1]
 	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-	compat-cmp($Exp, $Etype1, $Etype2, $Tenv'') = $Tenv'''
+	compat-cmp($Exp, norm($Etype1,$Tenv), norm($Etype2, $Tenv), $Tenv'') = $Tenv'''
 	===============================================
 	check-cmp($Exp, $Exp1, $Exp2, $Tenv) = <bool, $Tenv'''>
 
@@ -513,13 +553,7 @@ $Error]>
 %% --- Union-like operators
 
 [compat-un1] 
-	compat-un($Exp, bag[$Etype], 		bag[$Etype], $Tenv) 	= <bag[$Etype], $Tenv>
-[compat-un2] 
-	compat-un($Exp, rel[$Etype+],		rel[$Etype+], $Tenv) 	= <rel[$Etype+], $Tenv>
-[compat-un3]
-	compat-un($Exp, rel[$Etype+],		bag[<$Etype+>], $Tenv)	= <rel[$Etype+], $Tenv>
-[compat-un4] 
-	compat-un($Exp, bag[<$Etype+>],		rel[$Etype+], $Tenv)    = <rel[$Etype+], $Tenv>
+	compat-un($Exp, bag[$Etype], bag[$Etype], $Tenv) = <bag[$Etype], $Tenv>
 [default-compat-un]
 	compat-un($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
@@ -527,33 +561,29 @@ $Error]>
 [check-un1]
 	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-	compat-un($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype, $Tenv'''>
+	compat-un($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype, $Tenv'''>
 	===============================================
 	check-un($Exp, $Exp1, $Exp2, $Tenv) = <$Etype, $Tenv'''>
 	
 [check-union]
-      $Exp = $Exp1 union $Exp2
-      ===========================================
-      check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
+	$Exp = $Exp1 union $Exp2
+	===========================================
+	check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
 
 [check-inter]
-      $Exp = $Exp1 inter $Exp2
-      ===========================================
-      check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
+	$Exp = $Exp1 inter $Exp2
+	===========================================
+	check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
 
 [check-diff]
-      $Exp = $Exp1 \ $Exp2
-      ===========================================
-      check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
+	$Exp = $Exp1 \ $Exp2
+	===========================================
+	check($Exp, $Tenv) = check-un($Exp, $Exp1, $Exp2, $Tenv)
 
 %% --- Composition
 
 [compat-comp1] 
-	compat-comp($Exp, rel[$Etype1,$Etype2], rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
-[compat-comp2] 
-	compat-comp($Exp, rel[$Etype1,$Etype2], bag[<$Etype2,$Etype3>], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
-[compat-comp2] 
-	compat-comp($Exp, bag[<$Etype1,$Etype2>], rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
+	compat-comp($Exp, bag[<$Etype1,$Etype2>], bag[<$Etype2,$Etype3>], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
 [default-compat-comp]
 	compat-comp($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
@@ -561,7 +591,7 @@ $Error]>
 [c03] $Exp = $Exp1 o $Exp2,
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      compat-comp($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      compat-comp($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
       ===================================================================
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
@@ -569,6 +599,7 @@ $Error]>
 
 [compat-prod1] 
 	compat-prod($Exp, bag[$Etype1], bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
+
 [default-compat-prod]
 	compat-prod($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
@@ -577,25 +608,20 @@ $Error]>
 	$Exp = $Exp1 x $Exp2,
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-prod($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-prod($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
       ===========================================
       	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-%% -- Image
+%% ---- Image
 
-[xxx] compat-lim($Exp, rel[$Etype1,$Etype2],	$Etype2, $Tenv)            = <bag[$Etype1], $Tenv>
-[xxx] compat-lim($Exp, bag[<$Etype1,$Etype2>],	$Etype2, $Tenv)            = <bag[$Etype1], $Tenv>
-[xxx] compat-lim($Exp, rel[$Etype1,$Etype2],	bag[$Etype2], $Tenv)       = <bag[$Etype1], $Tenv>
-[xxx] compat-lim($Exp, bag[<$Etype1,$Etype2>],	bag[$Etype2], $Tenv)       = <bag[$Etype1], $Tenv>
-
-[default-compat-lim]
+[clm1]	compat-lim($Exp, bag[<$Etype1,$Etype2>], $Etype2, $Tenv) = <bag[$Etype1], $Tenv>
+[clm2]  compat-lim($Exp, bag[<$Etype1,$Etype2>], bag[$Etype2], $Tenv) = <bag[$Etype1], $Tenv>
+[default-clm]
 	compat-lim($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
-[xxx] compat-rim($Exp, rel[$Etype1,$Etype2],	$Etype1, $Tenv)            = <bag[$Etype2], $Tenv>
-[xxx] compat-rim($Exp, bag[<$Etype1,$Etype2>],	$Etype1, $Tenv)            = <bag[$Etype2], $Tenv>
-[xxx] compat-rim($Exp, rel[$Etype1,$Etype2],	bag[$Etype1], $Tenv)       = <bag[$Etype2], $Tenv>
-[xxx] compat-rim($Exp, bag[<$Etype1,$Etype2>],	bag[$Etype1], $Tenv)       = <bag[$Etype2], $Tenv>
+[crm1]	compat-rim($Exp, bag[<$Etype1,$Etype2>], $Etype1, $Tenv) = <bag[$Etype2], $Tenv>
+[crm2]	compat-rim($Exp, bag[<$Etype1,$Etype2>], bag[$Etype1], $Tenv) = <bag[$Etype2], $Tenv>
 
 [default-compat-rim]
 	compat-rim($Exp, $Etype1, $Etype2, $Tenv) = 
@@ -605,7 +631,7 @@ $Error]>
 	$Exp = $Exp1 [ -, $Exp2],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-lim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-lim($Exp, norm($Etype1, $Tenv), norm($Etype2, $Tenv), $Tenv'') = <$Etype3, $Tenv'''>
       	===========================================
       	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
@@ -613,7 +639,7 @@ $Error]>
 	$Exp = $Exp1 [ $Exp2, - ],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-rim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-rim($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
       	===========================================
 	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
@@ -621,7 +647,7 @@ $Error]>
 	$Exp = $Exp1 [ $Exp2 ],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-rim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-rim($Exp, norm($Etype1,$Tenv), norm($Etype2,$Tenv), $Tenv'') = <$Etype3, $Tenv'''>
       	===========================================
 	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
@@ -636,9 +662,7 @@ $Error]>
 
 %% --- Transitive closure
 
-[compat-trans1] 
-	compat-trans($Exp, rel[$Etype,$Etype], $Tenv) =   <rel[$Etype, $Etype], $Tenv>
-[compat-trans2] 
+[compat-trans1]
 	compat-trans($Exp, bag[<$Etype,$Etype>], $Tenv) = <rel[$Etype, $Etype], $Tenv>
 [default-compat-trans]
 	compat-trans($Exp, $Etype, $Tenv) = 
@@ -647,14 +671,14 @@ $Error]>
 [check-closure] 
 	$Exp = $Exp1 +,
       	check($Exp1, $Tenv) = <$Etype, $Tenv'>,
-      	compat-trans($Exp, $Etype, $Tenv') = <$Etype1, $Tenv''>
+      	compat-trans($Exp, norm($Etype,$Tenv), $Tenv') = <$Etype1, $Tenv''>
       	===========================================
       	check($Exp, $Tenv) = <$Etype1, $Tenv''>
 
 [check-rclosure]
-	 $Exp = $Exp1 *,
+	$Exp = $Exp1 *,
       	check($Exp1, $Tenv) = <$Etype, $Tenv'>,
-      	compat-trans($Exp, $Etype, $Tenv') = <$Etype1, $Tenv''>
+      	compat-trans($Exp, norm($Etype,$Tenv), $Tenv') = <$Etype1, $Tenv''>
       	===========================================
       	check($Exp, $Tenv) = <$Etype1, $Tenv''>
 
@@ -662,8 +686,6 @@ $Error]>
 
 [compat-size1]
 	compat-size($Exp, bag[$Etype], $Tenv) = <int, $Tenv>
-[compat-size2]
-	compat-size($Exp, rel[$Etype+], $Tenv) = <int, $Tenv>
 [default-compat-size]
 	compat-size($Exp, $Etype, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types $Etype in $Exp>  
@@ -671,18 +693,13 @@ $Error]>
 [check-size]
 	$Exp = #  $Exp1,
       	check($Exp1, $Tenv) = <$Etype, $Tenv'>,
-      	compat-size($Exp, $Etype, $Tenv') = <$Etype1, $Tenv''>
+      	compat-size($Exp, norm($Etype,$Tenv), $Tenv') = <$Etype1, $Tenv''>
       	===========================================
       	check($Exp, $Tenv) = <$Etype1, $Tenv''>
 
 %% --- end of checking operators
 
 %% --- Check comprehensions
-
-[rt1] 	check($Exp, $Tenv) = <$Etype', $Tenv'>
-      	=========================================
-      	require-type($Exp, $Etype, $Tenv) = 
-      	if equal-type($Etype, $Etype', $Tenv') then $Tenv' else $Tenv' + $Exp should have type $Etype fi
 	
 %% ---- Check generators and add introduced variables to type environment
 
@@ -717,30 +734,30 @@ $Error]>
 
 %% ---- Match a list of targets
 
-[mt1]	equal-type($Etype1, first($Etype2), $Tenv) = true,
+[mt1]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) = true,
 	store($Tenv, $Var, $Etype1) = $Tenv'
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
-	match-targets($Target*, second($Etype2), $Tenv')
+	match-targets($Target*, second($Etype2,$Tenv), $Tenv')
 
-[mt2]	equal-type($Etype1, first($Etype2), $Tenv) = false,
-	first($Etype2) != undefined	
+[mt2]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) = false,
+	first($Etype2, $Tenv) != undefined	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
-	match-targets($Target*, second($Etype2), $Tenv + $Var should have type
-	first($Etype2))
+	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var should have type
+	first($Etype2, $Tenv))
 
-[mt2]	equal-type($Etype1, first($Etype2), $Tenv) = false,
-	first($Etype2) = undefined	
+[mt2]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) = false,
+	first($Etype2, $Tenv) = undefined	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
-	match-targets($Target*, second($Etype2), $Tenv + $Var exceeds number of targets of generator)
+	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var exceeds number of targets of generator)
 
 
-[mt3]	require-type($Exp, first($Etype), $Tenv) = $Tenv'
+[mt3]	require-type($Exp, first($Etype, $Tenv), $Tenv) = $Tenv'
 	=====================================================
 	match-targets($Exp, $Target*, $Etype, $Tenv) =
-	match-targets($Target*, second($Etype), $Tenv')
+	match-targets($Target*, second($Etype, $Tenv), $Tenv')
 
 [mt4]	match-targets( , $Etype, $Tenv) = $Tenv
 
@@ -885,8 +902,6 @@ $Error]>
 	check-not-defined($Var, $Tenv) = $Tenv'
 	=============================================
 	check-stat(type $Var = $Etype, $Tenv) = store($Tenv', $Var, $Etype)
-
-
 
 %% ---- Check assert statement
 

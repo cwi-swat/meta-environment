@@ -1,15 +1,23 @@
+type stat = area
+type var = str
 
- 	area ROOT
-        rel[area,area] PRED
-        rel[<area,str>,area] USE_OCCURS
-        rel[<area,str>,area] DEF_OCCURS
-        rel[area,str] USES
-        rel[area,str] DEFS
+type var-occ = area
 
-        rel[str,area] occurrences(<area,str> S) = {second(S)} x USE_OCCURS[S]
+type var-in-stat = <stat Stat, var Var>
 
-        rel[str,area] UNINIT = 
-        { occurrences(<N,V>) | <N, V> : USES, <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
-        }
+ stat ROOT
+ rel[stat,stat] PRED
+
+ rel[var-in-stat,var-occ] USE_OCCURS
+ rel[var-in-stat,var-occ] DEF_OCCURS
+
+ bag[var-in-stat] USES
+ bag[var-in-stat] DEFS
+
+ rel[str,area] occurrences(var-in-stat VS) = {VS.Var} x USE_OCCURS[VS]
+
+rel[str,area] UNINIT = 
+   { occurrences(<S,V>) | <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
+   }
 
                          

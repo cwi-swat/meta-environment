@@ -30,11 +30,12 @@ exports
 
         is-var(REXPTYPE)                        		-> Boolean
 
-	first(REXPTYPE)						-> REXPTYPE
-	second(REXPTYPE)					-> REXPTYPE
+	first(REXPTYPE, TENV)					-> REXPTYPE
+	second(REXPTYPE, TENV)					-> REXPTYPE
 
 	is-tuple(Elem)						-> Boolean
 
+	norm(REXPTYPE, TENV)					-> REXPTYPE
 	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
 	get-tuple-type(REXPTYPE)				-> REXPTYPE
 
