@@ -3,15 +3,14 @@
 process Asfc is
 let
   COM           : asfc,
-  OutputFile    : str,
   ModuleName    : str,
   Syntax        : term,
   Equations     : term 
 in
   (
-    rec-msg(compile-module(ModuleName?, Equations?, OutputFile?)) .
+    rec-msg(compile-module(ModuleName?, Equations?)) .
     execute(asfc, COM?) .
-    snd-eval(COM, compile-module(ModuleName, Equations, OutputFile)) .
+    snd-eval(COM, compile-module(ModuleName, Equations)) .
     rec-value(COM, compilation-done) .
     snd-msg(compilation-done(ModuleName)).
     snd-terminate(COM,"done").

@@ -85,64 +85,37 @@ static void version(void)
 
 /*{{{  static PT_ParseTree compile(char *name, ASF_CondEquationList equations) */
 
-static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
+static PT_ParseTree compile(char *name, ASF_CondEquationList equations, 
+			    char *output)
 {
   MA_Module muasf;
   PT_ParseTree c_code;
+  FILE *fp = NULL;
+  char *saveName = NULL;
+
+  saveName = dashesToUnderscores(name);
 
   if (run_verbose) {
     ATwarning("transforming asf to muasf\n");
   }
 
-  muasf = asfToMuASF(name, equations);
+  muasf = asfToMuASF(saveName, equations);
 
   if (output_muasf) {
-   return (PT_ParseTree) muasf;
-  }
-
-  if (run_verbose) {
-    ATwarning("transforming muasf to c\n");
-  }
-
-  c_code = muasfToC(muasf); 
-
-  return c_code;
-}
-
-/*}}}  */
-
-/*{{{  void rec_terminate(int cid, ATerm t)  */
-
-void rec_terminate(int cid, ATerm t) 
-{
-  exit(0);
-}
-
-/*}}}  */
-/*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations,  */
-
-ATerm compile_module(int cid, char *moduleName, ATerm equations, 
-		     char *output)
-{
-  char *normalmodname = toalfanum(moduleName);
-  ASF_CondEquationList eqsList;
-  PT_ParseTree result;
-  FILE *fp;
-
-  eqsList    = ASF_makeCondEquationListFromTerm(equations);
-
-  result = compile(moduleName, eqsList);
-
-  if (output_muasf) {
-    ATwriteToNamedBinaryFile( 
-      (ATerm) PT_makeParseTreeTree(
-	PT_makeSymbolsList(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()), 
-	PT_makeTreeLayoutEmpty(),
-	(PT_Tree) result,
-	PT_makeTreeLayoutEmpty(),
-	0), output); 
+      return PT_makeParseTreeTree(
+        PT_makeSymbolsList(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()),
+        PT_makeTreeLayoutEmpty(),
+        (PT_Tree) muasf,
+        PT_makeTreeLayoutEmpty(),
+        0);
   }
   else {
+    if (run_verbose) {
+      ATwarning("transforming muasf to c\n");
+    }
+
+    c_code = muasfToC(muasf); 
+
     if (!strcmp(output, "-")) {
       fp = stdout;
     }
@@ -157,18 +130,45 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
       ATwarning("pretty printing c code\n");
     }
 
-    ToC_code(normalmodname, result, fp , myversion);
+    ToC_code(saveName, c_code, fp , myversion);
     fclose(fp);
 
     if (use_c_compiler) {
       if (run_verbose) {
 	ATwarning("calling c compiler\n");
       }
-      call_c_compiler(normalmodname, output);
+      call_c_compiler(name, saveName, output);
     }
   }
 
-  free(normalmodname);
+  free(saveName);
+
+  return c_code;
+}
+
+/*}}}  */
+
+/*{{{  void rec_terminate(int cid, ATerm t)  */
+
+void rec_terminate(int cid, ATerm t) 
+{
+  exit(0);
+}
+
+/*}}}  */
+/*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations, char *output) */
+
+ATerm compile_module(int cid, char *moduleName, ATerm equations)
+{
+  char output[2000];
+  ASF_CondEquationList eqsList;
+  PT_ParseTree result;
+
+  sprintf(output, "%s.c", moduleName);
+
+  eqsList    = ASF_makeCondEquationListFromTerm(equations);
+
+  result = compile(moduleName, eqsList, output);
 
   return ATmake("snd-value(compilation-done)");
 }                              
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    compile_module(0,name,eqs,output);
+    compile(name,ASF_CondEquationListFromTerm(eqs),output);
   }
 
   return 0;

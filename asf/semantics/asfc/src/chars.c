@@ -65,6 +65,9 @@ char* toalfanum(const char* str)
     if (isalpha(str[i])) {
       new[j] = str[i];
     }
+    else if (str[i] == '_') {
+      new[j] = '_';
+    }
     else {
       sprintf(new+j,"%03d",str[i]);
       j += 2;
@@ -76,3 +79,28 @@ char* toalfanum(const char* str)
 }
 
 /*}}}  */
+/*{{{  char* dashesToUnderscores(const char *str) */
+
+char* dashesToUnderscores(const char *str)
+{
+  char *tmp = strdup(str);
+  int i;
+
+  if (tmp == NULL) {
+    ATerror("Could not allocate memory to copy string\n");
+    return NULL;
+  }
+
+  for (i = 0; i < strlen(tmp); i++) {
+    if (tmp[i] == '-') {
+      tmp[i] = '_';
+    }
+  }
+
+  return tmp;
+}
+
+/*}}}  */
+
+
+

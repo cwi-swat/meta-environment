@@ -7,7 +7,7 @@
 
 extern ATbool run_verbose;
 
-void call_c_compiler(const char* name, const char* source)
+void call_c_compiler(const char* binary, const char* name, const char* source)
 {
   char commandline[1024];
 
@@ -25,7 +25,7 @@ void call_c_compiler(const char* name, const char* source)
 	 "-DMAIN_%s"
 	 "%s",
 	 run_verbose ? "-Wall" : "",
-	 name, 
+	 binary, 
 	 source,
 	 name,
 	 run_verbose ? "" : ">& /dev/null" 
