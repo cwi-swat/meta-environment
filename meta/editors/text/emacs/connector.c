@@ -18,6 +18,7 @@
 #include <connector.h>
 #include <TextEditor.h>
 #include <Location.h>
+#include <MetaConfig.h>
 
 /*}}}  */
 /*{{{  defines */
@@ -87,6 +88,62 @@ static char *stripIllegalMenuChars(const char *input)
 
 /*}}}  */
 
+/*{{{  static char *attributesToProperties(MC_TextAttributes attributes) */
+
+static char *attributesToProperties(MC_TextAttributes attributes)
+{
+  static char buffer[BUFSIZ];
+  buffer[0] = '\0';
+
+  for ( ; !MC_isTextAttributesEmpty(attributes); 
+	attributes = MC_getTextAttributesTail(attributes)) {
+    MC_TextAttribute attr = MC_getTextAttributesHead(attributes);
+    char *end = buffer+strlen(buffer);
+    int len = strlen(buffer);
+    int spaceLeft = BUFSIZ - len;
+
+    if (MC_isTextAttributeForegroundColor(attr)) {
+      MC_Color color = MC_getTextAttributeColor(attr);
+      assert(MC_isColorRgb(color));
+      snprintf(end, spaceLeft, " :foreground \"RGB:%02x/%02x/%02x\"",
+	      MC_getColorRed(color),
+	      MC_getColorGreen(color),
+	      MC_getColorBlue(color));
+    }
+    else if (MC_isTextAttributeBackgroundColor(attr)) {
+      MC_Color color = MC_getTextAttributeColor(attr);
+      assert(MC_isColorRgb(color));
+      snprintf(end, spaceLeft," :background \"RGB:%02x/%02x/%02x\"",
+	      MC_getColorRed(color),
+	      MC_getColorGreen(color),
+	      MC_getColorBlue(color));
+    }
+    else if (MC_isTextAttributeStyle(attr)) {
+      MC_TextStyle style = MC_getTextAttributeStyle(attr);
+
+      if (MC_isTextStyleBold(style)) {
+	snprintf(end, spaceLeft, " :weight 'bold");
+      }
+      else if (MC_isTextStyleItalics(style)) {
+	snprintf(end, spaceLeft, " :slant 'italic");
+      }
+      else if (MC_isTextStyleUnderlined(style)) {
+	snprintf(end, spaceLeft,  " :underline t");
+      }
+    }
+    else if (MC_isTextAttributeSize(attr)) {
+      snprintf(end, spaceLeft," :height %d", 10*MC_getTextAttributePoints(attr));
+    }
+    else if (MC_isTextAttributeFont(attr)) {
+      snprintf(end, spaceLeft, 
+	       " :family \"%s\"", MC_getTextAttributeName(attr));
+    }
+  }
+
+  return buffer;
+}
+
+/*}}}  */
 /*{{{  static char *menuToString(TE_Menu menu) */
 
 static char *menuToString(TE_Menu menu)
@@ -288,7 +345,22 @@ static void clearFocus(int write_to_editor_fd)
 
 static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 {
-  
+  ATermList categories = (ATermList) TE_getActionCategories(action);
+
+  for (;!ATisEmpty(categories); categories = ATgetNext(categories)) {
+    MC_Property category = MC_PropertyFromTerm(ATgetFirst(categories));
+    MC_TextCategoryName name = MC_getPropertyCategory(category);
+    MC_TextAttributes attributes = MC_getPropertyAttributes(category);
+
+    if (MC_isTextCategoryNameExtern(name)) {
+      char buf[BUFSIZ];
+      const char* str = MC_getTextCategoryNameName(name);
+      char *attribs = attributesToProperties(attributes);
+
+      sprintf(buf, "(register-category '%s (list %s))", str, attribs);
+      sendToEmacs(write_to_editor_fd, buf);
+    }
+  }
 }
 
 /*}}}  */
@@ -302,14 +374,8 @@ static void highlightSlices(int write_to_editor_fd, TE_Action action)
 
   for (; !ATisEmpty(slices); slices = ATgetNext(slices)) {
     LOC_Slice slice = LOC_SliceFromTerm(ATgetFirst(slices));
+    const char* category = LOC_getSliceId(slice);
     LOC_AreaAreas areas = LOC_getSliceAreas(slice);
-
-    /* a hack: for now we do not have a definition of what colors
-     * to use etc, so lets just try to make AlphanumericLiterals bold.
-     */
-    if (strcmp(LOC_getSliceId(slice), "AlphanumericLiterals")) {
-      continue;
-    }
 
     for (; !LOC_isAreaAreasEmpty(areas); areas = LOC_getAreaAreasTail(areas)) {
       LOC_Area area = LOC_getAreaAreasHead(areas);
@@ -317,7 +383,8 @@ static void highlightSlices(int write_to_editor_fd, TE_Action action)
       int length = LOC_getAreaLength(area);
       char buf[BUFSIZ];
 
-      sprintf(buf, "(set-highlight %d %d)", start, start+length);
+      sprintf(buf, "(set-highlight %d %d '%s)", 
+	      start, start+length, category);
       sendToEmacs(write_to_editor_fd, buf);
     }
   }
@@ -400,6 +467,7 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
   LOC_initLocationApi();
   TE_initTextEditorApi();
+  MC_initMetaConfigApi();
 
   for (i=1; i<argc; i++) {
     char *cur = argv[i];

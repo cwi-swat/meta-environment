@@ -4,6 +4,7 @@ SCRIPT = gnu-emacs.el
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
+	-I$(top_srcdir)/configuration-manager/src \
 	-I$(ATERM)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
@@ -26,6 +27,7 @@ emacs_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(TOOLBUSLIB)/lib -lATB \
         -L$(ERROR_SUPPORT)/lib -lLocationAPI \
+	-L$(top_srcdir)/configuration-manager/src -lMetaConfig \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 

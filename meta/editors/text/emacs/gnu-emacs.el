@@ -67,18 +67,25 @@
       (setq overlays (cdr overlays)))
     ))
 
+(setq categories (make-hash-table))
+
+(defun register-category (category properties)
+  (puthash category properties categories)
+)
+
+(defun get-category (category)
+  (gethash category categories '(foreground-color . "black"))
+)
+
 ; a partial implementation for the syntax highlighting interface
 ; the idea is that we will implement the full configurability later.
 ; At least the following code exhibits the functionality needed to set text
 ; properties:
-(defun set-highlight (start end)
+(defun set-highlight (start end category)
   (setq must-send-modified ())
   (let ((modified (buffer-modified-p)))
-    (let ((overlay (make-overlay start end nil nil)))
-      (overlay-put overlay 'face 'bold)
-; color is in hexadecimal RGB values
-      (overlay-put overlay 'face '(foreground-color . "RGB:85/85/85"))
-    )
+    (overlay-put (make-overlay start end nil nil) 
+		 'face (get-category category))
     (set-buffer-modified-p modified)
   )
   (setq must-send-modified t)
