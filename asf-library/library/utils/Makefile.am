@@ -1,7 +1,8 @@
 
 EXTRA_DIST = asf-library-config.src
 
-bin_SCRIPTS = asf-library-config
+bin_SCRIPTS = asf-library-config 
+noinst_SCRIPTS = gen-protos.sh gen-forward.sh
 
 CLEANFILES = $(bin_SCRIPTS)
 
