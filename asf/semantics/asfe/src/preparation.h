@@ -68,6 +68,7 @@ void enter_equations(char *module, ASF_CondEquationList eqs);
 ATbool find_module(char *module);
 void delete_equations(char *module);
 
+extern equation_table *equations;
 
 
 #endif

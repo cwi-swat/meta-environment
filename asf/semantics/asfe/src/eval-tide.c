@@ -215,6 +215,31 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
+/*{{{  static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args) */
+
+static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args)
+{
+  equation_entry *entry;
+  ATermList files = ATempty;
+  int hnr, start_line, start_col, end_line, end_col;
+  char *path;
+
+  for (hnr=0; hnr<equations->size; hnr++) {
+    for (entry=equations->table[hnr]; entry; entry=entry->hnext) {
+      if (PT_getTreePosInfo(entry->lhs, &path, &start_line, &start_col,
+			    &end_line, &end_col)) {
+	ATerm file = (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue));
+	if (ATindexOf(files, file, 0) == -1) {
+	  files = ATinsert(files, file);
+	}
+      }
+    }
+  }
+
+  return ATmake("source-list(<term>)", files);
+}
+
+/*}}}  */
 
 /*{{{  void Tide_connect() */
 
@@ -230,6 +255,7 @@ void Tide_connect()
   TA_registerFunction(ATmakeAFun("break",      0, ATfalse), eval_break);
   TA_registerFunction(ATmakeAFun("var",        1, ATfalse), eval_var);
   TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
+  TA_registerFunction(ATmakeAFun("list-sources", 0, ATfalse), eval_list_sources);
 
   TA_connect();
 

@@ -53,7 +53,7 @@
 equation_entry *currentRule = NULL;
 
 static equation_table *tables = NULL;
-static equation_table *equations = NULL;
+equation_table *equations = NULL;
 
 extern ATbool runVerbose;
 
