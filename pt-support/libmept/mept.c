@@ -112,18 +112,6 @@ static void init_asfix_patterns()
 
 }
 
-static void init_patterns(void)
-{
-  static ATbool patterns_initialized = ATfalse;
-
-  if (patterns_initialized) {
-    return;
-  }
-  patterns_initialized = ATtrue;
-
-  init_asfix_patterns();
-}
-
 ATerm PT_makeParseTreeTree(ATerm tree, ATerm cnt)
 {
   return ATmakeTerm(asfix_parsetree_pattern, tree, cnt);
@@ -646,5 +634,10 @@ ATbool PT_prodHasLexAsLhs(ATerm prod)
 
 void PT_initMEPTApi()
 {
-  init_patterns();
+  static int initialized = 0;
+
+  if (!initialized) {
+    init_asfix_patterns();
+    initialized = 1;
+  }
 }
