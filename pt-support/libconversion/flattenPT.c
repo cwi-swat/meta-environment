@@ -202,7 +202,9 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
     args = PT_getTreeArgs(tree);
 
     if (!isListProd(prod)) {
-      PT_Tree newTerm = flattenTerm(tree, ATtrue);
+      PT_Tree newTerm;
+      newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
+			                         listSymbol));
       if (newTerm) {
 	return PT_makeArgsList(newTerm, tail);
       }
@@ -274,7 +276,9 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
     args = PT_getTreeArgs(tree);
 
     if (!isSepListProd(prod)) {
-      PT_Tree newTerm = flattenTerm(tree, ATtrue);
+      PT_Tree newTerm;
+      newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
+			                         listSymbol));
       if (newTerm) {
 	return PT_makeArgsList(newTerm, tail);
       }
