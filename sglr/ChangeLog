@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 Thu Jun 19 13:32:10 CEST 2003 <jong@cwi.nl>
  * Added explicit ATBunpack and ATBpack to restore-term-brackets
 

@@ -1,0 +1,16 @@
+package 
+identification
+   name=sglr
+   version=3.10beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/sglr
+   description='The Scannerless Generalized LR parser, a GLR parser without
+                a separate scanning phase.'
+
+   keywords=meta-environment, parsing, sdf, glr, scannerless, disambiguation
+configuration interface
+
+requires
+   pt-support	0.12beta
+   aterm        2.0.1
+   toolbuslib	0.4
