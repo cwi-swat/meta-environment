@@ -1,25 +1,3 @@
-/*
-
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-   $Id$
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -153,7 +131,8 @@ static int connect_unix_socket(int port)
        */
       tb_sleep(0, TB_SOCKET_CONNECT_DELAY);
       if(attempts > 1000)
-        err_sys_fatal("cannot connect, giving up"); 
+				err_sys_fatal("cannot connect, giving up");
+
       attempts++;
     } else { /* Connection established */
       chmod(name, 0777);
@@ -199,7 +178,7 @@ static int connect_inet_socket(const char *host, int port)
     if(connect(sock, (struct sockaddr *)&isin, sizeof(isin)) < 0){
       close(sock);
       if(attempts > 1000)
-        err_sys_fatal("cannot connect, giving up");
+			  err_sys_fatal("cannot connect, giving up");
       attempts++;
     } else {
       set_connect_options(sock);
@@ -264,6 +243,7 @@ static int create_unix_socket(int port)
   /* Initialize socket's address structure */
   memset((char *) &usin, 0, sizeof(usin));
   usin.sun_family = AF_UNIX;
+
   strcpy (usin.sun_path, name);
 
   /* Assign an address to this socket */
@@ -271,12 +251,14 @@ static int create_unix_socket(int port)
     TBmsg("Binding %s\n", name);
 	
   while(bind(sock,(struct sockaddr *)&usin,
-    strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
-    if(attempts > 1000)
-      err_sys_fatal("cannot connect, giving up");
+						     strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
+    if(attempts > 1000) {
+			return TB_ERROR;
+		}
     attempts++;
     chmod (name, 0777);
   }
+
   return sock; 
 }
 
@@ -301,10 +283,12 @@ static int create_inet_socket(const char *host, int port)
   isin.sin_port = htons(port);
 
   while (bind (sock,(struct sockaddr *)&isin,sizeof(isin)) < 0){
-    if (attempts > 1000)
-      err_sys_fatal("cannot connect, giving up");
+    if (attempts > 1000) {
+			return TB_ERROR;
+		}
     attempts++;
   }
+ 
   return sock;
 }
 
@@ -322,7 +306,10 @@ static int create_socket (const char *host, int port)
     sock = create_inet_socket(host, port);
 
   /* Prepare socket queue for connect requests */
-  assert(sock >= 0);
+  if(sock < 0) {
+		return TB_ERROR;
+	}
+
   listen(sock,5);
 
   return sock;

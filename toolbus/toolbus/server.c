@@ -1,24 +1,3 @@
-/*
-
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -38,17 +17,37 @@ extern int connect_tool(int, int, int);
 int mk_server_ports(TBbool local_port_only)
 {
   int lsock, gsock = -1;
+	int attempts = 1000;
 
-  lsock = createWellKnownSocket(NULL, WellKnownSocketPort);
-  if(!local_port_only)
-    gsock = createWellKnownSocket(this_host, WellKnownSocketPort);
-                     
-  if(lsock < 0 || (!local_port_only && gsock < 0))
-    return TB_ERROR;
+	/* We try to create a socket, incrementing the port number if we fail. */
+	do {
+	
+		if(!local_port_only) 
+			gsock = createWellKnownSocket(this_host, WellKnownSocketPort);
+	
+		/* Only try to create the local port if the inet socket succeeded. 
+		 * The inet socket fails more frequently due some TCP bogy: some ports
+     * stay unavailable for a long while after they are closed.
+		 */
+		if(gsock >= 0 || local_port_only)
+			lsock = createWellKnownSocket(NULL, WellKnownSocketPort);
+			
+		WellKnownSocketPort++;
 
-  WellKnownLocalSocket = lsock;
+	} while((lsock < 0 || (!local_port_only && gsock < 0)) && attempts--);
+		
+	if(!attempts)
+		return TB_ERROR;
+  
+	/* Fix that the loop increments the port number in case of success */ 
+	WellKnownSocketPort--;
+
+	/* Commit the sockets */
+	WellKnownLocalSocket = lsock;
   WellKnownGlobalSocket = gsock;
 
+	fprintf(stderr, "The toolbus server allocated port %d.\n", WellKnownSocketPort);
+ 
   return TB_OK;
 }
 
