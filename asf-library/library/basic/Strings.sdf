@@ -3,6 +3,9 @@ module basic/Strings
 %% This module defines strings with continuations and escaped newlines, tabs and 
 %% backslashes
 
+
+imports basic/Integers
+
 hiddens 
   sorts Escaped Normal
 
@@ -11,9 +14,10 @@ exports
   lexical syntax
     ~[\0-\31\"\\\n]                         -> Normal
     "\\n" | "\\t" |  "\\\"" | "\\\\"        -> Escaped
+    "\\" [0-7][0-7][0-7]		    -> Escaped
+
     "\"" {Contents "\\\n"}+ "\"" -> StrCon
 
-  aliases
     (Normal | Escaped)* -> Contents
 
   context-free syntax
@@ -21,10 +25,13 @@ exports
     String "||" String -> String {left}
     "(" String ")"     -> String {bracket}
     remove-continuations(String) -> String
+    str-len(String) -> Integer
+    str-cmp(String,String) -> Integer
 
 hiddens
   imports
     basic/Whitespace
+    basic/Bytes
   variables
     "Chars" [0-9]* -> CHAR*
 

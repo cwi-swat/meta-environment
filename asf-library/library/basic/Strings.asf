@@ -7,3 +7,10 @@
      remove-continuations(strcon(""" Chars1 Chars2 """))
  
  [default] remove-continuations(Str) = Str
+
+
+[ln]	str-len(Str) = num-of-bytes(string-to-bytes(remove-continuations(Str)))
+
+[cmp]	str-cmp(Str1,Str2) =
+		ascii-compare(string-to-bytes(remove-continuations(Str1)),
+			string-to-bytes(remove-continuations(Str2)))
