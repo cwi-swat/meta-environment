@@ -304,6 +304,12 @@ in
   +
     rec-msg(clear-module-db-hook) .
     snd-msg(module-db-hook-done) 
+  +
+    rec-msg(add-initial-eqs-module-names-hook(ModuleNames?)) .
+    snd-msg(initial-eqs-module-names-added(ModuleNames)) 
+  +
+    rec-msg(post-initialization-hook) .
+    snd-msg(post-initialization-hook-finished) 
   ) * delta
 endlet
 
