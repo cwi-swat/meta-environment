@@ -29,7 +29,7 @@ void MT_destroyModuleTable(ModuleTable table)
 /*{{{  void MT_putModule(ModuleTable table, SDF_ModuleName moduleName, */
 
 void MT_putModule(ModuleTable table, SDF_ModuleId id,
-		  SDF_Module module)
+		  SDF_Start module)
 {
   ATtablePut(table, (ATerm) id, (ATerm) module);
 }
@@ -37,9 +37,9 @@ void MT_putModule(ModuleTable table, SDF_ModuleId id,
 /*}}}  */
 /*{{{  SDF_Module MT_getModule(ModuleTable table, SDF_ModuleName moduleName) */
 
-SDF_Module MT_getModule(ModuleTable table, SDF_ModuleId id)
+SDF_Start MT_getModule(ModuleTable table, SDF_ModuleId id)
 {
-  return (SDF_Module) ATtableGet(table, (ATerm) id);
+  return (SDF_Start) ATtableGet(table, (ATerm) id);
 }
 
 /*}}}  */

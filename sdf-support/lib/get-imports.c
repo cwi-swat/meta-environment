@@ -96,7 +96,8 @@ static ATermList get_transitive_imports(ATermList todo)
     SDF_Import     import = SDF_ImportFromTerm(ATgetFirst(todo));
     SDF_ModuleName name = SDF_getImportModuleName(import);
     SDF_ModuleId   id   = SDF_getModuleNameModuleId(name);
-    SDF_Module     module = MT_getModule(moduleTable, id);
+    SDF_Start      smodule = MT_getModule(moduleTable, id);
+    SDF_Module     module = SDF_getStartTopModule(smodule);
     SDF_Renamings  renamings = SDF_makeRenamingsRenamings(
                                  SDF_makeLayoutSpace(),
 			         SDF_makeRenamingListEmpty(),
@@ -137,10 +138,11 @@ static void initModuleTable(ATermList modules)
 {
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
-    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(modules));
+    SDF_Start smodule = SDF_StartFromTerm(ATgetFirst(modules));
+    SDF_Module module = SDF_getStartTopModule(smodule);
     SDF_ModuleId id = SDF_getModuleNameModuleId(
 	     	        SDF_getModuleModuleName(module));
-    MT_putModule(moduleTable, id, module);
+    MT_putModule(moduleTable, id, smodule);
   }
 }
 
