@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Nov  6 17:14:53 2003
+ * Generated at Sun Nov  9 17:22:01 2003
  */
 
 #ifndef __ASFME_dict_H
@@ -66,47 +66,60 @@ extern AFun ASF_afun55;
 extern AFun ASF_afun56;
 extern AFun ASF_afun57;
 
-extern ATerm ASF_patternStartASFEquations;
 extern ATerm ASF_patternOptLayoutPresent;
 extern ATerm ASF_patternOptLayoutAbsent;
-extern ATerm ASF_patternCHARDefault;
-extern ATerm ASF_patternTreeAmbsMany;
-extern ATerm ASF_patternTreeAmbsSingle;
-extern ATerm ASF_patternTreeAmbsEmpty;
-extern ATerm ASF_patternASFConditionNoMatch;
-extern ATerm ASF_patternASFConditionMatch;
-extern ATerm ASF_patternASFConditionEquality;
-extern ATerm ASF_patternASFConditionNegative;
-extern ATerm ASF_patternASFConditionPositive;
-extern ATerm ASF_patternASFEquationDefault;
-extern ATerm ASF_patternCHARListMany;
-extern ATerm ASF_patternCHARListSingle;
-extern ATerm ASF_patternCHARListEmpty;
-extern ATerm ASF_patternTreeAmbiguityConstructor;
-extern ATerm ASF_patternTreeLexicalConstructor;
-extern ATerm ASF_patternASFTagNotEmpty;
-extern ATerm ASF_patternASFTagEmpty;
-extern ATerm ASF_patternASFConditionalEquationWhen;
-extern ATerm ASF_patternASFConditionalEquationImplies;
-extern ATerm ASF_patternASFConditionalEquationSimple;
+extern ATerm ASF_patternStartASFCondition;
+extern ATerm ASF_patternStartASFConditions;
+extern ATerm ASF_patternStartTree;
+extern ATerm ASF_patternStartASFImplies;
+extern ATerm ASF_patternStartASFEquation;
+extern ATerm ASF_patternStartASFConditionalEquation;
+extern ATerm ASF_patternStartASFModule;
+extern ATerm ASF_patternStartASFSection;
+extern ATerm ASF_patternStartASFTagId;
+extern ATerm ASF_patternStartASFTag;
+extern ATerm ASF_patternStartASFTestEquation;
 extern ATerm ASF_patternASFTestEquationWhen;
 extern ATerm ASF_patternASFTestEquationImplies;
 extern ATerm ASF_patternASFTestEquationSimple;
+extern ATerm ASF_patternASFTagNotEmpty;
+extern ATerm ASF_patternASFTagEmpty;
+extern ATerm ASF_patternASFTagIdManyChars;
+extern ATerm ASF_patternASFTagIdOneChar;
 extern ATerm ASF_patternASFTestEquationTestListMany;
 extern ATerm ASF_patternASFTestEquationTestListSingle;
 extern ATerm ASF_patternASFTestEquationTestListEmpty;
 extern ATerm ASF_patternASFConditionalEquationListMany;
 extern ATerm ASF_patternASFConditionalEquationListSingle;
 extern ATerm ASF_patternASFConditionalEquationListEmpty;
-extern ATerm ASF_patternASFEquationsPresentWithTests;
-extern ATerm ASF_patternASFEquationsPresent;
-extern ATerm ASF_patternASFEquationsAbsent;
+extern ATerm ASF_patternASFSectionTests;
+extern ATerm ASF_patternASFSectionEquations;
+extern ATerm ASF_patternASFSectionListMany;
+extern ATerm ASF_patternASFSectionListSingle;
+extern ATerm ASF_patternASFSectionListEmpty;
+extern ATerm ASF_patternASFModuleDefault;
+extern ATerm ASF_patternASFEquationDefault;
+extern ATerm ASF_patternASFConditionalEquationWhen;
+extern ATerm ASF_patternASFConditionalEquationImplies;
+extern ATerm ASF_patternASFConditionalEquationSimple;
+extern ATerm ASF_patternASFImpliesDefault;
+extern ATerm ASF_patternCHARListMany;
+extern ATerm ASF_patternCHARListSingle;
+extern ATerm ASF_patternCHARListEmpty;
+extern ATerm ASF_patternTreeAmbsMany;
+extern ATerm ASF_patternTreeAmbsSingle;
+extern ATerm ASF_patternTreeAmbsEmpty;
+extern ATerm ASF_patternTreeLexicalConstructor;
+extern ATerm ASF_patternTreeAmbiguityConstructor;
 extern ATerm ASF_patternASFConditionListMany;
 extern ATerm ASF_patternASFConditionListSingle;
 extern ATerm ASF_patternASFConditionsDefault;
-extern ATerm ASF_patternASFTagIdManyChars;
-extern ATerm ASF_patternASFTagIdOneChar;
-extern ATerm ASF_patternASFImpliesDefault;
+extern ATerm ASF_patternASFConditionNoMatch;
+extern ATerm ASF_patternASFConditionMatch;
+extern ATerm ASF_patternASFConditionEquality;
+extern ATerm ASF_patternASFConditionNegative;
+extern ATerm ASF_patternASFConditionPositive;
+extern ATerm ASF_patternCHARDefault;
 extern ATerm ASF_patternProductionLexicalConstructor;
 
 extern void init_ASFME_dict();

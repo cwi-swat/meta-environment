@@ -11,6 +11,10 @@ CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 
 ADT=/ufs/sen1/software/installed/apigen-bundle-1.5/linux/i386
 
+Asf.label.def:
+	(echo "definition";\
+         cat ../../asf-library/library/languages/asf/syntax/*.sdf ) > $@
+
 api: subst-eqs
 	${ADT}/bin/sdf2-to-adt -i Asf.label.def -o ASFME.raw
 	${ADT}/bin/sdf2-to-c -b -o ASFME --prefix ASF_

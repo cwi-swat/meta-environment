@@ -94,7 +94,7 @@ ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFCondi
 }
 
 /*}}}  */
-/*{{{  ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
+/*{{{  ASF_ASFTestEquationTestList ASF_concatASFTestEquationList(ASF_ASFTestEquationTestList l1, ASF_ASFTestEquationTestList l2) */
 
 ASF_ASFTestEquationTestList ASF_concatASFTestEquationTestList(ASF_ASFTestEquationTestList l1, ASF_ASFTestEquationTestList l2)
 {
@@ -181,28 +181,6 @@ ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFCondit
   } 
 
   return cel1;
-}
-
-/*}}}  */
-/*{{{  ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListFromParseTrees(ATermList l) */
-
-ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListFromParseTrees(ATermList l)
-{
-  ASF_ASFConditionalEquationList alleqs = ASF_makeASFConditionalEquationListEmpty();
-
-  for(; !ATisEmpty(l); l = ATgetNext(l)) {
-    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(ATgetFirst(l));
-    PT_Tree  tree = PT_getParseTreeTree(parseTree);
-    ASF_ASFConditionalEquationList list;
-    ASF_ASFEquations equations;
-
-    equations = ASF_makeASFEquationsFromTerm(PT_makeTermFromTree(tree));
-
-    list = ASF_getASFEquationsList(equations);
-    alleqs = ASF_unionASFConditionalEquationList(list,alleqs);
-  }
-
-  return alleqs;
 }
 
 /*}}}  */
@@ -320,3 +298,57 @@ ATbool ASF_isTreeGetterFunction(ASF_Tree tree)
 
 /*}}}  */
 
+/*{{{  ASF_ASFConditionalEquationList ASF_getASFModuleEquationList(ASF_ASFModule module)  */
+
+ASF_ASFConditionalEquationList ASF_getASFModuleEquationList(ASF_ASFModule module) 
+{
+  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
+  ASF_ASFConditionalEquationList eqs = 
+    ASF_makeASFConditionalEquationListEmpty();
+
+  for ( ; !ASF_isASFSectionListEmpty(sections);
+	sections = ASF_getASFSectionListTail(sections)) {
+    ASF_ASFSection section = ASF_getASFSectionListHead(sections);
+
+    if (ASF_isASFSectionEquations(section)) {
+      eqs = ASF_unionASFConditionalEquationList(eqs, 
+						ASF_getASFSectionList(section));
+    }
+
+
+    if (!ASF_hasASFSectionListTail(sections)) {
+      break;
+    }
+  }
+
+  return eqs;
+}
+
+/*}}}  */
+/*{{{  ASF_ASFTestEquationTestList ASF_getASFModuleTestList(ASF_ASFModule module)  */
+
+ASF_ASFTestEquationTestList ASF_getASFModuleTestList(ASF_ASFModule module) 
+{
+  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
+  ASF_ASFTestEquationTestList tests = 
+    ASF_makeASFTestEquationTestListEmpty();
+
+  for ( ; !ASF_isASFSectionListEmpty(sections);
+	sections = ASF_getASFSectionListTail(sections)) {
+    ASF_ASFSection section = ASF_getASFSectionListHead(sections);
+
+    if (ASF_isASFSectionTests(section)) {
+      tests = ASF_concatASFTestEquationTestList(tests, 
+					    ASF_getASFSectionTestList(section));
+    }
+
+
+    if (!ASF_hasASFSectionListTail(sections)) {
+      break;
+    }
+  }
+
+  return tests;
+}
+
+/*}}}  */

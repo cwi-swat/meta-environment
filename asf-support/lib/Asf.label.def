@@ -1,103 +1,102 @@
 definition
-
-module Equations
-imports Characters
-exports
-  sorts ASF-Equations
-
-hiddens
-  sorts ASF-Tag 
-        ASF-TagId 
-        ASF-ConditionalEquation 
-        ASF-Equation 
-        ASF-Implies 
-        ASF-Condition 
-        ASF-Conditions
-
-exports
-  lexical syntax
-    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
-    [A-Za-z0-9\"\']                                  -> ASF-TagId {avoid,cons("one-char")}
-    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("many-chars")}
-     
-  lexical restrictions
-    ASF-Implies -/- [\=]
-
-  context-free syntax
-
-    list:{ASF-Condition ","}+                  -> ASF-Conditions
-                                               -> ASF-Equations {cons("absent")} 
-    "equations" list:ASF-ConditionalEquation*  -> ASF-Equations {cons("present")}
-
-    "equations" list:ASF-ConditionalEquation* "tests" test-list:ASF-TestEquation* -> ASF-Equations {cons("present-with-tests")}
-
-    ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
-    ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
-    ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when")}
-
-    ASF-Tag ASF-Equation                            -> ASF-ConditionalEquation {cons("simple")}
-    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
-    ASF-Tag ASF-Equation "when" ASF-Conditions      -> ASF-ConditionalEquation {cons("when")}
-
-    "[" "]"           -> ASF-Tag {cons("empty")}
-    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
-
-module GEN-LexConsFuncs
-
-%% This module defines the syntax for 'lexical constructor functions'
-%% for each sort in an ASF+SDF specification. So in reality, this module
-%% is generated (hence the name "GEN-*").
-
-imports Characters
-
-exports
-  context-free syntax
-
-%% FOR EACH Sort in ASF+SDF SPEC DO
-%%   Tree := Sort;
-%%   term := tolower(Sort);
-%%   ADD PRODUCTIONS {
-
-       name:Tree "(" list:CHAR* ")" -> Tree {cons("lexical-constructor")}
-
-%%   }
-%% NEXT Sort
-
-  context-free syntax
-
-
-module GEN-Equations
-
-  %% This module defines the syntax for ASF equations and conditions for
-  %% each sort in an ASF+SDF specification. So in reality, this module is
-  %% generated (hence the name "GEN-*").
-
-imports GEN-LexConsFuncs Equations
-
-exports
-   context-free syntax
-
-%% FOR EACH Sort IN ASF+SDF SPEC DO
-%%   Tree := Sort;
-%%   ADD PRODUCTIONS {
-       lhs:Tree          "=" rhs:Tree -> ASF-Equation
-       lhs:Tree          "=" rhs:Tree -> ASF-Condition {cons("positive")}
-       lhs:Tree unequal:"!=" rhs:Tree -> ASF-Condition {cons("negative")}
-       lhs:Tree equal:"==" rhs:Tree -> ASF-Condition {cons("equality")}
-       lhs:Tree match:":=" rhs:Tree -> ASF-Condition {cons("match")}
-       lhs:Tree match:"!:=" rhs:Tree -> ASF-Condition {cons("no-match")}
-       "amb" "(" ambs:{Tree ","}* ")" -> Tree      {cons("ambiguity-constructor")}
-%%   }
-%% NEXT Sort
-   context-free syntax
-
-module Characters
+module languages/asf/syntax/Characters
 hiddens
   sorts CHAR
 exports
   lexical syntax
     [\"] value:~[\257] [\"] -> CHAR {cons("default")}
 
-module Main
-  imports GEN-Equations
+
+module languages/asf/syntax/Conditions
+
+exports
+   sorts ASF-Condition ASF-Conditions Tree
+
+   context-free syntax
+
+       lhs:Tree "=" rhs:Tree -> ASF-Condition {cons("positive")}
+       lhs:Tree unequal:"!=" rhs:Tree -> ASF-Condition {cons("negative")}
+       lhs:Tree equality:"==" rhs:Tree   -> ASF-Condition {cons("equality")}
+       lhs:Tree match:":=" rhs:Tree   -> ASF-Condition {cons("match")}
+       lhs:Tree match:"!:=" rhs:Tree  -> ASF-Condition {cons("no-match")}
+
+  context-free syntax
+
+       list:{ASF-Condition ","}+ -> ASF-Conditions
+
+module languages/asf/syntax/Constructors
+
+imports languages/asf/syntax/Characters
+exports
+sorts Tree
+
+context-free syntax
+
+       "amb" "(" ambs:{Tree ","}* ")" -> Tree {cons("ambiguity-constructor")}
+       name:Tree "(" list:CHAR* ")"   -> Tree {cons("lexical-constructor")}
+
+
+module languages/asf/syntax/Equations
+imports languages/asf/syntax/Conditions
+imports languages/asf/syntax/Tags
+exports
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation
+
+exports
+  lexical syntax
+    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
+  lexical restrictions
+    ASF-Implies -/- [\=]
+
+  context-free syntax
+
+    ASF-Tag ASF-Equation -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
+
+  context-free syntax
+
+    lhs:Tree "=" rhs:Tree -> ASF-Equation
+
+module languages/asf/syntax/Module
+
+imports languages/asf/syntax/Equations languages/asf/syntax/Tests languages/asf/syntax/Characters languages/asf/syntax/Constructors
+exports
+  sorts ASF-Module ASF-Section
+
+context-free syntax
+
+  list:ASF-Section* -> ASF-Module {cons("default")}
+
+  "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
+  "tests" test-list:ASF-TestEquation*           -> ASF-Section {cons("tests")}
+
+module languages/asf/syntax/Tags
+
+exports
+
+sorts ASF-TagId ASF-Tag
+
+lexical syntax
+
+    [A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("one-char")}
+    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("many-chars")}
+
+context-free syntax
+
+    "[" "]"           -> ASF-Tag {cons("empty")}
+    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
+
+module languages/asf/syntax/Tests
+
+imports languages/asf/syntax/Equations
+
+exports
+
+sorts ASF-TestEquation
+
+context-free syntax
+    ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
+    ASF-Tag ASF-Condition "when" ASF-Conditions  -> ASF-TestEquation {cons("when")}
 
