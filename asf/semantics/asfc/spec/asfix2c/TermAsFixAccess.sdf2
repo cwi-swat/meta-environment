@@ -91,4 +91,6 @@ hiddens
 hiddens
   priorities
     <<ATerm -CF> -VAR> -> <ATerm -CF> >
+    "Sort" -> <AFun -CF>,
+    <<ATerm -CF> -VAR> -> <ATerm -CF> >
     "Symbol" -> <AFun -CF>
