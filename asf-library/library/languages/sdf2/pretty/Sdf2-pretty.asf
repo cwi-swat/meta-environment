@@ -1,0 +1,86 @@
+equations
+
+[sdf-trafo-imports]
+  ImpSection*1 imports Import Import+ ImpSection*2  =
+  ImpSection*1 imports Import imports Import+ ImpSection*2
+
+[aterm2box-afun]
+  AFun ( ATerm+ ) = box2aterm(H hs=0 [afun2box(AFun)
+                                      "("
+                                      atermplist2box(ATerm+)
+                                      ")"
+                                     ])
+
+[attributes2box-0]
+  { Attribute* } = box2attributes(H hs=0 ["{"
+                                          attributeslist2box(Attribute*)
+                                          "}"
+                                         ])
+
+[grammar2box-sorts]
+  sorts Symbol+ = box2grammar(H hs=1 ["sorts" 
+                                      HVlist2box(Symbol+)
+                                     ])
+
+[grammar2box-lexical-syntax]
+  lexical syntax Productions = 
+    box2grammar(V vs=1 [H hs=1 ["lexical"
+                                "syntax"
+                               ]
+                        I [productions2box(Productions)]
+                       ])
+
+[grammar2box-context-free-syntax]
+  context-free syntax Productions = 
+    box2grammar(V vs=1 [H hs=1 ["context-free"
+                                "syntax"
+                               ]
+                        I [productions2box(Productions)]
+                       ])
+
+[grammar2box-variables]
+  variables Productions = 
+    box2grammar(V vs=1 ["variables"
+                        I [productions2box(Productions)]
+                       ])
+
+[grammar2box-lexical-variables]
+  lexical variables Productions = 
+    box2grammar(V vs=1 [H hs=1 ["lexical"
+                                "variables"
+                               ]
+                        I [productions2box(Productions)]
+                       ])
+
+[grammars2box-0]
+  Grammar1 Grammar2 = box2grammar(V vs=2 [grammar2box(Grammar1)
+                                          grammar2box(Grammar2)
+                                         ])
+
+[module2box-0]
+  module ModuleName ImpSection* Sections =
+    box2module(V vs=2 [H hs=1 ["module" 
+                               modulename2box(ModuleName)
+                              ]
+                       impsections2box(ImpSection*)
+                       sections2box(Sections)
+                      ])
+
+[priority2box-0]
+  Group+ = box2priority(Vlist2box(Group+))
+
+[production2box-0]
+  Symbol+ -> Symbol Attributes =
+    box2production(HOV hs=1 [HOVlist2box(Symbol+) 
+                             I [HV hs=1 ["->" 
+                                         symbol2box(Symbol)
+                                         attributes2box(Attributes)
+                                        ]
+                               ]
+                            ])
+
+[symbol2box-label]
+  Literal : Symbol = box2symbol(H hs=0 [literal2box(Literal)
+                                        ":"
+                                        symbol2box(Symbol)
+                                       ])
