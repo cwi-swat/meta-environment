@@ -19,17 +19,16 @@ Usage: $PRG -i <sdf2-specification> [options]
 
 Parameters:
  
-  -b | --bottom           generate bottom sorts only       [off]
-  -i | --input  <FILE>    specify input specification      [?]
-  -o | --output <STEM>    generate <STEM>.[ch] etc.        [improvised]
-  -P | --prefix <STR>     specify API-prefix               [""]
-  -e | --expand-cons      propagate cons-annotations       [on]
-  -r | --remove-cons      remove cons-annotations          [off]
-  -I | --imploded         create API for imploded terms    [off]
-  -C | --compat-term      generate old term conv. macros   [off]
-  -t | --no-timestamp     do not output timestamps         [off]
-  -v | --verbose          be verbose during generation     [off]
-  -h | --help             display this information
+  -b | --bottom		    generate CHARLIST sort only      [off]
+  -i | --input  <FILE>	    specify input specification      [?]
+  -o | --output <STEM>	    generate <STEM>.[ch] etc.        [improvised]
+  -P | --prefix <STR>	    specify API-prefix               [""]
+  -e | --expand-cons	    propagate cons-annotations       [on]
+  -r | --remove-cons	    remove cons-annotations          [off]
+  -I | --imploded	    create API for imploded terms    [off]
+  -C | --term-compatibility generate old term conv. macros   [off]
+  -v | --verbose	    be verbose during generation     [off]
+  -h | --help		    display this information
 
 Example: ${PRG} -r -i Booleans.sdf -p booleans
 
@@ -74,7 +73,6 @@ IMPLODEDOPT=""
 CONSOPT='-e'
 PREFIX=""
 COMPATTERMOPT=""
-TIMESTAMPOPT=""
 GENBOTTOMSORT=1
 
 # binaries
@@ -95,8 +93,8 @@ do
     -b | --bottom)
       ONLYBOTTOM=1;;
 
-    -C | --compat-term)
-      COMPATTERMOPT='-C';;
+    -C | --term-compatibility)
+      COMPATTERMOPT='--term-compatibility';;
 
     -e | --expand-cons)
       CONSOPT='-e';;
@@ -112,9 +110,6 @@ do
 
     -P | --prefix)
       shift; PREFIX=$1 ;;
-
-    -t | --no-timestamp)
-      TIMESTAMPOPT='-t';;
 
     -I | --imploded)
       IMPLODEDOPT='-I'
@@ -181,8 +176,11 @@ fi
 
 if [ ${ONLYBOTTOM} -eq 0 ]; then
   info " generating C from ADT "
-  ${ADTTOC} ${COMPATTERMOPT} ${TIMESTAMPOPT} ${VERBOSEOPT} \
-               -i ${OUTPUT}.adt -o ${OUTPUT} -P ${PREFIX} -p ${OUTPUT}.pro 
+  set -x
+  ${ADTTOC} ${COMPATTERMOPT} ${VERBOSEOPT} \
+               --input ${OUTPUT}.adt --prefix ${PREFIX} \
+	       --prologue ${OUTPUT}.pro \
+	       -n ${OUTPUT}
 fi
 
 # }}}

@@ -23,6 +23,8 @@ pkgdata_DATA= CHARLIST_String.java.template \
 bin_SCRIPTS = sdf2-to-adt sdf2-to-java sdf2-to-c 
 
 noinst_SCRIPTS = sdf2-to-adt.test sdf2-to-java.test sdf2-to-c.test
+
+CLEANFILES = ${bin_SCRIPTS} ${noinst_SCRIPTS}
 	    
 abs_top_srcdir = $(shell cd ${top_srcdir}; pwd)
 abs_top_builddir = $(shell cd ${top_builddir}; pwd)

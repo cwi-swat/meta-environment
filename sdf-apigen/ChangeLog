@@ -1,10 +1,18 @@
 # $Id$
 
+2003/12/02 (jurgenv@cwi.nl)
+ * Brought up-to-date with commandline options of version 1.8 of apigen
+ * Changed CHARLIST_String to charlist.Chars in Java and in C
+   CHARLISTString has become CHARLISTChars. This was inevitable due
+   to the renaming of CHARLIST_String to charlist.String which is not
+   allowed in Java.
+ * Bumped to version 2.0
+
 2003/11/20 (jurgenv@cwi.nl)
-* added support for parameterized modules. If a module is parameterized
-  and the parameterized sort is used in the left-hand side of a production
-  the sort name becomes a field of type <str> and the tree becomes a field
-  of type <term>
+ * added support for parameterized modules. If a module is parameterized
+   and the parameterized sort is used in the left-hand side of a production
+   the sort name becomes a field of type <str> and the tree becomes a field
+   of type <term>
 
 2003/11/09 (jurgenv@cwi.nl)
  * Made CHARLIST_String.java compatible with newest apigen code
@@ -19,7 +27,7 @@ Tue Sep  2 10:33:54 CEST 2003 <{jong,kooiker}@cwi.nl>
    - cleaned up some prints and added 'upgrade-adt' invocation
 
 2003/06/27 (jurgenv@cwi.nl)
- * Bumped to 1.7beta
+ * Bumped to 1.7
  * Added package definition file
 
 2003/06/25 (jurgenv@cwi.nl)

@@ -1,19 +1,15 @@
-#
-# vim:ts=8:sw=8:sts=0
-#
 # $Id$
-#
-include PeanoMakeRules.am
 
 SGLR			= ${SGLRBIN}/sglr
 SDF2TABLE		= ${PGENBIN}/sdf2table
 SDF2JAVA                = ${top_builddir}/utils/sdf2-to-java.test
 SDF2C                   = ${top_builddir}/utils/sdf2-to-c.test
 
-JTESTS			= PeanoTest
+JTESTS			= Peano
 TESTS			= booltest $(foreach j, ${JTESTS}, $j.java.test)
 check_PROGRAMS		= booltest
 
+Peano_Main = PeanoTest
 
 # C programs
 INCLUDES                = -I${ATERM}/include
@@ -22,26 +18,27 @@ booltest_LDADD		= -L$(ATERM)/lib -lATerm
 booltest_DEPENDENCIES	= booltest.pt
 
 # Java programs
-javadir = ${top_builddir}/test/classfiles
-JAVAROOT = ${top_builddir}
-CLASSPATH_ENV=CLASSPATH=${top_builddir}:${EXTERNAL_JARS}:${srcdir}/$(JAVAROOT)
-
-check_JAVA = ${PeanoAPI} PeanoTest.java
+JAVAC = javac
 
 CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
-			booltest.pt ${PeanoAPI} libBooleans.a Booleans_bottom.c\
- 			Peano.adt
+			booltest.pt libBooleans.a Booleans_bottom.c\
+ 			Peano.adt apigen.env ${TESTS} *.class *.pro
 
-EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf \
-			  PeanoMakeRules.am
+clean:
+	rm -rf peano
+
+EXTRA_DIST = \
+	$(wildcard *.trm) \
+	$(wildcard *.sdf) \
+	$(wildcard *.java)
 
 Booleans.c Booleans.h: Booleans.sdf 
 	${SDF2C} \
 		--input $< \
 		--prefix SDF \
-		--compat-term \
+		--term-compatibility \
 		--verbose
 
 booltest.pt: Booleans.trm.tbl booltest.trm 
@@ -50,16 +47,15 @@ booltest.pt: Booleans.trm.tbl booltest.trm
 %.trm.tbl: %.sdf
 	${SDF2TABLE} -m `basename $< .sdf` -i $< -o $@
 
-${PeanoAPI}: Peano.sdf
+%.java.test: %.sdf Makefile 
 	${SDF2JAVA} --input $< \
-                    --output ${top_builddir}/test \
-                    --package test \
-                    --name Peano \
+                    --output ${top_srcdir} \
+                    --name $* \
+		    --package test \
 		    --verbose
-	mv ${srcdir}/PeanoMakeRules ${srcdir}/PeanoMakeRules.am
-
-%.java.test: %.java Makefile
+	${JAVAC} -classpath ${top_srcdir}:${JAVA_ATERM} \
+		${top_srcdir}/test/$($*_Main).java
 	@(echo "#! /bin/sh";\
-          echo "CLASSPATH=${top_builddir}:${EXTERNAL_JARS}";\
+          echo "CLASSPATH=.:${top_srcdir}:${EXTERNAL_JARS}";\
           echo "export CLASSPATH";\
-          echo "java test.$*") > $@ && chmod +x $@
+          echo "java test.$($*_Main) ${top_srcdir}/test") > $@ && chmod +x $@

@@ -1,12 +1,12 @@
 __PACKAGEDECL__
 
-public class CHARLIST_String
-extends CHARLIST
+public class Chars
+extends __PACKAGE__.types.CHARLIST
 {
   static private aterm.ATerm pattern = null;
   static private aterm.ATerm listpattern = null;
 
-  protected CHARLIST_String(__NAME__Factory factory) {
+  protected Chars(__PACKAGE__.Factory factory) {
     super(factory);
   }
 
@@ -16,13 +16,13 @@ extends CHARLIST
   private static int index_string = 0;
 
   public shared.SharedObject duplicate() {
-    CHARLIST_String clone = new CHARLIST_String(factory);
+    Chars clone = new Chars(get__NAME__Factory());
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
-    return get__NAME__Factory().makeCHARLIST_String(fun, i_args, annos);
+    return get__NAME__Factory().makeCHARLIST_Chars(fun, i_args, annos);
   }
 
   public aterm.ATerm toTerm() {
@@ -32,7 +32,7 @@ extends CHARLIST
     return term;
   }
 
-  public boolean isString()
+  public boolean isChars()
   {
     return true;
   }
@@ -47,9 +47,9 @@ extends CHARLIST
    return ((aterm.ATermAppl) this.getArgument(index_string)).getAFun().getName();
   }
 
-  public CHARLIST setString(String _string)
+  public __PACKAGE__.types.CHARLIST setString(String _string)
   {
-    return (CHARLIST) this.setArgument(getFactory().makeAppl(getFactory().makeAFun(_string, 0, true)), index_string);
+    return (__PACKAGE__.types.CHARLIST) this.setArgument(getFactory().makeAppl(getFactory().makeAFun(_string, 0, true)), index_string);
   }
 
   private static String convertCharsToString(aterm.ATermList list) {

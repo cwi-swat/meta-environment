@@ -14,8 +14,6 @@ static void testBooleans(SDFBoolList l)
 
   true = SDFmakeBoolTrue();
 
-  /*ATfprintf(stderr, "l=%t\n", l);*/
-
   assert(SDFisValidBoolList(l));
   assert(SDFhasBoolListElems(l));
 
@@ -50,8 +48,6 @@ static void testBooleans(SDFBoolList l)
 
   assert(SDFhasBoolWsAfterAmp(b));
   layout = SDFgetBoolWsAfterAmp(b);
-  ATwarning("[%s]", SDFgetCHARLISTString(SDFgetOptLayoutChars(layout)));
-
   bool[1] = SDFmakeBoolOr(SDFmakeBoolAnd(true,layout,layout,SDFmakeBoolFalse()),
                           layout,layout,true);
   assert(ATisEqual(bool[0], bool[1]));

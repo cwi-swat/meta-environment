@@ -70,6 +70,25 @@ bail_out() {
 }
 
 # }}}
+# {{{  capitalize()
+
+capitalize() {
+  word=$*
+  firstLetter=${word:0:1}
+  tailWord=${word:1}
+
+  firstLetter=`echo ${firstLetter} | tr a-z A-Z`
+  echo "${firstLetter}${tailWord}"
+}
+
+# }}}
+# {{{  tolower()
+
+tolower() {
+  printf "$1" | tr A-Z a-z
+}
+
+# }}}
 
 # {{{  default settings
 
@@ -82,11 +101,11 @@ IMPLODEDOPT=""
 CONSOPT='-e'
 JTOMOPT=""
 JTOM=0
-FOLDINGOPT=""
 VISITABLEOPT=""
 GENBOTTOMSORT=1
 ONLYBOTTOM=0
 NAME=""
+VERSION="0.0.0"
 
 # binaries
 SDF2TOADT=${SDF2ADT}
@@ -108,9 +127,6 @@ do
     -b | --bottom)
       ONLYBOTTOM=1;;
 
-    -f | --folding)
-      FOLDINGOPT='-f';;
-
     -e | --expand-cons)
       CONSOPT='-e';;
 
@@ -127,14 +143,11 @@ do
       shift; OUTPUT=$1 ;;
 
     -p | --package)
-      shift; PACKAGE="-p $1" ;;
+      shift;
+      PACKAGE=`tolower $1` ;;
 
     -t | --visitable)
       VISITABLEOPT='-t' ;;
-
-    -j | --jtom)
-      JTOMOPT='-j'
-      JTOM=1 ;;
 
     -I | --imploded)
       IMPLODEDOPT='-I'
@@ -169,14 +182,18 @@ if [ "a${NAME}" = "a" ]; then
   NAME=${BASE}
 fi
 
+LOWERNAME=`tolower ${NAME}`
+CAPNAME=`capitalize ${NAME}`
+
 if [ "a${PACKAGE}" = "a" ]; then
   PACKAGEDECL=""
 else
-  PACKAGEDECL="package ${PACKAGE};"
+  PACKAGEDECL="package ${PACKAGE}.${LOWERNAME}.types.charlist;"
 fi
 
 # }}}
 # {{{  generate Java from SDF
+set -x
 info "Generating Java code in ${OUTPUT}/${PACKAGE} from ${INPUT}:"
 
 if [ ${ONLYBOTTOM} -eq 0 ]; then
@@ -188,17 +205,20 @@ info "Adding string support (?)"
 ${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
 
 info "Generating java from ADT "
-${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
-             -i ${BASE}.adt -o ${OUTPUT} ${PACKAGE} -n ${NAME}
+${ADTTOJAVA} ${VERBOSEOPT} ${VISITABLEOPT} \
+             --input ${BASE}.adt --output ${OUTPUT} \
+	     --package ${PACKAGE} -n ${NAME}
 fi
+
 
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
   info "Overwriting CHARLIST_String.java"
-  sed "s@__PACKAGE__@${PACKAGE}@g;\
-       s@__NAME__@${NAME}@g;\
+  sed "s@__PACKAGE__@${PACKAGE}.${LOWERNAME}@g;\
+       s@__NAME__@${CAPNAME}@g;\
+       s@__LOWERNAME__@${LOWERNAME}@g;\
        s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
        < ${PKGDATA}/CHARLIST_String.java.template \
-       > ${OUTPUT}/CHARLIST_String.java
+       > ${OUTPUT}/${PACKAGE}/${LOWERNAME}/types/charlist/Chars.java
 fi
 
 # }}}

@@ -3,15 +3,17 @@ package test;
 import aterm.*;
 import aterm.pure.*;
 import java.util.*;
+import test.peano.types.*;
+import test.peano.Factory;
 
 public class PeanoTest {
 
-  private PeanoFactory factory;
+  private Factory factory;
   private OptLayout e;
 
-  public PeanoTest(PeanoFactory factory) {
+  public PeanoTest(Factory factory) {
     this.factory = factory;
-    this.e = factory.makeOptLayout_Present(factory.makeCHARLIST_String(" "));
+    this.e = factory.makeOptLayout_Present(factory.makeCHARLIST_Chars(" "));
   }
 
   public Nat make(int n) {
@@ -44,7 +46,7 @@ public class PeanoTest {
   }
 
   public final static void main(String[] args) {
-    PeanoTest test = new PeanoTest(new PeanoFactory(new PureFactory()));
+    PeanoTest test = new PeanoTest(new Factory(new PureFactory()));
     test.run();
   }
 
