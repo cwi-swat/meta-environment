@@ -73,7 +73,7 @@ LIB_OBJECTS	= client.o sockets.o terms.o tool.o tool2.o utils.o symbol.o \
 		evq.o
 
 DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
-		viewer.tcl evq.c.nw
+		viewer.tcl
 
 BUILD_TARGETS	= libtb.a toolbus ctif script2latex verbatim ${SHARED_TB_LIB}
 TARGETS		= ${BUILD_TARGETS} logger.tcl viewer.tcl
@@ -127,10 +127,6 @@ tool.o:		toolbus.h terms.h utils.h tool.h tool.c
 tool2.o:	toolbus.h terms.h utils.h tool2.h tool2.c
 modtest.o:	modtest.c
 evq.o:		evq.c
-
-evq.c evq.h: evq.c.nw
-	$(NOWEB) evq.c.nw
-	touch evq.c evq.h
 
 y.tab.o: y.tab.c
 	${COMPILE} -DCPP='"$(CPP)"' y.tab.c
