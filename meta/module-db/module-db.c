@@ -30,7 +30,7 @@ static ATerm MDB_NONE;
 
 /*{{{  Forward declarations */
 
-static ATbool complete_asf_specification(ATermList visited, ATerm module);
+static ATbool all_rules_available(ATermList visited, ATerm module);
 static ATermList add_imports(ATerm name, ATermList mods, SDF_ImportList imports);
 static ATermList replace_imports(ATerm name, ATermList mods, SDF_ImportList imports);
 static ATermList modules_depend_on(ATerm name, ATermList mods);
@@ -269,7 +269,7 @@ ATerm get_all_equations(int cid, char *moduleName)
   
   name = ATmake("<str>", moduleName);
 
-  if (complete_asf_specification(ATempty, name)) {
+  if (all_rules_available(ATempty, name)) {
     result = ASF_makeTermFromCondEquationList(
                getEquations(SDFmakeImport(moduleName)));
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
@@ -1216,10 +1216,10 @@ is_valid_parse_table(ATermList visited, ATerm module,
 } 
 
 /*}}}  */
-/*{{{  ATbool complete_asf_specification(ATermList visited, ATerm module) */
+/*{{{  ATbool all_rules_available(ATermList visited, ATerm module) */
 
 static ATbool 
-complete_asf_specification(ATermList visited, ATerm module)
+all_rules_available(ATermList visited, ATerm module)
 {
   ATerm first;
   MDB_Entry entry;
@@ -1255,7 +1255,7 @@ complete_asf_specification(ATermList visited, ATerm module)
         while (!ATisEmpty(imports) && result) {
           first = ATgetFirst(imports);
 
-          result = complete_asf_specification(visited,first);
+          result = all_rules_available(visited,first);
           imports = ATgetNext(imports);
         }
         return result;
@@ -1276,7 +1276,7 @@ complete_asf_specification(ATermList visited, ATerm module)
 ATbool complete_asf_sdf2_specification(ATerm module)
 {
   if(complete_sdf2_specification(ATempty,module))
-    return complete_asf_specification(ATempty, module);
+    return all_rules_available(ATempty, module);
   else
     return ATfalse;
 }
