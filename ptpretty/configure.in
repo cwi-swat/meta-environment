@@ -43,4 +43,5 @@ dnl Which files need updating?
 AC_OUTPUT(
    Makefile
    src/Makefile 
+   src/examples/Makefile 
 )
