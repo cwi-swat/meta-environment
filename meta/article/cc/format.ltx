@@ -84,6 +84,8 @@ processing huge COBOL programs memory usage becomes a critical issue
 as well.  Other applications of \asdf\ include the development of a
 GLR parser generator \cite{Vis97}, an unparser generator \cite{BV96},
 and the compiler discussed in this paper.
+Other components, such as parsers, structure editors, and interpreters,
+are developed in \asdf\ as well but are not (yet) compiled to C.
 
 What are the performance standards one should strive for when writing
 a compiler for, in our case, an algebraic specification formalism?
@@ -208,6 +210,9 @@ generating C code.
 using only prefix notation.
 \muasf\ can be considered as the abstract syntax representation
 of \asdf.
+\asfix\ and \muasf\ live on different levels, \muasf\ is only visible
+within the compiler whereas \asfix\ serves as exchange format between
+the various components, such as structure editor, parser, and compiler.
 
 A module in \muasf\ consists of a module name, a list of functions, and
 a set of equations. The main differences
@@ -334,11 +339,19 @@ simplify code generation.
 In the last phase of the compilation process C code is generated which
 implements the rewrite rules in the specification using adaptations of
 known techniques~\cite{Kap87a,Dik:89}.  Care is taken in constructing
-the most efficient matching automaton, identifying common and reusable
+an efficient matching automaton, identifying common and reusable
 (sub)expressions, and efficiently implementing list matching.  For
 each \muasf\ function (even the constructors) a separate C function is
 generated. The right-hand side of an equation is directly translated
-to a function call, if necessary.
+to a function call, if necessary. A detailed description of the construction
+of the matching automaton is beyond the scope of this paper,
+a full description of the construction of the matching aoutmaton can
+be found in \cite{BHKO99}. 
+Each generated C function contains a small part of the matching automaton,
+so instead of building one big automaton, the automaton is split over
+the functions. The matching automaton respects the syntactic specificity
+of the arguments from left to right in the left-hand sides of the equations.
+Non-variable arguments are tried before the variable ones.
 
 The datatype {\tt ATerm} (for Annotated Term) is the most important
 datatype used in the generated C code. It is provided by a run-time
@@ -365,6 +378,9 @@ argument of the \texttt{and}-function is equal to the term
 argument \texttt{arg1} of the \texttt{and}-function is returned rather
 than building a new normal form for the term {\tt false} or calling
 the function {\tt false()}.
+The last statement in Figure~\ref{boolexmpl3} is necessary to catch the
+case that the first argument is neither a \texttt{true} or \texttt{false}
+symbol, but some other Boolean normal form.
 
 \begin{figure}
 \centerline{\fbox{
@@ -633,9 +649,8 @@ the sizes and the compilation times of a number of non-trivial \asdf\
 specifications are given in Table \ref{ASF2Ctable}.
 
 \begin{table}
-\begin{tabular}{|l|l|l|l|l|l|} \hline
-Specification      & Nr of  & Lines of & Lines of & \asdf    & C \\
-                 & eqs    & \asdf  & C code   & compiler   & compiler \\ \hline \hline
+\begin{tabular}{|l|r|r|r|r|r|} \hline
+Specification    & Nr of eqs & Lines of \asdf & Lines of C & \asdf\ compiler & C compiler\\ \hline \hline
 Compiler         & 1748   & 7972     & 75578    & 186 s  & 263 s \\ \hline
 Parser generator & 1365   & 4586     & 49649    & 203 s  & 168 s \\ \hline
 COBOL formatter  & 1857   & 8387     & 76788    & 371 s  & 339 s \\ \hline
@@ -728,8 +743,8 @@ whatsoever due to the use of maximal sharing, although it is also
 based on strict evaluation
 
 Execution times are plotted in Figure \ref{evalexp-tlog}.  Opal and
-Clean(lazy) are faster than \asdf\ but the differences are small.  The
-Haskell implementation is somewhat lagging behind.
+Clean (lazy) are faster than \asdf\ but the differences are small.  The
+Haskell implementation is a bit slower, but Elan is really lagging behind.
 
 \begin{figure}[tb]
   \centerline{\psfig{figure=evaltree-mlin.eps}}
