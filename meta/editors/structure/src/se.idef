@@ -52,7 +52,8 @@ in
       snd-msg(set-focus(EditorId, Focus))
       +
       rec-value(SE, no-such-editor(editorId))
-    )
+    ).
+    snd-msg(invalidation-done(EditorId))
   +
     rec-msg(set-current-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
