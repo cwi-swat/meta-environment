@@ -16,11 +16,115 @@
 
 static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols);
 
-/*{{{  static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes) */
 
+static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr)
+{
+  SDF_Attribute result;
+
+  if (PT_isAttrAssoc(ptAttr)) {
+    PT_Associativity ptAssoc = PT_getAttrAssoc(ptAttr);
+    SDF_Associativity sdfAssoc;
+
+    if (PT_isAssociativityLeft(ptAssoc)) {
+      sdfAssoc = SDF_makeAssociativityLeft();
+    }
+    else if (PT_isAssociativityRight(ptAssoc)) {
+      sdfAssoc = SDF_makeAssociativityRight();
+    }
+    else if (PT_isAssociativityAssoc(ptAssoc)) {
+      sdfAssoc = SDF_makeAssociativityAssoc();
+    }
+    else {
+      sdfAssoc = SDF_makeAssociativityNonAssoc();
+    }
+    result = SDF_makeAttributeAssoc(sdfAssoc);
+  }
+  else if (PT_isAttrTerm(ptAttr)) {
+    ATerm term = PT_getAttrTerm(ptAttr);
+    ATabort("Conversion of plain ATerm not yet implemented: %t\n", term);
+    result = NULL;
+  }
+  else if (PT_isAttrId(ptAttr)) {
+    char *str = PT_getAttrModuleName(ptAttr);
+    SDF_ModuleId sdfModuleId;
+    SDF_ModuleName sdfModuleName;
+
+    sdfModuleId = SDF_makeModuleIdWord(SDF_makeCHARLISTString(str));
+    sdfModuleName = SDF_makeModuleNameUnparameterized(sdfModuleId);
+
+    result = SDF_makeAttributeId(SDF_makeLayoutEmpty(),
+				 SDF_makeLayoutEmpty(),
+				 sdfModuleName,
+				 SDF_makeLayoutEmpty());
+  }
+  else if (PT_isAttrBracket(ptAttr)) {
+    result = SDF_makeAttributeBracket();
+  }
+  else if (PT_isAttrReject(ptAttr)) {
+    result = SDF_makeAttributeReject();
+  }
+  else if (PT_isAttrPrefer(ptAttr)) {
+    result = SDF_makeAttributePrefer();
+  }
+  else if (PT_isAttrAvoid(ptAttr)) {
+    result = SDF_makeAttributeAvoid();
+  }
+  else {
+    ATabort("Unsupported attribute: %t\n", ptAttr);
+    result = NULL;
+  }
+  return result;
+}
+
+/*{{{  static SDF_AttributeList PTAttrsToSDFAttributeList(PT_Attrs ptAttrs) */
+
+static SDF_AttributeList PTAttrsToSDFAttributeList(PT_Attrs ptAttrs)
+{
+  SDF_AttributeList result;
+  PT_Attr ptAttr;
+  SDF_Attribute sdfAttribute;
+
+  ptAttr = PT_getAttrsHead(ptAttrs);
+  sdfAttribute = PTAttrToSDFAttribute(ptAttr);
+
+  if (PT_isAttrsSingle(ptAttrs)) {
+    result = SDF_makeAttributeListSingle(sdfAttribute);
+  }
+  else {
+    PT_Attrs ptAttrsTail = PT_getAttrsTail(ptAttrs);
+    result = PTAttrsToSDFAttributeList(ptAttrsTail);
+
+    result = SDF_makeAttributeListMany(sdfAttribute,
+				       SDF_makeLayoutEmpty(),
+				       ",", /* FIXME in ApiGen!! */
+				       SDF_makeLayoutEmpty(),
+				       result);
+  }
+  return result;
+}
+
+/*}}}  */
+/*{{{  static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes) */
 static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes)
 {
-  return SDF_makeAttributesNoAttrs();
+  SDF_Attributes result;
+
+  if (PT_isAttributesNoAttrs(ptAttributes)) {
+    result = SDF_makeAttributesNoAttrs();
+  }
+  else {
+    PT_Attrs ptAttributeList;
+    SDF_AttributeList sdfAttributeList;
+
+    ptAttributeList = PT_getAttributesAttrs(ptAttributes);
+    sdfAttributeList = PTAttrsToSDFAttributeList(ptAttributeList);
+
+    result = SDF_makeAttributesAttrs(SDF_makeLayoutEmpty(),
+				     sdfAttributeList,
+				     SDF_makeLayoutEmpty());
+
+  }
+  return result;
 }
 
 /*}}}  */
@@ -243,8 +347,8 @@ SDF_Production PTProductionToSDFProduction(PT_Production ptProduction)
   PT_Attributes ptAttributes;
 
   SDF_Symbols sdfLhs;
-  SDF_Symbol sdfRhs = NULL;
-  SDF_Attributes sdfAttributes = NULL;
+  SDF_Symbol sdfRhs;
+  SDF_Attributes sdfAttributes;
 
   ptLhs = PT_getProductionLhs(ptProduction);
   sdfLhs = PTSymbolsToSDFSymbols(ptLhs);
