@@ -37,7 +37,7 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
 AC_SUBST(PT_SUPPORT)
 
 dnl Require error-support package 
-AC_PACKAGE_REQUIRE(error-support, error-support,
+AC_PACKAGE_REQUIRE(error-support, error-support-config,
    [  --with-error-support=DIR   error-support distribution is in DIR])
 AC_SUBST(ERROR_SUPPORT)
 
