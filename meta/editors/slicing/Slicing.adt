@@ -1,6 +1,0 @@
-[
-  constructor(Slice, default, slice(<category(str)>,<areas(Areas)>)),
-  list(Slices, Slice),
-  list(Areas, Area)
-]
-

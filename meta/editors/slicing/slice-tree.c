@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #include <MEPT-utils.h>
-#include "Slicing.h"
+#include <Location.h>
 
 static ATermTable slices;
 
@@ -61,22 +61,22 @@ static ATbool allAlphaNumeric(const char* str)
 static void storeTree(PT_Tree tree, const char *category)
 {
   ATerm key;
-  S_Areas slice;
+  LOC_AreaAreas slice;
   LOC_Location location;
 
   key = ATmake("<str>",category);
-  slice = S_AreasFromTerm(ATtableGet(slices, key));
+  slice = LOC_AreaAreasFromTerm(ATtableGet(slices, key));
 
   if (slice == NULL) {
-    slice = S_makeAreasEmpty();
+    slice = LOC_makeAreaAreasEmpty();
   }
 
   location = PT_getTreeLocation(tree);
   if (location != NULL && LOC_hasLocationArea(location)) {
     LOC_Area area = LOC_getLocationArea(location);
 
-    slice = S_makeAreasMany((S_Area) area, slice);
-    ATtablePut(slices, key, S_AreasToTerm(slice));
+    slice = LOC_makeAreaAreasMany((LOC_Area) area, slice);
+    ATtablePut(slices, key, LOC_AreaAreasToTerm(slice));
   }
 }
 
@@ -138,11 +138,11 @@ static void treeToSlices(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  S_Slices TreeToSyntaxSlices(PT_Tree tree)  */
+/*{{{  ATermList TreeToSyntaxSlices(PT_Tree tree)  */
 
-S_Slices TreeToSyntaxSlices(PT_Tree tree) 
+ATermList TreeToSyntaxSlices(PT_Tree tree) 
 {
-  S_Slices result = S_makeSlicesEmpty();
+  ATermList result = ATempty;
   ATermList keys;
 
   slices = ATtableCreate(1024, 75);
@@ -155,14 +155,15 @@ S_Slices TreeToSyntaxSlices(PT_Tree tree)
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
     const char* cat = ATgetName(ATgetAFun((ATermAppl) key));
-    S_Areas areas;
-    S_Slice slice; 
+    LOC_AreaAreas areas;
+    LOC_Slice slice; 
 
-    areas = S_AreasFromTerm(ATtableGet(slices, key));
+    areas = LOC_AreaAreasFromTerm(ATtableGet(slices, key));
 
-    slice = S_makeSliceDefault(cat, areas);
+    slice = LOC_makeSliceSlice(cat, areas);
 
-    result = S_makeSlicesMany(slice, result);
+    result = ATinsert(result, LOC_SliceToTerm(slice));
+
   }
 
   ATtableDestroy(slices);
