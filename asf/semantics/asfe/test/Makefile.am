@@ -24,8 +24,8 @@ SUBDIRS         = terms eqs ref fail
 
 TESTS           = prepare-restore-test  regress-test
 
-EXTRA_DIST      = reduce-test.sh.src prepare-restore-test.sh.src \
-                  reduce-test-1.tb reduce-test-2.tb regress-test.sh.src 
+EXTRA_DIST      = prepare-restore-test.sh.src \
+                  regress-test.sh.src 
 
 noinst_PROGRAMS = prepare-restore 
 
