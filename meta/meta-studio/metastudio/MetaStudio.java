@@ -83,8 +83,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private String currentModule;
   private ModuleManager moduleManager;
 
-  private GUIList messageList;  // Message list
-  private JFrame messageWindow;
+  private MessageList messageList;  // Message list
+  private MessageWindow messageWindow;
 
   //{{{ public static final void main(String[] args)
 
@@ -668,21 +668,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     // Message list
 
-    messageList = new GUIList(bridge, factory);
-	
-    JScrollPane messagePane = new JScrollPane(messageList);
-    JPanel messageMainPanel = new JPanel();
-    messageWindow = new JFrame("Message list");
-    Container messageContent = messageWindow.getContentPane();
-
-    messageMainPanel.setLayout(new BorderLayout());
-    messageMainPanel.setBorder(BorderFactory.createTitledBorder("Messages"));
-    messageMainPanel.add(messagePane, BorderLayout.CENTER);
-    messageContent.setLayout(new BorderLayout());
-    messageContent.add(messageMainPanel, BorderLayout.CENTER);
-
-    messageWindow.setSize(300,400);
-    //messageWindow.setVisible(true);
+    messageList = new MessageList(bridge, factory);
+    messageWindow = new MessageWindow(messageList);
 
     //}}}
   }

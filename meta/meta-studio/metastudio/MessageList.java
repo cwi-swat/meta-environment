@@ -6,7 +6,7 @@ import aterm.*;
 import java.util.*;
 import javax.swing.event.*;
 
-public class GUIList extends JScrollPane 
+public class MessageList extends JScrollPane 
 {
     public ATermList items;
     String[] items_strings;
@@ -16,9 +16,9 @@ public class GUIList extends JScrollPane
     {
 	UserInterfaceBridge bridge;
 	ATermFactory factory;
-	GUIList list;
+	MessageList list;
 
-	ListEventHandler(UserInterfaceBridge lvb, ATermFactory fac, GUIList gl)
+	ListEventHandler(UserInterfaceBridge lvb, ATermFactory fac, MessageList gl)
 	{
 	    bridge = lvb;
 	    factory = fac;
@@ -63,7 +63,7 @@ public class GUIList extends JScrollPane
 	}
     }
     
-    public GUIList(UserInterfaceBridge lvt, ATermFactory fac) 
+    public MessageList(UserInterfaceBridge lvt, ATermFactory fac) 
     {
 	view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	getViewport().setView(view);

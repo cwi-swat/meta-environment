@@ -43,4 +43,5 @@ java_JAVA = \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
-        GUIList.java
+        MessageWindow.java \
+	MessageList.java
