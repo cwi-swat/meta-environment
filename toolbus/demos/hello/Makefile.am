@@ -1,4 +1,3 @@
-#
 #    ToolBus -- The ToolBus Application Architecture
 #    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
 #                             The  Netherlands.
@@ -16,43 +15,38 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
-noinst_PROGRAMS   = hello hello-gen printer producer store
 
-EXTRA_DIST        = hello1.tb \
-                    hello2.tb \
-                    hello3.tb \
-                    hello.tcl \
-                    hello.perl \
-                    hello.pl \
-                    hello.pl.tb \
-                    pipe.tb \
-                    PC.tb producer.c store.c \
-                    hello.py hello2py.tb no-pl.sh \
-                    hello2java.tb Hello.java HelloTool.java
+noinst_PROGRAMS		= hello hello-gen printer producer store
 
-hello_SOURCES     = hello.c
-hello_LDADD       = -L$(ATERM)/lib -lATerm -lATB 
+EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
+			hello.pl hello.pl.tb pipe.tb PC.tb producer.c store.c \
+			hello.py hello2py.tb no-pl.sh hello2java.tb \
+			Hello.java HelloTool.java
 
-hello_gen_SOURCES = hello-gen.c hello.tif.c hello.tif.h
-hello_gen_LDADD   = -L$(ATERM)/lib -lATerm -lATB
+hello_SOURCES		= hello.c
+hello_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-printer_SOURCES   = printer.c
-printer_LDADD     = -L$(ATERM)/lib -lATerm -lATB
+hello_gen_SOURCES	= hello-gen.c hello.tif.c hello.tif.h
+hello_gen_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-producer_SOURCES  = producer.c
-producer_LDADD    = -L$(ATERM)/lib -lATerm -lATB
+printer_SOURCES		= printer.c
+printer_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-store_SOURCES     = store.c
-store_LDADD       = -L$(ATERM)/lib -lATerm -lATB
+producer_SOURCES	= producer.c
+producer_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-INCLUDES          = -I$(ATERM)/include -I.
+store_SOURCES		= store.c
+store_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-%.tif.c: hello2.tifs
-	$(ATERM)/bin/tifstoc -tool $* $<
+INCLUDES		= -I$(ATERM)/include
+
+%.tif.c %.tif.h: hello2.tifs
+	${top_builddir}/aterm/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	$(top_builddir)/toolbus/toolbus -gentifs $<
-	@if [ "a$(VPATH)" != "a" ]; then \
-	   mv $(srcdir)/$@ $@ ;\
-	fi
+	${top_builddir}/toolbus/toolbus -gentifs $<
