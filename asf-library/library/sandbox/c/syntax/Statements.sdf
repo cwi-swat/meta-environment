@@ -1,0 +1,38 @@
+module Statements
+exports
+  context-free syntax
+    LabeledStatement    -> Statement
+    CompoundStatement   -> Statement
+    ExpressionStatement -> Statement
+    SelectionStatement  -> Statement
+    IterationStatement  -> Statement
+    JumpStatement       -> Statement
+
+  context-free syntax
+    IdentifierOrTypedefName ":" Statement   -> LabeledStatement 
+    "case" Expression ":" Statement         -> LabeledStatement 
+    "default" ":" Statement                 -> LabeledStatement 
+
+  context-free syntax
+    "{" Declaration* Statement* "}" -> CompoundStatement 
+
+  context-free syntax
+    CommaExpressionOpt ";" -> ExpressionStatement 
+
+  context-free syntax
+    "if" "(" CommaExpression ")" Statement                  -> SelectionStatement 
+    "if" "(" CommaExpression ")" Statement "else" Statement -> SelectionStatement 
+    "switch" "(" CommaExpression ")" Statement              -> SelectionStatement 
+
+  context-free syntax
+    "while" "(" CommaExpression ")" Statement -> IterationStatement 
+    "do" Statement "while" "(" CommaExpression ")" ";" -> IterationStatement 
+    "for" "(" CommaExpressionOpt ";" CommaExpressionOpt ";" CommaExpressionOpt ")" Statement -> IterationStatement 
+
+  context-free syntax
+    "goto" IdentifierOrTypedefName ";" -> JumpStatement 
+    "continue" ";"                     -> JumpStatement 
+    "break" ";"                        -> JumpStatement 
+    "return" CommaExpressionOpt ";"    -> JumpStatement 
+    "exit" CommaExpressionOpt ";"      -> JumpStatement 
+

@@ -1,0 +1,16 @@
+module Program
+exports
+  sorts TranslationUnit
+
+  context-free syntax
+    ExternalDefinition+ -> TranslationUnit
+
+  context-free syntax
+    FunctionDefinition -> ExternalDefinition
+    Declaration        -> ExternalDefinition
+
+  context-free syntax
+    ( DeclarationSpecifier | TypeSpecifier | DeclarationQualifierList | TypeQualifierList )? 
+    IdentifierDeclarator | ( OldFunctionDeclarator Declaration* ) 
+    CompoundStatement -> FunctionDefinition 
+

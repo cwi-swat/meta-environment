@@ -1,0 +1,62 @@
+module Declarators
+exports
+  context-free syntax
+    IdentifierDeclarator -> Declarator
+    TypedefDeclarator    -> Declarator
+
+  context-free syntax
+    TypedefName                              -> TypedefDeclarator
+    TypedefName PostfixingAbstractDeclarator -> TypedefDeclarator 
+
+  context-free syntax
+    "*" TypedefDeclarator                   -> TypedefDeclarator 
+    "*" TypeQualifierList TypedefDeclarator -> TypedefDeclarator 
+
+  context-free syntax
+    "(" TypedefDeclarator ")" -> TypedefDeclarator {bracket}
+    "(" TypedefDeclarator ")" PostfixingAbstractDeclarator -> TypedefDeclarator 
+
+
+  context-free syntax
+    "*" TypeQualifierList? IdentifierDeclarator -> IdentifierDeclarator 
+
+  context-free syntax
+    IdentifierDeclarator PostfixingAbstractDeclarator -> IdentifierDeclarator 
+    "(" IdentifierDeclarator ")"  -> IdentifierDeclarator {bracket}
+    "(" IdentifierDeclarator ")" PostfixingAbstractDeclarator -> IdentifierDeclarator 
+
+  context-free syntax
+    IDENTIFIER -> IdentifierDeclarator
+
+  context-free syntax
+    PostfixOldFunctionDeclarator                 -> OldFunctionDeclarator
+    "*" TypeQualifierList? OldFunctionDeclarator -> OldFunctionDeclarator 
+
+  context-free syntax
+    IdentifierDeclarator "(" IdentifierList ")" -> PostfixOldFunctionDeclarator 
+    "(" OldFunctionDeclarator ")"               -> PostfixOldFunctionDeclarator 
+    "(" OldFunctionDeclarator ")" PostfixingAbstractDeclarator -> PostfixOldFunctionDeclarator 
+
+  context-free syntax
+    UnaryAbstractDeclarator      -> AbstractDeclarator
+    PostfixAbstractDeclarator    -> AbstractDeclarator
+    PostfixingAbstractDeclarator -> AbstractDeclarator
+
+  context-free syntax
+    ArrayAbstractDeclarator    -> PostfixingAbstractDeclarator
+    "(" ParameterTypeList? ")" -> PostfixingAbstractDeclarator 
+
+  context-free syntax
+    ArrayAbstractDeclarator? "[" Expression? "]" -> ArrayAbstractDeclarator 
+
+  context-free syntax
+    "*" TypeQualifierList? AbstractDeclarator? -> UnaryAbstractDeclarator 
+
+  context-free syntax
+    "(" UnaryAbstractDeclarator ")"   -> PostfixAbstractDeclarator {bracket}
+    "(" PostfixAbstractDeclarator ")" -> PostfixAbstractDeclarator {bracket}
+    "(" PostfixingAbstractDeclarator ")" -> PostfixAbstractDeclarator {bracket}
+    "(" UnaryAbstractDeclarator ")" PostfixingAbstractDeclarator -> PostfixAbstractDeclarator {bracket}
+
+
+    

@@ -1,0 +1,95 @@
+module Expressions
+exports
+sorts Expression
+  context-free syntax
+    INTEGERconstant   -> Constant
+    FLOATINGconstant  -> Constant
+    OCTALconstant     -> Constant
+    HEXconstant       -> Constant
+    CHARACTERconstant -> Constant
+
+  context-free syntax
+    STRINGliteral+ -> StringLiteralList
+
+  context-free syntax
+    IDENTIFIER                 -> Expression 
+    Constant                   -> Expression
+    StringLiteralList          -> Expression 
+    "(" CommaExpressionOpt ")" -> Expression {bracket}
+
+
+  context-free syntax
+    Expression "[" Expression "]"             -> Expression
+    Expression "(" ExpressionList ")"         -> Expression
+    Expression "." | "->" MemberName          -> Expression
+    Expression "++" | "--"                    -> Expression
+
+  aliases
+    IDENTIFIER         -> MemberName
+    {Expression ","}*  -> ExpressionList
+
+  context-free syntax
+    "++" | "--" | "sizeof"  Expression -> Expression 
+    "sizeof" "(" TypeName ")"          -> Expression 
+    "&" | "*" | "+" | "-" | "~" | "!" Expression -> Expression 
+    "(" TypeName ")" Expression -> Expression 
+    Expression "*" | "/" | "%" Expression -> Expression {left}
+    Expression "+" |  "-" Expression -> Expression {left}
+    Expression "<<" | ">>" Expression -> Expression {left}
+    Expression "<" | ">" | "<=" | ">=" Expression -> Expression {left}
+    Expression "==" |  "!=" Expression -> Expression {left}
+    Expression "&" Expression -> Expression {left}
+    Expression "^" Expression -> Expression {left}
+    Expression "|" Expression -> Expression {left}
+    Expression "&&" Expression -> Expression {left}
+    Expression "||" Expression -> Expression {left}
+    Expression "?" Expression ":" Expression -> Expression {right}
+    Expression  "="  | "*="  | "/="  |
+                     "%="  | "+="  | "-="  |
+                     "<<=" | ">>=" | "&="  |
+                     "^="  | "|="  Expression -> Expression {left}
+  context-free syntax
+    {Expression ","}* -> CommaExpressionOpt
+    {Expression ","}+ -> CommaExpression
+
+context-free priorities
+{
+Expression "[" Expression "]"             -> Expression
+Expression "(" ExpressionList ")"         -> Expression
+Expression "." | "->" MemberName          -> Expression
+Expression "++" | "--"                    -> Expression } >
+
+Expression  "="  | "*="  | "/="  |
+		 "%="  | "+="  | "-="  |
+		 "<<=" | ">>=" | "&="  |
+		 "^="  | "|="  Expression -> Expression {left}
+
+context-free priorities
+
+{
+Expression "[" Expression "]"             -> Expression
+Expression "(" ExpressionList ")"      -> Expression
+Expression "." | "->" MemberName          -> Expression
+Expression "++" | "--"                    -> Expression } >
+
+{
+"++" | "--" | "sizeof"  Expression -> Expression 
+"sizeof" "(" TypeName ")"          -> Expression 
+"&" | "*" | "+" | "-" | "~" | "!" Expression -> Expression } >
+
+"(" TypeName ")" Expression -> Expression >
+Expression "*" | "/" | "%" Expression -> Expression {left} >
+Expression "+" |  "-" Expression -> Expression {left} >
+Expression "<<" | ">>" Expression -> Expression {left} >
+Expression "<" | ">" | "<=" | ">=" Expression -> Expression {left} >
+Expression "==" |  "!=" Expression -> Expression {left} >
+Expression "&" Expression -> Expression {left} >
+Expression "^" Expression -> Expression {left} >
+Expression "|" Expression -> Expression {left} >
+Expression "&&" Expression -> Expression {left} >
+Expression "||" Expression -> Expression {left} >
+Expression "?" Expression ":" Expression -> Expression {right} >
+Expression  "="  | "*="  | "/="  |
+		 "%="  | "+="  | "-="  |
+		 "<<=" | ">>=" | "&="  |
+		 "^="  | "|="  Expression -> Expression {left}
