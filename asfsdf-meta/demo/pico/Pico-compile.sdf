@@ -8,7 +8,8 @@ exports
     trp( PROGRAM ) -> Instrs
   
 hiddens
-  sorts <{Instr ";"}+ , Label>
+  context-free start-symbols
+    <{Instr ";"}+ , Label>
   context-free syntax
     trd(DECLS)                    -> {Instr ";"}+
     trits({ID-TYPE  ","}*)        -> {Instr ";"}+ 
