@@ -1,18 +1,20 @@
 package metastudio.components.graphs;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.ImageObserver;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
@@ -35,7 +37,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
     private JSlider slider;
     private MetaGraphFactory factory;
     private JViewport view;
-    private JPanel zoomToFit;
+    private JButton zoomToFit;
 
     public ZoomableGraphPanel(
         MetaGraphFactory factory,
@@ -66,10 +68,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
         
         sliderPanel.add(slider, BorderLayout.CENTER);
         
-        zoomToFit = new JPanel();
-        zoomToFit.setBorder(new LineBorder(Color.black));
-        zoomToFit.setAlignmentY(slider.getAlignmentY());
-        zoomToFit.setBackground(Preferences.getColor("graph.background"));
+        zoomToFit = new JButton("Z");
         zoomToFit.addMouseListener(new MouseInputAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int scale = graphPanel.getZoomToFitFactor(view.getVisibleRect());
@@ -77,6 +76,9 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
             }
         });
         zoomToFit.setToolTipText("Zoom to fit");
+        zoomToFit.setMinimumSize(new Dimension(ImageObserver.HEIGHT,ImageObserver.HEIGHT));
+        zoomToFit.setMaximumSize(new Dimension(ImageObserver.HEIGHT,ImageObserver.HEIGHT));
+        zoomToFit.setMargin(new Insets(0,0,0,0));
         sliderPanel.add(zoomToFit, BorderLayout.SOUTH);
         
         add(sliderPanel, BorderLayout.WEST);
