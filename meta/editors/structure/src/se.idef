@@ -61,9 +61,10 @@ in
     rec-value(SE, focus(Focus?)) .  
     snd-note(set-focus(EditorId, Focus)) 
   +
-    rec-msg(set-focus-at-posinfo(EditorId?, PosInfo?)) .
+    rec-msg(goto-focus-at-posinfo(EditorId?, PosInfo?)) .
     snd-eval(SE, get-focus-at-posinfo(EditorId, PosInfo)) .
     rec-value(SE, focus(Focus?)) .  
+    snd-note(goto-focus(EditorId, Focus)) .
     snd-note(set-focus(EditorId, Focus)) 
   +
     rec-msg(get-tree(EditorId?)) .
