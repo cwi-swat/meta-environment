@@ -175,21 +175,27 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-v       : toggle verbose mode                  [%s]\n"
               "\t-V       : reveal program version (i.e. %s)\n",
 #if !defined(NO_A2TOA1)
-              DEFAULTMODE(asfix1flag), DEFAULTMODE(!asfix1flag),
+              DEFAULTMODE(asfix1flag), 
+							DEFAULTMODE(!asfix1flag),
 #endif
-              DEFAULTMODE(binaryflag), DEFAULTMODE(cycleflag),
-              DEFAULTMODE(debugflag), dotoutput ? dotoutput : "<off>",
+              DEFAULTMODE(binaryflag), 
+							DEFAULTMODE(cycleflag),
+              DEFAULTMODE(debugflag), 
               DEFAULTMODE(filterflag),
 #if !defined(HAVE_BOEHMGC)
               DEFAULTMODE(gcflag),
 #endif
-              input_file_name, DEFAULTMODE(statisticsflag),
-              DEFAULTMODE(!outputflag), output_file_name,
-              parse_table_name?parse_table_name:"<unspecified>",
+              input_file_name, 
+							DEFAULTMODE(statisticsflag),
+              DEFAULTMODE(outputflag), 
+							output_file_name,
+              parse_table_name?parse_table_name:"unspecified",
               DEFAULTMODE(posinfoflag),
-              start_symbol?start_symbol:"<any>", stackoutput?stackoutput:"<off>",
-              DEFAULTMODE(!binaryflag), DEFAULTMODE(verboseflag),
-              VERSION, DEFAULTMODE(!supplexflag),DEFAULTMODE(printprodsflag)
+              start_symbol ? start_symbol:"any", 
+							stackoutput ? stackoutput : "off",
+              DEFAULTMODE(!binaryflag),
+							DEFAULTMODE(verboseflag),
+              VERSION
     );
   }
 }
