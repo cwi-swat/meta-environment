@@ -8,6 +8,9 @@
    as meta-studio, the standalone dumpers and the standalone editors
  * Renamed ToolBus files for the standalone tools! See asfsdf-meta/src for 
    examples on how to use them.
+ * Reactivated invalidation of asf-trees and parsetables 
+   (not working correctly yet)
+ 
 
 2003/05/27 (markvdb@cwi.nl)
  * Imports are filtered against the contents of the term-store.
