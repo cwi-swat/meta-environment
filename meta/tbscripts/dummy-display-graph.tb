@@ -1,0 +1,10 @@
+process DummyDisplayGraph is
+let
+  Graph : term,
+  Type : str
+in
+  (
+    rec-msg(display-graph(Type?, Graph?)) .
+    snd-note(ui-status(error("Display of graphs is not possible without the graphical interface\n")))
+  ) * delta
+endlet

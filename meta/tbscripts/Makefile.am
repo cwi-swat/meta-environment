@@ -29,6 +29,7 @@ TBSCRIPTS = \
   start-meta-eqs-dumper.tb \
   start-meta-pt-dumper.tb \
   start-meta-studio.tb \
+  dummy-display-graph.tb \
   status.tb \
   button-actions.tb
   

@@ -1,5 +1,6 @@
 #include "meta.tb"
 #include "status.tb"
+#include "dummy-display-graph.tb"
 
 process StandAloneEquationsEditor is
 let
@@ -19,9 +20,9 @@ in
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(edit-equations(MODULENAME)) .
-  rec-msg(edit-equations(ModuleName?, EditorId?)) .
+  rec-msg(editor-opened(ModuleName?, EditorId?)) .
   rec-note(delete-editor(EditorId)) .
   shutdown("")
 endlet   
 
-toolbus(StandAloneEquationsEditor)
+toolbus(StandAloneEquationsEditor, DummyDisplayGraph)

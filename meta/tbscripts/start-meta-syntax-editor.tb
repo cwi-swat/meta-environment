@@ -1,5 +1,6 @@
 #include "meta.tb"
 #include "status.tb"
+#include "dummy-display-graph.tb"
 
 process StandAloneSyntaxEditor is
 let
@@ -19,10 +20,9 @@ in
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(edit-syntax(MODULENAME)) .
-  rec-msg(edit-syntax(ModuleName?, EditorId?)) .
+  rec-msg(editor-opened(ModuleName?, EditorId?)) .
   rec-note(delete-editor(EditorId)) .
   shutdown("")
-
 endlet   
 
-toolbus(StandAloneSyntaxEditor)
+toolbus(StandAloneSyntaxEditor, DummyDisplayGraph)

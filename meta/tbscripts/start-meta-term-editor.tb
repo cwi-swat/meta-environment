@@ -1,5 +1,6 @@
 #include "meta.tb"
 #include "status.tb"
+#include "dummy-display-graph.tb"
 
 process StandAloneAsfEditor is
 let
@@ -20,10 +21,9 @@ in
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(edit-term-file(MODULENAME,INFILENAME)) .
-  rec-msg(edit-term-file(ModuleName?, EditorId?)) .
+  rec-msg(editor-opened(ModuleName?, EditorId?)) .
   rec-note(delete-editor(EditorId)) .
   shutdown("")
+endlet
 
-endlet   
-
-toolbus(StandAloneAsfEditor)
+toolbus(StandAloneAsfEditor, DummyDisplayGraph)
