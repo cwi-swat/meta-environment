@@ -1,5 +1,0 @@
-equations
-
-
-  [1] natcon("0" c+) = natcon(c+)
-  
