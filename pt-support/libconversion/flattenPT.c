@@ -381,11 +381,11 @@ static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
           PT_prodHasCfLayoutAsRhs(prod)) {
         tail = flattenLayoutList(PT_reverseArgs(list), tail);
       }
-/*
+
       else if (isCharClassListProd(prod)) {
         tail = flattenCharClassList(arg, tail);
       }
-*/
+
       else {
         PT_Tree newArg = flattenTerm(arg, ATfalse);
         if (newArg) {
@@ -475,6 +475,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
     ATerror("flattenTerm: not an appl pattern: %t\n", tree);
     return (PT_Tree)NULL;
   }
+
   prod = PT_getTreeProd(tree);
   args = PT_getTreeArgs(tree);
 
