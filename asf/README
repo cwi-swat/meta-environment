@@ -5,103 +5,31 @@ ASF rewriting engines
 This package contains the implementation of the rewriting language ASF. ASF
 rewrites terms in user-defined syntax.
 
-The following tools are provided: 
-
-addeqssyntax    - add ASF syntax to the user-defined term syntax for parsing                       equations. 
-removevarsyntax - removes variables syntax to obtain efficient parsetables for 
-                  parsing closed terms.
-asfe            - an interpreter for ASF specifications.
-asfc            - a compiler for ASF specifications to C programs.
-genmakefile     - a tool that generates Makefiles or Makefile.in's for compiled 
-                  specifications.
-genamakefile    - a tool that generates Makefile.am's for compiled 
-                  specifications. 
-
-These tools have a standalone interface that read and writes from files, but
-addeqssyntax, removevarsyntax, asfe and asfc also have a ToolBus interface.
-	    
 Installation Instructions
 =========================
 
-1) Required packages.
+1) Configuring
 
-   The ASF rewriting engines requires the following packages:
+   Type ./configure --help to find out which packages are needed.
+   Use the --with-<package>=/location/of/package switches to specify
+   where they are located.
 
-   -GNU make, available from:
-       www.gnu.org
+   If you do not provide the switches and the packages are in your PATH, 
+   ./configure will automatically locate them.
 
-   -The ATerm library, available from:
-       www.cwi.nl/projects/MetaEnv/
+   The typical configure command:
+   > ./configure --prefix=/usr/local
 
-   -The pt-support library, available from:
-       www.cwi.nl/projects/MetaEnv/
+3) Building the package
 
-   -The sdf-support library, available from:
-       www.cwi.nl/projects/MetaEnv/
+   > gmake
+   > gmake install
 
-   -The asf-support library, available from:
-       www.cwi.nl/projects/MetaEnv/
+4) Testing the package
 
-   -The ASF+SDF compiler runtime library, available from:
-       www.cwi.nl/projects/MetaEnv/
-
-   Before building the ASF rewriting engines, you should first install these
-   packages.
-
-2) Configuring the ASF rewriting engines.
-
-   Assuming that the aterm library, the support libraries and the runtime 
-   library, are installed in <aterm>,  <pt-support>, <sdf-support>, 
-   <asf-support>, and  <asc-support> respectively and that the ASF rewriting 
-   engines should be installed in <asf> then the following command will 
-   configure the rewriting engines accordingly:
-
-   ./configure --prefix=<asf> \
-               --with-aterm=<aterm> \
-               --with-pt-support=<pt-support> \
-               --with-sdf-support=<sdf-support> \
-               --with-asf-support=<asf-support> \
-               --with-asc-support=<asc-support> 
-
-   Note. Default behaviour of configure is that it will look for libraries
-         in <prefix>/lib and for executables in your search paths. So,
-         you do not need to specify the locations of all these packages
-         explicitly (as we did in the example above).
-
-   Note. The extra configuration flag --with-traversals activates new ASF
-         functionality in the ASF evaluator, but not in the ASF compiler.
- 
-   If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
-   different options use --with-cflags="<options>" when you run configure.
-
-   ./configure --help gives a detailed list of configuration options.       
-
-3) Building the ASF rewriting engines.
-
-   Assuming that GNU make is called "gmake" on your system then the
-   following commands will build and install the ASF rewriting engines:
-
-   gmake
-   gmake install
-
-4) Checking the ASF rewriting engines.
-
-   The ASF rewriting engines can be tested via:
-
-   gmake check
+   > gmake check
 
 5) Bug reporting and support.
 
-   Please report bugs via:
-
-   http://www.cwi.nl/htbin/MetaEnv/meta-bugs
-
-   This is the general bug reporting page of the ASF rewriting engines.
-
-   Support can be obtained via:
-
-   meta-support@cwi.nl
-
-6) Known bugs.
-
-   None.  
+   mailto:meta-support@cwi.nl
+   http://www.cwi.nl/projects/MetaEnv
