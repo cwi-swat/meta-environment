@@ -80,7 +80,7 @@ The core of the second and third sub library are generated via
 the API-GEN tooling \cite{JO01} given the annotated \sdf\
 definitions of \sdf\ and \asf. They provided type-safe manipulation
 of parse trees. On top of this core functionality more sophisticated
-functionality has been implemented, e.g. retrieval of imported modules,
+functionality has been implemented, e.g.\ retrieval of imported modules,
 etc.
 The parse tree library is discussed in more detail in Section \ref{ptlib}.
 
@@ -88,10 +88,99 @@ The parse tree library is discussed in more detail in Section \ref{ptlib}.
 \label{asfix2me}
 
 We will describe the \asmetaenv\ variant of \asfix\ in more detail.
-We will motivate why we want this ``diversion'' and at which points
+In Appendix \ref{app:motivation} we motivate why we ``diverse''
+and in Appendix \ref{app:differences} we discuss at which points 
 the \asmetaenv\ variant differs from plain \asfix.
 
-\subsection{Motivation}
+Based on the \aterm\ format the {\sc AsFix} family has been developed.
+So, every \asfixme\ term is also an \aterm.
+This library tries to shield the \aterm\ functionality from the user.
+Discussing the details of the \asfixme\ format will reveal some
+of the \aterm\ details. 
+There is a strong relation between \asfix/\asfixme\ and \sdf2.
+So, in order to understand design decisions we have to present
+\sdf2 details as well.
+
+In \cite{Vis97} the \sdf2 definition is presented. There are versions
+of this \sdf2 definition which are decorated with so-called constructor
+attributes. Some of these attributes are used in the parse tree to
+classify the type of nodes. Consider the \sdf2 definition of the
+production rule:
+
+\begin{verbatim}
+Symbols "->" Symbol Attributes {cons{"prod"}}
+\end{verbatim}
+This {\tt prod} is used int the parse tree to mark nodes which represent
+the production rules.
+
+Finally, \asfix\ as well as \asfixme\ represent full parse trees including
+all literals and {\em all} layout originally available in the parsed text.
+
+\subsection{Basic tree nodes}
+
+There are only 4 different type of nodes in the parse tree.
+\begin{itemize}
+
+\item The first type of nodes contain the characters, they represented 
+by their decimal representation, e.g.\ {\tt '101'}. For sake of readability
+we will use the string representation of the characters instead
+of the decimal representation, so {\tt "e"} instead of {\tt '101'}.
+There are no access/con\-struc\-tor functions related to this type of node.
+
+\item The second category of nodes represent the literals,
+e.g.\ {\tt lit("begin")}.
+The literal itself is represented by a plain string.
+The following access/con\-struc\-tor functions are available:
+\begin{description}
+\item[{\tt PT\_isLiteral}] to check whether a node is a literal node.
+\item[{\tt PT\_getLiteralString}] to obtain the string of the literal.
+\item[{\tt PT\_makeLiteral}] to create a literal node given a string.
+\end{description}
+
+\item The third category is the most important category of nodes,
+it represents all non-leaf nodes in the tree. They are the so-called
+application nodes {\tt appl(<term>,<term>)}, where the first argument
+represents a production rule and the second argument is the list of
+argument nodes which have a one-to-one correspondence with the
+number of arguments in the left-hand side of the production rule
+in the first argurment.
+The following access/con\-struc\-tor functions are available:
+\begin{description}
+\item[{\tt PT\_isApplNode}] to check whether a node is an application node.
+\item[{\tt PT\_getApplProd}] to obtain the production rule of an application.
+\item[{\tt PT\_getApplArgs}] to obtain the arguments of an application.
+\item[{\tt PT\_makeApplNode}] to create an application node given
+a production rule and a list of arguments.
+\end{description}
+
+\item The fourth category of nodes are the so-called flat-layout nodes, they
+represent the layout in the parsed text. 
+These nodes are a bit strange because the arguments of these nodes
+can be any of the previously described catogories,
+e.g.\
+{\tt layout([" ","}$\backslash${\tt n",lit("\%\%")," ","}$\backslash${\tt n"])}
+is a legal flat-layout node.
+
+\end{itemize}
+
+These four categories of nodes allows us to represent any parse tree
+we want.
+
+\subsection{Production rule nodes}
+
+We will now describe the \asfix/\asfixme\ representation of production
+rules, but before we dive into the details we have to explain some
+\sdf2 and \kernelsdf\ details in order to understand the various
+categories of nodes that are used ot represent the production rules.
+\section{Library interface}
+\label{ptlib}
+
+\bibliographystyle{alpha}
+\bibliography{PTdoc}
+
+\appendix
+\section{Motivation}
+\label{app:motivation}
 
 Why has the \asmetaenv\ its own variant of \asfix?
 Over the last 4 years we have been experimenting with various versions
@@ -111,7 +200,7 @@ binary encoded terms, so the issue of size and redundancy are
 solved by the underlying library.
 
 The syntax definition formalism \sdf2 supports lists to describe
-the repetition of language constructs, e.g. {\tt A+} (non-empty lists without
+the repetition of language constructs, e.g.\ {\tt A+} (non-empty lists without
 separators) or {\tt \{A ","\}*} (lists with separators).
 In the mapping from \sdf2 to \kernelsdf\ this list constructs
 are transformed into ordinary production rules of
@@ -130,7 +219,8 @@ The nested unflattened tree structures are transformed into
 flat lists. In the next section we will describe the differences
 in more detail.
 
-\subsection{Differences in representation}
+\section{Differences in representation}
+\label{app:differences}
 
 \paragraph{Implosion of literals}
 The literals in \asfix\ are represented as a tree consisting of
@@ -216,6 +306,46 @@ appl(
 \end{verbatim}
 
 \paragraph{Flattening of lexicals}
+At the lowest level lexicals are constructed by lists of characters
+from the defining character classes of the lexical. If the character
+class was an iterated one the list of character classes is treated
+in the same way as ordinary lists, e.g.
+\begin{verbatim}
+appl(
+ prod([char-class([range(97,122)]),
+       lex(iter-star(char-class([range(48,57),range(97,122)])))],
+      lex(sort("Elem")),attrs([id("TestSet")])),
+ ["a",
+  appl(
+   prod([lex(iter(char-class([range(48,57),range(97,122)])))],
+        lex(iter-star(char-class([range(48,57),range(97,122)]))),
+        no-attrs),
+   [appl(
+     prod([lex(iter(char-class([range(48,57),range(97,122)]))),
+           lex(iter(char-class([range(48,57),range(97,122)])))],
+          lex(iter(char-class([range(48,57),range(97,122)]))),
+          attrs([atr("left")])),
+    [appl(
+      prod([char-class([range(48,57),range(97,122)])],
+           lex(iter(char-class([range(48,57),range(97,122)]))),
+           no-attrs),
+      ["b"]),
+     appl(
+      prod([char-class([range(48,57),range(97,122)])],
+           lex(iter(char-class([range(48,57),range(97,122)]))),
+           no-attrs),
+      ["c"])])])])
+\end{verbatim}
+
+In \asfixme\ this subtree will have the following form:
+\begin{verbatim}
+appl(
+ prod([char-class([range(97,122)]),
+       lex(iter-star(char-class([range(48,57),range(97,122)])))],
+      lex(sort("Elem")),attrs([id("TestSet")])),    
+ ["a",["b","c"]])
+\end{verbatim} 
+
 \paragraph{Flattening of layout}
 
 \subsection{Conversion Tooling}
@@ -231,10 +361,4 @@ constructors, with/without flattened lexicals, etc.
 term, this function is only available for migration purposes and
 will certainly disappear in the (near) future.
 \end{description}
-\section{Library interface}
-\label{ptlib}
-
-\bibliographystyle{alpha}
-\bibliography{PTdoc}
-
 \end{document}
