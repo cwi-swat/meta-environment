@@ -1,11 +1,13 @@
 # $Id$
 
-2003/07/01 (jurgenv@cwi.nl)
+2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
    of the term-store.
 
 2003/07/01 (jurgenv@cwi.nl)
  * Added ATBpack to get-parsetree of structure editor
+ * Get all equations does not use all sdf modules anymore, only those
+   imported by the module that the equations are requested for.
 
 2003/06/27 (jurgenv@cwi.nl)
  * Added a library for creating snapshots of the term-store
