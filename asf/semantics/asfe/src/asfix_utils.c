@@ -56,9 +56,9 @@ extern ATerm tagCurrentRule;
 
 ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 {
-	/*	ATwarning("COMPARING IN %t:\n%t\nWITH\n%t\n",asource(tagCurrentRule),
-			asource(asfix1),asource(asfix2));
-	 */
+	if(asfix_is_whitespace(asfix1) && asfix_is_whitespace(asfix2))
+		ATwarning("COMPARING\n%t\nWITH\n%t\n", asfix1,asfix2);
+	 
 
 	if(!ATisEqual(asfix1, asfix2)) {
 		if(asfix_is_appl(asfix1) && asfix_is_appl(asfix2)) {
