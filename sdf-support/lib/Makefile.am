@@ -34,13 +34,15 @@ UTILSRCS = \
 	import-operations.c \
 	sort.c 
 
-LIBRARY = ../../asf-library/library/languages
-ATERM_SDF = $(shell ls ${LIBRARY}/aterm/syntax/*.sdf)
-SDF2_SDF = $(shell ls ${LIBRARY}/sdf2/syntax/*.sdf)
+LIBRARY = ../../asf-library/library
+ATERM_SDF = $(shell ls ${LIBRARY}/languages/aterm/syntax/*.sdf)
+SDF2_SDF = $(shell ls ${LIBRARY}/languages/sdf2/syntax/*.sdf)
+BASIC_SDF = ${LIBRARY}/basic/Whitespace.sdf ${LIBRARY}/basic/Comments.sdf
+
 
 # Developers only:
 api:
-	(echo definition; cat $(ATERM_SDF) $(SDF2_SDF)) \
+	(echo definition; cat $(ATERM_SDF) $(SDF2_SDF) $(BASIC_SDF)) \
 	> Sdf.label.def
 	sdf2-to-c --input Sdf.label.def --prefix SDF_ --output SDFME
 
