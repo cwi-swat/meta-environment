@@ -38,6 +38,7 @@ test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
+                        -L$(SGLR)/lib -lsglr \
                         -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
                         -L$(ASF_SUPPORT)/lib -lASFME \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
