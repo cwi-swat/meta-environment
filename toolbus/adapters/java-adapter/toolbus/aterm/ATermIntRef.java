@@ -68,7 +68,7 @@ public class ATermIntRef extends ATermRef
 
   //{ int getInt()
 
-  int getInt()
+  public int getInt()
   {
     return value.getInt();
   }
@@ -76,7 +76,7 @@ public class ATermIntRef extends ATermRef
   //}
   //{ int setInt()
 
-  void setInt(int i)
+  public void setInt(int i)
   {
     update(new ATermInt(i));
   }
