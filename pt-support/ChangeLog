@@ -1,3 +1,6 @@
+2002/05/24 (vandenbr@loria.fr)
+ * Introduced the strategy symbol.
+
 2002/05/22 (jurgenv@cwi.nl)
  * Made a toolbus tool out of addPosInfo
  * Set version of addPosInfo to 1.3

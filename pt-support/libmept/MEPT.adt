@@ -87,6 +87,8 @@
 
   [Symbol, parameterized-sort, parameterized-sort(<sort(str)>,<parameters(Symbols)>)],
 
+  [Symbol, strategy, strategy(<lhs(Symbol)>,<rhs(Symbol)>)], 
+
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
   [Symbol, layout, layout],
