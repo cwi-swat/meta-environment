@@ -1,0 +1,47 @@
+equations
+
+[execute-1]
+
+  <R, E> := eval(A,(),{"_rec":result no-bindings}, E1)
+  ==============================================================
+  execute(A,E1) = <R, get-store(E)>
+
+
+[cons-2] eval(the consdata, cdata(C, D), E) = normal cdata(C, D)
+
+[consdata-1] eval(consdata, (C, D), E) = normal cdata(C, D)
+
+[invert-1] eval(invert, (C, cdata(C, D)), E) = normal D
+
+[general-1] [DO1*, <DO, datasel(TY, A)>, DO2*] := get-dataops(E1),
+	    <normal D2, E2> := eval(A, D1, {}, E1)
+	    ==============================================================
+	    eval(DO, data(TY, D1), E1) = normal D2
+
+[general-2] [DO1*, <DO, datacon(TY1, TY2)>, DO2*] := get-dataops(E),
+	    normal D2 := eval(the TY2, D1, E)
+	    ==============================================================
+	    eval(DO, D1, E) = normal data(TY1, D2)
+
+[general-3] eval(the TY, data(TY, D), E) = normal data(TY, D)
+
+[general-4] [ATY1*, <ATY2, ATY1>, ATY2*] := get-subtypes(E),
+	    normal D2 := eval(the ATY1, D1, E)
+	    =====================================================
+	    eval(the ATY2, D1, E) = normal D2
+
+[general-5] [CO1*, <D, TY>, CO2*] := get-constants(E)
+	    ===================================================
+	    eval(the TY, D, E) = normal D
+
+[the-star-1] eval(the TY*, (), E) = normal ()
+
+[the-star-2] normal D == eval(the TY, D, E),
+	     normal (D*) == eval(the TY*, (D*), E)
+	     ======================================
+	     eval(the TY*, (D, D*), E) = normal (D, D*)
+
+[the-star-3] normal D == eval(the TY, D, E)
+	     ======================================
+	     eval(the TY*, D, E) = normal D
+

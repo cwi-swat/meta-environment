@@ -1,0 +1,52 @@
+module eval/eval
+
+imports eval/an-supplement
+imports eval/an
+
+exports
+
+context-free start-symbols  Bindings Effect
+
+sorts
+
+  Type
+
+context-free syntax
+
+  execute(Action,Environment) -> Effect 
+  
+  <Result, Table[[Cell, Data]]> -> Effect
+
+%% User defined
+
+  data(Type, Data)		-> Data
+  cdata(Cell, Data)		-> Data
+
+%%  DataConstant		-> Data
+
+  Type "*"		-> Type
+
+
+hiddens variables
+
+  "DO"[0-9]?		-> DataOp
+  "D"[0-9]?		-> Data
+  "D"[0-9]?"*"		-> {Data ","}*
+  "A"[0-9]?		-> Action
+  "TK"[0-9]?		-> Token
+  "BS"[0-9]?		-> Bindings
+  "TCD"[0-9]?"*"	-> { (Token ":" Data) ","}*
+  "N"[0-9]?		-> Integer
+  "B"[0-9]?		-> Boolean
+  "E"[0-9]?		-> Environment
+  "CH+"[0-9]?		-> CHAR+
+  "DO"[0-9]?"*"		-> {EvalData ","}* %%{(DataOp ":" UserDefDataOp) ","}*
+  "TY"[0-9]?		-> Type
+  "ATY"[0-9]?		-> AtomicType
+  "IX"[0-9]?		-> Index
+  "TY"[0-9]?"*"		-> {<Type, Type> ","}*
+  "ATY"[0-9]?"*"	-> {<AtomicType, AtomicType> ","}*
+  "CO"[0-9]?"*"		-> {<Data, Type> ","}*
+  "CO"[0-9]?		-> DataOp
+  "R"[0-9]?		-> Result
+  "C"[0-9]?		-> Cell

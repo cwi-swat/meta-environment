@@ -1,0 +1,37 @@
+module data/Data
+
+imports 
+
+  Layout
+
+exports
+
+sorts
+
+  DataOp InfixDataOp Data PrefixDataOp Index Type
+
+context-free syntax
+
+  InfixDataOp   -> DataOp
+  PrefixDataOp  -> DataOp
+
+  "the" Type	-> PrefixDataOp
+
+  "#" Index	-> PrefixDataOp
+
+  "(" { Data "," }* ")"		-> Data {prefer}
+
+lexical syntax
+
+  "="		-> InfixDataOp
+  "defined"	-> PrefixDataOp
+  "list"	-> PrefixDataOp
+  "invert"	-> PrefixDataOp
+  "consdata"	-> PrefixDataOp
+
+  "-1" | [1-9][0-9]*   -> Index
+
+variables
+
+  "D"[0-9]?	-> Data
+  "DO"[0-9]?	-> DataOp

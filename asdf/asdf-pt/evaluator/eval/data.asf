@@ -1,0 +1,109 @@
+equations
+
+[default-dataop-1] eval(DO, D, E) = excep ()
+
+[binding-1] eval(binding, (TK, D), E) = normal {TK : D}
+
+[bound-1] eval(bound, ({TCD1*, TK : D, TCD2*}, TK), E) = normal D
+
+[disj-union-1] 
+
+	  BS3 := BS1 + BS2
+	  =========================================
+	  eval(disj-union, (BS1, BS2), E) = normal BS3
+
+[overriding-1] 
+
+	  BS3 := BS2/BS1
+	  =========================================
+	  eval(overriding, (BS1, BS2), E) = normal BS3
+
+[klaf-1] eval(# 1, (D, D*), E) = normal D
+
+[default-klaf-1] eval(# 1, D, E) = normal D
+
+[klaf-2] eval(# 2, (D1, D2, D*), E) = normal D2
+
+[klaf-3] eval(# 3, (D1, D2, D3, D*), E) = normal D3
+
+[klaf--1] eval(# -1, (D, D*), E) = normal (D*)
+
+[equal-1] eval(=, (D, D), E) = normal true
+
+[equal-2] D1 != D2
+	  ==================================
+	  eval(=, (D1, D2), E) = normal false
+
+[the-1]	eval(the integer, N, E) = normal N
+
+[the-2] eval(the boolean, B, E) = normal B
+
+[the-3] eval(the token, TK, E) = normal TK
+
+[the-4] eval(the data, D, E) = normal D
+
+[the-5] eval(the action, A, E) = normal A
+
+[the-6] eval(the cell, C, E) = normal C
+
+[plus-1] eval(+, (N1, N2), E) = normal N1+N2
+
+[mult-1] eval(*, (N1, N2), E) = normal N1*N2
+
+[subt-1] eval(-, (N1, N2), E) = normal N1-N2
+
+[gt-1] eval(>, (N1, N2), E) = normal N1 > N2
+
+[lt-1] eval(<, (N1, N2), E) = normal N1 < N2
+
+[not-1] eval(not, B, E) = normal not(B)
+
+[list-1] eval(list, D, E) = normal list(D)
+
+[mod-1] N1 > N2 == true
+	================
+	N1 mod N2 = (N1 - N2) mod N2 
+
+[default-mod-1] N1 mod N2 = N1
+
+[concat-1] (D1*) + (D2*) = (D1*, D2*)
+
+[concat-2] (D1*) !:= D1
+	   =======================
+	   D1 + (D2*) = (D1, D2*)
+
+[concat-3] (D2*) !:= D2
+	   =======================
+	   (D1*) + D2 = (D1*, D2)
+
+[concat-4] (D2*) !:= D2,
+	   (D1*) !:= D1
+	   ==================
+	   D1 + D2 = (D1, D2)
+
+[bindings-1] {} / BS = BS
+
+[bindings-2] BS / {} = BS
+
+[bindings-3] {TCD4*} := {TCD1*} / {TCD2*, TCD3*}
+	     ==============================================================
+	     {TK : D1, TCD1*} / { TCD2*, TK : D2, TCD3*} = {TK : D1, TCD4*}
+
+[default-bindings-4] 
+	     
+             {TCD2*} := {TCD1*} / BS
+	     ========================================
+	     {TK : D1, TCD1*} / BS = {TK : D1, TCD2*}
+
+[bindings-5] {} + BS = BS
+
+[bindings-6] BS + {} = BS
+
+[bindings-7] normal D !:= eval(bound, (BS1, TK), initial-env),
+	     {TCD2*} := {TCD1*} + BS1
+	     =========================================
+	     {TK : D1, TCD1*} + BS1 = {TK : D1, TCD2*}
+
+[bindings-8] no-bindings = {}
+
+[bracket-1] (D) = D

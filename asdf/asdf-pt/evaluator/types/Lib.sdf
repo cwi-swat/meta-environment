@@ -1,0 +1,19 @@
+module types/Lib
+
+imports 
+
+  Layout
+
+exports
+
+sorts
+
+  Type Answer
+
+context-free syntax
+
+  "nothing"		-> Type
+
+lexical syntax
+
+  "yes" | "no"	-> Answer

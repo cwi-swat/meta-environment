@@ -1,0 +1,14 @@
+module data/Boolean
+
+imports data/Data
+        basic/Booleans
+exports
+
+context-free syntax
+
+  Boolean	-> Data
+
+lexical syntax
+
+  "not"		-> PrefixDataOp
+

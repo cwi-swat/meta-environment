@@ -1,0 +1,207 @@
+equations
+
+[copy-1] eval(copy, D, BS, E) = <normal D, E>
+
+[result-1] eval(result D1, D2, BS, E) = <normal D1, E>
+
+[give-1] R := eval(DO, D1, E)
+	 =========================================
+	 eval(give DO, D1, BS, E) = <R, E>
+
+[give-2] eval(give IA, (A1, A2), BS, E) = <normal A1 IA A2, E>
+
+[give-3] eval(give PA, A, BS, E) = <normal PA A, E>
+
+[check-1] normal true == eval(DO, D1, E)
+  	  =========================================
+	  eval(check DO, D1, BS, E) = <normal D1, E>
+
+[check-2] normal false == eval(DO, D1, E)
+  	  =========================================
+	  eval(check DO, D1, BS, E) = <excep (), E>
+
+[check-3] excep D2 := eval(DO, D1, E)
+  	  =========================================
+	  eval(check DO, D1, BS, E) = <excep D2, E>
+
+[then-1] <normal D2, E2> := eval(A1, D1, BS, E1)
+	 ===================================================
+	 eval(A1 then A2, D1, BS, E1) = eval(A2, D2, BS, E2)
+
+[default-then-1] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	normal D2 !:= R
+	======================================
+	eval(A1 then A2, D1, BS, E1) = <R, E2> 
+
+[and-1] <normal D2, E2> := eval(A1, D1, BS, E1),
+	<normal D3, E3> := eval(A2, D1, BS, E2)
+	================================================
+	eval(A1 and A2, D1, BS, E1) = <normal D2+D3, E3> 
+
+[default-and-1] 
+
+	<normal D2, E2> := eval(A1, D1, BS, E1),
+	<R, E3> := eval(A2, D1, BS, E2),
+	normal D3 !:= R
+	================================================
+	eval(A1 and A2, D1, BS, E1) = <R, E3> 
+
+[default-and-2] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	normal D2 !:= R
+	================================================
+	eval(A1 and A2, D1, BS, E1) = <R, E2> 
+
+[and-then-1] eval(A1 and-then A2, D, BS, E) = eval(A1 and A2, D, BS, E)
+
+[indivisibly-1] eval(indivisibly A, D, BS, E) = eval(A, D, BS, E)
+
+[unfold-1] A := get-unfold-action(E)
+	   ============================
+	   eval(unfold, D, BS, E) = eval(A, D, BS, E)
+
+[unfolding-1] 
+
+	   E2 := set-unfold-action(E1, A)
+	   ============================
+	   eval(unfolding A, D, BS, E1) = eval(A, D, BS, E2)
+
+[throw-1] eval(throw, D, BS, E) = <excep D, E>
+
+[catch-1] 
+
+	<excep D2, E2> := eval(A1, D1, BS, E1)
+	====================================================
+	eval(A1 catch A2, D1, BS, E1) = eval(A2, D2, BS, E2)
+
+[default-catch-1] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	excep D2 !:= R
+	=======================================
+	eval(A1 catch A2, D1, BS, E1) = <R, E2> 
+
+
+[and-catch-1] 
+
+	<excep D2, E2> := eval(A1, D1, BS, E1),
+	<excep D3, E3> := eval(A2, D1, BS, E2)
+	================================================
+	eval(A1 and-catch A2, D1, BS, E1) = <excep D2+D3, E3> 
+
+[default-and-catch-1] 
+
+	<excep D2, E2> := eval(A1, D1, BS, E1),
+	<R, E3> := eval(A2, D1, BS, E2),
+	excep D3 !:= R
+	================================================
+	eval(A1 and-catch A2, D1, BS, E1) = <R, E3> 
+
+[default-and-catch-2] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	excep D2 !:= R
+	================================================
+	eval(A1 and-catch A2, D1, BS, E1) = <R, E2> 
+
+[fail-1] eval(fail, D, BS, E) = <fail, E> 
+
+[else-1] <fail, E2> := eval(A1, D1, BS, E1),
+	 <R, E3> := eval(A2, D1, BS, E2)
+	 ========================================
+	 eval(A1 else A2, D1, BS, E1) = <R, E3> 
+
+[default-else-1] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	fail != R
+	======================================
+	eval(A1 else A2, D1, BS, E1) = <R, E2> 
+
+[choose-nat-1]  
+
+	<N, E2> := next-random(E1)
+	============================================
+	eval(choose-nat, D, BS, E1) = <normal N, E2>
+
+[copy-bindings-1]
+
+	eval(copy-bindings, D, BS, E) = <normal BS, E>
+
+[scope-1] 
+
+	 <normal BS2, E2> := eval(A1, D, BS1, E1)
+	 ====================================================
+	 eval(A1 scope A2, D, BS1, E1) = eval(A2, D, BS2, E2)
+
+[default-scope-1] 
+
+	<normal D2, E2> := eval(A1, D1, BS1, E1),
+	BS2 !:= D2
+	======================================
+	eval(A1 scope A2, D1, BS1, E1) = <excep (), E2>
+
+[default-scope-2] 
+
+	<R, E2> := eval(A1, D1, BS, E1),
+	normal D2 !:= R
+	======================================
+	eval(A1 scope A2, D1, BS, E1) = <R, E2> 
+
+[create-1] 
+	   
+	<C, E2> := create-cell(D, E1)
+	=========================================
+	eval(create, D, BS, E1) = <normal C, E2>
+
+[inspect-1]
+
+	D := inspect-cell(C, E)
+	==========================================
+	eval(inspect, C, BS, E) = <normal D, E>
+
+[default-inspect-1] eval(inspect, D, BS, E) = <excep (), E>
+
+[update-1] 
+
+	E2 := update-cell(C, D, E1) 
+	==============================================
+	eval(update, (C, D), BS, E1) = <normal (), E2>
+
+[default-update-1] eval(update, D, BS, E1) = <excep (), E1>
+
+[enact-1] eval(enact, A, BS, E) = eval(A, (), {}, E)
+
+[default-enact-1] 
+
+	A !:= D
+	=====================================
+	eval(enact, D, BS, E) = <excep (), E>
+
+[apply-1] eval(apply, (A, D), BS, E) = eval(result D then A, (), {}, E)
+
+[apply-2] 
+
+	(A, D*) !:= D
+	=====================================
+	eval(apply, D, BS, E) = <excep (), E>
+
+[default-apply-1] eval(apply, (A, D*), BS, E) = eval(result (D*) then A, (), {}, E)
+
+[closure-1] give closure Y = give (furthermore bound-to "_rec" scope Y) 
+			      then close
+
+[close-1] eval(close, A, BS, E) = <normal (result BS scope A), E>
+
+[default-close-1] 
+
+	A !:= D
+	=====================================
+	eval(close, D, BS, E) = <excep (), E>
+
+
+[recursively-1] eval(recursively A, D, BS, E) = 
+			eval(furthermore bind("_rec", A) scope A, D, BS, E)

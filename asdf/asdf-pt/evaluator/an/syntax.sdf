@@ -1,0 +1,69 @@
+module an/syntax
+
+imports
+
+  an/actions
+
+exports
+
+context-free syntax
+     
+%% Data-flow   
+
+  "result" Data		-> Action
+  "give" DataOp		-> Action
+  "check" DataOp	-> Action
+
+lexical syntax
+
+%% Data-flow
+
+  "copy"	-> Action
+  "skip"	-> Action
+  "then"	-> InfixAction
+  "and-then"	-> InfixAction
+  "and"		-> InfixAction
+  "indivisibly"	-> PrefixAction
+  "unfold"	-> Action
+  "unfolding"	-> PrefixAction
+  "throw"	-> Action
+  "catch"	-> InfixAction
+  "err"		-> Action
+  "and-catch"	-> InfixAction
+  "fail"	-> Action
+  "else"	-> InfixAction
+  "choose-nat"	-> Action
+
+%% Bindings
+
+  "copy-bindings"	-> Action
+  "scope"		-> InfixAction
+
+%% Storing
+
+  "create"	-> Action
+  "inspect"	-> Action
+  "update"	-> Action
+
+%% Actions as data
+
+  "enact"	 -> Action
+  "apply"	 -> Action
+  "close"	 -> Action
+  "recursively"	 -> PrefixAction  
+
+%% Communication
+
+  "activate"		-> Action
+  "deactivate"		-> Action
+  "give-current-agent"	-> Action
+  "send"		-> Action
+  "receive"		-> Action
+  "give-current-time"	-> Action
+
+
+context-free priorities
+
+  { "result" Data	-> Action} 
+  >
+  { Action InfixAction Action	-> Action}

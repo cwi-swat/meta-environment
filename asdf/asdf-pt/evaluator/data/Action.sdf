@@ -1,0 +1,15 @@
+module data/Action
+
+imports 
+
+  data/Data
+  an/actions
+
+
+exports
+
+context-free syntax
+
+  Action	-> Data {avoid}
+
+

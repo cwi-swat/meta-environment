@@ -1,0 +1,62 @@
+module eval/data
+
+imports
+
+  eval/environment
+  an/full
+  types/all
+
+exports
+
+context-free start-symbols
+
+  Result
+
+sorts
+
+  Integer Cell
+
+context-free syntax
+
+  eval(DataOp, Data, Environment)	-> Result
+
+%% Auxiliary
+
+  Integer "mod" Integer			-> Integer
+
+  Data "+" Data				-> Data
+
+  "{" {(Token ":" Data) ","}* "}"	-> Bindings
+
+  Bindings "+" Bindings			-> Bindings
+  Bindings "/" Bindings			-> Bindings
+
+  Bindings				-> Data
+
+  Cell					-> Data
+
+  "normal" Data	     -> Result
+  "excep" Data	     -> Result
+  "fail"	     -> Result
+
+%% Internal data
+
+  list(Data)	     -> Data
+
+lexical syntax
+
+  "c"[0-9]+		-> Cell
+
+hiddens variables
+
+  "DO"[0-9]?		-> DataOp
+  "D"[0-9]?		-> Data
+  "D"[0-9]?"*"		-> {Data ","}*
+  "TK"[0-9]?		-> Token
+  "BS"[0-9]?		-> Bindings
+  "TCD"[0-9]?"*"	-> { (Token ":" Data) ","}*
+  "N"[0-9]?		-> Integer
+  "B"[0-9]?		-> Boolean
+  "E"[0-9]?		-> Environment
+  "A"[0-9]?		-> Action
+  "C"[0-9]?		-> Cell

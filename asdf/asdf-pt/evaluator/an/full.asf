@@ -1,0 +1,55 @@
+equations
+
+[bracket-1] (A) = A
+
+[skip-1] skip = result ()
+
+[give-1] give it = copy
+
+[give-2] give D  = result D
+
+[give-3] give (ATMY) = give ATMY
+
+[give-4] give (DOP Y)  = give (Y) then give DOP
+
+[give-5] give (Y1 DOI Y2)  = give (Y1, Y2) then give DOI
+
+[give-6] give (Y1, Y2, Y+)  = give (Y1) and give (Y2, Y+)
+
+[give-7] give (Y1, Y2)  = give (Y1) and give (Y2)
+
+[give-8] give (DO) = give DO
+
+[given-1] given ATMY = give(list(it), list(ATMY)) then check = catch fail
+
+[action-1]  A ATMY  = give ATMY then A
+
+[action-2]  A DO  = give DO then A
+
+[check-1] check (DOP ATMY)  = copy and (give ATMY then check DOP then skip)
+
+[check-2] check (Y1 DOI Y2)  = copy and (give (Y1, Y2) then check DOI then skip)
+[check-3] check (DO)  = check DO
+
+[maybe-1] maybe A = A catch fail
+
+[bound-to-1] bound-to Y = (bound (current-bindings, Y))
+
+[bind-1] bind = give binding
+
+[current-bindings-1] give current-bindings = copy-bindings
+
+[furthermore-1] furthermore A = copy-bindings and A then give overriding
+
+[before-1] A1 before A2 = 
+	   (copy-bindings and A1) then 
+	   (give #2 and (give overriding scope A2)) 
+	   then give overriding
+
+[stored-at-1] give stored-at Y = give (Y) then inspect
+
+
+
+
+
+

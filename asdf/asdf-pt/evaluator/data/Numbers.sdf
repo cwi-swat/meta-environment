@@ -1,0 +1,19 @@
+module data/Numbers
+
+imports 
+
+  data/Data
+  basic/Integers
+
+exports
+
+context-free syntax
+
+  Integer	-> Data
+
+lexical syntax
+
+%%  "-"?[0-9]+		-> Number
+
+  "+" | "*" | "<" | ">" | "-"	-> InfixDataOp
+

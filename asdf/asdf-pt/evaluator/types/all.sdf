@@ -1,0 +1,10 @@
+module types/all
+
+imports
+	types/Atomic
+	types/Composed
+	types/Action
+	types/Tuple
+	types/Record
+	types/Variables
+	types/Unions

@@ -1,0 +1,34 @@
+module an/actions
+
+imports
+
+  Layout
+  data/all
+
+
+
+exports
+
+context-free start-symbols
+
+  Action
+
+sorts
+
+  Action PrefixAction InfixAction
+
+context-free syntax
+        
+  PrefixAction Action             -> Action       
+  Action InfixAction Action       -> Action {left, prefer}
+
+  "(" Action ")"	-> Action 
+        
+context-free priorities
+
+  { PrefixAction Action         -> Action }
+  >
+  { Action InfixAction Action   -> Action }
+
+
+

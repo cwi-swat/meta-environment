@@ -1,0 +1,16 @@
+module data/Tuple
+
+imports
+
+  data/Data
+
+exports
+
+context-free syntax
+
+  "(" Data "," {Data ","}+ ")"    -> Data
+
+  "(" Data ")"		  -> Data {bracket}
+
+  "(" ")"		  -> Data
+
