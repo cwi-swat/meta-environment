@@ -4,7 +4,6 @@ BUILTIN_NAMES=\
 	      asf-normalize \
 	      read-term-from-file write-term-to-file\
 	      shell \
-	      hashtable-lookup hashtable-store hashtable-delete \
 	      strategy-some strategy-all strategy-one \
               toolbus-event toolbus-term-event \
 	      term-compare-less
@@ -12,7 +11,6 @@ BUILTIN_NAMES=\
 BUILTIN_SOURCES=common.c \
                 annos.c \
 		fileio.c \
-		hashtable.c \
 		normalize.c \
 		shell.c \
 		traversal.c \
