@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Jan 29 10:15:44 CET 2003 <{jong,markvdb}@cwi.nl>
+ * First "meta-query" experiment:
+   given a focus in text-editor, find the "first" Module that has
+   the focus-sort as rhs in a production
+
 2003/01/28 (markvdb@cwi.nl)
  * Release 0.12beta
  * The error message in the equation and syntax editor was

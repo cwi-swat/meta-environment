@@ -86,10 +86,15 @@ in
     rec-value(SE, msg(Msg?)) .
     snd-msg(Msg)
   +
-    rec-msg(get-focus-sort(Nonterminal?, Focus?)) .
-    snd-eval(SE, get-focus-sort(Nonterminal, Focus)) .
-    rec-value(SE, focus-sort(Nonterminal?)) .
-    snd-msg(focus-sort(Nonterminal))
+    rec-msg(get-focus-sort(EditorId?)) .
+    snd-eval(SE, get-focus-sort(EditorId)) .
+    (
+      rec-value(SE, focus-sort(Nonterminal?)) .
+      snd-msg(focus-sort(Nonterminal))
+    +
+      rec-value(SE, no-focus) .
+      snd-msg(no-focus)
+    )
   +
     rec-msg(get-dirty-focuses(EditorId?)) .
     snd-eval(SE, get-dirty-focuses(EditorId)) .

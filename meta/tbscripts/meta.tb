@@ -44,6 +44,8 @@
 #include "parsetablegen.idef"
 #include "dump-equations.tb"
 #include "configmanager.idef"
+#include "query.tb"
+#include "FindSortDefinition.idef"
 
 #include "meta-interface.tb"
 
@@ -100,7 +102,8 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
         Open-modules,  PGen, ApplyFunc,
 	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
         DumpParseTable, Module-Utilities,
-	RestoreTermBrackets, RestoreBrackets
+	RestoreTermBrackets, RestoreBrackets,
+	Query, FindSortDefinition
 #ifdef METASTUDIO
 	, DOT-ADAPTER
 #endif

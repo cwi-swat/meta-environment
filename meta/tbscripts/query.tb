@@ -1,0 +1,65 @@
+process Query is
+let
+  EditorId : term,
+  NonTerminal : str,
+  Module : str,
+  Modules : list(<str>),
+  Occurrence : term,
+  Tree : term,
+  Term : term,
+  ParseTableOpened : term,
+  Sdf : term,
+  ParsedNonTerminal : term,
+  Errors : term,
+  Contains : str
+in
+  (
+    rec-msg(find-focus-source(EditorId?)) .
+    snd-msg(get-focus-sort(EditorId)) .
+    (
+      rec-msg(focus-sort(NonTerminal?)) .
+      Sdf := quote(trm("Sdf2")) .
+      SetParseTable(Sdf, ParseTableOpened?) .
+      if equal(ParseTableOpened, true) then
+        ParseString(Sdf, "Sort", NonTerminal, ParsedNonTerminal?, Errors?) .
+	ProcessParseError("Sdf2", Errors, "SortName")
+      else
+        printf("This should not happen :-)\n")
+      fi .
+      snd-msg(get-all-modules) .
+      rec-msg(all-modules(Modules?)) .
+      (
+        if not-equal(Modules, []) then
+        Module := first(Modules) .
+	snd-msg(get-sdf2-asfix(Module)) .
+	(
+	  rec-msg(syntax(Tree?)) .
+	  snd-msg(apply-rewrite("FindSortDefinition",
+	    "find-sort-definition", "Boolean", [Tree, ParsedNonTerminal])).
+	  rec-msg(normalform("FindSortDefinition", Term?)) .
+	  snd-msg(unparse(Term)) .
+	  rec-msg(unparsed-text(Contains?)) .
+	  if equal(Contains, "true") then
+	    printf("Spawning editor for module %s\n", Module) .
+	    snd-msg(edit-syntax(Module)) .
+	    Modules := [] /* stop searching after 1st hit, for now */
+	  else
+	    tau
+	  fi
+	+
+	  rec-msg(unavailable) .
+	  printf("Unable to get parse tree for focus!\n")
+	) .
+        Modules := next(Modules)
+        fi
+      ) *
+      if equal(Modules, []) then
+        tau
+      fi
+    +
+      rec-msg(no-focus) .
+      printf("No focus!\n")
+    )
+  ) * delta
+
+endlet

@@ -49,6 +49,7 @@ in
   snd-do(TE, tb-add-menu-item("Move", "Right")) .
   snd-do(TE, tb-add-menu-item("Move", "Up")) .
   snd-do(TE, tb-add-menu-item("Move", "Down")) .
+  snd-do(TE, tb-add-menu-item("Move", "toSource")) .
   (
     rec-msg(set-focus(EditorId,
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
@@ -90,7 +91,11 @@ in
     snd-ack-event(TE, menu-event("Meta-Environment", "Reduce", Fid))
   +
     rec-event(TE, menu-event("Move", Direction?, Fid)) .
-    snd-msg(move-focus(EditorId, Direction)) .
+    if equal(Direction, "toSource") then
+      snd-msg(find-focus-source(EditorId))
+    else
+      snd-msg(move-focus(EditorId, Direction))
+    fi .
     snd-ack-event(TE, menu-event("Move", Direction, Fid))
   +
     rec-event(TE, menu-event("Term-Actions", ButtonName?, Fid)) .

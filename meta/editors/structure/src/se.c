@@ -362,23 +362,22 @@ ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm t)
 }
       
 /*}}}  */
-/*{{{  ATerm get_focus_sort(int cid, char *nonterminal, ATerm f) */
+/*{{{  ATerm get_focus_sort(int cid, ATerm editorId) */
 
-ATerm get_focus_sort(int cid, char *nonterminal, ATerm f)
+ATerm get_focus_sort(int cid, ATerm editorId)
 {
   char *sort;
-  SE_Focus focus;
- 
-  focus = SE_makeFocusFromTerm(f);
-  assert(SE_isValidFocus(focus));
+  SE_Editor editor = getEditor(editorId);
+  SE_Focus focus = SE_getEditorFocus(editor); 
 
-  sort = SE_getFocusSort(focus);
-
-  if (strcmp(sort, SORT_UNPARSED) != 0) {
-    return ATmake("snd-value(focus-sort(<str>))", sort);
+  if (SE_isFocusNotEmpty(focus)) {
+    sort = SE_getFocusSort(focus);
+    if (strcmp(sort, SORT_UNPARSED) != 0) {
+      return ATmake("snd-value(focus-sort(<str>))", sort);
+    }
   }
 
-  return ATmake("snd-value(focus-sort(<str>))", nonterminal);
+  return ATmake("snd-value(no-focus)");
 }
 
 /*}}}  */

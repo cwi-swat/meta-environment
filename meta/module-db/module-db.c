@@ -1244,10 +1244,9 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
 }
 
 /*}}}  */
-/*{{{  ATerm add_import(int cid, char *oldModuleName, char *newModuleName, */
+/*{{{  ATerm add_import(int cid, char *modName, char *importedModName, char *ImportedPath) */
 
-ATerm add_import(int cid, char *modName, char *importedModName,
-		  char *ImportedPath)
+ATerm add_import(int cid, char *modName, char *importedModName, char *ImportedPath)
 {
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm moduleName = ATmake("<str>", modName);
@@ -1301,10 +1300,9 @@ ATerm add_import(int cid, char *modName, char *importedModName,
 }
 
 /*}}}  */
-/*{{{  ATerm add_import(int cid, char *oldModuleName, char *newModuleName, */
+/*{{{  ATerm remove_import(int cid, char *modName, char *importedModName, char *path) */
 
 ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
-		  
 {
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm moduleName = ATmake("<str>", modName);
