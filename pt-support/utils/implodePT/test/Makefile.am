@@ -23,7 +23,7 @@ TESTS = $(TEST_SET:%=%.sh)
 IMPLODE=$(top_builddir)/utils/flattenPT | \
         $(top_builddir)/utils/implodePT/implodePT
 
-CLEANFILES += $(TEST_SET:%=%.tested) $(TEST_SET:%=%.sh)
+CLEANFILES = $(TEST_SET:%=%.tested) $(TEST_SET:%=%.sh)
 
 #use this target to regenerate the regression tests:
 testset: grammar/tests.tbl \
