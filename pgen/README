@@ -1,6 +1,7 @@
 
     PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,53 +27,83 @@ Installation Instructions
 
 1) Required packages.
 
-  The parser generator requires the following packages:
+   The parser generator requires the following packages:
 
-  -GNU make, available from:
-      www.gnu.org
+   -GNU make, available from:
+       www.gnu.org
 
-  -The ASF+SDF compiler runtime library, available from:
-      www.cwi.nl/projects/MetaEnv/
+   -The ASF+SDF compiler runtime library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  -The ATerm library, available from:
-      www.cwi.nl/projects/MetaEnv/
-  -The AsFix library, available from:
-      www.cwi.nl/projects/MetaEnv/
+   -The ATerm library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  -The Scannerless Generalized LR Parser (sglr), available from:
-      www.cwi.nl/projects/MetaEnv/
+   -The pt-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  -The ToolBus, available from:
-      www.cwi.nl/projects/MetaEnv/
+   -The sdf-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  Before building the parser generator, you should first install these
-  packages.
+   -The asf-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
+
+   -The Scannerless Generalized LR Parser (sglr), available from:
+       www.cwi.nl/projects/MetaEnv/
+
+   Before building the parser generator, you should first install these
+   packages.
 
 2) Configuring the parser generator.
 
-  Assuming that the aterm library, the asfix library, the runtime library,
-  sglr, and the toolbus are installed in <aterm>, <asfix>, <asc>, <sglr>,
-  and <toolbus> respectively and that the parser generator should be
-  installed in <pgen> then the following command will configure pgen
-  accordingly:
+   Assuming that the aterm library, the support libraries, the 
+   runtime library, and sglr are installed in <aterm>, <pt-support>, 
+   <sdf-support>, <asf-support>, <asc-support>, and <sglr> respectively 
+   and that the parser generator should be installed in <pgen> then the 
+   following command will configure pgen accordingly:
 
-  ./configure --with-aterm=<aterm> --with-asfix=<asfix> --with-asc=<asc> \
-              --with-sglr=<sglr> --with-toolbus=<toolbus>
+   ./configure --prefix=<pgen> --with-aterm=<aterm> \
+               --with-pt-support=<pt-support> \
+               --with-sdf-support=<sdf-support> \
+               --with-asf-support=<asf-support> \
+               --with-asc-support=<asc-support> \
+               --with-sglr=<sglr>
 
-  Note. For all required packages (except the ASC runtime library) the
-  following holds: when you installed such a package in <some prefix>, and
-  <some prefix>/bin is included in your PATH, then configure can find its
-  location and you don't need to specify it explicitly (as we did in the
-  example above).
+   Note. Default behaviour of configure is that it will look for libraries
+         in <prefix>/lib and for executables in your search paths. So,
+         you do not need to specify the locations of all these packages
+         explicitly (as we did in the example above).
 
-  If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
-  different options use --with-cflags="<options>" when you run configure.
+   If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
+   different options use --with-cflags="<options>" when you run configure.
 
-3) Building the parser generator
+   ./configure --help gives a detailed list of configuration options.       
+
+3) Building the parser generator.
 
    Assuming that GNU make is called "gmake" on your system then the
    following commands will build and install the parser generator:
 
-   > gmake
-   > gmake install
+   gmake
+   gmake install
 
+4) Checking the parser generator.
+
+   The parser generator can be tested via:
+
+   gmake check
+
+5) Bug reporting and support.
+
+   Please report bugs via:
+
+   http://www.cwi.nl/htbin/MetaEnv/meta-bugs
+
+   This is the general bug reporting page of the ASF+SDF Meta-Environment.
+
+   Support can be obtained via:
+
+   meta-support@cwi.nl
+
+6) Known bugs.
+
+   None.  
