@@ -49,20 +49,20 @@ main(int argc, char *argv[])
 
   in = ATreadFromFile(stdin);
 
-  in = ATremoveAllAnnotations(in);
-
   term = PT_getParseTreeTree(PT_makeParseTreeFromTerm(in));
 
   prepared = RWprepareTerm(term);
   restored = RWrestoreTerm(prepared);
 
-  out = PT_makeTermFromParseTree(PT_setParseTreeTree(
-          PT_makeParseTreeFromTerm(in), restored));
+  out = PT_makeTermFromParseTree(
+          PT_setParseTreeTree(
+            PT_makeParseTreeFromTerm(in), restored));
 
   ATprintf("%t", out);
 
   if (!ATisEqual(in, out)) {
     ATerror("Error: Output term is different from input term.\n");
+    return 1;
   }
 
   return 0;
