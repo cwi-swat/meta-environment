@@ -1,5 +1,8 @@
 $Id$
 
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 3.8
+
 2002/06/25 (vandenbr@loria.fr)
  * Fine tuned the eagerness filter.
  * Bumped to version 3.8beta.
