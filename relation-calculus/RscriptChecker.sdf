@@ -1,0 +1,177 @@
+module RscriptChecker
+
+imports Rscript
+imports containers/Table[RVAR REXPTYPE]
+
+imports ListItems
+imports MyPosInfo[REXP]
+imports MyPosInfo[FROM]
+imports MyPosInfo[Bag[[Elem]]]
+imports MyPosInfo[Rel[[Elem]]]
+
+
+exports
+    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]]
+
+    context-free syntax
+
+	type-of(Elem)                  				-> ElemType
+
+        undefined                       			-> REXPTYPE
+        empty                           			-> REXPTYPE
+        "fun" {REXPTYPE ","}* to REXPTYPE			-> REXPTYPE
+        "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
+
+        is-var(REXPTYPE)                        		-> Boolean
+
+	REXPTYPE "==" REXPTYPE					-> Boolean
+
+	REXP cannot be typed 					-> ERROR
+	FROM cannot be typed					-> ERROR
+	Bag[[Elem]] cannot be typed 				-> ERROR
+	Rel[[Elem]] cannot be typed 				-> ERROR
+ 	"Undeclared" RVAR					-> ERROR
+  	RVAR "redeclared"					-> ERROR
+        "Incompatible" argument types REXPTYPE in REXP        	-> ERROR
+        REXP should have type REXPTYPE          		-> ERROR
+        REXP should be of type bag         			-> ERROR
+        REXP should be of type rel         			-> ERROR
+        "No" "definition" for RVAR with argument REXPTYPE       -> ERROR
+
+        "[" {ERROR ";"} * "]"                			-> ERRORS
+
+	t2s(REXPTYPE)						-> String
+	tl2sl({REXPTYPE ","}*)					-> String
+	e2i(ERROR)						-> ListItem
+	 convert-errors(ERRORS)                    		-> List
+	 convert-errors1(ERRORS)                    		-> List
+         rvar2str(RVAR)		 	        		-> String
+ 
+	Table[[RVAR,REXPTYPE]] # ERRORS  			-> TENV
+
+	TENV "+" ERROR						-> TENV
+
+        if Boolean then TENV else TENV fi			-> TENV
+        if Boolean then REXPTYPE # TENV else REXPTYPE # TENV fi	-> REXPTYPE # TENV
+
+	lookup(TENV, RVAR) 					-> REXPTYPE
+	store(TENV, RVAR, REXPTYPE)				-> TENV
+	delete(TENV, RVAR)					-> TENV
+
+	built-ins						-> Table[[RVAR,REXPTYPE]]
+
+	check-rscript(RSCRIPT)					-> List
+%%	check-rscript(RSTAT*)          				-> TENV
+        check-rscript(RSTAT*, TENV)				-> TENV
+	check(REXP, TENV) 					-> REXPTYPE # TENV
+
+	check-elem(Elem, TENV) 					-> REXPTYPE # TENV
+	check-elem-bag(Bag[[Elem]], TENV) 			-> REXPTYPE # TENV
+	check-elem-rel(Rel[[Elem]], TENV) 			-> REXPTYPE # TENV
+	check-stat(RSTAT, TENV) 				-> TENV
+
+        check-not-defined(RVAR, TENV)            		-> TENV
+
+        require-type(REXP, REXPTYPE, TENV) 			-> TENV
+	require-bag-type(REXP, RVAR, REXPTYPE, TENV) 		-> TENV
+	require-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
+
+        container-type(REXPTYPE)				-> REXPTYPE
+        
+        "[" { DCLRVAR ","}* "]"					-> DCLRVARS
+
+	add-from({FROM ","}*, TENV)             		-> TENV
+	del-from({FROM ","}*, TENV)             		-> TENV
+
+
+        add-formals(DCLRVARS, TENV)             		-> TENV
+        del-formals(DCLRVARS, TENV)				-> TENV
+
+ 	ext-types(DCLRVARS )                     		-> REXPTYPE
+        collect-actuals({REXP ","}*, TENV)        		-> REXPTYPE # TENV
+
+        find-result-type(RVAR, REXPTYPE, TENV)   		-> REXPTYPE # TENV
+
+        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]])	-> Boolean #  Table[[RVAR,REXPTYPE]]
+        substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
+
+	tst(Elem)			-> Integer
+
+
+        "and"                          				-> OP
+        "or"                           				-> OP
+        "not"                          				-> OP
+        "elem"			      				-> OP
+
+        "=="                           				-> OP
+        "<="                           				-> OP
+        "<"                            				-> OP
+        ">="                           				-> OP
+        ">"                            				-> OP
+        "union"                        				-> OP
+        "inter"                        				-> OP
+        "\\"                           				-> OP
+        "o"                            				-> OP
+        "x"                            				-> OP
+        "."                            				-> OP
+        "+"                            				-> OP
+        "*"                            				-> OP
+        "#"                            				-> OP
+
+        compat "(" REXP "," REXPTYPE OP REXPTYPE "," TENV ")" 	-> REXPTYPE # TENV
+        compat "(" REXP "," REXPTYPE OP "," TENV ")" 		-> REXPTYPE #TENV
+        compat "(" REXP "," OP REXPTYPE  "," TENV ")" 		-> REXPTYPE #TENV
+
+hiddens
+%%    imports asf/syntax/Comments
+    variables
+     "$Table" [0-9\']* 		-> Table[[RVAR,REXPTYPE]]
+     "$Tenv"[0-9\']* 		-> TENV
+     "$Error" [0-9\']* 		-> ERROR
+     "$Error*" [0-9\']* 	-> {ERROR ";"}*
+     "$Error+" [0-9\']* 	-> {ERROR ";"}+
+     "$Errors" [0-9\']*		-> ERRORS
+     "$Exp" [0-9\']*    	-> REXP
+     "$Exp*" [0-9\']*    	-> {REXP ","}*
+     "$Exp+" [0-9\']*    	-> {REXP ","}+
+
+     "$Op"               	-> OP
+     "$Etype" [0-9\']*    	-> REXPTYPE
+     "$Etype*" [0-9\']*    	-> {REXPTYPE ","}*
+
+
+     "$Elem" [0-9\']*     	-> Elem
+     "$Elem+" [0-9\']*     	-> {Elem ","}+
+     "$Elem*" [0-9\']*     	-> {Elem ","}*
+
+     "$Tuple" [0-9\']*     	-> Elem # Elem
+     "$Tuple*" [0-9\']*     	-> {Elem # Elem ","}*
+     "$Tuple+" [0-9\']*     	-> {Elem # Elem ","}+
+
+
+     "$Bag" [0-9\']*        	-> Bag[[Elem]]
+     "$Rel" [0-9\']*        	-> Rel[[Elem]]
+
+     "$Boolean" [0-9\']*    	-> Boolean
+     "$Integer" [0-9\']*    	-> Integer
+     "$Area" [0-9\']*    	-> Area
+     "$String" [0-9\']*    	-> String
+
+     "$Var" [0-9\']*       	-> RVAR
+
+      "$DclVar" [0-9\']*	-> DCLRVAR
+
+     "$DclVar*" [0-9\']*	-> {DCLRVAR ","}*
+     "$DclVar+" [0-9\']*	-> {DCLRVAR ","}+
+
+     "$Rscript" [0-9\']*        -> RSCRIPT
+
+     "$Stat" [0-9\']*            -> RSTAT
+     "$Stat*" [0-9\']*           -> RSTAT*
+
+     "$From" [0-9\']*   	-> FROM
+     "$From*" [0-9\']*   	-> {FROM ","}*
+     "$From+" [0-9\']*   	-> {FROM ","}+
+
+      "$ListItem*" [0-9\']*	-> {ListItem ","}*
+	

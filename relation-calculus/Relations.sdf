@@ -12,85 +12,65 @@ imports Bags[Elem]
 %%         Bag[[Elem # Elem]]	-> Rel[[Elem]]
 
   context-free syntax
-     "EmptyRel"                                	-> Rel[[Elem]]
+     "EmptyRel"                                		-> Rel[[Elem]]
 
-     equal(Rel[[Elem]], Rel[[Elem]])           	-> Boolean
-     subset(Rel[[Elem]], Rel[[Elem]])          	-> Boolean
-     strict-subset(Rel[[Elem]], Rel[[Elem]])   	-> Boolean
-     superset(Rel[[Elem]], Rel[[Elem]])        	-> Boolean
-     strict-superset(Rel[[Elem]], Rel[[Elem]]) 	-> Boolean
+     equal(Rel[[Elem]], Rel[[Elem]])           		-> Boolean
+     subset(Rel[[Elem]], Rel[[Elem]])          		-> Boolean
+     strict-subset(Rel[[Elem]], Rel[[Elem]])   		-> Boolean
+     superset(Rel[[Elem]], Rel[[Elem]])        		-> Boolean
+     strict-superset(Rel[[Elem]], Rel[[Elem]]) 		-> Boolean
 
-     union(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
-     inter(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
-     diff(Rel[[Elem]], Rel[[Elem]])            	-> Rel[[Elem]]
-     compose(Rel[[Elem]], Rel[[Elem]])       	-> Rel[[Elem]]
+     union(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
+     inter(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
+     diff(Rel[[Elem]], Rel[[Elem]])            		-> Rel[[Elem]]
+     compose(Rel[[Elem]], Rel[[Elem]])       		-> Rel[[Elem]]
     
-     product(Elem, Bag[[Elem]])                	-> Rel[[Elem]]
+     product(Elem, Bag[[Elem]])                		-> Rel[[Elem]]
 
-     product(Bag[[Elem]], Bag[[Elem]])         	-> Rel[[Elem]]
+     product(Bag[[Elem]], Bag[[Elem]])         		-> Rel[[Elem]]
      
-     domain(Rel[[Elem]])                       	-> Bag[[Elem]]
-     range(Rel[[Elem]])                        	-> Bag[[Elem]]
-     carrier(Rel[[Elem]])                      	-> Bag[[Elem]]
+     domain(Rel[[Elem]])                       		-> Bag[[Elem]]
+     range(Rel[[Elem]])                        		-> Bag[[Elem]]
+     carrier(Rel[[Elem]])                      		-> Bag[[Elem]]
 
-     domR(Rel[[Elem]], Bag[[Elem]])   		-> Rel[[Elem]]
-     ranR(Rel[[Elem]], Bag[[Elem]])  		-> Rel[[Elem]]
-     carR(Rel[[Elem]], Bag[[Elem]])   		-> Rel[[Elem]]
+     domR(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
+     ranR(Rel[[Elem]], Bag[[Elem]])  			-> Rel[[Elem]]
+     carR(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
 
-     domX(Rel[[Elem]], Bag[[Elem]])   		-> Rel[[Elem]]
-     ranX(Rel[[Elem]], Bag[[Elem]])   		-> Rel[[Elem]]
-     carX(Rel[[Elem]], Bag[[Elem]])   		-> Rel[[Elem]]
+     domX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
+     ranX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
+     carX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
 
-     top(Rel[[Elem]])                 		-> Bag[[Elem]]
-     bottom(Rel[[Elem]])                  	-> Bag[[Elem]]
+     top(Rel[[Elem]])                 			-> Bag[[Elem]]
+     bottom(Rel[[Elem]])                  		-> Bag[[Elem]]
 
-     inv(Rel[[Elem]])                  		-> Rel[[Elem]]
-     compl(Rel[[Elem]])                		-> Rel[[Elem]]
+     inv(Rel[[Elem]])                  			-> Rel[[Elem]]
+     compl(Rel[[Elem]])                			-> Rel[[Elem]]
 
-     id(Bag[[Elem]])                   		-> Rel[[Elem]]
+     id(Bag[[Elem]])                   			-> Rel[[Elem]]
 
-     Rel[[Elem]] "." Elem             		-> Bag[[Elem]]
-     Rel[[Elem]] "." Bag[[Elem]]      		-> Bag[[Elem]]
+     Rel[[Elem]] "." Elem             			-> Bag[[Elem]]
+     Rel[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]
 
-     Elem "." Rel[[Elem]]             		-> Bag[[Elem]]
-     Bag[[Elem]] "." Rel[[Elem]]      		-> Bag[[Elem]]
+     Elem "." Rel[[Elem]]             			-> Bag[[Elem]]
+     Bag[[Elem]] "." Rel[[Elem]]      			-> Bag[[Elem]]
 
-     size(Rel[[Elem]])                  	-> Integer
+     size(Rel[[Elem]])                  		-> Integer
+     reachX(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
+     reachR(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
+     Rel[[Elem]] "+"                  			-> Rel[[Elem]]
+     Rel[[Elem]] "*"                  			-> Rel[[Elem]]
 
-     closure(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-     reachX(Rel[[Elem]], Bag[[Elem]], Rel[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-
-     reachX(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-     reachR(Rel[[Elem]], Bag[[Elem]], Rel[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-
-     reachR(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-     Rel[[Elem]] "+"                  		-> Rel[[Elem]]
-     Rel[[Elem]] "*"                  		-> Rel[[Elem]]
-
-     closure(Bag[[Elem]], Rel[[Elem]])     	-> Bag[[Elem]]
-
-     dominators(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-     dominators1(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) 
-						-> Rel[[Elem]]
-
-     "(" Rel[[Elem]] ")"              		-> Rel[[Elem]] {bracket}
+     "(" Rel[[Elem]] ")"              			-> Rel[[Elem]] {bracket}
 
      "if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
-						-> Rel[[Elem]]
+							-> Rel[[Elem]]
 
 hiddens
   imports asf/syntax/Comments
+
+  context-free syntax
+     closure(Rel[[Elem]],Rel[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
 
   variables
      "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]
