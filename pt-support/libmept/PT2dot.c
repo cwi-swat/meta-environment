@@ -249,6 +249,7 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
     ATbool layout = PT_isTreeLayout(tree);
     ATbool literal = PT_isSymbolLit(rhs); /* for asfix2 compliance */
 
+
     if (!layout && (literals_on || !literal)) {
       dot = printNode(dot,parent,key,productions_on ?
 				PT_yieldProduction(PT_getTreeProd(tree)) :
@@ -256,6 +257,10 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
     } 
     else if (layout_on && layout) {
       dot = printNode(dot,parent,key, "LAYOUT?");
+    }
+
+    if (!characters_on && PT_isLexicalInjectionProd(prod)) {
+      return dot;
     }
 
     if ((layout_on || !layout) && (literals_on || !literal)) {
