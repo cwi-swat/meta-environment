@@ -65,27 +65,26 @@ The main characteristic of industrial applications is their
 therefore be the ability to handle huge problems.
 
 In this paper we take the specification formalism \asdf\
-\cite{BHK89,HHKR89.update} as point of departure.  Its main focus is
-on language prototyping \cite{DHK96} and on the development of
-language specific tools, such as unparsers \cite{BV96} and program
-transformation tools \cite{Bru96}.  \asdf\ is based on general
-context-free grammars for describing syntax and on conditional
-equations for describing semantics.  In this way, one can easily
-describe the syntax of a (new or existing) language and specify
-operations on programs in that language such as static type checking,
-interpretation, compilation or transformation.  \asdf\ has been
-applied successfully in a number of industrial projects
-\cite{BDKKM96,VanDenBrandKlintVerhoef:98}, such as the development of
-a domain-specific language for describing interest products (in the
-financial domain) \cite{ADR95} and a renovation factory for
-restructuring of COBOL code \cite{BSV97b}.  In such industrial
-applications, the execution speed is very important, but when
-processing huge COBOL programs memory usage becomes a critical issue
-as well.  Other applications of \asdf\ include the development of a
-GLR parser generator \cite{Vis97}, an unparser generator \cite{BV96},
-and the compiler discussed in this paper.
-Other components, such as parsers, structure editors, and interpreters,
-are developed in \asdf\ as well but are not (yet) compiled to C.
+\cite{BHK89,HHKR89.update,DHK96} as point of departure.  Its main
+focus is on language prototyping and on the development of language
+specific tools.  \asdf\ is based on general context-free grammars for
+describing syntax and on conditional equations for describing
+semantics.  In this way, one can easily describe the syntax of a (new
+or existing) language and specify operations on programs in that
+language such as static type checking, interpretation, compilation or
+transformation.  \asdf\ has been applied successfully in a number of
+industrial projects \cite{BDKKM96,VanDenBrandKlintVerhoef:98}, such as
+the development of a domain-specific language for describing interest
+products (in the financial domain) \cite{ADR95} and a renovation
+factory for restructuring of COBOL code \cite{BSV97b}.  In such
+industrial applications, the execution speed is very important, but
+when processing huge COBOL programs memory usage becomes a critical
+issue as well.  Other applications of \asdf\ include the development
+of a GLR parser generator \cite{Vis97}, an unparser generator
+\cite{BV96}, program transformation tools \cite{Bru96}, and the
+compiler discussed in this paper.  Other components, such as parsers,
+structure editors, and interpreters, are developed in \asdf\ as well
+but are not (yet) compiled to C.
 
 What are the performance standards one should strive for when writing
 a compiler for, in our case, an algebraic specification formalism?
@@ -160,8 +159,8 @@ list matching.  Figure \ref{setexmpl} shows a single equation which
 removes multiple occurrences of identifiers from a set. In this
 example, variables with a $^*$-superscript are list-variables that may
 match zero or more identifiers.  The implementation of list matching
-may involve backtracking to find a match, in order satisfies all conditions
-of the rewrite rule as well.
+may involve backtracking to find a match that satisfies the left-hand side
+of the rewrite rule as well as all its conditions.
 There is only backtracking within the scope of a rewrite rule, 
 so if the right-hand side of the rewrite rule is normalized and this
 normalization fails {\em no} backtracking is performed to find a new match.
@@ -251,8 +250,8 @@ left-linear since the variable \texttt{Id} appears twice on the
 left-hand side of the equation.
 The \texttt{\{list\}} function is used to mark that a term is a list.
 This extra function is needed to distinguish between a single element list
-and an ordinary term, e.g., \texttt{\{list\}(a)} vs.\ \texttt{a}
-or \texttt{\{list\}(V)} vs.\ \texttt{V}.
+and an ordinary term, e.g., \texttt{\{list\}(a)} \emph{versus} \texttt{a}
+or \texttt{\{list\}(V)} \emph{versus} \texttt{V}.
 An example of a transformation on \muasf\ specifications is shown in
 Figure~\ref{setexmpl3}, where the non-left-linearity 
 has been removed from  the specification in Figure \ref{setexmpl2}
@@ -352,7 +351,7 @@ each \muasf\ function (even the constructors) a separate C function is
 generated. The right-hand side of an equation is directly translated
 to a function call, if necessary. A detailed description of the construction
 of the matching automaton is beyond the scope of this paper,
-a full description of the construction of the matching aoutmaton can
+a full description of the construction of the matching automaton can
 be found in \cite{BHKO99}. 
 Each generated C function contains a small part of the matching automaton,
 so instead of building one big automaton, the automaton is split over
@@ -382,14 +381,14 @@ This C code also illustrates the detection of reusable subexpressions.
 In the second \texttt{if}-statement a check is made whether the first
 argument of the \texttt{and}-function is equal to the term
 \texttt{false}.  If the outcome of this test is positive, the first
-argument \texttt{arg1} of the \texttt{and}-function is returned rather
+argument \texttt{arg0} of the \texttt{and}-function is returned rather
 than building a new normal form for the term {\tt false} or calling
 the function {\tt false()}.
 The last statement in Figure~\ref{boolexmpl3} is necessary to catch the
 case that the first argument is neither a \texttt{true} or \texttt{false}
 symbol, but some other Boolean normal form.
 
-\begin{figure}
+\begin{figure}[tb]
 \centerline{\fbox{
 \begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
@@ -404,7 +403,7 @@ symbol, but some other Boolean normal form.
 \end{minipage}
 }
 }
-\caption{\label{boolexmpl3} Generated C for {\tt and} function of the Booleans.}
+\caption{\label{boolexmpl3} Generated C code for the {\tt and} function of the Booleans.}
 \end{figure}
 
 
@@ -417,11 +416,11 @@ The functions {\tt not\_empty\_list}, {\tt list\_head},
 which give access to the C data structure which represents the \asdf\
 lists.  In this way the generated C code needs no knowledge of the
 internal list structure. We can even change the internal
-representation of lists \emph{without adapting the C code}, by just
+representation of lists \emph{without adapting the generated C code}, by just
 replacing the library functions.  The function {\tt term\_equal}
 checks the equality of two terms.
 
-\begin{figure}
+\begin{figure}[tb]
 \centerline{\fbox{
 \begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
@@ -472,14 +471,14 @@ are too long for C compilers and linkage editors.  We have opted for a
 solution in which each generated C file contains a ``register''
 function which stores at run-time for each defined function defined in
 this C file a
-mapping between the address of th generated function 
+mapping between the address of the generated function 
 and the original \asdf\ name. 
 In addition, each C file contains a ``resolve'' function which connects
 local function calls to the corresponding definitions based on their
 \asdf\ names.
 An example of registering and resolving can be found in Figure \ref{boolexmpl4}.
 
-\begin{figure}
+\begin{figure}[tb]
 \centerline{\fbox{
 \begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
@@ -509,7 +508,7 @@ An example of registering and resolving can be found in Figure \ref{boolexmpl4}.
 \end{minipage}
 }
 }
-\caption{\label{boolexmpl4} Generated C for {\tt xor} function of the Booleans.}
+\caption{\label{boolexmpl4} Generated C code for the {\tt xor} function of the Booleans.}
 \end{figure}
 
 The second issue concerns the choice of a unit for separate
@@ -522,16 +521,16 @@ be recompiled and linked with the other object files.
 
 In the case of \asdf, the natural compilation unit would be the
 module.  However, we want to generate a single C function for each
-function in the specification (for efficiency reasons) but in \asdf\
-specification functions can be defined using multiple equations
+function in the specification (for efficiency reasons) but 
+\asdf\ functions can be defined in specifications using multiple equations
 occurring in several modules.  The solution is to use a single
 function as compilation unit and to {\em re-shuffle} the equations
 before translating the specification.  Equations are thus stored
 depending on the module they occur in as well as on their outermost
 function symbol.  When the user changes an equation, only those
-functions that are actually affected can be recompiled to C code. The
+functions that are actually affected have to be recompiled into C code. The
 resulting C code is then compiled, and linked together with all other
-compiled functions.
+previously compiled functions.
 
 \section{\label{MemoryManagement}Memory Management}
 
@@ -625,7 +624,7 @@ generates calls to {\tt term\_equal} in the translation of
 patterns and conditions.
 
 The idea of subterm sharing is known in the LISP community as
-\emph{hash consing}~\cite{Alan:78} and will be discussed below.
+\emph{hash consing} and will be discussed below.
 
 \subsection{Shared Terms versus Destructive Updates}
 
@@ -640,7 +639,7 @@ Normal forms are constructed bottom-up and there is no need to perform
 destructive updates on a term once it has been constructed.
 When normalizing an input term, this term is not modified, the normal
 form is constructed independent of the input term. If we would modify
-the input term we have graph rewriting instead of (innermost) term
+the input term we would get graph rewriting instead of (innermost) term
 rewriting. Furthermore, the term library is very general and {\em not}
 strictly devoted to rewriting, destructive updates would cause unwanted
 side effects in components based on this term library.
@@ -652,13 +651,16 @@ the concatenation result.  In our case, this effect can only be
 achieved by taking the second list, prepending the elements of the
 first list to it, and return the new list as result.
 
-In LISP, the success of hash consing has been limited by the existence
-of the functions \texttt{rplaca} and \texttt{rplacd} that can
-destructively modify a list structure. To support destructive updates,
-one has to support two kinds of lists structures ``mono copy'' lists
-with maximal sharing and ``multi copy'' lists without maximal sharing.
-Before destructively changing a mono copy list, it has to be converted
-to a multi copy list.
+In LISP, the success of hash consing~\cite{Alan:78} has been limited
+by the existence of the functions \texttt{rplaca} and \texttt{rplacd}
+that can destructively modify a list structure. To support destructive
+updates, one has to support two kinds of list structures ``mono copy''
+lists with maximal sharing and ``multi copy'' lists without maximal
+sharing.  Before destructively changing a mono copy list, it has to be
+converted to a multi copy list. In the 1970's, E. Goto has
+experimented with a Lisp dialect (HLisp) supporting hash consing and
+list types as just sketched.  See~\cite{TerashimaKanada:90} for a
+recent overview of this work and its applications.
 
 In the case of the \asdf\ compiler, we \emph{generate} the code that
 creates and manipulates terms and we can selectively generate code
@@ -695,16 +697,19 @@ exploits the fact that we are managing ATerms.
 
 \section{\label{Benchmarks}Benchmarks}
 
-
-
 Does maximal sharing of subterms lead to reductions in memory usage?
 How does it affect execution speed?  Does the combination of techniques
 presented in this paper indeed lead to an implementation of term
 rewriting that scales-up to industrial applications?
 
-To answer these questions, we have developed three relatively simple
-benchmarks to compare our work with that of other efficient functional
-and algebraic language implementations.  All three benchmarks are
+To answer these questions, we present in Section~\ref{SmallBenchmarks}
+three relatively simple benchmarks to compare our work with that of
+other efficient functional and algebraic language implementations.
+In Section~\ref{BigBenchmarks} we give measurements for some larger
+\asdf\ specifications.
+
+\subsection{\label{SmallBenchmarks}Three Small Benchmarks}
+All three benchmarks are
 based on symbolic evaluation of expressions $2 ^ n~{\bf mod}~17$, with
 $14 \leq n \leq 30$.  A nice aspect of these expressions is that there
 are many ways to calculate their value, giving ample opportunity to
@@ -735,6 +740,7 @@ in our benchmarks:
 \item The Opal compiler developed at the Technische Universit\"{a}t
 Berlin~\cite{DidrichEtAl:94}.
 \item The Glasgow Haskell compiler~\cite{ghc93}.
+\item The Standard ML compiler~\cite{AppelMacQueen:87}.
 \end{itemize}
 
 
@@ -743,7 +749,7 @@ Berlin~\cite{DidrichEtAl:94}.
 %%  \caption{\label{evalsym-tlog}Execution times for the {\tt evalsym} benchmark}
 %%\end{figure}
 
-\subsection{The {\tt evalsym} benchmark}
+\subsubsection{The {\tt evalsym} Benchmark}
 
 The first benchmark is called {\tt evalsym} and uses an algorithm that
 is CPU intensive, but does not use a lot of memory.  This benchmark is
@@ -752,23 +758,24 @@ maximal sharing.  The results are shown in
 Table \ref{evalsym-table}.
 %%Figure \ref{evalsym-tlog}.
 The differences between the various systems are indeed small.
-Although, \asdf\ cannot benefit from maximal sharing, it does not
+Although, \asdf\ (with sharing) cannot benefit from maximal sharing, it does not
 loose much either.
 
-\begin{table}
+\begin{table}[tb]
 \begin{center} 
 \begin{tabular}{|l|r|} \hline
-Compiler & Time \\ \hline \hline
-Clean (strict)          & 32.3 s \\ \hline
-Sml                     & 32.9 s \\ \hline 
-Clean (lazy)            & 36.9 s \\ \hline
-\asdf{} with sharing    & 37.7 s \\ \hline 
-Haskell                 & 42.4 s \\ \hline
-Opal                    & 75.7 s \\ \hline
-\asdf{} without sharing & 190.4 s \\ \hline 
-Elan                    & 287.0 s \\ \hline 
+Compiler & Time (sec)\\ \hline \hline
+Clean (strict)          & 32.3 \\ \hline
+Sml                     & 32.9 \\ \hline 
+Clean (lazy)            & 36.9 \\ \hline
+\asdf{} (with sharing)  & 37.7 \\ \hline 
+Haskell                 & 42.4 \\ \hline
+Opal                    & 75.7 \\ \hline
+\asdf{} (without sharing) & 190.4 \\ \hline 
+Elan                    & 287.0 \\ \hline 
 \end{tabular}
-\caption{\label{evalsym-table} The execution times for the evaluation of $2^23$.}
+\vspace{\baselineskip}
+\caption{\label{evalsym-table} The execution times for the evaluation of $2^{23}$.}
 \end{center}
 \end{table} 
 
@@ -782,7 +789,7 @@ Elan                    & 287.0 s \\ \hline
   \caption{\label{evalexp-tlog}Execution times for the {\tt evalexp} benchmark}
 \end{figure}
 
-\subsection{The {\tt evalexp} benchmark}
+\subsubsection{The {\tt evalexp} Benchmark}
 
 The second benchmark is called {\tt evalexp} and is based on an algorithm
 that uses a lot of memory when a typical eager (strict) implementation
@@ -792,13 +799,14 @@ relatively small.
 
 Memory usage is shown in Figure \ref{evalexp-mem}.  Clearly, normal
 strict implementations cannot cope with the excessive memory
-requirements of this benchmark. Interestingly, \asdf\ has no problems
-whatsoever due to the use of maximal sharing, although it is also
-based on strict evaluation
+requirements of this benchmark. Interestingly, \asdf\ (with sharing)
+has no problems whatsoever due to the use of maximal sharing, although
+it is also based on strict evaluation
 
 Execution times are plotted in Figure \ref{evalexp-tlog}.  Opal and
-Clean (lazy) are faster than \asdf\ but the differences are small.  The
-Haskell implementation is a bit slower, but Elan is really lagging behind.
+Clean (lazy) are faster than \asdf\ (with sharing) but the differences
+are small.  The Haskell implementation is a bit slower, but Elan is
+really lagging behind.
 
 \begin{figure}[tb]
   \centerline{\psfig{figure=evaltree-mlin.eps}}
@@ -810,19 +818,20 @@ Haskell implementation is a bit slower, but Elan is really lagging behind.
   \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
 \end{figure}
 
-\subsection{The {\tt evaltree} benchmark}
+\subsubsection{The {\tt evaltree} Benchmark}
 
 The third benchmark is called {\tt evaltree} and is based on an
 algorithm that uses a lot of memory both with lazy and eager
 implementations.  Figure \ref{evaltree-mlin} shows that neither the
 lazy nor the strict implementations can cope with the memory
-requirements of this benchmark.  Only \asdf\ can keep the memory
-requirements at an acceptable level due to its maximal sharing.
+requirements of this benchmark.  Only \asdf\ (with sharing) can keep
+the memory requirements at an acceptable level due to its maximal
+sharing.
 
 The execution times plotted in Figure \ref{evaltree-tlog}
 show that only \asdf\ scales-up for $n > 20$.
 
-\subsection{Compilation times of non-trivial \asdf{} specifications}
+\subsection{\label{BigBenchmarks}Compilation Times of Larger \asdf{} Specifications}
 
 Table \ref{ASF2Ctable} gives an overview of the compilation times of
 four non-trivial \asdf{} specifications and their sizes in number of
@@ -836,39 +845,46 @@ factory for COBOL \cite{BSV97b}.
 The Risla expander is an \asdf{} specification of a domain-specific language
 for interest products, it expands modular Risla specifications into
 ``flat'' Risla specifications. These flat Risla specifications are later
-(by an auxilary tool) compiled into COBOL code. 
+compiled into COBOL code by an auxiliary tool.
 The compilation times in the last column are produced by a
-native C compiler (cc) with maximal optimizations.
+native C compiler (SUN's \texttt{cc}) with maximal optimizations.
 
-\begin{table}
-\begin{tabular}{|l|r|r|r|r|r|} \hline
-Specification & Nr of eqs & Lines \asdf & Lines C & \asdf compiler & C compiler \\ \hline \hline
-\asdf{} compiler & 1876   & 8699     & 85185    & 216 s  & 323 s \\ \hline
-Parser generator & 1388   & 4722     & 47662    & 106 s  & 192 s \\ \hline
-COBOL formatter  & 2037   & 9205     & 85976    & 208 s  & 374 s \\ \hline
-Risla expander   & 1082   & 7169     & 46787    & 168 s  & 531 s \\ \hline
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|c|} \hline
+Specification & \asdf\      & \asdf    & Generated C  	& \asdf\	& C compiler\\
+	      & (equations) & (lines)  & code (lines) 	& compiler (sec)& (sec)\\ \hline \hline
+\asdf{} compiler & 1876     & 8699     & 85185    	& 216  		& 323 \\ \hline
+Parser generator & 1388     & 4722     & 47662    	& 106  		& 192 \\ \hline
+COBOL formatter  & 2037     & 9205     & 85976    	& 208  		& 374 \\ \hline
+Risla expander   & 1082     & 7169     & 46787    	& 168  		& 531 \\ \hline
 \end{tabular}
-\caption{\label{ASF2Ctable}Measurements of the \asfc\ compiler.}
+\vspace{\baselineskip}
+\caption{\label{ASF2Ctable}Measurements of the \asdf\ compiler.}
+\end{center}
 \end{table}
 
-Table \ref{sharingtable} gives an impression of the effect of 
-maximal sharing versus
-non-sharing it contains the execution times and the memory usages of
-the compilation of the \asdf{} to C compiler and of the expansion
-of a Risla specification.
+Table \ref{sharingtable} gives an impression of the effect of maximal
+sharing on execution time and memory usage of compiled 
+\asdf\ specifications.  We show the results (with and without sharing) for
+the compilation of the \asdf{} to C compiler itself and for the
+expansion of a Risla specification.
 
-\begin{table}
+\begin{table}[tb]
+\begin{center}
 \begin{tabular}{|l|r|r|} \hline
-Application & Time & Memory \\ \hline \hline
-\asdf{} compiler with sharing    & 216 s  & 16 Mb \\ \hline
-\asdf{} compiler without sharing & 661 s   & 117 Mb \\ \hline 
-Risla expansion with sharing   &  s & Mb \\ \hline
-Risla expansion without sharing   & s & Mb\\ \hline
+Application 				& Time (sec) 	& Memory (Mb) \\ \hline \hline
+\asdf{} compiler (with sharing)    	& 216		& 16	\\ \hline
+\asdf{} compiler (without sharing) 	& 661  		& 117 	\\ \hline 
+Risla expansion (with sharing)   	&   		&  	\\ \hline
+Risla expansion (without sharing)  	&  		& 	\\ \hline
 \end{tabular}
-\caption{\label{sharingtable}Figures of experiments with and without maximal sharing.}
+\vspace{\baselineskip}
+\caption{\label{sharingtable}Performance with and without maximal sharing.}
+\end{center}
 \end{table}
 
-\section{Concluding remarks}
+\section{Concluding Remarks}
 \label{Conclusions}
 
 We have presented the techniques for the compilation of \asdf\ to C,
@@ -878,6 +894,23 @@ other systems, while memory usage is in some cases an order of
 magnitude smaller.  We have mostly used and adjusted existing
 techniques but their combination in the \asdf\ compiler turns out to
 be very effective.
+
+It is striking that our benchmarks show results that seem to
+contradict previous observations in the context of
+Sml~\cite{AppelGoncalves:93} where sharing resulted in slightly
+increased execution speed and only marginal space savings.  On closer
+inspection, we come to the conclusion that both methods for term
+sharing are different and can not be compared easily.  We share terms
+immediately when they are created: the costs are a table lookup and
+the storage needed for the table while the benefits are space savings
+due to sharing and a fast equality test (one pointer comparison).
+In~\cite{AppelGoncalves:93} sharing of subterms is \emph{only}
+determined during garbage collection in order to minimize the overhead
+of a table lookup at term creation. This implies that local terms that
+have not yet survived one garbage collection are not yet shared thus
+loosing most of the benefits (space savings and fast equality test) as
+well. The different usage patterns of terms in Sml and \asdf\ may also
+contribute to these seemingly contradicting observations.
 
 There are several topics that need further exploration.  First, we
 want to study the potential of compile-time analysis for reducing the
@@ -890,16 +923,12 @@ subterms will provide a new perspective on the implementation of
 memo-functions. Finally, our ongoing concern is to achieve an even
 further scale-up of prototyping based on term rewriting.
 
-{\bf PM}: The maximal sharing prevents a cheap clean up of local variables
-when exiting a function. This is an observation made by Appel (according
-to Jan Heering). He does not share the local variables, but this prevents
-a cheap implementation of the \texttt{term-equal}.
-
 \section*{Acknowledgments}
 The discussions with Jan Heering on \asdf\ compilation are much
-appreciated.  The idea for the benchmarks in Section~\ref{Benchmarks}
-originates from Jan Bergstra.
-
+appreciated.  The idea for the benchmarks in
+Section~\ref{SmallBenchmarks} originates from Jan Bergstra.
+Reference~\cite{AppelGoncalves:93} was pointed out to us by one of the
+referees.
 
 \bibliographystyle{plain}
 \bibliography{/home/gipe/lib/tex/LanguageProto,metabib}
