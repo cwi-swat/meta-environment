@@ -177,7 +177,7 @@ ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
       ATerror("tb_get_focus_text: failed to allocate %d bytes\n", size);
     }
 
-    f = fopen(filename, "r");
+    f = fopen(filename, "rb");
     if (f == NULL) {
       ATwarning("tb_get_focus_text: failed to read %s\n", filename);
       strcpy(contents, "");

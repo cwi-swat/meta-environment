@@ -126,7 +126,7 @@ int fileisregular(const char *s)
 int fileisreadable(const char *s)
 {
   FILE *fd;
-  return fileisregular(s) && (fd = fopen(s, "r")) && fclose(fd);
+  return fileisregular(s) && (fd = fopen(s, "rb")) && fclose(fd);
 }
 
 /*}}}  */
@@ -156,7 +156,7 @@ char *readFileContents(char *fnam, size_t *size)
   FILE *fd;
 
   *size = filesize(fnam);
-  if((fd = fopen(fnam, "r")) == NULL) {
+  if((fd = fopen(fnam, "rb")) == NULL) {
     /* fprintf(stderr, "could not open %s\n", fnam); */
     *size = 0;
     return NULL;
