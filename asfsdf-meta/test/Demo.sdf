@@ -1,4 +1,4 @@
 module Demo
 
-imports Pico-eval
-imports Pico-typecheck
+imports languages/pico/interpreter/Pico-eval
+imports languages/pico/typechecker/Pico-typecheck

@@ -1,8 +1,10 @@
 /* $Id$ */
 
+Tue Jun 22 10:03:53 CEST 2004 <kooiker@cwi.nl>
+ * test/Demo.sdf: change path to Pico-eval and Pico-typecheck
+
 Tue Jun 15 15:01:39 CEST 2004 <kooiker@cwi.nl>
- * meta-script/standard.meta.buttons.src:
-   add Parse Term to term-editor 
+ * meta-script/standard.meta.buttons.src: add Parse Term to term-editor 
 
 Thu Jun 10 15:29:36 CEST 2004 <jurgenv@cwi.nl>
  * Removed demo/pico (now located in asf-library package)
