@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 2003/06/26
  * Added an explicit ATBpack for the normal form.
 
