@@ -124,14 +124,14 @@ funcdef2cfuncs(funid(Char*1),Namepair*) =
 is-list-funid(funid(Char*1)) = true, 
 np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
 sigargs2cargs(Sigarg+,1) = FormalArgs,
-funid(Char*1) = funid("{"Char*3"}")
+funid(Char*1) = funid(""""{"Char*3"}"""")
 =====================================
 funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
 (funid(Char*3)(Sigarg+),
   static Symbol identifier(Char*3"s""y""m");
   static ATerm identifier(Char*3)(FormalArgs);,
   identifier(Char*3 "s""y""m") = ATmakeSymbol(identifier(Char*2),1,ATtrue);
-  ATprotectSymbol(identifier(Char*2 "s""y""m"));
+  ATprotectSymbol(identifier(Char*3 "s""y""m"));
 )
 
   [fd2c-2'8] is-list-funid(funid(Char*1)) = false,
