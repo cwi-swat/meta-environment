@@ -76,14 +76,11 @@ in
   Status := success.
   GetRealModuleName(Import, Path, Status?, RealImport?).
   if equal(Status, success) then
-    CheckExistence(RealImport, Status?).
-    if not(equal (Status, success)) then
-      Status := success.
-      AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
-      if equal (Status, success) then
-        SaveSdfModules(Changed).
-	SaveAsfSdfModule(Mod)
-      else tau fi
+    Status := success.
+    AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
+    if equal (Status, success) then
+      SaveSdfModules(Changed).
+      SaveAsfSdfModule(Mod)
     else tau fi
   else tau fi
 endlet
