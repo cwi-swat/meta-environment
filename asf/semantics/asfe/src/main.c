@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
-  ASF_CondEquationList neweqs;
-
+  ASF_CondEquationList eqsList;
+  PT_ParseTree parseTree;
 
   /*  Check whether we're a ToolBus process  */
   for (c = 1; !toolbus_mode && c < argc; c++) {
@@ -203,12 +203,8 @@ int main(int argc, char *argv[])
     }
 
     eqs = ATreadFromFile(iofile);
+    eqsList = ASF_makeCondEquationListFromTerm(eqs);
     fclose(iofile);
-
-    /* Prepare the equations and put them in the database */
-    neweqs = RWprepareEquations(ASF_makeCondEquationListFromTerm(eqs));
-
-    enter_equations(name, neweqs);
 
     /* Get the term from file */
     if (!strcmp(input, "") || !strcmp(input, "-")) {
@@ -218,6 +214,7 @@ int main(int argc, char *argv[])
     }
 
     term = ATreadFromFile(iofile);
+    parseTree = PT_makeParseTreeFromTerm(term);
     fclose(iofile);
 
     /* Optionally connect to the tide debugger */
@@ -226,13 +223,13 @@ int main(int argc, char *argv[])
       ATBinit(argc, argv, &bottomOfStack);
       Tide_connect();
 #else
-      fprintf(stderr, "tide support is not enabled! (try configuring --with-tide)\n");
+      ATwarning("tide support is not enabled! (try configuring --with-tide)\n");
       exit(1);
 #endif
     }
 
     /* Rewrite the term */
-    result = evaluator(name, term);
+    result = evaluator(name, parseTree, eqsList, ATfalse);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;
