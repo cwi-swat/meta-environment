@@ -18,10 +18,11 @@ JAVA		= Port.java Expr.java DebugTool.java DebugToolListener.java \
 noinst_SCRIPTS = ${TOOL_GEN}
 
 java_JAVA	= ${TOOL_GEN} ${JAVA}
+EXTRA_DIST = ${java_JAVA}
 
-${TOOL_GEN}: ${top_builddir}/toolbus/tide.tifs
+${TOOL_GEN}: 
 	${TOOLBUS}/bin/tifstojava \
-		-tifs ${top_builddir}/toolbus/tide.tifs \
+		-tifs ${top_srcdir}/toolbus/tide.tifs \
 		-tool debug-tool \
 		-package tide.tool.support \
 		-swing

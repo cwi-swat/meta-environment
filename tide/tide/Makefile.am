@@ -13,7 +13,8 @@ GENJAVA		= TideConfig.java ${CONTROL_GEN}
 CONTROL_GEN     = TideControlTif.java TideControlTool.java \
 		TideControlBridge.java
 
-EXTRADIST	= TideConfig.java.src
+EXTRA_DIST	= TideConfig.java.src ${java_JAVA}
+CLEANFILES 	= TideConfig.java
 
 # This is some kind of hack to make sure that generated Java files are
 # generated before compiling all other java files but that it will

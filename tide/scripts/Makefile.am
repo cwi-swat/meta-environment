@@ -5,6 +5,8 @@ bin_SCRIPTS	= tide
 
 noinst_SCRIPTS	= tide-test tide-passive tide-control
 
+CLEANFILES = tide tide-test tide-passive tide-control
+
 %: %.src Makefile
 	sed 's@__JARDIR__@${pkgdatadir}@g;\
 	     s@__TBDIR__@${pkgdatadir}@g;\

@@ -3,7 +3,7 @@ SUBDIRS		= toolbus lib-c tide META-INF images examples scripts .
 
 ACLOCAL_FLAGS = -I .
 
-EXTRA_DIST      = $(wildcard *.pkg)
+EXTRA_DIST      = package
 
 pkgdata_DATA	= tide.jar
 
@@ -23,7 +23,7 @@ tide.jar: ${JARFILES}
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
-${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
-	sed 's#__VERSION__#${VERSION}#g;\
-             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
+${PACKAGE}-${VERSION}.pkg: package Makefile
+	cp $< $@
 
+CLEANFILES = tide.jar ${PACKAGE}-${VERSION}.pkg

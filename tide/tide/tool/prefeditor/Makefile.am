@@ -6,3 +6,4 @@ JAVAROOT	= ${top_builddir}
 java_JAVA	= PreferencesEditor.java PreferencesEditorFactory.java \
 		FontPreferenceEditor.java
 
+EXTRA_DIST = ${java_JAVA}

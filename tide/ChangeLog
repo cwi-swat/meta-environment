@@ -1,5 +1,11 @@
 
 
+Wed Sep 22 11:43:13 CEST 2004 <jurgenv@cwi.nl>
+ * Many small changes in the Makefile.am's to get tide through distcheck
+
+Thu Sep 16 10:25:37 CEST 2004 <jurgenv@cwi.nl>
+ * Split of a asf-sdf-meta_1-5 branch for Tide
+
 Mon May 24 10:42:55 CEST 2004 <{jurgenv,sgmcorne}@cwi.nl>
  * Bumped version to 1.0
  * Extracted MainFrame from TideControl in order to make basic Tide

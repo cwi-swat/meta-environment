@@ -1,11 +1,8 @@
 
 pkgdata_DATA	= $(wildcard *.tb) tide.tb tide.tifs
+noinst_SCRIPTS  = tide.tifs
 
-EXTRA_DIST	= $(wildcard *.tb)
+EXTRA_DIST	= $(wildcard *.tb) tide.tifs
 
-tide.tifs: ${srcdir}/tide.tb
-	cp ${srcdir}/tide.tb tmp-tide.tb
-	${TOOLBUS}/bin/toolbus -I. -gentifs tmp-tide.tb
-	mv tmp-tide.tifs tide.tifs
-	rm tmp-tide.tb
-
+tifs: tide.tb 
+	${TOOLBUS}/bin/toolbus -I${srcdir} -gentifs $< -output tide.tifs

@@ -13,3 +13,4 @@ java_JAVA	= ToolManager.java TideToolFactory.java TideTool.java \
 		AdapterAction.java ProcessAction.java \
 		TideDialog.java
 
+EXTRA_DIST = ${java_JAVA}

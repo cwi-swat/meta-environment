@@ -7,11 +7,11 @@ libtide_adapter_a_SOURCES	= TA.c TA_dict.c tide-adapter.c \
 				debug-adapter.tif.c debug-adapter.tif.h \
 				debug-adapter.c
 
-debug-adapter.tif.c debug-adapter.tif.h: ../toolbus/tide.tifs
+debug-adapter.tif.c debug-adapter.tif.h: ${top_srcdir}/toolbus/tide.tifs
 	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc \
 		-tool debug-adapter \
 		-prefix ta_ \
-		../toolbus/tide.tifs
+		${top_srcdir}/toolbus/tide.tifs
 
 regen:
 	adt-to-c -i TA.adt --prefix TA_ --name TA
