@@ -841,6 +841,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   private JMenu findMenuLocation(JMenu[] children, String name) {
+      // TODO: use buttons.adt
     for (int i=0; i<children.length; i++) {
       if (name.equals(children[i].getText())) {
 	return children[i];
