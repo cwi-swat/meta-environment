@@ -1,5 +1,10 @@
 $Id$
 
+2001/05/30
+  * Fixed a bug with respect to the Symbol Int+ construction, the
+    normalizer still used the old notation {Symbol}Int+.
+  * Generated new C code.
+
 2001/05/23 (markvdb@cwi.nl)
   * Released version 0.8 and bumped into 0.9.
 

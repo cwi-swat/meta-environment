@@ -123,13 +123,13 @@ equations
 %% $\Sym{A}+$, by productions of the form
 %% $\Sym{A}\;\{\Sym{A}\}(n-1)+\to\{\Sym{A}\}n+$.
 
-   [0] {_A}0+ = _A*
-   [0] {_A}1+ = _A+
+   [0] _A 0+ = _A*
+   [0] _A 1+ = _A+
 
    [0]
-        n >= 2 = true, n - 1 = n', p = _A {_A} n'+ -> {_A} n+
-        =====================================================
-        r[[ {_A} n+]] = syntax p r[[ {_A} n'+ ]]
+        n >= 2 = true, n - 1 = n', p = _A _A n'+ -> _A n+
+        =================================================
+        r[[ _A n+]] = syntax p r[[ _A n'+ ]]
 
 %% Constrained iteration is defined similarly for lists with separators.
 

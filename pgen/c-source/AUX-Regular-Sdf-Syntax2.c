@@ -12,12 +12,12 @@ static funcptr ef1 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 void register_AUX_Regular_Sdf_Syntax2 ( ) {
-lf_AUX_Regular_Sdf_Syntax2_1sym = ATmakeSymbol ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)"
+lf_AUX_Regular_Sdf_Syntax2_1sym = ATmakeSymbol ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Regular_Sdf_Syntax2_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) , lf_AUX_Regular_Sdf_Syntax2_1 , lf_AUX_Regular_Sdf_Syntax2_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) , lf_AUX_Regular_Sdf_Syntax2_1 , lf_AUX_Regular_Sdf_Syntax2_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_Regular_Sdf_Syntax2 ( ) {
