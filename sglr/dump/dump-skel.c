@@ -45,6 +45,7 @@ int main (int argc, char **argv)
   ATerm       bottomOfStack;
   char        *err;
   char        *pt_name;
+  language    lang_name;
   parse_table *pt;
   int         requested = -1;
 
@@ -63,13 +64,15 @@ int main (int argc, char **argv)
       pt_name = argv[1];
       break;
   }
-  if(ATmatch(SGopenLanguage("dump", pt_name, pt_name),
+
+  lang_name = ATmake("<str>", pt_name);
+  if(ATmatch(SGopenLanguage("dump", lang_name, pt_name),
              "snd-value(open-language-failed(<str>,<str>))", &err, NULL)) {
     ATfprintf(stderr, "could not open %s as a parse table\n", err);
     return 1;
   }
 
-  if(!(pt = SG_LookupParseTable(pt_name))) {
+  if(!(pt = SG_LookupParseTable(lang_name))) {
     ATfprintf(stderr, "failed to find parse table for languate %s\n", pt_name);
     return 1;
   }

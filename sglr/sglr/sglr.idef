@@ -24,6 +24,7 @@ process Parser is
   let
     P    : sglr,
     L    : str,
+    Lid  : term,
     G    : str,
     S    : str,
     Id   : term,
@@ -37,8 +38,8 @@ process Parser is
   in
     execute(sglr, P?) .
     (
-      (rec-msg(Id?, parse-string(L?, G?, S?)) .
-       snd-eval(P, parse-string(L, G, S))
+      (rec-msg(Id?, parse-string(Lid?, G?, S?)) .
+       snd-eval(P, parse-string(Lid, G, S))
       +
        rec-msg(parse-file(L?, G?, FN?, Id?)) .
        snd-eval(P, parse-file(L, G, FN))
@@ -60,8 +61,8 @@ process Parser is
         snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
       )
     +
-      rec-msg(Id?, parse-string-as-asfix1(L?, G?, S?)) .
-      snd-eval(P, parse-string-as-asfix1(L, G, S)) .
+      rec-msg(Id?, parse-string-as-asfix1(Lid?, G?, S?)) .
+      snd-eval(P, parse-string-as-asfix1(Lid, G, S)) .
       (
         rec-value(P, asfix1-parsetree(T?)) .
         snd-msg(parse-result-asfix1(Id, parse-tree(T)))
@@ -80,41 +81,41 @@ process Parser is
       )
     +
       (
-        rec-msg(open-language-from-term(L?, Tbl?)) .
-        snd-eval(P, open-language-from-term(L, Tbl))
+        rec-msg(open-language-from-term(Lid?, Tbl?)) .
+        snd-eval(P, open-language-from-term(Lid, Tbl))
       +
-        rec-msg(open-language(L?, FN?)) .
-        snd-eval(P, open-language(L, FN))
+        rec-msg(open-language(Lid?, FN?)) .
+        snd-eval(P, open-language(Lid, FN))
       +
-        rec-msg(reopen-language(L?, FN?)) .
-        snd-eval(P, reopen-language(L, FN))
+        rec-msg(reopen-language(Lid?, FN?)) .
+        snd-eval(P, reopen-language(Lid, FN))
       ) .
       (
-	rec-value(P, language-opened(L?, FN)) .
-	snd-msg(language-opened(L)) .
-	snd-note(language-available(L))
+	rec-value(P, language-opened(Lid)) .
+	snd-msg(language-opened(Lid)) .
+	snd-note(language-available(Lid))
       +
-	rec-value(P, language-not-opened(L?, FN)) .
-	snd-msg(language-not-opened(L))
+	rec-value(P, language-not-opened(Lid)) .
+	snd-msg(language-not-opened(Lid))
       )
     +
-      rec-msg(close-language(L?)) .
-      snd-eval(P, close-language(L)) .
+      rec-msg(close-language(Lid?)) .
+      snd-eval(P, close-language(Lid)) .
       (
-	rec-value(P, language-closed(L?)) .
-	snd-note(language-unavailable(L))
+	rec-value(P, language-closed(Lid?)) .
+	snd-note(language-unavailable(Lid))
       +
-	rec-value(P, language-not-open(L?))
+	rec-value(P, language-not-open(Lid?))
       )
     +
-      rec-msg(get-top-symbols(L?)) .
-      snd-eval(P, get-top-symbols(L)) .
+      rec-msg(get-top-symbols(Lid?)) .
+      snd-eval(P, get-top-symbols(Lid)) .
       (
-        rec-value(P, startsymbols(L, Start?)) .
-	snd-msg(startsymbols(L, Start))
+        rec-value(P, startsymbols(Lid, Start?)) .
+	snd-msg(startsymbols(Lid, Start))
       +
-        rec-value(P, language-not-available(L)) .
-	snd-msg(language-not-open(L))
+        rec-value(P, language-not-available(Lid)) .
+	snd-msg(language-not-open(Lid))
       )
     )
     * rec-disconnect(P)

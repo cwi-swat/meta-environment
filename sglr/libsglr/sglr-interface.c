@@ -106,7 +106,7 @@ void SGshowMode()
 
 /**  The ToolBus API functions  **/
 
-ATerm SGgetTopSymbols(char *L)
+ATerm SGgetTopSymbols(language L)
 {
   parse_table *pt = NULL;
   production   pr;
@@ -116,7 +116,7 @@ ATerm SGgetTopSymbols(char *L)
 
   if(!(pt = SG_LookupParseTable(L))) {
     return SG_TOOLBUS
-      ? SG_TermToToolbus(ATmake("language-not-available(<str>)", L))
+      ? SG_TermToToolbus(ATmake("language-not-available(<term>)", L))
       : (ATerm) NULL;
   }
 
@@ -131,7 +131,7 @@ ATerm SGgetTopSymbols(char *L)
       }
     }
   }
-  ret = ATmake("startsymbols(<str>,[<list>])", L, ret);
+  ret = ATmake("startsymbols(<term>,[<list>])", L, ret);
 
   return SG_TOOLBUS
     ? SG_TermToToolbus(ret)
@@ -144,18 +144,18 @@ ATerm SGgetTopSymbols(char *L)
  language |L| from the term |tbl|.
  */
 
-ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl)
+ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
 {
   parse_table *pt = NULL;
 
   if(!(pt = SG_LookupParseTable(L))) {
-    IF_STATISTICS(fprintf(SG_log(), "Language: %s\n", L); SG_Timer());
+    IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
 
     pt = SG_BuildParseTable((ATermAppl) tbl);
 
-    IF_STATISTICS(fprintf(SG_log(),
-                          "Obtaining parse table for %s took %.4fs\n",
-                          L, SG_Timer()));
+    IF_STATISTICS(ATfprintf(SG_log(),
+                            "Obtaining parse table for %t took %.4fs\n",
+                            L, SG_Timer()));
 
     if(pt)
       SG_SaveParseTable(L, pt);
@@ -164,9 +164,9 @@ ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl)
   IF_DEBUG(SGgetTopSymbols(L));
 
   return SG_TOOLBUS
-    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<str>,<str>)"
-                                 :  "language-not-opened(<str>,<str>)",
-                               L, L))
+    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
+                                 :  "language-not-opened(<term>)",
+                               L))
     : (ATerm) (pt ? ATempty : NULL);
 }
 
@@ -176,7 +176,7 @@ ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl)
  from the file |FN|.
  */
 
-ATerm SGopenLanguage(char *prgname, char *L, char *FN)
+ATerm SGopenLanguage(char *prgname, language L, char *FN)
 {
   parse_table *pt;
 
@@ -188,7 +188,8 @@ ATerm SGopenLanguage(char *prgname, char *L, char *FN)
 
   SG_Validate("SGopenLanguage");
   IF_VERBOSE(
-    if(FN) ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
+    if (FN) 
+      ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
   );
   if(!(pt = SG_LookupParseTable(L))) {
     pt = SG_AddParseTable(prgname, L, FN);
@@ -197,9 +198,9 @@ ATerm SGopenLanguage(char *prgname, char *L, char *FN)
   IF_DEBUG(SGgetTopSymbols(L));
 
   return SG_TOOLBUS
-    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<str>,<str>)"
-                                 :  "language-not-opened(<str>,<str>)",
-                               L, FN))
+    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
+                                 :  "language-not-opened(<term>)",
+                               L))
     : (ATerm) (pt ? ATempty : NULL);
 }
 
@@ -207,15 +208,15 @@ ATerm SGopenLanguage(char *prgname, char *L, char *FN)
  |SGcloseLanguage| discards the parse table for language |L|
  */
 
-ATerm SGcloseLanguage(char *prgname, char *L)
+ATerm SGcloseLanguage(char *prgname, language L)
 {
   SG_Validate("SGcloseLanguage");
   if(SG_LookupParseTable(L)) {
-    IF_VERBOSE(ATwarning("%s: closing language %s\n", prgname, SG_SAFE_STRING(L)));
+    IF_VERBOSE(ATwarning("%s: closing language %t\n", prgname, SG_SAFE_LANGUAGE(L)));
     SG_RemoveParseTable(L);
-    return SG_TermToToolbus(ATmake("language-closed(<str>)", SG_SAFE_STRING(L)));
+    return SG_TermToToolbus(ATmake("language-closed(<term>)", SG_SAFE_LANGUAGE(L)));
   }
-  return SG_TermToToolbus(ATmake("language-not-open(<str>)", SG_SAFE_STRING(L)));
+  return SG_TermToToolbus(ATmake("language-not-open(<term>)", SG_SAFE_LANGUAGE(L)));
 }
 
 /*
@@ -223,11 +224,11 @@ ATerm SGcloseLanguage(char *prgname, char *L)
  from the file |FN|.
  */
 
-ATerm SGreOpenLanguage(char *prgname, char *L, char *FN)
+ATerm SGreOpenLanguage(char *prgname, language L, char *FN)
 {
   SG_Validate("SGreOpenLanguage");
   IF_VERBOSE(
-    if(FN) ATwarning("%s: (re)opening parse table %s\n", prgname, SG_SAFE_STRING(L))
+    if(FN) ATwarning("%s: (re)opening parse table %t\n", prgname, SG_SAFE_LANGUAGE(L))
   );
   SGcloseLanguage(prgname, L);
   return SGopenLanguage(prgname, L, FN);
@@ -247,7 +248,7 @@ ATerm SGreOpenLanguage(char *prgname, char *L, char *FN)
  This is done by duplicating it.
  */
 
-ATerm SGparseString(char *L, char *G, char *S)
+ATerm SGparseString(language L, char *G, char *S)
 {
   ATerm t;
   parse_table *pt;
@@ -264,7 +265,7 @@ ATerm SGparseString(char *L, char *G, char *S)
 }
 
 
-ATerm SGparseStringAsAsFix2(char *L, char *G, char *S)
+ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
 {
   ATerm t;
   ATerm tree;
@@ -284,7 +285,7 @@ ATerm SGparseStringAsAsFix2(char *L, char *G, char *S)
   return SG_TermToToolbus(t);
 }
 
-ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)
+ATerm SGparseStringAsAsFix1(language L, char *G, char *S)
 {
   ATerm t;
 
@@ -312,7 +313,7 @@ ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)
  If either no filename or `-' is specified, standard input is used.
  */
 
-ATerm SGparseFile(char *prgname, char *L, char *G, char *FN)
+ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
 {
   forest ret;
   size_t ntok;
@@ -320,7 +321,7 @@ ATerm SGparseFile(char *prgname, char *L, char *G, char *FN)
 
   SG_Validate("SGparseFile");
   if((pt = SG_LookupParseTable(L)) == NULL) {
-    IF_VERBOSE(ATwarning("no such parse table (%s)\n", SG_SAFE_STRING(L)));
+    IF_VERBOSE(ATwarning("no such parse table (%s)\n", SG_SAFE_LANGUAGE(L)));
     return NULL;
   }
 
@@ -379,14 +380,16 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
 ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
                             char *infil, char *outfil)
 {
+  language L = ATmake("<str>", ptblfil);
+
   if(infil && *infil && strcmp(infil,"-") && (int)SG_FileSize(prg, infil)<0) {
     ATerror("%s: cannot open %s\n", prg, infil);
   }
 
-  if(!SGopenLanguage(prg, ptblfil, ptblfil)) {
+  if(!SGopenLanguage(prg, L, ptblfil)) {
     return NULL;
   }
-  return SGtermToFile(prg, SGparseFile(prg, ptblfil, sort, infil), outfil);
+  return SGtermToFile(prg, SGparseFile(prg, L, sort, infil), outfil);
 }
 
 /*

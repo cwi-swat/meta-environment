@@ -20,23 +20,23 @@ SGLR library (libsglr, -lsglr)
 
 =item void  B<SGinitParser>(ATbool toolbus_mode);
 
-=item ATerm B<SGopenlanguageFromTerm>(char *errpre, char *lang, ATerm tbl);
+=item ATerm B<SGopenlanguageFromTerm>(char *errpre, language lang, ATerm tbl);
 
-=item ATerm B<SGopenlanguage>(char *errpre, char *lang, char *tblfil);
+=item ATerm B<SGopenlanguage>(char *errpre, language lang, char *tblfil);
 
-=item ATerm B<SGcloselanguage>(char *errpre, char *lang);
+=item ATerm B<SGcloselanguage>(char *errpre, language lang);
 
-=item ATerm B<SGreOpenlanguage>(char *errpre, char *lang, char *tblfil);
+=item ATerm B<SGreOpenlanguage>(char *errpre, language lang, char *tblfil);
 
-=item ATerm B<SGgetTopSymbols>(char *lang);
+=item ATerm B<SGgetTopSymbols>(language lang);
 
-=item ATerm B<SGparseString>(char *lang, char *sort, char *str);
+=item ATerm B<SGparseString>(language lang, char *sort, char *str);
 
-=item ATerm B<SGparseStringAsAsFix2>(char *lang, char *sort, char *str);
+=item ATerm B<SGparseStringAsAsFix2>(language lang, char *sort, char *str);
 
-=item ATerm B<SGparseStringAsAsFix1>(char *lang, char *sort, char *str);
+=item ATerm B<SGparseStringAsAsFix1>(language lang, char *sort, char *str);
 
-=item ATerm B<SGparseFile>(char *errpre, char *lang, char *sort, char *infil);
+=item ATerm B<SGparseFile>(char *errpre, language lang, char *sort, char *infil);
 
 =item ATerm B<SGparseFileUsingTable>(char *errpre, char *tblfil, char *sort, char *infil, char *outfil);
 
@@ -106,7 +106,7 @@ application.
 =item The B<SGopenLanguageFromTerm> and B<SGopenLanguage> functions
 make a language available.  The language is registered under the name
 of the C<name> argument; it is available for later use (i.e. can be
-retreived from the parse table database) by that name. 
+retrieved from the parse table database) by that name. 
 B<SGopenLanguageFromTerm> uses the parse table, represented as an
 C<ATerm>, from the C<tbl> argument; B<SGopenLanguage> reads the parse
 table from the file that is named by the C<tblfil> argument.

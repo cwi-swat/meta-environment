@@ -51,6 +51,8 @@ typedef ATermAppl production;
 typedef ATermAppl tree;
 typedef ATermAppl forest;
 
+typedef ATerm language;
+
 /*
  Needed all the time...
  */
@@ -86,17 +88,17 @@ typedef ATermAppl forest;
 void  SGinitParser(ATbool toolbus_mode);
 void  SGshowMode(void);
 
-ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl);
-ATerm SGopenLanguage(char *prgname, char *L, char *FN);
-ATerm SGreOpenLanguage(char *prgname, char *L, char *FN);
-ATerm SGcloseLanguage(char *prgname, char *L);
-ATerm SGgetTopSymbols(char *L);
+ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
+ATerm SGopenLanguage(char *prgname, language L, char *FN);
+ATerm SGreOpenLanguage(char *prgname, language L, char *FN);
+ATerm SGcloseLanguage(char *prgname, language L);
+ATerm SGgetTopSymbols(language L);
 
-ATerm SGparseString(char *L, char *G, char *S);
-ATerm SGparseStringAsAsFix2(char *L, char *G, char *S);
-ATerm SGparseStringAsAsFix1(char *L, char *G, char *S);
+ATerm SGparseString(language L, char *G, char *S);
+ATerm SGparseStringAsAsFix2(language L, char *G, char *S);
+ATerm SGparseStringAsAsFix1(language L, char *G, char *S);
 
-ATerm SGparseFile(char *prgname, char *L, char *G, char *FN);
+ATerm SGparseFile(char *prgname, language L, char *G, char *FN);
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
 ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
                             char *in, char *out);

@@ -18,6 +18,10 @@
 
 $Id$
 
+2000/7/12 (markvdb@cwi.nl)
+   * "char *L" replaced by "language L" where "language" is a typedef ATerm.
+     L is used as key in the parsetable database.
+
 2000/7/12 (mdejonge@cwi.nl)
    * Bug fix in libsglr/sglr-interface.c. SGparseStringAsAsFix2 used ATBpack
      to pack the complete parse term which caused pattern matching in

@@ -134,12 +134,12 @@ ATbool        SG_PreferenceAction(action a);
 #endif
 #endif
 
-parse_table  *SG_AddParseTable(char *prgname, char *L, char *FN);
-void          SG_RemoveParseTable(char *L);
+parse_table  *SG_AddParseTable(char *prgname, language L, char *FN);
+void          SG_RemoveParseTable(language L);
 parse_table  *SG_BuildParseTable(ATermAppl t);
-void          SG_SaveParseTable(char *L, parse_table *pt);
-void          SG_ClearParseTable(char *L);
-parse_table  *SG_LookupParseTable(char *L);
+void          SG_SaveParseTable(language L, parse_table *pt);
+void          SG_ClearParseTable(language L);
+parse_table  *SG_LookupParseTable(language L);
 
 /*  Constants in parse tables  */
 #define       SG_PT_REGULAR         0

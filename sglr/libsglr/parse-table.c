@@ -896,7 +896,7 @@ void SG_DiscardParseTable(parse_table *pt)
  parse table database.
  */
 
-parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
+parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
 {
   FILE        *input_file;
   parse_table *pt = NULL;
@@ -905,12 +905,12 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
     return NULL;
   }
 
-  IF_STATISTICS(fprintf(SG_log(), "Language: %s\n", L); SG_Timer());
+  IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
 
   pt = SG_BuildParseTable((ATermAppl) ATreadFromFile(input_file));
 
-  IF_STATISTICS(fprintf(SG_log(),
-                        "Obtaining parse table for %s took %.4fs\n",
+  IF_STATISTICS(ATfprintf(SG_log(),
+                        "Obtaining parse table for %t took %.4fs\n",
                         L, SG_Timer()));
 
   SG_CloseFile(input_file);
@@ -920,7 +920,7 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
   return pt;
 }
 
-void SG_RemoveParseTable(char *L)
+void SG_RemoveParseTable(language L)
 {
   if(SG_LookupParseTable(L))
     SG_ClearParseTable(L);
@@ -1024,7 +1024,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 #define MAX_TABLES 4
 
 typedef struct _ptdb {
-  char *name;
+  language name;
   parse_table *table;
 } PTDB;
 static PTDB tables[MAX_TABLES];
@@ -1036,40 +1036,40 @@ static int last_table = 0;
  database is full, ditch its first entry to make room.
  */
 
-void SG_SaveParseTable(char *L, parse_table *pt)
+void SG_SaveParseTable(language L, parse_table *pt)
 {
   /*  Remove table for L, if already present  */
   SG_RemoveParseTable(L);
 
   if (last_table >= MAX_TABLES) {
     if(SG_VERBOSE) {
-      /*  Full?  Ditch oldest table in copybook^h^h^h^h^h^h^h^hdatabase  */
+      /*  Full?  Ditch oldest table in database  */
       ATwarning("maximum number (%d) of languages reached\n"
-                "removing table for %s to make room for %s\n",
-                MAX_TABLES, tables[0].name, SG_SAFE_STRING(L));
+                "removing table for %t to make room for %t\n",
+                MAX_TABLES, tables[0].name, SG_SAFE_LANGUAGE(L));
     }
     SG_ClearParseTable(tables[0].name);
   }
 
   /*  Add L in the next free slot  */
-  tables[last_table].name  = strdup(L);
+  tables[last_table].name  = L;
   tables[last_table].table = pt;
-  IF_DEBUG(fprintf(SG_log(),
-                   "Table for %s added to parse table database with index %d\n",
-                   L, last_table));
+  IF_DEBUG(ATfprintf(SG_log(),
+                     "Table for %t added to parse table database with index %d\n",
+                     L, last_table));
   last_table++;
 }
 
-void SG_ClearParseTable(char *L)
+void SG_ClearParseTable(language L)
 {
   int  i, j;
   long maxrss = 0;
 
   /*  Locate L in parse table database  */
-  for (i = 0; i < last_table && strcmp(L, tables[i].name); i++);
+  for (i = 0; i < last_table && !ATisEqual(L, tables[i].name); i++);
   if (i >= MAX_TABLES) {
     IF_VERBOSE(
-      ATwarning("no table for %s to remove\n", L)
+      ATwarning("no table for %t to remove\n", L)
     );
     return;
   }
@@ -1077,7 +1077,7 @@ void SG_ClearParseTable(char *L)
   IF_STATISTICS(maxrss = SG_ResidentSetSize());
 
   /*  L has index i  */
-  SG_Free(tables[i].name);
+  /*SG_Free(tables[i].name);*/
   SG_DiscardParseTable(tables[i].table);
   tables[i].name  = NULL;
   tables[i].table = NULL;
@@ -1093,30 +1093,32 @@ void SG_ClearParseTable(char *L)
     if(maxrss)
     fprintf(SG_log(), "[mem] PT cleared: %ld before, %ld after\n",
             maxrss, SG_ResidentSetSize());
-    fprintf(SG_log(), "Table for %s removed from parse table database\n", L)
+    ATfprintf(SG_log(), "Table for %t removed from parse table database\n", L)
   );
 }
 
-parse_table *SG_LookupParseTable(char *L)
+parse_table *SG_LookupParseTable(language L)
 {
   int i = 0;
 
-  IF_DEBUG(fprintf(SG_log(), "Request for language %s\n", L?L:"(undefined)"));
+  IF_DEBUG(ATfprintf(SG_log(), "Request for language %t\n",
+                     SG_SAFE_LANGUAGE(L)));
 
   if(!L) {
     IF_VERBOSE(ATwarning("can't lookup undefined language\n"));
     return NULL;
   }
   for (; L && i < last_table; i++)
-    if (!strcmp(L, tables[i].name)) {
-      IF_DEBUG(fprintf(SG_log(),
-                       "Table for language %s available with index %d\n", L, i))
+    if (ATisEqual(L, tables[i].name)) {
+      IF_DEBUG(ATfprintf(SG_log(),
+                         "Table for language %t available with index %d\n", 
+                         L, i))
       return tables[i].table;
-    } else IF_DEBUG(fprintf(SG_log(), "Table for %s not at index %d (%s)\n",
+    } else IF_DEBUG(ATfprintf(SG_log(), "Table for %t not at index %d (%t)\n",
                             L, i, tables[i].name));
 
-  IF_DEBUG(fprintf(SG_log(), "Table for %s not amongst the %d stored\n",
-                   SG_SAFE_STRING(L), MAX_TABLES));
+  IF_DEBUG(ATfprintf(SG_log(), "Table for %t not amongst the %d stored\n",
+                   SG_SAFE_LANGUAGE(L), MAX_TABLES));
 
   return NULL;
 }

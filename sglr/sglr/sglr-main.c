@@ -86,37 +86,37 @@ ATerm parse_file(int conn, char *L, char *G, char *FN)
   return SGparseFile(program_name, L, G?(*G?G:0):NULL, FN);
 }
 
-ATerm parse_string(int conn, char *L, char *G, char *S)
+ATerm parse_string(int conn, ATerm L, char *G, char *S)
 {
   return SGparseStringAsAsFix2(L, G, S);
 }
 
-ATerm parse_string_as_asfix1(int conn, char *L, char *G, char *S)
+ATerm parse_string_as_asfix1(int conn, ATerm L, char *G, char *S)
 {
   return SGparseStringAsAsFix1(L, G, S);
 }
 
-ATerm get_top_symbols(int conn, char *L)
+ATerm get_top_symbols(int conn, ATerm L)
 {
   return SGgetTopSymbols(L);
 }
 
-ATerm open_language_from_term(int conn, char *L, ATerm tbl)
+ATerm open_language_from_term(int conn, ATerm L, ATerm tbl)
 {
   return SGopenLanguageFromTerm(program_name, L, tbl);
 }
 
-ATerm open_language(int conn, char *L, char *FN)
+ATerm open_language(int conn, ATerm L, char *FN)
 {
   return SGopenLanguage(program_name, L, FN);
 }
 
-ATerm close_language(int conn, char *L)
+ATerm close_language(int conn, ATerm L)
 {
   return SGcloseLanguage(program_name, L);
 }
 
-ATerm reopen_language(int conn, char *L, char *FN)
+ATerm reopen_language(int conn, ATerm L, char *FN)
 {
   return SGreOpenLanguage(program_name, L, FN);
 }

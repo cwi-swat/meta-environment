@@ -72,5 +72,6 @@
 #define SG_COND_STRING(s)   (s?s:"")
 #define SG_SAFE_STRING(s)   (s?s:"[undefined]")
 
+#define SG_SAFE_LANGUAGE(l)   (l?l:ATparse("[undefined]"))
 
 #endif  /*  _SGLR_STRINGS_H_  */
