@@ -36,9 +36,10 @@ asfc_SOURCES = asfc.c \
                c-code.c \
                asf2muasf.c \
                lex-cons.c \
-               asfc.tif.c 
+               asfc.tif.c \
+               muasf2c.c
 
-asfc_LDADD   = -L$(top_builddir)/asfc/c-source  -lAsFix2C \
+asfc_LDADD   = -L$(top_builddir)/asfc/c-source  -lCompiler \
                -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept  \
                -L$(SDF_SUPPORT)/lib -lSDFME \

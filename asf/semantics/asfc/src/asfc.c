@@ -30,7 +30,7 @@
 #include "asfc.tif.h"
 #include "asf2muasf.h"
 #include "muasf2c.h"
-
+#include "c-code.h"
 
 /*}}}  */
 
@@ -74,13 +74,13 @@ static void version(void)
 
 /*}}}  */
 
-/*{{{  static ATerm compile(char *name, ASF_CondEquationList equations) */
+/*{{{  static PT_ParseTree compile(char *name, ASF_CondEquationList equations) */
 
-static ATerm compile(char *name, ASF_CondEquationList equations)
+static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
 {
   MA_Module muasf = asfToMuASF(name, equations);
 
-  return (ATerm) muasf; /* muasfToC(muasf); */
+  return muasfToC(muasf); 
 }
 
 /*}}}  */
@@ -99,19 +99,33 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
 		     char *output)
 {
   ASF_CondEquationList eqsList;
-  ATerm result;
+  PT_ParseTree result;
+  FILE *fp;
 
   eqsList    = ASF_makeCondEquationListFromTerm(equations);
 
   result = compile(moduleName, eqsList);
 
-  ATwriteToNamedTextFile( 
+/*  ATwriteToNamedTextFile( 
     (ATerm) PT_makeParseTreeTree(
       PT_makeSymbolsList(PT_makeSymbolSort("CProgram"), PT_makeSymbolsEmpty()), 
       PT_makeTreeLayoutEmpty(),
       (PT_Tree) result,
       PT_makeTreeLayoutEmpty(),
       0), output); 
+*/
+
+  if (!strcmp(output, "-")) {
+    fp = stdout;
+  }
+  else {
+    fp = fopen(output, "w");
+  }
+  if (fp == NULL) {
+    ATerror("Error: unable to open %s for writing\n", output);
+  }
+
+  ToC_code(result, fp , myversion);
 
   return ATmake("snd-value(compilation-done)");
 }                              

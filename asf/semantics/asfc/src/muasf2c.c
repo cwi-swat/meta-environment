@@ -3,13 +3,14 @@
 #include "muasf2c.h"
 #include "asc-apply-me.h"
 #include "asc-support2-me.h"
+#include "asc-support-me.h"
 
-ATerm muasfToC(MA_Module muasf)
+PT_ParseTree muasfToC(MA_Module muasf)
 
 {
   PT_Tree term;
   ATerm reduct;
-  ATerm result;
+  PT_ParseTree result;
 
   term = ASC_applyFunction("compile-muasf","Compiler","CProgram", 1, (PT_Tree) muasf);
 

@@ -1,7 +1,10 @@
 #ifndef _MUASF2C_H
 #define _MUASF2C_H
 
-ATerm muasfToC(MA_Module muasf);
+#include <MuASF.h>
+#include <MEPT.h>
+
+PT_ParseTree muasfToC(MA_Module muasf);
 
 #endif
 

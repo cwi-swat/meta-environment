@@ -2,8 +2,6 @@
 #include <string.h>
 #include <MEPT-utils.h>
 
-extern char* my_version;
-
 void ToC_code(PT_ParseTree ptCcode, FILE *file, const char* compiler_version)
 {
   int c, prev = ' ';
