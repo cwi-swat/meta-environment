@@ -5372,7 +5372,7 @@ of {\tt M}. This means in particular that all imports of {\tt M} should
 be expanded before {\tt sdf2table} can be used. Command line tools are
 available to do this, but we will not describe them here.
 
-For further information see the manual page for {\tt sdf2table}.
+For further information use {\tt sdf2table -h}.
 
 \end{itemize}
 
@@ -5407,6 +5407,14 @@ parse tree format that is becoming the standard inside the \ASmetaenv.
 
 \end{itemize}
 
+\subsection{Obtaining Equations}
+\label{SEC:obtainingequations}
+
+In order to \link{rewrite a term}[, see Section
+\Ref,]{SEC:interpretationgofterms}, or \link{compile a specification}[,
+see Section \Ref,]{SEC:compilingaspecification} it is necessary
+to obtain the equations.
+
 \subsection{Rewriting a Term using the Evaluator}
 \label{SEC:interpretationgofterms}
 
@@ -5432,6 +5440,9 @@ The result is a file named {\tt M.eqs}.
 
 \link*{Unparsing}[Section~\Ref]{SEC:unparsing}
 explains how {\tt reduct.tree} can be converted to a textual representation.
+
+\subsection{Compiling a Specification}
+\label{SEC:compilingaspecification}
 
 \subsection{Rewriting a Term using a Compiled Specification}
 \label{SEC:reducingofterms}
