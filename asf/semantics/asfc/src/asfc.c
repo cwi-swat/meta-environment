@@ -117,7 +117,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
 
   if (input_muasf) {
     PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
-    ATerm tree = PT_getParseTreeTree(parse_tree);
+    ATerm tree = PT_TreeToTerm(PT_getParseTreeTree(parse_tree));
     muasf = MA_ModuleFromTerm(tree);
   } else {
     VERBOSE("transforming ASF to MuASF");

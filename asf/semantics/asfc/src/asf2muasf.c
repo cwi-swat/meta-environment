@@ -21,7 +21,7 @@
 #include "asf2muasf.h"
 #include "chars.h"
 #include "lex-cons.h"
-
+#include "traversals.h"
 
 /*}}}  */
 
@@ -541,6 +541,30 @@ static MA_Term variableToTerm(PT_Tree var)
 }
 
 /*}}}  */
+/*{{{  static MA_Term applTreeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, */
+
+static MA_Term applTreeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
+			      LayoutOption layout)
+{
+  MA_Term result = NULL;
+  PT_Production prod = PT_getTreeProd(tree);
+  MA_FuncDef funcdef = prodToFuncDef(prod);
+  PT_Args args = PT_getTreeArgs(tree);
+  MA_FunId funid = prodToFunId(prod);
+  MA_TermArgs terms = argsToTermArgs(args, funcdefs);
+  ATindexedSetPut(funcdefs, (ATerm) funcdef, NULL);
+
+  if (terms != NULL) {
+    result = MA_makeTermFunc(funid,em,em,terms,em);
+  }
+  else {
+    result = MA_makeTermConstant(funid);
+  }
+
+  return result;
+}
+
+/*}}}  */
 /*{{{  static MA_Term treeToTerm(PT_Tree tree, ATindexedSet funcdefs,  */
 
 static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, 
@@ -554,6 +578,11 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
     PT_Tree converted = constructorTreeToLexicalTree(tree);
     result = treeToTerm(converted, funcdefs, layout);
   }
+  else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
+    PT_Tree converted;
+    converted = transformTraversalFunction(tree);
+    result = applTreeToTerm(converted, funcdefs, layout);
+  }
   else if (PT_isTreeVar(tree)) {
     result = variableToTerm(tree);
   }
@@ -561,20 +590,7 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
     result = treeToTerm(PT_getTreeBracketTree(tree), funcdefs, layout);
   } 
   else if (PT_isTreeAppl(tree)) {
-    ATbool new;
-    PT_Production prod = PT_getTreeProd(tree);
-    MA_FuncDef funcdef = prodToFuncDef(prod);
-    PT_Args args = PT_getTreeArgs(tree);
-    MA_FunId funid = prodToFunId(prod);
-    MA_TermArgs terms = argsToTermArgs(args, funcdefs);
-    ATindexedSetPut(funcdefs, (ATerm) funcdef, &new);
-
-    if (terms != NULL) {
-      result = MA_makeTermFunc(funid,em,em,terms,em);
-    }
-    else {
-      result = MA_makeTermConstant(funid);
-    }
+    result = applTreeToTerm(tree, funcdefs, layout);
   }
   else if (PT_isTreeChar(tree)) {
     int ch = PT_getTreeCharacter(tree);
