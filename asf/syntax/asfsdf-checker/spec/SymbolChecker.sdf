@@ -5,6 +5,7 @@ imports SdfCheckerFeedback ModuleOperations
 imports utilities/PosInfo[Symbol]
 
 exports
+  context-free start-symbols {Error ","}* 
   context-free syntax
     check-symbols(Definition) -> {Error ","}*
 
@@ -18,8 +19,8 @@ hiddens
     check-symbols2(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-charclass-list-symbols(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
-    check-charclass-list-symbols(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-charclass-symbols(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-charclass-symbols(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
 
 hiddens
   context-free syntax

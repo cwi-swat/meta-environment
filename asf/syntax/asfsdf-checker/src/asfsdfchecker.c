@@ -13,6 +13,7 @@
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+#include <Error-utils.h>
 
 static char *name;
 
@@ -76,46 +77,12 @@ static ATerm checkSdf(ATerm term, const char *name)
   return PT_ParseTreeToTerm(asfix);
 }
 
-static ATermList processMessages(ATerm term)
-{
-  ATermList resultMsgs = ATempty;
-  ATerm newMsg;
-
-  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
-
-  if (PT_isValidParseTree(parseTree)) {
-    PT_Tree ptMsgs = PT_getParseTreeTree(parseTree);
-    PT_Args msgsArgs = PT_getTreeArgs(ptMsgs);
-    PT_Tree msgs = PT_getArgsArgumentAt(msgsArgs, 2);
-    if (PT_isTreeApplList(msgs)) {
-      PT_Args msgsList = PT_getTreeArgs(msgs);
-
-      while (PT_hasArgsHead(msgsList)) {
-	PT_Tree msg = PT_getArgsHead(msgsList);
-        if (!PT_isTreeLayout(msg)) {
-          newMsg = ATmake("<str>", PT_yieldTree(msg));
-	  resultMsgs = ATappend(resultMsgs, newMsg);
-        }
-	msgsList = PT_getArgsTail(msgsList);
-      }
-    }
-  }
-  return resultMsgs;
-}
-
 static void displayMessages(ATerm term)
 {
-  char *errorStr;
-  ATermList errorList;
-
-  errorList = processMessages(term);
-  while (!ATisEmpty(errorList)) {
-    ATerm error = ATgetFirst(errorList);
-    if (ATmatch(error, "<str>", &errorStr)) {
-      ATwarning("%s\n", errorStr);
-    }
-    errorList = ATgetNext(errorList);
-  }
+  PERR_Start pStart = PERR_StartFromTerm(term);
+  PERR_Summary pSummary = PERR_getStartTopSummary(pStart);
+  ERR_Summary summary = PERR_lowerSummary(pSummary);
+  ERR_displaySummary(summary);
 }
 
 ATerm check_asfsdf(int cid, ATerm term, const char *name)
@@ -163,6 +130,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
+  initErrorApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 

@@ -8,7 +8,7 @@ equations
              check-symbols2(Module, Msgs, $ModuleId)
 
   [cs-2'1] Msgs2 := check-symbols2(Prod*, Msgs1, $ModuleId),
-           Msgs3 := check-charclass-list-symbols(Prod*, Msgs2, $ModuleId)
+           Msgs3 := check-charclass-symbols(Prod*, Msgs2, $ModuleId)
            =============================================================
            check-symbols2(context-free syntax Prod*, Msgs1, $ModuleId) =
              Msgs3
@@ -93,54 +93,13 @@ equations
            check-symbols2($Symbol0, Msgs, $ModuleId) =
               Msgs, make-warning($String2, $String3, $Location)
 
-  [cs-4'1] $Symbol+ := $Symbol0,
-           is-charclass-symbol($Symbol) == true,
+  [cs-4'1] is-charclass-symbol($Symbol0) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
            $String2 := "charclasses not allowed in context-free syntax in " || $String1,
            $String3 := symbol2str($Symbol0)
            ====>
-           check-charclass-list-symbols($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
-
-  [cs-4'2] $Symbol* := $Symbol0,
-           is-charclass-symbol($Symbol) == true,
-           $Location := get-location($Symbol0),
-           $String1 := moduleid2str($ModuleId),
-           $String2 := "charclasses not allowed in context-free syntax in " || $String1,
-           $String3 := symbol2str($Symbol0)
-           ====>
-           check-charclass-list-symbols($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
-
-  [cs-4'3] {$Symbol1 $Symbol2}+ := $Symbol0,
-           is-charclass-symbol($Symbol1) == true,
-           $Location := get-location($Symbol0),
-           $String1 := moduleid2str($ModuleId),
-           $String2 := "charclasses not allowed in context-free syntax in " || $String1,
-           $String3 := symbol2str($Symbol0)
-           ====>
-           check-charclass-list-symbols($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
-
-  [cs-4'4] {$Symbol1 $Symbol2}* := $Symbol0,
-           is-charclass-symbol($Symbol1) == true,
-           $Location := get-location($Symbol0),
-           $String1 := moduleid2str($ModuleId),
-           $String2 := "charclasses not allowed in context-free syntax in " || $String1,
-           $String3 := symbol2str($Symbol0)
-           ====>
-           check-charclass-list-symbols($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
-
-  [cs-4'5] {$Symbol1 $Symbol2}NatCon+ := $Symbol0,
-           is-charclass-symbol($Symbol1) == true,
-           $Location := get-location($Symbol0),
-           $String1 := moduleid2str($ModuleId),
-           $String2 := "charclasses not allowed in context-free syntax in " || $String1,
-           $String3 := symbol2str($Symbol0)
-           ====>
-           check-charclass-list-symbols($Symbol0, Msgs, $ModuleId) =
+           check-charclass-symbols($Symbol0, Msgs, $ModuleId) =
               Msgs, make-error($String2, $String3, $Location)
 
   [ils-1'1] is-literal-symbol($Literal) = true
