@@ -145,7 +145,7 @@ void      convert_form_to_mvar(var *);
 char      *strndup(char *, char *);
 void      print_str(const char *);
 void      print_bstr(const char *, int);
-char      *resolve(char *, const char *);
+static char *resolve(char *, const char *);
 void      pr_term(const term *);
 void      pr_env(const env *);
 void      pr_term_unquoted(const term *);

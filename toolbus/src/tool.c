@@ -9,18 +9,18 @@
 
 extern int mkports(TBbool, char *, char *, int *, int *, int *);
 
-int this_tool_id = -1;      /* tool_id assigned to this tool */
+static int this_tool_id = -1;      /* tool_id assigned to this tool */
 
-int ninports = 0;           /* # of connections currently in use */
-inport inportset[TB_MAX_INPORT];
+static int ninports = 0;           /* # of connections currently in use */
+static inport inportset[TB_MAX_INPORT];
 
-int toToolBus;              /* port to ToolBus  */
-int fromToolBus;	    /* port from ToolBus */
+static int toToolBus;       /* port to ToolBus  */
+static int fromToolBus;	    /* port from ToolBus */
 
-term_list *tool_in_sign = NULL;
-term_list *tool_out_sign = NULL;
+static term_list *tool_in_sign = NULL;
+static term_list *tool_out_sign = NULL;
 
-term *Snd_Void; /* PROTECTED */
+static term *Snd_Void; /* PROTECTED */
 
 int TBaddTermPort(int in, TBcallbackTerm fun)
 {
@@ -308,7 +308,7 @@ retry:
   /* <PO> unreachable code from lcc: return TB_ERROR; */
 }
 
-term *tool_read_term(void)
+static term *tool_read_term(void)
 {
   int nelem;
   term *trm, *rtrm;

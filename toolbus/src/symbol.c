@@ -10,8 +10,8 @@
 */
 
 #define MAX_MODULES	256
-char *module[MAX_MODULES];
-int nr_modules = 0;
+static char *module[MAX_MODULES];
+static int nr_modules = 0;
 
 /* We use a hash-table to map names to id's. Every symbol also has
    a module number, to make it easy to find the module in which a
@@ -28,8 +28,8 @@ int nr_modules = 0;
 /*static char *name_table[MAXNAME];*/
 
 /* Create a hash table initialized to 0. */
-name_bucket *hash_table[NAME_TABLE_SIZE] = { NULL };
-name_bucket *idx_table[MAXNAME];
+static name_bucket *hash_table[NAME_TABLE_SIZE] = { NULL };
+static name_bucket *idx_table[MAXNAME];
 static sym_idx ID = 0;
 
 /* Calculate the hash index */

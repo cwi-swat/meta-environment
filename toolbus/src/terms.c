@@ -120,8 +120,7 @@ void TBunprotect(term **pt)
    C functions should protect/unprotect their newly created terms
    that are not yet accessible from some root. By calling the
    garbage collector frequently, and by maintaining an appropriate
-   amount of free spac all the time, this should not occur not very
-   often.
+   amount of free space all the time, this should not occur very often.
 */
 
 #define new_term(t)  if(!free_list){\
@@ -386,7 +385,7 @@ term *mk_str(char *s)
 
 static char cbuf[256];
 
-char *resolve(char *id, const char *pname)
+static char *resolve(char *id, const char *pname)
 {
   if(*pname){
     /* only resolve, if non-empty pname */
@@ -433,7 +432,6 @@ var *mk_result_var_idx(sym_idx n, type *tp)
   var_result(v) = TBtrue;
   return v;
 }
-
 
 term *mk_formal(char *s, char *pname, type *tp)
 {  

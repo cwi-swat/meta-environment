@@ -4,9 +4,10 @@
 void add_proc_def(char *,term_list *, term_list *,proc *, term *, int);
 proc_def  *definition(sym_idx);
 
-TBbool find_comm(atom *, atom **, proc **, proc_inst **, term *);
+static TBbool find_comm(atom *, atom **, proc **, proc_inst **, term *);
 
-ap_form *expand(proc *, proc_inst *);
+static term *itp(term *, proc_inst *);
+static ap_form *expand(proc *, proc_inst *);
 
 void rec_from_tool_step(tool_inst *, term *);
 

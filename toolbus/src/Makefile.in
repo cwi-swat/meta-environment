@@ -70,13 +70,13 @@ LIB_OBJECTS	= client.o sockets.o terms.o tool.o utils.o symbol.o
 DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
 		viewer.tcl
 
-TARGETS		= libtb.a toolbus logger.tcl viewer.tcl ctif script2latex verbatim
+BUILD_TARGETS	= libtb.a toolbus ctif script2latex verbatim
+TARGETS		= ${BUILD_TARGETS} logger.tcl viewer.tcl
 
 # INIT_MODULES	= $(MODULES:.o=_init_module();)
 INIT_MODULES	=
 
-# all:	libtb.a toolbus ctif script2latex verbatim
-all:	${TARGETS}
+all:	${BUILD_TARGETS}
 
 toolbus: ${OBJECTS} 
 	${CC} ${CFLAGS} ${OBJECTS} -o toolbus ${LEXLIB} ${YACCLIB} ${LIBS}
@@ -131,7 +131,7 @@ print: ${HEADERS} ${SOURCES_C} ${SOURCES_Y}
 
 clean:
 	${CLEAN}
-	rm -f toolbus libtb.a ctif script2latex toolbus.Counts toolbus.Addrs toolbus.pixie mon.out
+	rm -f ${BUILD_TARGETS} toolbus.Counts toolbus.Addrs toolbus.pixie mon.out
 
 distclean: clean
 	rm -f Makefile

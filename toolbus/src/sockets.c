@@ -54,7 +54,7 @@ int putInt(int port, const char *tname, int n)
   return res;
 }
 
-int connectsocket (const char *host, int port)
+static int connectsocket (const char *host, int port)
 {    
   int sock;
   char name[128];    
@@ -121,7 +121,7 @@ int connectsocket (const char *host, int port)
   return sock;
 }
 
-int createsocket (const char *host, int port)
+static int createsocket (const char *host, int port)
 {
   int sock, msgsock, length;
   struct sockaddr_un usin;

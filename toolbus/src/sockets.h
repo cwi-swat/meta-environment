@@ -10,9 +10,8 @@ int  createWellKnownSocket(char *, int);
 int  connectWellKnownSocket(char *, int);
 int  accept_in_interval(int, struct sockaddr *, int *);
 
-int connectsocket (const char *, int);
-int createsocket (const char *, int);
-
+static int connectsocket (const char *, int);
+static int createsocket (const char *, int);
 
 extern int buf_size;
 extern int WellKnownSocketInPort;

@@ -59,7 +59,7 @@ TBbool match(term *t1,                 /* pattern */
   return b;
 }
 
-TBbool match1(term *t1, term *t2)
+static TBbool match1(term *t1, term *t2)
 {
   term *v1, *v2;
   
@@ -138,7 +138,7 @@ TBbool match1(term *t1, term *t2)
     return TBfalse;
 }
 
-TBbool match_list(term *tl1, term *tl2)
+static TBbool match_list(term *tl1, term *tl2)
 {
   assert(is_list(tl1));
   assert(is_list(tl2));

@@ -18,23 +18,22 @@ typedef term subs;
 typedef term_list subs_list;
 typedef term procs;
 
-int nproc = 0;                      /* # of ToolBus processes */
+static int nproc = 0;                /* # of ToolBus processes */
 
-time_t startup_time;
+time_t startup_time;                 /* used in main.c */
 
-time_t current_time = 0;
-time_t next_abs_delay = 0;
-time_t next_abs_timeout = 0;
+static time_t current_time = 0;
+static time_t next_abs_delay = 0;
+static time_t next_abs_timeout = 0;
 
-proc_inst *current_ProcInst;        /* PROTECTED */
+static proc_inst *current_ProcInst;  /* PROTECTED */
 
 #define update_env_of_atom(Atom,Env) if(!at_env(Atom)) at_env(Atom) = Env
 
-term *itp(term *, proc_inst *);
-
-procs *AllProcesses = NULL;         /* PROTECTED */
+static procs *AllProcesses = NULL;  /* PROTECTED */
 
 proc_def_list *Definitions = NULL;  /* PROTECTED */
+                                    /* used in calls.c */
 
 proc_def *definition(sym_idx sym)
 { proc_def_list *pdl;
@@ -59,11 +58,11 @@ void add_proc_def(char *pname,  term_list *formals, term_list *vars, proc *p,
   }
 }
 
-proc *propagate_env(proc *P, env *e);
+static proc *propagate_env(proc *P, env *e);
 
 proc *replace_formals(proc *p, env *e);
 
-proc_id *create_process(sym_idx pname, term_list *args, 
+static proc_id *create_process(sym_idx pname, term_list *args, 
 			tool_id *parent_db, subs_list *parent_subs,
 			note_list *parent_notes)
 {
@@ -122,7 +121,7 @@ void create_toolbus(term *monitor)
   create_process(TBlookup("INIT"), NULL, monitor, NULL, NULL);
 }
 
-atom *attach_cond(atom *Atom, term *Cond)
+static atom *attach_cond(atom *Atom, term *Cond)
 {
   term *old, *new;
   atom *new_atom;  
@@ -145,7 +144,7 @@ atom *attach_cond(atom *Atom, term *Cond)
   return new_atom;
 }
 
-void def_next_timer(time_t abs_delay, time_t abs_timeout)
+static void def_next_timer(time_t abs_delay, time_t abs_timeout)
 {
   if((abs_delay >= current_time) &&
      ((next_abs_delay < 0) || ((abs_delay > 0) && (abs_delay < next_abs_delay))))
@@ -156,7 +155,7 @@ void def_next_timer(time_t abs_delay, time_t abs_timeout)
     next_abs_timeout = abs_timeout;
 }
 
-atom *attach_timer(atom *Atom, time_t abs_delay, time_t abs_timeout)
+static atom *attach_timer(atom *Atom, time_t abs_delay, time_t abs_timeout)
 {
   term *old;
 
@@ -178,7 +177,7 @@ atom *attach_timer(atom *Atom, time_t abs_delay, time_t abs_timeout)
   return Atom;
 }
 
-time_t mk_abs_time(term_list *tl)
+static time_t mk_abs_time(term_list *tl)
 {
   struct tm *t = localtime(&current_time);
   term_list *args;
@@ -252,7 +251,7 @@ time_t mk_abs_time(term_list *tl)
   return tm;
 }
 
-term *mk_current_time(void)
+static term *mk_current_time(void)
 {
   struct tm *t = localtime(&current_time);
 
@@ -262,7 +261,7 @@ term *mk_current_time(void)
   
 #define is_enabled(Atom, ProcInst) (!has_conds(Atom) || do_is_enabled(Atom,ProcInst))
 
-TBbool do_is_enabled(atom *Atom, proc_inst *ProcInst)
+static TBbool do_is_enabled(atom *Atom, proc_inst *ProcInst)
 {
   /* TBmsg("is_enabled(%t), pi_env=%t\n", Atom, pi_env(ProcInst)); */
   assert(is_atom(Atom));
@@ -297,7 +296,7 @@ TBbool do_is_enabled(atom *Atom, proc_inst *ProcInst)
 
 #define CHOICE (rand() & 01)
 
-proc *sum(proc *p1, proc *p2)
+static proc *sum(proc *p1, proc *p2)
   {
     if(CHOICE){
       proc *p3 = p1;
@@ -326,7 +325,7 @@ proc *sum(proc *p1, proc *p2)
       mk_list2(p1,p2);
   }
 
-ap_form *dot(ap_form *AP, proc *P2)
+static ap_form *dot(ap_form *AP, proc *P2)
 {
   if(is_list(AP)){
     term_list *res = NULL;
@@ -360,7 +359,7 @@ ap_form *dot(ap_form *AP, proc *P2)
   }
 }
 
-ap_form *lmerge(ap_form *AP, proc *P)
+static ap_form *lmerge(ap_form *AP, proc *P)
 {
   if(is_list(AP)){
     term_list *res = NULL;
@@ -390,7 +389,7 @@ ap_form *lmerge(ap_form *AP, proc *P)
   }
 }
 
-ap_form *add_cond(term *T, ap_form *AP)
+static ap_form *add_cond(term *T, ap_form *AP)
   {
 /* TBmsg("add_cond: T = %t, AP = %t\n", T, AP); */
     if(is_list(AP)) {
@@ -424,7 +423,7 @@ ap_form *add_cond(term *T, ap_form *AP)
     }
   }
 
-proc *force_null_env(proc *P)
+static proc *force_null_env(proc *P)
 {  
   /* TBmsg("force_null_env: %t\n", P); */
   if(!P)
@@ -468,7 +467,7 @@ proc *force_null_env(proc *P)
   }
 }
 
-proc *propagate_env(proc *P, env *Env)
+static proc *propagate_env(proc *P, env *Env)
 { 
   /* TBmsg("propagate: %t, %t\n", P, Env); */
   if(!P)
@@ -517,7 +516,7 @@ proc *propagate_env(proc *P, env *Env)
   }    
 }
 
-ap_form *expand(proc *P, env *Env)
+static ap_form *expand(proc *P, env *Env)
 {
   proc *P1, *P2, *res;
 
@@ -709,7 +708,7 @@ ap_form *expand(proc *P, env *Env)
 
 /* ------------------ Notes ----------------------------*/
 
-term_list *del_pat(term *T, term_list *Ts)
+static term_list *del_pat(term *T, term_list *Ts)
 {
   term_list head, *prev;
 
@@ -724,7 +723,7 @@ term_list *del_pat(term *T, term_list *Ts)
   return next(&head);
 }
 
-TBbool match_note(term *Note, note_list **Notes)
+static TBbool match_note(term *Note, note_list **Notes)
 {
   note_list head, *prev;
   note_list *Notes1 = *Notes;
@@ -747,7 +746,7 @@ TBbool match_note(term *Note, note_list **Notes)
   return TBfalse;
 }
 
-TBbool no_note(term *Note, note_list *Notes)
+static TBbool no_note(term *Note, note_list *Notes)
 {
 
   /* TBmsg("no_note: %t, %t\n", Note, Notes); */
@@ -763,7 +762,7 @@ TBbool no_note(term *Note, note_list *Notes)
   return TBtrue;
 }
 
-TBbool matching_subscription(term *T, subs_list *Subscriptions)
+static TBbool matching_subscription(term *T, subs_list *Subscriptions)
 {
   while(Subscriptions){
     if(cmatchp(first(Subscriptions), T))
@@ -773,7 +772,7 @@ TBbool matching_subscription(term *T, subs_list *Subscriptions)
   return TBfalse;
 }
 
-void distr_note(term *Note)
+static void distr_note(term *Note)
 {
   procs * Processes;
   proc_inst *ProcInst;
@@ -788,17 +787,17 @@ void distr_note(term *Note)
 
 /* ----------------------- expressions ------------*/
 
-proc_inst *itp_ProcInst = NULL;         /* PROTECTED */
+static proc_inst *itp_ProcInst = NULL;         /* PROTECTED */
 
-term *itp1(term *);
+static term *itp1(term *);
 
-term *itp(term *T, proc_inst *ProcInst)
+static term *itp(term *T, proc_inst *ProcInst)
 {
   itp_ProcInst = ProcInst;
   return itp1(T);
 }
 
-term *itp1(register term *T)
+static term *itp1(register term *T)
 {
   term *V[3];
   struct expr_sign *es;
@@ -1019,7 +1018,7 @@ term *itp1(register term *T)
 
 /* ----------------------- atomic_steps -----------*/
 
-TBbool simple_atomic_step(atom *Atom)
+static TBbool simple_atomic_step(atom *Atom)
   {
     switch(at_fun(Atom)){
 
@@ -1182,7 +1181,7 @@ TBbool simple_atomic_step(atom *Atom)
     }
   }
 
-void nu(atom *Atom, proc *P, proc_inst *ProcInst1, proc_inst *ProcInst2)
+static void nu(atom *Atom, proc *P, proc_inst *ProcInst1, proc_inst *ProcInst2)
 {
   term *mon;
   extern atom *mk_snd_monitor(term *, atom *, proc *P, proc_inst *, proc_inst *);
@@ -1229,7 +1228,7 @@ void nu(atom *Atom, proc *P, proc_inst *ProcInst1, proc_inst *ProcInst2)
   }
 }
 
-int print_alts(term *alts)
+static int print_alts(term *alts)
 { term *alt;
   for( ; alts; alts = next(alts)){
     assert(is_list(alts));
@@ -1244,7 +1243,7 @@ int print_alts(term *alts)
   return 0;
 }
 
-void atomic_steps(void)
+static void atomic_steps(void)
 {   
   TBbool work = TBtrue;
   term *Processes, *Previous, *all_alts, *alts, *alt;
@@ -1374,7 +1373,7 @@ void atomic_steps(void)
   }
 }
 
-TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2, proc_inst **comm_ProcInst, term *Processes)
+static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2, proc_inst **comm_ProcInst, term *Processes)
   {
     proc_inst *ProcInst;
     register atom *Atom;
@@ -1429,7 +1428,7 @@ TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2, proc_inst **comm_ProcInst
 
 /*--- rec_from_tool_step -----------------------*/
 
-TBbool in_selection(proc_inst *ProcInst, term *sel)
+static TBbool in_selection(proc_inst *ProcInst, term *sel)
 {
   if(is_list(sel))
     return list_elem(pi_name(ProcInst), sel) || list_elem(pi_pid(ProcInst), sel);
@@ -1442,9 +1441,9 @@ TBbool in_selection(proc_inst *ProcInst, term *sel)
    [tool-inst, event]
 */
 
-term_list *Pending = NULL;
+static term_list *Pending = NULL;
 
-TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
+static TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
   {
     proc_inst *ProcInst;
     atom *Atom2;
@@ -1556,7 +1555,7 @@ TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
  *
  */
 
-TBbool occurs_in_out_sign_of_tool(term *Inp, term_list *outsigs)
+static TBbool occurs_in_out_sign_of_tool(term *Inp, term_list *outsigs)
 {
   for( ; outsigs; outsigs = next(outsigs)){
     if(fun_sym(Inp) == at_fun(first(outsigs)))
@@ -1566,7 +1565,7 @@ TBbool occurs_in_out_sign_of_tool(term *Inp, term_list *outsigs)
   return TBfalse;
 }
      
-TBbool pending_events(void)
+static TBbool pending_events(void)
 { term_list *events = Pending;
   term_list head, *prev = &head;
   int k = 0;
@@ -1632,7 +1631,7 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
   }
 }
 
-struct timeval timeout;
+static struct timeval timeout;
 
 struct timeval *get_timeout(void)
 {
@@ -1655,7 +1654,7 @@ struct timeval *get_timeout(void)
 
 #include <signal.h>
 
-void alarm_handler(int sig){
+static void alarm_handler(int sig){
   signal(SIGALRM, alarm_handler);
 
   time(&current_time);
@@ -1686,7 +1685,7 @@ void all_internal_steps(void)
 }
 /*--- interpreter ------------------------------*/
 
-void prompt(void)
+static void prompt(void)
 {
   if(stand_alone)
     fprintf(stdout, "%s", single_prompt);
