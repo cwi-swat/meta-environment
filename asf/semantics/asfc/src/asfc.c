@@ -45,7 +45,7 @@ ATbool use_c_compiler;
 int toolbus_id;
 
 char myname[] = "asfc";
-char myversion[] = "2.0";
+char myversion[] = "2.1";
 
 static char myarguments[] = "chi:mn:o:vV";
 

@@ -2,6 +2,7 @@
  * Fixed optimization of recursive list functions. In combination
    with automatic constructor detection, a large speedup can be
    expected.
+ * asfc version to 2.1
 
 2001/07/17 (jurgenv@cwi.nl)
  * Added automatic constructor detection to asfc
