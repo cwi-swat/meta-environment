@@ -1408,7 +1408,6 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     ATtableDestroy(m1);
   }
 
-  IF_DEBUG(ATfprintf(SG_log(), "max = %p returned \n"));
   return max;
 }
 
@@ -1522,15 +1521,9 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
       /*  new and existing are in a priority relation, max is top  */
       newambs = ATmakeList1((ATerm) max);
       if (max) {
-        if (SG_GetApplProdLabel(existing) == SG_GetApplProdLabel(new)) {
-          IF_DEBUG(fprintf(SG_log(), "existing:"));
-          IF_DEBUG(SG_PrintTree(existing, ATfalse));
-          IF_DEBUG(fprintf(SG_log(), "\nnew:"));
-          IF_DEBUG(SG_PrintTree(new, ATfalse));
-          IF_DEBUG(fprintf(SG_log(), "\nmax"));
-          IF_DEBUG(SG_PrintTree(max, ATfalse));
-          IF_DEBUG(fprintf(SG_log(), "\n"));
-        }
+        IF_DEBUG(fprintf(SG_log(), "max:"));
+        IF_DEBUG(SG_PrintTree(max, ATfalse));
+        IF_DEBUG(fprintf(SG_log(), "\n"));
         IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (new amb)\n",
                          SG_GetApplProdLabel(existing),
                          ATisEqual(max, existing)?'>':'<',
