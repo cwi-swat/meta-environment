@@ -2,6 +2,3 @@ Makefile.in
 Makefile
 *.class
 classjava.stamp
-TideControlTif.java
-TideControlBridge.java
-TideControlTool.java
