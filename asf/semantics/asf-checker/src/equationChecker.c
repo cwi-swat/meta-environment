@@ -274,6 +274,30 @@ static ATermList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition,
 }
 
 /*}}}  */
+/*{{{  static ATermList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+
+static ATermList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+{
+  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
+    return ATmakeList1(
+	       makeMessage(
+		   "matching condition does not use new variables",
+		   tag,
+		   ASF_makeTermFromASFCondition(condition)));
+  }
+
+  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
+    return ATmakeList1(
+	       makeMessage(
+		   "right-hand side of matching condition introduces variables",
+		   tag,
+		   ASF_makeTermFromASFCondition(condition)));
+  }
+
+  return ATempty;
+}
+
+/*}}}  */
 
 /*{{{  static ATermList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables)  */
 
@@ -301,6 +325,9 @@ static ATermList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_A
     }
     else if (ASF_isASFConditionMatch(condition)) {
       return checkMatchCondition(tag, condition, lhsCond, rhsCond, variables);
+    }
+    else if (ASF_isASFConditionNoMatch(condition)) {
+      return checkNoMatchCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionEquality(condition)) {
       return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
