@@ -64,37 +64,37 @@ static void init_asfix_patterns()
 
   ATprotect(&asfix2_empty_to_star_lex_sort);
   asfix2_empty_to_star_lex_sort  =
-    ATparse("prod([],lex(iter-star(sort(<term>))),no-attrs)"); 
+    ATparse("prod([],lex(iter-star(<term>)),no-attrs)"); 
 
   ATprotect(&asfix2_single_to_plus_lex_sort);
   asfix2_single_to_plus_lex_sort =
-    ATparse("prod([lex(sort(<term>))],lex(iter(sort(<term>))),no-attrs)");
+    ATparse("prod([lex(<term>)],lex(iter(<term>)),no-attrs)");
 
   ATprotect(&asfix2_plus_to_star_lex_sort);
   asfix2_plus_to_star_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>)))]," \
-            "lex(iter-star(sort(<term>))),no-attrs)");
+    ATparse("prod([lex(iter(<term>))]," \
+            "lex(iter-star(<term>)),no-attrs)");
 
   ATprotect(&asfix2_plus_plus_to_plus_lex_sort);
   asfix2_plus_plus_to_plus_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>))),lex(iter(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)"); 
+    ATparse("prod([lex(iter(<term>)),lex(iter(<term>))]," \
+            "lex(iter(<term>)),<term>)"); 
 
   ATprotect(&asfix2_star_star_to_star_lex_sort);
   asfix2_star_star_to_star_lex_sort =
-    ATparse("prod([lex(sort(iter-star(<term>)))," \
-            "lex(iter-star(sort(<term>)))]," \
-            "lex(iter-star(sort(<term>))),<term>)");  
+    ATparse("prod([lex(iter-star(<term>))," \
+            "lex(iter-star(<term>))]," \
+            "lex(iter-star(<term>)),<term>)");  
 
   ATprotect(&asfix2_star_plus_to_plus_lex_sort);
   asfix2_star_plus_to_plus_lex_sort =
-    ATparse("prod([lex(iter-star(sort(<term>))),lex(iter(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)");     
+    ATparse("prod([lex(iter-star(<term>)),lex(iter(<term>))]," \
+            "lex(iter(<term>)),<term>)");     
 
   ATprotect(&asfix2_plus_star_to_plus_lex_sort);
   asfix2_plus_star_to_plus_lex_sort =
-    ATparse("prod([lex(iter(sort(<term>))),lex(iter-star(sort(<term>)))]," \
-            "lex(iter(sort(<term>))),<term>)");  
+    ATparse("prod([lex(iter(<term>)),lex(iter-star(<term>))]," \
+            "lex(iter(<term>)),<term>)");  
 
   ATprotect(&asfix2_empty_to_star_lex_charclass);
   asfix2_empty_to_star_lex_charclass  =
