@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 
 PRODUCT=ToolBus
-VERSION=0.9.17
+VERSION=0.9.17a
 DEMOS="auction battleships calc cons edit game go-moku hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
@@ -62,6 +62,14 @@ AC_ARG_WITH(modules,
 MODULES=${withval},
 MODULES=${ALL_MODULES})
 AC_SUBST(MODULES)
+
+dnl shared libraries?
+AC_ARG_WITH(shared,
+[  --with-shared	create shared ToolBus library (libtb.so)],
+SHARED_LIB=libtb.so,
+SHARED_LIB=libtb.so)
+AC_SUBST(SHARED_LIB)
+
 
 dnl Do we need GeL?
 
@@ -124,6 +132,7 @@ fi,
 ADAPTERS="${ADAPTERS} python-adapter"
 )
 
+TBSWIPL=true
 AC_ARG_WITH(swipl,
 [  --with-swipl		   include swi-prolog support (swipl-adapter)],
 if test ${withval} = "yes"
@@ -133,8 +142,10 @@ then
   echo "architecture."
   ADAPTERS="${ADAPTERS} swipl-adapter"
   DEMOS="${DEMOS} ${SWIPL_DEMOS}"
+  TBSWIPL=tbswipl
 fi,
 )
+AC_SUBST(TBSWIPL)
 
 AC_SUBST(ADAPTERS)
 AC_SUBST(DEMOS)
