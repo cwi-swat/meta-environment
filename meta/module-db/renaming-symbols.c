@@ -1,6 +1,10 @@
 #include "module-db.h"
 
 static
+PT_Tree renameProdInTree(PT_Tree tree,
+                         PT_Production formalParam,
+                         PT_Production actualParam);
+static
 PT_Tree renameInTree(PT_Tree tree,
                      PT_Symbol formalParam,
                      PT_Symbol actualParam);
@@ -78,6 +82,24 @@ ATwarning("symbol = %t, formalParam = %t, actualParam = %t\n",
 }
 
 static
+PT_Args renameProdInArgs(PT_Args trees,
+                         PT_Production formalParam,
+                         PT_Production actualParam)
+{
+  if (PT_isArgsEmpty(trees)) {
+    return trees;
+  }
+  else {
+    PT_Tree head = PT_getArgsHead(trees);
+    PT_Args tail = PT_getArgsTail(trees);
+   
+    PT_Tree newHead = renameProdInTree(head, formalParam, actualParam);
+    PT_Args newTail = renameProdInArgs(tail, formalParam, actualParam);
+    return PT_setArgsHead(PT_setArgsTail(trees, newTail), newHead);
+  }
+}
+
+static
 PT_Args renameInArgs(PT_Args trees,
                      PT_Symbol formalParam,
                      PT_Symbol actualParam)
@@ -119,6 +141,26 @@ PT_Production renameInProduction(PT_Production prod,
 }
 
 static
+PT_Tree renameProdInTree(PT_Tree tree,
+                         PT_Production formalParam,
+                         PT_Production actualParam)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Args       args = PT_getTreeArgs(tree);
+  
+    PT_Args       newArgs = renameProdInArgs(args, formalParam, actualParam);
+    if (PT_isEqualProduction(prod, formalParam)) {
+      return PT_setTreeArgs(PT_setTreeProd(tree, actualParam), newArgs);
+    }
+    return PT_setTreeArgs(tree, newArgs);
+  }
+  else {
+    return tree;
+  }
+}
+
+static
 PT_Tree renameInTree(PT_Tree tree,
                      PT_Symbol formalParam,
                      PT_Symbol actualParam)
@@ -146,6 +188,33 @@ PT_Tree renameInTree(PT_Tree tree,
   else {
     return tree;
   }
+}
+
+static
+ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList,
+                                                  PT_Production formalParam,
+                                                  PT_Production actualParam)
+{
+  if (ASF_hasCondEquationListHead(eqsList)) {
+    ASF_CondEquation eq = ASF_getCondEquationListHead(eqsList);
+    ASF_CondEquation newEq = ASF_makeCondEquationFromTerm(
+                               PT_makeTermFromTree(
+                                 renameProdInTree(
+                                   PT_makeTreeFromTerm(
+                                     ASF_makeTermFromCondEquation(eq)), 
+                                   formalParam, actualParam)));
+
+    eqsList = ASF_setCondEquationListHead(eqsList, newEq);
+  }
+  if (ASF_hasCondEquationListTail(eqsList)) {
+    ASF_CondEquationList tail = ASF_getCondEquationListTail(eqsList);
+    ASF_CondEquationList newTail = replaceProductionInEquations(tail,
+                                                                formalParam,
+                                                                actualParam);
+
+    eqsList = ASF_setCondEquationListTail(eqsList, newTail);
+  }
+  return eqsList;
 }
 
 static
@@ -238,12 +307,32 @@ ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,
 ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree, 
                                               SDF_Renamings renamings)
 {
-  SDF_RenamingList renamingList = SDF_getRenamingsList(renamings);
+  SDF_RenamingList prodRenamingList = SDF_getRenamingsList(renamings);
+  SDF_RenamingList symbolRenamingList = SDF_getRenamingsList(renamings);
   SDF_Renaming renaming;
   SDF_Symbol fromSymbol, toSymbol;
+  SDF_Production fromProd, toProd;
 
-  while (SDF_hasRenamingListHead(renamingList)) {
-    renaming = SDF_getRenamingListHead(renamingList);
+  while (SDF_hasRenamingListHead(prodRenamingList)) {
+    renaming = SDF_getRenamingListHead(prodRenamingList);
+    if (SDF_isRenamingProduction(renaming)) {
+      fromProd = SDF_getRenamingFromProd(renaming);
+      toProd = SDF_getRenamingToProd(renaming);
+
+      asfTree = replaceProductionInEquations(asfTree, 
+                  SDFProductionToPtProduction(fromProd),
+                  SDFProductionToPtProduction(toProd));
+    }
+
+    if (SDF_hasRenamingListTail(prodRenamingList)) {
+      prodRenamingList = SDF_getRenamingListTail(prodRenamingList);
+    }
+    else {
+      break;
+    }
+  }
+  while (SDF_hasRenamingListHead(symbolRenamingList)) {
+    renaming = SDF_getRenamingListHead(symbolRenamingList);
     if (SDF_isRenamingSymbol(renaming)) {
       fromSymbol = SDF_getRenamingFrom(renaming);
       toSymbol = SDF_getRenamingTo(renaming);
@@ -252,12 +341,9 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
                   SDFSymbolToPtSymbol(fromSymbol),
                   SDFSymbolToPtSymbol(toSymbol));
     }
-    else {
-      ATwarning("Production renaming not yet supported!\n");
-    }
 
-    if (SDF_hasRenamingListTail(renamingList)) {
-      renamingList = SDF_getRenamingListTail(renamingList);
+    if (SDF_hasRenamingListTail(symbolRenamingList)) {
+      symbolRenamingList = SDF_getRenamingListTail(symbolRenamingList);
     }
     else {
       break;
