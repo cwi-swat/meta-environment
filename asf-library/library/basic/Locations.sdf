@@ -10,5 +10,7 @@ context-free syntax
 
   "file" "(" filename:StrCon ")" -> Location {cons("file")}
 
+  "area" "(" Area ")" -> Location {cons("area")}
+
   "area-in-file" "(" filename:StrCon "," Area ")"
     -> Location {cons("area-in-file")}
