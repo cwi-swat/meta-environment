@@ -33,7 +33,7 @@ libasc_support_a_SOURCES = $(SRCS)
 libasc_support_a_LIBADD  = rewriter.tif.o
 
 # Default include directories
-INCLUDES   = -I. -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES   = -I. -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
 rewriter.o: rewriter.tif.h
 
@@ -43,13 +43,10 @@ rewriter.o: rewriter.tif.h
 # location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.tb
-	PATH=$(TOOLBUSBIN):$(PATH) toolbus -gentifs $<
+	PATH=$(TOOLBUS)/bin:$(PATH) toolbus -gentifs $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
 %.tif.c %.tif.h: %.tifs
-	PATH=$(ATERMBIN):$(PATH) tifstoc -tool $* $<
-
-test: all
-	@echo "Test not yet implemented for asc-support"
+	PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<

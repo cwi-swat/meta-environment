@@ -1,6 +1,7 @@
 dnl
-dnl    Asf Sdf Compiler Runtime Library
-dnl    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+dnl    PT-support - support for ParseTrees
+dnl    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+dnl                        The Netherlands. 
 dnl
 dnl    This program is free software; you can redistribute it and/or modify
 dnl    it under the terms of the GNU General Public License as published by
@@ -19,117 +20,43 @@ dnl
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Makefile.in)
+AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(asc-support, 0.4)
 
+ACLOCAL="${ACLOCAL} -I ."
 
-AC_PATH_PROG(ATERM, baffle, no)
-if test "${ATERM}" = "no"; then
-	ATERM='${prefix}'
-else
-	ATERM=`dirname \`dirname ${ATERM}\``
-fi
+dnl Check for required packages and perform version check when needed.
 
-ASFIX=
-AC_PATH_PROG(ASFIX, afexpand, no)
-if test "${ASFIX}" = "no"; then
-	ASFIX='${prefix}'
-else
-	ASFIX=`dirname \`dirname ${ASFIX}\``
-fi
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, tifstoc,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
 
-AC_PATH_PROG(TOOLBUS, toolbus, no)
-if test "${TOOLBUS}" = "no"; then
-	TOOLBUS='${prefix}'
-else
-	TOOLBUS=`dirname \`dirname ${TOOLBUS}\``
-fi
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
 
-AC_REQUIRE([AC_PROG_CC])
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, asource,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+dnl Our own version of libdir whose value is set dynamically
+AC_SUBST(INSTLIBDIR)
+INSTLIBDIR="$libdir"
 
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+AC_REQUIRE([AC_PROG_CC])
 
 dnl Which compiler to use?
 AC_PROG_CC
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
-
-dnl Handle --with-aterm=... argument to configure
-AC_ARG_WITH(aterm,
-   [  --with-aterm=DIR        ATerm-library is in DIR], ATERM=${withval},)
-AC_SUBST(ATERM)
-
-AC_ARG_WITH(aterm-bin,
-   [  --with-aterm-bin=DIR    ATerm executables are in DIR],
-   ATERMBIN=${withval},ATERMBIN=${ATERM}/bin)
-AC_SUBST(ATERMBIN)
-
-AC_ARG_WITH(aterm-lib,
-   [  --with-aterm-lib=DIR    ATerm libraries are in DIR],
-   ATERMLIB=${withval},ATERMLIB=${ATERM}/lib)
-AC_SUBST(ATERMLIB)
-
-AC_ARG_WITH(aterm-inc,
-   [  --with-aterm-inc=DIR    ATerm header files are in DIR],
-   ATERMINC=${withval},ATERMINC=${ATERM}/include)
-AC_SUBST(ATERMINC)
-
-dnl Handle --with-asfix=... argument to configure
-AC_ARG_WITH(asfix,
-[  --with-asfix=DIR        AsFix-library is in DIR],
-   ASFIX=${withval},)
-AC_SUBST(ASFIX)
-
-AC_ARG_WITH(asfix-bin,
-   [  --with-asfix-bin=DIR    AsFix executables are in DIR],
-   ASFIXBIN=${withval},ASFIXBIN=${ASFIX}/bin)
-AC_SUBST(ASFIXBIN)
-
-AC_ARG_WITH(asfix-lib,
-   [  --with-asfix-lib=DIR    AsFix libraries are in DIR],
-   ASFIXLIB=${withval},ASFIXLIB=${ASFIX}/lib)
-AC_SUBST(ASFIXLIB)
-
-AC_ARG_WITH(asfix-inc,
-   [  --with-asfix-inc=DIR    AsFix header files are in DIR],
-   ASFIXINC=${withval},ASFIXINC=${ASFIX}/include)
-AC_SUBST(ASFIXINC)
-
-dnl Handle --with-toolbus[-...]=... arguments to configure
-AC_ARG_WITH(toolbus,
-   [  --with-toolbus=DIR      ToolBus distribution is in DIR],
-   TOOLBUS=${withval},)
-AC_SUBST(TOOLBUS)
-
-AC_ARG_WITH(toolbus-bin,
-   [  --with-toolbus-bin=DIR  ToolBus executables are in DIR],
-   TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
-AC_SUBST(TOOLBUSBIN)
-
-dnl Handle --with-debug-c-code to activate c debug info 
-dnl and shut off optimizations
-CFLAGS="-Wall -O4 -DNDEBUG"
-AC_ARG_WITH(debug-c-code,
-   [  --with-debug-c-code     C flags set to -Wall -g -O2],
-   CFLAGS="-Wall -g -O2"
-)
-AC_SUBST(CFLAGS)
-
-if test "a${TOOLBUS}" = "a"; then
- dnl Default locations of used components
- AC_PATH_PROG(TOOLBUS, toolbus, no)
- if test "${TOOLBUS}" = "no"; then
-  echo "Warning: toolbus not found. You might need it when developing libasc-support." >&2
-  TOOLBUS=
-  TOOLBUSBUN=
- else
-  TOOLBUSBIN=`dirname ${TOOLBUS}`
-  TOOLBUS=`dirname ${TOOLBUSBIN}`
- fi
-fi
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
@@ -138,7 +65,7 @@ SOCKET_FOUND=no
 SOCKLIBS=
 AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
 if test ${SOCKET_FOUND} = no; then
-  AC_CHECK_LIB(socket,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
   if test ${SOCKET_FOUND} = no; then
     AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
   fi
@@ -151,56 +78,16 @@ if test ${GHN_FOUND} = no; then
   AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
 fi
 
-LIBS=$NOSOCKLIBS
-AC_CHECK_LIB(dl, dlopen)
-
 AC_SUBST(SOCKLIBS)
 
-dnl Default values
-AC_PATH_PROG(CC_GCC,gcc,true)
-CFLAGS_GCC="-Wall -O4"
-LFLAGS_GCC=""
+LIBS=$NOSOCKLIBS
 
-CC_CC=${CC}
-CFLAGS_CC="-O"
-LFLAGS_CC=""
+AC_CHECK_LIB(dl, dlopen)
 
-CC_DBG=${CC_GCC}
-CFLAGS_DBG="-Wall -g"
-LFLAGS_DBG="-g"
-
-CC_PROF=${CC_GCC}
-CFLAGS_PROF="-Wall -pg"
-LFLAGS_PROF="-pg"
-
-AC_SUBST(CC_GCC)
-AC_SUBST(CC_CC)
-AC_SUBST(CC_DBG)
-AC_SUBST(CC_PROF)
-
-AC_SUBST(CFLAGS_CC)
-AC_SUBST(CFLAGS_GCC)
-AC_SUBST(CFLAGS_DBG)
-AC_SUBST(CFLAGS_PROF)
-AC_SUBST(CFLAGS_SHARED)
-AC_SUBST(CFLAGS_CC64)
-
-AC_SUBST(DEFS_CC)
-AC_SUBST(DEFS_GCC)
-AC_SUBST(DEFS_DBG)
-AC_SUBST(DEFS_PROF)
-
-AC_SUBST(INCL_CC)
-AC_SUBST(INCL_GCC)
-AC_SUBST(INCL_DBG)
-AC_SUBST(INCL_PROF)
-
-AC_SUBST(LFLAGS_CC)
-AC_SUBST(LFLAGS_GCC)
-AC_SUBST(LFLAGS_DBG)
-AC_SUBST(LFLAGS_PROF)
+dnl Checks for header files.
+AC_CHECK_HEADER(getopt.h)
 
 dnl Which files need updating?
 AC_OUTPUT(
-    Makefile
+  Makefile
 )
