@@ -135,6 +135,26 @@ static PT_Args skipLayout(PT_Args args)
 
 /*}}}  */
 
+/*{{{  static ATbool hasProductionFromoBoxAttribute(PT_Production prod) */
+
+static ATbool hasProductionFromBoxAttribute(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod,
+				     PT_makeAttrTerm(ATparse("from-box")));
+}
+
+/*}}}  */
+ 
+/*{{{  static ATbool hasProductionToBoxAttribute(PT_Production prod) */
+
+static ATbool hasProductionToBoxAttribute(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod,
+				     PT_makeAttrTerm(ATparse("to-box")));
+}
+
+/*}}}  */
+ 
 /*{{{  static ATbool isIndentedType(PT_Production production) */
 
 static ATbool isIndentedType(PT_Production production)
@@ -387,11 +407,100 @@ static BOX_Box applToBox(PT_Tree tree)
 
 /*}}}  */
 
+/*{{{  static BOX_Box processTree(PT_Tree tree) */
+
+static BOX_Box processTree(PT_Tree tree)
+{
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Tree treeTree = NULL;
+
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+
+    if (!PT_isTreeLayout(arg) &&
+	!PT_isTreeLit(arg)) {
+      treeTree = arg;
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  if (treeTree) {
+    return treeToBox(treeTree);
+  }
+  else {
+    return NULL;
+  }
+}
+
+/*}}}  */
+
+/*{{{  static BOX_Box transformBox(PT_Tree tree) */
+
+static PT_Tree transformBox(PT_Tree tree)
+{
+  PT_Production  boxProd = PT_getTreeProd(tree);
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Args boxArgs = PT_makeArgsEmpty();
+
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+
+    if (PT_isTreeFlatLexical(arg) || PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
+      boxArgs = PT_appendArgs(boxArgs, arg);
+    }
+    else if (PT_isTreeAppl(arg)) {
+      if (hasProductionToBoxAttribute(PT_getTreeProd(arg))) {
+        BOX_Box boxArg = processTree(arg);
+        boxArgs = PT_appendArgs(boxArgs, PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+      }
+      else {
+        boxArgs = PT_appendArgs(boxArgs, transformBox(arg));
+      }
+    }
+    else {
+      boxArgs = PT_appendArgs(boxArgs, transformBox(arg));
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  return PT_makeTreeAppl(boxProd, boxArgs);
+}
+
+/*}}}  */
+/*{{{  static BOX_Box insertBox(PT_Tree tree) */
+
+static BOX_Box processBox(PT_Tree tree)
+{
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Tree boxTree = NULL;
+
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+
+    if (!PT_isTreeLayout(arg) &&
+	!PT_isTreeLit(arg)) {
+      boxTree = arg;
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  if (boxTree) {
+    return BOX_BoxFromTerm(PT_TreeToTerm(transformBox(boxTree)));
+  }
+  else {
+    return NULL;
+  }
+}
+
+/*}}}  */
 /*{{{  static BOX_Box treeToBox(PT_Tree tree)  */
 
 static BOX_Box treeToBox(PT_Tree tree) 
 {
-  if (PT_isLexicalInjectionProd(PT_getTreeProd(tree))
+  if (hasProductionFromBoxAttribute(PT_getTreeProd(tree))) {
+    return processBox(tree);
+  }
+  else if (PT_isLexicalInjectionProd(PT_getTreeProd(tree))
       || PT_isTreeLit(tree)) {
     return terminalToBox(tree); 
   }
