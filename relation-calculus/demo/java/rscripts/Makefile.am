@@ -1,4 +1,5 @@
-rscriptsdir=$(pkgdatadir)/demo/java/rscripts
+include $(top_srcdir)/make_rules
 
-RSCRIPTS= $(wildcard *.rscript)
-rscripts_DATA=$(RSCRIPTS)
+rscriptsdir	= $(pkgdatadir)/demo/java/rscripts
+
+rscripts_DATA	= $(wildcard *.rscript)
