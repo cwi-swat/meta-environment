@@ -85,6 +85,7 @@
 #include <aterm2.h>
 #include <AsFix.h>
 #include <AsFix-access.h>
+#include <AsFix2src.h>
 #include <atb-tool.h>
 #include <string.h>
 #include <sys/times.h>
@@ -124,6 +125,7 @@
 /*{{{  globals */
 
 static unsigned rewrite_steps = 0;
+static ATerm tagCurrentRule = NULL;
 
 static ATbool run_verbose = ATfalse;
 
@@ -158,6 +160,14 @@ ATerm args_matching(ATerm env,ATermList conds,
                         ATermList args1,ATermList args2);
 ATerm conds_satisfied(ATermList conds,ATerm env);
 
+static void rewrite_error(const char *message, ATerm subject);
+
+/* rewrite_errors is al list in which errors that occur during rewriting 
+ * are saved until they can be send to the toolbus (or dumped to stderr in case of 
+ * standalone evaluator)
+ */
+ATermList rewrite_errors;
+
 /*}}}  */
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
@@ -171,6 +181,25 @@ void rec_terminate(int cid, ATerm t)
 
 void create_equations_db(int cid)
 {
+}
+
+/*}}}  */
+
+/*{{{  void create_equations_db(int cid) */
+
+/* rewrite_error adds an error to the list of errors in the global
+ * variable rewrite_errors. The errors consist of a user message
+ * and a subject term. The subject term can be constructed using 
+ * the usual ATmake interface. Also the tag of the current rule is passed
+ * on.
+ */
+void rewrite_error(const char *message, ATerm subject)
+{
+	ATerm error = ATmake("[<str>,<term>,<term>])", message, tagCurrentRule, subject);
+
+	rewrite_errors = ATinsert(rewrite_errors, error);
+	 
+	return;
 }
 
 /*}}}  */
@@ -333,7 +362,7 @@ ATerm add_equations(int cid, char *modname, ATerm equs)
   }
   newequs = RWprepareEqs((ATermList) equs);
   l = ATgetLength(newequs);
-
+	
   enter_equations(modname, newequs);
 
   if(run_verbose) {
@@ -389,11 +418,15 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   realtrm = RWprepareTerm(atrm);
 
   rewrite_steps = 0;
+	rewrite_errors = ATempty;
+	tagCurrentRule = NULL;
+
   select_equations(modname);
 
   if(run_verbose) {
     ATwarning("rewriting...\n");
   }
+
   times(&start);
   newtrm = rewrite(realtrm,(ATerm) ATempty);
   times(&rewriting);
@@ -409,12 +442,16 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   system = rewriting.tms_stime - start.tms_stime;
   if(run_verbose) {
     ATwarning("rewriting: %f user, %f system (%f steps/sec)\n",
-	TICK2SEC(user), TICK2SEC(system),
-	((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
+							TICK2SEC(user), TICK2SEC(system),
+							((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
   }
 #endif
+	
+	if(!ATisEmpty(rewrite_errors)) {
+		return ATmake("snd-value(errors([<list>]))",rewrite_errors);
+	}
 
-  return ATmake("snd-value(result(<term>))",result);
+	return ATmake("snd-value(result(<term>))",result);
 }
 
 /*}}}  */
@@ -488,9 +525,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList elems1, elems2;
   ATerm newenv = env;
 
-/*
-ATwarning("arg_matching: %t\n with %t\n\n", arg1, arg2);
-*/
+	if(run_verbose)
+		ATwarning("matching arguments: %t\n with %t\n\n", arg1, arg2);
 
   if(ATisEqual(arg1,arg2))
     return args_matching(newenv,conds,orgargs1,orgargs2);
@@ -777,14 +813,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
 
 
   if(!ATisEmpty(conds)) {
-		/* <PO:opt> we could do with iteration instead of recursion on the
-			 list of conditions! */
-
-    cond = ATgetFirst(conds);
-
-/*
-ATwarning("conds_satisfied entered with %t\n and %t\n", cond, env);
-*/
+		cond = ATgetFirst(conds);
 
     conds = ATgetNext(conds);
 		lhs = AFTgetCondLHS(cond);
@@ -810,15 +839,14 @@ ATwarning("conds_satisfied entered with %t\n and %t\n", cond, env);
           newenv = arg_matching(newenv,lhs,rhstrm,conds,ATempty,ATempty);
         }
         else {
-          ATfprintf(stderr,
-                   "Both sides of a condition introduces new variables:%t\n", cond);
+					rewrite_error("Both sides of condition introduce new variables.", cond);
           newenv = fail_env;
         }
       }
     }
     else {
       if(!no_new_vars(lhs,newenv) || !no_new_vars(rhs,newenv)) {
-        ATfprintf(stderr,"Negative condition introduces new variables.\n");
+        rewrite_error("Negative condition introduces new variables.",cond);
         newenv = fail_env;
       }
       else {
@@ -869,54 +897,53 @@ ATerm apply_rule(ATerm trm)
 		*/
     while((entry = find_equation(entry, top_ofs, first_ofs))) {
 
-/*
-ATwarning("Trying equation: %t\n",entry->tag);
-*/
+			if(run_verbose)
+				ATwarning("Trying equation: %t.\n",entry->tag);
+			
+			tagCurrentRule = entry->tag;
 
       conds = entry->conds;
       equargs = (ATermList) asfix_get_appl_args(entry->lhs);
 
       env = args_matching((ATerm) ATempty, conds, equargs, termargs);
       if(!is_fail_env(env)) {
-/*
-ATwarning("Equation: %t was successful\n",entry->tag);
-*/
+
+				if(run_verbose)
+					ATwarning("Equation %t was successful.\n",entry->tag);
+
 
         rewrite_steps++;
         return (ATerm) make_cenv(entry->rhs, env);
+      } else if(run_verbose) {
+				ATwarning("Equation %t failed.\n",entry->tag);
       }
-/*
-      else {
-        ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
-      }
-*/
+			
     }
   }
 
   while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) {
 
-/*
-ATwarning("Trying equation: %t\n",entry->tag);
-*/
+		if(run_verbose)
+			ATwarning("Trying equation: %t.\n",entry->tag);
+
+		tagCurrentRule = entry->tag;
 
     conds = entry->conds;
     equargs = (ATermList) asfix_get_appl_args(entry->lhs);
 
     env = args_matching((ATerm) ATempty, conds, equargs, termargs);
     if(!is_fail_env(env)) {
-/*
-ATwarning("Equation: %t was successful\n",entry->tag);
-*/
+
+			if(run_verbose)
+				ATwarning("Equation: %t was successful.\n",entry->tag);
+
       rewrite_steps++;
       return (ATerm) make_cenv(entry->rhs, env);
+    } else if(run_verbose) {
+		  ATwarning("Equation %t failed.\n",entry->tag);
     }
-/*
-    else {
-ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
-    }
-*/
-  }
-
+	}
+	
   return (ATerm) make_cenv(trm, fail_env);
 }
 
@@ -1059,8 +1086,6 @@ ATerm rewrite(ATerm trm, ATerm env)
 
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
-    /*if(!args)
-      ATfprintf(stderr, "trm = %t\n", trm);*/
     newargs = rewrite_args(args,env);
     if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(ATgetNext(newargs));
@@ -1196,6 +1221,7 @@ int main(int argc, char *argv[])
 
 		/* Prepare the equations and put them in the database */
     neweqs = RWprepareEqs((ATermList) eqs);
+
     enter_equations(name, neweqs);
 
 		/* Get the term from file */
@@ -1217,25 +1243,61 @@ int main(int argc, char *argv[])
     /*rewrite_steps = 0;*/
     select_equations(name);
 
-    if(run_verbose) ATwarning("rewriting...\n");
-    /*times(&start);*/
+		rewrite_errors = ATempty;
+		tagCurrentRule = NULL;
+
+    if(run_verbose) 
+			ATwarning("rewriting...\n");
+    
+		/*times(&start);*/
     newterm = rewrite(realterm,(ATerm) ATempty);
     /*times(&rewriting);*/
 
-		/* Postprocessing of reduct */
-    newaterm = RWrestoreTerm(newterm);
-    result = asfix_put_term(term,newaterm);
+		if(ATisEmpty(rewrite_errors)) {
+			/* Postprocessing of reduct */
+			newaterm = RWrestoreTerm(newterm);
+			result = asfix_put_term(term,newaterm);
+			
+			/* Communicate the reduct out of here */
+			if (!strcmp(output, "") || !strcmp(output, "-"))
+				iofile = stdout;
+			else if (!(iofile = fopen(output, "w")))
+				ATerror("%s: cannot open %s\n", myname, output);
+			
+			if(bafmode)
+				ATwriteToBinaryFile(result, iofile);
+			else
+				ATwriteToTextFile(result, iofile);
 
-		/* Communicate the reduct out of here */
-    if (!strcmp(output, "") || !strcmp(output, "-"))
-      iofile = stdout;
-    else if (!(iofile = fopen(output, "w")))
-      ATerror("%s: cannot open %s\n", myname, output);
+			fclose(iofile);
+		} else { /* We have errors! */
+			for(;!ATisEmpty(rewrite_errors);rewrite_errors = ATgetNext(rewrite_errors)) {
+				ATerm message, tag, subject;
+				char *messageText = NULL, *tagText = NULL, *subjectText = NULL;
+				ATermList error;
+								
+				/* The errors are tuples containing a message and a subject */
+				error = (ATermList) ATgetFirst(rewrite_errors);
+				message = ATgetFirst(error);
+				tag = ATgetFirst(ATgetNext(error));
+				subject = ATgetFirst(ATgetNext(ATgetNext(error)));
+				
+				/* Now unparse these fields to text */
+				messageText = (char*) malloc(AFsourceSize(message)+1);
+				tagText = (char*) malloc(AFsourceSize(tag)+1);
+				subjectText = (char*) malloc(AFsourceSize(subject));
 
-    if(bafmode)
-      ATwriteToBinaryFile(result, iofile);
-    else
-      ATwriteToTextFile(result, iofile);  
+				if(messageText && tagText && subjectText) {
+					AFsource(message, messageText);
+					AFsource(tag,tagText);
+				  AFsource(subject,subjectText);
+
+					ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
+				} else {
+					ATerror("No memory available to print errors.\n");
+				}
+			}
+		}
   }
   return 0;
 }
