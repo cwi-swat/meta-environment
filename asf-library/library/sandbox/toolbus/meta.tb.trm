@@ -1,5 +1,7 @@
-calculate-mismatches(
-find-facts(
+
+
+
+
 process AbortMetaEnvironment is
 let
   TimeOut : int
@@ -89,9 +91,10 @@ in
   if not-equal(Tree, error-tree) then
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(addPosInfo(FileName, Tree)) .
+    snd-msg(add-posinfo(FileName, Tree)) .
     rec-msg(tree-with-pos-info(NewTree?)) .
     snd-msg(replace-focus(EditorId, Focus, NewTree)) .
+    NewTree := no-tree .
     snd-msg(parse-ok(ModuleId))
   else
     tau
@@ -261,26 +264,28 @@ let
   Tree : term,
   Text : str,
   FileName : str,
-  Path : str,
-  Time : term
+  Message : str,
+  Path : str
 in
   Tree := none.
   Text := "".
-  snd-msg(get-sdf2-path-from-db(ModuleName)) .
-  rec-msg(path(FileName?)) .
+  snd-msg(get-path-from-db(ModuleName)) .
+  rec-msg(path(Path?)) .
+  snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
   snd-msg(get-sdf2-asfix(ModuleName)).
   (
     rec-msg(syntax(Tree?))
   +
     rec-msg(unavailable).
-    snd-msg(open-syntax-file(ModuleName)) .
+    snd-msg(io-read-file(FileName)) .
     (
-      rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
+      rec-msg(io-file-contents(Text?))
     +
-      rec-msg(error-opening(ModuleName))
+      rec-msg(io-error-reading(Message?))
     )
   ) .
-  CreateEditor(ModuleName,"syntax",FileName,Text,Tree)
+  CreateEditor("syntax",ModuleName,FileName,Text,Tree)
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -289,12 +294,16 @@ let
   Text : str,
   FileName : str,
   Path : str,
-  Time : int
+  Time : int,
+  Status : term
 in
+  Status := success .
   Tree := none .
   Text := "" .
-  snd-msg(get-eqs-path-from-db(ModuleName)) .
-  rec-msg(path(FileName?)) .
+  snd-msg(get-path-from-db(ModuleName)) .
+  rec-msg(path(Path?)) .
+  snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+  rec-msg(io-filename(FileName?)) .
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?))
@@ -305,30 +314,40 @@ in
       rec-msg(eqs-text(ModuleName, Text?))
     +
       rec-msg(no-eqs-text(ModuleName)) .
-      CreateNewEquations(ModuleName)
+      snd-msg(create-new-equations(ModuleName)) .
+      (
+        rec-msg(new-equations-created)
+      +
+        rec-msg(new-equations-not-created) .
+        Status := failure
+      )
     )
   ) .
-  CreateEditor(ModuleName, "equations", FileName, Text, Tree)
+  if equal(Status, success) then
+    CreateEditor("equations",ModuleName,FileName,Text,Tree)
+  else
+    tau
+  fi
 endlet
 
 process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
 let
   Text : str,
-  Path : str,
-  Time : term
+  ErrorMessage : str
 in
   Text := "".
-  snd-msg(open-trm-file(FileName)) .
+  snd-msg(io-read-file(FileName)) .
   (
-    rec-msg(opened-file(FileName, text(Text?), Path?, Time?))
+    rec-msg(io-file-contents(Text?))
     +
-    rec-msg(error-opening(FileName))
+    rec-msg(io-error-reading(ErrorMessage?))
   ).
-  CreateEditor(ModuleName,"term",FileName,Text,Tree)
+  CreateEditor("term",ModuleName,FileName,Text,Tree)
 endlet
 
-process CreateEditor(ModuleName : str, Type : str,
-                   FileName : str, Text : str, Tree : term) is
+process CreateEditor(Type : str, ModuleName : str,
+                     FileName : str,
+                     Text : str, Tree : term) is
 let
   EditorId : term,
   ButtonList : list,
@@ -343,28 +362,33 @@ in
     rec-msg(button-list(ModuleName,ButtonList?)).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
-      rec-msg(new-editor(FileName, EditorId?)) .
+      rec-msg(new-editor(EditorId?)) .
       snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
       rec-msg(initial-focus(Focus?)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
-      create(TextEditor(EditorId, FileName, ButtonList), Pid?) .
+      create(TextEditor, Pid?) .
+      snd-msg(edit-text(EditorId, FileName, ButtonList)) .
       rec-msg(text-editor-initialized(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     +
-      rec-msg(existing-editor(FileName, EditorId?)) .
-      create(EditorExists(EditorId,ModuleName,Type,FileName,Text,Tree), Pid?)
+      rec-msg(existing-editor(EditorId?)) .
+      snd-note(move-editor-to-front(EditorId)) .
+      snd-msg(editor-opened(ModuleName, EditorId))
     )
 endlet
 
-process EditorExists(EditorId : term, ModuleName : str, Type : str,
-                     FileName : str, Text : str, Tree : term) is
-  if equal(Type,"term") then
-    snd-msg(kill-editor(EditorId)).
-    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
-  else
-    snd-note(move-editor-to-front(EditorId)) .
-    snd-msg(editor-opened(ModuleName, EditorId))
-  fi
+process CloseEditor(ModuleName : str, FileName : str) is
+let
+  EditorId : term
+in
+  snd-msg(check-editor-id(FileName, ModuleName)) .
+  (
+    rec-msg(existing-editor(FileName, EditorId?)) .
+    snd-msg(kill-editor(EditorId))
+  +
+    rec-msg(non-existing-editor(FileName))
+  )
+endlet
 
 process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
 let
@@ -455,25 +479,9 @@ in
   fi
 endlet
 
-process CreateNewEquations(ModuleName : str) is
-let
-  ErrMsg : str,
-  Path : str
-in
-  snd-msg(create-new-equations(ModuleName)) .
-  (
-        rec-msg(new-equations-created(ModuleName, Path?))
-  +
-        rec-msg(new-equations-not-created(ErrMsg?)) .
-        snd-note(ui-status(errorf(
-                "Could not create empty equations: %s", [ErrMsg])))
-  )
-endlet
-
 process RestoreTermBrackets is
 let
   Table : term,
-  Path : str,
   Tree : term,
   ModuleName : str
 in
@@ -481,7 +489,7 @@ in
     rec-msg(restore-term-brackets(ModuleName?, Tree?)).
     snd-msg(get-parsetable(trm(ModuleName))).
     (
-      rec-msg(parse-table(Table?, Path?)) .
+      rec-msg(parse-table(Table?)) .
       snd-msg(restore-brackets(Tree, Table)) .
       rec-msg(brackets-restored(Tree?))
     +
@@ -497,26 +505,88 @@ process Open-initial-module is
 let
   Path : str,
   Module : str,
+  Extension : str,
   RealModule : str,
   Imports : list,
   Status : term
 in
   (
-    rec-msg(open-initial-module(Path?, Module?)).
+    rec-msg(open-initial-module(Path?, Module?, ".sdf")) .
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
       Status := success.
-      Open-Module(Module, Path, Status?, RealModule?, Imports?).
+      Open-Module(Path, Module, Status?, RealModule?, Imports?).
       snd-msg(open-modules(Imports)).
-      rec-msg(finished-opening-modules).
-      Invalidate-Dirty-ParseTables([RealModule])
+      rec-msg(finished-opening-modules)
     +
       rec-msg(exists-in-module-db(Module))
-    ).
-    snd-msg(finished-opening-initial-module)
+    )
   ) *
   delta
+endlet
+
+process DrawImportGraph is
+let
+  ImportRelations : list
+in
+  snd-msg(get-import-relations) .
+  rec-msg(import-relations(ImportRelations?)) .
+  snd-note(display-import-graph(ImportRelations)) .
+  ImportRelations := []
+endlet
+
+process LocateFile(Name : str, Extension : str, Path : str?) is
+let
+  Directories : list,
+  Chosen : str
+in
+  snd-msg(get-search-paths) .
+  rec-msg(search-paths(Directories?)) .
+  snd-msg(io-find-file(Directories, Name, Extension)) .
+  (
+    rec-msg(io-file-not-found) .
+    Path := ""
+  +
+    rec-msg(io-file-found(Directories?)) .
+    Path := first(Directories) .
+    Directories := next(Directories) .
+    if not-equal(Directories, []) then
+      snd-msg(io-get-filename(Path, Name, Extension)) .
+      rec-msg(io-filename(Chosen?)) .
+      DealWithMultipleOccurrences(Chosen, Name, Extension, Directories)
+    else
+      tau
+    fi
+  )
+endlet
+
+process DealWithMultipleOccurrences(Chosen : str, Name : str,
+                                    Extension : str, Peers : list) is
+let
+  Directories : list,
+  Directory : str,
+  FileName : str
+in
+  Directories := Peers .
+  if not-equal(Directories, []) then
+    Directory := first(Directories) .
+    Directories := next(Directories) .
+    snd-msg(io-get-filename(Directory, Name, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    snd-msg(compare-files(FileName, Chosen)) .
+    (
+      rec-msg(files-equal) .
+      snd-note(ui-status(errorf("Multiple occurrences of %s:\n%s and %s",
+                                [Name,Chosen,FileName])))
+    +
+      rec-msg(files-differ)
+    )
+  fi
+  *
+  if equal(Directories, []) then
+    tau
+  fi
 endlet
 
 process Open-modules is
@@ -527,11 +597,15 @@ let
   RealModules : list,
   RealModule : str,
   Imports : list,
-  Status : term
+  Status : term,
+  Path : str,
+  FileName : str,
+  Changed : term
 in
   Id := process-id.
   (
     rec-msg(open-modules(Modules?)).
+    Changed := true .
     snd-note(ui-status(stat(Id,"Opening Modules"))).
     RealModules := [].
     if not-equal(Modules, []) then
@@ -543,38 +617,27 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-        Open-Module(Module, "", Status?, RealModule?, Imports?).
+        LocateFile(Module, ".sdf", Path?) .
+        Open-Module(Path, Module, Status?, RealModule?, Imports?).
         Modules := join(Imports, Modules).
         RealModules := join(RealModules, RealModule)
       )
     fi *
     if equal(Modules, []) then
-      Invalidate-Dirty-ParseTables(RealModules) .
+      if equal(Changed, true) then
+        DrawImportGraph()
+      else
+        tau
+      fi .
+      snd-note(ui-status(endstat(Id))) .
       snd-msg(finished-opening-modules)
-    fi.
-    snd-note(ui-status(endstat(Id)))
+    fi
   ) *
   delta
 endlet
 
-process Invalidate-Dirty-ParseTables(Modules : list) is
-let
-  Runner : list,
-  Module : str
-in
-  Runner := Modules.
-  if not-equal(Runner, []) then
-    Module := first(Runner).
-    Runner := next(Runner).
-    snd-msg(invalidate-parse-tables(Module))
-  fi *
-  if equal(Runner, []) then
-    tau
-  fi
-endlet
-
-process Open-Module (Module : str, Path : str, Status : term?,
-                     RealModule : str?, Imports : list?)
+process Open-Module(Path : str, Module : str, Status : term?,
+                    RealModule : str?, Imports : list?)
 is
 let
   Id : int,
@@ -584,9 +647,8 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
-    Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
+    Open-Syntax(Path, Module, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then
-      Open-ParseTables(RealModule, RealPath).
       Open-Equations(RealModule, RealPath)
     else
       RealModule := Module.
@@ -606,47 +668,29 @@ process Handle-Open-Module-Errors(Module : str, Status : term) is
     tau
   fi
 
-process Open-Syntax (Module : str, Path : str, Status : term?,
-                     RealModule : str?, RealPath : str?, Imports : list?)
-is
+process Open-Syntax(Path : str, Module : str, Status : term?,
+                    RealModule : str?, RealPath : str?, Imports : list?) is
 let
   Tree : term,
   Text : str,
-  Time : term,
-  Dummy : str
+  Message : str,
+  FileName : str
 in
-  Tree := no-tree.
-
-  if equal(Path, "") then
-    snd-msg(open-syntax-file(Module))
-  else
-    snd-msg(open-file(Path))
-  fi.
+  snd-msg(io-get-filename(Path, Module, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-read-file(FileName)) .
   (
-    rec-msg(opened-file(Path, tree(Tree?), RealPath?, Time?))
-  +
-    rec-msg(opened-file(Module, tree(Tree?), RealPath?, Time?))
-  +
-    (
-      rec-msg(opened-file(Path, text(Text?), RealPath?, Time?))
-    +
-      rec-msg(opened-file(Module, text(Text?), RealPath?, Time?))
-    ).
+    rec-msg(io-file-contents(Text?)) .
     Parse-Syntax(Text, Status?, Tree?)
   +
-    (
-      rec-msg(error-opening(Path))
-    +
-      rec-msg(error-opening(Module))
-    ) .
+    rec-msg(io-error-reading(Message?)) .
     Status := no-such-file
-  ).
-  if equal(Status,success) then
+  ) .
+  if not-equal(Status, no-such-file) then
     Imports := [].
-    snd-msg(add-sdf-module-to-db(Module, RealPath, Tree, Time)).
+    snd-msg(add-sdf-module-to-db(Module, Path, Text, Tree)).
     (
-      rec-msg(real-module-name(Module, RealModule?)).
-      rec-msg(need-modules(Imports?))
+      rec-msg(adding-succeeded(Module, RealModule?, RealPath?, Imports?))
     +
       rec-msg(error-opening(Module, Status?))
     )
@@ -669,53 +713,27 @@ in
     rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
   +
     rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))).
+    Tree := no-tree.
     Status := parse-error
-  )
-endlet
-
-process Open-ParseTables (Module : str, Path : str) is
-let
-  Table : term,
-  Time : term
-in
-  snd-msg(open-parse-table(Module, Path, asf)).
-  (
-    rec-msg(table-on-disk(Table?, Time?)).
-    snd-msg(add-parse-table-to-db(eqs(Module), Table, Time)).
-    rec-msg(parse-table-added)
-  +
-    rec-msg(no-table-on-disk)
-  ).
-  snd-msg(open-parse-table(Module, Path, trm)).
-  (
-    rec-msg(table-on-disk(Table?, Time?)).
-    snd-msg(add-parse-table-to-db(trm(Module), Table, Time)).
-    rec-msg(parse-table-added)
-  +
-    rec-msg(no-table-on-disk)
   )
 endlet
 
 process Open-Equations (Module : str, Path : str) is
 let
-  Time : term,
   Tree : term,
   Text : str,
-  RealPath : str
+  ErrorMessage : str,
+  FileName : str
 in
-  snd-msg(open-rules-file(Module, Path)).
+  snd-msg(io-get-filename(Path, Module, ".asf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-read-file(FileName)) .
   (
-    rec-msg(opened-file(Module, text(Text?) , RealPath?, Time?)).
-    snd-msg(add-eqs-to-db(Module, RealPath, text(Text), Time)) .
+    rec-msg(io-file-contents(Text?)) .
+    snd-msg(add-eqs-to-db(Module, text(Text))) .
     rec-msg(eqs-added)
   +
-    rec-msg(opened-file(Module, tree(Tree?) , RealPath?, Time?)).
-    snd-msg(unparse(Tree)) .
-    rec-msg(unparsed-text(Text?)) .
-    snd-msg(add-eqs-to-db(Module, RealPath, tree(Tree), text(Text), Time)) .
-    rec-msg(eqs-added)
-  +
-    rec-msg(error-opening(Module))
+    rec-msg(io-error-reading(ErrorMessage?))
   )
 endlet
 
@@ -728,7 +746,8 @@ let
   ModuleName : str,
   RealModule : str,
   ErrMsg : str,
-  Path : str
+  Path : str,
+  Text : str
 in
   (
     %% Handle request to create a new module.
@@ -736,25 +755,26 @@ in
     snd-msg(is-module-in-db(ModuleName)) .
     (
       rec-msg(exists-in-module-db(ModuleName)) .
-      snd-msg(module-not-created("Module already in database"))
+      snd-note(ui-status(errorf("Module %s already exists",
+                                [ModuleName])))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(exists-syntax-module(Path)) .
+      snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-exists-file(FileName)) .
       (
-        rec-msg(syntax-module-exists(Path)) .
-        snd-msg(module-not-created("Module already exists in text or baf"))
+        rec-msg(io-file-exists) .
+        snd-note(ui-status(
+        errorf("Module %s already exists on disk", [ModuleName])))
       +
-        rec-msg(syntax-module-not-exists(Path)) .
-        snd-msg(create-empty-syntax-module(Path, ModuleName)) .
+        rec-msg(io-file-not-exists) .
+        snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
         (
-          rec-msg(module-created(Path?, RealModule?)) .
-          snd-msg(new-module-created(Path, RealModule))
+          rec-msg(io-file-written) .
+          snd-msg(open-initial-module(Path, ModuleName, ".sdf"))
         +
-          rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
-          snd-msg(new-module-not-created(ErrMsg))
-        +
-          rec-msg(module-not-created(ErrMsg?)).
-          snd-msg(new-module-not-created(ErrMsg))
+          rec-msg(io-file-not-written(ErrMsg?)) .
+          snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
         )
       )
     )
@@ -763,27 +783,41 @@ in
     rec-msg(create-new-equations(ModuleName?)) .
     snd-msg(is-module-in-db(ModuleName)) .
     (
-      rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(equations-not-created("Module not in database"))
+      rec-msg(not-exists-in-module-db(ModuleName))
     +
       rec-msg(exists-in-module-db(ModuleName)) .
-          snd-msg(get-eqs-path-from-db(ModuleName)) .
-          rec-msg(path(FileName?)) .
-      snd-msg(exists-rules-section(ModuleName, FileName)) .
+      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(path(Path?)) .
+      snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-exists-file(FileName)) .
       (
-        rec-msg(rules-section-exists(ModuleName)) .
-        snd-msg(equations-not-created("Equations section already exists."))
+        rec-msg(io-file-exists) .
+        snd-msg(io-read-file(FileName)) .
+        rec-msg(io-file-contents(text(Text?))) .
+        snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+        rec-msg(eqs-added) .
+        snd-msg(new-equations-created)
       +
-        rec-msg(rules-section-not-exists(ModuleName)) .
-        snd-msg(create-empty-rules-section(ModuleName, FileName)) .
+        rec-msg(io-file-not-exists) .
+        snd-msg(io-write-text-file(FileName, [])) .
         (
-          rec-msg(empty-rules-section-created(FileName)) .
-          snd-msg(add-empty-eqs-to-db(ModuleName, FileName)) .
-          rec-msg(empty-eqs-added) .
-          snd-msg(new-equations-created(ModuleName, FileName))
+          rec-msg(io-file-written) .
+          snd-msg(io-read-file(FileName)) .
+          (
+            rec-msg(io-file-contents(Text?)) .
+            snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+            rec-msg(eqs-added) .
+            snd-msg(new-equations-created)
+          +
+            rec-msg(io-error-reading(ErrMsg?)) .
+            snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
+            snd-msg(new-equations-not-created)
+          )
         +
-          rec-msg(empty-rules-section-not-created(ModuleName, ErrMsg?)) .
-          snd-msg(new-equations-not-created(ErrMsg))
+          rec-msg(io-file-not-written(ErrMsg?)) .
+          snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
+          snd-msg(new-equations-not-created)
         )
       )
     )
@@ -796,6 +830,7 @@ let
   Id : int,
   ModuleName1 : str,
   ModuleName2 : str,
+  Extension : str,
   Path : str,
   Option1 : term
 in
@@ -950,16 +985,14 @@ in
   Status := success.
   GetRealModuleName(New, Path, Status?, RealNew?).
   if equal(Status, success) then
-    CheckExistence(RealNew, Status?).
+    CheckExistence(New, RealNew, Status?).
     if equal(Status, success) then
       DeleteEditors(Old). tau.
       if equal(Status, success) then
-        RenameModuleInDB(Old, RealNew, Path, Status?, Changed?). tau.
-        if equal(Status, success) then
-          SaveSdfModules(Changed). tau.
-          SaveAsfSdfModule(RealNew). tau.
-          RemoveModuleFromDisk(Old). tau
-        else tau fi
+        RenameModuleInDB(Old, New, Path, Changed?) .
+        SaveSdfModules(Changed).
+        SaveAsfSdfModule(RealNew).
+        RemoveModuleFromDisk(Old)
       else tau fi
     else tau fi
   else tau fi.
@@ -975,7 +1008,7 @@ in
   Status := success.
   GetRealModuleName(New, Path, Status?, RealNew?).
   if equal(Status, success) then
-    CheckExistence(RealNew, Status?).
+    CheckExistence(New, RealNew, Status?).
     if equal (Status, success) then
       CopyModuleInDB(Old, RealNew, Path, Status?, Changed?).
       if equal (Status, success) then
@@ -990,39 +1023,39 @@ endlet
 process DoImportModule(Mod : str, Import : str, Path : str) is
 let
   Status : term,
-  Changed : list,
-  RealImport : str
+  Changed : list
 in
-  Status := success.
-  GetRealModuleName(Import, Path, Status?, RealImport?).
-  if equal(Status, success) then
-    Status := success.
+  snd-msg(is-module-in-db(Import)) .
+  (
+    rec-msg(exists-in-module-db(Import)) .
     DeleteEditors(Mod).
-    AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
-    if equal (Status, success) then
-      SaveSdfModules(Changed).
-      SaveAsfSdfModule(Mod)
-    else tau fi
-  else tau fi
+    AddImportInDB(Mod, Import).
+    SaveAsfSdfModule(Mod)
+  +
+    rec-msg(not-exists-in-module-db(Import)) .
+    snd-note(ui-status(
+      errorf("Error during adding import %s to %s: module not open",
+             [Import, Mod])))
+  )
 endlet
 
 process DoUnimportModule(Mod : str, Import : str, Path : str) is
 let
   Status : term,
-  Changed : list,
-  RealImport : str
+  Changed : list
 in
-  Status := success.
-  GetRealModuleName(Import, Path, Status?, RealImport?).
-  if equal(Status, success) then
-    Status := success.
+  snd-msg(is-module-in-db(Import)) .
+  (
+    rec-msg(exists-in-module-db(Import)) .
     DeleteEditors(Mod).
-    RemoveImportInDB(Mod, RealImport, Path, Status?, Changed?).
-    if equal(Status, success) then
-      SaveSdfModules(Changed).
-      SaveAsfSdfModule(Mod)
-    else tau fi
-  else tau fi
+    RemoveImportInDB(Mod, Import, Path) .
+    SaveAsfSdfModule(Mod)
+  +
+    rec-msg(not-exists-in-module-db(Import)) .
+    snd-note(ui-status(
+      errorf("Error during removing import %s to %s: module not open",
+             [Import, Mod])))
+  )
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -1031,13 +1064,9 @@ is
 let
   ErrMsg : str
 in
-  snd-msg(compute-module-name(Path, Name)).
-  (
-    rec-msg(module-name-not-computed(ErrMsg?)).
-    Status := module-name-not-computed
-  +
-    rec-msg(computed-module-name(RealName?))
-  )
+  Status := success .
+  snd-msg(io-get-filename(Path, Name, ".sdf")) .
+  rec-msg(io-filename(RealName?))
 endlet
 
 process SaveSdfModules(Modules : list) is
@@ -1098,16 +1127,10 @@ process CloseModuleInUI(ModuleName : str) is
 process CloseModulesInUI(Modules : list) is
   snd-msg(ui-delete-modules(Modules))
 
-process RenameModuleInDB(Old : str, New : str, Path : str, Status : term?,
-                         Changed : list?)
+process RenameModuleInDB(Old : str, New : str, Path : str, Changed : list?)
 is
   snd-msg(rename-module-in-db(Old, New, Path)) .
-  (
-    rec-msg(renaming-done(Old, Changed?))
-  +
-    rec-msg(renaming-not-done(Old)).
-    Status := module-not-changed
-  )
+  rec-msg(renaming-module-done(Old, Changed?))
 
 process CopyModuleInDB(Old : str, New : str, Path : str, Status : term?,
                        Changed : list?)
@@ -1120,42 +1143,30 @@ is
     Status := module-not-copied
   )
 
-process AddImportInDB(Mod : str, Import : str, Path : str, Status : term?,
-                       Changed : list?)
+process AddImportInDB(Mod : str, Import : str)
 is
-  snd-msg(add-import-in-db(Mod, Import, Path)) .
-  (
-    rec-msg(add-import-done(Mod, Changed?))
-  +
-    rec-msg(add-import-not-done(Mod)).
-    Status := import-not-done
-  )
+  snd-msg(add-import-in-db(Mod, Import)) .
+  rec-msg(add-import-done(Mod))
 
-process RemoveImportInDB(Mod : str, Import : str, Path : str, Status :term?,
-                         Changed : list?)
+process RemoveImportInDB(Mod : str, Import : str, Path : str)
 is
   snd-msg(remove-import-in-db(Mod, Import, Path)) .
-  (
-    rec-msg(remove-import-done(Mod, Changed?))
-  +
-    rec-msg(remove-import-not-done(Mod)).
-    Status := remove-import-not-done
-  )
+  rec-msg(remove-import-done)
 
-process CheckExistence(New : str, Status : term?) is
-    snd-msg(is-module-in-db(New)) .
+process CheckExistence(Name : str, FileName : str, Status : term?) is
+    snd-msg(is-module-in-db(Name)) .
     (
-      rec-msg(exists-in-module-db(New)).
+      rec-msg(exists-in-module-db(Name)).
       Status := module-exists-in-db
     +
-      rec-msg(not-exists-in-module-db(New))
+      rec-msg(not-exists-in-module-db(Name))
     ).
-    snd-msg(exists-syntax-module(New)) .
+    snd-msg(io-exists-file(FileName)) .
     (
-      rec-msg(syntax-module-exists(New)) .
+      rec-msg(io-file-exists) .
       Status := module-exists-on-disk
       +
-      rec-msg(syntax-module-not-exists(New))
+      rec-msg(io-file-not-exists)
     )
 
 process DeleteEditors(Module : str) is
@@ -1230,280 +1241,6 @@ endlet
 
 
 
-
-tool user-interface is {
-  command = "meta-studio"
-}
-
-process Status-display(UI: user-interface) is
-let
-  Lst : list,
-  Str : str,
-  Id : term
-in
-  subscribe(ui-status(<term>)) .
-  ( rec-note(ui-status(stat(Id?, Str?))) .
-    snd-do(UI, add-status(Id, Str))
-    +
-    rec-note(ui-status(statf(Id?, Str?, Lst?))) .
-    snd-do(UI, add-statusf(Id, Str, Lst))
-    +
-    rec-note(ui-status(endstat(Id?))) .
-    snd-do(UI, end-status(Id))
-    +
-    rec-note(ui-status(error(Str?))) .
-    snd-do(UI, error(Str))
-    +
-    rec-note(ui-status(errorf(Str?, Lst?))) .
-    snd-do(UI, errorf(Str, Lst))
-  ) *
-  delta
-endlet
-
-process Ui is
-let
-  SD : int,
-  Om : int,
-  EM : int,
-  ET : int,
-  UI : user-interface,
-  Id : term,
-  Name : term,
-  Str : term,
-  Str1 : term,
-  Mod : term,
-  Pairs : list,
-  Mods : list,
-  ModName : str,
-  FileName : str,
-  OutputFile : str,
-  T : str,
-  FT : str,
-  Path : str,
-  PathWithExt : str,
-  ErrMsg : str,
-  On : term,
-  Graph : term,
-  Info : list,
-  LayoutedGraph : term,
-   ModuleName : str,
-  RealModuleName : str,
-  LibraryPath : str,
-  SyntaxExt : str,
-  SemanticsExt : str,
-  TermExt : str,
-  EnvironmentName : str,
-  Recursive : term,
-  EditorId : term,
-  GraphId : str,
-  ButtonName : list,
-  Tree : term,
-  Lst : list
-in
-  Id := process-id.
-  subscribe(import-graph(<term>,<term>)).
-  execute(user-interface,UI?).
-  create(Status-display(UI),SD?).
-
-  snd-msg(library-location-hook).
-  rec-msg(library-location-hook-result(LibraryPath?)).
-  snd-msg(file-extensions-hook).
-  rec-msg(file-extensions-hook-result(SyntaxExt?,SemanticsExt?,TermExt?)).
-  snd-msg(environment-name-hook).
-  rec-msg(environment-name-hook-result(EnvironmentName?)).
-
-  snd-do(UI, initialize-ui(EnvironmentName, LibraryPath, SyntaxExt,
-                           SemanticsExt, TermExt)).
-  Mods := [] .
-  Pairs := [] .
-  (
-
-    (
-      rec-event(UI, new-module(Path?, Str?)).
-      snd-msg(create-new-module(Path, Str)).
-      (
-        rec-msg(new-module-not-created(ErrMsg?)).
-        snd-note(ui-status(errorf("%s",[ErrMsg])))
-      +
-        rec-msg(new-module-created(PathWithExt?, RealModuleName?)).
-        snd-msg(open-initial-module(PathWithExt, RealModuleName)).
-        ( rec-note(import-graph(Mods?, Pairs?)) .
-          snd-do(UI,new-graph(Mods,Pairs))
-        ) *
-        rec-msg(finished-opening-initial-module).
-        snd-do(UI,finished-opening-modules(Str))
-      ).
-      snd-ack-event(UI, new-module(Path, Str))
-    )
-    +
-
-    ( rec-event(UI, open-module(Path?, Str?)).
-      snd-note(online-help(open-module)).
-      snd-msg(open-initial-module(Path, Str)).
-      snd-ack-event(UI, open-module(Path, Str)) .
-      ( rec-note(import-graph(Mods?,Pairs?))
-        +
-        rec-msg(cannot-open-module(ModName?)).
-        snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-      )*
-      rec-msg(finished-opening-initial-module) .
-      snd-do(UI,finished-opening-modules(Str)) .
-      snd-do(UI,new-graph(Mods,Pairs))
-    ) +
-    ( rec-msg(cannot-open-module(ModName?)).
-      snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-    )
-    +
-    ( rec-msg(display-graph(GraphId?, Graph?)) .
-      snd-do(UI, display-graph(GraphId, Graph))
-    )
-    +
-    ( rec-event(UI, delete-module(ModName?)) .
-      snd-msg(delete-module(ModName)) .
-      snd-ack-event(UI, delete-module(ModName))
-    ) +
-    ( rec-msg(ui-delete-modules(Mods?)).
-      snd-do(UI, delete-modules(Mods))
-    ) +
-    ( rec-event(UI, close-module(ModName?,Recursive?)).
-      snd-msg(close-module(ModName, Recursive)).
-      snd-ack-event(UI, close-module(ModName, Recursive))
-    ) +
-    ( rec-event(UI,save-module(Str?)).
-      snd-msg(save-module(Str)).
-      rec-msg(saved-module(Str)).
-      snd-ack-event(UI,save-module(Str))
-    ) +
-    ( rec-event(UI, edit-module(ModName?)) .
-      snd-msg(edit-syntax(ModName)) .
-      rec-msg(editor-opened(ModName,EditorId?)) .
-      snd-ack-event(UI, edit-module(ModName))
-    ) +
-    ( rec-event(UI, edit-eqs-module(ModName?)).
-      snd-msg(edit-equations(ModName)) .
-      rec-msg(editor-opened(ModName,EditorId?)) .
-      snd-ack-event(UI, edit-eqs-module(ModName))
-    ) +
-   ( rec-event(UI, edit-term(ModName?, FileName?)).
-     snd-msg(edit-term-file(ModName, FileName)) .
-     rec-msg(editor-opened(ModName,EditorId?)) .
-     snd-ack-event(UI, edit-term(ModName, FileName))
-   ) +
-    ( rec-event(UI, revert-module(ModName?)) .
-      snd-msg(revert-module(ModName)) .
-      rec-msg(module-reverted(ModName?)) .
-      snd-ack-event(UI, revert-module(ModName))
-    ) +
-    ( rec-event(UI, print-module(ModName?)) .
-      snd-msg(print-module(ModName)) .
-      rec-msg(module-printed(ModName?)) .
-      snd-ack-event(UI, print-module(ModName))
-    ) +
-    ( rec-event(UI,get-module-info(ModName?)).
-      snd-msg(get-module-info(ModName)) .
-      rec-msg(module-info(ModName, Info?)) .
-      snd-do(UI,module-info(ModName,Info)) .
-      snd-ack-event(UI,get-module-info(ModName))
-    ) +
-    ( rec-event(UI,save-all).
-      snd-msg(save-all).
-      rec-msg(saved).
-      snd-ack-event(UI,save-all)
-    ) +
-    ( rec-event(UI,clear-all).
-      snd-msg(clear-all).
-      rec-msg(cleared-all).
-      snd-ack-event(UI,clear-all)
-    ) +
-    ( rec-event(UI, refresh-buttons) .
-      snd-msg(refresh-buttons) .
-      rec-msg(buttons-refreshed) .
-      snd-ack-event(UI, refresh-buttons)
-    ) +
-   ( rec-event(UI, compile-module(Str?)).
-     snd-msg(compile-module(Str)).
-     rec-msg(compilation-ready(Str)).
-     snd-ack-event(UI, compile-module(Str))
-   ) +
-   ( rec-event(UI, import-module(Str?, Str1?, Path?)) .
-     snd-msg(import-module(Str, Str1, Path)) .
-     snd-ack-event(UI, import-module(Str, Str1, Path))
-   ) +
-   ( rec-event(UI, unimport-module(Str?, Str1?,Path?)) .
-     snd-msg(unimport-module(Str, Str1,Path)) .
-     snd-ack-event(UI, unimport-module(Str, Str1,Path))
-   ) +
-   ( rec-event(UI, rename-module(Str?, Str1?, Path?)) .
-     snd-msg(rename-module(Str, Str1, Path)) .
-     snd-ack-event(UI, rename-module(Str, Str1, Path))
-   ) +
-   ( rec-event(UI, copy-module(Str?, Str1?, Path?)) .
-     snd-msg(copy-module(Str, Str1, Path)) .
-     snd-ack-event(UI, copy-module(Str, Str1, Path))
-   ) +
-   ( rec-event(UI, dump-equations(Str?)).
-     snd-msg(dump-equations(Str)).
-     rec-msg(equations-dumped).
-     snd-ack-event(UI, dump-equations(Str))
-   )+
-   ( rec-event(UI, dump-parse-table(Str?)).
-     snd-msg(dump-parse-table(Str)).
-     rec-msg(parse-table-dumped) .
-     snd-ack-event(UI, dump-parse-table(Str))
-   )+
-   ( rec-event(UI,parse-equations(Str?)).
-     snd-msg(process-eqs(Str)).
-     rec-msg(eqs-processed(Str)).
-     snd-ack-event(UI,parse-equations(Str))
-   ) +
-   ( rec-event(UI,jitterbug-wanted).
-     snd-msg(jitterbug-wanted).
-     rec-msg(jitterbug-activated).
-     snd-ack-event(UI,jitterbug-wanted)
-   ) +
-   ( rec-event(UI,online-help).
-     snd-msg(online-help-wanted).
-     rec-msg(done).
-     snd-ack-event(UI,online-help)
-   ) +
-   ( rec-event(UI,no-online-help).
-     snd-msg(no-online-help-wanted).
-     rec-msg(done).
-     snd-ack-event(UI,no-online-help)
-   ) +
-   ( rec-event(UI,debugging(On?)) .
-     snd-msg(debugging(On)) .
-     snd-ack-event(UI,debugging(On))
-   ) +
-   ( rec-note(import-graph(Mods?,Pairs?)).
-     snd-do(UI,new-graph(Mods,Pairs))
-   )
-   +
-   ( rec-event(UI, layout-graph(GraphId?, Graph?)) .
-     snd-msg(layout-graph(Graph)) .
-     rec-msg(graph-layouted(LayoutedGraph?)) .
-     snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
-     snd-ack-event(UI, layout-graph(GraphId, Graph))
-   )
-   +
-   (
-     rec-event(UI, element-selected(ButtonName?, Tree?)).
-     snd-msg(extra-button-action(ButtonName, Tree, "message-list", "*", message-id)).
-     snd-ack-event(UI, element-selected(ButtonName, Tree))
-   )
-   +
-   (
-     rec-msg(update-list-view(Lst?)).
-     snd-do(UI, update-list(Lst))
-   )
-  ) *
-  ( rec-event(UI,quit)
-  + rec-disconnect(UI)) .
-  shutdown("MetaStudio exiting\n")
-endlet
-
-
-
 process ClearAll is
 let
   Id : term,
@@ -1514,8 +1251,8 @@ in
   (
     rec-msg(clear-all) .
     snd-note(ui-status(stat(Id,"Clearing"))) .
-    snd-msg(get-all-modules) .
-    rec-msg(all-modules(Modules?)) .
+    snd-msg(get-all-module-names) .
+    rec-msg(all-module-names(Modules?)) .
     (
       if not-equal(Modules, []) then
         Module := first(Modules) .
@@ -1533,8 +1270,6 @@ in
 endlet
 
 
-
-
 process ProcessEqsTree(Module : str, Tree : term) is
 let
   NewTree : term
@@ -1543,15 +1278,15 @@ in
     snd-msg(postprocess-semantics-hook(Tree)) .
     rec-msg(postprocess-semantics-hook-result(NewTree?)) .
     snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
+    NewTree := no-tree .
     rec-msg(eqs-updated)
   else
     tau
   fi
 endlet
 
-process ProcessEqs is
+process ParseAllEquations(ModName : str) is
 let
-  ModName : str,
   ModuleName : str,
   Module : str,
   Modules : list,
@@ -1562,85 +1297,44 @@ let
   Errors : term,
   ModuleId : term
 in
+  snd-msg(get-rules-top-sort) .
+  rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
+  snd-msg(eqs-not-available-for-modules(ModName)) .
+  rec-msg(eqs-needed-for-modules(Modules?)).
   (
-    rec-msg(process-eqs(ModName?)).
-    snd-msg(get-rules-top-sort) .
-    rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
-    snd-msg(eqs-not-available-for-modules(ModName)) .
-    rec-msg(eqs-needed-for-modules(Modules?)).
-    (
-     if not-equal(Modules, []) then
-       Module := first(Modules).
-       Modules := next(Modules).
-
-
-       snd-msg(get-eqs-text(Module)).
-       (
-        rec-msg(eqs-text(Module, EqsText?)).
-        ModuleId := quote(eqs(Module)) .
-        ParseString(ModuleId,
-                    Nonterminal, EqsText, ParseTree?, Errors?) .
-        ProcessParseError(Module, Errors, "asf") .
-        ProcessEqsTree(Module, ParseTree)
-      +
-        rec-msg(no-eqs-text(Module))
-      )
-      fi
-    )*
-    if equal(Modules,[]) then
-      snd-msg(eqs-processed(ModName))
-    fi
-  )* delta
-endlet
-
-process ProcessRenamedImports(ImportTupleList : list,
-                              Equations : term?) is
-let
-  ImportTuple : term,
-  ImportTuples : list,
-  TupleArgs : list,
-  Import : term,
-  Imports : list,
-  Renamings : term,
-  NewRenamings : term,
-  NewImports : list,
-  NewEquations : term
-in
-  Equations := [] .
-  ImportTuples := ImportTupleList .
-  (
-    if not-equal(ImportTuples, []) then
-      ImportTuple := first(ImportTuples) .
-      ImportTuples := next(ImportTuples) .
-      TupleArgs := args(ImportTuple) .
-      Renamings := first(TupleArgs) .
-      Imports := first(next(TupleArgs)) .
-      (
-        if not-equal(Imports, []) then
-          Import := first(Imports) .
-          Imports := next(Imports) .
-          snd-msg(get-equations-for-renamed-import(Import, Renamings)) .
-          (
-            rec-msg(renamed-equations(NewRenamings?, NewImports?, NewEquations?)) .
-            snd-msg(rename-semantics-hook(NewRenamings, NewEquations)) .
-            rec-msg(rename-semantics-hook-result(NewEquations?)) .
-            Equations := join(NewEquations, Equations) .
-            ImportTuple := quote(tuple(NewRenamings, NewImports)) .
-            ImportTuples := join(ImportTuples, ImportTuple)
-          +
-            rec-msg(no-equations)
-          )
-        fi
-      )*
-      if equal(Imports, []) then
-        tau
-      fi
+   if not-equal(Modules, []) then
+     Module := first(Modules).
+     Modules := next(Modules).
+     snd-msg(get-eqs-text(Module)).
+     (
+      rec-msg(eqs-text(Module, EqsText?)).
+      ModuleId := quote(eqs(Module)) .
+      ParseString(ModuleId, Nonterminal, EqsText, ParseTree?, Errors?) .
+      ProcessParseError(Module, Errors, "asf") .
+      ProcessEqsTree(Module, ParseTree) .
+      ParseTree := no-tree
+    +
+      rec-msg(no-eqs-text(Module))
+    )
     fi
   )*
-  if equal(ImportTuples, []) then
+  if equal(Modules,[]) then
     tau
   fi
 endlet
+
+process GetImportsForRenaming(ModuleName : str, Imports : term?) is
+let
+  Modules : list
+in
+  printf("DEBUG:all sdf-modules not needed!(%f,%d)\n", "/export/scratch1/jong/meta/install/share/meta/process-eqs.tb", 60) .
+  snd-msg(get-all-modules) .
+  rec-msg(all-modules(Modules?)) .
+  snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
+  Modules := [] .
+  rec-msg(sm-all-needed-imports(Imports?))
+endlet
+
 
 process GetEquations is
 let
@@ -1649,46 +1343,48 @@ let
   AllEquations : term,
   Modules : list,
   NewEquations : list,
-  Imports : list,
-  Module : term,
+  Imports : term,
+  Module : str,
   Renamings : term,
   FormalName : term,
   Parameters : term,
-  ImportTuple : term
+  ImportTuple : term,
+  ModuleNames : list,
+  RenamedEquations : list,
+  ImportedModuleName : str
 in
   (
     rec-msg(get-all-equations(ModuleName?)) .
+    ParseAllEquations(ModuleName) .
     snd-msg(all-equations-available(ModuleName)) .
     (
       rec-msg(equations-available) .
       NewEquations := [] .
-      snd-msg(get-all-imported-modules(ModuleName)) .
-      rec-msg(all-modules(Modules?)) .
-      (
-        if not-equal(Modules, []) then
-          Module := first(Modules) .
-          Modules := next(Modules) .
-          snd-msg(get-equations-for-module(Module)) .
-          (
-            rec-msg(plain-equations(Equations?)) .
-            NewEquations := join(Equations, NewEquations)
-          +
-            rec-msg(renaming-equations(Renamings?, Imports?, Equations?)) .
-            snd-msg(rename-semantics-hook(Renamings, Equations)).
-            rec-msg(rename-semantics-hook-result(Equations?)).
-            NewEquations := join(Equations, NewEquations) .
-            ImportTuple := quote(tuple(Renamings, Imports)) .
-            ProcessRenamedImports([ImportTuple], Equations?) .
-            NewEquations := join(Equations, NewEquations)
-          +
-            rec-msg(no-equations)
-          )
-        fi
-      )*
-      if equal(Modules,[]) then
+      snd-msg(get-all-imported-module-names(ModuleName)) .
+      rec-msg(all-imported-module-names(ModuleNames?)) .
+      GetImportsForRenaming(ModuleName, Imports?) .
+      if not-equal(ModuleNames, []) then
+        Module := first(ModuleNames) .
+        ModuleNames := next(ModuleNames) .
+        snd-msg(get-equations-for-module(Module)) .
+        (
+           rec-msg(equations(Equations?)) .
+           snd-msg(sr-rename-module(Imports, Module, Equations)) .
+           Equations := no-tree .
+           rec-msg(sr-renamed-module(RenamedEquations?)) .
+           NewEquations := join(NewEquations, RenamedEquations) .
+           RenamedEquations := []
+        +
+           rec-msg(no-equations)
+        )
+      fi
+      *
+      if equal(ModuleNames,[]) then
         snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
+        NewEquations := [] .
         rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-        snd-msg(all-equations(AllEquations))
+        snd-msg(all-equations(AllEquations)) .
+        AllEquations := no-tree
       fi
     +
       rec-msg(equations-incomplete) .
@@ -1713,8 +1409,6 @@ in
     (
       rec-msg(compile-module(ModuleName?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
-      snd-msg(process-eqs(ModuleName)) .
-      rec-msg(eqs-processed(ModuleName)) .
       snd-msg(get-all-equations(ModuleName)) .
       (
         rec-msg(all-equations(Equations?)) .
@@ -1736,48 +1430,66 @@ endlet
 process Save-modules is
 let
   Id : term,
-  Str : term,
   Syntax : term,
   Eqs : term,
   Module : term,
   Path : str,
   Modules : list,
   Table : term,
-  Text : str
+  Text : str,
+  ErrorMessage : str,
+  FileName : str
 in
   Id := process-id.
-  ( rec-msg(save-module(Module?)).
+  (
+    rec-msg(save-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-sdf2-path-from-db(Module)).
+    snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
-    snd-msg(get-sdf2-asfix(Module)).
-    rec-msg(syntax(Syntax?)).
-    snd-msg(save-tree(Module,Path,Syntax)).
-    rec-msg(save-done) .
+    snd-msg(io-get-filename(Path, Module, ".asf.baf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-eqs-tree(Module)).
-    ( rec-msg(tree(Eqs?)).
-      snd-msg(get-eqs-path-from-db(Module)).
-      rec-msg(path(Path?)).
-      snd-msg(save-tree(Module,Path,Eqs)).
-      rec-msg(save-done)
+    (
+      rec-msg(tree(Eqs?)).
+      snd-msg(io-write-term-file(FileName, Eqs)).
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     +
       rec-msg(no-eqs)
     +
       rec-msg(unavailable)
     ).
+    snd-msg(io-get-filename(Path, Module, ".trm.tbl")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-table-from-db(trm(Module))).
     (
-      rec-msg(table(Table?, Path?)).
-      snd-msg(save-table(Module, Path, Table)).
-      rec-msg(save-done)
+      rec-msg(table(Table?)).
+      snd-msg(io-write-term-file(FileName, Table)).
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     +
       rec-msg(no-table)
     ).
+    snd-msg(io-get-filename(Path, Module, ".asf.tbl")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-table-from-db(eqs(Module))).
     (
-      rec-msg(table(Table?, Path?)).
-      snd-msg(save-table(Module, Path, Table)).
-      rec-msg(save-done)
+      rec-msg(table(Table?)).
+      snd-msg(io-write-term-file(FileName, Table)) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     +
       rec-msg(no-table)
     ).
@@ -1786,148 +1498,66 @@ in
   +
     rec-msg(save-sdf-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-sdf2-path-from-db(Module)).
+    snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
+    snd-msg(io-get-filename(Path, Module, ".sdf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-sdf2-asfix(Module)).
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(save-text-file(Path, Text)) .
-      rec-msg(save-done(Path))
+      snd-msg(io-write-text-file(FileName, [Text])) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-sdf-module(Module))
   +
     rec-msg(save-asfsdf-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-sdf2-path-from-db(Module)).
+    snd-msg(get-path-from-db(Module)).
     rec-msg(path(Path?)).
+    snd-msg(io-get-filename(Path, Module, ".sdf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(get-sdf2-asfix(Module)).
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(save-text-file(Path, Text)) .
-      rec-msg(save-done(Path))
+      snd-msg(io-write-text-file(FileName, [Text])) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     ) .
     snd-msg(get-eqs-text(Module)).
     (
       rec-msg(eqs-text(Module, Text?)) .
-      snd-msg(get-eqs-path-from-db(Module)) .
-      rec-msg(path(Path?)) .
-      snd-msg(save-text-file(Path, Text)) .
-      rec-msg(save-done(Path))
+      snd-msg(io-get-filename(Path, Module, ".asf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-write-text-file(FileName, [Text])) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      )
     +
       rec-msg(no-eqs-text(Module))
     ).
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-asfsdf-module(Module))
+
   +
-    rec-msg(save-all).
-    snd-msg(get-all-modules).
-    rec-msg(all-modules(Modules?)).
-    ( if not-equal(Modules, []) then
-       Module := first(Modules).
-       Modules := next(Modules).
-             snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-       snd-msg(get-sdf2-path-from-db(Module)).
-       rec-msg(path(Path?)).
-       snd-msg(get-sdf2-asfix(Module)).
-       rec-msg(syntax(Syntax?)).
-       snd-msg(save-tree(Module,Path,Syntax)).
-       rec-msg(save-done) .
-       snd-msg(get-eqs-tree(Module)).
-       ( rec-msg(tree(Eqs?)).
-         snd-msg(get-eqs-path-from-db(Module)).
-         rec-msg(path(Path?)).
-         snd-msg(save-tree(Module,Path,Eqs)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-eqs)
-       +
-         rec-msg(unavailable)
-       ) .
-       snd-msg(get-table-from-db(trm(Module))).
-       (
-         rec-msg(table(Table?, Path?)).
-         snd-msg(save-table(Module, Path, Table)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-table)
-       ).
-       snd-msg(get-table-from-db(eqs(Module))).
-       (
-         rec-msg(table(Table?, Path?)).
-         snd-msg(save-table(Module, Path, Table)).
-         rec-msg(save-done)
-       +
-         rec-msg(no-table)
-       ).
-       snd-note(ui-status(endstat(Id)))
-      fi
-    )*
-    if equal(Modules,[]) then
-     snd-msg(saved)
-    fi
-  )*
-  delta
-endlet
-
-
-
-tool gen is {
-  command = "gen-adapter"
-}
-
-process BROWSER(Id : gen, Cmd : str, Inp : str) is
-let
-  Out : str
-in
-   snd-eval(Id,cmd(Cmd, input(Inp))).
-   rec-value(Id, output(Out?))
-endlet
-
-process Help is
-let
-  HELP : gen,
-  Id : int,
-  Started : bool
-in
-  Id := process-id.
-  execute(gen,HELP?).
-  subscribe(online-help(<term>)).
-  Started := false.
-  (
-    rec-msg(jitterbug-wanted).
-    BROWSER(HELP,
-            "netscape -remote openUrl(http://www.cwi.nl/htbin/MetaEnv/meta-bugs)",
-            "").
-    snd-msg(jitterbug-activated)
-  +
-    rec-msg(online-help-wanted).
-    BROWSER(HELP,
-            "netscape -remote openUrl(/export/scratch1/jong/meta/install/share/meta/meta.html)",
-            "").
-    Started := true.
-    snd-msg(done)
-  +
-    rec-msg(no-online-help-wanted).
-    Started := false.
-    snd-msg(done)
-  +
-    rec-note(online-help(open-module)).
-    (
-      if Started then
-        BROWSER(HELP,
-                "netscape -remote openUrl(/export/scratch1/jong/meta/install/share/meta/open-module.html)",
-                "")
-      fi
-    +
-      if not(Started) then
-        tau
-      fi
-    )
+    rec-msg(save-all) .
+    snd-note(ui-status(errorf("Saving not yet implemented!",[])))
   )*
   delta
 endlet
@@ -1998,6 +1628,8 @@ in
   )*
   delta
 endlet
+
+toolbus(GenAdapt)
 
 
 tool se is {
@@ -2147,39 +1779,35 @@ let
   TableType : term,
   Table : term,
   Syntax : term,
-  Path : str,
   ErrorMsg : str,
   Id : int,
-  Msgs : list,
   Str : str
 in
 Id := process-id.
 (
   rec-msg(get-parsetable(ModuleId?)) .
+  Str := first(args(ModuleId)).
   snd-msg(get-table-from-db(ModuleId)) .
   (
-    rec-msg(table(Table?, Path?)).
-    snd-msg(parse-table(Table, Path))
+    rec-msg(table(Table?)).
+    snd-msg(parse-table(Table))
   +
     rec-msg(no-table) .
-    Str := first(args(ModuleId)).
     snd-note(ui-status(statf(Id, "Generating parsetable %s",[Str]))).
-    snd-msg(get-all-sdf2-definitions(ModuleId)).
+    snd-msg(get-all-sdf2-definitions(Str)).
     (
       rec-msg(syntax(Syntax?)).
-
       snd-msg(preprocess-syntax-hook(ModuleId, Syntax)).
       rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
-
       snd-msg(generate-parsetable(Syntax, ModuleId)).
+      Syntax := no-tree .
       (
         rec-msg(parsetable(Table?)).
-        snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
+        snd-msg(add-parse-table-to-db(ModuleId, Table)) .
         rec-msg(parse-table-added).
-        snd-msg(get-table-from-db(ModuleId)) .
-        rec-msg(table(Table?, Path?)) .
         snd-note(ui-status(endstat(Id))) .
-        snd-msg(parse-table(Table, Path))
+        snd-msg(parse-table(Table)) .
+        Table := no-table
       +
         rec-msg(no-parsetable).
         snd-note(ui-status(endstat(Id))) .
@@ -2208,7 +1836,6 @@ let
   ModuleId : term,
   TableType : term,
   Table : term,
-  Path : str,
   Id : int
 in
 Id := process-id.
@@ -2216,7 +1843,7 @@ Id := process-id.
   rec-msg(set-parsetable(ModuleId?)) .
   snd-msg(get-parsetable(ModuleId)) .
   (
-    rec-msg(parse-table(Table?, Path?)) .
+    rec-msg(parse-table(Table?)) .
     ReopenLanguage(ModuleId, Table)
   +
     rec-msg(no-parse-table(ModuleId)) .
@@ -2246,10 +1873,9 @@ let
   Id : term,
   ModuleName : str,
   FileName : str,
-  Equations : term,
   Table : term,
   Path : str,
-  Text : str
+  ErrorMessage : str
 in
   Id := process-id.
 
@@ -2260,16 +1886,24 @@ in
     +
       rec-msg(dump-parse-table-given-file(ModuleName?, FileName?))
     ) .
-    snd-note(ui-status(statf(Id, "Dumping parse table for %s",[ModuleName]))) .
+    snd-note(ui-status(statf(Id,"Dumping parse table for %s",[ModuleName]))) .
     snd-msg(get-parsetable(trm(ModuleName))) .
     (
-      rec-msg(parse-table(Table?, Path?)) .
+      rec-msg(parse-table(Table?)) .
+      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(path(Path?)) .
       if equal(FileName, "") then
-        snd-msg(save-table(ModuleName, Path, Table))
+        snd-msg(io-get-filename(Path, ModuleName, ".trm.tbl")) .
+        rec-msg(io-filename(FileName?))
       else
-        snd-msg(save-table(ModuleName, FileName, Table))
+        tau
       fi .
-      rec-msg(save-done)
+      snd-msg(io-write-term-file(FileName, Table)) .
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrorMessage?))
+      )
     +
       rec-msg(no-parse-table(trm(ModuleName)))
     ) .
@@ -2299,11 +1933,35 @@ process Open-Sdf2-Language is
 
 
 
+process GetText (EditorId : term, Text : str?, Focus : term?, Status : term?) is
+let
+  DirtyFoci : list
+in
+  snd-msg(get-dirty-focuses(EditorId)) .
+  rec-msg(dirty-focuses(DirtyFoci?)) .
+  if not-equal(DirtyFoci, []) then
+    Focus := first(DirtyFoci).
+    DirtyFoci := next(DirtyFoci).
+    snd-note(get-focus-text(EditorId, Focus)).
+    (
+      rec-msg(focus-text(EditorId, Text?)) .
+      Status := parse-needed
+    +
+
+      rec-note(delete-editor(EditorId)) .
+      Text := "" .
+      Status := no-parse-needed
+    )
+  else
+    Text := "" .
+    Status := no-parse-needed
+  fi
+endlet
+
 process ParseFocusses is
 let
   Id : term,
   Focus : term,
-  DirtyFoci : list,
   Text : str,
   Type : str,
   ModuleName : str,
@@ -2311,7 +1969,8 @@ let
   Nonterminal : str,
   Tree : term,
   Errors : term,
-  ModuleId : term
+  ModuleId : term,
+  Status : term
 in
   Id := process-id .
   (
@@ -2325,23 +1984,13 @@ in
     else
       Nonterminal := ""
     fi .
-    snd-msg(get-dirty-focuses(EditorId)) .
-    rec-msg(dirty-focuses(DirtyFoci?)) .
-    if not-equal(DirtyFoci, []) then
-      Focus := first(DirtyFoci).
-      DirtyFoci := next(DirtyFoci).
-      snd-note(get-focus-text(EditorId, Focus)).
-      (
-        rec-msg(focus-text(EditorId, Text?)).
-        UpdateTextInModuleDb(Type, ModuleName, Text).
-        ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
-        PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
-        ProcessTree(ModuleId, EditorId, Focus, Tree)
-      +
-
-        rec-note(delete-editor(EditorId)) .
-        snd-msg(parse-ok(ModuleId))
-      )
+    GetText(EditorId, Text?, Focus?, Status?) .
+    if equal(Status, parse-needed) then
+      UpdateTextInModuleDb(Type, ModuleName, Text).
+      ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
+      PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
+      ProcessTree(ModuleId, EditorId, Focus, Tree) .
+      Tree := no-tree
     else
       snd-msg(parse-ok(ModuleId))
     fi .
@@ -2483,6 +2132,7 @@ let
   NrOfArgs : int,
   Location : int,
   Integer : int,
+  Query : str,
   Action : str,
   OutStr : str,
   InStr : str,
@@ -2490,7 +2140,10 @@ let
   Path : str,
   Tree : term,
   Text : str,
-  TimeStamp : int
+  TimeStamp : int,
+  ErrorMessage : str,
+  Mode : term,
+  Ext : str
 in
    (
       rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?) .
@@ -2585,6 +2238,7 @@ in
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(get-root, Stack?, EditorId?) .
+    StackPopString(Stack, Stack?, ModuleName?) .
     GetTree(EditorId, ModuleName, RTree?) .
     if not-equal(RTree, error-tree) then
       StackPushTerm(Stack,Stack?,RTree).
@@ -2679,6 +2333,12 @@ in
         fi .
         ReturnSuccess(EditorId,Stack)
       +
+        rec-msg(close-editor, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopString(Stack,Stack?,FileName?) .
+        CloseEditor(NewModName, FileName) .
+        ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(send, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
         snd-msg(tree-send(STree)) .
@@ -2726,12 +2386,12 @@ in
         fi
       +
         rec-msg(exists(FileName?), Stack?, EditorId?) .
-        snd-msg(exists-file(FileName)) .
+        snd-msg(io-exists-file(FileName)) .
         (
-          rec-msg(file-exists(FileName)) .
+          rec-msg(io-file-exists(FileName)) .
           ReturnSuccess(EditorId,Stack)
         +
-          rec-msg(file-not-exists(FileName)) .
+          rec-msg(io-file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist",
                                     [FileName]))) .
           ReturnAbort(EditorId,Stack)
@@ -2778,6 +2438,10 @@ in
         StackPushInt(Stack,Stack?,Integer) .
         ReturnSuccess(EditorId,Stack)
       +
+        rec-msg(push-term(Tree?), Stack?, EditorId?) .
+        StackPushTerm(Stack,Stack?, Tree) .
+        ReturnSuccess(EditorId,Stack)
+      +
         rec-msg(message(String?), Stack?, EditorId?) .
         snd-note(ui-status(errorf("%s", [String]))) .
         ReturnSuccess(EditorId,Stack)
@@ -2815,21 +2479,189 @@ in
           rec-msg(save-done(Name))
         else
           Text := first(args(Tree)) .
-          snd-msg(save-text-file(Path,Text)).
-          rec-msg(save-done(Path))
-        fi .
-        ReturnSuccess(EditorId,Stack)
+          snd-msg(io-write-text-file(Path,[Text])).
+          (
+            rec-msg(io-file-written) .
+            ReturnSuccess(EditorId, Stack)
+          +
+            rec-msg(io-file-not-written(ErrorMessage?)) .
+            snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+            ReturnAbort(EditorId, Stack)
+          )
+        fi
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) .
-        snd-msg(open-file(Path)).
-        (
-          rec-msg(opened-file(Name?,tree(Tree?),Path?,TimeStamp?)).
-          StackPushTerm(Stack,Stack?,Tree) .
-          ReturnSuccess(EditorId,Stack)
-        +
-          rec-msg(error-opening(Path?)).
-          ReturnAbort(EditorId,Stack)
-        )
+        printf("not yet implemented at line %d", 497) .
+        ReturnAbort(EditorId,Stack)
+      +
+        rec-msg(query(Query?), Stack?, EditorId?) .
+        snd-msg(execute-query(EditorId, Query)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(edit-syntax, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(edit-syntax(ModuleName)) .
+        rec-msg(editor-opened(ModuleName,EditorId2?)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(edit-equations, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(edit-equations(ModuleName)) .
+        rec-msg(editor-opened(ModuleName,EditorId2?)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(save-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(save-module(ModuleName)).
+        rec-msg(saved-module(ModuleName)).
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(revert-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(revert-module(ModuleName)) .
+        rec-msg(module-reverted(ModuleName)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(close-module(Mode?), Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(close-module(ModuleName, Mode)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(delete-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(delete-module(ModuleName)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(open-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(open-initial-module(Path, ModuleName, Ext)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(new-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(create-new-module(Path, ModuleName)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
+        snd-msg(ask-for-file(String, Path, Ext)) .
+        rec-msg(ask-for-file-result(FileName?)) .
+        StackPushString(Stack,Stack?,FileName) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(edit-term, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,FileName?) .
+        StackPopString(Stack,Stack?,NewModName?) .
+        snd-msg(edit-term-file(NewModName, FileName)) .
+        rec-msg(editor-opened(NewModName, EditorId2?)).
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(ask-question(String?), Stack?, EditorId?) .
+        snd-msg(ask-question(String)) .
+        rec-msg(ask-question-result(Tree?)) .
+        StackPushTerm(Stack,Stack?,Tree) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(split-file-name(Ext?), Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, FileName?) .
+        snd-msg(decons-file-name(FileName, Ext)) .
+        rec-msg(decons-file-name-result(Path?, FileName?, Ext?)) .
+        StackPushString(Stack, Stack?, FileName) .
+        StackPushString(Stack, Stack?, Path) .
+        StackPushString(Stack, Stack?, Ext) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(copy-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, NewModName?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(copy-module(ModuleName, NewModName, Path, Ext)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(rename-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, NewModName?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(rename-module(ModuleName, NewModName, Path)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(import-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, NewModName?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(import-module(ModuleName, NewModName, Path)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(unimport-module, Stack?, EditorId?) .
+        StackPopString(Stack, Stack?, Ext?) .
+        StackPopString(Stack, Stack?, Path?) .
+        StackPopString(Stack, Stack?, NewModName?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(unimport-module(ModuleName, NewModName, Path)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(compile-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(compile-module(ModuleName)) .
+        rec-msg(compilation-ready(ModuleName)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(dump-equations, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(dump-equations(ModuleName)) .
+        rec-msg(equations-dumped) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(dump-parse-table, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(dump-parse-table(ModuleName)) .
+        rec-msg(parse-table-dumped) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(print-module, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        snd-msg(print-module(ModuleName)) .
+        rec-msg(module-printed(ModuleName)) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(clear-all, Stack?, EditorId?) .
+        snd-msg(clear-all) .
+        rec-msg(cleared-all) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(save-all, Stack?, EditorId?) .
+        snd-msg(save-all) .
+        rec-msg(saved) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(clear-history-list, Stack?, EditorId?) .
+        snd-msg(clear-history) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(refresh-buttons, Stack?, EditorId?) .
+        snd-msg(refresh-buttons) .
+        rec-msg(buttons-refreshed) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(exit, Stack?, EditorId?) .
+        shutdown("MetaStudio exiting\n") .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(dup, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,Tree?) .
+        StackPushTerm(Stack,Stack?,Tree) .
+        StackPushTerm(Stack,Stack?,Tree) .
+        ReturnSuccess(EditorId, Stack)
+      +
+        rec-msg(pop, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,Tree?) .
+        ReturnSuccess(EditorId, Stack)
   ) * delta
 endlet
 
@@ -2895,15 +2727,13 @@ endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
 let
-  Name : str,
-  TimeStamp : term,
-  Path : str
+  ErrorMessage : str
 in
-  snd-msg(open-file(FileName)).
+  snd-msg(io-read-file(FileName)).
   (
-    rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?))
+    rec-msg(io-file-contents(Text?))
   +
-    rec-msg(error-opening(Name?)) .
+    rec-msg(io-error-reading(ErrorMessage?)) .
     Text := error-text
   )
 endlet
@@ -2926,36 +2756,42 @@ endlet
 process ParseSyntax(EditorId : term, ModuleName : str) is
 let
   Tree : term,
+  Text : str,
   Focus : term,
-  Modules : list
+  NewModules : list,
+  DependingModules : list
 in
-      InvalidateEditor(EditorId).
-      snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
+  InvalidateEditor(EditorId).
+  snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
+  (
+    rec-msg(parse-ok(trm("Sdf2"))) .
+    snd-msg(get-tree(EditorId)) .
+    (
+      rec-msg(tree(Tree?)) .
+      snd-msg(unparse(Tree)) .
+      rec-msg(unparsed-text(Text?)) .
+      snd-msg(update-module-in-db(ModuleName, Text, Tree)) .
       (
-        rec-msg(parse-ok(trm("Sdf2"))) .
-        snd-msg(get-tree(EditorId)) .
-        (
-          rec-msg(tree(Tree?)) .
-          snd-msg(update-module-in-db(ModuleName, Tree, "Sdf2")).
-          (
-            rec-msg(extra-modules(Modules?)).
-            snd-msg(open-modules(Modules)).
-            rec-msg(finished-opening-modules) .
-            snd-note(clear-focus(EditorId))
-          +
-            rec-msg(error-opening(ModuleName, name-inconsistent)).
-            snd-msg(invalidate-sdf-in-db(ModuleName)).
-            InvalidateEditor(EditorId).
-            snd-note(ui-status(
-              errorf("Changing the name of %s is not permitted.",[ModuleName])))
-          )
-        +
-          rec-msg(no-tree)
-        )
+        rec-msg(updating-succeeded(DependingModules?, NewModules?)).
+        snd-msg(notify-about-changed-modules(DependingModules, "sdf")) .
+        rec-msg(notify-about-changed-modules-done) .
+        snd-msg(open-modules(NewModules)).
+        rec-msg(finished-opening-modules) .
+        snd-note(clear-focus(EditorId))
       +
-        rec-msg(parse-failed(trm("Sdf2"), Focus?)) .
-        snd-msg(invalidate-sdf-in-db(ModuleName))
+        rec-msg(error-opening(ModuleName, name-inconsistent)).
+        snd-msg(invalidate-sdf-in-db(ModuleName)).
+        InvalidateEditor(EditorId).
+        snd-note(ui-status(
+          errorf("Changing the name of %s is not permitted.",[ModuleName])))
       )
+    +
+      rec-msg(no-tree)
+    )
+  +
+    rec-msg(parse-failed(trm("Sdf2"), Focus?)) .
+    snd-msg(invalidate-sdf-in-db(ModuleName))
+  )
 endlet
 
 process ParseEquations(EditorId : term, ModuleName : str) is
@@ -3019,7 +2855,8 @@ let
   TotalTree : term,
   Text : str,
   Focus : term,
-  FileName : str
+  FileName : str,
+  ErrorMessage : str
 in
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(focus-moved(EditorId, Focus?)) .
@@ -3032,12 +2869,17 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
-    snd-note(reload-file(EditorId, FileName)) .
-    snd-msg(move-focus-to-root(EditorId)) .
-    rec-msg(focus-moved(EditorId, Focus?)) .
-    snd-note(set-focus(EditorId, Focus))
+    snd-msg(io-write-text-file(FileName,[Text])) .
+    (
+      rec-msg(io-file-written) .
+      snd-note(reload-file(EditorId, FileName)) .
+      snd-msg(move-focus-to-root(EditorId)) .
+      rec-msg(focus-moved(EditorId, Focus?)) .
+      snd-note(set-focus(EditorId, Focus))
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    )
   +
     rec-msg(no-tree)
   )
@@ -3058,7 +2900,8 @@ let
   TotalTree : term,
   Text : str,
   Focus : term,
-  FileName : str
+  FileName : str,
+  ErrorMessage : str
 in
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
@@ -3069,10 +2912,15 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
-    snd-note(reload-file(EditorId, FileName)) .
-    snd-note(set-focus(EditorId, Focus))
+    snd-msg(io-write-text-file(FileName,[Text])) .
+    (
+      rec-msg(io-file-written) .
+      snd-note(reload-file(EditorId, FileName)) .
+      snd-note(set-focus(EditorId, Focus))
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    )
   +
     rec-msg(no-tree)
   )
@@ -3104,8 +2952,6 @@ in
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  snd-msg(process-eqs(ModuleName)) .
-  rec-msg(eqs-processed(ModuleName)) .
   snd-msg(get-all-equations(ModuleName)) .
   (
     rec-msg(all-equations(Equations?)) .
@@ -3124,27 +2970,40 @@ process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
 let
   Text : str,
   EditorId : term,
-  NewModuleName : str
+  NewModuleName : str,
+  ErrorMessage : str
 in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) .
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(save-text-file(FileName, Text)) .
-    rec-msg(save-done(FileName)) .
-    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
-    rec-msg(editor-opened(ModuleName, EditorId?))
+    snd-msg(io-write-text-file(FileName,[Text])) .
+    (
+      rec-msg(io-file-written) .
+      snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
+      rec-msg(editor-opened(ModuleName, EditorId?))
+    +
+      rec-msg(io-file-not-written(ErrorMessage?)) .
+      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    )
   fi
 endlet
 
 process ActivateEditorWithString(Text: str, ModuleName: str, FileName: str) is
 let
   EditorId : term,
-  NewModuleName : str
+  NewModuleName : str,
+  ErrorMessage : str
 in
-  snd-msg(save-text-file(FileName, Text)) .
-  rec-msg(save-done(FileName)) .
-  snd-msg(edit-term-file(ModuleName, FileName)) .
-  rec-msg(editor-opened(ModuleName, EditorId?))
+  snd-msg(io-write-text-file(FileName,[Text])) .
+  (
+    rec-msg(io-file-written) .
+    snd-msg(edit-term-file(ModuleName, FileName)) .
+    rec-msg(editor-opened(ModuleName, EditorId?))
+  +
+    rec-msg(io-file-not-written(ErrorMessage?)) .
+    snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+  )
+
 endlet
 
 
@@ -3169,7 +3028,7 @@ in
           snd-note(syntax-changed(ChangedMod)).
           snd-msg(close-language(ChangedMod))
         else
-          snd-note(equations-changed(ChangedMod))
+          tau
         fi
       fi
     )*
@@ -3183,46 +3042,48 @@ in
 endlet
 
 
-
-
 process DumpEquations is
 let
-  Id : term,
+  Id : int,
   ModuleName : str,
-  FileName : str,
   Equations : term,
-  Text : str
+  Path : str,
+  FileName : str,
+  ErrorMessage : str
 in
-  Id := process-id.
-
+  Id := process-id .
   (
     (
       rec-msg(dump-equations(ModuleName?)) .
       FileName := ""
     +
-      rec-msg(dump-equations(ModuleName?, FileName?))
+      rec-msg(dump-equations-given-file(ModuleName?, FileName?))
     ) .
-    snd-note(ui-status(statf(Id, "Dumping specification for %s",[ModuleName]))).
-    snd-msg(process-eqs(ModuleName)).
-    rec-msg(eqs-processed(ModuleName)).
-    snd-msg(get-all-equations(ModuleName)).
+    snd-note(ui-status(statf(Id,"Dumping equations for %s", [ModuleName]))) .
+    snd-msg(get-all-equations(ModuleName)) .
     (
-      rec-msg(all-equations(Equations?)).
-      snd-msg(create-equations-dump-file(ModuleName, FileName, Equations)).
+      rec-msg(all-equations(Equations?)) .
+      if equal(FileName, "") then
+        snd-msg(get-path-from-db(ModuleName)) .
+        rec-msg(path(Path?)) .
+        snd-msg(io-get-filename(Path, ModuleName, ".eqs")) .
+        rec-msg(io-filename(FileName?))
+      else
+        tau
+      fi .
+      snd-msg(io-write-term-file(FileName, Equations)) .
       (
-        rec-msg(create-equations-dump-file-done(ModuleName))
-        +
-        rec-msg(create-equations-dump-file-failed(ModuleName, Text?)).
-        snd-note(ui-status(errorf("Dumping of specification for %s failed: %s",
-                 ModuleName, Text)))
-      )
+        rec-msg(io-file-written)
       +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+        snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
+      )
+    +
       rec-msg(equations-incomplete) .
       snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))
     ) .
-    snd-msg(equations-dumped) .
-    snd-note(ui-status(endstat(Id)))
-
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(equations-dumped)
   ) * delta
 
 endlet
@@ -3240,22 +3101,12 @@ let
   FunSym : str
 in
   (
-    rec-msg(get-query-actions) .
-    snd-msg(get-application-status) .
-    (
-      rec-msg(status(interactive)) .
-      snd-msg(action-list(["findProduction", "findProdUse"]))
-    +
-      rec-msg(status(standalone)) .
-      snd-msg(action-list([]))
-    )
-    +
-    rec-msg(execute-query(EditorId?, "findProdUse")) .
+    rec-msg(execute-query(EditorId?, "find-production-use")) .
     snd-msg(get-focussed-tree(EditorId)) .
     (
       rec-msg(tree(Focus?)) .
-      snd-msg(get-all-modules) .
-      rec-msg(all-modules(ModuleNames?)) .
+      snd-msg(get-all-module-names) .
+      rec-msg(all-module-names(ModuleNames?)) .
       (
         if not-equal(ModuleNames, []) then
           ModuleName := first(ModuleNames) .
@@ -3271,7 +3122,7 @@ in
             if equal(FunSym, "found") then
 
               snd-msg(edit-equations(ModuleName)) .
-              rec-msg(edit-equations(ModuleName, EditorId?)) .
+              rec-msg(editor-opened(ModuleName, EditorId?)) .
               PosInfo := first(args(Term)) .
               snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
               ModuleNames := []
@@ -3289,12 +3140,12 @@ in
       fi
     )
     +
-    rec-msg(execute-query(EditorId?, "findProduction")) .
+    rec-msg(execute-query(EditorId?, "find-production")) .
     snd-msg(get-focussed-tree(EditorId)) .
     (
       rec-msg(tree(Focus?)) .
-      snd-msg(get-all-modules) .
-      rec-msg(all-modules(ModuleNames?)) .
+      snd-msg(get-all-module-names) .
+      rec-msg(all-module-names(ModuleNames?)) .
       (
         if not-equal(ModuleNames, []) then
           ModuleName := first(ModuleNames) .
@@ -3307,7 +3158,7 @@ in
             if equal(FunSym, "found") then
 
               snd-msg(edit-syntax(ModuleName)) .
-              rec-msg(edit-syntax(ModuleName, EditorId?)) .
+              rec-msg(editor-opened(ModuleName, EditorId?)) .
               PosInfo := first(args(Term)) .
               snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
               ModuleNames := []
@@ -3371,11 +3222,6 @@ let
 in
   execute(asfoperations, AO?) .
   (
-    rec-msg(rename(Renamings?, Equations?)) .
-    snd-eval(AO, rename-in-equations(Renamings, Equations)) .
-    rec-value(AO, equations(Equations?)) .
-    snd-msg(equations(Equations))
-  +
     rec-msg(extract-equations(Equations?)).
     snd-eval(AO, extract-equations(Equations)).
     rec-value(AO, extract-equations-result(Equations?)).
@@ -3622,8 +3468,7 @@ in
     if not-equal(Errors,[]) then
       Message := first(Errors).
       Errors := next(Errors).
-      printf("WARNING: %s\n\n", Message)
-
+      snd-note(ui-status(errorf("WARNING: %s",[Message])))
     fi *
     if equal(Errors,[]) then
       tau
@@ -3648,7 +3493,6 @@ in
   create(Interpret-term, Pid?) .
   create(Postprocess-semantics, Pid?) .
   create(Compile-semantics, Pid?) .
-  create(Rename-semantics, Pid?) .
   create(Postprocess-collected-semantics, Pid?)
 endlet
 
@@ -3667,7 +3511,8 @@ in
     rec-msg(extended-syntax(Syntax?)).
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))
+    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax)) .
+    Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
@@ -3677,7 +3522,8 @@ in
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).
-    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax)) .
+    Syntax := no-tree
   )*delta
 endlet
 
@@ -3751,30 +3597,19 @@ in
   )*delta
 endlet
 
-process Rename-semantics is
-let
-  Semantics : term,
-  Renamings : term
-in
-  (
-    rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
-    snd-msg(rename(Renamings, Semantics)).
-    rec-msg(equations(Semantics?)).
-    snd-msg(rename-semantics-hook-result(Semantics))
-  )*delta
-endlet
-
 process Postprocess-collected-semantics is
 let
   Semantics : term,
-  ModuleName : term,
+  ModuleName : str,
   Modules : list
 in
   (
     rec-msg(postprocess-collected-semantics-hook(ModuleName?, Modules?)).
     snd-msg(extract-equations(Modules)).
     rec-msg(extract-equations-result(Semantics?)).
-    snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics))
+   printf("Equations extracted from parse trees\n") .
+   snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics))
+
   )*delta
 endlet
 
@@ -3911,9 +3746,6 @@ endlet
 
 tool layoutgraph is { command = "layoutgraph" }
 
-
-
-
 process Unparser is
 let
   UPT : unparsePT,
@@ -3932,27 +3764,47 @@ in
 endlet
 
 tool unparsePT is { command = "unparsePT" }
+toolbus(Unparser)
 
-
+tool addPosInfo is { command = "addPosInfo" }
 
 
 process AddPosInfo is
 let
   API : addPosInfo,
   Tree : term,
-  Path : str
+  Path : str,
+  Depth : int
 in
-  ( rec-msg(addPosInfo(Path?, Tree?)).
+  (
+    rec-msg(add-posinfo(Path?, Tree?)).
+    execute(addPosInfo, API?) .
+    snd-eval(API, add-posinfo(Path, Tree)) .
+    rec-value(API, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := no-tree .
+    snd-terminate(API,"")
+  +
+    rec-msg(add-posinfo-packed(Path?, Tree?)).
+    execute(addPosInfo, API?) .
+    snd-eval(API, add-posinfo-packed(Path, Tree)) .
+    rec-value(API, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := no-tree .
+    snd-terminate(API,"")
+  +
+    rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
     execute(addPosInfo, API?).
-    snd-eval(API, addPosInfo(Path, Tree)).
+    snd-eval(API, add-posinfo-to-depth(Path, Tree, Depth)).
     rec-value(API, tree-with-pos-info(Tree?)).
     snd-msg(tree-with-pos-info(Tree)).
+    Tree := no-tree .
     snd-terminate(API,"")
   ) *
   delta
 endlet
 
-tool addPosInfo is { command = "addPosInfo" }
+toolbus(AddPosInfo)
 
 
 
@@ -3960,223 +3812,90 @@ tool addPosInfo is { command = "addPosInfo" }
 process Io is
 let
   IO : in-output,
-  Tree : term,
   Name : str,
   Path : str,
-  SyntaxPath : str,
-  Text : str,
-  FunSym : str,
   Term : term,
-  SyntaxText : str,
-  RulesText : str,
+  FileName1 : str,
+  FileName2 : str,
   FileName : str,
   Contents : term,
-  Time : int,
-  TimeStamp : term,
-  TableType : term,
-  Table : term,
-  Paths : list,
-  SyntaxExt : str,
-  RulesExt : str,
-  TermExt : str,
-  RealName : str,
-  EditorId : term
+  ContentList: list,
+  Extension : str,
+  ErrorMessage : str,
+  Directory : str,
+  Directories : list
 in
   execute(in-output,IO?).
   (
-    rec-msg(get-config-file(Name?)) .
-    snd-eval(IO, read-file(Name)) .
+    rec-msg(io-relative-to-absolute(Directories?)) .
+    snd-eval(IO, relative-to-absolute(Directories)) .
+    rec-value(IO, absolute-directories(Directories?)) .
+    snd-msg(io-absolute-directories(Directories))
+  +
+    rec-msg(io-find-file(Directories?, Name?, Extension?)) .
+    snd-eval(IO, find-file(Directories, Name, Extension)) .
     (
-      rec-value(IO, file-contents(Name, Text?)) .
-      snd-msg(config-file(Name, Text))
-      +
-      rec-value(IO, error-opening(Name)).
-      snd-msg(no-config-file(Name))
-    )
+      rec-value(IO, file-found(Directories?)) .
+      snd-msg(io-file-found(Directories))
     +
-    rec-msg(get-button-file(Name?)) .
-    snd-eval(IO, read-aterm-file(Name)) .
+      rec-value(IO, file-not-found) .
+      snd-msg(io-file-not-found)
+    )
+  +
+    rec-msg(io-exists-file(FileName?)) .
+    snd-eval(IO, exists-file(FileName)) .
     (
-      rec-value(IO, file-contents(Name, Term?)) .
-      snd-msg(button-file(Name, Term))
-      +
-      rec-value(IO, error-opening(Name)).
-      snd-msg(no-button-file(Name))
+      rec-value(IO, success) .
+      snd-msg(io-file-exists)
+    +
+      rec-value(IO, failure(ErrorMessage?)) .
+      snd-msg(io-file-not-exists)
     )
-    +
-    rec-msg(process-search-paths(Name?, Paths?)) .
-    snd-eval(IO, process-search-paths(Name, Paths)) .
-    rec-value(IO, search-paths-processed(Name)) .
-    snd-msg(search-paths-processed(Name)) .
-    snd-msg(get-file-extensions) .
-    rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
-    snd-do(IO, set-file-extensions(SyntaxExt, RulesExt, TermExt))
-    +
-    rec-msg(open-parse-table(Name?, Path?, TableType?)) .
-    snd-eval(IO, open-parse-table(Name, Path, TableType)) .
+  +
+    rec-msg(io-write-text-file(FileName?, ContentList?)) .
+    snd-eval(IO, write-text-file(FileName, ContentList)) .
     (
-      rec-value(IO,table-on-disk(Table?, TimeStamp?)) .
-      snd-msg(table-on-disk(Table, TimeStamp))
+      rec-value(IO, success) .
+      snd-msg(io-file-written)
     +
-      rec-value(IO,error-opening(Name)).
-      snd-msg(no-table-on-disk)
+      rec-value(IO, failure(ErrorMessage?)) .
+      snd-msg(io-file-not-written(ErrorMessage))
     )
   +
-    rec-msg(open-trm-file(Name?)).
-    snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file(Name,Contents?,Path?,TimeStamp?)).
-      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-      +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(error-opening(Name))
-    )
-  +
-    %% Check if a syntax module exists.
-    rec-msg(exists-syntax-module(Name?)) .
-    snd-eval(IO, exists-syntax-module(Name)) .
+    rec-msg(io-write-term-file(FileName?, Term?)) .
+    snd-eval(IO, write-term-file(FileName, Term)) .
     (
-      rec-value(IO, exists) .
-      snd-msg(syntax-module-exists(Name))
+      rec-value(IO, success) .
+      snd-msg(io-file-written)
     +
-      rec-value(IO, not-exists) .
-      snd-msg(syntax-module-not-exists(Name))
+      rec-value(IO, failure(ErrorMessage?)) .
+      snd-msg(io-file-not-written(ErrorMessage))
     )
   +
-    %% Create a (new) empty syntax module
-    rec-msg(create-empty-syntax-module(Path?, Name?)) .
-    snd-eval(IO, create-empty-syntax-module(Path, Name)) .
+    rec-msg(io-read-file(FileName?)) .
+    snd-eval(IO,read-text-file(FileName)) .
     (
-      rec-value(IO, creation-succeeded(Path?, RealName?)) .
-      snd-msg(module-created(Path, RealName))
+      rec-value(IO,file-contents(Contents?)).
+      snd-msg(io-file-contents(Contents))
     +
-      rec-value(IO, creation-failed(Text?)) .
-      snd-msg(module-creation-failed(Name, Text))
+      rec-value(IO,failure(ErrorMessage?)).
+      snd-msg(io-error-reading(ErrorMessage))
     )
   +
-    rec-msg(compute-module-name(Path?, Name?)).
-    snd-eval(IO, compute-module-name(Path, Name)).
+    rec-msg(io-compare-files(FileName1?, FileName2?)) .
+    snd-eval(IO, compare-files(FileName1, FileName2)) .
     (
-      rec-value(IO, computed-module-name(RealName?)).
-      snd-msg(computed-module-name(RealName))
+      rec-value(IO, equal) .
+      snd-msg(io-files-equal)
     +
-      rec-value(IO, module-name-not-computed(Text?)).
-      snd-msg(module-name-not-computed(Text))
+      rec-value(IO, different) .
+      snd-msg(io-files-differ)
     )
   +
-    %% Check if a rules section exists.
-    rec-msg(exists-rules-section(Name?, Path?)) .
-    snd-eval(IO, exists-rules-section(Name, Path)) .
-    (
-      rec-value(IO, exists) .
-      snd-msg(rules-section-exists(Name))
-    +
-      rec-value(IO, not-exists) .
-      snd-msg(rules-section-not-exists(Name))
-    )
-  +
-    %% Create a (new) rules section for a given module
-    rec-msg(create-empty-rules-section(Name?, Path?)) .
-    snd-eval(IO, create-empty-rules-section(Name, Path)) .
-    (
-      rec-value(IO, creation-succeeded(FileName?)) .
-      snd-msg(empty-rules-section-created(FileName))
-    +
-      rec-value(IO, creation-failed(Text?)) .
-      snd-msg(empty-rules-section-not-created(Name, Text))
-    )
-  +
-    %% Name represents the module-name (without extension)
-    rec-msg(open-syntax-file(Name?)).
-    snd-eval(IO,open-syntax-file(Name)).
-    (
-      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
-      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-    +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(error-opening(Name))
-    )
-  +
-    rec-msg(open-file(Path?)).
-    snd-eval(IO,open-file(Path)).
-    (
-      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
-      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-    +
-      rec-value(IO,error-opening(Path?)).
-      snd-msg(error-opening(Path))
-    )
-  +
-    rec-msg(open-rules-file(Name?, SyntaxPath?)).
-    snd-eval(IO, open-rules-file(Name, SyntaxPath)).
-    (
-      rec-value(IO, opened-file(Name, Contents?, Path?, TimeStamp?)) .
-      snd-msg(opened-file(Name, Contents, Path, TimeStamp))
-    +
-      rec-value(IO, error-opening(Name)).
-      snd-msg(error-opening(Name))
-    )
-  +
-    %% Check if a file exists.
-    rec-msg(exists-file(Name?)) .
-    snd-eval(IO, exists-file(Name)) .
-    (
-      rec-value(IO, exists) .
-      snd-msg(file-exists(Name))
-    +
-      rec-value(IO, not-exists) .
-      snd-msg(file-not-exists(Name))
-    )
-  +
-    %% Check if a file exists.
-    rec-msg(locate-file(Name?)) .
-    snd-eval(IO, locate-file(Name)) .
-    (
-      rec-value(IO, location(Path?)) .
-      snd-msg(file-location(Name, Path))
-    +
-      rec-value(IO, not-exists) .
-      snd-msg(file-not-exists(Name))
-    )
-  +
-    rec-msg(save-tree(Name?, Path?, Tree?)) .
-    snd-eval(IO, save-tree(Name, Path, Tree)) .
-    rec-value(IO, save-done(Name?)) .
-    snd-msg(save-done)
-  +
-    rec-msg(save-text-file(Path?, Text?)) .
-    snd-eval(IO, save-text-file(Path, Text)) .
-    rec-value(IO, save-done(Path)) .
-    snd-msg(save-done(Path))
-  +
-    rec-msg(print-module-text(Name?, Path?, SyntaxText?, RulesText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SyntaxText, RulesText)) .
-    rec-value(IO, module-text-printed(Name)) .
-    snd-msg(module-text-printed(Name))
-  +
-    rec-msg(print-module-text(Name?, Path?, SyntaxText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SyntaxText, "")) .
-    rec-value(IO, module-text-printed(Name)) .
-    snd-msg(module-text-printed(Name))
-  +
-    rec-msg(save-table(Name?, Path?, Table?)) .
-    snd-eval(IO, save-parsetable(Name, Path, Table)) .
-    rec-value(IO, save-done(Name)).
-    snd-msg(save-done)
-  +
-    rec-msg(create-equations-dump-file(Name?, Path?, Tree?)) .
-    snd-eval(IO, create-equations-dump-file(Name, Path, Tree)) .
-    (
-      rec-value(IO, create-equations-dump-file-done(Name)) .
-      snd-msg(create-equations-dump-file-done(Name))
-    +
-      rec-value(IO, create-equations-dump-file-failed(Name, Text?)) .
-          snd-msg(create-equations-dump-file-failed(Name, Text))
-    )
-  +
-    rec-msg(remove-module(Name?)) .
-    snd-eval(IO, remove-module(Name)) .
-    rec-value(IO, removed-module) .
-    snd-msg(removed-module)
+    rec-msg(io-get-filename(Directory?, Name?, Extension?)) .
+    snd-eval(IO, get-filename(Directory, Name, Extension)) .
+    rec-value(IO, filename(FileName?)) .
+    snd-msg(io-filename(FileName))
   ) *
   delta
 endlet
@@ -4185,356 +3904,805 @@ tool in-output is { command = "in-output" }
 
 
 
+
+
+
+tool sdf-modules is { command = "sdf-modules" }
+
+toolbus(SdfModules)
+
+process SdfModules is
+let
+ SM : sdf-modules,
+ Modules : list,
+ Pairs : list,
+ ModuleId : str,
+ Imports : term,
+ ModuleImportPairs : list,
+ Import : term,
+ Renamings : term,
+ Module : term,
+ Definition : term,
+ Nodes : list,
+ Edges : list,
+ Path : str,
+ From : str,
+ To : str,
+ ModuleNames : list
+in
+  execute(sdf-modules, SM?) .
+  (
+    rec-msg(sm-get-module-id(Module?)) .
+    snd-eval(SM, get-module-id(Module)) .
+    rec-value(SM, module-id(ModuleId?)) .
+    snd-msg(sm-module-id(ModuleId))
+  +
+    rec-msg(sm-get-module-path(Path?, ModuleId?)) .
+    snd-eval(SM, get-module-path(Path, ModuleId)) .
+    (
+      rec-value(SM, module-path(Path?)) .
+      snd-msg(sm-module-path(Path))
+    +
+      rec-value(SM, module-path-inconsistent) .
+      snd-msg(sm-module-path-inconsistent)
+    )
+  +
+    rec-msg(sm-get-all-needed-module-names(ModuleImportPairs?, ModuleId?)) .
+    snd-eval(SM, get-all-needed-module-names(ModuleImportPairs, ModuleId)) .
+    ModuleImportPairs := [] .
+    rec-value(SM, all-needed-module-names(ModuleNames?)) .
+    snd-msg(sm-all-needed-module-names(ModuleNames))
+  +
+    rec-msg(sm-get-all-depending-module-names(ModuleImportPairs?, ModuleId?)) .
+    snd-eval(SM, get-all-depending-module-names(ModuleImportPairs, ModuleId)) .
+    Modules := [] .
+    rec-value(SM, all-depending-module-names(ModuleNames?)) .
+    snd-msg(sm-all-depending-module-names(ModuleNames))
+  +
+    rec-msg(sm-get-all-needed-imports(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-needed-imports(Modules, ModuleId)) .
+    Modules := [] .
+    rec-value(SM, all-needed-imports(Imports?)) .
+    snd-msg(sm-all-needed-imports(Imports))
+  +
+    rec-msg(sm-get-imported-module-names(Module?)) .
+    snd-eval(SM, get-imported-module-names(Module)) .
+    rec-value(SM, imported-module-names(ModuleNames?)) .
+    snd-msg(sm-imported-module-names(ModuleNames))
+  +
+    rec-msg(sm-make-sdf-definition(Modules?)) .
+    snd-eval(SM, make-sdf-definition(Modules)) .
+    Modules := [] .
+    rec-value(SM, sdf-definition(Definition?)) .
+    snd-msg(sm-sdf-definition(Definition)) .
+    Definition := no-tree
+  +
+    rec-msg(sm-is-valid-modulename-in-path(Path?, ModuleId?)) .
+    snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
+    (
+      rec-value(SM, result(yes)) .
+      snd-msg(sm-modulename-is-valid)
+    +
+      rec-value(SM, result(no)) .
+      snd-msg(sm-modulename-is-invalid)
+    )
+  +
+    rec-msg(sm-rename-import-in-module(Module?, From?, To?)) .
+    printf("not yet implemented in %s at %d\n", "/export/scratch1/jong/meta/install/share/sdf-support/sdf-modules.idef", 83) .
+    snd-msg(sm-import-renamed-in-module(Module))
+  +
+    rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
+    printf("not yet implemented in %s at %d\n", "/export/scratch1/jong/meta/install/share/sdf-support/sdf-modules.idef", 87) .
+    snd-msg(sm-import-removed-from-module(Module))
+  +
+    rec-msg(sm-rename-module(Module?, ModuleId?)) .
+    printf("not yet implemented in %s at %d\n", "/export/scratch1/jong/meta/install/share/sdf-support/sdf-modules.idef", 91) .
+    snd-msg(sm-module-renamed(Module))
+  +
+    rec-msg(sm-add-import-to-module(Module?, ModuleId?)) .
+    snd-eval(SM, add-import-to-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-import-added-to-module(Module)) .
+    Module := no-tree
+  )
+  * delta
+endlet
+
+tool sdf-renaming is { command = "sdf-renaming" }
+
+toolbus(SdfRenaming)
+
+process SdfRenaming is
+let
+ SR : sdf-renaming,
+ Imports : term,
+ ToBeRenamed : term,
+ Renamed : list,
+ ModuleName : str
+in
+  execute(sdf-renaming, SR?) .
+  (
+    rec-msg(sr-rename-module(Imports?, ModuleName?, ToBeRenamed?)) .
+    snd-eval(SR, rename-module(Imports, ModuleName, ToBeRenamed)) .
+    rec-value(SR, renamed-module(Renamed?)) .
+    snd-msg(sr-renamed-module(Renamed))
+  )
+  *delta
+endlet
+
+tool term-store is { command = "term-store" }
+
+toolbus(TermStore)
+
+process TermStore is
+let
+ TS : term-store,
+ TableName : str,
+ Key : term,
+ TermValue : term,
+ StrValue : str,
+ ContainsKey : bool,
+ Keys : list,
+ Values : list,
+ ValueType : str,
+ Pairs : list
+in
+  execute(term-store, TS?).
+  (
+    rec-msg(ts-add-table(TableName?, ValueType?)).
+    snd-do(TS,add-table(TableName, ValueType))
+  +
+    rec-msg(ts-remove-table(TableName?)).
+    snd-do(TS,remove-table(TableName))
+  +
+    rec-msg(ts-clear-table(TableName?)).
+    snd-do(TS,clear-table(TableName))
+  +
+    rec-msg(ts-put-term-value(TableName?,Key?,TermValue?)).
+    snd-do(TS,put-term-value(TableName,Key,TermValue)) .
+    TermValue := []
+  +
+    rec-msg(ts-put-str-value(TableName?,Key?,StrValue?)).
+    snd-do(TS,put-str-value(TableName,Key,StrValue)) .
+    StrValue := ""
+  +
+    rec-msg(ts-get-str-value(TableName?,Key?)).
+    snd-eval(TS,get-str-value(TableName,Key)) .
+    (
+      rec-value(TS,result(StrValue?)).
+      snd-msg(ts-value(StrValue)) .
+      StrValue := ""
+    +
+      rec-value(TS,no-result) .
+      snd-msg(ts-no-value)
+    )
+  +
+    rec-msg(ts-get-term-value(TableName?,Key?)).
+    snd-eval(TS,get-term-value(TableName,Key)) .
+    (
+      rec-value(TS,result(TermValue?)).
+      snd-msg(ts-value(TermValue)) .
+      TermValue := no-tree
+    +
+      rec-value(TS,no-result) .
+      snd-msg(ts-no-value)
+    )
+  +
+    rec-msg(ts-remove-value(TableName?,Key?)).
+    snd-do(TS,remove-value(TableName,Key))
+  +
+    rec-msg(ts-contains-key(TableName?,Key?)).
+    snd-eval(TS,contains-key(TableName,Key)).
+    (
+      rec-value(TS,result(yes)).
+      snd-msg(ts-contains-key)
+    +
+      rec-value(TS,result(no)).
+      snd-msg(ts-not-contains-key)
+    )
+  +
+    rec-msg(ts-get-all-keys(TableName?)).
+    snd-eval(TS, get-all-keys(TableName)).
+    rec-value(TS,result(Keys?)).
+    snd-msg(ts-all-keys(Keys)) .
+    Keys := []
+  +
+    rec-msg(ts-get-key-value-pairs(TableName?)) .
+    snd-eval(TS, get-key-value-pairs(TableName)) .
+    rec-value(TS, result(Pairs?)) .
+    snd-msg(ts-pairs(Pairs)) .
+    Pairs := []
+  +
+    rec-msg(ts-filter-keys(TableName?, Keys?)) .
+    snd-eval(TS, filter-keys(TableName, Keys)) .
+    rec-value(TS,result(Keys?)).
+    snd-msg(ts-keys(Keys)) .
+    Keys := []
+  +
+    rec-msg(ts-get-all-values(TableName?)) .
+    snd-eval(TS, get-all-values(TableName)) .
+    rec-value(TS,result(Values?)) .
+    snd-msg(ts-all-values(Values)) .
+    Values := []
+  +
+    rec-msg(ts-get-values(TableName?, Keys?)) .
+    snd-eval(TS, get-values(TableName, Keys)) .
+    rec-value(TS, result(Values?)) .
+    snd-msg(ts-values(Values)) .
+    Values := []
+  +
+    rec-msg(ts-remove-value-from-all-tables(Key?)).
+    snd-do(TS,remove-value-from-all-tables(Key))
+  )
+  * delta
+endlet
+
+
 process ModuleDB is
 let
-  Id : term,
   Path : str,
   Table : term,
-  ModuleId : term,
+  ModuleId : str,
   Syntax : term,
+  OldSyntaxTree : term,
+  SyntaxTree: term,
+  SyntaxText: str,
   EqsTree : term,
   EqsText : str,
   Name : str,
   OldName : str,
   NewName : str,
-  ErrorName : str,
-  Time : int,
-  Mdb : module-db,
   Modules : list,
-  ChngMods : list,
-  Import : term,
-  Imports : list,
-  NewImports : list,
-  Equations : term,
-  Renamings : term,
-  NewRenamings : term,
-  ModName : term,
-  Params : term,
-  Pairs : list,
-  ActualMods: list,
-  Language : str,
-  ErrorMsg : str,
-  OutputDir : str,
-  TableType : term,
-  RealName : str,
-  EqsList1 : term,
-  EqsList2 : term,
-  EqsList3 : term,
-  SyntaxExt : str,
-  RulesExt : str,
-  TermExt : str
+  DependingModules : list,
+  ModuleNames : list,
+  FileName : str,
+  Pairs : list
 in
-
-
-execute(module-db, Mdb?).
-
-snd-do(Mdb, create-module-db) .
-snd-msg(get-file-extensions) .
-rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
-snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
-(
-
-
-  rec-msg(clear-module-db).
-  snd-do(Mdb, clear-module-db)
-+
-
-  rec-msg(delete-module-from-db(Name?)).
-  snd-eval(Mdb, delete-module(Name)).
-  rec-value(Mdb, changed-modules(ChngMods?)).
-  snd-msg(changed-modules(ChngMods))
-+
-
-  rec-msg(close-module-in-db(Name?)).
-  snd-eval(Mdb, close-module(Name)).
-  rec-value(Mdb, changed-modules(ChngMods?)).
-  snd-msg(changed-modules(ChngMods))
-+
-
-  rec-msg(is-module-in-db(Name?)).
-  snd-eval(Mdb, exists(Name)).
-  ( rec-value(Mdb, result(exists(Name?))).
-    snd-msg(exists-in-module-db(Name))
-  +
-    rec-value(Mdb, result(notexists(Name?))).
-    snd-msg(not-exists-in-module-db(Name))
-  )
-+
-  rec-msg(add-empty-module-to-db(Name?)).
-  snd-eval(Mdb,add-empty-module(Name)).
-  rec-value(Mdb,empty-module-added(import-graph(ActualMods?, Pairs?))) .
-  snd-note(import-graph(ActualMods, Pairs)).
-  snd-msg(empty-module-added)
-+
-
-
-
-  rec-msg(add-sdf-module-to-db(Name?, Path?, Syntax?, timestamp(Time?))) .
-  snd-eval(Mdb, add-sdf-module(Name, Path, Syntax, Time)) .
+  MDB-InitializeModuleDb() .
+  MDB-InitializeFileExtensions() .
   (
-    rec-value(Mdb,module(RealName?,imports(need-modules(Modules?),
-                  import-graph(ActualMods?, Pairs?)))).
-
-    snd-msg(real-module-name(Name, RealName)).
-    snd-note(import-graph(ActualMods, Pairs)).
-    snd-msg(need-modules(Modules))
+    rec-msg(get-import-relations) .
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?)) .
+    snd-msg(import-relations(Pairs)) .
+    Pairs := []
   +
-    rec-value(Mdb, name-consistency-error(ErrorName?)) .
-    snd-msg(error-opening(Name, name-inconsistent))
+    rec-msg(clear-module-db) .
+    MDB-ClearModuleDb()
   +
-    rec-value(Mdb, illegal-module-error(ErrorName?)) .
-    snd-msg(error-opening(Name, erroneous-module))
-  )
-+
-  rec-msg(invalidate-sdf-in-db(Name?)).
-  snd-do(Mdb, invalidate-sdf(Name))
-+
-
-
-  rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
-  if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(Name, Syntax)) .
+    rec-msg(delete-module-from-db(Name?)).
+    MDB-GetAllDependingModules(Name, DependingModules?) .
+    snd-msg(ts-remove-value-from-all-tables(Name)) .
+    MDB-RemoveImportFromModules(Name, DependingModules) .
+    snd-msg(changed-modules(DependingModules))
+  +
+    rec-msg(close-module-in-db(Name?)) .
+    MDB-GetAllDependingModules(Name, DependingModules?) .
+    MDB-InvalidateModules(DependingModules) .
+    snd-msg(ts-remove-value-from-all-tables(Name)) .
+    snd-msg(changed-modules(DependingModules))
+  +
+    rec-msg(is-module-in-db(Name?)) .
+    snd-msg(ts-contains-key("active-modules", Name)) .
     (
-      rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
-                            import-graph(ActualMods?, Pairs?))).
-      snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
-      rec-msg(notify-about-changed-modules-done).
-      snd-note(import-graph(ActualMods, Pairs)).
-      snd-msg(extra-modules(Modules))
+      rec-msg(ts-contains-key).
+      snd-msg(exists-in-module-db(Name))
     +
-      rec-value(Mdb, name-consistency-error(ErrorName?)) .
-      snd-msg(error-opening(ErrorName, name-inconsistent))
+      rec-msg(ts-not-contains-key).
+      snd-msg(not-exists-in-module-db(Name))
     )
-  else
-    snd-msg(extra-modules([]))
-  fi
-+
-  rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
-  snd-eval(Mdb, rename-module(OldName, NewName, Path)) .
-  (
-    rec-value(Mdb, imports(changed-modules(Modules?),
-                           import-graph(ActualMods?, Pairs?))) .
-    snd-note(import-graph(ActualMods, Pairs)) .
-    snd-msg(renaming-done(OldName, Modules))
   +
-    rec-value(Mdb, illegal-module-name(NewName)) .
-    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
-    snd-msg(renaming-not-done(OldName))
-  )
-+
-  rec-msg(add-import-in-db(OldName?, NewName?, Path?)) .
-  snd-eval(Mdb, add-import(OldName, NewName, Path)) .
-  (
-    rec-value(Mdb, imports(changed-modules(Modules?),
-                           import-graph(ActualMods?, Pairs?))) .
-    snd-note(import-graph(ActualMods, Pairs)) .
-    snd-msg(add-import-done(OldName, Modules))
+    rec-msg(add-sdf-module-to-db(Name?, Path?, SyntaxText?, SyntaxTree?)) .
+    if not-equal(SyntaxTree, no-tree) then
+      snd-msg(sm-get-module-id(SyntaxTree)) .
+      rec-msg(sm-module-id(ModuleId?)) .
+      snd-msg(sm-get-module-path(Path, ModuleId)) .
+      rec-msg(sm-module-path(Path?)) .
+      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
+      snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
+      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      SyntaxTree := no-tree .
+      rec-msg(sm-imported-module-names(Modules?))
+    else
+      ModuleId := Name .
+      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+      Modules := []
+    fi .
+    snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
+    snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+    snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+    SyntaxText := "" .
+    snd-msg(ts-filter-keys("active-modules", Modules)) .
+    rec-msg(ts-keys(Modules?)) .
+    snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
   +
-    rec-value(Mdb, illegal-module-name(NewName?)) .
-    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
-    snd-msg(add-import-not-done(OldName))
-  )
-+
-  rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
-  snd-eval(Mdb, remove-import(OldName, NewName, Path)).
-  (
-    rec-value(Mdb, imports(changed-modules(Modules?),
-                           import-graph(ActualMods?, Pairs?))) .
-    snd-note(import-graph(ActualMods, Pairs)) .
-    snd-msg(remove-import-done(OldName, Modules))
-  )
-+
-  rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
-  snd-eval(Mdb, copy-module(OldName, NewName, Path)) .
-  (
-    rec-value(Mdb, imports(changed-modules(Modules?),
-                           import-graph(ActualMods?, Pairs?))) .
-    snd-note(import-graph(ActualMods, Pairs)) .
-    snd-msg(copy-done(OldName, Modules))
+    rec-msg(invalidate-sdf-in-db(Name?)) .
+    snd-msg(ts-remove-value("sdf-tree", Name))
   +
-    rec-value(Mdb, illegal-module-name(NewName)) .
-    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?)).
+    snd-msg(sm-get-module-id(SyntaxTree)) .
+    rec-msg(sm-module-id(ModuleId?)) .
+    if equal(Name, ModuleId) then
+      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
+      snd-msg(ts-put-term-value("sdf-tree", Name, SyntaxTree)) .
+      snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
+      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      SyntaxTree := no-tree .
+      SyntaxText := "" .
+      rec-msg(sm-imported-module-names(Modules?)) .
+      snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
+      snd-msg(ts-filter-keys("active-modules", Modules)) .
+      rec-msg(ts-keys(Modules?)) .
+      MDB-GetAllDependingModules(Name, DependingModules?) .
+      MDB-InvalidateModules(DependingModules) .
+      snd-msg(updating-succeeded(DependingModules, Modules))
+    else
+      snd-msg(error-opening(Name, name-inconsistent))
+    fi
+  +
+    rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
+    MDB-RenameModule(OldName, NewName, Modules?) .
+    snd-msg(renaming-module-done(OldName, Modules))
+  +
+    rec-msg(add-import-in-db(OldName?, NewName?)) .
+    MDB-AddImportToModule(OldName, NewName) .
+    snd-msg(add-import-done(OldName))
+  +
+    rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
+    MDB-RemoveImportFromModules(NewName, [OldName]) .
+    snd-msg(remove-import-done)
+  +
+    rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
+    printf("not yet implemented in %s at %d\n", "/export/scratch1/jong/meta/install/share/meta/module-db.tb", 127) .
     snd-msg(copy-not-done(OldName))
-  )
-+
-
-
-  rec-msg(eqs-not-available-for-modules(Name?)).
-  snd-eval(Mdb,eqs-not-available-for-modules(Name)).
-  rec-value(Mdb,modules(Modules?)).
-  snd-msg(eqs-needed-for-modules(Modules))
-+
-
-
-  rec-msg(get-eqs-text(Name?)).
-  snd-eval(Mdb, get-eqs-text(Name)).
-  (
-    rec-value(Mdb, eqs-text(Name, EqsText?)).
-    snd-msg(eqs-text(Name, EqsText))
   +
-    rec-value(Mdb, no-eqs-text(Name)).
-    snd-msg(no-eqs-text(Name))
-  )
-+
-
-  rec-msg(add-eqs-to-db(Name?, Path?, tree(EqsTree?), text(EqsText?),
-                        timestamp(Time?))) .
-  snd-do(Mdb,add-tree-eqs-section(Name, Path, EqsTree, EqsText, Time)) .
-  snd-msg(eqs-added)
-+
-
-  rec-msg(add-empty-eqs-to-db(Name?, Path?)) .
-  snd-do(Mdb,add-empty-eqs-section(Name, Path)) .
-  snd-msg(empty-eqs-added)
-+
-
-  rec-msg(add-eqs-to-db(Name?, Path?, text(EqsText?), timestamp(Time?))) .
-  snd-do(Mdb,add-text-eqs-section(Name, Path, EqsText, Time)) .
-  snd-msg(eqs-added)
-+
-
-
-  rec-msg(update-eqs-tree-in-db(Language?, tree(EqsTree?))) .
-  snd-eval(Mdb, update-eqs-tree(Language, EqsTree)) .
-  rec-value(Mdb, changed-modules(ChngMods?)) .
-  snd-msg(notify-about-changed-modules(ChngMods, "eqs")) .
-  rec-msg(notify-about-changed-modules-done) .
-  snd-msg(eqs-updated)
-+
-  rec-msg(update-eqs-text-in-db(Language?, text(EqsText?))).
-  snd-eval(Mdb, update-eqs-text(Language, EqsText)) .
-  rec-value(Mdb, eqs-text-updated(Language)) .
-  snd-msg(eqs-text-updated(Language))
-+
-
-  rec-msg(add-parse-table-to-db(ModuleId?, Table?, timestamp(Time?))) .
-  snd-eval(Mdb, add-parse-table(ModuleId, Table, Time)) .
-  rec-value(Mdb, parse-table-added) .
-  snd-msg(parse-table-added)
-+
-  rec-msg(get-sdf2-path-from-db(Name?)).
-  snd-eval(Mdb,get-path(Name, sdf2)).
-  rec-value(Mdb,path(Path?)).
-  snd-msg(path(Path))
-+
-  rec-msg(get-eqs-path-from-db(Name?)) .
-  snd-eval(Mdb, get-path(Name, eqs)) .
-  rec-value(Mdb, path(Path?)) .
-  snd-msg(path(Path))
-+
-
-  rec-msg(get-table-from-db(ModuleId?)) .
-  snd-eval(Mdb, get-parse-table(ModuleId)) .
-  ( rec-value(Mdb, table(Table?, Path?)) .
-    snd-msg(table(Table, Path))
+    rec-msg(eqs-not-available-for-modules(Name?)) .
+    MDB-AllEquationsAvailable(Name, ModuleNames?) .
+    snd-msg(eqs-needed-for-modules(ModuleNames))
   +
-    rec-value(Mdb, no-table) .
-    snd-msg(no-table)
-  )
-+
-
-  rec-msg(get-all-depending-modules(Name?)).
-  snd-eval(Mdb, get-all-depending-modules(Name)).
-  rec-value(Mdb, all-depending-modules(Modules?)).
-  snd-msg(all-depending-modules(Modules))
-+
-
-  rec-msg(get-all-imported-modules(Name?)).
-  snd-eval(Mdb, get-all-imported-modules(Name)).
-  rec-value(Mdb, all-modules(Modules?)).
-  snd-msg(all-modules(Modules))
-+
-
-  rec-msg(get-imported-modules(Name?)).
-  snd-eval(Mdb, get-imported-modules(Name)).
-  rec-value(Mdb, imported-modules(Modules?)).
-  snd-msg(imported-modules(Modules))
-+
-
-  rec-msg(get-all-modules).
-  snd-eval(Mdb, get-all-modules).
-  rec-value(Mdb, all-modules(Modules?)).
-  snd-msg(all-modules(Modules))
-+
-
-  rec-msg(all-equations-available(Name?)).
-  snd-eval(Mdb, all-equations-available(Name)).
-  (
-    rec-value(Mdb, equations-available).
-    snd-msg(equations-available)
+    rec-msg(get-eqs-text(Name?)).
+    snd-msg(ts-get-str-value("asf-text", Name)) .
+    (
+      rec-msg(ts-value(EqsText?)) .
+      snd-msg(eqs-text(Name, EqsText))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-eqs-text(Name))
+    )
   +
-    rec-value(Mdb, equations-incomplete) .
-    snd-msg(equations-incomplete)
-  )
-+
-
-
-  (
-    rec-msg(get-all-sdf2-definitions(eqs(Name?)))
+    rec-msg(add-eqs-to-db(Name?, text(EqsText?))) .
+    snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
+    snd-msg(eqs-added)
   +
-    rec-msg(get-all-sdf2-definitions(trm(Name?)))
-  ) .
-  snd-eval(Mdb, get-all-sdf2-definitions(Name)) .
-  (
-    rec-value(Mdb, syntax(Syntax?)).
-    snd-msg(syntax(Syntax))
+    rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
+    snd-msg(ts-get-str-value("module-paths", Name)) .
+    rec-msg(ts-value(Path?)) .
+    snd-msg(io-get-filename(Path, Name, ".asf")) .
+    rec-msg(io-filename(FileName?)) .
+    printf("DEBUG: magical value 4 for depth of posinfo!\n") .
+    snd-msg(add-posinfo-to-depth(FileName,EqsTree,4)) .
+    rec-msg(tree-with-pos-info(EqsTree?)) .
+    snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
+    EqsTree := no-tree .
+    snd-msg(eqs-updated)
   +
-    rec-value(Mdb, sdf2-definition-error(ErrorMsg?)).
-    snd-msg(no-syntax(ErrorMsg))
-  )
-+
-  rec-msg(get-sdf2-asfix(Name?)).
-  snd-eval(Mdb, get-sdf-tree(Name)).
-  (
-    rec-value(Mdb, asfix(syntax(Syntax?))).
-    snd-msg(syntax(Syntax))
+    rec-msg(update-eqs-text-in-db(Name?, text(EqsText?))).
+    snd-msg(ts-remove-value("asf-tree", Name)) .
+    snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
+    snd-msg(eqs-text-updated(Name))
   +
-    rec-value(Mdb, asfix(unavailable)) .
-    snd-msg(unavailable)
-  )
-+
-  rec-msg(get-eqs-tree(Name?)).
-  snd-eval(Mdb, get-asf-tree(Name)).
-  rec-value(Mdb, asfix(EqsTree?)).
-  snd-msg(EqsTree)
-+
-  rec-msg(get-equations-for-module(ModuleId?)).
-  snd-eval(Mdb, get-equations-for-module(ModuleId)).
-  (
-    rec-value(Mdb, plain-equations(Equations?)) .
-    snd-msg(plain-equations(Equations))
+    rec-msg(add-parse-table-to-db(eqs(Name?), Table?)) .
+    snd-msg(ts-put-term-value("asf-parse-table", Name, Table)) .
+    Table := no-table .
+    snd-msg(parse-table-added)
   +
-    rec-value(Mdb, renaming-equations(Renamings?, Imports?, Equations?)) .
-    snd-msg(renaming-equations(Renamings, Imports, Equations))
+    rec-msg(add-parse-table-to-db(trm(Name?), Table?)) .
+    snd-msg(ts-put-term-value("term-parse-table", Name, Table)) .
+    Table := no-table .
+    snd-msg(parse-table-added)
   +
-    rec-value(Mdb, no-equations) .
-    snd-msg(no-equations)
-  )
-+
-  rec-msg(get-equations-for-renamed-import(Import?, Renamings?)) .
-  snd-eval(Mdb, get-equations-for-renamed-import(Import, Renamings)) .
-  (
-    rec-value(Mdb, renamed-equations(NewRenamings?, NewImports?, Equations?)) .
-    snd-msg(renamed-equations(NewRenamings, NewImports, Equations))
+    rec-msg(get-path-from-db(Name?)).
+    snd-msg(ts-get-str-value("module-paths", Name)) .
+    rec-msg(ts-value(Path?)) .
+    snd-msg(path(Path))
   +
-    rec-value(Mdb, no-equations) .
-    snd-msg(no-equations)
-  )
-+
-
-  rec-msg(invalidate-parse-tables(Name?)).
-  snd-do(Mdb, invalidate-parse-tables(Name))
-+
-  rec-msg(get-module-info(Name?)) .
-  snd-eval(Mdb, get-module-info(Name)) .
-  rec-value(Mdb, module-info(Name, Pairs?)) .
-  snd-msg(module-info(Name, Pairs))
+    (
+      rec-msg(get-table-from-db(eqs(Name?))) .
+      snd-msg(ts-get-term-value("asf-parse-table", Name))
+    +
+      rec-msg(get-table-from-db(trm(Name?))) .
+      snd-msg(ts-get-term-value("term-parse-table", Name))
+    ).
+    (
+      rec-msg(ts-value(Table?)) .
+      snd-msg(table(Table)) .
+      Table := no-table
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-table)
+    )
+  +
+    rec-msg(get-all-depending-modules(Name?)).
+    MDB-GetAllDependingModules(Name, DependingModules?) .
+    snd-msg(all-depending-modules(DependingModules))
+  +
+    rec-msg(get-all-imported-module-names(Name?)).
+    MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
+    snd-msg(all-imported-module-names(ModuleNames))
+  +
+    rec-msg(get-all-modules) .
+    snd-msg(ts-get-all-values("sdf-tree")) .
+    rec-msg(ts-all-values(Modules?)) .
+    snd-msg(all-modules(Modules)) .
+    Modules := []
+  +
+    rec-msg(get-imported-modules(Name?)).
+    printf("DEBUG: NYI, should this be transitive?") .
+    MDB-GetImportedModules(Name, Modules?) .
+    snd-msg(imported-modules(Modules))
+  +
+    rec-msg(get-all-module-names).
+    snd-msg(ts-get-all-keys("active-modules")) .
+    rec-msg(ts-all-keys(ModuleNames?)) .
+    snd-msg(all-module-names(ModuleNames))
+  +
+    rec-msg(all-equations-available(Name?)).
+    MDB-AllEquationsAvailable(Name, ModuleNames?) .
+    if equal(ModuleNames, []) then
+      snd-msg(equations-available)
+    else
+      snd-msg(equations-incomplete)
+    fi
+  +
+    rec-msg(get-all-sdf2-definitions(Name?)) .
+    MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
+    snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+    rec-msg(ts-values(Modules?)) .
+    snd-msg(sm-make-sdf-definition(Modules)) .
+    Modules := [] .
+    rec-msg(sm-sdf-definition(Syntax?)) .
+    snd-msg(syntax(Syntax)) .
+    Syntax := no-tree
+  +
+    rec-msg(get-sdf2-asfix(Name?)) .
+    snd-msg(ts-get-term-value("sdf-tree", Name)) .
+    (
+      rec-msg(ts-value(Syntax?)) .
+      snd-msg(syntax(Syntax)) .
+      Syntax := no-tree
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(unavailable)
+    )
+  +
+    rec-msg(get-eqs-tree(Name?)) .
+    snd-msg(ts-get-term-value("asf-tree", Name)) .
+    (
+      rec-msg(ts-value(EqsTree?)) .
+      snd-msg(tree(EqsTree)) .
+      EqsTree := no-tree
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(unavailable)
+    )
+  +
+    rec-msg(get-equations-for-module(Name?)).
+    snd-msg(ts-get-term-value("asf-tree", Name)) .
+    (
+      rec-msg(ts-value(EqsTree?)) .
+      snd-msg(equations(EqsTree)) .
+      EqsTree := no-tree
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-equations)
+    )
+  +
+    rec-msg(invalidate-parse-tables(Name?)).
+    MDB-InvalidateModule(Name) .
+    MDB-GetAllDependingModules(Name, DependingModules?) .
+    MDB-InvalidateModules(DependingModules)
+  +
+    rec-msg(get-module-info(Name?)) .
+    snd-msg(ts-get-str-value("module-paths", Name)) .
+    (
+      rec-msg(ts-value(Path?)) .
+      snd-msg(module-info(Name, [[path, Path]]))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(module-info(Name, [[path,"not-available"]]))
+    )
 ) *
 delta
 endlet
 
+process MDB-InitializeModuleDb is
+  snd-msg(ts-add-table("extensions", "str")) .
+  snd-msg(ts-add-table("active-modules", "str")) .
+  snd-msg(ts-add-table("module-paths", "str")) .
+  snd-msg(ts-add-table("sdf-tree", "term")) .
+  snd-msg(ts-add-table("sdf-text", "str")) .
+  snd-msg(ts-add-table("asf-tree", "term")) .
+  snd-msg(ts-add-table("asf-text", "str")) .
+  snd-msg(ts-add-table("asf-parse-table", "term")) .
+  snd-msg(ts-add-table("term-parse-table", "term")) .
+  snd-msg(ts-add-table("import-relations", "term"))
 
-tool module-db is { command = "module-db" }
+process MDB-ClearModuleDb is
+  snd-msg(ts-clear-table("extensions")) .
+  snd-msg(ts-clear-table("active-modules")) .
+  snd-msg(ts-clear-table("module-paths")) .
+  snd-msg(ts-clear-table("sdf-tree")) .
+  snd-msg(ts-clear-table("sdf-text")) .
+  snd-msg(ts-clear-table("asf-tree")) .
+  snd-msg(ts-clear-table("asf-text")) .
+  snd-msg(ts-clear-table("asf-parse-table")) .
+  snd-msg(ts-clear-table("term-parse-table")) .
+  snd-msg(ts-clear-table("import-relations"))
+
+process MDB-InitializeFileExtensions is
+let
+  SyntaxExt : str,
+  RulesExt : str,
+  TermExt : str
+in
+  snd-msg(get-file-extensions) .
+  rec-msg(set-file-extensions(syntax(SyntaxExt?),
+                              rules(RulesExt?),
+                              term(TermExt?))) .
+  snd-msg(ts-put-str-value("extensions", "syntax", SyntaxExt)) .
+  snd-msg(ts-put-str-value("extensions", "equations", RulesExt)) .
+  snd-msg(ts-put-str-value("extensions", "term", TermExt))
+endlet
+
+process MDB-GetAllDependingModules(Name : str, DependingModules : list?) is
+let
+  Pairs : list
+in
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?)) .
+    snd-msg(sm-get-all-depending-module-names(Pairs, Name)) .
+    Pairs := [] .
+    rec-msg(sm-all-depending-module-names(DependingModules?))
+endlet
+
+process MDB-GetAllImportedModuleNames(Name : str, Imported : list?) is
+let
+  Pairs : list
+in
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?)) .
+    snd-msg(sm-get-all-needed-module-names(Pairs, Name)) .
+    Pairs := [] .
+    rec-msg(sm-all-needed-module-names(Imported?))
+endlet
+
+process MDB-GetImportedModules(Name : str, Imported : list?) is
+let
+  Syntax : term
+in
+    snd-msg(ts-get-term-value("sdf-tree", Name)) .
+    rec-msg(ts-value(Syntax?)) .
+    snd-msg(sm-all-imports(Syntax)) .
+    Syntax := no-tree .
+    rec-msg(sm-all-imports(Imported?))
+endlet
+
+process MDB-DisplayGraph is
+let
+  Pairs : list
+in
+  snd-msg(ts-get-key-value-pairs("import-relations")) .
+  rec-msg(ts-pairs(Pairs?)) .
+  snd-note(display-import-graph(Pairs)) .
+  Pairs := []
+endlet
+
+process MDB-StoreModuleTree(Name : str, Syntax : term) is
+let
+  Modules : list,
+  Text : str
+in
+  snd-msg(ts-put-term-value("sdf-tree", Name, Syntax)) .
+  snd-msg(unparse(Syntax)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(ts-put-str-value("sdf-text", Name, Text)) .
+  snd-msg(sm-get-imported-module-names(Syntax)) .
+  rec-msg(sm-imported-module-names(Modules?)) .
+  snd-msg(ts-put-term-value("import-relations", Name, Modules)) .
+  MDB-InvalidateModule(Name) .
+  MDB-GetAllDependingModules(Name, Modules?) .
+  MDB-InvalidateModules(Modules)
+endlet
+
+process MDB-RemoveImportFromModules(Name : str, ActualModules : list) is
+let
+  Module : str,
+  Modules : list,
+  Imports : list,
+  Syntax : term,
+  Status : term
+in
+  Modules := ActualModules .
+  if not(equal(Modules,[])) then
+    Module := first(Modules) .
+    Modules := next(Modules) .
+    snd-msg(ts-get-term-value("sdf-tree", Module)) .
+    rec-msg(ts-value(Syntax?)) .
+    snd-msg(sm-get-imported-module-names(Syntax)) .
+    rec-msg(sm-imported-module-names(Imports?)) .
+    MDB-ContainedIn(Name, Imports, Status?) .
+    if equal(Status, success) then
+      snd-msg(sm-remove-import-from-module(Syntax, Name)) .
+      Syntax := no-tree .
+      rec-msg(sm-import-removed-from-module(Syntax?)) .
+      MDB-StoreModuleTree(Module, Syntax) .
+      Syntax := no-tree
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(Modules,[]) then
+    tau
+  fi .
+  MDB-DisplayGraph
+endlet
+
+process MDB-RenameModule(OldName : str, NewName : str, Changed : list?) is
+let
+  Status : term,
+  Modules : list,
+  Imports : list,
+  Module : str,
+  Path : str,
+  Syntax : term
+in
+  MDB-GetAllDependingModules(OldName, Modules?) .
+  Changed := [] .
+  if not(equal(Modules,[])) then
+    Module := first(Modules) .
+    Modules := next(Modules) .
+    snd-msg(ts-get-term-value("sdf-tree", Module)) .
+    rec-msg(ts-value(Syntax?)) .
+    snd-msg(sm-get-imported-module-names(Syntax)) .
+    rec-msg(sm-imported-module-names(Imports?)) .
+    MDB-ContainedIn(OldName, Imports, Status?) .
+    if equal(Status, success) then
+      snd-msg(sm-remove-import-from-module(Syntax, OldName)) .
+      rec-msg(sm-import-removed-from-module(Syntax?)) .
+      snd-msg(sm-add-import-to-module(Syntax, NewName)) .
+      rec-msg(sm-import-added-to-module(Syntax?)) .
+      MDB-StoreModuleTree(Module, Syntax) .
+      Syntax := no-tree .
+      Changed := join(Changed, Module)
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(Modules,[]) then
+    tau
+  fi .
+  snd-msg(ts-get-term-value("sdf-tree", OldName)) .
+  rec-msg(ts-value(Syntax?)) .
+  snd-msg(ts-get-str-value("module-paths", OldName)) .
+  rec-msg(ts-value(Path?)) .
+  snd-msg(ts-put-str-value("module-paths", NewName, Path)) .
+  snd-msg(ts-put-str-value("active-modules", NewName, Path)) .
+  snd-msg(sm-rename-modulename-in-module(Syntax, NewName)) .
+  rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
+  MDB-StoreModuleTree(NewName, Syntax) .
+  Syntax := no-tree .
+  snd-msg(ts-remove-value-from-all-tables(OldName)) .
+  MDB-DisplayGraph
+endlet
+
+process MDB-AddImportToModule(OldName : str, NewName : str) is
+let
+  Syntax : term
+in
+  snd-msg(ts-get-term-value("sdf-tree", OldName)) .
+  rec-msg(ts-value(Syntax?)) .
+  snd-msg(sm-add-import-to-module(Syntax, NewName)) .
+  Syntax := no-tree .
+  rec-msg(sm-import-added-to-module(Syntax?)) .
+  MDB-StoreModuleTree(OldName, Syntax) .
+  Syntax := no-tree .
+  MDB-DisplayGraph
+endlet
+
+process MDB-AllEquationsAvailable(Name : str, Missing : list?) is
+let
+  ModuleNames : list,
+  ModuleName : str,
+  Text : str,
+  Tree : term
+in
+  MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
+  Missing := [] .
+  if not(equal(ModuleNames, [])) then
+    ModuleName := first(ModuleNames) .
+    ModuleNames := next(ModuleNames) .
+    snd-msg(ts-get-str-value("asf-text", ModuleName)) .
+    (
+      rec-msg(ts-no-value)
+    +
+      rec-msg(ts-value(Text?)) .
+      Text := "" .
+      snd-msg(ts-get-term-value("asf-tree", ModuleName)) .
+      (
+        rec-msg(ts-no-value) .
+        Missing := join(ModuleName, Missing)
+      +
+        rec-msg(ts-value(Tree?)) .
+        Tree := no-tree
+      )
+    )
+  fi
+  *
+  if equal(ModuleNames, []) then
+    tau
+  fi
+endlet
+
+process MDB-ContainedIn(Name : str, Modules : list, Status : term?) is
+let
+  Module : str,
+  Runner : list
+in
+  Status := no-success .
+  Runner := Modules .
+  if not-equal(Runner, []) then
+    Module := first(Runner) .
+    Runner := next(Runner) .
+    if equal(Module, Name) then
+      Status := success
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
+
+process MDB-InvalidateModules(Modules : list) is
+let
+  Module : str,
+  Runner : list
+in
+  Runner := Modules .
+  if not-equal(Runner, []) then
+    Module := first(Runner) .
+    Runner := next(Runner) .
+    MDB-InvalidateModule(Module)
+  fi
+  *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
+
+process MDB-InvalidateModule(Module : str) is
+  snd-msg(ts-remove-value("asf-tree", Module)) .
+  snd-msg(ts-remove-value("asf-parse-table", Module)) .
+  snd-msg(ts-remove-value("term-parse-table", Module))
+
+process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
+let
+  Path : str,
+  FileName : str
+in
+  snd-msg(ts-get-str-value("module-paths", Module)) .
+  rec-msg(ts-value(Path?)) .
+  snd-msg(io-get-filename(Path, Module, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(add-posinfo-packed(FileName, In)) .
+  rec-msg(tree-with-pos-info(Out?))
+endlet
 
 
 tool restorebrackets is
@@ -4606,7 +4774,7 @@ tool text-editor is {
   command = "gvim-editor"
 }
 
-process TextEditor(EditorId: term, FileName : str, ButtonList : list) is
+process TextEditor is
 let
   TE : text-editor,
   Path : term,
@@ -4627,8 +4795,11 @@ let
   ButtonItem : str,
   ButtonMenu : str,
   ButtonWalker : list,
-  FileName2 : str
+  ButtonList : list,
+  FileName : str,
+  EditorId : term
 in
+  rec-msg(edit-text(EditorId?, FileName?, ButtonList?)) .
   execute(text-editor, TE?) .
   snd-eval(TE, edit-file(FileName)) .
   rec-value(TE, file-id(Fid?)) .
@@ -4685,8 +4856,8 @@ in
     rec-note(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
   +
-    rec-note(reload-file(EditorId, FileName2?)) .
-    snd-do(TE, reload-file(FileName2))
+    rec-note(reload-file(EditorId, FileName?)) .
+    snd-do(TE, reload-file(FileName))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
@@ -4733,15 +4904,16 @@ endlet
 tool tree2graph is { command = "tree2graph" }
 process ProcessButtons(CMNG : configmanager) is
 let
-  Term : term
+  Contents : str,
+  ErrorMessage : str
 in
-  snd-msg(get-button-file("meta.buttons")) .
+  snd-msg(io-read-file("meta.buttons")) .
   (
-    rec-msg(button-file("meta.buttons", Term?)) .
-    snd-eval(CMNG, process-button-file("meta.buttons", Term))
+    rec-msg(io-file-contents(Contents?)) .
+    snd-eval(CMNG, process-button-file("meta.buttons", Contents))
   +
-    rec-msg(no-button-file("meta.buttons")) .
-    snd-eval(CMNG, process-button-file("meta.buttons", buttons([])))
+    rec-msg(io-error-reading(ErrorMessage?)) .
+    snd-eval(CMNG, process-button-file("meta.buttons", "buttons([])"))
   ) .
   rec-value(CMNG, buttons-processed) .
   snd-note(search-paths-processed)
@@ -4752,7 +4924,7 @@ let
   CMNG : configmanager,
   Text : str,
   Fid : str,
-  Paths : list,
+  SearchPaths : list,
   ButtonName : list,
   ButtonNames : list,
   ButtonActions : list,
@@ -4761,25 +4933,28 @@ let
   Tree : term,
   Term : term,
   Pid : int,
-  LibraryPath : str
+  LibraryPath : str,
+  Directories : list,
+  ErrorMessage : str
 in
   execute(configmanager, CMNG?) .
-  snd-msg(get-config-file("meta.conf")) .
+  snd-msg(io-read-file("meta.conf")) .
   (
-    rec-msg(config-file("meta.conf", Text?)) .
-    snd-eval(CMNG, process-config-file("meta.conf", Text))
+    rec-msg(io-file-contents(Text?))
   +
-    rec-msg(no-config-file("meta.conf")) .
-    snd-eval(CMNG, process-config-file("meta.conf", "."))
+    rec-msg(io-error-reading(ErrorMessage?)) .
+    Text := "."
   ) .
-  rec-value(CMNG, search-paths(Paths?)) .
+  snd-eval(CMNG, parse-config-file(Text)) .
+  rec-value(CMNG, directories(Directories?)) .
+  snd-msg(io-relative-to-absolute(Directories)) .
+  rec-msg(io-absolute-directories(Directories?)) .
+  snd-do(CMNG, register-user-directories(Directories)) .
+
   snd-msg(library-location-hook).
   rec-msg(library-location-hook-result(LibraryPath?)).
-  Paths := join(Paths, LibraryPath) .
-  snd-msg(process-search-paths("meta.conf", Paths)) .
-  rec-msg(search-paths-processed("meta.conf")) .
+  snd-do(CMNG, register-library(LibraryPath)) .
   ProcessButtons(CMNG) .
-  snd-note(search-paths-processed) .
   (
     rec-msg(refresh-buttons) .
     ProcessButtons(CMNG) .
@@ -4794,14 +4969,15 @@ in
     snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
     snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
+  +
+    rec-msg(get-search-paths) .
+    snd-eval(CMNG, get-search-paths) .
+    rec-value(CMNG, search-paths(SearchPaths?)) .
+    snd-msg(search-paths(SearchPaths))
   ) * delta
 endlet
 
 tool configmanager is { command = "configmanager" }
-
-
-
-
 
 
 process EditorManager is
@@ -4810,26 +4986,28 @@ let
   Name : str,
   ModuleName: str,
   Editors: list,
-  EditorId : term
+  EditorId : term,
+  Path : str,
+  FileName : str
 in
   execute(editor-manager, EM?) .
   subscribe(delete-editor(<term>)) .
   (
-    rec-msg(get-editor-id(Name?, ModuleName?)) .
-    snd-eval(EM, get-editor-id(Name, ModuleName)) .
+    rec-msg(get-editor-id(FileName?, ModuleName?)) .
+    snd-eval(EM, get-editor-id(FileName, ModuleName)) .
     (
       rec-value(EM, new-editor(EditorId?)) .
-      snd-msg(new-editor(Name, EditorId))
+      snd-msg(new-editor(EditorId))
     +
       rec-value(EM, existing-editor(EditorId?)) .
-      snd-msg(existing-editor(Name, EditorId))
+      snd-msg(existing-editor(EditorId))
     )
   +
     rec-msg(check-editor-id(Name?, ModuleName?)) .
     snd-eval(EM, check-editor-id(Name, ModuleName)) .
     (
       rec-value(EM, existing-editor(EditorId?)) .
-      snd-msg(existing-editor(Name, EditorId))
+      snd-msg(existing-editor(EditorId))
     +
       rec-value(EM, non-existing-editor) .
       snd-msg(non-existing-editor(Name))
@@ -4853,8 +5031,6 @@ endlet
 tool editor-manager is {
   command = "editor-manager"
 }
-
-
 
 
 process ApplyFunc is
@@ -4896,6 +5072,11 @@ endlet
 
 tool apply-function is { command = "apply-function" }
 
+toolbus(ApplyFunc)
+
+
+
+
 
 process META is
 let
@@ -4920,47 +5101,235 @@ in
   +
     rec-msg(get-application-status) .
     snd-msg(status(interactive))
-  )*delta
+  ) * delta
 endlet
 
-process META-START is
+process MetaCreator is
 let
-  Id : term,
-  ModuleName : str
+  Pid : int
 in
-  Id := process-id .
-  subscribe(search-paths-processed) .
-  rec-note(search-paths-processed) .
+  create(META, Pid?)
+  . create(ButtonActionExecutor, Pid?)
+  . create(ButtonActionReceiver, Pid?)
+  . create(ClearAll, Pid?)
+  . create(Compile-module, Pid?)
+  . create(ConfigManager, Pid?)
+  . create(DumpEquations, Pid?)
+  . create(DumpParseTable, Pid?)
+  . create(Editors, Pid?)
+  . create(File-creator, Pid?)
+  . create(GetEquations, Pid?)
+  . create(GetParseTable, Pid?)
+  . create(Io, Pid?)
+  . create(LAYOUT-GRAPH, Pid?)
+  . create(Meta-Interface, Pid?)
+  . create(Module-Utilities, Pid?)
+  . create(ModuleDB, Pid?)
+  . create(Notify-about-changed-modules, Pid?)
+  . create(Open-Sdf2-Language, Pid?)
+  . create(Open-initial-module, Pid?)
+  . create(Open-modules, Pid?)
+  . create(PGen, Pid?)
+  . create(ParseFocusses, Pid?)
+  . create(Parser, Pid?)
+  . create(PrintModule, Pid?)
+  . create(RestoreBrackets, Pid?)
+  . create(RestoreTermBrackets, Pid?)
+  . create(Save-modules, Pid?)
+  . create(Set-parsetable, Pid?)
+  . create(Tree2Graph, Pid?)
 
+
+
+
+
+
+
+endlet
+tool user-interface is {
+  command = "meta-studio"
+}
+
+process Status-display(UI: user-interface) is
+let
+  Lst : list,
+  Str : str,
+  Id : term
+in
+  subscribe(ui-status(<term>)) .
+  ( rec-note(ui-status(stat(Id?, Str?))) .
+    snd-do(UI, add-status(Id, Str))
+    +
+    rec-note(ui-status(statf(Id?, Str?, Lst?))) .
+    snd-do(UI, add-statusf(Id, Str, Lst))
+    +
+    rec-note(ui-status(endstat(Id?))) .
+    snd-do(UI, end-status(Id))
+    +
+    rec-note(ui-status(error(Str?))) .
+    snd-do(UI, error(Str))
+    +
+    rec-note(ui-status(errorf(Str?, Lst?))) .
+    snd-do(UI, errorf(Str, Lst))
+  ) *
+  delta
+endlet
+
+process Ui is
+let
+  SD : int,
+  UI : user-interface,
+  Id : term,
+  Name : term,
+  Str : term,
+  Str1 : term,
+  Mod : term,
+  Pairs : list,
+  Mods : list,
+  ModName : str,
+  FileName : str,
+  Path : str,
+  Extension : str,
+  ErrMsg : str,
+  On : term,
+  Graph : term,
+  Info : list,
+  LayoutedGraph : term,
+  ModuleName : str,
+  LibraryPath : str,
+  SyntaxExt : str,
+  SemanticsExt : str,
+  TermExt : str,
+  EnvironmentName : str,
+  Recursive : term,
+  EditorId : term,
+  GraphId : str,
+  ButtonName : list,
+  Tree : term,
+  Lst : list,
+  ButtonList : list,
+  Title : str,
+  Answer : term,
+  T : str
+in
+  subscribe(display-import-graph(<list>)) .
+  Id := process-id.
+  execute(user-interface,UI?).
+  create(Status-display(UI),SD?).
+
+  snd-msg(library-location-hook).
+  rec-msg(library-location-hook-result(LibraryPath?)).
+  snd-msg(file-extensions-hook).
+  rec-msg(file-extensions-hook-result(SyntaxExt?,SemanticsExt?,TermExt?)).
+  snd-msg(environment-name-hook).
+  rec-msg(environment-name-hook-result(EnvironmentName?)).
+
+  snd-do(UI, initialize-ui(EnvironmentName, LibraryPath, SyntaxExt,
+                           SemanticsExt, TermExt)).
+  Mods := [] .
+  Pairs := [] .
+  (
+    rec-msg(display-graph(GraphId?, Graph?)) .
+    snd-do(UI, display-graph(GraphId, Graph))
+  +
+    rec-msg(ui-delete-modules(Mods?)).
+    snd-do(UI, delete-modules(Mods))
+  +
+    rec-event(UI,get-module-info(ModName?)).
+    snd-msg(get-module-info(ModName)) .
+    rec-msg(module-info(ModName, Info?)) .
+    snd-do(UI,module-info(ModName,Info)) .
+    snd-ack-event(UI,get-module-info(ModName))
+  +
+    rec-event(UI,clear-all).
+    snd-msg(clear-all).
+    rec-msg(cleared-all).
+    snd-ack-event(UI,clear-all)
+  +
+   ( rec-event(UI,debugging(On?)) .
+     snd-msg(debugging(On)) .
+     snd-ack-event(UI,debugging(On))
+   ) +
+   ( rec-note(display-import-graph(Pairs?)).
+     snd-do(UI,new-graph(Pairs)) .
+     Pairs := []
+   )
+   +
+   ( rec-event(UI, layout-graph(GraphId?, Graph?)) .
+     snd-msg(layout-graph(Graph)) .
+     rec-msg(graph-layouted(LayoutedGraph?)) .
+     snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
+     snd-ack-event(UI, layout-graph(GraphId, Graph))
+   )
+   +
+   ( rec-event(UI, get-buttons(T?, ModuleName?)) .
+     snd-msg(get-auxilary-buttons(T, ModuleName)) .
+     rec-msg(button-list(ModuleName,ButtonList?)).
+     snd-do(UI, buttons-found(T, ModuleName, ButtonList)) .
+     snd-ack-event(UI, get-buttons(T, ModuleName))
+   )
+   +
+   ( rec-event(UI, button-selected(T?, ModuleName?, ButtonName?)) .
+     snd-msg(extra-button-action(ButtonName, str(ModuleName), T, ModuleName, ui-id)) .
+     snd-ack-event(UI, button-selected(T, ModuleName, ButtonName))
+   )
+   +
+   ( rec-event(UI, button-selected(T?, ButtonName?)) .
+     snd-msg(extra-button-action(ButtonName, T, "*", ui-id)) .
+     snd-ack-event(UI, button-selected(T, ButtonName))
+   )
+   +
+   ( rec-msg(ask-for-file(Title?, Path?, Extension?)) .
+     snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
+     rec-value(UI, file-name(FileName?)) .
+     snd-msg(ask-for-file-result(FileName))
+   )
+   +
+   ( rec-msg(ask-question(Title?)) .
+     snd-eval(UI, show-question-dialog(Title)) .
+     rec-value(UI, answer(Answer?)) .
+     snd-msg(ask-question-result(Answer))
+   )
+   +
+   ( rec-msg(decons-file-name(FileName?, Extension?)) .
+     snd-eval(UI, decons-filename(FileName, Extension)) .
+     rec-value(UI, file-name(Path?, FileName?, Extension?)) .
+     snd-msg(decons-file-name-result(Path, FileName, Extension))
+   )
+   +
+   ( rec-msg(clear-history) .
+     snd-do(UI, clear-history)
+   )
+   +
+   (
+     rec-event(UI, element-selected(ButtonName?, Tree?)).
+     snd-msg(extra-button-action(ButtonName, Tree, "message-list", "*", message-id)).
+     snd-ack-event(UI, element-selected(ButtonName, Tree))
+   )
+   +
+   (
+     rec-msg(update-list-view(Lst?)).
+     snd-do(UI, update-list(Lst))
+   )
+  ) *
+  ( rec-event(UI,quit)
+  + rec-disconnect(UI)) .
+  shutdown("MetaStudio exiting\n")
+endlet
+
+process MetaGUI is
+let
+  ModuleName : str,
+  Pid : int
+in
+  create(Ui, Pid?) .
+  create(MetaCreator, Pid?) .
   if not-equal("","") then
     snd-msg(open-modules([""])) .
-    (
-      rec-msg(cannot-open-module(ModuleName?)).
-      snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
-    )*
     rec-msg(finished-opening-modules)
   else
     tau
   fi
 endlet
 
-
-toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui,
-        Editors, ModuleDB, ProcessEqs, GetEquations, Save-modules,
-        PrintModule, File-creator,
-        Set-parsetable, GetParseTable, Open-Sdf2-Language,
-        Notify-about-changed-modules, Compile-module,
-        Meta-Interface, Open-initial-module,
-        Open-modules, PGen, ApplyFunc,
-        ButtonActionReceiver, ButtonActionExecutor,
-        Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
-        DumpParseTable, Module-Utilities,
-        RestoreTermBrackets, RestoreBrackets,
-        Query, Tree2Graph
-        , LAYOUT-GRAPH
-
-
-
-        )
-)
-)
+toolbus(MetaGUI)

@@ -11,17 +11,27 @@ exports
 
 hiddens
   context-free syntax
-    extractRelations(TscriptDef*, RSTORE)   -> RSTORE {traversal(accu,top-down,break)}
-    extractRelations(ProcessDef, RSTORE)    -> RSTORE {traversal(accu,top-down,break)}
-    findVarInProcess(VarDecl, RSTORE, INFO) -> RSTORE {traversal(accu,top-down,break)}
-    findVarInProcess(GenVar, RSTORE, INFO)  -> RSTORE {traversal(accu,top-down,break)}
+    extractRelations(TscriptDef*, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    extractRelations(ProcessDef, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    findVarInProcess(ProcessDef, RSTORE, ProcessName)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    findVarInProcess(VarDecl, RSTORE, ProcessName)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    findVarInProcess(GenVar, RSTORE, ProcessName)
+	-> RSTORE {traversal(accu, top-down, break)}
 
   variables
-    "$Area"[0-9]*              -> Area      
-    "$Rstore"[0-9]*            -> RSTORE
+    "$Area"[0-9]*		-> Area      
+    "$Rstore"[0-9]*		-> RSTORE
 
-    "TscriptDefs"[0-9]*        -> TscriptDef*
-    "ProcessInvocations"[0-9]* -> {ProcessInvocation ","}+
-    "VarDecl"[0-9]*            -> VarDecl
-    "Term"[0-9]*               -> Term
-    "Var"[0-9]*                -> Var
+    "$TscriptDefs"[0-9]*	-> TscriptDef*
+    "$ProcessDef"[0-9]*		-> ProcessDef
+    "$ProcessName"[0-9]*	-> ProcessName
+    "$Term"[0-9]*		-> Term
+    "$Var"[0-9]*		-> Var

@@ -6,7 +6,10 @@ exports
   sorts Tscript TscriptDef
 
   context-free syntax
-    ToolDef                                                -> TscriptDef {cons("tooldefScript")}
-    ProcessDef                                             -> TscriptDef {cons("procdefScript")}
-    TscriptDef* "toolbus" "(" {ProcessInvocation ","}+ ")" -> Tscript {cons("tscript")}
+    ToolDef                             -> TscriptDef {cons("tooldefScript")}
+    ProcessDef                          -> TscriptDef {cons("procdefScript")}
+    "toolbus" "(" ProcessInvocation ")" -> TscriptDef
+
+  context-free syntax
+    TscriptDef*                         -> Tscript {cons("tscript")}
 

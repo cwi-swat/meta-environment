@@ -5,42 +5,47 @@ imports
 
 exports
   context-free syntax
-    make-process-facts(DeclarationFact, CreationFacts, InvocationFacts, SendFacts, ReceiveFacts) -> ProcessFacts 
+    make-process-facts(
+      DeclarationFact,
+      CreationFacts,
+      InvocationFacts,
+      SendFacts,
+      ReceiveFacts)                                      -> ProcessFacts 
 
   context-free syntax
-    get-declaration(ProcessFacts) -> DeclarationFact
-    get-creations(ProcessFacts)   -> CreationFacts
-    get-invocations(ProcessFacts) -> InvocationFacts
-    get-sends(ProcessFacts)       -> SendFacts
-    get-receives(ProcessFacts) -> ReceiveFacts
+    get-declaration(ProcessFacts)                        -> DeclarationFact
+    get-creations(ProcessFacts)                          -> CreationFacts
+    get-invocations(ProcessFacts)                        -> InvocationFacts
+    get-sends(ProcessFacts)                              -> SendFacts
+    get-receives(ProcessFacts)                           -> ReceiveFacts
 
   context-free syntax
-    set-creations(ProcessFacts, CreationFacts) -> ProcessFacts
-    set-invocations(ProcessFacts, InvocationFacts) -> ProcessFacts
-    set-sends(ProcessFacts, SendFacts) -> ProcessFacts
-    set-receives(ProcessFacts, ReceiveFacts) -> ProcessFacts
+    set-creations(ProcessFacts, CreationFacts)           -> ProcessFacts
+    set-invocations(ProcessFacts, InvocationFacts)       -> ProcessFacts
+    set-sends(ProcessFacts, SendFacts)                   -> ProcessFacts
+    set-receives(ProcessFacts, ReceiveFacts)             -> ProcessFacts
 
   context-free syntax
     add-process-creation(ProcessFacts, CreationFact)     -> ProcessFacts
     add-process-invocation(ProcessFacts, InvocationFact) -> ProcessFacts
-    add-send-message(ProcessFacts, SendFact) -> ProcessFacts
-    add-receive-message(ProcessFacts, ReceiveFact) -> ProcessFacts
+    add-send-message(ProcessFacts, SendFact)             -> ProcessFacts
+    add-receive-message(ProcessFacts, ReceiveFact)       -> ProcessFacts
 
   context-free syntax
-    make-startup-facts(CreationFact)  -> StartupFacts 
+    make-startup-facts(CreationFact)                     -> StartupFacts 
 
   context-free syntax
-    add-startup-fact(StartupFacts, CreationFact) -> StartupFacts
+    add-startup-fact(StartupFacts, CreationFact)         -> StartupFacts
 
 hiddens
   variables
-    "ProcessFacts"[0-9]* -> ProcessFacts
-    "Declaration"[0-9]*  -> DeclarationFact
-    "Creations"[0-9]* -> Set[[CreationFact]]
-    "CreationFact"[0-9]* -> CreationFact
-    "Invocations"[0-9]* -> Set[[InvocationFact]]
-    "InvocationFact"[0-9]* -> InvocationFact
-    "Sends"[0-9]* -> Set[[SendFact]] 
-    "SendFact"[0-9]* -> SendFact 
-    "Receives"[0-9]* -> Set[[ReceiveFact]]
-    "ReceiveFact"[0-9]* -> ReceiveFact
+    "ProcessFacts"[0-9]*                                 -> ProcessFacts
+    "Declaration"[0-9]*                                  -> DeclarationFact
+    "Creations"[0-9]*                                    -> Set[[CreationFact]]
+    "CreationFact"[0-9]*                                 -> CreationFact
+    "Invocations"[0-9]*                                  -> Set[[InvocationFact]]
+    "InvocationFact"[0-9]*                               -> InvocationFact
+    "Sends"[0-9]*                                        -> Set[[SendFact]] 
+    "SendFact"[0-9]*                                     -> SendFact 
+    "Receives"[0-9]*                                     -> Set[[ReceiveFact]]
+    "ReceiveFact"[0-9]*                                  -> ReceiveFact
