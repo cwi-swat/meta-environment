@@ -18,23 +18,8 @@ let
 in
   (
     rec-msg(display-rewrite-errors(Errors?)).
-    if not-equal(Errors,[]) then
-      Error := first(Errors).
-      Errors := next(Errors).
-      Message := first(Error).
-      Error := next(Error).
-      Tag := first(Error).
-      snd-msg(unparse(Tag)).
-      rec-msg(unparsed-text(TagText?)).
-      Error := next(Error).
-      Subject := first(Error).
-      snd-msg(unparse(Subject)).
-      rec-msg(unparsed-text(SubjectText?)).
-      snd-note(ui-status(errorf("%s (%s, %s)",[Message,TagText,SubjectText])))
-    fi *
-    if equal(Errors,[]) then
-      tau
-    fi
+    snd-note(remove-feedback-summary("asfe","all")) .
+    snd-note(display-feedback-summary(feedback("asfe","all",Errors)))
   +
     rec-msg(display-asf-errors(Errors?)).
     snd-note(remove-feedback-summary("asf-checker","all")) .
