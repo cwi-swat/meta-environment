@@ -1,11 +1,11 @@
 libpackagedir = ${pkgdatadir}$(subst src/LIB,,$(subdir))
 
 MODULES=$(wildcard *.asf *.sdf) 
-PREPARED=$(wildcard *.baf *.tbl)
+PREPARED=$(wildcard *.tbl)
 
 INSTALL_READONLY = ${INSTALL} -m 0444
 
-EXTRA_DIST = $(MODULES)
+EXTRA_DIST = $(MODULES) $(PREPARED)
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
@@ -18,7 +18,7 @@ install-data-hook:
             $(INSTALL_READONLY) $$p $(DESTDIR)$(libpackagedir)/$$p; \
           fi; fi; \
         done; 
-	list='$(PREPARED)'; for p in $$list; do \
+	@list='$(PREPARED)'; for p in $$list; do \
           if test -f $(srcdir)/$$p; then \
             echo " $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
             $(INSTALL_READONLY) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
