@@ -1,8 +1,8 @@
 # $Id$
 
 lib_LIBRARIES		= libSDFME.a
-noinst_HEADERS          = SDFME_dict.h
-include_HEADERS		= SDFME.h SDFME-utils.h
+include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h
+
 libSDFME_a_SOURCES	= SDFME.c SDFME_dict.c ${UTILSRCS}
 
 UTILSRCS		= get-module-name.c get-imports.c grammar.c prod.c \
