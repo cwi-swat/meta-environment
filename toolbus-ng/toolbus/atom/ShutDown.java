@@ -10,19 +10,19 @@ import aterm.ATerm;
  */
 public class ShutDown extends Atom {
 
-	public ShutDown(ATerm trm) {
-		super(trm);
-	}
+  public ShutDown(ATerm trm) {
+    super(trm);
+  }
 
-	public ShutDown() {
-		super();
-	}
+  public ShutDown() {
+    super();
+  }
 
-	public boolean execute() throws ToolBusException {
-		if (isEnabled()) {
-			throw new ToolBusDeathException(getArgs().getFirst().toString());
-		} else {
-			return false;
-		}
-	}
+  public boolean execute() throws ToolBusException {
+    if (isEnabled()) {
+      throw new ToolBusDeathException(getArgs().getFirst().toString());
+    } else {
+      return false;
+    }
+  }
 }
