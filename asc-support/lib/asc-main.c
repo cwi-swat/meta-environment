@@ -126,12 +126,12 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
       else if(streq(argv[i], "-i")) {
 	assert(nInputs <= MAX_ARGS);
 	inputs[nInputs] = ATreadFromNamedFile(argv[++i]);
-	nInputs++;
-
 	if (inputs[nInputs] == NULL) {
 	  ATerror("Unable to read in %s\n", inputs[nInputs]);
 	  exit(1);
 	}
+
+	nInputs++;
       } 
       else if(streq(argv[i], "-s")) {
 	char buf[MAX_STRINGARGUMENT_LENGTH];
