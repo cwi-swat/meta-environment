@@ -40,7 +40,7 @@ $fullname = $ARGV[0];
 # Get basename
 @dirarray = split(/\//,$fullname);
 $basename = pop(@dirarray);
-$dir = join(/\//,@dirarray);
+$dir = join("/",@dirarray);
 if ($dir ne "") {
   $dir .= "/";
 }
