@@ -47,7 +47,7 @@ button("Pico-syntax",
 			 parse("RscriptCalculator", "RSTORE"),
 
 			 push-string("\"UNINIT-OCC\""),
-			 parse("basic/Strings", "String"),
+			 parse("basic/StrCon", "StrCon"),
 
 			 apply("pico-query", "Summary", 3),
 			 push-modulename("PicoQuery"),

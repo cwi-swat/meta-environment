@@ -5,10 +5,10 @@ imports PicoExtraction %% should be only convertl
 
 exports
   context-free syntax
-	pico-query(RSCRIPT, RSTORE, String) 	-> Summary
+	pico-query(RSCRIPT, RSTORE, StrCon) 	-> Summary
 
 hiddens
   variables
 	"$Rstore" [0-9\']*  -> RSTORE
 	"$Script" [0-9\']*  -> RSCRIPT
-	"$String" [0-9\']*  -> String
+	"$StrCon" [0-9\']*  -> StrCon
