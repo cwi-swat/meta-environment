@@ -1,0 +1,18 @@
+package
+identification
+  name=tide
+  version=0.3a
+  location=http://www.cwi.nl/~mdejonge/downloads
+  info=mailto:Pieter.Olivier@cwi.nl
+  description='TIDE: ToolBus Integrated Debugging Envrironment, a generic
+               debug framework.'
+
+  keywords=meta-environment, debugging
+
+configuration interface
+
+requires
+  aterm		1.6.7
+  toolbuslib	0.2
+  toolbus	0.23
+

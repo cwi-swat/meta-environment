@@ -1,6 +1,8 @@
 
 SUBDIRS		= toolbus lib-c tide META-INF images examples scripts .
 
+EXTRA_DIST      = tide-$(VERSION).pkg
+
 data_DATA	= tide.jar
 
 JARCLASSDIRS	= tide tide/tool tide/tool/support \
