@@ -11,27 +11,27 @@ exports
     [A-Z] [a-zA-Z\-0-9]* -> ProcessName
 
   context-free syntax
-    {Term ","}+ -> AtomArgs
+    {Term"," }+ -> AtomArgs
 
-  context-free syntax
-    "snd-msg" "(" AtomArgs ")"        -> Atom {cons("snd-msg")}
-    "rec-msg" "(" AtomArgs ")"        -> Atom {cons("rec-msg")}
-    "snd-eval" "(" AtomArgs ")"       -> Atom {cons("snd-eval")}
-    "rec-value" "(" AtomArgs ")"      -> Atom {cons("rec-value")}
-    "rec-event" "(" AtomArgs ")"      -> Atom {cons("rec-event")}
-    "snd-ack-event" "(" AtomArgs ")"  -> Atom {cons("snd-ack-event")}
-    "snd-do" "(" AtomArgs ")"         -> Atom {cons("snd-do")}
-    "subscribe" "(" AtomArgs ")"      -> Atom {cons("subscribe")}
-    "unsubscribe" "(" AtomArgs ")"    -> Atom {cons("unsubscribe")}
-    "snd-terminate" "(" AtomArgs ")"  -> Atom {cons("snd-terminate")}
-    "rec-connect" "(" AtomArgs ")" -> Atom {cons("rec-connect")}
-    "rec-disconnect" "(" AtomArgs ")" -> Atom {cons("rec-disconnect")}
-    "execute" "(" AtomArgs ")"   -> Atom {cons("execute")}
-    "shutdown" "(" AtomArgs ")"  -> Atom {cons("shutdown")}
-    "snd-note" "(" AtomArgs ")"  -> Atom {cons("snd-note")}
-    "rec-note" "(" AtomArgs ")"  -> Atom {cons("rec-note")}
-    "printf" "(" AtomArgs ")"         -> Atom {cons("printf")}
-    "delta"                      -> Atom {cons("delta")}
-    "tau"                        -> Atom {cons("tau")}
-    Var ":=" Term                -> Atom {cons("assignment")}
+context-free syntax
+"snd-msg""("AtomArgs")" -> Atom {cons("snd-msg")}
+"rec-msg""("AtomArgs")" -> Atom {cons("rec-msg")}
+"snd-eval""("AtomArgs")" -> Atom {cons("snd-eval")}
+"rec-value""("AtomArgs")" -> Atom {cons("rec-value")}
+"rec-event""("AtomArgs")" -> Atom {cons("rec-event")}
+"snd-ack-event""("AtomArgs")" -> Atom {cons("snd-ack-event")}
+"snd-do""("AtomArgs")" -> Atom {cons("snd-do")}
+"subscribe""("AtomArgs")" -> Atom {cons("subscribe")}
+"unsubscribe""("AtomArgs")" -> Atom {cons("unsubscribe")}
+"snd-terminate""("AtomArgs")" -> Atom {cons("snd-terminate")}
+"rec-connect""("AtomArgs")" -> Atom {cons("rec-connect")}
+"rec-disconnect""("AtomArgs")" -> Atom {cons("rec-disconnect")}
+"execute""("AtomArgs")" -> Atom {cons("execute")}
+"shutdown""("AtomArgs")" -> Atom {cons("shutdown")}
+"snd-note""("AtomArgs")" -> Atom {cons("snd-note")}
+"rec-note""("AtomArgs")" -> Atom {cons("rec-note")}
+"printf""("AtomArgs")" -> Atom {cons("printf")}
+"delta" -> Atom {cons("delta")}
+"tau" -> Atom {cons("tau")}
+Var ":=" Term -> Atom {cons("assignment")}
 

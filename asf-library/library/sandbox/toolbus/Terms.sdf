@@ -11,11 +11,11 @@ exports
   sorts Real Id Vname String Term TermList Var GenVar
 
   lexical syntax
-    [a-z] [A-Za-z0-9\-]*    -> Id
-    "\\" ~[]                -> EscChar {avoid}
+    [a-z] [A-Za-z0-9\-]* -> Id
+    "\\" ~[] -> EscChar {avoid}
     ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
-    EscChar                 -> L-Char
-    "\"" L-Char* "\""       -> String
+    EscChar -> L-Char
+    "\"" L-Char* "\"" -> String
 
   lexical syntax
   %% Underscore is not part of the official definition of variable names
@@ -28,19 +28,19 @@ exports
   context-free syntax
     "*undefined*" -> Term {cons("undefined-term")}
 
-    Boolean                 -> Term {cons("boolTerm")}
-    Integer                 -> Term {cons("intTerm")}
-    Real                    -> Term {cons("realTerm")}
-    String                  -> Term {cons("stringTerm")}
-    Vname                   -> Var {cons("vnameVar")}
-    Var                     -> GenVar {cons("var")}
-    Var "?"                 -> GenVar {cons("optVar")}
-    GenVar                  -> Term {cons("genvarTerm")}
-    "<" Term ">"            -> Term {cons("placeholder")}
-    Id                      -> Term {cons("idTerm")}
-    Id "(" TermList ")"     -> Term {cons("funTerm")}
-    {Term ","}*             -> TermList {cons("termStar")}
-    "[" TermList "]"        -> Term {cons("termList")}
+    Boolean -> Term {cons("boolTerm")}
+    Integer -> Term {cons("intTerm")}
+    Real -> Term {cons("realTerm")}
+    String -> Term {cons("stringTerm")}
+    Vname -> Var {cons("vnameVar")}
+    Var -> GenVar {cons("var")}
+    Var"?" -> GenVar {cons("optVar")}
+    GenVar -> Term {cons("genvarTerm")}
+    "<"Term">" -> Term {cons("placeholder")}
+    Id -> Term {cons("idTerm")}
+    Id"("TermList")" -> Term {cons("funTerm")}
+    {Term"," }* -> TermList {cons("termStar")}
+    "["TermList"]" -> Term {cons("termList")}
 
   context-free syntax
     "true" -> Id {reject}

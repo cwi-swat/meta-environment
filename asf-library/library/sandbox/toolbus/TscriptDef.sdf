@@ -11,4 +11,4 @@ exports
   context-free syntax
     ToolDef -> TscriptDef {cons("tooldefScript")}
     ProcessDef -> TscriptDef {cons("procdefScript")}
-    "toolbus" "(" ProcessInvocation ")" -> TscriptDef
+    "toolbus""("ProcessInvocation")" -> TscriptDef

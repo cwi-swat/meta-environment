@@ -5,8 +5,11 @@ imports TscriptDef
 exports
   sorts Tscript
   context-free syntax
+
+    TscriptDef
+
+* -> Tscript {cons("tscript")}
 %%    IncludeFile* TscriptDef* -> Tscript {cons("tscript")}
-    TscriptDef* -> Tscript {cons("tscript")}
 
 exports
   sorts IncludeFile

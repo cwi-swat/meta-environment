@@ -2,29 +2,63 @@ module ProcessExpr
 
 imports Atom TimeExpr
 
-exports
-  sorts ProcessExpr ProcessInvocation ProcessCreation
+exports sorts ProcessExpr
+exports sorts ProcessInvocation
+exports sorts ProcessCreation
 
-  context-free syntax
-    Atom                                                        -> ProcessExpr {cons("atomProcExpr")}
-    Atom TimeExpr                                               -> ProcessExpr {cons("atomTimeExpr")}
-    "create" "(" ProcessName "(" {Term ","}* ")" "," GenVar ")" -> ProcessCreation {cons("createProcArgs")}
-    "create" "(" ProcessName "," GenVar ")"                     -> ProcessCreation {cons("createProc")}
-    ProcessName                                                 -> ProcessInvocation {cons("procNameInvoc")}
-    ProcessName "(" {Term ","}* ")"                             -> ProcessInvocation {cons("procInvoc")}
-    ProcessInvocation                                           -> ProcessExpr {cons("procInvoExpr")}
-    ProcessCreation                                             -> ProcessExpr {cons("procCreaExpr")}
-    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {left, cons("seqComp")}
-    ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
-    ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
-    ProcessExpr "||" ProcessExpr                                -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
-    "(" ProcessExpr ")"                                         -> ProcessExpr {bracket}
-    "if" Term "then" ProcessExpr "fi"                           -> ProcessExpr {cons("ifthen")}
-    "if" Term "then" ProcessExpr "else" ProcessExpr "fi"        -> ProcessExpr {cons("ifthenelse")}
+exports context-free syntax
+    Atom -> ProcessExpr {cons("atomProcExpr")}
+    Atom TimeExpr -> ProcessExpr {cons("atomTimeExpr")}
+    "create""("ProcessName"("{Term"," }*")""," GenVar")" -> ProcessCreation {cons("createProcArgs")}
+    "create""("ProcessName"," GenVar")" -> ProcessCreation {cons("createProc")}
+    ProcessName -> ProcessInvocation {cons("procNameInvoc")}
+    ProcessName"("{Term"," }*")" -> ProcessInvocation {cons("procInvoc")}
+    ProcessInvocation -> ProcessExpr {cons("procInvoExpr")}
+    ProcessCreation -> ProcessExpr {cons("procCreaExpr")}
+
+exports context-free syntax
+  ProcessExpr "."
+ProcessExpr -> ProcessExpr {left, cons("seqComp")}
+
+exports context-free syntax
+  ProcessExpr
+"+"
+ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
+
+exports context-free syntax
+  ProcessExpr "*"
+ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
+
+exports context-free syntax
+  ProcessExpr
+"||"
+ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
+
+exports context-free syntax
+"("
+  ProcessExpr
+")"
+-> ProcessExpr {bracket}
+
+exports context-free syntax
+"if"
+  Term
+"then"
+  ProcessExpr
+"fi" -> ProcessExpr {cons("ifthen")}
+
+exports context-free syntax
+"if"
+  Term
+"then"
+  ProcessExpr
+"else"
+  ProcessExpr
+"fi" -> ProcessExpr {cons("ifthenelse")}
 
   context-free priorities
-    ProcessExpr "." ProcessExpr                                 -> ProcessExpr {cons("seqComp")} >
-    ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr1")} >
-    ProcessExpr "||" ProcessExpr                                -> ProcessExpr {cons("ProcessExpr-ProcessExpr2")} >
-    ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {cons("ProcessExpr-ProcessExpr3")}
+    ProcessExpr "." ProcessExpr -> ProcessExpr {cons("seqComp")} >
+    ProcessExpr "*" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr1")} >
+    ProcessExpr "||" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr2")} >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr3")}
 

@@ -7,11 +7,14 @@ exports
 
   context-free syntax
     ProcessName -> ProcessSignature
-    ProcessName "("{FormalParam"," }*")" -> ProcessSignature
+    ProcessName"("{FormalParam"," }*")" -> ProcessSignature
 
   sorts ProcessBody
-  context-free syntax
-    ProcessExpr -> ProcessBody {cons("plainBody")}
+
+exports context-free syntax
+  ProcessExpr -> ProcessBody {cons("plainBody")}
+
+exports context-free syntax
 "let"
   VarDecls
 "in" 
@@ -23,4 +26,5 @@ hiddens
 
 exports
   context-free syntax
-    "process" ProcessSignature "is" ProcessBody -> ProcessDef {cons("procDef")}
+"process" ProcessSignature "is"
+  ProcessBody -> ProcessDef {cons("procDef")}
