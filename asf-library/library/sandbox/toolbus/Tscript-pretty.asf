@@ -161,11 +161,19 @@ equations
                             I [processexpr2box(ProcessExpr2)]
                             "fi"])
 
+[processexpr2box-ifdef]
+  #ifdef Vname ProcessExpr1 #else ProcessExpr2 #endif = 
+    box2processexpr(V vs=1 [H ts=0 hs=1 ["#ifdef" vname2box(Vname)]
+                            processexpr2box(ProcessExpr1)
+                            H ts=2 ["#else"]
+                            processexpr2box(ProcessExpr2)
+                            H ts=4 ["#endif"]])
+
 [atomargs2box-0]
    atomargs2box(Term+) = HVlist2box(Term+)
 
 [tscript2box-0]
-  Preprocessor* TscriptDef* = box2tscript(V vs=2 [preprocessors2box(Preprocessor*) Vlist2box(TscriptDef*)]) 
+  TscriptDef* = box2tscript(Vlist2box(TscriptDef*)) 
 
 [tscriptdef2box-0]
   toolbus ( ProcessInvocation+ ) =
