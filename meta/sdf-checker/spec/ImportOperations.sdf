@@ -13,21 +13,21 @@ exports
 
 hiddens
   context-free syntax
-    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traverse(accu)}
-    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traverse(accu)}
-    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traverse(accu)}
+    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, topdown)}
+    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, topdown)}
+    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, topdown)}
                 
 hiddens
   context-free syntax
-    get-hidden-imports(Module, ImportsSet)  -> ImportsSet {traverse(accu)}
-    get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traverse(accu)}
-    get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traverse(accu)}
+    get-hidden-imports(Module, ImportsSet)  -> ImportsSet {traversal(accu)}
+    get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu)}
+    get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu)}
 
 exports
   context-free syntax
-    get-imports(Grammar, ImportsSet)         -> ImportsSet {traverse(accu)} 
+    get-imports(Grammar, ImportsSet)         -> ImportsSet {traversal(accu, topdown)} 
     get-imports(ModuleName, ImportRelations) -> ImportsSet
-    get-imports(ModuleName, ImportsSet)      -> ImportsSet {traverse(accu)}
+    get-imports(ModuleName, ImportsSet)      -> ImportsSet {traversal(accu, topown)}
 
 exports
   context-free syntax

@@ -10,9 +10,9 @@ exports
 
   context-free syntax
     get-export-grammar(Module, Grammar, Definition) 
-                                                -> Grammar {traverse(accu)}
+                                                -> Grammar {traversal(accu, topdown)}
     get-export-grammar(Section, Grammar, Definition) 
-                                                -> Grammar {traverse(accu)}
+                                                -> Grammar {traversal(accu, topdown)}
     get-export-grammar1(ModuleName, Definition) -> Grammar
 
 hiddens
