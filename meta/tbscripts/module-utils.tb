@@ -200,22 +200,14 @@ endlet
 process DoImportModule(Mod : str, Import : str, Path : str)  is
 let
   Status : term,
-  Changed : list,
-  RealImport : str
+  Changed : list
 in
   snd-msg(is-module-in-db(Import)) .
   (
     rec-msg(exists-in-module-db(Import)) .
-    Status := success.
-    GetRealModuleName(Import, Path, Status?, RealImport?).
-    if equal(Status, success) then
-      Status := success.
-      DeleteEditors(Mod). 
-      AddImportInDB(Mod, Import).
-      SaveAsfSdfModule(Mod)
-    else 
-      tau 
-    fi
+    DeleteEditors(Mod). 
+    AddImportInDB(Mod, Import).
+    SaveAsfSdfModule(Mod)
   +
     rec-msg(not-exists-in-module-db(Import)) .
     snd-note(ui-status(
@@ -227,20 +219,20 @@ endlet
 process DoUnimportModule(Mod : str, Import : str, Path : str) is
 let
   Status : term,
-  Changed : list,
-  RealImport : str
+  Changed : list
 in
-  Status := success.
-  GetRealModuleName(Import, Path, Status?, RealImport?).
-  if equal(Status, success) then
-    Status := success.
+  snd-msg(is-module-in-db(Import)) .
+  (
+    rec-msg(exists-in-module-db(Import)) .
     DeleteEditors(Mod). 
-    RemoveImportInDB(Mod, RealImport, Path, Status?, Changed?).
-    if equal(Status, success) then
-      SaveSdfModules(Changed).
-      SaveAsfSdfModule(Mod)
-    else tau fi
-  else tau fi
+    RemoveImportInDB(Mod, Import, Path) .
+    SaveAsfSdfModule(Mod)
+  +
+    rec-msg(not-exists-in-module-db(Import)) .
+    snd-note(ui-status(
+      errorf("Error during removing import %s to %s: module not open", 
+             [Import, Mod])))
+  )
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -339,16 +331,10 @@ is
   snd-msg(add-import-in-db(Mod, Import)) .
   rec-msg(add-import-done(Mod))
 
-process RemoveImportInDB(Mod : str, Import : str, Path : str, Status :term?,
-                         Changed : list?)
+process RemoveImportInDB(Mod : str, Import : str, Path : str)
 is
   snd-msg(remove-import-in-db(Mod, Import, Path)) .
-  (
-    rec-msg(remove-import-done(Mod, Changed?))
-  +
-    rec-msg(remove-import-not-done(Mod)).
-    Status := remove-import-not-done
-  )
+  rec-msg(remove-import-done)
 
 process CheckExistence(New : str, Status : term?) is
     snd-msg(is-module-in-db(New)) .

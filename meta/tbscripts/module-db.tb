@@ -358,11 +358,40 @@ in
     rec-msg(sm-all-imports(Imported?))
 endlet
 
+process MDB-DisplayGraph is
+let
+  Pairs : list
+in
+  snd-msg(ts-get-key-value-pairs("import-relations")) .
+  rec-msg(ts-pairs(Pairs?)) .
+  snd-note(display-import-graph(Pairs)) .
+  Pairs := []
+endlet
+
+process MDB-StoreModuleTree(Name : str, Syntax : term) is
+let
+  Modules : list,
+  Text : str
+in
+  snd-msg(ts-put-term-value("sdf-tree", Name, Syntax)) .
+  snd-msg(unparse(Syntax)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(ts-put-str-value("sdf-text", Name, Text)) .
+  snd-msg(sm-get-imported-module-names(Syntax)) .
+  rec-msg(sm-imported-module-names(Modules?)) .
+  snd-msg(ts-put-term-value("import-relations", Name, Modules)) .
+  MDB-InvalidateModule(Name) .
+  MDB-GetAllDependingModules(Name, Modules?) .
+  MDB-InvalidateModules(Modules)
+endlet
+
 process MDB-RemoveImportFromModules(Name : str, ActualModules : list) is
 let
   Module : str,
   Modules : list,
-  Syntax : term
+  Imports : list,
+  Syntax : term,
+  Status : term
 in
   Modules := ActualModules .
   if not(equal(Modules,[])) then
@@ -370,42 +399,38 @@ in
     Modules := next(Modules) .
     snd-msg(ts-get-term-value("sdf-tree", Module)) .
     rec-msg(ts-value(Syntax?)) .
-    snd-msg(sm-remove-import-from-module(Syntax, Name)) .
-    Syntax := no-tree .
-    rec-msg(sm-import-removed-from-module(Syntax?)) .
-    snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) .
-    Syntax := no-tree
+    snd-msg(sm-get-imported-module-names(Syntax)) .
+    rec-msg(sm-imported-module-names(Imports?)) .
+    MDB-ContainedIn(Name, Imports, Status?) .
+    if equal(Status, success) then
+      snd-msg(sm-remove-import-from-module(Syntax, Name)) .
+      Syntax := no-tree .
+      rec-msg(sm-import-removed-from-module(Syntax?)) .
+      MDB-StoreModuleTree(Module, Syntax) .
+      Syntax := no-tree
+    else
+      tau
+    fi
   fi
   *
   if equal(Modules,[]) then
     tau
-  fi 
+  fi .
+  MDB-DisplayGraph
 endlet
 
 process MDB-AddImportToModule(OldName : str, NewName : str) is
 let
-  Pairs : list,
-  Syntax : term,
-  Modules : list,
-  Text : str
+  Syntax : term
 in
   snd-msg(ts-get-term-value("sdf-tree", OldName)) .
   rec-msg(ts-value(Syntax?)) .
   snd-msg(sm-add-import-to-module(Syntax, NewName)) .
   Syntax := no-tree .
   rec-msg(sm-import-added-to-module(Syntax?)) .
-  snd-msg(ts-put-term-value("sdf-tree", OldName, Syntax)) .
-  snd-msg(unparse(Syntax)) .
-  rec-msg(unparsed-text(Text?)) .
-  snd-msg(ts-put-str-value("sdf-text", OldName, Text)) .
-  snd-msg(sm-get-imported-module-names(Syntax)) .
-  rec-msg(sm-imported-module-names(Modules?)) .
+  MDB-StoreModuleTree(OldName, Syntax) .
   Syntax := no-tree .
-  snd-msg(ts-put-term-value("import-relations", OldName, Modules)) .
-  snd-msg(ts-get-key-value-pairs("import-relations")) .
-  rec-msg(ts-pairs(Pairs?)) .
-  snd-note(display-import-graph(Pairs)) .
-  Pairs := []
+  MDB-DisplayGraph
 endlet
 
 process MDB-AllEquationsAvailable(Name : str, Missing : list?) is
@@ -438,6 +463,28 @@ in
   fi
   * 
   if equal(ModuleNames, []) then
+    tau
+  fi
+endlet
+
+process MDB-ContainedIn(Name : str, Modules : list, Status : term?) is
+let
+  Module : str,
+  Runner : list
+in
+  Status := no-success .
+  Runner := Modules .
+  if not-equal(Runner, []) then
+    Module := first(Runner) .
+    Runner := next(Runner) .
+    if equal(Module, Name) then
+      Status := success
+    else 
+      tau
+    fi
+  fi
+  *
+  if equal(Runner, []) then
     tau
   fi
 endlet

@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/04 (markvdb@cs.vu.nl)
+ * Introduce the refactor "remove import".
+
 2003/06/03 (iversen@cwi.nl)
  * made menuitems in MetaStudio configurable with button-scripts.
  * added some new button actions to support this.
