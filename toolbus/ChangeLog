@@ -3,6 +3,8 @@ $Id$
 2003-06-17 <jurgenv@cwi.nl>
   * Added an error message for when no 'toolbus' command at all are contained
     in the script. 
+  * Added \r to layout to prevent strange parse errors when parsing a script
+    that was written in Windows.
 
 2003-06-17 <kooiker@cwi.nl>
   * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
