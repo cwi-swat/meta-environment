@@ -8,6 +8,7 @@ include $(top_srcdir)/make_rules
 
 EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-java.sh.src \
+	     sdf2-to-c.sh.src \
 	     CHARLIST.java.template \
 	     CHARLIST_String.java.template \
 	     CHARLIST.t.template \
