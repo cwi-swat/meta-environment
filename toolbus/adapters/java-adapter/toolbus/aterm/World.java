@@ -416,13 +416,13 @@ public class World implements Serializable
 			ATerm annos;
 			if(channel.readNext() == '}') {
 				channel.readNext();
-				annos = makeList(empty);
+				annos = empty;
 			} else {
 				terms = parseATerms(channel);
 				if(channel.last() != '}')
 					throw new ParseError(channel, channel.last(), "'}' expected");
 				channel.readNext();
-				annos = makeList(terms);
+				annos = terms;
 			}
 			result.setAnno(annos);
 				
